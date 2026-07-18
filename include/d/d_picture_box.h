@@ -115,12 +115,14 @@ public:
     /* 0x588 */ fopMsgM_pane_class pane_ylef;
     /* 0x5C0 */ fopMsgM_pane_class pane_icn[3];
     /* 0x668 */ fopMsgM_pane_class pane_emp[3];
-    /* 0x710 */ fopMsgM_pane_class pane_ct[2];
+    /* 0x710 */ fopMsgM_pane_class pane_ct1;
+    /* 0x748 */ fopMsgM_pane_class pane_ct2;
     /* 0x780 */ fopMsgM_pane_class pane_sp[8];
     /* 0x940 */ fopMsgM_pane_class pane_no[3];
     /* 0x9E8 */ fopMsgM_pane_class pane_nob[3];
     /* 0xA90 */ fopMsgM_pane_class pane_nok[3];
-    /* 0xB38 */ fopMsgM_pane_class pane_b[2];
+    /* 0xB38 */ fopMsgM_pane_class pane_b1;
+    /* 0xB70 */ fopMsgM_pane_class pane_b2;
     /* 0xBA8 */ fopMsgM_pane_class pane_wnum;
     /* 0xBE0 */ fopMsgM_pane_class pane_wnuk;
     /* 0xC18 */ fopMsgM_pane_class pane_wpba;
@@ -134,7 +136,10 @@ public:
     /* 0xDD8 */ fopMsgM_pane_class pane_rzom;
     /* 0xE10 */ fopMsgM_pane_class pane_shut;
     /* 0xE48 */ fopMsgM_pane_class pane_fd00;
-    /* 0xE80 */ fopMsgM_pane_class pane_wp[4];
+    /* 0xE80 */ fopMsgM_pane_class pane_wp04;
+    /* 0xEB8 */ fopMsgM_pane_class pane_wp01;
+    /* 0xEF0 */ fopMsgM_pane_class pane_wp02;
+    /* 0xF28 */ fopMsgM_pane_class pane_wp03;
     /* 0xF60 */ fopMsgM_pane_alpha_class pane_tx[4];
     /* 0xF80 */ mDoDvdThd_toMainRam_c* mImportedPhotoLoadReq; // Async request for imported gallery photo data.
     /* 0xF84 */ J2DPicture* mMsgIconFontMainPic; // Message icon sheet used by fopMsgM_outFontDraw.
@@ -193,3 +198,4 @@ public:
     /* 0x0104 */ ResTIMG* buffer[4];
 };
 #endif /* D_PICTURE_BOX_H */
+

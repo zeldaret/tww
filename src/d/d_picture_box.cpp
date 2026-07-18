@@ -78,8 +78,8 @@ void dJle_Pb_c::screenSet() {
         fopMsgM_setPaneData(&pane_emp[i], scrn, emp_l[i]);
     }
 
-    fopMsgM_setPaneData(&pane_ct[0], scrn, 'ct1');
-    fopMsgM_setPaneData(&pane_ct[1], scrn, 'ct2');
+    fopMsgM_setPaneData(&pane_ct1, scrn, 'ct1');
+    fopMsgM_setPaneData(&pane_ct2, scrn, 'ct2');
 
     for (s32 i = 0; i < 8; i++) {
         fopMsgM_setPaneData(&pane_sp[i], scrn, sp_l[i]);
@@ -91,8 +91,8 @@ void dJle_Pb_c::screenSet() {
         fopMsgM_setPaneData(&pane_nok[i], scrn, nok_l[i]);
     }
 
-    fopMsgM_setPaneData(&pane_b[0], scrn, 'b1');
-    fopMsgM_setPaneData(&pane_b[1], scrn, 'b2');
+    fopMsgM_setPaneData(&pane_b1, scrn, 'b1');
+    fopMsgM_setPaneData(&pane_b2, scrn, 'b2');
     fopMsgM_setPaneData(&pane_wnum, scrn, 'wnum');
     fopMsgM_setPaneData(&pane_wnuk, scrn, 'wnuk');
     fopMsgM_setPaneData(&pane_wpba, scrn, 'wpba');
@@ -106,10 +106,10 @@ void dJle_Pb_c::screenSet() {
     fopMsgM_setPaneData(&pane_rzom, scrn, 'rzom');
     fopMsgM_setPaneData(&pane_shut, scrn, 'shut');
     fopMsgM_setPaneData(&pane_fd00, scrn, 'fd00');
-    fopMsgM_setPaneData(&pane_wp[3], scrn, 'wp03');
-    fopMsgM_setPaneData(&pane_wp[2], scrn, 'wp02');
-    fopMsgM_setPaneData(&pane_wp[1], scrn, 'wp01');
-    fopMsgM_setPaneData(&pane_wp[0], scrn, 'wp04');
+    fopMsgM_setPaneData(&pane_wp03, scrn, 'wp03');
+    fopMsgM_setPaneData(&pane_wp02, scrn, 'wp02');
+    fopMsgM_setPaneData(&pane_wp01, scrn, 'wp01');
+    fopMsgM_setPaneData(&pane_wp04, scrn, 'wp04');
 
     icn_white.set(((J2DPicture*) pane_icn[0].pane)->getWhite());
     icn_black.set(((J2DPicture*) pane_icn[0].pane)->getBlack());
@@ -197,10 +197,10 @@ void dJle_Pb_c::cameraAlphaInc(float alpha) {
     fopMsgM_setNowAlpha(&pane_lrtn, alpha);
     fopMsgM_setNowAlpha(&pane_rzom, alpha);
     fopMsgM_setNowAlpha(&pane_fd00, alpha);
-    fopMsgM_setNowAlpha(&pane_wp[3], alpha);
-    fopMsgM_setNowAlpha(&pane_wp[2], alpha);
-    fopMsgM_setNowAlpha(&pane_wp[1], alpha);
-    fopMsgM_setNowAlpha(&pane_wp[0], alpha);
+    fopMsgM_setNowAlpha(&pane_wp03, alpha);
+    fopMsgM_setNowAlpha(&pane_wp02, alpha);
+    fopMsgM_setNowAlpha(&pane_wp01, alpha);
+    fopMsgM_setNowAlpha(&pane_wp04, alpha);
     fopMsgM_setNowAlpha(&pane_tx[0], alpha);
     fopMsgM_setNowAlpha(&pane_tx[1], alpha);
     fopMsgM_setNowAlpha(&pane_tx[2], alpha);
@@ -224,8 +224,8 @@ void dJle_Pb_c::browseAlphaInc(float alpha) {
         fopMsgM_setNowAlpha(&pane_emp[i], alpha);
     }
 
-    fopMsgM_setNowAlpha(&pane_ct[0], alpha);
-    fopMsgM_setNowAlpha(&pane_ct[1], alpha);
+    fopMsgM_setNowAlpha(&pane_ct1, alpha);
+    fopMsgM_setNowAlpha(&pane_ct2, alpha);
 
     for (s32 i = 0; i < 8; i++) {
         fopMsgM_setNowAlpha(&pane_sp[i], alpha);
@@ -237,13 +237,13 @@ void dJle_Pb_c::browseAlphaInc(float alpha) {
         fopMsgM_setNowAlpha(&pane_nok[i], alpha);
     }
     
-    fopMsgM_setNowAlpha(&pane_b[0], alpha);
-    fopMsgM_setNowAlpha(&pane_b[1], alpha);
+    fopMsgM_setNowAlpha(&pane_b1, alpha);
+    fopMsgM_setNowAlpha(&pane_b2, alpha);
     fopMsgM_setNowAlpha(&pane_shut, alpha);
-    fopMsgM_setNowAlpha(&pane_wp[3], alpha);
-    fopMsgM_setNowAlpha(&pane_wp[2], alpha);
-    fopMsgM_setNowAlpha(&pane_wp[1], alpha);
-    fopMsgM_setNowAlpha(&pane_wp[0], alpha);
+    fopMsgM_setNowAlpha(&pane_wp03, alpha);
+    fopMsgM_setNowAlpha(&pane_wp02, alpha);
+    fopMsgM_setNowAlpha(&pane_wp01, alpha);
+    fopMsgM_setNowAlpha(&pane_wp04, alpha);
     fopMsgM_setNowAlpha(&pane_tx[0], alpha);
     fopMsgM_setNowAlpha(&pane_tx[1], alpha);
     fopMsgM_setNowAlpha(&pane_tx[2], alpha);
@@ -252,8 +252,8 @@ void dJle_Pb_c::browseAlphaInc(float alpha) {
 
 /* 802264A0-802265C0       .text getAlphaInc__9dJle_Pb_cFf */
 void dJle_Pb_c::getAlphaInc(float alpha) {
-    fopMsgM_setNowAlpha(&pane_ct[0], alpha);
-    fopMsgM_setNowAlpha(&pane_ct[1], alpha);
+    fopMsgM_setNowAlpha(&pane_ct1, alpha);
+    fopMsgM_setNowAlpha(&pane_ct2, alpha);
 
     for (s32 i = 0; i < 8; i++) {
         fopMsgM_setNowAlpha(&pane_sp[i], alpha);
@@ -262,13 +262,13 @@ void dJle_Pb_c::getAlphaInc(float alpha) {
     fopMsgM_setNowAlpha(pane_no, alpha);
     fopMsgM_setNowAlpha(pane_nob, alpha);
     fopMsgM_setNowAlpha(pane_nok, alpha);
-    fopMsgM_setNowAlpha(&pane_b[0], alpha);
-    fopMsgM_setNowAlpha(&pane_b[1], alpha);
+    fopMsgM_setNowAlpha(&pane_b1, alpha);
+    fopMsgM_setNowAlpha(&pane_b2, alpha);
     fopMsgM_setNowAlpha(&pane_shut, alpha);
-    fopMsgM_setNowAlpha(&pane_wp[3], alpha);
-    fopMsgM_setNowAlpha(&pane_wp[2], alpha);
-    fopMsgM_setNowAlpha(&pane_wp[1], alpha);
-    fopMsgM_setNowAlpha(&pane_wp[0], alpha);
+    fopMsgM_setNowAlpha(&pane_wp03, alpha);
+    fopMsgM_setNowAlpha(&pane_wp02, alpha);
+    fopMsgM_setNowAlpha(&pane_wp01, alpha);
+    fopMsgM_setNowAlpha(&pane_wp04, alpha);
     fopMsgM_setNowAlpha(&pane_tx[0], alpha);
     fopMsgM_setNowAlpha(&pane_tx[1], alpha);
     fopMsgM_setNowAlpha(&pane_tx[2], alpha);
@@ -297,10 +297,10 @@ void dJle_Pb_c::alphaDec(float scale) {
     pane_rzom.pane->setAlpha(pane_rzom.mNowAlpha * scale);
     pane_shut.pane->setAlpha(pane_shut.mNowAlpha * scale);
     pane_fd00.pane->setAlpha(pane_fd00.mNowAlpha * scale);
-    pane_wp[3].pane->setAlpha(pane_wp[3].mNowAlpha * scale);
-    pane_wp[2].pane->setAlpha(pane_wp[2].mNowAlpha * scale);
-    pane_wp[1].pane->setAlpha(pane_wp[1].mNowAlpha * scale);
-    pane_wp[0].pane->setAlpha(pane_wp[0].mNowAlpha * scale);
+    pane_wp03.pane->setAlpha(pane_wp03.mNowAlpha * scale);
+    pane_wp02.pane->setAlpha(pane_wp02.mNowAlpha * scale);
+    pane_wp01.pane->setAlpha(pane_wp01.mNowAlpha * scale);
+    pane_wp04.pane->setAlpha(pane_wp04.mNowAlpha * scale);
     pane_tx[0].pane->setAlpha(pane_tx[0].mNowAlpha * scale);
     pane_tx[1].pane->setAlpha(pane_tx[1].mNowAlpha * scale);
     pane_tx[2].pane->setAlpha(pane_tx[2].mNowAlpha * scale);
@@ -1161,8 +1161,8 @@ void dJle_Pb_c::changeBrowseToCamera() {
         fopMsgM_setNowAlphaZero(&pane_emp[i]);
     }
 
-    fopMsgM_setNowAlphaZero(&pane_ct[0]);
-    fopMsgM_setNowAlphaZero(&pane_ct[1]);
+    fopMsgM_setNowAlphaZero(&pane_ct1);
+    fopMsgM_setNowAlphaZero(&pane_ct2);
 
     for(int i = 0; i < 8; i++) {
         fopMsgM_setNowAlphaZero(&pane_sp[i]);
@@ -1174,8 +1174,8 @@ void dJle_Pb_c::changeBrowseToCamera() {
         fopMsgM_setNowAlphaZero(&pane_nok[i]);
     }
 
-    fopMsgM_setNowAlphaZero(&pane_b[0]);
-    fopMsgM_setNowAlphaZero(&pane_b[1]);
+    fopMsgM_setNowAlphaZero(&pane_b1);
+    fopMsgM_setNowAlphaZero(&pane_b2);
     fopMsgM_setNowAlphaZero(&pane_shut);
     fopMsgM_setInitAlpha(&pane_wnum);
     fopMsgM_setInitAlpha(&pane_wnuk);
@@ -1225,8 +1225,8 @@ void dJle_Pb_c::changeCameraToBrowse() {
         fopMsgM_setInitAlpha(&pane_emp[i]);
     }
 
-    fopMsgM_setInitAlpha(&pane_ct[0]);
-    fopMsgM_setInitAlpha(&pane_ct[1]);
+    fopMsgM_setInitAlpha(&pane_ct1);
+    fopMsgM_setInitAlpha(&pane_ct2);
 
     for(int i = 0; i < 8; i++) {
         fopMsgM_setInitAlpha(&pane_sp[i]);
@@ -1238,8 +1238,8 @@ void dJle_Pb_c::changeCameraToBrowse() {
         fopMsgM_setInitAlpha(&pane_nok[i]);
     }
 
-    fopMsgM_setInitAlpha(&pane_b[0]);
-    fopMsgM_setInitAlpha(&pane_b[1]);
+    fopMsgM_setInitAlpha(&pane_b1);
+    fopMsgM_setInitAlpha(&pane_b2);
     fopMsgM_setInitAlpha(&pane_shut);
 
     existMessageSet(dComIfGs_getPictureNum());
@@ -1990,8 +1990,8 @@ void dJle_Pb_c::draw() {
             fopMsgM_setAlpha(&pane_emp[i]);
         }
 
-        fopMsgM_setAlpha(&pane_ct[0]);
-        fopMsgM_setAlpha(&pane_ct[1]);
+        fopMsgM_setAlpha(&pane_ct1);
+        fopMsgM_setAlpha(&pane_ct2);
 
         for (int i = 0; i < 8; i++) {
             fopMsgM_setAlpha(&pane_sp[i]);
@@ -2003,8 +2003,8 @@ void dJle_Pb_c::draw() {
             fopMsgM_setAlpha(&pane_nok[i]);
         }
 
-        fopMsgM_setAlpha(&pane_b[0]);
-        fopMsgM_setAlpha(&pane_b[1]);
+        fopMsgM_setAlpha(&pane_b1);
+        fopMsgM_setAlpha(&pane_b2);
         fopMsgM_setAlpha(&pane_wnum);
         fopMsgM_setAlpha(&pane_wnuk);
         fopMsgM_setAlpha(&pane_wpba);
@@ -2019,10 +2019,10 @@ void dJle_Pb_c::draw() {
         fopMsgM_setAlpha(&pane_shut);
         fopMsgM_setAlpha(&pane_fd00);
         
-        fopMsgM_setAlpha(&pane_wp[3]);
-        fopMsgM_setAlpha(&pane_wp[2]);
-        fopMsgM_setAlpha(&pane_wp[1]);
-        fopMsgM_setAlpha(&pane_wp[0]);
+        fopMsgM_setAlpha(&pane_wp03);
+        fopMsgM_setAlpha(&pane_wp02);
+        fopMsgM_setAlpha(&pane_wp01);
+        fopMsgM_setAlpha(&pane_wp04);
 
         fopMsgM_setAlpha(&pane_tx[0]);
         fopMsgM_setAlpha(&pane_tx[1]);
