@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_so.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 000000EC-0000010C       .text __ct__14daTag_So_HIO_cFv */
 daTag_So_HIO_c::daTag_So_HIO_c() {
@@ -56,7 +54,7 @@ void daTag_So_c::getArg() {
 
 /* 00000224-0000027C       .text _create__10daTag_So_cFv */
 cPhs_State daTag_So_c::_create() {
-    fopAcM_SetupActor(this, daTag_So_c);
+    fopAcM_ct(this, daTag_So_c);
     getArg();
     return cPhs_COMPLEATE_e;
 }
@@ -100,18 +98,18 @@ static actor_method_class daTag_SoMethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_SO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_SO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_SO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_So_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_SO,
+    /* Draw Prio    */ fpcDwPi_TAG_SO_e,
     /* Actor SubMtd */ &daTag_SoMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ssk.h"
-#include "d/res/res_ssk.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Ssk.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_jnt_hit.h"
 #include "f_op/f_op_actor_mng.h"
@@ -15,24 +13,24 @@
 
 /* 00000078-00000194       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar4 = joint->getJntNo();
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         ssk_class* i_this = (ssk_class*)model->getUserArea();
 
-        if (i_this != NULL && uVar4 < 5) {
-            MTXCopy(model->getAnmMtx(uVar4), *calc_mtx);
+        if (i_this != NULL && jntNo < 5) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
-            cMtx_YrotM(*calc_mtx, i_this->m2F4[uVar4].y);
-            cMtx_XrotM(*calc_mtx, i_this->m2F4[uVar4].x);
-            cMtx_ZrotM(*calc_mtx, i_this->m2F4[uVar4].z);
+            cMtx_YrotM(*calc_mtx, i_this->m2F4[jntNo].y);
+            cMtx_XrotM(*calc_mtx, i_this->m2F4[jntNo].x);
+            cMtx_ZrotM(*calc_mtx, i_this->m2F4[jntNo].z);
 
-            cXyz sp08;
-            sp08.setall(0.0f);
-            MtxPosition(&sp08, &i_this->m314[uVar4]);
+            cXyz offset;
+            offset.setall(0.0f);
+            MtxPosition(&offset, &i_this->m314[jntNo]);
 
-            model->setAnmMtx(uVar4, *calc_mtx);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -273,7 +271,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     ssk_class* i_this = (ssk_class*)a_this;
 
     i_this->mpMorf1 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_TURU_02), NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022
+        (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_TURU_02_e), NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022
     );
 
     if (i_this->mpMorf1 == NULL || i_this->mpMorf1->getModel() == NULL) {
@@ -281,7 +279,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     i_this->mpMorf2 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Ssk", SSK_BDL_KTANA_00),
+        (J3DModelData*)dComIfG_getObjectRes("Ssk", dRes_INDEX_SSK_BDL_KTANA_00_e),
         NULL, NULL, NULL,
         DEMO_SELECT(J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_NULL),
         1.0f, 0, -1,
@@ -301,19 +299,19 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 1,
+            /* mJointIndex */ TURU_02_JNT_B3_e,
             /* mRadius     */ 50.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 2,
+            /* mJointIndex */ TURU_02_JNT_B2_e,
             /* mRadius     */ 30.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 3,
+            /* mJointIndex */ TURU_02_JNT_B1_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ &sph_offset,
         },
@@ -343,7 +341,7 @@ static cPhs_State daSsk_Create(fopAc_ac_c* a_this) {
             /* SrcObjTg  Type    */ AT_TYPE_ALL & ~AT_TYPE_BOOMERANG & ~AT_TYPE_WATER & ~AT_TYPE_UNK20000 & ~AT_TYPE_WIND & ~AT_TYPE_UNK400000 & ~AT_TYPE_LIGHT,
             /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
             /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsEnemy_e,
-            /* SrcGObjAt Se      */ dCcG_SE_UNK4,
+            /* SrcGObjAt Se      */ dCcG_SE_WOOD,
             /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK1,
             /* SrcGObjAt Mtrl    */ 0,
@@ -365,15 +363,10 @@ static cPhs_State daSsk_Create(fopAc_ac_c* a_this) {
 
     ssk_class* i_this = (ssk_class*)a_this;
 
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(a_this, ssk_class);
     cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Ssk");
     if (PVar2 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, ssk_class);
-#else
-    fopAcM_SetupActor(a_this, ssk_class);
-    cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Ssk");
-    if (PVar2 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, ssk_class);
         i_this->m2D0.setRateOff(0);
         i_this->m2B4 = fopAcM_GetParam(a_this);
         i_this->m2B5 = fopAcM_GetParam(a_this) >> 8;
@@ -441,18 +434,18 @@ static actor_method_class l_daSsk_Method = {
 };
 
 actor_process_profile_definition g_profile_SSK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SSK,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SSK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(ssk_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SSK,
+    /* Draw Prio    */ fpcDwPi_SSK_e,
     /* Actor SubMtd */ &l_daSsk_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

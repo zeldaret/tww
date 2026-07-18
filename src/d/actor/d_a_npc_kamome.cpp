@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_kamome.h"
-#include "d/res/res_kamome.h"
+#include "res/Object/Kamome.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player_main.h"
@@ -123,7 +121,7 @@ static s16 daNpc_kam_XyCheckCB(void* i_this, int i_itemBtn) {
 
 /* 00000260-000002A4       .text XyCheckCB__11daNpc_kam_cFi */
 s16 daNpc_kam_c::XyCheckCB(int i_itemBtn) {
-    if (dComIfGp_getSelectItem(i_itemBtn) == dItem_HYOI_PEAR_e) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_HYOI_PEAR_e) {
         return callDemoStartCheck();
     } else {
         return FALSE;
@@ -147,18 +145,19 @@ BOOL daNpc_kam_c::callDemoStartCheck() {
     cXyz line_start_pos;
     cXyz line_end_pos;
     
-    s16 angle = link->shape_angle.y + 0x8000;
+    s16 angleY = link->shape_angle.y + 0x8000;
+    s16 angleX = -0x1555;
     mLinChk.OnBackFlag();
     
     line_end_pos = hyoi_pear_pos;
     
     // Check if there are any straight lines from any angle around the Hyoi Pear that the Hyoi Seagull can descend from.
     for (int i = 0; i < 0x10; i++) {
-        mDoMtx_stack_c::YrotS(angle + 0x8000);
+        mDoMtx_stack_c::YrotS(angleY + 0x8000);
         mDoMtx_stack_c::multVec(&l_call_local_kyori, &line_end_pos);
-        mDoMtx_stack_c::YrotS(angle);
+        mDoMtx_stack_c::YrotS(angleY);
         mDoMtx_stack_c::multVec(&l_call_local_kyori, &line_start_pos);
-        mDoMtx_stack_c::XrotM(-0x1555);
+        mDoMtx_stack_c::XrotM(angleX);
         mDoMtx_stack_c::multVec(&l_call_local_kyori, &descend_start_pos);
         
         line_end_pos += hyoi_pear_pos;
@@ -172,14 +171,14 @@ BOOL daNpc_kam_c::callDemoStartCheck() {
                 // Found a direction with no collisions.
                 mDescendStartPos = descend_start_pos;
                 mDescendStartPosUnangled = line_start_pos; // Unused
-                mDescendStartAngle.set(0x1555, angle + 0x8000, 0);
+                mDescendStartAngle.set(-angleX, angleY + 0x8000, 0);
                 mLinChk.OffBackFlag();
                 l_demo_start_chk_flag = 1;
                 return TRUE;
             }
         }
         
-        angle = angle + 0x2000;
+        angleY = angleY + 0x2000;
     }
     
     mLinChk.OffBackFlag();
@@ -207,9 +206,13 @@ daNpc_kam_c::~daNpc_kam_c() {
     
     dComIfG_resDelete(&mPhs, "Kamome");
     
+#if VERSION == VERSION_DEMO
+    emitterDelete(&mB74);
+#else
     if (heap) {
         mpMorf->stopZelAnime();
     }
+#endif
     
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
@@ -218,6 +221,16 @@ daNpc_kam_c::~daNpc_kam_c() {
     
     offHyoiKamome();
 }
+
+#if VERSION == VERSION_DEMO
+void daNpc_kam_c::emitterDelete(JPABaseEmitter** pEmitter) {
+    if (*pEmitter) {
+        (*pEmitter)->quitImmortalEmitter();
+        (*pEmitter)->becomeInvalidEmitter();
+        *pEmitter = NULL;
+    }
+}
+#endif
 
 /* 00000A6C-00000B20       .text setAttention__11daNpc_kam_cFbi */
 void daNpc_kam_c::setAttention(bool param_1, int param_2) {
@@ -261,13 +274,13 @@ static int headNodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000CD0-00000EB8       .text createHeap__11daNpc_kam_cFv */
 BOOL daNpc_kam_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kamome", KAMOME_BDL_KA_HYOI);
-    JUT_ASSERT(763, modelData != NULL);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BDL_KA_HYOI_e);
+    JUT_ASSERT(DEMO_SELECT(762, 763), modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kamome", KAMOME_BCK_KA_WAIT1),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BCK_KA_WAIT1_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -283,7 +296,7 @@ BOOL daNpc_kam_c::createHeap() {
         modelData->getJointNodePointer(head1JntIdx)->setCallBack(headNodeCallBack);
     }
     m_jnt_body = modelData->getJointName()->getIndex("j_ka_spin1");
-    JUT_ASSERT(783, m_jnt_body >= 0);
+    JUT_ASSERT(DEMO_SELECT(782, 783), m_jnt_body >= 0);
     
     mpMorf->getModel()->setUserArea((u32)this);
     
@@ -297,7 +310,7 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000ED8-0000101C       .text create__11daNpc_kam_cFv */
 cPhs_State daNpc_kam_c::create() {
-    fopAcM_SetupActor(this, daNpc_kam_c);
+    fopAcM_ct_Retail(this, daNpc_kam_c);
     
     if (l_act != NULL && l_act != this) {
         return cPhs_ERROR_e;
@@ -309,8 +322,12 @@ cPhs_State daNpc_kam_c::create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Kamome");
     
     if (phase_state == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, daNpc_kam_c);
+
         if (!fopAcM_entrySolidHeap(this, checkCreateHeap, l_heap_size)) {
+#if VERSION > VERSION_DEMO
             mpMorf = NULL;
+#endif
             return cPhs_ERROR_e;
         }
         
@@ -1046,7 +1063,9 @@ BOOL daNpc_kam_c::actionWaitEvent(int evtStaffId) {
 
 /* 000035C8-0000361C       .text initialChangeEvent__11daNpc_kam_cFi */
 void daNpc_kam_c::initialChangeEvent(int evtStaffId) {
+#if VERSION > VERSION_DEMO
     fopAcM_SetRoomNo(this, fopAcM_GetHomeRoomNo(this));
+#endif
     changePlayer(this);
     dComIfGs_setBaitItemEmpty();
     offNoBgCheck();
@@ -1098,7 +1117,11 @@ BOOL daNpc_kam_c::actionDescendEvent(int evtStaffId) {
         return TRUE;
     }
     
-    return cLib_calcTimer(&mWaitTimer) == 0 ? TRUE : FALSE;
+    if (cLib_calcTimer(&mWaitTimer) == 0) {
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
 /* 00003864-00003884       .text initialAreaOutTurn__11daNpc_kam_cFi */
@@ -1160,9 +1183,9 @@ struct anmTbl_c {
 /* 000039E8-00003B14       .text setAnm__11daNpc_kam_cFi */
 void daNpc_kam_c::setAnm(int anmIdx) {
     static anmTbl_c l_anmTbl[] = {
-        {KAMOME_BCK_KA_WAIT1, KAMOME_BAS_KA_WAIT1},
-        {KAMOME_BCK_KA_WAIT2, KAMOME_BAS_KA_WAIT2},
-        {KAMOME_BCK_KA_SING1, -1},
+        {dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e},
+        {dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e},
+        {dRes_INDEX_KAMOME_BCK_KA_SING1_e, -1},
     };
     static anmPrm_c l_anmPrm[] = {
         {
@@ -1216,7 +1239,8 @@ void daNpc_kam_c::setAnm(int anmIdx) {
 
 /* 00003B14-00003C80       .text setCollision__11daNpc_kam_cFv */
 void daNpc_kam_c::setCollision() {
-    MtxP mtx = mpMorf->getModel()->getAnmMtx(m_jnt_body);
+    J3DModel* model = mpMorf->getModel();
+    MtxP mtx = model->getAnmMtx(m_jnt_body);
     cXyz center;
     center.set(mtx[0][3], mtx[1][3], mtx[2][3]);
     
@@ -1466,18 +1490,18 @@ static actor_method_class l_daNpc_kam_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_KAM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_KAM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_KAM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_kam_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_KAM,
+    /* Draw Prio    */ fpcDwPi_NPC_KAM_e,
     /* Actor SubMtd */ &l_daNpc_kam_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_2_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_2_e,
 };

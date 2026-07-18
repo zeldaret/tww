@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_alldie.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 
 enum {
@@ -67,7 +65,7 @@ BOOL daAlldie_c::execute() {
 }
 
 cPhs_State daAlldie_c::create() {
-    fopAcM_SetupActor(this, daAlldie_c);
+    fopAcM_ct(this, daAlldie_c);
 
     if (!dComIfGs_isSwitch(getSwbit(), fopAcM_GetRoomNo(this))) {
         setActio(ACT_CHECK);
@@ -119,18 +117,18 @@ static actor_method_class l_daAlldie_Method = {
 };
 
 actor_process_profile_definition g_profile_ALLDIE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ALLDIE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ALLDIE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAlldie_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ALLDIE,
+    /* Draw Prio    */ fpcDwPi_ALLDIE_e,
     /* Actor SubMtd */ &l_daAlldie_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

@@ -16,7 +16,6 @@
 #include "d/d_item_data.h"
 #include "d/d_magma.h"
 #include "d/d_particle.h"
-#include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "d/d_wood.h"
 #include "f_op/f_op_scene_mng.h"
@@ -81,9 +80,9 @@ void dComIfG_play_c::itemInit() {
     mItemKeyNumCount = 0;
     mItemMaxLifeCount = 0;
     mItemMagicCount = 0;
-    field_0x48da = 0;
+    mItemNowMagicCount = 0;
     mItemMaxMagicCount = 0;
-    field_0x48de = 0;
+    mItemPictureNumCount = 0;
     mItemArrowNumCount = 0;
     field_0x48e2 = 0;
     mItemBombNumCount = 0;
@@ -126,7 +125,7 @@ void dComIfG_play_c::itemInit() {
     mDirection = 0;
     mButtonMode = 0;
 
-    if (dComIfGs_checkGetItem(dItem_TELESCOPE_e)) {
+    if (dComIfGs_checkGetItem(dItemNo_TELESCOPE_e)) {
         mButtonInfo[0] = 0;
     } else {
         mButtonInfo[0] = 0x15;
@@ -158,9 +157,9 @@ void dComIfG_play_c::itemInit() {
     mPictureResult = 0;
     mPictureResultDetail = 0;
     mPictureStatus = 0;
-    field_0x495f = 0;
+    mGetPictureNum = 0;
     mPictureFormat = 0;
-    field_0x4961 = 0;
+    mSelectPicture = 0;
     mHeapLockFlag = 0;
     field_0x4965 = 0;
 
@@ -217,7 +216,12 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
                 return layer | 2;
             }
         } else if (strcmp(dComIfGp_getStartStageName(), "Hyrule") == 0) {
-            if (dComIfGs_getTriforceNum() == 8) {
+            if (
+                dComIfGs_getTriforceNum() == 8
+#if VERSION == VERSION_DEMO
+                && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2C01)
+#endif
+            ) {
                 return layer | 4;
             } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3280)) {
                 return layer | 2;
@@ -268,14 +272,14 @@ int dComIfG_play_c::getLayerNo(int i_roomNo) {
 void dComIfG_play_c::createParticle() {
     mParticle = new dPa_control_c();
 
-    JUT_ASSERT(VERSION_SELECT(358, 358, 360, 360), mParticle != NULL);
+    JUT_ASSERT(VERSION_SELECT(350, 358, 360, 360), mParticle != NULL);
 }
 
 /* 800528F4-8005297C       .text createDemo__14dComIfG_play_cFv */
 void dComIfG_play_c::createDemo() {
     mDemo = new dDemo_manager_c();
 
-    JUT_ASSERT(VERSION_SELECT(388, 388, 390, 390), mDemo != NULL);
+    JUT_ASSERT(VERSION_SELECT(380, 388, 390, 390), mDemo != NULL);
 }
 
 /* 8005297C-800529B8       .text removeDemo__14dComIfG_play_cFv */
@@ -479,15 +483,26 @@ void dComIfG_inf_c::ct() {
 
 /* 800531A8-8005326C       .text dComIfG_changeOpeningScene__FP11scene_classs */
 int dComIfG_changeOpeningScene(scene_class* i_scene, s16 i_procName) {
+#if VERSION == VERSION_DEMO
+    if (!fopScnM_ChangeReq(i_scene, i_procName, fpcNm_OVERLAP0_e, 30)) {
+        return FALSE;
+    }
+
+    dComIfGs_setRestartRoomParam(0);
+#else
     dComIfGp_offEnableNextStage();
+#endif
 
     dComIfGp_setNextStage("sea_T", 0, 44, 0);
-    mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(),
-                        dComIfGp_getNextStageLayer());
+    mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
+
+#if VERSION > VERSION_DEMO
     dComIfGs_setRestartRoomParam(0);
 
-    fopScnM_ChangeReq(i_scene, i_procName, PROC_OVERLAP0, 30);
+    fopScnM_ChangeReq(i_scene, i_procName, fpcNm_OVERLAP0_e, 30);
     fopScnM_ReRequest(i_procName, 0);
+#endif
+
     return 1;
 }
 
@@ -498,7 +513,9 @@ BOOL dComIfG_resetToOpening(scene_class* i_scene) {
     }
 
     dComIfG_changeOpeningScene(i_scene, 8);
+#if VERSION > VERSION_DEMO
     mDoAud_bgmStop(30);
+#endif
     mDoAud_resetProcess();
     return TRUE;
 }
@@ -547,7 +564,7 @@ cPhs_State dComIfG_resLoad(request_of_phase_process_class* i_phase, const char* 
 
 /* 800533D0-8005347C       .text dComIfG_resDelete__FP30request_of_phase_process_classPCc */
 int dComIfG_resDelete(request_of_phase_process_class* i_phase, const char* i_resName) {
-    JUT_ASSERT(VERSION_SELECT(1045, 1045, 1048, 1048), i_phase->id != 1);
+    JUT_ASSERT(VERSION_SELECT(1033, 1045, 1048, 1048), i_phase->id != 1);
 
     if (i_phase->id == 2) {
         dComIfG_deleteObjectRes(i_resName);
@@ -565,11 +582,11 @@ s8 dComIfGp_getReverb(int param_0) {
 /* 800534C4-800535B8       .text dComIfGd_setSimpleShadow2__FP4cXyzffR13cBgS_PolyInfosfP9_GXTexObj */
 int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 scaleXZ, cBgS_PolyInfo& i_floorPoly,
                               s16 i_angle, f32 scaleZ, GXTexObj* i_tex) {
-    if (i_floorPoly.ChkSetInfo() && -G_CM3D_F_INF != groundY) {
+    if (i_floorPoly.ChkSetInfo() && groundY != -G_CM3D_F_INF) {
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
-        return dComIfGd_setSimpleShadow(i_pos, groundY, scaleXZ, plane_p->GetNP(), i_angle, scaleZ, i_tex);
+        return dComIfGd_setSimpleShadow(i_pos, groundY, scaleXZ, &plane_p->mNormal, i_angle, scaleZ, i_tex);
     } else {
         return 0;
     }
@@ -660,9 +677,11 @@ void dComIfGp_setNextStage(const char* i_stageName, s16 i_point, s8 i_roomNo, s8
 
         i_lastMode |= link->checkTinkleShield() << 0x10;
 
+#if VERSION > VERSION_DEMO
         if (link->checkNoResetFlg1(daPy_lk_c::daPyFlg1_SOUP_POWER_UP)) {
             i_lastMode |= 0x4000;
         }
+#endif
     }
 
     g_dComIfG_gameInfo.save.getRestart().setLastSceneInfo(i_lastSpeed, i_lastMode);
@@ -693,6 +712,116 @@ BOOL dComIfGs_isStageTbox(int i_stageNo, int i_no) {
     }
 }
 
+void dComIfGs_onDungeonItemMap(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onDungeonItemMap();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onDungeonItemMap();
+}
+
+void dComIfGs_offDungeonItemMap(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offDungeonItemMap();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offDungeonItemMap();
+}
+
+BOOL dComIfGs_isDungeonItemMap(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isDungeonItemMap();
+    } else {
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isDungeonItemMap();
+    }
+}
+
+void dComIfGs_onDungeonItemCompass(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onDungeonItemCompass();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onDungeonItemCompass();
+}
+
+void dComIfGs_offDungeonItemCompass(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offDungeonItemCompass();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offDungeonItemCompass();
+}
+
+BOOL dComIfGs_isDungeonItemCompass(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isDungeonItemCompass();
+    } else {
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isDungeonItemCompass();
+    }
+}
+
+void dComIfGs_onDungeonItemBossKey(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onDungeonItemBossKey();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onDungeonItemBossKey();
+}
+
+void dComIfGs_offDungeonItemBossKey(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offDungeonItemBossKey();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offDungeonItemBossKey();
+}
+
+BOOL dComIfGs_isDungeonItemBossKey(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isDungeonItemBossKey();
+    } else {
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isDungeonItemBossKey();
+    }
+}
+
+void dComIfGs_onStageBossEnemy(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onStageBossEnemy();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onStageBossEnemy();
+}
+
+void dComIfGs_offStageBossEnemy(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offStageBossEnemy();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offStageBossEnemy();
+}
+
 /* 800539A8-80053A2C       .text dComIfGs_isStageBossEnemy__Fi */
 BOOL dComIfGs_isStageBossEnemy(int i_stageNo) {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
@@ -715,6 +844,16 @@ void dComIfGs_onStageLife(int i_stageNo) {
     g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onStageLife();
 }
 
+void dComIfGs_offStageLife(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offStageLife();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offStageLife();
+}
+
 /* 80053AAC-80053B30       .text dComIfGs_isStageLife__Fi */
 BOOL dComIfGs_isStageLife(int i_stageNo) {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
@@ -726,102 +865,132 @@ BOOL dComIfGs_isStageLife(int i_stageNo) {
     }
 }
 
+void dComIfGs_onStageBossDemo(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_onStageBossDemo();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().onStageBossDemo();
+}
+
+void dComIfGs_offStageBossDemo(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        dComIfGs_offStageBossDemo();
+    }
+
+    g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().offStageBossDemo();
+}
+
+BOOL dComIfGs_isStageBossDemo(int i_stageNo) {
+    stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
+
+    if (i_stageNo == dStage_stagInfo_GetSaveTbl(stag_info)) {
+        return dComIfGs_isStageBossDemo();
+    } else {
+        return g_dComIfG_gameInfo.save.getSavedata().getSave(i_stageNo).getBit().isStageBossDemo();
+    }
+}
+
 /* 80053B30-80053F70       .text dComIfGs_checkGetItem__FUc */
 u8 dComIfGs_checkGetItem(u8 i_itemNo) {
     u8 get_item = 0;
 
     switch (i_itemNo) {
-    case TACT_SONG1:
+    case dItemNo_WINDS_REQUIEM_e:
         if (dComIfGs_isTact(0)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG2:
+    case dItemNo_BALLAD_OF_GALES_e:
         if (dComIfGs_isTact(1)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG3:
+    case dItemNo_COMMAND_MELODY_e:
         if (dComIfGs_isTact(2)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG4:
+    case dItemNo_EARTH_GODS_LYRIC_e:
         if (dComIfGs_isTact(3)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG5:
+    case dItemNo_WIND_GODS_ARIA_e:
         if (dComIfGs_isTact(4)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG6:
+    case dItemNo_SONG_OF_PASSING_e:
         if (dComIfGs_isTact(5)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE1_e:
+    case dItemNo_TRIFORCE1_e:
         if (dComIfGs_isTriforce(0)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE2_e:
+    case dItemNo_TRIFORCE2_e:
         if (dComIfGs_isTriforce(1)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE3_e:
+    case dItemNo_TRIFORCE3_e:
         if (dComIfGs_isTriforce(2)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE4_e:
+    case dItemNo_TRIFORCE4_e:
         if (dComIfGs_isTriforce(3)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE5_e:
+    case dItemNo_TRIFORCE5_e:
         if (dComIfGs_isTriforce(4)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE6_e:
+    case dItemNo_TRIFORCE6_e:
         if (dComIfGs_isTriforce(5)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE7_e:
+    case dItemNo_TRIFORCE7_e:
         if (dComIfGs_isTriforce(6)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE8_e:
+    case dItemNo_TRIFORCE8_e:
         if (dComIfGs_isTriforce(7)) {
             get_item = 1;
         }
         break;
-    case dItem_PEARL_NAYRU_e:
+    case dItemNo_PEARL_NAYRU_e:
         if (dComIfGs_isSymbol(0)) {
             get_item = 1;
         }
         break;
-    case dItem_PEARL_DIN_e:
+    case dItemNo_PEARL_DIN_e:
         if (dComIfGs_isSymbol(1)) {
             get_item = 1;
         }
         break;
-    case dItem_PEARL_FARORE_e:
+    case dItemNo_PEARL_FARORE_e:
         if (dComIfGs_isSymbol(2)) {
             get_item = 1;
         }
         break;
-    case dItem_PIRATES_CHARM_e:
+    case dItemNo_PIRATES_CHARM_e:
         if (dComIfGs_isCollect(3, 0)) {
             get_item = 1;
         }
         break;
-    case dItem_HEROS_CHARM_e:
+    case dItemNo_HEROS_CHARM_e:
         if (dComIfGs_isCollect(4, 0)) {
             get_item = 1;
         }
@@ -839,8 +1008,8 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
             }
         }
 
-        if (i_itemNo >= 0xBF && i_itemNo <= dItem_NONE_e - 1 &&
-            dComIfGs_isGetCollectMap(dItem_NONE_e - i_itemNo))
+        if (i_itemNo >= 0xBF && i_itemNo <= dItemNo_NONE_e - 1 &&
+            dComIfGs_isGetCollectMap(dItemNo_NONE_e - i_itemNo))
         {
             get_item++;
         }
@@ -855,164 +1024,164 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
     u8 get_item = 0;
 
     switch (i_itemNo) {
-    case TACT_SONG1:
+    case dItemNo_WINDS_REQUIEM_e:
         if (dComIfGs_isTact(0)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG2:
+    case dItemNo_BALLAD_OF_GALES_e:
         if (dComIfGs_isTact(1)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG3:
+    case dItemNo_COMMAND_MELODY_e:
         if (dComIfGs_isTact(2)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG4:
+    case dItemNo_EARTH_GODS_LYRIC_e:
         if (dComIfGs_isTact(3)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG5:
+    case dItemNo_WIND_GODS_ARIA_e:
         if (dComIfGs_isTact(4)) {
             get_item = 1;
         }
         break;
-    case TACT_SONG6:
+    case dItemNo_SONG_OF_PASSING_e:
         if (dComIfGs_isTact(5)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE1_e:
+    case dItemNo_TRIFORCE1_e:
         if (dComIfGs_isTriforce(0)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE2_e:
+    case dItemNo_TRIFORCE2_e:
         if (dComIfGs_isTriforce(1)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE3_e:
+    case dItemNo_TRIFORCE3_e:
         if (dComIfGs_isTriforce(2)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE4_e:
+    case dItemNo_TRIFORCE4_e:
         if (dComIfGs_isTriforce(3)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE5_e:
+    case dItemNo_TRIFORCE5_e:
         if (dComIfGs_isTriforce(4)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE6_e:
+    case dItemNo_TRIFORCE6_e:
         if (dComIfGs_isTriforce(5)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE7_e:
+    case dItemNo_TRIFORCE7_e:
         if (dComIfGs_isTriforce(6)) {
             get_item = 1;
         }
         break;
-    case dItem_TRIFORCE8_e:
+    case dItemNo_TRIFORCE8_e:
         if (dComIfGs_isTriforce(7)) {
             get_item = 1;
         }
         break;
-    case dItem_PEARL_NAYRU_e:
+    case dItemNo_PEARL_NAYRU_e:
         if (dComIfGs_isSymbol(0)) {
             get_item = 1;
         }
         break;
-    case dItem_PEARL_DIN_e:
+    case dItemNo_PEARL_DIN_e:
         if (dComIfGs_isSymbol(1)) {
             get_item = 1;
         }
         break;
-    case dItem_PEARL_FARORE_e:
+    case dItemNo_PEARL_FARORE_e:
         if (dComIfGs_isSymbol(2)) {
             get_item = 1;
         }
         break;
-    case dItem_PIRATES_CHARM_e:
+    case dItemNo_PIRATES_CHARM_e:
         if (dComIfGs_isCollect(3, 0)) {
             get_item = 1;
         }
         break;
-    case dItem_HEROS_CHARM_e:
+    case dItemNo_HEROS_CHARM_e:
         if (dComIfGs_isCollect(4, 0)) {
             get_item = 1;
         }
         break;
-    case dItem_BOW_e:
-        if (dComIfGs_getItem(dInvSlot_BOW_e) != dItem_HEART_e) { // Bug?
+    case dItemNo_BOW_e:
+        if (dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_HEART_e) { // Bug?
             get_item = dComIfGs_getArrowNum();
         }
         break;
-    case dItem_BOMB_BAG_e:
-        if (dComIfGs_getItem(dInvSlot_BOMB_e) != dItem_HEART_e) { // Bug?
+    case dItemNo_BOMB_BAG_e:
+        if (dComIfGs_getItem(dInvSlot_BOMB_e) != dItemNo_HEART_e) { // Bug?
             get_item = dComIfGs_getBombNum();
         }
         break;
-    case dItem_SKULL_NECKLACE_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_SKULL_NECKLACE_e) {
-                get_item = dComIfGs_getBeastNum(0);
+    case dItemNo_SKULL_NECKLACE_e:
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_SKULL_NECKLACE_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_SKULL_NECKLACE_e);
             }
         }
         break;
-    case dItem_BOKOBABA_SEED_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_BOKOBABA_SEED_e) {
-                get_item = dComIfGs_getBeastNum(1);
+    case dItemNo_BOKOBABA_SEED_e:
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_BOKOBABA_SEED_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_BOKOBABA_SEED_e);
             }
         }
         break;
-    case dItem_GOLDEN_FEATHER_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_GOLDEN_FEATHER_e) {
-                get_item = dComIfGs_getBeastNum(2);
+    case dItemNo_GOLDEN_FEATHER_e:
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_GOLDEN_FEATHER_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_GOLDEN_FEATHER_e);
             }
         }
         break;
-    case BOKO_BELT:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == BOKO_BELT) {
-                get_item = dComIfGs_getBeastNum(3);
+    case dItemNo_KNIGHTS_CREST_e:
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_KNIGHTS_CREST_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_KNIGHTS_CREST_e);
             }
         }
         break;
-    case dItem_RED_JELLY_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_RED_JELLY_e) {
-                get_item = dComIfGs_getBeastNum(4);
+    case dItemNo_RED_JELLY_e:
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_RED_JELLY_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_RED_JELLY_e);
             }
         }
         break;
-    case dItem_GREEN_JELLY_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_GREEN_JELLY_e) {
-                get_item = dComIfGs_getBeastNum(5);
+    case dItemNo_GREEN_JELLY_e:
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_GREEN_JELLY_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_GREEN_JELLY_e);
             }
         }
         break;
-    case dItem_BLUE_JELLY_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_BLUE_JELLY_e) {
-                get_item = dComIfGs_getBeastNum(6);
+    case dItemNo_BLUE_JELLY_e:
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_BLUE_JELLY_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_BLUE_JELLY_e);
             }
         }
         break;
-    case dItem_JOY_PENDANT_e:
-        for (int i = 0; i < 8; i++) {
-            if (dComIfGs_getBeast(i) == dItem_JOY_PENDANT_e) {
-                get_item = dComIfGs_getBeastNum(7);
+    case dItemNo_JOY_PENDANT_e:
+        for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_JOY_PENDANT_e) {
+                get_item = dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
             }
         }
         break;
@@ -1029,8 +1198,8 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
             }
         }
 
-        if (i_itemNo >= 0xBF && i_itemNo <= dItem_NONE_e - 1 &&
-            dComIfGs_isGetCollectMap(dItem_NONE_e - i_itemNo))
+        if (i_itemNo >= 0xBF && i_itemNo <= dItemNo_NONE_e - 1 &&
+            dComIfGs_isGetCollectMap(dItemNo_NONE_e - i_itemNo))
         {
             get_item = 1;
         }
@@ -1066,12 +1235,12 @@ static void dummy() {
 /* 8005468C-800547BC       .text getSceneList__Fi */
 stage_scls_info_class* getSceneList(int i_no) {
     stage_scls_info_dummy_class* sclsInfo = dComIfGp_getStage().getSclsInfo();
-    JUT_ASSERT(VERSION_SELECT(2129, 2129, 2132, 2132), sclsInfo != NULL);
+    JUT_ASSERT(VERSION_SELECT(2114, 2129, 2132, 2132), sclsInfo != NULL);
 
-    JUT_ASSERT(VERSION_SELECT(2131, 2131, 2134, 2134), 0 <= i_no && i_no < sclsInfo->num);
+    JUT_ASSERT(VERSION_SELECT(2116, 2131, 2134, 2134), 0 <= i_no && i_no < sclsInfo->num);
 
     stage_scls_info_class* sclsData = sclsInfo->m_entries;
-    JUT_ASSERT(VERSION_SELECT(2133, 2133, 2136, 2136), sclsData != NULL);
+    JUT_ASSERT(VERSION_SELECT(2118, 2133, 2136, 2136), sclsData != NULL);
 
     return &sclsData[i_no];
 }
@@ -1170,7 +1339,7 @@ void dComIfGs_setGameStartStage() {
             dKy_set_nexttime(120.0f);
         } else if (stage_type == dStageType_SEA_e) {
             daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-            point = player_p->mRestartPoint;
+            point = player_p->checkIsland();
 
             room_no = fopAcM_GetRoomNo(player_p);
 
@@ -1210,7 +1379,7 @@ void dComIfGs_setGameStartStage() {
             strcpy(stage_name, "sea");
 
             stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
-            JUT_ASSERT(VERSION_SELECT(2359, 2359, 2362, 2362), mapInfo != NULL);
+            JUT_ASSERT(VERSION_SELECT(2344, 2359, 2362, 2362), mapInfo != NULL);
 
             room_no = 4 + dStage_mapInfo_GetOceanX(mapInfo) + ((dStage_mapInfo_GetOceanZ(mapInfo) + 3) * 7);
             point = 0;
@@ -1226,7 +1395,9 @@ void dComIfGs_setGameStartStage() {
 
 /* 80054C70-80054CC0       .text dComIfGs_gameStart__Fv */
 void dComIfGs_gameStart() {
+#if VERSION > VERSION_DEMO
     dComIfGp_offEnableNextStage();
+#endif
 
     s8 roomNo = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getRoomNo();
     s16 point = g_dComIfG_gameInfo.save.getPlayer().getPlayerReturnPlace().getPoint();
@@ -1285,18 +1456,22 @@ void dComIfGs_setPlayerRecollectionData() {
         tbl = 3;
         dComIfGp_setPlayerInfoBufferStageNo(4);
     } else {
+#if VERSION > VERSION_DEMO
         dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);
+#endif
         return;
     }
 
-    if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[dInvSlot_TELESCOPE_e] != dItem_TELESCOPE_e) {
+#if VERSION > VERSION_DEMO
+    if (dComIfGs_getpPlayerStatusC(tbl)->mRecollectItem.mItems[dInvSlot_TELESCOPE_e] != dItemNo_TELESCOPE_e) {
         dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
         dComIfGs_setSelectItem(dItemBtn_Z_e, dInvSlot_NONE_e);
         return;
     }
+#endif
 
     dSv_player_status_a_c tmp_sttsA;
     dSv_player_item_max_c tmp_max;
@@ -1391,7 +1566,9 @@ void dComIfGs_setPlayerRecollectionData() {
     dComIfGs_setItem(dInvSlot_BOTTLE1_e, tmp_item.mItems[dInvSlot_BOTTLE1_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE2_e, tmp_item.mItems[dInvSlot_BOTTLE2_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE3_e, tmp_item.mItems[dInvSlot_BOTTLE3_e]);
+#if VERSION > VERSION_DEMO
     dComIfGs_setItem(dInvSlot_CAMERA_e,  tmp_item.mItems[dInvSlot_CAMERA_e]);
+#endif
 
     dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
     dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
@@ -1490,7 +1667,9 @@ void dComIfGs_revPlayerRecollectionData() {
     dComIfGs_setItem(dInvSlot_BOTTLE1_e, tmp_item.mItems[dInvSlot_BOTTLE1_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE2_e, tmp_item.mItems[dInvSlot_BOTTLE2_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE3_e, tmp_item.mItems[dInvSlot_BOTTLE3_e]);
+#if VERSION > VERSION_DEMO
     dComIfGs_setItem(dInvSlot_CAMERA_e,  tmp_item.mItems[dInvSlot_CAMERA_e]);
+#endif
 
     dComIfGs_setSelectItem(dItemBtn_X_e, dInvSlot_NONE_e);
     dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_NONE_e);
@@ -1598,7 +1777,9 @@ void dComIfGs_exchangePlayerRecollectionData() {
     dComIfGs_setItem(dInvSlot_BOTTLE1_e, tmp_item.mItems[dInvSlot_BOTTLE1_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE2_e, tmp_item.mItems[dInvSlot_BOTTLE2_e]);
     dComIfGs_setItem(dInvSlot_BOTTLE3_e, tmp_item.mItems[dInvSlot_BOTTLE3_e]);
+#if VERSION > VERSION_DEMO
     dComIfGs_setItem(dInvSlot_CAMERA_e,  tmp_item.mItems[dInvSlot_CAMERA_e]);
+#endif
 }
 
 /* 8005586C-800559E8       .text dComIfGs_setSelectEquip__FiUc */
@@ -1606,32 +1787,32 @@ void dComIfGs_setSelectEquip(int i_type, u8 i_itemNo) {
     switch (i_type) {
     case 0:
         switch (i_itemNo) {
-        case dItem_SWORD_e:
+        case dItemNo_SWORD_e:
             dComIfGs_onCollect(i_type, 0);
             break;
-        case dItem_MASTER_SWORD_1_e:
+        case dItemNo_MASTER_SWORD_1_e:
             dComIfGs_onCollect(i_type, 1);
             break;
-        case dItem_MASTER_SWORD_2_e:
+        case dItemNo_MASTER_SWORD_2_e:
             dComIfGs_onCollect(i_type, 2);
             break;
-        case dItem_MASTER_SWORD_3_e:
+        case dItemNo_MASTER_SWORD_3_e:
             dComIfGs_onCollect(i_type, 3);
             break;
         }
         break;
     case 1:
         switch (i_itemNo) {
-        case dItem_SHIELD_e:
+        case dItemNo_SHIELD_e:
             dComIfGs_onCollect(i_type, 0);
             break;
-        case dItem_MIRROR_SHIELD_e:
+        case dItemNo_MIRROR_SHIELD_e:
             dComIfGs_onCollect(i_type, 1);
             break;
         }
         break;
     case 2:
-        if (i_itemNo == dItem_POWER_BRACELETS_e) {
+        if (i_itemNo == dItemNo_POWER_BRACELETS_e) {
             dComIfGs_onCollect(i_type, 0);
         }
         break;

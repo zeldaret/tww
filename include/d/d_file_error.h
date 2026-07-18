@@ -18,6 +18,8 @@ public:
 
     virtual ~dFe_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
     /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 m5;
     /* 0x006 */ s16 m6;
@@ -67,10 +69,10 @@ public:
 
 class dFile_error_c {
 public:
-    void getStatus() {}
-    void getYesNo() {}
+    u8 getStatus() { return mStatus; }
+    u8 getYesNo() { return mYesNo ^ 1; }
     void setDbgErrMessage(char*, int) {}
-    void setTimeCountDownMode() {}
+    void setTimeCountDownMode() { mTimeCountDownMode = 1; }
 
     virtual ~dFile_error_c() {}
     void _create();
@@ -115,14 +117,14 @@ public:
     /* 0x2ec */ char* mMessage;
     /* 0x2f0 */ STControl* stick;
     /* 0x2f4 */ u8 mState;
-    /* 0x2f5 */ u8 m2f5;
-    /* 0x2f6 */ u8 mSelectedOption;
+    /* 0x2f5 */ u8 mStatus;
+    /* 0x2f6 */ u8 mYesNo;
     /* 0x2f7 */ u8 m2f7;
     /* 0x2f8 */ u8 m2f8;
     /* 0x2f9 */ u8 m2f9;
     /* 0x2fa */ u8 m2fa;
     /* 0x2fb */ u8 m2fb;
-    /* 0x2fc */ u8 m2fc;
+    /* 0x2fc */ u8 mTimeCountDownMode;
     /* 0x2fd */ u8 m2fd;
     /* 0x2fe */ s16 m2fe;
     /* 0x300 */ f32 m300;

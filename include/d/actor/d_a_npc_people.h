@@ -74,13 +74,13 @@ public:
     };
 
     u8 getNpcNo() { return mNpcType; }
-    request_of_phase_process_class* getPhaseP() { return &mPhs; }
+    request_of_phase_process_class* getPhaseP() { return &mPhase; }
     void setEtcFlag(u32 flags) { mEtcFlag |= flags; }
     void setResFlag(u8 flag) { mResFlag = flag; }
     void setAnmFlag(u8 flags) { mAnmFlag |= flags; }
-    void setTalk(u8) {}
-    void setNoTalk(u8) {}
-    void setOrderEventNum(u8) {}
+    void setTalk(u8 value) { mTalk = value; }
+    void setNoTalk(u8 value) { mNoTalk = value; }
+    void setOrderEventNum(u8 value) { mOrderEventNum = value; }
 
     daNpcPeople_c();
     cPhs_State _create();
@@ -201,11 +201,11 @@ public:
     void warp();
 
 public:
-    /* 0x6C4 */ request_of_phase_process_class mPhs;
-    /* 0x6CC */ request_of_phase_process_class mPhs2;
-    /* 0x6D4 */ J3DModel* m6D4;
-    /* 0x6D8 */ J3DModel* m6D8;
-    /* 0x6DC */ mDoExt_McaMorf* m6DC;
+    /* 0x6C4 */ request_of_phase_process_class mPhase;
+    /* 0x6CC */ request_of_phase_process_class mPhase2;
+    /* 0x6D4 */ J3DModel* mpHeadModel;
+    /* 0x6D8 */ J3DModel* mpEtcModel;
+    /* 0x6DC */ mDoExt_McaMorf* mpHeadMorf;
     /* 0x6E0 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x6E4 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F8 */ u32 mShadowId;
@@ -244,12 +244,12 @@ public:
     /* 0x782 */ s16 m782;
     /* 0x784 */ s16 m784;
     /* 0x786 */ s16 m786;
-    /* 0x788 */ u8 m788;
+    /* 0x788 */ u8 mTalk;
     /* 0x789 */ u8 m789;
     /* 0x78A */ u8 m78A;
     /* 0x78B */ u8 m78B;
-    /* 0x78C */ u8 m78C;
-    /* 0x78D */ u8 m78D;
+    /* 0x78C */ u8 mNoTalk;
+    /* 0x78D */ u8 mOrderEventNum;
     /* 0x78E */ u8 m78E;
     /* 0x78F */ u8 m78F;
     /* 0x790 */ u8 mResFlag;

@@ -6,12 +6,10 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bmdfoot.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_bmdfoot.h"
+#include "res/Object/Bmdfoot.h"
 #include "d/actor/d_a_bmd.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 class daBmdfoot_HIO_c : public JORReflexible {
@@ -42,7 +40,7 @@ static daBmdfoot_HIO_c l_HIO;
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 jntNo = joint->getJntNo();
+        int jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         bmdfoot_class* i_this = (bmdfoot_class*)model->getUserArea();
         if (i_this != NULL) {
@@ -59,86 +57,76 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 /* 000001D8-000002B0       .text daBmdfoot_Draw__FP13bmdfoot_class */
 static BOOL daBmdfoot_Draw(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    J3DModel* pJVar1;
 
     if (i_this->mBC8 != 0) {
-        pJVar1 = i_this->m2B4->getModel();
+        J3DModel* model = i_this->mpBodyVineMorf->getModel();
         g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->current.pos, &actor->tevStr);
-        g_env_light.setLightTevColorType(pJVar1, &actor->tevStr);
-        i_this->btk->entry(pJVar1->getModelData());
-        i_this->m2B4->entryDL();
+        g_env_light.setLightTevColorType(model, &actor->tevStr);
+        i_this->btk->entry(model->getModelData());
+        i_this->mpBodyVineMorf->entryDL();
         if (i_this->mBA8 >= 10) {
-            pJVar1 = i_this->mAF4->getModel();
-            g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->mBAC, &i_this->mAF8);
-            g_env_light.setLightTevColorType(pJVar1, &i_this->mAF8);
-            i_this->mAF4->entryDL();
+            model = i_this->mpFloorVineMorf->getModel();
+            g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->mBAC, &i_this->mTevstr);
+            g_env_light.setLightTevColorType(model, &i_this->mTevstr);
+            i_this->mpFloorVineMorf->entryDL();
         }
     }
     return TRUE;
 }
 
 /* 000002B0-000003D8       .text anm_init__FP13bmdfoot_classifUcfi */
-void anm_init(bmdfoot_class* i_this, int bckFileIdx, float morf, unsigned char loopMode, float speed, int soundFileIdx) {
+void anm_init(bmdfoot_class* i_this, int bckFileIdx, f32 morf, unsigned char loopMode, f32 speed, int soundFileIdx) {
     if (soundFileIdx >= 0) {
-        i_this->m2B4->setAnm(
-            (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", bckFileIdx),
-            loopMode, morf, speed, 0.0f, -1.0f,
-            dComIfG_getObjectRes("Bmdfoot", soundFileIdx)
+        i_this->mpBodyVineMorf->setAnm(
+            (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", bckFileIdx), loopMode, morf, speed, 0.0f, -1.0f, dComIfG_getObjectRes("Bmdfoot", soundFileIdx)
         );
     } else {
-        i_this->m2B4->setAnm(
-            (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", bckFileIdx),
-            loopMode, morf, speed, 0.0f, -1.0f,
-            NULL
-        );
+        i_this->mpBodyVineMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", bckFileIdx), loopMode, morf, speed, 0.0f, -1.0f, NULL);
     }
 }
 
 /* 000003D8-00000440       .text housi_off__FP13bmdfoot_class */
 void housi_off(bmdfoot_class* i_this) {
-    for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m41C); i++) {
-        if (i_this->m41C[i].getEmitter() != NULL) {
-            i_this->m41C[i].getEmitter()->stopCreateParticle();
+    for (int i = 0; i < ARRAY_SSIZE(i_this->mAsiWaitFollowCB); i++) {
+        if (i_this->mAsiWaitFollowCB[i].getEmitter() != NULL) {
+            i_this->mAsiWaitFollowCB[i].getEmitter()->stopCreateParticle();
         }
     }
-    if (i_this->m4B0.getEmitter() != NULL) {
-        i_this->m4B0.remove();
+    if (i_this->mLAttackSmoke01CB.getEmitter() != NULL) {
+        i_this->mLAttackSmoke01CB.remove();
     }
 }
 
 /* 00000440-00000840       .text wait__FP13bmdfoot_class */
 void wait(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    short sVar2;
-    int iVar3;
     cXyz local_98;
-    static s32 eff_id[] = {0x0A, 0x0C, 0x11};
-    s32 i;
+    static int eff_id[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
 
-    iVar3 = i_this->m2B4->getFrame();
+    int frame = i_this->mpBodyVineMorf->getFrame();
     local_98.setall(0.0f);
-    
-    for (i = 0; i < (s32)ARRAY_SIZE(i_this->m3F8); i++) {
-        MTXCopy(i_this->m2B4->getModel()->getAnmMtx(eff_id[i]), *calc_mtx);
+
+    for (int i = 0; i < ARRAY_SSIZE(i_this->m3F8); i++) {
+        MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(eff_id[i]), *calc_mtx);
         MtxPosition(&local_98, &i_this->m3F8[i]);
         if (i_this->m3F4 == 0) {
-            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMASIWAIT00, &i_this->m3F8[i], NULL, NULL, 0xFF, &i_this->m41C[i]);
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMASIWAIT00, &i_this->m3F8[i], NULL, NULL, 0xFF, &i_this->mAsiWaitFollowCB[i]);
         }
-        if (i_this->m41C[i].getEmitter() != NULL) {
-            if (iVar3 == 0) {
-                i_this->m41C[i].getEmitter()->playCreateParticle();
-            } else if (iVar3 == 20) {
-                i_this->m41C[i].getEmitter()->stopCreateParticle();
+        if (i_this->mAsiWaitFollowCB[i].getEmitter() != NULL) {
+            if (frame == 0) {
+                i_this->mAsiWaitFollowCB[i].getEmitter()->playCreateParticle();
+            } else if (frame == 20) {
+                i_this->mAsiWaitFollowCB[i].getEmitter()->stopCreateParticle();
             }
         }
     }
-    
+
     i_this->m3F4 = 1;
-    
+
     switch (i_this->m2BC) {
     case -1:
-        for (i = 2; i <= (s32)ARRAY_SIZE(i_this->m3A4); i++) {
-            cLib_addCalc2(&i_this->m2CC[i].x, (s32)(0x10U - i) * (0.003f + REG12_F(3)), 0.1f, (0.008f + REG12_F(4)));
+        for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
+            cLib_addCalc2(&i_this->m2CC[i].x, (int)(0x10 - i) * (0.003f + REG12_F(3)), 0.1f, 0.008f + REG12_F(4));
             i_this->m3A4[i] = 0.0f;
         }
         if (i_this->m2C0[2] == 0) {
@@ -149,17 +137,17 @@ void wait(bmdfoot_class* i_this) {
         break;
     case 0:
         i_this->m2BC++;
-        anm_init(i_this, BMDFOOT_BCK_ASI_WAIT, 50.0f, J3DFrameCtrl::EMode_LOOP, (cM_rndF(0.2f) + 0.9f), -1);
-        i_this->m2C0[0] = (s16)(int)(cM_rndF(150.0f) + 100.0f);
-        i_this->m3EC = (s16)(int)cM_rndFX(32768.0f);
-        for (i = 2; i <= (s32)ARRAY_SIZE(i_this->m3A4); i++) {
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e, 50.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
+        i_this->m2C0[0] = cM_rndF(150.0f) + 100.0f;
+        i_this->m3EC = cM_rndFX(32768.0f);
+        for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
             i_this->m3A4[i] = REG14_F(13) + (0.2f + cM_rndFX(0.1f));
         }
         break;
     case 1:
         i_this->m3EC = (i_this->m3EC + (s16)(REG14_S(4) + 0x200));
         if (boss->m332 == 1) {
-            sVar2 = actor->current.angle.y - fopAcM_searchPlayerAngleY(actor);
+            s16 sVar2 = actor->current.angle.y - fopAcM_searchPlayerAngleY(actor);
             if (sVar2 < 0) {
                 sVar2 = -sVar2;
             }
@@ -168,7 +156,7 @@ void wait(bmdfoot_class* i_this) {
                 i_this->m2BA = 1;
                 i_this->m2BC = 0;
             } else {
-                i_this->m2C0[0] = (s16)(int)(cM_rndF(50.0f) + 50.0f);
+                i_this->m2C0[0] = cM_rndF(50.0f) + 50.0f;
             }
         } else {
             if (boss->m332 == 2) {
@@ -185,19 +173,14 @@ void wait(bmdfoot_class* i_this) {
 void attack_1(bmdfoot_class* i_this) {
     /* Nonmatching - retail-only regalloc */
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    bool bVar2;
-    short sVar3;
-    short sVar5;
-    J3DModel* pJVar9;
-    s32 i;
     cXyz local_5c;
     cXyz cStack_68;
-    static s32 jno[] = {0x0A, 0x0C, 0x11};
-    static s32 col_joint[] = {0x01, 0x03, 0x05, 0x07, 0x09};
+    static int jno[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
+    static int col_joint[] = {ASI_JNT_ASI2_e, ASI_JNT_ASI4_e, ASI_JNT_ASI6_e, ASI_JNT_ASI8_e, ASI_JNT_ASI10_e};
 
-    bVar2 = false;
+    bool bVar2 = false;
     local_5c.setall(0.0f);
-    
+
     switch (i_this->m2BC) {
     case 0:
         i_this->m2C0[0] = cM_rndF(20.0f);
@@ -205,7 +188,7 @@ void attack_1(bmdfoot_class* i_this) {
     case 1:
         i_this->mBC4 = 0.0f;
         if (i_this->m2C0[0] == 0) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_ATTACK1, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_ATTACK1_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m2BC++;
             i_this->mBD0 = 0x1e;
         }
@@ -214,8 +197,8 @@ void attack_1(bmdfoot_class* i_this) {
         if (i_this->mBD0 == 0) {
             i_this->mBD0 = 0x1e;
         }
-        if (i_this->m2B4->isStop()) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_ATTACK_LOOP, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        if (i_this->mpBodyVineMorf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_ATTACK_LOOP_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m2C0[0] = 0x3c;
             i_this->m2BC++;
         }
@@ -224,12 +207,12 @@ void attack_1(bmdfoot_class* i_this) {
         if (i_this->mBD0 == 0) {
             i_this->mBD0 = 0x1e;
         }
-        for (i = 2; i <= (s32)ARRAY_SIZE(i_this->m3A4); i++) {
+        for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
             i_this->m3A4[i] = 0.0f;
             cLib_addCalc0(&i_this->m2CC[i].z, 0.1f, 0.05f);
         }
         if (i_this->m2C0[0] == 0) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_ATTACK2, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_ATTACK2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m2BC++;
             i_this->m2C0[0] = REG14_S(2) + 0x1c;
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_PREP, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -239,22 +222,23 @@ void attack_1(bmdfoot_class* i_this) {
         bVar2 = true;
         if (i_this->m2C0[0] == 1) {
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_ATTACK, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-            for (s32 i = 0; i < (s32)ARRAY_SIZE(jno); i++) {
-                MTXCopy(i_this->m2B4->getModel()->getAnmMtx(jno[i]), *calc_mtx);
+            for (int i = 0; i < ARRAY_SSIZE(jno); i++) {
+                MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(jno[i]), *calc_mtx);
                 MtxPosition(&local_5c, &cStack_68);
                 dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &cStack_68, 0xFF, g_whiteColor, g_whiteColor, 0);
             }
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &i_this->mAE8, 0xFF, g_whiteColor, g_whiteColor, 0);
             dComIfGp_particle_setSimple(dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00, &i_this->mAE8, 0xB9, g_whiteColor, g_whiteColor, 0);
         }
-        if (i_this->m2B4->isStop()) {
+        if (i_this->mpBodyVineMorf->isStop()) {
             i_this->m2BA = 0;
             i_this->m2BC = 0;
         }
         break;
     }
-    
-    sVar3 = fopAcM_searchPlayerAngleY(actor) - actor->current.angle.y;
+
+    s16 sVar3 = fopAcM_searchPlayerAngleY(actor) - actor->current.angle.y;
+    s16 sVar5;
     if (sVar3 > l_HIO.m06) {
         sVar5 = l_HIO.m06;
     } else if (sVar3 < (s16)-l_HIO.m06) {
@@ -264,34 +248,30 @@ void attack_1(bmdfoot_class* i_this) {
     }
     cLib_addCalcAngleS2(&i_this->m2BE, sVar5, 4, i_this->mBC4 + 128.0f);
     cLib_addCalc2(&i_this->mBC4, 10000.0f, 1.0f, REG0_F(7) + 20.0f);
-    
+
     if (bVar2) {
-        pJVar9 = i_this->m2B4->getModel();
-        for (i = 0; i < (s32)ARRAY_SIZE(i_this->m50C); i++) {
-            MTXCopy(pJVar9->getAnmMtx((i_this->m2B8 & 7U) + col_joint[i]), *calc_mtx);
+        J3DModel* model = i_this->mpBodyVineMorf->getModel();
+        for (int i = 0; i < ARRAY_SSIZE(i_this->mSph); i++) {
+            MTXCopy(model->getAnmMtx((i_this->m2B8 & 7U) + col_joint[i]), *calc_mtx);
             MtxPosition(&local_5c, &cStack_68);
-            i_this->m50C[i].SetC(cStack_68);
-            i_this->m50C[i].SetR(40.0f);
-            i_this->m50C[i].OnAtSetBit();
-            i_this->m50C[i].OffCoSetBit();
-            dComIfG_Ccsp()->Set(&i_this->m50C[i]);
+            i_this->mSph[i].SetC(cStack_68);
+            i_this->mSph[i].SetR(40.0f);
+            i_this->mSph[i].OnAtSetBit();
+            i_this->mSph[i].OffCoSetBit();
+            dComIfG_Ccsp()->Set(&i_this->mSph[i]);
         }
     }
 }
 
 /* 00000D8C-00001180       .text ug_move__FP13bmdfoot_class */
-s32 ug_move(bmdfoot_class* i_this) {
+int ug_move(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    u32 uVar4;
-    f32 dVar5;
-    f32 dVar6;
-    float fVar7;
     cXyz local_4c;
     cXyz cStack_58;
     cXyz local_64;
 
-    daPy_py_c* apdVar3 = daPy_getPlayerActorClass();
-    uVar4 = 0;
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    u32 uVar4 = 0;
     switch (i_this->mBA8) {
     case 0:
         break;
@@ -301,20 +281,20 @@ s32 ug_move(bmdfoot_class* i_this) {
         i_this->mBB8.y = actor->current.angle.y;
         i_this->mBC0 = 0.0f;
         i_this->mBA8 = 2;
-        fVar7 = cM_rndF(10000.0f);
-        i_this->m2B8 = (s16)(int)fVar7;
-        dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMLATTACKSMOKE01, &i_this->mBAC, &i_this->mBB8, NULL, 0xB9, &i_this->m4B0, (u8)actor->current.roomNo);
+        i_this->m2B8 = cM_rndF(10000.0f);
+        dComIfGp_particle_setToon(
+            dPa_name::ID_AK_ST_BKMLATTACKSMOKE01, &i_this->mBAC, &i_this->mBB8, NULL, 0xB9, &i_this->mLAttackSmoke01CB, (u8)actor->current.roomNo
+        );
         break;
     case 0xa:
         break;
     case 2:
-        local_64 = apdVar3->current.pos - i_this->mBAC;
-        fVar7 = local_64.abs();
-        dVar5 = (fVar7 * 10.0f);
+        local_64 = player->current.pos - i_this->mBAC;
+        f32 dVar5 = (local_64.abs() * 10.0f);
         if (dVar5 > (REG14_F(14) + 10000.0f)) {
             dVar5 = (REG14_F(14) + 10000.0f);
         }
-        dVar6 = cM_ssin(i_this->m2B8 * (REG14_S(3) + 2000));
+        f32 dVar6 = cM_ssin(i_this->m2B8 * (REG14_S(3) + 2000));
         s16 r28 = dVar5 * dVar6;
         s16 r4 = r28 + cM_atan2s(local_64.x, local_64.z);
         cLib_addCalcAngleS2(&i_this->mBB8.y, r4, 0x10, 0x2000);
@@ -325,11 +305,10 @@ s32 ug_move(bmdfoot_class* i_this) {
         MtxPosition(&local_4c, &cStack_58);
         i_this->mBAC += cStack_58;
         i_this->mBC0 = i_this->mBC0 + local_4c.z;
-        fVar7 = local_64.abs();
-        if ((fVar7 < 300.0f) || (i_this->mBC0 > REG14_F(15) + 3000.0f)) {
+        if ((local_64.abs() < 300.0f) || (i_this->mBC0 > REG14_F(15) + 3000.0f)) {
             i_this->mBA8 = 10;
-            if (i_this->m4B0.getEmitter() != NULL) {
-                i_this->m4B0.remove();
+            if (i_this->mLAttackSmoke01CB.getEmitter() != NULL) {
+                i_this->mLAttackSmoke01CB.remove();
             }
             uVar4 = 1;
         }
@@ -337,20 +316,20 @@ s32 ug_move(bmdfoot_class* i_this) {
     }
     MtxTrans(i_this->mBAC.x, i_this->mBAC.y, i_this->mBAC.z, false);
     cMtx_YrotM(*calc_mtx, i_this->mBB8.y);
-    J3DModel* model = i_this->mAF4->getModel();
+    J3DModel* model = i_this->mpFloorVineMorf->getModel();
     model->setBaseTRMtx(*calc_mtx);
-    i_this->mAF4->play(NULL, 0, 0);
-    i_this->mAF4->calc();
+    i_this->mpFloorVineMorf->play(NULL, 0, 0);
+    i_this->mpFloorVineMorf->calc();
     return uVar4;
 }
 
 /* 00001180-00001B00       .text attack_2__FP13bmdfoot_class */
 void attack_2(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    J3DAnmTransform* pJVar2;
+    J3DAnmTransform* pBck;
     cXyz local_3c;
     cXyz local_48;
-    static s32 col_joint[] = {0x11, 0x0F, 0x0C, 0x09};
+    static int col_joint[] = {ASI_JNT_ASI18_e, ASI_JNT_ASI16_e, ASI_JNT_ASI13_e, ASI_JNT_ASI10_e};
 
     local_3c.z = 0.0f;
     local_3c.y = 0.0f;
@@ -358,28 +337,28 @@ void attack_2(bmdfoot_class* i_this) {
     boss->m334 = 10;
     switch (i_this->m2BC) {
     case 0:
-        i_this->m2C0[0] = (s16)(int)cM_rndF(20.0f);
+        i_this->m2C0[0] = cM_rndF(20.0f);
         i_this->m2BC++;
     case 1:
         i_this->mBC4 = 0.0f;
         if (i_this->m2C0[0] == 0) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_UMARU, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_UMARU_e, 10.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m2BC++;
             i_this->m2C0[0] = 5;
             i_this->mBD0 = 0x1e;
         }
         break;
     case 2:
-        if ((s32)i_this->m2B4->getFrame() == 49) {
-            MTXCopy(i_this->m2B4->getModel()->getAnmMtx(0x11), *calc_mtx);
+        if ((int)i_this->mpBodyVineMorf->getFrame() == 49) {
+            MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(ASI_JNT_ASI18_e), *calc_mtx);
             MtxPosition(&local_3c, &local_48);
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
             dComIfGp_particle_setSimple(dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00, &local_48, 0xB9, g_whiteColor, g_whiteColor, 0);
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_IN_G, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
-        if (i_this->m2B4->isStop()) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_UMARU_WAIT, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        if (i_this->mpBodyVineMorf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_UMARU_WAIT_e, 10.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m2BC++;
             i_this->mBA8 = 1;
         }
@@ -387,13 +366,13 @@ void attack_2(bmdfoot_class* i_this) {
     case 3:
         mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_DIG, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         if (ug_move(i_this)) {
-            pJVar2 = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_DATTACK1);
-            i_this->mAF4->setAnm(pJVar2, J3DFrameCtrl::EMode_NONE, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
+            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_DATTACK1_e);
+            i_this->mpFloorVineMorf->setAnm(pBck, J3DFrameCtrl::EMode_NONE, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
             i_this->m2BC++;
         }
         break;
     case 4:
-        if ((s32)i_this->mAF4->getFrame() == 2) {
+        if ((int)i_this->mpFloorVineMorf->getFrame() == 2) {
             local_48 = i_this->mBAC;
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
@@ -401,9 +380,9 @@ void attack_2(bmdfoot_class* i_this) {
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_OUT_G, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         ug_move(i_this);
-        if (i_this->mAF4->isStop()) {
-            pJVar2 = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_DATTACK2);
-            i_this->mAF4->setAnm(pJVar2, J3DFrameCtrl::EMode_LOOP, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
+        if (i_this->mpFloorVineMorf->isStop()) {
+            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_DATTACK2_e);
+            i_this->mpFloorVineMorf->setAnm(pBck, J3DFrameCtrl::EMode_LOOP, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
             i_this->m2C0[0] = 0xb4;
             i_this->m2BC++;
         }
@@ -411,39 +390,41 @@ void attack_2(bmdfoot_class* i_this) {
     case 5:
         ug_move(i_this);
         mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_L_ATK, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-        for (s32 i = 0; i < (s32)ARRAY_SIZE(col_joint); i++) {
-            MTXCopy(i_this->mAF4->getModel()->getAnmMtx(col_joint[i]), *calc_mtx);
+        for (int i = 0; i < ARRAY_SSIZE(col_joint); i++) {
+            MTXCopy(i_this->mpFloorVineMorf->getModel()->getAnmMtx(col_joint[i]), *calc_mtx);
             MtxPosition(&local_3c, &local_48);
-            i_this->m50C[i].SetC(local_48);
-            i_this->m50C[i].SetR(40.0f);
-            dComIfG_Ccsp()->Set(&i_this->m50C[i]);
+            i_this->mSph[i].SetC(local_48);
+            i_this->mSph[i].SetR(40.0f);
+            dComIfG_Ccsp()->Set(&i_this->mSph[i]);
         }
         if (i_this->m2C0[0] == 0) {
-            pJVar2 = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_DATTACK3);
-            i_this->mAF4->setAnm(pJVar2, J3DFrameCtrl::EMode_NONE, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
+            pBck = (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_DATTACK3_e);
+            i_this->mpFloorVineMorf->setAnm(pBck, J3DFrameCtrl::EMode_NONE, 1.0f, 1.0f, 0.0f, -1.0f, NULL);
             i_this->m2BC++;
         }
         break;
     case 6:
         ug_move(i_this);
-        if ((s32)i_this->mAF4->getFrame() == 12) {
+        if ((int)i_this->mpFloorVineMorf->getFrame() == 12) {
             dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKHOUSHI00, &i_this->mBAC);
             dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKSOIL00, &i_this->mBAC);
             i_this->m498[0].x = i_this->mBAC.x;
             i_this->m498[0].y = i_this->mBAC.y;
             i_this->m498[0].z = i_this->mBAC.z;
-            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMLATTACKSMOKE00, &i_this->m498[0], NULL, NULL, 0xB9, &i_this->m458[0], (u8)actor->current.roomNo);
+            dComIfGp_particle_setToon(
+                dPa_name::ID_AK_ST_BKMLATTACKSMOKE00, &i_this->m498[0], NULL, NULL, 0xB9, &i_this->mLAttackSmoke00CB[0], (u8)actor->current.roomNo
+            );
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_IN_G2, &i_this->mBAC, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
-        if (i_this->mAF4->isStop()) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_NUKU, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        if (i_this->mpFloorVineMorf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_NUKU_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m2BC++;
             i_this->mBA8 = 0;
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_OUT_G2, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         break;
     case 7:
-        if ((s32)i_this->m2B4->getFrame() == 13) {
+        if ((int)i_this->mpBodyVineMorf->getFrame() == 13) {
             local_48 = actor->current.pos;
             local_48.y = i_this->mBAC.y;
             dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMLATTACKHOUSHI00, &local_48);
@@ -451,42 +432,42 @@ void attack_2(bmdfoot_class* i_this) {
             i_this->m498[1].x = local_48.x;
             i_this->m498[1].y = local_48.y;
             i_this->m498[1].z = local_48.z;
-            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_BKMLATTACKSMOKE00, &i_this->m498[1], NULL, NULL, 0xB9, &i_this->m458[1], (u8)actor->current.roomNo);
+            dComIfGp_particle_setToon(
+                dPa_name::ID_AK_ST_BKMLATTACKSMOKE00, &i_this->m498[1], NULL, NULL, 0xB9, &i_this->mLAttackSmoke00CB[1], (u8)actor->current.roomNo
+            );
         }
-        if (i_this->m2B4->isStop()) {
+        if (i_this->mpBodyVineMorf->isStop()) {
             i_this->m2BA = 0;
             i_this->m2BC = 0;
         }
     }
-    MTXCopy(i_this->m2B4->getModel()->getAnmMtx(4), *calc_mtx);
+    MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(ASI_JNT_ASI5_e), *calc_mtx);
     MtxPosition(&local_3c, &local_48);
-    i_this->m50C[4].SetC(local_48);
-    i_this->m50C[4].SetR(50.0f);
-    i_this->m50C[4].OffAtSetBit();
-    i_this->m50C[4].OnCoSetBit();
-    dComIfG_Ccsp()->Set(&i_this->m50C[4]);
+    i_this->mSph[4].SetC(local_48);
+    i_this->mSph[4].SetR(50.0f);
+    i_this->mSph[4].OffAtSetBit();
+    i_this->mSph[4].OnCoSetBit();
+    dComIfG_Ccsp()->Set(&i_this->mSph[4]);
 }
 
 /* 00001B00-00001CDC       .text damage__FP13bmdfoot_class */
 void damage(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     f32 dVar5;
-    float fVar9;
 
     switch (i_this->m2BC) {
     case 0:
-        anm_init(i_this, BMDFOOT_BCK_ASI_NOBIKIRU, 40.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_NOBIKIRU_e, 40.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m2BC++;
         i_this->m2C0[0] = 0x1e;
-        fVar9 = cM_rndFX(32768.0f);
-        i_this->m3EC = (s16)(int)fVar9;
-        for (s32 i = 2; i <= (s32)ARRAY_SIZE(i_this->m3A4); i++) {
+        i_this->m3EC = cM_rndFX(32768.0f);
+        for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
             i_this->m3A4[i] = (0.3f + cM_rndFX(0.2f));
         }
     case 1:
         if (i_this->m2C0[0] != 0) {
             dVar5 = ((fopAcM_GetParam(actor) & 0xf) * 0.01f);
-            for (s32 i = 2; i <= (s32)ARRAY_SIZE(i_this->m3A4); i++) {
+            for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
                 cLib_addCalc2(&i_this->m2CC[i].x, -(dVar5 + (0.05f + ((i) * (0.03f + REG14_F(3))))), 0.1f, REG14_F(4) + 0.1f);
             }
         }
@@ -502,34 +483,34 @@ void damage(bmdfoot_class* i_this) {
 /* 00001CDC-00001ED8       .text start__FP13bmdfoot_class */
 void start(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    
-    for (s32 i = 2; i <= (s32)ARRAY_SIZE(i_this->m3A4); i++) {
+
+    for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
         i_this->m2CC[i].z = 0;
         i_this->m3A4[i] = 0;
     }
-    
+
     switch (i_this->m2BC) {
     case 0:
         if (boss->m332 == 6) {
             i_this->m2BC = 1;
-            i_this->m2C0[0] = (s16)(int)cM_rndF(10.0f);
+            i_this->m2C0[0] = cM_rndF(10.0f);
         }
         break;
     case 1:
         if (i_this->m2C0[0] == 0) {
             i_this->mBC8 = 1;
-            anm_init(i_this, BMDFOOT_BCK_ASI_START1, 1.0f, J3DFrameCtrl::EMode_NONE, (cM_rndF(0.2f) + 0.9f), -1);
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_START1_e, 1.0f, J3DFrameCtrl::EMode_NONE, cM_rndF(0.2f) + 0.9f, -1);
             i_this->m2BC = 2;
         }
         break;
     case 2:
-        if (i_this->m2B4->isStop()) {
-            anm_init(i_this, BMDFOOT_BCK_ASI_START2, 30.0f, J3DFrameCtrl::EMode_LOOP, (cM_rndF(0.2f) + 0.9f), -1);
+        if (i_this->mpBodyVineMorf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_START2_e, 30.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
             i_this->m2BC = 3;
         }
         break;
     case 3:
-        if ((s32)i_this->m2B4->getFrame() == 2) {
+        if ((int)i_this->mpBodyVineMorf->getFrame() == 2) {
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_MOVE_1, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         if (boss->m332 == 7) {
@@ -542,27 +523,26 @@ void start(bmdfoot_class* i_this) {
 
 /* 00001ED8-00001FB8       .text end__FP13bmdfoot_class */
 void end(bmdfoot_class* i_this) {
-    for (s32 i = 2; i <= (s32)ARRAY_SIZE(i_this->m3A4); i++) {
+    for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
         i_this->m2CC[i].z = 0;
         i_this->m3A4[i] = 0;
     }
     if (boss->mB76 == 2) {
-        anm_init(i_this, BMDFOOT_BCK_ASI_DEAD_LOOP, 30.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_DEAD_LOOP_e, 30.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
     }
     if (boss->mB76 == REG8_S(8) + 0x17c) {
-        anm_init(i_this, BMDFOOT_BCK_ASI_DEAD, 30.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_DEAD_e, 30.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
     }
 }
 
 /* 00001FB8-000021B8       .text move__FP13bmdfoot_class */
 void move(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    s16 sVar1;
     cXyz local_20;
     cXyz cStack_2c;
 
     if (boss != NULL) {
-        sVar1 = (u16)(fopAcM_GetParam(actor) & 0xF) << 13;
+        s16 sVar1 = (u16)(fopAcM_GetParam(actor) & 0xF) << 13;
         cMtx_YrotS(*calc_mtx, boss->actor.shape_angle.y);
         cMtx_XrotM(*calc_mtx, boss->actor.shape_angle.x);
         cMtx_ZrotM(*calc_mtx, boss->actor.shape_angle.z);
@@ -608,7 +588,7 @@ void move(bmdfoot_class* i_this) {
 /* 000021B8-00002204       .text s_a_d_sub__FPvPv */
 void* s_a_d_sub(void* search, void* param_2) {
     UNUSED(param_2);
-    if ((fopAc_IsActor(search)) && (fopAcM_GetName(search) == PROC_BMD)) {
+    if ((fopAcM_IsActor(search)) && (fopAcM_GetName(search) == fpcNm_BMD_e)) {
         return search;
     } else {
         return NULL;
@@ -618,16 +598,13 @@ void* s_a_d_sub(void* search, void* param_2) {
 /* 00002204-00002594       .text daBmdfoot_Execute__FP13bmdfoot_class */
 static BOOL daBmdfoot_Execute(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    short sVar1;
-    J3DModel* pJVar5;
     cXyz local_68;
-    s32 i;
 
     if (boss == NULL) {
         boss = (bmd_class*)fpcM_Search(s_a_d_sub, i_this);
     }
     i_this->m2B8++;
-    for (i = 0; i < (s32)ARRAY_SIZE(i_this->m2C0); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(i_this->m2C0); i++) {
         if (i_this->m2C0[i] != 0) {
             i_this->m2C0[i]--;
         }
@@ -640,22 +617,22 @@ static BOOL daBmdfoot_Execute(bmdfoot_class* i_this) {
     cMtx_YrotM(*calc_mtx, actor->current.angle.y + i_this->m2BE);
     cMtx_XrotM(*calc_mtx, actor->current.angle.x);
     cMtx_ZrotM(*calc_mtx, actor->current.angle.z + i_this->m2BE * 2);
-    pJVar5 = i_this->m2B4->getModel();
-    pJVar5->setBaseTRMtx(*calc_mtx);
-    i_this->m2B4->play(NULL, 0, 0);
-    i_this->m2B4->calc();
+    J3DModel* model = i_this->mpBodyVineMorf->getModel();
+    model->setBaseTRMtx(*calc_mtx);
+    i_this->mpBodyVineMorf->play(NULL, 0, 0);
+    i_this->mpBodyVineMorf->calc();
     if (i_this->mBD0 != 0) {
         if (i_this->mBD0 == 0x1e) {
             mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_MOVE_2, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
         }
         i_this->mBD0 = i_this->mBD0 + -1;
     }
-    sVar1 = 29 - i_this->mBD0;
+    s16 sVar1 = 29 - i_this->mBD0;
     if (sVar1 >= 30) {
         sVar1 = sVar1 % 30;
     }
     i_this->btk->setFrame(sVar1);
-    MTXCopy(pJVar5->getAnmMtx(REG14_S(6) + 0x10), *calc_mtx);
+    MTXCopy(model->getAnmMtx(REG14_S(6) + (s16)ASI_JNT_ASI17_e), *calc_mtx);
     local_68.z = 0.0f;
     local_68.y = 0.0f;
     local_68.x = 0.0f;
@@ -671,7 +648,7 @@ static BOOL daBmdfoot_Execute(bmdfoot_class* i_this) {
         sVar1_2 = REG0_S(4);
     }
     cLib_addCalcAngleS2(&actor->current.angle.x, sVar1_2, 0x10, 0x80);
-    for (i = 2; i <= (s32)ARRAY_SIZE(i_this->m3A4); i++) {
+    for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
         f32 f1 = i_this->m3A4[i] * cM_ssin(i_this->m3EC + i * (REG0_S(6) + 9000));
         cLib_addCalc2(&i_this->m2CC[i].z, f1, 0.05f, 0.01f + REG14_F(5));
         cLib_addCalc0(&i_this->m2CC[i].x, 0.05f, 0.005f + REG14_F(5));
@@ -686,76 +663,69 @@ static BOOL daBmdfoot_IsDelete(bmdfoot_class*) {
 
 /* 0000259C-000026B0       .text daBmdfoot_Delete__FP13bmdfoot_class */
 static BOOL daBmdfoot_Delete(bmdfoot_class* i_this) {
-    dComIfG_resDeleteDemo(&i_this->m2AC, "Bmdfoot");
+    dComIfG_resDeleteDemo(&i_this->mPhase, "Bmdfoot");
     if (i_this->mBD2 != 0) {
         hio_set = 0;
         mDoHIO_deleteChild(l_HIO.mNo);
     }
     mDoAud_seDeleteObject(&i_this->mAE8);
     mDoAud_seDeleteObject(&i_this->mBAC);
-    for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m41C); i++) {
-        i_this->m41C[i].remove();
+    for (int i = 0; i < ARRAY_SSIZE(i_this->mAsiWaitFollowCB); i++) {
+        i_this->mAsiWaitFollowCB[i].remove();
     }
-    i_this->m458[0].remove();
-    i_this->m458[1].remove();
-    i_this->m4B0.remove();
+    i_this->mLAttackSmoke00CB[0].remove();
+    i_this->mLAttackSmoke00CB[1].remove();
+    i_this->mLAttackSmoke01CB.remove();
     boss = NULL;
     return TRUE;
 }
 
 /* 000026B0-000029B4       .text useHeapInit__FP13bmdfoot_class */
-s32 useHeapInit(bmdfoot_class* i_this) {
-    mDoExt_McaMorf* pmVar1;
-    mDoExt_btkAnm* pmVar5;
-    J3DAnmTextureSRTKey* pAnm;
-    int iVar7;
-    J3DModel* pJVar9;
+int useHeapInit(bmdfoot_class* i_this) {
+    i_this->mpBodyVineMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BMD_ASI_e),
+        NULL,
+        NULL,
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e),
+        J3DFrameCtrl::EMode_LOOP,
+        cM_rndF(0.2f) + 0.9f,
+        0,
+        -1,
+        1,
+        NULL,
+        0,
+        0x11020203
+    );
+    J3DModel* model = i_this->mpBodyVineMorf->getModel();
+    if (model == NULL) {
+        return FALSE;
+    }
+#if VERSION > VERSION_DEMO
+    if (i_this->mpBodyVineMorf == NULL) {
+        return FALSE;
+    }
+#endif
 
-    pmVar1 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BMD_ASI),
-        NULL,
-        NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_WAIT),
-        J3DFrameCtrl::EMode_LOOP,
-        cM_rndF(0.2f) + 0.9f,
-        0,
-        -1,
-        1,
-        NULL,
-        0,
-        0x11020203
-    );
-    i_this->m2B4 = pmVar1;
-    pJVar9 = i_this->m2B4->getModel();
-    if (pJVar9 == NULL) {
-        return FALSE;
+    model->setUserArea((u32)i_this);
+    for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
+        model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
-#if VERSION > VERSION_DEMO
-    if (i_this->m2B4 == NULL) {
-        return FALSE;
-    }
-#endif
-    
-    pJVar9->setUserArea((u32)i_this);
-    for (u16 uVar16 = 0; uVar16 < pJVar9->getModelData()->getJointNum(); uVar16++) {
-        pJVar9->getModelData()->getJointNodePointer(uVar16)->setCallBack(nodeCallBack);
-    }
-    pmVar5 = new mDoExt_btkAnm();
-    i_this->btk = pmVar5;
+    i_this->btk = new mDoExt_btkAnm();
     JUT_ASSERT(DEMO_SELECT(1416, 1426), i_this->btk);
-    pAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BTK_ASI);
-    iVar7 = i_this->btk->init(pJVar9->getModelData(), pAnm, true, J3DFrameCtrl::EMode_NONE);
-#if VERSION > VERSION_DEMO
-    if (iVar7 == 0) {
+    J3DAnmTextureSRTKey* pBtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BTK_ASI_e);
+#if VERSION == VERSION_DEMO
+    i_this->btk->init(model->getModelData(), pBtk, true, J3DFrameCtrl::EMode_NONE);
+#else
+    if (!i_this->btk->init(model->getModelData(), pBtk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
 #endif
-    
-    pmVar1 = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BMD_ASI),
+
+    i_this->mpFloorVineMorf = new mDoExt_McaMorf(
+        (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BMD_ASI_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", BMDFOOT_BCK_ASI_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e),
         J3DFrameCtrl::EMode_LOOP,
         cM_rndF(0.2f) + 0.9f,
         0,
@@ -765,11 +735,10 @@ s32 useHeapInit(bmdfoot_class* i_this) {
         0,
         0x11020203
     );
-    i_this->mAF4 = pmVar1;
-    if (i_this->mAF4->getModel() == NULL) {
+    if (i_this->mpFloorVineMorf->getModel() == NULL) {
         return FALSE;
     }
-    
+
     return TRUE;
 }
 
@@ -796,7 +765,7 @@ static cPhs_State daBmdfoot_Create(fopAc_ac_c* a_this) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -809,18 +778,17 @@ static cPhs_State daBmdfoot_Create(fopAc_ac_c* a_this) {
             /* Radius */ 40.0f,
         }},
     };
-    cPhs_State res;
 
-    fopAcM_SetupActor(a_this, bmdfoot_class);
+    fopAcM_ct(a_this, bmdfoot_class);
     bmdfoot_class* i_this = (bmdfoot_class*)a_this;
-    res = dComIfG_resLoad(&i_this->m2AC, "Bmdfoot");
+    cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bmdfoot");
     if (res == cPhs_ERROR_e) {
         return cPhs_ERROR_e;
     } else if (res != cPhs_COMPLEATE_e) {
         return res;
     }
-    i_this->m458[0].setFollowOff();
-    i_this->m458[1].setFollowOff();
+    i_this->mLAttackSmoke00CB[0].setFollowOff();
+    i_this->mLAttackSmoke00CB[1].setFollowOff();
     if (!fopAcM_entrySolidHeap(a_this, solidHeapCB, 0x5040)) {
         return cPhs_ERROR_e;
     }
@@ -830,12 +798,12 @@ static cPhs_State daBmdfoot_Create(fopAc_ac_c* a_this) {
         l_HIO.mNo = mDoHIO_createChild("森ボス足", &l_HIO); // Forest boss feet
     }
     a_this->health = 2;
-    i_this->m2B8 = (s16)(int)cM_rndF(10000.0f);
+    i_this->m2B8 = cM_rndF(10000.0f);
     boss = NULL;
-    i_this->m4D0.Init(0xFF, 0, a_this);
-    for (s32 i = 0; i < (s32)ARRAY_SIZE(i_this->m50C); i++) {
-        i_this->m50C[i].SetStts(&i_this->m4D0);
-        i_this->m50C[i].Set(cc_sph_src);
+    i_this->mStts.Init(0xFF, 0, a_this);
+    for (int i = 0; i < ARRAY_SSIZE(i_this->mSph); i++) {
+        i_this->mSph[i].SetStts(&i_this->mStts);
+        i_this->mSph[i].Set(cc_sph_src);
     }
     a_this->attention_info.position.y = -20000.0f;
     a_this->eyePos.y = -20000.0f;
@@ -845,7 +813,7 @@ static cPhs_State daBmdfoot_Create(fopAc_ac_c* a_this) {
         i_this->mBC8 = 1;
     }
 #if VERSION > VERSION_DEMO
-    i_this->mAF8 = a_this->tevStr;
+    i_this->mTevstr = a_this->tevStr;
 #endif
     return cPhs_COMPLEATE_e;
 }
@@ -859,18 +827,18 @@ static actor_method_class l_daBmdfoot_Method = {
 };
 
 actor_process_profile_definition g_profile_BMDFOOT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BMDFOOT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BMDFOOT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bmdfoot_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BMDFOOT,
+    /* Draw Prio    */ fpcDwPi_BMDFOOT_e,
     /* Actor SubMtd */ &l_daBmdfoot_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_BOSS_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

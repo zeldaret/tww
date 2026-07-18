@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_timer.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h" // IWYU pragma: keep // Needed for dComIfGs_isSwitch inline definition
 
 /* 00000078-00000114       .text _create__Q210daObjTimer5Act_cFv */
 cPhs_State daObjTimer::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjTimer::Act_c);
+    fopAcM_ct(this, daObjTimer::Act_c);
 
     fopAcM_offDraw(this);
 
@@ -126,18 +124,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjTimer
 
 actor_process_profile_definition g_profile_Obj_Timer = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000A,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Timer,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000A,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Timer_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjTimer::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Timer,
+    /* Draw Prio    */ fpcDwPi_Obj_Timer_e,
     /* Actor SubMtd */ &daObjTimer::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -10,8 +10,6 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -55,7 +53,7 @@ cPhs_State daHot_Floor_c::CreateInit() {
 cPhs_State daHot_Floor_c::_create() {
 #if VERSION > VERSION_DEMO
     // Bug: This actor is never initialized in the demo.
-    fopAcM_SetupActor(this, daHot_Floor_c);
+    fopAcM_ct(this, daHot_Floor_c);
 #endif
     return CreateInit();
 }
@@ -134,18 +132,18 @@ static actor_method_class daHot_FloorMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Hot_Floor = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Hot_Floor,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Hot_Floor_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daHot_Floor_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Hot_Floor,
+    /* Draw Prio    */ fpcDwPi_Hot_Floor_e,
     /* Actor SubMtd */ &daHot_FloorMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

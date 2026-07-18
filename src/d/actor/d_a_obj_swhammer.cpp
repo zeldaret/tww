@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swhammer.h"
-#include "d/res/res_mhmrsw.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/MhmrSW.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 
@@ -115,11 +113,11 @@ daObjSwhammer::Act_c::Act_c() {
 
 /* 000004B0-0000058C       .text CreateHeap__Q213daObjSwhammer5Act_cFv */
 BOOL daObjSwhammer::Act_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, MHMRSW_BDL_MHMRSW));
+    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MHMRSW_BDL_MHMRSW_e));
     JUT_ASSERT(0x18b, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel) {
-        modelData->getJointNodePointer(1)->setCallBack(jnodeCB);
+        modelData->getJointNodePointer(MHMRSW_JNT_HIT_e)->setCallBack(jnodeCB);
         mpModel->setUserArea((u32) this);
     }
     return mpModel != NULL;
@@ -168,11 +166,11 @@ BOOL daObjSwhammer::Act_c::Create() {
 
 /* 0000070C-000007F8       .text _create__Q213daObjSwhammer5Act_cFv */
 cPhs_State daObjSwhammer::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, MHMRSW_DZB_MHMRSW, NULL, 0xa80);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MHMRSW_DZB_MHMRSW_e, NULL, 0xa80);
         JUT_ASSERT(0x1e9, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -207,16 +205,16 @@ void daObjSwhammer::Act_c::init_mtx() {
 
 /* 00000938-00000A58       .text set_damage__Q213daObjSwhammer5Act_cFv */
 void daObjSwhammer::Act_c::set_damage() {
-    u8 attackState = daPy_getPlayerActorClass()->getCutType();
+    u8 cutType = daPy_getPlayerActorClass()->getCutType();
     M_damage = 0;
     M_damage_dir = 0;
     if (mCylTg.ChkTgHit()) {
         cCcD_Obj *hitObj = mCylTg.GetTgHitObj();
         fopAc_ac_c* hitActor = mCylTg.GetTgHitAc();
-        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
-            if (attackState == 0x12 || attackState == 0x13) {
+        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
+            if (cutType == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || cutType == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER) {
                 M_damage = 1;
-            } else if (attackState == 0x11) {
+            } else if (cutType == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 M_damage_dir = cM_atan2s(mCylTg.GetTgRVecP()->x, mCylTg.GetTgRVecP()->z);
                 M_damage = 2;
             }
@@ -476,18 +474,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjSwhammer
 
 actor_process_profile_definition g_profile_Obj_Swhammer = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swhammer,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swhammer_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwhammer::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swhammer,
+    /* Draw Prio    */ fpcDwPi_Obj_Swhammer_e,
     /* Actor SubMtd */ &daObjSwhammer::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

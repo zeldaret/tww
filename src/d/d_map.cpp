@@ -8,7 +8,7 @@
 #include "d/actor/d_a_agb.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_stage.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_gba_com.h"
 #include "m_Do/m_Do_lib.h"
@@ -876,14 +876,14 @@ void dMap_c::create() {
     /* Nonmatching */
     static const GXColor l_cursorColor = {255, 255, 0, 255};
     static const int frameArcIdx[] = {
-        ALWAYS_BTI_MAP_FRAME1,
-        ALWAYS_BTI_MAP_FRAME3,
-        ALWAYS_BTI_MAP_FRAME2,
-        ALWAYS_BTI_MAP_FRAME4,
-        ALWAYS_BTI_MAP_FRAME1,
-        ALWAYS_BTI_MAP_FRAME3,
-        ALWAYS_BTI_MAP_FRAME1,
-        ALWAYS_BTI_MAP_FRAME2,
+        dRes_INDEX_ALWAYS_BTI_MAP_FRAME1_e,
+        dRes_INDEX_ALWAYS_BTI_MAP_FRAME3_e,
+        dRes_INDEX_ALWAYS_BTI_MAP_FRAME2_e,
+        dRes_INDEX_ALWAYS_BTI_MAP_FRAME4_e,
+        dRes_INDEX_ALWAYS_BTI_MAP_FRAME1_e,
+        dRes_INDEX_ALWAYS_BTI_MAP_FRAME3_e,
+        dRes_INDEX_ALWAYS_BTI_MAP_FRAME1_e,
+        dRes_INDEX_ALWAYS_BTI_MAP_FRAME2_e,
     };
     static const f32 cord[][4] = {
         {0.0f, 0.0f, 1.0f, 1.0f},
@@ -905,7 +905,7 @@ void dMap_c::create() {
     mTboxNum = 0;
     mAGBMapSendStatus = 0;
     mSetCursorFlg = 0;
-    mIconDispMode = 0;
+    mIconDispMode = dMapIconDisp_NONE_e;
     mIconFreeAlpha = 0;
     mIconSelfAlpha = 0;
     mAGBMapSendStopFlg = 0;
@@ -973,27 +973,27 @@ void dMap_c::create() {
         mFrameTexture[i].setScroll(cord[i][0], cord[i][1], cord[i][2], cord[i][3]);
         mFrameTex[i].init(1, &mFrameTexture[i]);
     }
-    timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_CAMERA_FREE);
+    timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_CAMERA_FREE_e);
     JUT_ASSERT(3476, timg != NULL);
     mIconFreeTexture.init(timg, 10, (GXColor){255, 210, 0, 255});
     mIconFreeTexture.field_0x0 = 1;
     mIconFreeTexture.setScroll(0.0f, 0.0f, 1.0f, 1.0f);
     mIconFreeTex.init(1, &mIconFreeTexture);
-    timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_CAMERA_SELF);
+    timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_CAMERA_SELF_e);
     JUT_ASSERT(3489, timg != NULL);
     mIconSelfTexture.init(timg, 10, (GXColor){255, 222, 255, 255});
     mIconSelfTexture.field_0x0 = 1;
     mIconSelfTexture.setScroll(0.0f, 0.0f, 1.0f, 1.0f);
     mIconSelfTex.init(1, &mIconSelfTexture);
-    timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_F_SHIPICON);
+    timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_F_SHIPICON_e);
     JUT_ASSERT(3502, timg != NULL);
     mShip.init(timg, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0, 1.0f, 1.0f, 0);
-    timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TREASUREBOX);
+    timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TREASUREBOX_e);
     JUT_ASSERT(3511, timg != NULL);
     for (int i = 0; i < 8; i++) {
         mTbox[i].init(timg, 0.0f, 0.0f, 0.0f, 0.0f, 1, 0, 0, 1.0f, 1.0f, 0);
     }
-    timg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_BLACK_WHITE_2);
+    timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_BLACK_WHITE_2_e);
     for (int i = 0; i < 16; i++) {
         mDoor[i].init(timg, 0.0f, 0.0f, 0.0f, 0.0f, 1, 0, 0, 1.0f, 1.0f, 0);
     }
@@ -1597,9 +1597,9 @@ void dMap_c::mapDrawAll(f32 param_1, f32 param_2, int param_3, f32 param_4) {
 
 /* 8004A760-8004A7B4       .text mapDrawIcon__6dMap_cFv */
 void dMap_c::mapDrawIcon() {
-    if (mIconDispMode == 2) {
+    if (mIconDispMode == dMapIconDisp_SELF_e) {
         mapDrawIconSelf(mIconFreePosX, mIconFreePosY, mIconSelfAlpha);
-    } else if (mIconDispMode == 1) {
+    } else if (mIconDispMode == dMapIconDisp_FREE_e) {
         mapDrawIconFree(mIconFreePosX, mIconFreePosY, mIconFreeAlpha);
     }
 }

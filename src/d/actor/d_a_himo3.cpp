@@ -6,15 +6,13 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_himo3.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #if VERSION > VERSION_DEMO
-#include "d/res/res_bgn.h"
+#include "res/Object/Bgn.h"
 #endif
-#include "d/res/res_link.h"
-#include "d/res/res_himo3.h"
+#include "res/Object/Link.h"
+#include "res/Object/Himo3.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_actor_mng.h"
@@ -51,6 +49,7 @@ static himo3HIO_c l_HIO;
 
 /* 000000EC-00000C58       .text himo3_control__FP11himo3_classP7himo3_s */
 void himo3_control(himo3_class* i_this, himo3_s* r31) {
+    /* Nonmatching - regalloc */
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     int i = 1;
@@ -615,18 +614,18 @@ static BOOL daHimo3_Delete(himo3_class* i_this) {
 /* 00001AE0-00001DD4       .text useHeapInit__FP11himo3_class */
 cPhs_State useHeapInit(himo3_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    static int hook_bmd[] = {HIMO3_BMD_SLAMP_00, LINK_BDL_ROPEEND, HIMO3_BMD_SLAMP_00, HIMO3_BMD_SLAMP_00, HIMO3_BMD_SLAMP_00};
+    static int hook_bmd[] = {dRes_INDEX_HIMO3_BMD_SLAMP_00_e, dRes_INDEX_LINK_BDL_ROPEEND_e, dRes_INDEX_HIMO3_BMD_SLAMP_00_e, dRes_INDEX_HIMO3_BMD_SLAMP_00_e, dRes_INDEX_HIMO3_BMD_SLAMP_00_e};
 
 #if VERSION == VERSION_DEMO
-    if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Always", i_this->m0298 == 0xf ? ALWAYS_BTI_TXM_ROPE1 : ALWAYS_BTI_ROPE), 0)) {
+    if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Always", i_this->m0298 == 0xf ? dRes_INDEX_ALWAYS_BTI_TXM_ROPE1_e : dRes_INDEX_ALWAYS_BTI_ROPE_e), 0)) {
         return cPhs_ERROR_e;
     }
 #else
     if (i_this->m0298 == 0xf) {
-        if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Bgn", BGN_BTI_NOT_CUT1), 0)) {
+        if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e), 0)) {
             return cPhs_ERROR_e;
         }
-    } else if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE), 0)) {
+    } else if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e), 0)) {
         return cPhs_ERROR_e;
     }
 #endif
@@ -648,7 +647,7 @@ cPhs_State useHeapInit(himo3_class* i_this) {
     }
 
     if (i_this->m0298 == 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Himo3", HIMO3_BMD_H3_GA);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Himo3", dRes_INDEX_HIMO3_BMD_H3_GA_e);
         JUT_ASSERT(DEMO_SELECT(1264, 1298), modelData != NULL);
         s32 tmp = 0;
 
@@ -671,7 +670,6 @@ cPhs_State useHeapInit(himo3_class* i_this) {
 
 /* 00001DD4-00002128       .text daHimo3_Create__FP10fopAc_ac_c */
 static cPhs_State daHimo3_Create(fopAc_ac_c* a_this) {
-    /* Nonmatching */
     static dCcD_SrcCyl cc_cyl_src = {
         // dCcD_SrcGObjInf
         {
@@ -760,7 +758,7 @@ static cPhs_State daHimo3_Create(fopAc_ac_c* a_this) {
 
     himo3_class* i_this = (himo3_class*)a_this;
 
-    fopAcM_SetupActor(a_this, himo3_class);
+    fopAcM_ct(a_this, himo3_class);
 
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Himo3");
     if (PVar1 == cPhs_COMPLEATE_e) {
@@ -859,18 +857,18 @@ static actor_method_class l_daHimo3_Method = {
 };
 
 actor_process_profile_definition g_profile_HIMO3 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_HIMO3,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_HIMO3_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(himo3_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_HIMO3,
+    /* Draw Prio    */ fpcDwPi_HIMO3_e,
     /* Actor SubMtd */ &l_daHimo3_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_stone2.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_always.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Always.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -89,7 +87,7 @@ void Act_c::prmZ_init() {
     if (m656) {
         return;
     }
-    m652 = home.angle.z;
+    mPrmZ = home.angle.z;
     m656 = true;
     home.angle.z = 0;
     current.angle.z = 0;
@@ -163,7 +161,7 @@ BOOL Act_c::Create() {
     m6A9 = 0;
     m65A = 2;
     mode_wait_init();
-    m650 = dComIfGp_evmng_getEventIdx(NULL, m652);
+    m650 = dComIfGp_evmng_getEventIdx(NULL, prmZ_get_evId());
     demo_non_init();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
@@ -177,7 +175,7 @@ bool Act_c::chk_appear() {
 
 /* 000009F4-00000B3C       .text Mthd_Create__Q28daStone25Act_cFv */
 cPhs_State Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     prmZ_init();
     m644 = prm_get_type();
     m659 = chk_appear();
@@ -330,8 +328,8 @@ bool Act_c::damage_bg_proc_directly() {
 
 /* 00001214-00001368       .text eff_m_break__Q28daStone25Act_cFUsUs */
 void Act_c::eff_m_break(u16 particleID, u16 texAnmFrame) {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI);
-    J3DAnmTexPattern* texAnm = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e);
+    J3DAnmTexPattern* texAnm = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e);
     cXyz sp18;
     sp18.setall(attr().m54);
 
@@ -622,7 +620,7 @@ bool Act_c::mode_proc_call() {
         }
 
         if (m648 == 3) {
-            if (prmZ_get_evId() == 0 && m65C.isEnd()) {
+            if (m64C == 0 && m65C.isEnd()) {
                 BOOL tmp;
                 if (m6A8) {
                     tmp = m688.isEnd();
@@ -650,9 +648,8 @@ void Act_c::demo_non() {
 
 /* 000021AC-00002214       .text demo_req_init__Q28daStone25Act_cFv */
 void Act_c::demo_req_init() {
-    if (prmZ_get_evId() == 0) {
-        u8 evno = m652;
-        fopAcM_orderOtherEventId(this, m650, evno);
+    if (m64C == 0) {
+        fopAcM_orderOtherEventId(this, m650, prmZ_get_evId());
         eventInfo.onCondition(dEvtCmd_INDEMO_e);
         m64C = 1;
     }
@@ -664,8 +661,7 @@ void Act_c::demo_req() {
         if (eventInfo.checkCommandDemoAccrpt()) {
             demo_run_init();
         } else {
-            u8 evno = m652;
-            fopAcM_orderOtherEventId(this, m650, evno);
+            fopAcM_orderOtherEventId(this, m650, prmZ_get_evId());
             eventInfo.onCondition(dEvtCmd_INDEMO_e);
         }
     } else {
@@ -694,7 +690,7 @@ void Act_c::demo_proc_call() {
         &Act_c::demo_req,
         &Act_c::demo_run,
     };
-    (this->*demo_proc[prmZ_get_evId()])();
+    (this->*demo_proc[m64C])();
 }
 
 /* 000023BC-00002574       .text Execute__Q28daStone25Act_cFPPA3_A4_f */
@@ -799,18 +795,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daStone2
 
 actor_process_profile_definition g_profile_Stone2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Stone2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Stone2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daStone2::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Stone2,
+    /* Draw Prio    */ fpcDwPi_Stone2_e,
     /* Actor SubMtd */ &daStone2::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

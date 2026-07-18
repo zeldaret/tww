@@ -4,10 +4,10 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "res/Object/Fdai.h"
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_salvage.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_lod_bg.h"
 #include "d/actor/d_a_agb.h"
 #include "d/actor/d_a_agbsw0.h"
@@ -405,7 +405,7 @@ void daTagKbItem_c::dig_main() {
     if (!fopAcM_IsActor(mpActor)) {
         return;
     }
-    if (fopAcM_GetName(mpActor) != PROC_KB) {
+    if (fopAcM_GetName(mpActor) != fpcNm_KB_e) {
         // Not a pig.
         return;
     }
@@ -448,12 +448,14 @@ void daTagKbItem_c::dig_main() {
     field_0x299 = 0;
 }
 
+#if VERSION > VERSION_DEMO
 bool daTitle_proc_c::daTitle_Kirakira_Sound_flag = true;
 
 /* 80056CC0-80056CCC       .text daTitle_Kirakira_Sound_flag_on__14daTitle_proc_cFv */
 void daTitle_proc_c::daTitle_Kirakira_Sound_flag_on() {
     daTitle_Kirakira_Sound_flag = true;
 }
+#endif
 
 /* 80056CCC-80056DE0       .text daiItemNodeCallBack__13daStandItem_cFP7J3DNodei */
 BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
@@ -462,17 +464,17 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         void* userArea = (void*)model->getUserArea();
-        if (userArea && fopAcM_IsActor(userArea) && fopAcM_GetName(userArea) == PROC_STANDITEM) {
+        if (userArea && fopAcM_IsActor(userArea) && fopAcM_GetName(userArea) == fpcNm_STANDITEM_e) {
             daStandItem_c* i_this = (daStandItem_c*)userArea;
             mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
             switch (i_this->getItemNo()) {
-            case WIND_FLAG:
+            case dItemNo_PINWHEEL_e:
                 mDoMtx_stack_c::XrotM(i_this->m6B4);
                 break;
-            case WATER_STATUE:
-                if (jntNo == 0) {
+            case dItemNo_FOUNTAIN_IDOL_e:
+                if (jntNo == FOBJ09_JNT_TUBOKO_BASE_e) {
                     mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m630);
-                } else if (jntNo == 1) {
+                } else if (jntNo == FOBJ09_JNT_TUBOKO_HEAD_e) {
                     mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m660);
                 }
                 break;

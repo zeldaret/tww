@@ -50,7 +50,7 @@ void daPy_lk_c::throwBoomerang() {
 BOOL daPy_lk_c::returnBoomerang() {
     dComIfGp_clearPlayerStatus0(0, daPyStts0_BOOMERANG_WAIT_e);
 
-    if (mEquipItem == daPyItem_NONE_e && !checkNoControll() && !dComIfGp_event_runCheck() && mDemo.getDemoType() == 0 &&
+    if (mEquipItem == daPyItem_NONE_e && !checkNoControll() && !dComIfGp_event_runCheck() && !checkPlayerDemoMode() &&
         (checkNoUpperAnime() || checkPlayerGuard() || checkDashDamageAnime() || checkBoomerangAnime()) &&
         (!checkModeFlg(
              // These combine to: 0x01FD2810
@@ -61,7 +61,7 @@ BOOL daPy_lk_c::returnBoomerang() {
     {
         mActorKeepEquip = mActorKeepThrow;
         mActorKeepThrow.clearData();
-        mEquipItem = dItem_BOOMERANG_e;
+        mEquipItem = dItemNo_BOOMERANG_e;
         onNoResetFlg0(daPyFlg0_UNK20);
         return true;
     }
@@ -72,9 +72,9 @@ BOOL daPy_lk_c::returnBoomerang() {
 
 /* 801497A4-8014984C       .text checkNextActionBoomerangReady__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextActionBoomerangReady() {
-    if (!itemButton() && (mpAttnActorLockOn != NULL || dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, 0x10))) {
+    if (!itemButton() && (mpAttnActorLockOn != NULL || dComIfGp_checkCameraAttentionStatus(mCameraInfoIdx, dCamAttnStts_00000010_e))) {
         setActAnimeUpper(
-            LKANM_BCK_BOOMTHROW,
+            dRes_INDEX_LKANM_BCK_BOOMTHROW_e,
             UPPER_MOVE2_e,
             m_HIO->mItem.mBoom.m.field_0x4,
             m_HIO->mItem.mBoom.m.field_0x8,
@@ -93,7 +93,7 @@ void daPy_lk_c::checkNextActionBoomerangFly() {
         checkNextActionBoomerangReady();
     } else if (itemTrigger() && mEquipItem == getReadyItem()) {
         setActAnimeUpper(
-            LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, m_HIO->mBasic.m.field_0xC
+            dRes_INDEX_LKANM_BCK_BOOMWAIT_e, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, m_HIO->mBasic.m.field_0xC
         );
     }
 }
@@ -113,11 +113,11 @@ BOOL daPy_lk_c::checkNextBoomerangMode() {
 /* 80149964-80149A44       .text changeBoomerangCatchProc__9daPy_lk_cFv */
 BOOL daPy_lk_c::changeBoomerangCatchProc() {
     if (checkNoResetFlg0(daPyFlg0_UNK20)) {
-        if (!dComIfGp_event_runCheck() && mDemo.getDemoType() == 0 && checkModeFlg(ModeFlg_00020000) &&
+        if (!dComIfGp_event_runCheck() && !checkPlayerDemoMode() && checkModeFlg(ModeFlg_00020000) &&
             (checkNoUpperAnime() || checkBoomerangThrowAnime()))
         {
             setActAnimeUpper(
-                LKANM_BCK_BOOMCATCH,
+                dRes_INDEX_LKANM_BCK_BOOMCATCH_e,
                 UPPER_MOVE2_e,
                 m_HIO->mItem.mBoom.m.field_0x20,
                 m_HIO->mItem.mBoom.m.field_0x24,
@@ -143,9 +143,9 @@ BOOL daPy_lk_c::procBoomerangSubject_init() {
 
     commonProcInit(daPyProc_BOOMERANG_SUBJECT_e);
 
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
-    setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_BOOMWAIT_e, UPPER_MOVE2_e, 0.0f, 0.0f, -1, -1.0f);
     setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
@@ -201,7 +201,7 @@ BOOL daPy_lk_c::procBoomerangMove_init() {
         mDirection = DIR_RIGHT;
         current.angle.y = shape_angle.y + -0x4000;
     }
-    setActAnimeUpper(LKANM_BCK_BOOMWAIT, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, -1.0f);
+    setActAnimeUpper(dRes_INDEX_LKANM_BCK_BOOMWAIT_e, UPPER_MOVE2_e, m_HIO->mItem.mBoom.m.field_0x18, 0.0f, -1, -1.0f);
     setBlendAtnMoveAnime(m_HIO->mBasic.m.field_0xC);
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOOMERANG_AIM_e);
     return true;
@@ -221,7 +221,7 @@ BOOL daPy_lk_c::procBoomerangMove() {
 
     if (!checkNextMode(0)) {
         f32 fVar1 = -1.0f;
-        if (std::fabsf(mVelocity) < 0.001f) {
+        if (std::fabsf(mNormalSpeed) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_RIGHT) {
                 mDirection = DIR_RIGHT;

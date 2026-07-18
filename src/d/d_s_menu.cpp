@@ -12,7 +12,6 @@
 #include "JSystem/JUtility/JUTReport.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
-#include "d/d_procname.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_scene_mng.h"
 #if VERSION == VERSION_PAL
@@ -26,13 +25,13 @@
 #include "stdio.h"
 #endif
 
-s32 l_startID;
-s32 l_cursolID;
-int l_timepat;
-s16 l_weekpat;
-s16 l_demo23;
-s8* l_groupPoint;
-u8 l_languageType;
+static s32 l_startID;
+static s32 l_cursolID;
+static int l_timepat;
+static s16 l_weekpat;
+static s16 l_demo23;
+static s8* l_groupPoint;
+static u8 l_languageType;
 
 #if VERSION == VERSION_PAL
 static mDoDvdThd_mountXArchive_c* l_bmgData2;
@@ -183,16 +182,26 @@ static BOOL dScnMenu_Execute(menu_of_scene_class* i_this) {
             i_this->startCode--;
     }
 
-    if (CPad_CHECK_TRIG_START(0)) {
+#if VERSION > VERSION_DEMO
+    if (CPad_CHECK_TRIG_START(0))
+#endif
+    {
         menu_of_scene_class::room_inf* room = &info->stage[l_cursolID].roomPtr[l_groupPoint[l_cursolID]];
+#if VERSION > VERSION_DEMO
         dComIfGp_offEnableNextStage();
-        s16 startCode = (i_this->startCode != 0) ? i_this->startCode - 1 : room->startCode;
+#endif
+        int startCode = (i_this->startCode != 0) ? i_this->startCode - 1 : room->startCode;
         dComIfGp_setNextStage(room->stageName, startCode, room->roomNo, room->layerNo);
+#if VERSION > VERSION_DEMO
         if (strcmp(dComIfGp_getNextStageName(), "ENDING") == 0) {
-            fopScnM_ChangeReq(i_this, PROC_ENDING_SCENE, PROC_OVERLAP0, 5);
+            fopScnM_ChangeReq(i_this, fpcNm_ENDING_SCENE_e, fpcNm_OVERLAP0_e, 5);
             mDoAud_bgmStop(30);
-        } else {
-            fopScnM_ChangeReq(i_this, PROC_PLAY_SCENE, PROC_OVERLAP0, 5);
+        } else
+#else
+        if (CPad_CHECK_TRIG_START(0))
+#endif
+        {
+            fopScnM_ChangeReq(i_this, fpcNm_PLAY_SCENE_e, fpcNm_OVERLAP0_e, 5);
             dComIfGs_setRestartRoomParam(0);
             mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
         }
@@ -302,9 +311,9 @@ static BOOL dScnMenu_Delete(menu_of_scene_class* i_this) {
 
 /* 8022F3C4-8022F4B0       .text phase_1__FP19menu_of_scene_class */
 cPhs_State phase_1(menu_of_scene_class* i_this) {
-    i_this->command = mDoDvdThd_toMainRam_c::create("/res/Menu/Menu1.dat", 0, NULL);
+    i_this->command = mDoDvdThd_toMainRam_c::create("/res/Menu/Menu1.dat", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(616, 616, 732, 732), i_this->command != NULL);
-    i_this->fontCommand = mDoDvdThd_toMainRam_c::create("/res/Menu/kanfont_fix16.bfn", 0, NULL);
+    i_this->fontCommand = mDoDvdThd_toMainRam_c::create("/res/Menu/kanfont_fix16.bfn", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     JUT_ASSERT(VERSION_SELECT(619, 619, 735, 735), i_this->fontCommand != NULL);
     return cPhs_NEXT_e;
 }
@@ -364,7 +373,7 @@ f32 myFontClass::drawChar_scale(f32 param_1, f32 param_2, f32 param_3, f32 param
     return JUTResFont::drawChar_scale(param_1, param_2, 12.0f, param_4, param_5, param_6);
 }
 
-scene_method_class l_dScnMenu_Method = {
+static scene_method_class l_dScnMenu_Method = {
     (process_method_func)dScnMenu_Create,
     (process_method_func)dScnMenu_Delete,
     (process_method_func)dScnMenu_Execute,
@@ -373,13 +382,13 @@ scene_method_class l_dScnMenu_Method = {
 };
 
 scene_process_profile_definition g_profile_MENU_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MENU_SCENE,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MENU_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(menu_of_scene_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnMenu_Method,

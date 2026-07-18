@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ep.h"
-#include "d/res/res_ep.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Ep.h"
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
@@ -271,7 +269,7 @@ void ep_move(ep_class* i_this) {
                         if (hitObj != NULL && hitObj->ChkAtType(0x600000)) {
                             fopAc_ac_c* ac = hitObj->GetAc();
 
-                            if (fopAcM_GetName(ac) == PROC_BDK) {
+                            if (fopAcM_GetName(ac) == fpcNm_BDK_e) {
                                 i_this->m7DC = ac->shape_angle.y;
                             } else {
                                 i_this->m7DC = player->shape_angle.y;
@@ -510,9 +508,9 @@ static BOOL daEp_CreateHeap(fopAc_ac_c* a_this) {
     J3DModelData* modelData;
 
     if (i_this->mbHasObm == 0) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", EP_BDL_VKTSD));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", dRes_INDEX_EP_BDL_VKTSD_e));
     } else {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", EP_BDL_OBM_SHOKUDAI1));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", dRes_INDEX_EP_BDL_OBM_SHOKUDAI1_e));
     }
     JUT_ASSERT(DEMO_SELECT(996, 997), modelData != NULL);
 
@@ -526,7 +524,7 @@ static BOOL daEp_CreateHeap(fopAc_ac_c* a_this) {
     }
 
     if (i_this->mbHasGa != 0) {
-        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", EP_BDL_EP_GA));
+        modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Ep", dRes_INDEX_EP_BDL_EP_GA_e));
         JUT_ASSERT(DEMO_SELECT(1007, 1010), modelData != NULL);
         
         for (s32 i = 0; i < 2; i++) {
@@ -637,16 +635,11 @@ static cPhs_State daEp_Create(fopAc_ac_c* a_this) {
     };
 
     ep_class* i_this = (ep_class*)a_this;
+    fopAcM_ct_Retail(a_this, ep_class);
 
-#if VERSION == VERSION_DEMO
     cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Ep");
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, ep_class);
-#else
-    fopAcM_SetupActor(a_this, ep_class);
-    cPhs_State ret = dComIfG_resLoad(&i_this->mPhase, "Ep");
-    if (ret == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, ep_class);
         i_this->mType = fopAcM_GetParam(a_this) & 0x3F;
         if (i_this->mType == 0x3F) {
             i_this->mType = 0;
@@ -716,18 +709,18 @@ static actor_method_class l_daEp_Method = {
 };
 
 actor_process_profile_definition g_profile_EP = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_EP,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_EP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(ep_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_EP,
+    /* Draw Prio    */ fpcDwPi_EP_e,
     /* Actor SubMtd */ &l_daEp_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

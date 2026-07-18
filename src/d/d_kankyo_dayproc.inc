@@ -23,7 +23,7 @@ static void dKankyo_DayProc() {
     clamped = cLib_maxLimit(dComIfGs_getEventReg(dSv_event_flag_c::UNK_AB03) + 1, 3);
     dComIfGs_setEventReg(dSv_event_flag_c::UNK_AB03, clamped);
 
-    if (dComIfGs_isGetItemReserve(0x0F) && dComIfGs_checkReserveItem(MO_LETTER) == 0) {
+    if (dComIfGs_isGetItemReserve(0x0F) && dComIfGs_checkReserveItem(dItemNo_MOBLINS_LETTER_e) == 0) {
         clamped = cLib_maxLimit(dComIfGs_getEventReg(dSv_event_flag_c::UNK_CCFF) + 1, 2);
         dComIfGs_setEventReg(dSv_event_flag_c::UNK_CCFF, clamped);
     }
@@ -73,13 +73,12 @@ static void dKankyo_DayProc() {
     dComIfGs_offEventBit(dSv_event_flag_c::UNK_2680);
 
 #if VERSION > VERSION_JPN
-    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A20)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A20))
 #endif
+    {
         clamped = cLib_maxLimit(dComIfGs_getEventReg(dSv_event_flag_c::UNK_A60F) + 1, 3);
         dComIfGs_setEventReg(dSv_event_flag_c::UNK_A60F, clamped);
-#if VERSION > VERSION_JPN
     }
-#endif
 
     if (dKy_get_dayofweek() == 5) {
         dComIfGs_offEventBit(dSv_event_flag_c::UNK_2080);

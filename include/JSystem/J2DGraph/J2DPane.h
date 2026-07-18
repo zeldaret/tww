@@ -54,8 +54,9 @@ public:
     virtual void move(f32 x, f32 y);
     virtual void add(f32 x, f32 y);
 
-    // fakematch, this getter doesn't exist
+    // fakematch, these getters don't exist
     f32 resize__getMinX() const { return mBounds.i.x; }
+    f32 resize__getMinY() const { return mBounds.i.y; }
     virtual void resize(f32 w, f32 h) {
         f32 x = resize__getMinX();
         x += w;
@@ -89,7 +90,7 @@ public:
     void hide() { mVisible = false; }
     bool isVisible() { return mVisible; }
 
-    void getBounds() {}
+    const JGeometry::TBox2<f32>& getBounds() { return mBounds; }
     const JGeometry::TBox2<f32>& getGlbBounds() { return mGlobalBounds; }
     f32 getRotate() const { return mRotation; }
     void place(const JGeometry::TBox2<f32>&) {}

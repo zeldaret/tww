@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_graphic.h"
@@ -22,55 +21,9 @@
 const u32 l_K_kusa_00TEX__width = 64;
 const u32 l_K_kusa_00TEX__height = 128;
 
-Vec l_Vmori_pos[] = {
-    {0.0f, -0.0f, 0.0f},
-    {-20.232309f, 2.398434f, -12.457211f},
-    {-22.421972f, 96.708992f, -32.329994f},
-    {-0.689661f, 28.224686f, -17.54632f},
-    {18.556299f, 68.562164f, -34.307945f},
-    {18.543142f, 2.398434f, -11.276213f},
-    {-0.200689f, 2.398434f, 21.652548f},
-    {-25.964092f, 96.708992f, 30.826571f},
-    {-14.926651f, 28.224686f, 6.578368f},
-    {-35.45715f, 68.562164f, -0.097443f},
-    {36.34602f, 96.708992f, 0.33899f},
-    {13.406961f, 28.224686f, 6.463065f},
-    {22.201593f, 68.562164f, 30.207361f},
-    {-17.307545f, 92.651337f, -11.431835f},
-    {-0.689661f, 28.224686f, -17.546318f},
-    {16.828806f, 92.651367f, -10.67745f},
-    {-0.098656f, 85.026367f, 19.19121f},
-    {-14.926647f, 28.224686f, 6.578368f},
-    {-0.479885f, 11.192533f, -13.94727f},
-    {11.278254f, 12.157036f, 6.079208f},
-    {-12.355106f, 13.254459f, 6.175385f},
-    {-15.73156f, 5.409967f, -8.529058f},
-    {13.355361f, 5.409967f, -8.554744f},
-    {-0.305629f, 4.337076f, 16.596081f},
-    {-0.479884f, 11.192533f, -13.94727f},
-    {-12.355103f, 13.254459f, 6.175385f},
-    {11.278254f, 12.157036f, 6.079209f},
-};
-
-GXColor l_Vmori_color[] = {
-    {0xFF, 0xFF, 0xFF, 0xFF},
-    {0x41, 0x41, 0x41, 0xFF},
-    {0xDD, 0xCF, 0x71, 0xFF},
-    {0, 0x2E, 0x1, 0xFF},
-    {0xAE, 0xA4, 0x57, 0xFF},
-};
-
-cXy l_Vmori_texCoord[] = {
-    {0.006063f, 0.998037f},
-    {0.659757f, 0.0f},
-    {0.974817f, 1.0f},
-    {-0.00456f, 1.0f},
-    {0.980413f, 1.0f},
-    {0.980413f, 1.002798f},
-    {0.933797f, 0.82872f},
-    {0.938976f, 0.84993f},
-    {0.940903f, 0.138216f},
-};
+#include "assets/l_Vmori_pos.h"
+#include "assets/l_Vmori_color.h"
+#include "assets/l_Vmori_texCoord.h"
 
 #include "assets/l_Vmori_00DL.h"
 #include "assets/l_Vmori_01DL.h"
@@ -81,58 +34,9 @@ l_Vmori_matDL(l_K_kusa_00TEX);
 const u32 l_Txa_ob_kusa_aTEX__width = 64;
 const u32 l_Txa_ob_kusa_aTEX__height = 64;
 
-Vec l_pos[] = {
-    {0.0f, -0.0f, 0.0f},
-    {-20.232309f, 7.048814f, -12.457211f},
-    {-22.421972f, 96.708992f, -32.329994f},
-    {-0.689661f, 28.224686f, -17.54632f},
-    {18.556299f, 68.562164f, -34.307945f},
-    {18.543142f, 7.048814f, -11.276213f},
-    {-0.200689f, 4.806987f, 21.652548f},
-    {-25.964092f, 96.708992f, 30.826571f},
-    {-14.926651f, 28.224686f, 6.578368f},
-    {-35.45715f, 68.562164f, -0.097443f},
-    {36.34602f, 96.708992f, 0.33899f},
-    {13.406961f, 28.224686f, 6.463065f},
-    {22.201593f, 68.562164f, 30.207361f},
-    {-17.307545f, 92.651337f, -11.431835f},
-    {-0.689661f, 28.224686f, -17.546318f},
-    {16.828806f, 92.651367f, -10.67745f},
-    {-0.098656f, 85.026367f, 19.19121f},
-    {-14.926647f, 28.224686f, 6.578368f},
-    {-0.479885f, 11.192533f, -13.94727f},
-    {11.278254f, 12.157036f, 6.079208f},
-    {-12.355106f, 13.254459f, 6.175385f},
-    {-15.73156f, 5.409967f, -8.529058f},
-    {13.355361f, 5.409967f, -8.554744f},
-    {-0.305629f, 4.337076f, 16.596081f},
-    {-0.479884f, 11.192533f, -13.94727f},
-    {-12.355103f, 13.254459f, 6.175385f},
-    {11.278254f, 12.157036f, 6.079209f},
-};
-
-GXColor l_color[] = {
-    {0x87, 0x87, 0x87, 0xFF},
-    {0xFF, 0xFF, 0xFF, 0xFF},
-    {0x6E, 0x6E, 0x6E, 0xFF},
-    {0x69, 0x69, 0x69, 0xFF},
-    {0x7B, 0x7B, 0x7B, 0xFF},
-    {0x76, 0x76, 0x76, 0xFF},
-    {0xB1, 0xB1, 0xB1, 0xFF},
-    {0xCC, 0xCC, 0xCC, 0xFF},
-};
-
-cXy l_texCoord[] = {
-    {0.375f, 0.625f},
-    {1.0f, 0.0f},
-    {1.0f, 1.0f},
-    {2.0f, 1.0f},
-    {0.0f, 1.0f},
-    {1.625f, 0.625f},
-    {0.0f, 0.5f},
-    {0.5f, 0.0f},
-    {0.0f, 0.0f},
-};
+#include "assets/l_pos__d_grass.h"
+#include "assets/l_color__d_grass.h"
+#include "assets/l_texCoord__d_grass.h"
 
 #include "assets/l_Oba_kusa_aDL.h"
 #include "assets/l_Oba_kusa_a_cutDL.h"
@@ -263,7 +167,7 @@ void dGrass_data_c::hitCheck(int roomNo) {
     dCcMassS_HitInf hitInf;
     fopAc_ac_c* actor;
     u32 ret = dComIfG_Ccsp()->ChkMass(&mPos, &actor, &hitInf);
-    bool checkAt = (ret & 1) && (actor != NULL && fopAcM_GetName(actor) != PROC_TSUBO && fopAcM_GetName(actor) != PROC_STONE);
+    bool checkAt = (ret & 1) && (actor != NULL && fopAcM_GetName(actor) != fpcNm_TSUBO_e && fopAcM_GetName(actor) != fpcNm_STONE_e);
 
     if ((ret & 2) == 0 && !checkAt) {
         if (mAnimIdx >= 8) {
@@ -320,9 +224,9 @@ dGrass_packet_c::dGrass_packet_c() {
     for (s32 i = 0; i < 8; i++, angle += 0x2000)
         setAnm(i, angle);
     if (strncmp(dComIfGp_getStartStageName(), "kin", sizeof("kin")-1) == 0 || strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0) {
-        mpPosArr = (f32*)l_Vmori_pos;
+        mpPosArr = l_Vmori_pos;
         mpColorArr = l_Vmori_color;
-        mpTexCoordArr = (f32*)l_Vmori_texCoord;
+        mpTexCoordArr = l_Vmori_texCoord;
         mpMatDL = l_Vmori_matDL;
         mMatDLSize = 0xa0;
         mpDL = l_Vmori_00DL;
@@ -332,9 +236,9 @@ dGrass_packet_c::dGrass_packet_c() {
         mCoParticle = dPa_name::ID_IT_SN_O_KINDANKUSA_RUN;
         mAtParticle = dPa_name::ID_IT_SN_O_KINDANKUSA_KEN;
     } else {
-        mpPosArr = (f32*)l_pos;
+        mpPosArr = l_pos;
         mpColorArr = l_color;
-        mpTexCoordArr = (f32*)l_texCoord;
+        mpTexCoordArr = l_texCoord;
         mpMatDL = l_matDL;
         mMatDLSize = 0xa0;
         mpDL = l_Oba_kusa_aDL;

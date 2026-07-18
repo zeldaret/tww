@@ -1,6 +1,7 @@
 #ifndef D_A_SHIP_H
 #define D_A_SHIP_H
 
+#include "res/Object/Ship.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
@@ -63,6 +64,7 @@ public:
         MODE_CANNON_e = 9,
         MODE_CRANE_e = 10,
         MODE_CRANE_UP_e = 11,
+        MODE_TORNADO_UP_e = 12,
         MODE_START_MODE_WARP_e = 13,
         MODE_TACT_WARP_e = 14,
         MODE_START_MODE_THROW_e = 16,
@@ -126,11 +128,11 @@ public:
     
 #if VERSION <= VERSION_JPN
     bool checkCraneMode() const {
-        return mCurMode == 10 && mNextMode == 10;
+        return mCurMode == MODE_CRANE_e && mNextMode == MODE_CRANE_e;
     }
 #else
     bool checkCraneMode() const {
-        return mCurMode == 10 && mNextMode == 10 && speedF < 1.0f && !checkStateFlg(daSFLG_FLY_e)  && !checkForceMove();
+        return mCurMode == MODE_CRANE_e && mNextMode == MODE_CRANE_e && speedF < 1.0f && !checkStateFlg(daSFLG_FLY_e)  && !checkForceMove();
     }
 #endif
 #if VERSION == VERSION_DEMO
@@ -142,8 +144,8 @@ public:
     daTornado_c* getTornadoActor() const { return mTornadoActor; }
     fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
 #endif
-    void checkTornadoFlg() const {}
-    void checkTornadoUp() const {}
+    bool checkTornadoFlg() const { return mTornadoID != fpcM_ERROR_PROCESS_ID_e; }
+    bool checkTornadoUp() const { return mCurMode == MODE_TORNADO_UP_e; }
     f32 getBeltSpeed() const { return m1044.absXZ(); }
     s16 getCannonAngleX() const { return shape_angle.x + m0396 - 0x4000; }
     s16 getCannonAngleY() const { return shape_angle.y + m0394; }
@@ -154,14 +156,14 @@ public:
     void getCraneRipplePosY() const {}
     void getCraneRipplePosZ() const {}
     cXyz* getCraneTop() { return m0434; }
-    MtxP getHeadJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(8); }
+    MtxP getHeadJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(FN_HEAD_H_JNT_J_FN_ATAMA_e); }
     f32 getJumpRate() { return mJumpRate; }
     u8 getPart() const { return mPart; }
     s16 getRopeCnt() const { return mRopeCnt; }
     BOOL checkRopeDownStart() const { return mRopeCnt > 20; }
     BOOL checkRopeCntMax() const { return mRopeCnt == 250; }
     s16 getSailAngle() { return mSailAngle; }
-    void getTactJntMtx() {}
+    MtxP getTactJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(FN_HEAD_H_JNT_J_FN_AGO2_e); }
     f32 getTillerAngleRate() { return mTillerAngleRate; }
     cXyz* getTillerTopPosP() { return &mTillerTopPos; }
     void offCraneHookFlg() { offStateFlg(daSFLG_UNK800_e);}
@@ -180,7 +182,6 @@ public:
     void onCraneHookFlg() { onStateFlg(daSFLG_UNK800_e); }
     void onCrashFlg() { onStateFlg(daSFLG_UNK4_e); }
     void onFantomGanonBattle() {}
-    //TODO: Is this right?
     void onLinkSit() { onStateFlg(daSFLG_UNK4000000_e); }
     void onSceneChange() { onStateFlg(daSFLG_UNK20000000_e); }
     void onShortHitFlg() { onStateFlg(daSFLG_UNK20_e); }

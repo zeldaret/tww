@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_sk.h"
-#include "d/res/res_sk.h"
+#include "res/Object/Sk.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
@@ -16,51 +14,51 @@
 
 /* 00000078-00000240       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar4 = joint->getJntNo();
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         sk_class* i_this = (sk_class*)model->getUserArea();
-        cXyz sp08;
+        cXyz offset;
 
         if (i_this != NULL) {
-            MTXCopy(model->getAnmMtx(uVar4), *calc_mtx);
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
-            cMtx_YrotM(*calc_mtx, i_this->m2C2[uVar4].y);
-            cMtx_XrotM(*calc_mtx, i_this->m2C2[uVar4].x);
-            cMtx_ZrotM(*calc_mtx, i_this->m2C2[uVar4].z);
+            cMtx_YrotM(*calc_mtx, i_this->m2C2[jntNo].y);
+            cMtx_XrotM(*calc_mtx, i_this->m2C2[jntNo].x);
+            cMtx_ZrotM(*calc_mtx, i_this->m2C2[jntNo].z);
 
-            switch (uVar4) {
-            case 0:
-                sp08.x = 0.0f;
-                sp08.y = 0.0f;
-                sp08.z = 180.0f;
-                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+            switch (jntNo) {
+            case TURU_00_JNT_BO04_e:
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 180.0f;
+                MtxPosition(&offset, &i_this->m2DC[jntNo]);
                 break;
 
-            case 1:
-                sp08.x = 0.0f;
-                sp08.y = 0.0f;
-                sp08.z = 250.0f;
-                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+            case TURU_00_JNT_BO03_e:
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 250.0f;
+                MtxPosition(&offset, &i_this->m2DC[jntNo]);
                 break;
 
-            case 2:
-                sp08.x = 0.0f;
-                sp08.y = 0.0f;
-                sp08.z = 250.0f;
-                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+            case TURU_00_JNT_BO02_e:
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 250.0f;
+                MtxPosition(&offset, &i_this->m2DC[jntNo]);
                 break;
 
-            case 3:
-                sp08.x = 0.0f;
-                sp08.y = 0.0f;
-                sp08.z = 180.0f;
-                MtxPosition(&sp08, &i_this->m2DC[uVar4]);
+            case TURU_00_JNT_BO01_e:
+                offset.x = 0.0f;
+                offset.y = 0.0f;
+                offset.z = 180.0f;
+                MtxPosition(&offset, &i_this->m2DC[jntNo]);
                 break;
             }
 
-            model->setAnmMtx(uVar4, *calc_mtx);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -207,7 +205,7 @@ static BOOL daSk_Delete(sk_class* i_this) {
 /* 0000090C-00000A6C       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* a_this) {
     sk_class* i_this = (sk_class*)a_this;
-    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk", SK_BDL_TURU_00);
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes("Sk", dRes_INDEX_SK_BDL_TURU_00_e);
 
     i_this->mpMorf = new mDoExt_McaMorf(pModelData, NULL, NULL, NULL, J3DFrameCtrl::EMode_NULL, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11000022);
     if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
@@ -225,19 +223,19 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 1,
+            /* mJointIndex */ TURU_00_JNT_BO03_e,
             /* mRadius     */ 140.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 2,
+            /* mJointIndex */ TURU_00_JNT_BO02_e,
             /* mRadius     */ 90.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 3,
+            /* mJointIndex */ TURU_00_JNT_BO01_e,
             /* mRadius     */ 50.0f,
             /* mpOffsets   */ &sph_offset,
         },
@@ -287,17 +285,10 @@ static cPhs_State daSk_Create(fopAc_ac_c* a_this) {
     };
 
     sk_class* i_this = (sk_class*)a_this;
-
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(a_this, sk_class);
     cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Sk");
     if (PVar2 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, sk_class);
-#else
-    fopAcM_SetupActor(a_this, sk_class);
-
-    cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Sk");
-    if (PVar2 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, sk_class);
         i_this->m2B4 = fopAcM_GetParam(i_this);
         if (i_this->m2B4 == 0xff) {
             i_this->m2B4 = 0;
@@ -360,18 +351,18 @@ static actor_method_class l_daSk_Method = {
 };
 
 actor_process_profile_definition g_profile_SK = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SK,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SK_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sk_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SK,
+    /* Draw Prio    */ fpcDwPi_SK_e,
     /* Actor SubMtd */ &l_daSk_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bflower.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_vbakh.h"
+#include "res/Object/VbakH.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_bomb2.h"
@@ -118,7 +116,7 @@ BOOL daBFlower_c::CreateHeap() {
         mState = daBFlower_c::STATE_LIVE_E;
     }
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKH_e));
     JUT_ASSERT(0x1B2, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -126,7 +124,7 @@ BOOL daBFlower_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAHX));
+    J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BCK_VBAHX_e));
     JUT_ASSERT(0x1C3, pbck != NULL);
 
     if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_RESET)) {
@@ -134,7 +132,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
     mBck1.setFrame(mBck1.getEndFrame());
 
-    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAHX));
+    J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BRK_VBAHX_e));
     JUT_ASSERT(0x1D9, pbrk != NULL);
 
     if (!mBrk1.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE)) {
@@ -142,7 +140,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
     mBrk1.setPlaySpeed(0.0f);
 
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKM));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKM_e));
     JUT_ASSERT(0x1E7, modelData != NULL);
 
     mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -150,7 +148,7 @@ BOOL daBFlower_c::CreateHeap() {
         return FALSE;
     }
 
-    pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, VBAKH_BCK_VBAMX));
+    pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BCK_VBAMX_e));
     JUT_ASSERT(0x1F7, pbck != NULL);
 
     if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE)) {
@@ -158,7 +156,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
     mBck2.setPlaySpeed(0.0f);
 
-    pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, VBAKH_BRK_VBAMX));
+    pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BRK_VBAMX_e));
     JUT_ASSERT(0x208, pbrk != NULL);
 
     if (!mBrk2.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE)) {
@@ -227,7 +225,7 @@ int daBFlower_c::init_bck_anm(s16 param) {
 
     m55C = param;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKH_e));
     J3DAnmTransform* pBck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, param));
 
     return mBck1.init(pModelData, pBck, TRUE, J3DFrameCtrl::EMode_RESET, 1.0f, 0, -1, true);
@@ -235,7 +233,7 @@ int daBFlower_c::init_bck_anm(s16 param) {
 
 /* 0000080C-000008AC       .text _create__11daBFlower_cFv */
 cPhs_State daBFlower_c::_create() {
-    fopAcM_SetupActor(this, daBFlower_c);
+    fopAcM_ct(this, daBFlower_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arcname);
 
@@ -295,12 +293,12 @@ BOOL daBFlower_c::actLive() {
     f32 tmp = cLib_addCalc(&mBombScale.z, 1.0f, 0.05f, 0.1f, 0.05f);
 
     if (m5B8 != 0 && tmp == 0.0f) {
-        init_bck_anm(VBAKH_BCK_VBAKH);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
     }
 
     // Play animation if player walks by bomb flower
     if (dist < 50.0f && std::abs(mPrevPlayerDist - dist) > 2.0f && std::abs(player->current.pos.y - current.pos.y) < 10.0f) {
-        init_bck_anm(VBAKH_BCK_VBAKH);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
     }
 
     // Play animation if player dropped held actor near bomb flower?
@@ -309,7 +307,7 @@ BOOL daBFlower_c::actLive() {
 
         if (pActor != NULL) {
             if ((pActor->current.pos - current.pos).absXZ() < 70.0f) {
-                init_bck_anm(VBAKH_BCK_VBAKH);
+                init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
             }
         }
     }
@@ -345,7 +343,7 @@ BOOL daBFlower_c::actLive() {
             cCcD_Obj* tg = mSph.GetTgHitObj();
             if (tg != NULL) {
                 if (tg->ChkAtType(AT_TYPE_BOMB)) {
-                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK0_e, true), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(fpcNm_Bomb2_e, daBomb2::Act_c::prm_make(daBomb2::Start_UNK0_e, true), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
                     m58C = 0;
                 } else if (tg->ChkAtType(~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT))) {
                     // TODO: simplify
@@ -355,7 +353,7 @@ BOOL daBFlower_c::actLive() {
                     }
                     u32 prm = daBomb2::Act_c::prm_make(daBomb2::Start_UNK1_e, b);
 
-                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(fpcNm_Bomb2_e, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle));
                     m58C = 0;
                 }
             }
@@ -366,7 +364,7 @@ BOOL daBFlower_c::actLive() {
 
     if (fopAcM_checkCarryNow(this) && m58D != 0) {
         m58C = 0;
-        mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(PROC_Bomb2, daBomb2::Act_c::prm_make(daBomb2::Start_UNK2_e, false), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+        mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(fpcNm_Bomb2_e, daBomb2::Act_c::prm_make(daBomb2::Start_UNK2_e, false), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
 
         fopAcM_cancelCarryNow(this);
         if (mpBombActor != NULL) {
@@ -374,7 +372,7 @@ BOOL daBFlower_c::actLive() {
             daPy_getPlayerLinkActorClass()->exchangeGrabActor(mpBombActor);
         }
 
-        init_bck_anm(VBAKH_BCK_VBAKH);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
     }
 
     if (m58C != 0 && tmp > 0.0f) {
@@ -398,12 +396,12 @@ BOOL daBFlower_c::actDead() {
 
     // Play animation if player walks by bomb flower
     if (dist < 50.0f && std::abs(mPrevPlayerDist - dist) > 2.0f) {
-        init_bck_anm(VBAKH_BCK_VBAHX);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAHX_e);
     }
 
     if (mAnimTimer == 0) {
         mAnimTimer = cM_rndF(100.0f) + 100.0f;
-        init_bck_anm(VBAKH_BCK_VBAHX);
+        init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAHX_e);
     }
 
     mBrk1.setPlaySpeed(0.0f);
@@ -416,7 +414,7 @@ BOOL daBFlower_c::actDead() {
             mState = daBFlower_c::STATE_LIVE_E;
             fopAcM_onSwitch(this, mSwitchNo);
 
-            init_bck_anm(VBAKH_BCK_VBAKH);
+            init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
             mBrk1.setPlaySpeed(1.0f);
             mBrk2.setPlaySpeed(1.0f);
             mBck2.setPlaySpeed(1.0f);
@@ -522,18 +520,18 @@ static actor_method_class daBFlowerMethodTable = {
 };
 
 actor_process_profile_definition g_profile_BOMB_FLOWER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BOMB_FLOWER,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BOMB_FLOWER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBFlower_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BOMB_FLOWER,
+    /* Draw Prio    */ fpcDwPi_BOMB_FLOWER_e,
     /* Actor SubMtd */ &daBFlowerMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

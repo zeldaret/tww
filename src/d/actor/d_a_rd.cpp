@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_rd.h"
-#include "d/res/res_rd.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Rd.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
@@ -147,7 +145,7 @@ static void* searchNeadDeadRd_CB(void* i_actor, void* i_this) {
 
 /* 000002A8-0000030C       .text _searchNearDeadRd__6daRd_cFP10fopAc_ac_c */
 fopAc_ac_c* daRd_c::_searchNearDeadRd(fopAc_ac_c* i_actor) {
-    if (fopAcM_GetName(i_actor) == PROC_RD) {
+    if (fopAcM_GetName(i_actor) == fpcNm_RD_e) {
         daRd_c* other = static_cast<daRd_c*>(i_actor);
         if (other->mMode == MODE_DEATH) {
             if (fopAcM_searchActorDistanceXZ(this, i_actor) < l_HIO.m34) {
@@ -236,13 +234,13 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 000006C0-0000096C       .text _createHeap__6daRd_cFv */
 BOOL daRd_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, RD_BDL_RD));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BDL_RD_e));
     JUT_ASSERT(DEMO_SELECT(502, 504), modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, RD_BCK_SUWARIP)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BCK_SUWARIP_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
         NULL,
         0x00080000,
@@ -257,15 +255,15 @@ BOOL daRd_c::_createHeap() {
         return FALSE;
     }
     
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, RD_BTK_RD_CLOSE));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BTK_RD_CLOSE_e));
     JUT_ASSERT(DEMO_SELECT(528, 525), btk != NULL);
     if (!mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
     }
     
-    modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
+    modelData->getJointNodePointer(RD_JNT_REE_ATAMA_1_e)->setCallBack(nodeHeadControl_CB);
     
-    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, RD_BRK_NML));
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BRK_NML_e));
     JUT_ASSERT(DEMO_SELECT(553, 550), brk != NULL);
     if (!mBrkAnm.init(modelData, brk, true, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
@@ -295,133 +293,133 @@ bool daRd_c::createArrowHeap() {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ RD_JNT_REE_KOSI_1_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ RD_JNT_REE_KOSI_1_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ RD_JNT_REE_KOSI_1_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x02,
+            /* mJointIndex */ RD_JNT_REE_ASI_L1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x03,
+            /* mJointIndex */ RD_JNT_REE_ASI_L2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x04,
+            /* mJointIndex */ RD_JNT_REE_ASI_L3_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x05,
+            /* mJointIndex */ RD_JNT_REE_ASI_R1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x06,
+            /* mJointIndex */ RD_JNT_REE_ASI_R2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x07,
+            /* mJointIndex */ RD_JNT_REE_ASI_R3_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x08,
+            /* mJointIndex */ RD_JNT_REE_MUNE_1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ sebone_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 10.0f,
             /* mpOffsets   */ muneA_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0F,
+            /* mJointIndex */ RD_JNT_REE_UDE_L1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x10,
+            /* mJointIndex */ RD_JNT_REE_UDE_L2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x11,
+            /* mJointIndex */ RD_JNT_REE_TEKUBI_L1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x12,
+            /* mJointIndex */ RD_JNT_REE_YUBI_L1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x13,
+            /* mJointIndex */ RD_JNT_REE_UDE_R1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x14,
+            /* mJointIndex */ RD_JNT_REE_UDE_R2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x15,
+            /* mJointIndex */ RD_JNT_REE_TEKUBI_R1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x16,
+            /* mJointIndex */ RD_JNT_REE_YUBI_R1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
@@ -444,7 +442,7 @@ bool daRd_c::checkPlayerInAttack() {
 /* 00000A38-00000AA0       .text checkPlayerInCry__6daRd_cFv */
 bool daRd_c::checkPlayerInCry() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    return dLib_checkActorInFan(current.pos, player, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, 100.0f);
+    return dLib_checkActorInFan(current.pos, player, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, DEMO_SELECT(1000.0f, 100.0f));
 }
 
 /* 00000AA0-00000D78       .text lookBack__6daRd_cFv */
@@ -566,21 +564,21 @@ bool daRd_c::checkTgHit() {
             fopAcM_seStart(this, JA_SE_LK_SW_HIT_S, 0x20);
             
             switch (player->getCutType()) {
-            case 0x05:
-            case 0x06:
-            case 0x07:
-            case 0x08:
-            case 0x09:
-            case 0x0A:
-            case 0x0C:
-            case 0x0E:
-            case 0x0F:
-            case 0x10:
-            case 0x15:
-            case 0x17:
-            case 0x19:
-            case 0x1A:
-            case 0x1B:
+            case daPy_py_c::CUT_TYPE_BT_JUMPCUT:
+            case daPy_py_c::CUT_TYPE_CUT_EA:
+            case daPy_py_c::CUT_TYPE_CUT_EB:
+            case daPy_py_c::CUT_TYPE_CUT_TURN:
+            case daPy_py_c::CUT_TYPE_CUT_ROLL:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_STICK:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE:
+            case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
+            case daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_CLUB:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR:
+            case daPy_py_c::CUT_TYPE_CUT_EXA:
+            case daPy_py_c::CUT_TYPE_CUT_EXB:
                 mHitType = 1;
                 break;
             default:
@@ -609,7 +607,7 @@ bool daRd_c::checkTgHit() {
         case AT_TYPE_STALFOS_MACE:
             fopAcM_seStart(this, JA_SE_LK_HAMMER_HIT, 0x20);
             mHitType = 7;
-            if (player->getCutType() == 0x11) {
+            if (player->getCutType() == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
                 mHitType = 8;
             }
             break;
@@ -638,7 +636,7 @@ bool daRd_c::checkTgHit() {
             break;
         case AT_TYPE_NORMAL_ARROW:
             mHitType = 5;
-            if (!dLib_checkActorInCircle(current.pos, player, l_HIO.mCryRadius, 1000.0f)) {
+            if (!dLib_checkActorInCircle(current.pos, player, l_HIO.mCryRadius, DEMO_SELECT(100.0f, 1000.0f))) {
                 fopAcM_seStart(this, JA_SE_LK_ARROW_HIT, 0x44);
                 mCE0 = 40;
                 r29 = false;
@@ -746,7 +744,7 @@ void daRd_c::setIceCollision() {
 void daRd_c::setAttention() {
     cXyz attnPos(60.0f, 0.0f, 0.0f);
     cXyz eyeballPos(60.0f, 0.0f, 0.0f);
-    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0x0C)); // ree_atama_1 joint
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(RD_JNT_REE_ATAMA_1_e));
     mDoMtx_stack_c::multVec(&attnPos, &attention_info.position);
     mDoMtx_stack_c::multVecZero(&eyeballPos);
     eyePos = eyeballPos;
@@ -792,7 +790,7 @@ void daRd_c::modeWait() {
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
     if (!isLinkControl()) {
-        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f)) {
+        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f))) {
             // The ReDead will only wake up if the player is in a 200-unit-tall cylinder around its spawn point.
             // Bug: If the ReDead spawned high up in the air, its spawn point will remain there even after the ReDead
             // itself has fallen down to ground level. This means it will not be able to notice the player properly.
@@ -808,7 +806,7 @@ void daRd_c::modeWait() {
         }
     }
     
-    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
+    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, DEMO_SELECT(100.0f, 1000.0f))) {
         cLib_addCalcAngleS2(&shape_angle.y, mSpawnAngle, 0x4, 0x200);
         if (cLib_distanceAngleS(shape_angle.y, mSpawnAngle) <= 0x200) {
             shape_angle.y = mSpawnAngle;
@@ -819,7 +817,7 @@ void daRd_c::modeWait() {
                 setAnm(AnmPrm_TACHIP1, false);
             }
         }
-    } else if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f) ||
+    } else if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f)) ||
                !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)
     ) {
         modeProcInit(MODE_RETURN);
@@ -922,7 +920,10 @@ void daRd_c::modeMove() {
             return;
         }
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
-        if (!dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f) || !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
+        if (
+            !dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f)) ||
+            !dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)
+        ) {
             modeProcInit(MODE_RETURN);
             return;
         }
@@ -1175,7 +1176,7 @@ void daRd_c::modeReturn() {
     
     setAnm(AnmPrm_WALK, false);
     
-    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, 1000.0f)) {
+    if (dLib_checkActorInCircle(mSpawnPos, this, 100.0f, DEMO_SELECT(100.0f, 1000.0f))) {
         speedF = 0.0f;
         cLib_addCalcAngleS2(&shape_angle.y, mSpawnAngle, 0xA, 0x200);
         if (cLib_distanceAngleS(shape_angle.y, mSpawnAngle) <= 0x200) {
@@ -1194,7 +1195,7 @@ void daRd_c::modeReturn() {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
     BOOL isOto = fopAcM_otoCheck(this, mAreaRadius);
     if (!isLinkControl()) {
-        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, 1000.0f)) {
+        if (dLib_checkActorInCircle(mSpawnPos, this, mAreaRadius, DEMO_SELECT(100.0f, 1000.0f))) {
             if (dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f)) {
                 if ((dLib_checkActorInCircle(mSpawnPos, player, mAreaRadius, 100.0f) && player->speedF > 10.0f + REG12_F(4)) ||
                     isOto ||
@@ -1224,7 +1225,7 @@ void daRd_c::modeSilentPray() {
     fopAc_ac_c* corpse;
     if (fopAcM_SearchByID(mCorpseID, &corpse)) {
         mTargetPos = corpse->current.pos;
-        if (dLib_checkActorInCircle(mTargetPos, this, 200.0f, 1000.0f)) {
+        if (dLib_checkActorInCircle(mTargetPos, this, 200.0f, DEMO_SELECT(100.0f, 1000.0f))) {
             setAnm(AnmPrm_TACHIP1, false);
             speedF = 0.0f;
         } else {
@@ -1257,7 +1258,7 @@ void daRd_c::modeSwWaitInit() {
 
 /* 00003428-00003480       .text modeSwWait__6daRd_cFv */
 void daRd_c::modeSwWait() {
-    if (dComIfGs_isSwitch(mSwNo, current.roomNo)) {
+    if (dComIfGs_isSwitch(mSwNo, fopAcM_GetRoomNo(this))) {
         modeProcInit(MODE_KANOKE);
     }
 }
@@ -1377,10 +1378,10 @@ void daRd_c::modeProc(daRd_c::Proc_e proc, int newMode) {
 /* 000038D4-000039AC       .text setBrkAnm__6daRd_cFSc */
 void daRd_c::setBrkAnm(s8 idx) {
     static const int a_anm_idx_tbl[] = {
-        RD_BRK_NML,
-        RD_BRK_BEAM_HIT,
-        RD_BRK_BEAM,
-        RD_BRK_BEAM_END,
+        dRes_INDEX_RD_BRK_NML_e,
+        dRes_INDEX_RD_BRK_BEAM_HIT_e,
+        dRes_INDEX_RD_BRK_BEAM_e,
+        dRes_INDEX_RD_BRK_BEAM_END_e,
     };
     static const int a_play_mod_tbl[] = {
         J3DFrameCtrl::EMode_NONE,
@@ -1398,10 +1399,10 @@ void daRd_c::setBrkAnm(s8 idx) {
 /* 000039AC-00003B3C       .text setBtkAnm__6daRd_cFSc */
 void daRd_c::setBtkAnm(s8 idx) {
     static const int a_anm_idx_tbl[] = {
-        RD_BTK_RD_IKARI,
-        RD_BTK_RD_NML,
-        RD_BTK_RD_OPEN,
-        RD_BTK_RD_CLOSE,
+        dRes_INDEX_RD_BTK_RD_IKARI_e,
+        dRes_INDEX_RD_BTK_RD_NML_e,
+        dRes_INDEX_RD_BTK_RD_OPEN_e,
+        dRes_INDEX_RD_BTK_RD_CLOSE_e,
     };
     struct anm_prm_struct {
         s8 m00;
@@ -1440,20 +1441,20 @@ void daRd_c::setBtkAnm(s8 idx) {
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
 void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
-        RD_BCK_TACHIP,
-        RD_BCK_SUWARIP,
-        RD_BCK_WALK2ATACK,
-        RD_BCK_ATACK,
-        RD_BCK_ATACK2WALK,
-        RD_BCK_WALK,
-        RD_BCK_DAMAGE,
-        RD_BCK_DEAD,
-        RD_BCK_TATSU,
-        RD_BCK_SUWARU,
-        RD_BCK_KANOKEP,
-        RD_BCK_BEAM_HIT,
-        RD_BCK_BEAM,
-        RD_BCK_BEAM_END,
+        dRes_INDEX_RD_BCK_TACHIP_e,
+        dRes_INDEX_RD_BCK_SUWARIP_e,
+        dRes_INDEX_RD_BCK_WALK2ATACK_e,
+        dRes_INDEX_RD_BCK_ATACK_e,
+        dRes_INDEX_RD_BCK_ATACK2WALK_e,
+        dRes_INDEX_RD_BCK_WALK_e,
+        dRes_INDEX_RD_BCK_DAMAGE_e,
+        dRes_INDEX_RD_BCK_DEAD_e,
+        dRes_INDEX_RD_BCK_TATSU_e,
+        dRes_INDEX_RD_BCK_SUWARU_e,
+        dRes_INDEX_RD_BCK_KANOKEP_e,
+        dRes_INDEX_RD_BCK_BEAM_HIT_e,
+        dRes_INDEX_RD_BCK_BEAM_e,
+        dRes_INDEX_RD_BCK_BEAM_END_e,
     };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {
@@ -1628,7 +1629,7 @@ bool daRd_c::_execute() {
         return true;
     }
     
-    fopAcM_setGbaName(this, dItem_MIRROR_SHIELD_e, 0x12, 0x30);
+    fopAcM_setGbaName(this, dItemNo_MIRROR_SHIELD_e, 0x12, 0x30);
     setIceCollision();
     if (mMode != MODE_SILENT_PRAY && mMode != MODE_DEATH && mMode != MODE_DAMAGE &&
         mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_CRY_WAIT)
@@ -1659,7 +1660,8 @@ bool daRd_c::_execute() {
     }
     
     if (enemy_ice(&mEnemyIce)) {
-        mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        J3DModel* model = mpMorf->getModel();
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
         mpMorf->calc();
         speedF = 0.0f;
         setAttention();
@@ -1752,7 +1754,11 @@ bool daRd_c::_draw() {
     } else {
         mBrkAnm.entry(modelData);
         mBtkAnm.entry(modelData);
+#if VERSION == VERSION_DEMO
+        mpMorf->entryDL();
+#else
         mpMorf->updateDL();
+#endif
         mBtkAnm.remove(modelData);
         mBrkAnm.remove(modelData);
     }
@@ -1782,10 +1788,10 @@ void daRd_c::createInit() {
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.SetRoofNone();
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
-    mJntCtrl.setHeadJntNum(0x0A); // ree_kubi_1
-    mJntCtrl.setBackboneJntNum(0x08); // ree_mune_1
-    modelData->getJointNodePointer(0x0A)->setCallBack(nodeControl_CB); // ree_kubi_1
-    modelData->getJointNodePointer(0x08)->setCallBack(nodeControl_CB); // ree_mune_1
+    mJntCtrl.setHeadJntNum(RD_JNT_REE_KUBI_1_e);
+    mJntCtrl.setBackboneJntNum(RD_JNT_REE_MUNE_1_e);
+    modelData->getJointNodePointer(RD_JNT_REE_KUBI_1_e)->setCallBack(nodeControl_CB);
+    modelData->getJointNodePointer(RD_JNT_REE_MUNE_1_e)->setCallBack(nodeControl_CB);
     setBtkAnm(2);
     
     if (mChecksSwitch == 0) {
@@ -1829,12 +1835,32 @@ void daRd_c::createInit() {
     
     mEnemyFire.mpMcaMorf = mpMorf;
     mEnemyFire.mpActor = this;
+    
     static u8 fire_j[ARRAY_SIZE(mEnemyFire.mFlameJntIdxs)] = {
-        0x0C, 0x01, 0x0F, 0x11, 0x13, 0x15, 0x02, 0x04, 0x05, 0x07,
+        RD_JNT_REE_ATAMA_1_e,
+        RD_JNT_REE_KOSI_1_e,
+        RD_JNT_REE_UDE_L1_e,
+        RD_JNT_REE_TEKUBI_L1_e,
+        RD_JNT_REE_UDE_R1_e,
+        RD_JNT_REE_TEKUBI_R1_e,
+        RD_JNT_REE_ASI_L1_e,
+        RD_JNT_REE_ASI_L3_e,
+        RD_JNT_REE_ASI_R1_e,
+        RD_JNT_REE_ASI_R3_e,
     };
     static f32 fire_sc[ARRAY_SIZE(mEnemyFire.mParticleScale)] = {
-        2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        2.0f, // RD_JNT_REE_ATAMA_1_e
+        2.0f, // RD_JNT_REE_KOSI_1_e
+        1.0f, // RD_JNT_REE_UDE_L1_e
+        1.0f, // RD_JNT_REE_TEKUBI_L1_e
+        1.0f, // RD_JNT_REE_UDE_R1_e
+        1.0f, // RD_JNT_REE_TEKUBI_R1_e
+        1.0f, // RD_JNT_REE_ASI_L1_e
+        1.0f, // RD_JNT_REE_ASI_L3_e
+        1.0f, // RD_JNT_REE_ASI_R1_e
+        1.0f, // RD_JNT_REE_ASI_R3_e
     };
+
     for (int i = 0; i < ARRAY_SIZE(mEnemyFire.mFlameJntIdxs); i++) {
         mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
         mEnemyFire.mParticleScale[i] = fire_sc[i];
@@ -1876,7 +1902,7 @@ void daRd_c::getArg() {
 
 /* 00004720-000047C8       .text _create__6daRd_cFv */
 cPhs_State daRd_c::_create() {
-    fopAcM_SetupActor(this, daRd_c);
+    fopAcM_ct(this, daRd_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     
@@ -1939,18 +1965,18 @@ static actor_method_class daRdMethodTable = {
 };
 
 actor_process_profile_definition g_profile_RD = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_RD,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_RD_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daRd_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_RD,
+    /* Draw Prio    */ fpcDwPi_RD_e,
     /* Actor SubMtd */ &daRdMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

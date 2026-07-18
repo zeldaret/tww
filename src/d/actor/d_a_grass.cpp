@@ -10,8 +10,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_flower.h"
 #include "d/d_grass.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_tree.h"
 #include "SSystem/SComponent/c_sxyz.h"
 
@@ -131,7 +129,7 @@ static cPhs_State daGrass_Create(fopAc_ac_c* i_ac) {
 
     grass_class * i_this = (grass_class*)i_ac;
 
-    fopAcM_SetupActor(i_this, grass_class);
+    fopAcM_ct(i_this, grass_class);
 
     u32 grp = daGrass_prm::getType(i_this);
     OffsetData * offset = &l_offsetData[grp];
@@ -203,18 +201,18 @@ static actor_method_class daGrass_METHODS = {
 };
 
 actor_process_profile_definition g_profile_GRASS = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_GRASS,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_GRASS_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(grass_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_GRASS,
+    /* Draw Prio    */ fpcDwPi_GRASS_e,
     /* Actor SubMtd */ &daGrass_METHODS,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

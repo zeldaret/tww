@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_btsw2.h"
-#include "d/res/res_btsw.h"
+#include "res/Object/Btsw.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
@@ -41,7 +39,7 @@ static dCcD_SrcCyl l_cyl_src = {
         /* SrcObjAt  Type    */ 0,
         /* SrcObjAt  Atp     */ 0,
         /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ ~(AT_TYPE_BOOMERANG),
+        /* SrcObjTg  Type    */ DEMO_SELECT(AT_TYPE_ALL, ~(AT_TYPE_BOOMERANG)),
         /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
         /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsGrpAll_e,
         /* SrcGObjAt Se      */ 0,
@@ -93,21 +91,21 @@ daNpc_Btsw2_HIO_c::daNpc_Btsw2_HIO_c() {
 const char daNpc_Btsw2_c::m_arc_name[] = "Btsw";
 
 static const int l_bck_ix_tbl[] = {
-    BTSW_INDEX_BCK_BN_WAIT01,
-    BTSW_INDEX_BCK_BN_WAIT02,
-    BTSW_INDEX_BCK_BN_TALK01,
-    BTSW_INDEX_BCK_BN_TALK02,
-    BTSW_INDEX_BCK_BN_ONEGAI,
-    BTSW_INDEX_BCK_BN_SUGOI,
-    BTSW_INDEX_BCK_BN_SUGOI,
-    BTSW_INDEX_BCK_BN_WALK,
-    BTSW_INDEX_BCK_BN_KASIGE,
-    BTSW_INDEX_BCK_BN_SIWAKE01,
-    BTSW_INDEX_BCK_BN_SIWAKE02,
+    dRes_INDEX_BTSW_BCK_BN_WAIT01_e,
+    dRes_INDEX_BTSW_BCK_BN_WAIT02_e,
+    dRes_INDEX_BTSW_BCK_BN_TALK01_e,
+    dRes_INDEX_BTSW_BCK_BN_TALK02_e,
+    dRes_INDEX_BTSW_BCK_BN_ONEGAI_e,
+    dRes_INDEX_BTSW_BCK_BN_SUGOI_e,
+    dRes_INDEX_BTSW_BCK_BN_SUGOI_e,
+    dRes_INDEX_BTSW_BCK_BN_WALK_e,
+    dRes_INDEX_BTSW_BCK_BN_KASIGE_e,
+    dRes_INDEX_BTSW_BCK_BN_SIWAKE01_e,
+    dRes_INDEX_BTSW_BCK_BN_SIWAKE02_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    BTSW_INDEX_BTP_BN_MABA,
+    dRes_INDEX_BTSW_BTP_BN_MABA_e,
 };
 
 /* 000001A8-000003E0       .text nodeCallBack__FP7J3DNodei */
@@ -355,12 +353,12 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000BB4-00000EFC       .text CreateHeap__13daNpc_Btsw2_cFv */
 BOOL daNpc_Btsw2_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, BTSW_INDEX_BDL_BN));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_BTSW_BDL_BN_e));
     JUT_ASSERT(616, modelData != NULL);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, BTSW_INDEX_BCK_BN_WAIT01)),
+        static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_BTSW_BCK_BN_WAIT01_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL, 0x80000, 0x15020022
     );
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -374,12 +372,12 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
     m_handL_jnt_num = modelData->getJointName()->getIndex("handL");
     m_handR_jnt_num = modelData->getJointName()->getIndex("handR");
     
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", BTSW_INDEX_BDL_BN_KABAN));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", dRes_INDEX_BTSW_BDL_BN_KABAN_e));
     mpKabanModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpKabanModel == NULL) {
         return FALSE;
     }
-    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", BTSW_INDEX_BDL_BN_TIRASI));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Btsw", dRes_INDEX_BTSW_BDL_BN_TIRASI_e));
     mpTirasiModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (mpTirasiModel == NULL) {
         return FALSE;
@@ -542,9 +540,9 @@ BOOL daNpc_Btsw2_c::wait_action(void*) {
 
 /* 00001660-00001884       .text _create__13daNpc_Btsw2_cFv */
 cPhs_State daNpc_Btsw2_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Btsw2_c);
+    fopAcM_ct(this, daNpc_Btsw2_c);
     
-    if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203) == 3 || !checkItemGet(dItem_PEARL_DIN_e, TRUE)) {
+    if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203) == 3 || !checkItemGet(dItemNo_PEARL_DIN_e, TRUE)) {
         return cPhs_ERROR_e;
     }
     
@@ -670,18 +668,18 @@ static actor_method_class l_daNpc_Btsw2_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_BTSW2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_BTSW2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_BTSW2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Btsw2_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_BTSW2,
+    /* Draw Prio    */ fpcDwPi_NPC_BTSW2_e,
     /* Actor SubMtd */ &l_daNpc_Btsw2_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

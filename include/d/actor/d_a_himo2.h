@@ -17,7 +17,7 @@ struct himo2_s {
 }; // Size: 0x24
 
 struct himo2_class {
-    BOOL setTargetPos(cXyz*, float*, float*);
+    BOOL setTargetPos(cXyz*, f32*, f32*);
 
     /* 0x0000 */ fopAc_ac_c actor;
     /* 0x0290 */ u8 m0290[0x029C - 0x0290];
@@ -26,9 +26,9 @@ struct himo2_class {
     /* 0x02A0 */ s16 m02A0;
     /* 0x02A2 */ s16 m02A2;
 #if VERSION == VERSION_DEMO
-    /* 0x02A6 */ u8 m02A6[0xC];
+    /* 0x02A4 */ u8 m02A4[0x2B0 - 0x2A4];
 #else
-    /* 0x02A2 */ s16 m02A4;
+    /* 0x02A4 */ s16 m02A4;
     /* 0x02A6 */ u8 m02A6[0x02B4 - 0x02A6];
 #endif
     /* 0x02B4 */ cXyz m02B4;
@@ -38,7 +38,6 @@ struct himo2_class {
     /* 0x02D8 */ u32 m02D8;
     /* 0x02DC */ s32 m02DC;
     /* 0x02E0 */ s8 m02E0;
-    /* 0x02E1 */ u8 m02E1[0x02E4 - 0x02E1];
     /* 0x02E4 */ f32 m02E4;
     /* 0x02E8 */ u8 m02E8[0x02EC - 0x02E8];
     /* 0x02EC */ cXyz m02EC[2];
@@ -49,13 +48,11 @@ struct himo2_class {
     /* 0x1120 */ himo2_s m1120[100];
     /* 0x1F30 */ mDoExt_3DlineMat1_c m1F30;
     /* 0x1F6C */ s32 m1F6C;
-    /* 0x1F70 */ f32 m1F70;
-    /* 0x1F74 */ u8 m1F74[0x1F84 - 0x1F74];
+    /* 0x1F70 */ f32 m1F70[5];
     /* 0x1F84 */ cXyz m1F84;
     /* 0x1F90 */ s16 m1F90;
     /* 0x1F92 */ s16 m1F92;
     /* 0x1F94 */ s16 m1F94;
-    /* 0x1F96 */ u8 m1F96[0x1F98 - 0x1F96];
     /* 0x1F98 */ mDoExt_3DlineMat1_c m1F98;
     /* 0x1FD4 */ f32 m1FD4;
     /* 0x1FD8 */ mDoExt_3DlineMat1_c m1FD8;
@@ -65,10 +62,8 @@ struct himo2_class {
     /* 0x2180 */ fpc_ProcID m2180;
     /* 0x2184 */ f32 m2184;
     /* 0x2188 */ f32 m2188;
-    /* 0x218C */ fopAc_ac_c* m218C;
-    /* 0x2190 */ u8 m2190[0x24AC - 0x2190];
+    /* 0x218C */ fopAc_ac_c* m218C[200];
     /* 0x24AC */ u8 m24AC;
-    /* 0x24AD */ u8 m24AD[0x24B0 - 0x24AD];
     /* 0x24B0 */ J3DModel* m24B0;
     /* 0x24B4 */ f32 m24B4;
     /* 0x24B8 */ f32 m24B8;
@@ -80,7 +75,6 @@ struct himo2_class {
     /* 0x24CC */ cXyz m24CC;
     /* 0x24D8 */ s8 m24D8;
     /* 0x24D9 */ s8 m24D9;
-    /* 0x24DA */ u8 m24DA[0x24DC - 0x24DA];
     /* 0x24DC */ cXyz m24DC;
     /* 0x24E8 */ cXyz m24E8;
     /* 0x24F4 */ f32 m24F4;
@@ -93,7 +87,6 @@ struct himo2_class {
     /* 0x2514 */ f32 m2514;
     /* 0x2518 */ f32 m2518;
     /* 0x251C */ s8 m251C;
-    /* 0x251C */ u8 m251D[0x2520 - 0x251D];
     /* 0x2520 */ f32 m2520;
     /* 0x2524 */ cXyz m2524;
     /* 0x2530 */ f32 m2530;

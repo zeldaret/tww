@@ -9,7 +9,6 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_file_error.h"
 #include "d/d_file_select.h"
-#include "d/d_procname.h"
 #include "d/d_menu_cloth.h"
 #include "d/d_menu_save.h"
 #include "d/d_name.h"
@@ -120,7 +119,7 @@ cPhs_State dScnName_c::create() {
         dFs_c->field_0x0 = mArchive;
         savePicDatabuf = new (0x20) card_pictdata[3 * 3];
         JUT_ASSERT(476, savePicDatabuf != NULL);
-        if (fpcM_GetName(this) == PROC_NAME_SCENE) {
+        if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             dFs_c->setUseType(0);
             dNm_c = new dName_c();
             JUT_ASSERT(484, dNm_c != NULL);
@@ -129,10 +128,10 @@ cPhs_State dScnName_c::create() {
             JUT_ASSERT(489, dFe_c != NULL);
             dFe_c->_create();
             dMs_c = NULL;
-            dComIfGs_setNoFile(0);
             dComIfGs_setNewFile(0);
+            dComIfGs_setNoFile(0);
         }
-        if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
+        if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
             dComIfGs_setClearCount(1);
             dFs_c->setUseType(1);
             dMs_c = new dMenu_save_c();
@@ -166,10 +165,10 @@ cPhs_State dScnName_c::create() {
         mDoGph_gInf_c::offAutoForcus();
         setView();
         dKy_setLight_init();
-        fopKyM_Create(PROC_KYEFF, 0, 0);
-        fopKyM_Create(PROC_KYEFF2, 0, 0);
-        fpcSCtRq_Request(fpcLy_CurrentLayer(), PROC_VRBOX, NULL, NULL, NULL);
-        fpcSCtRq_Request(fpcLy_CurrentLayer(), PROC_VRBOX2, NULL, NULL, NULL);
+        fopKyM_Create(fpcNm_KYEFF_e, 0, 0);
+        fopKyM_Create(fpcNm_KYEFF2_e, 0, 0);
+        fpcSCtRq_Request(fpcLy_CurrentLayer(), fpcNm_VRBOX_e, NULL, NULL, NULL);
+        fpcSCtRq_Request(fpcLy_CurrentLayer(), fpcNm_VRBOX2_e, NULL, NULL, NULL);
         g_env_light.mVrSkyColor.r = 0x50;
         g_env_light.mVrSkyColor.g = 0x78;
         g_env_light.mVrSkyColor.b = 0xff;
@@ -184,11 +183,11 @@ cPhs_State dScnName_c::create() {
         g_env_light.mVrKasumiMaeColor.a = 0xff;
         field_0x558 = g_snHIO.field_0x5;
         field_0x1bb8 = 0;
-        if (fpcM_GetName(this) == PROC_NAME_SCENE) {
+        if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             mMainProc = 0;
             field_0x556 = 0;
             mDrawProc = 0;
-        } else if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
+        } else if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
             mMainProc = 10;
             mDrawProc = 3;
         }
@@ -498,7 +497,7 @@ void dScnName_c::NoteOpen() {
         field_0x558--;
         return;
     }
-    mDoAud_seStart(JA_SE_MSEL_CLOTH_ON, NULL, 0, 0);
+    mDoAud_seStart(JA_SE_MSEL_CLOTH_ON);
     mMainProc = 2;
     field_0x55d = 1;
     cloth.cloth_c->init();
@@ -512,11 +511,11 @@ void dScnName_c::NoteOpenWait() {
         return;
     }
     if (g_snHIO.field_0x8 == 0) {
-        if (fpcM_GetName(this) == PROC_NAME_SCENE) {
+        if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             dFs_c->setSaveDataPtr(saveMemory);
             dFs_c->setSavePicDataPtr((u8*)savePicDatabuf);
         }
-        if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
+        if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
             dFs_c->setSaveDataPtr(dMs_c->getDataBufPtr());
             dFs_c->setSavePicDataPtr((u8*)savePicDatabuf);
         }
@@ -631,7 +630,7 @@ void dScnName_c::FileSelOpenMain() {
     if (dFs_c->_open() != 1) {
         return;
     }
-    if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
+    if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
         field_0x1bb6 = 2;
     } else {
         field_0x1bb6 = 1;
@@ -647,9 +646,9 @@ void dScnName_c::FileselOpenWait() {}
 void dScnName_c::FileSelectMain() {
     dFs_c->_move();
     field_0x1bb6 = dFs_c->getIconMode();
-    if (fpcM_GetName(this) == PROC_NAME_SCENE)
+    if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e)
         FileSelectMainNormal();
-    if (fpcM_GetName(this) == PROC_NAMEEX_SCENE)
+    if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e)
         FileSelectMainExSave();
 }
 
@@ -748,10 +747,10 @@ void dScnName_c::FileSelectClose() {
     if (dFs_c->_close() == 1) {
         switch (dFs_c->field_0x392c) {
         case 2:
-            if (fpcM_GetName(this) == PROC_NAMEEX_SCENE) {
+            if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
                 dMs_c->initialize();
-                dMs_c->field_0x053c = 1;
-                dMs_c->field_0x053d = dFs_c->field_0x392f; // getErrType?
+                dMs_c->field_0x53c = 1;
+                dMs_c->field_0x53d = dFs_c->field_0x392f; // getErrType?
                 if (dFs_c->field_0x392f == 2) {
                     dMs_c->initializeEx();
                 }
@@ -843,7 +842,7 @@ void dScnName_c::NameInDraw() {
 
 /* 80232074-802320C0       .text ShopDemoDataLoad__10dScnName_cFv */
 void dScnName_c::ShopDemoDataLoad() {
-    field_0x410 = mDoDvdThd_toMainRam_c::create("/res/ShopDemo/zelda_save.bin", 0, NULL);
+    field_0x410 = mDoDvdThd_toMainRam_c::create("/res/ShopDemo/zelda_save.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     mMainProc = 15;
 }
 
@@ -911,8 +910,8 @@ void dScnName_c::changeGameScene() {
         return;
 
     dComIfGs_gameStart();
-    u32 procName = field_0x55f ? PROC_OPEN_SCENE : PROC_PLAY_SCENE;
-    if (fopScnM_ChangeReq(this, procName, PROC_OVERLAP0, 5)) {
+    u32 procName = field_0x55f ? fpcNm_OPEN_SCENE_e : fpcNm_PLAY_SCENE_e;
+    if (fopScnM_ChangeReq(this, procName, fpcNm_OVERLAP0_e, 5)) {
         g_dComIfG_gameInfo.save.getDan().mStageNo = -1;
         dComIfGs_setRestartRoomParam(0);
         mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
@@ -964,7 +963,7 @@ void dDlst_FLSEL_CLOTH_c::draw() {
     dComIfGp_getCurrentGrafPort()->setPort();
 }
 
-scene_method_class l_dScnName_Method = {
+static scene_method_class l_dScnName_Method = {
     (process_method_func)dScnName_Create,
     (process_method_func)dScnName_Delete,
     (process_method_func)dScnName_Execute,
@@ -973,26 +972,26 @@ scene_method_class l_dScnName_Method = {
 };
 
 scene_process_profile_definition g_profile_NAME_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NAME_SCENE,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NAME_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnName_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnName_Method,
 };
 
 scene_process_profile_definition g_profile_NAMEEX_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NAMEEX_SCENE,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NAMEEX_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnName_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnName_Method,

@@ -6,7 +6,6 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_pc/f_pc_executor.h"
-#include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
 #include "SSystem/SComponent/c_malloc.h"
 #include "SSystem/SComponent/c_lib.h"
@@ -89,7 +88,7 @@ fpc_ProcID fopKyM_createWpillar(cXyz const* i_pos, f32 scaleXZ, f32 scaleY, int 
     params->mScale.z = scaleXZ;
     params->mParam = i_param;
 
-    return fopKyM_Create(PROC_WPILLAR, NULL, params);
+    return fopKyM_Create(fpcNm_WPILLAR_e, NULL, params);
 }
 
 /* 8002AB40-8002ABB4       .text fopKyM_createMpillar__FPC4cXyzf */

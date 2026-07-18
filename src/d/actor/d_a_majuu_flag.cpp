@@ -7,13 +7,11 @@
 #include "d/actor/d_a_majuu_flag.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
-#include "d/res/res_cloth.h"
-#include "d/res/res_matif.h"
-#include "d/res/res_vsvfg.h"
-#include "d/res/res_xhcf.h"
+#include "res/Object/Cloth.h"
+#include "res/Object/Matif.h"
+#include "res/Object/Vsvfg.h"
+#include "res/Object/Xhcf.h"
 #include "dolphin/gx/GXTexture.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
@@ -63,98 +61,8 @@ static u8 unused1[16] = {0}; // IWYU pragma: keep
 
 #include "assets/l_flag02TEX.h"
 
-static Vec l_majuu_flag_pos[] = {
-    {0.0f, -255.0f, 1300.0f}, {0.0f, -306.0f, 1040.0f}, {0.0f, -204.0f, 1040.0f}, {0.0f, -357.0f, 780.0f}, {0.0f, -255.0f, 780.0f}, {0.0f, -153.0f, 780.0f},
-    {0.0f, -408.0f, 520.0f},  {0.0f, -306.0f, 520.0f},  {0.0f, -204.0f, 520.0f},  {0.0f, -102.0f, 520.0f}, {0.0f, -459.0f, 260.0f}, {0.0f, -357.0f, 260.0f},
-    {0.0f, -255.0f, 260.0f},  {0.0f, -153.0f, 260.0f},  {0.0f, -51.0f, 260.0f},   {0.0f, -510.0f, 0.0f},   {0.0f, -408.0f, 0.0f},   {0.0f, -306.0f, 0.0f},
-    {0.0f, -204.0f, 0.0f},    {0.0f, -102.0f, 0.0f},    {0.0f, 0.0f, 0.0f},
-};
-static f32 l_texCoord[][2] = {
-    {
-        -0.280444f,
-        1.069755f,
-    },
-    {
-        0.241439f,
-        0.90587097f,
-    },
-    {
-        0.24137f,
-        1.10964f,
-    },
-    {
-        0.91434f,
-        0.707848f,
-    },
-    {
-        0.91426998f,
-        1.069345f,
-    },
-    {
-        1.352905f,
-        0.52748799f,
-    },
-    {
-        1.352837f,
-        0.954527f,
-    },
-    {
-        1.39049f,
-        0.34673199f,
-    },
-    {
-        1.390421f,
-        0.70902097f,
-    },
-    {
-        -0.28037399f,
-        0.70746398f,
-    },
-    {
-        0.241509f,
-        0.52670997f,
-    },
-    {
-        0.91441f,
-        0.346349f,
-    },
-    {
-        1.352974f,
-        0.100449f,
-    },
-    {
-        -0.280306f,
-        0.34517899f,
-    },
-    {
-        0.241579f,
-        0.147549f,
-    },
-    {
-        0.91447997f,
-        -0.015147f,
-    },
-    {
-        -0.28023499f,
-        -0.017113f,
-    },
-    {
-        0.241649f,
-        -0.186406f,
-    },
-    {
-        -0.27530599f,
-        1.1664619f,
-    },
-    {
-        -0.280164f,
-        -0.061744f,
-    },
-    {
-        1.396762f,
-        0.528265f,
-    },
-};
+#include "assets/l_majuu_flag_pos.h"
+#include "assets/l_texCoord__d_a_majuu_flag.h"
 
 #include "assets/l_majuu_flagDL.h"
 #include "assets/l_majuu_flag_matDL.h"
@@ -902,7 +810,7 @@ static BOOL daMajuu_Flag_Delete(daMajuu_Flag_c* i_this) {
 static cPhs_State daMajuu_Flag_Create(fopAc_ac_c* a_this) {
     daMajuu_Flag_c* i_this = (daMajuu_Flag_c*)a_this;
 
-    fopAcM_SetupActor(a_this, daMajuu_Flag_c);
+    fopAcM_ct(a_this, daMajuu_Flag_c);
 
     u32 uVar3 = fopAcM_GetParam(a_this);
     u32 uVar2 = uVar3 & 0xFF;
@@ -995,11 +903,11 @@ static cPhs_State daMajuu_Flag_Create(fopAc_ac_c* a_this) {
 
         if (i_this->mTexType != 0) {
             if (i_this->mTexType == 1) {
-                texInfo = (ResTIMG*)dComIfG_getObjectRes("Matif", MATIF_BTI_FLAG_MATI);
+                texInfo = (ResTIMG*)dComIfG_getObjectRes("Matif", dRes_INDEX_MATIF_BTI_FLAG_MATI_e);
             } else if (i_this->mTexType == 2) {
-                texInfo = (ResTIMG*)dComIfG_getObjectRes("Vsvfg", VSVFG_BTI_VSVFG);
+                texInfo = (ResTIMG*)dComIfG_getObjectRes("Vsvfg", dRes_INDEX_VSVFG_BTI_VSVFG_e);
             } else if (i_this->mTexType == 3) {
-                texInfo = (ResTIMG*)dComIfG_getObjectRes("Xhcf", XHCF_BTI_X_HC_FLAG00);
+                texInfo = (ResTIMG*)dComIfG_getObjectRes("Xhcf", dRes_INDEX_XHCF_BTI_X_HC_FLAG00_e);
             }
             mip = GXBool(texInfo->mipmapCount > 1);
             GXInitTexObj(
@@ -1028,7 +936,7 @@ static cPhs_State daMajuu_Flag_Create(fopAc_ac_c* a_this) {
             GXInitTexObjLOD(i_this->mPacket.getImageTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
         }
 
-        texInfo = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+        texInfo = (ResTIMG*)dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
         mip = GXBool(texInfo->mipmapCount > 1);
         GXInitTexObj(
             i_this->mPacket.getToonTexObj(),
@@ -1070,18 +978,18 @@ static actor_method_class l_daMajuu_Flag_Method = {
 };
 
 actor_process_profile_definition g_profile_MAJUU_FLAG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MAJUU_FLAG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MAJUU_FLAG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMajuu_Flag_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MAJUU_FLAG,
+    /* Draw Prio    */ fpcDwPi_MAJUU_FLAG_e,
     /* Actor SubMtd */ &l_daMajuu_Flag_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

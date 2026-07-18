@@ -11,9 +11,7 @@
 #include "d/d_bg_s_func.h"
 #include "d/d_cc_d.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_daiocta.h"
+#include "res/Object/Daiocta.h"
 
 const s32 daDaiocta_Eye_c::m_heapsize = 2848;
 const char daDaiocta_Eye_c::m_arc_name[] = "daiocta";
@@ -88,7 +86,7 @@ void daDaiocta_Eye_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
     cXyz dummy(0.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::copy(i_modelP->getAnmMtx(jnt_no));
 
-    if (jnt_no == 2) {
+    if (jnt_no == DO_EYE1_JNT_J_DO_EYE2_e) {
         mDoMtx_stack_c::ZXYrotM(mCurEyeRot);
         mDoMtx_stack_c::scaleM(mEyeScale);
     }
@@ -111,13 +109,13 @@ BOOL daDaiocta_Eye_c::_createHeap() {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ 2,
+            /* mJointIndex */ DO_EYE1_JNT_J_DO_EYE2_e,
             /* mRadius     */ 110.0f,
             /* mpOffsets   */ eye_sph_offset
         }
     };
 
-    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BDL_DO_EYE1));
+    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BDL_DO_EYE1_e));
     JUT_ASSERT(0xE9, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
@@ -128,7 +126,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
     
     mpModel->setUserArea((u32)this);
 
-    mpBrk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_DAMAGE_EYE_A1));
+    mpBrk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_DAMAGE_EYE_A1_e));
 
     if (!mpBrk) {
         return FALSE;
@@ -144,7 +142,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
         return FALSE;
     }
 
-    mpBtk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_DAMAGE_EYE_A1));
+    mpBtk = static_cast<J3DAnmTextureSRTKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_DAMAGE_EYE_A1_e));
     
     if (!mpBtk) {
         return FALSE;
@@ -161,7 +159,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
     }
 
     for (int i = 0; i < 3; i++) {
-        if (i == 2) modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
+        if (i == DO_EYE1_JNT_J_DO_EYE2_e) modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
     }
 
     mpJntHit = JntHit_create(mpModel, search_data, ARRAY_SSIZE(search_data));
@@ -184,7 +182,7 @@ void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjI
 
 /* 00000510-000005D0       .text _coHit__15daDaiocta_Eye_cFP10fopAc_ac_c */
 void daDaiocta_Eye_c::_coHit(fopAc_ac_c* i_actor) {
-    if (fpcM_GetName(i_actor) == PROC_BOMB) {
+    if (fpcM_GetName(i_actor) == fpcNm_BOMB_e) {
         daBomb_c* bomb_p = (daBomb_c *) i_actor;
         if (bomb_p->chk_state(daBomb_c::STATE_4)) {
             if (!mbIsDead) {
@@ -293,13 +291,13 @@ void daDaiocta_Eye_c::modeDamageInit() {
     mbIsDamaged = true;
 
     J3DModelData* model_data_p = mpModel->getModelData();
-    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_DAMAGE_EYE_A1);
+    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_DAMAGE_EYE_A1_e);
     mBrkAnm.init(
         model_data_p, mpBrk, TRUE, 
         J3DFrameCtrl::EMode_NONE, 1.0f, 
         0, -1, true, FALSE
     );
-    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_DAMAGE_EYE_A1);
+    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_DAMAGE_EYE_A1_e);
     mBtkAnm.init(
         model_data_p, mpBtk, TRUE, 
         J3DFrameCtrl::EMode_NONE, 1.0f, 
@@ -338,13 +336,13 @@ void daDaiocta_Eye_c::modeDeathInit() {
     mMode = MODE_DEATH;
     mbIsDamaged = true;
     mEyeScale.setall(1.0f);
-    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BRK_DAMAGE_EYE_B1);
+    mpBrk = (J3DAnmTevRegKey *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_DAMAGE_EYE_B1_e);
     mBrkAnm.init(
         mpModel->getModelData(), mpBrk, TRUE, 
         J3DFrameCtrl::EMode_NONE, 1.0f, 
         0, -1, true, FALSE
     );
-    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, DAIOCTA_BTK_DAMAGE_EYE_B1);
+    mpBtk = (J3DAnmTextureSRTKey *) dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BTK_DAMAGE_EYE_B1_e);
     mBtkAnm.init(
         mpModel->getModelData(), mpBtk, TRUE, 
         J3DFrameCtrl::EMode_NONE, 1.0f, 
@@ -461,7 +459,7 @@ void daDaiocta_Eye_c::createInit() {
     mEyeScale.setall(1.0f);
     if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* parent_p = fopAcM_SearchByID(parentActorID);
-        if (parent_p && fopAc_IsActor(parent_p) && fpcM_GetName(parent_p) == PROC_DAIOCTA) {
+        if (parent_p && fopAc_IsActor(parent_p) && fpcM_GetName(parent_p) == fpcNm_DAIOCTA_e) {
             mpParentActor = (daDaiocta_c *) parent_p;
         }
     }
@@ -469,7 +467,7 @@ void daDaiocta_Eye_c::createInit() {
 
 /* 000012D4-00001450       .text _create__15daDaiocta_Eye_cFv */
 cPhs_State daDaiocta_Eye_c::_create() {
-    fopAcM_SetupActor(this, daDaiocta_Eye_c);
+    fopAcM_ct(this, daDaiocta_Eye_c);
     cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
     if (result == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
@@ -521,18 +519,18 @@ static actor_method_class daDaiocta_EyeMethodTable = {
 };
 
 actor_process_profile_definition g_profile_DAIOCTA_EYE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DAIOCTA_EYE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DAIOCTA_EYE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDaiocta_Eye_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DAIOCTA_EYE,
+    /* Draw Prio    */ fpcDwPi_DAIOCTA_EYE_e,
     /* Actor SubMtd */ &daDaiocta_EyeMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

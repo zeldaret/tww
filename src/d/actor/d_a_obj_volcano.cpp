@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_volcano.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_particle_name.h"
-#include "d/res/res_ykzyg.h"
+#include "res/Object/Ykzyg.h"
 #include "d/d_cc_d.h"
 
 static dCcD_SrcCyl cyl_check_src = {
@@ -116,24 +114,24 @@ void daObjVolcano::Act_c::StopFire() {
 
 /* 00000470-00000758       .text CreateHeap__Q212daObjVolcano5Act_cFv */
 BOOL daObjVolcano::Act_c::CreateHeap() {
-    J3DModelData * model_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, YKZYG_BDL_QKZYG));
+    J3DModelData * model_data = (J3DModelData*)(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BDL_QKZYG_e));
     JUT_ASSERT(0xbf, model_data != NULL);
 
     field_0x2F8 = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000222);
-    J3DAnmTextureSRTKey * btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YKZYG_BTK_QKZYG));
+    J3DAnmTextureSRTKey * btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BTK_QKZYG_e));
     JUT_ASSERT(0xca, btk != NULL);
 
     s32 btkRet = field_0x2FC.init(model_data, btk, TRUE, J3DFrameCtrl::EMode_LOOP);
-    J3DModelData * model_data_fire = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YKZYG_BDL_YMNKZ00));
+    J3DModelData * model_data_fire = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BDL_YMNKZ00_e));
     JUT_ASSERT(0xe1, model_data_fire != NULL);
 
     field_0x310 = mDoExt_J3DModel__create(model_data_fire, 0x80000, 0x11000222);
-    J3DAnmTextureSRTKey * btk_f = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YKZYG_BTK_YMNKZ00));
+    J3DAnmTextureSRTKey * btk_f = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BTK_YMNKZ00_e));
     JUT_ASSERT(0xec, btk_f != NULL);
     
     s32 btkFRet = field_0x314.init(model_data_fire, btk_f, TRUE, J3DFrameCtrl::EMode_LOOP);
     
-    J3DAnmTevRegKey * brk_f = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, YKZYG_BRK_YMNKZ00));
+    J3DAnmTevRegKey * brk_f = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YKZYG_BRK_YMNKZ00_e));
     JUT_ASSERT(0xf3, brk_f != NULL);
     s32 brkRet = field_0x328.init(model_data_fire, brk_f, TRUE, J3DFrameCtrl::EMode_NONE);
 
@@ -195,7 +193,7 @@ BOOL daObjVolcano::Act_c::Create() {
 
 /* 000009C8-00000BA0       .text Mthd_Create__Q212daObjVolcano5Act_cFv */
 cPhs_State daObjVolcano::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjVolcano::Act_c);
+    fopAcM_ct(this, daObjVolcano::Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&field_0x2F0, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = MoveBGCreate(M_arcname, 0x11, NULL, 0xaed0);
@@ -462,8 +460,8 @@ BOOL daObjVolcano::Act_c::Draw() {
     dComIfGd_setListBG();
     u8 tmp = (s8)(field_0x4F8 * 255.5f);
     J3DModelData* model_data = field_0x2F8->getModelData();
-    set_material(model_data->getJointNodePointer(2)->getMesh(), tmp);
-    set_material(model_data->getJointNodePointer(1)->getMesh(), tmp);
+    set_material(model_data->getJointNodePointer(QKZYG_JNT_YG_e)->getMesh(), tmp);
+    set_material(model_data->getJointNodePointer(QKZYG_JNT_AA_e)->getMesh(), tmp);
 
     mDoExt_modelUpdateDL(field_0x2F8);
     if (field_0x4F4 != 0) {
@@ -513,18 +511,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjVolcano
 
 actor_process_profile_definition g_profile_Obj_Volcano = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Volcano,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Volcano_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVolcano::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Volcano,
+    /* Draw Prio    */ fpcDwPi_Obj_Volcano_e,
     /* Actor SubMtd */ &daObjVolcano::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

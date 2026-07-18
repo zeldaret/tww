@@ -6,12 +6,10 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_windmill.h"
 #include "d/actor/d_a_wind_tag.h"
-#include "d/res/res_hpu1.h"
-#include "d/res/res_hpu2.h"
+#include "res/Object/Hpu1.h"
+#include "res/Object/Hpu2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_movebg_actor.h"
 
@@ -108,8 +106,8 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
-const s16 daWindMill_c::m_bmdidx[] = {HPU1_BDL_HPU1, HPU2_BDL_HPU2};
-const s16 daWindMill_c::m_dzbidx[] = {HPU1_DZB_HPU1, -1};
+const s16 daWindMill_c::m_bmdidx[] = {dRes_INDEX_HPU1_BDL_HPU1_e, dRes_INDEX_HPU2_BDL_HPU2_e};
+const s16 daWindMill_c::m_dzbidx[] = {dRes_INDEX_HPU1_DZB_HPU1_e, -1};
 const s16 daWindMill_c::m_heapsize[] = { 0x3A40, 0xA00 };
 const Vec daWindMill_c::m_cull_size[][2] = {
     {{-1400.0f, 0.0f, -1400.0f}, {1400.0f, 500.0f, 1400.0f}},
@@ -210,7 +208,7 @@ void daWindMill_c::CreateInit() {
     set_mtx();
 
     for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
-        if (i == 2) {
+        if (i == HPU1_JNT_POLYSURFACE2007_e) {
             mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
             break;
         }
@@ -261,7 +259,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000608-00000670       .text search_wind__12daWindMill_cFv */
 void daWindMill_c::search_wind() {
-    fopAc_ac_c* windTag = fopAcM_SearchByName(PROC_WindTag);
+    fopAc_ac_c* windTag = fopAcM_SearchByName(fpcNm_WindTag_e);
     if (windTag != NULL)
         mWindTagId = fopAcM_GetID(windTag);
     else
@@ -270,7 +268,7 @@ void daWindMill_c::search_wind() {
 
 /* 00000670-00000804       .text _create__12daWindMill_cFv */
 cPhs_State daWindMill_c::_create() {
-    fopAcM_SetupActor(this, daWindMill_c);
+    fopAcM_ct(this, daWindMill_c);
 
     mType = fopAcM_GetParam(this) & 0xF;
     cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
@@ -500,18 +498,18 @@ static actor_method_class daWindMillMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WINDMILL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WINDMILL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WINDMILL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWindMill_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WINDMILL,
+    /* Draw Prio    */ fpcDwPi_WINDMILL_e,
     /* Actor SubMtd */ &daWindMillMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

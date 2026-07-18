@@ -11,7 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "d/d_snap.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -692,8 +691,8 @@ void dKyr_sun_move() {
 /* 8008CF68-8008D0B4       .text dKyr_rain_init__Fv */
 void dKyr_rain_init() {
     camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
-    g_env_light.mpRainPacket->mpTxSnow01 = (u8*)dComIfG_getObjectRes("Always", ALWAYS_I8_TX_SNOW01);
-    g_env_light.mpRainPacket->mpTxRingAHalf = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_TXA_RING_A_32HAFE);
+    g_env_light.mpRainPacket->mpTxSnow01 = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_I8_TX_SNOW01_e);
+    g_env_light.mpRainPacket->mpTxRingAHalf = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_RING_A_32HAFE_e);
     g_env_light.mpRainPacket->mCamEyePos = pCamera->mLookat.mEye;
     g_env_light.mpRainPacket->mCamCenterPos = pCamera->mLookat.mCenter;
     g_env_light.mpRainPacket->mCenterDeltaMul = 0.0f;
@@ -1234,7 +1233,7 @@ void dKyr_snow_init() {
     g_env_light.mpSnowPacket = new(0x20) dKankyo_snow_Packet();
     if (g_env_light.mpSnowPacket != NULL) {
         if (strcmp(dComIfGp_getStartStageName(), "Adanmae") != 0) {
-            g_env_light.mpSnowPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", ALWAYS_I8_TX_SNOW01);
+            g_env_light.mpSnowPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_I8_TX_SNOW01_e);
         } else {
             g_env_light.mpSnowPacket->mpTexture = (u8*)dComIfG_getStageRes("Stage", "ak_kazanbai00.bti");
         }
@@ -1265,7 +1264,7 @@ void dKyr_kazanbai_tamari_move() {
 void dKyr_star_init() {
     g_env_light.mpStarPacket = new(0x20) dKankyo_star_Packet();
     if (g_env_light.mpStarPacket != NULL) {
-        g_env_light.mpStarPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", ALWAYS_I8_TX_SNOW01);
+        g_env_light.mpStarPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_I8_TX_SNOW01_e);
         g_env_light.mpStarPacket->mEffect[0].mSin = 1.0f;
         g_env_light.mpStarPacket->mEffectNum = 0;
     }
@@ -1744,7 +1743,7 @@ void poison_init() {
     g_env_light.mpPoisonPacket->field_0xbb9c.z = 0.0f;
     g_env_light.mpPoisonPacket->mCount = 0;
     if (g_env_light.mpPoisonPacket != NULL) {
-        g_env_light.mpPoisonPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", ALWAYS_BTI_AK_SMOKE01);
+        g_env_light.mpPoisonPacket->mpTexture = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_AK_SMOKE01_e);
         for (u32 i = 0; i < ARRAY_SIZE(g_env_light.mpPoisonPacket->mEff); i++)
             g_env_light.mpPoisonPacket->mEff[i].mStatus = 0;
         poison_move();
@@ -2142,308 +2141,310 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* pPos, GXColor& color, u8** pImg) {
     f32 spAC = 1.0f - lenz_packet->mDistFalloff;
     f32 spA8 = sun_packet->mVisibility * sun_packet->mVisibility;
 
-    if (!(sun_visibility < 0.1f)) {
-        dKy_set_eyevect_calc2(camera, &spFC, 8000.0f, 8000.0f);
+    if (sun_visibility < 0.1f) {
+        return;
+    }
 
-        GXColor color_reg0;
-        color_reg0.r = sun_packet->mColor.r;
-        color_reg0.g = sun_packet->mColor.g;
-        color_reg0.b = sun_packet->mColor.b;
+    dKy_set_eyevect_calc2(camera, &spFC, 8000.0f, 8000.0f);
 
-        GXColor color_reg1;
-        color_reg1.r = sun_packet->mColor.r;
-        color_reg1.g = sun_packet->mColor.g;
-        color_reg1.b = sun_packet->mColor.b;
+    GXColor color_reg0;
+    color_reg0.r = sun_packet->mColor.r;
+    color_reg0.g = sun_packet->mColor.g;
+    color_reg0.b = sun_packet->mColor.b;
 
-        if (dComIfGd_getView() != NULL) {
-            MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
-        } else {
-            return;
+    GXColor color_reg1;
+    color_reg1.r = sun_packet->mColor.r;
+    color_reg1.g = sun_packet->mColor.g;
+    color_reg1.b = sun_packet->mColor.b;
+
+    if (dComIfGd_getView() != NULL) {
+        MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
+    } else {
+        return;
+    }
+
+    GXTexObj texobj;
+    GXInitTexObj(&texobj, pImg[0], 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&texobj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&texobj, GX_TEXMAP0);
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, color_reg0);
+    GXSetTevColor(GX_TEVREG1, color_reg1);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetZCompLoc(GX_TRUE);
+    GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    GXSetNumIndStages(0);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+
+    MTXRotRad(rotMtx, 'Z', 0.0f);
+    MTXConcat(camMtx, rotMtx, camMtx);
+    GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    static const f32 scale_dat[] = {
+        8000.0f, 10000.0f, 1600.0f, 4800.0f, 1200.0f, 5600.0f, 2400.0f, 7200.0f,
+    };
+
+    static const GXColor col_dat[] = {
+        {0xFF, 0xFF, 0xFF, 0xFF},
+        {0xFF, 0xFF, 0xFF, 0x50},
+        {0xFF, 0xFF, 0xFF, 0x5A},
+        {0xFF, 0xFF, 0xFF, 0x64},
+        {0xFF, 0xFF, 0xFF, 0x55},
+        {0xFF, 0xFF, 0xFF, 0x5A},
+        {0xFF, 0xFF, 0xFF, 0x6E},
+        {0xFF, 0xFF, 0xFF, 0x5A},
+    };
+
+    for (int i = 0; i < 8; i++) {
+        if (!g_env_light.mpSunlenzPacket->mbDrawLenzInSky || i == 0) {
+            f32 spC4 = spA8;
+            if (i < 2) {
+                color_reg0.a = spC4 * col_dat[i].a;
+            } else {
+                color_reg0.a = spC4 * col_dat[i].a * (0.8f * lenz_packet->mDistFalloff);
+            }
+
+            GXSetTevColor(GX_TEVREG0, color_reg0);
+
+            f32 var_f31;
+            if (i < 2) {
+                var_f31 = (0.04f + (0.075f * sun_visibility)) * scale_dat[i] + ((0.2f * sun_visibility * scale_dat[i]) * (1.0f - (lenz_packet->mDistFalloff * lenz_packet->mDistFalloff)));
+            } else {
+                var_f31 = 0.8f * (sun_visibility * scale_dat[i]) * (1.0f - (lenz_packet->mDistFalloff * lenz_packet->mDistFalloff * lenz_packet->mDistFalloff));
+            }
+
+            if (i == 1) {
+                dKyr_init_btitex(&texobj, (ResTIMG*)pImg[2]);
+                GXLoadTexObj(&texobj, GX_TEXMAP0);
+            } else if (i == 2) {
+                dKyr_init_btitex(&texobj, (ResTIMG*)pImg[1]);
+                GXLoadTexObj(&texobj, GX_TEXMAP0);
+            }
+
+            spE4.x = -var_f31;
+            spE4.y = var_f31;
+            spE4.z = 0.0f;
+            cMtx_multVec(camMtx, &spE4, &spD8);
+            pos[0].x = spD8.x + pPos[i].x;
+            pos[0].y = spD8.y + pPos[i].y;
+            pos[0].z = spD8.z + pPos[i].z;
+
+            spE4.x = var_f31;
+            spE4.y = var_f31;
+            spE4.z = 0.0f;
+            cMtx_multVec(camMtx, &spE4, &spD8);
+            pos[1].x = spD8.x + pPos[i].x;
+            pos[1].y = spD8.y + pPos[i].y;
+            pos[1].z = spD8.z + pPos[i].z;
+
+            spE4.x = var_f31;
+            spE4.y = -var_f31;
+            spE4.z = 0.0f;
+            cMtx_multVec(camMtx, &spE4, &spD8);
+            pos[2].x = spD8.x + pPos[i].x;
+            pos[2].y = spD8.y + pPos[i].y;
+            pos[2].z = spD8.z + pPos[i].z;
+
+            spE4.x = -var_f31;
+            spE4.y = -var_f31;
+            spE4.z = 0.0f;
+            cMtx_multVec(camMtx, &spE4, &spD8);
+            pos[3].x = spD8.x + pPos[i].x;
+            pos[3].y = spD8.y + pPos[i].y;
+            pos[3].z = spD8.z + pPos[i].z;
+
+            s16 sp8;
+            if (i == 0) {
+                sp8 = 0xFF;
+            } else {
+                sp8 = 0x1FF;
+            }
+
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+            GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+            GXTexCoord2s16(0, 0);
+            GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+            GXTexCoord2s16(sp8, 0);
+            GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+            GXTexCoord2s16(sp8, sp8);
+            GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
+            GXTexCoord2s16(0, sp8);
+            GXEnd();
         }
+    }
 
-        GXTexObj texobj;
-        GXInitTexObj(&texobj, pImg[0], 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-        GXInitTexObjLOD(&texobj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        GXLoadTexObj(&texobj, GX_TEXMAP0);
-        GXSetNumChans(0);
-        GXSetTevColor(GX_TEVREG0, color_reg0);
-        GXSetTevColor(GX_TEVREG1, color_reg1);
-        GXSetNumTexGens(1);
-        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-        GXSetNumTevStages(1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-        GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
-        GXSetZCompLoc(GX_TRUE);
-        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
-        GXSetNumIndStages(0);
-        GXSetCullMode(GX_CULL_NONE);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
-        GXClearVtxDesc();
-        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    spC = -0x07F6;
+    spA = 0x416B;
 
+    if (dComIfGd_getView() != NULL) {
+        MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
+    }
+
+    {
         MTXRotRad(rotMtx, 'Z', 0.0f);
         MTXConcat(camMtx, rotMtx, camMtx);
         GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
 
-        static const f32 scale_dat[] = {
-            8000.0f, 10000.0f, 1600.0f, 4800.0f, 1200.0f, 5600.0f, 2400.0f, 7200.0f,
-        };
+        GXSetNumChans(1);
+        GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+        GXSetNumTexGens(0);
+        GXSetNumTevStages(1);
 
-        static const GXColor col_dat[] = {
-            {0xFF, 0xFF, 0xFF, 0xFF},
-            {0xFF, 0xFF, 0xFF, 0x50},
-            {0xFF, 0xFF, 0xFF, 0x5A},
-            {0xFF, 0xFF, 0xFF, 0x64},
-            {0xFF, 0xFF, 0xFF, 0x55},
-            {0xFF, 0xFF, 0xFF, 0x5A},
-            {0xFF, 0xFF, 0xFF, 0x6E},
-            {0xFF, 0xFF, 0xFF, 0x5A},
-        };
+        color_reg0.a = sun_packet->mVisibility * (15.0f * (spA8 * spA8 * spA8));
+        GXSetTevColor(GX_TEVREG0, color_reg0);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetClipMode(GX_CLIP_ENABLE);
+        GXSetNumIndStages(0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
 
-        for (int i = 0; i < 8; i++) {
-            if (!g_env_light.mpSunlenzPacket->mbDrawLenzInSky || i == 0) {
-                f32 spC4 = spA8;
-                if (i < 2) {
-                    color_reg0.a = spC4 * col_dat[i].a;
-                } else {
-                    color_reg0.a = spC4 * col_dat[i].a * (0.8f * lenz_packet->mDistFalloff);
-                }
+        for (int i = 0; i < 16; i++) {
+            f32 spA0;
+            f32 sp9C;
+            f32 sp98;
+            f32 sp94;
+            f32 sp90;
+            f32 sp8C;
+            f32 sp88;
+            f32 sp84;
+            f32 sp80;
+            f32 sp7C;
+            f32 sp78;
+            f32 sp74;
+            f32 sp70;
+            f32 sp6C;
+            f32 sp68;
+            f32 sp64;
 
-                GXSetTevColor(GX_TEVREG0, color_reg0);
-
-                f32 var_f31;
-                if (i < 2) {
-                    var_f31 = (0.04f + (0.075f * sun_visibility)) * scale_dat[i] + ((0.2f * sun_visibility * scale_dat[i]) * (1.0f - (lenz_packet->mDistFalloff * lenz_packet->mDistFalloff)));
-                } else {
-                    var_f31 = 0.8f * (sun_visibility * scale_dat[i]) * (1.0f - (lenz_packet->mDistFalloff * lenz_packet->mDistFalloff * lenz_packet->mDistFalloff));
-                }
-
-                if (i == 1) {
-                    dKyr_init_btitex(&texobj, (ResTIMG*)pImg[2]);
-                    GXLoadTexObj(&texobj, GX_TEXMAP0);
-                } else if (i == 2) {
-                    dKyr_init_btitex(&texobj, (ResTIMG*)pImg[1]);
-                    GXLoadTexObj(&texobj, GX_TEXMAP0);
-                }
-
-                spE4.x = -var_f31;
-                spE4.y = var_f31;
-                spE4.z = 0.0f;
-                cMtx_multVec(camMtx, &spE4, &spD8);
-                pos[0].x = spD8.x + pPos[i].x;
-                pos[0].y = spD8.y + pPos[i].y;
-                pos[0].z = spD8.z + pPos[i].z;
-
-                spE4.x = var_f31;
-                spE4.y = var_f31;
-                spE4.z = 0.0f;
-                cMtx_multVec(camMtx, &spE4, &spD8);
-                pos[1].x = spD8.x + pPos[i].x;
-                pos[1].y = spD8.y + pPos[i].y;
-                pos[1].z = spD8.z + pPos[i].z;
-
-                spE4.x = var_f31;
-                spE4.y = -var_f31;
-                spE4.z = 0.0f;
-                cMtx_multVec(camMtx, &spE4, &spD8);
-                pos[2].x = spD8.x + pPos[i].x;
-                pos[2].y = spD8.y + pPos[i].y;
-                pos[2].z = spD8.z + pPos[i].z;
-
-                spE4.x = -var_f31;
-                spE4.y = -var_f31;
-                spE4.z = 0.0f;
-                cMtx_multVec(camMtx, &spE4, &spD8);
-                pos[3].x = spD8.x + pPos[i].x;
-                pos[3].y = spD8.y + pPos[i].y;
-                pos[3].z = spD8.z + pPos[i].z;
-
-                s16 sp8;
-                if (i == 0) {
-                    sp8 = 0xFF;
-                } else {
-                    sp8 = 0x1FF;
-                }
-
-                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
-                GXTexCoord2s16(0, 0);
-                GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
-                GXTexCoord2s16(sp8, 0);
-                GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
-                GXTexCoord2s16(sp8, sp8);
-                GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
-                GXTexCoord2s16(0, sp8);
-                GXEnd();
+            if (i & 1) {
+                sp78 = spC;
+            } else {
+                sp78 = spA;
             }
-        }
 
-        spC = -0x07F6;
-        spA = 0x416B;
-
-        if (dComIfGd_getView() != NULL) {
-            MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
-        }
-
-        {
-            MTXRotRad(rotMtx, 'Z', 0.0f);
-            MTXConcat(camMtx, rotMtx, camMtx);
-            GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
-
-            GXSetNumChans(1);
-            GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
-            GXSetNumTexGens(0);
-            GXSetNumTevStages(1);
-
-            color_reg0.a = sun_packet->mVisibility * (15.0f * (spA8 * spA8 * spA8));
-            GXSetTevColor(GX_TEVREG0, color_reg0);
-            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
-            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
-            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetClipMode(GX_CLIP_ENABLE);
-            GXSetNumIndStages(0);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-            GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
-
-            for (int i = 0; i < 16; i++) {
-                f32 spA0;
-                f32 sp9C;
-                f32 sp98;
-                f32 sp94;
-                f32 sp90;
-                f32 sp8C;
-                f32 sp88;
-                f32 sp84;
-                f32 sp80;
-                f32 sp7C;
-                f32 sp78;
-                f32 sp74;
-                f32 sp70;
-                f32 sp6C;
-                f32 sp68;
-                f32 sp64;
-
-                if (i & 1) {
-                    sp78 = spC;
-                } else {
-                    sp78 = spA;
-                }
-
-                sp6C = 0.4f + (0.6f * (sun_visibility * (spAC * spAC)));
-                sp64 = 300.0f;
-                sp68 = cM_ssin(34.0f * sp78);
-                if (sp68 < 0.0f) {
-                    sp68 = -sp68;
-                }
-
-                sp74 = 1000.0f * (0.5f + sp68);
-
-                spA0 = sp64 * sp6C * cM_ssin(sp78 + sp74);
-                sp9C = sp64 * sp6C * cM_scos(sp78 + sp74);
-                sp90 = sp64 * sp6C * cM_ssin(sp78 - sp74);
-                sp8C = sp64 * sp6C * cM_scos(sp78 - sp74);
-
-                sp70 = (0.6f + (0.4f * sp68)) * (300.0f * sp6C * (3.0f + spAC));
-                sp70 *= 1.5f * sun_visibility;
-
-                if ((i & 3)) {
-                    sp70 *= 0.2f;
-                }
-
-                sp98 = sp70 * cM_ssin(sp78);
-                sp94 = sp70 * cM_scos(sp78);
-                spC += 0x1000;
-                spA += 0x1C71;
-
-                spE4.x = sp98;
-                spE4.y = sp94;
-                spE4.z = 0.0f;
-                cMtx_multVec(camMtx, &spE4, &spD8);
-                spF0.x = pPos[0].x + spD8.x;
-                spF0.y = pPos[0].y + spD8.y;
-                spF0.z = pPos[0].z + spD8.z;
-
-                sp7C = spFC.abs(spF0);
-                if (sp7C < lenz_packet->field_0x88) {
-                    lenz_packet->field_0x88 = sp7C;
-                } else if (sp7C > lenz_packet->field_0x8c) {
-                    lenz_packet->field_0x8c = sp7C;
-                }
-
-                sp88 = lenz_packet->field_0x88 - lenz_packet->field_0x84;
-                if (sp88 > 0.0f) {
-                    sp84 = 1.0f - ((sp7C - lenz_packet->field_0x84) / sp88);
-                } else {
-                    sp84 = 1.0f;
-                }
-
-                switch (i & 3) {
-                case 0:
-                    sp80 = 0.1f;
-                    break;
-                case 1:
-                    sp80 = 1.1f;
-                    break;
-                case 2:
-                    sp80 = 0.2f;
-                    break;
-                case 3:
-                    sp80 = 0.4f;
-                    break;
-                }
-
-                f32 spC4 = spA8;
-                sp98 *= sun_visibility * (spC4 + sp80);
-                sp94 *= sun_visibility * (spC4 + sp80);
-
-                spE4.x = spA0;
-                spE4.y = sp9C;
-                spE4.z = 0.0f;
-                cMtx_multVec(camMtx, &spE4, &spD8);
-                pos[0].x = sun_packet->mPos[0].x + spD8.x;
-                pos[0].y = sun_packet->mPos[0].y + spD8.y;
-                pos[0].z = sun_packet->mPos[0].z + spD8.z;
-
-                spE4.x = sp98;
-                spE4.y = sp94;
-                spE4.z = 0.0f;
-                cMtx_multVec(camMtx, &spE4, &spD8);
-                pos[1].x = sun_packet->mPos[0].x + spD8.x;
-                pos[1].y = sun_packet->mPos[0].y + spD8.y;
-                pos[1].z = sun_packet->mPos[0].z + spD8.z;
-
-                spE4.x = sp90;
-                spE4.y = sp8C;
-                spE4.z = 0.0f;
-                cMtx_multVec(camMtx, &spE4, &spD8);
-                pos[2].x = sun_packet->mPos[0].x + spD8.x;
-                pos[2].y = sun_packet->mPos[0].y + spD8.y;
-                pos[2].z = sun_packet->mPos[0].z + spD8.z;
-
-                GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
-                GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
-                GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
-                GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
-                GXEnd();
+            sp6C = 0.4f + (0.6f * (sun_visibility * (spAC * spAC)));
+            sp64 = 300.0f;
+            sp68 = cM_ssin(34.0f * sp78);
+            if (sp68 < 0.0f) {
+                sp68 = -sp68;
             }
-        }
 
-        J3DShape::resetVcdVatCache();
+            sp74 = 1000.0f * (0.5f + sp68);
+
+            spA0 = sp64 * sp6C * cM_ssin(sp78 + sp74);
+            sp9C = sp64 * sp6C * cM_scos(sp78 + sp74);
+            sp90 = sp64 * sp6C * cM_ssin(sp78 - sp74);
+            sp8C = sp64 * sp6C * cM_scos(sp78 - sp74);
+
+            sp70 = (0.6f + (0.4f * sp68)) * (300.0f * sp6C * (3.0f + spAC));
+            sp70 *= 1.5f * sun_visibility;
+
+            if ((i & 3)) {
+                sp70 *= 0.2f;
+            }
+
+            sp98 = sp70 * cM_ssin(sp78);
+            sp94 = sp70 * cM_scos(sp78);
+            spC += 0x1000;
+            spA += 0x1C71;
+
+            spE4.x = sp98;
+            spE4.y = sp94;
+            spE4.z = 0.0f;
+            cMtx_multVec(camMtx, &spE4, &spD8);
+            spF0.x = pPos[0].x + spD8.x;
+            spF0.y = pPos[0].y + spD8.y;
+            spF0.z = pPos[0].z + spD8.z;
+
+            sp7C = spFC.abs(spF0);
+            if (sp7C < lenz_packet->field_0x88) {
+                lenz_packet->field_0x88 = sp7C;
+            } else if (sp7C > lenz_packet->field_0x8c) {
+                lenz_packet->field_0x8c = sp7C;
+            }
+
+            sp88 = lenz_packet->field_0x88 - lenz_packet->field_0x84;
+            if (sp88 > 0.0f) {
+                sp84 = 1.0f - ((sp7C - lenz_packet->field_0x84) / sp88);
+            } else {
+                sp84 = 1.0f;
+            }
+
+            switch (i & 3) {
+            case 0:
+                sp80 = 0.1f;
+                break;
+            case 1:
+                sp80 = 1.1f;
+                break;
+            case 2:
+                sp80 = 0.2f;
+                break;
+            case 3:
+                sp80 = 0.4f;
+                break;
+            }
+
+            f32 spC4 = spA8;
+            sp98 *= sun_visibility * (spC4 + sp80);
+            sp94 *= sun_visibility * (spC4 + sp80);
+
+            spE4.x = spA0;
+            spE4.y = sp9C;
+            spE4.z = 0.0f;
+            cMtx_multVec(camMtx, &spE4, &spD8);
+            pos[0].x = sun_packet->mPos[0].x + spD8.x;
+            pos[0].y = sun_packet->mPos[0].y + spD8.y;
+            pos[0].z = sun_packet->mPos[0].z + spD8.z;
+
+            spE4.x = sp98;
+            spE4.y = sp94;
+            spE4.z = 0.0f;
+            cMtx_multVec(camMtx, &spE4, &spD8);
+            pos[1].x = sun_packet->mPos[0].x + spD8.x;
+            pos[1].y = sun_packet->mPos[0].y + spD8.y;
+            pos[1].z = sun_packet->mPos[0].z + spD8.z;
+
+            spE4.x = sp90;
+            spE4.y = sp8C;
+            spE4.z = 0.0f;
+            cMtx_multVec(camMtx, &spE4, &spD8);
+            pos[2].x = sun_packet->mPos[0].x + spD8.x;
+            pos[2].y = sun_packet->mPos[0].y + spD8.y;
+            pos[2].z = sun_packet->mPos[0].z + spD8.z;
+
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
+            GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+            GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+            GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+            GXEnd();
+        }
     }
+
+    J3DShape::resetVcdVatCache();
 }
 
 /* 80095E8C-8009682C       .text dKyr_drawRain__FPA4_fPPUc */
@@ -2975,75 +2976,73 @@ void dKyr_drawHousi(Mtx drawMtx, u8** pImg) {
 
                 if (i == 1) {
                     f32 temp_f4 = 100.0f;
-                    if (!(spD0.y > player->current.pos.y + temp_f4)) {
-                        if (!(spD0.y < player->current.pos.y - 20.0f)) {
-                            if (!(housi_packet->mEffect[j].mAlpha <= 0.0f)) {
-                                color_reg0.a =
-                                    housi_packet->mEffect[j].mAlpha * 40.0f *
-                                    (1.0f - ((spD0.y - player->current.pos.y) / 100.0f));
-                                spD0.y = player->current.pos.y - 20.0f;
-                                goto block_14;  // probably fake match
-                            }
-                        }
+                    if (
+                        (spD0.y > player->current.pos.y + temp_f4) ||
+                        (spD0.y < player->current.pos.y - 20.0f) ||
+                        (housi_packet->mEffect[j].mAlpha <= 0.0f)
+                    ) {
+                        continue;
                     }
+                    color_reg0.a = housi_packet->mEffect[j].mAlpha * 40.0f *
+                                    (1.0f - ((spD0.y - player->current.pos.y) / 100.0f));
+                    spD0.y = player->current.pos.y - 20.0f;
                 } else {
                     color_reg0.a = housi_packet->mEffect[j].mAlpha * var_f25;
-
-                block_14:
-                    GXLoadTexObj(&spDC, GX_TEXMAP0);
-                    GXSetTevColor(GX_TEVREG0, color_reg0);
-
-                    f32 var_f27 = housi_packet->mEffect[j].field_0x48 * 9.0f;
-
-                    f32 temp_f28 = (var_f27 * 0.2f) * cM_fsin(housi_packet->mEffect[j].mScale.x * 5.0f);
-                    f32 temp_f30 = (var_f27 * 0.2f) * cM_fsin(housi_packet->mEffect[j].mScale.y * 6.0f);
-
-                    spC4.x = var_f27 - temp_f30;
-                    spC4.y = var_f27 - temp_f28;
-                    spC4.z = 0.0f;
-                    MTXMultVec(camMtx, &spC4, &spB8);
-                    pos[0].x = spD0.x + spB8.x;
-                    pos[0].y = spD0.y + spB8.y;
-                    pos[0].z = spD0.z + spB8.z;
-
-                    spC4.x = -var_f27 + temp_f30;
-                    spC4.y = var_f27 - temp_f28;
-                    spC4.z = 0.0f;
-                    MTXMultVec(camMtx, &spC4, &spB8);
-                    pos[1].x = spD0.x + spB8.x;
-                    pos[1].y = spD0.y + spB8.y;
-                    pos[1].z = spD0.z + spB8.z;
-
-                    spC4.x = -var_f27 + temp_f30;
-                    spC4.y = -var_f27 + temp_f28;
-                    spC4.z = 0.0f;
-                    MTXMultVec(camMtx, &spC4, &spB8);
-                    pos[2].x = spD0.x + spB8.x;
-                    pos[2].y = spD0.y + spB8.y;
-                    pos[2].z = spD0.z + spB8.z;
-
-                    spC4.x = var_f27 - temp_f30;
-                    spC4.y = -var_f27 + temp_f28;
-                    spC4.z = 0.0f;
-                    MTXMultVec(camMtx, &spC4, &spB8);
-                    pos[3].x = spD0.x + spB8.x;
-                    pos[3].y = spD0.y + spB8.y;
-                    pos[3].z = spD0.z + spB8.z;
-
-                    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-                    s16 var_r17 = 0x1FF;
-
-                    GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
-                    GXTexCoord2s16(0, 0);
-                    GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
-                    GXTexCoord2s16(var_r17, 0);
-                    GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
-                    GXTexCoord2s16(var_r17, var_r17);
-                    GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
-                    GXTexCoord2s16(0, var_r17);
-                    GXEnd();
                 }
+
+                GXLoadTexObj(&spDC, GX_TEXMAP0);
+                GXSetTevColor(GX_TEVREG0, color_reg0);
+
+                f32 var_f27 = housi_packet->mEffect[j].field_0x48 * 9.0f;
+
+                f32 temp_f28 = (var_f27 * 0.2f) * cM_fsin(housi_packet->mEffect[j].mScale.x * 5.0f);
+                f32 temp_f30 = (var_f27 * 0.2f) * cM_fsin(housi_packet->mEffect[j].mScale.y * 6.0f);
+
+                spC4.x = var_f27 - temp_f30;
+                spC4.y = var_f27 - temp_f28;
+                spC4.z = 0.0f;
+                MTXMultVec(camMtx, &spC4, &spB8);
+                pos[0].x = spD0.x + spB8.x;
+                pos[0].y = spD0.y + spB8.y;
+                pos[0].z = spD0.z + spB8.z;
+
+                spC4.x = -var_f27 + temp_f30;
+                spC4.y = var_f27 - temp_f28;
+                spC4.z = 0.0f;
+                MTXMultVec(camMtx, &spC4, &spB8);
+                pos[1].x = spD0.x + spB8.x;
+                pos[1].y = spD0.y + spB8.y;
+                pos[1].z = spD0.z + spB8.z;
+
+                spC4.x = -var_f27 + temp_f30;
+                spC4.y = -var_f27 + temp_f28;
+                spC4.z = 0.0f;
+                MTXMultVec(camMtx, &spC4, &spB8);
+                pos[2].x = spD0.x + spB8.x;
+                pos[2].y = spD0.y + spB8.y;
+                pos[2].z = spD0.z + spB8.z;
+
+                spC4.x = var_f27 - temp_f30;
+                spC4.y = -var_f27 + temp_f28;
+                spC4.z = 0.0f;
+                MTXMultVec(camMtx, &spC4, &spB8);
+                pos[3].x = spD0.x + spB8.x;
+                pos[3].y = spD0.y + spB8.y;
+                pos[3].z = spD0.z + spB8.z;
+
+                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+                s16 var_r17 = 0x1FF;
+
+                GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+                GXTexCoord2s16(0, 0);
+                GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+                GXTexCoord2s16(var_r17, 0);
+                GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+                GXTexCoord2s16(var_r17, var_r17);
+                GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
+                GXTexCoord2s16(0, var_r17);
+                GXEnd();
             }
         }
 
@@ -3621,12 +3620,12 @@ void dKyr_thunder_move() {
             cLib_addCalc(&pThunder->mFlashTimer, 1.0f, 0.3f, 0.2f, 0.001f);
             if (pThunder->mFlashTimer >= 1.0f) {
                 if (pThunder->mState < 10)
-                    mDoAud_seStart(JA_SE_OBJ_THUNDER_NEAR, NULL);
+                    mDoAud_seStart(JA_SE_OBJ_THUNDER_NEAR);
                 pThunder->mState++;
             }
 
             if (cM_rndF(1.0f) < 0.18f)
-                fopKyM_create(PROC_KY_THUNDER, -1);
+                fopKyM_create(fpcNm_KY_THUNDER_e, -1);
         }
         break;
     case 2:

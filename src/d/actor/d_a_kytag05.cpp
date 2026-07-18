@@ -12,8 +12,6 @@
 #include "d/actor/d_a_ykgr.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_audio.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daKytag05_Draw__FP13kytag05_class */
 static BOOL daKytag05_Draw(kytag05_class*) {
@@ -122,17 +120,13 @@ static BOOL daKytag05_Delete(kytag05_class*) {
 
 /* 00000404-000004C0       .text daKytag05_Create__FP10fopAc_ac_c */
 static cPhs_State daKytag05_Create(fopAc_ac_c* i_this) {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag05_class);
-#endif
+    fopAcM_ct_Retail(i_this, kytag05_class);
     kytag05_class *a_this = (kytag05_class*)i_this;
     if (dComIfGs_isSymbol(1) != 0) {
         return cPhs_STOP_e;
     }
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag05_class);
-#endif
+    fopAcM_ct_Demo(i_this, kytag05_class);
 
     a_this->mIndex = 0;
     a_this->mTimer = 0;
@@ -159,18 +153,18 @@ static actor_method_class l_daKytag05_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG05 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYTAG05,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG05_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag05_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG05,
+    /* Draw Prio    */ fpcDwPi_KYTAG05_e,
     /* Actor SubMtd */ &l_daKytag05_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

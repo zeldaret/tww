@@ -281,7 +281,7 @@ inline bool cBgW_CheckBRoof(f32 ny) {
     return ny < (-4.0f / 5.0f);
 }
 
-inline bool cBgW_CheckBWall(float y) {
+inline bool cBgW_CheckBWall(f32 y) {
     if (!cBgW_CheckBGround(y) && !cBgW_CheckBRoof(y))
         return true;
     return false;

@@ -99,6 +99,11 @@ public:
     void init(ResTIMG* pTimg, f32, f32, f32, f32, u8, u8, u8, f32, f32);
     virtual void draw();
 
+    f32 getScaleX() { return mScrollS; }
+    f32* getScaleX_p() { return &mScrollS; }
+    void setScaleX(f32 scale) { mScrollS = scale; }
+    void setScaleY(f32 scale) { mScrollT = scale; }
+
 public:
     /* 0x04 */ GXTexObj mTex;
     /* 0x24 */ f32 mX;
@@ -111,7 +116,7 @@ public:
     /* 0x40 */ u8 mMirrorS;
     /* 0x41 */ u8 mMirrorT;
     /* 0x42 */ u8 mAlpha;
-};
+};  // Size: 0x44
 
 class dDlst_2DM_c : public dDlst_base_c {
 public:
@@ -144,9 +149,10 @@ public:
     void setScale(f32, f32);
     void setScroll(int, s16, s16);
     virtual void draw();
-    void setAlpha(u8) {}
-    void setBlackColor(GXColor& c) { mC0 = c; }
-    void setWhiteColor(GXColor& c) { mC1 = c; }
+
+    void setAlpha(u8 i_alpha) { mBlack.a = i_alpha; }
+    void setBlackColor(GXColor& c) { mBlack = c; }
+    void setWhiteColor(GXColor& c) { mWhite = c; }
 
 public:
     struct TexEntry {
@@ -164,8 +170,8 @@ public:
     /* 0x0A */ s16 mY1;
     /* 0x0C */ f32 mScaleX;
     /* 0x10 */ f32 mScaleY;
-    /* 0x14 */ GXColor mC0;
-    /* 0x18 */ GXColor mC1;
+    /* 0x14 */ GXColor mBlack;
+    /* 0x18 */ GXColor mWhite;
     /* 0x1C */ TexEntry mTex[2];
 };
 

@@ -789,8 +789,8 @@ void JUTException::waitTime(s32 timeout_ms) {
 void JUTException::createFB() {
     GXRenderModeObj* renderMode = &GXNtsc480Int;
     void* end = (void*)OSGetArenaHi();
-    u16 width = ALIGN_NEXT(renderMode->fb_width, 16);
-    u16 height = renderMode->xfb_height;
+    u16 width = ALIGN_NEXT(renderMode->fbWidth, 16);
+    u16 height = renderMode->xfbHeight;
     u32 pixel_count = width * height;
     u32 size = pixel_count * 2;
 

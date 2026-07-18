@@ -5,14 +5,12 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Yboil.h"
-#include "d/res/res_yboil.h"
+#include "res/Object/Yboil.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -21,13 +19,13 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000368       .text CreateHeap__12daObjYboil_cFv */
 BOOL daObjYboil_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Yboil", YBOIL_BDL_YBOIL00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Yboil", dRes_INDEX_YBOIL_BDL_YBOIL00_e);
     JUT_ASSERT(92, modelData != NULL);
-    J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Yboil", YBOIL_BCK_YBOIL00));
+    J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Yboil", dRes_INDEX_YBOIL_BCK_YBOIL00_e));
     JUT_ASSERT(96, bck != NULL);
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Yboil", YBOIL_BTK_YBOIL00));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Yboil", dRes_INDEX_YBOIL_BTK_YBOIL00_e));
     JUT_ASSERT(100, btk != NULL);
-    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Yboil", YBOIL_BRK_YBOIL00));
+    J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Yboil", dRes_INDEX_YBOIL_BRK_YBOIL00_e));
     JUT_ASSERT(104, brk != NULL);
 
     for (s32 i = 0; i < 50; i++) {
@@ -66,10 +64,10 @@ void daObjYboil_c::CreateInit() {
         fopAcM_SetMtx(this, mModel[i]->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -3000.0f, -0.0f, -3000.0f, 3000.0f, 200.0f, 3000.0f);
         fopAcM_setCullSizeFar(this, 1.0f);
-        f32 frame = cM_rndF(29.9999f);
-        mBckAnm[i].setFrame((s32)frame);
-        mBtkAnm[i].setFrame((s32)frame);
-        mBrkAnm[i].setFrame((s32)frame);
+        int frame = cM_rndF(29.9999f);
+        mBckAnm[i].setFrame(frame);
+        mBtkAnm[i].setFrame(frame);
+        mBrkAnm[i].setFrame(frame);
         mMdlTimer[i] = 0;
     }
     set_mtx();
@@ -85,7 +83,7 @@ void daObjYboil_c::set_mtx() {
 }
 
 cPhs_State daObjYboil_c::_create() {
-    fopAcM_SetupActor(this, daObjYboil_c);
+    fopAcM_ct(this, daObjYboil_c);
 
     cPhs_State ret;
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1902)) {
@@ -105,7 +103,7 @@ cPhs_State daObjYboil_c::_create() {
 
 bool daObjYboil_c::_delete() {
     if (fpcM_CreateResult(this) != cPhs_STOP_e) {
-        dComIfG_resDelete(&mPhs, "Yboil");
+        dComIfG_resDeleteDemo(&mPhs, "Yboil");
     }
     return true;
 }
@@ -177,7 +175,7 @@ bool daObjYboil_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     for (s32 i = 0; i < 50; i++) {
         g_env_light.setLightTevColorType(mModel[i], &tevStr);
-        set_sea_material(mModel[i]->getModelData()->getJointNodePointer(0)->getMesh());
+        set_sea_material(mModel[i]->getModelData()->getJointNodePointer(YBOIL00_JNT_BOIL_e)->getMesh());
         mBckAnm[i].entry(mModel[i]->getModelData());
         mBtkAnm[i].entry(mModel[i]->getModelData());
         mBrkAnm[i].entry(mModel[i]->getModelData());
@@ -206,18 +204,18 @@ static actor_method_class daObj_YboilMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Yboil = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Yboil,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Yboil_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjYboil_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Yboil,
+    /* Draw Prio    */ fpcDwPi_Obj_Yboil_e,
     /* Actor SubMtd */ &daObj_YboilMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_Ygush00.h"
-#include "d/res/res_ygush00.h"
+#include "res/Object/Ygush00.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_obj_gryw00.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -38,9 +36,9 @@ BOOL daObjYgush00_c::solidHeapCB(fopAc_ac_c* ac) {
 
 /* 0000009C-00000250       .text create_heap__14daObjYgush00_cFv */
 bool daObjYgush00_c::create_heap() {
-    static u32 mdl_table[] = { YGUSH00_BDL_YGUSH00, YGUSH00_BDL_YGSTP00, YGUSH00_BDL_YGSTP00, YGUSH00_BDL_YGSTP00 };
-    static u32 btk_table[] = { YGUSH00_BTK_YGUSH00, YGUSH00_BTK_YGSTP00, YGUSH00_BTK_YGSTP00, YGUSH00_BTK_YGSTP00 };
-    static u32 bck_table[] = { YGUSH00_BCK_YGUSH00, YGUSH00_BCK_YGSTP00, YGUSH00_BCK_YGSTP00, YGUSH00_BCK_YGSTP00 };
+    static u32 mdl_table[] = { dRes_INDEX_YGUSH00_BDL_YGUSH00_e, dRes_INDEX_YGUSH00_BDL_YGSTP00_e, dRes_INDEX_YGUSH00_BDL_YGSTP00_e, dRes_INDEX_YGUSH00_BDL_YGSTP00_e };
+    static u32 btk_table[] = { dRes_INDEX_YGUSH00_BTK_YGUSH00_e, dRes_INDEX_YGUSH00_BTK_YGSTP00_e, dRes_INDEX_YGUSH00_BTK_YGSTP00_e, dRes_INDEX_YGUSH00_BTK_YGSTP00_e };
+    static u32 bck_table[] = { dRes_INDEX_YGUSH00_BCK_YGUSH00_e, dRes_INDEX_YGUSH00_BCK_YGSTP00_e, dRes_INDEX_YGUSH00_BCK_YGSTP00_e, dRes_INDEX_YGUSH00_BCK_YGSTP00_e };
 
     bool ret = true;
 
@@ -65,7 +63,7 @@ bool daObjYgush00_c::create_heap() {
 
 /* 00000250-000003F4       .text _create__14daObjYgush00_cFv */
 cPhs_State daObjYgush00_c::_create() {
-    fopAcM_SetupActor(this, daObjYgush00_c);
+    fopAcM_ct(this, daObjYgush00_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         u32 type = param_get_arg();
@@ -127,7 +125,7 @@ bool daObjYgush00_c::_execute() {
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_SPRING, 0);
             }
         } else {
-            mpGryw00 = (daObjGryw00_c*)fopAcM_SearchByName(PROC_Obj_Gryw00);
+            mpGryw00 = (daObjGryw00_c*)fopAcM_SearchByName(fpcNm_Obj_Gryw00_e);
         }
     } else {
         fopAcM_seStartCurrent(this, JA_SE_OBJ_SPRING, 0);
@@ -188,18 +186,18 @@ static actor_method_class l_daObjYgush00_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ygush00 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ygush00,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ygush00_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjYgush00_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ygush00,
+    /* Draw Prio    */ fpcDwPi_Obj_Ygush00_e,
     /* Actor SubMtd */ &l_daObjYgush00_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

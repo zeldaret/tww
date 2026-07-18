@@ -5,16 +5,14 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pfall.h"
-#include "d/d_procname.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_pfall.h"
+#include "res/Object/Pfall.h"
 #include "d/d_lib.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/d_priority.h"
 
 static const int l_bck_ix_tbl[] = {
-    PFALL_BCK_NZ_WAIT,
-    PFALL_BCK_HIKU,
+    dRes_INDEX_PFALL_BCK_NZ_WAIT_e,
+    dRes_INDEX_PFALL_BCK_HIKU_e,
 };
 
 static daObj_PfallHIO_c l_HIO;
@@ -36,8 +34,8 @@ daObj_PfallHIO_c::daObj_PfallHIO_c() {
 /* 00000140-00000190       .text setAnm__13daObj_Pfall_cFv */
 void daObj_Pfall_c::setAnm() {
     static const int a_anm_bcks_tbl[] = {
-        PFALL_BCK_NZ_WAIT,
-        PFALL_BCK_HIKU,
+        dRes_INDEX_PFALL_BCK_NZ_WAIT_e,
+        dRes_INDEX_PFALL_BCK_HIKU_e,
     };
 
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
@@ -113,7 +111,7 @@ void daObj_Pfall_c::set_mtx() {
 
 /* 00000518-00000858       .text CreateHeap__13daObj_Pfall_cFv */
 BOOL daObj_Pfall_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", PFALL_BDL_AOTSI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_BDL_AOTSI_e);
     JUT_ASSERT(0xD1, modelData != NULL);
     field_0x3C4 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     field_0x3FC = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -122,7 +120,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DModelData* himoModelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", PFALL_BDL_PSUZU);
+    J3DModelData* himoModelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_BDL_PSUZU_e);
     JUT_ASSERT(0xD9, himoModelData != NULL);
     mpHimoModel = mDoExt_J3DModel__create(himoModelData, 0, 0x11020203);
 
@@ -130,7 +128,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
         return FALSE;  
     }
 
-    J3DModelData* nzModelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", PFALL_BDL_NZ);
+    J3DModelData* nzModelData = (J3DModelData*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_BDL_NZ_e);
     JUT_ASSERT(0xE0, nzModelData != NULL);
     mpMorf = new mDoExt_McaMorf(
         nzModelData,
@@ -153,7 +151,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
     if(mpBgW == NULL) {
         return FALSE;
     }
-    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", PFALL_DZB_AOTOSI);
+    cBgD_t* pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_DZB_AOTOSI_e);
 
     if (mpBgW->Set(pData, cBgW::MOVE_BG_e, &field_0x3CC) == true) {
         return FALSE;
@@ -164,7 +162,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
         return FALSE;
     }
     
-    pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", PFALL_DZB_AOTOSI);
+    pData = (cBgD_t*)dComIfG_getObjectRes("Pfall", dRes_INDEX_PFALL_DZB_AOTOSI_e);
     
     if (mpBgW2->Set(pData, cBgW::MOVE_BG_e, &field_0x404) == true) {
         return FALSE;
@@ -183,16 +181,12 @@ void daObj_Pfall_c::CreateInit() {
 
 /* 000008CC-000009E8       .text _create__13daObj_Pfall_cFv */
 cPhs_State daObj_Pfall_c::_create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daObj_Pfall_c);
-#endif
+    fopAcM_ct_Retail(this, daObj_Pfall_c);
 
     cPhs_State phase = dComIfG_resLoad(&mPhsPfall, "Pfall");
 
     if (phase == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-            fopAcM_SetupActor(this, daObj_Pfall_c);
-#endif
+        fopAcM_ct_Demo(this, daObj_Pfall_c);
 
         if (!fopAcM_entrySolidHeap(this, CallbackCreateHeap, 0x38E0)) {
             return cPhs_ERROR_e;
@@ -412,7 +406,7 @@ void daObj_Pfall_c::nz_draw() {
     J3DModel* pModel = mpMorf->getModel();
     J3DModelData* pModelData = pModel->getModelData();
 
-    J3DJoint* rootJoint = pModelData->getJointNodePointer(0);
+    J3DJoint* rootJoint = pModelData->getJointNodePointer(PFALL_NZ_JNT_KOSI_e);
 
     J3DShape* matShape = pModelData->getMaterialNodePointer(0)->getShape();
     J3DShape* matShape2 = pModelData->getMaterialNodePointer(1)->getShape();
@@ -489,18 +483,18 @@ static actor_method_class daObj_PfallMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_PFALL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_PFALL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_PFALL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Pfall_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_PFALL,
+    /* Draw Prio    */ fpcDwPi_OBJ_PFALL_e,
     /* Actor SubMtd */ &daObj_PfallMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

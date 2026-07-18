@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tpota.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "JSystem/JGeometry.h"
 #include "d/d_particle.h"
 #include "JSystem/JParticle/JPAParticle.h"
@@ -17,7 +15,7 @@ const u16 l_daTpota_idx_table[2] = {dPa_name::ID_IT_SN_TAKIURA_POTAA00, dPa_name
 
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
 cPhs_State daTpota_c::_create() {
-    fopAcM_SetupActor(this, daTpota_c);
+    fopAcM_ct(this, daTpota_c);
     JPABaseEmitter* emitter;
     for (int i = 0; i < 2; i++) {
         mPositions[i] = current.pos;
@@ -161,18 +159,18 @@ static actor_method_class Tpota_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Tpota = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tpota,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tpota_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTpota_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tpota,
+    /* Draw Prio    */ fpcDwPi_Tpota_e,
     /* Actor SubMtd */ &Tpota_Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

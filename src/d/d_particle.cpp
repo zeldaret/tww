@@ -259,8 +259,10 @@ dPa_followEcallBack::dPa_followEcallBack(u8 param_1, u8 param_2) {
 void dPa_followEcallBack::execute(JPABaseEmitter* emtr) {
     if (field_0x12 == 0 && !(mFlag & 2)) {
         emtr->setGlobalTranslation(mPos->x, mPos->y, mPos->z);
-        if (mAngle != NULL)
-            emtr->setGlobalRotation(JGeometry::TVec3<s16>(mAngle->x, mAngle->y, mAngle->z));
+        if (mAngle != NULL) {
+            JGeometry::TVec3<s16> tmp(mAngle->x, mAngle->y, mAngle->z);
+            emtr->setGlobalRotation(tmp);
+        }
     }
 
     if (emtr->isEnableDeleteEmitter()) {
@@ -347,8 +349,8 @@ void dPa_smokeEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, con
     static dPa_smokePcallBack l_smokePcallBack;
     dPa_followEcallBack::setup(param_1, param_2, param_3, param_4);
     field_0x14 = param_4;
-    param_1->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
-    param_1->mUserData = mWindOff;
+    param_1->setParticleCallBackPtr(dPa_control_c::getSmokePcallback());
+    param_1->setUserWork(mWindOff);
 }
 
 /* 8007B73C-8007B804       .text initiateLighting__FR11_GXColorS10R8_GXColorR8_GXColor */
@@ -393,11 +395,11 @@ void smokeEcallBack(JPABaseEmitter* emtr, dKy_tevstr_c* tevStr, s8, GXColor colo
         } else {
             initiateLighting(tevStr->mColorC0, tevStr->mColorK0, color);
         }
-        color.a = emtr->mGlobalPrmColor.a;
+        color.a = emtr->getGlobalAlpha();
         GXSetNumTexGens(2);
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
         GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_SRTG, GX_TG_COLOR0, GX_IDENTITY);
-        emtr->mDraw.loadTexture(1, GX_TEXMAP1);
+        emtr->loadTexture(1, GX_TEXMAP1);
         GXSetNumTevStages(3);                             
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_KONST, GX_CC_TEXC, GX_CC_ZERO);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
@@ -429,7 +431,7 @@ void dPa_smokeEcallBack::end() {
 
     mpEmitter->becomeInvalidEmitter();
     mpEmitter->quitImmortalEmitter();
-    mpEmitter->setEmitterCallBackPtr(&dPa_control_c::mSmokeEcallback);
+    mpEmitter->setEmitterCallBackPtr(dPa_control_c::getSmokeEcallback());
     mFlag |= 1;
     mpEmitter = NULL;
 }
@@ -447,7 +449,7 @@ void dPa_setWindPower(JPABaseParticle* ptcl) {
 
 /* 8007BC84-8007BCB4       .text execute__18dPa_smokePcallBackFP14JPABaseEmitterP15JPABaseParticle */
 void dPa_smokePcallBack::execute(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
-    if (emtr->mUserData == 0)
+    if (emtr->getUserWork() == 0)
         dPa_setWindPower(ptcl);
 }
 
@@ -458,7 +460,7 @@ void dPa_smokePcallBack::draw(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
 
 /* 8007C380-8007C3B0       .text draw__22dPa_selectTexEcallBackFP14JPABaseEmitter */
 void dPa_selectTexEcallBack::draw(JPABaseEmitter* emtr) {
-    emtr->mDraw.loadTexture(mTexNo, GX_TEXMAP0);
+    emtr->loadTexture(mTexNo, GX_TEXMAP0);
 }
 
 /* 8007C3B0-8007C420       .text __ct__19dPa_simpleEcallBackFv */
@@ -472,14 +474,14 @@ dPa_simpleData_c::dPa_simpleData_c() {}
 
 /* 8007C460-8007C618       .text executeAfter__19dPa_simpleEcallBackFP14JPABaseEmitter */
 void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* param_1) {
-    s32 r28 = JPABaseEmitter::emtrInfo.mVolumeEmitCount;
+    s32 r28 = param_1->getCurrentCreateNumber();
     if (r28 <= 0) {
         mCount = 0;
     } else {
         dPa_simpleData_c* simpleData = mSimpleData;
         param_1->playCreateParticle();
         while (mCount != 0) {
-            if (mDoLib_clipper::clip(j3dSys.getViewMtx(), simpleData->mPos, 200.0f) == 0) {
+            if (!mDoLib_clipper::clip(j3dSys.getViewMtx(), simpleData->mPos, 200.0f)) {
                 param_1->setGlobalTranslation(simpleData->mPos.x, simpleData->mPos.y, simpleData->mPos.z);
                 param_1->setGlobalPrmColor(simpleData->mPrmColor.r, simpleData->mPrmColor.g, simpleData->mPrmColor.b);
                 param_1->setGlobalAlpha(simpleData->mPrmColor.a);
@@ -508,7 +510,7 @@ void dPa_simpleEcallBack::draw(JPABaseEmitter* emtr) {
     if (mbIsSmoke)
         smokeEcallBack(emtr, NULL, -1, (GXColor){ 0xA0, 0xA0, 0x80, 0xFF });
 
-    if (emtr->mGroupID == dPa_control_c::dPtclGroup_Projection_e)
+    if (emtr->getGroupID() == dPa_control_c::dPtclGroup_Projection_e)
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
 }
 
@@ -520,7 +522,7 @@ JPABaseEmitter* dPa_simpleEcallBack::create(JPAEmitterManager* manager, u16 effe
     if (createEmitter(manager)) {
         if (effectID == dPa_name::ID_AK_ST_O_BKMSATTACKSMOKE00 || effectID == dPa_name::ID_AK_ST_O_KGTT2JUMPHANDSMOKE00) {
             mbIsSmoke = true;
-            mpBaseEmitter->mpParticleCallBack = &dPa_control_c::mSmokePcallback;
+            mpBaseEmitter->setParticleCallBackPtr(dPa_control_c::getSmokePcallback());
         } else {
             mbIsSmoke = false;
         }
@@ -536,8 +538,8 @@ JPABaseEmitter* dPa_simpleEcallBack::createEmitter(JPAEmitterManager* manager) {
         if (!mpBaseEmitter) {
             return mpBaseEmitter;
         }
-        mpBaseEmitter->mpEmitterCallBack = this;
-        mpBaseEmitter->mMaxFrame = 0;
+        mpBaseEmitter->setEmitterCallBackPtr(this);
+        mpBaseEmitter->setMaxFrame(0);
         mpBaseEmitter->stopCreateParticle();
     }
     return mpBaseEmitter;
@@ -567,7 +569,7 @@ void dPa_windPcallBack::execute(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
     dPa_setWindPower(ptcl);
 }
 
-GXColor l_lifeBallColor[] = {
+static GXColor l_lifeBallColor[] = {
     0xeb, 0x20, 0x78, 0xff,
     0x20, 0xf1, 0x9b, 0xff,
     0xeb, 0xd7, 0x2f, 0xff
@@ -632,7 +634,7 @@ void dPa_control_c::createCommon(const void* param_1) {
     mEmitterMng = new(mHeap, 0) JPAEmitterManager(mCommonResMng, 3000, 150, 200, mHeap);
     JUT_ASSERT(1324, mEmitterMng != NULL);
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(mHeap);
-    mModelControl = new dPa_modelControl_c((J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPM_TUBO));
+    mModelControl = new dPa_modelControl_c((J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPM_TUBO_e));
     JUT_ASSERT(1332, mModelControl != NULL);
     for (u16 i = 0; i < 8; i++) {
         u16 id = dPa_name::j_o_id[i];
@@ -680,7 +682,7 @@ bool dPa_control_c::readScene(u8 i_no, mDoDvdThd_toMainRam_c** param_2) {
     mSceneNo = i_no;
     static char jpcName[32];
     sprintf(jpcName, "/res/Particle/Pscene%03d.jpc", i_no);
-    *param_2 = mDoDvdThd_toMainRam_c::create(jpcName, 0, NULL);
+    *param_2 = mDoDvdThd_toMainRam_c::create(jpcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
     return true;
 }
 
@@ -748,30 +750,37 @@ void dPa_control_c::draw(JPADrawInfo* param_1, u8 param_2) {
 
 /* 8007D1DC-8007D378       .text set__13dPa_control_cFUcUsPC4cXyzPC5csXyzPC4cXyzUcP18dPa_levelEcallBackScPC8_GXColorPC8_GXColorPC4cXyz */
 JPABaseEmitter* dPa_control_c::set(u8 groupID, u16 userID, const cXyz* pos, const csXyz* angle, const cXyz* scale, u8 alpha, dPa_levelEcallBack* pCallBack, s8 setupInfo, const GXColor* prm, const GXColor* env, const cXyz* globalScale) {
-    JPABaseEmitter* emtr = mEmitterMng->createSimpleEmitterID(JGeometry::TVec3<f32>(pos->x, pos->y, pos->z), userID, groupID, getRM_ID(userID), NULL, NULL);
+    JGeometry::TVec3<f32> tmp(pos->x, pos->y, pos->z);
+    JPABaseEmitter* emtr = mEmitterMng->createSimpleEmitterID(tmp, userID, groupID, getRM_ID(userID), NULL, NULL);
     if (emtr == NULL)
         return NULL;
 
-    if (angle != NULL)
-        emtr->setGlobalRotation(*(JGeometry::TVec3<s16>*)angle);
+    if (angle != NULL) {
+        JGeometry::TVec3<s16> tmp2(angle->x, angle->y, angle->z);
+        emtr->setGlobalRotation(tmp2);
+    }
 
-    if (scale != NULL)
-        emtr->setGlobalScale(*scale);
+    if (scale != NULL) {
+        JGeometry::TVec3<f32> tmp2(scale->x, scale->y, scale->z);
+        emtr->setGlobalScale(tmp2);
+    }
 
-    emtr->mGlobalPrmColor.a = alpha;
+    emtr->setGlobalAlpha(alpha);
     if (pCallBack != NULL) {
         emtr->setEmitterCallBackPtr(pCallBack);
         pCallBack->setup(emtr, pos, angle, setupInfo);
-    } else if (!!(userID & 0x4000)) {
-        emtr->setEmitterCallBackPtr(&mKagero);
+    } else if (userID & 0x4000) {
+        emtr->setEmitterCallBackPtr(getKageroEcallBack());
     }
 
     if (prm != NULL)
         emtr->setGlobalPrmColor(prm->r, prm->g, prm->b);
     if (env != NULL)
         emtr->setGlobalEnvColor(env->r, env->g, env->b);
-    if (globalScale != NULL)
-        emtr->setGlobalParticleScale(*globalScale);
+    if (globalScale != NULL) {
+        JGeometry::TVec3<f32> tmp2(globalScale->x, globalScale->y, globalScale->z);
+        emtr->setGlobalParticleScale(tmp2);
+    }
     return emtr;
 }
 
@@ -920,7 +929,7 @@ dPa_simpleEcallBack* dPa_control_c::getSimple(u16 id) {
 
 /* 8007DC6C-8007DC94       .text setup__19dPa_rippleEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void dPa_rippleEcallBack::setup(JPABaseEmitter* param_1, const cXyz* param_2, const csXyz* param_3, s8 param_4) {
-    param_1->setParticleCallBackPtr(&dPa_control_c::mRipplePcallBack);
+    param_1->setParticleCallBackPtr(dPa_control_c::getRipplePcallBack());
     mPos = param_2;
     mRate = 1.0f;
     mFlags |= 1;
@@ -959,7 +968,7 @@ void dPa_rippleEcallBack::draw(JPABaseEmitter*) {
 
 /* 8007DDA8-8007DDB4       .text setup__25dPa_singleRippleEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
 void dPa_singleRippleEcallBack::setup(JPABaseEmitter* param_1, const cXyz*, const csXyz*, s8) {
-    param_1->setParticleCallBackPtr(&dPa_control_c::mRipplePcallBack);
+    param_1->setParticleCallBackPtr(dPa_control_c::getRipplePcallBack());
 }
 
 /* 8007DDB4-8007DE00       .text execute__25dPa_singleRippleEcallBackFP14JPABaseEmitter */
@@ -1040,10 +1049,7 @@ void dPa_waveEcallBack::executeAfter(JPABaseEmitter* emitter) {
     }
     f32 speed = mVelFade1 * vel * mVelFade2;
     
-    JGeometry::TVec3<s16> rot;
-    rot.x = 0;
-    rot.y = mpRot->y;
-    rot.z = 0;
+    JGeometry::TVec3<s16> rot(0, mpRot->y, 0);
     emitter->setGlobalRotation(rot);
     
     if (std::fabsf(speed - mVel) > mVelSpeed) {

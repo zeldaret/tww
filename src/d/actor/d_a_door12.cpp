@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_door12.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_door12.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/door12.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -321,7 +319,7 @@ char* daDoor12_c::getArcName() {
 /* 000009B0-000009E0       .text getBdlLf__10daDoor12_cFv */
 s32 daDoor12_c::getBdlLf() {
     static s32 bldLf_table[] = {
-        DOOR12_BDL_DOOR12_GL, DOOR12_BDL_DOOR12M_L, DOOR12_BDL_DOOR12B_L, DOOR12_BDL_DOOR12_GR, DOOR12_BDL_DOOR12M_R, DOOR12_BDL_DOOR12B_R
+        dRes_INDEX_DOOR12_BDL_DOOR12_GL_e, dRes_INDEX_DOOR12_BDL_DOOR12M_L_e, dRes_INDEX_DOOR12_BDL_DOOR12B_L_e, dRes_INDEX_DOOR12_BDL_DOOR12_GR_e, dRes_INDEX_DOOR12_BDL_DOOR12M_R_e, dRes_INDEX_DOOR12_BDL_DOOR12B_R_e
     };
     return bldLf_table[getShapeType()];
 }
@@ -329,7 +327,7 @@ s32 daDoor12_c::getBdlLf() {
 /* 000009E0-00000A10       .text getBdlRt__10daDoor12_cFv */
 s32 daDoor12_c::getBdlRt() {
     static s32 bldRf_table[] = {
-        DOOR12_BDL_DOOR12_GR, DOOR12_BDL_DOOR12M_R, DOOR12_BDL_DOOR12B_R, DOOR12_BDL_DOOR12_GL, DOOR12_BDL_DOOR12M_L, DOOR12_BDL_DOOR12B_L
+        dRes_INDEX_DOOR12_BDL_DOOR12_GR_e, dRes_INDEX_DOOR12_BDL_DOOR12M_R_e, dRes_INDEX_DOOR12_BDL_DOOR12B_R_e, dRes_INDEX_DOOR12_BDL_DOOR12_GL_e, dRes_INDEX_DOOR12_BDL_DOOR12M_L_e, dRes_INDEX_DOOR12_BDL_DOOR12B_L_e
     };
     return bldRf_table[getShapeType()];
 }
@@ -338,16 +336,16 @@ s32 daDoor12_c::getBdlRt() {
 s32 daDoor12_c::getDzb() {
     switch (getShapeType()) {
     case 2:
-        return DOOR12_DZB_DOOR12_B;
+        return dRes_INDEX_DOOR12_DZB_DOOR12_B_e;
     case 3:
     case 4:
-        return DOOR12_DZB_DOOR12_G;
+        return dRes_INDEX_DOOR12_DZB_DOOR12_G_e;
 
     case 5:
-        return DOOR12_DZB_DOOR12_B;
+        return dRes_INDEX_DOOR12_DZB_DOOR12_B_e;
     }
 
-    return DOOR12_DZB_DOOR12_G;
+    return dRes_INDEX_DOOR12_DZB_DOOR12_G_e;
 }
 
 /* 00000A6C-00000ACC       .text openWide__10daDoor12_cFv */
@@ -893,7 +891,7 @@ static BOOL daDoor12_Delete(daDoor12_c* i_this) {
 
 /* 00001CC4-00001D3C       .text daDoor12_Create__FP10fopAc_ac_c */
 static cPhs_State daDoor12_Create(fopAc_ac_c* a_this) {
-    fopAcM_SetupActor(a_this, daDoor12_c);
+    fopAcM_ct(a_this, daDoor12_c);
 
     return ((daDoor12_c*)a_this)->create();
 }
@@ -907,18 +905,18 @@ static actor_method_class l_daDoor12_Method = {
 };
 
 actor_process_profile_definition g_profile_DOOR12 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DOOR12,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DOOR12_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDoor12_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DOOR12,
+    /* Draw Prio    */ fpcDwPi_DOOR12_e,
     /* Actor SubMtd */ &l_daDoor12_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

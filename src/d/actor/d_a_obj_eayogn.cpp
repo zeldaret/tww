@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_eayogn.h"
-#include "d/res/res_eayogn.h"
+#include "res/Object/Eayogn.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
@@ -26,13 +24,13 @@ BOOL daObjEayogn_c::solidHeapCB(fopAc_ac_c* i_this) {
 BOOL daObjEayogn_c::create_heap() {
     BOOL ret = FALSE;
 
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, EAYOGN_BDL_EAYOGN));
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_EAYOGN_BDL_EAYOGN_e));
     JUT_ASSERT(0x5c, mdl_data != NULL);
 
     if (mdl_data != NULL) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x00, 0x11020203);
         if (mpModel != NULL) {
-            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, EAYOGN_DZB_EAYOGN), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+            mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_EAYOGN_DZB_EAYOGN_e), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
             if (mpBgW != NULL)
                 ret = TRUE;
         }
@@ -45,7 +43,7 @@ BOOL daObjEayogn_c::create_heap() {
 cPhs_State daObjEayogn_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjEayogn_c);
+    fopAcM_ct(this, daObjEayogn_c);
 
     if (check_ev_bit()) {
         ret = dComIfG_resLoad(&mPhs, M_arcname);
@@ -68,14 +66,21 @@ cPhs_State daObjEayogn_c::_create() {
 
 /* 0000029C-00000330       .text _delete__13daObjEayogn_cFv */
 bool daObjEayogn_c::_delete() {
-    if (heap != NULL && mpBgW != NULL) {
+    if (
+#if VERSION > VERSION_DEMO
+        heap != NULL &&
+#endif
+        mpBgW != NULL
+    ) {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
+#if VERSION > VERSION_DEMO
             mpBgW = NULL;
+#endif
         }
     }
 
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
 
     return true;
 }
@@ -144,18 +149,18 @@ namespace {
 }
 
 actor_process_profile_definition g_profile_Obj_Eayogn = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Eayogn,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Eayogn_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEayogn_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Eayogn,
+    /* Draw Prio    */ fpcDwPi_Obj_Eayogn_e,
     /* Actor SubMtd */ &Eayogn_Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

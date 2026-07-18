@@ -7,26 +7,18 @@
 #include "d/d_cc_uty.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/actor/d_a_bwds.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/res/res_bwds.h"
-#include "d/res/res_bwd.h"
+#include "res/Object/Bwds.h"
+#include "res/Object/Bwd.h"
 #include "d/actor/d_a_player.h"
 
-enum ActionStatus {
+enum Action {
     ACTION_UG_MOVE = 0,
     ACTION_HOOK_ON = 1,
     ACTION_HOOK_CHANCE = 2,
     ACTION_FAIL = 5,
-};
-
-enum KOBOSS_HEAD_JOINT {
-    JNT_KUBI,
-    JNT_AGO,
-    JNT_HEAD,
 };
 
 static GXColor eff_col;
@@ -97,7 +89,7 @@ static void body_control(bwds_class* i_this) {
     f32 fVar1 = 0.0f;
     f32 fVar4;
     J3DModel* model = i_this->mpMorf->getModel();
-    MTXCopy(model->getAnmMtx(JNT_HEAD), *calc_mtx);
+    MTXCopy(model->getAnmMtx(KOBOSS_HEAD_JNT_HEAD_e), *calc_mtx);
     cXyz vec1((REG0_F(0) + 60.0f) * l_HIO.m008, REG0_F(1), REG0_F(2));
     cXyz vec2;
     cXyz vec3;
@@ -233,7 +225,7 @@ static void ug_move(bwds_class* i_this) {
     s16 sVar5 = 0;
     switch (i_this->m02F8) {
     case -10:
-        anm_init(i_this, BWDS_BCK_KOBOSS_PAKUPAKU, 2.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWDS_BCK_KOBOSS_PAKUPAKU_e, 2.0f, 2, 1.0f, -1);
         i_this->m02F8 = 3;
         i_this->m030C = REG0_F(3) + 3000.0f;
         actor->speedF = l_HIO.m010;
@@ -255,7 +247,7 @@ static void ug_move(bwds_class* i_this) {
         fopAcM_seStart(actor, JA_SE_CV_BWD_C_ATTACK, 0);
         break;
     case 0:
-        anm_init(i_this, BWDS_BCK_KOBOSS_CLOSE, 2.0f, 0, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWDS_BCK_KOBOSS_CLOSE_e, 2.0f, 0, 1.0f, -1);
         actor->current.pos.y = i_this->m0504;
         i_this->m02F8++;
         actor->shape_angle.z = 0;
@@ -278,11 +270,11 @@ static void ug_move(bwds_class* i_this) {
         sVar5 = fVar1 * cM_ssin(i_this->m02F4 * (REG0_S(3) + 0x514));
 
         if (fVar8 < 600.0f + REG0_F(12)) {
-            anm_init(i_this, BWDS_BCK_KOBOSS_PAKUPAKU, 2.0f, 2, 1.0f, -1);
+            anm_init(i_this, dRes_INDEX_BWDS_BCK_KOBOSS_PAKUPAKU_e, 2.0f, 2, 1.0f, -1);
             i_this->m02F8++;
             actor->speedF = l_HIO.m010;
             actor->speed.y = REG0_F(13) + 50.0f;
-            actor->current.angle.y = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
+            actor->current.angle.y = fopAcM_searchPlayerAngleY(actor);
             local_34.x = 0.0f;
             local_34.y = 0.0f;
             local_34.z = 2000.0f;
@@ -377,7 +369,7 @@ static void hook_on(bwds_class* i_this) {
     i_this->m031E = 3;
     switch (i_this->m02F8) {
     case 0:
-        anm_init(i_this, BWDS_BCK_KOBOSS_CLOSE, 2.0f, 0, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWDS_BCK_KOBOSS_CLOSE_e, 2.0f, 0, 1.0f, -1);
         i_this->m02F8++;
         local_34 = player->eyePos - actor->eyePos;
 
@@ -400,7 +392,7 @@ static void hook_chance(bwds_class* i_this) {
     i_this->m0670[0].OnCoSetBit();
     switch (i_this->m02F8) {
     case 0:
-        anm_init(i_this, BWDS_BCK_KOBOSS_PAKUPAKU, 2.0f, 2, 1.0f, -1);
+        anm_init(i_this, dRes_INDEX_BWDS_BCK_KOBOSS_PAKUPAKU_e, 2.0f, 2, 1.0f, -1);
         i_this->m02F8++;
         i_this->m0314[0] = l_HIO.m014;
         // FALL-THROUGH
@@ -421,9 +413,9 @@ static void hook_chance(bwds_class* i_this) {
             i_this->m0502 = cM_rndFX(REG0_F(5) + 2500.0f);
             if (cM_rndF(1.0f) < 0.5f) {
                 if (cM_rndF(1.0f) < 0.5f) {
-                    anm_init(i_this, BWDS_BCK_KOBOSS_CLOSE, 5.0f, 0, 1.0f, -1);
+                    anm_init(i_this, dRes_INDEX_BWDS_BCK_KOBOSS_CLOSE_e, 5.0f, 0, 1.0f, -1);
                 } else {
-                    anm_init(i_this, BWDS_BCK_KOBOSS_PAKUPAKU, 5.0f, 2, 1.0f, -1);
+                    anm_init(i_this, dRes_INDEX_BWDS_BCK_KOBOSS_PAKUPAKU_e, 5.0f, 2, 1.0f, -1);
                 }
             }
         }
@@ -457,7 +449,7 @@ static void fail(bwds_class* i_this) {
         local_34.y = REG0_F(19) + 60.0f;
         local_34.z = REG0_F(20) + -30.0f;
         player = daPy_getPlayerActorClass();
-        s16 angle = fopAcM_searchActorAngleY(actor, player);
+        s16 angle = fopAcM_searchPlayerAngleY(actor);
         cMtx_YrotS(*calc_mtx, angle);
         MtxPosition(&local_34, &actor->speed);
         i_this->m02F8++;
@@ -659,7 +651,7 @@ static BOOL daBwds_Execute(bwds_class* i_this) {
 
     pJVar8->setBaseTRMtx(mDoMtx_stack_c::get());
     i_this->mpMorf->calc();
-    MTXCopy(pJVar8->getAnmMtx(JNT_HEAD), *calc_mtx);
+    MTXCopy(pJVar8->getAnmMtx(KOBOSS_HEAD_JNT_HEAD_e), *calc_mtx);
 
     local_bc.set(REG0_F(0), REG0_F(1), REG0_F(2));
     MtxPosition(&local_bc, &actor->eyePos);
@@ -834,48 +826,48 @@ static BOOL daBwds_Delete(bwds_class* i_this) {
     return TRUE;
 }
 static u16 body_bdl[] = {
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_BODY,
-    BWDS_BDL_KOBOSS_SHIPPO,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_BODY_e,
+    dRes_INDEX_BWDS_BDL_KOBOSS_SHIPPO_e,
 };
 
 /* 00003278-00003634       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     static u32 s_bdl[] = {
-        BWD_BDL_GSP00,
-        BWD_BDL_GSP01,
+        dRes_INDEX_BWD_BDL_GSP00_e,
+        dRes_INDEX_BWD_BDL_GSP01_e,
     };
     static u32 s_btk[] = {
-        BWD_BTK_GSP00,
-        BWD_BTK_GSP01,
+        dRes_INDEX_BWD_BTK_GSP00_e,
+        dRes_INDEX_BWD_BTK_GSP01_e,
     };
     static u32 s_brk[] = {
-        BWD_BRK_GSP00,
-        BWD_BRK_GSP01,
+        dRes_INDEX_BWD_BRK_GSP00_e,
+        dRes_INDEX_BWD_BRK_GSP01_e,
     };
     static u32 s_bck[] = {
-        BWD_BCK_GSP00,
-        BWD_BCK_GSP01,
+        dRes_INDEX_BWD_BCK_GSP00_e,
+        dRes_INDEX_BWD_BCK_GSP01_e,
     };
     J3DModelData* modelData;
     J3DModel* model;
     bwds_class* i_this = (bwds_class*)i_actor;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Bwds", BWDS_BDL_KOBOSS_HEAD),
+        (J3DModelData*)dComIfG_getObjectRes("Bwds", dRes_INDEX_BWDS_BDL_KOBOSS_HEAD_e),
         NULL,
         NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bwds", BWDS_BCK_KOBOSS_CLOSE),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Bwds", dRes_INDEX_BWDS_BCK_KOBOSS_CLOSE_e),
         J3DFrameCtrl::EMode_NONE,
         1.0f,
         0,
@@ -888,60 +880,61 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
 
     if (!i_this->mpMorf || !i_this->mpMorf->getModel()) {
         return FALSE;
-    } else {
-        for (s32 i = 0; i < 0xd; i++) {
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Bwds", body_bdl[i]);
-            model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
-            i_this->mp02BC[i] = model;
-            if (i_this->mp02BC[i] == NULL) {
-                return FALSE;
-            }
-        }
+    }
 
-        for (s32 i = 0; i < 0x2; i++) {
-            i_this->mp18B0[i] = new mDoExt_McaMorf(
-                (J3DModelData*)dComIfG_getObjectRes("Bwd", s_bdl[i]),
-                NULL,
-                NULL,
-                (J3DAnmTransformKey*)dComIfG_getObjectRes("Bwd", s_bck[i]),
-                J3DFrameCtrl::EMode_LOOP,
-                1.0f,
-                0,
-                -1,
-                0,
-                NULL,
-                0,
-                0x11020203
-            );
-
-            if (!i_this->mp18B0[i] || !i_this->mp18B0[i]->getModel()) {
-                return FALSE;
-            }
-            modelData = i_this->mp18B0[i]->getModel()->getModelData();
-            i_this->mp18B8[i] = new mDoExt_btkAnm();
-            if (!i_this->mp18B8[i]) {
-                return FALSE;
-            }
-
-            int ret = i_this->mp18B8[i]->init(
-                modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", s_btk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
-            );
-
-            if (!ret) {
-                return FALSE;
-            }
-
-            i_this->mp18C0[i] = new mDoExt_brkAnm();
-
-            ret = i_this->mp18C0[i]->init(
-                modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", s_brk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
-            );
-
-            if (!ret) {
-                return FALSE;
-            }
+    for (s32 i = 0; i < 0xd; i++) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Bwds", body_bdl[i]);
+        model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+        i_this->mp02BC[i] = model;
+        if (i_this->mp02BC[i] == NULL) {
+            return FALSE;
         }
     }
+
+    for (s32 i = 0; i < 0x2; i++) {
+        i_this->mp18B0[i] = new mDoExt_McaMorf(
+            (J3DModelData*)dComIfG_getObjectRes("Bwd", s_bdl[i]),
+            NULL,
+            NULL,
+            (J3DAnmTransformKey*)dComIfG_getObjectRes("Bwd", s_bck[i]),
+            J3DFrameCtrl::EMode_LOOP,
+            1.0f,
+            0,
+            -1,
+            0,
+            NULL,
+            0,
+            0x11020203
+        );
+
+        if (!i_this->mp18B0[i] || !i_this->mp18B0[i]->getModel()) {
+            return FALSE;
+        }
+        modelData = i_this->mp18B0[i]->getModel()->getModelData();
+        i_this->mp18B8[i] = new mDoExt_btkAnm();
+        if (!i_this->mp18B8[i]) {
+            return FALSE;
+        }
+
+        int ret = i_this->mp18B8[i]->init(
+            modelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Bwd", s_btk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
+        );
+
+        if (!ret) {
+            return FALSE;
+        }
+
+        i_this->mp18C0[i] = new mDoExt_brkAnm();
+
+        ret = i_this->mp18C0[i]->init(
+            modelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bwd", s_brk[i]), TRUE, J3DFrameCtrl::EMode_LOOP
+        );
+
+        if (!ret) {
+            return FALSE;
+        }
+    }
+
     return TRUE;
 }
 
@@ -990,7 +983,7 @@ static cPhs_State daBwds_Create(fopAc_ac_c* a_this) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -1033,7 +1026,7 @@ static cPhs_State daBwds_Create(fopAc_ac_c* a_this) {
     };
 
     bwds_class* i_this = (bwds_class*)a_this;
-    fopAcM_SetupActor(&i_this->actor, bwds_class);
+    fopAcM_ct(&i_this->actor, bwds_class);
 
     cPhs_State res = dComIfG_resLoad(&i_this->m02AC, "Bwds");
     if (res == cPhs_COMPLEATE_e) {
@@ -1086,18 +1079,18 @@ static actor_method_class l_daBwds_Method = {
 };
 
 actor_process_profile_definition g_profile_BWDS = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BWDS,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BWDS_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bwds_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BWDS,
+    /* Draw Prio    */ fpcDwPi_BWDS_e,
     /* Actor SubMtd */ &l_daBwds_Method,
     /* Status       */ fopAcStts_UNK40000_e | fopAcStts_UNK80000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

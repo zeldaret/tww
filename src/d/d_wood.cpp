@@ -12,7 +12,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
 #include "d/d_tree.h"
 #include "d/d_cc_d.h"
 #include "dolphin/gf/GF.h"
@@ -75,106 +74,9 @@ namespace {
 const u16 l_Txa_swood_bTEX__width = 64;
 const u16 l_Txa_swood_bTEX__height = 64;
 
-Vec l_pos[] = {
-    {0.000022f, 14.922843f, -89.982368f},
-    {-77.927017f, 14.922843f, -44.991203f},
-    {-77.927025f, 14.922843f, 44.991173f},
-    {-0.000008f, 14.922843f, 89.982353f},
-    {77.92701f, 14.922843f, 44.99118f},
-    {77.92701f, 14.922843f, -44.99118f},
-    {0.0f, 86.107872f, 0.0f},
-    {48.073795f, 32.79335f, -83.266212f},
-    {-48.073753f, 32.79335f, -83.266228f},
-    {-96.147537f, 32.79335f, -0.000015f},
-    {-48.073772f, 32.79335f, 83.266212f},
-    {48.073757f, 32.79335f, 83.266212f},
-    {96.14753f, 32.79335f, 0.0f},
-    {0.0f, 94.79158f, 0.0f},
-    {46.784023f, 67.793831f, -81.032257f},
-    {-46.783981f, 67.793831f, -81.032272f},
-    {-93.568001f, 67.793831f, -0.000015f},
-    {-46.784004f, 67.793831f, 81.032257f},
-    {46.783993f, 67.793831f, 81.032257f},
-    {93.567993f, 67.793831f, 0.0f},
-    {0.0f, 105.391602f, 0.0f},
-    {28.882326f, 98.615974f, -50.02562f},
-    {-28.882303f, 98.615974f, -50.025642f},
-    {-57.764622f, 98.615974f, -0.000009f},
-    {-28.882315f, 98.615974f, 50.02562f},
-    {28.882305f, 98.615974f, 50.02562f},
-    {57.764614f, 98.615974f, 0.0f},
-    {0.0f, 109.061028f, 0.0f},
-    {41.2393f, 1.173791f, -71.42852f},
-    {-41.239262f, 1.173791f, -71.428535f},
-    {-82.478554f, 1.173791f, -0.000013f},
-    {-41.239281f, 1.173791f, 71.42852f},
-    {41.239265f, 1.173791f, 71.42852f},
-    {82.478539f, 1.173791f, 0.0f},
-    {0.0f, 70.268173f, 0.0f},
-    {0.000025f, 50.810505f, -97.695068f},
-    {-84.6064f, 50.810505f, -48.847549f},
-    {-84.606422f, 50.810505f, 48.847519f},
-    {-0.00001f, 50.810505f, 97.695053f},
-    {84.6064f, 50.810505f, 48.84753f},
-    {84.6064f, 50.810505f, -48.847527f},
-    {0.0f, 102.071098f, 0.0f},
-    {0.000021f, 82.279785f, -80.035629f},
-    {-69.312889f, 82.279785f, -40.017834f},
-    {-69.312904f, 82.279785f, 40.017811f},
-    {-0.000008f, 82.279785f, 80.035637f},
-    {69.312889f, 82.279785f, 40.017818f},
-    {69.312889f, 82.279785f, -40.017815f},
-    {0.0f, 109.022469f, 0.0f},
-    {3.255973f, 0.0f, -5.921541f},
-    {3.255973f, 0.0f, 5.921541f},
-    {-5.16166f, 0.0f, 0.0f},
-    {0.114389f, 11.775252f, -0.249098f},
-    {-0.862972f, 19.754194f, 8.598756f},
-    {-9.357565f, 19.58444f, 11.268269f},
-    {-8.081571f, 19.758448f, 3.069652f},
-    {-2.221876f, 19.009287f, -8.072796f},
-    {-9.50218f, 19.009287f, -4.024319f},
-    {-8.414586f, 19.009287f, -12.021413f},
-    {13.461897f, 22.025139f, 1.575613f},
-    {5.560989f, 22.025139f, 4.229024f},
-    {5.656257f, 22.025139f, -3.749505f},
-};
-
-GXColor l_color[] = {
-    {0x7F, 0x7F, 0x7F, 0xFF},
-    {0x98, 0x98, 0x99, 0xFF},
-    {0x99, 0x99, 0x99, 0xFF},
-    {0xCC, 0xCC, 0xCC, 0xFF},
-    {0xFF, 0xFF, 0xFF, 0xFF},
-    {0x66, 0x66, 0x66, 0xFF},
-    {0xB2, 0xB2, 0xB2, 0xFF},
-    {0xE5, 0xE5, 0xE5, 0xFF},
-    {0xF4, 0xF4, 0xF4, 0xFF},
-    {0xAB, 0xAB, 0xAB, 0xFF},
-    {0xFC, 0xFC, 0xFC, 0xFF},
-    {0xF7, 0xF7, 0xF7, 0xFF},
-    {0xF8, 0xF8, 0xF8, 0xFF},
-    {0xC3, 0xC3, 0xC3, 0xFF},
-    {0xA1, 0xA1, 0xA1, 0xFF},
-    {0xF5, 0xF5, 0xF5, 0xFF},
-    {0xFB, 0xFB, 0xFB, 0xFF},
-    {0x73, 0x73, 0x73, 0xFF},
-    {0x43, 0x43, 0x43, 0xFF},
-    {0x9A, 0x9A, 0x9A, 0xFF},
-};
-
-cXy l_texCoord[] = {
-    {0.5f, 1.0f},
-    {1.0f, 0.0f},
-    {0.0f, 0.0f},
-    {1.0f, 0.455793f},
-    {1.0f, 0.75f},
-    {0.705793f, 0.75f},
-    {0.958472f, 1.0f},
-    {0.792867f, 0.75f},
-    {0.958472f, 0.75f},
-    {0.792867f, 1.0f},
-};
+#include "assets/l_pos__d_wood.h"
+#include "assets/l_color__d_wood.h"
+#include "assets/l_texCoord__d_wood.h"
 
 #include "assets/l_Oba_swood_bDL.h"
 #include "assets/l_Oba_swood_b_cutDL.h"
@@ -414,12 +316,13 @@ void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) {
         f32 rotY = 0.0f;
         f32 rotX = rotY;
         for (s32 i = 0; i < 2; i++) {
+            s32 phaseVelY = attr_sway(SWAY_PUSH, i).phaseVelY;
             s32 phaseVelX = attr_sway(SWAY_PUSH, i).phaseVelX;
             s32 ampY = attr_sway(SWAY_PUSH, i).ampY;
             s32 ampX = attr_sway(SWAY_PUSH, i).ampX;
             f32 phaseBiasX = attr_sway(SWAY_PUSH, i).phaseBiasX;
 
-            mPhaseY[i] += attr_sway(SWAY_PUSH, i).phaseVelY;
+            mPhaseY[i] += phaseVelY;
             cLib_chaseAngleS(&mPhaseX[i], 0, phaseVelX);
             cLib_chaseS(&mAmpY[i], ampY/4, 0x14);
             cLib_addCalcAngleS(&mAmpX[i], ampX, 8, 0x14, 5);
@@ -428,9 +331,9 @@ void dWood::Anm_c::mode_push_into(dWood::Packet_c *packet) {
             rotX +=  mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
         }
 
-        mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
-        mDoMtx_XrotM(mModelMtx, (s32)rotX);
-        mDoMtx_YrotM(mModelMtx, -mForceDir);
+        cMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
+        cMtx_XrotM(mModelMtx, (s32)rotX);
+        cMtx_YrotM(mModelMtx, -mForceDir);
     }
 }
 
@@ -467,9 +370,9 @@ void dWood::Anm_c::mode_push_back(dWood::Packet_c *packet) {
             rotX +=  mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
         }
 
-        mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
-        mDoMtx_XrotM(mModelMtx, (s32)rotX);
-        mDoMtx_YrotM(mModelMtx, -mForceDir);
+        cMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
+        cMtx_XrotM(mModelMtx, (s32)rotX);
+        cMtx_YrotM(mModelMtx, -mForceDir);
     }
 }
 
@@ -509,12 +412,13 @@ void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
     f32 rotY = 0.0f;
     f32 rotX = rotY;
     for (s32 i = 0; i < 2; i++) {
+        s32 phaseVelY = attr_sway(swayID, i).phaseVelY;
         s32 phaseVelX = attr_sway(swayID, i).phaseVelX;
         s16 ampY = attr_sway(swayID, i).ampY;
         s16 ampX = attr_sway(swayID, i).ampX;
         f32 phaseBiasX = attr_sway(swayID, i).phaseBiasX;
 
-        mPhaseY[i] += attr_sway(swayID, i).phaseVelY;
+        mPhaseY[i] += phaseVelY;
         mPhaseX[i] += phaseVelX;
         cLib_chaseS(&mAmpY[i], ampY, 2);
         cLib_chaseS(&mAmpX[i], ampX, 2);
@@ -523,9 +427,9 @@ void dWood::Anm_c::mode_norm(dWood::Packet_c *packet) {
         rotX += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
     }
 
-    mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir); // Y Rotation (Yaw)
-    mDoMtx_XrotM(mModelMtx, rotX);                  // X Rotation
-    mDoMtx_YrotM(mModelMtx, -mForceDir);            // Y Rotation
+    cMtx_YrotS(mModelMtx, (s16)rotY + mForceDir); // Y Rotation (Yaw)
+    cMtx_XrotM(mModelMtx, rotX);                  // X Rotation
+    cMtx_YrotM(mModelMtx, -mForceDir);            // Y Rotation
 }
 
 /* 800BE148-800BE154       .text mode_norm_set_wind__Q25dWood5Anm_cFfs */
@@ -577,9 +481,9 @@ void dWood::Anm_c::mode_to_norm(dWood::Packet_c *packet) {
         rotX += mAmpX[i] * (phaseBiasX + JMASCos(mPhaseX[i]));
     }
 
-    mDoMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
-    mDoMtx_XrotM(mModelMtx, rotX);
-    mDoMtx_YrotM(mModelMtx, -mForceDir);
+    cMtx_YrotS(mModelMtx, (s16)rotY + mForceDir);
+    cMtx_XrotM(mModelMtx, rotX);
+    cMtx_YrotM(mModelMtx, -mForceDir);
 
     if (mCountdown > 0) {
         mCountdown -= 1;
@@ -651,20 +555,20 @@ void dWood::Unit_c::set_mtx(dWood::Anm_c *anim) {
     mtx[0][3] += mPos.x;
     mtx[1][3] += mPos.y;
     mtx[2][3] += mPos.z;
-    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mModelViewMtx);
+    cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mModelViewMtx);
 
     mDoMtx_stack_c::copy(anim[anmIdx].mTrunkModelMtx);
     mtx[0][3] = mPos.x;
     mtx[1][3] = mPos.y;
     mtx[2][3] = mPos.z;
-    mDoMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mTrunkModelViewMtx);
+    cMtx_concat(j3dSys.getViewMtx(), mDoMtx_stack_c::get(), mTrunkModelViewMtx);
 
-    mDoMtx_concat(j3dSys.getViewMtx(), mShadowModelMtx, mShadowModelViewMtx);
+    cMtx_concat(j3dSys.getViewMtx(), mShadowModelMtx, mShadowModelViewMtx);
 }
 
 /* 800BEA28-800BEA50       .text clear__Q25dWood6Unit_cFv */
 void dWood::Unit_c::clear() {
-    cLib_memSet(this, 0, 0x18c);
+    cLib_memSet(this, 0, sizeof(*this));
 }
 
 /* 800BEA50-800BEE9C       .text cc_hit_before_cut__Q25dWood6Unit_cFPQ25dWood8Packet_c */
@@ -701,7 +605,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                 mAnimCooldown = 20;
 
                 // Play the cut sound
-                mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0);
+                mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos);
 
                 // If we are currently performing a basic animation, assign a
                 // new animation
@@ -727,11 +631,11 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
         inf.GetCoHitObj()->GetStts()) {
         animIdx = packet->search_anm(Anm_c::Mode_PushInto);
 
-        if (fopAcM_GetProfName(actor) == PROC_PLAYER &&
+        if (fopAcM_GetProfName(actor) == fpcNm_PLAYER_e &&
             inf.GetCoHitLen() >= 2.0f && mAnimCooldown == 0) {
 
             mAnimCooldown = 20;
-            mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos, 0, 0);
+            mDoAud_seStart(JA_SE_OBJ_TREE_SWING, &mPos);
 
             // If we are currently performing a basic animation, assign a new
             // animation
@@ -776,13 +680,13 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
                                       NULL, 0xff, NULL, -1, &mTevStr.mColorK0,
                                       NULL, NULL);
 
-                mDoAud_seStart(JA_SE_OBJ_CUT_L_TREE_DOWN, &mPos, 0, 0);
+                mDoAud_seStart(JA_SE_OBJ_CUT_L_TREE_DOWN, &mPos);
 
                 f32 newShadowScale = L_attr.kCutShadowScale / L_attr.kUncutShadowScale;
 
-                mDoMtx_copy(mShadowModelMtx, mDoMtx_stack_c::get());
+                cMtx_copy(mShadowModelMtx, mDoMtx_stack_c::get());
                 mDoMtx_stack_c::scaleM(newShadowScale, 1.0f, newShadowScale);
-                mDoMtx_copy(mDoMtx_stack_c::get(), mShadowModelMtx);
+                cMtx_copy(mDoMtx_stack_c::get(), mShadowModelMtx);
             }
         }
     }
@@ -836,7 +740,9 @@ void dWood::Room_c::delete_all_unit() {
     Unit_c *unit;
     while (unit = mpUnit, unit != NULL) {
         mpUnit = unit->mpNext;
-        mDoAud_zelAudio_c::getInterface()->seDeleteObject((Vec *)unit);
+#if VERSION > VERSION_DEMO
+        mDoAud_zelAudio_c::getInterface()->seDeleteObject(&unit->mPos);
+#endif
         unit->clear();
     }
 }
@@ -931,10 +837,13 @@ void dWood::Packet_c::update() {
     s32 i = 0;
     for (Unit_c *unit = mUnit; i < (s32)ARRAY_SIZE(mUnit); i++, unit++) {
         if (cLib_checkBit(unit->mFlags, Unit_c::STATE_ACTIVE)) {
-            cXyz clipPos(unit->mPos.x, unit->mPos.y + L_attr.kClipCenterYOffset, unit->mPos.z);
-            s32 res = mDoLib_clipper::clip(j3dSys.getViewMtx(), clipPos, L_attr.kClipRadius);
+            BOOL clip = mDoLib_clipper::clip(
+                j3dSys.getViewMtx(),
+                cXyz(unit->mPos.x, unit->mPos.y + L_attr.kClipCenterYOffset, unit->mPos.z),
+                L_attr.kClipRadius
+            );
 
-            if (res != 0) {
+            if (clip) {
                 cLib_onBit(unit->mFlags, Unit_c::STATE_FRUSTUM_CULLED);
             } else {
                 cLib_offBit(unit->mFlags, Unit_c::STATE_FRUSTUM_CULLED);

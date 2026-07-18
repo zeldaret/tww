@@ -33,7 +33,7 @@ enum dCcD_ObjAtType {
     /* 0x00400000 */ AT_TYPE_UNK400000      = (1 << 22),
     /* 0x00800000 */ AT_TYPE_LIGHT          = (1 << 23),
     /* 0x01000000 */ AT_TYPE_STALFOS_MACE   = (1 << 24),
-    /* 0x02000000 */ AT_TYPE_UNK2000000     = (1 << 25),
+    /* 0x02000000 */ AT_TYPE_FAN_SWING      = (1 << 25),
     /* 0x04000000 */ AT_TYPE_DARKNUT_SWORD  = (1 << 26),
     /* 0x08000000 */ AT_TYPE_GRAPPLING_HOOK = (1 << 27),
     /* 0x10000000 */ AT_TYPE_MOBLIN_SPEAR   = (1 << 28),
@@ -75,11 +75,12 @@ enum dCcG_CoRPrm_e {
 };
 
 enum dCcG_hitSe {
+    /* 0x00 */ dCcG_SE_NONE = 0,
     /* 0x01 */ dCcG_SE_UNK1 = 1,
     /* 0x02 */ dCcG_SE_UNK2 = 2,
     /* 0x03 */ dCcG_SE_UNK3 = 3,
-    /* 0x04 */ dCcG_SE_UNK4 = 4,
-    /* 0x05 */ dCcG_SE_UNK5 = 5,
+    /* 0x04 */ dCcG_SE_WOOD = 4,
+    /* 0x05 */ dCcG_SE_METAL = 5,
     /* 0x06 */ dCcG_SE_UNK6 = 6,
     /* 0x07 */ dCcG_SE_ARROW = 7,
     /* 0x08 */ dCcG_SE_HOOKSHOT = 8,
@@ -95,6 +96,7 @@ enum CcG_At_HitMark {
 };
 
 enum CcG_Tg_HitMark {
+    /* 0x0 */ dCcG_TgHitMark_None_e = dPa_name::ID_NONE,
     /* 0x1 */ dCcG_TgHitMark_Unk1_e = dPa_name::ID_AK_JN_O_FIRE00,
     /* 0xC */ dCcg_TgHitMark_Purple_e = dPa_name::ID_AK_JN_NG,
     /* 0xD */ dCcG_TgHitMark_Nrm_e = dPa_name::ID_AK_JN_OK,
@@ -110,6 +112,7 @@ enum dCcG_At_Spl {
     /* 0x5 */ dCcG_At_Spl_UNK5 = 5,
     /* 0x6 */ dCcG_At_Spl_UNK6 = 6,
     /* 0x7 */ dCcG_At_Spl_UNK7 = 7,
+    // 8 and higher mean it can't be guarded/shielded against
     /* 0x8 */ dCcG_At_Spl_UNK8 = 8,
     /* 0x9 */ dCcG_At_Spl_UNK9 = 9,
     /* 0xA */ dCcG_At_Spl_UNKA = 0xA,

@@ -180,22 +180,22 @@ public:
     void setCommand(u16 command) { mCommand = command; }
 
     void setXyEventCB(CallbackFunc cb) { mpEventCB = cb; }
-    s16 runXyEventCB(void* ac, int i_itemBtn) {
+    s16 runXyEventCB(void* i_actor, int i_itemBtn) {
         if (mpEventCB == NULL)
             return -1;
-        return mpEventCB(ac, i_itemBtn);
+        return mpEventCB(i_actor, i_itemBtn);
     }
     void setXyCheckCB(CallbackFunc cb) { mpCheckCB = cb; }
-    s16 runXyCheckCB(void* ac, int i_itemBtn) {
+    s16 runXyCheckCB(void* i_actor, int i_itemBtn) {
         if (mpCheckCB == NULL)
             return true;
-        return mpCheckCB(ac, i_itemBtn);
+        return mpCheckCB(i_actor, i_itemBtn);
     }
     void setPhotoEventCB(CallbackFunc cb) { mpPhotoCB = cb; }
-    s16 runPhotoEventCB(void* ac, int i_itemBtn) {
+    s16 runPhotoEventCB(void* i_actor, int i_itemBtn) {
         if (mpPhotoCB == NULL)
             return -1;
-        return mpPhotoCB(ac, i_itemBtn);
+        return mpPhotoCB(i_actor, i_itemBtn);
     }
 
 public:
@@ -305,7 +305,7 @@ public:
     /* 0x26C */ actor_attention_types attention_info;
     /* 0x284 */ s8 max_health;
     /* 0x285 */ s8 health;
-    /* 0x288 */ s32 itemTableIdx;
+    /* 0x288 */ int itemTableIdx;
     /* 0x28C */ u8 stealItemBitNo; // For limited items (Blue Chu Jelly), this is the first itemBitNo to set.
     /* 0x28D */ s8 stealItemLeft;
 
@@ -368,7 +368,7 @@ public:
 
 STATIC_ASSERT(sizeof(fopEn_enemy_c) == 0x2AC);
 
-s32 fopAc_IsActor(void* actor);
+BOOL fopAc_IsActor(void* actor);
 
 extern int g_fopAc_type;
 extern actor_method_class g_fopAc_Method;

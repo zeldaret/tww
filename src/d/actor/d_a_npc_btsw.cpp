@@ -7,13 +7,11 @@
 #include "d/actor/d_a_npc_btsw.h"
 #include "d/d_letter.h"
 #include "d/d_snap.h"
-#include "d/res/res_btsw.h"
+#include "res/Object/Btsw.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 class daNpc_Btsw_HIO_c : public JORReflexible {
@@ -47,7 +45,7 @@ public:
     /* 0x5C */ f32 field_0x5C;
 };  // Size: 0x60
 
-daNpc_Btsw_HIO_c l_HIO;
+static daNpc_Btsw_HIO_c l_HIO;
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -118,11 +116,11 @@ daNpc_Btsw_HIO_c::daNpc_Btsw_HIO_c() {
 }
 
 static const s32 l_bck_ix_tbl[] = {
-    BTSW_BCK_BN_WAIT01, BTSW_BCK_BN_WAIT02, BTSW_BCK_BN_TALK01, BTSW_BCK_BN_TALK02,
-    BTSW_BCK_BN_ONEGAI, BTSW_BCK_BN_SUGOI, BTSW_BCK_BN_SUGOI, BTSW_BCK_BN_WALK,
-    BTSW_BCK_BN_KASIGE, BTSW_BCK_BN_SIWAKE01, BTSW_BCK_BN_SIWAKE02
+    dRes_ID_BTSW_BCK_BN_WAIT01_e, dRes_ID_BTSW_BCK_BN_WAIT02_e, dRes_ID_BTSW_BCK_BN_TALK01_e, dRes_ID_BTSW_BCK_BN_TALK02_e,
+    dRes_ID_BTSW_BCK_BN_ONEGAI_e, dRes_ID_BTSW_BCK_BN_SUGOI_e, dRes_ID_BTSW_BCK_BN_SUGOI_e, dRes_ID_BTSW_BCK_BN_WALK_e,
+    dRes_ID_BTSW_BCK_BN_KASIGE_e, dRes_ID_BTSW_BCK_BN_SIWAKE01_e, dRes_ID_BTSW_BCK_BN_SIWAKE02_e
 };
-static const u32 l_btp_ix_tbl[] = {BTSW_INDEX_BCK_BN_TALK02};
+static const u32 l_btp_ix_tbl[] = {dRes_ID_BTSW_BTP_BN_MABA_e};
 
 /* 000001E8-000003F4       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
@@ -451,8 +449,8 @@ void daNpc_Btsw_c::anmAtr(u16 i_msgStatus) {
 }
 
 /* 00000F0C-00000F30       .text daNpc_Btsw_XyCheckCB__FPvi */
-static s16 daNpc_Btsw_XyCheckCB(void*, int idx) {
-    if (dComIfGp_getSelectItem(idx) == dItem_NOTE_TO_MOM_e) {
+static s16 daNpc_Btsw_XyCheckCB(void*, int i_itemBtn) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_NOTE_TO_MOM_e) {
         return TRUE;
     }
     return FALSE;
@@ -976,7 +974,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002BB0-00002CAC       .text _create__12daNpc_Btsw_cFv */
 cPhs_State daNpc_Btsw_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Btsw_c);
+    fopAcM_ct(this, daNpc_Btsw_c);
 
     cPhs_State res = dComIfG_resLoad(&mPhs, "Btsw");
     if (res == cPhs_COMPLEATE_e) {
@@ -998,14 +996,14 @@ cPhs_State daNpc_Btsw_c::_create() {
 
 /* 00003304-0000372C       .text CreateHeap__12daNpc_Btsw_cFv */
 BOOL daNpc_Btsw_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Btsw", BTSW_BDL_BN));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Btsw", dRes_ID_BTSW_BDL_BN_e));
     JUT_ASSERT(1424, modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL,
         NULL,
-        (J3DAnmTransform*) dComIfG_getObjectIDRes("Btsw", BTSW_BCK_BN_WAIT02),
+        (J3DAnmTransform*) dComIfG_getObjectIDRes("Btsw", dRes_ID_BTSW_BCK_BN_WAIT02_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -1027,7 +1025,7 @@ BOOL daNpc_Btsw_c::CreateHeap() {
     m_handL = modelData->getJointName()->getIndex("handL");
     m_handR = modelData->getJointName()->getIndex("handR");
 
-    J3DModelData* letterModelData = (J3DModelData*) dComIfG_getObjectIDRes("Btsw", BTSW_BDL_BM_LETTER);
+    J3DModelData* letterModelData = (J3DModelData*) dComIfG_getObjectIDRes("Btsw", dRes_ID_BTSW_BDL_BM_LETTER_e);
     field_0x6D0 = mDoExt_J3DModel__create(letterModelData, 0,0x11020203);
     if (field_0x6D0 == NULL) {
         return FALSE;
@@ -1063,8 +1061,8 @@ BOOL daNpc_Btsw_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTevRegKey* tevRegKey = (J3DAnmTevRegKey*) dComIfG_getObjectIDRes("Btsw", BTSW_BRK_SHOP_CURSOR01);
-    J3DModelData* cursorModelData = (J3DModelData*) dComIfG_getObjectIDRes("Btsw", BTSW_BMD_SHOP_CURSOR01);
+    J3DAnmTevRegKey* tevRegKey = (J3DAnmTevRegKey*) dComIfG_getObjectIDRes("Btsw", dRes_ID_BTSW_BRK_SHOP_CURSOR01_e);
+    J3DModelData* cursorModelData = (J3DModelData*) dComIfG_getObjectIDRes("Btsw", dRes_ID_BTSW_BMD_SHOP_CURSOR01_e);
 
     mpShopCursor = ShopCursor_create(cursorModelData, tevRegKey, 0.65f);
     if (mpShopCursor == NULL) {
@@ -1089,13 +1087,13 @@ BOOL daNpc_Btsw_c::CreateHeap() {
 
 /* 0000372C-00003838       .text MailCreateInit__9SwMail2_cFP4cXyzP4cXyz */
 BOOL SwMail2_c::MailCreateInit(cXyz* param_1, cXyz* param_2) {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Btsw", BTSW_BDL_QMAIL));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Btsw", dRes_ID_BTSW_BDL_QMAIL_e));
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
     if (mpModel == NULL) {
         return FALSE;
     }
 
-    J3DAnmTexPattern* texPattern = (J3DAnmTexPattern*) dComIfG_getObjectIDRes("Btsw", BTSW_BTP_QMAIL);
+    J3DAnmTexPattern* texPattern = (J3DAnmTexPattern*) dComIfG_getObjectIDRes("Btsw", dRes_ID_BTSW_BTP_QMAIL_e);
     if (!field_0x10.init(modelData, texPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, false, FALSE)) {
         return FALSE;
     }
@@ -1482,18 +1480,18 @@ static actor_method_class l_daNpc_Btsw_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_BTSW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_BTSW,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_BTSW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Btsw_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_BTSW,
+    /* Draw Prio    */ fpcDwPi_NPC_BTSW_e,
     /* Actor SubMtd */ &l_daNpc_Btsw_Method,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_otble.h"
-#include "d/res/res_okmono.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Okmono.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -67,8 +65,8 @@ BOOL daObj_Otble::Act_c::_draw() {
 
 /* 000002E8-00000470       .text _createHeap__Q211daObj_Otble5Act_cFv */
 BOOL daObj_Otble::Act_c::_createHeap() {
-    static const s32 bdl[] = {OKMONO_BDL_OTABLE, OKMONO_BDL_OTABLEL};
-    static const s32 dzb[] = {OKMONO_DZB_OTBLE, OKMONO_DZB_OTBLE_L};
+    static const s32 bdl[] = {dRes_INDEX_OKMONO_BDL_OTABLE_e, dRes_INDEX_OKMONO_BDL_OTABLEL_e};
+    static const s32 dzb[] = {dRes_INDEX_OKMONO_DZB_OTBLE_e, dRes_INDEX_OKMONO_DZB_OTBLE_L_e};
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Okmono", bdl[m294]);
     JUT_ASSERT(191, modelData != NULL);
@@ -119,7 +117,7 @@ void daObj_Otble::Act_c::CreateInit() {
 cPhs_State daObj_Otble::Act_c::_create() {
     static const u32 heapsize[] = {0x1240, 0x1240};
 
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daObj_Otble::Act_c);
     m294 = fopAcM_GetParam(this) & 0xff;
     if (m294 > 1) {
         m294 = 1;
@@ -127,17 +125,7 @@ cPhs_State daObj_Otble::Act_c::_create() {
 
     cPhs_State ret = dComIfG_resLoad(&mPhase, "Okmono");
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObj_Otble::Act_c);
-#else
-    fopAcM_SetupActor(this, daObj_Otble::Act_c);
-    m294 = fopAcM_GetParam(this) & 0xFF;
-    if (m294 > 1) {
-        m294 = 1;
-    }
-
-    cPhs_State ret = dComIfG_resLoad(&mPhase, "Okmono");
-    if (ret == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daObj_Otble::Act_c);
         if (!fopAcM_entrySolidHeap(this, createHeap_CB, heapsize[m294])) {
             return cPhs_ERROR_e;
         }
@@ -188,18 +176,18 @@ actor_method_class daObj_Otble::Mthd::Table = {
 };
 
 actor_process_profile_definition g_profile_OBJ_OTBLE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_OTBLE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_OTBLE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Otble::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_OTBLE,
+    /* Draw Prio    */ fpcDwPi_OBJ_OTBLE_e,
     /* Actor SubMtd */ &daObj_Otble::Mthd::Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

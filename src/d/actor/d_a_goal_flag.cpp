@@ -11,111 +11,16 @@
 #if VERSION == VERSION_DEMO
 #include "d/d_s_play.h"
 #endif
-#include "d/res/res_cloth.h"
-#include "d/res/res_gflag.h"
-#include "d/res/res_tgflag.h"
+#include "res/Object/Cloth.h"
+#include "res/Object/Gflag.h"
+#include "res/Object/Tgflag.h"
 #include "d/d_path.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-
-#include "assets/l_txa_dummy_hataTEX.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-static Vec l_pos[] = {
-    { -1000.0f,    0.0f, 0.0f },
-    {  -750.0f,    0.0f, 0.0f },
-    {  -500.0f,    0.0f, 0.0f },
-    {  -250.0f,    0.0f, 0.0f },
-    {     0.0f,    0.0f, 0.0f },
-    {   250.0f,    0.0f, 0.0f },
-    {   500.0f,    0.0f, 0.0f },
-    {   750.0f,    0.0f, 0.0f },
-    {  1000.0f,    0.0f, 0.0f },
-    { -1000.0f, -100.0f, 0.0f },
-    {  -750.0f, -100.0f, 0.0f },
-    {  -500.0f, -100.0f, 0.0f },
-    {  -250.0f, -100.0f, 0.0f },
-    {     0.0f, -100.0f, 0.0f },
-    {   250.0f, -100.0f, 0.0f },
-    {   500.0f, -100.0f, 0.0f },
-    {   750.0f, -100.0f, 0.0f },
-    {  1000.0f, -100.0f, 0.0f },
-    { -1000.0f, -200.0f, 0.0f },
-    {  -750.0f, -200.0f, 0.0f },
-    {  -500.0f, -200.0f, 0.0f },
-    {  -250.0f, -200.0f, 0.0f },
-    {     0.0f, -200.0f, 0.0f },
-    {   250.0f, -200.0f, 0.0f },
-    {   500.0f, -200.0f, 0.0f },
-    {   750.0f, -200.0f, 0.0f },
-    {  1000.0f, -200.0f, 0.0f },
-    { -1000.0f, -300.0f, 0.0f },
-    {  -750.0f, -300.0f, 0.0f },
-    {  -500.0f, -300.0f, 0.0f },
-    {  -250.0f, -300.0f, 0.0f },
-    {     0.0f, -300.0f, 0.0f },
-    {   250.0f, -300.0f, 0.0f },
-    {   500.0f, -300.0f, 0.0f },
-    {   750.0f, -300.0f, 0.0f },
-    {  1000.0f, -300.0f, 0.0f },
-    { -1000.0f, -400.0f, 0.0f },
-    {  -750.0f, -400.0f, 0.0f },
-    {  -500.0f, -400.0f, 0.0f },
-    {  -250.0f, -400.0f, 0.0f },
-    {     0.0f, -400.0f, 0.0f },
-    {   250.0f, -400.0f, 0.0f },
-    {   500.0f, -400.0f, 0.0f },
-    {   750.0f, -400.0f, 0.0f },
-    {  1000.0f, -400.0f, 0.0f }
-};
+#include "assets/l_txa_dummy_hataTEX.h"
 
-static cXy l_texCoord[] = {
-    {   1.0f,  0.0f },
-    { 0.875f,  0.0f },
-    {  0.75f,  0.0f },
-    { 0.625f,  0.0f },
-    {   0.5f,  0.0f },
-    { 0.375f,  0.0f },
-    {  0.25f,  0.0f },
-    { 0.125f,  0.0f },
-    {   0.0f,  0.0f },
-    {   1.0f, 0.25f },
-    { 0.875f, 0.25f },
-    {  0.75f, 0.25f },
-    { 0.625f, 0.25f },
-    {   0.5f, 0.25f },
-    { 0.375f, 0.25f },
-    {  0.25f, 0.25f },
-    { 0.125f, 0.25f },
-    {   0.0f, 0.25f },
-    {   1.0f,  0.5f },
-    { 0.875f,  0.5f },
-    {  0.75f,  0.5f },
-    { 0.625f,  0.5f },
-    {   0.5f,  0.5f },
-    { 0.375f,  0.5f },
-    {  0.25f,  0.5f },
-    { 0.125f,  0.5f },
-    {   0.0f,  0.5f },
-    {   1.0f, 0.75f },
-    { 0.875f, 0.75f },
-    {  0.75f, 0.75f },
-    { 0.625f, 0.75f },
-    {   0.5f, 0.75f },
-    { 0.375f, 0.75f },
-    {  0.25f, 0.75f },
-    { 0.125f, 0.75f },
-    {   0.0f, 0.75f },
-    {   1.0f,  1.0f },
-    { 0.875f,  1.0f },
-    {  0.75f,  1.0f },
-    { 0.625f,  1.0f },
-    {   0.5f,  1.0f },
-    { 0.375f,  1.0f },
-    {  0.25f,  1.0f },
-    { 0.125f,  1.0f },
-    {   0.0f,  1.0f }
-};
+#include "assets/l_pos__d_a_goal_flag.h"
+#include "assets/l_texCoord__d_a_goal_flag.h"
 
 #include "assets/l_goal_flag_DL.h"
 #include "assets/l_goal_flag_matDL.h"
@@ -140,8 +45,8 @@ void daGFlag_packet_c::setTexObj(u8 i_arcIdx) {
         "Tgflag"
     };
     static const int index_tbl[] = {
-        GFLAG_BTI_B_FRAGGAIKOT,
-        TGFLAG_BTI_B_FRAGTORI
+        dRes_INDEX_GFLAG_BTI_B_FRAGGAIKOT_e,
+        dRes_INDEX_TGFLAG_BTI_B_FRAGTORI_e
     };
     // index_tbl likely existed in this function but passing
     // an element of it into getObjectRes breaks the match
@@ -172,7 +77,7 @@ void daGFlag_packet_c::setTexObj(u8 i_arcIdx) {
 
 /* 00000210-00000330       .text setToonTexObj__16daGFlag_packet_cFv */
 void daGFlag_packet_c::setToonTexObj() {
-    ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+    ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
     GXBool mipmap_cnt_over_one = GXBool(tex_info_p->mipmapCount > 1);
     GXInitTexObj(
         &mToonTexObj,
@@ -436,7 +341,7 @@ BOOL daGoal_Flag_c::CreateBuoyRaces() {
                 rope_points_p->m_position.z
             );
             fopAcM_createChild(
-                PROC_Obj_Buoyrace,
+                fpcNm_Obj_Buoyrace_e,
                 fopAcM_GetID(this),
                 j | (i << 8), &rope_point_pos,
                 fopAcM_GetRoomNo(this),
@@ -574,7 +479,7 @@ cPhs_State daGoal_Flag_c::_create() {
     u8 arc_index;
     dPath* path_p;
 
-    fopAcM_SetupActor(this, daGoal_Flag_c);
+    fopAcM_ct(this, daGoal_Flag_c);
 
     u8 prm = fopAcM_GetParam(this) & 0xFF;
     cloth_resload_state = dComIfG_resLoad(&mClothPhs, "Cloth");
@@ -662,7 +567,7 @@ cPhs_State daGoal_Flag_c::_create() {
             u16 time_limit_modifier = (u16)dComIfGs_getEventReg(dSv_event_flag_c::UNK_AAFF) * 10;
             time_limit -= time_limit_modifier;
             mTimerProcID = fopMsgM_Timer_create(
-                PROC_TIMER,
+                fpcNm_TIMER_e,
                 2,
                 time_limit,
                 3,
@@ -675,7 +580,7 @@ cPhs_State daGoal_Flag_c::_create() {
             );
 
             mMgameStartProcID = fopMsgM_MiniGameStarter_create(
-                PROC_MINIGAME_STARTER,
+                fpcNm_MINIGAME_STARTER_e,
                 0,
                 0x200,
                 NULL
@@ -728,68 +633,66 @@ cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* i_posArr, cXyz* i_nrmArr, cXyz* 
     f32 dot = i_windVecP->getDotProduct(i_nrmArr[index]);
     if ((i_row == 0 || i_row == 4) && (i_col == 0 || i_col == 8)) {
         return cXyz::Zero;
-    } else {
-        cXyz anim_factor = i_nrmArr[index] * dot;
-        anim_factor.y += l_HIO.mFlagSagFactor * ((float)i_row * 0.25f);
-        if (i_col != 0) {
+    }
+    cXyz anim_factor = i_nrmArr[index] * dot;
+    anim_factor.y += l_HIO.mFlagSagFactor * ((float)i_row * 0.25f);
+    if (i_col != 0) {
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[(i_col - 1) + (i_row * 9)],
+            &anim_factor, 250.0f);
+        if (i_row != 0) {
             get_cloth_anim_sub_factor(
-                &pos, &i_posArr[(i_col - 1) + (i_row * 9)],
+                &pos, &i_posArr[i_col + (i_row - 1) * 9],
+                &anim_factor, 120.0f);
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[(i_col - 1) + (i_row - 1) * 9],
+                &anim_factor, 277.3085f);
+        }
+        if (i_row != 4) {
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[i_col + (i_row + 1) * 9],
+                &anim_factor, 120.0f);
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[(i_col - 1) + (i_row + 1) * 9],
+                &anim_factor, 277.3085f);
+        }
+        if (i_col != 8) {
+            get_cloth_anim_sub_factor(
+                &pos, &i_posArr[(i_col + 1) + i_row * 9],
                 &anim_factor, 250.0f);
             if (i_row != 0) {
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row - 1) * 9],
-                    &anim_factor, 120.0f);
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col - 1) + (i_row - 1) * 9],
-                    &anim_factor, 277.3085f);
-            }
-            if (i_row != 4) {
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row + 1) * 9],
-                    &anim_factor, 120.0f);
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col - 1) + (i_row + 1) * 9],
-                    &anim_factor, 277.3085f);
-            }
-            if (i_col != 8) {
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[(i_col + 1) + i_row * 9],
-                    &anim_factor, 250.0f);
-                if (i_row != 0) {
-                    get_cloth_anim_sub_factor(
-                        &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9],
-                        &anim_factor, 277.3085f);
-                }
-                if (i_row != 4) {
-                    get_cloth_anim_sub_factor(
-                        &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9],
-                        &anim_factor, 277.3085f);
-                }
-            }
-            return anim_factor;
-        } else {
-            get_cloth_anim_sub_factor(
-                &pos, &i_posArr[(i_col + 1) + (i_row * 9)],
-                &anim_factor, 250.0f);
-            if (i_row != 0) {
-                get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row - 1) * 9],
-                    &anim_factor, 120.0f);
                 get_cloth_anim_sub_factor(
                     &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9],
                     &anim_factor, 277.3085f);
             }
             if (i_row != 4) {
                 get_cloth_anim_sub_factor(
-                    &pos, &i_posArr[i_col + (i_row + 1) * 9],
-                    &anim_factor, 120.0f);
-                get_cloth_anim_sub_factor(
                     &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9],
                     &anim_factor, 277.3085f);
             }
-            return anim_factor;
         }
+        return anim_factor;
     }
+    get_cloth_anim_sub_factor(
+        &pos, &i_posArr[(i_col + 1) + (i_row * 9)],
+        &anim_factor, 250.0f);
+    if (i_row != 0) {
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[i_col + (i_row - 1) * 9],
+            &anim_factor, 120.0f);
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[(i_col + 1) + (i_row - 1) * 9],
+            &anim_factor, 277.3085f);
+    }
+    if (i_row != 4) {
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[i_col + (i_row + 1) * 9],
+            &anim_factor, 120.0f);
+        get_cloth_anim_sub_factor(
+            &pos, &i_posArr[(i_col + 1) + (i_row + 1) * 9],
+            &anim_factor, 277.3085f);
+    }
+    return anim_factor;
 }
 
 /* 00001CC0-00001CE0       .text checkCreateHeap__FP10fopAc_ac_c */
@@ -937,7 +840,7 @@ BOOL daGoal_Flag_c::TimerExecute() {
             rupees_collected = dComIfGp_getMiniGameRupee();
             remaining_time = timer_p->getRestTimeMs() / 10;
             mMgameTermProcID = fopMsgM_MiniGameTerminater_create(
-                PROC_MINIGAME_TERMINATER,
+                fpcNm_MINIGAME_TERMINATER_e,
                 0,
                 finish_type,
                 remaining_time,
@@ -1065,18 +968,18 @@ static actor_method_class daGoal_FlagMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Goal_Flag = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Goal_Flag,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Goal_Flag_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daGoal_Flag_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Goal_Flag,
+    /* Draw Prio    */ fpcDwPi_Goal_Flag_e,
     /* Actor SubMtd */ &daGoal_FlagMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -15,7 +15,6 @@
 #include "d/actor/d_a_npc_so.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/d_procname.h"
 
 /* 80149ECC-80149F88       .text bowJointCB__9daPy_lk_cFi */
 BOOL daPy_lk_c::bowJointCB(int param_0) {
@@ -25,10 +24,10 @@ BOOL daPy_lk_c::bowJointCB(int param_0) {
 
     if (param_0 == 6) {
         mDoMtx_stack_c::transS(0.0f, 4.5f, 4.5f);
-        mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(6));
+        mDoMtx_stack_c::revConcat(mpEquipItemModel->getAnmMtx(LINK_BOW_JNT_LINEAB_JNT_e));
         mpEquipItemModel->setAnmMtx(param_0, mDoMtx_stack_c::get());
     } else {
-        mpEquipItemModel->setAnmMtx(11, mpEquipItemModel->getAnmMtx(6));
+        mpEquipItemModel->setAnmMtx(LINK_BOW_JNT_LINEBB_JNT_e, mpEquipItemModel->getAnmMtx(LINK_BOW_JNT_LINEAB_JNT_e));
     }
     return true;
 }
@@ -70,10 +69,10 @@ BOOL daPy_lk_c::checkBowAnime() const {
 void daPy_lk_c::makeArrow() {
     if ((!checkBowMiniGame() && dComIfGs_getArrowNum() != 0) ||
         (checkBowMiniGame() && dComIfGp_event_getPt1() &&
-         fopAcM_GetName(dComIfGp_event_getPt1()) == PROC_NPC_SO &&
+         fopAcM_GetName(dComIfGp_event_getPt1()) == fpcNm_NPC_SO_e &&
          ((daNpc_So_c*)dComIfGp_event_getPt1())->getMiniGameRestArrow() > 0))
     {
-        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, fopAcM_GetRoomNo(this));
+        fopAc_ac_c* arrow_p = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_ARROW_e, 0, &current.pos, fopAcM_GetRoomNo(this));
         mActorKeepEquip.setData(arrow_p);
     }
     m355C = 0;
@@ -83,7 +82,7 @@ void daPy_lk_c::makeArrow() {
 void daPy_lk_c::deleteArrow() {
     fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
 
-    if (equip_actor != NULL && fopAcM_GetName(equip_actor) == PROC_ARROW) {
+    if (equip_actor != NULL && fopAcM_GetName(equip_actor) == fpcNm_ARROW_e) {
         fopAcM_delete(equip_actor);
         mActorKeepEquip.clearData();
     }
@@ -92,14 +91,14 @@ void daPy_lk_c::deleteArrow() {
 /* 8014A1CC-8014A2A0       .text setBowReadyAnime__9daPy_lk_cFv */
 void daPy_lk_c::setBowReadyAnime() {
     setActAnimeUpper(
-        LKANM_BCK_ARROWSHOOT,
+        dRes_INDEX_LKANM_BCK_ARROWSHOOT_e,
         UPPER_MOVE2_e,
         1.0f,
         m_HIO->mItem.mBow.m.field_0x0 - 0.001f,
         m_HIO->mItem.mBow.m.field_0x0,
         10.0f
     );
-    mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWSHOOTA));
+    mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_ARROWSHOOTA_e));
     m35EC = m_HIO->mItem.mBow.m.field_0x0 - 0.001f;
     setPriTextureAnime(0x70, 0);
     m355E = 10;
@@ -109,7 +108,7 @@ void daPy_lk_c::setBowReadyAnime() {
 /* 8014A2A0-8014A328       .text setBowReloadAnime__9daPy_lk_cFv */
 void daPy_lk_c::setBowReloadAnime() {
     setActAnimeUpper(
-        LKANM_BCK_ARROWRELORD,
+        dRes_INDEX_LKANM_BCK_ARROWRELORD_e,
         UPPER_MOVE2_e,
         m_HIO->mItem.mBow.m.field_0x10,
         m_HIO->mItem.mBow.m.field_0x14,
@@ -117,7 +116,7 @@ void daPy_lk_c::setBowReloadAnime() {
         m_HIO->mItem.mBow.m.field_0x18
     );
     setPriTextureAnime(0x8d, 0);
-    mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWRELORDA));
+    mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_ARROWRELORDA_e));
     m35EC = 0.0f;
     seStartOnlyReverb(JA_SE_LK_DRAW_BOW);
 }
@@ -128,7 +127,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
         daArrow_c* arrow = (daArrow_c*)mActorKeepEquip.getActor();
         if (m355C != 0) {
             setActAnimeUpper(
-                LKANM_BCK_ARROWSHOOT,
+                dRes_INDEX_LKANM_BCK_ARROWSHOOT_e,
                 UPPER_MOVE2_e,
                 m_HIO->mItem.mBow.m.field_0x4,
                 m_HIO->mItem.mBow.m.field_0x8,
@@ -136,7 +135,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
                 m_HIO->mItem.mBow.m.field_0xC
             );
             setPriTextureAnime(0x70, 0);
-            mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_ARROWSHOOTA));
+            mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_ARROWSHOOTA_e));
             m35EC = 0.0f;
         } else if (bowButton() == NULL) {
             if (arrow != NULL) {
@@ -151,7 +150,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
             }
             m355C = 1;
         } else if (daArrow_c::changeArrowMp()) {
-            if (mEquipItem != dItem_BOW_e) {
+            if (mEquipItem != dItemNo_BOW_e) {
                 dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                 if (spActionTrigger() && arrow != NULL) {
                     mActorKeepEquip.setData(arrow->changeArrowType());
@@ -161,8 +160,8 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
         }
     } else if (checkBowReloadAnime()) {
         if (mFrameCtrlUpper[UPPER_MOVE2_e].getRate() < 0.01f) {
-            setActAnimeUpper(LKANM_BCK_BOWWAIT, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
-            mSwordAnim.changeBckOnly(getItemAnimeResource(LKANM_BCK_BOWWAITA));
+            setActAnimeUpper(dRes_INDEX_LKANM_BCK_BOWWAIT_e, UPPER_MOVE2_e, 1.0f, 0.0f, -1, -1.0f);
+            mSwordAnim.changeBckOnly(getItemAnimeResource(dRes_INDEX_LKANM_BCK_BOWWAITA_e));
             m35EC = 0.0f;
             setPriTextureAnime(0x70, 0);
         }
@@ -178,7 +177,7 @@ BOOL daPy_lk_c::checkNextActionBowReady() {
                     seStartSystem(JA_SE_ITEM_TARGET_OUT);
                 }
             } else if (daArrow_c::changeArrowMp()) {
-                if (mEquipItem != dItem_BOW_e) {
+                if (mEquipItem != dItemNo_BOW_e) {
                     dComIfGp_setRStatus(dActStts_SWAP_MODES_e);
                     if (spActionTrigger()) {
                         daArrow_c::changeArrowTypeNotReady();
@@ -215,21 +214,21 @@ BOOL daPy_lk_c::checkNextBowMode() {
 
 /* 8014A6F4-8014A834       .text setBowModel__9daPy_lk_cFv */
 void daPy_lk_c::setBowModel() {
-    J3DAnmTransform* bck = getItemAnimeResource(LKANM_BCK_ARROWRELORDA);
+    J3DAnmTransform* bck = getItemAnimeResource(dRes_INDEX_LKANM_BCK_ARROWRELORDA_e);
     JKRHeap* oldHeap = setItemHeap();
-    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, LINK_BDL_BOW, 0x37221222);
+    J3DModelData* tmp_modelData = initModel(&mpEquipItemModel, dRes_INDEX_LINK_BDL_BOW_e, 0x37221222);
     int ret = mSwordAnim.init(tmp_modelData, bck, false, J3DFrameCtrl::EMode_LOOP);
     if (!ret) {
         JUT_ASSERT(394, FALSE);
     }
     mDoExt_setCurrentHeap(oldHeap);
     m35EC = 0.0f;
-    J3DMaterial* lineMat_mtl = mpEquipItemModel->getModelData()->getJointNodePointer(0x00)->getMesh()->getNext();
+    J3DMaterial* lineMat_mtl = mpEquipItemModel->getModelData()->getJointNodePointer(LINK_BOW_JNT_CL_BOW_e)->getMesh()->getNext();
     J3DMaterial* lineDamMAT_mtl = lineMat_mtl->getNext();
     lineMat_mtl->getShape()->show();
     lineDamMAT_mtl->getShape()->hide();
-    tmp_modelData->getJointNodePointer(6)->setCallBack(daPy_bowJointCB);
-    tmp_modelData->getJointNodePointer(11)->setCallBack(daPy_bowJointCB);
+    tmp_modelData->getJointNodePointer(LINK_BOW_JNT_LINEAB_JNT_e)->setCallBack(daPy_bowJointCB);
+    tmp_modelData->getJointNodePointer(LINK_BOW_JNT_LINEBB_JNT_e)->setCallBack(daPy_bowJointCB);
     mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
 }
 
@@ -246,7 +245,7 @@ BOOL daPy_lk_c::procBowSubject_init() {
     }
     setSingleMoveAnime(ANM_ATNRS, 0.0f, 0.0f, -1, m_HIO->mBasic.m.field_0xC);
 
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
 
     dComIfGp_setPlayerStatus0(0, daPyStts0_BOW_AIM_e);
 
@@ -301,7 +300,7 @@ BOOL daPy_lk_c::procBowMove() {
     }
     if (!checkNextMode(0)) {
         f32 fVar1 = -1.0f;
-        if (std::fabsf(mVelocity) < 0.001f) {
+        if (std::fabsf(mNormalSpeed) < 0.001f) {
             onModeFlg(ModeFlg_00000001);
             if (mDirection != DIR_RIGHT) {
                 mDirection = DIR_RIGHT;

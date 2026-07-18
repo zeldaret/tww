@@ -8,93 +8,155 @@
 
 class daNpc_Ho_c : public fopAc_ac_c {
 public:
-    void ChkOrder(unsigned char) {}
-    void ClrOrder() {}
-    void SetOrder(unsigned char) {}
-    void chkFlag(unsigned short) {}
-    void clrFlag(unsigned short) {}
-    void getBackboneJntNum() {}
-    void getBackbone_y() {}
-    void getHeadJntNum() {}
-    void getHead_x() {}
-    void getHead_y() {}
-    void incAttnSetCount() {}
-    void setAction(int (daNpc_Ho_c::*)(void*), void*) {}
-    void setAttentionBasePos(cXyz) {}
-    void setEyePos(cXyz) {}
-    void setFlag(unsigned short) {}
 
-    void XyCheckCB(int);
+    enum HoFlags {
+        HO_FLAG_00000001 = 0x00000001,
+        HO_FLAG_00000004 = 0x00000004,
+        HO_FLAG_00000008 = 0x00000008,
+        HO_FLAG_00000010 = 0x00000010,
+        HO_FLAG_00000020 = 0x00000020,
+    };
+
+    enum HoStates {
+        HO_STATE_WAIT_01 = 0,
+        HO_STATE_TALK_01 = 1,
+        HO_STATE_TALK_02 = 2,
+        HO_STATE_TALK_03 = 3,
+        HO_STATE_TALK_03_CONTINUE = 4,
+        HO_STATE_GIVE_01 = 5,
+        HO_STATE_GIVE_02 = 6,
+        HO_STATE_PREACH = 7
+
+    };
+
+    enum ActionStatus {
+        ACTION_STARTING = 0,
+        ACTION_ONGOING = 1,
+        ACTION_ENDING = -1,
+    };
+
+    enum TalkStates {
+        TALK_INIT = 0,
+        TALK_MSG_CREATE = 1,
+        TALK_ACTIVE = 2,
+        TALK_FINISHED = -1
+    };
+    
+    typedef int (daNpc_Ho_c::*ActionFunc)(void*);
+
+    BOOL ChkOrder(u8 flag) { return mOrderFlags & flag; }
+    void ClrOrder() { mOrderFlags = 0; }
+    void SetOrder(u8 temp) { mOrderFlags |= temp; }
+    bool chkFlag(u16 flag) { return (mFlags & flag) == flag; }
+    void clrFlag(u16 flag) { mFlags &= ~flag; }
+
+    s8 getBackboneJntNum() { return m_jnt.getBackboneJntNum(); }
+    s8 getHeadJntNum() { return m_jnt.getHeadJntNum(); }
+    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
+    s16 getHead_x() { return m_jnt.getHead_x(); }
+    s16 getHead_y() { return m_jnt.getHead_y(); }
+
+    void incAttnSetCount() {
+        if (mAttnSetCount != 0xff) {
+            mAttnSetCount++;
+        }  
+    }
+
+    BOOL setAction(ActionFunc actionFunc, void* arg) {
+        if (mCurrActionFunc != actionFunc) {
+            if (mCurrActionFunc != NULL) {
+                mActionStatus = ACTION_ENDING;
+                (this->*mCurrActionFunc)(arg);
+            }
+            mCurrActionFunc = actionFunc;
+            mActionStatus = ACTION_STARTING;
+            (this->*mCurrActionFunc)(arg);
+        }
+        return TRUE;
+    }
+
+    void setAttentionBasePos(cXyz i_attnBasePos) { mAttnBasePos = i_attnBasePos; }
+    void setEyePos(cXyz i_eyePos) { mEyePos = i_eyePos; }
+    void setFlag(u16 flag) { mFlags |= flag; }
+
+    s16 XyCheckCB(int);
     void receivePendant(int);
-    void initTexPatternAnm(bool);
+    BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
-    void setAnm(signed char);
+    void setAnm(s8);
     void setAnmStatus();
-    void chkAttentionLocal();
+    bool chkAttentionLocal();
     void chkAttention();
     void eventOrder();
     void checkOrder();
-    void next_msg_sub0(unsigned long);
-    void next_msgStatus(unsigned long*);
-    void getMsg();
+    u32 next_msg_sub0(u32);
+    u16 next_msgStatus(u32*);
+    u32 getMsg();
     void setCollision();
     void msgPushButton();
-    void msgAnm(unsigned char);
+    void msgAnm(u8);
     void talkInit();
-    void talk();
-    void init();
+    u16 talk();
+    BOOL init();
     void setAttention(bool);
     void lookBack();
-    void wait01();
-    void talk01();
-    void talk02();
-    void talk03();
-    void give01();
-    void give02();
-    void preach();
-    void wait_action(void*);
+    bool wait01();
+    bool talk01();
+    bool talk02();
+    bool talk03();
+    bool give01();
+    bool give02();
+    bool preach();
+    BOOL wait_action(void*);
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void CreateHeap();
+    BOOL CreateHeap();
 
 public:
-    /* 0x290 */ u8 m290[0x298 - 0x290];
-    /* 0x298 */ mDoExt_McaMorf* mpMcaMorf;
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ mDoExt_McaMorf* mpMorf;
     /* 0x29C */ J3DModel* mpJoyPendentModel;
-    /* 0x2A0 */ u8 m2A0[0x2A4 - 0x2A0];
-    /* 0x2A4 */ J3DAnmTexPattern* mpCurrentBtpAnim;
-    /* 0x2A8 */ mDoExt_btpAnm mBtpAnimator;
-    /* 0x2BC */ u8 mBtpTimer;
-    /* 0x2BD */ u8 m2BD[0x2BE - 0x2BD];
-    /* 0x2BE */ s16 mTimer1;
-    /* 0x2C0 */ dBgS_Acch mAcch;
+    /* 0x2A0 */ u32 mShadowId;
+    /* 0x2A4 */ J3DAnmTexPattern* m_head_tex_pattern;
+    /* 0x2A8 */ mDoExt_btpAnm mBtpAnm;
+    /* 0x2BC */ u8 mBlinkFrame;
+    /* 0x2BD */ u8 field_0x2BD[0x2BE - 0x2BD];
+    /* 0x2BE */ s16 mBlinkTimer;
+    /* 0x2C0 */ dBgS_ObjAcch mObjAcch;
     /* 0x484 */ dBgS_AcchCir mAcchCir;
     /* 0x4C4 */ dCcD_Stts mStts;
-    /* 0x500 */ dCcD_Cyl mCylinderCollision;
-    /* 0x630 */ dNpc_JntCtrl_c* mpJointControl;
-    /* 0x634 */ u8 m634[0x638 - 0x634];
-    /* 0x638 */ u8 mHeadJointIndex;
-    /* 0x639 */ u8 mBackboneJointIndex;
-    /* 0x63A */ u8 m63A[0x664 - 0x63A];
+    /* 0x500 */ dCcD_Cyl mCyl;
+    /* 0x630 */ dNpc_JntCtrl_c m_jnt;
     /* 0x664 */ cXyz mEyePos;
-    /* 0x670 */ cXyz mAttentionBasePos;
-    /* 0x67C */ u8 m67C[0x680 - 0x67C];
-    /* 0x680 */ f32 mLastMorftime;
-    /* 0x684 */ int mCurrentMessageId;
-    /* 0x688 */ u8 m688[0x68C - 0x688];
-    /* 0x68C */ u8 mCurrentSpeakingAnimIdx;
-    /* 0x68D */ u8 m68D[0x690 - 0x68D];
+    /* 0x670 */ cXyz mAttnBasePos;
+    /* 0x67C */ s16 mMaxHeadTurnVelocity;
+    /* 0x67E */ s8 mAnmEnded;
+    /* 0x67F */ u8 mAttnSetCount;
+    /* 0x680 */ f32 mAnmTimer;
+    /* 0x684 */ u32 mCurrMsgNo;
+    /* 0x688 */ u16 mFlags;
+    /* 0x68A */ u8 mAttentionTimer;
+    /* 0x68B */ u8 mMsgSelectNum;
+    /* 0x68C */ u8 mMsgAnmIdx;
+    /* 0x68D */ u8 mAnmLoopCount;
+    /* 0x68E */ u8 mItemNum;
+    /* 0x68F */ u8 field_0x68F[0x690 - 0x68F];
     /* 0x690 */ int mNextMessageId;
-    /* 0x694 */ f32 mCylinderCollisionRadius;
-    /* 0x698 */ u8 m698[0x6A5 - 0x698];
-    /* 0x6A5 */ s8 mCurrentAnimIndex;
-    /* 0x6A6 */ u8 m6A6[0x6A7 - 0x6A6];
-    /* 0x6A7 */ u8 mCurrentState;
-    /* 0x6A8 */ u8 m6A8[0x6AC - 0x6A8];
-    /* 0x6AC */ int mCurrentFloorSoundId;
-    /* 0x6B0 */ u8 m6B0[0x6B4 - 0x6B0];
-};
+    /* 0x694 */ f32 mCylCollisionRadius;
+    /* 0x698 */ ActionFunc mCurrActionFunc;
+    /* 0x6A4 */ s8 mTexPatternIdx;
+    /* 0x6A5 */ s8 mCurrAnmIdx;
+    /* 0x6A6 */ s8 mOrderFlags;
+    /* 0x6A7 */ s8 mState;
+    /* 0x6A8 */ s8 mPrevState;
+    /* 0x6A9 */ u8 mType;
+    /* 0x6AA */ s8 mActionStatus;
+    /* 0x6AB */ s8 mTalkState;
+    /* 0x6AC */ u32 mtrlSndId;
+    /* 0x6B0 */ s8 mReverb;
+    /* 0x6B1 */ u8 field_0x6B1[0x6B4 - 0x6B1];
+};  // Size: 0x6B4
 
 #endif /* D_A_NPC_HO_H */

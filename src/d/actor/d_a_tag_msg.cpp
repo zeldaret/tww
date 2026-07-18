@@ -7,8 +7,6 @@
 #include "d/actor/d_a_tag_msg.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
@@ -132,7 +130,7 @@ static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
     int message = a_this->getMessage();
     switch (msg_mode / 1) {
     case 0:
-        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), 4)) {
+        if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
             msg_mode++;
         }
         break;
@@ -238,7 +236,7 @@ BOOL daTag_Msg_c::execute() {
 
 cPhs_State daTag_Msg_c::create() {
     int swBit;
-    fopAcM_SetupActor(this, daTag_Msg_c);
+    fopAcM_ct(this, daTag_Msg_c);
     swBit = (int)(getSwbit() & 0xFF);
     if ((getMessage() == 0x9c5) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0502)) {
         setActio(0);
@@ -290,18 +288,18 @@ static actor_method_class l_daTag_Msg_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_MSG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_MSG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_MSG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Msg_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_MSG,
+    /* Draw Prio    */ fpcDwPi_TAG_MSG_e,
     /* Actor SubMtd */ &l_daTag_Msg_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

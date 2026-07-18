@@ -5,15 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_photo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_a_obj.h"
 #include "d/d_path.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
-#include "d/res/res_po.h"
+#include "res/Object/Po.h"
 #include "d/d_snap.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_picture_box.h"
@@ -506,16 +504,16 @@ static char* l_npc_staff_id = {
 };
 
 static const int l_bck_ix_tbl[] = {
-    PO_BCK_WAIT01,
-    PO_BCK_TALK01,
-    PO_BCK_TALK02,
-    PO_BCK_WALK01,
-    PO_BCK_SPIT,
+    dRes_ID_PO_BCK_WAIT01_e,
+    dRes_ID_PO_BCK_TALK01_e,
+    dRes_ID_PO_BCK_TALK02_e,
+    dRes_ID_PO_BCK_WALK01_e,
+    dRes_ID_PO_BCK_SPIT_e,
 };
 
 static const int l_btp_ix_tbl[] = {
-    PO_BTP_MABA01,
-    PO_BTP_MABA02
+    dRes_ID_PO_BTP_MABA01_e,
+    dRes_ID_PO_BTP_MABA02_e
 };
 
 struct SaveDatStruct {
@@ -615,15 +613,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000878-0000095C       .text phase_1__FP12daNpcPhoto_c */
 static cPhs_State phase_1(daNpcPhoto_c* i_this) {
-    fopAcM_SetupActor(i_this, daNpcPhoto_c);
+    fopAcM_ct(i_this, daNpcPhoto_c);
     s16 arg0 = i_this->getPrmArg0();
     if(arg0 != 255){
         if(arg0 == 0){
-            if(!dComIfGs_checkGetItem(dItem_COLLECT_MAP_20_e) && arg0 != dComIfGp_getStartStagePoint()){
+            if(!dComIfGs_checkGetItem(dItemNo_COLLECT_MAP_20_e) && arg0 != dComIfGp_getStartStagePoint()){
                 return cPhs_STOP_e;
             }
         } else{
-            if(dComIfGs_checkGetItem(dItem_COLLECT_MAP_20_e) || arg0 != dComIfGp_getStartStagePoint()) {
+            if(dComIfGs_checkGetItem(dItemNo_COLLECT_MAP_20_e) || arg0 != dComIfGp_getStartStagePoint()) {
                 return cPhs_STOP_e;
             }
             i_this->field_0x9C1 = 4;
@@ -659,13 +657,13 @@ cPhs_State daNpcPhoto_c::_create() {
 
 /* 00000A04-00000CA0       .text createHeap__12daNpcPhoto_cFv */
 BOOL daNpcPhoto_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectIDRes(l_arcname_tbl[0], PO_BDL_PO);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectIDRes(l_arcname_tbl[0], dRes_ID_PO_BDL_PO_e);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
         (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_bck_ix_tbl[field_0x9C8]),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1, NULL,
-        0x80000,0x11020022
+        0x80000, 0x11020022
     );
 
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
@@ -712,14 +710,14 @@ cPhs_State daNpcPhoto_c::createInit() {
     u8 pathIndex = getPrmRailID();
     if(pathIndex != 0xFF) {
         mPathRun.setInf(pathIndex, fopAcM_GetRoomNo(this), true);
-        if(mPathRun.mPath == NULL) {
+        if(!mPathRun.isPath()) {
             return cPhs_ERROR_e;
         }
 
-        dPath_GetNextRoomPath(mPathRun.mPath, -1);
+        dPath_GetNextRoomPath(mPathRun.getPath(), -1);
         
         if(dComIfGs_isEventBit(l_save_dat.field_0x02)) {
-            cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+            cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             old.pos = point;
             current.pos = old.pos;
             mPathRun.incIdxLoop();
@@ -939,7 +937,7 @@ void daNpcPhoto_c::executeSetMode(u8 param_1) {
             field_0x9A8 = l_npc_dat.field_0x4E + cM_rndF(l_npc_dat.field_0x50 - l_npc_dat.field_0x4E);
             break;
         case 3:
-            cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+            cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
     
             if (angle == current.angle.y) {
@@ -963,14 +961,11 @@ void daNpcPhoto_c::executeWait() {
         
         if(!dComIfGs_isEventBit(l_save_dat.field_0x02)){
             field_0x988 = 150.0f;
-            f32 zPos = l_npc_dat.field_0x34;
-            field_0x958.x = 0.0f;
-            field_0x958.y = 0.0f;
-            field_0x958.z = zPos;
+            field_0x958.set(0.0f, 0.0f, l_npc_dat.field_0x34);
 
             if(mCyl.ChkCoHit()) {
                 daNpcPhoto_c* pActor = (daNpcPhoto_c*)mCyl.GetCoHitAc();
-                if(pActor && fopAcM_GetProfName(pActor) == PROC_PLAYER) {
+                if(pActor && fopAcM_GetProfName(pActor) == fpcNm_PLAYER_e) {
                     field_0x9BE = 2;
                 }
 
@@ -997,7 +992,7 @@ void daNpcPhoto_c::executeWait() {
                 for (int i = 0; i < 2; i++) {
                     if (field_0x6F8[i].ChkCoHit()) {
                         daNpcPhoto_c* pActor = (daNpcPhoto_c*)field_0x6F8[i].GetCoHitAc();
-                        if(pActor != NULL && fopAcM_GetProfName(pActor) == PROC_PLAYER) {
+                        if(pActor != NULL && fopAcM_GetProfName(pActor) == fpcNm_PLAYER_e) {
                             field_0x9CD = true;
                             break;
                         }
@@ -1061,14 +1056,14 @@ void daNpcPhoto_c::executeTalk() {
 void daNpcPhoto_c::executeWalk() {
     if(!executeCommon()) {
         bool temp = false;
-        if(mPathRun.chkPointPass(current.pos, mPathRun.mbGoingForwards) && !mPathRun.nextIdxAuto()) {
+        if(mPathRun.chkPointPass(current.pos, mPathRun.getDir()) && !mPathRun.nextIdxAuto()) {
             temp = true;
         }
 
         if (field_0x9BD != 0) {
             executeSetMode(0);
         } else if (!temp) {
-            cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+            cXyz point = mPathRun.getPoint(mPathRun.getIdx());
             s16 angle;
             dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
             field_0x9BA = angle;
@@ -1078,9 +1073,9 @@ void daNpcPhoto_c::executeWalk() {
             m_jnt.setTrn(); 
             field_0x984 = l_npc_dat.field_0x3C;
 
-            u8 pointIndex = mPathRun.mCurrPointIndex;
+            u8 pointIndex = mPathRun.getIdx();
 
-            if (mPathRun.mbGoingForwards) {
+            if (mPathRun.getDir()) {
                 pointIndex--;
             } else {
                 pointIndex++;
@@ -1103,7 +1098,7 @@ void daNpcPhoto_c::executeWalk() {
 void daNpcPhoto_c::executeTurn() {
     if (!executeCommon()) {
         s16 angle;
-        cXyz point = mPathRun.getPoint(mPathRun.mCurrPointIndex);
+        cXyz point = mPathRun.getPoint(mPathRun.getIdx());
         dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle); // maybe not oldpos
         field_0x9BA = angle;
         field_0x994 = false;
@@ -1398,7 +1393,7 @@ void daNpcPhoto_c::eventPosSetInit() {
 
     if(ac){
         cXyz temp = ac->current.pos;
-        dPath* path = dPath_GetNextRoomPath(mPathRun.mPath, fopAcM_GetRoomNo(this));
+        dPath* path = dPath_GetNextRoomPath(mPathRun.getPath(), fopAcM_GetRoomNo(this));
         
         if(path != NULL){
             dPnt* pnt = dPath_GetPnt(path, ac->getTagNo());
@@ -1432,8 +1427,8 @@ void daNpcPhoto_c::eventPosSetInit() {
         shape_angle.y = current.angle.y = field_0x9AE = angle;
     }
     dComIfGp_event_setTalkPartner(this);
-    mPathRun.mCurrPointIndex = mPathRun.mPath->m_num - 2;
-    mPathRun.mbGoingForwards = false;
+    mPathRun.setIdx(mPathRun.getPath()->m_num - 2);
+    mPathRun.setDir(0);
 
     executeSetMode(0);
     field_0x9C1 = 1;
@@ -1749,19 +1744,19 @@ u32 daNpcPhoto_c::getMsg() {
     } else if(dComIfGp_event_chkTalkXY()) {
         u32 itemNo = dComIfGp_event_getPreItemNo();
 
-        if(itemNo == CAMERA2 && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)) {
+        if(itemNo == dItemNo_DELUXE_PICTO_BOX_e && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)) {
             if (dComIfGs_getPictureNum() < 3) {
                 field_0x980 = l_msg_xy_buy_photo;
-                mItemNo = SALVAGE_ITEM1;
+                mItemNo = dItemNo_LEGENDARY_PICTOGRAPH_e;
             } else {
                 msgNo = 0x3787;
             }
-        } else if(itemNo == dItem_FIREFLY_BOTTLE_e) {
-            if(eventReg >= 6 && !dComIfGs_checkGetItem(CAMERA2)) {
+        } else if(itemNo == dItemNo_FIREFLY_BOTTLE_e) {
+            if(eventReg >= 6 && !dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)) {
                 field_0x980 = l_msg_color_xy;
                 field_0x9D0 = 0;
                 dComIfGs_setEquipBottleItemEmpty();
-                mItemNo = CAMERA2;
+                mItemNo = dItemNo_DELUXE_PICTO_BOX_e;
             } else{
                 msgNo = 0x2A57;
             }
@@ -1778,7 +1773,7 @@ u32 daNpcPhoto_c::getMsg() {
         if(field_0x9C1 == 1) {
             msgNo = mMsgNno;
         } else {
-            if(dComIfGs_checkGetItem(CAMERA2)) {
+            if(dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)) {
                 if(dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0301)) {
                     field_0x980 = (u32*)l_msg_buy_photo;
                     field_0x9D0 = 0;
@@ -1834,7 +1829,7 @@ u32 daNpcPhoto_c::getMsg() {
                 }
             }
         } 
-    } else if(dComIfGs_checkGetItem(CAMERA) || dComIfGs_checkGetItem(CAMERA2)) {
+    } else if(dComIfGs_checkGetItem(dItemNo_PICTO_BOX_e) || dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)) {
         if(!dComIfGs_isEventBit(l_save_dat.field_0x02)) {
             field_0x980 = l_msg_1st_photo;
             field_0x9D0 = 0;
@@ -2149,7 +2144,7 @@ s16 daNpcPhoto_c::XyCheckCB(int i_itemBtn) {
 s16 daNpcPhoto_c::XyEventCB(int i_itemBtn) {
     s16 eventIdx;
     u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
-    if(itemNo == CAMERA2 && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)){
+    if(itemNo == dItemNo_DELUXE_PICTO_BOX_e && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)){
         if(dComIfGs_getPictureNum() < 3){
             eventIdx = mPhotoGetPhotoEventIdx;
             field_0x9C7 = false;
@@ -2157,7 +2152,7 @@ s16 daNpcPhoto_c::XyEventCB(int i_itemBtn) {
             return dComIfGp_evmng_getEventIdx("DEFAULT_TALK_XY",0xff);
         }
     } else {
-        if(itemNo == dItem_FIREFLY_BOTTLE_e && dComIfGs_getEventReg(l_save_dat.field_0x06) >= 6 && !dComIfGs_checkGetItem(CAMERA2)){
+        if(itemNo == dItemNo_FIREFLY_BOTTLE_e && dComIfGs_getEventReg(l_save_dat.field_0x06) >= 6 && !dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)){
             eventIdx = mPhotoGetItem2EventIdx;
             field_0x9C7 = false;
         } else {
@@ -2276,18 +2271,18 @@ static actor_method_class daNpc_PhotoMethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_PHOTO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_PHOTO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_PHOTO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpcPhoto_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_PHOTO,
+    /* Draw Prio    */ fpcDwPi_NPC_PHOTO_e,
     /* Actor SubMtd */ &daNpc_PhotoMethodTable,
     /* Status       */ 0x07 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

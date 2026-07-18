@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gtaki.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
-#include "d/res/res_gtaki.h"
+#include "res/Object/Gtaki.h"
 #include "m_Do/m_Do_graphic.h"
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -65,12 +63,12 @@ void daObjGtaki_c::setDummyTexture() {
 
 /* 00000280-00000484       .text CreateHeap__12daObjGtaki_cFv */
 BOOL daObjGtaki_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", GTAKI_BDL_GTAKI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", dRes_INDEX_GTAKI_BDL_GTAKI_e);
     JUT_ASSERT(DEMO_SELECT(265, 267), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if(mpModel == NULL) return FALSE;
 
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", GTAKI_BTK_GTAKI));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", dRes_INDEX_GTAKI_BTK_GTAKI_e));
     JUT_ASSERT(DEMO_SELECT(275, 277), btk != NULL);
     mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, 0);
     setDummyTexture();
@@ -82,7 +80,7 @@ BOOL daObjGtaki_c::CreateHeap() {
 
     mpBgW = new dBgW();
     
-    if(!mpBgW || mpBgW->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Gtaki", GTAKI_DZB_ITAKI)), cBgW::MOVE_BG_e, &mMtx)){
+    if(!mpBgW || mpBgW->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Gtaki", dRes_INDEX_GTAKI_DZB_ITAKI_e)), cBgW::MOVE_BG_e, &mMtx)){
         return FALSE;
     }
 
@@ -138,7 +136,7 @@ static cPhs_State daObjGtaki_Create(void* i_this) {
 
 /* 000006A4-0000087C       .text _create__12daObjGtaki_cFv */
 cPhs_State daObjGtaki_c::_create() {
-    fopAcM_SetupActor(this, daObjGtaki_c);
+    fopAcM_ct(this, daObjGtaki_c);
     cPhs_State state = dComIfG_resLoad(&mPhase, "Gtaki");
     if(state == cPhs_COMPLEATE_e){
         if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, DEMO_SELECT(0xD20, 0x3450))){
@@ -213,18 +211,18 @@ static actor_method_class daObj_GtakiMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Gtaki = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Gtaki,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Gtaki_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGtaki_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gtaki,
+    /* Draw Prio    */ fpcDwPi_Obj_Gtaki_e,
     /* Actor SubMtd */ &daObj_GtakiMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

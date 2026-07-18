@@ -7,8 +7,6 @@
 #include "d/actor/d_a_tag_etc.h"
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 enum Action {
     ACT_WAIT,
@@ -104,7 +102,7 @@ cPhs_State daTag_Etc_c::create() {
     float fVar1;
     u8 stageEVNTListIndex;
 
-    fopAcM_SetupActor(this, daTag_Etc_c);
+    fopAcM_ct(this, daTag_Etc_c);
 
     stageEVNTListIndex = getEventNo();
     mEventIdx = dComIfGp_evmng_getEventIdx(NULL, stageEVNTListIndex);
@@ -252,18 +250,18 @@ static actor_method_class l_daTag_Etc_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_ETC = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_ETC,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_ETC_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Etc_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_ETC,
+    /* Draw Prio    */ fpcDwPi_TAG_ETC_e,
     /* Actor SubMtd */ &l_daTag_Etc_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

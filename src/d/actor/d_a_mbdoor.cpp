@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mbdoor.h"
-#include "d/res/res_mbdoor.h"
-#include "d/res/res_gbdoor.h"
+#include "res/Object/Mbdoor.h"
+#include "res/Object/Gbdoor.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -56,9 +54,9 @@ const char* daMbdoor_c::getArcName() {
 u32 daMbdoor_c::getFuBdl() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_BDL_V_GBDFU;
+        return dRes_INDEX_GBDOOR_BDL_V_GBDFU_e;
     default:
-        return MBDOOR_BDL_S_MBDFU;
+        return dRes_INDEX_MBDOOR_BDL_S_MBDFU_e;
     }
 }
 
@@ -66,9 +64,9 @@ u32 daMbdoor_c::getFuBdl() {
 u32 daMbdoor_c::getLBdl() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_BDL_V_GBD_L;
+        return dRes_INDEX_GBDOOR_BDL_V_GBD_L_e;
     default:
-        return MBDOOR_BDL_S_MBD_L;
+        return dRes_INDEX_MBDOOR_BDL_S_MBD_L_e;
     }
 }
 
@@ -76,9 +74,9 @@ u32 daMbdoor_c::getLBdl() {
 u32 daMbdoor_c::getRBdl() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_BDL_V_GBD_R;
+        return dRes_INDEX_GBDOOR_BDL_V_GBD_R_e;
     default:
-        return MBDOOR_BDL_S_MBD_R;
+        return dRes_INDEX_MBDOOR_BDL_S_MBD_R_e;
     }
 }
 
@@ -86,9 +84,9 @@ u32 daMbdoor_c::getRBdl() {
 u32 daMbdoor_c::getToBdl() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_BDL_V_GBDTO;
+        return dRes_INDEX_GBDOOR_BDL_V_GBDTO_e;
     default:
-        return MBDOOR_BDL_S_MBDTO;
+        return dRes_INDEX_MBDOOR_BDL_S_MBDTO_e;
     }
 }
 
@@ -96,9 +94,9 @@ u32 daMbdoor_c::getToBdl() {
 u32 daMbdoor_c::getDzb() {
     switch (getShapeType()) {
     case 1:
-        return GBDOOR_DZB_GBD;
+        return dRes_INDEX_GBDOOR_DZB_GBD_e;
     default:
-        return MBDOOR_DZB_S_MBDFU;
+        return dRes_INDEX_MBDOOR_DZB_S_MBDFU_e;
     }
 }
 
@@ -257,17 +255,13 @@ BOOL daMbdoor_c::CreateInit() {
 /* 00000A44-00000AF4       .text create__10daMbdoor_cFv */
 cPhs_State daMbdoor_c::create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, getArcName());
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daMbdoor_c);
-#endif
+    fopAcM_ct_Retail(this, daMbdoor_c);
     
     if (phase_state != cPhs_COMPLEATE_e) {
         return phase_state;
     }
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, daMbdoor_c);
-#endif
+    fopAcM_ct_Demo(this, daMbdoor_c);
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x8200)) {
         return cPhs_ERROR_e;
@@ -600,18 +594,18 @@ static actor_method_class l_daMbdoor_Method = {
 };
 
 actor_process_profile_definition g_profile_MBDOOR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MBDOOR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MBDOOR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMbdoor_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MBDOOR,
+    /* Draw Prio    */ fpcDwPi_MBDOOR_e,
     /* Actor SubMtd */ &l_daMbdoor_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

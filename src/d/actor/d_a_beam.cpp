@@ -7,12 +7,10 @@
 #include "d/actor/d_a_beam.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_hot_floor.h"
-#include "d/res/res_ylesr00.h"
+#include "res/Object/Ylesr00.h"
 #include "d/d_cc_d.h"
 #include "d/d_lib.h"
 #include "d/d_particle.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_a_obj.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
@@ -128,19 +126,19 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 000003D0-00000688       .text CreateHeap__8daBeam_cFv */
 BOOL daBeam_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BMD_YLESR00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YLESR00_BMD_YLESR00_e));
     JUT_ASSERT(304, modelData != NULL);
 
     M_mdl = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     JUT_ASSERT(306, M_mdl != NULL);
 
-    M_bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BCK_YLESR00));
+    M_bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YLESR00_BCK_YLESR00_e));
     JUT_ASSERT(310, M_bck != NULL);
 
-    M_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BRK_YLESR00));
+    M_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YLESR00_BRK_YLESR00_e));
     JUT_ASSERT(314, M_brk != NULL);
 
-    M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, YLESR00_INDEX_BTK_YLESR00));
+    M_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YLESR00_BTK_YLESR00_e));
     JUT_ASSERT(318, M_brk != NULL);
 
     BOOL tmp1 = mBckAnm.init(modelData, M_bck, false, J3DFrameCtrl::EMode_LOOP);
@@ -158,7 +156,7 @@ void daBeam_AtHitCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c* arg2
     daBeam_c* i_this = (daBeam_c*)arg0;
 
     if (fopAcM_IsActor(arg2)) {
-        if (fopAcM_GetName(arg2) == PROC_PLAYER) {
+        if (fopAcM_GetName(arg2) == fpcNm_PLAYER_e) {
             fopAcM_seStartCurrent(arg2, JA_SE_LK_BEAM_HIT, 0);
 
             if (i_this->m54C != 0) {
@@ -173,7 +171,7 @@ void daBeam_AtHitCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c* arg2
                 arg1->SetAtVec(sp20);
                 arg3->SetTgRVec(sp20);
             }
-        } else if (fopAcM_GetName(arg2) == PROC_AM2) {
+        } else if (fopAcM_GetName(arg2) == fpcNm_AM2_e) {
             arg3->ClrTgHit();
         }
 
@@ -189,7 +187,7 @@ void daBeam_AtHitDummyCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c*
     daBeam_c* i_this = (daBeam_c*)arg0;
 
     if (fopAcM_IsActor(arg2)) {
-        if (fopAcM_GetName(arg2) == PROC_PLAYER) {
+        if (fopAcM_GetName(arg2) == fpcNm_PLAYER_e) {
             fopAcM_seStartCurrent(arg2, JA_SE_LK_BEAM_HIT, 0);
 
             if (i_this->m54C != 0) {
@@ -203,7 +201,7 @@ void daBeam_AtHitDummyCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c*
                 arg1->SetAtVec(sp20);
                 arg3->SetTgRVec(sp20);
             }
-        } else if (fopAcM_GetName(arg2) == PROC_AM2) {
+        } else if (fopAcM_GetName(arg2) == fpcNm_AM2_e) {
             arg3->ClrTgHit();
         }
     }
@@ -212,7 +210,7 @@ void daBeam_AtHitDummyCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c*
 /* 00000A00-00000AA0       .text daBeam_checkHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daBeam_checkHitCallback(fopAc_ac_c* arg0, dCcD_GObjInf* arg1, fopAc_ac_c* arg2, dCcD_GObjInf* arg3) {
     if (fopAcM_IsActor(arg2) && arg0->parentActorID != fopAcM_GetID(arg2)) {
-        if (fopAcM_GetName(arg2) != PROC_PLAYER || arg1->ChkAtShieldHit()) {
+        if (fopAcM_GetName(arg2) != fpcNm_PLAYER_e || arg1->ChkAtShieldHit()) {
             daBeam_c* i_this = (daBeam_c*)arg0;
             i_this->m540 = *i_this->mCps2.GetAtHitPosP();
             i_this->m53C = true;
@@ -403,7 +401,7 @@ bool daBeam_c::_execute() {
                     parameters |= 2;
                 }
 
-                m684 = fopAcM_create(PROC_Hot_Floor, parameters, &m668);
+                m684 = fopAcM_create(fpcNm_Hot_Floor_e, parameters, &m668);
             }
             m688 = 1.0f;
         } else {
@@ -594,15 +592,10 @@ static cPhs_State daBeamCreate(void* i_this) {
 
 /* 00001CA4-00001D34       .text _create__8daBeam_cFv */
 cPhs_State daBeam_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daBeam_c);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
     if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daBeam_c);
-#else
-    fopAcM_SetupActor(this, daBeam_c);
-    cPhs_State PVar1 = dComIfG_resLoad(&mPhase, M_arcname);
-    if (PVar1 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daBeam_c);
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x22A0)) {
             return CreateInit();
         }
@@ -663,18 +656,18 @@ static actor_method_class daBeamMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Beam = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Beam,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Beam_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daBeam_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Beam,
+    /* Draw Prio    */ fpcDwPi_Beam_e,
     /* Actor SubMtd */ &daBeamMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ftree.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000000DC       .text search_heart_part__Q210daObjFtree5Act_cFv */
 void daObjFtree::Act_c::search_heart_part() {
@@ -386,18 +384,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjFtree
 
 actor_process_profile_definition g_profile_Obj_Ftree = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ftree,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ftree_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjFtree::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ftree,
+    /* Draw Prio    */ fpcDwPi_Obj_Ftree_e,
     /* Actor SubMtd */ &daObjFtree::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

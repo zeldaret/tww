@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mshokki.h"
-#include "d/res/res_mshokki.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Mshokki.h"
 #include "d/d_kankyo.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -143,7 +141,7 @@ BOOL daObjMshokki_c::solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 0000012C-000001FC       .text create_heap__14daObjMshokki_cFv */
 bool daObjMshokki_c::create_heap() {
-    static s32 bdl_idx[] = {MSHOKKI_BDL_POT, MSHOKKI_BDL_OSARA, MSHOKKI_BDL_KOPPU};
+    static s32 bdl_idx[] = {dRes_INDEX_MSHOKKI_BDL_POT_e, dRes_INDEX_MSHOKKI_BDL_OSARA_e, dRes_INDEX_MSHOKKI_BDL_KOPPU_e};
 
     bool uVar3 = true;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, bdl_idx[m60C]);
@@ -250,7 +248,7 @@ void daObjMshokki_c::set_se() {
 
 /* 00000740-00000A1C       .text _create__14daObjMshokki_cFv */
 cPhs_State daObjMshokki_c::_create() {
-    fopAcM_SetupActor(this, daObjMshokki_c);
+    fopAcM_ct(this, daObjMshokki_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         m60C = param_get_arg();
@@ -407,18 +405,18 @@ static actor_method_class l_daObjMshokki_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Mshokki = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Mshokki,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Mshokki_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMshokki_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Mshokki,
+    /* Draw Prio    */ fpcDwPi_Obj_Mshokki_e,
     /* Actor SubMtd */ &l_daObjMshokki_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

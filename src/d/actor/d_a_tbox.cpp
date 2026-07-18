@@ -6,7 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tbox.h"
 #include "d/d_npc.h"
-#include "d/res/res_dalways.h"
+#include "res/Object/Dalways.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_w.h"
@@ -14,8 +14,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
 #include "d/d_particle.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_graphic.h"
@@ -36,36 +34,36 @@ static daTbox_HIO_c l_HIO;
 
 static daTbox_c::modelInfo l_modelInfo[] = {
     {
-        DALWAYS_BDL_BOXA,
-        DALWAYS_BCK_BOXOPENSHORTBOX,
-        DALWAYS_BTK_BOXA,
-        DALWAYS_BRK_BOXA,
-        DALWAYS_DZB_BOXB_00,
-        DALWAYS_DZB_BOXB_01,
+        dRes_INDEX_DALWAYS_BDL_BOXA_e,
+        dRes_INDEX_DALWAYS_BCK_BOXOPENSHORTBOX_e,
+        dRes_INDEX_DALWAYS_BTK_BOXA_e,
+        dRes_INDEX_DALWAYS_BRK_BOXA_e,
+        dRes_INDEX_DALWAYS_DZB_BOXB_00_e,
+        dRes_INDEX_DALWAYS_DZB_BOXB_01_e,
     },
     {
-        DALWAYS_BDL_BOXB,
-        DALWAYS_BCK_BOXOPENBOX,
-        DALWAYS_BTK_BOXB,
-        DALWAYS_BRK_BOXB,
-        DALWAYS_DZB_BOXB_00,
-        DALWAYS_DZB_BOXB_01,
+        dRes_INDEX_DALWAYS_BDL_BOXB_e,
+        dRes_INDEX_DALWAYS_BCK_BOXOPENBOX_e,
+        dRes_INDEX_DALWAYS_BTK_BOXB_e,
+        dRes_INDEX_DALWAYS_BRK_BOXB_e,
+        dRes_INDEX_DALWAYS_DZB_BOXB_00_e,
+        dRes_INDEX_DALWAYS_DZB_BOXB_01_e,
     },
     {
-        DALWAYS_BDL_BOXC,
-        DALWAYS_BCK_BOXOPENBOX,
-        DALWAYS_BTK_BOXC,
-        DALWAYS_BRK_BOXC,
-        DALWAYS_DZB_BOXB_00,
-        DALWAYS_DZB_BOXB_01,
+        dRes_INDEX_DALWAYS_BDL_BOXC_e,
+        dRes_INDEX_DALWAYS_BCK_BOXOPENBOX_e,
+        dRes_INDEX_DALWAYS_BTK_BOXC_e,
+        dRes_INDEX_DALWAYS_BRK_BOXC_e,
+        dRes_INDEX_DALWAYS_DZB_BOXB_00_e,
+        dRes_INDEX_DALWAYS_DZB_BOXB_01_e,
     },
     {
-        DALWAYS_BDL_BOXD,
-        DALWAYS_BCK_BOXOPENBOX,
+        dRes_INDEX_DALWAYS_BDL_BOXD_e,
+        dRes_INDEX_DALWAYS_BCK_BOXOPENBOX_e,
         -1,
         -1,
-        DALWAYS_DZB_BOXD_00,
-        DALWAYS_DZB_BOXD_01,
+        dRes_INDEX_DALWAYS_DZB_BOXD_00_e,
+        dRes_INDEX_DALWAYS_DZB_BOXD_01_e,
     }
 };
 
@@ -132,7 +130,7 @@ cPhs_State daTbox_c::commonShapeSet() {
 
     // Set up Triforce platform for the type that spawns via Wind Waker song
     if (getFuncType() == FUNC_TYPE_TACT) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", DALWAYS_BDL_YTRIF00);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BDL_YTRIF00_e);
         JUT_ASSERT(0xE2, modelData);
 
         mpTactPlatformMdl = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000000);
@@ -140,7 +138,7 @@ cPhs_State daTbox_c::commonShapeSet() {
             return cPhs_ERROR_e;
         }
 
-        J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_YTRIF00);
+        J3DAnmTevRegKey* tactPlatformBrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BRK_YTRIF00_e);
         if (mTactPlatformBrk.init(modelData, tactPlatformBrk, true, J3DFrameCtrl::EMode_NONE) == 0) {
             return cPhs_ERROR_e;
         }
@@ -164,7 +162,7 @@ cPhs_State daTbox_c::commonShapeSet() {
 
 /* 00000598-00000764       .text effectShapeSet__8daTbox_cFv */
 cPhs_State daTbox_c::effectShapeSet() {
-    J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", DALWAYS_BDL_IT_TAKARA_FLASH);
+    J3DModelData* flashModelData = (J3DModelData*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BDL_IT_TAKARA_FLASH_e);
     JUT_ASSERT(0x117, flashModelData != NULL);
 
     mpFlashMdl = mDoExt_J3DModel__create(flashModelData, 0x80000, 0x1000200);
@@ -172,17 +170,17 @@ cPhs_State daTbox_c::effectShapeSet() {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", DALWAYS_BCK_IT_TAKARA_FLASH2);
+    J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BCK_IT_TAKARA_FLASH2_e);
     if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::EMode_NONE) == 0) {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BTK_IT_TAKARA_FLASH);
+    J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BTK_IT_TAKARA_FLASH_e);
     if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::EMode_NONE) == 0) {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", DALWAYS_BRK_IT_TAKARA_FLASH);
+    J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BRK_IT_TAKARA_FLASH_e);
     int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::EMode_NONE);
 
     if (regInit) {
@@ -252,7 +250,7 @@ cPhs_State daTbox_c::bgCheckSet() {
     }
 
     if (getFuncType() == FUNC_TYPE_SWITCH_VISIBLE) {
-        bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", DALWAYS_DZB_KINB_00);
+        bgd = (cBgD_t*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_DZB_KINB_00_e);
         JUT_ASSERT(0x1B9, bgd != NULL);
 
         mpBgWVines = new dBgW();
@@ -495,15 +493,15 @@ void daTbox_c::CreateInit() {
                 switch (funcType) {
                     case FUNC_TYPE_ENEMIES:
                         setAction(&daTbox_c::actionGenocide);
-                        mGenocideDelayTimer = 0x41;
+                        mGenocideDelayTimer = 65;
                         flagOn(daTboxFlg_UNK_01 | daTboxFlg_UNK_02);
-                        mAppearTimer = 0x78;
+                        mAppearTimer = 120;
                         break;
                     case FUNC_TYPE_SWITCH:
                     case FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN:
                         setAction(&daTbox_c::actionSwOnWait);
                         flagOn(daTboxFlg_UNK_01 | daTboxFlg_UNK_02);
-                        mAppearTimer = 0x78;
+                        mAppearTimer = 120;
                         break;
                     case FUNC_TYPE_TACT:
                         setAction(&daTbox_c::actionSwOnWait);
@@ -513,7 +511,7 @@ void daTbox_c::CreateInit() {
                     case FUNC_TYPE_SWITCH_TRANSPARENT:
                         setAction(&daTbox_c::actionSwOnWait);
                         flagOn(daTboxFlg_UNK_02);
-                        mAppearTimer = 0x5A;
+                        mAppearTimer = 90;
 
                         mpAppearRegAnm->setFrame(30.0f);
                         break;
@@ -612,7 +610,7 @@ void daTbox_c::darkProc() {
 
 /* 0000172C-000017CC       .text volmProc__8daTbox_cFv */
 void daTbox_c::volmProc() {
-    if (mOpenTimer == 0x24) {
+    if (mOpenTimer == 36) {
         mSmokeEmitter->mGlobalPrmColor.a = 0xFF;
     }
     else if (mOpenTimer >= 0xB5) {
@@ -642,7 +640,7 @@ void daTbox_c::demoProcOpen() {
         lightDownProc();
     }
 
-    if (mOpenTimer == 0x24) {
+    if (mOpenTimer == 36) {
         mOpenAnm.setPlaySpeed(1.0f);
 
         mFlashAnm.setPlaySpeed(1.0f);
@@ -725,11 +723,11 @@ void daTbox_c::demoProcAppear() {
         cLib_chaseF(&mInvisibleScrollVal, 2.0f, 1.0f / 30.0f);
     }
 
-    if (mAppearTimer == 0x3C) {
+    if (mAppearTimer == 60) {
         mpAppearRegAnm->setFrame(150.0f);
     }
 
-    if (mAppearTimer == 0x05) {
+    if (mAppearTimer == 5) {
         JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, NULL, NULL, 0xB9, &mSmokeCB);
 
         if (emitter != NULL) {
@@ -739,11 +737,11 @@ void daTbox_c::demoProcAppear() {
         }
     }
 
-    if (mAppearTimer == 0x04 && mSmokeCB.getEmitter() != NULL) {
+    if (mAppearTimer == 4 && mSmokeCB.getEmitter() != NULL) {
         mSmokeCB.remove();
     }
 
-    if (mAppearTimer != 0x00) {
+    if (mAppearTimer != 0) {
         mAppearTimer--;
     }
 
@@ -1243,7 +1241,7 @@ static cPhs_State daTbox_Create(fopAc_ac_c* i_actor) {
 
     daTbox_c* tbox = static_cast<daTbox_c*>(i_actor);
 
-    fopAcM_SetupActor(tbox, daTbox_c);
+    fopAcM_ct(tbox, daTbox_c);
 
     cPhs_State result = dComIfG_resLoad(tbox->getPhase(), "Dalways");
 
@@ -1279,18 +1277,18 @@ static actor_method_class l_daTbox_Method = {
 };
 
 actor_process_profile_definition g_profile_TBOX = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TBOX,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TBOX_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTbox_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TBOX,
+    /* Draw Prio    */ fpcDwPi_TBOX_e,
     /* Actor SubMtd */ &l_daTbox_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

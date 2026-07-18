@@ -12,13 +12,11 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
-#include "d/res/res_always.h"
-#include "d/res/res_ikadah.h"
-#include "d/res/res_link.h"
+#include "res/Object/Always.h"
+#include "res/Object/IkadaH.h"
+#include "res/Object/Link.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
@@ -113,9 +111,9 @@ daObj_Ikada_HIO_c::daObj_Ikada_HIO_c() {
 }
 
 /* 000002D8-00000324       .text nodeControl_CB__FP7J3DNodei */
-static BOOL nodeControl_CB(J3DNode* node, int arg1) {
+static BOOL nodeControl_CB(J3DNode* node, int calcTiming) {
     J3DJoint* joint = (J3DJoint*)node;
-    if (arg1 == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         daObj_Ikada_c* i_this = (daObj_Ikada_c*)j3dSys.getModel()->getUserArea();
         if (i_this != NULL) {
             i_this->_nodeControl(joint, j3dSys.getModel());
@@ -127,14 +125,14 @@ static BOOL nodeControl_CB(J3DNode* node, int arg1) {
 /* 00000324-00000458       .text _nodeControl__13daObj_Ikada_cFP7J3DNodeP8J3DModel */
 void daObj_Ikada_c::_nodeControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = (J3DJoint*)node;
-    s32 uVar1 = joint->getJntNo();
-    mDoMtx_stack_c::copy(model->getAnmMtx(uVar1));
-    mDoMtx_stack_c::ZXYrotM(mJointRot[uVar1].x, mJointRot[uVar1].y, mJointRot[uVar1].z);
-    if (uVar1 == 1) {
+    s32 jntNo = joint->getJntNo();
+    mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+    mDoMtx_stack_c::ZXYrotM(mJointRot[jntNo].x, mJointRot[jntNo].y, mJointRot[jntNo].z);
+    if (jntNo == VSVSP_JNT_SV_CREAN_e) {
         mDoMtx_stack_c::XrotM(m115A + m115E * (REG12_S(5) + 5) * cM_ssin(m115C));
     }
     MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
-    model->setAnmMtx(uVar1, mDoMtx_stack_c::get());
+    model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
 }
 
 /* 00000458-00000494       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
@@ -192,7 +190,7 @@ void daObj_Ikada_c::_ride(fopAc_ac_c* actor) {
             mbIsLinkRiding = true;
         }
 
-        if (fopAcM_GetName(actor) == PROC_BOMB) {
+        if (fopAcM_GetName(actor) == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)actor;
 
             if (bomb->getBombRestTime() <= 1) {
@@ -238,14 +236,10 @@ void daObj_Ikada_c::setCollision() {
 
 /* 00000AA4-00000DFC       .text checkTgHit__13daObj_Ikada_cFv */
 bool daObj_Ikada_c::checkTgHit() {
-    cCcD_Obj* sp64;
-    cXyz sp58;
-    cXyz sp4C;
-    cXyz sp40;
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     if (player->checkHammerQuake()) {
-        sp58 = player->getSwordTopPos();
+        cXyz sp58 = player->getSwordTopPos();
         f32 abs = (sp58 - current.pos).absXZ();
         if (abs < 1000.0f && mbIsLinkRiding) {
             mLinkRideRockAmpl = 200;
@@ -255,10 +249,14 @@ bool daObj_Ikada_c::checkTgHit() {
     }
 
     mStts.Move();
+
+    cXyz sp4C;
+    cXyz sp40;
+    CcAtInfo atInfo;
     if (cLib_calcTimer(&m12E4) == 0) {
         cCcD_Obj* pcVar3 = mSph.GetTgHitObj();
         sp4C = *mSph.GetTgHitPosP();
-        sp64 = mSph.GetTgHitObj();
+        atInfo.mpObj = mSph.GetTgHitObj();
         if (pcVar3 == NULL) {
             return false;
         }
@@ -357,6 +355,7 @@ void daObj_Ikada_c::createWave() {
 
 /* 000012EC-00001528       .text setWave__13daObj_Ikada_cFv */
 void daObj_Ikada_c::setWave() {
+    /* Nonmatching */
     f32 fVar2 = l_HIO.mTrackVel;
     f32 fVar1 = l_HIO.mWaveVelFade;
     f32 target = l_HIO.mSplashScaleMax;
@@ -445,6 +444,7 @@ void daObj_Ikada_c::incRopeCnt(int arg1, int arg2) {
 void daObj_Ikada_c::setRopePos() {
     static cXyz ripple_scale(0.6f, 0.6f, 0.6f);
 
+    int i;
     cXyz spBC;
     cXyz spB0;
     cXyz spA4;
@@ -463,7 +463,7 @@ void daObj_Ikada_c::setRopePos() {
 
     spBC = *pcVar6;
 
-    mDoMtx_stack_c::copy(mpModel->getAnmMtx(1));
+    mDoMtx_stack_c::copy(mpModel->getAnmMtx(VSVSP_JNT_SV_CREAN_e));
     mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
     mDoMtx_stack_c::multVecZero(pcVar6);
 
@@ -475,7 +475,7 @@ void daObj_Ikada_c::setRopePos() {
 
         pcVar6--;
         pcVar7--;
-        for (s32 i = m07D8 - 2; i >= 0; i--, pcVar6--, pcVar7--) {
+        for (i = m07D8 - 2; i >= 0; i--, pcVar6--, pcVar7--) {
             *pcVar6 = pcVar6[1] + spB0;
             *pcVar7 = cXyz::Zero;
         }
@@ -483,7 +483,7 @@ void daObj_Ikada_c::setRopePos() {
         pcVar6--;
         pcVar7--;
 
-        for (s32 i = m07D8 - 2; i >= 0; i--, pcVar6--, pcVar7--) {
+        for (i = m07D8 - 2; i >= 0; i--, pcVar6--, pcVar7--) {
             spBC = *pcVar6;
             if (pcVar6->y < dLib_getWaterY(*pcVar6, mObjAcch)) {
                 *pcVar7 *= 0.6f;
@@ -513,7 +513,7 @@ void daObj_Ikada_c::setRopePos() {
         iVar3 = 0;
         iVar4 = 0;
     } else {
-        mDoMtx_stack_c::copy(mpModel->getAnmMtx(1));
+        mDoMtx_stack_c::copy(mpModel->getAnmMtx(VSVSP_JNT_SV_CREAN_e));
         mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
         cMtx_copy(mDoMtx_stack_c::get(), ropeEndMtx);
         spA4.set(pcVar7->x - ropeEndMtx[0][3], pcVar7->y - ropeEndMtx[1][3], pcVar7->z - ropeEndMtx[2][3]);
@@ -541,7 +541,7 @@ void daObj_Ikada_c::setRopePos() {
 
     if (fVar1 > pcVar7->y) {
         cXyz* ptr = pcVar7;
-        for (s32 i = m07D8; i > 0; i--, pcVar7++) {
+        for (i = m07D8; i > 0; i--, pcVar7++) {
             if (pcVar7->y <= fVar1) {
                 ptr = pcVar7;
             }
@@ -1154,11 +1154,11 @@ bool daObj_Ikada_c::_execute() {
 
     if (isWave()) {
         f32 s = scale.x;
-        s32 uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
-        if (speedF <= 2.0f || uVar5 & 0xFF || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
-            mWaveRCallback.remove();
-            mWaveLCallback.remove();
-            mSplashCallBack.remove();
+        bool uVar5 = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), s * -1000.0f, s * -50.0f, s * -1000.0f, s * 1000.0f, s * 1000.0f, s * 1000.0f);
+        if (speedF <= 2.0f || uVar5 || fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
+            mWaveRCallback.end();
+            mWaveLCallback.end();
+            mSplashCallBack.end();
             mTrackCallBack.stop();
         } else {
             setWave();
@@ -1246,7 +1246,7 @@ bool daObj_Ikada_c::_draw() {
         J3DModelData* modelData = mpModel->getModelData();
         mBckAnm.entry(modelData);
         mDoExt_modelUpdateDL(mpModel);
-        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+        mpModel->getModelData()->getJointNodePointer(VSVSP_JNT_SV_SHIP_ROOT_e)->setMtxCalc(NULL);
     } else {
         mDoExt_modelUpdateDL(mpModel);
     }
@@ -1273,18 +1273,18 @@ bool daObj_Ikada_c::_draw() {
 
 /* 00003EE0-00003F34       .text getArg__13daObj_Ikada_cFv */
 void daObj_Ikada_c::getArg() {
-    u32 uVar2 = fopAcM_GetParam(this);
-    u32 sVar1 = home.angle.x;
+    u32 param = fopAcM_GetParam(this);
+    u32 prmX = home.angle.x;
 
-    mType = uVar2 & 0xF;
+    mType = fopAcM_GetParamBit(param, 0, 4);
     if (mType != 4) {
-        m0294 = (uVar2 >> 4) & 0x3F;
-        m0298 = (uVar2 >> 10) & 0xFF;
-        m02A0 = (uVar2 >> 18) & 0xFF;
-        m029C = (sVar1 >> 0) & 0xFF;
-        mPathId = (sVar1 >> 8) & 0xFF;
+        m0294 = fopAcM_GetParamBit(param, 4, 6);
+        m0298 = fopAcM_GetParamBit(param, 10, 8);
+        m02A0 = fopAcM_GetParamBit(param, 18, 8);
+        m029C = fopAcM_GetParamBit(prmX, 0, 8);
+        mPathId = fopAcM_GetParamBit(prmX, 8, 8);
     } else {
-        mPathId = (uVar2 >> 0x10) & 0xFF;
+        mPathId = fopAcM_GetParamBit(param, 16, 8);
     }
 }
 
@@ -1369,7 +1369,7 @@ void daObj_Ikada_c::createInit() {
         static const u32 params[] = {4, 4, 4, 4, 0x2000000};
         static const f32 flag_scale[] = {0.2f, 0.0f, 0.0f, 0.0f, 0.12f};
 
-        mFlagPcId = fopAcM_create(PROC_MAJUU_FLAG, params[mType], &current.pos, tevStr.mRoomNo, &current.angle);
+        mFlagPcId = fopAcM_create(fpcNm_MAJUU_FLAG_e, params[mType], &current.pos, tevStr.mRoomNo, &current.angle);
         mFlagOffset = flag_offset[mType];
         mFlagScale = flag_scale[mType];
     }
@@ -1384,7 +1384,7 @@ void daObj_Ikada_c::createInit() {
         cXyz* pcVar8 = &mRopeLine.getPos(0)[m07D8] - 1;
         cXyz* pcVar7 = &m07DC[m07D8 - 1];
 
-        mDoMtx_stack_c::copy(mpModel->getAnmMtx(1));
+        mDoMtx_stack_c::copy(mpModel->getAnmMtx(VSVSP_JNT_SV_CREAN_e));
         mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
         mDoMtx_stack_c::multVecZero(pcVar8);
 
@@ -1427,8 +1427,8 @@ void daObj_Ikada_c::createInit() {
 
 /* 00004838-00004B60       .text _createHeap__13daObj_Ikada_cFv */
 BOOL daObj_Ikada_c::_createHeap() {
-    static const s32 bdl[] = {IKADAH_BDL_VIKAE, IKADAH_BDL_VTSP, IKADAH_BDL_VIKAH, IKADAH_BDL_VTSP2, IKADAH_BDL_VSVSP};
-    static const s32 dzb[] = {IKADAH_DZB_VIKAE, IKADAH_DZB_VTSP, IKADAH_DZB_VIKAH, IKADAH_DZB_VTSP, IKADAH_DZB_VSVSP};
+    static const s32 bdl[] = {dRes_INDEX_IKADAH_BDL_VIKAE_e, dRes_INDEX_IKADAH_BDL_VTSP_e, dRes_INDEX_IKADAH_BDL_VIKAH_e, dRes_INDEX_IKADAH_BDL_VTSP2_e, dRes_INDEX_IKADAH_BDL_VSVSP_e};
+    static const s32 dzb[] = {dRes_INDEX_IKADAH_DZB_VIKAE_e, dRes_INDEX_IKADAH_DZB_VTSP_e, dRes_INDEX_IKADAH_DZB_VIKAH_e, dRes_INDEX_IKADAH_DZB_VTSP_e, dRes_INDEX_IKADAH_DZB_VSVSP_e};
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, bdl[mType]);
     JUT_ASSERT(2170, modelData != NULL);
@@ -1439,7 +1439,7 @@ BOOL daObj_Ikada_c::_createHeap() {
     }
 
     if (mType == 4) {
-        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, IKADAH_BCK_SVSHIP_KAITEN);
+        J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_IKADAH_BCK_SVSHIP_KAITEN_e);
         JUT_ASSERT(2180, bck != NULL);
 
         if (!mBckAnm.init(modelData, bck, true, J3DFrameCtrl::EMode_LOOP)) {
@@ -1452,9 +1452,9 @@ BOOL daObj_Ikada_c::_createHeap() {
     if (mType == 4) {
         for (u16 i = 0; i < modelData->getJointNum(); i++) {
             switch (i) {
-            case 1:
-            case 2:
-            case 3:
+            case VSVSP_JNT_SV_CREAN_e:
+            case VSVSP_JNT_SV_REEL_e:
+            case VSVSP_JNT_SV_HANDLE_1_e:
                 modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
                 break;
             }
@@ -1474,7 +1474,7 @@ BOOL daObj_Ikada_c::_createHeap() {
     }
 
     if (mType == 4) {
-        ResTIMG* pImg = (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE);
+        ResTIMG* pImg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e);
         if (!mRopeLine.init(1, 200, pImg, 0)) {
             return FALSE;
         }
@@ -1482,7 +1482,7 @@ BOOL daObj_Ikada_c::_createHeap() {
 #if VERSION > VERSION_DEMO
         J3DModelData*
 #endif
-            modelData = (J3DModelData*)dComIfG_getObjectRes("Link", LINK_BDL_ROPEEND);
+            modelData = (J3DModelData*)dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_ROPEEND_e);
         JUT_ASSERT(2228, modelData != NULL);
 
         mpRopeEnd = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -1495,7 +1495,7 @@ BOOL daObj_Ikada_c::_createHeap() {
 
 /* 00004B60-00004C18       .text _create__13daObj_Ikada_cFv */
 cPhs_State daObj_Ikada_c::_create() {
-    fopAcM_SetupActor(this, daObj_Ikada_c);
+    fopAcM_ct(this, daObj_Ikada_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhase, m_arc_name);
     if (ret == cPhs_COMPLEATE_e) {
@@ -1574,18 +1574,18 @@ static actor_method_class daObj_IkadaMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_IKADA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_IKADA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_IKADA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Ikada_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_IKADA,
+    /* Draw Prio    */ fpcDwPi_OBJ_IKADA_e,
     /* Actor SubMtd */ &daObj_IkadaMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
