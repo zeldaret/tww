@@ -1006,10 +1006,76 @@ bool dCamera_c::uniformBrakeEvCamera() {
     cXyz end_center = data->center;
     cXyz end_eye = data->eye;
     if (data->rel_actor != NULL) {
-        start_center = relationalPos(data->rel_actor, &data->start_center);
-        start_eye = relationalPos(data->rel_actor, &data->start_eye);
-        end_center = relationalPos(data->rel_actor, &data->center);
-        end_eye = relationalPos(data->rel_actor, &data->eye);
+        switch (data->rel_use_mask[0]) {
+        case 't':
+            start_center = attentionPos(data->rel_actor) + data->start_center;
+            break;
+        case 'c': {
+            cSGlobe direction(data->start_center);
+            direction.U(data->start_direction.U() + direction.U());
+            start_center = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            break;
+        default:
+            start_center = relationalPos(data->rel_actor, &data->start_center);
+            break;
+        }
+        switch (data->rel_use_mask[1]) {
+        case 't':
+            start_eye = attentionPos(data->rel_actor) + data->start_eye;
+            break;
+        case 'c': {
+            cSGlobe direction(data->start_eye);
+            direction.U(data->start_direction.U() + direction.U());
+            start_eye = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            break;
+        default:
+            start_eye = relationalPos(data->rel_actor, &data->start_eye);
+            break;
+        }
+        switch (data->rel_use_mask[2]) {
+        case 't':
+            end_center = attentionPos(data->rel_actor) + data->center;
+            break;
+        case 'c': {
+            cSGlobe direction(data->center);
+            direction.U(data->start_direction.U() + direction.U());
+            end_center = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            end_center = data->trans_type == 2
+                ? dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor))
+                : data->center;
+            break;
+        default:
+            end_center = relationalPos(data->rel_actor, &data->center);
+            break;
+        }
+        switch (data->rel_use_mask[3]) {
+        case 't':
+            end_eye = attentionPos(data->rel_actor) + data->eye;
+            break;
+        case 'c': {
+            cSGlobe direction(data->eye);
+            direction.U(data->start_direction.U() + direction.U());
+            end_eye = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            end_eye = data->trans_type == 2
+                ? dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor))
+                : data->eye;
+            break;
+        default:
+            end_eye = relationalPos(data->rel_actor, &data->eye);
+            break;
+        }
     }
 
     if (data->trans_type == 1) {
@@ -1133,10 +1199,76 @@ bool dCamera_c::uniformAcceleEvCamera() {
     cXyz end_center = data->center;
     cXyz end_eye = data->eye;
     if (data->rel_actor != NULL) {
-        start_center = relationalPos(data->rel_actor, &data->start_center);
-        start_eye = relationalPos(data->rel_actor, &data->start_eye);
-        end_center = relationalPos(data->rel_actor, &data->center);
-        end_eye = relationalPos(data->rel_actor, &data->eye);
+        switch (data->rel_use_mask[0]) {
+        case 't':
+            start_center = attentionPos(data->rel_actor) + data->start_center;
+            break;
+        case 'c': {
+            cSGlobe direction(data->start_center);
+            direction.U(data->start_direction.U() + direction.U());
+            start_center = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            break;
+        default:
+            start_center = relationalPos(data->rel_actor, &data->start_center);
+            break;
+        }
+        switch (data->rel_use_mask[1]) {
+        case 't':
+            start_eye = attentionPos(data->rel_actor) + data->start_eye;
+            break;
+        case 'c': {
+            cSGlobe direction(data->start_eye);
+            direction.U(data->start_direction.U() + direction.U());
+            start_eye = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            break;
+        default:
+            start_eye = relationalPos(data->rel_actor, &data->start_eye);
+            break;
+        }
+        switch (data->rel_use_mask[2]) {
+        case 't':
+            end_center = attentionPos(data->rel_actor) + data->center;
+            break;
+        case 'c': {
+            cSGlobe direction(data->center);
+            direction.U(data->start_direction.U() + direction.U());
+            end_center = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            end_center = data->trans_type == 2
+                ? dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor))
+                : data->center;
+            break;
+        default:
+            end_center = relationalPos(data->rel_actor, &data->center);
+            break;
+        }
+        switch (data->rel_use_mask[3]) {
+        case 't':
+            end_eye = attentionPos(data->rel_actor) + data->eye;
+            break;
+        case 'c': {
+            cSGlobe direction(data->eye);
+            direction.U(data->start_direction.U() + direction.U());
+            end_eye = attentionPos(data->rel_actor) + direction.Xyz();
+            break;
+        }
+        case '-':
+            end_eye = data->trans_type == 2
+                ? dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor))
+                : data->eye;
+            break;
+        default:
+            end_eye = relationalPos(data->rel_actor, &data->eye);
+            break;
+        }
     }
 
     if (data->trans_type == 1) {
