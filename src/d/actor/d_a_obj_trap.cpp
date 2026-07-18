@@ -67,10 +67,9 @@ int daObjTrap_c::create_heap() {
             if (btk_data){
                 int btk_anm_init_result = mBtkAnm.init(mdl_data, btk_data, true, JUTGamePad::CRumble::LOOP_ONCE, 1.0, 0, -1, false, FALSE);
                 if (btk_anm_init_result){
-                    Mtx &mdl_tr_mtx = mpModel->getBaseTRMtx();
-                    cBgD_t* dzb_data =
-                        (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_DZB_HTORA1_e);
-                    mpcBgW = D_BG_W_H::dBgW_NewSet(dzb_data, cBgW::MOVE_BG_e, &mdl_tr_mtx);
+                    mpcBgW = D_BG_W_H::dBgW_NewSet(
+                        (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_DZB_HTORA1_e),
+                        cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
                     if (mpcBgW != NULL){
                         result = true;
                     }
@@ -206,27 +205,30 @@ cXyz daObjTrap_c::check_wall() {
     static dBgS_ObjLinChk lin_chk;
 
     cXyz forward = mPathDirection * 150.0f;
+    cXyz start;
+    cXyz end;
+    cXyz hit;
+    cXyz offset;
     cXyz upward = cXyz::BaseY * 75.0f;
     cXyz wall_offset = cXyz::Zero;
 
     for (int i = 0; i < 3; i++) {
         mDoMtx_stack_c::YrotS(angle_y[i]);
-        cXyz offset;
         mDoMtx_stack_c::multVec(&mPathDirection, &offset);
         offset *= trans_a[i];
         offset += upward;
 
-        cXyz start = current.pos + offset;
-        cXyz end = start + mPathOffset;
+        start = current.pos + offset;
+        end = start + mPathOffset;
         end += forward;
         lin_chk.Set(&start, &end, this);
         lin_chk.SetActorPid(fopAcM_GetID(this));
 
         if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
-            cXyz hit = lin_chk.GetCross();
+            hit = lin_chk.GetCross();
             hit -= start;
             if (wall_offset == cXyz::Zero || wall_offset.absXZ() > hit.absXZ()) {
-                wall_offset = hit - current.pos - forward;
+                wall_offset = hit + current.pos - forward;
             }
         }
     }
@@ -235,10 +237,10 @@ cXyz daObjTrap_c::check_wall() {
 }
 
 /* 00001C88-00001D7C       .text check_block_target_pos__11daObjTrap_cFP4cXyz */
-bool daObjTrap_c::check_block_target_pos(cXyz* target_pos) {
+int daObjTrap_c::check_block_target_pos(cXyz* target_pos) {
     cXyz offset = *target_pos - current.pos;
     f32 dot = mPathDirection.x * offset.x + mPathDirection.z * offset.z;
-    bool result = false;
+    int result = false;
 
     if (dot >= 0.0f && dot < 150.0f + mPathLength) {
         mDoMtx_stack_c::YrotS(0x4000);
@@ -258,29 +260,32 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
     static dBgS_ObjLinChk lin_chk;
 
     cXyz forward = mPathDirection * 150.0f;
+    cXyz start;
+    cXyz end;
+    cXyz hit;
+    cXyz offset;
     cXyz block_offset = i_block_offset;
+    cXyz target_pos;
     cXyz upward = cXyz::BaseY * 75.0f;
 
     for (int i = 0; i < 2; i++) {
         mDoMtx_stack_c::YrotS(angle_y[i]);
-        cXyz offset;
         mDoMtx_stack_c::multVec(&mPathDirection, &offset);
         offset *= 225.0f;
         offset += upward;
 
-        cXyz start = current.pos + offset;
-        cXyz end = start + mPathOffset;
+        start = current.pos + offset;
+        end = start + mPathOffset;
         end += forward;
         lin_chk.Set(&start, &end, this);
         lin_chk.SetActorPid(fopAcM_GetID(this));
 
         if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
-            cXyz target_pos;
-            bool check_target;
             fopAc_ac_c* actor = dComIfG_Bgsp()->GetActorPointer(lin_chk);
             if (actor != NULL && fopAc_IsActor(actor) &&
                 fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
                 daObjMovebox::Act_c* movebox = static_cast<daObjMovebox::Act_c*>(actor);
+                bool check_target;
                 if (movebox->mMode == daObjMovebox::Act_c::MODE_WALK) {
                     mDoMtx_stack_c::push();
                     mDoMtx_stack_c::YrotS(movebox->home.angle.y);
@@ -294,20 +299,18 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
                     mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &box_dir);
                     mDoMtx_stack_c::pop();
 
-                    target_pos = (box_offset + box_dir) * 75.0f + movebox->current.pos;
+                    target_pos = (box_offset + box_dir) * 75.0f + actor->home.pos;
                     check_target = true;
                 } else {
                     check_target = false;
                 }
-            } else {
-                check_target = false;
-            }
-            if (check_target && check_block_target_pos(&target_pos)) {
-                cXyz hit = lin_chk.GetCross();
-                hit -= start;
-                if (block_offset == cXyz::Zero ||
-                    block_offset.absXZ() > hit.absXZ()) {
-                    block_offset = hit - current.pos - forward;
+                if (check_target && check_block_target_pos(&target_pos)) {
+                    hit = lin_chk.GetCross();
+                    hit -= start;
+                    if (block_offset == cXyz::Zero ||
+                        block_offset.absXZ() > hit.absXZ()) {
+                        block_offset = hit + current.pos - forward;
+                    }
                 }
             }
         }
