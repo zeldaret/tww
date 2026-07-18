@@ -2463,6 +2463,7 @@ bool dCamera_c::getItemEvCamera() {
     }
 
     switch (data->state) {
+    case 0:
     default:
         getEvIntData(&data->timer1, "Timer1", 27);
         getEvIntData(&data->timer2, "Timer2", 5);
@@ -2483,12 +2484,11 @@ bool dCamera_c::getItemEvCamera() {
         int i;
         for (i = 0; i < 4; i++) {
             eye = relationalPos(mpPlayerActor, &eye_gaps[i]);
-            cXyz player_pos = positionOf(mpPlayerActor);
-            if (eye.y < m368 + player_pos.y) {
+            if (eye.y < m368 + positionOf(mpPlayerActor).y) {
                 eye.y = m368 + positionOf(mpPlayerActor).y;
             }
             fopAc_ac_c* bird = NULL;
-            if (*(u32*)&g_mDoCPd_cpadInfo[mPadId].mButtonHold & 0x10000) {
+            if (dComIfGp_checkPlayerStatus0(mPadId, 0x10000)) {
                 s16 proc_name = 0xa7;
                 bird = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &proc_name);
             }
