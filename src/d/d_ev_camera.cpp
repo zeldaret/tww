@@ -1362,37 +1362,39 @@ bool dCamera_c::restorePosEvCamera() {
             data->saved.center = m0A4[0].m00.mCenter;
             data->saved.eye = m0A4[0].m00.mEye;
             data->saved.fovy = m0A4[0].m00.mFovY;
-            data->saved.bank = m0A4[0].m00.mBank;
             break;
         case 1:
             data->saved.center = m0A4[1].m00.mCenter;
             data->saved.eye = m0A4[1].m00.mEye;
             data->saved.fovy = m0A4[1].m00.mFovY;
-            data->saved.bank = m0A4[1].m00.mBank;
             break;
-        case 9: {
-            s16 bank;
+        case 9:
             dComIfGp_loadCameraPosition(0, &data->saved.center, &data->saved.eye,
-                                        &data->saved.fovy, &bank);
-            data->saved.bank = cSAngle(bank);
+                                        &data->saved.fovy, (s16*)&data->saved.bank);
             break;
-        }
         default:
             data->saved.center = m084;
             data->saved.eye = m090;
             data->saved.fovy = m09C;
-            data->saved.bank = m0A0;
             break;
         }
         if ((data->target = getEvActor("Target", "@PLAYER")) == NULL) {
             return true;
         }
         data->center = relationalPos(data->target, &data->center_gap);
-        cSGlobe distance(data->saved.eye - mEye);
+        cSGlobe distance(data->saved.eye - mViewCache.mCenter);
         if (distance.R() < data->near_dist) {
-            data->state = pointInSight(&data->center) ? 0 : 1;
+            if (pointInSight(&data->center)) {
+                data->state = 0;
+            } else {
+                data->state = 1;
+            }
         } else if (distance.R() < data->far_dist) {
-            data->state = lineBGCheck(&mEye, &data->center, 0x8f) ? 3 : 2;
+            if (lineBGCheck(&mEye, &data->center, 0x8f)) {
+                data->state = 3;
+            } else {
+                data->state = 2;
+            }
         } else {
             data->state = 3;
         }
@@ -1429,8 +1431,11 @@ bool dCamera_c::restorePosEvCamera() {
         break;
     case 3:
         if (m11C == 0) {
-            mViewCache.mCenter =
-                data->target_type == 1 ? data->saved.center : data->center;
+            if (data->target_type == 1) {
+                mViewCache.mCenter = data->saved.center;
+            } else {
+                mViewCache.mCenter = data->center;
+            }
             mViewCache.mDirection.Val(data->saved.eye - data->saved.center);
             mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
             mViewCache.mFovy = data->saved.fovy;
