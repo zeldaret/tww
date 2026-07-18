@@ -671,6 +671,10 @@ bool dCamera_c::uniformTransEvCamera() {
     static f32 curvePoints[4] = {0.0f, 0.0f, 1.0f, 1.0f};
 
     TransData* data = (TransData*)&mWork;
+    struct {
+        cXyz eye;
+        cXyz center;
+    } start, end;
     bool result = false;
     if (m11C == 0) {
         if (!getEvIntData(&data->timer, "Timer")) {
@@ -794,10 +798,6 @@ bool dCamera_c::uniformTransEvCamera() {
         ratio = (m11C + 1) / f32(data->timer);
     }
 
-    struct {
-        cXyz eye;
-        cXyz center;
-    } start, end;
     if (data->rel_actor != NULL) {
         if (data->rel_use_mask[0] == 't') {
             start.center = attentionPos(data->rel_actor) + data->start_center;
@@ -921,6 +921,10 @@ bool dCamera_c::uniformBrakeEvCamera() {
     static int DefaultTimer = -1;
     static f32 DefaultBank = 0.0f;
     BrakeData* data = (BrakeData*)&mWork;
+    struct {
+        cXyz eye;
+        cXyz center;
+    } start, end;
     cXyz center;
     cXyz eye;
     if (m11C == 0) {
@@ -1033,10 +1037,6 @@ bool dCamera_c::uniformBrakeEvCamera() {
     }
 
     f32 ratio = result ? 1.0f : data->progress / data->total_distance;
-    struct {
-        cXyz eye;
-        cXyz center;
-    } start, end;
     if (data->rel_actor != NULL) {
         if (data->rel_use_mask[0] == 't') {
             start.center = attentionPos(data->rel_actor) + data->start_center;
@@ -1152,6 +1152,10 @@ bool dCamera_c::uniformAcceleEvCamera() {
     static int DefaultTimer = -1;
     static f32 DefaultBank = 0.0f;
     AcceleData* data = (AcceleData*)&mWork;
+    struct {
+        cXyz eye;
+        cXyz center;
+    } start, end;
     cXyz center;
     cXyz eye;
     if (m11C == 0) {
@@ -1265,10 +1269,6 @@ bool dCamera_c::uniformAcceleEvCamera() {
     }
 
     f32 ratio = result ? 1.0f : data->progress / data->total_distance;
-    struct {
-        cXyz eye;
-        cXyz center;
-    } start, end;
     if (data->rel_actor != NULL) {
         if (data->rel_use_mask[0] == 't') {
             start.center = attentionPos(data->rel_actor) + data->start_center;
