@@ -167,8 +167,7 @@ void daObjTrap_c::get_ground() {
 /* 00000FF4-0000112C       .text circle_search__11daObjTrap_cFv */
 bool daObjTrap_c::circle_search() {
     cXyz offset = dComIfGp_getPlayer(0)->current.pos - current.pos;
-    cXyz offset_xz(offset.x, 0.0f, offset.z);
-    if (offset_xz.abs() <= 400.0f && mPathDirectionSign == 1) {
+    if (offset.absXZ() <= 400.0f && mPathDirectionSign == 1) {
         if (mPathDirection.x * offset.x + mPathDirection.z * offset.z >= 0.0f) {
             return true;
         }
@@ -193,9 +192,7 @@ void daObjTrap_c::set_move_info() {
 bool daObjTrap_c::check_arrival() {
     cXyz target_offset = mPathTarget - mPathPos;
     cXyz next_offset = mNextPathPos - mPathPos;
-    cXyz target_xz(target_offset.x, 0.0f, target_offset.z);
-    cXyz next_xz(next_offset.x, 0.0f, next_offset.z);
-    return target_xz.abs() >= next_xz.abs();
+    return target_offset.absXZ() >= next_offset.absXZ();
 }
 
 /* 000013E4-000018E4       .text check_wall__11daObjTrap_cFv */
@@ -224,9 +221,7 @@ cXyz daObjTrap_c::check_wall() {
             cXyz hit = lin_chk.GetCross();
             hit -= start;
             if (wall_offset != cXyz::Zero) {
-                cXyz wall_xz(wall_offset.x, 0.0f, wall_offset.z);
-                cXyz hit_xz(hit.x, 0.0f, hit.z);
-                if (wall_xz.abs() > hit_xz.abs()) {
+                if (wall_offset.absXZ() > hit.absXZ()) {
                     continue;
                 }
             }
@@ -301,9 +296,7 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
                         cXyz hit = lin_chk.GetCross();
                         hit -= start;
                         if (block_offset != cXyz::Zero) {
-                            cXyz block_xz(block_offset.x, 0.0f, block_offset.z);
-                            cXyz hit_xz(hit.x, 0.0f, hit.z);
-                            if (block_xz.abs() > hit_xz.abs()) {
+                            if (block_offset.absXZ() > hit.absXZ()) {
                                 continue;
                             }
                         }
