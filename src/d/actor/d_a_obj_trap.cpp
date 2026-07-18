@@ -81,7 +81,9 @@ void daObjTrap_c::init_mtx() {
 
 /* 00000F20-00000F70       .text set_co_pos__11daObjTrap_cFv */
 void daObjTrap_c::set_co_pos() {
-    /* Nonmatching */
+    cXyz pos(current.pos);
+    pos.y -= 40.0f;
+    mCcCyl.SetC(pos);
 }
 
 /* 00000F70-00000FF4       .text get_ground__11daObjTrap_cFv */
