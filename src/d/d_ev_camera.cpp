@@ -723,7 +723,8 @@ bool dCamera_c::uniformTransEvCamera() {
             }
             if (data->rel_use_mask[0] == 'n' || data->rel_use_mask[1] == 'n') {
                 cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
-                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
+                if (side < cSAngle::_0) {
                     if (data->rel_use_mask[0] == 'n') {
                         data->start_center.x = -data->start_center.x;
                     }
@@ -739,7 +740,8 @@ bool dCamera_c::uniformTransEvCamera() {
             }
             if (data->rel_use_mask[2] == 'n' || data->rel_use_mask[3] == 'n') {
                 cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
-                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
+                if (side < cSAngle::_0) {
                     if (data->rel_use_mask[2] == 'n') {
                         data->center.x = -data->center.x;
                     }
@@ -997,7 +999,8 @@ bool dCamera_c::uniformBrakeEvCamera() {
             }
             if (data->rel_use_mask[0] == 'n' || data->rel_use_mask[1] == 'n') {
                 cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
-                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
+                if (side < cSAngle::_0) {
                     if (data->rel_use_mask[0] == 'n') data->start_center.x = -data->start_center.x;
                     if (data->rel_use_mask[1] == 'n') data->start_eye.x = -data->start_eye.x;
                 }
@@ -1007,7 +1010,8 @@ bool dCamera_c::uniformBrakeEvCamera() {
             }
             if (data->rel_use_mask[2] == 'n' || data->rel_use_mask[3] == 'n') {
                 cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
-                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
+                if (side < cSAngle::_0) {
                     if (data->rel_use_mask[2] == 'n') data->center.x = -data->center.x;
                     if (data->rel_use_mask[3] == 'n') data->eye.x = -data->eye.x;
                 }
@@ -1248,7 +1252,8 @@ bool dCamera_c::uniformAcceleEvCamera() {
             }
             if (data->rel_use_mask[0] == 'n' || data->rel_use_mask[1] == 'n') {
                 cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
-                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
+                if (side < cSAngle::_0) {
                     if (data->rel_use_mask[0] == 'n') data->start_center.x = -data->start_center.x;
                     if (data->rel_use_mask[1] == 'n') data->start_eye.x = -data->start_eye.x;
                 }
@@ -1258,7 +1263,8 @@ bool dCamera_c::uniformAcceleEvCamera() {
             }
             if (data->rel_use_mask[2] == 'n' || data->rel_use_mask[3] == 'n') {
                 cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
-                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
+                if (side < cSAngle::_0) {
                     if (data->rel_use_mask[2] == 'n') data->center.x = -data->center.x;
                     if (data->rel_use_mask[3] == 'n') data->eye.x = -data->eye.x;
                 }
