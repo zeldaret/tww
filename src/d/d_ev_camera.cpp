@@ -2238,8 +2238,8 @@ bool dCamera_c::windDirectionEvCamera() {
             mViewCache.mCenter = data->center;
         }
         if (dComIfGp_checkPlayerStatus0(mPadId, 0x10000)) {
-            cXyz bird_eye_pos = eyePos(data->bird);
-            if (mViewCache.mEye.y < bird_eye_pos.y) {
+            if (mViewCache.mEye.y < eyePos(data->bird).y) {
+                cXyz bird_eye_pos = eyePos(data->bird);
                 mViewCache.mEye.y += (bird_eye_pos.y - mViewCache.mEye.y) * 0.05f;
             }
         }
