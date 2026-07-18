@@ -8,6 +8,7 @@
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_path.h"
 #include "f_pc/f_pc_draw_priority.h"
 #include "f_pc/f_pc_name.h"
 #include "m_Do/m_Do_mtx.h"
@@ -101,7 +102,14 @@ void daObjTrap_c::circle_search() {
 
 /* 0000112C-0000122C       .text set_move_info__11daObjTrap_cFv */
 void daObjTrap_c::set_move_info() {
-    /* Nonmatching */
+    dPnt* point = &mpPath->m_points[mPathPoint];
+    mPathPos.set(point->m_position.x, current.pos.y, point->m_position.z);
+    point = &mpPath->m_points[(mPathPoint + 1) & 1];
+    mNextPathPos.set(point->m_position.x, current.pos.y, point->m_position.z);
+    mPathDirection = mNextPathPos - mPathPos;
+    mPathDirectionSign = mPathDirection.normalizeRS();
+    mPathOffset = cXyz::Zero;
+    mPathStep = mPathDirection * 100.0f;
 }
 
 /* 0000122C-000013E4       .text check_arrival__11daObjTrap_cFv */
