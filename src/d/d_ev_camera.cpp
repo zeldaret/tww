@@ -977,6 +977,60 @@ bool dCamera_c::uniformBrakeEvCamera() {
         data->rel_actor = getEvActor("RelActor");
         getEvFloatData(&data->cushion, "Cushion", 1.0f);
         data->progress = 0.0f;
+        if (data->rel_actor != NULL) {
+            data->rel_actor_id = fopAcM_GetID(data->rel_actor);
+            cXyz center;
+            cXyz eye;
+            if (data->rel_use_mask[1] == 'r') {
+                center = relationalPos(data->rel_actor, &data->start_center);
+                if (m080 & 1) data->start_eye.x = -data->start_eye.x;
+                eye = relationalPos(data->rel_actor, &data->start_eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) data->start_eye.x = -data->start_eye.x;
+            }
+            if (data->rel_use_mask[0] == 'n' || data->rel_use_mask[1] == 'n') {
+                cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
+                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                    if (data->rel_use_mask[0] == 'n') data->start_center.x = -data->start_center.x;
+                    if (data->rel_use_mask[1] == 'n') data->start_eye.x = -data->start_eye.x;
+                }
+                center = relationalPos(data->rel_actor, &data->start_center);
+                eye = relationalPos(data->rel_actor, &data->start_eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) data->start_eye.x = -data->start_eye.x;
+            }
+            if (data->rel_use_mask[2] == 'n' || data->rel_use_mask[3] == 'n') {
+                cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
+                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                    if (data->rel_use_mask[2] == 'n') data->center.x = -data->center.x;
+                    if (data->rel_use_mask[3] == 'n') data->eye.x = -data->eye.x;
+                }
+                center = relationalPos(data->rel_actor, &data->center);
+                eye = relationalPos(data->rel_actor, &data->eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) data->eye.x = -data->eye.x;
+            }
+            if (data->rel_use_mask[2] == 'p') {
+                cXyz gap(data->center);
+                cXyz position(relationalPos(data->rel_actor, &gap));
+                f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                gap.x = -gap.x;
+                position = relationalPos(data->rel_actor, &gap);
+                f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                if (distance < other_distance) data->center.x = -data->center.x;
+            }
+            if (data->rel_use_mask[3] == 'p') {
+                cXyz gap(data->eye);
+                cXyz position(relationalPos(data->rel_actor, &gap));
+                f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                gap.x = -gap.x;
+                position = relationalPos(data->rel_actor, &gap);
+                f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                if (distance < other_distance) data->eye.x = -data->eye.x;
+            } else if (data->rel_use_mask[3] == 'r') {
+                center = relationalPos(data->rel_actor, &data->center);
+                if (m080 & 1) data->eye.x = -data->eye.x;
+                eye = relationalPos(data->rel_actor, &data->eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) data->eye.x = -data->eye.x;
+            }
+        }
         data->start_direction = mDirection.Invert();
         m102 = 1;
         m101 = 1;
@@ -1170,6 +1224,60 @@ bool dCamera_c::uniformAcceleEvCamera() {
         data->rel_actor = getEvActor("RelActor");
         getEvFloatData(&data->cushion, "Cushion", 1.0f);
         data->progress = 0.0f;
+        if (data->rel_actor != NULL) {
+            data->rel_actor_id = fopAcM_GetID(data->rel_actor);
+            cXyz center;
+            cXyz eye;
+            if (data->rel_use_mask[1] == 'r') {
+                center = relationalPos(data->rel_actor, &data->start_center);
+                if (m080 & 1) data->start_eye.x = -data->start_eye.x;
+                eye = relationalPos(data->rel_actor, &data->start_eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) data->start_eye.x = -data->start_eye.x;
+            }
+            if (data->rel_use_mask[0] == 'n' || data->rel_use_mask[1] == 'n') {
+                cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
+                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                    if (data->rel_use_mask[0] == 'n') data->start_center.x = -data->start_center.x;
+                    if (data->rel_use_mask[1] == 'n') data->start_eye.x = -data->start_eye.x;
+                }
+                center = relationalPos(data->rel_actor, &data->start_center);
+                eye = relationalPos(data->rel_actor, &data->start_eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) data->start_eye.x = -data->start_eye.x;
+            }
+            if (data->rel_use_mask[2] == 'n' || data->rel_use_mask[3] == 'n') {
+                cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
+                if (actor_direction.U() - directionOf(data->rel_actor) < cSAngle::_0) {
+                    if (data->rel_use_mask[2] == 'n') data->center.x = -data->center.x;
+                    if (data->rel_use_mask[3] == 'n') data->eye.x = -data->eye.x;
+                }
+                center = relationalPos(data->rel_actor, &data->center);
+                eye = relationalPos(data->rel_actor, &data->eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) data->eye.x = -data->eye.x;
+            }
+            if (data->rel_use_mask[2] == 'p') {
+                cXyz gap(data->center);
+                cXyz position(relationalPos(data->rel_actor, &gap));
+                f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                gap.x = -gap.x;
+                position = relationalPos(data->rel_actor, &gap);
+                f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                if (distance < other_distance) data->center.x = -data->center.x;
+            }
+            if (data->rel_use_mask[3] == 'p') {
+                cXyz gap(data->eye);
+                cXyz position(relationalPos(data->rel_actor, &gap));
+                f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                gap.x = -gap.x;
+                position = relationalPos(data->rel_actor, &gap);
+                f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
+                if (distance < other_distance) data->eye.x = -data->eye.x;
+            } else if (data->rel_use_mask[3] == 'r') {
+                center = relationalPos(data->rel_actor, &data->center);
+                if (m080 & 1) data->eye.x = -data->eye.x;
+                eye = relationalPos(data->rel_actor, &data->eye);
+                if (lineBGCheck(&center, &eye, 0x8f)) data->eye.x = -data->eye.x;
+            }
+        }
         data->start_direction = mDirection.Invert();
         m102 = 1;
         m101 = 1;
