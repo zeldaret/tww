@@ -5,6 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_camera.h"
+#include "d/d_kankyo_wether.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"
@@ -1722,7 +1723,213 @@ bool dCamera_c::tactEvCamera() {
 
 /* 800B8C90-800B99B8       .text windDirectionEvCamera__9dCamera_cFv */
 bool dCamera_c::windDirectionEvCamera() {
-    /* Nonmatching */
+    struct WindData {
+        int state;
+        int timer;
+        cSGlobe wind;
+        cSGlobe start_direction;
+        cSGlobe direction;
+        fopAc_ac_c* bird;
+        cXyz eye;
+        cXyz center;
+        cXyz bird_gap;
+        f32 stop_dist;
+        f32 follow_cushion;
+        int up_count;
+        int side_flag;
+        int type;
+        f32 far_dist;
+        f32 bird_fly_dist;
+        f32 near_fovy;
+        f32 far_fovy;
+        f32 fovy_cushion;
+        f32 total;
+        f32 progress;
+    };
+    WindData* data = (WindData*)&mWork;
+
+    cXyz center_gaps[3] = {
+        cXyz(-25.0f, 12.0f, 0.0f), cXyz(-25.0f, 12.0f, 0.0f),
+        cXyz(-25.0f, 12.0f, 0.0f),
+    };
+    cXyz eye_gaps[3] = {
+        cXyz(-40.0f, -10.0f, -90.0f), cXyz(-25.0f, 0.0f, 90.0f),
+        cXyz(-25.0f, -30.0f, 90.0f),
+    };
+
+    if (m11C == 0) {
+        data->state = 0;
+        data->timer = 0;
+        data->wind.Val(1.0f, g_env_light.mWind.mTactWindAngleX,
+                       g_env_light.mWind.mTactWindAngleY);
+        data->bird = g_dComIfG_gameInfo.play.getEvent()->getPtI();
+        getEvFloatData(&data->bird_fly_dist, "BirdFlyDist", 1620.0f);
+        cXyz default_gap(40.0f, -95.0f, 10.0f);
+        getEvXyzData(&data->bird_gap, "Torishita", default_gap);
+        if (dKyw_get_tactwind_dir()) {
+            data->bird_gap.x = -data->bird_gap.x;
+        }
+        cSGlobe direction(data->wind.Invert());
+        direction.R(data->bird_fly_dist);
+        cXyz side(-data->bird_gap.x, 0.0f, 0.0f);
+        cXyz player_attention = attentionPos(mpPlayerActor);
+        cXyz player_position = relationalPos(mpPlayerActor, &side);
+        cXyz bird_offset = direction.Xyz();
+        cXyz bird_position = relationalPos(data->bird, &bird_offset);
+        int blocked = 0;
+        if (lineBGCheck(&player_attention, &bird_position, 0x7f) ||
+            lineBGCheck(&player_position, &bird_position, 0x7f)) {
+            blocked = 1;
+        }
+        getEvFloatData(&data->stop_dist, "StopDist", 155.0f);
+        getEvIntData(&data->up_count, "UpCount", 8);
+        getEvIntData(&data->side_flag, "SideFlag", 0);
+        getEvFloatData(&data->follow_cushion, "FollowCushion", 0.02f);
+        getEvFloatData(&data->near_fovy, "NearFovy", 30.0f);
+        getEvFloatData(&data->far_fovy, "FarFovy", 85.0f);
+        getEvFloatData(&data->fovy_cushion, "FovyCushion", 0.05f);
+        data->far_dist = (positionOf(data->bird) - positionOf(mpPlayerActor)).abs();
+        mViewCache.mFovy = data->far_fovy;
+        getEvIntData(&data->type, "Type", blocked);
+        if (data->type == 1) {
+            data->state = 10;
+        }
+    }
+
+    if (dKyw_get_tactwind_dir()) {
+        center_gaps[0].x = -center_gaps[0].x;
+        center_gaps[1].x = -center_gaps[1].x;
+        center_gaps[2].x = -center_gaps[2].x;
+        eye_gaps[0].x = -eye_gaps[0].x;
+        eye_gaps[1].x = -eye_gaps[1].x;
+        eye_gaps[2].x = -eye_gaps[2].x;
+    }
+
+    switch (data->state) {
+    case 0:
+    default: {
+        mViewCache.mCenter = attentionPos(mpPlayerActor);
+        mViewCache.mEye = relationalPos(data->bird, &center_gaps[data->side_flag]);
+        f32 distance = dCamMath::xyzHorizontalDistance(mViewCache.mCenter, mViewCache.mEye);
+        ResetBlure(0);
+        SetBlureTimer(110);
+        SetBlureAlpha(0.6f);
+        SetBlureScale(0.99f);
+        dComIfGp_getVibration().StartShock(7, 0x20, cXyz(0.0f, 1.0f, 0.0f));
+        if (distance < data->stop_dist) {
+            data->state = 1;
+            data->timer = 0;
+        }
+        break;
+    }
+    case 1:
+        if (data->timer > data->up_count) {
+            data->state = 2;
+        }
+        break;
+    case 2:
+        data->center = mViewCache.mCenter;
+        data->state = 3;
+        /* fallthrough */
+    case 3: {
+        data->center += (attentionPos(mpPlayerActor) - data->center) * 0.02f;
+        cM3dGLin line;
+        line.set(data->center, mViewCache.mEye);
+        cXyz player = attentionPos(mpPlayerActor);
+        cXyz nearest;
+        f32 distance;
+        if (cM3d_Len3dSqPntAndSegLine(&line, &player, &nearest, &distance)) {
+            mViewCache.mCenter = nearest;
+        } else {
+            mViewCache.mCenter = data->center;
+        }
+        if (dComIfGp_checkPlayerStatus0(mPadId, 0x10000)) {
+            cXyz bird_eye_pos = eyePos(data->bird);
+            if (mViewCache.mEye.y < bird_eye_pos.y) {
+                mViewCache.mEye.y += (bird_eye_pos.y - mViewCache.mEye.y) * 0.05f;
+            }
+        }
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+        break;
+    }
+    case 10:
+        mViewCache.mCenter = relationalPos(mpPlayerActor, &center_gaps[data->side_flag]);
+        mViewCache.mEye = relationalPos(mpPlayerActor, &eye_gaps[data->side_flag]);
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+        data->up_count = 28;
+        ResetBlure(0);
+        SetBlureTimer(110);
+        SetBlureAlpha(0.6f);
+        SetBlureScale(0.99f);
+        dComIfGp_getVibration().StartShock(7, 0x20, cXyz(0.0f, 1.0f, 0.0f));
+        /* fallthrough */
+    case 11:
+        if (data->timer > data->up_count) {
+            data->state = 12;
+            data->center = relationalPos(mpPlayerActor, &center_gaps[data->side_flag]);
+            data->eye = relationalPos(mpPlayerActor, &eye_gaps[data->side_flag]);
+            data->direction.Val(data->eye - data->center);
+            data->start_direction = mViewCache.mDirection;
+            data->up_count = 40;
+            data->timer = 0;
+            data->progress = 0.0f;
+            data->total = (data->up_count * (data->up_count + 1)) >> 1;
+        }
+        break;
+    case 12:
+        if (data->timer < data->up_count) {
+            data->progress += data->timer;
+            f32 step = data->progress / data->total;
+            mViewCache.mDirection.R(data->start_direction.R() +
+                                   step * (data->direction.R() - data->start_direction.R()));
+            mViewCache.mDirection.V(data->start_direction.V() +
+                                   (data->direction.V() - data->start_direction.V()) * step);
+            mViewCache.mDirection.U(data->start_direction.U() +
+                                   (data->direction.U() - data->start_direction.U()) * step);
+            mViewCache.mCenter = data->center;
+            mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        } else {
+            data->state = 13;
+        case 13:
+            data->state = 14;
+            data->up_count = 0;
+            data->timer = 0;
+        case 14:
+            if (data->timer > data->up_count) {
+                data->state = 15;
+            }
+            data->center = relationalPos(mpPlayerActor, &center_gaps[data->side_flag]);
+            data->eye = relationalPos(mpPlayerActor, &eye_gaps[data->side_flag]);
+        }
+        break;
+    case 15:
+        mViewCache.mCenter += (data->center - mViewCache.mCenter) * 0.02f;
+        mViewCache.mEye += (data->eye - mViewCache.mEye) * 0.02f;
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+        break;
+    }
+
+    if (data->type == 0) {
+        f32 distance = (positionOf(data->bird) - positionOf(mpPlayerActor)).abs();
+        f32 ratio;
+        if (distance < data->stop_dist) {
+            ratio = 0.0f;
+        } else if (distance > data->far_dist) {
+            ratio = 1.0f;
+        } else {
+            ratio = (distance - data->stop_dist) / (data->far_dist - data->stop_dist);
+        }
+        f32 target_fovy = data->near_fovy + ratio * (data->far_fovy - data->near_fovy);
+        mViewCache.mFovy += data->fovy_cushion * (target_fovy - mViewCache.mFovy);
+    } else {
+        mEventData.field_0x20 = 1;
+        mViewCache.mFovy = 82.0f;
+    }
+    data->timer++;
+    m102 = 1;
+    m101 = 1;
+    m100 = 1;
+    return true;
 }
 
 /* 800B99B8-800B9FB0       .text turnToActorEvCamera__9dCamera_cFv */
