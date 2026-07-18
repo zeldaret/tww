@@ -2297,7 +2297,7 @@ bool dCamera_c::turnToActorEvCamera() {
         getEvFloatData(&data->cushion, "Cushion", DefaultCushion);
         getEvIntData(&data->timer, "Timer", DefaultTimer);
         getEvFloatData(&data->front_angle, "FrontAngle", DefaultFrontAngle);
-        if ((data->actor = getEvActor("Target", "@PLAYER")) == NULL) {
+        if ((data->actor = getEvActor("Target", "@STARTER")) == NULL) {
             m102 = 1;
             m101 = 1;
             m100 = 1;
