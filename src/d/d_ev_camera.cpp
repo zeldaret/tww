@@ -1535,7 +1535,149 @@ bool dCamera_c::styleEvCamera() {
 
 /* 800B81D0-800B8AB8       .text gameOverEvCamera__9dCamera_cFv */
 bool dCamera_c::gameOverEvCamera() {
-    /* Nonmatching */
+    struct GameOverData {
+        int state;
+        int timer;
+        int side;
+        cXyz center_gap;
+        cXyz eye_gap;
+    };
+    GameOverData* data = (GameOverData*)&mWork;
+    cXyz first_center(0.0f, -25.0f, 0.0f);
+    cXyz first_eyes[5] = {
+        cXyz(85.0f, -50.0f, 165.0f),
+        cXyz(72.0f, -64.0f, 60.0f),
+        cXyz(165.0f, -20.0f, 45.0f),
+        cXyz(85.0f, 165.0f, 40.0f),
+        cXyz(10.0f, -70.0f, 110.0f),
+    };
+    cXyz second_center(0.0f, -40.0f, -35.0f);
+    cXyz second_eye(0.0f, 170.0f, 115.0f);
+    cXyz subject_center(0.0f, 14.0f, 30.0f);
+    cXyz subject_eye(70.0f, 155.0f, 175.0f);
+
+    if (m11C == 0) {
+        data->state = 0;
+        data->timer = 0;
+        if (m07C & 2) {
+            data->side = 0;
+        } else {
+            data->side = 1;
+        }
+        if (dComIfGp_checkPlayerStatus0(mPadId, 0x100000)) {
+            data->state = 50;
+        }
+        m102 = 1;
+        m101 = 1;
+        m100 = 1;
+    }
+
+    cSAngle player_angle = cSAngle::_0;
+    if (dComIfGp_checkPlayerStatus0(mPadId, 0x10000)) {
+        player_angle = cSAngle::_270;
+    }
+    switch (data->state) {
+    default:
+        data->state = 1;
+        /* fallthrough */
+    case 1: {
+        cXyz center = relationalPos(mpPlayerActor, &first_center);
+        cXyz eye;
+        int i;
+        for (i = 0; i < 5; i++) {
+            if (data->side != 0) {
+                first_eyes[i].x = -first_eyes[i].x;
+            }
+            eye = relationalPos(mpPlayerActor, &first_eyes[i], player_angle);
+            if (eye.y < m368 + positionOf(mpPlayerActor).y) {
+                eye.y = m368 + positionOf(mpPlayerActor).y;
+            }
+            if (!lineBGCheck(&center, &eye, 0x7f)) {
+                break;
+            }
+            first_eyes[i].x = -first_eyes[i].x;
+            eye = relationalPos(mpPlayerActor, &first_eyes[i], player_angle);
+            if (eye.y < m368 + positionOf(mpPlayerActor).y) {
+                eye.y = m368 + positionOf(mpPlayerActor).y;
+            }
+            if (!lineBGCheck(&center, &eye, 0x7f)) {
+                break;
+            }
+            data->side ^= 1;
+        }
+        mViewCache.mEye = eye;
+        data->center_gap = first_center;
+        data->eye_gap = first_eyes[i];
+        data->state++;
+        /* fallthrough */
+    }
+    case 2:
+        if (data->timer == 130) {
+            data->state++;
+            data->timer = 0;
+        case 3: {
+            cXyz center = relationalPos(mpPlayerActor, &second_center, player_angle);
+            cXyz eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
+            if (eye.y < m368 + positionOf(mpPlayerActor).y) {
+                eye.y = m368 + positionOf(mpPlayerActor).y;
+            }
+            if (lineBGCheck(&center, &eye, 0x7f)) {
+                second_eye.z = -second_eye.z;
+                eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
+                if (eye.y < m368 + positionOf(mpPlayerActor).y) {
+                    eye.y = m368 + positionOf(mpPlayerActor).y;
+                }
+                if (lineBGCheck(&center, &eye, 0x7f)) {
+                    second_center.z = 0.0f;
+                    center = relationalPos(mpPlayerActor, &second_center, player_angle);
+                    eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
+                    if (eye.y < m368 + positionOf(mpPlayerActor).y) {
+                        eye.y = m368 + positionOf(mpPlayerActor).y;
+                    }
+                    if (lineBGCheck(&center, &eye, 0x7f)) {
+                        second_eye.z = -second_eye.z;
+                        eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
+                        if (eye.y < m368 + positionOf(mpPlayerActor).y) {
+                            eye.y = m368 + positionOf(mpPlayerActor).y;
+                        }
+                        lineBGCheck(&center, &eye, 0x7f);
+                    }
+                }
+            }
+            data->center_gap = second_center;
+            data->eye_gap = second_eye;
+            data->state++;
+            /* fallthrough */
+        }
+        case 4:
+            if (data->timer == 30) {
+                data->state++;
+                data->timer = 0;
+            }
+        }
+        break;
+    case 50:
+        data->state = 51;
+        /* fallthrough */
+    case 51:
+        data->center_gap = subject_center;
+        data->eye_gap = subject_eye;
+        data->state++;
+        /* fallthrough */
+    case 52:
+        if (data->timer == 160) {
+            data->state = 5;
+            data->timer = 0;
+        }
+        break;
+    }
+    mViewCache.mCenter = relationalPos(mpPlayerActor, &data->center_gap, player_angle);
+    mViewCache.mEye = relationalPos(mpPlayerActor, &data->eye_gap, player_angle);
+    data->timer++;
+    m102 = 1;
+    m101 = 1;
+    m100 = 1;
+    return true;
 }
 
 /* 800B8AB8-800B8C90       .text tactEvCamera__9dCamera_cFv */
