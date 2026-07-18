@@ -17,13 +17,37 @@
 #include "res/Object/Trap.h"
 
 /* 000000EC-0000010C       .text solidHeapCB__11daObjTrap_cFP10fopAc_ac_c */
-void daObjTrap_c::solidHeapCB(fopAc_ac_c*) {
-    create_heap();
+int daObjTrap_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return static_cast<daObjTrap_c*>(i_this)->create_heap();
 }
 
 f32 const daObjTrap_c::M_speed_table[] = {50.0f, 80.0f, 100.0f};
 s16 const daObjTrap_c::M_wait_f_table[] = {30, 10, 0};
 const char daObjTrap_c::M_arcname[] = "Trap";
+
+static dCcD_SrcCyl l_daObjTrap_cyl_data = {
+    {
+        0,
+        AT_TYPE_SPIKE,
+        1,
+        5,
+        0,
+        0,
+        0,
+        dCcG_SE_NONE,
+        dCcG_AtHitMark_None_e,
+        dCcG_At_Spl_UNK1,
+        0,
+        0,
+        dCcG_SE_NONE,
+        dCcG_TgHitMark_None_e,
+        dCcG_Tg_Spl_UNK0,
+        0,
+        dCcG_TgSPrm_NoHitMark_e,
+        0,
+    },
+    {{{0.0f, -40.0f, 0.0f}, 155.0f, 100.0f}},
+};
 
 /* 0000010C-000002A4       .text create_heap__11daObjTrap_cFv */
 bool daObjTrap_c::create_heap() {
@@ -58,7 +82,47 @@ bool daObjTrap_c::create_heap() {
 
 /* 000002A4-00000510       .text _create__11daObjTrap_cFv */
 cPhs_State daObjTrap_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjTrap_c);
+
+    cPhs_State phase = dComIfG_resLoad(&mPhase, M_arcname);
+    if (phase == cPhs_COMPLEATE_e) {
+        phase = cPhs_ERROR_e;
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            mPathId = fopAcM_GetParam(this);
+            if (mPathId != 0xFF) {
+                mpPath = dPath_GetRoomPath(mPathId, fopAcM_GetRoomNo(this));
+                if (mpPath != NULL && mpPath->m_points != NULL) {
+                    mSpeedType = (fopAcM_GetParam(this) >> 8) & 0xF;
+                    if (mSpeedType == 0xF) {
+                        mSpeedType = 0;
+                    }
+                    mSpeed = M_speed_table[mSpeedType];
+                    mWaitFrame = M_wait_f_table[mSpeedType];
+                    dPnt* first_point = mpPath->m_points;
+                    f32 z = first_point->m_position.z;
+                    current.pos.x = first_point->m_position.x;
+                    current.pos.z = z;
+                    set_move_info();
+                    cXyz path_diff = mNextPathPos - mPathPos;
+                    mPathLength = cXyz(path_diff.x, 0.0f, path_diff.z).abs();
+                    mPathTarget = current.pos;
+                    init_mtx();
+                    mCcStts.Init(0, 0xFF, this);
+                    mCcCyl.SetStts(&mCcStts);
+                    mCcCyl.Set(l_daObjTrap_cyl_data);
+                    set_co_pos();
+                    dComIfG_Bgsp()->Regist(mpcBgW, this);
+                    get_ground();
+                    phase = cPhs_COMPLEATE_e;
+                } else {
+                    mPathId = 0xFF;
+                    phase = cPhs_ERROR_e;
+                }
+            }
+        }
+    }
+
+    return phase;
 }
 
 /* 00000DF0-00000E84       .text _delete__11daObjTrap_cFv */
@@ -100,8 +164,17 @@ void daObjTrap_c::get_ground() {
 }
 
 /* 00000FF4-0000112C       .text circle_search__11daObjTrap_cFv */
-void daObjTrap_c::circle_search() {
-    /* Nonmatching */
+bool daObjTrap_c::circle_search() {
+    cXyz offset = dComIfGp_getPlayer(0)->current.pos - current.pos;
+    cXyz offset_xz(offset.x, 0.0f, offset.z);
+
+    if (offset_xz.abs() <= 400.0f && mPathDirectionSign == 1) {
+        if (mPathDirection.x * offset.x + mPathDirection.z * offset.z >= 0.0f) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* 0000112C-0000122C       .text set_move_info__11daObjTrap_cFv */
@@ -218,7 +291,14 @@ bool daObjTrap_c::_execute() {
 
 /* 00002CB0-00002D54       .text _draw__11daObjTrap_cFv */
 bool daObjTrap_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(1, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    J3DModelData* model_data = mpModel->getModelData();
+    mBtkAnm.entry(model_data, mBtkAnm.getFrame());
+    mDoExt_modelUpdateDL(mpModel);
+    dComIfGd_setSimpleShadow2(&current.pos, mGroundY, 150.0f, mGndChk, 0, 1.0f,
+                              dDlst_shadowControl_c::getSimpleTex());
+    return true;
 }
 
 namespace {

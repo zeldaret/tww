@@ -15,14 +15,14 @@ public:
     void start_shine() {}
     void stop_shine() {}
 
-    void solidHeapCB(fopAc_ac_c*);
+    static int solidHeapCB(fopAc_ac_c*);
     bool create_heap();
     cPhs_State _create();
     bool _delete();
     void init_mtx();
     void set_co_pos();
     void get_ground();
-    void circle_search();
+    bool circle_search();
     void set_move_info();
     bool check_arrival();
     void check_wall();
