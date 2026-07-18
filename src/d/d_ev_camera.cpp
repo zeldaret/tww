@@ -2785,6 +2785,7 @@ bool dCamera_c::useItem1EvCamera() {
         break;
     }
     case 1: {
+        {
         f32 step = (f32)data->frame / (f32)data->timer;
         mViewCache.mFovy += step * (data->fovy - mViewCache.mFovy);
         data->center = relationalPos(mpPlayerActor, centers[data->type]);
@@ -2799,6 +2800,7 @@ bool dCamera_c::useItem1EvCamera() {
         longitude += (data->direction.U() - longitude) * step;
         mViewCache.mDirection.Val(radius, latitude, longitude);
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        }
         if (data->frame >= data->timer) {
             data->state = 2;
         case 2:
