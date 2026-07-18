@@ -1033,68 +1033,68 @@ bool dCamera_c::uniformBrakeEvCamera() {
     }
 
     f32 ratio = result ? 1.0f : data->progress / data->total_distance;
-    cXyz start_center;
-    cXyz start_eye;
-    cXyz end_center;
-    cXyz end_eye;
+    struct {
+        cXyz eye;
+        cXyz center;
+    } start, end;
     if (data->rel_actor != NULL) {
         if (data->rel_use_mask[0] == 't') {
-            start_center = attentionPos(data->rel_actor) + data->start_center;
+            start.center = attentionPos(data->rel_actor) + data->start_center;
         } else if (data->rel_use_mask[0] == 'c') {
             cSGlobe direction(data->start_center);
             direction.U(data->start_direction.U() + direction.U());
-            start_center = attentionPos(data->rel_actor) + direction.Xyz();
+            start.center = attentionPos(data->rel_actor) + direction.Xyz();
         } else if (data->rel_use_mask[0] != '-') {
-            start_center = relationalPos(data->rel_actor, &data->start_center);
+            start.center = relationalPos(data->rel_actor, &data->start_center);
         }
         if (data->rel_use_mask[1] == 't') {
-            start_eye = attentionPos(data->rel_actor) + data->start_eye;
+            start.eye = attentionPos(data->rel_actor) + data->start_eye;
         } else if (data->rel_use_mask[1] == 'c') {
             cSGlobe direction(data->start_eye);
             direction.U(data->start_direction.U() + direction.U());
-            start_eye = attentionPos(data->rel_actor) + direction.Xyz();
+            start.eye = attentionPos(data->rel_actor) + direction.Xyz();
         } else if (data->rel_use_mask[1] != '-') {
-            start_eye = relationalPos(data->rel_actor, &data->start_eye);
+            start.eye = relationalPos(data->rel_actor, &data->start_eye);
         }
         if (data->rel_use_mask[2] == 't') {
-            end_center = attentionPos(data->rel_actor) + data->center;
+            end.center = attentionPos(data->rel_actor) + data->center;
         } else if (data->rel_use_mask[2] == 'c') {
             cSGlobe direction(data->center);
             direction.U(data->start_direction.U() + direction.U());
-            end_center = attentionPos(data->rel_actor) + direction.Xyz();
+            end.center = attentionPos(data->rel_actor) + direction.Xyz();
         } else if (data->rel_use_mask[2] == '-') {
-            end_center = data->trans_type == 2
+            end.center = data->trans_type == 2
                 ? dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor))
                 : data->center;
         } else {
-            end_center = relationalPos(data->rel_actor, &data->center);
+            end.center = relationalPos(data->rel_actor, &data->center);
         }
         if (data->rel_use_mask[3] == 't') {
-            end_eye = attentionPos(data->rel_actor) + data->eye;
+            end.eye = attentionPos(data->rel_actor) + data->eye;
         } else if (data->rel_use_mask[3] == 'c') {
             cSGlobe direction(data->eye);
             direction.U(data->start_direction.U() + direction.U());
-            end_eye = attentionPos(data->rel_actor) + direction.Xyz();
+            end.eye = attentionPos(data->rel_actor) + direction.Xyz();
         } else if (data->rel_use_mask[3] == '-') {
-            end_eye = data->trans_type == 2
+            end.eye = data->trans_type == 2
                 ? dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor))
                 : data->eye;
         } else {
-            end_eye = relationalPos(data->rel_actor, &data->eye);
+            end.eye = relationalPos(data->rel_actor, &data->eye);
         }
     } else {
-        start_center = data->start_center;
-        start_eye = data->start_eye;
-        end_center = data->center;
-        end_eye = data->eye;
+        start.center = data->start_center;
+        start.eye = data->start_eye;
+        end.center = data->center;
+        end.eye = data->eye;
     }
 
     if (data->trans_type == 1) {
         mViewCache.mCenter +=
-            (start_center + (end_center - start_center) * ratio - mViewCache.mCenter) *
+            (start.center + (end.center - start.center) * ratio - mViewCache.mCenter) *
             data->cushion;
-        cSGlobe start_direction(start_eye - start_center);
-        cSGlobe end_direction(end_eye - end_center);
+        cSGlobe start_direction(start.eye - start.center);
+        cSGlobe end_direction(end.eye - end.center);
         cSGlobe direction(
             start_direction.R() + ratio * (end_direction.R() - start_direction.R()),
             start_direction.V() + (end_direction.V() - start_direction.V()) * ratio,
@@ -1102,15 +1102,15 @@ bool dCamera_c::uniformBrakeEvCamera() {
         mViewCache.mEye +=
             (mViewCache.mCenter + direction.Xyz() - mViewCache.mEye) * data->cushion;
     } else if (data->trans_type == 2) {
-        mViewCache.mCenter += (start_center + end_center * ratio - mViewCache.mCenter) *
+        mViewCache.mCenter += (start.center + end.center * ratio - mViewCache.mCenter) *
                               data->cushion;
-        mViewCache.mEye += (start_eye + end_eye * ratio - mViewCache.mEye) * data->cushion;
+        mViewCache.mEye += (start.eye + end.eye * ratio - mViewCache.mEye) * data->cushion;
     } else {
         mViewCache.mCenter +=
-            (start_center + (end_center - start_center) * ratio - mViewCache.mCenter) *
+            (start.center + (end.center - start.center) * ratio - mViewCache.mCenter) *
             data->cushion;
         mViewCache.mEye +=
-            (start_eye + (end_eye - start_eye) * ratio - mViewCache.mEye) * data->cushion;
+            (start.eye + (end.eye - start.eye) * ratio - mViewCache.mEye) * data->cushion;
     }
     f32 fovy = data->start_fovy + ratio * (data->fovy - data->start_fovy);
     mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
@@ -1265,68 +1265,68 @@ bool dCamera_c::uniformAcceleEvCamera() {
     }
 
     f32 ratio = result ? 1.0f : data->progress / data->total_distance;
-    cXyz start_center;
-    cXyz start_eye;
-    cXyz end_center;
-    cXyz end_eye;
+    struct {
+        cXyz eye;
+        cXyz center;
+    } start, end;
     if (data->rel_actor != NULL) {
         if (data->rel_use_mask[0] == 't') {
-            start_center = attentionPos(data->rel_actor) + data->start_center;
+            start.center = attentionPos(data->rel_actor) + data->start_center;
         } else if (data->rel_use_mask[0] == 'c') {
             cSGlobe direction(data->start_center);
             direction.U(data->start_direction.U() + direction.U());
-            start_center = attentionPos(data->rel_actor) + direction.Xyz();
+            start.center = attentionPos(data->rel_actor) + direction.Xyz();
         } else if (data->rel_use_mask[0] != '-') {
-            start_center = relationalPos(data->rel_actor, &data->start_center);
+            start.center = relationalPos(data->rel_actor, &data->start_center);
         }
         if (data->rel_use_mask[1] == 't') {
-            start_eye = attentionPos(data->rel_actor) + data->start_eye;
+            start.eye = attentionPos(data->rel_actor) + data->start_eye;
         } else if (data->rel_use_mask[1] == 'c') {
             cSGlobe direction(data->start_eye);
             direction.U(data->start_direction.U() + direction.U());
-            start_eye = attentionPos(data->rel_actor) + direction.Xyz();
+            start.eye = attentionPos(data->rel_actor) + direction.Xyz();
         } else if (data->rel_use_mask[1] != '-') {
-            start_eye = relationalPos(data->rel_actor, &data->start_eye);
+            start.eye = relationalPos(data->rel_actor, &data->start_eye);
         }
         if (data->rel_use_mask[2] == 't') {
-            end_center = attentionPos(data->rel_actor) + data->center;
+            end.center = attentionPos(data->rel_actor) + data->center;
         } else if (data->rel_use_mask[2] == 'c') {
             cSGlobe direction(data->center);
             direction.U(data->start_direction.U() + direction.U());
-            end_center = attentionPos(data->rel_actor) + direction.Xyz();
+            end.center = attentionPos(data->rel_actor) + direction.Xyz();
         } else if (data->rel_use_mask[2] == '-') {
-            end_center = data->trans_type == 2
+            end.center = data->trans_type == 2
                 ? dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor))
                 : data->center;
         } else {
-            end_center = relationalPos(data->rel_actor, &data->center);
+            end.center = relationalPos(data->rel_actor, &data->center);
         }
         if (data->rel_use_mask[3] == 't') {
-            end_eye = attentionPos(data->rel_actor) + data->eye;
+            end.eye = attentionPos(data->rel_actor) + data->eye;
         } else if (data->rel_use_mask[3] == 'c') {
             cSGlobe direction(data->eye);
             direction.U(data->start_direction.U() + direction.U());
-            end_eye = attentionPos(data->rel_actor) + direction.Xyz();
+            end.eye = attentionPos(data->rel_actor) + direction.Xyz();
         } else if (data->rel_use_mask[3] == '-') {
-            end_eye = data->trans_type == 2
+            end.eye = data->trans_type == 2
                 ? dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor))
                 : data->eye;
         } else {
-            end_eye = relationalPos(data->rel_actor, &data->eye);
+            end.eye = relationalPos(data->rel_actor, &data->eye);
         }
     } else {
-        start_center = data->start_center;
-        start_eye = data->start_eye;
-        end_center = data->center;
-        end_eye = data->eye;
+        start.center = data->start_center;
+        start.eye = data->start_eye;
+        end.center = data->center;
+        end.eye = data->eye;
     }
 
     if (data->trans_type == 1) {
         mViewCache.mCenter +=
-            (start_center + (end_center - start_center) * ratio - mViewCache.mCenter) *
+            (start.center + (end.center - start.center) * ratio - mViewCache.mCenter) *
             data->cushion;
-        cSGlobe start_direction(start_eye - start_center);
-        cSGlobe end_direction(end_eye - end_center);
+        cSGlobe start_direction(start.eye - start.center);
+        cSGlobe end_direction(end.eye - end.center);
         cSGlobe direction(
             start_direction.R() + ratio * (end_direction.R() - start_direction.R()),
             start_direction.V() + (end_direction.V() - start_direction.V()) * ratio,
@@ -1334,15 +1334,15 @@ bool dCamera_c::uniformAcceleEvCamera() {
         mViewCache.mEye +=
             (mViewCache.mCenter + direction.Xyz() - mViewCache.mEye) * data->cushion;
     } else if (data->trans_type == 2) {
-        mViewCache.mCenter += (start_center + end_center * ratio - mViewCache.mCenter) *
+        mViewCache.mCenter += (start.center + end.center * ratio - mViewCache.mCenter) *
                               data->cushion;
-        mViewCache.mEye += (start_eye + end_eye * ratio - mViewCache.mEye) * data->cushion;
+        mViewCache.mEye += (start.eye + end.eye * ratio - mViewCache.mEye) * data->cushion;
     } else {
         mViewCache.mCenter +=
-            (start_center + (end_center - start_center) * ratio - mViewCache.mCenter) *
+            (start.center + (end.center - start.center) * ratio - mViewCache.mCenter) *
             data->cushion;
         mViewCache.mEye +=
-            (start_eye + (end_eye - start_eye) * ratio - mViewCache.mEye) * data->cushion;
+            (start.eye + (end.eye - start.eye) * ratio - mViewCache.mEye) * data->cushion;
     }
     f32 fovy = data->start_fovy + ratio * (data->fovy - data->start_fovy);
     mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
