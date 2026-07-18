@@ -273,6 +273,8 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
         lin_chk.SetActorPid(fopAcM_GetID(this));
 
         if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
+            cXyz target_pos;
+            bool check_target;
             fopAc_ac_c* actor = dComIfG_Bgsp()->GetActorPointer(lin_chk);
             if (actor != NULL && fopAc_IsActor(actor) &&
                 fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
@@ -290,15 +292,20 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
                     mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &box_dir);
                     mDoMtx_stack_c::pop();
 
-                    cXyz target_pos = (box_offset + box_dir) * 75.0f + movebox->current.pos;
-                    if (check_block_target_pos(&target_pos)) {
-                        cXyz hit = lin_chk.GetCross();
-                        hit -= start;
-                        if (block_offset == cXyz::Zero ||
-                            block_offset.absXZ() > hit.absXZ()) {
-                            block_offset = hit - current.pos - forward;
-                        }
-                    }
+                    target_pos = (box_offset + box_dir) * 75.0f + movebox->current.pos;
+                    check_target = true;
+                } else {
+                    check_target = false;
+                }
+            } else {
+                check_target = false;
+            }
+            if (check_target && check_block_target_pos(&target_pos)) {
+                cXyz hit = lin_chk.GetCross();
+                hit -= start;
+                if (block_offset == cXyz::Zero ||
+                    block_offset.absXZ() > hit.absXZ()) {
+                    block_offset = hit - current.pos - forward;
                 }
             }
         }
