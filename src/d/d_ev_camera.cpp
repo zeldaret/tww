@@ -1020,8 +1020,10 @@ bool dCamera_c::uniformBrakeEvCamera() {
         return true;
     }
 
+    f32 ratio;
     if (m11C >= (u32)data->timer) {
         result = true;
+        ratio = 1.0f;
     } else {
         if (data->brake_type != 1) {
             if (m11C < (u32)data->braking_point) {
@@ -1034,9 +1036,9 @@ bool dCamera_c::uniformBrakeEvCamera() {
         } else {
             data->progress += (f32)(1 << ((data->timer - m11C) - 1));
         }
+        ratio = data->progress / data->total_distance;
     }
 
-    f32 ratio = result ? 1.0f : data->progress / data->total_distance;
     if (data->rel_actor != NULL) {
         if (data->rel_use_mask[0] == 't') {
             start.center = attentionPos(data->rel_actor) + data->start_center;
@@ -1253,8 +1255,10 @@ bool dCamera_c::uniformAcceleEvCamera() {
         return true;
     }
 
+    f32 ratio;
     if (m11C >= (u32)data->timer) {
         result = true;
+        ratio = 1.0f;
     } else {
         if (data->acceleration_type != 1) {
             if (m11C < (u32)data->acceleration_time) {
@@ -1267,9 +1271,9 @@ bool dCamera_c::uniformAcceleEvCamera() {
         } else {
             data->progress += (f32)(1 << (data->acceleration_time - 1));
         }
+        ratio = data->progress / data->total_distance;
     }
 
-    f32 ratio = result ? 1.0f : data->progress / data->total_distance;
     if (data->rel_actor != NULL) {
         if (data->rel_use_mask[0] == 't') {
             start.center = attentionPos(data->rel_actor) + data->start_center;
