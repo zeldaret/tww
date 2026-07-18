@@ -28,7 +28,7 @@ const char daObjTrap_c::M_arcname[] = "Trap";
 
 static dCcD_SrcCyl l_daObjTrap_cyl_data = {
     {
-        0,
+        cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
         AT_TYPE_SPIKE,
         1,
         5,
@@ -252,7 +252,7 @@ bool daObjTrap_c::check_block_target_pos(cXyz* target_pos) {
 
 /* 00001D7C-000023D4       .text check_block__11daObjTrap_cF4cXyz */
 cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
-    static const s16 angle_y[] = {0, 0x4000};
+    static s16 angle_y[] = {0x4000, -0x4000};
     static dBgS_ObjLinChk lin_chk;
 
     cXyz forward = mPathDirection * 150.0f;
