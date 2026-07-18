@@ -9,6 +9,7 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_a_obj.h"
 #include "d/d_path.h"
 #include "f_pc/f_pc_draw_priority.h"
 #include "f_pc/f_pc_name.h"
@@ -137,7 +138,27 @@ void daObjTrap_c::check_block(cXyz) {
 
 /* 000023D4-0000250C       .text set_vib_mode__11daObjTrap_cFv */
 void daObjTrap_c::set_vib_mode() {
-    /* Nonmatching */
+    mVibrationAngle = shape_angle.x;
+    mVibrationTimer = 6;
+    mVibrationFrame = 35.0f;
+    mBoundTimer = 16;
+    mVibrationPosition = cXyz::Zero;
+    mMode = 2;
+
+    cXyz pos = mPathDirection * 150.0f;
+    pos += current.pos;
+    cXyz direction = mPathDirection * -0.5f;
+    pos.y += 50.0f;
+    daObj::HitEff_hibana(&pos, &direction);
+
+    if (mVibrationTimer != 0) {
+        vibrate();
+        mVibrationTimer--;
+    }
+    if (mBoundTimer != 0) {
+        bound();
+        mBoundTimer--;
+    }
 }
 
 /* 0000250C-0000255C       .text vibrate__11daObjTrap_cFv */
@@ -154,7 +175,14 @@ void daObjTrap_c::bound() {
 
 /* 00002678-0000270C       .text set_shine__11daObjTrap_cFv */
 void daObjTrap_c::set_shine() {
-    /* Nonmatching */
+    mShineStatus = 1;
+    if (cXyz::BaseX.inprod(mPathDirection) >= 0.0f) {
+        mBtkAnm.setFrame(35.0f);
+        mBtkAnm.setPlaySpeed(1.0f);
+    } else {
+        mBtkAnm.setFrame(46.0f);
+        mBtkAnm.setPlaySpeed(-0.5f);
+    }
 }
 
 /* 0000270C-00002758       .text shine_move__11daObjTrap_cFv */
