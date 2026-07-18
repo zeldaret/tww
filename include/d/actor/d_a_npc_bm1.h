@@ -63,12 +63,12 @@ public:
     bool IamKakkuto() {return mSpecificType == Akoot;}
     bool IamSukketo() {return mSpecificType == Skett;}
     void clr_manzai() {mbManzai = false;}
-    cXyz getOdoroki() { return attention_info.position;}
+    cXyz& getOdoroki() { return attention_info.position;}
     s8 getStt() { return mStatus;}
     u16 get_oldMsgStat() {
-        return m878;
+        return mOldMsgStat;
     }
-    void setFocus() {}
+    void setFocus() {m882 = true;}
     void setTelescopeDemo() {m881 = true;}
     void set_manzai() {mbManzai = true;}
 
@@ -243,39 +243,39 @@ public:
     /* 0x6EC */ mDoExt_McaMorf* mpHeadMorf;
     /* 0x6F0 */ J3DAnmTexPattern* m_hed_tex_pttrn;
     /* 0x6F4 */ mDoExt_btpAnm mHeadBtpAnm;
-    /* 0x708 */ u8 m708;
+    /* 0x708 */ u8 mBlinkFrame;
                 // u8 pad709;
-                s16 m70A;
-                s16 m70C;
+                s16 mBlinkTimer;
+                s16 pad70C;
     /* 0x710 */ mDoExt_McaMorf* mpWingMorf;
                 s8 m_wngL1_jnt_num;
                 s8 m_wngR1_jnt_num;
                 s8 m_wngL3_jnt_num;
                 s8 m_wngR3_jnt_num;
-    /* 0x714 */ u8 m718[0x71C - 0x718];
+    /* 0x718 */ u8 pad718[0x71C - 0x718];   //Possibly an unused mDoExt_McaMorf* ?
     /* 0x71C */ mDoExt_McaMorf* mpArmMorf;
-                s8 m_armL1_jnt_num;
-                s8 m_armR1_jnt_num;
-                s8 m_armL2_jnt_num;
-                s8 m_armR2_jnt_num;
-                s8 m_hnd_R_jnt_num;
-                ActionFunc mCurrActionFunc;
+    /* 0x720 */ s8 m_armL1_jnt_num;
+    /* 0x721 */ s8 m_armR1_jnt_num;
+    /* 0x722 */ s8 m_armL2_jnt_num;
+    /* 0x722 */ s8 m_armR2_jnt_num;
+    /* 0x723 */ s8 m_hnd_R_jnt_num;
+    /* 0x724 */ ActionFunc mCurrActionFunc;
     /* 0x734 */ Mtx mLeftArmMtx;
     /* 0x764 */ Mtx mRightArmMtx;
     /* 0x794 */ dNpc_PathRun_c mPathRun;
-                dNpc_EventCut_c m79C;
-                fpc_ProcID m808;
+                dNpc_EventCut_c mEventCut;
+                fpc_ProcID mPartnerProcID;
     /* 0x80C */ cXyz m80C;
     /* 0x818 */ csXyz m818;
     /* 0x81E */ u8 m81E[0x820 - 0x81E];
     /* 0x820 */ cXyz mEyePos;
-                cXyz m82C;
-    /* 0x838 */ cXyz m838;
-                f32 m844;
-    /* 0x844 */ f32 m848;
-                f32 m84C;
-                f32 m850;
-                f32 m854;
+                cXyz mAttentionPos;
+    /* 0x838 */ cXyz mTargetPos;
+                f32 mFrame;
+    /* 0x844 */ f32 mTargetFlySpeed;
+                f32 mFlySpeedY;
+                f32 mTargetFlyStep;
+                f32 mFlyAccelY;
                 f32 m858;
                 s16 m85C;
                 s16 m85E;
@@ -288,16 +288,16 @@ public:
     /* 0x872 */ s16 m872;
     /* 0x874 */ s16 mHeadLookAtMaxVel;
     /* 0x876 */ s16 m876;
-    /* 0x878 */ u16 m878;
-                s8 m87A;
+    /* 0x878 */ u16 mOldMsgStat;
+                s8 mbMorfAnimStopped;
                 s8 m87B;
                 s8 m87C;
                 u8 m87D;
                 u8 m87E;
     /* 0x87F */ bool m87F;
 
-    /* 0x880 */ u8 m880;
-    /* 0x881 */ u8 m881;
+    /* 0x880 */ bool m880;
+    /* 0x881 */ bool m881;
     /* 0x882 */ u8 m882;
                 bool mbManzai;
     /* 0x884 */ bool mbInitPostman0;
@@ -308,37 +308,37 @@ public:
                 bool m889;
                 bool m88A;
                 u8 m88B;
-                u8 m88C;
+                bool mbRanExecute;
                 u8 m88D;
                 u8 m88E;
                 u8 m88F;                
     /* 0x890 */ s32 mbSetEyePos;
-    /* 0x894 */ u8 m894;
-    /* 0x895 */ u8 m895;
+    /* 0x894 */ bool mbAttention;
+    /* 0x895 */ bool m895;
     /* 0x896 */ bool m896;
     /* 0x897 */ bool mbInDemo;
-    /* 0x898 */ cXyz m898;
-    /* 0x8A4 */ cXyz m8A4;
-    /* 0x8B0 */ cXyz m8B0;
-    /* 0x8BC */ cXyz m8BC;
+    /* 0x898 */ cXyz mWingLPos;
+    /* 0x8A4 */ cXyz mWingRPos;
+    /* 0x8B0 */ cXyz mArmLPos;
+    /* 0x8BC */ cXyz mArmRPos;
     /* 0x8C8 */ u8 m8C8;
     /* 0x8C9 */ u8 m8C9[0x8CC - 0x8C9];
     /* 0x8CC */ u8 m8CC;
     /* 0x8CD */ u8 m8CD[0x8D4 - 0x8CD];
-    /* 0x8D4 */ JPABaseEmitter* m8D4;
-    /* 0x8D8 */ JPABaseEmitter* m8D8;
-    /* 0x8DC */ JPABaseEmitter* m8DC;
-    /* 0x8E0 */ JPABaseEmitter* m8E0;
-    /* 0x8E4 */ JPABaseEmitter* m8E4;
-    /* 0x8E8 */ JPABaseEmitter* m8E8;
-    /* 0x8EC */ JPABaseEmitter* m8EC;
-    /* 0x8F0 */ JPABaseEmitter* m8F0;
+    /* 0x8D4 */ JPABaseEmitter* mpFlyawayEmitterL;
+    /* 0x8D8 */ JPABaseEmitter* mpFlyawayEmitterR;
+    /* 0x8DC */ JPABaseEmitter* mpLandEmitterL;
+    /* 0x8E0 */ JPABaseEmitter* mpLandEmitterR;
+    /* 0x8E4 */ JPABaseEmitter* mpFeatherEmitterL;
+    /* 0x8E8 */ JPABaseEmitter* mpFeatherEmitterR;
+    /* 0x8EC */ JPABaseEmitter* mpFeather1EmitterL;
+    /* 0x8F0 */ JPABaseEmitter* mpFeather1EmitterR;
 #if VERSION == VERSION_DEMO
-    /* 0x900 */ u32 mHioOnly;
+    /* 0x900 */ u32 mDemoOnly;  //Possibly an unused emitter
 #endif
     /* 0x8F4 */ s8 m8F4;
     /* 0x8F5 */ s8 m8F5;
-    /* 0x8F6 */ s8 m8F6;
+    /* 0x8F6 */ s8 mActNo;
     /* 0x8F7 */ u8 m8F7;
     /* 0x8F8 */ u8 m8F8;
     /* 0x8F9 */ s8 m8F9;
@@ -348,7 +348,7 @@ public:
     /* 0x8FE */ s8 mStatus;
     /* 0x8FF */ s8 m8FF;
 
-    /* 0x900 */ s8 m900;
+    /* 0x900 */ s8 mLookBackState;
     /* 0x901 */ s8 mType;
     /* 0x902 */ SpecificType mSpecificType;
     /* 0x903 */ s8 mSpawnCondition;
@@ -373,8 +373,8 @@ struct hio_prm_c{
     s16 mCalcAngleTarget;
     f32 mAttPosOffsetY;
     u8 m18;
-    s16 m1A;
-    s16 m1C;
+    s16 mFlyScale;
+    s16 mFlyMaxStep;
     s16 m1E;
     f32 m20;
     f32 m24;
