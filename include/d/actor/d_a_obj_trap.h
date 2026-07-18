@@ -26,7 +26,7 @@ public:
     void set_move_info();
     void check_arrival();
     void check_wall();
-    void check_block_target_pos(cXyz*);
+    bool check_block_target_pos(cXyz*);
     void check_block(cXyz);
     void set_vib_mode();
     void vibrate();

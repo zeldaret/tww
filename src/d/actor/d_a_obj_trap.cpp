@@ -127,8 +127,21 @@ void daObjTrap_c::check_wall() {
 }
 
 /* 00001C88-00001D7C       .text check_block_target_pos__11daObjTrap_cFP4cXyz */
-void daObjTrap_c::check_block_target_pos(cXyz*) {
-    /* Nonmatching */
+bool daObjTrap_c::check_block_target_pos(cXyz* target_pos) {
+    cXyz offset = *target_pos - current.pos;
+    f32 dot = mPathDirection.x * offset.x + mPathDirection.z * offset.z;
+    bool result = false;
+
+    if (dot >= 0.0f && dot < 150.0f + mPathLength) {
+        mDoMtx_stack_c::YrotS(0x4000);
+        cXyz direction;
+        mDoMtx_stack_c::multVec(&mPathDirection, &direction);
+        if (std::fabsf(direction.x * offset.x + direction.z * offset.z) < 225.0f) {
+            result = true;
+        }
+    }
+
+    return result;
 }
 
 /* 00001D7C-000023D4       .text check_block__11daObjTrap_cF4cXyz */
