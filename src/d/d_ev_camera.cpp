@@ -805,10 +805,10 @@ bool dCamera_c::uniformTransEvCamera() {
             cSGlobe direction(data->start_center);
             direction.U(data->start_direction.U() + direction.U());
             start.center = attentionPos(data->rel_actor) + direction.Xyz();
-        } else if (data->rel_use_mask[0] == '-') {
-            start.center = data->start_center;
-        } else {
+        } else if (data->rel_use_mask[0] != '-') {
             start.center = relationalPos(data->rel_actor, &data->start_center);
+        } else {
+            start.center = data->start_center;
         }
         if (data->rel_use_mask[1] == 't') {
             start.eye = attentionPos(data->rel_actor) + data->start_eye;
@@ -816,10 +816,10 @@ bool dCamera_c::uniformTransEvCamera() {
             cSGlobe direction(data->start_eye);
             direction.U(data->start_direction.U() + direction.U());
             start.eye = attentionPos(data->rel_actor) + direction.Xyz();
-        } else if (data->rel_use_mask[1] == '-') {
-            start.eye = data->start_eye;
-        } else {
+        } else if (data->rel_use_mask[1] != '-') {
             start.eye = relationalPos(data->rel_actor, &data->start_eye);
+        } else {
+            start.eye = data->start_eye;
         }
         if (data->rel_use_mask[2] == 't') {
             end.center = attentionPos(data->rel_actor) + data->center;
@@ -827,14 +827,14 @@ bool dCamera_c::uniformTransEvCamera() {
             cSGlobe direction(data->center);
             direction.U(data->start_direction.U() + direction.U());
             end.center = attentionPos(data->rel_actor) + direction.Xyz();
-        } else if (data->rel_use_mask[2] == '-') {
+        } else if (data->rel_use_mask[2] != '-') {
+            end.center = relationalPos(data->rel_actor, &data->center);
+        } else {
             if (data->trans_type == 2) {
                 end.center = dCamMath::xyzRotateY(data->center, directionOf(data->rel_actor));
             } else {
                 end.center = data->center;
             }
-        } else {
-            end.center = relationalPos(data->rel_actor, &data->center);
         }
         if (data->rel_use_mask[3] == 't') {
             end.eye = attentionPos(data->rel_actor) + data->eye;
@@ -842,14 +842,14 @@ bool dCamera_c::uniformTransEvCamera() {
             cSGlobe direction(data->eye);
             direction.U(data->start_direction.U() + direction.U());
             end.eye = attentionPos(data->rel_actor) + direction.Xyz();
-        } else if (data->rel_use_mask[3] == '-') {
+        } else if (data->rel_use_mask[3] != '-') {
+            end.eye = relationalPos(data->rel_actor, &data->eye);
+        } else {
             if (data->trans_type == 2) {
                 end.eye = dCamMath::xyzRotateY(data->eye, directionOf(data->rel_actor));
             } else {
                 end.eye = data->eye;
             }
-        } else {
-            end.eye = relationalPos(data->rel_actor, &data->eye);
         }
     } else {
         start.center = data->start_center;
