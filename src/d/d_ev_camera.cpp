@@ -456,9 +456,9 @@ bool dCamera_c::rollingEvCamera() {
         f32 latitude;
         f32 center_cushion;
     };
+    static int DefaultTimer = -1;
     static f32 DefaultBank = 0.0f;
     static f32 DefaultRoll = 2.0f;
-    static int DefaultTimer = -1;
     RollingData* data = (RollingData*)&mWork;
     if (m11C == 0) {
         getEvXyzData(&data->eye_gap, "Eye", mEye);
