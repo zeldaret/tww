@@ -222,12 +222,9 @@ cXyz daObjTrap_c::check_wall() {
         if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
             cXyz hit = lin_chk.GetCross();
             hit -= start;
-            if (wall_offset != cXyz::Zero) {
-                if (wall_offset.absXZ() > hit.absXZ()) {
-                    continue;
-                }
+            if (wall_offset == cXyz::Zero || wall_offset.absXZ() > hit.absXZ()) {
+                wall_offset = hit - current.pos - forward;
             }
-            wall_offset = hit - current.pos - forward;
         }
     }
 
@@ -297,12 +294,10 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
                     if (check_block_target_pos(&target_pos)) {
                         cXyz hit = lin_chk.GetCross();
                         hit -= start;
-                        if (block_offset != cXyz::Zero) {
-                            if (block_offset.absXZ() > hit.absXZ()) {
-                                continue;
-                            }
+                        if (block_offset == cXyz::Zero ||
+                            block_offset.absXZ() > hit.absXZ()) {
+                            block_offset = hit - current.pos - forward;
                         }
-                        block_offset = hit - current.pos - forward;
                     }
                 }
             }
