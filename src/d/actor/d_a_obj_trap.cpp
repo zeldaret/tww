@@ -53,9 +53,10 @@ static dCcD_SrcCyl l_daObjTrap_cyl_data = {
 /* 0000010C-000002A4       .text create_heap__11daObjTrap_cFv */
 int daObjTrap_c::create_heap() {
     /* Nonmatching */
+    J3DModelData* mdl_data;
     int result = false;
-    J3DModelData* mdl_data =
-        (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_BDL_HTORA1_e);
+
+    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_BDL_HTORA1_e);
     JUT_ASSERT(355, mdl_data != NULL);
     if (mdl_data){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
