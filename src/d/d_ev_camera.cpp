@@ -2199,7 +2199,6 @@ bool dCamera_c::windDirectionEvCamera() {
     }
 
     switch (data->state) {
-    case 0:
     default: {
         mViewCache.mCenter = attentionPos(mpPlayerActor);
         mViewCache.mEye = relationalPos(data->bird, &center_gaps[data->side_flag]);
