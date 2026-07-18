@@ -565,18 +565,18 @@ public:
     cXyz Center() { return mCenter + mCenterShake; }
     cXyz Eye() { return mEye + mEyeShake; }
 
-    void StartEventCamera(int, int, ...);
-    void EndEventCamera(int);
-    void searchEventArgData(char*);
-    void getEvIntData(int*, char*);
-    void getEvStringPntData(char*);
-    void getEvIntData(int*, char*, int);
-    void getEvFloatData(f32*, char*, f32);
-    void getEvXyzData(cXyz*, char*, cXyz);
+    int StartEventCamera(int, int, ...);
+    int EndEventCamera(int);
+    int searchEventArgData(char*);
+    bool getEvIntData(int*, char*);
+    char* getEvStringPntData(char*);
+    bool getEvIntData(int*, char*, int);
+    bool getEvFloatData(f32*, char*, f32);
+    bool getEvXyzData(cXyz*, char*, cXyz);
     bool getEvStringData(char*, char*, char*);
-    void getEvStringPntData(char*, char*);
-    void getEvActor(char*);
-    void getEvActor(char*, char*);
+    char* getEvStringPntData(char*, char*);
+    fopAc_ac_c* getEvActor(char*);
+    fopAc_ac_c* getEvActor(char*, char*);
     bool pauseEvCamera();
     bool fixedFrameEvCamera();
     bool stokerEvCamera();
