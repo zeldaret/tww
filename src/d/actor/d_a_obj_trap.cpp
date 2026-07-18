@@ -117,8 +117,14 @@ void daObjTrap_c::set_move_info() {
 }
 
 /* 0000122C-000013E4       .text check_arrival__11daObjTrap_cFv */
-void daObjTrap_c::check_arrival() {
-    /* Nonmatching */
+bool daObjTrap_c::check_arrival() {
+    cXyz target_offset = mPathTarget - mPathPos;
+    cXyz next_offset = mNextPathPos - mPathPos;
+    cXyz target_xz = target_offset;
+    target_xz.y = 0.0f;
+    cXyz next_xz = next_offset;
+    next_xz.y = 0.0f;
+    return target_xz.abs() >= next_xz.abs();
 }
 
 /* 000013E4-000018E4       .text check_wall__11daObjTrap_cFv */
