@@ -929,7 +929,264 @@ bool dCamera_c::uniformAcceleEvCamera() {
 
 /* 800B6470-800B7640       .text watchActorEvCamera__9dCamera_cFv */
 bool dCamera_c::watchActorEvCamera() {
-    /* Nonmatching */
+    struct ActorData {
+        cXyz center_gap;
+        cXyz center;
+        f32 cushion;
+        int near_timer;
+        f32 near_dist;
+        int far_timer;
+        f32 far_dist;
+        f32 zoom_dist;
+        f32 zoom_vangle;
+        fopAc_ac_c* target;
+        fpc_ProcID target_id;
+        cSGlobe direction;
+        int field_44;
+        u8 field_48[4];
+        cSGlobe target_direction;
+        int mode;
+        int blure;
+        f32 front_angle;
+    };
+    static cXyz DefaultGap(cXyz::Zero);
+    static f32 DefaultCushion = 1.0f;
+    static f32 DefaultNearDist = 750.0f;
+    static f32 DefaultFarDist = 1500.0f;
+    static int DefaultNearTimer = 20;
+    static int DefaultFarTimer = 30;
+    static int DefaultJumpTimer = 1;
+    static f32 DefaultZoomDist = 400.0f;
+    static f32 DefaultZoomVAngle = 0.0f;
+    static f32 DefaultFrontAngle = 179.0f;
+
+    ActorData* data = (ActorData*)&mWork;
+    if (m11C == 0) {
+        getEvXyzData(&data->center_gap, "CtrGap", DefaultGap);
+        getEvFloatData(&data->cushion, "Cushion", DefaultCushion);
+        getEvFloatData(&data->near_dist, "NearDist", DefaultNearDist);
+        getEvFloatData(&data->zoom_dist, "ZoomDist", DefaultZoomDist);
+        getEvFloatData(&data->zoom_vangle, "ZoomVAngle", DefaultZoomVAngle);
+        getEvFloatData(&data->far_dist, "FarDist", DefaultFarDist);
+        getEvIntData(&data->near_timer, "NearTimer", DefaultNearTimer);
+        getEvIntData(&data->far_timer, "FarTimer", DefaultFarTimer);
+        getEvFloatData(&data->front_angle, "FrontAngle", DefaultFrontAngle);
+        getEvIntData(&data->blure, "Blure", 0);
+        if ((data->target = getEvActor("Target", "@STARTER")) == NULL) {
+            return true;
+        }
+        data->target_id = fopAcM_GetID(data->target);
+        data->center = relationalPos(data->target, &data->center_gap);
+        data->direction.Val(mViewCache.mEye - data->center);
+        if (data->direction.R() < data->near_dist) {
+            if (pointInSight(&data->center)) {
+                data->mode = 0;
+            } else {
+                data->mode = 1;
+            }
+        } else if (data->direction.R() < data->far_dist) {
+            data->mode = 2;
+        } else {
+            data->mode = 3;
+        }
+        m102 = 1;
+        m101 = 1;
+        m100 = 1;
+    }
+    if (fopAcM_SearchByID(data->target_id) == NULL) {
+        return true;
+    }
+    bool special_actor = false;
+    bool collision_ok = true;
+    s16 proc_name = fopAcM_GetProfName(data->target);
+    if (proc_name == 0x12e || proc_name == 0x12f || proc_name == 0x133 || proc_name == 0x132) {
+        special_actor = true;
+    }
+
+    switch (data->mode) {
+    case 0:
+        mViewCache.mEye = mEye;
+        mViewCache.mDirection = mDirection;
+        break;
+    case 1:
+        if (m11C == 0) {
+            cXyz player_pos = attentionPos(mpPlayerActor);
+            player_pos.y += 10.0f;
+            cSGlobe desired(player_pos - data->center);
+            cSGlobe actor_dir(mViewCache.mEye - positionOf(data->target));
+            cSAngle side = actor_dir.U() - directionOf(data->target);
+            if (side < cSAngle::_0) {
+                desired.U(desired.U() + cSAngle(5.0f));
+            } else {
+                desired.U(desired.U() + cSAngle(-5.0f));
+            }
+            cSAngle front = desired.U() - directionOf(data->target);
+            if (front < cSAngle(-data->front_angle)) {
+                desired.U(directionOf(data->target) + cSAngle(-data->front_angle));
+            } else if (front > cSAngle(data->front_angle)) {
+                desired.U(directionOf(data->target) + cSAngle(data->front_angle));
+            }
+            data->target_direction.Val(desired.R() + 120.0f, desired.V(), desired.U());
+            cSAngle step;
+            if (front >= cSAngle::_0) {
+                step.Val(-8.0f);
+            } else {
+                step.Val(8.0f);
+            }
+            cSGlobe test_direction = data->target_direction;
+            for (int i = 0; i < 45; i++) {
+                cXyz test_eye = data->center + test_direction.Xyz();
+                if (collision_ok && !lineBGCheck(&data->center, &test_eye, 0x8f) &&
+                    !lineCollisionCheck(data->center, test_eye, mpPlayerActor, data->target)) {
+                    data->target_direction = test_direction;
+                    break;
+                }
+                test_direction.U(test_direction.U() + step);
+                if (special_actor) {
+                    cSAngle angle = test_direction.U() - directionOf(data->target);
+                    if (std::fabsf(angle.Degree()) < 70.0f) {
+                        collision_ok = true;
+                    } else {
+                        collision_ok = false;
+                    }
+                }
+                f32 vertical_step;
+                if (i & 2) {
+                    vertical_step = -5.0f;
+                } else {
+                    vertical_step = 5.0f;
+                }
+                test_direction.V((test_direction.V() + cSAngle(vertical_step)) -
+                                 test_direction.V() * 0.1f);
+            }
+        }
+        if (m11C < (u32)data->near_timer) {
+            f32 ratio = m11C / f32(data->near_timer);
+            mViewCache.mCenter += (data->center - mViewCache.mCenter) * ratio;
+            cSGlobe* direction = &mViewCache.mDirection;
+            direction->R(direction->R() + (data->target_direction.R() - direction->R()) * ratio);
+            direction->U(direction->U() + (data->target_direction.U() - direction->U()) * ratio);
+            direction->V(direction->V() + (data->target_direction.V() - direction->V()) * ratio);
+            mViewCache.mEye = mViewCache.mCenter + direction->Xyz();
+            return false;
+        }
+        break;
+    case 2:
+        if (m11C == 0) {
+            cSGlobe desired(attentionPos(mpPlayerActor) - data->center);
+            if (data->zoom_vangle != 0.0f) {
+                desired.V(data->zoom_vangle);
+            }
+            cSAngle front = desired.U() - directionOf(data->target);
+            if (front < cSAngle(-data->front_angle)) {
+                desired.U(directionOf(data->target) + cSAngle(-data->front_angle));
+            } else if (front > cSAngle(data->front_angle)) {
+                desired.U(directionOf(data->target) + cSAngle(data->front_angle));
+            }
+            if (std::fabsf(desired.R() - data->zoom_dist) < 30.0f) {
+                desired.U(desired.U() + (s16)900);
+            }
+            data->target_direction.Val(data->zoom_dist, desired.V(), desired.U());
+            cSAngle step;
+            if (front >= cSAngle::_0) {
+                step.Val(-8.0f);
+            } else {
+                step.Val(8.0f);
+            }
+            cSGlobe test_direction = data->target_direction;
+            for (int i = 0; i < 45; i++) {
+                cXyz test_eye = data->center + test_direction.Xyz();
+                if (collision_ok && !lineBGCheck(&data->center, &test_eye, 0x8f) &&
+                    !lineCollisionCheck(data->center, test_eye, mpPlayerActor, data->target)) {
+                    data->target_direction = test_direction;
+                    break;
+                }
+                test_direction.U(test_direction.U() + step);
+                if (special_actor) {
+                    cSAngle angle = test_direction.U() - directionOf(data->target);
+                    if (std::fabsf(angle.Degree()) < 70.0f) {
+                        collision_ok = true;
+                    } else {
+                        collision_ok = false;
+                    }
+                }
+                f32 vertical_step;
+                if (i & 2) {
+                    vertical_step = -5.0f;
+                } else {
+                    vertical_step = 5.0f;
+                }
+                test_direction.V((test_direction.V() + cSAngle(vertical_step)) -
+                                 test_direction.V() * 0.1f);
+            }
+        }
+        if (m11C < (u32)data->far_timer) {
+            f32 ratio = m11C / f32(data->far_timer);
+            mViewCache.mCenter += (data->center - mViewCache.mCenter) * ratio;
+            cSGlobe* direction = &mViewCache.mDirection;
+            direction->R(direction->R() + (data->target_direction.R() - direction->R()) * ratio);
+            direction->U(direction->U() + (data->target_direction.U() - direction->U()) * ratio);
+            direction->V(direction->V() + (data->target_direction.V() - direction->V()) * ratio);
+            mViewCache.mEye = mViewCache.mCenter + direction->Xyz();
+            return false;
+        }
+        break;
+    case 3:
+        if (m11C == 0) {
+            mViewCache.mCenter = data->center;
+            cSGlobe desired(attentionPos(mpPlayerActor) - data->center);
+            desired.R(data->zoom_dist);
+            cSAngle front = desired.U() - directionOf(data->target);
+            if (front < cSAngle(-data->front_angle)) {
+                desired.U(directionOf(data->target) + cSAngle(-data->front_angle));
+            } else if (front > cSAngle(data->front_angle)) {
+                desired.U(directionOf(data->target) + cSAngle(data->front_angle));
+            }
+            if (data->zoom_vangle != 0.0f) {
+                desired.V(data->zoom_vangle);
+            }
+            data->target_direction.Val(data->zoom_dist, desired.V(), desired.U());
+            cSAngle step;
+            if (front >= cSAngle::_0) {
+                step.Val(-8.0f);
+            } else {
+                step.Val(8.0f);
+            }
+            cSGlobe test_direction = data->target_direction;
+            for (int i = 0; i < 45; i++) {
+                cXyz test_eye = data->center + test_direction.Xyz();
+                if (collision_ok && !lineBGCheck(&data->center, &test_eye, 0x8f) &&
+                    !lineCollisionCheck(data->center, test_eye, mpPlayerActor, data->target)) {
+                    data->target_direction = test_direction;
+                    break;
+                }
+                test_direction.U(test_direction.U() + step);
+                if (special_actor) {
+                    cSAngle angle = test_direction.U() - directionOf(data->target);
+                    if (std::fabsf(angle.Degree()) < 70.0f) {
+                        collision_ok = true;
+                    } else {
+                        collision_ok = false;
+                    }
+                }
+                f32 vertical_step;
+                if (i & 2) {
+                    vertical_step = -5.0f;
+                } else {
+                    vertical_step = 5.0f;
+                }
+                test_direction.V((test_direction.V() + cSAngle(vertical_step)) -
+                                 test_direction.V() * 0.1f);
+            }
+        }
+        mViewCache.mDirection = data->target_direction;
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        break;
+    }
+    m102 = 1;
+    m101 = 1;
+    m100 = 1;
+    return true;
 }
 
 
