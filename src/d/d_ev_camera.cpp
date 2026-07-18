@@ -1459,18 +1459,19 @@ bool dCamera_c::talktoEvCamera() {
 
 /* 800B7EBC-800B8108       .text maptoolIdEvCamera__9dCamera_cFv */
 bool dCamera_c::maptoolIdEvCamera() {
+    int id;
     if (m108 == 0) {
-        int id;
         getEvIntData(&id, "ID", -1);
         mEventData.field_0x08 = 0;
         m11C = 0;
+        int map_id = id;
         dStage_Event_dt_c* event_data;
-        if (id == -1) {
+        if (map_id == -1) {
             event_data = g_dComIfG_gameInfo.play.getEvent()->getStageEventDt();
         } else {
             dStage_EventInfo_c* event_info = dComIfGp_getStage().getEventInfo();
-            if (id >= 0 && id < event_info->num) {
-                event_data = &event_info->events[id];
+            if (map_id >= 0 && map_id < event_info->num) {
+                event_data = &event_info->events[map_id];
             } else {
                 event_data = NULL;
             }
@@ -1481,8 +1482,9 @@ bool dCamera_c::maptoolIdEvCamera() {
     if (mEventData.field_0xec == NULL) {
         return true;
     }
-    s8 room_no = mEventData.field_0xec->field_0x14;
-    u8 camera_id = mEventData.field_0xec->field_0x10;
+    register u8 camera_id;
+    register s8 room_no = mEventData.field_0xec->field_0x14;
+    camera_id = mEventData.field_0xec->field_0x10;
     u32 timer = -1;
     if (mEventData.field_0xec->field_0x12 != 0xff) {
         if (mEventData.field_0xec->field_0x12 & 1) {
