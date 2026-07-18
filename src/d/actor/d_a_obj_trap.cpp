@@ -10,6 +10,7 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_a_obj.h"
+#include "d/actor/d_a_obj_movebox.h"
 #include "d/d_path.h"
 #include "f_pc/f_pc_draw_priority.h"
 #include "f_pc/f_pc_name.h"
@@ -201,8 +202,42 @@ bool daObjTrap_c::check_arrival() {
 }
 
 /* 000013E4-000018E4       .text check_wall__11daObjTrap_cFv */
-void daObjTrap_c::check_wall() {
-    /* Nonmatching */
+cXyz daObjTrap_c::check_wall() {
+    static s16 angle_y[] = {0, 0x4000, -0x4000};
+    static f32 trans_a[] = {0.0f, 145.0f, 145.0f};
+    static dBgS_ObjLinChk lin_chk;
+
+    cXyz forward = mPathDirection * 150.0f;
+    cXyz upward = cXyz::BaseY * 75.0f;
+    cXyz wall_offset = cXyz::Zero;
+
+    for (int i = 0; i < 3; i++) {
+        mDoMtx_stack_c::YrotS(angle_y[i]);
+        cXyz offset;
+        mDoMtx_stack_c::multVec(&mPathDirection, &offset);
+        offset *= trans_a[i];
+        offset += upward;
+
+        cXyz start = current.pos + offset;
+        cXyz end = start + mPathOffset;
+        end += forward;
+        lin_chk.Set(&start, &end, this);
+
+        if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
+            cXyz hit = lin_chk.GetCross();
+            hit -= start;
+            if (wall_offset != cXyz::Zero) {
+                cXyz wall_xz(wall_offset.x, 0.0f, wall_offset.z);
+                cXyz hit_xz(hit.x, 0.0f, hit.z);
+                if (wall_xz.abs() > hit_xz.abs()) {
+                    continue;
+                }
+            }
+            wall_offset = hit - current.pos - forward;
+        }
+    }
+
+    return wall_offset;
 }
 
 /* 00001C88-00001D7C       .text check_block_target_pos__11daObjTrap_cFP4cXyz */
@@ -224,8 +259,65 @@ bool daObjTrap_c::check_block_target_pos(cXyz* target_pos) {
 }
 
 /* 00001D7C-000023D4       .text check_block__11daObjTrap_cF4cXyz */
-void daObjTrap_c::check_block(cXyz) {
-    /* Nonmatching */
+cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
+    static s16 angle_y[] = {0, 0x4000};
+    static dBgS_ObjLinChk lin_chk;
+
+    cXyz forward = mPathDirection * 150.0f;
+    cXyz block_offset = i_block_offset;
+    cXyz upward = cXyz::BaseY * 75.0f;
+
+    for (int i = 0; i < 2; i++) {
+        mDoMtx_stack_c::YrotS(angle_y[i]);
+        cXyz offset;
+        mDoMtx_stack_c::multVec(&mPathDirection, &offset);
+        offset *= 225.0f;
+        offset += upward;
+
+        cXyz start = current.pos + offset;
+        cXyz end = start + mPathOffset;
+        end += forward;
+        lin_chk.Set(&start, &end, this);
+
+        if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
+            fopAc_ac_c* actor = dComIfG_Bgsp()->GetActorPointer(lin_chk);
+            if (actor != NULL && fopAc_IsActor(actor) &&
+                fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
+                daObjMovebox::Act_c* movebox = static_cast<daObjMovebox::Act_c*>(actor);
+                if (movebox->mMode == daObjMovebox::Act_c::MODE_WALK) {
+                    mDoMtx_stack_c::push();
+                    mDoMtx_stack_c::YrotS(movebox->home.angle.y);
+                    mDoMtx_stack_c::transM((f32)movebox->m628, 0.0f,
+                                           (f32)movebox->m62C);
+                    MtxP mtx = mDoMtx_stack_c::get();
+                    cXyz box_offset(mtx[0][3], mtx[1][3], mtx[2][3]);
+                    mDoMtx_stack_c::YrotS(movebox->home.angle.y +
+                                           daObjMovebox::Act_c::M_dir_base[movebox->m634]);
+                    cXyz box_dir;
+                    mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &box_dir);
+                    mDoMtx_stack_c::pop();
+
+                    cXyz target_pos = box_offset + box_dir;
+                    target_pos *= 75.0f;
+                    target_pos += movebox->current.pos;
+                    if (check_block_target_pos(&target_pos)) {
+                        cXyz hit = lin_chk.GetCross();
+                        hit -= start;
+                        if (block_offset != cXyz::Zero) {
+                            cXyz block_xz(block_offset.x, 0.0f, block_offset.z);
+                            cXyz hit_xz(hit.x, 0.0f, hit.z);
+                            if (block_xz.abs() > hit_xz.abs()) {
+                                continue;
+                            }
+                        }
+                        block_offset = hit - current.pos - forward;
+                    }
+                }
+            }
+        }
+    }
+
+    return block_offset;
 }
 
 /* 000023D4-0000250C       .text set_vib_mode__11daObjTrap_cFv */
@@ -262,7 +354,12 @@ void daObjTrap_c::vibrate() {
 
 /* 0000255C-00002678       .text bound__11daObjTrap_cFv */
 void daObjTrap_c::bound() {
-    /* Nonmatching */
+    cXyz offset = mPathDirection * -0.5f;
+    mPathTarget -= mVibrationPosition;
+    offset *= (f32)fabs((s16)(mVibrationFrame * cM_ssin(mBoundTimer << 14)));
+    mPathTarget += offset;
+    mVibrationPosition = offset;
+    cLib_addCalc(&mVibrationFrame, 0.0f, 0.17f, 35.0f, 1.0f);
 }
 
 /* 00002678-0000270C       .text set_shine__11daObjTrap_cFv */

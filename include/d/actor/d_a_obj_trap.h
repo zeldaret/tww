@@ -25,9 +25,9 @@ public:
     bool circle_search();
     void set_move_info();
     bool check_arrival();
-    void check_wall();
+    cXyz check_wall();
     bool check_block_target_pos(cXyz*);
-    void check_block(cXyz);
+    cXyz check_block(cXyz);
     void set_vib_mode();
     void vibrate();
     void bound();
