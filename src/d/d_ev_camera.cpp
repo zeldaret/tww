@@ -1950,7 +1950,137 @@ bool dCamera_c::useItem0EvCamera() {
 
 /* 800BB39C-800BBD88       .text useItem1EvCamera__9dCamera_cFv */
 bool dCamera_c::useItem1EvCamera() {
-    /* Nonmatching */
+    struct UseItemData {
+        int state;
+        int timer;
+        int type;
+        cXyz center;
+        f32 fovy;
+        int elapsed;
+        int frame;
+        cSGlobe direction;
+    };
+    UseItemData* data = (UseItemData*)&mWork;
+
+    cXyz center_4(0.0f, -16.0f, -17.0f);
+    cXyz eyes_4[3] = {
+        cXyz(36.0f, 55.0f, 17.0f), cXyz(36.0f, 67.0f, -30.0f),
+        cXyz(-10.0f, 75.0f, -5.0f),
+    };
+    cXyz center_1(0.0f, -32.0f, 15.0f);
+    cXyz eyes_1[4] = {
+        cXyz(80.0f, -50.0f, 140.0f), cXyz(-52.0f, 34.0f, 80.0f),
+        cXyz(55.0f, -33.0f, 100.0f), cXyz(105.0f, -55.0f, 70.0f),
+    };
+    cXyz center_0(0.0f, -40.0f, 25.0f);
+    cXyz eyes_0[3] = {
+        cXyz(-120.0f, 60.0f, 135.0f), cXyz(130.0f, -25.0f, 115.0f),
+        cXyz(5.0f, 130.0f, 110.0f),
+    };
+    cXyz center_3(0.0f, -27.0f, 25.0f);
+    cXyz eyes_3[3] = {
+        cXyz(-90.0f, -70.0f, 150.0f), cXyz(130.0f, -68.0f, 114.0f),
+        cXyz(5.0f, 130.0f, 110.0f),
+    };
+    cXyz center_5(10.0f, -2.0f, -2.0f);
+    cXyz eyes_5[3] = {
+        cXyz(15.0f, 80.0f, 45.0f), cXyz(42.0f, 85.0f, 22.0f),
+        cXyz(-65.0f, -50.0f, 25.0f),
+    };
+    cXyz center_6(-12.0f, -75.0f, 140.0f);
+    cXyz eyes_6[3] = {
+        cXyz(139.0f, 118.0f, 340.0f), cXyz(-220.0f, 46.0f, 48.0f),
+        cXyz(84.0f, 164.0f, -38.0f),
+    };
+    cXyz* centers[7] = {&center_0, &center_1, &center_0, &center_3, &center_4, &center_5,
+                        &center_6};
+    cXyz* eyes[7] = {eyes_0, eyes_1, eyes_0, eyes_3, eyes_4, eyes_5, eyes_6};
+    int eye_counts[7] = {3, 4, 3, 3, 3, 3, 3};
+    f32 fovys[7] = {65.0f, 65.0f, 65.0f, 65.0f, 70.0f, 70.0f, 65.0f};
+    int timers[7] = {45, 40, 40, 40, 10, 45, 40};
+
+    bool result = false;
+    if (m11C == 0) {
+        data->state = 0;
+    }
+    cXyz eye;
+    switch (data->state) {
+    case 0:
+    default:
+        getEvIntData(&data->type, "Type", 0);
+        data->elapsed = 0;
+        /* fallthrough */
+    case 10: {
+        data->frame = 0;
+        if (!(m07C & 7)) {
+            switch (data->type) {
+            case 2:
+            case 3: {
+                cXyz swap = eyes[data->type][0];
+                eyes[data->type][0] = eyes[data->type][1];
+                eyes[data->type][1] = swap;
+                break;
+            }
+            }
+        }
+        data->center = relationalPos(mpPlayerActor, centers[data->type]);
+        int i;
+        for (i = 0; i < eye_counts[data->type]; i++) {
+            eye = relationalPos(mpPlayerActor, &eyes[data->type][i]);
+            if (eye.y < m368 + positionOf(mpPlayerActor).y) {
+                eye.y = m368 + positionOf(mpPlayerActor).y;
+            }
+            if (!lineBGCheck(&data->center, &eye, 0x8f) &&
+                !lineCollisionCheck(data->center, eye, mpPlayerActor, NULL)) {
+                break;
+            }
+        }
+        data->direction.Val(eye - data->center);
+        data->fovy = fovys[data->type];
+        data->timer = timers[data->type];
+        data->state = 1;
+        break;
+    }
+    case 1: {
+        f32 step = (f32)data->frame / (f32)data->timer;
+        mViewCache.mFovy += step * (data->fovy - mViewCache.mFovy);
+        data->center = relationalPos(mpPlayerActor, centers[data->type]);
+        mViewCache.mCenter += (data->center - mViewCache.mCenter) * step;
+        f32 current_radius = mViewCache.mDirection.R();
+        cSAngle longitude;
+        cSAngle latitude;
+        latitude = mViewCache.mDirection.V();
+        longitude = mViewCache.mDirection.U();
+        f32 radius = current_radius + step * (data->direction.R() - current_radius);
+        latitude += (data->direction.V() - latitude) * step;
+        longitude += (data->direction.U() - longitude) * step;
+        mViewCache.mDirection.Val(radius, latitude, longitude);
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        if (data->frame >= data->timer) {
+            data->state = 2;
+        case 2:
+            mViewCache.mCenter = relationalPos(mpPlayerActor, centers[data->type]);
+            mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+            data->elapsed++;
+            if (data->type == 0 && data->elapsed == 1) {
+                data->state = 10;
+                data->type = 4;
+            } else {
+                data->state = 99;
+            case 99:
+                m102 = 1;
+                m101 = 1;
+                m100 = 1;
+                mViewCache.mCenter = relationalPos(mpPlayerActor, centers[data->type]);
+                mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+                result = true;
+            }
+        }
+        break;
+    }
+    }
+    data->frame++;
+    return result;
 }
 
 /* 800BBD88-800BC364       .text getItemEvCamera__9dCamera_cFv */
