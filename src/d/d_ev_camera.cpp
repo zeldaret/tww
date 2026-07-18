@@ -679,7 +679,7 @@ bool dCamera_c::uniformTransEvCamera() {
     TransData* data = (TransData*)&mWork;
     bool result = false;
     if (m11C == 0) {
-        if (!getEvIntData(&data->timer, "Timer")) {
+        if (!getEvIntData(&data->timer, "Timer", DefaultTimer)) {
             return true;
         }
         getEvIntData(&data->bsp_curve, "BSpCurve", 1);
@@ -1200,7 +1200,7 @@ bool dCamera_c::uniformAcceleEvCamera() {
     static f32 DefaultBank = 0.0f;
     AcceleData* data = (AcceleData*)&mWork;
     if (m11C == 0) {
-        if (!getEvIntData(&data->timer, "Timer")) {
+        if (!getEvIntData(&data->timer, "Timer", DefaultTimer)) {
             return true;
         }
         getEvIntData(&data->acceleration_time, "AcceleTimer", data->timer);
