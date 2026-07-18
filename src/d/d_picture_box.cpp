@@ -533,9 +533,9 @@ void dJle_Pb_c::selectMode() {
                 dComIfGp_onPictureFlag(1);
                 dComIfGp_onPictureFlag(2);
 
-                dst->field_0x1EE0 = dSnap_GetResult();
-                dst->field_0x1EE4 = dSnap_GetResultDetail();
-                dst->field_0x1EE5 = mCaptureFormat;
+                dst->mSnapResultId = dSnap_GetResult();
+                dst->mSnapResultDetail = dSnap_GetResultDetail();
+                dst->mPhotoFormat = mCaptureFormat;
 
                 memcpy(dst, mDoGph_getCaptureTextureBuffer(), 0x1ee0);
                 DCStoreRangeNoSync(dst, 0x1ee0);
@@ -745,10 +745,10 @@ void dJle_Pb_c::pictureDecide() {
         if ((u8)bVar2 == 0) {
             dPbPhotoSlotData* tmp = mPhotoBuffer[(u8)mSelectedPhotoSlot];
             dComIfGp_setSelectPicture(mSelectedPhotoSlot);
-            dComIfGp_setPictureFormat(tmp->field_0x1EE5);
+            dComIfGp_setPictureFormat(tmp->mPhotoFormat);
             dComIfGp_setPictureStatus(1);
-            dComIfGp_setPictureResult(tmp->field_0x1EE0);
-            dComIfGp_setPictureResultDetail(tmp->field_0x1EE4);
+            dComIfGp_setPictureResult(tmp->mSnapResultId);
+            dComIfGp_setPictureResultDetail(tmp->mSnapResultDetail);
             
             daPy_getPlayerActorClass()->onNoResetFlg0(daPy_py_c::daPyFlg0_PHOTO_BOX_CANCEL);
             mExecState = PB_EXEC_CLOSE_e;
@@ -1910,9 +1910,9 @@ void dJle_Pb_c::_gopen() {
             DCStoreRangeNoSync(dst, 0x1EE0);
         
             u8 picNo = dComIfGp_getGetPictureNum();
-            dst->field_0x1EE0 = photo_idx[picNo];
-            dst->field_0x1EE4 = 0;
-            dst->field_0x1EE5 = 0x0E;
+            dst->mSnapResultId = photo_idx[picNo];
+            dst->mSnapResultDetail = 0;
+            dst->mPhotoFormat = 0x0E;
         
             dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
             mExecState = PB_EXEC_GET_MOVE_e;

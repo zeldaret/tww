@@ -46,9 +46,9 @@ enum dJlePbViewMode {
 
 struct dPbPhotoSlotData {
     /* 0x0000 */ u8 pad[0x1EE0 - 0x0000];
-    /* 0x1EE0 */ u32 field_0x1EE0;
-    /* 0x1EE4 */ u8 field_0x1EE4;
-    /* 0x1EE5 */ u8 field_0x1EE5;
+    /* 0x1EE0 */ u32 mSnapResultId;
+    /* 0x1EE4 */ u8 mSnapResultDetail;
+    /* 0x1EE5 */ u8 mPhotoFormat;
 };
 
 void dPb_erasePicture();
