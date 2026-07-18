@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_bg_s_gnd_chk.h"
+#include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_ext.h"
@@ -58,7 +59,7 @@ public:
     /* 0x4B4 */ cXyz mPathTarget;
     /* 0x4C0 */ cXyz mVibrationPosition;
     /* 0x4CC */ f32 mPathLength;
-    /* 0x4D0 */ u8 mPad4D0[2];
+    /* 0x4D0 */ s16 mWaitTimer;
     /* 0x4D2 */ u16 mBoundTimer;
     /* 0x4D4 */ f32 mVibrationFrame;
     /* 0x4D8 */ u16 mVibrationTimer;
@@ -73,7 +74,7 @@ public:
     /* 0x4E4 */ f32 mSpeed;
     /* 0x4E8 */ s16 mWaitFrame;
     /* 0x4EA */ u8 mPad4EA[2];
-    /* 0x4EC */ cBgW *mpcBgW;
+    /* 0x4EC */ dBgW* mpcBgW;
 };
 
 STATIC_ASSERT(sizeof(daObjTrap_c) == 0x4F0);
