@@ -454,6 +454,9 @@ bool dCamera_c::rollingEvCamera() {
         f32 latitude;
         f32 center_cushion;
     };
+    static f32 DefaultBank = 0.0f;
+    static f32 DefaultRoll = 2.0f;
+    static int DefaultTimer = -1;
     RollingData* data = (RollingData*)&mWork;
     if (m11C == 0) {
         getEvXyzData(&data->eye_gap, "Eye", mEye);
@@ -461,12 +464,12 @@ bool dCamera_c::rollingEvCamera() {
         getEvFloatData(&data->center_cushion, "CtrCus", 1.0f);
         getEvIntData(&data->trans_type, "TransType", 0);
         getEvFloatData(&data->fovy, "Fovy", mFovy);
-        data->bank_present = getEvFloatData(&data->bank, "Bank", 0.0f);
-        getEvFloatData(&data->roll, "Roll", 2.0f);
+        data->bank_present = getEvFloatData(&data->bank, "Bank", DefaultBank);
+        getEvFloatData(&data->roll, "Roll", DefaultRoll);
         getEvFloatData(&data->radius_add, "RadiusAdd", 0.0f);
         cSGlobe direction(data->eye_gap - data->center_gap);
         getEvFloatData(&data->latitude, "Latitude", direction.V().Degree());
-        data->timer_present = getEvIntData(&data->timer, "Timer", -1);
+        data->timer_present = getEvIntData(&data->timer, "Timer", DefaultTimer);
         getEvStringData(data->mask, "RelUseMask", "oo");
         data->actor = getEvActor("RelActor");
 
