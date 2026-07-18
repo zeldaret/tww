@@ -218,6 +218,7 @@ cXyz daObjTrap_c::check_wall() {
         cXyz end = start + mPathOffset;
         end += forward;
         lin_chk.Set(&start, &end, this);
+        lin_chk.SetActorPid(fopAcM_GetID(this));
 
         if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
             cXyz hit = lin_chk.GetCross();
@@ -269,6 +270,7 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
         cXyz end = start + mPathOffset;
         end += forward;
         lin_chk.Set(&start, &end, this);
+        lin_chk.SetActorPid(fopAcM_GetID(this));
 
         if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
             fopAc_ac_c* actor = dComIfG_Bgsp()->GetActorPointer(lin_chk);
@@ -288,9 +290,7 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
                     mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &box_dir);
                     mDoMtx_stack_c::pop();
 
-                    cXyz target_pos = box_offset + box_dir;
-                    target_pos *= 75.0f;
-                    target_pos += movebox->current.pos;
+                    cXyz target_pos = (box_offset + box_dir) * 75.0f + movebox->current.pos;
                     if (check_block_target_pos(&target_pos)) {
                         cXyz hit = lin_chk.GetCross();
                         hit -= start;
