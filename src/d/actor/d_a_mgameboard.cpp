@@ -207,24 +207,6 @@ void daMgBoard_c::MiniGameInit() {
 /* 00000AE8-00000DEC       .text set_mtx__11daMgBoard_cFv */
 void daMgBoard_c::set_mtx() {
     /* Nonmatching */
-    /*
-         8] transS__14mDoMtx_stack_cFfff (func,weak) found in d_a_mgameboard.o 
->>> SYMBOL NOT FOUND: now__14mDoMtx_stack_c
->>> SYMBOL NOT FOUND: C_MTXTrans
-         8] YrotM__14mDoMtx_stack_cFs (func,weak) found in d_a_mgameboard.o 
->>> SYMBOL NOT FOUND: mDoMtx_YrotM__FPA4_fs
-         8] get__14mDoMtx_stack_cFv (func,weak) found in d_a_mgameboard.o 
-         8] setBaseTRMtx__8J3DModelFPA4_f (func,weak) found in d_a_mgameboard.o 
->>> SYMBOL NOT FOUND: PSMTXCopy
-         8] m_cur_table__11daMgBoard_c (object,global) found in d_a_mgameboard.o 
-         8] checkState__20dSeaFightGame_info_cFUcUc (func,weak) found in d_a_mgameboard.o 
-         8] getShipStartX__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
-         8] getShipStartY__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
-         8] getShipVecY__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
-         8] ZrotM__14mDoMtx_stack_cFs (func,weak) found in d_a_mgameboard.o
-         >>> SYMBOL NOT FOUND: mDoMtx_ZrotM__FPA4_fs
->>> SYMBOL NOT FOUND: _restgpr_22 
-    */
     J3DModel* board_model = mpBoardModel;
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
