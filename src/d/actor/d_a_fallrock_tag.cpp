@@ -5,6 +5,16 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock_tag.h"
+#include "c/c_dylink.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "m_Do/m_Do_audio.h"
+#include "SSystem/SComponent/c_math.h"
+
+f32 daFallRockTag_c::m_div_num = 6.0f;
+daFallRockTag_dataBase_c daFallRockTag_c::m_data = {
+    250.0f, 0.3f, 0.8f, -70.0f, -7.0f, 90, 90, 3, 0,
+};
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */
 static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
@@ -12,8 +22,42 @@ static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
 }
 
 /* 00000080-000002A0       .text daFallRockTag_Execute__FP15daFallRockTag_c */
-static BOOL daFallRockTag_Execute(daFallRockTag_c*) {
-    /* Nonmatching */
+BOOL daFallRockTag_c::execute() {
+    s32 window = (s32)((f32)dStage_stagInfo_GetSchSec(dComIfGp_getStageStagInfo()) / m_div_num) * 30;
+
+    u8 sb = dKy_get_schbit();
+    if (sb & mSchBit) {
+        if (window < dKy_get_schbit_timer()) {
+            s32 t = dKy_get_schbit_timer() - getData()->field_0x16;
+            if (t % (30 / getData()->field_0x18) == 0) {
+                cXyz pos;
+                f32 range = scale.x * getData()->field_0x00;
+                pos.x = cM_rndFX(range);
+                pos.y = 0.0f;
+                pos.z = cM_rndFX(range - std::fabsf(pos.x));
+
+                cXyz sc;
+                f32 base = getData()->field_0x04;
+                sc.x = sc.y = sc.z = base + cM_rndF(getData()->field_0x08 - base);
+
+                csXyz ang;
+                ang.x = (s16)cM_rndF(32767.0f);
+                ang.y = (s16)cM_rndF(32767.0f);
+                ang.z = (s16)cM_rndF(32767.0f);
+
+                createRock(&pos, &sc, &ang, fopAcM_GetRoomNo(this), 0);
+                fopAcM_seStart(this, JA_SE_ATM_RAKUBAN, 0);
+            }
+        } else {
+            field_0x298 = 0;
+        }
+    }
+
+    return TRUE;
+}
+
+static BOOL daFallRockTag_Execute(daFallRockTag_c* i_this) {
+    return i_this->execute();
 }
 
 /* 000002A0-000002A8       .text daFallRockTag_IsDelete__FP15daFallRockTag_c */
@@ -22,23 +66,47 @@ static BOOL daFallRockTag_IsDelete(daFallRockTag_c*) {
 }
 
 /* 000002A8-000002EC       .text daFallRockTag_Delete__FP15daFallRockTag_c */
-static BOOL daFallRockTag_Delete(daFallRockTag_c*) {
-    /* Nonmatching */
+static BOOL daFallRockTag_Delete(daFallRockTag_c* i_this) {
+    i_this->~daFallRockTag_c();
+    return TRUE;
 }
 
 /* 000002EC-00000360       .text daFallRockTag_Create__FP10fopAc_ac_c */
-static cPhs_State daFallRockTag_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+cPhs_State daFallRockTag_c::create() {
+#if VERSION > VERSION_DEMO
+    fopAcM_ct(this, daFallRockTag_c);
+#endif
+
+    cPhs_State res = cDyl_LinkASync(fpcNm_FallRock_e);
+    if (res != cPhs_COMPLEATE_e) {
+        return res;
+    }
+
+#if VERSION == VERSION_DEMO
+    fopAcM_ct(this, daFallRockTag_c);
+#endif
+
+    mSchBit = fopAcM_GetParam(this);
+    fopAcM_offDraw(this);
+    return cPhs_COMPLEATE_e;
+}
+
+static cPhs_State daFallRockTag_Create(fopAc_ac_c* i_this) {
+    return static_cast<daFallRockTag_c*>(i_this)->create();
 }
 
 /* 00000360-000003D8       .text createRock__15daFallRockTag_cFP4cXyzP4cXyzP5csXyziUl */
-void daFallRockTag_c::createRock(cXyz*, cXyz*, csXyz*, int, unsigned long) {
-    /* Nonmatching */
+void daFallRockTag_c::createRock(cXyz* i_offset, cXyz* i_scale, csXyz* i_angle, int i_roomNo, unsigned long i_parameter) {
+    cXyz pos;
+    pos.x = current.pos.x + i_offset->x;
+    pos.y = current.pos.y + i_offset->y;
+    pos.z = current.pos.z + i_offset->z;
+    fopAcM_create(fpcNm_FallRock_e, i_parameter, &pos, i_roomNo, i_angle, i_scale);
 }
 
 /* 000003D8-000003E4       .text getData__15daFallRockTag_cFv */
-void daFallRockTag_c::getData() {
-    /* Nonmatching */
+daFallRockTag_dataBase_c* daFallRockTag_c::getData() {
+    return &m_data;
 }
 
 static actor_method_class l_daFallRockTag_Method = {
