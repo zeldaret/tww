@@ -11,7 +11,7 @@ struct dSeaFightGame_ship_data {
     /* 0xB */ u8 mShipStartX;
     /* 0xC */ u8 mShipStartY;
     /* 0xD */ u8 field_0xd;
-    /* 0xE */ s8 field_0xe;
+    /* 0xE */ u8 field_0xe;
 };
 
 class dSeaFightGame_info_c {

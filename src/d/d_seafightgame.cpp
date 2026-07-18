@@ -59,8 +59,8 @@ int dSeaFightGame_info_c::put_ship(u8 i_shipNo, u8 i_shipSize) {
             mGrid[x][y + i] = i_shipNo + 102;
         }
 
-        mShips[i_shipNo].field_0xb = x;
-        mShips[i_shipNo].field_0xc = y;
+        mShips[i_shipNo].mShipStartX = x;
+        mShips[i_shipNo].mShipStartY = y;
         mShips[i_shipNo].field_0xd = 0;
         mShips[i_shipNo].field_0xe = i_shipSize;
     } else {
@@ -70,8 +70,8 @@ int dSeaFightGame_info_c::put_ship(u8 i_shipNo, u8 i_shipSize) {
             mGrid[x + i][y] = i_shipNo + 102;
         }
 
-        mShips[i_shipNo].field_0xb = x;
-        mShips[i_shipNo].field_0xc = y;
+        mShips[i_shipNo].mShipStartX = x;
+        mShips[i_shipNo].mShipStartY = y;
         mShips[i_shipNo].field_0xd = i_shipSize;
         mShips[i_shipNo].field_0xe = 0;
     }
