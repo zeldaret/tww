@@ -13,8 +13,8 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 char daMgBoard_c::m_arcname[9] = {};
-
 u8 daMgBoard_c::m_bullet_num = 24;
+cXyz daMgBoard_c::m_cur_table[8][8] = {};
 
 /* 0000010C-000007BC       .text CreateHeap__11daMgBoard_cFv */
 BOOL daMgBoard_c::CreateHeap() {
@@ -193,7 +193,7 @@ void daMgBoard_c::MiniGameInit() {
     for (int i = 0; i < (int)ARRAY_SIZE(mpSquidIcon); ++i) {
         mpSquidIcon[i]->mCurrentNo = 0;
     }
-    
+
     const int rows = 3;
     const int cols = 8;
     for (int i = 0; i < rows; ++i) {
@@ -207,6 +207,97 @@ void daMgBoard_c::MiniGameInit() {
 /* 00000AE8-00000DEC       .text set_mtx__11daMgBoard_cFv */
 void daMgBoard_c::set_mtx() {
     /* Nonmatching */
+    /*
+         8] transS__14mDoMtx_stack_cFfff (func,weak) found in d_a_mgameboard.o 
+>>> SYMBOL NOT FOUND: now__14mDoMtx_stack_c
+>>> SYMBOL NOT FOUND: C_MTXTrans
+         8] YrotM__14mDoMtx_stack_cFs (func,weak) found in d_a_mgameboard.o 
+>>> SYMBOL NOT FOUND: mDoMtx_YrotM__FPA4_fs
+         8] get__14mDoMtx_stack_cFv (func,weak) found in d_a_mgameboard.o 
+         8] setBaseTRMtx__8J3DModelFPA4_f (func,weak) found in d_a_mgameboard.o 
+>>> SYMBOL NOT FOUND: PSMTXCopy
+         8] m_cur_table__11daMgBoard_c (object,global) found in d_a_mgameboard.o 
+         8] checkState__20dSeaFightGame_info_cFUcUc (func,weak) found in d_a_mgameboard.o 
+         8] getShipStartX__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
+         8] getShipStartY__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
+         8] getShipVecY__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
+         8] ZrotM__14mDoMtx_stack_cFs (func,weak) found in d_a_mgameboard.o
+         >>> SYMBOL NOT FOUND: mDoMtx_ZrotM__FPA4_fs
+>>> SYMBOL NOT FOUND: _restgpr_22 
+    */
+    J3DModel* board_model = mpBoardModel;
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    board_model->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    J3DModel* cursor_model = mpCursorModel;
+    mDoMtx_stack_c::transS(
+        m_cur_table[(s8)mBoardPosY][(s8)mBoardPosX].x + current.pos.x,
+        m_cur_table[(s8)mBoardPosY][(s8)mBoardPosX].y + current.pos.y,
+        m_cur_table[(s8)mBoardPosY][(s8)mBoardPosX].z + current.pos.z
+    );
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    cursor_model->setBaseTRMtx(mDoMtx_stack_c::get());
+    
+    mMissModelCount = 0;
+    mHitModelCount = 0;
+
+    J3DModel* model;
+    for (u8 y = 0; y < 8; ++y) {
+        for (u8 x = 0; x < 8; ++x) {
+
+            u8 grid_value = mSeaFightGame.mGrid[y][x];
+            model = NULL;
+            if ((s32)grid_value == 3) {
+                model = mpHitModel[mHitModelCount];
+                mHitModelCount = mHitModelCount + 1;
+            } else if ((s32)grid_value == 1) {
+                model = mpMissModel[mMissModelCount];
+                mMissModelCount = mMissModelCount + 1;
+            }
+            if (model != NULL) {
+                mDoMtx_stack_c::transS(m_cur_table[x][y].x + current.pos.x, m_cur_table[x][y].y + current.pos.y, m_cur_table[x][y].z + current.pos.z);
+                mDoMtx_stack_c::YrotM(current.angle.y);
+                model->setBaseTRMtx(mDoMtx_stack_c::get());
+            }
+        }
+    }
+    
+    u8 num_alive_ships = mSeaFightGame.mAliveShipNum;
+    for (int i = 0; i < num_alive_ships; ++i) {
+        switch (mSeaFightGame.mShips[i].field_0x8) {
+            case 2:
+                model = mpShip2Model[0];
+                break;
+            case 3:
+                model = mpShip3Model[0];
+                break;
+            case 4:
+                model = mpShip4Model[0];
+                break;
+            default:
+                model = NULL;
+                break;
+        }
+
+        if (model != NULL) {
+            u8 ship_x = mSeaFightGame.getShipStartX(i);
+            u8 ship_y = mSeaFightGame.getShipStartY(i);
+            mDoMtx_stack_c::transS(
+                m_cur_table[ship_x][ship_y].x + current.pos.x,
+                m_cur_table[ship_x][ship_y].y + current.pos.y,
+                m_cur_table[ship_x][ship_y].z + current.pos.z
+            );
+
+            mDoMtx_stack_c::YrotM(current.angle.y);
+            if ((s8)mSeaFightGame.mShips[i].field_0xe == 0) {
+                mDoMtx_stack_c::ZrotM(0x4000);
+            } else {
+                mDoMtx_stack_c::ZrotM(-0x8000);
+            }
+            model->setBaseTRMtx(mDoMtx_stack_c::get());
+        }
+    }
 }
 
 /* 00000E28-00000FD8       .text _execute__11daMgBoard_cFv */

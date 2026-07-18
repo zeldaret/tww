@@ -36,6 +36,7 @@ public:
 public:
     static u8 m_bullet_num;
     static char m_arcname[];
+    static cXyz m_cur_table[8][8];
 
     /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpBoardModel;
