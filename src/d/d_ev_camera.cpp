@@ -1089,28 +1089,29 @@ bool dCamera_c::uniformBrakeEvCamera() {
         end.eye = data->eye;
     }
 
+    cXyz view_center;
+    cXyz view_eye;
     if (data->trans_type == 1) {
-        mViewCache.mCenter +=
-            (start.center + (end.center - start.center) * ratio - mViewCache.mCenter) *
-            data->cushion;
+        view_center = start.center + (end.center - start.center) * ratio;
+        mViewCache.mCenter += (view_center - mViewCache.mCenter) * data->cushion;
         cSGlobe start_direction(start.eye - start.center);
         cSGlobe end_direction(end.eye - end.center);
         cSGlobe direction(
             start_direction.R() + ratio * (end_direction.R() - start_direction.R()),
             start_direction.V() + (end_direction.V() - start_direction.V()) * ratio,
             start_direction.U() + (end_direction.U() - start_direction.U()) * ratio);
-        mViewCache.mEye +=
-            (mViewCache.mCenter + direction.Xyz() - mViewCache.mEye) * data->cushion;
+        view_eye = mViewCache.mCenter + direction.Xyz();
+        mViewCache.mEye += (view_eye - mViewCache.mEye) * data->cushion;
     } else if (data->trans_type == 2) {
-        mViewCache.mCenter += (start.center + end.center * ratio - mViewCache.mCenter) *
-                              data->cushion;
-        mViewCache.mEye += (start.eye + end.eye * ratio - mViewCache.mEye) * data->cushion;
+        view_center = start.center + end.center * ratio;
+        mViewCache.mCenter += (view_center - mViewCache.mCenter) * data->cushion;
+        view_eye = start.eye + end.eye * ratio;
+        mViewCache.mEye += (view_eye - mViewCache.mEye) * data->cushion;
     } else {
-        mViewCache.mCenter +=
-            (start.center + (end.center - start.center) * ratio - mViewCache.mCenter) *
-            data->cushion;
-        mViewCache.mEye +=
-            (start.eye + (end.eye - start.eye) * ratio - mViewCache.mEye) * data->cushion;
+        view_center = start.center + (end.center - start.center) * ratio;
+        mViewCache.mCenter += (view_center - mViewCache.mCenter) * data->cushion;
+        view_eye = start.eye + (end.eye - start.eye) * ratio;
+        mViewCache.mEye += (view_eye - mViewCache.mEye) * data->cushion;
     }
     f32 fovy = data->start_fovy + ratio * (data->fovy - data->start_fovy);
     mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
@@ -1321,28 +1322,29 @@ bool dCamera_c::uniformAcceleEvCamera() {
         end.eye = data->eye;
     }
 
+    cXyz view_center;
+    cXyz view_eye;
     if (data->trans_type == 1) {
-        mViewCache.mCenter +=
-            (start.center + (end.center - start.center) * ratio - mViewCache.mCenter) *
-            data->cushion;
+        view_center = start.center + (end.center - start.center) * ratio;
+        mViewCache.mCenter += (view_center - mViewCache.mCenter) * data->cushion;
         cSGlobe start_direction(start.eye - start.center);
         cSGlobe end_direction(end.eye - end.center);
         cSGlobe direction(
             start_direction.R() + ratio * (end_direction.R() - start_direction.R()),
             start_direction.V() + (end_direction.V() - start_direction.V()) * ratio,
             start_direction.U() + (end_direction.U() - start_direction.U()) * ratio);
-        mViewCache.mEye +=
-            (mViewCache.mCenter + direction.Xyz() - mViewCache.mEye) * data->cushion;
+        view_eye = mViewCache.mCenter + direction.Xyz();
+        mViewCache.mEye += (view_eye - mViewCache.mEye) * data->cushion;
     } else if (data->trans_type == 2) {
-        mViewCache.mCenter += (start.center + end.center * ratio - mViewCache.mCenter) *
-                              data->cushion;
-        mViewCache.mEye += (start.eye + end.eye * ratio - mViewCache.mEye) * data->cushion;
+        view_center = start.center + end.center * ratio;
+        mViewCache.mCenter += (view_center - mViewCache.mCenter) * data->cushion;
+        view_eye = start.eye + end.eye * ratio;
+        mViewCache.mEye += (view_eye - mViewCache.mEye) * data->cushion;
     } else {
-        mViewCache.mCenter +=
-            (start.center + (end.center - start.center) * ratio - mViewCache.mCenter) *
-            data->cushion;
-        mViewCache.mEye +=
-            (start.eye + (end.eye - start.eye) * ratio - mViewCache.mEye) * data->cushion;
+        view_center = start.center + (end.center - start.center) * ratio;
+        mViewCache.mCenter += (view_center - mViewCache.mCenter) * data->cushion;
+        view_eye = start.eye + (end.eye - start.eye) * ratio;
+        mViewCache.mEye += (view_eye - mViewCache.mEye) * data->cushion;
     }
     f32 fovy = data->start_fovy + ratio * (data->fovy - data->start_fovy);
     mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
