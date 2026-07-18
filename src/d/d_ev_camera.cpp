@@ -1949,7 +1949,7 @@ bool dCamera_c::turnToActorEvCamera() {
         cXyz target;
         cXyz center;
         f32 cushion;
-        u8 unused_39C[8];
+        u8 unused_39C[4];
         int timer;
         fopAc_ac_c* actor;
         u8 unused_3AC[16];
@@ -1969,8 +1969,7 @@ bool dCamera_c::turnToActorEvCamera() {
         getEvFloatData(&data->cushion, "Cushion", DefaultCushion);
         getEvIntData(&data->timer, "Timer", DefaultTimer);
         getEvFloatData(&data->front_angle, "FrontAngle", DefaultFrontAngle);
-        data->actor = getEvActor("Target", "@PLAYER");
-        if (data->actor == NULL) {
+        if ((data->actor = getEvActor("Target", "@PLAYER")) == NULL) {
             m102 = 1;
             m101 = 1;
             m100 = 1;
@@ -1983,21 +1982,22 @@ bool dCamera_c::turnToActorEvCamera() {
     }
 
     if (m11C == 0) {
-        cSGlobe target_direction(relationalPos(mpPlayerActor, &data->gap) - data->target);
+        cXyz center = relationalPos(mpPlayerActor, &data->gap);
+        cSGlobe target_direction(center - data->target);
         cSGlobe actor_direction(mViewCache.mEye - positionOf(data->actor));
-        cSAngle longitude = target_direction.U();
-        if (longitude - directionOf(data->actor) < cSAngle::_0) {
-            longitude = longitude + cSAngle(5.0f);
+        cSAngle actor_difference = actor_direction.U() - directionOf(data->actor);
+        if (actor_difference < cSAngle::_0) {
+            target_direction.U(target_direction.U() + cSAngle(5.0f));
         } else {
-            longitude = longitude + cSAngle(-5.0f);
+            target_direction.U(target_direction.U() + cSAngle(-5.0f));
         }
-        cSAngle difference = longitude - directionOf(data->actor);
+        cSAngle difference = target_direction.U() - directionOf(data->actor);
         if (difference < cSAngle(-data->front_angle)) {
-            longitude = directionOf(data->actor) + cSAngle(-data->front_angle);
+            target_direction.U(directionOf(data->actor) + cSAngle(-data->front_angle));
         } else if (difference > cSAngle(data->front_angle)) {
-            longitude = directionOf(data->actor) + cSAngle(data->front_angle);
+            target_direction.U(directionOf(data->actor) + cSAngle(data->front_angle));
         }
-        data->direction.Val(120.0f, target_direction.V(), longitude);
+        data->direction.Val(120.0f, target_direction.V(), target_direction.U());
         data->center = relationalPos(mpPlayerActor, &data->gap);
     }
 
