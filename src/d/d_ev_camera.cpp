@@ -264,9 +264,9 @@ bool dCamera_c::fixedFrameEvCamera() {
     static int DefaultTimer = -1;
     static f32 DefaultBank = 0.0f;
     FixedFrameEvData* data = (FixedFrameEvData*)&mWork;
+    cXyz eye;
+    cXyz center;
     if (m11C == 0) {
-        cXyz eye;
-        cXyz center;
         getEvXyzData(&eye, "Eye", mEye);
         getEvXyzData(&center, "Center", mCenter);
         getEvXyzData(&data->base_pos, "BasePos", cXyz::Zero);
@@ -279,17 +279,14 @@ bool dCamera_c::fixedFrameEvCamera() {
         if (data->actor != NULL && data->mask[0] == 'o') {
             data->center = relationalPos(data->actor, &center);
         } else {
-            switch (data->mask[0]) {
-            case 'n': {
+            if (data->mask[0] == 'n') {
                 cSGlobe direction(mEye - positionOf(data->actor));
                 cSAngle side = direction.U() - directionOf(data->actor);
                 if (side < cSAngle::_0) {
                     center.x = -center.x;
                 }
                 data->center = relationalPos(data->actor, &center);
-                break;
-            }
-            case 'p': {
+            } else if (data->mask[0] == 'p') {
                 cXyz position = relationalPos(data->actor, &center);
                 f32 distance = (position - positionOf(mpPlayerActor)).abs();
                 center.x = -center.x;
@@ -299,14 +296,10 @@ bool dCamera_c::fixedFrameEvCamera() {
                     center.x = -center.x;
                 }
                 data->center = relationalPos(data->actor, &center);
-                break;
-            }
-            case 't':
+            } else if (data->mask[0] == 't') {
                 data->center = attentionPos(data->actor) + center;
-                break;
-            default:
+            } else {
                 data->center = center;
-                break;
             }
         }
 
@@ -322,8 +315,7 @@ bool dCamera_c::fixedFrameEvCamera() {
             }
             data->eye = relationalPos(data->actor, &eye);
         } else {
-            switch (data->mask[1]) {
-            case 'n': {
+            if (data->mask[1] == 'n') {
                 cSGlobe direction(mEye - positionOf(data->actor));
                 cSAngle side = direction.U() - directionOf(data->actor);
                 if (side < cSAngle::_0) {
@@ -333,9 +325,7 @@ bool dCamera_c::fixedFrameEvCamera() {
                 if (lineBGCheck(&data->center, &data->eye, 0x8f)) {
                     eye.x = -eye.x;
                 }
-                break;
-            }
-            case 'p': {
+            } else if (data->mask[1] == 'p') {
                 cXyz position = relationalPos(data->actor, &eye);
                 f32 distance = (position - positionOf(mpPlayerActor)).abs();
                 eye.x = -eye.x;
@@ -345,14 +335,10 @@ bool dCamera_c::fixedFrameEvCamera() {
                     eye.x = -eye.x;
                 }
                 data->eye = relationalPos(data->actor, &eye);
-                break;
-            }
-            case 't':
+            } else if (data->mask[1] == 't') {
                 data->eye = attentionPos(data->actor) + eye;
-                break;
-            default:
+            } else {
                 data->eye = eye;
-                break;
             }
         }
         m102 = 1;
