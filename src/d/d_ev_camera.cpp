@@ -982,7 +982,68 @@ bool dCamera_c::uniformBrakeEvCamera() {
         m101 = 1;
         m100 = 1;
     }
-    return true;
+
+    bool result = false;
+    if (m11C >= (u32)data->timer) {
+        result = true;
+    } else {
+        if (data->brake_type != 1) {
+            if (m11C < (u32)data->braking_point) {
+                data->progress += (f32)data->braking_timer;
+            } else {
+                data->progress += (f32)(data->timer - m11C);
+            }
+        } else if (m11C < (u32)data->braking_point) {
+            data->progress += (f32)(1 << (data->braking_timer - 1));
+        } else {
+            data->progress += (f32)(1 << ((data->timer - m11C) - 1));
+        }
+    }
+
+    f32 ratio = result ? 1.0f : data->progress / data->total_distance;
+    cXyz start_center = data->start_center;
+    cXyz start_eye = data->start_eye;
+    cXyz end_center = data->center;
+    cXyz end_eye = data->eye;
+    if (data->rel_actor != NULL) {
+        start_center = relationalPos(data->rel_actor, &data->start_center);
+        start_eye = relationalPos(data->rel_actor, &data->start_eye);
+        end_center = relationalPos(data->rel_actor, &data->center);
+        end_eye = relationalPos(data->rel_actor, &data->eye);
+    }
+
+    if (data->trans_type == 1) {
+        mViewCache.mCenter +=
+            (start_center + (end_center - start_center) * ratio - mViewCache.mCenter) *
+            data->cushion;
+        cSGlobe start_direction(start_eye - start_center);
+        cSGlobe end_direction(end_eye - end_center);
+        cSGlobe direction(
+            start_direction.R() + ratio * (end_direction.R() - start_direction.R()),
+            start_direction.V() + (end_direction.V() - start_direction.V()) * ratio,
+            start_direction.U() + (end_direction.U() - start_direction.U()) * ratio);
+        mViewCache.mEye +=
+            (mViewCache.mCenter + direction.Xyz() - mViewCache.mEye) * data->cushion;
+    } else if (data->trans_type == 2) {
+        mViewCache.mCenter += (start_center + end_center * ratio - mViewCache.mCenter) *
+                              data->cushion;
+        mViewCache.mEye += (start_eye + end_eye * ratio - mViewCache.mEye) * data->cushion;
+    } else {
+        mViewCache.mCenter +=
+            (start_center + (end_center - start_center) * ratio - mViewCache.mCenter) *
+            data->cushion;
+        mViewCache.mEye +=
+            (start_eye + (end_eye - start_eye) * ratio - mViewCache.mEye) * data->cushion;
+    }
+    f32 fovy = data->start_fovy + ratio * (data->fovy - data->start_fovy);
+    mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
+    if (data->bank_present) {
+        f32 bank = data->start_bank + ratio * (data->bank - data->start_bank);
+        mViewCache.mBank += (cSAngle(bank) - mViewCache.mBank) * data->cushion;
+        setFlag(0x400);
+    }
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+    return result;
 }
 
 /* 800B514C-800B6434       .text uniformAcceleEvCamera__9dCamera_cFv */
@@ -1048,7 +1109,68 @@ bool dCamera_c::uniformAcceleEvCamera() {
         m101 = 1;
         m100 = 1;
     }
-    return true;
+
+    bool result = false;
+    if (m11C >= (u32)data->timer) {
+        result = true;
+    } else {
+        if (data->acceleration_type != 1) {
+            if (m11C < (u32)data->acceleration_time) {
+                data->progress += (f32)(m11C + 1);
+            } else {
+                data->progress += (f32)data->acceleration_time;
+            }
+        } else if (m11C < (u32)data->acceleration_time) {
+            data->progress += (f32)(1 << m11C);
+        } else {
+            data->progress += (f32)(1 << (data->acceleration_time - 1));
+        }
+    }
+
+    f32 ratio = result ? 1.0f : data->progress / data->total_distance;
+    cXyz start_center = data->start_center;
+    cXyz start_eye = data->start_eye;
+    cXyz end_center = data->center;
+    cXyz end_eye = data->eye;
+    if (data->rel_actor != NULL) {
+        start_center = relationalPos(data->rel_actor, &data->start_center);
+        start_eye = relationalPos(data->rel_actor, &data->start_eye);
+        end_center = relationalPos(data->rel_actor, &data->center);
+        end_eye = relationalPos(data->rel_actor, &data->eye);
+    }
+
+    if (data->trans_type == 1) {
+        mViewCache.mCenter +=
+            (start_center + (end_center - start_center) * ratio - mViewCache.mCenter) *
+            data->cushion;
+        cSGlobe start_direction(start_eye - start_center);
+        cSGlobe end_direction(end_eye - end_center);
+        cSGlobe direction(
+            start_direction.R() + ratio * (end_direction.R() - start_direction.R()),
+            start_direction.V() + (end_direction.V() - start_direction.V()) * ratio,
+            start_direction.U() + (end_direction.U() - start_direction.U()) * ratio);
+        mViewCache.mEye +=
+            (mViewCache.mCenter + direction.Xyz() - mViewCache.mEye) * data->cushion;
+    } else if (data->trans_type == 2) {
+        mViewCache.mCenter += (start_center + end_center * ratio - mViewCache.mCenter) *
+                              data->cushion;
+        mViewCache.mEye += (start_eye + end_eye * ratio - mViewCache.mEye) * data->cushion;
+    } else {
+        mViewCache.mCenter +=
+            (start_center + (end_center - start_center) * ratio - mViewCache.mCenter) *
+            data->cushion;
+        mViewCache.mEye +=
+            (start_eye + (end_eye - start_eye) * ratio - mViewCache.mEye) * data->cushion;
+    }
+    f32 fovy = data->start_fovy + ratio * (data->fovy - data->start_fovy);
+    mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
+    if (data->bank_present) {
+        f32 bank = data->start_bank + ratio * (data->bank - data->start_bank);
+        mViewCache.mBank += (cSAngle(bank) - mViewCache.mBank) * data->cushion;
+        setFlag(0x400);
+    }
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+    return result;
 }
 
 /* 800B6470-800B7640       .text watchActorEvCamera__9dCamera_cFv */
