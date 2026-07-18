@@ -8,11 +8,15 @@ class dBgW;
 
 class daObjHtetu1Splash_c {
 public:
+    JPABaseEmitter* get_emitter() { return DEMO_SELECT(mpEmitter, mSplashCb.getEmitter()); }
     bool chk_stop() { return mbIsActive == false; }
 
     void delete_s() {
-        if (mSplashCb.getEmitter() != NULL) {
+        if (get_emitter() != NULL) {
             mSplashCb.remove();
+#if VERSION == VERSION_DEMO
+            mpEmitter = NULL;
+#endif
             mbIsActive = false;
         }
     }
@@ -20,7 +24,7 @@ public:
     s16 get_timer() { return mTimer; }
 
     void play_particle() {
-        JPABaseEmitter* emitter = mSplashCb.getEmitter();
+        JPABaseEmitter* emitter = get_emitter();
         if (emitter != NULL) {
             emitter->playCreateParticle();
             mbIsActive = true;
@@ -30,7 +34,7 @@ public:
     void set_pos_y(f32 i_y) { mPos.y = i_y; }
 
     void stop_particle() {
-        JPABaseEmitter* emitter = mSplashCb.getEmitter();
+        JPABaseEmitter* emitter = get_emitter();
         if (emitter != NULL) {
             emitter->stopCreateParticle();
             mbIsActive = false;
@@ -40,7 +44,7 @@ public:
     void sub_timer() { mTimer--; }
 
     void timer_play_particle(s16 i_timer) {
-        JPABaseEmitter* emitter = mSplashCb.getEmitter();
+        JPABaseEmitter* emitter = get_emitter();
         if (emitter != NULL) {
             emitter->playCreateParticle();
             mbIsActive = true;
@@ -51,12 +55,15 @@ public:
     void create_s(u16 i_particleID, cXyz* i_pos, csXyz* i_angle, dKy_tevstr_c* i_tevStr);
 
 public:
-    /* 0x00 */ dPa_followEcallBack mSplashCb;
-    /* 0x14 */ Vec mPos;
-    /* 0x20 */ S16Vec mAngle;
-    /* 0x26 */ s16 mTimer;
-    /* 0x28 */ u8 mbIsActive;
-}; // Size: 0x2C
+#if VERSION == VERSION_DEMO
+    /* 0x00 */ JPABaseEmitter* mpEmitter;
+#endif
+    /* 0x00 (retail) / 0x04 (demo) */ dPa_followEcallBack mSplashCb;
+    /* 0x14 (retail) / 0x18 (demo) */ Vec mPos;
+    /* 0x20 (retail) / 0x24 (demo) */ S16Vec mAngle;
+    /* 0x26 (retail) / 0x2A (demo) */ s16 mTimer;
+    /* 0x28 (retail) / 0x2C (demo) */ u8 mbIsActive;
+}; // Size: 0x2C, demo size: 0x30
 
 class daObjHtetu1_c : public fopAc_ac_c {
 public:
@@ -90,6 +97,6 @@ public:
     /* 0x2C8 */ s16 mQuakeTimer;
     /* 0x2CC */ dBgW* mpBgw;
     /* 0x2D0 */ daObjHtetu1Splash_c mSplash[2];
-}; // Size: 0x328
+}; // Size: 0x328, demo size: 0x330
 
 #endif /* D_A_OBJ_HTETU1_H */

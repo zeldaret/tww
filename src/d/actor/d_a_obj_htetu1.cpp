@@ -24,12 +24,19 @@ void daObjHtetu1Splash_c::create_s(u16 i_particleID, cXyz* i_pos, csXyz* i_angle
     mAngle.x = i_angle->x;
     mAngle.y = i_angle->y;
     mAngle.z = i_angle->z;
-    dComIfGp_particle_set(i_particleID, reinterpret_cast<cXyz*>(&mPos), reinterpret_cast<csXyz*>(&mAngle), NULL, 0xFF,
-                          &mSplashCb);
+#if VERSION == VERSION_DEMO
+    mpEmitter =
+#endif
+        dComIfGp_particle_set(i_particleID, reinterpret_cast<cXyz*>(&mPos), reinterpret_cast<csXyz*>(&mAngle), NULL,
+                              0xFF, &mSplashCb);
 
-    if (mSplashCb.getEmitter() != NULL) {
-        mSplashCb.getEmitter()->setGlobalPrmColor(i_tevStr->mColorC0.r, i_tevStr->mColorC0.g, i_tevStr->mColorC0.b);
+#if VERSION == VERSION_DEMO
+    mpEmitter->setGlobalPrmColor(i_tevStr->mColorC0.r, i_tevStr->mColorC0.g, i_tevStr->mColorC0.b);
+#else
+    if (get_emitter() != NULL) {
+        get_emitter()->setGlobalPrmColor(i_tevStr->mColorC0.r, i_tevStr->mColorC0.g, i_tevStr->mColorC0.b);
     }
+#endif
 
     stop_particle();
     mbIsActive = false;
@@ -45,7 +52,7 @@ BOOL daObjHtetu1_c::solidHeapCB(fopAc_ac_c* i_this) {
 BOOL daObjHtetu1_c::create_heap() {
     BOOL ret = TRUE;
     J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_HTETU1_BDL_HTETU1_e));
-    JUT_ASSERT(281, mdl_data != NULL);
+    JUT_ASSERT(DEMO_SELECT(279, 281), mdl_data != NULL);
 
     if (mdl_data == NULL) {
         ret = FALSE;
@@ -104,12 +111,14 @@ bool daObjHtetu1_c::_delete() {
         mSplash[i].delete_s();
     }
 
-    if (heap != NULL && mpBgw != NULL && mpBgw->ChkUsed()) {
+    if (DEMO_SELECT(mpBgw != NULL, heap != NULL && mpBgw != NULL) && mpBgw->ChkUsed()) {
         dComIfG_Bgsp()->Release(mpBgw);
+#if VERSION > VERSION_DEMO
         mpBgw = NULL;
+#endif
     }
 
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 
@@ -131,8 +140,12 @@ void daObjHtetu1_c::init_mtx() {
 void daObjHtetu1_c::unlock() {
     cXyz offset = cXyz::BaseY;
     mPos -= mOffset;
+#if VERSION == VERSION_DEMO
+    offset *= std::fabsf((s16)(mUnlockSpeed * cM_ssin(mUnlockTimer * 0x859)));
+#else
     f32 speed = *reinterpret_cast<volatile f32*>(&mUnlockSpeed);
     offset *= std::fabsf((s16)(speed * cM_ssin(mUnlockTimer * 0x859)));
+#endif
     mPos += offset;
     mOffset = offset;
     cLib_addCalc(&mUnlockSpeed, 0.0f, 0.13f, 50.0f, 1.0f);
@@ -186,7 +199,7 @@ bool daObjHtetu1_c::_execute() {
     int i;
     switch (mEventState) {
     case 0:
-        if (check_sw() != FALSE) {
+        if (check_sw()) {
             if (!eventInfo.checkCommandDemoAccrpt()) {
                 fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
                 eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -239,13 +252,8 @@ bool daObjHtetu1_c::_execute() {
         mPos.y -= 5.0f;
         mDoAud_seStart(JA_SE_OBJ_ST_KOUSHI_MOVE, &current.pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
         if (mPos.y <= mLowerY) {
-            i = 0;
-            int inactive = i;
-            for (; i < 2; i++) {
-                if (mSplash[i].mSplashCb.getEmitter() != NULL) {
-                    mSplash[i].mSplashCb.remove();
-                    mSplash[i].mbIsActive = inactive;
-                }
+            for (i = 0; i < 2; i++) {
+                mSplash[i].delete_s();
             }
             mPos.y = mLowerY;
             mUnlockState = 0;
@@ -266,7 +274,7 @@ bool daObjHtetu1_c::_execute() {
         mQuakeTimer--;
     }
 
-    if (heap != NULL && mpBgw != NULL && mpBgw->ChkUsed()) {
+    if (DEMO_SELECT(mpBgw != NULL, heap != NULL && mpBgw != NULL) && mpBgw->ChkUsed()) {
         mpBgw->Move();
     }
 
