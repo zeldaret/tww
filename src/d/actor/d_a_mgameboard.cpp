@@ -243,10 +243,10 @@ void daMgBoard_c::set_mtx() {
     mHitModelCount = 0;
 
     J3DModel* model;
-    for (u8 y = 0; y < 8; ++y) {
-        for (u8 x = 0; x < 8; ++x) {
+    for (u8 x = 0; x < 8; ++x) {
+        for (u8 y = 0; y < 8; ++y) {
 
-            u8 grid_value = mSeaFightGame.mGrid[y][x];
+            u8 grid_value = mSeaFightGame.mGrid[x][y];
             model = NULL;
             if ((s32)grid_value == 3) {
                 model = mpHitModel[mHitModelCount];
@@ -256,7 +256,7 @@ void daMgBoard_c::set_mtx() {
                 mMissModelCount = mMissModelCount + 1;
             }
             if (model != NULL) {
-                mDoMtx_stack_c::transS(m_cur_table[x][y].x + current.pos.x, m_cur_table[x][y].y + current.pos.y, m_cur_table[x][y].z + current.pos.z);
+                mDoMtx_stack_c::transS(m_cur_table[y][x].x + current.pos.x, m_cur_table[y][x].y + current.pos.y, m_cur_table[y][x].z + current.pos.z);
                 mDoMtx_stack_c::YrotM(current.angle.y);
                 model->setBaseTRMtx(mDoMtx_stack_c::get());
             }
@@ -284,13 +284,13 @@ void daMgBoard_c::set_mtx() {
             u8 ship_x = mSeaFightGame.getShipStartX(i);
             u8 ship_y = mSeaFightGame.getShipStartY(i);
             mDoMtx_stack_c::transS(
-                m_cur_table[ship_x][ship_y].x + current.pos.x,
-                m_cur_table[ship_x][ship_y].y + current.pos.y,
-                m_cur_table[ship_x][ship_y].z + current.pos.z
+                m_cur_table[ship_y][ship_x].x + current.pos.x,
+                m_cur_table[ship_y][ship_x].y + current.pos.y,
+                m_cur_table[ship_y][ship_x].z + current.pos.z
             );
 
             mDoMtx_stack_c::YrotM(current.angle.y);
-            if ((s8)mSeaFightGame.mShips[i].field_0xe == 0) {
+            if ((s8)mSeaFightGame.getShipVecY(i) == 0) {
                 mDoMtx_stack_c::ZrotM(0x4000);
             } else {
                 mDoMtx_stack_c::ZrotM(-0x8000);
