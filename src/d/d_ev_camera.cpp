@@ -916,7 +916,7 @@ bool dCamera_c::uniformBrakeEvCamera() {
         f32 progress;
         f32 cushion;
         cSGlobe start_direction;
-        u8 bank_present;
+        bool bank_present;
     };
     static int DefaultTimer = -1;
     static f32 DefaultBank = 0.0f;
@@ -1158,7 +1158,7 @@ bool dCamera_c::uniformAcceleEvCamera() {
         f32 progress;
         f32 cushion;
         cSGlobe start_direction;
-        u8 bank_present;
+        bool bank_present;
     };
     static int DefaultTimer = -1;
     static f32 DefaultBank = 0.0f;
