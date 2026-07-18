@@ -662,7 +662,7 @@ bool dCamera_c::uniformTransEvCamera() {
         int trans_type;
         f32 cushion;
         cSGlobe start_direction;
-        u8 bank_present;
+        bool bank_present;
         u8 pad[3];
         int bsp_curve;
     };
