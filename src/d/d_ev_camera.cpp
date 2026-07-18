@@ -927,6 +927,7 @@ bool dCamera_c::uniformBrakeEvCamera() {
     } start, end;
     cXyz center;
     cXyz eye;
+    bool result = false;
     if (m11C == 0) {
         if (!getEvIntData(&data->timer, "Timer")) {
             return true;
@@ -1019,7 +1020,6 @@ bool dCamera_c::uniformBrakeEvCamera() {
         return true;
     }
 
-    bool result = false;
     if (m11C >= (u32)data->timer) {
         result = true;
     } else {
@@ -1140,8 +1140,8 @@ bool dCamera_c::uniformAcceleEvCamera() {
         u8 pad_4c[4];
         int timer;
         f32 total_distance;
-        int acceleration_time;
         int uniform_time;
+        int acceleration_time;
         int acceleration_type;
         int trans_type;
         f32 progress;
@@ -1158,8 +1158,9 @@ bool dCamera_c::uniformAcceleEvCamera() {
     } start, end;
     cXyz center;
     cXyz eye;
+    bool result = false;
     if (m11C == 0) {
-        if (!getEvIntData(&data->timer, "Timer", DefaultTimer)) {
+        if (!getEvIntData(&data->timer, "Timer")) {
             return true;
         }
         getEvIntData(&data->acceleration_time, "AcceleTimer", data->timer);
@@ -1251,18 +1252,17 @@ bool dCamera_c::uniformAcceleEvCamera() {
         return true;
     }
 
-    bool result = false;
     if (m11C >= (u32)data->timer) {
         result = true;
     } else {
         if (data->acceleration_type != 1) {
             if (m11C < (u32)data->acceleration_time) {
-                data->progress += (f32)(m11C + 1);
+                data->progress += (f32)m11C;
             } else {
                 data->progress += (f32)data->acceleration_time;
             }
         } else if (m11C < (u32)data->acceleration_time) {
-            data->progress += (f32)(1 << m11C);
+            data->progress += (f32)(1 << (m11C - 1));
         } else {
             data->progress += (f32)(1 << (data->acceleration_time - 1));
         }
