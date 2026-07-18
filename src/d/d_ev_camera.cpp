@@ -1556,6 +1556,10 @@ bool dCamera_c::gameOverEvCamera() {
     };
     cXyz second_center(0.0f, -40.0f, -35.0f);
     cXyz second_eye(0.0f, 170.0f, 115.0f);
+    cXyz first_work_center;
+    cXyz first_work_eye;
+    cXyz second_work_center;
+    cXyz second_work_eye;
     cXyz subject_center(0.0f, 14.0f, 30.0f);
     cXyz subject_eye(70.0f, 155.0f, 175.0f);
 
@@ -1587,31 +1591,30 @@ bool dCamera_c::gameOverEvCamera() {
         data->state = 1;
         /* fallthrough */
     case 1: {
-        cXyz center = relationalPos(mpPlayerActor, &first_center);
-        cXyz eye;
+        first_work_center = relationalPos(mpPlayerActor, &first_center);
         int i;
         for (i = 0; i < 5; i++) {
             if (data->side != 0) {
                 first_eyes[i].x = -first_eyes[i].x;
             }
-            eye = relationalPos(mpPlayerActor, &first_eyes[i], player_angle);
-            if (eye.y < m368 + positionOf(mpPlayerActor).y) {
-                eye.y = m368 + positionOf(mpPlayerActor).y;
+            first_work_eye = relationalPos(mpPlayerActor, &first_eyes[i], player_angle);
+            if (first_work_eye.y < m368 + positionOf(mpPlayerActor).y) {
+                first_work_eye.y = m368 + positionOf(mpPlayerActor).y;
             }
-            if (!lineBGCheck(&center, &eye, 0x7f)) {
+            if (!lineBGCheck(&first_work_center, &first_work_eye, 0x7f)) {
                 break;
             }
             first_eyes[i].x = -first_eyes[i].x;
-            eye = relationalPos(mpPlayerActor, &first_eyes[i], player_angle);
-            if (eye.y < m368 + positionOf(mpPlayerActor).y) {
-                eye.y = m368 + positionOf(mpPlayerActor).y;
+            first_work_eye = relationalPos(mpPlayerActor, &first_eyes[i], player_angle);
+            if (first_work_eye.y < m368 + positionOf(mpPlayerActor).y) {
+                first_work_eye.y = m368 + positionOf(mpPlayerActor).y;
             }
-            if (!lineBGCheck(&center, &eye, 0x7f)) {
+            if (!lineBGCheck(&first_work_center, &first_work_eye, 0x7f)) {
                 break;
             }
             data->side ^= 1;
         }
-        mViewCache.mEye = eye;
+        mViewCache.mEye = first_work_eye;
         data->center_gap = first_center;
         data->eye_gap = first_eyes[i];
         data->state++;
@@ -1622,31 +1625,31 @@ bool dCamera_c::gameOverEvCamera() {
             data->state++;
             data->timer = 0;
         case 3: {
-            cXyz center = relationalPos(mpPlayerActor, &second_center, player_angle);
-            cXyz eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
-            if (eye.y < m368 + positionOf(mpPlayerActor).y) {
-                eye.y = m368 + positionOf(mpPlayerActor).y;
+            second_work_center = relationalPos(mpPlayerActor, &second_center, player_angle);
+            second_work_eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
+            if (second_work_eye.y < m368 + positionOf(mpPlayerActor).y) {
+                second_work_eye.y = m368 + positionOf(mpPlayerActor).y;
             }
-            if (lineBGCheck(&center, &eye, 0x7f)) {
+            if (lineBGCheck(&second_work_center, &second_work_eye, 0x7f)) {
                 second_eye.z = -second_eye.z;
-                eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
-                if (eye.y < m368 + positionOf(mpPlayerActor).y) {
-                    eye.y = m368 + positionOf(mpPlayerActor).y;
+                second_work_eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
+                if (second_work_eye.y < m368 + positionOf(mpPlayerActor).y) {
+                    second_work_eye.y = m368 + positionOf(mpPlayerActor).y;
                 }
-                if (lineBGCheck(&center, &eye, 0x7f)) {
+                if (lineBGCheck(&second_work_center, &second_work_eye, 0x7f)) {
                     second_center.z = 0.0f;
-                    center = relationalPos(mpPlayerActor, &second_center, player_angle);
-                    eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
-                    if (eye.y < m368 + positionOf(mpPlayerActor).y) {
-                        eye.y = m368 + positionOf(mpPlayerActor).y;
+                    second_work_center = relationalPos(mpPlayerActor, &second_center, player_angle);
+                    second_work_eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
+                    if (second_work_eye.y < m368 + positionOf(mpPlayerActor).y) {
+                        second_work_eye.y = m368 + positionOf(mpPlayerActor).y;
                     }
-                    if (lineBGCheck(&center, &eye, 0x7f)) {
+                    if (lineBGCheck(&second_work_center, &second_work_eye, 0x7f)) {
                         second_eye.z = -second_eye.z;
-                        eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
-                        if (eye.y < m368 + positionOf(mpPlayerActor).y) {
-                            eye.y = m368 + positionOf(mpPlayerActor).y;
+                        second_work_eye = relationalPos(mpPlayerActor, &second_eye, player_angle);
+                        if (second_work_eye.y < m368 + positionOf(mpPlayerActor).y) {
+                            second_work_eye.y = m368 + positionOf(mpPlayerActor).y;
                         }
-                        lineBGCheck(&center, &eye, 0x7f);
+                        lineBGCheck(&second_work_center, &second_work_eye, 0x7f);
                     }
                 }
             }
