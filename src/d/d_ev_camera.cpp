@@ -2281,24 +2281,27 @@ bool dCamera_c::windDirectionEvCamera() {
                                    (data->direction.U() - data->start_direction.U()) * step);
             mViewCache.mCenter = data->center;
             mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+            break;
         } else {
             data->state = 13;
-        case 13:
-            data->state = 14;
-            data->up_count = 0;
-            data->timer = 0;
-        case 14:
-            if (data->timer > data->up_count) {
-                data->state = 15;
-            }
-            data->center = relationalPos(mpPlayerActor, &center_gaps[data->side_flag]);
-            data->eye = relationalPos(mpPlayerActor, &eye_gaps[data->side_flag]);
         }
+    case 13:
+        data->state = 14;
+        data->up_count = 0;
+        data->timer = 0;
+    case 14:
+        if (data->timer > data->up_count) {
+            data->state = 15;
+        }
+        data->center = relationalPos(mpPlayerActor, &center_gaps[data->side_flag]);
+        data->eye = relationalPos(mpPlayerActor, &eye_gaps[data->side_flag]);
         break;
     case 15:
         mViewCache.mCenter += (data->center - mViewCache.mCenter) * 0.02f;
         mViewCache.mEye += (data->eye - mViewCache.mEye) * 0.02f;
         mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+        break;
+    case 99:
         break;
     }
 
