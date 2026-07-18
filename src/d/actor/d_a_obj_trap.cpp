@@ -375,13 +375,15 @@ void daObjTrap_c::shine_move() {
 /* 00002758-00002CB0       .text _execute__11daObjTrap_cFv */
 bool daObjTrap_c::_execute() {
     mPathTarget = current.pos;
+    cXyz wall_offset;
+    cXyz block_offset;
 
     switch (mMode) {
     case 0: {
         int arrived = cLib_chasePosXZ(&mPathTarget, mNextPathPos, mSpeed);
         mPathOffset = mPathTarget - current.pos;
-        cXyz wall_offset = check_wall();
-        cXyz block_offset = check_block(wall_offset);
+        wall_offset = check_wall();
+        block_offset = check_block(wall_offset);
 
         if (block_offset != cXyz::Zero) {
             mPathTarget = block_offset;
@@ -402,8 +404,8 @@ bool daObjTrap_c::_execute() {
     case 1: {
         cLib_addCalcPosXZ(&mPathOffset, mPathStep, 0.1f, 40.0f, 0.0f);
         mPathTarget += mPathOffset;
-        cXyz wall_offset = check_wall();
-        cXyz block_offset = check_block(wall_offset);
+        wall_offset = check_wall();
+        block_offset = check_block(wall_offset);
 
         if (block_offset != cXyz::Zero) {
             mPathTarget = block_offset;
@@ -455,7 +457,7 @@ bool daObjTrap_c::_execute() {
     init_mtx();
     set_co_pos();
     dComIfG_Ccsp()->Set(&mCcCyl);
-    if (heap != NULL && mpcBgW != NULL) {
+    if (heap != NULL && mpcBgW != NULL && mpcBgW->ChkUsed()) {
         mpcBgW->Move();
     }
     return true;
