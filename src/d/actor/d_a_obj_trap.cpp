@@ -10,6 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_pc/f_pc_draw_priority.h"
 #include "f_pc/f_pc_name.h"
+#include "m_Do/m_Do_mtx.h"
 #include "res/Object/Trap.h"
 
 /* 000000EC-0000010C       .text solidHeapCB__11daObjTrap_cFP10fopAc_ac_c */
@@ -71,7 +72,11 @@ bool daObjTrap_c::_delete() {
 
 /* 00000E84-00000F20       .text init_mtx__11daObjTrap_cFv */
 void daObjTrap_c::init_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpModel->calc();
 }
 
 /* 00000F20-00000F70       .text set_co_pos__11daObjTrap_cFv */
