@@ -596,7 +596,7 @@ void dJle_Pb_c::cameraMode() {
         mSelectedPhotoSlot = 0;
         mDoAud_seStart(JA_SE_UTUSHIE_CHANGE_MODE);
     }
-    else if (!dComIfGp_checkCameraAttentionStatus(0, 0x40)) {
+    else if (!dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e)) {
         mExecState = PB_EXEC_CLOSE_e;
     }
     else if (mDoGph_getCaptureStep() == -1) {
@@ -1013,8 +1013,7 @@ void dJle_Pb_c::moveBrowse() {
 
         dComIfGp_setAStatusForce(dActStts_RETURN_e);
 
-        if (dComIfGp_getPictureStatus() != 2 &&
-            dComIfGp_getPictureStatus() != 3) {
+        if (dComIfGp_getPictureStatus() != 2 && dComIfGp_getPictureStatus() != 3) {
             dComIfGp_setRStatusForce(dActStts_SWAP_MODES_e);
         }
     } else if (mModeSubState == PB_SUB_CONFIRM_e) {
@@ -1051,9 +1050,7 @@ void dJle_Pb_c::selectBrowse() {
             (CPad_CHECK_TRIG_Y(0) && dComIfGs_getSelectItem(1) == dInvSlot_CAMERA_e) ||
             (CPad_CHECK_TRIG_Z(0) && dComIfGs_getSelectItem(2) == dInvSlot_CAMERA_e)
         ) {
-            daPy_getPlayerActorClass()->onNoResetFlg0(
-                daPy_py_c::daPyFlg0_PHOTO_BOX_CANCEL
-            );
+            daPy_getPlayerActorClass()->onNoResetFlg0(daPy_py_c::daPyFlg0_PHOTO_BOX_CANCEL);
             dComIfGp_setPictureStatus(0);
             mDoAud_seStart(JA_SE_UTUSHIE_B_LEAVE_PIC);
             mExecState = PB_EXEC_CLOSE_e;
@@ -1098,8 +1095,7 @@ void dJle_Pb_c::selectBrowse() {
 
         dComIfGp_setAStatusForce(dActStts_RETURN_e);
 
-        if (dComIfGp_getPictureStatus() != 2 &&
-            dComIfGp_getPictureStatus() != 3) {
+        if (dComIfGp_getPictureStatus() != 2 && dComIfGp_getPictureStatus() != 3) {
             dComIfGp_setRStatusForce(dActStts_SWAP_MODES_e);
         }
     } else if (mModeSubState == PB_SUB_CONFIRM_e) {
