@@ -480,7 +480,8 @@ bool dCamera_c::rollingEvCamera() {
                 data->center = relationalPos(data->actor, &data->center_gap);
             } else if (data->mask[0] == 'n') {
                 cSGlobe actor_direction(mEye - positionOf(data->actor));
-                if (actor_direction.U() - directionOf(data->actor) < cSAngle::_0) {
+                cSAngle side = actor_direction.U() - directionOf(data->actor);
+                if (side < cSAngle::_0) {
                     data->center_gap.x = -data->center_gap.x;
                 }
                 data->center = relationalPos(data->actor, &data->center_gap);
@@ -512,7 +513,8 @@ bool dCamera_c::rollingEvCamera() {
             data->eye = relationalPos(data->actor, &data->eye_gap);
         } else if (data->mask[1] == 'n') {
             cSGlobe actor_direction(mEye - positionOf(data->actor));
-            if (actor_direction.U() - directionOf(data->actor) < cSAngle::_0) {
+            cSAngle side = actor_direction.U() - directionOf(data->actor);
+            if (side < cSAngle::_0) {
                 data->eye_gap.x = -data->eye_gap.x;
             }
             data->eye = relationalPos(data->actor, &data->eye_gap);
@@ -539,7 +541,8 @@ bool dCamera_c::rollingEvCamera() {
             data->center = relationalPos(data->actor, &data->center_gap);
         } else if (data->mask[0] == 'n') {
             cSGlobe actor_direction(mEye - positionOf(data->actor));
-            if (actor_direction.U() - directionOf(data->actor) < cSAngle::_0) {
+            cSAngle side = actor_direction.U() - directionOf(data->actor);
+            if (side < cSAngle::_0) {
                 data->center_gap.x = -data->center_gap.x;
             }
             data->center = relationalPos(data->actor, &data->center_gap);
