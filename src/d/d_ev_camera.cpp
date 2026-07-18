@@ -2038,19 +2038,19 @@ bool dCamera_c::tornadoWarpEvCamera() {
         m100 = 1;
     }
 
-    cXyz player_gaps[4] = {
+    cXyz player_gaps[2] = {
         cXyz(0.0f, -40.0f, 0.0f), cXyz(0.0f, 60.0f, 0.0f),
-        cXyz(900.0f, 800.0f, 0.0f), cXyz(-900.0f, 800.0f, 0.0f),
     };
     cXyz bird_gaps[4] = {
+        cXyz(900.0f, 800.0f, 0.0f), cXyz(-900.0f, 800.0f, 0.0f),
         cXyz(0.0f, 800.0f, 900.0f), cXyz(0.0f, 800.0f, -900.0f),
-        cXyz(0.0f, -40.0f, 0.0f), cXyz(0.0f, 60.0f, 0.0f),
     };
     cSAngle offset(45.0f);
     cXyz center;
     cXyz eye;
 
     switch (data->state) {
+    case 0:
     default: {
         s16 proc_name = 0xa7;
         data->bird = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &proc_name);
@@ -2063,14 +2063,15 @@ bool dCamera_c::tornadoWarpEvCamera() {
             int selected = 3;
             for (int i = 0; i < 4; i++) {
                 eye = relationalPos(mpPlayerActor, &bird_gaps[i], offset);
-                f32 distance = (center - eye).abs();
+                cXyz difference = center - eye;
+                f32 distance = difference.abs();
                 if (distance < shortest) {
                     shortest = distance;
                     selected = i;
                 }
             }
-            bird_gaps[selected] = dCamMath::xyzRotateY(bird_gaps[selected], offset);
-            eye = relationalPos(mpPlayerActor, &bird_gaps[selected]);
+            cXyz rotated = dCamMath::xyzRotateY(bird_gaps[selected], offset);
+            eye = relationalPos(mpPlayerActor, &rotated);
         } else {
             for (int i = 0; i < 4; i++) {
                 eye = relationalPos(mpPlayerActor, &bird_gaps[i], offset);
@@ -2092,7 +2093,8 @@ bool dCamera_c::tornadoWarpEvCamera() {
         mViewCache.mFovy +=
             ((mViewCache.mFovy + (70.0f - mViewCache.mFovy) * rate) - mViewCache.mFovy) * 0.15f;
         mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
-        mViewCache.mBank += cSAngle(cM_rndFX(6.0f * rate)) * 0.15f;
+        mViewCache.mBank +=
+            ((s16)(182.04445f * cM_rndFX(6.0f * rate)) - mViewCache.mBank) * 0.15f;
         mEventFlags |= 0x400;
         if (--data->timer == 0) {
             data->state = 2;
@@ -2113,6 +2115,8 @@ bool dCamera_c::tornadoWarpEvCamera() {
         if (--data->timer == 0) {
             data->state = 3;
         }
+        break;
+    case 3:
         break;
     }
     return true;
