@@ -37,6 +37,8 @@ public:
     bool _draw();
 
     static const char M_arcname[];
+    static f32 const M_speed_table[];
+    static s16 const M_wait_f_table[];
 
 public:
     /* Place member variables here */
@@ -56,15 +58,19 @@ public:
     /* 0x4B4 */ cXyz mPathTarget;
     /* 0x4C0 */ u8 mPad4C0[0x0C];
     /* 0x4CC */ f32 mPathLength;
-    /* 0x4D0 */ u8 mPad4D0[0x0C];
+    /* 0x4D0 */ u8 mPad4D0[8];
+    /* 0x4D8 */ u16 mVibrationTimer;
+    /* 0x4DA */ u8 mPad4DA[2];
     /* 0x4DC */ u8 mPathPoint;
     /* 0x4DD */ u8 mPathId;
     /* 0x4DE */ u8 mPathDirectionSign;
-    /* 0x4DF */ u8 mPad4DF[2];
+    /* 0x4DF */ u8 mPad4DF;
+    /* 0x4E0 */ u8 mShineStatus;
     /* 0x4E1 */ u8 mSpeedType;
     /* 0x4E2 */ u8 mPad4E2[2];
     /* 0x4E4 */ f32 mSpeed;
-    /* 0x4E8 */ f32 mPathSpeed;
+    /* 0x4E8 */ s16 mWaitFrame;
+    /* 0x4EA */ u8 mPad4EA[2];
     /* 0x4EC */ cBgW *mpcBgW;
 };
 

@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_trap.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_path.h"
@@ -19,6 +20,8 @@ void daObjTrap_c::solidHeapCB(fopAc_ac_c*) {
     create_heap();
 }
 
+f32 const daObjTrap_c::M_speed_table[] = {50.0f, 80.0f, 100.0f};
+s16 const daObjTrap_c::M_wait_f_table[] = {30, 10, 0};
 const char daObjTrap_c::M_arcname[] = "Trap";
 
 /* 0000010C-000002A4       .text create_heap__11daObjTrap_cFv */
@@ -139,7 +142,9 @@ void daObjTrap_c::set_vib_mode() {
 
 /* 0000250C-0000255C       .text vibrate__11daObjTrap_cFv */
 void daObjTrap_c::vibrate() {
-    /* Nonmatching */
+    f32 amplitude;
+    amplitude = 288.0f;
+    shape_angle.x = amplitude * JMASSin(mVibrationTimer * 0x5555);
 }
 
 /* 0000255C-00002678       .text bound__11daObjTrap_cFv */
@@ -154,7 +159,9 @@ void daObjTrap_c::set_shine() {
 
 /* 0000270C-00002758       .text shine_move__11daObjTrap_cFv */
 void daObjTrap_c::shine_move() {
-    /* Nonmatching */
+    if (mShineStatus == 1 && mBtkAnm.play()) {
+        mShineStatus = 0;
+    }
 }
 
 /* 00002758-00002CB0       .text _execute__11daObjTrap_cFv */
