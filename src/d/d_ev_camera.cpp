@@ -1037,6 +1037,10 @@ bool dCamera_c::uniformBrakeEvCamera() {
         m100 = 1;
     }
 
+    if (data->rel_actor != NULL && fopAcM_SearchByID(data->rel_actor_id) == NULL) {
+        return true;
+    }
+
     bool result = false;
     if (m11C >= (u32)data->timer) {
         result = true;
@@ -1282,6 +1286,10 @@ bool dCamera_c::uniformAcceleEvCamera() {
         m102 = 1;
         m101 = 1;
         m100 = 1;
+    }
+
+    if (data->rel_actor != NULL && fopAcM_SearchByID(data->rel_actor_id) == NULL) {
+        return true;
     }
 
     bool result = false;
