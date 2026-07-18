@@ -1480,8 +1480,8 @@ bool dCamera_c::maptoolIdEvCamera() {
     if (mEventData.field_0xec == NULL) {
         return true;
     }
-    u8 camera_id = mEventData.field_0xec->field_0x10;
     s8 room_no = mEventData.field_0xec->field_0x14;
+    u8 camera_id = mEventData.field_0xec->field_0x10;
     u32 timer = -1;
     if (mEventData.field_0xec->field_0x12 != 0xff) {
         if (mEventData.field_0xec->field_0x12 & 1) {
@@ -1834,7 +1834,6 @@ bool dCamera_c::tornadoWarpEvCamera() {
     cXyz eye;
 
     switch (data->state) {
-    case 0:
     default: {
         s16 proc_name = 0xa7;
         data->bird = (fopAc_ac_c*)fopAcIt_Judge(fpcSch_JudgeForPName, &proc_name);
@@ -2129,7 +2128,7 @@ bool dCamera_c::possessedEvCamera() {
             ResetBlure(0);
             SetBlurePositionType(11);
             SetBlureTimer(data->timer);
-            SetBlureAlpha(0.63f);
+            SetBlureAlpha(0.63000005f);
             SetBlureScale(0.99f);
             dComIfGp_getVibration().StartShock(1, 0x20, cXyz(0.0f, 1.0f, 0.0f));
             break;
@@ -2148,16 +2147,19 @@ bool dCamera_c::possessedEvCamera() {
         eye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mEye += (eye - mViewCache.mEye) * data->cushion;
         mViewCache.mFovy += step * (data->fovy - mViewCache.mFovy);
-        if (data->blure == 1) {
-            dDlst_window_c* window =
-                dComIfGp_getWindow(dComIfGp_getCameraWinID(fopCamM_GetParam(mpCamera)));
+        switch (data->blure) {
+        case 1: {
+            scissor_class* scissor =
+                dComIfGp_getWindow(dComIfGp_getCameraWinID(fopCamM_GetParam(mpCamera)))
+                    ->getScissor();
             cXyz target_eye = eyePos(data->target);
             cXyz projected;
             mDoLib_project(&target_eye, &projected);
-            scissor_class* scissor = window->getScissor();
             SetBlurePosition(projected.x / scissor->mWidth, projected.y / scissor->mHeight, 0.0f);
             SetBlureAlpha(step * 0.7f + 0.5f);
             SetBlureScale(step * 0.09f + 1.1f, 0.98f - step * 0.18f, 0.0f);
+            break;
+        }
         }
         data->countdown--;
         if (data->countdown <= 0) {
