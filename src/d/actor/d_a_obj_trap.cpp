@@ -57,7 +57,16 @@ cPhs_State daObjTrap_c::_create() {
 
 /* 00000DF0-00000E84       .text _delete__11daObjTrap_cFv */
 bool daObjTrap_c::_delete() {
-    /* Nonmatching */
+    if (heap != NULL) {
+        if (mpcBgW != NULL) {
+            if (mpcBgW->ChkUsed()) {
+                dComIfG_Bgsp()->Release(mpcBgW);
+                mpcBgW = NULL;
+            }
+        }
+    }
+    dComIfG_resDelete(&mPhase, M_arcname);
+    return true;
 }
 
 /* 00000E84-00000F20       .text init_mtx__11daObjTrap_cFv */
