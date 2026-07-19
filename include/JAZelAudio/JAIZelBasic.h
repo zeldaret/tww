@@ -122,7 +122,7 @@ public:
     void processTime();
     void processMorningToNormal();
     int checkOnOuterSea(f32*);
-    void checkSeqIDDemoPlaying(u32);
+    BOOL checkSeqIDDemoPlaying(u32);
     u32 checkDemoFanfarePlaying();
     void processDemoFanfareMute();
     void muteMainBgmAll();
@@ -307,7 +307,8 @@ public:
     /* 0x01FF */ u8 field_0x01ff;
     /* 0x0200 */ u8 field_0x0200;
     /* 0x0201 */ u8 field_0x0201;
-    /* 0x0202 */ u8 field_0x0202[0x0204 - 0x0202];
+    /* 0x0202 */ u8 field_0x0202;
+    /* 0x0202 */ u8 field_0x0203;
     /* 0x0204 */ u8 field_0x0204;
 #if VERSION > VERSION_DEMO
     /* 0x0205 */ u8 field_0x0205;

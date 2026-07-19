@@ -83,8 +83,8 @@ JAIZelBasic::JAIZelBasic() {
     field_0x0206 = 0;
     field_0x01f9 = 0;
     field_0x01fa = 0;
-    field_0x0202[0] = 0;
-    field_0x0202[1] = 0;
+    field_0x0202 = 0;
+    field_0x0203 = 0;
     field_0x01fb = 0;
     field_0x01fc = 0;
     field_0x023a = 0;
@@ -152,6 +152,274 @@ JAIZelBasic::JAIZelBasic() {
 /* 802A1EB4-802A2F48       .text zeldaGFrameWork__11JAIZelBasicFv */
 void JAIZelBasic::zeldaGFrameWork() {
     /* Nonmatching */
+#if VERSION > VERSION_DEMO
+    if(field_0x022d == 0){
+        field_0x0028 = 0;
+    }else if(field_0x0028 != -1){
+        field_0x0028 += 1;
+    }else{
+        field_0x0028 = 0xFFFFFFFF;
+    }
+#endif
+    processLevObjSE();
+    cbPracticeProcess();
+    field_0x1f34 = 0;
+    field_0x01f9 = 0;
+    field_0x01fb = 0;
+    field_0x01fc = 0;
+    if(field_0x01fa != 0){
+        field_0x01fa -= 1;
+    }else{
+        field_0x01fa = 0;
+    }
+    if(field_0x0202 != 0){
+        field_0x0202 -= 1;
+    }else{
+        field_0x0202 = 0;
+    }
+    if(field_0x0203 != 0){
+        field_0x0203 -= 1;
+    }else{
+        field_0x0203 = 0;
+    }
+    if(field_0x0207 != 0){
+        field_0x0207 -= 1;
+    }else{
+        field_0x0207 = 0;
+    }
+    if(field_0x01fd != 0){
+        field_0x01fd -= 1;
+    }else{
+        field_0x01fd = 0;
+    }
+    if(field_0x01fe != 0){
+        field_0x01fe -= 1;
+    }else{
+        field_0x01fe = 0;
+    }
+    if(field_0x01ff != 0){
+        field_0x01ff -= 1;
+    }else{
+        field_0x01ff = 0;
+    }
+    if(field_0x0200 != 0){
+        field_0x0200 -= 1;
+    }else{
+        field_0x0200 = 0;
+    }
+    field_0x203c = 0;
+    field_0x203d = 0;
+    field_0x1e98 = 0;
+    if(dComIfGp_event_getMode() != 0){
+        field_0x0061 = 5;
+    }else{
+        if(field_0x0061 != 0){
+            field_0x0061 -= 1;
+        }else{
+            field_0x0061 = 0;
+        }
+    }
+    if(field_0x00ce != 0){
+        field_0x00ce -= 1;
+    }else{
+        field_0x00ce = 0;
+    }
+    processDemoFanfareMute();
+    if(mMainBgmNum == JA_BGM_I_MAJU_JAIL && checkBgmPlaying()){
+        bgmStop(0,0);
+        bgmStart(JA_BGM_I_MAJU,0,0);
+    }
+    if(mSubBgmNum < -0x7FFFFFD0){
+
+    }
+    if(checkBgmPlaying()){
+        mDoAud_bgmStop(0);
+        // bgmStop(0,0);
+        bgmStart(JA_BGM_I_MAJU,0,0);
+    }
+    switch(field_0x00b0){
+        case 1:
+            field_0x00b0 += 1;
+            break;
+        case 0:
+            subBgmStopInner();
+            field_0x00b0 = -1;
+    }
+    if(mMainBgmNum == JA_BGM_D_RYU_MT){
+        if(field_0x0065 == 1){
+            field_0x0090 = 0.0f;
+            if(mpMainBgmSound){
+                mpMainBgmSound->setVolume(
+                    field_0x00ac*field_0x009c*field_0x0098*field_0x0094*field_0x0090*field_0x008c*field_0x0088*field_0x0080*field_0x0084,
+                    0x1E,0);
+            }
+            field_0x0065 = 0;
+        }
+        else if(field_0x0090 == 0.0f){
+            field_0x0090 = 1.0f;
+            if(mpMainBgmSound){
+                mpMainBgmSound->setVolume(
+                    field_0x00ac*field_0x009c*field_0x0098*field_0x0094*field_0x0090*field_0x008c*field_0x0088*field_0x0080*field_0x0084,
+                    0x1E,0);
+            }
+        }
+    }
+    if(isDemo() && checkSeqIDDemoPlaying(JA_BGM_BAACHAN)){
+        bgmStart(JA_BGM_BAACHAN,0,0);
+    }
+    f32 fVar3;
+    f32 fVar4;
+    if(field_0x0224 == 0x21 && field_0x022d == 1){
+        if(mAudioCamera){
+            fVar3 = 0.0f;
+        }
+        else{
+            fVar3 = mAudioCamera->field_0x4->x;
+        }
+        if(fVar3 >= 2400.0f){
+            if(fVar3 >= 3200.0f){
+                fVar3 = 1.0f;
+            }
+            else{
+                fVar3 = (fVar3 - 2400.0f) / 800.0f;
+            }
+        }
+        else{
+            fVar3 = 0.0f;
+        }
+        if(fVar3 != 0.0f){
+            JAIBasic::startSoundVec(JA_SE_ATM_WIND_I_LINK,&field_0x1f38,NULL,0,0,4);
+            if(field_0x1f38){
+                field_0x1f38->setVolume(fVar3,0,0);
+            }
+        }
+    }
+    if(field_0x0224 == 0x12 || field_0x0224 == 0x55 || field_0x0224 == 0x13){
+        fVar3 = 0.0f;
+        if(field_0x022d == 1){
+            if(mAudioCamera){
+                fVar3 = mAudioCamera->field_0x4->x;
+            }
+            if(fVar3 >= 2400.0f){
+                if(fVar3 >= 3200.0f){
+                    fVar4 = 1.0f;
+                }
+                else{
+                    fVar4 = (fVar3 - 2400.0f) / 800.0f;
+                }
+            }
+            else{
+                fVar4 = 0.0f;
+            }
+            if(mIslandRoomNo == 0xB && isDemo()){
+                fVar4 = 0.0f;
+            }
+            if(fVar4 != 0.0f && checkPlayingStreamBgmFlag() ==  -0x3fffffca){
+                startSoundVec(JA_SE_ATM_WIND_I_LINK,&field_0x1f38,NULL,0,0,4);
+                if(field_0x1f38){
+                    field_0x1f38->setVolume(fVar4,0,0);
+                }
+            }
+        }
+        if(mIslandRoomNo == 0x2C && checkEventBit(1)){
+            if(mMainBgmNum == JA_BGM_DIE_LINK){
+                fVar3 = 1.0f;
+            }
+            else if(fVar3 >= 1800.0f){
+                if(fVar3 >= 3000.0f){
+                    fVar3 = 0.0f;
+                }
+                else{
+                    fVar3 = 1.0f - (fVar3 - 1800.0f) / 1200.0f;
+                }
+            }
+            else{
+                fVar3 = 1.0f;
+            }
+            field_0x00ac = fVar3;
+            if(mpMainBgmSound){
+                mpMainBgmSound->setVolume(
+                    field_0x00ac*field_0x009c*field_0x0098*field_0x0094*field_0x0090*field_0x008c*field_0x0088*field_0x0080*field_0x0084,
+                    0,0);
+            }
+        }
+        else if(mIslandRoomNo == 0xD){
+            if(mMainBgmNum == JA_BGM_DIE_LINK){
+                fVar3 = 1.0f;
+            }
+            else if(mbLandingDemoStarted == 2){
+                fVar3 = 1.0f;
+            }
+            else if(fVar3 >= 1800.0f){
+                if(fVar3 >= 3000.0f){
+                    fVar3 = 0.3f;
+                }
+                else{
+                    fVar3 = (1.0f - (fVar3 - 1800.0f) / 1200.0f) * 0.7f + 0.3f;
+                }
+            }
+            else{
+                fVar3 = 1.0f;
+            }
+            field_0x00ac = fVar3;
+            if(mpMainBgmSound){
+                mpMainBgmSound->setVolume(
+                    field_0x00ac*field_0x009c*field_0x0098*field_0x0094*field_0x0090*field_0x008c*field_0x0088*field_0x0080*field_0x0084,
+                    0,0);
+            }
+        }
+        else if(mIslandRoomNo == 0x29 && mbLandingDemoStarted != 3 && dComIfGp_event_getMode() == 0){
+            cXyz* vec = (cXyz*) mAudioCamera->field_0x4;
+            // fVar3 = mAudioCamera->field_0x4
+            fVar3 = vec->atan2sX_Z();
+            if(mMainBgmNum == JA_BGM_DIE_LINK){
+                fVar4 = 1.0f;
+            }
+            if(DEMO_SELECT(TRUE,field_0x0205 == 0)){
+                field_0x0090 = fVar4;
+            }
+            if(mpMainBgmSound){
+                mpMainBgmSound->setVolume(
+                    field_0x00ac*field_0x009c*field_0x0098*field_0x0094*field_0x0090*field_0x008c*field_0x0088*field_0x0080*field_0x0084,
+                    0,0);
+            }
+        }
+    }
+    if(field_0x0224 == 0x19){
+        fVar3 = 0.0f;
+        if(mAudioCamera->field_0x4){
+            fVar3 = mAudioCamera->field_0x4->y;
+        }
+        if(mMainBgmNum == JA_BGM_DIE_LINK){
+            fVar3 = 1.0f;
+        }
+        else if (fVar3 >= 2500.0f){
+            if(fVar3 >= 5000.0f){
+                fVar3 = 0.0f;
+            }
+            else{
+                fVar3 = 1.0f - (fVar3 - 2500.0f) / 2500.0f;
+            }
+        }
+        else {
+            fVar3 = 1.0f;
+        }
+        field_0x00ac = fVar3;
+        if(mpMainBgmSound){
+            mpMainBgmSound->setVolume(
+                field_0x00ac*field_0x009c*field_0x0098*field_0x0094*field_0x0090*field_0x008c*field_0x0088*field_0x0080*field_0x0084,
+                0,0);
+        }
+    }
+    if(field_0x0224 == 0x35){
+        fVar4 = ((cXyz*)(mAudioCamera->field_0x4))->absXZ();
+        if(mMainBgmNum == JA_BGM_DIE_LINK){
+            fVar4 = 1.0f;
+            
+        }
+    }
+
+
 }
 
 /* 802A2F48-802A2F54       .text heartGaugeOn__11JAIZelBasicFv */
@@ -1719,7 +1987,7 @@ JAISound* JAIZelBasic::makeSound(u32 param_1) {
 }
 
 /* 802AC258-802AC300       .text checkSeqIDDemoPlaying__11JAIZelBasicFUl */
-void JAIZelBasic::checkSeqIDDemoPlaying(u32) {
+BOOL JAIZelBasic::checkSeqIDDemoPlaying(u32) {
     /* Nonmatching */
 }
 
