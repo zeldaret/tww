@@ -219,13 +219,9 @@ void daObjDrift::Act_c::set_flower_current() {
         calc_flower_param(&pos, &angle);
         flower->current.pos = pos;
         if (mType == 0) {
-            flower->shape_angle.x = angle.x;
-            flower->shape_angle.y = angle.y;
-            flower->shape_angle.z = angle.z;
+            flower->shape_angle.set(angle);
         } else {
-            flower->current.angle.x = angle.x;
-            flower->current.angle.y = angle.y;
-            flower->current.angle.z = angle.z;
+            flower->current.angle.set(angle);
         }
     }
 }

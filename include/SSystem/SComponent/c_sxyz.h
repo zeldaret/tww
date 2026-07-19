@@ -20,6 +20,12 @@ public:
         z = oZ;
     }
 
+    void set(const SVec& other) {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+    }
+
     void setall(s16 val) {
         x = val;
         y = val;
