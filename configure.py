@@ -1491,7 +1491,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swpush"),
     ActorRel(Matching,    "d_a_obj_table"),
     ActorRel(Matching,    "d_a_obj_tenmado"),
-    ActorRel(Matching,    "d_a_obj_tide"),
+    ActorRel(Equivalent,  "d_a_obj_tide"), # Nondeterministic compiler bug? Do not link
     ActorRel(Matching,    "d_a_obj_timer"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_toripost"),
     ActorRel(Matching,    "d_a_obj_tousekiki"),

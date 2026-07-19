@@ -273,13 +273,14 @@ void Act_c::mode_norm_init() {
 
 /* 00000DD8-00000FAC       .text mode_norm__Q29daObjTide5Act_cFv */
 void Act_c::mode_norm() {
+    /* Compiler bug: Nondeterministically nonmatching? */
     bool uVar1;
     f32 fVar2;
     daTagWaterlevel::State_e uVar3;
 
     fVar2 = daTagWaterlevel::Act_c::get_now();
     uVar3 = daTagWaterlevel::Act_c::get_state();
-    uVar1 = cLib_checkBit(uVar3, daTagWaterlevel::STATE_1) ? true : false;
+    uVar1 = cLib_checkBit(uVar3, daTagWaterlevel::STATE_1);
 
     current.pos.y = home.pos.y + (1.0f - fVar2) * attr(M_type).m20;
     if (m2F4 > 0) {
