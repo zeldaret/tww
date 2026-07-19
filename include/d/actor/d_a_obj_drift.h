@@ -16,11 +16,8 @@ namespace daObjDrift {
         };
         
         enum Prm_e {
+            PRM_TYPE_W = 3,
             PRM_TYPE_S = 0,
-            PRM_TYPE_W = 4,
-
-            PRM_STATE_W = 3,
-            PRM_STATE_S = 0,
         };
         
         int prm_get_type() const {
@@ -58,19 +55,25 @@ namespace daObjDrift {
         /* 0x444 */ Mtx mMtx;
         /* 0x474 */ fpc_ProcID mFlowerPid;
         /* 0x478 */ s32 mMode;
-        /* 0x47C */ f32 mState[7];
-        /* 0x498 */ short mRotSpeedX;
-        /* 0x49A */ short mRotSpeedY;
-        /* 0x49C */ short mRotSpeedZ;
+        /* 0x47C */ f32 mRideYOff;
+        /* 0x480 */ f32 mTiltTargetZ;
+        /* 0x484 */ f32 mTiltTargetX;
+        /* 0x488 */ f32 mTiltVelZ;
+        /* 0x48C */ f32 mTiltVelX;
+        /* 0x490 */ f32 mTiltZ;
+        /* 0x494 */ f32 mTiltX;
+        /* 0x498 */ s16 mWavePhaseX;
+        /* 0x49A */ s16 mWavePhaseY;
+        /* 0x49C */ s16 mWavePhaseZ;
         /* 0x49E */ bool mRideFlag;
         /* 0x49F */ u8 field_0x49F;
-        /* 0x4A0 */ short mTargetAngleY;
-        /* 0x4A2 */ short mAngleChaseY;
-        /* 0x4A4 */ cXyz mTargetPos;
-        /* 0x4B0 */ cXyz mScaleModifier;
-        /* 0x4BC */ cXyz mHomePosCopy;
-        /* 0x4C8 */ f32 mPrevMtxTransY;
-        /* 0x4CC */ f32 mPrevPrevMtxTransY;
+        /* 0x4A0 */ s16 mTargetAngleY;
+        /* 0x4A2 */ s16 mAngleChaseY;
+        /* 0x4A4 */ cXyz mHitDir;
+        /* 0x4B0 */ cXyz field_0x4B0;
+        /* 0x4BC */ cXyz mPrevPos;
+        /* 0x4C8 */ f32 field_0x4C8;
+        /* 0x4CC */ f32 field_0x4CC;
         /* 0x4D0 */ f32 field_0x4D0;
         /* 0x4D4 */ f32 field_0x4D4;
         /* 0x4D8 */ f32 mRotTimer;

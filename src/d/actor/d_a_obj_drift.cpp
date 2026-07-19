@@ -6,33 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_drift.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_a_obj.h"
-#include "d/d_kankyo.h"
-#include "d/d_cc_d.h"
-#include "d/d_com_inf_game.h"
-#include "d/d_bg_s_movebg_actor.h"
-#include "JAZelAudio/JAIZelBasic.h"
-#include "JAZelAudio/JAZelAudio_SE.h"
-#include "JSystem/J3DGraphAnimator/J3DModel.h"
-#include "JSystem/J3DGraphBase/J3DSys.h"
-#include "JSystem/JUtility/JUTAssert.h"
-#include "SSystem/SComponent/c_cc_d.h"
-#include "SSystem/SComponent/c_phase.h"
-#include "SSystem/SComponent/c_math.h"
-#include "SSystem/SComponent/c_xyz.h"
-#include "dolphin/mtx/mtx.h"
-#include "dolphin/mtx/mtxvec.h"
-#include "dolphin/mtx/vec.h"
-#include "dolphin/os/OS.h"
-#include "dolphin/types.h"
-#include "f_op/f_op_actor_iter.h"
- #include "f_op/f_op_actor_mng.h"
-#include "f_pc/f_pc_base.h"
-#include "f_pc/f_pc_manager.h"
-#include "f_pc/f_pc_name.h"
-#include "f_pc/f_pc_searcher.h"
-#include "m_Do/m_Do_mtx.h"
- #include "res/Object/Kryu.h"
+#include "res/Object/Kryu.h"
  
 namespace daObjDrift {
     namespace {
@@ -41,22 +15,22 @@ namespace daObjDrift {
             /* 0x04 */ f32 mWaveSpeed;
             /* 0x08 */ f32 mWavePhase;
             /* 0x0C */ f32 mWaveAmplitude;
-            /* 0x10 */ f32 mStateYBase;
-            /* 0x14 */ s16 mRotSpeedXInit;
-            /* 0x16 */ s16 mRotSpeedXPad;
+            /* 0x10 */ f32 mRideYOff;
+            /* 0x14 */ s16 mWavePhaseXStep;
+            /* 0x16 */ s16 field_0x16;
             /* 0x18 */ f32 mWaveSinScale;
-            /* 0x1C */ f32 mField1C;
-            /* 0x20 */ f32 mRotAccelWait;
-            /* 0x24 */ f32 mRotAccelRot;
+            /* 0x1C */ f32 field_0x1C;
+            /* 0x20 */ f32 mTiltChaseWait;
+            /* 0x24 */ f32 mTiltChaseRot;
             /* 0x28 */ f32 mPosMoveDamp;
-            /* 0x2C */ s16 mRotSpeedYInit;
-            /* 0x2E */ s16 mRotSpeedZInit;
-            /* 0x30 */ f32 mRotSinScale;
-            /* 0x34 */ f32 mStateScale;
-            /* 0x38 */ s16 mRotSpeedXAdd;
-            /* 0x3A */ s16 mRotSpeedYAdd;
+            /* 0x2C */ s16 mWavePhaseYStep;
+            /* 0x2E */ s16 mWavePhaseZStep;
+            /* 0x30 */ f32 mTiltSinScale;
+            /* 0x34 */ f32 field_0x34;
+            /* 0x38 */ s16 field_0x38;
+            /* 0x3A */ s16 field_0x3A;
             /* 0x3C */ s16 mRotTimerMax;
-            /* 0x3E */ s16 mField3E;
+            /* 0x3E */ s16 field_0x3E;
         };
 
         static const Attr_c L_attr = {
@@ -64,22 +38,22 @@ namespace daObjDrift {
             /* mWaveSpeed      */ 0.04f,
             /* mWavePhase      */ 0.01f,
             /* mWaveAmplitude  */ 0.02f,
-            /* mStateYBase     */ -20.0f,
-            /* mRotSpeedXInit  */ 400,
-            /* mRotSpeedXPad   */ 0,
+            /* mRideYOff       */ -20.0f,
+            /* mWavePhaseXStep  */ 400,
+            /* field_0x16      */ 0,
             /* mWaveSinScale   */ 0.3f,
-            /* mField1C        */ 0.12f,
-            /* mRotAccelMode1  */ 0.8f,
-            /* mRotAccelMode0  */ 0.5f,
+            /* field_0x1C      */ 0.12f,
+            /* mTiltChaseWait  */ 0.8f,
+            /* mTiltChaseRot   */ 0.5f,
             /* mPosMoveDamp    */ 0.07f,
-            /* mRotSpeedYInit  */ 1000,
-            /* mRotSpeedZInit  */ 1111,
-            /* mRotSinScale    */ 0.01f,
-            /* mStateScale     */ 0.5f,
-            /* mRotSpeedXAdd   */ 30,
-            /* mRotSpeedYAdd   */ 30,
+            /* mWavePhaseYStep */ 1000,
+            /* mWavePhaseZStep */ 1111,
+            /* mTiltSinScale    */ 0.01f,
+            /* field_0x34      */ 0.5f,
+            /* field_0x38      */ 30,
+            /* field_0x3A      */ 30,
             /* mRotTimerMax    */ 10,
-            /* mField3E        */ 0,
+            /* field_0x3E      */ 0,
         };
     } // namespace
 } // namespace daObjDrift
@@ -114,28 +88,6 @@ const dCcD_SrcCyl daObjDrift::Act_c::M_cyl_src = { /* 0x48 */
     }},
 };
 
-namespace daObjDrift {
-    namespace {
-        /* 0x8C */ static const f32 l_cullMinX = -550.0f;
-        /* 0x90 */ static const f32 l_cullMinY = -180.0f;
-        /* 0x94 */ static const f32 l_cullMaxX = 550.0f;
-        /* 0x98 */ static const f32 l_cullMaxY = 605.0f;
-        /* 0x9C */ static const f32 l_zero = 0.0f;
-        /* 0xA0 */ static const f32 l_rndFX = 32768.0f;
-        /* 0xA4 */ static const f32 l_scale = 5.0f;
-        /* 0xAC */ static const f32 l_flowerOffsetX = -489.35f;
-        /* 0xB0 */ static const f32 l_flowerOffsetY = 600.0f;
-        /* 0xB4 */ static const f32 l_targetDistSq = 302500.0f;
-        /* 0xB8 */ static const f32 l_rotTimerInc = 1.0f;
-        /* 0xBC */ static const f32 l_seReverb = -1.0f;
-        /* 0xC8 */ static const f32 l_rideYMax = 400.0f;
-        /* 0xCC */ static const f32 l_rideDistSqLow = 129600.0f;
-        /* 0xD0 */ static const f32 l_rideDistSqHigh = 48400.0f;
-        /* 0xD4 */ static const f32 l_rotFactorRide = 0.2f;
-        /* 0xD8 */ static const f32 l_targetPosScale = 0.95f;
-    }
-} // namespace daObjDrift
-
 /* 000000EC-000001A0       .text CreateHeap__Q210daObjDrift5Act_cFv */
 BOOL daObjDrift::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KRYU_BDL_RYU_00_e);
@@ -151,12 +103,12 @@ BOOL daObjDrift::Act_c::Create() {
     init_mtx();
     fopAc_ac_c* actor = this;
 #if VERSION == VERSION_DEMO
-    fopAcM_setCullSizeBox(actor, l_cullMinX, l_cullMinY, l_cullMinX, l_cullMaxX, l_cullMaxY, l_cullMaxX);
+    fopAcM_setCullSizeBox(actor, -550.0f, -180.0f, -550.0f, 550.0f, 605.0f, 550.0f);
 #else
-    f32 cullMinX = l_cullMinX;
-    f32 cullMinY = l_cullMinY;
-    f32 cullMaxX = l_cullMaxX;
-    f32 cullMaxY = l_cullMaxY;
+    f32 cullMinX = -550.0f;
+    f32 cullMinY = -180.0f;
+    f32 cullMaxX = 550.0f;
+    f32 cullMaxY = 605.0f;
     fopAcM_setCullSizeBox(actor, cullMinX, cullMinY, cullMinX, cullMaxX, cullMaxY, cullMaxX);
 #endif
     mStts.Init(0xFF, 0xFF, this);
@@ -172,70 +124,50 @@ BOOL daObjDrift::Act_c::Create() {
         eyePos.y = L_waterY[0];
     }
 
-    f32 zero = l_zero;
-    mState[0] = zero;
-    mState[1] = zero;
-    mState[2] = zero;
-    mState[3] = zero;
-    mState[4] = zero;
-    mState[5] = zero;
-    mState[6] = zero;
+    mRideYOff = 0.0f;
+    mTiltTargetZ = 0.0f;
+    mTiltTargetX = 0.0f;
+    mTiltVelZ = 0.0f;
+    mTiltVelX = 0.0f;
+    mTiltZ = 0.0f;
+    mTiltX = 0.0f;
 
-    mRotSpeedX = cM_rndFX(l_rndFX);
-    mRotSpeedY = cM_rndFX(l_rndFX);
-    mRotSpeedZ = cM_rndFX(l_rndFX);
+    mWavePhaseX = cM_rndFX(32768.0f);
+    mWavePhaseY = cM_rndFX(32768.0f);
+    mWavePhaseZ = cM_rndFX(32768.0f);
     mRideFlag = FALSE;
 
     mTargetAngleY = 0;
     mAngleChaseY = 0;
 
-    mTargetPos.set((cXyz&)cXyz::Zero);
-    mScaleModifier.set(l_scale, l_scale, l_scale);
-    mHomePosCopy.x = current.pos.x;
-    mHomePosCopy.y = current.pos.y;
-    mHomePosCopy.z = current.pos.z;
-    f32 prevY = mHomePosCopy.y;
-    mPrevMtxTransY = prevY;
-    mPrevPrevMtxTransY = prevY;
+    mHitDir.set((cXyz&)cXyz::Zero);
+    field_0x4B0.set(5.0f, 5.0f, 5.0f);
+    mPrevPos.set(current.pos);
+    f32 prevY = mPrevPos.y;
+    field_0x4C8 = prevY;
+    field_0x4CC = prevY;
 
-    f32 endZero = l_zero;
-    field_0x4D0 = endZero;
-    field_0x4D4 = endZero;
+    // f32 endZero = 0.0f;
+    field_0x4D0 = 0.0f;
+    field_0x4D4 = 0.0f;
 
     return TRUE;
 }
 
 /* 00000370-0000050C       .text Mthd_Create__Q210daObjDrift5Act_cFv */
 cPhs_State daObjDrift::Act_c::Mthd_Create() {
-#if VERSION == VERSION_DEMO
-    fopAcM_ct_Demo(this, Act_c);
-#else
-    fopAcM_ct_Retail(this, Act_c);
-#endif
+    fopAcM_ct(this, Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_ct_Retail(this, Act_c);
-#else
-        fopAcM_ct_Demo(this, Act_c);
-#endif
+        mType = prm_get_type();
 
-        mType = daObj::PrmAbstract(this, PRM_STATE_W, PRM_STATE_S);
-
-#if VERSION == VERSION_DEMO
         phase_state = MoveBGCreate(
             M_arcname,
             dRes_INDEX_KRYU_DZB_RYU_00_e,
             dBgS_MoveBGProc_TypicalRotY,
-            0x8000);
-#else
-        phase_state = MoveBGCreate(
-            M_arcname,
-            dRes_INDEX_KRYU_DZB_RYU_00_e,
-            dBgS_MoveBGProc_TypicalRotY,
-            0x1B80);
-#endif
+            DEMO_SELECT(0x8000, 0x1B80)
+        );
         JUT_ASSERT(0x19B, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -268,7 +200,7 @@ void daObjDrift::Act_c::make_flower() {
 
 /* 000007EC-00000890       .text calc_flower_param__Q210daObjDrift5Act_cFP4cXyzP5csXyz */
 void daObjDrift::Act_c::calc_flower_param(cXyz* i_pos, csXyz* i_angle) {
-    static cXyz offset_vec(l_flowerOffsetX, l_flowerOffsetY, l_zero);
+    static cXyz offset_vec(-489.35f, 600.0f, 0.0f);
 
     PSMTXMultVec(mMtx, &offset_vec, i_pos);
     mDoMtx_MtxToRot(mMtx, i_angle);
@@ -276,25 +208,20 @@ void daObjDrift::Act_c::calc_flower_param(cXyz* i_pos, csXyz* i_angle) {
 
 /* 00000890-00000954       .text set_flower_current__Q210daObjDrift5Act_cFv */
 void daObjDrift::Act_c::set_flower_current() {
-    fpc_ProcID pid = mFlowerPid;
-    if (pid == fpcM_ERROR_PROCESS_ID_e) {
+    if (mFlowerPid == fpcM_ERROR_PROCESS_ID_e) {
         return;
     }
 
-    fopAc_ac_c* flower = fopAcM_SearchByID(pid);
+    fopAc_ac_c* flower = fopAcM_SearchByID(mFlowerPid);
     if (flower != NULL) {
         cXyz pos;
         csXyz angle;
         calc_flower_param(&pos, &angle);
         flower->current.pos = pos;
         if (mType == 0) {
-            flower->shape_angle.x = angle.x;
-            flower->shape_angle.y = angle.y;
-            flower->shape_angle.z = angle.z;
+            flower->shape_angle.set(angle);
         } else {
-            flower->current.angle.x = angle.x;
-            flower->current.angle.y = angle.y;
-            flower->current.angle.z = angle.z;
+            flower->current.angle.set(angle);
         }
     }
 }
@@ -321,13 +248,10 @@ void daObjDrift::Act_c::mode_wait_init() {
 void daObjDrift::Act_c::mode_wait() {
     if (mCyl.ChkTgHit()) {
         mCyl.ClrTgHit();
-        f32 dist = fopAcM_searchPlayerDistanceXZ2(this);
-        if (dist > l_targetDistSq) {
+        if (fopAcM_searchPlayerDistanceXZ2(this) > 302500.0f) {
             cXyz* l_tgrVec = mCyl.GetTgRVecP();
-            mTargetPos.x = l_tgrVec->x;
-            mTargetPos.y = l_tgrVec->y;
-            mTargetPos.z = l_tgrVec->z;
-            mTargetPos.normalizeZP();
+            mHitDir.set(*l_tgrVec);
+            mHitDir.normalizeZP();
             mode_rot_init();
         }
     } else {
@@ -342,7 +266,7 @@ void daObjDrift::Act_c::mode_rot_init() {
     mTargetAngleY = shape_angle.y + 0x8000;
     mAngleChaseY = 0;
     shape_angle.y += 10;
-    mRotTimer = l_zero;
+    mRotTimer = 0.0f;
     mMode = MODE_ROT;
 #if VERSION == VERSION_DEMO
     s8 roomNo = current.roomNo;
@@ -355,10 +279,10 @@ void daObjDrift::Act_c::mode_rot_init() {
         &eyePos,
         0,
         reverb,
-        l_rotTimerInc,
-        l_rotTimerInc,
-        l_seReverb,
-        l_seReverb,
+        1.0f,
+        1.0f,
+        -1.0f,
+        -1.0f,
         0
     );
 }
@@ -368,7 +292,7 @@ void daObjDrift::Act_c::mode_rot() {
     s16 yDiff = mTargetAngleY - shape_angle.y;
     if (yDiff <= 0) {
         shape_angle.y = mTargetAngleY;
-        mTargetPos.set(cXyz::Zero);
+        mHitDir.set(cXyz::Zero);
         mode_wait_init();
     } else {
         if (yDiff < 0x2000) {
@@ -376,7 +300,7 @@ void daObjDrift::Act_c::mode_rot() {
         } else {
             cLib_chaseS(&mAngleChaseY, 0x190, 0x14);
         }
-        shape_angle.y = shape_angle.y + mAngleChaseY;
+        shape_angle.y += mAngleChaseY;
     }
 
     if (mRotTimer >= L_attr.mRotTimerMax) {
@@ -389,33 +313,32 @@ void daObjDrift::Act_c::mode_rot() {
 
 /* 00000C3C-00000D18       .text set_mtx__Q210daObjDrift5Act_cFv */
 void daObjDrift::Act_c::set_mtx() {
-    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::transS(current.pos);
 #if VERSION == VERSION_DEMO
     Quaternion quat;
-    cXyz axis(mState[6], 1.0f, mState[5]);
+    cXyz axis(mTiltX, 1.0f, mTiltZ);
 #else
-    f32 axisZ = mState[5];
+    f32 axisZ = mTiltZ;
     f32 axisY = 1.0f;
-    f32 axisX = mState[6];
+    f32 axisX = mTiltX;
     Quaternion quat;
     cXyz axis(axisX, axisY, axisZ);
 #endif
     daObj::quat_rotBaseY2(&quat, axis);
     mDoMtx_stack_c::quatM(&quat);
-    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
     cMtx_copy(mDoMtx_stack_c::get(), mMtx);
-    mPrevPrevMtxTransY = mPrevMtxTransY;
-    mPrevMtxTransY = mHomePosCopy.y;
-    mHomePosCopy.x = mDoMtx_stack_c::get()[0][3];
-    mHomePosCopy.y = mDoMtx_stack_c::get()[1][3];
-    mHomePosCopy.z = mDoMtx_stack_c::get()[2][3];
+    field_0x4CC = field_0x4C8;
+    field_0x4C8 = mPrevPos.y;
+    mPrevPos.x = mDoMtx_stack_c::get()[0][3];
+    mPrevPos.y = mDoMtx_stack_c::get()[1][3];
+    mPrevPos.z = mDoMtx_stack_c::get()[2][3];
 }
 
 /* 00000D18-00000D54       .text init_mtx__Q210daObjDrift5Act_cFv */
 void daObjDrift::Act_c::init_mtx() {
-    J3DModel* l_model = mModel;
-    l_model->setBaseScale(scale);
+    mModel->setBaseScale(scale);
     set_mtx();
 }
 
@@ -427,7 +350,8 @@ void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_ride) {
         return;
     }
     f32 ratio = 1.0f / L_attr.mWaveHeight;
-    drift->mState[0] = L_attr.mStateYBase;
+    drift->mRideYOff = L_attr.mRideYOff;
+    
     cXyz delta;
     cXyz localDelta;
     Mtx invMtx;
@@ -436,12 +360,12 @@ void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_ride) {
         !dComIfGp_checkPlayerStatus0(0, daPyStts0_HANG_e)) {
         PSMTXMultVecSR(invMtx, &delta, &localDelta);
         f32 sqMag = localDelta.abs2XZ();
-        if (localDelta.y < l_rideYMax) {
-            if (sqMag < l_rideDistSqLow) {
+        if (localDelta.y < 400.0f) {
+            if (sqMag < 129600.0f) {
                 drift->mRideFlag = TRUE;
             }
-        } else if (localDelta.y < l_cullMaxX) {
-            if (sqMag < l_rideDistSqHigh) {
+        } else if (localDelta.y < 550.0f) {
+            if (sqMag < 48400.0f) {
                 drift->mRideFlag = TRUE;
             }
         }
@@ -449,21 +373,21 @@ void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_ride) {
         drift->mRideFlag = TRUE;
     }
     if (drift->mRideFlag == FALSE) {
-        drift->mState[1] = delta.z * (ratio * L_attr.mField1C);
-        drift->mState[2] = delta.x * (ratio * L_attr.mField1C);
+        drift->mTiltTargetZ = delta.z * (ratio * L_attr.field_0x1C);
+        drift->mTiltTargetX = delta.x * (ratio * L_attr.field_0x1C);
     }
 }
 
 /* 00000EC4-00001104       .text set_current__Q210daObjDrift5Act_cFv */
 void daObjDrift::Act_c::set_current() {
-    f32 y = mState[0] + home.pos.y;
-    mRotSpeedX += L_attr.mRotSpeedXInit;
+    f32 y = mRideYOff + home.pos.y;
+    mWavePhaseX += L_attr.mWavePhaseXStep;
 #if VERSION == VERSION_DEMO
-    f32 sinVal = JMASSin(mRotSpeedX);
+    f32 sinVal = JMASSin(mWavePhaseX);
     f32 yDelta = y - current.pos.y;
 #else
     f32 yDelta = y - current.pos.y;
-    f32 sinVal = JMASSin(mRotSpeedX);
+    f32 sinVal = JMASSin(mWavePhaseX);
 #endif
     gravity = yDelta * L_attr.mWaveAmplitude
             + sinVal * L_attr.mWaveSinScale;
@@ -476,69 +400,69 @@ void daObjDrift::Act_c::set_current() {
     f32 rotFactor;
 #endif
     if (mRideFlag != 0) {
-        rotFactor = l_rotFactorRide;
+        rotFactor = 0.2f;
     } else {
-        rotFactor = l_rotTimerInc;
+        rotFactor = 1.0f;
     }
     if (mMode == MODE_ROT) {
-        chaseFactor = L_attr.mRotAccelRot;
+        chaseFactor = L_attr.mTiltChaseRot;
     } else {
-        chaseFactor = L_attr.mRotAccelWait;
+        chaseFactor = L_attr.mTiltChaseWait;
     }
 #if VERSION == VERSION_DEMO
-    PSVECScale(&mTargetPos, &mTargetPos, l_targetPosScale);
-    mRotSpeedY += L_attr.mRotSpeedYInit;
-    mRotSpeedZ += L_attr.mRotSpeedZInit;
-    f32 diffZ = mState[5] - mState[1];
-    f32 diffX = mState[6] - mState[2];
-    f32 sinY = JMASSin(mRotSpeedY);
-    f32 z_val = mTargetPos.z * L_attr.mStateScale
-            + (rotFactor * (sinY * L_attr.mRotSinScale)
+    PSVECScale(&mHitDir, &mHitDir, 0.95f);
+    mWavePhaseY += L_attr.mWavePhaseYStep;
+    mWavePhaseZ += L_attr.mWavePhaseZStep;
+    f32 diffZ = mTiltZ - mTiltTargetZ;
+    f32 diffX = mTiltX - mTiltTargetX;
+    f32 sinY = JMASSin(mWavePhaseY);
+    f32 z_val = mHitDir.z * L_attr.field_0x34
+            + (rotFactor * (sinY * L_attr.mTiltSinScale)
             - diffZ * chaseFactor);
-    f32 sinZ = JMASSin(mRotSpeedZ);
-    f32 f8 = mTargetPos.x * L_attr.mStateScale
-        + (rotFactor * (sinZ * L_attr.mRotSinScale)
+    f32 sinZ = JMASSin(mWavePhaseZ);
+    f32 x_val = mHitDir.x * L_attr.field_0x34
+        + (rotFactor * (sinZ * L_attr.mTiltSinScale)
         - diffX * chaseFactor);
-    mState[3] += z_val;
-    mState[4] += f8;
+    mTiltVelZ += z_val;
+    mTiltVelX += x_val;
 #else
-    PSVECScale(&mTargetPos, &mTargetPos, l_targetPosScale);
-    mRotSpeedY += L_attr.mRotSpeedYInit;
-    mRotSpeedZ += L_attr.mRotSpeedZInit;
-    f32 sinY = JMASSin(mRotSpeedY);
-    f32 sinZ = JMASSin(mRotSpeedZ);
-    f32 diffZ = mState[5] - mState[1];
-    f32 diffX = mState[6] - mState[2];
-    f32 f8 = mTargetPos.x * L_attr.mStateScale
-        + (rotFactor * (sinZ * L_attr.mRotSinScale)
+    PSVECScale(&mHitDir, &mHitDir, 0.95f);
+    mWavePhaseY += L_attr.mWavePhaseYStep;
+    mWavePhaseZ += L_attr.mWavePhaseZStep;
+    f32 sinY = JMASSin(mWavePhaseY);
+    f32 sinZ = JMASSin(mWavePhaseZ);
+    f32 diffZ = mTiltZ - mTiltTargetZ;
+    f32 diffX = mTiltX - mTiltTargetX;
+    f32 x_val = mHitDir.x * L_attr.field_0x34
+        + (rotFactor * (sinZ * L_attr.mTiltSinScale)
         - diffX * chaseFactor);
-    mState[3] += mTargetPos.z * L_attr.mStateScale
-            + (rotFactor * (sinY * L_attr.mRotSinScale)
+    mTiltVelZ += mHitDir.z * L_attr.field_0x34
+            + (rotFactor * (sinY * L_attr.mTiltSinScale)
             - diffZ * chaseFactor);
-    mState[4] += f8;
+    mTiltVelX += x_val;
 #endif
-    mState[3] *= L_attr.mPosMoveDamp;
-    mState[4] *= L_attr.mPosMoveDamp;
-    mState[5] += mState[3];
-    mState[6] += mState[4];
-    mState[0] = l_zero;
-    mState[1] = l_zero;
-    mState[2] = l_zero;
+    mTiltVelZ *= L_attr.mPosMoveDamp;
+    mTiltVelX *= L_attr.mPosMoveDamp;
+    mTiltZ += mTiltVelZ;
+    mTiltX += mTiltVelX;
+    mRideYOff = 0.0f;
+    mTiltTargetZ = 0.0f;
+    mTiltTargetX = 0.0f;
     mRideFlag = FALSE;
 }
 
 /* 00001104-000011D0       .text Execute__Q210daObjDrift5Act_cFPPA3_A4_f */
-BOOL daObjDrift::Act_c::Execute(Mtx** vMtx) {
-    typedef void (Act_c::*ModeProcFunc)();
-    static ModeProcFunc mode_proc[] = {
-        &Act_c::mode_wait,
-        &Act_c::mode_rot,
+BOOL daObjDrift::Act_c::Execute(Mtx** mtx) {
+    typedef void (daObjDrift::Act_c::*procFunc)();
+    static procFunc mode_proc[] = {
+        &daObjDrift::Act_c::mode_wait,
+        &daObjDrift::Act_c::mode_rot,
     };
     (this->*mode_proc[mMode])();
 
     set_current();
     set_mtx();
-    *vMtx = &mMtx;
+    *mtx = &mMtx;
     set_flower_current();
     return TRUE;
 }
