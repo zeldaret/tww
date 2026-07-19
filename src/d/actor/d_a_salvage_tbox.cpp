@@ -341,7 +341,7 @@ bool daSTBox_c::_execute() {
     if ((dComIfGp_event_runCheck()) 
         && !eventInfo.checkCommandTalk()
         && staffIdx != -1) {
-        s32 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, 5, 0, 0);
+        s16 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, 5, 0, 0);
         if(actIdx == -1){
             dComIfGp_evmng_cutEnd(staffIdx);
         } else {
