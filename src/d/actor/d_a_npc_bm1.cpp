@@ -10,17 +10,47 @@
 #include "d/d_snap.h"
 #include "res/Object/Bm.h"
 
+struct hio_prm_c{
+    s16 mMaxHeadX;
+    s16 mMaxHeadY;
+    s16 mMinHeadX;
+    s16 mMinHeadY;
+    s16 mMaxBackboneX;
+    s16 mMaxBackboneY;
+    s16 mMinBackboneX;
+    s16 mMinBackboneY;
+    s16 mMaxTurnStep;
+    s16 mCalcAngleTarget;
+    f32 mAttPosOffsetY;
+    u8 m18;
+    s16 mFlyScale;
+    s16 mFlyMaxStep;
+    s16 m1E;
+    f32 m20;
+    f32 m24;
+    f32 m28;
+    f32 m2C;
+    f32 m30;
+    s16 m34;
+    s16 m36;
+    f32 m38;
+    f32 m3C;
+    f32 m40;
+    f32 m44;
+    f32 m48;
+};
+
+
 class daNpc_Bm1_childHIO_c : public mDoHIO_entry_c{
 
 public:
     daNpc_Bm1_childHIO_c();
     void genMessage(JORMContext* ctx){};
 public:
-
-    hio_prm_c hio_prm;
-    u32 m50;
-    //SIZE: 0x54
+    /* 0x04 */ hio_prm_c hio_prm;
+    /* 0x50 */ u32 m50;
 };
+    //SIZE: 0x54
 
 class daNpc_Bm1_HIO_c :public mDoHIO_entry_c{
 public:
@@ -29,10 +59,10 @@ public:
     void genMessage(JORMContext* ctx);
 public:
 
-    s8 m4;
-    s32 m8;
-    daNpc_Bm1_childHIO_c children[10];
-    /* Place member variables here */
+    /* 0x04 */ s8 m4;
+    /* 0x08 */ s32 m8;
+    /* 0x0C */ daNpc_Bm1_childHIO_c children[10];
+
 };
     //SIZE: 0x354
 
@@ -603,13 +633,13 @@ bool daNpc_Bm1_c::createInit() {
         return false;
     }
     for(int i = 0; i < 4; i++){
-        m862[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i]);
+        mEventIdTable[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i]);
     }
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     attention_info.distances[1] = a_att_dis_TBL[mType][0];
     attention_info.distances[3] = a_att_dis_TBL[mType][1];
     gravity = -4.5;
-    mAttentionPos = current.pos;
+    m82C = current.pos;
     s32 iVar5 = 0xFF;
     u32 param = fopAcM_GetParam(this);
     if(((param >> 16) & 0xFF) != 0xFF){
@@ -628,52 +658,52 @@ bool daNpc_Bm1_c::createInit() {
     mBckResIndex = 0x16;
     bool init_success;
     switch(mSpecificType){
-        case Quill_0:
+        case SPECIFIC_TYPE_Quill_0_e:
             init_success = init_PST_0();
             break;
-        case Quill_1:
+        case SPECIFIC_TYPE_Quill_1_e:
             init_success = init_PST_1();
             break;
-        case Quill_2:
+        case SPECIFIC_TYPE_Quill_2_e:
             init_success = init_PST_2();
             break;
-        case Quill_3:
+        case SPECIFIC_TYPE_Quill_3_e:
             init_success = init_PST_3();
             break;
-        case Quill_4:
+        case SPECIFIC_TYPE_Quill_4_e:
             init_success = init_PST_4();
             break;
-        case Skett:
+        case SPECIFIC_TYPE_Skett_e:
             init_success = init_SKT_0();
             break;
-        case Akoot:
+        case SPECIFIC_TYPE_Akoot_e:
             init_success = init_KKT_0();
             break;
-        case Basht:
+        case SPECIFIC_TYPE_Basht_e:
             init_success = init_BMB_0();
             break;
-        case Bisht:
+        case SPECIFIC_TYPE_Bisht_e:
             init_success = init_BMB_1();
             break;
-        case Hoskit:
+        case SPECIFIC_TYPE_Hoskit_e:
             init_success = init_BMB_2();
             break;
-        case Ilari_0xA:
+        case SPECIFIC_TYPE_Ilari_0xA_e:
             init_success = init_BMC_0();
             break;
-        case Ilari_0xB:
+        case SPECIFIC_TYPE_Ilari_0xB_e:
             init_success = init_BMC_1();
             break;
-        case Ilari_0xC:
+        case SPECIFIC_TYPE_Ilari_0xC_e:
             init_success = init_BMC_2();
             break;
-        case Pashli:
+        case SPECIFIC_TYPE_Pashli_e:
             init_success = init_BMC_3();
             break;
-        case Namali:
+        case SPECIFIC_TYPE_Namali_e:
             init_success = init_BMD_0();
             break;
-        case Kogoli:
+        case SPECIFIC_TYPE_Kogoli_e:
             init_success = init_BMD_1();
             break;
         default:
@@ -713,7 +743,7 @@ void daNpc_Bm1_c::setMtx(bool i_param_1) {
         s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
         mbMorfAnimStopped = mpMorf->play(&eyePos,uVar5,reverb);
         if(mpMorf->getFrame() < mFrame){
-            mbMorfAnimStopped = 1;
+            mbMorfAnimStopped = true;
         }
         mFrame = mpMorf->getFrame();
         if(mbHasArms){
@@ -880,7 +910,7 @@ BOOL daNpc_Bm1_c::setAnm_anm(daNpc_Bm1_c::anm_prm_c* i_anmPrmP) {
     }
     mFrame = 0;
     m87B = 0;
-    mbMorfAnimStopped = 0;
+    mbMorfAnimStopped = false;
     return TRUE;
 }
 
@@ -992,7 +1022,7 @@ void daNpc_Bm1_c::chg_anmAtr(unsigned char i_param_1) {
             case 0xD:
                 if(mPartnerProcID != -1){
                     fopAc_ac_c* actor = searchByID(mPartnerProcID);
-                    mAttentionPos = actor->eyePos;
+                    m82C = actor->eyePos;
                     mLookBackState = 2;
                 }
                 break;
@@ -1006,7 +1036,7 @@ void daNpc_Bm1_c::control_anmAtr() {
     
     switch(m8F7){
         case 8:
-            if(mbMorfAnimStopped != 0){
+            if(mbMorfAnimStopped){
                 if(++m87B >= 2){
                     m8F7 = 6;
                     setAnm_NUM(0x16,1);
@@ -1082,23 +1112,23 @@ void daNpc_Bm1_c::eventOrder() {
     s8 condition = m8FD;
     if(condition == 1 || condition == 2){
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
-        if(mSpecificType == Hoskit){
+        if(mSpecificType == SPECIFIC_TYPE_Hoskit_e){
             eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
         }
         if(m8FD == 1){
             fopAcM_orderSpeakEvent(this);
         }
     }else if(condition >= 3){
-        m86A = condition - 3;
-        fopAcM_orderOtherEventId(this,m862[m86A]);
+        mEventIdx = condition - 3;
+        fopAcM_orderOtherEventId(this,mEventIdTable[mEventIdx]);
     }
 }
 
 /* 0000217C-00002234       .text checkOrder__11daNpc_Bm1_cFv */
 void daNpc_Bm1_c::checkOrder() {
     if(eventInfo.checkCommandDemoAccrpt()){
-        if(dComIfGp_evmng_startCheck(m862[m86A])){
-            switch(m86A){
+        if(dComIfGp_evmng_startCheck(mEventIdTable[mEventIdx])){
+            switch(mEventIdx){
                 case 3:
                     fopAcM_OffStatus(this,fopAcStts_UNK4000_e);
                     break;
@@ -1187,7 +1217,7 @@ BOOL daNpc_Bm1_c::lookBack() {
             src_pos.y = eyePos.y;
             break;
         case 2:
-            dstPos = mAttentionPos;
+            dstPos = m82C;
             dstPos_p = &dstPos;
             src_pos.x = current.pos.x;
             src_pos.y = current.pos.y;
@@ -1210,173 +1240,173 @@ u16 daNpc_Bm1_c::next_msgStatus(unsigned long* i_msg_no) {
     
     u16 var_r0 = 0xF;
     switch (*i_msg_no) { 
-    case 0x1771:
-        *i_msg_no = 0x1772;
-        break;
-    case 0x1772:
-        *i_msg_no = 0x1773;
-        break;
-    case 0x1773:
-        *i_msg_no = 0x1774;
-        break;
-    case 0x1775:
-        *i_msg_no = 0x1776;
-        break;
-    case 0x18A1:
-        *i_msg_no = 0x18A2;
-        break;
-    case 0x5FE: 
-        *i_msg_no = 0x5FF;
-        break;
-    case 0x601: 
-        *i_msg_no = 0x602;
-        break;
-    case 0x602: 
-        *i_msg_no = 0x603;
-        break;
-    case 0x603: 
-        *i_msg_no = 0x604;
-        break;
-    case 0x604: 
-        *i_msg_no = 0x605;
-        break;
-    case 0x186B:
-        *i_msg_no = 0x186C;
-        break;
-    case 0x186C:
-        *i_msg_no = 0x186D;
-        break;
-    case 0x186D:
-        *i_msg_no = 0x186E;
-        break;
-    case 0x1873:
-        *i_msg_no = 0x1874;
-        break;
-    case 0x1874:
-        *i_msg_no = 0x1875;
-        break;
-    case 0x1875:
-        *i_msg_no = 0x1876;
-        break;
-    case 0x187B:
-        *i_msg_no = 0x187C;
-        break;
-    case 0x187C:
-        *i_msg_no = 0x187D;
-        break;
-    case 0x187D:
-        *i_msg_no = 0x187E;
-        break;
-    case 0x1883:
-        *i_msg_no = 0x1884;
-        break;
-    case 0x1884:
-        *i_msg_no = 0x1885;
-        break;
-    case 0x1885:
-        *i_msg_no = 0x1886;
-        break;
-    case 0x186F:
-        *i_msg_no = 0x1870;
-        break;
-    case 0x1870:
-        *i_msg_no = 0x1871;
-        break;
-    case 0x1871:
-        *i_msg_no = 0x1872;
-        break;
-    case 0x1877:
-        *i_msg_no = 0x1878;
-        break;
-    case 0x1878:
-        *i_msg_no = 0x1879;
-        break;
-    case 0x1879:
-        *i_msg_no = 0x187A;
-        break;
-    case 0x187F:
-        *i_msg_no = 0x1880;
-        break;
-    case 0x1880:
-        *i_msg_no = 0x1881;
-        break;
-    case 0x1881:
-        *i_msg_no = 0x1882;
-        break;
-    case 0x1887:
-        *i_msg_no = 0x1888;
-        break;
-    case 0x1888:
-        *i_msg_no = 0x1889;
-        break;
-    case 0x1889:
-        *i_msg_no = 0x188A;
-        break;
-    case 0x18A6:
-        *i_msg_no = 0x18A7;
-        break;
-    case 0x18BC:
-        *i_msg_no = 0x18BD;
-        break;
-    case 0x1996:
-        *i_msg_no = 0x1997;
-        break;
-    case 0x1998:
-        *i_msg_no = 0x1999;
-        break;
-    case 0x199E:
-        *i_msg_no = 0x199F;
-        break;
-    case 0x199F:
-        if(dComIfGs_getBeastNum(2) >= 0x14){
-            *i_msg_no = 0x19A1;
-        }else{
-            *i_msg_no = 0x19A0;
-        }
-        break;
-    case 0x19A1:
+        case 0x1771:
+            *i_msg_no = 0x1772;
+            break;
+        case 0x1772:
+            *i_msg_no = 0x1773;
+            break;
+        case 0x1773:
+            *i_msg_no = 0x1774;
+            break;
+        case 0x1775:
+            *i_msg_no = 0x1776;
+            break;
+        case 0x18A1:
+            *i_msg_no = 0x18A2;
+            break;
+        case 0x5FE: 
+            *i_msg_no = 0x5FF;
+            break;
+        case 0x601: 
+            *i_msg_no = 0x602;
+            break;
+        case 0x602: 
+            *i_msg_no = 0x603;
+            break;
+        case 0x603: 
+            *i_msg_no = 0x604;
+            break;
+        case 0x604: 
+            *i_msg_no = 0x605;
+            break;
+        case 0x186B:
+            *i_msg_no = 0x186C;
+            break;
+        case 0x186C:
+            *i_msg_no = 0x186D;
+            break;
+        case 0x186D:
+            *i_msg_no = 0x186E;
+            break;
+        case 0x1873:
+            *i_msg_no = 0x1874;
+            break;
+        case 0x1874:
+            *i_msg_no = 0x1875;
+            break;
+        case 0x1875:
+            *i_msg_no = 0x1876;
+            break;
+        case 0x187B:
+            *i_msg_no = 0x187C;
+            break;
+        case 0x187C:
+            *i_msg_no = 0x187D;
+            break;
+        case 0x187D:
+            *i_msg_no = 0x187E;
+            break;
+        case 0x1883:
+            *i_msg_no = 0x1884;
+            break;
+        case 0x1884:
+            *i_msg_no = 0x1885;
+            break;
+        case 0x1885:
+            *i_msg_no = 0x1886;
+            break;
+        case 0x186F:
+            *i_msg_no = 0x1870;
+            break;
+        case 0x1870:
+            *i_msg_no = 0x1871;
+            break;
+        case 0x1871:
+            *i_msg_no = 0x1872;
+            break;
+        case 0x1877:
+            *i_msg_no = 0x1878;
+            break;
+        case 0x1878:
+            *i_msg_no = 0x1879;
+            break;
+        case 0x1879:
+            *i_msg_no = 0x187A;
+            break;
+        case 0x187F:
+            *i_msg_no = 0x1880;
+            break;
+        case 0x1880:
+            *i_msg_no = 0x1881;
+            break;
+        case 0x1881:
+            *i_msg_no = 0x1882;
+            break;
+        case 0x1887:
+            *i_msg_no = 0x1888;
+            break;
+        case 0x1888:
+            *i_msg_no = 0x1889;
+            break;
+        case 0x1889:
+            *i_msg_no = 0x188A;
+            break;
+        case 0x18A6:
+            *i_msg_no = 0x18A7;
+            break;
+        case 0x18BC:
+            *i_msg_no = 0x18BD;
+            break;
+        case 0x1996:
+            *i_msg_no = 0x1997;
+            break;
+        case 0x1998:
+            *i_msg_no = 0x1999;
+            break;
+        case 0x199E:
+            *i_msg_no = 0x199F;
+            break;
+        case 0x199F:
+            if(dComIfGs_getBeastNum(dBeastIdx_GOLDEN_FEATHER_e) >= 0x14){
+                *i_msg_no = 0x19A1;
+            }else{
+                *i_msg_no = 0x19A0;
+            }
+            break;
+        case 0x19A1:
 
-        switch (mpCurrMsg->mSelectNum) { 
-        case 0:
-            *i_msg_no = 0x19A3;
-            dComIfGp_setItemBeastNumCount(2,-0x14);
+            switch (mpCurrMsg->mSelectNum) { 
+                case 0:
+                    *i_msg_no = 0x19A3;
+                    dComIfGp_setItemBeastNumCount(dBeastIdx_GOLDEN_FEATHER_e,-0x14);
+                    break;
+                case 1: 
+                    *i_msg_no = 0x19A2;
+                    break;
+            }
             break;
-        case 1: 
-            *i_msg_no = 0x19A2;
+        case 0x19A3:
+            *i_msg_no = 0x19A4;
             break;
-        }
-        break;
-    case 0x19A3:
-        *i_msg_no = 0x19A4;
-        break;
-    case 0x1EF0:
-        *i_msg_no = 0x1EF1;
-        break;
-    case 0x1EF1:
-        *i_msg_no = 0x1EF2;
-        break;
-    case 0x1EF2:
-        *i_msg_no = 0x1EF3;
-        break;
-    case 0x1EF3:
-        *i_msg_no = 0x1EF4;
-        break;
-    case 0x1EF4:
-        *i_msg_no = 0x1EF5;
-        break;
-    case 0x1EF5:
-        switch (mpCurrMsg->mSelectNum) { 
-        case 0:
-            *i_msg_no = 0x1EF6;
+        case 0x1EF0:
+            *i_msg_no = 0x1EF1;
             break;
-        case 1: 
-            *i_msg_no = 0x1EF8;
+        case 0x1EF1:
+            *i_msg_no = 0x1EF2;
             break;
-        }
-        break;
-    default:    
-        var_r0 = 0x10;
-        break;
+        case 0x1EF2:
+            *i_msg_no = 0x1EF3;
+            break;
+        case 0x1EF3:
+            *i_msg_no = 0x1EF4;
+            break;
+        case 0x1EF4:
+            *i_msg_no = 0x1EF5;
+            break;
+        case 0x1EF5:
+            switch (mpCurrMsg->mSelectNum) { 
+                case 0:
+                    *i_msg_no = 0x1EF6;
+                    break;
+                case 1: 
+                    *i_msg_no = 0x1EF8;
+                    break;
+            }
+            break;
+        default:    
+            var_r0 = 0x10;
+            break;
     }
     return var_r0;
 }
@@ -1385,19 +1415,19 @@ u16 daNpc_Bm1_c::next_msgStatus(unsigned long* i_msg_no) {
 s8 daNpc_Bm1_c::getBitMask() {
     s8 o_retval = 0;
     switch(mSpecificType){
-        case Basht:
+        case SPECIFIC_TYPE_Basht_e:
             o_retval = 1;
             break;
-        case Bisht:
+        case SPECIFIC_TYPE_Bisht_e:
             o_retval = 2;
             break;
-        case Pashli:
+        case SPECIFIC_TYPE_Pashli_e:
             o_retval = 4;
             break;
-        case Namali:
+        case SPECIFIC_TYPE_Namali_e:
             o_retval = 8;
             break;
-        case Kogoli:
+        case SPECIFIC_TYPE_Kogoli_e:
             o_retval = 0x10;
             break;
     }
@@ -1509,33 +1539,33 @@ u32 daNpc_Bm1_c::getMsg_BMB_1() {
     u32 var_r29 = 0;
     if (reg&mask) {
         switch (mSpawnCondition) {
-        case 1:
-            var_r29 = 0x18A9;
-            break;
-        case 2:
-            var_r29 = 0x18BF;
-            break;
-        case 3:
-            var_r29 = 0x18C1;
-            break;
-        case 4:
-            var_r29 = 0x18C3;
-            break;
+            case 1:
+                var_r29 = 0x18A9;
+                break;
+            case 2:
+                var_r29 = 0x18BF;
+                break;
+            case 3:
+                var_r29 = 0x18C1;
+                break;
+            case 4:
+                var_r29 = 0x18C3;
+                break;
         }
     } else {
         switch (mSpawnCondition) {
-        case 1:
-            var_r29 = 0x18A8;
-            break;
-        case 2:
-            var_r29 = 0x18BE;
-            break;
-        case 3:
-            var_r29 = 0x18C0;
-            break;
-        case 4:
-            var_r29 = 0x18C2;
-            break;
+            case 1:
+                var_r29 = 0x18A8;
+                break;
+            case 2:
+                var_r29 = 0x18BE;
+                break;
+            case 3:
+                var_r29 = 0x18C0;
+                break;
+            case 4:
+                var_r29 = 0x18C2;
+                break;
         }
     }
     if (var_r29 != 0U) {
@@ -1556,7 +1586,7 @@ u32 daNpc_Bm1_c::getMsg_BMB_2() {
             return 0x199D;
         }
         if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2140)){
-            return (dComIfGs_getBeastNum(2) >= 0x14) ? 0x19A1: 0x19A0;
+            return (dComIfGs_getBeastNum(dBeastIdx_GOLDEN_FEATHER_e) >= 0x14) ? 0x19A1: 0x19A0;
         }
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_2140);
         return 0x199E;
@@ -1612,33 +1642,33 @@ u32 daNpc_Bm1_c::getMsg_BMC_3() {
     u32 var_r29 = 0;
     if (reg&mask) {
         switch (mSpawnCondition) {
-        case 1:
-            var_r29 = 0x18C5;
-            break;
-        case 2:
-            var_r29 = 0x18C7;
-            break;
-        case 3:
-            var_r29 = 0x18C9;
-            break;
-        case 4:
-            var_r29 = 0x18CB;
-            break;
+            case 1:
+                var_r29 = 0x18C5;
+                break;
+            case 2:
+                var_r29 = 0x18C7;
+                break;
+            case 3:
+                var_r29 = 0x18C9;
+                break;
+            case 4:
+                var_r29 = 0x18CB;
+                break;
         }
     } else {
         switch (mSpawnCondition) {
-        case 1:
-            var_r29 = 0x18C4;
-            break;
-        case 2:
-            var_r29 = 0x18C6;
-            break;
-        case 3:
-            var_r29 = 0x18C8;
-            break;
-        case 4:
-            var_r29 = 0x18CA;
-            break;
+            case 1:
+                var_r29 = 0x18C4;
+                break;
+            case 2:
+                var_r29 = 0x18C6;
+                break;
+            case 3:
+                var_r29 = 0x18C8;
+                break;
+            case 4:
+                var_r29 = 0x18CA;
+                break;
         }
     }
     if (var_r29 != 0U) {
@@ -1656,33 +1686,33 @@ u32 daNpc_Bm1_c::getMsg_BMD_0() {
     u32 var_r29 = 0;
     if (reg&mask) {
         switch (mSpawnCondition) {
-        case 1:
-            var_r29 = 0x189E;
-            break;
-        case 2:
-            var_r29 = 0x18AB;
-            break;
-        case 3:
-            var_r29 = 0x18AD;
-            break;
-        case 4:
-            var_r29 = 0x18AF;
-            break;
+            case 1:
+                var_r29 = 0x189E;
+                break;
+            case 2:
+                var_r29 = 0x18AB;
+                break;
+            case 3:
+                var_r29 = 0x18AD;
+                break;
+            case 4:
+                var_r29 = 0x18AF;
+                break;
         }
     } else {
         switch (mSpawnCondition) {
-        case 1:
-            var_r29 = 0x189D;
-            break;
-        case 2:
-            var_r29 = 0x18AA;
-            break;
-        case 3:
-            var_r29 = 0x18AC;
-            break;
-        case 4:
-            var_r29 = 0x18AE;
-            break;
+            case 1:
+                var_r29 = 0x189D;
+                break;
+            case 2:
+                var_r29 = 0x18AA;
+                break;
+            case 3:
+                var_r29 = 0x18AC;
+                break;
+            case 4:
+                var_r29 = 0x18AE;
+                break;
         }
     }
     if (var_r29 != 0U) {
@@ -1703,16 +1733,16 @@ u32 daNpc_Bm1_c::getMsg_BMD_1() {
             var_r29 = 0x18A5;
         }else{
             switch (mSpawnCondition) {
-            case 1:
-            case 2:
-                var_r29 = 0x18A5;
-                break;
-            case 3:
-                var_r29 = 0x18B7;
-                break;
-            case 4:
-                var_r29 = 0x18B9;
-                break;
+                case 1:
+                case 2:
+                    var_r29 = 0x18A5;
+                    break;
+                case 3:
+                    var_r29 = 0x18B7;
+                    break;
+                case 4:
+                    var_r29 = 0x18B9;
+                    break;
             }
         }
     } else {
@@ -1720,16 +1750,16 @@ u32 daNpc_Bm1_c::getMsg_BMD_1() {
             var_r29 = 0x18A4;
         }else{
             switch (mSpawnCondition) {
-            case 1:
-            case 2:
-                var_r29 = 0x18A4;
-                break;
-            case 3:
-                var_r29 = 0x18B6;
-                break;
-            case 4:
-                var_r29 = 0x18B8;
-                break;
+                case 1:
+                case 2:
+                    var_r29 = 0x18A4;
+                    break;
+                case 3:
+                    var_r29 = 0x18B6;
+                    break;
+                case 4:
+                    var_r29 = 0x18B8;
+                    break;
             }
         }
     }
@@ -1745,41 +1775,41 @@ u32 daNpc_Bm1_c::getMsg() {
 
     u32 o_retval = 0;
     switch(this->mSpecificType) {
-    case Quill_1:
-        o_retval = getMsg_PST_1();
-        break;
-    case Quill_3:
-        o_retval = getMsg_PST_3();
-        break;
-    case Skett:
-        o_retval = getMsg_SKT_0();
-        break;
-    case Akoot:
-        o_retval = getMsg_KKT_0();
-        break;
-    case Basht:
-        o_retval = getMsg_BMB_0();
-        break;
-    case Bisht:
-        o_retval = getMsg_BMB_1();
-        break;
-    case Hoskit:
-        o_retval = getMsg_BMB_2();
-        break;
-    case Ilari_0xA:
-        o_retval = getMsg_BMC_0();
-        break;
-    case Ilari_0xC:
-        o_retval = getMsg_BMC_2();
-        break;
-    case Pashli:
-        o_retval = getMsg_BMC_3();
-        break;
-    case Namali:
-        o_retval = getMsg_BMD_0();
-        break;
-    case Kogoli:
-        o_retval = getMsg_BMD_1();
+        case SPECIFIC_TYPE_Quill_1_e:
+            o_retval = getMsg_PST_1();
+            break;
+        case SPECIFIC_TYPE_Quill_3_e:
+            o_retval = getMsg_PST_3();
+            break;
+        case SPECIFIC_TYPE_Skett_e:
+            o_retval = getMsg_SKT_0();
+            break;
+        case SPECIFIC_TYPE_Akoot_e:
+            o_retval = getMsg_KKT_0();
+            break;
+        case SPECIFIC_TYPE_Basht_e:
+            o_retval = getMsg_BMB_0();
+            break;
+        case SPECIFIC_TYPE_Bisht_e:
+            o_retval = getMsg_BMB_1();
+            break;
+        case SPECIFIC_TYPE_Hoskit_e:
+            o_retval = getMsg_BMB_2();
+            break;
+        case SPECIFIC_TYPE_Ilari_0xA_e:
+            o_retval = getMsg_BMC_0();
+            break;
+        case SPECIFIC_TYPE_Ilari_0xC_e:
+            o_retval = getMsg_BMC_2();
+            break;
+        case SPECIFIC_TYPE_Pashli_e:
+            o_retval = getMsg_BMC_3();
+            break;
+        case SPECIFIC_TYPE_Namali_e:
+            o_retval = getMsg_BMD_0();
+            break;
+        case SPECIFIC_TYPE_Kogoli_e:
+            o_retval = getMsg_BMD_1();
     }
     return o_retval;
 }
@@ -1847,24 +1877,24 @@ void daNpc_Bm1_c::partner_srch() {
     bool found_partner = false;
     if(m904 == 1){
         switch(mSpecificType){
-            case Quill_1:
+            case SPECIFIC_TYPE_Quill_1_e:
                 found_partner = partner_srch_sub(searchActor_Zl);
                 break;
-            case Skett:
+            case SPECIFIC_TYPE_Skett_e:
                 found_partner = partner_srch_sub(searchActor_Bm_Kkt);
                 break;
-            case Akoot:
+            case SPECIFIC_TYPE_Akoot_e:
                 found_partner = partner_srch_sub(searchActor_Bm_Skt);
                 break;
-            case Ilari_0xB:
+            case SPECIFIC_TYPE_Ilari_0xB_e:
                 if(partner_srch_sub(searchActor_Gp) ){
                     fopAc_ac_c* actor = searchByID(mPartnerProcID);
                     if(actor){
                         current.angle.y = cLib_targetAngleY(&current.pos,&actor->current.pos);
                     }
                     found_partner = true;
-                    break;
                 }
+                break;
         }
         if(found_partner){
             m904 += 1;
@@ -1991,66 +2021,66 @@ bool daNpc_Bm1_c::bm_flyMove() {
         mTargetPos = mPathRun.getPoint(mPathRun.getIdx());
     }
     switch (m8F4) {
-    case 1:    
-        if ((s32) mBckResIndex != 0xA) {
-            setAnm_NUM(0xA, 1);
-        } else if (mbMorfAnimStopped != 0) {
-            m8F4 = 2;
-        }
-        break;
-    case 2:    
-        if (mBckResIndex != 0xB) {
-            setAnm_NUM(0xB, 1);
-            speed.y = mTargetFlySpeed * 0.7f;
-        } else if (mbMorfAnimStopped != 0) {
-            m8F4 = 5;
-            m88A = 1;
-            bm_setFlyAnm();
-        }
-        goto case_5;
-    case 3:    
-        setAnm_NUM(9, 1);
-        if (!mObjAcch.ChkGroundHit() != 0) {
-            bm_clcFlySpd();
-        } else {
-            m8F4 = 4;
-            speedF = 0.0f;
-            speed.y = 0.0f;
-            m88A = 1;
-        }
-        break;
-
-
-    case 4:    
-        if ((s32) mBckResIndex != 0xD) {
-            setAnm_NUM(0xD, 1);
-        } else if ((s8) mbMorfAnimStopped != 0) {
-            gravity = -4.5f;
-            setAnm_NUM(4, 1);
-            m8F4 = 0;
-            m88A = 1;
-        }
-
-        break;
-    case 5:    
-case_5:
-        bm_clcFlySpd();
-        temp_r3 = bm_movPass(1);
-        switch (temp_r3) {
-        case 1:
-            if (m8F4 != 2) {
-                bm_setFlyAnm();
-                m8F4 = 5;
+        case 1:    
+            if (mBckResIndex != 0xA) {
+                setAnm_NUM(0xA, 1);
+            } else if (mbMorfAnimStopped) {
+                m8F4 = 2;
             }
-            m88A = 1;
             break;
-        case 2:
-            m8F4 = 3;
-            mTargetFlySpeed = 0.0f;
-            m88A = 1;
+        case 2:    
+            if (mBckResIndex != 0xB) {
+                setAnm_NUM(0xB, 1);
+                speed.y = mTargetFlySpeed * 0.7f;
+            } else if (mbMorfAnimStopped) {
+                m8F4 = 5;
+                m88A = 1;
+                bm_setFlyAnm();
+            }
+            goto case_5;
+        case 3:    
+            setAnm_NUM(9, 1);
+            if (!mObjAcch.ChkGroundHit() != 0) {
+                bm_clcFlySpd();
+            } else {
+                m8F4 = 4;
+                speedF = 0.0f;
+                speed.y = 0.0f;
+                m88A = 1;
+            }
             break;
-        }
-        break;
+
+
+        case 4:    
+            if (mBckResIndex != 0xD) {
+                setAnm_NUM(0xD, 1);
+            } else if (mbMorfAnimStopped) {
+                gravity = -4.5f;
+                setAnm_NUM(4, 1);
+                m8F4 = 0;
+                m88A = 1;
+            }
+
+            break;
+        case 5:    
+case_5:
+            bm_clcFlySpd();
+            temp_r3 = bm_movPass(1);
+            switch (temp_r3) {
+                case 1:
+                    if (m8F4 != 2) {
+                        bm_setFlyAnm();
+                        m8F4 = 5;
+                    }
+                    m88A = 1;
+                    break;
+                case 2:
+                    m8F4 = 3;
+                    mTargetFlySpeed = 0.0f;
+                    m88A = 1;
+                    break;
+            }
+            break;
     }
     return TRUE;
 }
@@ -2130,7 +2160,7 @@ void daNpc_Bm1_c::delPrtcl_Flyaway() {
 
     if(mpFlyawayEmitterL){
 #if VERSION > VERSION_DEMO
-        mpFlyawayEmitterL->clearStatus(0x40);
+        mpFlyawayEmitterL->quitImmortalEmitter();
 #endif
         mpFlyawayEmitterL->becomeInvalidEmitter();
         mpFlyawayEmitterL = NULL;
@@ -2138,7 +2168,7 @@ void daNpc_Bm1_c::delPrtcl_Flyaway() {
 
     if(mpFlyawayEmitterR){
 #if VERSION > VERSION_DEMO
-        mpFlyawayEmitterR->clearStatus(0x40);
+        mpFlyawayEmitterR->quitImmortalEmitter();
 #endif
         mpFlyawayEmitterR->becomeInvalidEmitter();
         mpFlyawayEmitterR = NULL;
@@ -2200,7 +2230,7 @@ void daNpc_Bm1_c::delPrtcl_Land0() {
     
     if(mpLandEmitterL){
 #if VERSION > VERSION_DEMO
-        mpLandEmitterL->clearStatus(0x40);
+        mpLandEmitterL->quitImmortalEmitter();
 #endif
         mpLandEmitterL->becomeInvalidEmitter();
         mpLandEmitterL = NULL;
@@ -2208,7 +2238,7 @@ void daNpc_Bm1_c::delPrtcl_Land0() {
 
     if(mpLandEmitterR){
 #if VERSION > VERSION_DEMO
-        mpLandEmitterR->clearStatus(0x40);
+        mpLandEmitterR->quitImmortalEmitter();
 #endif
         mpLandEmitterR->becomeInvalidEmitter();
         mpLandEmitterR = NULL;
@@ -2278,7 +2308,7 @@ void daNpc_Bm1_c::setPrtcl_Hane1() {
     
     delPrtcl_Hane1();
     mpFeather1EmitterL = dComIfGp_particle_set(
-        0x80DB,
+        dPa_name::ID_IT_SN_TORIZOKU_HANE01,
         &current.pos,
         NULL,
         NULL,
@@ -2294,7 +2324,7 @@ void daNpc_Bm1_c::setPrtcl_Hane1() {
     }
 #endif
     mpFeather1EmitterR = dComIfGp_particle_set(
-        0x80DB,
+        dPa_name::ID_IT_SN_TORIZOKU_HANE01,
         &current.pos,
         NULL,
         NULL,
@@ -2327,14 +2357,14 @@ void daNpc_Bm1_c::delPrtcl_Hane1() {
     
     if(mpFeather1EmitterL){
 #if VERSION > VERSION_DEMO
-        mpFeather1EmitterL->clearStatus(0x40);
+        mpFeather1EmitterL->quitImmortalEmitter();
 #endif
         mpFeather1EmitterL->becomeInvalidEmitter();
         mpFeather1EmitterL = NULL;
     }
     if(mpFeather1EmitterR){
 #if VERSION > VERSION_DEMO
-        mpFeather1EmitterR->clearStatus(0x40);
+        mpFeather1EmitterR->quitImmortalEmitter();
 #endif
         mpFeather1EmitterR->becomeInvalidEmitter();
         mpFeather1EmitterR = NULL;
@@ -2345,98 +2375,98 @@ void daNpc_Bm1_c::delPrtcl_Hane1() {
 bool daNpc_Bm1_c::decideType(int i_type_param, int i_spawn_cond_param) {
     
     mSpawnCondition = 0;
-    mType = t_Invalid;
-    mSpecificType = Invalid;
+    mType = TYPE_Invalid_e;
+    mSpecificType = SPECIFIC_TYPE_Invalid_e;
     fpc_ProcID procName = fopAcM_GetName(this);
     switch(procName){
-    case DEMO_SELECT(0x149,0x148):
-        mType = 1;
+    case fpcNm_NPC_BM1_e:
+        mType = TYPE_Quill_e;
         switch (i_type_param) {   
         case 0:
-            mSpecificType = 0;
+            mSpecificType = SPECIFIC_TYPE_Quill_0_e;
             break;
         case 1: 
-            mSpecificType = 1;
+            mSpecificType = SPECIFIC_TYPE_Quill_1_e;
             break;
         case 2:        
-            mSpecificType = 2;
+            mSpecificType = SPECIFIC_TYPE_Quill_2_e;
             break;
         case 3:
-            mSpecificType = 3;
+            mSpecificType = SPECIFIC_TYPE_Quill_3_e;
             break;
         case 4:
-            mSpecificType = 4;
+            mSpecificType = SPECIFIC_TYPE_Quill_4_e;
             break;
         default:
             return false;
         }
         break;
-    case DEMO_SELECT(0x14A,0x149):
+    case fpcNm_NPC_BM2_e:
         switch (i_type_param) {
-        case 0:
-            mSpecificType = 6;
-            mType = 3;
-            break;
-        case 1:
-            mSpecificType = 5;
-            mType = 2;
-            break;
-        default:
-            return false;
+            case 0:
+                mSpecificType = SPECIFIC_TYPE_Skett_e;
+                mType = TYPE_Skett_e;
+                break;
+            case 1:
+                mSpecificType = SPECIFIC_TYPE_Akoot_e;
+                mType = TYPE_Akoot_e;
+                break;
+            default:
+                return false;
         }
         break;
-    case DEMO_SELECT(0x14B,0x14A):
+    case fpcNm_NPC_BM3_e:
         switch (i_type_param) {
-        case 0:
-            mSpecificType = 7;
-            mType = 4;
-            break;
-        case 1:
-            mSpecificType = 8;
-            mType = 5;
-            break;
-        case 2:
-            mSpecificType = 9;
-            mType = 6;
-            break;
-        default: 
-            return false;
+            case 0:
+                mSpecificType = SPECIFIC_TYPE_Basht_e;
+                mType = TYPE_Basht_e;
+                break;
+            case 1:
+                mSpecificType = SPECIFIC_TYPE_Bisht_e;
+                mType = TYPE_Bisht_e;
+                break;
+            case 2:
+                mSpecificType = SPECIFIC_TYPE_Hoskit_e;
+                mType = TYPE_Hoskit_e;
+                break;
+            default: 
+                return false;
         }
         break;
-    case DEMO_SELECT(0x14C,0x14B):
+    case fpcNm_NPC_BM4_e:
         switch (i_type_param) { 
-        case 0: 
-            mSpecificType = 0xA;
-            mType = 7;
-            break;
-        case 1: 
-            mSpecificType = 0xB;
-            mType = 7;
-            break;
-        case 2: 
-            mSpecificType = 0xC;
-            mType = 7;
-            break;
-        case 3: 
-            mSpecificType = 0xD;
-            mType = 8;
-            break;
-        default:
-            return false;
+            case 0: 
+                mSpecificType = SPECIFIC_TYPE_Ilari_0xA_e;
+                mType = TYPE_Ilari_e;
+                break;
+            case 1: 
+                mSpecificType = SPECIFIC_TYPE_Ilari_0xB_e;
+                mType = TYPE_Ilari_e;
+                break;
+            case 2: 
+                mSpecificType = SPECIFIC_TYPE_Ilari_0xC_e;
+                mType = TYPE_Ilari_e;
+                break;
+            case 3: 
+                mSpecificType = SPECIFIC_TYPE_Pashli_e;
+                mType = TYPE_Pashli_e;
+                break;
+            default:
+                return false;
         }
         break;
-    case DEMO_SELECT(0x14D,0x14C):
+    case fpcNm_NPC_BM5_e:
         switch (i_type_param) {
-        case 0: 
-            mSpecificType = 0xE;
-            mType = 9;
-            break;
-        case 1: 
-            mSpecificType = 0xF;
-            mType = 0xA;
-            break;
-        default:
-            return false;
+            case 0: 
+                mSpecificType = SPECIFIC_TYPE_Namali_e;
+                mType = TYPE_Namali_e;
+                break;
+            case 1: 
+                mSpecificType = SPECIFIC_TYPE_Kogoli_e;
+                mType = TYPE_Kogoli_e;
+                break;
+            default:
+                return false;
         }
         break;
     default:   
@@ -2444,38 +2474,38 @@ bool daNpc_Bm1_c::decideType(int i_type_param, int i_spawn_cond_param) {
     }
 
     switch (i_spawn_cond_param) {
-    case 0: 
-        mSpawnCondition = 1;
-        break;
-    case 1: 
-        mSpawnCondition = 2;
-        break;
-    case 2: 
-        mSpawnCondition = 3;
-        break;
-    case 3: 
-        mSpawnCondition = 4;
-        break;
+        case 0: 
+            mSpawnCondition = 1;
+            break;
+        case 1: 
+            mSpawnCondition = 2;
+            break;
+        case 2: 
+            mSpawnCondition = 3;
+            break;
+        case 3: 
+            mSpawnCondition = 4;
+            break;
     }
     switch(mSpecificType){
-        case Quill_0:
+        case SPECIFIC_TYPE_Quill_0_e:
             strcpy(mArcName, "Bm2");
             break;
-        case Quill_1:
-        case Quill_2:
-        case Quill_3:
-        case Quill_4:
-        case Akoot:
-        case Skett:
-        case Basht:
-        case Bisht:
-        case Hoskit:
-        case Ilari_0xA:
-        case Ilari_0xB:
-        case Ilari_0xC:
-        case Pashli:
-        case Namali:
-        case Kogoli:
+        case SPECIFIC_TYPE_Quill_1_e:
+        case SPECIFIC_TYPE_Quill_2_e:
+        case SPECIFIC_TYPE_Quill_3_e:
+        case SPECIFIC_TYPE_Quill_4_e:
+        case SPECIFIC_TYPE_Akoot_e:
+        case SPECIFIC_TYPE_Skett_e:
+        case SPECIFIC_TYPE_Basht_e:
+        case SPECIFIC_TYPE_Bisht_e:
+        case SPECIFIC_TYPE_Hoskit_e:
+        case SPECIFIC_TYPE_Ilari_0xA_e:
+        case SPECIFIC_TYPE_Ilari_0xB_e:
+        case SPECIFIC_TYPE_Ilari_0xC_e:
+        case SPECIFIC_TYPE_Pashli_e:
+        case SPECIFIC_TYPE_Namali_e:
+        case SPECIFIC_TYPE_Kogoli_e:
             strcpy(mArcName, "Bm");
             break;
         default:
@@ -2565,53 +2595,53 @@ void daNpc_Bm1_c::eInit_ATTENTION_(int* i_prm_0_p, int* i_prm_1_p, int* i_prm_2_
         return;
     }
     switch(*i_prm_0_p) {
-    case 0:
-        break;
-    case 1:
-        mLookBackState = 1;
-        unaff_r27 = cLib_targetAngleY(&current.pos,&dComIfGp_getLinkPlayer()->current.pos);
-        break;
-    case 2:
-        if (!i_offset_p) {
-        return;
-        }
-        mLookBackState = 2;
-        unaff_r27 = cLib_targetAngleY(&current.pos,i_offset_p);
-        break;
-    case 3:
-        mLookBackState = 2;
-        mAttentionPos = eInit_calcRelativPos(i_offset_p,i_angle_p);
-        unaff_r27 = cLib_targetAngleY(&current.pos,&mAttentionPos);
-        break;
-    case 4:
-        if (i_angle_p == (int *)0x0) {
+        case 0:
+            break;
+        case 1:
+            mLookBackState = 1;
+            unaff_r27 = cLib_targetAngleY(&current.pos,&dComIfGp_getLinkPlayer()->current.pos);
+            break;
+        case 2:
+            if (!i_offset_p) {
             return;
-        }
-        mLookBackState = 3;
-        unaff_r27 = *i_angle_p;
-        break;
-    case 5:
-        if (mPathRun.isPath() == 0) {
-            return;
-        }
-        pointIndex = mPathRun.getIdx();
-        if (i_index_p) {
-        pointIndex = *i_index_p;
-        }
-        mAttentionPos = mPathRun.getPoint(pointIndex);
-        mLookBackState = 2;
-        break;
-    case 6:
-        iVar1 = searchByID(mPartnerProcID);
-        if (iVar1 == NULL) {
-            return;
-        }
-        mLookBackState = 2;
-        mAttentionPos = iVar1->eyePos;
-        unaff_r27 = cLib_targetAngleY(&current.pos,&mAttentionPos);
-        break;
-    default:
-        mLookBackState = 0;
+            }
+            mLookBackState = 2;
+            unaff_r27 = cLib_targetAngleY(&current.pos,i_offset_p);
+            break;
+        case 3:
+            mLookBackState = 2;
+            m82C = eInit_calcRelativPos(i_offset_p,i_angle_p);
+            unaff_r27 = cLib_targetAngleY(&current.pos,&m82C);
+            break;
+        case 4:
+            if (i_angle_p == (int *)0x0) {
+                return;
+            }
+            mLookBackState = 3;
+            unaff_r27 = *i_angle_p;
+            break;
+        case 5:
+            if (!mPathRun.isPath()) {
+                return;
+            }
+            pointIndex = mPathRun.getIdx();
+            if (i_index_p) {
+            pointIndex = *i_index_p;
+            }
+            m82C = mPathRun.getPoint(pointIndex);
+            mLookBackState = 2;
+            break;
+        case 6:
+            iVar1 = searchByID(mPartnerProcID);
+            if (iVar1 == NULL) {
+                return;
+            }
+            mLookBackState = 2;
+            m82C = iVar1->eyePos;
+            unaff_r27 = cLib_targetAngleY(&current.pos,&m82C);
+            break;
+        default:
+            mLookBackState = 0;
     }
     eInit_setLocFlag(i_prm_1_p);
     eInit_setShapeAngleY(i_prm_2_p,unaff_r27);
@@ -2690,11 +2720,11 @@ void daNpc_Bm1_c::eInit_FLY_(int* i_prm_0_p, float* i_speed_p, float* i_spd_y_p,
             gravity = 0.0;
             break;
         default:
-        m889 = 1;
-        m8F4 = 1;
-        speed.y = 0.0f;
-        speedF = 0.0f;
-        gravity = 0.0f;
+            m889 = 1;
+            m8F4 = 1;
+            speed.y = 0.0f;
+            speedF = 0.0f;
+            gravity = 0.0f;
         case 2:
             return;
     }
@@ -2709,42 +2739,41 @@ void daNpc_Bm1_c::eInit_DEL_ACTOR_() {
 }
 
 /* 00004FD8-00005190       .text eInit_WLK___11daNpc_Bm1_cFPiPfPfP4cXyzPiPiPi */
-void daNpc_Bm1_c::eInit_WLK_(int* arg0, float* arg1, float* arg2, cXyz* arg3, int* arg4, int* arg5, int* arg6) {
+void daNpc_Bm1_c::eInit_WLK_(int* i_prm_0_p, float* i_speed_p, float* i_accel_p, cXyz* i_offset_p, int* i_angle_p, int* i_index_p, int* i_timer_p) {
     
     s32 temp_r0;
     u8 var_r3;
 
     var_r3 = 0;
-    if (arg0 != NULL) {
-        temp_r0 = *arg0;
+    if (i_prm_0_p != NULL) {
+        temp_r0 = *i_prm_0_p;
         switch (temp_r0) {
-        case 0:
-            if (arg3 != NULL) {
-                mTargetPos.set(arg3->x,arg3->y,arg3->z);
+            case 0:
+                if (i_offset_p != NULL) {
+                    mTargetPos.set(i_offset_p->x,i_offset_p->y,i_offset_p->z);
+                    var_r3 = 1;
+                }
+                break;
+            case 1:
+                mTargetPos = eInit_calcRelativPos(i_offset_p,i_angle_p);
                 var_r3 = 1;
-            }
-            break;
-        case 1:
-            mTargetPos = eInit_calcRelativPos(arg3,arg4);
-            var_r3 = 1;
-            break;
-        case 2:
-            if (mPathRun.isPath() == 0) {
-                return;
-            }
-            u8 pointIdx = mPathRun.getIdx();
-            if (arg5 != NULL) {
-                pointIdx = *arg5;
-            }
-            mTargetPos = mPathRun.getPoint(pointIdx);
-            var_r3 = 1;
-
+                break;
+            case 2:
+                if (mPathRun.isPath() == 0) {
+                    return;
+                }
+                u8 pointIdx = mPathRun.getIdx();
+                if (i_index_p != NULL) {
+                    pointIdx = *i_index_p;
+                }
+                mTargetPos = mPathRun.getPoint(pointIdx);
+                var_r3 = 1;
         }
 
         if (var_r3) {
-            eInit_setEvTimer(arg6);
-            mTargetFlySpeed = eInit_prmFloat(arg1,l_HIO.children[mType-1].hio_prm.m3C);
-            mTargetFlyStep = eInit_prmFloat(arg2,l_HIO.children[mType-1].hio_prm.m40);
+            eInit_setEvTimer(i_timer_p);
+            mTargetFlySpeed = eInit_prmFloat(i_speed_p,l_HIO.children[mType-1].hio_prm.m3C);
+            mTargetFlyStep = eInit_prmFloat(i_accel_p,l_HIO.children[mType-1].hio_prm.m40);
             m858 = l_HIO.children[mType-1].hio_prm.m44;
             mLookBackState = 0;
             setAnm_NUM(0xE, 1);
@@ -2844,33 +2873,33 @@ void daNpc_Bm1_c::event_actionInit(int arg0) {
   if (act_no_p != NULL) {
     mActNo = *act_no_p;
     switch(mActNo) {
-    case 4:
-      eInit_DEL_ACTOR_();
-      break;
-    case 0x10:
-      eInit_SET_NXT_PTH_INF_();
-      break;
-    case 0x14:
-      eInit_INI_EVN_1_();
-      break;
-    case 0x15:
-      eInit_MOV_PTH_POINT_(prm_0_p,anmno_p,index_p,angle_p);
-      break;
-    case 0x16:
-    case 0x17:
-      eInit_FLY_(prm_0_p,speed_p,spd_y_p,accel_p,acc_y_p);
-      break;
-    case 0x18:
-      eInit_SET_PLYER_GOL_(prm_0_p,offset_p,angle_p);
-      break;
-    case 0x19:
-      eInit_ATTENTION_(prm_0_p,prm_1_p,prm_2_p,offset_p,angle_p,index_p,timer_p);
-      break;
-    case 0x1a:
-      eInit_SET_ANM_(anmno_p);
-      break;
-    case 0x1b:
-      eInit_WLK_(prm_0_p,speed_p,accel_p,offset_p,angle_p,index_p,timer_p);
+        case 4:
+            eInit_DEL_ACTOR_();
+            break;
+        case 0x10:
+            eInit_SET_NXT_PTH_INF_();
+            break;
+        case 0x14:
+            eInit_INI_EVN_1_();
+            break;
+        case 0x15:
+            eInit_MOV_PTH_POINT_(prm_0_p,anmno_p,index_p,angle_p);
+            break;
+        case 0x16:
+        case 0x17:
+            eInit_FLY_(prm_0_p,speed_p,spd_y_p,accel_p,acc_y_p);
+            break;
+        case 0x18:
+            eInit_SET_PLYER_GOL_(prm_0_p,offset_p,angle_p);
+            break;
+        case 0x19:
+            eInit_ATTENTION_(prm_0_p,prm_1_p,prm_2_p,offset_p,angle_p,index_p,timer_p);
+            break;
+        case 0x1a:
+            eInit_SET_ANM_(anmno_p);
+            break;
+        case 0x1b:
+            eInit_WLK_(prm_0_p,speed_p,accel_p,offset_p,angle_p,index_p,timer_p);
     }
   }
   return;
@@ -2916,38 +2945,38 @@ bool daNpc_Bm1_c::event_action() {
     
 
     switch(mActNo) {
-    case 4:
-        return 1;
-        break;
-    case 0x10:
-        return 1;
-        break;
-    case 0x14:
-        return 1;
-        break;
-    case 0x15:
-        return 1;
-        break;
-    case 0x16:
-        return eMove_FLY_();
-        break;
-    case 0x17:
-        return eMove_KMA_FLY_();
-        break;
-    case 0x18:
-        return 1;
-        break;
-    case 0x19:
-        return eMove_ATTENTION_();
-        break;
-    case 0x1a:
-        return 1;
-        break;
-    case 0x1b:
-        return eMove_WLK_();
-    default:
-        return 1;
-        break;
+        case 4:
+            return 1;
+            break;
+        case 0x10:
+            return 1;
+            break;
+        case 0x14:
+            return 1;
+            break;
+        case 0x15:
+            return 1;
+            break;
+        case 0x16:
+            return eMove_FLY_();
+            break;
+        case 0x17:
+            return eMove_KMA_FLY_();
+            break;
+        case 0x18:
+            return 1;
+            break;
+        case 0x19:
+            return eMove_ATTENTION_();
+            break;
+        case 0x1a:
+            return 1;
+            break;
+        case 0x1b:
+            return eMove_WLK_();
+        default:
+            return 1;
+            break;
     }
 
 }
@@ -3042,25 +3071,25 @@ BOOL daNpc_Bm1_c::isEventEntry() {
 void daNpc_Bm1_c::event_proc(int arg0) {
     
     short sVar1;
-    if (dComIfGp_evmng_endCheck(m862[m86A])) {
-        sVar1 = m86A;
-        switch(m86A){
+    if (dComIfGp_evmng_endCheck(mEventIdTable[mEventIdx])) {
+        sVar1 = mEventIdx;
+        switch(mEventIdx){
             case 0:
-            m8FD = 1;
-            m87C = 1;
-            break;
+                m8FD = 1;
+                m87C = 1;
+                break;
             case 1:
-            dComIfGs_onEventBit(0x1F40);
-            fopAcM_delete(this);
-            break;
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1F40);
+                fopAcM_delete(this);
+                break;
             case 2:
-            dLetter_send(0xAE03);
-            dComIfGs_onEventBit(0x2180);
-            break;
+                dLetter_send(0xAE03);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2180);
+                break;
             case 3:
-            dComIfGs_onEventBit(0x1E80);
-            fopAcM_delete(this);
-            break;
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1E80);
+                fopAcM_delete(this);
+                break;
 
         }
         endEvent();
@@ -3135,7 +3164,7 @@ void daNpc_Bm1_c::setStt(signed char i_param_1) {
     case 0xd:
         mLookBackState = 2;
         local_20.set(0.0f,1000.0f,100.0f);
-        mAttentionPos = eInit_calcRelativPos(&local_20,NULL);
+        m82C = eInit_calcRelativPos(&local_20,NULL);
         break;
     case 0x10:
         m872 = (g_Counter.mCounter0 & 3) + 1;
@@ -3221,44 +3250,44 @@ BOOL daNpc_Bm1_c::talk_1() {
     talk(1);
     if (mpCurrMsg != NULL) {
         switch (mpCurrMsg->mStatus) {
-        case 0x6:
-        case 2:
+        case fopMsgStts_MSG_TYPING_e:
+        case fopMsgStts_BOX_OPENING_e:
             break;
-        case 0x13:
+        case fopMsgStts_MSG_DESTROYED_e:
             switch (mCurrMsgNo) {
-            case 0xC92:
-                dComIfGs_onEventBit(0x1401);
-                break;
-            case 0x18A2:
-                dComIfGs_onEventBit(0x2202);
-                break;
-            case 0x1997:
-                dComIfGs_onEventBit(0x2120);
-                break;
-            case 0x19A2:
-                dComIfGs_onEventBit(0x2001);
-                break;
-            case 0x19A4:
-                m8FD = 5;
-                break;
-            case 0x1EF6:
-                m8FD = 3;
-                break;
-            case 0x1EF8:
-                dComIfGs_onEventBit(0x1908);
-                break;
-            case 0x1EF7:
-                m87C = 0;
-                break;
+                case 0xC92:
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_1401);
+                    break;
+                case 0x18A2:
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_2202);
+                    break;
+                case 0x1997:
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_2120);
+                    break;
+                case 0x19A2:
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_2001);
+                    break;
+                case 0x19A4:
+                    m8FD = 5;
+                    break;
+                case 0x1EF6:
+                    m8FD = 3;
+                    break;
+                case 0x1EF8:
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_1908);
+                    break;
+                case 0x1EF7:
+                    m87C = 0;
+                    break;
             }
             m87D = 0xFF;
             m895 = false;
             switch(mSpecificType){
-                case Akoot:
-                case Skett:
+                case SPECIFIC_TYPE_Akoot_e:
+                case SPECIFIC_TYPE_Skett_e:
                     setStt(0xB); 
                     break;
-                case Ilari_0xA:
+                case SPECIFIC_TYPE_Ilari_0xA_e:
                     setStt(0xA);
                     break;
                 default:       
@@ -3543,8 +3572,8 @@ BOOL daNpc_Bm1_c::CHKwai() {
         }
         else {
         mLookBackState = 2;
-        mAttentionPos = mPathRun.getPoint(mPathRun.getIdx());
-        mAttentionPos.y = eyePos.y;
+        m82C = mPathRun.getPoint(mPathRun.getIdx());
+        m82C.y = eyePos.y;
         m896 = false;
         m_jnt.setTrn();
         }
@@ -3616,7 +3645,7 @@ BOOL daNpc_Bm1_c::wait_action2(void*) {
     switch(m904){
         case 0:
             setStt(0xC);
-            if(mSpecificType == Kogoli && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) && !dKy_daynight_check()){
+            if(mSpecificType == SPECIFIC_TYPE_Kogoli_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) && !dKy_daynight_check()){
                 current.angle.y -= 0x6000;
                 m818.y = current.angle.y;
             }
@@ -3950,18 +3979,18 @@ BOOL daNpc_Bm1_c::_draw() {
     g_env_light.setLightTevColorType(morf_model,&tevStr);
     switch(mType){
 
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
+        case TYPE_Akoot_e:
+        case TYPE_Skett_e:
+        case TYPE_Basht_e:
+        case TYPE_Bisht_e:
+        case TYPE_Hoskit_e:
             mpMorf->entryDL((J3DMaterialTable*)dComIfG_getObjectRes(mArcName,"bm02.bmt"));
             break;
-        case 1:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
+        case TYPE_Quill_e:
+        case TYPE_Ilari_e:
+        case TYPE_Pashli_e:
+        case TYPE_Namali_e:
+        case TYPE_Kogoli_e:
         default:
             mpMorf->entryDL();
             break;
@@ -3975,23 +4004,21 @@ BOOL daNpc_Bm1_c::_draw() {
     if(mbHasArms){
         g_env_light.setLightTevColorType(mpArmMorf->getModel(),&tevStr);
 
-    
+    J3DMaterialTable* mattable;
     switch(mType){
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-            {
-            J3DMaterialTable* mattable = reinterpret_cast<J3DMaterialTable*>(dComIfG_getObjectRes(mArcName,"bmarm02.bmt"));
+        case TYPE_Akoot_e:
+        case TYPE_Skett_e:
+        case TYPE_Basht_e:
+        case TYPE_Bisht_e:
+        case TYPE_Hoskit_e:
+            mattable = reinterpret_cast<J3DMaterialTable*>(dComIfG_getObjectRes(mArcName,"bmarm02.bmt"));
             mpArmMorf->entryDL(mattable);
-            }
             break;
-        case 1:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
+        case TYPE_Quill_e:
+        case TYPE_Ilari_e:
+        case TYPE_Pashli_e:
+        case TYPE_Namali_e:
+        case TYPE_Kogoli_e:
         default:
             mpArmMorf->entryDL();
             break;
@@ -4023,39 +4050,39 @@ BOOL daNpc_Bm1_c::_draw() {
     }
     shadowDraw();
     switch(mType){
-        case 1:
-            dSnap_RegistFig(0x8D,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Quill_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK8D,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
-        case 2:
-            dSnap_RegistFig(0x8E,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Akoot_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK8E,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
-        case 3:
-            dSnap_RegistFig(0x8E,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Skett_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK8E,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
-        case 4:
-            dSnap_RegistFig(0x93,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Basht_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK93,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
-        case 5:
-            dSnap_RegistFig(0x93,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Bisht_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK93,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
-        case 6:
-            dSnap_RegistFig(0x91,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Hoskit_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK91,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
-        case 7:
-            dSnap_RegistFig(0x90,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Ilari_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK90,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
-        case 8:
-            dSnap_RegistFig(0x97,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Pashli_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK97,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
-        case 9:
-            dSnap_RegistFig(0x92,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Namali_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK92,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
-        case 0xA:
-            dSnap_RegistFig(0x8F,(fopAc_ac_c *)this,1.0,1.0,1.0);
+        case TYPE_Kogoli_e:
+            dSnap_RegistFig(DSNAP_TYPE_UNK8F,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
             break;
     }
 
-    if(l_HIO.children[mType-1].hio_prm.m18 != 0 && mSpecificType == Quill_2){
+    if(l_HIO.children[mType-1].hio_prm.m18 != 0 && mSpecificType == SPECIFIC_TYPE_Quill_2_e){
 
         cXyz somevec = current.pos;
         somevec.y = eyePos.y;
@@ -4187,7 +4214,7 @@ cPhs_State daNpc_Bm1_c::_create() {
         }
 
         fopAcM_SetMtx(this,mpMorf->getModel()->getBaseTRMtx());
-        if(mSpecificType == Quill_0){
+        if(mSpecificType == SPECIFIC_TYPE_Quill_0_e){
             fopAcM_setCullSizeBox(this,-250.0,-20.0,-200.0,250.0,500.0,200.0);
         }else{
             fopAcM_setCullSizeBox(this,-70.0,-20.0,-70.0,70.0,220.0,70.0);
@@ -4312,7 +4339,7 @@ bool daNpc_Bm1_c::create_itm_Mdl() {
     mpBagModel = NULL;
     mpKnifeModel = NULL;
     mpStickModel = NULL;
-    if(mType == 8 || mType == 9){
+    if(mType == TYPE_Pashli_e || mType == TYPE_Namali_e){
         J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes(mArcName,"bm_binder.bdl");
         JUT_ASSERT(DEMO_SELECT(0x1603,0x1616),a_mdl_dat != NULL);
         mpBinderModel = mDoExt_J3DModel__create(a_mdl_dat,0x80000,0x11000002);
@@ -4320,7 +4347,7 @@ bool daNpc_Bm1_c::create_itm_Mdl() {
             return FALSE;
         }
     }
-    if(mType == 1 || mType == 7 || mType == 8){
+    if(mType == TYPE_Quill_e || mType == TYPE_Ilari_e || mType == TYPE_Pashli_e){
         J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes(mArcName,"bm_bag.bdl");
         JUT_ASSERT(DEMO_SELECT(0x1612,0x1625),a_mdl_dat != NULL);
         mpBagModel = mDoExt_J3DModel__create(a_mdl_dat,0x80000,0x11000002);
@@ -4328,7 +4355,7 @@ bool daNpc_Bm1_c::create_itm_Mdl() {
             return FALSE;
         }
     }
-    if(mType == 2 || mType == 3){
+    if(mType == TYPE_Akoot_e || mType == TYPE_Skett_e){
         J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes(mArcName,"bm_knife.bdl");
         JUT_ASSERT(DEMO_SELECT(0x161F,0x1632),a_mdl_dat != NULL);
         mpKnifeModel = mDoExt_J3DModel__create(a_mdl_dat,0x80000,0x11000002);
@@ -4336,7 +4363,7 @@ bool daNpc_Bm1_c::create_itm_Mdl() {
             return FALSE;
         }
     }
-    if(mType == 4 || mType == 5 || mType == 6){
+    if(mType == TYPE_Basht_e || mType == TYPE_Bisht_e || mType == TYPE_Hoskit_e){
         J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes(mArcName,"bm_stick.bdl");
         JUT_ASSERT(DEMO_SELECT(0x162D,0x1640),a_mdl_dat != NULL);
         mpStickModel = mDoExt_J3DModel__create(a_mdl_dat,0x80000,0x11000002);
@@ -4394,14 +4421,8 @@ BOOL daNpc_Bm1_c::CreateHeap() {
         }
         mpMorf->getModel()->setUserArea((u32)this);
         mAcchCir.SetWall(30.0f,50.0f);
-#if VERSION == VERSION_DEMO
-
         mObjAcch.Set(fopAcM_GetPosition_p(this),fopAcM_GetOldPosition_p(this),this,1,&mAcchCir,fopAcM_GetSpeed_p(this),NULL,NULL);
 
-#else
-        mObjAcch.Set(&current.pos,&old.pos,this,1,&mAcchCir,&speed);
-
-#endif
         return TRUE;
 
     }else{

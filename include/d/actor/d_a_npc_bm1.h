@@ -8,47 +8,45 @@
 
 class J3DNode;
 
-typedef s8 SpecificType;
-enum {
-    Quill_0,
-    Quill_1,
-    Quill_2,
-    Quill_3,
-    Quill_4,
-    Akoot,  //0x5
-    Skett,  //0x6
-    Basht,
-    Bisht,
-    Hoskit,
-    Ilari_0xA,
-    Ilari_0xB,
-    Ilari_0xC,
-    Pashli,
-    Namali,
-    Kogoli,
-    Invalid = 0xFF
-};
-
-typedef s8 Type;
-enum{
-    t_Uninitialized,
-    t_Quill,
-    t_Akoot,
-    t_Skett,
-    t_Basht,
-    t_Bisht,
-    t_Hoskit,
-    t_Ilari,
-    t_Pashli,
-    t_Namali,
-    t_Kogoli,
-    t_Invalid = 0xFF,
-};
-
 
 class daNpc_Bm1_c : public fopNpc_npc_c {
 public:
+    typedef s8 SpecificType;
+    enum {
+        SPECIFIC_TYPE_Quill_0_e,
+        SPECIFIC_TYPE_Quill_1_e,
+        SPECIFIC_TYPE_Quill_2_e,
+        SPECIFIC_TYPE_Quill_3_e,
+        SPECIFIC_TYPE_Quill_4_e,
+        SPECIFIC_TYPE_Akoot_e,
+        SPECIFIC_TYPE_Skett_e,
+        SPECIFIC_TYPE_Basht_e,
+        SPECIFIC_TYPE_Bisht_e,
+        SPECIFIC_TYPE_Hoskit_e,
+        SPECIFIC_TYPE_Ilari_0xA_e,
+        SPECIFIC_TYPE_Ilari_0xB_e,
+        SPECIFIC_TYPE_Ilari_0xC_e,
+        SPECIFIC_TYPE_Pashli_e,
+        SPECIFIC_TYPE_Namali_e,
+        SPECIFIC_TYPE_Kogoli_e,
+        SPECIFIC_TYPE_Invalid_e = 0xFF
+    };
 
+    typedef s8 Type;
+    enum{
+        TYPE_Uninitialized_e,
+        TYPE_Quill_e,
+        TYPE_Akoot_e,
+        TYPE_Skett_e,
+        TYPE_Basht_e,
+        TYPE_Bisht_e,
+        TYPE_Hoskit_e,
+        TYPE_Ilari_e,
+        TYPE_Pashli_e,
+        TYPE_Namali_e,
+        TYPE_Kogoli_e,
+        TYPE_Invalid_e = 0xFF,
+    };
     struct anm_prm_c{
         s8 mBckResIndex;
         s8 mResIndex;
@@ -60,14 +58,12 @@ public:
 
     typedef BOOL (daNpc_Bm1_c::*ActionFunc)(void*);
 
-    bool IamKakkuto() {return mSpecificType == Akoot;}
-    bool IamSukketo() {return mSpecificType == Skett;}
+    bool IamKakkuto() {return mSpecificType == SPECIFIC_TYPE_Akoot_e;}
+    bool IamSukketo() {return mSpecificType == SPECIFIC_TYPE_Skett_e;}
     void clr_manzai() {mbManzai = false;}
-    cXyz& getOdoroki() { return attention_info.position;}
+    bool getOdoroki() { return m880;}
     s8 getStt() { return mStatus;}
-    u16 get_oldMsgStat() {
-        return mOldMsgStat;
-    }
+    u16 get_oldMsgStat() {return mOldMsgStat;}
     void setFocus() {m882 = true;}
     void setTelescopeDemo() {m881 = true;}
     void set_manzai() {mbManzai = true;}
@@ -235,83 +231,84 @@ public:
     /* 0x6D2 */ s8 m_nec_jnt_num;
     /* 0x6D3 */ s8 m_arm_L_jnt_num;
     /* 0x6D4 */ s8 m_arm_R_jnt_num;
-                J3DModel* mpBinderModel;
-                J3DModel* mpBagModel;
-                J3DModel* mpKnifeModel;
-                J3DModel* mpStickModel;
+    /* 0x6D8 */ J3DModel* mpBinderModel;
+    /* 0x6DC */ J3DModel* mpBagModel;
+    /* 0x6E0 */ J3DModel* mpKnifeModel;
+    /* 0x6E4 */ J3DModel* mpStickModel;
     /* 0x6E8 */ u32 mShadowID;
     /* 0x6EC */ mDoExt_McaMorf* mpHeadMorf;
     /* 0x6F0 */ J3DAnmTexPattern* m_hed_tex_pttrn;
     /* 0x6F4 */ mDoExt_btpAnm mHeadBtpAnm;
     /* 0x708 */ u8 mBlinkFrame;
-                // u8 pad709;
-                s16 mBlinkTimer;
-                s16 pad70C;
+    /* 0x709    u8 pad709; */
+    /* 0x70A */ s16 mBlinkTimer;
+    /* 0x70C */ s16 pad70C;
     /* 0x710 */ mDoExt_McaMorf* mpWingMorf;
-                s8 m_wngL1_jnt_num;
-                s8 m_wngR1_jnt_num;
-                s8 m_wngL3_jnt_num;
-                s8 m_wngR3_jnt_num;
+    /* 0x714 */ s8 m_wngL1_jnt_num;
+    /* 0x715 */ s8 m_wngR1_jnt_num;
+    /* 0x716 */ s8 m_wngL3_jnt_num;
+    /* 0x717 */ s8 m_wngR3_jnt_num;
     /* 0x718 */ u8 pad718[0x71C - 0x718];   //Possibly an unused mDoExt_McaMorf* ?
     /* 0x71C */ mDoExt_McaMorf* mpArmMorf;
     /* 0x720 */ s8 m_armL1_jnt_num;
     /* 0x721 */ s8 m_armR1_jnt_num;
     /* 0x722 */ s8 m_armL2_jnt_num;
-    /* 0x722 */ s8 m_armR2_jnt_num;
-    /* 0x723 */ s8 m_hnd_R_jnt_num;
-    /* 0x724 */ ActionFunc mCurrActionFunc;
+    /* 0x723 */ s8 m_armR2_jnt_num;
+    /* 0x724 */ s8 m_hnd_R_jnt_num;
+    /* 0x728 */ ActionFunc mCurrActionFunc;
     /* 0x734 */ Mtx mLeftArmMtx;
     /* 0x764 */ Mtx mRightArmMtx;
     /* 0x794 */ dNpc_PathRun_c mPathRun;
-                dNpc_EventCut_c mEventCut;
-                fpc_ProcID mPartnerProcID;
+    /* 0x79C */ dNpc_EventCut_c mEventCut;
+    /* 0x808 */ fpc_ProcID mPartnerProcID;
     /* 0x80C */ cXyz mInitialPos;
     /* 0x818 */ csXyz m818;
-    /* 0x81E */ u8 m81E[0x820 - 0x81E];
+    /* 0x81E    u8 pad81E[0x820 - 0x81E]; */
     /* 0x820 */ cXyz mEyePos;
-                cXyz mAttentionPos;
+    /* 0x82C */ cXyz m82C;
     /* 0x838 */ cXyz mTargetPos;
-                f32 mFrame;
-    /* 0x844 */ f32 mTargetFlySpeed;
-                f32 mFlySpeedY;
-                f32 mTargetFlyStep;
-                f32 mFlyAccelY;
-                f32 m858;
-                s16 m85C;
-                s16 m85E;
-                s16 m860;
-                s16 m862[4];
-                s16 m86A;
-                s16 m86C;
+    /* 0x844 */ f32 mFrame;
+    /* 0x848 */ f32 mTargetFlySpeed;
+    /* 0x84C */ f32 mFlySpeedY;
+    /* 0x850 */ f32 mTargetFlyStep;
+    /* 0x854 */ f32 mFlyAccelY;
+    /* 0x858 */ f32 m858;
+    /* 0x85C */ s16 m85C;
+    /* 0x85E */ s16 m85E;
+    /* 0x860 */ s16 m860;
+    /* 0x862 */ s16 mEventIdTable[4];
+    /* 0x86A */ s16 mEventIdx;
+    /* 0x86C */ s16 m86C;
     /* 0x86E */ s16 m86E;
     /* 0x870 */ s16 m870;
     /* 0x872 */ s16 m872;
     /* 0x874 */ s16 mHeadLookAtMaxVel;
     /* 0x876 */ s16 m876;
     /* 0x878 */ u16 mOldMsgStat;
-                s8 mbMorfAnimStopped;
-                s8 m87B;
-                s8 m87C;
-                u8 m87D;
-                u8 m87E;
+    /* 0x87A */ s8 mbMorfAnimStopped;
+    /* 0x87B */ s8 m87B;
+    /* 0x87C */ s8 m87C;
+    /* 0x87D */ u8 m87D;
+    /* 0x87E */ u8 m87E;
     /* 0x87F */ bool m87F;
-
+private:
     /* 0x880 */ bool m880;
     /* 0x881 */ bool m881;
-    /* 0x882 */ u8 m882;
-                bool mbManzai;
+    /* 0x882 */ bool m882;
+public:
+    /* 0x883 */ bool mbManzai;
     /* 0x884 */ bool mbInitPostman0;
-                bool mbHasArms;
-                bool mbSetShapeAngle;
+    /* 0x885 */ bool mbHasArms;
+    /* 0x886 */ bool mbSetShapeAngle;
     /* 0x887 */ u8 m887;
     /* 0x888 */ u8 m888;
-                bool m889;
-                bool m88A;
-                u8 m88B;
-                bool mbRanExecute;
-                u8 m88D;
-                u8 m88E;
-                u8 m88F;                
+    /* 0x889 */ bool m889;
+    /* 0x88A */ bool m88A;
+    /* 0x88B */ u8 m88B;
+    /* 0x88C */ bool mbRanExecute;
+    /* 0x88D */ u8 m88D;
+    /* 0x88E */ u8 m88E;
+    /* 0x88F */ u8 m88F;                
     /* 0x890 */ s32 mbSetEyePos;
     /* 0x894 */ bool mbAttention;
     /* 0x895 */ bool m895;
@@ -334,7 +331,7 @@ public:
     /* 0x8EC */ JPABaseEmitter* mpFeather1EmitterL;
     /* 0x8F0 */ JPABaseEmitter* mpFeather1EmitterR;
 #if VERSION == VERSION_DEMO
-    /* 0x900 */ u32 mDemoOnly;  //Possibly an unused emitter
+    /* 0x8F4 */ u32 mDemoOnly;  //Possibly an unused emitter
 #endif
     /* 0x8F4 */ s8 m8F4;
     /* 0x8F5 */ s8 m8F5;
@@ -347,48 +344,13 @@ public:
     /* 0x8FD */ s8 m8FD;
     /* 0x8FE */ s8 mStatus;
     /* 0x8FF */ s8 m8FF;
-
     /* 0x900 */ s8 mLookBackState;
     /* 0x901 */ s8 mType;
     /* 0x902 */ SpecificType mSpecificType;
     /* 0x903 */ s8 mSpawnCondition;
     /* 0x904 */ s8 m904;
     /* 0x904 */ s8 m905;   
-
-
 }; 
 STATIC_ASSERT(sizeof(daNpc_Bm1_c) == DEMO_SELECT(0x90C,0x908));
-
-
-struct hio_prm_c{
-    s16 mMaxHeadX;
-    s16 mMaxHeadY;
-    s16 mMinHeadX;
-    s16 mMinHeadY;
-    s16 mMaxBackboneX;
-    s16 mMaxBackboneY;
-    s16 mMinBackboneX;
-    s16 mMinBackboneY;
-    s16 mMaxTurnStep;
-    s16 mCalcAngleTarget;
-    f32 mAttPosOffsetY;
-    u8 m18;
-    s16 mFlyScale;
-    s16 mFlyMaxStep;
-    s16 m1E;
-    f32 m20;
-    f32 m24;
-    f32 m28;
-    f32 m2C;
-    f32 m30;
-    s16 m34;
-    s16 m36;
-    f32 m38;
-    f32 m3C;
-    f32 m40;
-    f32 m44;
-    f32 m48;
-};
-
 
 #endif /* D_A_NPC_BM1_H */

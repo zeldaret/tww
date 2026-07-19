@@ -1609,7 +1609,7 @@ bool daNpc_Ls1_c::telescope_proc() {
             case 1:
                 temp_msg_no = m810;
                 m810 = 0xBC1;
-                if (chkTelescope_sph(bm1_npc_p->getOdoroki(), 0.0f, l_HIO.mPrm.m2C)) {
+                if (chkTelescope_sph(bm1_npc_p->attention_info.position, 0.0f, l_HIO.mPrm.m2C)) {
                     u32 temp;
                     if (dComIfGp_getCameraZoomScale(0) >= l_HIO.mPrm.m24) {
                         temp = 0xBCB;
@@ -1635,7 +1635,7 @@ bool daNpc_Ls1_c::telescope_proc() {
                 }
                 break;
             case 3:
-                if (m810 == 0 && bm1_npc_p->m880) {
+                if (m810 == 0 && bm1_npc_p->getOdoroki()) {
                     if (scope_mesg_status == fopMsgStts_CLOSE_WAIT_e) {
                         fopMsgM_forceSendOn();
                     } else if (fopMsgM_releaseScopeMode()) {
