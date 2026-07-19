@@ -28,13 +28,13 @@ const char daObjTrap_c::M_arcname[] = "Trap";
 
 static dCcD_SrcCyl l_daObjTrap_cyl_data = {
     {
-        cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        0,
         AT_TYPE_SPIKE,
         1,
         5,
         0,
         0,
-        0,
+        cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
         dCcG_SE_NONE,
         dCcG_AtHitMark_None_e,
         dCcG_At_Spl_UNK1,
@@ -62,8 +62,8 @@ int daObjTrap_c::create_heap() {
     if (mdl_data){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
         if (mpModel != NULL){
-            J3DAnmTextureSRTKey* btk_data = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(
-                M_arcname, dRes_ID_TRAP_BTK_HTORA1_e);
+            J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(
+                dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_BTK_HTORA1_e));
             JUT_ASSERT(364, btk_data != NULL);
             if (btk_data){
                 int btk_anm_init_result = mBtkAnm.init(mdl_data, btk_data, true, JUTGamePad::CRumble::LOOP_ONCE, 1.0, 0, -1, false, FALSE);
@@ -101,9 +101,8 @@ cPhs_State daObjTrap_c::_create() {
                     mSpeed = M_speed_table[mSpeedType];
                     mWaitFrame = M_wait_f_table[mSpeedType];
                     dPnt* first_point = mpPath->m_points;
-                    f32 z = first_point->m_position.z;
-                    current.pos.x = first_point->m_position.x;
-                    current.pos.z = z;
+                    current.pos.set(first_point->m_position.x, current.pos.y,
+                                    first_point->m_position.z);
                     set_move_info();
                     cXyz path_diff = mNextPathPos - mPathPos;
                     mPathLength = cXyz(path_diff.x, 0.0f, path_diff.z).abs();
