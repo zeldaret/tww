@@ -200,9 +200,9 @@ int daObjTrap_c::check_arrival() {
 
 /* 000013E4-000018E4       .text check_wall__11daObjTrap_cFv */
 cXyz daObjTrap_c::check_wall() {
-    static const s16 angle_y[] = {0, 0x4000, -0x4000};
-    static const f32 trans_a[] = {0.0f, 145.0f, 145.0f};
-    static dBgS_ObjLinChk lin_chk;
+    static dBgS_ObjLinChk wall_work;
+    static const s16 angleY[] = {0, 0x4000, -0x4000};
+    static const f32 transA[] = {0.0f, 145.0f, 145.0f};
 
     cXyz forward = mPathDirection * 150.0f;
     cXyz start;
@@ -213,19 +213,19 @@ cXyz daObjTrap_c::check_wall() {
     cXyz wall_offset = cXyz::Zero;
 
     for (int i = 0; i < 3; i++) {
-        mDoMtx_stack_c::YrotS(angle_y[i]);
+        mDoMtx_stack_c::YrotS(angleY[i]);
         mDoMtx_stack_c::multVec(&mPathDirection, &offset);
-        offset *= trans_a[i];
+        offset *= transA[i];
         offset += upward;
 
         start = current.pos + offset;
         end = start + mPathOffset;
         end += forward;
-        lin_chk.Set(&start, &end, this);
-        lin_chk.SetActorPid(fopAcM_GetID(this));
+        wall_work.Set(&start, &end, this);
+        wall_work.SetActorPid(fopAcM_GetID(this));
 
-        if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
-            hit = lin_chk.GetCross();
+        if (dComIfG_Bgsp()->LineCross(&wall_work)) {
+            hit = wall_work.GetCross();
             hit -= start;
             if (wall_offset == cXyz::Zero || wall_offset.absXZ() > hit.absXZ()) {
                 wall_offset = hit + current.pos - forward;
@@ -256,8 +256,8 @@ int daObjTrap_c::check_block_target_pos(cXyz* target_pos) {
 
 /* 00001D7C-000023D4       .text check_block__11daObjTrap_cF4cXyz */
 cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
-    static s16 angle_y[] = {0x4000, -0x4000};
-    static dBgS_ObjLinChk lin_chk;
+    static dBgS_ObjLinChk wall_work;
+    static s16 angleY[] = {0x4000, -0x4000};
 
     cXyz forward = mPathDirection * 150.0f;
     cXyz start;
@@ -269,7 +269,7 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
     cXyz upward = cXyz::BaseY * 75.0f;
 
     for (int i = 0; i < 2; i++) {
-        mDoMtx_stack_c::YrotS(angle_y[i]);
+        mDoMtx_stack_c::YrotS(angleY[i]);
         mDoMtx_stack_c::multVec(&mPathDirection, &offset);
         offset *= 153.0f;
         offset += upward;
@@ -277,11 +277,11 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
         start = current.pos + offset;
         end = start + mPathOffset;
         end += forward;
-        lin_chk.Set(&start, &end, this);
-        lin_chk.SetActorPid(fopAcM_GetID(this));
+        wall_work.Set(&start, &end, this);
+        wall_work.SetActorPid(fopAcM_GetID(this));
 
-        if (dComIfG_Bgsp()->LineCross(&lin_chk)) {
-            fopAc_ac_c* actor = dComIfG_Bgsp()->GetActorPointer(lin_chk);
+        if (dComIfG_Bgsp()->LineCross(&wall_work)) {
+            fopAc_ac_c* actor = dComIfG_Bgsp()->GetActorPointer(wall_work);
             if (actor != NULL && fopAc_IsActor(actor) &&
                 fopAcM_GetName(actor) == fpcNm_Obj_Movebox_e) {
                 daObjMovebox::Act_c* movebox = static_cast<daObjMovebox::Act_c*>(actor);
@@ -305,7 +305,7 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
                     check_target = false;
                 }
                 if (check_target && check_block_target_pos(&target_pos)) {
-                    hit = lin_chk.GetCross();
+                    hit = wall_work.GetCross();
                     hit -= start;
                     if (block_offset == cXyz::Zero ||
                         block_offset.absXZ() > hit.absXZ()) {
