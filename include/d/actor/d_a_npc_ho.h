@@ -44,16 +44,15 @@ public:
     
     typedef int (daNpc_Ho_c::*ActionFunc)(void*);
 
-
-    bool ChkOrder(u8 temp) { return mOrderFlags & temp; }
+    BOOL ChkOrder(u8 flag) { return mOrderFlags & flag; }
     void ClrOrder() { mOrderFlags = 0; }
     void SetOrder(u8 temp) { mOrderFlags |= temp; }
     bool chkFlag(u16 flag) { return (mFlags & flag) == flag; }
     void clrFlag(u16 flag) { mFlags &= ~flag; }
 
     s8 getBackboneJntNum() { return m_jnt.getBackboneJntNum(); }
-    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
     s8 getHeadJntNum() { return m_jnt.getHeadJntNum(); }
+    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
     s16 getHead_x() { return m_jnt.getHead_x(); }
     s16 getHead_y() { return m_jnt.getHead_y(); }
 
