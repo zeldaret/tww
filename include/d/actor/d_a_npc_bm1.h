@@ -265,7 +265,7 @@ public:
     /* 0x794 */ dNpc_PathRun_c mPathRun;
                 dNpc_EventCut_c mEventCut;
                 fpc_ProcID mPartnerProcID;
-    /* 0x80C */ cXyz m80C;
+    /* 0x80C */ cXyz mInitialPos;
     /* 0x818 */ csXyz m818;
     /* 0x81E */ u8 m81E[0x820 - 0x81E];
     /* 0x820 */ cXyz mEyePos;
