@@ -1851,7 +1851,7 @@ void fopMsgM_arrowAnime(J2DPicture* i_iconPic, s16* param_2) {
 }
 
 /* 80031808-800319D8       .text selectCheck2__21fopMsgM_msgDataProc_cFP7J2DPaneiii */
-int fopMsgM_msgDataProc_c::selectCheck2(J2DPane* param_1, int param_2, int param_3, int param_4) {
+u8 fopMsgM_msgDataProc_c::selectCheck2(J2DPane* param_1, int param_2, int param_3, int param_4) {
     field_0x264 = param_1->getWidth() / 2.0f;
     field_0x268 = param_1->getHeight() / 2.0f;
     field_0x278 = g_msgHIO.field_0x70;
@@ -1881,7 +1881,7 @@ int fopMsgM_msgDataProc_c::selectCheck2(J2DPane* param_1, int param_2, int param
 }
 
 /* 800319D8-80031C38       .text selectCheck3__21fopMsgM_msgDataProc_cFP7J2DPaneiii */
-int fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param_3, int param_4) {
+u8 fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param_3, int param_4) {
     field_0x264 = param_1->getWidth() / 2.0f;
     field_0x268 = param_1->getHeight() / 2.0f;
     field_0x278 = g_msgHIO.field_0x70;
@@ -1919,7 +1919,7 @@ int fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param
 }
 
 /* 80031C38-80031E04       .text selectCheckYoko__21fopMsgM_msgDataProc_cFP7J2DPaneiii */
-int fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane* param_1, int param_2, int param_3, int param_4) {
+u8 fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane* param_1, int param_2, int param_3, int param_4) {
     field_0x264 = param_1->getWidth() / 2.0f;
     field_0x268 = param_1->getHeight() / 2.0f;
     field_0x278 = g_msgHIO.field_0x70;
@@ -1949,7 +1949,7 @@ int fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane* param_1, int param_2, int pa
 }
 
 /* 80031E04-800320E0       .text inputNumber__21fopMsgM_msgDataProc_cFi */
-int fopMsgM_msgDataProc_c::inputNumber(int param_1) {
+u8 fopMsgM_msgDataProc_c::inputNumber(int param_1) {
     s16 temp = dComIfGp_getMessageSetNumber();
     bool temp2 = false;
 

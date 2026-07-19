@@ -2065,7 +2065,7 @@ BOOL daNpc_Bs1_c::_draw() {
         }
     }
     
-    dSnap_RegistFig(DSNAP_TYPE_BS, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_BS1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
     
     return TRUE;
 }

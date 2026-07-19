@@ -819,7 +819,7 @@ bool daNpcPhoto_c::_draw() {
             l_pso_photo.field_0x08
         );
         temp += current.pos;
-        obj.SetInf(5, this, l_pso_photo.field_0x16, l_pso_photo.field_0x17, 0x7FFF);
+        obj.SetInf(DSNAP_TYPE_UNK05, this, l_pso_photo.field_0x16, l_pso_photo.field_0x17, 0x7FFF);
         obj.SetGeo(temp, l_pso_photo.field_0x0C, l_pso_photo.field_0x10, l_pso_photo.field_0x14 + current.angle.y);
         dSnap_RegistSnapObj(obj);
     } else {

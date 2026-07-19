@@ -489,6 +489,7 @@ public:
     u8 getVibration() { return mVibration; }
     void setVibration(u8 vib) { mVibration = vib; }
 
+private:
     /* 0x0 */ u8 mRuby;
     /* 0x1 */ u8 mSoundMode;
     /* 0x2 */ u8 mAttentionType;

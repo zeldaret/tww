@@ -639,7 +639,7 @@ BOOL daNpc_Km1_c::_draw() {
             dComIfG_Bgsp()->GetTriPla(mObjAcch.m_gnd)->GetNP()
         );
     }
-    dSnap_RegistFig(DSNAP_TYPE_KM1,this,1.0f,1.0f,1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_KM1,this,1.0f,1.0f,1.0f);
 
     // Color literals for debug drawing. Unused in non-debug builds.
     (GXColor){0xFF,0x00, 0x00, 0x80};

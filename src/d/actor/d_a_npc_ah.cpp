@@ -339,7 +339,7 @@ bool daNpcAh_c::_draw() {
                                      mObjAcch.GetGroundH(),
                                      mObjAcch.m_gnd, 
                                      &tevStr);
-    dSnap_RegistFig(DSNAP_TYPE_UNK7F, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_AH, this, 1.0f, 1.0f, 1.0f);
     return true;
 }
 
