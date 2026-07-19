@@ -52,26 +52,25 @@ static dCcD_SrcCyl l_daObjTrap_cyl_data = {
 
 /* 0000010C-000002A4       .text create_heap__11daObjTrap_cFv */
 int daObjTrap_c::create_heap() {
-    /* Nonmatching */
     J3DModelData* mdl_data;
     int result = false;
 
     mdl_data = static_cast<J3DModelData*>(
         dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_BDL_HTORA1_e));
     JUT_ASSERT(355, mdl_data != NULL);
-    if (mdl_data){
+    if (mdl_data) {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
-        if (mpModel != NULL){
+        if (mpModel != NULL) {
             J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(
                 dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_BTK_HTORA1_e));
             JUT_ASSERT(364, btk_data != NULL);
-            if (btk_data){
+            if (btk_data) {
                 int btk_anm_init_result = mBtkAnm.init(mdl_data, btk_data, true, JUTGamePad::CRumble::LOOP_ONCE, 1.0, 0, -1, false, FALSE);
-                if (btk_anm_init_result){
+                if (btk_anm_init_result) {
                     mpcBgW = D_BG_W_H::dBgW_NewSet(
                         (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_DZB_HTORA1_e),
                         cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
-                    if (mpcBgW != NULL){
+                    if (mpcBgW != NULL) {
                         result = true;
                     }
                 }
@@ -237,8 +236,8 @@ cXyz daObjTrap_c::check_wall() {
 }
 
 /* 00001C88-00001D7C       .text check_block_target_pos__11daObjTrap_cFP4cXyz */
-int daObjTrap_c::check_block_target_pos(cXyz* target_pos) {
-    cXyz offset = *target_pos - current.pos;
+int daObjTrap_c::check_block_target_pos(cXyz* i_target_pos) {
+    cXyz offset = *i_target_pos - current.pos;
     f32 dot = mPathDirection.x * offset.x + mPathDirection.z * offset.z;
     int result = false;
 
@@ -254,23 +253,24 @@ int daObjTrap_c::check_block_target_pos(cXyz* target_pos) {
     return result;
 }
 
-static inline void set_movebox_target(cXyz* target_pos, daObjMovebox::Act_c* movebox,
-                                      fopAc_ac_c* actor) {
+static inline void set_movebox_target(cXyz* o_target_pos, daObjMovebox::Act_c* i_movebox,
+                                      fopAc_ac_c* i_actor) {
     mDoMtx_stack_c::push();
-    mDoMtx_stack_c::YrotS(movebox->home.angle.y);
-    mDoMtx_stack_c::transM((f32)movebox->m628, 0.0f, (f32)movebox->m62C);
+    mDoMtx_stack_c::YrotS(i_movebox->home.angle.y);
+    mDoMtx_stack_c::transM((f32)i_movebox->m628, 0.0f, (f32)i_movebox->m62C);
     MtxP mtx = mDoMtx_stack_c::get();
     Vec box_offset;
     box_offset.x = mtx[0][3];
     box_offset.y = mtx[1][3];
     box_offset.z = mtx[2][3];
-    mDoMtx_stack_c::YrotS(movebox->home.angle.y +
-                          daObjMovebox::Act_c::M_dir_base[movebox->m634]);
+    mDoMtx_stack_c::YrotS(i_movebox->home.angle.y +
+                          daObjMovebox::Act_c::M_dir_base[i_movebox->m634]);
     Vec box_dir;
     mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &box_dir);
     mDoMtx_stack_c::pop();
 
-    *target_pos = (reinterpret_cast<cXyz&>(box_offset) + box_dir) * 75.0f + actor->home.pos;
+    *o_target_pos =
+        (reinterpret_cast<cXyz&>(box_offset) + box_dir) * 75.0f + i_actor->home.pos;
 }
 
 /* 00001D7C-000023D4       .text check_block__11daObjTrap_cF4cXyz */

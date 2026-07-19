@@ -42,7 +42,6 @@ public:
     static s16 const M_wait_f_table[];
 
 public:
-    /* Place member variables here */
     /* 0x290 */ J3DModel* mpModel;
     /* 0x294 */ mDoExt_btkAnm mBtkAnm;
     /* 0x2A8 */ request_of_phase_process_class mPhase;
@@ -70,10 +69,8 @@ public:
     /* 0x4DF */ u8 mMode;
     /* 0x4E0 */ u8 mShineStatus;
     /* 0x4E1 */ u8 mSpeedType;
-    /* 0x4E2 */ u8 mPad4E2[2];
     /* 0x4E4 */ f32 mSpeed;
     /* 0x4E8 */ s16 mWaitFrame;
-    /* 0x4EA */ u8 mPad4EA[2];
     /* 0x4EC */ dBgW* mpcBgW;
 };
 
