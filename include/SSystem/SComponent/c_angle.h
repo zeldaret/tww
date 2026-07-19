@@ -158,8 +158,8 @@ public:
     const cSAngle& U() const { return mInclination; }
 
     void R(f32 i_radius) { mRadius = i_radius; }
-    void U(cSAngle const& i_inclination) { mInclination = i_inclination.Val(); }
-    void V(cSAngle const& i_azimuth) { mAzimuth = i_azimuth.Val(); }
+    void U(cSAngle const& i_azimuth) { mAzimuth = i_azimuth.Val(); }
+    void V(cSAngle const& i_inclination) { mInclination = i_inclination.Val(); }
 
     cXyz Xyz() const;
     void Polar(cSPolar*) const;
