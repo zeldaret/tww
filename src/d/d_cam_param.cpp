@@ -11,12 +11,61 @@
 
 /* 800AF384-800AF4F4       .text rationalBezierRatio__8dCamMathFff */
 f32 dCamMath::rationalBezierRatio(f32 x, f32 y) {
-    /* Nonmatching */
+    double a;
+    double negA;
+    double sign;
+    double b;
+    double disc;
+    double root;
+    double denomT;
+    double t;
+    double tSquared;
+    double omt;
+    double omtSquared;
+    double crossTerm;
+    double denom;
+
+    if (x >= 0.0f) {
+        sign = 1.0;
+    } else {
+        sign = -1.0;
+        x = -x;
+    }
+
+    a = (x * 2.0 * y - x * 2.0) - y * 2.0;
+    negA = -a;
+    b = negA - 1.0;
+    disc = a * a - b * 4.0 * x;
+
+    root = 0.0;
+    if (disc > 0.0) {
+        root = sqrt(disc);
+    }
+
+    root = negA - root;
+
+    denomT = b * 2.0;
+    if (denomT > 1e-7 || denomT < -1e-7) {
+        t = root / denomT;
+        tSquared = t * t;
+        omt = 1.0 - t;
+        omtSquared = omt * omt;
+        crossTerm = ((omt * 2.0) * t) * y;
+        denom = tSquared + (omtSquared + crossTerm);
+
+        if (denom > (f32)1e-7) {
+            return sign * (tSquared / denom);
+        }
+
+        return 0.0f;
+    }
+
+    return 0.0f;
 }
 
 /* 800AF4F4-800AF544       .text customRBRatio__8dCamMathFff */
 f32 dCamMath::customRBRatio(f32 x, f32 y) {
-    if (x > 0.70710677f) {
+    if (x > M_SQRT1_2) {
         if (x < 0.0f) {
             return -1.0f;
         } else {
@@ -24,7 +73,7 @@ f32 dCamMath::customRBRatio(f32 x, f32 y) {
         }
     }
 
-    return rationalBezierRatio(x * 1.4142135f, y);
+    return rationalBezierRatio(x * M_SQRT2, y);
 }
 
 /* 800AF544-800AF5A0       .text zoomFovy__8dCamMathFff */
@@ -61,19 +110,19 @@ f32 dCamMath::xyzHorizontalDistance(cXyz& a, cXyz& b) {
 
 /* 800AF734-800AF810       .text xyzProjPosOnYZ__8dCamMathF7cSAngleR4cXyzR4cXyz */
 cXyz dCamMath::xyzProjPosOnYZ(cSAngle angle, cXyz& a, cXyz& b) {
-    /* Nonmatching */
     cXyz line;
     cXyz rot;
+
     line = b - a;
     rot = xyzRotateY(line, -angle);
     rot.x = 0.0f;
     line = xyzRotateY(rot, angle);
-    return b + line;
+
+    return a + line;
 }
 
 /* 800AF810-800AF838       .text __ct__9dCstick_cFv */
 dCstick_c::dCstick_c() {
-    /* Nonmatching */
     m00 = 0.2f;
     m04 = 0.95f;
     m08 = 6;
@@ -86,7 +135,33 @@ s32 dCstick_c::Shift(u32) {
 
 /* 800AF840-800AF8F4       .text __ct__11dCamBGChk_cFv */
 dCamBGChk_c::dCamBGChk_c() {
-    /* Nonmatching */
+    mFloorMargin = 32.0f;
+
+    mChkInfo[0].mDistance = 1.0f;
+    mChkInfo[0].mChkAngle = 25.0f;
+    mChkInfo[0].mWeightH = 0.4f;
+    mChkInfo[0].mWeightL = 0.8f;
+
+    mChkInfo[1].mDistance = 3.0f;
+    mChkInfo[1].mChkAngle = 15.0f;
+    mChkInfo[1].mWeightH = 0.5f;
+    mChkInfo[1].mWeightL = 0.3f;
+
+    mFwdBackMargin = 10.0f;
+    mFwdCushion = 0.1f;
+    m2C = 0.2f;
+    mGazeBackMargin = 10.0f;
+    mCornerCushion = 0.75f;
+    mWallCushion = 0.25f;
+    mWallUpDistance = 80.0f;
+    mWallBackCushion = 0.08f;
+    mCornerAngleMax = 120.0f;
+    m48 = 300.0f;
+    m4C = 80.0f;
+    m50 = 0.25f;
+    m54 = 0.25f;
+    m5C = 70.0f;
+    m58 = 90.0f;
 }
 
 /* 800AF8F4-800AF930       .text __ct__11dCamParam_cFl */
@@ -138,36 +213,71 @@ f32 dCamParam_c::ratiof(f32 t, f32 upper, f32 lower, f32 base) {
 
 /* 800AFAA4-800AFB00       .text DefaultRadius__11dCamParam_cFPf */
 BOOL dCamParam_c::DefaultRadius(f32* radius) {
-    /* Nonmatching */
-    f32 min, max;
-    if (mpStyle->styleParam[dCamStyleParam_UNK13] < mpStyle->styleParam[dCamStyleParam_UNK14]) {
-        min = mpStyle->styleParam[dCamStyleParam_UNK13];
-        max = mpStyle->styleParam[dCamStyleParam_UNK14];
+    f32 param13;
+    f32 param14;
+    f32 min;
+    f32 max;
+
+    param13 = mpStyle->styleParam[dCamStyleParam_UNK13];
+    param14 = mpStyle->styleParam[dCamStyleParam_UNK14];
+
+    if (param13 < param14) {
+        min = param13;
+        max = param14;
     } else {
-        min = mpStyle->styleParam[dCamStyleParam_UNK14];
-        max = mpStyle->styleParam[dCamStyleParam_UNK13];
+        max = param13;
+        min = param14;
     }
 
     if (*radius > max) {
         *radius = max;
         return FALSE;
-    } else if (*radius < min) {
+    }
+
+    if (*radius < min) {
         *radius = min;
         return FALSE;
-    } else {
-        return TRUE;
     }
+
+    return TRUE;
 }
 
 /* 800AFB00-800AFB88       .text RadiusRatio__11dCamParam_cFf */
-f32 dCamParam_c::RadiusRatio(f32) {
-    /* Nonmatching */
+f32 dCamParam_c::RadiusRatio(f32 r) {
+    f32 center = mpStyle->styleParam[dCamStyleParam_UNK10];
+
+    if (r < center) {
+        f32 dist = center - r;
+        f32 span =
+            center - mpStyle->styleParam[dCamStyleParam_UNK11];
+
+        if (dist >= span) {
+            return -1.0f;
+        }
+
+        if (span > 0.0001f) {
+            return -dist / span;
+        }
+    } else if (r > center) {
+        f32 dist = r - center;
+        f32 span =
+            mpStyle->styleParam[dCamStyleParam_UNK12] - center;
+
+        if (dist >= span) {
+            return 1.0f;
+        }
+
+        if (span > 0.0001f) {
+            return dist / span;
+        }
+    }
+
+    return 0.0f;
 }
 
 /* 800AFB88-800AFBB8       .text CenterHeight__11dCamParam_cFf */
 f32 dCamParam_c::CenterHeight(f32 t) {
     return ratiof(t, mpStyle->styleParam[dCamStyleParam_CENTER_HEIGHT_UPPER], mpStyle->styleParam[dCamStyleParam_CENTER_HEIGHT_LOWER], mpStyle->styleParam[dCamStyleParam_CENTER_HEIGHT_BASE]);
-    /* Nonmatching */
 }
 
 /* 800AFBB8-800AFBE8       .text Fovy__11dCamParam_cFf */
@@ -205,11 +315,11 @@ f32 dCamParam_c::LockonCenterHeight(f32 t) {
 
 /* 800AFD40-800AFEE0       .text __ct__11dCamSetup_cFv */
 dCamSetup_c::dCamSetup_c() {
-    /* Nonmatching - regalloc */
     mDrawNear = 1.0f;
     mDrawFar = 100000.0f;
     m00C = 1;
     mForceType = mModeSwitchType = -1;
+
     mCusCus = 0.2f;
     m024 = 0.05f;
     m060 = 80.0f;
@@ -226,9 +336,11 @@ dCamSetup_c::dCamSetup_c() {
     mCurveWeight = 1.0f;
     m034 = 25.0f;
     m048 = 70.0f;
+
     mParallelDist = 60.0f;
     mTrimVistaHeight = 52.0f;
     mTrimCineScopeHeight = 65.0f;
+
     m094 = 150;
     m098 = 60.0f;
     m09C = 0.3f;
@@ -243,6 +355,7 @@ dCamSetup_c::dCamSetup_c() {
     mChargeBRatio = 0.15f;
     mManualStartCThreshold = 0.66f;
     mManualEndVal = 0.0f;
+
     m06C = 45.0f;
     mForceLockOffDist = 1800.0f;
     mForceLockOffTimer = 120;
@@ -250,7 +363,8 @@ dCamSetup_c::dCamSetup_c() {
     m07C = 0.4f;
     m080 = 10.0f;
     m084 = 4.0f;
-    m0C0 = 1.0f;
+
+    m0C0 = 60.0f;
     mLockonChangeCushion = 100.0f;
     mLockonChangeTimer = -1;
 }
