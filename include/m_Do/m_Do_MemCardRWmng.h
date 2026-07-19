@@ -16,7 +16,11 @@ struct mDoMemCdRWm_HeaderData
 
 struct card_pictdata
 {
-    /* 0x0000 */ u8 data[0x2000 - sizeof(u16)];
+    /* 0x0000 */ u8 tex_buffer[0x1EE0]; // Holds the texture data for one 152x104 CMPR texture
+    /* 0x1EE0 */ u32 snap_result; // Photo index
+    /* 0x1EE4 */ u8 snap_result_detail;
+    /* 0x1EE5 */ u8 capture_format; // The format the capture was done in (not the same as the format of tex_buffer)
+    /* 0x1EE6 */ u8 field_0x1EE6[0x1FFE - 0x1EE6];
     /* 0x1FFE */ u16 csum;
 };  // Size: 0x2000
 
@@ -30,10 +34,10 @@ struct card_gamedata
 
 struct card_savedata
 {
-    /* 0x0000 */ u32 saveCount;
-    /* 0x0004 */ u32 dataVersion;
+    /* 0x0000 */ u32 save_count;
+    /* 0x0004 */ u32 data_version;
     /* 0x0008 */ card_gamedata gamedata[3];
-    /* 0x1658 */ u8 field_0x1658[0x2000 - 3*sizeof(u32) - 3*sizeof(card_gamedata)];
+    /* 0x1658 */ u8 field_0x1658[0x1FFC - 0x1658];
     /* 0x1FFC */ u32 csum;
 };  // Size: 0x2000
 

@@ -308,7 +308,7 @@ BOOL daNpc_Fa1_c::_draw() {
         dComIfGd_setSimpleShadow(&current.pos, ground_y, 10.0f, &m774, 0, 1.0f,
                                  dDlst_shadowControl_c::getSimpleTex());
     }
-    dSnap_RegistFig(DSNAP_TYPE_FA, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_FA1, this, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 

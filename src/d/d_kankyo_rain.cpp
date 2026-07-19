@@ -1798,11 +1798,11 @@ void snap_sunmoon_proc(cXyz* pPos, int type) {
 
         snapObj.SetGeoSph(pos, 8000.0f);
         if (type == 9)
-            snapObj.SetInf(9, NULL, 0xFF, 4, 0x7FFF);
+            snapObj.SetInf(DSNAP_TYPE_UNK09, NULL, 0xFF, 4, 0x7FFF);
         else if (type == 0)
-            snapObj.SetInf(7, NULL, 0xFF, 4, 0x7FFF);
+            snapObj.SetInf(DSNAP_TYPE_UNK07, NULL, 0xFF, 4, 0x7FFF);
         else
-            snapObj.SetInf(8, NULL, 0xFF, 4, 0x7FFF);
+            snapObj.SetInf(DSNAP_TYPE_UNK08, NULL, 0xFF, 4, 0x7FFF);
         dSnap_RegistSnapObj(snapObj);
     }
 }
