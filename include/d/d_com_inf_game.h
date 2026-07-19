@@ -621,7 +621,7 @@ public:
         mPictureFlag &= ~mask;
     }
     u8 getPictureFormat() { return mPictureFormat; }
-    void setPictureFormat(u8 i) { mPictureFormat = i; }
+    void setPictureFormat(u8 fmt) { mPictureFormat = fmt; }
     u8 getSelectPicture() { return mSelectPicture; }
     void setSelectPicture(u8 i) { mSelectPicture = i; }
     u8 getPictureResult() { return mPictureResult; }
@@ -829,8 +829,8 @@ public:
     /* 0x495B */ u8 mPictureFlag;
     /* 0x495C */ u8 mPictureResult;
     /* 0x495D */ u8 mPictureResultDetail;
-    /* 0x495E */ u8 mPictureStatus;
-    /* 0x495F */ u8 mGetPictureNum;
+    /* 0x495E */ u8 mPictureStatus; // For Legendary Pictographs
+    /* 0x495F */ u8 mGetPictureNum; // For Legendary Pictographs
     /* 0x4960 */ u8 mPictureFormat;
     /* 0x4961 */ u8 mSelectPicture;
     /* 0x4962 */ u8 mHeapLockFlag;
@@ -3199,8 +3199,8 @@ inline u8 dComIfGp_getPictureFormat() {
     return g_dComIfG_gameInfo.play.getPictureFormat();
 }
 
-inline void dComIfGp_setPictureFormat(u8 i) {
-    g_dComIfG_gameInfo.play.setPictureFormat(i);
+inline void dComIfGp_setPictureFormat(u8 fmt) {
+    g_dComIfG_gameInfo.play.setPictureFormat(fmt);
 }
 
 inline u8 dComIfGp_getSelectPicture() {

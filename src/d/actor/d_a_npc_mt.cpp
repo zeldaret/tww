@@ -913,25 +913,23 @@ u16 daNpcMt_c::next_msgStatus(u32* pMsgNo) {
 
 /* 00001A8C-00001FC8       .text getMsg__9daNpcMt_cFv */
 u32 daNpcMt_c::getMsg() {
-    u8 uVar2;
-    
     u32 msgNo = 0;
     mpMsgTbl = NULL;
     if (g_dComIfG_gameInfo.play.getEvent()->chkPhoto()){
-        uVar2 = changePhotoNo(dComIfGp_getPictureResult());
-        if ((uVar2 <= 0x48) || (uVar2 >= 0xcf)) {
-            uVar2 = 0xff;
+        u8 photoNo = changePhotoNo(dComIfGp_getPictureResult());
+        if ((photoNo <= DSNAP_TYPE_UNK48) || (photoNo >= DSNAP_TYPE_UNKCF)) {
+            photoNo = 0xff;
         }
         else {
-            uVar2 = dSnap_PhotoIndex2TableIndex(uVar2) & 0xff;
+            photoNo = dSnap_PhotoIndex2TableIndex(photoNo);
         }
-        if (dComIfGp_getPictureFormat() == 0 || dComIfGp_getPictureFormat() == 1) {
+        if (dComIfGp_getPictureFormat() == GX_TF_I4 || dComIfGp_getPictureFormat() == GX_TF_I8) {
             mpMsgTbl = l_msg_mt_no_color;
         }
-        else if (uVar2 == 0xff) {
+        else if (photoNo == 0xff) {
             mpMsgTbl = l_msg_mt_no_figure;
         }
-        else if (isFigureGet(uVar2)) {
+        else if (isFigureGet(photoNo)) {
             mpMsgTbl = l_msg_mt_maked;
         }
         else if (dComIfGp_getPictureResultDetail() == 1) {
@@ -940,19 +938,20 @@ u32 daNpcMt_c::getMsg() {
         else if (dComIfGp_getPictureResultDetail() == 2) {
             mpMsgTbl = l_msg_mt_body_ng;
         }
+        // !@bug: dComIfGp_getPictureResultDetail() == 3 is never checked
         else {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F01);
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3401);
-            dComIfGs_setEventReg(dSv_event_flag_c::UNK_A9FF, uVar2);
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_A9FF, photoNo);
             s32 bVar1 = 0;
             if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A01)) {
                 bVar1 = 1;
             }
-            switch(uVar2) {
-                case 0x5e:
+            switch(photoNo) {
+                case DSNAP_TYPE_NPC_PHOTO:
                     mpMsgTbl = l_msg_mt_make_mt[bVar1];
                     break;
-                case 0x5f:
+                case DSNAP_TYPE_NPC_RSH1:
                     mpMsgTbl = l_msg_mt_make_mn[bVar1];
                     break;
                 default:
@@ -1404,14 +1403,14 @@ BOOL daNpcMt_c::isComp() {
 /* 00002D08-00002D4C       .text changePhotoNo__9daNpcMt_cFUc */
 u8 daNpcMt_c::changePhotoNo(u8 photoNo) {
     switch(photoNo) {
-        case 2:
-            photoNo = 0x69;
+        case DSNAP_TYPE_BIKUTSUKI:
+            photoNo = DSNAP_TYPE_NPC_UO2;
             break;
-        case 4:
-            photoNo = 0x67;
+        case DSNAP_TYPE_UNK04:
+            photoNo = DSNAP_TYPE_NPC_UW2;
             break;
-        case 6:
-            photoNo = 0x6d;
+        case DSNAP_TYPE_UNK06:
+            photoNo = DSNAP_TYPE_NPC_UB4;
     }
     return photoNo;
 }

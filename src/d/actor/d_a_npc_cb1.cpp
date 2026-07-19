@@ -3081,7 +3081,7 @@ BOOL daNpc_Cb1_c::draw() {
         }
     }
 
-    dSnap_RegistFig(DSNAP_TYPE_CB1, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_CB1, this, 1.0f, 1.0f, 1.0f);
 
     return TRUE;
 }

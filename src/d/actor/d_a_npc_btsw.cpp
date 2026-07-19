@@ -917,7 +917,7 @@ BOOL daNpc_Btsw_c::_draw() {
     }
 
     mpShopCursor->draw();
-    dSnap_RegistFig(DSNAP_TYPE_BTSW, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_BTSW, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 

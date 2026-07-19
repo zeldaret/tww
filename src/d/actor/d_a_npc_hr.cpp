@@ -1976,7 +1976,7 @@ BOOL daNpc_Hr_c::_draw() {
     mpAntennaMorf->updateDL();
     mBtpAnm.remove(modelData);
     if (getShapeType() == 1 && mState == HR_STATE_RT_ANGRY) {
-        dSnap_RegistFig(DSNAP_TYPE_HR, this, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_NPC_HR, this, 1.0f, 1.0f, 1.0f);
     }
 
     return TRUE;

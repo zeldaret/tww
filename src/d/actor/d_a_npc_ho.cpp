@@ -779,7 +779,7 @@ BOOL daNpc_Ho_c::_draw() {
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
 
-    dSnap_RegistFig(DSNAP_TYPE_HO, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_HO, this, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
