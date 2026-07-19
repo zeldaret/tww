@@ -254,6 +254,25 @@ int daObjTrap_c::check_block_target_pos(cXyz* target_pos) {
     return result;
 }
 
+static inline void set_movebox_target(cXyz* target_pos, daObjMovebox::Act_c* movebox,
+                                      fopAc_ac_c* actor) {
+    mDoMtx_stack_c::push();
+    mDoMtx_stack_c::YrotS(movebox->home.angle.y);
+    mDoMtx_stack_c::transM((f32)movebox->m628, 0.0f, (f32)movebox->m62C);
+    MtxP mtx = mDoMtx_stack_c::get();
+    Vec box_offset;
+    box_offset.x = mtx[0][3];
+    box_offset.y = mtx[1][3];
+    box_offset.z = mtx[2][3];
+    mDoMtx_stack_c::YrotS(movebox->home.angle.y +
+                          daObjMovebox::Act_c::M_dir_base[movebox->m634]);
+    Vec box_dir;
+    mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &box_dir);
+    mDoMtx_stack_c::pop();
+
+    *target_pos = (reinterpret_cast<cXyz&>(box_offset) + box_dir) * 75.0f + actor->home.pos;
+}
+
 /* 00001D7C-000023D4       .text check_block__11daObjTrap_cF4cXyz */
 cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
     static dBgS_ObjLinChk wall_work;
@@ -287,19 +306,7 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
                 daObjMovebox::Act_c* movebox = static_cast<daObjMovebox::Act_c*>(actor);
                 bool check_target;
                 if (movebox->mMode == daObjMovebox::Act_c::MODE_WALK) {
-                    mDoMtx_stack_c::push();
-                    mDoMtx_stack_c::YrotS(movebox->home.angle.y);
-                    mDoMtx_stack_c::transM((f32)movebox->m628, 0.0f,
-                                           (f32)movebox->m62C);
-                    MtxP mtx = mDoMtx_stack_c::get();
-                    cXyz box_offset(mtx[0][3], mtx[1][3], mtx[2][3]);
-                    mDoMtx_stack_c::YrotS(movebox->home.angle.y +
-                                           daObjMovebox::Act_c::M_dir_base[movebox->m634]);
-                    cXyz box_dir;
-                    mDoMtx_stack_c::multVecSR(&cXyz::BaseZ, &box_dir);
-                    mDoMtx_stack_c::pop();
-
-                    target_pos = (box_offset + box_dir) * 75.0f + actor->home.pos;
+                    set_movebox_target(&target_pos, movebox, actor);
                     check_target = true;
                 } else {
                     check_target = false;
