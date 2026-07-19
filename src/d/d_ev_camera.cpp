@@ -264,8 +264,8 @@ bool dCamera_c::fixedFrameEvCamera() {
     static int DefaultTimer = -1;
     static f32 DefaultBank = 0.0f;
     FixedFrameEvData* data = (FixedFrameEvData*)&mWork;
-    cXyz eye;
     cXyz center;
+    cXyz eye;
     if (m11C == 0) {
         getEvXyzData(&eye, "Eye", mEye);
         getEvXyzData(&center, "Center", mCenter);
@@ -288,10 +288,10 @@ bool dCamera_c::fixedFrameEvCamera() {
                 data->center = relationalPos(data->actor, &center);
             } else if (data->mask[0] == 'p') {
                 cXyz position = relationalPos(data->actor, &center);
-                f32 distance = (position - positionOf(mpPlayerActor)).abs();
+                f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 center.x = -center.x;
                 position = relationalPos(data->actor, &center);
-                f32 other_distance = (position - positionOf(mpPlayerActor)).abs();
+                f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 if (distance > other_distance) {
                     center.x = -center.x;
                 }
@@ -327,10 +327,10 @@ bool dCamera_c::fixedFrameEvCamera() {
                 }
             } else if (data->mask[1] == 'p') {
                 cXyz position = relationalPos(data->actor, &eye);
-                f32 distance = (position - positionOf(mpPlayerActor)).abs();
+                f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 eye.x = -eye.x;
                 position = relationalPos(data->actor, &eye);
-                f32 other_distance = (position - positionOf(mpPlayerActor)).abs();
+                f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 if (distance > other_distance) {
                     eye.x = -eye.x;
                 }
@@ -473,10 +473,10 @@ bool dCamera_c::rollingEvCamera() {
                 data->center = relationalPos(data->actor, &data->center_gap);
             } else if (data->mask[0] == 'p') {
                 cXyz position = relationalPos(data->actor, &data->center_gap);
-                f32 distance = (position - positionOf(mpPlayerActor)).abs();
+                f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 data->center_gap.x = -data->center_gap.x;
                 position = relationalPos(data->actor, &data->center_gap);
-                f32 other_distance = (position - positionOf(mpPlayerActor)).abs();
+                f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 if (distance > other_distance) {
                     data->center_gap.x = -data->center_gap.x;
                 }
@@ -506,10 +506,10 @@ bool dCamera_c::rollingEvCamera() {
             data->eye = relationalPos(data->actor, &data->eye_gap);
         } else if (data->mask[1] == 'p') {
             cXyz position = relationalPos(data->actor, &data->eye_gap);
-            f32 distance = (position - positionOf(mpPlayerActor)).abs();
+            f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
             data->eye_gap.x = -data->eye_gap.x;
             position = relationalPos(data->actor, &data->eye_gap);
-            f32 other_distance = (position - positionOf(mpPlayerActor)).abs();
+            f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
             if (distance > other_distance) {
                 data->eye_gap.x = -data->eye_gap.x;
             }
@@ -534,10 +534,10 @@ bool dCamera_c::rollingEvCamera() {
             data->center = relationalPos(data->actor, &data->center_gap);
         } else if (data->mask[0] == 'p') {
             cXyz position = relationalPos(data->actor, &data->center_gap);
-            f32 distance = (position - positionOf(mpPlayerActor)).abs();
+            f32 distance = cXyz(position - positionOf(mpPlayerActor)).abs();
             data->center_gap.x = -data->center_gap.x;
             position = relationalPos(data->actor, &data->center_gap);
-            f32 other_distance = (position - positionOf(mpPlayerActor)).abs();
+            f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
             if (distance > other_distance) {
                 data->center_gap.x = -data->center_gap.x;
             }
@@ -699,9 +699,9 @@ bool dCamera_c::uniformTransEvCamera() {
 
         if (data->rel_actor != NULL) {
             data->rel_actor_id = fopAcM_GetID(data->rel_actor);
-            cXyz center;
-            cXyz eye;
             if (data->rel_use_mask[1] == 'r') {
+                cXyz center;
+                cXyz eye;
                 center = relationalPos(data->rel_actor, &data->start_center);
                 if (m080 & 1) {
                     data->start_eye.x = -data->start_eye.x;
@@ -712,6 +712,8 @@ bool dCamera_c::uniformTransEvCamera() {
                 }
             }
             if (data->rel_use_mask[0] == 'n' || data->rel_use_mask[1] == 'n') {
+                cXyz center;
+                cXyz eye;
                 cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
                 cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
                 if (side < cSAngle::_0) {
@@ -729,7 +731,9 @@ bool dCamera_c::uniformTransEvCamera() {
                 }
             }
             if (data->rel_use_mask[2] == 'n' || data->rel_use_mask[3] == 'n') {
-                cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
+                cXyz center;
+                cXyz eye;
+                cSGlobe actor_direction(data->eye - positionOf(data->rel_actor));
                 cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
                 if (side < cSAngle::_0) {
                     if (data->rel_use_mask[2] == 'n') {
@@ -767,6 +771,8 @@ bool dCamera_c::uniformTransEvCamera() {
                     data->eye.x = -data->eye.x;
                 }
             } else if (data->rel_use_mask[3] == 'r') {
+                cXyz center;
+                cXyz eye;
                 center = relationalPos(data->rel_actor, &data->center);
                 if (m080 & 1) {
                     data->eye.x = -data->eye.x;
@@ -925,8 +931,6 @@ bool dCamera_c::uniformBrakeEvCamera() {
         cXyz eye;
         cXyz center;
     } start, end;
-    cXyz center;
-    cXyz eye;
     bool result = false;
     if (m11C == 0) {
         if (!getEvIntData(&data->timer, "Timer")) {
@@ -955,16 +959,19 @@ bool dCamera_c::uniformBrakeEvCamera() {
         getEvStringData(data->rel_use_mask, "RelUseMask", "--oo");
         data->rel_actor = getEvActor("RelActor");
         getEvFloatData(&data->cushion, "Cushion", 1.0f);
-        data->progress = 0.0f;
         if (data->rel_actor != NULL) {
             data->rel_actor_id = fopAcM_GetID(data->rel_actor);
             if (data->rel_use_mask[1] == 'r') {
+                cXyz center;
+                cXyz eye;
                 center = relationalPos(data->rel_actor, &data->start_center);
                 if (m080 & 1) data->start_eye.x = -data->start_eye.x;
                 eye = relationalPos(data->rel_actor, &data->start_eye);
                 if (lineBGCheck(&center, &eye, 0x8f)) data->start_eye.x = -data->start_eye.x;
             }
             if (data->rel_use_mask[0] == 'n' || data->rel_use_mask[1] == 'n') {
+                cXyz center;
+                cXyz eye;
                 cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
                 cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
                 if (side < cSAngle::_0) {
@@ -976,7 +983,9 @@ bool dCamera_c::uniformBrakeEvCamera() {
                 if (lineBGCheck(&center, &eye, 0x8f)) data->start_eye.x = -data->start_eye.x;
             }
             if (data->rel_use_mask[2] == 'n' || data->rel_use_mask[3] == 'n') {
-                cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
+                cXyz center;
+                cXyz eye;
+                cSGlobe actor_direction(data->eye - positionOf(data->rel_actor));
                 cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
                 if (side < cSAngle::_0) {
                     if (data->rel_use_mask[2] == 'n') data->center.x = -data->center.x;
@@ -1004,6 +1013,8 @@ bool dCamera_c::uniformBrakeEvCamera() {
                 f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 if (distance < other_distance) data->eye.x = -data->eye.x;
             } else if (data->rel_use_mask[3] == 'r') {
+                cXyz center;
+                cXyz eye;
                 center = relationalPos(data->rel_actor, &data->center);
                 if (m080 & 1) data->eye.x = -data->eye.x;
                 eye = relationalPos(data->rel_actor, &data->eye);
@@ -1011,6 +1022,7 @@ bool dCamera_c::uniformBrakeEvCamera() {
             }
         }
         data->start_direction = mDirection.Invert();
+        data->progress = 0.0f;
         m102 = 1;
         m101 = 1;
         m100 = 1;
@@ -1126,7 +1138,8 @@ bool dCamera_c::uniformBrakeEvCamera() {
     f32 fovy = data->start_fovy + ratio * (data->fovy - data->start_fovy);
     mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
     if (data->bank_present) {
-        f32 bank = data->start_bank + ratio * (data->bank - data->start_bank);
+        f32 bank = data->start_bank;
+        bank += ratio * (data->bank - bank);
         mViewCache.mBank += (cAngle::d2s(bank) - mViewCache.mBank) * data->cushion;
         setFlag(0x400);
     }
@@ -1167,8 +1180,6 @@ bool dCamera_c::uniformAcceleEvCamera() {
         cXyz eye;
         cXyz center;
     } start, end;
-    cXyz center;
-    cXyz eye;
     bool result = false;
     if (m11C == 0) {
         if (!getEvIntData(&data->timer, "Timer")) {
@@ -1198,16 +1209,19 @@ bool dCamera_c::uniformAcceleEvCamera() {
         getEvStringData(data->rel_use_mask, "RelUseMask", "--oo");
         data->rel_actor = getEvActor("RelActor");
         getEvFloatData(&data->cushion, "Cushion", 1.0f);
-        data->progress = 0.0f;
         if (data->rel_actor != NULL) {
             data->rel_actor_id = fopAcM_GetID(data->rel_actor);
             if (data->rel_use_mask[1] == 'r') {
+                cXyz center;
+                cXyz eye;
                 center = relationalPos(data->rel_actor, &data->start_center);
                 if (m080 & 1) data->start_eye.x = -data->start_eye.x;
                 eye = relationalPos(data->rel_actor, &data->start_eye);
                 if (lineBGCheck(&center, &eye, 0x8f)) data->start_eye.x = -data->start_eye.x;
             }
             if (data->rel_use_mask[0] == 'n' || data->rel_use_mask[1] == 'n') {
+                cXyz center;
+                cXyz eye;
                 cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
                 cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
                 if (side < cSAngle::_0) {
@@ -1219,7 +1233,9 @@ bool dCamera_c::uniformAcceleEvCamera() {
                 if (lineBGCheck(&center, &eye, 0x8f)) data->start_eye.x = -data->start_eye.x;
             }
             if (data->rel_use_mask[2] == 'n' || data->rel_use_mask[3] == 'n') {
-                cSGlobe actor_direction(mEye - positionOf(data->rel_actor));
+                cXyz center;
+                cXyz eye;
+                cSGlobe actor_direction(data->eye - positionOf(data->rel_actor));
                 cSAngle side = actor_direction.U() - directionOf(data->rel_actor);
                 if (side < cSAngle::_0) {
                     if (data->rel_use_mask[2] == 'n') data->center.x = -data->center.x;
@@ -1247,6 +1263,8 @@ bool dCamera_c::uniformAcceleEvCamera() {
                 f32 other_distance = cXyz(position - positionOf(mpPlayerActor)).abs();
                 if (distance < other_distance) data->eye.x = -data->eye.x;
             } else if (data->rel_use_mask[3] == 'r') {
+                cXyz center;
+                cXyz eye;
                 center = relationalPos(data->rel_actor, &data->center);
                 if (m080 & 1) data->eye.x = -data->eye.x;
                 eye = relationalPos(data->rel_actor, &data->eye);
@@ -1254,6 +1272,7 @@ bool dCamera_c::uniformAcceleEvCamera() {
             }
         }
         data->start_direction = mDirection.Invert();
+        data->progress = 0.0f;
         m102 = 1;
         m101 = 1;
         m100 = 1;
@@ -1369,7 +1388,8 @@ bool dCamera_c::uniformAcceleEvCamera() {
     f32 fovy = data->start_fovy + ratio * (data->fovy - data->start_fovy);
     mViewCache.mFovy += data->cushion * (fovy - mViewCache.mFovy);
     if (data->bank_present) {
-        f32 bank = data->start_bank + ratio * (data->bank - data->start_bank);
+        f32 bank = data->start_bank;
+        bank += ratio * (data->bank - bank);
         mViewCache.mBank += (cAngle::d2s(bank) - mViewCache.mBank) * data->cushion;
         setFlag(0x400);
     }
@@ -2168,12 +2188,16 @@ bool dCamera_c::windDirectionEvCamera() {
         /* fallthrough */
     case 3: {
         data->center = data->center + (attentionPos(mpPlayerActor) - data->center) * 0.02f;
-        cM3dGLin line;
-        line.set(data->center, mViewCache.mEye);
+        struct LineData {
+            /* 0x00 */ cXyz start;
+            /* 0x0C */ cXyz end;
+        } line;
+        line.start = data->center;
+        line.end = mViewCache.mEye;
         cXyz player = attentionPos(mpPlayerActor);
         cXyz nearest;
         f32 distance;
-        if (cM3d_Len3dSqPntAndSegLine(&line, &player, &nearest, &distance)) {
+        if (cM3d_Len3dSqPntAndSegLine((cM3dGLin*)&line, &player, &nearest, &distance)) {
             mViewCache.mCenter = nearest;
         } else {
             mViewCache.mCenter = data->center;
