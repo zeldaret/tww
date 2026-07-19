@@ -72,8 +72,7 @@ daObjYLzou_HIO_c::daObjYLzou_HIO_c(){
 
 /* 000000EC-000002B8       .text set_start_type__12daObjYLzou_cFv */
 void daObjYLzou_c::set_start_type() {
-
-    UNK_YLZOU_ENUM_ONE unk_ylzou_enum_one ;
+    UNK_YLZOU_ENUM_ONE unk_ylzou_enum_one;
     u32 triforce_complete = 0;
     UNK_YLZOU_ENUM_TWO unk_ylzou_enum_two = ENUM_TWO_UNK_0000;
     bool event_bit_3820 = false;
