@@ -2621,7 +2621,7 @@ void daNpc_Bm1_c::eInit_ATTENTION_(int* i_prm_0_p, int* i_prm_1_p, int* i_prm_2_
             unaff_r27 = *i_angle_p;
             break;
         case 5:
-            if (!mPathRun.isPath()) {
+            if (mPathRun.isPath() == false) {
                 return;
             }
             pointIndex = mPathRun.getIdx();
