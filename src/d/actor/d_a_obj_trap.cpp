@@ -56,7 +56,8 @@ int daObjTrap_c::create_heap() {
     J3DModelData* mdl_data;
     int result = false;
 
-    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_BDL_HTORA1_e);
+    mdl_data = static_cast<J3DModelData*>(
+        dComIfG_getObjectRes(M_arcname, dRes_ID_TRAP_BDL_HTORA1_e));
     JUT_ASSERT(355, mdl_data != NULL);
     if (mdl_data){
         mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000222);
@@ -271,7 +272,7 @@ cXyz daObjTrap_c::check_block(cXyz i_block_offset) {
     for (int i = 0; i < 2; i++) {
         mDoMtx_stack_c::YrotS(angle_y[i]);
         mDoMtx_stack_c::multVec(&mPathDirection, &offset);
-        offset *= 225.0f;
+        offset *= 153.0f;
         offset += upward;
 
         start = current.pos + offset;
@@ -330,7 +331,7 @@ void daObjTrap_c::set_vib_mode() {
 
     cXyz pos = mPathDirection * 150.0f;
     pos += current.pos;
-    cXyz direction = mPathDirection * -0.5f;
+    cXyz direction = mPathDirection * -1.0f;
     pos.y += 50.0f;
     daObj::HitEff_hibana(&pos, &direction);
 
@@ -354,7 +355,7 @@ void daObjTrap_c::vibrate() {
 
 /* 0000255C-00002678       .text bound__11daObjTrap_cFv */
 void daObjTrap_c::bound() {
-    cXyz offset = mPathDirection * -0.5f;
+    cXyz offset = mPathDirection * -1.0f;
     mPathTarget -= mVibrationPosition;
     s16 angle = mBoundTimer << 14;
     f32 vibration_frame = mVibrationFrame;
@@ -372,7 +373,7 @@ void daObjTrap_c::set_shine() {
         mBtkAnm.setPlaySpeed(1.0f);
     } else {
         mBtkAnm.setFrame(46.0f);
-        mBtkAnm.setPlaySpeed(-0.5f);
+        mBtkAnm.setPlaySpeed(-1.0f);
     }
 }
 
@@ -412,7 +413,7 @@ bool daObjTrap_c::_execute() {
         break;
     }
     case 1: {
-        cLib_addCalcPosXZ(&mPathOffset, mPathStep, 0.1f, 40.0f, 0.0f);
+        cLib_addCalcPosXZ(&mPathOffset, mPathStep, 0.06f, 100.0f, 1.0f);
         mPathTarget += mPathOffset;
         block_offset = check_wall();
         block_offset = check_block(block_offset);
