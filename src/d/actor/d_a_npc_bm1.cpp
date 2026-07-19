@@ -4051,34 +4051,34 @@ BOOL daNpc_Bm1_c::_draw() {
     shadowDraw();
     switch(mType){
         case TYPE_Quill_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8D,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK8D,this,1.0f,1.0f,1.0f);
             break;
         case TYPE_Akoot_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8E,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK8E,this,1.0f,1.0f,1.0f);
             break;
         case TYPE_Skett_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8E,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK8E,this,1.0f,1.0f,1.0f);
             break;
         case TYPE_Basht_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK93,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK93,this,1.0f,1.0f,1.0f);
             break;
         case TYPE_Bisht_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK93,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK93,this,1.0f,1.0f,1.0f);
             break;
         case TYPE_Hoskit_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK91,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK91,this,1.0f,1.0f,1.0f);
             break;
         case TYPE_Ilari_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK90,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK90,this,1.0f,1.0f,1.0f);
             break;
         case TYPE_Pashli_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK97,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK97,this,1.0f,1.0f,1.0f);
             break;
         case TYPE_Namali_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK92,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK92,this,1.0f,1.0f,1.0f);
             break;
         case TYPE_Kogoli_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8F,(fopAc_ac_c *)this,1.0f,1.0f,1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_UNK8F,this,1.0f,1.0f,1.0f);
             break;
     }
 
