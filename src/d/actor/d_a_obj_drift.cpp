@@ -55,6 +55,8 @@ namespace daObjDrift {
             /* mRotTimerMax    */ 10,
             /* field_0x3E      */ 0,
         };
+        
+        inline const Attr_c& attr() { return L_attr; }
     } // namespace
 } // namespace daObjDrift
 
@@ -99,7 +101,7 @@ BOOL daObjDrift::Act_c::CreateHeap() {
 /* 000001A0-00000370       .text Create__Q210daObjDrift5Act_cFv */
 BOOL daObjDrift::Act_c::Create() {
     f32 L_waterY[2];
-    cullMtx = mModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     init_mtx();
     fopAc_ac_c* actor = this;
 #if VERSION == VERSION_DEMO
@@ -141,7 +143,7 @@ BOOL daObjDrift::Act_c::Create() {
     mAngleChaseY = 0;
 
     mHitDir.set((cXyz&)cXyz::Zero);
-    field_0x4B0.set(5.0f, 5.0f, 5.0f);
+    field_0x4B0.setall(5.0f);
     mPrevPos.set(current.pos);
     f32 prevY = mPrevPos.y;
     field_0x4C8 = prevY;
@@ -202,7 +204,7 @@ void daObjDrift::Act_c::make_flower() {
 void daObjDrift::Act_c::calc_flower_param(cXyz* i_pos, csXyz* i_angle) {
     static cXyz offset_vec(-489.35f, 600.0f, 0.0f);
 
-    PSMTXMultVec(mMtx, &offset_vec, i_pos);
+    mDoMtx_multVec(mMtx, &offset_vec, i_pos);
     mDoMtx_MtxToRot(mMtx, i_angle);
 }
 
@@ -240,7 +242,7 @@ BOOL daObjDrift::Act_c::Mthd_Delete() {
 
 /* 000009A8-000009C0       .text mode_wait_init__Q210daObjDrift5Act_cFv */
 void daObjDrift::Act_c::mode_wait_init() {
-    actor_status = actor_status | fopAcStts_NOCULLEXEC_e;
+    fopAcM_OnStatus(this, fopAcStts_NOCULLEXEC_e);
     mMode = MODE_WAIT;
 }
 
@@ -268,23 +270,7 @@ void daObjDrift::Act_c::mode_rot_init() {
     shape_angle.y += 10;
     mRotTimer = 0.0f;
     mMode = MODE_ROT;
-#if VERSION == VERSION_DEMO
-    s8 roomNo = current.roomNo;
-    s8 reverb = dComIfGp_getReverb(roomNo);
-#else
-    s8 reverb = dComIfGp_getReverb(current.roomNo);
-#endif
-    JAIZelBasic::zel_basic->seStart(
-        JA_SE_OBJ_RYUBOKU_MOVE,
-        &eyePos,
-        0,
-        reverb,
-        1.0f,
-        1.0f,
-        -1.0f,
-        -1.0f,
-        0
-    );
+    fopAcM_seStart(this, JA_SE_OBJ_RYUBOKU_MOVE, 0);
 }
 
 /* 00000B38-00000C3C       .text mode_rot__Q210daObjDrift5Act_cFv */
@@ -303,7 +289,7 @@ void daObjDrift::Act_c::mode_rot() {
         shape_angle.y += mAngleChaseY;
     }
 
-    if (mRotTimer >= L_attr.mRotTimerMax) {
+    if (mRotTimer >= attr().mRotTimerMax) {
         mRotTimer = 0.0f;
         field_0x4D0 = 1.0f;
     } else {
@@ -331,9 +317,7 @@ void daObjDrift::Act_c::set_mtx() {
     cMtx_copy(mDoMtx_stack_c::get(), mMtx);
     field_0x4CC = field_0x4C8;
     field_0x4C8 = mPrevPos.y;
-    mPrevPos.x = mDoMtx_stack_c::get()[0][3];
-    mPrevPos.y = mDoMtx_stack_c::get()[1][3];
-    mPrevPos.z = mDoMtx_stack_c::get()[2][3];
+    mDoMtx_multVecZero(mDoMtx_stack_c::get(), &mPrevPos);
 }
 
 /* 00000D18-00000D54       .text init_mtx__Q210daObjDrift5Act_cFv */
@@ -349,8 +333,8 @@ void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_ride) {
     if (fopAcM_GetProfName(player) != fpcNm_PLAYER_e) {
         return;
     }
-    f32 ratio = 1.0f / L_attr.mWaveHeight;
-    drift->mRideYOff = L_attr.mRideYOff;
+    f32 ratio = 1.0f / attr().mWaveHeight;
+    drift->mRideYOff = attr().mRideYOff;
     
     cXyz delta;
     cXyz localDelta;
@@ -358,7 +342,7 @@ void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_ride) {
     delta = player->current.pos - drift->current.pos;
     if (PSMTXInverse(drift->mMtx, invMtx) &&
         !dComIfGp_checkPlayerStatus0(0, daPyStts0_HANG_e)) {
-        PSMTXMultVecSR(invMtx, &delta, &localDelta);
+        mDoMtx_multVecSR(invMtx, &delta, &localDelta);
         f32 sqMag = localDelta.abs2XZ();
         if (localDelta.y < 400.0f) {
             if (sqMag < 129600.0f) {
@@ -373,25 +357,25 @@ void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_ride) {
         drift->mRideFlag = TRUE;
     }
     if (drift->mRideFlag == FALSE) {
-        drift->mTiltTargetZ = delta.z * (ratio * L_attr.field_0x1C);
-        drift->mTiltTargetX = delta.x * (ratio * L_attr.field_0x1C);
+        drift->mTiltTargetZ = delta.z * (ratio * attr().field_0x1C);
+        drift->mTiltTargetX = delta.x * (ratio * attr().field_0x1C);
     }
 }
 
 /* 00000EC4-00001104       .text set_current__Q210daObjDrift5Act_cFv */
 void daObjDrift::Act_c::set_current() {
     f32 y = mRideYOff + home.pos.y;
-    mWavePhaseX += L_attr.mWavePhaseXStep;
+    mWavePhaseX += attr().mWavePhaseXStep;
 #if VERSION == VERSION_DEMO
-    f32 sinVal = JMASSin(mWavePhaseX);
+    f32 sinVal = cM_ssin(mWavePhaseX);
     f32 yDelta = y - current.pos.y;
 #else
     f32 yDelta = y - current.pos.y;
-    f32 sinVal = JMASSin(mWavePhaseX);
+    f32 sinVal = cM_ssin(mWavePhaseX);
 #endif
-    gravity = yDelta * L_attr.mWaveAmplitude
-            + sinVal * L_attr.mWaveSinScale;
-    daObj::posMoveF_stream(this, NULL, &cXyz::Zero, L_attr.mWaveSpeed, L_attr.mWavePhase);
+    gravity = yDelta * attr().mWaveAmplitude
+            + sinVal * attr().mWaveSinScale;
+    daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().mWaveSpeed, attr().mWavePhase);
 #if VERSION == VERSION_DEMO
     f32 rotFactor;
     f32 chaseFactor;
@@ -405,44 +389,44 @@ void daObjDrift::Act_c::set_current() {
         rotFactor = 1.0f;
     }
     if (mMode == MODE_ROT) {
-        chaseFactor = L_attr.mTiltChaseRot;
+        chaseFactor = attr().mTiltChaseRot;
     } else {
-        chaseFactor = L_attr.mTiltChaseWait;
+        chaseFactor = attr().mTiltChaseWait;
     }
 #if VERSION == VERSION_DEMO
-    PSVECScale(&mHitDir, &mHitDir, 0.95f);
-    mWavePhaseY += L_attr.mWavePhaseYStep;
-    mWavePhaseZ += L_attr.mWavePhaseZStep;
+    mHitDir *= 0.95f;
+    mWavePhaseY += attr().mWavePhaseYStep;
+    mWavePhaseZ += attr().mWavePhaseZStep;
     f32 diffZ = mTiltZ - mTiltTargetZ;
     f32 diffX = mTiltX - mTiltTargetX;
-    f32 sinY = JMASSin(mWavePhaseY);
-    f32 z_val = mHitDir.z * L_attr.field_0x34
-            + (rotFactor * (sinY * L_attr.mTiltSinScale)
+    f32 sinY = cM_ssin(mWavePhaseY);
+    f32 z_val = mHitDir.z * attr().field_0x34
+            + (rotFactor * (sinY * attr().mTiltSinScale)
             - diffZ * chaseFactor);
-    f32 sinZ = JMASSin(mWavePhaseZ);
-    f32 x_val = mHitDir.x * L_attr.field_0x34
-        + (rotFactor * (sinZ * L_attr.mTiltSinScale)
+    f32 sinZ = cM_ssin(mWavePhaseZ);
+    f32 x_val = mHitDir.x * attr().field_0x34
+        + (rotFactor * (sinZ * attr().mTiltSinScale)
         - diffX * chaseFactor);
     mTiltVelZ += z_val;
     mTiltVelX += x_val;
 #else
-    PSVECScale(&mHitDir, &mHitDir, 0.95f);
-    mWavePhaseY += L_attr.mWavePhaseYStep;
-    mWavePhaseZ += L_attr.mWavePhaseZStep;
-    f32 sinY = JMASSin(mWavePhaseY);
-    f32 sinZ = JMASSin(mWavePhaseZ);
+    mHitDir *= 0.95f;
+    mWavePhaseY += attr().mWavePhaseYStep;
+    mWavePhaseZ += attr().mWavePhaseZStep;
+    f32 sinY = cM_ssin(mWavePhaseY);
+    f32 sinZ = cM_ssin(mWavePhaseZ);
     f32 diffZ = mTiltZ - mTiltTargetZ;
     f32 diffX = mTiltX - mTiltTargetX;
-    f32 x_val = mHitDir.x * L_attr.field_0x34
-        + (rotFactor * (sinZ * L_attr.mTiltSinScale)
+    f32 x_val = mHitDir.x * attr().field_0x34
+        + (rotFactor * (sinZ * attr().mTiltSinScale)
         - diffX * chaseFactor);
-    mTiltVelZ += mHitDir.z * L_attr.field_0x34
-            + (rotFactor * (sinY * L_attr.mTiltSinScale)
+    mTiltVelZ += mHitDir.z * attr().field_0x34
+            + (rotFactor * (sinY * attr().mTiltSinScale)
             - diffZ * chaseFactor);
     mTiltVelX += x_val;
 #endif
-    mTiltVelZ *= L_attr.mPosMoveDamp;
-    mTiltVelX *= L_attr.mPosMoveDamp;
+    mTiltVelZ *= attr().mPosMoveDamp;
+    mTiltVelX *= attr().mPosMoveDamp;
     mTiltZ += mTiltVelZ;
     mTiltX += mTiltVelX;
     mRideYOff = 0.0f;
