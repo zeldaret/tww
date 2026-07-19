@@ -55,11 +55,16 @@ void dPb_erasePicture();
 
 class dJle_Pb_c : public dDlst_base_c {
 public:
+    u8 getStatus() { return mExecState; }
+    void getMemory(void* buffer, int idx) {
+        mPhotoBuffer[idx] = (dPbPhotoSlotData*)buffer;
+    }
+    void setTextArea(char* buffer, int idx) {
+        mMsgTextBuffer[idx] = buffer;
+    }
+    
     void alphaChange(fopMsgM_pane_alpha_class*, f32) {}
     void alphaChange(fopMsgM_pane_class*, f32) {}
-    void getMemory(void*, int) {}
-    void getStatus() {}
-    void setTextArea(char*, int) {}
     
     void screenSet();
     void screenSet2();
@@ -112,7 +117,7 @@ public:
     void draw();
     void _delete(JKRExpHeap*);
 
-public:
+private:
     /* 0x004 */ J2DScreen* scrn;
     /* 0x008 */ J2DScreen* scrn1;
     /* 0x00C */ J2DScreen* scrn2;
