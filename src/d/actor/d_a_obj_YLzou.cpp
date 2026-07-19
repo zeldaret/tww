@@ -72,13 +72,14 @@ daObjYLzou_HIO_c::daObjYLzou_HIO_c(){
 
 /* 000000EC-000002B8       .text set_start_type__12daObjYLzou_cFv */
 void daObjYLzou_c::set_start_type() {
+
+    UNK_YLZOU_ENUM_ONE unk_ylzou_enum_one ;
+    u32 triforce_complete = 0;
     UNK_YLZOU_ENUM_TWO unk_ylzou_enum_two = ENUM_TWO_UNK_0000;
     bool event_bit_3820 = false;
-    BOOL triforce_complete = FALSE;
-    UNK_YLZOU_ENUM_ONE unk_ylzou_enum_one;
-    
+
     if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D04)) {
-        if (field_0x2E0 != 0xFF && !fopAcM_isSwitch(this, field_0x2E0)) {
+        if (field_0x2E0 != 0xFF && fopAcM_isSwitch(this, field_0x2E0) == 0) {
             unk_ylzou_enum_one = ENUM_ONE_UNK_0000;
             unk_ylzou_enum_two = ENUM_TWO_UNK_0001;
         } else {
