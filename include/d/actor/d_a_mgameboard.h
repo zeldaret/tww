@@ -30,7 +30,7 @@ public:
     bool _execute();
     bool execGameMain();
     void execEndGame();
-    void MinigameMain();
+    BOOL MinigameMain();
     void CursorMove();
 
 public:

@@ -6,6 +6,10 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mgameboard.h"
 #include "d/d_2dnumber.h"
+#include "m_Do/m_Do_controller_pad.h"
+#if VERSION == VERSION_DEMO
+#include "JSystem/JUtility/JUTReport.h"
+#endif
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -352,8 +356,46 @@ void daMgBoard_c::execEndGame() {
 }
 
 /* 00001060-00001250       .text MinigameMain__11daMgBoard_cFv */
-void daMgBoard_c::MinigameMain() {
-    /* Nonmatching */
+BOOL daMgBoard_c::MinigameMain() {
+    /* Nonmatching */   
+    if (mDoAud_checkSePlaying(0x8A8) != 0) {
+        return TRUE;
+    }
+    
+    CursorMove();
+    s32 bullet_num = mSeaFightGame.mBulletNum;
+    s32 num_alive = mSeaFightGame.mAliveShipNum;
+    if (g_mDoCPd_cpadInfo[0].mButtonTrig.a && bullet_num > 0) {
+        int attack_result = mSeaFightGame.attack(mBoardPosX, mBoardPosY);
+        s32 alive = mSeaFightGame.mAliveShipNum;
+        int dead = mSeaFightGame.mDeadShipNum;
+        s32 score = mSeaFightGame.mScore;
+        mLastFirePosX = (s8)mBoardPosX;
+        mLastFirePosY = (s8)mBoardPosY;
+        if (attack_result >= 0) {
+            mDoAud_seStart(0x69A2, &mNPCPos);
+            if ((num_alive != alive) && (alive != 0)) {
+                mDoAud_seStart(0x8AA, &mNPCPos);
+            }
+            dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0, 1, 0));
+        } else if (attack_result == -1) {
+            mDoAud_seStart(0x69A3, &mNPCPos);
+        }
+
+        if (dead > 0) {
+            mpSquidIcon[dead + -1]->offBeforeTex();
+        }
+        if (score > 0) {
+            mpSquidIcon[score + 2]->offBeforeTex();
+        }
+    }
+    #if VERSION == VERSION_DEMO
+    s32 near_enemy = mSeaFightGame.getNearEnemy(mLastFirePosX, mLastFirePosY);
+    JUTReport(0x1E0, 0x17C, "NEAR ENEMY");
+    JUTReport(0x1EA, 0x190, "%d\n", near_enemy);
+    #endif
+    set_mtx();
+    return TRUE;
 }
 
 /* 00001250-000013C4       .text CursorMove__11daMgBoard_cFv */
