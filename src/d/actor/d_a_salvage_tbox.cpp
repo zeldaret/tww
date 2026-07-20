@@ -334,6 +334,7 @@ bool daSTBox_c::_execute() {
     daShip_c* ship = dComIfGp_getShipActor();
     f32 waterY = 0.0;
     cXyz m1020Pos;
+    int actIdx;
     if (ship != NULL) {
         m1020Pos = ship->m1020;
         waterY = getWaterY(m1020Pos);
@@ -341,7 +342,7 @@ bool daSTBox_c::_execute() {
     if ((dComIfGp_event_runCheck()) 
         && !eventInfo.checkCommandTalk()
         && staffIdx != -1) {
-        s16 actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, 5, 0, 0);
+        actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, 5, 0, 0);
         if(actIdx == -1){
             dComIfGp_evmng_cutEnd(staffIdx);
         } else {
