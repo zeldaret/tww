@@ -3,7 +3,8 @@
  * Object - Icy clouds surrounding Ice Ring Isle
  */
 
-#include "d/dolzel_rel.h" // IWYU pragma: keep
+ #include "d/dolzel_rel.h" // IWYU pragma: keep
+ #include "d/d_s_play.h"
 #include "d/actor/d_a_obj_iceisland.h"
 #include "d/d_com_inf_game.h"
 #include "res/Object/GiceL.h"
@@ -58,7 +59,11 @@ void daObjIceisland_c::CreateInit() {
     u8 switchNo = daObjIceisland_prm::getSwitchNo(this);
     if(fopAcM_isSwitch(this, switchNo)){
         mBrkAnm.setFrame(mBrkAnm.getEndFrame());
+#if VERSION == VERSION_DEMO
+        if(dComIfGs_getStartPoint() == 2){
+#else
         if(dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()){
+#endif
             field_0x39C = 6;
         }else {
             field_0x39C = 3;
@@ -71,6 +76,9 @@ void daObjIceisland_c::CreateInit() {
     }
     mMeltIceEventIdx = dComIfGp_evmng_getEventIdx("MELT_ICE");
     mFreezeIceEventIdx = dComIfGp_evmng_getEventIdx("FREEZE_ICE");
+#if VERSION == VERSION_DEMO
+    REG17_S(0) = 0x80;
+#endif
 }
 
 /* 00000588-00000608       .text set_mtx__16daObjIceisland_cFv */
@@ -236,10 +244,17 @@ bool daObjIceisland_c::_execute(){
     JPABaseEmitter* emitter = mEmitter1;
     if(emitter != NULL) {
         
+#if VERSION == VERSION_DEMO
+        s16 reg17 = REG17_S(0);
+        u8 colorK0R = reg17 + (mTevStr.mColorK0.r / 2);
+        u8 colorK0G = reg17 + (mTevStr.mColorK0.g / 2);
+        u8 colorK0B = reg17 + (mTevStr.mColorK0.b / 2);
+#else
         u8 colorK0R = (mTevStr.mColorK0.r / 2) + 0x80;
         u8 colorK0G = (mTevStr.mColorK0.g / 2) + 0x80;
         u8 colorK0B = (mTevStr.mColorK0.b / 2) + 0x80;
 
+#endif
         emitter->setGlobalPrmColor(colorK0R, colorK0G, colorK0B);
         emitter = mEmitter1;
         emitter->setGlobalEnvColor(colorK0R, colorK0G, colorK0B);
