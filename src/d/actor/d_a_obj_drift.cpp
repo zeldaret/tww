@@ -103,15 +103,14 @@ BOOL daObjDrift::Act_c::Create() {
     f32 L_waterY[2];
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     init_mtx();
-    fopAc_ac_c* actor = this;
 #if VERSION == VERSION_DEMO
-    fopAcM_setCullSizeBox(actor, -550.0f, -180.0f, -550.0f, 550.0f, 605.0f, 550.0f);
+    fopAcM_setCullSizeBox(this, -550.0f, -180.0f, -550.0f, 550.0f, 605.0f, 550.0f);
 #else
     f32 cullMinX = -550.0f;
     f32 cullMinY = -180.0f;
     f32 cullMaxX = 550.0f;
     f32 cullMaxY = 605.0f;
-    fopAcM_setCullSizeBox(actor, cullMinX, cullMinY, cullMinX, cullMaxX, cullMaxY, cullMaxX);
+    fopAcM_setCullSizeBox(this, cullMinX, cullMinY, cullMinX, cullMaxX, cullMaxY, cullMaxX);
 #endif
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(M_cyl_src);
@@ -257,7 +256,7 @@ void daObjDrift::Act_c::mode_wait() {
             mode_rot_init();
         }
     } else {
-        mCyl.MoveCAtTg(*&current.pos);
+        mCyl.MoveCAtTg(current.pos);
         dComIfG_Ccsp()->Set(&mCyl);
     }
 }
