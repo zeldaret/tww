@@ -39,7 +39,7 @@ public:
     void onEnemyDamage();
     void mbossBgmMuteProcess();
     void mbossBgmNearByProcess(f32);
-    bool checkBgmPlaying();
+    BOOL checkBgmPlaying();
     int checkPlayingMainBgmFlag();
     BOOL checkSubBgmPlaying();
     int checkPlayingSubBgmFlag();
