@@ -29,7 +29,24 @@ struct h3_ga_s {
 
 class himo3_class {
 public:
-    void getPlayerMoveLength() {}
+    f32 getPlayerMoveLength() const {
+            //TODO: Used in daNpc_p2_c and daPy_lk_c. Implementation is something like this:
+            // f32 getPlayerMoveLength(const cXyz& actor_pos, f32 min_length) const {
+   
+            // cXyz offsetdist = (actor.current.pos - actor_pos);
+            // f32 dist =  offsetdist.abs() - min_length;
+            // cXyz local_84 = this->actor.current.pos - i_actor->current.pos;
+            // f32 dVar8 = (local_84.abs() - minDist);
+            // cXyz* temp = &this->m15F4;
+            // if (dist > m15F4.z) {
+            //     dist = m15F4.z;
+            // }
+            
+            // return dist;
+            // local_84.normalize();
+            //i_actor->current.pos = (this->actor.current.pos - (local_84 * dVar8));
+            // return (this->actor.current.pos - (local_84 * dVar8));
+    };
 
     void setActorHang(cXyz, short);
 

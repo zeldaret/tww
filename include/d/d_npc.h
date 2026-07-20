@@ -127,7 +127,7 @@ private:
     /* 0x52 */ u8 field_0x52;
     /* 0x54 */ cXyz mPos;
     /* 0x60 */ bool mbAttention;
-    /* 0x61 */ u8 mbNoTurn;
+    /* 0x61 */ bool mbNoTurn;
     /* 0x62 */ s16 mTurnSpeed;
     /* 0x64 */ u32 mTurnType;
     /* 0x68 */ dNpc_JntCtrl_c* mpJntCtrl;
