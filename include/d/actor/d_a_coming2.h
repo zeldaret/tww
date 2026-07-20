@@ -48,7 +48,11 @@ namespace daComing2 {
             minus_coming_point1();
             minus_coming_point1();
         }
-        void pluss_coming_point1() {}
+        void pluss_coming_point1() {
+            s32 evnt = dComIfGs_getEventReg(dSv_event_flag_c::UNK_7EFF) + 1;
+            u8 evnt2 = (evnt > 0xFF) ? 0xFF : evnt;
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_7EFF, evnt2);
+        }
     
         void chase_ship();
         void renew_scope_info();
