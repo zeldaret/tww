@@ -308,18 +308,14 @@ void JAIZelBasic::zeldaGFrameWork() {
         if(field_0x0065 == 1){
             field_0x0090 = 0.0f;
             if(mpMainBgmSound){
-                mpMainBgmSound->setVolume(
-                    field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac,
-                    0x1E,0);
+                mpMainBgmSound->setVolume(calcMainBgmVol(),0x1E,SOUNDPARAM_Unk0);
             }
             field_0x0065 = 0;
         }
         else if(field_0x0090 == 0.0f){
             field_0x0090 = 1.0f;
             if(mpMainBgmSound){
-                mpMainBgmSound->setVolume(
-                    field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac,
-                    0x1E,0);
+                mpMainBgmSound->setVolume(calcMainBgmVol(),0x1E,SOUNDPARAM_Unk0);
             }
         }
     }
@@ -349,7 +345,7 @@ void JAIZelBasic::zeldaGFrameWork() {
         if(fVar3 != 0.0f){
             JAIBasic::startSoundVec(JA_SE_ATM_WIND_I_LINK,&field_0x1f38,NULL,0,0,4);
             if(field_0x1f38){
-                field_0x1f38->setVolume(fVar3,0,0);
+                field_0x1f38->setVolume(fVar3,0,SOUNDPARAM_Unk0);
             }
         }
     }
@@ -376,7 +372,7 @@ void JAIZelBasic::zeldaGFrameWork() {
             if(fVar4 != 0.0f && checkPlayingStreamBgmFlag() !=  -0x3fffffca){
                 startSoundVec(JA_SE_ATM_WIND_I_LINK,&field_0x1f38,NULL,0,0,4);
                 if(field_0x1f38){
-                    field_0x1f38->setVolume(fVar4,0,0);
+                    field_0x1f38->setVolume(fVar4,0,SOUNDPARAM_Unk0);
                 }
             }
         }
@@ -397,9 +393,7 @@ void JAIZelBasic::zeldaGFrameWork() {
             }
             field_0x00ac = fVar3;
             if(mpMainBgmSound){
-                mpMainBgmSound->setVolume(
-                    field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac,
-                    0,0);
+                mpMainBgmSound->setVolume(calcMainBgmVol(),0,SOUNDPARAM_Unk0);
             }
         }
         else if(mIslandRoomNo == 0xD){
@@ -423,9 +417,7 @@ void JAIZelBasic::zeldaGFrameWork() {
             }
             field_0x00ac = fVar3;
             if(mpMainBgmSound){
-                mpMainBgmSound->setVolume(
-                    field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac,
-                    0,0);
+                mpMainBgmSound->setVolume(calcMainBgmVol(),0,SOUNDPARAM_Unk0);
             }
         }
         else if(mIslandRoomNo == 0x29 && mbLandingDemoStarted != 3 && dComIfGp_event_getMode() == 0){
@@ -448,9 +440,7 @@ void JAIZelBasic::zeldaGFrameWork() {
                 field_0x0090 = fVar4;
             }
             if(mpMainBgmSound){
-                mpMainBgmSound->setVolume(
-                    field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac,
-                    0,0);
+                mpMainBgmSound->setVolume(calcMainBgmVol(),0,SOUNDPARAM_Unk0);
             }
         }
     }
@@ -476,9 +466,7 @@ void JAIZelBasic::zeldaGFrameWork() {
         }
         field_0x00ac = fVar3;
         if(mpMainBgmSound){
-            mpMainBgmSound->setVolume(
-                field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac,
-                0,0);
+            mpMainBgmSound->setVolume(calcMainBgmVol(),0,SOUNDPARAM_Unk0);
         }
     }
     if(field_0x0224 == 0x35){
@@ -499,9 +487,7 @@ void JAIZelBasic::zeldaGFrameWork() {
         }
         field_0x0090 = fVar4;
         if(mpMainBgmSound){
-            mpMainBgmSound->setVolume(
-                field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac,
-                0,0);
+            mpMainBgmSound->setVolume(calcMainBgmVol(),0,SOUNDPARAM_Unk0);
         }
     }
     if(mMainBgmNum == JA_BGM_SELECT){
@@ -554,65 +540,62 @@ void JAIZelBasic::zeldaGFrameWork() {
     if(field_0x022d == 1){
         switch(this->field_0x0224) {
             case 7:
-            seStart(0x1065,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
-            break;
-
-            break;
+                seStart(0x1065,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
+                break;
             case 0xc:
             case 0x54:
             case 0x58:
                 seStart(0x7019,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
             break;
-            case 0x11:
-            seStart(0x701a,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
+                case 0x11:
+                seStart(0x701a,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
             break;
-            case 0x23:
-            seStart(0x105a,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
+                case 0x23:
+                seStart(0x105a,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
             break;
 
             case 0x21:
-            seStart(0x10a5,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
-            break;
+                seStart(0x10a5,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
+                break;
             case 0x18:
-            seStart(0x1075,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
-            break;
+                seStart(0x1075,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
+                break;
 
 
             case 9:
             case 0x40:
-            if (checkStreamPlaying(0xc0000004) == 0) {
-                f32 fVar5, fVar6;
-                fVar5 = 0.0;
-                if (mAudioCamera->field_0x0) {
-                    fVar5 = mAudioCamera->field_0x0->y;
-                }
-                if (fVar5 < 9000.0f) {
-                    fVar6 = 0.0f;
-                }
-                else if (fVar5 < 11000.0f) {
-                    fVar6 = (fVar5 - 9000.0f) / 2000.0f;
-                }else {
-                    fVar6 = 1.0f;
-                }
+                if (checkStreamPlaying(0xc0000004) == 0) {
+                    f32 fVar5, fVar6;
+                    fVar5 = 0.0f;
+                    if (mAudioCamera->field_0x0) {
+                        fVar5 = mAudioCamera->field_0x0->y;
+                    }
+                    if (fVar5 < 9000.0f) {
+                        fVar6 = 0.0f;
+                    }
+                    else if (fVar5 < 11000.0f) {
+                        fVar6 = (fVar5 - 9000.0f) / 2000.0f;
+                    }else {
+                        fVar6 = 1.0f;
+                    }
 
-                if (fVar6 != 0.0f) {
-                    startSoundVec(JA_SE_ATM_WIND_MJT,&field_0x1f38,NULL,0,0,'\x04');
-                    field_0x1f38->setVolume(fVar6,0,0);
+                    if (fVar6 != 0.0f) {
+                        startSoundVec(JA_SE_ATM_WIND_MJT,&field_0x1f38,NULL,0,0,'\x04');
+                        field_0x1f38->setVolume(fVar6,0,SOUNDPARAM_Unk0);
+                    }
                 }
-            }
-            break;
+                break;
             case 0x29:
-            seStart(0x1087,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
-            break;
+                seStart(0x1087,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
+                break;
             case 0x5c:
-                u16 cVar2 = this->field_0x0239;
-                if ((((cVar2 != 8) && (cVar2 != 9)) && (cVar2 != 0xA)) && (cVar2 != 0xB)) {
+                if ((((field_0x0239 != 8) && (field_0x0239 != 9)) && (field_0x0239 != 0xA)) && (field_0x0239 != 0xB)) {
                     seStart(0x706c,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
                 }
                 break;
             case 0x5a:
-            seStart(0x10a6,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
-            break;
+                seStart(0x10a6,NULL,0,0,1.0,1.0,-1.0,-1.0,0);
+                break;
         }
     }
     processHeartGaugeSound();
@@ -782,243 +765,236 @@ void JAIZelBasic::bgmStart(u32 bgmId, u32 arg1, s32 arg2) {
     if(field_0x0063){
         return;
     }
-    if(field_0x0066 && bgmId != 0x8000001e){
+    if(field_0x0066 && bgmId != JA_BGM_SELECT){
         return;
     }
-    if(bgmId == 0x80000800 || bgmId == 0){
+    if(bgmId == JA_BGM_SE_SEQUENCE || bgmId == 0){
         return;
     }
     if(bgmId == 0xFFFFFFFF){
         return;
     }
-    if(bgmId == 0xC0000000){
+    if(bgmId == JA_STRM_PROLOGUE){
         return;
     }
     u32 temp_r31 = bgmId;
-
-
     if(mMainBgmNum == JA_BGM_I_MAJU_JAIL && bgmId == JA_BGM_I_MAJU){
         return;    
     }
-
-
-
     switch(bgmId){
+        case JA_BGM_GOMA:
+        case JA_BGM_GOMA_2:
+            mSomeSpecialBGMFlag = 1;
+            break;
+        case JA_BGM_KINDAN_BOSS:
+        case JA_BGM_UNK_105: 
+            bgmId = JA_BGM_KINDAN_BOSS;
+            mSomeSpecialBGMFlag = 1;
+            break;
+        case JA_BGM_DK_BATTLE:
+        case JA_BGM_UNK_110:
+        case JA_BGM_UNK_111:
+        case JA_BGM_UNK_112:
+            bgmId = JA_BGM_DK_BATTLE;
+            mSomeSpecialBGMFlag = 1;
+            break;
+        case JA_BGM_MJ_TOWER_BATTLE:
+        case JA_BGM_UNK_115: 
+            bgmId = JA_BGM_MJ_TOWER_BATTLE;
+            mSomeSpecialBGMFlag = 1;
+            break;
+        case JA_BGM_BST_BATTLE:
+        case JA_BGM_UNK_120:
+        case JA_BGM_UNK_121:
+        case JA_BGM_UNK_122:
+        case JA_BGM_UNK_123:
+            bgmId = JA_BGM_BST_BATTLE;
+            mSomeSpecialBGMFlag = 1;
+            break;
+        case JA_BGM_UNK_124: 
+        case JA_BGM_RANE_BATTLE:
+            bgmId = JA_BGM_RANE_BATTLE;
+            mSomeSpecialBGMFlag = 1;
+            break;
 
-                    case 0x80000003:
-                    case 0x80000010:
-                        mSomeSpecialBGMFlag = 1;
-                        break;
-                    case 0x80000005:
-                    case 0x80000105: 
-                        bgmId = 0x80000005;
-                        mSomeSpecialBGMFlag = 1;
-                        break;
-                    case 0x80000014:
-                    case 0x80000110:
-                    case 0x80000111:
-                    case 0x80000112:
-                        bgmId = 0x80000014;
-                        mSomeSpecialBGMFlag = 1;
-                        break;
-                    case 0x80000015:
-                    case 0x80000115: 
-                        bgmId = 0x80000015;
-                        mSomeSpecialBGMFlag = 1;
-                        break;
-                    case 0x80000023:
-                    case 0x80000120:
-                    case 0x80000121:
-                    case 0x80000122:
-                    case 0x80000123:
-                        bgmId = 0x80000023;
-                        mSomeSpecialBGMFlag = 1;
-                        break;
-                    case 0x80000124: 
-                    case 0x80000029:
-                        bgmId = 0x80000029;
-                        mSomeSpecialBGMFlag = 1;
-                        break;
+        case JA_BGM_UNK_150:
+        case JA_BGM_PAST_BIG_POW:
+            bgmId = JA_BGM_PAST_BIG_POW;
+            mSomeSpecialBGMFlag = 1;
+            break;
+        case JA_BGM_UNK_151:
+        case JA_BGM_PAST_BKM:
+            bgmId = JA_BGM_PAST_BKM;
+            mSomeSpecialBGMFlag = 1;
+            break;
+        case JA_BGM_UNK_152: 
+        case JA_BGM_PAST_RANE: 
+            bgmId = JA_BGM_PAST_RANE;
+            mSomeSpecialBGMFlag = 1;
+            break;
 
-                    case 0x80000150:
-                    case 0x80000049:
-                        bgmId = 0x80000049;
-                        mSomeSpecialBGMFlag = 1;
-                        break;
-
-                    case 0x80000151:
-                    case 0x8000004A:
-                        bgmId = 0x8000004A;
-                        mSomeSpecialBGMFlag = 1;
-                        break;
-                    case 0x80000152: 
-                    case 0x8000004C: 
-                        bgmId = 0x8000004C;
-                        mSomeSpecialBGMFlag = 1;
-                        break;
-
-                    case 0x80000048:
-                    case 0x80000140:
-                        bgmId = 0x80000048;
-                        mSomeSpecialBGMFlag = 1;
-                        break;
-                    case 0x80000028:
-                    case 0x80000125:
-                    case 0x80000126:
-                        bgmId = 0x80000028;
-                        break;
-                    case 0x80000042:
-                    case 0x80000130:
-                    case 0x80000131:
-                    case 0x80000132:
-                    case 0x80000133:
-                        bgmId = 0x80000042;
-                        break;
-                    case 0xC0000006: 
-                        field_0x0064 = 1;
-                        break;
-                    case 0x8000000A:
-                        field_0x00ca = 1;
-                        break;
-                    case 0x80000007:
-                        mNextSceneBgmId = bgmId;
-                        break;
-                    default:
-                    case 0x80000004:
-                        mSomeSpecialBGMFlag = 0;
-                        break;
-                    }
-    
+        case JA_BGM_BIG_POW:
+        case JA_BGM_UNK_140:
+            bgmId = JA_BGM_BIG_POW;
+            mSomeSpecialBGMFlag = 1;
+            break;
+        case JA_BGM_KAMI_TOWER:
+        case JA_BGM_UNK_125:
+        case JA_BGM_UNK_126:
+            bgmId = JA_BGM_KAMI_TOWER;
+            break;
+        case JA_BGM_D_GANON_1:
+        case JA_BGM_UNK_130:
+        case JA_BGM_UNK_131:
+        case JA_BGM_UNK_132:
+        case JA_BGM_UNK_133:
+            bgmId = JA_BGM_D_GANON_1;
+            break;
+        case JA_STRM_MJ_DEMO_INTRO: 
+            field_0x0064 = 1;
+            break;
+        case JA_BGM_DIE_LINK:
+            field_0x00ca = 1;
+            break;
+        case JA_BGM_I_MAJU:
+            mNextSceneBgmId = bgmId;
+            break;
+        default:
+        case JA_BGM_BATTLE_NORM:
+            mSomeSpecialBGMFlag = 0;
+            break;
+        }
     if(mpMainBgmSound){
-        if(bgmId == mMainBgmNum && bgmId == 0x80000005 ){
+        if(bgmId == mMainBgmNum && bgmId == JA_BGM_KINDAN_BOSS ){
             switch(temp_r31){
-                case 0x80000005:
+                case JA_BGM_KINDAN_BOSS:
                     bgmMute(&mpMainBgmSound,bgmId,0,5);   
                     return;
-                case 0x80000105:
+                case JA_BGM_UNK_105:
                     bgmMute(&mpMainBgmSound,bgmId,1,5);
                     return;
             }
 
-        } else if(bgmId == mMainBgmNum && bgmId == 0x80000014){
+        } 
+        else if(bgmId == mMainBgmNum && bgmId == JA_BGM_DK_BATTLE){
             switch(temp_r31){
-                case 0x80000014:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 0, 5U);
+                case JA_BGM_DK_BATTLE: 
+                    bgmMute(&mpMainBgmSound,bgmId, 0, 5);
                     return;
-                case 0x80000110:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 1, 5U);
+                case JA_BGM_UNK_110: 
+                    bgmMute(&mpMainBgmSound,bgmId, 1, 5);
                     return;
-                case 0x80000111:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 2, 5U);
+                case JA_BGM_UNK_111: 
+                    bgmMute(&mpMainBgmSound,bgmId, 2, 5);
                     return;
-                case 0x80000112:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 3, 5U);
+                case JA_BGM_UNK_112: 
+                    bgmMute(&mpMainBgmSound,bgmId, 3, 5);
                     return;
                     
             }
 
-        } else if(bgmId == mMainBgmNum && bgmId == 0x80000015){
+        } else if(bgmId == mMainBgmNum && bgmId == JA_BGM_MJ_TOWER_BATTLE){
             switch(temp_r31){
-                case 0x80000015:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 0, 5U);
+                case JA_BGM_MJ_TOWER_BATTLE: 
+                    bgmMute(&mpMainBgmSound,bgmId, 0, 5);
                     return;
-                case 0x80000115:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 1, 5U);
+                case JA_BGM_UNK_115: 
+                    bgmMute(&mpMainBgmSound,bgmId, 1, 5);
                     return;
                 
             }
-        } else if(bgmId == mMainBgmNum && bgmId == 0x80000023){
+        } else if(bgmId == mMainBgmNum && bgmId == JA_BGM_BST_BATTLE){
             switch(temp_r31){
-                case 0x80000023:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 0, 5U);
+                case JA_BGM_BST_BATTLE: 
+                    bgmMute(&mpMainBgmSound,bgmId, 0, 5);
                     return;
-                case 0x80000120:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 1, 5U);
+                case JA_BGM_UNK_120: 
+                    bgmMute(&mpMainBgmSound,bgmId, 1, 5);
                     return;
-                case 0x80000121:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 2, 5U);
+                case JA_BGM_UNK_121: 
+                    bgmMute(&mpMainBgmSound,bgmId, 2, 5);
                     return;
-                case 0x80000122:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 3, 5U);
+                case JA_BGM_UNK_122: 
+                    bgmMute(&mpMainBgmSound,bgmId, 3, 5);
                     return;
-                case 0x80000123:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId-1, 3, 5U);
+                case JA_BGM_UNK_123: 
+                    bgmMute(&mpMainBgmSound,bgmId-1, 3, 5);
                     return;
             }
-        } else if(bgmId == mMainBgmNum && bgmId == 0x80000042){
+        } else if(bgmId == mMainBgmNum && bgmId == JA_BGM_D_GANON_1){
             switch(temp_r31){
-                case 0x80000042:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 0, 0x3CU);
+                case JA_BGM_D_GANON_1: 
+                    bgmMute(&mpMainBgmSound,bgmId, 0, 0x3C);
                     return;
-                case 0x80000130:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 1, 0x3CU);
+                case JA_BGM_UNK_130: 
+                    bgmMute(&mpMainBgmSound,bgmId, 1, 0x3C);
                     return;
-                case 0x80000131:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 2, 0x3CU);
+                case JA_BGM_UNK_131: 
+                    bgmMute(&mpMainBgmSound,bgmId, 2, 0x3C);
                     return;
-                case 0x80000132:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 3, 0x3CU);
+                case JA_BGM_UNK_132: 
+                    bgmMute(&mpMainBgmSound,bgmId, 3, 0x3C);
                     return;
-                case 0x80000133:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId+1, 3, 0x3CU);
+                case JA_BGM_UNK_133: 
+                    bgmMute(&mpMainBgmSound,bgmId+1, 3, 0x3C);
                     return;
             }
-        } else if(bgmId == mMainBgmNum && bgmId == 0x80000029){
+        } else if(bgmId == mMainBgmNum && bgmId == JA_BGM_RANE_BATTLE){
             switch(temp_r31){
-                case 0x80000029:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 0, 5U);
+                case JA_BGM_RANE_BATTLE: 
+                    bgmMute(&mpMainBgmSound,bgmId, 0, 5);
                     return;
-                case 0x80000124:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 1, 5U);
+                case JA_BGM_UNK_124: 
+                    bgmMute(&mpMainBgmSound,bgmId, 1, 5);
                     return;
             }
-        } else if(bgmId == mMainBgmNum && bgmId == 0x80000048){
+        } else if(bgmId == mMainBgmNum && bgmId == JA_BGM_BIG_POW){
             switch(temp_r31){
-                case 0x80000048:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 0, 5U);
+                case JA_BGM_BIG_POW: 
+                    bgmMute(&mpMainBgmSound,bgmId, 0, 5);
                     return;
-                case 0x80000140:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 1, 5U);
+                case JA_BGM_UNK_140: 
+                    bgmMute(&mpMainBgmSound,bgmId, 1, 5);
                     return;
             }
-        } else if(bgmId == mMainBgmNum && bgmId == 0x80000049){
+        } else if(bgmId == mMainBgmNum && bgmId == JA_BGM_PAST_BIG_POW){
             switch(temp_r31){
-                case 0x80000049:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 0, 5U);
+                case JA_BGM_PAST_BIG_POW: 
+                    bgmMute(&mpMainBgmSound,bgmId, 0, 5);
                     return;
-                case 0x80000150:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 1, 5U);
+                case JA_BGM_UNK_150: 
+                    bgmMute(&mpMainBgmSound,bgmId, 1, 5);
                     return;
             }
-        } else if(bgmId == mMainBgmNum && bgmId == 0x8000004A){
+        } else if(bgmId == mMainBgmNum && bgmId == JA_BGM_PAST_BKM){
             switch(temp_r31){
-                case 0x8000004A:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 0, 5U);
+                case JA_BGM_PAST_BKM: 
+                    bgmMute(&mpMainBgmSound,bgmId, 0, 5);
                     return;
-                case 0x80000151:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 1, 5U);
+                case JA_BGM_UNK_151: 
+                    bgmMute(&mpMainBgmSound,bgmId, 1, 5);
                     return;
             }
-        } else if(bgmId == mMainBgmNum && bgmId == 0x8000004C){
+        } else if(bgmId == mMainBgmNum && bgmId == JA_BGM_PAST_RANE){
             switch(temp_r31){
-                case 0x8000004C:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 0, 5U);
+                case JA_BGM_PAST_RANE: 
+                    bgmMute(&mpMainBgmSound,bgmId, 0, 5);
                     return;
-                case 0x80000152:                /* switch 4 */
-                    bgmMute(&mpMainBgmSound,bgmId, 1, 5U);
+                case JA_BGM_UNK_152: 
+                    bgmMute(&mpMainBgmSound,bgmId, 1, 5);
                     return;
             }
-        } else if(bgmId == mMainBgmNum && bgmId == 0x80000028){
+        } else if(bgmId == mMainBgmNum && bgmId == JA_BGM_KAMI_TOWER){
             switch(temp_r31){
-                case 0x80000028:                /* switch 4 */
+                case JA_BGM_KAMI_TOWER: 
                     bgmMute(&mpMainBgmSound,bgmId, 0, 0x3C);
                     mpMainBgmSound->setTempoProportion(1.0f,0x3C);
                     return;
-                case 0x80000125:                /* switch 4 */
+                case JA_BGM_UNK_125: 
                     bgmMute(&mpMainBgmSound,bgmId, 1, 0x3C);
                     mpMainBgmSound->setTempoProportion(1.3143f,0x3C);
                     return;
-                case 0x80000126:                /* switch 4 */
+                case JA_BGM_UNK_126: 
                     bgmMute(&mpMainBgmSound,bgmId, 2, 0x3C);
                     mpMainBgmSound->setTempoProportion(1.0f,0x3C);
                     return;
@@ -1028,156 +1004,154 @@ void JAIZelBasic::bgmStart(u32 bgmId, u32 arg1, s32 arg2) {
         }
     }else{
 end_state:
-    bgmStop(0,arg2);
-    startSoundVec(bgmId,&mpMainBgmSound,NULL,arg1,0,4);
-    f32 fVar3,fVar4;
-    if(field_0x0224 == 0x12 && mIslandRoomNo == 0x29){
-        if(mAudioCamera->field_0x0){
+        bgmStop(0,arg2);
+        startSoundVec(bgmId,&mpMainBgmSound,NULL,arg1,0,4);
+        f32 fVar3,fVar4;
+        if(field_0x0224 == 0x12 && mIslandRoomNo == 0x29){
+            if(mAudioCamera->field_0x0){
 
-            f32 var_x = mAudioCamera->field_0x0->x - 195000.0f;
-            f32 var_z = mAudioCamera->field_0x0->z - 198000.0f;
-            fVar3 = std::sqrtf((var_x * var_x) + (var_z * var_z));
-            fVar4 = 1.0f;
-            if(fVar3 <= 8000.0f){
-                if(fVar3 <= 5000.0f){
-                    fVar4 = 0.0f;
-                }else{
-                    fVar4 = (fVar3 - 5000.0f)/3000.0f;
-                }
-            }
-            if(mMainBgmNum == 0x8000000A){
+                f32 var_x = mAudioCamera->field_0x0->x - 195000.0f;
+                f32 var_z = mAudioCamera->field_0x0->z - 198000.0f;
+                fVar3 = std::sqrtf((var_x * var_x) + (var_z * var_z));
                 fVar4 = 1.0f;
+                if(fVar3 <= 8000.0f){
+                    if(fVar3 <= 5000.0f){
+                        fVar4 = 0.0f;
+                    }else{
+                        fVar4 = (fVar3 - 5000.0f)/3000.0f;
+                    }
+                }
+                if(mMainBgmNum == JA_BGM_DIE_LINK){
+                    fVar4 = 1.0f;
+                }
+                field_0x0090 = fVar4;
             }
-            field_0x0090 = fVar4;
+
+        }
+        if(bgmId != JA_BGM_DIE_LINK){
+            if(field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac != 1.0f && bgmId != JA_BGM_BIRDMAN_GOAL && bgmId != JA_BGM_BIRDMAN_FAIL && mpMainBgmSound){
+            mpMainBgmSound->setVolume(calcMainBgmVol(),0,SOUNDPARAM_Unk0);
+            }
+        }else{
+            field_0x008c = 1.0f;
         }
 
-    }
-    if(bgmId != 0x8000000A){
-        if(field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac != 1.0f && bgmId != 0x80000051 && bgmId != 0x80000052 && mpMainBgmSound){
-        mpMainBgmSound->setVolume(
-            field_0x0080*field_0x0084*field_0x0088*field_0x008c*field_0x0090*field_0x0094*field_0x0098*field_0x009c*field_0x00ac,
-            0,0);
+
+        switch (temp_r31) {
+            case JA_BGM_KINDAN_BOSS:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_105:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_DK_BATTLE:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_110:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_UNK_111:
+                bgmMute(&mpMainBgmSound, bgmId, 2, 0U);
+                break;
+            case JA_BGM_UNK_112:
+                bgmMute(&mpMainBgmSound, bgmId, 3, 0U);
+                break;
+            case JA_BGM_MJ_TOWER_BATTLE:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_115:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_BST_BATTLE:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_120:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_UNK_121:
+                bgmMute(&mpMainBgmSound, bgmId, 2, 0U);
+                break;
+            case JA_BGM_UNK_122:
+                bgmMute(&mpMainBgmSound, bgmId, 3, 0U);
+                break;
+            case JA_BGM_UNK_123:
+                bgmMute(&mpMainBgmSound, bgmId - 1, 3, 0U);
+                break;
+            case JA_BGM_D_GANON_1:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_130:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_UNK_131:
+                bgmMute(&mpMainBgmSound, bgmId, 2, 0U);
+                break;
+            case JA_BGM_UNK_132:
+                bgmMute(&mpMainBgmSound, bgmId, 3, 0U);
+                break;
+            case JA_BGM_UNK_133:
+                bgmMute(&mpMainBgmSound, bgmId + 1, 3, 0U);
+                break;
+            case JA_BGM_RANE_BATTLE:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_124:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_BIG_POW:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_140:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_PAST_BIG_POW:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_150:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_PAST_BKM:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_151:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_PAST_RANE:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_152:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                break;
+            case JA_BGM_KAMI_TOWER:
+                bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
+                break;
+            case JA_BGM_UNK_125:
+                bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
+                mpMainBgmSound->setTempoProportion(1.3143f, 0U);
+                break;
+            case JA_BGM_UNK_126:
+                bgmMute(&mpMainBgmSound, bgmId, 2, 0U);
+                break;
+            case JA_BGM_SEA:
+                if ((mIsSailing == 0) && (field_0x1f40 < 0.2f)) {
+                    bgmMute(&mpMainBgmSound, JA_BGM_SEA, 1, 0U);
+                }else{
+                    bgmMute(&mpMainBgmSound, JA_BGM_SEA, 0, 0U);
+                }
+                break;
+            case JA_BGM_SEA_STORM:
+                if ((mIsSailing == 0) && (field_0x1f40 < 0.2f)) {
+                    bgmMute(&mpMainBgmSound, JA_BGM_SEA_STORM, 1, 0U);
+                }else{
+                    bgmMute(&mpMainBgmSound, JA_BGM_SEA_STORM, 0, 0U);
+                }
+                break;
         }
-    }else{
-        field_0x008c = 1.0f;
+        mMainBgmNum = bgmId;
+        if(bgmId == JA_BGM_ISLAND_LINK_0 || bgmId == JA_BGM_ISLAND_LINK || bgmId == JA_BGM_ISLAND_LINK_2){
+            field_0x1f3c = 1;
+        }
     }
-
-
-    switch (temp_r31) {           /* switch 14; irregular */
-                case 0x80000005:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000105:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x80000014:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000110:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x80000111:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 2, 0U);
-                    break;
-                case 0x80000112:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 3, 0U);
-                    break;
-                case 0x80000015:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000115:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x80000023:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000120:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x80000121:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 2, 0U);
-                    break;
-                case 0x80000122:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 3, 0U);
-                    break;
-                case 0x80000123:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId - 1, 3, 0U);
-                    break;
-                case 0x80000042:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000130:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x80000131:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 2, 0U);
-                    break;
-                case 0x80000132:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 3, 0U);
-                    break;
-                case 0x80000133:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId + 1, 3, 0U);
-                    break;
-                case 0x80000029:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000124:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x80000048:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000140:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x80000049:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000150:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x8000004A:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000151:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x8000004C:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000152:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    break;
-                case 0x80000028:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 0, 0U);
-                    break;
-                case 0x80000125:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 1, 0U);
-                    mpMainBgmSound->setTempoProportion(1.3143f, 0U);
-                    break;
-                case 0x80000126:                    /* switch 14 */
-                    bgmMute(&mpMainBgmSound, bgmId, 2, 0U);
-                    break;
-                case 0x8000002E:                    /* switch 14 */
-                    if ((mIsSailing == 0) && (field_0x1f40 < 0.2f)) {
-                        bgmMute(&mpMainBgmSound, 0x8000002EU, 1, 0U);
-                    } else {
-                        bgmMute(&mpMainBgmSound, 0x8000002EU, 0, 0U);
-                    }
-                    break;
-                case 0x8000003C:                    /* switch 14 */
-                    if ((mIsSailing == 0) && (field_0x1f40 < 0.2f)) {
-                        bgmMute(&mpMainBgmSound, 0x8000003CU, 1, 0U);
-                    } else {
-                        bgmMute(&mpMainBgmSound, 0x8000003CU, 0, 0U);
-                    }
-                    break;
-                }
-                mMainBgmNum = bgmId;
-                if(bgmId == 0x80000038 || bgmId == 0x80000001 || bgmId == 0x8000000E){
-                    field_0x1f3c = 1;
-                }
-            }
 
 }
 
@@ -1236,6 +1210,7 @@ void JAIZelBasic::mainBgmStopOnly(u32 param_1) {
 /* 802A47B8-802A4CDC       .text subBgmStart__11JAIZelBasicFUl */
 void JAIZelBasic::subBgmStart(u32) {
     /* Nonmatching */
+
 }
 
 /* 802A4CDC-802A4DA4       .text subBgmStop__11JAIZelBasicFv */
