@@ -1418,7 +1418,7 @@ u16 daNpc_Bs1_c::talk() {
         }
     }
 
-    mShopCamAction.m54 = mShopItems.mSelectedItemIdx;
+    mShopCamAction.SetSelectIdx(mShopItems.mSelectedItemIdx);
 
     return status;
 }
