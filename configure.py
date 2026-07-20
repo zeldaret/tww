@@ -1604,7 +1604,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_bgn3"),
     ActorRel(NonMatching, "d_a_bigelf"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bk"),
-    ActorRel(NonMatching, "d_a_bl"),
+    ActorRel(Matching,    "d_a_bl"),
     ActorRel(Matching,    "d_a_bmd"),
     ActorRel(NonMatching, "d_a_bmdfoot"),
     ActorRel(Matching,    "d_a_bmdhand"),
