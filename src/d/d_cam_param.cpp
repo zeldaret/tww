@@ -10,57 +10,39 @@
 #include "SSystem/SComponent/c_math.h"
 
 /* 800AF384-800AF4F4       .text rationalBezierRatio__8dCamMathFff */
-f32 dCamMath::rationalBezierRatio(f32 x, f32 y) {
-    double a;
-    double negA;
-    double sign;
-    double b;
-    double disc;
-    double root;
-    double denomT;
-    double t;
-    double tSquared;
-    double omt;
-    double omtSquared;
-    double crossTerm;
-    double denom;
+f32 dCamMath::rationalBezierRatio(f32 param_0, f32 param_1) {
+    f64 sp68;
 
-    if (x >= 0.0f) {
-        sign = 1.0;
+    if (param_0 >= 0.0f) {
+        sp68 = 1.0;
     } else {
-        sign = -1.0;
-        x = -x;
+        sp68 = -1.0;
+        param_0 = -param_0;
     }
 
-    a = (x * 2.0 * y - x * 2.0) - y * 2.0;
-    negA = -a;
-    b = negA - 1.0;
-    disc = a * a - b * 4.0 * x;
+    f64 sp60 = 2.0 * param_0;
+    f64 sp58 = 2.0 * param_1;
+    f64 sp50 = sp60 * param_1;
+    f64 var_f31 = sp50 - sp60 - sp58;
+    f64 sp48 = -var_f31 - 1.0;
+    f64 sp40 = param_0;
+    f64 sp38 = (var_f31 * var_f31) - (4.0 * sp48 * sp40);
 
-    root = 0.0;
-    if (disc > 0.0) {
-        root = sqrt(disc);
-    }
+    f64 sp30 = -var_f31 - (sp38 > 0.0 ? sqrt(sp38) : 0.0);
+    f64 sp28 = sp48 * 2.0;
+    if (sp28 > 1e-07 || sp28 < -1e-07) {
+        f64 var_f30 = sp30 / sp28;
+        f64 sp20 = var_f30 * var_f30;
+        f64 sp18 = 1.0 - var_f30;
+        f64 sp10 = sp20 + ((sp18 * sp18) + (param_1 * (2.0 * sp18 * var_f30)));
 
-    root = negA - root;
-
-    denomT = b * 2.0;
-    if (denomT > 1e-7 || denomT < -1e-7) {
-        t = root / denomT;
-        tSquared = t * t;
-        omt = 1.0 - t;
-        omtSquared = omt * omt;
-        crossTerm = ((omt * 2.0) * t) * y;
-        denom = tSquared + (omtSquared + crossTerm);
-
-        if (denom > (f32)1e-7) {
-            return sign * (tSquared / denom);
+        if (sp10 > 1e-07f) {
+            return sp68 * (sp20 / sp10);
         }
-
+        return 0.0f;
+    } else {
         return 0.0f;
     }
-
-    return 0.0f;
 }
 
 /* 800AF4F4-800AF544       .text customRBRatio__8dCamMathFff */
@@ -162,6 +144,10 @@ dCamBGChk_c::dCamBGChk_c() {
     m54 = 0.25f;
     m5C = 70.0f;
     m58 = 90.0f;
+}
+
+static f32 dummy() {
+    return 182.04445f;
 }
 
 /* 800AF8F4-800AF930       .text __ct__11dCamParam_cFl */
@@ -342,7 +328,7 @@ dCamSetup_c::dCamSetup_c() {
     mTrimCineScopeHeight = 65.0f;
 
     m094 = 150;
-    m098 = 60.0f;
+    m098 = DEMO_SELECT(70.0f, 60.0f);
     m09C = 0.3f;
     m0A0 = 0.2f;
     mDMCValue = 0.1f;

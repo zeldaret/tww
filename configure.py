@@ -569,7 +569,7 @@ config.libs = [
             Object(Matching,    "d/d_cc_mass_s.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_s.cpp"),
             Object(Matching,    "d/d_cc_uty.cpp"),
-            Object(NonMatching, "d/d_cam_param.cpp"),
+            Object(Matching,    "d/d_cam_param.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_type.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_style.cpp"),
             Object(Matching,    "d/d_cam_type2.cpp"),
