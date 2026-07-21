@@ -62,9 +62,9 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
         mpEmitter = NULL;
     }
     if (emitter->mMaxFrame == 0 && field_0x4 == 0) {
-        f32 scaleY = mExScaleY;
-        f32 scaleZ = mExScaleZ;
-        emitter->setGlobalTranslation(mExScaleX, scaleY, scaleZ);
+        f32 scaleY = position.y;
+        f32 scaleZ = position.z;
+        emitter->setGlobalTranslation(position.x, scaleY, scaleZ);
         if (field_0x50 >= 0.0f) {
             yAngle = mpAngle->y;
         } else {
@@ -261,7 +261,7 @@ void daSTBox_c::CreateInit() {
         JPABaseEmitter* emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SALVAGE00, &field_0x324, 
                 &current.angle, NULL, 0, &shadowCallback, -1, 
                 NULL, NULL, NULL);
-            shadowCallback.setMPos(field_0x324);
+            shadowCallback.position = field_0x324;
             shadowCallback.setField0x48(-0.1f);
             shadowCallback.setDepth(4.0f);
             
@@ -366,9 +366,7 @@ bool daSTBox_c::_execute() {
         shadowCallback.setWaterFlatY(waterY + 2.0f);
         shadowCallback.field_0x0C = waterY + 2.0f; 
         shadowCallback.setWaterY(waterY - current.pos.y);
-        shadowCallback.mExScaleX = m1020Pos.x;
-        shadowCallback.mExScaleY = m1020Pos.y;
-        shadowCallback.mExScaleZ = m1020Pos.z;
+        shadowCallback.position = m1020Pos;
         
     } else {
         JPABaseEmitter* emitter = shadowCallback.getEmitter();
