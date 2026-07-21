@@ -246,8 +246,8 @@ public:
     /* 0x0068 */ JAISound* mpMainBgmSound;
     /* 0x006C */ JAISound* mpSubBgmSound;
     /* 0x0070 */ JAISound* mpStreamBgmSound;
-    /* 0x0074 */ u32 mSubBgmNum;
-    /* 0x0078 */ u32 mMainBgmNum;
+    /* 0x0074 */ s32 mSubBgmNum;
+    /* 0x0078 */ s32 mMainBgmNum;
     /* 0x007C */ u32 mStreamBgmNum;
     /* 0x0080 */ f32 field_0x0080;
     /* 0x0084 */ f32 field_0x0084;

@@ -1417,60 +1417,61 @@ void JAIZelBasic::bgmNowBattle(f32 arg0) {
     }
     if(mSomeSpecialBGMFlag != 1 && field_0x0206 != 1){
         switch(mMainBgmNum){
-            case 0x80000005:
-            case 0x80000105:
-            case 0x8000000A:
-            case 0x80000003:
-            case 0x80000010:
+            case JA_BGM_KINDAN_BOSS:
+            case JA_BGM_UNK_105:
+            case JA_BGM_DIE_LINK:
+            case JA_BGM_GOMA:
+            case JA_BGM_GOMA_2:
                 return;
         }
         if(field_0x0207 == 0){
-            if(mpSubBgmSound && (mSubBgmNum == 0x8000002B || mSubBgmNum == 0x80000046)){
+            if(mpSubBgmSound && (mSubBgmNum == JA_BGM_DIOCTA_BATTLE || mSubBgmNum == JA_BGM_DIOCTA_2)){
                 return;
             }
-            if(mMainBgmNum == 0x80000021 || mMainBgmNum == 0x80000022){
+#if VERSION > VERSION_DEMO
+            if(mMainBgmNum == JA_BGM_TAKT_MAKORE || mMainBgmNum == JA_BGM_TAKT_MEDRI){ //TODO: Enum names break match?
                 return;
             }
-            if(mpSubBgmSound){
-                if(mSubBgmNum == 0x80000041 || mSubBgmNum == 0x80000047){
+#endif
+            if(mpSubBgmSound && (mSubBgmNum == JA_BGM_P_GANON_1 || mSubBgmNum == JA_BGM_P_GANON_2)){
+                return;
+
+            }
+            if(field_0x00ce == 0){
+                if(mSubBgmNum == JA_BGM_MBOSS || mSubBgmNum == JA_BGM_MBOSS_S){
+                    mbossBgmNearByProcess(arg0);
                     return;
                 }
-            }
-                if(field_0x00ce == 0){
-                    if(mSubBgmNum == 0x80000019 || mSubBgmNum == 0x8000001A){
-                        mbossBgmNearByProcess(arg0);
-                        return;
-                    }
-                    if(field_0x00bb == 0 && mLastMinibossSubBGMType == 0){
-                        field_0x00c0 = JAIZelParam::COMMON_BATTLE_FO_DELAY;
-                        if(!mpSubBgmSound || (mSubBgmNum != 0x80000004 && mSubBgmNum != 0x8000001C)){
-                            if(checkLinkOnSea() == 1){
-                                startSoundVec(0x8000001C,&mpSubBgmSound,NULL,0x3C,0,4);
-                                mSubBgmNum = 0x8000001C;
-                            }else{
-                                startSoundVec(0x80000004,&mpSubBgmSound,NULL,0x3C,0,4);
-                                mSubBgmNum = 0x80000004;
-                            }
-
-                            if(mpSubBgmSound){
-                                mpSubBgmSound->setSeqInterVolume(0,field_0x00a0,0);
-                            }
-                            field_0x008c = 0.0f;
-                            if(mpMainBgmSound){
-                                mpMainBgmSound->setVolume(calcMainBgmVol(), 0x3C, SOUNDPARAM_Unk0);
-                            }
-                            if(checkLinkOnSea() == TRUE){
-                                if(checkLinkOnBoardSea() == TRUE){
-                                    bgmMute(&mpSubBgmSound,0x8000001C,0,0);
-                                }else{
-                                    bgmMute(&mpSubBgmSound,0x8000001C,1,0);
-                                }
-                            }else{
-                                bgmMute(&mpSubBgmSound,0x80000004,0,0);
-                            }
+                if(field_0x00bb == 0 && mLastMinibossSubBGMType == 0 && DEMO_SELECT(!field_0x0061,TRUE)){
+                    field_0x00c0 = JAIZelParam::COMMON_BATTLE_FO_DELAY;
+                    if(!mpSubBgmSound || (mSubBgmNum != JA_BGM_BATTLE_NORM && mSubBgmNum != JA_BGM_SEA_ENEMY)){
+                        if(checkLinkOnSea() == 1){
+                            startSoundVec(JA_BGM_SEA_ENEMY,&mpSubBgmSound,NULL,0x3C,0,4);
+                            mSubBgmNum = JA_BGM_SEA_ENEMY;
+                        }else{
+                            startSoundVec(JA_BGM_BATTLE_NORM,&mpSubBgmSound,NULL,0x3C,0,4);
+                            mSubBgmNum = JA_BGM_BATTLE_NORM;
                         }
 
-                    if(mpSubBgmSound && mSubBgmNum != 0x8000001C){
+                        if(mpSubBgmSound){
+                            mpSubBgmSound->setSeqInterVolume(0,field_0x00a0,0);
+                        }
+                        field_0x008c = 0.0f;
+                        if(mpMainBgmSound){
+                            mpMainBgmSound->setVolume(calcMainBgmVol(), 0x3C, SOUNDPARAM_Unk0);
+                        }
+                        if(checkLinkOnSea() == TRUE){
+                            if(checkLinkOnBoardSea() == TRUE){
+                                bgmMute(&mpSubBgmSound,JA_BGM_SEA_ENEMY,0,0);
+                            }else{
+                                bgmMute(&mpSubBgmSound,JA_BGM_SEA_ENEMY,1,0);
+                            }
+                        }else{
+                            bgmMute(&mpSubBgmSound,JA_BGM_BATTLE_NORM,0,0);
+                        }
+                    }
+
+                    if(mpSubBgmSound && mSubBgmNum != JA_BGM_SEA_ENEMY){
                         if(arg0 <= JAIZelParam::ENEMY_NEARBY_DIST){
                             field_0x00c4 = 0;
                             if(field_0x00c1 == 0){
@@ -1502,6 +1503,42 @@ void JAIZelBasic::bgmNowBattle(f32 arg0) {
 /* 802A53B4-802A5548       .text bgmBattleGFrame__11JAIZelBasicFv */
 void JAIZelBasic::bgmBattleGFrame() {
     /* Nonmatching */
+    if(mSubBgmNum == 0x80000004 || mSubBgmNum == 0x8000001C){
+        if(field_0x00c0 != JAIZelParam::COMMON_BATTLE_FO_DELAY && field_0x00c0 == 0){
+            field_0x008c = 1.0f;
+            if(mpMainBgmSound){
+                mpMainBgmSound->setVolume(calcMainBgmVol(), 0x2D, SOUNDPARAM_Unk0);
+            }
+        }
+        stopBattleBgm();
+        field_0x00c1 = 0;
+        field_0x00c4 = 0;
+    }else{
+        if(mSubBgmNum == 0x80000004){
+            switch(field_0x00c4){
+                case 1:
+                    mpSubBgmSound->setTrackVolume(JAIZelParam::ENEMY_NEARBY_TRACK,0.0f,JAIZelParam::ENEMY_NEARBY_FADEOUT_TIME);
+                    mpSubBgmSound->setTrackVolume(JAIZelParam::ENEMY_NEARBY_TRACK_2,0.0f,JAIZelParam::ENEMY_NEARBY_FADEOUT_TIME);
+                default:
+                    field_0x00c4 -= 1;
+
+            }
+        }
+        if(field_0x00c8 != 0){
+            field_0x00c8 -= 1;
+        }else{
+            if(mpSubBgmSound && mSubBgmNum == 0x80000004){
+                mpSubBgmSound->setTrackVolume(JAIZelParam::BTL_KAITENGIRI_TRACK,0.0f,JAIZelParam::BTL_KAITENGIRI_FADEOUT_TIME);
+            }
+        }
+        if(field_0x00c0 != 0){
+            field_0x00c0 -= 1;
+        }
+    }
+
+
+
+
 }
 
 /* 802A5548-802A55AC       .text stopBattleBgm__11JAIZelBasicFv */
