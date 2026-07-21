@@ -204,9 +204,11 @@ public:
     static scene_info_s m_isle_info[];
     static const char* spot_dir_name[];
     static isle_area_s mIsleArea[];
-
+#if VERSION == VERSION_DEMO
+    static const int MAX_CONCURRENT_SE_NUM = 26;
+#else
     static const int MAX_CONCURRENT_SE_NUM = 24;
-
+#endif
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0024 */ u8* field_0x0024;
@@ -295,7 +297,8 @@ public:
     /* 0x0194 */ u32 field_0x0194[MAX_CONCURRENT_SE_NUM];
     /* 0x01F4 */ int field_0x01f4;
 #if VERSION == VERSION_DEMO
-    u8 temppadding[0x60];
+    u8 temppadding[0x5C];
+    u32 field_demo_0x01f8;
 #endif
     /* 0x01F8 */ u8 field_0x01f8;
     /* 0x01F9 */ u8 field_0x01f9;
