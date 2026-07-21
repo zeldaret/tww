@@ -280,7 +280,7 @@ public:
 #endif
     /* 0x00C0 */ u8 field_0x00c0;
     /* 0x00C1 */ s8 field_0x00c1;
-    /* 0x00C4 */ int field_0x00c4;
+    /* 0x00C4 */ u32 field_0x00c4;
     /* 0x00C8 */ u8 field_0x00c8;
     /* 0x00C9 */ u8 field_0x00c9;
     /* 0x00CA */ u8 field_0x00ca;
