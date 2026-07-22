@@ -2146,20 +2146,22 @@ void JAIZelBasic::seDeleteObject(Vec* param_1) {
 /* 802A86A8-802A8748       .text getLinkVoiceVowel__11JAIZelBasicFUl */
 u8 JAIZelBasic::getLinkVoiceVowel(u32 arg0) {
     /* Nonmatching */
+
+
+    linkVoiceStruct* lvs = &linkVoiceTable[arg0];
     int i;
     u32 iVar1;
     for(i = 0; i < 400; i++){
  
-        f32 dVar4 = field_0x2068.get();
-        iVar1 = dVar4 * 4.0f;
-        if(linkVoiceTable[arg0][iVar1][0] != 0xFF){
+        iVar1 = field_0x2068.get()* 4.0f;
+        if(lvs->entries[iVar1].m0 != 0xFF){
             break;
         }
     }
     if(i == 400){
         return -1;
     }else{
-        return linkVoiceTable[arg0][iVar1][1];
+        return lvs->entries[iVar1].mVowel;
     }
 }
 
@@ -2170,17 +2172,55 @@ void JAIZelBasic::linkVoiceStart(u32 arg0, Vec* arg1, u8 arg2, s8 arg3) {
         return;
     }
     if(mStreamBgmNum == 0xC0000005){
-        if(field_0x00b8 == 0 || arg0 == 0x10){
+        if(field_0x00b8 != 0){
+
+            if(arg0 == 0x10){
                 return;
+            }
+
+        }else{
+            if(arg0 == 0x10 && getRandomU32(3) != 0){
+                return;
+            }
         }
-        if(arg0 == 0x10 && getRandomU32(3) != 0){
-            return;
-        }
-        
 
     }
     if(mMainBgmNum == 0x8000000B && arg0 == 3){
         field_0x0090 = JAIZelParam::VOL_BGM_TALKING;
+        if(mpMainBgmSound && !mpSubBgmSound){
+            mpMainBgmSound->setVolume(calcMainBgmVol(),2,0);
+        }
+    }
+
+
+
+    if(arg0 == 0xC){
+        arg1 = NULL;
+    }
+
+    linkVoiceStruct* voice_struct = &linkVoiceTable[arg0];
+    u32 se_num_pre_offset = 0;
+    if(arg2 == 0xFF){
+        se_num_pre_offset = voice_struct->entries[0].m0;
+    }else{
+        int i;
+        for(i = 0; i < 400; i++){
+            u32 second_index = field_0x2068.get()*4.0f;
+            if(arg2 == voice_struct->entries[second_index].mVowel){
+                u32 temp_r0 = voice_struct->entries[second_index].m0;
+                if(temp_r0 != 0xFF){
+                    se_num_pre_offset = temp_r0;
+                    break;
+                }
+            }
+        }
+        if(i == 400){
+            se_num_pre_offset = voice_struct->entries[0].m0;
+        }
+    }
+    if(se_num_pre_offset != 0xFF){
+        se_num_pre_offset += 0x1800;
+        seStart(se_num_pre_offset,arg1,NULL,arg3,1.0f,1.0f,-1.0f,-1.0f,0);
     }
 }
 

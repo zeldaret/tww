@@ -195,7 +195,15 @@ public:
     static u8 m_bgm_mute_state[];
 
     // static charVoiceTable;
-    static  u8 linkVoiceTable[1][4][2];
+
+    struct LinkVoiceEntry{
+        u8 m0;
+        u8 mVowel;
+    };
+    struct linkVoiceStruct{
+        LinkVoiceEntry entries[4];
+    };
+    static linkVoiceStruct linkVoiceTable[];
 
     static u8 m_bgm_wave_info[];
     static u8 m_dy_wave_set_1st[][2];
