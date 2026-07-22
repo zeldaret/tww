@@ -206,6 +206,8 @@ public:
     dMs_HIO_c();
     virtual ~dMs_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
     /* 0x04 */ s8 id;
     /* 0x05 */ u8 field_0x5;
     /* 0x06 */ u8 field_0x6;

@@ -73,7 +73,7 @@ public:
         PRM_ARG0_S = 0x0,
     };
 
-    u8 getNpcNo() { return mNpcType; }
+    u8 getNpcNo() { return mNpcNo; }
     request_of_phase_process_class* getPhaseP() { return &mPhase; }
     void setEtcFlag(u32 flags) { mEtcFlag |= flags; }
     void setResFlag(u8 flag) { mResFlag = flag; }
@@ -253,7 +253,7 @@ public:
     /* 0x78E */ u8 m78E;
     /* 0x78F */ u8 m78F;
     /* 0x790 */ u8 mResFlag;
-    /* 0x791 */ u8 mNpcType;
+    /* 0x791 */ u8 mNpcNo;
     /* 0x792 */ u8 m792;
     /* 0x793 */ u8 m793;
     /* 0x794 */ u8 m794;

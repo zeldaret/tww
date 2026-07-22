@@ -165,7 +165,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 }
 
 /* 00000430-0000046C       .text daNpc_Btsw_getGameEndMsg__Fs */
-u32 daNpc_Btsw_getGameEndMsg(short rupees) {
+u32 daNpc_Btsw_getGameEndMsg(s16 rupees) {
     u32 msgNo;
     if (rupees == 0) {
         msgNo = 0x1A9D;
@@ -207,7 +207,7 @@ void daNpc_Btsw_c::playTexPatternAnm() {
 }
 
 /* 00000610-00000708       .text setAnm__12daNpc_Btsw_cFSc */
-void daNpc_Btsw_c::setAnm(signed char idx) {
+void daNpc_Btsw_c::setAnm(s8 idx) {
     static u32 a_play_mode_tbl[] = {
         J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
         J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
@@ -252,7 +252,7 @@ void daNpc_Btsw_c::setAnm(signed char idx) {
 }
 
 /* 00000708-0000085C       .text chkAttention__12daNpc_Btsw_cF4cXyzs */
-bool daNpc_Btsw_c::chkAttention(cXyz pos, short angle) {
+bool daNpc_Btsw_c::chkAttention(cXyz pos, s16 angle) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     f32 maxAttnDistXZ = l_HIO.mNpc.mMaxAttnDistXZ;
@@ -309,7 +309,7 @@ void daNpc_Btsw_c::checkOrder() {
 }
 
 /* 00000AC4-00000CBC       .text next_msgStatus__12daNpc_Btsw_cFPUl */
-u16 daNpc_Btsw_c::next_msgStatus(unsigned long* currMsgNo) {
+u16 daNpc_Btsw_c::next_msgStatus(u32* currMsgNo) {
     u16 ret = fopMsgStts_MSG_CONTINUES_e;
 
     switch (*currMsgNo) {
@@ -917,7 +917,7 @@ BOOL daNpc_Btsw_c::_draw() {
     }
 
     mpShopCursor->draw();
-    dSnap_RegistFig(DSNAP_TYPE_BTSW, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_BTSW, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
@@ -1108,7 +1108,7 @@ BOOL SwMail2_c::MailCreateInit(cXyz* param_1, cXyz* param_2) {
 }
 
 /* 00003838-00003A64       .text getNextNo__9SwMail2_cFUc */
-u8 SwMail2_c::getNextNo(unsigned char previous_no) {
+u8 SwMail2_c::getNextNo(u8 previous_no) {
     f32 random = cM_rndF(10.0f);
     f32 fVar4 = 2.5f - (m_same_count * 1.25f);
 
@@ -1301,7 +1301,7 @@ void SwMail2_c::Wait() {
 }
 
 /* 000040A4-000040EC       .text ThrowInit__9SwMail2_cF4cXyzUc */
-void SwMail2_c::ThrowInit(cXyz param_1, unsigned char param_2) {
+void SwMail2_c::ThrowInit(cXyz param_1, u8 param_2) {
     field_0x30 = param_1;
     field_0x56 = 0;
     field_0x55 = param_2;

@@ -908,7 +908,7 @@ void dAttention_c::Draw() {
     Mtx invCamera;
     cMtx_inverse(dComIfGd_getViewRotMtx(), invCamera);
     fopAc_ac_c *target = LockonTarget(0);
-    if (dComIfGp_event_runCheck() || dComIfGp_getScopeMesgStatus() != 0)
+    if (dComIfGp_event_runCheck() || dComIfGp_getScopeMesgStatus() != fopMsgStts_MSG_UNK0_e)
         return;
     if (target != NULL) {
         if (target != NULL) {

@@ -157,7 +157,7 @@ void dComIfG_play_c::itemInit() {
     mPictureResult = 0;
     mPictureResultDetail = 0;
     mPictureStatus = 0;
-    field_0x495f = 0;
+    mGetPictureNum = 0;
     mPictureFormat = 0;
     mSelectPicture = 0;
     mHeapLockFlag = 0;
@@ -586,7 +586,7 @@ int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 scaleXZ, cBgS_PolyIn
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
-        return dComIfGd_setSimpleShadow(i_pos, groundY, scaleXZ, plane_p->GetNP(), i_angle, scaleZ, i_tex);
+        return dComIfGd_setSimpleShadow(i_pos, groundY, scaleXZ, &plane_p->mNormal, i_angle, scaleZ, i_tex);
     } else {
         return 0;
     }
@@ -1131,56 +1131,56 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
         break;
     case dItemNo_SKULL_NECKLACE_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_SKULL_NECKLACE_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_SKULL_NECKLACE_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_SKULL_NECKLACE_e);
             }
         }
         break;
     case dItemNo_BOKOBABA_SEED_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_BOKOBABA_SEED_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_BOKOBABA_SEED_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_BOKOBABA_SEED_e);
             }
         }
         break;
     case dItemNo_GOLDEN_FEATHER_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_GOLDEN_FEATHER_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_GOLDEN_FEATHER_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_GOLDEN_FEATHER_e);
             }
         }
         break;
     case dItemNo_KNIGHTS_CREST_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_KNIGHTS_CREST_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_KNIGHTS_CREST_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_KNIGHTS_CREST_e);
             }
         }
         break;
     case dItemNo_RED_JELLY_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_RED_JELLY_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_RED_JELLY_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_RED_JELLY_e);
             }
         }
         break;
     case dItemNo_GREEN_JELLY_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_GREEN_JELLY_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_GREEN_JELLY_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_GREEN_JELLY_e);
             }
         }
         break;
     case dItemNo_BLUE_JELLY_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_BLUE_JELLY_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_BLUE_JELLY_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_BLUE_JELLY_e);
             }
         }
         break;
     case dItemNo_JOY_PENDANT_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_JOY_PENDANT_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_JOY_PENDANT_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
             }
         }

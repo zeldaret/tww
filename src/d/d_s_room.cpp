@@ -160,11 +160,15 @@ cPhs_State phase_1(room_of_scene_class* i_this) {
         return cPhs_INIT_e;
 
     const char * arcName = setArcName(i_this);
-    BOOL ret = dComIfG_setStageRes(arcName, pHeap);
-    if (!ret) {
+    BOOL rt = dComIfG_setStageRes(arcName, pHeap);
+#if VERSION == VERSION_DEMO
+    JUT_ASSERT(380, rt == TRUE);
+#else
+    if (!rt) {
         dStage_escapeRestart();
         return cPhs_ERROR_e;
     }
+#endif
 
     return cPhs_NEXT_e;
 }
@@ -173,12 +177,14 @@ cPhs_State phase_1(room_of_scene_class* i_this) {
 cPhs_State phase_2(room_of_scene_class* i_this) {
     const char * arcName = setArcName(i_this);
     s32 rt = dComIfG_syncStageRes(arcName);
+#if VERSION > VERSION_DEMO
     if (rt < 0) {
         dStage_escapeRestart();
         return cPhs_ERROR_e;
     }
+#endif
 
-    JUT_ASSERT(0x1c0, rt >= 0);
+    JUT_ASSERT(DEMO_SELECT(394, 448), rt >= 0);
     if (rt != 0)
         return cPhs_INIT_e;
 
@@ -203,7 +209,7 @@ cPhs_State phase_2(room_of_scene_class* i_this) {
                     u32 layerNo = dComIfG_play_c::getLayerNo(roomNo);
                     s32 bank = banks[layerNo];
                     if (bank != 0xFF) {
-                        JUT_ASSERT(0x1db, 0 <= bank && bank < 100);
+                        JUT_ASSERT(DEMO_SELECT(421, 475), 0 <= bank && bank < 100);
                         sprintf(dStage_roomControl_c::mDemoArcName, "Demo%02d", bank);
                         if (!dComIfG_setObjectRes(dStage_roomControl_c::mDemoArcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL))
                             dStage_roomControl_c::mDemoArcName[0] = '\0';
@@ -213,7 +219,7 @@ cPhs_State phase_2(room_of_scene_class* i_this) {
         }
 
         dStage_FileList_dt_c * fileList = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
-        JUT_ASSERT(499, fileList != NULL);
+        JUT_ASSERT(DEMO_SELECT(445, 499), fileList != NULL);
 
         u8 particleNo = dStage_FileList_dt_GetParticleNo(fileList);
         i_this->mbHasRoomParticle = dComIfGp_particle_readScene(particleNo, &i_this->sceneCommand);
@@ -227,7 +233,9 @@ cPhs_State phase_3(room_of_scene_class* i_this) {
     if (dStage_roomControl_c::getDemoArcName()[0] != '\0') {
         s32 rt = dComIfG_syncObjectRes(dStage_roomControl_c::getDemoArcName());
         if (rt < 0) {
+#if VERSION > VERSION_DEMO
             dStage_escapeRestart();
+#endif
             return cPhs_ERROR_e;
         } else if (rt > 0) {
             return cPhs_INIT_e;
@@ -238,7 +246,7 @@ cPhs_State phase_3(room_of_scene_class* i_this) {
         if (i_this->sceneCommand->sync() == 0)
             return cPhs_INIT_e;
 
-        JUT_ASSERT(0x215, i_this->sceneCommand->getMemAddress() != NULL);
+        JUT_ASSERT(DEMO_SELECT(477, 533), i_this->sceneCommand->getMemAddress() != NULL);
         dComIfGp_particle_createRoomScene(i_this->sceneCommand->getMemAddress());
         delete i_this->sceneCommand;
     }

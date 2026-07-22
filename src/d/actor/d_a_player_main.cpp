@@ -13091,7 +13091,7 @@ void daPy_lk_c::endDemoMode() {
     resetDemoTextureAnime();
     if (mEquipItem == daPyItem_UNK104_e || mEquipItem == daPyItem_UNK10A_e) {
         deleteEquipItem(FALSE);
-        offNoResetFlg1(daPyFlg1_SHIP_TACT);
+        offShipTact();
     }
     mDoAud_taktModeMuteOff();
     if (mAcch.ChkGroundHit() &&
