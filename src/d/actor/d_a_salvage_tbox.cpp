@@ -20,7 +20,7 @@ const f32 daSTBox_c::m_shadow_depth = 2000.0f;
 const f32 daSTBox_c::m_shadow_scroll = -0.1f;
 const f32 daSTBox_c::m_shadow_scale = 4.0f;
 
-const f32 crane_offset[] = {80.0f, 125.0f, 125.0f};
+
 
 
 
@@ -414,6 +414,8 @@ void daSTBox_c::initDrop(int) {
     /* Nonmatching */
     gravity = -4.0f;
 }
+
+const f32 crane_offset[] = {80.0f, 125.0f, 125.0f};
 
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
 BOOL daSTBox_c::actWait(int) {
