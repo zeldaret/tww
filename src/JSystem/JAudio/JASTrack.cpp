@@ -750,7 +750,7 @@ void JASystem::TTrack::updateTempo() {
         field_0x368 = (f32) field_0x378;
         field_0x368 *= field_0x376;
         field_0x368 /= Kernel::getDacRate();
-        field_0x368 *= 1.33333333f;
+        field_0x368 *= (4.0f / 3.0f);
         if (mOuterParam != NULL && mOuterParam->checkOuterSwitch(OUTERPARAM_Tempo)) {
             field_0x368 *= mOuterParam->getTempo();
         }

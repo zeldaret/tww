@@ -3706,20 +3706,19 @@ BOOL daShip_c::execute() {
             if (mTornadoActor) {
                 s16 sVar16;
                 sVar16 = shape_angle.y;
-                cLib_addCalcAngleS(&shape_angle.y, m040C * 10430.378f + 20480.0f, 5, 0x2000, 0x200);
+                cLib_addCalcAngleS(&shape_angle.y, RAD2S(m040C) + 0x5000, 5, 0x2000, 0x200);
                 setControllAngle(getAimControllAngle(sVar16));
                 current.angle.y = shape_angle.y;
             }
             else {
                 if (mWhirlActor) {
-                    s16 sVar16;
-                    sVar16 = shape_angle.y;
+                    s16 sVar16 = shape_angle.y;
                     s16 sVar5;
                     if (m0352) {
-                        sVar5 = m040C * 10430.378f + 20480.0f;
+                        sVar5 = RAD2S(m040C) + 0x5000;
                     }
                     else {         
-                        sVar5 = m040C * 10430.378f + 32768.0f;
+                        sVar5 = RAD2S(m040C) + 0x8000;
                     }
                     cLib_addCalcAngleS(&shape_angle.y, sVar5, 5, 0x2000, 0x200);
                     setControllAngle(getAimControllAngle(sVar16));

@@ -498,7 +498,7 @@ void dKyr_lenzflare_move() {
     s16 angle = cM_atan2s(vectle.x, vectle.y);
 
     pLenzPkt->mAngleDeg = angle;
-    pLenzPkt->mAngleDeg *= 0.005493164f;
+    pLenzPkt->mAngleDeg *= S2DEG_CONSTANT;
     pLenzPkt->mAngleDeg += 180.0f;
 
     dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &camFwd);
@@ -2949,7 +2949,7 @@ void dKyr_drawHousi(Mtx drawMtx, u8** pImg) {
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 
-            MTXRotRad(rotMtx, 'Z', DEG_TO_RAD(rot));
+            MTXRotRad(rotMtx, 'Z', DEG2RAD(rot));
             MTXConcat(camMtx, rotMtx, camMtx);
 
             GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
@@ -3136,7 +3136,7 @@ void dKyr_drawStar(Mtx drawMtx, u8** pImg) {
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
 
         Mtx rotMtx;
-        MTXRotRad(rotMtx, 'Z', DEG_TO_RAD(rot));
+        MTXRotRad(rotMtx, 'Z', DEG2RAD(rot));
         MTXConcat(camMtx, rotMtx, camMtx);
 
         GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
