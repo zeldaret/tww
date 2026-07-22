@@ -839,8 +839,19 @@ void daNpc_Zk1_c::shadowDraw() {
     );
 }
 
+static const u32 dummy1[] = {
+    0xFF000080,
+};
+
+static const u32 dummy2[] = {
+    0x0000FF80,
+};
+
+    
+
 /* 00001BAC-00001C80       .text _draw__11daNpc_Zk1_cFv */
 BOOL daNpc_Zk1_c::_draw() {
+
     J3DModel* pModel = mpMorf->getModel();
     J3DModelData* modelData = pModel->getModelData();
 
