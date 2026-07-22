@@ -275,7 +275,7 @@ void daNpc_Zk1_c::play_btp_anm() {
 }
 
 /* 000009D8-00000A74       .text setAnm_anm__11daNpc_Zk1_cFPQ211daNpc_Zk1_c9anm_prm_c */
-void daNpc_Zk1_c::setAnm_anm(dLib_anm_prm_c* param_1) {
+void daNpc_Zk1_c::setAnm_anm(daNpc_Zk1_c::anm_prm_c* param_1) {
     /* Nonmatching */
     s8 temp = param_1->mAnmIdx;
     if(temp < 0 || mCurrAnmIdx == temp) {
@@ -298,7 +298,7 @@ void daNpc_Zk1_c::setAnm_anm(dLib_anm_prm_c* param_1) {
 /* 00000A74-00000AE0       .text setAnm__11daNpc_Zk1_cFv */
 void daNpc_Zk1_c::setAnm() {
     /* Nonmatching */
-    static dLib_anm_prm_c a_anm_prm_tbl[3] = {
+    static daNpc_Zk1_c::anm_prm_c a_anm_prm_tbl[3] = {
         {-1, -1, 0,0.0, 0.0, J3DFrameCtrl::EMode_NULL},
         {0, 0, 0,8.0, 1.0, J3DFrameCtrl::EMode_LOOP},
         {-1, -1, 0,0.0, 0.0, J3DFrameCtrl::EMode_NULL},
@@ -336,7 +336,7 @@ void daNpc_Zk1_c::ctrlAnmAtr() {
 /* 00000B34-00000B98       .text setAnm_ATR__11daNpc_Zk1_cFv */
 void daNpc_Zk1_c::setAnm_ATR() {
     /* Nonmatching */
-    static dLib_anm_prm_c a_anm_prm_tbl[4] = {
+    static daNpc_Zk1_c::anm_prm_c a_anm_prm_tbl[4] = {
         {0, 0, 0, 8., 1., J3DFrameCtrl::EMode_LOOP},
         {1, 0, 0, 8., 1., J3DFrameCtrl::EMode_LOOP},
         {2, 0, 0, 8., 1., J3DFrameCtrl::EMode_LOOP},

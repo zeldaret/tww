@@ -11,6 +11,16 @@ class daNpc_Zk1_c : public fopNpc_npc_c {
 public:
     typedef int (daNpc_Zk1_c::*ActionFunc)(void*);
 
+    struct anm_prm_c {
+        // Borrowed from d_lib.h, fields seem to match
+        /* 0x00 */ s8 mAnmIdx;
+        /* 0x01 */ s8 mNextPrmIdx;
+        /* 0x02 */ s16 field_0x02;
+        /* 0x04 */ f32 mMorf;
+        /* 0x08 */ f32 mPlaySpeed;
+        /* 0x0C */ int mLoopMode;
+    };
+
 
 
     void _nodeCB_Head(J3DNode*, J3DModel*);
@@ -24,7 +34,7 @@ public:
     bool setBtp(s8, bool);
     bool init_texPttrnAnm(s8, bool);
     void play_btp_anm();
-    void setAnm_anm(dLib_anm_prm_c*);
+    void setAnm_anm(daNpc_Zk1_c::anm_prm_c*);
     void setAnm();
     void chngAnmTag();
     void ctrlAnmTag();
