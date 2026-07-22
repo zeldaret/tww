@@ -917,7 +917,7 @@ BOOL daNpc_Zk1_c::_execute() {
     setMtx(false);
 
     if (!field_0x7A4) {
-        setCollision(40.0f, 100.0f);
+        setCollision(80.0f, 220.0f);
     }
 
     return TRUE;
