@@ -133,9 +133,9 @@ public:
     void initSeaEnvPos();
     void registSeaEnvPos(Vec*);
     void seaEnvSePlay(u32, s8);
-    void calcPosPanLR(Vec*);
-    void calcPosPanSR(Vec*, f32);
-    void calcPosVolume(Vec*, f32);
+    f32 calcPosPanLR(Vec*);
+    f32 calcPosPanSR(Vec*, f32);
+    f32 calcPosVolume(Vec*, f32);
     void seaShoreSE(u32, Vec*, u32, s8);
     void initRiverPos();
     void registRiverPos(Vec*);
@@ -195,7 +195,7 @@ public:
     static u8 m_bgm_mute_state[];
 
     // static charVoiceTable;
-    // static linkVoiceTable;
+    static  u8 linkVoiceTable[1][4][2];
 
     static u8 m_bgm_wave_info[];
     static u8 m_dy_wave_set_1st[][2];
@@ -291,7 +291,7 @@ public:
     /* 0x00CD */ u8 field_0x00cd;
     /* 0x00CE */ u8 field_0x00ce;
     /* 0x00CF */ u8 field_0x00CF[0x00D0 - 0x00CF];
-    /* 0x00D0 */ int field_0x00d0;
+    /* 0x00D0 */ Vec* field_0x00d0;
     /* 0x00D4 */ JAISound* mpSeSound[MAX_CONCURRENT_SE_NUM];
     /* 0x0134 */ u32 mSeNum[MAX_CONCURRENT_SE_NUM];
     /* 0x0194 */ u32 field_0x0194[MAX_CONCURRENT_SE_NUM];
