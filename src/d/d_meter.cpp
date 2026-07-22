@@ -2119,11 +2119,10 @@ void dMeter_actionForce(sub_meter_class* i_Meter) {
     if (dComIfGp_getDoStatusForce() != dActStts_BLANK_e) {
         dComIfGp_setDoStatusForce(dActStts_BLANK_e);
     }
-    if (dComIfGp_getAStatusForce() == dActStts_BLANK_e) {
-        return;
+    if (dComIfGp_getAStatusForce() != dActStts_BLANK_e) {
+        dComIfGp_setAStatus(dComIfGp_getDoStatusForce());
+        dComIfGp_setAStatusForce(dActStts_BLANK_e);
     }
-    dComIfGp_setAStatus(dComIfGp_getDoStatusForce());
-    dComIfGp_setAStatusForce(dActStts_BLANK_e);
 }
 
 /* 801F3B60-801F3CFC       .text dMeter_actionChange__FP15sub_meter_class */

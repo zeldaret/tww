@@ -185,7 +185,7 @@ static BOOL nodeCallBackArm(J3DNode* node, int calcTiming) {
 }
 
 /* 00000550-000006F4       .text daNpc_Bmsw_getGameEndMsg__Fs */
-static u32 daNpc_Bmsw_getGameEndMsg(short rupees) {
+static u32 daNpc_Bmsw_getGameEndMsg(s16 rupees) {
     u8 reg_val = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203);
     u32 msgNo;
     switch (reg_val) {
@@ -271,7 +271,7 @@ void daNpc_Bmsw_c::playTexPatternAnm() {
 }
 
 /* 00000894-00000984       .text setAnm__12daNpc_Bmsw_cFSc */
-void daNpc_Bmsw_c::setAnm(signed char idx) {
+void daNpc_Bmsw_c::setAnm(s8 idx) {
     static u32 a_play_mode_tbl[] = {
         J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
         J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
@@ -304,7 +304,7 @@ void daNpc_Bmsw_c::setAnm(signed char idx) {
 }
 
 /* 00000984-00000AD8       .text chkAttention__12daNpc_Bmsw_cF4cXyzs */
-bool daNpc_Bmsw_c::chkAttention(cXyz pos, short angle) {
+bool daNpc_Bmsw_c::chkAttention(cXyz pos, s16 angle) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     f32 maxAttnDistXZ = l_HIO.mNpc.mMaxAttnDistXZ;
@@ -349,7 +349,7 @@ void daNpc_Bmsw_c::checkOrder() {
 }
 
 /* 00000B68-00000EF8       .text next_msgStatus__12daNpc_Bmsw_cFPUl */
-u16 daNpc_Bmsw_c::next_msgStatus(unsigned long* currMsgNo) {
+u16 daNpc_Bmsw_c::next_msgStatus(u32* currMsgNo) {
     u16 ret = fopMsgStts_MSG_CONTINUES_e;
 
     switch (*currMsgNo) {
@@ -806,7 +806,7 @@ BOOL daNpc_Bmsw_c::checkNextMailThrowOK() {
 }
 
 /* 00001C70-00001DA4       .text setGameGetRupee__12daNpc_Bmsw_cFs */
-void daNpc_Bmsw_c::setGameGetRupee(short rupees) {
+void daNpc_Bmsw_c::setGameGetRupee(s16 rupees) {
     u8 reg_val = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203);
     switch (reg_val) {
         case 0:
@@ -1320,7 +1320,7 @@ BOOL SwMail_c::MailCreateInit(cXyz* param_1, cXyz* param_2) {
 }
 
 /* 00003DBC-00003FE8       .text getNextNo__8SwMail_cFUc */
-u8 SwMail_c::getNextNo(unsigned char previous_no) {
+u8 SwMail_c::getNextNo(u8 previous_no) {
     f32 random = cM_rndF(10.0f);
     f32 fVar4 = 2.5f - (m_same_count * 1.25f);
 
@@ -1513,7 +1513,7 @@ void SwMail_c::Wait() {
 }
 
 /* 00004628-00004670       .text ThrowInit__8SwMail_cF4cXyzUc */
-void SwMail_c::ThrowInit(cXyz param_1, unsigned char param_2) {
+void SwMail_c::ThrowInit(cXyz param_1, u8 param_2) {
     field_0x30 = param_1;
     field_0x56 = 0;
     field_0x55 = param_2;

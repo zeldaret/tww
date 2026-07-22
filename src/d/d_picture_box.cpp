@@ -2416,7 +2416,7 @@ static cPhs_State dPb_Create(msg_class* i_this) {
         dComIfGp_setDoStatusForce(dActStts_TAKE_PHOTO_e);
     }
     else {
-        dComIfGp_setDoStatusForce(dComIfGp_getScopeMesgStatus());
+        dComIfGp_setDoStatusForce(dActStts_BLANK_e);
     }
 
     if (dComIfGp_getPictureStatus() == 2) {

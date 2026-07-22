@@ -5414,7 +5414,7 @@ void view_setup(camera_process_class* i_this) {
     dComIfGd_setView(view);
 
     f32 far;
-    if (dComIfGp_getScopeMesgStatus() != 0) {
+    if (dComIfGp_getScopeMesgStatus() != fopMsgStts_MSG_UNK0_e) {
         far = view->mFar;
     } else {
         far = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());

@@ -19,7 +19,7 @@ public:
     }
 
     BOOL MailCreateInit(cXyz*, cXyz*);
-    static u8 getNextNo(unsigned char);
+    static u8 getNextNo(u8);
     void init();
     void set_mtx();
     void set_mtx_throw();
@@ -29,7 +29,7 @@ public:
     void Appear();
     void WaitInit();
     void Wait();
-    void ThrowInit(cXyz, unsigned char);
+    void ThrowInit(cXyz, u8);
     void Throw();
     void EndInit();
     void End();
@@ -40,7 +40,7 @@ public:
     static u8 m_same_count;
     static u8 m_no_buff;
 
-public:
+private:
     /* 0x00 */ SwMail_Func mFunc;
     /* 0x0C */ J3DModel* mpModel;
     /* 0x10 */ mDoExt_btpAnm field_0x10;
@@ -132,13 +132,13 @@ public:
 
     BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
-    void setAnm(signed char);
-    bool chkAttention(cXyz, short);
+    void setAnm(s8);
+    bool chkAttention(cXyz, s16);
     void eventOrder();
     void checkOrder();
-    u16 next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
     u32 getMsg();
-    void anmAtr(unsigned short);
+    void anmAtr(u16 s16);
     BOOL CreateInit();
     void set_mtx();
     void setAttention();
@@ -157,7 +157,7 @@ public:
     cPhs_State _create();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x6C4 */ s8 m_handL;
     /* 0x6C5 */ s8 m_handR;
     /* 0x6C6 */ u8 field_0x6C6[0x6C8 - 0x6C6];

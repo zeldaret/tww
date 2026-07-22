@@ -1564,7 +1564,7 @@ bool daNpc_Ls1_c::telescope_proc() {
     }
 
     u8 scope_mesg_status = dComIfGp_getScopeMesgStatus();
-    if (scope_mesg_status == 0) {
+    if (scope_mesg_status == fopMsgStts_MSG_UNK0_e) {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) != 0) {
             if (g_dComIfG_gameInfo.play.field_0x4978) {
                 daPy_getPlayerLinkActorClass()->setPlayerPosAndAngle(&m7CC[1], 0xCC70);
