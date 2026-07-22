@@ -819,11 +819,7 @@ u8 daNpc_Zk1_c::demo() {
         dDemo_setDemoData(this,
             dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e,
             mpMorf, 
-            mArcName,
-            0, 
-            NULL,
-            0,
-            0
+            mArcName
         );
     }
     return field_0x7A4;
