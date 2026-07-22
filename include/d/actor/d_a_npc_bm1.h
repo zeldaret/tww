@@ -48,8 +48,8 @@ public:
         TYPE_Invalid_e = 0xFF,
     };
     struct anm_prm_c{
-        s8 mBckResIndex;
-        s8 mResIndex;
+        s8 mAnmNum;
+        s8 mBtpNum;
         f32 mMorf;
         f32 mSpeed;
         s32 mLoopMode;
@@ -223,7 +223,7 @@ public:
     bool create_itm_Mdl();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ char mArcName[4];
     /* 0x6D0 */ s8 m_hed_jnt_num;
@@ -291,11 +291,9 @@ public:
     /* 0x87D */ u8 m87D;
     /* 0x87E */ u8 m87E;
     /* 0x87F */ bool m87F;
-private:
     /* 0x880 */ bool m880;
     /* 0x881 */ bool m881;
     /* 0x882 */ bool m882;
-public:
     /* 0x883 */ bool mbManzai;
     /* 0x884 */ bool mbInitPostman0;
     /* 0x885 */ bool mbHasArms;
@@ -331,15 +329,15 @@ public:
     /* 0x8EC */ JPABaseEmitter* mpFeather1EmitterL;
     /* 0x8F0 */ JPABaseEmitter* mpFeather1EmitterR;
 #if VERSION == VERSION_DEMO
-    /* 0x8F4 */ u32 mDemoOnly;  //Possibly an unused emitter
+    /* 0x8F4 */ u32 mDemoUnused;  //Possibly an unused emitter
 #endif
     /* 0x8F4 */ s8 m8F4;
-    /* 0x8F5 */ s8 m8F5;
+    /* 0x8F5 */ s8 mActionIndex;
     /* 0x8F6 */ s8 mActNo;
     /* 0x8F7 */ u8 m8F7;
     /* 0x8F8 */ u8 m8F8;
-    /* 0x8F9 */ s8 m8F9;
-    /* 0x8FA */ s8 mBckResIndex;
+    /* 0x8F9 */ s8 mBtpNum;
+    /* 0x8FA */ s8 mAnmNum;
     /* 0x8FB */ u8 m8FB[0x8FD - 0x8FB];
     /* 0x8FD */ s8 m8FD;
     /* 0x8FE */ s8 mStatus;

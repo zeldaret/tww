@@ -655,7 +655,7 @@ bool daNpc_Bm1_c::createInit() {
     }
     static char* a_staff_tbl[0x10] = {"Bm1","Bm1","Bm1","Bm1","Bm1","Bm2","Bm2","Bm3","Bm3","Bm3","Bm4","Bm4","Bm4","Bm4","Bm5","Bm5"};
     mEventCut.setActorInfo2(a_staff_tbl[mSpecificType],this);
-    mBckResIndex = 0x16;
+    mAnmNum = 0x16;
     bool init_success;
     switch(mSpecificType){
         case SPECIFIC_TYPE_Quill_0_e:
@@ -768,7 +768,7 @@ void daNpc_Bm1_c::setMtx(bool i_param_1) {
     mpHeadMorf->getModel()->setBaseTRMtx(mpMorf->getModel()->getAnmMtx(m_hed_jnt_num));
     mpHeadMorf->calc();
     if(mpBinderModel){
-        if(mBckResIndex == 4){
+        if(mAnmNum == 4){
             mDoMtx_stack_c::copy(mpArmMorf->getModel()->getAnmMtx(m_hnd_R_jnt_num));
             mDoMtx_stack_c::transM(13.5f,3.0f,-5.5f);
             mDoMtx_stack_c::XYZrotM(cM_deg2s(228),cM_deg2s(-114),cM_deg2s(-215));
@@ -853,16 +853,16 @@ bool daNpc_Bm1_c::setBtp(bool i_param_1, int i_btp_num) {
 
 /* 00001A4C-00001A74       .text iniTexPttrnAnm__11daNpc_Bm1_cFb */
 bool daNpc_Bm1_c::iniTexPttrnAnm(bool i_param_1) {
-    return setBtp(i_param_1,m8F9);
+    return setBtp(i_param_1,mBtpNum);
 }
 
 /* 00001A74-00001B20       .text plyTexPttrnAnm__11daNpc_Bm1_cFv */
 void daNpc_Bm1_c::plyTexPttrnAnm() {
     
-    if(m8F9 != 0 || !cLib_calcTimer(&mBlinkTimer)){
+    if(mBtpNum != 0 || !cLib_calcTimer(&mBlinkTimer)){
         mBlinkFrame += 1;
         if(mBlinkFrame >= m_hed_tex_pttrn->getFrameMax()){
-            if(m8F9 != 0){
+            if(mBtpNum != 0){
                 mBlinkFrame = m_hed_tex_pttrn->getFrameMax();
             }else{
                 mBlinkTimer = cM_rndF(60.0f) + 30.0f;
@@ -875,8 +875,8 @@ void daNpc_Bm1_c::plyTexPttrnAnm() {
 
 /* 00001B20-00001B5C       .text setAnm_tex__11daNpc_Bm1_cFSc */
 void daNpc_Bm1_c::setAnm_tex(signed char i_param_1) {
-    if(m8F9 != i_param_1){
-        m8F9 = i_param_1;
+    if(mBtpNum != i_param_1){
+        mBtpNum = i_param_1;
         iniTexPttrnAnm(true);
     }
 }
@@ -884,23 +884,23 @@ void daNpc_Bm1_c::setAnm_tex(signed char i_param_1) {
 /* 00001B5C-00001CF4       .text setAnm_anm__11daNpc_Bm1_cFPQ211daNpc_Bm1_c9anm_prm_c */
 BOOL daNpc_Bm1_c::setAnm_anm(daNpc_Bm1_c::anm_prm_c* i_anmPrmP) {
 
-    if(mBckResIndex == i_anmPrmP->mBckResIndex){
+    if(mAnmNum == i_anmPrmP->mAnmNum){
         return 1;
     }
-    mBckResIndex = i_anmPrmP->mBckResIndex;
-    dNpc_setAnmFNDirect(mpMorf,i_anmPrmP->mLoopMode,i_anmPrmP->mMorf,i_anmPrmP->mSpeed,anmNum_toResID(mBckResIndex),NULL,mArcName);
+    mAnmNum = i_anmPrmP->mAnmNum;
+    dNpc_setAnmFNDirect(mpMorf,i_anmPrmP->mLoopMode,i_anmPrmP->mMorf,i_anmPrmP->mSpeed,anmNum_toResID(mAnmNum),NULL,mArcName);
     mbHasArms = i_anmPrmP->mbHasArms == 1;
     if(mbHasArms){
-        dNpc_setAnmFNDirect(mpArmMorf,i_anmPrmP->mLoopMode,i_anmPrmP->mMorf,i_anmPrmP->mSpeed,wingAnmNum_toResID(mBckResIndex),NULL,mArcName);
+        dNpc_setAnmFNDirect(mpArmMorf,i_anmPrmP->mLoopMode,i_anmPrmP->mMorf,i_anmPrmP->mSpeed,wingAnmNum_toResID(mAnmNum),NULL,mArcName);
     }else{
-        dNpc_setAnmFNDirect(mpWingMorf,i_anmPrmP->mLoopMode,i_anmPrmP->mMorf,i_anmPrmP->mSpeed,wingAnmNum_toResID(mBckResIndex),NULL,mArcName);
+        dNpc_setAnmFNDirect(mpWingMorf,i_anmPrmP->mLoopMode,i_anmPrmP->mMorf,i_anmPrmP->mSpeed,wingAnmNum_toResID(mAnmNum),NULL,mArcName);
  
     }
-    dNpc_setAnmFNDirect(mpHeadMorf,i_anmPrmP->mLoopMode,i_anmPrmP->mMorf,i_anmPrmP->mSpeed,headAnmNum_toResID(mBckResIndex),NULL,mArcName);
+    dNpc_setAnmFNDirect(mpHeadMorf,i_anmPrmP->mLoopMode,i_anmPrmP->mMorf,i_anmPrmP->mSpeed,headAnmNum_toResID(mAnmNum),NULL,mArcName);
 
     delPrtcl_Hane0();
     delPrtcl_Hane1();
-    switch(mBckResIndex){
+    switch(mAnmNum){
         case 2:
             setPrtcl_Hane1();
             break;
@@ -943,7 +943,7 @@ void daNpc_Bm1_c::setAnm_NUM(int i_param_1, int i_param_2) {
         { 6, 0, 20.0f, 1.0f, 2, 1 },
     };
     if(i_param_2 != 0){
-        setAnm_tex(a_anm_prm_tbl[i_param_1].mResIndex);
+        setAnm_tex(a_anm_prm_tbl[i_param_1].mBtpNum);
     }
     setAnm_anm(&a_anm_prm_tbl[i_param_1]);
 }
@@ -972,10 +972,10 @@ bool daNpc_Bm1_c::setAnm() {
         {20,  0,  8.0f, 1.0f,  2,  1},
         {21,  0,  8.0f, 1.0f,  2,  1},
     };
-    if(a_anm_prm_tbl[mStatus].mResIndex >= 0){
-        setAnm_tex(a_anm_prm_tbl[mStatus].mResIndex);
+    if(a_anm_prm_tbl[mStatus].mBtpNum >= 0){
+        setAnm_tex(a_anm_prm_tbl[mStatus].mBtpNum);
     }
-    if(a_anm_prm_tbl[mStatus].mBckResIndex >= 0){
+    if(a_anm_prm_tbl[mStatus].mAnmNum >= 0){
         setAnm_anm(&a_anm_prm_tbl[mStatus]);
     }
     return true;
@@ -1070,7 +1070,7 @@ void daNpc_Bm1_c::setAnm_ATR(int i_param_1) {
         {18, 0,  8.0f, 1.0f, 2, 1 },
     };
     if(i_param_1 != 0){
-        setAnm_tex(a_anm_prm_tbl[m8F7].mResIndex);
+        setAnm_tex(a_anm_prm_tbl[m8F7].mBtpNum);
     }
     setAnm_anm(&a_anm_prm_tbl[m8F7]);
 }
@@ -2022,14 +2022,14 @@ bool daNpc_Bm1_c::bm_flyMove() {
     }
     switch (m8F4) {
         case 1:    
-            if (mBckResIndex != 0xA) {
+            if (mAnmNum != 0xA) {
                 setAnm_NUM(0xA, 1);
             } else if (mbMorfAnimStopped) {
                 m8F4 = 2;
             }
             break;
         case 2:    
-            if (mBckResIndex != 0xB) {
+            if (mAnmNum != 0xB) {
                 setAnm_NUM(0xB, 1);
                 speed.y = mTargetFlySpeed * 0.7f;
             } else if (mbMorfAnimStopped) {
@@ -2052,7 +2052,7 @@ bool daNpc_Bm1_c::bm_flyMove() {
 
 
         case 4:    
-            if (mBckResIndex != 0xD) {
+            if (mAnmNum != 0xD) {
                 setAnm_NUM(0xD, 1);
             } else if (mbMorfAnimStopped) {
                 gravity = -4.5f;
@@ -2092,7 +2092,7 @@ void daNpc_Bm1_c::bm_nMove() {
         m887 = 1;
         return;
     }
-    switch(mBckResIndex){
+    switch(mAnmNum){
         case 0x14:
         case 0xE:
             bm_clcMovSpd();
@@ -2113,7 +2113,7 @@ void daNpc_Bm1_c::bm_nMove() {
 void daNpc_Bm1_c::setPrtcl_Flyaway() {
     
 
-    if (mBckResIndex == 0xB && mpMorf->checkFrame(10.0f)){
+    if (mAnmNum == 0xB && mpMorf->checkFrame(10.0f)){
 #if VERSION == VERSION_DEMO
             JGeometry::TVec3<f32> direction(-1.0f,1.0f,0.0f);
 #endif
@@ -2178,7 +2178,7 @@ void daNpc_Bm1_c::delPrtcl_Flyaway() {
 /* 00004160-000042A8       .text setPrtcl_Land0__11daNpc_Bm1_cFv */
 void daNpc_Bm1_c::setPrtcl_Land0() {
     
-    if (mBckResIndex == 0xD && mpMorf->checkFrame(1.0f)){
+    if (mAnmNum == 0xD && mpMorf->checkFrame(1.0f)){
 #if VERSION == VERSION_DEMO
         JGeometry::TVec3<f32> direction(-1.0f,0.5f,0.0f);
 #endif
@@ -3017,15 +3017,13 @@ void daNpc_Bm1_c::privateCut(int arg0) {
     static char* a_cut_tbl[] = {"ACTION","360_TRN"};
     
     if (arg0 != -1) {
-        m8F5 = dComIfGp_evmng_getMyActIdx(arg0,
-                        a_cut_tbl,2,1,0);
-
-        if (m8F5 == -1) {
+        mActionIndex = dComIfGp_evmng_getMyActIdx(arg0,a_cut_tbl,ARRAY_SIZE(a_cut_tbl),1,0);
+        if (mActionIndex == -1) {
         dComIfGp_evmng_cutEnd(arg0);
         }
         else {
             if (dComIfGp_evmng_getIsAddvance(arg0)) {
-                switch(m8F5){
+                switch(mActionIndex){
                     case 0:
                         event_actionInit(arg0);
                         break;
@@ -3035,7 +3033,7 @@ void daNpc_Bm1_c::privateCut(int arg0) {
 
             }
             bool cVar3;
-            switch(m8F5){
+            switch(mActionIndex){
                 case 0:
                     cVar3 = event_action();
                     break;
@@ -3918,7 +3916,7 @@ bool daNpc_Bm1_c::demo() {
         if(demopattern){
             m_hed_tex_pttrn = demopattern;        
             if(mHeadBtpAnm.init(mpHeadMorf->getModel()->getModelData(),m_hed_tex_pttrn,1,2,1.0f,0,-1,true,FALSE)){
-                m8F9 = 1;
+                mBtpNum = 1;
                 mBlinkFrame = 0;
             }
         }
@@ -4387,7 +4385,7 @@ BOOL daNpc_Bm1_c::CreateHeap() {
         mpMorf = NULL;
         return FALSE;
     }
-    m8F9 = 0;
+    mBtpNum = 0;
     if(!iniTexPttrnAnm(false)){
         mpMorf = NULL;
         mpHeadMorf = NULL;
