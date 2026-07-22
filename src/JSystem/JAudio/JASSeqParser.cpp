@@ -581,7 +581,7 @@ int JASystem::TSeqParser::cmdIIRSet(TTrack* track, u32* args) {
     for (u8 i = 0; i < 4; i++) {
         u8 iirIndex = TTrack::TIMED_IIR_Unk0 + i;
         TTrack::MoveParam_* iir = &track->mTimedParam.mMoveParams[iirIndex];
-        iir->mTargetValue = (s16)args[i] / 32768.0f;
+        iir->mTargetValue = (f32)(s16)args[i] / 0x8000;
         iir->mCurrentValue = iir->mTargetValue;
         iir->mMoveAmount = 0.0f;
         iir->mMoveTime = 1.0f;
@@ -596,7 +596,7 @@ int JASystem::TSeqParser::cmdIIRCutOff(TTrack* track, u32* args) {
         s16* table = &JASystem::Player::CUTOFF_TO_IIR_TABLE[iirTableIdx * 4];
         u8 iirIndex = TTrack::TIMED_IIR_Unk0 + i;
         TTrack::MoveParam_* iir = &track->mTimedParam.mMoveParams[iirIndex];
-        iir->mTargetValue = table[i] / (32768.0f - 1.0f);
+        iir->mTargetValue = table[i] / (0x8000 - 1.0f);
         iir->mCurrentValue = iir->mTargetValue;
         iir->mMoveAmount = 0.0f;
         iir->mMoveTime = 1.0f;
@@ -789,7 +789,7 @@ int JASystem::TSeqParser::cmdSetParam(TTrack* track, u8 param_2) {
         break;
     }
 
-    track->setParam(flag, (int)data / 32767.0f, val);
+    track->setParam(flag, data / (f32)0x7FFF, val);
     return 0;
 }
 

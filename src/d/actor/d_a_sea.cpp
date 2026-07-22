@@ -542,7 +542,7 @@ void daSea_packet_c::execute(cXyz& pos) {
         aThetaXTable[i] = mWaveInfo.GetKm(i) * mWaveInfo.GetVx(i);
         aThetaZTable[i] = mWaveInfo.GetKm(i) * mWaveInfo.GetVz(i);
 
-        aOffsAnimTable[i] = 65536.0f * (mWaveInfo.GetRatio(i) - 0.5f);
+        aOffsAnimTable[i] = 0x10000 * (mWaveInfo.GetRatio(i) - 0.5f);
         aHeightTable[i] = mWaveInfo.GetBaseHeight(i) * scale;
     }
 

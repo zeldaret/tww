@@ -6367,10 +6367,10 @@ f32 fopMsgM_valueIncrease(int i_max, int i_value, u8 i_mode) {
         ret = (v * 2.0f - 1.0f) * 2.0f - 1.0f;
         break;
     case 4:
-        ret = JMASSin(v * 32768.0f * 0.5f) * JMASSin(v * 32768.0f * 0.5f);
+        ret = JMASSin(v * 0x8000 * 0.5f) * JMASSin(v * 0x8000 * 0.5f);
         break;
     case 5:
-        ret = JMASSin(v * 65535.0f * 0.5f) * JMASSin(v * 65535.0f * 0.5f);
+        ret = JMASSin(v * 0xFFFF * 0.5f) * JMASSin(v * 0xFFFF * 0.5f);
         break;
     }
     return ret;

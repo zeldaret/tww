@@ -200,7 +200,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc_ac
                     if (i_this->m44C < 0.0f) {
                         i_this->m44C = 0.0f;
                     }
-                    i_this->m450 = 1.0f - cM_scos(i_this->m44C * 16384.0f);
+                    i_this->m450 = 1.0f - cM_scos(i_this->m44C * 0x4000);
                     if (i_this->m44C < 0.1f) {
                         i_this->m45C = 1;
                     }
@@ -377,7 +377,7 @@ void daObjIce_c::fade_out_retire_act_proc() {
         m454 = 0.0f;
     }
 
-    f32 tmp3 = 1.0f - cM_scos(tmp2 * 16384.0f);
+    f32 tmp3 = 1.0f - cM_scos(tmp2 * 0x4000);
 
     m44C = tmp2;
     m450 = tmp3;

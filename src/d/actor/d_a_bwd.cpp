@@ -1147,8 +1147,8 @@ static void end(bwd_class* i_this) {
             local_c0.y = 2.0f;
             local_c0.z = 2.0f;
             csXyz local_d4(0, 0, 0);
-            local_d4.x = (s16)(int)cM_rndF(65536.0f);
-            local_d4.y = (s16)(int)cM_rndF(65536.0f);
+            local_d4.x = (s16)(int)cM_rndF(0x10000);
+            local_d4.y = (s16)(int)cM_rndF(0x10000);
             dComIfGp_particle_set(dPa_name::ID_IT_SN_BWO_SIBOUBAKUEN00, i_this->m0418 + i_this->m3C24, &local_d4, &local_c0);
             dComIfGp_particle_set(dPa_name::ID_IT_SN_BWO_SIBOUSUNA00, i_this->m0418 + i_this->m3C24, &local_d4, &local_c0);
             mDoAud_seStart(JA_SE_CM_MONS_EXPLODE, &i_this->m0418[i_this->m3C24], 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));

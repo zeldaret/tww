@@ -510,7 +510,7 @@ void JASystem::TTrack::updateTrackAll() {
     f32 fx_vol;
     f32 dolby;
 
-    f32 pan_weight = mRegisterParam.getPanPowerParent() / 32767.0f;
+    f32 pan_weight = (f32)mRegisterParam.getPanPowerParent() / 0x7FFF;
     mChannelUpdater.field_0x68 = mRegisterParam.field_0x1a | 0x10000;
     mChannelUpdater.field_0x6c = 0;
 
@@ -568,7 +568,7 @@ void JASystem::TTrack::updateTrackAll() {
         mChannelUpdater.field_0x24 = fx_vol;
         mChannelUpdater.field_0x28 = dolby;
     } else {
-        pan_weight = mRegisterParam.getPanPowerTrack() / 32767.0f;
+        pan_weight = (f32)mRegisterParam.getPanPowerTrack() / 0x7FFF;
 
         mChannelUpdater.field_0x18 = mParent->mChannelUpdater.field_0x18 * vol;
         mChannelUpdater.field_0x1c = mParent->mChannelUpdater.field_0x1c * pitch;
@@ -590,11 +590,11 @@ void JASystem::TTrack::updateTrackAll() {
         }
 
         for (u8 i = 0; i < 4; i++) {
-            mChannelUpdater.field_0x3c[i] = mTimedParam.mMoveParams[TIMED_IIR_Unk0 + i].mCurrentValue * 32767.0f;
+            mChannelUpdater.field_0x3c[i] = mTimedParam.mMoveParams[TIMED_IIR_Unk0 + i].mCurrentValue * 0x7FFF;
         }
 
         mChannelUpdater.field_0x61 |= 0x20;
-        mChannelUpdater.field_0x4c = mTimedParam.mMoveParams[TIMED_Unk5].mCurrentValue * 32767.0f;
+        mChannelUpdater.field_0x4c = mTimedParam.mMoveParams[TIMED_Unk5].mCurrentValue * 0x7FFF;
     }
 }
 
@@ -610,7 +610,7 @@ void JASystem::TTrack::updateTrack(u32 flags) {
     f32 fx_vol;
     f32 dolby;
 
-    f32 pan_weight = mRegisterParam.getPanPowerParent() / 32767.0f;
+    f32 pan_weight = (f32)mRegisterParam.getPanPowerParent() / 0x7FFF;
     if (flags & OUTERPARAM_Unk18) {
         f32 unkF = mTimedParam.mMoveParams[TIMED_Unk17].mCurrentValue * 128.0f;
         s8 unk = 0;
@@ -686,7 +686,7 @@ void JASystem::TTrack::updateTrack(u32 flags) {
 
     if (flags & OUTERPARAM_IIRFilter) {
         for (u8 i = 0; i < 4; i++) {
-            mChannelUpdater.field_0x3c[i] = mTimedParam.mMoveParams[TIMED_IIR_Unk0 + i].mCurrentValue * 32767.0f;
+            mChannelUpdater.field_0x3c[i] = mTimedParam.mMoveParams[TIMED_IIR_Unk0 + i].mCurrentValue * 0x7FFF;
         }
         mChannelUpdater.field_0x61 |= 0x20;
     }
@@ -699,7 +699,7 @@ void JASystem::TTrack::updateTrack(u32 flags) {
     }
 
     if (flags & OUTERPARAM_Unk6) {
-        mChannelUpdater.field_0x4c = mTimedParam.mMoveParams[TIMED_Unk5].mCurrentValue * 32767.0f;
+        mChannelUpdater.field_0x4c = mTimedParam.mMoveParams[TIMED_Unk5].mCurrentValue * 0x7FFF;
     }
 
     if (mParent == NULL || (field_0x37b & 1)) {
@@ -719,7 +719,7 @@ void JASystem::TTrack::updateTrack(u32 flags) {
             mChannelUpdater.field_0x28 = dolby;
         }
     } else {
-        pan_weight = mRegisterParam.getPanPowerTrack() / 32767.0f;
+        pan_weight = (f32)mRegisterParam.getPanPowerTrack() / 0x7FFF;
         if (set_volume) {
             mChannelUpdater.field_0x18 = mParent->mChannelUpdater.field_0x18 * vol;
         }

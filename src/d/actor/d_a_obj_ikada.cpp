@@ -1317,8 +1317,8 @@ void daObj_Ikada_c::createInit() {
         mSvId[3] = fopAcM_createChild("Sv3", fopAcM_GetID(this), 0xffffffff, &current.pos, tevStr.mRoomNo, 0, 0, 0);
     }
 
-    mLightRotY = cM_rndF(32768.0f);
-    mLightRotX = cM_rndF(32768.0f);
+    mLightRotY = cM_rndF(0x8000);
+    mLightRotX = cM_rndF(0x8000);
 
     current.pos.y = dLib_getWaterY(current.pos, mObjAcch);
     mpBgW->SetGrpRoomInf(fopAcM_GetRoomNo(this));
@@ -1374,8 +1374,8 @@ void daObj_Ikada_c::createInit() {
         mFlagScale = flag_scale[mType];
     }
 
-    mWave.mAnimX = cM_rndF(32768.0f);
-    mWave.mAnimZ = cM_rndF(32768.0f);
+    mWave.mAnimX = cM_rndF(0x8000);
+    mWave.mAnimZ = cM_rndF(0x8000);
 
     if (mType == 4) {
         mpModel->calc();

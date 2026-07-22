@@ -723,7 +723,7 @@ void action_dead_move(ks_class* i_this) {
 
             i_this->mMode++;
 
-            i_this->m2F0[1] = (s16)cM_rndFX(4096.0f);
+            i_this->m2F0[1] = (s16)cM_rndFX(0x1000);
 
             i_this->mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
             i_this->mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
@@ -1151,7 +1151,7 @@ void action_omoi(ks_class* i_this) {
             }
 
             actor->current.angle.y = fopAcM_searchPlayerAngleY(actor) + 0x8000;
-            actor->current.angle.y += (s16)cM_rndFX(16384.0f);
+            actor->current.angle.y += (s16)cM_rndFX(0x4000);
 
             actor->speedF = 15.0f;
             actor->gravity = -3.0f;
@@ -1290,7 +1290,7 @@ void action_kb_birth_check(ks_class* i_this) {
     switch (i_this->mMode) {
         case 60: {
             actor->current.pos.y += REG8_F(13) + 30.0f;
-            actor->current.angle.y = cM_rndFX(32767.0f);
+            actor->current.angle.y = cM_rndFX(0x7FFF);
 
             actor->speedF = REG8_F(8) + 4.0f + cM_rndF(REG8_F(9) + 4.0f);
             actor->speed.y = REG8_F(10) + 20.0f + cM_rndF(REG8_F(11) + 5.0f);
@@ -1717,7 +1717,7 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
 
             fopAc_ac_c* gm_actor = fopAcM_SearchByID(a_this->mGmID);
             if (gm_actor && fopAc_IsActor(gm_actor) && fopAcM_GetName(gm_actor) == fpcNm_GM_e && a_this->m2C8 == 5) {
-                i_this->current.angle.y += cM_rndFX(8192.0f);
+                i_this->current.angle.y += cM_rndFX(0x2000);
                 i_this->speedF = cM_rndF(6.0f) + 34.0f;
                 i_this->speed.y = cM_rndF(8.0f) + 22.0f;
             }

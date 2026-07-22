@@ -292,7 +292,7 @@ s32 check_flontofplayer(u32 checkMask, s16 angle1, s16 angle2) {
 
 /* 8009DC28-8009DC74       .text distace_weight__Ffsf */
 f32 distace_weight(f32 distance, s16 angle, f32 ratio) {
-    f32 turns = (f32)angle / 32768.0F;
+    f32 turns = (f32)angle / 0x8000;
     return distance * (f32)((1.0F - ratio) + (f32)(ratio * (turns * turns)));
 }
 

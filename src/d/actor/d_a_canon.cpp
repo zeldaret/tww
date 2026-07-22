@@ -127,7 +127,7 @@ cXyz daCanon_c::getGridPos(int arg1, int arg2) {
 /* 00000448-00000554       .text getBulEndPos__9daCanon_cFss */
 cXyz daCanon_c::getBulEndPos(short arg1, short arg2) {
     cXyz sp08 = current.pos;
-    f32 fVar2 = (((home.angle.x + 0x1000) - arg2) / 4096.0f);
+    f32 fVar2 = (f32)((home.angle.x + 0x1000) - arg2) / 0x1000;
     f32 fVar3 = fVar2 * 1500.0f * 7.0f + 10500.0f + REG10_F(10);
     sp08.x += fVar3 * cM_ssin(arg1);
     sp08.z += fVar3 * cM_scos(arg1);
@@ -327,7 +327,7 @@ void daCanon_c::game_proc() {
 
 /* 00000FA0-00001074       .text fire_proc_init__9daCanon_cFv */
 void daCanon_c::fire_proc_init() {
-    f32 tmp = (((home.angle.x + 0x1000) - shape_angle.x) / 4096.0f);
+    f32 tmp = (f32)((home.angle.x + 0x1000) - shape_angle.x) / 0x1000;
     m652 = tmp * 8.0f * 7.0f + 64.0f;
     m654 = m652;
     m65E = 0;
@@ -454,13 +454,13 @@ void daCanon_c::PadMove() {
     s16 target2 = shape_angle.x;
 
     if (stickX > 0.5f) {
-        target1 += (s16)((0.5f - stickX) * 1024.0f);
+        target1 += (s16)((0.5f - stickX) * 0x400);
         s16 sVar1 = home.angle.y + -0x1200;
         if (shape_angle.y >= sVar1 && target1 < sVar1) {
             target1 = sVar1;
         }
     } else if (stickX < -0.5f) {
-        target1 += (s16)((-0.5f - stickX) * 1024.0f);
+        target1 += (s16)((-0.5f - stickX) * 0x400);
         s16 sVar1 = home.angle.y + 0x1200;
         if (shape_angle.y <= sVar1 && target1 > sVar1) {
             target1 = sVar1;

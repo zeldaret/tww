@@ -133,8 +133,8 @@ void dKyr_kamome_move() {
         case 0:
             if (spawnBirds) {
                 if (pWind->mKamomeEff[i].mTimer == 0) {
-                    pWind->mKamomeEff[i].mAngleY = cM_rndFX(65535.0f);
-                    pWind->mKamomeEff[i].mAngleX = cM_rndFX(65535.0f);
+                    pWind->mKamomeEff[i].mAngleY = cM_rndFX(0xFFFF);
+                    pWind->mKamomeEff[i].mAngleX = cM_rndFX(0xFFFF);
                     newPos.x = pCamera->mLookat.mEye.x + cM_ssin(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
                     newPos.y = 4500.0f;
                     newPos.z = pCamera->mLookat.mEye.z + cM_scos(pWind->mKamomeEff[i].mAngleY) * 7000.0f;
@@ -343,7 +343,7 @@ void dKyr_wind_move() {
                 windEff.mPos.y -= windVec.y * windScale;
                 windEff.mPos.z -= windVec.z * windScale;
 
-                windEff.field_0x2c = cM_rndF(65535.0f);
+                windEff.field_0x2c = cM_rndF(0xFFFF);
 
                 cXyz pos;
                 pos.x = windEff.mBasePos.x + windEff.mPos.x;
@@ -1106,7 +1106,7 @@ void dKyr_housi_move() {
         case 0:
             effect->field_0x34 = cM_rndF(1.5f) + 0.2f;
             effect->field_0x3c = 0;
-            effect->field_0x4c = cM_rndFX(65536.0f);
+            effect->field_0x4c = cM_rndFX(0x10000);
             effect->mBasePos.x = sp84.x;
             effect->mBasePos.y = sp84.y;
             effect->mBasePos.z = sp84.z;
@@ -1399,9 +1399,9 @@ void wave_move() {
                 pPkt->mEff[i].mPos.x = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
                 pPkt->mEff[i].mPos.y = 0.0f;
                 pPkt->mEff[i].mPos.z = cM_rndFX(g_env_light.mWaveChan.mWaveSpawnRadius);
-                pPkt->mEff[i].mCounter = cM_rndF(65536.0f);
+                pPkt->mEff[i].mCounter = cM_rndF(0x10000);
                 pPkt->mEff[i].mAlpha = 0.0f;
-                pPkt->mEff[i].field_0x32 = cM_rndF(65536.0f);
+                pPkt->mEff[i].field_0x32 = cM_rndF(0x10000);
                 pPkt->mEff[i].mStrengthEnv = 1.0f;
                 pPkt->mEff[i].mScale = g_env_light.mWaveChan.mWaveScaleRand + cM_rndF(1.0f - g_env_light.mWaveChan.mWaveScaleRand);
                 pPkt->mEff[i].mSpeed = pPkt->mEff[i].mScale;
@@ -1562,7 +1562,7 @@ void cloud_shadow_move() {
             pPkt->mEff[i].mPos.z = cM_rndFX(2000.0f);
             pPkt->mEff[i].mWindSpeed = 0.7f + cM_rndF(0.3f);
             pPkt->mEff[i].mAlpha = 0.0;
-            pPkt->mEff[i].mAnimCounter = cM_rndF(65535.0f);
+            pPkt->mEff[i].mAnimCounter = cM_rndF(0xFFFF);
             pPkt->mEff[i].mVelRndm.x = cM_rndFX(360.0f);
             pPkt->mEff[i].mVelRndm.y = cM_rndFX(360.0f);
             pPkt->mEff[i].mVelRndm.z = cM_rndFX(360.0f);

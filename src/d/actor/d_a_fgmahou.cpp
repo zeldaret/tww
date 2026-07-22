@@ -67,7 +67,7 @@ static void move(fgmahou_class* i_this) {
         case 0:
             i_this->mState = 1;
             i_this->field_0x2D4 = i_this->mOrbNumber * REG6_S(2) - REG6_S(3);
-            i_this->field_0x2D6 = cM_rndF(65536.0f);
+            i_this->field_0x2D6 = cM_rndF(0x10000);
 
             i_this->speedF = REG0_F(0xD) + 50.0f;
             i_this->speedF *= (0.2f + REG0_F(4)) * spdd[i_this->mOrbNumber] + 1.0f;

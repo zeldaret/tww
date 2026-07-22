@@ -416,11 +416,11 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
             sp44 = i_this->m02EC[1] - i_this->m1F84;
             MtxPosition(&sp44, &sp38);
             sp38.z = sp38.z * (REG0_F(5) + 500.0f);
-            if (sp38.z > 16384.0f) {
-                sp38.z = 16384.0f;
+            if (sp38.z > 0x4000) {
+                sp38.z = 0x4000;
             }
-            if (sp38.z < -16384.0f) {
-                sp38.z = -16384.0f;
+            if (sp38.z < -0x4000) {
+                sp38.z = -0x4000;
             }
             cLib_addCalcAngleS2(&i_this->m1F90, sp38.z, 2, REG0_S(2) + 0x800);
             sp38.x *= REG0_F(6) + -200.0f;

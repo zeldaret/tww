@@ -401,7 +401,7 @@ void dJle_Pb_c::zoomScale() {
         }
         else {
             f32 cameraZoomForcus = dComIfGp_getCameraZoomForcus(0);
-            mDoAud_seStart(JA_SE_TELESCOPE_ZOOM, NULL, cameraZoomForcus * 32768.0f + 0.5f);
+            mDoAud_seStart(JA_SE_TELESCOPE_ZOOM, NULL, cameraZoomForcus * 0x8000 + 0.5f);
         }
     }
 }

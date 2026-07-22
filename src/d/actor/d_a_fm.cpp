@@ -636,9 +636,9 @@ void daFm_c::moveRndBack() {
         if(!isGrabFoot()) {
             if(cLib_calcTimer(&field_0x648) == 0 || field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
                 if(field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
-                    field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 4096.0f);
+                    field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 0x1000);
                 } else {
-                    field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 4096.0f;
+                    field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 0x1000;
                 }
                 field_0x394 = cM_rndF(9.0f) + 1.0f;
                 field_0x660.z += l_HIO.field_0x0AC * cM_scos(field_0x680);
@@ -661,9 +661,9 @@ void daFm_c::moveRndEscape() {
     if(cLib_calcTimer(&field_0x648) == 0 || field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
         if(dist < l_HIO.field_0x0B4) {
             if(field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
-                field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 4096.0f);
+                field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 0x1000);
             } else {
-                field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 4096.0f;
+                field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 0x1000;
             }
             field_0x660.set(field_0x690);
             field_0x660.z += l_HIO.field_0x0B8 * cM_scos(field_0x680);

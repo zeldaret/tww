@@ -750,7 +750,7 @@ BOOL search_angle_set(cc_class* i_this) {
         } else if (std::sqrtf(SQUARE(fVar7) + SQUARE(fVar1)) < 100.0f && cM_rnd() < 0.1f &&
                    (s16)cLib_distanceAngleS(i_this->actor.shape_angle.y, i_this->actor.current.angle.y) < 0x100)
         {
-            i_this->actor.current.angle.y += cM_rndFX(16384.0f);
+            i_this->actor.current.angle.y += cM_rndFX(0x4000);
         }
     }
     return FALSE;
@@ -1632,7 +1632,7 @@ void action_noboru(cc_class* i_this) {
         a_this->current.angle.x = 0;
         a_this->current.angle.y = 0;
         a_this->current.angle.z = 0;
-        a_this->current.angle.y = cM_rndFX(4096.0f) + 12288.0f;
+        a_this->current.angle.y = cM_rndFX(0x1000) + 0x3000;
         a_this->shape_angle.x = a_this->current.angle.x;
         a_this->shape_angle.y = a_this->current.angle.y;
         a_this->shape_angle.z = a_this->current.angle.z;

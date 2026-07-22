@@ -472,7 +472,7 @@ static void damage(bgn3_class* i_this) {
             if (checkGround(i_this)) {
                 actor->speed.y = 50.0f;
                 i_this->m0FD8C = 2;
-                actor->current.angle.y = cM_rndF(65536.0f);
+                actor->current.angle.y = cM_rndF(0x10000);
                 i_this->m0FDB8 = 1.0f;
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 drop_eff_set(i_this);
@@ -527,13 +527,13 @@ static void end(bgn3_class* i_this) {
             }
             if (checkGround(i_this)) {
                 i_this->m0FD8C++;
-                actor->current.angle.y = cM_rndF(65536.0f);
+                actor->current.angle.y = cM_rndF(0x10000);
                 i_this->m0FDB8 = 1.0f;
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 drop_eff_set(i_this);
                 actor->speed.y = REG0_F(11) + 130.0f;
                 actor->speedF = 0.0f;
-                actor->current.angle.y = cM_rndF(65536.0f);
+                actor->current.angle.y = cM_rndF(0x10000);
                 fopAcM_monsSeStart(actor, JA_SE_CV_BGN_HIT_1, 0);
             }
             if ((i_this->m0FD8C == 4) && (actor->speed.y <= -30.0f)) {

@@ -239,7 +239,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mEventFlags = 0;
     m148 = cSAngle::_0;
     m07C = 0;
-    m080 = cM_rndFX(32767.0f);
+    m080 = cM_rndFX(0x7FFF);
     m064 = 1.0f;
     m5F4 = 0.0f;
     mTrimHeight = 0.0f;

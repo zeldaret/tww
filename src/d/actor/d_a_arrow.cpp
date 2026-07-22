@@ -559,7 +559,7 @@ void daArrow_c::setStopActorMatrix() {
     s16 xRot = 0;
     if (cLib_calcTimer(&field_0x604) != 0) {
         f32 temp = (field_0x604 / 40.0f);
-        xRot = 1024.0f * temp*temp * cM_ssin(field_0x604 * 0x52FB);
+        xRot = 0x400 * temp*temp * cM_ssin(field_0x604 * 0x52FB);
     }
     fopAc_ac_c* hitActor = fopAcM_SearchByID(mHitActorProcID);
     if (!hitActor) {

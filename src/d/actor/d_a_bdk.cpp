@@ -174,7 +174,7 @@ static void eff_hane_set(bdk_class* i_this, cXyz* offset, int param_3, signed ch
         eff->m004.z = offset->z;
 
         eff->m024 = 0.0f;
-        eff->m03C = cM_rndF(65536.0f);
+        eff->m03C = cM_rndF(0x10000);
         eff->m036.z = cM_rndFX(1200.0f + REG8_F(10));
         eff->m036.x = cM_rndFX(800.0f + REG8_F(16));
         iVar4++;
@@ -191,7 +191,7 @@ static void eff_hane_set(bdk_class* i_this, cXyz* offset, int param_3, signed ch
                 eff->m020 = REG8_F(8) + (cM_rndF(5.0f) + 5.0f);
             }
             eff->m01C = REG8_F(9) + (cM_rndF(5.0f) + 5.0f);
-            eff->m030.y = cM_rndF(65536.0f);
+            eff->m030.y = cM_rndF(0x10000);
         }
     }
 }
