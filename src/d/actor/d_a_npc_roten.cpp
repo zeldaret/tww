@@ -1838,7 +1838,7 @@ bool daNpcRoten_c::_draw() {
         dComIfGd_addRealShadow(mShadowId, field_0x6D4);
     }
 
-    dSnap_RegistFig(DSNAP_TYPE_ROTEN, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_ROTEN, this, 1.0f, 1.0f, 1.0f);
 
     return true;
 }

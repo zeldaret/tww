@@ -2770,7 +2770,7 @@ BOOL daNpc_Zl1_c::_draw() {
     }
 
     shadowDraw();
-    dSnap_RegistFig(DSNAP_TYPE_ZL1, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_ZL1, this, 1.0f, 1.0f, 1.0f);
 
     // doesnt do anything?
     cXyz temp;

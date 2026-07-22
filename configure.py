@@ -166,10 +166,10 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20251118"
-config.dtk_tag = "v1.7.6"
-config.objdiff_tag = "v3.5.1"
+config.dtk_tag = "v1.8.3"
+config.objdiff_tag = "v3.7.3"
 config.sjiswrap_tag = "v1.2.2"
-config.wibo_tag = "1.0.0"
+config.wibo_tag = "1.1.0"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -215,7 +215,6 @@ cflags_base = [
     "-enum int",
     "-fp hardware",
     "-Cpp_exceptions off",
-    # "-W all",
     # "-O4,p",
     "-inline auto",
     '-pragma "cats off"',
@@ -570,7 +569,7 @@ config.libs = [
             Object(Matching,    "d/d_cc_mass_s.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_s.cpp"),
             Object(Matching,    "d/d_cc_uty.cpp"),
-            Object(NonMatching, "d/d_cam_param.cpp"),
+            Object(Matching,    "d/d_cam_param.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_type.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_style.cpp"),
             Object(Matching,    "d/d_cam_type2.cpp"),
@@ -634,7 +633,7 @@ config.libs = [
             Object(NonMatching, "d/d_menu_fmap2.cpp"),
             Object(NonMatching, "d/d_menu_item.cpp"),
             Object(Matching,    "d/d_menu_option.cpp"),
-            Object(NonMatching, "d/d_menu_save.cpp"),
+            Object(Matching,    "d/d_menu_save.cpp"),
             Object(MatchingFor("GZLE01"), "d/d_menu_window.cpp"),
             Object(NonMatching, "d/d_mesg.cpp"),
             Object(NonMatching, "d/d_message.cpp"),
@@ -1669,7 +1668,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_gk1"),
     ActorRel(NonMatching, "d_a_npc_gp1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_hi1"),
-    ActorRel(Matching, "d_a_npc_ho"),
+    ActorRel(Matching,    "d_a_npc_ho"),
     ActorRel(Matching,    "d_a_npc_hr"),
     ActorRel(Matching,    "d_a_npc_jb1"),
     ActorRel(NonMatching, "d_a_npc_ji1"),
@@ -1682,9 +1681,9 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_ko1"),
     ActorRel(NonMatching, "d_a_npc_kp1"),
     ActorRel(Matching,    "d_a_npc_ls1"),
-    ActorRel(NonMatching, "d_a_npc_mk"),
+    ActorRel(Matching,    "d_a_npc_mk"),
     ActorRel(NonMatching, "d_a_npc_mn"),
-    ActorRel(NonMatching, "d_a_npc_mt"),
+    ActorRel(Matching,    "d_a_npc_mt"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_nz"),
     ActorRel(NonMatching, "d_a_npc_ob1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_os"),
@@ -1699,7 +1698,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_sarace"),
     ActorRel(NonMatching, "d_a_npc_sv"),
     ActorRel(Matching,    "d_a_npc_tc"),
-    ActorRel(NonMatching, "d_a_npc_tt"),
+    ActorRel(Matching,    "d_a_npc_tt"),
     ActorRel(NonMatching, "d_a_npc_uk"),
     ActorRel(NonMatching, "d_a_npc_ym1"),
     ActorRel(NonMatching, "d_a_npc_yw1"),
@@ -1839,6 +1838,11 @@ config.custom_build_rules = [
         "command": "$python tools/converters/matDL_dis.py $in $out --symbol $symbol --scope $scope",
         "description": "CONVERT $symbol",
     },
+    {
+        "name": "convert_embedded_model_data",
+        "command": "$python tools/converters/extract_model_data.py $in $out --type $type --symbol $symbol --scope $scope",
+        "description": "CONVERT $symbol",
+    },
 ]
 config.custom_build_steps = {}
 
@@ -1868,6 +1872,21 @@ def emit_build_rule(asset):
                         "scope": custom_data.get("scope", "local")
                     },
                     "implicit": Path("tools/converters/matDL_dis.py"),
+                }
+            )
+
+        case "Vec" | "cXy" | "GXColor":
+            steps.append(
+                {
+                    "rule": "convert_embedded_model_data",
+                    "inputs": out_dir / "bin" / asset["binary"],
+                    "outputs": out_dir / "include" / asset["header"],
+                    "variables": {
+                        "type": asset.get("custom_type"),
+                        "symbol": asset.get("rename") or asset["symbol"],
+                        "scope": custom_data.get("scope", "local")
+                    },
+                    "implicit": Path("tools/converters/extract_model_data.py"),
                 }
             )
 
@@ -1916,6 +1935,7 @@ config.progress_report_args = [
     # Marks relocations as mismatching if the target value is different
     # Default is "functionRelocDiffs=none", which is most lenient
     "--config functionRelocDiffs=data_value",
+    "--config preferredStringEncoding=shift_jis",
 ]
 
 # Disable missing return type warnings for incomplete objects

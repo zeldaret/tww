@@ -79,9 +79,9 @@ public:
     /* 0x00014 */ dGrass_data_c mGrassData[1500];
     /* 0x18E84 */ dGrass_anm_c mGrassAnm[104];
     /* 0x1A544 */ dGrass_room_c mGrassRoom[64];
-    /* 0x1A644 */ f32* mpPosArr;
+    /* 0x1A644 */ Vec* mpPosArr;
     /* 0x1A648 */ GXColor* mpColorArr;
-    /* 0x1A64C */ f32* mpTexCoordArr;
+    /* 0x1A64C */ cXy* mpTexCoordArr;
     /* 0x1A650 */ void* mpMatDL;
     /* 0x1A654 */ u32 mMatDLSize;
     /* 0x1A658 */ void* mpDL;

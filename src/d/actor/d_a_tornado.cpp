@@ -11,6 +11,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_kankyo_wether.h"
+#include "d/actor/d_a_player.h"
+#include "cstdint.h"
 
 static char l_arcName[] = "Trnd";
 
@@ -208,7 +210,7 @@ BOOL daTornado_c::execute() {
             return TRUE;
         }
     }
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     attention_info.position = current.pos;
     eyePos = current.pos;
@@ -218,7 +220,7 @@ BOOL daTornado_c::execute() {
         dKy_get_seacolor(&colorAmb, &colorDif);
         mPtclCb.getEmitter()->setGlobalPrmColor(colorAmb.r, colorAmb.g, colorAmb.b);
     }
-    mDoMtx_stack_c::transS(mCenter);
+    mDoMtx_stack_c::transS(mCenter.x, mCenter.y, mCenter.z);
     mpModelUnder->setBaseTRMtx(mDoMtx_stack_c::get());
 
     return TRUE;
@@ -320,14 +322,14 @@ cPhs_State daTornado_c::create() {
             dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDUPWATER00, &mCenter, NULL, NULL, 0xFF, &mPtclCb);
             fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
         }
-        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
         mpModelUnder->setBaseTRMtx(mDoMtx_stack_c::get());
         J3DModelData* modelData = mpModel->getModelData();
         for (u16 i = 1; i < modelData->getJointNum(); i++) {
             modelData->getJointNodePointer(i)->setCallBack(daTornado_jointCallBack);
         }
-        mpModel->setUserArea((u32) this);
+        mpModel->setUserArea((std::uintptr_t)this);
     }
     return rt;
 }

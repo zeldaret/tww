@@ -3,50 +3,55 @@
 
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_a_obj.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class mDoExt_bckAnm;
 class mDoExt_btkAnm;
 class mDoExt_brkAnm;
 
 namespace daObjTide {
-    namespace {
-        enum Type_e {
-            TYPE_0_e = 0,
-            TYPE_1_e = 1,
-            TYPE_2_e = 2,
-            TYPE_3_e = 3,
-            TYPE_4_e = 4,
-            TYPE_5_e = 5,
-        };
+    enum Type_e {
+        TYPE_0_e = 0,
+        TYPE_1_e = 1,
+        TYPE_2_e = 2,
+        TYPE_3_e = 3,
+        TYPE_4_e = 4,
+        TYPE_5_e = 5,
+    };
 
+    namespace {
         struct Attr_c {
             /* 0x00 */ const char* arcName;
-            /* 0x04 */ s16 m04;
-            /* 0x06 */ s16 m06;
-            /* 0x08 */ s16 m08;
-            /* 0x0A */ s16 m0A;
-            /* 0x0C */ s16 m0C;
-            /* 0x10 */ u32 m10;
-            /* 0x14 */ s16 m14;
-            /* 0x16 */ s16 m16;
-            /* 0x18 */ u32 m18;
-            /* 0x1C */ u32 resSize;
+            /* 0x04 */ s16 bdl_res_index;
+            /* 0x06 */ s16 dzb_res_index;
+            /* 0x08 */ s16 bck_res_index;
+            /* 0x0A */ s16 brk_res_index;
+            /* 0x0C */ s16 btk_res_index;
+            /* 0x10 */ u32 bdl_dlist_flags;
+            /* 0x14 */ s16 nure_bdl_res_index;
+            /* 0x16 */ s16 nure_brk_res_index;
+            /* 0x18 */ u32 nure_bdl_dlist_flags;
+            /* 0x1C */ u32 res_size;
             /* 0x20 */ s16 m20;
             /* 0x24 */ f32 m24;
             /* 0x28 */ f32 m28;
             /* 0x2C */ f32 m2C;
             /* 0x30 */ f32 m30;
-            /* 0x34 */ s16 minX;
-            /* 0x36 */ s16 minY;
-            /* 0x38 */ s16 minZ;
-            /* 0x3A */ s16 maxX;
-            /* 0x3C */ s16 maxY;
-            /* 0x3E */ s16 maxZ;
+            /* 0x34 */ s16 min_x;
+            /* 0x36 */ s16 min_y;
+            /* 0x38 */ s16 min_z;
+            /* 0x3A */ s16 max_x;
+            /* 0x3C */ s16 max_y;
+            /* 0x3E */ s16 max_z;
             /* 0x40 */ bool sch_flag;
             /* 0x42 */ s16 m42;
             /* 0x44 */ f32 m44;
         }; // size = 0x48
     }
+
+    class Hio_c : public JORReflexible {
+        void genMessage(JORMContext* ctx) {}
+    };
 
     class Act_c : public dBgS_MoveBgActor {
         enum Prm_e {
