@@ -54,6 +54,7 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
     s16 yAngle;
     u8 alpha;
     f32 waterY;
+    s16 alpha_arr[2];
     dKy_get_seacolor(&diff, &amb);
     emitter->setGlobalPrmColor(diff.r, diff.g, diff.b);
     if (field_0x4 != 0) {
@@ -80,11 +81,10 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
         emitter->setGlobalAlpha(alpha);
     } else {
         emitter->mGlobalTranslation.y = mpWaterFlatY;
-        s16 alpha[2];
-        alpha[0] = emitter->getGlobalAlpha();
-        cLib_chaseS(alpha, 0, 5);
-        alpha[0] = 0xff;
-        emitter->setGlobalAlpha(alpha[0]);
+        alpha_arr[0] = emitter->getGlobalAlpha();
+        cLib_chaseS(alpha_arr, 0, 5);
+        alpha_arr[0] = 0xff;
+        emitter->setGlobalAlpha(alpha_arr[0]);
     }
     JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
     while(link != 0) {
