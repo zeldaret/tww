@@ -17,6 +17,7 @@ void C_QUATNormalize(const Quaternion* src, Quaternion* unit);
 void PSQUATNormalize(const Quaternion* src, Quaternion* unit);
 void C_QUATRotAxisRad(Quaternion* q, const Vec* axis, f32 rad);
 void C_QUATSlerp(const Quaternion* p, const Quaternion* q, Quaternion* r, f32 t);
+void PSQUATInverse(const Quaternion* src, Quaternion* inv);
 
 /* When compiling in debug mode, use C implementations */
 #if defined(DEBUG) || !defined(__MWERKS__)
