@@ -11,14 +11,28 @@
 #include "JSystem/JUtility/JUTReport.h"
 #endif
 
+char daMgBoard_c::m_arcname[9] = {};
+u8 daMgBoard_c::m_bullet_num = 24;
+cXyz daMgBoard_c::m_cur_table[8][8] = {};
+
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((daMgBoard_c*)i_this)->CreateHeap();
 }
 
-char daMgBoard_c::m_arcname[9] = {};
-u8 daMgBoard_c::m_bullet_num = 24;
-cXyz daMgBoard_c::m_cur_table[8][8] = {};
+cPhs_State daMgBoard_c::_create() {
+    fopAcM_ct(this, daMgBoard_c);
+    strcpy(m_arcname, "Kaisen_e");
+    cPhs_State result = dComIfG_resLoad(&mPhase, m_arcname);
+    if (result == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x4E000)) {
+            result = cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+    return result;
+}
 
 /* 0000010C-000007BC       .text CreateHeap__11daMgBoard_cFv */
 BOOL daMgBoard_c::CreateHeap() {
@@ -436,8 +450,8 @@ void daMgBoard_c::CursorMove() {
 }
 
 /* 000013C4-000014C8       .text daMgBoard_Create__FPv */
-static cPhs_State daMgBoard_Create(void*) {
-    /* Nonmatching */
+static cPhs_State daMgBoard_Create(void* i_this) {
+    return ((daMgBoard_c*)i_this)->_create();
 }
 
 /* 000014C8-00001518       .text daMgBoard_Delete__FPv */
