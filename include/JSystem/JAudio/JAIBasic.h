@@ -100,7 +100,7 @@ public:
 
     // TODO
     void addInitOnCodeSeScene(u32, u32) {}
-    void getAudioCamera() {}
+    JAInter::Camera* getAudioCamera() {return mAudioCamera;}
     void getInitDataInfo() {}
     void getInitOnCodeSeScene() {}
     void getSceneSetFlag() {}

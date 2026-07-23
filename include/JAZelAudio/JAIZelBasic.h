@@ -39,7 +39,7 @@ public:
     void onEnemyDamage();
     void mbossBgmMuteProcess();
     void mbossBgmNearByProcess(f32);
-    bool checkBgmPlaying();
+    BOOL checkBgmPlaying();
     int checkPlayingMainBgmFlag();
     BOOL checkSubBgmPlaying();
     int checkPlayingSubBgmFlag();
@@ -122,7 +122,7 @@ public:
     void processTime();
     void processMorningToNormal();
     int checkOnOuterSea(f32*);
-    void checkSeqIDDemoPlaying(u32);
+    BOOL checkSeqIDDemoPlaying(u32);
     u32 checkDemoFanfarePlaying();
     void processDemoFanfareMute();
     void muteMainBgmAll();
@@ -133,9 +133,9 @@ public:
     void initSeaEnvPos();
     void registSeaEnvPos(Vec*);
     void seaEnvSePlay(u32, s8);
-    void calcPosPanLR(Vec*);
-    void calcPosPanSR(Vec*, f32);
-    void calcPosVolume(Vec*, f32);
+    f32 calcPosPanLR(Vec*);
+    f32 calcPosPanSR(Vec*, f32);
+    f32 calcPosVolume(Vec*, f32);
     void seaShoreSE(u32, Vec*, u32, s8);
     void initRiverPos();
     void registRiverPos(Vec*);
@@ -195,7 +195,15 @@ public:
     static u8 m_bgm_mute_state[];
 
     // static charVoiceTable;
-    // static linkVoiceTable;
+
+    struct LinkVoiceEntry{
+        u8 m0;
+        u8 mVowel;
+    };
+    struct linkVoiceStruct{
+        LinkVoiceEntry entries[4];
+    };
+    static linkVoiceStruct linkVoiceTable[];
 
     static u8 m_bgm_wave_info[];
     static u8 m_dy_wave_set_1st[][2];
@@ -204,9 +212,11 @@ public:
     static scene_info_s m_isle_info[];
     static const char* spot_dir_name[];
     static isle_area_s mIsleArea[];
-
+#if VERSION == VERSION_DEMO
+    static const int MAX_CONCURRENT_SE_NUM = 26;
+#else
     static const int MAX_CONCURRENT_SE_NUM = 24;
-
+#endif
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0024 */ u8* field_0x0024;
@@ -246,8 +256,8 @@ public:
     /* 0x0068 */ JAISound* mpMainBgmSound;
     /* 0x006C */ JAISound* mpSubBgmSound;
     /* 0x0070 */ JAISound* mpStreamBgmSound;
-    /* 0x0074 */ u32 mSubBgmNum;
-    /* 0x0078 */ u32 mMainBgmNum;
+    /* 0x0074 */ s32 mSubBgmNum;
+    /* 0x0078 */ s32 mMainBgmNum;
     /* 0x007C */ u32 mStreamBgmNum;
     /* 0x0080 */ f32 field_0x0080;
     /* 0x0084 */ f32 field_0x0084;
@@ -280,7 +290,7 @@ public:
 #endif
     /* 0x00C0 */ u8 field_0x00c0;
     /* 0x00C1 */ s8 field_0x00c1;
-    /* 0x00C4 */ int field_0x00c4;
+    /* 0x00C4 */ u32 field_0x00c4;
     /* 0x00C8 */ u8 field_0x00c8;
     /* 0x00C9 */ u8 field_0x00c9;
     /* 0x00CA */ u8 field_0x00ca;
@@ -289,13 +299,14 @@ public:
     /* 0x00CD */ u8 field_0x00cd;
     /* 0x00CE */ u8 field_0x00ce;
     /* 0x00CF */ u8 field_0x00CF[0x00D0 - 0x00CF];
-    /* 0x00D0 */ int field_0x00d0;
+    /* 0x00D0 */ Vec* field_0x00d0;
     /* 0x00D4 */ JAISound* mpSeSound[MAX_CONCURRENT_SE_NUM];
     /* 0x0134 */ u32 mSeNum[MAX_CONCURRENT_SE_NUM];
     /* 0x0194 */ u32 field_0x0194[MAX_CONCURRENT_SE_NUM];
     /* 0x01F4 */ int field_0x01f4;
 #if VERSION == VERSION_DEMO
-    u8 temppadding[0x60];
+    u8 temppadding[0x5C];
+    u32 field_demo_0x01f8;
 #endif
     /* 0x01F8 */ u8 field_0x01f8;
     /* 0x01F9 */ u8 field_0x01f9;
@@ -307,7 +318,8 @@ public:
     /* 0x01FF */ u8 field_0x01ff;
     /* 0x0200 */ u8 field_0x0200;
     /* 0x0201 */ u8 field_0x0201;
-    /* 0x0202 */ u8 field_0x0202[0x0204 - 0x0202];
+    /* 0x0202 */ u8 field_0x0202;
+    /* 0x0202 */ u8 field_0x0203;
     /* 0x0204 */ u8 field_0x0204;
 #if VERSION > VERSION_DEMO
     /* 0x0205 */ u8 field_0x0205;
@@ -361,16 +373,16 @@ public:
     /* 0x1F3D */ u8 mIsSailing;
     /* 0x1F3E */ u8 field_0x1F3E[0x1F40 - 0x1F3E];
     /* 0x1F40 */ f32 field_0x1f40;
-    /* 0x1F44 */ int field_0x1f44;
-    /* 0x1F48 */ int field_0x1f48;
+    /* 0x1F44 */ JAISound* field_0x1f44;
+    /* 0x1F48 */ JAISound* field_0x1f48;
     /* 0x1F4C */ struct {
         int field_0x00;
-        int field_0x04;
+        JAISound* field_0x04;
     } field_0x1f4c[0x1E];
     /* 0x203C */ u8 field_0x203c;
     /* 0x203D */ u8 field_0x203d;
-    /* 0x2040 */ int field_0x2040[4];
-    /* 0x2050 */ int field_0x2050[4];
+    /* 0x2040 */ JAISound* mpKuroboMotion[4];
+    /* 0x2050 */ JAISound* mpKuroboVoice[4];
     /* 0x2060 */ JAISound* field_0x2060;
     /* 0x2064 */ int field_0x2064;
     /* 0x2068 */ JMath::TRandom_enough_ field_0x2068;
