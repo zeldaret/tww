@@ -218,9 +218,9 @@ void daMgBoard_c::set_mtx() {
 
     J3DModel* cursor_model = mpCursorModel;
     mDoMtx_stack_c::transS(
-        m_cur_table[(s8)mBoardPosY][(s8)mBoardPosX].x + current.pos.x,
-        m_cur_table[(s8)mBoardPosY][(s8)mBoardPosX].y + current.pos.y,
-        m_cur_table[(s8)mBoardPosY][(s8)mBoardPosX].z + current.pos.z
+        m_cur_table[mBoardPosY][mBoardPosX].x + current.pos.x,
+        m_cur_table[mBoardPosY][mBoardPosX].y + current.pos.y,
+        m_cur_table[mBoardPosY][mBoardPosX].z + current.pos.z
     );
     mDoMtx_stack_c::YrotM(current.angle.y);
     cursor_model->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -370,8 +370,8 @@ BOOL daMgBoard_c::MinigameMain() {
         s32 alive = mSeaFightGame.mAliveShipNum;
         int dead = mSeaFightGame.mDeadShipNum;
         s32 score = mSeaFightGame.mScore;
-        mLastFirePosX = (s8)mBoardPosX;
-        mLastFirePosY = (s8)mBoardPosY;
+        mLastFirePosX = mBoardPosX;
+        mLastFirePosY = mBoardPosY;
         if (attack_result >= 0) {
             mDoAud_seStart(0x69A2, &mNPCPos);
             if ((num_alive != alive) && (alive != 0)) {
@@ -401,8 +401,8 @@ BOOL daMgBoard_c::MinigameMain() {
 /* 00001250-000013C4       .text CursorMove__11daMgBoard_cFv */
 void daMgBoard_c::CursorMove() {
     /* Nonmatching */
-    u8 start_pos_x;
-    u8 start_pos_y;
+    s8 start_pos_x;
+    s8 start_pos_y;
 
     start_pos_x = mBoardPosX;
     start_pos_y = mBoardPosY;
@@ -417,20 +417,20 @@ void daMgBoard_c::CursorMove() {
     } else if (mStickControl.checkDownTrigger() != 0) {
         mBoardPosY--;
     }
-    if ((s8)mBoardPosX > 7) {
+    if (mBoardPosX > 7) {
         mBoardPosX = 7;
     }
-    if ((s8)mBoardPosX < 0) {
+    if (mBoardPosX < 0) {
         mBoardPosX = 0;
     }
-    if ((s8)mBoardPosY > 7) {
+    if (mBoardPosY > 7) {
         mBoardPosY = 7;
     }
-    if ((s8)mBoardPosY < 0) {
+    if (mBoardPosY < 0) {
         mBoardPosY = 0;
     }
 
-    if (((s8)mBoardPosX != (s8)start_pos_x) || ((s8)mBoardPosY != (s8)start_pos_y)) {
+    if ((mBoardPosX != start_pos_x) || (mBoardPosY != start_pos_y)) {
         mDoAud_seStart(0x8A9);
     }
 }

@@ -47,8 +47,8 @@ public:
     /* 0x378 */ J3DModel* mpShip3Model[2];
     /* 0x380 */ J3DModel* mpShip4Model[2];
     /* 0x388 */ u8 field_0x384[0x468 - 0x388];
-    /* 0x468 */ u8 mBoardPosX;
-    /* 0x469 */ u8 mBoardPosY;
+    /* 0x468 */ s8 mBoardPosX;
+    /* 0x469 */ s8 mBoardPosY;
     /* 0x46A */ u8 field_0x46A[0x46C - 0x46A];
     /* 0x46C */ int mLastFirePosX;
     /* 0x470 */ int mLastFirePosY;
