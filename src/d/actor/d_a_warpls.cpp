@@ -336,7 +336,7 @@ int daWarpls_c::check_warp_link() {
     #else
     f32 warp_distance = 112.5f;
     #endif
-    f64 dist = 0.5;
+    f64 dist = 0.5f;
 
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     if (!(player == dComIfGp_getPlayer(0) && mWarpActive && !mPlayerStartedInsideWarp)) {
@@ -357,7 +357,7 @@ int daWarpls_c::check_warp_link() {
 
 /* 00000EE8-00000FF4       .text check_warp_distance__10daWarpls_cFv */
 int daWarpls_c::check_warp_distance() {
-    f64 dist = 0.5;
+    f64 dist = 0.5f;
 
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     if (player != dComIfGp_getPlayer(0)) {
