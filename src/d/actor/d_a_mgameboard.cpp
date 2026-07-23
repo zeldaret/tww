@@ -357,11 +357,11 @@ void daMgBoard_c::execEndGame() {
 
 /* 00001060-00001250       .text MinigameMain__11daMgBoard_cFv */
 BOOL daMgBoard_c::MinigameMain() {
-    /* Nonmatching */   
+    /* Nonmatching */
     if (mDoAud_checkSePlaying(0x8A8) != 0) {
         return TRUE;
     }
-    
+
     CursorMove();
     s32 bullet_num = mSeaFightGame.mBulletNum;
     s32 num_alive = mSeaFightGame.mAliveShipNum;
@@ -389,11 +389,11 @@ BOOL daMgBoard_c::MinigameMain() {
             mpSquidIcon[score + 2]->offBeforeTex();
         }
     }
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     s32 near_enemy = mSeaFightGame.getNearEnemy(mLastFirePosX, mLastFirePosY);
     JUTReport(0x1E0, 0x17C, "NEAR ENEMY");
     JUTReport(0x1EA, 0x190, "%d\n", near_enemy);
-    #endif
+#endif
     set_mtx();
     return TRUE;
 }
@@ -401,6 +401,38 @@ BOOL daMgBoard_c::MinigameMain() {
 /* 00001250-000013C4       .text CursorMove__11daMgBoard_cFv */
 void daMgBoard_c::CursorMove() {
     /* Nonmatching */
+    u8 start_pos_x;
+    u8 start_pos_y;
+
+    start_pos_x = mBoardPosX;
+    start_pos_y = mBoardPosY;
+    mStickControl.checkTrigger();
+    if (mStickControl.checkLeftTrigger() != 0) {
+        mBoardPosX--;
+    } else if (mStickControl.checkRightTrigger() != 0) {
+        mBoardPosX++;
+    }
+    if (mStickControl.checkUpTrigger() != 0) {
+        mBoardPosY++;
+    } else if (mStickControl.checkDownTrigger() != 0) {
+        mBoardPosY--;
+    }
+    if ((s8)mBoardPosX > 7) {
+        mBoardPosX = 7;
+    }
+    if ((s8)mBoardPosX < 0) {
+        mBoardPosX = 0;
+    }
+    if ((s8)mBoardPosY > 7) {
+        mBoardPosY = 7;
+    }
+    if ((s8)mBoardPosY < 0) {
+        mBoardPosY = 0;
+    }
+
+    if (((s8)mBoardPosX != (s8)start_pos_x) || ((s8)mBoardPosY != (s8)start_pos_y)) {
+        mDoAud_seStart(0x8A9);
+    }
 }
 
 /* 000013C4-000014C8       .text daMgBoard_Create__FPv */
