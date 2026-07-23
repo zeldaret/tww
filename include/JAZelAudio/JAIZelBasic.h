@@ -373,16 +373,16 @@ public:
     /* 0x1F3D */ u8 mIsSailing;
     /* 0x1F3E */ u8 field_0x1F3E[0x1F40 - 0x1F3E];
     /* 0x1F40 */ f32 field_0x1f40;
-    /* 0x1F44 */ int field_0x1f44;
-    /* 0x1F48 */ int field_0x1f48;
+    /* 0x1F44 */ JAISound* field_0x1f44;
+    /* 0x1F48 */ JAISound* field_0x1f48;
     /* 0x1F4C */ struct {
         int field_0x00;
-        int field_0x04;
+        JAISound* field_0x04;
     } field_0x1f4c[0x1E];
     /* 0x203C */ u8 field_0x203c;
     /* 0x203D */ u8 field_0x203d;
-    /* 0x2040 */ int field_0x2040[4];
-    /* 0x2050 */ int field_0x2050[4];
+    /* 0x2040 */ JAISound* mpKuroboMotion[4];
+    /* 0x2050 */ JAISound* mpKuroboVoice[4];
     /* 0x2060 */ JAISound* field_0x2060;
     /* 0x2064 */ int field_0x2064;
     /* 0x2068 */ JMath::TRandom_enough_ field_0x2068;
