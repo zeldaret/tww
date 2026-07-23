@@ -1219,9 +1219,9 @@ void daShip_c::setCrashData(short param1) {
             iVar5 = param1 - shape_angle.y;
             fVar1 = cM_ssin(iVar5);
             fVar2 = cM_scos(iVar5);
-            m0370 += fVar2 * 3072.0f;
+            m0370 += fVar2 * 0xC00;
             m0374 += fVar2 * 500.0f;
-            m0372 -= fVar1 * 3072.0f;
+            m0372 -= fVar1 * 0xC00;
             m0376 -= fVar1 * 500.0f;
             m03B6 = 30;
         }
@@ -1393,7 +1393,7 @@ void daShip_c::setSelfMove(int param_1) {
     float fVar6;
     
     if (param_1) {
-        sVar2 = mStickMVal * 8192.0f * -cM_ssin(mStickMAng);
+        sVar2 = mStickMVal * 0x2000 * -cM_ssin(mStickMAng);
     }
     else {
         sVar2 = 0;
@@ -1624,7 +1624,7 @@ BOOL daShip_c::procSteerMove() {
     if (checkNextMode(MODE_STEER_MOVE_e)) {
         return TRUE;
     }
-    cLib_addCalcAngleS(&m0366, mStickMVal * 8192.0f * -cM_ssin(mStickMAng), 4, l_HIO.tiller_speed, 0x100);
+    cLib_addCalcAngleS(&m0366, mStickMVal * 0x2000 * -cM_ssin(mStickMAng), 4, l_HIO.tiller_speed, 0x100);
     if (!checkStateFlg(daSFLG_FLY_e)) {
         setMoveAngle(m0366);
     }
@@ -2030,19 +2030,19 @@ BOOL daShip_c::procCraneUp() {
         if (cLib_distanceAngleS(m036C, m03A6) < 0x400) {
             if (mCraneBaseAngle > 0) {
                 if (m03A6 > 0x400) {
-                    m03A6 = cM_rnd() * 256.0f;
+                    m03A6 = cM_rnd() * 0x100;
                 }
                 else {
-                    m03A6 = cM_rnd() * 1024.0f + 2048.0f;
+                    m03A6 = cM_rnd() * 0x400 + 0x800;
                     seStart(JA_SE_LK_SHIP_CRANE_SALVAGE, &current.pos);
                 }
             }
             else {
                 if (m03A6 < -0x400) {
-                    m03A6 = cM_rnd() * -256.0f;
+                    m03A6 = cM_rnd() * -0x100;
                 }
                 else {
-                    m03A6 = -2048.0f - cM_rnd() * 1024.0f;
+                    m03A6 = -0x800 - cM_rnd() * 0x400;
                     seStart(JA_SE_LK_SHIP_CRANE_SALVAGE, &current.pos);
                 }
             }
@@ -2876,7 +2876,7 @@ BOOL daShip_c::procWhirlDown_init() {
 
 /* 00007A90-00007BEC       .text procWhirlDown__8daShip_cFv */
 BOOL daShip_c::procWhirlDown() {  
-    shape_angle.y += (m0408 / (2*M_PI)) * 65536.0f;
+    shape_angle.y += (m0408 / (2*M_PI)) * 0x10000;
     if (mWhirlActor) {
 #if VERSION == VERSION_DEMO
         if (cLib_addCalcPosXZ(&current.pos, mWhirlActor->current.pos, 1.0f, speedF, 10.0f) < 10.0f)
@@ -3706,20 +3706,19 @@ BOOL daShip_c::execute() {
             if (mTornadoActor) {
                 s16 sVar16;
                 sVar16 = shape_angle.y;
-                cLib_addCalcAngleS(&shape_angle.y, m040C * 10430.378f + 20480.0f, 5, 0x2000, 0x200);
+                cLib_addCalcAngleS(&shape_angle.y, RAD2S(m040C) + 0x5000, 5, 0x2000, 0x200);
                 setControllAngle(getAimControllAngle(sVar16));
                 current.angle.y = shape_angle.y;
             }
             else {
                 if (mWhirlActor) {
-                    s16 sVar16;
-                    sVar16 = shape_angle.y;
+                    s16 sVar16 = shape_angle.y;
                     s16 sVar5;
                     if (m0352) {
-                        sVar5 = m040C * 10430.378f + 20480.0f;
+                        sVar5 = RAD2S(m040C) + 0x5000;
                     }
                     else {         
-                        sVar5 = m040C * 10430.378f + 32768.0f;
+                        sVar5 = RAD2S(m040C) + 0x8000;
                     }
                     cLib_addCalcAngleS(&shape_angle.y, sVar5, 5, 0x2000, 0x200);
                     setControllAngle(getAimControllAngle(sVar16));
@@ -4013,7 +4012,7 @@ BOOL daShip_c::execute() {
             mDoMtx_multVecZero(mpCannonModel->getAnmMtx(VFNCN_JNT_CANON2_e), &m1038);
             
             if (mProc != &daShip_c::procCannon) {
-                m0396 = getAnglePartRate() * 16384.0f;
+                m0396 = getAnglePartRate() * 0x4000;
                 m0394 *= getAnglePartRate();
             
             }

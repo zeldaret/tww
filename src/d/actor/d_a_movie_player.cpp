@@ -3279,18 +3279,18 @@ static void daMP_MixAudio(s16* destination, s16*, u32 sample) {
 
                 l_mix = 0.7f * (attenuation * curPtr[0] >> 15);
                 // clamp volume
-                if (l_mix < -32768)
-                    l_mix = -32768;
-                if (l_mix > 32767)
-                    l_mix = 32767;
+                if (l_mix < -0x8000)
+                    l_mix = -0x8000;
+                if (l_mix > 0x7FFF)
+                    l_mix = 0x7FFF;
 
                 dst[0] = l_mix;
 
                 r_mix = 0.7f * (attenuation * curPtr[1] >> 15);
-                if (r_mix < -32768)
-                    r_mix = -32768;
-                if (r_mix > 32767)
-                    r_mix = 32767;
+                if (r_mix < -0x8000)
+                    r_mix = -0x8000;
+                if (r_mix > 0x7FFF)
+                    r_mix = 0x7FFF;
 
                 dst[1] = r_mix;
 

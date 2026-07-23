@@ -637,7 +637,7 @@ void target_set(kb_class* i_this, u8 param_1) {
         case 0:
             temp = actor->shape_angle.y;
             if(i_this->m426[3] == 0) {
-                temp = way_check(i_this, cM_rndFX(32768.0f), 0);
+                temp = way_check(i_this, cM_rndFX(0x8000), 0);
             }
 
             break;
@@ -1664,7 +1664,7 @@ void attack_move(kb_class* i_this) {
             }
             else {
                 if((s16)cLib_distanceAngleS(actor->current.angle.y, i_this->m442) < 0x100) {
-                    i_this->m442 = fopAcM_searchPlayerAngleY(actor) + cM_rndFX(4096.0f);
+                    i_this->m442 = fopAcM_searchPlayerAngleY(actor) + cM_rndFX(0x1000);
                 }
 
                 i_this->m5D4[0] = actor->current.pos;
@@ -1761,7 +1761,7 @@ void money_drop(kb_class* i_this) {
                 rnd *= 10.0f;
                 u32 temp2 = gold_rate_dt[(int)(0.3f * rnd)];
                 i_this->m407 = 1;
-                cMtx_YrotS(*calc_mtx, cM_rndFX(32768.0f));
+                cMtx_YrotS(*calc_mtx, cM_rndFX(0x8000));
                 temp3.set(0.0f, 0.0f, 20.0f);
                 MtxPosition(&temp3, &temp4);
                 temp4 += actor->current.pos;
@@ -1782,7 +1782,7 @@ void money_drop(kb_class* i_this) {
             rnd *= 10.0f;
             u32 temp2 = item_rate_dt[(int)(0.3f * rnd)];
             i_this->m407 = 1;
-            cMtx_YrotS(*calc_mtx, cM_rndFX(32768.0f));
+            cMtx_YrotS(*calc_mtx, cM_rndFX(0x8000));
             temp3.set(0.0f, 0.0f, 20.0f);
             MtxPosition(&temp3, &temp4);
             temp4 += actor->current.pos;

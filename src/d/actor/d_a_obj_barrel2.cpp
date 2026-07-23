@@ -832,7 +832,7 @@ void daObjBarrel2::Act_c::buoy_jump(float speed) {
     if (m460 != fpcM_ERROR_PROCESS_ID_e) {
         daObjBuoyflag::Act_c* buoy = (daObjBuoyflag::Act_c*)fopAcM_SearchByID(m460);
         if (buoy != NULL) {
-            s16 rnd = cM_rndFX(32768.0f);
+            s16 rnd = cM_rndFX(0x8000);
             buoy->speed.y = speed;
             buoy->speedF = 50.0f;
             buoy->current.angle.y = rnd;

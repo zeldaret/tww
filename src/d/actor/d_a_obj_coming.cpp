@@ -417,7 +417,7 @@ bool daObjComing::Act_c::barrel2_get_param(daObjComing::PrmBarrel2_c* barrel2) {
             barrel2->m14 = barrel2_get_buoy(uVar5);
 
             s16 angle = cLib_targetAngleY(fopAcM_GetPosition_p(ship), (cXyz*)&sp08.m0C);
-            s16 rnd = cM_rndFX(8192.0f);
+            s16 rnd = cM_rndFX(0x2000);
             barrel2->mAngleY = angle + rnd;
             return true;
         }

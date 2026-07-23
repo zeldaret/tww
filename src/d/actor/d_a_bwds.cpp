@@ -230,7 +230,7 @@ static void ug_move(bwds_class* i_this) {
         i_this->m030C = REG0_F(3) + 3000.0f;
         actor->speedF = l_HIO.m010;
         actor->speed.y = REG0_F(13) + 60.0f + cM_rndF(20.0f);
-        actor->current.angle.y = cM_rndFX(32768.0f);
+        actor->current.angle.y = cM_rndFX(0x8000);
         local_34.x = 0.0f;
         local_34.y = 0.0f;
         local_34.z = 2000.0f;
@@ -409,7 +409,7 @@ static void hook_chance(bwds_class* i_this) {
                 i_this->m04FC = REG0_S(5) + 0x7f00;
             }
 
-            i_this->m0500 = cM_rndFX(32768.0f);
+            i_this->m0500 = cM_rndFX(0x8000);
             i_this->m0502 = cM_rndFX(REG0_F(5) + 2500.0f);
             if (cM_rndF(1.0f) < 0.5f) {
                 if (cM_rndF(1.0f) < 0.5f) {
@@ -465,8 +465,8 @@ static void fail(bwds_class* i_this) {
             local_34.z = 0.5f;
 
             csXyz local_54(0, 0, 0);
-            local_54.x = cM_rndF(65536.0f);
-            local_54.y = cM_rndF(65536.0f);
+            local_54.x = cM_rndF(0x10000);
+            local_54.y = cM_rndF(0x10000);
             dComIfGp_particle_set(dPa_name::ID_IT_SN_BWK_SIBOUBAKUEN00, &local_40, &local_54, &local_34);
             dComIfGp_particle_set(dPa_name::ID_IT_SN_BWK_SIBOUFLASH00, &local_40, &local_54, &local_34);
             i_this->m04F0++;

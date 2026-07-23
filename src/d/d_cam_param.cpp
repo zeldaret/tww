@@ -147,7 +147,7 @@ dCamBGChk_c::dCamBGChk_c() {
 }
 
 static f32 dummy() {
-    return 182.04445f;
+    return DEG2S_CONSTANT;
 }
 
 /* 800AF8F4-800AF930       .text __ct__11dCamParam_cFl */

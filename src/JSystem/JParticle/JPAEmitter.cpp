@@ -71,7 +71,7 @@ void JPABaseEmitter::calcVolumeSphere() {
     if (checkEmDataFlag(JPADynFlag_FixedInterval)) {
         u16 angleNo = (emtrInfo.mVolumeEmitAngleCount * 0x10000) / emtrInfo.mVolumeEmitAngleMax;
         x = (u16)((emtrInfo.mVolumeEmitXCount * 0x8000) / (emtrInfo.mDivNumber - 1) + 0x4000);
-        angle = (f32)angleNo * mVolumeSweep + 32768.0f;
+        angle = (f32)angleNo * mVolumeSweep + 0x8000;
         emtrInfo.mVolumeEmitAngleCount++;
         if (emtrInfo.mVolumeEmitAngleCount == emtrInfo.mVolumeEmitAngleMax) {
             emtrInfo.mVolumeEmitAngleCount = 0;

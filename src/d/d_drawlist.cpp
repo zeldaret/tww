@@ -96,10 +96,10 @@ void dDlst_2DT_c::draw() {
     f32 texH = mTexH;
     f32 xo = ((mX1 - mX0) * 0.5f) / mScaleX;
     f32 yo = ((mY1 - mY0) * 0.5f) / mScaleY;
-    u16 s0 = ((mCenterX - xo) / texW) * 32768.0f;
-    u16 t0 = ((mCenterY - yo) / texH) * 32768.0f;
-    u16 s1 = ((mCenterX + xo) / texW) * 32768.0f;
-    u16 t1 = ((mCenterY + yo) / texH) * 32768.0f;
+    u16 s0 = ((mCenterX - xo) / texW) * 0x8000;
+    u16 t0 = ((mCenterY - yo) / texH) * 0x8000;
+    u16 s1 = ((mCenterX + xo) / texW) * 0x8000;
+    u16 t1 = ((mCenterY + yo) / texH) * 0x8000;
 
     GXTexObj texObj;
     GXInitTexObj(&texObj, mpTexData, mTexW, mTexH, (GXTexFmt)mTexFmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -723,7 +723,7 @@ void dDlst_effectLine_c::draw() {
     for (s32 i = 0; i < numSegments; i++) {
         cXyz pt0, pt1;
 
-        s16 angle = mRnd.getFX(32767.0f);
+        s16 angle = mRnd.getFX(0x7FFF);
 
         f32 rad0 = mRnd.getValue(field_0x28, field_0x2C);
         pt0.x = mPos.x + rad0 * cM_ssin(angle);

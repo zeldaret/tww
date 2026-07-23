@@ -637,7 +637,7 @@ void daDaiocta_c::setAwaRandom(int i_awaIndex) {
     f29_2 = f30 + cM_rndF(f29);
 #endif
 
-    s16 random_theta = cM_rndF(65536.0f);
+    s16 random_theta = cM_rndF(0x10000);
 
     mAwaTranslation[i_awaIndex].x = current.pos.x + f29_2 * cM_ssin(random_theta);
     mAwaTranslation[i_awaIndex].y = mWaterY;

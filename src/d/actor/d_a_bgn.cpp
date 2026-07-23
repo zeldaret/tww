@@ -3686,8 +3686,8 @@ static cPhs_State daBgn_Create(fopAc_ac_c* a_this) {
 #endif
             }
             for (s32 i = 0; i < 8; i++) {
-                i_this->mAAA8[i].m2FA = cM_rndF(32768.0f);
-                i_this->mAAA8[i].m2FC = cM_rndF(32768.0f);
+                i_this->mAAA8[i].m2FA = cM_rndF(0x8000);
+                i_this->mAAA8[i].m2FC = cM_rndF(0x8000);
             }
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F10)) {
                 i_this->m02B4 = 0xFF;

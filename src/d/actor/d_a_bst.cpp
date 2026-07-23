@@ -3179,7 +3179,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             actor->max_health = 4;
         }
     }
-    i_this->mUpdateLastFacingDirIfMultipleOf32 = cM_rndFX(32768.0f);
+    i_this->mUpdateLastFacingDirIfMultipleOf32 = cM_rndFX(0x8000);
 #if VERSION > VERSION_DEMO
     i_this->mEnvLight = actor->tevStr;
     i_this->m2F20 = actor->tevStr;

@@ -312,7 +312,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
             a_this->cullMtx = a_this->mpModel[0]->getBaseTRMtx();
             a_this->mHomePos = a_this->current.pos;
             a_this->m2EC = a_this->mHomePos;
-            a_this->mLiveTimer = cM_rndF(32768.0f);
+            a_this->mLiveTimer = cM_rndF(0x8000);
             a_this->mTimers[2] = cM_rndF(100.0f);
             static dCcD_SrcSph cc_sph_src = {
                 // dCcD_SrcGObjInf

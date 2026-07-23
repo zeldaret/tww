@@ -2069,8 +2069,8 @@ void Act_c::mode_afl_init() {
 
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
 
-    m804 = cM_rndFX(32768.0f);
-    m806 = cM_rndFX(32768.0f);
+    m804 = cM_rndFX(0x8000);
+    m806 = cM_rndFX(0x8000);
     m678 = 7;
 }
 
@@ -2930,7 +2930,7 @@ void Act_c::set_tensor(const cXyz* pos) {
 void Act_c::init_rot_throw() {
     m688.Val(data().m28);
     m688 *= cM_rnd();
-    m68A.Val((s16)cM_rndFX(32768.0f));
+    m68A.Val((s16)cM_rndFX(0x8000));
     m68C.Val(data().m2A);
     m68E.Val(cSAngle::_0);
     m690.Val(data().m2C);
