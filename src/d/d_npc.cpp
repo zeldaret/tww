@@ -538,7 +538,7 @@ void dNpc_EventCut_c::setActorInfo2(char* staffName, fopNpc_npc_c* pActor) {
 }
 
 /* 8021B9D8-8021BABC       .text dNpc_setAnmIDRes__FP14mDoExt_McaMorfiffiiPCc */
-bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float speed, int animResId, int soundResId, const char* arcName) {
+bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animResId, int soundResId, const char* arcName) {
     void* pSoundAnimRes = NULL;
     bool ret = false;
 
@@ -622,7 +622,7 @@ cXyz dNpc_playerEyePos(f32 offsetY) {
 }
 
 /* 8021BDE8-8021BEC4       .text dNpc_calc_DisXZ_AngY__F4cXyz4cXyzPfPs */
-void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, float* param_3, s16* param_4) {
+void dNpc_calc_DisXZ_AngY(cXyz param_1, cXyz param_2, f32* param_3, s16* param_4) {
     cXyz diff;
     diff.x = param_2.x - param_1.x;
     diff.z = param_2.z - param_1.z;
