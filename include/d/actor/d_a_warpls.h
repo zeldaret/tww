@@ -39,16 +39,16 @@ public:
     /* 0x2A4 */ JPABaseEmitter* mpEmitter;  
     /* 0x2A8 */ s32 mSwitchNo;        
     /* 0x2AC */ s32 mSceneNo;      
-    /* 0x2B0 */ s32 m2B0;
-    /* 0x2B4 */ u8 m2B4;
-    /* 0x2B5 */ u8 m2B5;
-    /* 0x2B6 */ u8 m2B6;
-    /* 0x2B7 */ s8 m2B7;
-    /* 0x2B8 */ s16 m2B8;
-    /* 0x2BA */ s16 m2BA;
-    /* 0x2BC */ u8 m2BC;
-    /* 0x2BD */ u8 m2BD;
-    /* 0x2BE */ u8 m2BE;
+    /* 0x2B0 */ s32 mWarpEvtState;
+    /* 0x2B4 */ bool mWarpActive;
+    /* 0x2B5 */ bool mActivationEvtPlayed;
+    /* 0x2B6 */ u8 mPrevSwitchState;
+    /* 0x2B7 */ s8 mStartupDelayTimer;
+    /* 0x2B8 */ s16 mActivationEvtIdx;
+    /* 0x2BA */ s16 mWarpEvtIdx;
+    /* 0x2BC */ u8 mWarpType;
+    /* 0x2BD */ u8 mWarpEvtType;
+    /* 0x2BE */ bool mPlayerStartedInsideWarp;
 };  // Size: 0x2C0
 
 
