@@ -63,7 +63,9 @@ daNpc_Hi1_HIO_c::daNpc_Hi1_HIO_c() {
     field_0x8 = -1;
 }
 
-static const char* l_evn_tbl = "dummy";
+static const char* l_evn_tbl[1] = {
+    "dummy"
+};
 
 /* 00000198-000001E4       .text nodeCB_Head__FP7J3DNodei */
 static BOOL nodeCB_Head(J3DNode* i_node, int i_param) {
@@ -80,7 +82,7 @@ static BOOL nodeCB_Head(J3DNode* i_node, int i_param) {
 void daNpc_Hi1_c::_nodeCB_Head(J3DNode* i_node, J3DModel* i_pModel) {
     static cXyz a_eye_pos_off(20.0f, 30.0f, 0.0f);
 
-    u16 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
+    s32 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
     mDoMtx_stack_c::copy(i_pModel->getAnmMtx(jointIdx));
 
     mDoMtx_stack_c::multVecZero(&field_0x768);
@@ -104,7 +106,7 @@ static BOOL nodeCB_BackBone(J3DNode* i_node, int i_param) {
 
 /* 0000038C-0000042C       .text _nodeCB_BackBone__11daNpc_Hi1_cFP7J3DNodeP8J3DModel */
 void daNpc_Hi1_c::_nodeCB_BackBone(J3DNode* i_node, J3DModel* i_pModel) {
-    u16 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
+    s32 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
     mDoMtx_stack_c::copy(i_pModel->getAnmMtx(jointIdx));
     mDoMtx_stack_c::XrotM(m_jnt.getBackbone_y());
     mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
@@ -126,8 +128,9 @@ bool daNpc_Hi1_c::init_HI1_0() {
 /* 00000498-00000618       .text createInit__11daNpc_Hi1_cFv */
 bool daNpc_Hi1_c::createInit() {
     bool ret;
-
-    mEventIdx[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl, 0xff);
+    for(int i = 0; i < ARRAY_SSIZE(l_evn_tbl); i++) {
+        mEventIdx[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i]);
+    }
     mEventCut.setActorInfo2("Hi1", this);
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     
@@ -459,13 +462,9 @@ bool daNpc_Hi1_c::chk_talk() {
 
 /* 00000FFC-0000103C       .text chk_parts_notMov__11daNpc_Hi1_cFv */
 bool daNpc_Hi1_c::chk_parts_notMov() {
-    bool ret = false;
-    if(field_0x788.y != m_jnt.getHead_y() ||
+    return field_0x788.y != m_jnt.getHead_y() || 
         field_0x788.z != m_jnt.getBackbone_y() ||
-        field_0x788.x != current.angle.y) {
-        ret = true;
-    }
-    return ret;
+        field_0x788.x != current.angle.y;
 }
 
 /* 0000103C-00001090       .text searchByID__11daNpc_Hi1_cFUiPi */
@@ -523,11 +522,13 @@ void daNpc_Hi1_c::lookBack() {
 
 /* 00001254-000012D4       .text chkAttention__11daNpc_Hi1_cFv */
 bool daNpc_Hi1_c::chkAttention() {
-    if(dComIfGp_getAttention().LockonTruth()) {
-        return this == dComIfGp_getAttention().LockonTarget(0);
+    dAttention_c& attention = dComIfGp_getAttention();
 
+    if(attention.LockonTruth()) {
+        return this == attention.LockonTarget(0);
     }
-    return this == dComIfGp_getAttention().ActionTarget(0);
+
+    return this == attention.ActionTarget(0);
 }
 
 /* 000012D4-0000132C       .text setAttention__11daNpc_Hi1_cFb */
@@ -568,8 +569,34 @@ void daNpc_Hi1_c::privateCut(int i_staffIdx) {
         if(mActIdx == -1) {
             dComIfGp_evmng_cutEnd(i_staffIdx);
         } else {
+#if VERSION == VERSION_DEMO
+            bool temp;
+            if(dComIfGp_evmng_getIsAddvance(i_staffIdx)) {
+
+                switch(mActIdx) {
+                    case 0:
+                        // to match codegen
+                        speedF = speedF;
+                        break;
+                }
+            }
+            
+            switch(mActIdx) {
+                case 0:
+                    break;
+                default:
+                    temp = true;
+                    break;
+
+            }
+            
+            if(temp) {
+                dComIfGp_evmng_cutEnd(i_staffIdx);
+            }
+#else
             dComIfGp_evmng_getIsAddvance(i_staffIdx);
             dComIfGp_evmng_cutEnd(i_staffIdx);
+#endif
         }
     }
 }
@@ -837,7 +864,7 @@ BOOL daNpc_Hi1_c::_execute() {
     if(!demo()) {
         int temp = -1;
 
-        if(dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
+        if(dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == false) {
             temp = isEventEntry();
         }
 
@@ -874,10 +901,15 @@ BOOL daNpc_Hi1_c::_execute() {
 
 /* 00001EDC-00001F30       .text _delete__11daNpc_Hi1_cFv */
 BOOL daNpc_Hi1_c::_delete() {
-    fopAcM_GetID(this);
-    dComIfG_resDeleteDemo(&mPhs, mArcName);
-    if(heap && mpMorf) {
-        mpMorf->stopZelAnime();
+    if(DEMO_SELECT(mStateIsComplaete, true)){
+#if VERSION == VERSION_DEMO
+        l_HIO.removeHIO();
+#endif
+        dComIfG_resDelete(&mPhs, mArcName);
+    
+        if (DEMO_SELECT(mpMorf, heap && mpMorf)) {
+            mpMorf->stopZelAnime();
+        }
     }
     return TRUE;
 }
@@ -891,7 +923,7 @@ cPhs_State daNpc_Hi1_c::_create() {
     };
 
     cPhs_State state;
-    fopAcM_ct(this, daNpc_Hi1_c);
+    fopAcM_ct_Retail(this, daNpc_Hi1_c);
     if(!decideType(fopAcM_GetParam(this) & 0xFF)) {
         return cPhs_ERROR_e;
     }
@@ -901,10 +933,18 @@ cPhs_State daNpc_Hi1_c::_create() {
     if(!mStateIsComplaete) {
         return state;
     } 
+#if VERSION == VERSION_DEMO
+    l_HIO.entryHIO("ハイラル王");
+#endif
+    fopAcM_ct_Demo(this, daNpc_Hi1_c);
     
     if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_siz_tbl[field_0x7C5])) {
+#if VERSION == VERSION_DEMO
+        mStateIsComplaete = false;
+#endif
         return cPhs_ERROR_e;
     }
+    
     fopAcM_SetMtx(this, this->mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -110.0f, -20.0f, -100.0f, 110.0f, 280.0f, 100.0f);
 
@@ -917,7 +957,7 @@ cPhs_State daNpc_Hi1_c::_create() {
 /* 000024F4-00002768       .text bodyCreateHeap__11daNpc_Hi1_cFv */
 BOOL daNpc_Hi1_c::bodyCreateHeap() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, dRes_ID_HI_BDL_HI_e);
-    JUT_ASSERT(0x5BB, a_mdl_dat != NULL);
+    JUT_ASSERT(DEMO_SELECT(1469, 1467), a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
         NULL, NULL, NULL,
@@ -937,9 +977,9 @@ BOOL daNpc_Hi1_c::bodyCreateHeap() {
         return FALSE;
     }
     m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
-    JUT_ASSERT(0x5CF, m_hed_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(1489, 1487), m_hed_jnt_num >= 0);
     m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone1");
-    JUT_ASSERT(0x5D1, m_bbone_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(1491, 1489), m_bbone_jnt_num >= 0);
 
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num & 0xffff)->setCallBack(nodeCB_Head);
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num & 0xffff)->setCallBack(nodeCB_BackBone);
