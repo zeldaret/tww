@@ -9,16 +9,16 @@ class J3DNode;
 
 class daNpc_Zk1_c : public fopNpc_npc_c {
 public:
-    typedef int (daNpc_Zk1_c::*ActionFunc)(void*);
+    typedef int (daNpc_Zk1_c::*ProcFunc)(void*);
 
     struct anm_prm_c {
         // Borrowed from d_lib.h, fields seem to match
-        /* 0x00 */ s8 mAnmIdx;
-        /* 0x01 */ s8 mNextPrmIdx;
+        /* 0x00 */ s8 bckNum;
+        /* 0x01 */ s8 btpNum;
         /* 0x02 */ s16 field_0x02;
-        /* 0x04 */ f32 mMorf;
-        /* 0x08 */ f32 mPlaySpeed;
-        /* 0x0C */ int mLoopMode;
+        /* 0x04 */ f32 morf;
+        /* 0x08 */ f32 speed;
+        /* 0x0C */ int loopMode;
     };
 
 
@@ -58,11 +58,11 @@ public:
     void endEvent();
     int isEventEntry();
     void event_proc(int);
-    bool set_action(ActionFunc, void*);
+    bool set_action(ProcFunc, void*);
     void setStt(signed char);
     BOOL wait_1();
     BOOL talk_1();
-    int wait_action1(void*);
+    BOOL wait_action1(void*);
     u8 demo();
     void shadowDraw();
     BOOL _draw();
@@ -72,7 +72,7 @@ public:
     BOOL bodyCreateHeap();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_hed_jnt_num;
     /* 0x6CD */ s8 m_bbone_jnt_num;
@@ -83,7 +83,7 @@ public:
     /* 0x6EC */ u8 mBtpFrame;
     /* 0x6ED */ u8 field_0x6ED;
     /* 0x6EE */ s16 mTimer1;
-    /* 0x6F0 */ ActionFunc mCurrActionFunc;
+    /* 0x6F0 */ ProcFunc mCurrProcFunc;
     /* 0x6FD */ fpc_ProcID mProcId1;
     /* 0x700 */ fpc_ProcID mProcId2;
     /* 0x704 */ u8 m704[0x70C - 0x704];
@@ -96,18 +96,20 @@ public:
     /* 0x744 */ u8 m738[0x750 - 0x744];
     /* 0x750 */ cXyz field_0x750;
     /* 0x75C */ u8 m75C[0x768 - 0x75C];
-    /* 0x768 */ f32 mFrame;
+    /* 0x768 */ f32 mPrevMorfFrame;
     /* 0x76C */ u8 m76C[0x770 - 0x76C];
     /* 0x770 */ s16 mActorAngleY;
     /* 0x772 */ s16 mJointHeadY;
     /* 0x774 */ s16 mJointBackboneY;
     /* 0x776 */ s16 field_0x776;
     /* 0x778 */ BOOL mbSetEyePos;
-    /* 0x77C */ s16 mEventIdx[6];
+    /* 0x77C */ s16 mEventIDTbl[1];
+    /* 0x77E */ s16 mEventIndex;
+    /* 0x780 */ u8 m780[0x788 - 0x780];
     /* 0x788 */ s16 mTimer2;
     /* 0x78A */ u8 m78A[0x792 - 0x78A];
     /* 0x792 */ s16 field_0x792;
-    /* 0x794 */ u8 mAnmEnded;
+    /* 0x794 */ u8 mbMorfAnimStopped;
     /* 0x795 */ u8 field_0x795;
     /* 0x796 */ u8 mItemNo;
     /* 0x797 */ bool field_0x797;
@@ -125,16 +127,16 @@ public:
     /* 0x7A3 */ u8 field_0x7A3;
     /* 0x7A4 */ u8 field_0x7A4;
     /* 0x7A5 */ s8 mActIdx;
-    /* 0x7A6 */ u8 field_0x7A6;
-    /* 0x7A7 */ u8 field_0x7A7;
-    /* 0x7A8 */ s8 mBtpResIDIndex;
-    /* 0x7A9 */ s8 mCurrAnmIdx;
+    /* 0x7A6 */ u8 field_0x7A6; 
+    /* 0x7A7 */ u8 mMesgAnimeTag;
+    /* 0x7A8 */ s8 mBtpNum;
+    /* 0x7A9 */ s8 mBckNum;
     /* 0x7AA */ s8 field_0x7AA;
-    /* 0x7AB */ s8 field_0x7AB;
+    /* 0x7AB */ s8 mStatus;
     /* 0x7AC */ s8 field_0x7AC;
-    /* 0x7AD */ s8 field_0x7AD;
-    /* 0x7AE */ s8 field_0x7AE;
-    /* 0x7AF */ s8 field_0x7AF;
+    /* 0x7AD */ s8 mLookBackState;
+    /* 0x7AE */ s8 mType;
+    /* 0x7AF */ s8 mSpecificType;
     /* 0x7B0 */ s8 field_0x7B0;
     /* 0x7B1 */ s8 field_0x7B1;
     /* 0x7B2 */ u8 field_0x7B2;
