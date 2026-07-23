@@ -1577,7 +1577,7 @@ bool daNpc_Ls1_c::telescope_proc() {
 
     if (m833 == 0) {
         mDoAud_bgmStreamPrepare(JA_STRM_DEMO_TETRA_FLY);
-        bm1_npc_p->m881 = 1;
+        bm1_npc_p->setTelescopeDemo();
         mTimer5 = 150;
         m810 = -1;
         m833 = 1;
@@ -1626,7 +1626,7 @@ bool daNpc_Ls1_c::telescope_proc() {
                         fopMsgM_forceSendOn();
                     }
                     dComIfGp_getCamera(0)->mCamera.setFlag(0x800000);
-                    bm1_npc_p->m882 = 1;
+                    bm1_npc_p->setFocus();
                     mTimer5 = 0;
                     m810 = 0;
                     m833 = 3;
@@ -1635,7 +1635,7 @@ bool daNpc_Ls1_c::telescope_proc() {
                 }
                 break;
             case 3:
-                if (m810 == 0 && bm1_npc_p->m880 != 0) {
+                if (m810 == 0 && bm1_npc_p->getOdoroki()) {
                     if (scope_mesg_status == fopMsgStts_CLOSE_WAIT_e) {
                         fopMsgM_forceSendOn();
                     } else if (fopMsgM_releaseScopeMode()) {
