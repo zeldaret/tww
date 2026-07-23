@@ -1208,12 +1208,12 @@ void daNpc_Bs1_c::talkInit() {
 BOOL daNpc_Bs1_c::shopMsgCheck(u32 msgNo) {
     if(mType == 0) {
         if((0xF42 <= msgNo && msgNo <= 0xF54) || (0xF67 <= msgNo && msgNo <= 0xF6E) || (0xF63 <= msgNo && msgNo <= 0xF66) || msgNo == 0xF3E) {
-                return true;
+            return true;
         }
     }
     else {
         if((0x2F4A <= msgNo && msgNo <= 0x2F53) || (0x2F6B <= msgNo && msgNo <= 0x2F78) || msgNo == 0x2F47) {
-                return true;
+            return true;
         }
     }
 
@@ -1267,7 +1267,7 @@ BOOL daNpc_Bs1_c::shopStickMoveMsgCheck(u32 msgNo) {
     }
     else {
         if((0x2F4A <= msgNo && msgNo <= 0x2F4C) || ((0x2F72 <= msgNo && msgNo <= 0x2F76) && !(msgNo & 1)) || msgNo == 0x2F78 || msgNo == 0x2F6B || msgNo == 0x2F47) {
-                return true;
+            return true;
         }
     }
 

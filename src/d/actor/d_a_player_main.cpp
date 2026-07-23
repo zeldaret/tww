@@ -13111,7 +13111,7 @@ void daPy_lk_c::endDemoMode() {
         return;
     }
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-            daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+        daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
         if (ship == NULL) {
             checkNextMode(0);
         } else if (daPy_getPlayerActorClass() != this) {

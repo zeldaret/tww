@@ -264,7 +264,7 @@ BOOL daKnob00_c::openProc(int arg1) {
     } else if (mBckAnm.checkFrame(25.0f)) {
         fopAcM_seStart(this, JA_SE_OBJ_DOOR_N_OPEN, 0);
     } else if (mBckAnm.checkFrame(49.0f)) {
-            fopAcM_seStart(this, JA_SE_OBJ_DOOR_N_CLOSE_1, 0);
+        fopAcM_seStart(this, JA_SE_OBJ_DOOR_N_CLOSE_1, 0);
     } else if (mBckAnm.checkFrame(64.0f) && arg1 == 0xf) {
         fopAcM_seStart(this, JA_SE_OBJ_DOOR_N_CLOSE_2, 0);
     }

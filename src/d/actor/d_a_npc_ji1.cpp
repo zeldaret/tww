@@ -1738,6 +1738,7 @@ u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
                 break;
             case 3:
                 dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
+                break;
         }
     }
 

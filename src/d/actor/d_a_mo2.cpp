@@ -3238,6 +3238,7 @@ static u8 damage_check(mo2_class* i_this) {
                 tex_anm_set(i_this, 4);
                 i_this->mDamageReaction.m424 |= 0x10;
                 i_this->mDamageReaction.m428 = 26.0f;
+                break;
         }
         if (i_this->mDamageReaction.m424 != 0) {
             local_54.x = 0.0f;

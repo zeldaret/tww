@@ -633,6 +633,7 @@ static void fight(st_class* i_this) {
     switch (i_this->m02C4) {
         case 0:
             i_this->m02DC = 0.0f;
+            break;
     }
     i_this->m0ED1 = 0;
     switch (i_this->mFightBehavior) {
@@ -1519,6 +1520,7 @@ static void St_move(st_class* i_this) {
             break;
         case 0x21:
             sita_move(i_this);
+            break;
     }
     if (i_this->mActionState != 0x10) {
         speed_pos_calc(i_this);

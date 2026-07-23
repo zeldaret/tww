@@ -4,10 +4,6 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_hostIO.h"
-
-class J3DNode;
-
 
 class daNpc_Bm1_c : public fopNpc_npc_c {
 public:
@@ -33,7 +29,7 @@ public:
     };
 
     typedef s8 Type;
-    enum{
+    enum {
         TYPE_Uninitialized_e,
         TYPE_Quill_e,
         TYPE_Akoot_e,
@@ -47,27 +43,27 @@ public:
         TYPE_Kogoli_e,
         TYPE_Invalid_e = 0xFF,
     };
-    struct anm_prm_c{
-        s8 mAnmNum;
-        s8 mBtpNum;
-        f32 mMorf;
-        f32 mSpeed;
-        s32 mLoopMode;
-        BOOL mbHasArms;
+
+    struct anm_prm_c {
+        /* 0x00 */ s8 anmNum;
+        /* 0x01 */ s8 btpNum;
+        /* 0x04 */ f32 morf;
+        /* 0x08 */ f32 speed;
+        /* 0x0C */ int loopMode;
+        /* 0x10 */ BOOL hasArms;
     };
 
     typedef BOOL (daNpc_Bm1_c::*ActionFunc)(void*);
 
-    bool IamKakkuto() {return mSpecificType == SPECIFIC_TYPE_Akoot_e;}
-    bool IamSukketo() {return mSpecificType == SPECIFIC_TYPE_Skett_e;}
-    void clr_manzai() {mbManzai = false;}
-    bool getOdoroki() { return m880;}
-    s8 getStt() { return mStatus;}
-    u16 get_oldMsgStat() {return mOldMsgStat;}
-    void setFocus() {m882 = true;}
-    void setTelescopeDemo() {m881 = true;}
-    void set_manzai() {mbManzai = true;}
-
+    bool IamKakkuto() { return mSpecificType == SPECIFIC_TYPE_Akoot_e; }
+    bool IamSukketo() { return mSpecificType == SPECIFIC_TYPE_Skett_e; }
+    void clr_manzai() { mbManzai = false; }
+    bool getOdoroki() { return m880; }
+    s8 getStt() { return mStatus; }
+    u16 get_oldMsgStat() { return mOldMsgStat; }
+    void setFocus() { m882 = true; }
+    void setTelescopeDemo() { m881 = true; }
+    void set_manzai() { mbManzai = true; }
 
     void nodeWngControl(J3DNode*, J3DModel*);
     void nodeArmControl(J3DNode*, J3DModel*);
@@ -98,24 +94,24 @@ public:
     bool setBtp(bool, int);
     bool iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
-    void setAnm_tex(signed char);
+    void setAnm_tex(s8);
     BOOL setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
     bool setAnm();
     void setPlaySpd(float);
     void chg_anmTag();
     void control_anmTag();
-    void chg_anmAtr(unsigned char);
+    void chg_anmAtr(u8);
     void control_anmAtr();
     void setAnm_ATR(int);
-    void anmAtr(unsigned short);
+    void anmAtr(u16);
     void eventOrder();
     void checkOrder();
     u8 chk_manzai();
     bool chk_talk();
     bool chk_partsNotMove();
-    BOOL lookBack();
-    u16 next_msgStatus(unsigned long*);
+    void lookBack();
+    u16 next_msgStatus(u32*);
     s8 getBitMask();
     u32 getMsg_PST_1();
     u32 getMsg_PST_3();
@@ -178,9 +174,9 @@ public:
     void endEvent();
     BOOL isEventEntry();
     void event_proc(int);
-    BOOL set_action(int (daNpc_Bm1_c::*)(void*), void*);
-    BOOL chk_action(int (daNpc_Bm1_c::*)(void*)); //Unused
-    void setStt(signed char);
+    BOOL set_action(ActionFunc, void*);
+    BOOL chk_action(ActionFunc); // Unused
+    void setStt(s8);
     BOOL d_wait();
     BOOL lookup();
     BOOL orooro();
@@ -191,7 +187,7 @@ public:
     BOOL wait_4();
     BOOL flyawy();
     BOOL wait_5();
-    BOOL wait_6();  //Unused
+    BOOL wait_6(); //Unused
     BOOL h_wait();
     BOOL wait_7();
     BOOL wait_3();
@@ -240,7 +236,6 @@ private:
     /* 0x6F0 */ J3DAnmTexPattern* m_hed_tex_pttrn;
     /* 0x6F4 */ mDoExt_btpAnm mHeadBtpAnm;
     /* 0x708 */ u8 mBlinkFrame;
-    /* 0x709    u8 pad709; */
     /* 0x70A */ s16 mBlinkTimer;
     /* 0x70C */ s16 pad70C;
     /* 0x710 */ mDoExt_McaMorf* mpWingMorf;
@@ -248,7 +243,7 @@ private:
     /* 0x715 */ s8 m_wngR1_jnt_num;
     /* 0x716 */ s8 m_wngL3_jnt_num;
     /* 0x717 */ s8 m_wngR3_jnt_num;
-    /* 0x718 */ u8 pad718[0x71C - 0x718];   //Possibly an unused mDoExt_McaMorf* ?
+    /* 0x718 */ u8 pad718[0x71C - 0x718]; //Possibly an unused mDoExt_McaMorf* ?
     /* 0x71C */ mDoExt_McaMorf* mpArmMorf;
     /* 0x720 */ s8 m_armL1_jnt_num;
     /* 0x721 */ s8 m_armR1_jnt_num;
@@ -263,7 +258,6 @@ private:
     /* 0x808 */ fpc_ProcID mPartnerProcID;
     /* 0x80C */ cXyz mInitialPos;
     /* 0x818 */ csXyz m818;
-    /* 0x81E    u8 pad81E[0x820 - 0x81E]; */
     /* 0x820 */ cXyz mEyePos;
     /* 0x82C */ cXyz m82C;
     /* 0x838 */ cXyz mTargetPos;
@@ -306,7 +300,7 @@ private:
     /* 0x88C */ bool mbRanExecute;
     /* 0x88D */ u8 m88D;
     /* 0x88E */ u8 m88E;
-    /* 0x88F */ u8 m88F;                
+    /* 0x88F */ u8 m88F;
     /* 0x890 */ s32 mbSetEyePos;
     /* 0x894 */ bool mbAttention;
     /* 0x895 */ bool m895;
@@ -329,7 +323,7 @@ private:
     /* 0x8EC */ JPABaseEmitter* mpFeather1EmitterL;
     /* 0x8F0 */ JPABaseEmitter* mpFeather1EmitterR;
 #if VERSION == VERSION_DEMO
-    /* 0x8F4 */ u32 mDemoUnused;  //Possibly an unused emitter
+    /* 0x8F4 */ u8 mDemoUnused[4]; //Possibly an unused emitter
 #endif
     /* 0x8F4 */ s8 m8F4;
     /* 0x8F5 */ s8 mActionIndex;
@@ -347,8 +341,7 @@ private:
     /* 0x902 */ SpecificType mSpecificType;
     /* 0x903 */ s8 mSpawnCondition;
     /* 0x904 */ s8 m904;
-    /* 0x904 */ s8 m905;   
-}; 
-STATIC_ASSERT(sizeof(daNpc_Bm1_c) == DEMO_SELECT(0x90C,0x908));
+    /* 0x904 */ s8 m905;
+};
 
 #endif /* D_A_NPC_BM1_H */

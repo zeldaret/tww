@@ -174,13 +174,13 @@ BOOL daBoko_c::draw() {
 
     if (checkNoDraw()) {
         if (mParticleCallBack.getEmitter() != NULL) {
-            mParticleCallBack.getEmitter()->setStatus(4);
+            mParticleCallBack.getEmitter()->stopDrawParticle();
         }
         return TRUE;
     }
 
     if (mParticleCallBack.getEmitter() != NULL) {
-        mParticleCallBack.getEmitter()->clearStatus(4);
+        mParticleCallBack.getEmitter()->playDrawParticle();
     }
 
     if (mFlameTimer != 0) {

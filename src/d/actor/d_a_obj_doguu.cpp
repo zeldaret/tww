@@ -348,7 +348,6 @@ void daObjDoguu_c::setQuake(int i_staffIdx) {
     u32 pattern = 0x0010FFEE;
     dComIfGp_getVibration().StartQuake((u8*)&pattern, 0, 63, cXyz(0.0f, 1.0f, 0.0f));
     mTimer = *dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
-
 }
 
 /* 00000FB8-0000100C       .text setJDemo__12daObjDoguu_cFi */

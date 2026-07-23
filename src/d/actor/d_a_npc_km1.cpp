@@ -107,7 +107,6 @@ bool daNpc_Km1_c::createInit() {
     field_0x7BC = 1;
     setMtx();
     return true;
-
 }
 
 /* 0000043C-0000054C       .text setMtx__11daNpc_Km1_cFv */
@@ -184,13 +183,11 @@ bool daNpc_Km1_c::init_btp(bool param_1, int param_2) {
 
 /* 00000850-00000894       .text initTexPatternAnm__11daNpc_Km1_cFb */
 bool daNpc_Km1_c::initTexPatternAnm(bool param_1) {
-    
     bool var_31 = false;
     if(init_btp(param_1,field_0x7CD)){
         var_31 = true;
     }
     return var_31;
-
 }
 
 /* 00000894-00000958       .text playTexPatternAnm__11daNpc_Km1_cFv */
@@ -211,7 +208,6 @@ void daNpc_Km1_c::playTexPatternAnm() {
     if(field_0x7CD){
         mBtpFrame = m_head_tex_pattern->getFrameMax();
         return;
-
     }else{
         mBtpFrame = 0;
         field_0x6F2 = cM_rndF(60.0) + 30.0f;
@@ -290,7 +286,6 @@ void daNpc_Km1_c::setAnm_ATR(int param_1) {
         setAnm_tex(a_anm_prm_tbl[field_0x7CB].field_0x1);
     }
     setAnm_anm((&a_anm_prm_tbl[field_0x7CB]));
-
 }
 
 /* 00000B50-00000C0C       .text anmAtr__11daNpc_Km1_cFUs */
@@ -493,7 +488,6 @@ void daNpc_Km1_c::privateCut() {
         if(bVar1){
             dComIfGp_evmng_cutEnd(staffIdx);
         }
-
     }
 }
 
@@ -501,7 +495,6 @@ void daNpc_Km1_c::privateCut() {
 void daNpc_Km1_c::endEvent() {
     dComIfGp_event_reset();
     field_0x7CB = 0xFF;
-
 }
 
 /* 00001164-000011C4       .text event_proc__11daNpc_Km1_cFv */
@@ -694,7 +687,6 @@ BOOL daNpc_Km1_c::_delete() {
         }
     }
     return true;
-    
 }
 
 /* 0000188C-000018AC       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -739,7 +731,6 @@ cPhs_State daNpc_Km1_c::_create() {
         resLoadResult = cPhs_ERROR_e;
     }
     return resLoadResult; 
-    
 }
 
 /* 00001E4C-00002158       .text CreateHeap__11daNpc_Km1_cFv */

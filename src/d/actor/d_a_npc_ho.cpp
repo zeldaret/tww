@@ -46,7 +46,6 @@ static BOOL nodeCallBack_Ho(J3DNode* node, int calcTiming) {
                 MtxPosition(&temp, &temp2);
                 i_this->setEyePos(temp2);
                 i_this->incAttnSetCount();
-
             } else if (jntNo == i_this->getBackboneJntNum()) {
                 cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
             }
@@ -294,7 +293,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             receivePendant(1);
             break;
         case 0x273E:
-            if (dComIfGs_getBeastNum(7) >= 0x14) {
+            if (dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e) >= 20) {
                 *pMsgNo = 0x2741;
             } else {
                 *pMsgNo = 0x273F;
@@ -324,7 +323,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x274D:
             *pMsgNo = 0x274E;
-            receivePendant(dComIfGs_getBeastNum(7));
+            receivePendant(dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e));
             break;
         case 0x274E:
             if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF) >= 0x28 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1C04)) {
@@ -335,7 +334,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x2754: {
             *pMsgNo = 0x2755;
-            int numPendantsGiven = dComIfGs_getBeastNum(7);
+            int numPendantsGiven = dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
             receivePendant(numPendantsGiven);
             if (numPendantsGiven < 3) {
                 mItemNum = dItemNo_RED_RUPEE_e;
@@ -632,7 +631,6 @@ bool daNpc_Ho_c::talk01() {
             mState = HO_STATE_PREACH;
             fopAcM_orderChangeEvent(dComIfGp_getLinkPlayer(), this, "HO_PREACH", 0, 0xFFFF);
             clrFlag(HO_FLAG_00000020);
-
         } else {
             mState = mPrevState;
             setAnmStatus();
@@ -822,7 +820,6 @@ BOOL daNpc_Ho_c::_execute() {
                     setAnm(0);
                 }
                 break;
-
         }
     }
     checkOrder();

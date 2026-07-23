@@ -385,7 +385,6 @@ static cPhs_State daKokiie_Create(fopAc_ac_c* a_this) {
     }
 #endif
     {
-
         i_this->m2A0 = fopAcM_GetParam(a_this);
         if (i_this->m2A0 == 0xff) {
             i_this->m2A0 = 0;

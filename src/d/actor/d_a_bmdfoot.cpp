@@ -575,6 +575,7 @@ void move(bmdfoot_class* i_this) {
             break;
         case 0xb:
             end(i_this);
+            break;
         }
         if (boss->m332 == 3) {
             housi_off(i_this);

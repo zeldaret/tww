@@ -2544,7 +2544,7 @@ static void hensin(bgn_class* i_this) {
                 i_this->mC728.y = REG0_F(2) + -1000.0f;
                 i_this->mC770 = REG0_S(0) + 0x14;
                 for (s32 i = 0; i < 8; i++) {
-                    i_this->mAAA8[i].m2F8 = REG0_S(7) + 0x3c;
+                    i_this->mAAA8[i].m2F8 = REG0_S(7) + 60;
                     i_this->mAAA8[i].m2F4 = REG0_F(15) + 6000.0f;
                 }
                 if (i_this->mC74A == 1) {
@@ -2592,7 +2592,7 @@ static void hensin(bgn_class* i_this) {
             }
             cLib_addCalc2(&i_this->mC728.y, REG0_F(9) + 1000.0f, 0.05f, actor->speed.y);
             cLib_addCalc2(&actor->speed.y, 50.0f, 1.0f, 0.2f);
-            if (i_this->mC7AC[0] <= 0x64) {
+            if (i_this->mC7AC[0] <= 100) {
                 cLib_addCalc0(&i_this->mCC80, 1.0f, 0.02f);
                 if (i_this->mC7AC[0] == 100) {
                     mDoAud_seStart(JA_SE_CM_BGN_D_TO_T_1, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -2811,6 +2811,7 @@ static void action_s(bgn_class* i_this, move_s* param_2, int param_3) {
                 param_2->m2E0.x = l_HIO.m0CE;
                 param_2->m2E0.y = l_HIO.m0D0;
                 param_2->m2E0.z = l_HIO.m0D2;
+                break;
         }
     }
     if (param_2->m2D0 == 0) {
@@ -2867,7 +2868,7 @@ static void action_main(bgn_class* i_this) {
     pcVar5 = i_this->mRedRopeMat.getSize(0);
     for (s32 i = 0; i < 60; i++, pcVar7++, pcVar5++) {
         dVar9 = i_this->mC774 * cM_ssin(cM_rad2s(0.053247336f * (f32)(i)));
-        dVar9 *= (0.01666667f * (f32)(0x3B - i));
+        dVar9 *= (0.01666667f * (f32)(59 - i));
         local_90.x = dVar9 * cM_ssin(i_this->mC746 * (REG0_S(3) + 300) + i * (REG0_S(4) + 2000));
         local_90.z = dVar9 * cM_ssin(i_this->mC746 * (REG0_S(5) + 0xfa) + i * (REG0_S(6) + 2000));
         *pcVar7 = local_9c + local_90;
@@ -2908,6 +2909,7 @@ static void action_main(bgn_class* i_this) {
             case 10:
                 i_this->mC754 = 1;
                 i_this->mCC80 = 1.0f;
+                break;
         }
         if (i_this->mC748 > 0) {
             cLib_addCalcAngleS2(&i_this->mC750, 0, 10, 0x200);
@@ -3516,16 +3518,16 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e);
-    if (!i_this->mRedRopeMat.init(1, 0x3C, pBti, 1)) {
+    if (!i_this->mRedRopeMat.init(1, 60, pBti, 1)) {
         return FALSE;
     }
     pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_HIMO_e);
-    if (!i_this->mBlueRopeMat.init(8, 0x3C, pBti, 1)) {
+    if (!i_this->mBlueRopeMat.init(8, 60, pBti, 1)) {
         return FALSE;
     }
 #if VERSION > VERSION_DEMO
     pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e);
-    if (!i_this->mDefeatCSRopeMat.init(1, 0x3C, pBti, 1)) {
+    if (!i_this->mDefeatCSRopeMat.init(1, 60, pBti, 1)) {
         return FALSE;
     }
 #endif
@@ -3709,7 +3711,7 @@ static cPhs_State daBgn_Create(fopAc_ac_c* a_this) {
             }
             i_this->mCC80 = 1.0f;
             i_this->mC748 = 7;
-            i_this->mC7AC[0] = 0x3c;
+            i_this->mC7AC[0] = 60;
 #if VERSION > VERSION_DEMO
             bg_tevstr = a_this->tevStr;
             i_this->mWaterTevStr = a_this->tevStr;

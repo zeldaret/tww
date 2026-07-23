@@ -6086,7 +6086,6 @@ void daNpcPeople_c::eventUb1TalkInit(int) {
         if(!is1GetMap20()) {
             m73C = l_msg_ub1_no_collect_map20;
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_2102);
-            
         }
         else if(!is1DayGetMap20()) {
             m73C = l_msg_ub1_collect_map20;

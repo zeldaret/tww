@@ -1056,7 +1056,7 @@ fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* 
 daItem_c* fopAcM_createItemForSimpleDemo(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale, f32 speedF, f32 speedY) {
     daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(pos, i_itemNo, roomNo, angle, scale, speedF, speedY, -7.0f);
     if (item != NULL)
-        item->setStatus(5);
+        item->setStatus(daItem_c::STATUS_INIT_NORMAL);
     return item;
 }
 

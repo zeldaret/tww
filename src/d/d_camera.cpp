@@ -2221,7 +2221,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     curr_hit_type = 3;
                 }
                 else if (prev_hit_type != 3) {
-                        curr_hit_type = 4;
+                    curr_hit_type = 4;
                 }
                 else {
                     curr_hit_type = 5;
@@ -2645,11 +2645,11 @@ bool dCamera_c::followCamera2(s32 param_0) {
 
 /* 8016A110-8016C4F8       .text followCamera__9dCamera_cFl */
 bool dCamera_c::followCamera(s32 param_1) {
+    /* Nonmatching */
     bool bVar1;
     bool bVar2;
     bool bVar3;
     bool bVar4;
-    int iVar5;
     float fVar37;
     
     f32 fVar40 = 0.9f;
@@ -3050,7 +3050,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     cSGlobe local_484(mViewCache.mEye - mViewCache.mCenter);
     
     if (mWork.follow.m392 <= 0 || iVar17 <= mWork.follow.m392) {
-        dVar20 = dCamMath::rationalBezierRatio((float) iVar5 / (float)iVar17, fVar38);
+        dVar20 = dCamMath::rationalBezierRatio((float)mWork.follow.m392 / (float)iVar17, fVar38);
         mWork.follow.m3D8 = 1;
         mWork.follow.m3B8 = (1.0f - mWork.follow.m3B8) * dVar20;
     }
@@ -3131,7 +3131,7 @@ bool dCamera_c::followCamera(s32 param_1) {
                 mWork.follow.m38C = 1;
             }
             else if (mWork.follow.m38C < 0xf) {
-                mWork.follow.m3B8 = iVar5 * 0.033333335f;
+                mWork.follow.m3B8 = mWork.follow.m38C * 0.033333335f;
                 mWork.follow.m38C++;
             }
             else if (check_owner_action(mPadId, daPyStts0_UNK40_e | daPyStts0_UNK20_e)) {
@@ -3555,7 +3555,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
     if (mpLockonTarget && mLockOnActorId != -1) {
         cXyz local_120 = attentionPos(mpPlayerActor);
         if (lineBGCheck(&local_120, &mViewCache.mCenter, 0x7f)) {
-              ForceLockOff(mLockOnActorId);
+            ForceLockOff(mLockOnActorId);
         }
     }
 
@@ -3789,11 +3789,11 @@ bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
     fVar4 = mCamSetup.m030;
     
     if (!bVar9) {
-          cSAngle local_88(fVar2 * mWork.subject.m384);
-          cSAngle local_8c(fVar1 * mWork.subject.m388);
-          s16 local_98 = local_88.Val() + mWork.subject.m3BA;
-          *param_2 = local_98;
-          *param_1 = local_8c.Val();
+        cSAngle local_88(fVar2 * mWork.subject.m384);
+        cSAngle local_8c(fVar1 * mWork.subject.m388);
+        s16 local_98 = local_88.Val() + mWork.subject.m3BA;
+        *param_2 = local_98;
+        *param_1 = local_8c.Val();
     }
     
     fVar6 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
