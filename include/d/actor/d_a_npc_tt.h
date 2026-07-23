@@ -118,7 +118,7 @@ public:
     void danceInit(int);
     BOOL danceProc();
     BOOL danceNext();
-    
+
 public:
     /* 0x290 */ dNpc_HeadAnm_c mHeadAnm;
     /* 0x2B4 */ s16 mEventIdx;
