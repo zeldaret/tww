@@ -48,7 +48,6 @@ void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* shipPos) {
 
 /* 00000128-000002F4       .text execute__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
 void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
-    /* Nonmatching */
     GXColor diff;
     GXColor amb;
     s16 yAngle;
@@ -71,7 +70,8 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
         } else {
             yAngle = (s16)(mpAngle->y + 0x8000);
         }
-        JPAGetXYZRotateMtx(0, (int)yAngle, 0, emitter->mGlobalRotation);
+        JGeometry::TVec3<s16> rotation(0, yAngle, 0);
+        emitter->setGlobalRotation(rotation);
         waterY = mpWaterY;
         if (waterY < 0.0f || waterY > 2000.0f) {
             alpha = 0;
@@ -80,7 +80,7 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
         }
         emitter->setGlobalAlpha(alpha);
     } else {
-        emitter->mGlobalTranslation.y = mpWaterFlatY;
+        emitter->setGlobalTranslation(emitter->mGlobalTranslation.x, mpWaterFlatY, emitter->mGlobalTranslation.z);
         alpha_arr[0] = emitter->getGlobalAlpha();
         cLib_chaseS(alpha_arr, 0, 5);
         alpha_arr[0] = 0xff;
