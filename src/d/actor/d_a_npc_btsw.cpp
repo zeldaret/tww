@@ -358,7 +358,7 @@ u16 daNpc_Btsw_c::next_msgStatus(u32* currMsgNo) {
                 *currMsgNo = 0x1AA7;
             } else if (dLetter_isNoSend(dSv_event_flag_c::LETTER_BAITOS_MOM)) {
                 *currMsgNo = 0x1AAB;
-            } else if (!dComIfGs_isSymbol(1)) {
+            } else if (!dComIfGs_isSymbol(dSymbol_DIN_e)) {
                 *currMsgNo = 0x1AB4;
             } else if (!dLetter_isRead(dSv_event_flag_c::LETTER_BAITOS_MOM)) {
                 *currMsgNo = 0x1AAD;

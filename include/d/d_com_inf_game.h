@@ -1657,6 +1657,13 @@ inline void dComIfGs_onTriforce(u8 i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getCollect().onTriforce(i_no);
 }
 
+// Goddess pearls (aka "god symbols").
+enum dSymbolIndex_e {
+    /* 0x0 */ dSymbol_NAYRU_e,
+    /* 0x1 */ dSymbol_DIN_e,
+    /* 0x2 */ dSymbol_FARORE_e,
+};
+
 inline BOOL dComIfGs_isSymbol(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isSymbol(i_no);
 }

@@ -512,29 +512,29 @@ bool daNpc_Bm1_c::chk_appCnd() {
         case 0:
             return TRUE;
         case 1:
-            if (!dComIfGs_isSymbol(1)) {
+            if (!dComIfGs_isSymbol(dSymbol_DIN_e)) {
                 return TRUE;
             }
             break;
         case 2:
-            if (dComIfGs_isSymbol(1)) {
+            if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
                 return !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A80);
             }
             break;
         case 3:
-            if (!dComIfGs_isSymbol(1)) {
+            if (!dComIfGs_isSymbol(dSymbol_DIN_e)) {
                 return FALSE;
             }
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A80)) {
-                return dKy_daynight_check() == 0;
+                return dKy_daynight_check() == dKy_TIME_DAY_e;
             }
             break;
         case 4:
-            if (!dComIfGs_isSymbol(1)) {
+            if (!dComIfGs_isSymbol(dSymbol_DIN_e)) {
                 return FALSE;
             }
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A80)) {
-                return dKy_daynight_check() == 1;
+                return dKy_daynight_check() == dKy_TIME_NIGHT_e;
             }
             break;
     }
@@ -571,8 +571,7 @@ bool daNpc_Bm1_c::init_PST_2() {
 
 /* 00000C0C-00000CB8       .text init_PST_3__11daNpc_Bm1_cFv */
 bool daNpc_Bm1_c::init_PST_3() {
-    bool result;
-    result = dComIfGs_isSymbol(1) == 0;
+    bool result = dComIfGs_isSymbol(dSymbol_DIN_e) == 0;
     if (result) {
         result = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1102) != 0;
         if (result) {
@@ -1505,7 +1504,7 @@ u32 daNpc_Bm1_c::getMsg_PST_3() {
 
 /* 00002B40-00002BE8       .text getMsg_SKT_0__11daNpc_Bm1_cFv */
 u32 daNpc_Bm1_c::getMsg_SKT_0() {
-    if (dComIfGs_isSymbol(1)) {
+    if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
         if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A80)) {
             return 0x186B;
         } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
@@ -1519,7 +1518,7 @@ u32 daNpc_Bm1_c::getMsg_SKT_0() {
 
 /* 00002BE8-00002C90       .text getMsg_KKT_0__11daNpc_Bm1_cFv */
 u32 daNpc_Bm1_c::getMsg_KKT_0() {
-    if (dComIfGs_isSymbol(1)) {
+    if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
         if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A80)) {
             return 0x186F;
         } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {

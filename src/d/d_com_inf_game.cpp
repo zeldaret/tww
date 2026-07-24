@@ -971,17 +971,17 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
         }
         break;
     case dItemNo_PEARL_NAYRU_e:
-        if (dComIfGs_isSymbol(0)) {
+        if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_DIN_e:
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_FARORE_e:
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             get_item = 1;
         }
         break;
@@ -1095,17 +1095,17 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
         }
         break;
     case dItemNo_PEARL_NAYRU_e:
-        if (dComIfGs_isSymbol(0)) {
+        if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_DIN_e:
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_FARORE_e:
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             get_item = 1;
         }
         break;

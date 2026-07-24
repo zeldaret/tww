@@ -345,10 +345,10 @@ BOOL daShip_c::checkForceMessage() {
     if (dComIfGs_isGetItem(1, 0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) {
         mNextMessageNo = 0x5E0;
     }
-    else if (dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
+    else if (dComIfGs_isSymbol(dSymbol_DIN_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
         mNextMessageNo = 0x5EC;
     }
-    else if (dComIfGs_isSymbol(2) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
+    else if (dComIfGs_isSymbol(dSymbol_FARORE_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
         mNextMessageNo = 0x5F6;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A01)) {
@@ -357,7 +357,7 @@ BOOL daShip_c::checkForceMessage() {
     else if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
         mNextMessageNo = 0x624;
     }
-    else if (dComIfGs_isSymbol(0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
+    else if (dComIfGs_isSymbol(dSymbol_NAYRU_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xD5A;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D10) && !daPy_getPlayerActorClass()->checkMasterSwordEquip()) {
@@ -495,7 +495,7 @@ void daShip_c::setInitMessage() {
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xd62;
     }
-    else if (dComIfGs_isSymbol(0)) {
+    else if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
         mNextMessageNo = 0xd5a;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1940)) {
@@ -557,7 +557,7 @@ void daShip_c::setInitMessage() {
         }
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A20)) {
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             mNextMessageNo = 0x5f6;
         }
         else {
@@ -584,7 +584,7 @@ void daShip_c::setInitMessage() {
         }
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) {
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             mNextMessageNo = 0x5ec;
         }
         else {
@@ -1019,7 +1019,7 @@ BOOL daShip_c::checkOutRange() {
         if (bVar5) {
             if (
                 (pathIndex == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) ||
-                (pathIndex == 1 && dComIfGs_isSymbol(2)) ||
+                (pathIndex == 1 && dComIfGs_isSymbol(dSymbol_FARORE_e)) ||
                 (pathIndex == 2 && daPy_getPlayerActorClass()->checkMasterSwordEquip())
             ) {
                 path = dPath_GetNextRoomPath(path, -1);
