@@ -80,7 +80,10 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
         }
         emitter->setGlobalAlpha(alpha);
     } else {
-        emitter->setGlobalTranslation(emitter->mGlobalTranslation.x, mpWaterFlatY, emitter->mGlobalTranslation.z);
+        JGeometry::TVec3<f32> trans;
+        emitter->getGlobalTranslation(trans);
+        trans.y = mpWaterFlatY;
+        emitter->setGlobalTranslation(trans);
         alpha_arr[0] = emitter->getGlobalAlpha();
         cLib_chaseS(alpha_arr, 0, 5);
         alpha_arr[0] = 0xff;
@@ -102,7 +105,6 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
 
 /* 000002F4-00000570       .text draw__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
 void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
-    /* Nonmatching */
     f32 fVar2;
     f32 fVar1;
     f32 fVar3;
