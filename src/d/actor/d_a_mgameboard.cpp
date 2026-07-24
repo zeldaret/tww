@@ -498,8 +498,7 @@ bool daMgBoard_c::_draw() {
             u8 num_bullet = mSeaFightGame.checkRestBullet();
             u8 num_alive_ships = mSeaFightGame.getRest();
             bool is_game_finished = 0;
-            if ((!num_alive_ships | !num_bullet) != 0)
-            {
+            if ((!num_alive_ships | !num_bullet) != 0) {
                 is_game_finished = 1;
             }
             if (is_game_finished) {
