@@ -76,8 +76,8 @@ int dSeaFightGame_info_c::put_ship(u8 i_shipNo, u8 i_shipSize) {
         mShips[i_shipNo].field_0xe = 0;
     }
 
-    mShips[i_shipNo].field_0x8 = i_shipSize;
-    mShips[i_shipNo].field_0x9 = i_shipSize;
+    mShips[i_shipNo].mMaxHP = i_shipSize;
+    mShips[i_shipNo].mCurHP = i_shipSize;
     return 1;
 }
 
@@ -112,8 +112,8 @@ int dSeaFightGame_info_c::attack(u8 i_x, u8 i_y) {
     } else if (uvar1 > 100) {
         rt = uvar1 - 102;
 
-        mShips[rt].field_0x9--;
-        if (mShips[rt].field_0x9 == 0) {
+        mShips[rt].mCurHP--;
+        if (mShips[rt].mCurHP == 0) {
             mAliveShipNum--;
             mDeadShipNum++;
         }

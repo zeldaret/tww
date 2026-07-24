@@ -5,8 +5,8 @@
 
 struct dSeaFightGame_ship_data {
     /* 0x0 */ u8 m_pos[4][2];
-    /* 0x8 */ u8 field_0x8;
-    /* 0x9 */ u8 field_0x9;
+    /* 0x8 */ u8 mMaxHP;
+    /* 0x9 */ u8 mCurHP;
     /* 0xA */ u8 field_0xa;
     /* 0xB */ u8 mShipStartX;
     /* 0xC */ u8 mShipStartY;
@@ -18,13 +18,19 @@ class dSeaFightGame_info_c {
 public:
     // checkState__20dSeaFightGame_info_cFUcUc (func,weak) found in d_a_mgameboard.o 
     // ?? checkState(int i) { }
-    // getShipStartX__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
     u8 getShipStartX(int i) { return mShips[i].mShipStartX; }
-    // getShipStartY__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
     u8 getShipStartY(int i) { return mShips[i].mShipStartY; }
     // getShipVecY__20dSeaFightGame_info_cFi (func,weak) found in d_a_mgameboard.o 
     // ?? getShipVecY(int i) { }
     bool isClearGame() { return mAliveShipNum == 0; }
+
+    u8 getMaxHP(int i) { return mShips[i].mMaxHP; }
+    u8 getCurHP(int i) { return mShips[i].mCurHP; }
+
+    // checkRestBullet__20dSeaFightGame_info_cFv (func,weak) found in d_a_mgameboard.o 
+    u8 checkRestBullet() { return mBulletNum; }
+    // getRest__20dSeaFightGame_info_cFv
+    u8 getRest() { return mAliveShipNum; }
     
 
     int init(int, int);

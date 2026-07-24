@@ -265,7 +265,7 @@ void daMgBoard_c::set_mtx() {
 
     u8 num_alive_ships = mSeaFightGame.mAliveShipNum;
     for (int i = 0; i < num_alive_ships; ++i) {
-        switch (mSeaFightGame.mShips[i].field_0x8) {
+        switch (mSeaFightGame.mShips[i].mMaxHP) {
             case 2:
                 model = mpShip2Model[0];
                 break;
@@ -468,7 +468,78 @@ static BOOL daMgBoard_Draw(void* i_this) {
 
 /* 0000153C-00001850       .text _draw__11daMgBoard_cFv */
 bool daMgBoard_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpBoardModel, &tevStr);
+    mDoExt_modelUpdateDL(mpBoardModel);
+    if (mbDraw == 0) {
+        return true;
+    } else {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpCursorModel, &tevStr);
+        dComIfGd_setListMaskOff();
+        mDoExt_modelUpdateDL(mpCursorModel);
+        dComIfGd_setList();
+        dComIfGd_setListMaskOff();
+
+        for (int i = 0; i < mHitModelCount; ++i) {
+            g_env_light.setLightTevColorType(mpHitModel[i], &tevStr);
+            mDoExt_modelUpdateDL(mpHitModel[i]);
+        }
+
+        for (int i = 0; i < mMissModelCount; ++i) {
+            g_env_light.setLightTevColorType(mpMissModel[i], &tevStr);
+            mDoExt_modelUpdateDL(mpMissModel[i]);
+        }
+
+        dComIfGd_setList();
+
+        for (int i = 0; i < 3; ++i) {
+            u8 ship_max_health = mSeaFightGame.getMaxHP(i);
+            u8 num_bullet = mSeaFightGame.checkRestBullet();
+            u8 num_alive_ships = mSeaFightGame.getRest();
+            bool is_game_finished = 0;
+            if ((!num_alive_ships | !num_bullet) != 0)
+            {
+                is_game_finished = 1;
+            }
+            if (is_game_finished) {
+                J3DModel* model;
+                switch (ship_max_health) {
+                    case 2:
+                        model = mpShip2Model[0];
+                        break;
+                    case 3:
+                        model = mpShip3Model[0];
+                        break;
+                    case 4:
+                        model = mpShip4Model[0];
+                        break;
+                    default:
+                        model = NULL;
+                        break;
+                }
+                if (model != NULL) {
+                    g_env_light.setLightTevColorType(model, &tevStr);
+                    dComIfGd_setListMaskOff();
+                    mDoExt_modelUpdateDL(model);
+                    dComIfGd_setList();
+                }
+            }
+        }
+
+        dComIfGd_set2DOpa(mpMinigameDList);
+        dComIfGd_set2DOpa(mpNumber0);
+        dComIfGd_set2DOpa(mpNumber1);
+
+        for (int i = 0; i < (int)ARRAY_SIZE(mpBombIcons); ++i) {
+            dComIfGd_set2DOpa(mpBombIcons[i]);
+        }
+
+        for (int i = 0; i < (int)ARRAY_SIZE(mpSquidIcon); ++i) {
+            dComIfGd_set2DOpa(mpSquidIcon[i]);
+        }
+    }
+    return true;
 }
 
 /* 00001850-00001874       .text daMgBoard_Execute__FPv */
