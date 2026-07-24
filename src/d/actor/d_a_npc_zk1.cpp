@@ -130,8 +130,8 @@ bool daNpc_Zk1_c::init_ZK1_0() {
 
     if(dComIfGs_isSymbol(1)) {
         set_action(&daNpc_Zk1_c::wait_action1, NULL);
-        field_0x797 = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1802) == true;
-        field_0x798 = dComIfGs_isEventBit(dSv_event_flag_c::UNK_1C01) == true;
+        field_0x797 = dComIfGs_isEventBit(dSv_event_flag_c::ZK_POSTBOX_TALK) == true;
+        field_0x798 = dComIfGs_isEventBit(dSv_event_flag_c::ZK_MONSTERS_TALK) == true;
         return true;
     }
     return false;
@@ -427,14 +427,14 @@ u16 daNpc_Zk1_c::next_msgStatus(u32* pMsgNo) {
 /* 00000D30-00000E10       .text getMsg_ZK1_0__11daNpc_Zk1_cFv */
 u32 daNpc_Zk1_c::getMsg_ZK1_0() {
     if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A80)) {
-        return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1802) != 0 ? 0x17A7 : 0x17A2;
+        return dComIfGs_isEventBit(dSv_event_flag_c::ZK_POSTBOX_TALK) != 0 ? 0x17A7 : 0x17A2;
 
     } else if (!field_0x797) {
-        return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1802) != 0 ? 0x17AC : 0x17A8;
+        return dComIfGs_isEventBit(dSv_event_flag_c::ZK_POSTBOX_TALK) != 0 ? 0x17AC : 0x17A8;
     } else if (!field_0x798) {
-        return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1C01) != 0 ? 0x17B0 : 0x17AD;
+        return dComIfGs_isEventBit(dSv_event_flag_c::ZK_MONSTERS_TALK) != 0 ? 0x17B0 : 0x17AD;
     } else {
-        return dComIfGs_isEventBit(dSv_event_flag_c::UNK_1D80) != 0 ? 0x17B2 : 0x17B1;
+        return dComIfGs_isEventBit(dSv_event_flag_c::ZK_POST_H2_TALK) != 0 ? 0x17B2 : 0x17B1;
     }
 }
 
@@ -766,14 +766,14 @@ BOOL daNpc_Zk1_c::talk_1() {
         switch (mCurrMsgNo) {
         case 0x17A6:
         case 0x17AB:
-            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1802);
+            dComIfGs_onEventBit(dSv_event_flag_c::ZK_POSTBOX_TALK);
             break;
         case 0x17AE:
         case 0x17AF:
-            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1C01);
+            dComIfGs_onEventBit(dSv_event_flag_c::ZK_MONSTERS_TALK);
             break;
         case 0x17B1:
-            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1D80);
+            dComIfGs_onEventBit(dSv_event_flag_c::ZK_POST_H2_TALK);
         }
         mItemNo = 0xFF;
         field_0x7A1 = false;
