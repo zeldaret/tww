@@ -145,7 +145,7 @@ enum {
     /* 0x89 */ DSNAP_TYPE_UNK89,
     /* 0x8A */ DSNAP_TYPE_NPC_MD,
     /* 0x8B */ DSNAP_TYPE_UNK8B,
-    /* 0x8C */ DSNAP_TYPE_UNK8C,
+    /* 0x8C */ DSNAP_TYPE_NPC_ZK1,
     /* 0x8D */ DSNAP_TYPE_UNK8D,
     /* 0x8E */ DSNAP_TYPE_UNK8E,
     /* 0x8F */ DSNAP_TYPE_UNK8F,
