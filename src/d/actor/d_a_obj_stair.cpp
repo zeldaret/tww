@@ -227,8 +227,8 @@ bool daObj_Stair_c::_execute() {
             if(temp2.abs() > 8e-11f){
                 cXyz temp3 = temp2.normZP();
                 f32 temp4 = l_HIO.m10  * 0.5f * field_0x2C8.abs() * 0.01f * field_0x2EC;
-                sin = cM_ssin(temp4 * 182.04445f);
-                cos = cM_scos(temp4 * 182.04445f);
+                sin = cM_ssin(DEG2S(temp4));
+                cos = cM_scos(DEG2S(temp4));
                 // misses inline cM_deg2s?
                 
                 field_0x4B0.x = sin * temp3.x;

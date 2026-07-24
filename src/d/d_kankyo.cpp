@@ -590,9 +590,9 @@ void dScnKy_env_light_c::setSunpos() {
         var_f1 = g_env_light.mCurTime + 345.0f;
     }
 
-    sp8.x = std::sinf(DEG_TO_RAD(var_f1)) * 80000.0f;
-    sp8.y = std::cosf(DEG_TO_RAD(var_f1)) * 80000.0f;
-    sp8.z = std::cosf(DEG_TO_RAD(var_f1)) * -48000.0f;
+    sp8.x = std::sinf(DEG2RAD(var_f1)) * 80000.0f;
+    sp8.y = std::cosf(DEG2RAD(var_f1)) * 80000.0f;
+    sp8.z = std::cosf(DEG2RAD(var_f1)) * -48000.0f;
 
     if (dComIfGp_event_runCheck() == FALSE || g_env_light.mInitAnimTimer != 0) {
         mSunPos.x = camera_p->mLookat.mEye.x + sp8.x;
@@ -3159,7 +3159,7 @@ void dKy_arrowcol_chg_move() {
 
 /* 80196764-801967C4       .text dKy_checkEventNightStop__Fv */
 BOOL dKy_checkEventNightStop() {
-    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isSymbol(0)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
         return true;
     }
 

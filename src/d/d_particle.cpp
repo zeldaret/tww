@@ -110,21 +110,21 @@ void dPa_J3DmodelEmitter_c::draw() {
             sp44[2][1] = vel.z;
             sp44[2][2] = tmp.z;
             
-            f32 f1 = params->mRotateAngle * 0.005493164f; // SAngle -> Degree conversion
+            f32 f1 = S2DEG(params->mRotateAngle);
             if (f1) {
                 switch (field_0x26) {
                 case 0:
-                    MTXRotRad(sp14, 'y', f1 * 0.017453292f); // Degree -> Radian conversion
+                    MTXRotRad(sp14, 'y', DEG2RAD(f1));
                     break;
                 case 1:
-                    MTXRotRad(sp14, 'x', f1 * 0.017453292f); // Degree -> Radian conversion
+                    MTXRotRad(sp14, 'x', DEG2RAD(f1));
                     break;
                 case 2:
-                    MTXRotRad(sp14, 'z', f1 * 0.017453292f); // Degree -> Radian conversion
+                    MTXRotRad(sp14, 'z', DEG2RAD(f1));
                     break;
                 case 3:
                     Vec sp08 = {1.0f, 1.0f, 1.0f};
-                    MTXRotAxisRad(sp14, &sp08, f1 * 0.017453292f); // Degree -> Radian conversion
+                    MTXRotAxisRad(sp14, &sp08, DEG2RAD(f1));
                     break;
                 }
                 MTXConcat(sp44, sp14, sp44);

@@ -140,7 +140,8 @@ void dGrass_data_c::WorkAt(fopAc_ac_c* ac, u32 p1, int roomNo, dCcMassS_HitInf* 
         hitObj->ChkAtType(AT_TYPE_FIRE_ARROW) ||
         hitObj->ChkAtType(AT_TYPE_ICE_ARROW) ||
         hitObj->ChkAtType(AT_TYPE_LIGHT_ARROW) ||
-        hitObj->ChkAtType(AT_TYPE_HOOKSHOT))) {
+        hitObj->ChkAtType(AT_TYPE_HOOKSHOT))
+    ) {
         WorkAt_NoCutAnim(ac, p1, roomNo, inf, hitObj);
     } else {
         if (mAnimIdx >= 8) {

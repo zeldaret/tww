@@ -1630,7 +1630,7 @@ fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
     field_0x292 = 0;
     field_0x291 = 0;
     field_0x290 = 0;
-    mesgStatus = 6;
+    mesgStatus = fopMsgStts_MSG_TYPING_e;
     field_0x27D = 0;
     field_0x27E = 0;
     field_0x27F = 0;
@@ -1715,7 +1715,7 @@ void fopMsgM_msgDataProc_c::dataInit() {
     field_0x292 = 0;
     field_0x291 = 0;
     field_0x290 = 0;
-    mesgStatus = 6;
+    mesgStatus = fopMsgStts_MSG_TYPING_e;
     field_0x27D = 0;
     field_0x27E = 0;
     field_0x27F = 0;
@@ -1851,7 +1851,7 @@ void fopMsgM_arrowAnime(J2DPicture* i_iconPic, s16* param_2) {
 }
 
 /* 80031808-800319D8       .text selectCheck2__21fopMsgM_msgDataProc_cFP7J2DPaneiii */
-int fopMsgM_msgDataProc_c::selectCheck2(J2DPane* param_1, int param_2, int param_3, int param_4) {
+u8 fopMsgM_msgDataProc_c::selectCheck2(J2DPane* param_1, int param_2, int param_3, int param_4) {
     field_0x264 = param_1->getWidth() / 2.0f;
     field_0x268 = param_1->getHeight() / 2.0f;
     field_0x278 = g_msgHIO.field_0x70;
@@ -1881,7 +1881,7 @@ int fopMsgM_msgDataProc_c::selectCheck2(J2DPane* param_1, int param_2, int param
 }
 
 /* 800319D8-80031C38       .text selectCheck3__21fopMsgM_msgDataProc_cFP7J2DPaneiii */
-int fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param_3, int param_4) {
+u8 fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param_3, int param_4) {
     field_0x264 = param_1->getWidth() / 2.0f;
     field_0x268 = param_1->getHeight() / 2.0f;
     field_0x278 = g_msgHIO.field_0x70;
@@ -1919,7 +1919,7 @@ int fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param
 }
 
 /* 80031C38-80031E04       .text selectCheckYoko__21fopMsgM_msgDataProc_cFP7J2DPaneiii */
-int fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane* param_1, int param_2, int param_3, int param_4) {
+u8 fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane* param_1, int param_2, int param_3, int param_4) {
     field_0x264 = param_1->getWidth() / 2.0f;
     field_0x268 = param_1->getHeight() / 2.0f;
     field_0x278 = g_msgHIO.field_0x70;
@@ -1949,7 +1949,7 @@ int fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane* param_1, int param_2, int pa
 }
 
 /* 80031E04-800320E0       .text inputNumber__21fopMsgM_msgDataProc_cFi */
-int fopMsgM_msgDataProc_c::inputNumber(int param_1) {
+u8 fopMsgM_msgDataProc_c::inputNumber(int param_1) {
     s16 temp = dComIfGp_getMessageSetNumber();
     bool temp2 = false;
 
@@ -2069,7 +2069,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
     field_0x64 = field_0x44;
     field_0x68 = field_0x48;
     field_0x6C = field_0x4C;
-    mesgStatus = 6;
+    mesgStatus = fopMsgStts_MSG_TYPING_e;
 
     if (bmgData[count] == '\0') {
         if (field_0x27E != 0) {
@@ -2086,7 +2086,10 @@ void fopMsgM_msgDataProc_c::stringSet() {
             strcat(field_0x64, field_0x70);
             strcat(field_0x6C, field_0x70);
         }
-        if (mesgStatus != 8 && mesgStatus != 9 && mesgStatus != 0x14 && mesgStatus != 0x15) {
+        if (
+            mesgStatus != fopMsgStts_SELECT_2_e && mesgStatus != fopMsgStts_SELECT_3_e &&
+            mesgStatus != fopMsgStts_SELECT_YOKO_e && mesgStatus != fopMsgStts_INPUT_e
+        ) {
             if (mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB &&
                 mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD && mesgEntry->mTextboxType != 9)
             {
@@ -2100,15 +2103,15 @@ void fopMsgM_msgDataProc_c::stringSet() {
             if (fopMsgM_nextMsgFlagCheck()) {
                 if (mesgEntry->mNextMsgNo != 0) {
                     fopMsgM_messageSet(mesgEntry->mNextMsgNo);
-                    mesgStatus = 0xF;
+                    mesgStatus = fopMsgStts_MSG_CONTINUES_e;
                 } else {
-                    mesgStatus = 0x10;
+                    mesgStatus = fopMsgStts_MSG_ENDS_e;
                 }
             } else {
                 if (getAutoSendFlag() || getHandSendFlag()) {
-                    mesgStatus = 0xA;
+                    mesgStatus = fopMsgStts_CLOSE_WAIT_e;
                 } else {
-                    mesgStatus = 0xE;
+                    mesgStatus = fopMsgStts_MSG_DISPLAYED_e;
                 }
             }
         }
@@ -2138,7 +2141,10 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     strcat(field_0x6C, field_0x70);
                 }
 
-                if (mesgStatus == 8 || mesgStatus == 9 || mesgStatus == 0x14 || mesgStatus == 0x15) {
+                if (
+                    mesgStatus == fopMsgStts_SELECT_2_e || mesgStatus == fopMsgStts_SELECT_3_e ||
+                    mesgStatus == fopMsgStts_SELECT_YOKO_e || mesgStatus == fopMsgStts_INPUT_e
+                ) {
                     return;
                 }
 
@@ -2155,15 +2161,15 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 if (fopMsgM_nextMsgFlagCheck()) {
                     if (mesgEntry->mNextMsgNo != 0) {
                         fopMsgM_messageSet(mesgEntry->mNextMsgNo);
-                        mesgStatus = 0xF;
+                        mesgStatus = fopMsgStts_MSG_CONTINUES_e;
                     } else {
-                        mesgStatus = 0x10;
+                        mesgStatus = fopMsgStts_MSG_ENDS_e;
                     }
                 } else {
                     if (getAutoSendFlag() || getHandSendFlag()) {
-                        mesgStatus = 0xA;
+                        mesgStatus = fopMsgStts_CLOSE_WAIT_e;
                     } else {
-                        mesgStatus = 0xE;
+                        mesgStatus = fopMsgStts_MSG_DISPLAYED_e;
                     }
                 }
             }
@@ -6361,10 +6367,10 @@ f32 fopMsgM_valueIncrease(int i_max, int i_value, u8 i_mode) {
         ret = (v * 2.0f - 1.0f) * 2.0f - 1.0f;
         break;
     case 4:
-        ret = JMASSin(v * 32768.0f * 0.5f) * JMASSin(v * 32768.0f * 0.5f);
+        ret = JMASSin(v * 0x8000 * 0.5f) * JMASSin(v * 0x8000 * 0.5f);
         break;
     case 5:
-        ret = JMASSin(v * 65535.0f * 0.5f) * JMASSin(v * 65535.0f * 0.5f);
+        ret = JMASSin(v * 0xFFFF * 0.5f) * JMASSin(v * 0xFFFF * 0.5f);
         break;
     }
     return ret;

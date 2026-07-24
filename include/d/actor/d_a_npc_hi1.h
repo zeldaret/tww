@@ -71,7 +71,7 @@ public:
     BOOL bodyCreateHeap();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_hed_jnt_num;
     /* 0x6CD */ s8 m_bbone_jnt_num;

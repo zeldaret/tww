@@ -884,7 +884,6 @@ BOOL daNpc_Hi1_c::_delete() {
 
 /* 00001F30-0000205C       .text _create__11daNpc_Hi1_cFv */
 cPhs_State daNpc_Hi1_c::_create() {
-
     static int a_siz_tbl[] = {
         0,
         0

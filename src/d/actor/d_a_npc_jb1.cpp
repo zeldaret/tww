@@ -275,7 +275,7 @@ void daNpc_Jb1_c::checkOrder() {
 
 /* 000007AC-000007B4       .text next_msgStatus__11daNpc_Jb1_cFPUl */
 u16 daNpc_Jb1_c::next_msgStatus(u32* pMsgNo) {
-    return 0x10;
+    return fopMsgStts_MSG_ENDS_e;
 }
 
 /* 000007B4-000007BC       .text getMsg_JB1_0__11daNpc_Jb1_cFv */

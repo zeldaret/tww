@@ -157,10 +157,10 @@ public:
     void stringShift();
     void iconSelect(int, u8);
     void iconIdxRefresh();
-    int selectCheck2(J2DPane*, int, int, int);
-    int selectCheck3(J2DPane*, int, int, int);
-    int selectCheckYoko(J2DPane*, int, int, int);
-    int inputNumber(int);
+    u8 selectCheck2(J2DPane*, int, int, int);
+    u8 selectCheck3(J2DPane*, int, int, int);
+    u8 selectCheckYoko(J2DPane*, int, int, int);
+    u8 inputNumber(int);
     void selectArrow(J2DPicture*, f32, f32, f32, f32);
     void selectArrow(J2DPicture*, f32, f32);
     void colorAnime(J2DPicture*);

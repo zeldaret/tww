@@ -858,7 +858,7 @@ void daObjTpost_c::modeProc(daObjTpost_c::Proc_e proc, int newMode) {
 
 /* 00001758-000018CC       .text _execute__12daObjTpost_cFv */
 bool daObjTpost_c::_execute() {
-    if(dComIfGs_isSymbol(1)) {
+    if(dComIfGs_isSymbol(dSymbol_DIN_e)) {
         mNumReadable = getReadableLetterNum();
     }
     else {
@@ -914,7 +914,7 @@ bool daObjTpost_c::_draw() {
 
 /* 00001980-00001BA4       .text createInit__12daObjTpost_cFv */
 void daObjTpost_c::createInit() {
-    if(dComIfGs_isSymbol(2)) {
+    if(dComIfGs_isSymbol(dSymbol_FARORE_e)) {
         dLetter_autoStock(dSv_event_flag_c::LETTER_KOMALIS_FATHER);
     }
 

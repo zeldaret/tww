@@ -2446,7 +2446,7 @@ static void yogan_fail(mo2_class* i_this) {
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_FIREK_KASU, &actor->current.pos);
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_MAGT_FCHIP, &actor->current.pos);
             if ((i_this->m059C & 3U) == 0) {
-                i_this->m05E8.y = cM_rndF(65536.0f);
+                i_this->m05E8.y = cM_rndF(0x10000);
                 i_this->m05E8.x = -0x2000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m28C8, &i_this->m05E8);
             }
@@ -2624,7 +2624,7 @@ static void hip_damage(mo2_class* i_this) {
             break;
         case 2:
             if ((i_this->m059C & 7) == 0) {
-                i_this->m05E8.y = cM_rndF(65536.0f);
+                i_this->m05E8.y = cM_rndF(0x10000);
                 i_this->m05E8.x = -0x2000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m28C8, &i_this->m05E8);
             }
@@ -3238,6 +3238,7 @@ static u8 damage_check(mo2_class* i_this) {
                 tex_anm_set(i_this, 4);
                 i_this->mDamageReaction.m424 |= 0x10;
                 i_this->mDamageReaction.m428 = 26.0f;
+                break;
         }
         if (i_this->mDamageReaction.m424 != 0) {
             local_54.x = 0.0f;

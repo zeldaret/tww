@@ -185,7 +185,7 @@ static cPhs_State daLamp_Create(fopAc_ac_c* i_ac) {
             i_this->mSph.Set(sph_src);
             i_this->mSph.SetStts(&i_this->mStts);
 
-            i_this->mCycleCtr = cM_rndFX(32768.0f);
+            i_this->mCycleCtr = cM_rndFX(0x8000);
 
             for (int i = 0; i < 2; i++) {
                 daLamp_Execute(i_this);

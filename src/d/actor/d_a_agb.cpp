@@ -1162,11 +1162,11 @@ void daAgb_c::FlagsSend(u32 stage_type) {
         mFlags.field_0x9_7 = 0;
         mFlags.field_0x9_6 = 0;
         mFlags.field_0x9_5 = 0;
-    } else if (dComIfGs_isSymbol(2)) {
+    } else if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
         mFlags.field_0x9_7 = 0;
         mFlags.field_0x9_6 = 0;
         mFlags.field_0x9_5 = 1;
-    } else if (dComIfGs_isSymbol(1)) {
+    } else if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
         mFlags.field_0x9_7 = 0;
         mFlags.field_0x9_6 = 1;
         mFlags.field_0x9_5 = 0;

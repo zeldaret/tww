@@ -113,8 +113,8 @@ void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
     field_0x114 = 0xFFFFFFFF;
     field_0x118 = 0;
 
-    field_0x12c.U16._12e_1 = (u32)cM_rndF(32767.0f);
-    field_0x12c.U32bits._12c_2 = cM_rndF(32767.0f);
+    field_0x12c.U16._12e_1 = (u32)cM_rndF(0x7FFF);
+    field_0x12c.U32bits._12c_2 = cM_rndF(0x7FFF);
     field_0x12c.U8._12c_0 = 1;
     field_0x128 = 0;
 }
@@ -153,7 +153,7 @@ void mDoGaC_agbCom_c::mDoGaC_GbaReboot() {
     mDoGaC_ComStop();
     u8 temp = field_0x0 = 0; // fakematch?
     field_0x3 = 0;
-    field_0x12c.U32bits._12c_2 = cM_rndF(32767.0f);
+    field_0x12c.U32bits._12c_2 = cM_rndF(0x7FFF);
     field_0x128 = temp;
 }
 

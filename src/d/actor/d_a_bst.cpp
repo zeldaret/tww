@@ -1080,7 +1080,6 @@ static void damage(bst_class* i_this) {
 /* 00003DD8-00003EC4       .text bom_eat_check__FP9bst_class */
 static BOOL bom_eat_check(bst_class* i_this) {
     if (i_this->mHandHurtCyl.ChkCoHit()) {
-
         cCcD_Obj* hit_obj = i_this->mHandHurtCyl.GetCoHitObj();
         if (hit_obj != NULL) {
             fopAc_ac_c* hit_actor = (fopAc_ac_c*)hit_obj->GetAc();
@@ -1496,7 +1495,6 @@ static void damage_check(bst_class* i_this) {
             if (i_this->mHandHurtCyl.ChkTgHit()) {
                 i_this->mState = 10;
                 if (player_way_check(i_this)) {
-
                     atInfo.mpObj = i_this->mHandHurtCyl.GetTgHitObj();
                     atInfo.pParticlePos = i_this->mHandHurtCyl.GetTgHitPosP();
                     atInfo.mpActor = cc_at_check(actor, &atInfo);
@@ -3179,7 +3177,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             actor->max_health = 4;
         }
     }
-    i_this->mUpdateLastFacingDirIfMultipleOf32 = cM_rndFX(32768.0f);
+    i_this->mUpdateLastFacingDirIfMultipleOf32 = cM_rndFX(0x8000);
 #if VERSION > VERSION_DEMO
     i_this->mEnvLight = actor->tevStr;
     i_this->m2F20 = actor->tevStr;

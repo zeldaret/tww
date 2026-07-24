@@ -1133,10 +1133,10 @@ BOOL daPy_lk_c::procRopeSwingStart() {
             if (!cLib_addCalcAngleS(&shape_angle.x, mProcVar2.m34D4, 5, 0xa0, 0x40)) {
                 if (mProcVar2.m34D4 > 0) {
                     setSingleMoveAnime(ANM_ROPESWINGF, 1.0f, 0.0f, -1, 10.0f);
-                    mProcVar2.m34D4 = -4096.0f * m35A4;
+                    mProcVar2.m34D4 = -0x1000 * m35A4;
                 } else {
                     setSingleMoveAnime(ANM_ROPESWINGB, 1.0f, 0.0f, -1, 10.0f);
-                    mProcVar2.m34D4 = 4096.0f * m35A4;
+                    mProcVar2.m34D4 = 0x1000 * m35A4;
                 }
                 mProcVar0.m34D0 = 1;
                 if (DEMO_SELECT(!strcmp(dComIfGp_getStartStageName(), "GanonK"), checkSpecialRope())) {

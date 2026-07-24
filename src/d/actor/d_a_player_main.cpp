@@ -7583,7 +7583,7 @@ BOOL daPy_lk_c::procDamage() {
     dVar6 = (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() - m_HIO->mDam.mDamage.m.field_0x28);
     cLib_addCalcAngleS(&m3564.y, 0, 4, 0x800, 0x100);
     if (dVar6 < 0.0f) {
-        uVar4 = ((16384.0f * mFrameCtrlUnder[UNDER_MOVE0_e].getFrame()) /
+        uVar4 = ((0x4000 * mFrameCtrlUnder[UNDER_MOVE0_e].getFrame()) /
                  m_HIO->mDam.mDamage.m.field_0x28);
         fVar1 = cM_ssin(uVar4);
         if (uVar4 < 0x2000) {
@@ -7593,7 +7593,7 @@ BOOL daPy_lk_c::procDamage() {
         }
         fVar2 = cM_ssin(uVar4);
     } else {
-        uVar4 = (16384.0f * (1.0f - (dVar6 / (mFrameCtrlUnder[UNDER_MOVE0_e].getEnd() -
+        uVar4 = (0x4000 * (1.0f - (dVar6 / (mFrameCtrlUnder[UNDER_MOVE0_e].getEnd() -
                                               m_HIO->mDam.mDamage.m.field_0x28))));
         fVar1 = 1.0f - cM_scos(uVar4);
         fVar2 = 1.0f - cM_scos(uVar4 < 0x2000 ? 0 : (s16)((uVar4 - 0x2000) * 2));
@@ -7689,7 +7689,7 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
             current.angle.y = cM_atan2s(damage_vec->x, damage_vec->z);
         }
         sVar3 = current.angle.y - shape_angle.y;
-        if (std::abs(sVar3) < 8192.0f) {
+        if (std::abs(sVar3) < 0x2000) {
             if (sVar3 >= 0) {
                 sVar3 = 0x2000;
             } else {
@@ -13111,7 +13111,7 @@ void daPy_lk_c::endDemoMode() {
         return;
     }
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-            daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+        daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
         if (ship == NULL) {
             checkNextMode(0);
         } else if (daPy_getPlayerActorClass() != this) {

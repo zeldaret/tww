@@ -30,12 +30,70 @@ public:
     typedef BOOL (daNpc_Ls1_c::*ProcFunc)(void*);
 
     struct anm_prm_c {
-        /* 0x00 */ s8 mBckResIndex;
-        /* 0x01 */ s8 mResIndex;
-        /* 0x04 */ f32 mMorf;
-        /* 0x08 */ f32 mSpeed;
-        /* 0x0C */ int mLoopMode;
+        /* 0x00 */ s8 bckNum;
+        /* 0x01 */ s8 btpNum;
+        /* 0x04 */ f32 morf;
+        /* 0x08 */ f32 speed;
+        /* 0x0C */ int loopMode;
     };  // Size: 0x10
+
+    enum AnmNum {
+        /* 0x00 */ ANMNUM_WAIT01_e,
+        /* 0x01 */ ANMNUM_WAIT02_e,
+        /* 0x02 */ ANMNUM_WAIT03_e,
+        /* 0x03 */ ANMNUM_WAIT04_e,
+        /* 0x04 */ ANMNUM_WAIT05_e,
+        /* 0x05 */ ANMNUM_WAIT06_e,
+        /* 0x06 */ ANMNUM_WATASU_e,
+        /* 0x07 */ ANMNUM_FURIMUKI_e,
+        /* 0x08 */ ANMNUM_NOZOKU_e,
+        /* 0x09 */ ANMNUM_GET_e,
+        /* 0x0A */ ANMNUM_WAIT07_e,
+        /* 0x0B */ ANMNUM_TALK01_e,
+        /* 0x0C */ ANMNUM_DEMOWAIT_e,
+        /* 0x0D */ ANMNUM_DEMOLOOK_e,
+        /* 0x0E */ ANMNUM_NULL_e,
+    };
+
+    enum BckNum {
+        /* 0x00 */ BCKNUM_WAIT01_e,
+        /* 0x01 */ BCKNUM_WAIT02_e,
+        /* 0x02 */ BCKNUM_WAIT03_e,
+        /* 0x03 */ BCKNUM_WAIT04_e,
+        /* 0x04 */ BCKNUM_WAIT05_e,
+        /* 0x05 */ BCKNUM_WAIT06_e,
+        /* 0x06 */ BCKNUM_WATASU_e,
+        /* 0x07 */ BCKNUM_FURIMUKI_e,
+        /* 0x08 */ BCKNUM_NOZOKU_e,
+        /* 0x09 */ BCKNUM_GET_e,
+        /* 0x0A */ BCKNUM_WAIT07_e,
+        /* 0x0B */ BCKNUM_TALK01_e,
+        /* 0x0C */ BCKNUM_DEMOWAIT_e,
+        /* 0x0D */ BCKNUM_DEMOLOOK_e,
+        /* 0x0E */ BCKNUM_NULL_e,
+    };
+
+    enum BtpNum {
+        /* 0x00 */ BTPNUM_FUAN_e,
+        /* 0x01 */ BTPNUM_MABA_e,
+        /* 0x02 */ BTPNUM_FUAN02_e,
+        /* 0x03 */ BTPNUM_KIZUKU_e,
+        /* 0x04 */ BTPNUM_GET_e,
+        /* 0x05 */ BTPNUM_NGWARAI_e,
+        /* 0x06 */ BTPNUM_NOZOKU_e,
+        /* 0x07 */ BTPNUM_OKORI_e,
+        /* 0x08 */ BTPNUM_WARAI_e,
+        /* 0x09 */ BTPNUM_DEMOLOOK_e,
+        /* 0x0A */ BTPNUM_DEMOWAIT_e,
+        /* 0x0B */ BTPNUM_NULL_e,
+    };
+
+    enum BtkNum {
+        /* 0x00 */ BTKNUM_DEFAULT_e,
+        /* 0x01 */ BTKNUM_DEMOLOOK_e,
+        /* 0x02 */ BTKNUM_DEMOWAIT_e,
+        /* 0x03 */ BTKNUM_NULL_e,
+    };
 
     inline daNpc_Ls1_c();
 
@@ -63,14 +121,14 @@ public:
     void play_btp_anm();
     void eye_ctrl();
     void play_btk_anm();
-    void setAnm_anm(daNpc_Ls1_c::anm_prm_c*);
-    void setAnm_NUM(int, int);
+    void setAnm_anm(anm_prm_c*);
+    void setAnm_NUM(int, BOOL);
     void setAnm();
     void chngAnmTag();
     void ctrlAnmTag();
     void chngAnmAtr(u8);
     void ctrlAnmAtr();
-    void setAnm_ATR(int);
+    void setAnm_ATR(BOOL);
     void anmAtr(u16);
     u16 next_msgStatus(u32*);
     u32 getMsg_LS1_0();
@@ -126,7 +184,7 @@ public:
     BOOL itemCreateHeap();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_hed_jnt_num;
     /* 0x6CD */ s8 m_bbone_jnt_num;
@@ -204,9 +262,9 @@ public:
     /* 0x84A */ s8 mActionIndex;
     /* 0x84B */ u8 m84B;
     /* 0x84C */ u8 mMesgAnimeTag;
-    /* 0x84D */ s8 mBtpResIDIndex;
-    /* 0x84E */ s8 mBtkResIDIndex;
-    /* 0x84F */ s8 mBckResIndex;
+    /* 0x84D */ s8 mBtpNum;
+    /* 0x84E */ s8 mBtkNum;
+    /* 0x84F */ s8 mBckNum;
     /* 0x850 */ s8 m850;
     /* 0x851 */ s8 m851;
     /* 0x852 */ s8 m852;

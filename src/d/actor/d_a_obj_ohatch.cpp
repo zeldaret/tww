@@ -44,34 +44,34 @@ static daObjOhatch_HIO_c l_HIO;
 
 daObjOhatch_HIO_c::daObjOhatch_HIO_c() {
     mNo = -1;
-    m08 = -4096.0f;
-    m0C = -16384.0f;
+    m08 = -0x1000;
+    m0C = -0x4000;
     m10 = 0.0f;
     m14 = -25.0f;
     m18 = 190.0f;
     m1C = 1.0f;
-    m20 = 8192.0f;
-    m24 = 131072.0f;
+    m20 = 0x2000;
+    m24 = 0x20000;
     m28 = 6.0f;
     m2C = -64.0f;
-    m30 = 1024.0f;
-    m34 = 8192.0f;
+    m30 = 0x400;
+    m34 = 0x2000;
     m38 = 0;
 }
 #else
 namespace L_HIO {
-static const f32 m08 = -4096.0f;
-static const f32 m0C = -16384.0f;
+static const f32 m08 = -0x1000;
+static const f32 m0C = -0x4000;
 static const f32 m10 = 0.0f;
 static const f32 m14 = -25.0f;
 static const f32 m18 = 190.0f;
 static const f32 m1C = 1.0f;
-static const f32 m20 = 8192.0f;
-static const f32 m24 = 131072.0f;
+static const f32 m20 = 0x2000;
+static const f32 m24 = 0x20000;
 static const f32 m28 = 6.0f;
 static const f32 m2C = -64.0f;
-static const f32 m30 = 1024.0f;
-static const f32 m34 = 8192.0f;
+static const f32 m30 = 0x400;
+static const f32 m34 = 0x2000;
 static const u8 m38 = 0;
 } // namespace L_HIO
 #endif
@@ -246,10 +246,10 @@ void daObjOhatch_c::tremor_act_proc() {
 /* 000008A4-00000A00       .text open_act_proc__13daObjOhatch_cFv */
 void daObjOhatch_c::open_act_proc() {
 #if VERSION == VERSION_DEMO
-    f32 uVar3 = (cM_ssin(m2D8 / HIO(m0C) * 32768.0f) + HIO(m1C)) / (HIO(m1C) + 1.0f);
+    f32 uVar3 = (cM_ssin(m2D8 / HIO(m0C) * 0x8000) + HIO(m1C)) / (HIO(m1C) + 1.0f);
     s32 uVar2 = HIO(m08) * uVar3;
 #else
-    f32 sin = m2D8 / HIO(m0C) * 32768.0f;
+    f32 sin = m2D8 / HIO(m0C) * 0x8000;
     s32 uVar2 = (cM_ssin(sin) + HIO(m1C)) / (HIO(m1C) + 1.0f) * HIO(m08);
 #endif
     m2D8 += uVar2;

@@ -27,8 +27,8 @@ public:
     u8 getSwbit();
     u8 getSwbit2();
     u8 getType();
-    BOOL checkArea(float, float, float);
-    u16 next_msgStatus(unsigned long*);
+    BOOL checkArea(f32, f32, f32);
+    u16 next_msgStatus(u32*);
     u32 getMsg();
     void talkInit();
     u16 talk();
@@ -55,7 +55,7 @@ public:
     BOOL actionDaichi();
     BOOL execute();
 
-public:
+private:
     /* 0x290 */ u32 m290;
     /* 0x294 */ s8 m294;
     /* 0x295 */ u8 m295[0x296 - 0x295];

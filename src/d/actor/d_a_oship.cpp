@@ -913,8 +913,8 @@ void daOship_c::createInit() {
         mCyl[i].SetStts(&mStts);
     }
 
-    mWave.mAnimX = cM_rndF(32768.0f);
-    mWave.mAnimZ = cM_rndF(32768.0f);
+    mWave.mAnimX = cM_rndF(0x8000);
+    mWave.mAnimZ = cM_rndF(0x8000);
 
     setMtx();
     mpModel->calc();

@@ -963,7 +963,7 @@ void daNpc_Zl1_c::anmAtr(u16 mesgNo) {
 
 /* 00001ED4-00001FA0       .text next_msgStatus__11daNpc_Zl1_cFPUl */
 u16 daNpc_Zl1_c::next_msgStatus(u32* pMsgNo) {
-    u16 ret = fopMsgStts_MSG_CONTINUES_e;
+    u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
 
     switch(*pMsgNo) {
         case 0xCA2:
@@ -973,7 +973,7 @@ u16 daNpc_Zl1_c::next_msgStatus(u32* pMsgNo) {
         case 0xC90: {
             switch(mpCurrMsg->mSelectNum) {
                 case 0:
-                    ret = fopMsgStts_MSG_ENDS_e;
+                    msg_status = fopMsgStts_MSG_ENDS_e;
                     break;
                 case 1:
                     *pMsgNo = 0xC91;
@@ -999,11 +999,11 @@ u16 daNpc_Zl1_c::next_msgStatus(u32* pMsgNo) {
             break;
 
         default:
-            ret = fopMsgStts_MSG_ENDS_e;
+            msg_status = fopMsgStts_MSG_ENDS_e;
             break;
     }
 
-    return ret;
+    return msg_status;
 }
 
 /* 00001FA0-00001FF0       .text getMsg_ZL1_2__11daNpc_Zl1_cFv */
@@ -2770,7 +2770,7 @@ BOOL daNpc_Zl1_c::_draw() {
     }
 
     shadowDraw();
-    dSnap_RegistFig(DSNAP_TYPE_ZL1, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_ZL1, this, 1.0f, 1.0f, 1.0f);
 
     // doesnt do anything?
     cXyz temp;

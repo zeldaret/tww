@@ -238,7 +238,7 @@ void daObjMshokki_c::set_se() {
 #else
     if (abs(tmp) < (s32)HIO(m18)) {
 #endif
-        s16 uVar4 = (shape_angle.x / l_data[m60C].m0C) * 16384.0f;
+        s16 uVar4 = (shape_angle.x / l_data[m60C].m0C) * 0x4000;
         if (uVar4 > 0x4000) {
             uVar4 = 0x4000;
         }

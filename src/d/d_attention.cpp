@@ -292,7 +292,7 @@ s32 check_flontofplayer(u32 checkMask, s16 angle1, s16 angle2) {
 
 /* 8009DC28-8009DC74       .text distace_weight__Ffsf */
 f32 distace_weight(f32 distance, s16 angle, f32 ratio) {
-    f32 turns = (f32)angle / 32768.0F;
+    f32 turns = (f32)angle / 0x8000;
     return distance * (f32)((1.0F - ratio) + (f32)(ratio * (turns * turns)));
 }
 
@@ -908,7 +908,7 @@ void dAttention_c::Draw() {
     Mtx invCamera;
     cMtx_inverse(dComIfGd_getViewRotMtx(), invCamera);
     fopAc_ac_c *target = LockonTarget(0);
-    if (dComIfGp_event_runCheck() || dComIfGp_getScopeMesgStatus() != 0)
+    if (dComIfGp_event_runCheck() || dComIfGp_getScopeMesgStatus() != fopMsgStts_MSG_UNK0_e)
         return;
     if (target != NULL) {
         if (target != NULL) {

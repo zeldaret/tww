@@ -244,6 +244,18 @@ public:
     }
     void setMesgCamInfoBasicID(int id) { mMesgCamInfo.mBasicID = id; }
     dComIfG_MesgCamInfo_c* getMesgCamInfo() { return &mMesgCamInfo; }
+    void setMesgCamInfoActor(fopAc_ac_c* actor_1,fopAc_ac_c* actor_2,fopAc_ac_c* actor_3,fopAc_ac_c* actor_4,fopAc_ac_c* actor_5,fopAc_ac_c* actor_6,fopAc_ac_c* actor_7,fopAc_ac_c* actor_8,fopAc_ac_c* actor_9,fopAc_ac_c* actor_A){
+        mMesgCamInfo.mActor[0] = actor_1;
+        mMesgCamInfo.mActor[1] = actor_2;
+        mMesgCamInfo.mActor[2] = actor_3;
+        mMesgCamInfo.mActor[3] = actor_4;
+        mMesgCamInfo.mActor[4] = actor_5;
+        mMesgCamInfo.mActor[5] = actor_6;
+        mMesgCamInfo.mActor[6] = actor_7;
+        mMesgCamInfo.mActor[7] = actor_8;
+        mMesgCamInfo.mActor[8] = actor_9;
+        mMesgCamInfo.mActor[9] = actor_A;
+    }
     int getMesgCamInfoID() { return mMesgCamInfo.mID; }
     void setMesgCamInfoID(int param_0) { mMesgCamInfo.mID = param_0; }
     void clearMesgCamInfoID() { mMesgCamInfo.mID = -1; }
@@ -621,7 +633,7 @@ public:
         mPictureFlag &= ~mask;
     }
     u8 getPictureFormat() { return mPictureFormat; }
-    void setPictureFormat(u8 i) { mPictureFormat = i; }
+    void setPictureFormat(u8 fmt) { mPictureFormat = fmt; }
     u8 getSelectPicture() { return mSelectPicture; }
     void setSelectPicture(u8 i) { mSelectPicture = i; }
     u8 getPictureResult() { return mPictureResult; }
@@ -829,8 +841,8 @@ public:
     /* 0x495B */ u8 mPictureFlag;
     /* 0x495C */ u8 mPictureResult;
     /* 0x495D */ u8 mPictureResultDetail;
-    /* 0x495E */ u8 mPictureStatus;
-    /* 0x495F */ u8 mGetPictureNum;
+    /* 0x495E */ u8 mPictureStatus; // For Legendary Pictographs
+    /* 0x495F */ u8 mGetPictureNum; // For Legendary Pictographs
     /* 0x4960 */ u8 mPictureFormat;
     /* 0x4961 */ u8 mSelectPicture;
     /* 0x4962 */ u8 mHeapLockFlag;
@@ -1644,6 +1656,13 @@ inline BOOL dComIfGs_isTriforce(u8 i_no) {
 inline void dComIfGs_onTriforce(u8 i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getCollect().onTriforce(i_no);
 }
+
+// Goddess pearls (aka "god symbols").
+enum dSymbolIndex_e {
+    /* 0x0 */ dSymbol_NAYRU_e,
+    /* 0x1 */ dSymbol_DIN_e,
+    /* 0x2 */ dSymbol_FARORE_e,
+};
 
 inline BOOL dComIfGs_isSymbol(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isSymbol(i_no);
@@ -3159,6 +3178,11 @@ inline dComIfG_MesgCamInfo_c* dComIfGp_getMesgCameraInfo() {
     return g_dComIfG_gameInfo.play.getMesgCamInfo();
 }
 
+inline void dComIfGp_setMesgCameraInfoActor(fopAc_ac_c* actor_1,fopAc_ac_c* actor_2,fopAc_ac_c* actor_3,fopAc_ac_c* actor_4,fopAc_ac_c* actor_5,fopAc_ac_c* actor_6,fopAc_ac_c* actor_7,fopAc_ac_c* actor_8,fopAc_ac_c* actor_9,fopAc_ac_c* actor_A){
+    g_dComIfG_gameInfo.play.setMesgCamInfoActor(actor_1,actor_2,actor_3,actor_4,actor_5,actor_6,actor_7,actor_8,actor_9,actor_A);
+
+};
+
 inline u8 dComIfGp_checkMesgBgm() {
     return g_dComIfG_gameInfo.play.checkMesgBgm();
 }
@@ -3199,8 +3223,8 @@ inline u8 dComIfGp_getPictureFormat() {
     return g_dComIfG_gameInfo.play.getPictureFormat();
 }
 
-inline void dComIfGp_setPictureFormat(u8 i) {
-    g_dComIfG_gameInfo.play.setPictureFormat(i);
+inline void dComIfGp_setPictureFormat(u8 fmt) {
+    g_dComIfG_gameInfo.play.setPictureFormat(fmt);
 }
 
 inline u8 dComIfGp_getSelectPicture() {

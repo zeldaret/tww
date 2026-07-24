@@ -1470,10 +1470,10 @@ void dr_damage_anime(damagereaction* dr) {
         if(temp2 < -22000.0f) {
             temp2 = -22000.0f;
         }
-        dr->m010[8].y = 0.4f * temp2 + 8192.0f;
-        dr->m010[4].z = 0.4f * -temp2 - 8192.0f;
-        dr->m010[8].z = 0.4f * zero + 8192.0f;
-        dr->m010[4].y = 0.4f * zero + 8192.0f;
+        dr->m010[8].y = 0.4f * temp2 + 0x2000;
+        dr->m010[4].z = 0.4f * -temp2 - 0x2000;
+        dr->m010[8].z = 0.4f * zero + 0x2000;
+        dr->m010[4].y = 0.4f * zero + 0x2000;
 
         f32 temp3 = temp;
         if(temp3 > 22000.0f) {
@@ -1482,10 +1482,10 @@ void dr_damage_anime(damagereaction* dr) {
         if(temp3 < -5000.0f) {
             temp3 = -5000.0f;
         }
-        dr->m010[9].y = 0.4f * temp3 - 8192.0f;
-        dr->m010[5].z = 0.4f * temp3 - 8192.0f;
-        dr->m010[9].z = 0.4f * zero + 8192.0f;
-        dr->m010[5].y = 0.4f * -zero - 8192.0f;
+        dr->m010[9].y = 0.4f * temp3 - 0x2000;
+        dr->m010[5].z = 0.4f * temp3 - 0x2000;
+        dr->m010[9].z = 0.4f * zero + 0x2000;
+        dr->m010[5].y = 0.4f * -zero - 0x2000;
 
         f32 temp4 = temp;
         if(temp4 > 20000.0f) {
@@ -1507,7 +1507,7 @@ void dr_damage_anime(damagereaction* dr) {
             temp5 = -10000.0f;
         }
         dr->m010[6].x = (3000.0f - temp5) + REG0_S(0);
-        dr->m010[6].z = (-zero - 16384.0f) + REG0_S(1);
+        dr->m010[6].z = (-zero - 0x4000) + REG0_S(1);
 
         f32 temp6 = temp;
         if(temp6 > 10000.0f) {
@@ -1517,7 +1517,7 @@ void dr_damage_anime(damagereaction* dr) {
             temp6 = -7000.0f;
         }
         dr->m010[7].x = (-temp6 - 3000.0f);
-        dr->m010[7].z = (-zero - 16384.0f);
+        dr->m010[7].z = (-zero - 0x4000);
     }
     else {
         dr->m010[6].y += dr->m4B8;

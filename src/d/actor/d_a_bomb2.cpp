@@ -783,15 +783,15 @@ namespace daBomb2 {
     }
 
     void Act_c::se_explode() {
-            fopAcM_seStart(this, JA_SE_OBJ_BOMB_EXPLODE, 0);
+        fopAcM_seStart(this, JA_SE_OBJ_BOMB_EXPLODE, 0);
     }
 
     void Act_c::se_explode_water() {
-            fopAcM_seStart(this, JA_SE_OBJ_BOMB_WATER, 0);
+        fopAcM_seStart(this, JA_SE_OBJ_BOMB_WATER, 0);
     }
 
     void Act_c::se_ignition() {
-            fopAcM_seStart(this, JA_SE_OBJ_BOMB_IGNITION, 0);
+        fopAcM_seStart(this, JA_SE_OBJ_BOMB_IGNITION, 0);
     }
 
     void Act_c::set_sound_env(int param_1, int param_2) {

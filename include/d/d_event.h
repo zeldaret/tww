@@ -130,7 +130,13 @@ public:
     void offEventFlag(u16 flag) { mEventFlag &= ~flag; }
     void reset() { onEventFlag(8); }
 
-    BOOL runCheck() { return mMode != dEvtMode_NONE_e; }
+    BOOL runCheck() {
+        #if DEBUG
+        return mMode != dEvtMode_NONE_e || mDebugStb != 0;
+        #else
+        return mMode != dEvtMode_NONE_e;
+        #endif
+    }
     u8 getMode() const { return mMode; }
 
     void onHindFlag(u16 flag) { mHindFlag |= flag; }
@@ -158,7 +164,7 @@ public:
     /* 0xDA */ u8 mEventEndSound;
     /* 0xDB */ u8 field_0xdb;
     /* 0xDC */ u8 field_0xdc;
-    /* 0xDD */ u8 field_0xdd;
+    /* 0xDD */ u8 mDebugStb;
     /* 0xDE */ u8 field_0xde;
     /* 0xDF */ u8 mEventInfoIdx;
     /* 0xE0 */ u8 mTalkButton;

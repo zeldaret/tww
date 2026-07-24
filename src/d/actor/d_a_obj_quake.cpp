@@ -28,7 +28,7 @@ daObjQuake_HIO_c::daObjQuake_HIO_c() {
 cPhs_State daObjQuake_c::_create() {
     fopAcM_ct(this, daObjQuake_c);
 
-    if (dComIfGs_isSymbol(1)) {
+    if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
         return cPhs_STOP_e;
     }
 

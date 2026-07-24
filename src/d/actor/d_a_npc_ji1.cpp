@@ -1738,6 +1738,7 @@ u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
                 break;
             case 3:
                 dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
+                break;
         }
     }
 
@@ -4990,7 +4991,7 @@ BOOL daNpc_Ji1_c::_draw() {
             dComIfGd_addRealShadow(mShadowId, mpSpearMorf->getModel());
         }
 
-        dSnap_RegistFig(DSNAP_TYPE_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_NPC_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
         
         return true;
     }

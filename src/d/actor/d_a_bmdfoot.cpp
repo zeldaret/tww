@@ -139,7 +139,7 @@ void wait(bmdfoot_class* i_this) {
         i_this->m2BC++;
         anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e, 50.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
         i_this->m2C0[0] = cM_rndF(150.0f) + 100.0f;
-        i_this->m3EC = cM_rndFX(32768.0f);
+        i_this->m3EC = cM_rndFX(0x8000);
         for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
             i_this->m3A4[i] = REG14_F(13) + (0.2f + cM_rndFX(0.1f));
         }
@@ -460,7 +460,7 @@ void damage(bmdfoot_class* i_this) {
         anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_NOBIKIRU_e, 40.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m2BC++;
         i_this->m2C0[0] = 0x1e;
-        i_this->m3EC = cM_rndFX(32768.0f);
+        i_this->m3EC = cM_rndFX(0x8000);
         for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
             i_this->m3A4[i] = (0.3f + cM_rndFX(0.2f));
         }
@@ -575,6 +575,7 @@ void move(bmdfoot_class* i_this) {
             break;
         case 0xb:
             end(i_this);
+            break;
         }
         if (boss->m332 == 3) {
             housi_off(i_this);
