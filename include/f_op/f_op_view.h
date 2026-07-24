@@ -9,7 +9,6 @@ struct view_process_profile_definition {
     /* 0x00 */ leaf_process_profile_definition base;
     /* 0x24 */ leafdraw_method_class* sub_method; // Subclass methods
     /* 0x28 */ u8 unk28;
-    /* 0x29 */ u8 unk29[3]; // pad
     /* 0x2C */ u32 unk2C;
     /* 0x30 */ u32 unk30;
     /* 0x34 */ u32 unk34;

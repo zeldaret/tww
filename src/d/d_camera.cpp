@@ -221,7 +221,9 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mCamTypeSubject = GetCameraTypeFromCameraName("Subject");
     mCamTypeBoat = GetCameraTypeFromCameraName("Boat");
     mCamTypeBoatBattle = GetCameraTypeFromCameraName("BoatBattle");
+#if VERSION > VERSION_DEMO
     mCamTypeRestrict = GetCameraTypeFromCameraName("Restrict");
+#endif
     mCamTypeKeep = GetCameraTypeFromCameraName("Keep");
     mCurType = mMapToolType = mCamTypeField;
 
@@ -283,7 +285,9 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     m368 = 0.0f;
     m354 = -G_CM3D_F_INF;
     mRoomMapToolCameraIdx = 0xFF;
+#if VERSION > VERSION_DEMO
     m608 = mCamSetup.mBGChk.WallUpDistance();
+#endif
 
     if (!strcmp(dComIfGp_getStartStageName(), "sea")) {
         m780 = 1;
@@ -5720,3 +5724,53 @@ bool dCamForcusLine::Off() {
     m49 = 0;
     return m49 == 0;
 }
+
+static leafdraw_method_class method = {
+    (process_method_func)camera_create,
+    (process_method_func)camera_delete,
+    (process_method_func)camera_execute,
+    (process_method_func)is_camera_delete,
+    (process_method_func)camera_draw,
+};
+
+camera_process_profile_definition g_profile_CAMERA = {
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x000B,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_CAMERA_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(camera_class),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopVw_Method,
+    /* Draw Prio     */ fpcDwPi_CAMERA_e,
+    /* View SubMtd   */ &g_fopCam_Method,
+    /* View unk28    */ 0,
+    /* View unk2C    */ 0,
+    /* View unk30    */ 0,
+    /* View unk34    */ 0,
+    /* View unk38    */ 0,
+    /* Camera SubMtd */ &method,
+    /* Camera unk40  */ 0,
+};
+
+camera_process_profile_definition g_profile_CAMERA2 = {
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x000B,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_CAMERA2_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(camera_class),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopVw_Method,
+    /* Draw Prio     */ fpcDwPi_CAMERA2_e,
+    /* View SubMtd   */ &g_fopCam_Method,
+    /* View unk28    */ 0,
+    /* View unk2C    */ 0,
+    /* View unk30    */ 0,
+    /* View unk34    */ 0,
+    /* View unk38    */ 0,
+    /* Camera SubMtd */ &method,
+    /* Camera unk40  */ 0,
+};
