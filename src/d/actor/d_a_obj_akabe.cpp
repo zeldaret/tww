@@ -13,179 +13,181 @@
 #include "m_Do/m_Do_mtx.h"
 
 namespace daObjAkabe {
-    const char* const Act_c::M_arcname[4] = {
-        "Akabe",
-        "AkabeD",
-        "AkabeK",
-        "NBOX",
-    };
 
-    /* 00000078-0000009C       .text solidHeapCB__Q210daObjAkabe5Act_cFP10fopAc_ac_c */
-    BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
-        return ((Act_c*)i_this)->create_heap();
+const char* const Act_c::M_arcname[4] = {
+    "Akabe",
+    "AkabeD",
+    "AkabeK",
+    "NBOX",
+};
+
+/* 00000078-0000009C       .text solidHeapCB__Q210daObjAkabe5Act_cFP10fopAc_ac_c */
+BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
+}
+
+/* 0000009C-000001A4       .text create_heap__Q210daObjAkabe5Act_cFv */
+u8 Act_c::create_heap() {
+    bool ret = false;
+
+    mpBgW = new dBgW();
+    if (mpBgW != NULL) {
+        static const s16 dzb[4] = { dRes_INDEX_AKABE_DZB_AKABE_e, dRes_INDEX_AKABED_DZB_AKABED_e, dRes_INDEX_AKABEK_DZB_AKABEK_e, dRes_INDEX_NBOX_DZB_NBOX_e, };
+        cBgD_t * bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname[mType], dzb[mType]);
+        JUT_ASSERT(0x82, bgw_data != NULL);
+        if (!mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx))
+            ret = true;
     }
 
-    /* 0000009C-000001A4       .text create_heap__Q210daObjAkabe5Act_cFv */
-    u8 Act_c::create_heap() {
-        bool ret = false;
-
-        mpBgW = new dBgW();
-        if (mpBgW != NULL) {
-            static const s16 dzb[4] = { dRes_INDEX_AKABE_DZB_AKABE_e, dRes_INDEX_AKABED_DZB_AKABED_e, dRes_INDEX_AKABEK_DZB_AKABEK_e, dRes_INDEX_NBOX_DZB_NBOX_e, };
-            cBgD_t * bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname[mType], dzb[mType]);
-            JUT_ASSERT(0x82, bgw_data != NULL);
-            if (!mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx))
-                ret = true;
-        }
-
-        if (!ret) {
-            mpBgW = NULL;
-            return ret;
-        }
-
-        // Fakematch? This function should probably have return type bool, but the codegen towards the
-        // end here doesn't work unless the return type is u8.
+    if (!ret) {
+        mpBgW = NULL;
         return ret;
     }
 
-    /* 000001A4-00000360       .text _create__Q210daObjAkabe5Act_cFv */
-    cPhs_State Act_c::_create() {
-        cPhs_State rt = cPhs_ERROR_e;
+    // Fakematch? This function should probably have return type bool, but the codegen towards the
+    // end here doesn't work unless the return type is u8.
+    return ret;
+}
 
-        s32 arg0 = prm_get_arg0();
-        if (arg0 == 1)
-            mType = 1;
-        else if (arg0 == 2)
-            mType = 2;
-        else if (arg0 == 3)
-            mType = 3;
-        else
-            mType = 0;
+/* 000001A4-00000360       .text _create__Q210daObjAkabe5Act_cFv */
+cPhs_State Act_c::_create() {
+    cPhs_State rt = cPhs_ERROR_e;
 
-        fopAcM_ct(this, daObjAkabe::Act_c);
+    s32 arg0 = prm_get_arg0();
+    if (arg0 == 1)
+        mType = 1;
+    else if (arg0 == 2)
+        mType = 2;
+    else if (arg0 == 3)
+        mType = 3;
+    else
+        mType = 0;
 
-        mbAppear = chk_appear();
-        if (mbAppear) {
-            rt = dComIfG_resLoad(&mPhs, M_arcname[mType]);
-            if (rt == cPhs_COMPLEATE_e) {
-                init_scale();
-                init_mtx();
+    fopAcM_ct(this, daObjAkabe::Act_c);
 
-                static const u32 heap_size[4] = { 0x200, 0x200, 0x200, 0x3E0, };
-                if (fopAcM_entrySolidHeap(this, solidHeapCB, heap_size[mType])) {
-                    dComIfG_Bgsp()->Regist(mpBgW, this);
-                    mpBgW->SetCrrFunc(NULL);
-                    mpBgW->SetPriority((cBgW::PRIORITY)1);
-                    fopAcM_SetMtx(this, mMtx);
-                    if (mType == 3) {
-                        fopAcM_setCullSizeBox(this, -51.0f, -1.0f, -51.0f, 51.0f, 101.0f, 51.0f);
-                    } else {
-                        fopAcM_setCullSizeBox(this, -51.0f, -1.0f, -1.0f, 51.0f, 101.0f, 1.0f);
-                    }
+    mbAppear = chk_appear();
+    if (mbAppear) {
+        rt = dComIfG_resLoad(&mPhs, M_arcname[mType]);
+        if (rt == cPhs_COMPLEATE_e) {
+            init_scale();
+            init_mtx();
+
+            static const u32 heap_size[4] = { 0x200, 0x200, 0x200, 0x3E0, };
+            if (fopAcM_entrySolidHeap(this, solidHeapCB, heap_size[mType])) {
+                dComIfG_Bgsp()->Regist(mpBgW, this);
+                mpBgW->SetCrrFunc(NULL);
+                mpBgW->SetPriority((cBgW::PRIORITY)1);
+                fopAcM_SetMtx(this, mMtx);
+                if (mType == 3) {
+                    fopAcM_setCullSizeBox(this, -51.0f, -1.0f, -51.0f, 51.0f, 101.0f, 51.0f);
                 } else {
-                    rt = cPhs_ERROR_e;
+                    fopAcM_setCullSizeBox(this, -51.0f, -1.0f, -1.0f, 51.0f, 101.0f, 1.0f);
                 }
+            } else {
+                rt = cPhs_ERROR_e;
             }
         }
-
-        return rt;
     }
 
-    /* 00000360-000003F8       .text _delete__Q210daObjAkabe5Act_cFv */
-    bool Act_c::_delete() {
-        if (mbAppear) {
-            if (mpBgW != NULL && mpBgW->ChkUsed()) {
-                dComIfG_Bgsp()->Release(mpBgW);
-            }
+    return rt;
+}
 
-            dComIfG_resDelete(&mPhs, M_arcname[mType]);
+/* 00000360-000003F8       .text _delete__Q210daObjAkabe5Act_cFv */
+bool Act_c::_delete() {
+    if (mbAppear) {
+        if (mpBgW != NULL && mpBgW->ChkUsed()) {
+            dComIfG_Bgsp()->Release(mpBgW);
         }
 
+        dComIfG_resDelete(&mPhs, M_arcname[mType]);
+    }
+
+    return true;
+}
+
+/* 000003F8-00000498       .text init_scale__Q210daObjAkabe5Act_cFv */
+void Act_c::init_scale() {
+    s32 scl = prm_get_scl();
+    if (scl == 1) {
+        scale.x *= 10.0f;
+        scale.y *= 10.0f;
+        scale.z = 1.0f;
+    } else if (scl == 2) {
+    } else if (scl == 3) {
+        scale *= 10.0f;
+    } else {
+        scale.z = 1.0f;
+    }
+}
+
+/* 00000498-00000510       .text init_mtx__Q210daObjAkabe5Act_cFv */
+void Act_c::init_mtx() {
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::scaleM(scale);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+}
+
+/* 00000510-000005A4       .text chk_appear__Q210daObjAkabe5Act_cFv */
+bool Act_c::chk_appear() {
+    if (prm_get_always())
         return true;
+    s32 swSaveNo = prm_get_swSave();
+    if (swSaveNo == 0xFF) {
+        return dComIfGs_checkCollect(0) == 0;
+    } else {
+        return !fopAcM_isSwitch(this, swSaveNo);
     }
+}
 
-    /* 000003F8-00000498       .text init_scale__Q210daObjAkabe5Act_cFv */
-    void Act_c::init_scale() {
-        s32 scl = prm_get_scl();
-        if (scl == 1) {
-            scale.x *= 10.0f;
-            scale.y *= 10.0f;
-            scale.z = 1.0f;
-        } else if (scl == 2) {
-        } else if (scl == 3) {
-            scale *= 10.0f;
-        } else {
-            scale.z = 1.0f;
-        }
-    }
+/* 000005A4-000005E4       .text _execute__Q210daObjAkabe5Act_cFv */
+bool Act_c::_execute() {
+    if (!chk_appear())
+        fopAcM_delete(this);
+    return true;
+}
 
-    /* 00000498-00000510       .text init_mtx__Q210daObjAkabe5Act_cFv */
-    void Act_c::init_mtx() {
-        mDoMtx_stack_c::transS(current.pos);
-        mDoMtx_stack_c::ZXYrotM(shape_angle);
-        mDoMtx_stack_c::scaleM(scale);
-        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
-    }
+/* 000005E4-000005EC       .text _draw__Q210daObjAkabe5Act_cFv */
+bool Act_c::_draw() {
+    return true;
+}
 
-    /* 00000510-000005A4       .text chk_appear__Q210daObjAkabe5Act_cFv */
-    bool Act_c::chk_appear() {
-        if (prm_get_always())
-            return true;
-        s32 swSaveNo = prm_get_swSave();
-        if (swSaveNo == 0xFF) {
-            return dComIfGs_checkCollect(0) == 0;
-        } else {
-            return !fopAcM_isSwitch(this, swSaveNo);
-        }
-    }
+namespace {
+/* 000005EC-0000060C       .text Mthd_Create__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+cPhs_State Mthd_Create(void* i_this) {
+    return ((Act_c*)i_this)->_create();
+}
 
-    /* 000005A4-000005E4       .text _execute__Q210daObjAkabe5Act_cFv */
-    bool Act_c::_execute() {
-        if (!chk_appear())
-            fopAcM_delete(this);
-        return true;
-    }
+/* 0000060C-00000630       .text Mthd_Delete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+BOOL Mthd_Delete(void* i_this) {
+    return ((Act_c*)i_this)->_delete();
+}
 
-    /* 000005E4-000005EC       .text _draw__Q210daObjAkabe5Act_cFv */
-    bool Act_c::_draw() {
-        return true;
-    }
+/* 00000630-00000654       .text Mthd_Execute__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+BOOL Mthd_Execute(void* i_this) {
+    return ((Act_c*)i_this)->_execute();
+}
 
-    namespace {
-        /* 000005EC-0000060C       .text Mthd_Create__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-        cPhs_State Mthd_Create(void* i_this) {
-            return ((Act_c*)i_this)->_create();
-        }
+/* 00000654-00000678       .text Mthd_Draw__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+BOOL Mthd_Draw(void* i_this) {
+    return ((Act_c*)i_this)->_draw();
+}
 
-        /* 0000060C-00000630       .text Mthd_Delete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-        BOOL Mthd_Delete(void* i_this) {
-            return ((Act_c*)i_this)->_delete();
-        }
+/* 00000678-00000680       .text Mthd_IsDelete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
+BOOL Mthd_IsDelete(void* i_this) {
+    return TRUE;
+}
 
-        /* 00000630-00000654       .text Mthd_Execute__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-        BOOL Mthd_Execute(void* i_this) {
-            return ((Act_c*)i_this)->_execute();
-        }
-
-        /* 00000654-00000678       .text Mthd_Draw__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-        BOOL Mthd_Draw(void* i_this) {
-            return ((Act_c*)i_this)->_draw();
-        }
-
-        /* 00000678-00000680       .text Mthd_IsDelete__Q210daObjAkabe27@unnamed@d_a_obj_akabe_cpp@FPv */
-        BOOL Mthd_IsDelete(void* i_this) {
-            return TRUE;
-        }
-
-        static actor_method_class Mthd_Table = {
-            (process_method_func)Mthd_Create,
-            (process_method_func)Mthd_Delete,
-            (process_method_func)Mthd_Execute,
-            (process_method_func)Mthd_IsDelete,
-            (process_method_func)Mthd_Draw,
-        };
-    };
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
 };
+}; // namespace
+
+}; // namespace daObjAkabe
 
 actor_process_profile_definition g_profile_Obj_Akabe = {
     /* Layer ID     */ fpcLy_CURRENT_e,
