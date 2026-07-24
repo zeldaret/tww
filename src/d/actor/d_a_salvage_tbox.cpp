@@ -27,7 +27,6 @@ const f32 daSTBox_c::m_shadow_scale = 4.0f;
 
 /* 00000078-00000128       .text getMaxWaterY__25daSTBox_shadowEcallBack_cFPQ29JGeometry8TVec3<f> */
 void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* shipPos) {
-    /* Nonmatching */
     if (daSea_ChkArea(shipPos->x, shipPos->z)) {
         f32 wave = daSea_calcWave(shipPos->x, shipPos->z);
         shipPos->y = wave + 2.0f;
@@ -156,7 +155,6 @@ void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
 
 /* 00000570-000005D8       .text getWaterY__F4cXyz */
 f32 getWaterY(cXyz shipPos) {
-    /* Nonmatching */
     f32 waterY;
     shipPos.y += 500.0f;
     if (daSea_ChkArea(shipPos.x, shipPos.z)) {
@@ -215,7 +213,6 @@ BOOL daSTBox_c::CreateHeap() {
 
 /* 000007D4-00000ADC       .text CreateInit__9daSTBox_cFv */
 void daSTBox_c::CreateInit() {
-    /* Nonmatching */
     cXyz craneTop;
     f32 waterY;
     if (dComIfGp_getShipActor() != NULL && dComIfGp_getShipActor()->getCraneTop() != NULL) {
@@ -287,7 +284,6 @@ void daSTBox_c::CreateInit() {
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
 cPhs_State daSTBox_c::_create() {
-    /* Nonmatching */
     fopAcM_ct(this, daSTBox_c);
     field_0x331 = base.base.mParameters >> 8 & 0xf;
     cPhs_State phs_state = dComIfG_resLoad(&field_0x290, m_arcname);
@@ -303,7 +299,6 @@ cPhs_State daSTBox_c::_create() {
 
 /* 00000BFC-00000C7C       .text set_mtx__9daSTBox_cFv */
 void daSTBox_c::set_mtx() {
-    /* Nonmatching */
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -413,7 +408,6 @@ void daSTBox_c::initWaitDummy(int) {
 
 /* 00000F54-00000F64       .text initDrop__9daSTBox_cFi */
 void daSTBox_c::initDrop(int) {
-    /* Nonmatching */
     gravity = -4.0f;
 }
 
@@ -421,7 +415,6 @@ const f32 crane_offset[] = {80.0f, 125.0f, 125.0f};
 
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
 BOOL daSTBox_c::actWait(int) {
-    /* Nonmatching */
     daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
     if (ship == NULL) {
         JUT_ASSERT(0x32b, FALSE);
@@ -469,7 +462,6 @@ BOOL daSTBox_c::actWait(int) {
 
 /* 00001218-00001344       .text actDrop__9daSTBox_cFi */
 BOOL daSTBox_c::actDrop(int) {
-    /* Nonmatching */
     fopAcM_posMoveF(this, NULL);
     if (current.pos.y < getWaterY(current.pos) - 50.0f) {
         return TRUE;

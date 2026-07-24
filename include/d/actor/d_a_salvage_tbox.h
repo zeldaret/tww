@@ -35,8 +35,7 @@ public:
     /* 0x4C */  f32 mpDepth;
     /* 0x50 */  f32 field_0x50;
     /* 0x54 */  JPABaseEmitter* mpEmitter;
-
-};
+};  // Size: 0x58
 
 class daSTBox_c : public fopAc_ac_c {
 public:
