@@ -166,9 +166,9 @@ bool daTagvolcano::Act_c::_execute() {
         if (field_0x2a4 == 1) {
             if (eventInfo.checkCommandDemoAccrpt()) {
                 if (mType == 1) {
-                    dComIfGp_setNextStage("sea", 2, 20);
+                    dComIfGp_setNextStage("sea", 2, dIsleRoom_FireMountain_e);
                 } else {
-                    dComIfGp_setNextStage("sea", 2, 40);
+                    dComIfGp_setNextStage("sea", 2, dIsleRoom_IceRingIsle_e);
                 }
             } else {
                 fopAcM_orderOtherEvent(this, "TAG_VOLCANO");

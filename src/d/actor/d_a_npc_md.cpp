@@ -3554,7 +3554,7 @@ void daNpc_Md_c::initialMsgSetEvent(int staffIdx) {
     if (mMsgNo == 0x19DD) {
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1620);
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1608);
-        dComIfGp_setNextStage("sea", 0xE3, 13, 8);
+        dComIfGp_setNextStage("sea", 0xE3, dIsleRoom_DragonRoostIsland_e, 8);
     } else {
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
         int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
@@ -3908,7 +3908,7 @@ void daNpc_Md_c::initialEndEvent(int staffIdx) {
             if (mMsgNo == 0x19de) {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_1620);
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_1608);
-                dComIfGp_setNextStage("sea", 0xE3, 13, 8);
+                dComIfGp_setNextStage("sea", 0xE3, dIsleRoom_DragonRoostIsland_e, 8);
             }
             // Fall-through
         case -1:

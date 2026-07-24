@@ -2202,7 +2202,7 @@ BOOL daNpc_Zl1_c::talk_1() {
                         dComIfGs_onEventBit(dSv_event_flag_c::UNK_0810);
                         break;
                     case 0xC90:
-                        dComIfGp_setNextStage("sea", 0xcd, 0x2c, 10, 0.0f, 0, 1, 0);
+                        dComIfGp_setNextStage("sea", 0xcd, dIsleRoom_OutsetIsland_e, 10, 0.0f, 0, 1, 0);
                         field_0x7D7 = false;
                         return ret;
                 }

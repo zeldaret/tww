@@ -1,11 +1,12 @@
 /**
  * d_a_agb.cpp
- * Tingle Tuner Cursor
+ * Tingle Tuner Cursor / ＡＧＢカーソル (AGB Cursor)
  */
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_agb.h"
 #include "d/d_msg.h"
+#include "d/d_s_play.h"
 #include "res/Object/Agb.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -407,7 +408,7 @@ int daAgb_c::uploadSelect() {
             strcat(path, ".bin");
             l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, JKRArchive::DEFAULT_MOUNT_DIRECTION, dMsg_getAgbWorkArea());
 #endif
-            JUT_ASSERT(VERSION_SELECT(591, 591, 860, 861), l_gbaCommand != NULL);
+            JUT_ASSERT(VERSION_SELECT(590, 591, 860, 861), l_gbaCommand != NULL);
 
             mDoGaC_GbaReboot();
             mDoGaC_setPortNo(mPortNo);
@@ -423,7 +424,7 @@ int daAgb_c::uploadSelect() {
 int daAgb_c::uploadJoyboot1() {
     if (l_gbaCommand->sync()) {
         void* programp = l_gbaCommand->getMemAddress();
-        JUT_ASSERT(VERSION_SELECT(622, 622, 891, 892), programp != NULL);
+        JUT_ASSERT(VERSION_SELECT(621, 622, 891, 892), programp != NULL);
 
         JUTGba::getManager()->doJoyBoot(mDoGaC_getPortNo(), 3, -1, (u8*)programp,
                                         l_gbaCommand->getMemSize() - 4, NULL, NULL);
@@ -483,7 +484,7 @@ int daAgb_c::uploadMessageLoad() {
         strcat(path, ".bin");
         l_gbaCommand = mDoDvdThd_toMainRam_c::create(path, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 #endif
-        JUT_ASSERT(VERSION_SELECT(715, 715, 1000, 1001), l_gbaCommand != NULL);
+        JUT_ASSERT(VERSION_SELECT(714, 715, 1000, 1001), l_gbaCommand != NULL);
 
         mUploadAction  = UpAct_UNK7;
         mDoGaC_onComEnable();
@@ -506,7 +507,7 @@ int daAgb_c::uploadMessageLoad2() {
 int daAgb_c::uploadConnect() {
     if (mDoGaC_getComEnable() && mDoGaC_GbaLink()) {
         void* programp = l_gbaCommand->getMemAddress();
-        JUT_ASSERT(VERSION_SELECT(760, 760, 1045, 1046), programp != NULL);
+        JUT_ASSERT(VERSION_SELECT(759, 760, 1045, 1046), programp != NULL);
         mDoGac_SendDataSet((u32*)programp, l_gbaCommand->getMemSize(), 0, 0);
 
         mUploadAction  = UpAct_UNK8;
@@ -1019,10 +1020,12 @@ void daAgb_c::GbaItemUse() {
         temp_r29 |= (var_r28 << 8);
         resetCursor(false);
         break;
+#if VERSION > VERSION_DEMO
     case 0x13:
         resetCursor(false);
         field_0x65c = 30;
         break;
+#endif
     case 7:
         if (dComIfGs_checkGetItem(dItemNo_BAIT_BAG_e)) {
             if (dComIfGs_checkBaitItemEmpty()) {
@@ -1046,11 +1049,13 @@ void daAgb_c::GbaItemUse() {
         resetCursor(false);
         field_0x65c = 60;
         break;
+#if VERSION > VERSION_DEMO
     case 9:
         dComIfGp_setItemMagicCount(8);
         resetCursor(false);
         field_0x65c = 60;
         break;
+#endif
     case 10:
         dComIfGp_setItemLifeCount(dComIfGs_getMaxLife());
         dComIfGp_setItemMagicCount(dComIfGs_getMaxMagic());
@@ -1216,8 +1221,10 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     } else {
         mFlags.field_0xb_0 = 0;
     }
+#if VERSION > VERSION_DEMO
     mFlags.field_0x5_2 = field_0x675;
     mFlags.field_0x5_1 = dComIfGs_checkGetItem(dItemNo_CABANA_DEED_e) != FALSE;
+#endif
     mDoGac_SendDataSet((u32*)&mFlags, 0xC, 9, 0);
 }
 
@@ -1227,9 +1234,9 @@ void daAgb_c::CursorMove(fopAc_ac_c* actor, u32 stage_type) {
     
     f32 f31;
     if (stage_type == dStageType_SEA_e) {
-        f31 = field_0x67e ? 50.0f : 781.25f;
+        f31 = field_0x67e ? DEMO_SELECT(l_HIO.field_0x18, 50.0f) : DEMO_SELECT(l_HIO.field_0x1c, 781.25f);
     } else {
-        f31 = 25.0f;
+        f31 = DEMO_SELECT(l_HIO.field_0x14, 25.0f);
     }
     
     if (cLib_chaseF(&field_0x628, 2.5f, field_0x62c) &&
@@ -1375,11 +1382,13 @@ void daAgb_c::modeMove() {
     stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
     u16 stage_type = dStage_stagInfo_GetSTType(stag_info);
     
+#if VERSION > VERSION_DEMO
     if (eventInfo.checkCommandTalk()) {
         mUploadAction  = UpAct_UNK0;
         mMode = MODE_LOAD;
         return;
     }
+#endif
     
     if (field_0x65c != 0) {
         if (field_0x66b == 3 || field_0x66b == 12) {
@@ -1518,7 +1527,12 @@ void daAgb_c::modeMove() {
             home.pos = r3->current.pos;
         }
         
-        shape_angle.setall(0);
+        shape_angle.x = 0;
+#if VERSION > VERSION_DEMO
+        shape_angle.y = 0;
+#endif
+        shape_angle.z = 0;
+
         field_0x628 = 2.5f;
         
         if (g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && !CPad_CHECK_HOLD_L(mDoGaC_getPortNo()) && (
@@ -1586,8 +1600,24 @@ static BOOL daAgb_Execute(daAgb_c* i_this) {
             i_this->FlagsSend(stage_type);
         }
 
+#if VERSION > VERSION_DEMO
         i_this->field_0x680 = true;
-    } else if (i_this->field_0x680) {
+#endif
+    }
+#if VERSION == VERSION_DEMO
+    else {
+        i_this->resetCursor(false);
+        i_this->field_0x675 = 0;
+        i_this->field_0x676 = 0;
+        i_this->shape_angle.x = 0;
+        i_this->shape_angle.y = 0;
+        i_this->shape_angle.z = 0;
+        i_this->field_0x630 = 0;
+        i_this->field_0x632 = 0;
+        i_this->field_0x684.remove();
+    }
+#else
+    else if (i_this->field_0x680) {
         i_this->field_0x680 = false;
         i_this->resetCursor(true);
         i_this->offActive();
@@ -1607,6 +1637,7 @@ static BOOL daAgb_Execute(daAgb_c* i_this) {
         i_this->field_0x632 = 0;
         i_this->field_0x684.remove();
     }
+#endif
 
     i_this->modeProcCall();
 
@@ -1628,13 +1659,13 @@ static BOOL daAgb_Execute(daAgb_c* i_this) {
             {
                 f32 speedF = fabs(player->speedF);
 
-                if (speedF <= 0.0f) {
+                if (speedF <= DEMO_SELECT(l_HIO.field_0x24, 0.0f)) {
                     daAgb_c::mFlags.field_0x5_3 = 0;
-                } else if (speedF < 5.0f) {
+                } else if (speedF < DEMO_SELECT(l_HIO.field_0x28, 5.0f)) {
                     daAgb_c::mFlags.field_0x5_3 = 1;
-                } else if (speedF < 10.0f) {
+                } else if (speedF < DEMO_SELECT(l_HIO.field_0x2c, 10.0f)) {
                     daAgb_c::mFlags.field_0x5_3 = 2;
-                } else if (speedF < 15.0f) {
+                } else if (speedF < DEMO_SELECT(l_HIO.field_0x30, 15.0f)) {
                     daAgb_c::mFlags.field_0x5_3 = 3;
                 } else {
                     daAgb_c::mFlags.field_0x5_3 = 4;
@@ -1746,7 +1777,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 800D396C-800D3B58       .text createHeap__7daAgb_cFv */
 BOOL daAgb_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Agb", dRes_INDEX_AGB_BDL_AGBCURSOR_e);
-    JUT_ASSERT(VERSION_SELECT(2960, 2960, 3277, 3286), modelData != NULL);
+    JUT_ASSERT(VERSION_SELECT(2870, 2960, 3277, 3286), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
     if (mpModel == NULL) {
@@ -1804,10 +1835,16 @@ static cPhs_State daAgb_Create(fopAc_ac_c* i_this) {
         a_this->setTargetID(fpcM_ERROR_PROCESS_ID_e);
         a_this->setFollowTarget(false);
         a_this->field_0x67b = false;
+#if VERSION > VERSION_DEMO
         a_this->field_0x680 = true;
+#endif
 
         fopAcM_setStageLayer(a_this);
         a_this->eventInfo.setEventName("DEFAULT_AGB_USE");
+
+#if VERSION == VERSION_DEMO
+        l_HIO.entryHIO("ＡＧＢカーソル");
+#endif
     }
 
     return phase;
