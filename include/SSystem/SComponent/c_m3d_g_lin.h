@@ -20,12 +20,11 @@ public:
         mEnd = end;
     }
     void SetStartEnd(const Vec& start, const Vec& end) {
-        mStart = start;
-        mEnd = end;
+        mStart.set(start);
+        mEnd.set(end);
     }
     void set(const Vec& start, const Vec& end) {
-        mStart = start;
-        mEnd = end;
+        SetStartEnd(start, end);
     }
     void CalcPos(Vec* out, f32 scale) const {
         Vec tmp;

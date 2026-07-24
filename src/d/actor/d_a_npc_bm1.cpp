@@ -3285,11 +3285,11 @@ BOOL daNpc_Bm1_c::wait_6() {
 
 /* 000065B8-00006688       .text h_wait__11daNpc_Bm1_cFv */
 BOOL daNpc_Bm1_c::h_wait() {
-    if ((m8FD == 1) || (m8FD >= '\x03')) {
+    if ((m8FD == 1) || (m8FD >= 3)) {
         return TRUE;
     }
     if (m895) {
-        if (chk_talk() != '\0') {
+        if (chk_talk()) {
             setStt(5);
         }
         return TRUE;

@@ -4517,7 +4517,7 @@ bool dCamera_c::fixedFrameCamera(s32 param_1) {
         p->m39C = p->m3A8;
 
         cM3dGLin line;
-        line.set(p->m3A8, p->m378);
+        line.SetStartEnd(p->m3A8, p->m378);
         spF0 = attentionPos(mpPlayerActor);
 
         if (cM3d_Len3dSqPntAndSegLine(&line, &spF0, &spE4, &sp30)) {

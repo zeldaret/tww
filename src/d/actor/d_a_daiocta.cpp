@@ -838,36 +838,36 @@ void daDaiocta_c::setCollision() {
                 break;
         }
 
-        mCps[i].set(mSphCenters[j], mSphCenters[k]);
+        mCps[i].SetStartEnd(mSphCenters[j], mSphCenters[k]);
         mCps[i].SetR(l_HIO.mCpsRadii[i]);
         dComIfG_Ccsp()->Set(&mCps[i]);
     }
 
-    mCps[10].set(mSphCenters[36], m21AC);
+    mCps[10].SetStartEnd(mSphCenters[36], m21AC);
     mCps[10].SetR(l_HIO.m05C);
     dComIfG_Ccsp()->Set(&mCps[10]);
 
-    mCps[11].set(mSphCenters[30], m21A0);
+    mCps[11].SetStartEnd(mSphCenters[30], m21A0);
     mCps[11].SetR(l_HIO.m060);
     dComIfG_Ccsp()->Set(&mCps[11]);
 
-    mCps[12].set(mSphCenters[6], m21B8);
+    mCps[12].SetStartEnd(mSphCenters[6], m21B8);
     mCps[12].SetR(l_HIO.m064);
     dComIfG_Ccsp()->Set(&mCps[12]);
 
-    mCps[13].set(mSphCenters[10], m21DC);
+    mCps[13].SetStartEnd(mSphCenters[10], m21DC);
     mCps[13].SetR(l_HIO.m068);
     dComIfG_Ccsp()->Set(&mCps[13]);
 
-    mCps[14].set(mSphCenters[8], m21E8);
+    mCps[14].SetStartEnd(mSphCenters[8], m21E8);
     mCps[14].SetR(l_HIO.m06C);
     dComIfG_Ccsp()->Set(&mCps[14]);
 
-    mCps[15].set(mSphCenters[9], m21C4);
+    mCps[15].SetStartEnd(mSphCenters[9], m21C4);
     mCps[15].SetR(l_HIO.m070);
     dComIfG_Ccsp()->Set(&mCps[15]);
     
-    mCps[16].set(mSphCenters[7], m21D0);
+    mCps[16].SetStartEnd(mSphCenters[7], m21D0);
     mCps[16].SetR(l_HIO.m074);
     dComIfG_Ccsp()->Set(&mCps[16]);
 }
