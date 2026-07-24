@@ -103,9 +103,9 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
 /* 000002F4-00000570       .text draw__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
 void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
     /* Nonmatching */
-    f32 fVar3;
     f32 fVar2;
     f32 fVar1;
+    f32 fVar3;
     u32 particleCount = emitter->getParticleList()->getNumLinks();
     if (particleCount >= 6){
         if (dPa_control_c::isStatus(1)) {
