@@ -5,110 +5,499 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_salvage_tbox.h"
+#include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_ship.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_bg_s_func.h"
+#include "f_op/f_op_kankyo_mng.h"
+
+const char daSTBox_c::m_arcname[] = "Salvage";
+const s16 daSTBox_c::m_heapsize[3] = {0x5000, 0x5000, 0x5000};
+const s16 daSTBox_c::m_bdlidx[3] = { 4, 3, 3 };
+const f32 daSTBox_c::m_rope_max_length = 2500.0f;
+const u8 daSTBox_c::m_shadow_alpha = 0x78;
+const f32 daSTBox_c::m_shadow_depth = 2000.0f;
+const f32 daSTBox_c::m_shadow_scroll = -0.1f;
+const f32 daSTBox_c::m_shadow_scale = 4.0f;
+
+
+
+
+
 
 /* 00000078-00000128       .text getMaxWaterY__25daSTBox_shadowEcallBack_cFPQ29JGeometry8TVec3<f> */
-void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>*) {
-    /* Nonmatching */
+void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>* shipPos) {
+    if (daSea_ChkArea(shipPos->x, shipPos->z)) {
+        f32 wave = daSea_calcWave(shipPos->x, shipPos->z);
+        shipPos->y = wave + 2.0f;
+        f32 waterY = field_0x0C;
+        if (waterY > shipPos->y) {
+            shipPos->y = waterY + 2.0f;
+        }
+    }
+    else {
+        if (field_0x0C != -G_CM3D_F_INF ) {
+            shipPos->y = field_0x0C + 2.0f;
+        }
+        else {
+            shipPos->y = mpWaterFlatY;
+        }
+    }
 }
 
 /* 00000128-000002F4       .text execute__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
-void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
+    GXColor diff;
+    GXColor amb;
+    s16 yAngle;
+    u8 alpha;
+    f32 waterY;
+    s16 alpha_arr[2];
+    dKy_get_seacolor(&diff, &amb);
+    emitter->setGlobalPrmColor(diff.r, diff.g, diff.b);
+    if (field_0x4 != 0) {
+        emitter->setMaxFrame(-1);
+        emitter->stopCreateParticle();
+        mpEmitter = NULL;
+    }
+    if (emitter->mMaxFrame == 0 && field_0x4 == 0) {
+        f32 scaleY = position.y;
+        f32 scaleZ = position.z;
+        emitter->setGlobalTranslation(position.x, scaleY, scaleZ);
+        if (field_0x50 >= 0.0f) {
+            yAngle = mpAngle->y;
+        } else {
+            yAngle = (s16)(mpAngle->y + 0x8000);
+        }
+        JGeometry::TVec3<s16> rotation(0, yAngle, 0);
+        emitter->setGlobalRotation(rotation);
+        waterY = mpWaterY;
+        if (waterY < 0.0f || waterY > 2000.0f) {
+            alpha = 0;
+        } else {
+            alpha = (double)(((2000.0f - waterY) * 120.0f) / 2000.0f);
+        }
+        emitter->setGlobalAlpha(alpha);
+    } else {
+        JGeometry::TVec3<f32> trans;
+        emitter->getGlobalTranslation(trans);
+        trans.y = mpWaterFlatY;
+        emitter->setGlobalTranslation(trans);
+        alpha_arr[0] = emitter->getGlobalAlpha();
+        cLib_chaseS(alpha_arr, 0, 5);
+        alpha_arr[0] = 0xff;
+        emitter->setGlobalAlpha(alpha_arr[0]);
+    }
+    JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
+    while(link != 0) {
+        JSUPtrLink* next = link->getNext();
+
+        JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
+        JGeometry::TVec3<f32> ptclPos;
+        ptcl->getOffsetPosition(ptclPos);
+        getMaxWaterY(&ptclPos);
+        ptcl->setOffsetPosition(ptclPos);
+
+        link = next;
+    }
 }
 
 /* 000002F4-00000570       .text draw__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
-void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
+    f32 fVar2;
+    f32 fVar1;
+    f32 fVar3;
+    u32 particleCount = emitter->getParticleList()->getNumLinks();
+    if (particleCount >= 6){
+        if (dPa_control_c::isStatus(1)) {
+            GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
+        }
+        u32 steps = (u32)((f32)particleCount * 0.33333334f);
+        u32 stepsMinusOne = steps - 1;
+        fVar3 = (1.0f / (f32)stepsMinusOne);  
+        GXSetCullMode(GX_CULL_NONE);
+        Mtx mtx;
+        PSMTXIdentity(mtx);
+        mtx[1][1] = mpDepth;
+        mtx[1][3] = field_0x48 * emitter->getFrame();
+        GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
+        GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
+        JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst();
+        u32 i = 0;
+        fVar1 = 0.0f;
+        for (; i < steps; i++, fVar1 += fVar3) {
+            if (i != 0){
+                GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
+                u32 j = 0;
+                fVar2 = 0.0f;
+                for(; j < 3; j++) {
+                    JGeometry::TVec3<f32> ptclPos;
+                    link->getObject()->getGlobalPosition(ptclPos);
+                    getMaxWaterY(&ptclPos);
+                    GXPosition3f32(ptclPos.x, ptclPos.y, ptclPos.z);
+                    GXTexCoord2f32(fVar2, fVar1);
+                    GXPosition3f32(mPos[j].x, mPos[j].y, mPos[j].z);
+                    GXTexCoord2f32(fVar2, fVar1 - fVar3);
+                    mPos[j].set(ptclPos);
+                    fVar2 += 0.5f;
+                    link = link->getNext();
+                }
+                GXEnd();
+            } else {
+                for (int j = 0; j < 3; j++) {
+                    link->getObject()->getGlobalPosition(mPos[j]);
+                    link = link->getNext();
+                }
+            }
+        }
+    }
 }
 
 /* 00000570-000005D8       .text getWaterY__F4cXyz */
-void getWaterY(cXyz) {
-    /* Nonmatching */
+f32 getWaterY(cXyz shipPos) {
+    f32 waterY;
+    shipPos.y += 500.0f;
+    if (daSea_ChkArea(shipPos.x, shipPos.z)) {
+        waterY = daSea_calcWave(shipPos.x, shipPos.z);   
+    }
+    else {
+        waterY = dBgS_ObjGndChk_Wtr_Func(shipPos);
+    }
+    return waterY;
 }
 
 /* 000005D8-000006E8       .text _delete__9daSTBox_cFv */
 bool daSTBox_c::_delete() {
-    /* Nonmatching */
+    for (int i = 0; i < 3; i++) {
+        if (field_0x29C[i] != NULL) {
+            field_0x29C[i]->quitImmortalEmitter();
+            field_0x29C[i]->becomeInvalidEmitter();
+            field_0x29C[i] = NULL;
+        }
+    }
+    mRippleCallBack.end();
+    JPABaseEmitter* callbackEmitter = shadowCallback.getEmitter();
+    if (callbackEmitter != NULL) {
+        callbackEmitter->mpEmitterCallBack = NULL;
+        callbackEmitter = shadowCallback.getEmitter();
+        callbackEmitter->setMaxFrame(-1);
+        callbackEmitter->stopCreateParticle();
+    }
+    shadowCallback.setEmitter(NULL);
+    dComIfG_resDelete(&field_0x290, m_arcname);
+    u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_ADFF);
+    eventReg += 1;
+    if (field_0x331 == 2){
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_ADFF,eventReg);
+    }
+    return TRUE;
 }
 
 /* 000006E8-00000708       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    daSTBox_c* i_this = (daSTBox_c*)i_actor;
+    return i_this->CreateHeap();
 }
 
 /* 00000708-000007D4       .text CreateHeap__9daSTBox_cFv */
-void daSTBox_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSTBox_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, m_bdlidx[field_0x331]);
+    JUT_ASSERT(0x1cd, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
 }
 
 /* 000007D4-00000ADC       .text CreateInit__9daSTBox_cFv */
 void daSTBox_c::CreateInit() {
-    /* Nonmatching */
+    cXyz craneTop;
+    f32 waterY;
+    if (dComIfGp_getShipActor() != NULL && dComIfGp_getShipActor()->getCraneTop() != NULL) {
+        craneTop = *dComIfGp_getShipActor()->getCraneTop();
+        waterY = getWaterY(craneTop);
+        craneTop.y = waterY;
+    }
+    field_0x324.x = craneTop.x;
+    field_0x324.y = craneTop.y;
+    field_0x324.z = craneTop.z;
+    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -150.0f, -0.0f, -150.0f, 150.0f, 150.0f, 150.0f);
+    set_mtx();
+
+    field_0x330 = base.base.mParameters;
+    field_0x334 = 0;
+    field_0x336 = 0;
+
+    for (int i = 0; i < 2; i++) {
+        JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_LK_NURE_POTA00, &current.pos, 
+            &current.angle, NULL, 0xff, NULL, -1, 
+            NULL, NULL, NULL);
+        field_0x29C[i] = emitter;
+    }
+    if (field_0x331 == 1 || field_0x331 == 2) {
+        JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_LK_NURE_POTA00, &current.pos, 
+            &current.angle, NULL, 0xff, NULL, -1, 
+            NULL, NULL, NULL);
+        field_0x2A4 = emitter;
+
+        for (int i = 0; i < 3; i++) {
+            if (field_0x29C[i] != NULL) {
+                field_0x29C[i]->becomeImmortalEmitter();
+                
+                JGeometry::TVec3<f32> globalScale(1.5f, 1.5f, 1.0f);
+                field_0x29C[i]->setGlobalParticleScale(globalScale);
+                JGeometry::TVec3<f32> emitterScale(3.0f, 1.0f, 3.0f);
+                field_0x29C[i]->setEmitterScale(emitterScale); 
+                JGeometry::TVec3<f32> translation(0.0f, 20.0f, 0.0f);
+                field_0x29C[i]->setEmitterTranslation(translation);
+            }
+        }
+
+        if (shadowCallback.getEmitter() == NULL) {
+        JPABaseEmitter* emitter = dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SALVAGE00, &field_0x324, 
+                &current.angle, NULL, 0, &shadowCallback, -1, 
+                NULL, NULL, NULL);
+            shadowCallback.position = field_0x324;
+            shadowCallback.setField0x48(-0.1f);
+            shadowCallback.setDepth(4.0f);
+            
+        }
+    } else if (field_0x331 == 0) {
+        for (int i = 0; i < 2; i++) {
+            if (field_0x29C[i] != NULL) {
+                field_0x29C[i]->becomeImmortalEmitter();
+                
+                JGeometry::TVec3<f32> globalScale(1.5f, 1.5f, 1.0f);
+                field_0x29C[i]->setGlobalParticleScale(globalScale);
+                JGeometry::TVec3<f32> emitterScale(3.5f, 1.0f, 3.5f);
+                field_0x29C[i]->setEmitterScale(emitterScale); 
+                JGeometry::TVec3<f32> translation(0.0f, -20.0f, 0.0f);
+                field_0x29C[i]->setEmitterTranslation(translation);
+            }
+        }
+    }
+    field_0x338 = -1;
 }
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
 cPhs_State daSTBox_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daSTBox_c);
+    field_0x331 = base.base.mParameters >> 8 & 0xf;
+    cPhs_State phs_state = dComIfG_resLoad(&field_0x290, m_arcname);
+    if (phs_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[field_0x331])) {
+            return cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+    return phs_state;
 }
 
 /* 00000BFC-00000C7C       .text set_mtx__9daSTBox_cFv */
 void daSTBox_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
+
+typedef void (daSTBox_c::* eventInitFunc)(int);
+static eventInitFunc event_init_tbl[] = {
+    &daSTBox_c::initWait,
+    &daSTBox_c::initWait02,
+    &daSTBox_c::initWaitGetItem,
+    &daSTBox_c::initWaitDummy,
+    &daSTBox_c::initDrop,
+};
+
+typedef BOOL (daSTBox_c::* eventActionFunc)(int);
+static eventActionFunc event_action_tbl[] = {
+    &daSTBox_c::actWait,
+    &daSTBox_c::actWait02,
+    &daSTBox_c::actWaitGetItem,
+    &daSTBox_c::actWaitDummy,
+    &daSTBox_c::actDrop,
+};
 
 /* 00000C7C-00000EB8       .text _execute__9daSTBox_cFv */
 bool daSTBox_c::_execute() {
-    /* Nonmatching */
+    static char* action_table[] = {"WAIT", "WAIT02", "WAIT_GETITEM", "WAIT_DUMMY", "DROP"};
+    int staffIdx = dComIfGp_evmng_getMyStaffId("STBox");
+    daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+    f32 waterY = 0.0;
+    cXyz m1020Pos;
+    int actIdx;
+    if (ship != NULL) {
+        m1020Pos = ship->m1020;
+        waterY = getWaterY(m1020Pos);
+    }
+    if ((dComIfGp_event_runCheck()) 
+        && !eventInfo.checkCommandTalk()
+        && staffIdx != -1) {
+        actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, 5, 0, 0);
+        if(actIdx == -1){
+            dComIfGp_evmng_cutEnd(staffIdx);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                (this->*event_init_tbl[actIdx])(staffIdx);
+            }
+            if ((this->*event_action_tbl[actIdx])(staffIdx)) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            }
+        }
+    }
+
+    for (int i = 0; i < 3; i++) {
+        JPABaseEmitter* emitter = field_0x29C[i];
+        if (emitter != NULL) {
+            emitter->setGlobalTranslation(current.pos);
+        }
+    }
+
+    if (current.pos.y < waterY) {
+        shadowCallback.setWaterFlatY(waterY + 2.0f);
+        shadowCallback.field_0x0C = waterY + 2.0f; 
+        shadowCallback.setWaterY(waterY - current.pos.y);
+        shadowCallback.position = m1020Pos;
+        
+    } else {
+        JPABaseEmitter* emitter = shadowCallback.getEmitter();
+        if (emitter != NULL) {
+            emitter->setEmitterCallBackPtr(NULL);
+            emitter = shadowCallback.getEmitter();
+            emitter->setMaxFrame(-1);
+            emitter->stopCreateParticle();
+        }
+        shadowCallback.setEmitter(NULL);
+    }
+    set_mtx();
+    return TRUE;
 }
 
 /* 00000EB8-00000EBC       .text initWait__9daSTBox_cFi */
 void daSTBox_c::initWait(int) {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000EBC-00000EC8       .text initWait02__9daSTBox_cFi */
 void daSTBox_c::initWait02(int) {
-    /* Nonmatching */
+    field_0x332 = 20;
 }
 
 /* 00000EC8-00000F50       .text initWaitGetItem__9daSTBox_cFi */
 void daSTBox_c::initWaitGetItem(int) {
-    /* Nonmatching */
+    fopDwTg_DrawQTo(&draw_tag);
+    for(int i = 0; i < 3; i++) {
+        if (field_0x29C[i] != NULL) {
+            field_0x29C[i]->quitImmortalEmitter();
+            field_0x29C[i]->becomeInvalidEmitter();
+            field_0x29C[i] = NULL;
+        }
+    }
+    mRippleCallBack.remove();
 }
 
 /* 00000F50-00000F54       .text initWaitDummy__9daSTBox_cFi */
 void daSTBox_c::initWaitDummy(int) {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000F54-00000F64       .text initDrop__9daSTBox_cFi */
 void daSTBox_c::initDrop(int) {
-    /* Nonmatching */
+    gravity = -4.0f;
 }
 
+const f32 crane_offset[] = {80.0f, 125.0f, 125.0f};
+
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
-void daSTBox_c::actWait(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWait(int) {
+    daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+    if (ship == NULL) {
+        JUT_ASSERT(0x32b, FALSE);
+    }
+    cXyz* craneTop = ship->getCraneTop();
+    if (craneTop == NULL) {
+        JUT_ASSERT(0x332, FALSE);
+    }
+    cXyz craneTopPos = *craneTop;
+    craneTopPos.y += 5000.0f;
+    f32 waterY = getWaterY(craneTopPos); 
+    current.angle.y = ship->shape_angle.y;
+    cXyz craneTopPos2 = *craneTop;
+    craneTopPos2.y -= crane_offset[field_0x331];
+    current.pos = craneTopPos2;
+    attention_info.position = current.pos;
+    if ((field_0x331 == 1 || field_0x331 == 2) 
+        && current.pos.y > waterY && (field_0x336 == 0)) {
+        mDoAud_subBgmStart(JA_BGM_BGN_GET_BOX);
+        field_0x336 = 1;
+    }
+    if (field_0x335 == 0) {
+        position = current.pos;
+        position.y += 2500.0f;
+        position.y = dBgS_GetWaterHeight(position);
+        if (current.pos.y >position.y - 10.0f) {
+            dComIfGp_particle_setShipTail(0x35c, &position, 
+                NULL, &scale, 0xff, 
+                &mRippleCallBack, -1, 
+                NULL, NULL, NULL);
+            mRippleCallBack.setRate(12.0f);
+            field_0x335 = 1;
+        }
+    }
+    if ((field_0x331 == 1 || field_0x331 == 2) && ((field_0x338) == 0xffffffff)) {
+        field_0x338 = fopAcM_createItemForTrBoxDemo(&current.pos,
+            field_0x330, 0xffffffff, 
+            dStage_roomControl_c::mStayNo, 0, 0);
+        if (field_0x338 != 0xffffffff) {
+            g_dComIfG_gameInfo.play.mEvtCtrl.mPtItem = field_0x338;
+        }
+    }
+    return FALSE;
 }
 
 /* 00001218-00001344       .text actDrop__9daSTBox_cFi */
-void daSTBox_c::actDrop(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actDrop(int) {
+    fopAcM_posMoveF(this, NULL);
+    if (current.pos.y < getWaterY(current.pos) - 50.0f) {
+        return TRUE;
+    }
+    if(current.pos.y < getWaterY(current.pos)) {
+        if(field_0x334 == 0) {
+            s8 reverb = dComIfGp_getReverb(current.roomNo);
+            mDoAud_seStart(JA_SE_OBJ_FALL_WATER_M, &eyePos, 0, reverb);
+            fopKyM_createWpillar(&current.pos, 0.8, 1.0, 0);
+            field_0x334 = 1;
+        }
+        mRippleCallBack.end();
+    }
+    return FALSE;
 }
 
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
-void daSTBox_c::actWait02(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWait02(int) {
+    cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
+    if (pos != NULL) {
+        cXyz cranePos = *pos;
+        f32 offset = crane_offset[field_0x331];
+        cranePos.y -= offset;
+        current.pos = cranePos;
+    }
+    return FALSE;
 }
 
 /* 000013AC-000013B4       .text actWaitGetItem__9daSTBox_cFi */
-void daSTBox_c::actWaitGetItem(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWaitGetItem(int) {
+    return TRUE;
 }
 
 /* 000013B4-000013BC       .text actWaitDummy__9daSTBox_cFi */
-void daSTBox_c::actWaitDummy(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWaitDummy(int) {
+    return TRUE;
 }
 
 /* 000013BC-000013DC       .text daSTBox_Create__FPv */
@@ -121,9 +510,16 @@ static BOOL daSTBox_Delete(void* i_this) {
     return ((daSTBox_c*)i_this)->_delete();
 }
 
+bool daSTBox_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    return 1;
+}
+
 /* 00001400-0000146C       .text daSTBox_Draw__FPv */
-static BOOL daSTBox_Draw(void*) {
-    /* Nonmatching */
+static BOOL daSTBox_Draw(void* ptr) {
+    return ((daSTBox_c*)ptr)->_draw();
 }
 
 /* 0000146C-00001490       .text daSTBox_Execute__FPv */

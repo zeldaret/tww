@@ -7,25 +7,42 @@
 class daSTBox_shadowEcallBack_c : public dPa_levelEcallBack {
 public:
     void deleteCallBack() {}
-    void getEmitter() {}
-    void setDepth(float) {}
-    void setIndirectTexData(float, float) {}
-    void setPos(cXyz&) {}
-    void setWaterFlatY(float) {}
-    void setWaterY(float) {}
-    void setup(JPABaseEmitter*, const cXyz*, const csXyz*, signed char) {}
+    JPABaseEmitter* getEmitter() { return mpEmitter; }
+    void setEmitter(JPABaseEmitter* emitter) { mpEmitter = emitter; }
+    void setDepth(float depth) { mpDepth = depth; }
+    void setWaterFlatY(float waterFlatY) { mpWaterFlatY = waterFlatY; }
+    void setWaterY(float waterY) { mpWaterY = waterY; }
+    void setField0x48(float field) { field_0x48 = field; }
+    void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz* angle, signed char) { 
+        field_0x4 = 0;
+        mpAngle = const_cast<csXyz*>(angle);
+        mpEmitter = emitter; 
+    }
 
-    void getMaxWaterY(JGeometry::TVec3<float>*);
+    void getMaxWaterY(JGeometry::TVec3<f32>*);
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
-};
+
+    /* 0x04 */  s16 field_0x4;
+    /* 0x06 */  s16 field_0x6;
+    /* 0x08 */  f32 mpWaterFlatY;
+    /* 0x0C */  f32 field_0x0C;
+    /* 0x10 */  f32 mpWaterY;
+    /* 0x14 */  JGeometry::TVec3<f32> mPos[3];
+    /* 0x38 */  cXyz position;
+    /* 0x44 */  csXyz* mpAngle;
+    /* 0x48 */  f32 field_0x48;
+    /* 0x4C */  f32 mpDepth;
+    /* 0x50 */  f32 field_0x50;
+    /* 0x54 */  JPABaseEmitter* mpEmitter;
+};  // Size: 0x58
 
 class daSTBox_c : public fopAc_ac_c {
 public:
     inline bool _draw();
 
     bool _delete();
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     cPhs_State _create();
     void set_mtx();
@@ -35,14 +52,38 @@ public:
     void initWaitGetItem(int);
     void initWaitDummy(int);
     void initDrop(int);
-    void actWait(int);
-    void actDrop(int);
-    void actWait02(int);
-    void actWaitGetItem(int);
-    void actWaitDummy(int);
+    BOOL actWait(int);
+    BOOL actDrop(int);
+    BOOL actWait02(int);
+    BOOL actWaitGetItem(int);
+    BOOL actWaitDummy(int);
 
+    static const s16 m_heapsize[3];
+    static const char m_arcname[];
+    static const f32 m_rope_max_length;
+    static const s16 m_bdlidx[3];
+    static const u8 m_shadow_alpha;
+    static const f32 m_shadow_depth;
+    static const f32 m_shadow_scroll;
+    static const f32 m_shadow_scale;
+    
 public:
-    /* Place member variables here */
-};
-
+    /* 0x290 */ request_of_phase_process_class field_0x290;
+    /* 0x298 */ J3DModel* mpModel;
+    /* 0x29C */ JPABaseEmitter* field_0x29C[2];
+    /* 0x2A4 */ JPABaseEmitter* field_0x2A4;
+    /* 0x2A8 */ u8 field_0x2A8[0x2AC - 0x2A8];
+    /* 0x2AC */ dPa_rippleEcallBack mRippleCallBack;
+    /* 0x2C0 */ daSTBox_shadowEcallBack_c shadowCallback;
+    /* 0x318 */ cXyz position;
+    /* 0x324 */ cXyz field_0x324;
+    /* 0x330 */ u8 field_0x330;
+    /* 0x331 */ u8 field_0x331;
+    /* 0x332 */ s16 field_0x332;
+    /* 0x334 */ u8 field_0x334;
+    /* 0x335 */ u8 field_0x335;
+    /* 0x336 */ u8 field_0x336;
+    /* 0x337 */ u8 field_0x337[0x338 - 0x337];
+    /* 0x338 */ s32 field_0x338;
+};  // Size: 0x33C
 #endif /* D_A_SALVAGE_TBOX_H */

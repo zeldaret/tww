@@ -1,6 +1,7 @@
 #ifndef D_COM_D_COM_INF_GAME_H
 #define D_COM_D_COM_INF_GAME_H
 
+#include "d/actor/d_a_ship.h"
 #include "d/d_attention.h"
 #include "d/d_bg_s.h"
 #include "d/d_cc_s.h"
