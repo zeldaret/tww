@@ -224,7 +224,6 @@ void daMgBoard_c::MiniGameInit() {
 
 /* 00000AE8-00000DEC       .text set_mtx__11daMgBoard_cFv */
 void daMgBoard_c::set_mtx() {
-    /* Nonmatching */
     J3DModel* board_model = mpBoardModel;
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
@@ -263,9 +262,9 @@ void daMgBoard_c::set_mtx() {
         }
     }
 
-    u8 num_alive_ships = mSeaFightGame.mAliveShipNum;
+    u8 num_alive_ships = mSeaFightGame.getRest();
     for (int i = 0; i < num_alive_ships; ++i) {
-        switch (mSeaFightGame.mShips[i].mMaxHP) {
+        switch (mSeaFightGame.getMaxHP(i)) {
             case 2:
                 model = mpShip2Model[0];
                 break;
@@ -303,9 +302,18 @@ void daMgBoard_c::set_mtx() {
 /* 00000E28-00000FD8       .text _execute__11daMgBoard_cFv */
 bool daMgBoard_c::_execute() {
     /* Nonmatching */
-    u8 event_reg = dComIfGs_getEventReg(0xBEFF);
-    // debug map implies this should be a checkUsedBullet inline but that doesn't make sense
-    u8 score = mSeaFightGame.mScore;
+
+#if VERSION == VERSION_DEMO
+    u8 score;
+    int event_reg;
+#else
+    u8 event_reg;
+    u8 score;
+#endif
+
+    event_reg = dComIfGs_getEventReg(0xBEFF);
+    score = mSeaFightGame.mScore;
+
     mpNumber0->set(event_reg);
     mpNumber1->set(score);
     set_2dposition();
@@ -352,7 +360,7 @@ bool daMgBoard_c::_execute() {
 bool daMgBoard_c::execGameMain() {
     MinigameMain();
     bool is_end_game = false;
-    if (mSeaFightGame.mAliveShipNum == 0 || mSeaFightGame.mBulletNum == 0) {
+    if (mSeaFightGame.getRest() == 0 || mSeaFightGame.checkRestBullet() == 0) {
         is_end_game = true;
     }
 
@@ -377,11 +385,11 @@ BOOL daMgBoard_c::MinigameMain() {
     }
 
     CursorMove();
-    s32 bullet_num = mSeaFightGame.mBulletNum;
-    s32 num_alive = mSeaFightGame.mAliveShipNum;
+    s32 bullet_num = mSeaFightGame.checkRestBullet();
+    s32 num_alive = mSeaFightGame.getRest();
     if (g_mDoCPd_cpadInfo[0].mButtonTrig.a && bullet_num > 0) {
         int attack_result = mSeaFightGame.attack(mBoardPosX, mBoardPosY);
-        s32 alive = mSeaFightGame.mAliveShipNum;
+        s32 alive = mSeaFightGame.getRest();
         int dead = mSeaFightGame.mDeadShipNum;
         s32 score = mSeaFightGame.mScore;
         mLastFirePosX = mBoardPosX;
@@ -455,9 +463,10 @@ static cPhs_State daMgBoard_Create(void* i_this) {
 }
 
 /* 000014C8-00001518       .text daMgBoard_Delete__FPv */
-static BOOL daMgBoard_Delete(daMgBoard_c* i_this) {
-    dComIfG_resDelete(&i_this->mPhase, daMgBoard_c::m_arcname);
-    mDoAud_seDeleteObject(&i_this->mNPCPos);
+static BOOL daMgBoard_Delete(void* i_this) {
+    daMgBoard_c* actor = (daMgBoard_c*)i_this;
+    dComIfG_resDelete(&actor->mPhase, daMgBoard_c::m_arcname);
+    mDoAud_seDeleteObject(&actor->mNPCPos);
     return TRUE;
 }
 
@@ -495,6 +504,7 @@ bool daMgBoard_c::_draw() {
 
         for (int i = 0; i < 3; ++i) {
             u8 ship_max_health = mSeaFightGame.getMaxHP(i);
+            u8 ship_cur_health = mSeaFightGame.getCurHP(i); // unused but inline is in the debug maps
             u8 num_bullet = mSeaFightGame.checkRestBullet();
             u8 num_alive_ships = mSeaFightGame.getRest();
             bool is_game_finished = 0;
