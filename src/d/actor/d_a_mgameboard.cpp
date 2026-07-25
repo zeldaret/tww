@@ -7,12 +7,23 @@
 #include "d/actor/d_a_mgameboard.h"
 #include "d/d_2dnumber.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "res/Object/Kaisen.h"
+
 #if VERSION == VERSION_DEMO
 #include "JSystem/JUtility/JUTReport.h"
 #endif
 
+#if VERSION == VERSION_DEMO
+#include "res/Object/Kaisen.h"
+#elif VERSION == VERSION_JPN
+// # include
+#elif VERSION == VERSION_USA
+#include "res/Object/Kaisen_e.h"
+#elif VERSION == VERSION_PAL
+// #include
+#endif
+
 char daMgBoard_c::m_arcname[9] = {};
+
 u8 daMgBoard_c::m_bullet_num = 24;
 
 const cXyz daMgBoard_c::m_cur_table[8][8] = {
@@ -159,24 +170,27 @@ cPhs_State daMgBoard_c::_create() {
 
 /* 0000010C-000007BC       .text CreateHeap__11daMgBoard_cFv */
 BOOL daMgBoard_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AKBOD_e);
-    JUT_ASSERT(0x133, modelData != NULL);
+    J3DModelData* modelData = (J3DModelData*)
+        dComIfG_getObjectRes(m_arcname, VERSION_SELECT(dRes_INDEX_KAISEN_BDL_AKBOD_e, 0, dRes_INDEX_KAISEN_E_BDL_AKBOD_e, 0)); // TODO: JPN and PAL
+    JUT_ASSERT(DEMO_SELECT(0x126, 0x133), modelData != NULL);
 
     mpBoardModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpBoardModel == NULL) {
         return FALSE;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AKCSR_e);
-    JUT_ASSERT(0x143, modelData != NULL);
+    modelData = (J3DModelData*)
+        dComIfG_getObjectRes(m_arcname, VERSION_SELECT(dRes_INDEX_KAISEN_BDL_AKCSR_e, 0, dRes_INDEX_KAISEN_E_BDL_AKCSR_e, 0)); // TODO: JPN and PAL
+    JUT_ASSERT(DEMO_SELECT(0x136, 0x143), modelData != NULL);
 
     mpCursorModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpCursorModel == NULL) {
         return FALSE;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AKATR_e);
-    JUT_ASSERT(0x153, modelData != NULL);
+    modelData = (J3DModelData*)
+        dComIfG_getObjectRes(m_arcname, VERSION_SELECT(dRes_INDEX_KAISEN_BDL_AKATR_e, 0, dRes_INDEX_KAISEN_E_BDL_AKATR_e, 0)); // TODO: JPN and PAL
+    JUT_ASSERT(DEMO_SELECT(0x146, 0x153), modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpHitModel); ++i) {
         mpHitModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -185,8 +199,9 @@ BOOL daMgBoard_c::CreateHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AKHZR_e);
-    JUT_ASSERT(0x165, modelData != NULL);
+    modelData = (J3DModelData*)
+        dComIfG_getObjectRes(m_arcname, VERSION_SELECT(dRes_INDEX_KAISEN_BDL_AKHZR_e, 0, dRes_INDEX_KAISEN_E_BDL_AKHZR_e, 0)); // TODO: JPN and PAL
+    JUT_ASSERT(DEMO_SELECT(0x158, 0x165), modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpMissModel); ++i) {
         mpMissModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -195,8 +210,9 @@ BOOL daMgBoard_c::CreateHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AK2SH_e);
-    JUT_ASSERT(0x177, modelData != NULL);
+    modelData = (J3DModelData*)
+        dComIfG_getObjectRes(m_arcname, VERSION_SELECT(dRes_INDEX_KAISEN_BDL_AK2SH_e, 0, dRes_INDEX_KAISEN_E_BDL_AK2SH_e, 0)); // TODO: JPN and PAL
+    JUT_ASSERT(DEMO_SELECT(0x16A, 0x177), modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpShip2Model); ++i) {
         mpShip2Model[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -205,8 +221,9 @@ BOOL daMgBoard_c::CreateHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AK3SH_e);
-    JUT_ASSERT(0x189, modelData != NULL);
+    modelData = (J3DModelData*)
+        dComIfG_getObjectRes(m_arcname, VERSION_SELECT(dRes_INDEX_KAISEN_BDL_AK3SH_e, 0, dRes_INDEX_KAISEN_E_BDL_AK3SH_e, 0)); // TODO: JPN and PAL
+    JUT_ASSERT(DEMO_SELECT(0x17C, 0x189), modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpShip3Model); ++i) {
         mpShip3Model[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -215,8 +232,9 @@ BOOL daMgBoard_c::CreateHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AK4SH_e);
-    JUT_ASSERT(0x19b, modelData != NULL);
+    modelData = (J3DModelData*)
+        dComIfG_getObjectRes(m_arcname, VERSION_SELECT(dRes_INDEX_KAISEN_BDL_AK4SH_e, 0, dRes_INDEX_KAISEN_E_BDL_AK4SH_e, 0)); // TODO: JPN and PAL
+    JUT_ASSERT(DEMO_SELECT(0x18E, 0x19B), modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpShip4Model); ++i) {
         mpShip4Model[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -244,8 +262,14 @@ BOOL daMgBoard_c::CreateHeap() {
         }
 
         mpSquidIcon[i]->init(
-            (ResTIMG*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BTI_GAME_PAPER_e),
-            (ResTIMG*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BTI_GAME_SHIP_NODAMAGE_e)
+            (ResTIMG*)dComIfG_getObjectRes(
+                m_arcname,
+                VERSION_SELECT(dRes_INDEX_KAISEN_BTI_GAME_SHIP_NODAMAGE_e, 0, dRes_INDEX_KAISEN_E_BTI_KAISEN_IKA_01_e, 0)
+            ), // TODO: JPN and PAL
+            (ResTIMG*)dComIfG_getObjectRes(
+                m_arcname,
+                VERSION_SELECT(dRes_INDEX_KAISEN_BTI_GAME_HUNE_DAMAGE_e, 0, dRes_INDEX_KAISEN_E_BTI_KAISEN_IKA_02_e, 0)
+            ) // TODO: JPN and PAL
         );
     }
 
@@ -259,7 +283,16 @@ BOOL daMgBoard_c::CreateHeap() {
             if (!mpBombIcons[idx])
                 return FALSE;
 
-            mpBombIcons[idx]->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xF), (ResTIMG*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BTI_GAME_BOMB_02_e));
+            mpBombIcons[idx]->init(
+                (ResTIMG*)dComIfG_getObjectRes(
+                    m_arcname,
+                    VERSION_SELECT(dRes_INDEX_KAISEN_BTI_GAME_BOMB_01_e, 0, dRes_INDEX_KAISEN_E_BTI_GAME_BOMB_01_e, 0)
+                ), // TODO: JPN and PAL
+                (ResTIMG*)dComIfG_getObjectRes(
+                    m_arcname,
+                    VERSION_SELECT(dRes_INDEX_KAISEN_BTI_GAME_BOMB_02_e, 0, dRes_INDEX_KAISEN_E_BTI_GAME_BOMB_02_e, 0)
+                ) // TODO: JPN and PAL
+            );
         }
     }
 
@@ -268,7 +301,14 @@ BOOL daMgBoard_c::CreateHeap() {
         return FALSE;
     }
 
-    mpMinigameDList->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xE), (ResTIMG*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BTI_GAME_HUNE_DAMAGE_e));
+    mpMinigameDList->init(
+        (ResTIMG*)dComIfG_getObjectRes(
+            m_arcname,
+            VERSION_SELECT(dRes_INDEX_KAISEN_BTI_GAME_BEST_RECORD_e, 0, dRes_INDEX_KAISEN_E_BTI_GAME_BEST_RECORD_e, 0)
+        ), // TODO: JPN and PAL
+        (ResTIMG*)
+            dComIfG_getObjectRes(m_arcname, VERSION_SELECT(dRes_INDEX_KAISEN_BTI_GAME_PAPER_e, 0, dRes_INDEX_KAISEN_E_BTI_GAME_PAPER_e, 0)) // TODO: JPN and PAL
+    );
     set_2dposition();
 
     return TRUE;
