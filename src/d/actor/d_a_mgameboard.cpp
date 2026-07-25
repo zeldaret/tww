@@ -7,13 +7,136 @@
 #include "d/actor/d_a_mgameboard.h"
 #include "d/d_2dnumber.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "res/Object/Kaisen.h"
 #if VERSION == VERSION_DEMO
 #include "JSystem/JUtility/JUTReport.h"
 #endif
 
 char daMgBoard_c::m_arcname[9] = {};
 u8 daMgBoard_c::m_bullet_num = 24;
-cXyz daMgBoard_c::m_cur_table[8][8] = {};
+
+const cXyz daMgBoard_c::m_cur_table[8][8] = {
+    {
+        cXyz(-87.5f, -87.5f, 0.0f),
+        cXyz(-62.5f, -87.5f, 0.0f),
+        cXyz(-37.5f, -87.5f, 0.0f),
+        cXyz(-12.5f, -87.5f, 0.0f),
+        cXyz(12.5f, -87.5f, 0.0f),
+        cXyz(37.5f, -87.5f, 0.0f),
+        cXyz(62.5f, -87.5f, 0.0f),
+        cXyz(87.5f, -87.5f, 0.0f),
+    },
+    {
+        cXyz(-87.5f, -62.5f, 0.0f),
+        cXyz(-62.5f, -62.5f, 0.0f),
+        cXyz(-37.5f, -62.5f, 0.0f),
+        cXyz(-12.5f, -62.5f, 0.0f),
+        cXyz(12.5f, -62.5f, 0.0f),
+        cXyz(37.5f, -62.5f, 0.0f),
+        cXyz(62.5f, -62.5f, 0.0f),
+        cXyz(87.5f, -62.5f, 0.0f),
+    },
+    {
+        cXyz(-87.5f, -37.5f, 0.0f),
+        cXyz(-62.5f, -37.5f, 0.0f),
+        cXyz(-37.5f, -37.5f, 0.0f),
+        cXyz(-12.5f, -37.5f, 0.0f),
+        cXyz(12.5f, -37.5f, 0.0f),
+        cXyz(37.5f, -37.5f, 0.0f),
+        cXyz(62.5f, -37.5f, 0.0f),
+        cXyz(87.5f, -37.5f, 0.0f),
+    },
+    {
+        cXyz(-87.5f, -12.5f, 0.0f),
+        cXyz(-62.5f, -12.5f, 0.0f),
+        cXyz(-37.5f, -12.5f, 0.0f),
+        cXyz(-12.5f, -12.5f, 0.0f),
+        cXyz(12.5f, -12.5f, 0.0f),
+        cXyz(37.5f, -12.5f, 0.0f),
+        cXyz(62.5f, -12.5f, 0.0f),
+        cXyz(87.5f, -12.5f, 0.0f),
+    },
+    {
+        cXyz(-87.5f, 12.5f, 0.0f),
+        cXyz(-62.5f, 12.5f, 0.0f),
+        cXyz(-37.5f, 12.5f, 0.0f),
+        cXyz(-12.5f, 12.5f, 0.0f),
+        cXyz(12.5f, 12.5f, 0.0f),
+        cXyz(37.5f, 12.5f, 0.0f),
+        cXyz(62.5f, 12.5f, 0.0f),
+        cXyz(87.5f, 12.5f, 0.0f),
+    },
+    {
+        cXyz(-87.5f, 37.5f, 0.0f),
+        cXyz(-62.5f, 37.5f, 0.0f),
+        cXyz(-37.5f, 37.5f, 0.0f),
+        cXyz(-12.5f, 37.5f, 0.0f),
+        cXyz(12.5f, 37.5f, 0.0f),
+        cXyz(37.5f, 37.5f, 0.0f),
+        cXyz(62.5f, 37.5f, 0.0f),
+        cXyz(87.5f, 37.5f, 0.0f),
+    },
+    {
+        cXyz(-87.5f, 62.5f, 0.0f),
+        cXyz(-62.5f, 62.5f, 0.0f),
+        cXyz(-37.5f, 62.5f, 0.0f),
+        cXyz(-12.5f, 62.5f, 0.0f),
+        cXyz(12.5f, 62.5f, 0.0f),
+        cXyz(37.5f, 62.5f, 0.0f),
+        cXyz(62.5f, 62.5f, 0.0f),
+        cXyz(87.5f, 62.5f, 0.0f),
+    },
+    {
+        cXyz(-87.5f, 87.5f, 0.0f),
+        cXyz(-62.5f, 87.5f, 0.0f),
+        cXyz(-37.5f, 87.5f, 0.0f),
+        cXyz(-12.5f, 87.5f, 0.0f),
+        cXyz(12.5f, 87.5f, 0.0f),
+        cXyz(37.5f, 87.5f, 0.0f),
+        cXyz(62.5f, 87.5f, 0.0f),
+        cXyz(87.5f, 87.5f, 0.0f),
+    },
+};
+
+const cXyz daMgBoard_c::m_sink_table[3] = {
+    cXyz(162.5f, 87.5f, 0.0f),
+    cXyz(162.5f, 62.5f, 0.0f),
+    cXyz(162.5f, 37.5f, 0.0f),
+
+};
+
+const cXyz daMgBoard_c::m_bullet_table[3][8] = {
+    {
+        cXyz(-150.0f, 90.0f, 0.0f),
+        cXyz(-150.0f, 70.0f, 0.0f),
+        cXyz(-150.0f, 50.0f, 0.0f),
+        cXyz(-150.0f, 30.0f, 0.0f),
+        cXyz(-150.0f, 10.0f, 0.0f),
+        cXyz(-150.0f, -10.0f, 0.0f),
+        cXyz(-150.0f, -30.0f, 0.0f),
+        cXyz(-150.0f, -50.0f, 0.0f),
+    },
+    {
+        cXyz(-170.0f, 90.0f, 0.0f),
+        cXyz(-170.0f, 70.0f, 0.0f),
+        cXyz(-170.0f, 50.0f, 0.0f),
+        cXyz(-170.0f, 30.0f, 0.0f),
+        cXyz(-170.0f, 10.0f, 0.0f),
+        cXyz(-170.0f, -10.0f, 0.0f),
+        cXyz(-170.0f, -30.0f, 0.0f),
+        cXyz(-170.0f, -50.0f, 0.0f),
+    },
+    {
+        cXyz(-190.0f, 90.0f, 0.0f),
+        cXyz(-190.0f, 70.0f, 0.0f),
+        cXyz(-190.0f, 50.0f, 0.0f),
+        cXyz(-190.0f, 30.0f, 0.0f),
+        cXyz(-190.0f, 10.0f, 0.0f),
+        cXyz(-190.0f, -10.0f, 0.0f),
+        cXyz(-190.0f, -30.0f, 0.0f),
+        cXyz(-190.0f, -50.0f, 0.0f),
+    },
+};
 
 /* 000000EC-0000010C       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -36,7 +159,7 @@ cPhs_State daMgBoard_c::_create() {
 
 /* 0000010C-000007BC       .text CreateHeap__11daMgBoard_cFv */
 BOOL daMgBoard_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 8);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AKBOD_e);
     JUT_ASSERT(0x133, modelData != NULL);
 
     mpBoardModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -44,7 +167,7 @@ BOOL daMgBoard_c::CreateHeap() {
         return FALSE;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 9);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AKCSR_e);
     JUT_ASSERT(0x143, modelData != NULL);
 
     mpCursorModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -52,7 +175,7 @@ BOOL daMgBoard_c::CreateHeap() {
         return FALSE;
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 7);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AKATR_e);
     JUT_ASSERT(0x153, modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpHitModel); ++i) {
@@ -62,7 +185,7 @@ BOOL daMgBoard_c::CreateHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 10);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AKHZR_e);
     JUT_ASSERT(0x165, modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpMissModel); ++i) {
@@ -72,7 +195,7 @@ BOOL daMgBoard_c::CreateHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 4);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AK2SH_e);
     JUT_ASSERT(0x177, modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpShip2Model); ++i) {
@@ -82,7 +205,7 @@ BOOL daMgBoard_c::CreateHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 5);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AK3SH_e);
     JUT_ASSERT(0x189, modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpShip3Model); ++i) {
@@ -92,7 +215,7 @@ BOOL daMgBoard_c::CreateHeap() {
         }
     }
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, 6);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BDL_AK4SH_e);
     JUT_ASSERT(0x19b, modelData != NULL);
 
     for (int i = 0; i < (int)ARRAY_SIZE(mpShip4Model); ++i) {
@@ -120,7 +243,10 @@ BOOL daMgBoard_c::CreateHeap() {
             return FALSE;
         }
 
-        mpSquidIcon[i]->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x12), (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x13));
+        mpSquidIcon[i]->init(
+            (ResTIMG*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BTI_GAME_PAPER_e),
+            (ResTIMG*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BTI_GAME_SHIP_NODAMAGE_e)
+        );
     }
 
     const int rows = 3;
@@ -133,7 +259,7 @@ BOOL daMgBoard_c::CreateHeap() {
             if (!mpBombIcons[idx])
                 return FALSE;
 
-            mpBombIcons[idx]->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xF), (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x10));
+            mpBombIcons[idx]->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xF), (ResTIMG*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BTI_GAME_BOMB_02_e));
         }
     }
 
@@ -142,7 +268,7 @@ BOOL daMgBoard_c::CreateHeap() {
         return FALSE;
     }
 
-    mpMinigameDList->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xE), (ResTIMG*)dComIfG_getObjectRes(m_arcname, 0x11));
+    mpMinigameDList->init((ResTIMG*)dComIfG_getObjectRes(m_arcname, 0xE), (ResTIMG*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_KAISEN_BTI_GAME_HUNE_DAMAGE_e));
     set_2dposition();
 
     return TRUE;
