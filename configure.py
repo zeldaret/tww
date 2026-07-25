@@ -1797,7 +1797,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_pw"),
     ActorRel(NonMatching, "d_a_pz"),
     ActorRel(Matching,  "d_a_sail"),
-    ActorRel(Matching, "d_a_salvage_tbox"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_salvage_tbox"),
     ActorRel(Matching,    "d_a_scene_change"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter2"),
