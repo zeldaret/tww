@@ -18,6 +18,7 @@ public:
         mpAngle = const_cast<csXyz*>(angle);
         mpEmitter = emitter; 
     }
+    ~daSTBox_shadowEcallBack_c() {}
 
     void getMaxWaterY(JGeometry::TVec3<f32>*);
     void execute(JPABaseEmitter*);
