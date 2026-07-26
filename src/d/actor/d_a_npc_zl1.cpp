@@ -389,8 +389,8 @@ bool daNpc_Zl1_c::init_ZL1_7() {
 bool daNpc_Zl1_c::createInit() {
     bool ret;
     int temp = 0xff;
-    for(int i = 0; i < 4; i++) {
-        mEventIdx[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i], 0xff);
+    for(int i = 0; i < ARRAY_SSIZE(l_evn_tbl); i++) {
+        mEventIdx[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i]);
     }
     mEventCut.setActorInfo2("Zl1", this);
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
