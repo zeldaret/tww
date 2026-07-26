@@ -83,13 +83,13 @@ void dDlst_2DSCP_c::outFontDraw() {
         int pos_x = mpScp->mMesgDataProc.getIconPosX(i);
         int pos_y = mpScp->mMesgDataProc.getIconPosY(i);
         u32 color = mpScp->mMesgDataProc.getIconColor(i);
-        int line = mpScp->mpTextBox->mLineSpace / 2;
+        int line = mpScp->mpTextBox->getLineSpace() / 2;
 
         if (icon_no != 0xFF) {
-            int x = pos_x + mpScp->mpTextBox->mBounds.i.x;
+            int x = pos_x + mpScp->mpTextBox->getBounds().i.x;
             // for some reason y computation only match if split in two
             int y = line * (VERSION_SELECT(1, 1, 2, 2) - mpScp->mLineCount + pos_y * 2);
-            int y2 = y + mpScp->mpTextBox->mBounds.i.y;
+            int y2 = y + mpScp->mpTextBox->getBounds().i.y;
             fopMsgM_outFontDraw(sbutton_icon[i], sbutton_kage[i], x, y2, color, &sbuttonTimer[i], 0xFF, icon_no);
         }
     }
@@ -221,40 +221,40 @@ void dScp_ScreenDataSet(sub_scp_class* i_Scp) {
 #if VERSION <= VERSION_JPN
     {
         J2DTextBox* tx = i_Scp->mpTextBox;
-        tx->mCharSpace = -2.0f;
+        tx->setCharSpace(-2.0f);
         J2DTextBox* rb = i_Scp->mpRubyBox;
-        rb->mCharSpace = -1.0f;
+        rb->setCharSpace(-1.0f);
         J2DTextBox* txs = i_Scp->mpTextBoxSdw;
-        txs->mCharSpace = -2.0f;
+        txs->setCharSpace(-2.0f);
         J2DTextBox* rbs = i_Scp->mpRubyBoxSdw;
-        rbs->mCharSpace = -1.0f;
+        rbs->setCharSpace(-1.0f);
     }
 
     if (g_msgDHIO.field_0x08 == 0) {
         J2DTextBox* tx = i_Scp->mpTextBox;
-        tx->mLineSpace = 42.0f;
+        tx->setLineSpace(42.0f);
         J2DTextBox* rb = i_Scp->mpRubyBox;
-        rb->mLineSpace = 42.0f;
+        rb->setLineSpace(42.0f);
         J2DTextBox* txs = i_Scp->mpTextBoxSdw;
-        txs->mLineSpace = 42.0f;
+        txs->setLineSpace(42.0f);
         J2DTextBox* rbs = i_Scp->mpRubyBoxSdw;
-        rbs->mLineSpace = 42.0f;
+        rbs->setLineSpace(42.0f);
     } else {
         f32 ls = (f32)(int)g_msgHIO.field_0x5e;
         J2DTextBox* tx = i_Scp->mpTextBox;
-        tx->mLineSpace = ls;
+        tx->setLineSpace(ls);
         ls = (f32)(int)g_msgHIO.field_0x5e;
         J2DTextBox* txs = i_Scp->mpTextBoxSdw;
-        txs->mLineSpace = ls;
+        txs->setLineSpace(ls);
     }
 #else
-    i_Scp->mpTextBox->mCharSpace = 0.0f;
-    i_Scp->mpRubyBox->mCharSpace = 0.0f;
-    i_Scp->mpTextBoxSdw->mCharSpace = 0.0f;
-    i_Scp->mpRubyBoxSdw->mCharSpace = 0.0f;
+    i_Scp->mpTextBox->setCharSpace(0.0f);
+    i_Scp->mpRubyBox->setCharSpace(0.0f);
+    i_Scp->mpTextBoxSdw->setCharSpace(0.0f);
+    i_Scp->mpRubyBoxSdw->setCharSpace(0.0f);
 
-    i_Scp->mpTextBox->mLineSpace = 28.0f;
-    i_Scp->mpTextBoxSdw->mLineSpace = 28.0f;
+    i_Scp->mpTextBox->setLineSpace(28.0f);
+    i_Scp->mpTextBoxSdw->setLineSpace(28.0f);
 #endif
 
     fopMsgM_blendInit(&i_Scp->mWipeNum, "rupy_num_01.bti");
@@ -288,8 +288,8 @@ void dScp_valueInit(sub_scp_class* i_Scp) {
     J2DTextBox* ruby_box = i_Scp->mpRubyBox;
     i_Scp->mRubyFontSizeX = ruby_box->mFontSizeX;
     i_Scp->mRubyFontSizeY = ruby_box->mFontSizeY;
-    i_Scp->mpRubyBox->mLineSpace = i_Scp->mpTextBox->mLineSpace;
-    i_Scp->mpRubyBoxSdw->mLineSpace = i_Scp->mpTextBox->mLineSpace;
+    i_Scp->mpRubyBox->setLineSpace(i_Scp->mpTextBox->getLineSpace());
+    i_Scp->mpRubyBoxSdw->setLineSpace(i_Scp->mpTextBox->getLineSpace());
 
     i_Scp->mArrowBaseY = (int)(i_Scp->mArrow.mPosTopLeftOrig.y + i_Scp->mArrow.mSizeOrig.y);
 
@@ -677,10 +677,10 @@ void dScp_stringInit(sub_scp_class* i_Scp) {
     sprintf(buf2, "\x1b" "CC[000000FF]\x1b" "GM[0]");
 
     JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
-    strcpy((char*)i_Scp->oTx, buf1);
-    strcpy((char*)i_Scp->oRb, buf1);
-    strcpy((char*)i_Scp->oTxSdw, buf2);
-    strcpy((char*)i_Scp->oRbSdw, buf2);
+    strcpy(i_Scp->oTx, buf1);
+    strcpy(i_Scp->oRb, buf1);
+    strcpy(i_Scp->oTxSdw, buf2);
+    strcpy(i_Scp->oRbSdw, buf2);
     mDoExt_setCurrentHeap(heap);
 
     i_Scp->mLineCount = 0;
@@ -689,10 +689,10 @@ void dScp_stringInit(sub_scp_class* i_Scp) {
 /* 80239420-802394A4       .text dScp_stringSet__FP13sub_scp_class */
 void dScp_stringSet(sub_scp_class* i_Scp) {
     JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
-    i_Scp->mpTextBox->setString((char*)i_Scp->oTx);
-    i_Scp->mpRubyBox->setString((char*)i_Scp->oRb);
-    i_Scp->mpTextBoxSdw->setString((char*)i_Scp->oTxSdw);
-    i_Scp->mpRubyBoxSdw->setString((char*)i_Scp->oRbSdw);
+    i_Scp->mpTextBox->setString(i_Scp->oTx);
+    i_Scp->mpRubyBox->setString(i_Scp->oRb);
+    i_Scp->mpTextBoxSdw->setString(i_Scp->oTxSdw);
+    i_Scp->mpRubyBoxSdw->setString(i_Scp->oRbSdw);
     mDoExt_setCurrentHeap(heap);
 }
 
@@ -710,7 +710,7 @@ void dScp_yose_select(sub_scp_class* i_Scp) {
 void dScp_textPosition(sub_scp_class* i_Scp) {
     int m;
     J2DTextBox* textbox = i_Scp->mpTextBox;
-    int line = textbox->mLineSpace / 2;
+    int line = textbox->getLineSpace() / 2;
     m = 0;
     int n = line * (VERSION_SELECT(1, 1, 2, 2) - i_Scp->mLineCount);
 #if VERSION == VERSION_DEMO
@@ -795,6 +795,7 @@ void dScp_arrowMove(sub_scp_class* i_Scp) {
             i_Scp->mAnimeTimer = 0;
         }
 
+        // This block looks like there should be a function for it in fopMsgM_* but didn't find anything that would correspond
         i_Scp->mArrow.mSize.x = i_Scp->mArrow.mSizeOrig.x * sx;
         i_Scp->mArrow.mSize.y = i_Scp->mArrow.mSizeOrig.y * sy;
         i_Scp->mArrow.mPosCenter.y = (f32)i_Scp->mArrowBaseY - i_Scp->mArrow.mSize.y / 2.0f;
@@ -860,10 +861,10 @@ void dScp_talkBeforeProc(sub_scp_class* i_Scp) {
     dScp_stringInit(i_Scp);
 
     i_Scp->mMesgDataProc.dataInit();
-    i_Scp->mMesgDataProc.bmgData = i_Scp->mpMesgStr;
+    i_Scp->mMesgDataProc.setBmgData((char*)i_Scp->mpMesgStr);
 
     JKRHeap* heap = mDoExt_setCurrentHeap(i_Scp->mpHeap);
-    i_Scp->mMesgDataProc.setOutMessage((char*)i_Scp->oTx, (char*)i_Scp->oRb, (char*)i_Scp->oTxSdw, (char*)i_Scp->oRbSdw);
+    i_Scp->mMesgDataProc.setOutMessage(i_Scp->oTx, i_Scp->oRb, i_Scp->oTxSdw, i_Scp->oRbSdw);
     mDoExt_setCurrentHeap(heap);
 
     i_Scp->mMesgDataProc.setFont(font0);
@@ -875,15 +876,15 @@ void dScp_talkBeforeProc(sub_scp_class* i_Scp) {
     i_Scp->mMesgDataProc.setMesgEntry(&i_Scp->mMesgEntry);
     i_Scp->mMesgDataProc.setFontSize((int)i_Scp->mFontSizeX);
     i_Scp->mMesgDataProc.setRubyFontSize((int)i_Scp->mRubyFontSizeX);
-    i_Scp->mMesgDataProc.lineWidth = 0x1f7;
-    i_Scp->mMesgDataProc.centerLineWidth = 0x1e6;
+    i_Scp->mMesgDataProc.setLineWidth(0x1f7);
+    i_Scp->mMesgDataProc.setCenterLineWidth(0x1e6);
     i_Scp->mMesgDataProc.setSendSpeed(g_msgHIO.field_0x82);
     i_Scp->mMesgDataProc.setSpaceTimer(g_msgHIO.field_0x6c);
 
     if (g_msgHIO.field_0x83 != 0) {
-        i_Scp->mMesgDataProc.spaceFlag = 1;
+        i_Scp->mMesgDataProc.setSpaceFlagOn();
     } else {
-        i_Scp->mMesgDataProc.spaceFlag = 0;
+        i_Scp->mMesgDataProc.setSpaceFlagOff();
     }
 
     dScp_yose_select(i_Scp);
@@ -961,7 +962,7 @@ BOOL dScp_forceContinueProc(sub_scp_class* i_Scp) {
 BOOL dScp_closewaitProc(sub_scp_class* i_Scp) {
     if (i_Scp->mMesgDataProc.autoSendFlag != 0) {
         u32 count = (int)i_Scp->mMesgDataProc.waitTimer > 0 ? i_Scp->mMesgDataProc.waitTimer - 1 : 0;
-        i_Scp->mMesgDataProc.waitTimer = count;
+        i_Scp->mMesgDataProc.set_waitTimer(count);
         if (count == 0 || fopMsgM_checkForceSend()) {
             i_Scp->mMesgDataProc.setAutoSendFlagOff();
             dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSED_e);
@@ -969,7 +970,7 @@ BOOL dScp_closewaitProc(sub_scp_class* i_Scp) {
         }
     } else if (i_Scp->mMesgDataProc.handSendFlag != 0) {
         u32 count = (int)i_Scp->mMesgDataProc.waitTimer > 0 ? i_Scp->mMesgDataProc.waitTimer - 1 : 0;
-        i_Scp->mMesgDataProc.waitTimer = count;
+        i_Scp->mMesgDataProc.set_waitTimer(count);
         if (count != 0) {
             if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || fopMsgM_checkForceSend()) {
                 i_Scp->mMesgDataProc.setHandSendFlagOff();
@@ -1356,13 +1357,13 @@ static cPhs_State dScp_Create(msg_class* i_this) {
         sbuttonTimer[i] = -1;
     }
 
-    i_Scp->oTx = i_Scp->mpHeap->alloc(1000, 4);
+    i_Scp->oTx = (char*)i_Scp->mpHeap->alloc(1000, 4);
     JUT_ASSERT(VERSION_SELECT(0x8A9, 0x8A9, 0x8D1, 0x8DC), i_Scp->oTx != 0);
-    i_Scp->oRb = i_Scp->mpHeap->alloc(1000, 4);
+    i_Scp->oRb = (char*)i_Scp->mpHeap->alloc(1000, 4);
     JUT_ASSERT(VERSION_SELECT(0x8AC, 0x8AC, 0x8D4, 0x8DF), i_Scp->oRb != 0);
-    i_Scp->oTxSdw = i_Scp->mpHeap->alloc(1000, 4);
+    i_Scp->oTxSdw = (char*)i_Scp->mpHeap->alloc(1000, 4);
     JUT_ASSERT(VERSION_SELECT(0x8AF, 0x8AF, 0x8D7, 0x8E2), i_Scp->oTxSdw != 0);
-    i_Scp->oRbSdw = i_Scp->mpHeap->alloc(1000, 4);
+    i_Scp->oRbSdw = (char*)i_Scp->mpHeap->alloc(1000, 4);
     JUT_ASSERT(VERSION_SELECT(0x8B2, 0x8B2, 0x8DA, 0x8E5), i_Scp->oRbSdw != 0);
 
     mDoExt_setCurrentHeap(heap);

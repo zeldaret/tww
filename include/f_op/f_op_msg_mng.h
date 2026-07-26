@@ -303,7 +303,7 @@ public:
     void setSelectNum(u8) {}
     void setSendSpeed(int i_speed) { sendSpeed = i_speed; }
     void setSpaceFlagOff() { spaceFlag = 0; }
-    void setSpaceFlagOn() {}
+    void setSpaceFlagOn() { spaceFlag = 1; }
     void setSpaceTimer(int i_timer) { spaceTimer = i_timer; }
     void setStringColor(u32 color) { field_0x25C = color; }
     void set_waitTimer(int i_timer) { waitTimer = i_timer; }

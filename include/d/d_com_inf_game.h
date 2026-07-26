@@ -115,12 +115,6 @@ enum dCamera__AttentionStatus {
     dCamAttnStts_00002000_e = 0x00002000,
 };
 
-enum dScpTyp {
-    dScpTyp_TELESCOPE_e = 0,  // default/normal telescope
-    dScpTyp_PICTO_BOX_e = 1,
-    dScpTyp_DEMO_e = 2,
-};
-
 class __d_timer_info_c {
 public:
     __d_timer_info_c() {

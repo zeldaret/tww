@@ -9,6 +9,13 @@
 
 class J2DTextBox;
 
+
+enum dScpTyp {
+    dScpTyp_TELESCOPE_e = 0,  // default/normal telescope
+    dScpTyp_PICTO_BOX_e = 1,
+    dScpTyp_DEMO_e = 2,
+};
+
 class sub_scp_class : public msg_class {
 public:
     /* 0x0FC */ JKRExpHeap* mpHeap;
@@ -52,10 +59,10 @@ public:
     /* 0x916 */ s16 mLineCount;
     /* 0x918 */ s16 mAnimeTimer;
     /* 0x91C */ const char* mpMesgStr;
-    /* 0x920 */ void* oTx;
-    /* 0x924 */ void* oRb;
-    /* 0x928 */ void* oTxSdw;
-    /* 0x92C */ void* oRbSdw;
+    /* 0x920 */ char* oTx;
+    /* 0x924 */ char* oRb;
+    /* 0x928 */ char* oTxSdw;
+    /* 0x92C */ char* oRbSdw;
     /* 0x930 */ u8 mDemoCloseFlag;
 }; // Size: 0x934
 
