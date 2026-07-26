@@ -9,7 +9,6 @@
 
 class J2DTextBox;
 
-
 enum dScpTyp {
     dScpTyp_TELESCOPE_e = 0,  // default/normal telescope
     dScpTyp_PICTO_BOX_e = 1,
