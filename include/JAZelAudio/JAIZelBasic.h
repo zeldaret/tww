@@ -100,7 +100,7 @@ public:
     void sceneChange(u32, u32, u32, s32);
     void sceneBgmStart();
     void load1stDynamicWave();
-    BOOL check1stDynamicWave();
+    s32 check1stDynamicWave();
     void load2ndDynamicWave();
     void loadStaticWaves();
     s32 checkFirstWaves();
@@ -192,9 +192,14 @@ public:
 
     static JAIZelBasic* zel_basic;
 
-    static u8 m_bgm_mute_state[];
+    static u8 m_bgm_mute_state[][4];
 
-    // static charVoiceTable;
+    struct CharVoiceStruct{
+        u16 m0;
+        u16 m2;
+    };
+
+    static CharVoiceStruct charVoiceTable[];
 
     struct LinkVoiceEntry{
         u8 m0;
@@ -206,6 +211,12 @@ public:
     static linkVoiceStruct linkVoiceTable[];
 
     static u8 m_bgm_wave_info[];
+
+    struct WaveStruct{
+        u8 m0;
+        u8 m1;
+    };
+
     static u8 m_dy_wave_set_1st[][2];
     static u8 m_dy_wave_set_2nd[][2];
     static scene_info_s m_scene_info[];
@@ -217,6 +228,19 @@ public:
 #else
     static const int MAX_CONCURRENT_SE_NUM = 24;
 #endif
+
+    struct levInsideStruct{
+        f32 m0;
+        f32 m4;
+        f32 m8;
+        u8 mC;
+    };
+    struct levSeSomeStruct{
+        u32 m0;
+        u32 m4;
+        levInsideStruct m8[0x14];
+    };
+
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0024 */ u8* field_0x0024;
@@ -302,7 +326,7 @@ public:
     /* 0x00D0 */ Vec* field_0x00d0;
     /* 0x00D4 */ JAISound* mpSeSound[MAX_CONCURRENT_SE_NUM];
     /* 0x0134 */ u32 mSeNum[MAX_CONCURRENT_SE_NUM];
-    /* 0x0194 */ u32 field_0x0194[MAX_CONCURRENT_SE_NUM];
+    /* 0x0194 */ Vec* field_0x0194[MAX_CONCURRENT_SE_NUM];
     /* 0x01F4 */ int field_0x01f4;
 #if VERSION == VERSION_DEMO
     u8 temppadding[0x5C];
@@ -329,7 +353,7 @@ public:
     /* 0x0208 */ u8 field_0x0208;
     /* 0x020C */ int field_0x020c;
     /* 0x0210 */ int field_0x0210;
-    /* 0x0214 */ int field_0x0214;
+    /* 0x0214 */ JAISound* field_0x0214;
     /* 0x0218 */ u32 field_0x0218;
     /* 0x021C */ u8 mCameraSeaFloorGroupInfo;
     /* 0x021D */ u8 mLinkSeaFloorGroupInfo;
@@ -353,7 +377,9 @@ public:
     /* 0x0238 */ u8 mIslandRoomNo;
     /* 0x0239 */ u8 field_0x0239;
     /* 0x023A */ u8 field_0x023a;
-    /* 0x023B */ u8 field_0x023B[0x1B80 - 0x023B];
+    /* 0x023B */ u8 field_0x023B[0x244 - 0x023B];
+                 levSeSomeStruct field_0x0244[0x10];
+                 u8 field_0x16C4[0x1b80 - 0x16C4];
     /* 0x1B80 */ int field_0x1b80;
     /* 0x1B84 */ u8 field_0x1b84[0x1DD0 - 0x1B84];
     /* 0x1DD0 */ int field_0x1dd0;
@@ -366,7 +392,7 @@ public:
     /* 0x1EC8 */ int field_0x1ec8;
     /* 0x1ECC */ int field_0x1ecc;
     /* 0x1ED0 */ int field_0x1ed0;
-    /* 0x1ED4 */ u8 field_0x1ED4[0x1F34 - 0x1ED4];
+    /* 0x1ED4 */ Vec field_0x1ED4[8];
     /* 0x1F34 */ int field_0x1f34;
     /* 0x1F38 */ JAISound* field_0x1f38;
     /* 0x1F3C */ u8 field_0x1f3c;
@@ -384,7 +410,7 @@ public:
     /* 0x2040 */ JAISound* mpKuroboMotion[4];
     /* 0x2050 */ JAISound* mpKuroboVoice[4];
     /* 0x2060 */ JAISound* field_0x2060;
-    /* 0x2064 */ int field_0x2064;
+    /* 0x2064 */ JAISound* field_0x2064;
     /* 0x2068 */ JMath::TRandom_enough_ field_0x2068;
     /* 0x20F0 */ u8 field_0x20F0[0x20F4 - 0x20F0];
 };

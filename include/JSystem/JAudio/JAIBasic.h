@@ -105,9 +105,9 @@ public:
     void getInitOnCodeSeScene() {}
     void getSceneSetFlag() {}
     void getSeSoundHandle() {}
-    void getWaveLoadStatus(s32) {}
+    s32 getWaveLoadStatus(s32 arg0) { return JAInter::BankWave::getWaveLoadStatus(arg0);}
     void initAudio(JKRSolidHeap*, u32, u8) {}
-    void loadSceneWave(s32, s32) {}
+    void loadSceneWave(s32 arg0, s32 arg1) {JAInter::BankWave::loadSceneWave(arg0, arg1);}
     void setInitDataInfo(char*) {}
     void setInitOnCodeSeScene(u32*) {}
 

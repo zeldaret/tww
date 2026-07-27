@@ -14,6 +14,7 @@
 #include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JAudio/JAIBankWave.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
+#include "JSystem/JAudio/JASWaveBankMgr.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "d/d_com_inf_game.h"
 
@@ -2092,11 +2093,715 @@ void JAIZelBasic::initSe() {
 }
 
 /* 802A6720-802A8550       .text seStart__11JAIZelBasicFUlP3VecUlScffffUc */
-JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec*, u32, s8, f32, f32, f32, f32, u8) {
+JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param_4, f32 i_pitch, f32 i_volume, f32 i_pan, f32 i_dolby, u8 param_9) {
     /* Nonmatching */
-    // "Kurobo voices should be played in monsSeStart!\n"
-    OSReport("クロボーの声は monsSeStartで！\n");
-    OSReport("[JAIZelBasic::seStart] overflow JAISound pointer\n");
+
+    if(field_0x0201 == 1){
+        return NULL;
+    }
+    if(0x587A <= i_seNum && i_seNum <= 0x587C){
+        kuroboMotionPlay(i_seNum,param_2,param_3,param_4);
+        return NULL;
+    }
+    if(0x592D <= i_seNum && i_seNum <= 0x592F){
+        kuroboMotionPlay(i_seNum,param_2,param_3,param_4);
+        return NULL;
+    }
+    if(field_0x0224 == 0x2D){
+        if(i_seNum == 0x7051){
+            return NULL;
+        }
+        switch(i_seNum){
+            case 0x5930:
+            case 0x5135:
+            case 0x383C:
+            case 0x5936:
+            case 0x5931:
+            case 0x5932:
+            case 0x5933:
+            case 0x5934:
+                kuroboMotionPlay(i_seNum,param_2,param_3,param_4);
+                return NULL;
+        }
+    }
+        if(0x486D <= i_seNum && i_seNum <= 0x486F){
+            // "Kurobo voices should be played in monsSeStart!\n"
+            OSReport("クロボーの声は monsSeStartで！\n");
+            return NULL;
+        }
+        if(mMainBgmNum == 0x80000012){
+            if(i_seNum == 0x580E || i_seNum == 0x580D){
+                return NULL;
+            }
+        }
+            if(field_0x0206 != 0){
+                if((i_seNum < 0x690B || i_seNum > 0x6913) && (i_seNum & 0xFFFFF000) != 0){
+                    return NULL;
+                }
+            }
+            if((int)field_0x0207 != 0 && (i_seNum & 0xFFFFF000) != 0){
+                switch(i_seNum){
+
+                    case 0x2066:
+                    case 0x2868:
+                    case 0x2880:
+                    case 0x2881:
+                    case 0x48A1:
+                    case 0x4901:
+                    case 0x4902:
+                        break;
+                    default:
+                        return NULL;
+                }
+            }
+                if(i_seNum == 0x3814){
+                    if(field_0x01f9 == 1){
+                        return NULL;
+                    }
+                    field_0x01f9 = 1;
+                    if(field_0x0224 == 0x12 && mIslandRoomNo == 0x2C && field_0x0239 == 9 && field_0x0028 < 0x1E){
+                        return NULL;
+                    }
+                }
+                if(i_seNum == 0x6847){
+                    if(field_0x01fc == 1){
+                        return NULL;
+                    }
+                    field_0x01fc = 1;
+                }
+                if(i_seNum == 0x693F){
+                    if(field_0x01fb == 1){
+                        return NULL;
+                    }
+                    field_0x01fb = 1;
+                }
+                if(i_seNum == 0x282C){
+                    if(field_0x01fa != 0){
+                        return NULL;
+                    }
+                    field_0x01fa = 4;
+                }
+                if(i_seNum == 0x6932 || i_seNum == 0x69E6){
+                    if(field_0x0202 != 0){
+                        return NULL;
+                    }
+                    field_0x0202 = 2;
+                }
+                if(i_seNum == 0x6806){
+                    if(field_0x0203 != 0){
+                        return NULL;
+                    }
+                    field_0x0203 = 2;
+                }
+                if(i_seNum == 0x6A42){
+                    if(field_0x01fd != 0){
+                        return NULL;
+                    }
+                    field_0x01fd = 0x14;
+                }
+                if(i_seNum == 0x6A43){
+                    if(field_0x01fe != 0){
+                        return NULL;
+                    }
+                    field_0x01fe = 0x14;
+                }
+                if(i_seNum == 0x6A44){
+                    if(field_0x01ff != 0){
+                        return NULL;
+                    }
+                    field_0x01ff = 0x14;
+                }
+                if(i_seNum == 0x6A45){
+                    if(field_0x0200 != 0){
+                        return NULL;
+                    }
+                    field_0x0200 = 0x14;
+                }
+                if(i_seNum == 0xFFFFFFFF){
+                    return NULL;
+                }
+                if((i_seNum & 0xFFFFFF00) == 0x1800 && (i_seNum & 0xFF) < 0x5A){
+                    startSoundVec(i_seNum,&field_0x2064,param_2,0,0,4);
+                    if(field_0x2064){
+                        field_0x2064->setPortData(9,param_4);
+                    }
+                    return NULL;
+                }
+                MtxP pMtx = getAudioCamera()->field_0x8;
+                Vec local_44 = {0.0f,0.0f,-50.0f};
+                if(param_2 == NULL){
+                    if(getAudioCamera()->field_0x0){
+                        local_44 = *getAudioCamera()->field_0x0;
+                    }
+                }else{
+                    local_44 = *param_2;
+                }
+                if(i_seNum == 0x381F){
+                    return NULL;
+                }
+                switch(i_seNum){
+
+                    case 0x381F:
+                    case 0x001B:
+                        return NULL;
+                        // goto 0x8F8
+                        break;
+                    case 0x703A:
+                        field_0x00be = 1;
+                        break;
+                    case 0x105B:
+
+                        if(field_0x0224 == 0x5C){
+                            if(field_0x0239 < 8){
+                                i_seNum = 0x706D;
+                            }
+                        }
+                        break;
+                        // goto 0x90C
+                    case 0x08B3:
+                        field_0x0205 = 1;
+                        stopBattleBgm();
+                        field_0x008c = 1.0f;
+                        if(mpMainBgmSound){
+                            mpMainBgmSound->setVolume(calcMainBgmVol(),0x2D,0);
+                        }
+                        stopBattleBgm();
+                        field_0x00c1 = 0;
+                        field_0x00c4 = 0;
+                        field_0x00c0 = 0;
+                        subBgmStop();
+                        break;
+                        // goto 0x92C
+                        break;
+                    case 0x6A2B:
+                        return NULL;
+                    case 0x08F5:
+                        field_0x0206 = 0;
+                        field_0x00bb = 0;
+                        if(mLastMinibossSubBGMType == 0){
+                            if(mSubBgmNum == 0x80000036 || mSubBgmNum == 0x80000037){
+                                break;
+                            }
+                            field_0x00b0 = -2;
+                            subBgmStopInner();
+                        }
+                        // goto 0x9CC
+                        break;
+
+                    case 0x2066:
+                        field_0x0207 = 2;
+                        // goto 0xA10
+                        break;
+                    case 0x08C1:
+                        menuOut();
+                        // goto 0xA1C
+                        break;
+                        
+                    case 0x08DA:
+                        subBgmStart(0x80000030);
+                        field_0x0033 = 1;
+                        return NULL;
+                        // goto 0xA28
+                        break;
+                    case 0x0876:
+                        subBgmStart(0x80000031);
+                        // goto 0xA48
+                        break;
+                    case 0x186E:
+                        subBgmStart(0x80000032);
+                        // goto 0xA5C
+                        break;
+                    case 0x5875:
+                        field_0x00cc = 1;
+                        break;
+                    case 0x1088:
+                        if(field_0x0224 == 0x55){
+                            if(field_0x0239 == 0x9 || field_0x0239 == 0xA){
+                                return NULL;
+                            }
+                            break;
+                        }
+
+                        // goto 0xA7C
+                        break;
+                    case 0x61FE:
+                        if(field_0x0224 == 0x35 && !checkEventBit(0x2D04)){
+                            return NULL;
+                        }
+                        break;
+                    case 0x282D:
+                    case 0x282E:
+                        onEnemyDamage();
+                        // goto 0xACC
+                        break;
+                    case 0x50BE:
+                        if(field_0x0224 == 0x12 && mIslandRoomNo == 0x2c && field_0x0239 == 0xA){
+                            if(!checkStreamPlaying(0xC000001C)){
+                                if(field_0x0208 == 0){
+                                    return NULL;
+                                }
+                            }
+                            field_0x0208 = 1;
+                        }
+                        break;
+                    case 0x08A7:
+                    case 0x285D:
+                        param_2 = NULL;
+                        // goto 0xB34
+                        break;
+                    case 0x6934:
+                        field_0x00ca = 1;
+                        stopBattleBgm();
+                        field_0x008c = 1.0f;
+                        if(mpMainBgmSound){
+                            mpMainBgmSound->setVolume(calcMainBgmVol(),0x2D,0);
+                        }
+                        stopBattleBgm();
+                        field_0x00c1 = 0;
+                        field_0x00c4 = 0;
+                        field_0x00c0 = 0;
+                        param_2 = 0;
+                        break;
+                    case 0x584C:
+                        seStart(0x7818);
+                        break;
+
+                    case 0x08AB:
+                        seStop(0x8AA,0);
+                        // goto 0xC00
+                        break;
+
+                    case 0x3815:
+                    case 0x3818:
+                    if(field_0x0046 == 1){
+                        i_seNum = 0x382F;
+                        if(param_3 != 0xD){
+                            param_3 = 9;
+                        }
+                    }
+                    if(field_0x0045 == 1){
+                        seStart(0x3831,param_2,0,param_4);
+                    }
+                        // goto 0xC14
+                        break;
+                    case 0x205A:
+                        switch (param_3) { /* switch 15 */
+                            case 10: /* switch 15 */
+                                i_seNum = 0x205B;
+                                break;
+                            case 7: /* switch 15 */
+                            case 9: /* switch 15 */
+                            case 11: /* switch 15 */
+                            case 12: /* switch 15 */
+                            case 13: /* switch 15 */
+                            case 14: /* switch 15 */
+                            case 17: /* switch 15 */
+                            case 18: /* switch 15 */
+                                i_seNum = 0x205C;
+                                break;
+                        }
+                        // goto 0xC6C
+                        break;
+                    case 0x6942:
+                        if(pMtx){
+                            PSMTXMultVec(pMtx,&local_44,&local_44);
+                        }
+                        {
+                        f32 dist = SQUARE(local_44.x) + SQUARE(local_44.y) + SQUARE(local_44.z);
+                        if(std::sqrtf(dist) < (JAIGlobalParameter::getParamDistanceMax() * 0.5f) ){
+                            return NULL;
+                        }
+                        }
+                        // goto 0xCA0
+                    case 0x702C:
+                        if (pMtx != NULL) {
+                            PSMTXMultVec(pMtx,&local_44,&local_44);
+                        }
+                        // f32 fVar1 = std::abs(local_44.y);
+                        
+                        i_volume = 1.0f - std::abs(local_44.y) / (JAIGlobalParameter::getParamDistanceMax() * 2.0f);
+                        if (i_volume < 0.0f) {
+                        i_volume = 0.0f;
+                        }
+                        if (i_volume > 1.0f) {
+                        i_volume = 1.0f;
+                        }
+                        param_2 = NULL;
+                        break;
+                        // goto 0xD5C
+                    case 0x0008:
+                        if(param_3 < 0xCCC){
+                            param_3 = 0xCCC;
+                        }else if(param_3 > 0x8000){
+                            param_3 = 0x8000;
+                        }
+                        startSoundVec(i_seNum,&field_0x0214,NULL,0,0,4);
+                        {
+                        f32 tempval = param_3/32768.0f;
+                        field_0x0214->setPitch(0.8f + (0.4f * tempval),0,0);
+                        }
+                        return NULL;
+                        // goto 0xDBC
+
+                    case 0x2831:
+                        if(mpMainBgmSound && mMainBgmNum == 0x8000000B){
+                            field_0x0090 = JAIZelParam::VOL_BGM_DEFAULT;
+                            if(!mpSubBgmSound){
+                                mpMainBgmSound->setVolume(calcMainBgmVol(),2,0);
+                            }
+                        }
+                        break;
+                        // goto 0xE44
+
+                    case 0x080A:
+                    case 0x0825:
+                    case 0x080C:
+                        if(checkStreamPlaying(0xC0000005) == 1){
+                            return NULL;
+                        }
+                        if(isDemo() == 1){
+                            return NULL;
+                        }
+                        if((int)field_0x0207 != 0){
+                            return NULL;
+                        }
+                        if(field_0x00be != 0){
+                            return NULL;
+                        }
+                        // goto 0xECC
+                        break;
+
+                    case 0x080B:
+                        if(checkStreamPlaying(0xC0000005) == 1){
+                            return NULL;
+                        }
+                        if(isDemo() == 1 || (int)field_0x0207 != 0){
+                            i_seNum = 0x8FD;
+                        }
+                        if(field_0x00be != 0){
+                            return NULL;
+                        }
+                        // goto 0xF2C
+                        break;
+
+                    case 0x080D:
+                        if(checkStreamPlaying(0xC0000005) == 1){
+                            return NULL;
+                        }
+                        if(isDemo() == 1){
+                            i_seNum = 0x8FE;
+                        }
+                        if(checkSePlaying(0x871) == 1){
+                            return NULL;
+                        }
+                        if(field_0x00be != 0){
+                            return NULL;
+                        }
+                        // goto 0xF80
+                        break;
+                    case 0x3808:
+                        if(checkStreamPlaying(0xC0000005) == 1){
+                            return NULL;
+                        }
+                        if(field_0x2064 != NULL){
+                            field_0x2064->stop(1);
+                        }
+                        // goto 0xFE4
+                        break;
+                    case 0x0854:
+                        switch(field_0x0224){
+                            case 0x8:
+                            case 0xC:
+                            case 0x13:
+                                break;
+                            default:
+                                i_seNum = 0x85D;
+                        }
+                        break;
+                    case 0x1863:
+                        field_0x0204 = 1;
+                        // goto 0x1048
+                        break;
+
+                    case 0x080F:
+                        menuIn();
+                        // goto 0x1054
+                        break;
+
+                    case 0x0810:
+                        menuOut();
+                        // goto 0x1060
+                        break;
+
+                    case 0x081C:
+                    case 0x0804:
+                        seStop(0x805,0);
+                        seStop(0x81D,0);
+                        // goto 0x106C
+                        break;
+
+                    case 0x081D:
+                    case 0x0805:
+                        seStop(0x804,0);
+                        seStop(0x81C,0);
+                        // goto 0x1090
+                        break;
+                    case 0x6906:
+                        seStop(0x6906,0);
+                        break;
+                    case 0x6909:
+                        seStop(0x6907,0);
+                        seStop(0x6908,0);
+                        break;             
+                    case 0x6907:
+                    case 0x6908:
+                        seStop(0x6907,0);
+                        seStop(0x6908,0);
+                        break;
+                    case 0x690A:
+                        seStop(0x6907,0);
+                        seStop(0x6908,0);
+                        break;
+                    case 0x6956:
+                        seStop(0x6957,0);
+                        break;
+                    case 0x6957:
+                        seStop(0x6956,0);
+                        break;
+                    case 0x1068:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            return NULL;
+                        }
+                        param_3 *= param_3;
+                        i_volume = param_3 / 10000.0f;
+
+                        break;
+                    case 0x303D:
+                    case 0x5128:
+                    case 0x50CE:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            return NULL;
+                        }
+                        i_volume = param_3 / 100.0f;
+                        // param_3 = SQUARE(param_3);
+                        // goto 0x11A0
+                        break;
+                    case 0x106A:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            return NULL;
+                        }
+                        i_volume = SQUARE(param_3) / 10000.0f;
+                        param_3 = SQUARE(param_3);
+                        i_pitch = SQUARE(param_3)/ 40000.0f + 0.75f;
+                        // goto 0x13F8
+                        break;
+                    case 0x701D:
+                        break;
+                    case 0x705A:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            return NULL;
+                        }
+                        i_volume = SQUARE(param_3) / 10000.0f;
+                        i_pitch = 0.75f + SQUARE(param_3)/40000.0f;
+                        break;
+                    case 0x705B:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            return NULL;
+                        }
+                        i_volume = SQUARE(param_3) / 10000.0f;
+                        i_pitch = 0.75f + SQUARE(param_3)/40000.0f;
+                        break;
+                    case 0x705C:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            return NULL;
+                        }
+                        i_volume = SQUARE(param_3) / 10000.0f;
+                        i_pitch = 0.2f + (f32)param_3/80.0f;
+                        if(i_pitch >= 0.5f){
+                            i_pitch = 0.5f;
+                        }
+                        break;
+                    case 0x303E:
+                        // goto 0x1468
+                        break;
+                    case 0x1072:
+                        // goto 0x14D8
+                        break;
+
+                    case 0x107D:
+                        // goto 0x16D0
+                        break;
+
+                    case 0x087D:
+                        // goto 0x17C4
+                        break;
+
+                    case 0x08E4:
+                        // goto 0x17FC
+                        break;
+                    case 0x082F:
+                        seStop(0x90B,0x3C);
+                        // goto 0x1840
+                        break;
+                    case 0x5825:
+                        mSomeSpecialBGMFlag = 1;
+                        break;
+                    // case 0x
+                    case 0x580E:
+                        if (pMtx != NULL) {
+                            PSMTXMultVec(pMtx,&local_44,&local_44);
+                        }
+                        {
+                        f32 dist2 = std::sqrtf(SQUARE(local_44.x)+SQUARE(local_44.y)+SQUARE(local_44.z));
+                        // param_6 = 1.0f - fVar1 / (JAIGlobalParameter::getParamDistanceMax() * 2.0f);
+                        if (dist2 > JAIGlobalParameter::getParamDistanceMax()) {
+                            return NULL;
+                        }
+                        }
+                        break;              
+                    case 0x380D:
+                        if(param_2 != NULL){
+                            Vec* pfVar5 = &field_0x1ED4[field_0x1f34];
+                            *pfVar5 = *param_2;
+                            f32 fVar1 = getAudioCamera()->field_0x0->y;
+                            if(fVar1 < field_0x1ED4[field_0x1f34].y){
+                                field_0x1ED4[field_0x1f34].y = fVar1;
+                            }
+                            param_2 = &field_0x1ED4[field_0x1f34];
+                            field_0x1f34 += 1;
+                        }
+                        break;
+                }
+
+                if(param_9 != 1){
+                    switch(i_seNum) {
+                        case 0x105F:
+                        case 0x3019:
+                        case 0x3033:
+                        case 0x3034:
+                        case 0x303A:
+                        case 0x501E:
+                        case 0x501F:
+                        case 0x5053:
+                        case 0x5054:
+                        case 0x6103:
+                        case 0x612E:
+                        case 0x6131:
+                        case 0x614F:
+                        case 0x7035:
+                            setLevObjSE(i_seNum,param_2,param_4);
+                            return NULL;
+                        default:
+                            break;
+                    }
+                }
+                if((i_seNum & 0x800) == 0){
+                    for(int i = 0; i < 0x18; i++){
+                        if(mSeNum[i] == i_seNum && mpSeSound[i] != NULL && field_0x0194[i] == param_2){
+                            startSoundVec(i_seNum,&mpSeSound[i],param_2,0,param_3,4);
+                            if(mpSeSound[i]){
+                                mpSeSound[i]->setPortData(9,param_4);
+                                if(i_pitch != 1.0f){
+                                    mpSeSound[i]->setPitch(i_pitch,0,0);
+                                }
+                                if(i_volume != 1.0f){
+                                    mpSeSound[i]->setVolume(i_volume,0,0);
+                                }
+                                if(i_pan != -1.0f){
+                                    mpSeSound[i]->setPan(i_pan,0,0);
+                                }
+                                if(i_dolby != -1.0f){
+                                    mpSeSound[i]->setDolby(i_dolby,0,0);
+                                }
+                            }
+                            return &mpSeSound[i];
+                        }
+                    }
+                }
+                
+                if(mpSeSound[field_0x01f4] != NULL){
+                    int index = field_0x01f4;
+                    while(mpSeSound[index]){
+                        index += 1;
+                        index %= 0x18;
+                        if(index == field_0x01f4){
+                            OSReport("[JAIZelBasic::seStart] overflow JAISound pointer\n");
+                            return NULL;
+                        }
+                    }
+                    field_0x01f4 = index;
+                }
+                mpSeSound[field_0x01f4] = NULL;
+                startSoundVec(i_seNum,&mpSeSound[field_0x01f4],param_2,0,param_3,4);
+                if(i_seNum == 0x8AB){
+                    if(param_2 != NULL){
+                        deleteObject(param_2);
+                        
+                    }
+                    param_2 = NULL;
+                }
+                if(mpSeSound[field_0x01f4] != NULL){
+                    mpSeSound[field_0x01f4]->setPortData(9,param_4);
+                    if(i_pitch != 1.0f){
+                        mpSeSound[field_0x01f4]->setPitch(i_pitch,0,0);
+                    }
+                    if(i_volume != 1.0f){
+                        mpSeSound[field_0x01f4]->setVolume(i_volume,0,0);
+                    }
+                    if(i_pan != -1.0f){
+                        mpSeSound[field_0x01f4]->setPan(i_pan,0,0);
+                    }
+                    if(i_dolby != -1.0f){
+                        mpSeSound[field_0x01f4]->setDolby(i_dolby,0,0);
+
+                    }
+
+                    switch(i_seNum){
+                        case 0x893:
+                        case 0x894:
+                        case 0x895:
+                        case 0x887:
+                            mpSeSound[field_0x01f4]->setPortData(8,param_3);
+
+                    }
+                    if(i_seNum == 0x2867){
+                        mpSeSound[field_0x01f4]->setPortData(7,param_3 >> 0x10);
+                        mpSeSound[field_0x01f4]->setPortData(8,param_3);
+                    }
+                    if(i_seNum == 0x285f){
+                        mpSeSound[field_0x01f4]->setPortData(7,param_3 >> 0x10);
+                        mpSeSound[field_0x01f4]->setPortData(8,param_3);
+                    }
+                }
+                int temp_r4 = field_0x01f4;
+                JAISound** retval = &mpSeSound[temp_r4];
+                mSeNum[field_0x01f4] = i_seNum;
+                field_0x0194[field_0x01f4] = param_2;
+                field_0x01f4 += 1;
+                field_0x01f4 %= 0x18;
+                return retval;
+                // goto 0x197C
+            
+        
+     
 }
 
 /* 802A8550-802A85F4       .text seStop__11JAIZelBasicFUll */
@@ -2336,8 +3041,86 @@ void JAIZelBasic::kuroboVoicePlay(u32 param_1, Vec* param_2, s8 param_3) {
 }
 
 /* 802A8CB4-802A8F58       .text setLevObjSE__11JAIZelBasicFUlP3VecSc */
-void JAIZelBasic::setLevObjSE(u32, Vec*, s8) {
+void JAIZelBasic::setLevObjSE(u32 arg0, Vec* arg1, s8 arg2) {
     /* Nonmatching */
+    MtxP pMtx = getAudioCamera()->field_0x8;
+    Vec local_44 = {0.0f,0.0f,-50.0f};
+    f32 var_f1;
+    if(arg1 == NULL){
+        if(getAudioCamera()->field_0x0){
+            local_44 = *getAudioCamera()->field_0x0;
+        }
+    }else{
+        local_44 = *arg1;
+    }
+    if(arg0 == 0x7009){
+
+        if(local_44.y >  getAudioCamera()->field_0x0->y ){
+            local_44.y = getAudioCamera()->field_0x0->y;
+        }
+    }
+    if(pMtx){
+        PSMTXMultVec(pMtx,&local_44,&local_44);
+    }
+    // Vec* local_44;
+    var_f1 = 1.0f;
+    switch ((s32) arg0) {                           /* irregular */
+    case 0x6103:
+    case 0x7035:
+        var_f1 = 0.5f;
+        break;
+    case 0x7009:
+    case 0x501E:
+    case 0x3033:
+    case 0x3034:
+        var_f1 = 3.0f;
+        break;
+    case 0x105f:
+    case 0x501f:
+    case 0x5053:
+    case 0x5054:
+        var_f1 = 4.0f;
+        break;
+    case 0x701F:
+        var_f1 = 6.0f;
+        break;
+    case 0x612E:
+        var_f1 = 0.4f;
+        break;
+    case 0x3019:
+    case 0x6131:
+    case 0x614f:
+        break;
+    }
+    f32 dVar7 = calcPosVolume(&local_44,var_f1);
+    f32 dVar8 = calcPosPanLR(&local_44);
+    f32 dVar9 = calcPosPanSR(&local_44,1.0f);
+    if(dVar7 != 0.0f){
+
+
+        u32 uVar4 = field_0x0244[0xF].m0;
+        u32 uVar6 = uVar4;
+        int i;
+        for(i = 0; field_0x0244[i].m0 != arg0; i++){
+            uVar6 -= 1;
+        }
+        if(i == uVar4){
+            if(uVar4 == 0xF){
+                return;
+            }
+            field_0x0244[i].m0 = arg0;
+            field_0x0244[0xF].m0 += 1;
+        }
+        uVar6 = field_0x0244[i].m4;
+        if(uVar6 != 0x14){
+            field_0x0244[i].m8[uVar6].m0 = dVar7;
+            field_0x0244[i].m8[uVar6].m4 = dVar8;
+            field_0x0244[i].m8[uVar6].m8 = dVar9;
+            field_0x0244[i].m8[uVar6].mC = arg2;
+            field_0x0244[i].m4 += 1;
+        }
+    }
+
 }
 
 /* 802A8F58-802A90C0       .text processLevObjSE__11JAIZelBasicFv */
@@ -2348,6 +3131,16 @@ void JAIZelBasic::processLevObjSE() {
 /* 802A90C0-802A9120       .text initLevObjSE__11JAIZelBasicFv */
 void JAIZelBasic::initLevObjSE() {
     /* Nonmatching */
+    field_0x0244[0xF].m0 = 0;
+    for(int i = 0; i < 0xF; i++){
+        field_0x0244[i].m0 = -1;
+        field_0x0244[i].m4 = 0;
+        for(int j = 0; j < 0x14; j++){
+            field_0x0244[i].m8[j].m0 = 0.0f;
+            field_0x0244[i].m8[j].m4 = 0.5f;
+            field_0x0244[i].m8[j].m8 = 0.0f;
+        }
+    }
 }
 
 /* 802A9120-802A91CC       .text charVoicePlay__11JAIZelBasicFllP3VecSc */
@@ -2367,8 +3160,44 @@ void JAIZelBasic::charVoicePlay(s32 param_1, s32 param_2, Vec* param_3, s8 param
 }
 
 /* 802A91CC-802A92CC       .text messageSePlay__11JAIZelBasicFUsP3VecSc */
-void JAIZelBasic::messageSePlay(u16, Vec*, s8) {
+void JAIZelBasic::messageSePlay(u16 arg0, Vec* arg1, s8 arg2) {
     /* Nonmatching */
+    if(arg0 >= 0x118){
+        return;
+    }
+#if VERSION > VERSION_DEMO
+    switch(arg0){    
+        case 0x104:
+        case 0xB4:
+        case 0xB5:
+        case 0xB6:
+        case 0xB7:
+        case 0xB8:
+        case 0xB9:
+        case 0xBA:
+            arg1 = NULL;
+    }
+#endif
+    u16 uVar1 = charVoiceTable[arg0].m0;
+    u16 soundId = charVoiceTable[arg0].m2;
+    if((uVar1 & 0xFFFF) == 0xFFFF || (soundId & 0xFFFF) == 0xFFFF){
+        return;
+    }
+        switch(uVar1 & 0xF000){
+            case 0:
+
+                charVoicePlay(uVar1,soundId,arg1,arg2);
+                break;
+            case 0x1000:
+            case 0x2000:
+            case 0x3000:
+            case 0x8000:
+            // default:
+                seStart(soundId,arg1,0,arg2);
+
+        
+
+    }
 }
 
 /* 802A92CC-802A965C       .text shipCruiseSePlay__11JAIZelBasicFP3Vecf */
@@ -3217,21 +4046,173 @@ void JAIZelBasic::sceneBgmStart() {
     field_0x022e = 0;
 }
 
-/* 802AB374-802AB678       .text load1stDynamicWave__11JAIZelBasicFv */
 void JAIZelBasic::load1stDynamicWave() {
     /* Nonmatching */
-    OSReport("[JAIZelBasic::load1stDynamicWave] (%d) set num = %d\n");
+    u8 uVar2;
+    u8 uVar1;
+    OSReport("[JAIZelBasic::load1stDynamicWave] (%d) set num = %d\n",mSetNum,mFirstDynamicSceneWaveIndex);
+
+    field_0x0224 = field_0x0220;
+    if((field_0x0231 != 0 || mSetNum != 0 || field_0x0237)){
+        
+        u8 uVar1 = m_dy_wave_set_2nd[field_0x0236][0];
+        uVar2 = m_dy_wave_set_2nd[field_0x0236][1];
+        if(uVar2 != 0){
+            JASystem::WaveBankMgr::eraseWave(uVar2,0);
+            JAInter::BankWave::setWsLoadStatus(uVar2,0);
+            JAInter::BankWave::setWsGroupNumber(uVar2,-1);
+        }
+        if(uVar1 != 0){
+            JASystem::WaveBankMgr::eraseWave(uVar1,0);
+            JAInter::BankWave::setWsLoadStatus(uVar1,0);
+            JAInter::BankWave::setWsGroupNumber(uVar1,-1);
+        }
+    }
+    if(field_0x0231 != 0 || mSetNum != 0){
+        uVar1 = m_dy_wave_set_1st[field_0x0233][0];
+        u8 uVar2 = m_dy_wave_set_1st[field_0x0233][1];
+        if(uVar2 != 0){
+            JASystem::WaveBankMgr::eraseWave(uVar2,0);
+            JAInter::BankWave::setWsLoadStatus(uVar2,0);
+            JAInter::BankWave::setWsGroupNumber(uVar2,-1);
+        }
+        if(uVar1 != 0){
+            JASystem::WaveBankMgr::eraseWave(uVar1,0);
+            JAInter::BankWave::setWsLoadStatus(uVar1,0);
+            JAInter::BankWave::setWsGroupNumber(uVar1,-1);
+        }
+    }
+    if(field_0x0231 != 0 && field_0x0230 != 0){
+        JASystem::WaveBankMgr::eraseWave(field_0x0230,0);
+        JAInter::BankWave::setWsLoadStatus(field_0x0230,0);
+        JAInter::BankWave::setWsGroupNumber(field_0x0230,-1);
+    }
+    if(field_0x0231 != 0 && field_0x022f != 0){
+        JAInter::BankWave::loadSceneWave(field_0x022f,0);
+    }
+    if(mSetNum != 0){
+        u8 uVar1 = m_dy_wave_set_1st[mFirstDynamicSceneWaveIndex][0];
+        u8 uVar2 = m_dy_wave_set_1st[mFirstDynamicSceneWaveIndex][1];
+
+        if(uVar1 != 0){
+            loadSceneWave(uVar1,0);
+        }
+        if(uVar2){
+            loadSceneWave(uVar2,0);
+        }
+    }
+    field_0x022c = 0;
+    field_0x1f3c = 0;
+    field_0x0080 = 1.0f;
+    field_0x0084 = 1.0f;
+    field_0x0088 = 1.0f;
+#if VERSION > VERSION_DEMO
+    switch(mSubBgmNum){
+        case 0x8000001c:
+        case 0x80000030:
+        case 0x80000032:
+            break;
+        default:
+            field_0x008c = 1.0f;
+    }
+#endif
+    if(mMainBgmNum != 0x80000039){
+        field_0x0090 = 1.0f;
+    }
+    field_0x0094 = 1.0f;
+    field_0x0098 = 1.0f;
+    field_0x009c = 1.0f;
+    field_0x00ac = 1.0f;
+    field_0x00a0 = 1.0f;
+    field_0x00a4 = 1.0f;
+#if VERSION > VERSION_DEMO
+    field_0x00a8 = 1.0f;
+
+    if(!mpMainBgmSound || mMainBgmNum != 0x8000001d){
+        field_0x0032 = 0;
+    }
+#endif
+    field_0x00b9 = 0;
+    field_0x021e = 1;
+    field_0x022d = 0;
+    field_0x1dd4 = 0;
+    mbLandingDemoStarted = 0;
+    field_0x0208 = 0;
+    field_0x00d0 = 0;
+    field_0x0204 = 0;
+    field_0x00be = 0;
+#if VERSION > VERSION_DEMO
+    field_0x0028 = 0;
+    field_0x0062 = 0;
+#endif
+    
 }
 
 /* 802AB678-802AB6F4       .text check1stDynamicWave__11JAIZelBasicFv */
-BOOL JAIZelBasic::check1stDynamicWave() {
+s32 JAIZelBasic::check1stDynamicWave() {
     /* Nonmatching */
+
+    s32 iVar5 = 0;
+    s32 iVar4 = 0;
+    u32 wave1 = m_dy_wave_set_1st[mFirstDynamicSceneWaveIndex][0];
+    u32 wave2 = m_dy_wave_set_1st[mFirstDynamicSceneWaveIndex][1];
+    if(wave1 != 0){
+        // s32 uVar6 = getWaveLoadStatus(wave1);
+        iVar5 = 2-getWaveLoadStatus(wave1);
+    }
+    if(wave2 != 0){
+        // iVar4 = getWaveLoadStatus(wave2);
+        iVar4 = 2-getWaveLoadStatus(wave2);
+    }
+
+    return (iVar5 << 8)+iVar4;
 }
 
 /* 802AB6F4-802AB858       .text load2ndDynamicWave__11JAIZelBasicFv */
 void JAIZelBasic::load2ndDynamicWave() {
     /* Nonmatching */
-    OSReport("[JAIZelBasic::load2ndDynamicWave] (%d) set num = %d\n");
+    OSReport("[JAIZelBasic::load2ndDynamicWave] (%d) set num = %d\n",field_0x0237,mSecondDynamicSceneWaveIndex);
+    u32 var_r30 = 0;
+    switch(field_0x0224){
+        case 2:
+            if (field_0x00cd == 0) {
+                var_r30 = 0xC0000002;
+            }
+            break;
+        case 7:
+            if (field_0x00cd == 0) {
+                var_r30 = 0xC0000007;
+            }
+            break;
+        case 37:
+            if (field_0x00cd == 0) {
+                var_r30 = 0xC0000009;
+            }
+            break;
+        case 24:
+            if (field_0x00cd == 0) {
+                var_r30 = 0xC000000F;
+            }
+            break;
+        case 45:
+            if (field_0x00cd == 0) {
+                var_r30 = 0xC0000034;
+            }
+            break;
+    }
+    if(field_0x0237 != 0){
+        u8 uVar1 = m_dy_wave_set_2nd[mSecondDynamicSceneWaveIndex][0];
+        u8 uVar2 = m_dy_wave_set_2nd[mSecondDynamicSceneWaveIndex][1];
+        if(uVar1 != 0){
+            loadSceneWave(uVar1,0);
+        }
+        if(uVar2){
+            loadSceneWave(uVar2,0);
+        }      
+    }
+    if(var_r30 != 0){
+        bgmStreamPrepare(var_r30);
+    }
 }
 
 static void dummy() {
@@ -3256,9 +4237,35 @@ s32 JAIZelBasic::checkFirstWaves() {
     return 2 - JAInter::BankWave::getWaveLoadStatus(2);
 }
 
+
 /* 802AB8B0-802AB9F4       .text setLinkHp__11JAIZelBasicFll */
-void JAIZelBasic::setLinkHp(s32, s32) {
+void JAIZelBasic::setLinkHp(s32 arg0, s32 arg1) {
     /* Nonmatching */
+    field_0x0034 = arg0;
+    field_0x0038 = arg1;
+    if(arg1 != 0){
+        field_0x003c = (f32)arg0/(f32)arg1;
+    }else{
+        field_0x003c = 1.0f;
+    }
+    if(field_0x003c > 1.0f){
+        field_0x003c = 1.0f;
+    }
+    if(mpSubBgmSound){
+        switch(mSubBgmNum){
+            case 0x80000004:
+                mpSubBgmSound->setTempoProportion((1-field_0x003c) * 0.2667f + 1.0f,0);
+                break;
+            case 0x80000019:
+            case 0x8000001a:
+                mpSubBgmSound->setTempoProportion((1-field_0x003c) * 0.1765f + 1.0f,0);
+                break;
+            case 0x8000001c:
+                mpSubBgmSound->setTempoProportion((1-field_0x003c) * 0.2069f + 1.0f,0);
+                break;
+        }
+
+    }
 }
 
 /* 802AB9F4-802ABA44       .text setLinkSwordType__11JAIZelBasicFll */
@@ -3300,9 +4307,23 @@ void JAIZelBasic::setLinkOnBoard(s32 param_1) {
     }
 }
 
+
 /* 802ABB18-802ABBD0       .text bgmMute__11JAIZelBasicFPP8JAISoundUllUl */
-void JAIZelBasic::bgmMute(JAISound**, u32, s32, u32) {
+void JAIZelBasic::bgmMute(JAISound** param_1, u32 param_2, s32 param_3, u32 i_fadeTime) {
     /* Nonmatching */
+    u32 uVar2 = m_bgm_mute_state[4*(param_2 &  0xFF)][4*param_3];
+    if(*param_1 == NULL){
+        OSReport("Warning : bgm pointer is NULL!\n");
+    }else{
+        for(int i = 0; i < 0x10; i++){
+            if((uVar2 & 1) == 0){
+                (*param_1)->setTrackVolumeU7(i,0,i_fadeTime);
+            }else{
+                (*param_1)->setTrackVolumeU7(i,1,i_fadeTime);
+            }
+            uVar2 >>= 1;
+        }
+    }
 }
 
 /* 802ABBD0-802ABC3C       .text checkStreamPlaying__11JAIZelBasicFUl */
@@ -3347,6 +4368,18 @@ void JAIZelBasic::stSkyCloisters() {
 /* 802ABD34-802ABDE0       .text stSkyCloistersProcess__11JAIZelBasicFv */
 void JAIZelBasic::stSkyCloistersProcess() {
     /* Nonmatching */
+    if(field_0x00b7 != 0){
+        if(field_0x00b7 > 1){
+            field_0x00b7 -= 1;
+        }
+        if(field_0x00b7 == 1){
+            if(mMainBgmNum == 0x80000028){
+                bgmStart(0x80000028,1,0);
+            }
+            field_0x00b7 = 0;
+        }
+        seStart(0x105A);
+    }
 }
 
 /* 802ABDE0-802ABE10       .text getRandomU32__11JAIZelBasicFUl */
@@ -3468,13 +4501,43 @@ JAISound* JAIZelBasic::makeSound(u32 param_1) {
 }
 
 /* 802AC258-802AC300       .text checkSeqIDDemoPlaying__11JAIZelBasicFUl */
-BOOL JAIZelBasic::checkSeqIDDemoPlaying(u32) {
+BOOL JAIZelBasic::checkSeqIDDemoPlaying(u32 param_1) {
     /* Nonmatching */
+
+    JAInter::SeqUpdateData* data = 0;
+
+    for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++){
+        data = JAInter::SequenceMgr::getPlayTrackInfo(i);
+        if (data && data->field_0x48 && 
+            data->field_0x48 != mpMainBgmSound && 
+            data->field_0x48 != mpSubBgmSound && 
+            data->field_0x48->mSoundID != 0x80000800 && 
+            param_1 == data->field_0x48->mSoundID) {
+            return TRUE;
+        }
+    };
+    return FALSE;
 }
 
 /* 802AC300-802AC400       .text checkDemoFanfarePlaying__11JAIZelBasicFv */
 u32 JAIZelBasic::checkDemoFanfarePlaying() {
     /* Nonmatching */
+    if(checkSeqIDDemoPlaying(0x80000002) == TRUE){
+        return 0x80000002;
+    }
+    if(checkSeqIDDemoPlaying(0x80000025) == TRUE){
+        return 0x80000025;
+    }
+    if(checkSeqIDDemoPlaying(0x80000027) == TRUE){
+        return 0x80000027;
+    }
+    if(checkSeqIDDemoPlaying(0x80000024) == TRUE){
+        return 0x80000024;
+    }
+    if(checkSeqIDDemoPlaying(0x8000004F) == TRUE){
+        return 0x8000004F;
+    }
+    return checkSeqIDDemoPlaying(0x8000005D) == 1 ? 0x8000005D : 0;
 }
 
 /* 802AC400-802AC468       .text processDemoFanfareMute__11JAIZelBasicFv */
@@ -3493,17 +4556,51 @@ void JAIZelBasic::processDemoFanfareMute() {
 
 /* 802AC468-802AC594       .text muteMainBgmAll__11JAIZelBasicFv */
 void JAIZelBasic::muteMainBgmAll() {
-    /* Nonmatching */
+
+    JAInter::SeqUpdateData* data;
+    field_0x008c = 0.0f;
+    for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++){
+        data = JAInter::SequenceMgr::getPlayTrackInfo(i);
+
+        if (data && data->field_0x48 && data->field_0x48->field_0x4 == 0){
+            data->field_0x48->setVolume(calcMainBgmVol(),1,0);
+        }
+    };
+    JAISound* sound = JAInter::StreamMgr::streamUpdate->mpSound;
+    if(sound != NULL){
+        sound->setVolume(calcMainBgmVol(),1,0);
+    }
 }
 
 /* 802AC594-802AC6C0       .text unmuteMainBgmAll__11JAIZelBasicFv */
 void JAIZelBasic::unmuteMainBgmAll() {
     /* Nonmatching */
+    JAInter::SeqUpdateData* data;
+    field_0x008c = 1.0f;
+    for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++){
+        data = JAInter::SequenceMgr::getPlayTrackInfo(i);
+
+        if (data && data->field_0x48 && data->field_0x48->field_0x4 == 0){
+            data->field_0x48->setVolume(calcMainBgmVol(),0x2D,0);
+        }
+    };
+    JAISound* sound = JAInter::StreamMgr::streamUpdate->mpSound;
+    if(sound != NULL){
+        sound->setVolume(calcMainBgmVol(),0x2D,0);
+    }
 }
 
 /* 802AC6C0-802AC758       .text demoBgmStop__11JAIZelBasicFUl */
-void JAIZelBasic::demoBgmStop(u32) {
+void JAIZelBasic::demoBgmStop(u32 arg0) {
     /* Nonmatching */
+    JAInter::SeqUpdateData* data;
+    for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++){
+        data = JAInter::SequenceMgr::getPlayTrackInfo(i);
+
+        if (data && data->field_0x48 && data->field_0x48 != mpMainBgmSound   && data->field_0x48 != mpSubBgmSound && data->field_0x48->field_0x4 == 0){
+            data->field_0x48->stop(arg0);
+        }
+    };
 }
 
 /* 802AC758-802AC788       .text isDemo__11JAIZelBasicFv */
@@ -3514,6 +4611,7 @@ BOOL JAIZelBasic::isDemo() {
     }
     return false;
 }
+
 
 /* 802AC788-802AC7E8       .text checkSeaBgmID__11JAIZelBasicFv */
 u32 JAIZelBasic::checkSeaBgmID() {
