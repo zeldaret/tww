@@ -126,7 +126,7 @@ void* item_tag_search(void* param_1, void* param_2) {
 
 /* 00000B60-00000B9C       .text search_get_esa__FP8kb_class */
 void* search_get_esa(kb_class* i_this) {
-    void* pProc = fpcEx_Search(esa_search_sub, i_this);
+    void* pProc = fpcM_Search(esa_search_sub, i_this);
     if(pProc) {
         return pProc;
     }
@@ -136,7 +136,7 @@ void* search_get_esa(kb_class* i_this) {
 
 /* 00000B9C-00000BD8       .text search_get_item__FP8kb_class */
 daTagKbItem_c* search_get_item(kb_class* i_this) {
-    void* pProc = fpcEx_Search(item_tag_search, i_this);
+    void* pProc = fpcM_Search(item_tag_search, i_this);
     if(pProc) {
         return (daTagKbItem_c*)pProc;
     }

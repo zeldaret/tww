@@ -3278,7 +3278,7 @@ void daNpc_Ji1_c::battleSubActionWaitInit() {
 /* 0000A430-0000A564       .text battleSubActionWait__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::battleSubActionWait() {
     if(--field_0xC30 < 0) {
-        f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+        f32 dist = fopAcM_searchPlayerDistanceXZ(this);
         f32 rnd = cM_rndF(10.0f);
 
         if(rnd > 3.3f || dist > 100.0f) {

@@ -879,7 +879,7 @@ void daDaiocta_c::modeHideInit() {
 
 /* 00001EB8-00001F34       .text modeHide__11daDaiocta_cFv */
 void daDaiocta_c::modeHide() {
-    f32 dist_xz = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 dist_xz = fopAcM_searchPlayerDistanceXZ(this);
     if ((dist_xz < mAppearRadius || dist_xz < l_HIO.mMinAppearRadius) && 
         dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         modeProc(PROC_INIT_e, MODE_APPEAR);
@@ -967,7 +967,7 @@ void daDaiocta_c::modeAppear() {
             if (dist <= 0.1) {
                 modeProc(PROC_INIT_e, MODE_WAIT);
             } else {
-                s16 target = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+                s16 target = fopAcM_searchPlayerAngleY(this);
                 cLib_addCalcAngleS2(&shape_angle.y, target, 4, l_HIO.m010);
             }
         }
@@ -1400,8 +1400,8 @@ bool daDaiocta_c::_execute() {
         mBrkAnm2.play();
         mBtkAnm.play();
 #endif        
-        f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-        s16 angle_y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+        f32 dist = fopAcM_searchPlayerDistanceXZ(this);
+        s16 angle_y = fopAcM_searchPlayerAngleY(this);
         s32 dist_angle_s = cLib_distanceAngleS(shape_angle.y + l_HIO.m014, angle_y);
         if (dist < l_HIO.m084 && 
             mMode != MODE_DEMO && 

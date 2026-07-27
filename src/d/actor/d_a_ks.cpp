@@ -1205,7 +1205,7 @@ void action_tubo_search(ks_class* i_this) {
         case 50: {
             i_this->mKsID = fpcM_ERROR_PROCESS_ID_e;
 
-            fpcEx_Search(tsubo_search, actor);
+            fpcM_Search(tsubo_search, actor);
 
             if (i_this->mKsID == fpcM_ERROR_PROCESS_ID_e) {
                 fopAcM_delete(actor);

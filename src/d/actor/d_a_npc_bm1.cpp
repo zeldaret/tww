@@ -1881,7 +1881,7 @@ fopAc_ac_c* daNpc_Bm1_c::searchByID(fpc_ProcID i_procID) {
 }
 
 /* 00003664-00003714       .text partner_srch_sub__11daNpc_Bm1_cFPFPvPv_Pv */
-bool daNpc_Bm1_c::partner_srch_sub(void* (*i_searchFunc)(void*, void*)) {
+bool daNpc_Bm1_c::partner_srch_sub(fpcLyIt_JudgeFunc i_searchFunc) {
     bool o_retval = false;
     mPartnerProcID = -1;
     l_check_wrk = 0;

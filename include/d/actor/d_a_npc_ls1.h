@@ -139,7 +139,7 @@ public:
     bool chk_talk();
     bool chk_parts_notMov();
     fopAc_ac_c* searchByID(fpc_ProcID, int*);
-    bool partner_search_sub(void* (*)(void*, void*));
+    bool partner_search_sub(fpcLyIt_JudgeFunc);
     void partner_search();
     void setEyeCtrl();
     void clrEyeCtrl();

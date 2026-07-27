@@ -1269,7 +1269,7 @@ void daNpc_Cb1_c::evInitOffsetLink(int staffIdx) {
         cLib_offsetPos(&current.pos, &pLink->current.pos, pPlayer->shape_angle.y, pFrom);
     }
 
-    current.angle.y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    current.angle.y = fopAcM_searchPlayerAngleY(this);
     shape_angle.y = current.angle.y;
 }
 
@@ -1355,7 +1355,7 @@ BOOL daNpc_Cb1_c::evActWalk(int staffIdx) {
 void daNpc_Cb1_c::evInitToLink(int) {
     setAnm(ANM_01);
     speedF = 0.0f;
-    current.angle.y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    current.angle.y = fopAcM_searchPlayerAngleY(this);
     shape_angle.y = current.angle.y;
 }
 
@@ -1366,14 +1366,14 @@ BOOL daNpc_Cb1_c::evActToLink(int staffIdx) {
 
     JUT_ASSERT(VERSION_SELECT(2131, 2144, 2149, 2149), speed_p != NULL && dist_p != NULL);
 
-    if(fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) < *dist_p) {
+    if(fopAcM_searchPlayerDistanceXZ(this) < *dist_p) {
         setAnm(ANM_00);
         speedF = 0.0f;
 
         return TRUE;
     }
     else {
-        walkAction(*speed_p, l_HIO.mForwardAccel, fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0)));
+        walkAction(*speed_p, l_HIO.mForwardAccel, fopAcM_searchPlayerAngleY(this));
     }
 
     return FALSE;
@@ -1729,7 +1729,7 @@ BOOL daNpc_Cb1_c::waitNpcAction(void* param_1) {
                 cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e);
             }
 
-            f32 dist_sq = fopAcM_searchActorDistance2(this, dComIfGp_getPlayer(0));
+            f32 dist_sq = fopAcM_searchPlayerDistance2(this);
 
             if(!checkNpcCallCommand()) {
                 if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610) && dist_sq < SQUARE(l_HIO.field_0xC0)) {

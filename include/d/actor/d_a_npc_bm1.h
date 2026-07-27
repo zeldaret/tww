@@ -129,7 +129,7 @@ public:
     bool chkAttention();
     void setAttention(bool);
     fopAc_ac_c* searchByID(fpc_ProcID);
-    bool partner_srch_sub(void* (*)(void*, void*));
+    bool partner_srch_sub(fpcLyIt_JudgeFunc);
     void partner_srch();
     u32 bm_movPass(bool);
     void bm_setFlyAnm();

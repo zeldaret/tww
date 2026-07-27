@@ -1078,7 +1078,7 @@ static BOOL daBgn3_Execute(bgn3_class* i_this) {
     if (l_HIO.m06 != 0) {
         actor->health = l_HIO.m06;
     }
-    esa = (esa_class*)fpcEx_Search(esa_s_sub, i_this);
+    esa = (esa_class*)fpcM_Search(esa_s_sub, i_this);
     if (bgn->m02B5 != 2) {
         i_this->m0FD8A = 10;
         actor->current.pos.x = 0.0f;

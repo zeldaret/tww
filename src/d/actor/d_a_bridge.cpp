@@ -849,7 +849,7 @@ void* s_a_b_sub(void* ac1, void* ac2) {
 
 /* 00002A8C-00002AB8       .text search_aite__FP12bridge_class */
 bridge_class* search_aite(bridge_class* i_this) {
-    return (bridge_class*)fpcEx_Search(s_a_b_sub, &i_this->actor);
+    return (bridge_class*)fpcM_Search(s_a_b_sub, &i_this->actor);
 }
 
 /* 00002AB8-00003C68       .text daBridge_Execute__FP12bridge_class */

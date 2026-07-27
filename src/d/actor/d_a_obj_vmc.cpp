@@ -233,7 +233,7 @@ void daObjVmc::Act_c::daObjVmc_base_main() {
 #endif
         cLib_offBit<u32>(attention_info.flags, fopAc_Attn_UNK10000000_e);
         mState = STATE_TREE_DEMO_WAIT;
-        shape_angle.y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0)) + 0x1800;
+        shape_angle.y = fopAcM_searchPlayerAngleY(this) + 0x1800;
         mTimer = 0;
     }
 }

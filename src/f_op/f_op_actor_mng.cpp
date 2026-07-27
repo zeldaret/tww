@@ -52,7 +52,7 @@ BOOL fopAcM_SearchByID(fpc_ProcID actorID, fopAc_ac_c** pDstActor) {
     if (fpcM_IsCreating(actorID)) {
         *pDstActor = NULL;
     } else {
-        fopAc_ac_c *pActor = fopAcM_Search((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &actorID);
+        fopAc_ac_c *pActor = fopAcM_Search(fpcSch_JudgeByID, &actorID);
         *pDstActor = pActor;
         if (*pDstActor == NULL)
             return FALSE;
@@ -63,7 +63,7 @@ BOOL fopAcM_SearchByID(fpc_ProcID actorID, fopAc_ac_c** pDstActor) {
 
 /* 80024230-800242AC       .text fopAcM_SearchByName__FsPP10fopAc_ac_c */
 BOOL fopAcM_SearchByName(s16 procName, fopAc_ac_c** pDstActor) {
-    *pDstActor = fopAcM_Search((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &procName);
+    *pDstActor = fopAcM_Search(fpcSch_JudgeForPName, &procName);
     if (*pDstActor == NULL) {
         return FALSE;
     } else {

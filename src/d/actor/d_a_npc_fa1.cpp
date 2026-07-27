@@ -604,7 +604,7 @@ void daNpc_Fa1_c::init_hover_move() {
 void daNpc_Fa1_c::hover_move() {
     position_move(l_HIO.m78.prm.m10, l_HIO.m78.prm.m08);
     BGCheck();
-    s16 target = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    s16 target = fopAcM_searchPlayerAngleY(this);
     cLib_addCalcAngleS(&current.angle.y, target, 8, 0x2000, 0x400);
 }
 

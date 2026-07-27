@@ -1004,7 +1004,7 @@ static void beam_attack(bst_class* i_this) {
         }
         break;
     }
-    f32 dist = fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0));
+    f32 dist = fopAcM_searchPlayerDistance(actor);
     if (dist < REG0_F(9) + 500.0f || bVar3) {
         i_this->mRoomState = 8;
         i_this->mActionType = bst_class::ACTION_FLY_e;
@@ -1486,7 +1486,7 @@ static void damage_check(bst_class* i_this) {
                     scale.x = scale.y = scale.z = 2.0f;
                     csXyz angle;
                     angle.x = angle.z = 0;
-                    angle.y = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
+                    angle.y = fopAcM_searchPlayerAngleY(actor);
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, hit_pos, &angle, &scale);
                     dKy_SordFlush_set(*hit_pos, 1);
                 }
@@ -1516,7 +1516,7 @@ static void damage_check(bst_class* i_this) {
                     scale.x = 2.0f;
                     csXyz angle;
                     angle.x = angle.z = 0;
-                    angle.y = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
+                    angle.y = fopAcM_searchPlayerAngleY(actor);
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, hit_pos, &angle, &scale);
                     dKy_SordFlush_set(*hit_pos, 1);
                     i_this->mActionType = bst_class::ACTION_DAMAGE_e;

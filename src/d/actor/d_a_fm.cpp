@@ -575,8 +575,8 @@ fopAc_ac_c* daFm_c::searchNearOtherActor(fopAc_ac_c* i_actor) {
             } else if(fopAcM_GetName(i_actor) == fpcNm_TSUBO_e) {
                 daPy_lk_c* pLink = daPy_getPlayerLinkActorClass();
 
-                f32 dist2 = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-                f32 dist3 = fopAcM_searchActorDistanceXZ(i_actor, dComIfGp_getPlayer(0));
+                f32 dist2 = fopAcM_searchPlayerDistanceXZ(this);
+                f32 dist3 = fopAcM_searchPlayerDistanceXZ(i_actor);
 
                 if(dist2 < l_HIO.field_0x0E8) {
                     if(dist3 > REG12_F(0) + 80.0f || fopAcM_GetID(i_actor) == pLink->getGrabActorID()) {
@@ -652,7 +652,7 @@ void daFm_c::moveRndBack() {
 
 /* 00001384-000015F8       .text moveRndEscape__6daFm_cFv */
 void daFm_c::moveRndEscape() {
-    f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 dist = fopAcM_searchPlayerDistanceXZ(this);
 
     if(cLib_calcTimer(&field_0x648) == 0 || field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
         if(dist < l_HIO.field_0x0B4) {
@@ -1392,7 +1392,7 @@ void daFm_c::modeDisappear() {
             if(field_0x2E4 != 0 || field_0x2E5) {
                 modeProc(PROC_INIT_e, 0x12);
             } else {
-                fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                fopAcM_searchPlayerDistanceXZ(this);
                 if(isGrabFoot() && !dComIfGp_event_runCheck()) {
                     modeProc(PROC_INIT_e, 0xf);
                 } else {
@@ -1589,7 +1589,7 @@ void daFm_c::modeAttack() {
                                     }
                                     modeProcInit(0xD);
                                 } else {
-                                    f32 temp3 = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                                    f32 temp3 = fopAcM_searchPlayerDistanceXZ(this);
                                     daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
 
                                     if ((temp3 > l_HIO.field_0x0BC || 
@@ -1772,7 +1772,7 @@ void daFm_c::modeGrabFootDemo() {
             pLink->changeOriginalDemo();
 
             if(mAnmPrmIdx != 10) {
-                if(fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) < 3.0f) {
+                if(fopAcM_searchPlayerDistanceXZ(this) < 3.0f) {
                     setAnm(10, false);
                 }  else {
                     cLib_addCalcPosXZ2(&field_0x630, current.pos, 0.3f, 10.0f);
@@ -1907,16 +1907,16 @@ void daFm_c::modeGrab() {
                     cLib_addCalcAngleS2(&shape_angle.y, angle, 4, l_HIO.field_0x096);
                 }
             } else {
-                dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                dist = fopAcM_searchPlayerDistanceXZ(this);
                 if (field_0x2D0 == 2 && isNpc(mpActorTarget) && dist < l_HIO.field_0x0C4) {
                     fopAcM_Search(searchNearFm_CB, this);
                     if (field_0x3E4.absXZ() != 0.0f) {
                         angle = cLib_targetAngleY(&current.pos, &field_0x3E4);
                     } else {
-                        angle = (s16)fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+                        angle = (s16)fopAcM_searchPlayerAngleY(this);
                     }
                 } else {
-                    angle = (s16)fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+                    angle = (s16)fopAcM_searchPlayerAngleY(this);
                 }
                 cLib_addCalcAngleS2(&shape_angle.y, angle, 4, 0x800);
             }
@@ -1960,7 +1960,7 @@ void daFm_c::modeGrab() {
                             modeProcInit(0x10);
                         }
                     } else {
-                        dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                        dist = fopAcM_searchPlayerDistanceXZ(this);
                         if (dist < l_HIO.field_0x0B4 && field_0x2D0 == 2) {
                             angle = cLib_targetAngleY(&current.pos, &field_0x3E4);
 
