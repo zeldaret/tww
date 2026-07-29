@@ -7,6 +7,7 @@
 #include "d/actor/d_a_obj_majyuu_door.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_bg_s_func.h"
+#include "res/Object/S_MSPDo.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -74,7 +75,7 @@ void daObj_MjDoor_c::set_mtx() {
 
 /* 00000240-000003A0       .text _createHeap__14daObj_MjDoor_cFv */
 BOOL daObj_MjDoor_c::_createHeap() {
-    J3DModelData* mdl_data = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, 0x40);
+    J3DModelData* mdl_data = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_S_MSPDO_BDL_S_MSPDO_e);
     BOOL ret = false;
     JUT_ASSERT(199, mdl_data != 0);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
@@ -90,7 +91,8 @@ BOOL daObj_MjDoor_c::_createHeap() {
     if (mpBgW == NULL) {
         return FALSE;
     }
-    return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, 7), cBgW::MOVE_BG_e, &mMtx) ? TRUE : FALSE;
+    ret = mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_S_MSPDO_DZB_S_MSPDO_e), cBgW::MOVE_BG_e, &mMtx);
+    return ret ? TRUE : FALSE;
 }
 
 /* 000003A0-000003AC       .text getArg__14daObj_MjDoor_cFv */
@@ -100,7 +102,12 @@ void daObj_MjDoor_c::getArg() {
 
 /* 000003AC-00000478       .text CreateInit__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::CreateInit() {
-    /* Nonmatching */
+
+    dComIfG_Bgsp()->Regist(mpBgW, this);
+    set_mtx();
+    modeWaitInit();
+    max_health = 30;
+    health = max_health;
 }
 
 /* 00000478-000005B4       .text _create__14daObj_MjDoor_cFv */
