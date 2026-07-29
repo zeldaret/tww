@@ -5,7 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_majyuu_door.h"
-#include "d/d_cc_d.h"
+#include "f_op/f_op_actor_mng.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -39,13 +39,15 @@ static dCcD_SrcCyl l_cyl_src = {
 
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
+    return ((daObj_MjDoor_c*)i_this)->_createHeap();
 }
 
 /* 0000010C-00000130       .text TgHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void TgHitCallback(fopAc_ac_c*, dCcD_GObjInf*, fopAc_ac_c*, dCcD_GObjInf*) {
-    /* Nonmatching */
+void TgHitCallback(fopAc_ac_c* i_actor, dCcD_GObjInf*, fopAc_ac_c* i_atActor, dCcD_GObjInf*) {
+    if (i_atActor != NULL && fopAcM_GetName(i_atActor) == fpcNm_BOMB_e) {
+        ((daObj_MjDoor_c*)i_actor)->health--;
+    }     
 }
 
 /* 00000130-00000154       .text __ct__17daObj_MjDoorHIO_cFv */
@@ -55,17 +57,25 @@ daObj_MjDoorHIO_c::daObj_MjDoorHIO_c() {
 
 /* 0000019C-00000240       .text set_mtx__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+
+    if (mMode != MODE_DELETE) {
+        MTXCopy(mDoMtx_stack_c::now, mMtx);
+        mpBgW->Move();
+    }
 }
 
 /* 00000240-000003A0       .text _createHeap__14daObj_MjDoor_cFv */
-void daObj_MjDoor_c::_createHeap() {
+BOOL daObj_MjDoor_c::_createHeap() {
     /* Nonmatching */
 }
 
 /* 000003A0-000003AC       .text getArg__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::getArg() {
-    /* Nonmatching */
+    field_2CC = fopAcM_GetParam(this);
 }
 
 /* 000003AC-00000478       .text CreateInit__14daObj_MjDoor_cFv */
@@ -90,7 +100,7 @@ void daObj_MjDoor_c::setCollision() {
 
 /* 000009D4-000009E0       .text modeWaitInit__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::modeWaitInit() {
-    /* Nonmatching */
+    mMode = MODE_WAIT;
 }
 
 /* 000009E0-00000A34       .text modeWait__14daObj_MjDoor_cFv */

@@ -2,13 +2,21 @@
 #define D_A_OBJ_MAJYUU_DOOR_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_bg_w.h"
+#include "d/d_cc_d.h"
+#include "d/d_particle.h"
 
 class daObj_MjDoor_c : public fopAc_ac_c {
 public:
+    enum Mode {
+        MODE_WAIT  = 0x0,
+        MODE_DELETE = 0x1,
+    };
+
     void modeProcCall() {}
 
     void set_mtx();
-    void _createHeap();
+    BOOL _createHeap();
     void getArg();
     void CreateInit();
     cPhs_State _create();
@@ -23,8 +31,22 @@ public:
     bool _draw();
 
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ int mMode;
+    /* 0x294 */ cXyz mPos;
+    /* 0x2A0 */ csXyz mAngle;
+    /* 0x2A8 */ dPa_smokeEcallBack mSmoke;
+    /* 0x2C8 */ int field_2C8;
+    /* 0x2CC */ u8 field_2CC;
+    /* 0x2D0 */ J3DModel* mpModel;
+    /* 0x2D4 */ request_of_phase_process_class mPhs;
+    /* 0x2DC */ dBgW* mpBgW;
+    /* 0x2E0 */ Mtx mMtx;
+    /* 0x310 */ int field_310;
+    /* 0x314 */ dCcD_Stts mStts;
+    /* 0x350 */ dCcD_Cyl mCyl[10];
+}; // Size: 0xF30
+
+STATIC_ASSERT(sizeof(daObj_MjDoor_c) == 0xF30);
 
 class daObj_MjDoorHIO_c {
 public:
