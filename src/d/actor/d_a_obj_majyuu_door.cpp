@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_majyuu_door.h"
 #include "f_op/f_op_actor_mng.h"
+#include "d/d_bg_s_func.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -37,6 +38,9 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
+const char daObj_MjDoor_c::m_arc_name[] = "S_MSPDo";
+
+static daObj_MjDoorHIO_c l_HIO;
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c* i_this) {
@@ -52,7 +56,7 @@ void TgHitCallback(fopAc_ac_c* i_actor, dCcD_GObjInf*, fopAc_ac_c* i_atActor, dC
 
 /* 00000130-00000154       .text __ct__17daObj_MjDoorHIO_cFv */
 daObj_MjDoorHIO_c::daObj_MjDoorHIO_c() {
-    /* Nonmatching */
+    field_0x4 = 0;
 }
 
 /* 0000019C-00000240       .text set_mtx__14daObj_MjDoor_cFv */
@@ -70,12 +74,28 @@ void daObj_MjDoor_c::set_mtx() {
 
 /* 00000240-000003A0       .text _createHeap__14daObj_MjDoor_cFv */
 BOOL daObj_MjDoor_c::_createHeap() {
-    /* Nonmatching */
+    J3DModelData* mdl_data = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, 0x40);
+    BOOL ret = false;
+    JUT_ASSERT(199, mdl_data != 0);
+    mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    MTXCopy(mDoMtx_stack_c::now, mMtx);
+
+    mpBgW = new dBgW();
+    if (mpBgW == NULL) {
+        return FALSE;
+    }
+    return mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, 7), cBgW::MOVE_BG_e, &mMtx) ? TRUE : FALSE;
 }
 
 /* 000003A0-000003AC       .text getArg__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::getArg() {
-    field_2CC = fopAcM_GetParam(this);
+    field_0x2CC = fopAcM_GetParam(this);
 }
 
 /* 000003AC-00000478       .text CreateInit__14daObj_MjDoor_cFv */
@@ -105,7 +125,10 @@ void daObj_MjDoor_c::modeWaitInit() {
 
 /* 000009E0-00000A34       .text modeWait__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::modeWait() {
-    /* Nonmatching */
+    setCollision();
+    if (health < 0 || l_HIO.field_0x4 != 0) {
+        modeDeleteInit();
+    }
 }
 
 /* 00000A34-00000AEC       .text smoke_set__14daObj_MjDoor_cFv */
@@ -115,7 +138,40 @@ void daObj_MjDoor_c::smoke_set() {
 
 /* 00000AEC-00000D64       .text modeDeleteInit__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::modeDeleteInit() {
-    /* Nonmatching */
+    if(field_0x2CC != 0xFF) {
+        dComIfGs_onSwitch(field_0x2CC, fopAcM_GetRoomNo(this));
+    }
+
+    mMode = MODE_DELETE;
+    mDoAud_seStart(JA_SE_OBJ_MJ_GATE_BREAK, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
+
+    cXyz scale = cXyz(1.0f, 1.0f, 1.0f);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_HAHEN_L00, &current.pos, &current.angle,
+        &scale, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_HAHEN_S00, &current.pos, &current.angle,
+        &scale, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+
+    cXyz pos = current.pos;
+    pos.y = dBgS_GetWaterHeight(pos);
+
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_HAMON00, &pos, &current.angle,
+        &scale, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_SHIBUKI00, &pos, &current.angle,
+        &scale, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+
+    mPos = current.pos;
+    mAngle = current.angle;
+    smoke_set();
+    field_0x2C8 = 0x32;
+    field_0x310 = 600;
+    dComIfG_Bgsp()->Release(mpBgW);
+
+    dCcD_Cyl* cyl = mCyl;
+    for (int i = 0; i < 10; i++, cyl++) {
+        cyl->OffCoSPrmBit(cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e |
+            cCcD_CoSPrm_VsGrpAll_e);
+        cyl->OffTgSPrmBit(cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e);
+    }
 }
 
 /* 00000D64-00000DF0       .text modeDelete__14daObj_MjDoor_cFv */

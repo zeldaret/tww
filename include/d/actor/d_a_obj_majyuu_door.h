@@ -5,6 +5,7 @@
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daObj_MjDoor_c : public fopAc_ac_c {
 public:
@@ -30,30 +31,33 @@ public:
     bool _execute();
     bool _draw();
 
+    static const char m_arc_name[];
+
 public:
     /* 0x290 */ int mMode;
     /* 0x294 */ cXyz mPos;
     /* 0x2A0 */ csXyz mAngle;
     /* 0x2A8 */ dPa_smokeEcallBack mSmoke;
-    /* 0x2C8 */ int field_2C8;
-    /* 0x2CC */ u8 field_2CC;
+    /* 0x2C8 */ int field_0x2C8;
+    /* 0x2CC */ u8 field_0x2CC;
     /* 0x2D0 */ J3DModel* mpModel;
     /* 0x2D4 */ request_of_phase_process_class mPhs;
     /* 0x2DC */ dBgW* mpBgW;
     /* 0x2E0 */ Mtx mMtx;
-    /* 0x310 */ int field_310;
+    /* 0x310 */ int field_0x310;
     /* 0x314 */ dCcD_Stts mStts;
     /* 0x350 */ dCcD_Cyl mCyl[10];
 }; // Size: 0xF30
 
 STATIC_ASSERT(sizeof(daObj_MjDoor_c) == 0xF30);
 
-class daObj_MjDoorHIO_c {
+class daObj_MjDoorHIO_c : public mDoHIO_entry_c {
 public:
     daObj_MjDoorHIO_c();
+    // virtual ~daObj_MjDoorHIO_c() {}
 
 public:
-    /* Place member variables here */
+    /* 0x4 */ u8 field_0x4;
 };
 
 #endif /* D_A_OBJ_MAJYUU_DOOR_H */
