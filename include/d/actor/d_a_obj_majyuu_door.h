@@ -14,6 +14,7 @@ public:
         MODE_DELETE = 0x1,
     };
 
+    daObj_MjDoor_c() : mSmoke(smoke_col, &tevStr, 0) {}
     void modeProcCall() {}
 
     void set_mtx();
@@ -31,6 +32,7 @@ public:
     bool _execute();
     bool _draw();
 
+    static GXColor smoke_col;
     static const char m_arc_name[];
 
 public:

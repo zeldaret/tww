@@ -3,11 +3,12 @@
  * Object - Forsaken Fortress - Large wooden barricade (blocks entrance, destroyed with Bombs)
  */
 
-#include "d/dolzel_rel.h" // IWYU pragma: keep
-#include "d/actor/d_a_obj_majyuu_door.h"
-#include "f_op/f_op_actor_mng.h"
-#include "d/d_bg_s_func.h"
-#include "res/Object/S_MSPDo.h"
+ #include "d/dolzel_rel.h" // IWYU pragma: keep
+ #include "d/d_particle.h"
+ #include "d/actor/d_a_obj_majyuu_door.h"
+ #include "d/d_bg_s_func.h"
+ #include "f_op/f_op_actor_mng.h"
+ #include "res/Object/S_MSPDo.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -39,6 +40,7 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
+GXColor daObj_MjDoor_c::smoke_col = {0x86, 0x84, 0x6D, 0xC8};
 const char daObj_MjDoor_c::m_arc_name[] = "S_MSPDo";
 
 static daObj_MjDoorHIO_c l_HIO;
@@ -76,7 +78,6 @@ void daObj_MjDoor_c::set_mtx() {
 /* 00000240-000003A0       .text _createHeap__14daObj_MjDoor_cFv */
 BOOL daObj_MjDoor_c::_createHeap() {
     J3DModelData* mdl_data = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_S_MSPDO_BDL_S_MSPDO_e);
-    BOOL ret = false;
     JUT_ASSERT(199, mdl_data != 0);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
     if (mpModel == NULL) {
@@ -91,8 +92,12 @@ BOOL daObj_MjDoor_c::_createHeap() {
     if (mpBgW == NULL) {
         return FALSE;
     }
-    ret = mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_S_MSPDO_DZB_S_MSPDO_e), cBgW::MOVE_BG_e, &mMtx);
-    return ret ? TRUE : FALSE;
+
+    if (mpBgW->Set((cBgD_t*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_S_MSPDO_DZB_S_MSPDO_e), cBgW::MOVE_BG_e, &mMtx) == true) {
+        return FALSE;
+    }
+    
+    return TRUE;
 }
 
 /* 000003A0-000003AC       .text getArg__14daObj_MjDoor_cFv */
@@ -102,6 +107,16 @@ void daObj_MjDoor_c::getArg() {
 
 /* 000003AC-00000478       .text CreateInit__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::CreateInit() {
+    mStts.Init(0xFF, 0, this);
+
+    dCcD_Cyl* cyl = mCyl;
+    for (int i = 0; i < 10; i++, cyl++) {
+        cyl->Set(l_cyl_src);
+        cyl->SetStts(&mStts);
+        cyl->SetTgHitCallback(TgHitCallback);
+    }
+
+    mCyl[1].SetR(95.0f);
 
     dComIfG_Bgsp()->Regist(mpBgW, this);
     set_mtx();
@@ -112,7 +127,21 @@ void daObj_MjDoor_c::CreateInit() {
 
 /* 00000478-000005B4       .text _create__14daObj_MjDoor_cFv */
 cPhs_State daObj_MjDoor_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daObj_MjDoor_c);
+    cPhs_State phase = dComIfG_resLoad(&mPhs, m_arc_name);
+    if (phase == cPhs_COMPLEATE_e) {
+        getArg();
+        if (field_0x2CC != 0xFF && dComIfGs_isSwitch(field_0x2CC, current.roomNo)) {
+            return cPhs_ERROR_e;
+        }
+
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0x820)) {
+            return cPhs_ERROR_e;
+        }
+        CreateInit();
+    }
+
+    return phase;
 }
 
 /* 000007F0-00000884       .text _delete__14daObj_MjDoor_cFv */
