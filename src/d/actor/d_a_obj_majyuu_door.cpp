@@ -4,9 +4,9 @@
  */
  
  #include "d/dolzel_rel.h" // IWYU pragma: keep
+ #include "d/actor/d_a_obj_majyuu_door.h"
  #include "d/d_bg_s_func.h"
  #include "d/d_s_play.h"
- #include "d/actor/d_a_obj_majyuu_door.h"
  #include "res/Object/S_MSPDo.h"
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -137,11 +137,14 @@ void daObj_MjDoor_c::CreateInit() {
 
 /* 00000478-000005B4       .text _create__14daObj_MjDoor_cFv */
 cPhs_State daObj_MjDoor_c::_create() {
-    fopAcM_ct(this, daObj_MjDoor_c);
+    fopAcM_ct_Retail(this, daObj_MjDoor_c);
+    
     cPhs_State phase = dComIfG_resLoad(&mPhs, m_arc_name);
+    fopAcM_ct_Demo(this, daObj_MjDoor_c);
     if (phase == cPhs_COMPLEATE_e) {
         getArg();
-        if (field_0x2CC != 0xFF && dComIfGs_isSwitch(field_0x2CC, current.roomNo)) {
+        if (field_0x2CC != 0xFF
+            && dComIfGs_isSwitch(field_0x2CC, fopAcM_GetRoomNo(this))) {
             return cPhs_ERROR_e;
         }
 
@@ -217,7 +220,7 @@ void daObj_MjDoor_c::modeDeleteInit() {
     }
 
     mMode = MODE_DELETE;
-    mDoAud_seStart(JA_SE_OBJ_MJ_GATE_BREAK, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
+    mDoAud_seStart(JA_SE_OBJ_MJ_GATE_BREAK, &eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
 
     cXyz scale(1.0f, 1.0f, 1.0f);
     dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_HAHEN_L00, &current.pos, &current.angle,
@@ -253,8 +256,13 @@ void daObj_MjDoor_c::modeDelete() {
     if (mSmoke.getEmitter() != NULL) {
         if (cLib_calcTimer(&mSmokeTimer) != 0) {
             if (mSmokeTimer <= 40) {
+#if VERSION == VERSION_DEMO
+                u8 colorAlpha = mSmokeTimer * 5;
+                mSmoke.getEmitter()->mGlobalPrmColor.a = colorAlpha;
+#else
                 JPABaseEmitter* emitter = mSmoke.getEmitter();
                 emitter->mGlobalPrmColor.a = mSmokeTimer * 5;
+#endif
             }
         } else {
             mSmoke.end();
