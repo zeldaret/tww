@@ -2095,7 +2095,7 @@ void JAIZelBasic::initSe() {
 /* 802A6720-802A8550       .text seStart__11JAIZelBasicFUlP3VecUlScffffUc */
 JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param_4, f32 i_pitch, f32 i_volume, f32 i_pan, f32 i_dolby, u8 param_9) {
     /* Nonmatching */
-
+    f32 dist;
     if(field_0x0201 == 1){
         return NULL;
     }
@@ -2159,9 +2159,11 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         return NULL;
                     }
                     field_0x01f9 = 1;
+#if VERSION > VERSION_JPN
                     if(field_0x0224 == 0x12 && mIslandRoomNo == 0x2C && field_0x0239 == 9 && field_0x0028 < 0x1E){
                         return NULL;
                     }
+#endif
                 }
                 if(i_seNum == 0x6847){
                     if(field_0x01fc == 1){
@@ -2236,13 +2238,12 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                 }else{
                     local_44 = *param_2;
                 }
-                if(i_seNum == 0x381F){
-                    return NULL;
-                }
+
                 switch(i_seNum){
 
                     case 0x381F:
                     case 0x001B:
+                    case 0x584B:
                         return NULL;
                         // goto 0x8F8
                         break;
@@ -2272,7 +2273,7 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         subBgmStop();
                         break;
                         // goto 0x92C
-                        break;
+                    case 0x6A2A:
                     case 0x6A2B:
                         return NULL;
                     case 0x08F5:
@@ -2346,6 +2347,8 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         break;
                     case 0x08A7:
                     case 0x285D:
+                    case 0x591B:
+                    case 0x6981:
                         param_2 = NULL;
                         // goto 0xB34
                         break;
@@ -2406,12 +2409,12 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         if(pMtx){
                             PSMTXMultVec(pMtx,&local_44,&local_44);
                         }
-                        {
-                        f32 dist = SQUARE(local_44.x) + SQUARE(local_44.y) + SQUARE(local_44.z);
-                        if(std::sqrtf(dist) < (JAIGlobalParameter::getParamDistanceMax() * 0.5f) ){
+                        
+                        dist = SQUARE(local_44.x) + SQUARE(local_44.y) + SQUARE(local_44.z);
+                        if(std::sqrtf(dist) > (JAIGlobalParameter::getParamDistanceMax() / 2.0f) ){
                             return NULL;
                         }
-                        }
+                        break;
                         // goto 0xCA0
                     case 0x702C:
                         if (pMtx != NULL) {
@@ -2553,12 +2556,14 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         seStop(0x6907,0);
                         seStop(0x6908,0);
                         break;             
-                    case 0x6907:
-                    case 0x6908:
+
+                    case 0x690A:
                         seStop(0x6907,0);
                         seStop(0x6908,0);
                         break;
-                    case 0x690A:
+
+                    case 0x6907:
+                    case 0x6908:
                         seStop(0x6907,0);
                         seStop(0x6908,0);
                         break;
@@ -2569,6 +2574,30 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         seStop(0x6956,0);
                         break;
                     case 0x1068:
+                    case 0x3822:
+                    case 0x5807:
+                    case 0x5811:
+                    case 0x5814:
+                    case 0x5815:
+                    case 0x588C:
+                    case 0x5973:
+                    case 0x69F2:
+                    case 0x6955:
+                    case 0x6991:
+                    case 0x6988:
+                    case 0x6989:
+                    case 0x6998:
+                    case 0x6999:
+                    case 0x69E7:
+                    case 0x69E8:
+                    case 0x6A06:
+                    case 0x6A07:
+                    case 0x6A08:
+                    case 0x6A09:
+                    case 0x6A0A:
+                    case 0x6A0B:
+                    case 0x6A0C:
+                    case 0x6A0D:
                         if(param_3 >= 0x64){
                             param_3 = 0x64;
                         }
@@ -2589,23 +2618,26 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                             return NULL;
                         }
                         i_volume = param_3 / 100.0f;
+                        // param_3 *= param_3;
                         // param_3 = SQUARE(param_3);
                         // goto 0x11A0
                         break;
-                    case 0x106A:
+                    // case 0x71E0:
+                    case 0x701D:
+                    case 0x701E:
                         if(param_3 >= 0x64){
                             param_3 = 0x64;
                         }
                         if(param_3 == 0){
                             return NULL;
                         }
-                        i_volume = SQUARE(param_3) / 10000.0f;
-                        param_3 = SQUARE(param_3);
-                        i_pitch = SQUARE(param_3)/ 40000.0f + 0.75f;
-                        // goto 0x13F8
+                        i_volume = param_3;
+                        i_pitch = param_3;
+                        i_volume = (i_volume * i_volume) / 10000.0f;
+                        i_pitch = 0.75f + (i_pitch * i_pitch) / 40000.0f;
                         break;
-                    case 0x701D:
-                        break;
+                    // case 0x701D:
+                    //     break;
                     case 0x705A:
                         if(param_3 >= 0x64){
                             param_3 = 0x64;
@@ -2613,8 +2645,10 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         if(param_3 == 0){
                             return NULL;
                         }
-                        i_volume = SQUARE(param_3) / 10000.0f;
-                        i_pitch = 0.75f + SQUARE(param_3)/40000.0f;
+                        i_volume = param_3;
+                        i_pitch = param_3;
+                        i_volume = SQUARE(i_volume) / 10000.0f;
+                        i_pitch = 0.75f + SQUARE(i_pitch)/40000.0f;
                         break;
                     case 0x705B:
                         if(param_3 >= 0x64){
@@ -2623,8 +2657,10 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         if(param_3 == 0){
                             return NULL;
                         }
-                        i_volume = SQUARE(param_3) / 10000.0f;
-                        i_pitch = 0.75f + SQUARE(param_3)/40000.0f;
+                        i_volume = param_3;
+                        i_pitch = param_3;
+                        i_volume = SQUARE(i_volume) / 10000.0f;
+                        i_pitch = 0.75f + SQUARE(i_pitch)/40000.0f;
                         break;
                     case 0x705C:
                         if(param_3 >= 0x64){
@@ -2633,29 +2669,165 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         if(param_3 == 0){
                             return NULL;
                         }
-                        i_volume = SQUARE(param_3) / 10000.0f;
-                        i_pitch = 0.2f + (f32)param_3/80.0f;
-                        if(i_pitch >= 0.5f){
+                        i_volume = param_3;
+                        i_pitch = param_3;
+                        i_volume = SQUARE(i_volume) / 10000.0f;
+                        i_pitch = 0.2f + i_pitch/80.0f;
+                        if(i_pitch <= 0.5f){
                             i_pitch = 0.5f;
                         }
                         break;
+                    case 0x5127:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            return NULL;
+                        }
+                        i_volume = param_3;
+                        i_pitch = param_3;
+                        i_volume = SQUARE(i_volume) / 10000.0f;
+                        i_pitch = 0.5f + SQUARE(i_pitch)/20000.0f;
+                        break;       
+                    case 0x106A:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            param_3 = 0;
+                        }
+                        i_pitch = param_3;
+
+
+                        i_pitch = SQUARE(i_pitch) / 40000.0f + 0.75f;
+
+
+
+                        f32 temp = i_volume = param_3;
+                        i_volume = temp /100.0f;
+                        i_volume *= 0.85f;
+                        i_volume += 0.15f;
+                        break;  
                     case 0x303E:
+                    case 0x7051:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            param_3 = 0x0;
+                        }
+                        i_pitch = param_3;
+
+                        i_pitch = 0.75f + SQUARE(i_pitch)/20000.0f;
+
+                        i_volume = param_3/100.0f;
+                        i_volume *= 0.7f;
+                        i_volume += 0.3f;
                         // goto 0x1468
                         break;
                     case 0x1072:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            param_3 = 0;
+                        }
+                        // i_pitch = 0.75f + SQUARE(param_3) / 20000.0f;
+                        i_pitch = param_3;
+                        i_pitch = 0.75f + SQUARE(i_pitch)/20000.0f;
+
+                        i_volume = param_3 / 100.0f;
+                        i_volume *= 0.6f;
+                        i_volume += 0.4f;
+                        if(pMtx){
+                            PSMTXMultVec(pMtx,&local_44,&local_44);
+                        }
+                        f32 dist = std::sqrtf(SQUARE(local_44.x) + SQUARE(local_44.y) + SQUARE(local_44.z));
+                        if(dist >= 4500.0f){
+                            break;
+                        }
+                        param_2 = NULL;
+                        i_pan = 0.5f;
+                        i_dolby = 0.5f;
+                        i_volume *= dist/4500.0f * 0.7f;
+                        break;
+                    case 0x7036:
+                    case 0x7037:
+                    case 0x7038:
+                    case 0x7039:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            return NULL;
+                        }
+                        i_volume = param_3;
+                        i_pitch = param_3;
+
+                        i_volume = SQUARE(i_volume)/10000.0f;
+                        i_pitch = 0.95f + SQUARE(i_pitch) / 80000.0f;
                         // goto 0x14D8
                         break;
-
+                    // case 0x107C:
+                    case 0x50BF:
+                    case 0x5895:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            param_3 = 0x0;
+                        }
+                        i_volume = param_3 / 100.0f;
+                        i_pitch = 1.0f + param_3 / 300.0f;
+                        break;
                     case 0x107D:
-                        // goto 0x16D0
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0){
+                            param_3 = 0;
+                        }
+                        i_volume = param_3 / 100.0f;
+                        if(i_volume != 0.0f){
+                            i_volume = 0.4f + (0.6f*i_volume) ;
+                            
+                        }
+                        i_pitch = 0.5f + (param_3 / 200.0f);
                         break;
 
+                    case 0x61B1:
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 == 0x0){
+                            // param_3 = 0x0;
+                            return NULL;
+                        }   
+                        i_pitch = 1.0f + (param_3/100.0f);  
+                        if(param_3 >= 0x1E){
+                            param_3 = 0x1E;
+                        }
+                        i_volume = param_3 / 30.0f;
+                        // i_pitch = 1.0f + (0.0666667f * param_3);                 
+                        break;
                     case 0x087D:
+
+                        if(param_3 >= 1){
+                            param_3 -= 1;
+                        }
+                        i_pitch = 1.0f + (0.0666667f * param_3);
+
                         // goto 0x17C4
                         break;
 
                     case 0x08E4:
-                        // goto 0x17FC
+                        if(param_3 >= 0x64){
+                            param_3 = 0x64;
+                        }
+                        if(param_3 >= 1){
+                            param_3 -= 1;
+                        }
+                        i_pitch = 1.0f + (0.01f * param_3);
                         break;
                     case 0x082F:
                         seStop(0x90B,0x3C);
@@ -2666,12 +2838,12 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         break;
                     // case 0x
                     case 0x580E:
+                    case 0x580F:
                         if (pMtx != NULL) {
                             PSMTXMultVec(pMtx,&local_44,&local_44);
                         }
                         {
                         f32 dist2 = std::sqrtf(SQUARE(local_44.x)+SQUARE(local_44.y)+SQUARE(local_44.z));
-                        // param_6 = 1.0f - fVar1 / (JAIGlobalParameter::getParamDistanceMax() * 2.0f);
                         if (dist2 > JAIGlobalParameter::getParamDistanceMax()) {
                             return NULL;
                         }
@@ -2679,11 +2851,9 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         break;              
                     case 0x380D:
                         if(param_2 != NULL){
-                            Vec* pfVar5 = &field_0x1ED4[field_0x1f34];
-                            *pfVar5 = *param_2;
-                            f32 fVar1 = getAudioCamera()->field_0x0->y;
-                            if(fVar1 < field_0x1ED4[field_0x1f34].y){
-                                field_0x1ED4[field_0x1f34].y = fVar1;
+                            field_0x1ED4[field_0x1f34] = *param_2;
+                            if(field_0x1ED4[field_0x1f34].y > getAudioCamera()->field_0x0->y){
+                                field_0x1ED4[field_0x1f34].y = getAudioCamera()->field_0x0->y;
                             }
                             param_2 = &field_0x1ED4[field_0x1f34];
                             field_0x1f34 += 1;
@@ -4141,7 +4311,7 @@ void JAIZelBasic::load1stDynamicWave() {
     field_0x00d0 = 0;
     field_0x0204 = 0;
     field_0x00be = 0;
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     field_0x0028 = 0;
     field_0x0062 = 0;
 #endif
@@ -4311,7 +4481,7 @@ void JAIZelBasic::setLinkOnBoard(s32 param_1) {
 /* 802ABB18-802ABBD0       .text bgmMute__11JAIZelBasicFPP8JAISoundUllUl */
 void JAIZelBasic::bgmMute(JAISound** param_1, u32 param_2, s32 param_3, u32 i_fadeTime) {
     /* Nonmatching */
-    u32 uVar2 = m_bgm_mute_state[4*(param_2 &  0xFF)][4*param_3];
+    u32 uVar2 = m_bgm_mute_state[(param_2 &  0xFF)][param_3];
     if(*param_1 == NULL){
         OSReport("Warning : bgm pointer is NULL!\n");
     }else{

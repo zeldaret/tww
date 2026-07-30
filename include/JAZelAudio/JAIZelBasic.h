@@ -192,7 +192,7 @@ public:
 
     static JAIZelBasic* zel_basic;
 
-    static u8 m_bgm_mute_state[][4];
+    static u32 m_bgm_mute_state[][4];
 
     struct CharVoiceStruct{
         u16 m0;
@@ -245,7 +245,7 @@ public:
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0024 */ u8* field_0x0024;
 #if VERSION > VERSION_JPN
-    /* 0x0028 */ int field_0x0028;
+    /* 0x0028 */ u32 field_0x0028;
 #endif
     /* Offsets below are for USA/PAL */
     /* 0x002C */ u8 mHour;
