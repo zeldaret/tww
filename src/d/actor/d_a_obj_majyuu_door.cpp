@@ -202,7 +202,7 @@ void daObj_MjDoor_c::modeWait() {
 
 /* 00000A34-00000AEC       .text smoke_set__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::smoke_set() {
-    static JGeometry::TVec3<f32> smoke_scale(1.5f, 1.5f, 1.5f);
+    static JGeometry::TVec3<f32> smoke_scale(1.25f, 1.25f, 1.25f);
     dComIfGp_particle_setToon(dPa_name::ID_IT_ST_MJMON_SMOKE00,
         &mPos, &mAngle, NULL, 0xB9, &mSmoke, fopAcM_GetRoomNo(this));
     if (mSmoke.getEmitter() != NULL) {
