@@ -2,11 +2,12 @@
  * d_a_obj_majyuu_door.cpp
  * Object - Forsaken Fortress - Large wooden barricade (blocks entrance, destroyed with Bombs)
  */
-
+ 
  #include "d/dolzel_rel.h" // IWYU pragma: keep
  #include "d/d_particle.h"
- #include "d/actor/d_a_obj_majyuu_door.h"
  #include "d/d_bg_s_func.h"
+ #include "d/d_s_play.h"
+ #include "d/actor/d_a_obj_majyuu_door.h"
  #include "f_op/f_op_actor_mng.h"
  #include "res/Object/S_MSPDo.h"
 
@@ -41,7 +42,20 @@ static dCcD_SrcCyl l_cyl_src = {
 };
 
 GXColor daObj_MjDoor_c::smoke_col = {0x86, 0x84, 0x6D, 0xC8};
+const s32 daObj_MjDoor_c::m_heapsize = 0x820;
 const char daObj_MjDoor_c::m_arc_name[] = "S_MSPDo";
+
+struct mjdoor_smoke_scale {
+    mjdoor_smoke_scale() {
+        x = 1.25f;
+        y = 1.25f;
+        z = 1.25f;
+    }
+
+    /* 0x0 */ f32 x;
+    /* 0x4 */ f32 y;
+    /* 0x8 */ f32 z;
+};
 
 static daObj_MjDoorHIO_c l_HIO;
 
@@ -135,7 +149,7 @@ cPhs_State daObj_MjDoor_c::_create() {
             return cPhs_ERROR_e;
         }
 
-        if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0x820)) {
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
             return cPhs_ERROR_e;
         }
         CreateInit();
@@ -146,12 +160,35 @@ cPhs_State daObj_MjDoor_c::_create() {
 
 /* 000007F0-00000884       .text _delete__14daObj_MjDoor_cFv */
 bool daObj_MjDoor_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, m_arc_name);
+    if (mpBgW != NULL  && mpBgW->ChkUsed()) {
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
+    mSmoke.end();
+    return TRUE;
 }
 
 /* 00000884-000009D4       .text setCollision__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::setCollision() {
-    /* Nonmatching */
+    f32 cyl_offset[10] = {
+        -500.0f, -400.0f, -300.0f, -200.0f, -100.0f,
+           0.0f,  100.0f,  200.0f,  300.0f,  400.0f,
+    };
+    f32 sin_angle_y = cM_ssin(current.angle.y);
+    f32 cos_angle_y = cM_scos(current.angle.y);
+    
+    dCcD_Cyl* cyl = mCyl;
+    for (int i = 0; i < 10; i++, cyl++) {
+        cXyz center(
+            current.pos.x + cos_angle_y * cyl_offset[i],
+            current.pos.y - REG12_F(0),
+            current.pos.z + -sin_angle_y * cyl_offset[i]
+        );
+        cyl->SetC(center);
+        cyl->SetR(100.0f);
+        cyl->SetH(1350.0f);
+        dComIfG_Ccsp()->Set(cyl);
+    }
 }
 
 /* 000009D4-000009E0       .text modeWaitInit__14daObj_MjDoor_cFv */
@@ -169,7 +206,12 @@ void daObj_MjDoor_c::modeWait() {
 
 /* 00000A34-00000AEC       .text smoke_set__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::smoke_set() {
-    /* Nonmatching */
+    static mjdoor_smoke_scale smoke_scale;
+    dComIfGp_particle_set(dPa_name::ID_IT_ST_MJMON_SMOKE00,
+        &mPos, &mAngle, NULL, 0xB9, &mSmoke, current.roomNo);
+    if (mSmoke.getEmitter() != NULL) {
+        mSmoke.getEmitter()->mGlobalPrmColor.a = 200;
+    }
 }
 
 /* 00000AEC-00000D64       .text modeDeleteInit__14daObj_MjDoor_cFv */

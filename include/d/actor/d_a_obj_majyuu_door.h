@@ -33,6 +33,7 @@ public:
     bool _draw();
 
     static GXColor smoke_col;
+    static const s32 m_heapsize;
     static const char m_arc_name[];
 
 public:
