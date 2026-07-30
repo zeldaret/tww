@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_firewall.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
 #include "d/d_event_manager.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
@@ -19,9 +17,14 @@ namespace {
 static s32 l_enter_angl_band = abs(0xe00);
 
 static const char l_arcname[] = "Yswdr00";
-static const char* l_ev_name_table[] = {"smile", "s_surp", "dummy"};
+static const char l_ev_name[] = "btl_of_swroom";
+static const char l_ev_name2[] = "btl_of_swroom2";
+static const char* l_ev_name_table[] = {
+    l_ev_name,
+    l_ev_name2,
+};
 //TODO: Convert values to correct flags
-static dCcD_SrcCyl l_cyl_src = {
+static const dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
@@ -179,19 +182,19 @@ void daObjFirewall_c::particle_set() {
     for (int i = 0; i < 6; i++) {
         if(field_0x438[i] == NULL) {
             local_1.y = angles_0x438[i];
-            field_0x438[i] = dComIfGp_particle_set(dPa_name::ID_SCENE_82B6, &current.pos,&local_1);
+            field_0x438[i] = dComIfGp_particle_set(dPa_name::ID_AK_SN_SWORDROOMFIRE00, &current.pos,&local_1);
         }
     }
 
     for (int i = 0; i < 5; i++) {
         if (field_0x450[i] == NULL) {
             local_1.y = angles_0x450[i];
-            field_0x450[i] = dComIfGp_particle_set(dPa_name::ID_SCENE_82B7, &current.pos, &local_1);
+            field_0x450[i] = dComIfGp_particle_set(dPa_name::ID_AK_SN_SWORDROOMFIRE01, &current.pos, &local_1);
         }
     }
     
     if(field_0x464 == NULL) {
-        field_0x464 = dComIfGp_particle_set(dPa_name::ID_SCENE_82B8, &current.pos);
+        field_0x464 = dComIfGp_particle_set(dPa_name::ID_AK_SN_SWORDROOMFIRE02, &current.pos);
     }
 }
 
@@ -261,8 +264,12 @@ void daObjFirewall_c::set_pl_se() {
     /* Nonmatching */
     int link_id;
 
-    // TODO: fix these static tables to the correct data, junk in here atm
-    static const char* chk_word_table[] = {"smile", "s_surp", "dummy"};
+    // TODO: fix these static tables to the correct data, junk in here atm - I think this should be fixed now?
+    // I had to move these outside because the obj diff wasn't matching when the table was constructed with string literals.
+    static char chk_word0[] = "050smile";
+    static char chk_word1[] = "049s_surp";
+    static char chk_word2[] = "dummy";
+    static const char* chk_word_table[] = {chk_word0, chk_word1, chk_word2};
     static u32 voice_table[] = {0x2e,0x31,0};
 
     link_id = dComIfGp_evmng_getMyStaffId("Link");
@@ -409,11 +416,11 @@ void daObjFirewall_c::wait2_act_proc() {
         return;
     }
 
-    f32 temp = (current.pos - player->current.pos).absXZ();
+    f32 temp = (player->current.pos - current.pos).absXZ();
     
     if (temp < 950.0f && player->current.pos.z < -7000.0f) {
         if(eventInfo.checkCommandDemoAccrpt()) {
-            field_0x1070 = 0;
+            field_0x1070 = &daObjFirewall_c::wait3_act_proc;
         } else {
             fopAcM_orderOtherEventId(this,field_0x107c,0xff);
         }
@@ -445,13 +452,7 @@ void daObjFirewall_c::appear_act_proc() {
     
     field_0x420.play();
     
-    local_1 = true;
-    frameCtrl = field_0x420.getFrameCtrl();
-    if(!frameCtrl->checkState(1) && frameCtrl->getRate()){
-        local_1 = false;
-    }
-    
-    if(local_1 == true){
+    if(field_0x420.isStop() == TRUE){
         field_0x106c = 1.0f;
         if (field_0x107c != -1) {
             field_0x1070 = &daObjFirewall_c::burn_wait_act_proc;
@@ -481,7 +482,7 @@ void daObjFirewall_c::burn_wait_act_proc() {
     if(mSwitchNo != 0xff  && fopAcM_isSwitch(this, mSwitchNo) == 1){
         J3DAnmTevRegKey* brk_anm_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcname,9);
         JUT_ASSERT(0x4e4, brk_anm_p != NULL);
-        field_0x420.init(mpModel->getModelData(),brk_anm_p, true, 1, -1.0f,0,-1,true,false);
+        field_0x420.init(mpModel->getModelData(),brk_anm_p, true, 0, -1.0f,0,-1,true,false);
         setup_put_the_fire_out();
         field_0x1070 = &daObjFirewall_c::retire_act_proc;
     } else{
@@ -557,13 +558,13 @@ actor_process_profile_definition g_profile_Obj_Firewall = {
     /* LayerID      */ fpcLy_CURRENT_e,
     /* ListID       */ 0x0007,
     /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Firewall,
+    /* ProcName     */ fpcNm_Obj_Firewall_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjFirewall_c),
     /* SizeOther    */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Firewall,
+    /* Priority     */ fpcDwPi_Obj_Firewall_e,
     /* Actor SubMtd */ &l_daObjFirewall_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
