@@ -58,6 +58,8 @@ class daObj_MjDoorHIO_c : public mDoHIO_entry_c {
 public:
     daObj_MjDoorHIO_c();
 
+    void genMessage(JORMContext* ctx) {}
+
 public:
     /* 0x4 */ u8 field_0x4;
 };

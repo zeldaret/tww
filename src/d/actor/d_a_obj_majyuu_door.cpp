@@ -220,7 +220,7 @@ void daObj_MjDoor_c::modeDeleteInit() {
     }
 
     mMode = MODE_DELETE;
-    mDoAud_seStart(JA_SE_OBJ_MJ_GATE_BREAK, &eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+    fopAcM_seStart(this, JA_SE_OBJ_MJ_GATE_BREAK, 0);
 
     cXyz scale(1.0f, 1.0f, 1.0f);
     dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_HAHEN_L00, &current.pos, &current.angle,
@@ -256,13 +256,7 @@ void daObj_MjDoor_c::modeDelete() {
     if (mSmoke.getEmitter() != NULL) {
         if (cLib_calcTimer(&mSmokeTimer) != 0) {
             if (mSmokeTimer <= 40) {
-#if VERSION == VERSION_DEMO
-                u8 colorAlpha = mSmokeTimer * 5;
-                mSmoke.getEmitter()->mGlobalPrmColor.a = colorAlpha;
-#else
-                JPABaseEmitter* emitter = mSmoke.getEmitter();
-                emitter->mGlobalPrmColor.a = mSmokeTimer * 5;
-#endif
+                mSmoke.getEmitter()->setGlobalAlpha(mSmokeTimer * 5);
             }
         } else {
             mSmoke.end();
