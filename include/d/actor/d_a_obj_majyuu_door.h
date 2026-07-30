@@ -15,8 +15,8 @@ public:
     };
 
     daObj_MjDoor_c() : mSmoke(smoke_col, &tevStr, 0) {}
-    void modeProcCall() {}
-
+    
+    void modeProcCall();
     void set_mtx();
     BOOL _createHeap();
     void getArg();
@@ -41,13 +41,13 @@ public:
     /* 0x294 */ cXyz mPos;
     /* 0x2A0 */ csXyz mAngle;
     /* 0x2A8 */ dPa_smokeEcallBack mSmoke;
-    /* 0x2C8 */ int field_0x2C8;
+    /* 0x2C8 */ int mSmokeTimer;
     /* 0x2CC */ u8 field_0x2CC;
     /* 0x2D0 */ J3DModel* mpModel;
     /* 0x2D4 */ request_of_phase_process_class mPhs;
     /* 0x2DC */ dBgW* mpBgW;
     /* 0x2E0 */ Mtx mMtx;
-    /* 0x310 */ int field_0x310;
+    /* 0x310 */ int mDeleteTimer;
     /* 0x314 */ dCcD_Stts mStts;
     /* 0x350 */ dCcD_Cyl mCyl[10];
 }; // Size: 0xF30

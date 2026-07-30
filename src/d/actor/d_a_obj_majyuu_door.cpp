@@ -4,11 +4,9 @@
  */
  
  #include "d/dolzel_rel.h" // IWYU pragma: keep
- #include "d/d_particle.h"
  #include "d/d_bg_s_func.h"
  #include "d/d_s_play.h"
  #include "d/actor/d_a_obj_majyuu_door.h"
- #include "f_op/f_op_actor_mng.h"
  #include "res/Object/S_MSPDo.h"
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -56,6 +54,16 @@ struct mjdoor_smoke_scale {
     /* 0x4 */ f32 y;
     /* 0x8 */ f32 z;
 };
+
+inline void daObj_MjDoor_c::modeProcCall() {
+    typedef void (daObj_MjDoor_c::*modeProc)();
+    static modeProc mode_proc[] = {
+        &daObj_MjDoor_c::modeWait,
+        &daObj_MjDoor_c::modeDelete,
+    };
+
+    (this->*mode_proc[mMode])();
+}
 
 static daObj_MjDoorHIO_c l_HIO;
 
@@ -176,7 +184,7 @@ void daObj_MjDoor_c::setCollision() {
     };
     f32 sin_angle_y = cM_ssin(current.angle.y);
     f32 cos_angle_y = cM_scos(current.angle.y);
-    
+
     dCcD_Cyl* cyl = mCyl;
     for (int i = 0; i < 10; i++, cyl++) {
         cXyz center(
@@ -240,8 +248,8 @@ void daObj_MjDoor_c::modeDeleteInit() {
     mPos = current.pos;
     mAngle = current.angle;
     smoke_set();
-    field_0x2C8 = 0x32;
-    field_0x310 = 600;
+    mSmokeTimer = 0x32;
+    mDeleteTimer = 600;
     dComIfG_Bgsp()->Release(mpBgW);
 
     dCcD_Cyl* cyl = mCyl;
@@ -254,17 +262,40 @@ void daObj_MjDoor_c::modeDeleteInit() {
 
 /* 00000D64-00000DF0       .text modeDelete__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::modeDelete() {
-    /* Nonmatching */
+    if (mSmoke.getEmitter() != NULL) {
+        if (cLib_calcTimer(&mSmokeTimer) != 0) {
+            if (mSmokeTimer <= 40) {
+                JPABaseEmitter* emitter = mSmoke.getEmitter();
+                emitter->mGlobalPrmColor.a = mSmokeTimer * 5;
+            }
+        } else {
+            mSmoke.end();
+        }
+    }
+
+    if (cLib_calcTimer(&mDeleteTimer) == 0) {
+        fopAcM_delete(this);
+    }
 }
 
 /* 00000DF0-00000EB4       .text _execute__14daObj_MjDoor_cFv */
 bool daObj_MjDoor_c::_execute() {
-    /* Nonmatching */
+    modeProcCall();
+    fopAcM_posMoveF(this, NULL);
+    set_mtx();
+    return FALSE;
 }
 
 /* 00000EB4-00000F28       .text _draw__14daObj_MjDoor_cFv */
 bool daObj_MjDoor_c::_draw() {
-    /* Nonmatching */
+    if (mMode == MODE_DELETE) {
+        return TRUE;
+    }
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    return TRUE;
 }
 
 /* 00000F28-00000F48       .text daObj_MjDoorCreate__FPv */
