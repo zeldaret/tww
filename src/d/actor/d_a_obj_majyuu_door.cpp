@@ -43,18 +43,6 @@ GXColor daObj_MjDoor_c::smoke_col = {0x86, 0x84, 0x6D, 0xC8};
 const s32 daObj_MjDoor_c::m_heapsize = 0x820;
 const char daObj_MjDoor_c::m_arc_name[] = "S_MSPDo";
 
-struct mjdoor_smoke_scale {
-    mjdoor_smoke_scale() {
-        x = 1.25f;
-        y = 1.25f;
-        z = 1.25f;
-    }
-
-    /* 0x0 */ f32 x;
-    /* 0x4 */ f32 y;
-    /* 0x8 */ f32 z;
-};
-
 inline void daObj_MjDoor_c::modeProcCall() {
     typedef void (daObj_MjDoor_c::*modeProc)();
     static modeProc mode_proc[] = {
@@ -99,9 +87,9 @@ void daObj_MjDoor_c::set_mtx() {
 
 /* 00000240-000003A0       .text _createHeap__14daObj_MjDoor_cFv */
 BOOL daObj_MjDoor_c::_createHeap() {
-    J3DModelData* mdl_data = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_S_MSPDO_BDL_S_MSPDO_e);
-    JUT_ASSERT(199, mdl_data != 0);
-    mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
+    J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_S_MSPDO_BDL_S_MSPDO_e);
+    JUT_ASSERT(199, modelData != 0);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL) {
         return FALSE;
     }
@@ -214,9 +202,9 @@ void daObj_MjDoor_c::modeWait() {
 
 /* 00000A34-00000AEC       .text smoke_set__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::smoke_set() {
-    static mjdoor_smoke_scale smoke_scale;
-    dComIfGp_particle_set(dPa_name::ID_IT_ST_MJMON_SMOKE00,
-        &mPos, &mAngle, NULL, 0xB9, &mSmoke, current.roomNo);
+    static JGeometry::TVec3<f32> smoke_scale(1.5f, 1.5f, 1.5f);
+    dComIfGp_particle_setToon(dPa_name::ID_IT_ST_MJMON_SMOKE00,
+        &mPos, &mAngle, NULL, 0xB9, &mSmoke, fopAcM_GetRoomNo(this));
     if (mSmoke.getEmitter() != NULL) {
         mSmoke.getEmitter()->mGlobalPrmColor.a = 200;
     }
@@ -231,7 +219,7 @@ void daObj_MjDoor_c::modeDeleteInit() {
     mMode = MODE_DELETE;
     mDoAud_seStart(JA_SE_OBJ_MJ_GATE_BREAK, &eyePos, 0, dComIfGp_getReverb(current.roomNo));
 
-    cXyz scale = cXyz(1.0f, 1.0f, 1.0f);
+    cXyz scale(1.0f, 1.0f, 1.0f);
     dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_HAHEN_L00, &current.pos, &current.angle,
         &scale, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
     dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_HAHEN_S00, &current.pos, &current.angle,
@@ -241,9 +229,9 @@ void daObj_MjDoor_c::modeDeleteInit() {
     pos.y = dBgS_GetWaterHeight(pos);
 
     dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_HAMON00, &pos, &current.angle,
-        &scale, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+        &scale, 0xFF, NULL, -1);
     dComIfGp_particle_set(dPa_name::ID_IT_SN_MJMON_SHIBUKI00, &pos, &current.angle,
-        &scale, 0xFF, NULL, -1, &tevStr.mColorK0, &tevStr.mColorK0);
+        &scale, 0xFF, NULL, -1);
 
     mPos = current.pos;
     mAngle = current.angle;
