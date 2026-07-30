@@ -57,7 +57,6 @@ STATIC_ASSERT(sizeof(daObj_MjDoor_c) == 0xF30);
 class daObj_MjDoorHIO_c : public mDoHIO_entry_c {
 public:
     daObj_MjDoorHIO_c();
-    // virtual ~daObj_MjDoorHIO_c() {}
 
 public:
     /* 0x4 */ u8 field_0x4;

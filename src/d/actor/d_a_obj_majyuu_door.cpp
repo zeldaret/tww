@@ -3,11 +3,11 @@
  * Object - Forsaken Fortress - Large wooden barricade (blocks entrance, destroyed with Bombs)
  */
  
- #include "d/dolzel_rel.h" // IWYU pragma: keep
- #include "d/actor/d_a_obj_majyuu_door.h"
- #include "d/d_bg_s_func.h"
- #include "d/d_s_play.h"
- #include "res/Object/S_MSPDo.h"
+#include "d/dolzel_rel.h" // IWYU pragma: keep
+#include "d/actor/d_a_obj_majyuu_door.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_s_play.h"
+#include "res/Object/S_MSPDo.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -160,7 +160,7 @@ cPhs_State daObj_MjDoor_c::_create() {
 /* 000007F0-00000884       .text _delete__14daObj_MjDoor_cFv */
 bool daObj_MjDoor_c::_delete() {
     dComIfG_resDelete(&mPhs, m_arc_name);
-    if (mpBgW != NULL  && mpBgW->ChkUsed()) {
+    if (mpBgW != NULL && mpBgW->ChkUsed()) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
     mSmoke.end();
@@ -215,7 +215,7 @@ void daObj_MjDoor_c::smoke_set() {
 
 /* 00000AEC-00000D64       .text modeDeleteInit__14daObj_MjDoor_cFv */
 void daObj_MjDoor_c::modeDeleteInit() {
-    if(field_0x2CC != 0xFF) {
+    if (field_0x2CC != 0xFF) {
         dComIfGs_onSwitch(field_0x2CC, fopAcM_GetRoomNo(this));
     }
 
