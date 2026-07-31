@@ -648,6 +648,7 @@ int dMenu_Collect_c::stickDirection(unsigned char param_1) {
 
 /* 8019D5A8-8019E570       .text cursorMainMove__15dMenu_Collect_cFv */
 int dMenu_Collect_c::cursorMainMove() {
+    /* Nonmatching */
     u8 found;
     int check;
     uint old_item;
