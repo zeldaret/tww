@@ -4,28 +4,15 @@
 #include "dolphin/types.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
-#include "JSystem/J2DGraph/J2DWindow.h"
-#include "d/d_menu_option.h"
 #include "f_op/f_op_msg_mng.h"
-#include "d/d_2dnumber.h"
 
 struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 
-class dMenu_base_c : dDlst_base_c {
+class dMenu_Collect_c {
 public:
-    dMenu_base_c() {}
-    virtual ~dMenu_base_c() {}
-    virtual void _create() {}
-    virtual void _delete() {}
-    virtual void _move() {}
-    virtual void _draw() {}
-    virtual void draw() {}
-};
 
-class dMenu_Collect_c : dMenu_base_c {
-public:
     void alphaChange(fopMsgM_pane_class*, float) {}
     void draw() {}
     void getCollectMode() {}
@@ -47,9 +34,9 @@ public:
     void screenSet();
     void initialize();
     void cursorAnime();
-    int stickDirection(unsigned char);
-    int cursorMainMove();
-    BOOL noteCheck();
+    void stickDirection(unsigned char);
+    void cursorMainMove();
+    void noteCheck();
     void noteInit();
     void noteAppear();
     void noteOpen();
@@ -83,25 +70,26 @@ public:
     void outFontInit();
     void outFontMove();
     void outFontDraw();
-    bool collectItemGetCheck(unsigned char);
+    void collectItemGetCheck(unsigned char);
     void _create();
     void _create3();
-    void _delete();
-    void _move();
+    virtual void _delete();
+    virtual void _move();
     void _move3();
-    void _draw();
-    void _open();
-    void _open3();
-    void _close();
-    void _close3();
+    virtual void _draw();
+    bool _open();
+    bool _open3();
+    bool _close();
+    bool _close3();
     void animeStep1(short, short);
     void animeStep2(short, short);
     void animeStep3(short, short);
     void animeStep4(short, short);
-    void _open2();
-    void _close2();
+    bool _open2();
+    bool _close2();
 
-    /* 0x004 */ J2DScreen* screen;
+    /* 0x000 */ u8 m000[0x004 - 0x000];
+    /* 0x004 */ J2DScreen* m004;
     /* 0x008 */ fopMsgM_pane_class m008;
     /* 0x040 */ fopMsgM_pane_class m040;
     /* 0x078 */ fopMsgM_pane_class m078;
@@ -162,39 +150,19 @@ public:
     /* 0x2458 */ STControl* m2458;
     /* 0x245C */ u8 m245C[0x2460 - 0x245C];
     /* 0x2460 */ dDlst_2DOutFont_c* m2460;
-    /* 0x2464 */ u8 m2464[0x2470 - 0x2464];
-    /* 0x2470 */ JUTFont* m2470;
-    /* 0x2474 */ JUTFont* m2474;
+    /* 0x2464 */ JKRArchive* mpArc;
+    /* 0x2468 */ JKRArchive* mpOptArc;
+    /* 0x246C */ JKRArchive* mpSaveArc;
+    /* 0x2470 */ JUTFont* mFont;
+    /* 0x2474 */ JUTFont* mRFont;
     /* 0x2478 */ J2DPane* m2478;
-    /* 0x247C */ u8 m247C[0x2488 - 0x247C];
-    /* 0x2488 */ J2DWindow::TContentsColor m2488;
+    /* 0x247C */ u8 m247C[0x2498 - 0x247C];
     /* 0x2498 */ ResTIMG* m2498;
     /* 0x249C */ ResTIMG* m249C;
     /* 0x24A0 */ ResTIMG* m24A0[6];
-    /* 0x24B8 */ u8 m24B8[0x24E0 - 0x24B8];
-    /* 0x24E0 */ fopMsgM_msgDataProc_c m24E0;
-    /* 0x2510 */ u8 m2780[0x2788 - 0x2780];
-    /* 0x2788 */ f32 m2788[4];
-    /* 0x2798 */ f32 m2798[4];
+    /* 0x24B8 */ u8 m24B8[0x27A8 - 0x24B8];
     /* 0x27A8 */ f32 m27A8;
     /* 0x27AC */ f32 m27AC;
-    /* 0x27B0 */ u8 m27B0[0x27DC - 0x27B0];
-    /* 0x27DC */ int m27DC;
-    /* 0x27E0 */ s16 m27E0;
-    /* 0x27E2 */ s16 m27E2;
-    /* 0x27E4 */ s16 m27E4;
-    /* 0x27E6 */ s16 m27E6;
-    /* 0x27E8 */ s16 m27E8;
-    /* 0x27EA */ u8 m27EA;
-    /* 0x27EB */ u8 m27EB;
-    /* 0x27EC */ u8 m27EC;
-    /* 0x27ED */ u8 m27ED;
-    /* 0x27EE */ u8 m27EE;
-    /* 0x27EF */ u8 m27EF;
-    /* 0x27F0 */ u8 m27F0;
-    /* 0x27F1 */ u8 m27F1;
-    /* 0x27F2 */ u8 m27F2;
-    /* 0x27F3 */ u8 m27F3[0x2800 - 0x27F3];
 };
 
 class dMc_HIO_c {

@@ -1,3 +1,4 @@
+#ifdef __MWERKS__
 #include "ptmf.h"
 #include "global.h"
 
@@ -50,3 +51,4 @@ do_call:
     mtctr r12
     bctr
 };
+#endif

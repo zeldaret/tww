@@ -188,26 +188,48 @@ void dScp_closeDemoProc(sub_scp_class*) {
 }
 
 /* 8023AD20-8023AD60       .text dScp_Draw__FP13sub_scp_class */
-static BOOL dScp_Draw(sub_scp_class*) {
+static BOOL dScp_Draw(sub_scp_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8023AD60-8023AEF4       .text dScp_Execute__FP13sub_scp_class */
-static BOOL dScp_Execute(sub_scp_class*) {
+static BOOL dScp_Execute(sub_scp_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8023AEF4-8023AEFC       .text dScp_IsDelete__FP13sub_scp_class */
 static BOOL dScp_IsDelete(sub_scp_class*) {
-    /* Nonmatching */
+    return TRUE;
 }
 
 /* 8023AEFC-8023B094       .text dScp_Delete__FP13sub_scp_class */
-static BOOL dScp_Delete(sub_scp_class*) {
+static BOOL dScp_Delete(sub_scp_class* i_this) {
     /* Nonmatching */
 }
 
 /* 8023B094-8023B49C       .text dScp_Create__FP9msg_class */
-static cPhs_State dScp_Create(msg_class*) {
+static cPhs_State dScp_Create(msg_class* i_this) {
     /* Nonmatching */
 }
+
+static msg_method_class l_dPb_Method = {
+    (process_method_func)dScp_Create,
+    (process_method_func)dScp_Delete,
+    (process_method_func)dScp_Execute,
+    (process_method_func)dScp_IsDelete,
+    (process_method_func)dScp_Draw,
+};
+
+msg_process_profile_definition g_profile_SCP = {
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SCP_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(sub_scp_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Draw Prio    */ fpcDwPi_SCP_e,
+    /* Msg SubMtd   */ &l_dPb_Method,
+};

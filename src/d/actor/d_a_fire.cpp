@@ -7,8 +7,6 @@
 #include "d/actor/d_a_fire.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -219,11 +217,11 @@ BOOL daFire_c::CreateInit() {
 
 /* 00000518-00000758       .text _create__8daFire_cFv */
 cPhs_State daFire_c::_create() {
-    fopAcM_SetupActor(this, daFire_c);
+    fopAcM_ct(this, daFire_c);
 
-    field_0x8BC = dComIfGp_particle_set(dPa_name::ID_COMMON_0461, &current.pos);
-    field_0x8C0 = dComIfGp_particle_set(dPa_name::ID_COMMON_0462, &current.pos);
-    field_0x8C4 = dComIfGp_particle_setProjection(dPa_name::ID_COMMON_445B, &current.pos);
+    field_0x8BC = dComIfGp_particle_set(dPa_name::ID_IT_JN_KAKOMI_FIRE_A00, &current.pos);
+    field_0x8C0 = dComIfGp_particle_set(dPa_name::ID_IT_JN_KAKOMI_FIRE_B00, &current.pos);
+    field_0x8C4 = dComIfGp_particle_setProjection(dPa_name::ID_IT_JP_KAKOMI_KAGERO00, &current.pos);
 
     if (!CreateInit()) {
         return cPhs_ERROR_e;
@@ -250,7 +248,7 @@ bool daFire_c::_execute() {
 
 /* 00000A70-00000AD8       .text search_wind__8daFire_cFv */
 void daFire_c::search_wind() {
-    fopAc_ac_c* pActor = fopAcM_SearchByName(PROC_WindTag);
+    fopAc_ac_c* pActor = fopAcM_SearchByName(fpcNm_WindTag_e);
     if (pActor) {
         field_0x8F0 = fopAcM_GetID(pActor);
     } else {
@@ -282,7 +280,7 @@ void daFire_c::ctrlEffect() {
                     field_0x8D1 = 0;
                     flag = true;
                     execStopNowFire();
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_0463, &current.pos);
+                    dComIfGp_particle_set(dPa_name::ID_IT_JN_KAKOMI_STEAM00, &current.pos);
                 } else if (hit_obj->ChkAtType(AT_TYPE_WIND) && wind != field_0x2CC[0].GetTgHitAc()) {
                     field_0x8E0 = *field_0x2CC[0].GetTgRVecP();
 
@@ -539,18 +537,18 @@ static actor_method_class daFireMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Fire = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Fire,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Fire_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFire_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Fire,
+    /* Draw Prio    */ fpcDwPi_Fire_e,
     /* Actor SubMtd */ &daFireMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

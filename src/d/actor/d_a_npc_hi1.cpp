@@ -5,11 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_hi1.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_hi.h"
-
-extern dCcD_SrcCyl dNpc_cyl_src;
+#include "res/Object/Hi.h"
 
 class daNpc_Hi1_HIO_c : public mDoHIO_entry_c{
 public:
@@ -40,7 +36,6 @@ public:
     /* 0x07 */ s8 field_0x7;
     /* 0x08 */ int field_0x8;
     /* 0x0C */ hio_prm_c mPrmTbl;
-    /* Place member variables here */
 };
 
 static daNpc_Hi1_HIO_c l_HIO;
@@ -50,25 +45,27 @@ static int l_check_wrk;
 /* 000000EC-00000150       .text __ct__15daNpc_Hi1_HIO_cFv */
 daNpc_Hi1_HIO_c::daNpc_Hi1_HIO_c() {
     static hio_prm_c a_prm_tbl = {
-        0x0000,
-        0x1FFE,
-        0xF600,
-        0xE002,
-        0x0000,
-        0x0744,
-        0xF9DA,
-        0xF8BC,
-        0x0258,
-        0x0000,
-        270.0f,
-        0.0f
+        /* mMaxHeadX         */ 0x0000,
+        /* mMaxHeadY         */ 0x1FFE,
+        /* mMinHeadX         */ 0xF600,
+        /* mMinHeadY         */ 0xE002,
+        /* mMaxBackboneX     */ 0x0000,
+        /* mMaxBackboneY     */ 0x0744,
+        /* mMinBackboneX     */ 0xF9DA,
+        /* mMinBackboneY     */ 0xF8BC,
+        /* mMaxTurnStep      */ 0x0258,
+        /* field_12          */ 0x0000,
+        /* mAttentionYOffset */ 270.0f,
+        /* field_18          */ 0.0f,
     };
-    memcpy(&mPrmTbl,&a_prm_tbl,0x1c);
+    memcpy(&mPrmTbl, &a_prm_tbl, sizeof(hio_prm_c));
     mNo = -1;
     field_0x8 = -1;
 }
 
-static const char* l_evn_tbl = "dummy";
+static const char* l_evn_tbl[1] = {
+    "dummy"
+};
 
 /* 00000198-000001E4       .text nodeCB_Head__FP7J3DNodei */
 static BOOL nodeCB_Head(J3DNode* i_node, int i_param) {
@@ -85,7 +82,7 @@ static BOOL nodeCB_Head(J3DNode* i_node, int i_param) {
 void daNpc_Hi1_c::_nodeCB_Head(J3DNode* i_node, J3DModel* i_pModel) {
     static cXyz a_eye_pos_off(20.0f, 30.0f, 0.0f);
 
-    u16 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
+    s32 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
     mDoMtx_stack_c::copy(i_pModel->getAnmMtx(jointIdx));
 
     mDoMtx_stack_c::multVecZero(&field_0x768);
@@ -93,7 +90,7 @@ void daNpc_Hi1_c::_nodeCB_Head(J3DNode* i_node, J3DModel* i_pModel) {
     mDoMtx_stack_c::XrotM(m_jnt.getHead_y());
     mDoMtx_stack_c::ZrotM(-m_jnt.getHead_x());
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
-    MTXCopy(mDoMtx_stack_c::get(), i_pModel->getAnmMtx(jointIdx));
+    i_pModel->setAnmMtx(jointIdx, mDoMtx_stack_c::get());
 }
 
 /* 00000340-0000038C       .text nodeCB_BackBone__FP7J3DNodei */
@@ -109,12 +106,12 @@ static BOOL nodeCB_BackBone(J3DNode* i_node, int i_param) {
 
 /* 0000038C-0000042C       .text _nodeCB_BackBone__11daNpc_Hi1_cFP7J3DNodeP8J3DModel */
 void daNpc_Hi1_c::_nodeCB_BackBone(J3DNode* i_node, J3DModel* i_pModel) {
-    u16 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
+    s32 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
     mDoMtx_stack_c::copy(i_pModel->getAnmMtx(jointIdx));
     mDoMtx_stack_c::XrotM(m_jnt.getBackbone_y());
     mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
-    MTXCopy(mDoMtx_stack_c::get(), i_pModel->getAnmMtx(jointIdx));
+    i_pModel->setAnmMtx(jointIdx, mDoMtx_stack_c::get());
 }
 
 /* 0000042C-0000044C       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -131,8 +128,9 @@ bool daNpc_Hi1_c::init_HI1_0() {
 /* 00000498-00000618       .text createInit__11daNpc_Hi1_cFv */
 bool daNpc_Hi1_c::createInit() {
     bool ret;
-
-    mEventIdx[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl, 0xff);
+    for(int i = 0; i < ARRAY_SSIZE(l_evn_tbl); i++) {
+        mEventIdx[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i]);
+    }
     mEventCut.setActorInfo2("Hi1", this);
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     
@@ -201,8 +199,8 @@ void daNpc_Hi1_c::setMtx(bool param_1) {
 /* 00000778-0000078C       .text bckResID__11daNpc_Hi1_cFi */
 int daNpc_Hi1_c::bckResID(int idx) {
     static const int a_resID_tbl[] = {
-        1,
-        0
+        dRes_ID_HI_BCK_HI_WAIT01_e,
+        dRes_ID_HI_BCK_HI_POSE_e,
     };
     return a_resID_tbl[idx];
 }
@@ -210,7 +208,7 @@ int daNpc_Hi1_c::bckResID(int idx) {
 /* 0000078C-000007A0       .text btpResID__11daNpc_Hi1_cFi */
 int daNpc_Hi1_c::btpResID(int idx) {
     static const int a_resID_tbl[] = {
-        3
+        dRes_ID_HI_BTP_MABA_e,
     };
     return a_resID_tbl[idx];
 }
@@ -218,7 +216,7 @@ int daNpc_Hi1_c::btpResID(int idx) {
 /* 000007A0-000007B4       .text btkResID__11daNpc_Hi1_cFi */
 int daNpc_Hi1_c::btkResID(int idx) {
     static const int a_resID_tbl[] = {
-        4
+        dRes_ID_HI_BTK_HI_e,
     };
     return a_resID_tbl[idx];
 }
@@ -464,13 +462,9 @@ bool daNpc_Hi1_c::chk_talk() {
 
 /* 00000FFC-0000103C       .text chk_parts_notMov__11daNpc_Hi1_cFv */
 bool daNpc_Hi1_c::chk_parts_notMov() {
-    bool ret = false;
-    if(field_0x788.y != m_jnt.getHead_y() ||
+    return field_0x788.y != m_jnt.getHead_y() || 
         field_0x788.z != m_jnt.getBackbone_y() ||
-        field_0x788.x != current.angle.y) {
-        ret = true;
-    }
-    return ret;
+        field_0x788.x != current.angle.y;
 }
 
 /* 0000103C-00001090       .text searchByID__11daNpc_Hi1_cFUiPi */
@@ -528,11 +522,13 @@ void daNpc_Hi1_c::lookBack() {
 
 /* 00001254-000012D4       .text chkAttention__11daNpc_Hi1_cFv */
 bool daNpc_Hi1_c::chkAttention() {
-    if(dComIfGp_getAttention().LockonTruth()) {
-        return this == dComIfGp_getAttention().LockonTarget(0);
+    dAttention_c& attention = dComIfGp_getAttention();
 
+    if(attention.LockonTruth()) {
+        return this == attention.LockonTarget(0);
     }
-    return this == dComIfGp_getAttention().ActionTarget(0);
+
+    return this == attention.ActionTarget(0);
 }
 
 /* 000012D4-0000132C       .text setAttention__11daNpc_Hi1_cFb */
@@ -568,13 +564,39 @@ void daNpc_Hi1_c::privateCut(int i_staffIdx) {
     };
 
     if(i_staffIdx != -1) {
-        mActIdx = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, 1, TRUE, 0);
+        mActIdx = dComIfGp_evmng_getMyActIdx(i_staffIdx, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), TRUE, 0);
 
         if(mActIdx == -1) {
             dComIfGp_evmng_cutEnd(i_staffIdx);
         } else {
+#if VERSION == VERSION_DEMO
+            bool temp;
+            if(dComIfGp_evmng_getIsAddvance(i_staffIdx)) {
+
+                switch(mActIdx) {
+                    case 0:
+                        // to match codegen
+                        speedF = speedF;
+                        break;
+                }
+            }
+            
+            switch(mActIdx) {
+                case 0:
+                    break;
+                default:
+                    temp = true;
+                    break;
+
+            }
+            
+            if(temp) {
+                dComIfGp_evmng_cutEnd(i_staffIdx);
+            }
+#else
             dComIfGp_evmng_getIsAddvance(i_staffIdx);
             dComIfGp_evmng_cutEnd(i_staffIdx);
+#endif
         }
     }
 }
@@ -778,7 +800,7 @@ u8 daNpc_Hi1_c::demo() {
             field_0x7BF = 1;
             mBtkAnmFrame = 0;
         }
-        dDemo_setDemoData(this, 0x6a, mpMorf, mArcName);
+        dDemo_setDemoData(this, dDemo_actor_c::ENABLE_TRANS_e | dDemo_actor_c::ENABLE_ROTATE_e | dDemo_actor_c::ENABLE_ANM_e | dDemo_actor_c::ENABLE_ANM_FRAME_e, mpMorf, mArcName);
     }
     return field_0x7BA;
 }
@@ -842,7 +864,7 @@ BOOL daNpc_Hi1_c::_execute() {
     if(!demo()) {
         int temp = -1;
 
-        if(dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk()) {
+        if(dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == false) {
             temp = isEventEntry();
         }
 
@@ -879,24 +901,28 @@ BOOL daNpc_Hi1_c::_execute() {
 
 /* 00001EDC-00001F30       .text _delete__11daNpc_Hi1_cFv */
 BOOL daNpc_Hi1_c::_delete() {
-    fopAcM_GetID(this);
-    dComIfG_resDeleteDemo(&mPhs, mArcName);
-    if(heap && mpMorf) {
-        mpMorf->stopZelAnime();
+    if(DEMO_SELECT(mStateIsComplaete, true)){
+#if VERSION == VERSION_DEMO
+        l_HIO.removeHIO();
+#endif
+        dComIfG_resDelete(&mPhs, mArcName);
+    
+        if (DEMO_SELECT(mpMorf, heap && mpMorf)) {
+            mpMorf->stopZelAnime();
+        }
     }
     return TRUE;
 }
 
 /* 00001F30-0000205C       .text _create__11daNpc_Hi1_cFv */
 cPhs_State daNpc_Hi1_c::_create() {
-
     static int a_siz_tbl[] = {
         0,
         0
     };
 
     cPhs_State state;
-    fopAcM_SetupActor(this, daNpc_Hi1_c);
+    fopAcM_ct_Retail(this, daNpc_Hi1_c);
     if(!decideType(fopAcM_GetParam(this) & 0xFF)) {
         return cPhs_ERROR_e;
     }
@@ -906,10 +932,18 @@ cPhs_State daNpc_Hi1_c::_create() {
     if(!mStateIsComplaete) {
         return state;
     } 
+#if VERSION == VERSION_DEMO
+    l_HIO.entryHIO("ハイラル王");
+#endif
+    fopAcM_ct_Demo(this, daNpc_Hi1_c);
     
     if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_siz_tbl[field_0x7C5])) {
+#if VERSION == VERSION_DEMO
+        mStateIsComplaete = false;
+#endif
         return cPhs_ERROR_e;
     }
+    
     fopAcM_SetMtx(this, this->mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -110.0f, -20.0f, -100.0f, 110.0f, 280.0f, 100.0f);
 
@@ -921,8 +955,8 @@ cPhs_State daNpc_Hi1_c::_create() {
 
 /* 000024F4-00002768       .text bodyCreateHeap__11daNpc_Hi1_cFv */
 BOOL daNpc_Hi1_c::bodyCreateHeap() {
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, HI_BDL_HI);
-    JUT_ASSERT(0x5BB, a_mdl_dat != NULL);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes(mArcName, dRes_ID_HI_BDL_HI_e);
+    JUT_ASSERT(DEMO_SELECT(1469, 1467), a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
         NULL, NULL, NULL,
@@ -942,9 +976,9 @@ BOOL daNpc_Hi1_c::bodyCreateHeap() {
         return FALSE;
     }
     m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
-    JUT_ASSERT(0x5CF, m_hed_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(1489, 1487), m_hed_jnt_num >= 0);
     m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone1");
-    JUT_ASSERT(0x5D1, m_bbone_jnt_num >= 0);
+    JUT_ASSERT(DEMO_SELECT(1491, 1489), m_bbone_jnt_num >= 0);
 
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num & 0xffff)->setCallBack(nodeCB_Head);
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num & 0xffff)->setCallBack(nodeCB_BackBone);
@@ -997,18 +1031,18 @@ static actor_method_class l_daNpc_Hi1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_HI1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_HI1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_HI1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Hi1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_HI1,
+    /* Draw Prio    */ fpcDwPi_NPC_HI1_e,
     /* Actor SubMtd */ &l_daNpc_Hi1_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

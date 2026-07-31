@@ -30,7 +30,7 @@ public:
     BOOL CreateHeap();
     void calcMtx();
     BOOL CreateInit();
-    s32 getDemoAction();
+    int getDemoAction();
     void demoProc();
     BOOL checkArea();
     BOOL checkUnlock();
@@ -53,8 +53,8 @@ public:
     /* 0x2B7 */ u8 field_0x2B7[0x2B8 - 0x2B7];
     /* 0x2B8 */ s16 mAdjustmentTimer;
     /* 0x2BA */ u8 field_0x2BA[0x2BC - 0x2BA];
-    /* 0x2BC */ s32 field_0x2bc;
-    /* 0x2C0 */ s32 mEvtStaffId;
+    /* 0x2BC */ int field_0x2bc;
+    /* 0x2C0 */ int mEvtStaffId;
     /* 0x2C4 */ cXyz field_0x2c4;
     /* 0x2D0 */ cXyz mGoalPos;
     /* 0x2DC */ cXyz mGoal2Pos;

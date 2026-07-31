@@ -29,7 +29,7 @@ namespace daWindTag {
         cPhs_State _create();
         void set_mtx();
         bool checkSizeSpecialBig();
-        void set_wind_se_sub(unsigned long, cXyz*);
+        void set_wind_se_sub(u32, cXyz*);
         void set_wind_se();
         bool _execute();
         void path_move();
@@ -48,7 +48,6 @@ namespace daWindTag {
         static f32 m_ef_cullsize_far;
 
     public:
-        /* Place member variables here */
         /* 0x290 */ dCcD_Stts mStts;
         /* 0x2CC */ dCcD_Cps mCps;
         /* 0x404 */ cM3dGCpsS mCpsS;
@@ -70,7 +69,8 @@ namespace daWindTag {
         /* 0x574 */ u8 mPathId;
         /* 0x575 */ s8 mCurPathPoint;
         /* 0x576 */ s8 mPathPointDir;
-        /* 0x578 */ s32 mSwNo;
+        /* 0x577 */ u8 field_0x577;
+        /* 0x578 */ int mSwNo;
         /* 0x57C */ u8 field_0x57c;
         /* 0x57D */ u8 field_0x57d;
         /* 0x57E */ bool mbDraw;

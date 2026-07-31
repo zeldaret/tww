@@ -99,6 +99,11 @@ public:
         drawString_size_scale(posX, posY, width, height, str, strlen(str), visible);
     }
 
+    int getOffset(int i_no) const {
+        TWidth width;
+        getWidthEntry(i_no, &width);
+        return width.field_0x0;
+    }
     int getWidth(int i_no) const {
         TWidth width;
         getWidthEntry(i_no, &width);
@@ -108,6 +113,12 @@ public:
     bool isValid() const { return mValid; }
     bool isFixed() const { return mFixed; }
     int getFixedWidth() const { return mFixedWidth; }
+    void setFixedWidth(bool fixed, int width) {
+        mFixed = fixed;
+        mFixedWidth = width;
+    }
+
+    void drawChar(int, int, int, bool) {}
 
     /* 0x04 */ bool mValid;
     /* 0x05 */ bool mFixed;

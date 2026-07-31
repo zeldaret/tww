@@ -44,7 +44,6 @@ public:
     cXyz& getAttentionBasePos() { return field_0x754; }
     s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
     s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
-    s8 getCattleRoomNo() { return m_cattleRoomNo; }
     cXyz& getEyePos() { return field_0x748; }
     f32 getGroundY() { return mAcch.GetGroundH(); }
     s16 getHead_x() { return mJntCtrl.getHead_x(); }
@@ -70,10 +69,11 @@ public:
     // Note: The 0x10 bit is used in the final release, but not in the demo debug maps, so its official name is unknown.
     void offPlayerRoom(int idx) { m_playerRoom[idx] = false; }
     void onPlayerRoom(int idx) { m_playerRoom[idx] = true; }
-    void setCattleRoomNo(s8 roomNo) { m_cattleRoomNo = roomNo; }
 
     static bool isPlayerRoom(int idx) { return m_playerRoom[idx]; }
     static bool isPlayerRoom_Goat() { return isPlayerRoom(1) == true; }
+    static s8 getCattleRoomNo() { return m_cattleRoomNo; }
+    static void setCattleRoomNo(s8 roomNo) { m_cattleRoomNo = roomNo; }
 
     cPhs_State create();
     BOOL createHeap();

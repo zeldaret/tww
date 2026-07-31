@@ -5,10 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ohatch.h"
-#include "d/res/res_ohatch.h"
-#include "d/d_procname.h"
+#include "res/Object/Ohatch.h"
 #include "d/d_bg_w.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -46,34 +44,34 @@ static daObjOhatch_HIO_c l_HIO;
 
 daObjOhatch_HIO_c::daObjOhatch_HIO_c() {
     mNo = -1;
-    m08 = -4096.0f;
-    m0C = -16384.0f;
+    m08 = -0x1000;
+    m0C = -0x4000;
     m10 = 0.0f;
     m14 = -25.0f;
     m18 = 190.0f;
     m1C = 1.0f;
-    m20 = 8192.0f;
-    m24 = 131072.0f;
+    m20 = 0x2000;
+    m24 = 0x20000;
     m28 = 6.0f;
     m2C = -64.0f;
-    m30 = 1024.0f;
-    m34 = 8192.0f;
+    m30 = 0x400;
+    m34 = 0x2000;
     m38 = 0;
 }
 #else
 namespace L_HIO {
-static const f32 m08 = -4096.0f;
-static const f32 m0C = -16384.0f;
+static const f32 m08 = -0x1000;
+static const f32 m0C = -0x4000;
 static const f32 m10 = 0.0f;
 static const f32 m14 = -25.0f;
 static const f32 m18 = 190.0f;
 static const f32 m1C = 1.0f;
-static const f32 m20 = 8192.0f;
-static const f32 m24 = 131072.0f;
+static const f32 m20 = 0x2000;
+static const f32 m24 = 0x20000;
 static const f32 m28 = 6.0f;
 static const f32 m2C = -64.0f;
-static const f32 m30 = 1024.0f;
-static const f32 m34 = 8192.0f;
+static const f32 m30 = 0x400;
+static const f32 m34 = 0x2000;
 static const u8 m38 = 0;
 } // namespace L_HIO
 #endif
@@ -113,14 +111,14 @@ BOOL daObjOhatch_c::solidHeapCB(fopAc_ac_c* a_this) {
 /* 000002A0-000003CC       .text create_heap__13daObjOhatch_cFv */
 bool daObjOhatch_c::create_heap() {
     bool uVar5 = true;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, OHATCH_BDL_OHATCH);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_OHATCH_BDL_OHATCH_e);
     if (modelData == NULL) {
         JUT_ASSERT(DEMO_SELECT(308, 311), FALSE);
         uVar5 = false;
     } else {
         mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
-        mBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, OHATCH_DZB_OH_CLS), cBgW::MOVE_BG_e, &m2A8);
-        mBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, OHATCH_DZB_OH_OPN), cBgW::MOVE_BG_e, &m2A8);
+        mBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_OHATCH_DZB_OH_CLS_e), cBgW::MOVE_BG_e, &m2A8);
+        mBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_OHATCH_DZB_OH_OPN_e), cBgW::MOVE_BG_e, &m2A8);
         if (mModel == NULL || mBgW1 == NULL || mBgW2 == NULL) {
             uVar5 = false;
         }
@@ -130,7 +128,7 @@ bool daObjOhatch_c::create_heap() {
 
 /* 000003CC-00000548       .text _create__13daObjOhatch_cFv */
 cPhs_State daObjOhatch_c::_create() {
-    fopAcM_SetupActor(this, daObjOhatch_c);
+    fopAcM_ct(this, daObjOhatch_c);
     cPhs_State ret = dComIfG_resLoad(&mPhase, l_arcname);
     if (ret == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0xB90)) {
@@ -248,10 +246,10 @@ void daObjOhatch_c::tremor_act_proc() {
 /* 000008A4-00000A00       .text open_act_proc__13daObjOhatch_cFv */
 void daObjOhatch_c::open_act_proc() {
 #if VERSION == VERSION_DEMO
-    f32 uVar3 = (cM_ssin(m2D8 / HIO(m0C) * 32768.0f) + HIO(m1C)) / (HIO(m1C) + 1.0f);
+    f32 uVar3 = (cM_ssin(m2D8 / HIO(m0C) * 0x8000) + HIO(m1C)) / (HIO(m1C) + 1.0f);
     s32 uVar2 = HIO(m08) * uVar3;
 #else
-    f32 sin = m2D8 / HIO(m0C) * 32768.0f;
+    f32 sin = m2D8 / HIO(m0C) * 0x8000;
     s32 uVar2 = (cM_ssin(sin) + HIO(m1C)) / (HIO(m1C) + 1.0f) * HIO(m08);
 #endif
     m2D8 += uVar2;
@@ -354,18 +352,18 @@ static actor_method_class l_daObjOhatch_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ohatch = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ohatch,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ohatch_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjOhatch_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ohatch,
+    /* Draw Prio    */ fpcDwPi_Obj_Ohatch_e,
     /* Actor SubMtd */ &l_daObjOhatch_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_5_e,
+    /* Cull Type    */ fopAc_CULLBOX_5_e,
 };

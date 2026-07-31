@@ -11,10 +11,8 @@
 #include "d/d_cc_d.h"
 #include "d/d_cc_uty.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
-#include "d/res/res_bdkobj.h"
+#include "res/Object/Bdkobj.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_mtx.h"
@@ -25,7 +23,7 @@ static cXyz non_pos(10000.0f, -10000.0f, 20000.0f);
 
 /* 000000EC-00000104       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 static void ride_call_back(dBgW* param1, fopAc_ac_c* param2, fopAc_ac_c* param3) {
-    if (fopAcM_GetName(param3) != PROC_PLAYER) {
+    if (fopAcM_GetName(param3) != fpcNm_PLAYER_e) {
         return;
     }
     param2->health = 0xA;
@@ -257,9 +255,9 @@ static void tower_kaidan_move(bdkobj_class* i_this) {
             i_this->model = NULL;
             i_this->m299 = 100;
 
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8143, &i_this->current.pos, &i_this->current.angle);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8144, &i_this->current.pos, &i_this->current.angle);
-            dComIfGp_particle_set(dPa_name::ID_SCENE_8145, &i_this->current.pos, &i_this->current.angle);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_BRIDGE_L00, &i_this->current.pos, &i_this->current.angle);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_BRIDGE_S00, &i_this->current.pos, &i_this->current.angle);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_DK_BRIDGE_TENITA00, &i_this->current.pos, &i_this->current.angle);
             GXColor prim_col;
             prim_col.r = 0x46;
             prim_col.g = 0x3C;
@@ -271,7 +269,7 @@ static void tower_kaidan_move(bdkobj_class* i_this) {
             i_this->m938_demo =
 #endif
                 dComIfGp_particle_setToon(
-                    dPa_name::ID_SCENE_A146, &i_this->current.pos, &i_this->current.angle, NULL, 0xB4, &i_this->m918, (s8)fopAcM_GetRoomNo(i_this)
+                    dPa_name::ID_IT_ST_DK_BRIDGE_SMOKE00, &i_this->current.pos, &i_this->current.angle, NULL, 0xB4, &i_this->m918, (s8)fopAcM_GetRoomNo(i_this)
                 );
 #if VERSION == VERSION_DEMO
             JPABaseEmitter* emitter = i_this->m938_demo;
@@ -286,13 +284,13 @@ static void tower_kaidan_move(bdkobj_class* i_this) {
             fopAcM_seStartCurrent(i_this, JA_SE_OBJ_MJ_WBOARD_BRK, 0);
             for (s32 i = 0; i < 2; i++) {
                 i_this->mEffs[i].m000 = 2;
-                i_this->mEffs[i].m1AC = cM_rndF(65536.0f);
+                i_this->mEffs[i].m1AC = cM_rndF(0x10000);
                 i_this->mEffs[i].m028 = (0.7f + cM_rndFX(0.25f));
                 i_this->mEffs[i].m008.x = i_this->current.pos.x + cM_rndFX(500.0f);
                 i_this->mEffs[i].m008.y = i_this->current.pos.y;
                 i_this->mEffs[i].m008.z = i_this->current.pos.z + cM_rndFX(500.0f);
-                i_this->mEffs[i].m030.y = cM_rndF(65536.0f);
-                i_this->mEffs[i].m030.z = cM_rndF(65536.0f);
+                i_this->mEffs[i].m030.y = cM_rndF(0x10000);
+                i_this->mEffs[i].m030.z = cM_rndF(0x10000);
                 i_this->mEffs[i].m036.y = cM_rndFX(800.0f);
                 i_this->mEffs[i].m030.x = cM_rndFX(10000.0f);
                 i_this->mEffs[i].m036.z = cM_rndFX(800.0f);
@@ -371,13 +369,13 @@ static BOOL daBdkobj_Execute(bdkobj_class* i_this) {
                     u16 uVar6;
                     u16 uVar4;
                     if (i_this->m298 == 0) {
-                        uVar8 = dPa_name::ID_SCENE_A13D;
-                        uVar6 = dPa_name::ID_SCENE_813E;
-                        uVar4 = dPa_name::ID_SCENE_813F;
+                        uVar8 = dPa_name::ID_IT_ST_DK_BLOCK_SMOKE00;
+                        uVar6 = dPa_name::ID_IT_SN_DK_BLOCK_S00;
+                        uVar4 = dPa_name::ID_IT_SN_DK_BLOCK_L00;
                     } else {
-                        uVar8 = dPa_name::ID_SCENE_A140;
-                        uVar6 = dPa_name::ID_SCENE_8141;
-                        uVar4 = dPa_name::ID_SCENE_8142;
+                        uVar8 = dPa_name::ID_IT_ST_DK_POLE_SMOKE00;
+                        uVar6 = dPa_name::ID_IT_SN_DK_POLE_S00;
+                        uVar4 = dPa_name::ID_IT_SN_DK_POLE_L00;
                     }
                     static csXyz eff_ang = at->shape_angle;
                     eff_ang.z = 0;
@@ -456,14 +454,14 @@ static BOOL daBdkobj_Delete(bdkobj_class* i_this) {
     return TRUE;
 }
 static u16 bdl_data[] = {
-    BDKOBJ_BDL_S_TBLOCK,
-    BDKOBJ_BDL_S_TPOLE,
-    BDKOBJ_BDL_S_TOWER_BRIDGE,
+    dRes_INDEX_BDKOBJ_BDL_S_TBLOCK_e,
+    dRes_INDEX_BDKOBJ_BDL_S_TPOLE_e,
+    dRes_INDEX_BDKOBJ_BDL_S_TOWER_BRIDGE_e,
 };
 static u16 hahen_bdl_data[] = {
-    BDKOBJ_BDL_SHAHENS,
-    BDKOBJ_BDL_SHAHENL,
-    BDKOBJ_BDL_GWOOD00,
+    dRes_INDEX_BDKOBJ_BDL_SHAHENS_e,
+    dRes_INDEX_BDKOBJ_BDL_SHAHENL_e,
+    dRes_INDEX_BDKOBJ_BDL_GWOOD00_e,
 };
 
 /* 000022E8-000024C8       .text useHeapInit__FP10fopAc_ac_c */
@@ -482,7 +480,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         i_this->pm_bgw = new dBgW();
 
         JUT_ASSERT(DEMO_SELECT(781, 801), i_this->pm_bgw != NULL);
-        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Bdkobj", BDKOBJ_DZB_S_TOWER_BRIDGE);
+        cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Bdkobj", dRes_INDEX_BDKOBJ_DZB_S_TOWER_BRIDGE_e);
         if (i_this->pm_bgw->Set(dzb, cBgW::MOVE_BG_e, &i_this->mMtx) == TRUE) {
             return FALSE;
         }
@@ -517,7 +515,7 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -546,7 +544,7 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
             /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
             /* SrcGObjAt Mtrl    */ 0,
             /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+            /* SrcGObjTg Se      */ dCcG_SE_METAL,
             /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
             /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
             /* SrcGObjTg Mtrl    */ 0,
@@ -561,7 +559,7 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
     };
 
     bdkobj_class* i_this = (bdkobj_class*)a_this;
-    fopAcM_SetupActor(a_this, bdkobj_class);
+    fopAcM_ct(a_this, bdkobj_class);
 
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bdkobj");
     if (res == cPhs_ERROR_e) {
@@ -585,25 +583,30 @@ static cPhs_State daBdkobj_Create(fopAc_ac_c* a_this) {
     fopAcM_SetMtx(i_this, i_this->model->getBaseTRMtx());
 
     if (i_this->m298 == 2) {
-        return (dComIfG_Bgsp()->Regist(i_this->pm_bgw, i_this) != 0) ? cPhs_ERROR_e : (cPhs_ERROR_e - 1);
-    } else {
-        i_this->mStts.Init(0xFF, 0xFF, a_this);
-        i_this->mCyl.Set(cc_cyl_src);
-        i_this->mCyl.SetStts(&i_this->mStts);
-        if (i_this->m298 == 0) {
-            i_this->mCyl.SetH(REG6_F(0) + 300.0f);
-            i_this->mCyl.SetR(REG6_F(1) + 200.0f);
+        if (dComIfG_Bgsp()->Regist(i_this->pm_bgw, i_this)) {
+            return cPhs_ERROR_e;
         } else {
-            i_this->mCyl.SetH(REG6_F(2) + 300.0f);
-            i_this->mCyl.SetR(REG6_F(3) + 200.0f);
-        }
-
-        for (s32 i = 0; i < 3; i++) {
-            i_this->mEffs[i].mStts.Init(0xC8, 0xFF, a_this);
-            i_this->mEffs[i].mSph.Set(hahen_sph_src);
-            i_this->mEffs[i].mSph.SetStts(&i_this->mEffs[i].mStts);
+            return cPhs_COMPLEATE_e;
         }
     }
+    
+    i_this->mStts.Init(0xFF, 0xFF, a_this);
+    i_this->mCyl.Set(cc_cyl_src);
+    i_this->mCyl.SetStts(&i_this->mStts);
+    if (i_this->m298 == 0) {
+        i_this->mCyl.SetH(REG6_F(0) + 300.0f);
+        i_this->mCyl.SetR(REG6_F(1) + 200.0f);
+    } else {
+        i_this->mCyl.SetH(REG6_F(2) + 300.0f);
+        i_this->mCyl.SetR(REG6_F(3) + 200.0f);
+    }
+
+    for (s32 i = 0; i < 3; i++) {
+        i_this->mEffs[i].mStts.Init(0xC8, 0xFF, a_this);
+        i_this->mEffs[i].mSph.Set(hahen_sph_src);
+        i_this->mEffs[i].mSph.SetStts(&i_this->mEffs[i].mStts);
+    }
+
     return cPhs_COMPLEATE_e;
 }
 
@@ -616,18 +619,18 @@ static actor_method_class l_daBdkobj_Method = {
 };
 
 actor_process_profile_definition g_profile_BDKOBJ = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_BDKOBJ,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BDKOBJ_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(bdkobj_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_BDKOBJ,
+    /* Draw Prio    */ fpcDwPi_BDKOBJ_e,
     /* Actor SubMtd */ &l_daBdkobj_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

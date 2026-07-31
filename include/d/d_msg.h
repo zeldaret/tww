@@ -13,7 +13,7 @@ class sub_msg_class;
 class sub_msg_class : public msg_class {
 public:
     /* 0x00FC */ JKRExpHeap* mpHeap;
-    /* 0x0100 */ mesg_entry mMesgEntry;
+    /* 0x0100 */ JMSMesgEntry_c mMesgEntry;
     /* 0x0118 */ mesg_header* head_p;
     /* 0x011C */ fopMsgM_pane_class m011C[4];
     /* 0x01FC */ fopMsgM_pane_class m01FC;
@@ -91,6 +91,6 @@ public:
     void* field_0x8;
 };
 
-extern JKRHeap* dMsg_getAgbWorkArea();
+JKRHeap* dMsg_getAgbWorkArea();
 
 #endif /* D_MSG_H */

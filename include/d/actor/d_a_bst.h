@@ -106,7 +106,9 @@ struct bst_class {
     /* 0x2E88 */ fpc_ProcID mBombId;
     /* 0x2E8C */ fpc_ProcID mCreatedItemId;
     /* 0x2E90 */ fpc_ProcID m2E90[2];
+#if VERSION > VERSION_DEMO
     /* 0x2E98 */ s16 m2E98;
+#endif
     /* 0x2E9A */ s8 m2E9A;
     /* 0x2E9B */ u8 m2E9B[0x2E9C - 0x2E9B];
     /* 0x2E9C */ s16 msFrameCount;

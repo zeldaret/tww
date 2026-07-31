@@ -113,7 +113,7 @@ int g_fopAc_type;
 u32 fopAc_ac_c::stopStatus;
 
 /* 80023514-80023540       .text fopAc_IsActor__FPv */
-s32 fopAc_IsActor(void* pProc) {
+BOOL fopAc_IsActor(void* pProc) {
     int actor_type = ((fopAc_ac_c*)pProc)->actor_type;
     return fpcBs_Is_JustOfType(g_fopAc_type, actor_type);
 }

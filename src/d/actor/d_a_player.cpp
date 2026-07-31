@@ -14,8 +14,9 @@ void daPy_py_c::changePlayer(fopAc_ac_c* newPlayer) {
     if (!newPlayer) {
         return;
     }
+    s8 roomNo = newPlayer->current.roomNo;
     s8 stayNo = dComIfGp_roomControl_getStayNo();
-    if (stayNo != newPlayer->current.roomNo) {
+    if (stayNo != roomNo) {
         return;
     }
     dComIfGp_setPlayer(0, newPlayer);
@@ -25,27 +26,28 @@ void daPy_py_c::changePlayer(fopAc_ac_c* newPlayer) {
 
 /* 80102940-80102B84       .text objWindHitCheck__9daPy_py_cFP8dCcD_Cyl */
 void daPy_py_c::objWindHitCheck(dCcD_Cyl* cyl) {
-    cXyz targetSpeed(0.0f, 0.0f, 0.0f);
+    cXyz targetSpeedVec(0.0f, 0.0f, 0.0f);
     f32 maxStep = 3.0f;
     
     if (cyl->ChkTgHit()) {
         cCcD_Obj* hitObj = cyl->GetTgHitObj();
         if (hitObj && hitObj->ChkAtType(AT_TYPE_WIND)) {
-            targetSpeed = *cyl->GetTgRVecP();
-            f32 distXZ = cyl->GetTgRVecP()->absXZ();
+            targetSpeedVec = *cyl->GetTgRVecP();
+            f32 speedXZ = cyl->GetTgRVecP()->absXZ();
+            f32 targetSpeed = 30.0f;
             maxStep = 1.0f;
-            if (distXZ < 1.0f) {
-                targetSpeed = (current.pos - *cyl->GetTgHitPosP()) * 30.0f;
-                distXZ = targetSpeed.absXZ();
+            if (speedXZ < 1.0f) {
+                targetSpeedVec = (current.pos - *cyl->GetTgHitPosP()) * targetSpeed;
+                speedXZ = targetSpeedVec.absXZ();
             }
-            if (distXZ > 30.0f) {
-                targetSpeed *= 30.0f / distXZ;
+            if (speedXZ > targetSpeed) {
+                targetSpeedVec *= targetSpeed / speedXZ;
             }
         }
     }
     
-    cLib_addCalc(&field_0x2f8.x, targetSpeed.x, 0.5f, maxStep, 0.5f);
-    cLib_addCalc(&field_0x2f8.z, targetSpeed.z, 0.5f, maxStep, 0.5f);
+    cLib_addCalc(&field_0x2f8.x, targetSpeedVec.x, 0.5f, maxStep, 0.5f);
+    cLib_addCalc(&field_0x2f8.z, targetSpeedVec.z, 0.5f, maxStep, 0.5f);
     current.pos.x += field_0x2f8.x;
     current.pos.z += field_0x2f8.z;
 }

@@ -9,10 +9,8 @@
 #include "d/actor/d_a_tsubo.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_s_play.h"
-#include "d/res/res_ji.h"
+#include "res/Object/Ji.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_snap.h"
 #include "d/d_lib.h"
 #include "f_op/f_op_msg.h"
@@ -233,7 +231,7 @@ daNpc_Ji1_HIO_c::daNpc_Ji1_HIO_c() {
 
 /* 000003C0-000003E4       .text daNpc_Ji1_XyCheckCB__FPvi */
 static s16 daNpc_Ji1_XyCheckCB(void*, int i_itemBtn) {
-    return dComIfGp_getSelectItem(i_itemBtn) == BOKO_BELT ? TRUE : FALSE;
+    return dComIfGp_getSelectItem(i_itemBtn) == dItemNo_KNIGHTS_CREST_e ? TRUE : FALSE;
 }
 
 /* 000003E4-00000404       .text daJi1_CoHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
@@ -254,7 +252,7 @@ static void daJi1_TgHitCallback(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* a
 /* 00000424-000004A0       .text daJi1_AtHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void daJi1_AtHitCallback(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_ac_c* actor, dCcD_GObjInf*) {
     if(fopAc_IsActor(actor)) {
-        if(fpcM_GetName(actor) == PROC_PLAYER) {
+        if(fpcM_GetName(actor) == fpcNm_PLAYER_e) {
             if(!param_2->ChkAtShieldHit()) {
                 static_cast<daNpc_Ji1_c*>(i_this)->field_0xC3C++;
             }
@@ -372,7 +370,7 @@ void daNpc_Ji1_c::normalSubActionHarpoonGuard(s16 param_1) {
             field_0xD74++;
             field_0xD68 = 0;
             setAnm(9, 0.0f, 1);
-            dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
+            dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, field_0x7E0.GetTgHitPosP());
             fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
             fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
         }
@@ -708,7 +706,7 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
     else if(field_0xC78 != -1) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Ji1");
         int actionNo = getEventActionNo(staffIdx);
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             if(actionNo == 2) {
                 if(mMsgNo == 0x974) {
                     current.angle.y = -0x8000;
@@ -731,7 +729,7 @@ BOOL daNpc_Ji1_c::kaitenAction(void*) {
             if(l_msg) {
                 if(actionNo == 2) {
                     dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
-                    mDoAud_seStart(JA_SE_CM_AJ_ANGRY_FOOT, NULL);
+                    mDoAud_seStart(JA_SE_CM_AJ_ANGRY_FOOT);
                 }
 
                 field_0xC78 += 1;
@@ -848,11 +846,11 @@ u32 daNpc_Ji1_c::getMsg2ndType() {
             msgNo = 0x9AE;
         }
 #if VERSION == VERSION_DEMO
-        else if(dComIfGs_getBeastNum(3) < 3) {
+        else if(dComIfGs_getBeastNum(dBeastIdx_KNIGHTS_CREST_e) < 3) {
             msgNo = 0x9BB;
         }
 #else
-        else if(dComIfGs_getBeastNum(3) < 10) {
+        else if(dComIfGs_getBeastNum(dBeastIdx_KNIGHTS_CREST_e) < 10) {
             msgNo = 0x9BB;
         }
 #endif
@@ -953,12 +951,12 @@ u16 daNpc_Ji1_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x9AF:
 #if VERSION == VERSION_DEMO
-            if(dComIfGs_getBeastNum(3) >= 3) {
-                dComIfGp_setItemBeastNumCount(3, -3);
+            if(dComIfGs_getBeastNum(dBeastIdx_KNIGHTS_CREST_e) >= 3) {
+                dComIfGp_setItemBeastNumCount(dBeastIdx_KNIGHTS_CREST_e, -3);
                 mMsgNo = 0x9B0;
             }
 #else
-            if(dComIfGs_getBeastNum(3) >= 10) {
+            if(dComIfGs_getBeastNum(dBeastIdx_KNIGHTS_CREST_e) >= 10) {
                 mMsgNo = 0x9B0;
             }
 #endif
@@ -1026,6 +1024,7 @@ u16 daNpc_Ji1_c::next_msgStatus(u32* pMsgNo) {
             break;
         default:
             status = fopMsgStts_MSG_ENDS_e;
+            break;
     }
 
     return status;
@@ -1055,7 +1054,7 @@ BOOL daNpc_Ji1_c::talkAction(void*) {
         l_msg = 0;
     }
     else if(field_0xC78 != -1) {
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
         }
         else if(l_msg == 0) {
@@ -1327,7 +1326,7 @@ BOOL daNpc_Ji1_c::speakBadAction(void*) {
         l_msgId = -1;
     }
     else if(field_0xC78 != -1) {
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             if(mAnimation == 7) {
                 if(mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
                     l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
@@ -1387,7 +1386,7 @@ BOOL daNpc_Ji1_c::speakBadAction(void*) {
 
 /* 00003F54-00004050       .text initPosObject__11daNpc_Ji1_cFPvPv */
 void* daNpc_Ji1_c::initPosObject(void* pActor, void* pData) {
-    if(fopAc_IsActor(pActor) && fopAcM_GetName(pActor) == PROC_TSUBO) {
+    if(fopAc_IsActor(pActor) && fopAcM_GetName(pActor) == fpcNm_TSUBO_e) {
         ((daTsubo::Act_c*)pActor)->pos_init();
     }
 
@@ -1411,22 +1410,22 @@ void daNpc_Ji1_c::createItem() {
     u8 itemNo;
 
     if(field_0xD7C) {
-        itemNo = dItem_SWORD_e;
+        itemNo = dItemNo_SWORD_e;
     }
     else if(field_0xD7B == 1) {
-        itemNo = dItem_HURRICANE_SPIN_e;
+        itemNo = dItemNo_HURRICANE_SPIN_e;
     }
     else if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003) == 1) {
-        itemNo = dItem_PURPLE_RUPEE_e;
+        itemNo = dItemNo_PURPLE_RUPEE_e;
     }
     else if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_D003) == 2) {
-        itemNo = dItem_ORANGE_RUPEE_e;
+        itemNo = dItemNo_ORANGE_RUPEE_e;
     }
     else if(field_0xD70 >= l_HIO.field_0x60[3] && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0F10)) {
-        itemNo = dItem_SILVER_RUPEE_e;
+        itemNo = dItemNo_SILVER_RUPEE_e;
     }
     else {
-        itemNo = dItem_HEART_PIECE_e;
+        itemNo = dItemNo_HEART_PIECE_e;
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_0F10);
     }
 
@@ -1471,7 +1470,7 @@ void daNpc_Ji1_c::set_mtx() {
 #endif
 
         field_0xB90 = field_0xB78;
-        mDoMtx_stack_c::copy(mpSpearMorf->getModel()->getAnmMtx(1));
+        mDoMtx_stack_c::copy(mpSpearMorf->getModel()->getAnmMtx(JI_YARI_JNT_JI_YARI_e));
         mDoMtx_stack_c::multVec(&temp, &field_0xB78);
         mDoMtx_stack_c::multVec(&temp2, &field_0xB84);
     }
@@ -1739,6 +1738,7 @@ u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
                 break;
             case 3:
                 dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
+                break;
         }
     }
 
@@ -1974,7 +1974,7 @@ u32 daNpc_Ji1_c::privateCut() {
         ACT_CONTINUETALK,
         ACT_SETANGLE,
     };
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), 1, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
     if(actIdx == -1) {
         dComIfGp_evmng_cutEnd(staffIdx);
     }
@@ -2036,6 +2036,7 @@ u32 daNpc_Ji1_c::privateCut() {
                 break;
             default:
                 end = true;
+                break;
         }
 
         if(end) {
@@ -2052,7 +2053,7 @@ u32 daNpc_Ji1_c::setParticle(int max, f32 rate, f32 spread) {
 #endif
     dtParticle();
     if(field_0x2E0.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, 0, 0, 0xB9, &field_0x2E0, fopAcM_GetRoomNo(this));
         if(emitter) {
             emitter->setRate(rate);
             emitter->setSpread(spread);
@@ -2076,7 +2077,7 @@ void daNpc_Ji1_c::dtParticle() {
 /* 000058F0-000059E8       .text setParticleAT__11daNpc_Ji1_cFiff */
 u32 daNpc_Ji1_c::setParticleAT(int max, f32 rate, f32 spread) {
     if(field_0x300.getEmitter() == 0) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2022, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
+        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &field_0x320, 0, 0, 0xB9, &field_0x300, fopAcM_GetRoomNo(this));
         if(field_0x300.getEmitter()) {
             JGeometry::TVec3<f32> scaleVec;
             scaleVec.x = 2.0f;
@@ -2234,7 +2235,7 @@ BOOL daNpc_Ji1_c::endspeakAction(void*) {
         l_msgId = -1;
     }
     else if(field_0xC78 != -1) {
-        if(l_msgId == -1) {
+        if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
             l_msgId = fopMsgM_messageSet(mMsgNo, &eyePos);
             setAnm(5, 4.0f, 0);
         }
@@ -2315,7 +2316,7 @@ BOOL daNpc_Ji1_c::reiAction(void*) {
 
         field_0xC78++;
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
-        dComIfGp_onCameraAttentionStatus(0, 4);
+        dComIfGp_onCameraAttentionStatus(0, dCamAttnStts_00000004_e);
     }
     else if(field_0xC78 != -1) {
         if(l_msgId == fpcM_ERROR_PROCESS_ID_e) {
@@ -2362,7 +2363,7 @@ BOOL daNpc_Ji1_c::reiAction(void*) {
                     setAnm(0, 16.0f, 0);
                     setAction(&daNpc_Ji1_c::normalAction, NULL);
                     dComIfGp_event_reset();
-                    dComIfGp_offCameraAttentionStatus(0, 4);
+                    dComIfGp_offCameraAttentionStatus(0, dCamAttnStts_00000004_e);
                     field_0xD74 = 0;
                 }
             }
@@ -2750,22 +2751,23 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
         
         if(field_0x7E0.ChkTgHit() && field_0xD6C != 1) {
             switch(field_0xC24) {
-                case 0xF:
+                case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
                     teachSubActionJumpInit();
                     break;
-                case 1:
-                case 6:
-                case 8:
-                case 9:
+                case daPy_py_c::CUT_TYPE_CUT_A:
+                case daPy_py_c::CUT_TYPE_CUT_EA:
+                case daPy_py_c::CUT_TYPE_CUT_TURN:
+                case daPy_py_c::CUT_TYPE_CUT_ROLL:
                     setAnm(8, 0.0f, 1);
                     break;
-                case 10:
+                case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                     setAnm(10, 0.0f, 1);
                     field_0xC9C = 0.0f;
                     field_0xD38 = current.pos;
                     break;
                 default:
                     setAnm(9, 0.0f, 1);
+                    break;
             }
 
             if(checkCutType(field_0xC24, field_0xD70)) {
@@ -2811,7 +2813,7 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                 if(checkCutType(field_0xC8C, field_0xD70)) {
                     if(--field_0xC98 > 0) {
                         if(field_0xC94 == 0 && field_0xC98 > 0 && field_0xD34 == 0) {
-                            if(field_0xC8C != 9) {
+                            if(field_0xC8C != daPy_py_c::CUT_TYPE_CUT_ROLL) {
                                 fopAcM_orderOtherEventId(this, mEventIdx[1]);
                                 eventInfo.onCondition(dEvtCnd_UNK2_e);
                                 field_0xC90 = 1;
@@ -2825,7 +2827,7 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                             field_0xD6C = 0;
                         }
                     }
-                    else if(field_0xC8C != 9 && field_0xD34 == 0) {
+                    else if(field_0xC8C != daPy_py_c::CUT_TYPE_CUT_ROLL && field_0xD34 == 0) {
                         if(field_0xD70 >= 5 || (field_0xD70 >= 2 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001))) {
                             if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F10) == 0) {
                                 field_0xC84 = 0xF;
@@ -2846,7 +2848,7 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                         field_0xD34 = 3;
                     }
                 }
-                else if(field_0xC8C != 9 && field_0xD34 == 0) {
+                else if(field_0xC8C != daPy_py_c::CUT_TYPE_CUT_ROLL && field_0xD34 == 0) {
                     fopAcM_orderOtherEventId(this, mEventIdx[3]);
                     eventInfo.onCondition(dEvtCnd_UNK2_e);
                     field_0xC90 = 2;
@@ -2890,7 +2892,7 @@ BOOL daNpc_Ji1_c::teachAction(void*) {
                 field_0x6B0.OffTgShield();
                 field_0x7E0.OnTgShield();
 
-                if(field_0xC8C != 9) {
+                if(field_0xC8C != daPy_py_c::CUT_TYPE_CUT_ROLL) {
                     if(field_0xC90 == 1 || field_0xC90 == 3) {
                         field_0xD6C = 0;
                         field_0xC9C = 0.0f;
@@ -3031,16 +3033,16 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
 
             s32 cutType = player->getCutType();
 #if VERSION == VERSION_DEMO
-            if(cutType == 9)
+            if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL)
 #else
             f32 y_diff = std::fabsf(temp.y);
-            if(cutType == 9 && y_diff < 20.0f)
+            if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL && y_diff < 20.0f)
 #endif
             {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B20);
                 dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0402);
 #if VERSION > VERSION_DEMO
-                dComIfGp_setItemBeastNumCount(3, -10);
+                dComIfGp_setItemBeastNumCount(dBeastIdx_KNIGHTS_CREST_e, -10);
 #endif
                 field_0x7E0.OffTgShield();
                 field_0xC84 = 10;
@@ -3051,7 +3053,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                 return TRUE;
             }
             
-            if(cutType == 8) {
+            if(cutType == daPy_py_c::CUT_TYPE_CUT_TURN) {
                 field_0xC84 = 0xB;
 
                 setAction(&daNpc_Ji1_c::eventAction, 0);
@@ -3063,23 +3065,24 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
             field_0x7E0.OnTgShield();
             if(field_0x7E0.ChkTgHit() && field_0xD6C != 1) {
                 switch(field_0xC24) {
-                    case 1:
-                    case 6:
-                    case 8:
+                    case daPy_py_c::CUT_TYPE_CUT_A:
+                    case daPy_py_c::CUT_TYPE_CUT_EA:
+                    case daPy_py_c::CUT_TYPE_CUT_TURN:
                         setAnm(8, 0.0f, 1);
                         break;
-                    case 9:
+                    case daPy_py_c::CUT_TYPE_CUT_ROLL:
                         break;
-                    case 10:
+                    case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                         setAnm(10, 0.0f, 1);
                         field_0xC9C = 0.0f;
                         field_0xD38 = current.pos;
                         break;
                     default:
                         setAnm(9, 0.0f, 1);
+                        break;
                 }
 
-                if(field_0xC24 == 9) {
+                if(field_0xC24 == daPy_py_c::CUT_TYPE_CUT_ROLL) {
                     setHitParticle(0, 0x4833);
                     field_0xC9C = 0.0f;
                     field_0xD38 = current.pos;
@@ -3096,7 +3099,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
             if(field_0xD6C == 1) {
                 if(!player->getCutAtFlg() || mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
                     if(field_0xC90 == 0) {
-                        if(field_0xC8C == 9) {
+                        if(field_0xC8C == daPy_py_c::CUT_TYPE_CUT_ROLL) {
                             field_0xC84 = 0xA;
 
                             setAction(&daNpc_Ji1_c::eventAction, 0);
@@ -3112,7 +3115,7 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
                     }
                 }
 
-                if(mAnimation == 10 && field_0xC8C == 9) {
+                if(mAnimation == 10 && field_0xC8C == daPy_py_c::CUT_TYPE_CUT_ROLL) {
                     cLib_addCalc2(&field_0xC9C, l_HIO.field_0x34 * 2.0f, 0.25f, l_HIO.field_0x38);
                     cXyz temp(field_0xD38);
                     temp.x -= field_0xC9C * cM_ssin(current.angle.y);
@@ -3275,7 +3278,7 @@ void daNpc_Ji1_c::battleSubActionWaitInit() {
 /* 0000A430-0000A564       .text battleSubActionWait__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::battleSubActionWait() {
     if(--field_0xC30 < 0) {
-        f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+        f32 dist = fopAcM_searchPlayerDistanceXZ(this);
         f32 rnd = cM_rndF(10.0f);
 
         if(rnd > 3.3f || dist > 100.0f) {
@@ -3315,7 +3318,7 @@ void daNpc_Ji1_c::battleSubActionNockBackInit(int param_1) {
 
 /* 0000A5FC-0000A744       .text battleSubActionNockBack__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::battleSubActionNockBack() {
-    /* Nonmatching - load order */
+    /* Nonmatching - retail-only load order */
     fopAc_ac_c* player = dComIfGp_getPlayer(0); // doing this in the targetAngleY call fixes load order but breaks regalloc
     s16 temp = cLib_targetAngleY(&current.pos, &player->current.pos);
     if(mpOrcaMorf->checkFrame(1.0f)) {
@@ -3708,7 +3711,7 @@ BOOL daNpc_Ji1_c::battleSubActionGuard() {
 
     cXyz temp = field_0xD38;
 
-    if(field_0xC24 != 5) {
+    if(field_0xC24 != daPy_py_c::CUT_TYPE_BT_JUMPCUT) {
         temp.x -= field_0xC9C * cM_ssin(current.angle.y);
         temp.z -= field_0xC9C * cM_scos(current.angle.y);
     }
@@ -3785,19 +3788,19 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
     if(field_0x7E0.ChkTgHit() && field_0xD6C != 1) {
         switch(field_0xC24) {
-            case 0xF:
-            case 0x10:
+            case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
+            case daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT:
                 battleSubActionJumpInit();
                 break;
-            case 5:
+            case daPy_py_c::CUT_TYPE_BT_JUMPCUT:
                 current.angle.y += 0x8000;
                 battleSubActionDamageInit();
                 break;
-            case 0x1:
-            case 0x6:
-            case 0x8:
-            case 0x9:
-            case 0x1A: {
+            case daPy_py_c::CUT_TYPE_CUT_A:
+            case daPy_py_c::CUT_TYPE_CUT_EA:
+            case daPy_py_c::CUT_TYPE_CUT_TURN:
+            case daPy_py_c::CUT_TYPE_CUT_ROLL:
+            case daPy_py_c::CUT_TYPE_CUT_EXA: {
                 if(!isAttackAnim()) {
                     if(!checkSubAction(&daNpc_Ji1_c::battleSubActionNockBack)) {
                         setAnm(8, 0.0f, 1);
@@ -3829,32 +3832,32 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
                 break;
             }
-            case 0xA:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                 battleSubActionJpGuardInit();
                 break;
-            case 0x0:
-            case 0x2:
-            case 0x3:
-            case 0x4:
-            case 0x7:
-            case 0xB:
-            case 0xC:
-            case 0xD:
-            case 0xE:
-            case 0x11:
-            case 0x12:
-            case 0x13:
-            case 0x14:
-            case 0x15:
-            case 0x16:
-            case 0x17:
-            case 0x18:
-            case 0x19:
-            case 0x1B:
-            case 0x1C:
-            case 0x1D:
-            case 0x1E:
-            case 0x1F:
+            case daPy_py_c::CUT_TYPE_NONE:
+            case daPy_py_c::CUT_TYPE_CUT_F:
+            case daPy_py_c::CUT_TYPE_CUT_R:
+            case daPy_py_c::CUT_TYPE_CUT_L:
+            case daPy_py_c::CUT_TYPE_CUT_EB:
+            case daPy_py_c::CUT_TYPE_STICK:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_STICK:
+            case daPy_py_c::CUT_TYPE_MACHETE:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_MACHETE:
+            case daPy_py_c::CUT_TYPE_HAMMER_SIDESWING:
+            case daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER:
+            case daPy_py_c::CUT_TYPE_CLUB:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_CLUB:
+            case daPy_py_c::CUT_TYPE_DN_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_DN_SWORD:
+            case daPy_py_c::CUT_TYPE_SPEAR:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_SPEAR:
+            case daPy_py_c::CUT_TYPE_CUT_EXB:
+            case daPy_py_c::CUT_TYPE_PG_SWORD:
+            case daPy_py_c::CUT_TYPE_JUMPCUT_PG_SWORD:
+            case daPy_py_c::CUT_TYPE_CUT_EXMJ:
+            case daPy_py_c::CUT_TYPE_CUT_KESA:
             default: {
                 &daNpc_Ji1_c::battleSubActionNockBack; // seems super fake, needed to match .data
                 if(!isAttackAnim()) {
@@ -3890,15 +3893,19 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
             }
         }
         
-        if(field_0xC24 == 0) {
+        if(field_0xC24 == daPy_py_c::CUT_TYPE_NONE) {
             setGuardParticle();
         }
         else {
-            if(field_0xC24 == 0xF || field_0xC24 == 0x10 || field_0xC24 == 0x5) {
+            if(
+                field_0xC24 == daPy_py_c::CUT_TYPE_BT_ROLLCUT ||
+                field_0xC24 == daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT ||
+                field_0xC24 == daPy_py_c::CUT_TYPE_BT_JUMPCUT
+            ) {
                 fopAcM_seStart(this, JA_SE_LK_SW_CRT_HIT, 0);
 
                 static cXyz scale(1.25f, 1.25f, 1.25f);
-                if(field_0xC24 == 5) {
+                if(field_0xC24 == daPy_py_c::CUT_TYPE_BT_JUMPCUT) {
                     setHitParticle(&scale, JA_SE_CV_JI_FUTTOBI);
                 }
                 else {
@@ -3985,15 +3992,15 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
     if(field_0xC78 == 0) {
         u8 icon;
         switch(dComIfGs_getSelectEquip(0)) {
-            case dItem_SWORD_e:
+            case dItemNo_SWORD_e:
                 icon = 1;
                 break;
                 icon = 2;
                 break;
-            case dItem_MASTER_SWORD_2_e:
+            case dItemNo_MASTER_SWORD_2_e:
                 icon = 2;
                 break;
-            case dItem_MASTER_SWORD_1_e:
+            case dItemNo_MASTER_SWORD_1_e:
             default:
                 icon = 2;
                 break;
@@ -4040,23 +4047,23 @@ BOOL daNpc_Ji1_c::battleAction(void*) {
 }
 
 /* 0000CA98-0000CC28       .text checkCutType__11daNpc_Ji1_cFii */
-BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
+BOOL daNpc_Ji1_c::checkCutType(int cutType, int param_2) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
     BOOL ret = false;
     switch(param_2) {
         case 0:
-            switch(param_1) {
-                case 3:
-                case 4:
-                case 7:
-                case 0x1A:
-                case 0x1B:
-                case 0x1E:
-                case 0x1F:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_CUT_R:
+                case daPy_py_c::CUT_TYPE_CUT_L:
+                case daPy_py_c::CUT_TYPE_CUT_EB:
+                case daPy_py_c::CUT_TYPE_CUT_EXA:
+                case daPy_py_c::CUT_TYPE_CUT_EXB:
+                case daPy_py_c::CUT_TYPE_CUT_EXMJ:
+                case daPy_py_c::CUT_TYPE_CUT_KESA:
                     ret = true;
                     break;
-                case 8:
+                case daPy_py_c::CUT_TYPE_CUT_TURN:
                     if(player->checkComboCutTurn()) {
                         ret = true;
                     }
@@ -4067,16 +4074,16 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         case 1:
-            switch(param_1) {
-                case 1:
-                case 6:
-                case 0x1A:
-                case 0x1B:
-                case 0x1E:
-                case 0x1F:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_CUT_A:
+                case daPy_py_c::CUT_TYPE_CUT_EA:
+                case daPy_py_c::CUT_TYPE_CUT_EXA:
+                case daPy_py_c::CUT_TYPE_CUT_EXB:
+                case daPy_py_c::CUT_TYPE_CUT_EXMJ:
+                case daPy_py_c::CUT_TYPE_CUT_KESA:
                     ret = true;
                     break;
-                case 8:
+                case daPy_py_c::CUT_TYPE_CUT_TURN:
                     if(player->checkComboCutTurn()) {
                         ret = true;
                     }
@@ -4087,13 +4094,13 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         case 2:
-            switch(param_1) {
-                case 2:
-                case 6:
-                case 0x1A:
-                case 0x1B:
-                case 0x1E:
-                case 0x1F:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_CUT_F:
+                case daPy_py_c::CUT_TYPE_CUT_EA:
+                case daPy_py_c::CUT_TYPE_CUT_EXA:
+                case daPy_py_c::CUT_TYPE_CUT_EXB:
+                case daPy_py_c::CUT_TYPE_CUT_EXMJ:
+                case daPy_py_c::CUT_TYPE_CUT_KESA:
                     ret = true;
                     break;
                 case 8:
@@ -4107,9 +4114,9 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         case 3:
-            switch(param_1) {
-                case 8:
-                case 9:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_CUT_TURN:
+                case daPy_py_c::CUT_TYPE_CUT_ROLL:
                     ret = true;
                     break;
                 default:
@@ -4118,10 +4125,10 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         case 4:
-            switch(param_1) {
-                case 5:
-                case 0xF:
-                case 0x10:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_BT_JUMPCUT:
+                case daPy_py_c::CUT_TYPE_BT_ROLLCUT:
+                case daPy_py_c::CUT_TYPE_BT_VERTICALJUMPCUT:
                     ret = true;
                     break;
                 default:
@@ -4130,8 +4137,8 @@ BOOL daNpc_Ji1_c::checkCutType(int param_1, int param_2) {
 
             break;
         default:
-            switch(param_1) {
-                case 0xA:
+            switch(cutType) {
+                case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
                     ret = true;
                     break;
             }
@@ -4204,7 +4211,7 @@ void daNpc_Ji1_c::setAnimFromMsgNo(u32 msgNo) {
             if(field_0x430 != 0) {
                 field_0x430->becomeInvalidEmitter();
                 field_0x430 = 0;
-                field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A5, &current.pos);
+                field_0x430 = dComIfGp_particle_set(dPa_name::ID_AK_SN_JITEAR01, &current.pos);
             }
 
             setAnm(0x18, 8.0f, 0);
@@ -4242,146 +4249,146 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
         switch(param_1) {
             case 0:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_WAIT01));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WAIT01_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_WAIT01);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WAIT01_e);
 
                 break;
             case 1:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_WAIT02));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WAIT02_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_WAIT02);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WAIT02_e);
 
                 break;
             case 2:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TALK01));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TALK01_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TALK01);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TALK01_e);
 
                 break;
             case 3:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TALK02));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TALK02_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TALK02);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TALK02_e);
 
                 break;
             case 4:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_AKIRE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_AKIRE_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_AKIRE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_AKIRE_e);
 
                 break;
             case 5:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_KAMAE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_KAMAE_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_KAMAE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_KAMAE_e);
 
                 break;
             case 6:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_KROT));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_KROT_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_KROT);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_KROT_e);
                 speed = l_HIO.field_0x48;
 
                 break;
             case 7:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_INASI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_INASI_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_INASI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_INASI_e);
                 speed = l_HIO.field_0x44;
 
                 break;
             case 8:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TATEGUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TATEGUARD_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TATEGUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TATEGUARD_e);
 
                 break;
             case 9:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_YKGUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_YKGUARD_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_YKGUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_YKGUARD_e);
 
                 break;
             case 10:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_JPGUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_JPGUARD_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_JPGUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_JPGUARD_e);
 
                 break;
             case 11:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TOKAMAE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TOKAMAE_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TOKAMAE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TOKAMAE_e);
 
                 break;
             case 12:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_REI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_REI_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_REI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_REI_e);
 
                 break;
             case 13:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_WARAI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WARAI_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_WARAI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WARAI_e);
                 speed = l_HIO.field_0x4C;
 
                 break;
             case 14:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_JPGUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_JPGUARD_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_JPGUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_JPGUARD_e);
                 speed = 2.0f;
 
                 break;
             case 15:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_GUARD));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_GUARD_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_GUARD);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_GUARD_e);
                 speed = 2.0f;
 
                 break;
             case 16:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_BTKAMASI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BTKAMASI_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_BTKAMASI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BTKAMASI_e);
 
                 break;
             case 17:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_BTKAMAE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BTKAMAE_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_BTKAMAE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BTKAMAE_e);
 
                 break;
             case 18:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_UDEGUMI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_UDEGUMI_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_UDEGUMI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_UDEGUMI_e);
 
                 break;
             case 19:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_TATEATTACK));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TATEATTACK_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_TATEATTACK);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TATEATTACK_e);
 
                 break;
             case 20:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_YOKOATTACK));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_YOKOATTACK_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_YOKOATTACK);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_YOKOATTACK_e);
 
                 break;
             case 21:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_ODOROKU));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_ODOROKU_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_ODOROKU);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_ODOROKU_e);
 
                 break;
             case 22:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_BIBIRI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BIBIRI_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_BIBIRI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BIBIRI_e);
 
                 BackSlideInit();
                 if(field_0xD84 == 1) {
@@ -4390,26 +4397,26 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
                 break;
             case 23:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_NAKU));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_NAKU_e));
                 loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NAKU);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_NAKU_e);
 
                 if(field_0x430 == 0) {
-                    field_0x430 = dComIfGp_particle_set(dPa_name::ID_SCENE_81A4, &current.pos);
+                    field_0x430 = dComIfGp_particle_set(dPa_name::ID_AK_SN_JITEAR00, &current.pos);
                     harpoonRelease(0);
                 }
 
                 break;
             case 24:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_NUGUI));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_NUGUI_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_NUGUI);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_NUGUI_e);
 
                 break;
             case 25:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", JI_BCK_JI_DAMAGE));
+                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_DAMAGE_e));
                 loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", JI_BAS_JI_DAMAGE);
+                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_DAMAGE_e);
 
                 break;
             default:
@@ -4418,10 +4425,10 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
 
         mpOrcaMorf->setAnm(bckAnm, loopMode, param_2, speed, 0.0f, -1.0f, pSoundAnimRes);
         if(mAnimation == 0x13) {
-            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_TATEATTACK_e), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
         else if(mAnimation == 0x14) {
-            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_YOKOATTACK), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_YOKOATTACK_e), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
         }
 
         return true;
@@ -4529,7 +4536,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 0000DED0-0000DF78       .text _create__11daNpc_Ji1_cFv */
 cPhs_State daNpc_Ji1_c::_create() {
-    fopAcM_SetupActor(this, daNpc_Ji1_c);
+    fopAcM_ct(this, daNpc_Ji1_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhs, "Ji");
     if(state == cPhs_COMPLEATE_e) {
@@ -4547,13 +4554,13 @@ cPhs_State daNpc_Ji1_c::_create() {
 BOOL daNpc_Ji1_c::CreateHeap() {
     /* Nonmatching - regalloc */
 
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Ji", JI_BDL_JI));
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BDL_JI_e));
     mpOrcaMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", JI_BCK_WAIT01)),
+        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_WAIT01_e)),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Ji", JI_BAS_WAIT01),
+        dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_WAIT01_e),
         0x00000000,
         0x11020203
     );
@@ -4582,9 +4589,9 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     JUT_ASSERT(0x15BA, handRJointNo >= 0);
 
     mpSpearMorf = new mDoExt_McaMorf(
-        (J3DModelData*)(dComIfG_getObjectRes("Ji", JI_BDL_JI_YARI)),
+        (J3DModelData*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BDL_JI_YARI_e)),
         NULL, NULL,
-        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", JI_BCK_JIYARI_TATEATTACK)),
+        (J3DAnmTransformKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_TATEATTACK_e)),
         J3DFrameCtrl::EMode_NONE, 0.0f, 0, -1, 1,
         0,
         0x00000000,
@@ -4596,26 +4603,26 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         return false;
     }
 
-    J3DModelData* modelData2 = (J3DModelData*)(dComIfG_getObjectRes("Ji", JI_BDL_YJITR00));
+    J3DModelData* modelData2 = (J3DModelData*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BDL_YJITR00_e));
     mpTearsModel = mDoExt_J3DModel__create(modelData2, 0, 0x11020203);
 
-    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Ji", JI_BRK_YJITR00));
+    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BRK_YJITR00_e));
     JUT_ASSERT(0x15CD, a_brk != NULL);
 
-    J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", JI_BTK_YJITR00));
+    J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BTK_YJITR00_e));
     JUT_ASSERT(0x15D0, a_btk != NULL);
 
-    int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
-    int temp2 = mCryBtk.init(modelData2, a_btk, false, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP);
+    int temp2 = mCryBtk.init(modelData2, a_btk, false, J3DFrameCtrl::EMode_LOOP);
 
     if(mpTearsModel == 0 || temp1 == 0 || temp2 == 0) {
         return false;
     }
 
-    headTexPattern = (J3DAnmTexPattern*)(dComIfG_getObjectRes("Ji", JI_BTP_JI));
+    headTexPattern = (J3DAnmTexPattern*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BTP_JI_e));
     JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
-    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0);
+    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP);
 #if VERSION > VERSION_DEMO
     if(temp2 == 0) {
         return false;
@@ -4984,7 +4991,7 @@ BOOL daNpc_Ji1_c::_draw() {
             dComIfGd_addRealShadow(mShadowId, mpSpearMorf->getModel());
         }
 
-        dSnap_RegistFig(DSNAP_TYPE_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_NPC_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
         
         return true;
     }
@@ -4995,7 +5002,7 @@ static cXyz l_head_top(1.0f, 0.0f, 0.0f);
 
 /* 0001031C-00010E3C       .text daNpc_Ji1_setHairAngle__FP11daNpc_Ji1_c */
 static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
-    /* Nonmatching - stack */
+    /* Nonmatching - retail-only load order */
     f32 wind = *dKyw_get_wind_power() * *dKyw_get_wind_power() * 25.0f;
     cXyz* windVec = dKyw_get_wind_vec();
 
@@ -5051,7 +5058,7 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
     i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3_2);
     i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3_2);
-    i_this->field_0xBAA = cLib_minMaxLimit(i_this->field_0xBAA, l_HIO.field_0xF4, l_HIO.field_0xF6);
+    i_this->field_0xBAA = cLib_minMaxLimit<s16>(i_this->field_0xBAA, l_HIO.field_0xF4, l_HIO.field_0xF6);
 
     s16 r4_2 = i_this->current.angle.y + i_this->m_jnt.getHead_y();
     f32 f5 = cM_ssin(r4_2);
@@ -5059,7 +5066,7 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
     cLib_addCalcAngleS2(&i_this->field_0xBAC, cM_atan2s(sp3C.z * f5 - sp3C.x * f6, std::sqrtf(temp10 * temp10 + sp3C.y * sp3C.y)), 5, 0x400);
 
     i_this->field_0xBAC += (s16)(i_this->field_0xBB8 - temp4_2);
-    i_this->field_0xBAC = cLib_minMaxLimit(i_this->field_0xBAC, l_HIO.field_0xE8, l_HIO.field_0xEA);
+    i_this->field_0xBAC = cLib_minMaxLimit<s16>(i_this->field_0xBAC, l_HIO.field_0xE8, l_HIO.field_0xEA);
 
     i_this->field_0xBB6 = (s16)(i_this->field_0xBAA - r26) * 0.2f;
     i_this->field_0xBB8 = (s16)(i_this->field_0xBAC - r25) * 0.2f;
@@ -5219,8 +5226,8 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
         scale = *param_1;
     }
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, field_0x7E0.GetTgHitPosP(), &angle, &scale);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_0010, field_0x7E0.GetTgHitPosP(), 0, &scale);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, field_0x7E0.GetTgHitPosP(), &angle, &scale);
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, field_0x7E0.GetTgHitPosP(), 0, &scale);
     fopAcM_seStart(this, JA_SE_CM_JI_DAMAGE, 0);
     fopAcM_seStart(this, param_2, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);
@@ -5228,7 +5235,7 @@ void daNpc_Ji1_c::setHitParticle(cXyz* param_1, u32 param_2) {
 
 /* 000114EC-0001161C       .text setGuardParticle__11daNpc_Ji1_cFv */
 void daNpc_Ji1_c::setGuardParticle() {
-    dComIfGp_particle_set(dPa_name::ID_COMMON_PURPLE_HIT, field_0x7E0.GetTgHitPosP());
+    dComIfGp_particle_set(dPa_name::ID_AK_JN_NG, field_0x7E0.GetTgHitPosP());
     fopAcM_seStart(this, JA_SE_OBJ_COL_SWS_NMTLP, 0);
     fopAcM_seStart(this, JA_SE_CV_JI_DEFENCE, 0);
     dKy_SordFlush_set(*field_0x7E0.GetTgHitPosP(), 0);
@@ -5256,7 +5263,7 @@ void daNpc_Ji1_c::BackSlide(f32 param_1, f32 param_2) {
 
 /* 0001173C-000118E0       .text harpoonRelease__11daNpc_Ji1_cFP4cXyz */
 void daNpc_Ji1_c::harpoonRelease(cXyz* param_1) {
-    MTXCopy(mpSpearMorf->getModel()->getAnmMtx(1), field_0xCA0);
+    MTXCopy(mpSpearMorf->getModel()->getAnmMtx(JI_YARI_JNT_JI_YARI_e), field_0xCA0);
     mpSpearMorf->setFrame(0.0f);
     field_0xCD0.x = field_0xCA0[0][3];
     field_0xCD0.y = field_0xCA0[1][3];
@@ -5423,18 +5430,18 @@ static actor_method_class l_daNpc_Ji1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_JI1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_JI1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_JI1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Ji1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_JI1,
+    /* Draw Prio    */ fpcDwPi_NPC_JI1_e,
     /* Actor SubMtd */ &l_daNpc_Ji1_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

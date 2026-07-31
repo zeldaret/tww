@@ -5,13 +5,11 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_throwstone.h"
-#include "d/res/res_aisi.h"
+#include "res/Object/Aisi.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_demo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 const char daThrowstone_c::M_arcname[] = "Aisi";
@@ -24,7 +22,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 8023B564-8023B5DC       .text CreateHeap__14daThrowstone_cFv */
 BOOL daThrowstone_c::CreateHeap() {
-    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, AISI_INDEX_BDL_AISI);
+    J3DModelData* pModelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AISI_BDL_AISI_e);
     if (pModelData == NULL)
         return FALSE;
 
@@ -36,7 +34,7 @@ cPhs_State daThrowstone_c::_create() {
     cPhs_State result = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (result == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daThrowstone_c);
+        fopAcM_ct(this, daThrowstone_c);
 
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x4C0)) {
             result = cPhs_ERROR_e;
@@ -122,18 +120,18 @@ static actor_method_class daThrowstoneMethodTable = {
 };
 
 actor_process_profile_definition g_profile_THROWSTONE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_THROWSTONE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_THROWSTONE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daThrowstone_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_THROWSTONE,
+    /* Draw Prio    */ fpcDwPi_THROWSTONE_e,
     /* Actor SubMtd */ &daThrowstoneMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -43,7 +43,6 @@ public:
     /* 0x07 */ s8 m07;
     /* 0x08 */ s8 m08;
     /* 0x09 */ s8 m09;
-    /* 0x0A */ /* 2 bytes of alignment padding */
     /* 0x0C */ u32 mWindScalePhaseInc;
     /* 0x10 */ u32 mNormalFlutterPhaseInc;
     /* 0x14 */ u32 mFlagWavePhaseInc;
@@ -96,7 +95,6 @@ public:
     /* 0x0D30 */ cXyz mBackNrm[2][45];
     /* 0x1168 */ cXyz mVelocity[45];
     /* 0x1384 */ u8 mCurrArr;
-    /* 0x1385 */ /* 3 bytes of alignment padding */
 };  // Size: 0x1388
 STATIC_ASSERT(sizeof(daGFlag_packet_c) == 0x1388);
 
@@ -133,7 +131,6 @@ public:
     /* 0x1628 */ Mtx mMtx;
     /* 0x1658 */ cXyz mGoalFlagPolePos[2];
     /* 0x1670 */ s16 mWindScalePhase;
-    /* 0x1672 */ /* 2 bytes of alignment padding */
     /* 0x1674 */ fpc_ProcID mTimerProcID;
     /* 0x1678 */ fpc_ProcID mMgameStartProcID;
     /* 0x167C */ fpc_ProcID mMgameTermProcID;
@@ -141,7 +138,6 @@ public:
     /* 0x1684 */ s16 mRaceEndState;
     /* 0x1686 */ s16 mCamFramesPassed;
     /* 0x1688 */ u8 mRaceStartState;
-    /* 0x1689 */ /* 3 bytes of alignment padding */
     /* 0x168C */ dPath* mpRopePaths[4];
     /* 0x169C */ s32 mNumRopeBuoys[4];
     /* 0x16AC */ s32 mNumRopes;

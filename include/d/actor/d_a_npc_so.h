@@ -131,7 +131,11 @@ public:
 
 public:
     /* Place member variables here */
+#if VERSION == VERSION_DEMO
+    /* 0x290 */ u8 m290[0xB70 - 0x290];
+#else
     /* 0x290 */ u8 m290[0xB78 - 0x290];
+#endif
     /* 0xB78 */ int mB78;
 };
 

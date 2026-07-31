@@ -3,6 +3,20 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 
+#define RAD2DEG_CONSTANT (180.0f / M_PI) // 57.29577951f
+#define DEG2RAD_CONSTANT (M_PI / 180.0f) // 0.017453292f
+#define DEG2S_CONSTANT (0x8000 / 180.0f) // 182.04445f
+#define S2DEG_CONSTANT (180.0f / 0x8000) // 0.005493164f
+#define S2RAD_CONSTANT (M_PI / 0x8000) // 9.58738e-5f / 9.58738e-05f / 0.0000958738f
+#define RAD2S_CONSTANT (0x8000 / M_PI) // 10430.378f
+
+#define RAD2DEG(x) ((x) * RAD2DEG_CONSTANT)
+#define DEG2RAD(x) ((x) * DEG2RAD_CONSTANT)
+#define DEG2S(x) ((s16)((x) * DEG2S_CONSTANT))
+#define S2DEG(x) ((x) * S2DEG_CONSTANT)
+#define S2RAD(x) ((x) * S2RAD_CONSTANT)
+#define RAD2S(x) ((x) * RAD2S_CONSTANT)
+
 class cSAngle {
 private:
     s16 mAngle;
@@ -59,13 +73,13 @@ cSAngle operator+(short, const cSAngle&);
 cSAngle operator-(short, const cSAngle&);
 
 struct cAngle {
-    static f32 Radian_to_Degree(f32 rad) { return rad * 57.2957763671875f; }
-    static f32 Degree_to_Radian(f32 deg) { return deg * 0.017453292f; }
-    static s16 Degree_to_SAngle(f32 deg) { return deg * 182.04444885253906f; }
-    static f32 SAngle_to_Degree(s16 angle) { return (360.0f / 65536.0f) * angle; }
-    static f32 SAngle_to_Radian(s16 angle) { return 9.58738E-5f * angle; }
-    static f32 SAngle_to_Normal(s16 angle) { return 3.0517578E-5f * angle; }
-    static s16 Radian_to_SAngle(f32 rad) { return rad * 10430.378f; }
+    static f32 Radian_to_Degree(f32 rad) { return RAD2DEG(rad); }
+    static f32 Degree_to_Radian(f32 deg) { return  DEG2RAD(deg); }
+    static s16 Degree_to_SAngle(f32 deg) { return DEG2S(deg); }
+    static f32 SAngle_to_Degree(s16 angle) { return S2DEG(angle); }
+    static f32 SAngle_to_Radian(s16 angle) { return S2RAD(angle); }
+    static s16 Radian_to_SAngle(f32 rad) { return RAD2S(rad); }
+    static f32 SAngle_to_Normal(s16 angle) { return angle * (1.0f / 0x8000); }
 
     /* Converts Radian value into Degree value */
     static f32 r2d(f32 r) { return Radian_to_Degree(r); }

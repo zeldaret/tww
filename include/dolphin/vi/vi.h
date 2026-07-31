@@ -60,7 +60,10 @@ typedef enum {
     VI_TVMODE_GCA_PROG = VI_TVMODE(VI_GCA, VI_PROGRESSIVE),   // 26
 } VITVMode;
 
-typedef enum { VI_XFBMODE_SF = 0, VI_XFBMODE_DF } VIXFBMode;
+typedef enum {
+    VI_XFBMODE_SF = 0,
+    VI_XFBMODE_DF
+} VIXFBMode;
 
 typedef void (*VIRetraceCallback)(u32);
 typedef void (*VIPositionCallback)(s16 x, s16 y);
@@ -138,6 +141,7 @@ void VISetBlack(BOOL);
 u32 VIGetRetraceCount();
 u32 VIGetDTVStatus();
 u32 VIGetTvFormat();
+u32 VIGetNextField(void);
 
 vu16 __VIRegs[59] AT_ADDRESS(0xCC002000);
 

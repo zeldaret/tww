@@ -78,7 +78,8 @@ static cPhs_State fopOvlpReq_phase_IsCreated(overlap_request_class* i_this) {
 
 static cPhs_State fopOvlpReq_phase_Create(overlap_request_class* i_this) {
     fpcLy_SetCurrentLayer(i_this->pCurrentLayer);
-    i_this->mPId = fpcSCtRq_Request(fpcLy_CurrentLayer(), i_this->mProcName, NULL, NULL, NULL);
+    s16 procName = i_this->mProcName;
+    i_this->mPId = fpcSCtRq_Request(fpcLy_CurrentLayer(), procName, NULL, NULL, NULL);
     return cPhs_NEXT_e;
 }
 

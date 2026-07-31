@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ajav.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_ajav.h"
+#include "res/Object/Ajav.h"
 
 static cXyz l_daObjAjav_co_offset[3] = {
     cXyz(0.0f, 2550.0f, 200.0f),
@@ -144,7 +142,12 @@ static f32 l_daObjAjav_cyl_h[6] = {
 };
 
 static const s32 l_daObjAjav_idx_table[6] = {
-    4, 5 ,6 ,7, 8, 9
+    dRes_INDEX_AJAV_BDL_AJAVA_e,
+    dRes_INDEX_AJAV_BDL_AJAVB_e,
+    dRes_INDEX_AJAV_BDL_AJAVC_e,
+    dRes_INDEX_AJAV_BDL_AJAVD_e,
+    dRes_INDEX_AJAV_BDL_AJAVE_e,
+    dRes_INDEX_AJAV_BDL_AJAVF_e
 };
 
 static const char* const l_daObjAjav_ev_name[] = {
@@ -163,7 +166,7 @@ void daObjAjav::daObjAjav_make_splash(cXyz i_splashPos, f32 i_scale) {
     scale.x = i_scale;
     scale.y = 4.0f;
     scale.z = scale.x;
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003C, &i_splashPos,  NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_MIZUSHIBUKI_A, &i_splashPos,  NULL, &scale);
 }
 
 /* 000001AC-00000268       .text make_hamon__Q29daObjAjav6Part_cF4cXyzf */
@@ -182,7 +185,7 @@ void daObjAjav::Part_c::make_hamon(cXyz i_hamonPos, f32 i_scale) {
         i_hamonPos.y = water_height;
     }
 
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003F, &i_hamonPos, NULL, &scale);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_HAMON03, &i_hamonPos, NULL, &scale);
 }
 
 /* 00000268-0000026C       .text no_proc__Q29daObjAjav6Part_cFPQ29daObjAjav5Act_c */
@@ -416,7 +419,7 @@ void daObjAjav::Part_c::draw_shy(daObjAjav::Act_c*) {
 
 /* 00001090-00001168       .text make_fall_rock__Q29daObjAjav6Part_cFi */
 void daObjAjav::Part_c::make_fall_rock(BOOL i_increasedRate) {
-    JPABaseEmitter* particle_emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8427, &mRockParticlePos);
+    JPABaseEmitter* particle_emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_JBROCKGATE01, &mRockParticlePos);
     if (particle_emitter && mpTevStr) {
         if (i_increasedRate != FALSE) {
             particle_emitter->setRate(20.0f);
@@ -446,7 +449,7 @@ BOOL daObjAjav::Act_c::create_heap() {
     }
 
     if (res != FALSE) {
-        cBgD_t* cbgd_res = (cBgD_t*)dComIfG_getObjectRes(M_arcname, AJAV_DZB_AJAV);
+        cBgD_t* cbgd_res = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AJAV_DZB_AJAV_e);
         mpBgW = dBgW_NewSet(cbgd_res, cBgW::MOVE_BG_e, &mMtx);
         if (mpBgW == NULL) {
             res = FALSE;
@@ -460,7 +463,7 @@ BOOL daObjAjav::Act_c::create_heap() {
 cPhs_State daObjAjav::Act_c::_create() {
     cPhs_State rt = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjAjav::Act_c);
+    fopAcM_ct(this, daObjAjav::Act_c);
 
     mSwNo = fopAcM_GetParam(this) & 0xFF;
     mbResLoaded = false;
@@ -634,7 +637,7 @@ BOOL daObjAjav::Act_c::damage_part() {
 /* 00002124-000021EC       .text make_shot_rock__Q29daObjAjav5Act_cFv */
 void daObjAjav::Act_c::make_shot_rock() {
     cXyz sph_center = mSph.GetC();
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8426, &sph_center);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_JBROCKGATE00, &sph_center);
     if (emitter) {
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &sph_center, &tevStr);
         emitter->setGlobalPrmColor(
@@ -661,7 +664,7 @@ void daObjAjav::Act_c::make_hamon2(cXyz i_hamonPos, f32 i_scale) {
         i_hamonPos.y = water_height;
     }
 
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_SCENE_8454, &i_hamonPos, NULL, &scale);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_JBROCKGATEHAMON00, &i_hamonPos, NULL, &scale);
 
     if (emitter) {
         g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
@@ -906,18 +909,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjAjav
 
 actor_process_profile_definition g_profile_Obj_Ajav = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ajav,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ajav_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjAjav::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ajav,
+    /* Draw Prio    */ fpcDwPi_Obj_Ajav_e,
     /* Actor SubMtd */ &daObjAjav::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -4,7 +4,10 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "d/d_ovlp_fade3.h"
 #include "d/d_drawlist.h"
+#include "f_op/f_op_overlap.h"
+#include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_graphic.h"
 #include "dolphin/gx/GX.h"
 
@@ -15,3 +18,93 @@ void dDlst_snapShot_c::draw() {
     GXCopyTex(mDoGph_gInf_c::getFrameBufferTex(), GX_FALSE);
     GXPixModeSync();
 }
+
+#if VERSION <= VERSION_JPN
+dOvlpFd3_c::dOvlpFd3_c() {
+    setExecute(&dOvlpFd3_c::execFirstSnap);
+
+    JKRArchive* menu_archive = dComIfGp_getMenuArchive();
+    ResTIMG* texture = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "wipe_00.bti", menu_archive);
+    JUT_ASSERT(81, texture != 0);
+    field_0xdc.init(texture, -9.0f, -21.0f, 659.0f, 524.0f, 0, 1, 1, 2.0f, 2.436f);
+    field_0x120.init(mDoGph_gInf_c::getFrameBufferTimg(), -9.0f, -21.0f, 659.0f, 524.0f, 1, 0, 0, 1.0f, 1.0f);
+}
+
+BOOL dOvlpFd3_c::execFirstSnap() {
+    if (field_0x164 != 0) {
+        setExecute(&dOvlpFd3_c::execFadeOut);
+        fopOvlpM_Done(this);
+
+        dComIfGp_setWindowNum(0);
+    }
+    
+    return TRUE;
+}
+
+BOOL dOvlpFd3_c::execFadeOut() {
+    dComIfGp_setWindowNum(0);
+
+    cLib_chaseF(field_0xdc.getScaleX_p(), 0.0f, 0.05f);
+    field_0xdc.setScaleY(field_0xdc.getScaleX() * 1.218f);
+
+    return TRUE;
+}
+
+BOOL dOvlpFd3_c::draw() {
+    if (field_0x164 == 0) {
+        dComIfGd_set2DXlu(&mSnapshot_c);
+        field_0x164 = 1;
+    }
+    dComIfGd_set2DXlu(&field_0x120);
+    dComIfGd_set2DXlu(&field_0xdc);
+    return TRUE;
+}
+
+static BOOL dOvlpFd3_Draw(dOvlpFd3_c* i_this) {
+    return i_this->draw();
+}
+
+BOOL dOvlpFd3_c::execute() {
+    return (this->*mExecuteFn)();
+}
+
+static BOOL dOvlpFd3_Execute(dOvlpFd3_c* i_this) {
+    return i_this->execute();
+}
+
+static BOOL dOvlpFd3_IsDelete(dOvlpFd3_c* i_this) {
+    return TRUE;
+}
+
+static BOOL dOvlpFd3_Delete(dOvlpFd3_c* i_this) {
+    return TRUE;
+}
+
+static cPhs_State dOvlpFd3_Create(void* i_this) {
+    overlap_task_class* ovlp = (overlap_task_class*)i_this;
+    new (ovlp) dOvlpFd3_c();
+    return cPhs_COMPLEATE_e;
+}
+
+static overlap_method_class l_dOvlpFd3_Method = {
+    (process_method_func)dOvlpFd3_Create,
+    (process_method_func)dOvlpFd3_Delete,
+    (process_method_func)dOvlpFd3_Execute,
+    (process_method_func)dOvlpFd3_IsDelete,
+    (process_method_func)dOvlpFd3_Draw,
+};
+
+overlap_process_profile_definition g_profile_OVERLAP3 = {
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 2,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP3_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dOvlpFd3_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP3_e,
+    /* Fade SubMtd */ &l_dOvlpFd3_Method,
+};
+#endif

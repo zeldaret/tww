@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_stone2.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_always.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Always.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -54,15 +52,8 @@ const Attr_c Act_c::M_attr[5] = {
         NULL, 0x0, 0x0, 0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0x0,  0.0f, 0x0, 0x0,  0x0,  0x0,  0x0,
         0x0,  0x0, 0x0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0x0, 1.0f, 1.0f, 1.0f,
     },
-
     {
-        "Ebrock", 0x4,   0x8,
-#if VERSION == VERSION_DEMO
-        0x2000,
-#else
-        0xE40,
-#endif
-        0x19,     0x140, 0x12C,  0x118,  0x1C6, 0x696A, 13,   0x0,  0xC8, 0x0, 0xFFFF, 0x0,  0xC8, 0x0,
+        "Ebrock", 0x4,   0x8, DEMO_SELECT(0x2000, 0xE40), 0x19,     0x140, 0x12C,  0x118,  0x1C6, 0x696A, 13,   0x0,  0xC8, 0x0, 0xFFFF, 0x0,  0xC8, 0x0,
         0x190,    -6.0f, 200.0f, 200.0f, 27.0f, 36.0f,  0.0f, 0.0f, 3.0f, 0x6, 3.0f,   1.0f, 1.5f,
     },
     {
@@ -96,7 +87,7 @@ void Act_c::prmZ_init() {
     if (m656) {
         return;
     }
-    m652 = home.angle.z;
+    mPrmZ = home.angle.z;
     m656 = true;
     home.angle.z = 0;
     current.angle.z = 0;
@@ -170,7 +161,7 @@ BOOL Act_c::Create() {
     m6A9 = 0;
     m65A = 2;
     mode_wait_init();
-    m650 = dComIfGp_evmng_getEventIdx(NULL, m652);
+    m650 = dComIfGp_evmng_getEventIdx(NULL, prmZ_get_evId());
     demo_non_init();
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
@@ -184,7 +175,7 @@ bool Act_c::chk_appear() {
 
 /* 000009F4-00000B3C       .text Mthd_Create__Q28daStone25Act_cFv */
 cPhs_State Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     prmZ_init();
     m644 = prm_get_type();
     m659 = chk_appear();
@@ -336,16 +327,16 @@ bool Act_c::damage_bg_proc_directly() {
 }
 
 /* 00001214-00001368       .text eff_m_break__Q28daStone25Act_cFUsUs */
-void Act_c::eff_m_break(unsigned short arg1, unsigned short arg2) {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI);
-    J3DAnmTexPattern* texAnm = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI);
+void Act_c::eff_m_break(u16 particleID, u16 texAnmFrame) {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e);
+    J3DAnmTexPattern* texAnm = (J3DAnmTexPattern*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e);
     cXyz sp18;
     sp18.setall(attr().m54);
 
-    JPABaseEmitter* emitter = dComIfGp_particle_set(arg1, &current.pos, &shape_angle, NULL, 0xff, NULL, -1, NULL, NULL, &sp18);
+    JPABaseEmitter* emitter = dComIfGp_particle_set(particleID, &current.pos, &shape_angle, NULL, 0xff, NULL, -1, NULL, NULL, &sp18);
     if (emitter != NULL) {
         emitter->setGlobalRTMatrix(mpModel->getBaseTRMtx());
-        dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(emitter, modelData, tevStr, texAnm, arg2, 0);
+        dPa_J3DmodelEmitter_c* modelEmitter = new dPa_J3DmodelEmitter_c(emitter, modelData, tevStr, texAnm, texAnmFrame, 0);
         if (modelEmitter != NULL) {
             dComIfGp_particle_addModelEmitter(modelEmitter);
         }
@@ -353,7 +344,7 @@ void Act_c::eff_m_break(unsigned short arg1, unsigned short arg2) {
 }
 
 /* 00001368-0000143C       .text eff_b_break__Q28daStone25Act_cFUs */
-void Act_c::eff_b_break(unsigned short arg1) {
+void Act_c::eff_b_break(u16 arg1) {
     GXColor sp18;
     sp18.r = tevStr.mColorC0.r;
     sp18.g = tevStr.mColorC0.g;
@@ -371,15 +362,15 @@ void Act_c::eff_b_break(unsigned short arg1) {
 
 /* 0000143C-000015D8       .text eff_break_ebrock__Q28daStone25Act_cFv */
 void Act_c::eff_break_ebrock() {
-    eff_m_break(dPa_name::ID_COMMON_03F4, 2);
-    eff_b_break(dPa_name::ID_COMMON_03F3);
+    eff_m_break(dPa_name::ID_AK_JN_M_BREAKGREATROCK00, 2);
+    eff_b_break(dPa_name::ID_AK_JN_BREAKGREATROCK00);
 
     static cXyz offset_vec(0.0f, 250.0f, 0.0f);
 
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     mDoMtx_stack_c::multVec(&offset_vec, &m67C);
 
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &m67C, NULL, NULL, 200, &m65C);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &m67C, NULL, NULL, 200, &m65C);
     if (pJVar1 != NULL) {
         pJVar1->setRate(30.0f);
         pJVar1->setMaxFrame(1);
@@ -394,15 +385,15 @@ void Act_c::eff_break_ebrock() {
 
 /* 000015D8-00001774       .text eff_break_ekao__Q28daStone25Act_cFv */
 void Act_c::eff_break_ekao() {
-    eff_m_break(dPa_name::ID_COMMON_03F8, 3);
-    eff_b_break(dPa_name::ID_COMMON_03F7);
+    eff_m_break(dPa_name::ID_AK_JN_M_BREAKFACEROCK00, 3);
+    eff_b_break(dPa_name::ID_AK_JN_BREAKFACEROCK00);
 
     static cXyz offset_vec(0.0f, 250.0f, 0.0f);
 
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     mDoMtx_stack_c::multVec(&offset_vec, &m67C);
 
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &m67C, NULL, NULL, 200, &m65C);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &m67C, NULL, NULL, 200, &m65C);
     if (pJVar1 != NULL) {
         pJVar1->setRate(30.0f);
         pJVar1->setMaxFrame(1);
@@ -417,15 +408,15 @@ void Act_c::eff_break_ekao() {
 
 /* 00001774-00001910       .text eff_break_ebrock2__Q28daStone25Act_cFv */
 void Act_c::eff_break_ebrock2() {
-    eff_m_break(dPa_name::ID_COMMON_03F6, 2);
-    eff_b_break(dPa_name::ID_COMMON_03F5);
+    eff_m_break(dPa_name::ID_AK_JN_M_BREAKLITTLEROCK00, 2);
+    eff_b_break(dPa_name::ID_AK_JN_BREAKLITTLEROCK00);
 
     static cXyz offset_vec(0.0f, 100.0f, 0.0f);
 
     mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
     mDoMtx_stack_c::multVec(&offset_vec, &m67C);
 
-    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &m67C, NULL, NULL, 200, &m65C);
+    JPABaseEmitter* pJVar1 = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &m67C, NULL, NULL, 200, &m65C);
     if (pJVar1 != NULL) {
         pJVar1->setRate(30.0f);
         pJVar1->setMaxFrame(1);
@@ -464,7 +455,7 @@ void Act_c::eff_lift_smoke_start() {
         cXyz sp1C;
         sp1C.setall(attr().m5C);
 
-        dComIfGp_particle_setToon(dPa_name::ID_COMMON_23F2, &current.pos, NULL, &sp1C, 0x80, &m688, -1, &color, &tev.mColorK0, NULL);
+        dComIfGp_particle_setToon(dPa_name::ID_AK_JT_LIFTROCKSMOKE00, &current.pos, NULL, &sp1C, 0x80, &m688, -1, &color, &tev.mColorK0, NULL);
     }
 }
 
@@ -629,7 +620,7 @@ bool Act_c::mode_proc_call() {
         }
 
         if (m648 == 3) {
-            if (prmZ_get_evId() == 0 && m65C.isEnd()) {
+            if (m64C == 0 && m65C.isEnd()) {
                 BOOL tmp;
                 if (m6A8) {
                     tmp = m688.isEnd();
@@ -657,9 +648,8 @@ void Act_c::demo_non() {
 
 /* 000021AC-00002214       .text demo_req_init__Q28daStone25Act_cFv */
 void Act_c::demo_req_init() {
-    if (prmZ_get_evId() == 0) {
-        u8 evno = m652;
-        fopAcM_orderOtherEventId(this, m650, evno);
+    if (m64C == 0) {
+        fopAcM_orderOtherEventId(this, m650, prmZ_get_evId());
         eventInfo.onCondition(dEvtCmd_INDEMO_e);
         m64C = 1;
     }
@@ -671,8 +661,7 @@ void Act_c::demo_req() {
         if (eventInfo.checkCommandDemoAccrpt()) {
             demo_run_init();
         } else {
-            u8 evno = m652;
-            fopAcM_orderOtherEventId(this, m650, evno);
+            fopAcM_orderOtherEventId(this, m650, prmZ_get_evId());
             eventInfo.onCondition(dEvtCmd_INDEMO_e);
         }
     } else {
@@ -701,7 +690,7 @@ void Act_c::demo_proc_call() {
         &Act_c::demo_req,
         &Act_c::demo_run,
     };
-    (this->*demo_proc[prmZ_get_evId()])();
+    (this->*demo_proc[m64C])();
 }
 
 /* 000023BC-00002574       .text Execute__Q28daStone25Act_cFPPA3_A4_f */
@@ -806,18 +795,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daStone2
 
 actor_process_profile_definition g_profile_Stone2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Stone2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Stone2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daStone2::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Stone2,
+    /* Draw Prio    */ fpcDwPi_Stone2_e,
     /* Actor SubMtd */ &daStone2::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

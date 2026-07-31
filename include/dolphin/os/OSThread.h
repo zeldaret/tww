@@ -94,8 +94,7 @@ void __OSPromoteThread(OSThread* thread, s32 priority);
 static OSThread* SelectThread(BOOL yield);
 void __OSReschedule(void);
 void OSYieldThread(void);
-BOOL OSCreateThread(OSThread* thread, void* func, void* param, void* stackBase, u32 stackSize,
-                    OSPriority priority, u16 attribute);
+BOOL OSCreateThread(OSThread* thread, void* func, void* param, void* stack, u32 stackSize, OSPriority priority, u16 attr);
 void OSExitThread(void* exitValue);
 void OSCancelThread(OSThread* thread);
 void OSDetachThread(OSThread* thread);

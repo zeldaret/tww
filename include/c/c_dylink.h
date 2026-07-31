@@ -10,13 +10,12 @@ struct cDylPhs {
     static cPhs_State phase_03(void*);
     static cPhs_State Link(request_of_phase_process_class*, s16);
     static BOOL Unlink(request_of_phase_process_class*, s16);
-
 };
 
-struct DynamicNameTableEntry {
-    s16 mKey;
-    const char* name;
-};
+struct cDyl_DynamicName_t {
+    /* 0x00 */ s16 mKey;
+    /* 0x04 */ const char* name;
+};  // Size: 0x08
 
 BOOL cDyl_InitAsyncIsDone();
 void cDyl_InitAsync();

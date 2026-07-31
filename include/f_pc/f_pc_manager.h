@@ -18,6 +18,9 @@ typedef int (*fpcM_DrawIteraterFunc)(void*, void*);
 inline fpc_ProcID fpcM_GetID(void* pProc) {
     return pProc != NULL ? ((base_process_class*)pProc)->mBsPcId : fpcM_ERROR_PROCESS_ID_e;
 }
+inline BOOL fpcM_IsErrorID(fpc_ProcID id) {
+    return id == fpcM_ERROR_PROCESS_ID_e ? TRUE : FALSE;
+}
 inline s16 fpcM_GetName(void* pProc) {
     return ((base_process_class*)pProc)->mProcName;
 }
@@ -71,6 +74,10 @@ inline BOOL fpcM_IsExecuting(fpc_ProcID id) {
 
 inline void* fpcM_LyJudge(process_node_class* i_node, fpcLyIt_JudgeFunc i_func, void* i_data) {
     return fpcLyIt_Judge(&i_node->mLayer, i_func, i_data);
+}
+
+inline base_process_class* fpcM_Search(fpcLyIt_JudgeFunc i_func, void* i_data) {
+    return fpcEx_Search(i_func, i_data);
 }
 
 inline s8 fpcM_CreateResult(void* pProc) {

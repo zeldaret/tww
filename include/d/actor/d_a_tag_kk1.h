@@ -2,17 +2,16 @@
 #define D_A_TAG_KK1_H
 
 #include "d/d_npc.h"
-#include "m_Do/m_Do_hostIO.h"
 
 class daTag_Kk1_c : public fopNpc_npc_c {
 public:
     BOOL createInit();
-    bool _draw();
-    bool _execute();
-    bool _delete();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
     cPhs_State _create();
 
-public:
+private:
     /* 0x6C4 */ u8   padding_0x6C4;
     /* 0x6C5 */ bool mTagSet;
     /* 0x6C6 */ bool mNameIsWrong;

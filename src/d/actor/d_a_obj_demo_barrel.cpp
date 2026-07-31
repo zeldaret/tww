@@ -7,9 +7,7 @@
 #include "d/actor/d_a_obj_demo_barrel.h"
 #include "d/d_bg_s_func.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
-#include "d/res/res_dbarrel.h"
+#include "res/Object/DBarrel.h"
 #include "f_op/f_op_actor_mng.h"
 
 const char daObj_Demo_Barrel_c::M_arcname[] = "DBarrel";
@@ -17,7 +15,7 @@ const char daObj_Demo_Barrel_c::M_arcname[] = "DBarrel";
 /* 00000078-00000144       .text setParticleHahen__19daObj_Demo_Barrel_cFv */
 void daObj_Demo_Barrel_c::setParticleHahen() {
     JPABaseEmitter* emitter =
-        dComIfGp_particle_set(dPa_name::ID_COMMON_03E5, &current.pos, NULL, NULL, 0xFF, NULL, -1,
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_TR_HAHEN_A, &current.pos, NULL, NULL, 0xFF, NULL, -1,
                               &tevStr.mColorK0, &tevStr.mColorK0, NULL);
     if (emitter != NULL) {
         static JGeometry::TVec3<f32> em_scl(1.0f, 0.8f, 1.0f);
@@ -31,13 +29,13 @@ void daObj_Demo_Barrel_c::setParticleSibuki() {
     sp18.y = 100.0f;
     m2D0 = current.pos;
     m2D0.y = dBgS_ObjGndChk_Wtr_Func(sp18);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003D, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_COMMON_003E, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80CB, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80CC, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80CE, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80DC, &m2D0);
-    dComIfGp_particle_set(dPa_name::ID_SCENE_80DD, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_HAMON01, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_WP_HAMON02, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_HAMON_S, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_SUIMEN_A, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_MIZUBASHIRA2, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_SHIBUKI_A, &m2D0);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_DEMO_SHIBUKI_B, &m2D0);
 }
 
 /* 00000378-00000398       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -48,15 +46,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 /* 00000398-00000538       .text CreateHeap__19daObj_Demo_Barrel_cFv */
 BOOL daObj_Demo_Barrel_c::CreateHeap() {
     mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectIDRes(M_arcname, DBARREL_BDL_KTARU_02), NULL, NULL,
-        (J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, DBARREL_BCK_02_TR_CD),
+    (J3DModelData*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DBARREL_BDL_KTARU_02_e), NULL, NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DBARREL_BCK_02_TR_CD_e),
         J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
 
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
 
-    mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, DBARREL_BCK_02_TR_CD), 0,
+    mpMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectIDRes(M_arcname, dRes_ID_DBARREL_BCK_02_TR_CD_e), 0,
                    0.0f, 1.0f, 0.0f, -1.0f, NULL);
     mpMorf->setFrame(mpMorf->getEndFrame() - 1.0f);
     mpModel = mpMorf->getModel();
@@ -64,15 +62,10 @@ BOOL daObj_Demo_Barrel_c::CreateHeap() {
 }
 
 cPhs_State daObj_Demo_Barrel_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daObj_Demo_Barrel_c);
     cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daObj_Demo_Barrel_c);
-#else
-    fopAcM_SetupActor(this, daObj_Demo_Barrel_c);
-    cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
-    if (ret == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daObj_Demo_Barrel_c);
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x22E0)) {
             return cPhs_ERROR_e;
         }
@@ -108,7 +101,7 @@ bool daObj_Demo_Barrel_c::_execute() {
                 m2DC = 0;
                 dComIfGs_onCollect(3, 0);
                 dComIfGs_offCollect(0, 0);
-                dComIfGs_setSelectEquip(0, dItem_NONE_e);
+                dComIfGs_setSelectEquip(0, dItemNo_NONE_e);
                 setParticleHahen();
             }
 
@@ -160,18 +153,18 @@ static actor_method_class daObj_Demo_BarrelMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Demo_Barrel = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Demo_Barrel,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Demo_Barrel_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Demo_Barrel_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Demo_Barrel,
+    /* Draw Prio    */ fpcDwPi_Obj_Demo_Barrel_e,
     /* Actor SubMtd */ &daObj_Demo_BarrelMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

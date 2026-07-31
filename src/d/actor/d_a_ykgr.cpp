@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ykgr.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_path.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -127,7 +125,7 @@ static cPhs_State daYkgrCreate(void* i_this) {
 cPhs_State daYkgr_c::_create() {
     u8 uVar4 = fopAcM_GetParam(this) >> 0x14 & 0xF;
 
-    fopAcM_SetupActor(this, daYkgr_c);
+    fopAcM_ct(this, daYkgr_c);
 
     u8 pathIndex = fopAcM_GetParam(this) >> 8 & 0xFF;
     if (pathIndex != 0xff) {
@@ -136,14 +134,14 @@ cPhs_State daYkgr_c::_create() {
         m_path = NULL;
     }
 
-    if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0 && dComIfGs_isSymbol(1)) {
+    if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0 && dComIfGs_isSymbol(dSymbol_DIN_e)) {
         return cPhs_STOP_e;
     }
 
     if (m_emitter == NULL) {
         fopAc_ac_c* player = dComIfGp_getPlayer(0);
         current.pos = player->current.pos;
-        m_emitter = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C06D, &current.pos);
+        m_emitter = dComIfGp_particle_setProjection(dPa_name::ID_AK_SP_MTDRAGONKAGEROU, &current.pos);
         if (m_emitter != NULL) {
             m_emitter->setParticleCallBackPtr(&YkgrCB);
             YkgrCB.setParam(-3.0f);
@@ -278,18 +276,18 @@ static actor_method_class daYkgrMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Ykgr = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Ykgr,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Ykgr_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daYkgr_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Ykgr,
+    /* Draw Prio    */ fpcDwPi_Ykgr_e,
     /* Actor SubMtd */ &daYkgrMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

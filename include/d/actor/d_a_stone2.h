@@ -68,13 +68,13 @@ namespace daStone2 {
         virtual ~Act_c() {}
         
         const Attr_c& attr() { return M_attr[m644]; }
-        s32 prmZ_get_evId() const { return m64C; }
         s32 prm_get_cull() const { return daObj::PrmAbstract(this, PRM_CULL_W, PRM_CULL_S); }
         s32 prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
         s32 prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
         bool prm_get_shadow() const { return daObj::PrmAbstract(this, PRM_SHADOW_W, PRM_SHADOW_S); }
         s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         s32 prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+        u8 prmZ_get_evId() const { return mPrmZ & 0xFF; }
     
         void prmZ_init();
         bool is_switch() const;
@@ -138,7 +138,7 @@ namespace daStone2 {
         /* 0x648 */ s32 m648;
         /* 0x64C */ s32 m64C;
         /* 0x650 */ s16 m650;
-        /* 0x652 */ u16 m652;
+        /* 0x652 */ u16 mPrmZ;
         /* 0x654 */ s16 m654;
         /* 0x656 */ bool m656;
         /* 0x657 */ u8 m657;

@@ -86,7 +86,9 @@ void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
     field_0x4 = 1;
     field_0x5 = 0;
     mPortNo = 1;
+#if VERSION > VERSION_DEMO
     field_0x10e = 0;
+#endif
     field_0x7 = 0;
     field_0x8 = 0;
     field_0x10c = param_1;
@@ -111,8 +113,8 @@ void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
     field_0x114 = 0xFFFFFFFF;
     field_0x118 = 0;
 
-    field_0x12c.U16._12e_1 = (u32)cM_rndF(32767.0f);
-    field_0x12c.U32bits._12c_2 = cM_rndF(32767.0f);
+    field_0x12c.U16._12e_1 = (u32)cM_rndF(0x7FFF);
+    field_0x12c.U32bits._12c_2 = cM_rndF(0x7FFF);
     field_0x12c.U8._12c_0 = 1;
     field_0x128 = 0;
 }
@@ -151,7 +153,7 @@ void mDoGaC_agbCom_c::mDoGaC_GbaReboot() {
     mDoGaC_ComStop();
     u8 temp = field_0x0 = 0; // fakematch?
     field_0x3 = 0;
-    field_0x12c.U32bits._12c_2 = cM_rndF(32767.0f);
+    field_0x12c.U32bits._12c_2 = cM_rndF(0x7FFF);
     field_0x128 = temp;
 }
 
@@ -198,9 +200,11 @@ void mDoGaC_agbCom_c::mDoGaC_Connect() {
             case 0:
                 field_0x2 = 1;
                 JUTGba::getManager()->doProbe(mDoGaC_getPortNo(), ProbeCheck_0, NULL);
+#if VERSION > VERSION_DEMO
                 if (field_0x10e < 3) {
                     field_0x10e++;
                 }
+#endif
                 break;
             case 2:
                 mDoGaC_ComRestart();
@@ -216,7 +220,9 @@ void mDoGaC_agbCom_c::mDoGaC_Connect() {
                     mDoGaC_ComClose();
                 }
 
+#if VERSION > VERSION_DEMO
                 field_0x10e = 0;
+#endif
                 break;
             case 4:
                 break;
@@ -243,9 +249,11 @@ int mDoGaC_agbCom_c::mDoGaC_GbaLink() {
         return 1;
     }
 
+#if VERSION > VERSION_DEMO
     if (field_0x128 == 1 && field_0x10e < 3) {
         return 1;
     }
+#endif
 
     return 0;
 }

@@ -22,7 +22,7 @@ public:
     void gframeProcess();
     void resetProcess();
     void resetRecover();
-    void bgmStreamPrepare(u32);
+    void bgmStreamPrepare(u32 soundID);
     void bgmStreamPlay();
     void bgmStart(u32, u32, s32);
     void bgmStop(u32, s32);
@@ -60,7 +60,7 @@ public:
     void startLandingDemo();
     void endLandingDemo();
     void initSe();
-    void seStart(u32, Vec*, u32, s8, f32, f32, f32, f32, u8);
+    JAISound** seStart(u32, Vec* = NULL, u32 = 0 , s8 = 0, f32 = 1.0f, f32 = 1.0f, f32 = -1.0f, f32 = -1.0f, u8 = 0);
     void seStop(u32, s32);
     BOOL checkSePlaying(u32);
     void seStopActor(Vec*, u32);
@@ -154,12 +154,21 @@ public:
     void setMinute(s32 i_minute) { mMinute = i_minute; }
     void setWeekday(s32 i_weekday) { mWeekday = i_weekday; }
 
-    f32 calcMainBgmVol() { return field_0x0080 * field_0x0084 * field_0x0088 * field_0x008c * field_0x0090 * field_0x0094 * field_0x0098 * field_0x009c * field_0x00ac; }
-    f32 calcSubBgmVol() { return field_0x00a0 * field_0x00a4 * field_0x00a8; }
+    f32 calcMainBgmVol() {
+        return field_0x0080 * field_0x0084 * field_0x0088 * field_0x008c * field_0x0090 * field_0x0094 * field_0x0098 * field_0x009c * field_0x00ac;
+    }
+    f32 calcSubBgmVol() {
+#if VERSION == VERSION_DEMO
+        return field_0x00a0 * field_0x00a4;
+#else
+        return field_0x00a0 * field_0x00a4 * field_0x00a8;
+#endif
+    }
+
+    void bstHoriOn() { field_0x1dd4 = 1; }
+    void bstHoriOff() { field_0x1dd4 = 0; }
 
     // TODO
-    void bstHoriOff() {}
-    void bstHoriOn() {}
     void checkSeMute() {}
     void checkTBoxDemo() {}
     void getCurCamera(u32) {}
@@ -200,7 +209,6 @@ public:
 
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
-    /* 0x0022 */ u8 field_0x0022[0x0024 - 0x0022];
     /* 0x0024 */ u8* field_0x0024;
 #if VERSION > VERSION_JPN
     /* 0x0028 */ int field_0x0028;
@@ -235,7 +243,6 @@ public:
     /* 0x0064 */ u8 field_0x0064;
     /* 0x0065 */ u8 field_0x0065;
     /* 0x0066 */ u8 field_0x0066;
-    /* 0x0067 */ u8 field_0x0067[0x0068 - 0x0067];
     /* 0x0068 */ JAISound* mpMainBgmSound;
     /* 0x006C */ JAISound* mpSubBgmSound;
     /* 0x0070 */ JAISound* mpStreamBgmSound;
@@ -252,7 +259,9 @@ public:
     /* 0x009C */ f32 field_0x009c;
     /* 0x00A0 */ f32 field_0x00a0;
     /* 0x00A4 */ f32 field_0x00a4;
+#if VERSION > VERSION_DEMO
     /* 0x00A8 */ f32 field_0x00a8;
+#endif
     /* 0x00AC */ f32 field_0x00ac;
     /* 0x00B0 */ int field_0x00b0;
     /* 0x00B4 */ u8 field_0x00b4;
@@ -285,6 +294,9 @@ public:
     /* 0x0134 */ u32 mSeNum[MAX_CONCURRENT_SE_NUM];
     /* 0x0194 */ u32 field_0x0194[MAX_CONCURRENT_SE_NUM];
     /* 0x01F4 */ int field_0x01f4;
+#if VERSION == VERSION_DEMO
+    u8 temppadding[0x60];
+#endif
     /* 0x01F8 */ u8 field_0x01f8;
     /* 0x01F9 */ u8 field_0x01f9;
     /* 0x01FA */ u8 field_0x01fa;
@@ -297,7 +309,9 @@ public:
     /* 0x0201 */ u8 field_0x0201;
     /* 0x0202 */ u8 field_0x0202[0x0204 - 0x0202];
     /* 0x0204 */ u8 field_0x0204;
+#if VERSION > VERSION_DEMO
     /* 0x0205 */ u8 field_0x0205;
+#endif
     /* 0x0206 */ u8 field_0x0206;
     /* 0x0207 */ u8 field_0x0207;
     /* 0x0208 */ u8 field_0x0208;

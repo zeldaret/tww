@@ -2,20 +2,31 @@
 #define D_MENU_DMAP_H
 
 #include "dolphin/types.h"
+#include "d/d_menu_base.h"
 
 class J2DPane;
 struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 
-class dMenu_Dmap_c {
+class dMenu_Dmap_c : public dMenu_base_c {
 public:
     void alphaChange(fopMsgM_pane_class*, float) {}
-    void draw() {}
-    void setArchive(JKRArchive*) {}
-    void setFont(JUTFont*, JUTFont*) {}
+    virtual void draw() {}
+    void setArchive(JKRArchive* arc) { mpArc = arc; }
+    void setFont(JUTFont* font, JUTFont* rfont) {
+        mFont = font;
+        mRFont = rfont;
+    }
     void setItemTexBuffer(int, void*) {}
-    void setTextArea(char*, char*, char*, char*, char*, char*) {}
+    void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
+        name[0] = name0;
+        name[1] = name1;
+        note[0] = note0;
+        note[1] = note1;
+        dummy[0] = dummy0;
+        dummy[1] = dummy1;
+    }
 
     void changeFloorTexture(J2DPane*, int);
     void screenSet();
@@ -28,7 +39,7 @@ public:
     void cursorMove();
     void cursorAnime();
     void noteInit();
-    void noteCheck();
+    bool noteCheck();
     void noteAppear();
     void noteOpen();
     void noteClose();
@@ -45,13 +56,37 @@ public:
     void linkAnime();
     void bossAnime();
     void bossEyeAnime();
-    void _create();
-    void _delete();
-    void _move();
-    void _draw();
-    void _open();
-    void _close();
-};
+    virtual void _create();
+    virtual void _delete();
+    virtual void _move();
+    virtual void _draw();
+    virtual bool _open();
+    virtual bool _close();
+
+public:
+    /* 0x0004 */ u8 field_0x0004[0x972 - 0x4];
+    /* 0x0972 */ s16 field_0x0972;
+    /* 0x0974 */ u8 field_0x0974[0x14A4 - 0x974];
+    /* 0x14A4 */ JKRArchive* mpArc;
+    /* 0x14A8 */ JUTFont* mFont;
+    /* 0x14AC */ JUTFont* mRFont;
+    /* 0x14B0 */ u8 field_0x14B0[0x14B4 - 0x14B0];
+    /* 0x14B4 */ JUtility::TColor color_0x14B4;
+    /* 0x14B8 */ JUtility::TColor color_0x14B8;
+    /* 0x14BC */ JUtility::TColor color_0x14BC;
+    /* 0x14C0 */ JUtility::TColor color_0x14C0;
+    /* 0x14C4 */ JUtility::TColor color_0x14C4;
+    /* 0x14C8 */ JUtility::TColor color_0x14C8;
+    /* 0x14CC */ u8 padding_0x14CC[0x1AFC - 0x14CC];
+    /* 0x1AFC */ void* arr_0x1AFC[3];
+    /* 0x1B08 */ fopMsgM_msgDataProc_c mMsgProc;
+    /* 0x1DA8 */ char* name[2];
+    /* 0x1DB0 */ char* note[2];
+    /* 0x1DB8 */ char* dummy[2];
+    /* 0x1DC0 */ u8 padding_0x1DC0[0x1E38 - 0x1DC0];
+}; // Size: 0x1E38
+
+STATIC_ASSERT(sizeof(dMenu_Dmap_c) == 0x1E38);
 
 class dMd_HIO_c {
 public:

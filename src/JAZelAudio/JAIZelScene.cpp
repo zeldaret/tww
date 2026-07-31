@@ -6,7 +6,7 @@
 #include "JAZelAudio/JAIZelBasic.h"
 #include "dolphin/types.h"
 
-u8 JAIZelBasic::m_bgm_wave_info[96] = {};
+u8 JAIZelBasic::m_bgm_wave_info[DEMO_SELECT(0x5C, 0x60)] = {};
 
 u8 JAIZelBasic::m_dy_wave_set_1st[][2] = {
     {0x00, 0x00},
@@ -53,7 +53,11 @@ u8 JAIZelBasic::m_dy_wave_set_1st[][2] = {
     {0x0F, 0x3C},
     {0x3E, 0x3F},
     {0x39, 0x1D},
+#if VERSION == VERSION_DEMO
+    {0x00, 0x00},
+#else
     {0x40, 0x00},
+#endif
     {0x00, 0x00},
     {0x00, 0x00},
     {0x00, 0x00},
@@ -89,7 +93,11 @@ JAIZelBasic::scene_info_s JAIZelBasic::m_scene_info[] = {
     {(u16)JA_BGM_D_RYU_MT,      0x01, 0x05},
     {(u16)0x0000,               0x01, 0x01},
     {(u16)JA_BGM_D_FOREST,      0x03, 0x05},
+#if VERSION == VERSION_DEMO
+    {(u16)JA_BGM_I_MAJU,        0x02, 0x05},
+#else
     {(u16)JA_BGM_I_MAJU_2ND,    0x02, 0x05},
+#endif
     {(u16)JA_BGM_D_GANON_1,     0x17, 0x00},
     {(u16)JA_BGM_D_GANON_1,     0x17, 0x00},
     {(u16)0x0000,               0x03, 0x02},
@@ -148,7 +156,11 @@ JAIZelBasic::scene_info_s JAIZelBasic::m_scene_info[] = {
     {(u16)JA_BGM_D_EARTH,       0x12, 0x05},
     {(u16)JA_BGM_HOUSE,         0x19, 0x00},
     {(u16)JA_BGM_D_FOREST,      0x03, 0x05},
+#if VERSION == VERSION_DEMO
+    {(u16)JA_BGM_I_MAJU,        0x02, 0x05},
+#else
     {(u16)JA_BGM_I_MAJU_2ND,    0x02, 0x05},
+#endif
     {(u16)0x0000,               0x07, 0x04},
     {(u16)JA_BGM_D_WIND,        0x08, 0x05},
     {(u16)JA_BGM_SUB_DUNGEON,   0x26, 0x00},
@@ -174,8 +186,13 @@ JAIZelBasic::scene_info_s JAIZelBasic::m_scene_info[] = {
     {(u16)JA_BGM_HOUSE,         0x1B, 0x00},
     {(u16)JA_BGM_HOUSE,         0x0C, 0x00},
     {(u16)JA_BGM_SUB_DUNGEON,   0x29, 0x00},
+#if VERSION == VERSION_DEMO
+    {(u16)JA_BGM_HYRULE_ON,     0x14, 0x00},
+    {(u16)0x0000,               0x07, 0x00},
+#else
     {(u16)JA_BGM_HYRULE_ON,     0x14, 0x05},
     {(u16)0x0000,               0x2C, 0x00},
+#endif
     {(u16)0x0000,               0x2A, 0x00},
     {(u16)0x0000,               0x20, 0x00},
     {(u16)JA_BGM_ELF,           0x24, 0x00},
@@ -378,7 +395,11 @@ const char* JAIZelBasic::spot_dir_name[] = {
     "SubD71",
     "SubD43",
     "SubD42",
+#if VERSION == VERSION_DEMO
+    "dummy",
+#else
     "sea_T",
+#endif
     "dummy",
     "dummy",
     ""

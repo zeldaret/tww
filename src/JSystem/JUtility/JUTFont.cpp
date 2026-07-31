@@ -16,8 +16,7 @@ JUTFont::JUTFont() {
 /* 802C1DD0-802C1E1C       .text initialize_state__7JUTFontFv */
 void JUTFont::initialize_state() {
     setCharColor(JUtility::TColor());
-    mFixed = false;
-    mFixedWidth = 0;
+    setFixedWidth(false, 0);
     mValid = false;
 }
 

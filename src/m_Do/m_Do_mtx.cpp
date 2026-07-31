@@ -347,8 +347,8 @@ void mDoMtx_stack_c::rYrotM(f32 i_rad) {
 }
 
 /* 8000D940-8000D97C       .text quatM__14mDoMtx_stack_cFPC10Quaternion */
-void mDoMtx_stack_c::quatM(const Quaternion* param_0) {
+void mDoMtx_stack_c::quatM(const Quaternion* quat) {
     Mtx tmp;
-    mDoMtx_quat(tmp, param_0);
+    mDoMtx_quat(tmp, quat);
     mDoMtx_concat(now, tmp, now);
 }

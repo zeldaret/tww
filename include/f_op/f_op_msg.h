@@ -7,8 +7,10 @@
 class fopAc_ac_c;
 
 enum fopMsg_MessageStatus_e {
+    fopMsgStts_MSG_UNK0_e = 0x00,
     fopMsgStts_MSG_PREPARING_e = 0x01,
     fopMsgStts_BOX_OPENING_e = 0x02,
+    fopMsgStts_MSG_UNK5_e = 0x05,
     fopMsgStts_MSG_TYPING_e = 0x06,
     fopMsgStts_STOP_e = 0x07,
     fopMsgStts_SELECT_2_e = 0x08, // Selection box with 2 choices

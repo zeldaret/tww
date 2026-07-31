@@ -3,6 +3,13 @@
 
 #include "dolphin/types.h"
 
+enum JASMixMode {
+    /* 0x0 */ MIX_MODE_MONO,
+    /* 0x1 */ MIX_MODE_MONO_WIDE,
+    /* 0x2 */ MIX_MODE_EXTRA,
+    /* 0x3 */ MIX_MODE_INTERLEAVE,
+};
+
 namespace JASystem {
     namespace Kernel {
         void init();

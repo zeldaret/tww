@@ -391,8 +391,8 @@ typedef enum _GXTexFmt {
 
 typedef enum _GXGamma {
     /* 0x0 */ GX_GM_1_0,
-    /* 0x0 */ GX_GM_1_7,
-    /* 0x0 */ GX_GM_2_2,
+    /* 0x1 */ GX_GM_1_7,
+    /* 0x2 */ GX_GM_2_2,
 } GXGamma;
 
 typedef enum _GXTlutFmt {

@@ -5,12 +5,10 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pbka.h"
-#include "d/res/res_pbka.h"
+#include "res/Object/Pbka.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
 static int CheckCreateHeap(fopAc_ac_c* i_this) {
@@ -20,7 +18,7 @@ static int CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-0000015C       .text CreateHeap__11daObjPbka_cFv */
 BOOL daObjPbka_c::CreateHeap() {
-    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes("Pbka", PBKA_BDL_PBKA);
+    J3DModelData *modelData = (J3DModelData *)dComIfG_getObjectRes("Pbka", dRes_INDEX_PBKA_BDL_PBKA_e);
     JUT_ASSERT(0x51, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData,0,0x11020203);
     if(mpModel == NULL) {
@@ -46,7 +44,7 @@ void daObjPbka_c::set_mtx() {
 }
 
 cPhs_State daObjPbka_c::_create() {
-    fopAcM_SetupActor(this, daObjPbka_c);
+    fopAcM_ct(this, daObjPbka_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Pbka");
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -65,7 +63,7 @@ static cPhs_State daObjPbka_Create(void* i_this) {
 }
 
 bool daObjPbka_c::_delete() {
-    dComIfG_resDelete(&mPhase,"Pbka");
+    dComIfG_resDeleteDemo(&mPhase,"Pbka");
     return TRUE;
 }
 
@@ -115,18 +113,18 @@ static actor_method_class daObj_PbkaMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Pbka = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Pbka,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Pbka_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjPbka_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Pbka,
+    /* Draw Prio    */ fpcDwPi_Obj_Pbka_e,
     /* Actor SubMtd */ &daObj_PbkaMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -16,8 +16,8 @@ class daRd_c
 {
 public:
     enum Proc_e {
-        PROC_INIT = 0,
-        PROC_EXEC = 1,
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1,
     };
     
     enum Mode {
@@ -82,7 +82,7 @@ public:
     void onIkari() { mbIkari = true; }
     void offIkari() { mbIkari = false; }
     bool isIkari() { return mbIkari; }
-    void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
+    void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
     
     fopAc_ac_c* _searchNearDeadRd(fopAc_ac_c*);
     void _nodeControl(J3DNode*, J3DModel*);

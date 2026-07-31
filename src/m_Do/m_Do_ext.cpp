@@ -1224,10 +1224,10 @@ void mDoExt_MtxCalcAnmBlendTblOld::calc(u16 jnt_no) {
 }
 
 /* 80012548-800125CC       .text initOldFrameMorf__22mDoExt_MtxCalcOldFrameFfUsUs */
-void mDoExt_MtxCalcOldFrame::initOldFrameMorf(f32 param_0, u16 param_1, u16 param_2) {
-    if (param_0 > 0.0f) {
-        mOldFrameMorfCounter = param_0;
-        field_0x8 = 1.0f / param_0;
+void mDoExt_MtxCalcOldFrame::initOldFrameMorf(f32 i_morf, u16 i_frameStartJoint, u16 i_frameEndJoint) {
+    if (i_morf > 0.0f) {
+        mOldFrameMorfCounter = i_morf;
+        field_0x8 = 1.0f / i_morf;
         mOldFrameRate = 1.0f;
         field_0x10 = 1.0f;
         field_0x14 = 1.0f;
@@ -1239,8 +1239,8 @@ void mDoExt_MtxCalcOldFrame::initOldFrameMorf(f32 param_0, u16 param_1, u16 para
         field_0x10 = 0.0f;
         field_0x14 = 0.0f;
     }
-    mOldFrameStartJoint = param_1;
-    mOldFrameEndJoint = param_2;
+    mOldFrameStartJoint = i_frameStartJoint;
+    mOldFrameEndJoint = i_frameEndJoint;
 }
 
 /* 800125CC-80012650       .text decOldFrameMorfCounter__22mDoExt_MtxCalcOldFrameFv */
@@ -1266,7 +1266,7 @@ void mDoExt_MtxCalcOldFrame::decOldFrameMorfCounter() {
 /* 80012650-800129E4       .text __ct__14mDoExt_McaMorfFP12J3DModelDataP25mDoExt_McaMorfCallBack1_cP25mDoExt_McaMorfCallBack2_cP15J3DAnmTransformifiiiPvUlUl */
 mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_c* callback1,
                                mDoExt_McaMorfCallBack2_c* callback2, J3DAnmTransform* anmTransform,
-                               int loopMode, f32 param_5, int param_6, int param_7, int param_8,
+                               int loopMode, f32 playSpeed, int startFrame, int endFrame, BOOL param_8,
                                void* basAnm, u32 modelFlag, u32 differedDlistFlag) {
     mpModel = NULL;
     mpSound = NULL;
@@ -1292,7 +1292,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
     if (basAnm == NULL && anmTransform) {
         basAnm = ((mDoExt_transAnmBas*)anmTransform)->getBas();
         if (basAnm) {
-            param_8 = 1;
+            param_8 = TRUE;
         }
     }
     if (param_8) {
@@ -1301,7 +1301,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
             goto ERROR_EXIT;
         }
     }
-    setAnm(anmTransform, loopMode, 0.0f, param_5, param_6, param_7, basAnm);
+    setAnm(anmTransform, loopMode, 0.0f, playSpeed, startFrame, endFrame, basAnm);
     mPrevMorf = -1.0f;
     mpTransformInfo = new J3DTransformInfo[modelData->getJointNum()];
     if (!mpTransformInfo) {
@@ -1443,12 +1443,12 @@ void mDoExt_McaMorf::setAnm(J3DAnmTransform* bckAnm, int loopMode, f32 morf, f32
 }
 
 /* 80012FC8-8001300C       .text setMorf__14mDoExt_McaMorfFf */
-void mDoExt_McaMorf::setMorf(f32 morf) {
-    if (mPrevMorf < 0.0f || morf <= 0.0f) {
+void mDoExt_McaMorf::setMorf(f32 i_morf) {
+    if (mPrevMorf < 0.0f || i_morf <= 0.0f) {
         mCurMorf = 1.0f;
     } else {
         mCurMorf = 0.0f;
-        mMorfStep = 1.0f / morf;
+        mMorfStep = 1.0f / i_morf;
     }
     mPrevMorf = mCurMorf;
 }
@@ -1958,12 +1958,16 @@ void mDoExt_3DlineMat0_c::setMaterial() {
     GXSetNumIndStages(0);
     #endif
     dKy_setLight_again();
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_RGB8, 6);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+
     GXSetArray(GX_VA_NRM, l_normal, sizeof(*l_normal));
+
     if (mpTevStr) {
         dKy_GxFog_tevstr_set(mpTevStr);
         GXCallDisplayList(l_toonMatDL, 0x80);
@@ -1971,6 +1975,7 @@ void mDoExt_3DlineMat0_c::setMaterial() {
         dKy_GxFog_set();
         GXCallDisplayList(l_matDL, 0x80);
     }
+
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
     GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }
@@ -2219,14 +2224,18 @@ void mDoExt_3DlineMat1_c::setMaterial() {
     GXSetNumIndStages(0);
     #endif
     dKy_setLight_again();
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX16);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_RGB8, 6);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+
     GXSetArray(GX_VA_NRM, l_normal, sizeof(*l_normal));
+
     if (mpTevStr) {
         dKy_GxFog_tevstr_set(mpTevStr);
         GXCallDisplayList(l_toonMat1DL, 0xA0);
@@ -2234,6 +2243,7 @@ void mDoExt_3DlineMat1_c::setMaterial() {
         dKy_GxFog_set();
         GXCallDisplayList(l_mat1DL, 0x80);
     }
+
     GXLoadPosMtxImm(j3dSys.getViewMtx(), GX_PNMTX0);
     GXLoadNrmMtxImm(cMtx_getIdentity(), GX_PNMTX0);
 }

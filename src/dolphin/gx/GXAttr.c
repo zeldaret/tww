@@ -400,8 +400,8 @@ void GXSetVtxAttrFmtv(GXVtxFmt format, GXVtxAttrFmtList* list) {
     vatB = (u32*)&gx->vatB[format];
     vatC = &gx->vatC[format];
 
-    for (; list->mAttrib != GX_VA_NULL; list++) {
-        SETVAT(vatA, vatB, vatC, list->mAttrib, list->mCompCnt, list->mCompType, list->mCompShift);
+    for (; list->attr != GX_VA_NULL; list++) {
+        SETVAT(vatA, vatB, vatC, list->attr, list->cnt, list->type, list->frac);
     }
 
     gx->dirtyState |= GX_DIRTY_VAT;
@@ -471,12 +471,12 @@ void GXGetVtxAttrFmtv(GXVtxFmt param_0, GXVtxAttrFmtList* param_1) {
 #endif
 
     for (i = 9; i <= 0x14; i++) {
-        param_1->mAttrib = i;
-        GXGetVtxAttrFmt(param_0, i, &param_1->mCompCnt, &param_1->mCompType, &param_1->mCompShift);
+        param_1->attr = i;
+        GXGetVtxAttrFmt(param_0, i, &param_1->cnt, &param_1->type, &param_1->frac);
         param_1++;
     }
 
-    param_1->mAttrib = 0xFF;
+    param_1->attr = 0xFF;
 }
 
 void GXGetVtxAttrFmt(GXVtxFmt param_0, int param_1, GXCompCnt* param_2, GXCompType* param_3,

@@ -7,8 +7,6 @@
 #include "d/d_timer.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_audio.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
@@ -598,7 +596,7 @@ void dDlst_TimerScrnDraw_c::setIconType(void* tex, u8 type) {
         itemNo = dComIfGs_getSelectEquip(0);
         break;
     case 4:
-        itemNo = dItem_FATHER_LETTER_e;
+        itemNo = dItemNo_FATHER_LETTER_e;
         break;
     }
 
@@ -754,14 +752,14 @@ static cPhs_State dTimer_Create(msg_class* i_this) {
 /* 8023DA28-8023DA88       .text dTimer_createTimer__FiUsUcUcffff */
 fpc_ProcID dTimer_createTimer(int param_1, u16 param_2, u8 param_3, u8 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8) {
     if (dComIfG_getTimerMode() == -1)
-        return fop_Timer_create(PROC_TIMER, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, NULL);
+        return fop_Timer_create(fpcNm_TIMER_e, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, NULL);
     return fpcM_ERROR_PROCESS_ID_e;
 }
 
 /* 8023DA88-8023DAEC       .text dTimer_createStockTimer__Fv */
 fpc_ProcID dTimer_createStockTimer() {
     if (dComIfG_getTimerMode() != -1)
-        return fop_Timer_create(PROC_TIMER, 7, 0, 3, 0, 221.0f, 439.0f, 32.0f, 419.0f, NULL);
+        return fop_Timer_create(fpcNm_TIMER_e, 7, 0, 3, 0, 221.0f, 439.0f, 32.0f, 419.0f, NULL);
     return fpcM_ERROR_PROCESS_ID_e;
 }
 
@@ -769,7 +767,7 @@ fpc_ProcID dTimer_createStockTimer() {
 dDlst_TimerScrnDraw_c::~dDlst_TimerScrnDraw_c() {
 }
 
-msg_method_class l_dTimer_Method = {
+static msg_method_class l_dTimer_Method = {
     (process_method_func)dTimer_Create,
     (process_method_func)dTimer_Delete,
     (process_method_func)dTimer_Execute,
@@ -778,15 +776,15 @@ msg_method_class l_dTimer_Method = {
 };
 
 msg_process_profile_definition g_profile_TIMER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TIMER,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TIMER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dTimer_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_TIMER,
+    /* Draw Prio    */ fpcDwPi_TIMER_e,
     /* Msg SubMtd   */ &l_dTimer_Method,
 };

@@ -5,33 +5,31 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_adnno.h"
-#include "d/res/res_adnno.h"
+#include "res/Object/Adnno.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
 static const u32 daObjAdnno_bmt_table[16] = {
-    ADNNO_BMT_ADNNO_00,
-    ADNNO_BMT_ADNNO_01,
-    ADNNO_BMT_ADNNO_02,
-    ADNNO_BMT_ADNNO_03,
-    ADNNO_BMT_ADNNO_04,
-    ADNNO_BMT_ADNNO_05,
-    ADNNO_BMT_ADNNO_06,
-    ADNNO_BMT_ADNNO_07,
-    ADNNO_BMT_ADNNO_08,
-    ADNNO_BMT_ADNNO_09,
-    ADNNO_BMT_ADNNO_10,
-    ADNNO_BMT_ADNNO_11,
-    ADNNO_BMT_ADNNO_12,
-    ADNNO_BMT_ADNNO_13,
-    ADNNO_BMT_ADNNO_14,
-    ADNNO_BMT_ADNNO_15,
+    dRes_INDEX_ADNNO_BMT_ADNNO_00_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_01_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_02_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_03_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_04_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_05_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_06_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_07_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_08_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_09_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_10_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_11_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_12_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_13_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_14_e,
+    dRes_INDEX_ADNNO_BMT_ADNNO_15_e,
 };
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -41,8 +39,8 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-00000178       .text CreateHeap__12daObjAdnno_cFv */
 BOOL daObjAdnno_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Adnno", ADNNO_BDL_ADNNO));
-    JUT_ASSERT(0x5c, modelData != NULL);
+    J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Adnno", dRes_INDEX_ADNNO_BDL_ADNNO_e));
+    JUT_ASSERT(DEMO_SELECT(91, 92), modelData != NULL);
     for (s32 i = 0; i < 16; i++) {
         mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x37441422);
         if (!mpModel[i])
@@ -67,11 +65,9 @@ void daObjAdnno_c::set_mtx() {
 
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        int x = i % 4;
-        int y = i / 4;
         mDoMtx_stack_c::transM(
-            x * 40.0f - 60.0f,
-            60.0f - y * 40.0f,
+            (int)(i % 4) * 40.0f - 60.0f,
+            60.0f - (int)(i / 4) * 40.0f,
             0.0f
         );
         mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -79,7 +75,7 @@ void daObjAdnno_c::set_mtx() {
 }
 
 cPhs_State daObjAdnno_c::_create() {
-    fopAcM_SetupActor(this, daObjAdnno_c);
+    fopAcM_ct(this, daObjAdnno_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, "Adnno");
 
@@ -95,7 +91,7 @@ cPhs_State daObjAdnno_c::_create() {
 }
 
 bool daObjAdnno_c::_delete() {
-    dComIfG_resDelete(&mPhs, "Adnno");
+    dComIfG_resDeleteDemo(&mPhs, "Adnno");
     return true;
 }
 
@@ -127,8 +123,10 @@ bool daObjAdnno_c::_draw() {
     dComIfGd_setListBG();
     for (s32 i = 0; i < 16; i++) {
         if (dComIfGs_isEventBit(daObjAdnno_event_bit_table[i])) {
-            J3DMaterialTable* pBmt = (J3DMaterialTable*)dComIfG_getObjectRes("Adnno", daObjAdnno_bmt_table[i]);
-            mpModel[i]->getModelData()->setMaterialTable(pBmt, J3DMatCopyFlag_All);
+            mpModel[i]->getModelData()->setMaterialTable(
+                (J3DMaterialTable*)dComIfG_getObjectRes("Adnno", daObjAdnno_bmt_table[i]),
+                J3DMatCopyFlag_All
+            );
             mDoExt_modelUpdateDL(mpModel[i]);
         }
     }
@@ -170,18 +168,18 @@ static actor_method_class daObj_AdnnoMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Adnno = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Adnno,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Adnno_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjAdnno_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Adnno,
+    /* Draw Prio    */ fpcDwPi_Obj_Adnno_e,
     /* Actor SubMtd */ &daObj_AdnnoMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

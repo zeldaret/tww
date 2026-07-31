@@ -53,7 +53,7 @@ struct TAdaptor_sound : public JStudio::TAdaptor_sound {
 
     /* 0x0E8 */ JAIBasic* mpBasic;
     /* 0x0EC */ JAISound* mpSound;
-    /* 0x0F0 */ u32 mFlags;
+    /* 0x0F0 */ u32 mSoundID;
     /* 0x0F4 */ Vec* mPosition;
     /* 0x0F8 */ Vec _F8;
 

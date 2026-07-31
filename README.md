@@ -99,14 +99,17 @@ We have a shared Ghidra project for TWW already set up. To get access to this se
 Then wait for an admin to approve your request. Once you have access, you can set up the Ghidra project like so:
 
 * To use Ghidra, you first need to install JDK. You can download OpenJDK 17 from [here](https://adoptium.net/temurin/releases/).
-* Download the RootCubed Ghidra build ghidra_11.1_DEV_20240115 from [here](https://rootcubed.dev/ghidra_builds/).
+* Download the RootCubed Ghidra build from [here](https://github.com/RootCubed/ghidra-ci/releases/tag/2024-10-05).
 * Launch Ghidra with `ghidraRun`.
 * In Ghidra, go to `File -> New Project...`. Select `Shared Project` and input the following information:
     * Server Name: ghidra.decomp.dev
     * Port Number: 13100
     * User ID: (the username that you chose earlier)
     * Password: (the password that you chose earlier)
-* You should now be able to view the files in the Ghidra project. You should checkout the `main` file.
+* You should now be able to view the files in the Ghidra project. Open the `main` file.
+* Finally, you should make a local copy of the `main` file in Ghidra. Right click on `main`, select Copy, then right click again and select Paste.
+  * This is so that you will be able to save changes that you make while decompiling, as you don't have write access to change `main` itself.
+  * Additionally, Ghidra has a bug that causes the remote version of `main` to be extremely slow to use if you only have read access, so you should still make a local copy even if you don't intend to change anything. The first time you open `main` will still be slow, but opening the local copy in the future should be fast.
 
 Now you have Ghidra set up and ready to use.
 

@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hfuck1.h"
-#include "d/res/res_hfuck1.h"
+#include "res/Object/Hfuck1.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #if VERSION == VERSION_DEMO
@@ -59,7 +57,7 @@ namespace {
 };
 
 #if VERSION == VERSION_DEMO
-daObjHfuck1_HIO_c l_HIO;
+static daObjHfuck1_HIO_c l_HIO;
 
 daObjHfuck1_HIO_c::daObjHfuck1_HIO_c() {
     mNo = -1;
@@ -87,14 +85,14 @@ BOOL daObjHfuck1_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjHfuck1_c::create_heap() {
     bool ret = true;
 
-    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, HFUCK1_BDL_HFUCK1));
+    J3DModelData* pModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, dRes_INDEX_HFUCK1_BDL_HFUCK1_e));
 
     if (!pModelData) {
         JUT_ASSERT(DEMO_SELECT(241, 245), FALSE);
         ret = false;
     } else {
         mpModel = mDoExt_J3DModel__create(pModelData, 0x80000, 0x11000022);
-        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, HFUCK1_DZB_HFUCK1), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_HFUCK1_DZB_HFUCK1_e), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
 
         if (!mpModel || !mpBgW)
             ret = false;
@@ -119,7 +117,7 @@ bool daObjHfuck1_c::checkCollision() {
 
 /* 000002AC-000004B0       .text _create__13daObjHfuck1_cFv */
 cPhs_State daObjHfuck1_c::_create() {
-    fopAcM_SetupActor(this, daObjHfuck1_c);
+    fopAcM_ct(this, daObjHfuck1_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, l_arcname);
 
@@ -205,7 +203,7 @@ bool daObjHfuck1_c::_execute() {
 #endif
 
     if (mpHookshotActor != NULL) {
-        if (fopAcM_IsActor(mpHookshotActor) == TRUE && fopAcM_GetName(mpHookshotActor) == PROC_HOOKSHOT) {
+        if (fopAcM_IsActor(mpHookshotActor) == TRUE && fopAcM_GetName(mpHookshotActor) == fpcNm_HOOKSHOT_e) {
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
             if (player != NULL) {
                 player->setHookshotCarryOffset(fopAcM_GetID(this), (const cXyz*)&l_hook_offset);
@@ -262,18 +260,18 @@ static actor_method_class l_daObjHfuck1_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Hfuck1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Hfuck1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Hfuck1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjHfuck1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Hfuck1,
+    /* Draw Prio    */ fpcDwPi_Obj_Hfuck1_e,
     /* Actor SubMtd */ &l_daObjHfuck1_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_3_e,
+    /* Cull Type    */ fopAc_CULLBOX_3_e,
 };

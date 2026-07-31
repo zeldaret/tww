@@ -27,13 +27,13 @@ public:
     static void postRetraceProc(u32);
     static void drawDoneCallback();
 
-    u16 getFbWidth() const { return mRenderObj->fb_width; }
-    u16 getEfbHeight() const { return mRenderObj->efb_height; }
+    u16 getFbWidth() const { return mRenderObj->fbWidth; }
+    u16 getEfbHeight() const { return mRenderObj->efbHeight; }
     void getBounds(u16& width, u16& height) const {
         width = (u16)getFbWidth();
         height = (u16)getEfbHeight();
     }
-    u32 getXfbHeight() const { return mRenderObj->xfb_height & 0xFFFF; }
+    u32 getXfbHeight() const { return mRenderObj->xfbHeight & 0xFFFF; }
     u32 isAntiAliasing() const { return mRenderObj->antialiasing; }
     Pattern getSamplePattern() const { return mRenderObj->sample_pattern; }
     u8* getVFilter() const { return mRenderObj->vfilter; }

@@ -8,8 +8,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
 #include "m_Do/m_Do_mtx.h"
@@ -86,7 +84,7 @@ static BOOL daVrbox2_Draw(vrbox2_class* i_this) {
     return TRUE;
 }
 
-J3DZModeInfo l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
+static J3DZModeInfo l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
 
 /* 8015EC30-8015F368       .text daVrbox2_color_set__FP12vrbox2_class */
 BOOL daVrbox2_color_set(vrbox2_class* i_this) {
@@ -284,7 +282,7 @@ static BOOL daVrbox2_solidHeapCB(fopAc_ac_c* i_actor) {
 
 /* 8015F4D4-8015F550       .text daVrbox2_Create__FP10fopAc_ac_c */
 static cPhs_State daVrbox2_Create(fopAc_ac_c* i_actor) {
-    fopAcM_SetupActor(i_actor, vrbox2_class);
+    fopAcM_ct(i_actor, vrbox2_class);
     vrbox2_class* i_this = static_cast<vrbox2_class*>(i_actor);
 
 #if VERSION == VERSION_DEMO
@@ -308,18 +306,18 @@ static actor_method_class l_daVrbox2_Method = {
 };
 
 actor_process_profile_definition g_profile_VRBOX2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_VRBOX2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_VRBOX2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(vrbox2_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_VRBOX2,
+    /* Draw Prio    */ fpcDwPi_VRBOX2_e,
     /* Actor SubMtd */ &l_daVrbox2_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

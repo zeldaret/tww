@@ -553,7 +553,7 @@ void dNpc_EventCut_c::cutMoveToPosProc() {
     }
 }
 
-/* 8021E4C0-8021E58C       .text cutTalkMsgProc__15dNpc_EventCut_cFv */
+/* 8021E338-8021E444       .text cutTalkMsgStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgStart() {
     if(mpTalkActor != 0) {
         int* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
@@ -596,7 +596,7 @@ void dNpc_EventCut_c::cutContinueTalkStart() {
     }
 }
 
-/* 8021E338-8021E444       .text cutTalkMsgStart__15dNpc_EventCut_cFv */
+/* 8021E4C0-8021E58C       .text cutTalkMsgProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgProc() {
     if(mpTalkActor == NULL || field_0x52 == 0) {
         dComIfGp_evmng_cutEnd(mEvtStaffId);

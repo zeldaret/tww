@@ -540,7 +540,7 @@ cXyz* daShopItem_c::getPosP() {
 /* 80068A08-80068A58       .text getCenter__12daShopItem_cFv */
 cXyz daShopItem_c::getCenter() {
     f32 height;
-    if(FLOWER_1 <= m_itemNo && m_itemNo <= PRESIDENT_STATUE) {
+    if(dItemNo_TOWN_FLOWER_e <= m_itemNo && m_itemNo <= dItemNo_SHOP_GURU_STATUE_e) {
         height = 80.0f;
     }
     else {

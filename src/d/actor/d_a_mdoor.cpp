@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mdoor.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_mdoor.h"
+#include "res/Object/Mdoor.h"
 #include "f_op/f_op_actor_mng.h"
 
 const char daMdoor_c::M_arcname[] = "Mdoor";
@@ -46,13 +44,13 @@ BOOL daMdoor_c::CreateHeap() {
 
     switch (getShapeType()) {
         case 1:
-            modelRes = MDOOR_BDL_MORI2;
-            bgdRes = MDOOR_DZB_MORI2;
+            modelRes = dRes_INDEX_MDOOR_BDL_MORI2_e;
+            bgdRes = dRes_INDEX_MDOOR_DZB_MORI2_e;
             break;
         
         default:
-            modelRes = MDOOR_BDL_MORI1;
-            bgdRes = MDOOR_DZB_MORI1;
+            modelRes = dRes_INDEX_MDOOR_BDL_MORI1_e;
+            bgdRes = dRes_INDEX_MDOOR_DZB_MORI1_e;
             break;
     }
 
@@ -91,7 +89,7 @@ void daMdoor_c::calcMtx() {
 
 /* 0000029C-00000344       .text smokeInit__9daMdoor_cFv */
 void daMdoor_c::smokeInit() {
-    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_COMMON_2022, &current.pos, &shape_angle, NULL, 0xAA, &m290, fopAcM_GetRoomNo(this));
+    JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, &shape_angle, NULL, 0xAA, &m290, fopAcM_GetRoomNo(this));
     if (emitter != NULL) {
         emitter->setRate(16.0f);
         emitter->setSpread(0.35f);
@@ -177,17 +175,11 @@ BOOL daMdoor_c::CreateInit() {
 /* 000005E0-00000698       .text create__9daMdoor_cFv */
 cPhs_State daMdoor_c::create() {
     cPhs_State ret = dComIfG_resLoad(&mPhase, M_arcname);
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daMdoor_c);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
-    fopAcM_SetupActor(this, daMdoor_c);
-#else
-    fopAcM_SetupActor(this, daMdoor_c);
-    if (ret != cPhs_COMPLEATE_e) {
-        return ret;
-    }
-#endif
+    fopAcM_ct_Demo(this, daMdoor_c);
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1640)) {
         return cPhs_ERROR_e;
@@ -203,7 +195,7 @@ void daMdoor_c::demoProc() {
         "WAIT", "CLOSE", "STOP_OPEN",
     };
 
-    s32 actIdx = dComIfGp_evmng_getMyActIdx(m2C0, action_table, ARRAY_SIZE(action_table), 0, 0);
+    s32 actIdx = dComIfGp_evmng_getMyActIdx(m2C0, action_table, ARRAY_SIZE(action_table), FALSE, 0);
 
     if (dComIfGp_evmng_getIsAddvance(m2C0)) {
         switch (actIdx) {
@@ -216,7 +208,7 @@ void daMdoor_c::demoProc() {
             case 2:
                 speedF = 0.0f;
                 if (getShapeType() != 1) {
-                    dComIfGp_particle_set(dPa_name::ID_SCENE_81B2, &current.pos, &current.angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_SN_WOODCAGE00, &current.pos, &current.angle);
                 }
                 fopAcM_seStart(this, JA_SE_OBJ_CAGE_OPEN, 0);
                 break;
@@ -231,7 +223,7 @@ void daMdoor_c::demoProc() {
                 if (chkFlag(1)) {
                     clrFlag(1);
                     if (getShapeType() != 1) {
-                        dComIfGp_particle_set(dPa_name::ID_SCENE_81B2, &current.pos, &current.angle);
+                        dComIfGp_particle_set(dPa_name::ID_AK_SN_WOODCAGE00, &current.pos, &current.angle);
                     }
                     smokeInit();
                 }
@@ -311,7 +303,7 @@ BOOL daMdoor_actionOpen(daMdoor_c* i_this) {
         if (i_this->m2C4 == 0) {
             i_this->speedF = 0.0f;
             if (i_this->getShapeType() != 1) {
-                dComIfGp_particle_set(dPa_name::ID_SCENE_81B2, &i_this->current.pos, &i_this->current.angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_WOODCAGE00, &i_this->current.pos, &i_this->current.angle);
             }
             fopAcM_seStart(i_this, JA_SE_OBJ_CAGE_OPEN, 0);
         }
@@ -465,18 +457,18 @@ static actor_method_class l_daMdoor_Method = {
 };
 
 actor_process_profile_definition g_profile_MDOOR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MDOOR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MDOOR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daMdoor_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MDOOR,
+    /* Draw Prio    */ fpcDwPi_MDOOR_e,
     /* Actor SubMtd */ &l_daMdoor_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

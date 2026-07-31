@@ -7,8 +7,8 @@
 
 /* 80251CC4-80251D08       .text SetMinMax__8cM3dGAabFRC4cXyz */
 void cM3dGAab::SetMinMax(const cXyz& pMinMax) {
-    this->SetMin(pMinMax);
-    this->SetMax(pMinMax);
+    SetMin(pMinMax);
+    SetMax(pMinMax);
 }
 
 /* 80251D08-80251D48       .text SetMin__8cM3dGAabFRC4cXyz */

@@ -163,4 +163,8 @@ public:
 extern u32 j3dDefaultViewNo;
 extern J3DSys j3dSys;
 
+void J3DFifoLoadNrmMtxImm(Mtx, u32);
+void J3DFifoLoadNrmMtxImm3x3(Mtx33, u32);
+void J3DFifoLoadPosMtxImm(Mtx, u32);
+
 #endif /* J3DSYS_H */

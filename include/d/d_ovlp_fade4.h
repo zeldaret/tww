@@ -1,6 +1,7 @@
 #ifndef D_OVLP_FADE4_H
 #define D_OVLP_FADE4_H
 
+#include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "f_op/f_op_overlap_mng.h"
 
@@ -25,7 +26,7 @@ class dDlst_2Dt_Sp_c : public dDlst_base_c {
 public:
     ~dDlst_2Dt_Sp_c() {}
     void draw();
-    void init(ResTIMG*, f32, f32, f32, f32, GXColor);
+    void init(ResTIMG*, f32, f32, f32, f32, GXColor = g_whiteColor);
 
     void setPos(f32 x, f32 y) { mPosX = x; mPosY = y; }
     void setWidth(f32 w) { mWidth = w; }
@@ -51,7 +52,11 @@ public:
 class dDlst_2DtEff1_c : public dDlst_base_c {
 public:
     ~dDlst_2DtEff1_c() {}
+#if VERSION <= VERSION_JPN
+    void init();
+#else
     void init(GXColor);
+#endif
     void draw();
 
     /* 0x004 */ f32 timer;
@@ -100,7 +105,9 @@ public:
     /* 0x2C1 */ s8 startTime;
     /* 0x2C2 */ u8 field_0x2c2[0x2C8 - 0x2C2];
     /* 0x2C8 */ f32 timerStep;
+#if VERSION > VERSION_JPN
     /* 0x2CC */ u8 field_0x2cc;
+#endif
 };
 
 #endif /* D_OVLP_FADE4_H */

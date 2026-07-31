@@ -7,9 +7,7 @@
 #include "d/actor/d_a_warphr.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_ship.h"
-#include "d/res/res_ghrwp.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Ghrwp.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_graphic.h"
@@ -21,8 +19,8 @@ static inline u8 getType(daWarphr_c* i_this) {
 } // namespace daWarphr_prm
 
 const char daWarphr_c::m_arcname[] = "Ghrwp";
-const s16 daWarphr_c::m_residxA[] = {GHRWP_BDL_GHRWPA00, GHRWP_BTK_GHRWPA00, -1};
-const s16 daWarphr_c::m_residxB[] = {GHRWP_BDL_GHRWPB00, GHRWP_BTK_GHRWPB00, GHRWP_BRK_GHRWPB00};
+const s16 daWarphr_c::m_residxA[] = {dRes_INDEX_GHRWP_BDL_GHRWPA00_e, dRes_INDEX_GHRWP_BTK_GHRWPA00_e, -1};
+const s16 daWarphr_c::m_residxB[] = {dRes_INDEX_GHRWP_BDL_GHRWPB00_e, dRes_INDEX_GHRWP_BTK_GHRWPB00_e, dRes_INDEX_GHRWP_BRK_GHRWPB00_e};
 const u32 daWarphr_c::m_heapsize = 0x3000;
 
 typedef void (daWarphr_c::*EventInitFunc)(int);
@@ -82,7 +80,7 @@ BOOL daWarphr_c::CreateHeap() {
         JUT_ASSERT(VERSION_SELECT(226, 230, 239, 239), pbtk != NULL);
 
         mpBtkAnm1 = new mDoExt_btkAnm();
-        if (mpBtkAnm1 == NULL || !mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBtkAnm1 == NULL || !mpBtkAnm1->init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP)) {
             return FALSE;
         }
         mpBtkAnm1->setPlaySpeed(1.0f);
@@ -103,7 +101,7 @@ BOOL daWarphr_c::CreateHeap() {
 
         mpBtkAnm2 = new mDoExt_btkAnm();
 
-        if (mpBtkAnm2 == NULL || !mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBtkAnm2 == NULL || !mpBtkAnm2->init(modelData, pbtk, true, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
         mpBtkAnm2->setPlaySpeed(0.0f);
@@ -116,7 +114,7 @@ BOOL daWarphr_c::CreateHeap() {
 
         mpBrkAnm = new mDoExt_brkAnm();
 
-        if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, FALSE)) {
+        if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE)) {
             return FALSE;
         }
         mpBrkAnm->setPlaySpeed(0.0f);
@@ -140,7 +138,7 @@ void daWarphr_c::CreateInit() {
 
 /* 000006BC-00000768       .text _create__10daWarphr_cFv */
 cPhs_State daWarphr_c::_create() {
-    fopAcM_SetupActor(this, daWarphr_c);
+    fopAcM_ct(this, daWarphr_c);
 
     m2FA = daWarphr_prm::getType(this);
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, m_arcname);
@@ -187,7 +185,7 @@ bool daWarphr_c::_execute() {
                     m2E4 = true;
                 }
             } else {
-                m2B0 = dComIfGp_particle_setProjection(dPa_name::ID_SCENE_C2B9, &current.pos);
+                m2B0 = dComIfGp_particle_setProjection(dPa_name::ID_IT_SP_DEMO20_INDWP00, &current.pos);
                 mDoGph_gInf_c::offMonotone();
             }
         }
@@ -237,7 +235,7 @@ void daWarphr_c::demo_proc() {
 
     m304 = dComIfGp_evmng_getMyStaffId("Ghrwp");
     if (dComIfGp_event_runCheck() && !eventInfo.checkCommandTalk() && m304 != -1) {
-        s32 iVar1 = dComIfGp_evmng_getMyActIdx(m304, action_table, ARRAY_SIZE(action_table), 0, 0);
+        s32 iVar1 = dComIfGp_evmng_getMyActIdx(m304, action_table, ARRAY_SIZE(action_table), FALSE, 0);
         if (iVar1 == -1) {
             dComIfGp_evmng_cutEnd(m304);
         } else {
@@ -275,8 +273,8 @@ BOOL daWarphr_c::actStartWarp(int) {
 
 /* 00000CF4-00000DEC       .text initWarp__10daWarphr_cFi */
 void daWarphr_c::initWarp(int) {
-    dComIfGp_particle_set(dPa_name::ID_SCENE_8291, &current.pos);
-    m2AC = dComIfGp_particle_set(dPa_name::ID_SCENE_8292, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_HRWARPA00, &current.pos);
+    m2AC = dComIfGp_particle_set(dPa_name::ID_IT_SN_HRWARPB00, &current.pos);
     mDoAud_seStart(JA_SE_LK_HL_WAPR_U_IN);
 }
 
@@ -288,8 +286,8 @@ BOOL daWarphr_c::actWarp(int) {
 
 /* 00000E14-00000F70       .text initWarpArrive__10daWarphr_cFi */
 void daWarphr_c::initWarpArrive(int) {
-    dComIfGp_particle_set(dPa_name::ID_SCENE_8291, &current.pos);
-    m2AC = dComIfGp_particle_set(dPa_name::ID_SCENE_8292, &current.pos);
+    dComIfGp_particle_set(dPa_name::ID_IT_SN_HRWARPA00, &current.pos);
+    m2AC = dComIfGp_particle_set(dPa_name::ID_IT_SN_HRWARPB00, &current.pos);
 
     set_end_anim();
 
@@ -394,7 +392,7 @@ void daWarphr_c::set_end_anim() {
 
 /* 000012F8-0000134C       .text get_return_count__10daWarphr_cFv */
 s32 daWarphr_c::get_return_count() {
-    if (!dComIfGs_isStageBossEnemy(2)) {
+    if (!dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_FF)) {
         return 0;
     }
 
@@ -406,7 +404,7 @@ BOOL daWarphr_c::check_warp() {
     daPy_py_c* player = daPy_getPlayerActorClass();
     f32 abs = (player->current.pos - current.pos).absXZ();
 
-    if (dComIfGp_checkPlayerStatus0(0, 0x10000)) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         daShip_c* ship = dComIfGp_getShipActor();
         if (ship != NULL) {
             f32 abs = (ship->current.pos - current.pos).absXZ();
@@ -504,18 +502,18 @@ static actor_method_class daWarphrMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WARPHYRULE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WARPHYRULE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WARPHYRULE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWarphr_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WARPHYRULE,
+    /* Draw Prio    */ fpcDwPi_WARPHYRULE_e,
     /* Actor SubMtd */ &daWarphrMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

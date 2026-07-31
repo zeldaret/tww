@@ -5,9 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gtaki.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "res/Object/Gtaki.h"
+#include "m_Do/m_Do_graphic.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -41,28 +41,92 @@ static dCcD_SrcCyl l_cyl_src = {
 
 
 /* 00000078-00000098       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    return ((daObjGtaki_c*)i_actor)->CreateHeap();
 }
 
 /* 00000098-00000280       .text setDummyTexture__12daObjGtaki_cFv */
 void daObjGtaki_c::setDummyTexture() {
-    /* Nonmatching */
+    J3DModelData* modeldata = mpModel->getModelData();
+    J3DTexture* texture = modeldata->getTexture();
+    JUTNameTab* textureName = modeldata->getTextureName();
+    JUT_ASSERT(DEMO_SELECT(178, 180), texture != NULL);
+    JUT_ASSERT(DEMO_SELECT(179, 181), textureName != NULL);
+
+    for (u16 i = 0; i<texture->getNum(); i++) {
+        if(!strcmp(textureName->getName(i), "B_dummy")){
+            texture->setResTIMG(i,*mDoGph_gInf_c::getFrameBufferTimg());
+        }
+    }
+    mDoExt_modelTexturePatch(modeldata);
 }
 
 /* 00000280-00000484       .text CreateHeap__12daObjGtaki_cFv */
-void daObjGtaki_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daObjGtaki_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Gtaki", dRes_INDEX_GTAKI_BDL_GTAKI_e);
+    JUT_ASSERT(DEMO_SELECT(265, 267), modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+    if(mpModel == NULL) return FALSE;
+
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Gtaki", dRes_INDEX_GTAKI_BTK_GTAKI_e));
+    JUT_ASSERT(DEMO_SELECT(275, 277), btk != NULL);
+    mBtkAnm.init(modelData, btk, true, J3DFrameCtrl::EMode_LOOP, 1.0, 0, -1, false, 0);
+    setDummyTexture();
+    
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::scaleM(scale);
+    MTXCopy(mDoMtx_stack_c::get(), mMtx);
+
+    mpBgW = new dBgW();
+    
+    if(!mpBgW || mpBgW->Set(static_cast<cBgD_t*>(dComIfG_getObjectRes("Gtaki", dRes_INDEX_GTAKI_DZB_ITAKI_e)), cBgW::MOVE_BG_e, &mMtx)){
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+void daObjGtaki_c::set_effect() {
+    JPABaseEmitter* emitter = dComIfGp_particle_setP1(dPa_name::ID_AK_SN_GANONFALLSSPLASH00, &current.pos, NULL, NULL, 0xff, NULL, -1, NULL, NULL, NULL);
+    if(emitter != NULL){
+        JGeometry::TVec3<f32> p_scale;
+        p_scale.set(scale.x, scale.y, scale.z);
+        emitter->setGlobalDynamicsScale(p_scale);
+
+        p_scale.set(scale.x, scale.x, scale.x);
+        emitter->setGlobalParticleScale(p_scale);
+
+        emitter->setGlobalPrmColor(mTevStr.mColorC0.r, mTevStr.mColorC0.g, mTevStr.mColorC0.b);
+    }
+    set_mtx();
 }
 
 /* 00000484-00000604       .text CreateInit__12daObjGtaki_cFv */
-void daObjGtaki_c::CreateInit() {
+bool daObjGtaki_c::CreateInit() {
     /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f,600.0f,10000.0f,600.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+    mStts.Init(0xff, 0xff, this);
+
+    mCyl.Set(l_cyl_src);
+    mCyl.SetR(scale.x * 70.0f);
+    mCyl.SetStts(&mStts);
+
+    dKy_tevstr_init(&mTevStr, home.roomNo, 0xff);
+    g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &mTevStr);
+
+    set_effect();
+    return dComIfG_Bgsp()->Regist(mpBgW, this);
 }
 
 /* 00000604-00000684       .text set_mtx__12daObjGtaki_cFv */
 void daObjGtaki_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000684-000006A4       .text daObjGtaki_Create__FPv */
@@ -72,22 +136,65 @@ static cPhs_State daObjGtaki_Create(void* i_this) {
 
 /* 000006A4-0000087C       .text _create__12daObjGtaki_cFv */
 cPhs_State daObjGtaki_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daObjGtaki_c);
+    cPhs_State state = dComIfG_resLoad(&mPhase, "Gtaki");
+    if(state == cPhs_COMPLEATE_e){
+        if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, DEMO_SELECT(0xD20, 0x3450))){
+            state = cPhs_ERROR_e;
+            return state;
+        }
+        else CreateInit();
+    }
+    return state;
+}
+
+bool daObjGtaki_c::_delete(){
+#if VERSION > VERSION_DEMO
+    if(heap != NULL)
+#endif
+    {
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
+    dComIfG_resDeleteDemo(&mPhase, "Gtaki");
+    return true;
 }
 
 /* 00000AD8-00000B38       .text daObjGtaki_Delete__FPv */
-static BOOL daObjGtaki_Delete(void*) {
-    /* Nonmatching */
+static BOOL daObjGtaki_Delete(void* i_this) {
+    return ((daObjGtaki_c*)i_this)->_delete();
+}
+
+bool daObjGtaki_c::_draw(){
+    g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    dComIfGd_setListInvisisble();
+
+    mBtkAnm.entry(mpModel->getModelData());
+    mDoExt_modelUpdateDL(mpModel);
+    mBtkAnm.remove(mpModel->getModelData());
+
+    dComIfGd_setList();
+
+    return true;
 }
 
 /* 00000B38-00000C08       .text daObjGtaki_Draw__FPv */
-static BOOL daObjGtaki_Draw(void*) {
-    /* Nonmatching */
+static BOOL daObjGtaki_Draw(void* i_this) {
+    return ((daObjGtaki_c*)i_this)->_draw();
+}
+
+bool daObjGtaki_c::_execute(){
+    mCyl.SetC(current.pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+    mBtkAnm.play();
+    set_mtx();
+    return true;
 }
 
 /* 00000C08-00000C64       .text daObjGtaki_Execute__FPv */
-static BOOL daObjGtaki_Execute(void*) {
-    /* Nonmatching */
+static BOOL daObjGtaki_Execute(void* i_this) {
+    return ((daObjGtaki_c*)i_this)->_execute();
 }
 
 /* 00000C64-00000C6C       .text daObjGtaki_IsDelete__FPv */
@@ -104,18 +211,18 @@ static actor_method_class daObj_GtakiMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Gtaki = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Gtaki,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Gtaki_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGtaki_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gtaki,
+    /* Draw Prio    */ fpcDwPi_Obj_Gtaki_e,
     /* Actor SubMtd */ &daObj_GtakiMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

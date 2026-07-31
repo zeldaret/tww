@@ -364,6 +364,29 @@ public:
     /* 0x0E4 */ dCamBGChk_c mBGChk;
 };
 
+enum dCamAlgorythmn_e {
+    /* 0x00 */ dCamAlg_LET_CAMERA_e,
+    /* 0x01 */ dCamAlg_FOLLOW_CAMERA_e,
+    /* 0x02 */ dCamAlg_LOCKON_CAMERA_e,
+    /* 0x03 */ dCamAlg_TALKTO_CAMERA_e,
+    /* 0x04 */ dCamAlg_SUBJECT_CAMERA_e,
+    /* 0x05 */ dCamAlg_FIXED_POSITION_CAMERA_e,
+    /* 0x06 */ dCamAlg_FIXED_FRAME_CAMERA_e,
+    /* 0x07 */ dCamAlg_TOWER_CAMERA_e,
+    /* 0x08 */ dCamAlg_RIDE_CAMERA_e,
+    /* 0x09 */ dCamAlg_HUNG_CAMERA_e,
+    /* 0x0A */ dCamAlg_MANUAL_CAMERA_e,
+    /* 0x0B */ dCamAlg_EVENT_CAMERA_e,
+    /* 0x0C */ dCamAlg_CRAWL_CAMERA_e,
+    /* 0x0D */ dCamAlg_HOOKSHOT_CAMERA_e,
+    /* 0x0E */ dCamAlg_TORNADO_CAMERA_e,
+    /* 0x0F */ dCamAlg_VOMIT_CAMERA_e,
+    /* 0x10 */ dCamAlg_SHIELD_CAMERA_e,
+    /* 0x11 */ dCamAlg_NON_OWNER_CAMERA_e,
+    /* 0x12 */ dCamAlg_FOLLOW_CAMERA2_e,
+    /* 0x13 */ dCamAlg_DEMO_CAMERA_e,
+};
+
 class dCamParam_c {
 public:
     /* 0x0 */ const dCamera__Style* mpStyle;

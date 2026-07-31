@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mshokki.h"
-#include "d/res/res_mshokki.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Mshokki.h"
 #include "d/d_kankyo.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -143,7 +141,7 @@ BOOL daObjMshokki_c::solidHeapCB(fopAc_ac_c* a_this) {
 
 /* 0000012C-000001FC       .text create_heap__14daObjMshokki_cFv */
 bool daObjMshokki_c::create_heap() {
-    static s32 bdl_idx[] = {MSHOKKI_BDL_POT, MSHOKKI_BDL_OSARA, MSHOKKI_BDL_KOPPU};
+    static s32 bdl_idx[] = {dRes_INDEX_MSHOKKI_BDL_POT_e, dRes_INDEX_MSHOKKI_BDL_OSARA_e, dRes_INDEX_MSHOKKI_BDL_KOPPU_e};
 
     bool uVar3 = true;
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, bdl_idx[m60C]);
@@ -221,7 +219,7 @@ void daObjMshokki_c::co_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_
 
 /* 000004E4-00000610       .text break_proc__14daObjMshokki_cFv */
 void daObjMshokki_c::break_proc() {
-    static u16 particle_id[] = {dPa_name::ID_COMMON_0441, dPa_name::ID_COMMON_043F, dPa_name::ID_COMMON_0440};
+    static u16 particle_id[] = {dPa_name::ID_AK_JN_BREAKMAJUPOT00, dPa_name::ID_AK_JN_BREAKMAJUPLATE00, dPa_name::ID_AK_JN_BREAKMAJUCUP00};
 
     dComIfGp_particle_set(particle_id[m60C], &current.pos, &shape_angle, NULL, 0xff, NULL, -1, &tevStr.mColorK0);
     fopAcM_seStartCurrent(this, JA_SE_OBJ_COL_SWC_CHNS, dComIfG_Bgsp()->GetMtrlSndId(mAcch.m_gnd));
@@ -240,7 +238,7 @@ void daObjMshokki_c::set_se() {
 #else
     if (abs(tmp) < (s32)HIO(m18)) {
 #endif
-        s16 uVar4 = (shape_angle.x / l_data[m60C].m0C) * 16384.0f;
+        s16 uVar4 = (shape_angle.x / l_data[m60C].m0C) * 0x4000;
         if (uVar4 > 0x4000) {
             uVar4 = 0x4000;
         }
@@ -250,7 +248,7 @@ void daObjMshokki_c::set_se() {
 
 /* 00000740-00000A1C       .text _create__14daObjMshokki_cFv */
 cPhs_State daObjMshokki_c::_create() {
-    fopAcM_SetupActor(this, daObjMshokki_c);
+    fopAcM_ct(this, daObjMshokki_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         m60C = param_get_arg();
@@ -407,18 +405,18 @@ static actor_method_class l_daObjMshokki_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Mshokki = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Mshokki,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Mshokki_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMshokki_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Mshokki,
+    /* Draw Prio    */ fpcDwPi_Obj_Mshokki_e,
     /* Actor SubMtd */ &l_daObjMshokki_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

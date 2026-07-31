@@ -49,7 +49,6 @@ dScnOpen_message_c::dScnOpen_message_c(JKRExpHeap* heap) {
 
 /* 80233620-80233698       .text __dt__18dScnOpen_message_cFv */
 dScnOpen_message_c::~dScnOpen_message_c() {
-    /* Nonmatching */
     mDoExt_removeMesgFont();
     mDoExt_removeRubyFont();
     JKRHeap* old_heap = mDoExt_setCurrentHeap(exp_heap);

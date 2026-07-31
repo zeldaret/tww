@@ -26,7 +26,7 @@ void JPABaseParticle::initParticle() {
     mFieldDrag = 1.0f;
     mDrag = 1.0f;
     MTXMultVec(emtrInfo.mEmitterGlobalSR, emtrInfo.mVolumePos, mLocalPosition);
-    if ((emtr->mDataFlag & JPADynFlag_FollowEmtr) != 0)
+    if (emtr->checkEmDataFlag(JPADynFlag_FollowEmtr))
         setStatus(JPAPtclStts_UNK_20);
 
     mOffsetPosition.set(emtrInfo.mEmitterGlobalCenter);

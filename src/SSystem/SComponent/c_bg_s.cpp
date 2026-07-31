@@ -10,7 +10,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
 
-s32 l_SetCounter = 0;
+static s32 l_SetCounter = 0;
 
 /* 80246440-8024645C       .text Init__11cBgS_ChkElmFv */
 void cBgS_ChkElm::Init() {

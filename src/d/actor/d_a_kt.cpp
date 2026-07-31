@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kt.h"
-#include "d/res/res_kt.h"
+#include "res/Object/Kt.h"
 #include "d/d_bg_s_gnd_chk.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
 #include "d/actor/d_a_player.h"
 #include "f_op/f_op_actor_mng.h"
@@ -130,8 +128,8 @@ calc_012:
         offs.x = 0.0f;
         offs.y = 0.0f;
         offs.z = i_this->mSpeedFwd;
-        mDoMtx_YrotS(*calc_mtx, *r18);
-        mDoMtx_XrotM(*calc_mtx, *r17);
+        cMtx_YrotS(*calc_mtx, *r18);
+        cMtx_XrotM(*calc_mtx, *r17);
         MtxPosition(&offs, &i_this->mSpeedVel);
         *r28 += i_this->mSpeedVel.x;
         *r26 += i_this->mSpeedVel.y;
@@ -148,7 +146,7 @@ calc_012:
         offs.x = 0.0f;
         offs.y = 0.0f;
         offs.z = i_this->mSpeedFwd;
-        mDoMtx_YrotS(*calc_mtx, *r16);
+        cMtx_YrotS(*calc_mtx, *r16);
         MtxPosition(&offs, &pt);
         *r28 += pt.x;
         *r27 += pt.z;
@@ -180,7 +178,7 @@ calc_012:
         offs.x = 0.0f;
         offs.y = 0.0f;
         offs.z = i_this->mSpeedFwd;
-        mDoMtx_YrotS(*calc_mtx, *r16);
+        cMtx_YrotS(*calc_mtx, *r16);
         MtxPosition(&offs, &pt);
         *r28 += pt.x;
         *r27 += pt.z;
@@ -226,7 +224,7 @@ calc_012:
         offs.x = 0.0f;
         offs.y = 0.0f;
         offs.z = REG0_F(11) + 10.0f;
-        mDoMtx_YrotS(*calc_mtx, *r16_2);
+        cMtx_YrotS(*calc_mtx, *r16_2);
         MtxPosition(&offs, &i_this->mSpeedVel);
         *r28 += i_this->mSpeedVel.x;
         *r27 += i_this->mSpeedVel.z;
@@ -309,7 +307,7 @@ static BOOL daKt_IsDelete(kt_class* i_this) {
 
 /* 00001248-00001278       .text daKt_Delete__FP8kt_class */
 static BOOL daKt_Delete(kt_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Kt");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Kt");
     return TRUE;
 }
 
@@ -317,10 +315,10 @@ static BOOL daKt_Delete(kt_class* i_this) {
 static BOOL daKt_solidHeapCB(fopAc_ac_c* i_ac) {
     kt_class* i_this = (kt_class*)i_ac;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kt", KT_INDEX_BMD_KT_MODEL);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Kt", dRes_INDEX_KT_BMD_KT_MODEL_e);
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x10000, 0x11020203);
 
-    J3DModelData* modelDataWing = (J3DModelData*)dComIfG_getObjectRes("Kt", KT_INDEX_BMD_KT_HANE);
+    J3DModelData* modelDataWing = (J3DModelData*)dComIfG_getObjectRes("Kt", dRes_INDEX_KT_BMD_KT_HANE_e);
     i_this->mpModelWing = mDoExt_J3DModel__create(modelDataWing, 0x10000, 0x11020203);
 
     return modelData != NULL && modelDataWing != NULL && i_this->mpModel != NULL && i_this->mpModelWing != NULL;
@@ -328,7 +326,7 @@ static BOOL daKt_solidHeapCB(fopAc_ac_c* i_ac) {
 
 /* 0000134C-00001530       .text daKt_Create__FP10fopAc_ac_c */
 static cPhs_State daKt_Create(fopAc_ac_c* i_ac) {
-    fopAcM_SetupActor(i_ac, kt_class);
+    fopAcM_ct(i_ac, kt_class);
     kt_class* i_this = (kt_class*)i_ac;
 
     cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Kt");
@@ -343,7 +341,7 @@ static cPhs_State daKt_Create(fopAc_ac_c* i_ac) {
                     params->base.position = i_this->current.pos;
                     params->base.angle.set(0, 0, 0);
                     params->base.parameters = 1001 + i;
-                    fpcM_Create(PROC_KT, NULL, params);
+                    fpcM_Create(fpcNm_KT_e, NULL, params);
                 }
             }
 
@@ -369,18 +367,18 @@ static actor_method_class l_daKt_Method = {
 };
 
 actor_process_profile_definition g_profile_KT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kt_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KT,
+    /* Draw Prio    */ fpcDwPi_KT_e,
     /* Actor SubMtd */ &l_daKt_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

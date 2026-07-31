@@ -9,8 +9,6 @@
 #if VERSION > VERSION_DEMO
 #include "d/actor/d_a_gy.h"
 #endif
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #if VERSION > VERSION_DEMO
 #include "d/d_s_play.h"
 #endif
@@ -72,11 +70,11 @@ void* searchNearActor_CB(void* arg0, void* arg1) {
 void* daGy_Ctrl_c::searchNearActor(fopAc_ac_c* arg1) {
     if (fopAc_IsActor(arg1)) {
         f32 dVar3 = fopAcM_searchActorDistanceXZ(this, arg1);
-        if (m328 == 0 && fpcM_GetName(arg1) == PROC_GY_CTRLB && dVar3 < 6000.0f) {
+        if (m328 == 0 && fpcM_GetName(arg1) == fpcNm_GY_CTRLB_e && dVar3 < 6000.0f) {
             return arg1;
         }
 
-        if (fpcM_GetName(arg1) == PROC_DAIOCTA || fpcM_GetName(arg1) == PROC_OBJ_IKADA || fpcM_GetName(arg1) == PROC_NPC_SO) {
+        if (fpcM_GetName(arg1) == fpcNm_DAIOCTA_e || fpcM_GetName(arg1) == fpcNm_OBJ_IKADA_e || fpcM_GetName(arg1) == fpcNm_NPC_SO_e) {
             if (dVar3 < 6000.0f) {
                 return arg1;
             }
@@ -320,7 +318,7 @@ void daGy_Ctrl_c::modeSwWait() {
     }
 
     if (dComIfGs_isSwitch(m330, sw)) {
-        modeProc(PROC_0_e, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 }
 
@@ -332,11 +330,11 @@ void daGy_Ctrl_c::modeCreateInit() {
 /* 00000CA0-00000E50       .text modeCreate__11daGy_Ctrl_cFv */
 void daGy_Ctrl_c::modeCreate() {
     if (m328 == 1 && m344 == 0) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else if (m3E8 == 0) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else if (fopAcM_Search(searchNearActor_CB, this) != NULL) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else {
         if (m31C < m329 && cLib_calcTimer(&m350) == 0) {
             cXyz sp18 = m290[m31C];
@@ -344,13 +342,13 @@ void daGy_Ctrl_c::modeCreate() {
             sp10.y = m308[m31C];
             sp18.y = -1000.0f;
 
-            m360[m31C] = fopAcM_createChild(PROC_GY, fopAcM_GetID(this), 0xffffffff, &sp18, tevStr.mRoomNo, &sp10);
+            m360[m31C] = fopAcM_createChild(fpcNm_GY_e, fopAcM_GetID(this), 0xffffffff, &sp18, tevStr.mRoomNo, &sp10);
             m374[m31C] = true;
             m350 = l_HIO.m08;
         }
 
         if (m31C == m329) {
-            modeProc(PROC_0_e, 2);
+            modeProc(PROC_INIT_e, 2);
         }
         setPathPos();
     }
@@ -365,11 +363,11 @@ void daGy_Ctrl_c::modeWaitInit() {
 /* 00000E54-00000F00       .text modeWait__11daGy_Ctrl_cFv */
 void daGy_Ctrl_c::modeWait() {
     if (m328 == 1 && m344 == 0) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else if (m3E8 == 0) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else if (fopAcM_Search(searchNearActor_CB, this) != NULL) {
-        modeProc(PROC_0_e, 3);
+        modeProc(PROC_INIT_e, 3);
     } else {
         deadCheckGy();
         setPathPos();
@@ -388,10 +386,10 @@ void daGy_Ctrl_c::modeHide() {
 #if VERSION == VERSION_DEMO
     if (m328 == 1) {
         if (m344 == 1 && m3E8 == 1) {
-            modeProc(PROC_0_e, 1);
+            modeProc(PROC_INIT_e, 1);
         }
     } else if (m328 == 0 && m3E8 == 1) {
-        modeProc(PROC_0_e, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 #else
     bool bVar1 = false;
@@ -413,7 +411,7 @@ void daGy_Ctrl_c::modeHide() {
     }
 
     if (bVar1 && m3E8 == 1) {
-        modeProc(PROC_0_e, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 #endif
 }
@@ -437,7 +435,7 @@ bool daGy_Ctrl_c::_execute() {
     setTarget();
     m344 = setPathTargetPos();
     m3E8 = checkPath();
-    modeProc(PROC_1_e, 4);
+    modeProc(PROC_EXEC_e, 4);
 #if VERSION > VERSION_DEMO
     m334 = fopAcM_GetRoomNo(this);
 #endif
@@ -478,9 +476,9 @@ void daGy_Ctrl_c::createInitNoArer() {
 /* 00001250-000012D4       .text createInit__11daGy_Ctrl_cFv */
 void daGy_Ctrl_c::createInit() {
     if (m330 != 0xff) {
-        modeProc(PROC_0_e, 0);
+        modeProc(PROC_INIT_e, 0);
     } else {
-        modeProc(PROC_0_e, 1);
+        modeProc(PROC_INIT_e, 1);
     }
 
     m320 = 0;
@@ -521,7 +519,7 @@ void daGy_Ctrl_c::getArg() {
 
 /* 000013F8-00001458       .text checkGyCtrlExist__11daGy_Ctrl_cFv */
 bool daGy_Ctrl_c::checkGyCtrlExist() {
-    s32 local_8 = PROC_GY_CTRL;
+    s32 local_8 = fpcNm_GY_CTRL_e;
     daGy_Ctrl_c* pfVar1 = (daGy_Ctrl_c*)fopAcM_SearchByName(local_8);
     if ((pfVar1 != NULL) && (pfVar1->m328 == 0) && (pfVar1->m331 == 1)) {
         return true;
@@ -531,7 +529,7 @@ bool daGy_Ctrl_c::checkGyCtrlExist() {
 
 /* 00001458-000016AC       .text _create__11daGy_Ctrl_cFv */
 cPhs_State daGy_Ctrl_c::_create() {
-    fopAcM_SetupActor(this, daGy_Ctrl_c);
+    fopAcM_ct(this, daGy_Ctrl_c);
 
     getArg();
 
@@ -539,7 +537,7 @@ cPhs_State daGy_Ctrl_c::_create() {
         return cPhs_ERROR_e;
     }
 
-    if (!dComIfGs_checkGetItem(dItem_BOOMERANG_e)) {
+    if (!dComIfGs_checkGetItem(dItemNo_BOOMERANG_e)) {
         return cPhs_ERROR_e;
     }
 
@@ -586,35 +584,35 @@ static actor_method_class daGy_CtrlMethodTable = {
 };
 
 actor_process_profile_definition g_profile_GY_CTRL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_GY_CTRL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_GY_CTRL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daGy_Ctrl_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_GY_CTRL,
+    /* Draw Prio    */ fpcDwPi_GY_CTRL_e,
     /* Actor SubMtd */ &daGy_CtrlMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };
 
 actor_process_profile_definition g_profile_GY_CTRLB = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_GY_CTRLB,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_GY_CTRLB_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daGy_Ctrl_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_GY_CTRLB,
+    /* Draw Prio    */ fpcDwPi_GY_CTRLB_e,
     /* Actor SubMtd */ &daGy_CtrlMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

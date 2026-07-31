@@ -13,12 +13,12 @@ JAIZelSound::JAIZelSound() {}
 f32 JAIZelSound::setDistanceVolumeCommon(f32 f30, u8 r31) {
     f32 f31;
     if (field_0x8 != 4) {
-        f31 = getPositionInfo()[field_0x8].field_0x18;
+        f31 = mPositionInfo[field_0x8].field_0x18;
     } else {
-        f31 = getPositionInfo()[0].field_0x18;
+        f31 = mPositionInfo[0].field_0x18;
         for (u8 i = 1; i < JAIGlobalParameter::getParamAudioCameraMax(); i++) {
-            if (getPositionInfo()[i].field_0x18 < f31) {
-                f31 = getPositionInfo()[i].field_0x18;
+            if (mPositionInfo[i].field_0x18 < f31) {
+                f31 = mPositionInfo[i].field_0x18;
             }
         }
     }
@@ -91,7 +91,7 @@ void JAIZelSound::setSeDistanceDolby(u8 r30) {
         return;
     }
     
-    PositionInfo_t* posInf = &getPositionInfo()[0];
+    PositionInfo_t* posInf = &mPositionInfo[0];
     f32 f0;
     if (field_0x28 == 0 || posInf->field_0x8 < JAIGlobalParameter::getParamSeDolbyFrontDistanceMax()) {
         f0 = 0.0f;
@@ -109,6 +109,5 @@ void JAIZelSound::setSeDistanceDolby(u8 r30) {
         f0 = 127.0f;
     }
     
-    u8 r0 = f0;
-    setSeInterDolby(SOUNDPARAM_Distance, r0 / 127.0f, r30, 0);
+    setSeInterDolby(SOUNDPARAM_Distance, (u8)f0 / 127.0f, r30, 0);
 }

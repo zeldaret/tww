@@ -16,13 +16,6 @@
 #include "dolphin/types.h"
 #include "string.h"
 
-extern bool isTexNoReg(void*);
-extern u16 getTexNoReg(void*);
-extern void loadTexNo(u32, const u16 &);
-
-extern void J3DGDSetTevColorS10(GXTevRegID, GXColorS10);
-extern void J3DGDSetTevKColor(GXTevKColorID, GXColor);
-
 int SizeOfLoadMatColors = 13;
 int SizeOfLoadAmbColors = 13;
 int SizeOfLoadColorChans = 21;
@@ -1346,8 +1339,6 @@ void J3DTevBlock16::diffTexCoordScale() {
         );
     }
 }
-
-extern void patchTexNo_PtrToIdx(u32 texID, const u16& idx);
 
 /* 802E603C-802E6120       .text ptrToIndex__13J3DTevBlock16Fv */
 void J3DTevBlock16::ptrToIndex() {

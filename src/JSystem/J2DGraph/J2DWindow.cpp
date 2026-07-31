@@ -14,7 +14,13 @@
 #include "dolphin/gx/GX.h"
 
 /* 802D12E0-802D1820       .text __ct__9J2DWindowFP7J2DPaneP20JSURandomInputStream */
-J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1) : mpFrameTexture1(NULL), mpFrameTexture2(NULL), mpFrameTexture3(NULL), mpFrameTexture4(NULL), mpContentsTexture(NULL), mpPalette(NULL) {
+J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1)
+    : mpFrameTexture1(NULL),
+      mpFrameTexture2(NULL),
+      mpFrameTexture3(NULL),
+      mpFrameTexture4(NULL),
+      mpContentsTexture(NULL),
+      mpPalette(NULL) {
     s32 local_188 = param_1->getPosition();
     u32 header[2];
     param_1->read(header, 8);
@@ -129,13 +135,9 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
         f32 bottom = y + mpFrameTexture1->getHeight();
         u16 s0, s1, t0, t1;
 
-        drawFrameTexture(mpFrameTexture1, x, y,
-            (field_0x110 >> 7) & 1,
-            (field_0x110 >> 6) & 1, true);
+        drawFrameTexture(mpFrameTexture1, x, y, (field_0x110 >> 7) & 1, (field_0x110 >> 6) & 1, true);
         bool r7 = (field_0x111 & 1) ? true : false;
-        drawFrameTexture(mpFrameTexture2, right, 0.0f,
-            (field_0x110 >> 5) & 1,
-            (field_0x110 >> 4) & 1, r7);
+        drawFrameTexture(mpFrameTexture2, right, 0.0f, (field_0x110 >> 5) & 1, (field_0x110 >> 4) & 1, r7);
 
         s0 = ((field_0x110 >> 5) & 1) ? (u16)0x8000 : (u16)0;
         t0 = ((field_0x110 >> 4) & 1) ? (u16)0 : (u16)0x8000;
@@ -143,9 +145,7 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
         drawFrameTexture(mpFrameTexture2, left, 0.0f, right - left, (f32)mpFrameTexture2->getHeight(), s0, t0, s0, t1, false);
 
         r7 = (field_0x111 & 2) ? true : false;
-        drawFrameTexture(mpFrameTexture4, right, top,
-            (field_0x110 >> 1) & 1,
-            (field_0x110 >> 0) & 1, r7);
+        drawFrameTexture(mpFrameTexture4, right, top, (field_0x110 >> 1) & 1, (field_0x110 >> 0) & 1, r7);
 
         s0 = ((field_0x110 >> 1) & 1) ? (u16)0x8000 : (u16)0;
         t0 = ((field_0x110 >> 0) & 1) ? (u16)0 : (u16)0x8000;
@@ -158,9 +158,7 @@ void J2DWindow::draw_private(const JGeometry::TBox2<f32>& frameBox, const JGeome
         drawFrameTexture(mpFrameTexture4, right, bottom, (f32)mpFrameTexture4->getWidth(), top - bottom, s0, t0, s1, t0, false);
 
         r7 = (field_0x111 & 4) ? true : false;
-        drawFrameTexture(mpFrameTexture3, 0.0f, top,
-            (field_0x110 >> 3) & 1,
-            (field_0x110 >> 2) & 1, r7);
+        drawFrameTexture(mpFrameTexture3, 0.0f, top, (field_0x110 >> 3) & 1, (field_0x110 >> 2) & 1, r7);
 
         s0 = ((field_0x110 >> 3) & 1) ? (u16)0 : (u16)0x8000;
         s1 = (u16)(s0 ^ 0x8000);
@@ -206,7 +204,7 @@ void J2DWindow::drawSelf(f32 x, f32 y) {
 }
 
 /* 802D2190-802D2288       .text drawSelf__9J2DWindowFffPA3_A4_f */
-void J2DWindow::drawSelf(f32 x, f32 y, Mtx *pMtx) {
+void J2DWindow::drawSelf(f32 x, f32 y, Mtx* pMtx) {
     JGeometry::TBox2<f32> globalBounds = mGlobalBounds;
     globalBounds.addPos(JGeometry::TVec2<f32>(x, y));
 
@@ -250,15 +248,23 @@ void J2DWindow::drawContents(const JGeometry::TBox2<f32>& contentsBox) {
         }
 
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
         GXPosition3f32(contentsBox.i.x, contentsBox.i.y, 0.0f);
         GXColor1u32(drawColorTL);
+
         GXPosition3f32(contentsBox.f.x, contentsBox.i.y, 0.0f);
         GXColor1u32(drawColorTR);
+
         GXPosition3f32(contentsBox.f.x, contentsBox.f.y, 0.0f);
         GXColor1u32(drawColorBR);
+
         GXPosition3f32(contentsBox.i.x, contentsBox.f.y, 0.0f);
         GXColor1u32(drawColorBL);
+
+        GXEnd();
+
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
 
         if (mpContentsTexture != NULL) {
@@ -285,6 +291,7 @@ void J2DWindow::drawFrameTexture(JUTTexture* pTexture, f32 x0, f32 y0, f32 w, f3
     JUtility::TColor vtxColor(mDrawAlpha | 0xFFFFFF00);
 
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
     GXPosition3f32(x0, y0, 0.0f);
@@ -304,17 +311,24 @@ void J2DWindow::drawFrameTexture(JUTTexture* pTexture, f32 x0, f32 y0, f32 w, f3
     GXTexCoord2s16(s1, t0);
 
     GXEnd();
+
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
 }
 
 /* 802D26E4-802D2784       .text drawFrameTexture__9J2DWindowFP10JUTTextureffbbb */
 void J2DWindow::drawFrameTexture(JUTTexture* pTexture, f32 x, f32 y, bool flipS, bool flipT, bool bSetupTev) {
-    drawFrameTexture(pTexture, x, y, pTexture->getWidth(), pTexture->getHeight(),
+    drawFrameTexture(
+        pTexture,
+        x,
+        y,
+        pTexture->getWidth(),
+        pTexture->getHeight(),
         flipS ? (u16)0 : (u16)0x8000,
         flipT ? (u16)0 : (u16)0x8000,
         flipS ? (u16)0x8000 : (u16)0,
         flipT ? (u16)0x8000 : (u16)0,
-        bSetupTev);
+        bSetupTev
+    );
 }
 
 /* 802D2784-802D29F4       .text drawContentsTexture__9J2DWindowFffff */
@@ -331,8 +345,10 @@ void J2DWindow::drawContentsTexture(f32 x0, f32 y0, f32 w, f32 h) {
 
     mpContentsTexture->load(GX_TEXMAP0);
     setTevMode(mpContentsTexture, 0x00000000, 0xFFFFFFFF);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA6, 0);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
     GXPosition3f32(x0, y0, 0.0f);

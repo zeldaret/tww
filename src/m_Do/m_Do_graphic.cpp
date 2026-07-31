@@ -84,7 +84,7 @@ void mDoGph_gInf_c::create() {
 #endif
     JFWDisplay::createManager(heap, JUTXfb::Double, true);
     JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::Async);
-    JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fb_width, JUTVideo::getManager()->getRenderMode()->efb_height, JUtility::TColor(0, 0, 0, 0));
+    JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fbWidth, JUTVideo::getManager()->getRenderMode()->efbHeight, JUtility::TColor(0, 0, 0, 0));
     JUT_ASSERT(DEMO_SELECT(414, 416), faderPtr != NULL);
     setFader(faderPtr);
     JFWDisplay::getManager()->setFader(faderPtr);
@@ -152,6 +152,7 @@ void mDoGph_gInf_c::fadeOut(f32 speed, GXColor& color) {
     mFadeRate = speed >= 0.0f ? 0.0f : 1.0f;
 }
 
+#if VERSION > VERSION_DEMO
 /* 80007F6C-80007F94       .text onBlure__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::onBlure() {
     onBlure(cMtx_getIdentity());
@@ -160,8 +161,9 @@ void mDoGph_gInf_c::onBlure() {
 /* 80007F94-80007FC4       .text onBlure__13mDoGph_gInf_cFPA4_Cf */
 void mDoGph_gInf_c::onBlure(const Mtx mtx) {
     mBlureFlag = true;
-    mDoMtx_copy(mtx, mBlureMtx);
+    cMtx_copy(mtx, mBlureMtx);
 }
+#endif
 
 /* 80007FC4-80007FE8       .text fadeOut__13mDoGph_gInf_cFf */
 void mDoGph_gInf_c::fadeOut(f32 speed) {
@@ -281,7 +283,7 @@ bool mDoGph_AfterOfDraw() {
         BOOL printVisible = false;
 #else
         BOOL consoleVisible = JFWSystem::getSystemConsole()->isVisible();
-        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::Port_3).error == 0;
+        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::Port_3).err == 0;
         BOOL procVisible = pad3Connected && fapGmHIO_getMeter() && !consoleVisible;
         BOOL printVisible = pad3Connected && fapGmHIO_isPrint();
         if (mDoMain::developmentMode == 0) {
@@ -1915,7 +1917,7 @@ bool mDoGph_Painter() {
 
     if (dComIfGd_getList2D()->getEntryPacket(0) != NULL) {
         Mtx viewMtx;
-        mDoMtx_copy(j3dSys.getViewMtx(), viewMtx);
+        cMtx_copy(j3dSys.getViewMtx(), viewMtx);
         setLight();
         mDoMtx_stack_c::transS(320.0f, 240.0f, 1000.0f);
         mDoMtx_stack_c::ZrotM(-0x8000);

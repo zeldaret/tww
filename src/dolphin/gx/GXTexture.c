@@ -251,11 +251,11 @@ void GXInitTexObjLOD(GXTexObj* obj, GXTexFilter minFilter, GXTexFilter maxFilter
     GX_SET_REG(internal->texture_lod, reg2, 16, 23);
 }
 
-u16 GXGetTexObjWidth(GXTexObj* obj) {
+u16 GXGetTexObjWidth(const GXTexObj* obj) {
     return (obj->texture_size & 0x3ff) + 1;
 }
 
-u16 GXGetTexObjHeight(GXTexObj* obj) {
+u16 GXGetTexObjHeight(const GXTexObj* obj) {
     return ((obj->texture_size >> 10) & 0x3ff) + 1;
 }
 

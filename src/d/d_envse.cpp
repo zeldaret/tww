@@ -5,11 +5,9 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_envse.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
-#include "d/d_procname.h"
 #include "d/d_stage.h"
 #include "d/d_path.h"
 #include "d/d_com_inf_game.h"
@@ -182,7 +180,7 @@ static cPhs_State dEnvSe_Create(kankyo_class*) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dEnvSe_Method = {
+static kankyo_method_class l_dEnvSe_Method = {
     (process_method_func)dEnvSe_Create,
     (process_method_func)dEnvSe_Delete,
     (process_method_func)dEnvSe_Execute,
@@ -191,15 +189,15 @@ kankyo_method_class l_dEnvSe_Method = {
 };
 
 kankyo_process_profile_definition g_profile_ENVSE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ENVSE,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(dEnvSe_c),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_ENVSE,
-    /* Actor SubMtd */ &l_dEnvSe_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0002,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_ENVSE_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(dEnvSe_c),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_ENVSE_e,
+    /* Kankyo SubMtd */ &l_dEnvSe_Method,
 };

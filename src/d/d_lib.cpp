@@ -115,7 +115,7 @@ void dLib_debugDrawFan(cXyz& center, s16 angleY, s16 fanSpreadAngle, f32 radius,
 bool dLib_brkInit(J3DModelData* modelData, mDoExt_brkAnm* anm, const char* arcName, int fileno) {
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(arcName, fileno);
     JUT_ASSERT(0xae, brk != NULL);
-    if (anm->init(modelData, brk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0)
+    if (anm->init(modelData, brk, 1, J3DFrameCtrl::EMode_NONE) == 0)
         return false;
     return true;
 }
@@ -124,7 +124,7 @@ bool dLib_brkInit(J3DModelData* modelData, mDoExt_brkAnm* anm, const char* arcNa
 bool dLib_btkInit(J3DModelData* modelData, mDoExt_btkAnm* anm, const char* arcName, int fileno) {
     J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(arcName, fileno);
     JUT_ASSERT(0xbb, btk != NULL);
-    if (anm->init(modelData, btk, 1, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0)
+    if (anm->init(modelData, btk, 1, J3DFrameCtrl::EMode_NONE) == 0)
         return false;
     return true;
 }

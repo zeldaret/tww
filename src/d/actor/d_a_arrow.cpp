@@ -7,15 +7,13 @@
 #include "d/actor/d_a_arrow.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_item_data.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_pz.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_s_play.h"
-#include "d/res/res_link.h"
+#include "res/Object/Link.h"
 
 s16 daArrow_c::m_count;
 
@@ -89,9 +87,9 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 BOOL daArrow_c::_createHeap() {
     u16 modelFileIndex;
     if (mArrowType == TYPE_LIGHT) {
-        modelFileIndex = LINK_BDL_ARROWGLITTER;
+        modelFileIndex = dRes_INDEX_LINK_BDL_ARROWGLITTER_e;
     } else {
-        modelFileIndex = LINK_BDL_ARROW;
+        modelFileIndex = dRes_INDEX_LINK_BDL_ARROW_e;
     }
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, modelFileIndex);
     JUT_ASSERT(190, modelData != NULL);
@@ -142,7 +140,7 @@ void daArrow_c::checkCreater() {
     // Check if this arrow was fired by Princess Zelda (during the Ganondorf fight).
     fopAc_ac_c* archer;
     if (fopAcM_SearchByID(fopAcM_GetLinkId(this), &archer)) {
-        if (fpcM_GetName(archer) == PROC_PZ) {
+        if (fpcM_GetName(archer) == fpcNm_PZ_e) {
             mbSetByZelda = true;
         }
     }
@@ -156,7 +154,7 @@ void daArrow_c::setLightEffect() {
         }
         if (!mbHasLightEff) {
             mLightEffPID = fopAcM_createChild(
-                PROC_ARROW_LIGHTEFF, fopAcM_GetID(this),
+                fpcNm_ARROW_LIGHTEFF_e, fopAcM_GetID(this),
                 mArrowType, &field_0x6a8,
                 current.roomNo, &shape_angle
             );
@@ -193,7 +191,7 @@ void daArrow_c::setBlur() {
 /* 800D4994-800D4A04       .text createBlur__9daArrow_cFv */
 void daArrow_c::createBlur() {
     if (!mBlurFollowCb.getEmitter()) {
-        dComIfGp_particle_setP1(dPa_name::ID_COMMON_0048, &current.pos, NULL, NULL, 0xFF, &mBlurFollowCb);
+        dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARW_BLUR00, &current.pos, NULL, NULL, 0xFF, &mBlurFollowCb);
     }
 }
 
@@ -230,22 +228,22 @@ void daArrow_c::setDrawShapeMaterial() {
         {
             /* mAtType      */ AT_TYPE_NORMAL_ARROW,
             /* mAtp         */ 2,
-            /* mTipJointIdx */ 4,
+            /* mTipJointIdx */ ARROW_JNT_TIPNOMAL_e,
         },
         {
             /* mAtType      */ AT_TYPE_FIRE_ARROW,
             /* mAtp         */ 4,
-            /* mTipJointIdx */ 2,
+            /* mTipJointIdx */ ARROW_JNT_TIPFIRE_e,
         },
         {
             /* mAtType      */ AT_TYPE_ICE_ARROW,
             /* mAtp         */ 4,
-            /* mTipJointIdx */ 3,
+            /* mTipJointIdx */ ARROW_JNT_TIPICE_e,
         },
         {
             /* mAtType      */ AT_TYPE_LIGHT_ARROW,
             /* mAtp         */ 0xFF,
-            /* mTipJointIdx */ 0,
+            /* mTipJointIdx */ ARROWGLITTER_JNT_ARROWGLITTER_e,
         },
     };
     
@@ -326,7 +324,7 @@ void daArrow_c::ShieldReflect() {
     s16 targetAngleX = link->getBodyAngleX();
     
     fopAc_ac_c* ganondorf;
-    if (fopAcM_SearchByName(PROC_GND, &ganondorf)) {
+    if (fopAcM_SearchByName(fpcNm_GND_e, &ganondorf)) {
         dAttention_c& attention = dComIfGp_getAttention();
         if (attention.LockonTruth() && attention.LockonTarget(0) == ganondorf) {
             cXyz ganondorfChestPos = ganondorf->current.pos;
@@ -339,7 +337,7 @@ void daArrow_c::ShieldReflect() {
 #if VERSION > VERSION_DEMO
             fopAcM_SetParam(ganondorf, 0x23);
             mSparkleTimer = 15 + REG0_S(3);
-            mpSparkleEmitter = dComIfGp_particle_set(dPa_name::ID_COMMON_03EE, &link->current.pos);
+            mpSparkleEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_CCTHUNDER01, &link->current.pos);
 #endif
         }
     }
@@ -383,7 +381,7 @@ bool daArrow_c::check_water_in() {
         
         if (mArrowType == TYPE_FIRE) {
             mInWaterTimer = 1;
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_035A, &waterHitPos);
+            dComIfGp_particle_setP1(dPa_name::ID_AK_JN_EVAPORATION00, &waterHitPos);
 #if VERSION > VERSION_DEMO
             if (!field_0x6e4)
 #endif
@@ -393,7 +391,7 @@ bool daArrow_c::check_water_in() {
         } else if (mArrowType == TYPE_ICE) {
             mInWaterTimer = 10*30;
             fopAcM_createChild(
-                PROC_ARROW_ICEEFF, fopAcM_GetID(this), mArrowType,
+                fpcNm_ARROW_ICEEFF_e, fopAcM_GetID(this), mArrowType,
                 &waterHitPos, current.roomNo, &current.angle
             );
 #if VERSION > VERSION_DEMO
@@ -403,7 +401,7 @@ bool daArrow_c::check_water_in() {
                 dKy_arrowcol_chg_on(&current.pos, 1);
             }
         } else if (mArrowType == TYPE_LIGHT) {
-            dComIfGp_particle_setP1(dPa_name::ID_COMMON_02A1, &waterHitPos);
+            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWG_HITA00, &waterHitPos);
             fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
 #if VERSION > VERSION_DEMO
             if (!field_0x6e4)
@@ -438,19 +436,19 @@ daArrow_c* daArrow_c::changeArrowType() {
     daArrow_c* ret = this;
     
     if (mArrowType == TYPE_NORMAL) {
-        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(dInvSlot_BOW_e) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e)) {
+        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_LIGHT_ARROW_e)) {
             mArrowType = TYPE_NORMAL;
         } else {
             mArrowType = TYPE_FIRE;
         }
     } else if (mArrowType == TYPE_FIRE) {
-        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(dInvSlot_BOW_e) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e)) {
+        if (dComIfGs_getMagic() < 1 || !(dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_LIGHT_ARROW_e)) {
             mArrowType = TYPE_NORMAL;
         } else {
             mArrowType = TYPE_ICE;
         }
     } else if (mArrowType == TYPE_ICE) {
-        if (dComIfGs_getMagic() < 2 || dComIfGs_getItem(dInvSlot_BOW_e) != dItem_LIGHT_ARROW_e) {
+        if (dComIfGs_getMagic() < 2 || dComIfGs_getItem(dInvSlot_BOW_e) != dItemNo_LIGHT_ARROW_e) {
             mArrowType = TYPE_NORMAL;
         } else {
             mArrowType = TYPE_LIGHT;
@@ -461,7 +459,7 @@ daArrow_c* daArrow_c::changeArrowType() {
     
     if (mArrowType != origArrowType) {
         m_keep_type = mArrowType;
-        daArrow_c* newNockedArrow = (daArrow_c*)fopAcM_fastCreate(PROC_ARROW, 0, &current.pos, fopAcM_GetRoomNo(this));
+        daArrow_c* newNockedArrow = (daArrow_c*)fopAcM_fastCreate(fpcNm_ARROW_e, 0, &current.pos, fopAcM_GetRoomNo(this));
         if (!newNockedArrow) {
             mArrowType = origArrowType;
             m_keep_type = origArrowType;
@@ -483,18 +481,18 @@ void daArrow_c::changeArrowTypeNotReady() {
         if (dComIfGs_getMagic() < 1) {
             return;
         }
-        if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e) {
+        if (dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_LIGHT_ARROW_e) {
             m_keep_type = TYPE_FIRE;
         }
     } else if (m_keep_type == TYPE_FIRE) {
         if (dComIfGs_getMagic() < 1) {
             return;
         }
-        if (dComIfGs_getItem(dInvSlot_BOW_e) == dItem_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e) {
+        if (dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_MAGIC_ARROW_e || dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_LIGHT_ARROW_e) {
             m_keep_type = TYPE_ICE;
         }
     } else if (m_keep_type == TYPE_ICE) {
-        if (dComIfGs_getMagic() >= 2 && dComIfGs_getItem(dInvSlot_BOW_e) == dItem_LIGHT_ARROW_e) {
+        if (dComIfGs_getMagic() >= 2 && dComIfGs_getItem(dInvSlot_BOW_e) == dItemNo_LIGHT_ARROW_e) {
             m_keep_type = TYPE_LIGHT;
         } else {
             m_keep_type = TYPE_NORMAL;
@@ -561,7 +559,7 @@ void daArrow_c::setStopActorMatrix() {
     s16 xRot = 0;
     if (cLib_calcTimer(&field_0x604) != 0) {
         f32 temp = (field_0x604 / 40.0f);
-        xRot = 1024.0f * temp*temp * cM_ssin(field_0x604 * 0x52FB);
+        xRot = 0x400 * temp*temp * cM_ssin(field_0x604 * 0x52FB);
     }
     fopAc_ac_c* hitActor = fopAcM_SearchByID(mHitActorProcID);
     if (!hitActor) {
@@ -630,7 +628,7 @@ BOOL daArrow_c::procMove() {
         cXyz temp12;
         cXyz hitPos;
         csXyz temp11;
-        if (mArrowType == TYPE_LIGHT && !mbLinkReflect && mAtCps.ChkAtShieldHit() && fpcM_GetName(mAtCps.GetAtHitAc()) == PROC_PLAYER) {
+        if (mArrowType == TYPE_LIGHT && !mbLinkReflect && mAtCps.ChkAtShieldHit() && fpcM_GetName(mAtCps.GetAtHitAc()) == fpcNm_PLAYER_e) {
             mAtCps.GetAtHitAc();
             hitPos = *mAtCps.GetAtHitPosP();
             hitType = -1; // Reflected hit
@@ -653,9 +651,9 @@ BOOL daArrow_c::procMove() {
             if (hitActor) {
                 JntHit_c* jntHit = fopAcM_GetJntHit(hitActor);
                 if (mArrowType == TYPE_LIGHT) {
-                    if (fpcM_GetName(mAtCps.GetAtHitAc()) == PROC_BGN ||
-                        fpcM_GetName(mAtCps.GetAtHitAc()) == PROC_BGN2 ||
-                        fpcM_GetName(mAtCps.GetAtHitAc()) == PROC_BGN3) {
+                    if (fpcM_GetName(mAtCps.GetAtHitAc()) == fpcNm_BGN_e ||
+                        fpcM_GetName(mAtCps.GetAtHitAc()) == fpcNm_BGN2_e ||
+                        fpcM_GetName(mAtCps.GetAtHitAc()) == fpcNm_BGN3_e) {
                         // Hit Puppet Ganon.
                         if (hitWasBlocked) {
                             field_0x6a8 = hitPos;
@@ -683,7 +681,7 @@ BOOL daArrow_c::procMove() {
                             mDoMtx_stack_c::ZXYrotM(temp10.x, temp10.y, 0);
                             cMtx_copy(mDoMtx_stack_c::get(), field_0x6b4);
                             
-                            dComIfGp_particle_setP1(dPa_name::ID_COMMON_02A1, &field_0x6a8, &temp10);
+                            dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWG_HITA00, &field_0x6a8, &temp10);
                             fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
                             fopAcM_delete(this);
                         } else {
@@ -788,18 +786,18 @@ BOOL daArrow_c::procMove() {
             cMtx_copy(mDoMtx_stack_c::get(), field_0x6b4);
             
             if (mArrowType == TYPE_FIRE) {
-                dComIfGp_particle_setP1(dPa_name::ID_COMMON_029A, &field_0x6a8, &temp10);
-                dComIfGp_particle_setP1(dPa_name::ID_COMMON_029B, &field_0x6a8, &temp10);
+                dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWF_HITA00, &field_0x6a8, &temp10);
+                dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWF_HITB00, &field_0x6a8, &temp10);
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_FIRE_ARW_EFF, 0);
                 field_0x698 = false;
             } else if (mArrowType == TYPE_ICE) {
                 if (dComIfG_Bgsp()->ChkGrpInf(mLinChk, 0x200)) {
-                    fopAcM_create(PROC_Obj_Magmarock, NULL, &field_0x6a8, current.roomNo);
+                    fopAcM_create(fpcNm_Obj_Magmarock_e, NULL, &field_0x6a8, current.roomNo);
                 } else {
-                    dComIfGp_particle_setP1(dPa_name::ID_COMMON_029E, &field_0x6a8, &temp10);
+                    dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWI_HITA00, &field_0x6a8, &temp10);
                     
                     fopAcM_createChild(
-                        PROC_ARROW_ICEEFF, fopAcM_GetID(this),
+                        fpcNm_ARROW_ICEEFF_e, fopAcM_GetID(this),
                         mArrowType, &field_0x6a8,
                         current.roomNo, &field_0x6e6
                     );
@@ -807,7 +805,7 @@ BOOL daArrow_c::procMove() {
                     fopAcM_seStartCurrent(this, JA_SE_OBJ_ICE_ARW_EFF, 0);
                 }
             } else if (mArrowType == TYPE_LIGHT) {
-                dComIfGp_particle_setP1(dPa_name::ID_COMMON_02A1, &field_0x6a8, &temp10);
+                dComIfGp_particle_setP1(dPa_name::ID_IT_JN_ARWG_HITA00, &field_0x6a8, &temp10);
                 fopAcM_seStartCurrent(this, JA_SE_OBJ_LIGHT_ARW_EFF, 0);
                 field_0x698 = false;
             }
@@ -831,7 +829,7 @@ BOOL daArrow_c::procMove() {
                 csXyz temp9;
                 cM3d_CalcVecZAngle(*triPla->GetNP(), &temp9);
                 
-                dComIfGp_particle_setP1(dPa_name::ID_COMMON_PURPLE_HIT, &field_0x6a8, &temp9);
+                dComIfGp_particle_setP1(dPa_name::ID_AK_JN_NG, &field_0x6a8, &temp9);
                 fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_REBOUND, mtrlSndId);
             } else {
                 fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_HIT, mtrlSndId);
@@ -977,7 +975,7 @@ BOOL daArrow_c::procStop_BG() {
         
         if (mCoSph.ChkCoHit()) {
             dComIfGp_setItemArrowNumCount(1);
-            fopAcM_createItemForSimpleDemo(&current.pos, dItem_ARROW_10_e, -1, NULL, NULL, 0.0f, 0.0f);
+            fopAcM_createItemForSimpleDemo(&current.pos, dItemNo_ARROW_10_e, -1, NULL, NULL, 0.0f, 0.0f);
             mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
             fopAcM_delete(this);
             return TRUE;
@@ -1070,10 +1068,10 @@ BOOL daArrow_c::createInit() {
     
     if (mArrowType != TYPE_LIGHT) {
         J3DModelData* modelData = mpModel->getModelData();
-        modelData->getJointNodePointer(4)->getMesh()->getShape()->hide();
-        modelData->getJointNodePointer(2)->getMesh()->getShape()->hide();
-        modelData->getJointNodePointer(3)->getMesh()->getShape()->hide();
-        modelData->getJointNodePointer(3)->getMesh()->getNext()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPNOMAL_e)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPFIRE_e)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPICE_e)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPICE_e)->getMesh()->getNext()->getShape()->hide();
     }
     setDrawShapeMaterial();
     
@@ -1216,7 +1214,7 @@ BOOL daArrow_c::_draw() {
 
 /* 800D7960-800D7A38       .text _create__9daArrow_cFv */
 cPhs_State daArrow_c::_create() {
-    fopAcM_SetupActor(this, daArrow_c);
+    fopAcM_ct(this, daArrow_c);
     
     checkCreater();
     
@@ -1287,18 +1285,18 @@ static actor_method_class daArrowMethodTable = {
 };
 
 actor_process_profile_definition g_profile_ARROW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ARROW,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ARROW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daArrow_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ARROW,
+    /* Draw Prio    */ fpcDwPi_ARROW_e,
     /* Actor SubMtd */ &daArrowMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

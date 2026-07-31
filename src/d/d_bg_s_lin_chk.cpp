@@ -8,5 +8,11 @@
 
 /* 800A5678-800A56B8       .text Set__11dBgS_LinChkFP4cXyzP4cXyzP10fopAc_ac_c */
 void dBgS_LinChk::Set(cXyz* pi_start, cXyz* pi_end, fopAc_ac_c* pi_actor) {
-    Set2(pi_start, pi_end, pi_actor ? fopAcM_GetID(pi_actor) : fpcM_ERROR_PROCESS_ID_e);
+    u32 id;
+    if (pi_actor != NULL) {
+        id = fopAcM_GetID(pi_actor);
+    } else {
+        id = fpcM_ERROR_PROCESS_ID_e;
+    }
+    Set2(pi_start, pi_end, id);
 }

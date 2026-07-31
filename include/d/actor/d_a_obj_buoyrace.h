@@ -21,7 +21,6 @@ namespace daObjBuoyrace {
             /* 0x08 */ f32 m08;
             /* 0x0C */ f32 m0C;
             /* 0x10 */ s16 m10;
-            /* 0x12 */ // 2 bytes of alignment padding
             /* 0x14 */ f32 m14;
             /* 0x18 */ f32 m18;
             /* 0x1C */ f32 m1C;

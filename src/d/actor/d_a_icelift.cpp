@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_icelift.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-000000E0       .text _delete__9daIlift_cFv */
 bool daIlift_c::_delete() {
@@ -108,18 +106,18 @@ static actor_method_class daIliftMethodTable = {
 };
 
 actor_process_profile_definition g_profile_ICE_LIFT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ICE_LIFT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ICE_LIFT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daIlift_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ICE_LIFT,
+    /* Draw Prio    */ fpcDwPi_ICE_LIFT_e,
     /* Actor SubMtd */ &daIliftMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

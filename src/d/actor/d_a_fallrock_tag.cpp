@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock_tag.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */
 static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
@@ -52,18 +50,18 @@ static actor_method_class l_daFallRockTag_Method = {
 };
 
 actor_process_profile_definition g_profile_TagRock = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TagRock,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TagRock_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFallRockTag_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TagRock,
+    /* Draw Prio    */ fpcDwPi_TagRock_e,
     /* Actor SubMtd */ &l_daFallRockTag_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

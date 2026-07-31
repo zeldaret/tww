@@ -43,7 +43,7 @@ void mDoLib_clipper::setup(f32 fovY, f32 aspect, f32 n, f32 f) {
     mSystemFar = f;
     mClipper.calcViewFrustum();
 
-    s16 ang = (s16)(fovY * 182.04445f);
+    s16 ang = DEG2S(fovY);
     mFovyRate = JMASCos(ang) / JMASSin(ang);
 }
 

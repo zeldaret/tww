@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_eff.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 
 const GXColor daObjEff::BarrelSmokeCB::original_color = {0xAF, 0x96, 0x64, 0xFF};
@@ -144,7 +142,7 @@ bool daObjEff::Act_c::create_heap_woodBox_smoke() {
 
 /* 00000790-00000898       .text create_heap__Q28daObjEff5Act_cFv */
 bool daObjEff::Act_c::create_heap() {
-    static HeapProc proc[] = {
+    static CreateHeapProc proc[] = {
         &Act_c::create_heap_barrel_smoke,
         &Act_c::create_heap_stool_smoke,
         &Act_c::create_heap_skull_smoke,
@@ -154,7 +152,7 @@ bool daObjEff::Act_c::create_heap() {
     };
 
     bool ret = false;
-    if ((this->*proc[mProcIndex])()) {
+    if ((this->*proc[mType])()) {
         ret = true;
     }
 
@@ -164,7 +162,7 @@ bool daObjEff::Act_c::create_heap() {
 /* 00000898-00000998       .text eff_set_barrel_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_barrel_smoke() {
     static cXyz particle_scl(2.5f, 2.5f, 1.0f);
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos, NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos, NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
     if (emitter != NULL) {
         emitter->setVolumeSize(0x28);
         emitter->setRate(20.0f);
@@ -180,7 +178,7 @@ BOOL daObjEff::Act_c::eff_set_barrel_smoke() {
 /* 000009D4-00000AD0       .text eff_set_stool_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_stool_smoke() {
     static cXyz particle_scl(2.5f, 2.5f, 1.0f);
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos,
                                                         NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
     if (emitter != NULL) {
         emitter->setVolumeSize(0x1E);
@@ -197,7 +195,7 @@ BOOL daObjEff::Act_c::eff_set_stool_smoke() {
 /* 00000AD0-00000BC0       .text eff_set_skull_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_skull_smoke() {
     static cXyz particle_scl(1.6f, 1.6f, 1.0f);
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos,
                                                         NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
     if (emitter != NULL) {
         emitter->setRate(10.0f);
@@ -217,7 +215,7 @@ BOOL daObjEff::Act_c::eff_set_land_smoke() {
     pScale.y = scale.y;
     pScale.z = scale.z;
 
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos,
                                                         NULL,  &pScale, 0xB4, mParticleCallback, -1, NULL, NULL, NULL);
     if (emitter != NULL) {
         emitter->setVolumeSize(0x1E);
@@ -239,7 +237,7 @@ BOOL daObjEff::Act_c::eff_set_land_smoke() {
 
 /* 00000D24-00000D98       .text eff_set_pinecone_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_pinecone_smoke() {
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_SCENE_A16B, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_IT_ST_BOKKURI_SMOKE00, &current.pos,
                                                         NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, NULL);
     return emitter != NULL;
 }
@@ -247,7 +245,7 @@ BOOL daObjEff::Act_c::eff_set_pinecone_smoke() {
 /* 00000D98-00000E80       .text eff_set_woodBox_smoke__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set_woodBox_smoke() {
     static cXyz particle_scl(2.5f, 2.5f, 1.0f);
-    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_COMMON_2027, &current.pos,
+    JPABaseEmitter *emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &current.pos,
                                                         NULL,  NULL, 0xB4, mParticleCallback, -1, NULL, NULL, &particle_scl);
     if (emitter != NULL) {
         emitter->setRate(30.0f);
@@ -260,7 +258,7 @@ BOOL daObjEff::Act_c::eff_set_woodBox_smoke() {
 
 /* 00000E80-00000F6C       .text eff_set__Q28daObjEff5Act_cFv */
 BOOL daObjEff::Act_c::eff_set() {
-    static Proc proc[] = {
+    static SetProc proc[] = {
         &Act_c::eff_set_barrel_smoke,
         &Act_c::eff_set_stool_smoke,
         &Act_c::eff_set_skull_smoke,
@@ -269,7 +267,7 @@ BOOL daObjEff::Act_c::eff_set() {
         &Act_c::eff_set_woodBox_smoke
     };
 
-    return (this->*proc[mProcIndex])();
+    return (this->*proc[mType])();
 }
 
 /* 00000F6C-00001030       .text _create__Q28daObjEff5Act_cFv */
@@ -283,12 +281,12 @@ cPhs_State daObjEff::Act_c::_create() {
         0x00000040,
     };
 
-    mProcIndex = prm_get_type();
-    fopAcM_SetupActor(this, daObjEff::Act_c);
+    mType = prm_get_type();
+    fopAcM_ct(this, daObjEff::Act_c);
     int phase = cPhs_COMPLEATE_e;
-    if (fopAcM_entrySolidHeap(this, &solidHeapCB, heap_size[mProcIndex])) {
+    if (fopAcM_entrySolidHeap(this, &solidHeapCB, heap_size[mType])) {
         if ((u8) eff_set() != 0) {
-            fopDwTg_DrawQTo(&draw_tag);
+            fopAcM_offDraw(this);
         } else {
             phase = cPhs_ERROR_e;
         }
@@ -343,7 +341,7 @@ void daObjEff::Act_c::remove_woodBox_smoke() {
 
 /* 00001180-0000126C       .text remove__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::remove() {
-    static voidProc proc[] = {
+    static RemoveProc proc[] = {
         &Act_c::remove_barrel_smoke,
         &Act_c::remove_stool_smoke,
         &Act_c::remove_skull_smoke,
@@ -351,7 +349,7 @@ void daObjEff::Act_c::remove() {
         &Act_c::remove_pinecone_smoke,
         &Act_c::remove_woodBox_smoke
     };
-    (this->*proc[mProcIndex])();
+    (this->*proc[mType])();
 }
 
 /* 0000126C-00001290       .text _delete__Q28daObjEff5Act_cFv */
@@ -404,7 +402,7 @@ void daObjEff::Act_c::die_woodBox_smoke() {
 
 /* 000013B0-0000149C       .text die__Q28daObjEff5Act_cFv */
 void daObjEff::Act_c::die() {
-    static voidProc proc[] = {
+    static DieProc proc[] = {
         &Act_c::die_barrel_smoke,
         &Act_c::die_stool_smoke,
         &Act_c::die_skull_smoke,
@@ -413,7 +411,7 @@ void daObjEff::Act_c::die() {
         &Act_c::die_woodBox_smoke
     };
 
-    (this->*proc[mProcIndex])();
+    (this->*proc[mType])();
 }
 
 /* 0000149C-000014C0       .text _execute__Q28daObjEff5Act_cFv */
@@ -460,18 +458,18 @@ namespace daObjEff {
 }; // namespace daObjEff
 
 actor_process_profile_definition g_profile_Obj_Eff = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0009,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Eff,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0009,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Eff_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEff::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Eff,
+    /* Draw Prio    */ fpcDwPi_Obj_Eff_e,
     /* Actor SubMtd */ &daObjEff::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

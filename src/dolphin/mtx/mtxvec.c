@@ -44,6 +44,12 @@ asm void PSMTXMultVec(const register Mtx m, const register Vec* src, register Ve
 }
 #endif
 
+#ifdef DEBUG
+// Hack to fix a linker error when compiling in debug mode
+#pragma push
+#pragma force_active on
+#endif
+
 void C_MTXMultVecArray(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count) {
     u32 i;
     Vec vTmp;
@@ -64,6 +70,10 @@ void C_MTXMultVecArray(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count)
         dstBase++;
     }
 }
+
+#ifdef DEBUG
+#pragma pop
+#endif
 
 #ifdef __MWERKS__
 asm void PSMTXMultVecArray(const register Mtx m, const register Vec* srcBase, register Vec* dstBase, register u32 count) {

@@ -10,16 +10,25 @@ class JGadget_outMessage {
 public:
     typedef void (*MessageFunc)(const char*, int, const char*);
 
-    static void warning(const char*, int, const char*);
+    static void warning(const char*, int, const char*) {
+        /* Nonmatching - debug only */
+    }
 
-    JGadget_outMessage(MessageFunc fn, const char* file, int line);
-    ~JGadget_outMessage();
+    JGadget_outMessage(MessageFunc fn, const char* file, int line) {
+        /* Nonmatching - debug only */
+    }
+    ~JGadget_outMessage() {
+        /* Nonmatching - debug only */
+    }
 
     JGadget_outMessage& operator<<(int param_1) { return *this << (s32)param_1; }
     JGadget_outMessage& operator<<(u16);
     JGadget_outMessage& operator<<(unsigned int);
     JGadget_outMessage& operator<<(u8);
-    JGadget_outMessage& operator<<(const char* str);
+    JGadget_outMessage& operator<<(const char* str) {
+        /* Nonmatching - debug only */
+        return *this;
+    }
     JGadget_outMessage& operator<<(s8);
     JGadget_outMessage& operator<<(s32);
     JGadget_outMessage& operator<<(u32);

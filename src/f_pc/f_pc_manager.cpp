@@ -85,7 +85,8 @@ void messageSet(u32 status) {
 #else
     BMG_INF1* inf1 = (BMG_INF1*)&msg_data[0x20];
 #endif
-    const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(JUTDataBlockHeader) + inf1->entries[status]);
+    u8* dat1Block = (u8*)inf1 + inf1->mSize;
+    const char * msg = (const char*)(dat1Block + sizeof(JUTDataBlockHeader) + inf1->entries[status]);
 
     f32 f30 = 0.0f;
     f32 f31 = 660.0f;

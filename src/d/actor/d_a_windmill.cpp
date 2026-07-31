@@ -6,12 +6,10 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_windmill.h"
 #include "d/actor/d_a_wind_tag.h"
-#include "d/res/res_hpu1.h"
-#include "d/res/res_hpu2.h"
+#include "res/Object/Hpu1.h"
+#include "res/Object/Hpu2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_movebg_actor.h"
 
@@ -108,8 +106,8 @@ static dCcD_SrcCyl l_cyl_src = {
     }},
 };
 
-const s16 daWindMill_c::m_bmdidx[] = {HPU1_BDL_HPU1, HPU2_BDL_HPU2};
-const s16 daWindMill_c::m_dzbidx[] = {HPU1_DZB_HPU1, -1};
+const s16 daWindMill_c::m_bmdidx[] = {dRes_INDEX_HPU1_BDL_HPU1_e, dRes_INDEX_HPU2_BDL_HPU2_e};
+const s16 daWindMill_c::m_dzbidx[] = {dRes_INDEX_HPU1_DZB_HPU1_e, -1};
 const s16 daWindMill_c::m_heapsize[] = { 0x3A40, 0xA00 };
 const Vec daWindMill_c::m_cull_size[][2] = {
     {{-1400.0f, 0.0f, -1400.0f}, {1400.0f, 500.0f, 1400.0f}},
@@ -148,8 +146,7 @@ BOOL daWindMill_c::CreateHeap() {
     if (m_dzbidx[mType] != -1) {
         mpBgW = new dBgW();
         if (mpBgW != NULL) {
-            cBgD_t* res = (cBgD_t*) dComIfG_getObjectRes(
-                m_arcname[mType], m_dzbidx[mType]);
+            cBgD_t* res = (cBgD_t*) dComIfG_getObjectRes(m_arcname[mType], m_dzbidx[mType]);
             if (mpBgW->Set(res, cBgW::MOVE_BG_e, &mMtx) == TRUE) {
                 return FALSE;
             }
@@ -211,7 +208,7 @@ void daWindMill_c::CreateInit() {
     set_mtx();
 
     for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
-        if (i == 2) {
+        if (i == HPU1_JNT_POLYSURFACE2007_e) {
             mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
             break;
         }
@@ -223,7 +220,7 @@ void daWindMill_c::CreateInit() {
     if (mpBgW != NULL) {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        cMtx_copy(mDoMtx_stack_c::get(), mMtx);
+        MTXCopy(mDoMtx_stack_c::get(), mMtx);
 
         dComIfG_Bgsp()->Regist(mpBgW, this);
         mpBgW->Move();
@@ -251,8 +248,8 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                     break;
             }
             model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
-            cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
-            cMtx_copy(mDoMtx_stack_c::get(), i_this->mMtx);
+            MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+            MTXCopy(mDoMtx_stack_c::get(), i_this->mMtx);
 
             i_this->shape_angle.y = i_this->mAngle[0];
         }
@@ -262,7 +259,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 00000608-00000670       .text search_wind__12daWindMill_cFv */
 void daWindMill_c::search_wind() {
-    fopAc_ac_c* windTag = fopAcM_SearchByName(PROC_WindTag);
+    fopAc_ac_c* windTag = fopAcM_SearchByName(fpcNm_WindTag_e);
     if (windTag != NULL)
         mWindTagId = fopAcM_GetID(windTag);
     else
@@ -271,9 +268,9 @@ void daWindMill_c::search_wind() {
 
 /* 00000670-00000804       .text _create__12daWindMill_cFv */
 cPhs_State daWindMill_c::_create() {
-    fopAcM_SetupActor(this, daWindMill_c);
+    fopAcM_ct(this, daWindMill_c);
 
-    mType = fopAcM_GetParam(this) & 0xF;
+    mType = daWindMill_prm::getType(this);
     cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (res == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
@@ -287,8 +284,8 @@ cPhs_State daWindMill_c::_create() {
 /* 00000DC4-00000E4C       .text set_mtx__12daWindMill_cFv */
 void daWindMill_c::set_mtx() {
     mpModel->setBaseScale(scale);
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(current.angle);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
@@ -360,7 +357,7 @@ void daWindMill_c::set_at() {
         case 1:
             r0 = 1000;
             if (mAngle[1] > r0) {
-                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
                 mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, mAngle[0] + mAngle[1]);
                 mDoMtx_stack_c::multVec(&vec1, &vec1);
 
@@ -372,8 +369,7 @@ void daWindMill_c::set_at() {
                     m1244[i].mEnd = vec_array_0[i];
                     m1244[i].mRadius = 70.0f;
 
-                    mCps[i].set(m1244[i].mStart, m1244[i].mEnd);
-                    mCps[i].SetR(m1244[i].mRadius);
+                    mCps[i].cM3dGCps::Set(m1244[i]);
                 }
 
                 for (i = 0; i < 4; i++) {
@@ -384,7 +380,7 @@ void daWindMill_c::set_at() {
         case 0:
             r0 = 1000;
             if (mAngle[1] > r0) {
-                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
                 mDoMtx_stack_c::ZXYrotM(current.angle.x, mAngle[0] + mAngle[1], current.angle.z);
 
                 for (i = 0; i < 4; i++) {
@@ -395,7 +391,7 @@ void daWindMill_c::set_at() {
                     m1244[i].mEnd = vec_array_2[i];
                     m1244[i].mRadius = 170.0f;
 
-                    mCps[i].set(m1244[i].mStart, m1244[i].mEnd);
+                    mCps[i].SetStartEnd(m1244[i].mStart, m1244[i].mEnd);
                     mCps[i].SetR(m1244[i].mRadius);
                     mCps[i].SetAtSpl(dCcG_At_Spl_UNKA);
                 }
@@ -427,7 +423,7 @@ void daWindMill_c::set_co() {
         case 1:
             r0 = 1000;
             if (mAngle[1] <= r0) {
-                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
                 mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, mAngle[0] + mAngle[1]);
 
                 int i;
@@ -501,18 +497,18 @@ static actor_method_class daWindMillMethodTable = {
 };
 
 actor_process_profile_definition g_profile_WINDMILL = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_WINDMILL,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_WINDMILL_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daWindMill_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_WINDMILL,
+    /* Draw Prio    */ fpcDwPi_WINDMILL_e,
     /* Actor SubMtd */ &daWindMillMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

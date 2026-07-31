@@ -6,10 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_pirateship.h"
 #include "d/actor/d_a_knob00.h"
-#include "d/res/res_kaizokusen.h"
-#include "d/d_procname.h"
+#include "res/Object/Kaizokusen.h"
 #include "d/d_particle.h"
-#include "d/d_priority.h"
 #include "d/d_path.h"
 #include "d/d_lib.h"
 #include "d/d_com_inf_game.h"
@@ -219,14 +217,14 @@ void daObjPirateship::Act_c::partsCreate() {
     m_sail_id = fopAcM_createChild("Psail", fopAcM_GetID(this), 0, &current.pos, tevStr.mRoomNo, &current.angle);
     JUT_ASSERT(282, (m_sail_id != fpcM_ERROR_PROCESS_ID_e));
 
-    m2F0 = fopAcM_createChild(PROC_PIRATE_FLAG, fopAcM_GetID(this), 0, &current.pos, tevStr.mRoomNo, &current.angle);
+    m2F0 = fopAcM_createChild(fpcNm_PIRATE_FLAG_e, fopAcM_GetID(this), 0, &current.pos, tevStr.mRoomNo, &current.angle);
 
     if (uVar2 != 3) {
         cXyz sp30 = current.pos;
         sp30.y += 700.0f;
         sp30.x += cM_ssin(current.angle.y) * 850.0f;
         sp30.z += cM_scos(current.angle.y) * 850.0f;
-        m2F8 = fopAcM_createChild(PROC_Obj_Tousekiki, fopAcM_GetID(this), 0, &sp30, tevStr.mRoomNo, &current.angle);
+        m2F8 = fopAcM_createChild(fpcNm_Obj_Tousekiki_e, fopAcM_GetID(this), 0, &sp30, tevStr.mRoomNo, &current.angle);
     }
 
     if (uVar2 != 3) {
@@ -235,7 +233,7 @@ void daObjPirateship::Act_c::partsCreate() {
         sp24.x += cM_ssin(current.angle.y) * -788.0f;
         sp24.z += cM_scos(current.angle.y) * -788.0f;
 
-        m300 = fopAcM_createChild(PROC_Kaji, fopAcM_GetID(this), 0, &sp24, tevStr.mRoomNo, &current.angle);
+        m300 = fopAcM_createChild(fpcNm_Kaji_e, fopAcM_GetID(this), 0, &sp24, tevStr.mRoomNo, &current.angle);
     }
 
     cXyz sp18 = current.pos;
@@ -252,7 +250,7 @@ void daObjPirateship::Act_c::partsCreate() {
     sp18.x += cM_ssin(current.angle.y) * 475.0f;
     sp18.z += cM_scos(current.angle.y) * 475.0f;
 
-    m308 = fopAcM_createChild(PROC_KNOB00, fopAcM_GetID(this), dr_prm[uVar3], &sp18, tevStr.mRoomNo, &sp10);
+    m308 = fopAcM_createChild(fpcNm_KNOB00_e, fopAcM_GetID(this), dr_prm[uVar3], &sp18, tevStr.mRoomNo, &sp10);
     m304 = NULL;
 }
 
@@ -276,7 +274,7 @@ void daObjPirateship::Act_c::sound_proc() {
 
 /* 0000095C-00000A50       .text CreateHeap__Q215daObjPirateship5Act_cFv */
 BOOL daObjPirateship::Act_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(mArcname, KAIZOKUSEN_INDEX_BDL_OBA_KAIZOKU_A);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(mArcname, dRes_INDEX_KAIZOKUSEN_BDL_OBA_KAIZOKU_A_e);
     JUT_ASSERT(374, modelData != NULL);
 
     mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
@@ -290,7 +288,7 @@ BOOL daObjPirateship::Act_c::CreateHeap() {
 void daObjPirateship::Act_c::CreateWave() {
     m6C8 = current.pos;
     if (m4AC.getEmitter() == NULL) {
-        dComIfGp_particle_setShipTail(0x8315, &m6C8, &current.angle, NULL, 0, &m4AC);
+        dComIfGp_particle_setShipTail(dPa_name::ID_AK_SN_PIRATESHIPTAIL00, &m6C8, &current.angle, NULL, 0, &m4AC);
         JPABaseEmitter* emitter = m4AC.getEmitter();
         if (emitter != NULL) {
             const JGeometry::TVec3<f32> scale = (Vec){20.0f, 20.0f, 20.0f};
@@ -305,7 +303,7 @@ void daObjPirateship::Act_c::CreateWave() {
     {
         GXColor sea_color;
         dKy_get_seacolor(&m500, &sea_color);
-        m4FC = dComIfGp_particle_set(0x833d, &current.pos, &current.angle, NULL, 0xff, NULL, -1, &m500);
+        m4FC = dComIfGp_particle_set(dPa_name::ID_AK_SN_PIRATESHIPSPLASH00, &current.pos, &current.angle, NULL, 0xff, NULL, -1, &m500);
     }
 }
 
@@ -417,7 +415,7 @@ bool daObjPirateship::Act_c::_execute() {
 
     if (!demo_move()) {
         if (l_HIO.m05 == 0 && m4A8 != NULL) {
-            dLib_pathMove(&current.pos, &m4A4, m4A8, 3.0f, path_move_call_back, (void*)this);
+            dLib_pathMove(&current.pos, &m4A4, m4A8, 3.0f, path_move_call_back, this);
             if (m32E > 0x4000 || m32E < -0x4000) {
                 cLib_addCalcAngleS2(&m330, l_HIO.m12, 0x10, 0x300);
             } else {
@@ -462,13 +460,13 @@ bool daObjPirateship::Act_c::_execute() {
 
 /* 00000F10-000012A4       .text _create__Q215daObjPirateship5Act_cFv */
 cPhs_State daObjPirateship::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjPirateship::Act_c);
+    fopAcM_ct(this, daObjPirateship::Act_c);
 
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, mArcname);
     if (PVar1 == cPhs_COMPLEATE_e) {
-        s32 dzbFileIndex = KAIZOKUSEN_INDEX_DZB_ROOM1A;
+        s32 dzbFileIndex = dRes_INDEX_KAIZOKUSEN_DZB_ROOM1A_e;
         if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
-            dzbFileIndex = KAIZOKUSEN_INDEX_DZB_ROOM1B;
+            dzbFileIndex = dRes_INDEX_KAIZOKUSEN_DZB_ROOM1B_e;
         }
         PVar1 = MoveBGCreate(mArcname, dzbFileIndex, dBgS_MoveBGProc_TypicalRotY, 0x7500);
         mpBgW->SetRideCallback(ride_call_back);
@@ -595,18 +593,18 @@ actor_method_class daObjPirateship::Method::Table = {
 };
 
 actor_process_profile_definition g_profile_Obj_Pirateship = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Pirateship,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Pirateship_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjPirateship::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Pirateship,
+    /* Draw Prio    */ fpcDwPi_Obj_Pirateship_e,
     /* Actor SubMtd */ &daObjPirateship::Method::Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

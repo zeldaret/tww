@@ -6,8 +6,8 @@
 class daTag_Gship_c : public fopAc_ac_c {
 public:
     enum Proc_e {
-        CLEAR_WAIT = 0,
-        CLEAR_EVENT
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1,
     };
 
     void modeProcInit(int) {}

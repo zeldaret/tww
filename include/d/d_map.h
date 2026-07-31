@@ -331,6 +331,12 @@ public:
     virtual void draw();
 };
 
+enum {
+    dMapIconDisp_NONE_e = 0,
+    dMapIconDisp_FREE_e = 1,
+    dMapIconDisp_SELF_e = 2,
+};
+
 class dMap_c {
 public:
     static u8 getMapAlpha() { return mAlpha; }
@@ -349,11 +355,11 @@ public:
     static void setMapDispPosLeftUpX(s16 x) { mDispPosLeftUpX = x; }
     static s16 getMapDspPosLeftUpY() { return mDispPosLeftUpY; }
     static void setMapDispPosLeftUpY(s16 y) { mDispPosLeftUpY = y; }
+    static s16 getMapDspSizeWidth() { return mDispSizeX; }
+    static s16 getMapDspSizeHeight() { return mDispSizeY; }
     static void setIconFreeScale(f32 scale) { mIconFreeScale = scale; }
     static void setIconSelfScale(f32 scale) { mIconSelfScale = scale; }
 
-    static void getMapDspSizeHeight() {}
-    static void getMapDspSizeWidth() {}
     static void getNowRoom() {}
     static void isMapDispTypeEnlargementSize() {}
     static void isMapDispTypeRealSize() {}

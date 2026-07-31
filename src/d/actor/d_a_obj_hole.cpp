@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hole.h"
-#include "d/res/res_aana.h"
+#include "res/Object/Aana.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -162,18 +160,18 @@ void daObj_Hole_c::modeProc(daObj_Hole_c::Proc_e proc, int newMode) {
         }
     };
 
-    if (proc == PROC_INIT) {
+    if (proc == PROC_INIT_e) {
         mMode = newMode;
         (this->*mode_tbl[mMode].init)();
     }
-    else if (proc == PROC_EXEC) {
+    else if (proc == PROC_EXEC_e) {
         (this->*mode_tbl[mMode].exec)();
     }
 }
 
 /* 000006C0-00000700       .text _execute__12daObj_Hole_cFv */
 bool daObj_Hole_c::_execute() {
-    modeProc(PROC_EXEC, MODE_NULL);
+    modeProc(PROC_EXEC_e, MODE_NULL);
     setMtx();
     return false;
 }
@@ -218,7 +216,7 @@ void daObj_Hole_c::createInit() {
 
 /* 00000864-00000928       .text _createHeap__12daObj_Hole_cFv */
 BOOL daObj_Hole_c::_createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, AANA_BDL_AANA);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AANA_BDL_AANA_e);
 
     JUT_ASSERT(0x13D, modelData != NULL);
 
@@ -256,7 +254,7 @@ cPhs_State daObj_Hole_c::_create() {
     if (result == cPhs_COMPLEATE_e)
 #endif
     {
-        fopAcM_SetupActor(this, daObj_Hole_c);
+        fopAcM_ct(this, daObj_Hole_c);
 
 #if VERSION > VERSION_DEMO
         result = dComIfG_resLoad(&mPhs, m_arc_name);
@@ -320,18 +318,18 @@ static actor_method_class daObj_HoleMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_HOLE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_HOLE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_HOLE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Hole_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_HOLE,
+    /* Draw Prio    */ fpcDwPi_OBJ_HOLE_e,
     /* Actor SubMtd */ &daObj_HoleMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

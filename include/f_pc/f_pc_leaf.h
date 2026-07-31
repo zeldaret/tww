@@ -6,6 +6,7 @@
 #include "f_pc/f_pc_draw_priority.h"
 #include "f_pc/f_pc_method.h"
 #include "f_pc/f_pc_profile.h"
+#include "f_pc/f_pc_name.h" // IWYU pragma: export
 
 typedef struct leafdraw_method_class {
     /* 0x00 */ process_method_class base;

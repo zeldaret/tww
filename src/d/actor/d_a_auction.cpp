@@ -9,10 +9,9 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_camera.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_pspl.h"
+#include "res/Object/Pspl.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include "d/d_auction_screen.h"
 
 struct NpcDatStruct {
     /* 0x00 */ f32 field_0x00;
@@ -49,18 +48,21 @@ static daAuction_HIO_c l_HIO;
 
 
 static daAuction_c::ItemData l_item_dat[] = {
-    {dItem_JOY_PENDANT_e, 0x1D10, 40, dSv_event_flag_c::UNK_0F01},
-    {dItem_COLLECT_MAP_27_e, 0x1D11, 5, dSv_event_flag_c::UNK_1080},
-    {dItem_COLLECT_MAP_18_e, 0x1D12, 60, dSv_event_flag_c::UNK_1040},
-    {dItem_HEART_PIECE_e, 0x1D13, 80, dSv_event_flag_c::UNK_1020},
+    {dItemNo_JOY_PENDANT_e, 0x1D10, 40, dSv_event_flag_c::UNK_0F01},
+    {dItemNo_COLLECT_MAP_27_e, 0x1D11, 5, dSv_event_flag_c::UNK_1080},
+    {dItemNo_COLLECT_MAP_18_e, 0x1D12, 60, dSv_event_flag_c::UNK_1040},
+    {dItemNo_HEART_PIECE_e, 0x1D13, 80, dSv_event_flag_c::UNK_1020},
 };
 
 static daAuction_c::ItemData l_item_dat2[] = {
-    {POSTMAN_STATUE, 0x1D14, 30, dSv_event_flag_c::UNK_1008},
-    {PRESIDENT_STATUE, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
+    {dItemNo_POSTMAN_STATUE_e, 0x1D14, 30, dSv_event_flag_c::UNK_1008},
+    {dItemNo_SHOP_GURU_STATUE_e, 0x1D15, 40, dSv_event_flag_c::UNK_1004},
 };
 
-static s16 l_item_dat22[] = {0x002A, 0x00F9};
+static s16 l_item_dat22[] = {
+    dItemNo_MAGIC_ARMOR_e,
+    dItemNo_COLLECT_MAP_06_e,
+};
 
 static NpcDatStruct l_npc_dat[7] = {
     {2.0f, 2.1f, 0x0, 0x0, 1000},
@@ -187,17 +189,6 @@ static daAuction_c::ProcFunc_t moveProc[] = {
     &daAuction_c::executeStart,
 };
 
-extern void dAuction_screen_delete();
-extern void dAuction_screen_slotShow();
-extern void dAuction_screen_slotHide();
-extern void dAuction_screen_gaugeHide();
-extern void dAuction_screen_gaugeShow();
-extern void dAuction_screen_gaugeUp();
-extern void dAuction_screen_gaugeDown();
-extern void dAuction_screen_talkStart();
-extern void dAuction_screen_talkEnd();
-extern fpc_ProcID dAuction_screen_create();
-
 /* 000000EC-000002FC       .text __ct__11daAuction_cFv */
 daAuction_c::daAuction_c() {
     for (int i = 0; i < 8; i++) {
@@ -236,7 +227,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000664-000006F4       .text _create__11daAuction_cFv */
 cPhs_State daAuction_c::_create() {
-    fopAcM_SetupActor(this, daAuction_c);
+    fopAcM_ct(this, daAuction_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Pspl");
 
@@ -253,7 +244,7 @@ cPhs_State daAuction_c::_create() {
 
 /* 000006F4-00000770       .text createHeap__11daAuction_cFv */
 BOOL daAuction_c::createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Pspl", PSPL_BDL_PSPL));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Pspl", dRes_ID_PSPL_BDL_PSPL_e));
 
     if (modelData == NULL) {
         return FALSE;
@@ -674,7 +665,7 @@ void daAuction_c::eventStartInit() {
     dAuction_screen_gaugeHide();
     dAuction_screen_talkEnd();
 
-    mCurrAuctionItemPID = fopAcM_create(PROC_ShopItem, l_item_dat[mCurrAuctionItemIndex].mItemID, &current.pos);
+    mCurrAuctionItemPID = fopAcM_create(fpcNm_ShopItem_e, l_item_dat[mCurrAuctionItemIndex].mItemID, &current.pos);
     dKy_custom_colset(0, 4, 1.0f);
 
     mLight.mPos.x = 0.0f;
@@ -969,9 +960,7 @@ void daAuction_c::eventMainKai() {
                 }
 
                 if (m81F == 4) {
-                    u8 tmp = m828;
-                    m829 = tmp;
-                    m827 = tmp;
+                    m827 = m829 = m828;
                     dComIfGp_setMessageCountNumber(m800);
                     dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
                 }
@@ -1079,9 +1068,7 @@ void daAuction_c::eventMainUri() {
                 }
 
                 if (m81F == 4) {
-                    u8 m828_val = m828;
-                    m829 = m828_val;
-                    m827 = m828_val;
+                    m827 = m829 = m828;
                     dComIfGp_setMessageCountNumber(m800);
                     dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
                 }
@@ -1154,9 +1141,7 @@ void daAuction_c::eventMainMsgEnd() {
 
 /* 0000294C-00002B90       .text eventMainMsgBikonC__11daAuction_cFv */
 void daAuction_c::eventMainMsgBikonC() {
-    u8 tmp = m828;
-    m829 = tmp;
-    m827 = tmp;
+    m827 = m829 = m828;
 
     dComIfGp_setMessageCountNumber(m800);
     dComIfGp_setNpcNameMessageID(l_npc_msg_dat[getAucMdlNo(m827)].field_0x00);
@@ -1169,7 +1154,7 @@ void daAuction_c::eventMainMsgBikonC() {
         m7A8 = getNpcActorP(m827)->current.pos;
         m7A8.y += getPiconDispOfs(m827);
 
-        dComIfGp_particle_set(dPa_name::ID_SCENE_8153, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_PF_BIKON01, &m7A8, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
         mTimer = 30;
 
         if (m827 == 0) {
@@ -1342,9 +1327,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         }
 
         m825 = m824;
-        u8 tmp = m827;
-        m826 = tmp;
-        m824 = tmp;
+        m824 = m826 = m827;
         if (m826 != 0) {
             setLinkAnm(daPy_demo_c::DEMO_N_WAIT_e);
         }
@@ -1370,9 +1353,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
             if (msgSetNo == 999) {
                 *pMsgNo = 0x1D24;
                 m825 = m824;
-                u8 tmp = m827;
-                m826 = tmp;
-                m824 = tmp;
+                m824 = m826 = m827;
             } else {
                 *pMsgNo = 0x1CF9;
                 m82C = 4;  // ?
@@ -1408,7 +1389,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         break;
 
     case 0x1D1F:
-        dComIfGp_setNextStage("sea", 3, 11);
+        dComIfGp_setNextStage("sea", 3, dIsleRoom_WindfallIsland_e);
     case 0x1D24:
         m82B = 1;
         msgStatus = fopMsgStts_MSG_ENDS_e;
@@ -1657,18 +1638,18 @@ static actor_method_class daAuctionMethodTable = {
 };
 
 actor_process_profile_definition g_profile_AUCTION = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_AUCTION,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_AUCTION_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daAuction_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_AUCTION,
+    /* Draw Prio    */ fpcDwPi_AUCTION_e,
     /* Actor SubMtd */ &daAuctionMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

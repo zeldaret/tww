@@ -4,7 +4,7 @@
 #include "dolphin/types.h"
 
 #define ARRAY_SIZE(o) (sizeof(o) / sizeof(o[0]))
-#define ARRAY_SSIZE(o) ((s32)(sizeof(o) / sizeof(o[0])))
+#define ARRAY_SSIZE(o) ((int)(sizeof(o) / sizeof(o[0])))
 
 // Align X to the previous N bytes (N must be power of two)
 #define ALIGN_PREV(X, N) ((X) & ~((N)-1))
@@ -71,6 +71,12 @@ extern void __sync();
 #elif VERSION == VERSION_PAL
     #define VERSION_SELECT(DEMO, JPN, USA, PAL) (PAL)
     #define DEMO_SELECT(DEMO, RETAIL) (RETAIL)
+#endif
+
+#ifdef __MWERKS__
+#define SJIS(character, value) character
+#else
+#define SJIS(character, value) ((u32)value)
 #endif
 
 #endif

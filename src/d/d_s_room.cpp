@@ -13,7 +13,6 @@
 #include "d/d_com_lib_game.h"
 #include "d/d_item_data.h"
 #include "d/d_map.h"
-#include "d/d_procname.h"
 #include "d/d_stage.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_npc_md.h"
@@ -72,7 +71,7 @@ void objectSetCheck(room_of_scene_class* i_this) {
 
     if (!i_this->mbReLoaded) {
         if (!hiddenFlag) {
-            fopAcM_create(PROC_BG, roomNo);
+            fopAcM_create(fpcNm_BG_e, roomNo);
             dStage_dt_c_roomReLoader(i_this->mpRoomData, i_this->mpRoomDt, roomNo);
             i_this->mbReLoaded = true;
         }
@@ -161,11 +160,15 @@ cPhs_State phase_1(room_of_scene_class* i_this) {
         return cPhs_INIT_e;
 
     const char * arcName = setArcName(i_this);
-    BOOL ret = dComIfG_setStageRes(arcName, pHeap);
-    if (!ret) {
+    BOOL rt = dComIfG_setStageRes(arcName, pHeap);
+#if VERSION == VERSION_DEMO
+    JUT_ASSERT(380, rt == TRUE);
+#else
+    if (!rt) {
         dStage_escapeRestart();
         return cPhs_ERROR_e;
     }
+#endif
 
     return cPhs_NEXT_e;
 }
@@ -174,12 +177,14 @@ cPhs_State phase_1(room_of_scene_class* i_this) {
 cPhs_State phase_2(room_of_scene_class* i_this) {
     const char * arcName = setArcName(i_this);
     s32 rt = dComIfG_syncStageRes(arcName);
+#if VERSION > VERSION_DEMO
     if (rt < 0) {
         dStage_escapeRestart();
         return cPhs_ERROR_e;
     }
+#endif
 
-    JUT_ASSERT(0x1c0, rt >= 0);
+    JUT_ASSERT(DEMO_SELECT(394, 448), rt >= 0);
     if (rt != 0)
         return cPhs_INIT_e;
 
@@ -204,7 +209,7 @@ cPhs_State phase_2(room_of_scene_class* i_this) {
                     u32 layerNo = dComIfG_play_c::getLayerNo(roomNo);
                     s32 bank = banks[layerNo];
                     if (bank != 0xFF) {
-                        JUT_ASSERT(0x1db, 0 <= bank && bank < 100);
+                        JUT_ASSERT(DEMO_SELECT(421, 475), 0 <= bank && bank < 100);
                         sprintf(dStage_roomControl_c::mDemoArcName, "Demo%02d", bank);
                         if (!dComIfG_setObjectRes(dStage_roomControl_c::mDemoArcName, JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL))
                             dStage_roomControl_c::mDemoArcName[0] = '\0';
@@ -214,7 +219,7 @@ cPhs_State phase_2(room_of_scene_class* i_this) {
         }
 
         dStage_FileList_dt_c * fileList = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
-        JUT_ASSERT(499, fileList != NULL);
+        JUT_ASSERT(DEMO_SELECT(445, 499), fileList != NULL);
 
         u8 particleNo = dStage_FileList_dt_GetParticleNo(fileList);
         i_this->mbHasRoomParticle = dComIfGp_particle_readScene(particleNo, &i_this->sceneCommand);
@@ -228,7 +233,9 @@ cPhs_State phase_3(room_of_scene_class* i_this) {
     if (dStage_roomControl_c::getDemoArcName()[0] != '\0') {
         s32 rt = dComIfG_syncObjectRes(dStage_roomControl_c::getDemoArcName());
         if (rt < 0) {
+#if VERSION > VERSION_DEMO
             dStage_escapeRestart();
+#endif
             return cPhs_ERROR_e;
         } else if (rt > 0) {
             return cPhs_INIT_e;
@@ -239,7 +246,7 @@ cPhs_State phase_3(room_of_scene_class* i_this) {
         if (i_this->sceneCommand->sync() == 0)
             return cPhs_INIT_e;
 
-        JUT_ASSERT(0x215, i_this->sceneCommand->getMemAddress() != NULL);
+        JUT_ASSERT(DEMO_SELECT(477, 533), i_this->sceneCommand->getMemAddress() != NULL);
         dComIfGp_particle_createRoomScene(i_this->sceneCommand->getMemAddress());
         delete i_this->sceneCommand;
     }
@@ -257,10 +264,10 @@ cPhs_State phase_4(room_of_scene_class* i_this) {
 
     setMapImage(i_this);
 
-    if (dComIfGs_checkGetItem(dItem_PEARL_DIN_e))
+    if (dComIfGs_checkGetItem(dItemNo_PEARL_DIN_e))
         i_this->field_0x1dc = 1;
 
-    if (strcmp(dComIfGp_getStartStageName(), "Omori") == 0 && dComIfGs_checkGetItem(dItem_PEARL_FARORE_e))
+    if (strcmp(dComIfGp_getStartStageName(), "Omori") == 0 && dComIfGs_checkGetItem(dItemNo_PEARL_FARORE_e))
         i_this->field_0x1dc = 2;
 
     // Bug? The game seems to set these flags for DRI even when you're not on the sea stage.
@@ -288,7 +295,7 @@ static cPhs_State dScnRoom_Create(scene_class* i_scn) {
     return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }
 
-scene_method_class l_dScnRoom_Method = {
+static scene_method_class l_dScnRoom_Method = {
     (process_method_func)dScnRoom_Create,
     (process_method_func)dScnRoom_Delete,
     (process_method_func)dScnRoom_Execute,
@@ -297,13 +304,13 @@ scene_method_class l_dScnRoom_Method = {
 };
 
 scene_process_profile_definition g_profile_ROOM_SCENE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ROOM_SCENE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ROOM_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(room_of_scene_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnRoom_Method,

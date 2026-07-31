@@ -3,8 +3,8 @@
 
 #include "f_op/f_op_actor.h"
 
-class kytag00_class : public fopAc_ac_c {
-public:
+struct kytag00_class {
+    /* 0x000 */ fopAc_ac_c actor;
     /* 0x290 */ u32 field_0x290;
     /* 0x294 */ u8 mbEfSet;
     /* 0x295 */ u8 mbPselSet;

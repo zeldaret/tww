@@ -13,7 +13,6 @@ struct cM3dGSphS {
 };  // Size: 0x10
 
 class cM3dGSph {
-private:
 public:
     /* 0x00 */ cXyz mCenter;
     /* 0x0C */ f32 mRadius;

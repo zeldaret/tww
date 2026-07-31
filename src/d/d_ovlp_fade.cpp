@@ -5,11 +5,9 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ovlp_fade.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_overlap.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_pc/f_pc_manager.h"
-#include "d/d_procname.h"
 #include "m_Do/m_Do_graphic.h"
 
 BOOL (*dOvlpFd_execute_f)(overlap1_class*);
@@ -22,7 +20,7 @@ static BOOL dOvlpFd_Draw(overlap1_class* i_this) {
 /* 802235D4-802236AC       .text dOvlpFd_FadeOut__FP14overlap1_class */
 BOOL dOvlpFd_FadeOut(overlap1_class* i_this) {
     if (i_this->mFadeOutTime == 0) {
-        if (fpcM_GetProfName(i_this) != PROC_OVERLAP6) {
+        if (fpcM_GetProfName(i_this) != fpcNm_OVERLAP6_e) {
             if (!JFWDisplay::getManager()->getFader()->startFadeIn(26))
                 return TRUE;
             i_this->mFadeOutTime = 26;
@@ -61,7 +59,7 @@ BOOL dOvlpFd_Wait(overlap1_class* i_this) {
 BOOL dOvlpFd_FadeIn(overlap1_class* i_this) {
     if (i_this->mFadeInTime == 0) {
         i_this->mFadeInTime = 26;
-        if (fpcM_GetProfName(i_this) == PROC_OVERLAP0 || fpcM_GetProfName(i_this) == PROC_OVERLAP7) {
+        if (fpcM_GetProfName(i_this) == fpcNm_OVERLAP0_e || fpcM_GetProfName(i_this) == fpcNm_OVERLAP7_e) {
             mDoGph_gInf_c::startFadeOut(26);
         }
     }
@@ -101,7 +99,7 @@ static cPhs_State dOvlpFd_Create(void* i_this) {
 #endif
 }
 
-overlap_method_class l_dOvlpFd_Method = {
+static overlap_method_class l_dOvlpFd_Method = {
     (process_method_func)dOvlpFd_Create,
     (process_method_func)dOvlpFd_Delete,
     (process_method_func)dOvlpFd_Execute,
@@ -110,71 +108,71 @@ overlap_method_class l_dOvlpFd_Method = {
 };
 
 overlap_process_profile_definition g_profile_OVERLAP0 = {
-    fpcLy_ROOT_e,
-    0,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP0,
-    &g_fpcLf_Method.base,
-    sizeof(overlap1_class),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    PRIO_OVERLAP0,
-    &l_dOvlpFd_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 0,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP0_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(overlap1_class),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP0_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };
 
 overlap_process_profile_definition g_profile_OVERLAP1 = {
-    fpcLy_ROOT_e,
-    0,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP1,
-    &g_fpcLf_Method.base,
-    sizeof(overlap1_class),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    PRIO_OVERLAP1,
-    &l_dOvlpFd_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 0,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP1_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(overlap1_class),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP1_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };
 
 overlap_process_profile_definition g_profile_OVERLAP6 = {
-    fpcLy_ROOT_e,
-    0,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP6,
-    &g_fpcLf_Method.base,
-    sizeof(overlap1_class),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    PRIO_OVERLAP6,
-    &l_dOvlpFd_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 0,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP6_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(overlap1_class),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP6_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };
 
 overlap_process_profile_definition g_profile_OVERLAP7 = {
-    fpcLy_ROOT_e,
-    0,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP7,
-    &g_fpcLf_Method.base,
-    sizeof(overlap1_class),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    PRIO_OVERLAP7,
-    &l_dOvlpFd_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 0,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP7_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(overlap1_class),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP7_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };
 
 overlap_process_profile_definition g_profile_OVERLAP8 = {
-    fpcLy_ROOT_e,
-    0,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP8,
-    &g_fpcLf_Method.base,
-    sizeof(overlap1_class),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    PRIO_OVERLAP8,
-    &l_dOvlpFd_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 0,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP8_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(overlap1_class),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP8_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd_Method,
 };

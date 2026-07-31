@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kk1.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 class daTag_Kk1_HIO_c : public JORReflexible {
 public:
@@ -48,12 +46,12 @@ BOOL daTag_Kk1_c::createInit() {
 }
 
 /* 00000128-00000130       .text _draw__11daTag_Kk1_cFv */
-bool daTag_Kk1_c::_draw() {
+BOOL daTag_Kk1_c::_draw() {
     return true;
 }
 
 /* 00000130-0000024C       .text _execute__11daTag_Kk1_cFv */
-bool daTag_Kk1_c::_execute() {
+BOOL daTag_Kk1_c::_execute() {
     f32 distance = current.pos.abs(dComIfGp_getPlayer(0)->current.pos);
     f32 vert_distance = dComIfGp_getPlayer(0)->current.pos.y - current.pos.y;
     mTagSet = false;
@@ -69,7 +67,7 @@ bool daTag_Kk1_c::_execute() {
 
 
 /* 0000024C-000002A0       .text _delete__11daTag_Kk1_cFv */
-bool daTag_Kk1_c::_delete() {
+BOOL daTag_Kk1_c::_delete() {
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
         l_HIO.mNo = -1;
@@ -82,10 +80,10 @@ cPhs_State daTag_Kk1_c::_create() {
     u32 name_int = 0;
     s32 o_phsState = cPhs_COMPLEATE_e;
 
-    fopAcM_SetupActor(this, daTag_Kk1_c);
+    fopAcM_ct(this, daTag_Kk1_c);
 
     switch(fopAcM_GetName(this)){
-        case PROC_TAG_KK1:
+        case fpcNm_TAG_KK1_e:
             mNameIsWrong = false;
             break;
         default:
@@ -107,22 +105,22 @@ cPhs_State daTag_Kk1_c::_create() {
 
 /* 00000694-000006B4       .text daTag_Kk1_Create__FP10fopAc_ac_c */
 static cPhs_State daTag_Kk1_Create(fopAc_ac_c* obj) {
-    (static_cast<daTag_Kk1_c*>(obj))->_create();
+    return (static_cast<daTag_Kk1_c*>(obj))->_create();
 }
 
 /* 000006B4-000006D4       .text daTag_Kk1_Delete__FP11daTag_Kk1_c */
 static BOOL daTag_Kk1_Delete(daTag_Kk1_c* obj) {
-    (static_cast<daTag_Kk1_c*>(obj))->_delete();
+    return (static_cast<daTag_Kk1_c*>(obj))->_delete();
 }
 
 /* 000006D4-000006F4       .text daTag_Kk1_Execute__FP11daTag_Kk1_c */
 static BOOL daTag_Kk1_Execute(daTag_Kk1_c* obj) {
-    (static_cast<daTag_Kk1_c*>(obj))->_execute();
+    return (static_cast<daTag_Kk1_c*>(obj))->_execute();
 }
 
 /* 000006F4-00000714       .text daTag_Kk1_Draw__FP11daTag_Kk1_c */
 static BOOL daTag_Kk1_Draw(daTag_Kk1_c* obj) {
-    (static_cast<daTag_Kk1_c*>(obj))->_draw();
+    return (static_cast<daTag_Kk1_c*>(obj))->_draw();
 }
 
 /* 00000714-0000071C       .text daTag_Kk1_IsDelete__FP11daTag_Kk1_c */
@@ -139,18 +137,18 @@ static actor_method_class l_daTag_Kk1_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_KK1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_KK1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_KK1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Kk1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_KK1,
+    /* Draw Prio    */ fpcDwPi_TAG_KK1_e,
     /* Actor SubMtd */ &l_daTag_Kk1_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

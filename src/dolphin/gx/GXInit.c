@@ -308,7 +308,7 @@ void __GXInitGX(void) {
     GXLoadTexMtxImm(ident, GX_IDENTITY, GX_MTX3x4);
     GXLoadTexMtxImm(ident, GX_PTIDENTITY, GX_MTX3x4);
 
-    GXSetViewport(0.0f, 0.0f, renderObj->fb_width, renderObj->xfb_height, 0.0f, 1.0f);
+    GXSetViewport(0.0f, 0.0f, renderObj->fbWidth, renderObj->xfbHeight, 0.0f, 1.0f);
 
     GXSetProjectionv(GXDefaultProjData);
 
@@ -316,7 +316,7 @@ void __GXInitGX(void) {
     GXSetCullMode(GX_CULL_BACK);
     GXSetClipMode(GX_CLIP_ENABLE);
 
-    GXSetScissor(0, 0, renderObj->fb_width, renderObj->efb_height);
+    GXSetScissor(0, 0, renderObj->fbWidth, renderObj->efbHeight);
     GXSetScissorBoxOffset(0, 0);
 
     GXSetNumChans(0);
@@ -399,11 +399,11 @@ void __GXInitGX(void) {
     GXSetFieldMask(GX_TRUE, GX_TRUE);
     GXSetFieldMode(
         (GXBool)renderObj->field_rendering,
-        (GXBool)((renderObj->vi_height == 2 * renderObj->xfb_height) ? GX_TRUE : GX_FALSE));
+        (GXBool)((renderObj->viHeight == 2 * renderObj->xfbHeight) ? GX_TRUE : GX_FALSE));
 
-    GXSetDispCopySrc(0, 0, renderObj->fb_width, renderObj->efb_height);
-    GXSetDispCopyDst(renderObj->fb_width, renderObj->efb_height);
-    GXSetDispCopyYScale((f32)renderObj->xfb_height / (f32)renderObj->efb_height);
+    GXSetDispCopySrc(0, 0, renderObj->fbWidth, renderObj->efbHeight);
+    GXSetDispCopyDst(renderObj->fbWidth, renderObj->efbHeight);
+    GXSetDispCopyYScale((f32)renderObj->xfbHeight / (f32)renderObj->efbHeight);
     GXSetCopyClamp(GX_CLAMP_BOTH);
 
     GXSetCopyFilter(renderObj->antialiasing, renderObj->sample_pattern, GX_TRUE,

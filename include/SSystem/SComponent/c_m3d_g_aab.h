@@ -98,10 +98,18 @@ public:
         }
     }
     bool UnderPlaneYUnder(f32 y) const {
-        return mMin.y < y;
+        if (mMin.y < y) {
+            return true;
+        } else {
+            return false;
+        }
     }
     bool TopPlaneYUnder(f32 y) const {
-        return mMax.y < y;
+        if (mMax.y < y) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     void Cross(const cM3dGAab*) const {}

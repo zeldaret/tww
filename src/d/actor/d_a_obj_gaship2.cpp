@@ -5,12 +5,10 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gaship2.h"
-#include "d/res/res_yakerom.h"
+#include "res/Object/YakeRom.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_mtx.h"
 
 const char daObjGaship2::Act_c::M_arcname[] = "YakeRom";
@@ -25,26 +23,35 @@ bool daObjGaship2::Act_c::create_heap() {
     J3DModelData *mdl_data;
     cBgD_t *bgw_data;
 
-    mdl_data = (J3DModelData *) (dComIfG_getObjectRes(M_arcname, YAKEROM_BDL_YAKEROM));
-    JUT_ASSERT(0x5A, mdl_data != NULL);
+    mdl_data = (J3DModelData *) (dComIfG_getObjectRes(M_arcname, dRes_INDEX_YAKEROM_BDL_YAKEROM_e));
+    JUT_ASSERT(90, mdl_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11000002);
     set_mtx();
-    bgw_data = (cBgD_t *) (dComIfG_getObjectRes(M_arcname, YAKEROM_DZB_YAKEROM));
-    JUT_ASSERT(0x67, bgw_data != NULL);
-    if (bgw_data != NULL) {
+    bgw_data = (cBgD_t *) (dComIfG_getObjectRes(M_arcname, dRes_INDEX_YAKEROM_DZB_YAKEROM_e));
+    JUT_ASSERT(103, bgw_data != NULL);
+#if VERSION > VERSION_DEMO
+    if (bgw_data != NULL)
+#endif
+    {
         mpBgW = new dBgW();
         if (mpBgW != NULL && (mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx) == true)) {
+#if VERSION > VERSION_DEMO
             return false;
+#endif
         }
     }
 
+#if VERSION == VERSION_DEMO
+    return mdl_data != NULL && bgw_data != NULL && mpBgW != NULL;
+#else
     return mdl_data != NULL && mpModel != NULL && bgw_data != NULL && mpBgW != NULL;
+#endif
 }
 
 /* 00000220-000002F8       .text _create__Q212daObjGaship25Act_cFv */
 cPhs_State daObjGaship2::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mphs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
@@ -60,7 +67,10 @@ cPhs_State daObjGaship2::Act_c::_create() {
 
 /* 000002F8-00000384       .text _delete__Q212daObjGaship25Act_cFv */
 bool daObjGaship2::Act_c::_delete() {
-    if (heap != NULL && mpBgW != NULL) {
+#if VERSION > VERSION_DEMO
+    if (heap != NULL && mpBgW != NULL)
+#endif
+    {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
         }
@@ -131,18 +141,18 @@ namespace daObjGaship2 {
 }
 
 actor_process_profile_definition g_profile_Obj_Gaship2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Gaship2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Gaship2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGaship2::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gaship2,
+    /* Draw Prio    */ fpcDwPi_Obj_Gaship2_e,
     /* Actor SubMtd */ &daObjGaship2::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

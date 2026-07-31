@@ -15,8 +15,8 @@
 class daObj_Ikada_c : public fopAc_ac_c {
 public:
     enum Proc_e {
-        PROC_00_e = 0,
-        PROC_01_e = 1,
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1,
     };
 
     void getCranePos() {}
@@ -27,7 +27,7 @@ public:
     bool isCrane() {return mType == 4; }
     bool isFlag() { return mType == 0 || mType == 4; }
     bool isWave() { return mType == 4 || mType == 3 || mType == 1; }
-    void modeProcInit(int idx) { modeProc(PROC_00_e, idx); }
+    void modeProcInit(int idx) { modeProc(PROC_INIT_e, idx); }
     void setInitPos() {}
     void setStart() {}
     void setStop() {}

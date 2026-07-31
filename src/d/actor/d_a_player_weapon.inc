@@ -18,12 +18,12 @@
 /* 80153554-801535D8       .text setEnemyWeaponAtParam__9daPy_lk_cFi */
 void daPy_lk_c::setEnemyWeaponAtParam(BOOL r4) {
     static const u8 cut_type[] = {
-        /* daBoko_c::Type_STICK_e    */ 0x0B,
-        /* daBoko_c::Type_MACHETE_e  */ 0x0D,
-        /* daBoko_c::Type_CLUB_e     */ 0x14,
-        /* daBoko_c::Type_DN_SWORD_e */ 0x16,
-        /* daBoko_c::Type_SPEAR_e    */ 0x18,
-        /* daBoko_c::Type_PG_SWORD_e */ 0x1C,
+        /* daBoko_c::Type_STICK_e    */ CUT_TYPE_STICK,
+        /* daBoko_c::Type_MACHETE_e  */ CUT_TYPE_MACHETE,
+        /* daBoko_c::Type_CLUB_e     */ CUT_TYPE_CLUB,
+        /* daBoko_c::Type_DN_SWORD_e */ CUT_TYPE_DN_SWORD,
+        /* daBoko_c::Type_SPEAR_e    */ CUT_TYPE_SPEAR,
+        /* daBoko_c::Type_PG_SWORD_e */ CUT_TYPE_PG_SWORD,
     };
     daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
     u8 cutType = cut_type[fopAcM_GetParam(boko)];
@@ -59,15 +59,15 @@ BOOL daPy_lk_c::procWeaponNormalSwing_init() {
     m34C2 = 1;
     voiceStart(1);
     if (checkAttentionLock() || mStickDistance <= 0.05f) {
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        mProcVar2.m34D4 = m34E8;
     }
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWORD_SWING_e);
     m351E = m34DC;
-    setBlurPosResource(LKANM__CUTBOKO_POS);
-    setEnemyWeaponAtParam(0);
-    m34D0 = m_HIO->mCut.mCutBoko.m.field_0x4;
+    setBlurPosResource(dRes_INDEX_LKANM__CUTBOKO_POS_e);
+    setEnemyWeaponAtParam(FALSE);
+    mProcVar0.m34D0 = m_HIO->mCut.mCutBoko.m.field_0x4;
 
     return true;
 }
@@ -83,26 +83,26 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
     }
     if (frameCtrl.getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
         if (mActorKeepEquip.getActor() == NULL) {
-            m34D0 = 0;
+            mProcVar0.m34D0 = 0;
             offNoResetFlg0(daPyFlg0_UNK4);
         }
-        if (m34D0 > 0) {
-            m34D0--;
+        if (mProcVar0.m34D0 > 0) {
+            mProcVar0.m34D0--;
         } else {
-            mVelocity = 0.0f;
+            mNormalSpeed = 0.0f;
             mDirection = DIR_RIGHT;
             checkNextMode(0);
             return true;
         }
     } else if (frameCtrl.getFrame() > m_HIO->mCut.mCutBoko.m.field_0x1C) {
-        f32 dVar4 = mVelocity;
+        f32 dVar4 = mNormalSpeed;
         u8 orig_direction = mDirection;
-        mVelocity = 0.0f;
+        mNormalSpeed = 0.0f;
         mDirection = DIR_RIGHT;
         if (checkNextMode(1)) {
             return true;
         }
-        mVelocity = dVar4;
+        mNormalSpeed = dVar4;
         mDirection = orig_direction;
     }
 
@@ -113,11 +113,11 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
     m34C2 = 1;
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -126,7 +126,7 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
 
     current.angle.y = shape_angle.y;
     if (frameCtrl.checkPass(m_HIO->mCut.mCutBoko.m.field_0x38)) {
-        mVelocity = std::fabsf(speedF) * m_HIO->mCut.mCutBoko.m.field_0x20 + m_HIO->mCut.mCutBoko.m.field_0x24;
+        mNormalSpeed = std::fabsf(speedF) * m_HIO->mCut.mCutBoko.m.field_0x20 + m_HIO->mCut.mCutBoko.m.field_0x24;
     }
     if (frameCtrl.checkPass(m_HIO->mCut.mCutBoko.m.field_0x3C)) {
         frameCtrl.setRate(m_HIO->mCut.mCutBoko.m.field_0x14);
@@ -141,7 +141,7 @@ BOOL daPy_lk_c::procWeaponNormalSwing() {
         onResetFlg0(daPyRFlg0_UNK2);
     }
     cLib_addCalc(
-        &mVelocity,
+        &mNormalSpeed,
         0.0f,
         m_HIO->mCut.mCutBoko.m.field_0x30,
         m_HIO->mCut.mCutBoko.m.field_0x28,
@@ -162,11 +162,11 @@ BOOL daPy_lk_c::procWeaponSideSwing_init() {
         m_HIO->mCut.mCutBoko.m.field_0x54
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     voiceStart(1);
-    m34D4 = shape_angle.y;
-    setBlurPosResource(LKANM__HAMMERSIDE_POS);
-    setEnemyWeaponAtParam(0);
+    mProcVar2.m34D4 = shape_angle.y;
+    setBlurPosResource(dRes_INDEX_LKANM__HAMMERSIDE_POS_e);
+    setEnemyWeaponAtParam(FALSE);
     return true;
 }
 
@@ -179,21 +179,21 @@ BOOL daPy_lk_c::procWeaponSideSwing() {
     }
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
-        mVelocity = 0.0f;
+        mNormalSpeed = 0.0f;
         mDirection = DIR_RIGHT;
         checkNextMode(0);
         return true;
     }
 
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mCut.mCutBoko.m.field_0x50) {
-        f32 dVar4 = mVelocity;
+        f32 dVar4 = mNormalSpeed;
         u8 orig_direction = mDirection;
-        mVelocity = 0.0f;
+        mNormalSpeed = 0.0f;
         mDirection = DIR_RIGHT;
         if (checkNextMode(1)) {
             return true;
         }
-        mVelocity = dVar4;
+        mNormalSpeed = dVar4;
         mDirection = orig_direction;
     }
 
@@ -203,11 +203,11 @@ BOOL daPy_lk_c::procWeaponSideSwing() {
 
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -238,33 +238,39 @@ BOOL daPy_lk_c::procWeaponFrontSwingReady_init() {
         m_HIO->mCut.mCutBoko.m.field_0x68
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     if (checkAttentionLock() || mStickDistance <= 0.05f) {
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        mProcVar2.m34D4 = m34E8;
     }
-    setEnemyWeaponAtParam(0);
+    setEnemyWeaponAtParam(FALSE);
     voiceStart(7);
     return true;
 }
 
 /* 80153D1C-80153DBC       .text procWeaponFrontSwingReady__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponFrontSwingReady() {
+#if VERSION == VERSION_DEMO
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
+        return procWeaponFrontSwing_init();
+    }
+#else
     if (mActorKeepEquip.getActor() == NULL) {
         return checkNextMode(0);
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         return procWeaponFrontSwing_init();
     }
+#endif
 
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -286,40 +292,46 @@ BOOL daPy_lk_c::procWeaponFrontSwing_init() {
         0.0f
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     voiceStart(1);
     if (checkAttentionLock() || mStickDistance <= 0.05f) {
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
-        m34D4 = m34E8;
+        mProcVar2.m34D4 = m34E8;
     }
-    m34D4 = shape_angle.y;
-    setBlurPosResource(LKANM__HAMMERFRONT_POS);
-    setEnemyWeaponAtParam(0);
+    mProcVar2.m34D4 = shape_angle.y;
+    setBlurPosResource(dRes_INDEX_LKANM__HAMMERFRONT_POS_e);
+    setEnemyWeaponAtParam(FALSE);
     onResetFlg0(daPy_RFLG0(daPyRFlg0_UNK1 | daPyRFlg0_UNK2));
-    m34D0 = 0;
+    mProcVar0.m34D0 = 0;
     return true;
 }
 
 /* 80153ED8-80153FA0       .text procWeaponFrontSwing__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWeaponFrontSwing() {
+#if VERSION == VERSION_DEMO
+    if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f || mActorKeepEquip.getActor() == NULL) {
+        return procWeaponFrontSwingEnd_init();
+    }
+#else
     if (mActorKeepEquip.getActor() == NULL) {
         return checkNextMode(0);
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         return procWeaponFrontSwingEnd_init();
     }
+#endif
     if (changeCutReverseProc(ANM_CUTREL)) {
         return true;
     }
 
     if (mpAttnActorLockOn != NULL) {
         setShapeAngleToAtnActor();
-        m34D4 = shape_angle.y;
+        mProcVar2.m34D4 = shape_angle.y;
     } else {
         cLib_addCalcAngleS(
             &shape_angle.y,
-            m34D4,
+            mProcVar2.m34D4,
             m_HIO->mTurn.m.field_0x4,
             m_HIO->mTurn.m.field_0x0,
             m_HIO->mTurn.m.field_0x2
@@ -341,8 +353,8 @@ BOOL daPy_lk_c::procWeaponFrontSwingEnd_init() {
         m_HIO->mCut.mCutBoko.m.field_0x80
     );
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
-    setEnemyWeaponAtParam(0);
+    mNormalSpeed = 0.0f;
+    setEnemyWeaponAtParam(FALSE);
     return true;
 }
 
@@ -368,7 +380,7 @@ BOOL daPy_lk_c::procWeaponThrow_init() {
     commonProcInit(daPyProc_WEAPON_THROW_e);
     setSingleMoveAnime(ANM_CUTA, 1.0f, 0.0f, -1, 5.0f);
     current.angle.y = shape_angle.y;
-    mVelocity = 0.0f;
+    mNormalSpeed = 0.0f;
     m34C2 = 1;
     return true;
 }

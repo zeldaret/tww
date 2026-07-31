@@ -14,8 +14,8 @@ struct daObjTpost_c__letter_data {
 class daObjTpost_c : public fopNpc_npc_c {
 public:
     enum Proc_e {
-        PROC_INIT = 0,
-        PROC_EXEC = 1
+        PROC_INIT_e = 0,
+        PROC_EXEC_e = 1
     };
 
     enum Mode {
@@ -44,7 +44,7 @@ public:
     void eventSet(s8 eventIdx) { mEventIdx = eventIdx; }
     int getSendPrice() { return m_send_price[mPayType]; }
     bool isAnm(s8 idx) { return mAnmPrmIdx == idx; }
-    void modeProcInit(int newMode) { modeProc(PROC_INIT, newMode); }
+    void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
 
     BOOL _createHeap();
     void cutProc();

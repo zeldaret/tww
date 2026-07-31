@@ -67,7 +67,7 @@ public:
 class daObj_PfallHIO_c {
 public:
     daObj_PfallHIO_c();
-    virtual ~daObj_PfallHIO_c() {mNo = -1;}
+    virtual ~daObj_PfallHIO_c() { mNo = -1; }
 
 public:
     /* 0x04 */ s8 mNo;

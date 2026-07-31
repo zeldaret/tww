@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_mflft.h"
-#include "d/res/res_mflft.h"
-#include "d/res/res_always.h"
+#include "res/Object/Mflft.h"
+#include "res/Object/Always.h"
 #include "d/d_bg_w.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
 #include "d/d_kankyo_wether.h"
@@ -105,7 +103,7 @@ void kikuzu_set(mflft_class* i_this, cXyz* arg1) {
     sp18.y -= -0x8000;
 
     JPABaseEmitter* pJVar4 = dComIfGp_particle_set(
-        dPa_name::ID_COMMON_002B, arg1, &sp18, NULL, 0xff, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL
+        dPa_name::ID_AK_JN_ELEMENTKIKUZU00, arg1, &sp18, NULL, 0xff, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL
     );
     if (pJVar4 != NULL) {
         pJVar4->setRate(10.0f);
@@ -304,7 +302,7 @@ void mflft_move(mflft_class* i_this) {
             if (i_this->actor.speed.y < -50.0f) {
                 i_this->m2C4 = 2000.0f;
                 i_this->m2BC = 2000.0f;
-                dComIfGp_particle_set(dPa_name::ID_SCENE_8231, &i_this->actor.current.pos, &i_this->actor.shape_angle);
+                dComIfGp_particle_set(dPa_name::ID_AK_SN_MAGMALIFTSPLASH00, &i_this->actor.current.pos, &i_this->actor.shape_angle);
                 fopAcM_seStartCurrent(&i_this->actor, JA_SE_OBJ_BAL_LIFT_LANDING, 0);
                 dComIfGp_getVibration().StartShock(REG0_S(2) + DEMO_SELECT(4, 5), -0x21, cXyz(0.0f, 1.0f, 0.0f));
             }
@@ -380,7 +378,7 @@ void himo_move(mflft_class* i_this) {
                 if (ccAtInfo.mpActor != NULL) {
                     sp48 = i_this->m2D8[i];
                     sp48.y = ccAtInfo.mpActor->eyePos.y;
-                    dComIfGp_particle_set(dPa_name::ID_COMMON_NORMAL_HIT, &sp48, &player->shape_angle);
+                    dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, &sp48, &player->shape_angle);
                     kikuzu_set(i_this, &sp48);
                     mDoAud_seStart(soundId, &ccAtInfo.mpActor->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(&i_this->actor)));
                 }
@@ -412,7 +410,7 @@ void eff_cont(mflft_class* i_this) {
         break;
 
     case 1:
-        i_this->m774 = dComIfGp_particle_set(dPa_name::ID_SCENE_8105, &sp24);
+        i_this->m774 = dComIfGp_particle_set(dPa_name::ID_AK_SN_MAGMAISLAND01, &sp24);
         if (i_this->m774 != NULL) {
             cXyz s(1.8f, 1.8f, 1.8f);
             i_this->m774->setGlobalScale(s);
@@ -545,7 +543,7 @@ static BOOL daMflft_Delete(mflft_class* i_this) {
 static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     mflft_class* actor = (mflft_class*)a_this;
 
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Mflft", MFLFT_BDL_MFLFT);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Mflft", dRes_INDEX_MFLFT_BDL_MFLFT_e);
     actor->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (actor->mpModel == NULL) {
         return FALSE;
@@ -556,10 +554,10 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     actor->pm_bgw = new dBgW();
     JUT_ASSERT(DEMO_SELECT(1047, 1058), actor->pm_bgw != NULL);
 
-    actor->pm_bgw->Set((cBgD_t*)dComIfG_getObjectRes("Mflft", MFLFT_DZB_MFLFT), dBgW::MOVE_BG_e, &actor->m700);
+    actor->pm_bgw->Set((cBgD_t*)dComIfG_getObjectRes("Mflft", dRes_INDEX_MFLFT_DZB_MFLFT_e), dBgW::MOVE_BG_e, &actor->m700);
     actor->pm_bgw->SetCrrFunc(dBgS_MoveBGProc_Typical);
     actor->pm_bgw->SetRideCallback(ride_call_back);
-    if (!actor->mLineMat.init(6, 10, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE), 1)) {
+    if (!actor->mLineMat.init(6, 10, (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e), 1)) {
         return FALSE;
     }
     return TRUE;
@@ -599,7 +597,7 @@ static cPhs_State daMflft_Create(fopAc_ac_c* a_this) {
 
     mflft_class* i_this = (mflft_class*)a_this;
 
-    fopAcM_SetupActor(&i_this->actor, mflft_class);
+    fopAcM_ct(&i_this->actor, mflft_class);
 
     cPhs_State PVar2 = dComIfG_resLoad(&i_this->mPhase, "Mflft");
     if (PVar2 == cPhs_COMPLEATE_e) {
@@ -688,18 +686,18 @@ static actor_method_class l_daMflft_Method = {
 };
 
 actor_process_profile_definition g_profile_MFLFT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MFLFT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MFLFT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(mflft_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_MFLFT,
+    /* Draw Prio    */ fpcDwPi_MFLFT_e,
     /* Actor SubMtd */ &l_daMflft_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

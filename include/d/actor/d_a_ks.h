@@ -4,8 +4,8 @@
 #include "f_op/f_op_actor.h"
 #include "c/c_damagereaction.h"
 
-class ks_class : public fopEn_enemy_c {
-public:
+struct ks_class {
+    /* 0x000 */ fopEn_enemy_c actor;
     /* 0x2AC */ request_of_phase_process_class mPhs;
     /* 0x2B4 */ mDoExt_McaMorf* mpBodyMorf;
     /* 0x2B8 */ mDoExt_McaMorf* mpEyeMorf;

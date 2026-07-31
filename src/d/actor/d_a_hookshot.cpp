@@ -10,42 +10,13 @@
 #include "SSystem/SComponent/c_counter.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h" // IWYU pragma: keep
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 #include "assets/l_chainS3TCTEX__d_hookshot.h"
 const u16 l_chainS3TCTEX__width = 32;
 const u16 l_chainS3TCTEX__height = 32;
 
-static Vec l_pos[] = {
-    {-2.0f, 1.522254f, -0.0f},
-    {-2.0f, 1.522254f, 7.0f},
-    {2.0f, 1.522254f, -0.0f},
-    {-3.5f, 0.0f, -1.5f},
-    {-3.5f, 0.0f, 8.5f},
-    {3.5f, 0.0f, -1.5f},
-    {-2.0f, -1.522254f, -0.0f},
-    {-2.0f, -1.522254f, 7.0f},
-    {2.0f, -1.522254f, -0.0f},
-    {2.0f, 1.522254f, 7.0f},
-    {3.5f, 0.0f, 8.5f},
-    {2.0f, -1.522254f, 7.0f},
-};
-
-static cXy l_texCoord[] = {
-    {0.02736f, 0.041406f},
-    {0.97264f, 0.041406f},
-    {0.830848f, 0.40324f},
-    {0.169152f, 0.40324f},
-    {0.03125f, 0.0f},
-    {0.96875f, 0.0f},
-    {0.767857f, 0.494086f},
-    {0.232143f, 0.494086f},
-    {0.038462f, 0.48226f},
-    {0.038462f, 0.983522f},
-    {0.961538f, 0.48226f},
-    {0.961538f, 0.983522f},
-};
+#include "assets/l_pos__d_hookshot.h"
+#include "assets/l_texCoord__d_hookshot.h"
 
 #include "assets/l_chainDL__d_hookshot.h"
 
@@ -68,8 +39,8 @@ void daHookshot_shape::draw() {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetArray(GX_VA_POS, &l_pos, sizeof(l_pos[0]));
     GXSetArray(GX_VA_TEX0, &l_texCoord, sizeof(l_texCoord[0]));
     dKy_GxFog_set();
@@ -259,7 +230,7 @@ BOOL daHookshot_c::procShot() {
         mCurrProcFunc = &daHookshot_c::procReturn;
     } else if (m2A3 || current.pos.abs(daPy_getPlayerLinkActorClass()->getHookshotRootPos()) >= 1500.0f) {
         if (m2A3) {
-            if (m2A6 == dPa_name::ID_SCENE_825F) {
+            if (m2A6 == dPa_name::ID_IT_SN_LK_FKSHOT_SUNA00) {
                 dComIfGp_particle_setP1(m2A6, &current.pos);
             } else {
                 dComIfGp_particle_setP1(m2A6, &current.pos, &m2BA);
@@ -298,9 +269,9 @@ BOOL daHookshot_c::procShot() {
                         dComIfG_Bgsp()->GetAttributeCode(mLinChk) == dBgS_Attr_SAND_e
                     )
                 ) {
-                    m2A6 = dPa_name::ID_SCENE_825F;
+                    m2A6 = dPa_name::ID_IT_SN_LK_FKSHOT_SUNA00;
                 } else {
-                    m2A6 = dPa_name::ID_COMMON_PURPLE_HIT;
+                    m2A6 = dPa_name::ID_AK_JN_NG;
                 }
                 mMtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(mLinChk);
                 m2A3 = true;
@@ -543,7 +514,7 @@ static dCcD_SrcCps l_at_cps_src = {
 
 /* 800F2C14-800F2CC8       .text create__12daHookshot_cFv */
 cPhs_State daHookshot_c::create() {
-    fopAcM_SetupActor(this, daHookshot_c);
+    fopAcM_ct(this, daHookshot_c);
     
     mShape.setUserArea(reinterpret_cast<u32>(this));
     mLinChk.ClrSttsRoofOff();
@@ -576,18 +547,18 @@ static actor_method_class l_daHookshot_Method = {
 };
 
 actor_process_profile_definition g_profile_HOOKSHOT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0006,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_HOOKSHOT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0006,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_HOOKSHOT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daHookshot_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_HOOKSHOT,
+    /* Draw Prio    */ fpcDwPi_HOOKSHOT_e,
     /* Actor SubMtd */ &l_daHookshot_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
