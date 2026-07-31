@@ -2140,20 +2140,30 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                 }
             }
             if((int)field_0x0207 != 0 && (i_seNum & 0xFFFFF000) != 0){
-                switch(i_seNum){
 
-                    case 0x2066:
-                    case 0x2868:
-                    case 0x2880:
-                    case 0x2881:
-                    case 0x48A1:
-                    case 0x4901:
-                    case 0x4902:
-                        break;
-                    default:
-                        return NULL;
+
+                if(DEMO_SELECT((i_seNum & 0xFFFFF000) != 0x200,TRUE)){
+
+                    switch(i_seNum){
+#if VERSION > VERSION_DEMO
+                        case 0x2066:
+                        case 0x2868:
+                        case 0x2880:
+                        case 0x2881:
+#endif
+                        case 0x48A1:
+                        case 0x4901:
+                        case 0x4902:
+
+                            break;
+                        default:
+                            return NULL;
+                    }
+                                    
                 }
             }
+
+
                 if(i_seNum == 0x3814){
                     if(field_0x01f9 == 1){
                         return NULL;
@@ -2250,8 +2260,8 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                     case 0x703A:
                         field_0x00be = 1;
                         break;
+#if VERSION > VERSION_DEMO
                     case 0x105B:
-
                         if(field_0x0224 == 0x5C){
                             if(field_0x0239 < 8){
                                 i_seNum = 0x706D;
@@ -2260,9 +2270,9 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         break;
                         // goto 0x90C
                     case 0x08B3:
-#if VERSION > VERSION_JPN
+
                         field_0x0205 = 1;
-#endif
+
                         stopBattleBgm();
                         field_0x008c = 1.0f;
                         if(mpMainBgmSound){
@@ -2274,15 +2284,19 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         field_0x00c0 = 0;
                         subBgmStop();
                         break;
+#endif
                         // goto 0x92C
                     case 0x6A2A:
                     case 0x6A2B:
+                        if(DEMO_SELECT(isDemo() != 1,FALSE)){
+                            break;
+                        }
                         return NULL;
                     case 0x08F5:
                         field_0x0206 = 0;
                         field_0x00bb = 0;
-                        if(mLastMinibossSubBGMType == 0){
-                            if(mSubBgmNum == 0x80000036 || mSubBgmNum == 0x80000037){
+                        if(DEMO_SELECT(TRUE,mLastMinibossSubBGMType == 0)){
+                            if(DEMO_SELECT(FALSE,mSubBgmNum == 0x80000036 || mSubBgmNum == 0x80000037)){
                                 break;
                             }
                             field_0x00b0 = -2;
@@ -2295,11 +2309,12 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         field_0x0207 = 2;
                         // goto 0xA10
                         break;
+#if VERSION > VERSION_DEMO
                     case 0x08C1:
                         menuOut();
                         // goto 0xA1C
                         break;
-                        
+#endif
                     case 0x08DA:
                         subBgmStart(0x80000030);
                         field_0x0033 = 1;
@@ -2317,6 +2332,7 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                     case 0x5875:
                         field_0x00cc = 1;
                         break;
+#if VERSION > VERSION_DEMO
                     case 0x1088:
                         if(field_0x0224 == 0x55){
                             if(field_0x0239 == 0x9 || field_0x0239 == 0xA){
@@ -2327,6 +2343,7 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
 
                         // goto 0xA7C
                         break;
+#endif
                     case 0x61FE:
                         if(field_0x0224 == 0x35 && !checkEventBit(0x2D04)){
                             return NULL;
@@ -2347,13 +2364,16 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                             field_0x0208 = 1;
                         }
                         break;
+#if VERSION > VERSION_JPN
                     case 0x08A7:
+#endif
                     case 0x285D:
                     case 0x591B:
                     case 0x6981:
                         param_2 = NULL;
                         // goto 0xB34
                         break;
+#if VERSION > VERSION_DEMO
                     case 0x6934:
                         field_0x00ca = 1;
                         stopBattleBgm();
@@ -2367,6 +2387,7 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         field_0x00c0 = 0;
                         param_2 = 0;
                         break;
+#endif
                     case 0x584C:
                         seStart(0x7818);
                         break;
@@ -2496,9 +2517,11 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         if(isDemo() == 1){
                             i_seNum = 0x8FE;
                         }
+#if VERSION > VERSION_JPN
                         if(checkSePlaying(0x871) == 1){
                             return NULL;
                         }
+#endif
                         if(field_0x00be != 0){
                             return NULL;
                         }
@@ -2620,11 +2643,8 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                             return NULL;
                         }
                         i_volume = param_3 / 100.0f;
-                        // param_3 *= param_3;
-                        // param_3 = SQUARE(param_3);
-                        // goto 0x11A0
                         break;
-                    // case 0x71E0:
+
                     case 0x701D:
                     case 0x701E:
                         if(param_3 >= 0x64){
@@ -2638,8 +2658,7 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         i_volume = (i_volume * i_volume) / 10000.0f;
                         i_pitch = 0.75f + (i_pitch * i_pitch) / 40000.0f;
                         break;
-                    // case 0x701D:
-                    //     break;
+
                     case 0x705A:
                         if(param_3 >= 0x64){
                             param_3 = 0x64;
@@ -2705,8 +2724,8 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
 
 
 
-                        f32 temp = i_volume = param_3;
-                        i_volume = temp /100.0f;
+
+                        i_volume = param_3 /100.0f;
                         i_volume *= 0.85f;
                         i_volume += 0.15f;
                         break;  
@@ -2744,7 +2763,7 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         if(pMtx){
                             PSMTXMultVec(pMtx,&local_44,&local_44);
                         }
-                        f32 dist = std::sqrtf(SQUARE(local_44.x) + SQUARE(local_44.y) + SQUARE(local_44.z));
+                        dist = std::sqrtf(SQUARE(local_44.x) + SQUARE(local_44.y) + SQUARE(local_44.z));
                         if(dist >= 4500.0f){
                             break;
                         }
@@ -2827,10 +2846,11 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         }
                         i_pitch = 1.0f + (0.01f * param_3);
                         break;
+#if VERSION > VERSION_DEMO
                     case 0x082F:
                         seStop(0x90B,0x3C);
-
                         break;
+#endif
                     case 0x5825:
                         mSomeSpecialBGMFlag = 1;
                         break;
@@ -2908,7 +2928,9 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                     int index = field_0x01f4;
                     while(mpSeSound[index]){
                         index += 1;
+#if VERSION > VERSION_DEMO
                         index %= 0x18;
+#endif
                         if(index == field_0x01f4){
                             OSReport("[JAIZelBasic::seStart] overflow JAISound pointer\n");
                             return NULL;
@@ -3294,13 +3316,13 @@ void JAIZelBasic::processLevObjSE() {
     f32 fVar_dolby;
     f32 fVar_pan;
     f32 fVar_volume;
-
     f32 fVar1,fVar2,fVar3;
     for(int i = 0; i < field_0x0244[0xF].m0; i++){
+        fVar_dolby = 0.0f;
         fVar1 = 0.0f;
         fVar2 = 0.0f;
-        fVar_dolby = 0.0f;
 
+        fVar_volume = 0.0f;
 
         s8 uVar6 = 0;
         for(int j = 0; j < field_0x0244[i].m4; j++){
@@ -3320,15 +3342,16 @@ void JAIZelBasic::processLevObjSE() {
             if(fVar_volume > fVar2){
                 fVar2 = fVar_volume;
             }
-
+            
             if(fVar_pan > fVar_dolby){
                 fVar_dolby = fVar_pan;
             }
         }
 
 
-        fVar_pan = (fVar1 > fVar2) ? fVar1 : fVar2;
-        fVar_volume = (fVar_pan > fVar_dolby) ? fVar_pan : fVar_dolby;
+        f32 temp = (fVar1 > fVar2) ? fVar1 : fVar2;
+        fVar_volume = (temp > fVar_dolby) ? temp :  fVar_dolby;
+
         fVar_pan = 0.5f;
         if(fVar1 != 0.0f || fVar2 != 0.0f){
             fVar_pan = fVar2 / (fVar1 + fVar2);
@@ -3583,6 +3606,11 @@ void JAIZelBasic::talkIn() {
 
 /* 802A9A20-802A9B74       .text talkOut__11JAIZelBasicFv */
 void JAIZelBasic::talkOut() {
+#if VERSION == VERSION_DEMO
+    if(field_0x0064 == 1){
+        return;
+    }
+#endif
     if (checkStreamPlaying(JA_STRM_MJ_DEMO_INTRO) == 1) {
         return;
     }
@@ -3800,6 +3828,20 @@ void JAIZelBasic::setLinkGroupInfo(u8 param_1) {
     if (param_1 == mLinkSeaFloorGroupInfo) {
         return;
     }
+#if VERSION <= VERSION_JPN
+    if(field_0x021e == 0){
+        if((mLinkSeaFloorGroupInfo & 0x40) != 0){
+            if(mpMainBgmSound){
+                mpMainBgmSound->stop(JAIZelParam::BGM_SCENE_CHANGE_FO_TIME);
+            }
+            field_0x00bc = 3;
+        }
+
+        field_0x021e = 1;
+    }
+#endif
+
+
     mLinkSeaFloorGroupInfo = param_1;
 }
 
@@ -4038,16 +4080,16 @@ void JAIZelBasic::setScene(s32 sceneNum, s32 roomNo, s32 param_3, s32 layerNo) {
 
 /* 802AACE8-802AAD0C       .text expandSceneBgmNum__11JAIZelBasicFUl */
 u32 JAIZelBasic::expandSceneBgmNum(u32 bgmNum) {
-    /* Nonmatching - retail-only regalloc */
+
+    u32 temp;
     if ((bgmNum & 0xF000) == 0x8000) {
-        u32 temp = bgmNum & 0x7FFF;
+        temp = bgmNum & 0x7FFF;
         temp |= JAISoundID_Type_Stream;
-        return temp;
     } else {
-        u32 temp = bgmNum & 0x7FFF;
+        temp = bgmNum & 0x7FFF;
         temp |= JAISoundID_Type_Sequence;
-        return temp;
     }
+    return temp;
 }
 
 /* 802AAD0C-802AAD48       .text checkLinkOnSea__11JAIZelBasicFv */
