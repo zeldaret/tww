@@ -211,8 +211,8 @@ public:
 
     void SetOld() { *pm_old_pos = *pm_pos; }
 
-    // TODO
-    void ChkGroundAway() {}
+    
+    bool ChkGroundAway() { return m_flags & GROUND_AWAY;}
     void DrawWall(dBgS&) {}
 
 public:

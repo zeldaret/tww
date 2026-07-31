@@ -1305,7 +1305,7 @@ void dComIfGs_setGameStartStage() {
         {true,  dSv_event_flag_c::RODE_KORL, "",        0,                          0},
         {true,  dSv_event_flag_c::MET_KORL,  "sea",     dIsleRoom_WindfallIsland_e, 128},
         {true,  dSv_event_flag_c::UNK_0801,  "MajyuE",  0,                          0},
-        {true,  dSv_event_flag_c::UNK_0808,  "MajyuE",  0,                          18},
+        {true,  dSv_event_flag_c::ARRIVE_MAJYU,  "MajyuE",  0,                          18},
         {true,  dSv_event_flag_c::UNK_2401,  "A_umikz", 0,                          204},
         {false, 0,                           "sea",     dIsleRoom_OutsetIsland_e,   128},
     };
