@@ -106,6 +106,7 @@ bool daObjFerris::Act_c::create_heap() {
     if (mdl_data_gondola != NULL && mdl_data_wheelbase != NULL)
         init_mtx();
 
+#if VERSION == VERSION_DEMO
     int r29 = 0;
     cBgD_t* bgw_data_gondola = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_DZB_SGONDOR_e));
     JUT_ASSERT(412, bgw_data_gondola != NULL);
@@ -126,6 +127,34 @@ bool daObjFerris::Act_c::create_heap() {
     }
 
     return mdl_data_gondola != NULL && mdl_data_wheelbase != NULL && r29 == 0;
+#else
+    cBgD_t* bgw_data_gondola = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_DZB_SGONDOR_e));
+    JUT_ASSERT(416, bgw_data_gondola != NULL);
+    if (bgw_data_gondola != NULL) {
+        for (i = 0; i < 5; i++) {
+            mpBgW[i] = new dBgW();
+            if (mpBgW[i] != NULL && mpBgW[i]->Set(bgw_data_gondola, dBgW::MOVE_BG_e, &mMtx[i]) == true) {
+                return false;
+            }
+        }
+    }
+
+    cBgD_t* bgw_data_wheelbase = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_DZB_SKANRAN_e));
+    JUT_ASSERT(432, bgw_data_wheelbase != NULL);
+
+    if (bgw_data_wheelbase != NULL) {
+        int r24 = 5;
+        mpBgW[r24] = new dBgW();
+        if (mpBgW[r24] != NULL && mpBgW[r24]->Set(bgw_data_wheelbase, dBgW::MOVE_BG_e, &mMtx[r24]) == true) {
+            return false;
+        }
+    }
+
+    return ((mdl_data_gondola != NULL && mpModel[0] != NULL && mpModel[1] != NULL && mpModel[2] != NULL && mpModel[3] != NULL && mpModel[4] != NULL) &&
+            (mdl_data_wheelbase != NULL && mpModel[5] != NULL) &&
+            (bgw_data_gondola != NULL && mpBgW[0] != NULL && mpBgW[1] != NULL && mpBgW[2] != NULL && mpBgW[3] != NULL && mpBgW[4] != NULL) &&
+            (bgw_data_wheelbase != NULL && mpBgW[5] != NULL));
+#endif
 }
 
 /* 0000048C-000004DC       .text ride_call_back__Q211daObjFerris5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
