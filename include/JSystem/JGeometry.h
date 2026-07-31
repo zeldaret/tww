@@ -234,7 +234,7 @@ struct TVec3<f32> : public Vec {
     }
 
     template <class U>
-    void cubic(const JGeometry::TVec3<f32>& vec1, const JGeometry::TVec3<f32>& vec2, const JGeometry::TVec3<f32>& vec3, const JGeometry::TVec3<f32>& vec4, f32 f19) {
+    void cubic(const JGeometry::TVec3<U>& vec1, const JGeometry::TVec3<U>& vec2, const JGeometry::TVec3<U>& vec3, const JGeometry::TVec3<U>& vec4, U f19) {
         // TODO: name variables properly
         f32 f5 = f19 * f19;
         f32 f4 = f5 * f19;
