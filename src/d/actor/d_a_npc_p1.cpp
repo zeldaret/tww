@@ -51,6 +51,7 @@ class daNpc_P1_HIO_c : public JORReflexible{
 public:
     daNpc_P1_HIO_c();
     virtual ~daNpc_P1_HIO_c(){};
+    virtual void genMessage(JORMContext*){};
 public:
     s8 m4;
     s32 m8;
@@ -1308,7 +1309,7 @@ fpc_ProcID daNpc_P1_c::getKajiID() {
     if(id != -1){
         daObjPirateship::Act_c* actor = (daObjPirateship::Act_c*)fopAcM_SearchByID(id);
         if(fopAc_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Pirateship_e){
-            pnVar2 = actor->m300;
+            pnVar2 = actor->getKajiID();
         }
     }
     return pnVar2;
