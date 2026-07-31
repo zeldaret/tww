@@ -189,7 +189,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                 } else {
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &hitPos, &player->shape_angle);
                     fopAcM_seStart(actor, JA_SE_CM_AM2_PARALYZED, 0);
-                    fopAcM_monsSeStart(actor, JA_SE_CV_AM2_PARALYZED, 0x42);
+                    fopAcM_monsSeStart(actor, JA_SE_CV_AM2_PARALYZED, 0);
                     i_this->mAction = ACTION_MAHI;
                     i_this->mMode = 10;
                 }
@@ -857,7 +857,7 @@ static void action_itai(am2_class* i_this) {
         actor->current.angle.y = fopAcM_searchPlayerAngleY(actor) + 0x8000;
         actor->speedF = 20.0f;
         
-        fopAcM_monsSeStart(actor, JA_SE_CV_AM2_DAMAGE, 0x42);
+        fopAcM_monsSeStart(actor, JA_SE_CV_AM2_DAMAGE, 0);
         dComIfGp_particle_set(dPa_name::ID_AK_SN_AMOTH2WEAKPOINT00, &i_this->mWeakPos, &actor->shape_angle);
         
         if (actor->health > 0) {
@@ -909,7 +909,7 @@ static void action_itai(am2_class* i_this) {
         // Fall-through
     case 24:
         if (actor->speed.y > 0.0f && i_this->mCountUpTimers[1] == 0) {
-            fopAcM_monsSeStart(actor, JA_SE_CV_AM2_JUMP, 0x42);
+            fopAcM_monsSeStart(actor, JA_SE_CV_AM2_JUMP, 0);
             i_this->mCountUpTimers[1] = 1;
         }
         
@@ -926,7 +926,7 @@ static void action_itai(am2_class* i_this) {
             }
             
             fopAcM_seStart(actor, JA_SE_CM_AM2_JUMP2, 0);
-            fopAcM_monsSeStart(actor, JA_SE_CV_AM_JITABATA, 0x42);
+            fopAcM_monsSeStart(actor, JA_SE_CV_AM_JITABATA, 0);
             
             actor->speed.y = 25.0f;
             actor->gravity = -10.0f;

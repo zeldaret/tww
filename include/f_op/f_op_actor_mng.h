@@ -684,7 +684,7 @@ inline void fopAcM_seStart(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
 }
 
 inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
-    mDoAud_monsSeStart(i_seNum, &actor->eyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+    mDoAud_monsSeStart(i_seNum, &actor->eyePos, fopAcM_GetID(actor), param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
 inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 i_seNum, Vec* i_sePos, u32 param_2) {
