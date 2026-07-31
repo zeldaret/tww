@@ -50,6 +50,8 @@ void dPb_erasePicture() {
         dComIfGs_setEventReg(dSv_event_flag_c::UNK_89FF, evReg2);
         dComIfGp_setItemPictureNumCount(-1);
     }
+    // !@bug: This function does not set the picture flags, meaning the removing pictures are never cleared from the memcard.
+    // This was fixed for PAL.
 #if VERSION >= VERSION_PAL
     dComIfGp_onPictureFlag(0);
     dComIfGp_onPictureFlag(1);
@@ -192,18 +194,57 @@ void dJle_Pb_c::screenSet2() {
     ((J2DTextBox *)(pane_tx[2].pane))->setFont(font0);
     ((J2DTextBox *)(pane_tx[3].pane))->setFont(font1);
 
+#if VERSION <= VERSION_JPN
+    J2DTextBox::TFontSize fontSize;
+    if (g_msgDHIO.field_0x08 == 0) {
+        fontSize.mSizeX = fontSize.mSizeY = (int)g_msgHIO.field_0x58;
+        J2DTextBox::TFontSize fontSize2;
+        fontSize2.mSizeX = fontSize2.mSizeY = g_msgHIO.field_0x68;
+
+        ((J2DTextBox *)(pane_tx[0].pane))->setFontSize(fontSize);
+        ((J2DTextBox *)(pane_tx[1].pane))->setFontSize(fontSize2);
+        ((J2DTextBox *)(pane_tx[2].pane))->setFontSize(fontSize);
+        ((J2DTextBox *)(pane_tx[3].pane))->setFontSize(fontSize2);
+    } else {
+        fontSize.mSizeX = fontSize.mSizeY = g_msgHIO.field_0x70;
+
+        ((J2DTextBox *)(pane_tx[0].pane))->setFontSize(fontSize);
+        ((J2DTextBox *)(pane_tx[2].pane))->setFontSize(fontSize);
+    }
+#else
     J2DTextBox::TFontSize fontSize;
     fontSize.mSizeX = fontSize.mSizeY = g_msgHIO.field_0x70;
 
     ((J2DTextBox *)(pane_tx[0].pane))->setFontSize(fontSize);
     ((J2DTextBox *)(pane_tx[2].pane))->setFontSize(fontSize);
+#endif
 
+#if VERSION <= VERSION_JPN
+    ((J2DTextBox *)(pane_tx[0].pane))->setCharSpace(-2.0f);
+    ((J2DTextBox *)(pane_tx[1].pane))->setCharSpace(-1.0f);
+    ((J2DTextBox *)(pane_tx[2].pane))->setCharSpace(-2.0f);
+    ((J2DTextBox *)(pane_tx[3].pane))->setCharSpace(-1.0f);
+#else
     ((J2DTextBox *)(pane_tx[0].pane))->setCharSpace(0.0f);
     ((J2DTextBox *)(pane_tx[1].pane))->setCharSpace(0.0f);
     ((J2DTextBox *)(pane_tx[2].pane))->setCharSpace(0.0f);
     ((J2DTextBox *)(pane_tx[3].pane))->setCharSpace(0.0f);
+#endif
+
+#if VERSION <= VERSION_JPN
+    if (g_msgDHIO.field_0x08 == 0) {
+        ((J2DTextBox *)(pane_tx[0].pane))->setLineSpace(42.0f);
+        ((J2DTextBox *)(pane_tx[1].pane))->setLineSpace(42.0f);
+        ((J2DTextBox *)(pane_tx[2].pane))->setLineSpace(42.0f);
+        ((J2DTextBox *)(pane_tx[3].pane))->setLineSpace(42.0f);
+    } else {
+        ((J2DTextBox *)(pane_tx[0].pane))->setLineSpace(g_msgHIO.field_0x5e);
+        ((J2DTextBox *)(pane_tx[2].pane))->setLineSpace(g_msgHIO.field_0x5e);
+    }
+#else
     ((J2DTextBox *)(pane_tx[0].pane))->setLineSpace(28.0f);
     ((J2DTextBox *)(pane_tx[2].pane))->setLineSpace(28.0f);
+#endif
 }
 
 /* 8022616C-802262CC       .text cameraAlphaInc__9dJle_Pb_cFf */
@@ -360,7 +401,7 @@ void dJle_Pb_c::zoomScale() {
         }
         else {
             f32 cameraZoomForcus = dComIfGp_getCameraZoomForcus(0);
-            mDoAud_seStart(JA_SE_TELESCOPE_ZOOM, NULL, cameraZoomForcus * 32768.0f + 0.5f);
+            mDoAud_seStart(JA_SE_TELESCOPE_ZOOM, NULL, cameraZoomForcus * 0x8000 + 0.5f);
         }
     }
 }
@@ -513,8 +554,8 @@ void dJle_Pb_c::clickShutterMode() {
     }
     else if (mShutterCounter == iVar3) {
         if (mDoGph_getCaptureStep() == 5) {
-              mShutterCounter++;
-              dMenu_flagSet(1);
+            mShutterCounter++;
+            dMenu_flagSet(1);
         }
         dVar8 = 1.0f;
     }
@@ -542,9 +583,9 @@ void dJle_Pb_c::clickShutterMode() {
 /* 80227520-802277A0       .text selectMode__9dJle_Pb_cFv */
 void dJle_Pb_c::selectMode() {
     u8 pictureNum;
-    int selection = mMsgDataProc.selectCheckYoko(mMsgSelectArrowPic, mChoiceCursorX0, mChoiceCursorY, mChoiceCursorX1 - mChoiceCursorX0);
+    u8 selection = mMsgDataProc.selectCheckYoko(mMsgSelectArrowPic, mChoiceCursorX0, mChoiceCursorY, mChoiceCursorX1 - mChoiceCursorX0);
 
-    if ((u8)selection != mSelectedChoiceIndex) {
+    if (selection != mSelectedChoiceIndex) {
         mSelectedChoiceIndex = selection;
         mDoAud_seStart(JA_SE_TALK_CURSOR);
     }
@@ -553,9 +594,9 @@ void dJle_Pb_c::selectMode() {
         if (mDoGph_getCaptureStep() == 5) {
             mDoGph_setCaptureStep(6);
 
-            if ((u8)selection == 0) {
+            if (selection == 0) {
                 pictureNum = dComIfGs_getPictureNum();
-                dPbPhotoSlotData * dst = mPhotoBuffer[pictureNum];
+                card_pictdata* pict = mPhotoBuffer[pictureNum];
 
 #if VERSION <= VERSION_JPN
                 dComIfGp_onPictureFlag(pictureNum);
@@ -565,16 +606,15 @@ void dJle_Pb_c::selectMode() {
                 dComIfGp_onPictureFlag(2);
 #endif
 
-                dst->mSnapResultId = dSnap_GetResult();
-                dst->mSnapResultDetail = dSnap_GetResultDetail();
-                dst->mPhotoFormat = mCaptureFormat;
+                pict->snap_result = dSnap_GetResult();
+                pict->snap_result_detail = dSnap_GetResultDetail();
+                pict->capture_format = mCaptureFormat;
 
-                memcpy(dst, mDoGph_getCaptureTextureBuffer(), 0x1ee0);
-
+                memcpy(pict->tex_buffer, mDoGph_getCaptureTextureBuffer(), sizeof(pict->tex_buffer));
 #if VERSION <= VERSION_JPN
-                DCFlushRangeNoSync(dst, 0x1ee0);
+                DCFlushRangeNoSync(pict->tex_buffer, sizeof(pict->tex_buffer));
 #else
-                DCStoreRangeNoSync(dst, 0x1ee0);
+                DCStoreRangeNoSync(pict->tex_buffer, sizeof(pict->tex_buffer));
 #endif
 
                 dComIfGp_setItemPictureNumCount(1);
@@ -658,7 +698,7 @@ void dJle_Pb_c::pictureDraw(u8 mono_color_1_alpha, int img_index) {
     Mtx44 mtx;
     GXTexObj tex_obj;
 
-    dPbPhotoSlotData* img = mPhotoBuffer[img_index];
+    card_pictdata* pict = mPhotoBuffer[img_index];
     u32 index = (img_index == 3) ? 0 : img_index;
     f32 f2 = pane_no[index].mPosTopLeft.x + REG6_F(0);
     f32 f3 = pane_no[index].mPosTopLeft.y + REG6_F(1);
@@ -711,7 +751,7 @@ void dJle_Pb_c::pictureDraw(u8 mono_color_1_alpha, int img_index) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB8, 0);
     
-    GXInitTexObj(&tex_obj, img, 0x98, 0x68, GX_TF_CMPR, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tex_obj, pict->tex_buffer, 0x98, 0x68, GX_TF_CMPR, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXLoadTexObj(&tex_obj, GX_TEXMAP0);
 
     s32 r31 = (s32)r30 - 0x98;
@@ -746,14 +786,14 @@ void dJle_Pb_c::pictureDraw(u8 mono_color_1_alpha, int img_index) {
 
 /* 80227D34-80227ED8       .text pictureEraseWait__9dJle_Pb_cFv */
 void dJle_Pb_c::pictureEraseWait() {
-    int bVar1 = mMsgDataProc.selectCheckYoko(mMsgSelectArrowPic, mChoiceCursorX0, mChoiceCursorY, mChoiceCursorX1 - mChoiceCursorX0);
-    if ((u8)bVar1 != mSelectedChoiceIndex) {
+    u8 bVar1 = mMsgDataProc.selectCheckYoko(mMsgSelectArrowPic, mChoiceCursorX0, mChoiceCursorY, mChoiceCursorX1 - mChoiceCursorX0);
+    if (bVar1 != mSelectedChoiceIndex) {
         mSelectedChoiceIndex = bVar1;
         mDoAud_seStart(JA_SE_TALK_CURSOR);
     }
 
     if (CPad_CHECK_TRIG_A(0)) {
-        if ((u8)bVar1 == 0) {
+        if (bVar1 == 0) {
             pictureErase();
             mDoAud_seStart(JA_SE_UTUSHIE_B_DEL_PIC);
         }
@@ -775,19 +815,19 @@ void dJle_Pb_c::pictureEraseWait() {
 
 /* 80227ED8-802280C8       .text pictureDecide__9dJle_Pb_cFv */
 void dJle_Pb_c::pictureDecide() {
-    int bVar2 = mMsgDataProc.selectCheckYoko(mMsgSelectArrowPic, mChoiceCursorX0, mChoiceCursorY, mChoiceCursorX1 - mChoiceCursorX0);
-    if ((u8)bVar2 != mSelectedChoiceIndex) {
+    u8 bVar2 = mMsgDataProc.selectCheckYoko(mMsgSelectArrowPic, mChoiceCursorX0, mChoiceCursorY, mChoiceCursorX1 - mChoiceCursorX0);
+    if (bVar2 != mSelectedChoiceIndex) {
         mSelectedChoiceIndex = bVar2;
         mDoAud_seStart(JA_SE_TALK_CURSOR);
     }
     if (CPad_CHECK_TRIG_A(0)) {
-        if ((u8)bVar2 == 0) {
-            dPbPhotoSlotData* tmp = mPhotoBuffer[(u8)mSelectedPhotoSlot];
+        if (bVar2 == 0) {
+            card_pictdata* pict = mPhotoBuffer[mSelectedPhotoSlot];
             dComIfGp_setSelectPicture(mSelectedPhotoSlot);
-            dComIfGp_setPictureFormat(tmp->mPhotoFormat);
+            dComIfGp_setPictureFormat(pict->capture_format);
             dComIfGp_setPictureStatus(1);
-            dComIfGp_setPictureResult(tmp->mSnapResultId);
-            dComIfGp_setPictureResultDetail(tmp->mSnapResultDetail);
+            dComIfGp_setPictureResult(pict->snap_result);
+            dComIfGp_setPictureResultDetail(pict->snap_result_detail);
             
 #if VERSION <= VERSION_JPN
             mDoAud_seStart(JA_SE_UTUSHIE_B_DEL_PIC);
@@ -982,12 +1022,12 @@ void dJle_Pb_c::moveCamera() {
             dComIfGp_setDoStatusForce(dActStts_TAKE_PHOTO_e);
         }
         else {
-          dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+            dComIfGp_setDoStatusForce(dActStts_BLANK_e);
         }
 
         dComIfGp_setAStatusForce(dActStts_RETURN_e);
 
-        if (dComIfGp_getPictureStatus() != 2 &&  dComIfGp_getPictureStatus() != 3) {
+        if (dComIfGp_getPictureStatus() != 2 && dComIfGp_getPictureStatus() != 3) {
             dComIfGp_setRStatusForce(dActStts_SWAP_MODES_e);
         }
     }
@@ -1061,9 +1101,13 @@ void dJle_Pb_c::moveBrowse() {
 
         dComIfGp_setAStatusForce(dActStts_RETURN_e);
 
+#if VERSION == VERSION_DEMO
+        dComIfGp_setRStatusForce(dActStts_SWAP_MODES_e);
+#else
         if (dComIfGp_getPictureStatus() != 2 && dComIfGp_getPictureStatus() != 3) {
             dComIfGp_setRStatusForce(dActStts_SWAP_MODES_e);
         }
+#endif
     } else if (mModeSubState == PB_SUB_CONFIRM_e) {
         pictureEraseWait();
 
@@ -1175,12 +1219,11 @@ void dJle_Pb_c::getBrowse() {
         dComIfGp_onPictureFlag(2);
 #endif
 
-        memcpy(mPhotoBuffer[dComIfGs_getPictureNum()], mPhotoBuffer[3], 0x2000);
-        
+        memcpy(mPhotoBuffer[dComIfGs_getPictureNum()], mPhotoBuffer[3], sizeof(card_pictdata));
 #if VERSION <= VERSION_JPN
-        DCFlushRangeNoSync(mPhotoBuffer[dComIfGs_getPictureNum()], 0x2000);
+        DCFlushRangeNoSync(mPhotoBuffer[dComIfGs_getPictureNum()], sizeof(card_pictdata));
 #else
-        DCStoreRangeNoSync(mPhotoBuffer[dComIfGs_getPictureNum()], 0x2000);
+        DCStoreRangeNoSync(mPhotoBuffer[dComIfGs_getPictureNum()], sizeof(card_pictdata));
 #endif
         
         dComIfGp_setItemPictureNumCount(1);
@@ -1334,19 +1377,19 @@ void dJle_Pb_c::setColorAnime(u8 param_1) {
     }
 
     
-    icnWhite.r = (u8)(icn_white.r - t * (icn_white.r - 255.0f));
-    icnWhite.g = (u8)(icn_white.g - t * (icn_white.g - 60.0f));
-    icnWhite.b = (u8)(icn_white.b - t * (icn_white.b - 60.0f));
+    icnWhite.r = (icn_white.r - t * (icn_white.r - 255.0f));
+    icnWhite.g = (icn_white.g - t * (icn_white.g - 60.0f));
+    icnWhite.b = (icn_white.b - t * (icn_white.b - 60.0f));
     icnWhite.a = 0xFF;
 
-    empWhite.r = (u8)(emp_white.r - t * (emp_white.r - 255.0f));
-    empWhite.g = (u8)(emp_white.g - t * (emp_white.g - 60.0f));
-    empWhite.b = (u8)(emp_white.b - t * (emp_white.b - 60.0f));
+    empWhite.r = (emp_white.r - t * (emp_white.r - 255.0f));
+    empWhite.g = (emp_white.g - t * (emp_white.g - 60.0f));
+    empWhite.b = (emp_white.b - t * (emp_white.b - 60.0f));
     empWhite.a = 0xFF;
 
-    empBlack.r = (u8)(emp_black.r - t * (emp_black.r - 255.0f));
-    empBlack.g = (u8)(emp_black.g - t * (emp_black.g - 60.0f));
-    empBlack.b = (u8)(emp_black.b - t * (emp_black.b - 60.0f));
+    empBlack.r = (emp_black.r - t * (emp_black.r - 255.0f));
+    empBlack.g = (emp_black.g - t * (emp_black.g - 60.0f));
+    empBlack.b = (emp_black.b - t * (emp_black.b - 60.0f));
     empBlack.a = 0;
 
     ((J2DPicture*)pane_icn[param_1].pane)->setWhite(icnWhite);
@@ -1368,15 +1411,15 @@ void dJle_Pb_c::changeData() {
             if(i != j) {
                 mPhotoSlotOccupied[i] = 0;
                 mPhotoSlotOccupied[j] = 1;
-                memcpy(mPhotoBuffer[j], mPhotoBuffer[i], 0x2000);
+                memcpy(mPhotoBuffer[j], mPhotoBuffer[i], sizeof(card_pictdata));
 #if VERSION <= VERSION_JPN
-                DCFlushRangeNoSync(mPhotoBuffer[j], 0x2000);
+                DCFlushRangeNoSync(mPhotoBuffer[j], sizeof(card_pictdata));
 #else
-                DCStoreRangeNoSync(mPhotoBuffer[j], 0x2000);
+                DCStoreRangeNoSync(mPhotoBuffer[j], sizeof(card_pictdata));
 #endif
             }
             mDoMemCdRWm_SetCheckSumPictData((u8*)mPhotoBuffer[i]);
-            JKRMainRamToAram((u8*)mPhotoBuffer[i], dComIfGp_getPictureBoxData(j), 0x2000, EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1);
+            JKRMainRamToAram((u8*)mPhotoBuffer[i], dComIfGp_getPictureBoxData(j), sizeof(card_pictdata), EXPAND_SWITCH_UNKNOWN0, 0, NULL, -1);
             j++;
         }
     }
@@ -1552,11 +1595,10 @@ void dJle_Pb_c::shutterLineMove() {
         determinant = a1 * b2 - x2OrA2 * b1;
 
         if (determinant) {
-            intersectionX[i] =
-                (b2 * c1 - b1 * xNext) / determinant;
-
-            intersectionY[i] =
-                (-x2OrA2 * c1 + a1 * xNext) / determinant;
+            f32 temp1 = (b2 * c1 - b1 * xNext) / determinant;
+            f32 temp2 = (-x2OrA2 * c1 + a1 * xNext) / determinant;;
+            intersectionX[i] = temp1;
+            intersectionY[i] = temp2;
         } else {
             intersectionX[i] = x1;
             intersectionY[i] = mShutterLineY1[i];
@@ -1613,7 +1655,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     }
 
     head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(VERSION_SELECT(1836, 1836, 1881, 1908), head_p);
+    JUT_ASSERT(VERSION_SELECT(1841, 1836, 1881, 1908), head_p);
 
     const char* text = msgGet.getMessage(head_p);
     mMsgEntry = msgGet.getMesgEntry(head_p);
@@ -1671,7 +1713,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     mMsgDataProc.stringSet();
 
     for (int i = 0; i < 4; i++) {
-        ((J2DTextBox*)pane_tx[i].pane)->setString((char*)mMsgTextBuffer[i]);
+        ((J2DTextBox*)pane_tx[i].pane)->setString(mMsgTextBuffer[i]);
     }
 
     for (int i = 0; i < 15; i++) {
@@ -1697,7 +1739,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
 
             mMsgSelectArrowPic->show();
             mMsgSelectArrowPic->setAlpha(0xFF);
-            mChoiceArrowIconIdx = (u8)i;
+            mChoiceArrowIconIdx = i;
 
             if (firstChoiceSeen == 0) {
                 firstChoiceSeen = 1;
@@ -1723,7 +1765,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
 
             mMsgSelectArrowPic->show();
             mMsgSelectArrowPic->setAlpha(0xFF);
-            mChoiceArrowIconIdx = (u8)i;
+            mChoiceArrowIconIdx = i;
 
             if (firstChoiceSeen != 0) {
                 mSelectedChoiceIndex = 1;
@@ -1808,25 +1850,25 @@ void dJle_Pb_c::_create(JKRExpHeap* i_heap) {
     int k = 0;
 
     scrn = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(2033, 2033, 2086, 2113), scrn != NULL); 
+    JUT_ASSERT(VERSION_SELECT(2038, 2033, 2086, 2113), scrn != NULL); 
     scrn->set("wipe_01_01.blo", dComIfGp_getCameraResArchive());
 
     scrn1 = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(2037, 2037, 2090, 2117), scrn1 != NULL);
+    JUT_ASSERT(VERSION_SELECT(2042, 2037, 2090, 2117), scrn1 != NULL);
     scrn1->set("wipe_01_02.blo", dComIfGp_getCameraResArchive());
 
     scrn2 = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(2041, 2041, 2094, 2121), scrn2 != NULL);
+    JUT_ASSERT(VERSION_SELECT(2046, 2041, 2094, 2121), scrn2 != NULL);
     scrn2->set("hukidashi_08.blo", dComIfGp_getMsgArchive());
 
     font0 = mDoExt_getMesgFont();
-    JUT_ASSERT(VERSION_SELECT(2045, 2045, 2098, 2125), font0 != NULL);
+    JUT_ASSERT(VERSION_SELECT(2050, 2045, 2098, 2125), font0 != NULL);
 
     font1 = mDoExt_getRubyFont();
-    JUT_ASSERT(VERSION_SELECT(2048, 2048, 2102, 2129), font1 != NULL);
+    JUT_ASSERT(VERSION_SELECT(2053, 2048, 2102, 2129), font1 != NULL);
 
-    stick = new STControl(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x2000);
-    JUT_ASSERT(VERSION_SELECT(2051, 2051, 2107, 2134), stick != NULL);
+    stick = new STControl(5, 2, 3, 2);
+    JUT_ASSERT(VERSION_SELECT(2056, 2051, 2107, 2134), stick != NULL);
 
     mMsgIconFontMainPic = new J2DPicture("font_07_02.bti");
     mMsgIconFontSubPic = new J2DPicture("font_07_02.bti");
@@ -1894,7 +1936,7 @@ void dJle_Pb_c::_create(JKRExpHeap* i_heap) {
             JKRAramToMainRam(
                 dComIfGp_getPictureBoxData(mPictureSlotSortMap[i]),
                 (u8*)mPhotoBuffer[k],
-                0x2000
+                sizeof(card_pictdata)
             );
             j++;
             k++;
@@ -1960,28 +2002,27 @@ void dJle_Pb_c::_gopen() {
         messageSet(0xee5);
     }
 
-    s16 counter = mFadeTimer;
-    if (counter >= 10) {
+    if (mFadeTimer >= 10) {
         if (mImportedPhotoLoadReq->sync() != 0) {
-            dPbPhotoSlotData* dst = mPhotoBuffer[3];
-            memcpy(dst, mImportedPhotoLoadReq->getMemAddress(), 0x1EE0);
+            card_pictdata* pict = mPhotoBuffer[3];
+            memcpy(pict->tex_buffer, mImportedPhotoLoadReq->getMemAddress(), sizeof(pict->tex_buffer));
 #if VERSION <= VERSION_JPN
-            DCFlushRangeNoSync(dst, 0x1EE0);
+            DCFlushRangeNoSync(pict->tex_buffer, sizeof(pict->tex_buffer));
 #else
-            DCStoreRangeNoSync(dst, 0x1EE0);
+            DCStoreRangeNoSync(pict->tex_buffer, sizeof(pict->tex_buffer));
 #endif
-        
+
             u8 picNo = dComIfGp_getGetPictureNum();
-            dst->mSnapResultId = photo_idx[picNo];
-            dst->mSnapResultDetail = 0;
-            dst->mPhotoFormat = GX_TF_CMPR;
-        
+            pict->snap_result = photo_idx[picNo];
+            pict->snap_result_detail = 0;
+            pict->capture_format = GX_TF_CMPR;
+
             dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
             mExecState = PB_EXEC_GET_MOVE_e;
             mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_2);
         }
     } else {
-        mFadeTimer = counter + 1;
+        mFadeTimer++;
         getAlphaInc(fopMsgM_valueIncrease(10, mFadeTimer, 0));
     }
 
@@ -2246,7 +2287,7 @@ void dJle_Pb_c::_delete(JKRExpHeap* i_heap) {
     }
 
     if (mImportedPhotoLoadReq != NULL) {
-      delete mImportedPhotoLoadReq;
+        delete mImportedPhotoLoadReq;
     }
 
     delete scrn;
@@ -2348,22 +2389,22 @@ static cPhs_State dPb_Create(msg_class* i_this) {
     i_Pb->heap = dComIfGp_getExpHeap2D();
     dComIfGp_setHeapLockFlag(6);
 
-    JUT_ASSERT(VERSION_SELECT(2725, 2725, 2796, 2823), i_Pb->heap != NULL);
+    JUT_ASSERT(VERSION_SELECT(2716, 2725, 2796, 2823), i_Pb->heap != NULL);
 
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Pb->heap);
 
     i_Pb->dPb_c = new dJle_Pb_c();
 
     for(int i = 0; i < 4; i++) {
-        i_Pb->buffer[i] = (dPbPhotoSlotData*)i_Pb->heap->alloc(0x2000, 0x20);
-        JUT_ASSERT(VERSION_SELECT(2734, 2734, 2805, 2832), i_Pb->buffer[i] != NULL);
+        i_Pb->buffer[i] = (card_pictdata*)i_Pb->heap->alloc(sizeof(card_pictdata), 0x20);
+        JUT_ASSERT(VERSION_SELECT(2725, 2734, 2805, 2832), i_Pb->buffer[i] != NULL);
         i_Pb->dPb_c->getMemory(i_Pb->buffer[i], i);
     }
 
     for(int i = 0; i < 4; i++) {
         char* buffer = (char*)i_Pb->heap->alloc(1000, 4);
         i_Pb->dPb_c->setTextArea(buffer, i);
-        JUT_ASSERT(VERSION_SELECT(2741, 2741, 2812, 2839), buffer != NULL);
+        JUT_ASSERT(VERSION_SELECT(2732, 2741, 2812, 2839), buffer != NULL);
     }
 
     i_Pb->dPb_c->_create(i_Pb->heap);
@@ -2375,7 +2416,7 @@ static cPhs_State dPb_Create(msg_class* i_this) {
         dComIfGp_setDoStatusForce(dActStts_TAKE_PHOTO_e);
     }
     else {
-        dComIfGp_setDoStatusForce(dComIfGp_getScopeMesgStatus());
+        dComIfGp_setDoStatusForce(dActStts_BLANK_e);
     }
 
     if (dComIfGp_getPictureStatus() == 2) {

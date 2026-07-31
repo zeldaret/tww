@@ -596,7 +596,7 @@ BOOL Act_c::process_falldown_init() {
     } else {
         field_0x7D6 = 120;
     }
-    field_0x7DC = cM_rndFX(3072.0f);
+    field_0x7DC = cM_rndFX(0xC00);
     return TRUE;
 }
 

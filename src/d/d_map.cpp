@@ -1830,7 +1830,7 @@ void dMap_c::drawPointAgbCursor(f32 param_1, f32 param_2) {
     if (agbFlashCheck()) {
         mMapAGBCursorFlashFrmCnt++;
         mMapAGBCursorFlashFrmCnt = mMapAGBCursorFlashFrmCnt % 45;
-        f32 tmp = JMASSin(mMapAGBCursorFlashFrmCnt / 45.0f * 32768.0f) * JMASSin(mMapAGBCursorFlashFrmCnt / 45.0f * 32768.0f);
+        f32 tmp = JMASSin(mMapAGBCursorFlashFrmCnt / 45.0f * 0x8000) * JMASSin(mMapAGBCursorFlashFrmCnt / 45.0f * 0x8000);
         color.r = 0;
         color.g = tmp * 175.0f + 80.0f;
         color.b = 0;

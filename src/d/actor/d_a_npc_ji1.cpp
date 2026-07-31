@@ -1738,6 +1738,7 @@ u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
                 break;
             case 3:
                 dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
+                break;
         }
     }
 
@@ -3277,7 +3278,7 @@ void daNpc_Ji1_c::battleSubActionWaitInit() {
 /* 0000A430-0000A564       .text battleSubActionWait__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::battleSubActionWait() {
     if(--field_0xC30 < 0) {
-        f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+        f32 dist = fopAcM_searchPlayerDistanceXZ(this);
         f32 rnd = cM_rndF(10.0f);
 
         if(rnd > 3.3f || dist > 100.0f) {
@@ -4989,7 +4990,7 @@ BOOL daNpc_Ji1_c::_draw() {
             dComIfGd_addRealShadow(mShadowId, mpSpearMorf->getModel());
         }
 
-        dSnap_RegistFig(DSNAP_TYPE_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_NPC_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
         
         return true;
     }

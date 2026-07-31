@@ -1864,7 +1864,6 @@ static void fight_run(bk_class* i_this) {
                 }
                 break;
             }
-            
         }
         
         if (i_this->mPlayerDistance < l_bkHIO.m030) {

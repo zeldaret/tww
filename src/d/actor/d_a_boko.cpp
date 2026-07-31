@@ -174,13 +174,13 @@ BOOL daBoko_c::draw() {
 
     if (checkNoDraw()) {
         if (mParticleCallBack.getEmitter() != NULL) {
-            mParticleCallBack.getEmitter()->setStatus(4);
+            mParticleCallBack.getEmitter()->stopDrawParticle();
         }
         return TRUE;
     }
 
     if (mParticleCallBack.getEmitter() != NULL) {
-        mParticleCallBack.getEmitter()->clearStatus(4);
+        mParticleCallBack.getEmitter()->playDrawParticle();
     }
 
     if (mFlameTimer != 0) {
@@ -358,7 +358,7 @@ void daBoko_c::setThrowReverse(s16 arg1) {
     fopAcM_SetGravity(this, -3.0f);
     fopAcM_GetSpeed(this).y = 15.0f;
     speedF *= 0.25f;
-    current.angle.y = arg1 + cM_rndFX(12288.0f);
+    current.angle.y = arg1 + cM_rndFX(0x3000);
 
     int sVar1 = cLib_distanceAngleS(current.angle.y, shape_angle.y);
     if (sVar1 >= 0x4000) {
@@ -603,7 +603,7 @@ BOOL daBoko_c::procThrow() {
         }
 
         if (mCps.ChkAtHit()) {
-            unaff_r28 = current.angle.y + cM_rndF(16384.0f);
+            unaff_r28 = current.angle.y + cM_rndF(0x4000);
         } else if (mAcch.ChkWallHit()) {
             unaff_r28 = mAcchCir.GetWallAngleY();
         } else {

@@ -1102,7 +1102,6 @@ void standby(fganon_class* i_this) {
             }
         }
     }
-    
 }
 
 /* 00004DB4-00005128       .text start__FP12fganon_class */
@@ -2008,6 +2007,7 @@ void demo_camera(fganon_class* i_this) {
             if (DEMO_SELECT(REG17_S(3), REG0_S(3)) == 0) {
                 dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(a_this));
             }
+            // Fall-through
         }
         case 150: {
         case_150:
@@ -2016,6 +2016,7 @@ void demo_camera(fganon_class* i_this) {
             dMeter_mtrShow();
             dComIfGp_event_reset();
             i_this->mB54 = 0;
+            break;
         }
     }
     if (i_this->mB54 && bVar3) {

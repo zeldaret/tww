@@ -8,6 +8,7 @@
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_lib.h"
+#include "m_Do/m_Do_MemCardRWmng.h"
 
 
 class J3DModel;
@@ -44,20 +45,14 @@ enum dJlePbViewMode {
     PB_VIEW_GET_e = 0x2,
 };
 
-struct dPbPhotoSlotData {
-    /* 0x0000 */ u8 pad[0x1EE0 - 0x0000];
-    /* 0x1EE0 */ u32 mSnapResultId;
-    /* 0x1EE4 */ u8 mSnapResultDetail;
-    /* 0x1EE5 */ u8 mPhotoFormat;
-};
-
 void dPb_erasePicture();
 
 class dJle_Pb_c : public dDlst_base_c {
 public:
     u8 getStatus() { return mExecState; }
+    // was this supposed to be called setMemory? typo?
     void getMemory(void* buffer, int idx) {
-        mPhotoBuffer[idx] = (dPbPhotoSlotData*)buffer;
+        mPhotoBuffer[idx] = (card_pictdata*)buffer;
     }
     void setTextArea(char* buffer, int idx) {
         mMsgTextBuffer[idx] = buffer;
@@ -168,7 +163,7 @@ private:
     /* 0x1260 */ JUtility::TColor icn_black;
     /* 0x1264 */ JUtility::TColor emp_white;
     /* 0x1268 */ JUtility::TColor emp_black;
-    /* 0x126C */ dPbPhotoSlotData* mPhotoBuffer[4]; // Three saved slots + one import/get temporary slot.
+    /* 0x126C */ card_pictdata* mPhotoBuffer[4]; // Three saved slots + one import/get temporary slot.
     /* 0x127C */ f32 mZoomScale;
     /* 0x1280 */ f32 mShutterLineX1[12];
     /* 0x12B0 */ f32 mShutterLineY1[12];
@@ -200,6 +195,6 @@ class sub_pb_class : public msg_class {
 public:
     /* 0x00FC */ JKRExpHeap* heap;
     /* 0x0100 */ dJle_Pb_c* dPb_c;
-    /* 0x0104 */ dPbPhotoSlotData* buffer[4];
+    /* 0x0104 */ card_pictdata* buffer[4];
 };
 #endif /* D_PICTURE_BOX_H */

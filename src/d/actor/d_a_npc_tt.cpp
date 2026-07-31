@@ -790,7 +790,7 @@ BOOL daNpc_Tt_c::_draw() {
 #endif
     dComIfGd_set3DlineMat(&mLineKe.mLineMat);
 
-    dSnap_RegistFig(DSNAP_TYPE_TT, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_TT, this, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
