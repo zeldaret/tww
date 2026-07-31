@@ -1049,7 +1049,7 @@ void dPa_waveEcallBack::executeAfter(JPABaseEmitter* emitter) {
     }
     f32 speed = mVelFade1 * vel * mVelFade2;
     
-    JGeometry::TVec3<s16> rot(0, mpRot->y, 0);
+    JGeometry::TVec3<s16> rot((s16)0, mpRot->y, (s16)0);
     emitter->setGlobalRotation(rot);
     
     if (std::fabsf(speed - mVel) > mVelSpeed) {

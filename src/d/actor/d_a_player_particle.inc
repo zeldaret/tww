@@ -76,7 +76,7 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
 
     if (field_0x20 != NULL) {
         emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
-        JGeometry::TVec3<s16> rot(0, field_0x20->y, 0);
+        JGeometry::TVec3<s16> rot((s16)0, field_0x20->y, (s16)0);
         emitter->setGlobalRotation(rot);
     }else {
         JGeometry::TVec3<f32> sp20;
