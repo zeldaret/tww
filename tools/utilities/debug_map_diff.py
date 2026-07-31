@@ -45,11 +45,11 @@ del target_map_path_rel
 
 base_map_path_dol = decomp_root_path / "build" / "D44J01" / "framework.elf.MAP"
 base_map_path_rel = decomp_root_path / "build" / "D44J01" / target_object_name / f"{target_object_name}.plf.MAP"
-if str(base_map_path_rel) in all_ninja_outputs:
+if base_map_path_rel.as_posix() in all_ninja_outputs:
   base_is_rel = True
   base_map_path = base_map_path_rel
 else:
-  assert str(base_map_path_dol) in all_ninja_outputs
+  assert base_map_path_dol.as_posix() in all_ninja_outputs
   base_is_rel = False
   base_map_path = base_map_path_dol
 del base_map_path_dol
