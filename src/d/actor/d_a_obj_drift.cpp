@@ -103,15 +103,8 @@ BOOL daObjDrift::Act_c::Create() {
     f32 L_waterY[2];
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     init_mtx();
-#if VERSION == VERSION_DEMO
+
     fopAcM_setCullSizeBox(this, -550.0f, -180.0f, -550.0f, 550.0f, 605.0f, 550.0f);
-#else
-    f32 cullMinX = -550.0f;
-    f32 cullMinY = -180.0f;
-    f32 cullMaxX = 550.0f;
-    f32 cullMaxY = 605.0f;
-    fopAcM_setCullSizeBox(this, cullMinX, cullMinY, cullMinX, cullMaxX, cullMaxY, cullMaxX);
-#endif
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(M_cyl_src);
     mCyl.SetStts(&mStts);
@@ -295,16 +288,8 @@ void daObjDrift::Act_c::mode_rot() {
 /* 00000C3C-00000D18       .text set_mtx__Q210daObjDrift5Act_cFv */
 void daObjDrift::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
-#if VERSION == VERSION_DEMO
     Quaternion quat;
     cXyz axis(mTiltX, 1.0f, mTiltZ);
-#else
-    f32 axisZ = mTiltZ;
-    f32 axisY = 1.0f;
-    f32 axisX = mTiltX;
-    Quaternion quat;
-    cXyz axis(axisX, axisY, axisZ);
-#endif
     daObj::quat_rotBaseY2(&quat, axis);
     mDoMtx_stack_c::quatM(&quat);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -361,13 +346,8 @@ void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_ride) {
 void daObjDrift::Act_c::set_current() {
     f32 y = mRideYOff + home.pos.y;
     mWavePhaseX += attr().mWavePhaseXStep;
-#if VERSION == VERSION_DEMO
     f32 sinVal = cM_ssin(mWavePhaseX);
     f32 yDelta = y - current.pos.y;
-#else
-    f32 yDelta = y - current.pos.y;
-    f32 sinVal = cM_ssin(mWavePhaseX);
-#endif
     gravity = yDelta * attr().mWaveAmplitude
             + sinVal * attr().mWaveSinScale;
     daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().mWaveSpeed, attr().mWavePhase);
@@ -388,7 +368,6 @@ void daObjDrift::Act_c::set_current() {
     } else {
         chaseFactor = attr().mTiltChaseWait;
     }
-#if VERSION == VERSION_DEMO
     mHitDir *= 0.95f;
     mWavePhaseY += attr().mWavePhaseYStep;
     mWavePhaseZ += attr().mWavePhaseZStep;
@@ -404,22 +383,6 @@ void daObjDrift::Act_c::set_current() {
         - diffX * chaseFactor);
     mTiltVelZ += z_val;
     mTiltVelX += x_val;
-#else
-    mHitDir *= 0.95f;
-    mWavePhaseY += attr().mWavePhaseYStep;
-    mWavePhaseZ += attr().mWavePhaseZStep;
-    f32 sinY = cM_ssin(mWavePhaseY);
-    f32 sinZ = cM_ssin(mWavePhaseZ);
-    f32 diffZ = mTiltZ - mTiltTargetZ;
-    f32 diffX = mTiltX - mTiltTargetX;
-    f32 x_val = mHitDir.x * attr().field_0x34
-        + (rotFactor * (sinZ * attr().mTiltSinScale)
-        - diffX * chaseFactor);
-    mTiltVelZ += mHitDir.z * attr().field_0x34
-            + (rotFactor * (sinY * attr().mTiltSinScale)
-            - diffZ * chaseFactor);
-    mTiltVelX += x_val;
-#endif
     mTiltVelZ *= attr().mPosMoveDamp;
     mTiltVelX *= attr().mPosMoveDamp;
     mTiltZ += mTiltVelZ;
