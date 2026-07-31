@@ -180,11 +180,7 @@ void daObjDrift::Act_c::make_flower() {
         cXyz pos;
         csXyz angle;
         calc_flower_param(&pos, &angle);
-#if VERSION == VERSION_DEMO
-        static const s16 pf_name[2] = {0xD7, 0xD8};
-#else
-        static const s16 pf_name[2] = {0xD6, 0xD7};
-#endif
+        static const s16 pf_name[2] = {fpcNm_JBO_e, fpcNm_BO_e};
         mFlowerPid = fopAcM_create(
             pf_name[mType],
             0,
