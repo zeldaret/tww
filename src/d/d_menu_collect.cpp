@@ -1452,13 +1452,19 @@ void dMenu_Collect_c::titleTrans(float i_transX, float i_transY) {
 }
 
 /* 8019F0B8-8019F144       .text noteRotate__15dMenu_Collect_cFff */
-void dMenu_Collect_c::noteRotate(float, float) {
-    /* Nonmatching */
+void dMenu_Collect_c::noteRotate(float i_transY, float i_angle) {
+    fopMsgM_paneTrans(&m820, 0.0f, i_transY);
+    m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, i_angle);
 }
 
 /* 8019F144-8019F1C8       .text nameTrans__15dMenu_Collect_cFff */
-void dMenu_Collect_c::nameTrans(float, float) {
-    /* Nonmatching */
+void dMenu_Collect_c::nameTrans(float i_transX, float i_transY) {
+    fopMsgM_paneTrans(&m858, i_transX, i_transY);
+
+    outFont->setLeftUpPos(m858.mPosTopLeft.x, m858.mPosTopLeft.y);
+    outFont->move();
+
+    fopMsgM_paneTrans(&m938, i_transX, i_transY);
 }
 
 /* 8019F1C8-8019F49C       .text mainOpenProc__15dMenu_Collect_cFsss */
