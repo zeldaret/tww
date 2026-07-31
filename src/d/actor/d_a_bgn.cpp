@@ -668,19 +668,9 @@ static void daBgn_DrawS(bgn_class* i_this) {
     for (s32 i = 0; i < BGN_TAIL_MAX; i++) {
         part_draw(i_this, &i_this->mTailParts[i]);
     }
-#ifdef __MWERKS__
     i_this->mBlueRopeMat.update(60, (GXColor){DEMO_SELECT(0, 0xFF), 0xFF, 0xFF, 0}, &actor->tevStr);
-#else
-    GXColor local_24 = (GXColor){DEMO_SELECT(0, 0xFF), 0xFF, 0xFF, 0};
-    i_this->mBlueRopeMat.update(60, local_24, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mBlueRopeMat);
-#ifdef __MWERKS__
     i_this->mRedRopeMat.update(60, (GXColor){DEMO_SELECT(0xD2, 0xFF), DEMO_SELECT(0x32, 0xFF), DEMO_SELECT(0x5A, 0xFF), 0}, &actor->tevStr);
-#else
-    GXColor local_28 = (GXColor){DEMO_SELECT(0xD2, 0xFF), DEMO_SELECT(0x32, 0xFF), DEMO_SELECT(0x5A, 0xFF), 0};
-    i_this->mRedRopeMat.update(60, local_28, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mRedRopeMat);
 }
 
@@ -752,12 +742,7 @@ static BOOL daBgn2_Draw(bgn2_class* i_this) {
             i_this->m02E4.update();
         }
     }
-#ifdef __MWERKS__
-    i_this->mRedRopeMat.update(60, (GXColor){0xD2, 0x32, 0x5A, 0}, &actor->tevStr);
-#else
-    GXColor local_28 = (GXColor){0xD2, 0x32, 0x5A, 0};
-    i_this->mRedRopeMat.update(60, local_28, &actor->tevStr);
-#endif
+    i_this->mRedRopeMat.update(60, (GXColor){0xD2, 0x32, 0x5A, 0x00}, &actor->tevStr);
     dComIfGd_set3DlineMat(&i_this->mRedRopeMat);
     return TRUE;
 }
@@ -880,12 +865,7 @@ static BOOL daBgn3_Draw(bgn3_class* i_this) {
 #endif
         }
     }
-#ifdef __MWERKS__
     i_this->mRedRopeMat.update(60, (GXColor){0xD2, 0x32, 0x5A, 0}, &actor->tevStr);
-#else
-    GXColor local_48 = (GXColor){0xD2, 0x32, 0x5A, 0};
-    i_this->mRedRopeMat.update(60, local_48, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mRedRopeMat);
     return TRUE;
 }
@@ -1011,12 +991,7 @@ static BOOL daBgn_Draw(bgn_class* i_this) {
         }
 #if VERSION > VERSION_DEMO
         if (i_this->mC720 != 0) {
-#ifdef __MWERKS__
             i_this->mDefeatCSRopeMat.update(60, (GXColor){0xFF, 0xFF, 0xFF, 0}, &actor->tevStr);
-#else
-            GXColor local_18 = (GXColor){0xFF, 0xFF, 0xFF, 0};
-            i_this->mDefeatCSRopeMat.update(60, local_18, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->mDefeatCSRopeMat);
         }
 #endif

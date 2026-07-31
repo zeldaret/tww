@@ -2008,7 +2008,7 @@ void mDoExt_3DlineMat0_c::draw() {
 }
 
 /* 800148B4-80014E04       .text update__19mDoExt_3DlineMat0_cFUsfR8_GXColorUsP12dKy_tevstr_c */
-void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 space, dKy_tevstr_c* pTevStr) {
+void mDoExt_3DlineMat0_c::update(u16 i_segs, f32 i_size, GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr) {
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
@@ -2020,9 +2020,9 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     cXyz* r_dstPos;
     cXyz* dstPos;
 
-    mColor = newColor;
-    mpTevStr = pTevStr;
-    mNumSegments = segs;
+    mColor = i_color;
+    mpTevStr = i_tevStr;
+    mNumSegments = i_segs;
     if (mNumSegments > mMaxSegments)
         mNumSegments = mMaxSegments;
 
@@ -2030,8 +2030,8 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     line = mpLines;
 
     f32 spacing;
-    if (space != 0) {
-        spacing = size / space;
+    if (i_space != 0) {
+        spacing = i_size / i_space;
     } else {
         spacing = 0.0f;
     }
@@ -2041,7 +2041,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     for (s32 i = 0; i < mNumLines; i++) {
         pos = line->mpSegments;
         dstPos = line->mPosArr[mCurArr];
-        f32 r_size = size;
+        f32 r_size = i_size;
 
         delta = pos[1] - pos[0];
 
@@ -2064,7 +2064,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         nextP1 = pos[0] - delta;
 
         for (s32 j = mNumSegments - 2; j > 0; j--) {
-            if (j < space)
+            if (j < i_space)
                 r_size -= spacing;
 
             delta = pos[1] - pos[0];
@@ -2089,7 +2089,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
             nextP1 = pos[0] - delta;
         }
 
-        if (space != 0) {
+        if (i_space != 0) {
             r_dstPos[0] = pos[0];
             r_dstPos[1] = pos[0];
         } else {
@@ -2103,7 +2103,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 }
 
 /* 80014E04-80015328       .text update__19mDoExt_3DlineMat0_cFUsR8_GXColorP12dKy_tevstr_c */
-void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
+void mDoExt_3DlineMat0_c::update(u16 i_segs, GXColor& i_color, dKy_tevstr_c* i_tevStr) {
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
@@ -2116,9 +2116,9 @@ void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
     cXyz* dstPos;
     u8* size_p;
 
-    mColor = newColor;
-    mpTevStr = pTevStr;
-    mNumSegments = segs;
+    mColor = i_color;
+    mpTevStr = i_tevStr;
+    mNumSegments = i_segs;
     if (mNumSegments > mMaxSegments)
         mNumSegments = mMaxSegments;
 
@@ -2284,7 +2284,7 @@ void mDoExt_3DlineMat1_c::draw() {
 }
 
 /* 80015764-80015E54       .text update__19mDoExt_3DlineMat1_cFUsfR8_GXColorUsP12dKy_tevstr_c */
-void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 space, dKy_tevstr_c* pTevStr) {
+void mDoExt_3DlineMat1_c::update(u16 i_segs, f32 i_size, GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr) {
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
@@ -2299,9 +2299,9 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     cXy* r_dstTex;
     cXy* dstTex;
 
-    mColor = newColor;
-    mpTevStr = pTevStr;
-    mNumSegments = segs;
+    mColor = i_color;
+    mpTevStr = i_tevStr;
+    mNumSegments = i_segs;
     if (mNumSegments > mMaxSegments)
         mNumSegments = mMaxSegments;
 
@@ -2309,8 +2309,8 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     line = mpLines;
 
     f32 spacing;
-    if (space != 0) {
-        spacing = size / space;
+    if (i_space != 0) {
+        spacing = i_size / i_space;
     } else {
         spacing = 0.0f;
     }
@@ -2325,7 +2325,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 
         dstPos = line->mPosArr[mCurArr];
         dstTex = line->mTexArr[mCurArr];
-        r_size = size;
+        r_size = i_size;
 
         dstTex[0].y = dist;
         dstTex[1].y = dist;
@@ -2341,7 +2341,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         delta = delta.outprod(eyeDelta);
         f32 scale = delta.abs();
         if (scale != 0.0f) {
-            scale = size / scale;
+            scale = i_size / scale;
             delta *= scale;
         }
 
@@ -2356,7 +2356,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         nextP1 = pos[0] - delta;
 
         for (s32 j = mNumSegments - 2; j > 0; j--) {
-            if (j < space)
+            if (j < i_space)
                 r_size -= spacing;
 
             r_dstTex[0].y = dist;
@@ -2390,7 +2390,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         r_dstTex[0].y = dist;
         r_dstTex[1].y = dist;
 
-        if (space != 0) {
+        if (i_space != 0) {
             r_dstPos[0] = pos[0];
             r_dstPos[1] = pos[0];
         } else {
@@ -2405,7 +2405,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 }
 
 /* 80015E54-80016518       .text update__19mDoExt_3DlineMat1_cFUsR8_GXColorP12dKy_tevstr_c */
-void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
+void mDoExt_3DlineMat1_c::update(u16 i_segs, GXColor& i_color, dKy_tevstr_c* i_tevStr) {
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
@@ -2421,9 +2421,9 @@ void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
     cXy* dstTex;
     u8* size_p;
 
-    mColor = newColor;
-    mpTevStr = pTevStr;
-    mNumSegments = segs;
+    mColor = i_color;
+    mpTevStr = i_tevStr;
+    mNumSegments = i_segs;
     if (mNumSegments > mMaxSegments)
         mNumSegments = mMaxSegments;
 
@@ -2515,12 +2515,12 @@ void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
 }
 
 /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
-void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* pMat) {
+void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* i_3DlineMat) {
     if (mp3DlineMat == NULL) {
         j3dSys.getDrawBuffer(0)->entryImm(this, 0);
     }
-    pMat->mpNextLineMat = mp3DlineMat;
-    mp3DlineMat = pMat;
+    i_3DlineMat->mpNextLineMat = mp3DlineMat;
+    mp3DlineMat = i_3DlineMat;
 }
 
 /* 8001657C-800165E4       .text draw__26mDoExt_3DlineMatSortPacketFv */
@@ -2727,32 +2727,4 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
         }
     }
     return NULL;
-}
-
-/* 80016C98-80016CC4       .text setGX__7JUTFontFQ28JUtility6TColorQ28JUtility6TColor */
-void JUTFont::setGX(JUtility::TColor col1, JUtility::TColor col2) {
-    setGX();
-}
-
-/* 80016CC4-80016CF0       .text getCellWidth__7JUTFontCFv */
-int JUTFont::getCellWidth() const {
-    return getWidth();
-}
-
-/* 80016CF0-80016D1C       .text getCellHeight__7JUTFontCFv */
-s32 JUTFont::getCellHeight() const {
-    return getHeight();
-}
-
-/* 80016D1C-80016D78       .text __dt__26mDoExt_3DlineMatSortPacketFv */
-mDoExt_3DlineMatSortPacket::~mDoExt_3DlineMatSortPacket() {}
-
-/* 80016D78-80016D80       .text getMaterialID__19mDoExt_3DlineMat1_cFv */
-int mDoExt_3DlineMat1_c::getMaterialID() {
-    return 1;
-}
-
-/* 80016D80-80016D88       .text getMaterialID__19mDoExt_3DlineMat0_cFv */
-int mDoExt_3DlineMat0_c::getMaterialID() {
-    return 0;
 }

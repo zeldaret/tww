@@ -328,7 +328,7 @@ int JUTResFont::getCellWidth() const {
 }
 
 /* 802C2EDC-802C2F28       .text getCellHeight__10JUTResFontCFv */
-s32 JUTResFont::getCellHeight() const {
+int JUTResFont::getCellHeight() const {
     if (mpGlyphBlocks) {
         ResFONT::GLY1* glyph = *mpGlyphBlocks;
         if (glyph) {
