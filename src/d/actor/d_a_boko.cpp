@@ -73,12 +73,7 @@ static daBoko_HIO_c l_HIO;
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {
-#ifdef __MWERKS__
     mpLineKe->lineMat.update(0xA, 1.25f, (GXColor){0xFF, 0x64, 0x00, 0xFF}, 2, &tevStr);
-#else
-    GXColor color = {0xFF, 0x64, 0x00, 0xFF};
-    mpLineKe->lineMat.update(0xA, 1.25f, color, 2, &tevStr);
-#endif
     dComIfGd_set3DlineMat(&mpLineKe->lineMat);
 }
 

@@ -151,8 +151,14 @@ public:
     virtual void draw();
 
     void setAlpha(u8 i_alpha) { mBlack.a = i_alpha; }
-    void setBlackColor(GXColor& c) { mBlack = c; }
-    void setWhiteColor(GXColor& c) { mWhite = c; }
+    void setBlackColor(GXColor& i_color) { mBlack = i_color; }
+    void setWhiteColor(GXColor& i_color) { mWhite = i_color; }
+    // some calls to these functions define i_color inline which is illegal in C++ for a non-const
+    // reference parameter - we add these overloads to enable standard compiler compatibility
+#if !__MWERKS__
+    void setBlackColor(const GXColor& i_color) { mBlack = const_cast<GXColor&>(i_color); }
+    void setWhiteColor(const GXColor& i_color) { mWhite = const_cast<GXColor&>(i_color); }
+#endif
 
 public:
     struct TexEntry {
