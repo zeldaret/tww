@@ -2260,7 +2260,9 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         break;
                         // goto 0x90C
                     case 0x08B3:
+#if VERSION > VERSION_JPN
                         field_0x0205 = 1;
+#endif
                         stopBattleBgm();
                         field_0x008c = 1.0f;
                         if(mpMainBgmSound){
@@ -2800,15 +2802,13 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                             param_3 = 0x64;
                         }
                         if(param_3 == 0x0){
-                            // param_3 = 0x0;
                             return NULL;
                         }   
                         i_pitch = 1.0f + (param_3/100.0f);  
                         if(param_3 >= 0x1E){
                             param_3 = 0x1E;
                         }
-                        i_volume = param_3 / 30.0f;
-                        // i_pitch = 1.0f + (0.0666667f * param_3);                 
+                        i_volume = param_3 / 30.0f;               
                         break;
                     case 0x087D:
 
@@ -2816,8 +2816,6 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                             param_3 -= 1;
                         }
                         i_pitch = 1.0f + (0.0666667f * param_3);
-
-                        // goto 0x17C4
                         break;
 
                     case 0x08E4:
@@ -2831,12 +2829,11 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                         break;
                     case 0x082F:
                         seStop(0x90B,0x3C);
-                        // goto 0x1840
+
                         break;
                     case 0x5825:
                         mSomeSpecialBGMFlag = 1;
                         break;
-                    // case 0x
                     case 0x580E:
                     case 0x580F:
                         if (pMtx != NULL) {
@@ -2967,11 +2964,7 @@ JAISound** JAIZelBasic::seStart(u32 i_seNum, Vec* param_2, u32 param_3, s8 param
                 field_0x0194[field_0x01f4] = param_2;
                 field_0x01f4 += 1;
                 field_0x01f4 %= 0x18;
-                return retval;
-                // goto 0x197C
-            
-        
-     
+                return retval;     
 }
 
 /* 802A8550-802A85F4       .text seStop__11JAIZelBasicFUll */
@@ -3224,7 +3217,6 @@ void JAIZelBasic::setLevObjSE(u32 arg0, Vec* arg1, s8 arg2) {
         local_44 = *arg1;
     }
     if(arg0 == 0x7009){
-
         if(local_44.y >  getAudioCamera()->field_0x0->y ){
             local_44.y = getAudioCamera()->field_0x0->y;
         }
@@ -3234,7 +3226,7 @@ void JAIZelBasic::setLevObjSE(u32 arg0, Vec* arg1, s8 arg2) {
     }
     // Vec* local_44;
     var_f1 = 1.0f;
-    switch ((s32) arg0) {                           /* irregular */
+    switch (arg0) {
     case 0x6103:
     case 0x7035:
         var_f1 = 0.5f;
@@ -3268,20 +3260,23 @@ void JAIZelBasic::setLevObjSE(u32 arg0, Vec* arg1, s8 arg2) {
     if(dVar7 != 0.0f){
 
 
-        u32 uVar4 = field_0x0244[0xF].m0;
-        u32 uVar6 = uVar4;
+
         int i;
-        for(i = 0; field_0x0244[i].m0 != arg0; i++){
-            uVar6 -= 1;
+        for(i = 0; i < field_0x0244[0xF].m0; i++){
+            if(field_0x0244[i].m0 == arg0){
+                break;
+            }
+            // var_r5 += 1;
         }
-        if(i == uVar4){
-            if(uVar4 == 0xF){
+        // u32 uVar4 = field_0x0244[0xF].m0;
+        if(i == field_0x0244[0xF].m0){
+            if(field_0x0244[0xF].m0 == 0xF){
                 return;
             }
             field_0x0244[i].m0 = arg0;
             field_0x0244[0xF].m0 += 1;
         }
-        uVar6 = field_0x0244[i].m4;
+        u32 uVar6 = field_0x0244[i].m4;
         if(uVar6 != 0x14){
             field_0x0244[i].m8[uVar6].m0 = dVar7;
             field_0x0244[i].m8[uVar6].m4 = dVar8;
@@ -3296,6 +3291,53 @@ void JAIZelBasic::setLevObjSE(u32 arg0, Vec* arg1, s8 arg2) {
 /* 802A8F58-802A90C0       .text processLevObjSE__11JAIZelBasicFv */
 void JAIZelBasic::processLevObjSE() {
     /* Nonmatching */
+    f32 fVar_dolby;
+    f32 fVar_pan;
+    f32 fVar_volume;
+
+    f32 fVar1,fVar2,fVar3;
+    for(int i = 0; i < field_0x0244[0xF].m0; i++){
+        fVar1 = 0.0f;
+        fVar2 = 0.0f;
+        fVar_dolby = 0.0f;
+
+
+        s8 uVar6 = 0;
+        for(int j = 0; j < field_0x0244[i].m4; j++){
+            fVar_pan = field_0x0244[i].m8[j].m0;
+            if(field_0x0244[i].m8[j].m0 > 0.0f){
+                uVar6 = field_0x0244[i].m8[j].mC;
+            }
+            fVar_volume = field_0x0244[i].m8[j].m4;
+            fVar3 = (1.0f - fVar_volume) * fVar_pan;
+            fVar_volume = fVar_volume * fVar_pan;
+            fVar_pan = field_0x0244[i].m8[j].m8 * fVar_pan;
+
+            if(fVar3 > fVar1){
+                fVar1 = fVar3;
+            }
+
+            if(fVar_volume > fVar2){
+                fVar2 = fVar_volume;
+            }
+
+            if(fVar_pan > fVar_dolby){
+                fVar_dolby = fVar_pan;
+            }
+        }
+
+
+        fVar_pan = (fVar1 > fVar2) ? fVar1 : fVar2;
+        fVar_volume = (fVar_pan > fVar_dolby) ? fVar_pan : fVar_dolby;
+        fVar_pan = 0.5f;
+        if(fVar1 != 0.0f || fVar2 != 0.0f){
+            fVar_pan = fVar2 / (fVar1 + fVar2);
+        }
+        if(DEMO_SELECT(TRUE,(int)field_0x0207 == 0)){
+            seStart(field_0x0244[i].m0,NULL,0,uVar6,1.0f,fVar_volume,fVar_pan,fVar_dolby,1);
+        }
+    }
+    initLevObjSE();
 }
 
 /* 802A90C0-802A9120       .text initLevObjSE__11JAIZelBasicFv */

@@ -233,7 +233,7 @@ public:
         f32 m0;
         f32 m4;
         f32 m8;
-        u8 mC;
+        s8 mC;
     };
     struct levSeSomeStruct{
         u32 m0;
