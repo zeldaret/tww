@@ -39,7 +39,7 @@ namespace daObjDrift {
             /* mWavePhase      */ 0.01f,
             /* mWaveAmplitude  */ 0.02f,
             /* mRideYOff       */ -20.0f,
-            /* mWavePhaseXStep  */ 400,
+            /* mWavePhaseXStep */ 400,
             /* field_0x16      */ 0,
             /* mWaveSinScale   */ 0.3f,
             /* field_0x1C      */ 0.12f,
@@ -48,7 +48,7 @@ namespace daObjDrift {
             /* mPosMoveDamp    */ 0.07f,
             /* mWavePhaseYStep */ 1000,
             /* mWavePhaseZStep */ 1111,
-            /* mTiltSinScale    */ 0.01f,
+            /* mTiltSinScale   */ 0.01f,
             /* field_0x34      */ 0.5f,
             /* field_0x38      */ 30,
             /* field_0x3A      */ 30,
@@ -60,9 +60,9 @@ namespace daObjDrift {
     } // namespace
 } // namespace daObjDrift
 
-const char daObjDrift::Act_c::M_arcname[] = "Kryu"; /* 0x40 */
+const char daObjDrift::Act_c::M_arcname[] = "Kryu";
 
-const dCcD_SrcCyl daObjDrift::Act_c::M_cyl_src = { /* 0x48 */
+const dCcD_SrcCyl daObjDrift::Act_c::M_cyl_src = {
     {
         /* Flags             */ 0,
         /* SrcObjAt  Type    */ 0,
@@ -93,14 +93,13 @@ const dCcD_SrcCyl daObjDrift::Act_c::M_cyl_src = { /* 0x48 */
 /* 000000EC-000001A0       .text CreateHeap__Q210daObjDrift5Act_cFv */
 BOOL daObjDrift::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KRYU_BDL_RYU_00_e);
-    JUT_ASSERT(0x13A, model_data != NULL);
+    JUT_ASSERT(314, model_data != NULL);
     mModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     return mModel != NULL;
 }
 
 /* 000001A0-00000370       .text Create__Q210daObjDrift5Act_cFv */
 BOOL daObjDrift::Act_c::Create() {
-    f32 L_waterY[2];
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     init_mtx();
 
@@ -114,8 +113,9 @@ BOOL daObjDrift::Act_c::Create() {
     make_flower();
     mpBgW->SetRideCallback(rideCB);
     mode_wait_init();
-    if (fopAcM_getWaterY(&home.pos, L_waterY)) {
-        eyePos.y = L_waterY[0];
+    f32 waterY;
+    if (fopAcM_getWaterY(&home.pos, &waterY)) {
+        eyePos.y = waterY;
     }
 
     mRideYOff = 0.0f;
@@ -126,22 +126,21 @@ BOOL daObjDrift::Act_c::Create() {
     mTiltZ = 0.0f;
     mTiltX = 0.0f;
 
-    mWavePhaseX = cM_rndFX(32768.0f);
-    mWavePhaseY = cM_rndFX(32768.0f);
-    mWavePhaseZ = cM_rndFX(32768.0f);
+    mWavePhaseX = cM_rndFX(0x8000);
+    mWavePhaseY = cM_rndFX(0x8000);
+    mWavePhaseZ = cM_rndFX(0x8000);
     mRideFlag = FALSE;
 
     mTargetAngleY = 0;
     mAngleChaseY = 0;
 
-    mHitDir.set((cXyz&)cXyz::Zero);
+    mHitDir.set(cXyz::Zero);
     field_0x4B0.setall(5.0f);
     mPrevPos.set(current.pos);
     f32 prevY = mPrevPos.y;
     field_0x4C8 = prevY;
     field_0x4CC = prevY;
 
-    // f32 endZero = 0.0f;
     field_0x4D0 = 0.0f;
     field_0x4D4 = 0.0f;
 
@@ -162,7 +161,7 @@ cPhs_State daObjDrift::Act_c::Mthd_Create() {
             dBgS_MoveBGProc_TypicalRotY,
             DEMO_SELECT(0x8000, 0x1B80)
         );
-        JUT_ASSERT(0x19B, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+        JUT_ASSERT(411, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
 }
@@ -179,10 +178,8 @@ void daObjDrift::Act_c::make_flower() {
             0,
             &pos,
             fopAcM_GetHomeRoomNo(this),
-            &angle,
-            NULL,
-            -1,
-            NULL);
+            &angle
+        );
     } else {
         mFlowerPid = fpcM_ERROR_PROCESS_ID_e;
     }
@@ -223,7 +220,7 @@ BOOL daObjDrift::Act_c::Delete() {
 
 /* 0000095C-000009A8       .text Mthd_Delete__Q210daObjDrift5Act_cFv */
 BOOL daObjDrift::Act_c::Mthd_Delete() {
-    s32 ret = MoveBGDelete();
+    BOOL ret = MoveBGDelete();
     dComIfG_resDeleteDemo(&mPhase, M_arcname);
     return ret;
 }
@@ -309,27 +306,25 @@ void daObjDrift::Act_c::init_mtx() {
 /* 00000D54-00000EC4       .text rideCB__Q210daObjDrift5Act_cFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjDrift::Act_c::rideCB(dBgW*, fopAc_ac_c* i_this, fopAc_ac_c* i_ride) {
     Act_c* drift = (Act_c*)i_this;
-    daPy_py_c* player = (daPy_py_c*)i_ride;
-    if (fopAcM_GetProfName(player) != fpcNm_PLAYER_e) {
+    if (fopAcM_GetProfName(i_ride) != fpcNm_PLAYER_e) {
         return;
     }
+    daPy_py_c* player = (daPy_py_c*)i_ride;
+
     f32 ratio = 1.0f / attr().mWaveHeight;
     drift->mRideYOff = attr().mRideYOff;
-    
-    cXyz delta;
-    cXyz localDelta;
+    cXyz delta = player->current.pos - drift->current.pos;
     Mtx invMtx;
-    delta = player->current.pos - drift->current.pos;
-    if (PSMTXInverse(drift->mMtx, invMtx) &&
-        !dComIfGp_checkPlayerStatus0(0, daPyStts0_HANG_e)) {
+    if (MTXInverse(drift->mMtx, invMtx) && !dComIfGp_checkPlayerStatus0(0, daPyStts0_HANG_e)) {
+        cXyz localDelta;
         mDoMtx_multVecSR(invMtx, &delta, &localDelta);
         f32 sqMag = localDelta.abs2XZ();
         if (localDelta.y < 400.0f) {
-            if (sqMag < 129600.0f) {
+            if (sqMag < SQUARE(360.0f)) {
                 drift->mRideFlag = TRUE;
             }
         } else if (localDelta.y < 550.0f) {
-            if (sqMag < 48400.0f) {
+            if (sqMag < SQUARE(220.0f)) {
                 drift->mRideFlag = TRUE;
             }
         }
@@ -351,18 +346,8 @@ void daObjDrift::Act_c::set_current() {
     gravity = yDelta * attr().mWaveAmplitude
             + sinVal * attr().mWaveSinScale;
     daObj::posMoveF_stream(this, NULL, &cXyz::Zero, attr().mWaveSpeed, attr().mWavePhase);
-#if VERSION == VERSION_DEMO
-    f32 rotFactor;
+    f32 rotFactor = mRideFlag != 0 ? 0.2f : 1.0f;
     f32 chaseFactor;
-#else
-    f32 chaseFactor;
-    f32 rotFactor;
-#endif
-    if (mRideFlag != 0) {
-        rotFactor = 0.2f;
-    } else {
-        rotFactor = 1.0f;
-    }
     if (mMode == MODE_ROT) {
         chaseFactor = attr().mTiltChaseRot;
     } else {

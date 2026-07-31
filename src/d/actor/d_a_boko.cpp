@@ -269,7 +269,6 @@ BOOL daBoko_c::checkNoDraw() {
 
 /* 00000FA4-00001340       .text setFlameEffect__8daBoko_cFv */
 void daBoko_c::setFlameEffect() {
-    /* Nonmatching */
     static const s16 base_angle[] = {150, 200, 180, 120};
 
     dStage_darkStatus_c* dark_stts = dStage_roomControl_c::getDarkStatus();
@@ -421,7 +420,6 @@ BOOL daBoko_c::procMove_init() {
 
 /* 0000175C-00001E94       .text procMove__8daBoko_cFv */
 BOOL daBoko_c::procMove() {
-    /* Nonmatching - fpr regswap */
     BOOL bVar4 = FALSE;
     fopAcM_posMoveF(this, NULL);
     f32 fVar14_2 = m2DC.y;
