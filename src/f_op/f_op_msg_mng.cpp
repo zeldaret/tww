@@ -2134,7 +2134,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
         // TODO: is this pointer supposed to be char* or u8*?
         const char* temp_char = &bmgData[count];
         const u8* temp = (const u8*)&bmgData[count];
-        if (*temp_char == 0x1A) {
+        if (temp_char[0] == 0x1A) {
             if ((u8)temp[2] == 0xFF && temp[3] == 0 && temp[4] == 0) {
                 if (mesgEntry->mMsgNo == 0x42 || mesgEntry->mMsgNo == 0x43 || mesgEntry->mMsgNo == 0x44 || mesgEntry->mMsgNo == 0x45 ||
                     mesgEntry->mMsgNo == 0x46 || mesgEntry->mMsgNo == 0x47 || mesgEntry->mMsgNo == 0x48 || mesgEntry->mMsgNo == 0x49 ||
@@ -2283,22 +2283,18 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     }
                 }
 
-                // const u8* r27 = (const u8*)sp84;
-                for (int i = 0; sp84[r28] != '\0'; i++) {
+                while ((char)sp84[r28] != '\0') {
                     int c;
-                    if ((sp84[r28] >> 4) == 8 || (sp84[r28] >> 4) == 9) {
-                        char tmp = sp84[r28++];
-                        field_0xD4[0] = tmp;
-                        // int tmp = buf[r28++];
+                    if (((u8)sp84[r28] >> 4) == 8 || ((u8)sp84[r28] >> 4) == 9) {
+                        int tmp = (u8)sp84[r28];
+                        field_0xD4[0] = sp84[r28++];
                         u8 tmp2 = sp84[r28++];
                         c = tmp << 8 | tmp2;
                         field_0xD4[1] = tmp2;
-                        // r27 += 2;
                         field_0xD4[2] = '\0';
                     } else {
-                        c = sp84[r28];
+                        c = (u8)sp84[r28];
                         field_0xD4[0] = sp84[r28++];
-                        // r27 += 1;
                         field_0xD4[1] = '\0';
                     }
                     
@@ -2564,7 +2560,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 tag_input_kenshi();
     #endif
             } else if ((u8)temp[2] == 1) {
-                u16 r27 = (temp[count + 3] << 8) | temp[count + 4];
+                u16 r27 = ((u8)bmgData[count + 3] << 8) | (u8)bmgData[count + 4];
                 if (dComIfGp_roomControl_getStayNo() != 0) {
                     s8 reverb = dComIfGp_getReverb(dComIfGp_roomControl_getStayNo());
                     if (r27 == 8) {
@@ -2592,7 +2588,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             } else {
                 count += bmgData[count + 1];
             }
-        } else if (*temp_char == 0xA) {
+        } else if (temp_char[0] == 0xA) {
             if (field_0x154 != 0) {
                 field_0x1C = field_0x20 - field_0x28;
 
@@ -2635,7 +2631,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 if (lineCount >= mesgEntry->field_0x16) {
                     temp_char = &bmgData[count];
                     temp = (const u8*)&bmgData[count];
-                    if ((u8)temp[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 8) {
+                    if (temp_char[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 8) {
                         setSelectFlagOn();
                         lineCount = 0;
                         field_0x20 = field_0x108[lineCount];
@@ -2645,7 +2641,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         field_0x64 = field_0x50[1];
                         field_0x68 = field_0x50[2];
                         field_0x6C = field_0x50[3];
-                    } else if ((u8)temp[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 9) {
+                        continue;
+                    } else if (temp_char[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 9) {
                         setSelectFlagOn();
                         lineCount = 0;
                         field_0x20 = field_0x108[lineCount];
@@ -2655,7 +2652,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         field_0x64 = field_0x50[1];
                         field_0x68 = field_0x50[2];
                         field_0x6C = field_0x50[3];
-                    } else if ((u8)temp[0] != 0x00) {
+                        continue;
+                    } else if (temp_char[0] != 0x00) {
                         mesgStatus = fopMsgStts_STOP_e;
                     }
 
@@ -2665,12 +2663,14 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     return;
                 }
 
-                field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
+                field_0x150 = 0;
+                
+                field_0x20 = field_0xF8[lineCount];
 
                 char sp54[16];
                 sprintf(sp54, "\x1b""CR[%d]", (int)field_0x20);
-                strcat(field_0x64, sp54);
-                strcat(field_0x6C, sp54);
+                strcat(field_0x60, sp54);
+                strcat(field_0x68, sp54);
                 
                 if (autoSendFlag == 0) {
                     waitTimer = spaceTimer;
@@ -2692,8 +2692,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
         } else {
             int r28;
             bool r27;
-            if (((*temp_char >> 4) & 0x0F) == 8 || ((*temp_char >> 4) & 0x0F) == 9) {
-                field_0xD4[0] = *temp_char;
+            if (((temp[0] >> 4) & 0x0F) == 8 || ((temp[0] >> 4) & 0x0F) == 9) {
+                field_0xD4[0] = temp[0];
                 field_0xD4[1] = bmgData[count + 1];
                 field_0xD4[2] = '\0';
                 r28 = (u8)bmgData[count] << 8;
@@ -2711,7 +2711,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
                 r27 = false;
             } else {
-                field_0xD4[0] = *temp_char;
+                field_0xD4[0] = temp_char[0];
                 field_0xD4[1] = '\0';
                 r28 = (u8)bmgData[count];
                 r27 = true;
