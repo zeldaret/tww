@@ -2453,7 +2453,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 iconSelect(field_0x148, 0x18);
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x3A) {
                 iconSelect(field_0x148, 0x19);
-    #if VERSION > VERSION_DEMO
+    #if VERSION > VERSION_JPN
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x20) {
                 tag_kaisen_game();
             } else if (
@@ -2482,13 +2482,13 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     field_0x14 = field_0x20 - field_0x108[lineCount];
                 }
                 count += bmgData[count + 1];
-    #if VERSION > VERSION_DEMO
+    #if VERSION > VERSION_JPN
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x26) {
                 tag_num_input();
     #endif
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x27) {
                 iconSelect(field_0x148, 0x17);
-    #if VERSION > VERSION_DEMO
+    #if VERSION > VERSION_JPN
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x28) {
                 tag_sword_game();
     #endif
@@ -2503,7 +2503,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 count += bmgData[count + 1];
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x2A) {
                 iconSelect(field_0x148, 0x1A);
-    #if VERSION > VERSION_DEMO
+    #if VERSION > VERSION_JPN
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x2B) {
                 tag_letter_game();
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x3B) {
