@@ -1616,7 +1616,7 @@ fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
     waitTimer = 0;
     spaceTimer = 1;
     sendSpeed = 1;
-    field_0x164 = 0;
+    keyWaitTimer = 0;
     field_0x25C = -1;
     field_0x29D = 0;
     field_0x260 = 0;
@@ -1644,7 +1644,7 @@ fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
         field_0x220[i] = 0;
     }
 
-    field_0x10 = 0;
+    field_0x10 = NULL;
     field_0x299 = 0;
     field_0x29A = 0;
     selectFlag = 0;
@@ -1702,7 +1702,7 @@ void fopMsgM_msgDataProc_c::dataInit() {
     waitTimer = 0;
     spaceTimer = 1;
     sendSpeed = 1;
-    field_0x164 = 0;
+    keyWaitTimer = 0;
     field_0x29D = 0;
     field_0x260 = 0;
     field_0x264 = 0.0f;
@@ -1743,9 +1743,9 @@ void fopMsgM_msgDataProc_c::dataInit() {
 /* 8002E95C-8002EA58       .text charLength__21fopMsgM_msgDataProc_cFiib */
 f32 fopMsgM_msgDataProc_c::charLength(int i_scale, int i_charNo, bool param_2) {
     JUTFont::TWidth width;
-    font[0]->getWidthEntry(i_charNo, &width);
+    font->getWidthEntry(i_charNo, &width);
     f32 charWidth = (f32)(int)width.field_0x1;
-    f32 cellWidth = (f32)i_scale / (f32)font[0]->getCellWidth();
+    f32 cellWidth = (f32)i_scale / (f32)font->getCellWidth();
 
     if (param_2) {
         return charWidth * cellWidth;
@@ -1757,9 +1757,9 @@ f32 fopMsgM_msgDataProc_c::charLength(int i_scale, int i_charNo, bool param_2) {
 /* 8002EA58-8002EB4C       .text rubyLength__21fopMsgM_msgDataProc_cFib */
 f32 fopMsgM_msgDataProc_c::rubyLength(int i_charNo, bool param_2) {
     JUTFont::TWidth width;
-    font[1]->getWidthEntry(i_charNo, &width);
+    rubyFont->getWidthEntry(i_charNo, &width);
     s32 advance = width.field_0x1;
-    f32 width2 = font[1]->getCellWidth();
+    f32 width2 = rubyFont->getCellWidth();
     f32 temp = ((s32)rubyFontSize / width2);
     if (param_2) {
         return advance * temp;
@@ -1856,20 +1856,18 @@ u8 fopMsgM_msgDataProc_c::selectCheck2(J2DPane* param_1, int param_2, int param_
     field_0x268 = param_1->getHeight() / 2.0f;
     field_0x278 = g_msgHIO.field_0x70;
     field_0x274 = g_msgHIO.field_0x70;
-    int temp = field_0x164 > 0 ? field_0x164 - 1 : 0;
-    field_0x164 = temp;
 
-    if (!temp) {
+    if (dec_keyWaitTimer() == 0) {
         if (g_mDoCPd_cpadInfo[0].mMainStickPosY > 0.7f) {
             if (field_0x27D == 1) {
                 field_0x27D = 0;
-                field_0x164 = 10;
+                keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             }
         } else if (g_mDoCPd_cpadInfo[0].mMainStickPosY < -0.7f) {
             if (field_0x27D == 0) {
                 field_0x27D = 1;
-                field_0x164 = 10;
+                keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             }
         }
@@ -1886,28 +1884,26 @@ u8 fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param_
     field_0x268 = param_1->getHeight() / 2.0f;
     field_0x278 = g_msgHIO.field_0x70;
     field_0x274 = g_msgHIO.field_0x70;
-    int temp = field_0x164 > 0 ? field_0x164 - 1 : 0;
-    field_0x164 = temp;
 
-    if (!temp) {
+    if (dec_keyWaitTimer() == 0) {
         if (g_mDoCPd_cpadInfo[0].mMainStickPosY > 0.7f) {
             if (field_0x27D == 1) {
                 field_0x27D = 0;
-                field_0x164 = 10;
+                keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             } else if (field_0x27D == 2) {
                 field_0x27D = 1;
-                field_0x164 = 10;
+                keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             }
         } else if (g_mDoCPd_cpadInfo[0].mMainStickPosY < -0.7f) {
             if (field_0x27D == 0) {
                 field_0x27D = 1;
-                field_0x164 = 10;
+                keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             } else if (field_0x27D == 1) {
                 field_0x27D = 2;
-                field_0x164 = 10;
+                keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             }
         }
@@ -1924,20 +1920,18 @@ u8 fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane* param_1, int param_2, int par
     field_0x268 = param_1->getHeight() / 2.0f;
     field_0x278 = g_msgHIO.field_0x70;
     field_0x274 = g_msgHIO.field_0x70;
-    int temp = field_0x164 > 0 ? field_0x164 - 1 : 0;
-    field_0x164 = temp;
 
-    if (!temp) {
+    if (dec_keyWaitTimer() == 0) {
         if (g_mDoCPd_cpadInfo[0].mMainStickPosX < -0.7f) {
             if (field_0x27D == 1) {
                 field_0x27D = 0;
-                field_0x164 = 10;
+                keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             }
         } else if (g_mDoCPd_cpadInfo[0].mMainStickPosX > 0.7f) {
             if (field_0x27D == 0) {
                 field_0x27D = 1;
-                field_0x164 = 10;
+                keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             }
         }
@@ -2065,6 +2059,8 @@ void fopMsgM_msgDataProc_c::colorAnime(J2DPicture* i_pic) {
 /* 800322B4-80034F3C       .text stringSet__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::stringSet() {
     /* Nonmatching */
+    s8 r30 = g_msgHIO.field_0x6c;
+
     field_0x60 = field_0x40;
     field_0x64 = field_0x44;
     field_0x68 = field_0x48;
@@ -2093,7 +2089,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             if (mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB &&
                 mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD && mesgEntry->mTextboxType != 9)
             {
-                if (dComIfGp_roomControl_getStayNo()) {
+                if (dComIfGp_roomControl_getStayNo() != 0) {
                     mDoAud_messageSePlay(0, 0, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
                 } else {
                     mDoAud_messageSePlay(0, 0, 0);
@@ -2119,81 +2115,27 @@ void fopMsgM_msgDataProc_c::stringSet() {
         return;
     }
 
-    while (true) {
-        while (true) {
-            if (bmgData[count] == '\0') {
-                if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag) {
-                    return;
-                }
+    while (bmgData[count] != '\0') {
+        if (field_0x27E != 0) {
+            field_0x27E = 0;
+            field_0x60[field_0x2C] = '\0';
+            field_0x68[field_0x30] = '\0';
+            strcat(field_0x60, field_0xD4);
+            strcat(field_0x68, field_0xD4);
+        }
+        if (field_0x27F != 0) {
+            field_0x27F = 0;
+            field_0x64[field_0x34] = '\0';
+            field_0x6C[field_0x38] = '\0';
+            strcat(field_0x64, field_0x70);
+            strcat(field_0x6C, field_0x70);
+        }
 
-                if (field_0x27E != 0) {
-                    field_0x27E = 0;
-                    field_0x60[field_0x2C] = '\0';
-                    field_0x68[field_0x30] = '\0';
-                    strcat(field_0x60, field_0xD4);
-                    strcat(field_0x68, field_0xD4);
-                }
-                if (field_0x27F != 0) {
-                    field_0x27F = 0;
-                    field_0x64[field_0x34] = '\0';
-                    field_0x6C[field_0x38] = '\0';
-                    strcat(field_0x64, field_0x70);
-                    strcat(field_0x6C, field_0x70);
-                }
-
-                if (
-                    mesgStatus == fopMsgStts_SELECT_2_e || mesgStatus == fopMsgStts_SELECT_3_e ||
-                    mesgStatus == fopMsgStts_SELECT_YOKO_e || mesgStatus == fopMsgStts_INPUT_e
-                ) {
-                    return;
-                }
-
-                if (mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB &&
-                    mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD && mesgEntry->mTextboxType != 9)
-                {
-                    if (dComIfGp_roomControl_getStayNo()) {
-                        mDoAud_messageSePlay(0, 0, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
-                    } else {
-                        mDoAud_messageSePlay(0, 0, 0);
-                    }
-                }
-
-                if (fopMsgM_nextMsgFlagCheck()) {
-                    if (mesgEntry->mNextMsgNo != 0) {
-                        fopMsgM_messageSet(mesgEntry->mNextMsgNo);
-                        mesgStatus = fopMsgStts_MSG_CONTINUES_e;
-                    } else {
-                        mesgStatus = fopMsgStts_MSG_ENDS_e;
-                    }
-                } else {
-                    if (getAutoSendFlag() || getHandSendFlag()) {
-                        mesgStatus = fopMsgStts_CLOSE_WAIT_e;
-                    } else {
-                        mesgStatus = fopMsgStts_MSG_DISPLAYED_e;
-                    }
-                }
-            }
-
-            if (field_0x27E != 0) {
-                field_0x27E = 0;
-                field_0x60[field_0x2C] = '\0';
-                field_0x68[field_0x30] = '\0';
-                strcat(field_0x60, field_0xD4);
-                strcat(field_0x68, field_0xD4);
-            }
-            if (field_0x27F != 0) {
-                field_0x27F = 0;
-                field_0x64[field_0x34] = '\0';
-                field_0x6C[field_0x38] = '\0';
-                strcat(field_0x64, field_0x70);
-                strcat(field_0x6C, field_0x70);
-            }
-
-            u32 origOffset = count;
-            const char* temp = &bmgData[origOffset];
-            if (*temp != 0x1A)
-                break;
-            if (temp[2] == 0xFF && temp[3] == 0 && temp[4] == 0) {
+        // TODO: is this pointer supposed to be char* or u8*?
+        const char* temp_char = &bmgData[count];
+        const u8* temp = (const u8*)&bmgData[count];
+        if (*temp_char == 0x1A) {
+            if ((u8)temp[2] == 0xFF && temp[3] == 0 && temp[4] == 0) {
                 if (mesgEntry->mMsgNo == 0x42 || mesgEntry->mMsgNo == 0x43 || mesgEntry->mMsgNo == 0x44 || mesgEntry->mMsgNo == 0x45 ||
                     mesgEntry->mMsgNo == 0x46 || mesgEntry->mMsgNo == 0x47 || mesgEntry->mMsgNo == 0x48 || mesgEntry->mMsgNo == 0x49 ||
                     mesgEntry->mMsgNo == 0x4A || mesgEntry->mMsgNo == 0x4B)
@@ -2214,7 +2156,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     sprintf(buf, "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
                     strcat(field_0x60, buf);
                 } else {
-                    if (temp[5] > -1 && temp[5] < 9) {
+                    if (temp_char[5] >= 0 && temp_char[5] <= 8) {
                         if (mesgEntry->mTextboxType == 2 || mesgEntry->mTextboxType == 6 || mesgEntry->mTextboxType == 7) {
                             static const u32 colorTable[9] = {
                                 0x00000000,
@@ -2227,76 +2169,84 @@ void fopMsgM_msgDataProc_c::stringSet() {
                                 0x50505000,
                                 0xFFB40000,
                             };
-                            field_0x25C = colorTable[mesgEntry->mTextboxType];
-                            char buf[16];
-                            sprintf(buf,"\x1B""CC[%08x]\x1B""GC[%08x]", field_0x25C | field_0x290, field_0x25C | field_0x291);
-                            strcat(field_0x60, buf);
+                            field_0x25C = colorTable[temp_char[5]];
+                            char spD0[16];
+                            u32 r5 = field_0x25C;
+                            r5 |= field_0x290;
+                            u32 r6 = field_0x25C;
+                            r6 |= field_0x291;
+                            sprintf(spD0,"\x1B""CC[%08x]\x1B""GC[%08x]", r5, r6);
+                            strcat(field_0x60, spD0);
+                        } else if (mesgEntry->mTextboxType == 0xB) {
+                            static const u32 colorTable[9] = {
+                                0x000000FF,
+                                0xB40000FF,
+                                0x008282FF,
+                                0x0000AAFF,
+                                0xE67D0FFF,
+                                0x82FFFFFF,
+                                0x6400FFFF,
+                                0x3C3C3CFF,
+                                0xFFB400FF,
+                            };
+                            field_0x25C = colorTable[temp_char[5]];
+                            char spB4[16];
+                            sprintf(spB4,  "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
+                            strcat(field_0x60, spB4);
+                        } else {
+                            field_0x25C = fopMsgM_getColorTable(temp[5]);
+                            char sp98[16];
+                            sprintf(sp98, "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
+                            strcat(field_0x60, sp98);
                         }
-                    } else if (temp[5] == 0xB) {
-                        static const u32 colorTable[9] = {
-                            0x000000FF,
-                            0xB40000FF,
-                            0x008282FF,
-                            0x0000AAFF,
-                            0xE67D0FFF,
-                            0x82FFFFFF,
-                            0x6400FFFF,
-                            0x3C3C3CFF,
-                            0xFFB400FF,
-                        };
-                        field_0x25C = colorTable[temp[5]];
-                        char buf[16];
-                        sprintf(buf,  "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
-                        strcat(field_0x60, buf);
-                    } else {
-                        field_0x25C = fopMsgM_getColorTable(temp[5]);
-                        char buf[16];
-                        sprintf(buf, "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
-                        strcat(field_0x60, buf);
                     }
                 }
 
                 count += bmgData[count + 1];
-            } else if (temp[2] == 0xFF && temp[3] == 0 && temp[4] == 1) {
-                f32 temp2 = *(u16*)(&temp[5]);
+            } else if ((u8)temp[2] == 0xFF && temp[3] == 0 && temp[4] == 1) {
+                int r0 = (temp[5] << 8) | temp[6];
+                f32 temp2 = r0;
+                f32 f31 = temp2 * 0.01f;
                 u32 temp3 = field_0x148;
-                field_0x148 = fontSize * temp2 * 0.1f + 0.5f;
+                field_0x148 = fontSize * f31 + 0.5f;
                 if (field_0x134 == 0) {
                     fopMsgM_setFontsizeCenter(field_0x60, field_0x68, field_0x64, field_0x6C, temp3, field_0x148);
-                    if (temp2 * 0.1f > 1.0f && field_0x29D == 0) {
+                    if (f31 > 1.0f && field_0x29D == 0) {
                         field_0x29D = 1;
                     }
                 } else {
-                    if (temp2 * 0.1f > 1.0f && field_0x29D == 0) {
+                    if (f31 > 1.0f && field_0x29D == 0) {
                         strcat(field_0x60, "\n");
                         strcat(field_0x64, "\n");
                         strcat(field_0x68, "\n");
                         strcat(field_0x6C, "\n");
-                        char buf[16];
-                        sprintf(buf, "\x1B""CR[%d]", field_0x20);
-                        strcat(field_0x60, buf);
-                        strcat(field_0x68, buf);
+                        char sp74[16];
+                        sprintf(sp74, "\x1B""CR[%d]", (int)field_0x20);
+                        strcat(field_0x60, sp74);
+                        strcat(field_0x68, sp74);
                         field_0x29D = 1;
                     }
                     fopMsgM_setFontsizeCenter2(field_0x60, field_0x68, field_0x64, field_0x6C, temp3, field_0x148, fontSize, lineSpace);
                 }
 
                 count += bmgData[count + 1];
-            } else if (temp[2] == 0xFF && temp[3] == 0 && temp[4] == 2) {
+            } else if ((u8)temp[2] == 0xFF && temp[3] == 0 && temp[4] == 2) {
                 if (temp[1] != 5) {
+                    int r28 = count + (temp_char[1] & 0xFF);
                     strcpy(field_0x70, "");
                     field_0x18 = 0.0f;
                     field_0x1C = 0.0f;
                     field_0x28 = field_0x20;
-                    field_0x154 = bmgData[count + 5];
+                    field_0x154 = (u8)bmgData[count + 5];
                     count += 6;
-                    while (count < origOffset + temp[2]) {
+                    while (r28 > count) {
                         char buf[3];
                         buf[0] = bmgData[count];
                         buf[1] = bmgData[count + 1];
                         buf[2] = '\0';
+                        u32 temp2 = (u8)bmgData[count] << 8;
+                        temp2 |= (u8)bmgData[count + 1];
                         strcat(field_0x70, buf);
-                        u16 temp2 = *(u16*)(&bmgData[count]);
                         if (field_0x29B == 0) {
                             field_0x18 = rubyLength(temp2, true);
                             field_0x29B = 1;
@@ -2306,14 +2256,17 @@ void fopMsgM_msgDataProc_c::stringSet() {
 
                         count += 2;
                     }
+                } else {
+                    count += temp_char[1] & 0xFF;
                 }
-            } else if (temp[2] == 0 && temp[3] == 0 && temp[4] == 0) {
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0) {
                 char buf[12];
+                u32 r28 = 0;
                 strcpy(buf, dComIfGs_getPlayerName());
                 if (
-#if VERSION > VERSION_JPN
+    #if VERSION > VERSION_JPN
                     dComIfGs_getPalLanguage() == 1 &&
-#endif 
+    #endif 
                         (mesgEntry->mMsgNo == 0x33B ||
                         mesgEntry->mMsgNo == 0xC8B  ||
                         mesgEntry->mMsgNo == 0x1D21 ||
@@ -2330,20 +2283,23 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     }
                 }
 
-                u32 curOffset = 0;
-                for (s32 i = 0; buf[i] != '\0'; i++) {
-                    char c = buf[i];
-                    if (c == '\0')
-                        break;
-                    if ((c >> 4) == 8 || (c >> 4) == 9) {
-                        field_0xD4[0] = buf[curOffset];
-                        field_0xD4[1] = buf[curOffset + 1];
+                char* r27 = buf;
+                for (s32 i = 0; *r27 != '\0'; i++) {
+                    int c;
+                    if ((*r27 >> 4) == 8 || (*r27 >> 4) == 9) {
+                        field_0xD4[0] = buf[r28++];
+                        int tmp = buf[r28++];
+                        c = tmp;
+                        c |= *r27 << 8;
+                        field_0xD4[1] = tmp;
                         field_0xD4[2] = '\0';
-                        curOffset += 2;
+                        r27 += 2;
                     } else {
-                        field_0xD4[0] = buf[curOffset];
+                        c = *r27;
+                        field_0xD4[0] = buf[r28];
                         field_0xD4[1] = '\0';
-                        curOffset += 1;
+                        r28 += 1;
+                        r27 += 1;
                     }
                     if (field_0x150 == 0) {
                         field_0x14 = charLength(field_0x148, c, true);
@@ -2363,84 +2319,578 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 count += bmgData[count + 1];
-            } else if (temp[2] == 0 && temp[3] == 0 && temp[4] == 1) {
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 1) {
                 field_0x29A = 1;
                 count = bmgData[count + 1];
-            } else if (temp[2] == 0 && temp[3] == 0 && temp[4] == 2) {
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 2) {
                 field_0x29A = 0;
                 count = bmgData[count + 1];
-            } else if (temp[2] == 0 && temp[3] == 0 && temp[4] == 3) {
-                waitTimer = temp[5] << 8;
-                waitTimer |= bmgData[count + 6];
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 3) {
+                waitTimer = (u8)temp[5] << 8;
+                waitTimer |= (u8)bmgData[count + 6];
                 setAutoSendFlagOn();
                 count = bmgData[count + 1];
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 4) {
+    #if VERSION > VERSION_DEMO
+                if (
+                    mesgEntry->mTextboxType == 0 || mesgEntry->mTextboxType == 1 || mesgEntry->mTextboxType == 5 ||
+                    mesgEntry->mTextboxType == 8 || mesgEntry->mTextboxType == 0xC || mesgEntry->mTextboxType == 0xE
+                ) {
+                    field_0x296 = 1;
+                }
+    #endif
+                waitTimer = (u8)bmgData[count + 5] << 8;
+                waitTimer |= (u8)bmgData[count + 6];
+                setAutoSendFlagOn();
+                count = bmgData[count + 1];
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 5) {
+                waitTimer = (u8)temp[5] << 8;
+                waitTimer |= (u8)bmgData[count + 6];
+                setHandSendFlagOn();
+                count = bmgData[count + 1];
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 6) {
+                count = (s8)temp[1];
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 7) {
+                if (field_0x299 == 0) {
+    #if VERSION > VERSION_DEMO
+                    if (
+                        mesgEntry->mTextboxType == 0 || mesgEntry->mTextboxType == 1 || mesgEntry->mTextboxType == 5 ||
+                        mesgEntry->mTextboxType == 8 || mesgEntry->mTextboxType == 0xC || mesgEntry->mTextboxType == 0xE
+                    ) {
+                        field_0x296 = 1;
+                    }
+    #endif
+                    waitTimer = (u8)bmgData[count + 5] << 8;
+                    waitTimer |= (u8)bmgData[count + 6];
+                    count = bmgData[count + 1];
+                    return;
+                }
+                if (
+                    mesgEntry->mTextboxType == 0 || mesgEntry->mTextboxType == 1 || mesgEntry->mTextboxType == 5 ||
+                    mesgEntry->mTextboxType == 8 || mesgEntry->mTextboxType == 0xC || mesgEntry->mTextboxType == 0xE
+                ) {
+    #if VERSION > VERSION_DEMO
+                    field_0x296 = 1;
+    #endif
+                    waitTimer = (u8)bmgData[count + 5] << 8;
+                    waitTimer |= (u8)bmgData[count + 6];
+                    count = bmgData[count + 1];
+                    return;
+                }
+                count = bmgData[count + 1];
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 8) {
+                setSelectFlagOn();
+                lineCount = 0;
+                field_0x20 = field_0x108[lineCount];
+                count = bmgData[count + 1];
+                mesgStatus = fopMsgStts_SELECT_2_e;
+                field_0x60 = field_0x50[0];
+                field_0x64 = field_0x50[1];
+                field_0x68 = field_0x50[2];
+                field_0x6C = field_0x50[3];
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 9) {
+                setSelectFlagOn();
+                lineCount = 0;
+                field_0x20 = field_0x108[lineCount];
+                count = bmgData[count + 1];
+                mesgStatus = fopMsgStts_SELECT_3_e;
+                field_0x60 = field_0x50[0];
+                field_0x64 = field_0x50[1];
+                field_0x68 = field_0x50[2];
+                field_0x6C = field_0x50[3];
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0xA) {
+                iconSelect(field_0x148, 0x00);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0xB) {
+                iconSelect(field_0x148, 0x01);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0xC) {
+                iconSelect(field_0x148, 0x02);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0xD) {
+                iconSelect(field_0x148, 0x03);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0xE) {
+                iconSelect(field_0x148, 0x04);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0xF) {
+                iconSelect(field_0x148, 0x05);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x10) {
+                iconSelect(field_0x148, 0x06);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x11) {
+                iconSelect(field_0x148, 0x07);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x12) {
+                iconSelect(field_0x148, 0x08);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x13) {
+                iconSelect(field_0x148, 0x09);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x14) {
+                iconSelect(field_0x148, 0x0A);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x15) {
+                iconSelect(field_0x148, 0x0B);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x16) {
+                iconSelect(field_0x148, 0x0C);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x17) {
+                iconSelect(field_0x148, 0x0D);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x18) {
+                iconSelect(field_0x148, 0x0E);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x19) {
+                iconSelect(field_0x148, 0x0F);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x1A) {
+                iconSelect(field_0x148, 0x10);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x1B) {
+                iconSelect(field_0x148, 0x11);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x1C) {
+                iconSelect(field_0x148, 0x12);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x1D) {
+                iconSelect(field_0x148, 0x13);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x1E) {
+                setSelectFlagYokoOn();
+                iconSelect(field_0x148, 0x14);
+                mesgStatus = fopMsgStts_SELECT_YOKO_e;
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x1F) {
+                if (selectFlag == 0) {
+                    field_0x27D = 0;
+                } else {
+                    field_0x27D = 1;
+                }
+                iconSelect(field_0x148, 0x15);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x39) {
+                iconSelect(field_0x148, 0x18);
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x3A) {
+                iconSelect(field_0x148, 0x19);
+    #if VERSION > VERSION_DEMO
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x20) {
+                tag_kaisen_game();
+            } else if (
+                ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x21) ||
+                ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x24) ||
+                ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x25) ||
+                ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x2C) ||
+                ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x36)
+            ) {
+                tag_rupee();
+    #endif
+            } else if (
+                ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x22) ||
+                ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x23)
+            ) {
+                if (temp[4] == 0x22) {
+                    u32 msgNo = dComIfGp_getNpcNameMessageID();
+                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &field_0x20, &field_0x24, &field_0x150);
+                } else if (temp[4] == 0x23) {
+                    u32 msgNo = dComIfGp_getItemNameMessageID();
+                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &field_0x20, &field_0x24, &field_0x150);
+                }
+                if (selectFlag != 1) {
+                    field_0x14 = field_0x20 - field_0xF8[lineCount];
+                } else {
+                    field_0x14 = field_0x20 - field_0x108[lineCount];
+                }
+                count += bmgData[count + 1];
+    #if VERSION > VERSION_DEMO
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x26) {
+                tag_num_input();
+    #endif
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x27) {
+                iconSelect(field_0x148, 0x17);
+    #if VERSION > VERSION_DEMO
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x28) {
+                tag_sword_game();
+    #endif
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x29) {
+                u32 msgNo = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
+                getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &field_0x20, &field_0x24, &field_0x150);
+                if (selectFlag != 1) {
+                    field_0x14 = field_0x20 - field_0xF8[lineCount];
+                } else {
+                    field_0x14 = field_0x20 - field_0x108[lineCount];
+                }
+                count += bmgData[count + 1];
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x2A) {
+                iconSelect(field_0x148, 0x1A);
+    #if VERSION > VERSION_DEMO
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x2B) {
+                tag_letter_game();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x3B) {
+                tag_letter_game_max();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x3C) {
+                tag_fish();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x3D) {
+                tag_fish_rupee();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x2D) {
+                tag_letter();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x2E) {
+                tag_rescue();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x2F) {
+                tag_forest_timer();
+            } else if (
+                ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x30) ||
+                ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x31)
+            ) {
+                tag_birdman();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x32) {
+                tag_point();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x33) {
+                tag_get_pendant();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x34) {
+                tag_rev_pendant();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x35) {
+                tag_pig_timer();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x37) {
+                tag_get_bomb();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x38) {
+                tag_get_arrow();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x3E) {
+                tag_stock_bokobaba();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x3F) {
+                tag_stock_dokuro();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x40) {
+                tag_stock_chuchu();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x41) {
+                tag_stock_pendant();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x42) {
+                tag_stock_hane();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x43) {
+                tag_stock_kenshi();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x44) {
+                tag_terry_rupee();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x45) {
+                tag_input_bokobaba();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x46) {
+                tag_input_dokuro();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x47) {
+                tag_input_chuchu();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x48) {
+                tag_input_pendant();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x49) {
+                tag_input_hane();
+            } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x4A) {
+                tag_input_kenshi();
+    #endif
+            } else if ((u8)temp[2] == 1) {
+                u16 r27 = (temp[count + 3] << 8) | temp[count + 4];
+                if (dComIfGp_roomControl_getStayNo() != 0) {
+                    s8 reverb = dComIfGp_getReverb(dComIfGp_roomControl_getStayNo());
+                    if (r27 == 8) {
+                        mDoAud_messageSePlay(r27, 0, reverb);
+                    } else {
+                        mDoAud_messageSePlay(r27, field_0x10, reverb);
+                    }
+                } else {
+                    if (r27 == 8) {
+                        mDoAud_messageSePlay(r27, 0, 0);
+                    } else {
+                        mDoAud_messageSePlay(r27, field_0x10, 0);
+                    }
+                }
+                count += bmgData[count + 1];
+            } else if ((u8)temp[2] == 2) {
+                u32 r0 = (u8)(temp[3] << 8);
+                r0 |= (u8)temp[4];
+                dComIfGp_setMesgCameraTagInfo(r0);
+                count += bmgData[count + 1];
+            } else if ((u8)temp[2] == 3) {
+                dComIfGp_setMesgAnimeTagInfo(temp[4]);
+                count += bmgData[count + 1];
+            } else {
+                count += bmgData[count + 1];
+            }
+        } else if (*temp_char == 0xA) {
+            if (field_0x154 != 0) {
+                field_0x1C = field_0x20 - field_0x28;
+
+                int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
+                f32 f3 = temp1;
+                char sp64[16];
+                if (field_0x24 < f3) {
+                    f32 f31 = f3 - field_0x24;
+                    sprintf(sp64, "\x1b""CR[%d]", (int)(f31 + 0.5f));
+                    strcat(field_0x64, sp64);
+                    strcat(field_0x6C, sp64);
+                } else if (field_0x24 == 0.0f) {
+                    f32 f31 = field_0x24 - f3;
+                    sprintf(sp64,  "\x1b""CL[%d]", (int)(f31 + 0.5f));
+                    strcat(field_0x64, sp64);
+                    strcat(field_0x6C, sp64);
+                }
+
+                strcat(field_0x64, field_0x70);
+                strcat(field_0x6C, field_0x70);
+                field_0x154 = 0;
             }
 
-            sprintf(field_0x60, "\x1B""CL[%d]", 0.5f);
+            strcat(field_0x60, "\n");
+            strcat(field_0x64, "\n");
+            strcat(field_0x68, "\n");
+            strcat(field_0x6C, "\n");
+            count++;
+            lineCount++;
+            if (field_0x29D) {
+                lineCount++;
+                field_0x29D = 0;
+            }
+
+            field_0x14 = 0.0f;
+            field_0x24 = 0.0f;
+            field_0x29B = 0;
+            if (selectFlag != 1) {
+                if (lineCount >= mesgEntry->field_0x16) {
+                    if (temp_char[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 8) {
+                        setSelectFlagOn();
+                        lineCount = 0;
+                        field_0x20 = field_0x108[lineCount];
+                        count = bmgData[count + 1];
+                        mesgStatus = fopMsgStts_SELECT_2_e;
+                        field_0x60 = field_0x50[0];
+                        field_0x64 = field_0x50[1];
+                        field_0x68 = field_0x50[2];
+                        field_0x6C = field_0x50[3];
+                    } else if (temp_char[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 9) {
+                        setSelectFlagOn();
+                        lineCount = 0;
+                        field_0x20 = field_0x108[lineCount];
+                        count = bmgData[count + 1];
+                        mesgStatus = fopMsgStts_SELECT_3_e;
+                        field_0x60 = field_0x50[0];
+                        field_0x64 = field_0x50[1];
+                        field_0x68 = field_0x50[2];
+                        field_0x6C = field_0x50[3];
+                    } else if (temp_char[0] != 0x00) {
+                        mesgStatus = fopMsgStts_STOP_e;
+                    }
+
+                    field_0x150 = 0;
+                    field_0x299 = 0;
+                    field_0x29A = 0;
+                    return;
+                }
+
+                field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
+
+                char sp54[16];
+                sprintf(sp54, "\x1b""CR[%d]", (int)(field_0x20));
+                strcat(field_0x64, sp54);
+                strcat(field_0x6C, sp54);
+                
+                if (autoSendFlag == 0) {
+                    waitTimer = spaceTimer;
+                }
+                
+                if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag == 0) {
+                    return;
+                }
+                break;
+            }
+            
+            field_0x150 = 0;
+            
+            field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
+            
+            char sp44[16];
+            sprintf(sp44, "\x1b""CR[%d]", (int)(field_0x20));
+            strcat(field_0x64, sp44);
+            strcat(field_0x6C, sp44);
+        } else if (((*temp_char >> 4) & 0x0F) == 8 || ((*temp_char >> 4) & 0x0F) == 9) {
+            field_0xD4[0] = (*temp_char >> 4) & 0x0F;
+            field_0xD4[1] = bmgData[count + 1];
+            field_0xD4[2] = '\0';
+            int r28;
+            u16 uVar9 = bmgData[count + 1];
+            bool r27;
+            if (dComIfGs_getClearCount() == 0 && mesgEntry->mTextboxType == 0xC) {
+                for (int i = 0; i < ARRAY_SIZE(zfont); i++) {
+                    if (zfont[i][0] == uVar9) {
+                        field_0xD4[0] = (zfont[i][1] >> 8) & 0xFF;
+                        field_0xD4[1] = zfont[i][1] & 0xFF;
+                        field_0xD4[2] = '\0';
+                        r28 = zfont[i][1];
+                        break;
+                    }
+                }
+                r27 = false;
+            } else {
+                field_0xD4[0] = *temp_char;
+                field_0xD4[1] = '\0';
+                r28 = bmgData[count];
+                r27 = true;
+            }
+
+            if (field_0x150 == 0) {
+                field_0x14 = charLength(field_0x148, r28, true);
+            } else {
+                field_0x14 += charLength(field_0x148, r28, false);
+            }
+
+            field_0x150++;
+            
+            if (selectFlag != 1) {
+                field_0x20 = field_0xF8[lineCount] + field_0x14 + 0.5f;
+            } else {
+                field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
+            }
+            
+            if (lineWidth <= (int)(field_0x14 + 0.5f)) {
+                strcat(field_0x60, "\n");
+                strcat(field_0x64, "\n");
+                strcat(field_0x68, "\n");
+                strcat(field_0x6C, "\n");
+                lineCount++;
+                field_0x24 = 0.0f;
+
+                field_0x14 = charLength(field_0x148, r28, true);
+
+                if (selectFlag != 1) {
+                    if (lineCount >= mesgEntry->field_0x16) {
+                        if (temp_char[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 8) {
+                            setSelectFlagOn();
+                            lineCount = 0;
+                            field_0x20 = field_0x108[lineCount];
+                            count = bmgData[count + 1];
+                            mesgStatus = fopMsgStts_SELECT_2_e;
+                            field_0x60 = field_0x50[0];
+                            field_0x64 = field_0x50[1];
+                            field_0x68 = field_0x50[2];
+                            field_0x6C = field_0x50[3];
+                        } else if (temp_char[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 9) {
+                            setSelectFlagOn();
+                            lineCount = 0;
+                            field_0x20 = field_0x108[lineCount];
+                            count = bmgData[count + 1];
+                            mesgStatus = fopMsgStts_SELECT_3_e;
+                            field_0x60 = field_0x50[0];
+                            field_0x64 = field_0x50[1];
+                            field_0x68 = field_0x50[2];
+                            field_0x6C = field_0x50[3];
+                        } else if (temp_char[0] != 0x00) {
+                            mesgStatus = fopMsgStts_STOP_e;
+                        }
+                        field_0x299 = 0;
+                        field_0x29A = 0;
+                        return;
+                    }
+                    
+                    field_0x150 = 0;
+                    field_0x20 = field_0xF8[lineCount];
+
+                    char sp34[16];
+                    sprintf(sp34, "\x1b""CR[%d]", (int)(field_0x20));
+                    strcat(field_0x64, sp34);
+                    strcat(field_0x6C, sp34);
+
+                    if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag == 0) {
+                        return;
+                    }
+                } else {
+                    field_0x150 = 0;
+                    field_0x20 = field_0xF8[lineCount];
+                }
+
+                char sp24[16];
+                sprintf(sp24,  "\x1b""CR[%d]", (int)(field_0x20));
+                strcat(field_0x64, sp24);
+                strcat(field_0x6C, sp24);
+            }
+
+            if (field_0x154 != 0) {
+                field_0x154--;
+                if (field_0x154 == 0) {
+                    field_0x1C = field_0x20 - field_0x28;
+
+                    int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
+                    f32 f3 = temp1;
+                    char sp14[16];
+                    if (field_0x24 < f3) {
+                        f32 f31 = f3 - field_0x24;
+                        sprintf(sp14, "\x1b""CR[%d]", (int)(f31 + 0.5f));
+                        strcat(field_0x64, sp14);
+                        strcat(field_0x6C, sp14);
+                        field_0x24 += f31;
+                    } else if (field_0x24 == 0.0f) {
+                        f32 f31 = field_0x24 - f3;
+                        sprintf(sp14,  "\x1b""CL[%d]", (int)(f31 + 0.5f));
+                        strcat(field_0x64, sp14);
+                        strcat(field_0x6C, sp14);
+                        field_0x24 -= f31;
+                    }
+
+                    strcat(field_0x64, field_0x70);
+                    strcat(field_0x6C, field_0x70);
+                    field_0x24 += field_0x18;
+                }
+            }
+
+            if (r27) {
+                count++;
+            } else {
+                count += 2;
+            }
+
+            strcat(field_0x60, field_0xD4);
+            strcat(field_0x68, field_0xD4);
+
+            if (autoSendFlag == 0) {
+                if (r28 == 0x8140 || r28 == 0x8141 || r28 == 0x878C) {
+                    waitTimer = spaceTimer;
+                }
+                if (r28 == 0x20 && spaceFlag != 0) {
+                    waitTimer = spaceTimer;
+                }
+            }
+            if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag == 0) {
+                if (r30 == 0) {
+                    return;
+                }
+                r30--;
+            }
         }
+    } // while
+
+    if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag != 0) {
+        return;
+    }
+    if (bmgData[count] != '\0') {
+        return;
     }
 
-    if (field_0x154 != 0) {
-        field_0x1C = field_0x20 - field_0x28;
-
-        int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
-        if (field_0x24 > temp1) {
-            char temp[16];
-            sprintf(temp, "\x1b""CR[%d]", (int)(field_0x24 - temp1 + 0.5f));
-            strcat(field_0x64, temp);
-            strcat(field_0x6C, temp);
-        } else if (temp1 == 0.0f) {
-            char temp[16];
-            sprintf(temp,  "\x1b""CL[%d]", (int)(temp1 - field_0x24 + 0.5f));
-            strcat(field_0x64, temp);
-            strcat(field_0x6C, temp);
-        }
-
+    if (field_0x27E != 0) {
+        field_0x27E = 0;
+        field_0x60[field_0x2C] = '\0';
+        field_0x68[field_0x30] = '\0';
+        strcat(field_0x60, field_0xD4);
+        strcat(field_0x68, field_0xD4);
+    }
+    if (field_0x27F != 0) {
+        field_0x27F = 0;
+        field_0x64[field_0x34] = '\0';
+        field_0x6C[field_0x38] = '\0';
         strcat(field_0x64, field_0x70);
         strcat(field_0x6C, field_0x70);
-        field_0x154 = 0;
     }
 
-    strcat(field_0x60, "\n");
-    strcat(field_0x64, "\n");
-    strcat(field_0x68, "\n");
-    strcat(field_0x6C, "\n");
-    count++;
-    lineCount++;
-    if (field_0x29D) {
-        lineCount++;
-        field_0x29D = 0;
+    if (mesgStatus == fopMsgStts_SELECT_2_e) return;
+    if (mesgStatus == fopMsgStts_SELECT_3_e) return;
+    if (mesgStatus == fopMsgStts_SELECT_YOKO_e) return;
+    if (mesgStatus == fopMsgStts_INPUT_e) return;
+
+    if (mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB &&
+        mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD && mesgEntry->mTextboxType != 9)
+    {
+        if (dComIfGp_roomControl_getStayNo() != 0) {
+            mDoAud_messageSePlay(0, 0, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
+        } else {
+            mDoAud_messageSePlay(0, 0, 0);
+        }
     }
-}
 
-/* 80034F5C-80034F68       .text setSelectFlagYokoOn__21fopMsgM_msgDataProc_cFv */
-void fopMsgM_msgDataProc_c::setSelectFlagYokoOn() {
-    selectFlag = 2;
-}
-
-/* 80034F68-80034F74       .text setSelectFlagOn__21fopMsgM_msgDataProc_cFv */
-void fopMsgM_msgDataProc_c::setSelectFlagOn() {
-    selectFlag = 1;
-}
-
-/* 80034F74-80034F80       .text setHandSendFlagOn__21fopMsgM_msgDataProc_cFv */
-void fopMsgM_msgDataProc_c::setHandSendFlagOn() {
-    handSendFlag = 1;
-}
-
-/* 80034F80-80034F8C       .text setAutoSendFlagOn__21fopMsgM_msgDataProc_cFv */
-void fopMsgM_msgDataProc_c::setAutoSendFlagOn() {
-    autoSendFlag = 1;
-}
-
-/* 80034F8C-80034F94       .text getHandSendFlag__21fopMsgM_msgDataProc_cFv */
-u8 fopMsgM_msgDataProc_c::getHandSendFlag() {
-    return handSendFlag;
-}
-
-/* 80034F94-80034F9C       .text getAutoSendFlag__21fopMsgM_msgDataProc_cFv */
-u8 fopMsgM_msgDataProc_c::getAutoSendFlag() {
-    return autoSendFlag;
+    if (fopMsgM_nextMsgFlagCheck()) {
+        if (mesgEntry->mNextMsgNo != 0) {
+            fopMsgM_messageSet(mesgEntry->mNextMsgNo);
+            mesgStatus = fopMsgStts_MSG_CONTINUES_e;
+        } else {
+            mesgStatus = fopMsgStts_MSG_ENDS_e;
+        }
+    } else {
+        if (getAutoSendFlag() || getHandSendFlag()) {
+            mesgStatus = fopMsgStts_CLOSE_WAIT_e;
+        } else {
+            mesgStatus = fopMsgStts_MSG_DISPLAYED_e;
+        }
+    }
 }
 
 /* 80034FE0-80034FF4       .text fopMsgM_itemNumIdx__FUc */
@@ -4497,7 +4947,7 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
     int temp = (field_0x148 + charSpace) * 3;
     selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    mesgStatus = 0x15;
+    mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf2, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf2);
     strcat(field_0x68, buf2);
@@ -5946,7 +6396,7 @@ void fopMsgM_msgDataProc_c::tag_input_bokobaba() {
     int temp = (field_0x148 + charSpace) * 2;
     selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    mesgStatus = 0x15;
+    mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
@@ -5990,7 +6440,7 @@ void fopMsgM_msgDataProc_c::tag_input_dokuro() {
     int temp = (field_0x148 + charSpace) * 2;
     selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    mesgStatus = 0x15;
+    mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
@@ -6034,7 +6484,7 @@ void fopMsgM_msgDataProc_c::tag_input_chuchu() {
     int temp = (field_0x148 + charSpace) * 2;
     selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    mesgStatus = 0x15;
+    mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
@@ -6077,7 +6527,7 @@ void fopMsgM_msgDataProc_c::tag_input_pendant() {
     int temp = (field_0x148 + charSpace) * 2;
     selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    mesgStatus = 0x15;
+    mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
@@ -6121,7 +6571,7 @@ void fopMsgM_msgDataProc_c::tag_input_hane() {
     int temp = (field_0x148 + charSpace) * 2;
     selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    mesgStatus = 0x15;
+    mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
@@ -6165,7 +6615,7 @@ void fopMsgM_msgDataProc_c::tag_input_kenshi() {
     int temp = (field_0x148 + charSpace) * 2;
     selectFlag = 3;
     iconSelect(field_0x148, 0x16);
-    mesgStatus = 0x15;
+    mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf,  "\x1B""CR[%d]", temp);
     strcat(field_0x60, buf);
     strcat(field_0x68, buf);
@@ -6214,8 +6664,8 @@ fopMsgM_f2d_class fopMsgM_centerPosCalc(fopMsgM_f2d_class param_1, fopMsgM_f2d_c
 void fopMsgM_pane_parts_set(fopMsgM_pane_class* i_pane) {
     i_pane->mPosTopLeftOrig.x = i_pane->pane->mBounds.i.x;
     i_pane->mPosTopLeftOrig.y = i_pane->pane->mBounds.i.y;
-    i_pane->mSizeOrig.x = i_pane->pane->mBounds.f.x - i_pane->pane->mBounds.i.x;
-    i_pane->mSizeOrig.y = i_pane->pane->mBounds.f.y - i_pane->pane->mBounds.i.y;
+    i_pane->mSizeOrig.x = i_pane->pane->mBounds.getWidth();
+    i_pane->mSizeOrig.y = i_pane->pane->mBounds.getHeight();
     fopMsgM_f2d_class center = fopMsgM_centerPosCalc(i_pane->mPosTopLeftOrig, i_pane->mSizeOrig);
     i_pane->mPosCenterOrig.x = center.x;
     i_pane->mPosCenterOrig.y = center.y;

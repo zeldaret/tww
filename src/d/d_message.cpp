@@ -428,8 +428,8 @@ void dMsg2_messageOut(sub_msg2_class* i_Msg, u8 i_index, int i_aimLine) {
 /* 801E8668-801E86E8       .text dMsg2_yose_select__FP14sub_msg2_classUc */
 void dMsg2_yose_select(sub_msg2_class* i_Msg, u8 i_index) {
     i_Msg->msgDataProc[i_index].count = i_Msg->msgDataProc[i_index].stringLength();
-    i_Msg->field_0xecc[i_index] = i_Msg->msgDataProc[i_index].lineCount;
-    i_Msg->msgDataProc[i_index].lineCount = 0;
+    i_Msg->field_0xecc[i_index] = i_Msg->msgDataProc[i_index].getLineCount();
+    i_Msg->msgDataProc[i_index].setLineCount(0);
     i_Msg->msgDataProc[i_index].stringShift();
     dMsg2_textPosition(i_Msg, i_index);
 }

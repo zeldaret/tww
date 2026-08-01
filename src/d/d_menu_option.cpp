@@ -665,29 +665,29 @@ void dMenu_Option_c::noteSet() {
     msg_entry = msgGet.getMesgEntry(head_p);
 
     msgDataProc.dataInit();
-    msgDataProc.bmgData = mesg;
+    msgDataProc.setBmgData((char*)mesg);
     msgDataProc.setOutMessage(mD38, mD3C, mD40, mD44);
-    msgDataProc.font[0] = mD2C;
-    msgDataProc.font[1] = mD30;
-    msgDataProc.charSpace = ((J2DTextBox*)m740[0].pane)->getCharSpace();
-    msgDataProc.rubyCharSpace = ((J2DTextBox*)m740[1].pane)->getCharSpace();
-    msgDataProc.lineSpace = ((J2DTextBox*)m740[0].pane)->getLineSpace();
-    msgDataProc.mesgEntry = &msg_entry;
-    msgDataProc.fontSize = f31;
-    msgDataProc.rubyFontSize = f30;
-    msgDataProc.lineWidth = 0x1D0;
-    msgDataProc.centerLineWidth = 0x1D0;
-    msgDataProc.sendSpeed = 2;
-    msgDataProc.spaceTimer = 0;
+    msgDataProc.setFont(mD2C);
+    msgDataProc.setRubyFont(mD30);
+    msgDataProc.setCharSpace(((J2DTextBox*)m740[0].pane)->getCharSpace());
+    msgDataProc.setRubyCharSpace(((J2DTextBox*)m740[1].pane)->getCharSpace());
+    msgDataProc.setLineSpace(((J2DTextBox*)m740[0].pane)->getLineSpace());
+    msgDataProc.setMesgEntry(&msg_entry);
+    msgDataProc.setFontSize(f31);
+    msgDataProc.setRubyFontSize(f30);
+    msgDataProc.setLineWidth(0x1D0);
+    msgDataProc.setCenterLineWidth(0x1D0);
+    msgDataProc.setSendSpeed(2);
+    msgDataProc.setSpaceTimer(0);
     msgDataProc.field_0x299 = 1;
-    msgDataProc.spaceFlag = 0;
+    msgDataProc.setSpaceFlagOff();
 
     msgDataProc.stringLength();
     msgDataProc.stringShift();
     msgDataProc.iconIdxRefresh();
 
-    s16 r26 = msgDataProc.lineCount;
-    msgDataProc.lineCount = 0;
+    s16 r26 = msgDataProc.getLineCount();
+    msgDataProc.setLineCount(0);
     msgDataProc.stringSet();
     f32 f30_2 = (m740[0].pane->getHeight() - f31 - (f32)r26 * ((J2DTextBox*)m740[0].pane)->getLineSpace()) / 2.0f;
     ((J2DTextBox*)m740[0].pane)->shiftSet(0.0f, f30_2);

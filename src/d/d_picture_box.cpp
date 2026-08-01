@@ -1675,34 +1675,34 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     mMsgDataProc.setFont(font0);
     mMsgDataProc.setRubyFont(font1);
 
-    mMsgDataProc.charSpace = ((J2DTextBox*)pane_tx[0].pane)->mCharSpace;
-    mMsgDataProc.rubyCharSpace = ((J2DTextBox*)pane_tx[1].pane)->mCharSpace;
-    mMsgDataProc.lineSpace = ((J2DTextBox*)pane_tx[0].pane)->getLineSpace();
+    mMsgDataProc.setCharSpace(((J2DTextBox*)pane_tx[0].pane)->mCharSpace);
+    mMsgDataProc.setRubyCharSpace(((J2DTextBox*)pane_tx[1].pane)->mCharSpace);
+    mMsgDataProc.setLineSpace(((J2DTextBox*)pane_tx[0].pane)->getLineSpace());
 
     mMsgDataProc.setMesgEntry(&mMsgEntry);
 
-    mMsgDataProc.fontSize = tx0FontSizeX;
-    mMsgDataProc.rubyFontSize = tx1FontSizeX;
+    mMsgDataProc.setFontSize(tx0FontSizeX);
+    mMsgDataProc.setRubyFontSize(tx1FontSizeX);
 
-    mMsgDataProc.lineWidth = 0x1F7;
-    mMsgDataProc.centerLineWidth = 0x1E6;
+    mMsgDataProc.setLineWidth(0x1F7);
+    mMsgDataProc.setCenterLineWidth(0x1E6);
 
-    mMsgDataProc.sendSpeed = g_msgHIO.field_0x82;
-    mMsgDataProc.spaceTimer = g_msgHIO.field_0x6c;
+    mMsgDataProc.setSendSpeed(g_msgHIO.field_0x82);
+    mMsgDataProc.setSpaceTimer(g_msgHIO.field_0x6c);
     mMsgDataProc.field_0x299 = 1;
 
     if (g_msgHIO.field_0x83 != 0) {
-        mMsgDataProc.spaceFlag = 1;
+        mMsgDataProc.setSpaceFlagOn();
     } else {
-        mMsgDataProc.spaceFlag = 0;
+        mMsgDataProc.setSpaceFlagOff();
     }
 
     mMsgDataProc.stringLength();
     mMsgDataProc.stringShift();
     mMsgDataProc.iconIdxRefresh();
 
-    mMsgLineCount = mMsgDataProc.lineCount;
-    mMsgDataProc.lineCount = 0;
+    mMsgLineCount = mMsgDataProc.getLineCount();
+    mMsgDataProc.setLineCount(0);
 
     f32 yShift = ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) * (((J2DTextBox*)pane_tx[0].pane)->getLineSpace() / 2.0f));
 

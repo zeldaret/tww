@@ -79,6 +79,9 @@ public:
     virtual void draw();
     void outFontDraw();
 
+    void setActorP(sub_msg_class* i_msg) { field_0x4 = i_msg; }
+
+private:
     sub_msg_class* field_0x4;
 };
 
@@ -87,6 +90,7 @@ public:
     virtual ~dDlst_2Dtact_c();
     virtual void draw();
 
+private:
     u8 field_0x4[4];
     void* field_0x8;
 };
