@@ -345,10 +345,10 @@ public:
     /* 0x06C */ char* field_0x6C;
     /* 0x070 */ char field_0x70[0x64]; // no idea how big this array is
     /* 0x0D4 */ char field_0xD4[4];
-    /* 0x0D8 */ s32 field_0xD8[4];
-    /* 0x0E8 */ s32 field_0xE8[4];
-    /* 0x0F8 */ s32 field_0xF8[4];
-    /* 0x108 */ s32 field_0x108[4];
+    /* 0x0D8 */ int field_0xD8[4];
+    /* 0x0E8 */ int field_0xE8[4];
+    /* 0x0F8 */ int field_0xF8[4];
+    /* 0x108 */ int field_0x108[4];
     /* 0x118 */ int count;
     /* 0x11C */ int charSpace;
     /* 0x120 */ int lineSpace;

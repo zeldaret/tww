@@ -2058,7 +2058,7 @@ void fopMsgM_msgDataProc_c::colorAnime(J2DPicture* i_pic) {
 
 /* 800322B4-80034F3C       .text stringSet__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::stringSet() {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - regswap */
     s8 r30 = g_msgHIO.field_0x6c;
 
     field_0x60 = field_0x40;
@@ -2191,7 +2191,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                             sprintf(spB4,  "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
                             strcat(field_0x60, spB4);
                         } else {
-                            field_0x25C = fopMsgM_getColorTable((u8)bmgData[count + 5]);
+                            field_0x25C = fopMsgM_getColorTable(bmgData[count + 5]);
                             char sp98[28];
                             sprintf(sp98, "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
                             strcat(field_0x60, sp98);
@@ -2201,10 +2201,9 @@ void fopMsgM_msgDataProc_c::stringSet() {
 
                 count += bmgData[count + 1];
             } else if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == 1) {
-                int r0 = ((u8)bmgData[count + 5] << 8) | (u8)bmgData[count + 6];
-                f32 temp2 = r0;
+                f32 temp2 = (int)(((u8)bmgData[count + 5] << 8) | (u8)bmgData[count + 6]);
                 f32 f31 = temp2 * 0.01f;
-                u32 temp3 = field_0x148;
+                int temp3 = field_0x148;
                 field_0x148 = fontSize * f31 + 0.5f;
                 if (field_0x134 == 0) {
                     fopMsgM_setFontsizeCenter(field_0x60, field_0x68, field_0x64, field_0x6C, temp3, field_0x148);
@@ -2229,7 +2228,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 count += bmgData[count + 1];
             } else if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == 2) {
                 if ((u8)bmgData[count + 1] != 5) {
-                    int r28 = count + (bmgData[count + 1] & 0xFF);
+                    int r28 = count + (u8)bmgData[count + 1];
                     strcpy(field_0x70, "");
                     field_0x18 = 0.0f;
                     field_0x1C = 0.0f;
@@ -2241,24 +2240,23 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         buf[0] = bmgData[count];
                         buf[1] = bmgData[count + 1];
                         buf[2] = '\0';
-                        u32 temp2 = (u8)bmgData[count] << 8;
-                        temp2 |= (u8)bmgData[count + 1];
+                        int c = (u8)bmgData[count] << 8 | (u8)bmgData[count + 1];
                         strcat(field_0x70, buf);
                         if (field_0x29B == 0) {
-                            field_0x18 = rubyLength(temp2, true);
+                            field_0x18 = rubyLength(c, true);
                             field_0x29B = 1;
                         } else {
-                            field_0x18 += rubyLength(temp2, false);
+                            field_0x18 += rubyLength(c, false);
                         }
 
                         count += 2;
                     }
                 } else {
-                    count += bmgData[count + 1] & 0xFF;
+                    count += (u8)bmgData[count + 1];
                 }
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == 0) {
                 char sp84[20];
-                u32 r28 = 0;
+                int r28 = 0;
                 strcpy(sp84, dComIfGs_getPlayerName());
                 if (
     #if VERSION > VERSION_JPN
@@ -2280,7 +2278,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     }
                 }
 
-                while ((char)sp84[r28] != '\0') {
+                while (sp84[r28] != '\0') {
                     int c;
                     if (((u8)sp84[r28] >> 4) == 8 || ((u8)sp84[r28] >> 4) == 9) {
                         int tmp = (u8)sp84[r28];
@@ -2343,7 +2341,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 setHandSendFlagOn();
                 count += bmgData[count + 1];
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == 6) {
-                count += (s8)(u8)bmgData[count + 1];
+                count += bmgData[count + 1];
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == 7) {
                 if (field_0x299 == 0) {
     #if VERSION > VERSION_DEMO
@@ -2589,8 +2587,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             if (field_0x154 != 0) {
                 field_0x1C = field_0x20 - field_0x28;
 
-                int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
-                f32 f3 = temp1;
+                f32 f3 = (int)(field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f);
                 char sp64[16];
                 f32 f31;
                 if (field_0x24 < f3) {
@@ -2688,11 +2685,10 @@ void fopMsgM_msgDataProc_c::stringSet() {
             int r28;
             bool r27;
             if ((((u8)bmgData[count + 0] >> 4) & 0x0F) == 8 || (((u8)bmgData[count + 0] >> 4) & 0x0F) == 9) {
-                field_0xD4[0] = (u8)bmgData[count + 0];
+                field_0xD4[0] = bmgData[count + 0];
                 field_0xD4[1] = bmgData[count + 1];
                 field_0xD4[2] = '\0';
-                r28 = (u8)bmgData[count] << 8;
-                r28 |= (u8)bmgData[count + 1];
+                r28 = ((u8)bmgData[count] << 8) | (u8)bmgData[count + 1];
                 if (dComIfGs_getClearCount() == 0 && mesgEntry->mTextboxType == 0xC) {
                     for (int i = 0; i < ARRAY_SIZE(zfont); i++) {
                         if (zfont[i][0] == (u16)r28) {
@@ -2795,8 +2791,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 if (field_0x154 == 0) {
                     field_0x1C = field_0x20 - field_0x28;
 
-                    int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
-                    f32 f3 = temp1;
+                    f32 f3 = (int)(field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f);
                     char sp14[16];
                     f32 f31;
                     if (field_0x24 < f3) {
