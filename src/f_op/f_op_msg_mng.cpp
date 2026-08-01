@@ -3,9 +3,6 @@
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JUtility/JUTDataHeader.h"
 #include "d/d_meter.h"
-#if VERSION <= VERSION_JPN
-#include "d/d_s_play.h"
-#endif
 #include "f_op/f_op_scene_mng.h"
 #include "f_pc/f_pc_manager.h"
 #include "f_pc/f_pc_layer_iter.h"
@@ -20,6 +17,9 @@
 #include "SSystem/SComponent/c_malloc.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include <stdio.h>
+#if VERSION <= VERSION_JPN
+#include "d/d_s_play.h"
+#endif
 
 STControl stick;
 
@@ -597,7 +597,7 @@ char* fopMsgM_messageGet(char* i_dest, u32 i_msgNo) {
 #endif
                     )
                 ) {
-                    s32 bufLen = strlen(dstBuf);
+                    size_t bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if (current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
                         strcat(dstBuf, "\'");
@@ -671,7 +671,7 @@ char* fopMsgM_passwordGet(char* i_dest, u32 i_msgNo) {
 #endif
                     )
                 ) {
-                    s32 bufLen = strlen(dstBuf);
+                    size_t bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if (current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
                         strcat(dstBuf, "\'");
@@ -2151,10 +2151,10 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         0x505050FF,
                         0xFFB400FF,
                     };
-                    field_0x25C = colorTable[temp[5]];
-                    char buf[16];
-                    sprintf(buf, "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
-                    strcat(field_0x60, buf);
+                    field_0x25C = colorTable[temp_char[5]];
+                    char spF0[32];
+                    sprintf(spF0, "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
+                    strcat(field_0x60, spF0);
                 } else {
                     if (temp_char[5] >= 0 && temp_char[5] <= 8) {
                         if (mesgEntry->mTextboxType == 2 || mesgEntry->mTextboxType == 6 || mesgEntry->mTextboxType == 7) {
@@ -2170,7 +2170,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                                 0xFFB40000,
                             };
                             field_0x25C = colorTable[temp_char[5]];
-                            char spD0[16];
+                            char spD0[32];
                             u32 r5 = field_0x25C;
                             r5 |= field_0x290;
                             u32 r6 = field_0x25C;
@@ -2190,12 +2190,12 @@ void fopMsgM_msgDataProc_c::stringSet() {
                                 0xFFB400FF,
                             };
                             field_0x25C = colorTable[temp_char[5]];
-                            char spB4[16];
+                            char spB4[28];
                             sprintf(spB4,  "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
                             strcat(field_0x60, spB4);
                         } else {
                             field_0x25C = fopMsgM_getColorTable(temp[5]);
-                            char sp98[16];
+                            char sp98[28];
                             sprintf(sp98, "\x1B""CC[%08x]\x1B""GM[0]", field_0x25C);
                             strcat(field_0x60, sp98);
                         }
@@ -2260,9 +2260,9 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     count += temp_char[1] & 0xFF;
                 }
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0) {
-                char buf[12];
+                char sp84[20];
                 u32 r28 = 0;
-                strcpy(buf, dComIfGs_getPlayerName());
+                strcpy(sp84, dComIfGs_getPlayerName());
                 if (
     #if VERSION > VERSION_JPN
                     dComIfGs_getPalLanguage() == 1 &&
@@ -2274,33 +2274,34 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         mesgEntry->mMsgNo == 0x37DD ||
                         mesgEntry->mMsgNo == 0x37DE)
                 ) {
-                    s32 bufLen = strlen(buf);
-                    char current = (buf)[bufLen - 1];
+                    size_t bufLen = strlen(sp84);
+                    char current = (sp84)[bufLen - 1];
                     if (current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
-                        strcat(buf, "\'");
+                        strcat(sp84, "\'");
                     } else {
-                        strcat(buf, "s");
+                        strcat(sp84, "s");
                     }
                 }
 
-                char* r27 = buf;
-                for (s32 i = 0; *r27 != '\0'; i++) {
+                // const u8* r27 = (const u8*)sp84;
+                for (int i = 0; sp84[r28] != '\0'; i++) {
                     int c;
-                    if ((*r27 >> 4) == 8 || (*r27 >> 4) == 9) {
-                        field_0xD4[0] = buf[r28++];
-                        int tmp = buf[r28++];
-                        c = tmp;
-                        c |= *r27 << 8;
-                        field_0xD4[1] = tmp;
+                    if ((sp84[r28] >> 4) == 8 || (sp84[r28] >> 4) == 9) {
+                        char tmp = sp84[r28++];
+                        field_0xD4[0] = tmp;
+                        // int tmp = buf[r28++];
+                        u8 tmp2 = sp84[r28++];
+                        c = tmp << 8 | tmp2;
+                        field_0xD4[1] = tmp2;
+                        // r27 += 2;
                         field_0xD4[2] = '\0';
-                        r27 += 2;
                     } else {
-                        c = *r27;
-                        field_0xD4[0] = buf[r28];
+                        c = sp84[r28];
+                        field_0xD4[0] = sp84[r28++];
+                        // r27 += 1;
                         field_0xD4[1] = '\0';
-                        r28 += 1;
-                        r27 += 1;
                     }
+                    
                     if (field_0x150 == 0) {
                         field_0x14 = charLength(field_0x148, c, true);
                     } else {
@@ -2321,15 +2322,15 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 count += bmgData[count + 1];
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 1) {
                 field_0x29A = 1;
-                count = bmgData[count + 1];
+                count += bmgData[count + 1];
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 2) {
                 field_0x29A = 0;
-                count = bmgData[count + 1];
+                count += bmgData[count + 1];
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 3) {
                 waitTimer = (u8)temp[5] << 8;
                 waitTimer |= (u8)bmgData[count + 6];
                 setAutoSendFlagOn();
-                count = bmgData[count + 1];
+                count += bmgData[count + 1];
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 4) {
     #if VERSION > VERSION_DEMO
                 if (
@@ -2342,14 +2343,14 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 waitTimer = (u8)bmgData[count + 5] << 8;
                 waitTimer |= (u8)bmgData[count + 6];
                 setAutoSendFlagOn();
-                count = bmgData[count + 1];
+                count += bmgData[count + 1];
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 5) {
                 waitTimer = (u8)temp[5] << 8;
                 waitTimer |= (u8)bmgData[count + 6];
                 setHandSendFlagOn();
-                count = bmgData[count + 1];
+                count += bmgData[count + 1];
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 6) {
-                count = (s8)temp[1];
+                count += (s8)temp[1];
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 7) {
                 if (field_0x299 == 0) {
     #if VERSION > VERSION_DEMO
@@ -2362,7 +2363,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
     #endif
                     waitTimer = (u8)bmgData[count + 5] << 8;
                     waitTimer |= (u8)bmgData[count + 6];
-                    count = bmgData[count + 1];
+                    count += bmgData[count + 1];
                     return;
                 }
                 if (
@@ -2374,15 +2375,15 @@ void fopMsgM_msgDataProc_c::stringSet() {
     #endif
                     waitTimer = (u8)bmgData[count + 5] << 8;
                     waitTimer |= (u8)bmgData[count + 6];
-                    count = bmgData[count + 1];
+                    count += bmgData[count + 1];
                     return;
                 }
-                count = bmgData[count + 1];
+                count += bmgData[count + 1];
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 8) {
                 setSelectFlagOn();
                 lineCount = 0;
                 field_0x20 = field_0x108[lineCount];
-                count = bmgData[count + 1];
+                count += bmgData[count + 1];
                 mesgStatus = fopMsgStts_SELECT_2_e;
                 field_0x60 = field_0x50[0];
                 field_0x64 = field_0x50[1];
@@ -2392,7 +2393,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 setSelectFlagOn();
                 lineCount = 0;
                 field_0x20 = field_0x108[lineCount];
-                count = bmgData[count + 1];
+                count += bmgData[count + 1];
                 mesgStatus = fopMsgStts_SELECT_3_e;
                 field_0x60 = field_0x50[0];
                 field_0x64 = field_0x50[1];
@@ -2443,10 +2444,10 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 iconSelect(field_0x148, 0x14);
                 mesgStatus = fopMsgStts_SELECT_YOKO_e;
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x1F) {
-                if (selectFlag == 0) {
-                    field_0x27D = 0;
-                } else {
+                if (selectFlag != 0) {
                     field_0x27D = 1;
+                } else {
+                    field_0x27D = 0;
                 }
                 iconSelect(field_0x148, 0x15);
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x39) {
@@ -2469,10 +2470,10 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x22) ||
                 ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x23)
             ) {
-                if (temp[4] == 0x22) {
+                if ((u8)temp[4] == 0x22) {
                     u32 msgNo = dComIfGp_getNpcNameMessageID();
                     getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &field_0x20, &field_0x24, &field_0x150);
-                } else if (temp[4] == 0x23) {
+                } else if ((u8)temp[4] == 0x23) {
                     u32 msgNo = dComIfGp_getItemNameMessageID();
                     getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &field_0x20, &field_0x24, &field_0x150);
                 }
@@ -2493,7 +2494,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 tag_sword_game();
     #endif
             } else if ((u8)temp[2] == 0 && temp[3] == 0 && temp[4] == 0x29) {
-                u32 msgNo = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
+                u32 msgNo = 0x1B37 + dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
                 getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &field_0x20, &field_0x24, &field_0x150);
                 if (selectFlag != 1) {
                     field_0x14 = field_0x20 - field_0xF8[lineCount];
@@ -2579,13 +2580,14 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     }
                 }
                 count += bmgData[count + 1];
+                return;
             } else if ((u8)temp[2] == 2) {
-                u32 r0 = (u8)(temp[3] << 8);
-                r0 |= (u8)temp[4];
+                u16 r0 = (temp[3] << 8) | temp[4];
                 dComIfGp_setMesgCameraTagInfo(r0);
                 count += bmgData[count + 1];
             } else if ((u8)temp[2] == 3) {
-                dComIfGp_setMesgAnimeTagInfo(temp[4]);
+                u16 r0 = (temp[3] << 8) | temp[4];
+                dComIfGp_setMesgAnimeTagInfo(r0);
                 count += bmgData[count + 1];
             } else {
                 count += bmgData[count + 1];
@@ -2597,13 +2599,14 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
                 f32 f3 = temp1;
                 char sp64[16];
+                f32 f31;
                 if (field_0x24 < f3) {
-                    f32 f31 = f3 - field_0x24;
+                    f31 = f3 - field_0x24;
                     sprintf(sp64, "\x1b""CR[%d]", (int)(f31 + 0.5f));
                     strcat(field_0x64, sp64);
                     strcat(field_0x6C, sp64);
                 } else if (field_0x24 == 0.0f) {
-                    f32 f31 = field_0x24 - f3;
+                    f31 = field_0x24 - f3;
                     sprintf(sp64,  "\x1b""CL[%d]", (int)(f31 + 0.5f));
                     strcat(field_0x64, sp64);
                     strcat(field_0x6C, sp64);
@@ -2630,27 +2633,29 @@ void fopMsgM_msgDataProc_c::stringSet() {
             field_0x29B = 0;
             if (selectFlag != 1) {
                 if (lineCount >= mesgEntry->field_0x16) {
-                    if (temp_char[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 8) {
+                    temp_char = &bmgData[count];
+                    temp = (const u8*)&bmgData[count];
+                    if ((u8)temp[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 8) {
                         setSelectFlagOn();
                         lineCount = 0;
                         field_0x20 = field_0x108[lineCount];
-                        count = bmgData[count + 1];
+                        count += bmgData[count + 1];
                         mesgStatus = fopMsgStts_SELECT_2_e;
                         field_0x60 = field_0x50[0];
                         field_0x64 = field_0x50[1];
                         field_0x68 = field_0x50[2];
                         field_0x6C = field_0x50[3];
-                    } else if (temp_char[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 9) {
+                    } else if ((u8)temp[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 9) {
                         setSelectFlagOn();
                         lineCount = 0;
                         field_0x20 = field_0x108[lineCount];
-                        count = bmgData[count + 1];
+                        count += bmgData[count + 1];
                         mesgStatus = fopMsgStts_SELECT_3_e;
                         field_0x60 = field_0x50[0];
                         field_0x64 = field_0x50[1];
                         field_0x68 = field_0x50[2];
                         field_0x6C = field_0x50[3];
-                    } else if (temp_char[0] != 0x00) {
+                    } else if ((u8)temp[0] != 0x00) {
                         mesgStatus = fopMsgStts_STOP_e;
                     }
 
@@ -2663,7 +2668,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
 
                 char sp54[16];
-                sprintf(sp54, "\x1b""CR[%d]", (int)(field_0x20));
+                sprintf(sp54, "\x1b""CR[%d]", (int)field_0x20);
                 strcat(field_0x64, sp54);
                 strcat(field_0x6C, sp54);
                 
@@ -2674,39 +2679,41 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag == 0) {
                     return;
                 }
-                break;
+            } else {
+                field_0x150 = 0;
+                
+                field_0x20 = field_0x108[lineCount];
+                
+                char sp44[16];
+                sprintf(sp44, "\x1b""CR[%d]", (int)(field_0x20));
+                strcat(field_0x60, sp44);
+                strcat(field_0x68, sp44);
             }
-            
-            field_0x150 = 0;
-            
-            field_0x20 = field_0x108[lineCount] + field_0x14 + 0.5f;
-            
-            char sp44[16];
-            sprintf(sp44, "\x1b""CR[%d]", (int)(field_0x20));
-            strcat(field_0x64, sp44);
-            strcat(field_0x6C, sp44);
-        } else if (((*temp_char >> 4) & 0x0F) == 8 || ((*temp_char >> 4) & 0x0F) == 9) {
-            field_0xD4[0] = (*temp_char >> 4) & 0x0F;
-            field_0xD4[1] = bmgData[count + 1];
-            field_0xD4[2] = '\0';
+        } else {
             int r28;
-            u16 uVar9 = bmgData[count + 1];
             bool r27;
-            if (dComIfGs_getClearCount() == 0 && mesgEntry->mTextboxType == 0xC) {
-                for (int i = 0; i < ARRAY_SIZE(zfont); i++) {
-                    if (zfont[i][0] == uVar9) {
-                        field_0xD4[0] = (zfont[i][1] >> 8) & 0xFF;
-                        field_0xD4[1] = zfont[i][1] & 0xFF;
-                        field_0xD4[2] = '\0';
-                        r28 = zfont[i][1];
-                        break;
+            if (((*temp_char >> 4) & 0x0F) == 8 || ((*temp_char >> 4) & 0x0F) == 9) {
+                field_0xD4[0] = *temp_char;
+                field_0xD4[1] = bmgData[count + 1];
+                field_0xD4[2] = '\0';
+                r28 = (u8)bmgData[count] << 8;
+                r28 |= (u8)bmgData[count + 1];
+                if (dComIfGs_getClearCount() == 0 && mesgEntry->mTextboxType == 0xC) {
+                    for (int i = 0; i < ARRAY_SIZE(zfont); i++) {
+                        if (zfont[i][0] == (u16)r28) {
+                            field_0xD4[0] = (zfont[i][1] >> 8) & 0xFF;
+                            field_0xD4[1] = zfont[i][1] & 0xFF;
+                            field_0xD4[2] = '\0';
+                            r28 = zfont[i][1];
+                            break;
+                        }
                     }
                 }
                 r27 = false;
             } else {
                 field_0xD4[0] = *temp_char;
                 field_0xD4[1] = '\0';
-                r28 = bmgData[count];
+                r28 = (u8)bmgData[count];
                 r27 = true;
             }
 
@@ -2736,11 +2743,13 @@ void fopMsgM_msgDataProc_c::stringSet() {
 
                 if (selectFlag != 1) {
                     if (lineCount >= mesgEntry->field_0x16) {
+                        temp_char = &bmgData[count];
+                        temp = (const u8*)&bmgData[count];
                         if (temp_char[0] == 0x1A && temp[2] == 0 && temp[3] == 0 && temp[4] == 8) {
                             setSelectFlagOn();
                             lineCount = 0;
                             field_0x20 = field_0x108[lineCount];
-                            count = bmgData[count + 1];
+                            count += bmgData[count + 1];
                             mesgStatus = fopMsgStts_SELECT_2_e;
                             field_0x60 = field_0x50[0];
                             field_0x64 = field_0x50[1];
@@ -2750,40 +2759,42 @@ void fopMsgM_msgDataProc_c::stringSet() {
                             setSelectFlagOn();
                             lineCount = 0;
                             field_0x20 = field_0x108[lineCount];
-                            count = bmgData[count + 1];
+                            count += bmgData[count + 1];
                             mesgStatus = fopMsgStts_SELECT_3_e;
                             field_0x60 = field_0x50[0];
                             field_0x64 = field_0x50[1];
                             field_0x68 = field_0x50[2];
                             field_0x6C = field_0x50[3];
-                        } else if (temp_char[0] != 0x00) {
-                            mesgStatus = fopMsgStts_STOP_e;
+                        } else {
+                            if (temp_char[0] != 0x00) {
+                                mesgStatus = fopMsgStts_STOP_e;
+                            }
+                            field_0x299 = 0;
+                            field_0x29A = 0;
+                            return;
                         }
-                        field_0x299 = 0;
-                        field_0x29A = 0;
-                        return;
-                    }
-                    
-                    field_0x150 = 0;
-                    field_0x20 = field_0xF8[lineCount];
+                    } else {
+                        field_0x150 = 0;
+                        field_0x20 = field_0xF8[lineCount];
 
-                    char sp34[16];
-                    sprintf(sp34, "\x1b""CR[%d]", (int)(field_0x20));
-                    strcat(field_0x64, sp34);
-                    strcat(field_0x6C, sp34);
+                        char sp34[16];
+                        sprintf(sp34, "\x1b""CR[%d]", (int)(field_0x20));
+                        strcat(field_0x60, sp34);
+                        strcat(field_0x68, sp34);
 
-                    if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag == 0) {
-                        return;
+                        if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag == 0) {
+                            return;
+                        }
                     }
                 } else {
                     field_0x150 = 0;
-                    field_0x20 = field_0xF8[lineCount];
+                    field_0x20 = field_0x108[lineCount];
+                    
+                    char sp24[16];
+                    sprintf(sp24,  "\x1b""CR[%d]", (int)(field_0x20));
+                    strcat(field_0x60, sp24);
+                    strcat(field_0x68, sp24);
                 }
-
-                char sp24[16];
-                sprintf(sp24,  "\x1b""CR[%d]", (int)(field_0x20));
-                strcat(field_0x64, sp24);
-                strcat(field_0x6C, sp24);
             }
 
             if (field_0x154 != 0) {
@@ -2794,14 +2805,15 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     int temp1 = field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f;
                     f32 f3 = temp1;
                     char sp14[16];
+                    f32 f31;
                     if (field_0x24 < f3) {
-                        f32 f31 = f3 - field_0x24;
+                        f31 = f3 - field_0x24;
                         sprintf(sp14, "\x1b""CR[%d]", (int)(f31 + 0.5f));
                         strcat(field_0x64, sp14);
                         strcat(field_0x6C, sp14);
                         field_0x24 += f31;
                     } else if (field_0x24 == 0.0f) {
-                        f32 f31 = field_0x24 - f3;
+                        f31 = field_0x24 - f3;
                         sprintf(sp14,  "\x1b""CL[%d]", (int)(f31 + 0.5f));
                         strcat(field_0x64, sp14);
                         strcat(field_0x6C, sp14);
@@ -2840,7 +2852,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
         }
     } // while
 
-    if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag != 0) {
+    if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag == 0) {
         return;
     }
     if (bmgData[count] != '\0') {
@@ -3020,7 +3032,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
 #endif
                     )
                 ) {
-                    s32 bufLen = strlen(str);
+                    size_t bufLen = strlen(str);
                     current = (str)[bufLen - 1];
                     if (current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
                         strcat(str, "\'");
@@ -3085,7 +3097,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char*, char*, char*, u32 i_m
 #endif
                      (i_msgNo == 0x33B || i_msgNo == 0xC8B || i_msgNo == 0x1D21 || i_msgNo == 0x31D7 || i_msgNo == 0x37DD || i_msgNo == 0x37DE)
                 ) {
-                    s32 bufLen = strlen(dstBuf);
+                    size_t bufLen = strlen(dstBuf);
                     current = (dstBuf)[bufLen - 1];
                     if (current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
                         strcat(dstBuf, "\'");
