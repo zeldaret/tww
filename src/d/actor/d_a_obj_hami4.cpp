@@ -183,7 +183,6 @@ bool daObjHami4_c::_execute() {
     }
     set_mtx();
     return true;
-
 }
 
 /* 000009DC-00000A58       .text daObjHami4_Execute__FPv */

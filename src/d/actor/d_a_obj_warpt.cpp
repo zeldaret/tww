@@ -235,7 +235,7 @@ void daObj_Warpt_c::_ride(fopAc_ac_c* arg1) {
     if (fpcM_GetName(arg1) == fpcNm_PLAYER_e) {
         daPy_py_c* player = (daPy_py_c*)arg1;
 
-        fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+        fopAcM_searchPlayerAngleY(this);
         dLib_checkPlayerInCircle(m830, 1.0f, 20.0f);
 
         if (l_HIO.m06 == 0) {

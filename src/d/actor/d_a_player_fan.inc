@@ -85,9 +85,9 @@ int daPy_lk_c::setShapeFanLeaf() {
     if (mpEquipItemModel != NULL) {
         mtl = mpEquipItemModel->getModelData()->getJointNodePointer(FAN_JNT_CL_FAN_e)->getMesh()->getNext();
     }
-    m355C = m355C + 0x82f;
-    m3558 = 1536.0f * cM_ssin(m355C);
-    m355A = 2048.0f * cM_ssin(m355C - 0xe00U);
+    m355C = m355C + 0x82F;
+    m3558 = 0x600 * cM_ssin(m355C);
+    m355A = 0x800 * cM_ssin(m355C - 0xE00);
     if (dComIfGs_getMagic() >= 1) {
         // Show material:
         // * "leafAMat"

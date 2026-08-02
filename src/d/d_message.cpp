@@ -447,7 +447,12 @@ void dMsg2_textPosition(sub_msg2_class* i_Msg, u8 i_index) {
 
 /* 801E8798-801E880C       .text dMsg2_rubySet__FP14sub_msg2_class */
 void dMsg2_rubySet(sub_msg2_class* i_Msg) {
-    if (i_Msg->msg.mStatus == 5 || i_Msg->msg.mStatus == 6 || i_Msg->msg.mStatus == 7 || i_Msg->msg.mStatus == 10) {
+    if (
+        i_Msg->msg.mStatus == fopMsgStts_MSG_UNK5_e ||
+        i_Msg->msg.mStatus == fopMsgStts_MSG_TYPING_e ||
+        i_Msg->msg.mStatus == fopMsgStts_STOP_e ||
+        i_Msg->msg.mStatus == fopMsgStts_CLOSE_WAIT_e
+    ) {
         for (int i = 0; i < 3; i++) {
             if (!g_messageHIO.field_0x4b) {
                 i_Msg->ruby_pane[i].pane->hide();
@@ -657,7 +662,7 @@ int dMsg2_stopProc(sub_msg2_class* i_Msg) {
                 dMsg2_screenDataSet(i_Msg, r4);
                 i_Msg->field_0xec0 = 3;
                 i_Msg->field_0xec4 -= i_Msg->mesgEntry.field_0x16;
-                i_Msg->msg.mStatus = 5;
+                i_Msg->msg.mStatus = fopMsgStts_MSG_UNK5_e;
                 mDoAud_seStart(JA_SE_SCROLL_1, NULL);
             }
         } else if (CPad_CHECK_TRIG_A(0) || CPad_GET_STICK_POS_Y(0) < -0.7f || CPad_GET_STICK_POS_Y(3) < -0.7f) {
@@ -666,7 +671,7 @@ int dMsg2_stopProc(sub_msg2_class* i_Msg) {
             dMsg2_screenDataSet(i_Msg, r4);
             i_Msg->field_0xec0 = 1;
             i_Msg->field_0xec4 += i_Msg->mesgEntry.field_0x16;
-            i_Msg->msg.mStatus = 5;
+            i_Msg->msg.mStatus = fopMsgStts_MSG_UNK5_e;
             mDoAud_seStart(JA_SE_SCROLL_1, NULL);
         }
 #if VERSION > VERSION_DEMO
@@ -691,13 +696,13 @@ int dMsg2_closewaitProc(sub_msg2_class* i_Msg) {
                 dMsg2_screenDataSet(i_Msg, r4);
                 i_Msg->field_0xec0 = 3;
                 i_Msg->field_0xec4 -= i_Msg->mesgEntry.field_0x16;
-                i_Msg->msg.mStatus = 5;
+                i_Msg->msg.mStatus = fopMsgStts_MSG_UNK5_e;
                 mDoAud_seStart(JA_SE_SCROLL_1, NULL);
             }
         } else if (CPad_CHECK_TRIG_A(0) || CPad_GET_STICK_POS_Y(0) < -0.7f || CPad_GET_STICK_POS_Y(3) < -0.7f) {
             i_Msg->field_0xedd = 2;
             mDoAud_seStart(JA_SE_TALK_WIN_CLOSE, NULL);
-            i_Msg->msg.mStatus = 16;
+            i_Msg->msg.mStatus = fopMsgStts_MSG_ENDS_e;
         }
 #if VERSION > VERSION_DEMO
         else {
@@ -750,7 +755,7 @@ int dMsg2_closeProc(sub_msg2_class* i_Msg) {
         }
 
         JKRFileLoader::removeResource(i_Msg->head_p, NULL);
-        i_Msg->msg.mStatus = 0x12;
+        i_Msg->msg.mStatus = fopMsgStts_BOX_CLOSED_e;
     }
 
     i_Msg->field_0xe98--;
@@ -867,10 +872,10 @@ int dMsg2_outwaitProc(sub_msg2_class* i_Msg) {
             i_Msg->field_0xec0 = 0;
 
             if (i_Msg->msgDataProc[i_Msg->field_0xe9d].getMesgStatus() == 7) {
-                i_Msg->msg.mStatus = 7;
+                i_Msg->msg.mStatus = fopMsgStts_STOP_e;
                 dMsg2_arrowDownShow(i_Msg);
             } else {
-                i_Msg->msg.mStatus = 14;
+                i_Msg->msg.mStatus = fopMsgStts_MSG_DISPLAYED_e;
                 dMsg2_dotShow(i_Msg);
             }
 
@@ -895,7 +900,7 @@ int dMsg2_outwaitProc(sub_msg2_class* i_Msg) {
             i_Msg->text_pane[i_Msg->field_0xe9e].mPosTopLeft.y = i_Msg->text_pane[0].mPosTopLeftOrig.y + i_Msg->field_0xe94;
 
             i_Msg->field_0xec0 = 0;
-            i_Msg->msg.mStatus = 7;
+            i_Msg->msg.mStatus = fopMsgStts_STOP_e;
             i_Msg->field_0xede = 0xFF;
             dMsg2_arrowDownShow(i_Msg);
 
@@ -1024,7 +1029,7 @@ static BOOL dMsg2_Draw(sub_msg2_class* i_Msg) {
 static BOOL dMsg2_Execute(sub_msg2_class* i_Msg) {
     if (i_Msg->msg.mStatus == fopMsgStts_BOX_OPENING_e) {
         dMsg2_openProc(i_Msg);
-    } else if (i_Msg->msg.mStatus == 5) {
+    } else if (i_Msg->msg.mStatus == fopMsgStts_MSG_UNK5_e) {
         dMsg2_outwaitProc(i_Msg);
     } else if (i_Msg->msg.mStatus == fopMsgStts_STOP_e) {
         dMsg2_stopProc(i_Msg);
@@ -1199,7 +1204,7 @@ static cPhs_State dMsg2_Create(msg_class* i_this) {
     i_Msg->message = (char*)i_Msg->msgGet.getMessage(i_Msg->head_p);
     i_Msg->mesgEntry = i_Msg->msgGet.getMesgEntry(i_Msg->head_p);
     i_Msg->mesgNumber = i_Msg->msgGet.getMesgNumber();
-    i_this->mStatus = 2;
+    i_this->mStatus = fopMsgStts_BOX_OPENING_e;
 
     dMsg2_multiTexInit(i_Msg);
 

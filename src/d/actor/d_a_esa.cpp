@@ -93,7 +93,7 @@ void esa_1_move(esa_class* i_this) {
     switch(i_this->mActionState) {
         case 0:
             i_this->current.angle.y += (s16)cM_rndFX(4000.0f);
-            i_this->current.angle.z = cM_rndFX(32768.0f);
+            i_this->current.angle.z = cM_rndFX(0x8000);
             sp24.x = 0.0f;
             sp24.y = cM_rndF(8.0f) + 15.0f;
             sp24.z = cM_rndF(5.0f) + 10.0f;
@@ -118,7 +118,7 @@ void esa_1_move(esa_class* i_this) {
                 else {
                     if(i_this->speed.y < 5.0f) {
                         i_this->speed.y *= -(cM_rndF(0.05f) + 0.15f);
-                        i_this->current.angle.z = cM_rndFX(32768.0f);
+                        i_this->current.angle.z = cM_rndFX(0x8000);
                     }
 
                     i_this->current.angle.y += (s16)cM_rndFX(8000.0f);
@@ -264,7 +264,7 @@ static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
                 params->base.position = pos;
                 params->base.angle.x = 0;
                 params->base.angle.y = i_this->current.angle.y;
-                params->base.angle.z = cM_rndF(65536.0f);
+                params->base.angle.z = cM_rndF(0x10000);
                 params->base.parameters = 0x000000FF;
                 fpcM_Create(fpcNm_ESA_e, 0, params);
             }

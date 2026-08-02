@@ -21,339 +21,341 @@
 #include "m_Do/m_Do_mtx.h"
 
 namespace daObjPaper {
-    namespace {
-        struct Attr_c {
-            /* 0x00 */ char* mResName;
-            /* 0x04 */ s32 mHeapSize;
-            /* 0x06 */ s16 mModelId;
-            /* 0x08 */ s16 mEyeOffset;
-            /* 0x0A */ s16 mAttentionOffset;
-            /* 0x0C */ s16 mCullSphereRadius;
-            /* 0x0E */ s16 mCullSphereYOffset;
-            /* 0x10 */ s8 mAttentionDist1;
-            /* 0x11 */ s8 mAttentionDist2;
-            /* 0x12 */ u8 mTevType;
-            /* 0x14 */ s16 mColCylinderRadius;
-            /* 0x16 */ s16 mColCylinderHeight;
-        };
 
-        static const Attr_c L_attr[] = {
-            {
-                /* mResName           */ "Opaper",
-                /* mHeapSize          */ 0x04C0,
-                /* mModelId           */ dRes_INDEX_OPAPER_BDL_OPAPER_e,
-                /* mEyeOffset         */ 0x00,
-                /* mAttentionOffset   */ 0x28,
-                /* mCullSphereRadius  */ 0x28,
-                /* mCullSphereYOffset */ 0x00,
-                /* mAttentionDist1    */ 0x1D,
-                /* mAttentionDist2    */ 0x1E,
-                /* mTevType           */ 0x01,
-                /* mColCylinderRadius */ 0x00,
-                /* mColCylinderHeight */ 0x00,
-            },
-            {
-                /* mResName           */ "Ppos",
-                /* mHeapSize          */ DEMO_SELECT(0x1000, 0x04C0),
-                /* mModelId           */ dRes_INDEX_PPOS_BDL_PPOS_e,
-                /* mEyeOffset         */ 0x00,
-                /* mAttentionOffset   */ 0x32,
-                /* mCullSphereRadius  */ 0x3C,
-                /* mCullSphereYOffset */ 0x00,
-                /* mAttentionDist1    */ 0x1F,
-                /* mAttentionDist2    */ 0x20,
-                /* mTevType           */ 0x00,
-                /* mColCylinderRadius */ 0x00,
-                /* mColCylinderHeight */ 0x00,
-            },
-            {
-                /* mResName           */ "Piwa",
-                /* mHeapSize          */ DEMO_SELECT(0x8000, 0x04C0),
-                /* mModelId           */ dRes_INDEX_PIWA_BDL_PIWA_e,
-                /* mEyeOffset         */ 0x3C,
-                /* mAttentionOffset   */ 0x82,
-                /* mCullSphereRadius  */ 0x50,
-                /* mCullSphereYOffset */ 0x3C,
-                /* mAttentionDist1    */ 0x1D,
-                /* mAttentionDist2    */ 0x1E,
-                /* mTevType           */ 0x00,
-                /* mColCylinderRadius */ 0x37,
-                /* mColCylinderHeight */ 0x73,
-            }
-        };
-
-        inline const Attr_c & attr(Type_e type) { return L_attr[type]; }
-    }
-
-    const dCcD_SrcCyl Act_c::M_cyl_src = {
-        // dCcD_SrcGObjInf
-        {
-            /* Flags             */ 0,
-            /* SrcObjAt  Type    */ 0,
-            /* SrcObjAt  Atp     */ 0,
-            /* SrcObjAt  SPrm    */ 0,
-            /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
-            /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_GrpAll_e,
-            /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
-            /* SrcGObjAt Se      */ 0,
-            /* SrcGObjAt HitMark */ 0,
-            /* SrcGObjAt Spl     */ 0,
-            /* SrcGObjAt Mtrl    */ 0,
-            /* SrcGObjAt SPrm    */ 0,
-            /* SrcGObjTg Se      */ 0,
-            /* SrcGObjTg HitMark */ 0,
-            /* SrcGObjTg Spl     */ 0,
-            /* SrcGObjTg Mtrl    */ 0,
-            /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
-            /* SrcGObjCo SPrm    */ 0,
-        },
-        // cM3dGCylS
-        {{
-            /* Center */ {0.0f, 0.0f, 0.0f},
-            /* Radius */ 0.0f,
-            /* Height */ 0.0f,
-        }},
+namespace {
+    struct Attr_c {
+        /* 0x00 */ char* mResName;
+        /* 0x04 */ s32 mHeapSize;
+        /* 0x06 */ s16 mModelId;
+        /* 0x08 */ s16 mEyeOffset;
+        /* 0x0A */ s16 mAttentionOffset;
+        /* 0x0C */ s16 mCullSphereRadius;
+        /* 0x0E */ s16 mCullSphereYOffset;
+        /* 0x10 */ s8 mAttentionDist1;
+        /* 0x11 */ s8 mAttentionDist2;
+        /* 0x12 */ u8 mTevType;
+        /* 0x14 */ s16 mColCylinderRadius;
+        /* 0x16 */ s16 mColCylinderHeight;
     };
 
-    /* 00000078-0000009C       .text solidHeapCB__Q210daObjPaper5Act_cFP10fopAc_ac_c */
-    int Act_c::solidHeapCB(fopAc_ac_c* i_this) {
-        return static_cast<Act_c*>(i_this)->create_heap();
-    }
-
-    /* 0000009C-00000170       .text create_heap__Q210daObjPaper5Act_cFv */
-    bool Act_c::create_heap() {
-        J3DModelData* mdl_data;
-        bool ret = false;
-
-        mdl_data = (J3DModelData*)dComIfG_getObjectRes(attr(mType).mResName, attr(mType).mModelId);
-
-        JUT_ASSERT(0x13E, mdl_data != NULL);
-
-        mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
-        if (mpModel)
-            ret = true;
-
-        return ret;
-    }
-
-    /* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
-    cPhs_State Act_c::_create() {
-        fopAcM_ct(this, Act_c);
-
-        mType = prm_get_type();
-
-        cPhs_State result = dComIfG_resLoad(&mPhs, attr(mType).mResName);
-
-        if (result == cPhs_COMPLEATE_e) {
-            if (fopAcM_entrySolidHeap(this, solidHeapCB, attr(mType).mHeapSize)) {
-                eyePos.y += attr(mType).mEyeOffset;
-
-                attention_info.position.y += attr(mType).mAttentionOffset;
-                attention_info.distances[fopAc_Attn_TYPE_TALK_e] = attr(mType).mAttentionDist1;
-                attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = attr(mType).mAttentionDist2;
-                cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_READ_e);
-
-                mMsgId = fpcM_ERROR_PROCESS_ID_e;
-
-                if (mType == Piwa_e) {
-                    fopAcM_SetStatusMap(this, 0x18);
-                }
-
-                if (attr(mType).mColCylinderRadius != 0) {
-                    mbHasCc = true;
-
-                    mColStatus.Init(0xFF, 0xFF, this);
-                    mCylinderCol.Set(M_cyl_src);
-
-                    mCylinderCol.SetStts(&mColStatus);
-
-                    mCylinderCol.SetR(attr(mType).mColCylinderRadius);
-                    mCylinderCol.SetH(attr(mType).mColCylinderHeight);
-                } else {
-                    mbHasCc = false;
-                }
-
-                fopAcM_setCullSizeSphere(this, 0.0f, attr(mType).mCullSphereYOffset, 0.0f, attr(mType).mCullSphereRadius);
-                fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
-
-                init_mtx();
-                mode_wait_init();
-            } else {
-                result = cPhs_ERROR_e;
-            }
+    static const Attr_c L_attr[] = {
+        {
+            /* mResName           */ "Opaper",
+            /* mHeapSize          */ 0x04C0,
+            /* mModelId           */ dRes_INDEX_OPAPER_BDL_OPAPER_e,
+            /* mEyeOffset         */ 0x00,
+            /* mAttentionOffset   */ 0x28,
+            /* mCullSphereRadius  */ 0x28,
+            /* mCullSphereYOffset */ 0x00,
+            /* mAttentionDist1    */ 0x1D,
+            /* mAttentionDist2    */ 0x1E,
+            /* mTevType           */ 0x01,
+            /* mColCylinderRadius */ 0x00,
+            /* mColCylinderHeight */ 0x00,
+        },
+        {
+            /* mResName           */ "Ppos",
+            /* mHeapSize          */ DEMO_SELECT(0x1000, 0x04C0),
+            /* mModelId           */ dRes_INDEX_PPOS_BDL_PPOS_e,
+            /* mEyeOffset         */ 0x00,
+            /* mAttentionOffset   */ 0x32,
+            /* mCullSphereRadius  */ 0x3C,
+            /* mCullSphereYOffset */ 0x00,
+            /* mAttentionDist1    */ 0x1F,
+            /* mAttentionDist2    */ 0x20,
+            /* mTevType           */ 0x00,
+            /* mColCylinderRadius */ 0x00,
+            /* mColCylinderHeight */ 0x00,
+        },
+        {
+            /* mResName           */ "Piwa",
+            /* mHeapSize          */ DEMO_SELECT(0x8000, 0x04C0),
+            /* mModelId           */ dRes_INDEX_PIWA_BDL_PIWA_e,
+            /* mEyeOffset         */ 0x3C,
+            /* mAttentionOffset   */ 0x82,
+            /* mCullSphereRadius  */ 0x50,
+            /* mCullSphereYOffset */ 0x3C,
+            /* mAttentionDist1    */ 0x1D,
+            /* mAttentionDist2    */ 0x1E,
+            /* mTevType           */ 0x00,
+            /* mColCylinderRadius */ 0x37,
+            /* mColCylinderHeight */ 0x73,
         }
+    };
 
-        return result;
-    }
+    inline const Attr_c & attr(Type_e type) { return L_attr[type]; }
+}
 
-    /* 000006F4-00000730       .text _delete__Q210daObjPaper5Act_cFv */
-    bool daObjPaper::Act_c::_delete() {
-        dComIfG_resDeleteDemo(&mPhs, attr(mType).mResName);
-        return TRUE;
-    }
+const dCcD_SrcCyl Act_c::M_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT),
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_GrpAll_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsOther_e | cCcD_CoSPrm_VsGrpAll_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_NoConHit_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 0.0f,
+        /* Height */ 0.0f,
+    }},
+};
 
-    /* 00000730-00000748       .text mode_wait_init__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::mode_wait_init() {
-        fopAcM_OnStatus(this, fopAcStts_NOCULLEXEC_e);
-        mMode = ActMode_WAIT_e;
-    }
+/* 00000078-0000009C       .text solidHeapCB__Q210daObjPaper5Act_cFP10fopAc_ac_c */
+int Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return static_cast<Act_c*>(i_this)->create_heap();
+}
 
-    /* 00000748-00000784       .text mode_wait__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::mode_wait() {
-        if (eventInfo.mCommand == dEvtCmd_INTALK_e) {
-            mode_talk0_init();
-        }
-        else {
-            eventInfo.onCondition(dEvtCnd_CANTALK_e);
-        }
-    }
+/* 0000009C-00000170       .text create_heap__Q210daObjPaper5Act_cFv */
+bool Act_c::create_heap() {
+    J3DModelData* mdl_data;
+    bool ret = false;
 
-    /* 00000784-000007A4       .text mode_talk0_init__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::mode_talk0_init() {
-        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
-        mMsgId = fpcM_ERROR_PROCESS_ID_e;
-        mMode = ActMode_TALKBEGIN_e;
-    }
+    mdl_data = (J3DModelData*)dComIfG_getObjectRes(attr(mType).mResName, attr(mType).mModelId);
 
-    /* 000007A4-00000820       .text mode_talk0__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::mode_talk0() {
-        if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
-            mMsgId = fopMsgM_messageSet(prm_get_msgNo(), &eyePos);
+    JUT_ASSERT(0x13E, mdl_data != NULL);
 
-            mode_talk1_init();
-        }
-    }
+    mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
+    if (mpModel)
+        ret = true;
 
-    /* 00000820-0000082C       .text mode_talk1_init__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::mode_talk1_init() {
-        mMode = ActMode_GETMSG_e;
-    }
+    return ret;
+}
 
-    /* 0000082C-00000874       .text mode_talk1__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::mode_talk1() {
-        mpMsg = fopMsgM_SearchByID(mMsgId);
-        if (mpMsg) {
-            mode_talk2_init();
-        }
-    }
+/* 00000170-000004E0       .text _create__Q210daObjPaper5Act_cFv */
+cPhs_State Act_c::_create() {
+    fopAcM_ct(this, Act_c);
 
-    /* 00000874-00000880       .text mode_talk2_init__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::mode_talk2_init() {
-        mMode = ActMode_TALKWAIT_e;
-    }
+    mType = prm_get_type();
 
-    /* 00000880-000008DC       .text mode_talk2__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::mode_talk2() {
-        if (mpMsg->mStatus == fopMsgStts_BOX_CLOSED_e) {
-            mpMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
-            mpMsg = NULL;
+    cPhs_State result = dComIfG_resLoad(&mPhs, attr(mType).mResName);
+
+    if (result == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, attr(mType).mHeapSize)) {
+            eyePos.y += attr(mType).mEyeOffset;
+
+            attention_info.position.y += attr(mType).mAttentionOffset;
+            attention_info.distances[fopAc_Attn_TYPE_TALK_e] = attr(mType).mAttentionDist1;
+            attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = attr(mType).mAttentionDist2;
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_TALKFLAG_READ_e);
+
             mMsgId = fpcM_ERROR_PROCESS_ID_e;
 
-            dComIfGp_event_reset();
+            if (mType == Piwa_e) {
+                fopAcM_SetStatusMap(this, 0x18);
+            }
+
+            if (attr(mType).mColCylinderRadius != 0) {
+                mbHasCc = true;
+
+                mColStatus.Init(0xFF, 0xFF, this);
+                mCylinderCol.Set(M_cyl_src);
+
+                mCylinderCol.SetStts(&mColStatus);
+
+                mCylinderCol.SetR(attr(mType).mColCylinderRadius);
+                mCylinderCol.SetH(attr(mType).mColCylinderHeight);
+            } else {
+                mbHasCc = false;
+            }
+
+            fopAcM_setCullSizeSphere(this, 0.0f, attr(mType).mCullSphereYOffset, 0.0f, attr(mType).mCullSphereRadius);
+            fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+
+            init_mtx();
             mode_wait_init();
+        } else {
+            result = cPhs_ERROR_e;
         }
     }
 
-    /* 000008DC-00000948       .text set_mtx__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::set_mtx() {
-        mDoMtx_stack_c::transS(current.pos);
-        mDoMtx_stack_c::ZXYrotM(shape_angle);
+    return result;
+}
 
-        mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+/* 000006F4-00000730       .text _delete__Q210daObjPaper5Act_cFv */
+bool daObjPaper::Act_c::_delete() {
+    dComIfG_resDeleteDemo(&mPhs, attr(mType).mResName);
+    return TRUE;
+}
+
+/* 00000730-00000748       .text mode_wait_init__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::mode_wait_init() {
+    fopAcM_OnStatus(this, fopAcStts_NOCULLEXEC_e);
+    mMode = ActMode_WAIT_e;
+}
+
+/* 00000748-00000784       .text mode_wait__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::mode_wait() {
+    if (eventInfo.mCommand == dEvtCmd_INTALK_e) {
+        mode_talk0_init();
     }
-
-    /* 00000948-00000984       .text init_mtx__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::init_mtx() {
-        mpModel->setBaseScale(scale);
-        set_mtx();
-    }
-
-    /* 00000984-00000A38       .text damage_cc_proc__Q210daObjPaper5Act_cFv */
-    void daObjPaper::Act_c::damage_cc_proc() {
-        u32 hitResult = mCylinderCol.ChkTgHit();
-        if (hitResult) {
-            daObj::HitSeStart(&eyePos, current.roomNo, &mCylinderCol, 0x0D);
-            dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
-
-            daObj::HitEff_hibana(this, &mCylinderCol);
-
-            mCylinderCol.ClrTgHit();
-        }
-
-        mColStatus.Move();
-    }
-
-    typedef void (Act_c::*daObjPaper_mode_t)(void);
-
-    /* 00000A38-00000B58       .text _execute__Q210daObjPaper5Act_cFv */
-    bool daObjPaper::Act_c::_execute() {
-        static const daObjPaper_mode_t mode_proc[] = {
-            &Act_c::mode_wait,
-            &Act_c::mode_talk0,
-            &Act_c::mode_talk1,
-            &Act_c::mode_talk2,
-        };
-
-        if (mbHasCc) {
-            damage_cc_proc();
-        }
-
-        (this->*mode_proc[mMode])();
-
-        set_mtx();
-        if (mbHasCc) {
-            mCylinderCol.SetC(current.pos);
-            dComIfG_Ccsp()->Set(&mCylinderCol);
-        }
-
-        return true;
-    }
-
-    /* 00000B58-00000BD4       .text _draw__Q210daObjPaper5Act_cFv */
-    bool daObjPaper::Act_c::_draw() {
-        g_env_light.settingTevStruct(attr(mType).mTevType == 0 ? TEV_TYPE_BG0 : TEV_TYPE_ACTOR, &current.pos, &tevStr);
-        g_env_light.setLightTevColorType(mpModel, &tevStr);
-
-        mDoExt_modelUpdateDL(mpModel);
-
-        return TRUE;
-    }
-
-    namespace {
-        /* 00000BD4-00000BF4       .text Mthd_Create__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static cPhs_State Mthd_Create(void* i_this) {
-            return static_cast<Act_c*>(i_this)->_create();
-        }
-
-        /* 00000BF4-00000C18       .text Mthd_Delete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static BOOL Mthd_Delete(void* i_this) {
-            return static_cast<Act_c*>(i_this)->_delete();
-        }
-
-        /* 00000C18-00000C3C       .text Mthd_Execute__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static BOOL Mthd_Execute(void* i_this) {
-            return static_cast<Act_c*>(i_this)->_execute();
-        }
-
-        /* 00000C3C-00000C60       .text Mthd_Draw__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static BOOL Mthd_Draw(void* i_this) {
-            return static_cast<Act_c*>(i_this)->_draw();
-        }
-
-        /* 00000C60-00000C68       .text Mthd_IsDelete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
-        static BOOL Mthd_IsDelete(void* i_this) {
-            return TRUE;
-        }
-
-        static actor_method_class Mthd_Table = {
-            (process_method_func)Mthd_Create,
-            (process_method_func)Mthd_Delete,
-            (process_method_func)Mthd_Execute,
-            (process_method_func)Mthd_IsDelete,
-            (process_method_func)Mthd_Draw,
-        };
+    else {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
 }
+
+/* 00000784-000007A4       .text mode_talk0_init__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::mode_talk0_init() {
+    fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
+    mMsgId = fpcM_ERROR_PROCESS_ID_e;
+    mMode = ActMode_TALKBEGIN_e;
+}
+
+/* 000007A4-00000820       .text mode_talk0__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::mode_talk0() {
+    if (mMsgId == fpcM_ERROR_PROCESS_ID_e && dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) {
+        mMsgId = fopMsgM_messageSet(prm_get_msgNo(), &eyePos);
+
+        mode_talk1_init();
+    }
+}
+
+/* 00000820-0000082C       .text mode_talk1_init__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::mode_talk1_init() {
+    mMode = ActMode_GETMSG_e;
+}
+
+/* 0000082C-00000874       .text mode_talk1__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::mode_talk1() {
+    mpMsg = fopMsgM_SearchByID(mMsgId);
+    if (mpMsg) {
+        mode_talk2_init();
+    }
+}
+
+/* 00000874-00000880       .text mode_talk2_init__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::mode_talk2_init() {
+    mMode = ActMode_TALKWAIT_e;
+}
+
+/* 00000880-000008DC       .text mode_talk2__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::mode_talk2() {
+    if (mpMsg->mStatus == fopMsgStts_BOX_CLOSED_e) {
+        mpMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+        mpMsg = NULL;
+        mMsgId = fpcM_ERROR_PROCESS_ID_e;
+
+        dComIfGp_event_reset();
+        mode_wait_init();
+    }
+}
+
+/* 000008DC-00000948       .text set_mtx__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::set_mtx() {
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+}
+
+/* 00000948-00000984       .text init_mtx__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::init_mtx() {
+    mpModel->setBaseScale(scale);
+    set_mtx();
+}
+
+/* 00000984-00000A38       .text damage_cc_proc__Q210daObjPaper5Act_cFv */
+void daObjPaper::Act_c::damage_cc_proc() {
+    u32 hitResult = mCylinderCol.ChkTgHit();
+    if (hitResult) {
+        daObj::HitSeStart(&eyePos, current.roomNo, &mCylinderCol, 0x0D);
+        dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
+
+        daObj::HitEff_hibana(this, &mCylinderCol);
+
+        mCylinderCol.ClrTgHit();
+    }
+
+    mColStatus.Move();
+}
+
+typedef void (Act_c::*daObjPaper_mode_t)(void);
+
+/* 00000A38-00000B58       .text _execute__Q210daObjPaper5Act_cFv */
+bool daObjPaper::Act_c::_execute() {
+    static const daObjPaper_mode_t mode_proc[] = {
+        &Act_c::mode_wait,
+        &Act_c::mode_talk0,
+        &Act_c::mode_talk1,
+        &Act_c::mode_talk2,
+    };
+
+    if (mbHasCc) {
+        damage_cc_proc();
+    }
+
+    (this->*mode_proc[mMode])();
+
+    set_mtx();
+    if (mbHasCc) {
+        mCylinderCol.SetC(current.pos);
+        dComIfG_Ccsp()->Set(&mCylinderCol);
+    }
+
+    return true;
+}
+
+/* 00000B58-00000BD4       .text _draw__Q210daObjPaper5Act_cFv */
+bool daObjPaper::Act_c::_draw() {
+    g_env_light.settingTevStruct(attr(mType).mTevType == 0 ? TEV_TYPE_BG0 : TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    mDoExt_modelUpdateDL(mpModel);
+
+    return TRUE;
+}
+
+namespace {
+/* 00000BD4-00000BF4       .text Mthd_Create__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
+static cPhs_State Mthd_Create(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_create();
+}
+
+/* 00000BF4-00000C18       .text Mthd_Delete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
+static BOOL Mthd_Delete(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_delete();
+}
+
+/* 00000C18-00000C3C       .text Mthd_Execute__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
+static BOOL Mthd_Execute(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_execute();
+}
+
+/* 00000C3C-00000C60       .text Mthd_Draw__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
+static BOOL Mthd_Draw(void* i_this) {
+    return static_cast<Act_c*>(i_this)->_draw();
+}
+
+/* 00000C60-00000C68       .text Mthd_IsDelete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
+static BOOL Mthd_IsDelete(void* i_this) {
+    return TRUE;
+}
+
+static actor_method_class Mthd_Table = {
+    (process_method_func)Mthd_Create,
+    (process_method_func)Mthd_Delete,
+    (process_method_func)Mthd_Execute,
+    (process_method_func)Mthd_IsDelete,
+    (process_method_func)Mthd_Draw,
+};
+}; // namespace
+
+}; // namespace daObjPaper
 
 actor_process_profile_definition g_profile_Obj_Paper = {
     /* Layer ID     */ fpcLy_CURRENT_e,

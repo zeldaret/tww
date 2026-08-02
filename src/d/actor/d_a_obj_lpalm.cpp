@@ -67,7 +67,7 @@ void daObjLpalm_c::CreateInit() {
     mAnimDir[0] = 0;
     mAnimDir[1] = 0;
     mAnimWave[0] = 0;
-    mAnimWave[1] = cM_rndFX(32768.0f);
+    mAnimWave[1] = cM_rndFX(0x8000);
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -350.0f, -50.0f, -350.0f, 350.0f, 1300.0f, 350.0f);
     fopAcM_setCullSizeFar(this, 2.37f);

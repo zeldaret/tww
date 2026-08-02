@@ -2341,48 +2341,48 @@ static BOOL daBb_Execute(bb_class* i_this) {
                 break;
             
             case 2: {
-                    fopAc_ac_c* ac = fopAcM_SearchByID(i_this->unk_2E8);
-                    if (ac != NULL) {
-                        i_this->unk_2E4 = ac;
-                        i_this->unk_2DF = 3;
-                    }
+                fopAc_ac_c* ac = fopAcM_SearchByID(i_this->unk_2E8);
+                if (ac != NULL) {
+                    i_this->unk_2E4 = ac;
+                    i_this->unk_2DF = 3;
                 }
                 break;
+            }
 
             case 3: {
-                    fopAc_ac_c* ac = i_this->unk_2E4;
+                fopAc_ac_c* ac = i_this->unk_2E4;
 
-                    sp10.x = (i_this->unk_A6C[1].x - i_this->unk_A6C[0].x) / 2.0f + i_this->unk_A6C[0].x;
-                    sp10.y = (i_this->unk_A6C[1].y - i_this->unk_A6C[0].y) / 2.0f + i_this->unk_A6C[0].y;
-                    sp10.z = (i_this->unk_A6C[1].z - i_this->unk_A6C[0].z) / 2.0f + i_this->unk_A6C[0].z;
+                sp10.x = (i_this->unk_A6C[1].x - i_this->unk_A6C[0].x) / 2.0f + i_this->unk_A6C[0].x;
+                sp10.y = (i_this->unk_A6C[1].y - i_this->unk_A6C[0].y) / 2.0f + i_this->unk_A6C[0].y;
+                sp10.z = (i_this->unk_A6C[1].z - i_this->unk_A6C[0].z) / 2.0f + i_this->unk_A6C[0].z;
 
-                    ac->current.pos = sp10;
-                    ac->current.angle = i_this->actor.current.angle;
-                    ac->shape_angle = i_this->actor.current.angle;
+                ac->current.pos = sp10;
+                ac->current.angle = i_this->actor.current.angle;
+                ac->shape_angle = i_this->actor.current.angle;
 
-                    if (i_this->unk_2EC == fpcNm_MO2_e || i_this->unk_2EC == fpcNm_BK_e) {
-                        damagereaction* dr;
+                if (i_this->unk_2EC == fpcNm_MO2_e || i_this->unk_2EC == fpcNm_BK_e) {
+                    damagereaction* dr;
 
-                        if (i_this->unk_2EC == fpcNm_MO2_e) {
-                            dr = &((mo2_class*)ac)->mDamageReaction;
-                            dr->m468 = REG0_F(8) * 10.0f + -110.0f;
-                            dr->m46C = REG0_F(9) * 10.0f + 10.0f;
-                        } else if (i_this->unk_2EC == fpcNm_BK_e) {
-                            dr = &((bk_class*)ac)->dr;
-                            dr->m468 = REG0_F(8) * 10.0f + -100.0f;
-                            dr->m46C = REG0_F(9) * 10.0f;
-                        }
-
-                        if (i_this->unk_2E0 != 0) {
-                            i_this->unk_2DF = 0;
-                            anm_init(i_this, dRes_INDEX_BB_BCK_FLY02_e, 12.0f, 2, 1.0f, dRes_INDEX_BB_BAS_FLY02_e);
-                            dr->mAction = 31;
-                            ac->speedF = 40.0f;
-                        }
+                    if (i_this->unk_2EC == fpcNm_MO2_e) {
+                        dr = &((mo2_class*)ac)->mDamageReaction;
+                        dr->m468 = REG0_F(8) * 10.0f + -110.0f;
+                        dr->m46C = REG0_F(9) * 10.0f + 10.0f;
+                    } else if (i_this->unk_2EC == fpcNm_BK_e) {
+                        dr = &((bk_class*)ac)->dr;
+                        dr->m468 = REG0_F(8) * 10.0f + -100.0f;
+                        dr->m46C = REG0_F(9) * 10.0f;
                     }
 
+                    if (i_this->unk_2E0 != 0) {
+                        i_this->unk_2DF = 0;
+                        anm_init(i_this, dRes_INDEX_BB_BCK_FLY02_e, 12.0f, 2, 1.0f, dRes_INDEX_BB_BAS_FLY02_e);
+                        dr->mAction = 31;
+                        ac->speedF = 40.0f;
+                    }
                 }
+
                 break;
+            }
         }
     }
 

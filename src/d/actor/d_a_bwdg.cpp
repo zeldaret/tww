@@ -17,7 +17,7 @@ static bwd_class* boss;
 #include "assets/l_B_sand2TEX.h"
 const u16 l_B_sand2TEX__width = 512;
 const u16 l_B_sand2TEX__height = 256;
-#include "assets/l_texCoord.h"
+#include "assets/l_texCoord__d_a_bwdg.h"
 #include "assets/l_Hsand1DL.h"
 #include "assets/l_matDL__d_a_bwdg.h"
 l_matDL__d_a_bwdg(l_B_sand2TEX);

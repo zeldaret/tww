@@ -272,7 +272,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         0,
         -1,
         0x1,
-        (void*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BAS_KA_WAIT1_e),
+        dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BAS_KA_WAIT1_e),
         0x80000,
         0x11000002
     );

@@ -539,7 +539,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_event_manager.cpp"),
             Object(Matching,    "d/d_magma.cpp"),
             Object(Matching,    "d/d_boss_magma.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_grass.cpp"),
+            Object(Matching,    "d/d_grass.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_tree.cpp"),
             Object(NonMatching, "d/d_particle.cpp"),
             Object(Matching,    "d/d_particle_name.cpp"),
@@ -569,13 +569,13 @@ config.libs = [
             Object(Matching,    "d/d_cc_mass_s.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_s.cpp"),
             Object(Matching,    "d/d_cc_uty.cpp"),
-            Object(NonMatching, "d/d_cam_param.cpp"),
+            Object(Matching,    "d/d_cam_param.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_type.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_style.cpp"),
             Object(Matching,    "d/d_cam_type2.cpp"),
             Object(NonMatching, "d/d_ev_camera.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_wood.cpp"),
-            Object(NonMatching, "d/d_flower.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_flower.cpp"),
             Object(Matching,    "d/d_item_data.cpp"),
             Object(Matching,    "d/d_seafightgame.cpp"),
             Object(Matching,    "d/d_spline_path.cpp"),
@@ -586,7 +586,7 @@ config.libs = [
             Object(Matching, "d/d_a_npc_mk_static.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_salvage.cpp"),
             Object(Matching,    "d/d_snap.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_point_wind.cpp"),
+            Object(Matching,    "d/d_point_wind.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d/actor/d_a_agb.cpp"),
             Object(Matching,    "d/actor/d_a_arrow.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bg.cpp"),
@@ -606,7 +606,7 @@ config.libs = [
             Object(Matching,    "d/actor/d_a_nh.cpp"),
             Object(Matching,    "d/actor/d_a_npc_fa1.cpp"),
             Object(NonMatching, "d/actor/d_a_obj_search.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_player.cpp"),
+            Object(Matching,    "d/actor/d_a_player.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_player_main.cpp"),
             Object(Matching,    "d/actor/d_a_player_npc.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_sea.cpp"),
@@ -1569,7 +1569,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_canon"),
     ActorRel(Matching,    "d_a_obj_eff"),
     ActorRel(NonMatching, "d_a_obj_magmarock"),
-    ActorRel(NonMatching, "d_a_obj_majyuu_door"),
+    ActorRel(Matching, "d_a_obj_majyuu_door"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swhammer"),
@@ -1655,7 +1655,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_auction"),
     ActorRel(NonMatching, "d_a_npc_ba1"),
     ActorRel(NonMatching, "d_a_npc_bj1"),
-    ActorRel(NonMatching, "d_a_npc_bm1"),
+    ActorRel(Matching,    "d_a_npc_bm1"),
     ActorRel(NonMatching, "d_a_npc_bmcon1"),
     ActorRel(NonMatching, "d_a_npc_bms1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_bmsw"),
@@ -1667,8 +1667,8 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_ds1"),
     ActorRel(NonMatching, "d_a_npc_gk1"),
     ActorRel(NonMatching, "d_a_npc_gp1"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_hi1"),
-    ActorRel(Matching, "d_a_npc_ho"),
+    ActorRel(Matching,    "d_a_npc_hi1"),
+    ActorRel(Matching,    "d_a_npc_ho"),
     ActorRel(Matching,    "d_a_npc_hr"),
     ActorRel(Matching,    "d_a_npc_jb1"),
     ActorRel(NonMatching, "d_a_npc_ji1"),
@@ -1681,7 +1681,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_ko1"),
     ActorRel(NonMatching, "d_a_npc_kp1"),
     ActorRel(Matching,    "d_a_npc_ls1"),
-    ActorRel(NonMatching, "d_a_npc_mk"),
+    ActorRel(Matching,    "d_a_npc_mk"),
     ActorRel(NonMatching, "d_a_npc_mn"),
     ActorRel(Matching,    "d_a_npc_mt"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_nz"),
@@ -1720,7 +1720,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_correct"),
     ActorRel(Matching,    "d_a_obj_dmgroom"),
     ActorRel(Matching,    "d_a_obj_dragonhead"),
-    ActorRel(NonMatching, "d_a_obj_drift"),
+    ActorRel(Matching,    "d_a_obj_drift"),
     ActorRel(Matching,    "d_a_obj_eayogn"),
     ActorRel(Matching,    "d_a_obj_ebomzo"),
     ActorRel(NonMatching, "d_a_obj_ekskz"),
@@ -1813,7 +1813,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tag_ret"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tag_volcano"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_title"),
-    ActorRel(NonMatching, "d_a_tn"),
+    ActorRel(MatchingFor("D44J01"), "d_a_tn"),
     ActorRel(Matching,    "d_a_toge"),
     ActorRel(Matching,    "d_a_tori_flag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wall"),
@@ -1836,6 +1836,11 @@ config.custom_build_rules = [
     {
         "name": "convert_matDL",
         "command": "$python tools/converters/matDL_dis.py $in $out --symbol $symbol --scope $scope",
+        "description": "CONVERT $symbol",
+    },
+    {
+        "name": "convert_embedded_model_data",
+        "command": "$python tools/converters/extract_model_data.py $in $out --type $type --symbol $symbol --scope $scope",
         "description": "CONVERT $symbol",
     },
 ]
@@ -1867,6 +1872,21 @@ def emit_build_rule(asset):
                         "scope": custom_data.get("scope", "local")
                     },
                     "implicit": Path("tools/converters/matDL_dis.py"),
+                }
+            )
+
+        case "Vec" | "cXy" | "GXColor":
+            steps.append(
+                {
+                    "rule": "convert_embedded_model_data",
+                    "inputs": out_dir / "bin" / asset["binary"],
+                    "outputs": out_dir / "include" / asset["header"],
+                    "variables": {
+                        "type": asset.get("custom_type"),
+                        "symbol": asset.get("rename") or asset["symbol"],
+                        "scope": custom_data.get("scope", "local")
+                    },
+                    "implicit": Path("tools/converters/extract_model_data.py"),
                 }
             )
 

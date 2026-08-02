@@ -1572,7 +1572,6 @@ void dMsg_tactGuideShow(sub_msg_class* i_Msg, u8 param_2) {
 /* 80210AA0-80210CA4       .text dMsg_numberInput__FP13sub_msg_class */
 void dMsg_numberInput(sub_msg_class* i_Msg) {
     static char* num_str[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-    u8 uVar2;
 
     for (s32 i = 0; i < 8; i++) {
         if (i_Msg->mMsgDataProc.field_0x281[i] == 0x16) {
@@ -1581,11 +1580,9 @@ void dMsg_numberInput(sub_msg_class* i_Msg) {
         }
     }
     if (i_Msg->mMsgNo == 0x1cfa) {
-        uVar2 = i_Msg->mMsgDataProc.inputNumber(3);
-        i_Msg->mSelectNum = uVar2;
+        i_Msg->mSelectNum = i_Msg->mMsgDataProc.inputNumber(3);
     } else {
-        uVar2 = i_Msg->mMsgDataProc.inputNumber(2);
-        i_Msg->mSelectNum = uVar2;
+        i_Msg->mSelectNum = i_Msg->mMsgDataProc.inputNumber(2);
     }
     i_Msg->mMsgDataProc.colorAnime(maskPane);
     numberPane[2]->setString(num_str[dComIfGp_getMessageSetNumber() / 100]);
@@ -2027,7 +2024,6 @@ s32 dMsg_selectProc(sub_msg_class* i_Msg) {
     int uVar1;
     s16 sVar3;
     u8 cVar6;
-    u8 uVar7;
     J2DTextBox* pJVar8;
     u8 uVar9;
     int iVar10;
@@ -2083,8 +2079,7 @@ s32 dMsg_selectProc(sub_msg_class* i_Msg) {
         goto end;
     }
     if (i_Msg->mStatus == fopMsgStts_SELECT_2_e) {
-        uVar7 = i_Msg->mMsgDataProc.selectCheck2(arrowPane, iVar10, iVar11 + uVar1 + ((int)uVar1 / 2), uVar1);
-        i_Msg->mSelectNum = uVar7;
+        i_Msg->mSelectNum = i_Msg->mMsgDataProc.selectCheck2(arrowPane, iVar10, iVar11 + uVar1 + ((int)uVar1 / 2), uVar1);
         i_Msg->m026C[8].mUserArea++;
         if (i_Msg->m026C[8].mUserArea >= 0x14) {
             i_Msg->m026C[8].mUserArea = 0;
@@ -2104,8 +2099,7 @@ s32 dMsg_selectProc(sub_msg_class* i_Msg) {
         fopMsgM_paneTrans(&i_Msg->m01FC, 0.0f, i_Msg->mSelectNum * uVar1);
         fopMsgM_paneTrans(&i_Msg->m0234, 0.0f, i_Msg->mSelectNum * uVar1);
     } else if (i_Msg->mStatus == fopMsgStts_SELECT_3_e) {
-        uVar7 = i_Msg->mMsgDataProc.selectCheck3(arrowPane, iVar10, iVar11, uVar1);
-        i_Msg->mSelectNum = uVar7;
+        i_Msg->mSelectNum = i_Msg->mMsgDataProc.selectCheck3(arrowPane, iVar10, iVar11, uVar1);
         i_Msg->m026C[8].mUserArea++;
         if (i_Msg->m026C[8].mUserArea >= 0x14) {
             i_Msg->m026C[8].mUserArea = 0;

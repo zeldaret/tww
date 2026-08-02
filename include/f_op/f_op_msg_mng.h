@@ -157,10 +157,10 @@ public:
     void stringShift();
     void iconSelect(int, u8);
     void iconIdxRefresh();
-    int selectCheck2(J2DPane*, int, int, int);
-    int selectCheck3(J2DPane*, int, int, int);
-    int selectCheckYoko(J2DPane*, int, int, int);
-    int inputNumber(int);
+    u8 selectCheck2(J2DPane*, int, int, int);
+    u8 selectCheck3(J2DPane*, int, int, int);
+    u8 selectCheckYoko(J2DPane*, int, int, int);
+    u8 inputNumber(int);
     void selectArrow(J2DPicture*, f32, f32, f32, f32);
     void selectArrow(J2DPicture*, f32, f32);
     void colorAnime(J2DPicture*);
@@ -239,7 +239,7 @@ public:
     void tag_input_kenshi();
 #endif
 
-    void getIconColor(int) {}
+    u32 getIconColor(int i_no) { return field_0x1E0[i_no]; }
     u8 getIconNum(int i_no) { return field_0x281[i_no]; }
     int getIconPosX(int i_no) { return field_0x168[i_no]; }
     int getIconPosY(int i_no) { return field_0x1A4[i_no]; }
@@ -365,9 +365,9 @@ public:
     /* 0x164 */ int field_0x164;      // keyWaitTimer?
     /* 0x168 */ int field_0x168[0xF]; // IconPosX
     /* 0x1A4 */ int field_0x1A4[0xF]; // IconPosY
-    /* 0x1A4 */ u32 field_0x1E0[0xF];
+    /* 0x1E0 */ u32 field_0x1E0[0xF]; // IconColor
     /* 0x21C */ int field_0x21C;
-    /* 0x21C */ u32 field_0x220[0xF];
+    /* 0x220 */ u32 field_0x220[0xF];
     /* 0x25C */ u32 field_0x25C;
     /* 0x260 */ s16 field_0x260;
     /* 0x264 */ f32 field_0x264;

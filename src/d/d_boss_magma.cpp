@@ -68,7 +68,7 @@ void dMagma_ballBoss_c::setup(f32 param_1, u8 param_2, int param_3) {
 
     mBaseY = REG0_F(6) + -150.0f - 20.0f + param_1 + 90.0f;
 
-    btd = (btd_class*)fpcEx_Search(b_a_sub, NULL);
+    btd = (btd_class*)fpcM_Search(b_a_sub, NULL);
 
     if (btd != NULL) {
         if (btd->m6E88 == 1) {
@@ -84,5 +84,5 @@ void dMagma_ballBoss_c::setup(f32 param_1, u8 param_2, int param_3) {
     }
 
     field_0x7C = (cM_rndF(100.0f) + 400.0f);
-    mWave = (cM_rndF(8.0f) * 4096.0f);
+    mWave = (cM_rndF(8.0f) * 0x1000);
 }

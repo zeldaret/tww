@@ -5,10 +5,10 @@
 #include "f_op/f_op_actor.h"
 
 enum {
-    /* 0x00 */ DSNAP_TYPE_UNK00,
-    /* 0x01 */ DSNAP_TYPE_UNK01,
-    /* 0x02 */ DSNAP_TYPE_UNK02,
-    /* 0x03 */ DSNAP_TYPE_UNK03,
+    /* 0x00 */ DSNAP_TYPE_NONE,
+    /* 0x01 */ DSNAP_TYPE_POST, // Garrickson mailing his love letter
+    /* 0x02 */ DSNAP_TYPE_BIKUTSUKI, // Gossack scared
+    /* 0x03 */ DSNAP_TYPE_COUPLE_LOOK, // Linda and Anton, the secret couple
     /* 0x04 */ DSNAP_TYPE_UNK04,
     /* 0x05 */ DSNAP_TYPE_UNK05,
     /* 0x06 */ DSNAP_TYPE_UNK06,
@@ -78,11 +78,11 @@ enum {
     /* 0x46 */ DSNAP_TYPE_UNK46,
     /* 0x47 */ DSNAP_TYPE_UNK47,
     /* 0x48 */ DSNAP_TYPE_UNK48,
-    /* 0x49 */ DSNAP_TYPE_LS1,
+    /* 0x49 */ DSNAP_TYPE_NPC_LS1,
     /* 0x4A */ DSNAP_TYPE_UNK4A,
     /* 0x4B */ DSNAP_TYPE_UNK4B,
     /* 0x4C */ DSNAP_TYPE_UNK4C,
-    /* 0x4D */ DSNAP_TYPE_JI1,
+    /* 0x4D */ DSNAP_TYPE_NPC_JI1,
     /* 0x4E */ DSNAP_TYPE_UNK4E,
     /* 0x4F */ DSNAP_TYPE_UNK4F,
     /* 0x50 */ DSNAP_TYPE_UNK50,
@@ -92,34 +92,34 @@ enum {
     /* 0x54 */ DSNAP_TYPE_KB,
     /* 0x55 */ DSNAP_TYPE_KAMOME,
     /* 0x56 */ DSNAP_TYPE_KN,
-    /* 0x57 */ DSNAP_TYPE_TT,
-    /* 0x58 */ DSNAP_TYPE_KM1,
+    /* 0x57 */ DSNAP_TYPE_NPC_TT,
+    /* 0x58 */ DSNAP_TYPE_NPC_KM1,
     /* 0x59 */ DSNAP_TYPE_UNK59,
     /* 0x5A */ DSNAP_TYPE_UNK5A,
     /* 0x5B */ DSNAP_TYPE_UNK5B,
     /* 0x5C */ DSNAP_TYPE_UNK5C,
     /* 0x5D */ DSNAP_TYPE_UNK5D,
     /* 0x5E */ DSNAP_TYPE_NPC_PHOTO,
-    /* 0x5F */ DSNAP_TYPE_RSH1,
-    /* 0x60 */ DSNAP_TYPE_HO,
-    /* 0x61 */ DSNAP_TYPE_UNK61,
-    /* 0x62 */ DSNAP_TYPE_UNK62,
-    /* 0x63 */ DSNAP_TYPE_UNK63,
-    /* 0x64 */ DSNAP_TYPE_UNK64,
-    /* 0x65 */ DSNAP_TYPE_UNK65,
-    /* 0x66 */ DSNAP_TYPE_UNK66,
-    /* 0x67 */ DSNAP_TYPE_UNK67,
-    /* 0x68 */ DSNAP_TYPE_UNK68,
-    /* 0x69 */ DSNAP_TYPE_UNK69,
-    /* 0x6A */ DSNAP_TYPE_UNK6A,
-    /* 0x6B */ DSNAP_TYPE_UNK6B,
-    /* 0x6C */ DSNAP_TYPE_UNK6C,
-    /* 0x6D */ DSNAP_TYPE_UNK6D,
-    /* 0x6E */ DSNAP_TYPE_UNK6E,
-    /* 0x6F */ DSNAP_TYPE_UNK6F,
-    /* 0x70 */ DSNAP_TYPE_UNK70,
-    /* 0x71 */ DSNAP_TYPE_UNK71,
-    /* 0x72 */ DSNAP_TYPE_ZL1,
+    /* 0x5F */ DSNAP_TYPE_NPC_RSH1,
+    /* 0x60 */ DSNAP_TYPE_NPC_HO,
+    /* 0x61 */ DSNAP_TYPE_NPC_MK,
+    /* 0x62 */ DSNAP_TYPE_NPC_UG1_UG2,
+    /* 0x63 */ DSNAP_TYPE_NPC_UM2,
+    /* 0x64 */ DSNAP_TYPE_NPC_UM1,
+    /* 0x65 */ DSNAP_TYPE_NPC_UM3,
+    /* 0x66 */ DSNAP_TYPE_NPC_UW1,
+    /* 0x67 */ DSNAP_TYPE_NPC_UW2,
+    /* 0x68 */ DSNAP_TYPE_NPC_UO1,
+    /* 0x69 */ DSNAP_TYPE_NPC_UO2,
+    /* 0x6A */ DSNAP_TYPE_NPC_UO3,
+    /* 0x6B */ DSNAP_TYPE_NPC_UB1_UB2,
+    /* 0x6C */ DSNAP_TYPE_NPC_UB3,
+    /* 0x6D */ DSNAP_TYPE_NPC_UB4,
+    /* 0x6E */ DSNAP_TYPE_NPC_SA2,
+    /* 0x6F */ DSNAP_TYPE_NPC_SA3,
+    /* 0x70 */ DSNAP_TYPE_NPC_SA5,
+    /* 0x71 */ DSNAP_TYPE_NPC_SA4,
+    /* 0x72 */ DSNAP_TYPE_NPC_ZL1,
     /* 0x73 */ DSNAP_TYPE_UNK73,
     /* 0x74 */ DSNAP_TYPE_UNK74,
     /* 0x75 */ DSNAP_TYPE_UNK75,
@@ -131,19 +131,19 @@ enum {
     /* 0x7B */ DSNAP_TYPE_TC_BLUE,
     /* 0x7C */ DSNAP_TYPE_TC_WHITE,
     /* 0x7D */ DSNAP_TYPE_UNK7D,
-    /* 0x7E */ DSNAP_TYPE_ROTEN,
-    /* 0x7F */ DSNAP_TYPE_UNK7F,
-    /* 0x80 */ DSNAP_TYPE_BS,
+    /* 0x7E */ DSNAP_TYPE_NPC_ROTEN,
+    /* 0x7F */ DSNAP_TYPE_NPC_AH,
+    /* 0x80 */ DSNAP_TYPE_NPC_BS1,
     /* 0x81 */ DSNAP_TYPE_UNK81,
-    /* 0x82 */ DSNAP_TYPE_UNK82,
+    /* 0x82 */ DSNAP_TYPE_NPC_SA1,
     /* 0x83 */ DSNAP_TYPE_UNK83,
-    /* 0x84 */ DSNAP_TYPE_FA,
+    /* 0x84 */ DSNAP_TYPE_NPC_FA1,
     /* 0x85 */ DSNAP_TYPE_UNK85,
     /* 0x86 */ DSNAP_TYPE_UNK86,
     /* 0x87 */ DSNAP_TYPE_UNK87,
     /* 0x88 */ DSNAP_TYPE_UNK88,
     /* 0x89 */ DSNAP_TYPE_UNK89,
-    /* 0x8A */ DSNAP_TYPE_MD,
+    /* 0x8A */ DSNAP_TYPE_NPC_MD,
     /* 0x8B */ DSNAP_TYPE_UNK8B,
     /* 0x8C */ DSNAP_TYPE_UNK8C,
     /* 0x8D */ DSNAP_TYPE_UNK8D,
@@ -155,13 +155,13 @@ enum {
     /* 0x93 */ DSNAP_TYPE_UNK93,
     /* 0x94 */ DSNAP_TYPE_UNK94,
     /* 0x95 */ DSNAP_TYPE_UNK95,
-    /* 0x96 */ DSNAP_TYPE_BMSW,
+    /* 0x96 */ DSNAP_TYPE_NPC_BMSW,
     /* 0x97 */ DSNAP_TYPE_UNK97,
-    /* 0x98 */ DSNAP_TYPE_BTSW,
+    /* 0x98 */ DSNAP_TYPE_NPC_BTSW,
     /* 0x99 */ DSNAP_TYPE_DR,
-    /* 0x9A */ DSNAP_TYPE_HR,
+    /* 0x9A */ DSNAP_TYPE_NPC_HR,
     /* 0x9B */ DSNAP_TYPE_UNK9B,
-    /* 0x9C */ DSNAP_TYPE_CB1,
+    /* 0x9C */ DSNAP_TYPE_NPC_CB1,
     /* 0x9D */ DSNAP_TYPE_UNK9D,
     /* 0x9E */ DSNAP_TYPE_UNK9E,
     /* 0x9F */ DSNAP_TYPE_UNK9F,
@@ -222,7 +222,7 @@ public:
     /* 0x0C */ f32 mRadius;
     /* 0x10 */ f32 mHeight;
     /* 0x14 */ fpc_ProcID mActorPID;
-    /* 0x18 */ u8 mPhoto;
+    /* 0x18 */ u8 mPhotoNo;
     /* 0x19 */ u8 field_0x19;
     /* 0x1A */ u8 field_0x1a;
     /* 0x1B */ u8 field_0x1b;
@@ -249,7 +249,7 @@ public:
     s16 GetMinY() { return mMinY; }
     s16 GetMaxX() { return mMaxX; }
     s16 GetMaxY() { return mMaxY; }
-    int GetPhoto() const { return mPhoto; }
+    int GetPhoto() const { return mPhotoNo; }
     void GetPoint() {}
     void SetDRRatio(f32) {}
     void SetPoint(s32) {}
@@ -310,7 +310,7 @@ public:
     int JudgeFigure(int);
     void SetResult();
 
-    /* 0x010 */ int field_0x10;
+    /* 0x010 */ int mPhotoNo;
     /* 0x014 */ int field_0x14;
     /* 0x018 */ dSnap_RegistObjElm m_tbl[0x3F];
     /* 0xEDC */ int mFlag;

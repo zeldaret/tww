@@ -54,7 +54,7 @@ public:
     virtual void move(f32 x, f32 y);
     virtual void add(f32 x, f32 y);
 
-    // fakematch, this getter doesn't exist
+    // fakematch, this fake inline is only needed by the J2DPane::resize call inside of J2DWindow::resize
     f32 resize__getMinX() const { return mBounds.i.x; }
     virtual void resize(f32 w, f32 h) {
         f32 x = resize__getMinX();
