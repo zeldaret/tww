@@ -5971,7 +5971,7 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
         strcpy(buf2, "");
     }
 
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
 #else
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &nowCursorPos, &field_0x24, &field_0x150);
 #endif
@@ -6582,7 +6582,7 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
             strcpy(buf2, " seed");
         }
     }
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &field_0x20, &field_0x24, &field_0x150);
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
 #else
     char buf2[12];
 
@@ -6725,7 +6725,7 @@ void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
     } else {
         strcpy(text_buf, "");
     }
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &nowCursorPos, &field_0x24, &field_0x150);
 #else
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &nowCursorPos, &field_0x24, &field_0x150);
 #endif
@@ -7051,7 +7051,7 @@ void fopMsgM_msgDataProc_c::tag_input_bokobaba() {
     } else {
         strcpy(text_buf, " seed(s)");
     }
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &nowCursorPos, &field_0x24, &field_0x150);
 #else
     char* text = "seed(s)";
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &nowCursorPos, &field_0x24, &field_0x150);
@@ -7095,7 +7095,7 @@ void fopMsgM_msgDataProc_c::tag_input_dokuro() {
     } else {
         strcpy(text_buf, " necklace(s)");
     }
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &nowCursorPos, &field_0x24, &field_0x150);
 #else
     char* text = "necklace(s)";
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &nowCursorPos, &field_0x24, &field_0x150);
@@ -7139,7 +7139,7 @@ void fopMsgM_msgDataProc_c::tag_input_chuchu() {
     } else {
         strcpy(text_buf, " ");
     }
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &nowCursorPos, &field_0x24, &field_0x150);
 #else
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &nowCursorPos, &field_0x24, &field_0x150);
 #endif
@@ -7182,7 +7182,7 @@ void fopMsgM_msgDataProc_c::tag_input_pendant() {
     } else {
         strcpy(text_buf, " pendant(s)");
     }
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &nowCursorPos, &field_0x24, &field_0x150);
 #else
     char* text = "pendant(s)";
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &nowCursorPos, &field_0x24, &field_0x150);
@@ -7226,7 +7226,7 @@ void fopMsgM_msgDataProc_c::tag_input_hane() {
     } else {
         strcpy(text_buf, " feather(s)");
     }
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &nowCursorPos, &field_0x24, &field_0x150);
 #else
     char* text = "feather(s)";
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &nowCursorPos, &field_0x24, &field_0x150);
@@ -7270,7 +7270,7 @@ void fopMsgM_msgDataProc_c::tag_input_kenshi() {
     } else {
         strcpy(text_buf, " crest(s)");
     }
-    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &field_0x20, &field_0x24, &field_0x150);
+    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text_buf, "", &nowCursorPos, &field_0x24, &field_0x150);
 #else
     char* text = "crest(s)";
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, text, "", &nowCursorPos, &field_0x24, &field_0x150);
