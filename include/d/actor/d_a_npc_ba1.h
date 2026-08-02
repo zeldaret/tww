@@ -3,7 +3,6 @@
 
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
-#include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
 
@@ -158,7 +157,9 @@ public:
     /* 0x7EF */ u8 m7EF;
     /* 0x7F0 */ s8 m7F0;
     /* 0x7F1 */ u8 mItemNo;
+#if VERSION > VERSION_JPN
     /* 0x7F2 */ u8 m7F2;
+#endif
     /* 0x7F3 */ u8 field_0x7F3[0x7F4 - 0x7F3];
     /* 0x7F4 */ bool mbInitGrandma0;
     /* 0x7F5 */ bool m7F5;
@@ -173,9 +174,6 @@ public:
     /* 0x7FE */ bool m7FE;
     /* 0x7FF */ bool m7FF;
     /* 0x800 */ bool mbRanExecute;
-    /* 0x801 */ u8 m801;
-    /* 0x802 */ u8 m802;
-    /* 0x803 */ u8 m803;
     /* 0x804 */ BOOL mbSetEyePos;
     /* 0x808 */ bool mbAttention;
     /* 0x809 */ bool m809;

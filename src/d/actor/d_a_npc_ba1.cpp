@@ -273,7 +273,9 @@ bool daNpc_Ba1_c::createInit() {
     } else {
         return false;
     }
+#if VERSION > VERSION_JPN
     m7F2 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_A60F);
+#endif
     mStts.Init(0xFF,0xFF,this);
     mCyl.SetStts(&mStts);
     mCyl.Set(dNpc_cyl_src);
@@ -354,7 +356,8 @@ bool daNpc_Ba1_c::setBtp(bool i_param_1, int i_btp_num) {
     J3DModelData* model_data = mpMorf->getModel()->getModelData();
     int res_id = btpNum_toResID(i_btp_num);
     m_hed_tex_pttrn = reinterpret_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Ba",res_id));
-    JUT_ASSERT(0x239,m_hed_tex_pttrn != NULL);
+    JUT_ASSERT(VERSION_SELECT(0x237, 0x237,0x239, 0x239),m_hed_tex_pttrn != NULL);
+    
     int iVar1 = mHeadBtpAnm.init(model_data,m_hed_tex_pttrn,1,2,1.0f,0,-1,i_param_1,0);
     bool o_retval = iVar1 == 1;
     if(o_retval){
@@ -773,9 +776,13 @@ u32 daNpc_Ba1_c::getMsg_BA1_3() {
     }
     else {
         if (dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED)) {
-            dComIfGs_setEventReg(dSv_event_flag_c::UNK_A60F, 0);
             
+#if VERSION > VERSION_JPN
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_A60F, 0);
             if(m7F2 >= 3) {
+#else
+            if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_A60F) >= 3) {
+#endif
                 if (m7FA) {
                     return 0x7fd;
                 }
@@ -1385,6 +1392,9 @@ void daNpc_Ba1_c::setStt(s8 i_status) {
     mStatus = i_status;
     switch(mStatus) {
         case 2:
+#if VERSION <= VERSION_JPN
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_A60F, 0);
+#endif
             m80E = 0xFF;
             if(mAnmNum != 4) {
                 mLookBackState = 1;
@@ -1406,6 +1416,7 @@ void daNpc_Ba1_c::setStt(s8 i_status) {
             mHeadOnlyFollow = true;
             break;
     }
+
     setAnm();
     
 }
@@ -2003,7 +2014,7 @@ cPhs_State daNpc_Ba1_c::_create() {
 /* 000043E8-00004658       .text create_Anm__11daNpc_Ba1_cFv */
 J3DModelData* daNpc_Ba1_c::create_Anm() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ba",10);
-    JUT_ASSERT(0xB0C,a_mdl_dat != NULL);
+    JUT_ASSERT(VERSION_SELECT(0xB0B, 0xB0B, 0xB0C, 0xB0C),a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
         NULL,
@@ -2029,11 +2040,11 @@ J3DModelData* daNpc_Ba1_c::create_Anm() {
     }
 
     m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
-    JUT_ASSERT(0xB20,m_hed_jnt_num >= 0);
+    JUT_ASSERT(VERSION_SELECT(0xB1F, 0xB1F, 0xB20, 0xB20),m_hed_jnt_num >= 0);
     m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone");
-    JUT_ASSERT(0xB23,m_bbone_jnt_num >= 0);    
+    JUT_ASSERT(VERSION_SELECT(0xB22, 0xB22, 0xB23, 0xB23),m_bbone_jnt_num >= 0);    
     m_footL_jnt_num = a_mdl_dat->getJointName()->getIndex("footL");
-    JUT_ASSERT(0xB26,m_footL_jnt_num >= 0);    
+    JUT_ASSERT(VERSION_SELECT(0xB25, 0xB25, 0xB26, 0xB26),m_footL_jnt_num >= 0);    
 
     return a_mdl_dat;  
 }
@@ -2042,7 +2053,7 @@ J3DModelData* daNpc_Ba1_c::create_Anm() {
 bool daNpc_Ba1_c::create_itm_Mdl() {
     mpClothModel = NULL;
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ba",9);
-    JUT_ASSERT(0xB38,a_mdl_dat != NULL);
+    JUT_ASSERT(VERSION_SELECT(0xB37, 0xB37, 0xB38, 0xB38),a_mdl_dat != NULL);
     mpClothModel = mDoExt_J3DModel__create(a_mdl_dat,0x80000,0x11000002);
     return true;
 }
