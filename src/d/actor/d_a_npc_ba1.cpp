@@ -1891,7 +1891,7 @@ BOOL daNpc_Ba1_c::_draw() {
         mDoExt_modelEntryDL(mpClothModel);
     }
     shadowDraw();
-    dSnap_RegistFig(DSNAP_TYPE_UNK4A, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_BA1, this, 1.0f, 1.0f, 1.0f);
 
     if((u8)l_HIO.mPrmTbl.m18 != 0){
         cXyz somevec;
