@@ -390,12 +390,16 @@ void daMgBoard_c::MiniGameInit() {
 
 /* 00000AE8-00000DEC       .text set_mtx__11daMgBoard_cFv */
 void daMgBoard_c::set_mtx() {
-    J3DModel* board_model = mpBoardModel;
+    J3DModel* model;
+    J3DModel* board_model;
+    J3DModel* cursor_model;
+
+    board_model = mpBoardModel;
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     board_model->setBaseTRMtx(mDoMtx_stack_c::get());
 
-    J3DModel* cursor_model = mpCursorModel;
+    cursor_model = mpCursorModel;
     mDoMtx_stack_c::transS(
         m_cur_table[mBoardPosY][mBoardPosX].x + current.pos.x,
         m_cur_table[mBoardPosY][mBoardPosX].y + current.pos.y,
@@ -407,7 +411,6 @@ void daMgBoard_c::set_mtx() {
     mMissModelCount = 0;
     mHitModelCount = 0;
 
-    J3DModel* model;
     for (u8 x = 0; x < 8; ++x) {
         for (u8 y = 0; y < 8; ++y) {
 
