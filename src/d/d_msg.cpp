@@ -70,9 +70,7 @@ JKRHeap* dMsg_getAgbWorkArea() {
 
 /* 8020A628-8020A950       .text draw__13dDlst_2DMSG_cFv */
 void dDlst_2DMSG_c::draw() {
-    sub_msg_class* pmVar4;
-
-    pmVar4 = field_0x4;
+    sub_msg_class* msg = mpMsg;
     J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
     graf->setPort();
     sScreen->draw(0.0f, 0.0f, graf);
@@ -82,37 +80,37 @@ void dDlst_2DMSG_c::draw() {
 
     outFontDraw();
 
-    if (pmVar4->mStatus == fopMsgStts_SELECT_YOKO_e) {
-        field_0x4->mMsgDataProc.selectArrow(arrowPane);
-    } else if (pmVar4->mStatus == fopMsgStts_INPUT_e) {
-        if ((field_0x4->mMesgEntry.mTextboxType == 0) || (field_0x4->mMesgEntry.mTextboxType == 10)) {
+    if (msg->mStatus == fopMsgStts_SELECT_YOKO_e) {
+        mpMsg->mMsgDataProc.selectArrow(arrowPane);
+    } else if (msg->mStatus == fopMsgStts_INPUT_e) {
+        if ((mpMsg->mMesgEntry.mTextboxType == 0) || (mpMsg->mMesgEntry.mTextboxType == 10)) {
             f32 dVar3 = (numberPane[0]->mBounds.getWidth() + numberPane[0]->getCharSpace());
             f32 f3;
             f32 f4;
-            if (pmVar4->mMsgNo == 0x1cfa) {
+            if (msg->mMsgNo == 0x1cfa) {
                 f4 = maskPane->mBounds.getHeight();
                 f3 = maskPane->mBounds.getWidth();
-                maskPane->draw(field_0x4->m10EC + (dVar3 * (2 - pmVar4->mSelectNum)), field_0x4->m10F0, f3, f4, false, false, false);
+                maskPane->draw(mpMsg->m10EC + (dVar3 * (2 - msg->mSelectNum)), mpMsg->m10F0, f3, f4, false, false, false);
                 f4 = numberPane[2]->mBounds.getWidth();
                 f3 = numberPane[2]->mBounds.getHeight();
-                numberPane[2]->draw(field_0x4->m10EC, field_0x4->m10F0 + f3, f4, HBIND_CENTER);
+                numberPane[2]->draw(mpMsg->m10EC, mpMsg->m10F0 + f3, f4, HBIND_CENTER);
                 f4 = numberPane[1]->mBounds.getWidth();
                 f3 = numberPane[1]->mBounds.getHeight();
-                numberPane[1]->draw((field_0x4->m10EC + dVar3), field_0x4->m10F0 + f3, f4, HBIND_CENTER);
+                numberPane[1]->draw((mpMsg->m10EC + dVar3), mpMsg->m10F0 + f3, f4, HBIND_CENTER);
                 f4 = numberPane[0]->mBounds.getWidth();
                 f3 = numberPane[0]->mBounds.getHeight();
-                numberPane[0]->draw(field_0x4->m10EC + (dVar3 * 2.0f), field_0x4->m10F0 + f3, f4, HBIND_CENTER);
+                numberPane[0]->draw(mpMsg->m10EC + (dVar3 * 2.0f), mpMsg->m10F0 + f3, f4, HBIND_CENTER);
             } else {
                 numberPane[2]->hide();
                 f4 = maskPane->mBounds.getHeight();
                 f3 = maskPane->mBounds.getWidth();
-                maskPane->draw(field_0x4->m10EC + (dVar3 * (1 - pmVar4->mSelectNum)), field_0x4->m10F0, f3, f4, false, false, false);
+                maskPane->draw(mpMsg->m10EC + (dVar3 * (1 - msg->mSelectNum)), mpMsg->m10F0, f3, f4, false, false, false);
                 f4 = numberPane[1]->mBounds.getWidth();
                 f3 = numberPane[1]->mBounds.getHeight();
-                numberPane[1]->draw(field_0x4->m10EC, field_0x4->m10F0 + f3, f4, HBIND_CENTER);
+                numberPane[1]->draw(mpMsg->m10EC, mpMsg->m10F0 + f3, f4, HBIND_CENTER);
                 f4 = numberPane[0]->mBounds.getWidth();
                 f3 = numberPane[0]->mBounds.getHeight();
-                numberPane[0]->draw((field_0x4->m10EC + dVar3), field_0x4->m10F0 + f3, f4, HBIND_CENTER);
+                numberPane[0]->draw((mpMsg->m10EC + dVar3), mpMsg->m10F0 + f3, f4, HBIND_CENTER);
             }
         }
     }
@@ -120,85 +118,67 @@ void dDlst_2DMSG_c::draw() {
 
 /* 8020A950-8020AC40       .text outFontDraw__13dDlst_2DMSG_cFv */
 void dDlst_2DMSG_c::outFontDraw() {
-    /* Nonmatching */
-    f32 dVar1;
-    u8 cVar2;
-    J2DScreen* pJVar3;
-    sub_msg_class* pdVar4;
-    int uVar4;
-    int uVar5;
-    u8 bVar6;
-    int iVar7;
-    f32 local_38;
-    f32 local_30;
-    f32 local_28;
-
-    for (s32 i = 0; i < 8; i++) {
-        pdVar4 = (sub_msg_class*)this->field_0x4;
-        cVar2 = pdVar4->mMsgDataProc.field_0x281[i];
-        fopMsgM_msgDataProc_c* tmp = &pdVar4->mMsgDataProc;
-        iVar7 = tmp->field_0x1A4[i];
-        uVar5 = tmp->field_0x1E0[i];
-        if (cVar2 != 0xFF && cVar2 != 0x14 && cVar2 != 0x15 && cVar2 != 0x16) {
-            pJVar3 = (J2DScreen*)pdVar4->m0544[0].pane;
-            local_38 = tmp->field_0x168[i];
-            dVar1 = local_38;
-            int r5 = dVar1 + pJVar3->mBounds.i.x;
-            if (pdVar4->mMesgEntry.mTextboxType == 5) {
-                local_30 = g_msgHIO.field_0x5e * iVar7;
-                local_38 = pdVar4->m1104 * (2 - pdVar4->m1108);
-                iVar7 = (int)((local_30) + (local_38) + pJVar3->mBounds.i.y);
-                bVar6 = pdVar4->m0544[0].mNowAlpha;
-            } else if (pdVar4->mMesgEntry.mTextboxType == 0xe) {
-                local_28 = g_msgHIO.field_0x5e * iVar7;
-                local_30 = pdVar4->m1104;
-                iVar7 = (int)((local_28) + (local_30) + pJVar3->mBounds.i.y);
-                bVar6 = pdVar4->m0544[0].mNowAlpha;
+    /* Nonmatching - regswap */
+    for (int i = 0; i < 8; i++) {
+        u8 iconNum = mpMsg->mMsgDataProc.getIconNum(i);
+        int posX = mpMsg->mMsgDataProc.getIconPosX(i);
+        int posY = mpMsg->mMsgDataProc.getIconPosY(i);
+        int scale = mpMsg->mMsgDataProc.getIconScale(i);
+        if (iconNum != 0xFF && iconNum != 0x14 && iconNum != 0x15 && iconNum != 0x16) {
+            J2DScreen* scrn = (J2DScreen*)mpMsg->m0544[0].pane;
+            int r5 = posX + scrn->mBounds.i.x;
+            int r6;
+            u8 alpha;
+            if (mpMsg->mMesgEntry.mTextboxType == 5) {
+                f32 local_30 = g_msgHIO.field_0x5e * posY;
+                f32 local_38 = mpMsg->m1104 * (2 - mpMsg->m1108);
+                r6 = (int)(local_38 + scrn->mBounds.i.y + local_30);
+                alpha = mpMsg->m0544[0].mNowAlpha;
+            } else if (mpMsg->mMesgEntry.mTextboxType == 0xe) {
+                f32 local_28 = g_msgHIO.field_0x5e * posY;
+                f32 local_30 = mpMsg->m1104;
+                r6 = (int)(local_30 + scrn->mBounds.i.y + local_28);
+                alpha = mpMsg->m0544[0].mNowAlpha;
             } else {
-                if (pdVar4->m110C > (int)uVar5) {
-                    if (pdVar4->m1108 > 1) {
-                        uVar4 = uVar5 - pdVar4->m110C;
-                        iVar7 = ((int)uVar4 / 2) + (int)(((pdVar4->m1104 * ((3 - iVar7) - (pdVar4->m1108 + -2))) + pJVar3->mBounds.i.y) - (int)(uVar5 / 2));
+                if (scale > mpMsg->m110C) {
+                    if (mpMsg->m1108 > 1) {
+                        int temp1 = (mpMsg->m1104 * ((3 - posY) - (mpMsg->m1108 + -2)));
+                        r6 = ((scale - mpMsg->m110C) / 2) + (int)((temp1 + scrn->mBounds.i.y) - (f32)(int)(scale / 2));
                     } else {
-                        iVar7 = (int)(((pdVar4->m1104 << 2) + pJVar3->mBounds.i.y) - (int)(uVar5 / 2));
+                        r6 = (int)(((mpMsg->m1104 << 2) + scrn->mBounds.i.y) - (f32)(int)(scale / 2));
                     }
                 } else {
-                    local_28 = g_msgHIO.field_0x5e * iVar7;
-                    local_30 = pdVar4->m1104 * (3 - pdVar4->m1108);
-                    iVar7 = (int)((local_28) + (local_30) + pJVar3->mBounds.i.y);
+                    f32 local_28 = g_msgHIO.field_0x5e * posY;
+                    f32 local_30 = mpMsg->m1104 * (3 - mpMsg->m1108);
+                    r6 = (int)(local_30 + scrn->mBounds.i.y + local_28);
                 }
-                bVar6 = pdVar4->m0544[0].mNowAlpha;
+                alpha = mpMsg->m0544[0].mNowAlpha;
             }
-            fopMsgM_outFontDraw(button_icon[i], button_kage[i], r5, iVar7, uVar5, &buttonTimer[i], bVar6, cVar2);
+            fopMsgM_outFontDraw(button_icon[i], button_kage[i], r5, r6, scale, &buttonTimer[i], alpha, iconNum);
         }
     }
 }
 
 /* 8020AC40-8020AD3C       .text draw__14dDlst_2Dtact_cFv */
 void dDlst_2Dtact_c::draw() {
-    /* Nonmatching */
-    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
-    GXBool uVar1;
-    f32 temp_r27;
-    f32 temp_r28;
-    f32 temp_r29;
-    f32 temp_r30;
+    int r27 = 0;
+    int r28 = 0;
+    int r26 = 372;
+    int r25 = 72;
 
+    J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
     graf->setPort();
-    temp_r30 = -9.0f;
-    temp_r29 = -21.0f;
-    temp_r28 = 383.04376f;
-    temp_r27 = 78.600006f;
-    GXSetScissor((s32)temp_r30, (s32)temp_r29, (s32)temp_r28, (s32)temp_r27);
+    
+    int left = r27 * 1.0296875f + -9.0f;
+    int top = r28 * 1.0916667f + -21.0f;
+    int width = r26 * 1.0296875f;
+    int height = r25 * 1.0916667f;
+
+    GXSetScissor(left, top, width, height);
     sScreen->draw(0.0f, 0.0f, graf);
-    GXSetTexCopySrc((s32)temp_r30, (s32)temp_r29, (s32)temp_r28, (s32)temp_r27);
-    GXSetTexCopyDst((s32)temp_r28, (s32)temp_r27, GX_TF_RGB565, GX_FALSE);
-    if (REG1_S(6) != 0) {
-        uVar1 = GX_FALSE;
-    } else {
-        uVar1 = GX_TRUE;
-    }
-    GXCopyTex(field_0x8, uVar1);
+    GXSetTexCopySrc(left, top, width, height);
+    GXSetTexCopyDst(width, height, GX_TF_RGB565, GX_FALSE);
+    GXCopyTex(field_0x8, REG1_S(6) == 0 ? GX_TRUE : GX_FALSE);
 }
 
 /* 8020AD3C-8020ADD8       .text dMsg_msg_pane_parts_set__FP18fopMsgM_pane_classUc */
@@ -318,9 +298,6 @@ void dMsg_screenDataSetTalk(sub_msg_class* i_Msg) {
 
 /* 8020B958-8020CC6C       .text dMsg_screenDataSetItem__FP13sub_msg_class */
 void dMsg_screenDataSetItem(sub_msg_class* i_Msg) {
-    ResTIMG* pRVar6;
-    f32 dVar12;
-
     sScreen = new MyScreen();
     sScreen->set("hukidashi_09.blo", dComIfGp_getMsgArchive());
     fopMsgM_setPaneData(&i_Msg->m049C, sScreen->search('ms90'));
@@ -340,8 +317,7 @@ void dMsg_screenDataSetItem(sub_msg_class* i_Msg) {
     fopMsgM_setPaneData(&i_Msg->m0624[5], sScreen->search('lig6'));
     fopMsgM_setPaneData(&i_Msg->m0624[6], sScreen->search('lig7'));
     fopMsgM_setPaneData(&i_Msg->m0624[7], sScreen->search('lig8'));
-    pRVar6 = (ResTIMG*)i_Msg->mpHeap->alloc(0xc00, 0x20);
-    i_Msg->buffer_p = pRVar6;
+    i_Msg->buffer_p = (ResTIMG*)i_Msg->mpHeap->alloc(0xc00, 0x20);
     JUT_ASSERT(661, i_Msg->buffer_p != NULL);
     if ((i_Msg->mMesgEntry.mTextboxType == 9) && (dItem_data::getTexture(i_Msg->mMsgNo - 101) != NULL)) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
@@ -352,7 +328,7 @@ void dMsg_screenDataSetItem(sub_msg_class* i_Msg) {
             i_Msg->m0624[i].pane->hide();
         }
         i_Msg->m0624[8].mUserArea = 1;
-        dVar12 = (i_Msg->m049C.mPosCenterOrig.x - i_Msg->m0544[0].mPosCenterOrig.x);
+        f32 dVar12 = (i_Msg->m049C.mPosCenterOrig.x - i_Msg->m0544[0].mPosCenterOrig.x);
         for (s32 i = 0; i < 4; i++) {
             i_Msg->m0544[i].mSize.x = 486.0f;
             fopMsgM_paneTrans(&i_Msg->m0544[i], dVar12, 0.0f);
@@ -378,7 +354,6 @@ void dMsg_screenDataSetItem(sub_msg_class* i_Msg) {
         ((J2DPicture*)i_Msg->m0624[8].pane)->setWhite(JUtility::TColor(0xBE78FFFF));
     } else if (i_Msg->mMsgNo == 0x6b) {
         ((J2DPicture*)i_Msg->m0624[8].pane)->setBlack(JUtility::TColor(0x50280000));
-        ;
         ((J2DPicture*)i_Msg->m0624[8].pane)->setWhite(JUtility::TColor(0xFF8C00FF));
     } else if (i_Msg->mMsgNo == 0x74) {
         ((J2DPicture*)i_Msg->m0624[8].pane)->setBlack(JUtility::TColor(0x00000000));
@@ -447,8 +422,12 @@ void dMsg_screenDataSetItem(sub_msg_class* i_Msg) {
     if (i_Msg->mMesgEntry.mTextboxType == 1) {
         ((J2DPicture*)i_Msg->m049C.pane)->setBlack(JUtility::TColor(0x00000000));
         ((J2DPicture*)i_Msg->m049C.pane)->setWhite(JUtility::TColor(0xFFFFFFFF));
-        ((J2DPicture*)i_Msg->m049C.pane)
-            ->setCornerColor(JUtility::TColor(0x3232B4FF), JUtility::TColor(0x3232B4FF), JUtility::TColor(0x3232B496), JUtility::TColor(0x646478FF));
+        ((J2DPicture*)i_Msg->m049C.pane)->setCornerColor(
+            JUtility::TColor(0x3232B4FF),
+            JUtility::TColor(0x3232B4FF),
+            JUtility::TColor(0x3232B496),
+            JUtility::TColor(0x646478FF)
+        );
     }
     ((J2DTextBox*)i_Msg->m0544[0].pane)->setFont(textFont);
     ((J2DTextBox*)i_Msg->m0544[1].pane)->setFont(rubyFont);
@@ -752,10 +731,6 @@ void dMsg_outFontHide(sub_msg_class*) {
 void dMsg_ScreenDataValueInitTalk(sub_msg_class* i_Msg) {
     int iVar1;
     int iVar2;
-    char* pcVar4;
-    char* pcVar5;
-    char* pcVar7;
-    char* pcVar8;
     cXyz VStack_3c;
     cXyz local_48;
 
@@ -787,28 +762,11 @@ void dMsg_ScreenDataValueInitTalk(sub_msg_class* i_Msg) {
     i_Msg->m049C.mSize.y = (i_Msg->m049C.mSizeOrig.y / i_Msg->m049C.mSizeOrig.x) * 100.0f;
     fopMsgM_cposMove(&i_Msg->m049C);
     i_Msg->mMsgDataProc.dataInit();
-    i_Msg->mMsgDataProc.field_0x25C = i_Msg->m1164;
-    i_Msg->mMsgDataProc.field_0x10 = &i_Msg->mPos;
+    i_Msg->mMsgDataProc.setStringColor(i_Msg->m1164);
+    i_Msg->mMsgDataProc.setActorPosition(&i_Msg->mPos);
     i_Msg->mMsgDataProc.setBmgData(i_Msg->mpMesgStr);
-    pcVar8 = i_Msg->output_rubSdw;
-    pcVar7 = i_Msg->output_textSdw;
-    pcVar5 = i_Msg->output_rub;
-    pcVar4 = i_Msg->output_text;
-    i_Msg->mMsgDataProc.field_0x60 = pcVar4;
-    i_Msg->mMsgDataProc.field_0x40 = pcVar4;
-    i_Msg->mMsgDataProc.field_0x64 = pcVar5;
-    i_Msg->mMsgDataProc.field_0x44 = pcVar5;
-    i_Msg->mMsgDataProc.field_0x68 = pcVar7;
-    i_Msg->mMsgDataProc.field_0x48 = pcVar7;
-    i_Msg->mMsgDataProc.field_0x6C = pcVar8;
-    i_Msg->mMsgDataProc.field_0x4C = pcVar8;
-    pcVar4 = i_Msg->select_rubSdw;
-    pcVar5 = i_Msg->select_textSdw;
-    pcVar7 = i_Msg->select_rub;
-    i_Msg->mMsgDataProc.field_0x50[0] = i_Msg->select_text;
-    i_Msg->mMsgDataProc.field_0x50[1] = pcVar7;
-    i_Msg->mMsgDataProc.field_0x50[2] = pcVar5;
-    i_Msg->mMsgDataProc.field_0x50[3] = pcVar4;
+    i_Msg->mMsgDataProc.setOutMessage(i_Msg->output_text, i_Msg->output_rub, i_Msg->output_textSdw, i_Msg->output_rubSdw);
+    i_Msg->mMsgDataProc.setSelectMessage(i_Msg->select_text, i_Msg->select_rub, i_Msg->select_textSdw, i_Msg->select_rubSdw);
     i_Msg->mMsgDataProc.setFont(textFont);
     i_Msg->mMsgDataProc.setRubyFont(rubyFont);
     i_Msg->mMsgDataProc.setCharSpace(iVar1);
@@ -837,10 +795,6 @@ void dMsg_ScreenDataValueInitItem(sub_msg_class* i_Msg) {
     int iVar9;
     int fVar3;
     int fVar4;
-    char* pcVar5;
-    char* pcVar6;
-    char* pcVar7;
-    char* pcVar8;
 
     fVar3 = (int)((J2DTextBox*)i_Msg->m0544[0].pane)->getCharSpace();
     fVar4 = (int)((J2DTextBox*)i_Msg->m0544[1].pane)->getCharSpace();
@@ -880,27 +834,10 @@ void dMsg_ScreenDataValueInitItem(sub_msg_class* i_Msg) {
     i_Msg->m049C.mSize.y = (i_Msg->m049C.mSizeOrig.y / i_Msg->m049C.mSizeOrig.x) * 100.0f;
     fopMsgM_cposMove(&i_Msg->m049C);
     i_Msg->mMsgDataProc.dataInit();
-    i_Msg->mMsgDataProc.field_0x10 = &i_Msg->mPos;
+    i_Msg->mMsgDataProc.setActorPosition(&i_Msg->mPos);
     i_Msg->mMsgDataProc.setBmgData(i_Msg->mpMesgStr);
-    pcVar8 = i_Msg->output_rubSdw;
-    pcVar7 = i_Msg->output_textSdw;
-    pcVar6 = i_Msg->output_rub;
-    pcVar5 = i_Msg->output_text;
-    i_Msg->mMsgDataProc.field_0x60 = pcVar5;
-    i_Msg->mMsgDataProc.field_0x40 = pcVar5;
-    i_Msg->mMsgDataProc.field_0x64 = pcVar6;
-    i_Msg->mMsgDataProc.field_0x44 = pcVar6;
-    i_Msg->mMsgDataProc.field_0x68 = pcVar7;
-    i_Msg->mMsgDataProc.field_0x48 = pcVar7;
-    i_Msg->mMsgDataProc.field_0x6C = pcVar8;
-    i_Msg->mMsgDataProc.field_0x4C = pcVar8;
-    pcVar5 = i_Msg->select_rubSdw;
-    pcVar6 = i_Msg->select_textSdw;
-    pcVar7 = i_Msg->select_rub;
-    i_Msg->mMsgDataProc.field_0x50[0] = i_Msg->select_text;
-    i_Msg->mMsgDataProc.field_0x50[1] = pcVar7;
-    i_Msg->mMsgDataProc.field_0x50[2] = pcVar6;
-    i_Msg->mMsgDataProc.field_0x50[3] = pcVar5;
+    i_Msg->mMsgDataProc.setOutMessage(i_Msg->output_text, i_Msg->output_rub, i_Msg->output_textSdw, i_Msg->output_rubSdw);
+    i_Msg->mMsgDataProc.setSelectMessage(i_Msg->select_text, i_Msg->select_rub, i_Msg->select_textSdw, i_Msg->select_rubSdw);
     i_Msg->mMsgDataProc.setFont(textFont);
     i_Msg->mMsgDataProc.setRubyFont(rubyFont);
     i_Msg->mMsgDataProc.setCharSpace((int)fVar3);
@@ -933,10 +870,6 @@ void dMsg_ScreenDataValueInitItem(sub_msg_class* i_Msg) {
 void dMsg_ScreenDataValueInitTact(sub_msg_class* i_Msg) {
     int uVar1;
     int iVar2;
-    char* pcVar3;
-    char* pcVar4;
-    char* pcVar5;
-    char* pcVar6;
     f32 dVar7;
     f32 dVar8;
 
@@ -963,27 +896,10 @@ void dMsg_ScreenDataValueInitTact(sub_msg_class* i_Msg) {
     i_Msg->m049C.mSize.y = (i_Msg->m049C.mSizeOrig.y / i_Msg->m049C.mSizeOrig.x) * 100.0f;
     fopMsgM_cposMove(&i_Msg->m049C);
     i_Msg->mMsgDataProc.dataInit();
-    i_Msg->mMsgDataProc.field_0x10 = &i_Msg->mPos;
+    i_Msg->mMsgDataProc.setActorPosition(&i_Msg->mPos);
     i_Msg->mMsgDataProc.setBmgData(i_Msg->mpMesgStr);
-    pcVar6 = i_Msg->output_rubSdw;
-    pcVar5 = i_Msg->output_textSdw;
-    pcVar4 = i_Msg->output_rub;
-    pcVar3 = i_Msg->output_text;
-    i_Msg->mMsgDataProc.field_0x60 = pcVar3;
-    i_Msg->mMsgDataProc.field_0x40 = pcVar3;
-    i_Msg->mMsgDataProc.field_0x64 = pcVar4;
-    i_Msg->mMsgDataProc.field_0x44 = pcVar4;
-    i_Msg->mMsgDataProc.field_0x68 = pcVar5;
-    i_Msg->mMsgDataProc.field_0x48 = pcVar5;
-    i_Msg->mMsgDataProc.field_0x6C = pcVar6;
-    i_Msg->mMsgDataProc.field_0x4C = pcVar6;
-    pcVar3 = i_Msg->select_rubSdw;
-    pcVar4 = i_Msg->select_textSdw;
-    pcVar5 = i_Msg->select_rub;
-    i_Msg->mMsgDataProc.field_0x50[0] = i_Msg->select_text;
-    i_Msg->mMsgDataProc.field_0x50[1] = pcVar5;
-    i_Msg->mMsgDataProc.field_0x50[2] = pcVar4;
-    i_Msg->mMsgDataProc.field_0x50[3] = pcVar3;
+    i_Msg->mMsgDataProc.setOutMessage(i_Msg->output_text, i_Msg->output_rub, i_Msg->output_textSdw, i_Msg->output_rubSdw);
+    i_Msg->mMsgDataProc.setSelectMessage(i_Msg->select_text, i_Msg->select_rub, i_Msg->select_textSdw, i_Msg->select_rubSdw);
     i_Msg->mMsgDataProc.setFont(textFont);
     i_Msg->mMsgDataProc.setRubyFont(rubyFont);
     i_Msg->mMsgDataProc.setCharSpace((int)dVar7);
@@ -1015,42 +931,18 @@ void dMsg_ScreenDataValueInitTact(sub_msg_class* i_Msg) {
 
 /* 8020EAC4-8020EC28       .text dMsg_ScreenDataValueInitDemo__FP13sub_msg_class */
 void dMsg_ScreenDataValueInitDemo(sub_msg_class* i_Msg) {
-    char* pcVar1;
-    char* pcVar2;
-    char* pcVar4;
-    char* pcVar5;
-    f32 dVar6;
-    f32 dVar7;
-
-    dVar6 = ((J2DTextBox*)i_Msg->m0544[0].pane)->getCharSpace();
-    dVar7 = ((J2DTextBox*)i_Msg->m0544[1].pane)->getCharSpace();
+    f32 charSpace = ((J2DTextBox*)i_Msg->m0544[0].pane)->getCharSpace();
+    f32 rubyCharSpace = ((J2DTextBox*)i_Msg->m0544[1].pane)->getCharSpace();
     f32 tmp = 0.5f;
     i_Msg->m1104 = (((J2DTextBox*)i_Msg->m0544[0].pane)->mLineSpace * tmp);
     i_Msg->mMsgDataProc.dataInit();
     i_Msg->mMsgDataProc.setBmgData(i_Msg->mpMesgStr);
-    pcVar5 = i_Msg->output_rubSdw;
-    pcVar4 = i_Msg->output_textSdw;
-    pcVar2 = i_Msg->output_rub;
-    pcVar1 = i_Msg->output_text;
-    i_Msg->mMsgDataProc.field_0x60 = pcVar1;
-    i_Msg->mMsgDataProc.field_0x40 = pcVar1;
-    i_Msg->mMsgDataProc.field_0x64 = pcVar2;
-    i_Msg->mMsgDataProc.field_0x44 = pcVar2;
-    i_Msg->mMsgDataProc.field_0x68 = pcVar4;
-    i_Msg->mMsgDataProc.field_0x48 = pcVar4;
-    i_Msg->mMsgDataProc.field_0x6C = pcVar5;
-    i_Msg->mMsgDataProc.field_0x4C = pcVar5;
-    pcVar1 = i_Msg->select_rubSdw;
-    pcVar2 = i_Msg->select_textSdw;
-    pcVar4 = i_Msg->select_rub;
-    i_Msg->mMsgDataProc.field_0x50[0] = i_Msg->select_text;
-    i_Msg->mMsgDataProc.field_0x50[1] = pcVar4;
-    i_Msg->mMsgDataProc.field_0x50[2] = pcVar2;
-    i_Msg->mMsgDataProc.field_0x50[3] = pcVar1;
+    i_Msg->mMsgDataProc.setOutMessage(i_Msg->output_text, i_Msg->output_rub, i_Msg->output_textSdw, i_Msg->output_rubSdw);
+    i_Msg->mMsgDataProc.setSelectMessage(i_Msg->select_text, i_Msg->select_rub, i_Msg->select_textSdw, i_Msg->select_rubSdw);
     i_Msg->mMsgDataProc.setFont(textFont);
     i_Msg->mMsgDataProc.setRubyFont(rubyFont);
-    i_Msg->mMsgDataProc.setCharSpace(dVar6);
-    i_Msg->mMsgDataProc.setRubyCharSpace(dVar7);
+    i_Msg->mMsgDataProc.setCharSpace(charSpace);
+    i_Msg->mMsgDataProc.setRubyCharSpace(rubyCharSpace);
     i_Msg->mMsgDataProc.setMesgEntry(&i_Msg->mMesgEntry);
     i_Msg->mMsgDataProc.setFontSize(i_Msg->m110C);
     i_Msg->mMsgDataProc.setRubyFontSize(i_Msg->m1110);
@@ -1084,7 +976,7 @@ void dMsg_value_init(sub_msg_class* i_Msg) {
     strcpy(i_Msg->select_rub, acStack_4c);
     strcpy(i_Msg->select_textSdw, acStack_68);
     strcpy(i_Msg->select_rubSdw, acStack_68);
-    i_Msg->mMsgDataProc.field_0x25C = i_Msg->m1164;
+    i_Msg->mMsgDataProc.setStringColor(i_Msg->m1164);
     dMsg_outFontHide(i_Msg);
     i_Msg->m1108 = 0;
 }
@@ -1095,8 +987,8 @@ void dMsg_setString(sub_msg_class* i_Msg) {
     ((J2DTextBox*)i_Msg->m0544[1].pane)->setString(i_Msg->output_rub);
     ((J2DTextBox*)i_Msg->m0544[2].pane)->setString(i_Msg->output_textSdw);
     ((J2DTextBox*)i_Msg->m0544[3].pane)->setString(i_Msg->output_rubSdw);
-    if ((((i_Msg->mMesgEntry.mTextboxType != 9) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) && (i_Msg->mMesgEntry.mTextboxType != 1)) &&
-        (i_Msg->mMesgEntry.mTextboxType != 5))
+    if (i_Msg->mMesgEntry.mTextboxType != 9 && i_Msg->mMesgEntry.mTextboxType != 0xe && i_Msg->mMesgEntry.mTextboxType != 1 &&
+        i_Msg->mMesgEntry.mTextboxType != 5)
     {
         ((J2DTextBox*)i_Msg->m011C[0].pane)->setString(i_Msg->select_text);
         ((J2DTextBox*)i_Msg->m011C[1].pane)->setString(i_Msg->select_rub);
@@ -1601,9 +1493,9 @@ void dMsg_numberInput(sub_msg_class* i_Msg) {
     static char* num_str[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
     for (s32 i = 0; i < 8; i++) {
-        if (i_Msg->mMsgDataProc.field_0x281[i] == 0x16) {
-            i_Msg->m10EC = ((i_Msg->m0544[0].pane)->mBounds.i.x + i_Msg->mMsgDataProc.field_0x168[i]);
-            i_Msg->m10F0 = ((i_Msg->m0544[0].pane)->mBounds.i.y + (i_Msg->m1104 * (s32)((3 - i_Msg->m1108) + (i_Msg->mMsgDataProc.field_0x1A4[i]) * 2)));
+        if (i_Msg->mMsgDataProc.getIconNum(i) == 0x16) {
+            i_Msg->m10EC = ((i_Msg->m0544[0].pane)->mBounds.i.x + i_Msg->mMsgDataProc.getIconPosX(i));
+            i_Msg->m10F0 = ((i_Msg->m0544[0].pane)->mBounds.i.y + (i_Msg->m1104 * (s32)((3 - i_Msg->m1108) + (i_Msg->mMsgDataProc.getIconPosY(i)) * 2)));
         }
     }
     if (i_Msg->mMsgNo == 0x1cfa) {
@@ -1630,14 +1522,7 @@ static void dummy() {
 
 /* 80210CA4-80210F28       .text dMsg_tactInput__FP13sub_msg_class */
 void dMsg_tactInput(sub_msg_class* i_Msg) {
-    s16 sVar1;
-    f32 alpha;
-    int iVar3;
-    s32 melody_no;
-    f32 dVar5;
-    s32 local_38;
-
-    melody_no = dComIfGp_getMelodyNum();
+    int melody_no = dComIfGp_getMelodyNum();
     if (i_Msg->m1100 < mBeatNum[melody_no]) {
         if ((mBeatNum[melody_no] != mDoAud_tact_getBeat()) || (i_Msg->m1168 != mDoAud_tact_getBeat())) {
             i_Msg->m1100 = 0;
@@ -1646,11 +1531,12 @@ void dMsg_tactInput(sub_msg_class* i_Msg) {
             dMsg_tactGuideShow(i_Msg, mBeatNum[melody_no]);
         }
         if (daPy_getPlayerActorClass()->checkTactInput()) {
-            sVar1 = daPy_getPlayerLinkActorClass()->getTactLeftHandPos();
+            s16 sVar1 = daPy_getPlayerLinkActorClass()->getTactLeftHandPos();
+            s32 local_38;
             mDoAud_tact_getMelodyPattern(melody_no, i_Msg->m1100, &local_38);
             i_Msg->m1100++;
             if ((sVar1 == local_38) && (mBeatNum[melody_no] == mDoAud_tact_getBeat())) {
-                iVar3 = (int)i_Msg->m0624[0].mUserArea;
+                int iVar3 = (int)i_Msg->m0624[0].mUserArea;
                 if (iVar3 == i_Msg->m1100 + -1) {
                     i_Msg->m0B64[iVar3].mUserArea = 1;
                     i_Msg->m0624[0].mUserArea++;
@@ -1667,19 +1553,18 @@ void dMsg_tactInput(sub_msg_class* i_Msg) {
             }
         }
     }
-    for (s32 i = 0; i < mBeatNum[melody_no]; i++) {
-        sVar1 = i_Msg->m0B64[i].mUserArea;
+    
+    for (int i = 0; i < mBeatNum[melody_no]; i++) {
+        s16 sVar1 = i_Msg->m0B64[i].mUserArea;
         if ((sVar1 > 0) && (sVar1 <= 5)) {
-            dVar5 = fopMsgM_valueIncrease(5, (int)sVar1, 0);
-            alpha = (dVar5 * 0.5f) + 0.5f;
-            dVar5 = alpha;
+            f32 alpha = (fopMsgM_valueIncrease(5, (int)sVar1, 0) * 0.5f) + 0.5f;
             if (dComIfGp_getMelodyNum() < 5) {
                 fopMsgM_setNowAlpha(&i_Msg->m0A14[i], alpha);
-                fopMsgM_setNowAlpha(&i_Msg->m0B64[i], dVar5);
+                fopMsgM_setNowAlpha(&i_Msg->m0B64[i], alpha);
             } else {
                 fopMsgM_setNowAlpha(&i_Msg->m0A14[i], alpha);
-                fopMsgM_setNowAlpha(&i_Msg->m08C4[i], dVar5);
-                fopMsgM_setNowAlpha(&i_Msg->m0CB4[i], dVar5);
+                fopMsgM_setNowAlpha(&i_Msg->m08C4[i], alpha);
+                fopMsgM_setNowAlpha(&i_Msg->m0CB4[i], alpha);
             }
             if (i_Msg->m0B64[mBeatNum[melody_no] - 1].mUserArea == 5) {
                 i_Msg->mStatus = fopMsgStts_MSG_DISPLAYED_e;
@@ -1732,7 +1617,7 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
         fVar1 = (fVar1 + i_Msg->m049C.mSize.y / 2.0f) - ((int)g_msgHIO.field_0x7c);
     }
     local_68 = (int)g_msgHIO.field_0x78;
-    fVar3 = (local_68) + ((g_msgHIO.field_0x7e) * 2.0f + (i_Msg->mMsgDataProc.field_0x21C) - i_Msg->m011C[0].mSizeOrig.x);
+    fVar3 = (local_68) + ((g_msgHIO.field_0x7e) * 2.0f + (i_Msg->mMsgDataProc.getSelectLength()) - i_Msg->m011C[0].mSizeOrig.x);
     for (s32 i = 0; i < 4; i++) {
         i_Msg->m011C[i].mSize.x = i_Msg->m011C[i].mSizeOrig.x + fVar3;
     }
@@ -1773,7 +1658,7 @@ void dMsg_subTextSizeSet(sub_msg_class* i_Msg) {
     i_Msg->m01FC.mPosCenterOrig.x = i_Msg->m01FC.mPosTopLeftOrig.x + i_Msg->m01FC.mSizeOrig.x / 2.0f + fVar3;
     f32 f4 = g_msgHIO.field_0x7e * 2.0f;
     f32 f3 = i_Msg->m01FC.mPosCenterOrig.x + i_Msg->m01FC.mSizeOrig.x;
-    i_Msg->m0234.mPosCenterOrig.x = f3 + i_Msg->mMsgDataProc.field_0x21C + f4;
+    i_Msg->m0234.mPosCenterOrig.x = f3 + i_Msg->mMsgDataProc.getSelectLength() + f4;
     i_Msg->m01FC.mPosCenterOrig.y = i_Msg->m01FC.mPosTopLeftOrig.y + i_Msg->m01FC.mSizeOrig.y / 2.0f + fVar5;
     i_Msg->m0234.mPosCenterOrig.y = i_Msg->m0234.mPosTopLeftOrig.y + i_Msg->m0234.mSizeOrig.y / 2.0f + fVar5;
     for (s32 i = 0; i < 4; i++) {
@@ -1931,9 +1816,6 @@ void dMsg_setCancelMode(sub_msg_class* i_Msg) {
 
 /* 80211BCC-80211DA0       .text dMsg_messageShow__FP13sub_msg_class */
 void dMsg_messageShow(sub_msg_class* i_Msg) {
-    u8 cVar2;
-    u32 iVar1;
-
     fopMsgM_paneScaleXY(&i_Msg->m049C, 1.0f);
     fopMsgM_setInitAlpha(&i_Msg->m049C);
     dMsg_messagePaneShow(i_Msg);
@@ -1944,14 +1826,13 @@ void dMsg_messageShow(sub_msg_class* i_Msg) {
     i_Msg->mMsgDataProc.field_0x299 = 1;
     i_Msg->mMsgDataProc.stringSet();
     for (s32 i = 0; i < 8; i++) {
-        cVar2 = i_Msg->mMsgDataProc.field_0x281[i];
-        iVar1 = i_Msg->mMsgDataProc.field_0x220[i];
-        u32 var_r6 = iVar1;
-        if (((((u8)(cVar2 - 10U) <= 3) || (cVar2 == 0x15)) || (cVar2 == 0x17)) && (iVar1 == 0)) {
-            var_r6 = -1;
+        u8 iconNum = i_Msg->mMsgDataProc.getIconNum(i);
+        u32 iconColor = i_Msg->mMsgDataProc.getIconColor(i);
+        if ((iconNum == 0xA || iconNum == 0xB || iconNum == 0xC || iconNum == 0xD || iconNum == 0x15 || iconNum == 0x17) && iconColor == 0) {
+            iconColor = -1;
         }
-        if (((cVar2 != 0xFF) && (buttonTimer[i] == -1)) && (cVar2 != 0x14 && (cVar2 != 0x15 && (cVar2 != 0x16)))) {
-            fopMsgM_outFontSet(button_icon[i], button_kage[i], &buttonTimer[i], var_r6, cVar2);
+        if (((iconNum != 0xFF) && (buttonTimer[i] == -1)) && (iconNum != 0x14 && (iconNum != 0x15 && (iconNum != 0x16)))) {
+            fopMsgM_outFontSet(button_icon[i], button_kage[i], &buttonTimer[i], iconColor, iconNum);
         }
     }
     dMsg_setString(i_Msg);
@@ -2046,7 +1927,6 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
 s32 dMsg_selectProc(sub_msg_class* i_Msg) {
     int uVar1;
     s16 sVar3;
-    u8 cVar6;
     J2DTextBox* pJVar8;
     u8 uVar9;
     int iVar10;
@@ -2146,12 +2026,12 @@ s32 dMsg_selectProc(sub_msg_class* i_Msg) {
         s32 var_r6 = 0;
         s32 var_r11 = 0;
         for (s32 i = 0; i < 8; i++) {
-            cVar6 = i_Msg->mMsgDataProc.field_0x281[i];
-            if (cVar6 == 0x14) {
-                var_r5 = (int)(i_Msg->m0544[0].pane->mBounds.i.x + ((int)i_Msg->mMsgDataProc.field_0x168[i]));
-                var_r6 = (int)(i_Msg->m0544[0].pane->mBounds.i.y + (int)(i_Msg->m1104 * ((2 - i_Msg->m1108) + (i_Msg->mMsgDataProc.field_0x1A4[i] * 2))));
-            } else if (cVar6 == 0x15) {
-                var_r11 = (int)(i_Msg->m0544[0].pane->mBounds.i.x + ((int)i_Msg->mMsgDataProc.field_0x168[i]));
+            u8 iconNum = i_Msg->mMsgDataProc.getIconNum(i);
+            if (iconNum == 0x14) {
+                var_r5 = i_Msg->m0544[0].pane->mBounds.i.x + i_Msg->mMsgDataProc.getIconPosX(i);
+                var_r6 = i_Msg->m0544[0].pane->mBounds.i.y + i_Msg->m1104 * ((2 - i_Msg->m1108) + (i_Msg->mMsgDataProc.getIconPosY(i) * 2));
+            } else if (iconNum == 0x15) {
+                var_r11 = (i_Msg->m0544[0].pane->mBounds.i.x + (i_Msg->mMsgDataProc.getIconPosX(i)));
             }
         }
         i_Msg->mSelectNum = i_Msg->mMsgDataProc.selectCheckYoko(arrowPane, var_r5, var_r6, var_r11 - var_r5);
@@ -2219,22 +2099,14 @@ s32 dMsg_inputProc(sub_msg_class* i_Msg) {
 
 /* 80212910-80212DC0       .text dMsg_demoProc__FP13sub_msg_class */
 s32 dMsg_demoProc(sub_msg_class* i_Msg) {
-    s16 sVar1;
-    u8 cVar3;
-    u32 iVar2;
-    int iVar4;
-    s32 melody_no;
-    f32 dVar9;
-    f32 fVar10;
-    s32 lStack_68;
-    f32 local_64[7];
-
     if (i_Msg->m116B == 0) {
-        melody_no = dComIfGp_getMelodyNum();
+        int melody_no = dComIfGp_getMelodyNum();
         static bool flag = 0;
         static s16 cnt = 0;
+        f32 local_64[7];
         local_64[0] = 0.0f;
-        for (s32 i = 0; i < mBeatNum[melody_no]; i++) {
+        for (int i = 0; i < mBeatNum[melody_no]; i++) {
+            s32 lStack_68;
             local_64[i + 1] = mDoAud_tact_getMelodyPattern((u8)melody_no, i, &lStack_68);
             local_64[i + 1] += local_64[i];
         }
@@ -2249,21 +2121,17 @@ s32 dMsg_demoProc(sub_msg_class* i_Msg) {
                 cnt++;
             }
         }
-        for (s32 i = 0; i < mBeatNum[melody_no]; i++) {
-            sVar1 = i_Msg->m0B64[i].mUserArea;
-            iVar4 = (int)sVar1;
-            if ((sVar1 > 0) && (iVar4 <= 0x23)) {
-                if (iVar4 < 5) {
-                    dVar9 = fopMsgM_valueIncrease(5, iVar4, 0);
-                    fVar10 = (dVar9 * 0.5f) + 0.5f;
-                    dVar9 = fVar10;
+        for (int i = 0; i < mBeatNum[melody_no]; i++) {
+            if ((i_Msg->m0B64[i].mUserArea > 0) && (i_Msg->m0B64[i].mUserArea <= 0x23)) {
+                if (i_Msg->m0B64[i].mUserArea < 5) {
+                    f32 fVar10 = (fopMsgM_valueIncrease(5, i_Msg->m0B64[i].mUserArea, 0) * 0.5f) + 0.5f;
                     if (dComIfGp_getMelodyNum() < 5) {
                         fopMsgM_setNowAlpha(&i_Msg->m0A14[i], fVar10);
-                        fopMsgM_setNowAlpha(&i_Msg->m0B64[i], dVar9);
+                        fopMsgM_setNowAlpha(&i_Msg->m0B64[i], fVar10);
                     } else {
                         fopMsgM_setNowAlpha(&i_Msg->m0A14[i], fVar10);
-                        fopMsgM_setNowAlpha(&i_Msg->m08C4[i], dVar9);
-                        fopMsgM_setNowAlpha(&i_Msg->m0CB4[i], dVar9);
+                        fopMsgM_setNowAlpha(&i_Msg->m08C4[i], fVar10);
+                        fopMsgM_setNowAlpha(&i_Msg->m0CB4[i], fVar10);
                     }
                 } else {
                     fopMsgM_setInitAlpha(&i_Msg->m0A14[i]);
@@ -2282,15 +2150,14 @@ s32 dMsg_demoProc(sub_msg_class* i_Msg) {
                         }
                         i_Msg->mMsgDataProc.field_0x299 = 1;
                         i_Msg->mMsgDataProc.stringSet();
-                        for (s32 j = 0; j < 8; j++) {
-                            cVar3 = i_Msg->mMsgDataProc.field_0x281[j];
-                            iVar2 = i_Msg->mMsgDataProc.field_0x220[j];
-                            u32 var_r6 = iVar2;
-                            if (((((u8)(cVar3 - 10U) <= 3) || (cVar3 == 0x15)) || (cVar3 == 0x17)) && (iVar2 == 0)) {
-                                var_r6 = -1;
+                        for (int j = 0; j < 8; j++) {
+                            u8 iconNum = i_Msg->mMsgDataProc.iconNum[j];
+                            u32 iconColor = i_Msg->mMsgDataProc.getIconColor(j);
+                            if ((iconNum == 0xA || iconNum == 0xB || iconNum == 0xC || iconNum == 0xD || iconNum == 0x15 || iconNum == 0x17) && iconColor == 0) {
+                                iconColor = -1;
                             }
-                            if (((cVar3 != 0xFF) && (buttonTimer[j] == -1)) && (cVar3 != 0x14 && (cVar3 != 0x15 && (cVar3 != 0x16)))) {
-                                fopMsgM_outFontSet(button_icon[j], button_kage[j], &buttonTimer[j], var_r6, cVar3);
+                            if (((iconNum != 0xFF) && (buttonTimer[j] == -1)) && (iconNum != 0x14 && (iconNum != 0x15 && (iconNum != 0x16)))) {
+                                fopMsgM_outFontSet(button_icon[j], button_kage[j], &buttonTimer[j], iconColor, iconNum);
                             }
                         }
                         dMsg_setString(i_Msg);
@@ -2304,7 +2171,7 @@ s32 dMsg_demoProc(sub_msg_class* i_Msg) {
                         flag += 1;
                     }
                     i_Msg->m1100 = 0;
-                    for (s32 j = 0; j < mBeatNum[melody_no]; j++) {
+                    for (int j = 0; j < mBeatNum[melody_no]; j++) {
                         i_Msg->m0B64[j].mUserArea = 0;
                         if (dComIfGp_getMelodyNum() < 5) {
                             fopMsgM_setNowAlpha(&i_Msg->m0A14[j], 0.5f);
@@ -2319,7 +2186,7 @@ s32 dMsg_demoProc(sub_msg_class* i_Msg) {
             }
         }
     } else {
-        dVar9 = fopMsgM_valueIncrease(5, i_Msg->m116B, 0);
+        f32 dVar9 = fopMsgM_valueIncrease(5, i_Msg->m116B, 0);
         fopMsgM_setNowAlpha(&i_Msg->m0544[0], dVar9);
         fopMsgM_setNowAlpha(&i_Msg->m0544[1], dVar9);
         fopMsgM_setNowAlpha(&i_Msg->m0544[2], dVar9);
@@ -2340,10 +2207,7 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
     f32 dVar3;
     f32 fVar5;
     char* pcVar9;
-    char* pcVar10;
-    char* pcVar12;
     fopAc_ac_c* pActor;
-    char* pcVar13;
 
     iVar1 = (int)((J2DTextBox*)i_Msg->m0544[0].pane)->getCharSpace();
     iVar2 = (int)((J2DTextBox*)i_Msg->m0544[1].pane)->getCharSpace();
@@ -2375,27 +2239,10 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
         i_Msg->m1164 = -1;
         dMsg_value_init(i_Msg);
         i_Msg->mMsgDataProc.dataInit();
-        i_Msg->mMsgDataProc.field_0x25C = i_Msg->m1164;
+        i_Msg->mMsgDataProc.setStringColor(i_Msg->m1164);
         i_Msg->mMsgDataProc.setBmgData(i_Msg->mpMesgStr);
-        pcVar13 = i_Msg->output_rubSdw;
-        pcVar12 = i_Msg->output_textSdw;
-        pcVar10 = i_Msg->output_rub;
-        pcVar9 = i_Msg->output_text;
-        i_Msg->mMsgDataProc.field_0x60 = pcVar9;
-        i_Msg->mMsgDataProc.field_0x40 = pcVar9;
-        i_Msg->mMsgDataProc.field_0x64 = pcVar10;
-        i_Msg->mMsgDataProc.field_0x44 = pcVar10;
-        i_Msg->mMsgDataProc.field_0x68 = pcVar12;
-        i_Msg->mMsgDataProc.field_0x48 = pcVar12;
-        i_Msg->mMsgDataProc.field_0x6C = pcVar13;
-        i_Msg->mMsgDataProc.field_0x4C = pcVar13;
-        pcVar10 = i_Msg->select_rubSdw;
-        pcVar12 = i_Msg->select_textSdw;
-        pcVar9 = i_Msg->select_rub;
-        i_Msg->mMsgDataProc.field_0x50[0] = i_Msg->select_text;
-        i_Msg->mMsgDataProc.field_0x50[1] = pcVar9;
-        i_Msg->mMsgDataProc.field_0x50[2] = pcVar12;
-        i_Msg->mMsgDataProc.field_0x50[3] = pcVar10;
+        i_Msg->mMsgDataProc.setOutMessage(i_Msg->output_text, i_Msg->output_rub, i_Msg->output_textSdw, i_Msg->output_rubSdw);
+        i_Msg->mMsgDataProc.setSelectMessage(i_Msg->select_text, i_Msg->select_rub, i_Msg->select_textSdw, i_Msg->select_rubSdw);
         i_Msg->mMsgDataProc.setFont(textFont);
         i_Msg->mMsgDataProc.setRubyFont(rubyFont);
         i_Msg->mMsgDataProc.setCharSpace(iVar1);
@@ -2638,14 +2485,10 @@ s32 dMsg_openItemProc(sub_msg_class* i_Msg) {
 
 /* 80213C20-80213E28       .text dMsg_openTactProc__FP13sub_msg_class */
 s32 dMsg_openTactProc(sub_msg_class* i_Msg) {
-    u8 uVar2;
-    u8 cVar4;
-    u32 iVar3;
-
     if (i_Msg->mMsgNo == 0x5ac) {
         i_Msg->mStatus = fopMsgStts_INPUT_e;
     } else if ((i_Msg->mMsgNo == 0x5b3) || (i_Msg->mMsgNo == 0x5b4)) {
-        uVar2 = dComIfGp_getMelodyNum();
+        u8 uVar2 = dComIfGp_getMelodyNum();
         if (((s32)uVar2 != 1) && ((s32)uVar2 != 5)) {
             dMsg_tactGuideShow(i_Msg, mBeatNum[uVar2]);
             i_Msg->mStatus = fopMsgStts_DEMO_e;
@@ -2671,14 +2514,13 @@ s32 dMsg_openTactProc(sub_msg_class* i_Msg) {
         i_Msg->mMsgDataProc.field_0x299 = 1;
         i_Msg->mMsgDataProc.stringSet();
         for (s32 i = 0; i < 8; i++) {
-            cVar4 = i_Msg->mMsgDataProc.field_0x281[i];
-            iVar3 = i_Msg->mMsgDataProc.field_0x220[i];
-            u32 var_r6 = iVar3;
-            if (((((u8)(cVar4 - 10U) <= 3) || (cVar4 == 0x15)) || (cVar4 == 0x17)) && (iVar3 == 0)) {
-                var_r6 = -1;
+            u8 iconNum = i_Msg->mMsgDataProc.getIconNum(i);
+            u32 iconColor = i_Msg->mMsgDataProc.getIconColor(i);
+            if ((iconNum == 0xA || iconNum == 0xB || iconNum == 0xC || iconNum == 0xD || iconNum == 0x15 || iconNum == 0x17) && iconColor == 0) {
+                iconColor = -1;
             }
-            if (((cVar4 != 0xFF) && (buttonTimer[i] == -1)) && (cVar4 != 0x14 && (cVar4 != 0x15 && (cVar4 != 0x16)))) {
-                fopMsgM_outFontSet(button_icon[i], button_kage[i], &buttonTimer[i], var_r6, cVar4);
+            if (((iconNum != 0xFF) && (buttonTimer[i] == -1)) && (iconNum != 0x14 && (iconNum != 0x15 && (iconNum != 0x16)))) {
+                fopMsgM_outFontSet(button_icon[i], button_kage[i], &buttonTimer[i], iconColor, iconNum);
             }
         }
         dMsg_setString(i_Msg);
@@ -2718,7 +2560,7 @@ s32 dMsg_initProc(sub_msg_class* i_Msg) {
     const char* pcVar3;
     char acStack_28[24];
 
-    if ((dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e)) || (fopMsgM_demoMsgFlagCheck())) {
+    if (dComIfGp_checkCameraAttentionStatus(dComIfGp_getPlayerCameraID(0), dCamAttnStts_00000004_e) || fopMsgM_demoMsgFlagCheck()) {
         pcVar3 = i_Msg->mpMesgStr;
         if (((u8)pcVar3[0] == 0x1A) && ((u8)pcVar3[2] == 0x02)) {
             dComIfGp_setMesgCameraTagInfo((s32)(u16)((((u8)pcVar3[3] << 8) & ~0xFFFF00FF) | (((u8)pcVar3[4]) & ~0xFF00)));
@@ -2769,8 +2611,6 @@ s32 dMsg_tactProc(sub_msg_class* i_Msg) {
 
 /* 8021411C-802143A8       .text dMsg_outnowProc__FP13sub_msg_class */
 s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
-    u16 uVar2;
-    u8 cVar4;
     u32 iVar3;
 
     if (i_Msg->mMesgCameraTagInfo != dComIfGp_getMesgCameraTagInfo()) {
@@ -2804,23 +2644,21 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
         i_Msg->mMsgDataProc.dec_waitTimer();
     } else {
         i_Msg->mMsgDataProc.stringSet();
-        i_Msg->m1164 = i_Msg->mMsgDataProc.field_0x25C;
+        i_Msg->m1164 = i_Msg->mMsgDataProc.getStringColor();
         i_Msg->mStatus = (u16)i_Msg->mMsgDataProc.mesgStatus;
         for (s32 i = 0; i < 8; i++) {
-            cVar4 = i_Msg->mMsgDataProc.field_0x281[i];
-            iVar3 = i_Msg->mMsgDataProc.field_0x220[i];
-            u32 var_r6 = iVar3;
-            if (((((u8)(cVar4 - 10U) <= 3) || (cVar4 == 0x15)) || (cVar4 == 0x15)) && (iVar3 == 0)) {
-                var_r6 = -1;
+            u8 iconNum = i_Msg->mMsgDataProc.getIconNum(i);
+            u32 iconColor = i_Msg->mMsgDataProc.getIconColor(i);
+            if ((iconNum == 0xA || iconNum == 0xB || iconNum == 0xC || iconNum == 0xD || iconNum == 0x15 || iconNum == 0x15) && iconColor == 0) {
+                iconColor = -1;
             }
-            if (((cVar4 != 0xFF) && (buttonTimer[i] == -1)) && (cVar4 != 0x14 && (cVar4 != 0x15 && (cVar4 != 0x16)))) {
-                fopMsgM_outFontSet(button_icon[i], button_kage[i], &buttonTimer[i], var_r6, cVar4);
+            if (iconNum != 0xFF && buttonTimer[i] == -1 && iconNum != 0x14 && iconNum != 0x15 && iconNum != 0x16) {
+                fopMsgM_outFontSet(button_icon[i], button_kage[i], &buttonTimer[i], iconColor, iconNum);
             }
         }
-        uVar2 = i_Msg->mStatus;
-        if (uVar2 == 7) {
+        if (i_Msg->mStatus == 7) {
             i_Msg->m1100 = 0;
-        } else if ((uVar2 == 10) && (i_Msg->mMsgDataProc.autoSendFlag == 0)) {
+        } else if (i_Msg->mStatus == 10 && i_Msg->mMsgDataProc.autoSendFlag == 0) {
             i_Msg->m1100 = 0;
         }
     }
@@ -2830,9 +2668,12 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
 
 /* 802143A8-80214560       .text dMsg_Draw__FP13sub_msg_class */
 static BOOL dMsg_Draw(sub_msg_class* i_Msg) {
-    if ((i_Msg->mMesgEntry.mTextboxType != 5) && (fopMsgM_setAlpha(&i_Msg->m049C), i_Msg->mMesgEntry.mTextboxType != 0xe)) {
-        fopMsgM_setAlpha(&i_Msg->mPane_Arrow);
-        fopMsgM_setAlpha(&i_Msg->m050C);
+    if (i_Msg->mMesgEntry.mTextboxType != 5) {
+        fopMsgM_setAlpha(&i_Msg->m049C);
+        if (i_Msg->mMesgEntry.mTextboxType != 0xe) {
+            fopMsgM_setAlpha(&i_Msg->mPane_Arrow);
+            fopMsgM_setAlpha(&i_Msg->m050C);
+        }
     }
     fopMsgM_setAlpha(&i_Msg->m0544[0]);
     fopMsgM_setAlpha(&i_Msg->m0544[1]);
@@ -2883,11 +2724,10 @@ static BOOL dMsg_Execute(sub_msg_class* i_Msg) {
     if (dComIfGp_checkMesgSendButton()) {
         dComIfGp_setMesgSendButton(0);
     }
-    if ((dComIfGp_checkMesgBgm()) && (i_Msg->mMesgEntry.mTextboxType != 9 ||
-                                      ((((mDoAud_checkPlayingSubBgmFlag() != JA_BGM_ITEM_GET && (mDoAud_checkPlayingSubBgmFlag() != JA_BGM_ITEM_GET_S)) &&
-                                         (mDoAud_checkPlayingSubBgmFlag() != JA_BGM_GET_HEART)) &&
-                                        (mDoAud_checkPlayingSubBgmFlag() != JA_BGM_GET_SONG && (mDoAud_checkPlayingSubBgmFlag() != JA_BGM_MASTER_SWORD))) &&
-                                       (mDoAud_checkPlayingSubBgmFlag() != JA_BGM_GET_PEARL))))
+    if (dComIfGp_checkMesgBgm() && (i_Msg->mMesgEntry.mTextboxType != 9 ||
+                                    (mDoAud_checkPlayingSubBgmFlag() != JA_BGM_ITEM_GET && mDoAud_checkPlayingSubBgmFlag() != JA_BGM_ITEM_GET_S &&
+                                     mDoAud_checkPlayingSubBgmFlag() != JA_BGM_GET_HEART && mDoAud_checkPlayingSubBgmFlag() != JA_BGM_GET_SONG &&
+                                     mDoAud_checkPlayingSubBgmFlag() != JA_BGM_MASTER_SWORD && mDoAud_checkPlayingSubBgmFlag() != JA_BGM_GET_PEARL)))
     {
         dComIfGp_setMesgBgmOff();
     }

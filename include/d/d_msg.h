@@ -79,10 +79,10 @@ public:
     virtual void draw();
     void outFontDraw();
 
-    void setActorP(sub_msg_class* i_msg) { field_0x4 = i_msg; }
+    void setActorP(sub_msg_class* i_msg) { mpMsg = i_msg; }
 
 private:
-    sub_msg_class* field_0x4;
+    sub_msg_class* mpMsg;
 };
 
 class dDlst_2Dtact_c : public dDlst_base_c {

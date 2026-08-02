@@ -2424,7 +2424,7 @@ f32 dCamera_c::getWaterSurfaceHeight(cXyz* param_0) {
     dBgS_CamGndChk_Wtr gndchk;
     gndchk.SetPos(&spF8);
 
-    f32 gnd_y = dComIfG_Bgsp()->GroundCross(&gndchk) ;
+    f32 gnd_y = dComIfG_Bgsp()->GroundCross(&gndchk);
 
     if (gnd_y + 5.0f > param_0->y) {
         var_f31 = gnd_y + 5.0f;

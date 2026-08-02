@@ -539,7 +539,6 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                     }
                     m858[1].mUserArea = 6;
                     mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
-                    ;
                     break;
                 }
                 case 3: {
@@ -698,7 +697,7 @@ void dMenu_Option_c::noteSet() {
 
     int r31 = ((J2DTextBox*)m740[0].pane)->getLineSpace() / 2.0f;
     for (int i = 0; i < 0xf; i++) {
-        u32 r6 = msgDataProc.field_0x281[i];
+        u8 r6 = msgDataProc.getIconNum(i);
         if (r6 == 0xFF) {
             continue;
         }
@@ -708,8 +707,8 @@ void dMenu_Option_c::noteSet() {
         if (r6 == 0x16) {
             continue;
         }
-        m0B0[i].mPosTopLeft.x = (f32)msgDataProc.field_0x168[i];
-        m0B0[i].mPosTopLeft.y = f30_2 + (f32)(int)(msgDataProc.field_0x1A4[i] * 2 * r31);
+        m0B0[i].mPosTopLeft.x = (f32)msgDataProc.getIconPosX(i);
+        m0B0[i].mPosTopLeft.y = f30_2 + (f32)(msgDataProc.getIconPosY(i) * 2 * r31);
         m0B0[i].mPosTopLeftOrig.y = (f32)r6;
 
         fopMsgM_outFontSet((J2DPicture*)m0B0[i].pane, &m0B0[i].mUserArea, 0xFF, r6);

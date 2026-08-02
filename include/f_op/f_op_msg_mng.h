@@ -233,11 +233,11 @@ public:
     void tag_input_kenshi();
 #endif
 
-    u32 getIconColor(int i_no) { return field_0x1E0[i_no]; }
-    u8 getIconNum(int i_no) { return field_0x281[i_no]; }
-    int getIconPosX(int i_no) { return field_0x168[i_no]; }
-    int getIconPosY(int i_no) { return field_0x1A4[i_no]; }
-    void getIconScale(int) {}
+    u8 getIconNum(int i_no) { return iconNum[i_no]; }
+    int getIconPosX(int i_no) { return iconPosX[i_no]; }
+    int getIconPosY(int i_no) { return iconPosY[i_no]; }
+    int getIconScale(int i_no) { return iconScale[i_no]; }
+    u32 getIconColor(int i_no) { return iconColor[i_no]; }
 
     void setCharSpace(int i_space) { charSpace = i_space; }
     void setRubyCharSpace(int i_space) { rubyCharSpace = i_space; }
@@ -253,7 +253,12 @@ public:
         field_0x6C = param_3;
         field_0x4C = param_3;
     }
-    void setSelectMessage(char*, char*, char*, char*) {}
+    void setSelectMessage(char* param_0, char* param_1, char* param_2, char* param_3) {
+        selectMessage[0] = param_0;
+        selectMessage[1] = param_1;
+        selectMessage[2] = param_2;
+        selectMessage[3] = param_3;
+    }
 
     void setMesgEntry(JMSMesgEntry_c* i_entry) { mesgEntry = i_entry; }
 
@@ -275,25 +280,25 @@ public:
 
     int dec_keyWaitTimer() { return keyWaitTimer = keyWaitTimer > 0 ? keyWaitTimer - 1 : 0; }
 
-    u8 getCharAlpha() { return field_0x293; } // ?
-    u8 getGradAlpha() { return field_0x292; } // ?
     int getLineCount() { return lineCount; }
     u8 getMesgStatus() { return mesgStatus; }
-    f32 getNowCursorPos() { return field_0x20; }
-    u8 getRCharAlpha() { return field_0x291; } // ?
-    u8 getRGradAlpha() { return field_0x290; } // ?
-    void getSelectLength() {}
-    u32 getStringColor() { return field_0x25C;}
-    void setStringColor(u32) {}
+    f32 getNowCursorPos() { return nowCursorPos; }
+    int getSelectLength() { return selectLength; }
+    u32 getStringColor() { return stringColor; }
+    void setStringColor(u32 i_color) { stringColor = i_color; }
     void resetNowLine() { nowLine = 0; }
     void selectArrow(J2DPicture* i_arrowPane) {
         selectArrow(i_arrowPane, field_0x26C, field_0x270, field_0x278, field_0x274);
     }
-    void setActorPosition(cXyz*) {}
+    void setActorPosition(cXyz* i_pos) { actorPosition = i_pos; }
     void setAimLine(int i_line) { aimLine = i_line; }
     void setBmgData(char* i_data) { bmgData = i_data; }
     void setCenterLineWidth(int i_width) { centerLineWidth = i_width; }
 
+    u8 getCharAlpha() { return field_0x290; }
+    u8 getGradAlpha() { return field_0x291; }
+    u8 getRCharAlpha() { return field_0x292; }
+    u8 getRGradAlpha() { return field_0x293; }
     void setCharAlpha(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
         field_0x290 = param_0;
         field_0x291 = param_1;
@@ -315,18 +320,15 @@ public:
     void setSpaceTimer(int i_timer) { spaceTimer = i_timer; }
     void shortCut() { field_0x299 = 1; }
 
-    // fake, replace with real inline once it's figured out
-    u32 get_0x220(int i) { return field_0x220[i]; }
-
 public:
     /* 0x004 */ JUTFont* font;
     /* 0x008 */ JUTFont* rubyFont;
     /* 0x00C */ JMSMesgEntry_c* mesgEntry;
-    /* 0x010 */ Vec* field_0x10;
+    /* 0x010 */ cXyz* actorPosition;
     /* 0x014 */ f32 field_0x14;
     /* 0x018 */ f32 field_0x18;
     /* 0x01C */ f32 field_0x1C;
-    /* 0x020 */ f32 field_0x20; // NowCursorPos?
+    /* 0x020 */ f32 nowCursorPos;
     /* 0x024 */ f32 field_0x24;
     /* 0x028 */ f32 field_0x28;
     /* 0x02C */ u32 field_0x2C;
@@ -338,7 +340,7 @@ public:
     /* 0x044 */ char* field_0x44;
     /* 0x048 */ char* field_0x48;
     /* 0x04C */ char* field_0x4C;
-    /* 0x050 */ char* field_0x50[4];
+    /* 0x050 */ char* selectMessage[4]; // TODO: should this be 4 separate fields? or should field_0x40 and field_0x60 also be arrays?
     /* 0x060 */ char* field_0x60;
     /* 0x064 */ char* field_0x64;
     /* 0x068 */ char* field_0x68;
@@ -361,7 +363,7 @@ public:
     /* 0x13C */ int aimLine;
     /* 0x140 */ int field_0x140;
     /* 0x144 */ int fontSize;
-    /* 0x148 */ int field_0x148;
+    /* 0x148 */ int field_0x148; // size/scale?
     /* 0x14C */ int rubyFontSize;
     /* 0x150 */ int field_0x150;
     /* 0x154 */ int field_0x154;
@@ -369,12 +371,12 @@ public:
     /* 0x15C */ int spaceTimer;
     /* 0x160 */ int sendSpeed;
     /* 0x164 */ int keyWaitTimer;
-    /* 0x168 */ int field_0x168[0xF]; // IconPosX
-    /* 0x1A4 */ int field_0x1A4[0xF]; // IconPosY
-    /* 0x1E0 */ u32 field_0x1E0[0xF]; // IconColor
-    /* 0x21C */ int field_0x21C;
-    /* 0x220 */ u32 field_0x220[0xF]; // StringColor?
-    /* 0x25C */ u32 field_0x25C;
+    /* 0x168 */ int iconPosX[0xF];
+    /* 0x1A4 */ int iconPosY[0xF];
+    /* 0x1E0 */ int iconScale[0xF];
+    /* 0x21C */ int selectLength;
+    /* 0x220 */ u32 iconColor[0xF];
+    /* 0x25C */ u32 stringColor;
     /* 0x260 */ s16 field_0x260;
     /* 0x264 */ f32 field_0x264;
     /* 0x268 */ f32 field_0x268;
@@ -387,7 +389,7 @@ public:
     /* 0x27E */ u8 field_0x27E;
     /* 0x27F */ u8 field_0x27F;
     /* 0x280 */ u8 field_0x280;
-    /* 0x281 */ u8 field_0x281[0xF]; // IconNum?
+    /* 0x281 */ u8 iconNum[0xF];
     /* 0x290 */ u8 field_0x290;
     /* 0x291 */ u8 field_0x291;
     /* 0x292 */ u8 field_0x292;
@@ -404,7 +406,7 @@ public:
     /* 0x29B */ u8 field_0x29B;
     /* 0x29C */ u8 spaceFlag;
     /* 0x29D */ u8 field_0x29D;
-};
+};  // Size: 0x2A0
 
 typedef int (*fopMsgCreateFunc)(void*);
 

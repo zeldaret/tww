@@ -3169,14 +3169,12 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
     static f32 nowY = 0.0f;
     if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(1)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK100_e) ||
-        (((dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) ||
-          (i_Meter->mStatusFlags & dMtrStts_UNK800000_e)) ||
-         (((((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
-            (i_Meter->mStatusFlags & dMtrStts_UNK80_e)) ||
-           (((i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e)) ||
-            ((i_Meter->mStatusFlags & dMtrStts_UNK20000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80000_e))))
-          ) ||
-          (i_Meter->mStatusFlags & dMtrStts_UNK400000_e))))
+        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK40000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK400000_e))
     {
         if (moveStatus != 1) {
             moveFlag = 1;

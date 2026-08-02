@@ -1653,9 +1653,9 @@ static BOOL daAgb_Execute(daAgb_c* i_this) {
         } else {
             daPy_lk_c* player_p2 = daPy_getPlayerLinkActorClass();
             if ((dComIfGp_getPlayer(0) == player_p2 && !player->checkPlayerFly()) ||
-                ((fopAcM_GetName(player) == fpcNm_NPC_MD_e && !daNpc_Md_c::isFlying()) ||
-                 (fopAcM_GetName(player) == fpcNm_NPC_CB1_e && !daNpc_Cb1_c::isFlying()) ||
-                 fopAcM_GetName(player) == fpcNm_NPC_OS_e))
+                (fopAcM_GetName(player) == fpcNm_NPC_MD_e && !daNpc_Md_c::isFlying()) ||
+                (fopAcM_GetName(player) == fpcNm_NPC_CB1_e && !daNpc_Cb1_c::isFlying()) ||
+                 fopAcM_GetName(player) == fpcNm_NPC_OS_e)
             {
                 f32 speedF = fabs(player->speedF);
 
