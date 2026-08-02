@@ -371,6 +371,14 @@ STATIC_ASSERT(sizeof(dMenu_Fmap_c) == 0x51B4);
 class dMf_HIO_c {
 public:
     dMf_HIO_c();
+    virtual ~dMf_HIO_c() {}
+
+public:
+    /* 0x04 */ u8 field_0x04[0x3A - 0x04];
+    /* 0x3A */ u8 field_0x3A;
+    /* 0x3B */ u8 field_0x3B[0x120 - 0x3B];
 };
+
+extern dMf_HIO_c g_mfHIO;
 
 #endif /* D_MENU_FMAP_H */

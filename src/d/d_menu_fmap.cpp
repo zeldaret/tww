@@ -5,6 +5,11 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_fmap.h"
+#include "dolphin/types.h"
+#include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
+
+dMf_HIO_c g_mfHIO;
 
 /* 801AF4F0-801AF848       .text __ct__9dMf_HIO_cFv */
 dMf_HIO_c::dMf_HIO_c() {
@@ -38,7 +43,7 @@ void dMenu_Fmap_c::displayinit() {
 
 /* 801B1200-801B1210       .text backClothDispInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::backClothDispInit() {
-    /* Nonmatching */
+    mClPane.pane->hide();
 }
 
 /* 801B1210-801B1374       .text calcGetMapCount__12dMenu_Fmap_cFv */
@@ -68,8 +73,7 @@ void dMenu_Fmap_c::checkMarkCheck3() {
 
 /* 801B190C-801B1914       .text isFmapClose__12dMenu_Fmap_cFv */
 bool dMenu_Fmap_c::isFmapClose() {
-    /* Nonmatching */
-    return false;
+    return mMapClose;
 }
 
 /* 801B1914-801B1978       .text setPaneOnOff__12dMenu_Fmap_cFP9J2DScreenUlb */
@@ -94,12 +98,19 @@ void dMenu_Fmap_c::fmapMaskAlphaCtrl(short, unsigned char, unsigned char, int) {
 
 /* 801B1B10-801B1B58       .text selCursorInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::selCursorInit() {
-    /* Nonmatching */
+    mSelCursorBufIdx = 0;
+    for (int i = 0; i < 4; i++) {
+        mKk1xPanes[i].pane->show();
+        mKk2xPanes[i].pane->hide();
+    }
+    mKk1xPanes->mUserArea = g_mfHIO.field_0x3A;
 }
 
 /* 801B1B58-801B1B80       .text selCursorHide__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::selCursorHide() {
-    /* Nonmatching */
+    for (int i = 0; i < 8; i++) {
+        mKk1xPanes[i].pane->hide();
+    }
 }
 
 /* 801B1B80-801B1CF0       .text selCursorMove__12dMenu_Fmap_cFv */
