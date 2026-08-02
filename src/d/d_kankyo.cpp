@@ -3159,7 +3159,7 @@ void dKy_arrowcol_chg_move() {
 
 /* 80196764-801967C4       .text dKy_checkEventNightStop__Fv */
 BOOL dKy_checkEventNightStop() {
-    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isSymbol(0)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
         return true;
     }
 

@@ -418,7 +418,9 @@ public:
     /* 0x5FC */ int mTrimSize;
     /* 0x600 */ int mTrimTypeForce;
     /* 0x604 */ f32 mWindowAspectRatio;
+#if VERSION > VERSION_DEMO
     /* 0x608 */ f32 m608;
+#endif
     /* 0x60C */ dCamSetup_c mCamSetup;
     /* 0x750 */ dCamParam_c mCamParam;
     /* 0x75C */ int mCamTypeField;
@@ -429,7 +431,9 @@ public:
     /* 0x770 */ int mCamTypeBoatBattle;
     /* 0x774 */ int mCamTypeSubject;
     /* 0x778 */ int mCamTypeKeep;
+#if VERSION > VERSION_DEMO
     /* 0x77C */ int mCamTypeRestrict;
+#endif
     /* 0x780 */ u8 m780;
     /* 0x781 */ u8 m781;
     /* 0x782 */ u8 m782;
@@ -442,7 +446,6 @@ public:
     /* 0x789 */ u8 m789;
     /* 0x78A */ u8 m78A;
     /* 0x78B */ u8 m78B;
-    /* 0x78C */ u8 m78C[0x800 - 0x78C];
 
 public:
     dCamera_c(camera_class*);
@@ -622,8 +625,6 @@ public:
     static const int mvBGType_num;
     static const char* mvBGTypes[];
 };
-
-STATIC_ASSERT(sizeof(dCamera_c) == 0x800);
 
 bool dCam_isManual(camera_class* i_this);
 s16 dCam_getAngleY(camera_class*);

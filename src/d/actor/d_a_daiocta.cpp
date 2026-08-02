@@ -838,36 +838,36 @@ void daDaiocta_c::setCollision() {
                 break;
         }
 
-        mCps[i].set(mSphCenters[j], mSphCenters[k]);
+        mCps[i].SetStartEnd(mSphCenters[j], mSphCenters[k]);
         mCps[i].SetR(l_HIO.mCpsRadii[i]);
         dComIfG_Ccsp()->Set(&mCps[i]);
     }
 
-    mCps[10].set(mSphCenters[36], m21AC);
+    mCps[10].SetStartEnd(mSphCenters[36], m21AC);
     mCps[10].SetR(l_HIO.m05C);
     dComIfG_Ccsp()->Set(&mCps[10]);
 
-    mCps[11].set(mSphCenters[30], m21A0);
+    mCps[11].SetStartEnd(mSphCenters[30], m21A0);
     mCps[11].SetR(l_HIO.m060);
     dComIfG_Ccsp()->Set(&mCps[11]);
 
-    mCps[12].set(mSphCenters[6], m21B8);
+    mCps[12].SetStartEnd(mSphCenters[6], m21B8);
     mCps[12].SetR(l_HIO.m064);
     dComIfG_Ccsp()->Set(&mCps[12]);
 
-    mCps[13].set(mSphCenters[10], m21DC);
+    mCps[13].SetStartEnd(mSphCenters[10], m21DC);
     mCps[13].SetR(l_HIO.m068);
     dComIfG_Ccsp()->Set(&mCps[13]);
 
-    mCps[14].set(mSphCenters[8], m21E8);
+    mCps[14].SetStartEnd(mSphCenters[8], m21E8);
     mCps[14].SetR(l_HIO.m06C);
     dComIfG_Ccsp()->Set(&mCps[14]);
 
-    mCps[15].set(mSphCenters[9], m21C4);
+    mCps[15].SetStartEnd(mSphCenters[9], m21C4);
     mCps[15].SetR(l_HIO.m070);
     dComIfG_Ccsp()->Set(&mCps[15]);
     
-    mCps[16].set(mSphCenters[7], m21D0);
+    mCps[16].SetStartEnd(mSphCenters[7], m21D0);
     mCps[16].SetR(l_HIO.m074);
     dComIfG_Ccsp()->Set(&mCps[16]);
 }
@@ -879,7 +879,7 @@ void daDaiocta_c::modeHideInit() {
 
 /* 00001EB8-00001F34       .text modeHide__11daDaiocta_cFv */
 void daDaiocta_c::modeHide() {
-    f32 dist_xz = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 dist_xz = fopAcM_searchPlayerDistanceXZ(this);
     if ((dist_xz < mAppearRadius || dist_xz < l_HIO.mMinAppearRadius) && 
         dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         modeProc(PROC_INIT_e, MODE_APPEAR);
@@ -967,7 +967,7 @@ void daDaiocta_c::modeAppear() {
             if (dist <= 0.1) {
                 modeProc(PROC_INIT_e, MODE_WAIT);
             } else {
-                s16 target = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+                s16 target = fopAcM_searchPlayerAngleY(this);
                 cLib_addCalcAngleS2(&shape_angle.y, target, 4, l_HIO.m010);
             }
         }
@@ -1400,8 +1400,8 @@ bool daDaiocta_c::_execute() {
         mBrkAnm2.play();
         mBtkAnm.play();
 #endif        
-        f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-        s16 angle_y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+        f32 dist = fopAcM_searchPlayerDistanceXZ(this);
+        s16 angle_y = fopAcM_searchPlayerAngleY(this);
         s32 dist_angle_s = cLib_distanceAngleS(shape_angle.y + l_HIO.m014, angle_y);
         if (dist < l_HIO.m084 && 
             mMode != MODE_DEMO && 

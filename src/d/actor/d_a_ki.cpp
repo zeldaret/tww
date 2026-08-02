@@ -922,7 +922,6 @@ void ki_path_move(ki_class* i_this) {
                 }
             }
             break;
-
     }
 
     i_this->mPosMoveTarget = l_kiHIO.m28;

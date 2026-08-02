@@ -3107,6 +3107,7 @@ static u8 damage_check(tn_class* i_this) {
         case 7:
             i_this->mDamageReaction.m424 |= 0x10;
             i_this->mDamageReaction.m428 = 26.0f;
+            break;
     }
     if (i_this->mDamageReaction.m424 != 0) {
         cXyz local_8c(0.0f, 0.0f, -10.0f);

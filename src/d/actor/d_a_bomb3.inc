@@ -94,7 +94,7 @@ void daBomb_fuseSmokeEcallBack::executeAfter(JPABaseEmitter* emitter) {
 
         for(f32 i = step; i < 1.0f; i += step, temp8 += temp7) {
             JGeometry::TVec3<f32> vec5;
-            vec5.cubic<f32>(vec1, vec2, vec3, vec4, i);
+            vec5.cubic(vec1, vec2, vec3, vec4, i);
             
             emitter->setLifeTime(temp8);
             JPABaseParticle* particle = emitter->createParticle();

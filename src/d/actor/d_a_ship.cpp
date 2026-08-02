@@ -345,10 +345,10 @@ BOOL daShip_c::checkForceMessage() {
     if (dComIfGs_isGetItem(1, 0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) {
         mNextMessageNo = 0x5E0;
     }
-    else if (dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
+    else if (dComIfGs_isSymbol(dSymbol_DIN_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
         mNextMessageNo = 0x5EC;
     }
-    else if (dComIfGs_isSymbol(2) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
+    else if (dComIfGs_isSymbol(dSymbol_FARORE_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
         mNextMessageNo = 0x5F6;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A01)) {
@@ -357,7 +357,7 @@ BOOL daShip_c::checkForceMessage() {
     else if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
         mNextMessageNo = 0x624;
     }
-    else if (dComIfGs_isSymbol(0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
+    else if (dComIfGs_isSymbol(dSymbol_NAYRU_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xD5A;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D10) && !daPy_getPlayerActorClass()->checkMasterSwordEquip()) {
@@ -495,7 +495,7 @@ void daShip_c::setInitMessage() {
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xd62;
     }
-    else if (dComIfGs_isSymbol(0)) {
+    else if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
         mNextMessageNo = 0xd5a;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1940)) {
@@ -557,7 +557,7 @@ void daShip_c::setInitMessage() {
         }
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A20)) {
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             mNextMessageNo = 0x5f6;
         }
         else {
@@ -584,7 +584,7 @@ void daShip_c::setInitMessage() {
         }
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) {
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             mNextMessageNo = 0x5ec;
         }
         else {
@@ -1019,7 +1019,7 @@ BOOL daShip_c::checkOutRange() {
         if (bVar5) {
             if (
                 (pathIndex == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) ||
-                (pathIndex == 1 && dComIfGs_isSymbol(2)) ||
+                (pathIndex == 1 && dComIfGs_isSymbol(dSymbol_FARORE_e)) ||
                 (pathIndex == 2 && daPy_getPlayerActorClass()->checkMasterSwordEquip())
             ) {
                 path = dPath_GetNextRoomPath(path, -1);
@@ -1262,7 +1262,6 @@ BOOL daShip_c::checkNextMode(int i_curMode) {
             tgRVecP = mSph.GetTgRVecP();
             tgHitPos = mSph.GetTgHitPosP();
             tgHitObj = mSph.GetTgHitGObj();
-            
         }
         else {
             dCcD_Cyl* cyl = mCyl;
@@ -1781,7 +1780,6 @@ BOOL daShip_c::procCannon() {
 
             cLib_addCalcAngleS(&m0396, cM_atan2s(-cannonPos.y, cannonPos.absXZ()) + 0x4000, 5, 0x180, 0x40);
             cLib_addCalcAngleS(&m0394, cM_atan2s(cannonPos.x, cannonPos.z) - shape_angle.y, 5, 0x180, 0x40);
-        
         } else if (!mDoCPd_R_LOCK_BUTTON(0)) {
             float adjust = mStickMVal * (m0404 * 4.0f + 1.0f);
             m0396 += (adjust * 384.0f) * cM_scos(mStickMAng);
@@ -2986,7 +2984,6 @@ void daShip_c::setEffectData(float param_1, short param_2) {
             mWaveL.stop();
             mSplash.stop();
         }
-        
     }
     fVar3 = speedF + 150.0f;
     mEffPos.set(current.pos.x + fVar3 * cM_ssin(shape_angle.y), param_1, current.pos.z + fVar3 * cM_scos(shape_angle.y));
@@ -3786,7 +3783,7 @@ BOOL daShip_c::execute() {
                     fVar4 = m0404 * 30.0f + 10.0f;
                     // Bug? This room check assumes we're on the sea without checking?
                     if (dComIfGs_getBombNum() == 0 && fopAcM_GetRoomNo(this) == dIsleRoom_OutsetIsland_e) {
-                          fVar4 *= 1.2f;
+                        fVar4 *= 1.2f;
                     }
                 }
                 firstDecrementShipSpeed(fVar4);
@@ -3869,7 +3866,6 @@ BOOL daShip_c::execute() {
                 fopAcM_posMove(this, mStts.GetCCMoveP());
                 if (dComIfGp_event_runCheck()) {
                     m1044 = cXyz::Zero;
-                    
                 }
                 else {
                     cXyz sp108;
@@ -3881,7 +3877,6 @@ BOOL daShip_c::execute() {
                     }
                     else {
                         cLib_addCalcPosXZ(&m1044, cXyz::Zero, 0.05f, 0.1f, 0.02f);
-
                     }
                     current.pos += m1044;
                 }
@@ -4014,7 +4009,6 @@ BOOL daShip_c::execute() {
             if (mProc != &daShip_c::procCannon) {
                 m0396 = getAnglePartRate() * 0x4000;
                 m0394 *= getAnglePartRate();
-            
             }
             
             mpCannonModel->calc();
@@ -4134,8 +4128,8 @@ BOOL daShip_c::execute() {
         r23_2 = TRUE;
     } 
     else if ((mCurMode == 10 || mCurMode == 11) && m0434 && mRopeCnt > 0) {
-            spC0 = *m0434 - eyePos;
-            r23_2 = TRUE;
+        spC0 = *m0434 - eyePos;
+        r23_2 = TRUE;
     }
     else if (mCurMode == 8 || distXz > 125.0f) {
         if (
@@ -4348,7 +4342,6 @@ BOOL daShip_c::execute() {
     if (mPart == PART_STEER_e) {
         dComIfGp_setPlayerStatus1(0, daPyStts1_SAIL_e);
         mDoAud_setShipSailState(1);
-        
     }
     else {
         dComIfGp_clearPlayerStatus1(0, daPyStts1_SAIL_e);

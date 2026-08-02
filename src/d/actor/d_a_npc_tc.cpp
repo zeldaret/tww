@@ -1117,7 +1117,6 @@ void daNpc_Tc_c::lookBack() {
         dstPos = &temp6;
         temp3.set(current.pos);
         temp3.y = eyePos.y;
-        
     } else if (mHasAttention){
         temp6 = dNpc_playerEyePos(l_HIO.mNpc.m04);
         dstPos = &temp6;
@@ -1232,7 +1231,6 @@ void daNpc_Tc_c::statusWalkToJail() {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B40);
                 mHasTalkedNearJail  = true;
                 return;
-
             }
             mStatus = STATUS_TALK_NEAR_JAIL;
         } else if (mHasAttention) {
@@ -1293,7 +1291,6 @@ void daNpc_Tc_c::statusWaitNearJail() {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B40);
                 mHasTalkedNearJail = true;
                 return;
-
             }
             mStatus = STATUS_TALK_NEAR_JAIL;
         } else if (mHasAttention) {
@@ -1323,7 +1320,6 @@ void daNpc_Tc_c::statusWalkToStool() {
         if (speedF == 0.0f) {
             mStatus = STATUS_WALK_TO_JAIL;
         }
-        
     } else {
         mStoolLookPos.set(mStoolPos);
         cLib_targetAngleY(&current.pos, &mWalkToStoolPos);
@@ -1707,7 +1703,6 @@ void daNpc_Tc_c::setTower() {
             temp = l_HIO.field_0x6C;
             temp2 = l_HIO.field_0x78;
             break;
-        
     }
 
     switch(mType) {
@@ -1769,7 +1764,6 @@ BOOL daNpc_Tc_c::_execute() {
                     case 0:
                         mAnmPrmIdx = ANM_PRM_IDX_WAIT01;
                         break;
-   
                 }
             } else {
                 mAnmPrmIdx = ANM_PRM_IDX_WAIT01;

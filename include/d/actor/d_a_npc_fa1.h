@@ -153,7 +153,7 @@ public:
     int CreateHeap();
     void setMtx();
 
-public:
+private:
     /* 0x6C4 */ u8 m6C4[0x6CC - 0x6C4];
     /* 0x6CC */ mDoExt_McaMorf* mpMorf;
     /* 0x6D0 */ daNpc_Fa1_McaMorfCallBack1_c mMcaMorfCallback1;

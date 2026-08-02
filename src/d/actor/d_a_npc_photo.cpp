@@ -968,7 +968,6 @@ void daNpcPhoto_c::executeWait() {
                 if(pActor && fopAcM_GetProfName(pActor) == fpcNm_PLAYER_e) {
                     field_0x9BE = 2;
                 }
-
             }
         } else if(field_0x9C1 == 4 && ((field_0x9C6 & 0x10) == 0)){
             daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
@@ -1028,13 +1027,11 @@ void daNpcPhoto_c::executeTalk() {
                 field_0x9C6 = temp & 254;
                 mItemNo = 31;
                 field_0x9BE = 4;
-                
             } else {
                 if((temp & 2) != 0){
                     field_0x9C6 = temp & ~0x02;
                     mItemNo = 38;
                     field_0x9BE = 5;
-                    
                 } else {
                     if((temp & 4) != 0){
                         field_0x9C6 = temp & ~0x04;
@@ -1085,7 +1082,6 @@ void daNpcPhoto_c::executeWalk() {
             if (point2.y - point.y > 400.0f) {
                 field_0x984 = l_npc_dat.field_0x3C * l_npc_dat.field_0x40;
             }
-    
         } else{
             executeSetMode(0);
             field_0x9C1 = 2;
@@ -1324,7 +1320,6 @@ void daNpcPhoto_c::eventMesSetInit(int i_staffId) {
                     field_0x980 = l_msg_1st_talk_photo;
                     field_0x9D0 = NULL;
                     dComIfGs_onEventBit(l_save_dat.field_0x04);
-
                 } else {
                     int temp = 0;
                     daTagPhoto_c* ac = (daTagPhoto_c*)dComIfGp_event_getPt2();
@@ -1781,7 +1776,6 @@ u32 daNpcPhoto_c::getMsg() {
                     if(dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0302)) {
                         field_0x980 = l_msg_get_photo;
                         field_0x9D0 = 0;
-                        
                     } else {
                         if(isPhotoDxOk()) {
                             dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0302);
@@ -1798,7 +1792,6 @@ u32 daNpcPhoto_c::getMsg() {
                             field_0x9D0 = (u8*)l_msg_color_c;
                         }
                     }
-
                 }
             } else {
                 eventReg = dComIfGs_getEventReg(l_save_dat.field_0x06);
@@ -1902,6 +1895,7 @@ void daNpcPhoto_c::setAnmFromMsgTag() {
         case 9:
             setAnmTbl(l_npc_anm_spit);
             field_0x9C9 &= 0x7f;
+            break;
     }
     dComIfGp_setMesgAnimeAttrInfo(0xFF);
 }
@@ -1938,7 +1932,6 @@ void daNpcPhoto_c::chkAttention() {
         if (!field_0x9BD) {
           field_0x9BD = true;
         }
-        
     } else {
         fopAc_ac_c* link = dComIfGp_getLinkPlayer();
         f32 temp = l_npc_dat.field_0x2C;

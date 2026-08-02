@@ -73,12 +73,7 @@ static daBoko_HIO_c l_HIO;
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {
-#ifdef __MWERKS__
     mpLineKe->lineMat.update(0xA, 1.25f, (GXColor){0xFF, 0x64, 0x00, 0xFF}, 2, &tevStr);
-#else
-    GXColor color = {0xFF, 0x64, 0x00, 0xFF};
-    mpLineKe->lineMat.update(0xA, 1.25f, color, 2, &tevStr);
-#endif
     dComIfGd_set3DlineMat(&mpLineKe->lineMat);
 }
 
@@ -174,13 +169,13 @@ BOOL daBoko_c::draw() {
 
     if (checkNoDraw()) {
         if (mParticleCallBack.getEmitter() != NULL) {
-            mParticleCallBack.getEmitter()->setStatus(4);
+            mParticleCallBack.getEmitter()->stopDrawParticle();
         }
         return TRUE;
     }
 
     if (mParticleCallBack.getEmitter() != NULL) {
-        mParticleCallBack.getEmitter()->clearStatus(4);
+        mParticleCallBack.getEmitter()->playDrawParticle();
     }
 
     if (mFlameTimer != 0) {
@@ -269,7 +264,6 @@ BOOL daBoko_c::checkNoDraw() {
 
 /* 00000FA4-00001340       .text setFlameEffect__8daBoko_cFv */
 void daBoko_c::setFlameEffect() {
-    /* Nonmatching */
     static const s16 base_angle[] = {150, 200, 180, 120};
 
     dStage_darkStatus_c* dark_stts = dStage_roomControl_c::getDarkStatus();
@@ -421,7 +415,6 @@ BOOL daBoko_c::procMove_init() {
 
 /* 0000175C-00001E94       .text procMove__8daBoko_cFv */
 BOOL daBoko_c::procMove() {
-    /* Nonmatching - fpr regswap */
     BOOL bVar4 = FALSE;
     fopAcM_posMoveF(this, NULL);
     f32 fVar14_2 = m2DC.y;

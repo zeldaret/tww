@@ -104,7 +104,7 @@ static void move(fgmahou_class* i_this) {
 
             if(i_this->mAtSph.ChkAtHit()) {
                 i_this->mAtSph.GetAtHitObj();
-                fganon_class* fganon = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
+                fganon_class* fganon = (fganon_class*)fpcM_Search(boss_s_sub, i_this);
                 if(fganon != NULL) {
                     fganon->m68B = 1;
 
@@ -123,7 +123,7 @@ static void move(fgmahou_class* i_this) {
 
             i_this->mState = 5;
         case 5:
-            fganon2 = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
+            fganon2 = (fganon_class*)fpcM_Search(boss_s_sub, i_this);
             if(fganon2 == NULL) {
                 i_this->field_0x780 = 0x32;
                 break;

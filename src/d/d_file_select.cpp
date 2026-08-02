@@ -649,8 +649,8 @@ void dFile_select_c::makeRecInfo(u8 param_1) {
                 }
             }
             else {
-                    ((J2DPicture*)field_0x828[i].pane)->changeTexture("heart_04_2.bti", 0);
-                    ((J2DPicture*)field_0xc88[i].pane)->changeTexture("heart_04_2.bti", 0);
+                ((J2DPicture*)field_0x828[i].pane)->changeTexture("heart_04_2.bti", 0);
+                ((J2DPicture*)field_0xc88[i].pane)->changeTexture("heart_04_2.bti", 0);
             }
         }
         else {

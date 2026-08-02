@@ -14,7 +14,7 @@ class JUTFont;
 class dMenu_Option_c : public dDlst_base_c {
 public:
     void alphaChange(fopMsgM_pane_class*, f32) {}
-    void getQuitStatus() {}
+    u8 getQuitStatus() { return mE40; }
     void setArchive(JKRArchive* archive) {
         mpArchive = archive;
     }

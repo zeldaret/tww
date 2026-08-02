@@ -134,7 +134,7 @@ cPhs_State daYkgr_c::_create() {
         m_path = NULL;
     }
 
-    if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0 && dComIfGs_isSymbol(1)) {
+    if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0 && dComIfGs_isSymbol(dSymbol_DIN_e)) {
         return cPhs_STOP_e;
     }
 

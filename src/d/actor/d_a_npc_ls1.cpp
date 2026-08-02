@@ -1266,7 +1266,7 @@ fopAc_ac_c* daNpc_Ls1_c::searchByID(fpc_ProcID i_PID, int* param_2) {
 }
 
 /* 000020A4-00002154       .text partner_search_sub__11daNpc_Ls1_cFPFPvPv_Pv */
-bool daNpc_Ls1_c::partner_search_sub(void* (*i_funcP)(void*, void*)) {
+bool daNpc_Ls1_c::partner_search_sub(fpcLyIt_JudgeFunc i_judgeFunc) {
     bool result = false;
     mBm1ProcID = fpcM_ERROR_PROCESS_ID_e;
 
@@ -1275,7 +1275,7 @@ bool daNpc_Ls1_c::partner_search_sub(void* (*i_funcP)(void*, void*)) {
         l_check_inf[i] = NULL;
     }
 
-    fpcEx_Search(i_funcP, this);
+    fpcM_Search(i_judgeFunc, this);
 
     if (l_check_wrk != 0) {
         mBm1ProcID = fpcM_GetID(l_check_inf[0]);
@@ -1695,7 +1695,7 @@ void daNpc_Ls1_c::setStt(s8 param_1) {
             mTelescopeScale = 1.0f;
             break;
         case 5:
-            fpcEx_Search(searchActor_kamome_Set_NOSTOP_DEMO, this);
+            fpcM_Search(searchActor_kamome_Set_NOSTOP_DEMO, this);
             m850 = 0;
             m84B = 0xFF;
             mMesgAnimeTag = 0xFF;
@@ -1800,7 +1800,7 @@ bool daNpc_Ls1_c::telescope_proc() {
     u8 scope_mesg_status = dComIfGp_getScopeMesgStatus();
     if (scope_mesg_status == fopMsgStts_MSG_UNK0_e) {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) != 0) {
-            if (g_dComIfG_gameInfo.play.field_0x4978) {
+            if (g_dComIfG_gameInfo.play.mScopeWipeFlag) {
                 daPy_getPlayerLinkActorClass()->setPlayerPosAndAngle(&m7CC[1], 0xCC70);
             }
             dComIfGp_setScopeType(1);
@@ -1836,7 +1836,7 @@ bool daNpc_Ls1_c::telescope_proc() {
         }
     // fallthrough
     case fopMsgStts_CLOSE_WAIT_e:
-    case fopMsgStts_UNKD_e: 
+    case fopMsgStts_SCOPE_WAIT_e: 
         {
             u32 temp_msg_no;
             switch (m833) {
@@ -2105,7 +2105,7 @@ BOOL daNpc_Ls1_c::talk_1() {
             eventInfo.mEventId = -1;
             break;
         }
-        fpcEx_Search(searchActor_kamome_Clr_NOSTOP_DEMO, this);
+        fpcM_Search(searchActor_kamome_Clr_NOSTOP_DEMO, this);
         mItemNo = 0xFF;
         m83F = false;
         setStt(m852);

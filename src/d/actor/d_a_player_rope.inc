@@ -958,15 +958,15 @@ BOOL daPy_lk_c::procRopeUp_init() {
         }
     }
     if (dVar4 <= current.pos.y) {
+#if VERSION > VERSION_DEMO
         if (specialRopeHangUp()) {
             return true;
-#if VERSION > VERSION_DEMO
-        } else if (changeRopeToHangProc()) {
-            return true;
-#endif
-        } else {
-            return procRopeHangWait_init(0);
         }
+#endif
+        if (changeRopeToHangProc()) {
+            return true;
+        }
+        return procRopeHangWait_init(0);
     } else {
         commonProcInit(daPyProc_ROPE_UP_e);
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK800000_e);

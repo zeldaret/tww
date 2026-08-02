@@ -782,12 +782,7 @@ BOOL daNpc_Tt_c::_draw() {
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
 
-#ifdef __MWERKS__
     mLineKe.mLineMat.update(10, 0.8f, (GXColor){0xC9, 0xCA, 0xE4, 0xFF}, 0, &tevStr);
-#else
-    GXColor color = (GXColor){0xC9, 0xCA, 0xE4, 0xFF};
-    mLineKe.mLineMat.update(10, 0.8f, color, 0, &tevStr);
-#endif
     dComIfGd_set3DlineMat(&mLineKe.mLineMat);
 
     dSnap_RegistFig(DSNAP_TYPE_NPC_TT, this, 1.0f, 1.0f, 1.0f);

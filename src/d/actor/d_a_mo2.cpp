@@ -594,12 +594,7 @@ static void ke_disp(mo2_class* i_this) {
         ke_control(i_this, pkVar2, i);
         ke_draw(i_this, pkVar2, i);
     }
-#ifdef __MWERKS__
     i_this->m3Dline.update(10, 1.25f, (GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
-#else
-    GXColor local_18 = (GXColor){0xFF, 0x64, 0, 0xFF};
-    i_this->m3Dline.update(10, 1.25f, local_18, 2, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->m3Dline);
 }
 
@@ -3238,6 +3233,7 @@ static u8 damage_check(mo2_class* i_this) {
                 tex_anm_set(i_this, 4);
                 i_this->mDamageReaction.m424 |= 0x10;
                 i_this->mDamageReaction.m428 = 26.0f;
+                break;
         }
         if (i_this->mDamageReaction.m424 != 0) {
             local_54.x = 0.0f;

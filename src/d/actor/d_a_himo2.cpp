@@ -404,12 +404,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 r19--;
                 *r19 = local_a10[i];
             }
-#ifdef __MWERKS__
             i_this->m1F30.update((u16)i_this->m1F6C, rope_scale, (GXColor){200, 0x96, 50, 0xFF}, 0, &actor->tevStr);
-#else
-            GXColor local_a50 = {200, 0x96, 50, 0xFF};
-            i_this->m1F30.update((u16)i_this->m1F6C, rope_scale, local_a50, 0, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->m1F30);
             daPy_py_c* apdVar2 = (daPy_py_c*)dComIfGp_getPlayer(0);
             cMtx_YrotS(*calc_mtx, -apdVar2->shape_angle.y);
@@ -462,12 +457,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                     *r19 += i_this->m02EC[1];
                 }
             }
-#if __MWERKS__
             i_this->m1F98.update(0x20, rope_scale, (GXColor){200, 0x96, 50, 0xFF}, 0, &actor->tevStr);
-#else
-            GXColor local_a54 = {200, 0x96, 50, 0xFF};
-            i_this->m1F98.update(0x20, rope_scale, local_a54, 0, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->m1F98);
             r19 = i_this->m1FD8.getPos(0);
             f32 f1_2;
@@ -497,12 +487,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 r19->z = i_this->m02EC[1].z + sp2C.z * i + sp38.z * fVar1;
                 r19++;
             }
-#ifdef __MWERKS__
             i_this->m1FD8.update(16, rope_scale, (GXColor){200, 0x96, 50, 0xFF}, 0, &actor->tevStr);
-#else
-            GXColor local_a58 = {200, 0x96, 50, 0xFF};
-            i_this->m1FD8.update(16, rope_scale, local_a58, 0, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->m1FD8);
             dComIfGd_setList();
         }
