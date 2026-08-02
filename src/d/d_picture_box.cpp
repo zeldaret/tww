@@ -631,7 +631,7 @@ void dJle_Pb_c::selectMode() {
 
             remainMessageSet(pictureNum);
             mModeSubState = PB_SUB_IDLE_e;
-            dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+            dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
             dMenu_flagSet(0);
         }
     } else if (CPad_CHECK_TRIG_B(0) && mDoGph_getCaptureStep() == 5) {
@@ -640,7 +640,7 @@ void dJle_Pb_c::selectMode() {
         mDoAud_seStart(JA_SE_UTUSHIE_DEL_PIC);
 
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         dMenu_flagSet(0);
     }
 }
@@ -803,13 +803,13 @@ void dJle_Pb_c::pictureEraseWait() {
         }
         
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
     }
     else if (CPad_CHECK_TRIG_B(0)) {
         existMessageSet(dComIfGs_getPictureNum());
         mDoAud_seStart(JA_SE_UTUSHIE_B_LEAVE_PIC);
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
     }
 }
 
@@ -845,13 +845,13 @@ void dJle_Pb_c::pictureDecide() {
             mDoAud_seStart(JA_SE_UTUSHIE_B_LEAVE_PIC);
         }
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
     }
     else if (CPad_CHECK_TRIG_B(0)) {
         existMessageSet(dComIfGs_getPictureNum());
         mDoAud_seStart(JA_SE_UTUSHIE_B_LEAVE_PIC);
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
     }
 }
 
@@ -1958,7 +1958,7 @@ void dJle_Pb_c::_copen() {
     cameraAlphaInc(fopMsgM_valueIncrease(10, mFadeTimer, 0));
 
     if (mFadeTimer == 10) {
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         mExecState = PB_EXEC_CAMERA_MOVE_e;
         mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_2);
     }
@@ -1985,7 +1985,7 @@ void dJle_Pb_c::_bopen() {
     browseAlphaInc(fopMsgM_valueIncrease(10, mFadeTimer, 0));
 
     if (mFadeTimer == 10) {
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         mExecState = PB_EXEC_BROWSE_MOVE_e;
         mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_2);
     }
@@ -2017,7 +2017,7 @@ void dJle_Pb_c::_gopen() {
             pict->snap_result_detail = 0;
             pict->capture_format = GX_TF_CMPR;
 
-            dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+            dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
             mExecState = PB_EXEC_GET_MOVE_e;
             mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_2);
         }
