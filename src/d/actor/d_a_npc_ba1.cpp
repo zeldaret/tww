@@ -1187,7 +1187,8 @@ bool daNpc_Ba1_c::eMove_CHK_FAIRY_MOV_1() {
             daNpc_Fa1_c * actor_fa;
             actor_fa = (daNpc_Fa1_c*) searchByID(mPartnerProcID);
             if(actor_fa != NULL) {
-                ret = actor_fa->mMode == 5;
+
+                ret = actor_fa->getMode() == daNpc_Fa1_c::Mode_BOTTLE_BABA_MOVE_e;
             }
         }
     }
