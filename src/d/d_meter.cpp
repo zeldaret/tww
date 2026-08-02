@@ -897,67 +897,73 @@ void dMeter_rupy_num(char* buf, s16 num) {
     sprintf(buf, "rupy_num_%02d.bti", num);
 }
 
+#if VERSION < VERSION_PAL
+#define TEXNAME(a) a ".bti"
+#else
+#define TEXNAME(a) a
+#endif
+
 /* 801F0320-801F0378       .text dMeter_actionTex__Fs */
 const char* dMeter_actionTex(s16 id) {
     static const struct {
         u8 id;
         const char* filename;
     } act[] = {
-        {dActStts_BLANK_e, "ba_shiraberu.bti"},
-        {dActStts_LOOK_e, "ba_miru.bti"},
-        {dActStts_SPEAK_e, "ba_syaberu.bti"},
-        {dActStts_CHARTS_e, "ba_shiraberu.bti"},
-        {dActStts_LIFT_e, "ba_motu.bti"},
-        {dActStts_CLIMB_e, "ba_noru.bti"},
-        {dActStts_LET_GO_e, "ba_oriru.bti"},
-        {dActStts_RETURN_e, "ba_modoru.bti"},
-        {dActStts_PUT_AWAY_e, "ba_shimau.bti"},
-        {dActStts_DROP_e, "ba_oku.bti"},
-        {dActStts_CHECK_e, "ba_chekku.bti"},
-        {dActStts_OPEN_e, "ba_hiraku.bti"},
-        {dActStts_ATTACK_e, "ba_attack.bti"},
-        {dActStts_ba_osu, "ba_osu.bti"},
-        {dActStts_THROW_e, "ba_nageru.bti"},
-        {dActStts_CROUCH_e, "ba_shagamu.bti"},
-        {dActStts_SIDLE_e, "ba_harituku.bti"},
-        {dActStts_GRAB_e, "ba_tukamu.bti"},
-        {dActStts_JUMP_e, "ba_jump.bti"},
-        {dActStts_STOP_e, "ba_tomeru.bti"},
-        {dActStts_ba_haru, "ba_haru.bti"},
-        {dActStts_ba_tatamu, "ba_tatamu.bti"},
-        {dActStts_LET_GO_ROPE_e, "ba_hanasu.bti"},
-        {dActStts_CHOOSE_e, "ba_kettei.bti"},
-        {dActStts_ba_kogu, "ba_kogu.bti"},
-        {dActStts_NEXT_e, "ba_tugihe.bti"},
-        {dActStts_PARRY_e, "ba_sake.bti"},
-        {dActStts_PICK_UP_e, "ba_motu_buki.bti"},
-        {dActStts_GET_IN_SHIP_e, "ba_noru_hune.bti"},
-        {dActStts_GET_OUT_SHIP_e, "ba_oriru_hune.bti"},
-        {dActStts_ba_save, "ba_save.bti"},
-        {dActStts_ba_option, "ba_option.bti"},
-        {dActStts_TAKE_PHOTO_e, "ba_toru.bti"},
-        {dActStts_INFO_e, "ba_setumei.bti"},
-        {dActStts_SWAP_MODES_e, "ba_kirikae.bti"},
-        {dActStts_FLY_e, "ba_tobu.bti"},
-        {dActStts_CALL_e, "ba_yobu.bti"},
-        {dActStts_BID_e, "ba_hoshii.bti"},
-        {dActStts_READ_e, "ba_yomu.bti"},
-        {dActStts_CANCEL_e, "ba_yameru.bti"},
-        {dActStts_ba_kakudai, "ba_kakudai.bti"},
-        {dActStts_ba_hikaku, "ba_hikaku.bti"},
-        {dActStts_ba_zoom01, "ba_zoom01.bti"},
-        {dActStts_ba_zoom02, "ba_zoom02.bti"},
-        {dActStts_CRUISE_e, "ba_susumu.bti"},
-        {dActStts_ba_nageru__dupe_2D, "ba_nageru.bti"},
-        {dActStts_ba_motu__dupe_2E, "ba_motu.bti"},
-        {dActStts_SWING_e, "ba_huru.bti"},
-        {dActStts_SEA_CHART_e, "ba_kaizuhe.bti"},
-        {dActStts_ba_sake__dupe_31, "ba_sake.bti"},
-        {dActStts_ba_modoru__dupe_32, "ba_modoru.bti"},
-        {dActStts_ba_save__dupe_33, "ba_save.bti"},
-        {dActStts_ba_save__dupe_34, "ba_save.bti"},
+        {dActStts_BLANK_e, TEXNAME("ba_shiraberu")},
+        {dActStts_LOOK_e, TEXNAME("ba_miru")},
+        {dActStts_SPEAK_e, TEXNAME("ba_syaberu")},
+        {dActStts_CHARTS_e, TEXNAME("ba_shiraberu")},
+        {dActStts_LIFT_e, TEXNAME("ba_motu")},
+        {dActStts_CLIMB_e, TEXNAME("ba_noru")},
+        {dActStts_LET_GO_e, TEXNAME("ba_oriru")},
+        {dActStts_RETURN_e, TEXNAME("ba_modoru")},
+        {dActStts_PUT_AWAY_e, TEXNAME("ba_shimau")},
+        {dActStts_DROP_e, TEXNAME("ba_oku")},
+        {dActStts_CHECK_e, TEXNAME("ba_chekku")},
+        {dActStts_OPEN_e, TEXNAME("ba_hiraku")},
+        {dActStts_ATTACK_e, TEXNAME("ba_attack")},
+        {dActStts_ba_osu, TEXNAME("ba_osu")},
+        {dActStts_THROW_e, TEXNAME("ba_nageru")},
+        {dActStts_CROUCH_e, TEXNAME("ba_shagamu")},
+        {dActStts_SIDLE_e, TEXNAME("ba_harituku")},
+        {dActStts_GRAB_e, TEXNAME("ba_tukamu")},
+        {dActStts_JUMP_e, TEXNAME("ba_jump")},
+        {dActStts_STOP_e, TEXNAME("ba_tomeru")},
+        {dActStts_ba_haru, TEXNAME("ba_haru")},
+        {dActStts_ba_tatamu, TEXNAME("ba_tatamu")},
+        {dActStts_LET_GO_ROPE_e, TEXNAME("ba_hanasu")},
+        {dActStts_CHOOSE_e, TEXNAME("ba_kettei")},
+        {dActStts_ba_kogu, TEXNAME("ba_kogu")},
+        {dActStts_NEXT_e, TEXNAME("ba_tugihe")},
+        {dActStts_PARRY_e, TEXNAME("ba_sake")},
+        {dActStts_PICK_UP_e, TEXNAME("ba_motu_buki")},
+        {dActStts_GET_IN_SHIP_e, TEXNAME("ba_noru_hune")},
+        {dActStts_GET_OUT_SHIP_e, TEXNAME("ba_oriru_hune")},
+        {dActStts_ba_save, TEXNAME("ba_save")},
+        {dActStts_ba_option, TEXNAME("ba_option")},
+        {dActStts_TAKE_PHOTO_e, TEXNAME("ba_toru")},
+        {dActStts_INFO_e, TEXNAME("ba_setumei")},
+        {dActStts_SWAP_MODES_e, TEXNAME("ba_kirikae")},
+        {dActStts_FLY_e, TEXNAME("ba_tobu")},
+        {dActStts_CALL_e, TEXNAME("ba_yobu")},
+        {dActStts_BID_e, TEXNAME("ba_hoshii")},
+        {dActStts_READ_e, TEXNAME("ba_yomu")},
+        {dActStts_CANCEL_e, TEXNAME("ba_yameru")},
+        {dActStts_ba_kakudai, TEXNAME("ba_kakudai")},
+        {dActStts_ba_hikaku, TEXNAME("ba_hikaku")},
+        {dActStts_ba_zoom01, TEXNAME("ba_zoom01")},
+        {dActStts_ba_zoom02, TEXNAME("ba_zoom02")},
+        {dActStts_CRUISE_e, TEXNAME("ba_susumu")},
+        {dActStts_ba_nageru__dupe_2D, TEXNAME("ba_nageru")},
+        {dActStts_ba_motu__dupe_2E, TEXNAME("ba_motu")},
+        {dActStts_SWING_e, TEXNAME("ba_huru")},
+        {dActStts_SEA_CHART_e, TEXNAME("ba_kaizuhe")},
+        {dActStts_ba_sake__dupe_31, TEXNAME("ba_sake")},
+        {dActStts_ba_modoru__dupe_32, TEXNAME("ba_modoru")},
+        {dActStts_ba_save__dupe_33, TEXNAME("ba_save")},
+        {dActStts_ba_save__dupe_34, TEXNAME("ba_save")},
         {dActStts_sword_01, "sword_01.bti"},
-        {dActStts_DEFEND_e, "ba_husegu.bti"},
+        {dActStts_DEFEND_e, TEXNAME("ba_husegu")},
         {dActStts_boko_stick, "boko_stick.bti"},
         {dActStts_hatchet, "hatchet.bti"},
         {dActStts_iron_club, "iron_club.bti"},
@@ -965,7 +971,7 @@ const char* dMeter_actionTex(s16 id) {
         {dActStts_spear, "spear.bti"},
         {dActStts_spear__dupe_3C, "spear.bti"},
         {dActStts_bow_01, "bow_01.bti"},
-        {dActStts_HIDDEN_e, "ba_modoru.bti"},
+        {dActStts_HIDDEN_e, TEXNAME("ba_modoru")},
     };
     int found = 0;
     for (int i = 0; i < ARRAY_SIZE(act); i++) {
@@ -974,7 +980,29 @@ const char* dMeter_actionTex(s16 id) {
             break;
         }
     }
+#if VERSION < VERSION_PAL
     return act[found].filename;
+#else
+    if (
+        found == dActStts_sword_01 ||
+        found == dActStts_boko_stick ||
+        found == dActStts_hatchet ||
+        found == dActStts_iron_club ||
+        found == dActStts_longsword ||
+        found == dActStts_spear ||
+        found == dActStts_spear__dupe_3C ||
+        found == dActStts_bow_01
+    ) {
+        return act[found].filename;
+    }
+    static char tex_name[20];
+    char suffix[16];
+    sprintf(suffix, "_%d.bti", dComIfGs_getPalLanguage());
+    const char* filename = act[found].filename;
+    strcpy(tex_name, filename);
+    strcat(tex_name, suffix);
+    return tex_name;
+#endif
 }
 
 /* 801F0378-801F041C       .text dMeter_weponTex__Fv */
@@ -1423,18 +1451,14 @@ void dMeter_LifeMove(sub_meter_class* i_Meter, bool bForce) {
 /* 801F17F0-801F1A48       .text dMeter_BattleLifeMove__FP15sub_meter_classb */
 void dMeter_BattleLifeMove(sub_meter_class* i_Meter, bool param_2) {
     /* Nonmatching */
-    const char* pFilename;
-    f32 dVar4;
-
     static u8 point = 0;
-    dVar4 = (i_Meter->mHeart[1].mPosCenterOrig.x - i_Meter->mHeart[0].mPosCenterOrig.x);
+    f32 dVar4 = (i_Meter->mHeart[1].mPosCenterOrig.x - i_Meter->mHeart[0].mPosCenterOrig.x);
     if (point != daNpc_Ji1_c::game_life_point || !param_2) {
         for (s32 i = 0; i < 20; i++) {
             point = daNpc_Ji1_c::game_life_point;
             if (i == 1 || i == 2) {
-                i_Meter->mHeart[i].mPosCenter.x = (s32)(g_meterHIO.field_0x4c + i_Meter->mHeart[i].mPosCenterOrig.x) * (g_meterHIO.field_0x58 * dVar4);
-                i_Meter->mHeartShadow[i].mPosCenter.x =
-                    (s32)(g_meterHIO.field_0x4c + i_Meter->mHeartShadow[i].mPosCenterOrig.x) * (g_meterHIO.field_0x58 * dVar4);
+                i_Meter->mHeart[i].mPosCenter.x = (g_meterHIO.field_0x58 * dVar4 * (f32)i) + i_Meter->mHeart[0].mPosCenterOrig.x + g_meterHIO.field_0x4c;
+                i_Meter->mHeartShadow[i].mPosCenter.x = (g_meterHIO.field_0x58 * dVar4 * (f32)i) + i_Meter->mHeartShadow[i].mPosCenterOrig.x + g_meterHIO.field_0x4c;
                 i_Meter->mHeart[i].mPosCenter.y = i_Meter->mHeart[i].mPosCenterOrig.y + g_meterHIO.field_0x5c;
                 i_Meter->mHeartShadow[i].mPosCenter.y = i_Meter->mHeartShadow[i].mPosCenterOrig.y + g_meterHIO.field_0x5c;
             } else if (i == 0) {
@@ -1444,8 +1468,7 @@ void dMeter_BattleLifeMove(sub_meter_class* i_Meter, bool param_2) {
                 i_Meter->mHeartShadow[i].mPosCenter.y = i_Meter->mHeartShadow[i].mPosCenterOrig.y + g_meterHIO.field_0x5c;
             }
             if (i < point) {
-                pFilename = dMeter_heartTex(0);
-                dMeter_heartChangeTexture(i_Meter, pFilename, i);
+                dMeter_heartChangeTexture(i_Meter, dMeter_heartTex(0), i);
                 if (i == point - 1) {
                     dMeter_setNowHeartScaleXY2(&i_Meter->mHeart[i]);
                     dMeter_setNowHeartScaleXY2(&i_Meter->mHeartShadow[i]);
@@ -1454,8 +1477,7 @@ void dMeter_BattleLifeMove(sub_meter_class* i_Meter, bool param_2) {
                     dMeter_setHeartScaleXY2(&i_Meter->mHeartShadow[i], 0);
                 }
             } else if (i < 3) {
-                pFilename = dMeter_heartTex(4);
-                dMeter_heartChangeTexture(i_Meter, pFilename, i);
+                dMeter_heartChangeTexture(i_Meter, dMeter_heartTex(4), i);
                 dMeter_setHeartScaleXY2(&i_Meter->mHeart[i], 4);
                 dMeter_setHeartScaleXY2(&i_Meter->mHeartShadow[i], 4);
             } else {
@@ -1657,24 +1679,35 @@ void dMeter_weponDraw(sub_meter_class* i_Meter) {
 
 /* 801F2408-801F2688       .text dMeter_weponChange__FP15sub_meter_class */
 void dMeter_weponChange(sub_meter_class* i_Meter) {
-    const char* pFilename;
-    JKRArchive* pArc;
+#if VERSION == VERSION_DEMO
+    if (i_Meter->field_0x301a == dComIfGp_getAStatus()) {
+        return;
+    }
+#endif
 
-    if (i_Meter->field_0x2828.mUserArea != 0) {
-        if (i_Meter->field_0x301a == 0x25) {
+#if VERSION > VERSION_DEMO
+    if (i_Meter->field_0x2828.mUserArea != 0)
+#endif
+    {
+        if (i_Meter->field_0x301a == dActStts_BID_e) {
             i_Meter->field_0x1d00.mUserArea = 0;
             ((J2DPicture*)i_Meter->field_0x1d00.pane)->setWhite(0xFFFFFFFF);
             ((J2DPicture*)i_Meter->field_0x1d00.pane)->setBlack(0x0000FF00);
         }
         if (dComIfGp_getAStatus() != dActStts_BLANK_e) {
             if (dComIfGp_getAStatus() == dActStts_sword_01) {
-                pArc = dComIfGp_getItemIconArchive();
-                pFilename = dMeter_weponTex();
-                JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', pFilename, pArc);
+                JKRArchive* pArc = dComIfGp_getItemIconArchive();
+                JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', dMeter_weponTex(), pArc);
+#if VERSION <= VERSION_JPN
+                DCFlushRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#else
                 DCStoreRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#endif
                 ((J2DPicture*)i_Meter->field_0x2828.pane)->changeTexture(i_Meter->actionTex[0], 0);
                 ((J2DPicture*)i_Meter->field_0x2860.pane)->changeTexture(i_Meter->actionTex[0], 0);
+#if VERSION > VERSION_DEMO
                 ((J2DPicture*)i_Meter->field_0x1d00.pane)->changeTexture(i_Meter->actionTex[0], 0);
+#endif
             } else if (dComIfGp_getAStatus() == dActStts_boko_stick ||
                        dComIfGp_getAStatus() == dActStts_hatchet ||
                        dComIfGp_getAStatus() == dActStts_iron_club ||
@@ -1682,34 +1715,53 @@ void dMeter_weponChange(sub_meter_class* i_Meter) {
                        dComIfGp_getAStatus() == dActStts_spear ||
                        dComIfGp_getAStatus() == dActStts_spear__dupe_3C)
             {
-                pArc = dComIfGp_getItemIconArchive();
-                pFilename = dMeter_actionTex(dComIfGp_getAStatus());
-                JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', pFilename, pArc);
+                JKRArchive* pArc = dComIfGp_getItemIconArchive();
+                JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', dMeter_actionTex(dComIfGp_getAStatus()), pArc);
+#if VERSION <= VERSION_JPN
+                DCFlushRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#else
                 DCStoreRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#endif
                 ((J2DPicture*)i_Meter->field_0x2828.pane)->changeTexture(i_Meter->actionTex[0], 0);
                 ((J2DPicture*)i_Meter->field_0x2860.pane)->changeTexture(i_Meter->actionTex[0], 0);
+#if VERSION > VERSION_DEMO
                 ((J2DPicture*)i_Meter->field_0x1d00.pane)->changeTexture(i_Meter->actionTex[0], 0);
+#endif
             } else {
+                JKRArchive* pArc;
                 if (dComIfGp_getAStatus() == dActStts_RETURN_e || dComIfGp_getAStatus() == dActStts_RETURN_e) {
                     pArc = dComIfGp_getMenuArchive();
                 } else {
                     pArc = dComIfGp_getActionIconArchive();
                 }
-                pFilename = dMeter_actionTex(dComIfGp_getAStatus());
-                JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', pFilename, pArc);
+                JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', dMeter_actionTex(dComIfGp_getAStatus()), pArc);
+#if VERSION <= VERSION_JPN
+                DCFlushRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#else
                 DCStoreRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#endif
+#if VERSION > VERSION_DEMO
                 ((J2DPicture*)i_Meter->field_0x2828.pane)->changeTexture(i_Meter->actionTex[0], 0);
                 ((J2DPicture*)i_Meter->field_0x2860.pane)->changeTexture(i_Meter->actionTex[0], 0);
+#endif
                 ((J2DPicture*)i_Meter->field_0x1d00.pane)->changeTexture(i_Meter->actionTex[0], 0);
             }
         }
+#if VERSION > VERSION_DEMO
         i_Meter->field_0x2828.mUserArea = 0;
+#endif
     }
+    
+#if VERSION == VERSION_DEMO
+    i_Meter->field_0x28d0.mUserArea = 1;
+    i_Meter->field_0x301a = dComIfGp_getAStatus();
+#else
     if (i_Meter->field_0x301a != dComIfGp_getAStatus()) {
         i_Meter->field_0x2828.mUserArea = 1;
         i_Meter->field_0x28d0.mUserArea = 1;
         i_Meter->field_0x301a = dComIfGp_getAStatus();
     }
+#endif
 }
 
 /* 801F2688-801F2818       .text dMeter_weponAnime__FP15sub_meter_class */
@@ -2019,8 +2071,7 @@ void dMeter_actionInit(sub_meter_class* i_Meter) {
     i_Meter->field_0x301b = 0;
     dComIfGp_setDoStatus(dActStts_BLANK_e);
     JKRArchive* pArc = dComIfGp_getActionIconArchive();
-    const char* pFilename = dMeter_actionTex(dActStts_BLANK_e);
-    JKRArchive::readTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', pFilename, pArc);
+    JKRArchive::readTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', dMeter_actionTex(dActStts_BLANK_e), pArc);
     DCStoreRangeNoSync(i_Meter->actionTex[1], 0xc00);
     ((J2DPicture*)i_Meter->field_0x27b8.pane)->changeTexture(i_Meter->actionTex[1], 0);
     ((J2DPicture*)i_Meter->field_0x27f0.pane)->changeTexture(i_Meter->actionTex[1], 0);
@@ -2127,7 +2178,6 @@ void dMeter_actionForce(sub_meter_class* i_Meter) {
 
 /* 801F3B60-801F3CFC       .text dMeter_actionChange__FP15sub_meter_class */
 void dMeter_actionChange(sub_meter_class* i_Meter) {
-    const char* pFilename;
     JKRArchive* pArc;
 
     if (i_Meter->field_0x27b8.mUserArea != 0) {
@@ -2140,8 +2190,7 @@ void dMeter_actionChange(sub_meter_class* i_Meter) {
         {
             if (dComIfGp_getDoStatus() == dActStts_bow_01) {
                 pArc = dComIfGp_getItemIconArchive();
-                pFilename = dMeter_actionTex(dComIfGp_getDoStatus());
-                JKRArchive::readTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', pFilename, pArc);
+                JKRArchive::readTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', dMeter_actionTex(dComIfGp_getDoStatus()), pArc);
                 DCStoreRangeNoSync(i_Meter->actionTex[1], 0xc00);
                 ((J2DPicture*)i_Meter->field_0x27b8.pane)->changeTexture(i_Meter->actionTex[1], 0);
                 ((J2DPicture*)i_Meter->field_0x27f0.pane)->changeTexture(i_Meter->actionTex[1], 0);
@@ -2151,8 +2200,7 @@ void dMeter_actionChange(sub_meter_class* i_Meter) {
                 } else {
                     pArc = dComIfGp_getActionIconArchive();
                 }
-                pFilename = dMeter_actionTex(dComIfGp_getDoStatus());
-                JKRArchive::readTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', pFilename, pArc);
+                JKRArchive::readTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', dMeter_actionTex(dComIfGp_getDoStatus()), pArc);
                 DCStoreRangeNoSync(i_Meter->actionTex[1], 0xc00);
                 ((J2DPicture*)i_Meter->field_0x1d38.pane)->changeTexture(i_Meter->actionTex[1], 0);
                 i_Meter->field_0x1e18[0].mUserArea = 1;
@@ -2882,24 +2930,23 @@ void dMeter_xyItemChange(sub_meter_class* i_Meter, int i_itemBtn) {
         } else {
             dMeter_PaneShow(&i_Meter->field_0x2080[i_itemBtn]);
             dMeter_PaneShow(&i_Meter->field_0x2128[i_itemBtn]);
-            u8 uVar2 = dComIfGp_getSelectItem(i_itemBtn);
-            u8 var_r4 = uVar2;
-            if (uVar2 == dItemNo_MAGIC_ARROW_e) {
+            u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
+            if (itemNo == dItemNo_MAGIC_ARROW_e) {
                 i_Meter->field_0x2320[i_itemBtn].pane->show();
                 i_Meter->field_0x23c8[i_itemBtn].pane->show();
                 i_Meter->field_0x2470[i_itemBtn].pane->hide();
-                var_r4 = dItemNo_BOW_e;
-            } else if (uVar2 == dItemNo_LIGHT_ARROW_e) {
+                itemNo = dItemNo_BOW_e;
+            } else if (itemNo == dItemNo_LIGHT_ARROW_e) {
                 i_Meter->field_0x2320[i_itemBtn].pane->show();
                 i_Meter->field_0x23c8[i_itemBtn].pane->show();
                 i_Meter->field_0x2470[i_itemBtn].pane->show();
-                var_r4 = dItemNo_BOW_e;
+                itemNo = dItemNo_BOW_e;
             }
-            if (var_r4 == dItemNo_MAGIC_ARROW_e || var_r4 == dItemNo_LIGHT_ARROW_e) {
-                var_r4 = dItemNo_BOW_e;
+            if (itemNo == dItemNo_MAGIC_ARROW_e || itemNo == dItemNo_LIGHT_ARROW_e) {
+                itemNo = dItemNo_BOW_e;
             }
             pArc = dComIfGp_getItemIconArchive();
-            pFilename = dItem_data::getTexture(var_r4);
+            pFilename = dItem_data::getTexture(itemNo);
             JKRArchive::readTypeResource(i_Meter->xyIconTex[i_itemBtn], 0xc00, 'TIMG', pFilename, pArc);
             DCStoreRangeNoSync(i_Meter->xyIconTex[i_itemBtn], 0xc00);
             ((J2DPicture*)i_Meter->field_0x2080[i_itemBtn].pane)->changeTexture(i_Meter->xyIconTex[i_itemBtn], 0);
@@ -6086,7 +6133,7 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
 /* 801FFEB0-801FFF30       .text dMeter_moveItemInit__FP15sub_meter_class */
 void dMeter_moveItemInit(sub_meter_class* i_Meter) {
     JKRArchive* archive = dComIfGp_getItemIconArchive();
-    const char* pFilename = dItem_data::getTexture(0x27);
+    const char* pFilename = dItem_data::getTexture(dItemNo_BOW_e);
     JKRArchive::readTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', pFilename, archive);
     DCStoreRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
     moveItemPane = new J2DPicture(i_Meter->moveIconTex[0]);
@@ -6370,32 +6417,39 @@ void dMeter_swimDraw(sub_meter_class* i_Meter) {
 
 /* 80200E18-802011D0       .text dMeter_swimOpenProc__FP15sub_meter_class */
 void dMeter_swimOpenProc(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     int r31 = ++i_Meter->field_0x2c88.mUserArea;
     static f32 dist_buf = 0.0f;
-    f32 dVar3;
+    f32 alpha;
+    f32 scale;
     if (r31 == 1) {
         fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, 0.1f);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2dd8);
     } else if (r31 < 5) {
-        dVar3 = fopMsgM_valueIncrease(4, r31 - 1, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, (dVar3 * 0.9f) + 0.1f);
-        fopMsgM_setNowAlpha(&i_Meter->field_0x2dd8, dVar3);
+        alpha = fopMsgM_valueIncrease(4, r31 - 1, 0);
+        scale = (alpha * 0.9f) + 0.1f;
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x2dd8, alpha);
     } else if (r31 < 8) {
-        dVar3 = fopMsgM_valueIncrease(3, r31 - 5, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, 1.0f - (dVar3 * 0.3f));
+        alpha = fopMsgM_valueIncrease(3, r31 - 5, 0);
+        scale = 1.0f - (alpha * 0.3f);
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
     } else if (r31 < 10) {
-        dVar3 = fopMsgM_valueIncrease(2, r31 - 8, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, (dVar3 * 0.3f) + 0.7f);
-    } else if (r31 < 0xc) {
-        dVar3 = fopMsgM_valueIncrease(2, r31 - 10, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, 1.0f - (dVar3 * 0.100000024f));
-    } else if (r31 < 0xe) {
-        dVar3 = fopMsgM_valueIncrease(2, r31 - 0xc, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, (dVar3 * 0.100000024f) + 0.9f);
-    } else if (r31 == 0xe) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 8, 0);
+        scale = (alpha * 0.3f) + 0.7f;
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
+    } else if (r31 < 12) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 10, 0);
+        scale = 1.0f - (alpha * 0.100000024f);
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
+    } else if (r31 < 14) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 12, 0);
+        scale = (alpha * 0.100000024f) + 0.9f;
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
+    } else if (r31 == 14) {
         fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, 1.0f);
     }
+
+    f32 transY;
     if (r31 == 1) {
         dMeter_swimPaneTransY(i_Meter, -130.0f);
         fopMsgM_paneScaleY(&i_Meter->field_0x2cf8, 1.0f);
@@ -6407,26 +6461,31 @@ void dMeter_swimOpenProc(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2d30);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2c88);
     } else if (r31 <= 5) {
-        dVar3 = fopMsgM_valueIncrease(4, r31 - 1, 0);
-        dMeter_swimPaneTransY(i_Meter, -((1.0f - dVar3) * 130.0f));
-        dMeter_swimPaneAlpha(i_Meter, dVar3);
+        alpha = fopMsgM_valueIncrease(4, r31 - 1, 0);
+        transY = -((1.0f - alpha) * 130.0f);
+        dMeter_swimPaneTransY(i_Meter, transY);
+        dMeter_swimPaneAlpha(i_Meter, alpha);
     } else if (r31 <= 8) {
-        dVar3 = fopMsgM_valueIncrease(3, r31 - 5, 0);
-        dMeter_swimPaneTransY(i_Meter, (-25.0f - (1.0f - dVar3) * -25.0f));
+        alpha = fopMsgM_valueIncrease(3, r31 - 5, 0);
+        transY = -25.0f - (1.0f - alpha) * -25.0f;
+        dMeter_swimPaneTransY(i_Meter, transY);
         dMeter_swimPaneShow(i_Meter);
     } else if (r31 <= 0xa) {
-        dVar3 = fopMsgM_valueIncrease(2, r31 - 8, 0);
-        dMeter_swimPaneTransY(i_Meter, -((1.0f - dVar3) * 25.0f));
+        alpha = fopMsgM_valueIncrease(2, r31 - 8, 0);
+        transY = -((1.0f - alpha) * 25.0f);
+        dMeter_swimPaneTransY(i_Meter, transY);
         dMeter_swimPaneShow(i_Meter);
-    } else if (r31 <= 0xc) {
-        dVar3 = fopMsgM_valueIncrease(2, r31 - 10, 0);
-        dMeter_swimPaneTransY(i_Meter, (-6.0f - (1.0f - dVar3) * -6.0f));
+    } else if (r31 <= 12) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 10, 0);
+        transY = -6.0f - (1.0f - alpha) * -6.0f;
+        dMeter_swimPaneTransY(i_Meter, transY);
         dMeter_swimPaneShow(i_Meter);
-    } else if (r31 < 0xe) {
-        dVar3 = fopMsgM_valueIncrease(2, r31 - 0xc, 0);
-        dMeter_swimPaneTransY(i_Meter, -((1.0f - dVar3) * 6.0f));
+    } else if (r31 < 14) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 12, 0);
+        transY = -((1.0f - alpha) * 6.0f);
+        dMeter_swimPaneTransY(i_Meter, transY);
         dMeter_swimPaneShow(i_Meter);
-    } else if (r31 == 0xe) {
+    } else if (r31 == 14) {
         dMeter_swimPaneTransY(i_Meter, 0);
         fopMsgM_paneScaleY(&i_Meter->field_0x2cf8, 1.0f);
         fopMsgM_paneScaleY(&i_Meter->field_0x2da0, 1.0f);
@@ -7409,41 +7468,41 @@ static cPhs_State dMeter_Create(msg_class* i_this) {
 #endif
 
     i_Meter->heap = fopMsgM_createExpHeap(0x2a819);
-    JUT_ASSERT(13475, i_Meter->heap != NULL);
+    JUT_ASSERT(VERSION_SELECT(13172, 13354, 13475, 13474), i_Meter->heap != NULL);
 
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Meter->heap);
     sMainParts1 = new MyScreen();
-    JUT_ASSERT(13480, sMainParts1 != NULL);
+    JUT_ASSERT(VERSION_SELECT(13177, 13359, 13480, 13479), sMainParts1 != NULL);
     sMainParts1->set("main_parts1.blo", dComIfGp_getMenuArchive());
 
     sMainParts2 = new J2DScreen();
-    JUT_ASSERT(13484, sMainParts2 != NULL);
+    JUT_ASSERT(VERSION_SELECT(13181, 13363, 13484, 13483), sMainParts2 != NULL);
     sMainParts2->set("main_parts2.blo", dComIfGp_getMenuArchive());
 
     sMainParts3 = new J2DScreen();
-    JUT_ASSERT(13488, sMainParts3 != NULL);
+    JUT_ASSERT(VERSION_SELECT(13185, 13367, 13488, 13487), sMainParts3 != NULL);
     sMainParts3->set("main_parts3.blo", dComIfGp_getMenuArchive());
 
     sChoiceRoad = new J2DScreen();
-    JUT_ASSERT(13492, sChoiceRoad != NULL);
+    JUT_ASSERT(VERSION_SELECT(13189, 13371, 13492, 13491), sChoiceRoad != NULL);
     sChoiceRoad->set("choice_road.blo", dComIfGp_getMenuArchive());
 
     for (s32 i = 0; i < 3; i++) {
         i_Meter->actionTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(13497, i_Meter->actionTex[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(13194, 13376, 13497, 13496), i_Meter->actionTex[i] != NULL);
 
         i_Meter->xyIconTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(13499, i_Meter->xyIconTex[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(13196, 13378, 13499, 13498), i_Meter->xyIconTex[i] != NULL);
     }
 
     for (s32 i = 0; i < 2; i++) {
         if (i == 0) {
             i_Meter->moveIconTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-            JUT_ASSERT(13506, i_Meter->moveIconTex[i] != NULL);
+            JUT_ASSERT(VERSION_SELECT(13203, 13385, 13506, 13505), i_Meter->moveIconTex[i] != NULL);
         }
 
         i_Meter->arrowTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(13509, i_Meter->arrowTex[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(13206, 13388, 13509, 13508), i_Meter->arrowTex[i] != NULL);
     }
 
 #if VERSION == VERSION_DEMO
@@ -7460,8 +7519,8 @@ static cPhs_State dMeter_Create(msg_class* i_this) {
     dComIfGp_setRStatusForce(dActStts_BLANK_e);
     dComIfGp_setAStatusForce(dActStts_BLANK_e);
 
-    g_meterHIO.mNo = mDoHIO_createChild("通常画面表示", &g_meterHIO);        // "Normal Screen Display"
-    g_menuHIO.mNo = mDoHIO_createChild("メニュー画面", &g_menuHIO);          // "Menu Screen"
+    g_meterHIO.mNo = mDoHIO_createChild("通常画面表示", &g_meterHIO);         // "Normal Screen Display"
+    g_menuHIO.mNo = mDoHIO_createChild("メニュー画面", &g_menuHIO);           // "Menu Screen"
     g_msgHIO.mNo = mDoHIO_createChild("Message（会話）", &g_msgHIO);         // "Message (Talk)"
     g_messageHIO.mNo = mDoHIO_createChild("Message（看板）", &g_messageHIO); // "Message (Sign)"
     g_meter_mapHIO.mNo = mDoHIO_createChild("マップ２", &g_meter_mapHIO);    // "Map 2"
