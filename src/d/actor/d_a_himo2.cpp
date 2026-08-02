@@ -59,7 +59,7 @@ dr2_class* dr;
 #endif
 
 /* 800EB60C-800EBABC       .text spin_draw__FP11himo2_class */
-void spin_draw(himo2_class* i_this) {
+static void spin_draw(himo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     int r27;
     s16 r22;
@@ -179,7 +179,7 @@ void spin_draw(himo2_class* i_this) {
 }
 
 /* 800EBABC-800EBCD0       .text himo2_control__FP11himo2_classP7himo2_s */
-void himo2_control(himo2_class* i_this, himo2_s* param_2) {
+static void himo2_control(himo2_class* i_this, himo2_s* param_2) {
     f32 fVar1;
     f32 fVar2;
     f32 dVar8;
@@ -218,7 +218,7 @@ void himo2_control(himo2_class* i_this, himo2_s* param_2) {
 }
 
 /* 800EBCD0-800EBFEC       .text himo2_control2__FP11himo2_classP7himo2_s */
-void himo2_control2(himo2_class* i_this, himo2_s* param_2) {
+static void himo2_control2(himo2_class* i_this, himo2_s* param_2) {
     cXyz local_a8;
     cXyz local_b4;
     f32 f30;
@@ -282,7 +282,7 @@ void himo2_control2(himo2_class* i_this, himo2_s* param_2) {
 }
 
 /* 800EBFEC-800EC1E4       .text himo2_draw__FP11himo2_classP7himo2_s */
-void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
+static void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     int r30;
@@ -331,17 +331,17 @@ void himo2_draw(himo2_class* i_this, himo2_s* param_2) {
 }
 
 #if VERSION == VERSION_DEMO
-void himo_e_control(himo2_class* i_this, himo2_s*) {
+static void himo_e_control(himo2_class* i_this, himo2_s*) {
     /* Nonmatching*/
 }
 
-void himo_e_draw(himo2_class* i_this, himo2_s*) {
+static void himo_e_draw(himo2_class* i_this, himo2_s*) {
     /* Nonmatching*/
 }
 #endif
 
 /* 800EC1E4-800EC300       .text himo_hang_draw__FP11himo2_class */
-void himo_hang_draw(himo2_class* i_this) {
+static void himo_hang_draw(himo2_class* i_this) {
     cXyz* pcVar3 = i_this->m1F30.getPos(0);
     pcVar3 += i_this->m1F6C;
     cXyz local_38 = i_this->m02EC[0] - i_this->m2504;
@@ -356,7 +356,7 @@ void himo_hang_draw(himo2_class* i_this) {
 }
 
 /* 800EC300-800EC338       .text himo2_disp__FP11himo2_class */
-void himo2_disp(himo2_class* i_this) {
+static void himo2_disp(himo2_class* i_this) {
     if (i_this->m02DC < 10) {
         himo2_draw(i_this, &i_this->m0310[0]);
     } else {
@@ -404,23 +404,18 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 r19--;
                 *r19 = local_a10[i];
             }
-#ifdef __MWERKS__
             i_this->m1F30.update((u16)i_this->m1F6C, rope_scale, (GXColor){200, 0x96, 50, 0xFF}, 0, &actor->tevStr);
-#else
-            GXColor local_a50 = {200, 0x96, 50, 0xFF};
-            i_this->m1F30.update((u16)i_this->m1F6C, rope_scale, local_a50, 0, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->m1F30);
             daPy_py_c* apdVar2 = (daPy_py_c*)dComIfGp_getPlayer(0);
             cMtx_YrotS(*calc_mtx, -apdVar2->shape_angle.y);
             sp44 = i_this->m02EC[1] - i_this->m1F84;
             MtxPosition(&sp44, &sp38);
             sp38.z = sp38.z * (REG0_F(5) + 500.0f);
-            if (sp38.z > 16384.0f) {
-                sp38.z = 16384.0f;
+            if (sp38.z > 0x4000) {
+                sp38.z = 0x4000;
             }
-            if (sp38.z < -16384.0f) {
-                sp38.z = -16384.0f;
+            if (sp38.z < -0x4000) {
+                sp38.z = -0x4000;
             }
             cLib_addCalcAngleS2(&i_this->m1F90, sp38.z, 2, REG0_S(2) + 0x800);
             sp38.x *= REG0_F(6) + -200.0f;
@@ -462,12 +457,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                     *r19 += i_this->m02EC[1];
                 }
             }
-#if __MWERKS__
             i_this->m1F98.update(0x20, rope_scale, (GXColor){200, 0x96, 50, 0xFF}, 0, &actor->tevStr);
-#else
-            GXColor local_a54 = {200, 0x96, 50, 0xFF};
-            i_this->m1F98.update(0x20, rope_scale, local_a54, 0, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->m1F98);
             r19 = i_this->m1FD8.getPos(0);
             f32 f1_2;
@@ -497,12 +487,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 r19->z = i_this->m02EC[1].z + sp2C.z * i + sp38.z * fVar1;
                 r19++;
             }
-#ifdef __MWERKS__
             i_this->m1FD8.update(16, rope_scale, (GXColor){200, 0x96, 50, 0xFF}, 0, &actor->tevStr);
-#else
-            GXColor local_a58 = {200, 0x96, 50, 0xFF};
-            i_this->m1FD8.update(16, rope_scale, local_a58, 0, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->m1FD8);
             dComIfGd_setList();
         }
@@ -511,7 +496,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
 }
 
 /* 800ECBE8-800ECC54       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* param_1, void* param_2) {
+static void* s_a_d_sub(void* param_1, void* param_2) {
     if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KUI_e)) {
         himo2_class* rope = (himo2_class*)param_2;
         rope->m218C[rope->m24AC] = (fopAc_ac_c*)param_1;
@@ -521,7 +506,7 @@ void* s_a_d_sub(void* param_1, void* param_2) {
 }
 
 /* 800ECC54-800ED19C       .text search_target__FP11himo2_class4cXyz */
-fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
+static fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
     fopAc_ac_c* r28;
     s16 r27;
     s16 r26;
@@ -655,7 +640,7 @@ BOOL himo2_class::setTargetPos(cXyz* param_1, f32* param_2, f32* param_3) {
 }
 
 /* 800ED2E0-800ED32C       .text dr_a_sub__FPvPv */
-void* dr_a_sub(void* param_1, void* param_2) {
+static void* dr_a_sub(void* param_1, void* param_2) {
     if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_DR2_e)) {
         return param_1;
     } else {
@@ -664,7 +649,7 @@ void* dr_a_sub(void* param_1, void* param_2) {
 }
 
 /* 800ED32C-800ED378       .text b_a_sub__FPvPv */
-void* b_a_sub(void* param_1, void* param_2) {
+static void* b_a_sub(void* param_1, void* param_2) {
     if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BTD_e)) {
         return param_1;
     } else {
@@ -673,7 +658,7 @@ void* b_a_sub(void* param_1, void* param_2) {
 }
 
 /* 800ED378-800ED688       .text himo2_bg_check__FP11himo2_class */
-BOOL himo2_bg_check(himo2_class* i_this) {
+static BOOL himo2_bg_check(himo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     u8 flag;
     u32 uVar3;
@@ -739,14 +724,14 @@ BOOL himo2_bg_check(himo2_class* i_this) {
 }
 
 /* 800ED688-800ED6F4       .text pl_pos_add__FP11himo2_class */
-void pl_pos_add(himo2_class* i_this) {
+static void pl_pos_add(himo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_28 = daPy_getPlayerActorClass()->old.pos - daPy_getPlayerActorClass()->current.pos;
     actor->current.pos += local_28;
 }
 
 /* 800ED6F4-800F0038       .text new_himo2_move__FP11himo2_class */
-void new_himo2_move(himo2_class* i_this) {
+static void new_himo2_move(himo2_class* i_this) {
     /* Nonmatching - regalloc */
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player_actor;

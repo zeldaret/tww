@@ -73,4 +73,10 @@ extern void __sync();
     #define DEMO_SELECT(DEMO, RETAIL) (RETAIL)
 #endif
 
+#ifdef __MWERKS__
+#define SJIS(character, value) character
+#else
+#define SJIS(character, value) ((u32)value)
+#endif
+
 #endif

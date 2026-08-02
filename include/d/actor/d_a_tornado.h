@@ -14,27 +14,27 @@ class daTornado_HIO_c0 {
 
 class daTornado_c : public fopAc_ac_c {
 public:
-    float getJointXPos(int jno) const {
+    f32 getJointXPos(int jno) const {
         if (mpModel)
             return mpModel->getAnmMtx(jno)[0][3];
         else
             return current.pos.x;
     }
-    float getJointYPos(int jno) const {
+    f32 getJointYPos(int jno) const {
         if (mpModel)
             return mpModel->getAnmMtx(jno)[1][3];
         else
             return current.pos.y;
     }
-    float getJointZPos(int jno) const {
+    f32 getJointZPos(int jno) const {
         if (mpModel)
             return mpModel->getAnmMtx(jno)[2][3];
         else
             return current.pos.z;
     }
-    void getScaleEnd() {}
-    void getSmallScaleEnd() {}
-    void setScaleOn() {}
+    f32 getScaleEnd() { return mJointScale[10]; }
+    f32 getSmallScaleEnd() { return mJointScale[10]; }
+    void setScaleOn() { m31c = 1; }
 
     BOOL jointCallBack(int);
     BOOL draw();
@@ -43,7 +43,7 @@ public:
     BOOL createHeap();
     cPhs_State create();
 
-public:
+private:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29c */ mDoExt_bckAnm mBck;
@@ -53,17 +53,17 @@ public:
     /* 0x2dc */ mDoExt_bckAnm mBckUnder;
     /* 0x2ec */ mDoExt_btkAnm mBtkUnder;
     /* 0x300 */ mDoExt_brkAnm mBrkUnder;
-    /* 0x318 */ short mAngle1;
-    /* 0x31a */ short mAngle2;
-    /* 0x31c */ short m31c;
-    /* 0x31e */ short mPtclTimer;
-    /* 0x320 */ float mBtkFrame;
-    /* 0x324 */ float mBtkUnderFrame;
-    /* 0x328 */ float mBrkFrame;
-    /* 0x32c */ float m32c;
-    /* 0x330 */ float mJointX[11];
-    /* 0x35c */ float mJointZ[11];
-    /* 0x388 */ float mJointScale[11];
+    /* 0x318 */ s16 mAngle1;
+    /* 0x31a */ s16 mAngle2;
+    /* 0x31c */ s16 m31c;
+    /* 0x31e */ s16 mPtclTimer;
+    /* 0x320 */ f32 mBtkFrame;
+    /* 0x324 */ f32 mBtkUnderFrame;
+    /* 0x328 */ f32 mBrkFrame;
+    /* 0x32c */ f32 m32c;
+    /* 0x330 */ f32 mJointX[11];
+    /* 0x35c */ f32 mJointZ[11];
+    /* 0x388 */ f32 mJointScale[11];
     /* 0x3b4 */ cXyz mCenter;
     /* 0x3c0 */ dPa_followEcallBack mPtclCb;
 };

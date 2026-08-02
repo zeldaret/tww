@@ -1,6 +1,6 @@
 /**
  * d_a_tn.cpp
- * Enemy - Darknut / Mini-Boss - Darknut (Tower of the Gods) / タートナック (Tātonakku)
+ * Enemy - Darknut / Mini-Boss - Darknut (Tower of the Gods) / タートナック (Taatonakku)
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -2101,7 +2101,7 @@ static void yogan_fail(tn_class* i_this) {
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_FIREK_KASU, &actor->current.pos);
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_MAGT_FCHIP, &actor->current.pos);
             if (!(i_this->m03D8 & 3)) {
-                i_this->m0428.y = cM_rndF(65536.0f);
+                i_this->m0428.y = cM_rndF(0x10000);
                 i_this->m0428.x = -0x2000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m1384, &i_this->m0428);
             }
@@ -3107,6 +3107,7 @@ static u8 damage_check(tn_class* i_this) {
         case 7:
             i_this->mDamageReaction.m424 |= 0x10;
             i_this->mDamageReaction.m428 = 26.0f;
+            break;
     }
     if (i_this->mDamageReaction.m424 != 0) {
         cXyz local_8c(0.0f, 0.0f, -10.0f);
@@ -4270,7 +4271,7 @@ static cPhs_State daTn_Create(fopAc_ac_c* a_this) {
         return cPhs_ERROR_e;
     }
     if (hio_set == false) {
-        l_tnHIO.mNo = mDoHIO_createChild("タートナック", &l_tnHIO); // Tātonakku
+        l_tnHIO.mNo = mDoHIO_createChild("タートナック", &l_tnHIO); // Taatonakku
         i_this->m1433 = 1;
         hio_set = true;
     }

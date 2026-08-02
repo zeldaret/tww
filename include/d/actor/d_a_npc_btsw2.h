@@ -51,7 +51,7 @@ public:
 
     static const char m_arc_name[];
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ u32 mShadowId;
     /* 0x6D0 */ J3DModel* mpKabanModel; // Bag

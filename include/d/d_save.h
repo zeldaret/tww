@@ -489,6 +489,7 @@ public:
     u8 getVibration() { return mVibration; }
     void setVibration(u8 vib) { mVibration = vib; }
 
+private:
     /* 0x0 */ u8 mRuby;
     /* 0x1 */ u8 mSoundMode;
     /* 0x2 */ u8 mAttentionType;
@@ -977,8 +978,8 @@ public:
     /* 0x1158 */ dSv_event_c mTmp;
     /* 0x1258 */ dSv_turnRestart_c mTurnRestart;
     /* 0x1290 */ u8 mDataNum;
-    /* 0x1291 */ u8 mNoFile;
-    /* 0x1292 */ u8 mNewFile;
+    /* 0x1291 */ u8 mNewFile;
+    /* 0x1292 */ u8 mNoFile;
     /* 0x1298 */ u64 mMemCardCheckID;
 };  // Size: 0x12A0
 

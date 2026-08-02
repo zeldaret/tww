@@ -122,7 +122,7 @@ static BOOL daKytag05_Delete(kytag05_class*) {
 static cPhs_State daKytag05_Create(fopAc_ac_c* i_this) {
     fopAcM_ct_Retail(i_this, kytag05_class);
     kytag05_class *a_this = (kytag05_class*)i_this;
-    if (dComIfGs_isSymbol(1) != 0) {
+    if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
         return cPhs_STOP_e;
     }
 

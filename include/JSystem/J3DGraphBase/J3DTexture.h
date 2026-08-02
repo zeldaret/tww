@@ -68,15 +68,13 @@ public:
     void calc();
 
     J3DTexMtxInfo& getTexMtxInfo() { return mTexMtxInfo; }
+    J3DTextureSRTInfo& getTextureSRT() { return mTexMtxInfo.mSRT;}
     Mtx& getMtx() { return mMtx; }
     void setEffectMtx(Mtx effectMtx) { mTexMtxInfo.setEffectMtx(effectMtx); }
     Mtx& getViewMtx() { return mViewMtx; }
     void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
-    void setTranslationX(f32 translationX){ mTexMtxInfo.mSRT.mTranslationX = translationX; } // Fakematch
 
-    J3DTextureSRTInfo& getTextureSRT() { return mTexMtxInfo.mSRT;}
-
-private:
+public:
     /* 0x00 */ J3DTexMtxInfo mTexMtxInfo;
     /* 0x64 */ Mtx mMtx;
     /* 0x94 */ Mtx mViewMtx;

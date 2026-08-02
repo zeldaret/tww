@@ -71,11 +71,11 @@ u32 JUTGamePad::read() {
     u32 mask = 0;
     for (int i = 0; i < 4; i++) {
         u32 mask_tmp = 0x80000000 >> i;
-        if (mPadStatus[i].error == 0) {
-            u32 local_2c = mPadMStick[i].update(mPadStatus[i].stick_x, mPadStatus[i].stick_y, sStickMode, WS_MAIN_STICK) << 0x18;
-            local_2c |= (mPadSStick[i].update(mPadStatus[i].substick_x, mPadStatus[i].substick_y, sStickMode, WS_SUB_STICK) << 0x10);
+        if (mPadStatus[i].err == 0) {
+            u32 local_2c = mPadMStick[i].update(mPadStatus[i].stickX, mPadStatus[i].stickY, sStickMode, WS_MAIN_STICK) << 0x18;
+            local_2c |= (mPadSStick[i].update(mPadStatus[i].substickX, mPadStatus[i].substickY, sStickMode, WS_SUB_STICK) << 0x10);
             mPadButton[i].update(&mPadStatus[i], local_2c);
-        } else if (mPadStatus[i].error == -1) {
+        } else if (mPadStatus[i].err == -1) {
             mPadMStick[i].update(0, 0, sStickMode, WS_MAIN_STICK);
             mPadSStick[i].update(0, 0, sStickMode, WS_SUB_STICK);
             mPadButton[i].update(NULL, 0);
@@ -84,8 +84,8 @@ u32 JUTGamePad::read() {
                 mask |= mask_tmp;
             }
         } else {
-            if (mPadStatus[i].error != -3) {
-                OSReport("game pad read error (%d)\n", mPadStatus[i].error);
+            if (mPadStatus[i].err != -3) {
+                OSReport("game pad read error (%d)\n", mPadStatus[i].err);
             }
             mPadButton[i].mTrigger = 0;
             mPadButton[i].mRelease = 0;
@@ -97,10 +97,10 @@ u32 JUTGamePad::read() {
         if (pad->getPadReplay()) {
             PADStatus status;
             pad->getPadReplay()->unk1(&status);
-            u32 m_stick = pad->mMainStick.update(status.stick_x, status.stick_y, sStickMode,
+            u32 m_stick = pad->mMainStick.update(status.stickX, status.stickY, sStickMode,
                                                  WS_MAIN_STICK)
                           << 0x18;
-            u32 s_stick = pad->mSubStick.update(status.substick_x, status.substick_y, sStickMode,
+            u32 s_stick = pad->mSubStick.update(status.substickX, status.substickY, sStickMode,
                                                 WS_SUB_STICK)
                           << 0x10;
             m_stick |= s_stick;
@@ -114,7 +114,7 @@ u32 JUTGamePad::read() {
 
         if (pad->getPadRecord() && pad->mPortNum != -1) {
             s32 port = pad->mPortNum;
-            if (mPadStatus[port].error == 0) {
+            if (mPadStatus[port].err == 0) {
                 pad->getPadRecord()->write(&mPadStatus[port]);
             }
         }
@@ -131,7 +131,7 @@ u32 JUTGamePad::read() {
 /* 802C3C14-802C3CC4       .text assign__10JUTGamePadFv */
 void JUTGamePad::assign() {
     for (int i = 0; i < 4; i++) {
-        if (mPadStatus[i].error == 0 && mPadAssign[i] == 0) {
+        if (mPadStatus[i].err == 0 && mPadAssign[i] == 0) {
             mPortNum = i;
             mPadAssign[i] = 1;
             mPadButton[i].setRepeat(mButton.field_0x24, mButton.field_0x28, mButton.field_0x2c);
@@ -142,7 +142,7 @@ void JUTGamePad::assign() {
 }
 
 u8 JUTGamePad::CRumble::mStatus[4];
-PADMask JUTGamePad::CRumble::mEnabled;
+u32 JUTGamePad::CRumble::mEnabled;
 callbackFn JUTGamePad::C3ButtonReset::sCallback;
 void* JUTGamePad::C3ButtonReset::sCallbackArg;
 OSTime JUTGamePad::C3ButtonReset::sThreshold = (OSTime)((OS_BUS_CLOCK / 4) / 60) * 30;
@@ -176,7 +176,7 @@ void JUTGamePad::update() {
         mButton = mPadButton[mPortNum];
         mMainStick = mPadMStick[mPortNum];
         mSubStick = mPadSStick[mPortNum];
-        mErrorStatus = mPadStatus[mPortNum].error;
+        mErrorStatus = mPadStatus[mPortNum].err;
 
         if ((mButton.mButton & C3ButtonReset::sResetMaskPattern) != C3ButtonReset::sResetPattern)
         {
@@ -276,10 +276,10 @@ void JUTGamePad::CButton::update(const PADStatus* padStatus, u32 stickStatus) {
     mRepeat |= (field_0x24 ^ 0xFFFFFFFF) & mTrigger;
 
     if (padStatus != NULL) {
-        mAnalogA = padStatus->analog_a;
-        mAnalogB = padStatus->analog_b;
-        mAnalogL = padStatus->trigger_left;
-        mAnalogR = padStatus->trigger_right;
+        mAnalogA = padStatus->analogA;
+        mAnalogB = padStatus->analogB;
+        mAnalogL = padStatus->triggerLeft;
+        mAnalogR = padStatus->triggerRight;
     } else {
         mAnalogA = 0;
         mAnalogB = 0;
@@ -362,7 +362,7 @@ void JUTGamePad::CRumble::clear() {
     mLength = 0;
     mData = 0;
     mFrameCount = 0;
-    mEnabled = (PADMask)(PAD_CHAN3_BIT | PAD_CHAN2_BIT | PAD_CHAN1_BIT | PAD_CHAN0_BIT);
+    mEnabled = (PAD_CHAN3_BIT | PAD_CHAN2_BIT | PAD_CHAN1_BIT | PAD_CHAN0_BIT);
 }
 
 /* 802C4444-802C449C       .text clear__Q210JUTGamePad7CRumbleFP10JUTGamePad */
@@ -495,7 +495,7 @@ void JUTGamePad::CRumble::setEnabled(u32 mask) {
             }
         }
     }
-    mEnabled = (PADMask)(mask & (PAD_CHAN3_BIT | PAD_CHAN2_BIT | PAD_CHAN1_BIT | PAD_CHAN0_BIT));
+    mEnabled = (mask & (PAD_CHAN3_BIT | PAD_CHAN2_BIT | PAD_CHAN1_BIT | PAD_CHAN0_BIT));
 }
 
 /* 802C489C-802C48B8       .text setRepeat__Q210JUTGamePad7CButtonFUlUlUl */
@@ -517,7 +517,7 @@ bool JUTGamePad::recalibrate(u32 mask) {
         }
     }
 
-    return PADRecalibrate((PADMask)mask);
+    return PADRecalibrate(mask);
 }
 
 static void dummy() {

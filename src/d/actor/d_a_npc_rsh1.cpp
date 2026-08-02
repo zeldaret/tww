@@ -506,9 +506,9 @@ void daNpc_Rsh1_c::checkOrder() {
 
 /* 0000126C-00001650       .text next_msgStatus__12daNpc_Rsh1_cFPUl */
 u16 daNpc_Rsh1_c::next_msgStatus(u32* o_pMsgNo) {
-    u16 msg_status;    
+    u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
     s32 msg_rupee;
-    msg_status = fopMsgStts_MSG_CONTINUES_e;
+
     switch (*o_pMsgNo) {
     case 0x2845:
     case 0x2846:
@@ -1681,7 +1681,7 @@ BOOL daNpc_Rsh1_c::_draw() {
         mpShopCursor->draw();
     }
 
-    dSnap_RegistFig(DSNAP_TYPE_RSH1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_RSH1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
 
     return TRUE;
 }

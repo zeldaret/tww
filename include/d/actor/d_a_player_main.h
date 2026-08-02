@@ -1865,8 +1865,8 @@ public:
     
     J3DAnmTextureSRTKey* getIceParticleBtk() { return mpGicer00Btk; }
     J3DAnmTextureSRTKey* getIceWaterParticleBtk() { return mpGicer01Btk; }
-    void getBombWaterPillarBrk() {} // mpGwp00BrkData?
-    void getBombWaterPillarBtk() {} // mpGwp00BtkData?
+    J3DAnmTevRegKey* getBombWaterPillarBrk() { return mpGwp00BrkData; }
+    J3DAnmTextureSRTKey* getBombWaterPillarBtk() { return mpGwp00BtkData; }
     
     BOOL checkSwordEquip() const {
         return dComIfGs_getSelectEquip(0) != dItemNo_NONE_e || checkSwordMiniGame();

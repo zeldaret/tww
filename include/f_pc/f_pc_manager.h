@@ -76,6 +76,10 @@ inline void* fpcM_LyJudge(process_node_class* i_node, fpcLyIt_JudgeFunc i_func, 
     return fpcLyIt_Judge(&i_node->mLayer, i_func, i_data);
 }
 
+inline base_process_class* fpcM_Search(fpcLyIt_JudgeFunc i_func, void* i_data) {
+    return fpcEx_Search(i_func, i_data);
+}
+
 inline s8 fpcM_CreateResult(void* pProc) {
     return ((base_process_class*)pProc)->mCreateResult;
 }

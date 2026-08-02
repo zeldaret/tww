@@ -540,14 +540,14 @@ static void sibuki_set(btd_class* i_this) {
     for (s32 i = 0; i < ARRAY_SSIZE(i_this->mBtdSibukiS); i++, sibuki++) {
         if (sibuki->m00 == 0) {
             sibuki->m00 = 1;
-            cMtx_YrotS(*calc_mtx, cM_rndFX(32768.0f));
+            cMtx_YrotS(*calc_mtx, cM_rndFX(0x8000));
             local_38.z = REG0_F(13) + (cM_rndFX(200.0f) + 300.0f);
             local_38.y = cM_rndF(50.0f);
             MtxPosition(&local_38, &sibuki->m04);
             local_38.z = l_HIO.m48 + cM_rndF(l_HIO.m48 * 0.5f);
             local_38.y = l_HIO.m4C + cM_rndF(l_HIO.m4C * 0.5f);
             MtxPosition(&local_38, &sibuki->m10);
-            cMtx_YrotS(*calc_mtx, cM_rndFX(32768.0f));
+            cMtx_YrotS(*calc_mtx, cM_rndFX(0x8000));
         }
     }
 }
@@ -811,8 +811,8 @@ static s32 damage(btd_class* i_this)
                         local_58.y = REG0_F(1) + (cM_rndF(5.0f) + 20.0f);
                         local_58.z = REG0_F(0) + (cM_rndF(5.0f) + 20.0f);
                         MtxPosition(&local_58, &hahen->m14);
-                        hahen->m22 = cM_rndF(65536.0f);
-                        hahen->m20 = cM_rndF(65536.0f);
+                        hahen->m22 = cM_rndF(0x10000);
+                        hahen->m20 = cM_rndF(0x10000);
                     }
                 }
                 for (s32 i = 0, j = 0, k = 0; i < ARRAY_SSIZE(hahen_eff_name); i++, j++, k++) {

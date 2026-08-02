@@ -987,7 +987,7 @@ void wait(bmd_class* i_this) {
         move1(i_this);
         if (i_this->m308[1] == 0) {
             i_this->m308[1] = (s16)(int)(cM_rndF(200.0f) + 100.0f);
-            i_this->m336 = (s16)(int)cM_rndFX(32768.0f);
+            i_this->m336 = (s16)(int)cM_rndFX(0x8000);
             i_this->m338 = 0.0f;
         }
         cLib_addCalcAngleS2(&actor->shape_angle.y, i_this->m336, 0x20, i_this->m338);

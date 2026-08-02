@@ -454,9 +454,10 @@ public:
 
     void reset() { mp3DlineMat = NULL; }
 
-    void setMat(mDoExt_3DlineMat_c* pMat);
+    void setMat(mDoExt_3DlineMat_c* i_3DlineMat);
+
     virtual void draw();
-    virtual ~mDoExt_3DlineMatSortPacket();
+    virtual ~mDoExt_3DlineMatSortPacket() {}
 
 private:
     /* 0x10 */ mDoExt_3DlineMat_c* mp3DlineMat;
@@ -588,11 +589,22 @@ public:
     ~mDoExt_3DlineMat0_c() {}
 
     BOOL init(u16 numLines, u16 numSegments, BOOL hasSize);
-    void setMaterial();
-    void draw();
-    void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);
-    void update(u16, GXColor&, dKy_tevstr_c*);
-    int getMaterialID();
+    void update(u16 i_segs, f32 i_size, GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr);
+    void update(u16 i_segs, GXColor& i_color, dKy_tevstr_c* i_tevStr);
+    // some calls to these functions define i_color inline which is illegal in C++ for a non-const
+    // reference parameter - we add these overloads to enable standard compiler compatibility
+#if !__MWERKS__
+    void update(u16 i_segs, f32 i_size, const _GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr) {
+        update(i_segs, i_size, const_cast<_GXColor&>(i_color), i_space, i_tevStr);
+    }
+    void update(u16 i_segs, const _GXColor& i_color, dKy_tevstr_c* i_tevStr) {
+        update(i_segs, const_cast<_GXColor&>(i_color), i_tevStr);
+    }
+#endif
+
+    virtual int getMaterialID() { return 0; }
+    virtual void setMaterial();
+    virtual void draw();
 
     cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
     u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }
@@ -612,11 +624,22 @@ public:
     ~mDoExt_3DlineMat1_c() {}
     
     BOOL init(u16 numLines, u16 numSegments, ResTIMG* i_img, BOOL hasSize);
-    void setMaterial();
-    void draw();
-    void update(u16, f32, GXColor&, u16, dKy_tevstr_c*);
-    void update(u16, GXColor&, dKy_tevstr_c*);
-    int getMaterialID();
+    void update(u16 i_segs, f32 i_size, GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr);
+    void update(u16 i_segs, GXColor& i_color, dKy_tevstr_c* i_tevStr);
+    // some calls to these functions define i_color inline which is illegal in C++ for a non-const
+    // reference parameter - we add these overloads to enable standard compiler compatibility
+#if !__MWERKS__
+    void update(u16 i_segs, f32 i_size, const GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr) {
+        update(i_segs, i_size, const_cast<GXColor&>(i_color), i_space, i_tevStr);
+    }
+    void update(u16 i_segs, const GXColor& i_color, dKy_tevstr_c* i_tevStr) {
+        update(i_segs, const_cast<GXColor&>(i_color), i_tevStr);
+    }
+#endif
+
+    virtual int getMaterialID() { return 1; }
+    virtual void setMaterial();
+    virtual void draw();
 
     cXyz* getPos(int i_idx) { return mpLines[i_idx].mpSegments; }
     u8* getSize(int i_idx) { return mpLines[i_idx].mpSize; }

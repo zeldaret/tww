@@ -37,7 +37,12 @@ public:
     void setTevMode(JUTTexture*, JUtility::TColor, JUtility::TColor);
 
     void getBlack() const {}
-    void getContentsColor(TContentsColor&) const {}
+    void getContentsColor(TContentsColor& param_0) const {
+        param_0.mTL = mColorTL;
+        param_0.mTR = mColorTR;
+        param_0.mBL = mColorBL;
+        param_0.mBR = mColorBR;
+    }
     void getWhite() const {}
     void setBlack(JUtility::TColor) {}
     void setContentsColor(TContentsColor) {}

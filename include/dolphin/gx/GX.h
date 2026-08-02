@@ -234,6 +234,9 @@ inline void GXEnd() {}
 #define GX_WRITE_F32(f)     \
     GXFIFO.f32 = (f32)(f);
 
+#define VERIF_RAS_REG(v)
+#define VERIF_XF_REG(r, v)
+
 #define GX_WRITE_XF_REG(addr, value) \
 do { \
     GX_WRITE_U8(0x10); \
