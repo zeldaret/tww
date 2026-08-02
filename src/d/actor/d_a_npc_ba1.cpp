@@ -11,7 +11,7 @@
 #include "d/d_snap.h"
 #include "res/Object/Ba.h"
 
-class daNpc_Ba1_HIO_c : mDoHIO_entry_c {
+class daNpc_Ba1_HIO_c : public mDoHIO_entry_c {
 public:
     struct hio_prm_c {
         s16 mMaxHeadX;
@@ -165,7 +165,7 @@ bool daNpc_Ba1_c::init_BA1_1() {
     if(!ret) { // weird, but couldn't get it to match without this ...
         return ret;
     } else {
-        res = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001) != 0;
+        res = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001);
         ret = res;
         if(ret) {
             if(dComIfGs_checkCollect(1)) {
@@ -176,7 +176,6 @@ bool daNpc_Ba1_c::init_BA1_1() {
             fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
             mpClothModel = 0;
         }
-        
     }
     return ret;
 }
@@ -606,11 +605,20 @@ bool daNpc_Ba1_c::chk_talk() {
 
 /* 000012E8-0000137C       .text chk_drct__11daNpc_Ba1_cFf */
 bool daNpc_Ba1_c::chk_drct(float i_param_1) {
+#if VERSION == VERSION_DEMO
+    s16 target = cLib_targetAngleY(
+        &current.pos,
+        &dComIfGp_getPlayer(0)->current.pos
+    ) - current.angle.y;
+    int cmp = abs(target);
+    return cmp < cM_deg2s(i_param_1);
+#else
     s16 target = cLib_targetAngleY(
         &current.pos,
         &dComIfGp_getPlayer(0)->current.pos
     ) - current.angle.y;
     return abs(target) < cM_deg2s(i_param_1);
+#endif
 }
 
 /* 0000137C-000013BC       .text chk_partsNotMove__11daNpc_Ba1_cFv */
@@ -839,11 +847,21 @@ bool daNpc_Ba1_c::chkAttention() {
 
 /* 00001A2C-00001A94       .text setAttention__11daNpc_Ba1_cFb */
 void daNpc_Ba1_c::setAttention(bool i_setEyePos) {
+
+#if VERSION == VERSION_DEMO
+    f32 offset = l_HIO.mPrmTbl.mAttPosOffsetY;
+        attention_info.position.set(
+        current.pos.x,
+        current.pos.y + offset,
+        current.pos.z
+    );
+#else
     attention_info.position.set(
         current.pos.x,
         current.pos.y + l_HIO.mPrmTbl.mAttPosOffsetY,
         current.pos.z
     );
+#endif
     
     if (!mbSetEyePos && !i_setEyePos) {
         return;
@@ -883,7 +901,14 @@ bool daNpc_Ba1_c::partner_srch_sub(void* (*i_searchFunc)(void*, void*)) {
 /* 00001B78-00001B90       .text partner_srch__11daNpc_Ba1_cFv */
 void daNpc_Ba1_c::partner_srch() {
     if (m818 == 1) {
+#if VERSION == VERSION_DEMO
+        bool found_partner = 1;
+        if(found_partner) {
+            m818++;
+        }
+#else
         m818++;
+#endif
     }
 }
 
@@ -906,7 +931,7 @@ bool daNpc_Ba1_c::checkCommandTalk() {
     bool ret;
     ret = false;
     
-    if (eventInfo.checkCommandTalk() != 0) {
+    if (eventInfo.checkCommandTalk()) {
         ret = dComIfGp_event_chkTalkXY() == 0;
     }
     return ret;
@@ -1194,8 +1219,12 @@ bool daNpc_Ba1_c::eMove_CHK_FAIRY_MOV_1() {
             daNpc_Fa1_c * actor_fa;
             actor_fa = (daNpc_Fa1_c*) searchByID(mPartnerProcID);
             if(actor_fa != NULL) {
-
+#if VERSION == VERSION_DEMO
+                u32 res = (actor_fa->getMode() == daNpc_Fa1_c::Mode_BOTTLE_BABA_MOVE_e);
+                ret = res !=0;
+#else
                 ret = actor_fa->getMode() == daNpc_Fa1_c::Mode_BOTTLE_BABA_MOVE_e;
+#endif
             }
         }
     }
@@ -1960,22 +1989,47 @@ BOOL daNpc_Ba1_c::_execute() {
     }
     eventOrder();
     setMtx(false);
+#if VERSION == VERSION_DEMO
+    if(!mbInDemo && !m7FE){
+        f32 radius = 50;
+        f32 height = 110.0;
+        if(m7FD) {
+            radius = 30;
+        }
+        setCollision(
+            radius,
+            height
+        );
+    }
+#else
     if(!mbInDemo && !m7FE){
         f32 radius = 50;
         if(m7FD) {
             radius = 30;
         }
-        setCollision(radius,110.0f);
+        setCollision(
+            radius,
+            110.0f
+        );
     }
+#endif
     return TRUE;
 }
 
 /* 00003E1C-00003E78       .text _delete__11daNpc_Ba1_cFv */
 BOOL daNpc_Ba1_c::_delete() {
     dComIfG_resDelete(&mPhs,"Ba");
-    if(heap != NULL && mpMorf != NULL) {
+#if VERSION > VERSION_DEMO
+    if(heap != NULL && mpMorf != NULL) 
+#else 
+    if(mpMorf != NULL) 
+#endif
+    {
         mpMorf->stopZelAnime();
     }
+#if VERSION == VERSION_DEMO
+    l_HIO.removeHIO();
+#endif
     return 1;
 
 }
@@ -1995,26 +2049,36 @@ cPhs_State daNpc_Ba1_c::_create() {
     cPhs_State state = dComIfG_resLoad(&mPhs,"Ba");
     if(state != cPhs_COMPLEATE_e) {
         return state;
-    } else {
-        if(charDecide(fpcM_GetParam(this) & 0xFF) == 0) {
-            return cPhs_ERROR_e;
-        }
-        if(!fopAcM_entrySolidHeap(this,CheckCreateHeap,a_size_tbl[mType])){
-            return cPhs_ERROR_e;
-        }
-        fopAcM_SetMtx(this,mpMorf->getModel()->getBaseTRMtx());
-        fopAcM_setCullSizeBox(this,-50.0,-20.0,-50.0,50.0,120.0,50.0);
-        if(!createInit()){
-            return cPhs_ERROR_e;
-        }
+    } 
+#if VERSION == VERSION_DEMO
+    u32 tmp = fpcM_GetParam(this) & 0xFF;
+    if(!charDecide(tmp)) 
+#else
+    if(!charDecide(fpcM_GetParam(this) & 0xFF)) 
+#endif
+    {
+        return cPhs_ERROR_e;
     }
+    #if VERSION == VERSION_DEMO
+            l_HIO.entryHIO("おばあちゃん");
+            fopAcM_ct(this, daNpc_Ba1_c);
+    #endif
+    if(!fopAcM_entrySolidHeap(this,CheckCreateHeap,a_size_tbl[mType])){
+        return cPhs_ERROR_e;
+    }
+    fopAcM_SetMtx(this,mpMorf->getModel()->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this,-50.0,-20.0,-50.0,50.0,120.0,50.0);
+    if(!createInit()){
+        return cPhs_ERROR_e;
+    }
+    
     return state;
 }
 
 /* 000043E8-00004658       .text create_Anm__11daNpc_Ba1_cFv */
 J3DModelData* daNpc_Ba1_c::create_Anm() {
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ba",10);
-    JUT_ASSERT(VERSION_SELECT(0xB0B, 0xB0B, 0xB0C, 0xB0C),a_mdl_dat != NULL);
+    JUT_ASSERT(VERSION_SELECT(0xB0C, 0xB0B, 0xB0C, 0xB0C),a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
         NULL,
@@ -2040,11 +2104,11 @@ J3DModelData* daNpc_Ba1_c::create_Anm() {
     }
 
     m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
-    JUT_ASSERT(VERSION_SELECT(0xB1F, 0xB1F, 0xB20, 0xB20),m_hed_jnt_num >= 0);
+    JUT_ASSERT(VERSION_SELECT(0xB20, 0xB1F, 0xB20, 0xB20),m_hed_jnt_num >= 0);
     m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone");
-    JUT_ASSERT(VERSION_SELECT(0xB22, 0xB22, 0xB23, 0xB23),m_bbone_jnt_num >= 0);    
+    JUT_ASSERT(VERSION_SELECT(0xB23, 0xB22, 0xB23, 0xB23),m_bbone_jnt_num >= 0);    
     m_footL_jnt_num = a_mdl_dat->getJointName()->getIndex("footL");
-    JUT_ASSERT(VERSION_SELECT(0xB25, 0xB25, 0xB26, 0xB26),m_footL_jnt_num >= 0);    
+    JUT_ASSERT(VERSION_SELECT(0xB26, 0xB25, 0xB26, 0xB26),m_footL_jnt_num >= 0);    
 
     return a_mdl_dat;  
 }
@@ -2053,7 +2117,7 @@ J3DModelData* daNpc_Ba1_c::create_Anm() {
 bool daNpc_Ba1_c::create_itm_Mdl() {
     mpClothModel = NULL;
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ba",9);
-    JUT_ASSERT(VERSION_SELECT(0xB37, 0xB37, 0xB38, 0xB38),a_mdl_dat != NULL);
+    JUT_ASSERT(VERSION_SELECT(0xB38, 0xB37, 0xB38, 0xB38),a_mdl_dat != NULL);
     mpClothModel = mDoExt_J3DModel__create(a_mdl_dat,0x80000,0x11000002);
     return true;
 }
