@@ -48,7 +48,6 @@ class daNpc_P1_HIO_c : public JORReflexible{
 public:
     daNpc_P1_HIO_c();
     virtual ~daNpc_P1_HIO_c(){};
-    virtual void genMessage(JORMContext*){};
 public:
     s8 mNo;
     s32 m8;
