@@ -343,11 +343,11 @@ void dScp_wipeAngleCalc(sub_scp_class* i_Scp) {
 
     if (clamped != i_Scp->mZoomScale) {
         if (1.0f == clamped || 5.0f == clamped || 9.0f == clamped) {
-            mDoAud_seStart(0x809, NULL);
+            mDoAud_seStart(JA_SE_TELESCOPE_STOP, NULL);
         } else {
             f32 focus = dComIfGp_getCameraZoomForcus(0);
             u32 se_param = (u32)(32768.0f * focus + 0.5f);
-            mDoAud_seStart(8, NULL, se_param);
+            mDoAud_seStart(JA_SE_TELESCOPE_ZOOM, NULL, se_param);
         }
         i_Scp->mZoomScale = clamped;
     }
@@ -876,8 +876,8 @@ void dScp_talkBeforeProc(sub_scp_class* i_Scp) {
     i_Scp->mMesgDataProc.setMesgEntry(&i_Scp->mMesgEntry);
     i_Scp->mMesgDataProc.setFontSize((int)i_Scp->mFontSizeX);
     i_Scp->mMesgDataProc.setRubyFontSize((int)i_Scp->mRubyFontSizeX);
-    i_Scp->mMesgDataProc.setLineWidth(0x1f7);
-    i_Scp->mMesgDataProc.setCenterLineWidth(0x1e6);
+    i_Scp->mMesgDataProc.setLineWidth(503);
+    i_Scp->mMesgDataProc.setCenterLineWidth(486);
     i_Scp->mMesgDataProc.setSendSpeed(g_msgHIO.field_0x82);
     i_Scp->mMesgDataProc.setSpaceTimer(g_msgHIO.field_0x6c);
 
@@ -942,7 +942,7 @@ BOOL dScp_continueProc(sub_scp_class* i_Scp) {
         i_Scp->mMesgDataProc.setSelectFlagOff();
         JKRFileLoader::removeResource(i_Scp->head_p, NULL);
         dScp_talkBeforeProc(i_Scp);
-        mDoAud_seStart(0x80b, NULL);
+        mDoAud_seStart(JA_SE_TALK_NEXT, NULL);
     } else {
         dScp_arrowMove(i_Scp);
     }
@@ -954,7 +954,7 @@ BOOL dScp_continueProc(sub_scp_class* i_Scp) {
 BOOL dScp_forceContinueProc(sub_scp_class* i_Scp) {
     JKRFileLoader::removeResource(i_Scp->head_p, NULL);
     dScp_talkBeforeProc(i_Scp);
-    mDoAud_seStart(0x80b, NULL);
+    mDoAud_seStart(JA_SE_TALK_NEXT, NULL);
     return TRUE;
 }
 
@@ -1027,7 +1027,7 @@ void dScp_openProc(sub_scp_class* i_Scp) {
         dComIfGp_setMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         dComIfGp_setAStatusForce(dActStts_RETURN_e);
-        mDoAud_seStart(0x823, NULL);
+        mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_2, NULL);
     }
 }
 
@@ -1065,7 +1065,7 @@ void dScp_openProc1(sub_scp_class* i_Scp) {
         dComIfGp_setMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         dComIfGp_setAStatusForce(dActStts_RETURN_e);
-        mDoAud_seStart(0x823, NULL);
+        mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_2, NULL);
     }
 }
 
@@ -1142,12 +1142,12 @@ void dScp_demoProc(sub_scp_class* i_Scp) {
 
         dDemo_manager_c* demo = dComIfGp_demo_get();
         if (demo != NULL) {
-            if (demo->getFrameNoMsg() == 0x1A9) {
+            if (demo->getFrameNoMsg() == 425) {
                 camera->mCamera.SetTrimSize(3);
                 for (int i = 0; i < 8; i++) {
                     i_Scp->mWipePanel[i].pane->hide();
                 }
-            } else if (demo->getFrameNoMsg() == 0x460) {
+            } else if (demo->getFrameNoMsg() == 1120) {
                 camera->mCamera.SetTrimSize(4);
                 for (int i = 0; i < 8; i++) {
                     i_Scp->mWipePanel[i].pane->show();
