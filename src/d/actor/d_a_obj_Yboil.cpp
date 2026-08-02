@@ -48,7 +48,7 @@ BOOL daObjYboil_c::CreateHeap() {
 void daObjYboil_c::pos_reset(int i) {
     mMdlScale[i].setall(mScaleMin + cM_rndF(mScaleMax - mScaleMin));
     f32 dist = 1300.0f + cM_rndF(1400.0f);
-    s16 angle = cM_rndF(65536.0f);
+    s16 angle = cM_rndF(0x10000);
     mMdlPos[i].x = current.pos.x + dist * cM_ssin(angle);
     mMdlPos[i].y = current.pos.y;
     mMdlPos[i].z = current.pos.z + dist * cM_scos(angle);

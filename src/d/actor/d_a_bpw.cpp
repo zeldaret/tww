@@ -953,7 +953,7 @@ void search_get_skull(bpw_class* i_this, u8 param_2) {
                         actor2->speed.y = 20.0f;
                     }
                     actor2->current.angle.y = fopAcM_searchActorAngleY(actor, actor2);
-                    actor2->current.angle.y += (int)cM_rndFX(4096.0f);
+                    actor2->current.angle.y += (int)cM_rndFX(0x1000);
                     actor2->shape_angle.x += -0x2000;
                 }
                 break;
@@ -2025,13 +2025,13 @@ void action_damage(bpw_class* i_this) {
             csXyz pwAngle = actor->shape_angle;
             local_58 = actor->current.pos;
             int currRandomAngle;
-            int pwSpreadAmount = (int)(65536.0f / actor->health);
+            int pwSpreadAmount = (int)(0x10000 / (f32)actor->health);
             local_58.y = i_this->mAcch.GetGroundH() + 20.0f;
             i_this->m3E9 = 0;
             for (i = 0; i < 15; i++) {
                 i_this->mChildPoeIds[i] = fpcM_ERROR_PROCESS_ID_e;
             }
-            currRandomAngle = (int)cM_rndFX(32768.0f);
+            currRandomAngle = (int)cM_rndFX(0x8000);
             uVar14 = (s16)cM_rndF(4.99f);
             u32 uVar2 = uVar14 << 9 | 0xFF000003;
             for (i = 0; i < actor->health; i++) {
@@ -2089,13 +2089,13 @@ void action_bunri_dousa(bpw_class* i_this) {
         csXyz pwAngle = actor->shape_angle;
         local_58 = actor->current.pos;
         int currRandomAngle;
-        int pwSpreadAmount = (int)(65536.0f / actor->health);
+        int pwSpreadAmount = (int)(0x10000 / (f32)actor->health);
         local_58.y = i_this->mAcch.GetGroundH() + 20.0f;
         i_this->m3E9 = 0;
         for (i = 0; i < 15; i++) {
             i_this->mChildPoeIds[i] = fpcM_ERROR_PROCESS_ID_e;
         }
-        currRandomAngle = (int)cM_rndFX(32768.0f);
+        currRandomAngle = (int)cM_rndFX(0x8000);
         uVar14 = (s16)cM_rndF(4.99f);
         u32 uVar2 = uVar14 << 9 | 0xFF000003;
         for (i = 0; i < actor->health; i++) {
@@ -2739,7 +2739,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         i_this->mActionState++;
         // fallthrough
     case 0x83:
-        cLib_addCalcAngleS2(&actor->shape_angle.x, REG18_F(19) + 49152.0f, 1, 0x300);
+        cLib_addCalcAngleS2(&actor->shape_angle.x, REG18_F(19) + 0xC000, 1, 0x300);
         if (i_this->mSomeCountdownTimers[0] != 0) {
             break;
         }
@@ -2768,7 +2768,7 @@ void action_bunri_dousa(bpw_class* i_this) {
 #endif
         // fallthrough
     case 0x85:
-        cLib_addCalcAngleS2(&actor->shape_angle.x, REG18_F(19) + 49152.0f, 1, 0x300);
+        cLib_addCalcAngleS2(&actor->shape_angle.x, REG18_F(19) + 0xC000, 1, 0x300);
         cLib_addCalcAngleS2(&actor->shape_angle.z, 0, 1, 0x300);
         cLib_addCalc2(&i_this->m440, REG6_F(7) + 50.0f, 1.0f, 0.5f);
         fVar2 = std::fabsf(i_this->m40C.x - (REG6_F(8) + -1352.0f));
@@ -4616,9 +4616,9 @@ static cPhs_State daBPW_Create(fopAc_ac_c* a_this) {
                 csXyz pwAngle = a_this->shape_angle;
                 local_58 = a_this->current.pos;
                 int currRandomAngle;
-                int pwSpreadAmount = (int)(65536.0f / a_this->health);
+                int pwSpreadAmount = (int)(0x10000 / (f32)a_this->health);
                 local_58.y = i_this->mAcch.GetGroundH() + 20.0f;
-                currRandomAngle = (int)cM_rndFX(32768.0f);
+                currRandomAngle = (int)cM_rndFX(0x8000);
                 uVar14 = (s16)cM_rndF(4.99f);
                 u32 uVar2 = uVar14 << 9 | 0xFF000004;
                 for (s32 i = 0; i < 15; i++) {

@@ -213,7 +213,7 @@ static BOOL createHeapCallBack(fopAc_ac_c* i_ac) {
 
 /* 00000A58-00000B4C       .text execCreateWait__9daLodbg_cFv */
 BOOL daLodbg_c::execCreateWait() {
-    f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 dist = fopAcM_searchPlayerDistanceXZ(this);
     if (dist > scale.x)
         return TRUE;
 
@@ -271,7 +271,7 @@ BOOL daLodbg_c::execReadWait() {
 BOOL daLodbg_c::execDeleteWait() {
     if (heap != NULL) {
 #if VERSION != VERSION_PAL
-        f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+        f32 dist = fopAcM_searchPlayerDistanceXZ(this);
 #else
         // TODO: inline for this?
         cXyz delta = g_dComIfG_gameInfo.play.mCurrentView->mLookat.mEye - current.pos;

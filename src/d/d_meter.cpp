@@ -459,42 +459,51 @@ dMeter_msg_HIO_c::dMeter_msg_HIO_c() {
 
 /* 801EF75C-801EF924       .text __ct__20dMeter_message_HIO_cFv */
 dMeter_message_HIO_c::dMeter_message_HIO_c() {
-    field_0x5 = 0;
-    field_0x6 = 0;
-    field_0x7 = 0;
-    field_0x8 = 0xff;
-    field_0x9 = 0xff;
-    field_0xa = 0xff;
-    field_0xb = 0xff;
-    field_0xc = 0xff;
-    field_0xd = 0xff;
-    field_0xe = 0xff;
-    field_0xf = 0xff;
-    field_0x10 = 0;
-    field_0x11 = 0xff;
-    field_0x12 = 0xff;
-    field_0x13 = 0xff;
-    field_0x14 = 0xff;
-    field_0x15 = 0xff;
-    field_0x16 = 0xff;
-    field_0x17 = 0xff;
-    field_0x18 = 0xff;
-    field_0x19 = 0xff;
-    field_0x1a = 0xff;
-    field_0x1b = 0xff;
-    field_0x1c = 0;
-    field_0x1d = 0;
-    field_0x1e = 0;
-    field_0x1f = 0;
-    field_0x20 = 0xff;
-    field_0x21 = 0xff;
-    field_0x22 = 0xff;
-    field_0x23 = 0xff;
-    field_0x24 = 0xff;
-    field_0x25 = 0xff;
-    field_0x26 = 0xff;
-    field_0x27 = 0xff;
-    field_0x28 = 0;
+    field_0x5.r = 0;
+    field_0x5.g = 0;
+    field_0x5.b = 0;
+    field_0x5.a = 0xff;
+
+    field_0x9.r = 0xff;
+    field_0x9.g = 0xff;
+    field_0x9.b = 0xff;
+    field_0x9.a = 0xff;
+
+    field_0xd.r = 0xff;
+    field_0xd.g = 0xff;
+    field_0xd.b = 0xff;
+    field_0xd.a = 0;
+
+    field_0x11.r = 0xff;
+    field_0x11.g = 0xff;
+    field_0x11.b = 0xff;
+    field_0x11.a = 0xff;
+
+    field_0x15.r = 0xff;
+    field_0x15.g = 0xff;
+    field_0x15.b = 0xff;
+    field_0x15.a = 0xff;
+
+    field_0x19.r = 0xff;
+    field_0x19.g = 0xff;
+    field_0x19.b = 0xff;
+    field_0x19.a = 0;
+
+    field_0x1d.r = 0;
+    field_0x1d.g = 0;
+    field_0x1d.b = 0;
+    field_0x1d.a = 0xff;
+
+    field_0x21.r = 0xff;
+    field_0x21.g = 0xff;
+    field_0x21.b = 0xff;
+    field_0x21.a = 0xff;
+
+    field_0x25.r = 0xff;
+    field_0x25.g = 0xff;
+    field_0x25.b = 0xff;
+    field_0x25.a = 0;
+
     field_0x29 = 0x80;
     field_0x2a = 0xff;
     field_0x2b = 0xff;
@@ -2110,11 +2119,10 @@ void dMeter_actionForce(sub_meter_class* i_Meter) {
     if (dComIfGp_getDoStatusForce() != dActStts_BLANK_e) {
         dComIfGp_setDoStatusForce(dActStts_BLANK_e);
     }
-    if (dComIfGp_getAStatusForce() == dActStts_BLANK_e) {
-        return;
+    if (dComIfGp_getAStatusForce() != dActStts_BLANK_e) {
+        dComIfGp_setAStatus(dComIfGp_getDoStatusForce());
+        dComIfGp_setAStatusForce(dActStts_BLANK_e);
     }
-    dComIfGp_setAStatus(dComIfGp_getDoStatusForce());
-    dComIfGp_setAStatusForce(dActStts_BLANK_e);
 }
 
 /* 801F3B60-801F3CFC       .text dMeter_actionChange__FP15sub_meter_class */
@@ -4710,7 +4718,7 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
     cXyz* pcVar4 = dKyw_get_wind_vec();
     iVar3 = cM_atan2s(pcVar4->x, pcVar4->z);
     i_Meter->field_0x02f8.pane->rotate(
-        i_Meter->field_0x02f8.mSizeOrig.x, i_Meter->field_0x02f8.mSizeOrig.y / 2.0f, ROTATE_Z, (iVar3 * 180.0f) / 32768.0f - 180.0f
+        i_Meter->field_0x02f8.mSizeOrig.x, i_Meter->field_0x02f8.mSizeOrig.y / 2.0f, ROTATE_Z, (iVar3 * 180.0f) / 0x8000 - 180.0f
     );
     fopMsgM_paneTrans(&i_Meter->field_0x02c0, x, y);
     fopMsgM_paneTrans(&i_Meter->field_0x02f8, (dVar13 - 7.0f) + g_meterHIO.field_0x64, (dVar12 + 9.0f) + g_meterHIO.field_0x66);
@@ -5215,7 +5223,7 @@ void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
         dMeter_compassAnimeMove(i_Meter);
         break;
     }
-    f32 dVar3 = (-(s16)(fopAcM_SearchByName(fpcNm_SHIP_e)->shape_angle.y + 0x8000) * 180.0f) / 32768.0f;
+    f32 dVar3 = (-(s16)(fopAcM_SearchByName(fpcNm_SHIP_e)->shape_angle.y + 0x8000) * 180.0f) / 0x8000;
     dMeter_compassRotate(&i_Meter->field_0x1670, &i_Meter->field_0x16a8, (-dComIfGs_getTime() - 90.0f));
     dMeter_compassRotate(&i_Meter->field_0x1248, &i_Meter->field_0x12f0, dVar3);
     dMeter_compassRotate(&i_Meter->field_0x1280, &i_Meter->field_0x12f0, dVar3);
@@ -5783,15 +5791,15 @@ void dMeter_clockMultiMove(sub_meter_class* i_Meter) {
         fVar2 = i_Meter->field_0x1868[i].mPosCenter.y;
         clock[i].setPos(sVar4, sVar5, sVar4 + i_Meter->field_0x1830.mSizeOrig.x, sVar5 + i_Meter->field_0x1830.mSizeOrig.y);
         GXColor color1 = {0xFF, 0XFF, 0XFF, 0XFF};
-        clock[i].mC0.r = color1.r;
-        clock[i].mC0.g = color1.g;
-        clock[i].mC0.b = color1.b;
-        clock[i].mC0.a = color1.a;
+        clock[i].mBlack.r = color1.r;
+        clock[i].mBlack.g = color1.g;
+        clock[i].mBlack.b = color1.b;
+        clock[i].mBlack.a = color1.a;
         GXColor color2 = {0x00, 0x00, 0XFF, 0x00};
-        clock[i].mC1.r = color2.r;
-        clock[i].mC1.g = color2.g;
-        clock[i].mC1.b = color2.b;
-        clock[i].mC1.a = color2.a;
+        clock[i].mWhite.r = color2.r;
+        clock[i].mWhite.g = color2.g;
+        clock[i].mWhite.b = color2.b;
+        clock[i].mWhite.a = color2.a;
         clock[i].setScroll(0, 0, 0);
         clock[i].setScroll(1, fVar1, fVar2);
         clock[i].setScale((100.0f * (1.0f / scaleX[i]) / g_meterHIO.field_0x78[i]), (100.0f * (1.0f / scaleY[i])) / g_meterHIO.field_0x78[i]);
@@ -6215,7 +6223,7 @@ void dMeter_swimPaneHide(sub_meter_class* i_Meter) {
     fopMsgM_setNowAlphaZero(&i_Meter->field_0x2d30);
     fopMsgM_setNowAlphaZero(&i_Meter->field_0x2da0);
     fopMsgM_setNowAlphaZero(&i_Meter->field_0x2dd8);
-    tekari.mC0.a = 0;
+    tekari.mBlack.a = 0;
 }
 
 /* 80200630-802006AC       .text dMeter_swimPaneTransY__FP15sub_meter_classf */
@@ -6607,17 +6615,17 @@ void dMeter_swimTekariScroll(sub_meter_class* i_Meter) {
     }
     tekari.setPos(temp_r29, temp_r28, temp_r27, temp_r26);
     GXColor color1 = {0xFF, 0xFF, 0xFF, 0XFF};
-    tekari.mC0.r = color1.r;
-    tekari.mC0.g = color1.g;
-    tekari.mC0.b = color1.b;
-    tekari.mC0.a = color1.a;
+    tekari.mBlack.r = color1.r;
+    tekari.mBlack.g = color1.g;
+    tekari.mBlack.b = color1.b;
+    tekari.mBlack.a = color1.a;
     GXColor color2 = {0xFF, 0xFF, 0xFF, 0X00};
-    tekari.mC1.r = color2.r;
-    tekari.mC1.g = color2.g;
-    tekari.mC1.b = color2.b;
-    tekari.mC1.a = color2.a;
+    tekari.mWhite.r = color2.r;
+    tekari.mWhite.g = color2.g;
+    tekari.mWhite.b = color2.b;
+    tekari.mWhite.a = color2.a;
     tekari.setScroll(0, 0, 0);
-    tekari.mC0.a = 0xFF;
+    tekari.mBlack.a = 0xFF;
     tekari.setScroll(1, var_r30, var_r30);
 }
 
@@ -7164,11 +7172,11 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
     fopMsgM_setAlpha(&i_Meter->field_0x1948);
     if (i_Meter->field_0x1830.pane->isVisible() && i_Meter->field_0x3020 == 7) {
         for (s32 i = 0; i < 3; i++) {
-            clock[i].mC0.a = i_Meter->field_0x1830.mNowAlpha;
+            clock[i].mBlack.a = i_Meter->field_0x1830.mNowAlpha;
         }
     } else {
         for (s32 i = 0; i < 3; i++) {
-            clock[i].mC0.a = 0;
+            clock[i].mBlack.a = 0;
         }
     }
     fopMsgM_setAlpha(&i_Meter->field_0x1980);

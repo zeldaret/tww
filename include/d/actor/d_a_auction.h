@@ -93,7 +93,7 @@ public:
     void nextBet();
     int getRand(int);
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ dNpc_EventCut_c mNpcEvtInfo;
     /* 0x738 */ fpc_ProcID m738[8];

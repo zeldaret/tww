@@ -322,7 +322,7 @@ void action_dousa(pw_class* i_this) {
                 anm_init(i_this, dRes_INDEX_PW_BCK_IDOU2_e, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
         }
-        i_this->m38C += (s16)cM_rndFX(16384.0f);
+        i_this->m38C += (s16)cM_rndFX(0x4000);
         if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
             i_this->mMode = 0x14;
         } else {

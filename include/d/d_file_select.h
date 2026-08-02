@@ -112,9 +112,7 @@ public:
     dFile_select_c() {}
     void _create();
     void initial();
-#if VERSION == VERSION_DEMO
     void _deleteSp();
-#endif
     void _delete();
     void _move();
     bool _open();

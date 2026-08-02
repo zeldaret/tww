@@ -56,10 +56,10 @@ void daArrow_Iceeff_c::CreateInit() {
             field_0x8B4[i].setall(cM_rndF(4.5f) + 6.2999997f);
 
             f32 temp = 180.0f * i / 30.0f;
-            s16 angle = cM_rndF(65536.0f);
-            mDoMtx_stack_c::ZrotS(cM_rndF(65536.0f));
-            mDoMtx_stack_c::XrotM(cM_rndF(65536.0f));
-            mDoMtx_stack_c::YrotM(cM_rndF(65536.0f));
+            s16 angle = cM_rndF(0x10000);
+            mDoMtx_stack_c::ZrotS(cM_rndF(0x10000));
+            mDoMtx_stack_c::XrotM(cM_rndF(0x10000));
+            mDoMtx_stack_c::YrotM(cM_rndF(0x10000));
             mDoMtx_stack_c::transM(temp * cM_ssin(angle), temp * cM_scos(angle), 0.0f);
             mDoMtx_stack_c::ZrotM(current.angle.z);
             mDoMtx_stack_c::XrotM(current.angle.x);
@@ -68,7 +68,7 @@ void daArrow_Iceeff_c::CreateInit() {
         }
     }
     else {
-        current.angle.y = cM_rndF(65536.0f);
+        current.angle.y = cM_rndF(0x10000);
     }
 
     fopAcM_setCullSizeBox(this, -100.0f, -100.0f, -100.0f, 100.0f, 100.0f, 100.0f);

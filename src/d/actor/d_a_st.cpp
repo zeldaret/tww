@@ -222,12 +222,7 @@ static void ke_pos_set(st_class* i_this, st_ke_s* param_2, int param_3) {
 static void ke_disp(st_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
-#ifdef __MWERKS__
     i_this->mLineMat.update(10, 1.2f, (GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
-#else
-    GXColor color = (GXColor){0xFF, 0x64, 0, 0xFF};
-    i_this->mLineMat.update(10, 1.2f, color, 2, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 }
 
@@ -633,6 +628,7 @@ static void fight(st_class* i_this) {
     switch (i_this->m02C4) {
         case 0:
             i_this->m02DC = 0.0f;
+            break;
     }
     i_this->m0ED1 = 0;
     switch (i_this->mFightBehavior) {
@@ -1519,6 +1515,7 @@ static void St_move(st_class* i_this) {
             break;
         case 0x21:
             sita_move(i_this);
+            break;
     }
     if (i_this->mActionState != 0x10) {
         speed_pos_calc(i_this);
@@ -2049,7 +2046,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     }
                 }
                 if ((i_this->m0ED3 == 2) || (i_this->m0ED3 == 0xb)) {
-                    this_part->m3E = cM_rndF(65536.0f);
+                    this_part->m3E = cM_rndF(0x10000);
                     this_part->m44 = 0.0f;
                     if (jointIndex == ST_JNT_BUKI_e) {
                         if ((heldWeapon != NULL) && (!fopAcM_checkCarryNow(heldWeapon))) {
@@ -2083,7 +2080,7 @@ static void part_move(st_class* i_this, int jointIndex) {
             case 6:
 #if VERSION > VERSION_DEMO
                 if ((i_this->m1DDC == 0) && (this_part->mPartVelocity.y <= 0.0f)) {
-                    this_part->m3E = cM_rndF(65536.0f);
+                    this_part->m3E = cM_rndF(0x10000);
                     this_part->m44 = 0.0f;
                     this_part->mPartState = 1;
                     this_part->mWaitTimer = 0;
@@ -2123,7 +2120,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                     cLib_addCalcAngleS2(&this_part->mPartRot.y, i_this->m1DDA, 2, 0xc00);
 #if VERSION == VERSION_DEMO
                     if (i_this->m1DDC == 0) {
-                        this_part->m3E = cM_rndF(65536.0f);
+                        this_part->m3E = cM_rndF(0x10000);
                         this_part->m44 = 0.0f;
                         this_part->mPartState = 1;
                         this_part->mWaitTimer = 0;
@@ -2151,7 +2148,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 }
                 this_part->mPartVelocity.setall(0.0f);
                 if (i_this->m1DDC == 0) {
-                    this_part->m3E = cM_rndF(65536.0f);
+                    this_part->m3E = cM_rndF(0x10000);
                     this_part->m44 = 0.0f;
                     this_part->mPartState = 1;
                     this_part->mWaitTimer = 0;
@@ -2162,7 +2159,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                 }
 #else
                 if ((i_this->m1DDC == 0) && (this_part->mPartVelocity.y <= 0.0f)) {
-                    this_part->m3E = cM_rndF(65536.0f);
+                    this_part->m3E = cM_rndF(0x10000);
                     this_part->m44 = 0.0f;
                     this_part->mPartState = 1;
                     this_part->mWaitTimer = 0;
@@ -2246,7 +2243,7 @@ static void part_move(st_class* i_this, int jointIndex) {
                             this_part->mPartRotAdd = local_88;
                             this_part->mPartRot = this_part->mPartRotAdd;
                         }
-                        this_part->m3E = cM_rndF(65536.0f);
+                        this_part->m3E = cM_rndF(0x10000);
                         this_part->mWaitTimer = 0;
                         this_part->m44 = 0.5f;
                         this_part->m05 = 1;

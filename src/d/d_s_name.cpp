@@ -128,8 +128,8 @@ cPhs_State dScnName_c::create() {
             JUT_ASSERT(489, dFe_c != NULL);
             dFe_c->_create();
             dMs_c = NULL;
-            dComIfGs_setNoFile(0);
             dComIfGs_setNewFile(0);
+            dComIfGs_setNoFile(0);
         }
         if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
             dComIfGs_setClearCount(1);
@@ -749,8 +749,8 @@ void dScnName_c::FileSelectClose() {
         case 2:
             if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
                 dMs_c->initialize();
-                dMs_c->field_0x053c = 1;
-                dMs_c->field_0x053d = dFs_c->field_0x392f; // getErrType?
+                dMs_c->field_0x53c = 1;
+                dMs_c->field_0x53d = dFs_c->field_0x392f; // getErrType?
                 if (dFs_c->field_0x392f == 2) {
                     dMs_c->initializeEx();
                 }

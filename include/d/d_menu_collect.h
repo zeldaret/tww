@@ -4,9 +4,15 @@
 #include "dolphin/types.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
+#include "JSystem/J2DGraph/J2DWindow.h"
+#include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_2dnumber.h"
+#include "d/d_menu_option.h"
+#include "d/d_menu_save.h"
 #include "d/d_menu_base.h"
 #include "f_op/f_op_msg_mng.h"
+#include "d/d_lib.h"
+#include "d/d_file_error.h"
 
 struct fopMsgM_pane_class;
 class JKRArchive;
@@ -14,7 +20,7 @@ class JUTFont;
 
 class dMenu_Collect_c : public dMenu_base_c {
 public:
-    virtual void draw() {}
+    virtual void draw() { _draw(); }
 
     void alphaChange(fopMsgM_pane_class* pane, float alpha) { pane->mInitAlpha *= alpha; }
     u8 getCollectMode() { return mCollectMode; }
@@ -51,8 +57,8 @@ public:
     void screenSet();
     void initialize();
     void cursorAnime();
-    void stickDirection(unsigned char);
-    void cursorMainMove();
+    int stickDirection(unsigned char);
+    int cursorMainMove();
     u8 noteCheck();
     void noteInit();
     void noteAppear();
@@ -87,7 +93,7 @@ public:
     void outFontInit();
     void outFontMove();
     void outFontDraw();
-    void collectItemGetCheck(unsigned char);
+    bool collectItemGetCheck(unsigned char);
     virtual void _create();
     void _create3();
     virtual void _delete();
@@ -107,7 +113,7 @@ public:
 
 private:
     /* 0x0000 */ // vtable
-    /* 0x0004 */ J2DScreen* m004;
+    /* 0x0004 */ MyScreen* scrn;
     /* 0x0008 */ fopMsgM_pane_class m008;
     /* 0x0040 */ fopMsgM_pane_class m040;
     /* 0x0078 */ fopMsgM_pane_class m078;
@@ -119,8 +125,7 @@ private:
     /* 0x07E8 */ fopMsgM_pane_class m7E8;
     /* 0x0820 */ fopMsgM_pane_class m820;
     /* 0x0858 */ fopMsgM_pane_class m858;
-    /* 0x0890 */ fopMsgM_pane_class m890;
-    /* 0x08C8 */ fopMsgM_pane_class m8C8;
+    /* 0x0890 */ fopMsgM_pane_class m890[2];
     /* 0x0900 */ fopMsgM_pane_class m900;
     /* 0x0938 */ fopMsgM_pane_class m938;
     /* 0x0970 */ fopMsgM_pane_class m970;
@@ -155,9 +160,9 @@ private:
     /* 0x1B98 */ fopMsgM_pane_class m1B98[6];
     /* 0x1CE8 */ fopMsgM_pane_class m1CE8[6];
     /* 0x1E38 */ fopMsgM_pane_class m1E38[6];
-    /* 0x1460 */ fopMsgM_pane_class m1F88;
-    /* 0x1460 */ fopMsgM_pane_class m1FC0;
-    /* 0x1460 */ fopMsgM_pane_class m1FF8;
+    /* 0x1F88 */ fopMsgM_pane_class m1F88;
+    /* 0x1FC0 */ fopMsgM_pane_class m1FC0;
+    /* 0x1FF8 */ fopMsgM_pane_class m1FF8;
     /* 0x2030 */ fopMsgM_pane_class m2030[5];
     /* 0x2148 */ fopMsgM_pane_class m2148[5];
     /* 0x2260 */ fopMsgM_pane_class m2260[5];
@@ -165,43 +170,54 @@ private:
     /* 0x23B0 */ fopMsgM_pane_class m23B0;
     /* 0x23E8 */ fopMsgM_pane_class m23E8;
     /* 0x2420 */ fopMsgM_pane_class m2420;
-    /* 0x2458 */ u8 m2458[0x2460 - 0x2458];
-    /* 0x2460 */ dDlst_2DOutFont_c* m2460;
+    /* 0x2458 */ STControl* stick;
+    /* 0x245C */ CSTControl* cstick;
+    /* 0x2460 */ dDlst_2DOutFont_c* outFont;
     /* 0x2464 */ JKRArchive* mpArc;
     /* 0x2468 */ JKRArchive* mpOptArc;
     /* 0x246C */ JKRArchive* mpSaveArc;
     /* 0x2470 */ JUTFont* mFont;
     /* 0x2474 */ JUTFont* mRFont;
     /* 0x2478 */ J2DPane* m2478;
-    /* 0x247C */ u8 m247C[0x2488 - 0x247C];
-    /* 0x2488 */ JUtility::TColor color_2488;
-    /* 0x248C */ JUtility::TColor color_248C;
-    /* 0x2490 */ JUtility::TColor color_2490;
-    /* 0x2494 */ JUtility::TColor color_2494;
+    /* 0x247C */ JPABaseEmitter* m247C[3];
+    /* 0x2488 */ J2DWindow::TContentsColor m2488;
     /* 0x2498 */ ResTIMG* mTactTexBuffer;
     /* 0x249C */ ResTIMG* mMapTexBuffer;
     /* 0x24A0 */ ResTIMG* mTriforceTexBuffer[8];
     /* 0x24C0 */ void* mSymbolTexBuffer[3];
     /* 0x24CC */ void* mItemTexBuffer[5];
     /* 0x24E0 */ fopMsgM_msgDataProc_c mMsgProc;
-    /* 0x2780 */ u8 m2780[0x27A8 - 0x2780];
+    /* 0x2780 */ dMenu_Option_c* dMo_c;
+    /* 0x2784 */ dMenu_save_c* dMs_c;
+    /* 0x2788 */ f32 m2788[4];
+    /* 0x2798 */ f32 m2798[4];
     /* 0x27A8 */ f32 m27A8;
     /* 0x27AC */ f32 m27AC;
     /* 0x27B0 */ char* name[2];
     /* 0x27B8 */ char* note[2];
     /* 0x27C0 */ char* dummy[2];
-    /* 0x27C8 */ u8 m27C8[0x27E2 - 0x27C8];
-    /* 0x27E2 */ u16 mTimer;
-    /* 0x27E4 */ u8 m27E4[0x27EC - 0x27E4];
+    /* 0x27C8 */ u8 m27C8[0x27DC - 0x27C8];
+    /* 0x27DC */ u32 m27DC;
+    /* 0x27E0 */ s16 m27E0;
+    /* 0x27E2 */ s16 mTimer;
+    /* 0x27E4 */ u16 m27E4;
+    /* 0x27E6 */ u16 m27E6;
+    /* 0x27E8 */ u16 m27E8;
+    /* 0x27EA */ u8 m27EA;
+    /* 0x27EB */ u8 m27EB;
     /* 0x27EC */ u8 mTriggerInfo;
     /* 0x27ED */ u8 mNowItem;
     /* 0x27EE */ u8 mCollectMode;
-    /* 0x27EF */ u8 m27EF[0x27F4 - 0x27EF];
+    /* 0x27EF */ u8 m27EF;
+    /* 0x27F0 */ u8 m27F0;
+    /* 0x27F1 */ u8 m27F1;
+    /* 0x27F2 */ u8 m27F2;
+    /* 0x27F3 */ u8 m27F3;
 }; // Size: 0x27F4
 
 STATIC_ASSERT(sizeof(dMenu_Collect_c) == 0x27F4);
 
-class dMc_HIO_c {
+class dMc_HIO_c : public JORReflexible {
 public:
     dMc_HIO_c();
     virtual ~dMc_HIO_c() {}
@@ -222,6 +238,7 @@ public:
     /* 0x58 */ JUtility::TColor m58;
     /* 0x5C */ u8 m5C;
     /* 0x5D */ u8 m5D;
+    /* 0x5E */ s8 mNo;
 };
 
 #endif /* D_MENU_COLLECT_H */

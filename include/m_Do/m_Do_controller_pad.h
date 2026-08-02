@@ -33,6 +33,16 @@ extern interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 #define CPad_CHECK_TRIG_RIGHT(padNo) (g_mDoCPd_cpadInfo[padNo].mButtonTrig.right)
 #define CPad_CHECK_TRIG_LEFT(padNo)  (g_mDoCPd_cpadInfo[padNo].mButtonTrig.left)
 
+#define CPad_GET_STICK_POS_X(padNo) (g_mDoCPd_cpadInfo[padNo].mMainStickPosX)
+#define CPad_GET_STICK_POS_Y(padNo) (g_mDoCPd_cpadInfo[padNo].mMainStickPosY)
+#define CPad_GET_STICK_VALUE(padNo) (g_mDoCPd_cpadInfo[padNo].mMainStickValue)
+#define CPad_GET_STICK_ANGLE(padNo) (g_mDoCPd_cpadInfo[padNo].mMainStickAngle)
+
+#define CPad_GET_SUBSTICK_POS_X(padNo) (g_mDoCPd_cpadInfo[padNo].mCStickPosX)
+#define CPad_GET_SUBSTICK_POS_Y(padNo) (g_mDoCPd_cpadInfo[padNo].mCStickPosY)
+#define CPad_GET_SUBSTICK_VALUE(padNo) (g_mDoCPd_cpadInfo[padNo].mCStickValue)
+#define CPad_GET_SUBSTICK_ANGLE(padNo) (g_mDoCPd_cpadInfo[padNo].mCStickAngle)
+
 int mDoCPd_Create();
 int mDoCPd_Read();
 

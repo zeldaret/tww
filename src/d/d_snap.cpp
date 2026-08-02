@@ -1457,7 +1457,7 @@ int dSnap_GetFigRoomId(int tableIndex) {
 /* 800CD00C-800CD068       .text __ct__9dSnap_ObjFv */
 dSnap_Obj::dSnap_Obj() {
     mActorPID = fpcM_ERROR_PROCESS_ID_e;
-    mPhoto = 0;
+    mPhotoNo = 0;
     field_0x19 = 4;
     field_0x1a = -1;
     field_0x1b = 0;
@@ -1703,8 +1703,8 @@ void dSnap_Obj::SetGeoSph(const Vec& center, f32 radius) {
 }
 
 /* 800CDB68-800CDB94       .text SetInf__9dSnap_ObjFUcPC10fopAc_ac_cUcUcs */
-void dSnap_Obj::SetInf(u8 photoIndex, const fopAc_ac_c* r5, u8 r6, u8 r7, s16 cullAngle) {
-    mPhoto = photoIndex;
+void dSnap_Obj::SetInf(u8 photoNo, const fopAc_ac_c* r5, u8 r6, u8 r7, s16 cullAngle) {
+    mPhotoNo = photoNo;
     mActorPID = fopAcM_GetID(const_cast<fopAc_ac_c*>(r5));
     field_0x1a = r6;
     field_0x19 = r7;
@@ -1736,8 +1736,8 @@ void dSnap_Obj::SetArea(s16 x, s16 y) {
 }
 
 /* 800CDC04-800CDC18       .text ChkPhoto__9dSnap_ObjFi */
-bool dSnap_Obj::ChkPhoto(int r4) {
-    return mPhoto == r4 ? TRUE : FALSE;
+bool dSnap_Obj::ChkPhoto(int photoNo) {
+    return mPhotoNo == photoNo ? TRUE : FALSE;
 }
 
 /* 800CDC18-800CDC40       .text ChkSuccess__9dSnap_ObjFlf */
@@ -1973,12 +1973,12 @@ void dSnap_packet::Judge() {
 }
 
 /* 800CE610-800CE6A4       .text FindPhoto__12dSnap_packetFii */
-int dSnap_packet::FindPhoto(int r4, int r5) {
+int dSnap_packet::FindPhoto(int r4, int photoNo) {
     if (r4 < 0 || r4 >= field_0x14) {
         return -1;
     }
     for (int col = r4; col < field_0x14; col++) {
-        if (m_tbl[col].m_obj.ChkPhoto(r5)) {
+        if (m_tbl[col].m_obj.ChkPhoto(photoNo)) {
             return col;
         }
     }
@@ -1987,7 +1987,7 @@ int dSnap_packet::FindPhoto(int r4, int r5) {
 
 /* 800CE6A4-800CE70C       .text JudgePost__12dSnap_packetFv */
 int dSnap_packet::JudgePost() {
-    int col = FindPhoto(0, 1);
+    int col = FindPhoto(0, DSNAP_TYPE_POST);
     if (col == -1) {
         return 0;
     }
@@ -2000,7 +2000,7 @@ int dSnap_packet::JudgePost() {
 
 /* 800CE70C-800CE77C       .text JudgeBikutsuki__12dSnap_packetFv */
 int dSnap_packet::JudgeBikutsuki() {
-    int col = FindPhoto(0, 2);
+    int col = FindPhoto(0, DSNAP_TYPE_BIKUTSUKI);
     if (col == -1) {
         return 0;
     }
@@ -2013,11 +2013,11 @@ int dSnap_packet::JudgeBikutsuki() {
 
 /* 800CE77C-800CE83C       .text JudgeCoupleLook__12dSnap_packetFv */
 int dSnap_packet::JudgeCoupleLook() {
-    int col1 = FindPhoto(0, 3);
+    int col1 = FindPhoto(0, DSNAP_TYPE_COUPLE_LOOK);
     if (col1 == -1) {
         return 0;
     }
-    int col2 = FindPhoto(col1+1, 3);
+    int col2 = FindPhoto(col1+1, DSNAP_TYPE_COUPLE_LOOK);
     if (col2 == -1) {
         return 0;
     }
@@ -2032,7 +2032,7 @@ int dSnap_packet::JudgeCoupleLook() {
 
 /* 800CE83C-800CE8AC       .text JudgeGF__12dSnap_packetFv */
 int dSnap_packet::JudgeGF() {
-    int col = FindPhoto(0, 4);
+    int col = FindPhoto(0, DSNAP_TYPE_UNK04);
     if (col == -1) {
         return 0;
     }
@@ -2045,7 +2045,7 @@ int dSnap_packet::JudgeGF() {
 
 /* 800CE8AC-800CE96C       .text JudgeGenzo__12dSnap_packetFv */
 int dSnap_packet::JudgeGenzo() {
-    int col1 = FindPhoto(0, 5);
+    int col1 = FindPhoto(0, DSNAP_TYPE_UNK05);
     if (col1 == -1) {
         return 0;
     }
@@ -2068,11 +2068,11 @@ int dSnap_packet::JudgeGenzo() {
 
 /* 800CE96C-800CEA08       .text JudgeObasan4__12dSnap_packetFv */
 int dSnap_packet::JudgeObasan4() {
-    int col1 = FindPhoto(0, 6);
+    int col1 = FindPhoto(0, DSNAP_TYPE_UNK06);
     if (col1 == -1) {
         return 0;
     }
-    int col2 = FindPhoto(0, 5);
+    int col2 = FindPhoto(0, DSNAP_TYPE_UNK05);
     if (col2 != -1) {
         return 0;
     }
@@ -2090,12 +2090,12 @@ int dSnap_packet::JudgeTestM() {
 
 /* 800CEA10-800CEA80       .text JudgeGene__12dSnap_packetFv */
 int dSnap_packet::JudgeGene() {
-    int col = FindPhoto(0, field_0x10);
+    int col = FindPhoto(0, mPhotoNo);
     if (col == -1) {
         return 0;
     }
     if (m_tbl[col].m_obj.ChkSuccess(4000, 0.5f)) {
-        return field_0x10;
+        return mPhotoNo;
     } else {
         return 0;
     }
@@ -2110,17 +2110,17 @@ int dSnap_packet::JudgeFigure(int col) {
     m_tbl[col].m_obj.mActorPID = m_tbl[col].m_obj.mActorPID;
 #endif
     
-    if (field_0x10 >= 0xD0) {
+    if (mPhotoNo >= DSNAP_TYPE_LAST_INDEX) {
         return 0;
     }
-    if (field_0x10 >= 0xCF) {
+    if (mPhotoNo >= DSNAP_TYPE_UNKCF) {
         return 0;
     }
     
     int minPixels;
     f32 minRatio;
-    if (field_0x10 > 0x48) {
-        int tableIndex = dSnap_PhotoIndex2TableIndex(field_0x10);
+    if (mPhotoNo > DSNAP_TYPE_UNK48) {
+        int tableIndex = dSnap_PhotoIndex2TableIndex(mPhotoNo);
         minPixels = l_CharaData[tableIndex].minPixels;
         minRatio = l_CharaData[tableIndex].minRatio / 1000.0f;
     } else {
@@ -2139,16 +2139,16 @@ int dSnap_packet::JudgeFigure(int col) {
         mResultDetail |= 1;
     }
     
-    return field_0x10;
+    return mPhotoNo;
 }
 
 /* 800CEB80-800CED0C       .text SetResult__12dSnap_packetFv */
 void dSnap_packet::SetResult() {
     mResult = 0;
     mResultDetail = 0;
-    u8 sp8[0xB];
+    bool sp8[ARRAY_SIZE(m_judge_tbl)];
     for (int i = 0; i < ARRAY_SIZE(sp8); i++) {
-        sp8[i] = 0;
+        sp8[i] = false;
     }
     int r30 = -1;
     for (int col = 0; col < field_0x14; col++) {
@@ -2156,22 +2156,22 @@ void dSnap_packet::SetResult() {
             continue;
         }
         JUT_ASSERT(VERSION_SELECT(2273, 2325, 2327, 2327), 0 <= m_tbl[col].m_obj.GetPhoto() && m_tbl[col].m_obj.GetPhoto() < DSNAP_TYPE_LAST_INDEX);
-        if (m_tbl[col].m_obj.GetPhoto() < (s32)ARRAY_SIZE(sp8)) {
-            if (sp8[m_tbl[col].m_obj.GetPhoto()] != 0) {
+        if (m_tbl[col].m_obj.GetPhoto() < ARRAY_SSIZE(sp8)) {
+            if (sp8[m_tbl[col].m_obj.GetPhoto()]) {
                 continue;
             }
-            if (m_judge_tbl[m_tbl[col].m_obj.GetPhoto()] != 0) {
-                field_0x10 = m_tbl[col].m_obj.GetPhoto();
+            if (m_judge_tbl[m_tbl[col].m_obj.GetPhoto()] != NULL) {
+                mPhotoNo = m_tbl[col].m_obj.GetPhoto();
                 mResult = (this->*m_judge_tbl[m_tbl[col].m_obj.GetPhoto()])();
                 r30 = m_tbl[col].m_obj.mCapturedPixels;
                 if (mResult != 0) {
                     return;
                 }
             }
-            sp8[m_tbl[col].m_obj.GetPhoto()] = 1;
+            sp8[m_tbl[col].m_obj.GetPhoto()] = true;
         } else {
             if (r30 < m_tbl[col].m_obj.mCapturedPixels) {
-                field_0x10 = m_tbl[col].m_obj.GetPhoto();
+                mPhotoNo = m_tbl[col].m_obj.GetPhoto();
                 mResult = JudgeFigure(col);
                 r30 = m_tbl[col].m_obj.mCapturedPixels;
             }
@@ -2215,15 +2215,15 @@ void dSnap_RegistFig(u8 photoIndex, fopAc_ac_c* actor, f32 f1, f32 f2, f32 f3) {
 }
 
 /* 800CEDF8-800CEFD4       .text dSnap_RegistFig__FUcP10fopAc_ac_cRC3Vecsfff */
-void dSnap_RegistFig(u8 photoIndex, fopAc_ac_c* actor, const Vec& pos, s16 angleY, f32 f1, f32 f2, f32 f3) {
+void dSnap_RegistFig(u8 photoNo, fopAc_ac_c* actor, const Vec& pos, s16 angleY, f32 f1, f32 f2, f32 f3) {
     if (!l_snap.ChkReleaseShutter()) {
         return;
     }
-    if (photoIndex >= 0xCF) {
+    if (photoNo >= DSNAP_TYPE_UNKCF) {
         return;
     }
     
-    int tableIndex = dSnap_PhotoIndex2TableIndex(photoIndex);
+    int tableIndex = dSnap_PhotoIndex2TableIndex(photoNo);
     const CharaData& chara = l_CharaData[tableIndex];
     mDoMtx_stack_c::YrotS(angleY);
     cXyz sp14;
@@ -2240,7 +2240,7 @@ void dSnap_RegistFig(u8 photoIndex, fopAc_ac_c* actor, const Vec& pos, s16 angle
     int angY = angleY;
     dSnap_Obj sp20;
     sp20.SetGeo(sp14, chara.radius*f2, chara.height*f1, angY);
-    sp20.SetInf(photoIndex, actor, 0, 4, chara.cullAngle);
+    sp20.SetInf(photoNo, actor, 0, 4, chara.cullAngle);
     dSnap_RegistSnapObj(sp20);
 }
 

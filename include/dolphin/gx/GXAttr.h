@@ -13,10 +13,10 @@ typedef struct _GXVtxDescList {
 } GXVtxDescList;  // Size: 0x08
 
 typedef struct _GXVtxAttrFmtList {
-    /* 0x00 */ GXAttr mAttrib;
-    /* 0x04 */ GXCompCnt mCompCnt;
-    /* 0x08 */ GXCompType mCompType;
-    /* 0x0C */ u8 mCompShift;
+    GXAttr attr;
+    GXCompCnt cnt;
+    GXCompType type;
+    u8 frac;
 } GXVtxAttrFmtList;  // Size: 0x10
 
 void GXSetVtxDesc(GXAttr attr, GXAttrType type);

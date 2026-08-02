@@ -22,6 +22,7 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_grid.h"
 #include "res/Object/Ship.h"
+#include "cstdint.h"
 
 static char l_arcName[] = "Ship";
 static Vec l_cannon_top = {85.0f, 0.0f, 10.0f};
@@ -278,7 +279,7 @@ BOOL daShip_c::draw() {
         mDoMtx_stack_c::concat(MStack_50);
         mDoMtx_stack_c::revConcat(m02A8);
         m02A0->setEffectMtx(mDoMtx_stack_c::get());
-        m02A4->setTranslationX(m03D4);
+        m02A4->mTexMtxInfo.mSRT.mTranslationX = m03D4;
     }
 
     if (
@@ -344,10 +345,10 @@ BOOL daShip_c::checkForceMessage() {
     if (dComIfGs_isGetItem(1, 0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) {
         mNextMessageNo = 0x5E0;
     }
-    else if (dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
+    else if (dComIfGs_isSymbol(dSymbol_DIN_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
         mNextMessageNo = 0x5EC;
     }
-    else if (dComIfGs_isSymbol(2) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
+    else if (dComIfGs_isSymbol(dSymbol_FARORE_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
         mNextMessageNo = 0x5F6;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A01)) {
@@ -356,7 +357,7 @@ BOOL daShip_c::checkForceMessage() {
     else if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
         mNextMessageNo = 0x624;
     }
-    else if (dComIfGs_isSymbol(0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
+    else if (dComIfGs_isSymbol(dSymbol_NAYRU_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xD5A;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D10) && !daPy_getPlayerActorClass()->checkMasterSwordEquip()) {
@@ -494,7 +495,7 @@ void daShip_c::setInitMessage() {
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xd62;
     }
-    else if (dComIfGs_isSymbol(0)) {
+    else if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
         mNextMessageNo = 0xd5a;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1940)) {
@@ -556,7 +557,7 @@ void daShip_c::setInitMessage() {
         }
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A20)) {
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             mNextMessageNo = 0x5f6;
         }
         else {
@@ -583,7 +584,7 @@ void daShip_c::setInitMessage() {
         }
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) {
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             mNextMessageNo = 0x5ec;
         }
         else {
@@ -1018,7 +1019,7 @@ BOOL daShip_c::checkOutRange() {
         if (bVar5) {
             if (
                 (pathIndex == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) ||
-                (pathIndex == 1 && dComIfGs_isSymbol(2)) ||
+                (pathIndex == 1 && dComIfGs_isSymbol(dSymbol_FARORE_e)) ||
                 (pathIndex == 2 && daPy_getPlayerActorClass()->checkMasterSwordEquip())
             ) {
                 path = dPath_GetNextRoomPath(path, -1);
@@ -1218,9 +1219,9 @@ void daShip_c::setCrashData(short param1) {
             iVar5 = param1 - shape_angle.y;
             fVar1 = cM_ssin(iVar5);
             fVar2 = cM_scos(iVar5);
-            m0370 += fVar2 * 3072.0f;
+            m0370 += fVar2 * 0xC00;
             m0374 += fVar2 * 500.0f;
-            m0372 -= fVar1 * 3072.0f;
+            m0372 -= fVar1 * 0xC00;
             m0376 -= fVar1 * 500.0f;
             m03B6 = 30;
         }
@@ -1261,7 +1262,6 @@ BOOL daShip_c::checkNextMode(int i_curMode) {
             tgRVecP = mSph.GetTgRVecP();
             tgHitPos = mSph.GetTgHitPosP();
             tgHitObj = mSph.GetTgHitGObj();
-            
         }
         else {
             dCcD_Cyl* cyl = mCyl;
@@ -1392,7 +1392,7 @@ void daShip_c::setSelfMove(int param_1) {
     float fVar6;
     
     if (param_1) {
-        sVar2 = mStickMVal * 8192.0f * -cM_ssin(mStickMAng);
+        sVar2 = mStickMVal * 0x2000 * -cM_ssin(mStickMAng);
     }
     else {
         sVar2 = 0;
@@ -1623,7 +1623,7 @@ BOOL daShip_c::procSteerMove() {
     if (checkNextMode(MODE_STEER_MOVE_e)) {
         return TRUE;
     }
-    cLib_addCalcAngleS(&m0366, mStickMVal * 8192.0f * -cM_ssin(mStickMAng), 4, l_HIO.tiller_speed, 0x100);
+    cLib_addCalcAngleS(&m0366, mStickMVal * 0x2000 * -cM_ssin(mStickMAng), 4, l_HIO.tiller_speed, 0x100);
     if (!checkStateFlg(daSFLG_FLY_e)) {
         setMoveAngle(m0366);
     }
@@ -1780,7 +1780,6 @@ BOOL daShip_c::procCannon() {
 
             cLib_addCalcAngleS(&m0396, cM_atan2s(-cannonPos.y, cannonPos.absXZ()) + 0x4000, 5, 0x180, 0x40);
             cLib_addCalcAngleS(&m0394, cM_atan2s(cannonPos.x, cannonPos.z) - shape_angle.y, 5, 0x180, 0x40);
-        
         } else if (!mDoCPd_R_LOCK_BUTTON(0)) {
             float adjust = mStickMVal * (m0404 * 4.0f + 1.0f);
             m0396 += (adjust * 384.0f) * cM_scos(mStickMAng);
@@ -2029,19 +2028,19 @@ BOOL daShip_c::procCraneUp() {
         if (cLib_distanceAngleS(m036C, m03A6) < 0x400) {
             if (mCraneBaseAngle > 0) {
                 if (m03A6 > 0x400) {
-                    m03A6 = cM_rnd() * 256.0f;
+                    m03A6 = cM_rnd() * 0x100;
                 }
                 else {
-                    m03A6 = cM_rnd() * 1024.0f + 2048.0f;
+                    m03A6 = cM_rnd() * 0x400 + 0x800;
                     seStart(JA_SE_LK_SHIP_CRANE_SALVAGE, &current.pos);
                 }
             }
             else {
                 if (m03A6 < -0x400) {
-                    m03A6 = cM_rnd() * -256.0f;
+                    m03A6 = cM_rnd() * -0x100;
                 }
                 else {
-                    m03A6 = -2048.0f - cM_rnd() * 1024.0f;
+                    m03A6 = -0x800 - cM_rnd() * 0x400;
                     seStart(JA_SE_LK_SHIP_CRANE_SALVAGE, &current.pos);
                 }
             }
@@ -2153,10 +2152,10 @@ BOOL daShip_c::procZevDemo() {
         }
 
         if (dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "tact")) {
-            daPy_getPlayerLinkActorClass()->onNoResetFlg1(daPy_py_c::daPyFlg1_SHIP_TACT);
+            daPy_getPlayerLinkActorClass()->onShipTact();
         }
         else {
-            daPy_getPlayerLinkActorClass()->offNoResetFlg1(daPy_py_c::daPyFlg1_SHIP_TACT);
+            daPy_getPlayerLinkActorClass()->offShipTact();
         }
 
         if (m0351 == DEMO_INIT_e || m0351 == DEMO_OPEN_e) {
@@ -2640,11 +2639,11 @@ BOOL daShip_c::procTornadoUp_init() {
 
 /* 00006DE0-00006FDC       .text procTornadoUp__8daShip_cFv */
 BOOL daShip_c::procTornadoUp() {
-    daTornado_c* tornadoActor = mTornadoActor;
+    daTornado_c* tornado = mTornadoActor;
     
-    cLib_addCalc(&current.pos.x, tornadoActor->getJointXPos(m037A), 0.5f, 80.0f, 20.0f);
+    cLib_addCalc(&current.pos.x, tornado->getJointXPos(m037A), 0.5f, 80.0f, 20.0f);
     
-    cLib_addCalc(&current.pos.z, tornadoActor->getJointZPos(m037A), 0.5f, 80.0f, 20.0f);
+    cLib_addCalc(&current.pos.z, tornado->getJointZPos(m037A), 0.5f, 80.0f, 20.0f);
 
     current.pos.y += speed.y;
     speed.y += 2.0f;
@@ -2653,17 +2652,17 @@ BOOL daShip_c::procTornadoUp() {
         speed.y = 50.0f;
     }
 
-    if (tornadoActor->getJointYPos(m037A) < current.pos.y && m037A < 11) {
+    if (tornado->getJointYPos(m037A) < current.pos.y && m037A < 11) {
         m037A++;
     }
 
     shape_angle.y += 0x1C25;
 
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-    cXyz local_3c(tornadoActor->current.pos.x, current.pos.y, tornadoActor->current.pos.z);
+    cXyz local_3c(tornado->current.pos.x, current.pos.y, tornado->current.pos.z);
     camera->mCamera.Set(local_3c, camera->mCamera.Eye());
     
-    if (m03A6 == 0 && current.pos.y > tornadoActor->current.pos.y + 5000.0f) {
+    if (m03A6 == 0 && current.pos.y > tornado->current.pos.y + 5000.0f) {
         m03A6 = 1;
         int exitId = (s32)cM_rndF(8.0f) + 0xC6;
         if (exitId >= 0xCE) {
@@ -2704,29 +2703,29 @@ BOOL daShip_c::procStartModeWarp() {
     GXColor amb;
     cXyz local_30;
     
-    daTornado_c* pfVar2 = (daTornado_c*)fopAcM_SearchByID(mTactWarpID);
+    daTornado_c* tornado = (daTornado_c*)fopAcM_SearchByID(mTactWarpID);
     camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     shape_angle.y += m03A6;
     current.angle.y = shape_angle.y;
-    if (pfVar2) {
+    if (tornado) {
 #if VERSION > VERSION_DEMO
         if (!checkStateFlg(daSFLG_UNK8_e)) {
             onStateFlg(daSFLG_UNK8_e);
-            pfVar2->current.pos.x = current.pos.x;
-            pfVar2->current.pos.z = current.pos.z;
+            tornado->current.pos.x = current.pos.x;
+            tornado->current.pos.z = current.pos.z;
         }
 #endif
         iVar5 = 0;
         for (int i = 0; i < 11; iVar5++, i++) {
-            if (current.pos.y < pfVar2->getJointYPos(i)) break;
+            if (current.pos.y < tornado->getJointYPos(i)) break;
         }
         if (iVar5 == 11) {
           iVar5 = 10;
         }
-        cLib_chaseF(&current.pos.x, pfVar2->getJointXPos(iVar5), 50.0f);
-        cLib_chaseF(&current.pos.z, pfVar2->getJointZPos(iVar5), 50.0f);
-        local_30.x = pfVar2->current.pos.x;
-        local_30.z = pfVar2->current.pos.z;
+        cLib_chaseF(&current.pos.x, tornado->getJointXPos(iVar5), 50.0f);
+        cLib_chaseF(&current.pos.z, tornado->getJointZPos(iVar5), 50.0f);
+        local_30.x = tornado->current.pos.x;
+        local_30.z = tornado->current.pos.z;
     }
     else {
         local_30.x = current.pos.x;
@@ -2740,8 +2739,8 @@ BOOL daShip_c::procStartModeWarp() {
             speed.y = 0.0f;
             offStateFlg(daSFLG_FLY_e);
             m037A = 1;
-            if (pfVar2 != NULL) {
-                pfVar2->m31c = 1;
+            if (tornado != NULL) {
+                tornado->setScaleOn();
             }
             dKy_get_seacolor(&diff, &amb);
             m03BC.x = 0;
@@ -2750,13 +2749,13 @@ BOOL daShip_c::procStartModeWarp() {
             dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &shape_angle, NULL, 0xFF, &m1984, -1, &diff);
             dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWARPSPLASH00, &current.pos, &m03BC, NULL, 0xFF, &m1998, -1, &diff);
         }
-        if (pfVar2 != NULL) {
-            pfVar2->current.pos.y = current.pos.y - 700.0f;
+        if (tornado != NULL) {
+            tornado->current.pos.y = current.pos.y - 700.0f;
         }
     }
-    else if (pfVar2 == NULL || pfVar2->mJointScale[10] < 0.8f) {
-        if (pfVar2 != NULL) {
-            pfVar2->current.pos.y -= 12.0f;
+    else if (tornado == NULL || tornado->getSmallScaleEnd() < 0.8f) {
+        if (tornado != NULL) {
+            tornado->current.pos.y -= 12.0f;
         }
         m03BC.y = shape_angle.y + 0x8000;
         cLib_chaseS(&m03A6, 0, 0x40);
@@ -2818,7 +2817,7 @@ BOOL daShip_c::procTactWarp() {
         res = FALSE;
     }
     else {
-        if (cLib_chaseS(&m03A6, 0x1C25, 0x40) && (tornado->mJointScale[10] > 0.8f)) {
+        if (cLib_chaseS(&m03A6, 0x1C25, 0x40) && (tornado->getScaleEnd() > 0.8f)) {
             speed.y += 1.0f;
             if (speed.y > 50.0f) {
                 speed.y = 50.0f;
@@ -2831,7 +2830,7 @@ BOOL daShip_c::procTactWarp() {
         else {
             if ((!m037A) && (m03A6 > 0x1000)) {
                 m037A = 1;
-                tornado->m31c = 1;
+                tornado->setScaleOn();
             }
         }
         if (m037A == 1) {
@@ -2875,7 +2874,7 @@ BOOL daShip_c::procWhirlDown_init() {
 
 /* 00007A90-00007BEC       .text procWhirlDown__8daShip_cFv */
 BOOL daShip_c::procWhirlDown() {  
-    shape_angle.y += (m0408 / (2*M_PI)) * 65536.0f;
+    shape_angle.y += (m0408 / (2*M_PI)) * 0x10000;
     if (mWhirlActor) {
 #if VERSION == VERSION_DEMO
         if (cLib_addCalcPosXZ(&current.pos, mWhirlActor->current.pos, 1.0f, speedF, 10.0f) < 10.0f)
@@ -2985,7 +2984,6 @@ void daShip_c::setEffectData(float param_1, short param_2) {
             mWaveL.stop();
             mSplash.stop();
         }
-        
     }
     fVar3 = speedF + 150.0f;
     mEffPos.set(current.pos.x + fVar3 * cM_ssin(shape_angle.y), param_1, current.pos.z + fVar3 * cM_scos(shape_angle.y));
@@ -3423,10 +3421,10 @@ void daShip_c::setTornadoActor() {
         if (m0404 < 0.0f) {
             m0404 = 0.0f;
         }
-        daTornado_c* pfVar2 = mTornadoActor;
-        float dx = pfVar2->getJointXPos(0) - current.pos.x;
-        float dz = pfVar2->getJointZPos(0) - current.pos.z;
-        float distXZ = std::sqrtf(dx * dx + dz * dz);
+        daTornado_c* tornado = mTornadoActor;
+        f32 dx = tornado->getJointXPos(0) - current.pos.x;
+        f32 dz = tornado->getJointZPos(0) - current.pos.z;
+        f32 distXZ = std::sqrtf(dx * dx + dz * dz);
         if (!checkStateFlg(daSFLG_UNK1000_e) && distXZ < 3500.0f) {
             if(daPy_getPlayerLinkActorClass()->shipSpecialDemoStart()) {
                 procTornadoUp_init();
@@ -3705,20 +3703,19 @@ BOOL daShip_c::execute() {
             if (mTornadoActor) {
                 s16 sVar16;
                 sVar16 = shape_angle.y;
-                cLib_addCalcAngleS(&shape_angle.y, m040C * 10430.378f + 20480.0f, 5, 0x2000, 0x200);
+                cLib_addCalcAngleS(&shape_angle.y, RAD2S(m040C) + 0x5000, 5, 0x2000, 0x200);
                 setControllAngle(getAimControllAngle(sVar16));
                 current.angle.y = shape_angle.y;
             }
             else {
                 if (mWhirlActor) {
-                    s16 sVar16;
-                    sVar16 = shape_angle.y;
+                    s16 sVar16 = shape_angle.y;
                     s16 sVar5;
                     if (m0352) {
-                        sVar5 = m040C * 10430.378f + 20480.0f;
+                        sVar5 = RAD2S(m040C) + 0x5000;
                     }
                     else {         
-                        sVar5 = m040C * 10430.378f + 32768.0f;
+                        sVar5 = RAD2S(m040C) + 0x8000;
                     }
                     cLib_addCalcAngleS(&shape_angle.y, sVar5, 5, 0x2000, 0x200);
                     setControllAngle(getAimControllAngle(sVar16));
@@ -3786,7 +3783,7 @@ BOOL daShip_c::execute() {
                     fVar4 = m0404 * 30.0f + 10.0f;
                     // Bug? This room check assumes we're on the sea without checking?
                     if (dComIfGs_getBombNum() == 0 && fopAcM_GetRoomNo(this) == dIsleRoom_OutsetIsland_e) {
-                          fVar4 *= 1.2f;
+                        fVar4 *= 1.2f;
                     }
                 }
                 firstDecrementShipSpeed(fVar4);
@@ -3869,7 +3866,6 @@ BOOL daShip_c::execute() {
                 fopAcM_posMove(this, mStts.GetCCMoveP());
                 if (dComIfGp_event_runCheck()) {
                     m1044 = cXyz::Zero;
-                    
                 }
                 else {
                     cXyz sp108;
@@ -3881,7 +3877,6 @@ BOOL daShip_c::execute() {
                     }
                     else {
                         cLib_addCalcPosXZ(&m1044, cXyz::Zero, 0.05f, 0.1f, 0.02f);
-
                     }
                     current.pos += m1044;
                 }
@@ -4012,9 +4007,8 @@ BOOL daShip_c::execute() {
             mDoMtx_multVecZero(mpCannonModel->getAnmMtx(VFNCN_JNT_CANON2_e), &m1038);
             
             if (mProc != &daShip_c::procCannon) {
-                m0396 = getAnglePartRate() * 16384.0f;
+                m0396 = getAnglePartRate() * 0x4000;
                 m0394 *= getAnglePartRate();
-            
             }
             
             mpCannonModel->calc();
@@ -4134,8 +4128,8 @@ BOOL daShip_c::execute() {
         r23_2 = TRUE;
     } 
     else if ((mCurMode == 10 || mCurMode == 11) && m0434 && mRopeCnt > 0) {
-            spC0 = *m0434 - eyePos;
-            r23_2 = TRUE;
+        spC0 = *m0434 - eyePos;
+        r23_2 = TRUE;
     }
     else if (mCurMode == 8 || distXz > 125.0f) {
         if (
@@ -4348,7 +4342,6 @@ BOOL daShip_c::execute() {
     if (mPart == PART_STEER_e) {
         dComIfGp_setPlayerStatus1(0, daPyStts1_SAIL_e);
         mDoAud_setShipSailState(1);
-        
     }
     else {
         dComIfGp_clearPlayerStatus1(0, daPyStts1_SAIL_e);
@@ -4594,8 +4587,7 @@ cPhs_State daShip_c::create() {
         for (u16 mno = 0; mno < pModelData->getMaterialNum(); mno++) {
             pMaterial = pModelData->getMaterialNodePointer(mno);
             for(u32 i = 0; i < 8; i++) {
-                J3DTexGenBlock* pTexGenBlock = pMaterial->getTexGenBlock();
-                J3DTexMtx* pTexMtx = pTexGenBlock->getTexMtx(i);
+                J3DTexMtx* pTexMtx = pMaterial->getTexMtx(i);
                 if (pTexMtx && pTexMtx->getTexMtxInfo().mInfo == 8) {
                     m02A0 = pTexMtx;
                     m02A4 = pTexMtx;
@@ -4720,14 +4712,10 @@ cPhs_State daShip_c::create() {
         mSph.Set(sph_src);
         mSph.SetStts(&mStts);
 
-        cull.box.min.x = -325.0f;
-        cull.box.min.y = -50.0f;
-        cull.box.min.z = -325.0f;
-        cull.box.max.x = 325.0f;
-        cull.box.max.y = 570.0f;
-        cull.box.max.z = 240.0f;
+        fopAcM_SetMin(this, -325.0f, -50.0f, -325.0f);
+        fopAcM_SetMax(this, 325.0f, 570.0f, 240.0f);
         
-        fopKyM_create(fpcNm_WIND_ARROW_e, (s32)this, 0, 0, 0);
+        fopKyM_create(fpcNm_WIND_ARROW_e, (std::intptr_t)this, 0, 0, 0);
 
         offStateFlg(daSFLG_UNK2_e);
         mAcch.CrrPos(*dComIfG_Bgsp());

@@ -244,6 +244,18 @@ public:
     }
     void setMesgCamInfoBasicID(int id) { mMesgCamInfo.mBasicID = id; }
     dComIfG_MesgCamInfo_c* getMesgCamInfo() { return &mMesgCamInfo; }
+    void setMesgCamInfoActor(fopAc_ac_c* actor_1,fopAc_ac_c* actor_2,fopAc_ac_c* actor_3,fopAc_ac_c* actor_4,fopAc_ac_c* actor_5,fopAc_ac_c* actor_6,fopAc_ac_c* actor_7,fopAc_ac_c* actor_8,fopAc_ac_c* actor_9,fopAc_ac_c* actor_A){
+        mMesgCamInfo.mActor[0] = actor_1;
+        mMesgCamInfo.mActor[1] = actor_2;
+        mMesgCamInfo.mActor[2] = actor_3;
+        mMesgCamInfo.mActor[3] = actor_4;
+        mMesgCamInfo.mActor[4] = actor_5;
+        mMesgCamInfo.mActor[5] = actor_6;
+        mMesgCamInfo.mActor[6] = actor_7;
+        mMesgCamInfo.mActor[7] = actor_8;
+        mMesgCamInfo.mActor[8] = actor_9;
+        mMesgCamInfo.mActor[9] = actor_A;
+    }
     int getMesgCamInfoID() { return mMesgCamInfo.mID; }
     void setMesgCamInfoID(int param_0) { mMesgCamInfo.mID = param_0; }
     void clearMesgCamInfoID() { mMesgCamInfo.mID = -1; }
@@ -339,7 +351,10 @@ public:
     void setMessageRupee(s16 count) { mMessageRupee = count; }
 
     void setAuctionRupee(s16 count) { mAuctionRupee = count; }
+    s16 getAuctionRupee() { return mAuctionRupee; }
+
     void setAuctionGauge(s16 gauge) { mAuctionGauge = gauge; }
+    s16 getAuctionGauge() { return mAuctionGauge; }
 
     int getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
@@ -500,8 +515,9 @@ public:
     void setPictureStatusOn() { mPictureStatus = 2; }
     void setPictureStatusGetOn(u8 to_set) {
         mPictureStatus = 3;
-        field_0x495f = to_set;
+        mGetPictureNum = to_set;
     }
+    u8 getGetPictureNum() { return mGetPictureNum; }
 
     u8 getScopeMesgStatus() { return mScopeMesgStatus; }
     void setScopeMesgStatus(u8 status) { mScopeMesgStatus = status; }
@@ -586,6 +602,7 @@ public:
     void setActionIconArchive(JKRArchive * pArc) { mpActionIconArchive = pArc; }
     JKRArchive* getActionIconArchive() { return mpActionIconArchive; }
     void setScopeResArchive(JKRArchive * pArc) { mpScopeResArchive = pArc; }
+    JKRArchive* getCameraResArchive() { return mpCameraResArchive; }
     void setCameraResArchive(JKRArchive * pArc) { mpCameraResArchive = pArc; }
     JKRArchive* getSwimResArchive() { return mpSwimResArchive; }
     void setSwimResArchive(JKRArchive * pArc) { mpSwimResArchive = pArc; }
@@ -593,6 +610,7 @@ public:
     void setFontArchive(JKRArchive * pArc) { mpFont0Archive = pArc; }
     void setMsgDtArchive(JKRArchive * pArc) { mpEnglishTextArchive = pArc; }
     JKRArchive* getMsgDtArchive() { return mpEnglishTextArchive; }
+    JKRArchive* getNameResArchive() { return mpNameResArchive; }
 #if VERSION > VERSION_JPN
     void setMsgDt2Archive(JKRArchive * pArc) { mpHyruleTextArchive = pArc; }
     JKRArchive* getMsgDt2Archive() { return mpHyruleTextArchive; }
@@ -615,8 +633,13 @@ public:
         mPictureFlag &= ~mask;
     }
     u8 getPictureFormat() { return mPictureFormat; }
+    void setPictureFormat(u8 fmt) { mPictureFormat = fmt; }
+    u8 getSelectPicture() { return mSelectPicture; }
+    void setSelectPicture(u8 i) { mSelectPicture = i; }
     u8 getPictureResult() { return mPictureResult; }
+    void setPictureResult(u8 i) { mPictureResult = i; }
     u8 getPictureResultDetail() { return mPictureResultDetail; }
+    void setPictureResultDetail(u8 i) { mPictureResultDetail = i; }
     void setBossBattleData(JKRAramBlock* aramBlock, int i) { mBossBattleData[i] = aramBlock; }
 
     void startFwaterTimer() { mFwaterTimer = 1; }
@@ -818,10 +841,10 @@ public:
     /* 0x495B */ u8 mPictureFlag;
     /* 0x495C */ u8 mPictureResult;
     /* 0x495D */ u8 mPictureResultDetail;
-    /* 0x495E */ u8 mPictureStatus;
-    /* 0x495F */ u8 field_0x495f;
+    /* 0x495E */ u8 mPictureStatus; // For Legendary Pictographs
+    /* 0x495F */ u8 mGetPictureNum; // For Legendary Pictographs
     /* 0x4960 */ u8 mPictureFormat;
-    /* 0x4961 */ u8 field_0x4961;
+    /* 0x4961 */ u8 mSelectPicture;
     /* 0x4962 */ u8 mHeapLockFlag;
 #if VERSION > VERSION_DEMO
     /* 0x4963 */ u8 mNowVibration;
@@ -900,6 +923,7 @@ void dComIfGs_setGameStartStage();
 void dComIfGs_gameStart();
 void dComIfGs_copyPlayerRecollectionData();
 u8 dComIfGs_checkGetItem(u8);
+void dComIfGs_exchangePlayerRecollectionData();
 
 inline void dComIfGs_init() {
     g_dComIfG_gameInfo.save.init();
@@ -967,8 +991,16 @@ inline void dComIfGp_setAuctionRupee(s16 count) {
     g_dComIfG_gameInfo.play.setAuctionRupee(count);
 }
 
+inline s16 dComIfGp_getAuctionRupee() {
+    return g_dComIfG_gameInfo.play.getAuctionRupee();
+}
+
 inline void dComIfGp_setAuctionGauge(s16 gauge) {
     g_dComIfG_gameInfo.play.setAuctionGauge(gauge);
+}
+
+inline s16 dComIfGp_getAuctionGauge() {
+    return g_dComIfG_gameInfo.play.getAuctionGauge();
 }
 
 inline void dComIfGs_setRupee(u16 rupee) {
@@ -979,24 +1011,24 @@ inline u16 dComIfGs_getRupeeMax() {
     return g_dComIfG_gameInfo.save.getPlayer().getPlayerStatusA().getRupeeMax();
 }
 
-inline u8 dComIfGs_getItemBeast(int param_0) {
-    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(param_0);
+inline u8 dComIfGs_getItemBeast(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(i_idx);
 }
 
 inline void dComIfGs_setItemBeast(int i_idx, u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBeast(i_idx, i_itemNo);
 }
 
-inline u8 dComIfGs_getItemBait(int param_0) {
-    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(param_0);
+inline u8 dComIfGs_getItemBait(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBait(i_idx);
 }
 
 inline void dComIfGs_setItemBait(int i_idx, u8 i_itemNo) {
     g_dComIfG_gameInfo.save.getPlayer().getBagItem().setBait(i_idx, i_itemNo);
 }
 
-inline u8 dComIfGs_getItemReserve(int param_0) {
-    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(param_0);
+inline u8 dComIfGs_getItemReserve(int i_idx) {
+    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getReserve(i_idx);
 }
 
 inline void dComIfGs_setItemReserve(int i_idx, u8 i_itemNo) {
@@ -1103,10 +1135,6 @@ inline void dComIfGs_setItem(int i_invIdx, u8 i_itemNo) {
     } else {
         return;
     }
-}
-
-inline u8 dComIfGs_getBeast(int i_idx) {
-    return g_dComIfG_gameInfo.save.getPlayer().getBagItem().getBeast(i_idx);
 }
 
 inline void dComIfGs_setBeastItem(u8 i_itemNo) {
@@ -1459,8 +1487,8 @@ inline void dComIfGs_setTurnRestart(const cXyz& i_pos, s16 i_angle, s8 i_roomNo,
 }
 #endif
 
-inline void dComIfGs_setMemoryToCard(u8* i_cardPtr, int i_dataNum) {
-    g_dComIfG_gameInfo.save.memory_to_card((char*)i_cardPtr, i_dataNum);
+inline int dComIfGs_setMemoryToCard(u8* i_cardPtr, int i_dataNum) {
+    return g_dComIfG_gameInfo.save.memory_to_card((char*)i_cardPtr, i_dataNum);
 }
 
 inline void dComIfGs_setInitDataToCard(u8* i_cardPtr, int i_dataNum) {
@@ -1628,6 +1656,13 @@ inline BOOL dComIfGs_isTriforce(u8 i_no) {
 inline void dComIfGs_onTriforce(u8 i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getCollect().onTriforce(i_no);
 }
+
+// Goddess pearls (aka "god symbols").
+enum dSymbolIndex_e {
+    /* 0x0 */ dSymbol_NAYRU_e,
+    /* 0x1 */ dSymbol_DIN_e,
+    /* 0x2 */ dSymbol_FARORE_e,
+};
 
 inline BOOL dComIfGs_isSymbol(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getCollect().isSymbol(i_no);
@@ -2969,8 +3004,8 @@ inline u8 dComIfGp_getAStatusForce() {
 }
 
 // B Button
-inline void dComIfGp_setAStatusForce(u8 value) {
-    g_dComIfG_gameInfo.play.setAStatusForce(value);
+inline void dComIfGp_setAStatusForce(u8 status) {
+    g_dComIfG_gameInfo.play.setAStatusForce(status);
 }
 
 // A Button
@@ -2979,8 +3014,8 @@ inline u8 dComIfGp_getDoStatusForce() {
 }
 
 // A Button
-inline void dComIfGp_setDoStatusForce(u8 value) {
-    g_dComIfG_gameInfo.play.setDoStatusForce(value);
+inline void dComIfGp_setDoStatusForce(u8 status) {
+    g_dComIfG_gameInfo.play.setDoStatusForce(status);
 }
 
 inline u8 dComIfGp_getPictureStatus() {
@@ -2993,6 +3028,10 @@ inline void dComIfGp_setPictureStatus(u8 status) {
 
 inline void dComIfGp_setPictureStatusOn() {
     g_dComIfG_gameInfo.play.setPictureStatusOn();
+}
+
+inline u8 dComIfGp_getGetPictureNum() {
+    return g_dComIfG_gameInfo.play.getGetPictureNum();
 }
 
 inline void dComIfGp_setPictureStatusGetOn(u8 to_set){
@@ -3139,6 +3178,11 @@ inline dComIfG_MesgCamInfo_c* dComIfGp_getMesgCameraInfo() {
     return g_dComIfG_gameInfo.play.getMesgCamInfo();
 }
 
+inline void dComIfGp_setMesgCameraInfoActor(fopAc_ac_c* actor_1,fopAc_ac_c* actor_2,fopAc_ac_c* actor_3,fopAc_ac_c* actor_4,fopAc_ac_c* actor_5,fopAc_ac_c* actor_6,fopAc_ac_c* actor_7,fopAc_ac_c* actor_8,fopAc_ac_c* actor_9,fopAc_ac_c* actor_A){
+    g_dComIfG_gameInfo.play.setMesgCamInfoActor(actor_1,actor_2,actor_3,actor_4,actor_5,actor_6,actor_7,actor_8,actor_9,actor_A);
+
+};
+
 inline u8 dComIfGp_checkMesgBgm() {
     return g_dComIfG_gameInfo.play.checkMesgBgm();
 }
@@ -3179,12 +3223,32 @@ inline u8 dComIfGp_getPictureFormat() {
     return g_dComIfG_gameInfo.play.getPictureFormat();
 }
 
+inline void dComIfGp_setPictureFormat(u8 fmt) {
+    g_dComIfG_gameInfo.play.setPictureFormat(fmt);
+}
+
+inline u8 dComIfGp_getSelectPicture() {
+    return g_dComIfG_gameInfo.play.getSelectPicture();
+}
+
+inline void dComIfGp_setSelectPicture(u8 i) {
+    g_dComIfG_gameInfo.play.setSelectPicture(i);
+}
+
 inline u8 dComIfGp_getPictureResult() {
     return g_dComIfG_gameInfo.play.getPictureResult();
 }
 
+inline void dComIfGp_setPictureResult(u8 i) {
+    g_dComIfG_gameInfo.play.setPictureResult(i);
+}
+
 inline u8 dComIfGp_getPictureResultDetail() {
     return g_dComIfG_gameInfo.play.getPictureResultDetail();
+}
+
+inline void dComIfGp_setPictureResultDetail(u8 i) {
+    g_dComIfG_gameInfo.play.setPictureResultDetail(i);
 }
 
 inline void dComIfGp_setBossBattleData(JKRAramBlock* aramBlock, int i) {
@@ -3873,6 +3937,7 @@ inline JKRArchive* dComIfGp_getErrorResArchive() { return g_dComIfG_gameInfo.pla
 inline void dComIfGp_setActionIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setActionIconArchive(pArc); }
 inline JKRArchive* dComIfGp_getActionIconArchive() { return g_dComIfG_gameInfo.play.getActionIconArchive(); }
 inline void dComIfGp_setScopeResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setScopeResArchive(pArc); }
+inline JKRArchive* dComIfGp_getCameraResArchive() { return g_dComIfG_gameInfo.play.getCameraResArchive(); }
 inline void dComIfGp_setCameraResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCameraResArchive(pArc); }
 inline JKRArchive* dComIfGp_getSwimResArchive() { return g_dComIfG_gameInfo.play.getSwimResArchive(); }
 inline void dComIfGp_setSwimResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setSwimResArchive(pArc); }
@@ -3880,6 +3945,7 @@ inline void dComIfGp_setWindResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.p
 inline void dComIfGp_setFontArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFontArchive(pArc); }
 inline void dComIfGp_setMsgDtArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDtArchive(pArc); }
 inline JKRArchive* dComIfGp_getMsgDtArchive() { return g_dComIfG_gameInfo.play.getMsgDtArchive(); }
+inline JKRArchive* dComIfGp_getNameResArchive() { return g_dComIfG_gameInfo.play.getNameResArchive(); }
 #if VERSION > VERSION_JPN
 inline void dComIfGp_setMsgDt2Archive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setMsgDt2Archive(pArc); }
 inline JKRArchive* dComIfGp_getMsgDt2Archive() { return g_dComIfG_gameInfo.play.getMsgDt2Archive(); }
