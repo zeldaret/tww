@@ -549,7 +549,7 @@ void daMgBoard_c::execEndGame() {
 /* 00001060-00001250       .text MinigameMain__11daMgBoard_cFv */
 BOOL daMgBoard_c::MinigameMain() {
     /* Nonmatching */
-    if (mDoAud_checkSePlaying(0x8A8) != 0) {
+    if (mDoAud_checkSePlaying(JA_SE_PLAYSPOT_START) != 0) {
         return TRUE;
     }
 
