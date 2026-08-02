@@ -28,8 +28,8 @@ class daNpc_P1_c : public fopAc_ac_c {
 
 public:
 
-    bool checkAction(int (daNpc_P1_c::*action)(void*)) { return mActionFunc == action;}
-    void setAction(int (daNpc_P1_c::*action)(void*), void* i_param_2, int i_param_3) {
+    bool checkAction(ActionFunc action) { return mActionFunc == action;}
+    void setAction(ActionFunc action, void* i_param_2, int i_param_3) {
         if(mActionFunc != action){
             if(mActionFunc != NULL){
                 mActionStatus = ACTION_ENDING_e;

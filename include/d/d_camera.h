@@ -620,7 +620,7 @@ public:
     void CStickUseless() { setFlag(0x800000); }
     void StickUse() { clrFlag(0x1000000); }
     void StickUseless() { setFlag(0x1000000); }
-    void SkipSmoother(){m346 = 1; m345 = 1; m344 = 1;}
+    void SkipSmoother(){m102 = 1; m101 = 1; m100 = 1;}
 
     bool Active() { return mActive; }
     bool Pause() { return mPause; }

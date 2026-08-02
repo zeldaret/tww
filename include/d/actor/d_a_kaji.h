@@ -24,7 +24,7 @@ public:
     void setAnm(int i_m668, f32 frame) {
         J3DAnmTransform* pAnimRes;
         void* pSoundAnimRes;
-        switch(i_m668 - 9){
+        switch(i_m668){
             case 0:
                 pAnimRes = (J3DAnmTransform*)dComIfG_getObjectRes("Kaji",dRes_INDEX_KAJI_BCK_KJ_WAIT_e);
                 pSoundAnimRes = dComIfG_getObjectRes("Kaji",dRes_INDEX_KAJI_BAS_KJ_WAIT_e);
@@ -48,7 +48,6 @@ public:
         if(frame >= 0.0f){
             mpMorf->setFrame(frame);
         }
-        return;
     }
 
     inline cPhs_State _create();
