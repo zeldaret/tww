@@ -11,8 +11,11 @@ struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 
-class dMenu_Option_c : public dDlst_base_c {
+class dMenu_Option_c {
 public:
+    dMenu_Option_c() { }
+    virtual ~dMenu_Option_c() {}
+
     void alphaChange(fopMsgM_pane_class*, f32) {}
     u8 getQuitStatus() { return mE40; }
     void setArchive(JKRArchive* archive) {

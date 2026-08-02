@@ -354,7 +354,9 @@ inline void mDoAud_tact_melodyPlay(s32 param_1) {
     mDoAud_zelAudio_c::getTact().melodyPlay(param_1);
 }
 
-inline void mDoAud_tact_melodyStop() {}
+inline void mDoAud_tact_melodyStop() {
+    mDoAud_zelAudio_c::getTact().melodyStop();
+}
 
 inline BOOL mDoAud_checkCbPracticePlay() {
     return mDoAud_zelAudio_c::getInterface()->checkCbPracticePlay();
