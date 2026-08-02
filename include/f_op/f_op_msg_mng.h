@@ -359,7 +359,7 @@ public:
     /* 0x134 */ int field_0x134;
     /* 0x138 */ int nowLine;
     /* 0x13C */ int aimLine;
-    /* 0x140 */ u32 field_0x140;
+    /* 0x140 */ int field_0x140;
     /* 0x144 */ int fontSize;
     /* 0x148 */ int field_0x148;
     /* 0x14C */ int rubyFontSize;

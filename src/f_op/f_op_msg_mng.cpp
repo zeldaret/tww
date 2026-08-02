@@ -1770,7 +1770,587 @@ f32 fopMsgM_msgDataProc_c::rubyLength(int i_charNo, bool param_2) {
 
 /* 8002EB4C-80031064       .text stringLength__21fopMsgM_msgDataProc_cFv */
 u32 fopMsgM_msgDataProc_c::stringLength() {
-    /* Nonmatching */
+    int sp18[4];
+    int sp14 = 0;
+    int sp10 = 0;
+    u32 r30 = 0;
+    int r29 = count;
+    f32 sp0C = 0.0f;
+    bool r28 = false;
+    bool r27 = false;
+    lineCount = 0;
+    int sp08 = fontSize;
+    field_0x148 = fontSize;
+    for (int i = 0; i < 4; i++) {
+        sp18[i] = 0;
+        field_0xD8[i] = 0;
+        field_0xE8[i] = 0;
+        field_0x108[i] = 0;
+    }
+
+    while (bmgData[r29] != '\0') {
+        if (bmgData[r29 + 0] == 0x1A) {
+            if ((u8)bmgData[r29 + 2] == 0xFF && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 1) {
+                f32 temp2 = (int)(((u8)bmgData[r29 + 5] << 8) | (u8)bmgData[r29 + 6]);
+                f32 f31 = temp2 * 0.01f;
+                if (f31 > 1.0f) {
+                    r28 = true;
+                }
+                sp08 = f31 * fontSize + 0.5f;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0) {
+                char sp50[20];
+                int r26 = 0;
+                strcpy(sp50, dComIfGs_getPlayerName());
+#if VERSION > VERSION_JPN
+                if (
+                    dComIfGs_getPalLanguage() == 1 &&
+                    (
+#if VERSION == VERSION_USA
+                        mesgEntry->mMsgNo == 0x33B ||
+                        mesgEntry->mMsgNo == 0xC8B ||
+                        mesgEntry->mMsgNo == 0x1D21 ||
+                        mesgEntry->mMsgNo == 0x31D7 ||
+                        mesgEntry->mMsgNo == 0x37DD ||
+                        mesgEntry->mMsgNo == 0x37DE
+#elif VERSION == VERSION_PAL
+                        mesgEntry->mMsgNo == 0xC8B ||
+                        mesgEntry->mMsgNo == 0x1D21 ||
+                        mesgEntry->mMsgNo == 0x31D7
+#endif
+                    )
+                ) {
+                    size_t bufLen = strlen(sp50);
+                    char current = (sp50)[bufLen - 1];
+                    if (current == 's' || current == 'S' || current == 'z' || current == 'Z' || current == 'x' || current == 'X') {
+                        strcat(sp50, "\'");
+                    } else {
+                        strcat(sp50, "s");
+                    }
+                }
+#endif
+                while (sp50[r26] != '\0') {
+                    int r5;
+#if VERSION == VERSION_PAL
+                    if (mesgEntry->mTextboxType == 0xC)
+#endif
+                    {
+                        if ((((u8)sp50[r26 + 0] >> 4) & 0x0F) == 8 || (((u8)sp50[r26 + 0] >> 4) & 0x0F) == 9) {
+                            r5 = ((u8)sp50[r26++] << 8);
+                            r5 |= (u8)sp50[r26++];
+                        } else {
+                            r5 = (u8)sp50[r26++];
+                        }
+                    }
+#if VERSION == VERSION_PAL
+                    else {
+                        r5 = (u8)sp50[r26++];
+                    }
+#endif
+                    
+                    f32 f1;
+                    if (sp10 != 0) {
+                        f1 = charLength(sp08, r5, false) + sp0C;
+                    } else {
+                        f1 = charLength(sp08, r5, true);
+                    }
+                    sp0C = f1;
+                    sp10 += 1;
+                }
+                sp18[sp14] = (int)(sp0C + 0.5f);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 8) {
+                r27 = true;
+                for (int i = 0; i < sp14; i++) {
+                    field_0xD8[i] = sp18[i];
+                }
+                lineCount = sp14 - 1;
+                sp14 = 0;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 9) {
+                r27 = true;
+                for (int i = 0; i < sp14; i++) {
+                    field_0xD8[i] = sp18[i];
+                    sp18[i] = 0;
+                }
+                lineCount = sp14 - 1;
+                sp14 = 0;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0xA) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0xB) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0xC) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0xD) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0xE) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0xF) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x10) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x11) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x12) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x13) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x14) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x15) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x16) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x17) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x18) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x19) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x1A) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x1B) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x1C) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x1D) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x1E) {
+                sp0C += (f32)sp08;
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x1F) {
+                sp0C += (f32)sp08;
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x39) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x3A) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+    #if VERSION > VERSION_JPN
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x20) {
+                tag_len_kaisen_game(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if (
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x21) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x24) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x25) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x2C) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x36)
+            ) {
+                tag_len_rupee(&sp10, &sp0C, sp18, &sp08, &sp14);
+    #endif
+            } else if (
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x22) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x23)
+            ) {
+                int r26 = 0;
+                char sp3C[20];
+                if ((u8)bmgData[r29 + 4] == 0x22) {
+                    u32 msgNo = dComIfGp_getNpcNameMessageID();
+                    getString(sp3C, msgNo);
+                } else if ((u8)bmgData[r29 + 4] == 0x23) {
+                    u32 msgNo = dComIfGp_getItemNameMessageID();
+                    getString(sp3C, msgNo);
+                }
+                while (sp3C[r26] != '\0') {
+                    int r5 = (u8)sp3C[r26++];
+                    f32 f1;
+                    if (sp10 != 0) {
+                        f1 = charLength(sp08, r5, false) + sp0C;
+                    } else {
+                        f1 = charLength(sp08, r5, true);
+                    }
+                    sp0C = f1;
+                    sp10 += 1;
+                }
+                sp18[sp14] = (int)(sp0C + 0.5f);
+    #if VERSION > VERSION_JPN
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x26) {
+                tag_len_num_input(&sp10, &sp0C, sp18, &sp08, &sp14);
+    #endif
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x27) {
+                sp0C += (f32)sp08;
+                sp10 += 1;
+    #if VERSION > VERSION_JPN
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x28) {
+                tag_len_sword_game(&sp10, &sp0C, sp18, &sp08, &sp14);
+    #endif
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x29) {
+                int r26 = 0;
+                char sp28[20];
+                u32 msgNo = 0x1B37 + dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
+                getString(sp28, msgNo);
+                while (sp28[r26] != '\0') {
+                    int r5 = (u8)sp28[r26++];
+                    f32 f1;
+                    if (sp10 != 0) {
+                        f1 = charLength(sp08, r5, false) + sp0C;
+                    } else {
+                        f1 = charLength(sp08, r5, true);
+                    }
+                    sp0C = f1;
+                    sp10 += 1;
+                }
+                sp18[sp14] = (int)(sp0C + 0.5f);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x2A) {
+                if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
+                    field_0x295 = 1;
+                }
+                sp0C += (f32)sp08;
+                sp18[sp14] = (int)(sp0C + 0.5f);
+                sp10 += 1;
+    #if VERSION > VERSION_JPN
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x2B) {
+                tag_len_letter_game(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x3B) {
+                tag_len_letter_game_max(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x3C) {
+                tag_len_fish(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x3D) {
+                tag_len_fish_rupee(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x2D) {
+                tag_len_letter(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x2E) {
+                tag_len_rescue(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x2F) {
+                tag_len_forest_timer(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if (
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x30) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x31)
+            ) {
+                tag_len_birdman(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x32) {
+                tag_len_point(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x33) {
+                tag_len_get_pendant(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x34) {
+                tag_len_rev_pendant(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x35) {
+                tag_len_pig_timer(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x37) {
+                tag_len_get_bomb(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x38) {
+                tag_len_get_arrow(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x3E) {
+                tag_len_stock_bokobaba(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x3F) {
+                tag_len_stock_dokuro(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x40) {
+                tag_len_stock_chuchu(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x41) {
+                tag_len_stock_pendant(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x42) {
+                tag_len_stock_hane(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x43) {
+                tag_len_stock_kenshi(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x44) {
+                tag_len_terry_rupee(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x45) {
+                tag_len_input_bokobaba(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x46) {
+                tag_len_input_dokuro(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x47) {
+                tag_len_input_chuchu(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x48) {
+                tag_len_input_pendant(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x49) {
+                tag_len_input_hane(&sp10, &sp0C, sp18, &sp08, &sp14);
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 0x4A) {
+                tag_len_input_kenshi(&sp10, &sp0C, sp18, &sp08, &sp14);
+    #endif
+            }
+            r29 += bmgData[r29 + 1];
+        } else {
+            if (field_0x295 != 0 && bmgData[r29] != 0) {
+                field_0x295 = 0;
+            }
+            if (bmgData[r29 + 0] == 0xA) {
+                sp10 = 0;
+                sp0C = 0.0f;
+                
+                r29++;
+                if (bmgData[r29 + 0] == 0) {
+                    f32 f3 = (int)(field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f);
+                    f32 f31;
+                    if (field_0x24 < f3) {
+                        f31 = f3 - field_0x24;
+                    } else if (field_0x24 == 0.0f) {
+                        f31 = field_0x24 - f3;
+                    }
+
+                    field_0x140 = aimLine;
+                }
+
+                if (!r27) {
+                    if (r28) {
+                        if (aimLine == nowLine) {
+                            sp14++;
+                            lineCount++;
+                        } else {
+                            nowLine++;
+                        }
+                        r28 = false;
+                    }
+                    if (aimLine == nowLine) {
+                        sp14++;
+                        if (sp14 >= mesgEntry->field_0x16) {
+                            if (
+                                ((u8)bmgData[r29 + 0] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 8) ||
+                                ((u8)bmgData[r29 + 0] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 9)
+                            ) {
+                                r27 = true;
+                                for (int i = 0; i < sp14; i++) {
+                                    field_0xD8[i] = sp18[i];
+                                }
+                                lineCount = sp14 - 1;
+                                sp14 = 0;
+                                r29 += bmgData[r29 + 1];
+                            } else {
+                                for (int i = 0; i < 4; i++) {
+                                    field_0xD8[i] = sp18[i];
+                                }
+                                field_0x134 = lineCount;
+                                return r30;
+                            }
+                        }
+                    } else {
+                        nowLine++;
+                        r30 = r29;
+                        sp18[0] = 0;
+                    }
+                    continue;
+                } else if (r27) {
+                    field_0xE8[sp14] = sp18[sp14];
+                }
+                sp14++;
+            } else {
+                int r28;
+                bool r25;
+#if VERSION == VERSION_PAL
+                if (mesgEntry->mTextboxType == 0xC)
+#endif
+                {
+                    if (((u8)bmgData[r29 + 0] >> 4) == 8 || ((u8)bmgData[r29 + 0] >> 4) == 9) {
+                        r28 = ((u8)bmgData[r29] << 8) | (u8)bmgData[r29 + 1];
+                        if (
+                            dComIfGs_getClearCount() == 0
+#if VERSION < VERSION_PAL
+                            && mesgEntry->mTextboxType == 0xC
+#endif
+                        ) {
+                            for (int i = 0; i < ARRAY_SIZE(zfont); i++) {
+                                if (zfont[i][0] == (u16)r28) {
+                                    r28 = zfont[i][1];
+                                    break;
+                                }
+                            }
+                        }
+                        r25 = false;
+                    } else {
+                        r28 = (u8)bmgData[r29];
+                        r25 = true;
+                    }
+                }
+#if VERSION == VERSION_PAL
+                else {
+                    r28 = (u8)bmgData[r29];
+                    r25 = true;
+                }
+#endif
+
+                f32 f1;
+                if (sp10 != 0) {
+                    f1 = charLength(sp08, r28, false) + sp0C;
+                } else {
+                    f1 = charLength(sp08, r28, true);
+                }
+                sp0C = f1;
+                sp10 += 1;
+                
+                int r7 = sp18[sp14];
+                sp18[sp14] = (int)((f32)(f64)sp0C + 0.5f);
+                if (!r27) {
+                    if (sp14 != lineCount) {
+                        lineCount++;
+                    }
+                }
+                    
+                if (lineWidth <= sp18[sp14]) {
+                    sp18[sp14] = r7;
+                    sp14++;
+                    sp10 = 1;
+                    sp0C = 0.0f;
+
+                    if (bmgData[r29] == '\0') {
+                        field_0x140 = aimLine;
+                    }
+                    
+                    if (aimLine == nowLine) {
+                        if (sp14 >= mesgEntry->field_0x16) {
+                            if (
+                                ((u8)bmgData[r29 + 0] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 8) ||
+                                ((u8)bmgData[r29 + 0] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == 9)
+                            ) {
+                                r27 = true;
+                                for (int i = 0; i < sp14; i++) {
+                                    field_0xD8[i] = sp18[i];
+                                }
+                                lineCount = sp14 - 1;
+                                sp14 = 0;
+                                r29 += bmgData[r29 + 1];
+                            } else {
+                                field_0x134 = lineCount;
+                                for (int i = 0; i < 4; i++) {
+                                    field_0xD8[i] = sp18[i];
+                                }
+                                return r30;
+                            }
+                        } else {
+                            sp0C = charLength(sp08, r28, false);
+                            sp18[sp14] = sp0C + 0.5f;
+                        }
+                    } else {
+                        nowLine++;
+                        sp14 = 0;
+                        lineCount = 0;
+                        sp18[0] = 0;
+                        sp0C = charLength(sp08, r28, false);
+                        sp18[sp14] = sp0C + 0.5f;
+                    }
+                }
+                
+                if (r25) {
+                    r29++;
+                } else {
+                    r29 += 2;
+                }
+            }
+        }
+    } // while
+
+    if (bmgData[r29] == '\0') {
+        field_0x140 = aimLine;
+    }
+    
+    if (r27) {
+        field_0xE8[sp14] = sp18[sp14];
+    } else {
+        for (int i = 0; i < 4; i++) {
+            field_0xD8[i] = sp18[i];
+        }
+        if (field_0x295 != 0 && lineCount == 0 && r28) {
+            lineCount = 1;
+        }
+    }
+    
+    field_0x134 = lineCount;
+    
+    return r30;
 }
 
 /* 800310E4-800312B4       .text stringShift__21fopMsgM_msgDataProc_cFv */
@@ -2227,6 +2807,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 
                 count += bmgData[count + 1];
             } else if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == 2) {
+#if VERSION < VERSION_PAL
                 if ((u8)bmgData[count + 1] != 5) {
                     int r28 = count + (u8)bmgData[count + 1];
                     strcpy(field_0x70, "");
@@ -2251,23 +2832,33 @@ void fopMsgM_msgDataProc_c::stringSet() {
 
                         count += 2;
                     }
-                } else {
+                } else
+#endif
+                {
                     count += (u8)bmgData[count + 1];
                 }
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == 0) {
                 char sp84[20];
                 int r28 = 0;
                 strcpy(sp84, dComIfGs_getPlayerName());
+
+#if VERSION > VERSION_JPN
                 if (
-    #if VERSION > VERSION_JPN
                     dComIfGs_getPalLanguage() == 1 &&
-    #endif 
-                        (mesgEntry->mMsgNo == 0x33B ||
-                        mesgEntry->mMsgNo == 0xC8B  ||
+                    (
+#if VERSION == VERSION_USA
+                        mesgEntry->mMsgNo == 0x33B ||
+                        mesgEntry->mMsgNo == 0xC8B ||
                         mesgEntry->mMsgNo == 0x1D21 ||
                         mesgEntry->mMsgNo == 0x31D7 ||
                         mesgEntry->mMsgNo == 0x37DD ||
-                        mesgEntry->mMsgNo == 0x37DE)
+                        mesgEntry->mMsgNo == 0x37DE
+#elif VERSION == VERSION_PAL
+                        mesgEntry->mMsgNo == 0xC8B ||
+                        mesgEntry->mMsgNo == 0x1D21 ||
+                        mesgEntry->mMsgNo == 0x31D7
+#endif
+                    )
                 ) {
                     size_t bufLen = strlen(sp84);
                     char current = (sp84)[bufLen - 1];
@@ -2277,21 +2868,34 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         strcat(sp84, "s");
                     }
                 }
+#endif
 
                 while (sp84[r28] != '\0') {
                     int c;
-                    if (((u8)sp84[r28] >> 4) == 8 || ((u8)sp84[r28] >> 4) == 9) {
-                        int tmp = (u8)sp84[r28];
-                        field_0xD4[0] = sp84[r28++];
-                        u8 tmp2 = sp84[r28++];
-                        c = tmp << 8 | tmp2;
-                        field_0xD4[1] = tmp2;
-                        field_0xD4[2] = '\0';
-                    } else {
+#if VERSION == VERSION_PAL
+                    if (mesgEntry->mTextboxType == 0xC)
+#endif
+                    {
+                        if (((u8)sp84[r28] >> 4) == 8 || ((u8)sp84[r28] >> 4) == 9) {
+                            int tmp = (u8)sp84[r28];
+                            field_0xD4[0] = sp84[r28++];
+                            u8 tmp2 = sp84[r28++];
+                            c = tmp << 8 | tmp2;
+                            field_0xD4[1] = tmp2;
+                            field_0xD4[2] = '\0';
+                        } else {
+                            c = (u8)sp84[r28];
+                            field_0xD4[0] = sp84[r28++];
+                            field_0xD4[1] = '\0';
+                        }
+                    }
+#if VERSION == VERSION_PAL
+                    else {
                         c = (u8)sp84[r28];
                         field_0xD4[0] = sp84[r28++];
                         field_0xD4[1] = '\0';
                     }
+#endif
                     
                     if (field_0x150 == 0) {
                         field_0x14 = charLength(field_0x148, c, true);
@@ -2684,29 +3288,47 @@ void fopMsgM_msgDataProc_c::stringSet() {
         } else {
             int r28;
             bool r27;
-            if ((((u8)bmgData[count + 0] >> 4) & 0x0F) == 8 || (((u8)bmgData[count + 0] >> 4) & 0x0F) == 9) {
-                field_0xD4[0] = bmgData[count + 0];
-                field_0xD4[1] = bmgData[count + 1];
-                field_0xD4[2] = '\0';
-                r28 = ((u8)bmgData[count] << 8) | (u8)bmgData[count + 1];
-                if (dComIfGs_getClearCount() == 0 && mesgEntry->mTextboxType == 0xC) {
-                    for (int i = 0; i < ARRAY_SIZE(zfont); i++) {
-                        if (zfont[i][0] == (u16)r28) {
-                            field_0xD4[0] = (zfont[i][1] >> 8) & 0xFF;
-                            field_0xD4[1] = zfont[i][1] & 0xFF;
-                            field_0xD4[2] = '\0';
-                            r28 = zfont[i][1];
-                            break;
+#if VERSION == VERSION_PAL
+            if (mesgEntry->mTextboxType == 0xC)
+#endif
+            {
+                if ((((u8)bmgData[count + 0] >> 4) & 0x0F) == 8 || (((u8)bmgData[count + 0] >> 4) & 0x0F) == 9) {
+                    field_0xD4[0] = bmgData[count + 0];
+                    field_0xD4[1] = bmgData[count + 1];
+                    field_0xD4[2] = '\0';
+                    r28 = ((u8)bmgData[count] << 8) | (u8)bmgData[count + 1];
+                    if (
+                        dComIfGs_getClearCount() == 0
+#if VERSION < VERSION_PAL
+                        && mesgEntry->mTextboxType == 0xC
+#endif
+                    ) {
+                        for (int i = 0; i < ARRAY_SIZE(zfont); i++) {
+                            if (zfont[i][0] == (u16)r28) {
+                                field_0xD4[0] = (zfont[i][1] >> 8) & 0xFF;
+                                field_0xD4[1] = zfont[i][1] & 0xFF;
+                                field_0xD4[2] = '\0';
+                                r28 = zfont[i][1];
+                                break;
+                            }
                         }
                     }
+                    r27 = false;
+                } else {
+                    field_0xD4[0] = bmgData[count + 0];
+                    field_0xD4[1] = '\0';
+                    r28 = (u8)bmgData[count];
+                    r27 = true;
                 }
-                r27 = false;
-            } else {
+            }
+#if VERSION == VERSION_PAL
+            else {
                 field_0xD4[0] = bmgData[count + 0];
                 field_0xD4[1] = '\0';
                 r28 = (u8)bmgData[count];
                 r27 = true;
             }
+#endif
 
             if (field_0x150 == 0) {
                 field_0x14 = charLength(field_0x148, r28, true);
@@ -6184,6 +6806,12 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
     count += bmgData[count + 1];
 }
 
+#if VERSION == VERSION_PAL
+static void dummy() {
+    OSReport(" ");
+}
+#endif
+
 /* 8003AB00-8003ACEC       .text tag_stock_hane__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_hane() {
     char buf[20];
@@ -6903,5 +7531,7 @@ void fopMsgM_destroyExpHeap(JKRExpHeap* i_heap) {
     i_heap->destroy();
 }
 
-static const char* dummy1 = "\x1B""CU[%d]";
-static const char* dummy2 = "\x1B""CD[%d]";
+static void dummy2() {
+    OSReport("\x1B""CU[%d]");
+    OSReport("\x1B""CD[%d]");
+}
