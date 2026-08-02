@@ -511,9 +511,9 @@ bool daMgBoard_c::_execute() {
             if (cLib_calcTimer<u8>(&mTimer) == 0) {
                 mState = 0;
                 if (!mSeaFightGame.isClearGame()) {
-                    mDoAud_seStart(0x8AC, &mNPCPos);
+                    mDoAud_seStart(JA_SE_PLAYSPOT_END_F, &mNPCPos);
                 } else {
-                    mDoAud_seStart(0x8AB, &mNPCPos);
+                    mDoAud_seStart(JA_SE_PLAYSPOT_END_S, &mNPCPos);
                 }
             }
             break;
@@ -561,13 +561,13 @@ BOOL daMgBoard_c::MinigameMain() {
         mLastFirePosX = mBoardPosX;
         mLastFirePosY = mBoardPosY;
         if (attack_result >= 0) {
-            mDoAud_seStart(0x69A2, &mNPCPos);
+            mDoAud_seStart(JA_SE_PLAYSPOT_RIGHT, &mNPCPos);
             if ((num_alive != alive) && (alive != 0)) {
-                mDoAud_seStart(0x8AA, &mNPCPos);
+                mDoAud_seStart(JA_SE_PLAYSPOT_DESTROY, &mNPCPos);
             }
             dComIfGp_getVibration().StartShock(7, -0x21, cXyz(0, 1, 0));
         } else if (attack_result == -1) {
-            mDoAud_seStart(0x69A3, &mNPCPos);
+            mDoAud_seStart(JA_SE_PLAYSPOT_WRONG, &mNPCPos);
         }
 
         if (dead > 0) {
@@ -619,7 +619,7 @@ void daMgBoard_c::CursorMove() {
     }
 
     if ((mBoardPosX != start_pos_x) || (mBoardPosY != start_pos_y)) {
-        mDoAud_seStart(0x8A9);
+        mDoAud_seStart(JA_SE_PLAYSPOT_CURSOR);
     }
 }
 
