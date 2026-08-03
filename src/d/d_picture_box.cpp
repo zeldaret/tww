@@ -1722,7 +1722,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
         u8 icon = mMsgDataProc.getIconNum(i);
         u32 fontColor = mMsgDataProc.getStringColor();
 
-        if (icon == 20) {
+        if (icon == fopMsgM_Icon_SELECT_YOKO_LEFT_e) {
             mChoiceCursorX0 = (int)(
                 ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.x +
                 (f32)mMsgDataProc.getIconPosX(i)
@@ -1748,7 +1748,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
                 firstChoiceSeen = 0;
                 mSelectedChoiceIndex = 0;
             }
-        } else if (icon == 0x15) {
+        } else if (icon == fopMsgM_Icon_SELECT_YOKO_RIGHT_e) {
             mChoiceCursorX1 = (int)(
                 ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.x +
                 (f32)mMsgDataProc.getIconPosX(i)
@@ -2172,7 +2172,7 @@ void dJle_Pb_c::draw() {
             } else {
                 u8 iconNo = mMsgDataProc.getIconNum(idx);
             
-                if (iconNo != 0xFF && iconNo != 20 && iconNo != 0x15) {
+                if (iconNo != fopMsgM_Icon_NONE_e && iconNo != fopMsgM_Icon_SELECT_YOKO_LEFT_e && iconNo != fopMsgM_Icon_SELECT_YOKO_RIGHT_e) {
                     int posX = mMsgDataProc.getIconPosX(idx);
                     int posY = mMsgDataProc.getIconPosY(idx);
                     int scale = mMsgDataProc.getIconScale(idx);
@@ -2234,7 +2234,7 @@ void dJle_Pb_c::draw() {
             } else {
                 u8 iconNo = mMsgDataProc.getIconNum(idx);
             
-                if (iconNo != 0xFF && iconNo != 20 && iconNo != 0x15) {
+                if (iconNo != fopMsgM_Icon_NONE_e && iconNo != fopMsgM_Icon_SELECT_YOKO_LEFT_e && iconNo != fopMsgM_Icon_SELECT_YOKO_RIGHT_e) {
                     int posX = mMsgDataProc.getIconPosX(idx);
                     int posY = mMsgDataProc.getIconPosY(idx);
                     int scale = mMsgDataProc.getIconScale(idx);

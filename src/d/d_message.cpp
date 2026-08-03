@@ -406,17 +406,26 @@ void dMsg2_messageOut(sub_msg2_class* i_Msg, u8 i_index, int i_aimLine) {
     i_Msg->msgDataProc[i_index].stringSet();
 
     for (int i = 0; i < 8; i++) {
-        u8 var_r30 = i_Msg->msgDataProc[i_index].getIconNum(i);
-        u32 var_r29 = i_Msg->msgDataProc[i_index].getIconColor(i);
+        u8 iconNum = i_Msg->msgDataProc[i_index].getIconNum(i);
+        u32 iconColor = i_Msg->msgDataProc[i_index].getIconColor(i);
 
-        if (var_r30 != 0xFF && bbuttonTimer[i][i_index] == -1) {
+        if (iconNum != fopMsgM_Icon_NONE_e && bbuttonTimer[i][i_index] == -1) {
             JKRHeap* heap = mDoExt_setCurrentHeap(i_Msg->Heap);
 
-            if ((var_r30 == 10 || var_r30 == 11 || var_r30 == 12 || var_r30 == 13 || var_r30 == 0x15 || var_r30 == 0x17) && var_r29 == 0) {
-                var_r29 = -1;
+            if (
+                (
+                    iconNum == fopMsgM_Icon_ARROW_LEFT_e ||
+                    iconNum == fopMsgM_Icon_ARROW_RIGHT_e ||
+                    iconNum == fopMsgM_Icon_ARROW_UP_e ||
+                    iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
+                    iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
+                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+                ) && iconColor == 0
+            ) {
+                iconColor = 0xFFFFFFFF;
             }
 
-            fopMsgM_outFontSet(bbutton_icon[i][i_index], bbutton_kage[i][i_index], &bbuttonTimer[i][i_index], var_r29, var_r30);
+            fopMsgM_outFontSet(bbutton_icon[i][i_index], bbutton_kage[i][i_index], &bbuttonTimer[i][i_index], iconColor, iconNum);
 
             mDoExt_setCurrentHeap(heap);
         }
@@ -944,7 +953,7 @@ void dDlst_2DMSG2_c::outFontDraw() {
             int posY = actorP->msgDataProc[i].getIconPosY(j);
             int scale = actorP->msgDataProc[i].getIconScale(j);
 
-            if (iconNum != 0xFF) {
+            if (iconNum != fopMsgM_Icon_NONE_e) {
                 u8 r14;
                 J2DTextBox* scrn = (J2DTextBox*)actorP->text_pane[i].pane;
                 int r18 = (f32)posX + scrn->getGlbBounds().i.x;

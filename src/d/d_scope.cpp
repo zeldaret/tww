@@ -938,7 +938,7 @@ BOOL dScp_outnowProc(sub_scp_class* i_Scp) {
 
 /* 8023A2AC-8023A354       .text dScp_continueProc__FP13sub_scp_class */
 BOOL dScp_continueProc(sub_scp_class* i_Scp) {
-    if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || i_Scp->mMesgDataProc.getSelectFlag() != 0) {
+    if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || i_Scp->mMesgDataProc.getSelectFlag() != fopMsgM_msgDataProc_c::Select_OFF) {
         i_Scp->mMesgDataProc.setSelectFlagOff();
         JKRFileLoader::removeResource(i_Scp->head_p, NULL);
         dScp_talkBeforeProc(i_Scp);

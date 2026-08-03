@@ -704,14 +704,14 @@ void dMenu_Option_c::noteSet() {
         if(m0B0[i].mUserArea != -1) {
             continue;
         }
-        if (r6 == 0x16) {
+        if (r6 == fopMsgM_Icon_INPUT_e) {
             continue;
         }
         m0B0[i].mPosTopLeft.x = (f32)msgDataProc.getIconPosX(i);
         m0B0[i].mPosTopLeft.y = f30_2 + (f32)(msgDataProc.getIconPosY(i) * 2 * r31);
-        m0B0[i].mPosTopLeftOrig.y = (f32)r6;
+        m0B0[i].mPosTopLeftOrig.y = (f32)r6; // ?
 
-        fopMsgM_outFontSet((J2DPicture*)m0B0[i].pane, &m0B0[i].mUserArea, 0xFF, r6);
+        fopMsgM_outFontSet((J2DPicture*)m0B0[i].pane, &m0B0[i].mUserArea, 0x000000FF, r6);
     }
 }
 

@@ -146,6 +146,37 @@ public:
     /* 0x134 */ u8 m134;
 };
 
+enum {
+    /* 0x00 */ fopMsgM_Icon_A_BUTTON_e,
+    /* 0x01 */ fopMsgM_Icon_B_BUTTON_e,
+    /* 0x02 */ fopMsgM_Icon_C_STICK_e,
+    /* 0x03 */ fopMsgM_Icon_L_BUTTON_e,
+    /* 0x04 */ fopMsgM_Icon_R_BUTTON_e,
+    /* 0x05 */ fopMsgM_Icon_X_BUTTON_e,
+    /* 0x06 */ fopMsgM_Icon_Y_BUTTON_e,
+    /* 0x07 */ fopMsgM_Icon_Z_BUTTON_e,
+    /* 0x08 */ fopMsgM_Icon_DPAD_e,
+    /* 0x09 */ fopMsgM_Icon_CONTROL_STICK_e,
+    /* 0x0A */ fopMsgM_Icon_ARROW_LEFT_e,
+    /* 0x0B */ fopMsgM_Icon_ARROW_RIGHT_e,
+    /* 0x0C */ fopMsgM_Icon_ARROW_UP_e,
+    /* 0x0D */ fopMsgM_Icon_ARROW_DOWN_e,
+    /* 0x0E */ fopMsgM_Icon_CONTROL_STICK_UP_e,
+    /* 0x0F */ fopMsgM_Icon_CONTROL_STICK_DOWN_e,
+    /* 0x10 */ fopMsgM_Icon_CONTROL_STICK_LEFT_e,
+    /* 0x11 */ fopMsgM_Icon_CONTROL_STICK_RIGHT_e,
+    /* 0x12 */ fopMsgM_Icon_CONTROL_STICK_UP_DOWN_e,
+    /* 0x13 */ fopMsgM_Icon_CONTROL_STICK_LEFT_RIGHT_e,
+    /* 0x14 */ fopMsgM_Icon_SELECT_YOKO_LEFT_e,
+    /* 0x15 */ fopMsgM_Icon_SELECT_YOKO_RIGHT_e,
+    /* 0x16 */ fopMsgM_Icon_INPUT_e,
+    /* 0x17 */ fopMsgM_Icon_FLASHING_A_BUTTON_e,
+    /* 0x18 */ fopMsgM_Icon_HEART_e,
+    /* 0x19 */ fopMsgM_Icon_MUSIC_NOTE_e,
+    /* 0x1A */ fopMsgM_Icon_STARBURST_e,
+    /* 0xFF */ fopMsgM_Icon_NONE_e = 0xFF,
+};
+
 class fopMsgM_msgDataProc_c {
 public:
     fopMsgM_msgDataProc_c();
@@ -262,10 +293,17 @@ public:
 
     void setMesgEntry(JMSMesgEntry_c* i_entry) { mesgEntry = i_entry; }
 
+    enum SelectFlag {
+        /* 0x00 */ Select_OFF,
+        /* 0x01 */ Select_ON,
+        /* 0x02 */ Select_YOKO,
+        /* 0x03 */ Select_INPUT,
+    };
+
     u8 getSelectFlag() { return selectFlag; }
-    void setSelectFlagOff() { selectFlag = 0; }
-    void setSelectFlagOn() { selectFlag = 1; }
-    void setSelectFlagYokoOn() { selectFlag = 2; }
+    void setSelectFlagOff() { selectFlag = Select_OFF; }
+    void setSelectFlagOn() { selectFlag = Select_ON; }
+    void setSelectFlagYokoOn() { selectFlag = Select_YOKO; }
     u8 getAutoSendFlag() { return autoSendFlag; }
     void setAutoSendFlagOff() { autoSendFlag = 0; }
     void setAutoSendFlagOn() { autoSendFlag = 1; }

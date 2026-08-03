@@ -124,7 +124,12 @@ void dDlst_2DMSG_c::outFontDraw() {
         int posX = mpMsg->mMsgDataProc.getIconPosX(i);
         int posY = mpMsg->mMsgDataProc.getIconPosY(i);
         int scale = mpMsg->mMsgDataProc.getIconScale(i);
-        if (iconNum != 0xFF && iconNum != 0x14 && iconNum != 0x15 && iconNum != 0x16) {
+        if (
+            iconNum != fopMsgM_Icon_NONE_e &&
+            iconNum != fopMsgM_Icon_SELECT_YOKO_LEFT_e &&
+            iconNum != fopMsgM_Icon_SELECT_YOKO_RIGHT_e &&
+            iconNum != fopMsgM_Icon_INPUT_e
+        ) {
             J2DScreen* scrn = (J2DScreen*)mpMsg->m0544[0].pane;
             int r5 = posX + scrn->mBounds.i.x;
             int r6;
@@ -1493,7 +1498,7 @@ void dMsg_numberInput(sub_msg_class* i_Msg) {
     static char* num_str[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
     for (s32 i = 0; i < 8; i++) {
-        if (i_Msg->mMsgDataProc.getIconNum(i) == 0x16) {
+        if (i_Msg->mMsgDataProc.getIconNum(i) == fopMsgM_Icon_INPUT_e) {
             i_Msg->m10EC = ((i_Msg->m0544[0].pane)->mBounds.i.x + i_Msg->mMsgDataProc.getIconPosX(i));
             i_Msg->m10F0 = ((i_Msg->m0544[0].pane)->mBounds.i.y + (i_Msg->m1104 * (s32)((3 - i_Msg->m1108) + (i_Msg->mMsgDataProc.getIconPosY(i)) * 2)));
         }
@@ -1828,10 +1833,25 @@ void dMsg_messageShow(sub_msg_class* i_Msg) {
     for (s32 i = 0; i < 8; i++) {
         u8 iconNum = i_Msg->mMsgDataProc.getIconNum(i);
         u32 iconColor = i_Msg->mMsgDataProc.getIconColor(i);
-        if ((iconNum == 0xA || iconNum == 0xB || iconNum == 0xC || iconNum == 0xD || iconNum == 0x15 || iconNum == 0x17) && iconColor == 0) {
-            iconColor = -1;
+        if (
+            (
+                iconNum == fopMsgM_Icon_ARROW_LEFT_e ||
+                iconNum == fopMsgM_Icon_ARROW_RIGHT_e ||
+                iconNum == fopMsgM_Icon_ARROW_UP_e ||
+                iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
+                iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
+                iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+            ) && iconColor == 0
+        ) {
+            iconColor = 0xFFFFFFFF;
         }
-        if (((iconNum != 0xFF) && (buttonTimer[i] == -1)) && (iconNum != 0x14 && (iconNum != 0x15 && (iconNum != 0x16)))) {
+        if (
+            iconNum != fopMsgM_Icon_NONE_e &&
+            buttonTimer[i] == -1 &&
+            iconNum != fopMsgM_Icon_SELECT_YOKO_LEFT_e &&
+            iconNum != fopMsgM_Icon_SELECT_YOKO_RIGHT_e &&
+            iconNum != fopMsgM_Icon_INPUT_e
+        ) {
             fopMsgM_outFontSet(button_icon[i], button_kage[i], &buttonTimer[i], iconColor, iconNum);
         }
     }
@@ -2027,10 +2047,10 @@ s32 dMsg_selectProc(sub_msg_class* i_Msg) {
         s32 var_r11 = 0;
         for (s32 i = 0; i < 8; i++) {
             u8 iconNum = i_Msg->mMsgDataProc.getIconNum(i);
-            if (iconNum == 0x14) {
+            if (iconNum == fopMsgM_Icon_SELECT_YOKO_LEFT_e) {
                 var_r5 = i_Msg->m0544[0].pane->mBounds.i.x + i_Msg->mMsgDataProc.getIconPosX(i);
                 var_r6 = i_Msg->m0544[0].pane->mBounds.i.y + i_Msg->m1104 * ((2 - i_Msg->m1108) + (i_Msg->mMsgDataProc.getIconPosY(i) * 2));
-            } else if (iconNum == 0x15) {
+            } else if (iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e) {
                 var_r11 = (i_Msg->m0544[0].pane->mBounds.i.x + (i_Msg->mMsgDataProc.getIconPosX(i)));
             }
         }
@@ -2151,12 +2171,27 @@ s32 dMsg_demoProc(sub_msg_class* i_Msg) {
                         i_Msg->mMsgDataProc.field_0x299 = 1;
                         i_Msg->mMsgDataProc.stringSet();
                         for (int j = 0; j < 8; j++) {
-                            u8 iconNum = i_Msg->mMsgDataProc.iconNum[j];
+                            u8 iconNum = i_Msg->mMsgDataProc.getIconNum(j);
                             u32 iconColor = i_Msg->mMsgDataProc.getIconColor(j);
-                            if ((iconNum == 0xA || iconNum == 0xB || iconNum == 0xC || iconNum == 0xD || iconNum == 0x15 || iconNum == 0x17) && iconColor == 0) {
-                                iconColor = -1;
+                            if (
+                                (
+                                    iconNum == fopMsgM_Icon_ARROW_LEFT_e ||
+                                    iconNum == fopMsgM_Icon_ARROW_RIGHT_e ||
+                                    iconNum == fopMsgM_Icon_ARROW_UP_e ||
+                                    iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
+                                    iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
+                                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+                                ) && iconColor == 0
+                            ) {
+                                iconColor = 0xFFFFFFFF;
                             }
-                            if (((iconNum != 0xFF) && (buttonTimer[j] == -1)) && (iconNum != 0x14 && (iconNum != 0x15 && (iconNum != 0x16)))) {
+                            if (
+                                iconNum != fopMsgM_Icon_NONE_e &&
+                                buttonTimer[j] == -1 &&
+                                iconNum != fopMsgM_Icon_SELECT_YOKO_LEFT_e &&
+                                iconNum != fopMsgM_Icon_SELECT_YOKO_RIGHT_e &&
+                                iconNum != fopMsgM_Icon_INPUT_e
+                            ) {
                                 fopMsgM_outFontSet(button_icon[j], button_kage[j], &buttonTimer[j], iconColor, iconNum);
                             }
                         }
@@ -2211,14 +2246,20 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
 
     iVar1 = (int)((J2DTextBox*)i_Msg->m0544[0].pane)->getCharSpace();
     iVar2 = (int)((J2DTextBox*)i_Msg->m0544[1].pane)->getCharSpace();
-    if (((((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (i_Msg->mMsgDataProc.getSelectFlag() != 0)) ||
-         (fopMsgM_checkMessageSend() || (i_Msg->mMsgNo == 0x5ac && (dComIfGp_checkMesgCancelButton())))) &&
-        (!dComIfGp_checkMesgBgm()))
-    {
+    if (
+        (
+            CPad_CHECK_TRIG_A(0) ||
+            CPad_CHECK_TRIG_B(0) ||
+            i_Msg->mMsgDataProc.getSelectFlag() != fopMsgM_msgDataProc_c::Select_OFF ||
+            fopMsgM_checkMessageSend() ||
+            (i_Msg->mMsgNo == 0x5ac && dComIfGp_checkMesgCancelButton())
+        ) &&
+        !dComIfGp_checkMesgBgm()
+    ) {
         i_Msg->mMsgDataProc.setSelectFlagOff();
         i_Msg->m1100 = 0;
         JKRFileLoader::removeResource(i_Msg->head_p, NULL);
-        if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
+        if (i_Msg->mMesgEntry.mTextboxType != 5 && i_Msg->mMesgEntry.mTextboxType != 0xe) {
             dMsg_arrowInit(i_Msg);
         }
         if (CPad_CHECK_TRIG_B(0)) {
@@ -2405,10 +2446,16 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
 
 /* 80213830-80213960       .text dMsg_finishProc__FP13sub_msg_class */
 s32 dMsg_finishProc(sub_msg_class* i_Msg) {
-    if ((((((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (i_Msg->mMsgDataProc.getSelectFlag() != 0)) || (fopMsgM_checkMessageSend())) ||
-         (i_Msg->mMsgNo == 0x5ac && (dComIfGp_checkMesgCancelButton()))) &&
-        (!dComIfGp_checkMesgBgm()))
-    {
+    if (
+        (
+            CPad_CHECK_TRIG_A(0) ||
+            CPad_CHECK_TRIG_B(0) ||
+            i_Msg->mMsgDataProc.getSelectFlag() != fopMsgM_msgDataProc_c::Select_OFF ||
+            fopMsgM_checkMessageSend() ||
+            (i_Msg->mMsgNo == 0x5ac && dComIfGp_checkMesgCancelButton())
+        ) &&
+        !dComIfGp_checkMesgBgm()
+    ) {
         i_Msg->mMsgDataProc.setSelectFlagOff();
         i_Msg->mStatus = fopMsgStts_BOX_CLOSING_e;
         if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
@@ -2516,10 +2563,25 @@ s32 dMsg_openTactProc(sub_msg_class* i_Msg) {
         for (s32 i = 0; i < 8; i++) {
             u8 iconNum = i_Msg->mMsgDataProc.getIconNum(i);
             u32 iconColor = i_Msg->mMsgDataProc.getIconColor(i);
-            if ((iconNum == 0xA || iconNum == 0xB || iconNum == 0xC || iconNum == 0xD || iconNum == 0x15 || iconNum == 0x17) && iconColor == 0) {
-                iconColor = -1;
+            if (
+                (
+                    iconNum == fopMsgM_Icon_ARROW_LEFT_e ||
+                    iconNum == fopMsgM_Icon_ARROW_RIGHT_e ||
+                    iconNum == fopMsgM_Icon_ARROW_UP_e ||
+                    iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
+                    iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
+                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+                ) && iconColor == 0
+            ) {
+                iconColor = 0xFFFFFFFF;
             }
-            if (((iconNum != 0xFF) && (buttonTimer[i] == -1)) && (iconNum != 0x14 && (iconNum != 0x15 && (iconNum != 0x16)))) {
+            if (
+                iconNum != fopMsgM_Icon_NONE_e &&
+                buttonTimer[i] == -1 &&
+                iconNum != fopMsgM_Icon_SELECT_YOKO_LEFT_e &&
+                iconNum != fopMsgM_Icon_SELECT_YOKO_RIGHT_e &&
+                iconNum != fopMsgM_Icon_INPUT_e
+            ) {
                 fopMsgM_outFontSet(button_icon[i], button_kage[i], &buttonTimer[i], iconColor, iconNum);
             }
         }
@@ -2649,10 +2711,25 @@ s32 dMsg_outnowProc(sub_msg_class* i_Msg) {
         for (s32 i = 0; i < 8; i++) {
             u8 iconNum = i_Msg->mMsgDataProc.getIconNum(i);
             u32 iconColor = i_Msg->mMsgDataProc.getIconColor(i);
-            if ((iconNum == 0xA || iconNum == 0xB || iconNum == 0xC || iconNum == 0xD || iconNum == 0x15 || iconNum == 0x15) && iconColor == 0) {
-                iconColor = -1;
+            if (
+                (
+                    iconNum == fopMsgM_Icon_ARROW_LEFT_e ||
+                    iconNum == fopMsgM_Icon_ARROW_RIGHT_e ||
+                    iconNum == fopMsgM_Icon_ARROW_UP_e ||
+                    iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
+                    iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
+                    iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e // !@bug: The same value is checked twice here
+                ) && iconColor == 0
+            ) {
+                iconColor = 0xFFFFFFFF;
             }
-            if (iconNum != 0xFF && buttonTimer[i] == -1 && iconNum != 0x14 && iconNum != 0x15 && iconNum != 0x16) {
+            if (
+                iconNum != fopMsgM_Icon_NONE_e &&
+                buttonTimer[i] == -1 &&
+                iconNum != fopMsgM_Icon_SELECT_YOKO_LEFT_e &&
+                iconNum != fopMsgM_Icon_SELECT_YOKO_RIGHT_e &&
+                iconNum != fopMsgM_Icon_INPUT_e
+            ) {
                 fopMsgM_outFontSet(button_icon[i], button_kage[i], &buttonTimer[i], iconColor, iconNum);
             }
         }
