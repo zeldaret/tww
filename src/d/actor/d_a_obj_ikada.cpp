@@ -1265,7 +1265,7 @@ bool daObj_Ikada_c::_draw() {
     }
 
     if (isCrane()) {
-        dSnap_RegistFig(DSNAP_TYPE_UNK83, this, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_IKADA, this, 1.0f, 1.0f, 1.0f);
     }
 
     return true;
