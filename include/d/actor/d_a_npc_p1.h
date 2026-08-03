@@ -23,15 +23,14 @@ class daNpc_P1_c : public fopAc_ac_c {
     enum {
         TYPE_P1A_e,
         TYPE_P1B_e,
-        TYPE_P1C_e
+        TYPE_P1C_e,
     };
 
 public:
-
-    bool checkAction(ActionFunc action) { return mActionFunc == action;}
+    bool checkAction(ActionFunc action) { return mActionFunc == action; }
     void setAction(ActionFunc action, void* i_param_2, int i_param_3) {
-        if(mActionFunc != action){
-            if(mActionFunc != NULL){
+        if (mActionFunc != action) {
+            if (mActionFunc != NULL) {
                 mActionStatus = ACTION_ENDING_e;
                 (this->*mActionFunc)(i_param_2);
             }
@@ -75,7 +74,7 @@ public:
     /* 0x29C */ ActionFunc mPrevAction;
     /* 0x2A8 */ request_of_phase_process_class mPhs;
     /* 0x2B0 */ mDoExt_McaMorf* mpMorf;
-    /* 0x2B4 */ u8 pad2B4[0x2C0-0x2B4];
+    /* 0x2B4 */ u8 pad2B4[0x2C0 - 0x2B4];
     /* 0x2C0 */ J3DModel* mpHeadModel;
     /* 0x2C4 */ J3DModel* mpDoraModel;
     /* 0x2C8 */ J3DAnmTexPattern* mpTexture;
@@ -108,7 +107,6 @@ public:
     /* 0x740 */ s8 m_handR_jnt_num;
     /* 0x741 */ bool mbAttentionFlag;
     /* 0x742 */ s16 mMaxLookVel;
-
 };
 
 #endif /* D_A_NPC_P1_H */
