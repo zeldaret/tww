@@ -1176,7 +1176,7 @@ void dAttLook_c::init() {
 
 /* 8009FE58-8009FE74       .text proc__10dAttLook_cFv */
 void dAttLook_c::proc() {
-    mLookTargetID = mRequestActorID ;
+    mLookTargetID = mRequestActorID;
     mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }

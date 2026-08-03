@@ -1675,34 +1675,34 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     mMsgDataProc.setFont(font0);
     mMsgDataProc.setRubyFont(font1);
 
-    mMsgDataProc.charSpace = ((J2DTextBox*)pane_tx[0].pane)->mCharSpace;
-    mMsgDataProc.rubyCharSpace = ((J2DTextBox*)pane_tx[1].pane)->mCharSpace;
-    mMsgDataProc.lineSpace = ((J2DTextBox*)pane_tx[0].pane)->getLineSpace();
+    mMsgDataProc.setCharSpace(((J2DTextBox*)pane_tx[0].pane)->mCharSpace);
+    mMsgDataProc.setRubyCharSpace(((J2DTextBox*)pane_tx[1].pane)->mCharSpace);
+    mMsgDataProc.setLineSpace(((J2DTextBox*)pane_tx[0].pane)->getLineSpace());
 
     mMsgDataProc.setMesgEntry(&mMsgEntry);
 
-    mMsgDataProc.fontSize = tx0FontSizeX;
-    mMsgDataProc.rubyFontSize = tx1FontSizeX;
+    mMsgDataProc.setFontSize(tx0FontSizeX);
+    mMsgDataProc.setRubyFontSize(tx1FontSizeX);
 
-    mMsgDataProc.lineWidth = 0x1F7;
-    mMsgDataProc.centerLineWidth = 0x1E6;
+    mMsgDataProc.setLineWidth(0x1F7);
+    mMsgDataProc.setCenterLineWidth(0x1E6);
 
-    mMsgDataProc.sendSpeed = g_msgHIO.field_0x82;
-    mMsgDataProc.spaceTimer = g_msgHIO.field_0x6c;
+    mMsgDataProc.setSendSpeed(g_msgHIO.field_0x82);
+    mMsgDataProc.setSpaceTimer(g_msgHIO.field_0x6c);
     mMsgDataProc.field_0x299 = 1;
 
     if (g_msgHIO.field_0x83 != 0) {
-        mMsgDataProc.spaceFlag = 1;
+        mMsgDataProc.setSpaceFlagOn();
     } else {
-        mMsgDataProc.spaceFlag = 0;
+        mMsgDataProc.setSpaceFlagOff();
     }
 
     mMsgDataProc.stringLength();
     mMsgDataProc.stringShift();
     mMsgDataProc.iconIdxRefresh();
 
-    mMsgLineCount = mMsgDataProc.lineCount;
-    mMsgDataProc.lineCount = 0;
+    mMsgLineCount = mMsgDataProc.getLineCount();
+    mMsgDataProc.setLineCount(0);
 
     f32 yShift = ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) * (((J2DTextBox*)pane_tx[0].pane)->getLineSpace() / 2.0f));
 
@@ -1719,8 +1719,8 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     for (int i = 0; i < 15; i++) {
         int halfLine = ((J2DTextBox*)pane_tx[0].pane)->getLineSpace() / 2.0f;
 
-        u8 icon = mMsgDataProc.field_0x281[i];
-        u32 fontData = mMsgDataProc.field_0x25C;
+        u8 icon = mMsgDataProc.getIconNum(i);
+        u32 fontColor = mMsgDataProc.getStringColor();
 
         if (icon == 20) {
             mChoiceCursorX0 = (int)(
@@ -1777,7 +1777,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
                 mMsgIconFontMainPic,
                 mMsgIconFontSubPic,
                 &mMsgIconDrawState,
-                fontData,
+                fontColor,
                 icon
             );
         }
@@ -2170,12 +2170,12 @@ void dJle_Pb_c::draw() {
                     VERSION_SELECT(29.0f, 29.0f, g_msgHIO.field_0x70, g_msgHIO.field_0x70)
                 );
             } else {
-                u8 iconNo = mMsgDataProc.field_0x281[idx];
+                u8 iconNo = mMsgDataProc.getIconNum(idx);
             
                 if (iconNo != 0xFF && iconNo != 20 && iconNo != 0x15) {
                     int posX = mMsgDataProc.getIconPosX(idx);
                     int posY = mMsgDataProc.getIconPosY(idx);
-                    u32 color = mMsgDataProc.getIconColor(idx);
+                    int scale = mMsgDataProc.getIconScale(idx);
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
                     f32 lineSpace = base->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
@@ -2189,7 +2189,7 @@ void dJle_Pb_c::draw() {
                         mMsgIconFontSubPic,
                         r5,
                         r6,
-                        color,
+                        scale,
                         &mMsgIconDrawState,
                         alpha,
                         iconNo
@@ -2232,12 +2232,12 @@ void dJle_Pb_c::draw() {
                     VERSION_SELECT(29.0f, 29.0f, g_msgHIO.field_0x70, g_msgHIO.field_0x70)
                 );
             } else {
-                u8 iconNo = mMsgDataProc.field_0x281[idx];
+                u8 iconNo = mMsgDataProc.getIconNum(idx);
             
                 if (iconNo != 0xFF && iconNo != 20 && iconNo != 0x15) {
                     int posX = mMsgDataProc.getIconPosX(idx);
                     int posY = mMsgDataProc.getIconPosY(idx);
-                    u32 color = mMsgDataProc.getIconColor(idx);
+                    int scale = mMsgDataProc.getIconScale(idx);
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
                     f32 lineSpace = base->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
@@ -2251,7 +2251,7 @@ void dJle_Pb_c::draw() {
                         mMsgIconFontSubPic,
                         r5,
                         r6,
-                        color,
+                        scale,
                         &mMsgIconDrawState,
                         alpha,
                         iconNo

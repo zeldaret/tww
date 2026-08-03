@@ -444,7 +444,9 @@ public:
     int getItemNowMagic() { return mItemNowMagicCount; }
     void setItemNowMagic(s16 num) { mItemNowMagicCount = num; }
 
+    u32 getNpcNameMessageID() { return mNpcNameMessageID; }
     void setNpcNameMessageID(u32 id) { mNpcNameMessageID = id; }
+    u32 getItemNameMessageID() { return mItemNameMessageID; }
     void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
 
     s16 getItemKeyNumCount() { return mItemKeyNumCount; }
@@ -1008,6 +1010,14 @@ inline void dComIfGp_setAuctionGauge(s16 gauge) {
 
 inline s16 dComIfGp_getAuctionGauge() {
     return g_dComIfG_gameInfo.play.getAuctionGauge();
+}
+
+inline u32 dComIfGp_getNpcNameMessageID() {
+    return g_dComIfG_gameInfo.play.getNpcNameMessageID();
+}
+
+inline u32 dComIfGp_getItemNameMessageID() {
+    return g_dComIfG_gameInfo.play.getItemNameMessageID();
 }
 
 inline void dComIfGs_setRupee(u16 rupee) {

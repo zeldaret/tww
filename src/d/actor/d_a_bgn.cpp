@@ -1982,56 +1982,57 @@ static void dance_0(bgn_class* i_this) {
             }
             i_this->mC74E = 0;
             i_this->mC74A++;
-            goto block_51;
+            break;
         case 1:
-            if (((i_this->mC7AC[0] == 0) && (!ki_check(i_this))) && (l_HIO.m028 != 0)) {
-                if (((i_this->mC754 == 1) || (i_this->mC754 == 2)) || (i_this->mC754 == 3)) {
-                    if (((i_this->mAAA8[0].m2D0 != 0) && (i_this->mAAA8[1].m2D0 != 0)) && (i_this->mC7AC[2] == 0)) {
-                        i_this->mC748 = 4;
-                        i_this->mC74A = 0;
-                        i_this->mCA98 = 0.0f;
-                        return;
-                    }
-                    i_this->mC748 = 1;
-                    i_this->mC7AC[0] = REG0_S(0) + 0x32;
-                    uVar2 = i_this->mAAA8[3].m2D0;
-                    if ((uVar2 == 0) && (i_this->mAAA8[4].m2D0 == 0)) {
-                        i_this->mC74A = 5;
-                        i_this->mC7AC[0] = REG0_S(6) + 0x40;
-                        fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
-                    } else if (uVar2 == 0) {
-                        i_this->mC74A = 3;
-                        fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
-                    } else if (i_this->mAAA8[4].m2D0 == 0) {
-                        i_this->mC74A = 1;
-                        fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
-                    } else if (i_this->mAAA8[7].m2D0 == 0) {
-                        i_this->mC748 = 3;
-                        i_this->mC74A = 0;
-                    } else {
-                        i_this->mC748 = 2;
-                        i_this->mC74A = 0;
-                    }
-                } else if ((i_this->mC754 == 0) || (i_this->mC754 == 5)) {
+            if (i_this->mC7AC[0] != 0 || ki_check(i_this) || l_HIO.m028 == 0) {
+                break;
+            }
+            if (i_this->mC754 == 1 || i_this->mC754 == 2 || i_this->mC754 == 3) {
+                if (i_this->mAAA8[0].m2D0 != 0 && i_this->mAAA8[1].m2D0 != 0 && i_this->mC7AC[2] == 0) {
+                    i_this->mC748 = 4;
+                    i_this->mC74A = 0;
+                    i_this->mCA98 = 0.0f;
+                    return;
+                }
+                i_this->mC748 = 1;
+                i_this->mC7AC[0] = REG0_S(0) + 0x32;
+                uVar2 = i_this->mAAA8[3].m2D0;
+                if (uVar2 == 0 && i_this->mAAA8[4].m2D0 == 0) {
+                    i_this->mC74A = 5;
+                    i_this->mC7AC[0] = REG0_S(6) + 0x40;
+                    fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
+                } else if (uVar2 == 0) {
+                    i_this->mC74A = 3;
+                    fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
+                } else if (i_this->mAAA8[4].m2D0 == 0) {
+                    i_this->mC74A = 1;
+                    fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
+                } else if (i_this->mAAA8[7].m2D0 == 0) {
+                    i_this->mC748 = 3;
+                    i_this->mC74A = 0;
+                } else {
+                    i_this->mC748 = 2;
                     i_this->mC74A = 0;
                 }
-                i_this->mC754++;
-                if (i_this->mC754 > 5) {
-                    i_this->mC754 = 0;
-                }
-                // fallthrough
+            } else if (i_this->mC754 == 0 || i_this->mC754 == 5) {
+                i_this->mC74A = 0;
             }
-        default:
-        block_51:
-            switch (i_this->mC74C) {
-                case 0:
-                    dance_A(i_this);
-                    break;
-                case 1:
-                    dance_B(i_this);
-                    break;
+            i_this->mC754++;
+            if (i_this->mC754 > 5) {
+                i_this->mC754 = 0;
             }
+            break;
     }
+    
+    switch (i_this->mC74C) {
+        case 0:
+            dance_A(i_this);
+            break;
+        case 1:
+            dance_B(i_this);
+            break;
+    }
+    
     move_s* pmVar8 = i_this->mAAA8;
     for (s32 i = 0; i < 8; i++, pmVar8++) {
         if (pmVar8->m2D0 == 0) {

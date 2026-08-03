@@ -2,6 +2,8 @@
 #ifndef F_PC_NAME_H
 #define F_PC_NAME_H
 
+#include "global.h"
+
 // The fpcNm prefix is from an error string in TP.
 enum {
     /* 0x0000 */ fpcNm_OVERLAP0_e,
@@ -494,10 +496,15 @@ enum {
     /* 0x01E3 */ fpcNm_CAMERA2_e,
     /* 0x01E4 */ fpcNm_KYEFF_e,
     /* 0x01E5 */ fpcNm_KYEFF2_e,
+#if VERSION == VERSION_PAL
+    /* 0x01E6 */ fpcNm_MSG3_e,
+#endif
     /* 0x01E6 */ fpcNm_MESG_e,
     /* 0x01E7 */ fpcNm_MSG_e,
     /* 0x01E8 */ fpcNm_MSG2_e,
+#if VERSION < VERSION_PAL
     /* 0x01E9 */ fpcNm_MSG3_e,
+#endif
     /* 0x01EA */ fpcNm_MENUWINDOW_e,
     /* 0x01EB */ fpcNm_Menu_Cloth_e,
     /* 0x01EC */ fpcNm_TIMER_e,

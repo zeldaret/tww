@@ -670,176 +670,178 @@ static s32 damage(btd_class* i_this)
             anm_init(i_this, dRes_INDEX_BTD_BCK_SIZUMU2_e, 1.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             i_this->m02EC[0] = (REG0_S(7) + 0x14) * 5;
             i_this->mGohmaState++;
-
-        case 0x16:
-            if (i_this->m02EC[0] == REG0_S(5) + 0x28) {
-                J3DModel* model = morf->getModel();
-                i_this->brk->init(
-                    model->getModelData(),
-                    (J3DAnmTevRegKey*)dComIfG_getObjectRes("Btd", hibi_brk[i_this->m6190]),
-                    true,
-                    J3DFrameCtrl::EMode_LOOP,
-                    1.0f,
-                    0,
-                    -1,
-                    true,
-                    0
-                );
-                i_this->m6190++;
-                fopAcM_seStart(actor, JA_SE_CM_BTD_BRK_SHIELD_S, 0);
-                for (int i = 0, j = 0; i < 3; i++, j++) {
-                    JPABaseEmitter* emitter = dComIfGp_particle_set(hibi_eff_name[j], &actor->current.pos);
-                    if (emitter != NULL) {
-                        emitter->setGlobalRTMatrix(morf->getModel()->getAnmMtx(BTD_JNT_HEAD_e));
-                    }
-                }
-                if (l_HIO.m06 != 0) {
-                    i_this->m6190 = 3;
-                }
-                if ((l_HIO.m07 != 0) && (i_this->m6190 >= 3)) {
-                    i_this->m6190 = 2;
-                }
-            }
-            if (i_this->m02EC[0] == 0) {
-                if (i_this->m6190 >= 3) {
-                    i_this->mGohmaState = 0x28;
-                } else {
-                    anm_init(i_this, dRes_INDEX_BTD_BCK_SIZUMU3_e, 15.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                    i_this->mGohmaState++;
-                    static_center_pos.setall(0.0f);
-                    mDoAud_seStart(JA_SE_CM_BTD_INTO_MAGMA_N, &static_center_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                    fopAcM_monsSeStart(actor, JA_SE_CV_BTD_WAIT, 0);
-                    i_this->m6E7C = 0.0f;
-                    i_this->m02EC[0] = 0x96;
-                }
-            }
+        } else {
             break;
-        case 0x17:
-            if ((i_this->m02EC[0] == 1) || (i_this->m02EC[0] == 0x46)) {
-                i_this->m6E7C = 0.0f;
+        }
+        // Fall-through
+    case 0x16:
+        if (i_this->m02EC[0] == REG0_S(5) + 0x28) {
+            J3DModel* model = morf->getModel();
+            i_this->brk->init(
+                model->getModelData(),
+                (J3DAnmTevRegKey*)dComIfG_getObjectRes("Btd", hibi_brk[i_this->m6190]),
+                true,
+                J3DFrameCtrl::EMode_LOOP,
+                1.0f,
+                0,
+                -1,
+                true,
+                0
+            );
+            i_this->m6190++;
+            fopAcM_seStart(actor, JA_SE_CM_BTD_BRK_SHIELD_S, 0);
+            for (int i = 0, j = 0; i < 3; i++, j++) {
+                JPABaseEmitter* emitter = dComIfGp_particle_set(hibi_eff_name[j], &actor->current.pos);
+                if (emitter != NULL) {
+                    emitter->setGlobalRTMatrix(morf->getModel()->getAnmMtx(BTD_JNT_HEAD_e));
+                }
             }
-            if (morf->isStop()) {
-                i_this->mGohmaState = 0x1e;
-                i_this->m02EC[0] = 0;
+            if (l_HIO.m06 != 0) {
+                i_this->m6190 = 3;
             }
-            break;
-        case 0x1e:
-            i_this->m6E88 = 0;
-            if (i_this->m02EC[0] == 0) {
-                anm_init(i_this, dRes_INDEX_BTD_BCK_MOTIAGE1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            if ((l_HIO.m07 != 0) && (i_this->m6190 >= 3)) {
+                i_this->m6190 = 2;
+            }
+        }
+        if (i_this->m02EC[0] == 0) {
+            if (i_this->m6190 >= 3) {
+                i_this->mGohmaState = 0x28;
+            } else {
+                anm_init(i_this, dRes_INDEX_BTD_BCK_SIZUMU3_e, 15.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->mGohmaState++;
-                i_this->m02F6 = 0;
-                mDoAud_seStart(JA_SE_CM_BTD_ENT_BLAST, &static_center_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                fopAcM_monsSeStart(actor, JA_SE_CV_BTD_ENTER, 0);
-                i_this->m02EC[0] = 0x3c;
+                static_center_pos.setall(0.0f);
+                mDoAud_seStart(JA_SE_CM_BTD_INTO_MAGMA_N, &static_center_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+                fopAcM_monsSeStart(actor, JA_SE_CV_BTD_WAIT, 0);
                 i_this->m6E7C = 0.0f;
-                i_this->mKankyoTimer = 0x14;
+                i_this->m02EC[0] = 0x96;
             }
-            break;
-        case 0x1f:
-            if (i_this->m02EC[0] == 0x37) {
-                sibuki_set(i_this);
-            }
-            if (i_this->m02EC[0] == 1) {
-                i_this->m6E7C = 0.0f;
-            }
-            if (morf->isStop()) {
-                anm_init(i_this, dRes_INDEX_BTD_BCK_MOTIAGE2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                i_this->mGohmaState++;
-                mDoAud_seStart(JA_SE_CM_BTD_LIFT_UP, &static_center_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                i_this->m6E7C = 0.0f;
-            }
-            break;
-        case 0x20:
-            i_this->m6E88 = 0;
-            if (morf->isStop()) {
-                anm_init(i_this, dRes_INDEX_BTD_BCK_MOTIAGE3_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                dr2_class* tmp = (dr2_class*)dr2;
-                mDoAud_seStart(JA_SE_CM_BTD_JUMP_DOWN, &tmp->unk_4A8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDSPLASHMAGMA00, &actor->current.pos, &actor->current.angle);
-                i_this->mGohmaState++;
-                i_this->m02EC[0] = 0x1e;
-            }
-            break;
-        case 0x21:
-            if (i_this->m02EC[0] == 0x14) {
-                mDoAud_seStart(JA_SE_CM_BTD_LANDING, &static_center_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
-                i_this->m6E7C = 0.0f;
-                sibuki_set(i_this);
-            }
-            if (morf->isStop()) {
-                i_this->m02E4 = 0;
-                i_this->mGohmaState = 0;
-                i_this->m02EC[0] = cM_rndF(50.0f) + 50.0f;
-            }
-            break;
-        case 0x28:
-            anm_init(i_this, dRes_INDEX_BTD_BCK_WARERU1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-            i_this->mGohmaState++;
-            fopAcM_seStart(actor, JA_SE_CM_BTD_FALL_FWD, 0);
-            mDoAud_bgmStop(30);
-            i_this->m02EC[0] = 0x96;
+        }
+        break;
+    case 0x17:
+        if ((i_this->m02EC[0] == 1) || (i_this->m02EC[0] == 0x46)) {
             i_this->m6E7C = 0.0f;
-        case 0x29:
-            if (i_this->m02EC[0] == (s16)(REG0_S(5) + 0x26)) {
-                dr2_class* tmp = dr2;
-                tmp->unk_4BA = 10;
-                if (dComIfGp_getStartStageName()[0] == 'X') {
-                    mDoAud_bgmStart(JA_BGM_PAST_GOMA_2);
-                } else {
-                    mDoAud_bgmStart(JA_BGM_GOMA_2);
-                };
-                btd_hahen_s* hahen = &i_this->hahen[0];
-                for (s32 i = 0; i < ARRAY_SSIZE(i_this->hahen); i++, hahen++) {
-                    if (hahen->m04 == 0) {
-                        int iVar3;
-                        if (i < 5) {
-                            iVar3 = 2;
-                        } else {
-                            iVar3 = cM_rndF(18.999f);
-                        }
-                        hahen->m04 = 1;
-                        hahen->m08.x = i_this->m02FC[iVar3].x;
-                        hahen->m08.y = i_this->m02FC[iVar3].y;
-                        hahen->m08.z = i_this->m02FC[iVar3].z;
-                        hahen->m08.x = hahen->m08.x + cM_rndFX(REG0_F(2) + 50.0f);
-                        hahen->m08.y = hahen->m08.y + cM_rndFX(REG0_F(2) + 50.0f);
-                        hahen->m08.z = hahen->m08.z + cM_rndFX(REG0_F(2) + 50.0f);
-                        s16 r0 = cM_atan2s(hahen->m08.x, hahen->m08.z);
-                        cMtx_YrotS(*calc_mtx, r0 + (s16)cM_rndFX(2000.0f));
-                        local_58.x = 0.0f;
-                        local_58.y = REG0_F(1) + (cM_rndF(5.0f) + 20.0f);
-                        local_58.z = REG0_F(0) + (cM_rndF(5.0f) + 20.0f);
-                        MtxPosition(&local_58, &hahen->m14);
-                        hahen->m22 = cM_rndF(0x10000);
-                        hahen->m20 = cM_rndF(0x10000);
+        }
+        if (morf->isStop()) {
+            i_this->mGohmaState = 0x1e;
+            i_this->m02EC[0] = 0;
+        }
+        break;
+    case 0x1e:
+        i_this->m6E88 = 0;
+        if (i_this->m02EC[0] == 0) {
+            anm_init(i_this, dRes_INDEX_BTD_BCK_MOTIAGE1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->mGohmaState++;
+            i_this->m02F6 = 0;
+            mDoAud_seStart(JA_SE_CM_BTD_ENT_BLAST, &static_center_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            fopAcM_monsSeStart(actor, JA_SE_CV_BTD_ENTER, 0);
+            i_this->m02EC[0] = 0x3c;
+            i_this->m6E7C = 0.0f;
+            i_this->mKankyoTimer = 0x14;
+        }
+        break;
+    case 0x1f:
+        if (i_this->m02EC[0] == 0x37) {
+            sibuki_set(i_this);
+        }
+        if (i_this->m02EC[0] == 1) {
+            i_this->m6E7C = 0.0f;
+        }
+        if (morf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BTD_BCK_MOTIAGE2_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->mGohmaState++;
+            mDoAud_seStart(JA_SE_CM_BTD_LIFT_UP, &static_center_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            i_this->m6E7C = 0.0f;
+        }
+        break;
+    case 0x20:
+        i_this->m6E88 = 0;
+        if (morf->isStop()) {
+            anm_init(i_this, dRes_INDEX_BTD_BCK_MOTIAGE3_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            dr2_class* tmp = (dr2_class*)dr2;
+            mDoAud_seStart(JA_SE_CM_BTD_JUMP_DOWN, &tmp->unk_4A8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            dComIfGp_particle_set(dPa_name::ID_AK_SN_BTDSPLASHMAGMA00, &actor->current.pos, &actor->current.angle);
+            i_this->mGohmaState++;
+            i_this->m02EC[0] = 0x1e;
+        }
+        break;
+    case 0x21:
+        if (i_this->m02EC[0] == 0x14) {
+            mDoAud_seStart(JA_SE_CM_BTD_LANDING, &static_center_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            i_this->m6E7C = 0.0f;
+            sibuki_set(i_this);
+        }
+        if (morf->isStop()) {
+            i_this->m02E4 = 0;
+            i_this->mGohmaState = 0;
+            i_this->m02EC[0] = cM_rndF(50.0f) + 50.0f;
+        }
+        break;
+    case 0x28:
+        anm_init(i_this, dRes_INDEX_BTD_BCK_WARERU1_e, 3.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        i_this->mGohmaState++;
+        fopAcM_seStart(actor, JA_SE_CM_BTD_FALL_FWD, 0);
+        mDoAud_bgmStop(30);
+        i_this->m02EC[0] = 0x96;
+        i_this->m6E7C = 0.0f;
+    case 0x29:
+        if (i_this->m02EC[0] == (s16)(REG0_S(5) + 0x26)) {
+            dr2_class* tmp = dr2;
+            tmp->unk_4BA = 10;
+            if (dComIfGp_getStartStageName()[0] == 'X') {
+                mDoAud_bgmStart(JA_BGM_PAST_GOMA_2);
+            } else {
+                mDoAud_bgmStart(JA_BGM_GOMA_2);
+            };
+            btd_hahen_s* hahen = &i_this->hahen[0];
+            for (s32 i = 0; i < ARRAY_SSIZE(i_this->hahen); i++, hahen++) {
+                if (hahen->m04 == 0) {
+                    int iVar3;
+                    if (i < 5) {
+                        iVar3 = 2;
+                    } else {
+                        iVar3 = cM_rndF(18.999f);
                     }
+                    hahen->m04 = 1;
+                    hahen->m08.x = i_this->m02FC[iVar3].x;
+                    hahen->m08.y = i_this->m02FC[iVar3].y;
+                    hahen->m08.z = i_this->m02FC[iVar3].z;
+                    hahen->m08.x = hahen->m08.x + cM_rndFX(REG0_F(2) + 50.0f);
+                    hahen->m08.y = hahen->m08.y + cM_rndFX(REG0_F(2) + 50.0f);
+                    hahen->m08.z = hahen->m08.z + cM_rndFX(REG0_F(2) + 50.0f);
+                    s16 r0 = cM_atan2s(hahen->m08.x, hahen->m08.z);
+                    cMtx_YrotS(*calc_mtx, r0 + (s16)cM_rndFX(2000.0f));
+                    local_58.x = 0.0f;
+                    local_58.y = REG0_F(1) + (cM_rndF(5.0f) + 20.0f);
+                    local_58.z = REG0_F(0) + (cM_rndF(5.0f) + 20.0f);
+                    MtxPosition(&local_58, &hahen->m14);
+                    hahen->m22 = cM_rndF(0x10000);
+                    hahen->m20 = cM_rndF(0x10000);
                 }
-                for (s32 i = 0, j = 0, k = 0; i < ARRAY_SSIZE(hahen_eff_name); i++, j++, k++) {
-                    JPABaseEmitter* emitter = dComIfGp_particle_set(hahen_eff_name[k], &actor->current.pos);
-                    if (emitter != NULL) {
-                        emitter->setGlobalRTMatrix(morf->getModel()->getAnmMtx(hahen_eff_index[j]));
-                    }
+            }
+            for (s32 i = 0, j = 0, k = 0; i < ARRAY_SSIZE(hahen_eff_name); i++, j++, k++) {
+                JPABaseEmitter* emitter = dComIfGp_particle_set(hahen_eff_name[k], &actor->current.pos);
+                if (emitter != NULL) {
+                    emitter->setGlobalRTMatrix(morf->getModel()->getAnmMtx(hahen_eff_index[j]));
                 }
             }
-            if (i_this->m02EC[0] == 0x65) {
-                fopAcM_seStart(actor, JA_SE_CM_BTD_GET_UP, 0);
-                fopAcM_monsSeStart(actor, JA_SE_CV_BTD_ENTER, 0);
-            }
-            if (morf->isStop()) {
-                fopAcM_seStart(actor, JA_SE_CM_BTD_BRK_SHIELD_L, 0);
-                fopAcM_monsSeStart(actor, JA_SE_CV_BTD_AFT_DAMAGE, 0);
-                i_this->m02E0 = 1;
-                anm_init(i_this, dRes_INDEX_BTD_BCK_WARERU2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                i_this->mGohmaState++;
-            }
-            break;
-        case 0x2a:
-            if (morf->isStop()) {
-                i_this->m02E4 = 0;
-                i_this->mGohmaState = 0;
-                i_this->m02EC[0] = cM_rndF(50.0f) + 50.0f;
-            }
+        }
+        if (i_this->m02EC[0] == 0x65) {
+            fopAcM_seStart(actor, JA_SE_CM_BTD_GET_UP, 0);
+            fopAcM_monsSeStart(actor, JA_SE_CV_BTD_ENTER, 0);
+        }
+        if (morf->isStop()) {
+            fopAcM_seStart(actor, JA_SE_CM_BTD_BRK_SHIELD_L, 0);
+            fopAcM_monsSeStart(actor, JA_SE_CV_BTD_AFT_DAMAGE, 0);
+            i_this->m02E0 = 1;
+            anm_init(i_this, dRes_INDEX_BTD_BCK_WARERU2_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            i_this->mGohmaState++;
+        }
+        break;
+    case 0x2a:
+        if (morf->isStop()) {
+            i_this->m02E4 = 0;
+            i_this->mGohmaState = 0;
+            i_this->m02EC[0] = cM_rndF(50.0f) + 50.0f;
         }
     }
 #if VERSION == VERSION_DEMO

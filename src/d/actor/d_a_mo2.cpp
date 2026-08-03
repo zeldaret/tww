@@ -654,7 +654,6 @@ static void daMo2_shadowDraw(mo2_class* i_this) {
             i_this->mDamageReaction.mAcch.m_gnd,
             &actor->tevStr
         );
-        ;
     }
 }
 

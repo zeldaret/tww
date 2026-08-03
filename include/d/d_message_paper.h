@@ -2,8 +2,12 @@
 #define D_MESSAGE_PAPER_H
 
 #include "dolphin/types.h"
+#include "f_op/f_op_msg.h"
 
-class sub_msg3_class;
+#if VERSION < VERSION_PAL
+struct sub_msg3_class : public msg_class {
+    /* 0x0FC */ u8 m0FC[0xEE8 - 0x0FC];
+};
 
 class dmsg3_3d_c {
 public:
@@ -22,5 +26,12 @@ public:
     void draw();
     void outFontDraw();
 };
+#endif
+
+#if VERSION == VERSION_PAL
+struct dMessage_Paper_c : public msg_class {
+    /* 0x0FC */ u8 m0FC[0x104 - 0x0FC];
+};
+#endif
 
 #endif /* D_MESSAGE_PAPER_H */

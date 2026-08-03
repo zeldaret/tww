@@ -3912,23 +3912,14 @@ void daPy_lk_c::checkItemAction() {
     {
         J3DFrameCtrl& frameCtrl = mFrameCtrlUpper[UPPER_MOVE2_e];
         if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMCATCH_e)) {
-            if (!(frameCtrl.getRate() < 0.01f)) {
-                if (!(mStickDistance > 0.05f)) {
-                    return;
+            if (frameCtrl.getRate() < 0.01f || (mStickDistance > 0.05f && frameCtrl.getFrame() > m_HIO->mItem.mBoom.m.field_0x2C)) {
+                resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
+                if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
+                    procShipPaddle_init();
                 }
-                if (!(frameCtrl.getFrame() > m_HIO->mItem.mBoom.m.field_0x2C)) {
-                    return;
-                }
-            }
-            resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
-            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-                procShipPaddle_init();
             }
         } else if (checkUpperAnime(dRes_INDEX_LKANM_BCK_BOOMTHROW_e)) {
-            if (frameCtrl.getRate() < 0.01f ||
-                ((mStickDistance > 0.05f &&
-                  (frameCtrl.getFrame() > m_HIO->mItem.mBoom.m.field_0x10))))
-            {
+            if (frameCtrl.getRate() < 0.01f || (mStickDistance > 0.05f && frameCtrl.getFrame() > m_HIO->mItem.mBoom.m.field_0x10)) {
                 resetActAnimeUpper(UPPER_MOVE2_e, m_HIO->mBasic.m.field_0xC);
             } else {
                 if (frameCtrl.checkPass(m_HIO->mItem.mBoom.m.field_0x14)) {
@@ -4247,9 +4238,7 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
                     }
                     if (mEquipItem == dItemNo_SKULL_HAMMER_e) {
                         direction = getDirectionFromShapeAngle();
-                        if (mStickDistance > 0.05f &&
-                            ((direction == DIR_LEFT || direction == DIR_RIGHT)))
-                        {
+                        if (mStickDistance > 0.05f && (direction == DIR_LEFT || direction == DIR_RIGHT)) {
                             return procHammerSideSwing_init();
                         } else {
                             return procHammerFrontSwingReady_init();
@@ -4948,11 +4937,9 @@ BOOL daPy_lk_c::changeLandProc(f32 param_1) {
     } else {
         bVar2 = false;
     }
-    if ((((!checkGrabAnime() && mStickDistance > 0.5f) && direction != DIR_BACKWARD) &&
-         (!bVar2)) &&
-        (((mCurProc == daPyProc_CUT_EX_MJ_e || (m3688.y - current.pos.y >= 300.0f)) &&
-          ((!checkNoResetFlg1(daPyFlg1_UNK8000000) &&
-            getDirectionFromCurrentAngle() == DIR_FORWARD)))))
+    if (!checkGrabAnime() && mStickDistance > 0.5f && direction != DIR_BACKWARD && !bVar2 &&
+        (mCurProc == daPyProc_CUT_EX_MJ_e || (m3688.y - current.pos.y) >= 300.0f) &&
+        !checkNoResetFlg1(daPyFlg1_UNK8000000) && getDirectionFromCurrentAngle() == DIR_FORWARD)
     {
         voiceStart(7);
         if (direction == DIR_FORWARD) {
@@ -6465,7 +6452,7 @@ BOOL daPy_lk_c::procCrouchDefenseSlip_init() {
         m35A8 = m_HIO->mNockback.m.field_0x24;
         m35AC = m_HIO->mNockback.m.field_0x28;
         dVar5 = cM_rnd();
-        mProcVar6.m3570 = (dVar5 < 0.2f) ? 1 : 0;
+        mProcVar6.m3570 = dVar5 < 0.2f ? 1 : 0;
     } else {
         setSingleMoveAnime(ANM_DIFENCEA, m_HIO->mGuard.m.field_0x4, m_HIO->mGuard.m.field_0x8, m_HIO->mGuard.m.field_0x0, m_HIO->mGuard.m.field_0xC);
         dVar5 = damage_vec->absXZ();
@@ -8260,7 +8247,7 @@ BOOL daPy_lk_c::procGuardSlip_init() {
         m35A4 = m_HIO->mNockback.m.field_0x20;
         m35A8 = m_HIO->mNockback.m.field_0x24;
         m35AC = m_HIO->mNockback.m.field_0x28;
-        mProcVar6.m3570 = (cM_rnd() < 0.2f) ? 1 : 0;
+        mProcVar6.m3570 = cM_rnd() < 0.2f ? 1 : 0;
     } else {
         setSingleMoveAnime(dVar5, m_HIO->mGuard.m.field_0x4, m_HIO->mGuard.m.field_0x8, m_HIO->mGuard.m.field_0x0, m_HIO->mGuard.m.field_0xC);
         mNormalSpeed = (m_HIO->mGuard.m.field_0x14 * damage_vec->absXZ()) + m_HIO->mGuard.m.field_0x10;
@@ -9083,7 +9070,7 @@ void daPy_lk_c::setNeckAngle() {
     s16 r25_3;
     s16 r24_2 = cM_atan2s(-spAC.y, spAC.absXZ());
     r24_4 = (r24_2 - m3564.x);
-    s16 r25_2 = (cM_atan2s(spAC.x, spAC.z));
+    s16 r25_2 = cM_atan2s(spAC.x, spAC.z);
     r25_3 = r25_2;
     r25_3 -= m34DE;
     r25_3 = r25_3 - m3564.y;
@@ -13026,7 +13013,7 @@ BOOL daPy_lk_c::setThrowDamage(cXyz* r4, s16 r5, f32 f30, f32 f31, int r6) {
 
 /* 80128B50-80128C10       .text setPlayerPosAndAngle__9daPy_lk_cFP4cXyzs */
 void daPy_lk_c::setPlayerPosAndAngle(cXyz* param_1, s16 param_2) {
-    if (!(dComIfGp_event_runCheck()) && dComIfGp_getScopeType() != 1) {
+    if (!dComIfGp_event_runCheck() && dComIfGp_getScopeType() != 1) {
         return;
     }
     if (param_1 != NULL) {
@@ -13045,7 +13032,7 @@ void daPy_lk_c::setPlayerPosAndAngle(cXyz* param_1, s16 param_2) {
 
 /* 80128C10-80128CE4       .text setPlayerPosAndAngle__9daPy_lk_cFP4cXyzP5csXyz */
 void daPy_lk_c::setPlayerPosAndAngle(cXyz* param_1, csXyz* param_2) {
-    if (!(dComIfGp_event_runCheck())) {
+    if (!dComIfGp_event_runCheck()) {
         return;
     }
     if (param_1 != NULL) {
