@@ -12,7 +12,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-static s16 zou_chk_angl[] = {0xD556,0x2AAA, 0x5555, 0xAAAB,0x8000};
 namespace {
 static s32 l_enter_angl_band = abs(0xe00);
 
@@ -95,21 +94,24 @@ bool daObjFirewall_c::create_heap() {
 /* 000002DC-00000568       .text registCollisionTable__15daObjFirewall_cFv */
 void daObjFirewall_c::registCollisionTable() {
     /* Nonmatching */
-    s16 temp_r3_3;
+    static s16 zou_chk_angl[] = {0xD556,0x2AAA, 0x5555, 0xAAAB,0x8000};
+    int temp_r3_3;
+    f32 base_radius;
+    f32 height;
+    f32 r_modifier;
     
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    f32 r_modifier = -1.0f;
+    r_modifier = -1.0f;
     s16 local_1 = cM_atan2s(player->current.pos.x - current.pos.x, player->current.pos.z - current.pos.z);
-    s32 temp_r3_2 = abs(local_1);
+    int temp_r3_2 = abs(local_1);
     if(temp_r3_2 < l_enter_angl_band) {
-        r_modifier = cM_scos(cM_s2rad(l_enter_angl_band)) * 30.0f + 100.0f;
+        r_modifier = 100.0f + 30.0f * cM_scos(temp_r3_2 / (f32)l_enter_angl_band * 0x4000);
     } else {
         for (int i=0; i < 5; i++) {
             
-            temp_r3_3 = abs(local_1 - zou_chk_angl[i]);
+            temp_r3_3 = abs((s16)(local_1 - zou_chk_angl[i]));
             if(temp_r3_3 < 0x1A00) {
-
-                r_modifier = 100.0f + 115.0f * cM_scos(cM_s2rad(temp_r3_3)) ;
+                r_modifier = 100.0f + 115.0f * cM_scos(temp_r3_3 / 6656.0f * 0x4000);
                 break;
             }
         }
@@ -121,8 +123,8 @@ void daObjFirewall_c::registCollisionTable() {
     cXyz pos = current.pos;
     pos.y -= 300.0f;
 
-    f32 base_radius = scale.x * 1000.0f;
-    f32 height = scale.y * 10000.0f + 300.0f;
+    base_radius = scale.x * 1000.0f;
+    height = scale.y * 10000.0f + 300.0f;
     
     mCyl.SetC(pos);
     mCyl.SetR(base_radius - r_modifier);
@@ -139,7 +141,8 @@ void daObjFirewall_c::setPointLight() {
     /* Nonmatching */
     f32 blend;
     cXyz pos;
-    if(field_0x1070 == &daObjFirewall_c::burn_wait_act_proc || field_0x1070 == &daObjFirewall_c::burn_wait_act_proc || field_0x1070 == &daObjFirewall_c::burn_wait_act_proc){
+    cXyz scale;
+    if(field_0x1070 == &daObjFirewall_c::burn_wait_act_proc || field_0x1070 == &daObjFirewall_c::demo_end_wait_act_proc || field_0x1070 == &daObjFirewall_c::appear_act_proc){
         cLib_addCalc2(&field_0x106c, cM_rndF(0.5f) + 1.0f,0.5f,0.04f);
     }else {
         field_0x106c = 0.0f;
@@ -150,12 +153,14 @@ void daObjFirewall_c::setPointLight() {
         field_0x46c[i].mColor.r = 0x258;
         field_0x46c[i].mColor.g = 0x190;
         field_0x46c[i].mColor.b = 0x78;
-        field_0x46c[i].mPower = (REG12_F(0) + 800.0f) * field_0x106c;
+        field_0x46c[i].mPower = (s16)((REG12_F(0) + 800.0f) * field_0x106c);
         field_0x46c[i].mFluctuation = 250.0f;
 
-        if (field_0x106c > 1.0f) {            
-            field_0xc6c[i].y += (1.1f * ((220.0f + REG12_S(0)) * 2));
-            field_0xc6c[i].setall(1.5f * field_0x106c);
+        if (field_0x106c > 1.0f) {
+            pos = field_0xc6c[i];
+            scale.setall(1.5f * field_0x106c);            
+            pos.y += (1.1f * ((220.0f + REG12_S(0)) * 2));
+            
         }
     }
 
@@ -276,8 +281,6 @@ void daObjFirewall_c::set_pl_se() {
     if(link_id != -1) {
         char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(link_id);
         if(strcmp(cut_name, chk_word_table[field_0x10e8]) == 0) {
-            
-            
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0); // There is an inline but not in debug map
             if(player != NULL) {
                 //TODO: I think this is the wrong way to call voice start
