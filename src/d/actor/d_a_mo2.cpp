@@ -1498,7 +1498,7 @@ static void fight_run(mo2_class* i_this) {
     f32 dVar9;
     f32 fVar10;
 
-    dVar9 = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    dVar9 = CPad_GET_STICK_POS_X(0);
     i_this->mDamageReaction.m4D0 = i_this->m05D6;
     if (i_this->m05B0 == 0 && i_this->mDamageReaction.mMode != 0) {
         maxSpeed = 0x400;

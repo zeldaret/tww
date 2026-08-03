@@ -63,11 +63,11 @@ namespace {
     }
 
     inline static bool push_any_key(u32 padId) {
-        if (g_mDoCPd_cpadInfo[padId].mMainStickValue > 0.001f) {
+        if (CPad_GET_STICK_VALUE(padId) > 0.001f) {
             return true;
         }
         
-        if (g_mDoCPd_cpadInfo[padId].mCStickValue > 0.001f) {
+        if (CPad_GET_SUBSTICK_VALUE(padId) > 0.001f) {
             return true;
         }
 
@@ -438,17 +438,17 @@ bool dCamera_c::ChangeModeOK(s32 param_1) {
 
 /* 801621A0-801623A0       .text initPad__9dCamera_cFv */
 void dCamera_c::initPad() {
-    mStickMainPosXLast = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
-    mStickMainPosYLast = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
-    mStickMainValueLast = g_mDoCPd_cpadInfo[mPadId].mMainStickValue;
+    mStickMainPosXLast = CPad_GET_STICK_POS_X(mPadId);
+    mStickMainPosYLast = CPad_GET_STICK_POS_Y(mPadId);
+    mStickMainValueLast = CPad_GET_STICK_VALUE(mPadId);
 
     mStickMainPosXDelta = 0.0f;
     mStickMainPosYDelta = 0.0f;
     mStickMainValueDelta = 0.0f;
 
-    mStickCPosXLast = g_mDoCPd_cpadInfo[mPadId].mCStickPosX;
-    mStickCPosYLast = g_mDoCPd_cpadInfo[mPadId].mCStickPosY;
-    mStickCValueLast = g_mDoCPd_cpadInfo[mPadId].mCStickValue;
+    mStickCPosXLast = CPad_GET_SUBSTICK_POS_X(mPadId);
+    mStickCPosYLast = CPad_GET_SUBSTICK_POS_Y(mPadId);
+    mStickCValueLast = CPad_GET_SUBSTICK_VALUE(mPadId);
 
     mStickCPosXDelta = 0.0f;
     mStickCPosYDelta = 0.0f;
@@ -458,7 +458,7 @@ void dCamera_c::initPad() {
     m188 = 0;
     m184 = 0;
 
-    mTriggerLeftLast = g_mDoCPd_cpadInfo[mPadId].mTriggerLeft;
+    mTriggerLeftLast = CPad_GET_ANALOG_L(mPadId);
     mTriggerLeftDelta = 0.0f;
 
     mHoldLockL = FALSE;
@@ -466,7 +466,7 @@ void dCamera_c::initPad() {
     m19A = 0;
     m19B = 0;
 
-    mTriggerRightLast = g_mDoCPd_cpadInfo[mPadId].mTriggerRight;
+    mTriggerRightLast = CPad_GET_ANALOG_R(mPadId);
     mTriggerRightDelta = 0.0f;
 
     mHoldLockR = 0;
@@ -501,12 +501,12 @@ void dCamera_c::updatePad() {
         fVar3 = 0.0f;
     }
     else {
-        fVar1 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
-        fVar2 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
-        fVar3 = g_mDoCPd_cpadInfo[mPadId].mMainStickValue;
+        fVar1 = CPad_GET_STICK_POS_X(mPadId);
+        fVar2 = CPad_GET_STICK_POS_Y(mPadId);
+        fVar3 = CPad_GET_STICK_VALUE(mPadId);
     }
 
-    cSAngle unused(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle); // Unused object? Code matches so perhaps a developer oversight
+    cSAngle unused(CPad_GET_STICK_ANGLE(mPadId)); // Unused object? Code matches so perhaps a developer oversight
 
     mStickMainPosXDelta = fVar1 - mStickMainPosXLast;
     mStickMainPosYDelta = fVar2 - mStickMainPosYLast;
@@ -522,9 +522,9 @@ void dCamera_c::updatePad() {
         fVar3 = 0.0f;
     }
     else {
-        fVar1 = g_mDoCPd_cpadInfo[mPadId].mCStickPosX;
-        fVar2 = g_mDoCPd_cpadInfo[mPadId].mCStickPosY;
-        fVar3 = g_mDoCPd_cpadInfo[mPadId].mCStickValue;
+        fVar1 = CPad_GET_SUBSTICK_POS_X(mPadId);
+        fVar2 = CPad_GET_SUBSTICK_POS_Y(mPadId);
+        fVar3 = CPad_GET_SUBSTICK_VALUE(mPadId);
     }
 
     mStickCPosXDelta = fVar1 - mStickCPosXLast;
@@ -535,7 +535,7 @@ void dCamera_c::updatePad() {
     mStickCPosYLast = fVar2;
     mStickCValueLast = fVar3;
 
-    fVar1 = g_mDoCPd_cpadInfo[mPadId].mTriggerLeft;
+    fVar1 = CPad_GET_ANALOG_L(mPadId);
     mTriggerLeftDelta = mTriggerLeftLast - fVar1;
     mTriggerLeftLast = fVar1;
 
@@ -557,7 +557,7 @@ void dCamera_c::updatePad() {
         m19A = 0;
     }
 
-    fVar1 = g_mDoCPd_cpadInfo[mPadId].mTriggerRight;
+    fVar1 = CPad_GET_ANALOG_R(mPadId);
     mTriggerRightDelta = mTriggerRightLast - fVar1;
     mTriggerRightLast = fVar1;
 
@@ -896,14 +896,14 @@ bool dCamera_c::Run() {
 
     bumpCheck(m068);
 
-    cSAngle angle(cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle) - mDMCSystem.field_0x4);
+    cSAngle angle(cSAngle(CPad_GET_STICK_ANGLE(mPadId)) - mDMCSystem.field_0x4);
 
     if (mStickMainValueLast < mCamSetup.DMCValue() || angle > cSAngle(mCamSetup.DMCAngle()) || angle < cSAngle(-mCamSetup.DMCAngle())) {
         mDMCSystem.field_0x0 = 0;
     }
 
     if (mDMCSystem.field_0x0) {
-        mAngleY = getDMCAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle);
+        mAngleY = getDMCAngle(CPad_GET_STICK_ANGLE(mPadId));
     }
     else {
         mAngleY = mDirection.U().Inv();
@@ -1694,7 +1694,7 @@ cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* 
 void dCamera_c::setDMCAngle() {
     mDMCSystem.field_0x0 = 1;
     mDMCSystem.field_0x2 = mDirection.U().Inv();
-    mDMCSystem.field_0x4 = cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle);
+    mDMCSystem.field_0x4 = cSAngle(CPad_GET_STICK_ANGLE(mPadId));
 }
 
 /* 80165720-80165744       .text getDMCAngle__9dCamera_cF7cSAngle */
@@ -3800,8 +3800,8 @@ bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
         *param_1 = local_8c.Val();
     }
     
-    fVar6 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
-    fVar5 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
+    fVar6 = CPad_GET_STICK_POS_X(mPadId);
+    fVar5 = CPad_GET_STICK_POS_Y(mPadId);
 
     if (is_player(mpPlayerActor)) {
         mWork.subject.m3B8 = ((daPy_py_c*)mpPlayerActor)->getBodyAngleX();

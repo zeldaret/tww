@@ -774,7 +774,7 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
         case LockState_LOCK:
             mLockonTargetID = LockonTargetPId(0);
             if (field_0x01a == 1) {
-                f32 stickY = g_mDoCPd_cpadInfo[mPadNo].mMainStickPosY;
+                f32 stickY = CPad_GET_STICK_POS_Y(mPadNo);
                 if (-0.9f < stickY && nextAttention(interactMask) != NULL && mLockonCount > 1) {
                     setFlag(AttnFlag_00000008);
                 } else {

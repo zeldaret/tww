@@ -1412,7 +1412,7 @@ void daShip_c::setSelfMove(int param_1) {
                     fVar6 = cLib_addCalc(&speedF, 0.0f, 0.1f, 1.0f, 0.1f);
                 }
                 else {
-                    fVar6 = g_mDoCPd_cpadInfo[0].mTriggerRight * 10.0f; //Not sure if this is a macro either
+                    fVar6 = CPad_GET_ANALOG_R(0) * 10.0f;
                     bVar1 = FALSE;
                     if (mAcch.ChkWallHit()) {
                         for (int i = 0; i < m03CC; i++) {
@@ -3587,8 +3587,8 @@ BOOL daShip_c::execute() {
             mStickMAng = 0;
         }
         else {
-            mStickMVal = g_mDoCPd_cpadInfo[0].mMainStickValue;
-            mStickMAng = g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000;
+            mStickMVal = CPad_GET_STICK_VALUE(0);
+            mStickMAng = CPad_GET_STICK_ANGLE(0) + 0x8000;
         }
         mEvtStaffId = -1;
     }

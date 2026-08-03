@@ -1428,9 +1428,9 @@ static void new_himo2_move(himo2_class* i_this) {
             i_this->m02E0++;
             i_this->m029C = 50;
         }
-        f26 = g_mDoCPd_cpadInfo[0].mCStickPosY;
+        f26 = CPad_GET_SUBSTICK_POS_Y(0);
     label_1d50:
-        f32 f2 = g_mDoCPd_cpadInfo[0].mCStickPosX;
+        f32 f2 = CPad_GET_SUBSTICK_POS_X(0);
         i_this->m2512 += (s16)(f2 * (REG0_F(6) + 1000.0f));
         cLib_addCalcAngleS2(&i_this->m2510, i_this->m2512, 4, 0x1000);
         if (f26 <= -0.1f) {

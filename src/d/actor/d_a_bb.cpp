@@ -1973,8 +1973,8 @@ void bb_fail_move(bb_class* i_this) {
 
 #if VERSION == VERSION_DEMO
 void bb_key_move(bb_class* i_this) {
-    f32 stickX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
-    f32 stickY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    f32 stickX = CPad_GET_STICK_POS_X(0);
+    f32 stickY = CPad_GET_STICK_POS_Y(0);
 
     switch (i_this->unk_2F0) {
         case 0: {

@@ -7989,7 +7989,7 @@ BOOL daPy_lk_c::procLargeDamageUp() {
         } else {
             dComIfGp_evmng_cutEnd(mStaffIdx);
         }
-        if (mProcVar0.m34D0 == 0 || (mProcVar6.m3570 == -4 && g_mDoCPd_cpadInfo[0].mMainStickValue > 0.05f)) {
+        if (mProcVar0.m34D0 == 0 || (mProcVar6.m3570 == -4 && CPad_GET_STICK_VALUE(0) > 0.05f)) {
             mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.5f);
         }
     } else if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
@@ -10529,8 +10529,8 @@ void daPy_lk_c::setStickData() {
         m34E8 = 0;
     } else {
         if (checkBowMiniGame()) {
-            mStickDistance = g_mDoCPd_cpadInfo[0].mMainStickValue;
-            m34DC = g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000;
+            mStickDistance = CPad_GET_STICK_VALUE(0);
+            m34DC = CPad_GET_STICK_ANGLE(0) + 0x8000;
             m34E8 = m34DC + dCam_getControledAngleY(dComIfGp_getCamera(mCameraInfoIdx));
             if (CPad_CHECK_HOLD_A(0)) {
                 mItemButton |= BTN_A;
@@ -10559,11 +10559,11 @@ void daPy_lk_c::setStickData() {
             mStickDistance = 0.0f;
             m34E8 = 0;
         } else {
-            mStickDistance = g_mDoCPd_cpadInfo[0].mMainStickValue;
+            mStickDistance = CPad_GET_STICK_VALUE(0);
             if (checkNoResetFlg1(daPyFlg1_CONFUSE) && !dComIfGp_event_runCheck()) {
-                m34DC = g_mDoCPd_cpadInfo[0].mMainStickAngle;
+                m34DC = CPad_GET_STICK_ANGLE(0);
             } else {
-                m34DC = g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000;
+                m34DC = CPad_GET_STICK_ANGLE(0) + 0x8000;
             }
             m34E8 = m34DC + dCam_getControledAngleY(dComIfGp_getCamera(mCameraInfoIdx));
             u8 bVar2 = dComIfGp_getButtonActionMode();

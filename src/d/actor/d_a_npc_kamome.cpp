@@ -600,7 +600,7 @@ BOOL daNpc_kam_c::getStickAngY(s16* pTargetAngleY, s16* pTargetAngleZ) {
     s16 deltaAngleY = 0;
     s16 targetAngleZ = 0;
     
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
     if (stickPosX) {
         deltaAngleY = stickPosX * -mAngVelY;
         targetAngleZ = stickPosX * l_HIO.mHio1.mMaxAngleZ;
@@ -639,7 +639,7 @@ s16 daNpc_kam_c::getAngleX() {
         angle = mAngVelX;
         mLockAngleXTimer = 30;
     } else {
-        angle = g_mDoCPd_cpadInfo[0].mMainStickPosY * mAngVelX;
+        angle = CPad_GET_STICK_POS_Y(0) * mAngVelX;
     }
     return angle;
 }

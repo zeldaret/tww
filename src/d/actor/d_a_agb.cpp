@@ -802,7 +802,7 @@ void daAgb_c::FlagsRecv() {
     pad_p->mButtonTrig.l     = triggeredButtons & 0x0200;
     pad_p->mButtonTrig.start = triggeredButtons & 0x0008;
 
-    g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags = 0;
+    CPad_GET_ERROR_STATUS(mDoGaC_getPortNo()) = 0;
 
     mPrevButtons = buttons;
     field_0x673 = mGbaFlg.field_0x3;
@@ -1209,8 +1209,8 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     mFlags.field_0x3_7 = dComIfGs_isTact(0);
     
     if (*(u16*)&g_mDoCPd_cpadInfo[0].mButtonHold || // fakematch? is controller_pad_buttons supposed to be a u16?
-        g_mDoCPd_cpadInfo[0].mMainStickValue ||
-        g_mDoCPd_cpadInfo[0].mCStickValue)
+        CPad_GET_STICK_VALUE(0) ||
+        CPad_GET_SUBSTICK_VALUE(0))
     {
         mFlags.field_0x3_6 = 1;
     } else {
@@ -1480,7 +1480,7 @@ void daAgb_c::modeMove() {
         mDoGac_SendDataSet((u32*)&mItemBuy, 4, 0xD, mItemBuy.U32);
     }
     
-    if ((g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && fopAcM_GetName(player) != fpcNm_NPC_KAM_e) &&
+    if ((CPad_GET_ERROR_STATUS(mDoGaC_getPortNo()) == 0 && fopAcM_GetName(player) != fpcNm_NPC_KAM_e) &&
         ((isActive() && !field_0x675 && CPad_CHECK_TRIG_R(mDoGaC_getPortNo())) ||
         (mFlags.field_0x3_5 != 0 && (CPad_CHECK_TRIG_R(mDoGaC_getPortNo()) || CPad_CHECK_TRIG_A(mDoGaC_getPortNo())))))
     {
@@ -1535,7 +1535,7 @@ void daAgb_c::modeMove() {
 
         field_0x628 = 2.5f;
         
-        if (g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags == 0 && !CPad_CHECK_HOLD_L(mDoGaC_getPortNo()) && (
+        if (CPad_GET_ERROR_STATUS(mDoGaC_getPortNo()) == 0 && !CPad_CHECK_HOLD_L(mDoGaC_getPortNo()) && (
             CPad_CHECK_HOLD_LEFT(mDoGaC_getPortNo()) | CPad_CHECK_HOLD_RIGHT(mDoGaC_getPortNo()) |
             CPad_CHECK_HOLD_UP(mDoGaC_getPortNo()) | CPad_CHECK_HOLD_DOWN(mDoGaC_getPortNo())
         ) && isActive() && !mHold)
@@ -1583,7 +1583,7 @@ static BOOL daAgb_Execute(daAgb_c* i_this) {
         i_this->FlagsRecv();
         mDoGaC_DataStatusReset(4);
     } else {
-        g_mDoCPd_cpadInfo[mDoGaC_getPortNo()].mGamepadErrorFlags = 1;
+        CPad_GET_ERROR_STATUS(mDoGaC_getPortNo()) = 1;
     }
 
     // single | instead of double ||: bug?

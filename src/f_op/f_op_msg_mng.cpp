@@ -2541,13 +2541,13 @@ u8 fopMsgM_msgDataProc_c::selectCheck2(J2DPane* param_1, int param_2, int param_
     field_0x274 = g_msgHIO.field_0x70;
 
     if (dec_keyWaitTimer() == 0) {
-        if (g_mDoCPd_cpadInfo[0].mMainStickPosY > 0.7f) {
+        if (CPad_GET_STICK_POS_Y(0) > 0.7f) {
             if (field_0x27D == 1) {
                 field_0x27D = 0;
                 keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             }
-        } else if (g_mDoCPd_cpadInfo[0].mMainStickPosY < -0.7f) {
+        } else if (CPad_GET_STICK_POS_Y(0) < -0.7f) {
             if (field_0x27D == 0) {
                 field_0x27D = 1;
                 keyWaitTimer = 10;
@@ -2569,7 +2569,7 @@ u8 fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param_
     field_0x274 = g_msgHIO.field_0x70;
 
     if (dec_keyWaitTimer() == 0) {
-        if (g_mDoCPd_cpadInfo[0].mMainStickPosY > 0.7f) {
+        if (CPad_GET_STICK_POS_Y(0) > 0.7f) {
             if (field_0x27D == 1) {
                 field_0x27D = 0;
                 keyWaitTimer = 10;
@@ -2579,7 +2579,7 @@ u8 fopMsgM_msgDataProc_c::selectCheck3(J2DPane* param_1, int param_2, int param_
                 keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             }
-        } else if (g_mDoCPd_cpadInfo[0].mMainStickPosY < -0.7f) {
+        } else if (CPad_GET_STICK_POS_Y(0) < -0.7f) {
             if (field_0x27D == 0) {
                 field_0x27D = 1;
                 keyWaitTimer = 10;
@@ -2605,13 +2605,13 @@ u8 fopMsgM_msgDataProc_c::selectCheckYoko(J2DPane* param_1, int param_2, int par
     field_0x274 = g_msgHIO.field_0x70;
 
     if (dec_keyWaitTimer() == 0) {
-        if (g_mDoCPd_cpadInfo[0].mMainStickPosX < -0.7f) {
+        if (CPad_GET_STICK_POS_X(0) < -0.7f) {
             if (field_0x27D == 1) {
                 field_0x27D = 0;
                 keyWaitTimer = 10;
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
             }
-        } else if (g_mDoCPd_cpadInfo[0].mMainStickPosX > 0.7f) {
+        } else if (CPad_GET_STICK_POS_X(0) > 0.7f) {
             if (field_0x27D == 0) {
                 field_0x27D = 1;
                 keyWaitTimer = 10;
