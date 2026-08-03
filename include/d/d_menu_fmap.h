@@ -13,9 +13,16 @@ class JUTFont;
 class J2DScreen;
 class dMenu_FmapSv_c;
 struct cursorTable_t;
+
+struct aramCmapDatPnt_t {
+    s8 field_0x0;
+    s8 field_0x1;
+    u8 field_0x2[0x24];
+};
+
 struct aramCmapDatPat_t {
     u32 m_0x0;
-    u32 m_0x4;
+    aramCmapDatPnt_t* m_0x4;
 };
 
 class dDlst_FMAP_c : public dDlst_base_c {
@@ -266,7 +273,7 @@ public:
     /* 0x4AAC */ fopMsgM_pane_class mWnd2Pane;
     /* 0x4AE4 */ fopMsgM_pane_class* mMr01Pane;
     /* 0x4AE8 */ u8 padding_0x4AE8[0x4B1C - 0x4AE8];
-    /* 0x4B1C */ fopMsgM_pane_class mTxtxPanes[3];
+    /* 0x4B1C */ fopMsgM_pane_class mAreaTxtPanes[3];
     /* 0x4BC4 */ fopMsgM_pane_class mBt00Pane;
     /* 0x4BFC */ fopMsgM_pane_class mBt01Pane;
     /* 0x4C34 */ fopMsgM_pane_class mBt02Pane;
@@ -310,12 +317,12 @@ public:
     /* 0x5134 */ float field_0x5134;
     /* 0x5138 */ float field_0x5138;
     /* 0x513C */ bool mFullMapMode;
-    /* 0x513D */ u8 field_0x513D;
-    /* 0x513E */ u8 field_0x513E;
-    /* 0x513F */ u8 field_0x513F;
-    /* 0x5140 */ u8 field_0x5140;
-    /* 0x5141 */ u8 field_0x5141;
-    /* 0x5142 */ u8 field_0x5142;
+    /* 0x513D */ u8 mSalvItmBufIdx;
+    /* 0x513E */ u8 mSalvItmTimer;
+    /* 0x513F */ bool mSalvItmChanging;
+    /* 0x5140 */ u8 mAreaTxtBufIdx;
+    /* 0x5141 */ u8 mAreaTxtTimer;
+    /* 0x5142 */ bool mAreaTxtChanging;
     /* 0x5143 */ u8 mWarpAnimTimer;
     /* 0x5144 */ u8 mWarpBlinkToggle;
     /* 0x5145 */ u8 padding_0x5145[0x5148-0x5145];
@@ -374,9 +381,13 @@ public:
     virtual ~dMf_HIO_c() {}
 
 public:
-    /* 0x04 */ u8 field_0x04[0x3A - 0x04];
+    /* 0x04 */ u8 padding_0x04[0x28 - 0x04];
+    /* 0x28 */ s16 field_0x28;
+    /* 0x2A */ u8 padding_0x29[0x3A - 0x2A];
     /* 0x3A */ u8 field_0x3A;
-    /* 0x3B */ u8 field_0x3B[0x120 - 0x3B];
+    /* 0x3B */ u8 padding_0x3B[0xE0 - 0x3B];
+    /* 0xE0 */ u8 field_0xE0;
+    /* 0xE1 */ u8 padding_0xE1[0x120 - 0xE1];
 };
 
 extern dMf_HIO_c g_mfHIO;

@@ -120,7 +120,12 @@ void dMenu_Fmap_c::selCursorMove() {
 
 /* 801B1CF0-801B1D48       .text islandNameChange__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::islandNameChange() {
-    /* Nonmatching */
+    if (mAreaTxtChanging == TRUE) {
+        AreaTxtChgFast();
+    } else {
+        mAreaTxtChanging = TRUE;
+    }
+    changeIslandName(mAreaTxtBufIdx ^ 1);
 }
 
 /* 801B1D48-801B1FCC       .text changeIslandName__12dMenu_Fmap_cFUc */
@@ -135,7 +140,12 @@ void dMenu_Fmap_c::AreaTxtChg() {
 
 /* 801B2044-801B20E0       .text AreaTxtChgFast__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::AreaTxtChgFast() {
-    /* Nonmatching */
+    mAreaTxtTimer = false;
+    fopMsgM_setNowAlpha(&mAreaTxtPanes[mAreaTxtBufIdx ^ 1], 1.0f);
+    fopMsgM_setAlpha(&mAreaTxtPanes[mAreaTxtBufIdx ^ 1]);
+    fopMsgM_setNowAlpha(&mAreaTxtPanes[mAreaTxtBufIdx], 0.0f);
+    fopMsgM_setAlpha(&mAreaTxtPanes[mAreaTxtBufIdx]);
+    mAreaTxtBufIdx ^= 1;
 }
 
 /* 801B20E0-801B2154       .text salvageGetItemChg__12dMenu_Fmap_cFv */
@@ -145,12 +155,26 @@ void dMenu_Fmap_c::salvageGetItemChg() {
 
 /* 801B2154-801B21AC       .text salvageGetItemChange__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::salvageGetItemChange() {
-    /* Nonmatching */
+    if (mSalvItmChanging == TRUE) {
+        SalvItmDispChgFast();
+    } else {
+        mSalvItmChanging = TRUE;
+    }
+    changeSalvageGetItem(mSalvItmBufIdx ^ 1);
 }
 
 /* 801B21AC-801B2274       .text SalvItmDispChgFast__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::SalvItmDispChgFast() {
-    /* Nonmatching */
+    mSalvItmTimer = 0;
+    if (mFullMapMode == TRUE) {
+        fopMsgM_setNowAlpha(&mKk1xPanes[mSalvItmBufIdx ^ 1], 1.0f);
+    } else {
+        fopMsgM_setNowAlpha(&mKk1xPanes[mSalvItmBufIdx ^ 1], 0.0f);
+    }
+    fopMsgM_setAlpha(&mKk1xPanes[mSalvItmBufIdx ^ 1]);
+    fopMsgM_setNowAlpha(&mKk1xPanes[mSalvItmBufIdx], 0.0f);
+    fopMsgM_setAlpha(&mKk1xPanes[mSalvItmBufIdx]);
+    mSalvItmBufIdx ^= 1;
 }
 
 /* 801B2274-801B23EC       .text changeSalvageGetItem__12dMenu_Fmap_cFUc */
@@ -165,7 +189,12 @@ void dMenu_Fmap_c::selCursorAnime() {
 
 /* 801B247C-801B24C4       .text zoomCursorInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::zoomCursorInit() {
-    /* Nonmatching */
+    mCursorBufIdx = 0;
+    for (int i = 0; i < 4; i++) {
+        mKk3xPanes[i].pane->show();
+        mKk4xPanes[i].pane->hide();
+    }
+    mKk3xPanes[0].mUserArea = g_mfHIO.field_0x3A;
 }
 
 /* 801B24C4-801B2554       .text zoomCursorAnime__12dMenu_Fmap_cFv */
@@ -175,7 +204,8 @@ void dMenu_Fmap_c::zoomCursorAnime() {
 
 /* 801B2554-801B2570       .text playerPointGridAnimeInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::playerPointGridAnimeInit() {
-    /* Nonmatching */
+    field_0x510F = g_mfHIO.field_0x28;
+    field_0x5110 = 0;
 }
 
 /* 801B2570-801B2830       .text playerPointGridAnime__12dMenu_Fmap_cFv */
@@ -195,7 +225,8 @@ void dMenu_Fmap_c::windArrowColorAnime() {
 
 /* 801B3284-801B32A0       .text checkMarkAnimeInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkMarkAnimeInit() {
-    /* Nonmatching */
+    mFishmanMsgTimer = g_mfHIO.field_0xE0;
+    mFishmanMsgToggle = 1;
 }
 
 /* 801B32A0-801B3658       .text checkMarkAnime__12dMenu_Fmap_cFv */
@@ -204,18 +235,26 @@ void dMenu_Fmap_c::checkMarkAnime() {
 }
 
 /* 801B3658-801B3698       .text readFmapTexture__12dMenu_Fmap_cFPCc */
-void dMenu_Fmap_c::readFmapTexture(const char*) {
-    /* Nonmatching */
+void dMenu_Fmap_c::readFmapTexture(const char* i_filename) {
+    JKRArchive* archive = dComIfGp_getFmapArchive();
+    JKRArchive::readTypeResource(mpImg, 0x2c00, 'FM  ', i_filename, archive);
 }
 
 /* 801B3698-801B36F0       .text aramCmapDatRead__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::aramCmapDatRead() {
-    /* Nonmatching */
+    JKRArchive* archive = dComIfGp_getFmapResArchive();
+    aramCmapDatPat_t* pat = (aramCmapDatPat_t*)JKRArchive::getGlbResource('DATA', "CmapDat.bin", archive);
+    initCmapDatPnt(pat);
 }
 
 /* 801B36F0-801B3760       .text initCmapDatPnt__12dMenu_Fmap_cFP16aramCmapDatPat_t */
-void dMenu_Fmap_c::initCmapDatPnt(aramCmapDatPat_t*) {
-    /* Nonmatching */
+void dMenu_Fmap_c::initCmapDatPnt(aramCmapDatPat_t* a_pat) {
+    if (a_pat != NULL) {
+        mCmapDatPnt.m_0x0 = a_pat->m_0x0;
+        mCmapDatPnt.m_0x4 = (aramCmapDatPnt_t*)&a_pat->m_0x4;
+    } else {
+        JUT_ASSERT(0xFC, 0);
+    }
 }
 
 /* 801B3760-801B37B0       .text getGridNumToCmapDatPnt__12dMenu_Fmap_cFi */
