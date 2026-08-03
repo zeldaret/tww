@@ -8,6 +8,8 @@
 #include "dolphin/types.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "res/Object/X_futa.h"
+#include "res/Object/X_tower.h"
 
 dMf_HIO_c g_mfHIO;
 
@@ -258,8 +260,20 @@ void dMenu_Fmap_c::initCmapDatPnt(aramCmapDatPat_t* a_pat) {
 }
 
 /* 801B3760-801B37B0       .text getGridNumToCmapDatPnt__12dMenu_Fmap_cFi */
-void dMenu_Fmap_c::getGridNumToCmapDatPnt(int) {
-    /* Nonmatching */
+aramCmapDatPnt_t* dMenu_Fmap_c::getGridNumToCmapDatPnt(int i_param) {
+    int i;
+    aramCmapDatPnt_t* pat = mCmapDatPnt.m_0x4;
+    int num;
+    for (i = 0, num = mCmapDatPnt.m_0x0; i < num; i++) {
+        if (pat->field_0x0 == i_param + 1) {
+            break;
+        }
+        pat++;
+    }
+    if (i < num) {
+        return pat;
+    }
+    return NULL;
 }
 
 /* 801B37B0-801B392C       .text setDispIslandPos__12dMenu_Fmap_cFScSc */
@@ -268,8 +282,15 @@ void dMenu_Fmap_c::setDispIslandPos(signed char, signed char) {
 }
 
 /* 801B392C-801B3984       .text setIslandPos__12dMenu_Fmap_cFP18fopMsgM_pane_classff */
-void dMenu_Fmap_c::setIslandPos(fopMsgM_pane_class*, float, float) {
-    /* Nonmatching */
+void dMenu_Fmap_c::setIslandPos(fopMsgM_pane_class* i_pane, float i_x, float i_y) {
+    float scale = 0.5f;
+    f32 newX = mClbPane.mSizeOrig.x * scale;
+    i_pane->mPosCenterOrig.x = newX + i_x;
+    f32 newY = mClbPane.mSizeOrig.y * scale;
+    i_pane->mPosCenterOrig.y = newY + i_y;
+
+    i_pane->mPosCenter = i_pane->mPosCenterOrig;
+    fopMsgM_cposMove(i_pane);
 }
 
 /* 801B3984-801B3A2C       .text changeFmapTexture__12dMenu_Fmap_cFScSc */

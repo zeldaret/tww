@@ -114,7 +114,7 @@ public:
     void readFmapTexture(const char*);
     void aramCmapDatRead();
     void initCmapDatPnt(aramCmapDatPat_t*);
-    void getGridNumToCmapDatPnt(int);
+    aramCmapDatPnt_t* getGridNumToCmapDatPnt(int);
     void setDispIslandPos(signed char, signed char);
     void setIslandPos(fopMsgM_pane_class*, float, float);
     void changeFmapTexture(signed char, signed char);
