@@ -45,10 +45,12 @@ public:
     daNpc_P1_HIO_c();
     virtual ~daNpc_P1_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
 public:
-    s8 mNo;
-    s32 m8;
-    daNpc_P1_childHIO_c children[3];
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ s32 m8;
+    /* 0x0C */ daNpc_P1_childHIO_c children[3];
 };
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -724,7 +726,7 @@ BOOL daNpc_P1_c::demo_move() {
     m670 = 1;
     J3DAnmTexPattern* btp = actor->getP_BtpData("P1");
     if (btp) {
-        mBtp.init(mpHeadModel->getModelData(), btp, 1, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
+        mBtp.init(mpHeadModel->getModelData(), btp, TRUE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, true, FALSE);
         mBlinkFrame = 0;
     }
     if (mBtp.getBtpAnm()) {
@@ -820,7 +822,7 @@ BOOL daNpc_P1_c::evn_talk() {
 BOOL daNpc_P1_c::minigameExplainCut() {
     static char* ActionNames[] = {"4013_msg", "4014_msg"};
     int staffId = dComIfGp_evmng_getMyStaffId(mEventCut6B0.getActorName(), NULL);
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, ActionNames, ARRAY_SSIZE(ActionNames), 1, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffId, ActionNames, ARRAY_SSIZE(ActionNames), TRUE, 0);
 
     if (staffId == -1) {
         mbAttentionFlag = 0;
@@ -889,7 +891,7 @@ BOOL daNpc_P1_c::privateCut() {
     if (staffIdx == -1) {
         return FALSE;
     }
-    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), true, 0);
+    int actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SSIZE(cut_name_tbl), TRUE, 0);
     if (actIdx == -1) {
         dComIfGp_evmng_cutEnd(staffIdx);
     } else {
@@ -1101,12 +1103,11 @@ BOOL daNpc_P1_c::CreateHeap() {
         1.0f,
         0,
         -1,
-        1,
+        TRUE,
         NULL,
         0x80000,
         0x11020002
     );
-    ;
     if (!mpMorf || !mpMorf->getModel()) {
         return FALSE;
     }
@@ -1153,8 +1154,7 @@ BOOL daNpc_P1_c::CreateHeap() {
     } else {
         mpDoraModel = NULL;
     }
-    J3DJointTree& tree = model_data_p->getJointTree();
-    for (u16 i = 0; i < tree.getJointNum(); i += 1) {
+    for (u16 i = 0; i < model_data_p->getJointNum(); i += 1) {
         if ((i == m_jnt.getHeadJntNum()) || (i == m_jnt.getBackboneJntNum())) {
             model_data_p->getJointNodePointer(i)->setCallBack(nodeCallBack1);
         }
@@ -1196,12 +1196,12 @@ BOOL daNpc_P1_c::_delete() {
 
 /* 00003DF8-00003E70       .text getKajiID__10daNpc_P1_cFv */
 fpc_ProcID daNpc_P1_c::getKajiID() {
-    fpc_ProcID kaji_id = 0xFFFFFFFF;
+    fpc_ProcID kaji_id = fpcM_ERROR_PROCESS_ID_e;
     fpc_ProcID parent_id = parentActorID;
     if (parent_id != fpcM_ERROR_PROCESS_ID_e) {
-        daObjPirateship::Act_c* actor = (daObjPirateship::Act_c*)fopAcM_SearchByID(parent_id);
+        fopAc_ac_c* actor = fopAcM_SearchByID(parent_id);
         if (fopAc_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Pirateship_e) {
-            kaji_id = actor->getKajiID();
+            kaji_id = ((daObjPirateship::Act_c*)actor)->getKajiID();
         }
     }
     return kaji_id;
@@ -1230,9 +1230,9 @@ BOOL daNpc_P1_c::kaji_anm() {
             }
         }
         if (mKajiId != fpcM_ERROR_PROCESS_ID_e) {
-            daKaji_c* wheel = (daKaji_c*)fopAcM_SearchByID(mKajiId);
-            if (fopAc_IsActor(wheel) && fopAcM_GetName(wheel) == fpcNm_Kaji_e) {
-                wheel->setAnm(mAnmNum - 9, mpMorf->getFrame());
+            fopAc_ac_c* kaji = fopAcM_SearchByID(mKajiId);
+            if (fopAc_IsActor(kaji) && fopAcM_GetName(kaji) == fpcNm_Kaji_e) {
+                ((daKaji_c*)kaji)->setAnm(mAnmNum - 9, mpMorf->getFrame());
             }
         }
         return TRUE;
@@ -1265,11 +1265,9 @@ BOOL daNpc_P1_c::_execute() {
     if (!demo_move()) {
         playTexPatternAnm();
         s8 room_no = fopAcM_GetRoomNo(this);
-        mpMorf->play(
-            &current.pos,
-            mObjAcch.ChkGroundHit() ? dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd) : 0,
-            (s16)dComIfGp_getReverb(room_no)
-        ); //TODO: cast to s16 needed?
+        int mtrlSndId = mObjAcch.ChkGroundHit() ? dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd) : 0;
+        int reverb = dComIfGp_getReverb(room_no);
+        mpMorf->play(&current.pos, mtrlSndId, reverb);
 
         if (dComIfGp_event_getMode() == 0 || eventInfo.checkCommandTalk()) {
             (this->*mActionFunc)(NULL);
