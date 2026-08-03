@@ -403,7 +403,7 @@ static void jumpattack(bgn2_class* i_this) {
         case 0:
             anm_init(i_this, dRes_INDEX_BGN_BCK_JUMP1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m0314 = 1;
-        // fallthrough
+            // fallthrough
         case 1:
             actor->speedF = 0.0f;
             if (frame == 6) {
@@ -417,10 +417,13 @@ static void jumpattack(bgn2_class* i_this) {
                 actor->speed.y = REG0_F(8) + 250.0f;
                 i_this->m0314 = 2;
                 fopAcM_seStart(actor, JA_SE_CM_BGN_T_JUMP_UP, 0);
-                case 2:
-                    actor->speedF = REG0_F(9) + 50.0f;
-                    break;
+            } else {
+                break;
             }
+            // fallthrough
+        case 2:
+            actor->speedF = REG0_F(9) + 50.0f;
+            break;
     }
     if (i_this->m2EC8[0] != NULL) {
         i_this->m2EC8[0]->setGlobalRTMatrix(pBrk->getAnmMtx(2));

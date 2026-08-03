@@ -659,7 +659,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_play.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_room.cpp"),
             Object(Matching,    "d/d_s_title.cpp"),
-            Object(NonMatching, "d/d_scope.cpp"),
+            Object(Matching,    "d/d_scope.cpp"),
             Object(Matching,    "d/d_throwstone.cpp"),
             Object(Matching,    "d/d_timer.cpp"),
             Object(Matching,    "d/d_water_mark.cpp"),

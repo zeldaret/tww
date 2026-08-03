@@ -171,7 +171,6 @@ void* JKRArchive::getResource(u32 type, const char* path) {
 }
 
 /* 802B8528-802B85F0       .text readTypeResource__10JKRArchiveFPvUlUlPCcP10JKRArchive */
-// missing instructions
 u32 JKRArchive::readTypeResource(void* buffer, u32 bufferSize, u32 type, const char* path, JKRArchive* archive) {
     u32 ret = 0;
 

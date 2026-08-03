@@ -2424,7 +2424,7 @@ f32 dCamera_c::getWaterSurfaceHeight(cXyz* param_0) {
     dBgS_CamGndChk_Wtr gndchk;
     gndchk.SetPos(&spF8);
 
-    f32 gnd_y = dComIfG_Bgsp()->GroundCross(&gndchk) ;
+    f32 gnd_y = dComIfG_Bgsp()->GroundCross(&gndchk);
 
     if (gnd_y + 5.0f > param_0->y) {
         var_f31 = gnd_y + 5.0f;
@@ -4021,10 +4021,10 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 
                 setComZoomScale(1.0f);
 
-                f32 x = (g_dComIfG_gameInfo.play.field_0x48b8 - 1.0f) * 0.5f * 640.0f + 320.0f;
+                f32 x = (g_dComIfG_gameInfo.play.mItemScopeWipeScale - 1.0f) * 0.5f * 640.0f + 320.0f;
                 if (x < 640.0f &&
-                    g_dComIfG_gameInfo.play.field_0x48b8 >= 1.0f &&
-                    g_dComIfG_gameInfo.play.field_0x48b8 <= 3.0f) {
+                    g_dComIfG_gameInfo.play.mItemScopeWipeScale >= 1.0f &&
+                    g_dComIfG_gameInfo.play.mItemScopeWipeScale <= 3.0f) {
 
                     f32 s = (640.0f - x) / 320.0f;
 
