@@ -1325,7 +1325,7 @@ BOOL daNpc_P1_c::_execute() {
 /* 0000458C-00004814       .text _draw__10daNpc_P1_cFv */
 BOOL daNpc_P1_c::_draw() {
     
-    static u8 l_snap_idx_tbl[] = {DSNAP_TYPE_P1A,DSNAP_TYPE_P1B,DSNAP_TYPE_P1C};
+    static u8 l_snap_idx_tbl[] = {DSNAP_TYPE_NPC_P1A,DSNAP_TYPE_NPC_P1B,DSNAP_TYPE_NPC_P1C};
     if(mType == TYPE_P1A_e && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0310)){
         return TRUE;
     }
