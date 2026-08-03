@@ -155,17 +155,17 @@ enum MsgControlCodes {
     /* 0x10 */ CtrlCode_Y_BUTTON,
     /* 0x11 */ CtrlCode_Z_BUTTON,
     /* 0x12 */ CtrlCode_DPAD,
-    /* 0x13 */ CtrlCode_CONTROL_STICK,
+    /* 0x13 */ CtrlCode_MAIN_STICK,
     /* 0x14 */ CtrlCode_ARROW_LEFT,
     /* 0x15 */ CtrlCode_ARROW_RIGHT,
     /* 0x16 */ CtrlCode_ARROW_UP,
     /* 0x17 */ CtrlCode_ARROW_DOWN,
-    /* 0x18 */ CtrlCode_CONTROL_STICK_UP,
-    /* 0x19 */ CtrlCode_CONTROL_STICK_DOWN,
-    /* 0x1A */ CtrlCode_CONTROL_STICK_LEFT,
-    /* 0x1B */ CtrlCode_CONTROL_STICK_RIGHT,
-    /* 0x1C */ CtrlCode_CONTROL_STICK_UP_DOWN,
-    /* 0x1D */ CtrlCode_CONTROL_STICK_LEFT_RIGHT,
+    /* 0x18 */ CtrlCode_MAIN_STICK_UP,
+    /* 0x19 */ CtrlCode_MAIN_STICK_DOWN,
+    /* 0x1A */ CtrlCode_MAIN_STICK_LEFT,
+    /* 0x1B */ CtrlCode_MAIN_STICK_RIGHT,
+    /* 0x1C */ CtrlCode_MAIN_STICK_UP_DOWN,
+    /* 0x1D */ CtrlCode_MAIN_STICK_LEFT_RIGHT,
     /* 0x1E */ CtrlCode_SELECT_YOKO_LEFT, // Horizontal choice, left option
     /* 0x1F */ CtrlCode_SELECT_YOKO_RIGHT, // Horizontal choice, right option
     /* 0x20 */ CtrlCode_UNK20, // canon_balls ?
@@ -1468,25 +1468,25 @@ void fopMsgM_outFontArrow(J2DPicture* i_iconPic, int* param_2, int* param_3, int
 /* 8002DD98-8002DFB4       .text fopMsgM_outFontDraw__FP10J2DPictureP10J2DPictureiiiPsUcUc */
 void fopMsgM_outFontDraw(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, int param_3, int param_4, int param_5, s16* i_timer, u8 i_alpha, u8 i_iconNo) {
     switch (i_iconNo) {
-    case fopMsgM_Icon_CONTROL_STICK_e:
+    case fopMsgM_Icon_MAIN_STICK_e:
         fopMsgM_outFontStickAnime(i_iconPic, i_sdwPic, &param_3, &param_4, param_5, i_timer);
         break;
-    case fopMsgM_Icon_CONTROL_STICK_UP_e:
+    case fopMsgM_Icon_MAIN_STICK_UP_e:
         fopMsgM_outFontStickAnime(i_iconPic, i_sdwPic, &param_3, &param_4, param_5, i_timer, 1);
         break;
-    case fopMsgM_Icon_CONTROL_STICK_DOWN_e:
+    case fopMsgM_Icon_MAIN_STICK_DOWN_e:
         fopMsgM_outFontStickAnime(i_iconPic, i_sdwPic, &param_3, &param_4, param_5, i_timer, 3);
         break;
-    case fopMsgM_Icon_CONTROL_STICK_LEFT_e:
+    case fopMsgM_Icon_MAIN_STICK_LEFT_e:
         fopMsgM_outFontStickAnime(i_iconPic, i_sdwPic, &param_3, &param_4, param_5, i_timer, 0);
         break;
-    case fopMsgM_Icon_CONTROL_STICK_RIGHT_e:
+    case fopMsgM_Icon_MAIN_STICK_RIGHT_e:
         fopMsgM_outFontStickAnime(i_iconPic, i_sdwPic, &param_3, &param_4, param_5, i_timer, 2);
         break;
-    case fopMsgM_Icon_CONTROL_STICK_UP_DOWN_e:
+    case fopMsgM_Icon_MAIN_STICK_UP_DOWN_e:
         fopMsgM_outFontStickAnime2(i_iconPic, i_sdwPic, &param_3, &param_4, param_5, i_timer, 0);
         break;
-    case fopMsgM_Icon_CONTROL_STICK_LEFT_RIGHT_e:
+    case fopMsgM_Icon_MAIN_STICK_LEFT_RIGHT_e:
         fopMsgM_outFontStickAnime2(i_iconPic, i_sdwPic, &param_3, &param_4, param_5, i_timer, 1);
         break;
     case fopMsgM_Icon_ARROW_LEFT_e:
@@ -2038,7 +2038,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_CONTROL_STICK) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
@@ -2073,42 +2073,42 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_CONTROL_STICK_UP) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_UP) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_CONTROL_STICK_DOWN) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_DOWN) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_CONTROL_STICK_LEFT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_LEFT) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_CONTROL_STICK_RIGHT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_RIGHT) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_CONTROL_STICK_UP_DOWN) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_UP_DOWN) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_CONTROL_STICK_LEFT_RIGHT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_LEFT_RIGHT) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
@@ -3112,8 +3112,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 iconSelect(field_0x148, fopMsgM_Icon_Z_BUTTON_e);
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_DPAD) {
                 iconSelect(field_0x148, fopMsgM_Icon_DPAD_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_CONTROL_STICK) {
-                iconSelect(field_0x148, fopMsgM_Icon_CONTROL_STICK_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK) {
+                iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_e);
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_ARROW_LEFT) {
                 iconSelect(field_0x148, fopMsgM_Icon_ARROW_LEFT_e);
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_ARROW_RIGHT) {
@@ -3122,18 +3122,18 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 iconSelect(field_0x148, fopMsgM_Icon_ARROW_UP_e);
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_ARROW_DOWN) {
                 iconSelect(field_0x148, fopMsgM_Icon_ARROW_DOWN_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_CONTROL_STICK_UP) {
-                iconSelect(field_0x148, fopMsgM_Icon_CONTROL_STICK_UP_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_CONTROL_STICK_DOWN) {
-                iconSelect(field_0x148, fopMsgM_Icon_CONTROL_STICK_DOWN_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_CONTROL_STICK_LEFT) {
-                iconSelect(field_0x148, fopMsgM_Icon_CONTROL_STICK_LEFT_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_CONTROL_STICK_RIGHT) {
-                iconSelect(field_0x148, fopMsgM_Icon_CONTROL_STICK_RIGHT_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_CONTROL_STICK_UP_DOWN) {
-                iconSelect(field_0x148, fopMsgM_Icon_CONTROL_STICK_UP_DOWN_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_CONTROL_STICK_LEFT_RIGHT) {
-                iconSelect(field_0x148, fopMsgM_Icon_CONTROL_STICK_LEFT_RIGHT_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_UP) {
+                iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_UP_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_DOWN) {
+                iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_DOWN_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_LEFT) {
+                iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_LEFT_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_RIGHT) {
+                iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_RIGHT_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_UP_DOWN) {
+                iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_UP_DOWN_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_LEFT_RIGHT) {
+                iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_LEFT_RIGHT_e);
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_YOKO_LEFT) {
                 setSelectFlagYokoOn();
                 iconSelect(field_0x148, fopMsgM_Icon_SELECT_YOKO_LEFT_e);
