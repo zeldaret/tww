@@ -69,7 +69,7 @@ void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
         } else {
             yAngle = (s16)(mpAngle->y + 0x8000);
         }
-        JGeometry::TVec3<s16> rotation(0, yAngle, 0);
+        JGeometry::TVec3<s16> rotation((s16)0, yAngle, (s16)0);
         emitter->setGlobalRotation(rotation);
         waterY = mpWaterY;
         if (waterY < 0.0f || waterY > 2000.0f) {
