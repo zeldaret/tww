@@ -3317,20 +3317,20 @@ void daShip_c::setRopePos() {
             }
         }
 
-        m1020.x = r3->x;
-        m1020.y = fVar2;
-        m1020.z = r3->z;
+        mCraneRipplePos.x = r3->x;
+        mCraneRipplePos.y = fVar2;
+        mCraneRipplePos.z = r3->z;
 
         if (mRipple.getEmitter() == NULL) { 
-            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &m1020, NULL, &ripple_scale, 0xFF, &mRipple);
+            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &mCraneRipplePos, NULL, &ripple_scale, 0xFF, &mRipple);
 
             if (mRipple.getEmitter() != NULL) {
                 mRipple.setRate(0.0f);
 
                 if (m034F == 0) {
-                    fopKyM_createWpillar(&m1020, 0.7f, 0.7f, 0);
+                    fopKyM_createWpillar(&mCraneRipplePos, 0.7f, 0.7f, 0);
 
-                    seStart(JA_SE_LK_SHIP_CRANE_DROP, &m1020);
+                    seStart(JA_SE_LK_SHIP_CRANE_DROP, &mCraneRipplePos);
 
                     dComIfGp_getVibration().StartShock(3, 1, cXyz(0.0f, 1.0f, 0.0f));
                 }
@@ -3341,7 +3341,7 @@ void daShip_c::setRopePos() {
         if (fVar17 < fVar2 && !m034F && mRopeCnt >= 20) {
             m034F = 20;
 
-            seStart(JA_SE_LK_SHIP_CRANE_LIFTUP, &m1020);
+            seStart(JA_SE_LK_SHIP_CRANE_LIFTUP, &mCraneRipplePos);
 
             if (mCurMode != MODE_CRANE_UP_e) {
                 if (m19AC.getEmitter() == NULL) {
@@ -3356,7 +3356,7 @@ void daShip_c::setRopePos() {
                     }
                 }
                 
-                fopKyM_createWpillar(&m1020, 0.5f, 0.7f, 0);
+                fopKyM_createWpillar(&mCraneRipplePos, 0.5f, 0.7f, 0);
                 
                 dComIfGp_getVibration().StartShock(3, 1, cXyz(0.0f, 1.0f, 0.0f));
                 
@@ -3988,10 +3988,10 @@ BOOL daShip_c::execute() {
         setRopePos();
         mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e), &m102C);
         if (mProc == &daShip_c::procCrane || mProc == &daShip_c::procCraneUp) {
-            m0434 = mRopeLine.getPos(0);
+            mCraneTop = mRopeLine.getPos(0);
         }
         else {
-            m0434 = NULL;
+            mCraneTop = NULL;
         }
     }
     else {
@@ -4001,7 +4001,7 @@ BOOL daShip_c::execute() {
 
         mRopeCnt = 0;
 
-        m0434 = NULL;
+        mCraneTop = NULL;
 
         if (mPart == PART_CANNON_e) {
             mDoMtx_multVecZero(mpCannonModel->getAnmMtx(VFNCN_JNT_CANON2_e), &m1038);
@@ -4127,8 +4127,8 @@ BOOL daShip_c::execute() {
         spC0 = *m0428 - eyePos;
         r23_2 = TRUE;
     } 
-    else if ((mCurMode == 10 || mCurMode == 11) && m0434 && mRopeCnt > 0) {
-        spC0 = *m0434 - eyePos;
+    else if ((mCurMode == 10 || mCurMode == 11) && mCraneTop && mRopeCnt > 0) {
+        spC0 = *mCraneTop - eyePos;
         r23_2 = TRUE;
     }
     else if (mCurMode == 8 || distXz > 125.0f) {
@@ -4379,7 +4379,7 @@ BOOL daShip_c::shipDelete() {
     mDoAud_seDeleteObject(&mTillerTopPos);
     mDoAud_seDeleteObject(&m0444);
     mDoAud_seDeleteObject(&m102C);
-    mDoAud_seDeleteObject(&m1020);
+    mDoAud_seDeleteObject(&mCraneRipplePos);
     mDoAud_seDeleteObject(&m1038);
     dComIfGp_clearPlayerStatus1(0, daPyStts1_SAIL_e);
     dComIfG_resDelete(&mPhs, l_arcName);

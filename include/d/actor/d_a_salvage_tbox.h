@@ -3,37 +3,48 @@
 
 #include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
+#include "f_op/f_op_actor_mng.h"
 
 class daSTBox_shadowEcallBack_c : public dPa_levelEcallBack {
 public:
-    void deleteCallBack() {}
     JPABaseEmitter* getEmitter() { return mpEmitter; }
-    void setEmitter(JPABaseEmitter* emitter) { mpEmitter = emitter; }
-    void setDepth(float depth) { mpDepth = depth; }
-    void setWaterFlatY(float waterFlatY) { mpWaterFlatY = waterFlatY; }
-    void setWaterY(float waterY) { mpWaterY = waterY; }
-    void setField0x48(float field) { field_0x48 = field; }
-    void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz* angle, signed char) { 
+    void setWaterY(f32 waterY) { mWaterY = waterY; }
+    void setWaterFlatY(f32 waterFlatY) { mWaterFlatY = waterFlatY; }
+    void setDepth(f32 depth) { mDepth = depth; }
+    void setup(JPABaseEmitter* emitter, const cXyz*, const csXyz* angle, s8) { 
         field_0x4 = 0;
-        mpAngle = const_cast<csXyz*>(angle);
+        mpAngle = angle;
         mpEmitter = emitter; 
     }
+    void setIndirectTexData(f32 exTransY, f32 exScaleY) {
+        mExTransY = exTransY;
+        mExScaleY = exScaleY;
+    }
+    void setPos(cXyz& pos) { mPos = pos; }
+    void deleteCallBack() {
+        if (mpEmitter != NULL) {
+            mpEmitter->setEmitterCallBackPtr(NULL);
+            mpEmitter->becomeInvalidEmitter();
+        }
+        mpEmitter = NULL;
+    }
+
     ~daSTBox_shadowEcallBack_c() {}
 
     void getMaxWaterY(JGeometry::TVec3<f32>*);
     void execute(JPABaseEmitter*);
     void draw(JPABaseEmitter*);
 
+private:
     /* 0x04 */  s16 field_0x4;
-    /* 0x06 */  s16 field_0x6;
-    /* 0x08 */  f32 mpWaterFlatY;
-    /* 0x0C */  f32 field_0x0C;
-    /* 0x10 */  f32 mpWaterY;
-    /* 0x14 */  JGeometry::TVec3<f32> mPos[3];
-    /* 0x38 */  cXyz position;
-    /* 0x44 */  csXyz* mpAngle;
-    /* 0x48 */  f32 field_0x48;
-    /* 0x4C */  f32 mpDepth;
+    /* 0x08 */  f32 mWaterY;
+    /* 0x0C */  f32 mWaterFlatY;
+    /* 0x10 */  f32 mDepth;
+    /* 0x14 */  JGeometry::TVec3<f32> field_0x14[3];
+    /* 0x38 */  cXyz mPos;
+    /* 0x44 */  const csXyz* mpAngle;
+    /* 0x48 */  f32 mExTransY;
+    /* 0x4C */  f32 mExScaleY;
     /* 0x50 */  f32 field_0x50;
     /* 0x54 */  JPABaseEmitter* mpEmitter;
 };  // Size: 0x58
@@ -69,22 +80,28 @@ public:
     static const f32 m_shadow_scale;
     
 public:
-    /* 0x290 */ request_of_phase_process_class field_0x290;
+    /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpModel;
-    /* 0x29C */ JPABaseEmitter* field_0x29C[2];
-    /* 0x2A4 */ JPABaseEmitter* field_0x2A4;
+    /* 0x29C */ JPABaseEmitter* field_0x29C[3];
     /* 0x2A8 */ u8 field_0x2A8[0x2AC - 0x2A8];
     /* 0x2AC */ dPa_rippleEcallBack mRippleCallBack;
-    /* 0x2C0 */ daSTBox_shadowEcallBack_c shadowCallback;
-    /* 0x318 */ cXyz position;
+    /* 0x2C0 */ daSTBox_shadowEcallBack_c mShadowCallback;
+    /* 0x318 */ cXyz mParticlePos;
     /* 0x324 */ cXyz field_0x324;
     /* 0x330 */ u8 field_0x330;
     /* 0x331 */ u8 field_0x331;
     /* 0x332 */ s16 field_0x332;
     /* 0x334 */ u8 field_0x334;
     /* 0x335 */ u8 field_0x335;
+#if VERSION > VERSION_DEMO
     /* 0x336 */ u8 field_0x336;
-    /* 0x337 */ u8 field_0x337[0x338 - 0x337];
-    /* 0x338 */ s32 field_0x338;
+    /* 0x338 */ fpc_ProcID mItemPID;
+#endif
 };  // Size: 0x33C
+
+namespace daSTBox_prm {
+    inline u32 getBoxType(daSTBox_c* i_this) { return (fopAcM_GetParam(i_this) >> 8) & 0xF; }
+    inline u32 getItemNo(daSTBox_c* i_this) { return fopAcM_GetParam(i_this) & 0xFF; }
+};
+
 #endif /* D_A_SALVAGE_TBOX_H */
