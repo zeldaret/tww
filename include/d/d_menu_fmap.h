@@ -25,6 +25,13 @@ struct aramCmapDatPat_t {
     aramCmapDatPnt_t* m_0x4;
 };
 
+enum FmapMode {
+    FMAP_MODE_NORMAL = 0,
+    FMAP_MODE_WARP = 1,
+    FMAP_MODE_WALLPAPER = 2,
+    FMAP_MODE_FISHMAN = 3,
+};
+
 class dDlst_FMAP_c : public dDlst_base_c {
 public:
     virtual ~dDlst_FMAP_c() {}
@@ -111,7 +118,7 @@ public:
     void windArrowColorAnime();
     void checkMarkAnimeInit();
     void checkMarkAnime();
-    void readFmapTexture(const char*);
+    u32 readFmapTexture(const char*);
     void aramCmapDatRead();
     void initCmapDatPnt(aramCmapDatPat_t*);
     aramCmapDatPnt_t* getGridNumToCmapDatPnt(int);
@@ -127,9 +134,9 @@ public:
     void dispEndSalvageHugeMark(float, float);
     void checkDspHugeMapLink();
     void checkDspHugeMapShip();
-    bool _open();
-    bool _close();
-    void _close_normalMode();
+    BOOL _open();
+    BOOL _close();
+    BOOL _close_normalMode();
     void _move();
     void _draw();
     void _delete();
@@ -150,7 +157,7 @@ public:
     void fmap2Open();
     void fmap2Move();
     void fmap2Close();
-    void paneTransBase(short, unsigned char, float, float, unsigned char, int);
+    int paneTransBase(short, unsigned char, float, float, unsigned char, int);
     void paneTranceZoomMap(short, unsigned char, float, float, float, float, float, float, unsigned char, int);
     void paneTranceZoomMapAlpah(short, unsigned char, unsigned char, int);
     void paneTranceZoom2Map(short, unsigned char, float, float, float, float, float, float, unsigned char, int);
@@ -161,7 +168,7 @@ public:
     bool _open_warpMode();
     void init_warpMode();
     void selCursorMoveWarp();
-    void _close_warpMode();
+    BOOL _close_warpMode();
     void moveMain_warpMode();
     void wrapMove();
     void wrapSelWinFadeIn1();
@@ -189,7 +196,7 @@ public:
     void setWrapBackEmitter(cXyz);
     void setWrapSpotEmitter(int, cXyz);
     bool _open_fishManMode();
-    void _close_fishManMode();
+    BOOL _close_fishManMode();
     void init_fishManMode();
     void movefishManMode();
     void fmDispArea();
@@ -307,7 +314,7 @@ public:
     /* 0x5113 */ u8 mMainProcIdx;
     /* 0x5114 */ u8 mFmapProcIdx;
     /* 0x5115 */ u8 mHikakuProcIdx;
-    /* 0x5116 */ u16 mFrameTimer;
+    /* 0x5116 */ s16 mFrameTimer;
     /* 0x5118 */ s8 mGridX;
     /* 0x5119 */ s8 mGridY;
     /* 0x511A */ s8 mTargetGridX;
@@ -383,9 +390,14 @@ public:
 public:
     /* 0x04 */ u8 padding_0x04[0x28 - 0x04];
     /* 0x28 */ s16 field_0x28;
-    /* 0x2A */ u8 padding_0x29[0x3A - 0x2A];
+    /* 0x2A */ u8 padding_0x29[0x33 - 0x2A];
+    /* 0x33 */ u8 field_0x33;
+    /* 0x34 */ u8 field_0x34;
+    /* 0x35 */ u8 padding_0x35[1];
+    /* 0x36 */ s16 field_0x36;
+    /* 0x38 */ u8 padding_0x38[0x3A - 0x38];
     /* 0x3A */ u8 field_0x3A;
-    /* 0x3B */ u8 padding_0x3B[0xE0 - 0x3B];
+    /* 0x3B */ u8 padding_0x3B[0xE0 - 0x3A];
     /* 0xE0 */ u8 field_0xE0;
     /* 0xE1 */ u8 padding_0xE1[0x120 - 0xE1];
 };

@@ -7,7 +7,9 @@
 #include "d/d_menu_fmap.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_hostIO.h"
+#include "printf.h"
 #include "res/Object/X_futa.h"
 #include "res/Object/X_tower.h"
 
@@ -21,6 +23,7 @@ dMf_HIO_c::dMf_HIO_c() {
 /* 801AF848-801AFB64       .text _create__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_create() {
     /* Nonmatching */
+    mFmapMode = FMAP_MODE_NORMAL;
 }
 
 /* 801AFB64-801AFBDC       .text phantomShipCheck__12dMenu_Fmap_cFv */
@@ -237,9 +240,9 @@ void dMenu_Fmap_c::checkMarkAnime() {
 }
 
 /* 801B3658-801B3698       .text readFmapTexture__12dMenu_Fmap_cFPCc */
-void dMenu_Fmap_c::readFmapTexture(const char* i_filename) {
+u32 dMenu_Fmap_c::readFmapTexture(const char* i_filename) {
     JKRArchive* archive = dComIfGp_getFmapArchive();
-    JKRArchive::readTypeResource(mpImg, 0x2c00, 'FM  ', i_filename, archive);
+    return JKRArchive::readTypeResource(mpImg, 0x2c00, 'FM  ', i_filename, archive);
 }
 
 /* 801B3698-801B36F0       .text aramCmapDatRead__12dMenu_Fmap_cFv */
@@ -294,8 +297,16 @@ void dMenu_Fmap_c::setIslandPos(fopMsgM_pane_class* i_pane, float i_x, float i_y
 }
 
 /* 801B3984-801B3A2C       .text changeFmapTexture__12dMenu_Fmap_cFScSc */
-void dMenu_Fmap_c::changeFmapTexture(signed char, signed char) {
-    /* Nonmatching */
+void dMenu_Fmap_c::changeFmapTexture(signed char i_x, signed char i_y) {
+    char filename[64];
+    sprintf(filename, "R%02X_b.bti", i_x + (i_y + 3) * 7 + 4);
+    if (readFmapTexture(filename) == NULL) {
+        mR01bPane.pane->hide();
+        mR01gPane.pane->hide();
+    } else {
+        ((J2DPicture*)mR01bPane.pane)->changeTexture(mpImg, 0);
+        ((J2DPicture*)mR01gPane.pane)->changeTexture(mpImg, 0);
+    }
 }
 
 /* 801B3A2C-801B3C4C       .text setDspNormalMapLink__12dMenu_Fmap_cFv */
@@ -344,25 +355,68 @@ void dMenu_Fmap_c::checkDspHugeMapShip() {
 }
 
 /* 801B4B44-801B4C0C       .text _open__12dMenu_Fmap_cFv */
-bool dMenu_Fmap_c::_open() {
-    /* Nonmatching */
-    return false;
+BOOL dMenu_Fmap_c::_open() {
+    int ret;
+    if (mFrameTimer == 0) {
+        field_0x5181 = 0;
+    }
+    if (mZoomLocked) {
+        ret = 1;
+    } else {
+        ret = paneTransBase(mFrameTimer - g_mfHIO.field_0x33, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0, '\0', 0);
+        mFrameTimer += 1;
+    }
+    if (ret == TRUE) {
+        mFrameTimer = 0;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 801B4C0C-801B4C78       .text _close__12dMenu_Fmap_cFv */
-bool dMenu_Fmap_c::_close() {
-    /* Nonmatching */
-    return false;
+BOOL dMenu_Fmap_c::_close() {
+    BOOL ret;
+    switch (mFmapMode) {
+        case FMAP_MODE_NORMAL:
+        case FMAP_MODE_WALLPAPER:
+            ret = _close_normalMode();
+            break;
+        case FMAP_MODE_WARP:
+            ret = _close_warpMode();
+            break;
+        case FMAP_MODE_FISHMAN:
+            ret = _close_fishManMode();
+            break;
+    }
+    return ret;
 }
 
 /* 801B4C78-801B4D78       .text _close_normalMode__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_close_normalMode() {
+BOOL dMenu_Fmap_c::_close_normalMode() {
     /* Nonmatching */
+    return FALSE;
 }
 
 /* 801B4D78-801B4E14       .text _move__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_move() {
-    /* Nonmatching */
+    switch (mFmapMode) {
+        case FMAP_MODE_NORMAL:
+            move_normal();
+            break;
+        case FMAP_MODE_WARP:
+            moveMain_warpMode();
+            break;
+        case FMAP_MODE_WALLPAPER:
+            if (CPad_CHECK_TRIG_LEFT(0) || CPad_CHECK_TRIG_DOWN(0) || CPad_CHECK_TRIG_B(0)) {
+                mMapClose = TRUE;
+            } else {
+                mMapClose = FALSE;
+            }
+            break;
+        case FMAP_MODE_FISHMAN:
+            movefishManMode();
+            break;
+    }
 }
 
 /* 801B4E14-801B4E6C       .text _draw__12dMenu_Fmap_cFv */
@@ -461,8 +515,9 @@ void dMenu_Fmap_c::fmap2Close() {
 }
 
 /* 801B68EC-801B6A7C       .text paneTransBase__12dMenu_Fmap_cFsUcffUci */
-void dMenu_Fmap_c::paneTransBase(short, unsigned char, float, float, unsigned char, int) {
+int dMenu_Fmap_c::paneTransBase(short, unsigned char, float, float, unsigned char, int) {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B6A7C-801B6F88       .text paneTranceZoomMap__12dMenu_Fmap_cFsUcffffffUci */
@@ -509,6 +564,14 @@ bool dMenu_Fmap_c::_open_warpMode() {
 /* 801B79E8-801B7CD0       .text init_warpMode__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::init_warpMode() {
     /* Nonmatching */
+    mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
+    mFmapMode = FMAP_MODE_WARP;
+    field_0x5181 = 4;
+
+    areaTextChangeAnimeInit();
+    mFrameCounter = 0;
+    setDspWarpBackCornerColor(0.0);
+    warpAreaAnime0();
 }
 
 /* 801B7CD0-801B7E30       .text selCursorMoveWarp__12dMenu_Fmap_cFv */
@@ -517,8 +580,9 @@ void dMenu_Fmap_c::selCursorMoveWarp() {
 }
 
 /* 801B7E30-801B7EA8       .text _close_warpMode__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_close_warpMode() {
+BOOL dMenu_Fmap_c::_close_warpMode() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801B7EA8-801B7EF8       .text moveMain_warpMode__12dMenu_Fmap_cFv */
@@ -658,8 +722,9 @@ bool dMenu_Fmap_c::_open_fishManMode() {
 }
 
 /* 801BA19C-801BA214       .text _close_fishManMode__12dMenu_Fmap_cFv */
-void dMenu_Fmap_c::_close_fishManMode() {
+BOOL dMenu_Fmap_c::_close_fishManMode() {
     /* Nonmatching */
+    return false;
 }
 
 /* 801BA214-801BA49C       .text init_fishManMode__12dMenu_Fmap_cFv */
