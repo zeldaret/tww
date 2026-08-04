@@ -4,6 +4,7 @@
 #include "d/d_2dnumber.h"
 #include "d/d_drawlist.h"
 #include "d/d_lib.h"
+#include "d/d_menu_fmap_sv.h"
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_menu_fmap2.h"
@@ -11,7 +12,6 @@
 
 class JUTFont;
 class J2DScreen;
-class dMenu_FmapSv_c;
 struct cursorTable_t;
 
 struct aramCmapDatPnt_t {
@@ -26,10 +26,20 @@ struct aramCmapDatPat_t {
 };
 
 enum FmapMode {
-    FMAP_MODE_NORMAL = 0,
-    FMAP_MODE_WARP = 1,
+    FMAP_MODE_NORMAL    = 0,
+    FMAP_MODE_WARP      = 1,
     FMAP_MODE_WALLPAPER = 2,
-    FMAP_MODE_FISHMAN = 3,
+    FMAP_MODE_FISHMAN   = 3,
+};
+
+enum FmapButtonIconMode {
+    FMAP_BTN_ICON_WORLD     = 0,
+    FMAP_BTN_ICON_SECTOR    = 1,
+    FMAP_BTN_ICON_DETAIL    = 2,
+    FMAP_BTN_ICON_LOCKED    = 3,
+    FMAP_BTN_ICON_WARP      = 4,
+    FMAP_BTN_ICON_WALLPAPER = 5,
+    FMAP_BTN_ICON_FISHMAN   = 6,
 };
 
 class dDlst_FMAP_c : public dDlst_base_c {
@@ -70,7 +80,7 @@ public:
         mFont = font;
         mRFont = rfont;
     }
-    void setSvPtr(dMenu_FmapSv_c* i_ptr) { mFmapSv = i_ptr; }
+    void setSvPtr(dMenu_FmapSv_c* i_ptr) { fMapSv = i_ptr; }
     void setTextArea_New(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         mTxtName[0] = name0;
         mTxtName[1] = name1;
@@ -218,7 +228,7 @@ public:
     /* 0x001C */ dDlst_FMAP_c mDlst;
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
     /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
-    /* 0x2878 */ dMenu_FmapSv_c* mFmapSv;
+    /* 0x2878 */ dMenu_FmapSv_c* fMapSv;
     /* 0x287C */ aramCmapDatPat_t mCmapDatPnt;
     /* 0x2884 */ dDlst_2DOutFont_c* field_0x2884;
     /* 0x2888 */ dDlst_2DOutFont_c* field_0x2888;
@@ -357,7 +367,7 @@ public:
     /* 0x517D */ u8 padding_0x517D[0x517F-0x517D];
     /* 0x517F */ bool mFishmanActive;
     /* 0x5180 */ u8 field_0x5180;
-    /* 0x5181 */ u8 field_0x5181;
+    /* 0x5181 */ u8 mButtonIconMode;
     /* 0x5182 */ u8 field_0x5182;
     /* 0x5183 */ bool field_0x5183;
     /* 0x5184 */ bool field_0x5184;
@@ -388,18 +398,22 @@ public:
     virtual ~dMf_HIO_c() {}
 
 public:
-    /* 0x04 */ u8 padding_0x04[0x28 - 0x04];
-    /* 0x28 */ s16 field_0x28;
-    /* 0x2A */ u8 padding_0x29[0x33 - 0x2A];
-    /* 0x33 */ u8 field_0x33;
-    /* 0x34 */ u8 field_0x34;
-    /* 0x35 */ u8 padding_0x35[1];
-    /* 0x36 */ s16 field_0x36;
-    /* 0x38 */ u8 padding_0x38[0x3A - 0x38];
-    /* 0x3A */ u8 field_0x3A;
-    /* 0x3B */ u8 padding_0x3B[0xE0 - 0x3A];
-    /* 0xE0 */ u8 field_0xE0;
-    /* 0xE1 */ u8 padding_0xE1[0x120 - 0xE1];
+    /* 0x004 */ u8 padding_0x04[0x28 - 0x04];
+    /* 0x028 */ s16 field_0x28;
+    /* 0x02A */ u8 padding_0x29[0x2F - 0x2A];
+    /* 0x02F */ u8 field_0x2F;
+    /* 0x030 */ u8 padding_0x30[0x33 - 0x30];
+    /* 0x033 */ u8 field_0x33;
+    /* 0x034 */ u8 field_0x34;
+    /* 0x035 */ u8 padding_0x35[1];
+    /* 0x036 */ s16 field_0x36;
+    /* 0x038 */ u8 padding_0x38[0x3A - 0x38];
+    /* 0x03A */ u8 field_0x3A;
+    /* 0x03B */ u8 padding_0x3B[0xE0 - 0x3A];
+    /* 0x0E0 */ u8 field_0xE0;
+    /* 0x0E1 */ u8 padding_0xE1[0x11B - 0xE1];
+    /* 0x11B */ u8 field_0x11B;
+    /* 0x11C */ u8 padding_0x11C[0x120 - 0x11C];
 };
 
 extern dMf_HIO_c g_mfHIO;

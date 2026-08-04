@@ -358,12 +358,12 @@ void dMenu_Fmap_c::checkDspHugeMapShip() {
 BOOL dMenu_Fmap_c::_open() {
     int ret;
     if (mFrameTimer == 0) {
-        field_0x5181 = 0;
+        mButtonIconMode = FMAP_BTN_ICON_WORLD;
     }
     if (mZoomLocked) {
         ret = 1;
     } else {
-        ret = paneTransBase(mFrameTimer - g_mfHIO.field_0x33, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0, '\0', 0);
+        ret = paneTransBase(mFrameTimer - g_mfHIO.field_0x33, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0, NULL, 0);
         mFrameTimer += 1;
     }
     if (ret == TRUE) {
@@ -437,6 +437,12 @@ void dMenu_Fmap_c::FmapProcMain() {
 /* 801B5034-801B5878       .text SelectGrid__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::SelectGrid() {
     /* Nonmatching */
+    if (dComIfGs_isSaveArriveGrid(fMapSv->field_0x4 + (fMapSv->field_0x5 + 3) * 7 + 3)) {
+        mButtonIconMode = FMAP_BTN_ICON_LOCKED;
+    } else {
+        mButtonIconMode = FMAP_BTN_ICON_SECTOR;
+    }
+    JUT_ASSERT(0x1E9, fMapSv != NULL);
 }
 
 /* 801B5878-801B5B58       .text zoom1000x1000Init__12dMenu_Fmap_cFv */
@@ -457,6 +463,40 @@ void dMenu_Fmap_c::ZoomGridLv1In() {
 /* 801B5D6C-801B5F80       .text ZoomGridLv1Proc__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv1Proc() {
     /* Nonmatching */
+    if (CPad_CHECK_TRIG_A(0) != 0 || mWarpScrollGuard != false) {
+        if (mButtonIconMode == 1) {
+            mDoAud_seStart(JA_SE_CHART_ZOOM_IN);
+            mButtonIconMode = FMAP_BTN_ICON_DETAIL;
+            JUT_ASSERT(0x1E3, fMapSv != NULL)
+            fMapSv->field_0x1 = 0x2;
+            zoom200x200Init();
+            f32 clgOrigX = mClgPane.mSizeOrig.x;
+            paneTranceZoom2Map(0, g_mfHIO.field_0x2F, field_0x5134 * (clgOrigX / 100000.0f),
+                field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f), 0.0, 0.0,
+                mTsw1Pane.mSizeOrig.x / clgOrigX, 1.0, 0x2, 0);
+            for (int i = 0; i < 8; i++) {
+                mKk3xPanes[i].pane->mInheritAlpha = FALSE;
+            }
+            mR01bPane.pane->mInheritAlpha = FALSE;
+            mFrameTimer = 0;
+            mFmapProcIdx = 4;
+        }
+        mWarpScrollGuard = FALSE;
+    } else {
+        if (CPad_CHECK_TRIG_B(0) || mWarpAnimActive) {
+            mDoAud_seStart(JA_SE_CHART_ZOOM_OUT);
+            if (field_0x5182 != 0) {
+                mLnk2Pane.pane->hide();
+            }
+            if (field_0x5184) {
+                mSpi2Pane.pane->hide();
+            }
+            mWarpAnimActive = FALSE;
+            zoomCursorInit();
+            mFmapProcIdx = 3;
+        }
+    }
+    zoomCursorAnime();
 }
 
 /* 801B5F80-801B6084       .text zoom200x200Init__12dMenu_Fmap_cFv */
@@ -566,7 +606,7 @@ void dMenu_Fmap_c::init_warpMode() {
     /* Nonmatching */
     mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
     mFmapMode = FMAP_MODE_WARP;
-    field_0x5181 = 4;
+    mButtonIconMode = FMAP_BTN_ICON_WARP;
 
     areaTextChangeAnimeInit();
     mFrameCounter = 0;
@@ -581,8 +621,14 @@ void dMenu_Fmap_c::selCursorMoveWarp() {
 
 /* 801B7E30-801B7EA8       .text _close_warpMode__12dMenu_Fmap_cFv */
 BOOL dMenu_Fmap_c::_close_warpMode() {
-    /* Nonmatching */
-    return false;
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x34, 0.0, 0.0, NULL, 1);
+    mFrameTimer += 1;
+    if (ret == 1) {
+        mFrameTimer = 0;
+        mFmapMode = FMAP_MODE_NORMAL;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 801B7EA8-801B7EF8       .text moveMain_warpMode__12dMenu_Fmap_cFv */
@@ -723,13 +769,21 @@ bool dMenu_Fmap_c::_open_fishManMode() {
 
 /* 801BA19C-801BA214       .text _close_fishManMode__12dMenu_Fmap_cFv */
 BOOL dMenu_Fmap_c::_close_fishManMode() {
-    /* Nonmatching */
-    return false;
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x11B, 0.0, 0.0, NULL, 1);
+    mFrameTimer += 1;
+    if (ret == 1) {
+        mFrameTimer = 0;
+        mFmapMode = FMAP_MODE_NORMAL;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 801BA214-801BA49C       .text init_fishManMode__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::init_fishManMode() {
     /* Nonmatching */
+    mFmapMode = FMAP_MODE_FISHMAN;
+    mButtonIconMode = FMAP_BTN_ICON_FISHMAN;
 }
 
 /* 801BA49C-801BA4D4       .text movefishManMode__12dMenu_Fmap_cFv */
@@ -789,8 +843,18 @@ void dMenu_Fmap_c::fmEndWait() {
 
 /* 801BAF18-801BAFCC       .text _open_wallPaper__12dMenu_Fmap_cFv */
 bool dMenu_Fmap_c::_open_wallPaper() {
-    /* Nonmatching */
-    return false;
+    if (mFrameTimer == 0) {
+        mButtonIconMode = FMAP_BTN_ICON_WALLPAPER;
+        selCursorHide();
+    }
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0, NULL, 1);
+    mFrameTimer += 1;
+    if (ret == 1) {
+        mFrameTimer = 0;
+        mFmapMode = FMAP_MODE_WALLPAPER;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 801BAFCC-801BB024       .text getButtonIconMode__12dMenu_Fmap_cFv */
