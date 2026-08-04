@@ -421,7 +421,10 @@ void dMenu_Fmap_c::_move() {
 
 /* 801B4E14-801B4E6C       .text _draw__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_draw() {
-    /* Nonmatching */
+    dComIfGd_set2DOpa(&mDlst);
+    if (mMainProcIdx == 1) {
+        mFmap2._draw();
+    }
 }
 
 /* 801B4E6C-801B4F40       .text _delete__12dMenu_Fmap_cFv */
@@ -451,8 +454,14 @@ void dMenu_Fmap_c::zoom1000x1000Init() {
 }
 
 /* 801B5B58-801B5BB4       .text zoomMapAlphaSet__12dMenu_Fmap_cFScScP18fopMsgM_pane_classUc */
-void dMenu_Fmap_c::zoomMapAlphaSet(signed char, signed char, fopMsgM_pane_class*, unsigned char) {
-    /* Nonmatching */
+void dMenu_Fmap_c::zoomMapAlphaSet(signed char i_gridX, signed char i_gridY, fopMsgM_pane_class* i_pane, unsigned char i_alpha) {
+    if ((i_gridX + 3) + (i_gridY + 3) * 7 == 0x19) {
+        i_pane->mInitAlpha = i_alpha;
+    } else {
+        i_pane->mInitAlpha = 0xFF;
+    }
+    i_pane->mInitAlpha = 0xFF;
+    fopMsgM_setAlpha(i_pane);
 }
 
 /* 801B5BB4-801B5D6C       .text ZoomGridLv1In__12dMenu_Fmap_cFv */
@@ -858,9 +867,14 @@ bool dMenu_Fmap_c::_open_wallPaper() {
 }
 
 /* 801BAFCC-801BB024       .text getButtonIconMode__12dMenu_Fmap_cFv */
-u8 dMenu_Fmap_c::getButtonIconMode() {
-    /* Nonmatching */
-    return 0;
+int dMenu_Fmap_c::getButtonIconMode() {
+    if (mMainProcIdx == 1) {
+        return mFmap2.getButtonIconMode() + 7;
+    }
+    if (mInputDisabled) {
+        return mFmap2.getButtonIconMode() + 7;
+    }
+    return mButtonIconMode;
 }
 
 /* 801BB024-801BB088       .text draw__12dDlst_FMAP_cFv */

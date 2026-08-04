@@ -527,8 +527,9 @@ void dMenu_Fmap2_c::readFmapTexture(const char*) {
 }
 
 /* 801C74B4-801C756C       .text getButtonIconMode__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::getButtonIconMode() {
+int dMenu_Fmap2_c::getButtonIconMode() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 801C756C-801C7574       .text isLockBbutton__13dMenu_Fmap2_cFv */

@@ -220,7 +220,7 @@ public:
     void fmZoomGridLv1Out();
     void fmEndWait();
     bool _open_wallPaper();
-    u8 getButtonIconMode();
+    int getButtonIconMode();
 
 public:
     /* 0x0004 */ u8 padding_0x4[0x18 - 0x4];

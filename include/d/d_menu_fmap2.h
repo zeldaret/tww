@@ -145,7 +145,7 @@ public:
     void getCmapDatPnt4(int);
     void readPaneCmapTexture(const ResTIMG*, int);
     void readFmapTexture(const char*);
-    void getButtonIconMode();
+    int getButtonIconMode();
     void isLockBbutton();
     void isGetCollectMap(signed char);
     void isOpenCollectMap(signed char);
