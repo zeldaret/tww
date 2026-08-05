@@ -2186,20 +2186,14 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
 
     s32 pattern[6];
     f32 xOffset = 0.0f;
-
     if (m15E8[0].mUserArea < tact_beat[i_song]) {
-        if (tact_beat[i_song] == 3) {
-            xOffset =
-                (m17A8[1].mPosCenterOrig.x -
-                 m17A8[0].mPosCenterOrig.x) *
-                1.5f;
-
+        s32 temp =  tact_beat[i_song];
+        
+        if (temp == 3) {
+            xOffset = (m17A8[1].mPosCenterOrig.x - m17A8[0].mPosCenterOrig.x) * 1.5f;
             mDoAud_tact_setBeat(0);
-        } else if (tact_beat[i_song] == 4) {
-            xOffset =
-                m17A8[1].mPosCenterOrig.x -
-                m17A8[0].mPosCenterOrig.x;
-
+        } else if (temp == 4) {
+            xOffset = m17A8[1].mPosCenterOrig.x - m17A8[0].mPosCenterOrig.x;
             mDoAud_tact_setBeat(4);
         } else {
             mDoAud_tact_setBeat(2);
@@ -2221,11 +2215,11 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
                     fopMsgM_setInitAlpha(&m1B98[i]);
                     fopMsgM_setInitAlpha(&m1CE8[i]);
                 } else {
-                    fopMsgM_setNowAlpha(&m17A8[i], 1.0f);
-                    fopMsgM_setNowAlpha(&m18F8[i], 1.0f);
-                    fopMsgM_setNowAlpha(&m1A48[i], 1.0f);
-                    fopMsgM_setNowAlpha(&m1B98[i], 1.0f);
-                    fopMsgM_setNowAlpha(&m1CE8[i], 1.0f);
+                    fopMsgM_setNowAlpha(&m17A8[i], 0.5f);
+                    fopMsgM_setNowAlpha(&m18F8[i], 0.5f);
+                    fopMsgM_setNowAlpha(&m1A48[i], 0.5f);
+                    fopMsgM_setNowAlpha(&m1B98[i], 0.5f);
+                    fopMsgM_setNowAlpha(&m1CE8[i], 0.5f);
                 }
 
                 fopMsgM_setInitAlpha(&m1E38[i]);
@@ -2236,10 +2230,9 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
             }
         }
 
-        bool inputReady = false;
+        s32 direction = mDoAud_getTactDirection(0, m27DC);
 
-        s32 direction =
-            mDoAud_getTactDirection(0, m27DC);
+        bool inputReady = false;
 
         if (direction != m27DC) {
             m27DC = direction;
@@ -2255,10 +2248,10 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
                 }
             }
         } else if (direction == 0) {
-            if ((s16)m27E4 > 0) {
-                m27E4 = (s16)m27E4 - 1;
+            if (m27E4 > 0) {
+                m27E4--;
 
-                if ((s16)m27E4 == 0) {
+                if (m27E4 == 0) {
                     inputReady = true;
                 }
             }
@@ -2272,36 +2265,26 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
                 m27DC
             );
 
-            s32 beat = m15E8[0].mUserArea;
-
-            if (m27DC == pattern[beat]) {
-                m1E38[beat].mUserArea = 1;
+            if (m27DC == pattern[m15E8[0].mUserArea]) {
+                m1E38[m15E8[0].mUserArea].mUserArea = 1;
                 m15E8[0].mUserArea++;
 
-                if (m15E8[0].mUserArea ==
-                    tact_beat[i_song]) {
+                if (m15E8[0].mUserArea == tact_beat[i_song]) {
                     m27E4 = 10;
                 }
 
-                f32 rightOffset = xOffset + 7.0f;
+                for (int i = 0; i < tact_beat[i_song]; i++) {
+                    f32 rightOffset = xOffset + 7.0f;
 
-                for (int i = 0;
-                     i < tact_beat[i_song];
-                     i++) {
                     if (m1E38[i].mUserArea == 1) {
-                        s32 patternValue = pattern[i];
-
-                        f32 angle =
-                            rotate_angle[patternValue];
-
                         m1A48[i].pane->rotate(
-                            m1A48[i].mSizeOrig.x * 0.5f,
-                            m1A48[i].mSizeOrig.y * 0.5f,
+                            m1A48[i].mSizeOrig.x / 2.0f,
+                            m1A48[i].mSizeOrig.y / 2.0f,
                             ROTATE_Z,
-                            angle
+                            rotate_angle[pattern[i]]
                         );
 
-                        if (patternValue == 0) {
+                        if (pattern[i] == 0) {
                             m17A8[i].pane->show();
                             m18F8[i].pane->show();
                             m1A48[i].pane->show();
@@ -2322,7 +2305,7 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
                             m1CE8[i].pane->show();
                             m1E38[i].pane->show();
 
-                            switch (patternValue) {
+                            switch (pattern[i]) {
                             case 1:
                                 fopMsgM_paneTrans(
                                     &m17A8[i],
@@ -2432,9 +2415,7 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
             mCollectMode = 0;
         }
     } else {
-        m27E4 = (s16)m27E4 - 1;
-
-        if ((s16)m27E4 <= 0) {
+        if (--m27E4 <= 0) {
             mDoAud_seStart(0x8F6);
 
             for (int i = 0; i < 6; i++) {
@@ -2505,400 +2486,154 @@ void dMenu_Collect_c::tactBaseShow() {
 
 /* 801A1600-801A2958       .text cornerMove__15dMenu_Collect_cFv */
 void dMenu_Collect_c::cornerMove() {
-    JUtility::TColor outTL(0xFFFFFFFF);
-    JUtility::TColor outTR(0xFFFFFFFF);
-    JUtility::TColor outBL(0xFFFFFFFF);
-    JUtility::TColor outBR(0xFFFFFFFF);
+    J2DWindow::TContentsColor outColor;
 
-    s16& cornerTimer = *(s16*)&m27E6;
+    m27E6++;
 
-    cornerTimer++;
-
-    if (cornerTimer >= 0xF0) {
-        cornerTimer = 0;
+    if (m27E6 >= 0xF0) {
+        m27E6 = 0;
     }
 
     f32 t = fopMsgM_valueIncrease(
         60,
-        cornerTimer % 60,
+        m27E6 % 60,
         2
     );
 
-    if (cornerTimer < 60) {
-        outTL.r = (u8)(
-            (f32)m2488.mTL.r +
-            (f32)((s32)m2488.mTR.r - (s32)m2488.mTL.r) * t
+    if (m27E6 < 60) {
+        outColor.mTL.set(
+            m2488.mTL.r + (m2488.mBL.r - m2488.mTL.r) * t,
+            m2488.mTL.g + (m2488.mBL.g - m2488.mTL.g) * t,
+            m2488.mTL.b + (m2488.mBL.b - m2488.mTL.b) * t,
+            m2488.mTL.a + (m2488.mBL.a - m2488.mTL.a) * t
         );
-
-        outTL.g = (u8)(
-            (f32)m2488.mTL.g +
-            (f32)((s32)m2488.mTR.g - (s32)m2488.mTL.g) * t
+        outColor.mTR.set(
+            m2488.mTR.r + (m2488.mTL.r - m2488.mTR.r) * t,
+            m2488.mTR.g + (m2488.mTL.g - m2488.mTR.g) * t,
+            m2488.mTR.b + (m2488.mTL.b - m2488.mTR.b) * t,
+            m2488.mTR.a + (m2488.mTL.a - m2488.mTR.a) * t
         );
-
-        outTL.b = (u8)(
-            (f32)m2488.mTL.b +
-            (f32)((s32)m2488.mTR.b - (s32)m2488.mTL.b) * t
+        outColor.mBL.set(
+            m2488.mBL.r + (m2488.mBR.r - m2488.mBL.r) * t,
+            m2488.mBL.g + (m2488.mBR.g - m2488.mBL.g) * t,
+            m2488.mBL.b + (m2488.mBR.b - m2488.mBL.b) * t,
+            m2488.mBL.a + (m2488.mBR.a - m2488.mBL.a) * t
         );
-
-        outTL.a = (u8)(
-            (f32)m2488.mTL.a +
-            (f32)((s32)m2488.mTR.a - (s32)m2488.mTL.a) * t
+        outColor.mBR.set(
+            m2488.mBR.r + (m2488.mBL.r - m2488.mBR.r) * t,
+            m2488.mBR.g + (m2488.mBL.g - m2488.mBR.g) * t,
+            m2488.mBR.b + (m2488.mBL.b - m2488.mBR.b) * t,
+            m2488.mBR.a + (m2488.mBL.a - m2488.mBR.a) * t
         );
-
-        outTR.r = (u8)(
-            (f32)m2488.mBL.r +
-            (f32)((s32)m2488.mTL.r - (s32)m2488.mBL.r) * t
+    } else if (m27E6 < 120) {
+        outColor.mTL.set(
+            m2488.mTR.r + (m2488.mBR.r - m2488.mTR.r) * t,
+            m2488.mTR.g + (m2488.mBR.g - m2488.mTR.g) * t,
+            m2488.mTR.b + (m2488.mBR.b - m2488.mTR.b) * t,
+            m2488.mTR.a + (m2488.mBR.a - m2488.mTR.a) * t
         );
-
-        outTR.g = (u8)(
-            (f32)m2488.mBL.g +
-            (f32)((s32)m2488.mTL.g - (s32)m2488.mBL.g) * t
+        outColor.mTR.set(
+            m2488.mTL.r + (m2488.mTR.r - m2488.mTL.r) * t,
+            m2488.mTL.g + (m2488.mTR.g - m2488.mTL.g) * t,
+            m2488.mTL.b + (m2488.mTR.b - m2488.mTL.b) * t,
+            m2488.mTL.a + (m2488.mTR.a - m2488.mTL.a) * t
         );
-
-        outTR.b = (u8)(
-            (f32)m2488.mBL.b +
-            (f32)((s32)m2488.mTL.b - (s32)m2488.mBL.b) * t
+        outColor.mBL.set(
+            m2488.mBR.r + (m2488.mBL.r - m2488.mBR.r) * t,
+            m2488.mBR.g + (m2488.mBL.g - m2488.mBR.g) * t,
+            m2488.mBR.b + (m2488.mBL.b - m2488.mBR.b) * t,
+            m2488.mBR.a + (m2488.mBL.a - m2488.mBR.a) * t
         );
-
-        outTR.a = (u8)(
-            (f32)m2488.mBL.a +
-            (f32)((s32)m2488.mTL.a - (s32)m2488.mBL.a) * t
+        outColor.mBR.set(
+            m2488.mBL.r + (m2488.mTL.r - m2488.mBL.r) * t,
+            m2488.mBL.g + (m2488.mTL.g - m2488.mBL.g) * t,
+            m2488.mBL.b + (m2488.mTL.b - m2488.mBL.b) * t,
+            m2488.mBL.a + (m2488.mTL.a - m2488.mBL.a) * t
         );
-
-        outBL.r = (u8)(
-            (f32)m2488.mTR.r +
-            (f32)((s32)m2488.mBR.r - (s32)m2488.mTR.r) * t
+    } else if (m27E6 < 180) {
+        outColor.mTL.set(
+            m2488.mBR.r + (m2488.mBL.r - m2488.mBR.r) * t,
+            m2488.mBR.g + (m2488.mBL.g - m2488.mBR.g) * t,
+            m2488.mBR.b + (m2488.mBL.b - m2488.mBR.b) * t,
+            m2488.mBR.a + (m2488.mBL.a - m2488.mBR.a) * t
         );
-
-        outBL.g = (u8)(
-            (f32)m2488.mTR.g +
-            (f32)((s32)m2488.mBR.g - (s32)m2488.mTR.g) * t
+        outColor.mTR.set(
+            m2488.mTR.r + (m2488.mBR.r - m2488.mTR.r) * t,
+            m2488.mTR.g + (m2488.mBR.g - m2488.mTR.g) * t,
+            m2488.mTR.b + (m2488.mBR.b - m2488.mTR.b) * t,
+            m2488.mTR.a + (m2488.mBR.a - m2488.mTR.a) * t
         );
-
-        outBL.b = (u8)(
-            (f32)m2488.mTR.b +
-            (f32)((s32)m2488.mBR.b - (s32)m2488.mTR.b) * t
+        outColor.mBL.set(
+            m2488.mBL.r + (m2488.mTL.r - m2488.mBL.r) * t,
+            m2488.mBL.g + (m2488.mTL.g - m2488.mBL.g) * t,
+            m2488.mBL.b + (m2488.mTL.b - m2488.mBL.b) * t,
+            m2488.mBL.a + (m2488.mTL.a - m2488.mBL.a) * t
         );
-
-        outBL.a = (u8)(
-            (f32)m2488.mTR.a +
-            (f32)((s32)m2488.mBR.a - (s32)m2488.mTR.a) * t
-        );
-
-        outBR.r = (u8)(
-            (f32)m2488.mBR.r +
-            (f32)((s32)m2488.mBL.r - (s32)m2488.mBR.r) * t
-        );
-
-        outBR.g = (u8)(
-            (f32)m2488.mBR.g +
-            (f32)((s32)m2488.mBL.g - (s32)m2488.mBR.g) * t
-        );
-
-        outBR.b = (u8)(
-            (f32)m2488.mBR.b +
-            (f32)((s32)m2488.mBL.b - (s32)m2488.mBR.b) * t
-        );
-
-        outBR.a = (u8)(
-            (f32)m2488.mBR.a +
-            (f32)((s32)m2488.mBL.a - (s32)m2488.mBR.a) * t
-        );
-    } else if (cornerTimer < 120) {
-        outTL.r = (u8)(
-            (f32)m2488.mTR.r +
-            (f32)((s32)m2488.mBR.r - (s32)m2488.mTR.r) * t
-        );
-
-        outTL.g = (u8)(
-            (f32)m2488.mTR.g +
-            (f32)((s32)m2488.mBR.g - (s32)m2488.mTR.g) * t
-        );
-
-        outTL.b = (u8)(
-            (f32)m2488.mTR.b +
-            (f32)((s32)m2488.mBR.b - (s32)m2488.mTR.b) * t
-        );
-
-        outTL.a = (u8)(
-            (f32)m2488.mTR.a +
-            (f32)((s32)m2488.mBR.a - (s32)m2488.mTR.a) * t
-        );
-
-        outTR.r = (u8)(
-            (f32)m2488.mTL.r +
-            (f32)((s32)m2488.mTR.r - (s32)m2488.mTL.r) * t
-        );
-
-        outTR.g = (u8)(
-            (f32)m2488.mTL.g +
-            (f32)((s32)m2488.mTR.g - (s32)m2488.mTL.g) * t
-        );
-
-        outTR.b = (u8)(
-            (f32)m2488.mTL.b +
-            (f32)((s32)m2488.mTR.b - (s32)m2488.mTL.b) * t
-        );
-
-        outTR.a = (u8)(
-            (f32)m2488.mTL.a +
-            (f32)((s32)m2488.mTR.a - (s32)m2488.mTL.a) * t
-        );
-
-        outBL.r = (u8)(
-            (f32)m2488.mBR.r +
-            (f32)((s32)m2488.mBL.r - (s32)m2488.mBR.r) * t
-        );
-
-        outBL.g = (u8)(
-            (f32)m2488.mBR.g +
-            (f32)((s32)m2488.mBL.g - (s32)m2488.mBR.g) * t
-        );
-
-        outBL.b = (u8)(
-            (f32)m2488.mBR.b +
-            (f32)((s32)m2488.mBL.b - (s32)m2488.mBR.b) * t
-        );
-
-        outBL.a = (u8)(
-            (f32)m2488.mBR.a +
-            (f32)((s32)m2488.mBL.a - (s32)m2488.mBR.a) * t
-        );
-
-        outBR.r = (u8)(
-            (f32)m2488.mBL.r +
-            (f32)((s32)m2488.mTL.r - (s32)m2488.mBL.r) * t
-        );
-
-        outBR.g = (u8)(
-            (f32)m2488.mBL.g +
-            (f32)((s32)m2488.mTL.g - (s32)m2488.mBL.g) * t
-        );
-
-        outBR.b = (u8)(
-            (f32)m2488.mBL.b +
-            (f32)((s32)m2488.mTL.b - (s32)m2488.mBL.b) * t
-        );
-
-        outBR.a = (u8)(
-            (f32)m2488.mBL.a +
-            (f32)((s32)m2488.mTL.a - (s32)m2488.mBL.a) * t
-        );
-    } else if (cornerTimer < 180) {
-        outTL.r = (u8)(
-            (f32)m2488.mBR.r +
-            (f32)((s32)m2488.mBL.r - (s32)m2488.mBR.r) * t
-        );
-
-        outTL.g = (u8)(
-            (f32)m2488.mBR.g +
-            (f32)((s32)m2488.mBL.g - (s32)m2488.mBR.g) * t
-        );
-
-        outTL.b = (u8)(
-            (f32)m2488.mBR.b +
-            (f32)((s32)m2488.mBL.b - (s32)m2488.mBR.b) * t
-        );
-
-        outTL.a = (u8)(
-            (f32)m2488.mBR.a +
-            (f32)((s32)m2488.mBL.a - (s32)m2488.mBR.a) * t
-        );
-
-        outTR.r = (u8)(
-            (f32)m2488.mTR.r +
-            (f32)((s32)m2488.mBR.r - (s32)m2488.mTR.r) * t
-        );
-
-        outTR.g = (u8)(
-            (f32)m2488.mTR.g +
-            (f32)((s32)m2488.mBR.g - (s32)m2488.mTR.g) * t
-        );
-
-        outTR.b = (u8)(
-            (f32)m2488.mTR.b +
-            (f32)((s32)m2488.mBR.b - (s32)m2488.mTR.b) * t
-        );
-
-        outTR.a = (u8)(
-            (f32)m2488.mTR.a +
-            (f32)((s32)m2488.mBR.a - (s32)m2488.mTR.a) * t
-        );
-
-        outBL.r = (u8)(
-            (f32)m2488.mBL.r +
-            (f32)((s32)m2488.mTL.r - (s32)m2488.mBL.r) * t
-        );
-
-        outBL.g = (u8)(
-            (f32)m2488.mBL.g +
-            (f32)((s32)m2488.mTL.g - (s32)m2488.mBL.g) * t
-        );
-
-        outBL.b = (u8)(
-            (f32)m2488.mBL.b +
-            (f32)((s32)m2488.mTL.b - (s32)m2488.mBL.b) * t
-        );
-
-        outBL.a = (u8)(
-            (f32)m2488.mBL.a +
-            (f32)((s32)m2488.mTL.a - (s32)m2488.mBL.a) * t
-        );
-
-        outBR.r = (u8)(
-            (f32)m2488.mTL.r +
-            (f32)((s32)m2488.mTR.r - (s32)m2488.mTL.r) * t
-        );
-
-        outBR.g = (u8)(
-            (f32)m2488.mTL.g +
-            (f32)((s32)m2488.mTR.g - (s32)m2488.mTL.g) * t
-        );
-
-        outBR.b = (u8)(
-            (f32)m2488.mTL.b +
-            (f32)((s32)m2488.mTR.b - (s32)m2488.mTL.b) * t
-        );
-
-        outBR.a = (u8)(
-            (f32)m2488.mTL.a +
-            (f32)((s32)m2488.mTR.a - (s32)m2488.mTL.a) * t
+        outColor.mBR.set(
+            m2488.mTL.r + (m2488.mTR.r - m2488.mTL.r) * t,
+            m2488.mTL.g + (m2488.mTR.g - m2488.mTL.g) * t,
+            m2488.mTL.b + (m2488.mTR.b - m2488.mTL.b) * t,
+            m2488.mTL.a + (m2488.mTR.a - m2488.mTL.a) * t
         );
     } else {
-        outTL.r = (u8)(
-            (f32)m2488.mBL.r +
-            (f32)((s32)m2488.mTL.r - (s32)m2488.mBL.r) * t
+        outColor.mTL.set(
+            m2488.mBL.r + (m2488.mTL.r - m2488.mBL.r) * t,
+            m2488.mBL.g + (m2488.mTL.g - m2488.mBL.g) * t,
+            m2488.mBL.b + (m2488.mTL.b - m2488.mBL.b) * t,
+            m2488.mBL.a + (m2488.mTL.a - m2488.mBL.a) * t
         );
-
-        outTL.g = (u8)(
-            (f32)m2488.mBL.g +
-            (f32)((s32)m2488.mTL.g - (s32)m2488.mBL.g) * t
+        outColor.mTR.set(
+            m2488.mBR.r + (m2488.mBL.r - m2488.mBR.r) * t,
+            m2488.mBR.g + (m2488.mBL.g - m2488.mBR.g) * t,
+            m2488.mBR.b + (m2488.mBL.b - m2488.mBR.b) * t,
+            m2488.mBR.a + (m2488.mBL.a - m2488.mBR.a) * t
         );
-
-        outTL.b = (u8)(
-            (f32)m2488.mBL.b +
-            (f32)((s32)m2488.mTL.b - (s32)m2488.mBL.b) * t
+        outColor.mBL.set(
+            m2488.mTL.r + (m2488.mTR.r - m2488.mTL.r) * t,
+            m2488.mTL.g + (m2488.mTR.g - m2488.mTL.g) * t,
+            m2488.mTL.b + (m2488.mTR.b - m2488.mTL.b) * t,
+            m2488.mTL.a + (m2488.mTR.a - m2488.mTL.a) * t
         );
-
-        outTL.a = (u8)(
-            (f32)m2488.mBL.a +
-            (f32)((s32)m2488.mTL.a - (s32)m2488.mBL.a) * t
-        );
-
-        outTR.r = (u8)(
-            (f32)m2488.mBR.r +
-            (f32)((s32)m2488.mBL.r - (s32)m2488.mBR.r) * t
-        );
-
-        outTR.g = (u8)(
-            (f32)m2488.mBR.g +
-            (f32)((s32)m2488.mBL.g - (s32)m2488.mBR.g) * t
-        );
-
-        outTR.b = (u8)(
-            (f32)m2488.mBR.b +
-            (f32)((s32)m2488.mBL.b - (s32)m2488.mBR.b) * t
-        );
-
-        outTR.a = (u8)(
-            (f32)m2488.mBR.a +
-            (f32)((s32)m2488.mBL.a - (s32)m2488.mBR.a) * t
-        );
-
-        outBL.r = (u8)(
-            (f32)m2488.mTL.r +
-            (f32)((s32)m2488.mTR.r - (s32)m2488.mTL.r) * t
-        );
-
-        outBL.g = (u8)(
-            (f32)m2488.mTL.g +
-            (f32)((s32)m2488.mTR.g - (s32)m2488.mTL.g) * t
-        );
-
-        outBL.b = (u8)(
-            (f32)m2488.mTL.b +
-            (f32)((s32)m2488.mTR.b - (s32)m2488.mTL.b) * t
-        );
-
-        outBL.a = (u8)(
-            (f32)m2488.mTL.a +
-            (f32)((s32)m2488.mTR.a - (s32)m2488.mTL.a) * t
-        );
-
-        outBR.r = (u8)(
-            (f32)m2488.mTR.r +
-            (f32)((s32)m2488.mBR.r - (s32)m2488.mTR.r) * t
-        );
-
-        outBR.g = (u8)(
-            (f32)m2488.mTR.g +
-            (f32)((s32)m2488.mBR.g - (s32)m2488.mTR.g) * t
-        );
-
-        outBR.b = (u8)(
-            (f32)m2488.mTR.b +
-            (f32)((s32)m2488.mBR.b - (s32)m2488.mTR.b) * t
-        );
-
-        outBR.a = (u8)(
-            (f32)m2488.mTR.a +
-            (f32)((s32)m2488.mBR.a - (s32)m2488.mTR.a) * t
+        outColor.mBR.set(
+            m2488.mTR.r + (m2488.mBR.r - m2488.mTR.r) * t,
+            m2488.mTR.g + (m2488.mBR.g - m2488.mTR.g) * t,
+            m2488.mTR.b + (m2488.mBR.b - m2488.mTR.b) * t,
+            m2488.mTR.a + (m2488.mBR.a - m2488.mTR.a) * t
         );
     }
 
-    ((J2DWindow*)mB68[1].pane)->setContentsColor(
-        outTL,
-        outTR,
-        outBL,
-        outBR
-    );
+    ((J2DWindow*)mB68[1].pane)->setContentsColor(outColor);
 
-    s16& pulseTimer = *(s16*)&m27E8;
+    m27E8++;
 
-    pulseTimer++;
-
-    s16 halfPeriod = g_mcHIO.m50;
-    s16 fullPeriod = halfPeriod * 2;
-
-    if (pulseTimer >= fullPeriod) {
-        pulseTimer = 0;
+    if (m27E8 >= g_mcHIO.m50 * 2) {
+        m27E8 = 0;
     }
 
     f32 pulse;
 
-    if (pulseTimer < halfPeriod) {
+    if (m27E8 < g_mcHIO.m50) {
         pulse = fopMsgM_valueIncrease(
-            halfPeriod,
-            pulseTimer,
+            g_mcHIO.m50,
+            m27E8,
             0
         );
     } else {
         pulse = fopMsgM_valueIncrease(
-            halfPeriod,
-            fullPeriod - pulseTimer,
+            g_mcHIO.m50,
+            g_mcHIO.m50 * 2 - m27E8,
             0
         );
     }
 
-    JUtility::TColor white;
-
-    white.r = (u8)(
-        255.0f -
-        (255.0f - (f32)g_mcHIO.m58.r) * pulse
+    ((J2DWindow*)mB68[1].pane)->setWhite(
+        JUtility::TColor(
+            255.0f - (255.0f - g_mcHIO.m58.r) * pulse,
+            128.0f - (128.0f - g_mcHIO.m58.g) * pulse,
+            g_mcHIO.m58.b * pulse,
+            0xFF
+        )
     );
-
-    white.g = (u8)(
-        128.0f -
-        (128.0f - (f32)g_mcHIO.m58.g) * pulse
-    );
-
-    white.b = (u8)(
-        (f32)g_mcHIO.m58.b * pulse
-    );
-
-    white.a = 0xFF;
-
-    ((J2DWindow*)mB68[1].pane)->setWhite(white);
 }
 
 /* 801A2958-801A2A4C       .text triforceAnime__15dMenu_Collect_cFUc */
@@ -3006,21 +2741,26 @@ void dMenu_Collect_c::itemnameMove() {
 
 /* 801A2CA4-801A36AC       .text itemnameSet__15dMenu_Collect_cFv */
 void dMenu_Collect_c::itemnameSet() {
+    /* Nonmatching */
     fopMsgM_itemMsgGet_c msgGet;
     u32 msgNo = 0;
+    int i = 0;
 
-    ((J2DTextBox*)m858.pane)->setFontSize(29.0f, 29.0f);
+    J2DTextBox::TFontSize copiedFontSize;
+    J2DTextBox::TFontSize nameFontSize;
+    J2DTextBox::TFontSize initialFontSize;
 
-    ((J2DTextBox*)m890[1].pane)->setFontSize(
-        ((J2DTextBox*)m890[0].pane)->mFontSizeX, 
-        ((J2DTextBox*)m890[0].pane)->mFontSizeY
-    );
+    initialFontSize.mSizeY = 29.0f;
+    initialFontSize.mSizeX = 29.0f;
+
+    ((J2DTextBox*)m858.pane)->setFontSize(initialFontSize);
+
+    ((J2DTextBox*)m890[0].pane)->getFontSize(copiedFontSize);
+    ((J2DTextBox*)m890[1].pane)->setFontSize(copiedFontSize);
 
     ((J2DTextBox*)m890[1].pane)->setCharSpace(
         ((J2DTextBox*)m890[0].pane)->getCharSpace()
     );
-
-    int i = 0;
 
     while (name[0][i] != '\0') {
         name[1][i] = name[0][i];
@@ -3133,7 +2873,8 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 9:
-            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) || dComIfGs_getCollectMapNum() != 0) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) ||
+                dComIfGs_getCollectMapNum() != 0) {
                 msgNo = 0x1F7;
             }
             break;
@@ -3167,7 +2908,8 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 0x0E: {
-            s16 equipMsg = dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(0));
+            u32 equipMsg =
+                dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(0));
 
             msgNo = equipMsg;
 
@@ -3178,7 +2920,8 @@ void dMenu_Collect_c::itemnameSet() {
         }
 
         case 0x0F: {
-            s16 equipMsg = dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(1));
+            u32 equipMsg =
+                dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(1));
 
             msgNo = equipMsg;
 
@@ -3189,7 +2932,8 @@ void dMenu_Collect_c::itemnameSet() {
         }
 
         case 0x10: {
-            s16 equipMsg = dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(2));
+            u32 equipMsg =
+                dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(2));
 
             msgNo = equipMsg;
 
@@ -3218,12 +2962,12 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 0x13:
-            if (dComIfGs_isTact(0) ||
-                dComIfGs_isTact(1) ||
-                dComIfGs_isTact(2) ||
-                dComIfGs_isTact(3) ||
-                dComIfGs_isTact(4) ||
-                dComIfGs_isTact(5)) {
+            if (!dComIfGs_isTact(0) &&
+                !dComIfGs_isTact(1) &&
+                !dComIfGs_isTact(2) &&
+                !dComIfGs_isTact(3) &&
+                !dComIfGs_isTact(4) &&
+                !dComIfGs_isTact(5)) {
                 msgNo = 0;
             } else {
                 msgNo = 0;
@@ -3231,9 +2975,9 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 0x14:
-            if (dComIfGs_isSymbol(0) ||
-                dComIfGs_isSymbol(1) ||
-                dComIfGs_isSymbol(2)) {
+            if (!dComIfGs_isSymbol(0) &&
+                !dComIfGs_isSymbol(1) &&
+                !dComIfGs_isSymbol(2)) {
                 msgNo = 0;
             } else {
                 msgNo = 0;
@@ -3252,43 +2996,42 @@ void dMenu_Collect_c::itemnameSet() {
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(0xBD1, head_p);
 
-    volatile JGeometry::TVec2<f32> nameFontSize;
-    nameFontSize.x = ((J2DTextBox*)m890[0].pane)->mFontSizeX;
-    nameFontSize.y = ((J2DTextBox*)m890[0].pane)->mFontSizeY;
+    ((J2DTextBox*)m890[0].pane)->getFontSize(nameFontSize);
+    nameFontSize.mSizeX = nameFontSize.mSizeY;
 
-    nameFontSize.x = nameFontSize.y;
-
-    const char* src = msgGet.getMessage(head_p);
+    const char* mesg = msgGet.getMessage(head_p);
+    const char* current;
 
     bool firstCharacter = false;
 
-    f32 fontScale = nameFontSize.y / mFont->getCellWidth();
+    f32 fontScale =
+        nameFontSize.mSizeY / mFont->getCellWidth();
 
     f32 measuredWidth;
 
-    while (*(const s8*)src != '\0') {
+    current = mesg;
+
+    while (*(const s8*)current != '\0') {
         char appendBuf[3];
 
-        appendBuf[0] = '\0';
-        appendBuf[1] = '\0';
-        appendBuf[2] = '\0';
+        appendBuf[0] = appendBuf[1] = appendBuf[2] = '\0';
 
-        u8 firstByte = (u8)src[0];
+        if ((u8)current[0] == 0x1A) {
+            current++;
 
-        if (firstByte == 0x1A) {
-            src++;
-
-            s8 skip = (s8)*src;
-            src += skip;
-            src--;
+            s8 skip = (s8)*current;
+            current = skip + current;
+            current--;
 
             continue;
         }
 
         u16 code;
 
-        if ((firstByte >> 4) == 8 || (firstByte >> 4) == 9) {
-            u8 secondByte = (u8)src[1];
+        if ((((u8)current[0] >> 4) == 8) ||
+            (((u8)current[0] >> 4) == 9)) {
+            u8 firstByte = (u8)current[0];
+            u8 secondByte = (u8)current[1];
 
             code = secondByte;
             code |= (u16)firstByte << 8;
@@ -3297,14 +3040,14 @@ void dMenu_Collect_c::itemnameSet() {
             appendBuf[1] = secondByte;
             appendBuf[2] = '\0';
 
-            src += 2;
+            current += 2;
         } else {
-            code = firstByte;
+            code = (u8)current[0];
 
-            appendBuf[0] = firstByte;
+            appendBuf[0] = current[0];
             appendBuf[1] = '\0';
 
-            src++;
+            current++;
         }
 
         JUTFont::TWidth width;
@@ -3318,38 +3061,46 @@ void dMenu_Collect_c::itemnameSet() {
             JUTFont::TWidth firstWidth;
             mFont->getWidthEntry(code, &firstWidth);
 
-            measuredWidth = fontScale * (characterWidth + firstWidth.field_0x0);
+            measuredWidth =
+                fontScale *
+                (characterWidth + firstWidth.field_0x0);
 
             firstCharacter = true;
         } else {
-            measuredWidth += fontScale * characterWidth;
+            measuredWidth += characterWidth * fontScale;
         }
     }
 
-    J2DTextBox* textBox = (J2DTextBox*)m890[0].pane;
-
-    f32 paneWidth = textBox->getBounds().f.x - textBox->getBounds().i.x;
+    f32 paneWidth =
+        ((J2DTextBox*)m890[0].pane)->getBounds().f.x -
+        ((J2DTextBox*)m890[0].pane)->getBounds().i.x;
 
     if (paneWidth < measuredWidth) {
-        nameFontSize.x = (s32)((nameFontSize.x * paneWidth) / measuredWidth);
+        nameFontSize.mSizeX = (s32)(
+            (nameFontSize.mSizeX * paneWidth) /
+            measuredWidth
+        );
     }
 
-    textBox->setFontSize(nameFontSize.x, nameFontSize.y);
-
-    textBox->setCharSpace(0.0f);
-    textBox->setString(name[0]);
+    ((J2DTextBox*)m890[0].pane)->setFontSize(nameFontSize);
+    ((J2DTextBox*)m890[0].pane)->setCharSpace(0.0f);
+    ((J2DTextBox*)m890[0].pane)->setString(name[0]);
 }
 
 /* 801A36AC-801A42D0       .text itemnoteSet__15dMenu_Collect_cFv */
 void dMenu_Collect_c::itemnoteSet() {
+    /* Nonmatching - regswap */
     fopMsgM_itemMsgGet_c msgGet;
-    u32 msgNo = 0;
-    int triforceCount = 0;
+    int triforceCount;
+    u32 msgNo;
 
-    if (dComIfGs_getOptRuby() == 0) {
-        fopMsgM_paneTrans(&m778, 0.0f, 0.0f);
-    } else {
+    msgNo = 0;
+    triforceCount = 0;
+
+    if (dComIfGs_getOptRuby() != 0) {
         fopMsgM_paneTrans(&m778, 0.0f, -4.0f);
+    } else {
+        fopMsgM_paneTrans(&m778, 0.0f, 0.0f);
     }
 
     strcpy(note[0], "");
@@ -3359,19 +3110,20 @@ void dMenu_Collect_c::itemnoteSet() {
 
     outFontInit();
 
-    if (dComIfGs_getOptRuby() == 0) {
-        m740.pane->show();
-    } else {
+    if (dComIfGs_getOptRuby() != 0) {
         m740.pane->hide();
+    } else {
+        m740.pane->show();
     }
 
-    const int mainFontSize = 25;
-    const int lineSpace = 29;
-    const f32 rubyFontSize = ((J2DTextBox*)m740.pane)->mFontSizeX;
+    f32 rubyFontSize = ((J2DTextBox*)m740.pane)->mFontSizeX;
 
-    m778.mSizeOrig.x = mainFontSize > 0 ? (f32)mainFontSize : 0.0f;
-    m778.mSizeOrig.y = mainFontSize > 0 ? (f32)mainFontSize : 0.0f;
-    m778.mPosTopLeftOrig.y = (f32)lineSpace;
+    J2DTextBox::TFontSize msgFontSize;
+    msgFontSize.mSizeX = g_msgHIO.field_0x70;
+    msgFontSize.mSizeY = g_msgHIO.field_0x70;
+
+    ((J2DTextBox*)m778.pane)->setFontSize(msgFontSize);
+    ((J2DTextBox*)m778.pane)->setLineSpace(g_msgHIO.field_0x5e);
 
     switch (mNowItem) {
     case 0:
@@ -3379,53 +3131,65 @@ void dMenu_Collect_c::itemnoteSet() {
             msgNo = dItem_data::getItemMesgNum(109) + 200;
         }
         break;
+
     case 1:
         if (dComIfGs_isTact(1)) {
             msgNo = dItem_data::getItemMesgNum(110) + 200;
         }
         break;
+
     case 2:
         if (dComIfGs_isTact(2)) {
             msgNo = dItem_data::getItemMesgNum(111) + 200;
         }
         break;
+
     case 3:
         if (dComIfGs_isTact(3)) {
             msgNo = dItem_data::getItemMesgNum(112) + 200;
         }
         break;
+
     case 4:
         if (dComIfGs_isTact(4)) {
             msgNo = dItem_data::getItemMesgNum(113) + 200;
         }
         break;
+
     case 5:
         if (dComIfGs_isTact(5)) {
             msgNo = dItem_data::getItemMesgNum(114) + 200;
         }
         break;
+
     case 6:
         msgNo = 0x265;
         break;
+
     case 7:
         msgNo = 0x2C0;
         break;
+
     case 8:
-        if ((dComIfGs_getMaxLife() & 3) != 0) {
+        if (dComIfGs_getMaxLife() % 4 != 0) {
             msgNo = dItem_data::getItemMesgNum(7) + 200;
         }
         break;
+
     case 9:
-        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) || dComIfGs_getCollectMapNum() != 0) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) ||
+            dComIfGs_getCollectMapNum() != 0) {
             msgNo = 0x2BF;
         }
         break;
+
     case 10:
         for (int i = 0; i < 8; i++) {
             if (dComIfGs_isTriforce(i)) {
                 triforceCount++;
             }
         }
+
         if (triforceCount > 0) {
             if (triforceCount == 8) {
                 msgNo = 0x28C;
@@ -3434,71 +3198,93 @@ void dMenu_Collect_c::itemnoteSet() {
             }
         }
         break;
+
     case 0x0B:
         if (dComIfGs_isSymbol(0)) {
             msgNo = dItem_data::getItemMesgNum(105) + 200;
         }
         break;
+
     case 0x0C:
         if (dComIfGs_isSymbol(1)) {
             msgNo = dItem_data::getItemMesgNum(106) + 200;
         }
         break;
+
     case 0x0D:
         if (dComIfGs_isSymbol(2)) {
             msgNo = dItem_data::getItemMesgNum(107) + 200;
         }
         break;
+
     case 0x0E: {
         u8 item = dComIfGs_getSelectEquip(0);
-        if (dItem_data::getItemMesgNum(item) == 0) {
+        u32 itemMsgNo = dItem_data::getItemMesgNum(item);
+
+        if (itemMsgNo == 0) {
             msgNo = 0x25C;
         } else {
-            msgNo = dItem_data::getItemMesgNum(item) + 200;
+            msgNo = itemMsgNo + 200;
         }
         break;
     }
+
     case 0x0F: {
         u8 item = dComIfGs_getSelectEquip(1);
-        if (dItem_data::getItemMesgNum(item) == 0) {
+        u32 itemMsgNo = dItem_data::getItemMesgNum(item);
+
+        if (itemMsgNo == 0) {
             msgNo = 0x25C;
         } else {
-            msgNo = dItem_data::getItemMesgNum(item) + 200;
+            msgNo = itemMsgNo + 200;
         }
         break;
     }
+
     case 0x10: {
         u8 item = dComIfGs_getSelectEquip(2);
-        if (dItem_data::getItemMesgNum(item) == 0) {
+        u32 itemMsgNo = dItem_data::getItemMesgNum(item);
+
+        if (itemMsgNo == 0) {
             msgNo = 0x25C;
         } else {
-            msgNo = dItem_data::getItemMesgNum(item) + 200;
+            msgNo = itemMsgNo + 200;
         }
         break;
     }
+
     case 0x11:
         if (dComIfGs_isCollect(3, 0)) {
             msgNo = dItem_data::getItemMesgNum(66) + 200;
         }
         break;
+
     case 0x12:
         if (dComIfGs_isCollect(4, 0)) {
             msgNo = dItem_data::getItemMesgNum(67) + 200;
         }
         break;
+
     case 0x13:
-        if (dComIfGs_isTact(0) || dComIfGs_isTact(1) || dComIfGs_isTact(2) ||
-            dComIfGs_isTact(3) || dComIfGs_isTact(4) || dComIfGs_isTact(5)) {
-            msgNo = 0x25C;
-        } else {
+        if (!dComIfGs_isTact(0) &&
+            !dComIfGs_isTact(1) &&
+            !dComIfGs_isTact(2) &&
+            !dComIfGs_isTact(3) &&
+            !dComIfGs_isTact(4) &&
+            !dComIfGs_isTact(5)) {
             msgNo = 0;
+        } else {
+            msgNo = 0x25C;
         }
         break;
+
     case 0x14:
-        if (dComIfGs_isSymbol(0) || dComIfGs_isSymbol(1) || dComIfGs_isSymbol(2)) {
-            msgNo = 0x25C;
-        } else {
+        if (!dComIfGs_isSymbol(0) &&
+            !dComIfGs_isSymbol(1) &&
+            !dComIfGs_isSymbol(2)) {
             msgNo = 0;
+        } else {
+            msgNo = 0x25C;
         }
         break;
     }
@@ -3510,36 +3296,39 @@ void dMenu_Collect_c::itemnoteSet() {
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(0xCD3, head_p);
 
-    const char* mesg = msgGet.getMessage(head_p);
-    JMSMesgEntry_c mesgEntry = msgGet.getMesgEntry(head_p);
+    char* bmgData = (char*)msgGet.getMessage(head_p);
+
+    JMSMesgEntry_c mesgEntry;
+    mesgEntry = msgGet.getMesgEntry(head_p);
 
     mMsgProc.dataInit();
-    mMsgProc.bmgData = mesg;
+    mMsgProc.setBmgData(bmgData);
     mMsgProc.setOutMessage(note[0], note[1], dummy[0], dummy[1]);
-    mMsgProc.font[0] = mFont;
-    mMsgProc.font[1] = mRFont;
-    mMsgProc.charSpace = ((J2DTextBox*)m778.pane)->getCharSpace();
-    mMsgProc.rubyCharSpace = ((J2DTextBox*)m740.pane)->getCharSpace();
-    mMsgProc.lineSpace = lineSpace;
-    mMsgProc.mesgEntry = &mesgEntry;
-    mMsgProc.fontSize = mainFontSize;
-    mMsgProc.rubyFontSize = (int)rubyFontSize;
-    mMsgProc.lineWidth = 0x1FE;
-    mMsgProc.centerLineWidth = 0x1E6;
-    mMsgProc.sendSpeed = 2;
-    mMsgProc.spaceTimer = 0;
-    mMsgProc.field_0x299 = 1;
-    mMsgProc.spaceFlag = 0;
-
+    mMsgProc.setFont(mFont);
+    mMsgProc.setRubyFont(mRFont);
+    mMsgProc.setCharSpace(((J2DTextBox*)m778.pane)->getCharSpace());
+    mMsgProc.setRubyCharSpace(((J2DTextBox*)m740.pane)->getCharSpace());
+    mMsgProc.setLineSpace(((J2DTextBox*)m778.pane)->getLineSpace());
+    mMsgProc.setMesgEntry(&mesgEntry);
+    mMsgProc.setFontSize(msgFontSize.mSizeX);
+    mMsgProc.setRubyFontSize(rubyFontSize);
+    mMsgProc.setLineWidth(0x1FE);
+    mMsgProc.setCenterLineWidth(0x1E6);
+    mMsgProc.setSendSpeed(2);
+    mMsgProc.setSpaceTimer(0);
+    mMsgProc.shortCut();
+    mMsgProc.setSpaceFlagOff();
     mMsgProc.stringLength();
     mMsgProc.stringShift();
     mMsgProc.iconIdxRefresh();
 
-    int lineCount = mMsgProc.lineCount;
+    s16 lineCount = mMsgProc.lineCount;
     mMsgProc.lineCount = 0;
 
+    f32 lineSpace = ((J2DTextBox*)m778.pane)->getLineSpace();
+
     int lineAdjust = 3 - lineCount;
-    f32 yShift = (f32)lineAdjust * (f32)lineSpace * 0.5f;
+    f32 yShift = lineAdjust * (lineSpace / 2.0f);
 
     ((J2DTextBox*)m740.pane)->shiftSet(0.0f, yShift);
     ((J2DTextBox*)m778.pane)->shiftSet(0.0f, yShift);
@@ -3549,12 +3338,13 @@ void dMenu_Collect_c::itemnoteSet() {
     ((J2DTextBox*)m778.pane)->setString(note[0]);
     ((J2DTextBox*)m740.pane)->setString(note[1]);
 
-    int halfLine = (int)((f32)lineSpace * 0.5f);
+    int halfLine = (((J2DTextBox*)m778.pane)->getLineSpace() / 2.0f);
 
     for (int i = 0; i < 15; i++) {
         u8 iconNo = mMsgProc.field_0x281[i];
-        s32 iconColor = (s32)mMsgProc.field_0x220[i];
-        if (iconColor == -1) {
+        u32 iconColor = mMsgProc.field_0x220[i];
+
+        if (iconColor == 0xFFFFFFFF) {
             iconColor = 0xFF;
         }
 
@@ -3565,9 +3355,8 @@ void dMenu_Collect_c::itemnoteSet() {
                     m0B0[i].mUserArea = 0;
                 }
 
-                m0B0[m27E0].mPosCenter.x = (f32)mMsgProc.field_0x168[i];
-                m0B0[m27E0].mPosCenter.y =
-                    (f32)(halfLine * (lineAdjust + mMsgProc.field_0x1A4[i] * 2));
+                m0B0[m27E0].mPosCenter.x = mMsgProc.field_0x168[i];
+                m0B0[m27E0].mPosCenter.y = (halfLine * (lineAdjust + mMsgProc.field_0x1A4[i] * 2));
 
                 m27EB = 1;
             } else if (iconNo == 0x15) {
@@ -3580,37 +3369,49 @@ void dMenu_Collect_c::itemnoteSet() {
                     m27F0 = 1;
                 }
 
-                m0B0[m27E0].mPosTopLeft.x = (f32)mMsgProc.field_0x168[i];
-                m0B0[m27E0].mPosTopLeft.y =
-                    (f32)(halfLine * (lineAdjust + mMsgProc.field_0x1A4[i] * 2));
+                m0B0[m27E0].mPosTopLeft.x = mMsgProc.field_0x168[i];
+
+                m0B0[m27E0].mPosTopLeft.y = (halfLine * (lineAdjust + mMsgProc.field_0x1A4[i] * 2));
 
                 fopMsgM_blendDraw(&m0B0[m27E0], "font_10.bti");
 
                 J2DPicture* pic = (J2DPicture*)m0B0[m27E0].pane;
-                pic->setBlendColorRatio(0.0f, 1.0f, 1.0f, 1.0f);
-                pic->setBlendAlphaRatio(0.0f, 1.0f, 1.0f, 1.0f);
+
+                pic->setBlendColorRatio(
+                    0.0f,
+                    1.0f,
+                    1.0f,
+                    1.0f
+                );
+
+                pic->setBlendAlphaRatio(
+                    0.0f,
+                    1.0f,
+                    1.0f,
+                    1.0f
+                );
 
                 if (mNowItem == 0x12) {
-                    if (!dComIfGs_isCollect(4, 1)) {
-                        m27F0 = 1;
-                        mMsgProc.field_0x27D = 1;
-                    } else {
+                    if (dComIfGs_isCollect(4, 1)) {
                         m27F0 = 0;
                         mMsgProc.field_0x27D = 0;
+                    } else {
+                        m27F0 = 1;
+                        mMsgProc.field_0x27D = 1;
                     }
                 }
 
                 m27F1 = m27F0;
             } else if (iconNo != 0x16) {
-                m0B0[i].mPosTopLeft.x = (f32)mMsgProc.field_0x168[i];
-                m0B0[i].mPosTopLeft.y =
-                    (f32)(halfLine * (lineAdjust + mMsgProc.field_0x1A4[i] * 2));
-                m0B0[i].mPosTopLeftOrig.y = (f32)iconNo;
+                m0B0[i].mPosTopLeft.x = mMsgProc.field_0x168[i];
+                m0B0[i].mPosTopLeft.y = (halfLine * (lineAdjust + mMsgProc.field_0x1A4[i] * 2));
+
+                m0B0[i].mPosTopLeftOrig.y = iconNo;
 
                 fopMsgM_outFontSet(
                     (J2DPicture*)m0B0[i].pane,
                     &m0B0[i].mUserArea,
-                    (u32)iconColor,
+                    iconColor,
                     iconNo
                 );
             }
