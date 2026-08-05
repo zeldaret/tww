@@ -62,8 +62,14 @@ public:
     void getCtCurY() {}
     void getCtDispMode() {}
     void getCtFmapZoom() {}
-    void getCtZoomGridX() {}
-    void getCtZoomGridY() {}
+    inline s8 getCtZoomGridX() {
+        JUT_ASSERT(0x1E9, fmapSv != NULL);
+        return fmapSv->field_0x4;
+    }
+    inline s8  getCtZoomGridY() {
+        JUT_ASSERT(0x1F4, fmapSv != NULL);
+        return fmapSv->field_0x5;
+    }
     void lineInter0to1(float, float, float) {}
     void lineInter0to1ForU8(unsigned char, unsigned char, float) {}
     void setCtCurHX(signed char) {}
@@ -80,7 +86,7 @@ public:
         mFont = font;
         mRFont = rfont;
     }
-    void setSvPtr(dMenu_FmapSv_c* i_ptr) { fMapSv = i_ptr; }
+    void setSvPtr(dMenu_FmapSv_c* i_ptr) { fmapSv = i_ptr; }
     void setTextArea_New(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         mTxtName[0] = name0;
         mTxtName[1] = name1;
@@ -228,7 +234,7 @@ public:
     /* 0x001C */ dDlst_FMAP_c mDlst;
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
     /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
-    /* 0x2878 */ dMenu_FmapSv_c* fMapSv;
+    /* 0x2878 */ dMenu_FmapSv_c* fmapSv;
     /* 0x287C */ aramCmapDatPat_t mCmapDatPnt;
     /* 0x2884 */ dDlst_2DOutFont_c* field_0x2884;
     /* 0x2888 */ dDlst_2DOutFont_c* field_0x2888;
