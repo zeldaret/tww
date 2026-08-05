@@ -20,6 +20,20 @@ dMf_HIO_c::dMf_HIO_c() {
     /* Nonmatching */
 }
 
+typedef void (dMenu_Fmap_c::*mainProcFunc)();
+
+static mainProcFunc mainProc[] = {
+    &dMenu_Fmap_c::FmapProc,
+    &dMenu_Fmap_c::HikakuProc,
+};
+
+typedef void (dMenu_Fmap_c::*hikakuProcFunc)();
+
+static hikakuProcFunc HikakuProcMain[] = {
+    &dMenu_Fmap_c::FmapProc,
+    &dMenu_Fmap_c::HikakuProc,
+};
+
 /* 801AF848-801AFB64       .text _create__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_create() {
     /* Nonmatching */
@@ -92,12 +106,12 @@ void dMenu_Fmap_c::childPaneMoveSp(fopMsgM_pane_class*, fopMsgM_pane_class*, flo
 }
 
 /* 801B19F0-801B1A80       .text selGridMaskAlphaCtrl__12dMenu_Fmap_cFsUcUci */
-void dMenu_Fmap_c::selGridMaskAlphaCtrl(short, unsigned char, unsigned char, int) {
+BOOL dMenu_Fmap_c::selGridMaskAlphaCtrl(short, unsigned char, unsigned char, int) {
     /* Nonmatching */
 }
 
 /* 801B1A80-801B1B10       .text fmapMaskAlphaCtrl__12dMenu_Fmap_cFsUcUci */
-void dMenu_Fmap_c::fmapMaskAlphaCtrl(short, unsigned char, unsigned char, int) {
+BOOL dMenu_Fmap_c::fmapMaskAlphaCtrl(short, unsigned char, unsigned char, int) {
     /* Nonmatching */
 }
 
@@ -520,17 +534,58 @@ void dMenu_Fmap_c::zoom200x200Init() {
 
 /* 801B6084-801B6270       .text ZoomGridLv1Out__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv1Out() {
-    /* Nonmatching */
+    BOOL gridMask = selGridMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, NULL, 1);
+    BOOL fmapMask = fmapMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, NULL, 1);
+    BOOL zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E, 0.0f, 0.0f,
+        mKkdmPane.mPosCenter.x - mClbPane.mPosCenterOrig.x,
+        mKkdmPane.mPosCenter.y - mClbPane.mPosCenterOrig.y, 1.0,
+        mKkdmPane.mSizeOrig.x / mClbPane.mSizeOrig.x, 0x02, 1);
+    BOOL zoomCursor = paneAlphaFmapCursor(mKk3xPanes, mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E, NULL, 1);
+    BOOL selCursor = paneAlphaFmapCursor(mKk1xPanes, mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x3B, NULL, 0);
+    mFrameTimer += 1;
+    if (gridMask == TRUE && fmapMask == TRUE && zoomMap == TRUE && zoomCursor == TRUE && selCursor == TRUE) {
+        mFrameTimer = 0;
+        mKkdmPane.pane->hide();
+        mSmskPane.pane->hide();
+        mClbPane.pane->hide();
+        mButtonIconMode = FMAP_BTN_ICON_WORLD;
+        JUT_ASSERT(0x1E3, fmapSv != NULL);
+        fmapSv->field_0x1 = 0x0;
+        mFmapProcIdx = 0;
+    }
 }
 
 /* 801B6270-801B6388       .text ZoomGridLv2In__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv2In() {
-    /* Nonmatching */
+    f32 origX = mClgPane.mSizeOrig.x;
+    BOOL zoom2 = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x2F,
+        field_0x5134 * (origX / 100000.0f), field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f),
+        0.0, 0.0, mTsw1Pane.mSizeOrig.x / origX, 1.0, 0x02, 0);
+    BOOL alpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x2F, 0x02, 1);
+    mFrameTimer += 1;
+    if (zoom2 == TRUE && alpha == TRUE) {
+        mFrameTimer = 0;
+        field_0x5183 ? mLnk3Pane.pane->show() : mLnk3Pane.pane->hide();
+        field_0x5185 ? mSpi3Pane.pane->show() : mSpi3Pane.pane->hide();
+        mFmapProcIdx = 5;
+    }
 }
 
 /* 801B6388-801B6440       .text ZoomGridLv2Proc__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv2Proc() {
-    /* Nonmatching */
+    if (CPad_CHECK_TRIG_B(0)) {
+        mDoAud_seStart(JA_SE_CHART_ZOOM_OUT);
+        if (field_0x5183) {
+            mLnk3Pane.pane->hide();
+        }
+        if (field_0x5185) {
+            mSpi3Pane.pane->hide();
+        }
+        mWarpAnimActive = FALSE;
+        zoomCursorInit();
+        mFmapProcIdx = 6;
+    }
+    zoomCursorAnime();
 }
 
 /* 801B6440-801B65D8       .text ZoomGridLv2Out__12dMenu_Fmap_cFv */
@@ -540,17 +595,25 @@ void dMenu_Fmap_c::ZoomGridLv2Out() {
 
 /* 801B65D8-801B6610       .text move_normal__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::move_normal() {
-    /* Nonmatching */
+    (this->*mainProc[mMainProcIdx])();
 }
 
 /* 801B6610-801B66DC       .text FmapProc__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::FmapProc() {
-    /* Nonmatching */
+    if (CPad_CHECK_TRIG_Y(0)) {
+        mDoAud_seStart(JA_SE_CHART_TO_COMPARE);
+        JUT_ASSERT(0x1D8, fmapSv != NULL);
+        fmapSv->field_0x0 = 1;
+        mMainProcIdx = 1;
+        mHikakuProcIdx = 0;
+    } else {
+        FmapProcMain();
+    }
 }
 
 /* 801B66DC-801B6714       .text HikakuProc__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::HikakuProc() {
-    /* Nonmatching */
+    (this->*HikakuProcMain[mHikakuProcIdx])();
 }
 
 /* 801B6714-801B678C       .text fmap2Open__12dMenu_Fmap_cFv */
@@ -575,22 +638,22 @@ int dMenu_Fmap_c::paneTransBase(short, unsigned char, float, float, unsigned cha
 }
 
 /* 801B6A7C-801B6F88       .text paneTranceZoomMap__12dMenu_Fmap_cFsUcffffffUci */
-void dMenu_Fmap_c::paneTranceZoomMap(short, unsigned char, float, float, float, float, float, float, unsigned char, int) {
+BOOL dMenu_Fmap_c::paneTranceZoomMap(short, unsigned char, float, float, float, float, float, float, unsigned char, int) {
     /* Nonmatching */
 }
 
 /* 801B6F88-801B7018       .text paneTranceZoomMapAlpah__12dMenu_Fmap_cFsUcUci */
-void dMenu_Fmap_c::paneTranceZoomMapAlpah(short, unsigned char, unsigned char, int) {
+BOOL dMenu_Fmap_c::paneTranceZoomMapAlpah(short, unsigned char, unsigned char, int) {
     /* Nonmatching */
 }
 
 /* 801B7018-801B74EC       .text paneTranceZoom2Map__12dMenu_Fmap_cFsUcffffffUci */
-void dMenu_Fmap_c::paneTranceZoom2Map(short, unsigned char, float, float, float, float, float, float, unsigned char, int) {
+BOOL dMenu_Fmap_c::paneTranceZoom2Map(short, unsigned char, float, float, float, float, float, float, unsigned char, int) {
     /* Nonmatching */
 }
 
 /* 801B74EC-801B75B0       .text paneAlphaFmapCursor__12dMenu_Fmap_cFP18fopMsgM_pane_classsUcUci */
-void dMenu_Fmap_c::paneAlphaFmapCursor(fopMsgM_pane_class*, short, unsigned char, unsigned char, int) {
+BOOL dMenu_Fmap_c::paneAlphaFmapCursor(fopMsgM_pane_class*, short, unsigned char, unsigned char, int) {
     /* Nonmatching */
 }
 
