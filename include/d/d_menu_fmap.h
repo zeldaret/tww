@@ -178,7 +178,7 @@ public:
     BOOL paneTranceZoomMapAlpah(short, unsigned char, unsigned char, int);
     BOOL paneTranceZoom2Map(short, unsigned char, float, float, float, float, float, float, unsigned char, int);
     BOOL paneAlphaFmapCursor(fopMsgM_pane_class*, short, unsigned char, unsigned char, int);
-    void PaneAlphaSelvageItem(short, unsigned char);
+    BOOL PaneAlphaSelvageItem(short, unsigned char);
     void gShipMarkAnimeInit();
     void gShipMarkAnime();
     bool _open_warpMode();
@@ -388,11 +388,11 @@ public:
     /* 0x51A0 */ JUtility::TColor mKr0Color2;
     /* 0x51A4 */ JUtility::TColor mYs01Color;
     /* 0x51A8 */ JUtility::TColor mYs01Color2;
-    /* 0x51AC */ u8 mMsgValueActive;
-    /* 0x51AD */ u8 mMsgValueState1;
-    /* 0x51AE */ u8 mMsgValueState2;
+    /* 0x51AC */ bool mMsgValueActive;
+    /* 0x51AD */ bool mMsgValueState1;
+    /* 0x51AE */ bool mMsgValueState2;
     /* 0x51AF */ u8 mMsgValueTimer;
-    /* 0x51B0 */ u8 mMsgValueToggle;
+    /* 0x51B0 */ bool mMsgValueToggle;
     /* 0x51B1 */ u8 padding_0x51B1[0x51B4-0x51B1];
 }; // Size: 0x51B4
 
@@ -423,7 +423,10 @@ public:
     /* 0x0E0 */ u8 field_0xE0;
     /* 0x0E1 */ u8 padding_0xE1[0x11B - 0xE1];
     /* 0x11B */ u8 field_0x11B;
-    /* 0x11C */ u8 padding_0x11C[0x120 - 0x11C];
+    /* 0x11C */ u8 field_0x11C;
+    /* 0x11D */ u8 field_0x11D;
+    /* 0x11E */ u8 field_0x11E;
+    /* 0x11F */ u8 padding_0x11F[0x120 - 0x11F];
 };
 
 extern dMf_HIO_c g_mfHIO;

@@ -242,12 +242,12 @@ void dMenu_Fmap2_c::ChangeProcMode() {
 }
 
 /* 801C36C8-801C376C       .text _open__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::_open() {
+bool dMenu_Fmap2_c::_open() {
     /* Nonmatching */
 }
 
 /* 801C376C-801C3858       .text _close__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::_close() {
+bool dMenu_Fmap2_c::_close() {
     /* Nonmatching */
 }
 
