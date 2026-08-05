@@ -1539,18 +1539,18 @@ static cPhs_State dMs_Create(msg_class* i_this) {
 
     dMenu_setMenuStatus(MENU_STATUS_ITEM);
 
-    dMv_CIO_c.field_0x0 = 0;
-    dMv_CIO_c.field_0x1 = 0;
-    dMv_CIO_c.field_0x2 = -10;
-    dMv_CIO_c.field_0x3 = -10;
-    dMv_CIO_c.field_0x4 = -10;
-    dMv_CIO_c.field_0x5 = -10;
-    dMv_CIO_c.field_0x6 = -10;
-    dMv_CIO_c.field_0x7 = -10;
-    dMv_CIO_c.field_0x8 = 0;
-    dMv_CIO_c.field_0x9 = -1;
-    dMv_CIO_c.field_0xA = -10;
-    dMv_CIO_c.field_0xB = -10;
+    dMv_CIO_c.active = 0;
+    dMv_CIO_c.cmapSelNo = 0;
+    dMv_CIO_c.curX = -10;
+    dMv_CIO_c.curY = -10;
+    dMv_CIO_c.curWX = -10;
+    dMv_CIO_c.curWY = -10;
+    dMv_CIO_c.curHX = -10;
+    dMv_CIO_c.curHY = -10;
+    dMv_CIO_c.dispMode = 0;
+    dMv_CIO_c.fmapZoom = -1;
+    dMv_CIO_c.zoomGridX = -10;
+    dMv_CIO_c.zoomGridY = -10;
 
     fopMsgM_setStageLayer(i_Ms);
 

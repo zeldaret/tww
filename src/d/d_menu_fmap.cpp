@@ -455,7 +455,7 @@ void dMenu_Fmap_c::FmapProcMain() {
 /* 801B5034-801B5878       .text SelectGrid__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::SelectGrid() {
     /* Nonmatching */
-    if (dComIfGs_isSaveArriveGrid(fmapSv->field_0x4 + (fmapSv->field_0x5 + 3) * 7 + 3)) {
+    if (dComIfGs_isSaveArriveGrid(fmapSv->curWX + (fmapSv->curWY + 3) * 7 + 3)) {
         mButtonIconMode = FMAP_BTN_ICON_LOCKED;
     } else {
         mButtonIconMode = FMAP_BTN_ICON_SECTOR;
@@ -492,7 +492,7 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
             mDoAud_seStart(JA_SE_CHART_ZOOM_IN);
             mButtonIconMode = FMAP_BTN_ICON_DETAIL;
             JUT_ASSERT(0x1E3, fmapSv != NULL)
-            fmapSv->field_0x1 = 0x2;
+            fmapSv->cmapSelNo = 0x2;
             zoom200x200Init();
             f32 clgOrigX = mClgPane.mSizeOrig.x;
             paneTranceZoom2Map(0, g_mfHIO.field_0x2F, field_0x5134 * (clgOrigX / 100000.0f),
@@ -525,7 +525,7 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
 
 /* 801B5F80-801B6084       .text zoom200x200Init__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::zoom200x200Init() {
-    zoomMapAlphaSet(getCtZoomGridX(), getCtZoomGridY(), &mR01gPane, 0x1E);
+    zoomMapAlphaSet(getCtCurWX(), getCtCurWY(), &mR01gPane, 0x1E);
     zoomCursorInit();
     setDspHugeMapLink();
     checkDspHugeMapLink();
@@ -551,7 +551,7 @@ void dMenu_Fmap_c::ZoomGridLv1Out() {
         mClbPane.pane->hide();
         mButtonIconMode = FMAP_BTN_ICON_WORLD;
         JUT_ASSERT(0x1E3, fmapSv != NULL);
-        fmapSv->field_0x1 = 0x0;
+        fmapSv->cmapSelNo = 0x0;
         mFmapProcIdx = 0;
     }
 }
@@ -604,7 +604,7 @@ void dMenu_Fmap_c::FmapProc() {
     if (CPad_CHECK_TRIG_Y(0)) {
         mDoAud_seStart(JA_SE_CHART_TO_COMPARE);
         JUT_ASSERT(0x1D8, fmapSv != NULL);
-        fmapSv->field_0x0 = 1;
+        fmapSv->active = 1;
         mMainProcIdx = 1;
         mHikakuProcIdx = 0;
     } else {
@@ -707,7 +707,7 @@ BOOL dMenu_Fmap_c::PaneAlphaSelvageItem(short i_frame, unsigned char i_max) {
 void dMenu_Fmap_c::gShipMarkAnimeInit() {
     if (dComIfGs_isOpenCollectMap(0x24)) {
         mMsgValueActive = true;
-        if ((int)dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803) == 3) {
+        if ((int)dComIfGs_getEventReg(dSv_event_flag_c::GHOST_SHIP) == 3) {
             mMsgValueState1 = true;
         } else {
             mMsgValueState1 = false;
@@ -766,7 +766,11 @@ void dMenu_Fmap_c::init_warpMode() {
 
 /* 801B7CD0-801B7E30       .text selCursorMoveWarp__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::selCursorMoveWarp() {
-    /* Nonmatching */
+    f32 transX = getCtCurHX() * 56.0f;
+    f32 transY = getCtCurHY() * 56.0f;
+    for (int i = 0; i < 8; i++) {
+        fopMsgM_paneTrans(&mKk1xPanes[i], transX, transY);
+    }
 }
 
 /* 801B7E30-801B7EA8       .text _close_warpMode__12dMenu_Fmap_cFv */

@@ -56,32 +56,92 @@ public:
     virtual ~dMenu_Fmap_c() {}
 
     void draw() { _draw(); }
-    void getCtCurWX() {}
-    void getCtCurWY() {}
-    void getCtCurX() {}
-    void getCtCurY() {}
-    void getCtDispMode() {}
-    void getCtFmapZoom() {}
-    inline s8 getCtZoomGridX() {
+    inline u8 getCtActive() {
+        JUT_ASSERT(0x1D3, fmapSv != NULL);
+        return fmapSv->active;
+    }
+    inline void setCtActive(u8 val) {
+        JUT_ASSERT(0x1D8, fmapSv != NULL);
+        fmapSv->active = val;
+    }
+    inline s8 getCtCmapSelNo() {
+        JUT_ASSERT(0x1DE, fmapSv != NULL);
+        return fmapSv->cmapSelNo;
+    }
+    inline void setCtCmapSelNo(s8 val) {
+        JUT_ASSERT(0x1E3, fmapSv != NULL);
+        fmapSv->cmapSelNo = val;
+    }
+    inline s8 getCtCurWX() {
         JUT_ASSERT(0x1E9, fmapSv != NULL);
-        return fmapSv->field_0x4;
+        return fmapSv->curWX;
     }
-    inline s8  getCtZoomGridY() {
+    inline void setCtCurWX(s8 val) {
+        JUT_ASSERT(0x1EE, fmapSv != NULL);
+        fmapSv->curWX = val;
+    }
+    inline s8 getCtCurWY() {
         JUT_ASSERT(0x1F4, fmapSv != NULL);
-        return fmapSv->field_0x5;
+        return fmapSv->curWY;
     }
+    inline void setCtCurWY(s8 val) {
+        JUT_ASSERT(0x1F9, fmapSv != NULL);
+        fmapSv->curWY = val;
+    }
+    inline s8 getCtCurHX() {
+        JUT_ASSERT(0x1FF, fmapSv != NULL);
+        return fmapSv->curHX;
+    }
+    inline void setCtCurHX(s8 val) {
+        JUT_ASSERT(0x204, fmapSv != NULL);
+        fmapSv->curHX = val;
+    }
+    inline s8 getCtCurHY() {
+        JUT_ASSERT(0x20A, fmapSv != NULL);
+        return fmapSv->curHY;
+    }
+    inline void setCtCurHY(s8 val) {
+        JUT_ASSERT(0x20F, fmapSv != NULL);
+        fmapSv->curHY = val;
+    }
+    inline s8 getCtCurX() {
+        JUT_ASSERT(0x215, fmapSv != NULL);
+        return fmapSv->curX;
+    }
+    inline void setCtCurX(s8 val) {
+        JUT_ASSERT(0x21A, fmapSv != NULL);
+        fmapSv->curX = val;
+    }
+    inline s8 getCtCurY() {
+        JUT_ASSERT(0x21F, fmapSv != NULL);
+        return fmapSv->curY;
+    }
+    inline void setCtCurY(s8 val) {
+        JUT_ASSERT(0x224, fmapSv != NULL);
+        fmapSv->curY = val;
+    }
+    inline s8 getCtZoomGridX() {
+        JUT_ASSERT(0x22A, fmapSv != NULL);
+        return fmapSv->zoomGridX;
+    }
+    inline void setCtZoomGridX(s8 val) {
+        JUT_ASSERT(0x22F, fmapSv != NULL);
+        fmapSv->zoomGridX = val;
+    }
+    inline s8 getCtZoomGridY() {
+        JUT_ASSERT(0x234, fmapSv != NULL);
+        return fmapSv->zoomGridY;
+    }
+    inline void setCtZoomGridY(s8 val) {
+        JUT_ASSERT(0x239, fmapSv != NULL);
+        fmapSv->zoomGridY = val;
+    }
+    void getCtDispMode() {}
+    void setCtDispMode(unsigned char) {}
+    void getCtFmapZoom() {}
+    void setCtFmapZoom(unsigned char) {}
     void lineInter0to1(float, float, float) {}
     void lineInter0to1ForU8(unsigned char, unsigned char, float) {}
-    void setCtCurHX(signed char) {}
-    void setCtCurHY(signed char) {}
-    void setCtCurWX(signed char) {}
-    void setCtCurWY(signed char) {}
-    void setCtCurX(signed char) {}
-    void setCtCurY(signed char) {}
-    void setCtDispMode(unsigned char) {}
-    void setCtFmapZoom(unsigned char) {}
-    void setCtZoomGridX(signed char) {}
-    void setCtZoomGridY(signed char) {}
     void setFont(JUTFont* font, JUTFont* rfont) {
         mFont = font;
         mRFont = rfont;
