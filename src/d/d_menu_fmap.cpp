@@ -15,7 +15,7 @@
 
 dMf_HIO_c g_mfHIO;
 
-const cursorTable_t g_cursorTable[9] = {
+extern const cursorTable_t g_cursorTable[9] = {
     /* 0 */ {-2, -2, 0, -1,  1, -1,  7},
     /* 1 */ { 0, -2, 1,  0,  2, -1,  7},
     /* 2 */ { 2, -2, 2,  1, -1,  0,  7},
@@ -27,10 +27,32 @@ const cursorTable_t g_cursorTable[9] = {
     /* 8 */ { 0,  2, 8, -1,  5,  3,  6},
 };
 
+extern const u32 hist[] = {
+    'mR01', 'mR02', 'mR03', 'mR04', 'mR05', 'mR06', 'mR07',
+    'mR08', 'mR09', 'mR0A', 'mR0B', 'mR0C', 'mR0D', 'mR0E',
+    'mR0F', 'mR10', 'mR11', 'mR12', 'mR13', 'mR14', 'mR15',
+    'mR16', 'mR17', 'mR18', 'mR19', 'mR1A', 'mR1B', 'mR1C',
+    'mR1D', 'mR1E', 'mR1F', 'mR20', 'mR21', 'mR22', 'mR23',
+    'mR24', 'mR25', 'mR26', 'mR27', 'mR28', 'mR29', 'mR2A',
+    'mR2B', 'mR2C', 'mR2D', 'mR2E', 'mR2F', 'mR30', 'mR31',
+};
+
 /* 801AF4F0-801AF848       .text __ct__9dMf_HIO_cFv */
 dMf_HIO_c::dMf_HIO_c() {
     /* Nonmatching */
 }
+
+typedef void (dMenu_Fmap_c::*fmapProcFunc)();
+
+fmapProcFunc fmapProcMain[] = {
+    &dMenu_Fmap_c::SelectGrid,
+    &dMenu_Fmap_c::ZoomGridLv1In,
+    &dMenu_Fmap_c::ZoomGridLv1Proc,
+    &dMenu_Fmap_c::ZoomGridLv1Out,
+    &dMenu_Fmap_c::ZoomGridLv2In,
+    &dMenu_Fmap_c::ZoomGridLv2Proc,
+    &dMenu_Fmap_c::ZoomGridLv2Out,
+};
 
 typedef void (dMenu_Fmap_c::*mainProcFunc)();
 
@@ -41,7 +63,7 @@ static mainProcFunc mainProc[] = {
 
 typedef void (dMenu_Fmap_c::*hikakuProcFunc)();
 
-static hikakuProcFunc HikakuProcMain[] = {
+hikakuProcFunc HikakuProcMain[] = {
     &dMenu_Fmap_c::fmap2Open,
     &dMenu_Fmap_c::fmap2Move,
     &dMenu_Fmap_c::fmap2Close,
@@ -49,7 +71,7 @@ static hikakuProcFunc HikakuProcMain[] = {
 
 typedef void (dMenu_Fmap_c::*warpProcFunc)();
 
-static warpProcFunc warpProcMain[] = {
+warpProcFunc warpProcMain[] = {
     &dMenu_Fmap_c::wrapMove,
     &dMenu_Fmap_c::wrapSelWinFadeIn1,
     &dMenu_Fmap_c::wrapSelect,
@@ -57,9 +79,46 @@ static warpProcFunc warpProcMain[] = {
     &dMenu_Fmap_c::wrapSelWarp,
 };
 
+typedef void (dMenu_Fmap_c::*fishManProcFunc)();
+
+fishManProcFunc FishManProcMain[] = {
+    &dMenu_Fmap_c::fmDispArea,
+    &dMenu_Fmap_c::fmZoomGridLv1In,
+    &dMenu_Fmap_c::fmZoomGridLv2In,
+    &dMenu_Fmap_c::fmMapWrite,
+    &dMenu_Fmap_c::fmMapWait,
+    &dMenu_Fmap_c::fmZoomGridLv2Out,
+    &dMenu_Fmap_c::fmZoomGridLv1Out,
+    &dMenu_Fmap_c::fmEndWait,
+};
+
 /* 801AF848-801AFB64       .text _create__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_create() {
-    /* Nonmatching */
+    fmapDl.scrn = new J2DScreen();
+    JUT_ASSERT(0x23B, fmapDl.scrn != 0);
+    fmapDl.scrn->set("f_map.blo", dComIfGp_getFmapResArchive());
+
+    outFont = new dDlst_2DOutFont_c();
+    JUT_ASSERT(0x23F, outFont != 0);
+    outFont->m74 = 1;
+
+    outFont2 = new dDlst_2DOutFont_c();
+    JUT_ASSERT(0x243, outFont2 != 0);
+
+    stick = new STControl(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x2000);
+    JUT_ASSERT(0x246, stick != 0);
+    stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x800);
+
+    mChkPntTxt_p = (ResTIMG*)operator new (0x2c00, 0x20);
+    JUT_ASSERT(0x24a, mChkPntTxt_p != 0);
+
+    screenSet();
+    aramCmapDatRead();
+    field_0x5180 = dComIfGs_getRandomSalvagePoint();
+    initialize();
+    displayinit(); 
+    phantomShipCheck();
+    mMapClose = false;
     mFmapMode = FMAP_MODE_NORMAL;
 }
 
@@ -279,7 +338,7 @@ void dMenu_Fmap_c::checkMarkAnime() {
 /* 801B3658-801B3698       .text readFmapTexture__12dMenu_Fmap_cFPCc */
 u32 dMenu_Fmap_c::readFmapTexture(const char* i_filename) {
     JKRArchive* archive = dComIfGp_getFmapArchive();
-    return JKRArchive::readTypeResource(mpImg, 0x2c00, 'FM  ', i_filename, archive);
+    return JKRArchive::readTypeResource(mChkPntTxt_p, 0x2c00, 'FM  ', i_filename, archive);
 }
 
 /* 801B3698-801B36F0       .text aramCmapDatRead__12dMenu_Fmap_cFv */
@@ -341,8 +400,8 @@ void dMenu_Fmap_c::changeFmapTexture(s8 i_x, s8 i_y) {
         mR01bPane.pane->hide();
         mR01gPane.pane->hide();
     } else {
-        ((J2DPicture*)mR01bPane.pane)->changeTexture(mpImg, 0);
-        ((J2DPicture*)mR01gPane.pane)->changeTexture(mpImg, 0);
+        ((J2DPicture*)mR01bPane.pane)->changeTexture(mChkPntTxt_p, 0);
+        ((J2DPicture*)mR01gPane.pane)->changeTexture(mChkPntTxt_p, 0);
     }
 }
 
@@ -458,7 +517,7 @@ void dMenu_Fmap_c::_move() {
 
 /* 801B4E14-801B4E6C       .text _draw__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_draw() {
-    dComIfGd_set2DOpa(&mDlst);
+    dComIfGd_set2DOpa(&fmapDl);
     if (mMainProcIdx == 1) {
         mFmap2._draw();
     }
@@ -476,7 +535,6 @@ void dMenu_Fmap_c::FmapProcMain() {
 
 /* 801B5034-801B5878       .text SelectGrid__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::SelectGrid() {
-    /* Nonmatching */
     if (dComIfGs_isSaveArriveGrid(fmapSv->curWX + (fmapSv->curWY + 3) * 7 + 3)) {
         mButtonIconMode = FMAP_BTN_ICON_LOCKED;
     } else {
@@ -508,7 +566,6 @@ void dMenu_Fmap_c::ZoomGridLv1In() {
 
 /* 801B5D6C-801B5F80       .text ZoomGridLv1Proc__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv1Proc() {
-    /* Nonmatching */
     if (CPad_CHECK_TRIG_A(0) != 0 || mWarpScrollGuard != false) {
         if (mButtonIconMode == 1) {
             mDoAud_seStart(JA_SE_CHART_ZOOM_IN);
@@ -775,7 +832,6 @@ bool dMenu_Fmap_c::_open_warpMode() {
 
 /* 801B79E8-801B7CD0       .text init_warpMode__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::init_warpMode() {
-    /* Nonmatching */
     mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
     mFmapMode = FMAP_MODE_WARP;
     mButtonIconMode = FMAP_BTN_ICON_WARP;
@@ -809,7 +865,7 @@ BOOL dMenu_Fmap_c::_close_warpMode() {
 
 /* 801B7EA8-801B7EF8       .text moveMain_warpMode__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::moveMain_warpMode() {
-    mStControl->checkTrigger();
+    stick->checkTrigger();
     (this->*warpProcMain[mWarpProcIdx])();
 }
 
@@ -839,7 +895,6 @@ void dMenu_Fmap_c::wrapSelWinFadeIn1() {
 
 /* 801B8938-801B8E60       .text wrapSelect__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::wrapSelect() {
-    /* Nonmatching */
     if (CPad_CHECK_TRIG_A(0)) {
         if (mWarpSubState == 0) {
             mDoAud_seStart(JA_SE_SHIPPU_WARP_OK);
@@ -853,7 +908,7 @@ void dMenu_Fmap_c::wrapSelect() {
         mDoAud_seStart(JA_SE_SHIPPU_WARP_CANCEL);
         mWarpProcIdx = 3;
         mCur1Pane.pane->hide();
-    } else if (mStControl->checkRightTrigger()) {
+    } else if (stick->checkRightTrigger()) {
         if (mWarpSubState != 1) {
             mWarpSubState = 1;
             mDoAud_seStart(JA_SE_TALK_CURSOR);
@@ -867,7 +922,7 @@ void dMenu_Fmap_c::wrapSelect() {
             ((J2DPicture*)mNo01Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
             ((J2DPicture*)mNo00Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
         }
-    } else if (mStControl->checkLeftTrigger()) {
+    } else if (stick->checkLeftTrigger()) {
         if (mWarpSubState != 0) {
             mDoAud_seStart(JA_SE_TALK_CURSOR);
             mWarpSubState = 0;
@@ -887,16 +942,16 @@ void dMenu_Fmap_c::wrapSelect() {
 
 /* 801B8E60-801B9064       .text wrapSelWinFadeOut__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::wrapSelWinFadeOut() {
-    BOOL a = paneAlphaWarpMsgBack(mFrameTimer - g_mfHIO.field_0x40, g_mfHIO.field_0x3E, 0, 1);
-    BOOL b = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - g_mfHIO.field_0x42, g_mfHIO.field_0x41, 0.0f, 40.0f, 0, 2);
-    BOOL c;
-    if (b == TRUE) {
-        c = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - (g_mfHIO.field_0x42 + g_mfHIO.field_0x41), g_mfHIO.field_0x41, 0.0f, g_mfHIO.field_0x44, 0, 1);
+    BOOL backAlpha = paneAlphaWarpMsgBack(mFrameTimer - g_mfHIO.field_0x40, g_mfHIO.field_0x3E, 0, 1);
+    BOOL msg = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - g_mfHIO.field_0x42, g_mfHIO.field_0x41, 0.0f, 40.0f, 0, 2);
+    BOOL msg2;
+    if (msg == TRUE) {
+        msg2 = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - (g_mfHIO.field_0x42 + g_mfHIO.field_0x41), g_mfHIO.field_0x41, 0.0f, g_mfHIO.field_0x44, 0, 1);
     }
-    BOOL d = paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
-    BOOL e = paneTranceWarpMsg(&mNok0Pane, mFrameTimer - g_mfHIO.field_0x49, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
+    BOOL yesMove = paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
+    BOOL noMove = paneTranceWarpMsg(&mNok0Pane, mFrameTimer - g_mfHIO.field_0x49, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
     mFrameTimer++;
-    if (a == TRUE && b == TRUE && c == TRUE && d == TRUE && e == TRUE) {
+    if (backAlpha == TRUE && msg == TRUE && msg2 == TRUE && yesMove == TRUE && noMove == TRUE) {
         mFrameTimer = 0;
         for (int i = 0; i < 9; i++) {
             mWarpPanes[i]->playDrawParticle();
@@ -1017,12 +1072,40 @@ void dMenu_Fmap_c::areaTextChangeAnimeInit() {
 
 /* 801B9AB0-801B9B40       .text areaTextChangeAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::areaTextChangeAnime() {
-    /* Nonmatching */
+    if (mWarpAnimTimer == false) {
+        BOOL alpha = PaneAlphaAreaTxt(mAreaTxtTimer, g_mfHIO.field_0x32, 1);
+        mAreaTxtTimer++;
+        if (alpha == TRUE) {
+            mAreaTxtBufIdx ^= 1;
+            mAreaTxtTimer = 0;
+            mWarpAnimTimer = g_mfHIO.field_0x31;
+        }
+    } else {
+        mWarpAnimTimer--;
+    }
 }
 
 /* 801B9B40-801B9C90       .text PaneAlphaAreaTxt__12dMenu_Fmap_cFsUci */
-void dMenu_Fmap_c::PaneAlphaAreaTxt(short, u8, int) {
-    /* Nonmatching */
+BOOL dMenu_Fmap_c::PaneAlphaAreaTxt(short i_value, u8 i_max, int i_flag) {
+    if (i_value < 0) {
+        return FALSE;
+    }
+    if (i_value > i_max) {
+        return TRUE;
+    }
+    f32 inAlpha = fopMsgM_valueIncrease(i_max, i_value, 0);
+    f32 outAlpha = 1.0f - inAlpha;
+    fopMsgM_setNowAlpha(&mAreaTxtPanes[mAreaTxtBufIdx + i_flag], outAlpha);
+    if (mAreaTxtBufIdx + i_flag == 2) {
+        outFont->setAlpha(outAlpha * 255.0f);
+    }
+    fopMsgM_setNowAlpha(&mAreaTxtPanes[(mAreaTxtBufIdx ^ 1) + i_flag], inAlpha);
+    if ((mAreaTxtBufIdx ^ 1) + i_flag == 2) {
+        outFont->setAlpha(inAlpha * 255.0f);
+    }
+    fopMsgM_setAlpha(&mAreaTxtPanes[i_flag]);
+    fopMsgM_setAlpha(&mAreaTxtPanes[i_flag + 1]);
+    return FALSE;
 }
 
 /* 801B9C90-801BA01C       .text setDspWarpBackCornerColor__12dMenu_Fmap_cFf */
@@ -1031,19 +1114,28 @@ void dMenu_Fmap_c::setDspWarpBackCornerColor(f32) {
 }
 
 /* 801BA01C-801BA08C       .text setWrapBackEmitter__12dMenu_Fmap_cF4cXyz */
-void dMenu_Fmap_c::setWrapBackEmitter(cXyz) {
-    /* Nonmatching */
+void dMenu_Fmap_c::setWrapBackEmitter(cXyz i_pos) {
+    mMainWarpPane = (J2DPane*)dComIfGp_particle_set2DmenuFore(dPa_name::ID_AK_J4_GALEMAPKIRAKIRA00, &i_pos);
 }
 
 /* 801BA08C-801BA110       .text setWrapSpotEmitter__12dMenu_Fmap_cFi4cXyz */
-void dMenu_Fmap_c::setWrapSpotEmitter(int, cXyz) {
-    /* Nonmatching */
+void dMenu_Fmap_c::setWrapSpotEmitter(int i_idx, cXyz i_pos) {
+    mWarpPanes[i_idx] = dComIfGp_particle_set2DmenuFore(dPa_name::ID_AK_J4_GALESPOT00, &i_pos);
 }
 
 /* 801BA110-801BA19C       .text _open_fishManMode__12dMenu_Fmap_cFv */
 bool dMenu_Fmap_c::_open_fishManMode() {
-    /* Nonmatching */
-    return false;
+    if (mFrameTimer == 0) {
+        init_fishManMode();
+    }
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x110, 0.0f, 0.0f, 0, 0);
+    mFrameTimer++;
+    if (ret == TRUE) {
+        mFrameTimer = 0;
+        mFishmanProcIdx = 0;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 801BA19C-801BA214       .text _close_fishManMode__12dMenu_Fmap_cFv */
@@ -1060,14 +1152,56 @@ BOOL dMenu_Fmap_c::_close_fishManMode() {
 
 /* 801BA214-801BA49C       .text init_fishManMode__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::init_fishManMode() {
-    /* Nonmatching */
     mFmapMode = FMAP_MODE_FISHMAN;
     mButtonIconMode = FMAP_BTN_ICON_FISHMAN;
+    selCursorHide();
+    int i;
+    for (i = 0; i < 3; i++) {
+        mCk1xPanes[i].pane->hide();
+        mCk2xPanes[i].pane->hide();
+    }
+    for (i = 0; i < 2; i++) {
+        mCk1xPanes[i].pane->hide();
+    }
+    for (i = 0; i < 8; i++) {
+        mKr0xPanes[i].pane->hide();
+    }
+    for (i = 0; i < 49; i++) {
+        mStxxPanes[i].pane->hide();
+    }
+    mLnk2Pane.pane->hide();
+    mSpi2Pane.pane->hide();
+    mStm1Pane.pane->hide();
+    mLnk3Pane.pane->hide();
+    mSpi3Pane.pane->hide();
+    mStl1Pane.pane->hide();
+    for (i = 0; i < 8; i++) {
+        mKk3xPanes[i].pane->hide();
+    }
+
+    playerPointGridAnimeInit();
+    playerPointGridAnime();
+    fopMsgM_paneTrans(&mKkdmPane, mGridX * 56.0f, mGridY * 56.0f);
+    setDispIslandPos(mGridX, mGridY);
+    zoomMapAlphaSet(mGridX, mGridY, &mR01bPane, 0x14);
+    zoomMapAlphaSet(mGridX, mGridY, &mR01gPane, 0x1E);
+    mTsw1Pane.pane->hide();
+    mR01bPane.pane->hide();
+    mR01gPane.pane->hide();
+
+    fopMsgM_setNowAlpha(mAreaTxtPanes, 0.0f);
+    fopMsgM_setAlpha(mAreaTxtPanes);
+    s32 idx = mGridX + (mGridY + 3) * 7 + 3;
+    fopMsgM_setPaneData(&mMr01Pane, fmapDl.scrn, hist[idx]);
+    mFishmanTimer2 = g_mfHIO.field_0x118;
+    mFishmanTimer3 = g_mfHIO.field_0x119;
+    mFishmanProcIdx = 0;
+    mDoAud_seStart(JA_SE_CM_SO_DRAW_MAP);
 }
 
 /* 801BA49C-801BA4D4       .text movefishManMode__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::movefishManMode() {
-    /* Nonmatching */
+    (this->*FishManProcMain[mFishmanProcIdx])();
 }
 
 /* 801BA4D4-801BA608       .text fmDispArea__12dMenu_Fmap_cFv */
@@ -1117,7 +1251,11 @@ void dMenu_Fmap_c::fmZoomGridLv1Out() {
 
 /* 801BAEF4-801BAF18       .text fmEndWait__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmEndWait() {
-    /* Nonmatching */
+    if (mFishmanTimer1 == 0) {
+        mMapClose = true;
+    } else {
+        mFishmanTimer1--;
+    }
 }
 
 /* 801BAF18-801BAFCC       .text _open_wallPaper__12dMenu_Fmap_cFv */

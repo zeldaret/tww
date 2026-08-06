@@ -58,7 +58,7 @@ public:
     virtual void draw();
 
 public:
-    /* 0x0004 */ J2DScreen* mScreen;
+    /* 0x0004 */ J2DScreen* scrn;
 };
 
 class dMenu_Fmap_c {
@@ -277,7 +277,7 @@ public:
     const cursorTable_t* getWarpAreaTablePtr(s8, s8);
     void areaTextChangeAnimeInit();
     void areaTextChangeAnime();
-    void PaneAlphaAreaTxt(short, u8, int);
+    BOOL PaneAlphaAreaTxt(short, u8, int);
     void setDspWarpBackCornerColor(f32);
     void setWrapBackEmitter(cXyz);
     void setWrapSpotEmitter(int, cXyz);
@@ -300,14 +300,14 @@ public:
 
 public:
     /* 0x0004 */ u8 padding_0x4[0x18 - 0x4];
-    /* 0x0018 */ ResTIMG * mpImg;
-    /* 0x001C */ dDlst_FMAP_c mDlst;
+    /* 0x0018 */ ResTIMG * mChkPntTxt_p;
+    /* 0x001C */ dDlst_FMAP_c fmapDl;
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
     /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
     /* 0x2878 */ dMenu_FmapSv_c* fmapSv;
     /* 0x287C */ aramCmapDatPat_t mCmapDatPnt;
-    /* 0x2884 */ dDlst_2DOutFont_c* field_0x2884;
-    /* 0x2888 */ dDlst_2DOutFont_c* field_0x2888;
+    /* 0x2884 */ dDlst_2DOutFont_c* outFont;
+    /* 0x2888 */ dDlst_2DOutFont_c* outFont2;
     /* 0x288C */ fopMsgM_pane_class mFddmPane;
     /* 0x28C4 */ fopMsgM_pane_class mClPane;
     /* 0x28FC */ fopMsgM_pane_class mCi22Pane;
@@ -364,8 +364,7 @@ public:
     /* 0x48B4 */ fopMsgM_pane_class mKr0xPanes[8];
     /* 0x4A74 */ fopMsgM_pane_class mWnd1Pane;
     /* 0x4AAC */ fopMsgM_pane_class mWnd2Pane;
-    /* 0x4AE4 */ fopMsgM_pane_class* mMr01Pane;
-    /* 0x4AE8 */ u8 padding_0x4AE8[0x4B1C - 0x4AE8];
+    /* 0x4AE4 */ fopMsgM_pane_class mMr01Pane;
     /* 0x4B1C */ fopMsgM_pane_class mAreaTxtPanes[3];
     /* 0x4BC4 */ fopMsgM_pane_class mBt00Pane;
     /* 0x4BFC */ fopMsgM_pane_class mBt01Pane;
@@ -384,7 +383,7 @@ public:
     /* 0x4ED4 */ fopMsgM_pane_class mNoPane;
     /* 0x4F0C */ fopMsgM_pane_class mCur1Pane;
     /* 0x4F44 */ fopMsgM_pane_class mGsPanes[7];
-    /* 0x50CC */ STControl* mStControl;
+    /* 0x50CC */ STControl* stick;
     /* 0x50D0 */ JUTFont* mFont;
     /* 0x50D4 */ JUTFont* mRFont;
     /* 0x50D8 */ J2DPane* mMainWarpPane;
@@ -480,7 +479,8 @@ public:
     /* 0x02E */ u8 field_0x2E;
     /* 0x02F */ u8 field_0x2F;
     /* 0x030 */ u8 field_0x30;
-    /* 0x031 */ u8 padding_0x31[0x33 - 0x31];
+    /* 0x031 */ u8 field_0x31;
+    /* 0x032 */ u8 field_0x32;
     /* 0x033 */ u8 field_0x33;
     /* 0x034 */ u8 field_0x34;
     /* 0x035 */ u8 padding_0x35[0x36 - 0x35];
@@ -503,7 +503,12 @@ public:
     /* 0x04A */ s16 field_0x4A;
     /* 0x04C */ u8 padding_0x4C[0xE0 - 0x4C];
     /* 0x0E0 */ u8 field_0xE0;
-    /* 0x0E1 */ u8 padding_0xE1[0x11B - 0xE1];
+    /* 0x0E1 */ u8 padding_0xE1[0x110 - 0xE1];
+    /* 0x110 */ u8 field_0x110;
+    /* 0x111 */ u8 padding_0x111[0x118 - 0x111];
+    /* 0x118 */ u8 field_0x118;
+    /* 0x119 */ u8 field_0x119;
+    /* 0x11A */ u8 padding_0x11A[0x11B - 0x11A];
     /* 0x11B */ u8 field_0x11B;
     /* 0x11C */ u8 field_0x11C;
     /* 0x11D */ u8 field_0x11D;
