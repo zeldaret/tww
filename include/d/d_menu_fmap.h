@@ -6,13 +6,23 @@
 #include "d/d_lib.h"
 #include "d/d_menu_fmap_sv.h"
 #include "dolphin/types.h"
+#include "JSystem/JParticle/JPAEmitter.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_menu_fmap2.h"
 #include "f_op/f_op_msg_mng.h"
 
 class JUTFont;
 class J2DScreen;
-struct cursorTable_t;
+
+struct cursorTable_t {
+    /* 0x0 */ s8 gridX;
+    /* 0x1 */ s8 gridY;
+    /* 0x2 */ s8 no;
+    /* 0x3 */ s8 left;
+    /* 0x4 */ s8 right;
+    /* 0x5 */ s8 up;
+    /* 0x6 */ s8 down;
+};
 
 struct aramCmapDatPnt_t {
     s8 field_0x0;
@@ -137,11 +147,11 @@ public:
         fmapSv->zoomGridY = val;
     }
     void getCtDispMode() {}
-    void setCtDispMode(unsigned char) {}
+    void setCtDispMode(u8) {}
     void getCtFmapZoom() {}
-    void setCtFmapZoom(unsigned char) {}
-    void lineInter0to1(float, float, float) {}
-    void lineInter0to1ForU8(unsigned char, unsigned char, float) {}
+    void setCtFmapZoom(u8) {}
+    void lineInter0to1(f32, f32, f32) {}
+    void lineInter0to1ForU8(u8, u8, f32) {}
     void setFont(JUTFont* font, JUTFont* rfont) {
         mFont = font;
         mRFont = rfont;
@@ -170,21 +180,21 @@ public:
     void checkMarkCheck2();
     void checkMarkCheck3();
     bool isFmapClose();
-    void setPaneOnOff(J2DScreen*, unsigned long, bool);
-    void childPaneMoveSp(fopMsgM_pane_class*, fopMsgM_pane_class*, float, float, float);
-    BOOL selGridMaskAlphaCtrl(short, unsigned char, unsigned char, int);
-    BOOL fmapMaskAlphaCtrl(short, unsigned char, unsigned char, int);
+    void setPaneOnOff(J2DScreen*, u32, bool);
+    void childPaneMoveSp(fopMsgM_pane_class*, fopMsgM_pane_class*, f32, f32, f32);
+    BOOL selGridMaskAlphaCtrl(short, u8, u8, int);
+    BOOL fmapMaskAlphaCtrl(short, u8, u8, int);
     void selCursorInit();
     void selCursorHide();
     void selCursorMove();
     void islandNameChange();
-    void changeIslandName(unsigned char);
+    void changeIslandName(u8);
     void AreaTxtChg();
     void AreaTxtChgFast();
     void salvageGetItemChg();
     void salvageGetItemChange();
     void SalvItmDispChgFast();
-    void changeSalvageGetItem(unsigned char);
+    void changeSalvageGetItem(u8);
     void selCursorAnime();
     void zoomCursorInit();
     void zoomCursorAnime();
@@ -198,16 +208,16 @@ public:
     void aramCmapDatRead();
     void initCmapDatPnt(aramCmapDatPat_t*);
     aramCmapDatPnt_t* getGridNumToCmapDatPnt(int);
-    void setDispIslandPos(signed char, signed char);
-    void setIslandPos(fopMsgM_pane_class*, float, float);
-    void changeFmapTexture(signed char, signed char);
+    void setDispIslandPos(s8, s8);
+    void setIslandPos(fopMsgM_pane_class*, f32, f32);
+    void changeFmapTexture(s8, s8);
     void setDspNormalMapLink();
     void setDspLargeMapLink();
     void checkDspLargeMapLink();
     void checkDspLargeMapShip();
     void dispEndSalvageLargeMark();
     void setDspHugeMapLink();
-    void dispEndSalvageHugeMark(float, float);
+    void dispEndSalvageHugeMark(f32, f32);
     void checkDspHugeMapLink();
     void checkDspHugeMapShip();
     BOOL _open();
@@ -219,7 +229,7 @@ public:
     void FmapProcMain();
     void SelectGrid();
     void zoom1000x1000Init();
-    void zoomMapAlphaSet(signed char, signed char, fopMsgM_pane_class*, unsigned char);
+    void zoomMapAlphaSet(s8, s8, fopMsgM_pane_class*, u8);
     void ZoomGridLv1In();
     void ZoomGridLv1Proc();
     void zoom200x200Init();
@@ -233,12 +243,12 @@ public:
     void fmap2Open();
     void fmap2Move();
     void fmap2Close();
-    int paneTransBase(short, unsigned char, float, float, unsigned char, int);
-    BOOL paneTranceZoomMap(short, unsigned char, float, float, float, float, float, float, unsigned char, int);
-    BOOL paneTranceZoomMapAlpah(short, unsigned char, unsigned char, int);
-    BOOL paneTranceZoom2Map(short, unsigned char, float, float, float, float, float, float, unsigned char, int);
-    BOOL paneAlphaFmapCursor(fopMsgM_pane_class*, short, unsigned char, unsigned char, int);
-    BOOL PaneAlphaSelvageItem(short, unsigned char);
+    int paneTransBase(short, u8, f32, f32, u8, int);
+    BOOL paneTranceZoomMap(short, u8, f32, f32, f32, f32, f32, f32, u8, int);
+    BOOL paneTranceZoomMapAlpah(short, u8, u8, int);
+    BOOL paneTranceZoom2Map(short, u8, f32, f32, f32, f32, f32, f32, u8, int);
+    BOOL paneAlphaFmapCursor(fopMsgM_pane_class*, short, u8, u8, int);
+    BOOL PaneAlphaSelvageItem(short, u8);
     void gShipMarkAnimeInit();
     void gShipMarkAnime();
     bool _open_warpMode();
@@ -252,23 +262,23 @@ public:
     void wrapSelWinFadeOut();
     void wrapSelWarp();
     void warpAreaAnime0();
-    void paneTranceWarpMsg(fopMsgM_pane_class*, short, unsigned char, float, float, unsigned char, int);
-    void paneAlphaWarpMsgBack(short, unsigned char, unsigned char, int);
+    BOOL paneTranceWarpMsg(fopMsgM_pane_class*, short, u8, f32, f32, u8, int);
+    BOOL paneAlphaWarpMsgBack(short, u8, u8, int);
     void warpSelCursorMove();
     void warpSelCursorAnimeInit();
     void warpSelCursorAnime();
-    void getWarpAreaGridX(int);
-    void getWarpAreaGridY(int);
-    void getWarpAreaNo(const cursorTable_t*);
-    void getWarpAreaNoUp(const cursorTable_t*);
-    void getWarpAreaNoDown(const cursorTable_t*);
-    void getWarpAreaNoLeft(const cursorTable_t*);
-    void getWarpAreaNoRight(const cursorTable_t*);
-    void getWarpAreaTablePtr(signed char, signed char);
+    s8 getWarpAreaGridX(int);
+    s8 getWarpAreaGridY(int);
+    int getWarpAreaNo(const cursorTable_t*);
+    int getWarpAreaNoUp(const cursorTable_t*);
+    int getWarpAreaNoDown(const cursorTable_t*);
+    int getWarpAreaNoLeft(const cursorTable_t*);
+    int getWarpAreaNoRight(const cursorTable_t*);
+    const cursorTable_t* getWarpAreaTablePtr(s8, s8);
     void areaTextChangeAnimeInit();
     void areaTextChangeAnime();
-    void PaneAlphaAreaTxt(short, unsigned char, int);
-    void setDspWarpBackCornerColor(float);
+    void PaneAlphaAreaTxt(short, u8, int);
+    void setDspWarpBackCornerColor(f32);
     void setWrapBackEmitter(cXyz);
     void setWrapSpotEmitter(int, cXyz);
     bool _open_fishManMode();
@@ -278,10 +288,10 @@ public:
     void fmDispArea();
     void fmZoomGridLv1In();
     void fmZoomGridLv2In();
-    void islandNameSet(unsigned char);
+    void islandNameSet(u8);
     void fmMapWrite();
     void fmMapWait();
-    void paneAlphaZoom2Map(short, unsigned char, unsigned char, int);
+    void paneAlphaZoom2Map(short, u8, u8, int);
     void fmZoomGridLv2Out();
     void fmZoomGridLv1Out();
     void fmEndWait();
@@ -378,7 +388,7 @@ public:
     /* 0x50D0 */ JUTFont* mFont;
     /* 0x50D4 */ JUTFont* mRFont;
     /* 0x50D8 */ J2DPane* mMainWarpPane;
-    /* 0x50DC */ J2DPane* mWarpPanes[9];
+    /* 0x50DC */ JPABaseEmitter* mWarpPanes[9];
     /* 0x5100 */ u8 padding_0x5100[0x510C - 0x5100];
     /* 0x510C */ bool mMapClose;
     /* 0x510D */ u8 mSelCursorBufIdx;
@@ -397,8 +407,8 @@ public:
     /* 0x511B */ s8 mTargetGridY;
     /* 0x511C */ cXyz field_0x511C;
     /* 0x5128 */ cXyz field_0x5128;
-    /* 0x5134 */ float field_0x5134;
-    /* 0x5138 */ float field_0x5138;
+    /* 0x5134 */ f32 field_0x5134;
+    /* 0x5138 */ f32 field_0x5138;
     /* 0x513C */ bool mFullMapMode;
     /* 0x513D */ u8 mSalvItmBufIdx;
     /* 0x513E */ u8 mSalvItmTimer;
@@ -479,7 +489,19 @@ public:
     /* 0x03A */ u8 field_0x3A;
     /* 0x03B */ u8 field_0x3B;
     /* 0x03C */ u8 field_0x3C;
-    /* 0x03D */ u8 padding_0x3D[0xE0 - 0x3D];
+    /* 0x03D */ u8 padding_0x3D[0x3E - 0x3D];
+    /* 0x03E */ u8 field_0x3E;
+    /* 0x03F */ u8 field_0x3F;
+    /* 0x040 */ u8 field_0x40;
+    /* 0x041 */ u8 field_0x41;
+    /* 0x042 */ u8 field_0x42;
+    /* 0x043 */ u8 padding_0x43[0x44 - 0x43];
+    /* 0x044 */ s16 field_0x44;
+    /* 0x046 */ u8 field_0x46;
+    /* 0x047 */ u8 padding_0x47[0x49 - 0x47];
+    /* 0x049 */ u8 field_0x49;
+    /* 0x04A */ s16 field_0x4A;
+    /* 0x04C */ u8 padding_0x4C[0xE0 - 0x4C];
     /* 0x0E0 */ u8 field_0xE0;
     /* 0x0E1 */ u8 padding_0xE1[0x11B - 0xE1];
     /* 0x11B */ u8 field_0x11B;
