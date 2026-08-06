@@ -26,7 +26,7 @@ public:
     void setMtx(bool);
     s32 bckResID(int);
     s32 btpResID(int);
-    BOOL setBtp(signed char, bool);
+    bool setBtp(signed char, bool);
     bool init_texPttrnAnm(signed char, bool);
     void play_btp_anm();
     void setAnm_anm(anm_prm_c*);
@@ -43,7 +43,7 @@ public:
     u32 getMsg();
     void eventOrder();
     void checkOrder();
-    BOOL chk_talk();
+    bool chk_talk();
     fopAc_ac_c* searchByID(fpc_ProcID, int*);
     BOOL srch_Tsubo();
     void create_rupee(cXyz, int);
@@ -83,11 +83,11 @@ public:
     void endEvent();
     s32 isEventEntry();
     void event_proc(int);
-    void set_action(ActionFunc, void*);
+    BOOL set_action(ActionFunc, void*);
     void setStt(signed char);
     void set_pthPoint(unsigned char);
     s16 chk_tsubo();
-    void orderTsuboEvent();
+    BOOL orderTsuboEvent();
     BOOL wait_1();
     BOOL walk_1();
     BOOL talk_1();
@@ -142,13 +142,13 @@ public:
     /* 0x78E */ s16 m78E;
     /* 0x790 */ s16 m790;
     /* 0x792 */ s16 m792;
-    /* 0x794 */ u8 m794;
-    /* 0x795 */ u8 field_0x795[0x79A - 0x795];
+    /* 0x794 */ s16 m794;
+    /* 0x795 */ u8 field_0x796[0x79A - 0x796];
     /* 0x79A */ s16 m79A;
     /* 0x79C */ s8 m79C;
     /* 0x79D */ u8 m79D;
     /* 0x79E */ u8 m79E;
-    /* 0x79F */ s8 m79F;
+    /* 0x79F */ u8 m79F;
     /* 0x7A0 */ u8 m7A0;
     /* 0x7A1 */ u8 m7A1;
     /* 0x7A2 */ u8 field_0x7A2[0x7A3 - 0x7A2];
@@ -173,14 +173,14 @@ public:
     /* 0x7EE */ s16 m7EE;
     /* 0x7F0 */ u16 m7F0;
     // /* 0x7F1 */ u8 field_0x7F1[0x7F2 - 0x7F1];
-    /* 0x7F2 */ u8 m7F2;
+    /* 0x7F2 */ s8 m7F2;
     /* 0x7F3 */ u8 m7F3;
     /* 0x7F4 */ u8 m7F4;
     /* 0x7F5 */ s8 m7F5;
     /* 0x7F6 */ s8 m7F6;
     /* 0x7F7 */ s8 m7F7;
     /* 0x7F8 */ s8 m7F8;
-    /* 0x7F9 */ u8 m7F9;
+    /* 0x7F9 */ s8 m7F9;
     /* 0x7FA */ s8 mLookBackState;
     /* 0x7FB */ s8 m7FB;
     /* 0x7FC */ s8 m7FC;
@@ -219,7 +219,7 @@ public:
 public:
     s8 m0;
     s32 m4;
-    hio_prm_c m8[3];
+    hio_prm_c m8;
     /* Place member variables here */
 };
 
