@@ -1512,8 +1512,8 @@ void dMsg_numberInput(sub_msg_class* i_Msg) {
     numberPane[2]->setString(num_str[dComIfGp_getMessageSetNumber() / 100]);
     numberPane[1]->setString(num_str[(dComIfGp_getMessageSetNumber() % 100) / 10]);
     numberPane[0]->setString(num_str[dComIfGp_getMessageSetNumber() % 10]);
-    daNpc_Bs1_c::m_tag_buy_item = dComIfGp_getMessageSetNumber();
-    if (((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (fopMsgM_checkMessageSend())) {
+    daNpc_Bs1_c::setBuyItem(dComIfGp_getMessageSetNumber());
+    if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || fopMsgM_checkMessageSend()) {
         dMsg_setCancelMode(i_Msg);
     } else {
         dMeter_Info.field_0x0 = 3;
