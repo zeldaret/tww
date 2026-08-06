@@ -47,7 +47,6 @@ public:
 
 /* 000000EC-00000150       .text __ct__15daNpc_Ba1_HIO_cFv */
 daNpc_Ba1_HIO_c::daNpc_Ba1_HIO_c() {
-    /* Nonmatching */
     static hio_prm_c a_prm_tbl = {
         /* mMaxHeadX         */ 0x1554,
         /* mMaxHeadY         */ 0x2000,
@@ -120,7 +119,6 @@ static bool daNpc_Ba1_XyCheck_cB(void* i_this, int i_itemBtn) {
 
 /* 00000408-00000428       .text XyCheck_cB__11daNpc_Ba1_cFi */
 bool daNpc_Ba1_c::XyCheck_cB(int i_itemBtn) {
-    /* Nonmatching */
     if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_FAIRY_BOTTLE_e) {
         return TRUE;
     }
@@ -157,26 +155,25 @@ bool daNpc_Ba1_c::init_BA1_0() {
 
 /* 000004F8-000005F4       .text init_BA1_1__11daNpc_Ba1_cFv */
 bool daNpc_Ba1_c::init_BA1_1() {
-    // This int + bool thing is weird, but can't get it to match without ...
-    int res;
+    BOOL res;
     bool ret;
     res = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520);
     ret = res == 0;
-    if(!ret) { // weird, but couldn't get it to match without this ...
+    if(!ret) {
         return ret;
-    } else {
-        res = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001);
-        ret = res;
-        if(ret) {
-            if(dComIfGs_checkCollect(1)) {
-                current.pos.set(-290.f, 0.f, 110.f);
-                current.angle.y = 0;
-            }
-            set_action(&daNpc_Ba1_c::wait_action2, NULL);
-            fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
-            mpClothModel = 0;
-        }
     }
+    res = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001);
+    ret = res;
+    if(ret) {
+        if(dComIfGs_checkCollect(1)) {
+            current.pos.set(-290.f, 0.f, 110.f);
+            current.angle.y = 0;
+        }
+        set_action(&daNpc_Ba1_c::wait_action2, NULL);
+        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
+        mpClothModel = 0;
+    }
+
     return ret;
 }
 
@@ -189,47 +186,45 @@ bool daNpc_Ba1_c::init_BA1_2() {
 
 /* 00000648-00000734       .text init_BA1_3__11daNpc_Ba1_cFv */
 bool daNpc_Ba1_c::init_BA1_3() {
-    /* Nonmatching */
-    int res; // Same as init_1
+    BOOL res;
     bool ret;
     res = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520);
     ret = res;
     if(!ret) {
         return ret;
-    } else {
-        res = dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED);
-        ret = res ==0;
-        if(ret) {
-            attention_info.distances[1] = 0x1B;
-            attention_info.distances[3] = 0x1C;
-            actor_status &= ~0x180; // Fakematch, didn't find a fitting accessor that would match
-            set_action(&daNpc_Ba1_c::wait_action3, NULL);
-            gravity = 0.f;
-            eventInfo.setXyCheckCB((dEvt_info_c::CallbackFunc)&daNpc_Ba1_XyCheck_cB);
-            eventInfo.setXyEventCB(&daNpc_Ba1_XyEvent_cB);
-        } 
-    } 
+    }
+    res = dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED);
+    ret = res ==0;
+    if(ret) {
+        attention_info.distances[1] = 0x1B;
+        attention_info.distances[3] = 0x1C;
+        fopAcM_OffStatus(this, fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e);
+        set_action(&daNpc_Ba1_c::wait_action3, NULL);
+        gravity = 0.f;
+        eventInfo.setXyCheckCB((dEvt_info_c::CallbackFunc)&daNpc_Ba1_XyCheck_cB);
+        eventInfo.setXyEventCB(&daNpc_Ba1_XyEvent_cB);
+    }
+
     return ret;
 }
 
 /* 00000734-000007E8       .text init_BA1_4__11daNpc_Ba1_cFv */
 bool daNpc_Ba1_c::init_BA1_4() {
     // Same as 1 and 3
-    int res;
+    BOOL res;
     bool ret;
     res = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520);
     ret = res;
     if (!ret) {
         return ret;
-    }else {
-        res = dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED);
-        ret = res;
-        if(ret) {
-            mpClothModel = 0;
-            set_action(&daNpc_Ba1_c::wait_action4, NULL);
-        }
     }
-    
+    res = dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED);
+    ret = res;
+    if(ret) {
+        mpClothModel = 0;
+        set_action(&daNpc_Ba1_c::wait_action4, NULL);
+    }
+
     return ret;
 }
 
@@ -248,23 +243,23 @@ bool daNpc_Ba1_c::createInit() {
     bool init_success;
     switch (mSpecificType) {
         case 0:
-        init_success = init_BA1_0();
-        break;
+            init_success = init_BA1_0();
+            break;
         case 1:
-        init_success = init_BA1_1();
-        break;
+            init_success = init_BA1_1();
+            break;
         case 2:
-        init_success = init_BA1_2();
-        break;
+            init_success = init_BA1_2();
+            break;
         case 3:
-        init_success = init_BA1_3();
-        break;
+            init_success = init_BA1_3();
+            break;
         case 4:
-        init_success = init_BA1_4();
-        break;
+            init_success = init_BA1_4();
+            break;
         default:
-        init_success = false;
-        break;
+            init_success = false;
+            break;
     }
     if (init_success) {
         m78A = current.angle;
@@ -419,7 +414,6 @@ BOOL daNpc_Ba1_c::setAnm_anm(daNpc_Ba1_c::anm_prm_c* i_anmPrmP) {
 
 /* 00000E34-00000EA0       .text setAnm_NUM__11daNpc_Ba1_cFii */
 void daNpc_Ba1_c::setAnm_NUM(int i_param_1, int i_param_2) {
-    /* Nonmatching */
     static anm_prm_c a_anm_prm_tbl[11] = {
         {0, 0, 0, 8, 1, J3DFrameCtrl::EMode_LOOP},
         {1, 0, 0, 8, 1, J3DFrameCtrl::EMode_LOOP},
@@ -441,7 +435,6 @@ void daNpc_Ba1_c::setAnm_NUM(int i_param_1, int i_param_2) {
 
 /* 00000EA0-00000F20       .text setAnm__11daNpc_Ba1_cFv */
 bool daNpc_Ba1_c::setAnm() {
-    /* Nonmatching */
     static anm_prm_c a_anm_prm_tbl[8] = {
         {-1, -1, 0, 0, 0, -1},
         {0, 0, 0, 8, 1, J3DFrameCtrl::EMode_LOOP},
@@ -605,20 +598,12 @@ bool daNpc_Ba1_c::chk_talk() {
 
 /* 000012E8-0000137C       .text chk_drct__11daNpc_Ba1_cFf */
 bool daNpc_Ba1_c::chk_drct(float i_param_1) {
-#if VERSION == VERSION_DEMO
     s16 target = cLib_targetAngleY(
         &current.pos,
         &dComIfGp_getPlayer(0)->current.pos
     ) - current.angle.y;
     int cmp = abs(target);
     return cmp < cM_deg2s(i_param_1);
-#else
-    s16 target = cLib_targetAngleY(
-        &current.pos,
-        &dComIfGp_getPlayer(0)->current.pos
-    ) - current.angle.y;
-    return abs(target) < cM_deg2s(i_param_1);
-#endif
 }
 
 /* 0000137C-000013BC       .text chk_partsNotMove__11daNpc_Ba1_cFv */
@@ -648,24 +633,24 @@ void daNpc_Ba1_c::lookBack() {
     
     switch(mLookBackState){
         case 1:
-        dstPos = dNpc_playerEyePos(-20.0f);
-        dstPos_p = &dstPos;
-        src_pos.x = current.pos.x;
-        src_pos.y = current.pos.y;
-        src_pos.z = current.pos.z;
-        src_pos.y = eyePos.y;
-        break;
+            dstPos = dNpc_playerEyePos(-20.0f);
+            dstPos_p = &dstPos;
+            src_pos.x = current.pos.x;
+            src_pos.y = current.pos.y;
+            src_pos.z = current.pos.z;
+            src_pos.y = eyePos.y;
+            break;
         case 2:
-        dstPos.set(m79C);
-        dstPos_p = &dstPos;
-        src_pos.x = current.pos.x;
-        src_pos.y = current.pos.y;
-        src_pos.z = current.pos.z;
-        src_pos.y = eyePos.y;
-        break;
+            dstPos.set(m79C);
+            dstPos_p = &dstPos;
+            src_pos.x = current.pos.x;
+            src_pos.y = current.pos.y;
+            src_pos.z = current.pos.z;
+            src_pos.y = eyePos.y;
+            break;
         case 3:
-        desiredYrot = mTargetYRot;
-        break;
+            desiredYrot = mTargetYRot;
+            break;
     }
     cLib_addCalcAngleS2(&mLookAtMaxVel,l_HIO.mPrmTbl.mCalcAngleTarget,4,0x800);
     if(!m_jnt.trnChk()){
@@ -688,11 +673,7 @@ u16 daNpc_Ba1_c::next_msgStatus(unsigned long* i_msg_no) {
             *i_msg_no = 0x7F4;
             break;
         case 0x7F4:
-        // Moving this case bellow the goto 
-        // (thus removing the need for the label) 
-        // does not match ...
-        // Maybe a missing inline ?
-        noBottle: 
+        neverGotSoup: 
             if(dComIfGs_checkEmptyBottle()) {
                 *i_msg_no = 0x7F5;
             } else {
@@ -706,26 +687,26 @@ u16 daNpc_Ba1_c::next_msgStatus(unsigned long* i_msg_no) {
         case 0x7FC:
         case 0x7FD:
         case 0x7FA:
-            if(dComIfGs_isGetBottleItem(0x55)) {
+            if(dComIfGs_isGetBottleItem(dItemNo_SOUP_BOTTLE_e)) {
                 if(!dComIfGs_checkEmptyBottle()) {
                     *i_msg_no = 0x803;
                 }
-                else if(dComIfGs_checkBottle(0x55)) {
+                else if(dComIfGs_checkBottle(dItemNo_SOUP_BOTTLE_e)) {
                     *i_msg_no = 0x7FE;
                 } else {
                     *i_msg_no = 0x7FF;
                 }
                 break;
             }
-            goto noBottle; // I don't like this ...
+            goto neverGotSoup; // I don't like this ...
         case 0x7FF:
             switch(mpCurrMsg->mSelectNum) {
                 case 0:
-                *i_msg_no = 0x800;
-                break;
+                    *i_msg_no = 0x800;
+                    break;
                 case 1:
-                *i_msg_no = 0x802;
-                break;
+                    *i_msg_no = 0x802;
+                    break;
             }
             break;
         default:
@@ -740,12 +721,10 @@ u32 daNpc_Ba1_c::getMsg_BA1_0() {
     if (m7FA) {
         return 0x7d8;
     }
-    else if (mbHoldEvent) {
+    if (mbHoldEvent) {
         return dComIfGs_isEventBit(dSv_event_flag_c::UNK_0608) ? 0x7e7 : 0x7e6;
     }
-    else {
-        return m7FB ? 0x7e5 : 0x7e4;
-    }
+    return m7FB ? 0x7e5 : 0x7e4;
 }
 
 /* 00001738-00001818       .text getMsg_BA1_1__11daNpc_Ba1_cFv */
@@ -757,57 +736,47 @@ u32 daNpc_Ba1_c::getMsg_BA1_1() {
         return dComIfGs_isEventBit(dSv_event_flag_c::UNK_0740) ? 0x7ee : 0x7ef;
         
     }
-    else {
-        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0780)) {
-            return 0x7ed;
-        }
-        else {
-            if (dComIfGs_checkCollect(0)) {
-                return dComIfGs_isEventBit(dSv_event_flag_c::UNK_0602) ? 0x7ea : 0x7eb;
-            }
-            else {
-                return dComIfGs_isEventBit(dSv_event_flag_c::UNK_0601) ? 0x7e9 : 0x7e8;
-            }
-        }
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0780)) {
+        return 0x7ed;
     }
+    if (dComIfGs_checkCollect(0)) {
+        return dComIfGs_isEventBit(dSv_event_flag_c::UNK_0602) ? 0x7ea : 0x7eb;
+    }
+    return dComIfGs_isEventBit(dSv_event_flag_c::UNK_0601) ? 0x7e9 : 0x7e8;
+
 }
 
 /* 00001818-00001908       .text getMsg_BA1_3__11daNpc_Ba1_cFv */
 u32 daNpc_Ba1_c::getMsg_BA1_3() {
-    /* Nonmatching */
-    
+
     if (m7F0) {
         if (dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED)) {
             return 0x801;
         }
         return 0x7f6;
     }
-    else {
-        if (dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED)) {
-            
+
+    if (dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED)) {
+        
 #if VERSION > VERSION_JPN
-            dComIfGs_setEventReg(dSv_event_flag_c::UNK_A60F, 0);
-            if(m7F2 >= 3) {
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_A60F, 0);
+        if(m7F2 >= 3) {
 #else
-            if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_A60F) >= 3) {
+        if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_A60F) >= 3) {
 #endif
-                if (m7FA) {
-                    return 0x7fd;
-                }
-                m7FA = true;
-                return 0x7fc;
-            } else {
-                if (m7FA) {
-                    return 0x7fa;
-                }
-                m7FA = true;
-                return 0x7fb;
+            if (m7FA) {
+                return 0x7fd;
             }
+            m7FA = true;
+            return 0x7fc;
+        } 
+        if (m7FA) {
+            return 0x7fa;
         }
-        else {
-            return 0x7f1;
-        }
+        m7FA = true;
+        return 0x7fb;
     }
+    return 0x7f1;
 }
 
 /* 00001908-00001928       .text getMsg_BA1_4__11daNpc_Ba1_cFv */
@@ -840,28 +809,20 @@ bool daNpc_Ba1_c::chkAttention() {
     dAttention_c& attention = dComIfGp_getAttention();
     if (attention.LockonTruth()) {
         return this == attention.LockonTarget(0);
-    } else {
-        return this == attention.ActionTarget(0);
     }
+    return this == attention.ActionTarget(0);
 }
 
 /* 00001A2C-00001A94       .text setAttention__11daNpc_Ba1_cFb */
 void daNpc_Ba1_c::setAttention(bool i_setEyePos) {
 
-#if VERSION == VERSION_DEMO
     f32 offset = l_HIO.mPrmTbl.mAttPosOffsetY;
-        attention_info.position.set(
+    attention_info.position.set(
         current.pos.x,
         current.pos.y + offset,
         current.pos.z
     );
-#else
-    attention_info.position.set(
-        current.pos.x,
-        current.pos.y + l_HIO.mPrmTbl.mAttPosOffsetY,
-        current.pos.z
-    );
-#endif
+
     
     if (!mbSetEyePos && !i_setEyePos) {
         return;
@@ -1019,11 +980,11 @@ void daNpc_Ba1_c::eInit_ACTOR_DRW_CONTROL_(int* i_param_1, int* i_param_2) {
         daPy_py_c* player = daPy_getPlayerActorClass();
         switch (*i_param_1) {
             case 0:
-            player->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
-            break;
+                player->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                break;
             case 1:
-            player->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
-            break;
+                player->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                break;
         }
         
     }
@@ -1031,25 +992,25 @@ void daNpc_Ba1_c::eInit_ACTOR_DRW_CONTROL_(int* i_param_1, int* i_param_2) {
         cXyz tmp;
         switch (*i_param_2) {
             case 0:
-            m7F7 = 1;
-            break;
+                m7F7 = 1;
+                break;
             case 1:
-            m7F7 = 0;
-            break;
+                m7F7 = 0;
+                break;
             case 2:
-            setAnm_NUM( 10, 1);
-            m7F7 = 1;
-            return;
+                setAnm_NUM( 10, 1);
+                m7F7 = 1;
+                return;
             case 3:
-            current.angle.y = cLib_targetAngleY(&current.pos,  &dComIfGp_getPlayer(0)->current.pos);
-            attention_info.distances[1] = 0xAB;
-            attention_info.distances[3] = 0xAB;
-            tmp.set(0, 0, 90);
-            mDoMtx_stack_c::transS(current.pos);
-            mDoMtx_stack_c::YrotM(current.angle.y);
-            mDoMtx_stack_c::multVec(&tmp, &current.pos);
-            m7F7 = 0;
-            break;
+                current.angle.y = cLib_targetAngleY(&current.pos,  &dComIfGp_getPlayer(0)->current.pos);
+                attention_info.distances[1] = 0xAB;
+                attention_info.distances[3] = 0xAB;
+                tmp.set(0, 0, 90);
+                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::YrotM(current.angle.y);
+                mDoMtx_stack_c::multVec(&tmp, &current.pos);
+                m7F7 = 0;
+                break;
         }
     }
 }
@@ -1069,7 +1030,6 @@ void daNpc_Ba1_c::eInit_CHK_FAIRY_(int* i_param_1) {
 
 /* 000020E8-000020F8       .text eInit_prmFloat__11daNpc_Ba1_cFPff */
 f32 daNpc_Ba1_c::eInit_prmFloat(float* i_param_1, float i_param_2) {
-    /* Nonmatching */
     if (i_param_1 != NULL) {
         return *i_param_1;
     }
@@ -1093,7 +1053,6 @@ void daNpc_Ba1_c::eInit_CHK_FAIRY_MOV_1(int* i_param_1) {
 
 /* 00002188-00002358       .text event_actionInit__11daNpc_Ba1_cFi */
 void daNpc_Ba1_c::event_actionInit(int i_staff_idx) {
-    /* Nonmatching */
     int *act_no_p;
     int *prm_0_p;
     int *prm_1_p;
@@ -1110,39 +1069,38 @@ void daNpc_Ba1_c::event_actionInit(int i_staff_idx) {
         mActNo = *act_no_p;
         switch (mActNo) {
             case 0:
-            setAnm_NUM(9, 1);
-            break;
+                setAnm_NUM(9, 1);
+                break;
             case 1:
-            eInit_SET_PLYER_GOL_();
-            break;
+                eInit_SET_PLYER_GOL_();
+                break;
             case 2:
-            eInit_PLYER_INI_POS_();
-            break;
+                eInit_PLYER_INI_POS_();
+                break;
             case 3:
-            eInit_USE_FAIRY_END_();
-            break;
+                eInit_USE_FAIRY_END_();
+                break;
             case 4:
-            eInit_MOV_POS_();
-            break;
+                eInit_MOV_POS_();
+                break;
             case 5:
-            eInit_SET_PLYER_TRN_ANG_();
-            break;
+                eInit_SET_PLYER_TRN_ANG_();
+                break;
             case 6:
-            eInit_ACTOR_DRW_CONTROL_(prm_0_p,prm_1_p);
-            break;
+                eInit_ACTOR_DRW_CONTROL_(prm_0_p,prm_1_p);
+                break;
             case 7:
-            eInit_CHK_FAIRY_(timer_p);
-            break;
+                eInit_CHK_FAIRY_(timer_p);
+                break;
             case 8:
-            eInit_SET_EYE_OFF_(atten_p);
-            break;
+                eInit_SET_EYE_OFF_(atten_p);
+                break;
             case 9:
-            eInit_EYE_OFF_ZRO_(speed_p);
-            break;
+                eInit_EYE_OFF_ZRO_(speed_p);
+                break;
             case 10:
-            eInit_CHK_FAIRY_MOV_1(timer_p);
-            break;
-            
+                eInit_CHK_FAIRY_MOV_1(timer_p);
+                break;
         }
     }
 }
@@ -1155,34 +1113,32 @@ bool daNpc_Ba1_c::eMove_MOV_POS_() {
     temp.set(503, 0, -91);
     if(cLib_calcTimer(&mEvTimer)) {
         return FALSE;
-    } else {
-        if((int)mEyeOffset != 0) {
-            cLib_chaseF(&mEyeOffset, 0.0f, 2.0f);
-            return FALSE;
-            
-        } else {
-            f32 mag = std::sqrtf((temp - current.pos).abs2XZ());
-            ret = mag < 4.0f;
-            m78A.y = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
-            m7F5 = true;
-            if(ret != 0) {
-                current.angle.y = m78A.y;
-                m7F5 = false;
-                speedF = 0.0;
-                mEyeOffset = 0.0;
-            } else {
-                cLib_addCalcAngleS(
-                    &current.angle.y,
-                    cLib_targetAngleY(&current.pos, &temp),
-                    4,
-                    0x400,
-                    0
-                );
-                cLib_chaseF(&speedF, 4.0f, 0.4f);
-            }
-            return ret;
-        }
+    } 
+    if((int)mEyeOffset != 0) {
+        cLib_chaseF(&mEyeOffset, 0.0f, 2.0f);
+        return FALSE;
+        
     }
+    f32 mag = std::sqrtf((temp - current.pos).abs2XZ());
+    ret = mag < 4.0f;
+    m78A.y = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
+    m7F5 = true;
+    if(ret != 0) {
+        current.angle.y = m78A.y;
+        m7F5 = false;
+        speedF = 0.0;
+        mEyeOffset = 0.0;
+    } else {
+        cLib_addCalcAngleS(
+            &current.angle.y,
+            cLib_targetAngleY(&current.pos, &temp),
+            4,
+            0x400,
+            0
+        );
+        cLib_chaseF(&speedF, 4.0f, 0.4f);
+    }
+    return ret;
 }
 
 /* 00002518-00002574       .text eMove_CHK_FAIRY___11daNpc_Ba1_cFv */
@@ -1219,12 +1175,8 @@ bool daNpc_Ba1_c::eMove_CHK_FAIRY_MOV_1() {
             daNpc_Fa1_c * actor_fa;
             actor_fa = (daNpc_Fa1_c*) searchByID(mPartnerProcID);
             if(actor_fa != NULL) {
-#if VERSION == VERSION_DEMO
                 u32 res = (actor_fa->getMode() == daNpc_Fa1_c::Mode_BOTTLE_BABA_MOVE_e);
                 ret = res !=0;
-#else
-                ret = actor_fa->getMode() == daNpc_Fa1_c::Mode_BOTTLE_BABA_MOVE_e;
-#endif
             }
         }
     }
@@ -1239,17 +1191,17 @@ bool daNpc_Ba1_c::event_action() {
     bool ret;
     switch(mActNo) {
         case 4:
-        ret =  eMove_MOV_POS_();
-        break;
+            ret =  eMove_MOV_POS_();
+            break;
         case 7:
-        ret = eMove_CHK_FAIRY_();
-        break;
+            ret = eMove_CHK_FAIRY_();
+            break;
         case 9:
-        ret = eMove_EYE_OFF_ZRO_();
-        break;  
+            ret = eMove_EYE_OFF_ZRO_();
+            break;  
         case 10:
-        ret = eMove_CHK_FAIRY_MOV_1();
-        break;
+            ret = eMove_CHK_FAIRY_MOV_1();
+            break;
         case 1:
         case 2:
         case 3:
@@ -1258,8 +1210,8 @@ bool daNpc_Ba1_c::event_action() {
         case 8:
         case 0:
         default:
-        ret = true;
-        break;
+            ret = true;
+            break;
     }
     return ret;
 }
@@ -1276,7 +1228,6 @@ void daNpc_Ba1_c::cut_init_START_TALE1(int i_staff_idx) {
 
 /* 00002764-00002820       .text cut_move_START_TALE1__11daNpc_Ba1_cFv */
 bool daNpc_Ba1_c::cut_move_START_TALE1() {
-    /* Nonmatching */
     if(cLib_calcTimer(&mEvTimer) == 0) {
         if(dComIfGs_getClearCount() != 0) {
             dComIfGp_setNextStage(
@@ -1321,23 +1272,23 @@ void daNpc_Ba1_c::privateCut(int i_staff_idx) {
             if (dComIfGp_evmng_getIsAddvance(i_staff_idx)) {
                 switch(mActionIndex){
                     case 0:
-                    event_actionInit(i_staff_idx);
-                    break;
+                        event_actionInit(i_staff_idx);
+                        break;
                     case 1:
-                    cut_init_START_TALE1(i_staff_idx);
+                        cut_init_START_TALE1(i_staff_idx);
                 }
             }
             bool endCut;
             switch (mActionIndex) {
                 case 0:
-                endCut = event_action();
-                break;
+                    endCut = event_action();
+                    break;
                 case 1:
-                endCut = cut_move_START_TALE1();
-                break;
+                    endCut = cut_move_START_TALE1();
+                    break;
                 default:
-                endCut = true;
-                break;
+                    endCut = true;
+                    break;
             }
             if(endCut) {
                 dComIfGp_evmng_cutEnd(i_staff_idx);
@@ -1360,7 +1311,6 @@ BOOL daNpc_Ba1_c::isEventEntry() {
 
 /* 000029A0-00002B50       .text event_proc__11daNpc_Ba1_cFi */
 void daNpc_Ba1_c::event_proc(int i_staff_idx) {
-    /* Nonmatching */
     if (dComIfGp_evmng_endCheck(mEventIdTable[mEventIdx])) {
         switch(mEventIdx){
             case 0:
@@ -1478,7 +1428,6 @@ BOOL daNpc_Ba1_c::wait_0() {
 
 /* 00002E30-00002F70       .text wait_1__11daNpc_Ba1_cFv */
 BOOL daNpc_Ba1_c::wait_1() {
-    /* Nonmatching */
     cLib_addCalcAngleS(
         &current.angle.y,
         mInitialAngle.y,
@@ -1606,26 +1555,20 @@ BOOL daNpc_Ba1_c::wait_2() {
             dComIfGp_setNextStage("LinkRM",201,0,9,0.0,0,1,0);
             return 1;
         }
-        else {
-            if (chk_talk()) {
-                setStt(2);
-                mHeadOnlyFollow = false;
-            }
-            return 1;
+
+        if (chk_talk()) {
+            setStt(2);
+            mHeadOnlyFollow = false;
         }
-    }
-    
-    else if (!dComIfGs_checkCollect(1) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3202)) {
+        return 1;
+    } else if (!dComIfGs_checkCollect(1) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3202)) {
         current.pos.x = -290.0;
         current.pos.y = 0.0;
         current.pos.z = 110.0;
         current.angle.y = -0x8000;
         mInitialPos.set(current.pos);
 
-        // Maybe missing a .set(CsXyz) inline function
-        mInitialAngle.x = current.angle.x;
-        mInitialAngle.y = current.angle.y;
-        mInitialAngle.z = current.angle.z;
+        mInitialAngle = current.angle;
         if ((dComIfGp_getPlayer(0)->current.pos.y - current.pos.y) < 1.0f) {
             m812 = 1;
             m7FF = 1;
@@ -1635,18 +1578,16 @@ BOOL daNpc_Ba1_c::wait_2() {
         m_jnt.setTrn();
         return 1;
     }
-    else {
-        m812 = 2;
-        if (mbAttention) {
-            mEvTimer2 = 60;
-        }
-        if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0)) {
-            mLookBackState = 1;
-        } else {
-            mLookBackState = 3;
-            mTargetYRot = mInitialAngle.y;
-            m_jnt.setTrn();
-        }
+    m812 = 2;
+    if (mbAttention) {
+        mEvTimer2 = 60;
+    }
+    if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0)) {
+        mLookBackState = 1;
+    } else {
+        mLookBackState = 3;
+        mTargetYRot = mInitialAngle.y;
+        m_jnt.setTrn();
     }
     return 1;
 }
@@ -1666,31 +1607,30 @@ BOOL daNpc_Ba1_c::ZZZwai() {
       m812 = 4;
       return 1;
     }
-    else if (m809) {
+    if (m809) {
         if (chk_talk()) {
             setStt(5);
         }
         return 1;
     }
-    else {
-        if (dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED)) {
-            m812 = 2;
-            if (mbAttention) {
-                mEvTimer2 = 60;
-            }
-            if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0)) {
-                mLookBackState = 1;
-            } else {
-                mLookBackState = 3;
-                mTargetYRot = mInitialAngle.y;
-                m_jnt.setTrn();
-            }
+
+    if (dComIfGs_isEventBit(dSv_event_flag_c::GRANDMA_HEALED)) {
+        m812 = 2;
+        if (mbAttention) {
+            mEvTimer2 = 60;
         }
-        else {
-            m812 = 0;
-            if (check_useFairyArea()) {
-                m812 = 2;
-            }
+        if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0)) {
+            mLookBackState = 1;
+        } else {
+            mLookBackState = 3;
+            mTargetYRot = mInitialAngle.y;
+            m_jnt.setTrn();
+        }
+    }
+    else {
+        m812 = 0;
+        if (check_useFairyArea()) {
+            m812 = 2;
         }
     }
     return 1;
@@ -1738,8 +1678,7 @@ BOOL daNpc_Ba1_c::wait_action1(void*) {
             lookBack();
         default:
         case 9:
-
-        break;
+            break;
         
 
     }
@@ -1989,7 +1928,7 @@ BOOL daNpc_Ba1_c::_execute() {
     }
     eventOrder();
     setMtx(false);
-#if VERSION == VERSION_DEMO
+
     if(!mbInDemo && !m7FE){
         f32 radius = 50;
         f32 height = 110.0;
@@ -2001,18 +1940,7 @@ BOOL daNpc_Ba1_c::_execute() {
             height
         );
     }
-#else
-    if(!mbInDemo && !m7FE){
-        f32 radius = 50;
-        if(m7FD) {
-            radius = 30;
-        }
-        setCollision(
-            radius,
-            110.0f
-        );
-    }
-#endif
+
     return TRUE;
 }
 
@@ -2050,13 +1978,8 @@ cPhs_State daNpc_Ba1_c::_create() {
     if(state != cPhs_COMPLEATE_e) {
         return state;
     } 
-#if VERSION == VERSION_DEMO
-    u32 tmp = fpcM_GetParam(this) & 0xFF;
-    if(!charDecide(tmp)) 
-#else
-    if(!charDecide(fpcM_GetParam(this) & 0xFF)) 
-#endif
-    {
+    u32 tmp = fopAcM_GetParam(this) & 0xFF;
+    if(!charDecide(tmp)) {
         return cPhs_ERROR_e;
     }
     #if VERSION == VERSION_DEMO
@@ -2077,7 +2000,7 @@ cPhs_State daNpc_Ba1_c::_create() {
 
 /* 000043E8-00004658       .text create_Anm__11daNpc_Ba1_cFv */
 J3DModelData* daNpc_Ba1_c::create_Anm() {
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ba",10);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ba",dRes_ID_BA_BDL_BA_e);
     JUT_ASSERT(VERSION_SELECT(0xB0C, 0xB0B, 0xB0C, 0xB0C),a_mdl_dat != NULL);
     mpMorf = new mDoExt_McaMorf(
         a_mdl_dat,
@@ -2085,7 +2008,7 @@ J3DModelData* daNpc_Ba1_c::create_Anm() {
         NULL,
         (J3DAnmTransform*)dComIfG_getObjectIDRes(
             "Ba", 
-            7
+            dRes_ID_BA_BCK_WAIT01_e
         ),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
@@ -2098,7 +2021,8 @@ J3DModelData* daNpc_Ba1_c::create_Anm() {
     );
     if(mpMorf == NULL ){
         return NULL;
-    }else if(mpMorf->getModel() == NULL){
+    }
+    if(mpMorf->getModel() == NULL){
         mpMorf = NULL;
         return NULL;
     }
@@ -2116,7 +2040,7 @@ J3DModelData* daNpc_Ba1_c::create_Anm() {
 /* 00004658-00004714       .text create_itm_Mdl__11daNpc_Ba1_cFv */
 bool daNpc_Ba1_c::create_itm_Mdl() {
     mpClothModel = NULL;
-    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ba",9);
+    J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Ba",dRes_ID_BA_BDL_BA_CLOTH_e);
     JUT_ASSERT(VERSION_SELECT(0xB38, 0xB37, 0xB38, 0xB38),a_mdl_dat != NULL);
     mpClothModel = mDoExt_J3DModel__create(a_mdl_dat,0x80000,0x11000002);
     return true;
@@ -2124,7 +2048,6 @@ bool daNpc_Ba1_c::create_itm_Mdl() {
 
 /* 00004714-0000485C       .text CreateHeap__11daNpc_Ba1_cFv */
 BOOL daNpc_Ba1_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* modeldat;
     J3DModelData* anm_model = create_Anm();
     if(!anm_model) {
@@ -2154,10 +2077,9 @@ BOOL daNpc_Ba1_c::CreateHeap() {
             NULL
         );
         return 1;
-    } else {
-        mpMorf = NULL;
-        return 0;
     }
+    mpMorf = NULL;
+    return 0;
 }
 
 /* 0000485C-0000487C       .text daNpc_Ba1_Create__FP10fopAc_ac_c */
