@@ -57,8 +57,8 @@ daNpc_Zk1_HIO_c::daNpc_Zk1_HIO_c() {
         /* mMinBackboneX     */ 0xFD44,
         /* mMinBackboneY     */ 0xEE6C,
         /* mMaxTurnStep      */ 0x0640,
-        /* mCalcAngleTarget          */ 0x04B0,
-        /* mAttPosOffsetY */ 240.0f,
+        /* mCalcAngleTarget  */ 0x04B0,
+        /* mAttPosOffsetY    */ 240.0f,
         /* field_18          */ 0.0f,
     };
     memcpy(&mPrmTbl, &a_prm_tbl, sizeof(hio_prm_c));
@@ -152,11 +152,9 @@ bool daNpc_Zk1_c::createInit() {
     mEventCut.setActorInfo2("Zk1", this);
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
 
-    // Not sure why this is here, but it won't match without.
-    // NPC Hi1 seems to have the same thing going on
     switch(mSpecificType) {
         case 0:
-        break;
+            break;
     }
 
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
@@ -266,7 +264,6 @@ bool daNpc_Zk1_c::setBtp(s8 i_btpNum, bool i_bModify) {
 
 /* 0000091C-0000093C       .text init_texPttrnAnm__11daNpc_Zk1_cFScb */
 bool daNpc_Zk1_c::init_texPttrnAnm(s8 i_btpNum, bool i_bModify) {
-
     return setBtp(i_btpNum, i_bModify);
 }
 
@@ -431,13 +428,14 @@ u32 daNpc_Zk1_c::getMsg_ZK1_0() {
     if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A80)) {
         return dComIfGs_isEventBit(dSv_event_flag_c::ZK_POSTBOX_TALK) != 0 ? 0x17A7 : 0x17A2;
 
-    } else if (!field_0x797) {
+    } 
+    if (!field_0x797) {
         return dComIfGs_isEventBit(dSv_event_flag_c::ZK_POSTBOX_TALK) != 0 ? 0x17AC : 0x17A8;
-    } else if (!field_0x798) {
+    } 
+    if (!field_0x798) {
         return dComIfGs_isEventBit(dSv_event_flag_c::ZK_MONSTERS_TALK) != 0 ? 0x17B0 : 0x17AD;
-    } else {
-        return dComIfGs_isEventBit(dSv_event_flag_c::ZK_POST_H2_TALK) != 0 ? 0x17B2 : 0x17B1;
     }
+    return dComIfGs_isEventBit(dSv_event_flag_c::ZK_POST_H2_TALK) != 0 ? 0x17B2 : 0x17B1;
 }
 
 /* 00000E10-00000E4C       .text getMsg__11daNpc_Zk1_cFv */
@@ -578,9 +576,8 @@ bool daNpc_Zk1_c::chkAttention() {
     dAttention_c& attention = dComIfGp_getAttention();
     if (attention.LockonTruth()) {
         return this == attention.LockonTarget(0);
-    } else {
-        return this == attention.ActionTarget(0);
     }
+    return this == attention.ActionTarget(0);
 }
 
 /* 000012FC-00001354       .text setAttention__11daNpc_Zk1_cFb */
@@ -636,7 +633,7 @@ void daNpc_Zk1_c::privateCut(int i_staffIdx) {
         if(mActIdx == -1) {
             dComIfGp_evmng_cutEnd(i_staffIdx);
         } else {
-             bool temp;
+            bool temp;
             if(dComIfGp_evmng_getIsAddvance(i_staffIdx)) {
 #if VERSION == VERSION_DEMO
                 switch(mActIdx) {
@@ -774,29 +771,29 @@ BOOL daNpc_Zk1_c::talk_1() {
     if(mpCurrMsg == NULL) {
         return TRUE;
     }
-        switch (mpCurrMsg->mStatus) {
-    case fopMsgStts_BOX_OPENING_e:
-    case fopMsgStts_MSG_TYPING_e:
-        break;
-    case fopMsgStts_MSG_DESTROYED_e:
-        switch (mCurrMsgNo) {
-        case 0x17A6:
-        case 0x17AB:
-            dComIfGs_onEventBit(dSv_event_flag_c::ZK_POSTBOX_TALK);
+    switch (mpCurrMsg->mStatus) {
+        case fopMsgStts_BOX_OPENING_e:
+        case fopMsgStts_MSG_TYPING_e:
             break;
-        case 0x17AE:
-        case 0x17AF:
-            dComIfGs_onEventBit(dSv_event_flag_c::ZK_MONSTERS_TALK);
-            break;
-        case 0x17B1:
-            dComIfGs_onEventBit(dSv_event_flag_c::ZK_POST_H2_TALK);
-        }
-        mItemNo = 0xFF;
-        field_0x7A1 = false;
-        setStt(field_0x7AC);
-        mTimer2 = cLib_getRndValue(15, 30);
-        endEvent();
-        break;  
+        case fopMsgStts_MSG_DESTROYED_e:
+            switch (mCurrMsgNo) {
+                case 0x17A6:
+                case 0x17AB:
+                    dComIfGs_onEventBit(dSv_event_flag_c::ZK_POSTBOX_TALK);
+                    break;
+                case 0x17AE:
+                case 0x17AF:
+                    dComIfGs_onEventBit(dSv_event_flag_c::ZK_MONSTERS_TALK);
+                    break;
+                case 0x17B1:
+                    dComIfGs_onEventBit(dSv_event_flag_c::ZK_POST_H2_TALK);
+            }
+            mItemNo = 0xFF;
+            field_0x7A1 = false;
+            setStt(field_0x7AC);
+            mTimer2 = cLib_getRndValue(15, 30);
+            endEvent();
+            break;  
     }
     return ret;
 }
@@ -1051,7 +1048,8 @@ BOOL daNpc_Zk1_c::bodyCreateHeap() {
 
     if(!mpMorf){
         return FALSE;
-    } else if(mpMorf->getModel() == NULL) {
+    }
+    if(mpMorf->getModel() == NULL) {
         mpMorf = NULL;
         return FALSE;
     }
