@@ -1556,14 +1556,14 @@ mesg_header* fopMsgM_msgGet_c::getMesgHeader(u32 i_msgNo) {
         sprintf(path, "zel_e%02d.bmg", mGroupID);
     }
     JKRArchive* arc = dComIfGp_getMsgDtArchive();
-    return (mesg_header*)JKRArchive::getGlbResource('ROOT', path, arc);
+    return (mesg_header*)JKRGetTypeResource('ROOT', path, arc);
 #else
     if (fopMsgM_hyrule_language_check(i_msgNo)) {
         JKRArchive* arc = dComIfGp_getMsgDt2Archive();
-        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
+        return (mesg_header*)JKRGetTypeResource('ROOT', "zel_01.bmg", arc);
     } else {
         JKRArchive* arc = dComIfGp_getMsgDtArchive();
-        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
+        return (mesg_header*)JKRGetTypeResource('ROOT', "zel_00.bmg", arc);
     }
 #endif
 }
@@ -1575,7 +1575,8 @@ mesg_info* fopMsgM_msgGet_c::getMesgInfo(mesg_header* i_head) {
 
 /* 8002E2E0-8002E308       .text getMesgData__16fopMsgM_msgGet_cFP11mesg_header */
 mesg_data* fopMsgM_msgGet_c::getMesgData(mesg_header* i_head) {
-    return (mesg_data*)getMesgInfo(i_head)->getNext();
+    mesg_info* info = getMesgInfo(i_head);
+    return (mesg_data*)((u8*)info + info->mSize);
 }
 
 /* 8002E308-8002E378       .text getMesgEntry__16fopMsgM_msgGet_cFP11mesg_header */
@@ -1621,14 +1622,14 @@ mesg_header* fopMsgM_itemMsgGet_c::getMesgHeader(u32 i_msgNo) {
         sprintf(path, "zel_e%02d.bmg", groupID);
     }
     JKRArchive* arc = dComIfGp_getMsgDtArchive();
-    return (mesg_header*)JKRArchive::getGlbResource('ROOT', path, arc);
+    return (mesg_header*)JKRGetTypeResource('ROOT', path, arc);
 #else
     if (fopMsgM_hyrule_language_check(i_msgNo)) {
         JKRArchive* arc = dComIfGp_getMsgDt2Archive();
-        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_01.bmg", arc);
+        return (mesg_header*)JKRGetTypeResource('ROOT', "zel_01.bmg", arc);
     } else {
         JKRArchive* arc = dComIfGp_getMsgDtArchive();
-        return (mesg_header*)JKRArchive::getGlbResource('ROOT', "zel_00.bmg", arc);
+        return (mesg_header*)JKRGetTypeResource('ROOT', "zel_00.bmg", arc);
     }
 #endif
 }
@@ -1640,7 +1641,8 @@ mesg_info* fopMsgM_itemMsgGet_c::getMesgInfo(mesg_header* i_head) {
 
 /* 8002E4B4-8002E4DC       .text getMesgData__20fopMsgM_itemMsgGet_cFP11mesg_header */
 mesg_data* fopMsgM_itemMsgGet_c::getMesgData(mesg_header* i_head) {
-    return (mesg_data*)getMesgInfo(i_head)->getNext();
+    mesg_info* info = getMesgInfo(i_head);
+    return (mesg_data*)((u8*)info + info->mSize);
 }
 
 /* 8002E4DC-8002E54C       .text getMesgEntry__20fopMsgM_itemMsgGet_cFP11mesg_header */
@@ -1743,7 +1745,7 @@ fopMsgM_msgDataProc_c::fopMsgM_msgDataProc_c() {
     actorPosition = NULL;
     field_0x299 = 0;
     field_0x29A = 0;
-    selectFlag = Select_OFF;
+    setSelectFlagOff();
     field_0x29B = 0;
     autoSendFlag = 0;
     handSendFlag = 0;
@@ -1825,7 +1827,7 @@ void fopMsgM_msgDataProc_c::dataInit() {
     }
     field_0x299 = 0;
     field_0x29A = 0;
-    selectFlag = Select_OFF;
+    setSelectFlagOff();
     field_0x29B = 0;
     autoSendFlag = 0;
     handSendFlag = 0;
@@ -1838,9 +1840,7 @@ void fopMsgM_msgDataProc_c::dataInit() {
 
 /* 8002E95C-8002EA58       .text charLength__21fopMsgM_msgDataProc_cFiib */
 f32 fopMsgM_msgDataProc_c::charLength(int i_scale, int i_charNo, bool param_2) {
-    JUTFont::TWidth width;
-    font->getWidthEntry(i_charNo, &width);
-    f32 charWidth = (f32)(int)width.field_0x1;
+    f32 charWidth = (f32)font->getWidth(i_charNo);
     f32 cellWidth = (f32)i_scale / (f32)font->getCellWidth();
 
     if (param_2) {
@@ -1852,22 +1852,18 @@ f32 fopMsgM_msgDataProc_c::charLength(int i_scale, int i_charNo, bool param_2) {
 
 /* 8002EA58-8002EB4C       .text rubyLength__21fopMsgM_msgDataProc_cFib */
 f32 fopMsgM_msgDataProc_c::rubyLength(int i_charNo, bool param_2) {
-    JUTFont::TWidth width;
-    rubyFont->getWidthEntry(i_charNo, &width);
-    s32 advance = width.field_0x1;
+    int width = rubyFont->getWidth(i_charNo);
     f32 cellWidth = rubyFont->getCellWidth();
     f32 temp = ((s32)rubyFontSize / cellWidth);
     if (param_2) {
 #if VERSION == VERSION_DEMO
-        JUTFont::TWidth width2;
-        rubyFont->getWidthEntry(i_charNo, &width2);
-        return (f32)(advance + width2.field_0x0) * temp;
+        return (f32)(width + rubyFont->getOffset(i_charNo)) * temp;
 #else
-        return (f32)advance * temp;
+        return (f32)width * temp;
 #endif
     }
 
-    return (s32)rubyCharSpace + advance * temp;
+    return (s32)rubyCharSpace + width * temp;
 }
 
 /* 8002EB4C-80031064       .text stringLength__21fopMsgM_msgDataProc_cFv */
@@ -4158,8 +4154,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
             ) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
-
                 char buf[20];
+
                 int num = dComIfGp_getMessageCountNumber();
                 fopMsgM_int_to_char(buf, num, false);
 
@@ -5800,7 +5796,7 @@ u8 fopMsgM_itemNum(u8 i_itemNo) {
 /* 80035060-800350B8       .text fopMsgM_getColorTable__FUs */
 u32 fopMsgM_getColorTable(u16 i_colorNo) {
     JKRArchive* arc = dComIfGp_getMsgDtArchive();
-    JUTDataFileHeader* bmc = (JUTDataFileHeader*)JKRArchive::getGlbResource('ROOT', "color.bmc", arc);
+    JUTDataFileHeader* bmc = (JUTDataFileHeader*)JKRGetTypeResource('ROOT', "color.bmc", arc);
     clt1_header* clt1 = (clt1_header*)&bmc->mFirstBlock;
     return clt1->mColors[i_colorNo];
 }
@@ -10194,7 +10190,7 @@ void fopMsgM_setFontsizeCenter2(char* param_1, char* param_2, char* param_3, cha
 
 /* 8003C414-8003C450       .text fopMsgM_createExpHeap__FUl */
 JKRExpHeap* fopMsgM_createExpHeap(u32 i_size) {
-    return JKRExpHeap::create(i_size, mDoExt_getGameHeap(), FALSE);
+    return JKRCreateExpHeap(i_size, mDoExt_getGameHeap(), FALSE);
 }
 
 /* 8003C450-8003C470       .text fopMsgM_destroyExpHeap__FP10JKRExpHeap */
