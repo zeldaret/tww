@@ -190,37 +190,6 @@ public:
 };  // Size: 0x800
 
 
-class daNpc_Kf1_HIO_c : public mDoHIO_entry_c{
-    struct hio_prm_c{
-        s16 m0;
-        s16 m2;
-        s16 m4;
-        s16 m6;
-        s16 m8;
-        s16 mA;
-        s16 mC;
-        s16 mE;
-        s16 m10;
-        s16 m12;
-        f32 m14;
-        // s16 m16;
-        s16 m18;
-        s16 m1A;
-        s16 m1C;
-        s16 m1E;
-        f32 m20;
-        f32 m24;
-        f32 m28;
-        f32 m2C;
-    }; //Size: 0x30
-public:
-    daNpc_Kf1_HIO_c();
 
-public:
-    s8 m0;
-    s32 m4;
-    hio_prm_c m8;
-    /* Place member variables here */
-};
 
 #endif /* D_A_NPC_KF1_H */
