@@ -9,6 +9,7 @@
 #include "dolphin/types.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg_mng.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
@@ -277,22 +278,22 @@ fishManProcFunc FishManProcMain[] = {
 /* 801AF848-801AFB64       .text _create__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_create() {
     fmapDl.scrn = new J2DScreen();
-    JUT_ASSERT(0x23B, fmapDl.scrn != 0);
+    JUT_ASSERT(571, fmapDl.scrn != 0);
     fmapDl.scrn->set("f_map.blo", dComIfGp_getFmapResArchive());
 
     outFont = new dDlst_2DOutFont_c();
-    JUT_ASSERT(0x23F, outFont != 0);
+    JUT_ASSERT(575, outFont != 0);
     outFont->m74 = 1;
 
     outFont2 = new dDlst_2DOutFont_c();
-    JUT_ASSERT(0x243, outFont2 != 0);
+    JUT_ASSERT(579, outFont2 != 0);
 
     stick = new STControl(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x2000);
-    JUT_ASSERT(0x246, stick != 0);
+    JUT_ASSERT(582, stick != 0);
     stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x800);
 
     mChkPntTxt_p = (ResTIMG*)operator new (0x2c00, 0x20);
-    JUT_ASSERT(0x24a, mChkPntTxt_p != 0);
+    JUT_ASSERT(586, mChkPntTxt_p != 0);
 
     screenSet();
     aramCmapDatRead();
@@ -314,28 +315,34 @@ void dMenu_Fmap_c::phantomShipCheck() {
 
 /* 801AFBDC-801B06D4       .text screenSet__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::screenSet() {
+    JUtility::TColor white;
+    JUtility::TColor black;
+
     fopMsgM_setPaneData(&mFddmPane, fmapDl.scrn, 'fddm');
     fopMsgM_setPaneData(&mClPane, fmapDl.scrn, 'cl');
     fopMsgM_setPaneData(&mAreaPane, fmapDl.scrn, 'area');
 
-    J2DPicture* areaPane = (J2DPicture*)mAreaPane.pane;
-    mBlackAlpha = areaPane->getBlack().a;
-    mWhiteAlpha = areaPane->getWhite().a;
+    white.set(((J2DPicture*)mAreaPane.pane)->getWhite());
+    black.set(((J2DPicture*)mAreaPane.pane)->getBlack());
+    mBlackAlpha = black.a;
+    mWhiteAlpha = white.a;
 
     fopMsgM_setPaneData(&mCi22Pane, fmapDl.scrn, 'ci22');
     fopMsgM_setPaneData(&mCi21Pane, fmapDl.scrn, 'ci21');
     fopMsgM_setPaneData(&mCi32Pane, fmapDl.scrn, 'ci32');
     fopMsgM_setPaneData(&mCi31Pane, fmapDl.scrn, 'ci31');
-    fopMsgM_setPaneData(&mGti1Pane, fmapDl.scrn, 'gti1');
-    fopMsgM_setPaneData(&mGti2Pane, fmapDl.scrn, 'gti2');
+    fopMsgM_setPaneData(&mGti1Pane, fmapDl.scrn, 'GTI1');
+    fopMsgM_setPaneData(&mGti2Pane, fmapDl.scrn, 'GTI2');
     fopMsgM_setPaneData(&mLnk1Pane, fmapDl.scrn, 'lnk1');
     fopMsgM_setPaneData(&mSpi1Pane, fmapDl.scrn, 'spi1');
 
+    u32 kk1xTag = 'kk10', kk2xTag = 'kk20', kk3xTag = 'kk30', kk4xTag = 'kk40';
     for (int i = 0; i < 4; i++) {
-        fopMsgM_setPaneData(&mKk1xPanes[i], fmapDl.scrn, 'kk10' + i);
-        fopMsgM_setPaneData(&mKk2xPanes[i], fmapDl.scrn, 'kk20' + i);
-        fopMsgM_setPaneData(&mKk3xPanes[i], fmapDl.scrn, 'kk30' + i);
-        fopMsgM_setPaneData(&mKk4xPanes[i], fmapDl.scrn, 'kk40' + i);
+        fopMsgM_setPaneData(&mKk1xPanes[i], fmapDl.scrn, kk1xTag);
+        fopMsgM_setPaneData(&mKk1xPanes[i + 4], fmapDl.scrn, kk2xTag);
+        fopMsgM_setPaneData(&mKk3xPanes[i], fmapDl.scrn, kk3xTag);
+        fopMsgM_setPaneData(&mKk3xPanes[i + 4], fmapDl.scrn, kk4xTag);
+        kk1xTag++; kk2xTag++; kk3xTag++; kk4xTag++;
     }
 
     fopMsgM_setPaneData(&mWnd1Pane, fmapDl.scrn, 'wnd1');
@@ -352,8 +359,8 @@ void dMenu_Fmap_c::screenSet() {
     fopMsgM_setPaneData(&mSc18Pane, fmapDl.scrn, 'sc18');
     fopMsgM_setPaneData(&mSc19Pane, fmapDl.scrn, 'sc19');
     fopMsgM_setPaneData(&mTsw1Pane, fmapDl.scrn, 'tsw1');
-    fopMsgM_setPaneData(&mStm1Pane, fmapDl.scrn, 'stm1');
-    fopMsgM_setPaneData(&mR01bPane, fmapDl.scrn, 'r01b');
+    fopMsgM_setPaneData(&mStm1Pane, fmapDl.scrn, 'STM1');
+    fopMsgM_setPaneData(&mR01bPane, fmapDl.scrn, 'R01B');
     fopMsgM_setPaneData(&mLnk2Pane, fmapDl.scrn, 'lnk2');
     fopMsgM_setPaneData(&mSpi2Pane, fmapDl.scrn, 'spi2');
     fopMsgM_setPaneData(&mClbPane, fmapDl.scrn, 'clb');
@@ -362,10 +369,13 @@ void dMenu_Fmap_c::screenSet() {
     fopMsgM_setPaneData(&mKtx2Pane, fmapDl.scrn, 'ktx2');
 
     ((J2DTextBox*)mKtx1Pane.pane)->setFont(mFont);
-    ((J2DTextBox*)mKtx1Pane.pane)->setFont(mRFont);
+    ((J2DTextBox*)mKtx2Pane.pane)->setFont(mRFont);
 
-    //do/while 128
-    char* str = "Hello, World!";
+    char str[0x80];
+    for (int i = 0; i < 0x80; i++) {
+        str[i] = 'A';
+    }
+    str[0x7F] = 0;
 
     ((J2DTextBox*)mKtx1Pane.pane)->setString(str);
     ((J2DTextBox*)mKtx2Pane.pane)->setString(str);
@@ -379,8 +389,8 @@ void dMenu_Fmap_c::screenSet() {
     outFont2->setLeftUpPos(mKtx1Pane.mPosTopLeft.x, mKtx1Pane.mPosTopLeft.y);
 
     if (dComIfGs_getOptRuby() != 0) {
-        mKtx1Pane.mPosCenterOrig.y = mKtx1Pane.mPosCenterOrig.y - 4.0f;
-        mKtx1Pane.mPosCenter.y = mKtx1Pane.mPosCenter.y - 4.0f;
+        mKtx1Pane.mPosCenterOrig.y -= 4.0f;
+        mKtx1Pane.mPosCenter.y = mKtx1Pane.mPosCenterOrig.y;
         fopMsgM_cposMove(&mKtx1Pane);
         mKtx1Pane.mPosTopLeftOrig.y = mKtx1Pane.mPosTopLeft.y;
     }
@@ -388,54 +398,73 @@ void dMenu_Fmap_c::screenSet() {
     fopMsgM_setPaneData(&mClgPane, fmapDl.scrn, 'clg');
     fopMsgM_setPaneData(&mLnk3Pane, fmapDl.scrn, 'lnk3');
     fopMsgM_setPaneData(&mSpi3Pane, fmapDl.scrn, 'spi3');
-    fopMsgM_setPaneData(&mStl1Pane, fmapDl.scrn, 'stl1');
-    fopMsgM_setPaneData(&mR01gPane, fmapDl.scrn, 'r01g');
+    fopMsgM_setPaneData(&mStl1Pane, fmapDl.scrn, 'STL1');
+    fopMsgM_setPaneData(&mR01gPane, fmapDl.scrn, 'R01G');
     fopMsgM_setPaneData(&mFmumPane, fmapDl.scrn, 'fmum');
     fopMsgM_setPaneData(&mFmw1Pane, fmapDl.scrn, 'fmw1');
     fopMsgM_setPaneData(&mFmw2Pane, fmapDl.scrn, 'fmw2');
     fopMsgM_setPaneData(&mFmw3Pane, fmapDl.scrn, 'fmw3');
     fopMsgM_setPaneData(&mFmw4Pane, fmapDl.scrn, 'fmw4');
 
+    static u32 fmnTags[] = {
+        'fmn1','fmn2','fmn3','fmn4','fmn5','fmn6','fmn7','fmn8',
+        'fmna','fmnb','fmnc','fmnd','fmne','fmnf','fmnh',
+    };
+
     for (int i = 0; i < 15; i++) {
-        fopMsgM_setPaneData(&mFmnPanes[i], fmapDl.scrn, 'fmn1' + i);
+        fopMsgM_setPaneData(&mFmnPanes[i], fmapDl.scrn, fmnTags[i]);
     }
 
+    u32 sc2xTag = 'sc21';
     for (int i = 0; i < 7; i++) {
-        fopMsgM_setPaneData(&mSc2xPanes[i], fmapDl.scrn, 'sc21' + i);
+        fopMsgM_setPaneData(&mSc2xPanes[i], fmapDl.scrn, sc2xTag);
+        sc2xTag++;
     }
 
+    u32 ck1xTag = 'CK11', ck2xTag = 'CK21';
     for (int i = 0; i < 3; i++) {
-        fopMsgM_setPaneData(&mCk1xPanes[i], fmapDl.scrn, 'CK11' + i);
-        fopMsgM_setPaneData(&mCk2xPanes[i], fmapDl.scrn, 'CK21' + i);
+        fopMsgM_setPaneData(&mCk1xPanes[i], fmapDl.scrn, ck1xTag);
+        fopMsgM_setPaneData(&mCk2xPanes[i], fmapDl.scrn, ck2xTag);
+        ck1xTag++; ck2xTag++;
     }
     fopMsgM_setPaneData(&mCk31Pane, fmapDl.scrn, 'CK31');
-    fopMsgM_setPaneData(&mCk31Pane, fmapDl.scrn, 'CK32');
-    ((J2DPicture*)mCk1xPanes[0].pane)->setBlackWhite(mCk1Color, mCk1Color2);
+    fopMsgM_setPaneData(&mCk32Pane, fmapDl.scrn, 'CK32');
+    mCk1Color.set(((J2DPicture*)mCk1xPanes[0].pane)->getBlack());
+    mCk1Color2.set(((J2DPicture*)mCk1xPanes[0].pane)->getWhite());
+
+    static u32 krTags[] = {
+        'KR03','KR05','KR01','KR08','KR06','KR02','KR07','KR04',
+    };
 
     for (int i = 0; i < 8; i++) {
-        fopMsgM_setPaneData(&mKr0xPanes[i], fmapDl.scrn, 'kr03' + i);
+        fopMsgM_setPaneData(&mKr0xPanes[i], fmapDl.scrn, krTags[i]);
     }
-    ((J2DPicture*)mKr0xPanes[0].pane)->setBlackWhite(mKr0Color, mKr0Color2);
-
+    mKr0Color.set(((J2DPicture*)mKr0xPanes[0].pane)->getBlack());
+    mKr0Color2.set(((J2DPicture*)mKr0xPanes[0].pane)->getWhite());
+    
     for (int i = 0; i < 11; i++) {
-        // todo l_island lookup
-        fopMsgM_setPaneData(&mR0xPanes[i], fmapDl.scrn, 'r01' + i);
+        fopMsgM_setPaneData(&mR0xPanes[i], fmapDl.scrn, l_island[i]);
     }
 
     for (int i = 0; i < 49; i++) {
-        // todo vtable lookup
-        fopMsgM_setPaneData(&mStxxPanes[i], fmapDl.scrn, 'st00' + i);
+        fopMsgM_setPaneData(&mStxxPanes[i], fmapDl.scrn->search(endSalv[i]));
     }
 
-    //do/while 128
-    char* str2 = "Hello, World2!";
+    char str2[0x80];
+    for (int i = 0; i < 0x80; i++) {
+        str2[i] = 'A';
+    }
+    str2[0x7F] = 0;
+
+    static u32 txtTags[] = { 'txt1', 'txt3', 'txt2' };
 
     for (int i = 0; i < 3; i++) {
-        fopMsgM_setPaneData(&mAreaTxtPanes[i], fmapDl.scrn, 'txt1' + i);
+        fopMsgM_setPaneData(&mAreaTxtPanes[i], fmapDl.scrn, txtTags[i]);
         ((J2DTextBox*)mAreaTxtPanes[i].pane)->setFont(mFont);
         ((J2DTextBox*)mAreaTxtPanes[i].pane)->setString(str2);
-        mTxtName[i] = 0;
-        mAreaTxtPanes[0].pane->show();
+        mTxtName[i] = ((J2DTextBox*)mAreaTxtPanes[i].pane)->getStringPtr();
+        mTxtName[i][0] = 0;
+        mAreaTxtPanes[i].pane->show();
     }
 
     fopMsgM_setPaneData(&mBt00Pane, fmapDl.scrn, 'bt00');
@@ -462,13 +491,14 @@ void dMenu_Fmap_c::screenSet() {
     ((J2DTextBox*)mWt0Pane.pane)->setFont(mFont);
     ((J2DTextBox*)mWt1Pane.pane)->setFont(mRFont);
 
+    mYs01Color2.set(((J2DPicture*)mYs01Pane.pane)->getWhite());
+    mYs01Color.set(((J2DPicture*)mYs01Pane.pane)->getBlack());
 
-    ((J2DPicture*)mYs01Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
-    ((J2DTextBox*)mWt0Pane.pane)->setBlack(JUtility::TColor(255, 255, 255, 0));
-    ((J2DTextBox*)mWt0Pane.pane)->setWhite(JUtility::TColor(255, 255, 255, 255));
+    ((J2DTextBox*)mWt0Pane.pane)->setBlack(JUtility::TColor(0xffffff00));
+    ((J2DTextBox*)mWt0Pane.pane)->setWhite(JUtility::TColor(0xffffffff));
 
     for (int i = 0; i < 7; i++) {
-        fopMsgM_setPaneData(&mGsPanes[i], fmapDl.scrn, 'gs07' + i);
+        fopMsgM_setPaneData(&mGsPanes[i], fmapDl.scrn, gsShip[i]);
     }
 }
 
@@ -694,7 +724,7 @@ void dMenu_Fmap_c::initCmapDatPnt(aramCmapDatPat_t* a_pat) {
         mCmapDatPnt.m_0x0 = a_pat->m_0x0;
         mCmapDatPnt.m_0x4 = (aramCmapDatPnt_t*)&a_pat->m_0x4;
     } else {
-        JUT_ASSERT(0xFC, 0);
+        JUT_ASSERT(252, 0);
     }
 }
 
@@ -880,7 +910,7 @@ void dMenu_Fmap_c::SelectGrid() {
     } else {
         mButtonIconMode = FMAP_BTN_ICON_SECTOR;
     }
-    JUT_ASSERT(0x1E9, fmapSv != NULL);
+    JUT_ASSERT(489, fmapSv != NULL);
 }
 
 /* 801B5878-801B5B58       .text zoom1000x1000Init__12dMenu_Fmap_cFv */
@@ -910,8 +940,7 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
         if (mButtonIconMode == 1) {
             mDoAud_seStart(JA_SE_CHART_ZOOM_IN);
             mButtonIconMode = FMAP_BTN_ICON_DETAIL;
-            JUT_ASSERT(0x1E3, fmapSv != NULL)
-            fmapSv->cmapSelNo = 0x2;
+            setCtCmapSelNo(0x2);
             zoom200x200Init();
             f32 clgOrigX = mClgPane.mSizeOrig.x;
             paneTranceZoom2Map(0, g_mfHIO.field_0x2F, field_0x5134 * (clgOrigX / 100000.0f),
@@ -969,8 +998,7 @@ void dMenu_Fmap_c::ZoomGridLv1Out() {
         mSmskPane.pane->hide();
         mClbPane.pane->hide();
         mButtonIconMode = FMAP_BTN_ICON_WORLD;
-        JUT_ASSERT(0x1E3, fmapSv != NULL);
-        fmapSv->cmapSelNo = 0x0;
+        setCtCmapSelNo(0x0);
         mFmapProcIdx = 0;
     }
 }
@@ -1022,8 +1050,7 @@ void dMenu_Fmap_c::move_normal() {
 void dMenu_Fmap_c::FmapProc() {
     if (CPad_CHECK_TRIG_Y(0)) {
         mDoAud_seStart(JA_SE_CHART_TO_COMPARE);
-        JUT_ASSERT(0x1D8, fmapSv != NULL);
-        fmapSv->active = 1;
+        setCtActive(1);
         mMainProcIdx = 1;
         mHikakuProcIdx = 0;
     } else {
@@ -1627,5 +1654,7 @@ int dMenu_Fmap_c::getButtonIconMode() {
 
 /* 801BB024-801BB088       .text draw__12dDlst_FMAP_cFv */
 void dDlst_FMAP_c::draw() {
-    /* Nonmatching */
+    J2DOrthoGraph* grafPort = dComIfGp_getCurrentGrafPort();
+    grafPort->setPort();
+    scrn->draw(0.0f, 0.0f, grafPort);
 }
