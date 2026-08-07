@@ -4,9 +4,13 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "d/actor/d_a_ghostship.h"
 #include "d/d_menu_fmap.h"
 #include "dolphin/types.h"
+#include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg_mng.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
+#include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "printf.h"
@@ -35,6 +39,20 @@ extern const u32 hist[] = {
     'mR1D', 'mR1E', 'mR1F', 'mR20', 'mR21', 'mR22', 'mR23',
     'mR24', 'mR25', 'mR26', 'mR27', 'mR28', 'mR29', 'mR2A',
     'mR2B', 'mR2C', 'mR2D', 'mR2E', 'mR2F', 'mR30', 'mR31',
+};
+
+const u32 endSalv[] = {
+    'ST01', 'ST02', 'ST03', 'ST04', 'ST05', 'ST06', 'ST07',
+    'ST08', 'ST09', 'ST10', 'ST11', 'ST12', 'ST13', 'ST14',
+    'ST15', 'ST16', 'ST17', 'ST18', 'ST19', 'ST20', 'ST21',
+    'ST22', 'ST23', 'ST24', 'ST25', 'ST26', 'ST27', 'ST28',
+    'ST29', 'ST30', 'ST31', 'ST32', 'ST33', 'ST34', 'ST35',
+    'ST36', 'ST37', 'ST38', 'ST39', 'ST40', 'ST41', 'ST42',
+    'ST43', 'ST44', 'ST45', 'ST46', 'ST47', 'ST48', 'ST49',
+};
+
+const u32 gsShip[] = {
+    'gs07', 'gs01', 'gs02', 'gs03', 'gs04', 'gs05', 'gs06',
 };
 
 /* 801AF4F0-801AF848       .text __ct__9dMf_HIO_cFv */
@@ -124,12 +142,170 @@ void dMenu_Fmap_c::_create() {
 
 /* 801AFB64-801AFBDC       .text phantomShipCheck__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::phantomShipCheck() {
-    /* Nonmatching */
+    daGhostship_c* gship = (daGhostship_c*)fopAcM_searchFromName("Ayush", 0, 0);
+    if (gship != NULL && gship->mAlpha != 0.0f) {
+        mDoAud_seStart(JA_SE_CV_YUUREISEN_SONG);
+    }
 }
 
 /* 801AFBDC-801B06D4       .text screenSet__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::screenSet() {
-    /* Nonmatching */
+    fopMsgM_setPaneData(&mFddmPane, fmapDl.scrn, 'fddm');
+    fopMsgM_setPaneData(&mClPane, fmapDl.scrn, 'cl');
+    fopMsgM_setPaneData(&mAreaPane, fmapDl.scrn, 'area');
+
+    J2DPicture* areaPane = (J2DPicture*)mAreaPane.pane;
+    mBlackAlpha = areaPane->getBlack().a;
+    mWhiteAlpha = areaPane->getWhite().a;
+
+    fopMsgM_setPaneData(&mCi22Pane, fmapDl.scrn, 'ci22');
+    fopMsgM_setPaneData(&mCi21Pane, fmapDl.scrn, 'ci21');
+    fopMsgM_setPaneData(&mCi32Pane, fmapDl.scrn, 'ci32');
+    fopMsgM_setPaneData(&mCi31Pane, fmapDl.scrn, 'ci31');
+    fopMsgM_setPaneData(&mGti1Pane, fmapDl.scrn, 'gti1');
+    fopMsgM_setPaneData(&mGti2Pane, fmapDl.scrn, 'gti2');
+    fopMsgM_setPaneData(&mLnk1Pane, fmapDl.scrn, 'lnk1');
+    fopMsgM_setPaneData(&mSpi1Pane, fmapDl.scrn, 'spi1');
+
+    for (int i = 0; i < 4; i++) {
+        fopMsgM_setPaneData(&mKk1xPanes[i], fmapDl.scrn, 'kk10' + i);
+        fopMsgM_setPaneData(&mKk2xPanes[i], fmapDl.scrn, 'kk20' + i);
+        fopMsgM_setPaneData(&mKk3xPanes[i], fmapDl.scrn, 'kk30' + i);
+        fopMsgM_setPaneData(&mKk4xPanes[i], fmapDl.scrn, 'kk40' + i);
+    }
+
+    fopMsgM_setPaneData(&mWnd1Pane, fmapDl.scrn, 'wnd1');
+    fopMsgM_setPaneData(&mWnd2Pane, fmapDl.scrn, 'wnd2');
+    fopMsgM_setPaneData(&mKkdmPane, fmapDl.scrn, 'kkdm');
+    fopMsgM_setPaneData(&mSmskPane, fmapDl.scrn, 'smsk');
+    fopMsgM_setPaneData(&mSc11Pane, fmapDl.scrn, 'sc11');
+    fopMsgM_setPaneData(&mSc12Pane, fmapDl.scrn, 'sc12');
+    fopMsgM_setPaneData(&mSc13Pane, fmapDl.scrn, 'sc13');
+    fopMsgM_setPaneData(&mSc14Pane, fmapDl.scrn, 'sc14');
+    fopMsgM_setPaneData(&mSc15Pane, fmapDl.scrn, 'sc15');
+    fopMsgM_setPaneData(&mSc16Pane, fmapDl.scrn, 'sc16');
+    fopMsgM_setPaneData(&mSc17Pane, fmapDl.scrn, 'sc17');
+    fopMsgM_setPaneData(&mSc18Pane, fmapDl.scrn, 'sc18');
+    fopMsgM_setPaneData(&mSc19Pane, fmapDl.scrn, 'sc19');
+    fopMsgM_setPaneData(&mTsw1Pane, fmapDl.scrn, 'tsw1');
+    fopMsgM_setPaneData(&mStm1Pane, fmapDl.scrn, 'stm1');
+    fopMsgM_setPaneData(&mR01bPane, fmapDl.scrn, 'r01b');
+    fopMsgM_setPaneData(&mLnk2Pane, fmapDl.scrn, 'lnk2');
+    fopMsgM_setPaneData(&mSpi2Pane, fmapDl.scrn, 'spi2');
+    fopMsgM_setPaneData(&mClbPane, fmapDl.scrn, 'clb');
+    fopMsgM_setPaneData(&mClb2Pane, fmapDl.scrn, 'clb2');
+    fopMsgM_setPaneData(&mKtx1Pane, fmapDl.scrn, 'ktx1');
+    fopMsgM_setPaneData(&mKtx2Pane, fmapDl.scrn, 'ktx2');
+
+    ((J2DTextBox*)mKtx1Pane.pane)->setFont(mFont);
+    ((J2DTextBox*)mKtx1Pane.pane)->setFont(mRFont);
+
+    //do/while 128
+    char* str = "Hello, World!";
+
+    ((J2DTextBox*)mKtx1Pane.pane)->setString(str);
+    ((J2DTextBox*)mKtx2Pane.pane)->setString(str);
+
+    mpKtx1String = ((J2DTextBox*)mKtx1Pane.pane)->getStringPtr();
+    mpKtx2String = ((J2DTextBox*)mKtx2Pane.pane)->getStringPtr();
+
+    outFont2->setPaneEx(mFont, &mKtx1Pane, NULL, NULL, NULL, mpKtx1String);
+    outFont2->setRubyEx(mRFont, &mKtx2Pane, mpKtx2String);
+    outFont2->messageSet(0x319B);
+    outFont2->setLeftUpPos(mKtx1Pane.mPosTopLeft.x, mKtx1Pane.mPosTopLeft.y);
+
+    if (dComIfGs_getOptRuby() != 0) {
+        mKtx1Pane.mPosCenterOrig.y = mKtx1Pane.mPosCenterOrig.y - 4.0f;
+        mKtx1Pane.mPosCenter.y = mKtx1Pane.mPosCenter.y - 4.0f;
+        fopMsgM_cposMove(&mKtx1Pane);
+        mKtx1Pane.mPosTopLeftOrig.y = mKtx1Pane.mPosTopLeft.y;
+    }
+
+    fopMsgM_setPaneData(&mClgPane, fmapDl.scrn, 'clg');
+    fopMsgM_setPaneData(&mLnk3Pane, fmapDl.scrn, 'lnk3');
+    fopMsgM_setPaneData(&mSpi3Pane, fmapDl.scrn, 'spi3');
+    fopMsgM_setPaneData(&mStl1Pane, fmapDl.scrn, 'stl1');
+    fopMsgM_setPaneData(&mR01gPane, fmapDl.scrn, 'r01g');
+    fopMsgM_setPaneData(&mFmumPane, fmapDl.scrn, 'fmum');
+    fopMsgM_setPaneData(&mFmw1Pane, fmapDl.scrn, 'fmw1');
+    fopMsgM_setPaneData(&mFmw2Pane, fmapDl.scrn, 'fmw2');
+    fopMsgM_setPaneData(&mFmw3Pane, fmapDl.scrn, 'fmw3');
+    fopMsgM_setPaneData(&mFmw4Pane, fmapDl.scrn, 'fmw4');
+
+    for (int i = 0; i < 15; i++) {
+        fopMsgM_setPaneData(&mFmnPanes[i], fmapDl.scrn, 'fmn1' + i);
+    }
+
+    for (int i = 0; i < 7; i++) {
+        fopMsgM_setPaneData(&mSc2xPanes[i], fmapDl.scrn, 'sc21' + i);
+    }
+
+    for (int i = 0; i < 3; i++) {
+        fopMsgM_setPaneData(&mCk1xPanes[i], fmapDl.scrn, 'CK11' + i);
+        fopMsgM_setPaneData(&mCk2xPanes[i], fmapDl.scrn, 'CK21' + i);
+    }
+    fopMsgM_setPaneData(&mCk31Pane, fmapDl.scrn, 'CK31');
+    fopMsgM_setPaneData(&mCk31Pane, fmapDl.scrn, 'CK32');
+    ((J2DPicture*)mCk1xPanes[0].pane)->setBlackWhite(mCk1Color, mCk1Color2);
+
+    for (int i = 0; i < 8; i++) {
+        fopMsgM_setPaneData(&mKr0xPanes[i], fmapDl.scrn, 'kr03' + i);
+    }
+    ((J2DPicture*)mKr0xPanes[0].pane)->setBlackWhite(mKr0Color, mKr0Color2);
+
+    for (int i = 0; i < 11; i++) {
+        // todo l_island lookup
+        fopMsgM_setPaneData(&mR0xPanes[i], fmapDl.scrn, 'r01' + i);
+    }
+
+    for (int i = 0; i < 49; i++) {
+        // todo vtable lookup
+        fopMsgM_setPaneData(&mStxxPanes[i], fmapDl.scrn, 'st00' + i);
+    }
+
+    //do/while 128
+    char* str2 = "Hello, World2!";
+
+    for (int i = 0; i < 3; i++) {
+        fopMsgM_setPaneData(&mAreaTxtPanes[i], fmapDl.scrn, 'txt1' + i);
+        ((J2DTextBox*)mAreaTxtPanes[i].pane)->setFont(mFont);
+        ((J2DTextBox*)mAreaTxtPanes[i].pane)->setString(str2);
+        mTxtName[i] = 0;
+        mAreaTxtPanes[0].pane->show();
+    }
+
+    fopMsgM_setPaneData(&mBt00Pane, fmapDl.scrn, 'bt00');
+    fopMsgM_setPaneData(&mBt01Pane, fmapDl.scrn, 'bt01');
+    fopMsgM_setPaneData(&mBt02Pane, fmapDl.scrn, 'bt02');
+    outFont->setPane(mFont, mAreaTxtPanes + 2, &mBt00Pane, &mBt01Pane, &mBt02Pane);
+
+    fopMsgM_setPaneData(&mWts1Pane, fmapDl.scrn, 'wts1');
+    fopMsgM_setPaneData(&mCc01Pane, fmapDl.scrn, 'cc01');
+    fopMsgM_setPaneData(&mYs01Pane, fmapDl.scrn, 'ys01');
+    fopMsgM_setPaneData(&mYs00Pane, fmapDl.scrn, 'ys00');
+    fopMsgM_setPaneData(&mYsk0Pane, fmapDl.scrn, 'ysk0');
+    fopMsgM_setPaneData(&mYesPane, fmapDl.scrn, 'yes');
+    fopMsgM_setPaneData(&mNo01Pane, fmapDl.scrn, 'no01');
+    fopMsgM_setPaneData(&mNo00Pane, fmapDl.scrn, 'no00');
+    fopMsgM_setPaneData(&mNok0Pane, fmapDl.scrn, 'nok0');
+    fopMsgM_setPaneData(&mNoPane, fmapDl.scrn, 'no');
+    fopMsgM_setPaneData(&mCur1Pane, fmapDl.scrn, 'cur1');
+    fopMsgM_setPaneData(&mWt0Pane, fmapDl.scrn, 'wt0');
+    fopMsgM_setPaneData(&mWt1Pane, fmapDl.scrn, 'wt1');
+
+    ((J2DTextBox*)mYesPane.pane)->setFont(mFont);
+    ((J2DTextBox*)mNoPane.pane)->setFont(mFont);
+    ((J2DTextBox*)mWt0Pane.pane)->setFont(mFont);
+    ((J2DTextBox*)mWt1Pane.pane)->setFont(mRFont);
+
+
+    ((J2DPicture*)mYs01Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
+    ((J2DTextBox*)mWt0Pane.pane)->setBlack(JUtility::TColor(255, 255, 255, 0));
+    ((J2DTextBox*)mWt0Pane.pane)->setWhite(JUtility::TColor(255, 255, 255, 255));
+
+    for (int i = 0; i < 7; i++) {
+        fopMsgM_setPaneData(&mGsPanes[i], fmapDl.scrn, 'gs07' + i);
+    }
 }
 
 /* 801B06D4-801B0FB4       .text initialize__12dMenu_Fmap_cFv */
