@@ -841,7 +841,7 @@ fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_ruby
     ((J2DTextBox*)i_textPane)->getFontSize(size2);
 
     mesg_header* head_p = msgGet.getMesgHeader(i_msgNo);
-    JUT_ASSERT(VERSION_SELECT(1866, 1866, 1947, 1947), head_p);
+    JUT_ASSERT(VERSION_SELECT(1866, 1866, 1947, 1956), head_p);
 
     char* bmgData = (char*)msgGet.getMessage(head_p);
     fopMsgM_unk_struct sp40;
@@ -8286,9 +8286,9 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
     count += bmgData[count + 1];
 }
 
+#if VERSION < VERSION_PAL
 /* 8003912C-800394B4       .text tag_forest_timer__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_forest_timer() {
-    /* Nonmatching - PAL */
     int i = 0;
     char buf[20];
     char buf2[4];
@@ -8349,6 +8349,175 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
 
     count += bmgData[count + 1];
 }
+#else
+void fopMsgM_msgDataProc_c::tag_forest_timer() {
+    int i = 0;
+    char buf[32];
+    char buf2[4];
+
+    int minutes = dComIfGs_getFwaterTimer() / 1800;
+    strcpy(buf, "");
+
+    if (dComIfGs_getPalLanguage() != 0 && dComIfGs_getPalLanguage() != 1) {
+        if (minutes > 0) {
+            fopMsgM_int_to_char(buf, minutes, false);
+
+            while (buf[i] != '\0') {
+                int c = (u8)buf[i++];
+                if (field_0x150 == 0) {
+                    field_0x14 = charLength(field_0x148, c, true);
+                } else {
+                    field_0x14 += charLength(field_0x148, c, false);
+                }
+
+                field_0x150 += 1;
+            }
+
+            strcat(field_0x60, buf);
+            strcat(field_0x68, buf);
+            if (selectFlag != Select_ON) {
+                nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+            } else {
+                nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+            }
+
+            if (dComIfGs_getPalLanguage() == 2) {
+                if (minutes > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minutes", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minute", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            } else if (dComIfGs_getPalLanguage() == 3) {
+                if (minutes > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minutos", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minuto", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            } else if (dComIfGs_getPalLanguage() == 4) {
+                if (minutes > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minuti", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minuto", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            }
+            buf[0] = '\0';
+            i = 0;
+        }
+    } else {
+        fopMsgM_int_to_char(buf, minutes, false);
+        while (buf[i] != '\0') {
+            int c = (u8)buf[i++];
+            if (field_0x150 == 0) {
+                field_0x14 = charLength(field_0x148, c, true);
+            } else {
+                field_0x14 += charLength(field_0x148, c, false);
+            }
+
+            field_0x150 += 1;
+        }
+
+        strcat(field_0x60, buf);
+        strcat(field_0x68, buf);
+        if (selectFlag != Select_ON) {
+            nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+        } else {
+            nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+        }
+        strcpy(buf2, ":");
+        getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+        buf[0] = '\0';
+        i = 0;
+    }
+
+    int seconds = (dComIfGs_getFwaterTimer() % 1800) / 30;
+    if (minutes == 0 && seconds == 0) {
+        seconds = 1;
+    }
+    
+    if (dComIfGs_getPalLanguage() != 0 && dComIfGs_getPalLanguage() != 1) {
+        if (seconds != 0 || minutes == 0) {
+            if (dComIfGs_getPalLanguage() == 3 && minutes != 0) {
+                strcat(field_0x60, " y ");
+                strcat(field_0x68, " y ");
+            } else if (minutes != 0) {
+                strcat(field_0x60, " ");
+                strcat(field_0x68, " ");
+            }
+            
+            fopMsgM_int_to_char(buf, seconds, false);
+
+            while (buf[i] != '\0') {
+                int c = (u8)buf[i++];
+                if (field_0x150 == 0) {
+                    field_0x14 = charLength(field_0x148, c, true);
+                } else {
+                    field_0x14 += charLength(field_0x148, c, false);
+                }
+
+                field_0x150 += 1;
+            }
+
+            strcat(field_0x60, buf);
+            strcat(field_0x68, buf);
+            if (selectFlag != Select_ON) {
+                nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+            } else {
+                nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+            }
+
+            if (dComIfGs_getPalLanguage() == 2) {
+                if (seconds > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " secondes", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " seconde", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            } else if (dComIfGs_getPalLanguage() == 3) {
+                if (seconds > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " segundos", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " segundo", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            } else if (dComIfGs_getPalLanguage() == 4) {
+                if (seconds > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " secondi", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " secondo", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            }
+        }
+    } else {
+        fopMsgM_int_to_char2(buf, seconds);
+
+        while (buf[i] != '\0') {
+            int c = (u8)buf[i++];
+            if (field_0x150 == 0) {
+                field_0x14 = charLength(field_0x148, c, true);
+            } else {
+                field_0x14 += charLength(field_0x148, c, false);
+            }
+
+            field_0x150 += 1;
+        }
+
+        strcat(field_0x60, buf);
+        strcat(field_0x68, buf);
+
+        if (selectFlag != Select_ON) {
+            nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+        } else {
+            nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+        }
+
+        if (dComIfGs_getPalLanguage() == 1) {
+            getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " Minuten", "", &nowCursorPos, &field_0x24, &field_0x150);
+        } else {
+            getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &nowCursorPos, &field_0x24, &field_0x150);
+        }
+    }
+
+    count += bmgData[count + 1];
+}
+#endif
 
 /* 800394B4-8003966C       .text tag_birdman__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_birdman() {
@@ -8642,9 +8811,9 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
     count += bmgData[count + 1];
 }
 
+#if VERSION < VERSION_PAL
 /* 80039C2C-80039FA0       .text tag_pig_timer__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_pig_timer() {
-    /* Nonmatching - PAL */
     int i = 0;
     char buf[20];
     char buf2[4];
@@ -8705,6 +8874,175 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
 
     count += bmgData[count + 1];
 }
+#else
+void fopMsgM_msgDataProc_c::tag_pig_timer() {
+    int i = 0;
+    char buf[32];
+    char buf2[4];
+
+    int minutes = dComIfGp_getItemTimer() / 1800;
+    strcpy(buf, "");
+
+    if (dComIfGs_getPalLanguage() != 0 && dComIfGs_getPalLanguage() != 1) {
+        if (minutes > 0) {
+            fopMsgM_int_to_char(buf, minutes, false);
+
+            while (buf[i] != '\0') {
+                int c = (u8)buf[i++];
+                if (field_0x150 == 0) {
+                    field_0x14 = charLength(field_0x148, c, true);
+                } else {
+                    field_0x14 += charLength(field_0x148, c, false);
+                }
+
+                field_0x150 += 1;
+            }
+
+            strcat(field_0x60, buf);
+            strcat(field_0x68, buf);
+            if (selectFlag != Select_ON) {
+                nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+            } else {
+                nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+            }
+
+            if (dComIfGs_getPalLanguage() == 2) {
+                if (minutes > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minutes", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minute", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            } else if (dComIfGs_getPalLanguage() == 3) {
+                if (minutes > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minutos", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minuto", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            } else if (dComIfGs_getPalLanguage() == 4) {
+                if (minutes > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minuti", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " minuto", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            }
+            buf[0] = '\0';
+            i = 0;
+        }
+    } else {
+        fopMsgM_int_to_char(buf, minutes, false);
+        while (buf[i] != '\0') {
+            int c = (u8)buf[i++];
+            if (field_0x150 == 0) {
+                field_0x14 = charLength(field_0x148, c, true);
+            } else {
+                field_0x14 += charLength(field_0x148, c, false);
+            }
+
+            field_0x150 += 1;
+        }
+
+        strcat(field_0x60, buf);
+        strcat(field_0x68, buf);
+        if (selectFlag != Select_ON) {
+            nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+        } else {
+            nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+        }
+        strcpy(buf2, ":");
+        getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+        buf[0] = '\0';
+        i = 0;
+    }
+
+    int seconds = (dComIfGp_getItemTimer() % 1800) / 30;
+    if (minutes == 0 && seconds == 0) {
+        seconds = 1;
+    }
+    
+    if (dComIfGs_getPalLanguage() != 0 && dComIfGs_getPalLanguage() != 1) {
+        if (seconds != 0 || minutes == 0) {
+            if (dComIfGs_getPalLanguage() == 3 && minutes != 0) {
+                strcat(field_0x60, " y ");
+                strcat(field_0x68, " y ");
+            } else if (dComIfGs_getPalLanguage() != 3 || minutes != 0) {
+                strcat(field_0x60, " ");
+                strcat(field_0x68, " ");
+            }
+            
+            fopMsgM_int_to_char(buf, seconds, false);
+
+            while (buf[i] != '\0') {
+                int c = (u8)buf[i++];
+                if (field_0x150 == 0) {
+                    field_0x14 = charLength(field_0x148, c, true);
+                } else {
+                    field_0x14 += charLength(field_0x148, c, false);
+                }
+
+                field_0x150 += 1;
+            }
+
+            strcat(field_0x60, buf);
+            strcat(field_0x68, buf);
+            if (selectFlag != Select_ON) {
+                nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+            } else {
+                nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+            }
+
+            if (dComIfGs_getPalLanguage() == 2) {
+                if (seconds > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " secondes", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " seconde", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            } else if (dComIfGs_getPalLanguage() == 3) {
+                if (seconds > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " segundos", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " segundo", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            } else if (dComIfGs_getPalLanguage() == 4) {
+                if (seconds > 1) {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " secondi", "", &nowCursorPos, &field_0x24, &field_0x150);
+                } else {
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " secondo", "", &nowCursorPos, &field_0x24, &field_0x150);
+                }
+            }
+        }
+    } else {
+        fopMsgM_int_to_char2(buf, seconds);
+
+        while (buf[i] != '\0') {
+            int c = (u8)buf[i++];
+            if (field_0x150 == 0) {
+                field_0x14 = charLength(field_0x148, c, true);
+            } else {
+                field_0x14 += charLength(field_0x148, c, false);
+            }
+
+            field_0x150 += 1;
+        }
+
+        strcat(field_0x60, buf);
+        strcat(field_0x68, buf);
+
+        if (selectFlag != Select_ON) {
+            nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+        } else {
+            nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+        }
+
+        if (dComIfGs_getPalLanguage() == 1) {
+            getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, " Minuten", "", &nowCursorPos, &field_0x24, &field_0x150);
+        } else {
+            getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &nowCursorPos, &field_0x24, &field_0x150);
+        }
+    }
+
+    count += bmgData[count + 1];
+}
+#endif
 
 /* 80039FA0-8003A194       .text tag_get_bomb__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_bomb() {
