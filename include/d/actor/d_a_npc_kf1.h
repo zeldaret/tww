@@ -12,9 +12,9 @@ public:
     struct anm_prm_c {
         s8 m0;
         s8 m1;
-        f32 m4;
-        f32 m8;
-        u32 mC;
+        f32 morf;
+        f32 speed;
+        u32 mLoopMode;
     };
 
     void _nodeCB_Head(J3DNode*, J3DModel*);
@@ -107,10 +107,10 @@ public:
     /* 0x6CC */ s8 m_hed_jnt_num;
     /* 0x6CD */ s8 m_bbone_jnt_num;         
     /* 0x6CE */ s8 m_nck_jnt_num;          
-    /* 0x6D0 */ J3DModel* m6D0;
+    /* 0x6D0 */ J3DModel* mpHairModel;
     /* 0x6D4 */ char mArcName[4];
     /* 0x6D8 */ u32 mShadowId;
-    /* 0x6DC */ mDoExt_btpAnm m6DC;
+    /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F0 */ u8 m6F0;
     /* 0x6F1 */ u8 field_0x6F1[0x6F2 - 0x6F1];
     /* 0x6F2 */ s16 m6F2;
@@ -133,8 +133,8 @@ public:
     /* 0x776 */ s16 m776;
     /* 0x778 */ s16 m778;
     /* 0x779 */ u8 field_0x77A[0x77C - 0x77A];
-    /* 0x77C */ s32 m77C;
-    /* 0x780 */ s16 m780[2];
+    /* 0x77C */ s32 mbSetEyePos;
+    /* 0x780 */ s16 mEventIdTbl[2];
     /* 0x784 */ u8 field_0x784[0x786 - 0x784];
     /* 0x786 */ s16 m786;
     /* 0x788 */ u8 field_0x788[0x78C - 0x788];
@@ -145,7 +145,7 @@ public:
     /* 0x794 */ s16 m794;
     /* 0x795 */ u8 field_0x796[0x79A - 0x796];
     /* 0x79A */ s16 m79A;
-    /* 0x79C */ s8 m79C;
+    /* 0x79C */ s8 mbMorfAnimStopped;
     /* 0x79D */ u8 m79D;
     /* 0x79E */ u8 m79E;
     /* 0x79F */ u8 m79F;
@@ -155,7 +155,7 @@ public:
     /* 0x7A3 */ bool m7A3;
     /* 0x7A4 */ bool m7A4;
     /* 0x7A5 */ bool m7A5;
-    /* 0x7A6 */ bool m7A6;
+    /* 0x7A6 */ bool mbLoadComplete;
     /* 0x7A7 */ u8 m7A7;
     /* 0x7A8 */ u8 m7A8;
     /* 0x7A9 */ u8 m7A9;
@@ -163,7 +163,7 @@ public:
     /* 0x7AB */ bool mbAttention;
     /* 0x7AC */ u8 m7AC;
     /* 0x7AD */ bool m7AD;
-    /* 0x7AE */ bool m7AE;
+    /* 0x7AE */ bool mbInDemo;
     /* 0x7AF */ u8 field_0x7AF[0x7B0 - 0x7AF];
     /* 0x7B0 */ fpc_ProcID m7B0[3];
     /* 0x7BC */ u32 m7BC[0x8];
@@ -179,7 +179,7 @@ public:
     /* 0x7F5 */ s8 m7F5;
     /* 0x7F6 */ s8 m7F6;
     /* 0x7F7 */ s8 m7F7;
-    /* 0x7F8 */ s8 m7F8;
+    /* 0x7F8 */ s8 mStatus;
     /* 0x7F9 */ s8 m7F9;
     /* 0x7FA */ s8 mLookBackState;
     /* 0x7FB */ s8 m7FB;
