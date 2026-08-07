@@ -16,12 +16,6 @@ namespace {
 static s32 l_enter_angl_band = abs(0xe00);
 
 static const char l_arcname[] = "Yswdr00";
-static const char l_ev_name[] = "btl_of_swroom";
-static const char l_ev_name2[] = "btl_of_swroom2";
-static const char* l_ev_name_table[] = {
-    l_ev_name,
-    l_ev_name2,
-};
 //TODO: Convert values to correct flags
 static const dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -51,6 +45,13 @@ static const dCcD_SrcCyl l_cyl_src = {
         /* Radius */ 1000.0f,
         /* Height */ 10000.0f,
     }},
+};
+
+static const char l_ev_name[] = "btl_of_swroom";
+static const char l_ev_name2[] = "btl_of_swroom2";
+static const char* l_ev_name_table[] = {
+    l_ev_name,
+    l_ev_name2,
 };
 
 }
@@ -159,17 +160,19 @@ void daObjFirewall_c::setPointLight() {
         if (field_0x106c > 1.0f) {
             pos = field_0xc6c[i];
             scale.setall(1.5f * field_0x106c);            
-            pos.y += (1.1f * ((220.0f + REG12_S(0)) * 2));
+            pos.y += (1.1f * ((220.0f + REG12_F(1)) * field_0x106c));
             
         }
     }
 
-    if (field_0x106c > 1.0f) {
-        field_0x106c = 1.0f;
+    blend = field_0x106c;
+
+    if (blend > 1.0f) {
+        blend = 1.0f;
     }
 
-    blend = field_0x106c;
-    if (field_0x106c > 0.5f) {
+    
+    if (blend > 0.5f) {
         dKy_custom_colset(0, 3, blend);
     } else {
         blend = 1.0f - blend;
@@ -206,14 +209,15 @@ void daObjFirewall_c::particle_set() {
 /* 00000970-00000A1C       .text particle_delete__15daObjFirewall_cFv */
 void daObjFirewall_c::particle_delete() {
     /* Nonmatching */
-    for (int i = 0; i < 6; i++) {
+    int i = 0;
+    for (i = 0; i < 6; i++) {
         if (field_0x438[i] != NULL) {
             field_0x438[i]->becomeInvalidEmitter();
             field_0x438[i] = NULL;
         }
     }
 
-    for (int i = 0; i < 5; i++) {
+    for (i = 0; i < 5; i++) {
         if (field_0x450[i] != NULL) {
             field_0x450[i]->becomeInvalidEmitter();
             field_0x450[i] = NULL;
@@ -347,19 +351,21 @@ cPhs_State daObjFirewall_c::_create() {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x1420)) {
             cullMtx = mpModel->getBaseTRMtx();
             init_mtx();
-            mStts.Init(-1,-1,this);
+            mStts.Init(0xff,0xff,this);
             mCyl.Set(l_cyl_src);
             mCyl.SetStts(&mStts);
             mCyl.OnBsRevHit();
 
-            for (int i=0; i < 8; i++) {
-                field_0x1080[i].x = current.angle.y;
-                field_0x1080[i].y = current.pos.y;
-                field_0x1080[i].z = current.pos.y + current.angle.y * 1000.0f;
+            u16 angle = 0;
+            for (int i=0; i < 8; angle += 0x2000, i++) {
+                field_0x1080[i].set(
+                    current.pos.x + cM_ssin(angle) * 1000.0f * scale.x, 
+                    current.pos.y, 
+                    current.pos.z + cM_scos(angle) * 1000.0f * scale.x);
             }
-            field_0x10e0 = true;
+            field_0x10e0 = TRUE;
             mSwitchNo = param_get_swSave();
-            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3520) != 1) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3520) == 1) {
                 field_0x10e4 = TRUE;
                 field_0x107c = dComIfGp_evmng_getEventIdx(l_ev_name_table[1]);
                 field_0x1070 = &daObjFirewall_c::wait2_act_proc;
@@ -369,7 +375,7 @@ cPhs_State daObjFirewall_c::_create() {
                 field_0x1070 = &daObjFirewall_c::wait_act_proc;
             }
         } else {
-            return cPhs_ERROR_e;
+            result = cPhs_ERROR_e;
         }
     }
 
@@ -402,7 +408,7 @@ void daObjFirewall_c::wait_act_proc() {
 
     if(staffIdx != -1) {
         if (strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "BurnUp") == 0) {
-            dComIfGs_onEventBit(0x3520);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_3520);
             setup_burn_up();
         } else {
             set_pl_se();
