@@ -79,15 +79,17 @@ bool daObjFirewall_c::create_heap() {
     J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, 9));
     if(modelData == NULL || pbtk == NULL || pbrk == NULL) {
         JUT_ASSERT(0x171, 0);
-        ret = false;
+        ret = FALSE;
     }
     
-    J3DModel* model = mDoExt_J3DModel__create(modelData,0x80000,0x11000222);
-    dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 0xf), cBgW::MOVE_BG_e, &model->getBaseTRMtx());
-    int local_1 = field_0x40c.init(modelData, pbtk, true, 2, 1.0f, 0, -1, false, FALSE);
-    int local_2 = field_0x420.init(modelData, pbrk, true, 0, 1.0f, 0, -1, false, 0);
-    if(mpModel == NULL|| field_0x408 == NULL || local_1 == 0 || local_2 == 0) {
-        ret = false;
+    else {
+        mpModel = mDoExt_J3DModel__create(modelData,0x80000,0x11000222);
+        field_0x408 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 0xf), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
+        int local_1 = field_0x40c.init(modelData, pbtk, true, 2, 1.0f, 0, -1, false, FALSE);
+        int local_2 = field_0x420.init(modelData, pbrk, true, 0, 1.0f, 0, -1, false, 0);
+        if(mpModel == NULL|| field_0x408 == NULL || local_1 == 0 || local_2 == 0) {
+            ret = FALSE;
+        }
     }
     return ret;
 }
