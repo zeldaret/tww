@@ -222,6 +222,8 @@ public:
     dMc_HIO_c();
     virtual ~dMc_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) {}
+
 public:
     /* 0x00 */ // vtable
     /* 0x04 */ u8 m04[0x44 - 0x04];

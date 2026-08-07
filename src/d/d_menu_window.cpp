@@ -706,7 +706,7 @@ BOOL dMs_isButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
 
 /* 801DD340-801DD3A4       .text dMs_isPush_L_Button__FP19sub_ms_screen_class */
 BOOL dMs_isPush_L_Button(sub_ms_screen_class* i_Ms) {
-    if (g_mDoCPd_cpadInfo[0].mHoldLockL != 0 && !dMs_isButtonBit(i_Ms, 1)) {
+    if (mDoCPd_L_LOCK_BUTTON(0) && !dMs_isButtonBit(i_Ms, 1)) {
         dMs_onButtonBit(i_Ms, 1);
         return TRUE;
     } else {
@@ -716,7 +716,7 @@ BOOL dMs_isPush_L_Button(sub_ms_screen_class* i_Ms) {
 
 /* 801DD3A4-801DD408       .text dMs_isPush_R_Button__FP19sub_ms_screen_class */
 BOOL dMs_isPush_R_Button(sub_ms_screen_class* i_Ms) {
-    if (g_mDoCPd_cpadInfo[0].mHoldLockR != 0 && !dMs_isButtonBit(i_Ms, 2)) {
+    if (mDoCPd_R_LOCK_BUTTON(0) && !dMs_isButtonBit(i_Ms, 2)) {
         dMs_onButtonBit(i_Ms, 2);
         return TRUE;
     } else {

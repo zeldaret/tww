@@ -194,7 +194,7 @@ void dMesg_tSequenceProcessor::initialize(int param_1) {
         }
     }
 
-    mesgControl->setNowFontSize(mesgControl->getInitFontSize()) ;
+    mesgControl->setNowFontSize(mesgControl->getInitFontSize());
     mesgControl->setCharCode(0);
     mesgControl->setHeaderOff();
     mesgControl->setCode16FgOff();
@@ -768,7 +768,7 @@ dMesg_tMeasureProcessor::dMesg_tMeasureProcessor(JMessage::TControl* param_1, in
     field_0x54 = 0;
     linemax = 4;
     dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
-    mesgControl->setNowFontSize(mesgControl->getInitFontSize()) ;
+    mesgControl->setNowFontSize(mesgControl->getInitFontSize());
     mesgControl->setLineCount(0);
     mesgControl->setCharCode(0);
     mesgControl->setHeaderOff();

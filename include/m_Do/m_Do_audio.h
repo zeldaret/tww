@@ -294,7 +294,7 @@ inline void mDoAud_rainPlay(s32 param_0) {
     mDoAud_zelAudio_c::getInterface()->rainPlay(param_0);
 }
 
-inline f32 mDoAud_tact_getMelodyPattern(s32 melody_no, s32 note_no, s32 * pattern) {
+inline f32 mDoAud_tact_getMelodyPattern(s32 melody_no, s32 note_no, s32* pattern) {
     return mDoAud_zelAudio_c::mTact.getMelodyPattern(melody_no, note_no, pattern);
 }
 

@@ -263,7 +263,6 @@ void dAuction_screen_c::rupeeCountDown() {
 
 /* 8016013C-801604A0       .text slotShowAnime__17dAuction_screen_cFv */
 void dAuction_screen_c::slotShowAnime() {
-
     if (slotShow) {
         if (field_0xc.mUserArea <= 7) {
             field_0xc.mUserArea++;

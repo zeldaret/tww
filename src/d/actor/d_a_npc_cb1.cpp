@@ -639,7 +639,7 @@ void daNpc_Cb1_c::setPlayerAction(daNpc_Cb1_c::ActionFunc_t param_1, void* param
 
 /* 00001810-00001858       .text getStickAngY__11daNpc_Cb1_cFv */
 s16 daNpc_Cb1_c::getStickAngY() {
-    return 0x8000 + g_mDoCPd_cpadInfo[0].mMainStickAngle + dCam_getControledAngleY(dComIfGp_getCamera(0));
+    return 0x8000 + CPad_GET_STICK_ANGLE(0) + dCam_getControledAngleY(dComIfGp_getCamera(0));
 }
 
 /* 00001858-000019B0       .text calcStickPos__11daNpc_Cb1_cFsP4cXyz */
@@ -854,7 +854,7 @@ BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4
         fopAcM_seStart(this, JA_SE_CM_PRAPELLO_ROLLING, m8F8 * (100.0f / l_HIO.field_0xD0));
 
         if(param_4 || (!isMakarPlayer && mAcch.ChkWallHit()) || (!mAcch.ChkGroundHit() && m8F8 == 0) ||
-            (mAcch.ChkGroundHit() && m8F8 <= l_HIO.field_0xD2 && (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x80 || ++m8F6 > l_HIO.field_0xCC))
+            (mAcch.ChkGroundHit() && m8F8 <= l_HIO.field_0xD2 && (CPad_GET_STICK_VALUE(0) >= l_HIO.field_0x80 || ++m8F6 > l_HIO.field_0xCC))
         ) {
             setAnm(ANM_06);
             mpMorf->setFrame(8.0f);
@@ -2247,7 +2247,7 @@ BOOL daNpc_Cb1_c::waitPlayerAction(void*) {
     else if(m8F0 != -1 && !sowCheck()) {
         dAttention_c& attention = dComIfGp_getAttention();
 
-        if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x80 || attention.Lockon()) {
+        if(CPad_GET_STICK_VALUE(0) >= l_HIO.field_0x80 || attention.Lockon()) {
             s16 target = getStickAngY();
             cLib_addCalcAngleS(&current.angle.y, target, 0x19, 0x7FFF, 1);
 
@@ -2256,7 +2256,7 @@ BOOL daNpc_Cb1_c::waitPlayerAction(void*) {
             if(stickPos == 0) {
                 shape_angle.y = current.angle.y;
             }
-            else if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x84) {
+            else if(CPad_GET_STICK_VALUE(0) >= l_HIO.field_0x84) {
                 shape_angle.y = current.angle.y;
             }
 
@@ -2269,7 +2269,7 @@ BOOL daNpc_Cb1_c::waitPlayerAction(void*) {
 
             current.angle.y = shape_angle.y;
 
-            if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x84 && stickPos == 0) {
+            if(CPad_GET_STICK_VALUE(0) >= l_HIO.field_0x84 && stickPos == 0) {
                 current.angle.y = target;
                 setPlayerAction(&daNpc_Cb1_c::walkPlayerAction, NULL);
             }
@@ -2292,7 +2292,7 @@ BOOL daNpc_Cb1_c::walkPlayerAction(void*) {
         cLib_onBit<u32>(attention_info.flags, ~0);
     }
     else if(m8F0 != -1 && !sowCheck()) {
-        f32 temp = g_mDoCPd_cpadInfo[0].mMainStickValue * l_HIO.mStickWalkSpeedScale;
+        f32 temp = CPad_GET_STICK_VALUE(0) * l_HIO.mStickWalkSpeedScale;
         s16 temp7 = getStickAngY();
         s32 temp2 = cLib_distanceAngleS(temp7, current.angle.y);
         f32 temp6 = l_HIO.mForwardAccel;
@@ -2410,7 +2410,7 @@ BOOL daNpc_Cb1_c::flyPlayerAction(void*) {
     }
     else if(m8F0 != -1) {
         dComIfGp_setAStatus(dActStts_LET_GO_e);
-        flyAction(CPad_CHECK_TRIG_A(0), g_mDoCPd_cpadInfo[0].mMainStickValue * l_HIO.mStickFlySpeedScale, getStickAngY(), CPad_CHECK_TRIG_B(0));
+        flyAction(CPad_CHECK_TRIG_A(0), CPad_GET_STICK_VALUE(0) * l_HIO.mStickFlySpeedScale, getStickAngY(), CPad_CHECK_TRIG_B(0));
     }
 
     return TRUE;
