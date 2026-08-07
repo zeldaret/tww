@@ -821,7 +821,7 @@ void dMenu_Fmap_c::checkDspHugeMapShip() {
 }
 
 /* 801B4B44-801B4C0C       .text _open__12dMenu_Fmap_cFv */
-BOOL dMenu_Fmap_c::_open() {
+bool dMenu_Fmap_c::_open() {
     int ret;
     if (mFrameTimer == 0) {
         mButtonIconMode = FMAP_BTN_ICON_WORLD;
@@ -840,7 +840,7 @@ BOOL dMenu_Fmap_c::_open() {
 }
 
 /* 801B4C0C-801B4C78       .text _close__12dMenu_Fmap_cFv */
-BOOL dMenu_Fmap_c::_close() {
+bool dMenu_Fmap_c::_close() {
     BOOL ret;
     switch (mFmapMode) {
         case FMAP_MODE_NORMAL:

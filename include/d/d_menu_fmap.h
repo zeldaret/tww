@@ -220,8 +220,8 @@ public:
     void dispEndSalvageHugeMark(f32, f32);
     void checkDspHugeMapLink();
     void checkDspHugeMapShip();
-    BOOL _open();
-    BOOL _close();
+    bool _open();
+    bool _close();
     BOOL _close_normalMode();
     void _move();
     void _draw();

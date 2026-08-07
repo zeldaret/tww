@@ -22,8 +22,8 @@ public:
 
     ~dMenu_FmapSv_c() {}
 
-    u8 getActive() { return active; }
-    void setActive(u8 val) { active = val; }
+    s8 getActive() { return active; }
+    void setActive(s8 val) { active = val; }
     s8 getCmapSelNo() { return cmapSelNo; }
     void setCmapSelNo(s8 val) { cmapSelNo = val; }
     s8 getCurX() { return curX; }
@@ -38,17 +38,17 @@ public:
     void setCurHX(s8 val) { curHX = val; }
     s8 getCurHY() { return curHY; }
     void setCurHY(s8 val) { curHY = val; }
-    u8 getDispMode() { return dispMode; }
-    void setDispMode(u8 val) { dispMode = val; }
-    u8 getFmapZoom() { return fmapZoom; }
-    void setFmapZoom(u8 val) { fmapZoom = val; }
+    s8 getDispMode() { return dispMode; }
+    void setDispMode(s8 val) { dispMode = val; }
+    s8 getFmapZoom() { return fmapZoom; }
+    void setFmapZoom(s8 val) { fmapZoom = val; }
     s8 getZoomGridX() { return zoomGridX; }
     void setZoomGridX(s8 val) { zoomGridX = val; }
     s8 getZoomGridY() { return zoomGridY; }
     void setZoomGridY(s8 val) { zoomGridY = val; }
 
 public:
-    /* 0x0 */ u8 active;
+    /* 0x0 */ s8 active;
     /* 0x1 */ s8 cmapSelNo;
     /* 0x2 */ s8 curX;
     /* 0x3 */ s8 curY;
@@ -56,8 +56,8 @@ public:
     /* 0x5 */ s8 curWY;
     /* 0x6 */ s8 curHX;
     /* 0x7 */ s8 curHY;
-    /* 0x8 */ u8 dispMode;
-    /* 0x9 */ u8 fmapZoom;
+    /* 0x8 */ s8 dispMode;
+    /* 0x9 */ s8 fmapZoom;
     /* 0xA */ s8 zoomGridX;
     /* 0xB */ s8 zoomGridY;
 };
