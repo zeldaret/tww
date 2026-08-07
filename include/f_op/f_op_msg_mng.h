@@ -297,13 +297,14 @@ public:
         /* 0x00 */ Select_OFF,
         /* 0x01 */ Select_ON,
         /* 0x02 */ Select_YOKO,
-        /* 0x03 */ Select_INPUT,
+        /* 0x03 */ Select_AUCTION,
     };
 
     u8 getSelectFlag() { return selectFlag; }
     void setSelectFlagOff() { selectFlag = Select_OFF; }
     void setSelectFlagOn() { selectFlag = Select_ON; }
     void setSelectFlagYokoOn() { selectFlag = Select_YOKO; }
+    void setSelectFlagAuctionOn() { selectFlag = Select_AUCTION; }
     u8 getAutoSendFlag() { return autoSendFlag; }
     void setAutoSendFlagOff() { autoSendFlag = 0; }
     void setAutoSendFlagOn() { autoSendFlag = 1; }

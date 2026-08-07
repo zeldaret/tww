@@ -41,6 +41,13 @@ struct mesg_data : JUTDataBlockHeader {
     char mData[];
 };
 
+// Fake struct name. CLT1 chunk in a .bmc file.
+struct clt1_header : public JUTDataBlockHeader {
+    /* 0x08 */ u16 mEntryNum;
+    /* 0x0A */ u16 pad;
+    /* 0x0C */ u32 mColors[];
+};
+
 static bool pushButton;
 static bool pushButton2;
 static bool demoFlag;
@@ -1074,7 +1081,6 @@ GXColor fopMsgM_outFontColorWhite(int i_no) {
 
 /* 8002C6D8-8002C9B0       .text fopMsgM_outFontSet__FP10J2DPictureP10J2DPicturePsUlUc */
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, s16* i_timer, u32 i_color, u8 i_iconNo) {
-    /* Nonmatching */
     // Convert special icon numbers to indexes into fopMsgM_buttonTex/fopMsgM_buttonW.
     if (i_iconNo == fopMsgM_Icon_FLASHING_A_BUTTON_e) {
         i_iconNo = 0x14;
@@ -1120,7 +1126,6 @@ void fopMsgM_outFontSet(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, s16* i_time
 
 /* 8002C9B0-8002CBDC       .text fopMsgM_outFontSet__FP10J2DPicturePsUlUc */
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, s16* i_timer, u32 i_color, u8 i_iconNo) {
-    /* Nonmatching */
     // Convert special icon numbers to indexes into fopMsgM_buttonTex/fopMsgM_buttonW.
     if (i_iconNo == fopMsgM_Icon_FLASHING_A_BUTTON_e) {
         i_iconNo = 0x14;
@@ -3291,9 +3296,18 @@ void fopMsgM_msgDataProc_c::stringShift() {
     if (g_msgDHIO.field_0x08 != 0 && mesgEntry->mTextAlignment != 3) {
         r0 = 1;
     }
-#else
+#elif VERSION == VERSION_USA
     u8 r3 = mesgEntry->mTextboxType;
     if (mesgEntry->mTextAlignment != 3 && r3 != 0xD) {
+        r0 = 1;
+    }
+#else // VERSION_PAL
+    u8 r3 = mesgEntry->mTextboxType;
+    if (dComIfGs_getPalLanguage() == 0) {
+        if (mesgEntry->mTextAlignment != 3 && r3 != 0xD) {
+            r0 = 1;
+        }
+    } else if (mesgEntry->mMsgNo == 0x141) {
         r0 = 1;
     }
 #endif
@@ -3651,7 +3665,10 @@ void fopMsgM_msgDataProc_c::colorAnime(J2DPicture* i_pic) {
 
 /* 800322B4-80034F3C       .text stringSet__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::stringSet() {
-    /* Nonmatching - regswap */
+    /* Nonmatching - regalloc */
+    // demo: regswap on int r28
+    // jpn: matches 100%
+    // usa and pal: regswap on s8 r30
     s8 r30 = g_msgHIO.field_0x6c;
 
     field_0x60 = field_0x40;
@@ -3679,8 +3696,13 @@ void fopMsgM_msgDataProc_c::stringSet() {
             mesgStatus != fopMsgStts_SELECT_2_e && mesgStatus != fopMsgStts_SELECT_3_e &&
             mesgStatus != fopMsgStts_SELECT_YOKO_e && mesgStatus != fopMsgStts_INPUT_e
         ) {
+#if VERSION <= VERSION_JPN
+            if (mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB &&
+                mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD)
+#else
             if (mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB &&
                 mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD && mesgEntry->mTextboxType != 9)
+#endif
             {
                 if (dComIfGp_roomControl_getStayNo() != 0) {
                     mDoAud_messageSePlay(0, 0, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
@@ -3726,6 +3748,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 
         if (bmgData[count] == 0x1A) {
             if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == SpclCode_COLOR) {
+#if VERSION > VERSION_JPN
                 if (mesgEntry->mMsgNo == 0x42 || mesgEntry->mMsgNo == 0x43 || mesgEntry->mMsgNo == 0x44 || mesgEntry->mMsgNo == 0x45 ||
                     mesgEntry->mMsgNo == 0x46 || mesgEntry->mMsgNo == 0x47 || mesgEntry->mMsgNo == 0x48 || mesgEntry->mMsgNo == 0x49 ||
                     mesgEntry->mMsgNo == 0x4A || mesgEntry->mMsgNo == 0x4B)
@@ -3745,48 +3768,52 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     char spF0[32];
                     sprintf(spF0, "\x1B""CC[%08x]\x1B""GM[0]", stringColor);
                     strcat(field_0x60, spF0);
-                } else if (bmgData[count + 5] >= 0 && bmgData[count + 5] <= 8) {
-                    if (mesgEntry->mTextboxType == 2 || mesgEntry->mTextboxType == 6 || mesgEntry->mTextboxType == 7) {
-                        static const u32 colorTable[9] = {
-                            0x00000000,
-                            0xB4000000,
-                            0x00828200,
-                            0x0000AA00,
-                            0xF0F01E00,
-                            0x82FFFF00,
-                            0x6400FF00,
-                            0x50505000,
-                            0xFFB40000,
-                        };
-                        stringColor = colorTable[bmgData[count + 5]];
-                        char spD0[32];
-                        u32 r5 = stringColor;
-                        r5 |= field_0x290;
-                        u32 r6 = stringColor;
-                        r6 |= field_0x291;
-                        sprintf(spD0,"\x1B""CC[%08x]\x1B""GC[%08x]", r5, r6);
-                        strcat(field_0x60, spD0);
-                    } else if (mesgEntry->mTextboxType == 0xB) {
-                        static const u32 colorTable[9] = {
-                            0x000000FF,
-                            0xB40000FF,
-                            0x008282FF,
-                            0x0000AAFF,
-                            0xE67D0FFF,
-                            0x82FFFFFF,
-                            0x6400FFFF,
-                            0x3C3C3CFF,
-                            0xFFB400FF,
-                        };
-                        stringColor = colorTable[bmgData[count + 5]];
-                        char spB4[28];
-                        sprintf(spB4,  "\x1B""CC[%08x]\x1B""GM[0]", stringColor);
-                        strcat(field_0x60, spB4);
-                    } else {
-                        stringColor = fopMsgM_getColorTable(bmgData[count + 5]);
-                        char sp98[28];
-                        sprintf(sp98, "\x1B""CC[%08x]\x1B""GM[0]", stringColor);
-                        strcat(field_0x60, sp98);
+                } else
+#endif
+                {
+                    if (bmgData[count + 5] >= 0 && bmgData[count + 5] <= 8) {
+                        if (mesgEntry->mTextboxType == 2 || mesgEntry->mTextboxType == 6 || mesgEntry->mTextboxType == 7) {
+                            static const u32 colorTable[9] = {
+                                0x00000000,
+                                0xB4000000,
+                                0x00828200,
+                                0x0000AA00,
+                                0xF0F01E00,
+                                0x82FFFF00,
+                                0x6400FF00,
+                                0x50505000,
+                                0xFFB40000,
+                            };
+                            stringColor = colorTable[bmgData[count + 5]];
+                            char spD0[32];
+                            u32 r5 = stringColor;
+                            r5 |= field_0x290;
+                            u32 r6 = stringColor;
+                            r6 |= field_0x291;
+                            sprintf(spD0,"\x1B""CC[%08x]\x1B""GC[%08x]", r5, r6);
+                            strcat(field_0x60, spD0);
+                        } else if (mesgEntry->mTextboxType == 0xB) {
+                            static const u32 colorTable[9] = {
+                                0x000000FF,
+                                0xB40000FF,
+                                0x008282FF,
+                                0x0000AAFF,
+                                0xE67D0FFF,
+                                0x82FFFFFF,
+                                0x6400FFFF,
+                                0x3C3C3CFF,
+                                0xFFB400FF,
+                            };
+                            stringColor = colorTable[bmgData[count + 5]];
+                            char spB4[28];
+                            sprintf(spB4,  "\x1B""CC[%08x]\x1B""GM[0]", stringColor);
+                            strcat(field_0x60, spB4);
+                        } else {
+                            stringColor = fopMsgM_getColorTable(bmgData[count + 5]);
+                            char sp98[28];
+                            sprintf(sp98, "\x1B""CC[%08x]\x1B""GM[0]", stringColor);
+                            strcat(field_0x60, sp98);
+                        }
                     }
                 }
 
@@ -3976,7 +4003,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     count += bmgData[count + 1];
                     return;
                 }
-#if VERSION > VERSION_JPN
+#if VERSION > VERSION_DEMO
                 if (
                     mesgEntry->mTextboxType == 0 || mesgEntry->mTextboxType == 1 || mesgEntry->mTextboxType == 5 ||
                     mesgEntry->mTextboxType == 8 || mesgEntry->mTextboxType == 0xC || mesgEntry->mTextboxType == 0xE
@@ -3990,6 +4017,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     return;
                 }
 #endif
+
                 count += bmgData[count + 1];
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_TWO) {
                 setSelectFlagOn();
@@ -4070,6 +4098,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[12];
+
                 int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF);
                 fopMsgM_int_to_char(buf, num, false);
 
@@ -4095,17 +4124,18 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
                 }
 
+                char* r27 = "発";
                 // Furigana for 発 (counter with irregular pronunciation)
                 char* sp3C8[] = {
                     "ぱつ",
                     "ぱつ",
                     "はつ",
                     "ぱつ",
+                    DEMO_SELECT("はつ", "ぱつ"),
                     "はつ",
+                    DEMO_SELECT("はつ", "ぱつ"),
                     "はつ",
-                    "はつ",
-                    "はつ",
-                    "はつ",
+                    "ぱつ",
                     "はつ",
                 };
                 int r23 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_BEFF) % 10;
@@ -4113,7 +4143,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     r23 = 2;
                 }
 
-                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "発", sp3C8[r23], &nowCursorPos, &field_0x24, &field_0x150);
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r27, sp3C8[r23], &nowCursorPos, &field_0x24, &field_0x150);
+
                 count += bmgData[count + 1];
 #else
                 tag_kaisen_game();
@@ -4176,9 +4207,49 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 } else {
                     field_0x14 = nowCursorPos - field_0x108[lineCount];
                 }
+
                 count += bmgData[count + 1];
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK26) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[8];
+                char buf2[16];
+
+                int temp = (field_0x148 + charSpace) * 3;
+                setSelectFlagAuctionOn();
+                iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
+                mesgStatus = fopMsgStts_INPUT_e;
+                sprintf(buf2, "\x1B""CR[%d]", temp);
+                strcat(field_0x60, buf2);
+                strcat(field_0x68, buf2);
+                field_0x14 = temp;
+                field_0x150 += 3;
+
+                strcpy(buf, "ルピー");
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_num_input();
 #endif
@@ -4186,6 +4257,39 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 iconSelect(field_0x148, fopMsgM_Icon_FLASHING_A_BUTTON_e);
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK28) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGp_getMessageCountNumber();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "回";
+                char* r9 = "かい";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_sword_game();
 #endif
@@ -4197,41 +4301,325 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 } else {
                     field_0x14 = nowCursorPos - field_0x108[lineCount];
                 }
+
                 count += bmgData[count + 1];
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_STARBURST) {
                 iconSelect(field_0x148, fopMsgM_Icon_STARBURST_e);
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK2B) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGp_getMiniGameRupee();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_letter_game();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3B) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8AFF);
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_letter_game_max();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3C) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGp_getMessageCountNumber();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_fish();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3D) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGp_getMessageCountNumber() * 10;
+                fopMsgM_int_to_char(buf, num, false);
+
+                strcat(buf, "ルピー");
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_fish_rupee();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK2D) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGp_getMessageCountNumber();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "通";
+                char* r9 = "つう";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_letter();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK2E) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGp_getMessageCountNumber();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r23 = "人";
+                // Furigana for 人 (counter with irregular pronunciation)
+                char* sp3A0[] = {
+                    "にん",
+                    "り",
+                    "り",
+                    "にん",
+                    "にん",
+                    "にん",
+                    "にん",
+                    "にん",
+                    "にん",
+                    "にん",
+                };
+                int r9 = dComIfGp_getMessageCountNumber() % 10;
+
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r23, sp3A0[r9], &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_rescue();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK2F) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+                int c;
+
+                int minutes = dComIfGs_getFwaterTimer() / 1800;
+                if (minutes > 0) {
+                    fopMsgM_int_to_char(buf, minutes, false);
+
+                    while (buf[i] != '\0') {
+                        int hi = (u8)buf[i++];
+                        int lo = (u8)buf[i++];
+                        c = hi << 8 | lo;
+                        if (field_0x150 == 0) {
+                            field_0x14 = charLength(field_0x148, c, true);
+                        } else {
+                            field_0x14 += charLength(field_0x148, c, false);
+                        }
+
+                        field_0x150 += 1;
+                    }
+
+                    strcat(field_0x60, buf);
+                    strcat(field_0x68, buf);
+                    if (selectFlag != Select_ON) {
+                        nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                    } else {
+                        nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                    }
+
+                    char* r8 = "分";
+                    // Furigana for 分 (counter with irregular pronunciation)
+                    char* sp378[] = {
+                        "ぷん",
+                        "ぷん",
+                        "ふん",
+                        "ぷん",
+                        "ふん",
+                        "ふん",
+                        "ぷん",
+                        "ふん",
+                        "ぷん",
+                        "ふん",
+                    };
+                    int r9 = minutes % 10;
+
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, sp378[r9], &nowCursorPos, &field_0x24, &field_0x150);
+                    buf[0] = '\0';
+                    i = 0;
+                }
+
+                int seconds = (dComIfGs_getFwaterTimer() % 1800) / 30;
+                if (minutes == 0 && seconds == 0) {
+                    seconds = 1;
+                }
+                if (seconds != 0 || minutes == 0) {
+                    fopMsgM_int_to_char(buf, seconds, false);
+                    
+                    while (buf[i] != '\0') {
+                        int hi = (u8)buf[i++];
+                        int lo = (u8)buf[i++];
+                        c = hi << 8 | lo;
+                        if (field_0x150 == 0) {
+                            field_0x14 = charLength(field_0x148, c, true);
+                        } else {
+                            field_0x14 += charLength(field_0x148, c, false);
+                        }
+
+                        field_0x150 += 1;
+                    }
+
+                    strcat(field_0x60, buf);
+                    strcat(field_0x68, buf);
+
+                    if (selectFlag != Select_ON) {
+                        nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                    } else {
+                        nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                    }
+
+                    char* r8 = "秒";
+                    char* r9 = "びょう";
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_forest_timer();
 #endif
@@ -4240,101 +4628,764 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK31)
             ) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGp_getMessageCountNumber();
+                fopMsgM_int_to_char(buf, num, false);
+
+                strcat(buf, "メートル");
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_birdman();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK32) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
+                fopMsgM_int_to_char(buf, num, false);
+
+                strcat(buf, "ポイント");
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_point();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK33) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_get_pendant();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK34) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_rev_pendant();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK35) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+                int c;
+
+                int minutes = dComIfGp_getItemTimer() / 1800;
+                if (minutes > 0) {
+                    fopMsgM_int_to_char(buf, minutes, false);
+
+                    while (buf[i] != '\0') {
+                        int hi = (u8)buf[i++];
+                        int lo = (u8)buf[i++];
+                        c = hi << 8 | lo;
+                        if (field_0x150 == 0) {
+                            field_0x14 = charLength(field_0x148, c, true);
+                        } else {
+                            field_0x14 += charLength(field_0x148, c, false);
+                        }
+
+                        field_0x150 += 1;
+                    }
+
+                    strcat(field_0x60, buf);
+                    strcat(field_0x68, buf);
+                    if (selectFlag != Select_ON) {
+                        nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                    } else {
+                        nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                    }
+
+                    char* r8 = "分";
+                    // Furigana for 分 (counter with irregular pronunciation)
+                    char* sp350[] = {
+                        "ぷん",
+                        "ぷん",
+                        "ふん",
+                        "ぷん",
+                        "ふん",
+                        "ふん",
+                        "ぷん",
+                        "ふん",
+                        "ぷん",
+                        "ふん",
+                    };
+                    int r9 = minutes % 10;
+
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, sp350[r9], &nowCursorPos, &field_0x24, &field_0x150);
+                    buf[0] = '\0';
+                    i = 0;
+                }
+
+                int seconds = (dComIfGp_getItemTimer() % 1800) / 30;
+                if (minutes == 0 && seconds == 0) {
+                    seconds = 1;
+                }
+                if (seconds != 0 || minutes == 0) {
+                    fopMsgM_int_to_char(buf, seconds, false);
+
+                    while (buf[i] != '\0') {
+                        int hi = (u8)buf[i++];
+                        int lo = (u8)buf[i++];
+                        c = hi << 8 | lo;
+                        if (field_0x150 == 0) {
+                            field_0x14 = charLength(field_0x148, c, true);
+                        } else {
+                            field_0x14 += charLength(field_0x148, c, false);
+                        }
+
+                        field_0x150 += 1;
+                    }
+
+                    strcat(field_0x60, buf);
+                    strcat(field_0x68, buf);
+
+                    if (selectFlag != Select_ON) {
+                        nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                    } else {
+                        nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                    }
+
+                    char* r8 = "秒";
+                    char* r9 = "びょう";
+                    getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_pig_timer();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK37) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGs_getBombMax();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_get_bomb();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK38) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = dComIfGs_getArrowMax();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r23 = "本";
+                // Furigana for 本 (counter with irregular pronunciation)
+                char* sp328[] = {
+                    "ぽん",
+                    "ぽん",
+                    "ほん",
+                    "ぼん",
+                    "ほん",
+                    "ほん",
+                    "ぽん",
+                    "ほん",
+                    "ぽん",
+                    "ほん",
+                };
+                int r24 = dComIfGs_getArrowMax() % 10;
+                if (dComIfGs_getArrowMax() == 0) {
+                    r24 = 2;
+                }
+
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r23, sp328[r24], &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_get_arrow();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3E) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = daNpc_Bs1_c::getBuyItem();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_stock_bokobaba();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3F) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = daNpc_Bs1_c::getBuyItem();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_stock_dokuro();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK40) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = daNpc_Bs1_c::getBuyItem();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_stock_chuchu();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK41) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = daNpc_Bs1_c::getBuyItem();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_stock_pendant();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK42) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = daNpc_Bs1_c::getBuyItem();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "枚";
+                char* r9 = "まい";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_stock_hane();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK43) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = daNpc_Bs1_c::getBuyItem();
+                fopMsgM_int_to_char(buf, num, false);
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_stock_kenshi();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK44) {
 #if VERSION <= VERSION_JPN
+                int i = 0;
+                char buf[20];
+
+                int num = daNpc_Bs1_c::getPayRupee();
+                fopMsgM_int_to_char(buf, num, false);
+
+                strcat(buf, "ルピー");
+
+                while (buf[i] != '\0') {
+                    int hi = (u8)buf[i++];
+                    int lo = (u8)buf[i++];
+                    int c = hi << 8 | lo;
+                    if (field_0x150 == 0) {
+                        field_0x14 = charLength(field_0x148, c, true);
+                    } else {
+                        field_0x14 += charLength(field_0x148, c, false);
+                    }
+
+                    field_0x150 += 1;
+                }
+
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                count += bmgData[count + 1];
 #else
                 tag_terry_rupee();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK45) {
 #if VERSION <= VERSION_JPN
+                char buf[16];
+
+                int temp = (field_0x148 + charSpace) * 2;
+                setSelectFlagAuctionOn();
+                iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
+                mesgStatus = fopMsgStts_INPUT_e;
+                sprintf(buf, "\x1B""CR[%d]", temp);
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+                field_0x14 = temp;
+                field_0x150 += 2;
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_input_bokobaba();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK46) {
 #if VERSION <= VERSION_JPN
+                char buf[16];
+
+                int temp = (field_0x148 + charSpace) * 2;
+                setSelectFlagAuctionOn();
+                iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
+                mesgStatus = fopMsgStts_INPUT_e;
+                sprintf(buf, "\x1B""CR[%d]", temp);
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+                field_0x14 = temp;
+                field_0x150 += 2;
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_input_dokuro();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK47) {
 #if VERSION <= VERSION_JPN
+                char buf[16];
+
+                int temp = (field_0x148 + charSpace) * 2;
+                setSelectFlagAuctionOn();
+                iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
+                mesgStatus = fopMsgStts_INPUT_e;
+                sprintf(buf, "\x1B""CR[%d]", temp);
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+                field_0x14 = temp;
+                field_0x150 += 2;
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_input_chuchu();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK48) {
 #if VERSION <= VERSION_JPN
+                char buf[16];
+
+                int temp = (field_0x148 + charSpace) * 2;
+                setSelectFlagAuctionOn();
+                iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
+                mesgStatus = fopMsgStts_INPUT_e;
+                sprintf(buf, "\x1B""CR[%d]", temp);
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+                field_0x14 = temp;
+                field_0x150 += 2;
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_input_pendant();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK49) {
 #if VERSION <= VERSION_JPN
+                char buf[16];
+
+                int temp = (field_0x148 + charSpace) * 2;
+                setSelectFlagAuctionOn();
+                iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
+                mesgStatus = fopMsgStts_INPUT_e;
+                sprintf(buf, "\x1B""CR[%d]", temp);
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+                field_0x14 = temp;
+                field_0x150 += 2;
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "枚";
+                char* r9 = "まい";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_input_hane();
 #endif
             } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK4A) {
 #if VERSION <= VERSION_JPN
+                char buf[16];
+
+                int temp = (field_0x148 + charSpace) * 2;
+                setSelectFlagAuctionOn();
+                iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
+                mesgStatus = fopMsgStts_INPUT_e;
+                sprintf(buf, "\x1B""CR[%d]", temp);
+                strcat(field_0x60, buf);
+                strcat(field_0x68, buf);
+                field_0x14 = temp;
+                field_0x150 += 2;
+
+                if (selectFlag != Select_ON) {
+                    nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
+                } else {
+                    nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
+                }
+
+                char* r8 = "個";
+                char* r9 = "こ";
+                getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, r8, r9, &nowCursorPos, &field_0x24, &field_0x150);
+
+                count += bmgData[count + 1];
 #else
                 tag_input_kenshi();
 #endif
@@ -4354,6 +5405,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         mDoAud_messageSePlay(r27, actorPosition, 0);
                     }
                 }
+
                 count += bmgData[count + 1];
                 return;
             } else if ((u8)bmgData[count + 2] == 2) {
@@ -4371,7 +5423,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
             if (field_0x154 != 0) {
                 field_0x1C = nowCursorPos - field_0x28;
 
-                f32 f3 = (int)(field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f);
+                f32 f0 = field_0x28 + field_0x1C / 2.0f;
+                f32 f3 = (int)(f0 - field_0x18 / 2.0f + 0.5f);
                 char sp64[16];
                 f32 f31;
                 if (field_0x24 < f3) {
@@ -4385,6 +5438,14 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     strcat(field_0x64, sp64);
                     strcat(field_0x6C, sp64);
                 }
+
+#if VERSION <= VERSION_JPN
+                field_0x34 = strlen(field_0x64);
+                field_0x38 = strlen(field_0x6C);
+                strcat(field_0x64, "\x1b""CC[FFFFFF80]""\x1bGM[0]");
+                strcat(field_0x6C, "\x1b""CC[00000080]""\x1bGM[0]");
+                field_0x27F = 1;
+#endif
 
                 strcat(field_0x64, field_0x70);
                 strcat(field_0x6C, field_0x70);
@@ -4594,7 +5655,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 if (field_0x154 == 0) {
                     field_0x1C = nowCursorPos - field_0x28;
 
-                    f32 f3 = (int)(field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f);
+                    f32 f0 = field_0x28 + field_0x1C / 2.0f;
+                    f32 f3 = (int)(f0 - field_0x18 / 2.0f + 0.5f);
                     char sp14[16];
                     f32 f31;
                     if (field_0x24 < f3) {
@@ -4624,14 +5686,15 @@ void fopMsgM_msgDataProc_c::stringSet() {
                     field_0x24 += field_0x18;
                 }
 
-#if VERSION <= VERSION_JPN
-                field_0x2C = strlen(field_0x60);
-                field_0x30 = strlen(field_0x68);
-                strcat(field_0x60, "\x1b""CC[FFFFFF80]""\x1bGM[0]");
-                strcat(field_0x68, "\x1b""CC[00000080]""\x1bGM[0]");
-                field_0x27E = 1;
-#endif
             }
+
+#if VERSION <= VERSION_JPN
+            field_0x2C = strlen(field_0x60);
+            field_0x30 = strlen(field_0x68);
+            strcat(field_0x60, "\x1b""CC[FFFFFF80]""\x1bGM[0]");
+            strcat(field_0x68, "\x1b""CC[00000080]""\x1bGM[0]");
+            field_0x27E = 1;
+#endif
 
             if (r27) {
                 count++;
@@ -4686,8 +5749,13 @@ void fopMsgM_msgDataProc_c::stringSet() {
     if (mesgStatus == fopMsgStts_SELECT_YOKO_e) return;
     if (mesgStatus == fopMsgStts_INPUT_e) return;
 
+#if VERSION <= VERSION_JPN
+    if (mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB &&
+        mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD)
+#else
     if (mesgEntry->mTextboxType != 2 && mesgEntry->mTextboxType != 6 && mesgEntry->mTextboxType != 7 && mesgEntry->mTextboxType != 0xB &&
         mesgEntry->mTextboxType != 5 && mesgEntry->mTextboxType != 0xD && mesgEntry->mTextboxType != 9)
+#endif
     {
         if (dComIfGp_roomControl_getStayNo() != 0) {
             mDoAud_messageSePlay(0, 0, dComIfGp_getReverb(dComIfGp_roomControl_getStayNo()));
@@ -4732,8 +5800,9 @@ u8 fopMsgM_itemNum(u8 i_itemNo) {
 /* 80035060-800350B8       .text fopMsgM_getColorTable__FUs */
 u32 fopMsgM_getColorTable(u16 i_colorNo) {
     JKRArchive* arc = dComIfGp_getMsgDtArchive();
-    u32* resource = (u32*)JKRArchive::getGlbResource('ROOT', "color.bmc", arc);
-    return resource[i_colorNo + 0x0b]; // probably a struct i have no idea what it looks like though
+    JUTDataFileHeader* bmc = (JUTDataFileHeader*)JKRArchive::getGlbResource('ROOT', "color.bmc", arc);
+    clt1_header* clt1 = (clt1_header*)&bmc->mFirstBlock;
+    return clt1->mColors[i_colorNo];
 }
 
 /* 800350B8-80035170       .text fopMsgM_int_to_char__FPcib */
@@ -4792,9 +5861,6 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
     msgGet.mGroupID = 0;
     msgGet.mMsgNo = 0;
     msgGet.mResMsgNo = 0;
-#if VERSION > VERSION_JPN
-    static const char* name = "no name";
-#endif
 
 #if VERSION <= VERSION_JPN
     mesg_header* header = msgGet.getMesgHeader(i_msgNo);
@@ -4802,9 +5868,10 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
     int offset = 0;
     int numRead = 0;
 #else
+    const char* src;
+    static const char* name = "no name";
     int offset = 0;
     int numRead = 0;
-    const char* src;
     if (i_msgNo == 0) {
         src = name;
     } else {
@@ -4869,18 +5936,15 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
     msgGet.mResMsgNo = 0;
     f32 f31;
     f32 f30 = 0.0f;
-    int r21;
-#if VERSION > VERSION_JPN
-    static const char* name = "no name";
-#endif
 
 #if VERSION <= VERSION_JPN
     mesg_header* header = msgGet.getMesgHeader(i_msgNo);
     const char* src = msgGet.getMessage(header);
     int offset = 0;
 #else
-    int offset = 0;
     const char* src;
+    static const char* name = "no name";
+    int offset = 0;
     if (i_msgNo == 0) {
         src = name;
     } else {
@@ -4890,6 +5954,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
 #endif
 
     int c;
+    int r21;
     char sp1C[16];
     char sp08[4];
     while (src[offset] != '\0') {
@@ -4979,7 +6044,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
                 sp08[1] = (u8)src[offset + 1];
                 sp08[2] = '\0';
                 strcat(i_dest, sp08);
-                strcat(i_dest, sp08);
+                strcat(param_2, sp08);
                 c = ((u8)src[offset + 0] << 8) | (u8)src[offset + 1];
                 offset += 2;
             } else
@@ -4988,7 +6053,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
                 sp08[0] = (u8)src[offset + 0];
                 sp08[1] = '\0';
                 strcat(i_dest, sp08);
-                strcat(i_dest, sp08);
+                strcat(param_2, sp08);
                 c = (u8)src[offset + 0];
                 offset++;
             }
@@ -6743,6 +7808,7 @@ void fopMsgM_msgDataProc_c::tag_kaisen_game() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
@@ -6810,11 +7876,12 @@ void fopMsgM_msgDataProc_c::tag_rupee() {
 
 /* 80038330-80038538       .text tag_num_input__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_num_input() {
+    int i = 0;
     char buf[8];
     char buf2[16];
 
     int temp = (field_0x148 + charSpace) * 3;
-    selectFlag = Select_INPUT;
+    setSelectFlagAuctionOn();
     iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
     mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf2, "\x1B""CR[%d]", temp);
@@ -6839,7 +7906,6 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
     strcpy(buf, " Rupee(s)");
 #endif
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -6865,12 +7931,12 @@ void fopMsgM_msgDataProc_c::tag_num_input() {
 
 /* 80038538-8003872C       .text tag_sword_game__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_sword_game() {
-    char buf[16];
+    int i = 0;
+    char buf[20];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -6926,17 +7992,18 @@ void fopMsgM_msgDataProc_c::tag_sword_game() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 8003872C-800388AC       .text tag_letter_game__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_letter_game() {
-    char buf[24];
+    int i = 0;
+    char buf[20];
 
     int num = dComIfGp_getMiniGameRupee();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -6962,12 +8029,12 @@ void fopMsgM_msgDataProc_c::tag_letter_game() {
 
 /* 800388AC-80038A40       .text tag_letter_game_max__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_letter_game_max() {
-    char buf[24];
+    int i = 0;
+    char buf[20];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8AFF);
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -6993,12 +8060,12 @@ void fopMsgM_msgDataProc_c::tag_letter_game_max() {
 
 /* 80038A40-80038BC0       .text tag_fish__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_fish() {
-    char buf[24];
+    int i = 0;
+    char buf[20];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7024,7 +8091,8 @@ void fopMsgM_msgDataProc_c::tag_fish() {
 
 /* 80038BC0-80038D7C       .text tag_fish_rupee__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_fish_rupee() {
-    char buf[24];
+    int i = 0;
+    char buf[20];
 
     int num = dComIfGp_getMessageCountNumber() * 10;
     fopMsgM_int_to_char(buf, num, false);
@@ -7061,7 +8129,6 @@ void fopMsgM_msgDataProc_c::tag_fish_rupee() {
     }
 #endif
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7087,12 +8154,12 @@ void fopMsgM_msgDataProc_c::tag_fish_rupee() {
 
 /* 80038D7C-80038F70       .text tag_letter__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_letter() {
+    int i = 0;
     char buf[16];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7160,17 +8227,18 @@ void fopMsgM_msgDataProc_c::tag_letter() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 80038F70-8003912C       .text tag_rescue__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rescue() {
+    int i = 0;
     char buf[20];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7220,13 +8288,14 @@ void fopMsgM_msgDataProc_c::tag_rescue() {
 
 /* 8003912C-800394B4       .text tag_forest_timer__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_forest_timer() {
-    char buf[16];
+    /* Nonmatching - PAL */
+    int i = 0;
+    char buf[20];
     char buf2[4];
 
     int minutes = dComIfGs_getFwaterTimer() / 1800;
     fopMsgM_int_to_char(buf, minutes, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7248,6 +8317,7 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
     strcpy(buf2, ":");
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
     buf[0] = '\0';
+    i = 0;
 
     int seconds = (dComIfGs_getFwaterTimer() % 1800) / 30;
     if (minutes == 0 && seconds == 0) {
@@ -7255,7 +8325,6 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
     }
     fopMsgM_int_to_char2(buf, seconds);
 
-    i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7277,12 +8346,14 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
     }
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 800394B4-8003966C       .text tag_birdman__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_birdman() {
-    char buf[24];
+    int i = 0;
+    char buf[20];
 
     int num = dComIfGp_getMessageCountNumber();
     fopMsgM_int_to_char(buf, num, false);
@@ -7323,7 +8394,6 @@ void fopMsgM_msgDataProc_c::tag_birdman() {
     }
 #endif
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7349,7 +8419,8 @@ void fopMsgM_msgDataProc_c::tag_birdman() {
 
 /* 8003966C-80039834       .text tag_point__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_point() {
-    char buf[24];
+    int i = 0;
+    char buf[20];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_86FF);
     fopMsgM_int_to_char(buf, num, false);
@@ -7394,7 +8465,6 @@ void fopMsgM_msgDataProc_c::tag_point() {
     }
 #endif
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7420,12 +8490,12 @@ void fopMsgM_msgDataProc_c::tag_point() {
 
 /* 80039834-80039A28       .text tag_get_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_pendant() {
+    int i = 0;
     char buf[20];
 
     int num = dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7491,17 +8561,18 @@ void fopMsgM_msgDataProc_c::tag_get_pendant() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 80039A28-80039C2C       .text tag_rev_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_rev_pendant() {
+    int i = 0;
     char buf[20];
 
     int num = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF);
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7567,18 +8638,20 @@ void fopMsgM_msgDataProc_c::tag_rev_pendant() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 80039C2C-80039FA0       .text tag_pig_timer__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_pig_timer() {
-    char buf[16];
+    /* Nonmatching - PAL */
+    int i = 0;
+    char buf[20];
     char buf2[4];
 
     int minutes = dComIfGp_getItemTimer() / 1800;
     fopMsgM_int_to_char(buf, minutes, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7629,17 +8702,18 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
     }
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, "", "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 80039FA0-8003A194       .text tag_get_bomb__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_bomb() {
-    char buf[16];
+    int i = 0;
+    char buf[20];
 
     int num = dComIfGs_getBombMax();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7691,17 +8765,18 @@ void fopMsgM_msgDataProc_c::tag_get_bomb() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 8003A194-8003A388       .text tag_get_arrow__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_get_arrow() {
-    char buf[16];
+    int i = 0;
+    char buf[20];
 
     int num = dComIfGs_getArrowMax();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7753,17 +8828,18 @@ void fopMsgM_msgDataProc_c::tag_get_arrow() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 8003A388-8003A574       .text tag_stock_bokobaba__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
+    int i = 0;
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7827,12 +8903,12 @@ void fopMsgM_msgDataProc_c::tag_stock_bokobaba() {
 
 /* 8003A574-8003A760       .text tag_stock_dokuro__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
+    int i = 0;
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7894,17 +8970,18 @@ void fopMsgM_msgDataProc_c::tag_stock_dokuro() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 8003A760-8003A914       .text tag_stock_chuchu__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
+    int i = 0;
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -7961,12 +9038,12 @@ void fopMsgM_msgDataProc_c::tag_stock_chuchu() {
 
 /* 8003A914-8003AB00       .text tag_stock_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_pendant() {
+    int i = 0;
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -8028,6 +9105,7 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
@@ -8039,12 +9117,12 @@ static void dummy() {
 
 /* 8003AB00-8003ACEC       .text tag_stock_hane__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_hane() {
+    int i = 0;
     char buf[20];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -8106,17 +9184,18 @@ void fopMsgM_msgDataProc_c::tag_stock_hane() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 8003ACEC-8003AED8       .text tag_stock_kenshi__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
+    int i = 0;
     char buf[16];
 
     int num = daNpc_Bs1_c::getBuyItem();
     fopMsgM_int_to_char(buf, num, false);
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -8172,12 +9251,14 @@ void fopMsgM_msgDataProc_c::tag_stock_kenshi() {
 #endif
 
     getRubyString(field_0x60, field_0x68, field_0x64, field_0x6C, buf2, "", &nowCursorPos, &field_0x24, &field_0x150);
+
     count += bmgData[count + 1];
 }
 
 /* 8003AED8-8003B088       .text tag_terry_rupee__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_terry_rupee() {
-    char buf[24];
+    int i = 0;
+    char buf[20];
 
     int num = daNpc_Bs1_c::getPayRupee();
     fopMsgM_int_to_char(buf, num, false);
@@ -8214,7 +9295,6 @@ void fopMsgM_msgDataProc_c::tag_terry_rupee() {
     }
 #endif
 
-    int i = 0;
     while (buf[i] != '\0') {
         int c = (u8)buf[i++];
         if (field_0x150 == 0) {
@@ -8240,11 +9320,10 @@ void fopMsgM_msgDataProc_c::tag_terry_rupee() {
 
 /* 8003B088-8003B21C       .text tag_input_bokobaba__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_input_bokobaba() {
-    /* Nonmatching */
     char buf[16];
 
     int temp = (field_0x148 + charSpace) * 2;
-    selectFlag = Select_INPUT;
+    setSelectFlagAuctionOn();
     iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
     mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
@@ -8284,11 +9363,10 @@ void fopMsgM_msgDataProc_c::tag_input_bokobaba() {
 
 /* 8003B21C-8003B3B0       .text tag_input_dokuro__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_input_dokuro() {
-    /* Nonmatching */
     char buf[16];
 
     int temp = (field_0x148 + charSpace) * 2;
-    selectFlag = Select_INPUT;
+    setSelectFlagAuctionOn();
     iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
     mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
@@ -8328,11 +9406,10 @@ void fopMsgM_msgDataProc_c::tag_input_dokuro() {
 
 /* 8003B3B0-8003B544       .text tag_input_chuchu__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_input_chuchu() {
-    /* Nonmatching */
     char buf[16];
 
     int temp = (field_0x148 + charSpace) * 2;
-    selectFlag = Select_INPUT;
+    setSelectFlagAuctionOn();
     iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
     mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
@@ -8371,11 +9448,10 @@ void fopMsgM_msgDataProc_c::tag_input_chuchu() {
 
 /* 8003B544-8003B6D8       .text tag_input_pendant__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_input_pendant() {
-    /* Nonmatching */
     char buf[16];
 
     int temp = (field_0x148 + charSpace) * 2;
-    selectFlag = Select_INPUT;
+    setSelectFlagAuctionOn();
     iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
     mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
@@ -8415,11 +9491,10 @@ void fopMsgM_msgDataProc_c::tag_input_pendant() {
 
 /* 8003B6D8-8003B86C       .text tag_input_hane__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_input_hane() {
-    /* Nonmatching */
     char buf[16];
 
     int temp = (field_0x148 + charSpace) * 2;
-    selectFlag = Select_INPUT;
+    setSelectFlagAuctionOn();
     iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
     mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf, "\x1B""CR[%d]", temp);
@@ -8459,11 +9534,10 @@ void fopMsgM_msgDataProc_c::tag_input_hane() {
 
 /* 8003B86C-8003BA00       .text tag_input_kenshi__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::tag_input_kenshi() {
-    /* Nonmatching */
     char buf[16];
 
     int temp = (field_0x148 + charSpace) * 2;
-    selectFlag = Select_INPUT;
+    setSelectFlagAuctionOn();
     iconSelect(field_0x148, fopMsgM_Icon_INPUT_e);
     mesgStatus = fopMsgStts_INPUT_e;
     sprintf(buf,  "\x1B""CR[%d]", temp);
@@ -8714,7 +9788,7 @@ void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char
     if (temp > 0) {
 #if VERSION <= VERSION_JPN
         sprintf(buf1, "\x1b""CD[%d]\x1b""FX[%d]\x1b""FY[%d]", temp, param_6, param_6);
-        sprintf(buf1, "\x1b""CU[%d]", temp);
+        sprintf(buf2, "\x1b""CU[%d]", temp);
 #else
         sprintf(buf1, "\x1b""FX[%d]\x1b""FY[%d]", param_6, param_6);
         buf2[0] = '\0';
@@ -8726,8 +9800,8 @@ void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char
     } else if (temp < 0) {
 #if VERSION <= VERSION_JPN
         int temp2 = (param_5 - param_6) / 2;
-        sprintf(buf1, "\x1b""CD[%d]\x1b""FX[%d]\x1b""FY[%d]", temp2, param_6, param_6);
-        sprintf(buf1, "\x1b""CU[%d]", temp2);
+        sprintf(buf1, "\x1b""CU[%d]\x1b""FX[%d]\x1b""FY[%d]", temp2, param_6, param_6);
+        sprintf(buf2, "\x1b""CD[%d]", temp2);
 #else
         sprintf(buf1, "\x1b""FX[%d]\x1b""FY[%d]", param_6, param_6);
         buf2[0] = '\0';
