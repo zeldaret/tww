@@ -17,4 +17,6 @@ public:
     /* 0x24 */ cXyz* mPt;
 };
 
+dChain_packet_c* dChain_packet_create(int, dKy_tevstr_c*, f32);
+
 #endif /* D_CHAIN_H */
