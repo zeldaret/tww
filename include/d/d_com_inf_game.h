@@ -589,11 +589,13 @@ public:
     JKRArchive* getAnmArchive() { return mpAnmArchive; }
     void setLkDArc(JKRArchive * pArc) { mpLkDArc = pArc; }
     void setFmapArchive(JKRArchive * pArc) { mpFmapArchive = pArc; }
+    JKRArchive* getFmapArchive() { return mpFmapArchive; }
     void setItemResArchive(JKRArchive * pArc) { mpItemResArchive = pArc; }
     JKRArchive* getItemResArchive() { return mpItemResArchive; }
     void setCollectResArchive(JKRArchive * pArc) { mpCollectResArchive = pArc; }
     JKRArchive* getCollectResArchive() { return mpCollectResArchive; }
     void setFmapResArchive(JKRArchive * pArc) { mpFmapResArchive = pArc; }
+    JKRArchive* getFmapResArchive() { return mpFmapResArchive; }
     void setDmapResArchive(JKRArchive * pArc) { mpDmapResArchive = pArc; }
     JKRArchive* getDmapResArchive() { return mpDmapResArchive; }
     void setOptionResArchive(JKRArchive * pArc) { mpOptionResArchive = pArc; }
@@ -1242,6 +1244,13 @@ inline void dComIfGs_offCompleteCollectMap(int i_no) {
 
 inline s32 dComIfGs_getCollectMapNum() {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().getCollectMapNum();
+}
+
+inline void dComIfGs_onSaveArriveGrid(int i_no) {
+    g_dComIfG_gameInfo.save.getPlayer().getMap().onSaveArriveGrid(i_no);
+}
+inline BOOL dComIfGs_isSaveArriveGrid(int i_no) {
+    return g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGrid(i_no);
 }
 
 inline void dComIfGs_onSaveArriveGridForAgb(int i_no) {
@@ -3953,11 +3962,13 @@ inline JKRArchive* dComIfGp_getFontArchive() { return g_dComIfG_gameInfo.play.ge
 inline JKRArchive* dComIfGp_getRubyArchive() { return g_dComIfG_gameInfo.play.getRubyArchive(); }
 inline void dComIfGp_setLkDArc(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setLkDArc(pArc); }
 inline void dComIfGp_setFmapArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFmapArchive(pArc); }
+inline JKRArchive* dComIfGp_getFmapArchive() { return g_dComIfG_gameInfo.play.getFmapArchive(); }
 inline void dComIfGp_setItemResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setItemResArchive(pArc); }
 inline JKRArchive* dComIfGp_getItemResArchive() { return g_dComIfG_gameInfo.play.getItemResArchive(); }
 inline void dComIfGp_setCollectResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCollectResArchive(pArc); }
 inline JKRArchive* dComIfGp_getCollectResArchive() { return g_dComIfG_gameInfo.play.getCollectResArchive(); }
 inline void dComIfGp_setFmapResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setFmapResArchive(pArc); }
+inline JKRArchive* dComIfGp_getFmapResArchive() { return g_dComIfG_gameInfo.play.getFmapResArchive(); }
 inline void dComIfGp_setDmapResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setDmapResArchive(pArc); }
 inline JKRArchive* dComIfGp_getDmapResArchive() { return g_dComIfG_gameInfo.play.getDmapResArchive(); }
 inline void dComIfGp_setOptionResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setOptionResArchive(pArc); }

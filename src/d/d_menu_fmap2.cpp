@@ -242,12 +242,12 @@ void dMenu_Fmap2_c::ChangeProcMode() {
 }
 
 /* 801C36C8-801C376C       .text _open__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::_open() {
+bool dMenu_Fmap2_c::_open() {
     /* Nonmatching */
 }
 
 /* 801C376C-801C3858       .text _close__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::_close() {
+bool dMenu_Fmap2_c::_close() {
     /* Nonmatching */
 }
 
@@ -527,8 +527,9 @@ void dMenu_Fmap2_c::readFmapTexture(const char*) {
 }
 
 /* 801C74B4-801C756C       .text getButtonIconMode__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::getButtonIconMode() {
+int dMenu_Fmap2_c::getButtonIconMode() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 801C756C-801C7574       .text isLockBbutton__13dMenu_Fmap2_cFv */

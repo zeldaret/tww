@@ -88,8 +88,8 @@ public:
     void cmapAlphaSet();
     void changeZoomCmap();
     void ChangeProcMode();
-    void _open();
-    void _close();
+    bool _open();
+    bool _close();
     void _draw();
     void _delete();
     void fCursorInit();
@@ -145,7 +145,7 @@ public:
     void getCmapDatPnt4(int);
     void readPaneCmapTexture(const ResTIMG*, int);
     void readFmapTexture(const char*);
-    void getButtonIconMode();
+    int getButtonIconMode();
     void isLockBbutton();
     void isGetCollectMap(signed char);
     void isOpenCollectMap(signed char);
