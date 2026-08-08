@@ -3906,34 +3906,34 @@ BOOL daNpc_Bm1_c::_draw() {
 
     switch (mType) {
         case TYPE_Quill_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8D, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_PST, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Akoot_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8E, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_SKT_KKT, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Skett_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8E, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_SKT_KKT, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Basht_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK93, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BMB_0_1, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Bisht_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK93, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BMB_0_1, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Hoskit_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK91, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BMB_2, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Ilari_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK90, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BMC, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Pashli_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK97, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BMC_3, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Namali_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK92, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BMD, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Kogoli_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8F, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BMD_1, this, 1.0f, 1.0f, 1.0f);
             break;
     }
 

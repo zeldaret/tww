@@ -1624,11 +1624,11 @@ BOOL daNpc_Tc_c::_draw() {
     };
 
     static const u8 a_snap_tbl[] = {
-        DSNAP_TYPE_TC_NORMAL,
-        DSNAP_TYPE_TC_RED,
-        DSNAP_TYPE_TC_WHITE,
-        DSNAP_TYPE_TC_BLUE,
-        DSNAP_TYPE_TC_NORMAL,
+        DSNAP_TYPE_NPC_TC_NORMAL,
+        DSNAP_TYPE_NPC_TC_RED,
+        DSNAP_TYPE_NPC_TC_WHITE,
+        DSNAP_TYPE_NPC_TC_BLUE,
+        DSNAP_TYPE_NPC_TC_NORMAL,
     };
 
     static const u32 dummy[] = {

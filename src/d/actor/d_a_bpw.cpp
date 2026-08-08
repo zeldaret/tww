@@ -202,7 +202,7 @@ void body_draw(bpw_class* i_this) {
     if (i_this->m3E0 == 0) {
         dComIfGd_setListMaskOff();
     }
-    dSnap_RegistFig(DSNAP_TYPE_UNKCE, actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_GND, actor, 1.0f, 1.0f, 1.0f);
     if (i_this->m3E0 != 0) {
         i_this->mpLightFreezeBrkAnm->entry(model->getModelData());
     } else if (i_this->m3E1 != 0) {
@@ -235,7 +235,7 @@ void body_draw(bpw_class* i_this) {
     if ((i_this->m47E == 0) || (fopAcM_checkCarryNow(actor))) {
         return;
     }
-    dSnap_RegistFig(DSNAP_TYPE_UNKCB, actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_BPW, actor, 1.0f, 1.0f, 1.0f);
     local_28.set(actor->current.pos.x, actor->current.pos.y + 400.0f + REG8_F(18), actor->current.pos.z);
     i_this->mShadowId = dComIfGd_setShadow(
         i_this->mShadowId,
