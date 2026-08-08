@@ -285,6 +285,7 @@ public:
     void quitImmortalEmitter() { clearStatus(JPAEmtrStts_Immortal); }
 
     void becomeContinuousParticle() { mMaxFrame = 0; }
+    bool isContinuousParticle() { return mMaxFrame == 0; }
     void becomeInvalidEmitter() {
         mMaxFrame = -1;
         stopCreateParticle();
@@ -324,7 +325,6 @@ public:
     void drawCB() {}
     void drawEmitterCallBack() {}
     void getgReRDirection(JGeometry::TVec3<f32>&) {}
-    void isContinuousParticle() {}
     void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
 
     static JPAEmitterInfo emtrInfo;

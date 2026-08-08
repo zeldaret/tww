@@ -227,7 +227,7 @@ bool daNpc_Hi1_c::setBtp(s8 param_1, bool param_2) {
     if(param_1 < 0) {
         return false;
     }
-    int resID = btpResID((int)param_1) ;
+    int resID = btpResID(param_1);
     J3DAnmTexPattern* a_btp = (J3DAnmTexPattern *)dComIfG_getObjectIDRes(mArcName, resID);
     JUT_ASSERT(0x192, a_btp != NULL);
     field_0x7BE = param_1;
@@ -243,7 +243,7 @@ bool daNpc_Hi1_c::setBtk(s8 param_1, bool param_2) {
     if(param_1 < 0) {
         return false;
     }
-    int resID = btkResID((int)param_1);
+    int resID = btkResID(param_1);
     J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey *)dComIfG_getObjectIDRes(mArcName, resID);
 
     JUT_ASSERT(0x1aa, a_btk != NULL);

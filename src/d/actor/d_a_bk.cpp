@@ -1776,7 +1776,7 @@ static void* shot_s_sub(void* param_1, void*) {
 /* 000064D8-000073B8       .text fight_run__FP8bk_class */
 static void fight_run(bk_class* i_this) {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
     s8 r29 = 0;
     if (i_this->dr.mAcch.ChkGroundHit() && i_this->dr.mAcch.ChkWallHit()) {
         r29 = 1;

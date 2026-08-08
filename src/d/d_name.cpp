@@ -781,11 +781,8 @@ void dName_c::setNameText() {
 
     for (int i = 0; i < 8; i++) {
         if (chrInfo[i].field_0x3 != 0) {
-            JUTFont::TWidth twidth;
             int character = chrInfo[i].character;
-            nameIn.font->getWidthEntry(character, &twidth);
-
-            f32 temp = (int)twidth.field_0x1;
+            f32 temp = (f32)nameIn.font->getWidth(character);
             temp *= ratio;
             int sp50 = temp * 10000.0f;
 

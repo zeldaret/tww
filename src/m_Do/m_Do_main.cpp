@@ -274,7 +274,7 @@ bool Debug_console(JUTGamePad* i_pad) {
 
         if (console->isVisible()) {
             if ((i_pad->testButton(CButton::L) && i_pad->testButton(CButton::R)) ||
-                ((i_pad->getAnalogL() != 0 && i_pad->getAnalogR() != 0)))
+                (i_pad->getAnalogL() != 0 && i_pad->getAnalogR() != 0))
             {
                 f32 stick_x = i_pad->getMainStickX();
                 f32 stick_y = i_pad->getMainStickY();

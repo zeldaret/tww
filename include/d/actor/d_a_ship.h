@@ -151,11 +151,11 @@ public:
     s16 getCannonAngleY() const { return shape_angle.y + m0394; }
     s16 getCraneAngle() const { return m0398; }
     s16 getCraneBaseAngle() const { return mCraneBaseAngle; }
-    void getCraneHookAngleY() const {}
-    void getCraneRipplePosX() const {}
-    void getCraneRipplePosY() const {}
-    void getCraneRipplePosZ() const {}
-    cXyz* getCraneTop() { return m0434; }
+    s16 getCraneHookAngleY() const { return shape_angle.y; }
+    cXyz* getCraneTop() { return mCraneTop; }
+    f32 getCraneRipplePosX() const { return mCraneRipplePos.x; }
+    f32 getCraneRipplePosY() const { return mCraneRipplePos.y; }
+    f32 getCraneRipplePosZ() const { return mCraneRipplePos.z; }
     MtxP getHeadJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(FN_HEAD_H_JNT_J_FN_ATAMA_e); }
     f32 getJumpRate() { return mJumpRate; }
     u8 getPart() const { return mPart; }
@@ -386,13 +386,13 @@ public:
     /* 0x0428 */ cXyz* m0428;
     /* 0x042C */ fpc_ProcID mTactWarpID;
     /* 0x0430 */ fpc_ProcID m0430;
-    /* 0x0434 */ cXyz* m0434;
+    /* 0x0434 */ cXyz* mCraneTop;
     /* 0x0438 */ cXyz mTillerTopPos;
     /* 0x0444 */ cXyz m0444;
     /* 0x0450 */ cXyz m0450;
     /* 0x045C */ cXyz m045C;
     /* 0x0468 */ cXyz mRopeLineSegments[250];
-    /* 0x1020 */ cXyz m1020;
+    /* 0x1020 */ cXyz mCraneRipplePos;
     /* 0x102C */ cXyz m102C;
     /* 0x1038 */ cXyz m1038;
     /* 0x1044 */ cXyz m1044;

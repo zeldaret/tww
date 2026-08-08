@@ -173,15 +173,15 @@ public:
 
     JSUTree<T>* getLastChild() const { return (JSUTree<T>*)this->getLast(); }
 
-    JSUTree<T>* getNextChild() const { return (JSUTree<T>*)this->getNext(); }
+    JSUTree<T>* getNextChild() const { return (JSUTree<T>*)this->mNext; }
 
-    JSUTree<T>* getPrevChild() const { return (JSUTree<T>*)this->getPrev(); }
+    JSUTree<T>* getPrevChild() const { return (JSUTree<T>*)this->mPrev; }
 
     u32 getNumChildren() const { return this->getNumLinks(); }
 
     T* getObject() const { return (T*)this->getObjectPtr(); }
 
-    JSUTree<T>* getParent() const { return (JSUTree<T>*)this->getList(); }
+    JSUTree<T>* getParent() const { return (JSUTree<T>*)this->mList; }
 };
 
 template <typename T>

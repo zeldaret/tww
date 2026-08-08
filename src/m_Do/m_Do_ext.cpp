@@ -849,7 +849,7 @@ JKRExpHeap* gameHeap;
 /* 80011734-800117E4       .text mDoExt_createGameHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2036, 2035, 2050, 2050), gameHeap == NULL || heapSize == 0);
-    gameHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    gameHeap = JKRCreateExpHeap(heapSize, i_heap, true);
     #if VERSION > VERSION_DEMO
     gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     #endif
@@ -880,7 +880,7 @@ JKRExpHeap* zeldaHeap;
 /* 8001181C-800118C0       .text mDoExt_createZeldaHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2081, 2097, 2112, 2112), zeldaHeap == NULL || heapSize == 0);
-    return zeldaHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    return zeldaHeap = JKRCreateExpHeap(heapSize, i_heap, true);
 }
 
 /* 800118C0-800118C8       .text mDoExt_getZeldaHeap__Fv */
@@ -907,7 +907,7 @@ JKRExpHeap* commandHeap;
 /* 800118F8-8001199C       .text mDoExt_createCommandHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2126, 2158, 2173, 2173), commandHeap == NULL || heapSize == 0);
-    return commandHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    return commandHeap = JKRCreateExpHeap(heapSize, i_heap, true);
 }
 
 /* 8001199C-800119A4       .text mDoExt_getCommandHeap__Fv */
@@ -934,7 +934,7 @@ JKRExpHeap* archiveHeap;
 /* 800119D4-80011A84       .text mDoExt_createArchiveHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2173, 2222, 2237, 2237), archiveHeap == NULL || heapSize == 0);
-    archiveHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    archiveHeap = JKRCreateExpHeap(heapSize, i_heap, true);
     #if VERSION > VERSION_DEMO
     archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
     #endif

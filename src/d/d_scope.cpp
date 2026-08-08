@@ -82,7 +82,7 @@ void dDlst_2DSCP_c::outFontDraw() {
         u8 icon_no = mpScp->mMesgDataProc.getIconNum(i);
         int pos_x = mpScp->mMesgDataProc.getIconPosX(i);
         int pos_y = mpScp->mMesgDataProc.getIconPosY(i);
-        u32 color = mpScp->mMesgDataProc.getIconColor(i);
+        int scale = mpScp->mMesgDataProc.getIconScale(i);
         int line = mpScp->mpTextBox->getLineSpace() / 2;
 
         if (icon_no != 0xFF) {
@@ -90,7 +90,7 @@ void dDlst_2DSCP_c::outFontDraw() {
             // for some reason y computation only match if split in two
             int y = line * (VERSION_SELECT(1, 1, 2, 2) - mpScp->mLineCount + pos_y * 2);
             int y2 = y + mpScp->mpTextBox->getBounds().i.y;
-            fopMsgM_outFontDraw(sbutton_icon[i], sbutton_kage[i], x, y2, color, &sbuttonTimer[i], 0xFF, icon_no);
+            fopMsgM_outFontDraw(sbutton_icon[i], sbutton_kage[i], x, y2, scale, &sbuttonTimer[i], 0xFF, icon_no);
         }
     }
 }
@@ -938,7 +938,7 @@ BOOL dScp_outnowProc(sub_scp_class* i_Scp) {
 
 /* 8023A2AC-8023A354       .text dScp_continueProc__FP13sub_scp_class */
 BOOL dScp_continueProc(sub_scp_class* i_Scp) {
-    if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || i_Scp->mMesgDataProc.getSelectFlag() != 0) {
+    if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || i_Scp->mMesgDataProc.getSelectFlag() != fopMsgM_msgDataProc_c::Select_OFF) {
         i_Scp->mMesgDataProc.setSelectFlagOff();
         JKRFileLoader::removeResource(i_Scp->head_p, NULL);
         dScp_talkBeforeProc(i_Scp);

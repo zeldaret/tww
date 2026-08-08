@@ -326,7 +326,7 @@ public:
     int getCameraPlayer2ID(int i) { return mCameraInfo[i].mCamP2Id; }
     int getCameraWinID(int i) { return mCameraInfo[i].mDlstWindowIdx; }
 
-    int getItemTimer() { return mItemTimer; }
+    s16 getItemTimer() { return mItemTimer; }
     void resetItemTimer(s16 timer) {
         mItemTimer = timer;
         mStartItemTimer = false;
@@ -444,7 +444,9 @@ public:
     int getItemNowMagic() { return mItemNowMagicCount; }
     void setItemNowMagic(s16 num) { mItemNowMagicCount = num; }
 
+    u32 getNpcNameMessageID() { return mNpcNameMessageID; }
     void setNpcNameMessageID(u32 id) { mNpcNameMessageID = id; }
+    u32 getItemNameMessageID() { return mItemNameMessageID; }
     void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
 
     s16 getItemKeyNumCount() { return mItemKeyNumCount; }
@@ -974,7 +976,7 @@ inline void dComIfGp_startItemTimer() {
     g_dComIfG_gameInfo.play.startItemTimer();
 }
 
-inline int dComIfGp_getItemTimer() {
+inline s16 dComIfGp_getItemTimer() {
     return g_dComIfG_gameInfo.play.getItemTimer();
 }
 
@@ -1008,6 +1010,14 @@ inline void dComIfGp_setAuctionGauge(s16 gauge) {
 
 inline s16 dComIfGp_getAuctionGauge() {
     return g_dComIfG_gameInfo.play.getAuctionGauge();
+}
+
+inline u32 dComIfGp_getNpcNameMessageID() {
+    return g_dComIfG_gameInfo.play.getNpcNameMessageID();
+}
+
+inline u32 dComIfGp_getItemNameMessageID() {
+    return g_dComIfG_gameInfo.play.getItemNameMessageID();
 }
 
 inline void dComIfGs_setRupee(u16 rupee) {

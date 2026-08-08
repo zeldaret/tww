@@ -1392,7 +1392,6 @@ void daNpc_Zl1_c::decEnvironment() {
 
 /* 00002BCC-00002CD0       .text darkProc__11daNpc_Zl1_cFv */
 void daNpc_Zl1_c::darkProc() {
-
     switch(field_0x7C2) {
         case 1:
             incEnvironment();

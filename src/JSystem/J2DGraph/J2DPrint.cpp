@@ -237,9 +237,7 @@ f32 J2DPrint::parse(const u8* param_1, int param_2, int param_3, u16* param_4, J
                 if (mFont->isFixed()) {
                     field_0x34 = mFont->getFixedWidth();
                 } else {
-                    JUTFont::TWidth uStack_ec;
-                    mFont->getWidthEntry(r27, &uStack_ec);
-                    field_0x34 = uStack_ec.field_0x1;
+                    field_0x34 = (u32)mFont->getWidth(r27);
                 }
 
                 field_0x34 *= field_0x18 / mFont->getCellWidth();
