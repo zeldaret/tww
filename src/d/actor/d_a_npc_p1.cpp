@@ -900,13 +900,13 @@ BOOL daNpc_P1_c::privateCut() {
             switch (actIdx) {
                 case 2:
                     evn_setAnm_init(staffIdx);
-
                     break;
                 case 3:
                     mHeadAnm.swing_vertical_init(2, 0x1000, 0x800, 1);
                     break;
                 case 4:
                     evn_talk_init(staffIdx);
+                    break;
             }
         }
         switch (actIdx) {
@@ -1043,8 +1043,8 @@ cPhs_State daNpc_P1_c::_create() {
         mKajiTimer = 300;
 
         if (mType == TYPE_P1B_e) {
-            attention_info.distances[1] = 0xAA;
-            attention_info.distances[3] = 0xAA;
+            attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
+            attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
             u8 type = mParam;
             if (mParam == 1) {
                 if (dComIfGp_getStartStagePoint() == 0 || dComIfGp_getStartStagePoint() == 2) {
@@ -1064,8 +1064,8 @@ cPhs_State daNpc_P1_c::_create() {
                 setAction(&daNpc_P1_c::normalAction, NULL, 0);
             }
         } else if (mType == TYPE_P1C_e) {
-            attention_info.distances[1] = 0xAA;
-            attention_info.distances[3] = 0xAA;
+            attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
+            attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
             if (!dComIfGs_isEventBit(0x820) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)) {
                 current.pos.x -= cM_scos(current.angle.y) * 40.0f;
                 current.pos.z += cM_ssin(current.angle.y) * 40.0f;
@@ -1076,8 +1076,8 @@ cPhs_State daNpc_P1_c::_create() {
             }
             mCyl.SetR(100.0f);
         } else {
-            attention_info.distances[1] = 0xAB;
-            attention_info.distances[3] = 0xAB;
+            attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
+            attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
             if (m671 != 0) {
                 setAnm(9, 0.0f);
                 mCyl.SetR(REG10_F(5) + 90.0f);

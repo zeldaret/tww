@@ -8,10 +8,8 @@ class J3DNode;
 
 class daNpc_Ba1_c : public fopNpc_npc_c {
 public:
-
     typedef BOOL (daNpc_Ba1_c::*ProcFunc)(void*);
     struct anm_prm_c {
-        // Borrowed from d_lib.h, fields seem to match
         /* 0x00 */ s8 mAnmNum;
         /* 0x01 */ s8 mBtpNum;
         /* 0x02 */ s16 field_0x02;
@@ -37,23 +35,23 @@ public:
     bool setBtp(bool, int);
     bool iniTexPttrnAnm(bool);
     void plyTexPttrnAnm();
-    void setAnm_tex(signed char);
+    void setAnm_tex(s8);
     BOOL setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int, int);
     bool setAnm();
     void chg_anmTag();
     void control_anmTag();
-    void chg_anmAtr(unsigned char);
+    void chg_anmAtr(u8);
     void control_anmAtr();
     void setAnm_ATR(int);
-    void anmAtr(unsigned short);
+    void anmAtr(u16);
     void eventOrder();
     void checkOrder();
     bool chk_talk();
-    bool chk_drct(float);
+    bool chk_drct(f32);
     bool chk_partsNotMove();
     void lookBack();
-    u16 next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
     u32 getMsg_BA1_0();
     u32 getMsg_BA1_1();
     u32 getMsg_BA1_3();
@@ -62,7 +60,7 @@ public:
     bool chkAttention();
     void setAttention(bool);
     fopAc_ac_c* searchByID(fpc_ProcID);
-    bool partner_srch_sub(void* (*)(void*, void*));
+    bool partner_srch_sub(fpcLyIt_JudgeFunc);
     void partner_srch();
     bool check_useFairyArea();
     bool checkCommandTalk();
@@ -75,9 +73,9 @@ public:
     void eInit_ACTOR_DRW_CONTROL_(int*, int*);
     void eInit_setEvTimer(int*);
     void eInit_CHK_FAIRY_(int*);
-    f32 eInit_prmFloat(float*, float);
-    void eInit_SET_EYE_OFF_(float*);
-    void eInit_EYE_OFF_ZRO_(float*);
+    f32 eInit_prmFloat(f32*, f32);
+    void eInit_SET_EYE_OFF_(f32*);
+    void eInit_EYE_OFF_ZRO_(f32*);
     void eInit_CHK_FAIRY_MOV_1(int*);
     void event_actionInit(int);
     bool eMove_MOV_POS_();
@@ -92,7 +90,7 @@ public:
     BOOL isEventEntry();
     void event_proc(int);
     BOOL set_action(int (daNpc_Ba1_c::*)(void*), void*);
-    void setStt(signed char);
+    void setStt(s8);
     BOOL wait_0();
     BOOL wait_1();
     BOOL talk_1();
@@ -116,18 +114,15 @@ public:
     BOOL CreateHeap();
 
 public:
-
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_hed_jnt_num;
     /* 0x6CD */ s8 m_bbone_jnt_num;
     /* 0x6CE */ s8 m_footL_jnt_num;
-    /* 0x6CF */ u8 field_0x6CF[0x6D0 - 0x6CF];
     /* 0x6D0 */ J3DModel* mpClothModel;
     /* 0x6D4 */ u32 mShadowID;
     /* 0x6D8 */ J3DAnmTexPattern* m_hed_tex_pttrn;
     /* 0x6DC */ mDoExt_btpAnm mHeadBtpAnm;
     /* 0x6F0 */ u8 mBlinkFrame;
-    /* 0x6F1 */ u8 field_0x6F1[0x6F2 - 0x6F1];
     /* 0x6F2 */ s16 mBlinkTimer;
     /* 0x6F4 */ ProcFunc mCurrProcFunc;
     /* 0x700 */ u8 field_0x700[0x708 - 0x700];
@@ -193,10 +188,6 @@ public:
     /* 0x817 */ s8 mSpecificType;
     /* 0x818 */ s8 m818;
     /* 0x819 */ s8 m819;
-    /* 0x81A */ u8 field_0x81A[0x81C - 0x81A];
 };  // Size: 0x81C
-
-
-
 
 #endif /* D_A_NPC_BA1_H */

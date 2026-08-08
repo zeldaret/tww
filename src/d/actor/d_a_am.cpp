@@ -82,6 +82,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
             case AM_JNT_EYE_e:
                 cMtx_YrotM(*calc_mtx, i_this->mEyeRot.y);
                 cMtx_XrotM(*calc_mtx, i_this->mEyeRot.x);
+                break;
             }
 
             if (jntNo >= AM_JNT_KOSI_e && jntNo <= AM_JNT_EYE_e) {
