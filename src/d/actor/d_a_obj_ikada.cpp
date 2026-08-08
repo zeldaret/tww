@@ -355,7 +355,6 @@ void daObj_Ikada_c::createWave() {
 
 /* 000012EC-00001528       .text setWave__13daObj_Ikada_cFv */
 void daObj_Ikada_c::setWave() {
-    /* Nonmatching */
     f32 fVar2 = l_HIO.mTrackVel;
     f32 fVar1 = l_HIO.mWaveVelFade;
     f32 target = l_HIO.mSplashScaleMax;
@@ -393,12 +392,12 @@ void daObj_Ikada_c::setWave() {
 
     cXyz sp2C = l_HIO.mWaveCollapsePos[0];
     cXyz sp20 = l_HIO.mWaveCollapsePos[1];
-    cXyz sp14 = l_HIO.mWaveCollapsePos[0];
-    cXyz sp08 = l_HIO.mWaveCollapsePos[1];
+    cXyz sp14 = sp2C;
+    cXyz sp08 = sp20;
 
     mWaveRCallback.setAnchor(&sp2C, &sp20);
-    sp14.x = (f32)(f64)sp14.x * -1.0f;
-    sp08.x = (f32)(f64)sp08.x * -1.0f;
+    sp14.x *= -1.0f;
+    sp08.x *= -1.0f;
     mWaveLCallback.setAnchor(&sp14, &sp08);
 
     mWaveRCallback.setMaxDisSpeed(l_HIO.mWaveVelSpeed);
