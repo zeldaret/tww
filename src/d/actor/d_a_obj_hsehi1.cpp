@@ -7,9 +7,35 @@
 #include "d/actor/d_a_obj_hsehi1.h"
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
+struct hsh_hio_init_data {
+    /* 0x00 */ f32 mF0;
+    /* 0x04 */ f32 mF1;
+    /* 0x08 */ f32 mF2;
+    /* 0x0C */ s16 mS0;
+    /* 0x0E */ u8 mB0;
+};
+
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
-    /* Nonmatching */
+    mField_0x04 = -1;
+
+    static const hsh_hio_init_data init_data = {
+        250.0f,
+        0.0f,
+        0.0f,
+        0x4000,
+        0,
+    };
+
+    mField_0x08 = init_data.mF0;
+    mField_0x0C = init_data.mF1;
+    mField_0x10 = init_data.mF2;
+    mField_0x14 = init_data.mS0;
+    mField_0x16 = init_data.mB0;
 }
+
+daObj_hsh_HIO_c::~daObj_hsh_HIO_c() {}
+
+    /* Nonmatching */
 
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
 daObj_hsh_c::~daObj_hsh_c() {
