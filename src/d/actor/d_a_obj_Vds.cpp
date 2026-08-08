@@ -83,7 +83,8 @@ void daObjVds::Act_c::delete_point_light() {
 
 /* 00000954-00000968       .text Event_init__Q28daObjVds5Act_cFv */
 void daObjVds::Act_c::Event_init() {
-    /* Nonmatching */
+    field_0x334 = -1;
+    field_0x336 = 0;
 }
 
 /* 00000968-00000A28       .text Event_exe__Q28daObjVds5Act_cFv */
