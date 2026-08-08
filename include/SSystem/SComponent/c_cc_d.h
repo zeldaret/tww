@@ -30,6 +30,7 @@ enum cCcD_AtRPrm_e {
 };
 
 enum cCcD_TgSPrm_e {
+    /* 0x00 */ cCcD_TgSPrm_UNK0 = 0x00,
     /* 0x01 */ cCcD_TgSPrm_Set_e = 0x01,
     /* 0x02 */ cCcD_TgSPrm_IsEnemy_e = 0x02,
     /* 0x04 */ cCcD_TgSPrm_IsPlayer_e = 0x04,
@@ -43,6 +44,7 @@ enum cCcD_TgRPrm_e {
 };
 
 enum cCcD_CoSPrm_e {
+    /* 0x0000 */ cCcD_CoSPrm_UNK0 = 0x00,
     /* 0x0001 */ cCcD_CoSPrm_Set_e = 0x01,
     /* 0x0002 */ cCcD_CoSPrm_IsEnemy_e = 0x02,
     /* 0x0004 */ cCcD_CoSPrm_IsPlayer_e = 0x04,
