@@ -326,7 +326,7 @@ public:
     int getCameraPlayer2ID(int i) { return mCameraInfo[i].mCamP2Id; }
     int getCameraWinID(int i) { return mCameraInfo[i].mDlstWindowIdx; }
 
-    int getItemTimer() { return mItemTimer; }
+    s16 getItemTimer() { return mItemTimer; }
     void resetItemTimer(s16 timer) {
         mItemTimer = timer;
         mStartItemTimer = false;
@@ -976,7 +976,7 @@ inline void dComIfGp_startItemTimer() {
     g_dComIfG_gameInfo.play.startItemTimer();
 }
 
-inline int dComIfGp_getItemTimer() {
+inline s16 dComIfGp_getItemTimer() {
     return g_dComIfG_gameInfo.play.getItemTimer();
 }
 

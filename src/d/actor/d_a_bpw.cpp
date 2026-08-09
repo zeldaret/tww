@@ -4385,11 +4385,11 @@ void body_create_init(bpw_class* i_this) {
     fopAcM_SetMtx(actor, i_this->mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(actor, -300.0f, -300.0f, -300.0f, 300.0f, 300.0f, 300.0f);
     actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-    actor->attention_info.distances[2] = 4;
+    actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
     fopAcM_OnStatus(actor, fopAcStts_BOSS_e);
     i_this->mAcch.Set(fopAcM_GetPosition_p(actor), fopAcM_GetOldPosition_p(actor), actor, 1, &i_this->mAcchCir, fopAcM_GetSpeed_p(actor));
     i_this->mStts.Init(0xfe, 1, actor);
-    actor->attention_info.distances[4] = 0x25;
+    actor->attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 0x25;
     fopAcM_OnStatus(actor, fopAcStts_UNK10000_e);
     i_this->mBodyCoSph.Set(body_co_sph_src);
     i_this->mBodyCoSph.SetStts(&i_this->mStts);

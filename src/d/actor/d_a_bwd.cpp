@@ -2508,7 +2508,7 @@ static cPhs_State daBwd_Create(fopAc_ac_c* a_this) {
         }
     }
     a_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-    a_this->attention_info.distances[2] = 0x22;
+    a_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 0x22;
     if (hio_set == 0) {
         i_this->m3C51 = 1;
         hio_set = 1;

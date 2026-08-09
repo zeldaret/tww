@@ -297,13 +297,14 @@ public:
         /* 0x00 */ Select_OFF,
         /* 0x01 */ Select_ON,
         /* 0x02 */ Select_YOKO,
-        /* 0x03 */ Select_INPUT,
+        /* 0x03 */ Select_AUCTION,
     };
 
     u8 getSelectFlag() { return selectFlag; }
     void setSelectFlagOff() { selectFlag = Select_OFF; }
     void setSelectFlagOn() { selectFlag = Select_ON; }
     void setSelectFlagYokoOn() { selectFlag = Select_YOKO; }
+    void setSelectFlagAuctionOn() { selectFlag = Select_AUCTION; }
     u8 getAutoSendFlag() { return autoSendFlag; }
     void setAutoSendFlagOff() { autoSendFlag = 0; }
     void setAutoSendFlagOn() { autoSendFlag = 1; }
@@ -369,10 +370,10 @@ public:
     /* 0x020 */ f32 nowCursorPos;
     /* 0x024 */ f32 field_0x24;
     /* 0x028 */ f32 field_0x28;
-    /* 0x02C */ u32 field_0x2C;
-    /* 0x030 */ u32 field_0x30;
-    /* 0x034 */ u32 field_0x34;
-    /* 0x038 */ u32 field_0x38;
+    /* 0x02C */ size_t field_0x2C;
+    /* 0x030 */ size_t field_0x30;
+    /* 0x034 */ size_t field_0x34;
+    /* 0x038 */ size_t field_0x38;
     /* 0x03C */ const char* bmgData;
     /* 0x040 */ char* field_0x40;
     /* 0x044 */ char* field_0x44;
@@ -532,6 +533,7 @@ void fopMsgM_blendInit(J2DPicture* pic, const char* data);
 u8 fopMsgM_itemNumIdx(u8 i_no);
 u8 fopMsgM_itemNum(u8 i_itemNo);
 u32 fopMsgM_getColorTable(u16 i_colorNo);
+void fopMsgM_int_to_char(char* i_dest, int i_value, bool param_3);
 void fopMsgM_blendDraw(fopMsgM_pane_class* i_pane, const char* data);
 void fopMsgM_blendDraw(J2DPicture* pic, const char* data);
 void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char* param_4, int param_5, int param_6);

@@ -8,10 +8,6 @@
 struct JUTDataBlockHeader {
     /* 0x00 */ u32 mType;
     /* 0x04 */ u32 mSize;
-
-    const JUTDataBlockHeader* getNext() const { // fake inline
-        return reinterpret_cast<const JUTDataBlockHeader*>(reinterpret_cast<const u8*>(this) + mSize);
-    }
 };
 
 struct JUTDataFileHeader { // actual struct name unknown
