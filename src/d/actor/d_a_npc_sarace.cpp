@@ -200,7 +200,18 @@ bool daNpc_Sarace_c::chkAttention(cXyz i_pos, s16 i_angle) {
 
 /* 00000760-000007D8       .text eventOrder__14daNpc_Sarace_cFv */
 void daNpc_Sarace_c::eventOrder() {
-    /* Nonmatching */
+    if(mEventState == 3) {
+        fopAcM_orderOtherEvent2(
+            this,
+            "SARACE_EXPCAM",
+            dEvtFlag_NOPARTNER_e
+        );
+    } else if (mEventState == 1 || mEventState == 2) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if(mEventState == 1) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    }
 }
 
 /* 000007D8-000008E8       .text checkOrder__14daNpc_Sarace_cFv */

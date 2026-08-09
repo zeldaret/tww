@@ -62,7 +62,8 @@ public:
     /* 0x729 */ u8 field_0x729[0x740 - 0x729];
     /* 0x740 */ s8 mTexPatternNum;
     /* 0x741 */ s8 mCurrentAnm;
-    /* 0x742 */ u8 field_0x742[0x748 - 0x742];
+    /* 0x742 */ s8 mEventState;
+    /* 0x743 */ u8 field_0x743[0x748 - 0x743];
 };  // Size: 0x748
 
 class daNpc_Sarace_HIO_c : public JORReflexible {
