@@ -179,8 +179,23 @@ void daNpc_Sarace_c::setAnm(s8 bck_id, f32 morf) {
 }
 
 /* 0000060C-00000760       .text chkAttention__14daNpc_Sarace_cF4cXyzs */
-void daNpc_Sarace_c::chkAttention(cXyz, s16) {
-    /* Nonmatching */
+bool daNpc_Sarace_c::chkAttention(cXyz i_pos, s16 i_angle) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    f32 maxAttnDistXZ = l_HIO.mNpc.mMaxAttnDistXZ;
+    int maxAttnAngleY = l_HIO.mNpc.mMaxAttnAngleY;
+
+    cXyz delta;
+    delta.x = player->current.pos.x - i_pos.x;
+    delta.z = player->current.pos.z - i_pos.z;
+    f32 distXZ = std::sqrtf(delta.x*delta.x + delta.z*delta.z);
+    s16 targetAngleY = cM_atan2s(delta.x, delta.z);
+    if (mHasAttention) {
+        maxAttnDistXZ += 40.0f;
+        maxAttnAngleY += cAngle::d2s(10.0f);
+    }
+    targetAngleY -= i_angle;
+    return maxAttnAngleY > abs(targetAngleY) && maxAttnDistXZ > distXZ;
 }
 
 /* 00000760-000007D8       .text eventOrder__14daNpc_Sarace_cFv */

@@ -20,7 +20,7 @@ public:
     BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
     void setAnm(s8, f32);
-    void chkAttention(cXyz, s16);
+    bool chkAttention(cXyz, s16);
     void eventOrder();
     void checkOrder();
     u16 next_msgStatus(u32*);
@@ -57,7 +57,9 @@ public:
     /* 0x6FA */ s16 mBlinkTimer;
     /* 0x6FC */ cXyz mEyePos;
     /* 0x708 */ cXyz mAttPos;
-    /* 0x714 */ u8 field_0x714[0x740 - 0x714];
+    /* 0x714 */ u8 field_0x714[0x728 - 0x714];
+    /* 0x728 */ u8 mHasAttention;
+    /* 0x729 */ u8 field_0x729[0x740 - 0x729];
     /* 0x740 */ s8 mTexPatternNum;
     /* 0x741 */ s8 mCurrentAnm;
     /* 0x742 */ u8 field_0x742[0x748 - 0x742];
