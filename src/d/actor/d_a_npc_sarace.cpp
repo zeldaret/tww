@@ -216,7 +216,18 @@ void daNpc_Sarace_c::eventOrder() {
 
 /* 000007D8-000008E8       .text checkOrder__14daNpc_Sarace_cFv */
 void daNpc_Sarace_c::checkOrder() {
-    /* Nonmatching */
+    if(eventInfo.checkCommandDemoAccrpt()) {
+        if(mEventState == 3) {
+            setAction(&daNpc_Sarace_c::event_endCheck_action, 0);
+            mEventState = 0;
+        }
+    }
+    else if (eventInfo.checkCommandTalk()) {
+        if(mEventState == 1 || mEventState == 2) {
+            mEventState = 0;
+            m729 = 1;
+        }
+    }
 }
 
 /* 000008E8-00000A6C       .text next_msgStatus__14daNpc_Sarace_cFPUl */
@@ -270,7 +281,7 @@ void daNpc_Sarace_c::wait_action(void*) {
 }
 
 /* 000015BC-0000173C       .text event_endCheck_action__14daNpc_Sarace_cFPv */
-void daNpc_Sarace_c::event_endCheck_action(void*) {
+BOOL daNpc_Sarace_c::event_endCheck_action(void* i_arg) {
     /* Nonmatching */
 }
 

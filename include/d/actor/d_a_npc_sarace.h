@@ -10,12 +10,28 @@ public:
 
     typedef BOOL (daNpc_Sarace_c::*ProcFunc)(void*);
 
+    enum ActionStatus {
+        ACTION_STARTING = 0,
+        ACTION_ONGOING  = 1,
+        ACTION_ENDING   = -1,
+    };
+
     void getAttentionBasePos() {}
     void getEyePos() {}
     void getHBarrelP() {}
     void getVBarrelP() {}
     void init() {}
-    void setAction(int (daNpc_Sarace_c::*)(void*), void*) {}
+    void setAction(ProcFunc func, void* arg) {
+        if (mCurrActionFunc != func) {
+            if (mCurrActionFunc) {
+                mActionStatus = ACTION_ENDING;
+                (this->*mCurrActionFunc)(NULL);
+            }
+            mCurrActionFunc = func;
+            mActionStatus = ACTION_STARTING;
+            (this->*mCurrActionFunc)(arg);
+        }
+    }
 
     BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
@@ -33,7 +49,7 @@ public:
     void talk01();
     void dummy_action(void*);
     void wait_action(void*);
-    void event_endCheck_action(void*);
+    BOOL event_endCheck_action(void*);
     void set_mtx();
     BOOL _draw();
     BOOL _execute();
@@ -59,11 +75,15 @@ public:
     /* 0x708 */ cXyz mAttPos;
     /* 0x714 */ u8 field_0x714[0x728 - 0x714];
     /* 0x728 */ u8 mHasAttention;
-    /* 0x729 */ u8 field_0x729[0x740 - 0x729];
+    /* 0x729 */ u8 m729;
+    /* 0x72A */ u8 field_0x72A[0x734 - 0x72A];
+    /* 0x734 */ ProcFunc mCurrActionFunc;
     /* 0x740 */ s8 mTexPatternNum;
     /* 0x741 */ s8 mCurrentAnm;
     /* 0x742 */ s8 mEventState;
-    /* 0x743 */ u8 field_0x743[0x748 - 0x743];
+    /* 0x743 */ u8 field_0x743[0x746 - 0x743];
+    /* 0x746 */ s8 mActionStatus;
+    /* 0x747 */ u8 field_0x747[0x748 - 0x747];
 };  // Size: 0x748
 
 class daNpc_Sarace_HIO_c : public JORReflexible {
