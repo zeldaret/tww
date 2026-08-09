@@ -205,7 +205,7 @@ J3DAnmBase* J3DAnmFullLoader_v15::load(const void* dst) {
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     return mAnm;
 }
@@ -250,7 +250,7 @@ void J3DAnmFullLoader_v15::setResource(J3DAnmBase* dst, const void* data) {
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
 }
 
@@ -397,7 +397,7 @@ J3DAnmBase* J3DAnmKeyLoader_v15::load(const void* dst) {
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     return mAnm;
 }
@@ -442,7 +442,7 @@ void J3DAnmKeyLoader_v15::setResource(J3DAnmBase* dst, const void* data) {
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
 }
 

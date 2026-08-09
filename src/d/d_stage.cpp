@@ -2323,7 +2323,7 @@ int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 
         if (strcmp(dComIfGp_getStartStageName(), "Asoko") == 0) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)) {
                 if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
-                    dComIfGp_setNextStage("sea", 5, 11, -1, i_speed, i_mode);
+                    dComIfGp_setNextStage("sea", 5, dIsleRoom_WindfallIsland_e, -1, i_speed, i_mode);
                 } else {
                     dComIfGp_setNextStage("MajyuE", 18, 0, -1, i_speed, i_mode);
                 }

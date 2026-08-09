@@ -97,7 +97,7 @@ cPhs_State daObjRcloud_c::_create() {
         }
         break;
     case 1:
-        if (dComIfGs_isSymbol(0) == 0) {
+        if (!dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
             phase = dComIfG_resLoad(&mPhase, l_arcname);
             mResourceLoadedFlag = 1;
         }

@@ -987,7 +987,7 @@ void wait(bmd_class* i_this) {
         move1(i_this);
         if (i_this->m308[1] == 0) {
             i_this->m308[1] = (s16)(int)(cM_rndF(200.0f) + 100.0f);
-            i_this->m336 = (s16)(int)cM_rndFX(32768.0f);
+            i_this->m336 = (s16)(int)cM_rndFX(0x8000);
             i_this->m338 = 0.0f;
         }
         cLib_addCalcAngleS2(&actor->shape_angle.y, i_this->m336, 0x20, i_this->m338);
@@ -2027,7 +2027,7 @@ static cPhs_State daBmd_Create(fopAc_ac_c* a_this) {
             i_this->mB71 = 1;
         }
         dKyw_pntwind_set(&i_this->mWindInfluence);
-        a_this->attention_info.distances[2] = 4;
+        a_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
         daBmd_Execute(i_this);
         res = cPhs_COMPLEATE_e;
     }

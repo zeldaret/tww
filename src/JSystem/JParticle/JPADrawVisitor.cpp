@@ -990,7 +990,7 @@ void JPADrawCalcAlpha::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
 /* 80265C40-80265D54       .text calc__27JPADrawCalcAlphaFlickNrmSinFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcAlphaFlickNrmSin::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    f32 sin = JMASSin((ptcl->getAge() * 16384) * params->mAlphaWaveRandom * (1.0f - pDC->pesp->getAlphaWaveParam1()));
+    f32 sin = JMASSin((ptcl->getAge() * 0x4000) * params->mAlphaWaveRandom * (1.0f - pDC->pesp->getAlphaWaveParam1()));
     params->mAlphaOut *= params->mAlphaWaveRandom * (((sin - 1.0f) * 0.5f) * pDC->pesp->getAlphaWaveParam3()) + 1.0f;
     if (params->mAlphaOut < 0.0f)
         params->mAlphaOut = 0.0f;
@@ -1000,7 +1000,7 @@ void JPADrawCalcAlphaFlickNrmSin::calc(const JPADrawContext* pDC, JPABaseParticl
 void JPADrawCalcAlphaFlickAddSin::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     /* Nonmatching - operand swap */
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    f32 theta = (ptcl->getAge() * 16384) * params->mAlphaWaveRandom;
+    f32 theta = (ptcl->getAge() * 0x4000) * params->mAlphaWaveRandom;
     f32 sin2 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam2()));
     f32 sin1 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam1()));
     params->mAlphaOut *= (params->mAlphaWaveRandom * ((((sin1 + sin2) - 2.0f) * 0.5f) * pDC->pesp->getAlphaWaveParam3()) + 2.0f) * 0.5f;
@@ -1011,7 +1011,7 @@ void JPADrawCalcAlphaFlickAddSin::calc(const JPADrawContext* pDC, JPABaseParticl
 /* 80265EC4-80266048       .text calc__28JPADrawCalcAlphaFlickMultSinFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcAlphaFlickMultSin::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    f32 theta = (ptcl->getAge() * 16384) * params->mAlphaWaveRandom;
+    f32 theta = (ptcl->getAge() * 0x4000) * params->mAlphaWaveRandom;
     f32 mul3 = (pDC->pesp->getAlphaWaveParam3() * 0.5f) * params->mAlphaWaveRandom;
     f32 sin2 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam2()));
     f32 sin1 = JMASSin(theta * (1.0f - pDC->pesp->getAlphaWaveParam1()));

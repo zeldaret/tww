@@ -123,7 +123,7 @@ void dFile_error_c::closeMessage() {
 /* 8017E068-8017E228       .text resizeMsgBoard__13dFile_error_cFi */
 void dFile_error_c::resizeMsgBoard(int param_1) {
     J2DPane *pane_2_pane = msgPanes[2].pane;
-    f32 pane_2_height = pane_2_pane->mBounds.f.y - pane_2_pane->mBounds.i.y;
+    f32 pane_2_height = pane_2_pane->mBounds.getHeight();
     f32 scale = ((pane_2_height / VERSION_SELECT(9.0f, 9.0f, 12.0f, 12.0f)) * (f32) param_1) / pane_2_height;
 
     fopMsgM_paneScaleY(&msgPanes[2], scale);

@@ -173,9 +173,9 @@ BOOL daObjVolcano::Act_c::Create() {
         field_0x4F8 = 0.0f;
         if (dComIfGs_getStartPoint() == 2 
 #if VERSION > VERSION_DEMO
-        && current.roomNo == dComIfGs_getRestartRoomNo()
+            && current.roomNo == dComIfGs_getRestartRoomNo()
 #endif
-    ) {
+        ) {
             field_0x500 = 6;
         } else {
             field_0x500 = 3;

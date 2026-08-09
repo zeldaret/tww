@@ -958,15 +958,15 @@ BOOL daPy_lk_c::procRopeUp_init() {
         }
     }
     if (dVar4 <= current.pos.y) {
+#if VERSION > VERSION_DEMO
         if (specialRopeHangUp()) {
             return true;
-#if VERSION > VERSION_DEMO
-        } else if (changeRopeToHangProc()) {
-            return true;
-#endif
-        } else {
-            return procRopeHangWait_init(0);
         }
+#endif
+        if (changeRopeToHangProc()) {
+            return true;
+        }
+        return procRopeHangWait_init(0);
     } else {
         commonProcInit(daPyProc_ROPE_UP_e);
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK800000_e);
@@ -1133,10 +1133,10 @@ BOOL daPy_lk_c::procRopeSwingStart() {
             if (!cLib_addCalcAngleS(&shape_angle.x, mProcVar2.m34D4, 5, 0xa0, 0x40)) {
                 if (mProcVar2.m34D4 > 0) {
                     setSingleMoveAnime(ANM_ROPESWINGF, 1.0f, 0.0f, -1, 10.0f);
-                    mProcVar2.m34D4 = -4096.0f * m35A4;
+                    mProcVar2.m34D4 = -0x1000 * m35A4;
                 } else {
                     setSingleMoveAnime(ANM_ROPESWINGB, 1.0f, 0.0f, -1, 10.0f);
-                    mProcVar2.m34D4 = 4096.0f * m35A4;
+                    mProcVar2.m34D4 = 0x1000 * m35A4;
                 }
                 mProcVar0.m34D0 = 1;
                 if (DEMO_SELECT(!strcmp(dComIfGp_getStartStageName(), "GanonK"), checkSpecialRope())) {

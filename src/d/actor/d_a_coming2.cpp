@@ -291,8 +291,8 @@ BOOL daComing2::Act_c::request_all_flag_exit() {
         daObjBarrel2::Act_c* buoy;
 
         if (buoyProc != fpcM_ERROR_PROCESS_ID_e && fopAcM_SearchByID(buoyProc, (fopAc_ac_c**)&buoy) != NULL && buoy != NULL) {
-             buoy->exit_req();
-             mStartBuoy[i].unk_00 = fpcM_ERROR_PROCESS_ID_e;
+            buoy->exit_req();
+            mStartBuoy[i].unk_00 = fpcM_ERROR_PROCESS_ID_e;
         }
     }
 
@@ -309,28 +309,28 @@ void daComing2::Act_c::barrel_execute(int idx) {
     
     if (barrelProc != fpcM_ERROR_PROCESS_ID_e) {
         if ((BOOL)fopAcM_SearchByID(barrelProc, (fopAc_ac_c**)&barrel) == TRUE) {
-             if (barrel != NULL) {
+            if (barrel != NULL) {
                 mBarrelInfo[idx].unk_06 = barrel->chk_item_give();
-             }
+            }
 
-             if (mBarrelInfo[idx].unk_04 == 0) {
-                 request_barrel_exitN(idx);
-             } else if (mBarrelInfo[idx].unk_04 > 0) {
-                 mBarrelInfo[idx].unk_04--;
-             }
+            if (mBarrelInfo[idx].unk_04 == 0) {
+                request_barrel_exitN(idx);
+            } else if (mBarrelInfo[idx].unk_04 > 0) {
+                mBarrelInfo[idx].unk_04--;
+            }
         } else if (mBarrelInfo[idx].unk_06 == 0) {
-             init_barrelN_info(idx);
-             coming_process_init(0);
+            init_barrelN_info(idx);
+            coming_process_init(0);
         }
 
         if (mBarrelInfo[idx].unk_06 == 1) {
-             if (unk_2A4 >= 15u) {
-                 coming_process_init(0);
-                } else {
-                 request_barrel_exitN(idx);
-                 init_barrelN_info(idx);
-                 unk_29A = 1;
-             }
+            if (unk_2A4 >= 15u) {
+                coming_process_init(0);
+            } else {
+                request_barrel_exitN(idx);
+                init_barrelN_info(idx);
+                unk_29A = 1;
+            }
         }
     }
 }

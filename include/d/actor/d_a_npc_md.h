@@ -19,7 +19,7 @@ public:
     cXyz& getPos() { return mPos; }
     void setAngle(s16 x, s16 y, s16 z) { mAngle.set(x, y, z); }
 
-public:
+private:
     /* 0x04 */ JPABaseEmitter* mpEmitter;
     /* 0x08 */ cXyz mPos;
     /* 0x14 */ csXyz mAngle;
@@ -341,7 +341,7 @@ public:
     static void onPlayerRoom() { m_playerRoom = true; }
     static void offPlayerRoom() { m_playerRoom = false; }
     
-public:
+private:
     /* 0x04EC */ request_of_phase_process_class mPhase;
     /* 0x04F4 */ J3DModel* mpHarpModel;
     /* 0x04F8 */ J3DModel* mpHarpLightModel;

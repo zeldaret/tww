@@ -506,9 +506,9 @@ void daNpc_Rsh1_c::checkOrder() {
 
 /* 0000126C-00001650       .text next_msgStatus__12daNpc_Rsh1_cFPUl */
 u16 daNpc_Rsh1_c::next_msgStatus(u32* o_pMsgNo) {
-    u16 msg_status;    
+    u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
     s32 msg_rupee;
-    msg_status = fopMsgStts_MSG_CONTINUES_e;
+
     switch (*o_pMsgNo) {
     case 0x2845:
     case 0x2846:
@@ -940,7 +940,7 @@ BOOL daNpc_Rsh1_c::CreateInit() {
     mActorAngle = current.angle;
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 173;
-    attention_info.distances[8] = 173; // Bug?
+    attention_info.distances[8] = 173; // !@bug: There is no distances[8], this overwrites the first byte of position.x
     gravity = -30.0f;
     
     switch (m95E) {

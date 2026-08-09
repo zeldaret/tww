@@ -18,9 +18,9 @@ arg_parse = argparse.ArgumentParser()
 arg_parse.add_argument("object_name", help="Name of the object to compare, e.g. d_a_bridge or d_a_npc_fa1")
 args = arg_parse.parse_args()
 target_object_name: str = args.object_name
-assert "/" not in target_object_name and "." not in target_object_name, "The object name should not contain slashes or dots"
+assert not re.search(r"[/\\.]", target_object_name), "The object name should not contain slashes or dots"
 
-debug_maps_root_path = Path("orig/D44J01/files/maps")
+debug_maps_root_path = Path("orig") / "D44J01" / "files" / "maps"
 decomp_root_path = Path(".")
 
 retcode = subprocess.call(["python", "configure.py", "--version", "D44J01", "--debug", "--map", "--non-matching"], cwd=decomp_root_path)
@@ -43,13 +43,13 @@ else:
 del target_map_path_dol
 del target_map_path_rel
 
-base_map_path_dol = decomp_root_path / "build/D44J01/framework.elf.MAP"
-base_map_path_rel = decomp_root_path / f"build/D44J01/{target_object_name}/{target_object_name}.plf.MAP"
-if str(base_map_path_rel) in all_ninja_outputs:
+base_map_path_dol = decomp_root_path / "build" / "D44J01" / "framework.elf.MAP"
+base_map_path_rel = decomp_root_path / "build" / "D44J01" / target_object_name / f"{target_object_name}.plf.MAP"
+if base_map_path_rel.as_posix() in all_ninja_outputs:
   base_is_rel = True
   base_map_path = base_map_path_rel
 else:
-  assert str(base_map_path_dol) in all_ninja_outputs
+  assert base_map_path_dol.as_posix() in all_ninja_outputs
   base_is_rel = False
   base_map_path = base_map_path_dol
 del base_map_path_dol

@@ -415,7 +415,7 @@ bool daObjPirateship::Act_c::_execute() {
 
     if (!demo_move()) {
         if (l_HIO.m05 == 0 && m4A8 != NULL) {
-            dLib_pathMove(&current.pos, &m4A4, m4A8, 3.0f, path_move_call_back, (void*)this);
+            dLib_pathMove(&current.pos, &m4A4, m4A8, 3.0f, path_move_call_back, this);
             if (m32E > 0x4000 || m32E < -0x4000) {
                 cLib_addCalcAngleS2(&m330, l_HIO.m12, 0x10, 0x300);
             } else {

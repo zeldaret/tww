@@ -220,7 +220,7 @@ void daWindMill_c::CreateInit() {
     if (mpBgW != NULL) {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        cMtx_copy(mDoMtx_stack_c::get(), mMtx);
+        MTXCopy(mDoMtx_stack_c::get(), mMtx);
 
         dComIfG_Bgsp()->Regist(mpBgW, this);
         mpBgW->Move();
@@ -248,8 +248,8 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
                     break;
             }
             model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
-            cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
-            cMtx_copy(mDoMtx_stack_c::get(), i_this->mMtx);
+            MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+            MTXCopy(mDoMtx_stack_c::get(), i_this->mMtx);
 
             i_this->shape_angle.y = i_this->mAngle[0];
         }
@@ -270,7 +270,7 @@ void daWindMill_c::search_wind() {
 cPhs_State daWindMill_c::_create() {
     fopAcM_ct(this, daWindMill_c);
 
-    mType = fopAcM_GetParam(this) & 0xF;
+    mType = daWindMill_prm::getType(this);
     cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (res == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
@@ -284,8 +284,8 @@ cPhs_State daWindMill_c::_create() {
 /* 00000DC4-00000E4C       .text set_mtx__12daWindMill_cFv */
 void daWindMill_c::set_mtx() {
     mpModel->setBaseScale(scale);
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(current.angle);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
@@ -357,7 +357,7 @@ void daWindMill_c::set_at() {
         case 1:
             r0 = 1000;
             if (mAngle[1] > r0) {
-                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
                 mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, mAngle[0] + mAngle[1]);
                 mDoMtx_stack_c::multVec(&vec1, &vec1);
 
@@ -369,8 +369,7 @@ void daWindMill_c::set_at() {
                     m1244[i].mEnd = vec_array_0[i];
                     m1244[i].mRadius = 70.0f;
 
-                    mCps[i].set(m1244[i].mStart, m1244[i].mEnd);
-                    mCps[i].SetR(m1244[i].mRadius);
+                    mCps[i].cM3dGCps::Set(m1244[i]);
                 }
 
                 for (i = 0; i < 4; i++) {
@@ -381,7 +380,7 @@ void daWindMill_c::set_at() {
         case 0:
             r0 = 1000;
             if (mAngle[1] > r0) {
-                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
                 mDoMtx_stack_c::ZXYrotM(current.angle.x, mAngle[0] + mAngle[1], current.angle.z);
 
                 for (i = 0; i < 4; i++) {
@@ -392,7 +391,7 @@ void daWindMill_c::set_at() {
                     m1244[i].mEnd = vec_array_2[i];
                     m1244[i].mRadius = 170.0f;
 
-                    mCps[i].set(m1244[i].mStart, m1244[i].mEnd);
+                    mCps[i].SetStartEnd(m1244[i].mStart, m1244[i].mEnd);
                     mCps[i].SetR(m1244[i].mRadius);
                     mCps[i].SetAtSpl(dCcG_At_Spl_UNKA);
                 }
@@ -424,7 +423,7 @@ void daWindMill_c::set_co() {
         case 1:
             r0 = 1000;
             if (mAngle[1] <= r0) {
-                mDoMtx_stack_c::transS(current.pos);
+                mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
                 mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, mAngle[0] + mAngle[1]);
 
                 int i;

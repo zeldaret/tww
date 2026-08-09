@@ -212,7 +212,7 @@ public:
     void cutPayStart(int);
     void cutPayProc(int);
 
-public:
+private:
     /* 0x6C4 */ u8 field_0x6C4[0x6C8 - 0x6C4];
     /* 0x6C8 */ BOOL field_0x6C8;
     /* 0x6CC */ u8 mJtbtTimer;

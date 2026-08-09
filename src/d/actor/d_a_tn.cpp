@@ -1114,7 +1114,7 @@ static void fight_run(tn_class* i_this) {
     cXyz local_54;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
     i_this->mDamageReaction.m710 = 1;
     i_this->mDamageReaction.m4D0 = i_this->mTargetAngle;
     if (i_this->m03EC == 0 && i_this->mDamageReaction.mMode != 0) {
@@ -1437,7 +1437,7 @@ static void fight(tn_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     s8 r29 = false;
     s8 r27 = false;
-    f31 = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f31 = CPad_GET_STICK_POS_X(0);
     i_this->mDamageReaction.m710 = 1;
     if ((player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN) || (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL)) {
         r27 = true;
@@ -2101,7 +2101,7 @@ static void yogan_fail(tn_class* i_this) {
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_FIREK_KASU, &actor->current.pos);
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_MAGT_FCHIP, &actor->current.pos);
             if (!(i_this->m03D8 & 3)) {
-                i_this->m0428.y = cM_rndF(65536.0f);
+                i_this->m0428.y = cM_rndF(0x10000);
                 i_this->m0428.x = -0x2000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m1384, &i_this->m0428);
             }
@@ -2701,6 +2701,7 @@ static void Tn_move(tn_class* i_this) {
                     break;
                 case ACTION_S_DEMO:
                     s_demo(i_this);
+                    break;
             }
 #if VERSION == VERSION_DEMO
             if (r29 != 0) {
@@ -3107,6 +3108,7 @@ static u8 damage_check(tn_class* i_this) {
         case 7:
             i_this->mDamageReaction.m424 |= 0x10;
             i_this->mDamageReaction.m428 = 26.0f;
+            break;
     }
     if (i_this->mDamageReaction.m424 != 0) {
         cXyz local_8c(0.0f, 0.0f, -10.0f);

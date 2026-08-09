@@ -43,7 +43,7 @@ void daLwood_c::CreateInit() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
     fopAcM_setCullSizeFar(this, 2.37f);
-    mTimer = cM_rndF(32768.0f);
+    mTimer = cM_rndF(0x8000);
     mScale = cM_rndF(0.4f) + 0.8f;
     JUTNameTab* jointName = mModel->getModelData()->getJointName();
     for (u16 i = 0; i < mModel->getModelData()->getJointNum(); i++) {

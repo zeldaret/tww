@@ -63,11 +63,11 @@ namespace {
     }
 
     inline static bool push_any_key(u32 padId) {
-        if (g_mDoCPd_cpadInfo[padId].mMainStickValue > 0.001f) {
+        if (CPad_GET_STICK_VALUE(padId) > 0.001f) {
             return true;
         }
         
-        if (g_mDoCPd_cpadInfo[padId].mCStickValue > 0.001f) {
+        if (CPad_GET_SUBSTICK_VALUE(padId) > 0.001f) {
             return true;
         }
 
@@ -221,7 +221,9 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mCamTypeSubject = GetCameraTypeFromCameraName("Subject");
     mCamTypeBoat = GetCameraTypeFromCameraName("Boat");
     mCamTypeBoatBattle = GetCameraTypeFromCameraName("BoatBattle");
+#if VERSION > VERSION_DEMO
     mCamTypeRestrict = GetCameraTypeFromCameraName("Restrict");
+#endif
     mCamTypeKeep = GetCameraTypeFromCameraName("Keep");
     mCurType = mMapToolType = mCamTypeField;
 
@@ -239,7 +241,7 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     mEventFlags = 0;
     m148 = cSAngle::_0;
     m07C = 0;
-    m080 = cM_rndFX(32767.0f);
+    m080 = cM_rndFX(0x7FFF);
     m064 = 1.0f;
     m5F4 = 0.0f;
     mTrimHeight = 0.0f;
@@ -283,7 +285,9 @@ void dCamera_c::initialize(camera_class* camera, fopAc_ac_c* playerActor, u32 ca
     m368 = 0.0f;
     m354 = -G_CM3D_F_INF;
     mRoomMapToolCameraIdx = 0xFF;
+#if VERSION > VERSION_DEMO
     m608 = mCamSetup.mBGChk.WallUpDistance();
+#endif
 
     if (!strcmp(dComIfGp_getStartStageName(), "sea")) {
         m780 = 1;
@@ -434,17 +438,17 @@ bool dCamera_c::ChangeModeOK(s32 param_1) {
 
 /* 801621A0-801623A0       .text initPad__9dCamera_cFv */
 void dCamera_c::initPad() {
-    mStickMainPosXLast = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
-    mStickMainPosYLast = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
-    mStickMainValueLast = g_mDoCPd_cpadInfo[mPadId].mMainStickValue;
+    mStickMainPosXLast = CPad_GET_STICK_POS_X(mPadId);
+    mStickMainPosYLast = CPad_GET_STICK_POS_Y(mPadId);
+    mStickMainValueLast = CPad_GET_STICK_VALUE(mPadId);
 
     mStickMainPosXDelta = 0.0f;
     mStickMainPosYDelta = 0.0f;
     mStickMainValueDelta = 0.0f;
 
-    mStickCPosXLast = g_mDoCPd_cpadInfo[mPadId].mCStickPosX;
-    mStickCPosYLast = g_mDoCPd_cpadInfo[mPadId].mCStickPosY;
-    mStickCValueLast = g_mDoCPd_cpadInfo[mPadId].mCStickValue;
+    mStickCPosXLast = CPad_GET_SUBSTICK_POS_X(mPadId);
+    mStickCPosYLast = CPad_GET_SUBSTICK_POS_Y(mPadId);
+    mStickCValueLast = CPad_GET_SUBSTICK_VALUE(mPadId);
 
     mStickCPosXDelta = 0.0f;
     mStickCPosYDelta = 0.0f;
@@ -454,7 +458,7 @@ void dCamera_c::initPad() {
     m188 = 0;
     m184 = 0;
 
-    mTriggerLeftLast = g_mDoCPd_cpadInfo[mPadId].mTriggerLeft;
+    mTriggerLeftLast = CPad_GET_ANALOG_L(mPadId);
     mTriggerLeftDelta = 0.0f;
 
     mHoldLockL = FALSE;
@@ -462,7 +466,7 @@ void dCamera_c::initPad() {
     m19A = 0;
     m19B = 0;
 
-    mTriggerRightLast = g_mDoCPd_cpadInfo[mPadId].mTriggerRight;
+    mTriggerRightLast = CPad_GET_ANALOG_R(mPadId);
     mTriggerRightDelta = 0.0f;
 
     mHoldLockR = 0;
@@ -497,12 +501,12 @@ void dCamera_c::updatePad() {
         fVar3 = 0.0f;
     }
     else {
-        fVar1 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
-        fVar2 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
-        fVar3 = g_mDoCPd_cpadInfo[mPadId].mMainStickValue;
+        fVar1 = CPad_GET_STICK_POS_X(mPadId);
+        fVar2 = CPad_GET_STICK_POS_Y(mPadId);
+        fVar3 = CPad_GET_STICK_VALUE(mPadId);
     }
 
-    cSAngle unused(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle); // Unused object? Code matches so perhaps a developer oversight
+    cSAngle unused(CPad_GET_STICK_ANGLE(mPadId)); // Unused object? Code matches so perhaps a developer oversight
 
     mStickMainPosXDelta = fVar1 - mStickMainPosXLast;
     mStickMainPosYDelta = fVar2 - mStickMainPosYLast;
@@ -518,9 +522,9 @@ void dCamera_c::updatePad() {
         fVar3 = 0.0f;
     }
     else {
-        fVar1 = g_mDoCPd_cpadInfo[mPadId].mCStickPosX;
-        fVar2 = g_mDoCPd_cpadInfo[mPadId].mCStickPosY;
-        fVar3 = g_mDoCPd_cpadInfo[mPadId].mCStickValue;
+        fVar1 = CPad_GET_SUBSTICK_POS_X(mPadId);
+        fVar2 = CPad_GET_SUBSTICK_POS_Y(mPadId);
+        fVar3 = CPad_GET_SUBSTICK_VALUE(mPadId);
     }
 
     mStickCPosXDelta = fVar1 - mStickCPosXLast;
@@ -531,7 +535,7 @@ void dCamera_c::updatePad() {
     mStickCPosYLast = fVar2;
     mStickCValueLast = fVar3;
 
-    fVar1 = g_mDoCPd_cpadInfo[mPadId].mTriggerLeft;
+    fVar1 = CPad_GET_ANALOG_L(mPadId);
     mTriggerLeftDelta = mTriggerLeftLast - fVar1;
     mTriggerLeftLast = fVar1;
 
@@ -553,7 +557,7 @@ void dCamera_c::updatePad() {
         m19A = 0;
     }
 
-    fVar1 = g_mDoCPd_cpadInfo[mPadId].mTriggerRight;
+    fVar1 = CPad_GET_ANALOG_R(mPadId);
     mTriggerRightDelta = mTriggerRightLast - fVar1;
     mTriggerRightLast = fVar1;
 
@@ -892,14 +896,14 @@ bool dCamera_c::Run() {
 
     bumpCheck(m068);
 
-    cSAngle angle(cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle) - mDMCSystem.field_0x4);
+    cSAngle angle(cSAngle(CPad_GET_STICK_ANGLE(mPadId)) - mDMCSystem.field_0x4);
 
     if (mStickMainValueLast < mCamSetup.DMCValue() || angle > cSAngle(mCamSetup.DMCAngle()) || angle < cSAngle(-mCamSetup.DMCAngle())) {
         mDMCSystem.field_0x0 = 0;
     }
 
     if (mDMCSystem.field_0x0) {
-        mAngleY = getDMCAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle);
+        mAngleY = getDMCAngle(CPad_GET_STICK_ANGLE(mPadId));
     }
     else {
         mAngleY = mDirection.U().Inv();
@@ -1690,7 +1694,7 @@ cXyz dCamera_c::relationalPos(fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2, cXyz* 
 void dCamera_c::setDMCAngle() {
     mDMCSystem.field_0x0 = 1;
     mDMCSystem.field_0x2 = mDirection.U().Inv();
-    mDMCSystem.field_0x4 = cSAngle(g_mDoCPd_cpadInfo[mPadId].mMainStickAngle);
+    mDMCSystem.field_0x4 = cSAngle(CPad_GET_STICK_ANGLE(mPadId));
 }
 
 /* 80165720-80165744       .text getDMCAngle__9dCamera_cF7cSAngle */
@@ -2221,7 +2225,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     curr_hit_type = 3;
                 }
                 else if (prev_hit_type != 3) {
-                        curr_hit_type = 4;
+                    curr_hit_type = 4;
                 }
                 else {
                     curr_hit_type = 5;
@@ -2420,7 +2424,7 @@ f32 dCamera_c::getWaterSurfaceHeight(cXyz* param_0) {
     dBgS_CamGndChk_Wtr gndchk;
     gndchk.SetPos(&spF8);
 
-    f32 gnd_y = dComIfG_Bgsp()->GroundCross(&gndchk) ;
+    f32 gnd_y = dComIfG_Bgsp()->GroundCross(&gndchk);
 
     if (gnd_y + 5.0f > param_0->y) {
         var_f31 = gnd_y + 5.0f;
@@ -2645,11 +2649,11 @@ bool dCamera_c::followCamera2(s32 param_0) {
 
 /* 8016A110-8016C4F8       .text followCamera__9dCamera_cFl */
 bool dCamera_c::followCamera(s32 param_1) {
+    /* Nonmatching */
     bool bVar1;
     bool bVar2;
     bool bVar3;
     bool bVar4;
-    int iVar5;
     float fVar37;
     
     f32 fVar40 = 0.9f;
@@ -3050,7 +3054,7 @@ bool dCamera_c::followCamera(s32 param_1) {
     cSGlobe local_484(mViewCache.mEye - mViewCache.mCenter);
     
     if (mWork.follow.m392 <= 0 || iVar17 <= mWork.follow.m392) {
-        dVar20 = dCamMath::rationalBezierRatio((float) iVar5 / (float)iVar17, fVar38);
+        dVar20 = dCamMath::rationalBezierRatio((float)mWork.follow.m392 / (float)iVar17, fVar38);
         mWork.follow.m3D8 = 1;
         mWork.follow.m3B8 = (1.0f - mWork.follow.m3B8) * dVar20;
     }
@@ -3131,7 +3135,7 @@ bool dCamera_c::followCamera(s32 param_1) {
                 mWork.follow.m38C = 1;
             }
             else if (mWork.follow.m38C < 0xf) {
-                mWork.follow.m3B8 = iVar5 * 0.033333335f;
+                mWork.follow.m3B8 = mWork.follow.m38C * 0.033333335f;
                 mWork.follow.m38C++;
             }
             else if (check_owner_action(mPadId, daPyStts0_UNK40_e | daPyStts0_UNK20_e)) {
@@ -3555,7 +3559,7 @@ bool dCamera_c::lockonCamera(s32 param_1) {
     if (mpLockonTarget && mLockOnActorId != -1) {
         cXyz local_120 = attentionPos(mpPlayerActor);
         if (lineBGCheck(&local_120, &mViewCache.mCenter, 0x7f)) {
-              ForceLockOff(mLockOnActorId);
+            ForceLockOff(mLockOnActorId);
         }
     }
 
@@ -3789,15 +3793,15 @@ bool dCamera_c::CalcSubjectAngle(s16* param_1, s16* param_2) {
     fVar4 = mCamSetup.m030;
     
     if (!bVar9) {
-          cSAngle local_88(fVar2 * mWork.subject.m384);
-          cSAngle local_8c(fVar1 * mWork.subject.m388);
-          s16 local_98 = local_88.Val() + mWork.subject.m3BA;
-          *param_2 = local_98;
-          *param_1 = local_8c.Val();
+        cSAngle local_88(fVar2 * mWork.subject.m384);
+        cSAngle local_8c(fVar1 * mWork.subject.m388);
+        s16 local_98 = local_88.Val() + mWork.subject.m3BA;
+        *param_2 = local_98;
+        *param_1 = local_8c.Val();
     }
     
-    fVar6 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosX;
-    fVar5 = g_mDoCPd_cpadInfo[mPadId].mMainStickPosY;
+    fVar6 = CPad_GET_STICK_POS_X(mPadId);
+    fVar5 = CPad_GET_STICK_POS_Y(mPadId);
 
     if (is_player(mpPlayerActor)) {
         mWork.subject.m3B8 = ((daPy_py_c*)mpPlayerActor)->getBodyAngleX();
@@ -4017,10 +4021,10 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 
                 setComZoomScale(1.0f);
 
-                f32 x = (g_dComIfG_gameInfo.play.field_0x48b8 - 1.0f) * 0.5f * 640.0f + 320.0f;
+                f32 x = (g_dComIfG_gameInfo.play.mItemScopeWipeScale - 1.0f) * 0.5f * 640.0f + 320.0f;
                 if (x < 640.0f &&
-                    g_dComIfG_gameInfo.play.field_0x48b8 >= 1.0f &&
-                    g_dComIfG_gameInfo.play.field_0x48b8 <= 3.0f) {
+                    g_dComIfG_gameInfo.play.mItemScopeWipeScale >= 1.0f &&
+                    g_dComIfG_gameInfo.play.mItemScopeWipeScale <= 3.0f) {
 
                     f32 s = (640.0f - x) / 320.0f;
 
@@ -4461,7 +4465,7 @@ bool dCamera_c::nonOwnerCamera(s32 param_1) {
 
     if (m11C == 0) {
         mViewCache.mCenter = relationalPos(mpLockonTarget, &local_90);
-        mViewCache.mDirection.Val(f27, f26 * 182.04445f, directionOf(mpLockonTarget).Inv());
+        mViewCache.mDirection.Val(f27, DEG2S(f26), directionOf(mpLockonTarget).Inv());
         mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
         mViewCache.mFovy = f31;
         m100 = 1;
@@ -4517,7 +4521,7 @@ bool dCamera_c::fixedFrameCamera(s32 param_1) {
         p->m39C = p->m3A8;
 
         cM3dGLin line;
-        line.set(p->m3A8, p->m378);
+        line.SetStartEnd(p->m3A8, p->m378);
         spF0 = attentionPos(mpPlayerActor);
 
         if (cM3d_Len3dSqPntAndSegLine(&line, &spF0, &spE4, &sp30)) {
@@ -5414,7 +5418,7 @@ void view_setup(camera_process_class* i_this) {
     dComIfGd_setView(view);
 
     f32 far;
-    if (dComIfGp_getScopeMesgStatus() != 0) {
+    if (dComIfGp_getScopeMesgStatus() != fopMsgStts_MSG_UNK0_e) {
         far = view->mFar;
     } else {
         far = dStage_stagInfo_GetCullPoint(dComIfGp_getStageStagInfo());
@@ -5720,3 +5724,53 @@ bool dCamForcusLine::Off() {
     m49 = 0;
     return m49 == 0;
 }
+
+static leafdraw_method_class method = {
+    (process_method_func)camera_create,
+    (process_method_func)camera_delete,
+    (process_method_func)camera_execute,
+    (process_method_func)is_camera_delete,
+    (process_method_func)camera_draw,
+};
+
+camera_process_profile_definition g_profile_CAMERA = {
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x000B,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_CAMERA_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(camera_class),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopVw_Method,
+    /* Draw Prio     */ fpcDwPi_CAMERA_e,
+    /* View SubMtd   */ &g_fopCam_Method,
+    /* View unk28    */ 0,
+    /* View unk2C    */ 0,
+    /* View unk30    */ 0,
+    /* View unk34    */ 0,
+    /* View unk38    */ 0,
+    /* Camera SubMtd */ &method,
+    /* Camera unk40  */ 0,
+};
+
+camera_process_profile_definition g_profile_CAMERA2 = {
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x000B,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_CAMERA2_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(camera_class),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopVw_Method,
+    /* Draw Prio     */ fpcDwPi_CAMERA2_e,
+    /* View SubMtd   */ &g_fopCam_Method,
+    /* View unk28    */ 0,
+    /* View unk2C    */ 0,
+    /* View unk30    */ 0,
+    /* View unk34    */ 0,
+    /* View unk38    */ 0,
+    /* Camera SubMtd */ &method,
+    /* Camera unk40  */ 0,
+};

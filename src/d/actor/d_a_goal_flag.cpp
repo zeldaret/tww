@@ -894,7 +894,7 @@ BOOL daGoal_Flag_c::RaceEnd() {
 
     if (end_chk || (mCamFramesPassed > l_HIO.mEndCamEarlyFrame &&
         (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
-        dComIfGp_setNextStage("sea", 1, 0x30);
+        dComIfGp_setNextStage("sea", 1, dIsleRoom_BoatingCourse_e);
     }
 
     return true;

@@ -284,13 +284,13 @@ static void tower_kaidan_move(bdkobj_class* i_this) {
             fopAcM_seStartCurrent(i_this, JA_SE_OBJ_MJ_WBOARD_BRK, 0);
             for (s32 i = 0; i < 2; i++) {
                 i_this->mEffs[i].m000 = 2;
-                i_this->mEffs[i].m1AC = cM_rndF(65536.0f);
+                i_this->mEffs[i].m1AC = cM_rndF(0x10000);
                 i_this->mEffs[i].m028 = (0.7f + cM_rndFX(0.25f));
                 i_this->mEffs[i].m008.x = i_this->current.pos.x + cM_rndFX(500.0f);
                 i_this->mEffs[i].m008.y = i_this->current.pos.y;
                 i_this->mEffs[i].m008.z = i_this->current.pos.z + cM_rndFX(500.0f);
-                i_this->mEffs[i].m030.y = cM_rndF(65536.0f);
-                i_this->mEffs[i].m030.z = cM_rndF(65536.0f);
+                i_this->mEffs[i].m030.y = cM_rndF(0x10000);
+                i_this->mEffs[i].m030.z = cM_rndF(0x10000);
                 i_this->mEffs[i].m036.y = cM_rndFX(800.0f);
                 i_this->mEffs[i].m030.x = cM_rndFX(10000.0f);
                 i_this->mEffs[i].m036.z = cM_rndFX(800.0f);
