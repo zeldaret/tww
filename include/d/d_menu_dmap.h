@@ -1,13 +1,30 @@
 #ifndef D_MENU_DMAP_H
 #define D_MENU_DMAP_H
 
+#include "JSystem/J2DGraph/J2DPicture.h"
 #include "dolphin/types.h"
 #include "d/d_menu_base.h"
+#include "f_op/f_op_msg_mng.h"
 
 class J2DPane;
+class J2DScreen;
 struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
+class STControl;
+class dMap_Dmap_c;
+struct ResTIMG;
+
+struct dMap_pane_c {
+    /* 0x00 */ J2DPicture* ppane;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ u8 padding_0x14[2];
+    /* 0x16 */ u8 field_0x16;
+    /* 0x17 */ u8 padding_0x17[1];
+} /* Size: 0x18 */;
 
 class dMenu_Dmap_c : public dMenu_base_c {
 public:
@@ -20,12 +37,12 @@ public:
     }
     void setItemTexBuffer(int, void*) {}
     void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
-        name[0] = name0;
-        name[1] = name1;
-        note[0] = note0;
-        note[1] = note1;
-        dummy[0] = dummy0;
-        dummy[1] = dummy1;
+        mTxtName[0] = name0;
+        mTxtName[1] = name1;
+        mTxtNote[0] = note0;
+        mTxtNote[1] = note1;
+        mTxtDummy[0] = dummy0;
+        mTxtDummy[1] = dummy1;
     }
 
     void changeFloorTexture(J2DPane*, int);
@@ -64,26 +81,100 @@ public:
     virtual bool _close();
 
 public:
-    /* 0x0004 */ u8 field_0x0004[0x972 - 0x4];
-    /* 0x0972 */ s16 field_0x0972;
-    /* 0x0974 */ u8 field_0x0974[0x14A4 - 0x974];
+    /* 0x0004 */ J2DScreen* scrn;
+    /* 0x0008 */ J2DScreen* scrn2;
+    /* 0x000C */ fopMsgM_pane_class field_0x000C[15];
+    /* 0x0354 */ fopMsgM_pane_class field_0x0354[15];
+    /* 0x069C */ fopMsgM_pane_class field_0x069C[4];
+    /* 0x077C */ fopMsgM_pane_class field_0x077C;
+    /* 0x07B4 */ fopMsgM_pane_class field_0x07B4;
+    /* 0x07EC */ fopMsgM_pane_class field_0x07EC;
+    /* 0x0824 */ fopMsgM_pane_class field_0x0824;
+    /* 0x085C */ fopMsgM_pane_class field_0x085C;
+    /* 0x0894 */ fopMsgM_pane_class field_0x0894;
+    /* 0x08CC */ fopMsgM_pane_class field_0x08CC;
+    /* 0x0904 */ fopMsgM_pane_class field_0x0904;
+    /* 0x093C */ fopMsgM_pane_class field_0x093C;
+    /* 0x0974 */ fopMsgM_pane_class field_0x0974;
+    /* 0x09AC */ fopMsgM_pane_class field_0x09AC;
+    /* 0x09E4 */ fopMsgM_pane_class field_0x09E4;
+    /* 0x0A1C */ fopMsgM_pane_class field_0x0A1C;
+    /* 0x0A54 */ fopMsgM_pane_class field_0x0A54[3];
+    /* 0x0AFC */ fopMsgM_pane_class field_0x0AFC[3];
+    /* 0x0BA4 */ fopMsgM_pane_class field_0x0BA4[3];
+    /* 0x0C4C */ fopMsgM_pane_class field_0x0C4C;
+    /* 0x0C84 */ fopMsgM_pane_class field_0x0C84[3];
+    /* 0x0D2C */ fopMsgM_pane_class field_0x0D2C;
+    /* 0x0D64 */ fopMsgM_pane_class field_0x0D64;
+    /* 0x0D9C */ fopMsgM_pane_class field_0x0D9C;
+    /* 0x0DD4 */ fopMsgM_pane_class field_0x0DD4;
+    /* 0x0E0C */ u8 padding[0xE7C - 0xE0C];
+    /* 0x0E7C */ fopMsgM_pane_class field_0x0E7C[6];
+    /* 0x0FCC */ fopMsgM_pane_class field_0x0FCC[6];
+    /* 0x111C */ fopMsgM_pane_class field_0x111C[6];
+    /* 0x126C */ fopMsgM_pane_class field_0x126C;
+    /* 0x12A4 */ fopMsgM_pane_class field_0x12A4;
+    /* 0x12DC */ fopMsgM_pane_class field_0x12DC;
+    /* 0x1314 */ fopMsgM_pane_class field_0x1314;
+    /* 0x134C */ fopMsgM_pane_class field_0x134C;
+    /* 0x1384 */ fopMsgM_pane_class field_0x1384;
+    /* 0x13BC */ fopMsgM_pane_class field_0x13BC;
+    /* 0x13F4 */ fopMsgM_pane_class field_0x13F4;
+    /* 0x142C */ fopMsgM_pane_class field_0x142C;
+    /* 0x1464 */ fopMsgM_pane_class field_0x1464;
+    /* 0x149C */ STControl* stick;
+    /* 0x14A0 */ dMap_Dmap_c* dmap_c;
     /* 0x14A4 */ JKRArchive* mpArc;
     /* 0x14A8 */ JUTFont* mFont;
     /* 0x14AC */ JUTFont* mRFont;
     /* 0x14B0 */ u8 field_0x14B0[0x14B4 - 0x14B0];
-    /* 0x14B4 */ JUtility::TColor color_0x14B4;
-    /* 0x14B8 */ JUtility::TColor color_0x14B8;
-    /* 0x14BC */ JUtility::TColor color_0x14BC;
-    /* 0x14C0 */ JUtility::TColor color_0x14C0;
-    /* 0x14C4 */ JUtility::TColor color_0x14C4;
-    /* 0x14C8 */ JUtility::TColor color_0x14C8;
-    /* 0x14CC */ u8 padding_0x14CC[0x1AFC - 0x14CC];
-    /* 0x1AFC */ void* arr_0x1AFC[3];
-    /* 0x1B08 */ fopMsgM_msgDataProc_c mMsgProc;
-    /* 0x1DA8 */ char* name[2];
-    /* 0x1DB0 */ char* note[2];
-    /* 0x1DB8 */ char* dummy[2];
-    /* 0x1DC0 */ u8 padding_0x1DC0[0x1E38 - 0x1DC0];
+    /* 0x14B4 */ JUtility::TColor field_0x14B4;
+    /* 0x14B8 */ JUtility::TColor field_0x14B8;
+    /* 0x14BC */ JUtility::TColor field_0x14BC;
+    /* 0x14C0 */ JUtility::TColor field_0x14C0;
+    /* 0x14C4 */ JUtility::TColor field_0x14C4;
+    /* 0x14C8 */ JUtility::TColor field_0x14C8;
+    /* 0x14CC */ dMap_pane_c treasure_p[32];
+    /* 0x17CC */ dMap_pane_c door_p[32];
+    /* 0x1ACC */ dMap_pane_c npc_p;
+    /* 0x1AE4 */ dMap_pane_c boss_p;
+    /* 0x1AFC */ ResTIMG* field_0x1AFC[3];
+    /* 0x1B08 */ fopMsgM_msgDataProc_c field_0x1B08;
+    /* 0x1DA8 */ char* mTxtName[2];
+    /* 0x1DB0 */ char* mTxtNote[2];
+    /* 0x1DB8 */ char* mTxtDummy[2];
+    /* 0x1DC0 */ char field_0x1DC0[0x1DCC - 0x1DC0];
+    /* 0x1DCC */ f32 field_0x1DCC[4];
+    /* 0x1DDC */ f32 field_0x1DDC[4];
+    /* 0x1DEC */ f32 field_0x1DEC[4];
+    /* 0x1DFC */ f32 field_0x1DFC[4];
+    /* 0x1E0C */ s16 field_0x1E0C;
+    /* 0x1E0E */ s16 field_0x1E0E;
+    /* 0x1E10 */ s16 field_0x1E10;
+    /* 0x1E12 */ s16 field_0x1E12;
+    /* 0x1E14 */ s16 field_0x1E14;
+    /* 0x1E16 */ u16 field_0x1E16;
+    /* 0x1E18 */ s16 field_0x1E18;
+    /* 0x1E1A */ s16 field_0x1E1A;
+    /* 0x1E1C */ s16 field_0x1E1C;
+    /* 0x1E1E */ u16 field_0x1E1E;
+    /* 0x1E20 */ s16 field_0x1E20;
+    /* 0x1E22 */ s16 field_0x1E22;
+    /* 0x1E24 */ s16 field_0x1E24;
+    /* 0x1E26 */ s16 field_0x1E26;
+    /* 0x1E28 */ s16 field_0x1E28;
+    /* 0x1E2A */ s16 field_0x1E2A;
+    /* 0x1E2C */ s16 field_0x1E2C;
+    /* 0x1E2E */ u8 field_0x1E2E;
+    /* 0x1E2F */ u8 mCurFloor;
+    /* 0x1E30 */ u8 mBossFloor;
+    /* 0x1E31 */ u8 mTopFloor;
+    /* 0x1E32 */ u8 mBottomFloor;
+    /* 0x1E33 */ u8 field_0x1E33;
+    /* 0x1E34 */ bool field_0x1E34;
+    /* 0x1E35 */ bool field_0x1E35;
+    /* 0x1E36 */ u8 field_0x1E36;
+    /* 0x1E37 */ u8 pad;
 }; // Size: 0x1E38
 
 STATIC_ASSERT(sizeof(dMenu_Dmap_c) == 0x1E38);
