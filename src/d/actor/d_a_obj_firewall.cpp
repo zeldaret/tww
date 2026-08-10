@@ -108,13 +108,14 @@ void daObjFirewall_c::registCollisionTable() {
     s16 local_1 = cM_atan2s(player->current.pos.x - current.pos.x, player->current.pos.z - current.pos.z);
     int temp_r3_2 = abs(local_1);
     if(temp_r3_2 < l_enter_angl_band) {
-        r_modifier = 100.0f + 30.0f * cM_scos(temp_r3_2 / (f32)l_enter_angl_band * 0x4000);
+        f32 temp_s_cos_input = temp_r3_2 / (f32)l_enter_angl_band * 0x4000;
+        r_modifier = 100.0f + cM_scos(temp_s_cos_input) * 115.0f;
     } else {
         for (int i=0; i < 5; i++) {
             
             temp_r3_3 = abs((s16)(local_1 - zou_chk_angl[i]));
             if(temp_r3_3 < 0x1A00) {
-                r_modifier = 100.0f + 115.0f * cM_scos(temp_r3_3 / 6656.0f * 0x4000);
+                r_modifier = 100.0f + 30.0f * cM_scos(temp_r3_3 / 6656.0f * 0x4000);
                 break;
             }
         }
