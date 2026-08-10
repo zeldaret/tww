@@ -333,7 +333,27 @@ u32 daNpc_Sarace_c::getMsg() {
 
 /* 00000B50-00000BEC       .text anmAtr__14daNpc_Sarace_cFUs */
 void daNpc_Sarace_c::anmAtr(unsigned short) {
-    /* Nonmatching */
+    switch(dComIfGp_getMesgAnimeAttrInfo()) {
+        case 0:
+            setAnm(
+                dRes_ID_SARACE_BCK_SA01HEAD_TALK01_e,
+                -1.0f
+            );
+            break;
+        case 1:
+            setAnm(
+                dRes_ID_SARACE_BCK_SA01HEAD_WAIT01_e, 
+                l_HIO.m30
+            );
+            break;
+        case 2:
+            setAnm(
+                dRes_ID_SARACE_BCK_SA_TALK01_e,
+                l_HIO.m34
+            );
+            break;
+    }
+    dComIfGp_setMesgAnimeAttrInfo(0xFF);
 }
 
 /* 00000BEC-00000E24       .text CreateInit__14daNpc_Sarace_cFv */
