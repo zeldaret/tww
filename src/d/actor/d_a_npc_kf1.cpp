@@ -1689,8 +1689,8 @@ BOOL daNpc_Kf1_c::_execute() {
         }
         lookBack();
         fopAcM_posMoveF(this,mStts.GetCCMoveP());
-        mbOnGround = mObjAcch.ChkGroundHit();
-        mbInWater = mObjAcch.ChkWaterIn();
+        mbOnGround = mObjAcch.ChkGroundHit() ? true : false;
+        mbInWater = mObjAcch.ChkWaterIn() ? true : false;
         mObjAcch.CrrPos(*dComIfG_Bgsp());
         play_animation();
     }else{
