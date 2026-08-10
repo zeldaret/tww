@@ -109,13 +109,13 @@ void daObjFirewall_c::registCollisionTable() {
     int temp_r3_2 = abs(local_1);
     if(temp_r3_2 < l_enter_angl_band) {
         f32 temp_s_cos_input = temp_r3_2 / (f32)l_enter_angl_band * 0x4000;
-        r_modifier = 100.0f + cM_scos(temp_s_cos_input) * 115.0f;
+        r_modifier = 100.0f + cM_scos(temp_s_cos_input) * 30.0f;
     } else {
         for (int i=0; i < 5; i++) {
             
             temp_r3_3 = abs((s16)(local_1 - zou_chk_angl[i]));
             if(temp_r3_3 < 0x1A00) {
-                r_modifier = 100.0f + 30.0f * cM_scos(temp_r3_3 / 6656.0f * 0x4000);
+                r_modifier = 100.0f + 115.0f * cM_scos(temp_r3_3 / 6656.0f * 0x4000);
                 break;
             }
         }
@@ -317,7 +317,7 @@ void daObjFirewall_c::setup_burn_up() {
         mDoMtx_stack_c::transM(scaledX,0.0f,0.0f);
         mDoMtx_stack_c::multVecZero(&field_0xc6c[i]);
     }
-    field_0x1070 = &daObjFirewall_c::burn_wait_act_proc;
+    field_0x1070 = &daObjFirewall_c::appear_act_proc;
     field_0x10e1 = 1;
 }
 
@@ -467,9 +467,9 @@ void daObjFirewall_c::appear_act_proc() {
     if(field_0x420.isStop() == TRUE){
         field_0x106c = 1.0f;
         if (field_0x107c != -1) {
-            field_0x1070 = &daObjFirewall_c::burn_wait_act_proc;
-        } else {
             field_0x1070 = &daObjFirewall_c::demo_end_wait_act_proc;
+        } else {
+            field_0x1070 = &daObjFirewall_c::burn_wait_act_proc;
         }
     }
     set_se(true);
