@@ -7,14 +7,15 @@
 
 class daNpc_Kf1_c : public fopNpc_npc_c {
 
+#define JAR_RUPEE_COUNT 3
 typedef BOOL (daNpc_Kf1_c::*ActionFunc)(void*);
 public:
     struct anm_prm_c {
-        s8 m0;
-        s8 m1;
+        s8 bckNum;
+        s8 btpNum;
         f32 morf;
         f32 speed;
-        u32 mLoopMode;
+        u32 loopMode;
     };
 
     void _nodeCB_Head(J3DNode*, J3DModel*);
@@ -111,9 +112,8 @@ public:
     /* 0x6D4 */ char mArcName[4];
     /* 0x6D8 */ u32 mShadowId;
     /* 0x6DC */ mDoExt_btpAnm mBtpAnm;
-    /* 0x6F0 */ u8 m6F0;
-    /* 0x6F1 */ u8 field_0x6F1[0x6F2 - 0x6F1];
-    /* 0x6F2 */ s16 m6F2;
+    /* 0x6F0 */ u8 mBtpFrame;
+    /* 0x6F2 */ s16 mTimer6F2;
     /* 0x6F4 */ ActionFunc mCurrentAction;
     /* 0x700 */ s32 m700;
     /* 0x704 */ s32 m704;
@@ -136,7 +136,7 @@ public:
     /* 0x77C */ s32 mbSetEyePos;
     /* 0x780 */ s16 mEventIdTbl[2];
     /* 0x784 */ u8 field_0x784[0x786 - 0x784];
-    /* 0x786 */ s16 m786;
+    /* 0x786 */ s16 mEventIdx;
     /* 0x788 */ u8 field_0x788[0x78C - 0x788];
     /* 0x78C */ s16 m78C;
     /* 0x78E */ s16 m78E;
@@ -147,49 +147,45 @@ public:
     /* 0x79A */ s16 m79A;
     /* 0x79C */ s8 mbMorfAnimStopped;
     /* 0x79D */ u8 m79D;
-    /* 0x79E */ u8 m79E;
+    /* 0x79E */ u8 mPreItemNo;
     /* 0x79F */ u8 m79F;
     /* 0x7A0 */ u8 m7A0;
     /* 0x7A1 */ u8 m7A1;
     /* 0x7A2 */ u8 field_0x7A2[0x7A3 - 0x7A2];
-    /* 0x7A3 */ bool m7A3;
-    /* 0x7A4 */ bool m7A4;
+    /* 0x7A3 */ bool mbOnGround;
+    /* 0x7A4 */ bool mbInWater;
     /* 0x7A5 */ bool m7A5;
     /* 0x7A6 */ bool mbLoadComplete;
     /* 0x7A7 */ u8 m7A7;
     /* 0x7A8 */ u8 m7A8;
     /* 0x7A9 */ u8 m7A9;
-    /* 0x7AA */ bool m7AA;
+    /* 0x7AA */ bool mbFirstExecute;
     /* 0x7AB */ bool mbAttention;
     /* 0x7AC */ u8 m7AC;
     /* 0x7AD */ bool m7AD;
     /* 0x7AE */ bool mbInDemo;
     /* 0x7AF */ u8 field_0x7AF[0x7B0 - 0x7AF];
-    /* 0x7B0 */ fpc_ProcID m7B0[3];
-    /* 0x7BC */ u32 m7BC[0x8];
-    /* 0x7DC */ u32 m7DC[3];
+    /* 0x7B0 */ fpc_ProcID mRupeeIdTbl[JAR_RUPEE_COUNT];
+    /* 0x7BC */ fpc_ProcID mPotIdTbl[0x8];
+    /* 0x7DC */ u32 m7DC[JAR_RUPEE_COUNT];
     /* 0x7E8 */ u32 m7E8;
     /* 0x7EC */ s16 m7EC;
-    /* 0x7EE */ s16 m7EE;
-    /* 0x7F0 */ u16 m7F0;
-    // /* 0x7F1 */ u8 field_0x7F1[0x7F2 - 0x7F1];
-    /* 0x7F2 */ s8 m7F2;
-    /* 0x7F3 */ u8 m7F3;
-    /* 0x7F4 */ u8 m7F4;
-    /* 0x7F5 */ s8 m7F5;
-    /* 0x7F6 */ s8 m7F6;
+    /* 0x7EE */ s16 mBrokenPotCount;
+    /* 0x7F0 */ u16 mRupee;
+    /* 0x7F2 */ s8 mActIdx;
+    /* 0x7F3 */ u8 mAnmAttr;
+    /* 0x7F4 */ u8 mMesgTagInfo;
+    /* 0x7F5 */ s8 mBtpNum;
+    /* 0x7F6 */ s8 mBckNum;
     /* 0x7F7 */ s8 m7F7;
     /* 0x7F8 */ s8 mStatus;
     /* 0x7F9 */ s8 m7F9;
     /* 0x7FA */ s8 mLookBackState;
-    /* 0x7FB */ s8 m7FB;
+    /* 0x7FB */ s8 mType;
     /* 0x7FC */ s8 m7FC;
     /* 0x7FD */ s8 m7FD;
     /* 0x7FE */ s8 m7FE;
-    /* 0x7FF */ u8 field_0x7FF[0x800 - 0x7FF];
+    /* 0x7FF */ u8 m7FF;
 };  // Size: 0x800
-
-
-
 
 #endif /* D_A_NPC_KF1_H */
