@@ -36,18 +36,22 @@ public:
     void drawContentsTexture(f32, f32, f32, f32);
     void setTevMode(JUTTexture*, JUtility::TColor, JUtility::TColor);
 
-    void getBlack() const {}
+    const JUtility::TColor& getBlack() const { return mBlack; }
     void getContentsColor(TContentsColor& param_0) const {
         param_0.mTL = mColorTL;
         param_0.mTR = mColorTR;
         param_0.mBL = mColorBL;
         param_0.mBR = mColorBR;
     }
-    void getWhite() const {}
-    void setBlack(JUtility::TColor) {}
-    void setContentsColor(TContentsColor) {}
-    void setContentsColor(JUtility::TColor) {}
-    void setWhite(JUtility::TColor) {}
+    const JUtility::TColor& getWhite() const { return mWhite; }
+    bool setBlack(JUtility::TColor black) { mBlack = black; return true; }
+    void setContentsColor(TContentsColor c) {
+        setContentsColor(c.mTL, c.mTR, c.mBL, c.mBR);
+    }
+    void setContentsColor(JUtility::TColor c) {
+        setContentsColor(c, c, c, c);
+    }
+    bool setWhite(JUtility::TColor white) { mWhite = white; return true; }
 
 public:
     /* 0x0CC */ JUTTexture* mpFrameTexture1;

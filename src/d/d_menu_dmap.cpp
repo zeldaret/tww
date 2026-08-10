@@ -8,37 +8,9 @@
 #include "d/d_stage.h"
 #include "f_op/f_op_msg_mng.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
+#include "JSystem/J2DGraph/J2DWindow.h"
 
 dMd_HIO_c g_mdHIO;
-
-const char* floor_name[] = {
-	"hierarchy_num_B3.bti",
-	"hierarchy_num_B3.bti",
-	"hierarchy_num_B3.bti",
-	"hierarchy_num_B3.bti",
-	"hierarchy_num_B3.bti",
-	"hierarchy_num_B3.bti",
-	"hierarchy_num_B3.bti",
-	"hierarchy_num_B3.bti",
-	"hierarchy_num_B2.bti",
-	"hierarchy_num_B1.bti",
-	"hierarchy_num_1.bti",
-	"hierarchy_num_2.bti",
-	"hierarchy_num_3.bti",
-    "hierarchy_num_4.bti",
-	"hierarchy_num_5.bti",
-	"hierarchy_num_6.bti",
-    "hierarchy_num_7.bti",
-    "hierarchy_num_7.bti",
-    "hierarchy_num_7.bti",
-    "hierarchy_num_7.bti",
-};
-
-const char* itmTex[] = {
-    "dungeon_map.bti",
-    "boss_key.bti",
-    "compass.bti",
-};
 
 /* 801A86A4-801A87CC       .text __ct__9dMd_HIO_cFv */
 dMd_HIO_c::dMd_HIO_c() {
@@ -103,6 +75,29 @@ dMd_HIO_c::dMd_HIO_c() {
 
 /* 801A87CC-801A8818       .text changeFloorTexture__12dMenu_Dmap_cFP7J2DPanei */
 void dMenu_Dmap_c::changeFloorTexture(J2DPane* i_pane, int i_floor) {
+    static const char* floor_name[] = {
+        "hierarchy_num_B3.bti",
+        "hierarchy_num_B3.bti",
+        "hierarchy_num_B3.bti",
+        "hierarchy_num_B3.bti",
+        "hierarchy_num_B3.bti",
+        "hierarchy_num_B3.bti",
+        "hierarchy_num_B3.bti",
+        "hierarchy_num_B3.bti",
+        "hierarchy_num_B2.bti",
+        "hierarchy_num_B1.bti",
+        "hierarchy_num_1.bti",
+        "hierarchy_num_2.bti",
+        "hierarchy_num_3.bti",
+        "hierarchy_num_4.bti",
+        "hierarchy_num_5.bti",
+        "hierarchy_num_6.bti",
+        "hierarchy_num_7.bti",
+        "hierarchy_num_7.bti",
+        "hierarchy_num_7.bti",
+        "hierarchy_num_7.bti",
+    };
+
     if (i_floor < 0 || i_floor >= 20) {
         i_floor = 0;
     }
@@ -111,6 +106,11 @@ void dMenu_Dmap_c::changeFloorTexture(J2DPane* i_pane, int i_floor) {
 
 /* 801A8818-801A92D4       .text screenSet__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::screenSet() {
+    static const char* itmTex[] = {
+        "dungeon_map.bti",
+        "boss_key.bti",
+        "compass.bti",
+    };
 
     static const u32 l_ft[] = {
         'ft00', 'ft01', 'ft02', 'ft03', 'ft04',
@@ -124,99 +124,82 @@ void dMenu_Dmap_c::screenSet() {
         'fd10', 'fd11', 'fd12', 'fd13', 'fd14',
     };
 
+    static const u32 l_car[] = { 'car1', 'car2', 'car3', 'car4' };
+    static const u32 l_it[]  = { 'it00', 'it01', 'it02' };
+    static const u32 l_ik[]  = { 'ik00', 'ik01', 'ik02' };
+    static const u32 l_ip[]  = { 'ip06', 'ip04', 'ip02', 'ip01' };
+    static const u32 l_lnk[] = { 'lnk0', 'lnk1', 'lnk2' };
+    static const u32 l_fl[]  = { 'f001', 'f002', 'f003', 'f004', 'f005', 'f006' };
+    static const u32 l_fb[]  = { 'fb01', 'fb02', 'fb03', 'fb04', 'fb05', 'fb06' };
+    static const u32 l_fbk[] = { 'fbk1', 'fbk2', 'fbk3', 'fbk4', 'fbk5', 'fbk6' };
+    
     for (int i = 0; i < 15; i++) {
         fopMsgM_setPaneData(&mFtPanes[i], scrn2, l_ft[i]);
         fopMsgM_setPaneData(&mFdPanes[i], scrn2, l_fd[i]);
     }
 
-    static const u32 l_car[] = {
-        'car1', 'car2', 'car3', 'car4',
-    };
-
     for (int i = 0; i < 4; i++) {
-        fopMsgM_setPaneData(&mCarPanes[i], scrn2, l_car[i]);
+        fopMsgM_setPaneData(&mCarPanes[i], scrn, l_car[i]);
     }
 
     fopMsgM_setPaneData(&mNm00Pane, scrn2, 'nm00');
     ((J2DTextBox*)mNm00Pane.pane)->setFont(mFont);
     fopMsgM_setPaneData(&mNm01Pane, scrn2, 'nm01');
     ((J2DTextBox*)mNm01Pane.pane)->setFont(mFont);
-    fopMsgM_setPaneData(&mItmnPane, scrn2, 'itmn');
+    fopMsgM_setPaneData(&mItnmPane, scrn2, 'itnm');
     fopMsgM_setPaneData(&mItnkPane, scrn2, 'itnk');
     fopMsgM_setPaneData(&mStr0Pane, scrn2, 'str0');
     fopMsgM_setPaneData(&mSt00Pane, scrn2, 'st00');
 
-    if (dComIfGs_getOptRuby() != 0) {
+    if (dComIfGs_getOptRuby()) {
         fopMsgM_paneTrans(&mSt00Pane, 0.0f, -4.0f);
     }
 
     fopMsgM_setPaneData(&mNt00Pane, scrn2, 'nt00');
     fopMsgM_setPaneData(&mNk00Pane, scrn2, 'nk00');
-    fopMsgM_setPaneData(&mNo01Pane, scrn2, 'no01');
+    fopMsgM_setPaneData(&mNo11Pane, scrn2, 'no11');
     fopMsgM_setPaneData(&mMsk0Pane, scrn2, 'msk0');
 
-    mNo01Pane.mUserArea = mNo01Pane.pane->getRotate();
+    mNo11Pane.mUserArea = mNo11Pane.pane->mRotation;
 
     ((J2DTextBox*)mStr0Pane.pane)->setFont(mRFont);
     ((J2DTextBox*)mSt00Pane.pane)->setFont(mFont);
 
-                                                        
-    fopMsgM_setPaneData(&mDtlePane,scrn2, 'dtle');
+    ((J2DTextBox*)(mStr0Pane).pane)->setWhite(0xFFFFFFFF);
+    ((J2DTextBox*)(mStr0Pane).pane)->setCharColor(0x000000FF);
+    ((J2DTextBox*)(mStr0Pane).pane)->setGradColor(0x000000FF);
+    ((J2DTextBox*)(mSt00Pane).pane)->setWhite(0xFFFFFFFF);
+    ((J2DTextBox*)(mSt00Pane).pane)->setCharColor(0x000000FF);
+    ((J2DTextBox*)(mSt00Pane).pane)->setGradColor(0x000000FF);
+
+    fopMsgM_setPaneData(&mDtlePane, scrn2, 'dtle');
     ((J2DTextBox*)mDtlePane.pane)->setFont(mFont);
     dnameSet();
-    fopMsgM_setPaneData(&mDt00Pane,scrn2, 'dt00');
-    fopMsgM_setPaneData(&mDk00Pane,scrn2, 'dk00');
-
-
-    static const u32 l_it[] = {
-        'it00', 'it01', 'it02',
-    };
-
-    static const u32 l_ik[] = {
-        'ik00', 'ik01', 'ik02',
-    };
-
-    static const u32 l_ip[] = {
-        'ip06', 'ip04', 'ip02', 'ip01',
-    };
+    fopMsgM_setPaneData(&mDt00Pane, scrn2, 'dt00');
+    fopMsgM_setPaneData(&mDk00Pane, scrn2, 'dk00');
 
     for (int i = 0; i < 3; i++) {
-        fopMsgM_setPaneData(&mItPanes[0], scrn, l_it[i]);
-        fopMsgM_setPaneData(&mIkPanes[0], scrn, l_ik[i]);
+        fopMsgM_setPaneData(&mItPanes[i], scrn, l_it[i]);
+        fopMsgM_setPaneData(&mIkPanes[i], scrn, l_ik[i]);
 
-        JKRArchive::readTypeResource(mpTIMG[i], 0xC00, 'TIMG', itmTex[i], dComIfGp_getItemIconArchive());
+        JKRArchive* arc = dComIfGp_getItemIconArchive();
+        JKRArchive::readTypeResource(mpTIMG[i], 0xC00, 'TIMG', itmTex[i], arc);
 
         ((J2DPicture*)mItPanes[i].pane)->changeTexture(mpTIMG[i], 0);
         ((J2DPicture*)mIkPanes[i].pane)->changeTexture(mpTIMG[i], 0);
 
-        fopMsgM_setPaneData(&mIpPanes[0], scrn, l_ip[i]);
+        fopMsgM_setPaneData(&mIpPanes[i], scrn, l_ip[i]);
     }
     fopMsgM_setPaneData(&mIp01Pane, scrn, 'ip01');
-
-    static const u32 l_lnk[] = {
-        'lnk0', 'lnk1', 'lnk2',
-    };
 
     for (int i = 0; i < 3; i++) {
         fopMsgM_setPaneData(&mLnkPanes[i], scrn, l_lnk[i]);
     }
-                           
+
     fopMsgM_setPaneData(&mBey1Pane, scrn, 'bey1');
     fopMsgM_setPaneData(&mBey2Pane, scrn, 'bey2');
     fopMsgM_setPaneData(&mBossPane, scrn, 'boss');
     fopMsgM_setPaneData(&mBos2Pane, scrn, 'bos2');
-
-    static const u32 l_fl[] = {
-        'f001', 'f002', 'f003', 'f004', 'f005', 'f006',
-    };
-
-    static const u32 l_fb[] = {
-        'fb01', 'fb02', 'fb03', 'fb04', 'fb05', 'fb06',
-    };
-
-    static const u32 l_fbk[] = {
-        'fbk1', 'fbk2', 'fbk3', 'fbk4', 'fbk5', 'fbk6',
-    };
 
     for (int i = 0; i < 6; i++) {
         fopMsgM_setPaneData(&mFlPanes[i], scrn, l_fl[i]);
@@ -224,24 +207,71 @@ void dMenu_Dmap_c::screenSet() {
         fopMsgM_setPaneData(&mFbkPanes[i], scrn, l_fbk[i]);
     }
 
-    //TODO missing lines
+    J2DWindow::TContentsColor contentsColor;
+    J2DWindow* win = (J2DWindow*)mFbPanes[0].pane;
+    win->getContentsColor(contentsColor);
+    field_0x14B8 = contentsColor.mTL;
+    field_0x14C0 = JUtility::TColor(((J2DWindow*)mFbPanes[0].pane)->mWhite.toUInt32());
+    field_0x14C8 = JUtility::TColor(((J2DWindow*)mFbPanes[0].pane)->mBlack.toUInt32());
 
-    fopMsgM_setPaneData(&field_0x126C, scrn, 'fw00');
-    fopMsgM_setPaneData(&field_0x12A4, scrn, 'fw1');
+    win = (J2DWindow*)mFbPanes[5].pane;
+    win->getContentsColor(contentsColor);
+    field_0x14B4 = contentsColor.mTL;
+    field_0x14BC = JUtility::TColor(((J2DWindow*)mFbPanes[5].pane)->mWhite.toUInt32());
+    field_0x14C4 = JUtility::TColor(((J2DWindow*)mFbPanes[5].pane)->mBlack.toUInt32());
+
+    for (int i = 4; i < 6; i++) {
+        mFlPanes[i].mSizeOrig.x = mFlPanes[i].mSize.x = mFlPanes[0].mSizeOrig.x;
+        mFlPanes[i].mSizeOrig.y = mFlPanes[i].mSize.y = mFlPanes[0].mSizeOrig.y;
+        fopMsgM_cposMove(&mFlPanes[i]);
+        mFbPanes[i].mSizeOrig.x = mFbPanes[i].mSize.x = mFbPanes[0].mSizeOrig.x;
+        mFbPanes[i].mSizeOrig.y = mFbPanes[i].mSize.y = mFbPanes[0].mSizeOrig.y;
+        ((J2DWindow*)mFbPanes[i].pane)->setContentsColor(field_0x14B8);
+        ((J2DWindow*)mFbPanes[i].pane)->mWhite = JUtility::TColor(field_0x14C0.toUInt32());
+        ((J2DWindow*)mFbPanes[i].pane)->mBlack = JUtility::TColor(field_0x14C8.toUInt32());
+        fopMsgM_cposMove(&mFbPanes[i]);
+        mFbkPanes[i].mSizeOrig.x = mFbkPanes[i].mSize.x = mFbkPanes[0].mSizeOrig.x;
+        mFbkPanes[i].mSizeOrig.y = mFbkPanes[i].mSize.y = mFbkPanes[0].mSizeOrig.y;
+        fopMsgM_cposMove(&mFbkPanes[i]);
+    }
+
+    fopMsgM_setPaneData(&mFw00Pane, scrn, 'fw00');
+    fopMsgM_setPaneData(&mFw01Pane, scrn, 'fw01');
     scrn->search('mpmk')->hide();
     scrn->search('mpp2')->hide();
     scrn->search('mpp1')->hide();
     scrn->search('mpp0')->hide();
-    fopMsgM_setPaneData(&field_0x12DC, scrn, 'cc38');
-    fopMsgM_setPaneData(&field_0x1314, scrn, 'cc31');
-    fopMsgM_setPaneData(&field_0x134C, scrn, 'cc34');
-    fopMsgM_setPaneData(&field_0x1384, scrn, 'cc37');
-    fopMsgM_setPaneData(&field_0x13BC, scrn, 'cc30');
-    fopMsgM_setPaneData(&field_0x13F4, scrn, 'cc35');
-    fopMsgM_setPaneData(&field_0x142C, scrn, 'cc30');
-    fopMsgM_setPaneData(&field_0x1464, scrn, 'msk');
-    // fopMsgM_setPaneData(&fStack_d4, scrn, 0x6d706d6b);
-    // fopMsgM_setPaneData(&fStack_10c, scrn, 0x6d707031);
+    fopMsgM_setPaneData(&mCc38Pane, scrn, 'cc38');
+    fopMsgM_setPaneData(&mCc31Pane, scrn, 'cc31');
+    fopMsgM_setPaneData(&mCc24Pane, scrn, 'cc24');
+    fopMsgM_setPaneData(&mCc17Pane, scrn, 'cc17');
+    fopMsgM_setPaneData(&mCc10Pane, scrn, 'cc10');
+    fopMsgM_setPaneData(&mCc05pane, scrn, 'cc05');
+    fopMsgM_setPaneData(&mCc00Pane, scrn, 'cc00');
+    fopMsgM_setPaneData(&mMskPane, scrn, 'msk');
+
+    fopMsgM_pane_class mpmk;
+    fopMsgM_pane_class mpp1pane;
+    fopMsgM_setPaneData(&mpmk, scrn, 'mpmk');
+    fopMsgM_setPaneData(&mpp1pane, scrn, 'mpp1');
+
+    mMskPane.mInitAlpha = 0x82;
+    mMsk0Pane.mInitAlpha = 0x82;
+
+    field_0x1E16 = mpmk.mPosCenterOrig.x;
+    field_0x1E18 = mpmk.mPosCenterOrig.y;
+    field_0x1E1A = mpmk.mSizeOrig.x;
+    field_0x1E1C = mpmk.mSizeOrig.y;
+    field_0x1E1E = mpp1pane.mPosCenterOrig.x;
+    field_0x1E20 = mpp1pane.mPosCenterOrig.y;
+    field_0x1E22 = mpp1pane.mSizeOrig.x;
+    field_0x1E24 = mpp1pane.mSizeOrig.y;
+
+    J2DPane* p2 = scrn->search('mpp2');
+    f32 h = p2->getHeight();
+    p2 = scrn->search('mpp2');
+    J2DPane* p1 = scrn->search('mpp1');
+    field_0x1E26 = p1->mBounds.i.y - (p2->mBounds.i.y + h);
 }
 
 /* 801A92D4-801A9364       .text dMap_isBossDoor__FP21stage_tgsc_data_class */

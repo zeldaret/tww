@@ -30,7 +30,7 @@ struct dMap_pane_c {
 class dMenu_Dmap_c : public dMenu_base_c {
 public:
     void alphaChange(fopMsgM_pane_class*, float) {}
-    virtual void draw() {}
+    virtual void draw() { _draw(); }
     void setArchive(JKRArchive* arc) { mpArc = arc; }
     void setFont(JUTFont* font, JUTFont* rfont) {
         mFont = font;
@@ -89,14 +89,14 @@ public:
     /* 0x069C */ fopMsgM_pane_class mCarPanes[4];
     /* 0x077C */ fopMsgM_pane_class mNm00Pane;
     /* 0x07B4 */ fopMsgM_pane_class mNm01Pane;
-    /* 0x07EC */ fopMsgM_pane_class mItmnPane;
+    /* 0x07EC */ fopMsgM_pane_class mItnmPane;
     /* 0x0824 */ fopMsgM_pane_class mItnkPane;
     /* 0x085C */ fopMsgM_pane_class mMsk0Pane;
     /* 0x0894 */ fopMsgM_pane_class mStr0Pane;
     /* 0x08CC */ fopMsgM_pane_class mSt00Pane;
     /* 0x0904 */ fopMsgM_pane_class mNt00Pane;
     /* 0x093C */ fopMsgM_pane_class mNk00Pane;
-    /* 0x0974 */ fopMsgM_pane_class mNo01Pane;
+    /* 0x0974 */ fopMsgM_pane_class mNo11Pane;
     /* 0x09AC */ fopMsgM_pane_class mDtlePane;
     /* 0x09E4 */ fopMsgM_pane_class mDt00Pane;
     /* 0x0A1C */ fopMsgM_pane_class mDk00Pane;
@@ -113,16 +113,16 @@ public:
     /* 0x0E7C */ fopMsgM_pane_class mFlPanes[6];
     /* 0x0FCC */ fopMsgM_pane_class mFbPanes[6];
     /* 0x111C */ fopMsgM_pane_class mFbkPanes[6];
-    /* 0x126C */ fopMsgM_pane_class field_0x126C;
-    /* 0x12A4 */ fopMsgM_pane_class field_0x12A4;
-    /* 0x12DC */ fopMsgM_pane_class field_0x12DC;
-    /* 0x1314 */ fopMsgM_pane_class field_0x1314;
-    /* 0x134C */ fopMsgM_pane_class field_0x134C;
-    /* 0x1384 */ fopMsgM_pane_class field_0x1384;
-    /* 0x13BC */ fopMsgM_pane_class field_0x13BC;
-    /* 0x13F4 */ fopMsgM_pane_class field_0x13F4;
-    /* 0x142C */ fopMsgM_pane_class field_0x142C;
-    /* 0x1464 */ fopMsgM_pane_class field_0x1464;
+    /* 0x126C */ fopMsgM_pane_class mFw00Pane;
+    /* 0x12A4 */ fopMsgM_pane_class mFw01Pane;
+    /* 0x12DC */ fopMsgM_pane_class mCc38Pane;
+    /* 0x1314 */ fopMsgM_pane_class mCc31Pane;
+    /* 0x134C */ fopMsgM_pane_class mCc24Pane;
+    /* 0x1384 */ fopMsgM_pane_class mCc17Pane;
+    /* 0x13BC */ fopMsgM_pane_class mCc10Pane;
+    /* 0x13F4 */ fopMsgM_pane_class mCc05pane;
+    /* 0x142C */ fopMsgM_pane_class mCc00Pane;
+    /* 0x1464 */ fopMsgM_pane_class mMskPane;
     /* 0x149C */ STControl* stick;
     /* 0x14A0 */ dMap_Dmap_c* dmap_c;
     /* 0x14A4 */ JKRArchive* mpArc;
