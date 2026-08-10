@@ -32,8 +32,8 @@ public:
     virtual JUTTexture* getJUTTexture() { return &mTexture; }
 
 public:
-    /* 0x00 */ JUTTexture mTexture;
-    /* 0x40 */ const JPATextureData* mpData;
+    /* 0x04 */ JUTTexture mTexture;
+    /* 0x44 */ const JPATextureData* mpData;
 };
 
 struct JPADefaultTexture {
