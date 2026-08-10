@@ -7,7 +7,7 @@
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 
-class msg_class;
+struct msg_class;
 class sub_msg_class;
 
 class sub_msg_class : public msg_class {

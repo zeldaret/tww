@@ -9,8 +9,8 @@
 #include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
-class dCcD_SrcSph;
-class dCcD_SrcCps;
+struct dCcD_SrcSph;
+struct dCcD_SrcCps;
 
 class daDaiocta_c : public fopAc_ac_c {
 public:

@@ -8,7 +8,7 @@ struct DOUBLE_POS {
     f64 x, y, z;
 };
 
-class cXyz;
+struct cXyz;
 
 void dKyr_drawSun(Mtx, cXyz*, GXColor&, u8**);
 void dKyr_drawLenzflare(Mtx, cXyz*, GXColor&, u8**);
