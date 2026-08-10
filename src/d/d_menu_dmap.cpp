@@ -6,6 +6,8 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_dmap.h"
 #include "d/d_stage.h"
+#include "f_op/f_op_msg_mng.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
 
 dMd_HIO_c g_mdHIO;
 
@@ -109,7 +111,137 @@ void dMenu_Dmap_c::changeFloorTexture(J2DPane* i_pane, int i_floor) {
 
 /* 801A8818-801A92D4       .text screenSet__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::screenSet() {
-    /* Nonmatching */
+
+    static const u32 l_ft[] = {
+        'ft00', 'ft01', 'ft02', 'ft03', 'ft04',
+        'ft05', 'ft06', 'ft07', 'ft08', 'ft09',
+        'ft10', 'ft11', 'ft12', 'ft13', 'ft14',
+    };
+
+    static const u32 l_fd[] = {
+        'fd00', 'fd01', 'fd02', 'fd03', 'fd04',
+        'fd05', 'fd06', 'fd07', 'fd08', 'fd09',
+        'fd10', 'fd11', 'fd12', 'fd13', 'fd14',
+    };
+
+    for (int i = 0; i < 15; i++) {
+        fopMsgM_setPaneData(&mFtPanes[i], scrn2, l_ft[i]);
+        fopMsgM_setPaneData(&mFdPanes[i], scrn2, l_fd[i]);
+    }
+
+    static const u32 l_car[] = {
+        'car1', 'car2', 'car3', 'car4',
+    };
+
+    for (int i = 0; i < 4; i++) {
+        fopMsgM_setPaneData(&mCarPanes[i], scrn2, l_car[i]);
+    }
+
+    fopMsgM_setPaneData(&mNm00Pane, scrn2, 'nm00');
+    ((J2DTextBox*)mNm00Pane.pane)->setFont(mFont);
+    fopMsgM_setPaneData(&mNm01Pane, scrn2, 'nm01');
+    ((J2DTextBox*)mNm01Pane.pane)->setFont(mFont);
+    fopMsgM_setPaneData(&mItmnPane, scrn2, 'itmn');
+    fopMsgM_setPaneData(&mItnkPane, scrn2, 'itnk');
+    fopMsgM_setPaneData(&mStr0Pane, scrn2, 'str0');
+    fopMsgM_setPaneData(&mSt00Pane, scrn2, 'st00');
+
+    if (dComIfGs_getOptRuby() != 0) {
+        fopMsgM_paneTrans(&mSt00Pane, 0.0f, -4.0f);
+    }
+
+    fopMsgM_setPaneData(&mNt00Pane, scrn2, 'nt00');
+    fopMsgM_setPaneData(&mNk00Pane, scrn2, 'nk00');
+    fopMsgM_setPaneData(&mNo01Pane, scrn2, 'no01');
+    fopMsgM_setPaneData(&mMsk0Pane, scrn2, 'msk0');
+
+    mNo01Pane.mUserArea = mNo01Pane.pane->getRotate();
+
+    ((J2DTextBox*)mStr0Pane.pane)->setFont(mRFont);
+    ((J2DTextBox*)mSt00Pane.pane)->setFont(mFont);
+
+                                                        
+    fopMsgM_setPaneData(&mDtlePane,scrn2, 'dtle');
+    ((J2DTextBox*)mDtlePane.pane)->setFont(mFont);
+    dnameSet();
+    fopMsgM_setPaneData(&mDt00Pane,scrn2, 'dt00');
+    fopMsgM_setPaneData(&mDk00Pane,scrn2, 'dk00');
+
+
+    static const u32 l_it[] = {
+        'it00', 'it01', 'it02',
+    };
+
+    static const u32 l_ik[] = {
+        'ik00', 'ik01', 'ik02',
+    };
+
+    static const u32 l_ip[] = {
+        'ip06', 'ip04', 'ip02', 'ip01',
+    };
+
+    for (int i = 0; i < 3; i++) {
+        fopMsgM_setPaneData(&mItPanes[0], scrn, l_it[i]);
+        fopMsgM_setPaneData(&mIkPanes[0], scrn, l_ik[i]);
+
+        JKRArchive::readTypeResource(mpTIMG[i], 0xC00, 'TIMG', itmTex[i], dComIfGp_getItemIconArchive());
+
+        ((J2DPicture*)mItPanes[i].pane)->changeTexture(mpTIMG[i], 0);
+        ((J2DPicture*)mIkPanes[i].pane)->changeTexture(mpTIMG[i], 0);
+
+        fopMsgM_setPaneData(&mIpPanes[0], scrn, l_ip[i]);
+    }
+    fopMsgM_setPaneData(&mIp01Pane, scrn, 'ip01');
+
+    static const u32 l_lnk[] = {
+        'lnk0', 'lnk1', 'lnk2',
+    };
+
+    for (int i = 0; i < 3; i++) {
+        fopMsgM_setPaneData(&mLnkPanes[i], scrn, l_lnk[i]);
+    }
+                           
+    fopMsgM_setPaneData(&mBey1Pane, scrn, 'bey1');
+    fopMsgM_setPaneData(&mBey2Pane, scrn, 'bey2');
+    fopMsgM_setPaneData(&mBossPane, scrn, 'boss');
+    fopMsgM_setPaneData(&mBos2Pane, scrn, 'bos2');
+
+    static const u32 l_fl[] = {
+        'f001', 'f002', 'f003', 'f004', 'f005', 'f006',
+    };
+
+    static const u32 l_fb[] = {
+        'fb01', 'fb02', 'fb03', 'fb04', 'fb05', 'fb06',
+    };
+
+    static const u32 l_fbk[] = {
+        'fbk1', 'fbk2', 'fbk3', 'fbk4', 'fbk5', 'fbk6',
+    };
+
+    for (int i = 0; i < 6; i++) {
+        fopMsgM_setPaneData(&mFlPanes[i], scrn, l_fl[i]);
+        fopMsgM_setPaneData(&mFbPanes[i], scrn, l_fb[i]);
+        fopMsgM_setPaneData(&mFbkPanes[i], scrn, l_fbk[i]);
+    }
+
+    //TODO missing lines
+
+    fopMsgM_setPaneData(&field_0x126C, scrn, 'fw00');
+    fopMsgM_setPaneData(&field_0x12A4, scrn, 'fw1');
+    scrn->search('mpmk')->hide();
+    scrn->search('mpp2')->hide();
+    scrn->search('mpp1')->hide();
+    scrn->search('mpp0')->hide();
+    fopMsgM_setPaneData(&field_0x12DC, scrn, 'cc38');
+    fopMsgM_setPaneData(&field_0x1314, scrn, 'cc31');
+    fopMsgM_setPaneData(&field_0x134C, scrn, 'cc34');
+    fopMsgM_setPaneData(&field_0x1384, scrn, 'cc37');
+    fopMsgM_setPaneData(&field_0x13BC, scrn, 'cc30');
+    fopMsgM_setPaneData(&field_0x13F4, scrn, 'cc35');
+    fopMsgM_setPaneData(&field_0x142C, scrn, 'cc30');
+    fopMsgM_setPaneData(&field_0x1464, scrn, 'msk');
+    // fopMsgM_setPaneData(&fStack_d4, scrn, 0x6d706d6b);
+    // fopMsgM_setPaneData(&fStack_10c, scrn, 0x6d707031);
 }
 
 /* 801A92D4-801A9364       .text dMap_isBossDoor__FP21stage_tgsc_data_class */
@@ -164,7 +296,7 @@ void dMenu_Dmap_c::noteInit() {
 
 /* 801AC2D8-801AC2EC       .text noteCheck__12dMenu_Dmap_cFv */
 bool dMenu_Dmap_c::noteCheck() {
-    return field_0x093C.mUserArea == 1 ? TRUE : FALSE;
+    return mNk00Pane.mUserArea == 1 ? TRUE : FALSE;
 }
 
 /* 801AC2EC-801AC390       .text noteAppear__12dMenu_Dmap_cFv */
