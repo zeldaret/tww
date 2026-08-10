@@ -65,13 +65,11 @@ void daObjFirewall_c::init_mtx() {
 
 /* 000000EC-00000110       .text solidHeapCB__15daObjFirewall_cFP10fopAc_ac_c */
 BOOL daObjFirewall_c::solidHeapCB(fopAc_ac_c* i_this) {
-    /* Nonmatching */
     return ((daObjFirewall_c*)i_this)->create_heap();
 }
 
 /* 00000110-000002DC       .text create_heap__15daObjFirewall_cFv */
 bool daObjFirewall_c::create_heap() {
-    /* Nonmatching */
     bool ret = true;
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 6));
@@ -96,7 +94,6 @@ bool daObjFirewall_c::create_heap() {
 
 /* 000002DC-00000568       .text registCollisionTable__15daObjFirewall_cFv */
 void daObjFirewall_c::registCollisionTable() {
-    /* Nonmatching */
     static s16 zou_chk_angl[] = {0xD556,0x2AAA, 0x5555, 0xAAAB,0x8000};
     int temp_r3_3;
     f32 base_radius;
@@ -142,7 +139,6 @@ void daObjFirewall_c::registCollisionTable() {
 
 /* 000005A4-00000794       .text setPointLight__15daObjFirewall_cFv */
 void daObjFirewall_c::setPointLight() {
-    /* Nonmatching */
     f32 blend;
     cXyz pos;
     cXyz scale;
@@ -185,7 +181,6 @@ void daObjFirewall_c::setPointLight() {
 
 /* 00000794-00000970       .text particle_set__15daObjFirewall_cFv */
 void daObjFirewall_c::particle_set() {
-    /* Nonmatching */
     s16 angles_0x438 [6] = {0x1555, -0x1555, 0x4000, -0x4000, 0x6aaa, -0x6aaa};
     s16 angles_0x450 [5] = {0, -0x2aaa, 0x2aaa, 0x5555, 0xaaab};
     csXyz local_1(0,0,0);
@@ -211,7 +206,6 @@ void daObjFirewall_c::particle_set() {
 
 /* 00000970-00000A1C       .text particle_delete__15daObjFirewall_cFv */
 void daObjFirewall_c::particle_delete() {
-    /* Nonmatching */
     int i = 0;
     for (i = 0; i < 6; i++) {
         if (field_0x438[i] != NULL) {
@@ -235,7 +229,6 @@ void daObjFirewall_c::particle_delete() {
 
 /* 00000A1C-00000AB0       .text seStart__15daObjFirewall_cFUl */
 void daObjFirewall_c::seStart(unsigned long param_1) {
-    /* Nonmatching */
     for(int i=0; i < 8; i++) {
         
         mDoAud_seStart(param_1, &field_0x1080[i]);
@@ -246,8 +239,6 @@ void daObjFirewall_c::seStart(unsigned long param_1) {
 
 /* 00000AB0-00000B28       .text set_se__15daObjFirewall_cFb */
 void daObjFirewall_c::set_se(bool param_1) {
-    /* Nonmatching */
-
     if(field_0x107e != param_1) {
         if (field_0x107e == 1) {
             seStart(0x6950);
@@ -263,7 +254,6 @@ void daObjFirewall_c::set_se(bool param_1) {
 
 /* 00000B28-00000B94       .text seDelete__15daObjFirewall_cFv */
 void daObjFirewall_c::seDelete() {
-    /* Nonmatching */
     if(field_0x10e0 == 1){
         for(int i=0; i < 8; i++) {
             mDoAud_seDeleteObject(&field_0x1080[i]);
@@ -273,11 +263,8 @@ void daObjFirewall_c::seDelete() {
 
 /* 00000B94-00000C64       .text set_pl_se__15daObjFirewall_cFv */
 void daObjFirewall_c::set_pl_se() {
-    /* Nonmatching */
     int link_id;
 
-    // TODO: fix these static tables to the correct data, junk in here atm - I think this should be fixed now?
-    // I had to move these outside because the obj diff wasn't matching when the table was constructed with string literals.
     static char chk_word0[] = "050smile";
     static char chk_word1[] = "049s_surp";
     static char chk_word2[] = "dummy";
@@ -288,9 +275,9 @@ void daObjFirewall_c::set_pl_se() {
     if(link_id != -1) {
         char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(link_id);
         if(strcmp(cut_name, chk_word_table[field_0x10e8]) == 0) {
-            daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0); // There is an inline but not in debug map
+            daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0); // There is an inline here but not in debug map
             if(player != NULL) {
-                //TODO: I think this is the wrong way to call voice start
+                //I think this is the wrong way to call voice start
                 player->voiceStart(voice_table[field_0x10e8]);
                 field_0x10e8 += 1;  
             }
@@ -300,7 +287,6 @@ void daObjFirewall_c::set_pl_se() {
 
 /* 00000C64-00000DDC       .text setup_burn_up__15daObjFirewall_cFv */
 void daObjFirewall_c::setup_burn_up() {
-    /* Nonmatching */
     f32 scaledX;
     particle_set();
     if(field_0x408 != NULL) {
@@ -323,7 +309,6 @@ void daObjFirewall_c::setup_burn_up() {
 
 /* 00000DDC-00000EAC       .text setup_put_the_fire_out__15daObjFirewall_cFv */
 void daObjFirewall_c::setup_put_the_fire_out() {
-    /* Nonmatching */
 
     if (field_0x10e1 == 1) {
         particle_delete();
@@ -345,7 +330,6 @@ void daObjFirewall_c::setup_put_the_fire_out() {
 
 /* 00000EAC-000011F8       .text _create__15daObjFirewall_cFv */
 cPhs_State daObjFirewall_c::_create() {
-    /* Nonmatching */
     fopAcM_SetupActor(this, daObjFirewall_c);
 
     cPhs_State result = dComIfG_resLoad(&mPhs, l_arcname);
@@ -401,8 +385,6 @@ bool daObjFirewall_c::_delete() {
 
 /* 000015F4-000016D4       .text wait_act_proc__15daObjFirewall_cFv */
 void daObjFirewall_c::wait_act_proc() {
-    /* Nonmatching */
-
     s32 staffIdx = -1;
     
     if (dComIfGp_evmng_existence(l_ev_name_table[0])) {
@@ -422,7 +404,6 @@ void daObjFirewall_c::wait_act_proc() {
 
 /* 000016D4-00001820       .text wait2_act_proc__15daObjFirewall_cFv */
 void daObjFirewall_c::wait2_act_proc() {
-    /* Nonmatching */
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     if(player == NULL){
         return;
@@ -441,7 +422,6 @@ void daObjFirewall_c::wait2_act_proc() {
 
 /* 00001820-000018E0       .text wait3_act_proc__15daObjFirewall_cFv */
 void daObjFirewall_c::wait3_act_proc() {
-    /* Nonmatching */
     s32 staffIdx = -1;
     
     if (dComIfGp_evmng_existence(l_ev_name_table[1])) {
@@ -458,7 +438,6 @@ void daObjFirewall_c::wait3_act_proc() {
 
 /* 000018E0-000019B0       .text appear_act_proc__15daObjFirewall_cFv */
 void daObjFirewall_c::appear_act_proc() {
-    /* Nonmatching */
     bool local_1;
     J3DFrameCtrl* frameCtrl;
     
@@ -477,7 +456,6 @@ void daObjFirewall_c::appear_act_proc() {
 
 /* 000019B0-00001A34       .text demo_end_wait_act_proc__15daObjFirewall_cFv */
 void daObjFirewall_c::demo_end_wait_act_proc() {
-    /* Nonmatching */
     if(dComIfGp_evmng_endCheck(field_0x107c)) {
         dComIfGp_event_reset();
         field_0x1070 = &daObjFirewall_c::burn_wait_act_proc;
@@ -487,7 +465,6 @@ void daObjFirewall_c::demo_end_wait_act_proc() {
 
 /* 00001A34-00001B68       .text burn_wait_act_proc__15daObjFirewall_cFv */
 void daObjFirewall_c::burn_wait_act_proc() {
-    /* Nonmatching */
     mStts.Move();
     registCollisionTable();
 
