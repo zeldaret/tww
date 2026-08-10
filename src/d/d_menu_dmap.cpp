@@ -275,8 +275,18 @@ void dMenu_Dmap_c::screenSet() {
 }
 
 /* 801A92D4-801A9364       .text dMap_isBossDoor__FP21stage_tgsc_data_class */
-void dMap_isBossDoor(stage_tgsc_data_class*) {
-    /* Nonmatching */
+BOOL dMap_isBossDoor(stage_tgsc_data_class* i_stage) {
+    if (strcmp(i_stage->name, "door20") == 0) {
+        return TRUE;
+    }
+    if (strcmp(i_stage->name, "door12") == 0) {
+        switch (i_stage->base.angle.z >> 8 & 0xFF) {
+            case 12:
+            case 9:
+                return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /* 801A9364-801A98EC       .text initialize__12dMenu_Dmap_cFv */
