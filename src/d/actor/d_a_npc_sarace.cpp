@@ -395,7 +395,17 @@ BOOL daNpc_Sarace_c::CreateInit() {
 
 /* 00000E24-00000E68       .text setAttention__14daNpc_Sarace_cFv */
 void daNpc_Sarace_c::setAttention() {
-    /* Nonmatching */
+    eyePos.set(
+        mEyePos.x,
+        mEyePos.y,
+        mEyePos.z
+    );
+    attention_info.position.set(
+        mAttPos.x,
+        mAttPos.y + l_HIO.mNpc.mAttnYOffset,
+        mAttPos.z
+    );
+
 }
 
 /* 00000E68-00000FF4       .text lookBack__14daNpc_Sarace_cFv */
