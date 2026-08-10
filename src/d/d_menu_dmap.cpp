@@ -7,14 +7,104 @@
 #include "d/d_menu_dmap.h"
 #include "d/d_stage.h"
 
+dMd_HIO_c g_mdHIO;
+
+const char* floor_name[] = {
+	"hierarchy_num_B3.bti",
+	"hierarchy_num_B3.bti",
+	"hierarchy_num_B3.bti",
+	"hierarchy_num_B3.bti",
+	"hierarchy_num_B3.bti",
+	"hierarchy_num_B3.bti",
+	"hierarchy_num_B3.bti",
+	"hierarchy_num_B3.bti",
+	"hierarchy_num_B2.bti",
+	"hierarchy_num_B1.bti",
+	"hierarchy_num_1.bti",
+	"hierarchy_num_2.bti",
+	"hierarchy_num_3.bti",
+    "hierarchy_num_4.bti",
+	"hierarchy_num_5.bti",
+	"hierarchy_num_6.bti",
+    "hierarchy_num_7.bti",
+    "hierarchy_num_7.bti",
+    "hierarchy_num_7.bti",
+    "hierarchy_num_7.bti",
+};
+
+const char* itmTex[] = {
+    "dungeon_map.bti",
+    "boss_key.bti",
+    "compass.bti",
+};
+
 /* 801A86A4-801A87CC       .text __ct__9dMd_HIO_cFv */
 dMd_HIO_c::dMd_HIO_c() {
-    /* Nonmatching */
+    field_0x06 = 0;
+    field_0x08 = 0;
+    field_0x0A = 14;
+    field_0x0C = 14;
+
+    field_0x10.r = 0xff;
+    field_0x10.g = 0xc4;
+    field_0x10.b = 0x00;
+    field_0x14.r = 0x20;
+    field_0x14.g = 0x20;
+    field_0x14.b = 0x00;
+    field_0x10.a = 0xff;
+    field_0x14.a = 0x00;
+
+    field_0x24 = 16;
+    field_0x26 = 8;
+
+    field_0x28.r = 0xA8;
+    field_0x28.g = 0xA8;
+    field_0x28.b = 0xA8;
+    field_0x2C.r = 0x40;
+    field_0x2C.g = 0x20;
+    field_0x2C.b = 0x00;
+    field_0x28.a = 0xFF;
+    field_0x2C.a = 0x00;
+
+    field_0x18 = 32;
+    field_0x1A = 32;
+
+    field_0x1C.r = 0xFF;
+    field_0x1C.g = 0xFF;
+    field_0x1C.b = 0xFF;
+    field_0x20.r = 0x00;
+    field_0x20.g = 0x00;
+    field_0x20.b = 0x00;
+    field_0x1C.a = 0xFF;
+    field_0x20.a = 0x00;
+
+    field_0x30 = 16;
+    field_0x32 = 16;
+
+    field_0x34.r = 0xFF;
+    field_0x34.g = 0x00;
+    field_0x34.b = 0xFF;
+    field_0x38.r = 0x00;
+    field_0x38.g = 0x00;
+    field_0x38.b = 0x00;
+    field_0x34.a = 0xFF;
+    field_0x38.a = 0x00;
+
+    field_0x3C = 4;
+    field_0x3E = 10;
+    field_0x40 = 2;
+    field_0x42 = 2;
+    field_0x44 = 2;
+    field_0x46 = 2;
+    field_0x48 = 2;
 }
 
 /* 801A87CC-801A8818       .text changeFloorTexture__12dMenu_Dmap_cFP7J2DPanei */
-void dMenu_Dmap_c::changeFloorTexture(J2DPane*, int) {
-    /* Nonmatching */
+void dMenu_Dmap_c::changeFloorTexture(J2DPane* i_pane, int i_floor) {
+    if (i_floor < 0 || i_floor >= 20) {
+        i_floor = 0;
+    }
+    ((J2DPicture *)i_pane)->changeTexture(floor_name[i_floor], 0);
 }
 
 /* 801A8818-801A92D4       .text screenSet__12dMenu_Dmap_cFv */

@@ -5,6 +5,7 @@
 #include "dolphin/types.h"
 #include "d/d_menu_base.h"
 #include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J2DPane;
 class J2DScreen;
@@ -179,9 +180,45 @@ public:
 
 STATIC_ASSERT(sizeof(dMenu_Dmap_c) == 0x1E38);
 
-class dMd_HIO_c {
+class dMd_HIO_c : public JORReflexible {
 public:
     dMd_HIO_c();
-};
+    virtual ~dMd_HIO_c() {}
+
+    void genMessage(JORMContext*) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x06 */ s16 field_0x06;
+    /* 0x08 */ s16 field_0x08;
+    /* 0x0A */ s16 field_0x0A;
+    /* 0x0C */ s16 field_0x0C;
+    /* 0x0E */ u8 padding_0x0E[0x10 - 0x0E];
+    /* 0x10 */ JUtility::TColor field_0x10;
+    /* 0x14 */ JUtility::TColor field_0x14;
+    /* 0x18 */ s16 field_0x18;
+    /* 0x1A */ s16 field_0x1A;
+    /* 0x1C */ JUtility::TColor field_0x1C;
+    /* 0x20 */ JUtility::TColor field_0x20;
+    /* 0x24 */ s16 field_0x24;
+    /* 0x26 */ s16 field_0x26;
+    /* 0x28 */ JUtility::TColor field_0x28;
+    /* 0x2C */ JUtility::TColor field_0x2C;
+    /* 0x30 */ s16 field_0x30;
+    /* 0x32 */ s16 field_0x32;
+    /* 0x34 */ JUtility::TColor field_0x34;
+    /* 0x38 */ JUtility::TColor field_0x38;
+    /* 0x3C */ s16 field_0x3C;
+    /* 0x3E */ s16 field_0x3E;
+    /* 0x40 */ s16 field_0x40;
+    /* 0x42 */ s16 field_0x42;
+    /* 0x44 */ s16 field_0x44;
+    /* 0x46 */ s16 field_0x46;
+    /* 0x48 */ s16 field_0x48;
+}; // Size: 0x4C
+
+STATIC_ASSERT(sizeof(dMd_HIO_c) == 0x4C);
+
+extern dMd_HIO_c g_mdHIO;
 
 #endif /* D_MENU_DMAP_H */
