@@ -42,13 +42,13 @@ public:
     u16 next_msgStatus(u32*);
     u32 getMsg();
     void anmAtr(u16);
-    void CreateInit();
+    BOOL CreateInit();
     void setAttention();
     void lookBack();
     void wait01();
     void talk01();
-    void dummy_action(void*);
-    void wait_action(void*);
+    BOOL dummy_action(void*);
+    BOOL wait_action(void*);
     BOOL event_endCheck_action(void*);
     void set_mtx();
     BOOL _draw();
@@ -65,7 +65,9 @@ public:
 
     /* 0x6C4 */ u8 field_0x6C4[0x6CC - 0x6C4];
     /* 0x6CC */ mDoExt_McaMorf* mpHeadMorf;
-    /* 0x6D0 */ u8 field_0x6D0[0x6E0 - 0x6D0];
+    /* 0x6D0 */ u8 field_0x6D0[0x6D8 - 0x6D0];
+    /* 0x6D8 */ int m6D8;
+    /* 0x6DC */ int m6DC;
     /* 0x6E0 */ J3DAnmTexPattern* m_btp;
     /* 0x6E4 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F8 */ u8 mBlinkFrame;
@@ -73,11 +75,15 @@ public:
     /* 0x6FA */ s16 mBlinkTimer;
     /* 0x6FC */ cXyz mEyePos;
     /* 0x708 */ cXyz mAttPos;
-    /* 0x714 */ u8 field_0x714[0x724 - 0x714];
+    /* 0x714 */ u8 field_0x714[0x718 - 0x714];
+    /* 0x718 */ csXyz m718;
+    /* 0x71E */ u8 field_0x71E[0x724 - 0x71E];
     /* 0x724 */ u32 mMiniGameMessage;
     /* 0x728 */ u8 mHasAttention;
     /* 0x729 */ u8 m729;
-    /* 0x72A */ u8 field_0x72A[0x734 - 0x72A];
+    /* 0x72A */ u8 field_0x72A[0x730 - 0x72A];
+    /* 0x730 */ s8 m730;
+    /* 0x731 */ u8 field_0x731[0x734 - 0x731];
     /* 0x734 */ ProcFunc mCurrActionFunc;
     /* 0x740 */ s8 mTexPatternNum;
     /* 0x741 */ s8 mCurrentAnm;

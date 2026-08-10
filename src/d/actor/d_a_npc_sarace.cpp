@@ -357,8 +357,40 @@ void daNpc_Sarace_c::anmAtr(unsigned short) {
 }
 
 /* 00000BEC-00000E24       .text CreateInit__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::CreateInit() {
-    /* Nonmatching */
+BOOL daNpc_Sarace_c::CreateInit() {
+    m718 = current.angle;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+    gravity = -30.0f;
+    setAction(&daNpc_Sarace_c::wait_action, 0);
+    mAttPos = current.pos;
+    mEyePos = current.pos;
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    setCollision(60.0f, 150.0f);
+    m730 = 0;
+    mEventCut.setActorInfo2("Sarace", this);
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 173;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 173;
+    set_mtx();
+    mMiniGameMessage = 0;
+    m6D8 = -1;
+    m6DC = -1;
+    setAnm(dRes_ID_SARACE_BCK_SA01HEAD_TALK01_e, -1.0);
+    if(
+        dComIfGp_getStartStagePoint() == 1
+        && dComIfGp_getStartStageRoomNo() == 48
+        && ship_race_result != 0
+    ) {
+        mEventState = 1;
+        mMiniGameMessage = 0xFB4;
+        fopAcM_orderSpeakEvent(this);
+    }
+    mpMorf->play(&mEyePos, 0, 0);
+    mpMorf->calc();
+    mpHeadMorf->play(NULL, 0, 0);
+    mpHeadMorf->calc();
+    return TRUE;
 }
 
 /* 00000E24-00000E68       .text setAttention__14daNpc_Sarace_cFv */
@@ -382,12 +414,12 @@ void daNpc_Sarace_c::talk01() {
 }
 
 /* 000014B8-000014E0       .text dummy_action__14daNpc_Sarace_cFPv */
-void daNpc_Sarace_c::dummy_action(void*) {
+BOOL daNpc_Sarace_c::dummy_action(void* i_arg) {
     /* Nonmatching */
 }
 
 /* 000014E0-000015BC       .text wait_action__14daNpc_Sarace_cFPv */
-void daNpc_Sarace_c::wait_action(void*) {
+BOOL daNpc_Sarace_c::wait_action(void* i_arg) {
     /* Nonmatching */
 }
 
