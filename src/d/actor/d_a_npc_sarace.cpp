@@ -231,13 +231,104 @@ void daNpc_Sarace_c::checkOrder() {
 }
 
 /* 000008E8-00000A6C       .text next_msgStatus__14daNpc_Sarace_cFPUl */
-u16 daNpc_Sarace_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daNpc_Sarace_c::next_msgStatus(u32* i_msg_no) {
+    u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
+    
+    switch(*i_msg_no) {
+        case 0xfa1:
+        case 0xfa2:
+        case 0xfa5:
+        case 0xfa7:
+        case 0xfb1:
+        case 0xfb2:
+        case 0xfb4:
+        case 0xfb5:
+        case 0xfb7:
+            (*i_msg_no)++;
+            break;
+        case 0xfb8:
+            *i_msg_no = 0xfb3;
+            break;
+        case 0xfb3:
+            *i_msg_no = 0xfa3;
+            break;
+        case 0xfa3:
+            if (mpCurrMsg->mSelectNum == 0) {
+                *i_msg_no = 0xfa4;
+            }
+            else if (mpCurrMsg->mSelectNum == 1) {
+                if ((u16)dComIfGs_getRupee() < 30) {
+                    *i_msg_no = 0xfaf;
+                }
+                else {
+                    
+                    dComIfGp_setItemRupeeCount(-30);
+                    dComIfGs_offEventBit(dSv_event_flag_c::UNK_2820);
+                    *i_msg_no = 0xfb0;
+                }
+            }
+            else {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2808) == 0) {
+                    dComIfGs_onEventBit(dSv_event_flag_c::UNK_2808);
+                    *i_msg_no = 0xfad;
+                }
+                else {
+                    *i_msg_no = 0xfae;
+                }
+            }
+            break;
+        case 0xfa8:
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2820)) {
+                *i_msg_no = 0xfaa;
+            }
+            else {
+                *i_msg_no = 0xfa9;
+            }
+            break;
+        case 0xfaa:
+            *i_msg_no = 0xfa9;
+            break;
+        case 0xfa9:
+            *i_msg_no = 0xfa3;
+            break;
+        
+        
+        default:
+            msg_status = 0x10;
+            break;
+    }
+    return msg_status;
 }
 
 /* 00000A6C-00000B50       .text getMsg__14daNpc_Sarace_cFv */
 u32 daNpc_Sarace_c::getMsg() {
-    /* Nonmatching */
+    u32 msgNo;
+    if(mMiniGameMessage != 0) {
+        if(mMiniGameMessage == 0xFB4) {
+            if(ship_race_result == 1) {
+                mMiniGameMessage = 0xFB7; // Timeout
+            } else if(ship_race_result == 3) {
+                mMiniGameMessage = 0xFB1; // Drowned
+            } else {
+                dComIfGp_setMessageCountNumber(ship_race_rupee);
+            }
+        }
+        msgNo = mMiniGameMessage;
+        mMiniGameMessage = 0;
+    } else {
+        if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2810)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2810);
+            msgNo = 0xFA1;
+        }
+        else {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2840)) {
+                msgNo = 0xFA1;
+            } else {
+                msgNo = 0xFA2;
+            }
+        }
+    }
+    return msgNo;
 }
 
 /* 00000B50-00000BEC       .text anmAtr__14daNpc_Sarace_cFUs */

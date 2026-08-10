@@ -73,7 +73,8 @@ public:
     /* 0x6FA */ s16 mBlinkTimer;
     /* 0x6FC */ cXyz mEyePos;
     /* 0x708 */ cXyz mAttPos;
-    /* 0x714 */ u8 field_0x714[0x728 - 0x714];
+    /* 0x714 */ u8 field_0x714[0x724 - 0x714];
+    /* 0x724 */ u32 mMiniGameMessage;
     /* 0x728 */ u8 mHasAttention;
     /* 0x729 */ u8 m729;
     /* 0x72A */ u8 field_0x72A[0x734 - 0x72A];
