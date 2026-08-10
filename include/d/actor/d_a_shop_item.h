@@ -17,7 +17,7 @@ public:
     inline bool _delete();
     void setTevType(int type) { mTevType = type; }
 
-    char* getShopArcname();
+    const char* getShopArcname();
     s16 getShopBmdIdx();
     void CreateInit();
     bool _execute();

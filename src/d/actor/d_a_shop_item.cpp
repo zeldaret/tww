@@ -20,7 +20,7 @@ const char daShopItem_c::m_cloth_arcname[] = "Cloth";
 const f32 daShopItem_c::m_cullfar_max = 5000.0f;
 
 /* 00000078-000000D8       .text getShopArcname__12daShopItem_cFv */
-char* daShopItem_c::getShopArcname() {
+const char* daShopItem_c::getShopArcname() {
     u8 type = fopAcM_GetParamBit(fopAcM_GetParam(this), 8, 4);
     if(type == 1 || (type == 0 && mModelType[m_itemNo] == 0x01)) {
         return dItem_data::getFieldArc(m_itemNo);
