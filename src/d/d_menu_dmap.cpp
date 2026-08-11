@@ -404,7 +404,59 @@ void dMenu_Dmap_c::treasureSet() {
 
 /* 801AAE10-801AB20C       .text treasureDraw__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::treasureDraw() {
-    /* Nonmatching */
+    f32 offsetY = mCurFloorMapY - (mMpp1PosY + (mCurFloor - 0x80) * (mMpp1SizeY + mMppGapY));
+    f32 drawOffsetY = offsetY + mMapDrawOffsetY;
+
+    for (int i = 0; i < 32; i++) {
+        if (treasure_p[i].exists != 0) {
+            f32 y = treasure_p[i].posY;
+            f32 scale = 0.5f;
+            if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
+                treasure_p[i].ppane->draw(
+                    treasure_p[i].posX, y + drawOffsetY,
+                    treasure_p[i].width, treasure_p[i].height,
+                    false, false, false);
+                treasure_p[i].ppane->mAlpha = mCc05pane.mNowAlpha;
+            }
+        }
+    }
+
+    for (int i = 0; i < 32; i++) {
+        if (door_p[i].exists != 0) {
+            f32 y = door_p[i].posY;
+            f32 scale = 0.5f;
+            if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
+                door_p[i].ppane->draw(
+                    door_p[i].posX, y + drawOffsetY,
+                    door_p[i].width, door_p[i].height,
+                    false, false, false);
+                door_p[i].ppane->rotate(
+                    door_p[i].width * scale,
+                    door_p[i].height * scale,
+                    ROTATE_Z,
+                    door_p[i].angle * 0.005493164f);
+                door_p[i].ppane->mAlpha = mCc05pane.mNowAlpha;
+            }
+        }
+    }
+
+    if (npc_p.exists != 0) {
+        f32 y = npc_p.posY;
+        f32 scale = 0.5f;
+        if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
+            npc_p.ppane->draw(npc_p.posX, y + drawOffsetY, npc_p.width, npc_p.height, false, false, false);
+            npc_p.ppane->mAlpha = mCc05pane.mNowAlpha;
+        }
+    }
+
+    if (boss_p.exists != 0) {
+        f32 y = boss_p.posY;
+        f32 scale = 0.5f;
+        if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
+            boss_p.ppane->draw(boss_p.posX, y + drawOffsetY, boss_p.width, boss_p.height, false, false, false);
+            boss_p.ppane->mAlpha = mCc05pane.mNowAlpha;
+        }
+    }
 }
 
 /* 801AB20C-801AB464       .text paneMove__12dMenu_Dmap_cFf */

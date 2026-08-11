@@ -18,12 +18,12 @@ struct ResTIMG;
 
 struct dMap_pane_c {
     /* 0x00 */ J2DPicture* ppane;
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ f32 field_0x0C;
-    /* 0x10 */ f32 field_0x10;
-    /* 0x14 */ u8 padding_0x14[2];
-    /* 0x16 */ u8 field_0x16;
+    /* 0x04 */ f32 posX;
+    /* 0x08 */ f32 posY;
+    /* 0x0C */ f32 width;
+    /* 0x10 */ f32 height;
+    /* 0x14 */ s16 angle;
+    /* 0x16 */ u8 exists;
     /* 0x17 */ u8 padding_0x17[1];
 } /* Size: 0x18 */;
 
