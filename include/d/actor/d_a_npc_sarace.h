@@ -75,7 +75,8 @@ public:
     /* 0x6FA */ s16 mBlinkTimer;
     /* 0x6FC */ cXyz mEyePos;
     /* 0x708 */ cXyz mAttPos;
-    /* 0x714 */ u8 field_0x714[0x718 - 0x714];
+    /* 0x714 */ s16 mLookAtMaxVel;
+    /* 0x716 */ u8 field_0x716[0x718 - 0x716];
     /* 0x718 */ csXyz m718;
     /* 0x71E */ u8 field_0x71E[0x724 - 0x71E];
     /* 0x724 */ u32 mMiniGameMessage;
@@ -88,7 +89,8 @@ public:
     /* 0x740 */ s8 mTexPatternNum;
     /* 0x741 */ s8 mCurrentAnm;
     /* 0x742 */ s8 mEventState;
-    /* 0x743 */ u8 field_0x743[0x746 - 0x743];
+    /* 0x743 */ s8 mLookBackState;
+    /* 0x744 */ u8 field_0x744[0x746 - 0x744];
     /* 0x746 */ s8 mActionStatus;
     /* 0x747 */ u8 field_0x747[0x748 - 0x747];
 };  // Size: 0x748

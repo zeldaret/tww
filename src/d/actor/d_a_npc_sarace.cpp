@@ -410,7 +410,46 @@ void daNpc_Sarace_c::setAttention() {
 
 /* 00000E68-00000FF4       .text lookBack__14daNpc_Sarace_cFv */
 void daNpc_Sarace_c::lookBack() {
-    /* Nonmatching */
+    cXyz vec2;
+    cXyz vec(0.0f, 0.0f, 0.0f);
+
+    cXyz* dstPos = NULL;
+    s16 desired_y_rot = current.angle.y;
+    bool lookParam = 1;
+
+    switch (mLookBackState) {
+        case 1:
+        case 2:
+            if(mLookBackState == 2) {
+                m_jnt.setTrn();
+                if(!mHasAttention) {
+                    vec2 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+                    s16 target = cLib_targetAngleY(&current.pos, &vec2);
+                    cLib_addCalcAngleS2(&current.angle.y, target, 4, 0x1800);
+                
+                }
+            }
+            if(mHasAttention) {
+                vec2 = dNpc_playerEyePos(l_HIO.mNpc.m04);
+                dstPos = &vec2;
+
+                vec = current.pos;
+                vec.y = eyePos.y;
+            }
+    }
+    if (m_jnt.trnChk()) {
+        lookParam = 0;
+    } else {
+        mLookAtMaxVel = 0;
+    }
+    m_jnt.lookAtTarget(
+        &current.angle.y, 
+        dstPos, 
+        vec, 
+        desired_y_rot, 
+        l_HIO.mNpc.mMaxHeadTurnVel, 
+        lookParam
+    );
 }
 
 /* 00000FF4-00001024       .text wait01__14daNpc_Sarace_cFv */
