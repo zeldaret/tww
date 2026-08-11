@@ -454,7 +454,14 @@ void daNpc_Sarace_c::lookBack() {
 
 /* 00000FF4-00001024       .text wait01__14daNpc_Sarace_cFv */
 void daNpc_Sarace_c::wait01() {
-    /* Nonmatching */
+    if (m729 != 0) {
+        mLookBackState = 2;
+        return;
+    }
+    if (mEventState != 0) {
+        return;
+    }
+    mEventState = 2;
 }
 
 /* 00001024-000014B8       .text talk01__14daNpc_Sarace_cFv */
