@@ -999,6 +999,9 @@ struct FuncTable {
     dStage_Func function;
 };
 
+
+dStage_KeepDoorInfo * dStage_GetKeepDoorInfo();
+
 s8 dStage_roomRead_dt_c_GetReverbStage(roomRead_class&, int);
 int dStage_mapInfo_GetOceanZ(stage_map_info_class*);
 int dStage_mapInfo_GetOceanX(stage_map_info_class*);

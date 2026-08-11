@@ -4,6 +4,7 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "d/d_map.h"
 #include "d/d_menu_dmap.h"
 #include "d/d_stage.h"
 #include "f_op/f_op_msg_mng.h"
@@ -258,20 +259,20 @@ void dMenu_Dmap_c::screenSet() {
     mMskPane.mInitAlpha = 0x82;
     mMsk0Pane.mInitAlpha = 0x82;
 
-    field_0x1E16 = mpmk.mPosCenterOrig.x;
-    field_0x1E18 = mpmk.mPosCenterOrig.y;
-    field_0x1E1A = mpmk.mSizeOrig.x;
-    field_0x1E1C = mpmk.mSizeOrig.y;
-    field_0x1E1E = mpp1pane.mPosCenterOrig.x;
-    field_0x1E20 = mpp1pane.mPosCenterOrig.y;
-    field_0x1E22 = mpp1pane.mSizeOrig.x;
-    field_0x1E24 = mpp1pane.mSizeOrig.y;
+    mMpmkPosX = mpmk.mPosCenterOrig.x;
+    mMpmkPosY = mpmk.mPosCenterOrig.y;
+    mMpmkSizeX = mpmk.mSizeOrig.x;
+    mMpmkSizeY = mpmk.mSizeOrig.y;
+    mMpp1PosX = mpp1pane.mPosCenterOrig.x;
+    mMpp1PosY = mpp1pane.mPosCenterOrig.y;
+    mMpp1SizeX = mpp1pane.mSizeOrig.x;
+    mMpp1SizeY = mpp1pane.mSizeOrig.y;
 
     J2DPane* p2 = scrn->search('mpp2');
     f32 h = p2->getHeight();
     p2 = scrn->search('mpp2');
     J2DPane* p1 = scrn->search('mpp1');
-    field_0x1E26 = p1->mBounds.i.y - (p2->mBounds.i.y + h);
+    mMppGapY = p1->mBounds.i.y - (p2->mBounds.i.y + h);
 }
 
 /* 801A92D4-801A9364       .text dMap_isBossDoor__FP21stage_tgsc_data_class */
@@ -291,7 +292,109 @@ BOOL dMap_isBossDoor(stage_tgsc_data_class* i_stage) {
 
 /* 801A9364-801A98EC       .text initialize__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::initialize() {
-    /* Nonmatching */
+    f32 yPos = dComIfGp_getPlayer(0)->current.pos.y;
+    mNm00Pane.mUserArea = 0;
+    mCurFloor = dMap_GetFloorNo(&dComIfGp_getStage(), yPos + mapOffsetY());
+    mBossFloor = 0xFF;
+
+    dStage_KeepDoorInfo* doorInfo = dStage_GetKeepDoorInfo();
+    stage_tgsc_data_class* tgsc = doorInfo->mDrTgData;
+    for (int i = 0; i < doorInfo->num; tgsc++, i++) {
+        if (dMap_isBossDoor(tgsc)) {
+            mBossFloor = dMap_GetFloorNo(&dComIfGp_getStage(), tgsc->base.position.y);
+        }
+    }
+
+    dMap_GetTopBottomFloorNo(&dComIfGp_getStage(), &mTopFloor, &mBottomFloor);
+    int stayNo = dComIfGp_roomControl_getStayNo();
+    u8 floorNo = dMap_GetFloorNoForDmap(&dComIfGp_getStage(), stayNo, yPos + mapOffsetY());
+    dmap_c->init(mMpmkPosX, mMpmkPosY, mMpmkSizeX, mMpmkSizeY,
+        mMpp1PosX, mMpp1PosY, mMpp1SizeX, mMpp1SizeY, mMppGapY,
+        mTopFloor, mBottomFloor, stayNo, floorNo, 0xFF);
+    mCurFloorMapY = mMpp1PosY + (mCurFloor - 0x80) * (mMpp1SizeY + mMppGapY);
+    mMapDrawOffsetY = 0x1E0;
+    mFloorListOffsetY = (mFbPanes[0].mPosCenterOrig.y - mFbPanes[1].mPosCenterOrig.y) * (mBottomFloor - mCurFloor);
+    if (mBossFloor != 0xFF) {
+        mBossFloorListOffsetY = (mFbPanes[0].mPosCenterOrig.y - mFbPanes[1].mPosCenterOrig.y) * (mBottomFloor - mBossFloor);
+    } else {
+        mBossFloorListOffsetY = 0;
+    }
+
+    s16 y = mMpmkPosY + mMapDrawOffsetY;
+    dMap_Dmap_c* dmap = dmap_c;
+    dmap->field_0x35C = mMpmkPosX;
+    dmap->field_0x35E = y;
+
+    y = mCurFloorMapY + mMapDrawOffsetY;
+    dmap = dmap_c;
+    dmap->field_0x364 = mMpp1PosX;
+    dmap->field_0x366 = y;
+
+    for (int i = 0; i < (mTopFloor - mBottomFloor + 1); i++) {
+        J2DPane* pane = mFlPanes[i].pane;
+        changeFloorTexture(pane, mBottomFloor - 0x76 + i);
+    }
+
+    mLnkTimer2 = cM_rndF(100.0f) + 100.0f;
+    mLnkTimer1 = cM_rndF(50.0f) + 100.0f;
+    mLnkTexFlip2 = false;
+    mLnkTexFlip1 = false;
+    mLnkPanes[1].mUserArea = 0;
+    mLnkPanes[2].mUserArea = 0;
+    mBossPane.mUserArea = 100;
+    mBos2Pane.mUserArea = cM_rndF(200.0f) + 300.0f;
+    mBossEyeState = 0;
+    mBossEyeTimer = ((int)(cM_rndF(18.0f) + 40.0f)) << 1;
+
+    f32 scale = 0.5f;
+    mCarOfsX[0] = -(mItPanes[0].mSizeOrig.x) * scale;
+    mCarOfsY[0] =  (mItPanes[0].mSizeOrig.y) * scale;
+    mCarOfsX[1] =  (mItPanes[0].mSizeOrig.x) * scale;
+    mCarOfsY[1] =  (mItPanes[0].mSizeOrig.y) * scale;
+    mCarOfsX[2] = -(mItPanes[0].mSizeOrig.x) * scale;
+    mCarOfsY[2] = -(mItPanes[0].mSizeOrig.y) * scale;
+    mCarOfsX[3] =  (mItPanes[0].mSizeOrig.x) * scale;
+    mCarOfsY[3] = -(mItPanes[0].mSizeOrig.y) * scale;
+
+    mCarFloorOfsX[0] = -(mFbPanes[0].mSizeOrig.x) * scale;
+    mCarFloorOfsY[0] =  (mFbPanes[0].mSizeOrig.y) * scale;
+    mCarFloorOfsX[1] =  (mFbPanes[0].mSizeOrig.x) * scale;
+    mCarFloorOfsY[1] =  (mFbPanes[0].mSizeOrig.y) * scale;
+    mCarFloorOfsX[2] = -(mFbPanes[0].mSizeOrig.x) * scale;
+    mCarFloorOfsY[2] = -(mFbPanes[0].mSizeOrig.y) * scale;
+    mCarFloorOfsX[3] =  (mFbPanes[0].mSizeOrig.x) * scale;
+    mCarFloorOfsY[3] = -(mFbPanes[0].mSizeOrig.y) * scale;
+
+    floorInit();
+    itemScale();
+    if (!dComIfGs_isDungeonItemMap()) {
+        mItPanes[0].pane->hide();
+        mIkPanes[0].pane->hide();
+        mIpPanes[0].pane->hide();
+    }
+    if (!dComIfGs_isDungeonItemBossKey()) {
+        mItPanes[1].pane->hide();
+        mIkPanes[1].pane->hide();
+        mIpPanes[1].pane->hide();
+    }
+    if (!dComIfGs_isDungeonItemCompass()) {
+        mItPanes[2].pane->hide();
+        mIkPanes[2].pane->hide();
+        mIpPanes[2].pane->hide();
+    }
+    if (!dComIfGs_isDungeonItemCompass() || mBossFloor == 0xFF) {
+        mBossPane.pane->hide();
+    }
+    noteInit();
+    if ((mSelectItem == 0 && dComIfGs_isDungeonItemMap()) ||
+        (mSelectItem == 1 && dComIfGs_isDungeonItemBossKey()) ||
+        (mSelectItem == 2 && dComIfGs_isDungeonItemCompass())
+    ) {
+        dComIfGp_setDoStatusForce(dActStts_INFO_e);
+    } else {
+        dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+        dComIfGp_setDoStatus(dActStts_BLANK_e);
+    }
 }
 
 /* 801A98EC-801AAE10       .text treasureSet__12dMenu_Dmap_cFv */
@@ -375,8 +478,9 @@ void dMenu_Dmap_c::mapMove() {
 }
 
 /* 801AD000-801AD130       .text mapOffsetY__12dMenu_Dmap_cFv */
-void dMenu_Dmap_c::mapOffsetY() {
+f32 dMenu_Dmap_c::mapOffsetY() {
     /* Nonmatching */
+    return 0.0f;
 }
 
 /* 801AD130-801AD1A8       .text itemnameMove__12dMenu_Dmap_cFv */
