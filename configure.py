@@ -1556,7 +1556,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_kn"),
     ActorRel(Matching,    "d_a_kokiie"),
     ActorRel(Matching,    "d_a_ks"),
-    ActorRel(NonMatching, "d_a_kt"), # regalloc
+    ActorRel(Equivalent,  "d_a_kt"), # regalloc (kotori_move)
     ActorRel(Matching,    "d_a_mflft"),
     ActorRel(MatchingFor("GZLE01", "GZLP01"),    "d_a_npc_cb1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_md"),
