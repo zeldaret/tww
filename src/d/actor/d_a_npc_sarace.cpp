@@ -375,8 +375,8 @@ BOOL daNpc_Sarace_c::CreateInit() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 173;
     set_mtx();
     mMiniGameMessage = 0;
-    m6D8 = -1;
-    m6DC = -1;
+    mHBarrelId = -1;
+    mVBarrelId = -1;
     setAnm(dRes_ID_SARACE_BCK_SA01HEAD_TALK01_e, -1.0);
     if(
         dComIfGp_getStartStagePoint() == 1
@@ -476,9 +476,9 @@ void daNpc_Sarace_c::talk01() {
                 cXyz(176030, 50, 278884)
 
             };
-            dComIfGp_event_onEventFlag(dEvtFlag_UNK8_e);
+            dComIfGp_event_reset();
             mEventState = 3;
-            m6D8 = fopAcM_create(
+            mHBarrelId = fopAcM_create(
                 fpcNm_Obj_Barrel2_e,
                 daObjBarrel2::Act_c::make_prm(
                     daObjBarrel2::Type_01_e,
@@ -494,7 +494,7 @@ void daNpc_Sarace_c::talk01() {
                 0xFF,
                 NULL
             );
-            m6DC = fopAcM_create(
+            mVBarrelId = fopAcM_create(
                 fpcNm_Obj_Barrel2_e,
                 daObjBarrel2::Act_c::make_prm(
                     daObjBarrel2::Type_00_e,
@@ -531,7 +531,7 @@ void daNpc_Sarace_c::talk01() {
             }
             setAction(&daNpc_Sarace_c::dummy_action, NULL);
         } else {
-            dComIfGp_event_onEventFlag(dEvtFlag_UNK8_e);
+            dComIfGp_event_reset();
             ship_race_result = 0;
             ship_race_rupee = 0;
             setAnm(0, -1.0f);
@@ -592,7 +592,25 @@ BOOL daNpc_Sarace_c::wait_action(void* i_arg) {
 
 /* 000015BC-0000173C       .text event_endCheck_action__14daNpc_Sarace_cFPv */
 BOOL daNpc_Sarace_c::event_endCheck_action(void* i_arg) {
-    /* Nonmatching */
+    if(mActionStatus == 0) {
+        mActionStatus++;
+    } else if(mActionStatus != -1) {
+        if(dComIfGp_evmng_endCheck("SARACE_EXPCAM")) {
+            mMiniGameMessage = 0xFA7;
+            dComIfGp_event_reset();
+            mEventState = 1;
+            setAction(&daNpc_Sarace_c::wait_action, NULL);
+            daObjBarrel2::Act_c* HBarrelP = getHBarrelP();
+            daObjBarrel2::Act_c* VBarrelP = getVBarrelP();
+            if (HBarrelP != NULL) {
+                HBarrelP->m475 = 1;
+            }
+            if (VBarrelP != NULL) {
+                VBarrelP->m475 = 1;
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 0000173C-000017E0       .text set_mtx__14daNpc_Sarace_cFv */

@@ -11,8 +11,8 @@ class daRaceItem_c;
 
 namespace daObjBarrel2 {
     enum Type_e {
-        Type_00_e = 0x0,
-        Type_01_e = 0x1,
+        Type_00_e = 0x0, // Vertical barrel
+        Type_01_e = 0x1, // Horizontal barrel
     };
 
     struct Attr_c {

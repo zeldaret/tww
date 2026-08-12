@@ -1,8 +1,10 @@
 #ifndef D_A_NPC_SARACE_H
 #define D_A_NPC_SARACE_H
 
+#include "d/actor/d_a_obj_barrel2.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
 class daNpc_Sarace_c : public fopNpc_npc_c {
@@ -18,8 +20,12 @@ public:
 
     void getAttentionBasePos() {}
     void getEyePos() {}
-    void getHBarrelP() {}
-    void getVBarrelP() {}
+    daObjBarrel2::Act_c * getHBarrelP() {
+        return (daObjBarrel2::Act_c* )fopAcM_SearchByID(mHBarrelId);
+    }
+    daObjBarrel2::Act_c * getVBarrelP() {
+        return (daObjBarrel2::Act_c* )fopAcM_SearchByID(mVBarrelId);
+    }
     void init() {}
     void setAction(ProcFunc func, void* arg) {
         if (mCurrActionFunc != func) {
@@ -66,8 +72,8 @@ public:
     /* 0x6C4 */ u8 field_0x6C4[0x6CC - 0x6C4];
     /* 0x6CC */ mDoExt_McaMorf* mpHeadMorf;
     /* 0x6D0 */ u8 field_0x6D0[0x6D8 - 0x6D0];
-    /* 0x6D8 */ fpc_ProcID m6D8;
-    /* 0x6DC */ fpc_ProcID m6DC;
+    /* 0x6D8 */ fpc_ProcID mHBarrelId;
+    /* 0x6DC */ fpc_ProcID mVBarrelId;
     /* 0x6E0 */ J3DAnmTexPattern* m_btp;
     /* 0x6E4 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F8 */ u8 mBlinkFrame;
