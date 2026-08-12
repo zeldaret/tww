@@ -1420,7 +1420,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bflower"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bita"),
     ActorRel(Matching,    "d_a_branch"),
-    ActorRel(NonMatching, "d_a_bridge"),
+    ActorRel(Equivalent,  "d_a_bridge"), # regalloc (2 fns 99.78/99.90)
     ActorRel(Matching,    "d_a_coming2"),
     ActorRel(Matching,    "d_a_coming3"),
     ActorRel(Matching,    "d_a_demo_dk"),
