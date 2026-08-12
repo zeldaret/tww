@@ -310,8 +310,6 @@ u16 daNpc_Sarace_c::next_msgStatus(u32* i_msg_no) {
         case 0xfa9:
             *i_msg_no = 0xfa3;
             break;
-        
-        
         default:
             msg_status = 0x10;
             break;
@@ -766,7 +764,6 @@ cPhs_State daNpc_Sarace_c::_create() {
 
 /* 000020CC-00002498       .text CreateHeap__14daNpc_Sarace_cFv */
 BOOL daNpc_Sarace_c::CreateHeap() {
-    /* Nonmatching */
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Sarace", dRes_INDEX_SARACE_BDL_SA_e));
     JUT_ASSERT(DEMO_SELECT(999, 1008), modelData != NULL);
     mpMorf = new mDoExt_McaMorf(

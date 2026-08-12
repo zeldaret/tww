@@ -78,7 +78,6 @@ public:
     /* 0x6E0 */ J3DAnmTexPattern* m_btp;
     /* 0x6E4 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F8 */ u8 mBlinkFrame;
-    /* 0x6F9 */ u8 field_0x6F9[0x6FA - 0x6F9];
     /* 0x6FA */ s16 mBlinkTimer;
     /* 0x6FC */ cXyz mEyePos;
     /* 0x708 */ cXyz mAttPos;
@@ -91,7 +90,6 @@ public:
     /* 0x729 */ u8 m729;
     /* 0x72A */ u8 field_0x72A[0x730 - 0x72A];
     /* 0x730 */ s8 m730;
-    /* 0x731 */ u8 field_0x731[0x734 - 0x731];
     /* 0x734 */ ProcFunc mCurrActionFunc;
     /* 0x740 */ s8 mTexPatternNum;
     /* 0x741 */ s8 mCurrentAnm;
@@ -99,7 +97,7 @@ public:
     /* 0x743 */ s8 mLookBackState;
     /* 0x744 */ u8 field_0x744[0x746 - 0x744];
     /* 0x746 */ s8 mActionStatus;
-    /* 0x747 */ u8 field_0x747[0x748 - 0x747];
+    /* 0x747 */ //u8 field_0x747[0x748 - 0x747];
 };  // Size: 0x748
 
 
