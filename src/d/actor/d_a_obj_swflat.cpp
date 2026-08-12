@@ -210,6 +210,7 @@ void daObjSwflat::Act_c::init_mtx() {
 
 /* 00000B20-0000121C       .text Execute__Q211daObjSwflat5Act_cFPPA3_A4_f */
 BOOL daObjSwflat::Act_c::Execute(Mtx** pMtx) {
+    u8 hit;
     u8 player_on = FALSE;
     mCyl.SetC(current.pos);
     if (l_HIO.mbDebug) {
@@ -218,7 +219,7 @@ BOOL daObjSwflat::Act_c::Execute(Mtx** pMtx) {
     }
     dComIfG_Ccsp()->Set(&mCyl);
 
-    u8 hit = FALSE;
+    hit = FALSE;
     if (mCyl.ChkCoHit()) {
         fopAc_ac_c* actor = mCyl.GetCoHitAc();
         if (actor != NULL) {
