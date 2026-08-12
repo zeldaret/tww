@@ -29,7 +29,7 @@ struct dMap_pane_c {
 
 class dMenu_Dmap_c : public dMenu_base_c {
 public:
-    void alphaChange(fopMsgM_pane_class*, float) {}
+    void alphaChange(fopMsgM_pane_class*, f32) {}
     virtual void draw() { _draw(); }
     void setArchive(JKRArchive* arc) { mpArc = arc; }
     void setFont(JUTFont* font, JUTFont* rfont) {
@@ -51,9 +51,9 @@ public:
     void initialize();
     void treasureSet();
     void treasureDraw();
-    void paneMove(float);
-    void paneAlpha(float);
-    void decAlpha(float);
+    void paneMove(f32);
+    void paneAlpha(f32);
+    void decAlpha(f32);
     void cursorMove();
     void cursorAnime();
     void noteInit();
@@ -61,7 +61,7 @@ public:
     void noteAppear();
     void noteOpen();
     void noteClose();
-    void noteOpenProc(short);
+    void noteOpenProc(s16);
     void itemScale();
     void floorInit();
     void mapMove();

@@ -688,7 +688,7 @@ void dMenu_Dmap_c::treasureDraw() {
 }
 
 /* 801AB20C-801AB464       .text paneMove__12dMenu_Dmap_cFf */
-void dMenu_Dmap_c::paneMove(float i_y) {
+void dMenu_Dmap_c::paneMove(f32 i_y) {
     fopMsgM_paneTrans(&mDt00Pane, 0.0f, i_y);
     fopMsgM_paneTrans(&mDk00Pane, 0.0f, i_y);
     fopMsgM_paneTrans(&mNm00Pane, 0.0f, i_y);
@@ -727,13 +727,97 @@ void dMenu_Dmap_c::paneMove(float i_y) {
 }
 
 /* 801AB464-801AB630       .text paneAlpha__12dMenu_Dmap_cFf */
-void dMenu_Dmap_c::paneAlpha(float) {
-    /* Nonmatching */
+void dMenu_Dmap_c::paneAlpha(f32 i_alpha) {
+    fopMsgM_setNowAlpha(&mDtlePane, i_alpha);
+    fopMsgM_setNowAlpha(&mDt00Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mDk00Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mItnmPane, i_alpha);
+    fopMsgM_setNowAlpha(&mItnkPane, i_alpha);
+
+    for (int i = 0; i < 4; i++) {
+        fopMsgM_setNowAlpha(&mCarPanes[i], i_alpha);
+    }
+
+    for (int i = 0; i < 3; i++) {
+        fopMsgM_setNowAlpha(&mItPanes[i], i_alpha);
+        fopMsgM_setNowAlpha(&mIkPanes[i], i_alpha);
+        fopMsgM_setNowAlpha(&mIpPanes[i], i_alpha);
+    }
+
+    fopMsgM_setNowAlpha(&mIp01Pane, i_alpha);
+    fopMsgM_setNowAlpha(mLnkPanes, i_alpha);
+    fopMsgM_setNowAlpha(&mBossPane, i_alpha);
+
+    for (int i = 0; i < mTopFloor - mBottomFloor + 1; i++) {
+        fopMsgM_setNowAlpha(&mFlPanes[i], i_alpha);
+        fopMsgM_setNowAlpha(&mFbPanes[i], i_alpha);
+        fopMsgM_setNowAlpha(&mFbkPanes[i], i_alpha);
+    }
+
+    fopMsgM_setNowAlpha(&mFw00Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mFw01Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mCc38Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mCc31Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mCc24Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mCc17Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mCc10Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mCc05pane, i_alpha);
+    fopMsgM_setNowAlpha(&mCc00Pane, i_alpha);
+    fopMsgM_setNowAlpha(&mMskPane, i_alpha);
 }
 
 /* 801AB630-801ABC64       .text decAlpha__12dMenu_Dmap_cFf */
-void dMenu_Dmap_c::decAlpha(float) {
-    /* Nonmatching */
+void dMenu_Dmap_c::decAlpha(f32 i_alpha) {
+    for (int i = 0; i < 15; i++) {
+        mFtPanes[i].mNowAlpha *= i_alpha;
+    }
+
+    for (int i = 0; i < 4; i++) {
+        mCarPanes[i].mNowAlpha *= i_alpha;
+    }
+
+    mNm00Pane.mNowAlpha *= i_alpha;
+    mNm01Pane.mNowAlpha *= i_alpha;
+    mItnmPane.mNowAlpha *= i_alpha;
+    mItnkPane.mNowAlpha *= i_alpha;
+    mMsk0Pane.mNowAlpha *= i_alpha;
+    mStr0Pane.mNowAlpha *= i_alpha;
+    mSt00Pane.mNowAlpha *= i_alpha;
+    mNt00Pane.mNowAlpha *= i_alpha;
+    mNk00Pane.mNowAlpha *= i_alpha;
+    mNo11Pane.mNowAlpha *= i_alpha;
+    mDtlePane.mNowAlpha *= i_alpha;
+    mDt00Pane.mNowAlpha *= i_alpha;
+    mDk00Pane.mNowAlpha *= i_alpha;
+
+    for (int i = 0; i < 3; i++) {
+        mItPanes[i].mNowAlpha *= i_alpha;
+        mIkPanes[i].mNowAlpha *= i_alpha;
+        mIpPanes[i].mNowAlpha *= i_alpha;
+    }
+
+    mIp01Pane.mNowAlpha *= i_alpha;
+    mLnkPanes[0].mNowAlpha *= i_alpha;
+    mBey1Pane.mNowAlpha *= i_alpha;
+    mBey2Pane.mNowAlpha *= i_alpha;
+    mBossPane.mNowAlpha *= i_alpha;
+
+    for (int i = 0; i < 6; i++) {
+        mFlPanes[i].mNowAlpha *= i_alpha;
+        mFbPanes[i].mNowAlpha *= i_alpha;
+        mFbkPanes[i].mNowAlpha *= i_alpha;
+    }
+
+    mFw00Pane.mNowAlpha *= i_alpha;
+    mFw01Pane.mNowAlpha *= i_alpha;
+    mCc38Pane.mNowAlpha *= i_alpha;
+    mCc31Pane.mNowAlpha *= i_alpha;
+    mCc24Pane.mNowAlpha *= i_alpha;
+    mCc17Pane.mNowAlpha *= i_alpha;
+    mCc10Pane.mNowAlpha *= i_alpha;
+    mCc05pane.mNowAlpha *= i_alpha;
+    mCc00Pane.mNowAlpha *= i_alpha;
+    mMskPane.mNowAlpha *= i_alpha;
 }
 
 /* 801ABC64-801AC00C       .text cursorMove__12dMenu_Dmap_cFv */
