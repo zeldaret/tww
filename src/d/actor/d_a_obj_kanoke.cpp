@@ -260,7 +260,7 @@ BOOL daObjKanoke_c::_delete() {
         dComIfG_Bgsp()->Release(mpLidBgW);
     }
     for (int i = 0; i < 2; i++) {
-        // The demo build retains an empty emitter loop.
+        // Preserve the empty counted loop emitted by the D44J01 target.
     }
 #endif
     mSmokeCallback.remove();
