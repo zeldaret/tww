@@ -648,10 +648,9 @@ int dMenu_Collect_c::stickDirection(unsigned char param_1) {
 
 /* 8019D5A8-8019E570       .text cursorMainMove__15dMenu_Collect_cFv */
 u8 dMenu_Collect_c::cursorMainMove() {
-    /* Nonmatching */
-    u8 found;
-    int check;
-    uint old_item;
+    int direction;
+    bool found;
+    u8 old_item;
     f32 trans;
     u8 tact_no[6];
 
@@ -679,11 +678,16 @@ u8 dMenu_Collect_c::cursorMainMove() {
         {0x05, 0x09, 0x09, 0xFF, 0x11, 0x10, 0x0F, 0x0A},
     };
 
-    u8 direction = 0xFF;
+    direction = 0xFF;
+
     u8 trigger = stick->checkTrigger();
     u8 previous_item = mNowItem;
-    u8 next_item = 0xFF;
-    bool moved = false;
+
+    u8 moved;
+    u8 next_item;
+
+    next_item = 0xFF;
+    moved = false;
 
     if (stick->checkRightTrigger()) {
         moved = true;
@@ -701,11 +705,11 @@ u8 dMenu_Collect_c::cursorMainMove() {
         direction = stickDirection(trigger);
     }
 
-    if (direction != 0xFF) {
+    if ((u8)direction != 0xFF) {
         found = false;
         old_item = mNowItem;
 
-        next_item = item[mNowItem][direction];
+        next_item = item[mNowItem][(u8)direction];
 
         switch (next_item) {
         case 0:
@@ -728,11 +732,10 @@ u8 dMenu_Collect_c::cursorMainMove() {
                 if (!found) {
                     next_item = 0x13;
                 }
-            } else if (old_item == next_item ||
-                       !dComIfGs_isTact(next_item)) {
-                if (direction == 0 || direction == 1) {
+            } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
+                if ((u8)direction == 0 || (u8)direction == 1) {
                     next_item = 0x0E;
-                } else if (direction == 5 || direction == 6) {
+                } else if ((u8)direction == 5 || (u8)direction == 6) {
                     tact_no[0] = 1;
                     tact_no[1] = 2;
                     tact_no[2] = 3;
@@ -774,18 +777,16 @@ u8 dMenu_Collect_c::cursorMainMove() {
                 if (!found) {
                     next_item = 0x13;
                 }
-            } else if (old_item == next_item ||
-                       dComIfGs_isTact(next_item)) {
-                if (direction == 0 || direction == 1) {
+            } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
+                if ((u8)direction == 0 || (u8)direction == 1) {
                     tact_no[0] = 0;
 
-                    check = dComIfGs_isTact(0);
-                    next_item = tact_no[0];
-
-                    if (check == 0) {
+                    if (dComIfGs_isTact(0)) {
+                        next_item = tact_no[0];
+                    } else {
                         next_item = 0x0E;
                     }
-                } else if (direction == 5 || direction == 6) {
+                } else if ((u8)direction == 5 || (u8)direction == 6) {
                     tact_no[0] = 2;
                     tact_no[1] = 3;
                     tact_no[2] = 4;
@@ -807,7 +808,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
             break;
 
         case 2:
-            if (old_item < 6) {
+            if (old_item > 5) {
                 tact_no[0] = 2;
                 tact_no[1] = 1;
                 tact_no[2] = 3;
@@ -826,9 +827,8 @@ u8 dMenu_Collect_c::cursorMainMove() {
                 if (!found) {
                     next_item = 0x13;
                 }
-            } else if (old_item == next_item ||
-                       dComIfGs_isTact(next_item)) {
-                if (direction == 0 || direction == 1) {
+            } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
+                if ((u8)direction == 0 || (u8)direction == 1) {
                     tact_no[0] = 1;
                     tact_no[1] = 0;
 
@@ -843,7 +843,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     if (!found) {
                         next_item = 0x0E;
                     }
-                } else if (direction == 5 || direction == 6) {
+                } else if ((u8)direction == 5 || (u8)direction == 6) {
                     tact_no[0] = 3;
                     tact_no[1] = 4;
                     tact_no[2] = 5;
@@ -864,43 +864,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
             break;
 
         case 3:
-            if (old_item < 6) {
-                if (old_item == next_item ||
-                    dComIfGs_isTact(next_item)) {
-                    if (direction == 0 || direction == 1) {
-                        tact_no[0] = 2;
-                        tact_no[1] = 1;
-                        tact_no[2] = 0;
-
-                        for (int i = 0; i < 3; i++) {
-                            if (dComIfGs_isTact(tact_no[i])) {
-                                next_item = tact_no[i];
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            next_item = 0x0E;
-                        }
-                    } else if (direction == 5 || direction == 6) {
-                        tact_no[0] = 4;
-                        tact_no[1] = 5;
-
-                        for (int i = 0; i < 2; i++) {
-                            if (dComIfGs_isTact(tact_no[i])) {
-                                next_item = tact_no[i];
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            next_item = 10;
-                        }
-                    }
-                }
-            } else {
+            if (old_item > 5) {
                 tact_no[0] = 3;
                 tact_no[1] = 2;
                 tact_no[2] = 4;
@@ -918,53 +882,50 @@ u8 dMenu_Collect_c::cursorMainMove() {
 
                 if (!found) {
                     next_item = 0x13;
+                }
+            } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
+                if ((u8)direction == 0 || (u8)direction == 1) {
+                    tact_no[0] = 2;
+                    tact_no[1] = 1;
+                    tact_no[2] = 0;
+
+                    for (int i = 0; i < 3; i++) {
+                        if (dComIfGs_isTact(tact_no[i])) {
+                            next_item = tact_no[i];
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        next_item = 0x0E;
+                    }
+                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                    tact_no[0] = 4;
+                    tact_no[1] = 5;
+
+                    for (int i = 0; i < 2; i++) {
+                        if (dComIfGs_isTact(tact_no[i])) {
+                            next_item = tact_no[i];
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        next_item = 10;
+                    }
                 }
             }
             break;
 
         case 4:
-            if (old_item < 6) {
-                if (old_item == next_item ||
-                    dComIfGs_isTact(next_item)) {
-                    if (direction == 0 || direction == 1) {
-                        tact_no[0] = 2;
-                        tact_no[1] = 1;
-                        tact_no[2] = 0;
-
-                        for (int i = 0; i < 3; i++) {
-                            if (dComIfGs_isTact(tact_no[i])) {
-                                next_item = tact_no[i];
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            next_item = 0x0E;
-                        }
-                    } else if (direction == 5 || direction == 6) {
-                        tact_no[0] = 4;
-                        tact_no[1] = 5;
-
-                        for (int i = 0; i < 2; i++) {
-                            if (dComIfGs_isTact(tact_no[i])) {
-                                next_item = tact_no[i];
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            next_item = 10;
-                        }
-                    }
-                }
-            } else {
-                tact_no[0] = 3;
-                tact_no[1] = 2;
-                tact_no[2] = 4;
-                tact_no[3] = 1;
-                tact_no[4] = 5;
+            if (old_item > 5) {
+                tact_no[0] = 4;
+                tact_no[1] = 3;
+                tact_no[2] = 5;
+                tact_no[3] = 2;
+                tact_no[4] = 1;
                 tact_no[5] = 0;
 
                 for (int i = 0; i < 6; i++) {
@@ -977,53 +938,47 @@ u8 dMenu_Collect_c::cursorMainMove() {
 
                 if (!found) {
                     next_item = 0x13;
+                }
+            } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
+                if ((u8)direction == 0 || (u8)direction == 1) {
+                    tact_no[0] = 3;
+                    tact_no[1] = 2;
+                    tact_no[2] = 1;
+                    tact_no[3] = 0;
+
+                    for (int i = 0; i < 4; i++) {
+                        if (dComIfGs_isTact(tact_no[i])) {
+                            next_item = tact_no[i];
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        next_item = 0x0E;
+                    }
+                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                    tact_no[0] = 5;
+
+                    if (dComIfGs_isTact(5)) {
+                        next_item = tact_no[0];
+                        found = true;
+                    }
+
+                    if (!found) {
+                        next_item = 10;
+                    }
                 }
             }
             break;
 
         case 5:
-            if (old_item < 6) {
-                if (old_item == next_item ||
-                    dComIfGs_isTact(next_item)) {
-                    if (direction == 0 || direction == 1) {
-                        tact_no[0] = 2;
-                        tact_no[1] = 1;
-                        tact_no[2] = 0;
-
-                        for (int i = 0; i < 3; i++) {
-                            if (dComIfGs_isTact(tact_no[i])) {
-                                next_item = tact_no[i];
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            next_item = 0x0E;
-                        }
-                    } else if (direction == 5 || direction == 6) {
-                        tact_no[0] = 4;
-                        tact_no[1] = 5;
-
-                        for (int i = 0; i < 2; i++) {
-                            if (dComIfGs_isTact(tact_no[i])) {
-                                next_item = tact_no[i];
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            next_item = 10;
-                        }
-                    }
-                }
-            } else {
-                tact_no[0] = 3;
-                tact_no[1] = 2;
-                tact_no[2] = 4;
-                tact_no[3] = 1;
-                tact_no[4] = 5;
+            if (old_item > 5) {
+                tact_no[0] = 5;
+                tact_no[1] = 4;
+                tact_no[2] = 3;
+                tact_no[3] = 2;
+                tact_no[4] = 1;
                 tact_no[5] = 0;
 
                 for (int i = 0; i < 6; i++) {
@@ -1037,13 +992,33 @@ u8 dMenu_Collect_c::cursorMainMove() {
                 if (!found) {
                     next_item = 0x13;
                 }
+            } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
+                if ((u8)direction == 0 || (u8)direction == 1) {
+                    tact_no[0] = 4;
+                    tact_no[1] = 3;
+                    tact_no[2] = 2;
+                    tact_no[3] = 1;
+                    tact_no[4] = 0;
+
+                    for (int i = 0; i < 5; i++) {
+                        if (dComIfGs_isTact(tact_no[i])) {
+                            next_item = tact_no[i];
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        next_item = 0x0E;
+                    }
+                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                    next_item = 10;
+                }
             }
             break;
 
         case 0x0B:
-            if (old_item == 0x0B ||
-                old_item == 0x0C ||
-                old_item == 0x0D) {
+            if (old_item != 0x0B && old_item != 0x0C && old_item != 0x0D) {
                 tact_no[0] = 0x0B;
                 tact_no[1] = 0x0C;
                 tact_no[2] = 0x0D;
@@ -1059,22 +1034,19 @@ u8 dMenu_Collect_c::cursorMainMove() {
                 if (!found) {
                     next_item = 0x14;
                 }
-            } else if (old_item == next_item ||
-                       !dComIfGs_isSymbol(next_item - 0x0B)) {
-                if (direction == 1) {
+            } else if (old_item == next_item || !dComIfGs_isSymbol(next_item - 0x0B)) {
+                if ((u8)direction == 1) {
                     next_item = 9;
-                } else if (direction == 5 || direction == 6) {
+                } else if ((u8)direction == 5 || (u8)direction == 6) {
                     next_item = 0x11;
-                } else if (direction == 0 || direction == 7) {
+                } else if ((u8)direction == 0 || (u8)direction == 7) {
                     next_item = 10;
                 }
             }
             break;
 
         case 0x0C:
-            if (old_item == 0x0B ||
-                old_item == 0x0C ||
-                old_item == 0x0D) {
+            if (old_item != 0x0B && old_item != 0x0C && old_item != 0x0D) {
                 tact_no[0] = 0x0C;
                 tact_no[1] = 0x0B;
                 tact_no[2] = 0x0D;
@@ -1090,17 +1062,16 @@ u8 dMenu_Collect_c::cursorMainMove() {
                 if (!found) {
                     next_item = 0x14;
                 }
-            } else if (old_item == next_item ||
-                       !dComIfGs_isSymbol(next_item - 0x0B)) {
-                if (direction == 1) {
+            } else if (old_item == next_item || !dComIfGs_isSymbol(next_item - 0x0B)) {
+                if ((u8)direction == 1) {
                     next_item = 9;
-                } else if (direction == 5 || direction == 6) {
+                } else if ((u8)direction == 5 || (u8)direction == 6) {
                     next_item = 0x0B;
 
                     if (!dComIfGs_isSymbol(0)) {
                         next_item = 0x11;
                     }
-                } else if (direction == 0 || direction == 7) {
+                } else if ((u8)direction == 0 || (u8)direction == 7) {
                     next_item = 0x0B;
 
                     if (!dComIfGs_isSymbol(0)) {
@@ -1111,9 +1082,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
             break;
 
         case 0x0D:
-            if (old_item != 0x0B &&
-                old_item != 0x0C &&
-                old_item != 0x0D) {
+            if (old_item != 0x0B && old_item != 0x0C && old_item != 0x0D) {
                 tact_no[0] = 0x0D;
                 tact_no[1] = 0x0C;
                 tact_no[2] = 0x0B;
@@ -1129,17 +1098,16 @@ u8 dMenu_Collect_c::cursorMainMove() {
                 if (!found) {
                     next_item = 0x14;
                 }
-            } else if (old_item == next_item ||
-                       !dComIfGs_isSymbol(next_item - 0x0B)) {
-                if (direction == 1) {
+            } else if (old_item == next_item || !dComIfGs_isSymbol(next_item - 0x0B)) {
+                if ((u8)direction == 1) {
                     next_item = 0x0C;
 
                     if (!dComIfGs_isSymbol(1)) {
                         next_item = 9;
                     }
-                } else if (direction == 5 || direction == 6) {
+                } else if ((u8)direction == 5 || (u8)direction == 6) {
                     next_item = 0x11;
-                } else if (direction == 0 || direction == 7) {
+                } else if ((u8)direction == 0 || (u8)direction == 7) {
                     next_item = 0x0B;
 
                     if (!dComIfGs_isSymbol(0)) {
@@ -1156,10 +1124,8 @@ u8 dMenu_Collect_c::cursorMainMove() {
     }
 
     if (mNowItem != previous_item) {
-        if (((mNowItem <= 0x0D || mNowItem >= 0x13) &&
-             (previous_item > 0x0D && previous_item < 0x13)) ||
-            ((previous_item <= 0x0D || previous_item >= 0x13) &&
-             (mNowItem > 0x0D && mNowItem < 0x13))) {
+        if (((mNowItem <= 0x0D || mNowItem >= 0x13) && (previous_item > 0x0D && previous_item < 0x13)) ||
+            ((previous_item <= 0x0D || previous_item >= 0x13) && (mNowItem > 0x0D && mNowItem < 0x13))) {
             mA18[1].mUserArea = 10;
         }
 
@@ -1177,7 +1143,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
 
         m858.mUserArea = 0;
         itemnameSet();
-        mDoAud_seStart(0x80E, NULL, 0);
+        mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
     }
 
     switch (mNowItem) {
@@ -1190,33 +1156,31 @@ u8 dMenu_Collect_c::cursorMainMove() {
     case 6:
     case 7:
         if (collectItemGetCheck(mNowItem)) {
-            dComIfGp_setDoStatusForce(0x17);
+            dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
         } else {
-            dComIfGp_setDoStatusForce(0);
-            dComIfGp_setDoStatus(0);
+            dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+            dComIfGp_setDoStatus(dActStts_BLANK_e);
         }
         break;
 
     default:
         if (collectItemGetCheck(mNowItem)) {
-            dComIfGp_setDoStatusForce(0x21);
+            dComIfGp_setDoStatusForce(dActStts_INFO_e);
         } else {
-            dComIfGp_setDoStatusForce(0);
-            dComIfGp_setDoStatus(0);
+            dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+            dComIfGp_setDoStatus(dActStts_BLANK_e);
         }
         break;
     }
 
     if (mA18[1].mUserArea) {
+        trans = 10.0f;
+
         mA18[1].mUserArea--;
 
-        trans =
-            fopMsgM_valueIncrease(
-                5,
-                5 - abs(5 - mA18[1].mUserArea),
-                0
-            ) *
-            10.0f;
+        s16 amount = 5 - abs(5 - mA18[1].mUserArea);
+
+        trans *= fopMsgM_valueIncrease(5, amount, 0);
 
         mainTrans(-trans, 0.0f);
         subTrans(trans, 0.0f);
@@ -2383,7 +2347,7 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
                 }
 
                 m15E8[0].mUserArea = 0;
-                mDoAud_seStart(0x8F7);
+                mDoAud_seStart(JA_SE_COLL_TAKT_WRONG);
             }
         }
 
@@ -2416,7 +2380,7 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
         }
     } else {
         if (--m27E4 <= 0) {
-            mDoAud_seStart(0x8F6);
+            mDoAud_seStart(JA_SE_COLL_TAKT_RIGHT);
 
             for (int i = 0; i < 6; i++) {
                 m1E38[i].mUserArea = 0;
@@ -2486,6 +2450,7 @@ void dMenu_Collect_c::tactBaseShow() {
 
 /* 801A1600-801A2958       .text cornerMove__15dMenu_Collect_cFv */
 void dMenu_Collect_c::cornerMove() {
+    /* Nonmatching */
     J2DWindow::TContentsColor outColor;
 
     m27E6++;
@@ -2758,9 +2723,7 @@ void dMenu_Collect_c::itemnameSet() {
     ((J2DTextBox*)m890[0].pane)->getFontSize(copiedFontSize);
     ((J2DTextBox*)m890[1].pane)->setFontSize(copiedFontSize);
 
-    ((J2DTextBox*)m890[1].pane)->setCharSpace(
-        ((J2DTextBox*)m890[0].pane)->getCharSpace()
-    );
+    ((J2DTextBox*)m890[1].pane)->setCharSpace(((J2DTextBox*)m890[0].pane)->getCharSpace());
 
     while (name[0][i] != '\0') {
         name[1][i] = name[0][i];
@@ -2908,8 +2871,7 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 0x0E: {
-            u32 equipMsg =
-                dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(0));
+            u32 equipMsg = dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(0));
 
             msgNo = equipMsg;
 
@@ -2920,8 +2882,7 @@ void dMenu_Collect_c::itemnameSet() {
         }
 
         case 0x0F: {
-            u32 equipMsg =
-                dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(1));
+            u32 equipMsg = dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(1));
 
             msgNo = equipMsg;
 
@@ -2932,8 +2893,7 @@ void dMenu_Collect_c::itemnameSet() {
         }
 
         case 0x10: {
-            u32 equipMsg =
-                dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(2));
+            u32 equipMsg = dItem_data::getItemMesgNum(dComIfGs_getSelectEquip(2));
 
             msgNo = equipMsg;
 
@@ -2993,6 +2953,10 @@ void dMenu_Collect_c::itemnameSet() {
         return;
     }
 
+    JUTFont::TWidth width;
+    JUTFont::TWidth firstWidth;
+    u8 characterWidth;
+
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(0xBD1, head_p);
 
@@ -3004,8 +2968,7 @@ void dMenu_Collect_c::itemnameSet() {
 
     bool firstCharacter = false;
 
-    f32 fontScale =
-        nameFontSize.mSizeY / mFont->getCellWidth();
+    f32 fontScale = nameFontSize.mSizeY / mFont->getCellWidth();
 
     f32 measuredWidth;
 
@@ -3025,19 +2988,15 @@ void dMenu_Collect_c::itemnameSet() {
 
             continue;
         }
+        
+        int code;
 
-        u16 code;
+        if ((current[0] == 8) || (current[0] == 9)) {
+            code = (u8)current[1];
+            code |= (u16)(u8)current[0] << 8;
 
-        if ((((u8)current[0] >> 4) == 8) ||
-            (((u8)current[0] >> 4) == 9)) {
-            u8 firstByte = (u8)current[0];
-            u8 secondByte = (u8)current[1];
-
-            code = secondByte;
-            code |= (u16)firstByte << 8;
-
-            appendBuf[0] = firstByte;
-            appendBuf[1] = secondByte;
+            appendBuf[0] = current[0];
+            appendBuf[1] = current[1];
             appendBuf[2] = '\0';
 
             current += 2;
@@ -3050,36 +3009,27 @@ void dMenu_Collect_c::itemnameSet() {
             current++;
         }
 
-        JUTFont::TWidth width;
         mFont->getWidthEntry(code, &width);
 
-        u8 characterWidth = width.field_0x1;
+        characterWidth = width.field_0x1;
 
         strcat(name[0], appendBuf);
 
         if (!firstCharacter) {
-            JUTFont::TWidth firstWidth;
             mFont->getWidthEntry(code, &firstWidth);
 
-            measuredWidth =
-                fontScale *
-                (characterWidth + firstWidth.field_0x0);
+            measuredWidth = fontScale * (characterWidth + firstWidth.field_0x0);
 
             firstCharacter = true;
         } else {
-            measuredWidth += characterWidth * fontScale;
+            measuredWidth += (s16)characterWidth * fontScale;
         }
     }
 
-    f32 paneWidth =
-        ((J2DTextBox*)m890[0].pane)->getBounds().f.x -
-        ((J2DTextBox*)m890[0].pane)->getBounds().i.x;
+    f32 paneWidth = ((J2DTextBox*)m890[0].pane)->getBounds().f.x - ((J2DTextBox*)m890[0].pane)->getBounds().i.x;
 
     if (paneWidth < measuredWidth) {
-        nameFontSize.mSizeX = (s32)(
-            (nameFontSize.mSizeX * paneWidth) /
-            measuredWidth
-        );
+        nameFontSize.mSizeX = (s32)((nameFontSize.mSizeX * paneWidth) / measuredWidth);
     }
 
     ((J2DTextBox*)m890[0].pane)->setFontSize(nameFontSize);
@@ -3093,7 +3043,7 @@ void dMenu_Collect_c::itemnoteSet() {
     fopMsgM_itemMsgGet_c msgGet;
     int triforceCount;
     u32 msgNo;
-
+    
     msgNo = 0;
     triforceCount = 0;
 
@@ -3789,11 +3739,9 @@ void dMenu_Collect_c::_move() {
                     }
 
                     if (((mNowItem >= 0xA && mNowItem <= 0x12) ||
-                         (mNowItem == 8 &&
-                          dComIfGs_getMaxLife() % 4) ||
-                         (mNowItem == 9 &&
-                          (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) ||
-                           dComIfGs_getCollectMapNum()))) &&
+                         (mNowItem == 8 && dComIfGs_getMaxLife() % 4) ||
+                         (mNowItem == 9 && (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) ||
+                         dComIfGs_getCollectMapNum()))) &&
                         collectItemGetCheck(mNowItem))
                     {
                         fopMsgM_setInitAlpha(&m740);
