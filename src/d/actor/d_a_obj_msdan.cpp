@@ -67,7 +67,7 @@ BOOL daObjMsdan::Act_c::Mthd_Execute() {
             } else if (prm_get_sound()) {
                 mState = 3;
             } else if (mEvId == -1) {
-                JAIZelBasic::getInterface()->seStart(0x806);
+                JAIZelBasic::getInterface()->seStart(JA_SE_READ_RIDDLE_1);
                 mState = 3;
             } else {
                 fopAcM_orderOtherEventId(this, mEvId);
@@ -76,9 +76,9 @@ BOOL daObjMsdan::Act_c::Mthd_Execute() {
         }
         break;
     case 1:
-        if (eventInfo.mCommand == 2) {
+        if (eventInfo.checkCommandDemoAccrpt()) {
             mState = 2;
-            JAIZelBasic::getInterface()->seStart(0x806);
+            JAIZelBasic::getInterface()->seStart(JA_SE_READ_RIDDLE_1);
         } else {
             fopAcM_orderOtherEventId(this, mEvId);
         }
