@@ -692,7 +692,15 @@ BOOL daNpc_Sarace_c::_execute() {
 
 /* 00001A68-00001AE0       .text _delete__14daNpc_Sarace_cFv */
 BOOL daNpc_Sarace_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, "Sarace");
+    if (mpMorf != NULL) {
+        mpMorf->stopZelAnime();
+    }
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+    return TRUE;
 }
 
 /* 00001AE0-00001B00       .text CallbackCreateHeap__FP10fopAc_ac_c */

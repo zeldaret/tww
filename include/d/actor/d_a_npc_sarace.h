@@ -69,7 +69,7 @@ public:
 public:
 
 
-    /* 0x6C4 */ u8 field_0x6C4[0x6CC - 0x6C4];
+    /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ mDoExt_McaMorf* mpHeadMorf;
     /* 0x6D0 */ u32 mShadowID;
     /* 0x6D4 */ u8 field_0x6D4[0x6D8 - 0x6D4];
