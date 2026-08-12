@@ -8,6 +8,8 @@
 #include "d/d_cc_d.h"
 #include "res/Object/Hfbot.h"
 
+static daObjSwflat_HIO_c l_HIO;
+
 namespace daObjSwflat {
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -38,8 +40,6 @@ static dCcD_SrcCyl l_cyl_src = {
         /* Height */ 20.0f,
     }},
 };
-
-static daObjSwflat_HIO_c l_HIO;
 }
 
 /* 000000EC-00000138       .text __ct__17daObjSwflat_HIO_cFv */
