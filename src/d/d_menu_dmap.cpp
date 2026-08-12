@@ -12,6 +12,7 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DWindow.h"
 #include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_controller_pad.h"
 
 dMd_HIO_c g_mdHIO;
 
@@ -930,7 +931,17 @@ void dMenu_Dmap_c::cursorAnime() {
 
 /* 801AC238-801AC2D8       .text noteInit__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::noteInit() {
-    /* Nonmatching */
+    mNk00Pane.mUserArea = 0;
+    mNt00Pane.mUserArea = 0;
+
+    mNo11Pane.pane->rotate(
+        mNo11Pane.mSizeOrig.x / 2.0f,
+        mNo11Pane.mSizeOrig.y / 2.0f,
+        ROTATE_Z,
+        mNo11Pane.mUserArea
+    );
+
+    fopMsgM_paneTrans(&mNo11Pane, 0.0f, 0.0f);
 }
 
 /* 801AC2D8-801AC2EC       .text noteCheck__12dMenu_Dmap_cFv */
@@ -940,22 +951,117 @@ bool dMenu_Dmap_c::noteCheck() {
 
 /* 801AC2EC-801AC390       .text noteAppear__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::noteAppear() {
-    /* Nonmatching */
+    if (mNk00Pane.mUserArea == 1) {
+        if (mNt00Pane.mUserArea <= 17) {
+            noteOpen();
+        } else if (mNt00Pane.mUserArea > 18) {
+            noteClose();
+        } else {
+            if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0)) {
+                mNt00Pane.mUserArea++;
+                mDoAud_seStart(JA_SE_ITM_MENU_EXP_OUT);
+            }
+        }
+    }
 }
 
 /* 801AC390-801AC590       .text noteOpen__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::noteOpen() {
-    /* Nonmatching */
+    f32 x = 320.0f - mNo11Pane.mPosCenterOrig.x;
+    f32 y = 240.0f - mNo11Pane.mPosCenterOrig.y;
+    f32 alpha = 1.0f - fopMsgM_valueIncrease(17, 17 - mNt00Pane.mUserArea, 0);
+
+    if (mNt00Pane.mUserArea >= 17) {
+        fopMsgM_setInitAlpha(&mMsk0Pane);
+        fopMsgM_setInitAlpha(&mStr0Pane);
+        fopMsgM_setInitAlpha(&mSt00Pane);
+        mDoAud_seStart(JA_SE_ITM_MENU_EXP_IN);
+    } else {
+        fopMsgM_setNowAlpha(&mMsk0Pane, alpha);
+        fopMsgM_setNowAlpha(&mStr0Pane, alpha);
+        fopMsgM_setNowAlpha(&mSt00Pane, alpha);
+    }
+
+    mNo11Pane.pane->rotate(
+        mNo11Pane.mSize.x / 2.0f,
+        mNo11Pane.mSize.y / 2.0f,
+        ROTATE_Z,
+        mNo11Pane.mUserArea + alpha * (f32)(-3 - mNo11Pane.mUserArea)
+    );
+
+    if (mNt00Pane.mUserArea < 5) {
+        alpha = (mNt00Pane.mUserArea * 0.8f) / 5.0f;
+    } else {
+        alpha = (1.0f - fopMsgM_valueIncrease(12, 17 - mNt00Pane.mUserArea, 0)) * 0.19999999f + 0.8f;
+    }
+
+    fopMsgM_paneTrans(&mNo11Pane, x * alpha, y * alpha);
+    mNt00Pane.mUserArea++;
 }
 
 /* 801AC590-801AC7C8       .text noteClose__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::noteClose() {
-    /* Nonmatching */
+    float out_x = (640.0f - mNo11Pane.mPosCenterOrig.x) - 320.0f;
+    float out_y = (480.0f - mNo11Pane.mPosCenterOrig.y) - 240.0f;
+    float x = 320.0f - mNo11Pane.mPosCenterOrig.x;
+    float y = 240.0f - mNo11Pane.mPosCenterOrig.y;
+    
+    float alpha = fopMsgM_valueIncrease(10, mNt00Pane.mUserArea - 18, 0);
+
+    fopMsgM_paneTrans(&mNo11Pane, (out_x * alpha) + x, (out_y * alpha) + y);
+
+    mNo11Pane.pane->rotate(
+        mNo11Pane.mSize.x / 2.0f,
+        mNo11Pane.mSize.y / 2.0f,
+        ROTATE_Z,
+        (alpha * 123.0f) + -3.0f
+    );
+
+    mNt00Pane.mUserArea++;
+
+    if (mNt00Pane.mUserArea > 0x1c) {
+        fopMsgM_setInitAlpha(&mNt00Pane);
+        fopMsgM_setInitAlpha(&mNk00Pane);
+        fopMsgM_setInitAlpha(&mNo11Pane);
+        fopMsgM_setNowAlphaZero(&mMsk0Pane);
+        fopMsgM_setNowAlphaZero(&mStr0Pane);
+        fopMsgM_setNowAlphaZero(&mSt00Pane);
+
+        mNk00Pane.mUserArea = 0;
+        mNt00Pane.mUserArea = 0;
+
+        mNo11Pane.pane->rotate(
+            mNo11Pane.mSize.x / 2.0f,
+            mNo11Pane.mSize.y / 2.0f,
+            ROTATE_Z,
+            mNo11Pane.mUserArea
+        );
+
+        fopMsgM_paneTrans(&mNo11Pane, 0.0f, 0.0f);
+    } else {
+        fopMsgM_setNowAlpha(&mNt00Pane, 1.0f - alpha);
+        fopMsgM_setNowAlpha(&mNk00Pane, 1.0f - alpha);
+        fopMsgM_setNowAlpha(&mNo11Pane, 1.0f - alpha);
+        fopMsgM_setNowAlpha(&mMsk0Pane, 1.0f - alpha);
+        fopMsgM_setNowAlpha(&mStr0Pane, 1.0f - alpha);
+        fopMsgM_setNowAlpha(&mSt00Pane, 1.0f - alpha);
+    }
 }
 
 /* 801AC7C8-801AC8CC       .text noteOpenProc__12dMenu_Dmap_cFs */
-void dMenu_Dmap_c::noteOpenProc(short) {
-    /* Nonmatching */
+void dMenu_Dmap_c::noteOpenProc(s16 i_step) {
+    if (i_step <= 10) {
+        f32 alpha = fopMsgM_valueIncrease(10, i_step, 0);
+        f32 angle = fopMsgM_valueIncrease(10, 10 - i_step, 0) * (-90 - mNo11Pane.mUserArea) + mNo11Pane.mUserArea;
+        mNo11Pane.pane->rotate(
+            mNo11Pane.mSize.x / 2.0f,
+            mNo11Pane.mSize.y / 2.0f,
+            ROTATE_Z,
+            angle
+        );
+        fopMsgM_setNowAlpha(&mNt00Pane, alpha);
+        fopMsgM_setNowAlpha(&mNk00Pane, alpha);
+    }
 }
 
 /* 801AC8CC-801ACDE0       .text itemScale__12dMenu_Dmap_cFv */
