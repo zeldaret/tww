@@ -639,13 +639,13 @@ void daNpc_Sarace_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    #if VERSION > VERSION_DEMO
+#if VERSION > VERSION_DEMO
     mpMorf->calc();
-    #endif
+#endif
     pHeadModel->setBaseTRMtx(pModel->getAnmMtx(m_jnt.mHeadJntNum));
-    #if VERSION > VERSION_DEMO
+#if VERSION > VERSION_DEMO
     mpHeadMorf->calc();
-    #endif
+#endif
 }
 
 /* 000017E0-00001938       .text _draw__14daNpc_Sarace_cFv */
@@ -695,15 +695,15 @@ BOOL daNpc_Sarace_c::_execute() {
         l_HIO.mNpc.mMaxTurnStep
     );
     playTexPatternAnm();
-    #if VERSION == DEMO
+#if VERSION == DEMO
     mpMorf->play(&eyePos, 0, 0);
     mpMorf->calc();
     mpHeadMorf->play(NULL, 0, 0);
     mpHeadMorf->calc();
-    #else
+#else
     mpMorf->play(NULL, 0, 0);
     mpHeadMorf->play(NULL, 0, 0);
-    #endif
+#endif
     checkOrder();
     (this->*mCurrActionFunc)(NULL);
     mEventCut.cutProc();
