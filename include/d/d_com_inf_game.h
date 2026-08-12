@@ -8,6 +8,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_event.h"
 #include "d/d_event_manager.h"
+#include "d/d_item_data.h"
 #include "d/d_map.h"
 #include "d/d_particle.h"
 #include "d/d_resorce.h"
