@@ -1471,7 +1471,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_hfuck1"),
     ActorRel(Matching,    "d_a_obj_hole"),
     ActorRel(Matching,    "d_a_obj_ice"),
-    ActorRel(NonMatching, "d_a_obj_ikada"),
+    ActorRel(Equivalent,  "d_a_obj_ikada"), # weak func order: extra weak inlines (CrossAtTg/CrossCo/dBgS) vs original weak set
     ActorRel(Matching,    "d_a_obj_kanat"),
     ActorRel(Matching,    "d_a_obj_leaves"),
     ActorRel(Matching,    "d_a_obj_lpalm"),
