@@ -42,6 +42,23 @@ static dCcD_SrcCyl l_cyl_src = {
 };
 
 
+class daNpc_Sarace_HIO_c : public JORReflexible {
+public:
+
+    daNpc_Sarace_HIO_c();
+    virtual ~daNpc_Sarace_HIO_c() {};
+
+    void genMessage(JORMContext* ctx) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 field_0x05[0x08 - 0x05];
+    /* 0x08 */ dNpc_HIO_c mNpc;
+    /* 0x30 */ f32 m30;
+    /* 0x34 */ f32 m34;
+};  // Size: 0x38
+
+
 /* 000000EC-00000198       .text __ct__18daNpc_Sarace_HIO_cFv */
 daNpc_Sarace_HIO_c::daNpc_Sarace_HIO_c() {
     mNpc.m04 = -20.0;

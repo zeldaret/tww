@@ -102,20 +102,5 @@ public:
     /* 0x747 */ u8 field_0x747[0x748 - 0x747];
 };  // Size: 0x748
 
-class daNpc_Sarace_HIO_c : public JORReflexible {
-public:
-
-    daNpc_Sarace_HIO_c();
-    virtual ~daNpc_Sarace_HIO_c() {};
-
-    void genMessage(JORMContext* ctx) {}
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 field_0x05[0x08 - 0x05];
-    /* 0x08 */ dNpc_HIO_c mNpc;
-    /* 0x30 */ f32 m30;
-    /* 0x34 */ f32 m34;
-};  // Size: 0x38
 
 #endif /* D_A_NPC_SARACE_H */
