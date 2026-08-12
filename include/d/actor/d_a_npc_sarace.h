@@ -18,8 +18,8 @@ public:
         ACTION_ENDING   = -1,
     };
 
-    void getAttentionBasePos() {}
-    void getEyePos() {}
+    cXyz& getAttentionBasePos() { return mAttPos; }
+    cXyz& getEyePos() { return mEyePos; }
     daObjBarrel2::Act_c * getHBarrelP() {
         return (daObjBarrel2::Act_c* )fopAcM_SearchByID(mHBarrelId);
     }

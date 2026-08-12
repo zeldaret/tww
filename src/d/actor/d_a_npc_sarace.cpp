@@ -94,10 +94,10 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
             if(jntNo == i_this->m_jnt.getHeadJntNum()) {
                 static cXyz l_offsetAttPos(0.0f, 0.0f, 0.0f);
                 cXyz l_offsetEyePos(24.0f, 14.0f, 0.0f);
-                mDoMtx_stack_c::multVec(&l_offsetAttPos, &i_this->mAttPos);
+                mDoMtx_stack_c::multVec(&l_offsetAttPos, &i_this->getAttentionBasePos());
                 mDoMtx_stack_c::XrotM(+i_this->m_jnt.getHead_y());
                 mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getHead_x());
-                mDoMtx_stack_c::multVec(&l_offsetEyePos, &i_this->mEyePos);
+                mDoMtx_stack_c::multVec(&l_offsetEyePos, &i_this->getEyePos());
             } else if(jntNo == i_this->m_jnt.getBackboneJntNum()) {
                 mDoMtx_stack_c::XrotM(+i_this->m_jnt.getBackbone_y());
                 mDoMtx_stack_c::ZrotM(-i_this->m_jnt.getBackbone_x());
@@ -382,7 +382,9 @@ BOOL daNpc_Sarace_c::CreateInit() {
     if(
         dComIfGp_getStartStagePoint() == 1
         && dComIfGp_getStartStageRoomNo() == 48
+#if VERSION > VERSION_DEMO
         && ship_race_result != 0
+#endif
     ) {
         mEventState = 1;
         mMiniGameMessage = 0xFB4;
@@ -498,7 +500,7 @@ void daNpc_Sarace_c::talk01() {
             mVBarrelId = fopAcM_create(
                 fpcNm_Obj_Barrel2_e,
                 daObjBarrel2::Act_c::make_prm(
-                    daObjBarrel2::Type_00_e,
+                    (daObjBarrel2::Type_e) 0,
                     1,
                     true,
                     false,
@@ -622,9 +624,13 @@ void daNpc_Sarace_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    #if VERSION > VERSION_DEMO
     mpMorf->calc();
+    #endif
     pHeadModel->setBaseTRMtx(pModel->getAnmMtx(m_jnt.mHeadJntNum));
+    #if VERSION > VERSION_DEMO
     mpHeadMorf->calc();
+    #endif
 }
 
 /* 000017E0-00001938       .text _draw__14daNpc_Sarace_cFv */
@@ -674,8 +680,15 @@ BOOL daNpc_Sarace_c::_execute() {
         l_HIO.mNpc.mMaxTurnStep
     );
     playTexPatternAnm();
+    #if VERSION == DEMO
+    mpMorf->play(&eyePos, 0, 0);
+    mpMorf->calc();
+    mpHeadMorf->play(NULL, 0, 0);
+    mpHeadMorf->calc();
+    #else
     mpMorf->play(NULL, 0, 0);
     mpHeadMorf->play(NULL, 0, 0);
+    #endif
     checkOrder();
     (this->*mCurrActionFunc)(NULL);
     mEventCut.cutProc();
@@ -692,7 +705,11 @@ BOOL daNpc_Sarace_c::_execute() {
 
 /* 00001A68-00001AE0       .text _delete__14daNpc_Sarace_cFv */
 BOOL daNpc_Sarace_c::_delete() {
+    #if VERSION == DEMO
+    dComIfG_deleteObjectRes("Sarace");
+    #else
     dComIfG_resDelete(&mPhs, "Sarace");
+    #endif
     if (mpMorf != NULL) {
         mpMorf->stopZelAnime();
     }
@@ -713,7 +730,7 @@ cPhs_State daNpc_Sarace_c::_create() {
     fopAcM_ct_Retail(this, daNpc_Sarace_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Sarace");
     if (phase_state == cPhs_COMPLEATE_e) { 
-
+        fopAcM_ct_Demo(this, daNpc_Sarace_c);
         if (!fopAcM_entrySolidHeap(this, CallbackCreateHeap, 0x2760)) {
             return cPhs_ERROR_e;
         } else {
@@ -734,7 +751,7 @@ cPhs_State daNpc_Sarace_c::_create() {
 BOOL daNpc_Sarace_c::CreateHeap() {
     /* Nonmatching */
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Sarace", dRes_INDEX_SARACE_BDL_SA_e);
-    JUT_ASSERT(DEMO_SELECT(1008, 1008), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(999, 1008), modelData != NULL);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL,
@@ -757,12 +774,12 @@ BOOL daNpc_Sarace_c::CreateHeap() {
     }
 
     m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
-    JUT_ASSERT(DEMO_SELECT(1024, 1024), m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(1012, 1024), m_jnt.getHeadJntNum() >= 0);
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
-    JUT_ASSERT(DEMO_SELECT(1026, 1026), m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(1014, 1026), m_jnt.getBackboneJntNum() >= 0);
 
     J3DModelData* headModelData = (J3DModelData*)dComIfG_getObjectRes("Sarace", dRes_INDEX_SARACE_BDL_SA01_HEAD_e);
-    JUT_ASSERT(DEMO_SELECT(1034, 1034), headModelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1022, 1034), headModelData != NULL);
     mpHeadMorf = new mDoExt_McaMorf(
         headModelData,
         NULL,

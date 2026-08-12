@@ -82,13 +82,14 @@ namespace daObjBarrel2 {
         static u32 make_prm(Type_e type, int droppedItem, bool hasFlag, bool coming, daObjBuoyflag::Texture_e tex) {
             int itemNo = (droppedItem & 0x3F);
             int buoy = hasFlag ? 1 : 0;
+            int isComing = coming ? 1: 0;
             return 
                 (itemNo << PRM_ITEM_NO_S) |
                 (0x7F << PRM_ITEM_SAVE_S) |
                 (type << PRM_TYPE_S) |
                 (buoy << PRM_BUOY_S) |
                 ((tex == daObjBuoyflag::Texture_00_e ? 0 : 1) << PRM_TEXTURE_S) |
-                (coming << PRM_COMING_S);
+                (isComing << PRM_COMING_S);
         }
         s32 prm_get_buoy() const {
             return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S);
