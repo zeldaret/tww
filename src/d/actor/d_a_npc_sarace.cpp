@@ -556,7 +556,11 @@ void daNpc_Sarace_c::talk01() {
 
 /* 000014B8-000014E0       .text dummy_action__14daNpc_Sarace_cFPv */
 BOOL daNpc_Sarace_c::dummy_action(void* i_arg) {
-    /* Nonmatching */
+    if(mActionStatus == 0) {
+        mLookBackState = 1;
+        mActionStatus++;
+    }
+    return TRUE;
 }
 
 /* 000014E0-000015BC       .text wait_action__14daNpc_Sarace_cFPv */
