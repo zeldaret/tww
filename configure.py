@@ -1606,7 +1606,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bk"),
     ActorRel(NonMatching, "d_a_bl"),
     ActorRel(Matching,    "d_a_bmd"),
-    ActorRel(NonMatching, "d_a_bmdfoot"),
+    ActorRel(Equivalent,  "d_a_bmdfoot"), # regalloc (attack_1)
     ActorRel(Matching,    "d_a_bmdhand"),
     ActorRel(NonMatching, "d_a_bo"),
     ActorRel(Matching,    "d_a_boss_item"),
