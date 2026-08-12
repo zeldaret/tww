@@ -615,7 +615,15 @@ BOOL daNpc_Sarace_c::event_endCheck_action(void* i_arg) {
 
 /* 0000173C-000017E0       .text set_mtx__14daNpc_Sarace_cFv */
 void daNpc_Sarace_c::set_mtx() {
-    /* Nonmatching */
+    J3DModel* model = mpMorf->getModel();
+    J3DModel* headModel = mpHeadMorf->getModel();
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpMorf->calc();
+    headModel->setBaseTRMtx(model->getAnmMtx(m_jnt.mHeadJntNum));
+    mpHeadMorf->calc();
 }
 
 /* 000017E0-00001938       .text _draw__14daNpc_Sarace_cFv */
