@@ -9,25 +9,28 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_magma.h"
 
+#if VERSION > VERSION_DEMO
 daMagma_c::~daMagma_c() {
     dComIfG_resDelete(&mPhs, "Magma");
 }
+#endif
 
 cPhs_State daMagma_c::create() {
+#if VERSION > VERSION_DEMO
     fopAcM_ct(this, daMagma_c);
-
+#endif
     cPhs_State result = dComIfG_resLoad(&mPhs, "Magma");
     if (result != cPhs_COMPLEATE_e) {
         return result;
     }
 
     if (dComIfGp_createMagma()) {
-        dComIfGp_getMagma()->newFloor(
-            current.pos,
-            scale,
-            current.roomNo,
-            getPathNo()
-        );
+#if VERSION > VERSION_DEMO
+        dComIfGp_getMagma()->newFloor(current.pos, scale, current.roomNo, getPathNo());
+#else
+        s16 pathNo = fopAcM_GetParam(this);
+        dComIfGp_getMagma()->newFloor(current.pos, scale, fopAcM_GetRoomNo(this), pathNo);
+#endif
     }
 
     return cPhs_ERROR_e;
