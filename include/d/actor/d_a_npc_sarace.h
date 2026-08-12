@@ -66,8 +66,8 @@ public:
     /* 0x6C4 */ u8 field_0x6C4[0x6CC - 0x6C4];
     /* 0x6CC */ mDoExt_McaMorf* mpHeadMorf;
     /* 0x6D0 */ u8 field_0x6D0[0x6D8 - 0x6D0];
-    /* 0x6D8 */ int m6D8;
-    /* 0x6DC */ int m6DC;
+    /* 0x6D8 */ fpc_ProcID m6D8;
+    /* 0x6DC */ fpc_ProcID m6DC;
     /* 0x6E0 */ J3DAnmTexPattern* m_btp;
     /* 0x6E4 */ mDoExt_btpAnm mBtpAnm;
     /* 0x6F8 */ u8 mBlinkFrame;

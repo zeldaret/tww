@@ -11,6 +11,7 @@ class daRaceItem_c;
 
 namespace daObjBarrel2 {
     enum Type_e {
+        Type_00_e = 0x0,
         Type_01_e = 0x1,
     };
 
@@ -78,10 +79,9 @@ namespace daObjBarrel2 {
             csXyz angle(0, angleY, 0);
             return fopAcM_create(fpcNm_Obj_Barrel2_e, make_prm(type, droppedItem, !hasFlag, true, tex), pos, roomNo, &angle);
         }
-        static u32 make_prm(Type_e type, int droppedItem, bool hasFlag, bool _unused, daObjBuoyflag::Texture_e tex) {
+        static u32 make_prm(Type_e type, int droppedItem, bool hasFlag, bool coming, daObjBuoyflag::Texture_e tex) {
             int itemNo = (droppedItem & 0x3F);
             int buoy = hasFlag ? 1 : 0;
-            bool coming = true;
             return 
                 (itemNo << PRM_ITEM_NO_S) |
                 (0x7F << PRM_ITEM_SAVE_S) |

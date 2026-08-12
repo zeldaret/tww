@@ -8,6 +8,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
 #include "res/Object/Sarace.h"
+#include "d/actor/d_a_obj_barrel2.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -466,7 +467,91 @@ void daNpc_Sarace_c::wait01() {
 
 /* 00001024-000014B8       .text talk01__14daNpc_Sarace_cFv */
 void daNpc_Sarace_c::talk01() {
-    /* Nonmatching */
+    if(talk(1) == fopMsgStts_BOX_CLOSED_e) {
+        mLookBackState = 1;
+        if(mCurrMsgNo == 0xFA4) {
+            static cXyz create_pos[] = 
+            {
+                cXyz(175875, 50, 276520),
+                cXyz(176030, 50, 278884)
+
+            };
+            dComIfGp_event_onEventFlag(dEvtFlag_UNK8_e);
+            mEventState = 3;
+            m6D8 = fopAcM_create(
+                fpcNm_Obj_Barrel2_e,
+                daObjBarrel2::Act_c::make_prm(
+                    daObjBarrel2::Type_01_e,
+                    1,
+                    true,
+                    false,
+                    daObjBuoyflag::Texture_00_e
+                ),
+                &create_pos[0],
+                -1,
+                NULL,
+                NULL,
+                0xFF,
+                NULL
+            );
+            m6DC = fopAcM_create(
+                fpcNm_Obj_Barrel2_e,
+                daObjBarrel2::Act_c::make_prm(
+                    daObjBarrel2::Type_00_e,
+                    1,
+                    true,
+                    false,
+                    daObjBuoyflag::Texture_00_e
+                ),
+                &create_pos[1],
+                -1,
+                NULL,
+                NULL,
+                0xFF,
+                NULL
+            );
+        } else if(mCurrMsgNo == 0xFB0) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2840);
+            dComIfGp_setNextStage(
+                "Ocean", 
+                1,
+                0,
+                0.0,
+                0,
+                FALSE,
+                1
+            );
+            if(
+                dComIfGs_getSelectItem(dItemBtn_X_e) != dInvSlot_SAIL_e
+                && dComIfGs_getSelectItem(dItemBtn_Y_e) != dInvSlot_SAIL_e
+                && dComIfGs_getSelectItem(dItemBtn_Z_e) != dInvSlot_SAIL_e
+            ) {
+                dComIfGs_setSelectItem(dItemBtn_Y_e, dInvSlot_SAIL_e);
+                dComIfGp_setSelectItem(dItemBtn_Y_e);
+            }
+            setAction(&daNpc_Sarace_c::dummy_action, NULL);
+        } else {
+            dComIfGp_event_onEventFlag(dEvtFlag_UNK8_e);
+            ship_race_result = 0;
+            ship_race_rupee = 0;
+            setAnm(0, -1.0f);
+        }
+        m729 = 0;
+    } else if (mCurrMsgNo == 0xFB6) {
+        if(dComIfGp_checkMesgSendButton() == 1) {
+            dComIfGp_setItemRupeeCount(ship_race_rupee);
+            u8 tmp = dComIfGs_getEventReg(dSv_event_flag_c::UNK_AAFF);
+            u8 tmp2 = cLib_maxLimit<int>(
+                tmp + 1,
+                0xc
+            );
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_AAFF, tmp2);
+            if (tmp != tmp2) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2820);
+            }
+
+        }
+    }
 }
 
 /* 000014B8-000014E0       .text dummy_action__14daNpc_Sarace_cFPv */
