@@ -566,6 +566,7 @@ BOOL daNpc_Sarace_c::dummy_action(void* i_arg) {
 
 /* 000014E0-000015BC       .text wait_action__14daNpc_Sarace_cFPv */
 BOOL daNpc_Sarace_c::wait_action(void* i_arg) {
+    UNUSED(i_arg);
     if(mActionStatus == 0) {
         mLookBackState = 1;
         mActionStatus++;
