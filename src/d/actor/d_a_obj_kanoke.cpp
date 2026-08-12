@@ -140,8 +140,10 @@ cPhs_State daObjKanoke_c::_create() {
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x2400)) {
             phase_state = createInit();
         } else {
+#if VERSION > VERSION_DEMO
             mpLidBgW = NULL;
             mpBodyBgW = NULL;
+#endif
             phase_state = cPhs_ERROR_e;
         }
     }
@@ -241,6 +243,7 @@ cPhs_State daObjKanoke_c::createInit() {
 
 /* 00000B28-00000C0C       .text _delete__13daObjKanoke_cFv */
 BOOL daObjKanoke_c::_delete() {
+#if VERSION > VERSION_DEMO
     if (heap != NULL) {
         if (mpBodyBgW != NULL && mpBodyBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBodyBgW);
@@ -249,8 +252,19 @@ BOOL daObjKanoke_c::_delete() {
             dComIfG_Bgsp()->Release(mpLidBgW);
         }
     }
+#else
+    if (mpBodyBgW->ChkUsed()) {
+        dComIfG_Bgsp()->Release(mpBodyBgW);
+    }
+    if (mpLidBgW->ChkUsed()) {
+        dComIfG_Bgsp()->Release(mpLidBgW);
+    }
+    for (int i = 0; i < 2; i++) {
+        // The demo build retains an empty emitter loop.
+    }
+#endif
     mSmokeCallback.remove();
-    dComIfG_resDelete(&mPhs, "Mkanoke");
+    dComIfG_resDeleteDemo(&mPhs, "Mkanoke");
     return TRUE;
 }
 
@@ -376,13 +390,27 @@ void daObjKanoke_c::executeYureYoko() {
 
 /* 00001358-00001544       .text executeOpenYoko__13daObjKanoke_cFv */
 void daObjKanoke_c::executeOpenYoko() {
+#if VERSION == VERSION_DEMO
+    f32 maxOffset = 100.0f;
+    s16 maxRotation = -0x15E0;
+#endif
     mPivotOffset.x += 4.0f;
+#if VERSION == VERSION_DEMO
+    mLidOffset.x = maxOffset - mPivotOffset.x;
+    if (mPivotOffset.x > maxOffset) {
+#else
     mLidOffset.x = 100.0f - mPivotOffset.x;
     if (mPivotOffset.x > 100.0f) {
+#endif
         mLidRotZ += mRotStep;
         mRotStep -= 100;
+#if VERSION == VERSION_DEMO
+        if (mLidRotZ <= maxRotation) {
+            mLidRotZ = maxRotation;
+#else
         if (mLidRotZ <= -0x15E0) {
             mLidRotZ = -0x15E0;
+#endif
             mState = 3;
 
             mDoMtx_stack_c::YrotS(shape_angle.y);
@@ -397,7 +425,10 @@ void daObjKanoke_c::executeOpenYoko() {
             cXyz effectPos = mPivotOffset + daObjKanoke_Yoko_pfs;
             mDoMtx_multVec(mtx, &effectPos, &effectPos);
             mEffectPos = effectPos + current.pos;
-            if (mSmokeCallback.getEmitter() == NULL) {
+#if VERSION > VERSION_DEMO
+            if (mSmokeCallback.getEmitter() == NULL)
+#endif
+            {
                 dComIfGp_particle_setToon(dPa_name::ID_IT_ST_KANOKE_SMOKE01, &mEffectPos,
                                            &mEffectAngle, NULL, (u8)mEffectScale,
                                            &mSmokeCallback);
@@ -469,7 +500,10 @@ void daObjKanoke_c::executeOpenTate() {
             dPa_name::ID_IT_SN_KANOKE_ROCK00, &mEffectPos, &mEffectAngle, NULL, 0xFF, NULL,
             -1, &tevStr.mColorK0, &tevStr.mColorK0);
         mEffectScale = 180.0f;
-        if (mSmokeCallback.getEmitter() == NULL) {
+#if VERSION > VERSION_DEMO
+        if (mSmokeCallback.getEmitter() == NULL)
+#endif
+        {
             dComIfGp_particle_setToon(dPa_name::ID_IT_ST_KANOKE_SMOKE00, &mEffectPos,
                                        &mEffectAngle, NULL, (u8)mEffectScale,
                                        &mSmokeCallback);
