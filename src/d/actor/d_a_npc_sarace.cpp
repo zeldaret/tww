@@ -720,11 +720,7 @@ BOOL daNpc_Sarace_c::_execute() {
 
 /* 00001A68-00001AE0       .text _delete__14daNpc_Sarace_cFv */
 BOOL daNpc_Sarace_c::_delete() {
-    #if VERSION == DEMO
-    dComIfG_deleteObjectRes("Sarace");
-    #else
-    dComIfG_resDelete(&mPhs, "Sarace");
-    #endif
+    dComIfG_resDeleteDemo(&mPhs, "Sarace");
     if (mpMorf != NULL) {
         mpMorf->stopZelAnime();
     }
