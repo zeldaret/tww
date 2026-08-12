@@ -314,9 +314,9 @@ struct dStage_Lbnk_c {
 
 // DMAP
 struct dStage_DMap_dt_c {
-    /* 0x00 */ int field_0x00;
-    /* 0x04 */ int field_0x04;
-    /* 0x08 */ int field_0x08;
+    /* 0x00 */ f32 originX;
+    /* 0x04 */ f32 originZ;
+    /* 0x08 */ f32 scale;
     /* 0x0C */ f32 offsetY;
 };  // Size: 0x10
 
@@ -1000,6 +1000,7 @@ struct FuncTable {
 };
 
 
+dStage_KeepTresureInfo* dStage_GetKeepTresureInfo();
 dStage_KeepDoorInfo * dStage_GetKeepDoorInfo();
 
 s8 dStage_roomRead_dt_c_GetReverbStage(roomRead_class&, int);
