@@ -1632,7 +1632,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_goal_flag"),
     ActorRel(NonMatching, "d_a_gy"),
     ActorRel(NonMatching, "d_a_icelift"),
-    ActorRel(NonMatching, "d_a_kb"),
+    ActorRel(Equivalent,  "d_a_kb"), # regalloc (useHeapInit)
     ActorRel(NonMatching, "d_a_kddoor"),
     ActorRel(Matching,    "d_a_kita"),
     ActorRel(NonMatching, "d_a_klft"),
