@@ -3291,8 +3291,8 @@ void dMenu_Collect_c::itemnoteSet() {
     int halfLine = (((J2DTextBox*)m778.pane)->getLineSpace() / 2.0f);
 
     for (int i = 0; i < 15; i++) {
-        u8 iconNo = mMsgProc.field_0x281[i];
-        u32 iconColor = mMsgProc.field_0x220[i];
+        u8 iconNo = mMsgProc.iconNum[i];
+        u32 iconColor = mMsgProc.iconColor[i];
 
         if (iconColor == 0xFFFFFFFF) {
             iconColor = 0xFF;
@@ -3305,8 +3305,8 @@ void dMenu_Collect_c::itemnoteSet() {
                     m0B0[i].mUserArea = 0;
                 }
 
-                m0B0[m27E0].mPosCenter.x = mMsgProc.field_0x168[i];
-                m0B0[m27E0].mPosCenter.y = (halfLine * (lineAdjust + mMsgProc.field_0x1A4[i] * 2));
+                m0B0[m27E0].mPosCenter.x = mMsgProc.iconPosX[i];
+                m0B0[m27E0].mPosCenter.y = (halfLine * (lineAdjust + mMsgProc.iconPosY[i] * 2));
 
                 m27EB = 1;
             } else if (iconNo == 0x15) {
@@ -3319,9 +3319,9 @@ void dMenu_Collect_c::itemnoteSet() {
                     m27F0 = 1;
                 }
 
-                m0B0[m27E0].mPosTopLeft.x = mMsgProc.field_0x168[i];
+                m0B0[m27E0].mPosTopLeft.x = mMsgProc.iconPosX[i];
 
-                m0B0[m27E0].mPosTopLeft.y = (halfLine * (lineAdjust + mMsgProc.field_0x1A4[i] * 2));
+                m0B0[m27E0].mPosTopLeft.y = (halfLine * (lineAdjust + mMsgProc.iconPosY[i] * 2));
 
                 fopMsgM_blendDraw(&m0B0[m27E0], "font_10.bti");
 
@@ -3353,8 +3353,8 @@ void dMenu_Collect_c::itemnoteSet() {
 
                 m27F1 = m27F0;
             } else if (iconNo != 0x16) {
-                m0B0[i].mPosTopLeft.x = mMsgProc.field_0x168[i];
-                m0B0[i].mPosTopLeft.y = (halfLine * (lineAdjust + mMsgProc.field_0x1A4[i] * 2));
+                m0B0[i].mPosTopLeft.x = mMsgProc.iconPosX[i];
+                m0B0[i].mPosTopLeft.y = (halfLine * (lineAdjust + mMsgProc.iconPosY[i] * 2));
 
                 m0B0[i].mPosTopLeftOrig.y = iconNo;
 
