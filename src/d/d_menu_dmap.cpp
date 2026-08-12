@@ -7,6 +7,7 @@
 #include "d/d_lib.h"
 #include "d/d_map.h"
 #include "d/d_menu_dmap.h"
+#include "d/d_meter.h"
 #include "d/d_stage.h"
 #include "f_op/f_op_msg_mng.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
@@ -215,14 +216,14 @@ void dMenu_Dmap_c::screenSet() {
     J2DWindow* win = (J2DWindow*)mFbPanes[0].pane;
     win->getContentsColor(contentsColor);
     mFb0ContentsColor = contentsColor.mTL;
-    mFb0White = JUtility::TColor(((J2DWindow*)mFbPanes[0].pane)->mWhite.toUInt32());
-    mFb0Black = JUtility::TColor(((J2DWindow*)mFbPanes[0].pane)->mBlack.toUInt32());
+    mFb0White.set(((J2DWindow*)mFbPanes[0].pane)->mWhite);
+    mFb0Black.set(((J2DWindow*)mFbPanes[0].pane)->mBlack);
 
     win = (J2DWindow*)mFbPanes[5].pane;
     win->getContentsColor(contentsColor);
     mFb5ContentsColor = contentsColor.mTL;
-    mFb5White = JUtility::TColor(((J2DWindow*)mFbPanes[5].pane)->mWhite.toUInt32());
-    mFb5Black = JUtility::TColor(((J2DWindow*)mFbPanes[5].pane)->mBlack.toUInt32());
+    mFb5White.set(((J2DWindow*)mFbPanes[5].pane)->mWhite);
+    mFb5Black.set(((J2DWindow*)mFbPanes[5].pane)->mBlack);
 
     for (int i = 4; i < 6; i++) {
         mFlPanes[i].mSizeOrig.x = mFlPanes[i].mSize.x = mFlPanes[0].mSizeOrig.x;
@@ -231,8 +232,8 @@ void dMenu_Dmap_c::screenSet() {
         mFbPanes[i].mSizeOrig.x = mFbPanes[i].mSize.x = mFbPanes[0].mSizeOrig.x;
         mFbPanes[i].mSizeOrig.y = mFbPanes[i].mSize.y = mFbPanes[0].mSizeOrig.y;
         ((J2DWindow*)mFbPanes[i].pane)->setContentsColor(mFb0ContentsColor);
-        ((J2DWindow*)mFbPanes[i].pane)->mWhite = JUtility::TColor(mFb0White.toUInt32());
-        ((J2DWindow*)mFbPanes[i].pane)->mBlack = JUtility::TColor(mFb0Black.toUInt32());
+        ((J2DWindow*)mFbPanes[i].pane)->setWhite(mFb0White);
+        ((J2DWindow*)mFbPanes[i].pane)->setBlack(mFb0Black);
         fopMsgM_cposMove(&mFbPanes[i]);
         mFbkPanes[i].mSizeOrig.x = mFbkPanes[i].mSize.x = mFbkPanes[0].mSizeOrig.x;
         mFbkPanes[i].mSizeOrig.y = mFbkPanes[i].mSize.y = mFbkPanes[0].mSizeOrig.y;
@@ -1066,7 +1067,89 @@ void dMenu_Dmap_c::noteOpenProc(s16 i_step) {
 
 /* 801AC8CC-801ACDE0       .text itemScale__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::itemScale() {
-    /* Nonmatching */
+    if (mSelectItem < 3) {
+        for (int i = 0; i < 3; i++) {
+            if (i == mSelectItem) {
+                fopMsgM_paneScaleXY(&mItPanes[i], g_menuHIO.field_0x8);
+                fopMsgM_paneScaleXY(&mIkPanes[i], g_menuHIO.field_0x8);
+            } else {
+                fopMsgM_paneScaleXY(&mItPanes[i], 1.0f);
+                fopMsgM_paneScaleXY(&mIkPanes[i], 1.0f);
+            }
+        }
+
+        for (int i = 0; i < 4; i++) {
+            mCarPanes[i].mPosCenterOrig.x = mItPanes[mSelectItem].mPosCenterOrig.x + mCarOfsX[i];
+            mCarPanes[i].mPosCenterOrig.y = mItPanes[mSelectItem].mPosCenterOrig.y + mCarOfsY[i];
+        }
+
+        for (int i = 0; i < (mTopFloor - mBottomFloor + 1); i++) {
+            mFlPanes[i].mSize.x = mFlPanes[i].mSizeOrig.x;
+            mFlPanes[i].mSize.y = mFlPanes[i].mSizeOrig.y;
+            fopMsgM_cposMove(&mFlPanes[i]);
+
+            mFbPanes[i].mSize.x = mFbPanes[i].mSizeOrig.x;
+            mFbPanes[i].mSize.y = mFbPanes[i].mSizeOrig.y;
+            ((J2DWindow*)mFbPanes[i].pane)->setContentsColor(mFb0ContentsColor);
+            ((J2DWindow*)mFbPanes[i].pane)->setWhite(mFb0White);
+            ((J2DWindow*)mFbPanes[i].pane)->setBlack(mFb0Black);
+            fopMsgM_cposMove(&mFbPanes[i]);
+
+            mFbkPanes[i].mSize.x = mFbkPanes[i].mSizeOrig.x;
+            mFbkPanes[i].mSize.y = mFbkPanes[i].mSizeOrig.y;
+            fopMsgM_cposMove(&mFbkPanes[i]);
+        }
+
+        f32 yPos = dComIfGp_getPlayer(0)->current.pos.y;
+        mCurFloor = dMap_GetFloorNo(&dComIfGp_getStage(), yPos + mapOffsetY());
+        mCurFloorMapY = mMpp1PosY + (mCurFloor - 0x80) * (mMpp1SizeY + mMppGapY);
+    } else {
+        for (int i = 0; i < 3; i++) {
+            fopMsgM_paneScaleXY(&mItPanes[i], 1.0f);
+            fopMsgM_paneScaleXY(&mIkPanes[i], 1.0f);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            mCarPanes[i].mPosCenterOrig.x = mFbPanes[mCurFloor - mBottomFloor].mPosCenter.x + mCarFloorOfsX[i];
+            mCarPanes[i].mPosCenterOrig.y = mFbPanes[mCurFloor - mBottomFloor].mPosCenter.y + mCarFloorOfsY[i];
+        }
+
+        for (int i = 0; i < (mTopFloor - mBottomFloor + 1); i++) {
+            int floorNo = mBottomFloor + i;
+            if (floorNo == mCurFloor) {
+                mFlPanes[i].mSize.x = mFlPanes[i].mSizeOrig.x * 1.15f;
+                mFlPanes[i].mSize.y = mFlPanes[i].mSizeOrig.y * 1.15f;
+                fopMsgM_cposMove(&mFlPanes[i]);
+
+                mFbPanes[i].mSize.x = mFbPanes[i].mSizeOrig.x * 1.15f;
+                mFbPanes[i].mSize.y = mFbPanes[i].mSizeOrig.y * 1.15f;
+                ((J2DWindow*)mFbPanes[i].pane)->setContentsColor(mFb5ContentsColor);
+                ((J2DWindow*)mFbPanes[i].pane)->setWhite(mFb5White);
+                ((J2DWindow*)mFbPanes[i].pane)->setBlack(mFb5Black);
+                fopMsgM_cposMove(&mFbPanes[i]);
+
+                mFbkPanes[i].mSize.x = mFbkPanes[i].mSizeOrig.x * 1.15f;
+                mFbkPanes[i].mSize.y = mFbkPanes[i].mSizeOrig.y * 1.15f;
+                fopMsgM_cposMove(&mFbkPanes[i]);
+            } else {
+                mFlPanes[i].mSize.x = mFlPanes[i].mSizeOrig.x;
+                mFlPanes[i].mSize.y = mFlPanes[i].mSizeOrig.y;
+                fopMsgM_cposMove(&mFlPanes[i]);
+
+                mFbPanes[i].mSize.x = mFbPanes[i].mSizeOrig.x;
+                mFbPanes[i].mSize.y = mFbPanes[i].mSizeOrig.y;
+                ((J2DWindow*)mFbPanes[i].pane)->setContentsColor(mFb0ContentsColor);
+                ((J2DWindow*)mFbPanes[i].pane)->setWhite(mFb0White);
+                ((J2DWindow*)mFbPanes[i].pane)->setBlack(mFb0Black);
+
+                fopMsgM_cposMove(&mFbPanes[i]);
+
+                mFbkPanes[i].mSize.x = mFbkPanes[i].mSizeOrig.x;
+                mFbkPanes[i].mSize.y = mFbkPanes[i].mSizeOrig.y;
+                fopMsgM_cposMove(&mFbkPanes[i]);
+            }
+        }
+    }
 }
 
 /* 801ACDE0-801ACEB8       .text floorInit__12dMenu_Dmap_cFv */
