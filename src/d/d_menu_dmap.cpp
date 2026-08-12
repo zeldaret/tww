@@ -4,12 +4,14 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "d/d_lib.h"
 #include "d/d_map.h"
 #include "d/d_menu_dmap.h"
 #include "d/d_stage.h"
 #include "f_op/f_op_msg_mng.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DWindow.h"
+#include "m_Do/m_Do_audio.h"
 
 dMd_HIO_c g_mdHIO;
 
@@ -822,12 +824,108 @@ void dMenu_Dmap_c::decAlpha(f32 i_alpha) {
 
 /* 801ABC64-801AC00C       .text cursorMove__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::cursorMove() {
-    /* Nonmatching */
+    u8 selectItem = mSelectItem;
+    u8 curFloor = mCurFloor;
+    stick->checkTrigger();
+
+    if (stick->checkLeftTrigger()) {
+        if (mSelectItem < 3 && mSelectItem != 0) {
+            mSelectItem--;
+            mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
+        }
+    } else if (stick->checkRightTrigger()) {
+        if (mSelectItem < 3 && mSelectItem < 2) {
+            mSelectItem++;
+            mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
+        }
+    } else if (stick->checkUpTrigger()) {
+        if (mSelectItem < 3) {
+            mSelectItem = 3;
+            mCc38Pane.mUserArea = 6;
+            mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
+        } else if (mCurFloor < mTopFloor) {
+            mCurFloor++;
+            mCc38Pane.mUserArea = 6;
+            mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
+        }
+    } else if (stick->checkDownTrigger()) {
+        if (mSelectItem == 3) {
+            if (mCurFloor > mBottomFloor) {
+                mCurFloor--;
+                mCc38Pane.mUserArea = -6;
+                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
+            } else {
+                mSelectItem = 1;
+                mCc38Pane.mUserArea = -6;
+                mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
+            }
+        }
+    }
+
+    if (mSelectItem != selectItem || mCurFloor != curFloor) {
+        mNm00Pane.mUserArea = 0;
+        itemnameSet();
+        if (mSelectItem < 3) {
+            for (int i = 0; i < mTopFloor - mBottomFloor + 1; i++) {
+                fopMsgM_setInitAlpha(&mFbPanes[i]);
+            }
+        }
+        itemScale();
+        if (mCurFloor != curFloor) {
+            treasureSet();
+        }
+        mDoAud_seStart(JA_SE_ITM_MENU_CURSOR);
+    }
+
+    if (mSelectItem < 3) {
+        if ((mSelectItem == 0 && dComIfGs_isDungeonItemMap()) ||
+            (mSelectItem == 1 && dComIfGs_isDungeonItemBossKey()) ||
+            (mSelectItem == 2 && dComIfGs_isDungeonItemCompass())) {
+            dComIfGp_setDoStatusForce(dActStts_INFO_e);
+        } else {
+            dComIfGp_setDoStatusForce(dActStts_BLANK_e);
+            dComIfGp_setDoStatus(dActStts_BLANK_e);
+        }
+    }
 }
 
 /* 801AC00C-801AC238       .text cursorAnime__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::cursorAnime() {
-    /* Nonmatching */
+    s16 x_trans;
+    s16 y_trans;
+    
+    JUtility::TColor sp10;
+    JUtility::TColor sp0C;
+    JUtility::TColor sp08;
+
+    if (mCarPanes[0].mUserArea < 10) {
+        for (int i = 0; i < 4; i++) {
+            ((J2DPicture*)mCarPanes[i].pane)->changeTexture("cursor_00_01.bti", 0);
+        }
+        x_trans = 7;
+        y_trans = 7;
+        if (mSelectItem == 3) {
+            fopMsgM_valueIncrease(10, mCarPanes[0].mUserArea, 0);
+        }
+    } else if (mCarPanes[0].mUserArea < 20) {
+        for (int i = 0; i < 4; i++) {
+            ((J2DPicture*)mCarPanes[i].pane)->changeTexture("cursor_00_02.bti", 0);
+        }
+        x_trans = 14;
+        y_trans = 14;
+        if (mSelectItem == 3) {
+            fopMsgM_valueIncrease(10, 20 - mCarPanes[0].mUserArea, 0);
+        }
+    }
+    fopMsgM_paneTrans(&mCarPanes[0], -x_trans, y_trans);
+    fopMsgM_paneTrans(&mCarPanes[1], x_trans, y_trans);
+    fopMsgM_paneTrans(&mCarPanes[2], -x_trans, -y_trans);
+    fopMsgM_paneTrans(&mCarPanes[3], x_trans, -y_trans);
+
+    mCarPanes[0].mUserArea++;
+    if (mCarPanes[0].mUserArea >= 20) {
+        mCarPanes[0].mUserArea = 0;
+    }
 }
 
 /* 801AC238-801AC2D8       .text noteInit__12dMenu_Dmap_cFv */
