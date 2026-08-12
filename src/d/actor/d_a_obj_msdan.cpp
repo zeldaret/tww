@@ -20,8 +20,8 @@ cPhs_State daObjMsdan::Act_c::Mthd_Create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
-        Vec pos = current.pos;
-        SVec angle = current.angle;
+        cXyz pos = current.pos;
+        csXyz angle = current.angle;
         angle.y += 0x8000;
 
         if (prm_get_size()) {
@@ -30,7 +30,7 @@ cPhs_State daObjMsdan::Act_c::Mthd_Create() {
                 pos.x += 50.0f * cM_ssin(current.angle.y);
                 pos.z += 50.0f * cM_scos(current.angle.y);
                 fopAcM_create(fpcNm_Obj_MsdanSub_e, prm_get_swSave() + (i << 8) + (prm_get_size() << 16),
-                              (cXyz*)&pos, current.roomNo, (csXyz*)&angle, NULL, -1, NULL);
+                              &pos, current.roomNo, &angle, NULL, -1, NULL);
             }
         } else {
             pos.y += 400.0f;
@@ -38,7 +38,7 @@ cPhs_State daObjMsdan::Act_c::Mthd_Create() {
                 pos.x += 50.0f * cM_ssin(current.angle.y);
                 pos.z += 50.0f * cM_scos(current.angle.y);
                 fopAcM_create(fpcNm_Obj_MsdanSub_e, prm_get_swSave() + (i << 8) + (prm_get_size() << 16),
-                              (cXyz*)&pos, current.roomNo, (csXyz*)&angle, NULL, -1, NULL);
+                              &pos, current.roomNo, &angle, NULL, -1, NULL);
             }
         }
 
