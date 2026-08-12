@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_sarace.h"
+#include "d/d_snap.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
 #include "res/Object/Sarace.h"
@@ -615,20 +616,52 @@ BOOL daNpc_Sarace_c::event_endCheck_action(void* i_arg) {
 
 /* 0000173C-000017E0       .text set_mtx__14daNpc_Sarace_cFv */
 void daNpc_Sarace_c::set_mtx() {
-    J3DModel* model = mpMorf->getModel();
-    J3DModel* headModel = mpHeadMorf->getModel();
+    J3DModel* pModel = mpMorf->getModel();
+    J3DModel* pHeadModel = mpHeadMorf->getModel();
 
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::YrotM(current.angle.y);
-    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    pModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
-    headModel->setBaseTRMtx(model->getAnmMtx(m_jnt.mHeadJntNum));
+    pHeadModel->setBaseTRMtx(pModel->getAnmMtx(m_jnt.mHeadJntNum));
     mpHeadMorf->calc();
 }
 
 /* 000017E0-00001938       .text _draw__14daNpc_Sarace_cFv */
 BOOL daNpc_Sarace_c::_draw() {
-    /* Nonmatching */
+    J3DModel* pModel = mpMorf->getModel();
+    J3DModel* pHeadModel = mpHeadMorf->getModel();
+    J3DModelData* pHeadModelData = pHeadModel->getModelData();
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(pModel, &tevStr);
+    g_env_light.setLightTevColorType(pHeadModel, &tevStr);
+    mBtpAnm.entry(pHeadModelData, mBlinkFrame);
+    mpMorf->entryDL();
+    mpHeadMorf->entryDL();
+    mBtpAnm.remove(pHeadModelData);
+    
+    cXyz tmp(current.pos.x, current.pos.y + 130.0f, current.pos.z);
+    mShadowID = dComIfGd_setShadow(
+        mShadowID,
+        1,
+        mpMorf->getModel(),
+        &tmp,
+        800.0f,
+        20.0f,
+        current.pos.y,
+        mObjAcch.GetGroundH(),
+        mObjAcch.m_gnd,
+        &tevStr,
+        0,
+        1.0f,
+        dDlst_shadowControl_c::getSimpleTex()
+    );
+    if(mShadowID) {
+        dComIfGd_addRealShadow(mShadowID, mpHeadMorf->getModel());
+    }
+    dSnap_RegistFig(DSNAP_TYPE_NPC_SA1, this, 1.0, 1.0, 1.0);
+    return TRUE;
 }
 
 /* 00001938-00001A68       .text _execute__14daNpc_Sarace_cFv */
