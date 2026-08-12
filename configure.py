@@ -1743,7 +1743,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_hami4"),
     ActorRel(Matching,    "d_a_obj_hat"),
     ActorRel(Matching,    "d_a_obj_hbrf1"),
-    ActorRel(NonMatching, "d_a_obj_hcbh"),
+    ActorRel(Matching,    "d_a_obj_hcbh"),
     ActorRel(Matching,    "d_a_obj_hha"),
     ActorRel(Matching,    "d_a_obj_hlift"),
     ActorRel(Matching,    "d_a_obj_homen"),
