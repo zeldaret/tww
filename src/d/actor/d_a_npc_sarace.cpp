@@ -556,6 +556,7 @@ void daNpc_Sarace_c::talk01() {
 
 /* 000014B8-000014E0       .text dummy_action__14daNpc_Sarace_cFPv */
 BOOL daNpc_Sarace_c::dummy_action(void* i_arg) {
+    UNUSED(i_arg);
     if(mActionStatus == 0) {
         mLookBackState = 1;
         mActionStatus++;
@@ -565,7 +566,27 @@ BOOL daNpc_Sarace_c::dummy_action(void* i_arg) {
 
 /* 000014E0-000015BC       .text wait_action__14daNpc_Sarace_cFPv */
 BOOL daNpc_Sarace_c::wait_action(void* i_arg) {
-    /* Nonmatching */
+    if(mActionStatus == 0) {
+        mLookBackState = 1;
+        mActionStatus++;
+    } else if (mActionStatus != -1) {
+        s16 angle = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
+        mHasAttention = chkAttention(
+            current.pos,
+            angle
+        );
+        switch(mLookBackState) {
+            case 1:
+                wait01();
+                break;
+            case 2:
+                talk01();
+                break;
+        }
+        lookBack();
+        setAttention();
+    }
+    return TRUE;
 }
 
 /* 000015BC-0000173C       .text event_endCheck_action__14daNpc_Sarace_cFPv */
