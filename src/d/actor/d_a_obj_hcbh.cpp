@@ -275,33 +275,33 @@ cPhs_State daObjHcbh_c::_create() {
             } else if (dComIfG_Bgsp()->Regist(mpBgW2, this)) {
                 phase = cPhs_ERROR_e;
             } else {
-            cullMtx = mpModel->getBaseTRMtx();
-            init_mtx();
-            mAcchCir.SetWall(589.0f, 70.0f);
-            mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
-            mAcch.ClrWaterNone();
-            mAcch.ClrRoofNone();
-            mAcch.SetRoofCrrHeight(589.0f);
-            mAcch.CrrPos(*dComIfG_Bgsp());
-            mAcch.ClrGroundLanding();
-            mStts.Init(0xFF, 0xFF, this);
-            mCyl.Set(l_cyl_src);
-            mCyl.SetStts(&mStts);
-            mCyl.SetC(current.pos);
-            mCyl.SetCoHitCallback(co_hitCallback);
-            for (int i = 0; i < 6; i++) {
-                mSph[i].Set(l_sph_src);
-                mSph[i].SetStts(&mStts);
-                mSph[i].SetR(70.0f);
-                cXyz pos(current.pos.x, current.pos.y + l_co_sph_offset[i].y, current.pos.z);
-                mSph[i].SetC(pos);
+                cullMtx = mpModel->getBaseTRMtx();
+                init_mtx();
+                mAcchCir.SetWall(589.0f, 70.0f);
+                mAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, &current.angle, &shape_angle);
+                mAcch.ClrWaterNone();
+                mAcch.ClrRoofNone();
+                mAcch.SetRoofCrrHeight(589.0f);
+                mAcch.CrrPos(*dComIfG_Bgsp());
+                mAcch.ClrGroundLanding();
+                mStts.Init(0xFF, 0xFF, this);
+                mCyl.Set(l_cyl_src);
+                mCyl.SetStts(&mStts);
+                mCyl.SetC(current.pos);
+                mCyl.SetCoHitCallback(co_hitCallback);
+                for (int i = 0; i < 6; i++) {
+                    mSph[i].Set(l_sph_src);
+                    mSph[i].SetStts(&mStts);
+                    mSph[i].SetR(70.0f);
+                    cXyz pos(current.pos.x, current.pos.y + l_co_sph_offset[i].y, current.pos.z);
+                    mSph[i].SetC(pos);
+                }
+                mSmokeCallback.setTevStr(&tevStr);
+                mSmokeCallback.setRateOff(0);
+                mSmokeCallback.setFollowOff();
+                mActProc = &daObjHcbh_c::wait_act_proc;
+                fopAcM_setCullSizeBox(this, -40.0f, 0.0f, -40.0f, 100.0f, 589.0f, 100.0f);
             }
-            mSmokeCallback.setTevStr(&tevStr);
-            mSmokeCallback.setRateOff(0);
-            mSmokeCallback.setFollowOff();
-            mActProc = &daObjHcbh_c::wait_act_proc;
-            fopAcM_setCullSizeBox(this, -40.0f, 0.0f, -40.0f, 100.0f, 589.0f, 100.0f);
-        }
         } else {
             phase = cPhs_ERROR_e;
         }
