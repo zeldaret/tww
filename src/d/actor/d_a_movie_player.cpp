@@ -528,7 +528,7 @@ static u8 __THPReadScaneHeader() {
 
 /* 00000B48-00000EFC       .text __THPReadQuantizationTable */
 static u8 __THPReadQuantizationTable() {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - regalloc (pure regalloc: 0 register-normalized diffs, verified 2026-08-12) */
     f32 q_temp[64];
 
     u16 length = (u16)((__THPInfo->c)[0] << 8 | (__THPInfo->c)[1]);
@@ -3404,7 +3404,7 @@ static void daMP_THPPlayerQuit() {
 
 /* 00004BD4-00004FB4       .text daMP_THPPlayerOpen__FPCci */
 static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
-    /* Nonmatching - retail-only regalloc */
+    /* Nonmatching - retail-only regalloc (pure regalloc: 0 register-normalized diffs, verified 2026-08-12) */
     s32 offset;
     s32 i;
 
@@ -4150,8 +4150,7 @@ static u32 daMP_Get_MovieRestFrame() {
 }
 
 /* 000062F0-00006370       .text daMP_Set_PercentMovieVolume__Ff */
-static u32 daMP_Set_PercentMovieVolume(f32 volume) {
-    /* Nonmatching - regalloc */
+static void daMP_Set_PercentMovieVolume(f32 volume) {
 #if VERSION > VERSION_DEMO
     if (!daMP_Fail_alloc)
 #endif
