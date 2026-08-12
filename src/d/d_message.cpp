@@ -61,10 +61,10 @@ void dMsg2_value_init(sub_msg2_class* i_Msg, u8 i_index) {
     const u32 color = colorTable[i_Msg->colorNo];
     int i = i_index;
 
-    int temp_r5 = i_Msg->msgDataProc[i].getRGradAlpha();
-    int temp_r6 = i_Msg->msgDataProc[i].getRCharAlpha();
-    int var_r30 = i_Msg->msgDataProc[i].getGradAlpha();
-    int var_r29 = i_Msg->msgDataProc[i].getCharAlpha();
+    int temp_r5 = i_Msg->msgDataProc[i].getCharAlpha();
+    int temp_r6 = i_Msg->msgDataProc[i].getGradAlpha();
+    int var_r30 = i_Msg->msgDataProc[i].getRCharAlpha();
+    int var_r29 = i_Msg->msgDataProc[i].getRGradAlpha();
 
     u32 temp_a = color | temp_r5;
     u32 temp_b = color | temp_r6;
@@ -406,17 +406,26 @@ void dMsg2_messageOut(sub_msg2_class* i_Msg, u8 i_index, int i_aimLine) {
     i_Msg->msgDataProc[i_index].stringSet();
 
     for (int i = 0; i < 8; i++) {
-        u8 var_r30 = i_Msg->msgDataProc[i_index].getIconNum(i);
-        u32 var_r29 = i_Msg->msgDataProc[i_index].get_0x220(i);
+        u8 iconNum = i_Msg->msgDataProc[i_index].getIconNum(i);
+        u32 iconColor = i_Msg->msgDataProc[i_index].getIconColor(i);
 
-        if (var_r30 != 0xFF && bbuttonTimer[i][i_index] == -1) {
+        if (iconNum != fopMsgM_Icon_NONE_e && bbuttonTimer[i][i_index] == -1) {
             JKRHeap* heap = mDoExt_setCurrentHeap(i_Msg->Heap);
 
-            if ((var_r30 == 10 || var_r30 == 11 || var_r30 == 12 || var_r30 == 13 || var_r30 == 0x15 || var_r30 == 0x17) && var_r29 == 0) {
-                var_r29 = -1;
+            if (
+                (
+                    iconNum == fopMsgM_Icon_ARROW_LEFT_e ||
+                    iconNum == fopMsgM_Icon_ARROW_RIGHT_e ||
+                    iconNum == fopMsgM_Icon_ARROW_UP_e ||
+                    iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
+                    iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
+                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+                ) && iconColor == 0
+            ) {
+                iconColor = 0xFFFFFFFF;
             }
 
-            fopMsgM_outFontSet(bbutton_icon[i][i_index], bbutton_kage[i][i_index], &bbuttonTimer[i][i_index], var_r29, var_r30);
+            fopMsgM_outFontSet(bbutton_icon[i][i_index], bbutton_kage[i][i_index], &bbuttonTimer[i][i_index], iconColor, iconNum);
 
             mDoExt_setCurrentHeap(heap);
         }
@@ -428,8 +437,8 @@ void dMsg2_messageOut(sub_msg2_class* i_Msg, u8 i_index, int i_aimLine) {
 /* 801E8668-801E86E8       .text dMsg2_yose_select__FP14sub_msg2_classUc */
 void dMsg2_yose_select(sub_msg2_class* i_Msg, u8 i_index) {
     i_Msg->msgDataProc[i_index].count = i_Msg->msgDataProc[i_index].stringLength();
-    i_Msg->field_0xecc[i_index] = i_Msg->msgDataProc[i_index].lineCount;
-    i_Msg->msgDataProc[i_index].lineCount = 0;
+    i_Msg->field_0xecc[i_index] = i_Msg->msgDataProc[i_index].getLineCount();
+    i_Msg->msgDataProc[i_index].setLineCount(0);
     i_Msg->msgDataProc[i_index].stringShift();
     dMsg2_textPosition(i_Msg, i_index);
 }
@@ -605,9 +614,9 @@ void dMsg2_setCharAlpha(sub_msg2_class* i_Msg, u8 i_index) {
     }
 
     i_Msg->msgDataProc[var_r31].setCharAlpha(i_Msg->field_0xedf[0][var_r31],
-                                              i_Msg->field_0xedf[1][var_r31],
-                                              i_Msg->field_0xedf[2][var_r31],
-                                              i_Msg->field_0xedf[3][var_r31]);
+                                             i_Msg->field_0xedf[1][var_r31],
+                                             i_Msg->field_0xedf[2][var_r31],
+                                             i_Msg->field_0xedf[3][var_r31]);
 }
 
 /* 801E9054-801E9108       .text dMsg2_messageShow__FP14sub_msg2_class */
@@ -931,7 +940,7 @@ void dDlst_2DMSG2_c::draw() {
 }
 
 /* 801E9CDC-801E9FC4       .text outFontDraw__14dDlst_2DMSG2_cFv */
-// NONMATCHING - a lot wrong here
+// NONMATCHING - regswap
 void dDlst_2DMSG2_c::outFontDraw() {
     J2DPane* ppane = ((sub_msg2_class*)actorP)->field_0xd00[0].pane;
     f32 var_f31 = ppane->getGlbBounds().i.y;
@@ -939,32 +948,35 @@ void dDlst_2DMSG2_c::outFontDraw() {
 
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 8; j++) {
-            sub_msg2_class* msg = (sub_msg2_class*)actorP;
-            u8 iconNum = msg->msgDataProc[i].field_0x281[j];
-            fopMsgM_msgDataProc_c* dataProc = msg->msgDataProc;
-            int temp_r6 = dataProc->field_0x168[i];
-            int temp_r4 = dataProc->field_0x1A4[i];
-            int var_r22 = dataProc->field_0x1E0[i];
+            u8 iconNum = actorP->msgDataProc[i].getIconNum(j);
+            int posX = actorP->msgDataProc[i].getIconPosX(j);
+            int posY = actorP->msgDataProc[i].getIconPosY(j);
+            int scale = actorP->msgDataProc[i].getIconScale(j);
 
-            if (iconNum != 0xFF) {
-                J2DTextBox* pJVar3 = (J2DTextBox*)msg->text_pane[i].pane;
-                int sp10 = (f32)temp_r6 + pJVar3->getGlbBounds().i.x;
+            if (iconNum != fopMsgM_Icon_NONE_e) {
+                u8 r14;
+                J2DTextBox* scrn = (J2DTextBox*)actorP->text_pane[i].pane;
+                int r18 = (f32)posX + scrn->getGlbBounds().i.x;
 
-                if (var_r22 > msg->field_0xeb4) {
-                    if (msg->field_0xecc[i] > 1) {
-                        temp_r4 = ((msg->field_0xeb0 * (3 - temp_r4)) + pJVar3->getGlbBounds().i.y);
+                int r17;
+                if (scale > actorP->field_0xeb4) {
+                    if (actorP->field_0xecc[i] > 1) {
+                        f32 temp = (actorP->field_0xeb0 * (DEMO_SELECT(2, 3) - posY));
+                        r17 = temp + scrn->getGlbBounds().i.y - (f32)(int)(scale / 2);
                     } else {
-                        temp_r4 = (msg->field_0xeb0 + pJVar3->getGlbBounds().i.y);
+                        f32 temp = actorP->field_0xeb0 * DEMO_SELECT(3, 4);
+                        r17 = (temp + scrn->getGlbBounds().i.y - (f32)(int)(scale / 2));
                     }
                 } else {
-                    temp_r4 = ((msg->field_0xeb0 * (3 - msg->field_0xecc[i])) + pJVar3->getGlbBounds().i.y);
+                    f32 temp = (actorP->field_0xeb0 * (DEMO_SELECT(2, 3) - actorP->field_0xecc[i] + (posY * 2)));
+                    r17 = (temp + scrn->getGlbBounds().i.y);
                 }
 
-                u8 sp20 = msg->field_0xeac;
-                JKRHeap* heap = mDoExt_setCurrentHeap(msg->Heap);
+                r14 = actorP->field_0xeac;
+                JKRHeap* heap = mDoExt_setCurrentHeap(actorP->Heap);
 
-                if ((f32)temp_r4 > var_f31 && (f32)temp_r4 < var_f30 - (f32)var_r22) {
-                    fopMsgM_outFontDraw(bbutton_icon[j][i], bbutton_kage[j][i], sp10, temp_r4, var_r22, &bbuttonTimer[j][i], sp20, iconNum);
+                if ((f32)r17 > var_f31 && (f32)r17 < var_f30 - (f32)scale) {
+                    fopMsgM_outFontDraw(bbutton_icon[j][i], bbutton_kage[j][i], r18, r17, scale, &bbuttonTimer[j][i], r14, iconNum);
                 }
 
                 mDoExt_setCurrentHeap(heap);

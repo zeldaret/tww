@@ -30,7 +30,7 @@ namespace daObjPirateship {
         inline bool _delete();
         inline bool _draw();
         inline bool _execute();
-        void getKajiID() {}
+        fpc_ProcID getKajiID() {return m300;}
     
         void set_mtx();
         void pirateCreate(int*);

@@ -31,8 +31,8 @@ public:
     /* 0x01C */ f32 field_0x1c;
     /* 0x020 */ f32 field_0x20;
     /* 0x024 */ f32 field_0x24;
-    /* 0x028 */ f32 field_0x28;
-    /* 0x02C */ u8 field_0x2c;
+    /* 0x028 */ f32 mScopeWipeMaxScale;
+    /* 0x02C */ u8 mScopeWipeAlpha;
     /* 0x02D */ u8 field_0x2d;
     /* 0x02E */ s16 field_0x2e;
     /* 0x030 */ s16 field_0x30;

@@ -419,6 +419,7 @@ bool daObjVgnfd_c::_execute() {
                             dComIfGp_getVibration().StartShock(8, 27, cXyz(0.0f, 1.0f, 0.0f));
                             mCurModel = 2;
                             fopAcM_seStartCurrent(this, JA_SE_OBJ_B_BOSS_DR_BRK_3, 0);
+                            break;
                         }
                     }
 

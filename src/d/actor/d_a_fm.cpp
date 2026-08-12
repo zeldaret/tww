@@ -2300,7 +2300,6 @@ void daFm_c::modeBikubiku() {
 
 /* 000068D0-00006D8C       .text modeProc__6daFm_cFQ26daFm_c6Proc_ei */
 void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
-
     struct ModeEntry {
         ModeFunc init;
         ModeFunc run;

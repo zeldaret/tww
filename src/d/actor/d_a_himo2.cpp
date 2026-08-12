@@ -404,12 +404,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 r19--;
                 *r19 = local_a10[i];
             }
-#ifdef __MWERKS__
             i_this->m1F30.update((u16)i_this->m1F6C, rope_scale, (GXColor){200, 0x96, 50, 0xFF}, 0, &actor->tevStr);
-#else
-            GXColor local_a50 = {200, 0x96, 50, 0xFF};
-            i_this->m1F30.update((u16)i_this->m1F6C, rope_scale, local_a50, 0, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->m1F30);
             daPy_py_c* apdVar2 = (daPy_py_c*)dComIfGp_getPlayer(0);
             cMtx_YrotS(*calc_mtx, -apdVar2->shape_angle.y);
@@ -462,12 +457,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                     *r19 += i_this->m02EC[1];
                 }
             }
-#if __MWERKS__
             i_this->m1F98.update(0x20, rope_scale, (GXColor){200, 0x96, 50, 0xFF}, 0, &actor->tevStr);
-#else
-            GXColor local_a54 = {200, 0x96, 50, 0xFF};
-            i_this->m1F98.update(0x20, rope_scale, local_a54, 0, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->m1F98);
             r19 = i_this->m1FD8.getPos(0);
             f32 f1_2;
@@ -497,12 +487,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
                 r19->z = i_this->m02EC[1].z + sp2C.z * i + sp38.z * fVar1;
                 r19++;
             }
-#ifdef __MWERKS__
             i_this->m1FD8.update(16, rope_scale, (GXColor){200, 0x96, 50, 0xFF}, 0, &actor->tevStr);
-#else
-            GXColor local_a58 = {200, 0x96, 50, 0xFF};
-            i_this->m1FD8.update(16, rope_scale, local_a58, 0, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->m1FD8);
             dComIfGd_setList();
         }
@@ -1443,9 +1428,9 @@ static void new_himo2_move(himo2_class* i_this) {
             i_this->m02E0++;
             i_this->m029C = 50;
         }
-        f26 = g_mDoCPd_cpadInfo[0].mCStickPosY;
+        f26 = CPad_GET_SUBSTICK_POS_Y(0);
     label_1d50:
-        f32 f2 = g_mDoCPd_cpadInfo[0].mCStickPosX;
+        f32 f2 = CPad_GET_SUBSTICK_POS_X(0);
         i_this->m2512 += (s16)(f2 * (REG0_F(6) + 1000.0f));
         cLib_addCalcAngleS2(&i_this->m2510, i_this->m2512, 4, 0x1000);
         if (f26 <= -0.1f) {

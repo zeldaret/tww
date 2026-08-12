@@ -473,6 +473,7 @@ void daNpc_Km1_c::privateCut() {
             switch(field_0x7C9){
                 case 0:
                     event_actionInit(staffIdx);
+                    break;
             }
         }
         bool bVar1;

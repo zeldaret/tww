@@ -975,8 +975,8 @@ void daRd_c::modeCryInit() {
 void daRd_c::modeCry() {
     setAnm(AnmPrm_WALK, false);
     
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
-    f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
+    f32 stickPosY = CPad_GET_STICK_POS_Y(0);
     if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         if (isLinkControl()) {
             dComIfGp_event_reset();
@@ -1084,8 +1084,8 @@ void daRd_c::modeAttack() {
         return;
     }
     
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
-    f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
+    f32 stickPosY = CPad_GET_STICK_POS_Y(0);
     if (eventInfo.checkCommandDemoAccrpt()) {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
         if (isAnm(AnmPrm_ATACK)) {

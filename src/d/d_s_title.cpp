@@ -123,7 +123,7 @@ static cPhs_State dScnTitle_Create(scene_class* i_scn) {
 #if VERSION == VERSION_PAL
     dScnTitle_c::mMp = NULL;
     if (fpcM_GetName(i_this) == fpcNm_ENDING_SCENE_e) {
-        fopMsgM_Create(fpcNm_MESG_e, NULL, NULL);
+        fopMsgM_Create(fpcNm_MSG3_e, NULL, NULL);
     }
 #endif
 

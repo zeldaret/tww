@@ -326,7 +326,7 @@ public:
     int getCameraPlayer2ID(int i) { return mCameraInfo[i].mCamP2Id; }
     int getCameraWinID(int i) { return mCameraInfo[i].mDlstWindowIdx; }
 
-    int getItemTimer() { return mItemTimer; }
+    s16 getItemTimer() { return mItemTimer; }
     void resetItemTimer(s16 timer) {
         mItemTimer = timer;
         mStartItemTimer = false;
@@ -444,7 +444,9 @@ public:
     int getItemNowMagic() { return mItemNowMagicCount; }
     void setItemNowMagic(s16 num) { mItemNowMagicCount = num; }
 
+    u32 getNpcNameMessageID() { return mNpcNameMessageID; }
     void setNpcNameMessageID(u32 id) { mNpcNameMessageID = id; }
+    u32 getItemNameMessageID() { return mItemNameMessageID; }
     void setItemNameMessageID(u32 id) { mItemNameMessageID = id; }
 
     s16 getItemKeyNumCount() { return mItemKeyNumCount; }
@@ -473,6 +475,12 @@ public:
 
     u8 getScopeType() { return mScopeType; }
     void setScopeType(u8 type) { mScopeType = type; }
+
+    void setItemScopeWipeTimer(u8 timer) { mItemScopeWipeTimer = timer; }
+    f32 getItemScopeWipeScale() { return mItemScopeWipeScale; }
+    void setItemScopeWipeScale(f32 scale) { mItemScopeWipeScale = scale; }
+    bool getScopeWipeFlag() { return mScopeWipeFlag; }
+    void setScopeWipeFlag(bool flag) { mScopeWipeFlag = flag; }
 
     u8 getOperateWind() { return mOperateWind; }
     void setOperateWindCancelOff() { mOperateWind = 0; }
@@ -602,6 +610,7 @@ public:
     void setActionIconArchive(JKRArchive * pArc) { mpActionIconArchive = pArc; }
     JKRArchive* getActionIconArchive() { return mpActionIconArchive; }
     void setScopeResArchive(JKRArchive * pArc) { mpScopeResArchive = pArc; }
+    JKRArchive* getScopeResArchive() { return mpScopeResArchive; }
     JKRArchive* getCameraResArchive() { return mpCameraResArchive; }
     void setCameraResArchive(JKRArchive * pArc) { mpCameraResArchive = pArc; }
     JKRArchive* getSwimResArchive() { return mpSwimResArchive; }
@@ -772,7 +781,7 @@ public:
         /* 0x4 */ s8 mCameraID;
     } mPlayerInfo[1];
     /* 0x48AC */ fopAc_ac_c* mpPlayerPtr[3];  // 0: Link, 1: Partner, 2: Ship
-    /* 0x48B8 */ f32 field_0x48b8;
+    /* 0x48B8 */ f32 mItemScopeWipeScale;
     /* 0x48BC */ f32 mItemLifeCount;
     /* 0x48C0 */ s32 mItemRupeeCount;
     /* 0x48C4 */ s32 mAirMeter;
@@ -800,7 +809,7 @@ public:
     /* 0x4924 */ u16 mItemNowLife;
     /* 0x4926 */ s16 mItemNowRupee;
     /* 0x4928 */ bool mItemSwimTimerStatus;
-    /* 0x4929 */ u8 field_0x4929;
+    /* 0x4929 */ u8 mItemScopeWipeTimer;
     /* 0x492A */ u8 mMesgStatus;
     /* 0x492B */ u8 mScopeMesgStatus;
     /* 0x492C */ u8 field_0x492c;
@@ -855,7 +864,7 @@ public:
     /* 0x4965 */ u8 field_0x4965;
     /* 0x4966 */ char mInputPassword[0x11];
     /* 0x4977 */ u8 mMesgBgm;
-    /* 0x4978 */ u8 field_0x4978;
+    /* 0x4978 */ u8 mScopeWipeFlag;
     /* 0x4979 */ u8 m2dShow;
     /* 0x497A */ u8 field_0x497a;
     /* 0x497B */ u8 field_0x497B[0x497C - 0x497B];
@@ -967,7 +976,7 @@ inline void dComIfGp_startItemTimer() {
     g_dComIfG_gameInfo.play.startItemTimer();
 }
 
-inline int dComIfGp_getItemTimer() {
+inline s16 dComIfGp_getItemTimer() {
     return g_dComIfG_gameInfo.play.getItemTimer();
 }
 
@@ -1001,6 +1010,14 @@ inline void dComIfGp_setAuctionGauge(s16 gauge) {
 
 inline s16 dComIfGp_getAuctionGauge() {
     return g_dComIfG_gameInfo.play.getAuctionGauge();
+}
+
+inline u32 dComIfGp_getNpcNameMessageID() {
+    return g_dComIfG_gameInfo.play.getNpcNameMessageID();
+}
+
+inline u32 dComIfGp_getItemNameMessageID() {
+    return g_dComIfG_gameInfo.play.getItemNameMessageID();
 }
 
 inline void dComIfGs_setRupee(u16 rupee) {
@@ -2752,6 +2769,26 @@ inline void dComIfGp_setScopeType(u8 type) {
     g_dComIfG_gameInfo.play.setScopeType(type);
 }
 
+inline void dComIfGp_setItemScopeWipeTimer(u8 timer) {
+    g_dComIfG_gameInfo.play.setItemScopeWipeTimer(timer);
+}
+
+inline f32 dComIfGp_getItemScopeWipeScale() {
+    return g_dComIfG_gameInfo.play.getItemScopeWipeScale();
+}
+
+inline void dComIfGp_setItemScopeWipeScale(f32 scale) {
+    g_dComIfG_gameInfo.play.setItemScopeWipeScale(scale);
+}
+
+inline bool dComIfGp_getScopeWipeFlag() {
+    return g_dComIfG_gameInfo.play.getScopeWipeFlag();
+}
+
+inline void dComIfGp_setScopeWipeFlag(bool flag) {
+    g_dComIfG_gameInfo.play.setScopeWipeFlag(flag);
+}
+
 inline u8 dComIfGp_getOperateWind() {
     return g_dComIfG_gameInfo.play.getOperateWind();
 }
@@ -3937,6 +3974,7 @@ inline JKRArchive* dComIfGp_getErrorResArchive() { return g_dComIfG_gameInfo.pla
 inline void dComIfGp_setActionIconArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setActionIconArchive(pArc); }
 inline JKRArchive* dComIfGp_getActionIconArchive() { return g_dComIfG_gameInfo.play.getActionIconArchive(); }
 inline void dComIfGp_setScopeResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setScopeResArchive(pArc); }
+inline JKRArchive* dComIfGp_getScopeResArchive() { return g_dComIfG_gameInfo.play.getScopeResArchive(); }
 inline JKRArchive* dComIfGp_getCameraResArchive() { return g_dComIfG_gameInfo.play.getCameraResArchive(); }
 inline void dComIfGp_setCameraResArchive(JKRArchive * pArc) { g_dComIfG_gameInfo.play.setCameraResArchive(pArc); }
 inline JKRArchive* dComIfGp_getSwimResArchive() { return g_dComIfG_gameInfo.play.getSwimResArchive(); }

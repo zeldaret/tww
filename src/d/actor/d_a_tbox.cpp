@@ -562,7 +562,7 @@ s32 daTbox_c::boxCheck() {
     cXyz playerChestDiff = player->current.pos - home.pos;
 
     if (playerChestDiff.abs2XZ() < SQUARE(100.0f)) {
-        if (fopAcM_seenActorAngleY(this, dComIfGp_getPlayer(0)) < 0x2000 && fopAcM_seenActorAngleY(player, this) < 0x2000) {
+        if (fopAcM_seenPlayerAngleY(this) < 0x2000 && fopAcM_seenActorAngleY(player, this) < 0x2000) {
             return TRUE;
         }
     }
@@ -611,19 +611,19 @@ void daTbox_c::darkProc() {
 /* 0000172C-000017CC       .text volmProc__8daTbox_cFv */
 void daTbox_c::volmProc() {
     if (mOpenTimer == 36) {
-        mSmokeEmitter->mGlobalPrmColor.a = 0xFF;
+        mSmokeEmitter->setGlobalAlpha(0xFF);
     }
     else if (mOpenTimer >= 0xB5) {
         dKy_plight_cut(&mPLight);
         dKy_efplight_cut(&mEfLight);
 
-        mSmokeEmitter->mGlobalPrmColor.a = 0;
+        mSmokeEmitter->setGlobalAlpha(0);
 
         mSmokeEmitter->becomeInvalidEmitter();
         mSmokeEmitter = NULL;
     }
     else if (mOpenTimer > 0x9C) {
-        mSmokeEmitter->mGlobalPrmColor.a = (0xB5 - mOpenTimer) * 0x0A;
+        mSmokeEmitter->setGlobalAlpha((0xB5 - mOpenTimer) * 0x0A);
     }
 }
 
@@ -896,7 +896,7 @@ void daTbox_c::OpenInit() {
 
     mSmokeEmitter = dComIfGp_particle_set(dPa_name::ID_IT_JN_TAKARA_VOLM, &current.pos, &current.angle);
     if (mSmokeEmitter != NULL) {
-        mSmokeEmitter->mGlobalPrmColor.a = 0;
+        mSmokeEmitter->setGlobalAlpha(0);
     }
 }
 

@@ -594,12 +594,7 @@ static void ke_disp(mo2_class* i_this) {
         ke_control(i_this, pkVar2, i);
         ke_draw(i_this, pkVar2, i);
     }
-#ifdef __MWERKS__
     i_this->m3Dline.update(10, 1.25f, (GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
-#else
-    GXColor local_18 = (GXColor){0xFF, 0x64, 0, 0xFF};
-    i_this->m3Dline.update(10, 1.25f, local_18, 2, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->m3Dline);
 }
 
@@ -659,7 +654,6 @@ static void daMo2_shadowDraw(mo2_class* i_this) {
             i_this->mDamageReaction.mAcch.m_gnd,
             &actor->tevStr
         );
-        ;
     }
 }
 
@@ -1504,7 +1498,7 @@ static void fight_run(mo2_class* i_this) {
     f32 dVar9;
     f32 fVar10;
 
-    dVar9 = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    dVar9 = CPad_GET_STICK_POS_X(0);
     i_this->mDamageReaction.m4D0 = i_this->m05D6;
     if (i_this->m05B0 == 0 && i_this->mDamageReaction.mMode != 0) {
         maxSpeed = 0x400;

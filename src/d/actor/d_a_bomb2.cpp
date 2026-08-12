@@ -202,7 +202,7 @@ void FuseSmokeCB_c::executeAfter(JPABaseEmitter* emitter) {
         s16 lifetime = r29 + r28;
         for (f32 f19 = f20; f19 < 1.0f; f19 += f20, lifetime += r28) {
             JGeometry::TVec3<f32> vec5;
-            vec5.cubic<f32>(vec1, vec2, vec3, vec4, f19);
+            vec5.cubic(vec1, vec2, vec3, vec4, f19);
             
             emitter->setLifeTime(lifetime);
             JPABaseParticle* particle = emitter->createParticle();
