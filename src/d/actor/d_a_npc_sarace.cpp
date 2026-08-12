@@ -83,7 +83,7 @@ static const u32 l_btp_ix_tbl[] = {
 
 
 /* 00000198-00000328       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode* node, s32 calcTiming) {
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if(calcTiming == J3DNodeCBCalcTiming_In){
         J3DModel* model = j3dSys.getModel();
         J3DJoint* joint = (J3DJoint*)node;
@@ -111,7 +111,7 @@ static BOOL nodeCallBack(J3DNode* node, s32 calcTiming) {
 
 /* 00000364-00000478       .text initTexPatternAnm__14daNpc_Sarace_cFb */
 BOOL daNpc_Sarace_c::initTexPatternAnm(bool i_param_1) {
-    J3DModelData* modeldata = mpMorf->getModel()->getModelData();
+    J3DModelData* modeldata = mpHeadMorf->getModel()->getModelData();
 
     m_btp = (J3DAnmTexPattern*)dComIfG_getObjectRes("Sarace", l_btp_ix_tbl[mTexPatternNum]);
     JUT_ASSERT(0xF9, m_btp != NULL);
@@ -388,7 +388,7 @@ BOOL daNpc_Sarace_c::CreateInit() {
         mMiniGameMessage = 0xFB4;
         fopAcM_orderSpeakEvent(this);
     }
-    mpMorf->play(&mEyePos, 0, 0);
+    mpMorf->play(&eyePos, 0, 0);
     mpMorf->calc();
     mpHeadMorf->play(NULL, 0, 0);
     mpHeadMorf->calc();
@@ -704,18 +704,103 @@ BOOL daNpc_Sarace_c::_delete() {
 }
 
 /* 00001AE0-00001B00       .text CallbackCreateHeap__FP10fopAc_ac_c */
-static BOOL CallbackCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
+    return ((daNpc_Sarace_c*)i_this)->CreateHeap();
 }
 
 /* 00001B00-00001D1C       .text _create__14daNpc_Sarace_cFv */
 cPhs_State daNpc_Sarace_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct_Retail(this, daNpc_Sarace_c);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Sarace");
+    if (phase_state == cPhs_COMPLEATE_e) { 
+
+        if (!fopAcM_entrySolidHeap(this, CallbackCreateHeap, 0x2760)) {
+            return cPhs_ERROR_e;
+        } else {
+            fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+            if (l_HIO.mNo < 0) {
+                l_HIO.mNo = mDoHIO_createChild("船乗りレースゲーム専用", &l_HIO);
+            }
+            if (!CreateInit()) {
+                return cPhs_ERROR_e;
+            }
+        }
+
+    }
+    return phase_state;
 }
 
 /* 000020CC-00002498       .text CreateHeap__14daNpc_Sarace_cFv */
-void daNpc_Sarace_c::CreateHeap() {
+BOOL daNpc_Sarace_c::CreateHeap() {
     /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Sarace", dRes_INDEX_SARACE_BDL_SA_e);
+    JUT_ASSERT(DEMO_SELECT(1008, 1008), modelData != NULL);
+    mpMorf = new mDoExt_McaMorf(
+        modelData,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectRes("Sarace", dRes_INDEX_SARACE_BCK_SA_WAIT01_e),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0,
+        0,
+        -1,
+        TRUE,
+        NULL,
+        0,
+        0x11020203
+    );
+    if (!mpMorf || !mpMorf->getModel()) {
+#if VERSION > VERSION_DEMO
+        mpMorf = NULL;
+#endif
+        return FALSE;
+    }
+
+    m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
+    JUT_ASSERT(DEMO_SELECT(1024, 1024), m_jnt.getHeadJntNum() >= 0);
+    m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
+    JUT_ASSERT(DEMO_SELECT(1026, 1026), m_jnt.getBackboneJntNum() >= 0);
+
+    J3DModelData* headModelData = (J3DModelData*)dComIfG_getObjectRes("Sarace", dRes_INDEX_SARACE_BDL_SA01_HEAD_e);
+    JUT_ASSERT(DEMO_SELECT(1034, 1034), headModelData != NULL);
+    mpHeadMorf = new mDoExt_McaMorf(
+        headModelData,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectRes("Sarace", dRes_INDEX_SARACE_BCK_SA01HEAD_WAIT01_e),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0,
+        0,
+        -1,
+        TRUE,
+        NULL,
+        0,
+        0x11020203
+    );
+    if(!mpHeadMorf || !mpHeadMorf->getModel()) {
+        return FALSE;
+    }
+    mTexPatternNum = 0;
+    if(!initTexPatternAnm(false)) {
+        return FALSE;
+    }
+    for (u16 jntNo = 0; jntNo < modelData->getJointNum(); jntNo++) {
+        if (jntNo == m_jnt.getHeadJntNum() || jntNo == m_jnt.getBackboneJntNum()) {
+            mpMorf->getModel()->getModelData()->getJointNodePointer(jntNo)->setCallBack(nodeCallBack);
+        }
+    }
+    mpMorf->getModel()->setUserArea((u32)this);
+    mAcchCir.SetWall(30.0f, 0.0f);
+    mObjAcch.Set(
+        fopAcM_GetPosition_p(this), 
+        fopAcM_GetOldPosition_p(this),  
+        this, 
+        1, 
+        &mAcchCir, 
+        fopAcM_GetSpeed_p(this)
+    );
+    return TRUE;
+
 }
 
 /* 00002498-000024B8       .text daNpc_Sarace_Create__FP10fopAc_ac_c */

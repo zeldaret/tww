@@ -61,7 +61,7 @@ public:
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void CreateHeap();
+    BOOL CreateHeap();
     
     static s32 ship_race_rupee;
     static s32 ship_race_result;
