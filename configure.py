@@ -1938,11 +1938,11 @@ config.progress_report_args = [
     "--config preferredStringEncoding=shift_jis",
 ]
 
-# Disable missing return type warnings for incomplete objects
-for lib in config.libs:
-    for obj in lib["objects"]:
-        if not obj.completed:
-            obj.options["extra_clang_flags"].append("-Wno-return-type")
+# # Disable missing return type warnings for incomplete objects
+# for lib in config.libs:
+#     for obj in lib["objects"]:
+#         if not obj.completed:
+#             obj.options["extra_clang_flags"].append("-Wno-return-type")
 
 if args.mode == "configure":
     # Write build.ninja and objdiff.json
