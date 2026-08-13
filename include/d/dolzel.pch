@@ -33,5 +33,6 @@
 #include "d/d_cc_uty.h" // IWYU pragma: export
 #include "d/d_magma.h" // IWYU pragma: export
 #include "d/d_mesg.h" // IWYU pragma: export
+#include "d/d_menu_base.h" // IWYU pragma: export
 
 #endif /* DOLZEL_PCH */

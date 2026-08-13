@@ -209,7 +209,7 @@ void daObj_MjDoor_c::smoke_set() {
     dComIfGp_particle_setToon(dPa_name::ID_IT_ST_MJMON_SMOKE00,
         &mPos, &mAngle, NULL, 0xB9, &mSmoke, fopAcM_GetRoomNo(this));
     if (mSmoke.getEmitter() != NULL) {
-        mSmoke.getEmitter()->mGlobalPrmColor.a = 200;
+        mSmoke.getEmitter()->setGlobalAlpha(200);
     }
 }
 

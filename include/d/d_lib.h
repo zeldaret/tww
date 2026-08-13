@@ -52,7 +52,9 @@ public:
 
 class CSTControl : public STControl {
 public:
-    CSTControl() : STControl(5, 2, 3, 2) {}
+    CSTControl(s16 a, s16 b, s16 c, s16 d, f32 e = 0.9f, f32 f = 0.5f, s16 g = 0, s16 h = 0x2000)
+        : STControl(a, b, c, d, e, f, g, h)
+        {}
     virtual f32 getValueStick();
     virtual s16 getAngleStick();
 };
