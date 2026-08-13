@@ -52,6 +52,7 @@ public:
 
 class CSTControl : public STControl {
 public:
+    CSTControl() : STControl(5, 2, 3, 2) {}
     virtual f32 getValueStick();
     virtual s16 getAngleStick();
 };

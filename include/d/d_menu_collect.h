@@ -58,7 +58,7 @@ public:
     void initialize();
     void cursorAnime();
     int stickDirection(unsigned char);
-    int cursorMainMove();
+    u8 cursorMainMove();
     u8 noteCheck();
     void noteInit();
     void noteAppear();
@@ -197,12 +197,12 @@ private:
     /* 0x27B8 */ char* note[2];
     /* 0x27C0 */ char* dummy[2];
     /* 0x27C8 */ u8 m27C8[0x27DC - 0x27C8];
-    /* 0x27DC */ u32 m27DC;
+    /* 0x27DC */ s32 m27DC;
     /* 0x27E0 */ s16 m27E0;
     /* 0x27E2 */ s16 mTimer;
-    /* 0x27E4 */ u16 m27E4;
-    /* 0x27E6 */ u16 m27E6;
-    /* 0x27E8 */ u16 m27E8;
+    /* 0x27E4 */ s16 m27E4;
+    /* 0x27E6 */ s16 m27E6;
+    /* 0x27E8 */ s16 m27E8;
     /* 0x27EA */ u8 m27EA;
     /* 0x27EB */ u8 m27EB;
     /* 0x27EC */ u8 mTriggerInfo;
