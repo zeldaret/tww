@@ -3202,8 +3202,9 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                 
                 int r7 = sp18[sp14];
 #if VERSION <= VERSION_JPN
-                sp18[sp14] = (int)((f32)sp0C + 0.5f);
+                sp18[sp14] = (int)(sp0C + 0.5f);
 #else
+                // Fakematch? Why the (f64) cast?
                 sp18[sp14] = (int)((f32)(f64)sp0C + 0.5f);
 #endif
                 if (!r27) {

@@ -132,7 +132,7 @@ void daOship_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
 }
 
 /* 0000044C-00000488       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-int pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
+static int pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
     return ((daOship_c *)i_this)->_pathMove(param_1, param_2, param_3);
 }
 
