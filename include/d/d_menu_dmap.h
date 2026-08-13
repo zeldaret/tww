@@ -208,13 +208,13 @@ public:
     /* 0x32 */ s16 mNpcHeight;
     /* 0x34 */ JUtility::TColor mNpcWhite;
     /* 0x38 */ JUtility::TColor mNpcBlack;
-    /* 0x3C */ s16 field_0x3C;
-    /* 0x3E */ s16 field_0x3E;
-    /* 0x40 */ s16 field_0x40;
-    /* 0x42 */ s16 field_0x42;
-    /* 0x44 */ s16 field_0x44;
-    /* 0x46 */ s16 field_0x46;
-    /* 0x48 */ s16 field_0x48;
+    /* 0x3C */ s16 mBossUpTime;
+    /* 0x3E */ s16 mBossWaitTime;
+    /* 0x40 */ s16 mBossDownTime;
+    /* 0x42 */ s16 mBossMoveTime1;
+    /* 0x44 */ s16 mBossMoveTime2;
+    /* 0x46 */ s16 mBossMoveTime3;
+    /* 0x48 */ s16 mBossMoveTime4;
 }; // Size: 0x4C
 
 STATIC_ASSERT(sizeof(dMd_HIO_c) == 0x4C);

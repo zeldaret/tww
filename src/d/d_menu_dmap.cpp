@@ -70,13 +70,13 @@ dMd_HIO_c::dMd_HIO_c() {
     mNpcWhite.a = 0xFF;
     mNpcBlack.a = 0x00;
 
-    field_0x3C = 4;
-    field_0x3E = 10;
-    field_0x40 = 2;
-    field_0x42 = 2;
-    field_0x44 = 2;
-    field_0x46 = 2;
-    field_0x48 = 2;
+    mBossUpTime = 4;
+    mBossWaitTime = 10;
+    mBossDownTime = 2;
+    mBossMoveTime1 = 2;
+    mBossMoveTime2 = 2;
+    mBossMoveTime3 = 2;
+    mBossMoveTime4 = 2;
 }
 
 /* 801A87CC-801A8818       .text changeFloorTexture__12dMenu_Dmap_cFP7J2DPanei */
@@ -1580,12 +1580,95 @@ void dMenu_Dmap_c::linkAnime() {
 
 /* 801AE204-801AE550       .text bossAnime__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::bossAnime() {
-    /* Nonmatching */
+    f32 move_y = 0.0f;
+    s16 time[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2};
+    time[0] = g_mdHIO.mBossUpTime;
+    time[1] = g_mdHIO.mBossWaitTime;
+    time[2] = g_mdHIO.mBossDownTime;
+    time[4] = g_mdHIO.mBossMoveTime1;
+    time[6] = g_mdHIO.mBossMoveTime2;
+    time[8] = g_mdHIO.mBossMoveTime3;
+    time[10] = g_mdHIO.mBossMoveTime4;
+
+    s16 total[15];
+    total[0] = time[0];
+    for (s32 i = 1; i < 15; i++) {
+        total[i] = total[i - 1] + time[i];
+    }
+
+    mBossPane.mUserArea++;
+    if (mBossPane.mUserArea >= mBos2Pane.mUserArea) {
+        mBossPane.mUserArea = 0;
+        mBos2Pane.mUserArea = cM_rndF(200.0f) + 300.0f;
+    } else if (mBossPane.mUserArea < total[10]) {
+        if (mBossPane.mUserArea < total[0]) {
+            move_y = fopMsgM_valueIncrease(time[0], mBossPane.mUserArea, 0) * 2.0f;
+        } else if (mBossPane.mUserArea < total[1]) {
+            move_y = 2.0f;
+        } else if (mBossPane.mUserArea < total[2]) {
+            move_y = fopMsgM_valueIncrease(time[2], total[2] - mBossPane.mUserArea, 0) * 2.0f;
+        } else if (mBossPane.mUserArea < total[3]) {
+            move_y = 0.0f;
+        } else if (mBossPane.mUserArea < total[4]) {
+            move_y = fopMsgM_valueIncrease(time[4], total[4] - mBossPane.mUserArea, 0) * 2.0f;
+        } else if (mBossPane.mUserArea < total[5]) {
+            move_y = 2.0f;
+        } else if (mBossPane.mUserArea < total[6]) {
+            move_y = fopMsgM_valueIncrease(time[6], total[6] - mBossPane.mUserArea, 0) * 2.0f;
+        } else if (mBossPane.mUserArea < total[7]) {
+            move_y = 0.0f;
+        } else if (mBossPane.mUserArea < total[8]) {
+            move_y = fopMsgM_valueIncrease(time[8], total[8] - mBossPane.mUserArea, 0) * 2.0f;
+        } else if (mBossPane.mUserArea < total[9]) {
+            move_y = 2.0f;
+        } else if (mBossPane.mUserArea < total[10]) {
+            move_y = fopMsgM_valueIncrease(time[10], total[10] - mBossPane.mUserArea, 0) * 2.0f;
+        } else if (mBossPane.mUserArea < total[11]) {
+            move_y = 0.0f;
+        } else if (mBossPane.mUserArea < total[12]) {
+            move_y = fopMsgM_valueIncrease(time[12], total[12] - mBossPane.mUserArea, 0) * 2.0f;
+        } else if (mBossPane.mUserArea < total[13]) {
+            move_y = 2.0f;
+        } else if (mBossPane.mUserArea < total[14]) {
+            move_y = fopMsgM_valueIncrease(time[14], total[14] - mBossPane.mUserArea, 0) * 2.0f;
+        }
+    }
+
+    fopMsgM_paneTrans(&mBossPane, 0.0f, mBossFloorListOffsetY - move_y);
+    fopMsgM_paneTrans(&mBos2Pane, 0.0f, move_y * 2.0f);
+    bossEyeAnime();
 }
 
 /* 801AE550-801AE65C       .text bossEyeAnime__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::bossEyeAnime() {
-    /* Nonmatching */
+    int i_max;
+    f32 alpha;
+
+    i_max = (s16)(mBossEyeTimer / 2);
+    mBey1Pane.mUserArea++;
+
+    if (mBossEyeState != 0) {
+        if (mBey1Pane.mUserArea < i_max) {
+            alpha = fopMsgM_valueIncrease(i_max, mBey1Pane.mUserArea, 2);
+        } else {
+            alpha = fopMsgM_valueIncrease(i_max, mBossEyeTimer - mBey1Pane.mUserArea, 2);
+        }
+    } else {
+        alpha = 0.0f;
+    }
+
+    if (mBey1Pane.mUserArea == mBossEyeTimer) {
+        mBey1Pane.mUserArea = 0;
+        mBossEyeTimer = ((int)(cM_rndF(18.0f) + 40.0f) * 2);
+        if (mBossEyeState != 0) {
+            mBossEyeState = 0;
+        } else {
+            mBossEyeState = 1;
+        }
+    }
+    
+    fopMsgM_setNowAlpha(&mBey1Pane, alpha);
+    fopMsgM_setNowAlpha(&mBey2Pane, alpha);
 }
 
 /* 801AE65C-801AEB88       .text _create__12dMenu_Dmap_cFv */
