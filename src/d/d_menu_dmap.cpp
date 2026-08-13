@@ -4,6 +4,7 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "d/d_item_data.h"
 #include "d/d_lib.h"
 #include "d/d_map.h"
 #include "d/d_menu_dmap.h"
@@ -24,13 +25,13 @@ dMd_HIO_c::dMd_HIO_c() {
     mTreasureWidth = 14;
     mTreasureHeight = 14;
 
-    mTreasureWhite.r = 0xff;
-    mTreasureWhite.g = 0xc4;
+    mTreasureWhite.r = 0xFF;
+    mTreasureWhite.g = 0xC4;
     mTreasureWhite.b = 0x00;
     mTreasureBlack.r = 0x20;
     mTreasureBlack.g = 0x20;
     mTreasureBlack.b = 0x00;
-    mTreasureWhite.a = 0xff;
+    mTreasureWhite.a = 0xFF;
     mTreasureBlack.a = 0x00;
 
     mDoorWidth = 16;
@@ -1302,34 +1303,279 @@ void dMenu_Dmap_c::dnameSet() {
         }
     }
 
-    J2DTextBox* textBox = (J2DTextBox*)mDtlePane.pane;
-    if (textBox->getWidth() < strWidth) {
+    if (((J2DTextBox*)mDtlePane.pane)->getWidth() < strWidth) {
         fontSize.mSizeX = (int)(fontSize.mSizeX * mNm00Pane.pane->getWidth() / strWidth);
     }
 
-    textBox->setFontSize(fontSize);
+    ((J2DTextBox*)mDtlePane.pane)->setFontSize(fontSize);
     ((J2DTextBox*)mDtlePane.pane)->setCharSpace(0.0f);
     ((J2DTextBox*)mDtlePane.pane)->setString(mDName);
 }
 
 /* 801AD54C-801ADA04       .text itemnameSet__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::itemnameSet() {
-    /* Nonmatching */
+    fopMsgM_itemMsgGet_c msgGet;
+    u32 msgNo = 0;
+    int i = 0;
+
+    J2DTextBox::TFontSize fontSize0;
+    ((J2DTextBox*)mNm00Pane.pane)->getFontSize(fontSize0);
+    ((J2DTextBox*)mNm01Pane.pane)->setFontSize(fontSize0);
+    ((J2DTextBox*)mNm01Pane.pane)->setCharSpace(((J2DTextBox*)mNm00Pane.pane)->getCharSpace());
+
+    while (mTxtName[0][i] != 0) {
+        mTxtName[1][i] = mTxtName[0][i];
+        i++;
+    }
+    mTxtName[1][i] = 0;
+    ((J2DTextBox*)mNm01Pane.pane)->setString(mTxtName[1]);
+    strcpy(mTxtName[0], "");
+
+    switch (mSelectItem) {
+        case 0:
+            if (dComIfGs_isDungeonItemMap()) {
+                msgNo = dItem_data::getItemMesgNum(dItemNo_MAP_e);
+            }
+            break;
+        case 1:
+            if (dComIfGs_isDungeonItemBossKey()) {
+                msgNo = dItem_data::getItemMesgNum(dItemNo_BOSS_KEY_e);
+            }
+            break;
+        case 2:
+            if (dComIfGs_isDungeonItemCompass()) {
+                msgNo = dItem_data::getItemMesgNum(dItemNo_COMPASS_e);
+            }
+            break;
+    }
+
+    if (msgNo == 0) {
+        ((J2DTextBox*)mNm00Pane.pane)->setString(mTxtName[0]);
+        return;
+    }
+
+    mesg_header* head_p = msgGet.getMesgHeader(msgNo);
+    JUT_ASSERT(1833, head_p);
+
+    J2DTextBox::TFontSize fontSize;
+    ((J2DTextBox*)mNm00Pane.pane)->getFontSize(fontSize);
+    fontSize.mSizeX = fontSize.mSizeY;
+
+    char* src;
+    f32 strWidth;
+    char* mesg = (char*)msgGet.getMessage(head_p);
+    bool first = false;
+    f32 scale = fontSize.mSizeY / mFont->getCellWidth();
+    src = mesg;
+
+    while ((s8)*src != 0) {
+        char charStr[3];
+        int byte = 0;
+        charStr[2] = byte;
+        charStr[1] = byte;
+        charStr[0] = byte;
+
+        u32 c = (u8)(*(u8*)src);
+        if (c == 0x1A) {
+            src++;
+            src += (s8)*src - 1;
+        } else {
+            int charCode;
+            int hi_nibble = (c >> 4) & 0xF;
+            if (hi_nibble == 8 || hi_nibble == 9) {
+                byte = (u8)src[0];
+                c = (u8)src[1];
+                charCode = c;
+                charCode |= byte << 8;
+                charStr[0] = byte;
+                charStr[1] = c;
+                charStr[2] = 0;
+                src += 2;
+            } else {
+                charCode = c;
+                charStr[0] = c;
+                charStr[1] = byte;
+                src += 1;
+            }
+
+            int width = mFont->getWidth(charCode);
+            strcat(mTxtName[0], charStr);
+            if (!first) {
+                strWidth = scale * (width + mFont->getOffset(charCode));
+                first = true;
+            } else {
+                strWidth += width * scale;
+            }
+        }
+    }
+
+    if (((J2DTextBox*)mNm00Pane.pane)->getWidth() < strWidth) {
+        fontSize.mSizeX = (int)(fontSize.mSizeX * ((J2DTextBox*)mNm00Pane.pane)->getWidth() / strWidth);
+    }
+
+    ((J2DTextBox*)mNm00Pane.pane)->setFontSize(fontSize);
+    ((J2DTextBox*)mNm00Pane.pane)->setCharSpace(0.0f);
+    ((J2DTextBox*)mNm00Pane.pane)->setString(mTxtName[0]);
 }
 
 /* 801ADA04-801AE004       .text itemnoteSet__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::itemnoteSet() {
-    /* Nonmatching */
+    fopMsgM_itemMsgGet_c msgGet;
+    u32 msgNo = 0;
+
+    strcpy(mTxtNote[0], "");
+    strcpy(mTxtNote[1], "");
+    strcpy(mTxtDummy[0], "");
+    strcpy(mTxtDummy[1], "");
+
+    outFontInit();
+
+    if (dComIfGs_getOptRuby()) {
+        mStr0Pane.pane->hide();
+    } else {
+        mStr0Pane.pane->show();
+    }
+
+    f32 rubySize = ((J2DTextBox*)mStr0Pane.pane)->mFontSizeX;
+
+    J2DTextBox::TFontSize fontSize;
+    fontSize.mSizeX = g_msgHIO.field_0x70;
+    fontSize.mSizeY = g_msgHIO.field_0x70;
+    ((J2DTextBox*)mSt00Pane.pane)->setFontSize(fontSize);
+    ((J2DTextBox*)mSt00Pane.pane)->setLineSpace(g_msgHIO.field_0x5e);
+
+    switch (mSelectItem) {
+        case 0:
+            if (dComIfGs_isDungeonItemMap()) {
+                msgNo = dItem_data::getItemMesgNum(dItemNo_MAP_e) + 0xC8;
+            }
+            break;
+        case 1:
+            if (dComIfGs_isDungeonItemBossKey()) {
+                msgNo = dItem_data::getItemMesgNum(dItemNo_BOSS_KEY_e) + 0xC8;
+            }
+            break;
+        case 2:
+            if (dComIfGs_isDungeonItemCompass()) {
+                msgNo = dItem_data::getItemMesgNum(dItemNo_COMPASS_e) + 0xC8;
+            }
+            break;
+    }
+
+    if (msgNo == 0) {
+        return;
+    }
+
+    mesg_header* head_p = msgGet.getMesgHeader(msgNo);
+    JUT_ASSERT(1970, head_p);
+
+    const char* mesg = msgGet.getMessage(head_p);
+    JMSMesgEntry_c msg_entry;
+    msg_entry = msgGet.getMesgEntry(head_p);
+
+    mMsgProc.dataInit();
+    mMsgProc.setBmgData((char*)mesg);
+    mMsgProc.setOutMessage(mTxtNote[0], mTxtNote[1], mTxtDummy[0], mTxtDummy[1]);
+    mMsgProc.setFont(mFont);
+    mMsgProc.setRubyFont(mRFont);
+    mMsgProc.setCharSpace(((J2DTextBox*)mSt00Pane.pane)->getCharSpace());
+    mMsgProc.setRubyCharSpace(((J2DTextBox*)mStr0Pane.pane)->getCharSpace());
+    mMsgProc.setLineSpace(((J2DTextBox*)mSt00Pane.pane)->getLineSpace());
+    mMsgProc.setMesgEntry(&msg_entry);
+    mMsgProc.setFontSize(fontSize.mSizeX);
+    mMsgProc.setRubyFontSize(rubySize);
+    mMsgProc.setLineWidth(0x1FE);
+    mMsgProc.setCenterLineWidth(0x1E6);
+    mMsgProc.setSendSpeed(2);
+    mMsgProc.setSpaceTimer(0);
+    mMsgProc.shortCut();
+    mMsgProc.setSpaceFlagOff();
+
+    mMsgProc.stringLength();
+    mMsgProc.stringShift();
+    mMsgProc.iconIdxRefresh();
+
+    s16 lineCount = mMsgProc.getLineCount();
+    mMsgProc.setLineCount(0);
+    f32 lineSpace = ((J2DTextBox*)mSt00Pane.pane)->getLineSpace();
+    int unusedLines = 3 - lineCount;
+    f32 shiftY = unusedLines * (lineSpace / 2.0f);
+    ((J2DTextBox*)mStr0Pane.pane)->shiftSet(0.0f, shiftY);
+    ((J2DTextBox*)mSt00Pane.pane)->shiftSet(0.0f, shiftY);
+    mMsgProc.stringSet();
+
+    ((J2DTextBox*)mSt00Pane.pane)->setString(mTxtNote[0]);
+    ((J2DTextBox*)mStr0Pane.pane)->setString(mTxtNote[1]);
+
+    int halfSpace = ((J2DTextBox*)mSt00Pane.pane)->getLineSpace() / 2.0f;
+    for (int i = 0; i < 15; i++) {
+        u8 iconNo = mMsgProc.getIconNum(i);
+        u32 color = mMsgProc.getIconColor(i);
+        if (color == 0xFFFFFFFF) {
+            color = 0xFF;
+        }
+        if (iconNo == 0xFF) {
+            continue;
+        }
+        if (mFtPanes[i].mUserArea != -1) {
+            continue;
+        }
+        if (iconNo == fopMsgM_Icon_INPUT_e) {
+            continue;
+        }
+        mFtPanes[i].mPosTopLeft.x = (f32)mMsgProc.getIconPosX(i);
+        mFtPanes[i].mPosTopLeft.y = (f32)(halfSpace * (unusedLines + mMsgProc.getIconPosY(i) * 2));
+        mFtPanes[i].mPosTopLeftOrig.y = (f32)iconNo;
+
+        fopMsgM_outFontSet((J2DPicture*)mFtPanes[i].pane, &mFtPanes[i].mUserArea, color, iconNo);
+    }
 }
 
 /* 801AE004-801AE08C       .text outFontInit__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::outFontInit() {
-    /* Nonmatching */
+    for (int i = 0; i < 15; i++) {
+        mFtPanes[i].mUserArea = -1;
+        mFtPanes[i].pane->rotate(0.0f);
+        fopMsgM_setNowAlphaZero(&mFtPanes[i]);
+    }
 }
 
 /* 801AE08C-801AE204       .text linkAnime__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::linkAnime() {
-    /* Nonmatching */
+    mLnkPanes[1].mUserArea++;
+    mLnkPanes[2].mUserArea++;
+    if (mLnkPanes[1].mUserArea > mLnkTimer1) {
+        mLnkPanes[1].mUserArea = 0;
+        if (!mLnkTexFlip1) {
+            mLnkTimer1 = 5;
+            mLnkTexFlip1 = true;
+        } else {
+            mLnkTimer1 = cM_rndF(50.0f) + 100.0f;
+            mLnkTexFlip1 = false;
+        }
+    }
+
+    if (mLnkPanes[2].mUserArea > mLnkTimer2) {
+        mLnkPanes[2].mUserArea = 0;
+        mLnkTimer2 = cM_rndF(100.0f) + 100.0f;
+        if (!mLnkTexFlip2) {
+            mLnkTexFlip2 = true;
+        } else {
+            mLnkTexFlip2 = false;
+        }
+    }
+
+    if (mLnkTexFlip1 == false) {
+        ((J2DPicture*)mLnkPanes[1].pane)->changeTexture("link_eye2.bti", 0);
+    } else {
+        ((J2DPicture*)mLnkPanes[1].pane)->changeTexture("link_eye1.bti", 0);
+    }
+
+    if (mLnkTexFlip2 == false) {
+        ((J2DPicture*)mLnkPanes[2].pane)->changeTexture("link_mouth2.bti", 0);
+    } else {
+        ((J2DPicture*)mLnkPanes[2].pane)->changeTexture("link_mouth1.bti", 0);
+    }
 }
 
 /* 801AE204-801AE550       .text bossAnime__12dMenu_Dmap_cFv */

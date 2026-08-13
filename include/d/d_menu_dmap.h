@@ -140,7 +140,7 @@ public:
     /* 0x1ACC */ dMap_pane_c npc_p;
     /* 0x1AE4 */ dMap_pane_c boss_p;
     /* 0x1AFC */ ResTIMG* mpTIMG[3];
-    /* 0x1B08 */ fopMsgM_msgDataProc_c field_0x1B08;
+    /* 0x1B08 */ fopMsgM_msgDataProc_c mMsgProc;
     /* 0x1DA8 */ char* mTxtName[2];
     /* 0x1DB0 */ char* mTxtNote[2];
     /* 0x1DB8 */ char* mTxtDummy[2];
