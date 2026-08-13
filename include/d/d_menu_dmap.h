@@ -144,7 +144,7 @@ public:
     /* 0x1DA8 */ char* mTxtName[2];
     /* 0x1DB0 */ char* mTxtNote[2];
     /* 0x1DB8 */ char* mTxtDummy[2];
-    /* 0x1DC0 */ char field_0x1DC0[0x1DCC - 0x1DC0];
+    /* 0x1DC0 */ char mDName[12];
     /* 0x1DCC */ f32 mCarOfsX[4];
     /* 0x1DDC */ f32 mCarOfsY[4];
     /* 0x1DEC */ f32 mCarFloorOfsX[4];

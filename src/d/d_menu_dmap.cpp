@@ -1154,28 +1154,162 @@ void dMenu_Dmap_c::itemScale() {
 
 /* 801ACDE0-801ACEB8       .text floorInit__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::floorInit() {
-    /* Nonmatching */
+    f32 yDif = (mFbPanes[0].mPosTopLeftOrig.y - mFbPanes[1].mPosTopLeftOrig.y) *
+                (6 - ((mTopFloor - mBottomFloor + 1) & 0xFF));
+    f32 fw00Height = mFw00Pane.mSizeOrig.y;
+    f32 fw01Height = mFw01Pane.mSizeOrig.y;
+    mFw00Pane.mSizeOrig.y = mFw00Pane.mSize.y = fw00Height - yDif;
+    mFw01Pane.mSizeOrig.y = mFw01Pane.mSize.y = fw01Height - yDif;
+    mFw00Pane.mPosCenterOrig.y = mFw00Pane.mPosCenter.y =
+        (mFw00Pane.mPosTopLeftOrig.y + fw00Height) - mFw00Pane.mSizeOrig.y / 2.0f;
+    mFw01Pane.mPosCenterOrig.y = mFw01Pane.mPosCenter.y =
+        (mFw01Pane.mPosTopLeftOrig.y + fw01Height) - mFw01Pane.mSizeOrig.y / 2.0f;
+    fopMsgM_cposMove(&mFw00Pane);
+    fopMsgM_cposMove(&mFw01Pane);
 }
 
 /* 801ACEB8-801AD000       .text mapMove__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::mapMove() {
-    /* Nonmatching */
+    if (mCc38Pane.mUserArea > 0) {
+        mCc38Pane.mUserArea--;
+        f32 a = fopMsgM_valueIncrease(6, 6 - mCc38Pane.mUserArea, 0);
+        mCurFloorMapY += (s16)(a * ((mMpp1PosY + (mCurFloor - 0x80) * (mMpp1SizeY + mMppGapY)) - mCurFloorMapY));
+    } else if (mCc38Pane.mUserArea < 0) {
+        mCc38Pane.mUserArea++;
+        f32 a = fopMsgM_valueIncrease(6, 6 - abs(mCc38Pane.mUserArea), 0);
+        mCurFloorMapY += (s16)(a * ((mMpp1PosY + (mCurFloor - 0x80) * (mMpp1SizeY + mMppGapY)) - mCurFloorMapY));
+    }
+    dMap_Dmap_c* dmap;
+    s16 y = mCurFloorMapY;
+    dmap = dmap_c;
+    dmap->field_0x364 = mMpp1PosX;
+    dmap->field_0x366 = y;
 }
 
 /* 801AD000-801AD130       .text mapOffsetY__12dMenu_Dmap_cFv */
 f32 dMenu_Dmap_c::mapOffsetY() {
-    /* Nonmatching */
-    return 0.0f;
+    f32 ret = 0.0f;
+    dStage_dt_c* stage = &dComIfGp_getStage();
+    if (dStage_stagInfo_GetSTType(stage->getStagInfo()) == dStageType_BOSS_e ||
+        dStage_stagInfo_GetSTType(stage->getStagInfo()) == dStageType_MINIBOSS_e) {
+        if (stage->getDMap()) {
+            dStage_DMap_c* pinf = stage->getDMap();
+            dStage_DMap_dt_c* entry = pinf->entries;
+            JUT_ASSERT(1627, pinf->num == 1);
+            for (int i = 0; i < pinf->num; i++, entry++) {
+                ret = entry->offsetY;
+            }
+        }
+    }
+    return ret;
 }
 
 /* 801AD130-801AD1A8       .text itemnameMove__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::itemnameMove() {
-    /* Nonmatching */
+    mNm00Pane.mUserArea++;
+    if (mNm00Pane.mUserArea <= 10) {
+        f32 alpha = fopMsgM_valueIncrease(10, mNm00Pane.mUserArea, 0);
+        fopMsgM_setNowAlpha(&mNm00Pane, alpha);
+        fopMsgM_setNowAlpha(&mNm01Pane, 1.0f - alpha);
+    }
 }
 
 /* 801AD1A8-801AD54C       .text dnameSet__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::dnameSet() {
-    /* Nonmatching */
+    fopMsgM_itemMsgGet_c msgGet;
+    u32 msgNo;
+
+    mDName[0] = 0;
+    switch (dStage_stagInfo_GetSaveTbl(dComIfGp_getStage().getStagInfo())) {
+        case dSv_save_c::STAGE_FF:
+            msgNo = 0x320;
+            break;
+        case dSv_save_c::STAGE_DRC:
+            msgNo = 0x59;
+            break;
+        case dSv_save_c::STAGE_FW:
+            msgNo = 0x5A;
+            break;
+        case dSv_save_c::STAGE_TOTG:
+            msgNo = 0x5B;
+            break;
+        case dSv_save_c::STAGE_ET:
+            msgNo = 0x5C;
+            break;
+        case dSv_save_c::STAGE_WT:
+            msgNo = 0x5D;
+            break;
+        case dSv_save_c::STAGE_GT:
+            msgNo = 0x5E;
+            break;
+        default:
+            msgNo = 0x59;
+            break;
+    }
+
+    mesg_header* head_p = msgGet.getMesgHeader(msgNo);
+    JUT_ASSERT(1707, head_p);
+
+    J2DTextBox::TFontSize fontSize;
+    ((J2DTextBox*)mDtlePane.pane)->getFontSize(fontSize);
+    fontSize.mSizeX = fontSize.mSizeY;
+
+    char* src;
+    f32 strWidth;
+    char* mesg = (char*)msgGet.getMessage(head_p);
+    bool first = false;
+    f32 scale = fontSize.mSizeY / mFont->getCellWidth();
+    src = mesg;
+
+    while ((s8)*src != 0) {
+        char charStr[3];
+        int byte = 0;
+        charStr[2] = byte;
+        charStr[1] = byte;
+        charStr[0] = byte;
+
+        u32 c = (u8)(*(u8*)src);
+        if (c == 0x1A) {
+            src++;
+            src += (s8)*src - 1;
+        } else {
+            int charCode;
+            int hi_nibble = (c >> 4) & 0xF;
+            if (hi_nibble == 8 || hi_nibble == 9) {
+                byte = (u8)src[0];
+                c = (u8)src[1];
+                charCode = c;
+                charCode |= byte << 8;
+                charStr[0] = byte;
+                charStr[1] = c;
+                charStr[2] = 0;
+                src += 2;
+            } else {
+                charCode = c;
+                charStr[0] = c;
+                charStr[1] = byte;
+                src += 1;
+            }
+
+            int width = mFont->getWidth(charCode);
+            strcat(mDName, charStr);
+            if (!first) {
+                strWidth = scale * (width + mFont->getOffset(charCode));
+                first = true;
+            } else {
+                strWidth += width * scale;
+            }
+        }
+    }
+
+    J2DTextBox* textBox = (J2DTextBox*)mDtlePane.pane;
+    if (textBox->getWidth() < strWidth) {
+        fontSize.mSizeX = (int)(fontSize.mSizeX * mNm00Pane.pane->getWidth() / strWidth);
+    }
+
+    textBox->setFontSize(fontSize);
+    ((J2DTextBox*)mDtlePane.pane)->setCharSpace(0.0f);
+    ((J2DTextBox*)mDtlePane.pane)->setString(mDName);
 }
 
 /* 801AD54C-801ADA04       .text itemnameSet__12dMenu_Dmap_cFv */
