@@ -133,7 +133,6 @@ cPhs_State daDai_c::_create() {
     if (PVar3 != cPhs_COMPLEATE_e) {
         return PVar3;
     }
-
 #else
     if (PVar2 != cPhs_COMPLEATE_e) {
         return PVar2;

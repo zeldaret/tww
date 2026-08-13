@@ -52,8 +52,9 @@ public:
 class daNpc_Bm1_HIO_c : public mDoHIO_entry_c {
 public:
     daNpc_Bm1_HIO_c();
-    virtual ~daNpc_Bm1_HIO_c() {};
-    void genMessage(JORMContext* ctx);
+    virtual ~daNpc_Bm1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 m4;
