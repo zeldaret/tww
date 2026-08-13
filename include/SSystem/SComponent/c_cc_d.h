@@ -380,9 +380,9 @@ public:
     cCcD_ObjCommonBase() { ct(); }
     virtual ~cCcD_ObjCommonBase() {}
     void ct() {
-        SetSPrm(0);
-        SetRPrm(0);
-        ClrObj();
+        mSPrm = 0;
+        mRPrm = 0;
+        mHitObj = NULL;
     }
     void SetSPrm(u32 sprm) { mSPrm = sprm; }
     void SetRPrm(u32 rprm) { mRPrm = rprm; }

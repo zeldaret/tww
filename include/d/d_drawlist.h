@@ -535,8 +535,8 @@ public:
     J3DDrawBuffer* getXluList() { return mpXluList; }
     J3DDrawBuffer* getXluListP1() { return mpXluListP1; }
 
-    void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, XLU_BUFFER); }
-    void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }
+    void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, J3DSysDrawBuf_Xlu); }
+    void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, J3DSysDrawBuf_Opa); }
     void setOpaList() { setOpaDrawList(mpOpaList); }
     void setXluList() { setXluDrawList(mpXluList); }
     void setOpaListInvisible() { setOpaDrawList(mpOpaListInvisible); }

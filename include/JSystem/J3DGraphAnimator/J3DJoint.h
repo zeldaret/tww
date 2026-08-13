@@ -119,7 +119,6 @@ class J3DMtxCalcMayaAnm : public J3DMtxCalcMaya, public J3DMtxCalcAnm {
 public:
     J3DMtxCalcMayaAnm(J3DAnmTransform* pAnmTransform)
         : J3DMtxCalcMaya(), J3DMtxCalcAnm(pAnmTransform) {}
-    virtual ~J3DMtxCalcMayaAnm() {}
     virtual void calc(u16 jnt_no) { J3DMtxCalcAnm::calc(jnt_no); }
 };
 

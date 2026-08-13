@@ -202,8 +202,8 @@ bool daStandItem_c::_delete() {
         m698 = NULL;
     }
 
-    dComIfG_resDelete(&mPhsDai, m_arcname);
-    dComIfG_resDelete(&mPhsCloth, "Cloth");
+    dComIfG_resDeleteDemo(&mPhsDai, m_arcname);
+    dComIfG_resDeleteDemo(&mPhsCloth, "Cloth");
     return true;
 }
 
@@ -215,7 +215,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 /* 800E37B8-800E3AF8       .text CreateHeap__13daStandItem_cFv */
 BOOL daStandItem_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, m_bmdidx[mItemType]);
-    JUT_ASSERT(0x239, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(566, 569), modelData != NULL);
 
     if (mItemNo == dItemNo_SHOP_GURU_STATUE_e) {
         mpModel = mDoExt_J3DModel__create(modelData, 0x0, 0x11020203);
@@ -228,7 +228,7 @@ BOOL daStandItem_c::CreateHeap() {
 
     if (m_bckidx[mItemType] != -1) {
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, m_bckidx[mItemType]);
-        JUT_ASSERT(0x250, pbck != NULL);
+        JUT_ASSERT(DEMO_SELECT(589, 592), pbck != NULL);
         mpBckAnm = new mDoExt_bckAnm();
 
         static const u32 playmode[] = {
@@ -297,6 +297,37 @@ BOOL daStandItem_c::CreateHeap() {
     return TRUE;
 }
 
+#if VERSION == VERSION_DEMO
+// Note: Retail moved this into d_com_static.cpp as daStandItem_c::daiItemNodeCallBack
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        void* userArea = (void*)model->getUserArea();
+        if (userArea && fopAcM_IsActor(userArea) && fopAcM_GetName(userArea) == fpcNm_STANDITEM_e) {
+            daStandItem_c* i_this = (daStandItem_c*)userArea;
+            mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+            switch (i_this->getItemNo()) {
+            case dItemNo_PINWHEEL_e:
+                mDoMtx_stack_c::XrotM(i_this->m6B4);
+                break;
+            case dItemNo_FOUNTAIN_IDOL_e:
+                if (jntNo == FOBJ09_JNT_TUBOKO_BASE_e) {
+                    mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m630);
+                } else if (jntNo == FOBJ09_JNT_TUBOKO_HEAD_e) {
+                    mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m660);
+                }
+                break;
+            }
+            model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+            cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
+}
+#endif
+
 /* 800E3AF8-800E3E94       .text CreateInit__13daStandItem_cFv */
 void daStandItem_c::CreateInit() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -312,7 +343,9 @@ void daStandItem_c::CreateInit() {
     m6A4 = *dKyw_get_wind_vec();
     m6A2 = cM_atan2s(m6A4.x, m6A4.z);
     set_mtx();
+#if VERSION > VERSION_DEMO
     mpModel->setUserArea(NULL);
+#endif
 
     JUTNameTab* jointNameTab = mpModel->getModelData()->getJointName();
     const char* jointName;
@@ -323,7 +356,7 @@ void daStandItem_c::CreateInit() {
             for (i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
                 jointName = jointNameTab->getName(i);
                 if (strcmp("top", jointName) == 0) {
-                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
+                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(DEMO_SELECT(nodeCallBack, daiItemNodeCallBack));
                     break;
                 }
             }
@@ -336,7 +369,7 @@ void daStandItem_c::CreateInit() {
             for (i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
                 jointName = jointNameTab->getName(i);
                 if (strcmp("tuboko_head", jointName) == 0 || strcmp("tuboko_base", jointName) == 0)
-                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
+                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(DEMO_SELECT(nodeCallBack, daiItemNodeCallBack));
             }
             mpModel->setUserArea((u32)this);
             mpModel->calc();
@@ -352,18 +385,20 @@ void daStandItem_c::CreateInit() {
     s16 stopMaxTime = m_stop_max_time[mItemType];
     s16 r29 = (animMinTime + animMaxTime) / 2;
     s16 r28 = (animMaxTime - animMinTime) / 2;
+    s16 temp3 = (stopMinTime + stopMaxTime) / 2;
     s16 temp = (stopMaxTime - stopMinTime) / 2;
     mBckPlayTimer = 0;
     f32 temp2 = cM_rndFX(temp);
-    s16 temp3 = (stopMinTime + stopMaxTime) / 2;
     mBckStopTimer = temp3 + temp2;
     if (stopMaxTime == 0) {
         mBckPlayTimer = r29 + cM_rndFX(r28);
     }
 
+#if VERSION > VERSION_DEMO
     m690 = NULL;
     m694 = NULL;
     m698 = NULL;
+#endif
 #if VERSION > VERSION_JPN
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 #endif
@@ -376,6 +411,23 @@ cPhs_State daStandItem_c::_create() {
     mItemNo = fopAcM_GetParam(this);
     mItemType = convItemNo(mItemNo);
 
+#if VERSION == VERSION_DEMO
+    cPhs_State rt;
+    cPhs_State cloth_rt;
+    rt = dComIfG_resLoad(&mPhsDai, m_arcname);
+    cloth_rt = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    
+    if (rt == cPhs_ERROR_e || cloth_rt == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    }
+    if (rt != cPhs_COMPLEATE_e) {
+        return rt;
+    }
+    // !@bug They meant to check cloth_rt here, instead they check rt a second time.
+    if (rt != cPhs_COMPLEATE_e) {
+        return cloth_rt;
+    }
+#else
     cPhs_State rt = dComIfG_resLoad(&mPhsDai, m_arcname);
     if (rt != cPhs_COMPLEATE_e)
         return rt;
@@ -383,6 +435,7 @@ cPhs_State daStandItem_c::_create() {
     cPhs_State cloth_rt = dComIfG_resLoad(&mPhsCloth, "Cloth");
     if (cloth_rt != cPhs_COMPLEATE_e)
         return cloth_rt;
+#endif
 
     if (rt == cPhs_COMPLEATE_e && cloth_rt == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mItemType]))
@@ -509,7 +562,8 @@ bool daStandItem_c::actionFobj06() {
         m6C4 = 4.0f;
     }
 
-    m6B2 = m6C4 * 0x600;
+    int r0 = 0x600;
+    m6B2 = (f32)r0 * m6C4;
     cLib_addCalc(&m6C4, 0.0f, 0.08f, dKyw_get_wind_pow() + 0.3f, dKyw_get_wind_pow() + 0.1f);
     m6B4 += m6B2;
     return true;
@@ -572,7 +626,10 @@ bool daStandItem_c::actionFobj09() {
             if (m694 == NULL) {
                 m694 = dComIfGp_particle_set(dPa_name::ID_AK_SN_FOUNTAINFIGURE01, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
             }
-            if (m698 == NULL) {
+#if VERSION > VERSION_DEMO
+            if (m698 == NULL)
+#endif
+            {
                 m698 = dComIfGp_particle_set(dPa_name::ID_AK_SN_FOUNTAINFIGURE02, &current.pos, &current.angle);
             }
             if (m698) {
@@ -627,8 +684,8 @@ void daStandItem_c::animTest() {
         }
         if (mBckSpeed == 0.0f || mBckPlayTimer == 0) {
             mpBckAnm->setPlaySpeed(0.0f);
-            s16 temp = (stopMaxTime - stopMinTime) / 2;
             s16 temp2 = (stopMinTime + stopMaxTime) / 2;
+            s16 temp = (stopMaxTime - stopMinTime) / 2;
             mBckStopTimer = temp2 + cM_rndFX(temp);
         }
     } else if (mBckStopTimer > 0) {
@@ -637,8 +694,8 @@ void daStandItem_c::animTest() {
             mBckStopTimer = 1;
         }
         if (mBckStopTimer == 0) {
-            s16 temp = (animMaxTime - animMinTime) / 2;
             s16 temp2 = (animMinTime + animMaxTime) / 2;
+            s16 temp = (animMaxTime - animMinTime) / 2;
             mBckPlayTimer = temp2 + cM_rndFX(temp);
             mBckSpeed = 1.0f;
             if (mpBckAnm) {
@@ -662,8 +719,8 @@ void daStandItem_c::animTestForOneTime() {
         if (mBckStopTimer == 0) {
             mpBckAnm->setPlaySpeed(1.0f);
             mpBckAnm->setFrame(0.0f);
-            s16 temp = (animMaxTime - animMinTime) / 2;
             s16 temp2 = (animMinTime + animMaxTime) / 2;
+            s16 temp = (animMaxTime - animMinTime) / 2;
             mBckPlayTimer = temp2 + cM_rndFX(temp);
         }
     } else if (mBckPlayTimer > 0) {
@@ -672,8 +729,8 @@ void daStandItem_c::animTestForOneTime() {
             mpBckAnm->setPlaySpeed(1.0f);
             mpBckAnm->setFrame(0.0f);
         } else if (mBckPlayTimer == 0 && isStop) {
-            s16 temp = (stopMaxTime - stopMinTime) / 2;
             s16 temp2 = (stopMinTime + stopMaxTime) / 2;
+            s16 temp = (stopMaxTime - stopMinTime) / 2;
             mBckStopTimer = temp2 + cM_rndFX(temp);
         } else if (mBckPlayTimer == 0) {
             mBckPlayTimer = 1;
@@ -754,13 +811,22 @@ void daStandItem_c::mode_drop() {
 bool daStandItem_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
+#if VERSION == VERSION_DEMO
+    if (mpBckAnm != NULL)
+        mpBckAnm->entry(mpModel->getModelData());
+    if (mItemNo == dItemNo_PINWHEEL_e)
+        mDoExt_bckAnmRemove(mpModel->getModelData());
+#else
     if (mItemNo == dItemNo_PINWHEEL_e)
         mDoExt_bckAnmRemove(mpModel->getModelData());
     else if (mpBckAnm != NULL)
         mpBckAnm->entry(mpModel->getModelData());
+#endif
 
-    if (mItemNo == dItemNo_SHOP_GURU_STATUE_e)
-        dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
+    if (mItemNo == dItemNo_SHOP_GURU_STATUE_e) {
+        f32 scale = 1.0f;
+        dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), scale);
+    }
 
     mDoExt_modelUpdateDL(mpModel);
     if (mpCloth != NULL)
