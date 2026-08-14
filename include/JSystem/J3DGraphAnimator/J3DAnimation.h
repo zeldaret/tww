@@ -430,7 +430,7 @@ public:
     }
     u16 getUpdateMaterialNum() const { return mTrackNum / 3; }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
-    u16 getUpdateTexMtxID(u16 idx) const {
+    int getUpdateTexMtxID(u16 idx) const {
         J3D_ASSERT(1017, idx < (mTrackNum / 3), "Error : range over.");
         return mUpdateTexMtxID[idx];
     }

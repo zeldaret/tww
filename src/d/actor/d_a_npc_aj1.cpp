@@ -37,7 +37,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 0000044C-0000046C       .text daNpc_Aj1_XyCheck_CB__FPvi */
-void daNpc_Aj1_XyCheck_CB(void*, int) {
+static void daNpc_Aj1_XyCheck_CB(void*, int) {
     /* Nonmatching */
 }
 

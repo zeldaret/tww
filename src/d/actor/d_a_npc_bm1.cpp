@@ -52,8 +52,9 @@ public:
 class daNpc_Bm1_HIO_c : public mDoHIO_entry_c {
 public:
     daNpc_Bm1_HIO_c();
-    virtual ~daNpc_Bm1_HIO_c() {};
-    void genMessage(JORMContext* ctx);
+    virtual ~daNpc_Bm1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) {}
 
 public:
     /* 0x04 */ s8 m4;
@@ -687,8 +688,8 @@ bool daNpc_Bm1_c::createInit() {
         mEventIdTable[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i]);
     }
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
-    attention_info.distances[1] = a_att_dis_TBL[mType][0];
-    attention_info.distances[3] = a_att_dis_TBL[mType][1];
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = a_att_dis_TBL[mType][0];
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = a_att_dis_TBL[mType][1];
     gravity = -4.5;
     m82C = current.pos;
     s32 iVar5 = 0xFF;
@@ -2940,6 +2941,7 @@ void daNpc_Bm1_c::privateCut(int arg0) {
                         break;
                     case 1:
                         cut_init_360_TRN(arg0);
+                        break;
                 }
             }
             bool cVar3;

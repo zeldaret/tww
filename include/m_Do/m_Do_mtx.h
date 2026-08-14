@@ -95,6 +95,10 @@ inline void cMtx_copy(CMtxP src, MtxP dst) {
     mDoMtx_copy(src, dst);
 }
 
+inline void cMtx_trans(Mtx dst, f32 x, f32 y, f32 z) {
+    mDoMtx_trans(dst, x, y, z);
+}
+
 inline void cMtx_multVecArray(Mtx mtx, const Vec* src, Vec* dst, u32 count) {
     mDoMtx_multVecArray(mtx, src, dst, count);
 }

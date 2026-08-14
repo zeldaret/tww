@@ -526,7 +526,7 @@ bool daFm_c::jntHitCreateHeap() {
 }
 
 /* 00000A30-00000A6C       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-BOOL pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
+static BOOL pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
     return ((daFm_c*)i_this)->_pathMove(param_1, param_2, param_3   );
 }
 
@@ -551,7 +551,7 @@ BOOL daFm_c::_pathMove(cXyz* param_1, cXyz* param_2, cXyz* param_3) {
 }
 
 /* 00000D40-00000D6C       .text searchNearOtherActor_CB__FPvPv */
-void* searchNearOtherActor_CB(void* param_1, void* param_2) {
+static void* searchNearOtherActor_CB(void* param_1, void* param_2) {
     return ((daFm_c*)param_2)->searchNearOtherActor((fopAc_ac_c*)param_1);
 }
 

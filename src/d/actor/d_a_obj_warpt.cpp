@@ -226,7 +226,7 @@ bool daObj_Warpt_c::createBodyHeap() {
 }
 
 /* 00000620-00000648       .text ride_CB__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_CB(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* arg2) {
+static void ride_CB(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* arg2) {
     ((daObj_Warpt_c*)a_this)->_ride(arg2);
 }
 

@@ -1127,7 +1127,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
 
 #if VERSION > VERSION_DEMO
 /* 80027254-80027280       .text stealItem_CB__FPv */
-BOOL stealItem_CB(void* actor) {
+static BOOL stealItem_CB(void* actor) {
     if (actor) {
         daItem_c* item = (daItem_c*)actor;
         item->scale.setall(1.0f);

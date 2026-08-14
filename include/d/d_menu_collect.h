@@ -20,6 +20,7 @@ class JUTFont;
 
 class dMenu_Collect_c : public dMenu_base_c {
 public:
+    ~dMenu_Collect_c() {}
     virtual void draw() { _draw(); }
 
     void alphaChange(fopMsgM_pane_class* pane, float alpha) { pane->mInitAlpha *= alpha; }
@@ -32,15 +33,15 @@ public:
     void setQuitArchive(JKRArchive* arc) { mpSaveArc = arc; }
 
     void setFont(JUTFont* font, JUTFont* rfont) {
-        mFont = font;
-        mRFont = rfont;
+        mpFont = font;
+        mpRubyFont = rfont;
     }
 
     void setTactTexBuffer(void* ptr) { mTactTexBuffer = (ResTIMG*)ptr; }
     void setMapTexBuffer(void* ptr) { mMapTexBuffer = (ResTIMG*)ptr; }
     void setTriforceTexBuffer(int idx, void* ptr) { mTriforceTexBuffer[idx] = (ResTIMG*)ptr; }
-    void setSymbolTexBuffer(int idx, void* ptr) { mSymbolTexBuffer[idx] = ptr; }
-    void setItemTexBuffer(int idx, void* ptr) { mItemTexBuffer[idx] = ptr; }
+    void setSymbolTexBuffer(int idx, void* ptr) { mSymbolTexBuffer[idx] = (ResTIMG*)ptr; }
+    void setItemTexBuffer(int idx, void* ptr) { mItemTexBuffer[idx] = (ResTIMG*)ptr; }
 
     void setTextArea(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
         name[0] = name0;
@@ -58,7 +59,7 @@ public:
     void initialize();
     void cursorAnime();
     int stickDirection(unsigned char);
-    int cursorMainMove();
+    u8 cursorMainMove();
     u8 noteCheck();
     void noteInit();
     void noteAppear();
@@ -176,16 +177,21 @@ private:
     /* 0x2464 */ JKRArchive* mpArc;
     /* 0x2468 */ JKRArchive* mpOptArc;
     /* 0x246C */ JKRArchive* mpSaveArc;
-    /* 0x2470 */ JUTFont* mFont;
-    /* 0x2474 */ JUTFont* mRFont;
+    /* 0x2470 */ JUTFont* mpFont;
+    /* 0x2474 */ JUTFont* mpRubyFont;
     /* 0x2478 */ J2DPane* m2478;
     /* 0x247C */ JPABaseEmitter* m247C[3];
     /* 0x2488 */ J2DWindow::TContentsColor m2488;
     /* 0x2498 */ ResTIMG* mTactTexBuffer;
     /* 0x249C */ ResTIMG* mMapTexBuffer;
     /* 0x24A0 */ ResTIMG* mTriforceTexBuffer[8];
-    /* 0x24C0 */ void* mSymbolTexBuffer[3];
-    /* 0x24CC */ void* mItemTexBuffer[5];
+    /* 0x24C0 */ ResTIMG* mSymbolTexBuffer[3];
+    /* 0x24CC */ ResTIMG* mItemTexBuffer[5];
+#if VERSION == VERSION_PAL
+    /* 0x24E0 */ ResTIMG* mWordSaveTexBuffer;
+    /* 0x24E4 */ ResTIMG* mWordOptionTexBuffer;
+    /* 0x24E8 */ ResTIMG* mTitleCollectTexBuffer;
+#endif
     /* 0x24E0 */ fopMsgM_msgDataProc_c mMsgProc;
     /* 0x2780 */ dMenu_Option_c* dMo_c;
     /* 0x2784 */ dMenu_save_c* dMs_c;
@@ -197,12 +203,12 @@ private:
     /* 0x27B8 */ char* note[2];
     /* 0x27C0 */ char* dummy[2];
     /* 0x27C8 */ u8 m27C8[0x27DC - 0x27C8];
-    /* 0x27DC */ u32 m27DC;
+    /* 0x27DC */ s32 m27DC;
     /* 0x27E0 */ s16 m27E0;
     /* 0x27E2 */ s16 mTimer;
-    /* 0x27E4 */ u16 m27E4;
-    /* 0x27E6 */ u16 m27E6;
-    /* 0x27E8 */ u16 m27E8;
+    /* 0x27E4 */ s16 m27E4;
+    /* 0x27E6 */ s16 m27E6;
+    /* 0x27E8 */ s16 m27E8;
     /* 0x27EA */ u8 m27EA;
     /* 0x27EB */ u8 m27EB;
     /* 0x27EC */ u8 mTriggerInfo;
@@ -214,8 +220,6 @@ private:
     /* 0x27F2 */ u8 m27F2;
     /* 0x27F3 */ u8 m27F3;
 }; // Size: 0x27F4
-
-STATIC_ASSERT(sizeof(dMenu_Collect_c) == 0x27F4);
 
 class dMc_HIO_c : public JORReflexible {
 public:

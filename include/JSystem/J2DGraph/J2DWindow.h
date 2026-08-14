@@ -44,14 +44,10 @@ public:
         param_0.mBR = mColorBR;
     }
     const JUtility::TColor& getWhite() const { return mWhite; }
-    bool setBlack(JUtility::TColor black) { mBlack = black; return true; }
-    void setContentsColor(TContentsColor c) {
-        setContentsColor(c.mTL, c.mTR, c.mBL, c.mBR);
-    }
-    void setContentsColor(JUtility::TColor c) {
-        setContentsColor(c, c, c, c);
-    }
-    bool setWhite(JUtility::TColor white) { mWhite = white; return true; }
+    void setBlack(JUtility::TColor black) { mBlack = black; }
+    void setContentsColor(TContentsColor param_0) { setContentsColor(param_0.mTL, param_0.mTR, param_0.mBL, param_0.mBR); }
+    void setContentsColor(JUtility::TColor param_0) { setContentsColor(param_0, param_0, param_0, param_0); }
+    void setWhite(JUtility::TColor white) { mWhite = white; }
 
 public:
     /* 0x0CC */ JUTTexture* mpFrameTexture1;

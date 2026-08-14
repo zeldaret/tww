@@ -409,7 +409,7 @@ config.libs = [
             Object(NonMatching, "m_Do/m_Do_graphic.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_machine.cpp"),
             Object(Matching,    "m_Do/m_Do_mtx.cpp"),
-            Object(NonMatching, "m_Do/m_Do_ext.cpp"),
+            Object(MatchingFor("D44J01"),    "m_Do/m_Do_ext.cpp"),
             Object(Matching,    "m_Do/m_Do_lib.cpp"),
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_Reset.cpp"),
@@ -565,7 +565,7 @@ config.libs = [
             Object(Matching,    "d/d_bg_w_deform.cpp"),
             Object(Matching,    "d/d_bg_w_hf.cpp"),
             Object(Matching,    "d/d_bg_w_sv.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_d.cpp"),
+            Object(Matching,    "d/d_cc_d.cpp"),
             Object(Matching,    "d/d_cc_mass_s.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_s.cpp"),
             Object(Matching,    "d/d_cc_uty.cpp"),
@@ -593,7 +593,7 @@ config.libs = [
             Object(Matching,    "d/actor/d_a_bomb.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bomb2.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/actor/d_a_boomerang.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_dai_item.cpp"),
+            Object(Matching,    "d/actor/d_a_dai_item.cpp"),
             Object(Matching,    "d/actor/d_a_demo00.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_disappear.cpp"),
             Object(Matching,    "d/actor/d_a_esa.cpp"),
@@ -1232,7 +1232,7 @@ config.libs = [
         [
             Object(NonMatching, "dolphin/gx/GXInit.c", extra_cflags=["-opt nopeephole"]),
             Object(Matching,    "dolphin/gx/GXFifo.c"),
-            Object(NonMatching, "dolphin/gx/GXAttr.c"),
+            Object(Matching,    "dolphin/gx/GXAttr.c"),
             Object(NonMatching, "dolphin/gx/GXMisc.c"),
             Object(NonMatching, "dolphin/gx/GXGeometry.c"),
             Object(NonMatching, "dolphin/gx/GXFrameBuf.c"),
@@ -1451,7 +1451,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lamp"),
     ActorRel(NonMatching, "d_a_lod_bg"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lwood"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_magma"),
+    ActorRel(Matching,    "d_a_magma"),
     ActorRel(Matching,    "d_a_majuu_flag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_mdoor"),
     ActorRel(MatchingFor("D44J01"), "d_a_msw"),
@@ -1471,7 +1471,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_hfuck1"),
     ActorRel(Matching,    "d_a_obj_hole"),
     ActorRel(Matching,    "d_a_obj_ice"),
-    ActorRel(NonMatching, "d_a_obj_ikada"),
+    ActorRel(Matching,    "d_a_obj_ikada"),
     ActorRel(Matching,    "d_a_obj_kanat"),
     ActorRel(Matching,    "d_a_obj_leaves"),
     ActorRel(Matching,    "d_a_obj_lpalm"),
@@ -1653,7 +1653,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_npc_ah"),
     ActorRel(NonMatching, "d_a_npc_aj1"),
     ActorRel(NonMatching, "d_a_npc_auction"),
-    ActorRel(NonMatching, "d_a_npc_ba1"),
+    ActorRel(Matching, "d_a_npc_ba1"),
     ActorRel(NonMatching, "d_a_npc_bj1"),
     ActorRel(Matching,    "d_a_npc_bm1"),
     ActorRel(NonMatching, "d_a_npc_bmcon1"),
@@ -1938,11 +1938,11 @@ config.progress_report_args = [
     "--config preferredStringEncoding=shift_jis",
 ]
 
-# Disable missing return type warnings for incomplete objects
-for lib in config.libs:
-    for obj in lib["objects"]:
-        if not obj.completed:
-            obj.options["extra_clang_flags"].append("-Wno-return-type")
+# # Disable missing return type warnings for incomplete objects
+# for lib in config.libs:
+#     for obj in lib["objects"]:
+#         if not obj.completed:
+#             obj.options["extra_clang_flags"].append("-Wno-return-type")
 
 if args.mode == "configure":
     # Write build.ninja and objdiff.json
