@@ -316,19 +316,19 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
     if symbol_name not in base_symbols:
       continue
     base_symbol = base_symbols[symbol_name]
-    wrong_linkage = False
+    is_wrong_linkage = False
     if target_symbol.linkage is None and base_symbol.sym_type == "object":
       # The official framework.map for main.dol doesn't include linkage, but we can guess it based off of certain symbol name prefixes.
       if base_symbol.name.startswith("l_") and base_symbol.linkage != "local":
-        wrong_linkage = True
+        is_wrong_linkage = True
         target_linkage = "local"
       elif base_symbol.name.startswith("g_") and base_symbol.linkage != "global":
-        wrong_linkage = True
+        is_wrong_linkage = True
         target_linkage = "global"
     elif target_symbol.linkage is not None and target_symbol.linkage != base_symbol.linkage:
-      wrong_linkage = True
+      is_wrong_linkage = True
       target_linkage = target_symbol.linkage
-    if wrong_linkage:
+    if is_wrong_linkage:
       total_wrong_linkage += 1
       print(f"LINKAGE: {symbol_name} (should be {target_linkage}, is {base_symbol.linkage})")
   
@@ -382,14 +382,37 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
     print(f"Total maybe fake: {total_maybe_fake}")
   print(f"Total fake: {total_fake}")
   print(f"Total missing: {total_missing}")
+  
+  return (total_missing, total_fake, total_wrong_linkage, total_wrong_align)
+
+def diff_all_debug_maps():
+  retcode = subprocess.call(["ninja"], cwd=decomp_root_path)
+  assert retcode == 0, "Ninja build call failed"
+  
+  total_missing = 0
+  total_fake = 0
+  total_wrong_linkage = 0
+  total_wrong_align = 0
+  
+  for target_object_name in all_object_names:
+    if target_object_name in ["__mem", "exception", "executor"]:
+      continue
+    missing, fake, wrong_linkage, wrong_align = diff_debug_map(target_object_name, call_ninja=False, print_size_diffs=False, print_maybe_fake=False)
+    total_missing += missing
+    total_fake += fake
+    total_wrong_linkage += wrong_linkage
+    total_wrong_align += wrong_align
+  
+  print("==================================================")
+  print("=== Summary for all objects")
+  print("==================================================")
+  print(f"Total wrong linkage: {total_wrong_linkage}")
+  print(f"Total wrong alignment: {total_wrong_align}")
+  print(f"Total fake: {total_fake}")
+  print(f"Total missing: {total_missing}")
 
 if __name__ == "__main__":
   if build_all:
-    retcode = subprocess.call(["ninja"], cwd=decomp_root_path)
-    assert retcode == 0, "Ninja build call failed"
-    for target_object_name in all_object_names:
-      if target_object_name in ["__mem", "exception", "executor"]:
-        continue
-      diff_debug_map(target_object_name, call_ninja=False, print_size_diffs=False, print_maybe_fake=False)
+    diff_all_debug_maps()
   else:
     diff_debug_map(arg_object_name, call_ninja=True, print_size_diffs=True, print_maybe_fake=True)
