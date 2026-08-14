@@ -911,6 +911,9 @@ public:
     /* 0x1BFC0 */ dRes_control_c mResControl;
     /* 0x1D1C0 */ u8 field_0x1d1c0;
     /* 0x1D1C1 */ u8 mBrightness;
+#ifdef DEBUG
+    u8 mIsDebugMode;
+#endif
 };
 
 #if VERSION > VERSION_JPN
@@ -4413,6 +4416,14 @@ inline void dComIfG_TimerStop(int timer) {
 
 inline u8 dComIfG_getBrightness() { return g_dComIfG_gameInfo.mBrightness; }
 inline void dComIfG_setBrightness(u8 v) { g_dComIfG_gameInfo.mBrightness = v; }
+
+inline BOOL dComIfG_isDebugMode() {
+#ifdef DEBUG
+    return g_dComIfG_gameInfo.mIsDebugMode;
+#else
+    return FALSE;
+#endif
+}
 
 class scene_class;
 BOOL dComIfG_resetToOpening(scene_class* i_scene);

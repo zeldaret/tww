@@ -365,6 +365,9 @@ NonMatching = False               # Object does not match and should not be link
 Equivalent = config.non_matching  # Object should be linked when configured with --non-matching
 
 
+DEBUG_ONLY = args.debug
+
+
 # Object is only matching for specific versions
 def MatchingFor(*versions):
     return config.version in versions
@@ -587,6 +590,11 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_salvage.cpp"),
             Object(Matching,    "d/d_snap.cpp"),
             Object(Matching,    "d/d_point_wind.cpp"),
+            Object(DEBUG_ONLY,  "d/d_debug_viewer.cpp"),
+            Object(DEBUG_ONLY,  "d/d_debug_pad.cpp"),
+            # Object(DEBUG_ONLY,  "d/d_debug_camera.cpp"),
+            # Object(DEBUG_ONLY,  "d/d_event_debug.cpp"),
+            # Object(DEBUG_ONLY,  "d/d_kankyo_debug.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d/actor/d_a_agb.cpp"),
             Object(Matching,    "d/actor/d_a_arrow.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bg.cpp"),
@@ -1241,6 +1249,7 @@ config.libs = [
             Object(NonMatching, "dolphin/gx/GXBump.c"),
             Object(NonMatching, "dolphin/gx/GXTev.c"),
             Object(NonMatching, "dolphin/gx/GXPixel.c"),
+            Object(DEBUG_ONLY,  "dolphin/gx/GXDraw.c"),
             Object(Matching,    "dolphin/gx/GXStubs.c"),
             Object(Matching,    "dolphin/gx/GXDisplayList.c"),
             Object(NonMatching, "dolphin/gx/GXTransform.c", extra_cflags=["-fp_contract off"]),
@@ -1907,19 +1916,30 @@ if config_path.exists():
 
 # Optional callback to adjust link order. This can be used to add, remove, or reorder objects.
 # This is called once per module, with the module ID and the current link order.
-#
-# For example, this adds "dummy.c" to the end of the DOL link order if configured with --non-matching.
-# "dummy.c" *must* be configured as a Matching (or Equivalent) object in order to be linked.
 def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
     # Don't modify the link order for matching builds
     if not config.non_matching:
         return objects
-    if module_id == 0:  # DOL
-        return objects + ["dummy.c"]
+    
+    if args.debug and module_id == 0: # Debug DOL
+        # Insert debug-only objects.
+        objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_viewer.cpp")
+        objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_pad.cpp")
+        # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_camera.cpp")
+        # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_event_debug.cpp")
+        # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_kankyo_debug.cpp")
+        objects.insert(objects.index("dolphin/gx/GXPixel.c"), "dolphin/gx/GXDraw.c")
+    
+    # Example of adding new files for modding:
+    # This adds "dummy.c" to the end of the DOL link order if configured with --non-matching.
+    # "dummy.c" *must* be configured as a Matching (or Equivalent) object in order to be linked.
+    # if module_id == 0:  # DOL
+    #     return objects + ["dummy.c"]
+    
     return objects
 
 # Uncomment to enable the link order callback.
-# config.link_order_callback = link_order_callback
+config.link_order_callback = link_order_callback
 
 
 # Optional extra categories for progress tracking
