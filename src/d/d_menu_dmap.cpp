@@ -140,7 +140,7 @@ void dMenu_Dmap_c::screenSet() {
     static const u32 l_fl[]  = { 'f001', 'f002', 'f003', 'f004', 'f005', 'f006' };
     static const u32 l_fb[]  = { 'fb01', 'fb02', 'fb03', 'fb04', 'fb05', 'fb06' };
     static const u32 l_fbk[] = { 'fbk1', 'fbk2', 'fbk3', 'fbk4', 'fbk5', 'fbk6' };
-    
+
     for (int i = 0; i < 15; i++) {
         fopMsgM_setPaneData(&mFtPanes[i], scrn2, l_ft[i]);
         fopMsgM_setPaneData(&mFdPanes[i], scrn2, l_fd[i]);
@@ -254,7 +254,7 @@ void dMenu_Dmap_c::screenSet() {
     fopMsgM_setPaneData(&mCc24Pane, scrn, 'cc24');
     fopMsgM_setPaneData(&mCc17Pane, scrn, 'cc17');
     fopMsgM_setPaneData(&mCc10Pane, scrn, 'cc10');
-    fopMsgM_setPaneData(&mCc05pane, scrn, 'cc05');
+    fopMsgM_setPaneData(&mCc05Pane, scrn, 'cc05');
     fopMsgM_setPaneData(&mCc00Pane, scrn, 'cc00');
     fopMsgM_setPaneData(&mMskPane, scrn, 'msk');
 
@@ -651,7 +651,7 @@ void dMenu_Dmap_c::treasureDraw() {
                     treasure_p[i].posX, y + drawOffsetY,
                     treasure_p[i].width, treasure_p[i].height,
                     false, false, false);
-                treasure_p[i].ppane->mAlpha = mCc05pane.mNowAlpha;
+                treasure_p[i].ppane->mAlpha = mCc05Pane.mNowAlpha;
             }
         }
     }
@@ -670,7 +670,7 @@ void dMenu_Dmap_c::treasureDraw() {
                     door_p[i].height * scale,
                     ROTATE_Z,
                     door_p[i].angle * 0.005493164f);
-                door_p[i].ppane->mAlpha = mCc05pane.mNowAlpha;
+                door_p[i].ppane->mAlpha = mCc05Pane.mNowAlpha;
             }
         }
     }
@@ -680,7 +680,7 @@ void dMenu_Dmap_c::treasureDraw() {
         f32 scale = 0.5f;
         if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
             npc_p.ppane->draw(npc_p.posX, y + drawOffsetY, npc_p.width, npc_p.height, false, false, false);
-            npc_p.ppane->mAlpha = mCc05pane.mNowAlpha;
+            npc_p.ppane->mAlpha = mCc05Pane.mNowAlpha;
         }
     }
 
@@ -689,7 +689,7 @@ void dMenu_Dmap_c::treasureDraw() {
         f32 scale = 0.5f;
         if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
             boss_p.ppane->draw(boss_p.posX, y + drawOffsetY, boss_p.width, boss_p.height, false, false, false);
-            boss_p.ppane->mAlpha = mCc05pane.mNowAlpha;
+            boss_p.ppane->mAlpha = mCc05Pane.mNowAlpha;
         }
     }
 }
@@ -721,16 +721,16 @@ void dMenu_Dmap_c::paneMove(f32 i_y) {
         fopMsgM_paneTrans(&mFbPanes[i], 0.0f, i_y);
         fopMsgM_paneTrans(&mFbkPanes[i], 0.0f, i_y);
     }
-                          
-    fopMsgM_paneTrans(&mFw00Pane, 0.0, i_y);
-    fopMsgM_paneTrans(&mFw01Pane, 0.0, i_y);
-    fopMsgM_paneTrans(&mCc38Pane, 0.0, i_y);
-    fopMsgM_paneTrans(&mCc31Pane, 0.0, i_y);
-    fopMsgM_paneTrans(&mCc24Pane, 0.0, i_y);
-    fopMsgM_paneTrans(&mCc17Pane, 0.0, i_y);
-    fopMsgM_paneTrans(&mCc10Pane, 0.0, i_y);
-    fopMsgM_paneTrans(&mCc05pane, 0.0, i_y);
-    fopMsgM_paneTrans(&mCc00Pane, 0.0, i_y);
+
+    fopMsgM_paneTrans(&mFw00Pane, 0.0f, i_y);
+    fopMsgM_paneTrans(&mFw01Pane, 0.0f, i_y);
+    fopMsgM_paneTrans(&mCc38Pane, 0.0f, i_y);
+    fopMsgM_paneTrans(&mCc31Pane, 0.0f, i_y);
+    fopMsgM_paneTrans(&mCc24Pane, 0.0f, i_y);
+    fopMsgM_paneTrans(&mCc17Pane, 0.0f, i_y);
+    fopMsgM_paneTrans(&mCc10Pane, 0.0f, i_y);
+    fopMsgM_paneTrans(&mCc05Pane, 0.0f, i_y);
+    fopMsgM_paneTrans(&mCc00Pane, 0.0f, i_y);
 }
 
 /* 801AB464-801AB630       .text paneAlpha__12dMenu_Dmap_cFf */
@@ -768,7 +768,7 @@ void dMenu_Dmap_c::paneAlpha(f32 i_alpha) {
     fopMsgM_setNowAlpha(&mCc24Pane, i_alpha);
     fopMsgM_setNowAlpha(&mCc17Pane, i_alpha);
     fopMsgM_setNowAlpha(&mCc10Pane, i_alpha);
-    fopMsgM_setNowAlpha(&mCc05pane, i_alpha);
+    fopMsgM_setNowAlpha(&mCc05Pane, i_alpha);
     fopMsgM_setNowAlpha(&mCc00Pane, i_alpha);
     fopMsgM_setNowAlpha(&mMskPane, i_alpha);
 }
@@ -822,7 +822,7 @@ void dMenu_Dmap_c::decAlpha(f32 i_alpha) {
     mCc24Pane.mNowAlpha *= i_alpha;
     mCc17Pane.mNowAlpha *= i_alpha;
     mCc10Pane.mNowAlpha *= i_alpha;
-    mCc05pane.mNowAlpha *= i_alpha;
+    mCc05Pane.mNowAlpha *= i_alpha;
     mCc00Pane.mNowAlpha *= i_alpha;
     mMskPane.mNowAlpha *= i_alpha;
 }
@@ -1005,12 +1005,12 @@ void dMenu_Dmap_c::noteOpen() {
 
 /* 801AC590-801AC7C8       .text noteClose__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::noteClose() {
-    float out_x = (640.0f - mNo11Pane.mPosCenterOrig.x) - 320.0f;
-    float out_y = (480.0f - mNo11Pane.mPosCenterOrig.y) - 240.0f;
-    float x = 320.0f - mNo11Pane.mPosCenterOrig.x;
-    float y = 240.0f - mNo11Pane.mPosCenterOrig.y;
+    f32 out_x = (640.0f - mNo11Pane.mPosCenterOrig.x) - 320.0f;
+    f32 out_y = (480.0f - mNo11Pane.mPosCenterOrig.y) - 240.0f;
+    f32 x = 320.0f - mNo11Pane.mPosCenterOrig.x;
+    f32 y = 240.0f - mNo11Pane.mPosCenterOrig.y;
     
-    float alpha = fopMsgM_valueIncrease(10, mNt00Pane.mUserArea - 18, 0);
+    f32 alpha = fopMsgM_valueIncrease(10, mNt00Pane.mUserArea - 18, 0);
 
     fopMsgM_paneTrans(&mNo11Pane, (out_x * alpha) + x, (out_y * alpha) + y);
 
@@ -1018,7 +1018,7 @@ void dMenu_Dmap_c::noteClose() {
         mNo11Pane.mSize.x / 2.0f,
         mNo11Pane.mSize.y / 2.0f,
         ROTATE_Z,
-        (alpha * 123.0f) + -3.0f
+        (alpha * -117.0f) + -3.0f
     );
 
     mNt00Pane.mUserArea++;
@@ -1568,15 +1568,15 @@ void dMenu_Dmap_c::linkAnime() {
     }
 
     if (mLnkTexFlip1 == false) {
-        ((J2DPicture*)mLnkPanes[1].pane)->changeTexture("link_eye2.bti", 0);
-    } else {
         ((J2DPicture*)mLnkPanes[1].pane)->changeTexture("link_eye1.bti", 0);
+    } else {
+        ((J2DPicture*)mLnkPanes[1].pane)->changeTexture("link_eye2.bti", 0);
     }
 
     if (mLnkTexFlip2 == false) {
-        ((J2DPicture*)mLnkPanes[2].pane)->changeTexture("link_mouth2.bti", 0);
-    } else {
         ((J2DPicture*)mLnkPanes[2].pane)->changeTexture("link_mouth1.bti", 0);
+    } else {
+        ((J2DPicture*)mLnkPanes[2].pane)->changeTexture("link_mouth2.bti", 0);
     }
 }
 
@@ -1790,7 +1790,7 @@ void dMenu_Dmap_c::_draw() {
 
     fopMsgM_setAlpha(&mNm00Pane);
     fopMsgM_setAlpha(&mNm01Pane);
-    fopMsgM_setAlpha(&mItnmPane);                                                   
+    fopMsgM_setAlpha(&mItnmPane);
     fopMsgM_setAlpha(&mItnkPane);
     fopMsgM_setAlpha(&mMsk0Pane);
     fopMsgM_setAlpha(&mStr0Pane);
@@ -1820,7 +1820,6 @@ void dMenu_Dmap_c::_draw() {
         fopMsgM_setAlpha(&mFbkPanes[i]);
     }
 
-                          
     fopMsgM_setAlpha(&mFw00Pane);
     fopMsgM_setAlpha(&mFw01Pane);
     fopMsgM_setAlpha(&mCc38Pane);
@@ -1828,11 +1827,11 @@ void dMenu_Dmap_c::_draw() {
     fopMsgM_setAlpha(&mCc24Pane);
     fopMsgM_setAlpha(&mCc17Pane);
     fopMsgM_setAlpha(&mCc10Pane);
-    fopMsgM_setAlpha(&mCc05pane);
+    fopMsgM_setAlpha(&mCc05Pane);
     fopMsgM_setAlpha(&mCc00Pane);
     fopMsgM_setAlpha(&mMskPane);
 
-    dmap_c->field_0x2B6 = mCc05pane.mNowAlpha;
+    dmap_c->field_0x2B6 = mCc05Pane.mNowAlpha;
     J2DOrthoGraph* port = dComIfGp_getCurrentGrafPort();
     port->setPort();
     scrn->draw(0.0f, 0.0f, (J2DGrafContext*)port);
@@ -1843,7 +1842,50 @@ void dMenu_Dmap_c::_draw() {
 
 /* 801AF0C0-801AF294       .text _open__12dMenu_Dmap_cFv */
 bool dMenu_Dmap_c::_open() {
-    /* Nonmatching */
+    bool ret = false;
+
+    if (mNoteTimer == 0) {
+        for (int i = 0; i < 2; i++) {
+            strcpy(mTxtName[i], "");
+            strcpy(mTxtNote[i], "");
+            ((J2DTextBox*)(&mNm00Pane)[i].pane)->setString(mTxtName[i]);
+        }
+
+        ((J2DTextBox*)mSt00Pane.pane)->setString(mTxtNote[0]);
+        ((J2DTextBox*)mStr0Pane.pane)->setString(mTxtNote[1]);
+        itemnameSet();
+        itemnoteSet();
+    }
+
+    mNoteTimer++;
+
+    if (mNoteTimer <= 10) {
+        f32 alpha = fopMsgM_valueIncrease(10, mNoteTimer, 0);
+        f32 rate = fopMsgM_valueIncrease(10, 10 - mNoteTimer, 0);
+        mMapDrawOffsetY = rate * 480.0f;
+        paneMove(rate * 480.0f);
+
+        s16 y = mMpmkPosY + mMapDrawOffsetY;
+        dMap_Dmap_c* dmap = dmap_c;
+        dmap->field_0x35C = mMpmkPosX;
+        dmap->field_0x35E = y;
+
+        y = mCurFloorMapY + mMapDrawOffsetY;
+        dmap = dmap_c;
+        dmap->field_0x364 = mMpp1PosX;
+        dmap->field_0x366 = y;
+
+        paneAlpha(alpha);
+        noteOpenProc(mNoteTimer);
+        mCurFloorOnly = true;
+    }
+
+    if (mNoteTimer >= 10) {
+        ret = true;
+        mCurFloorOnly = false;
+        mDoAud_seStart(JA_SE_ITM_MENU_ITEMS_IN);
+    }
+    return ret;
 }
 
 /* 801AF294-801AF3B8       .text _close__12dMenu_Dmap_cFv */

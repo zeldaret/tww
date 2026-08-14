@@ -24,12 +24,12 @@ struct dMap_pane_c {
     /* 0x10 */ f32 height;
     /* 0x14 */ s16 angle;
     /* 0x16 */ u8 exists;
-    /* 0x17 */ u8 padding_0x17[1];
-} /* Size: 0x18 */;
+}; // Size: 0x18
 
 class dMenu_Dmap_c : public dMenu_base_c {
 public:
     void alphaChange(fopMsgM_pane_class*, f32) {}
+    virtual ~dMenu_Dmap_c() {}
     virtual void draw() { _draw(); }
     void setArchive(JKRArchive* arc) { mpArc = arc; }
     void setFont(JUTFont* font, JUTFont* rfont) {
@@ -109,7 +109,7 @@ public:
     /* 0x0D64 */ fopMsgM_pane_class mBey2Pane;
     /* 0x0D9C */ fopMsgM_pane_class mBossPane;
     /* 0x0DD4 */ fopMsgM_pane_class mBos2Pane;
-    /* 0x0E0C */ u8 padding[0xE7C - 0xE0C];
+    /* 0x0E0C */ fopMsgM_pane_class field_0xE0C[2];
     /* 0x0E7C */ fopMsgM_pane_class mFlPanes[6];
     /* 0x0FCC */ fopMsgM_pane_class mFbPanes[6];
     /* 0x111C */ fopMsgM_pane_class mFbkPanes[6];
@@ -120,7 +120,7 @@ public:
     /* 0x134C */ fopMsgM_pane_class mCc24Pane;
     /* 0x1384 */ fopMsgM_pane_class mCc17Pane;
     /* 0x13BC */ fopMsgM_pane_class mCc10Pane;
-    /* 0x13F4 */ fopMsgM_pane_class mCc05pane;
+    /* 0x13F4 */ fopMsgM_pane_class mCc05Pane;
     /* 0x142C */ fopMsgM_pane_class mCc00Pane;
     /* 0x1464 */ fopMsgM_pane_class mMskPane;
     /* 0x149C */ STControl* stick;
@@ -175,7 +175,6 @@ public:
     /* 0x1E34 */ bool mLnkTexFlip1;
     /* 0x1E35 */ bool mCurFloorOnly;
     /* 0x1E36 */ u8 mBossEyeState;
-    /* 0x1E37 */ u8 pad;
 }; // Size: 0x1E38
 
 STATIC_ASSERT(sizeof(dMenu_Dmap_c) == 0x1E38);
