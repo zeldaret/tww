@@ -4,6 +4,7 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "stdio.h"
 #include "d/d_item_data.h"
 #include "d/d_lib.h"
 #include "d/d_map.h"
@@ -86,6 +87,28 @@ dMd_HIO_c::dMd_HIO_c() {
 /* 801A87CC-801A8818       .text changeFloorTexture__12dMenu_Dmap_cFP7J2DPanei */
 void dMenu_Dmap_c::changeFloorTexture(J2DPane* i_pane, int i_floor) {
     static const char* floor_name[] = {
+#if VERSION == VERSION_PAL
+        "hierarchy_num_B3",
+        "hierarchy_num_B3",
+        "hierarchy_num_B3",
+        "hierarchy_num_B3",
+        "hierarchy_num_B3",
+        "hierarchy_num_B3",
+        "hierarchy_num_B3",
+        "hierarchy_num_B3",
+        "hierarchy_num_B2",
+        "hierarchy_num_B1",
+        "hierarchy_num_1",
+        "hierarchy_num_2",
+        "hierarchy_num_3",
+        "hierarchy_num_4",
+        "hierarchy_num_5",
+        "hierarchy_num_6",
+        "hierarchy_num_7",
+        "hierarchy_num_7",
+        "hierarchy_num_7",
+        "hierarchy_num_7",
+#else
         "hierarchy_num_B3.bti",
         "hierarchy_num_B3.bti",
         "hierarchy_num_B3.bti",
@@ -106,12 +129,23 @@ void dMenu_Dmap_c::changeFloorTexture(J2DPane* i_pane, int i_floor) {
         "hierarchy_num_7.bti",
         "hierarchy_num_7.bti",
         "hierarchy_num_7.bti",
+#endif
     };
 
     if (i_floor < 0 || i_floor >= 20) {
         i_floor = 0;
     }
-    ((J2DPicture *)i_pane)->changeTexture(floor_name[i_floor], 0);
+#if VERSION == VERSION_PAL
+    char buf[0x20];
+    if (dComIfGs_getPalLanguage() != 0) {
+        sprintf(buf, "%s_%d.bti", floor_name[i_floor], dComIfGs_getPalLanguage());
+    } else {
+        sprintf(buf, "%s.bti", floor_name[i_floor]);
+    }
+    ((J2DPicture*)i_pane)->changeTexture(buf, 0);
+#else
+    ((J2DPicture*)i_pane)->changeTexture(floor_name[i_floor], 0);
+#endif
 }
 
 /* 801A8818-801A92D4       .text screenSet__12dMenu_Dmap_cFv */
