@@ -82,7 +82,6 @@ namespace daObjMovebox {
         };
         
         Bgc_c();
-        ~Bgc_c();
         void gnd_pos(const Act_c*, const BgcSrc_c*, int, f32);
         void wrt_pos(const cXyz&);
         void wall_pos(const Act_c*, const BgcSrc_c*, int, s16, f32);
