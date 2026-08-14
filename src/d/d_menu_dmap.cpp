@@ -11,6 +11,7 @@
 #include "d/d_meter.h"
 #include "d/d_stage.h"
 #include "f_op/f_op_msg_mng.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DWindow.h"
@@ -1779,7 +1780,65 @@ void dMenu_Dmap_c::_move() {
 
 /* 801AEE90-801AF0C0       .text _draw__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::_draw() {
-    /* Nonmatching */
+    for (int i = 0; i < 15; i++) {
+        fopMsgM_setAlpha(&mFtPanes[i]);
+    }
+
+    for (int i = 0; i < 4; i++) {
+        fopMsgM_setAlpha(&mCarPanes[i]);
+    }
+
+    fopMsgM_setAlpha(&mNm00Pane);
+    fopMsgM_setAlpha(&mNm01Pane);
+    fopMsgM_setAlpha(&mItnmPane);                                                   
+    fopMsgM_setAlpha(&mItnkPane);
+    fopMsgM_setAlpha(&mMsk0Pane);
+    fopMsgM_setAlpha(&mStr0Pane);
+    fopMsgM_setAlpha(&mSt00Pane);
+    fopMsgM_setAlpha(&mNt00Pane);
+    fopMsgM_setAlpha(&mNk00Pane);
+    fopMsgM_setAlpha(&mNo11Pane);
+    fopMsgM_setAlpha(&mDtlePane);
+    fopMsgM_setAlpha(&mDt00Pane);
+    fopMsgM_setAlpha(&mDk00Pane);
+
+    for (int i = 0; i < 3; i++) {
+        fopMsgM_setAlpha(&mItPanes[i]);
+        fopMsgM_setAlpha(&mIkPanes[i]);
+        fopMsgM_setAlpha(&mIpPanes[i]);
+    }
+
+    fopMsgM_setAlpha(&mIp01Pane);
+    fopMsgM_setAlpha(mLnkPanes);
+    fopMsgM_setAlpha(&mBey1Pane);
+    fopMsgM_setAlpha(&mBey2Pane);
+    fopMsgM_setAlpha(&mBossPane);
+
+    for (int i = 0; i < 6; i++) {
+        fopMsgM_setAlpha(&mFlPanes[i]);
+        fopMsgM_setAlpha(&mFbPanes[i]);
+        fopMsgM_setAlpha(&mFbkPanes[i]);
+    }
+
+                          
+    fopMsgM_setAlpha(&mFw00Pane);
+    fopMsgM_setAlpha(&mFw01Pane);
+    fopMsgM_setAlpha(&mCc38Pane);
+    fopMsgM_setAlpha(&mCc31Pane);
+    fopMsgM_setAlpha(&mCc24Pane);
+    fopMsgM_setAlpha(&mCc17Pane);
+    fopMsgM_setAlpha(&mCc10Pane);
+    fopMsgM_setAlpha(&mCc05pane);
+    fopMsgM_setAlpha(&mCc00Pane);
+    fopMsgM_setAlpha(&mMskPane);
+
+    dmap_c->field_0x2B6 = mCc05pane.mNowAlpha;
+    J2DOrthoGraph* port = dComIfGp_getCurrentGrafPort();
+    port->setPort();
+    scrn->draw(0.0f, 0.0f, (J2DGrafContext*)port);
+    dmap_c->draw();
+    treasureDraw();
+    scrn2->draw(0.0f, 0.0f, (J2DGrafContext*)port);
 }
 
 /* 801AF0C0-801AF294       .text _open__12dMenu_Dmap_cFv */
