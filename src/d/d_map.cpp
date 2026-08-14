@@ -292,7 +292,7 @@ dStage_FloorInfo_dt_c* dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c* floor
 }
 
 /* 80045AEC-80045C24       .text dMap_GetFloorNoForDmap__FP11dStage_dt_cif */
-u8 dMap_GetFloorNoForDmap(dStage_dt_c* stag, int param_2, f32 param_3) {
+int dMap_GetFloorNoForDmap(dStage_dt_c* stag, int param_2, f32 param_3) {
     dStage_FloorInfo_c* floor = stag->getFloorInfo();
     int floorNo = Floor_1F;
     dStage_FloorInfo_dt_c* floorData = dMap_GetFloorInfoDtP(floor, param_3);
