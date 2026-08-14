@@ -24,8 +24,7 @@
 
 #include "d/d_menu_capture.inc"
 
-// TODO: Remove me when all the JUT asserts and other strings are filled out.
-// This is temporary, just to make the strings match.
+// A bunch of unused strings, might match the unused data from d_meter.cpp (header include?)
 static void dummy0() {
     OSReport("cmap_tri.bti");
     OSReport("cmap_treasure.bti");
@@ -37,32 +36,6 @@ static void dummy0() {
     OSReport("f_heart_up_02.bti");
     OSReport("f_korog_kare.bti");
     OSReport("f_korog_saki.bti");
-    OSReport("d_menu_window.cpp");
-    OSReport("i_Ms->name[i] != 0");
-    OSReport("Halt");
-    OSReport("");
-    OSReport("i_Ms->note[i] != 0");
-    OSReport("i_Ms->dummy[i] != 0");
-    OSReport("i_Ms->buffer_p[i] != 0");
-#if VERSION == VERSION_PAL
-    OSReport("i_Ms->title_p != 0");
-#endif
-    OSReport("dMi_c != 0");
-    OSReport("dMc_c != 0");
-    OSReport("dMf_c != 0");
-    OSReport("dMs_capture_c != 0");
-    OSReport("dMd_c != 0");
-    OSReport("dNm_c != 0");
-    OSReport("dMs_c != 0");
-    OSReport("cloth_c != 0");
-    OSReport("dMs_cloth_c != 0");
-    OSReport("i_Ms->childHeap != 0");
-    OSReport("awake");
-    OSReport("majyuu_shinnyuu");
-    OSReport("アイテムビット");
-    OSReport("ダンジョンビット");
-    OSReport("fonttype != 0");
-    OSReport("rfonttype != 0");
 }
 
 dMenu_FmapSv_c dMv_CIO_c;
@@ -604,6 +577,11 @@ void dMs_name_delete(sub_ms_screen_class*) {
         delete dMs_capture_c;
         dMs_capture_c = NULL;
     }
+}
+
+// Another unused string, probably a stripped void dMs_save_create(sub_ms_screen_class*)?
+static void dummy1() {
+    OSReport("dMs_c != 0");
 }
 
 /* 801DCE20-801DCEA0       .text dMs_save_delete__FP19sub_ms_screen_class */
