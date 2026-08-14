@@ -67,7 +67,9 @@ public:
     void mapMove();
     f32 mapOffsetY();
     void itemnameMove();
+#if VERSION > VERSION_JPN
     void dnameSet();
+#endif
     void itemnameSet();
     void itemnoteSet();
     void outFontInit();

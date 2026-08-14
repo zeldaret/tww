@@ -184,7 +184,39 @@ void dMenu_Dmap_c::screenSet() {
 
     fopMsgM_setPaneData(&mDtlePane, scrn2, 'dtle');
     ((J2DTextBox*)mDtlePane.pane)->setFont(mFont);
+#if VERSION > VERSION_JPN
     dnameSet();
+#else
+    u32 msgNo;
+    switch (dStage_stagInfo_GetSaveTbl(dComIfGp_getStage().getStagInfo())) {
+    case dSv_save_c::STAGE_FF:
+        msgNo = 0x320;
+        break;
+    case dSv_save_c::STAGE_DRC:
+        msgNo = 0x59;
+        break;
+    case dSv_save_c::STAGE_FW:
+        msgNo = 0x5A;
+        break;
+    case dSv_save_c::STAGE_TOTG:
+        msgNo = 0x5B;
+        break;
+    case dSv_save_c::STAGE_ET:
+        msgNo = 0x5C;
+        break;
+    case dSv_save_c::STAGE_WT:
+        msgNo = 0x5D;
+        break;
+    case dSv_save_c::STAGE_GT:
+        msgNo = 0x5E;
+        break;
+    default:
+        msgNo = 0x59;
+        break;
+    }
+    fopMsgM_messageGet(mDName, msgNo);
+    ((J2DTextBox*)mDtlePane.pane)->setString(mDName);
+#endif
     fopMsgM_setPaneData(&mDt00Pane, scrn2, 'dt00');
     fopMsgM_setPaneData(&mDk00Pane, scrn2, 'dk00');
 
@@ -431,7 +463,7 @@ void dMenu_Dmap_c::treasureSet() {
     if (stage->getDMap()) {
         dStage_DMap_c* pinf = stage->getDMap();
         dStage_DMap_dt_c* entry = pinf->entries;
-        JUT_ASSERT(609, pinf->num == 1);
+        JUT_ASSERT(VERSION_SELECT(572, 572, 609, 609), pinf->num == 1);
 
         f32 originX;
         f32 originZ;
@@ -1200,7 +1232,7 @@ f32 dMenu_Dmap_c::mapOffsetY() {
         if (stage->getDMap()) {
             dStage_DMap_c* pinf = stage->getDMap();
             dStage_DMap_dt_c* entry = pinf->entries;
-            JUT_ASSERT(1627, pinf->num == 1);
+            JUT_ASSERT(VERSION_SELECT(1590, 1590, 1627, 1627), pinf->num == 1);
             for (int i = 0; i < pinf->num; i++, entry++) {
                 ret = entry->offsetY;
             }
@@ -1219,6 +1251,7 @@ void dMenu_Dmap_c::itemnameMove() {
     }
 }
 
+#if VERSION > VERSION_JPN
 /* 801AD1A8-801AD54C       .text dnameSet__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::dnameSet() {
     fopMsgM_itemMsgGet_c msgGet;
@@ -1315,6 +1348,7 @@ void dMenu_Dmap_c::dnameSet() {
     ((J2DTextBox*)mDtlePane.pane)->setCharSpace(0.0f);
     ((J2DTextBox*)mDtlePane.pane)->setString(mDName);
 }
+#endif
 
 /* 801AD54C-801ADA04       .text itemnameSet__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::itemnameSet() {
@@ -1359,7 +1393,7 @@ void dMenu_Dmap_c::itemnameSet() {
     }
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(1833, head_p);
+    JUT_ASSERT(VERSION_SELECT(1678, 1678, 1833, 1833), head_p);
 
     J2DTextBox::TFontSize fontSize;
     ((J2DTextBox*)mNm00Pane.pane)->getFontSize(fontSize);
@@ -1441,12 +1475,15 @@ void dMenu_Dmap_c::itemnoteSet() {
     }
 
     f32 rubySize = ((J2DTextBox*)mStr0Pane.pane)->mFontSizeX;
-
+#if VERSION <= VERSION_JPN
+    f32 fontSizeX = ((J2DTextBox*)mSt00Pane.pane)->mFontSizeX;
+#else
     J2DTextBox::TFontSize fontSize;
     fontSize.mSizeX = g_msgHIO.field_0x70;
     fontSize.mSizeY = g_msgHIO.field_0x70;
     ((J2DTextBox*)mSt00Pane.pane)->setFontSize(fontSize);
     ((J2DTextBox*)mSt00Pane.pane)->setLineSpace(g_msgHIO.field_0x5e);
+#endif
 
     switch (mSelectItem) {
         case 0:
@@ -1471,7 +1508,7 @@ void dMenu_Dmap_c::itemnoteSet() {
     }
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(1970, head_p);
+    JUT_ASSERT(VERSION_SELECT(1808, 1808, 1970, 1970), head_p);
 
     const char* mesg = msgGet.getMessage(head_p);
     JMSMesgEntry_c msg_entry;
@@ -1486,7 +1523,11 @@ void dMenu_Dmap_c::itemnoteSet() {
     mMsgProc.setRubyCharSpace(((J2DTextBox*)mStr0Pane.pane)->getCharSpace());
     mMsgProc.setLineSpace(((J2DTextBox*)mSt00Pane.pane)->getLineSpace());
     mMsgProc.setMesgEntry(&msg_entry);
+#if VERSION <= VERSION_JPN
+    mMsgProc.setFontSize(fontSizeX);
+#else
     mMsgProc.setFontSize(fontSize.mSizeX);
+#endif
     mMsgProc.setRubyFontSize(rubySize);
     mMsgProc.setLineWidth(0x1FE);
     mMsgProc.setCenterLineWidth(0x1E6);
@@ -1502,7 +1543,7 @@ void dMenu_Dmap_c::itemnoteSet() {
     s16 lineCount = mMsgProc.getLineCount();
     mMsgProc.setLineCount(0);
     f32 lineSpace = ((J2DTextBox*)mSt00Pane.pane)->getLineSpace();
-    int unusedLines = 3 - lineCount;
+    int unusedLines = VERSION_SELECT(2, 2, 3, 3) - lineCount;
     f32 shiftY = unusedLines * (lineSpace / 2.0f);
     ((J2DTextBox*)mStr0Pane.pane)->shiftSet(0.0f, shiftY);
     ((J2DTextBox*)mSt00Pane.pane)->shiftSet(0.0f, shiftY);
@@ -1678,38 +1719,38 @@ void dMenu_Dmap_c::bossEyeAnime() {
 /* 801AE65C-801AEB88       .text _create__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::_create() {
     scrn = new J2DScreen();
-    JUT_ASSERT(2320, scrn != 0);
+    JUT_ASSERT(VERSION_SELECT(2138, 2138, 2320, 2320), scrn != 0);
     scrn->set("menu_map_d.blo", mpArc);
 
     scrn2 = new J2DScreen();
-    JUT_ASSERT(2324, scrn2 != 0);
+    JUT_ASSERT(VERSION_SELECT(2142, 2142, 2324, 2324), scrn2 != 0);
     scrn2->set("menu_explanation.blo", mpArc);
 
     stick = new STControl(5, 2, 3, 2);
-    JUT_ASSERT(2328, stick != 0);
+    JUT_ASSERT(VERSION_SELECT(2146, 2146, 2328, 2328), stick != 0);
 
     dmap_c = new(0x20) dMap_Dmap_c();
-    JUT_ASSERT(2331, dmap_c != 0);
+    JUT_ASSERT(VERSION_SELECT(2149, 2149, 2331, 2331), dmap_c != 0);
     dmap_c->field_0x2A0 = mpArc;
 
     for (int i = 0; i < 32; i++) {
         treasure_p[i].ppane = new J2DPicture("treasurebox.bti");
-        JUT_ASSERT(2337, treasure_p[i].ppane != 0);
+        JUT_ASSERT(VERSION_SELECT(2155, 2155, 2337, 2337), treasure_p[i].ppane != 0);
         treasure_p[i].exists = 0;
     }
 
     for (int i = 0; i < 32; i++) {
         door_p[i].ppane = new J2DPicture("black_white_3.bti");
-        JUT_ASSERT(2343, door_p[i].ppane != 0);
+        JUT_ASSERT(VERSION_SELECT(2161, 2161, 2343, 2343), door_p[i].ppane != 0);
         door_p[i].exists = 0;
     }
 
     npc_p.ppane = new J2DPicture("f_otmicon.bti");
-    JUT_ASSERT(2348, npc_p.ppane != 0);
+    JUT_ASSERT(VERSION_SELECT(2166, 2166, 2348, 2348), npc_p.ppane != 0);
     npc_p.exists = 0;
 
     boss_p.ppane = new J2DPicture("boss_small.bti");
-    JUT_ASSERT(2352, boss_p.ppane != 0);
+    JUT_ASSERT(VERSION_SELECT(2170, 2170, 2352, 2352), boss_p.ppane != 0);
     boss_p.exists = 0;
 
     mNoteTimer = 0;
