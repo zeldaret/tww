@@ -11,6 +11,7 @@
 #include "d/d_meter.h"
 #include "d/d_stage.h"
 #include "f_op/f_op_msg_mng.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DWindow.h"
 #include "m_Do/m_Do_audio.h"
@@ -1673,17 +1674,107 @@ void dMenu_Dmap_c::bossEyeAnime() {
 
 /* 801AE65C-801AEB88       .text _create__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::_create() {
-    /* Nonmatching */
+    scrn = new J2DScreen();
+    JUT_ASSERT(2320, scrn != 0);
+    scrn->set("menu_map_d.blo", mpArc);
+
+    scrn2 = new J2DScreen();
+    JUT_ASSERT(2324, scrn2 != 0);
+    scrn2->set("menu_explanation.blo", mpArc);
+
+    stick = new STControl(5, 2, 3, 2);
+    JUT_ASSERT(2328, stick != 0);
+
+    dmap_c = new(0x20) dMap_Dmap_c();
+    JUT_ASSERT(2331, dmap_c != 0);
+    dmap_c->field_0x2A0 = mpArc;
+
+    for (int i = 0; i < 32; i++) {
+        treasure_p[i].ppane = new J2DPicture("treasurebox.bti");
+        JUT_ASSERT(2337, treasure_p[i].ppane != 0);
+        treasure_p[i].exists = 0;
+    }
+
+    for (int i = 0; i < 32; i++) {
+        door_p[i].ppane = new J2DPicture("black_white_3.bti");
+        JUT_ASSERT(2343, door_p[i].ppane != 0);
+        door_p[i].exists = 0;
+    }
+
+    npc_p.ppane = new J2DPicture("f_otmicon.bti");
+    JUT_ASSERT(2348, npc_p.ppane != 0);
+    npc_p.exists = 0;
+
+    boss_p.ppane = new J2DPicture("boss_small.bti");
+    JUT_ASSERT(2352, boss_p.ppane != 0);
+    boss_p.exists = 0;
+
+    mNoteTimer = 0;
+    mSelectItem = 3;
+    mCurFloorMapY = 0;
+    mCurFloorOnly = true;
+    strcpy(mDName, "");
+
+    screenSet();
+    initialize();
+    treasureSet();
+
+    g_mdHIO.mNo = mDoHIO_createChild("ダンジョンマップ画面", &g_mdHIO);
 }
 
 /* 801AEB88-801AED08       .text _delete__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::_delete() {
-    /* Nonmatching */
+    delete scrn;
+    delete scrn2;
+    delete stick;
+    delete dmap_c;
+
+    for (int i = 0; i < 32; i++) {
+        delete treasure_p[i].ppane;
+    }
+    for (int i = 0; i < 32; i++) {
+        delete door_p[i].ppane;
+    }
+    delete npc_p.ppane;
+    delete boss_p.ppane;
+
+    mpArc->removeResourceAll();
+    mDoHIO_deleteChild(g_mdHIO.mNo);
 }
 
 /* 801AED08-801AEE90       .text _move__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::_move() {
-    /* Nonmatching */
+    if (!noteCheck()) {
+        if (!CPad_CHECK_TRIG_UP(0) && !CPad_CHECK_TRIG_B(0)) {
+            if (CPad_CHECK_TRIG_A(0) != false) {
+                if ((mSelectItem == 0 && dComIfGs_isDungeonItemMap()) ||
+                    (mSelectItem == 1 && dComIfGs_isDungeonItemBossKey()) ||
+                    (mSelectItem == 2 && dComIfGs_isDungeonItemCompass())) {
+                    fopMsgM_setInitAlpha(&mStr0Pane);
+                    fopMsgM_setInitAlpha(&mSt00Pane);
+                    fopMsgM_setInitAlpha(&mNt00Pane);
+                    fopMsgM_setInitAlpha(&mNk00Pane);
+                    fopMsgM_setInitAlpha(&mNo11Pane);
+                    mNk00Pane.mUserArea = 1;
+                    mNt00Pane.mUserArea = 1;
+                    itemnoteSet();
+                    mDoAud_seStart(JA_SE_ITEM_EXP_OPEN);
+                }
+            } else {
+                cursorMove();
+            }
+        }
+    } else {
+        noteAppear();
+    }
+
+    if (mNm00Pane.mUserArea < 10) {
+        itemnameMove();
+    }
+    mapMove();
+    linkAnime();
+    bossAnime();
+    cursorAnime();
 }
 
 /* 801AEE90-801AF0C0       .text _draw__12dMenu_Dmap_cFv */
@@ -1698,5 +1789,32 @@ bool dMenu_Dmap_c::_open() {
 
 /* 801AF294-801AF3B8       .text _close__12dMenu_Dmap_cFv */
 bool dMenu_Dmap_c::_close() {
-    /* Nonmatching */
+    bool ret = false;
+    mNoteTimer--;
+    if (mNoteTimer > 0) {
+        f32 alpha = fopMsgM_valueIncrease(10, mNoteTimer, 0);
+        f32 rate = fopMsgM_valueIncrease(10, 10 - mNoteTimer, 0);
+        mMapDrawOffsetY = rate * 480.0f;
+        paneMove(rate * 480.0f);
+
+        s16 y = mMpmkPosY + mMapDrawOffsetY;
+        dMap_Dmap_c* dmap = dmap_c;
+        dmap->field_0x35C = mMpmkPosX;
+        dmap->field_0x35E = y;
+
+        y = mCurFloorMapY + mMapDrawOffsetY;
+        dmap = dmap_c;
+        dmap->field_0x364 = mMpp1PosX;
+        dmap->field_0x366 = y;
+
+        dComIfGp_setDoStatus(dActStts_BLANK_e);
+        decAlpha(alpha);
+        mCurFloorOnly = true;
+    } else {
+        paneMove(480.0f);
+        decAlpha(0.0f);
+        ret = true;
+        mCurFloorOnly = false;
+    }
+    return ret;
 }
