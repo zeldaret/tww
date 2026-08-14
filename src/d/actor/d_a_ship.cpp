@@ -3106,7 +3106,7 @@ void daShip_c::incRopeCnt(int lengthChange, int minSegmentLimit) {
     int targetRopeCnt = currRopeCnt + lengthChange;
 
     // Ensure the new segment index is within valid bounds
-    if (targetRopeCnt >= (int)ARRAY_SIZE(mRopeLineSegments)) {
+    if (targetRopeCnt >= ARRAY_SSIZE(mRopeLineSegments)) {
         targetRopeCnt = ARRAY_SIZE(mRopeLineSegments);
     }
     else if (targetRopeCnt < minSegmentLimit) {

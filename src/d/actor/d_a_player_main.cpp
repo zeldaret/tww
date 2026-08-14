@@ -11740,7 +11740,7 @@ static BOOL daPy_IsDelete(daPy_lk_c*) {
 /* 80122D58-80123058       .text playerDelete__9daPy_lk_cFv */
 BOOL daPy_lk_c::playerDelete() {
     int i;
-    for (i = 0; i < (int)ARRAY_SIZE(mFootEffect); i++) {
+    for (i = 0; i < ARRAY_SSIZE(mFootEffect); i++) {
         mFootEffect[i].getSmokeCallBack()->remove();
         mFootEffect[i].getOtherCallBack()->remove();
     }
@@ -11774,10 +11774,10 @@ BOOL daPy_lk_c::playerDelete() {
     mDoAud_seDeleteObject(&m338C.getPos());
     mDoAud_seDeleteObject(mFanWindCps.GetEndP());
     
-    for (i = 0; i < (int)ARRAY_SIZE(m_anm_heap_under); i++) {
+    for (i = 0; i < ARRAY_SSIZE(m_anm_heap_under); i++) {
         mDoExt_destroySolidHeap(m_anm_heap_under[i].mpAnimeHeap);
     }
-    for (i = 0; i < (int)ARRAY_SIZE(m_anm_heap_upper); i++) {
+    for (i = 0; i < ARRAY_SSIZE(m_anm_heap_upper); i++) {
         mDoExt_destroySolidHeap(m_anm_heap_upper[i].mpAnimeHeap);
     }
     
@@ -12233,13 +12233,13 @@ void daPy_lk_c::playerInit() {
     mFanLightCps.SetAtType(AT_TYPE_LIGHT);
     mFanLightCps.SetR(20.0f);
     
-    for (int i = 0; i < (int)ARRAY_SIZE(m_anm_heap_under); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(m_anm_heap_under); i++) {
         createAnimeHeap(&m_anm_heap_under[i].mpAnimeHeap, HEAP_TYPE_UNDER_UPPER_e);
         m_anm_heap_under[i].mIdx = -1;
         m_anm_heap_under[i].field_0x2 = -1;
         m_anm_heap_under[i].field_0x4 = -1;
     }
-    for (int i = 0; i < (int)ARRAY_SIZE(m_anm_heap_upper); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(m_anm_heap_upper); i++) {
         createAnimeHeap(&m_anm_heap_upper[i].mpAnimeHeap, HEAP_TYPE_UNDER_UPPER_e);
         m_anm_heap_upper[i].mIdx = -1;
         m_anm_heap_upper[i].field_0x2 = -1;

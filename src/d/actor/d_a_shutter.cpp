@@ -32,7 +32,7 @@ bool daShutter_c::_delete() {
     if (heap != NULL)
 #endif
     {
-        for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+        for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
             dComIfG_Bgsp()->Release(mdBgW[i]);
         };
     }
@@ -48,7 +48,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 BOOL daShutter_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
     JUT_ASSERT(0x121, modelData != NULL);
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
         if (!mpModel[i]) {
             return FALSE;
@@ -86,7 +86,7 @@ BOOL daShutter_c::Create() {
     }
     mFrameTimer = 30;
     set_mtx();
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         dComIfG_Bgsp()->Regist(mdBgW[i], this);
         mdBgW[i]->Move();
     }
@@ -118,7 +118,7 @@ cPhs_State daShutter_c::_create() {
 /* 000005E0-000006F0       .text set_mtx__11daShutter_cFv */
 void daShutter_c::set_mtx() {
     cXyz local_48;
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         mDoMtx_stack_c::YrotS(current.angle.y);
         mDoMtx_stack_c::multVec(&mcXyz[i], &local_48);
         mpModel[i]->setBaseScale(scale);
@@ -136,7 +136,7 @@ bool daShutter_c::_execute() {
     }
     demo();
     set_mtx();
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         mdBgW[i]->Move();
     }
     mbIsSwitch = fopAcM_isSwitch(this, mSwitchNo);
@@ -268,7 +268,7 @@ void daShutter_c::demo() {
 /* 00000CF0-00000DD8       .text _draw__11daShutter_cFv */
 bool daShutter_c::_draw() {
     cXyz actorPos;
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         actorPos = current.pos;
         actorPos += mcXyz[i];
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &actorPos, &tevStr);

@@ -246,7 +246,7 @@ void daObjTpost_c::deliverLetter() {
 /* 00000650-000006C0       .text getReceiveLetterNum__12daObjTpost_cFv */
 s16 daObjTpost_c::getReceiveLetterNum() {
     s16 num = 0;
-    for(int i = 1; i < (int)ARRAY_SIZE(m_letter); i++) {
+    for(int i = 1; i < ARRAY_SSIZE(m_letter); i++) {
         if(dLetter_isStock(m_letter[i].mEventReg)) {
             num = num + 1;
         }
@@ -261,8 +261,8 @@ s32 daObjTpost_c::getReadableLetterNum() {
     s32 startIdx = mNumReadable != 0 ? mNumReadable : 1;
     s32 readable = mNumReadable;
 
-    if(readable < (int)ARRAY_SIZE(m_letter)) {
-        for(int i = startIdx; i < (int)ARRAY_SIZE(m_letter); i++) {
+    if(readable < ARRAY_SSIZE(m_letter)) {
+        for(int i = startIdx; i < ARRAY_SSIZE(m_letter); i++) {
             if(!dLetter_isStock(m_letter[i].mEventReg)) {
                 continue;
             }

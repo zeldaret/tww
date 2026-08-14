@@ -1444,7 +1444,7 @@ int Act_c::check_to_walk() {
             }
         }
         
-        for (int i = 0; i < (int)ARRAY_SIZE(mMomentCnt); i++) {
+        for (int i = 0; i < ARRAY_SSIZE(mMomentCnt); i++) {
             if (mMomentCnt[i] >= r0) {
                 const BgcSrc_c* bgcSrc = attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5;
                 int bgcSrcCount = attr()->m9A ? (mType == TYPE_MIRROR ? ARRAY_SIZE(mBgc.M_lin20) : ARRAY_SIZE(mBgc.M_lin20)-2) : ARRAY_SIZE(mBgc.M_lin5);
@@ -1504,7 +1504,7 @@ void Act_c::eff_set_slip_smoke_pos() {
     mDoMtx_stack_c::transM(0.0f, 0.0f, 10.0f);
     mDoMtx_stack_c::scaleM(scaleMag, scaleMag, scaleMag);
     
-    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeCbs); i++) {
         mDoMtx_stack_c::multVec(&base_pos[i], &mSmokeCbs[i].field_0x20);
         mSmokeCbs[i].field_0x2C.set(0, angle, 0);
     }
@@ -1516,7 +1516,7 @@ void Act_c::eff_smoke_slip_start() {
     
     eff_set_slip_smoke_pos();
     
-    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeCbs); i++) {
         JPABaseEmitter* emitter = dComIfGp_particle_setToon(
             dPa_name::ID_AK_JT_ELEMENTSMOKE00, &mSmokeCbs[i].field_0x20, &mSmokeCbs[i].field_0x2C,
             &scl, 0xB9, &mSmokeCbs[i], fopAcM_GetRoomNo(this)
@@ -1532,14 +1532,14 @@ void Act_c::eff_smoke_slip_start() {
 
 /* 00002A14-00002A74       .text eff_smoke_slip_end__Q212daObjMovebox5Act_cFv */
 void Act_c::eff_smoke_slip_end() {
-    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeCbs); i++) {
         mSmokeCbs[i].remove();
     }
 }
 
 /* 00002A74-00002AD4       .text eff_smoke_slip_remove__Q212daObjMovebox5Act_cFv */
 void Act_c::eff_smoke_slip_remove() {
-    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeCbs); i++) {
         mSmokeCbs[i].remove();
     }
 }

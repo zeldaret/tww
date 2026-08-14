@@ -256,7 +256,7 @@ f32 daSea_packet_c::CalcFlatInterTarget(cXyz& pos) {
 
     f32 result = 1.0f;
 
-    for (int i = 0; i < (int)ARRAY_SIZE(pos_around); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(pos_around); i++) {
         int ix = mIdxX + pos_around[i][0];
         int iz = mIdxZ + pos_around[i][1];
 

@@ -228,7 +228,7 @@ static s32 atr_conv[0x20] = {
 /* 800A0B60-800A0BA8       .text GetAttributeCode__4dBgSFR13cBgS_PolyInfo */
 s32 dBgS::GetAttributeCode(cBgS_PolyInfo& polyInfo) {
     s32 attr = GetAttributeCodeDirect(polyInfo);
-    if (attr < 0 || attr >= (int)ARRAY_SIZE(atr_conv))
+    if (attr < 0 || attr >= ARRAY_SSIZE(atr_conv))
         return 0;
     return atr_conv[attr];
 }

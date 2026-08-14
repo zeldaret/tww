@@ -351,7 +351,7 @@ BOOL daIball_c::_daIball_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     
-    for (int i = 0; i < (int)ARRAY_SIZE(mBrkAnm); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mBrkAnm); i++) {
         mBrkAnm[i].entry(mpModel->getModelData());
     }
     mBtkAnm.entry(mpModel->getModelData());
@@ -442,7 +442,7 @@ BOOL daIball_c::CreateHeap() {
         dRes_INDEX_ALWAYS_BRK_IB_02_e,
     };
     J3DAnmTevRegKey* pbrk;
-    for (int i = 0; i < (int)ARRAY_SIZE(mBrkAnm); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mBrkAnm); i++) {
         pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, brkIds[i]);
         JUT_ASSERT(DEMO_SELECT(1180, 1182), pbrk != NULL);
         ret = mBrkAnm[i].init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_LOOP);

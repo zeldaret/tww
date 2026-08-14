@@ -539,7 +539,7 @@ void daPy_lk_c::setAuraEffect() {
 
     if (checkNoDamageMode() && (!dComIfGp_event_runCheck() || (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(dEvtFlag_TALK_e))) ) {
         if (yauraFrame < 0.01f) {
-            for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++) {
+            for (int idx = 0; idx < ARRAY_SSIZE(mMagicArmorAuraEntries); idx++) {
                 mMagicArmorAuraEntries[idx].setFrame(cM_rndF(y00BtkFrameMax));
             }
         }
@@ -588,7 +588,7 @@ void daPy_lk_c::setAuraEffect() {
 
         cXyz localScale = scale * (var_f28 * cM_fcos(M_PI * (0.5f * var_f31)));
 
-        for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++, auraEntry++) {
+        for (int idx = 0; idx < ARRAY_SSIZE(mMagicArmorAuraEntries); idx++, auraEntry++) {
             f32 var_f0 = 1.0f + auraEntry->getFrame();
             if (var_f0 >= y00BtkFrameMax) {
                 var_f0 -= y00BtkFrameMax;
@@ -1269,7 +1269,7 @@ void daPy_lk_c::endFlameDamageEmitter() {
 
 /* 8012C9D8-8012CA44       .text endDamageEmitter__9daPy_lk_cFv */
 void daPy_lk_c::endDamageEmitter() {
-    for (int i = 0; i < (int)ARRAY_SIZE(mDmEcallBack); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mDmEcallBack); i++) {
         mDmEcallBack[i].end();
     }
     daPy_dmEcallBack_c::setTimer(0);

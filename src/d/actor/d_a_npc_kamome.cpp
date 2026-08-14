@@ -712,12 +712,12 @@ int daNpc_kam_c::waitNpcAction(void*) {
             } else {
                 if (cLib_calcTimer(&mC0C) == 0) {
                     mC0C = cLib_getRndValue(10, 80);
-                    setAnm(l_anm_type[cLib_getRndValue(0, (int)ARRAY_SIZE(l_anm_type)-2)]);
+                    setAnm(l_anm_type[cLib_getRndValue(0, ARRAY_SSIZE(l_anm_type)-2)]);
                 }
                 if (!npcTurnCheck(&targetAngleY) && cLib_calcTimer(&mC08) == 0) {
                     mActionStatus = ACTION_ONGOING_3;
                     mC08 = cLib_getRndValue(60, 60);
-                    mC0A = l_turn_angleY[cLib_getRndValue(0, (int)ARRAY_SIZE(l_turn_angleY)-2)];
+                    mC0A = l_turn_angleY[cLib_getRndValue(0, ARRAY_SSIZE(l_turn_angleY)-2)];
                 }
             }
         } else if (mActionStatus == ACTION_ONGOING_2) {

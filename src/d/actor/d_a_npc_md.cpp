@@ -979,7 +979,7 @@ BOOL daNpc_Md_c::createHeap() {
     if (m_hair_jnt_nums[i] >= 0) {
         modelData->getJointNodePointer(m_hair_jnt_nums[i])->setCallBack(hairTopNodeCallBack);
     }
-    for (i = 1; i < (int)ARRAY_SIZE(hairName); i++) {
+    for (i = 1; i < ARRAY_SSIZE(hairName); i++) {
         m_hair_jnt_nums[i] = modelData->getJointName()->getIndex(hairName[i]);
         if (m_hair_jnt_nums[i] >= 0) {
             modelData->getJointNodePointer(m_hair_jnt_nums[i])->setCallBack(hairNodeCallBack);
