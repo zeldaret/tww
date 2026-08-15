@@ -11,6 +11,7 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DWindow.h"
 #include "m_Do/m_Do_controller_pad.h"
+#include <stdio.h>
 
 u8 dMap_GetFloorNoForDmap(dStage_dt_c*, int, f32);
 
