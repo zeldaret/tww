@@ -835,10 +835,10 @@ fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_ruby
     strcpy(param_5, "");
     strcpy(param_6, "");
 
-    J2DTextBox::TFontSize size;
-    J2DTextBox::TFontSize size2;
-    ((J2DTextBox*)i_rubyPane)->getFontSize(size);
-    ((J2DTextBox*)i_textPane)->getFontSize(size2);
+    J2DTextBox::TFontSize fontSize;
+    J2DTextBox::TFontSize rubySize;
+    ((J2DTextBox*)i_rubyPane)->getFontSize(rubySize);
+    ((J2DTextBox*)i_textPane)->getFontSize(fontSize);
 
     mesg_header* head_p = msgGet.getMesgHeader(i_msgNo);
     JUT_ASSERT(VERSION_SELECT(1866, 1866, 1947, 1956), head_p);
@@ -857,8 +857,8 @@ fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_ruby
     msgData.setRubyCharSpace(((J2DTextBox*)i_rubyPane)->getCharSpace());
     msgData.setLineSpace(((J2DTextBox*)i_textPane)->getLineSpace());
     msgData.setMesgEntry(&entry);
-    msgData.setFontSize(size2.mSizeX);
-    msgData.setRubyFontSize(size.mSizeX);
+    msgData.setFontSize(fontSize.mSizeX);
+    msgData.setRubyFontSize(rubySize.mSizeX);
     msgData.setLineWidth(i_textPane->getWidth());
     msgData.setCenterLineWidth(i_textPane->getWidth());
     msgData.setSendSpeed(2);

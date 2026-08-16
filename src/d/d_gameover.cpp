@@ -83,8 +83,13 @@ cPhs_State dGameover_c::_create() {
 
         dMs_c = new dMenu_save_c();
         JUT_ASSERT(VERSION_SELECT(0xa7, 0xa7, 0xb6, 0xb6), dMs_c != NULL);
+#if VERSION == VERSION_DEMO
+        dMs_c->_create();
+        dMs_c->setUseType(2);
+#else
         dMs_c->setUseType(2);
         dMs_c->_create();
+#endif
 
         dgo_capture_c = new dDlst_Gameover_CAPTURE_c();
         JUT_ASSERT(VERSION_SELECT(0xac, 0xac, 0xbb, 0xbb), dgo_capture_c != NULL);
@@ -105,10 +110,16 @@ BOOL dGameover_c::_execute() {
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(mpHeap);
 
     if (mState == 3) {
+#if VERSION == VERSION_DEMO
+        dComIfGp_setGameoverStatus(3);
+        dMenu_flagSet(0);
+        mDoRst::onReset();
+#else
         if (dMs_c->_open()) {
             mState = 4;
             dComIfGs_setLife(12);
         }
+#endif
     } else if (mState == 4) {
         dMs_c->_move();
         if (dMs_c->getSaveStatus() == 3)
@@ -381,9 +392,8 @@ BOOL dDlst_GameOverScrnDraw_c::anime2(int idx) {
 
         letter[idx].mUserArea += 1;
 
-        f32 y = letter[idx].mUserArea / 7.0f;
         f32 y2 = (f32)letter[idx].mUserArea * (f32)letter[idx].mUserArea / 49.0f;
-        setRotate(&letter[idx], (f32)mRotate[idx] * (1.0f - y));
+        setRotate(&letter[idx], (f32)mRotate[idx] * (1.0f - (letter[idx].mUserArea / 7.0f)));
         fopMsgM_paneTrans(&letter[idx], 0.0f, y2 * 244.0f);
     }
     

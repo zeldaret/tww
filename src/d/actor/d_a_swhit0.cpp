@@ -163,7 +163,7 @@ BOOL daSwhit0_c::CreateInit() {
     mColSph.SetStts(&mColStatus);
     mColSph.SetC(attention_info.position);
     
-    if (dComIfGs_isSwitch(getSwNo(), current.roomNo)) {
+    if (dComIfGs_isSwitch(getSwNo(), fopAcM_GetRoomNo(this))) {
         mState = 4;
         onFlag(0x01);
     }
@@ -326,7 +326,7 @@ s32 daSwhit0_c::actionOnWait() {
     }
 
     if (getType() == 0x02) {
-        if (!dComIfGs_isSwitch(getSwNo(), current.roomNo)) {
+        if (!dComIfGs_isSwitch(getSwNo(), fopAcM_GetRoomNo(this))) {
             offFlag(0x01);
             mState = 0;
 
@@ -349,7 +349,7 @@ s32 daSwhit0_c::actionOnTimer() {
         fopAcM_seStart(this, JA_SE_OBJ_COL_SWC_NSTONE, 0);
     }
 
-    if (dComIfGs_isSwitch(getSwNo2(), current.roomNo)) {
+    if (dComIfGs_isSwitch(getSwNo2(), fopAcM_GetRoomNo(this))) {
         mState = 4;
     }
     else if (mOnTimer > 0) {
@@ -359,7 +359,7 @@ s32 daSwhit0_c::actionOnTimer() {
         offFlag(0x01);
         mState = 0;
 
-        dComIfGs_offSwitch(getSwNo(), current.roomNo);
+        dComIfGs_offSwitch(getSwNo(), fopAcM_GetRoomNo(this));
     }
 
     return TRUE;

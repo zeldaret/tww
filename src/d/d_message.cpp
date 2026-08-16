@@ -215,7 +215,7 @@ void dMsg2_screenDataSet(sub_msg2_class* i_Msg, u8 i_index) {
 }
 
 /* 801E7AB8-801E8154       .text dMsg2_screenDataInit__FP14sub_msg2_classUc */
-// NONMATCHING - some reg alloc
+// NONMATCHING - USA/PAL-only regalloc and load issues
 void dMsg2_screenDataInit(sub_msg2_class* i_Msg, u8 i_index) {
     fopMsgM_setPaneData(&i_Msg->text_pane[i_index], sScreen2[i_index]->search('tx23'));
     fopMsgM_setPaneData(&i_Msg->ruby_pane[i_index], sScreen2[i_index]->search('tx29'));
@@ -272,33 +272,33 @@ void dMsg2_screenDataInit(sub_msg2_class* i_Msg, u8 i_index) {
     ((J2DTextBox*)i_Msg->rubySdw_pane[i_index].pane)->setFont(i_Msg->rx);
 
     f32 var_f31;
-    J2DTextBox::TFontSize size;
+    J2DTextBox::TFontSize fontSize;
+    J2DTextBox::TFontSize rubySize;
 #if VERSION <= VERSION_JPN
     if (!g_msgDHIO.field_0x08) {
-        size.mSizeX = (int)g_messageHIO.field_0x32;
-        size.mSizeY = (int)g_messageHIO.field_0x32;
+        fontSize.mSizeX = (int)g_messageHIO.field_0x32;
+        fontSize.mSizeY = (int)g_messageHIO.field_0x32;
 
-        J2DTextBox::TFontSize size2;
-        size2.mSizeX = g_msgHIO.field_0x68;
-        size2.mSizeY = g_msgHIO.field_0x68;
+        rubySize.mSizeX = g_msgHIO.field_0x68;
+        rubySize.mSizeY = g_msgHIO.field_0x68;
 
-        ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->setFontSize(size);
-        ((J2DTextBox*)i_Msg->ruby_pane[i_index].pane)->setFontSize(size2);
-        ((J2DTextBox*)i_Msg->textSdw_pane[i_index].pane)->setFontSize(size);
-        ((J2DTextBox*)i_Msg->rubySdw_pane[i_index].pane)->setFontSize(size2);
+        ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->setFontSize(fontSize);
+        ((J2DTextBox*)i_Msg->ruby_pane[i_index].pane)->setFontSize(rubySize);
+        ((J2DTextBox*)i_Msg->textSdw_pane[i_index].pane)->setFontSize(fontSize);
+        ((J2DTextBox*)i_Msg->rubySdw_pane[i_index].pane)->setFontSize(rubySize);
     } else {
-        size.mSizeX = g_msgHIO.field_0x70;
-        size.mSizeY = g_msgHIO.field_0x70;
+        fontSize.mSizeX = g_msgHIO.field_0x70;
+        fontSize.mSizeY = g_msgHIO.field_0x70;
 
-        ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->setFontSize(size);
-        ((J2DTextBox*)i_Msg->textSdw_pane[i_index].pane)->setFontSize(size);
+        ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->setFontSize(fontSize);
+        ((J2DTextBox*)i_Msg->textSdw_pane[i_index].pane)->setFontSize(fontSize);
     }
 #else
-    size.mSizeX = g_msgHIO.field_0x70;
-    size.mSizeY = g_msgHIO.field_0x70;
+    fontSize.mSizeX = g_msgHIO.field_0x70;
+    fontSize.mSizeY = g_msgHIO.field_0x70;
 
-    ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->setFontSize(size);
-    ((J2DTextBox*)i_Msg->textSdw_pane[i_index].pane)->setFontSize(size);
+    ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->setFontSize(fontSize);
+    ((J2DTextBox*)i_Msg->textSdw_pane[i_index].pane)->setFontSize(fontSize);
 #endif
 
     ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->setCharSpace(0.0f);
@@ -321,8 +321,8 @@ void dMsg2_screenDataInit(sub_msg2_class* i_Msg, u8 i_index) {
     ((J2DTextBox*)i_Msg->textSdw_pane[i_index].pane)->setLineSpace(g_msgHIO.field_0x5e);
 #endif
 
-    i_Msg->field_0xeb4 = size.mSizeX;
-    i_Msg->field_0xeb8 = var_f31;
+    i_Msg->field_0xeb4 = fontSize.mSizeX;
+    i_Msg->field_0xeb8 = rubySize.mSizeX; // !@bug uninitialized use
 }
 
 /* 801E8154-801E8260       .text dMsg2_ScreenDataValueInit__FP14sub_msg2_class */
@@ -373,9 +373,11 @@ void dMsg2_stickInfoCheck(sub_msg2_class* i_Msg) {
 
 /* 801E833C-801E84E8       .text dMsg2_multiTexDraw__FP14sub_msg2_classssss */
 void dMsg2_multiTexDraw(sub_msg2_class* i_Msg, s16 param_1, s16 param_2, s16 param_3, s16 param_4) {
+    s16 r6 = param_1 + param_3;
+    s16 r7 = param_2 + param_4;
     f32 var_f31 = (i_Msg->field_0xeac * g_messageHIO.field_0x5b) / 255.0f;
     
-    board.setPos(param_1, param_2, param_1 + param_3, param_2 + param_4);
+    board.setPos(param_1, param_2, r6, r7);
 
     if (i_Msg->mesgEntry.mTextboxType == 7) {
         board.setBlackColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -486,7 +488,6 @@ void dMsg2_arrowMove(sub_msg2_class* i_Msg) {
 }
 
 /* 801E8994-801E8A70       .text dMsg2_aimAlphaSqare__FP14sub_msg2_classii */
-// NONMATCHING - float reg alloc
 void dMsg2_aimAlphaSqare(sub_msg2_class* i_Msg, int param_0, int param_1) {
     if (param_1 < 0) {
         param_1 = 0;
@@ -494,7 +495,9 @@ void dMsg2_aimAlphaSqare(sub_msg2_class* i_Msg, int param_0, int param_1) {
         param_1 = param_0;
     }
 
-    i_Msg->field_0xea8 = 255.0f - (255.0f - dMsg2_aimBrightness()) * (((f32)param_1 * (f32)param_1) / ((f32)param_0 * (f32)param_0));
+    f32 f31 = (((f32)param_1 * (f32)param_1) / ((f32)param_0 * (f32)param_0));
+    f32 f0 = (255.0f - dMsg2_aimBrightness());
+    i_Msg->field_0xea8 = 255.0f - f0 * f31;
 }
 
 /* 801E8A70-801E8B90       .text dMsg2_aimAlphaSqrt__FP14sub_msg2_classii */
@@ -505,7 +508,9 @@ void dMsg2_aimAlphaSqrt(sub_msg2_class* i_Msg, int param_0, int param_1) {
         param_1 = param_0;
     }
 
-    i_Msg->field_0xea8 = 255.0f - (255.0f - dMsg2_aimBrightness()) * std::sqrtf((f32)param_1 / (f32)param_0);
+    f32 f31 = std::sqrtf((f32)param_1 / (f32)param_0);
+    f32 f0 = (255.0f - dMsg2_aimBrightness());
+    i_Msg->field_0xea8 = 255.0f - f0 * f31;
 }
 
 /* 801E8B90-801E8C2C       .text dMsg2_kankyoBrightness__Fv */
@@ -638,8 +643,10 @@ void dMsg2_messageShow(sub_msg2_class* i_Msg) {
 
 /* 801E9108-801E9254       .text dMsg2_messageDataInit__FP14sub_msg2_classi */
 void dMsg2_messageDataInit(sub_msg2_class* i_Msg, int i_index) {
-    f32 char_space = ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->getCharSpace();
-    f32 ruby_space = ((J2DTextBox*)i_Msg->ruby_pane[i_index].pane)->getCharSpace();
+    int line_width = 503;
+    int center_line_width = 486;
+    int char_space = ((J2DTextBox*)i_Msg->text_pane[i_index].pane)->getCharSpace();
+    int ruby_space = ((J2DTextBox*)i_Msg->ruby_pane[i_index].pane)->getCharSpace();
 
     i_Msg->msgDataProc[i_index].dataInit();
     i_Msg->msgDataProc[i_index].setBmgData(i_Msg->message);
@@ -656,8 +663,8 @@ void dMsg2_messageDataInit(sub_msg2_class* i_Msg, int i_index) {
     i_Msg->msgDataProc[i_index].setMesgEntry(&i_Msg->mesgEntry);
     i_Msg->msgDataProc[i_index].setFontSize(i_Msg->field_0xeb4);
     i_Msg->msgDataProc[i_index].setRubyFontSize(i_Msg->field_0xeb8);
-    i_Msg->msgDataProc[i_index].setLineWidth(503);
-    i_Msg->msgDataProc[i_index].setCenterLineWidth(486);
+    i_Msg->msgDataProc[i_index].setLineWidth(line_width);
+    i_Msg->msgDataProc[i_index].setCenterLineWidth(center_line_width);
     i_Msg->msgDataProc[i_index].setSpaceFlagOff();
 }
 
@@ -1009,8 +1016,12 @@ void dDlst_2DCopy_c::draw() {
 
 /* 801EA0C8-801EA224       .text dMsg2_Draw__FP14sub_msg2_class */
 static BOOL dMsg2_Draw(sub_msg2_class* i_Msg) {
-    int sp8 = (int)(i_Msg->field_0xda8[0].mPosTopLeftOrig.x + 288.0f) - 288;
-    int sp10 = (int)(i_Msg->field_0xda8[0].mPosTopLeftOrig.y + 120.0f) - 120;
+    int r0 = 576;
+    int r3 = 240;
+    int r4 = (int)(i_Msg->field_0xda8[0].mPosTopLeftOrig.x + 288.0f);
+    int r5 = (int)(i_Msg->field_0xda8[0].mPosTopLeftOrig.y + 120.0f);
+    int sp8 = r4 - (r0 / 2);
+    int sp10 = r5 - (r3 / 2);
 
     for (int i = 0; i < 3; i++) {
         i_Msg->text_pane[i].mNowAlpha = i_Msg->field_0xeac;

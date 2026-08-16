@@ -3965,7 +3965,10 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
     if(field_0xC3C > 2) {
         if(checkAction(&daNpc_Ji1_c::battleAction)) {
-            dComIfG_TimerDeleteRequest();
+            dTimer_c* timer = dComIfG_getTimerPtr();
+            if (timer != NULL) {
+                timer->deleteRequest();
+            }
             
             if(isClearRecord(field_0xD70)) {
                 setClearRecord(field_0xD70);

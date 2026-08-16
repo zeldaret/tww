@@ -1714,12 +1714,6 @@ BOOL daPy_lk_c::dProcWindChange() {
 
 /* 80130F98-8013116C       .text dProcStandItemPut_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcStandItemPut_init() {
-    daPy_py_c* pdVar1;
-    fopAc_ac_c* pfVar2;
-    f32 dVar5;
-    double in_f4;
-    csXyz* angle;
-
     if (mCurProc == daPyProc_DEMO_STAND_ITEM_PUT_e) {
         return true;
     }
@@ -1727,27 +1721,24 @@ BOOL daPy_lk_c::dProcStandItemPut_init() {
     mNormalSpeed = 0.0f;
     keepItemData();
     mProcVar6.m3570 = 0;
-    pdVar1 = (daPy_py_c*)fopAcM_getEventPartner(this);
-    if (pdVar1 != NULL) {
-        cXyz local_20 = pdVar1->current.pos - current.pos;
+    fopAc_ac_c* event_partner = fopAcM_getEventPartner(this);
+    csXyz* angle;
+    if (event_partner != NULL) {
+        cXyz local_20 = event_partner->current.pos - current.pos;
         angle = fopAcM_GetShapeAngle_p(this);
-        angle->y = fopAcM_searchActorAngleY(this, pdVar1);
-        dVar5 = local_20.absXZ();
-        if (0.0f < dVar5) {
-            in_f4 = 0.5;
-        }
-        m35C8 = dVar5 - 47.0f;
-        angle = fopAcM_GetShapeAngle_p(pdVar1);
+        angle->y = fopAcM_searchActorAngleY(this, event_partner);
+        m35C8 = local_20.absXZ() - 47.0f;
+        angle = fopAcM_GetShapeAngle_p(event_partner);
     } else {
         m35C8 = 15.0f;
         angle = fopAcM_GetShapeAngle_p(this);
     }
     mProcVar6.m3570 = 1;
     setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, -1.0f);
-    pfVar2 = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
-    if (pfVar2 != NULL) {
-        mActorKeepGrab.setData(pfVar2);
-        fopAcM_setCarryNow(pfVar2, FALSE);
+    fopAc_ac_c* stand_item = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
+    if (stand_item != NULL) {
+        mActorKeepGrab.setData(stand_item);
+        fopAcM_setCarryNow(stand_item, FALSE);
     }
     return true;
 }

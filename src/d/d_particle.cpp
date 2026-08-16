@@ -206,12 +206,12 @@ J3DModel * dPa_modelControl_c::newModel(J3DModelData* modelData) {
             J3DModel * j3dmodel = model->mModel;
             j3dmodel->setModelData(modelData);
 
-            J3DShapePacket * shapePacket = j3dmodel->getShapePacket(0);
+            J3DShapePacket * shapePacket = j3dmodel->getShapePacketArray();
             for (u16 j = 0; j < modelData->getShapeNum(); shapePacket++, j++) {
                 shapePacket->setShape(modelData->getShapeNodePointer(j));
             }
 
-            J3DMatPacket * matPacket = j3dmodel->getMatPacket(0);
+            J3DMatPacket * matPacket = j3dmodel->getMatPacketArray();
             for (u16 j = 0; j < modelData->getMaterialNum(); matPacket++, j++) {
                 J3DMaterial* mat = modelData->getMaterialNodePointer(j);
                 matPacket->setMaterial(mat);

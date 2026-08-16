@@ -47,14 +47,6 @@ f32 PSVECDistance(const Vec* a, const Vec* b);
 void C_VECHalfAngle(const Vec* a, const Vec* b, Vec* half);
 void C_VECReflect(const Vec* src, const Vec* normal, Vec* dst);
 
-inline BOOL checkScaleOne(Vec v) {
-    if (v.x == 1.0f && v.y == 1.0f && v.z == 1.0f) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-}
-
 /* When compiling in debug mode, use C implementations */
 #if defined(DEBUG) || !defined(__MWERKS__)
 #define VECAdd C_VECAdd

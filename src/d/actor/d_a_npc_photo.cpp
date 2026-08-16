@@ -588,16 +588,16 @@ static BOOL daNpc_Photo_nodeCallBack(J3DNode* node, int calcTiming) {
         J3DJoint* joint = (J3DJoint*)node;
         daNpcPhoto_c* i_this = (daNpcPhoto_c*)model->getUserArea();
         s32 jntNo = joint->getJntNo();
-        cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
+        MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
         
         if(jntNo == i_this->m_jnt.getHeadJntNum()) {
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
-            mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getHead_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
         }
 
         if(jntNo == i_this->m_jnt.getBackboneJntNum()) {
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
-            mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getBackbone_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
         }
 
         model->setAnmMtx(jntNo, *calc_mtx);

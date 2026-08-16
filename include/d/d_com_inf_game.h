@@ -634,14 +634,8 @@ public:
     JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
     void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
     bool isPictureFlag(u8 i) { return mPictureFlag & (u8)(1 << i); }
-    void onPictureFlag(u8 i) {
-        u8 mask = (1 << i);
-        mPictureFlag |= mask;
-    }
-    void offPictureFlag(u8 i) {
-        u8 mask = (1 << i);
-        mPictureFlag &= ~mask;
-    }
+    void onPictureFlag(u8 i) { mPictureFlag |= (u8)(1 << i); }
+    void offPictureFlag(u8 i) { mPictureFlag &= ~(u8)(1 << i); }
     u8 getPictureFormat() { return mPictureFormat; }
     void setPictureFormat(u8 fmt) { mPictureFormat = fmt; }
     u8 getSelectPicture() { return mSelectPicture; }
@@ -1190,15 +1184,13 @@ inline BOOL dComIfGs_isGetItemReserve(u8 i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().isReserve(i_no);
 }
 
-inline void dComIfGs_onGetItemReserve(int i_no) {
+inline void dComIfGs_onGetItemReserve(u8 i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().onReserve(i_no);
 }
 
-#if VERSION == VERSION_DEMO
 inline void dComIfGs_offGetItemReserve(u8 i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getGetBagItem().offReserve(i_no);
 }
-#endif
 
 inline BOOL dComIfGs_isGetCollectMap(int i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().isGetMap(i_no - 1);
@@ -4393,9 +4385,18 @@ inline int dComIfG_getTimerRestTimeMs() {
     return limit - now;
 }
 
-inline void dComIfG_TimerDeleteRequest() {
-    if (dComIfG_getTimerPtr() != NULL)
-        dComIfG_getTimerPtr()->deleteRequest();
+inline int dComIfG_TimerDeleteRequest(int i_mode) {
+    if (i_mode == dComIfG_getTimerMode()) {
+        dTimer_c* timer = dComIfG_getTimerPtr();
+        if (timer != NULL) {
+            timer->deleteRequest();
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    return 0;
 }
 inline void dComIfG_TimerStart(int mode, s16 timer) {
     if (dComIfG_getTimerMode() == mode && dComIfG_getTimerPtr() != NULL) {

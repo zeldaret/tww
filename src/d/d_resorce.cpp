@@ -549,7 +549,7 @@ dRes_control_c::~dRes_control_c() {
 }
 
 /* 8006EF34-8006F01C       .text setRes__14dRes_control_cFPCcP11dRes_info_ciPCcUcP7JKRHeap */
-BOOL dRes_control_c::setRes(const char* pArcName, dRes_info_c* pInfoArr, int infoNum, const char* pArcPath, u8 direction, JKRHeap* pHeap) {
+int dRes_control_c::setRes(const char* pArcName, dRes_info_c* pInfoArr, int infoNum, const char* pArcPath, u8 direction, JKRHeap* pHeap) {
     dRes_info_c * pInfo = getResInfo(pArcName, pInfoArr, infoNum);
 
     if (pInfo == NULL) {
@@ -557,18 +557,18 @@ BOOL dRes_control_c::setRes(const char* pArcName, dRes_info_c* pInfoArr, int inf
         if (pInfo == NULL) {
             OSReport_Error("<%s.arc> dRes_control_c::setRes: 空きリソース情報ポインタがありません\n", pArcName);
             pInfo->~dRes_info_c();
-            return FALSE;
+            return 0;
         }
 
         if (!pInfo->set(pArcName, pArcPath, direction, pHeap)) {
             OSReport_Error("<%s.arc> dRes_control_c::setRes: res info set error !!\n", pArcName);
             pInfo->~dRes_info_c();
-            return FALSE;
+            return 0;
         }
     }
 
     pInfo->incCount();
-    return TRUE;
+    return 1;
 }
 
 /* 8006F01C-8006F074       .text syncRes__14dRes_control_cFPCcP11dRes_info_ci */
@@ -703,7 +703,7 @@ int dRes_control_c::syncAllRes(dRes_info_c* pInfo, int infoNum) {
 }
 
 /* 8006F430-8006F500       .text setStageRes__14dRes_control_cFPCcP7JKRHeap */
-BOOL dRes_control_c::setStageRes(char const* pArcName, JKRHeap* pHeap) {
+int dRes_control_c::setStageRes(char const* pArcName, JKRHeap* pHeap) {
     char path[20];
     snprintf(path, sizeof(path), "/res/Stage/%s/", strcmp(dComIfGp_getStartStageName(), "ma2room") == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) ? "ma3room" : dComIfGp_getStartStageName());
     return setRes(pArcName, &mStageInfo[0], ARRAY_SIZE(mStageInfo), path, 1, pHeap);
