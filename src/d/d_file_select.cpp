@@ -3074,7 +3074,7 @@ void dFile_select_c::setSaveData() {
 
         ((J2DTextBox*)pane[i]->pane)->setFontSize(field_0x38e0);
 
-        J2DTextBox::TFontSize size;
+        J2DTextBox::TFontSize fontSize;
 
         fopMsgM_paneTrans(pane[i], 0.0f, 0.0f);
         if(mDoMemCdRWm_TestCheckSumGameData(data)) {
@@ -3092,14 +3092,14 @@ void dFile_select_c::setSaveData() {
             if(data[0x157] == 0) {
                 fopMsgM_paneScaleXY(pane[i], g_fsHIO.field_0x54);
 
-                size.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-                size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+                fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
+                fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
 
 #if VERSION > VERSION_JPN
                 strcpy(field_0x38f4[i], "New Game");
 #endif
 
-                ((J2DTextBox*)pane[i]->pane)->setFontSize(size);
+                ((J2DTextBox*)pane[i]->pane)->setFontSize(fontSize);
 
                 fopMsgM_paneTrans(pane[i], pane[i]->mPosTopLeftOrig.x - pane[i]->mPosTopLeft.x, pane[i]->mPosTopLeftOrig.y - pane[i]->mPosTopLeft.y + g_fsHIO.field_0x58);
 
@@ -3137,18 +3137,18 @@ void dFile_select_c::setSaveData() {
             fopMsgM_paneScaleXY(pane[i], g_fsHIO.field_0x54);
 
 #if VERSION <= VERSION_JPN
-            size.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-            size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+            fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
+            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
 #else
-            size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
-            size.mSizeX = field_0x38e0.mSizeX * 0.9f;
+            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+            fontSize.mSizeX = field_0x38e0.mSizeX * 0.9f;
 #endif
 
 #if VERSION > VERSION_JPN
             strcpy(field_0x38f4[i], "This data is corrupted.");
 #endif
 
-            ((J2DTextBox*)pane[i]->pane)->setFontSize(size);
+            ((J2DTextBox*)pane[i]->pane)->setFontSize(fontSize);
 
             fopMsgM_paneTrans(pane[i], pane[i]->mPosTopLeftOrig.x - pane[i]->mPosTopLeft.x, pane[i]->mPosTopLeftOrig.y - pane[i]->mPosTopLeft.y + g_fsHIO.field_0x58);
 #if VERSION <= VERSION_JPN
@@ -3187,7 +3187,7 @@ void dFile_select_c::setSaveData() {
 
         ((J2DTextBox*)pane->pane)->setFontSize(field_0x38e0);
 
-        J2DTextBox::TFontSize size;
+        J2DTextBox::TFontSize fontSize;
 
         fopMsgM_paneTrans(pane, 0.0f, 0.0f);
         if(mDoMemCdRWm_TestCheckSumGameData(data)) {
@@ -3205,14 +3205,14 @@ void dFile_select_c::setSaveData() {
             if(data[0x157] == 0) {
                 fopMsgM_paneScaleXY(pane, g_fsHIO.field_0x54);
 
-                size.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-                size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+                fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
+                fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
 
 #if VERSION > VERSION_JPN
                 strcpy(field_0x38f4[i], "New Game");
 #endif
 
-                ((J2DTextBox*)pane->pane)->setFontSize(size);
+                ((J2DTextBox*)pane->pane)->setFontSize(fontSize);
 
                 fopMsgM_paneTrans(pane, pane->mPosTopLeftOrig.x - pane->mPosTopLeft.x, pane->mPosTopLeftOrig.y - pane->mPosTopLeft.y + g_fsHIO.field_0x58);
 
@@ -3253,15 +3253,15 @@ void dFile_select_c::setSaveData() {
             size.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
             size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
 #else
-            size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
-            size.mSizeX = field_0x38e0.mSizeX * 0.9f;
+            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+            fontSize.mSizeX = field_0x38e0.mSizeX * 0.9f;
 #endif
 
 #if VERSION > VERSION_JPN
             strcpy(field_0x38f4[i], "This data is corrupted.");
 #endif
 
-            ((J2DTextBox*)pane->pane)->setFontSize(size);
+            ((J2DTextBox*)pane->pane)->setFontSize(fontSize);
 
             fopMsgM_paneTrans(pane, pane->mPosTopLeftOrig.x - pane->mPosTopLeft.x, pane->mPosTopLeftOrig.y - pane->mPosTopLeft.y + g_fsHIO.field_0x58);
 #if VERSION <= VERSION_JPN
