@@ -3250,8 +3250,8 @@ void dFile_select_c::setSaveData() {
             fopMsgM_paneScaleXY(pane, g_fsHIO.field_0x54);
 
 #if VERSION <= VERSION_JPN
-            size.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-            size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+            fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
+            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
 #else
             fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
             fontSize.mSizeX = field_0x38e0.mSizeX * 0.9f;
