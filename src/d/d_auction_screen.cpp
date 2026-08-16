@@ -568,7 +568,7 @@ static cPhs_State dAs_Create(msg_class* msg) {
     talkFlag = FALSE;
 
     dAs_c* i_this = (dAs_c*)msg;
-    i_this->_create();
+    return i_this->_create();
 }
 
 /* 80160D20-80160D70       .text dAuction_screen_create__Fv */

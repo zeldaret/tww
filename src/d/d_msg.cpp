@@ -45,7 +45,7 @@ static dDlst_2DMSG_c message;
 dDlst_2Dtact_c capture;
 dDlst_2DM_c multiTex;
 
-char* mLayout[] = {
+const char* mLayout[] = {
     "hukidashi_14_1.blo",
     "hukidashi_14_1.blo",
     "hukidashi_14_3.blo",
@@ -1495,7 +1495,7 @@ void dMsg_tactGuideShow(sub_msg_class* i_Msg, u8 param_2) {
 
 /* 80210AA0-80210CA4       .text dMsg_numberInput__FP13sub_msg_class */
 void dMsg_numberInput(sub_msg_class* i_Msg) {
-    static char* num_str[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    static const char* num_str[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
     for (s32 i = 0; i < 8; i++) {
         if (i_Msg->mMsgDataProc.getIconNum(i) == fopMsgM_Icon_INPUT_e) {

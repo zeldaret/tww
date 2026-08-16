@@ -14,7 +14,7 @@ class cM3dGPla;
 class cM3dGSph;
 class cM3dGTri;
 class csXyz;
-class cXyz;
+struct cXyz;
 
 struct Vec;
 

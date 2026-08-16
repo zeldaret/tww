@@ -10,7 +10,7 @@ class cBgS_ShdwDraw;
 class cBgS_LinChk;
 class cBgS_GndChk;
 class cM3dGPla;
-class cXyz;
+struct cXyz;
 
 class cBgS_ChkElm {
 public:

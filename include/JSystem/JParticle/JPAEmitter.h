@@ -130,8 +130,8 @@ public:
     /* 0x0E0 */ JGeometry::TVec3<f32> mEmitterGlobalCenter;
     /* 0x0EC */ JGeometry::TVec3<f32> mPublicScale;
     /* 0x0F8 */ JGeometry::TVec3<f32> mgReRDir;
-    /* 0x100 */ f32 mFovy;
-    /* 0x104 */ f32 mAspect;
+    /* 0x104 */ f32 mFovy;
+    /* 0x108 */ f32 mAspect;
     /* 0x10C */ JGeometry::TVec3<f32> mVolumePos;
     /* 0x118 */ JGeometry::TVec3<f32> mVelOmni;
     /* 0x124 */ JGeometry::TVec3<f32> mVelAxis;

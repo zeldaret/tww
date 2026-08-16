@@ -1181,7 +1181,7 @@ void action_omoi(ks_class* i_this) {
 }
 
 /* 000026DC-000027A0       .text tsubo_search__FPvPv */
-void* tsubo_search(void* param_1, void* i_data) {
+static void* tsubo_search(void* param_1, void* i_data) {
     ks_class* i_this = (ks_class*)i_data;
     fopAc_ac_c* actor = &i_this->actor;
     int r0 = 0;

@@ -19,7 +19,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 
 s16 JASystem::BankMgr::OSC_RELEASE_TABLE[6] = { 1, 10, 0, 15, 0, 0};
-JASystem::TOscillator::Osc_ JASystem::BankMgr::OSC_ENV = { 0, 1.0f, NULL, BankMgr::OSC_RELEASE_TABLE, 1.0f, 0.0f };
+JASystem::TOscillator::Osc_ JASystem::BankMgr::OSC_ENV = { 0, 1.0f, NULL, JASystem::BankMgr::OSC_RELEASE_TABLE, 1.0f, 0.0f };
 
 s32 JASystem::BankMgr::sTableSize;
 JASystem::TBank** JASystem::BankMgr::sBankArray;

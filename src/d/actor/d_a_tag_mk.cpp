@@ -203,7 +203,7 @@ void daTag_Mk_c::demoInitCom() {
 }
 
 /* 000006F8-000006FC       .text demoProcCom__10daTag_Mk_cFv */
-BOOL daTag_Mk_c::demoProcCom() {
+void daTag_Mk_c::demoProcCom() {
 }
 
 /* 000006FC-00000744       .text getNowEventAction__10daTag_Mk_cFv */

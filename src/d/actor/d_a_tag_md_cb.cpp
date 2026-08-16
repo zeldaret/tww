@@ -441,12 +441,12 @@ void daTag_MdCb_c::initialMsgSetEvent(int arg1) {
 
 /* 00000FB0-00000FD0       .text actionMsgSetEvent__12daTag_MdCb_cFi */
 BOOL daTag_MdCb_c::actionMsgSetEvent(int) {
-    talk_init();
+    return talk_init();
 }
 
 /* 00000FD0-00000FF0       .text actionMessageEvent__12daTag_MdCb_cFi */
 BOOL daTag_MdCb_c::actionMessageEvent(int) {
-    talk();
+    return talk();
 }
 
 /* 00000FF0-0000100C       .text initialPlayerOffDrow__12daTag_MdCb_cFi */

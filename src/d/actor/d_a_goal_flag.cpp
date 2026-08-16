@@ -615,7 +615,7 @@ cPhs_State daGoal_Flag_c::_create() {
 
 
 /* 0000183C-00001970       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf */
-void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_idealDist) {
+static void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_idealDist) {
     cXyz vec_to_neighbor = *i_otherP - *i_posP;
     cXyz correction_dir = vec_to_neighbor.normZP();
 

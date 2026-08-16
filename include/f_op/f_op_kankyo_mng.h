@@ -4,7 +4,7 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "f_pc/f_pc_manager.h"
 
-class kankyo_class;
+struct kankyo_class;
 
 struct fopKyM_prm_class {
     /* 0x00 */ cXyz mPos;

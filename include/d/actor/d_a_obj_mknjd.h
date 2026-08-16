@@ -8,7 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class msg_class;
+struct msg_class;
 
 namespace daObjMknjD {
     class Act_c : public dBgS_MoveBgActor {

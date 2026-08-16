@@ -422,7 +422,7 @@ bool daObjIce_c::_execute() {
 }
 
 /* 00000EB8-00000F48       .text set_material_sub__FP11J3DMaterialUc */
-void set_material_sub(J3DMaterial* material, unsigned char alpha) {
+static void set_material_sub(J3DMaterial* material, unsigned char alpha) {
     while (material != NULL) {
         if (alpha == 0) {
             material->getShape()->hide();
@@ -435,7 +435,7 @@ void set_material_sub(J3DMaterial* material, unsigned char alpha) {
 }
 
 /* 00000F48-00000FB0       .text set_material__FP8J3DModelUc */
-void set_material(J3DModel* model, unsigned char alpha) {
+static void set_material(J3DModel* model, unsigned char alpha) {
     J3DModelData* modelData = model->getModelData();
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         set_material_sub(modelData->getJointNodePointer(i)->getMesh(), alpha);

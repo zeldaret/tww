@@ -254,7 +254,7 @@ void daObjLeaves_c::birthEffect(int arg1, cXyz* arg2, csXyz* arg3, GXColor* arg4
 }
 
 /* 000002E4-00000360       .text rideCallBack__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void rideCallBack(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* a_player) {
+static void rideCallBack(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* a_player) {
     daObjLeaves_c* i_this = (daObjLeaves_c*)a_this;
 
     if (fopAcM_GetName(a_player) == fpcNm_PLAYER_e) {
@@ -718,7 +718,7 @@ bool daObjLeaves_c::_execute() {
 }
 
 /* 0000107C-000011B0       .text set_material_sub__FP11J3DMaterialUc */
-void set_material_sub(J3DMaterial* material, unsigned char alpha) {
+static void set_material_sub(J3DMaterial* material, unsigned char alpha) {
     while (material != NULL) {
         if (alpha == 0) {
             material->getShape()->hide();
@@ -739,7 +739,7 @@ void set_material_sub(J3DMaterial* material, unsigned char alpha) {
 }
 
 /* 000011B0-00001218       .text set_material__FP8J3DModelUc */
-void set_material(J3DModel* model, unsigned char alpha) {
+static void set_material(J3DModel* model, unsigned char alpha) {
     J3DModelData* modelData = model->getModelData();
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         set_material_sub(modelData->getJointNodePointer(i)->getMesh(), alpha);
