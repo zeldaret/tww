@@ -17,6 +17,7 @@
 #include "dolphin/gx/GXTev.h" // IWYU pragma: export
 #include "dolphin/gx/GXTexture.h" // IWYU pragma: export
 #include "dolphin/gx/GXTransform.h" // IWYU pragma: export
+#include "dolphin/gx/GXDraw.h" // IWYU pragma: export
 
 #include "dolphin/os/OSUtil.h"
 

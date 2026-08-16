@@ -6,6 +6,7 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JUtility/JUTFont.h"
 #include "JAZelAudio/JAIZelAnime.h"
+#include "SSystem/SComponent/c_sxyz.h"
 #include "d/d_kankyo.h"
 
 class JKRArchive;
@@ -655,18 +656,147 @@ private:
     /* 0x38 */ mDoExt_3Dline_c* mpLines;
 };
 
-// The following classes only appear in the debug maps and seem unused:
-// mDoExt_ArrowPacket
-// mDoExt_circlePacket
-// mDoExt_cube8pPacket
-// mDoExt_cubePacket
-// mDoExt_cylinderMPacket
-// mDoExt_cylinderPacket
-// mDoExt_linePacket
-// mDoExt_pointPacket
-// mDoExt_quadPacket
-// mDoExt_spherePacket
-// mDoExt_trianglePacket
+class mDoExt_cube8pPacket : public J3DPacket {
+public:
+    mDoExt_cube8pPacket(cXyz* i_points, const GXColor& i_color);
+
+    virtual void draw();
+    virtual ~mDoExt_cube8pPacket() {}
+
+    /* 0x10 */ cXyz mPoints[8];
+    /* 0x70 */ GXColor mColor;
+};
+
+class mDoExt_cubePacket : public J3DPacket {
+public:
+    mDoExt_cubePacket(cXyz& i_position, cXyz& i_size, csXyz& i_angle, const GXColor& i_color);
+
+    virtual void draw();
+    virtual ~mDoExt_cubePacket() {}
+
+    /* 0x10 */ cXyz mPosition;
+    /* 0x1C */ cXyz mSize;
+    /* 0x28 */ csXyz mAngle;
+    /* 0x2E */ GXColor mColor;
+};
+
+class mDoExt_trianglePacket : public J3DPacket {
+public:
+    mDoExt_trianglePacket(cXyz* i_points, const GXColor& i_color, u8 i_clipZ);
+
+    virtual void draw();
+    virtual ~mDoExt_trianglePacket() {}
+
+    /* 0x10 */ cXyz mPoints[3];
+    /* 0x34 */ GXColor mColor;
+    /* 0x38 */ u8 mClipZ;
+};
+
+class mDoExt_quadPacket : public J3DPacket {
+public:
+    mDoExt_quadPacket(cXyz* i_points, const GXColor& i_color, u8 i_clipZ);
+
+    virtual void draw();
+    virtual ~mDoExt_quadPacket() {}
+
+    /* 0x10 */ cXyz mPoints[4];
+    /* 0x40 */ GXColor mColor;
+    /* 0x44 */ u8 mClipZ;
+};
+
+class mDoExt_linePacket : public J3DPacket {
+public:
+    mDoExt_linePacket(cXyz& i_start, cXyz& i_end, const GXColor& i_color, u8 i_clipZ, u8 i_width);
+
+    virtual void draw();
+    virtual ~mDoExt_linePacket() {}
+
+    /* 0x10 */ cXyz mStart;
+    /* 0x1C */ cXyz mEnd;
+    /* 0x28 */ GXColor mColor;
+    /* 0x2C */ u8 mClipZ;
+    /* 0x2D */ u8 mWidth;
+};
+
+class mDoExt_ArrowPacket : public J3DPacket {
+public:
+    mDoExt_ArrowPacket(cXyz& i_position, cXyz& param_1, const GXColor& i_color, u8 i_clipZ, u8 i_lineWidth);
+
+    virtual void draw();
+    virtual ~mDoExt_ArrowPacket() {}
+
+    /* 0x10 */ cXyz mStart;
+    /* 0x1C */ cXyz mEnd;
+    /* 0x28 */ GXColor mColor;
+    /* 0x2C */ u8 mClipZ;
+    /* 0x2D */ u8 mLineWidth;
+};
+
+class mDoExt_pointPacket : public J3DPacket {
+public:
+    mDoExt_pointPacket(cXyz& i_position, const GXColor& i_color, u8 i_clipZ, u8 i_lineWidth);
+
+    virtual void draw();
+    virtual ~mDoExt_pointPacket() {}
+
+    /* 0x10 */ cXyz mPosition;
+    /* 0x1C */ GXColor mColor;
+    /* 0x20 */ u8 mClipZ;
+    /* 0x21 */ u8 mLineWidth;
+};
+
+class mDoExt_circlePacket : public J3DPacket {
+public:
+    mDoExt_circlePacket(cXyz& i_position, f32 i_radius, const GXColor& i_color, u8 i_clipZ, u8 i_lineWidth);
+
+    virtual void draw();
+    virtual ~mDoExt_circlePacket() {}
+
+    /* 0x10 */ cXyz mPosition;
+    /* 0x1C */ f32 mRadius;
+    /* 0x20 */ GXColor mColor;
+    /* 0x24 */ u8 mClipZ;
+    /* 0x25 */ u8 mLineWidth;
+};
+
+class mDoExt_spherePacket : public J3DPacket {
+public:
+    mDoExt_spherePacket(cXyz& i_position, f32 i_size, const GXColor& i_color, u8 i_clipZ);
+
+    virtual void draw();
+    virtual ~mDoExt_spherePacket() {}
+
+    /* 0x10 */ cXyz mPosition;
+    /* 0x1C */ f32 mSize;
+    /* 0x20 */ GXColor mColor;
+    /* 0x24 */ u8 mClipZ;
+};
+
+class mDoExt_cylinderPacket : public J3DPacket {
+public:
+    mDoExt_cylinderPacket(cXyz& i_position, f32 i_radius, f32 i_height, const GXColor& i_color, u8 i_clipZ);
+
+    virtual void draw();
+    virtual ~mDoExt_cylinderPacket() {}
+
+    /* 0x10 */ cXyz mPosition;
+    /* 0x1C */ f32 mRadius;
+    /* 0x20 */ f32 mHeight;
+    /* 0x24 */ GXColor mColor;
+    /* 0x28 */ u8 mClipZ;
+};
+
+class mDoExt_cylinderMPacket : public J3DPacket {
+public:
+    mDoExt_cylinderMPacket(Mtx i_mtx, const GXColor& i_color, u8 i_clipZ);
+
+    virtual void draw();
+    virtual ~mDoExt_cylinderMPacket() {}
+
+    /* 0x10 */ Mtx mMatrix;
+    /* 0x40 */ GXColor mColor;
+    /* 0x44 */ u8 mClipZ;
+};
 
 inline void mDoExt_bckAnmRemove(J3DModelData* i_modelData) {
     i_modelData->getJointNodePointer(0)->setMtxCalc(NULL);

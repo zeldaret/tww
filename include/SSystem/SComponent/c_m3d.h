@@ -165,4 +165,8 @@ inline f32 cM3d_LenSq(const Vec* a, const Vec* b) {
     return VECSquareDistance(a, b);
 }
 
+#ifdef DEBUG
+bool cM3d_UpMtx(const Vec& param_1, Mtx param_2);
+#endif
+
 #endif
