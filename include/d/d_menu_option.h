@@ -11,16 +11,19 @@ struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 
-class dMenu_Option_c : public dDlst_base_c {
+class dMenu_Option_c {
 public:
+    dMenu_Option_c() { }
+    virtual ~dMenu_Option_c() {}
+
     void alphaChange(fopMsgM_pane_class*, f32) {}
     u8 getQuitStatus() { return mE40; }
     void setArchive(JKRArchive* archive) {
         mpArchive = archive;
     }
-    void setFont(JUTFont* font_1, JUTFont* font_2) {
-        mD2C = font_1;
-        mD30 = font_2;
+    void setFont(JUTFont* i_font, JUTFont* i_rubyFont) {
+        mpFont = i_font;
+        mpRubyFont = i_rubyFont;
     }
     void setTextArea(char* param_1, char* param_2, char* param_3, char* param_4) {
         mD38 = param_1;
@@ -83,8 +86,8 @@ private:
     /* 0xC80 */ fopMsgM_pane_class mC80[2];
     /* 0xCF0 */ fopMsgM_pane_class mCF0;
     /* 0xD28 */ JKRArchive* mpArchive;
-    /* 0xD2C */ JUTFont* mD2C;
-    /* 0xD30 */ JUTFont* mD30;
+    /* 0xD2C */ JUTFont* mpFont;
+    /* 0xD30 */ JUTFont* mpRubyFont;
     /* 0xD34 */ STControl* stick;
     /* 0xD38 */ char* mD38;
     /* 0xD3C */ char* mD3C;

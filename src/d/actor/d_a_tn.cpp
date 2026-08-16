@@ -2701,6 +2701,7 @@ static void Tn_move(tn_class* i_this) {
                     break;
                 case ACTION_S_DEMO:
                     s_demo(i_this);
+                    break;
             }
 #if VERSION == VERSION_DEMO
             if (r29 != 0) {

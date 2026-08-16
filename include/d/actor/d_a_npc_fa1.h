@@ -73,7 +73,7 @@ public:
     u8 getMode() { return mMode; }
     void setMode(u8 mode) { mMode = mode; }
     bool isLinkMode() { return mMode == Mode_PLAYER_MOVE_e; }
-    void isBabaMode() {}
+    bool isBabaMode() { return mMode == Mode_BOTTLE_BABA_MOVE_e; }
     u8 getSubMode() { return mSubMode; }
     void setSubMode(u8 submode) { mSubMode = submode; }
 

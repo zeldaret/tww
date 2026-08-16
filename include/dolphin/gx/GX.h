@@ -42,6 +42,8 @@ extern "C" {
     (reg) = ((u32) (reg) & ~(((1 << (nbits)) - 1) << (shift))) |               \
             ((u32) (value) << (shift));
 
+#define GET_REG_FIELD(reg, size, shift) ((int)((reg) >> (shift)) & ((1 << (size)) - 1))
+
 #define SET_REG_FIELD(reg, size, shift, val) \
     (reg) = ((u32)(reg) & ~(((1 << (size)) - 1) << (shift))) | ((u32)(val) << (shift)); \
 

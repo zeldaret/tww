@@ -62,7 +62,7 @@ daGy_Ctrl_HIO_c::daGy_Ctrl_HIO_c() {
 }
 
 /* 000001B8-000001E4       .text searchNearActor_CB__FPvPv */
-void* searchNearActor_CB(void* arg0, void* arg1) {
+static void* searchNearActor_CB(void* arg0, void* arg1) {
     return ((daGy_Ctrl_c*)arg1)->searchNearActor((fopAc_ac_c*)arg0);
 }
 

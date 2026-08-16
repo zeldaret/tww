@@ -95,22 +95,22 @@ void dMenu_Option_c::screenSet() {
     fopMsgM_messageGet(mDE8[3], 0x1D6);
 #endif
     
-    ((J2DTextBox*)m008.pane)->setFont(mD2C);
+    ((J2DTextBox*)m008.pane)->setFont(mpFont);
 #if VERSION > VERSION_JPN
     ((J2DTextBox*)m008.pane)->setString(mD48);
 #endif
-    ((J2DTextBox*)m740[0].pane)->setFont(mD2C);
-    ((J2DTextBox*)m740[1].pane)->setFont(mD30);
+    ((J2DTextBox*)m740[0].pane)->setFont(mpFont);
+    ((J2DTextBox*)m740[1].pane)->setFont(mpRubyFont);
     
     for (int i = 0; i < 2; i++) {
-        ((J2DTextBox*)m9A8[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)m9A8[i].pane)->setFont(mpFont);
 #if VERSION <= VERSION_JPN
-        ((J2DTextBox*)mA18_jpn[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)mA18_jpn[i].pane)->setFont(mpFont);
 #endif
 #if VERSION > VERSION_JPN
         ((J2DTextBox*)m9A8[i].pane)->setString(mD5C[i]);
 #endif
-        ((J2DTextBox*)mAC0[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)mAC0[i].pane)->setFont(mpFont);
 #if VERSION > VERSION_JPN
         ((J2DTextBox*)mAC0[i].pane)->setString(mD84[i]);
         changeScaleCenter(&m9A8[i], mD5C[i]);
@@ -119,7 +119,7 @@ void dMenu_Option_c::screenSet() {
     }
     
     for (int i = 0; i < 3; i++) {
-        ((J2DTextBox*)mA18[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)mA18[i].pane)->setFont(mpFont);
 #if VERSION > VERSION_JPN
         ((J2DTextBox*)mA18[i].pane)->setString(mDAC[i]);
         changeScaleCenter(&mA18[i], mDAC[i]);
@@ -130,7 +130,7 @@ void dMenu_Option_c::screenSet() {
 #if VERSION > VERSION_JPN
         if (i == 1) continue;
 #endif
-        ((J2DTextBox*)m8C8[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)m8C8[i].pane)->setFont(mpFont);
 #if VERSION > VERSION_JPN
         ((J2DTextBox*)m8C8[i].pane)->setString(mDE8[i]);
         changeScaleRight(&m8C8[i], mDE8[i]);
@@ -666,8 +666,8 @@ void dMenu_Option_c::noteSet() {
     msgDataProc.dataInit();
     msgDataProc.setBmgData((char*)mesg);
     msgDataProc.setOutMessage(mD38, mD3C, mD40, mD44);
-    msgDataProc.setFont(mD2C);
-    msgDataProc.setRubyFont(mD30);
+    msgDataProc.setFont(mpFont);
+    msgDataProc.setRubyFont(mpRubyFont);
     msgDataProc.setCharSpace(((J2DTextBox*)m740[0].pane)->getCharSpace());
     msgDataProc.setRubyCharSpace(((J2DTextBox*)m740[1].pane)->getCharSpace());
     msgDataProc.setLineSpace(((J2DTextBox*)m740[0].pane)->getLineSpace());
@@ -763,16 +763,16 @@ f32 dMenu_Option_c::stringlength(fopMsgM_pane_class* r30, char* r31) {
     J2DTextBox::TFontSize sp18;
     ((J2DTextBox*)r30->pane)->getFontSize(sp18);
     f32 f31 = ((J2DTextBox*)r30->pane)->getCharSpace();
-    f30 = sp18.mSizeX / mD2C->getCellWidth();
+    f30 = sp18.mSizeX / mpFont->getCellWidth();
     while (*r31 != 0) {
         if ((u8)*r31 == 0x1A) {
             r31++;
             r31 += (*r31 - 1);
         } else {
             int r26 = (u8)*r31++;
-            int r28 = mD2C->getWidth(r26);
+            int r28 = mpFont->getWidth(r26);
             if (!r27) {
-                f29 = f30 * (r28 + mD2C->getOffset(r26));
+                f29 = f30 * (r28 + mpFont->getOffset(r26));
                 r27 = true;
             } else{
                 f29 += f31 + r28 * f30;

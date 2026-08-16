@@ -306,6 +306,11 @@ struct TVec2 {
         y += other.y;
     }
 
+    void add(const TVec2<T>& a, const TVec2<T>& b) {
+        x = a.x + b.x;
+        y = a.y + b.y;
+    }
+
     bool isAbove(const TVec2<T>& other) const {
         return (x >= other.x) && (y >= other.y) ? true : false;
     }
@@ -346,9 +351,8 @@ template<> struct TBox<TVec2<f32> > {
         addPos(TVec2<f32>(x, y));
     }
 
-    void setSize(TVec2<f32> size) {
-        f.x = size.x;
-        f.y = size.y;
+    void setSize(const TVec2<f32>& size) {
+        f.add(i, size);
     }
 
     void addPos(const TVec2<f32>& pos) {

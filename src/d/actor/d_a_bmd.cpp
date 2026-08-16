@@ -2027,7 +2027,7 @@ static cPhs_State daBmd_Create(fopAc_ac_c* a_this) {
             i_this->mB71 = 1;
         }
         dKyw_pntwind_set(&i_this->mWindInfluence);
-        a_this->attention_info.distances[2] = 4;
+        a_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
         daBmd_Execute(i_this);
         res = cPhs_COMPLEATE_e;
     }

@@ -159,15 +159,15 @@ int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, BOOL i
 
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -260,7 +260,7 @@ int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk
                 J3DMaterial* material = i_matTable->getMaterialNodePointer(materialId);
                 u8 texMtxId = mpAnm->getUpdateTexMtxID(i);
                 if (texMtxId != 0xFF) {
-                    J3DTexMtx* texMtx = material->getTexGenBlock()->getTexMtx(texMtxId);
+                    J3DTexMtx* texMtx = material->getTexMtx(texMtxId);
                     if (!texMtx) {
                         texMtx = new J3DTexMtx();
                     }
@@ -286,15 +286,15 @@ int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk
 
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -365,15 +365,15 @@ int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, BO
 
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -405,15 +405,15 @@ int mDoExt_bvaAnm::init(J3DModel* i_model, J3DAnmVisibilityFull* i_bva, BOOL i_a
     }
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -442,15 +442,15 @@ int mDoExt_bckAnm::init(J3DModelData* i_modelData, J3DAnmTransform* i_bck, BOOL 
     }
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -849,10 +849,10 @@ JKRExpHeap* gameHeap;
 /* 80011734-800117E4       .text mDoExt_createGameHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2036, 2035, 2050, 2050), gameHeap == NULL || heapSize == 0);
-    gameHeap = JKRExpHeap::create(heapSize, i_heap, true);
-    #if VERSION > VERSION_DEMO
+    gameHeap = JKRCreateExpHeap(heapSize, i_heap, true);
+#if VERSION > VERSION_DEMO
     gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
-    #endif
+#endif
     return gameHeap;
 }
 
@@ -880,7 +880,7 @@ JKRExpHeap* zeldaHeap;
 /* 8001181C-800118C0       .text mDoExt_createZeldaHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2081, 2097, 2112, 2112), zeldaHeap == NULL || heapSize == 0);
-    return zeldaHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    return zeldaHeap = JKRCreateExpHeap(heapSize, i_heap, true);
 }
 
 /* 800118C0-800118C8       .text mDoExt_getZeldaHeap__Fv */
@@ -907,7 +907,7 @@ JKRExpHeap* commandHeap;
 /* 800118F8-8001199C       .text mDoExt_createCommandHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2126, 2158, 2173, 2173), commandHeap == NULL || heapSize == 0);
-    return commandHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    return commandHeap = JKRCreateExpHeap(heapSize, i_heap, true);
 }
 
 /* 8001199C-800119A4       .text mDoExt_getCommandHeap__Fv */
@@ -934,10 +934,10 @@ JKRExpHeap* archiveHeap;
 /* 800119D4-80011A84       .text mDoExt_createArchiveHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2173, 2222, 2237, 2237), archiveHeap == NULL || heapSize == 0);
-    archiveHeap = JKRExpHeap::create(heapSize, i_heap, true);
-    #if VERSION > VERSION_DEMO
+    archiveHeap = JKRCreateExpHeap(heapSize, i_heap, true);
+#if VERSION > VERSION_DEMO
     archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
-    #endif
+#endif
     return archiveHeap;
 }
 
@@ -955,25 +955,28 @@ s32 mDoExt_getSafeArchiveHeapSize() {
 }
 #endif
 
+#if VERSION == VERSION_DEMO
+static u8 archiveHeapGroupID;
+#endif
+
 JKRHeap* mDoExt_SaveCurrentHeap;
 
 #if VERSION == VERSION_DEMO
-static u8 archiveHeapGroupID;
 static u8 SolidHeapGroupID;
 #endif
 
 /* 80011AB4-80011ABC       .text mDoExt_getArchiveHeap__Fv */
 JKRExpHeap* mDoExt_getArchiveHeap() {
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     JKRExpHeap* heap = archiveHeap;
     heap->changeGroupID(archiveHeapGroupID++);
     if (archiveHeapGroupID >= 200) {
         archiveHeapGroupID = 0;
     }
     return heap;
-    #else
+#else
     return archiveHeap;
-    #endif
+#endif
 }
 
 static void dummy() {
@@ -993,9 +996,9 @@ JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignmen
     u32 size;
     JKRSolidHeap* createdHeap;
 
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     u8 groupID = i_heap->changeGroupID(SolidHeapGroupID);
-    #endif
+#endif
 
     if (i_size == 0 || i_size == -1) {
         createdHeap = JKRSolidHeap::create(-1, i_heap, false);
@@ -1010,15 +1013,15 @@ JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignmen
         createdHeap = JKRSolidHeap::create(size, i_heap, false);
     }
 
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     i_heap->changeGroupID(groupID);
-    #endif
+#endif
 
     if (createdHeap != NULL) {
         createdHeap->setErrorFlag(true);
     }
 
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     if (createdHeap == NULL) {
         // "mDoExt_createMaxSolidHeap: Failed to allocate a %fK solid heap.  Contiguous free space=%fK  Remaining free space=%f\n"
         OSReport_Warning(
@@ -1034,7 +1037,7 @@ JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignmen
     } else {
         SolidHeapGroupID = SolidHeapGroupID < 199 ? (u8)(SolidHeapGroupID + 1) : 0;
     }
-    #endif
+#endif
 
     return createdHeap;
 }
@@ -1055,9 +1058,9 @@ JKRSolidHeap* mDoExt_createSolidHeapToCurrent(u32 i_size, JKRHeap* i_parent, u32
     if (!resultHeap) {
         return NULL;
     }
-    #if VERSION > VERSION_DEMO
+#if VERSION > VERSION_DEMO
     JUT_ASSERT(VERSION_SELECT(0, 2530, 2545, 2545), OSGetCurrentThread() == &mainThread);
-    #endif
+#endif
     JUT_ASSERT(VERSION_SELECT(2441, 2531, 2546, 2546), mDoExt_SaveCurrentHeap == NULL);
     mDoExt_SaveCurrentHeap = JKRGetCurrentHeap();
     mDoExt_setCurrentHeap(resultHeap);
@@ -1102,9 +1105,9 @@ JKRHeap* mDoExt_getCurrentHeap() {
 
 /* 80011DDC-80011E98       .text mDoExt_restoreCurrentHeap__Fv */
 void mDoExt_restoreCurrentHeap() {
-    #if VERSION > VERSION_DEMO
+#if VERSION > VERSION_DEMO
     JUT_ASSERT(VERSION_SELECT(0, 2739, 2754, 2754), OSGetCurrentThread() == &mainThread);
-    #endif
+#endif
     JUT_ASSERT(VERSION_SELECT(2647, 2740, 2755, 2755), mDoExt_SaveCurrentHeap != NULL);
     mDoExt_SaveCurrentHeap->becomeCurrentHeap();
     mDoExt_SaveCurrentHeap = NULL;
@@ -1136,6 +1139,7 @@ void mDoExt_MtxCalcAnmBlendTbl::calc(u16 jnt_no) {
     Quaternion quat3;
     mAnmRatio->getAnmTransform()->getTransform(jnt_no, &info2);
     JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat1);
+    f32 f30 = mAnmRatio[0].getRatio();
     quat3 = quat1;
     for (int i = 1; i < mNum; i++) {
         J3DAnmTransform* transform = mAnmRatio[i].getAnmTransform();
@@ -1143,7 +1147,7 @@ void mDoExt_MtxCalcAnmBlendTbl::calc(u16 jnt_no) {
             J3DTransformInfo info3;
             transform->getTransform(jnt_no, &info3);
             f32 ratio = mAnmRatio[i].getRatio();
-            f32 f30 = 1.0f - ratio;
+            f30 = 1.0f - ratio;
             JMAEulerToQuat(info3.mRotation.x, info3.mRotation.y, info3.mRotation.z, &quat2);
             JMAQuatLerp(&quat1, &quat2, ratio, &quat3);
             quat1 = quat3;
@@ -1316,7 +1320,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
         J3DTransformInfo* info = mpTransformInfo;
         Quaternion* quat = mpQuat;
         J3DModelData* r23 = mpModel->getModelData();
-        u16 jointNum = r23->getJointNum();
+        int jointNum = r23->getJointNum();
         for (int i = 0; i < jointNum; i++) {
             *info = r23->getJointNodePointer(i)->getTransformInfo();
             JMAEulerToQuat(info->mRotation.x, info->mRotation.y, info->mRotation.z, quat);
@@ -1604,7 +1608,7 @@ mDoExt_McaMorf2::mDoExt_McaMorf2(J3DModelData* modelData, mDoExt_McaMorfCallBack
     J3DTransformInfo* info = mpTransformInfo;
     Quaternion* quat = mpQuat;
     J3DModelData* r23 = mpModel->getModelData();
-    u16 jointNum = r23->getJointNum();
+    int jointNum = r23->getJointNum();
     for (int i = 0; i < jointNum; i++) {
         *info = r23->getJointNodePointer(i)->getTransformInfo();
         JMAEulerToQuat(info->mRotation.x, info->mRotation.y, info->mRotation.z, quat);
@@ -1954,9 +1958,9 @@ void mDoExt_3DlineMat0_c::setMaterial() {
         {0xC0, 0x00, 0x00},
     };
     j3dSys.reinitGX();
-    #if VERSION > VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
-    #endif
+#endif
     dKy_setLight_again();
 
     GXClearVtxDesc();
@@ -2220,9 +2224,9 @@ void mDoExt_3DlineMat1_c::setMaterial() {
         {0xC0, 0x00, 0x00},
     };
     j3dSys.reinitGX();
-    #if VERSION > VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
-    #endif
+#endif
     dKy_setLight_again();
 
     GXClearVtxDesc();
@@ -2341,7 +2345,7 @@ void mDoExt_3DlineMat1_c::update(u16 i_segs, f32 i_size, GXColor& i_color, u16 i
         delta = delta.outprod(eyeDelta);
         f32 scale = delta.abs();
         if (scale != 0.0f) {
-            scale = i_size / scale;
+            scale = r_size / scale;
             delta *= scale;
         }
 
@@ -2531,9 +2535,9 @@ void mDoExt_3DlineMatSortPacket::draw() {
         lineMat->draw();
         lineMat = lineMat->mpNextLineMat;
     } while (lineMat);
-    #if VERSION > VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
-    #endif
+#endif
 }
 
 /* 800165E4-8001683C       .text mDoExt_initFontCommon__FPP7JUTFontPP7ResFONTP7JKRHeapPCcP10JKRArchiveUcUlUl */
@@ -2549,11 +2553,11 @@ void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_hea
     JUT_ASSERT(VERSION_SELECT(6544, 6637, 6651, 6651), mDoExt_resfont != NULL);
     
     if (param_6 == 0) {
-        #if VERSION <= VERSION_JPN
+#if VERSION <= VERSION_JPN
         u32 temp = (param_8 + 0x40) * param_7;
-        #else
+#else
         u32 temp = (((param_8+0x1F) & ~0x1F) + 0x40) * param_7;
-        #endif
+#endif
         JUTCacheFont* cacheFont = new(p_heap, 0) JUTCacheFont(*p_resfont, temp, p_heap);
         if (cacheFont->isValid()) {
             *p_font = cacheFont;
@@ -2576,18 +2580,29 @@ void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_hea
     JUT_ASSERT(VERSION_SELECT(6575, 6668, 6685, 6685), mDoExt_font != NULL);
 }
 
+#if VERSION == VERSION_DEMO
 JUTFont* mDoExt_font0;
-ResFONT* mDoExt_resfont0;
+JUTFont* mDoExt_font1;
 s32 mDoExt_font0_getCount;
+s32 mDoExt_font1_getCount;
+ResFONT* mDoExt_resfont0;
+ResFONT* mDoExt_resfont1;
+#else
+JUTFont* mDoExt_font0;
+s32 mDoExt_font0_getCount;
+ResFONT* mDoExt_resfont0;
+JUTFont* mDoExt_font1;
+s32 mDoExt_font1_getCount;
+ResFONT* mDoExt_resfont1;
+#endif
 
 #if VERSION <= VERSION_JPN
 void mDoExt_initFont0() {
-    /* Nonmatching */
-    static const char* fontdata[] = {
+    static const char* const fontdata[] = {
         "rock_24_20_4i1.bfn",
         "rock_e_24_20_4i.bfn",
     };
-    u8 r30 = g_msgDHIO.field_0x08;
+    const u8 r30 = g_msgDHIO.field_0x08;
     mDoExt_initFontCommon(&mDoExt_font0, &mDoExt_resfont0, mDoExt_getZeldaHeap(), fontdata[r30], dComIfGp_getFontArchive(), r30, 0xB4, 0x800);
 }
 #else
@@ -2597,10 +2612,6 @@ void mDoExt_initFont0() {
     mDoExt_initFontCommon(&mDoExt_font0, &mDoExt_resfont0, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getFontArchive(), 1, 0, 0);
 }
 #endif
-
-JUTFont* mDoExt_font1;
-ResFONT* mDoExt_resfont1;
-s32 mDoExt_font1_getCount;
 
 #if VERSION <= VERSION_JPN
 void mDoExt_initFont1() {
@@ -2640,11 +2651,11 @@ void mDoExt_removeMesgFont() {
             mDoExt_font0 = NULL;
             
             if (mDoExt_resfont0) {
-                #if VERSION <= VERSION_JPN
+#if VERSION <= VERSION_JPN
                 if (g_msgDHIO.field_0x08 == 0) {
                     JKRFileLoader::removeResource(mDoExt_resfont0, NULL);
                 } else
-                #endif
+#endif
                 {
                     JKRHeap::free(mDoExt_resfont0, NULL);
                 }
@@ -2657,12 +2668,12 @@ void mDoExt_removeMesgFont() {
 #if VERSION > VERSION_JPN
 /* 80016A1C-80016A7C       .text mDoExt_initFont1__Fv */
 void mDoExt_initFont1() {
-    #if VERSION <= VERSION_JPN
+#if VERSION <= VERSION_JPN
     mDoExt_initFontCommon(&mDoExt_font1, &mDoExt_resfont1, mDoExt_getZeldaHeap(), "rodb_16_11_4i.bfn", dComIfGp_getRubyArchive(), 1, 1, 0x8000);
-    #else
+#else
     static const char fontdata[] = "hyrule.bfn";
     mDoExt_initFontCommon(&mDoExt_font1, &mDoExt_resfont1, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getRubyArchive(), 1, 1, 0x8000);
-    #endif
+#endif
 }
 #endif
 
