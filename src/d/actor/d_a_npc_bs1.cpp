@@ -43,7 +43,7 @@ public:
     daNpc_Bs1_HIO_c();
     virtual ~daNpc_Bs1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x000 */ // this.__vt

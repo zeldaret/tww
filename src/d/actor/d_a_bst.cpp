@@ -26,7 +26,7 @@ class daBst_HIO_c : public JORReflexible {
 public:
     daBst_HIO_c();
     virtual ~daBst_HIO_c() {}
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ s8 m4;

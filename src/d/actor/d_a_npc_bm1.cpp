@@ -42,7 +42,7 @@ public:
     };  // Size: 0x4C
 
     daNpc_Bm1_childHIO_c();
-    void genMessage(JORMContext* ctx) {};
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); };
 
 public:
     /* 0x04 */ hio_prm_c hio_prm;
@@ -54,7 +54,7 @@ public:
     daNpc_Bm1_HIO_c();
     virtual ~daNpc_Bm1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 m4;

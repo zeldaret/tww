@@ -45,7 +45,7 @@ public:
     daNpc_P1_HIO_c();
     virtual ~daNpc_P1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;

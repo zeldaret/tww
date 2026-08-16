@@ -25,7 +25,7 @@ public:
     daObj_Ikada_HIO_c();
     virtual ~daObj_Ikada_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ u8 mbDebugDraw;

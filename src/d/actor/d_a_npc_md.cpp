@@ -22,7 +22,7 @@ public:
     daNpc_Md_HIO2_c();
     virtual ~daNpc_Md_HIO2_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 m04;
@@ -47,7 +47,7 @@ public:
     daNpc_Md_HIO3_c();
     virtual ~daNpc_Md_HIO3_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 m04;
@@ -70,7 +70,7 @@ public:
     daNpc_Md_HIO4_c();
     virtual ~daNpc_Md_HIO4_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ f32 m4;
@@ -83,7 +83,7 @@ public:
     daNpc_Md_HIO5_c();
     virtual ~daNpc_Md_HIO5_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ f32 m4;
@@ -95,7 +95,7 @@ public:
     daNpc_Md_HIO6_c();
     virtual ~daNpc_Md_HIO6_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 m04;
@@ -114,7 +114,7 @@ public:
     daNpc_Md_HIO_c();
     virtual ~daNpc_Md_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x004 */ s8 mNo;

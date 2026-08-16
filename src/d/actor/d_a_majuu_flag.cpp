@@ -35,7 +35,7 @@ public:
         m08 = 0;
     }
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ bool mbUseToonTex;

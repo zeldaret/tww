@@ -24,7 +24,7 @@ public:
     daRd_HIO_c();
     virtual ~daRd_HIO_c() {}
     
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ dNpc_HIO_c mNpc;

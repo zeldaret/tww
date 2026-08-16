@@ -206,7 +206,7 @@ public:
     dMs_HIO_c();
     virtual ~dMs_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 id;
     /* 0x05 */ u8 field_0x5;

@@ -168,7 +168,7 @@ class daAuction_HIO_c : public JORReflexible  {
 public:
     daAuction_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* Place member variables here */
