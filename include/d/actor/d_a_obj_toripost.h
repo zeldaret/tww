@@ -92,7 +92,7 @@ public:
     static const dCcD_SrcCyl m_cyl_src;
 
 private:
-    static const s32 m_send_price[];
+    static const int m_send_price[];
 
     /* 0x6C4 */ u32 mCurMode;
     /* 0x6C8 */ s8 mBckIdx;

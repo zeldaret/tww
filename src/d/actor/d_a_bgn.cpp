@@ -463,7 +463,7 @@ void mDoExt_J3DModelPacketS::draw() {
         while (mesh != NULL) {
             if (!mesh->getShape()->checkFlag(J3DShpFlag_Hide)) {
                 matPacket = mpModel->getMatPacket(mesh->getIndex());
-                j3dSys.setTexture(matPacket->mpTexture);
+                j3dSys.setTexture(matPacket->getTexture());
                 j3dSys.setMatPacket(matPacket);
                 mesh->load();
                 setMaterial();

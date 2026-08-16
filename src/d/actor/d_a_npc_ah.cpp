@@ -135,12 +135,12 @@ static BOOL da_Npc_Ah_nodeCallBack(J3DNode* node, int calcTiming) {
         MTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
 
         if(jointNo == i_this->m_jnt.getHeadJntNum()){
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
-            cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getHead_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
         }
         else if(jointNo == i_this->m_jnt.getBackboneJntNum()){
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
-            cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getBackbone_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
         }
 #if VERSION > VERSION_DEMO
         MTXCopy(*calc_mtx, model->getAnmMtx(jointNo));

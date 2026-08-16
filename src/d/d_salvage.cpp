@@ -11,7 +11,7 @@
 // maybe belongs in d_a_salvage.h?
 namespace daSalvage_prm {
     inline u8 getKindCmapNo(fopAc_ac_c* pact) { return pact->home.angle.z & 0x03; }
-    inline s32 getSwitchNo(fopAc_ac_c* pact) { return pact->home.angle.z & 0xFF; }
+    inline int getSwitchNo(fopAc_ac_c* pact) { return pact->home.angle.z & 0xFF; }
     inline u8 getRoomNo(fopAc_ac_c* pact) { return fopAcM_GetParam(pact) >> 12; }
     inline u8 getSvNo(fopAc_ac_c* pact) { return fopAcM_GetParam(pact) >> 20; }
     inline u8 getType(fopAc_ac_c* pact) { return fopAcM_GetParam(pact) & 0x0F; }
@@ -46,9 +46,9 @@ void dSalvage_control_c::entry(fopAc_ac_c* pact, JPABaseEmitter* emtr) {
     u32 type = daSalvage_prm::getType(pact);
     u32 saveNo = daSalvage_prm::getSvNo(pact);
     s8 roomNoPrm = daSalvage_prm::getRoomNo(pact);
-    s32 switchNo = daSalvage_prm::getSwitchNo(pact);
+    int switchNo = daSalvage_prm::getSwitchNo(pact);
     s8 cmapNo;
-    s32 no;
+    int no;
 
     bool invalid = false;
     if (roomNo != 0) {
