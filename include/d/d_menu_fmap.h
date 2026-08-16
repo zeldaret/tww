@@ -135,7 +135,7 @@ public:
         return fmapSv->zoomGridX;
     }
     inline void setCtZoomGridX(s8 val) {
-        JUT_ASSERT(558, fmapSv != NULL);
+        JUT_ASSERT(559, fmapSv != NULL);
         fmapSv->zoomGridX = val;
     }
     inline s8 getCtZoomGridY() {
@@ -143,7 +143,7 @@ public:
         return fmapSv->zoomGridY;
     }
     inline void setCtZoomGridY(s8 val) {
-        JUT_ASSERT(568, fmapSv != NULL);
+        JUT_ASSERT(569, fmapSv != NULL);
         fmapSv->zoomGridY = val;
     }
     void getCtDispMode() {}

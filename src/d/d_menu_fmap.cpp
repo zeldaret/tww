@@ -555,7 +555,105 @@ void dMenu_Fmap_c::screenSet() {
 
 /* 801B06D4-801B0FB4       .text initialize__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::initialize() {
-    /* Nonmatching */
+    mFrameTimer = 0;
+    mInputDisabled = false;
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    field_0x511C.x = player->current.pos.x;
+    field_0x511C.y = player->current.pos.z;
+    field_0x511C.z = (s16)(player->shape_angle.y + 0x8000) * 180.0f / 32768.0f;
+
+    fopAc_ac_c* ship = dComIfGp_getShipActor();
+    if (ship != NULL) {
+        field_0x5128.x = ship->current.pos.x;
+        field_0x5128.y = ship->current.pos.z;
+        field_0x5128.z = (s16)(ship->shape_angle.y + 0x8000) * 180.0f / 32768.0f;
+    } else {
+        field_0x5128.x = 0.0f;
+        field_0x5128.y = 0.0f;
+    }
+
+    if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
+        mFishmanActive = true;
+        s8 x, y;
+        dMap_point2Grid(field_0x511C.x, field_0x511C.y, &x, &y);
+        mGridX = x;
+        mGridY = y;
+        dMap_point2Grid(field_0x5128.x, field_0x5128.y, &x, &y);
+        mTargetGridX = x;
+        mTargetGridY = y;
+    } else {
+        mFishmanActive = false;
+        if (strcmp(dComIfGp_getStartStageName(), "Obshop") == 0 ||
+            strcmp(dComIfGp_getStartStageName(), "Abship") == 0 ||
+            strcmp(dComIfGp_getStartStageName(), "PShip") == 0)
+        {
+            u8 room = dComIfGp_getIkadaShipBeforeRoomId();
+            mGridX = room % 7 - 3;
+            mGridY = room / 7 - 3;
+        } else {
+            stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
+            if (mapInfo != NULL) {
+                mGridX = dStage_mapInfo_GetOceanX(mapInfo);
+                if (mGridX == 4) {
+                    mGridX = 0;
+                }
+                mGridY = dStage_mapInfo_GetOceanZ(mapInfo);
+                if (mGridY == 4) {
+                    mGridY = 0;
+                }
+            } else {
+                mGridX = 0;
+                mGridY = 0;
+            }
+        }
+        mTargetGridX = mGridX;
+        mTargetGridY = mGridY;
+    }
+
+    field_0x5112 = dMap_getCheckPointUseGrid(mGridX, mGridY);
+    mWnd1Pane.mUserArea = 0;
+    checkMarkAnimeInit();
+    mAreaTxtBufIdx = 0;
+    mAreaTxtTimer = 0;
+    mAreaTxtChanging = false;
+    mSalvItmBufIdx = 0;
+    mSalvItmTimer = 0;
+    mSalvItmChanging = false;
+
+    if (getCtCurWX() < -3 || getCtCurWY() < -3) {
+        setCtCurWX(mGridX);
+        setCtCurWY(mGridY);
+    }
+
+    if (getCtCurX() < -3 || getCtCurY() < -3) {
+        setCtCurX(getCtCurWX());
+        setCtCurY(getCtCurWY());
+    }
+
+    switch (getCtActive()) {
+        case 0:
+            setCtZoomGridX(getCtCurWX());
+            setCtZoomGridY(getCtCurWY());
+            mMainProcIdx = 0;
+            mZoomLocked = false;
+            break;
+        case 1:
+            mMainProcIdx = 1;
+            mZoomLocked = true;
+            break;
+    }
+    
+    mHikakuProcIdx = 0;
+    paneTransBase(0, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0f, 0, 0);
+    mWarpScrollGuard = false;
+    mWarpAnimActive = false;
+    setCtCmapSelNo(0);
+    selGridMaskAlphaCtrl(0, g_mfHIO.field_0x2E, 0, 0);
+    fmapMaskAlphaCtrl(0, g_mfHIO.field_0x2E, 0, 0);
+    paneTranceZoomMap(0, g_mfHIO.field_0x2E, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0);
+    paneTranceZoom2Map(0, g_mfHIO.field_0x2E, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0);
+    paneAlphaFmapCursor(mKk3xPanes, 0, g_mfHIO.field_0x3B, 0, 0);
+    mFmapProcIdx = 0;
 }
 
 /* 801B0FB4-801B1200       .text displayinit__12dMenu_Fmap_cFv */
