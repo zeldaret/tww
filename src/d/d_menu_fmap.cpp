@@ -13,10 +13,9 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "m_Do/m_Do_hostIO.h"
+#include "d/actor/d_a_ship.h"
+#include <dolphin/mtx/mtx.h>
 #include "printf.h"
-#include "res/Object/X_futa.h"
-#include "res/Object/X_tower.h"
 
 dMf_HIO_c g_mfHIO;
 
@@ -1329,7 +1328,26 @@ void dMenu_Fmap_c::wrapSelWinFadeOut() {
 
 /* 801B9064-801B9288       .text wrapSelWarp__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::wrapSelWarp() {
-    /* Nonmatching */
+    BOOL yskWarp = paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
+    BOOL nokWarp = paneTranceWarpMsg(&mNok0Pane, mFrameTimer - g_mfHIO.field_0x49, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
+    mFrameTimer++;
+
+    if (yskWarp == TRUE && nokWarp == TRUE) {
+        mFrameTimer = 0;
+        const cursorTable_t* table = getWarpAreaTablePtr(getCtCurHX(), getCtCurHY());
+        int warpAreaNo = getWarpAreaNo(table);
+
+        if (dComIfGp_getShipActor() != NULL) {
+            dComIfGp_getShipActor()->setTactWarpPosNum(warpAreaNo);
+        }
+
+        mMapClose = true;
+        stopWrapBackEmitter();
+        for (int i = 0; i < 9; i++) {
+            mWarpPanes[i]->stopDrawParticle();
+            stopWrapSpotEmitter(i);
+        }
+    }
 }
 
 /* 801B9288-801B940C       .text warpAreaAnime0__12dMenu_Fmap_cFv */
@@ -1482,7 +1500,7 @@ void dMenu_Fmap_c::setDspWarpBackCornerColor(f32) {
 
 /* 801BA01C-801BA08C       .text setWrapBackEmitter__12dMenu_Fmap_cF4cXyz */
 void dMenu_Fmap_c::setWrapBackEmitter(cXyz i_pos) {
-    mMainWarpPane = (J2DPane*)dComIfGp_particle_set2DmenuFore(dPa_name::ID_AK_J4_GALEMAPKIRAKIRA00, &i_pos);
+    mMainWarpPane = dComIfGp_particle_set2DmenuFore(dPa_name::ID_AK_J4_GALEMAPKIRAKIRA00, &i_pos);
 }
 
 /* 801BA08C-801BA110       .text setWrapSpotEmitter__12dMenu_Fmap_cFi4cXyz */

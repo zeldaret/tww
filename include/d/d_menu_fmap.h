@@ -95,7 +95,7 @@ public:
         return fmapSv->curWY;
     }
     inline void setCtCurWY(s8 val) {
-        JUT_ASSERT(404, fmapSv != NULL);
+        JUT_ASSERT(505, fmapSv != NULL);
         fmapSv->curWY = val;
     }
     inline s8 getCtCurHX() {
@@ -165,8 +165,16 @@ public:
         mTxtDummy[0] = dummy0;
         mTxtDummy[1] = dummy1;
     }
-    void stopWrapBackEmitter() {}
-    void stopWrapSpotEmitter(int) {}
+    void stopWrapBackEmitter() {
+        if (mMainWarpPane != NULL) {
+            mMainWarpPane->becomeInvalidEmitter();
+        }
+    }
+    void stopWrapSpotEmitter(int i_idx) {
+        if (mWarpPanes[i_idx] != NULL) {
+            mWarpPanes[i_idx]->becomeInvalidEmitter();
+        }
+    }
 
     void _create();
     void phantomShipCheck();
@@ -386,7 +394,7 @@ public:
     /* 0x50CC */ STControl* stick;
     /* 0x50D0 */ JUTFont* mFont;
     /* 0x50D4 */ JUTFont* mRFont;
-    /* 0x50D8 */ J2DPane* mMainWarpPane;
+    /* 0x50D8 */ JPABaseEmitter* mMainWarpPane;
     /* 0x50DC */ JPABaseEmitter* mWarpPanes[9];
     /* 0x5100 */ u8 padding_0x5100[0x510C - 0x5100];
     /* 0x510C */ bool mMapClose;
