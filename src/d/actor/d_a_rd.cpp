@@ -1953,6 +1953,7 @@ static BOOL daRdDraw(void* i_this) {
 
 /* 00005044-0000504C       .text daRdIsDelete__FPv */
 static BOOL daRdIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

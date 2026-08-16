@@ -2462,6 +2462,7 @@ static BOOL daNpc_Os_Draw(daNpc_Os_c* i_this) {
 
 /* 00006EC8-00006ED0       .text daNpc_Os_IsDelete__FP10daNpc_Os_c */
 static BOOL daNpc_Os_IsDelete(daNpc_Os_c* i_this) {
+    UNUSED(i_this);
     return true;
 }
 

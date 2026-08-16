@@ -1467,6 +1467,7 @@ static BOOL daNpc_kam_Execute(daNpc_kam_c* i_this) {
 
 /* 00004588-00004590       .text daNpc_kam_IsDelete__FP11daNpc_kam_c */
 static BOOL daNpc_kam_IsDelete(daNpc_kam_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -149,6 +149,7 @@ static BOOL daBita_Execute(bita_class* i_this) {
 
 /* 00000714-0000071C       .text daBita_IsDelete__FP10bita_class */
 static BOOL daBita_IsDelete(bita_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

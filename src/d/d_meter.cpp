@@ -7356,6 +7356,7 @@ static BOOL dMeter_Execute(sub_meter_class* i_Meter) {
 
 /* 80204C20-80204C28       .text dMeter_IsDelete__FP15sub_meter_class */
 static BOOL dMeter_IsDelete(sub_meter_class* i_Meter) {
+    UNUSED(i_Meter);
     return TRUE;
 }
 

@@ -182,6 +182,7 @@ static BOOL daBwdg_Execute(bwdg_class* i_this) {
 
 /* 0000084C-00000854       .text daBwdg_IsDelete__FP10bwdg_class */
 static BOOL daBwdg_IsDelete(bwdg_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

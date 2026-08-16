@@ -340,6 +340,7 @@ static BOOL daKytag00_Execute(kytag00_class* i_this) {
 
 /* 00000D44-00000D4C       .text daKytag00_IsDelete__FP13kytag00_class */
 static BOOL daKytag00_IsDelete(kytag00_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

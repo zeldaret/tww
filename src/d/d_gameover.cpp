@@ -424,6 +424,7 @@ static BOOL dGameover_Execute(dGameover_c* i_this) {
 
 /* 8018F62C-8018F634       .text dGameover_IsDelete__FP11dGameover_c */
 static BOOL dGameover_IsDelete(dGameover_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -1111,6 +1111,7 @@ static BOOL dMsg2_Execute(sub_msg2_class* i_Msg) {
 
 /* 801EA7C4-801EA7CC       .text dMsg2_IsDelete__FP14sub_msg2_class */
 static BOOL dMsg2_IsDelete(sub_msg2_class* i_Msg) {
+    UNUSED(i_Msg);
     return TRUE;
 }
 

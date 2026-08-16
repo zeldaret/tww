@@ -1087,6 +1087,7 @@ static BOOL daAM_Execute(am_class* i_this) {
 
 /* 000039A4-000039AC       .text daAM_IsDelete__FP8am_class */
 static BOOL daAM_IsDelete(am_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

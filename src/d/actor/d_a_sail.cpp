@@ -560,6 +560,7 @@ static BOOL daSail_Execute(sail_class* i_this) {
 
 /* 00002154-0000215C       .text daSail_IsDelete__FP10sail_class */
 static BOOL daSail_IsDelete(sail_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

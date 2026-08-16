@@ -8485,6 +8485,7 @@ static BOOL daNpc_PeopleDraw(void* i_this) {
 
 /* 00009968-00009970       .text daNpc_PeopleIsDelete__FPv */
 static BOOL daNpc_PeopleIsDelete(void* i_this) {
+    UNUSED(i_this);
     return true;
 }
 

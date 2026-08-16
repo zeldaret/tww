@@ -82,6 +82,7 @@ static BOOL dThunder_Execute(dThunder_c* i_this) {
 
 /* 80198AB4-80198ABC       .text dThunder_IsDelete__FP10dThunder_c */
 static BOOL dThunder_IsDelete(dThunder_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

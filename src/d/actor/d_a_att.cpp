@@ -99,6 +99,7 @@ static BOOL daAtt_Execute(att_class* i_this) {
 
 /* 00000568-00000570       .text daAtt_IsDelete__FP9att_class */
 static BOOL daAtt_IsDelete(att_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

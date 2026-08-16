@@ -120,6 +120,7 @@ static BOOL dKyeff_Execute(dKyeff_c* i_this) {
 
 /* 801984EC-801984F4       .text dKyeff_IsDelete__FP8dKyeff_c */
 static BOOL dKyeff_IsDelete(dKyeff_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

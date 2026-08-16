@@ -156,6 +156,7 @@ static BOOL daObjVteng_Draw(daObjVteng_c* i_this) {
 
 /* 00000604-0000060C       .text daObjVteng_IsDelete__FP12daObjVteng_c */
 static BOOL daObjVteng_IsDelete(daObjVteng_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

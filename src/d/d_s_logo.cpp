@@ -479,6 +479,7 @@ static BOOL dScnLogo_Execute(dScnLogo_c* i_this) {
 
 /* 8022D21C-8022D224       .text dScnLogo_IsDelete__FP10dScnLogo_c */
 static BOOL dScnLogo_IsDelete(dScnLogo_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

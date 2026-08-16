@@ -2342,6 +2342,7 @@ static BOOL daKb_Execute(kb_class* i_this) {
 
 /* 00006E38-00006E40       .text daKb_IsDelete__FP8kb_class */
 static BOOL daKb_IsDelete(kb_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

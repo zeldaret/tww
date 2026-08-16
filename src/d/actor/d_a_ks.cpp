@@ -1479,6 +1479,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
 
 /* 00003054-0000305C       .text daKS_IsDelete__FP8ks_class */
 static BOOL daKS_IsDelete(ks_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

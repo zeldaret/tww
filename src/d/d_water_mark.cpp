@@ -90,6 +90,7 @@ static BOOL dWaterMark_Execute(dWaterMark_c* i_this) {
 
 /* 8023DF24-8023DF2C       .text dWaterMark_IsDelete__FP12dWaterMark_c */
 static BOOL dWaterMark_IsDelete(dWaterMark_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

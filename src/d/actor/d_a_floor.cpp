@@ -138,6 +138,7 @@ static BOOL daFloor_Execute(void* i_this) {
 
 /* 0000076C-00000774       .text daFloor_IsDelete__FPv */
 static BOOL daFloor_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

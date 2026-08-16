@@ -6237,6 +6237,7 @@ static BOOL daNpc_Md_Draw(daNpc_Md_c* i_this) {
 
 /* 00011144-0001114C       .text daNpc_Md_IsDelete__FP10daNpc_Md_c */
 static BOOL daNpc_Md_IsDelete(daNpc_Md_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

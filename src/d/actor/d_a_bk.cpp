@@ -4501,6 +4501,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
 
 /* 0000DD1C-0000DD24       .text daBk_IsDelete__FP8bk_class */
 static BOOL daBk_IsDelete(bk_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

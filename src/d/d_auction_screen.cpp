@@ -554,6 +554,7 @@ static BOOL dAs_Execute(dAs_c* i_this) {
 
 /* 80160CBC-80160CC4       .text dAs_IsDelete__FP5dAs_c */
 static BOOL dAs_IsDelete(dAs_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

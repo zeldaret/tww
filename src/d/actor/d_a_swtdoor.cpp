@@ -37,6 +37,7 @@ static BOOL daSwtdoor_Execute(swtdoor_class* i_this) {
 
 /* 000001BC-000001C4       .text daSwtdoor_IsDelete__FP13swtdoor_class */
 static BOOL daSwtdoor_IsDelete(swtdoor_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

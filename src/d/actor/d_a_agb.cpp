@@ -1759,6 +1759,7 @@ static BOOL daAgb_Draw(daAgb_c* i_this) {
 
 /* 800D38F0-800D38F8       .text daAgb_IsDelete__FP7daAgb_c */
 static BOOL daAgb_IsDelete(daAgb_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

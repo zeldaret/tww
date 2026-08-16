@@ -32,6 +32,7 @@ static BOOL daHitobj_Execute(hitobj_class* i_this) {
 
 /* 000000E8-000000F0       .text daHitobj_IsDelete__FP12hitobj_class */
 static BOOL daHitobj_IsDelete(hitobj_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

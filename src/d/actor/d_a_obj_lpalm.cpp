@@ -188,6 +188,7 @@ static BOOL daObjLpalmDraw(void* i_this) {
 
 /* 00000950-00000958       .text daObjLpalmIsDelete__FPv */
 static BOOL daObjLpalmIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

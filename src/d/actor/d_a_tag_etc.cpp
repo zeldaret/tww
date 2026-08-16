@@ -227,6 +227,7 @@ static BOOL daTag_Etc_Execute(daTag_Etc_c* i_this) {
 
 /* 00000730-00000738       .text daTag_Etc_IsDelete__FP11daTag_Etc_c */
 static BOOL daTag_Etc_IsDelete(daTag_Etc_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

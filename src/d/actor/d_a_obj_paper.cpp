@@ -343,6 +343,7 @@ static BOOL Mthd_Draw(void* i_this) {
 
 /* 00000C60-00000C68       .text Mthd_IsDelete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
 static BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -35,6 +35,7 @@ cPhs_State daMagma_c::create() {
 
 /* 00000078-00000080       .text daMagma_IsDelete__FP9daMagma_c */
 static BOOL daMagma_IsDelete(daMagma_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
