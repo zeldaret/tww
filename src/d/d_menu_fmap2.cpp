@@ -512,7 +512,7 @@ void dMenu_Fmap2_c::getNowCmapNextNum(signed char, int) {
 }
 
 /* 801C7364-801C73B0       .text getCmapDatPnt4__13dMenu_Fmap2_cFi */
-void dMenu_Fmap2_c::getCmapDatPnt4(int) {
+aramCmapDatPat_t* dMenu_Fmap2_c::getCmapDatPnt4(int) {
     /* Nonmatching */
 }
 

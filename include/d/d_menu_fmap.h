@@ -10,6 +10,7 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_menu_fmap2.h"
 #include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class JUTFont;
 class J2DScreen;
@@ -25,10 +26,11 @@ struct cursorTable_t {
 };
 
 struct aramCmapDatPnt_t {
-    s8 field_0x0;
-    s8 field_0x1;
-    u8 field_0x2[0x24];
-};
+    s8 gridNo;
+    s8 collectMapNo;
+    s8 cmapIdx;
+    u8 field_0x2[0x23];
+}; // Size: 0x26
 
 struct aramCmapDatPat_t {
     u32 m_0x0;
@@ -475,14 +477,14 @@ public:
 
 STATIC_ASSERT(sizeof(dMenu_Fmap_c) == 0x51B4);
 
-class dMf_HIO_c {
+class dMf_HIO_c : public JORReflexible {
 public:
     dMf_HIO_c();
     virtual ~dMf_HIO_c() {}
 
 public:
     // TODO: Check for groups of fields (colors, arrays, etc.)
-    /* 0x004 */ u8 padding_0x04[0x05 - 0x04];
+    /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 field_0x05;
     /* 0x006 */ u8 field_0x06;
     /* 0x007 */ u8 field_0x07;

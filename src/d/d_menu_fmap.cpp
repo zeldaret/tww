@@ -642,7 +642,7 @@ void dMenu_Fmap_c::initialize() {
             mZoomLocked = true;
             break;
     }
-    
+
     mHikakuProcIdx = 0;
     paneTransBase(0, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0f, 0, 0);
     mWarpScrollGuard = false;
@@ -658,7 +658,47 @@ void dMenu_Fmap_c::initialize() {
 
 /* 801B0FB4-801B1200       .text displayinit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::displayinit() {
-    /* Nonmatching */
+    int i;
+    for (i = 0; i < 49; i++) {
+        setPaneOnOff(fmapDl.scrn, hist[i], !dComIfGs_isSaveArriveGrid(i));
+    }
+
+    static int islandPos[] = {1, 4, 11, 13, 20, 23, 26, 40, 41, 44, 45};
+    for (i = 0; i < 11; i++) {
+        if (dComIfGs_isSaveArriveGrid(islandPos[i] - 1)) {
+            mR0xPanes[i].pane->show();
+        } else {
+            mR0xPanes[i].pane->hide();
+        }
+    }
+
+    dispEndSalvageMark();
+    fopMsgM_paneTrans(&mAreaPane, mGridX * mAreaPane.mSizeOrig.x, mGridY * mAreaPane.mSizeOrig.y);
+    setDspNormalMapLink();
+    setDspLargeMapLink();
+    selCursorInit();
+    selCursorMove();
+    fopMsgM_setNowAlpha(&mAreaTxtPanes[1], 0.0f);
+    fopMsgM_setAlpha(&mAreaTxtPanes[1]);
+    changeIslandName(mAreaTxtBufIdx);
+    fopMsgM_setNowAlpha(&mGti1Pane, 1.0f);
+    fopMsgM_setAlpha(&mGti1Pane);
+    fopMsgM_setNowAlpha(&mGti2Pane, 0.0f);
+    fopMsgM_setAlpha(&mGti2Pane);
+    changeSalvageGetItem(mSalvItmBufIdx);
+    playerPointGridAnimeInit();
+    checkMarkCheck1();
+    checkMarkCheck2();
+    checkMarkCheck3();
+    setDspWindAngle();
+    calcGetMapCount();
+    gShipMarkAnimeInit();
+    mFmap2.fmapSv = fmapSv;
+    mFmap2._create();
+    mFmap2.mpFmapDatPnt = &mCmapDatPnt;
+    mFmap2.initialize();
+    mFmap2.displayInit();
+    g_mfHIO.mNo = mDoHIO_createChild("フィールドマップ画面", &g_mfHIO);
 }
 
 /* 801B1200-801B1210       .text backClothDispInit__12dMenu_Fmap_cFv */
@@ -883,7 +923,7 @@ aramCmapDatPnt_t* dMenu_Fmap_c::getGridNumToCmapDatPnt(int i_param) {
     aramCmapDatPnt_t* pat = mCmapDatPnt.m_0x4;
     int num;
     for (i = 0, num = mCmapDatPnt.m_0x0; i < num; i++) {
-        if (pat->field_0x0 == i_param + 1) {
+        if (pat->gridNo == i_param + 1) {
             break;
         }
         pat++;
