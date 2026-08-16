@@ -192,7 +192,7 @@ dMf_HIO_c::dMf_HIO_c() {
     field_0x3F = 0;
     field_0x40 = 0;
     field_0x41 = 5;
-    field_0x44 = 65036;
+    field_0x44 = -500;
     field_0x42 = 0;
     field_0x43 = 0;
     field_0x46 = 5;
@@ -223,6 +223,53 @@ dMf_HIO_c::dMf_HIO_c() {
     field_0x11D = 255;
     field_0x11E = 32;
 }
+
+static const char* rollmapTex[] = {
+    "cmap_tri.bti",
+    "cmap_treasure.bti",
+    "cmap_treasure.bti",
+    "cmap_tingle.bti",
+    "cmap_phantomship.bti",
+    "cmap_treasure.bti",
+    "cmap_treasure.bti",
+    "cmap_tingle.bti",
+    "cmap_treasure.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+};
+
+const char* salvItemex[] = {
+    "f_item_tri.bti",
+    "f_get_rupy.bti",
+    "f_heart_up_02.bti",
+    "cmap_tingle.bti",
+    "cmap_phantomship.bti",
+    "cmap_treasure.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_tri.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+    "cmap_hint.bti",
+};
+
+const char* korogStat[] = {
+    "f_korog_kare.bti",
+    "f_korog_saki.bti",
+};
 
 typedef void (dMenu_Fmap_c::*fmapProcFunc)();
 
@@ -307,7 +354,7 @@ void dMenu_Fmap_c::_create() {
 /* 801AFB64-801AFBDC       .text phantomShipCheck__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::phantomShipCheck() {
     daGhostship_c* gship = (daGhostship_c*)fopAcM_searchFromName("Ayush", 0, 0);
-    if (gship != NULL && gship->mAlpha != 0.0f) {
+    if (gship != NULL && gship->mAlpha) {
         mDoAud_seStart(JA_SE_CV_YUUREISEN_SONG);
     }
 }
@@ -335,8 +382,13 @@ void dMenu_Fmap_c::screenSet() {
     fopMsgM_setPaneData(&mLnk1Pane, fmapDl.scrn, 'lnk1');
     fopMsgM_setPaneData(&mSpi1Pane, fmapDl.scrn, 'spi1');
 
-    u32 kk1xTag = 'kk10', kk2xTag = 'kk20', kk3xTag = 'kk30', kk4xTag = 'kk40';
-    for (int i = 0; i < 4; i++) {
+
+    u32 kk1xTag = 'kk10';
+    int i;
+    u32 kk2xTag = 'kk20';
+    u32 kk3xTag = 'kk30';
+    u32 kk4xTag = 'kk40';
+    for (i = 0; i < 4; i++) {
         fopMsgM_setPaneData(&mKk1xPanes[i], fmapDl.scrn, kk1xTag);
         fopMsgM_setPaneData(&mKk1xPanes[i + 4], fmapDl.scrn, kk2xTag);
         fopMsgM_setPaneData(&mKk3xPanes[i], fmapDl.scrn, kk3xTag);
@@ -405,13 +457,13 @@ void dMenu_Fmap_c::screenSet() {
     fopMsgM_setPaneData(&mFmw3Pane, fmapDl.scrn, 'fmw3');
     fopMsgM_setPaneData(&mFmw4Pane, fmapDl.scrn, 'fmw4');
 
-    static u32 fmnTags[] = {
+    static u32 tag00[] = {
         'fmn1','fmn2','fmn3','fmn4','fmn5','fmn6','fmn7','fmn8',
         'fmna','fmnb','fmnc','fmnd','fmne','fmnf','fmnh',
     };
 
     for (int i = 0; i < 15; i++) {
-        fopMsgM_setPaneData(&mFmnPanes[i], fmapDl.scrn, fmnTags[i]);
+        fopMsgM_setPaneData(&mFmnPanes[i], fmapDl.scrn, tag00[i]);
     }
 
     u32 sc2xTag = 'sc21';
@@ -431,12 +483,12 @@ void dMenu_Fmap_c::screenSet() {
     mCk1Color.set(((J2DPicture*)mCk1xPanes[0].pane)->getBlack());
     mCk1Color2.set(((J2DPicture*)mCk1xPanes[0].pane)->getWhite());
 
-    static u32 krTags[] = {
+    static u32 tagkr[] = {
         'KR03','KR05','KR01','KR08','KR06','KR02','KR07','KR04',
     };
 
     for (int i = 0; i < 8; i++) {
-        fopMsgM_setPaneData(&mKr0xPanes[i], fmapDl.scrn, krTags[i]);
+        fopMsgM_setPaneData(&mKr0xPanes[i], fmapDl.scrn, tagkr[i]);
     }
     mKr0Color.set(((J2DPicture*)mKr0xPanes[0].pane)->getBlack());
     mKr0Color2.set(((J2DPicture*)mKr0xPanes[0].pane)->getWhite());
@@ -455,10 +507,10 @@ void dMenu_Fmap_c::screenSet() {
     }
     str2[0x7F] = 0;
 
-    static u32 txtTags[] = { 'txt1', 'txt3', 'txt2' };
+    static u32 txtnm[] = { 'txt1', 'txt3', 'txt2' };
 
     for (int i = 0; i < 3; i++) {
-        fopMsgM_setPaneData(&mAreaTxtPanes[i], fmapDl.scrn, txtTags[i]);
+        fopMsgM_setPaneData(&mAreaTxtPanes[i], fmapDl.scrn, txtnm[i]);
         ((J2DTextBox*)mAreaTxtPanes[i].pane)->setFont(mFont);
         ((J2DTextBox*)mAreaTxtPanes[i].pane)->setString(str2);
         mTxtName[i] = ((J2DTextBox*)mAreaTxtPanes[i].pane)->getStringPtr();
@@ -1649,7 +1701,7 @@ bool dMenu_Fmap_c::_open_wallPaper() {
         mButtonIconMode = FMAP_BTN_ICON_WALLPAPER;
         selCursorHide();
     }
-    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0, 0, 1);
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0, 0, 0);
     mFrameTimer++;
     if (ret == 1) {
         mFrameTimer = 0;
