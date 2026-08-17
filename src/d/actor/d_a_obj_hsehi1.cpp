@@ -606,7 +606,7 @@ void daObj_hsh_c::initialMsgSetEvent(int staffIdx) {
 
 /* 000019C0-000019E0       .text actionMsgSetEvent__11daObj_hsh_cFi */
 BOOL daObj_hsh_c::actionMsgSetEvent(int) {
-    talk_init();
+    return talk_init();
 }
 
 /* 000019E0-00001A40       .text actionMessageEvent__11daObj_hsh_cFi */
@@ -616,7 +616,7 @@ BOOL daObj_hsh_c::actionMessageEvent(int staffIdx) {
     if (p_talkMode != NULL) {
         i_talkMode = *p_talkMode;
     }
-    talk(i_talkMode);
+    return talk(i_talkMode);
 }
 
 /* 00001A40-00001ADC       .text actionTactEvent__11daObj_hsh_cFi */
@@ -632,7 +632,7 @@ BOOL daObj_hsh_c::actionTactEvent(int staffIdx) {
     if (music == i_talkMode) {
         onTactCorrect();
     }
-    talk(1);
+    return talk(1);
 }
 
 /* 00001ADC-00001B3C       .text initialJudgeEvent__11daObj_hsh_cFi */

@@ -20,8 +20,6 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include <stdio.h>
 
-u8 dMap_GetFloorNoForDmap(dStage_dt_c*, int, f32);
-
 dMd_HIO_c g_mdHIO;
 
 /* 801A86A4-801A87CC       .text __ct__9dMd_HIO_cFv */

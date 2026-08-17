@@ -626,6 +626,7 @@ public:
 };
 
 BOOL dMap_GetTopBottomFloorNo(dStage_dt_c* stag, u8* bottom_p, u8* top_p);
+u8 dMap_GetFloorNoForDmap(dStage_dt_c*, int, f32);
 u8 dMap_GetFloorNo(dStage_dt_c*, f32);
 
 inline void dMap_drawPoint(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9) {
