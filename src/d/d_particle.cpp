@@ -186,7 +186,6 @@ dPa_J3Dmodel_c::dPa_J3Dmodel_c() {
 
 /* 8007AED8-8007AF64       .text __dt__18dPa_modelControl_cFv */
 dPa_modelControl_c::~dPa_modelControl_c() {
-    /* this cast is a guess */
     dPa_modelEmitter_c* node = (dPa_modelEmitter_c*)mpHead;
     while (node) {
         dPa_modelEmitter_c* nextNode = (dPa_modelEmitter_c*)node->mpNextNode;
@@ -233,18 +232,25 @@ J3DModel * dPa_modelControl_c::newModel(J3DModelData* modelData) {
 
 /* 8007B074-8007B158       .text draw__18dPa_modelControl_cFv */
 void dPa_modelControl_c::draw() {
-    /* Nonmatching */
-    for (u32 i = 0; i < 0x80; i++)
-        mModel[i].mInit = 0;
+    dPa_J3Dmodel_c* model = mModel;
+    for (u32 i = 0; i < 0x80; i++, model++)
+        model->mInit = 0;
 
     dKy_GxFog_set();
 
-    for (node_class * nd = LIST_GET_HEAD(this); nd != NULL;) {
-        node_class* pNext = NODE_GET_NEXT(nd);
+    for (dPa_J3DmodelEmitter_c* node = (dPa_J3DmodelEmitter_c*)mpHead; node != NULL;) {
+        dPa_J3DmodelEmitter_c* nextNode = (dPa_J3DmodelEmitter_c*)node->mpNextNode;
 
-        // TODO
+        JPABaseEmitter* emitter = node->mpBaseEmitter;
+        if (emitter->isEnableDeleteEmitter()) {
+            emitter->quitImmortalEmitter();
+            cLs_SingleCut(node);
+            delete node;
+        } else {
+            node->draw();
+        }
 
-        nd = pNext;
+        node = nextNode;
     }
 }
 
@@ -1006,7 +1012,10 @@ void dPa_ripplePcallBack::execute(JPABaseEmitter* emitter, JPABaseParticle* ptcl
     cXyz pos(local_18.x, local_18.y, local_18.z);
     f32 height;
     if (fopAcM_getWaterY(&pos, &height)) {
-        ptcl->mOffsetPosition.y = height;
+        JGeometry::TVec3<f32> offsetPos;
+        ptcl->getOffsetPosition(offsetPos);
+        offsetPos.y = height;
+        ptcl->setOffsetPosition(offsetPos);
     }
 }
 
@@ -1102,7 +1111,6 @@ void dPa_splashEcallBack::remove() {
 
 /* 8007E850-8007E9B8       .text execute__19dPa_splashEcallBackFP14JPABaseEmitter */
 void dPa_splashEcallBack::execute(JPABaseEmitter* emitter) {
-    /* Nonmatching - setGlobalTranslation */
     GXColor local_24;
     GXColor local_28;
     dKy_get_seacolor(&local_24, &local_28);
@@ -1119,7 +1127,7 @@ void dPa_splashEcallBack::execute(JPABaseEmitter* emitter) {
         emitter->setGlobalParticleScale(local_20);
         emitter->setDirectionalSpeed(local_20.x * 15.0f);
     } else {
-        emitter->setGlobalTranslation(*mpPos);
+        emitter->setGlobalTranslation(mpPos->x, mpPos->y, mpPos->z);
         f32 scaleF = mScaleTimer / mMaxScaleTimer;
         s16 yaw = mpRot->y;
         if (scaleF > 1.0f) {
@@ -1144,7 +1152,6 @@ void dPa_cutTurnEcallBack_c::setup(JPABaseEmitter* emitter, const cXyz* pos, con
 
 /* 8007E9D4-8007EAC4       .text executeAfter__22dPa_cutTurnEcallBack_cFP14JPABaseEmitter */
 void dPa_cutTurnEcallBack_c::executeAfter(JPABaseEmitter* emitter) {
-    /* Nonmatching - setGlobalTranslation */
     if (field_0x5) {
         emitter->becomeInvalidEmitter();
         emitter->setEmitterCallBackPtr(NULL);
@@ -1160,7 +1167,7 @@ void dPa_cutTurnEcallBack_c::executeAfter(JPABaseEmitter* emitter) {
                 particle->setOffsetPosition(*pos);
             }
         }
-        emitter->setGlobalTranslation(*pos);
+        emitter->setGlobalTranslation(pos->x, pos->y, pos->z);
         emitter->setGlobalAlpha(mAlpha);
         field_0x6 = 0;
     }
@@ -1239,7 +1246,7 @@ void dPa_trackEcallBack::remove() {
 
 /* 8007F1F4-8007F3BC       .text execute__18dPa_trackEcallBackFP14JPABaseEmitter */
 void dPa_trackEcallBack::execute(JPABaseEmitter* emitter) {
-    /* Nonmatching - regalloc, setGlobalTranslation */
+    /* Nonmatching - regalloc */
     GXColor local_30;
     GXColor local_34;
     dKy_get_seacolor(&local_30, &local_34);
@@ -1256,7 +1263,7 @@ void dPa_trackEcallBack::execute(JPABaseEmitter* emitter) {
             return;
         }
     } else {
-        emitter->setGlobalTranslation(*mpPos);
+        emitter->setGlobalTranslation(mpPos->x, mpPos->y, mpPos->z);
         JGeometry::TVec3<s16> rot(0, mVel >= 0.0f ? mpRot->y : mpRot->y + 0x8000, 0);
         emitter->setGlobalRotation(rot);
         s16 local_38 = emitter->getGlobalAlpha();
@@ -1298,12 +1305,14 @@ void dPa_trackEcallBack::draw(JPABaseEmitter* emitter) {
     GXLoadTexMtxImm(local_bc, GX_TEXMTX1, GX_MTX2x4);
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
     JSULink<JPABaseParticle>* link = emitter->mActiveParticles.getFirst();
+    u32 i = 0;
     f32 f31 = 0.0f;
-    for (u32 i = 0; i < r28; i++) {
+    for (; i < r28; i++) {
         if (i) {
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
+            u32 j = 0;
             f32 f27 = 0.0f;
-            for (u32 j = 0; j < 3; j++) {
+            for (; j < 3; j++) {
                 JPABaseParticle* particle = link->getObject();
                 JGeometry::TVec3<f32> local_c8;
                 particle->getGlobalPosition(local_c8);
