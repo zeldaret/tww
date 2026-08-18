@@ -2073,7 +2073,7 @@ void action_bunri_dousa(bpw_class* i_this) {
     f32 f2;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mActionState) {
     case ACTION_STATE_SEPARATE_BUNRI_DOUSA_INIT: {
         for (s32 i = 0; i < 10; i++) {

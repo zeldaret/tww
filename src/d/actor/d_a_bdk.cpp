@@ -1296,7 +1296,7 @@ static void wind_set(bdk_class* i_this, cXyz* param2) {
             }
         }
     }
-    camera = static_cast<camera_process_class*>(dComIfGp_getCamera(0));
+    camera = (camera_process_class*)dComIfGp_getCamera(0);
     vec2 = actor->eyePos - camera->mLookat.mEye;
     wind_se_pos = actor->eyePos + (camera->mLookat.mEye - actor->eyePos) * 0.8f;
     mDoAud_seStart(JA_SE_CM_DK_WIND, &wind_se_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));

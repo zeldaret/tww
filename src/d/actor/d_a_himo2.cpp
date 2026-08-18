@@ -775,7 +775,7 @@ static void new_himo2_move(himo2_class* i_this) {
 
     player_actor = dComIfGp_getPlayer(0);
     player = (daPy_py_c*)player_actor;
-    camera = (camera_process_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp100 = i_this->m02EC[0];
     cXyz spF4 = i_this->m02EC[1]; // unused
     cXyz spE8; // unused
@@ -875,7 +875,7 @@ static void new_himo2_move(himo2_class* i_this) {
             i_this->m029E = 0;
             i_this->m02A0 = REG0_S(9) + 10;
             i_this->m02A2 = 3;
-            camera2 = (camera_process_class*)dComIfGp_getCamera(0);
+            camera2 = dComIfGp_getCamera(0);
             f28 = i_this->m2524.x - camera2->mLookat.mEye.x;
             f27 = i_this->m2524.y - camera2->mLookat.mEye.y;
             f26_3 = i_this->m2524.z - camera2->mLookat.mEye.z;
