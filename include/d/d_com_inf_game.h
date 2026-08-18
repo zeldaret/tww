@@ -205,14 +205,14 @@ public:
     void executeWood();
     void drawWood();
 
-    BOOL checkCameraAttentionStatus(int idx, u32 flag) {
-        return mCameraInfo[idx].mCameraAttentionStatus & flag;
+    BOOL checkCameraAttentionStatus(int idx, u32 i_flag) {
+        return mCameraInfo[idx].mCameraAttentionStatus & i_flag;
     }
     u32 getCameraAttentionStatus(int i) { return mCameraInfo[i].mCameraAttentionStatus; }
-    void setCameraAttentionStatus(int i, u32 flag) { mCameraInfo[i].mCameraAttentionStatus = flag; }
-    void onCameraAttentionStatus(int i, u32 flag) { mCameraInfo[i].mCameraAttentionStatus |= flag; }
-    void offCameraAttentionStatus(int i, u32 flag) {
-        mCameraInfo[i].mCameraAttentionStatus &= ~flag;
+    void setCameraAttentionStatus(int i, u32 i_flag) { mCameraInfo[i].mCameraAttentionStatus = i_flag; }
+    void onCameraAttentionStatus(int i, u32 i_flag) { mCameraInfo[i].mCameraAttentionStatus |= i_flag; }
+    void offCameraAttentionStatus(int i, u32 i_flag) {
+        mCameraInfo[i].mCameraAttentionStatus &= ~i_flag;
     }
 
     void setCamera(int i, camera_class* cam) { mCameraInfo[i].mpCamera = cam; }
@@ -2541,20 +2541,20 @@ inline int dComIfGp_getPlayerCameraID(int idx) {
     return g_dComIfG_gameInfo.play.getPlayerCameraID(idx);
 }
 
-inline u32 dComIfGp_checkCameraAttentionStatus(int idx, u32 flag) {
-    return g_dComIfG_gameInfo.play.checkCameraAttentionStatus(idx, flag);
+inline u32 dComIfGp_checkCameraAttentionStatus(int idx, u32 i_flag) {
+    return g_dComIfG_gameInfo.play.checkCameraAttentionStatus(idx, i_flag);
 }
 
 inline u32 dComIfGp_getCameraAttentionStatus(int i_no) {
     return g_dComIfG_gameInfo.play.getCameraAttentionStatus(i_no);
 }
 
-inline void dComIfGp_onCameraAttentionStatus(int i, u32 flag) {
-    g_dComIfG_gameInfo.play.onCameraAttentionStatus(i, flag);
+inline void dComIfGp_onCameraAttentionStatus(int i, u32 i_flag) {
+    g_dComIfG_gameInfo.play.onCameraAttentionStatus(i, i_flag);
 }
 
-inline void dComIfGp_offCameraAttentionStatus(int i, u32 flag) {
-    g_dComIfG_gameInfo.play.offCameraAttentionStatus(i, flag);
+inline void dComIfGp_offCameraAttentionStatus(int i, u32 i_flag) {
+    g_dComIfG_gameInfo.play.offCameraAttentionStatus(i, i_flag);
 }
 
 inline void dComIfGp_setCamera(int i, camera_class* cam) {

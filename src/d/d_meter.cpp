@@ -7654,7 +7654,7 @@ void mapCtrlDisp_c::moveMapCtrlDisp() {
             dMap_c::setIconDispMode(dMapIconDisp_SELF_e );
         }
     }
-    if (dCam_getBody()->mCurMode == 4) {
+    if (dCam_getBody()->Mode() == 4) {
         dMap_c::setIconDispMode(dMapIconDisp_NONE_e);
     }
     if (field_0x0 != 0) {

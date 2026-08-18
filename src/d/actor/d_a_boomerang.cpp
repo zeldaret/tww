@@ -542,7 +542,7 @@ BOOL daBoomerang_c::procWait() {
 
         procMove();
     } else {
-        if (dCam_getBody()->mCurMode != 0xB) {
+        if (dCam_getBody()->Mode() != 0xB) {
             resetLockActor();
         } else {
             if (pPlayer->checkBoomerangRock()) {
