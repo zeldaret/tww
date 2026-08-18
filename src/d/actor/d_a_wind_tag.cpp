@@ -259,7 +259,7 @@ void daWindTag_c::set_wind_se_sub(u32, cXyz* pos) {
 /* 00001044-000011CC       .text set_wind_se__Q29daWindTag11daWindTag_cFv */
 void daWindTag_c::set_wind_se() {
     f32 radius = scale.x * mData[mType * 2];
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     lookat_class* lookat = &camera->mLookat;
 
     cM3dGCps cps;

@@ -201,7 +201,7 @@ void daCanon_c::breakAllObj() {
 
 /* 00000820-00000A8C       .text makeFireEffect__9daCanon_cFR4cXyzR5csXyzi */
 void daCanon_c::makeFireEffect(cXyz& arg1, csXyz& arg2, int arg3) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp2C(0.75f, 0.75f, 0.75f);
     csXyz sp18;
     sp18.x = -fopCamM_GetAngleX(camera);

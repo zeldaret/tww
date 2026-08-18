@@ -443,7 +443,7 @@ public:
 
 struct view_port_class;
 struct view_class;
-class camera_class;
+class camera_process_class;
 
 struct dDlst_alphaModelData_c {
 public:
@@ -639,7 +639,7 @@ public:
     void setWindow(dDlst_window_c* pWindow) { mpWindow = pWindow; }
     void setViewport(view_port_class* pViewPort) { mpViewPort = pViewPort; }
     view_port_class* getViewport() { return mpViewPort; }
-    void setView(view_class* pView) { mpCamera = (camera_class*)pView; }
+    void setView(view_class* pView) { mpCamera = (camera_process_class*)pView; }
     view_class* getView() { return (view_class*)mpCamera; }
 
     static void offWipe() { mWipe = false; }
@@ -690,7 +690,7 @@ public:
     /* 0x00228 */ dDlst_base_c** mp2DXluEnd;
     /* 0x0022C */ dDlst_window_c* mpWindow;
     /* 0x00230 */ view_port_class* mpViewPort;
-    /* 0x00234 */ camera_class* mpCamera; // should be view_class*
+    /* 0x00234 */ camera_process_class* mpCamera; // should be view_class*
     /* 0x00238 */ u8 field_0x00238[0x00244 - 0x00238];
     /* 0x00244 */ dDlst_alphaModel_c* mpAlphaModel;
     /* 0x00248 */ dDlst_alphaModel_c* mpSpotModel;

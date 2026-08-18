@@ -5315,22 +5315,22 @@ bool dCamera_c::ScopeViewMsgModeOff() {
 
 /* 8017BD90-8017BD9C       .text dCam_isManual__FP12camera_class */
 bool dCam_isManual(camera_class* i_this) {
-    return i_this->mCamera.chkFlag(0x20);
+    return ((camera_process_class*)i_this)->mCamera.chkFlag(0x20);
 }
 
 /* 8017BD9C-8017BDC0       .text dCam_getAngleY__FP12camera_class */
 s16 dCam_getAngleY(camera_class* i_this) {
-    return i_this->mCamera.mDirection.U().Inv();
+    return ((camera_process_class*)i_this)->mCamera.mDirection.U().Inv();
 }
 
 /* 8017BDC0-8017BDC8       .text dCam_getAngleX__FP12camera_class */
 s16 dCam_getAngleX(camera_class* i_this) {
-    return i_this->mCamera.mDirection.V();
+    return ((camera_process_class*)i_this)->mCamera.mDirection.V();
 }
 
 /* 8017BDC8-8017BDEC       .text dCam_getControledAngleY__FP12camera_class */
 s16 dCam_getControledAngleY(camera_class* i_this) {
-    return i_this->mCamera.U2();
+    return ((camera_process_class*)i_this)->mCamera.U2();
 }
 
 /* 8017BDEC-8017BDFC       .text dCam_getCamera__Fv */
@@ -5340,13 +5340,15 @@ camera_class* dCam_getCamera() {
 
 /* 8017BDFC-8017BE20       .text dCam_getBody__Fv */
 dCamera_c* dCam_getBody() {  
-    return &dCam_getCamera()->mCamera;
+    camera_process_class* camera = (camera_process_class*)dCam_getCamera();
+    return &camera->mCamera;
 }
 
 /* 8017BE20-8017BEB0       .text preparation__FP20camera_process_class */
 static void preparation(camera_process_class* i_this) {
+    camera_process_class* process = i_this;
     camera_class* a_this = (camera_class*)i_this;
-    dCamera_c* camera = &a_this->mCamera;
+    dCamera_c* camera = &i_this->mCamera;
 
     int camera_id = get_camera_id(a_this);
 
@@ -5355,7 +5357,7 @@ static void preparation(camera_process_class* i_this) {
     f32 aspect = (4.0f/3.0f) * fapGmHIO_getAspectRatio();
 
     camera->SetWindow(viewport->mWidth, viewport->mHeight);
-    fopCamM_SetAspect(a_this, aspect);
+    fopCamM_SetAspect(i_this, aspect);
     dComIfGp_offCameraAttentionStatus(camera_id, dCamAttnStts_00000001_e | dCamAttnStts_SUBJECT_e | dCamAttnStts_00000020_e);
 }
 
@@ -5390,18 +5392,19 @@ static void view_setup(camera_process_class* i_this) {
 /* 8017BFAC-8017C29C       .text store__FP20camera_process_class */
 static void store(camera_process_class* i_this) {
     /* Nonmatching */
-    camera_class* a_this = (camera_class*)i_this;
-    dCamera_c* body = &((camera_class*)i_this)->mCamera;
+    camera_process_class* process = (camera_process_class*)i_this;
+    camera_class* camera = (camera_class*)i_this;
+    dCamera_c* body = &((camera_process_class*)i_this)->mCamera;
 
-    int camera_id = get_camera_id(a_this);
+    int camera_id = get_camera_id(camera);
     
     dStage_dt_c* stage = &dComIfGp_getStage();
 
-    cXyz oldCenter = *fopCamM_GetCenter_p(a_this);
-    cXyz oldEye = *fopCamM_GetEye_p(a_this);
-    cXyz oldUp = *fopCamM_GetUp_p(a_this);
-    cSAngle bank = fopCamM_GetBank(a_this);
-    f32 fovy = fopCamM_GetFovy(a_this);
+    cXyz oldCenter = *fopCamM_GetCenter_p(camera);
+    cXyz oldEye = *fopCamM_GetEye_p(camera);
+    cXyz oldUp = *fopCamM_GetUp_p(camera);
+    cSAngle bank = fopCamM_GetBank(camera);
+    f32 fovy = fopCamM_GetFovy(camera);
 
     dDemo_camera_c* demoCamera = dComIfGp_demo_getCamera();
 
@@ -5436,52 +5439,50 @@ static void store(camera_process_class* i_this) {
         }
     }
     
-    fopCamM_SetCenter(a_this, oldCenter.x, oldCenter.y, oldCenter.z);
-    fopCamM_SetEye(a_this, oldEye.x, oldEye.y, oldEye.z);
-    fopCamM_SetUp(a_this, oldUp.x, oldUp.y, oldUp.z);
-    fopCamM_SetBank(a_this, bank);
-    fopCamM_SetFovy(a_this, fovy);
+    fopCamM_SetCenter(camera, oldCenter.x, oldCenter.y, oldCenter.z);
+    fopCamM_SetEye(camera, oldEye.x, oldEye.y, oldEye.z);
+    fopCamM_SetUp(camera, oldUp.x, oldUp.y, oldUp.z);
+    fopCamM_SetBank(camera, bank);
+    fopCamM_SetFovy(camera, fovy);
 
     if (dComIfGp_checkCameraAttentionStatus(camera_id, dCamAttnStts_TELESCOPE_LOOK_e)) {
-        fopCamM_SetNear(a_this, 30.0f);
+        fopCamM_SetNear(camera, 30.0f);
     }
     else {
         if (stage) {
-            fopCamM_SetNear(a_this, dComIfGp_getStageStagInfo()->mNearPlane);
+            fopCamM_SetNear(camera, dComIfGp_getStageStagInfo()->mNearPlane);
         }
     }
 
     if (stage) {
-        fopCamM_SetFar(a_this, dComIfGp_getStageStagInfo()->mFarPlane);
+        fopCamM_SetFar(camera, dComIfGp_getStageStagInfo()->mFarPlane);
     }
 
-    fopCamM_SetAngleY(a_this, body->mDirection.U().Inv());
-    fopCamM_SetAngleX(a_this, body->mDirection.V());
+    fopCamM_SetAngleY(camera, body->mDirection.U().Inv());
+    fopCamM_SetAngleX(camera, body->mDirection.V());
     return;
 
 }
 
 /* 8017C29C-8017C350       .text camera_execute__FP20camera_process_class */
 static int camera_execute(camera_process_class* i_this) {
-    camera_class* a_this = (camera_class*)i_this;
-    
     preparation(i_this);
 
     if (dComIfGp_demo_getCamera()) {
-        a_this->mCamera.ResetView();
+        i_this->mCamera.ResetView();
     }
 
     if (!dComIfGp_evmng_cameraPlay()) {
         mDoGph_gInf_c::onAutoForcus();
     }
 
-    if (a_this->mCamera.Active() && !a_this->mCamera.Pause()) {
-        a_this->mCamera.Run();
+    if (i_this->mCamera.Active() && !i_this->mCamera.Pause()) {
+        i_this->mCamera.Run();
     } else {
-        a_this->mCamera.NotRun();
+        i_this->mCamera.NotRun();
     }
 
-    a_this->mCamera.CalcTrimSize();
+    i_this->mCamera.CalcTrimSize();
 
     store(i_this);
 
@@ -5493,7 +5494,7 @@ static int camera_execute(camera_process_class* i_this) {
 /* 8017C350-8017C72C       .text camera_draw__FP20camera_process_class */
 static bool camera_draw(camera_process_class* i_this) {
     camera_class* a_this = (camera_class*)i_this;
-    dCamera_c* body = &((camera_class*)i_this)->mCamera;
+    dCamera_c* body = &((camera_process_class*)i_this)->mCamera;
 
     dDlst_window_c* window = get_window(a_this);
     view_port_class* viewport = window->getViewPort();
@@ -5576,8 +5577,8 @@ static cPhs_State init_phase1(camera_class* i_this) {
 
 /* 8017C7E4-8017C980       .text init_phase2__FP12camera_class */
 static cPhs_State init_phase2(camera_class* i_this) {
-    camera_process_class* a_this = (camera_process_class*)i_this;
-    dCamera_c* body = &i_this->mCamera;
+    camera_process_class* camera = (camera_process_class*)i_this;
+    dCamera_c* body = &camera->mCamera;
     int camera_id = get_camera_id(i_this);
 
     fopAc_ac_c* player = (fopAc_ac_c*)get_player_actor(i_this);
@@ -5610,9 +5611,9 @@ static cPhs_State init_phase2(camera_class* i_this) {
     fopCamM_SetCenter(i_this, player->current.pos.x, player->current.pos.y, player->current.pos.z);
     fopCamM_SetBank(i_this, 0);
         
-    store(i_this);
+    store(camera);
     
-    view_setup(i_this);
+    view_setup(camera);
     
     return cPhs_NEXT_e;
 }
@@ -5625,13 +5626,14 @@ static cPhs_State camera_create(camera_class* i_this) {
         (request_of_phase_process_fn)NULL,
     };
 
-    return dComLbG_PhaseHandler(&i_this->phase_request, l_method, i_this);
+    camera_process_class* camera = (camera_process_class*)i_this;
+    return dComLbG_PhaseHandler(&camera->phase_request, l_method, i_this);
 }
 
 /* 8017C9B0-8017C9DC       .text camera_delete__FP20camera_process_class */
 static bool camera_delete(camera_process_class* i_this) {
     /* Nonmatching - fakematch, instruction swap */
-    dCamera_c* camera = &((camera_class*)i_this)->mCamera;
+    dCamera_c* camera = &i_this->mCamera;
     camera->~dCamera_c();
     return TRUE;
 }
@@ -5696,7 +5698,7 @@ camera_process_profile_definition g_profile_CAMERA = {
     /* List Prio     */ fpcPi_CURRENT_e,
     /* Proc Name     */ fpcNm_CAMERA_e,
     /* Proc SubMtd   */ &g_fpcLf_Method.base,
-    /* Size          */ sizeof(camera_class),
+    /* Size          */ sizeof(camera_process_class),
     /* Size Other    */ 0,
     /* Parameters    */ 0,
     /* Leaf SubMtd   */ &g_fopVw_Method,
@@ -5717,7 +5719,7 @@ camera_process_profile_definition g_profile_CAMERA2 = {
     /* List Prio     */ fpcPi_CURRENT_e,
     /* Proc Name     */ fpcNm_CAMERA2_e,
     /* Proc SubMtd   */ &g_fpcLf_Method.base,
-    /* Size          */ sizeof(camera_class),
+    /* Size          */ sizeof(camera_process_class),
     /* Size Other    */ 0,
     /* Parameters    */ 0,
     /* Leaf SubMtd   */ &g_fopVw_Method,

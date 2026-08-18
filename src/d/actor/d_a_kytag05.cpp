@@ -39,7 +39,7 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
         150,
     };
     
-    camera_process_class *camera = dComIfGp_getCamera(0);
+    camera_class *camera = dComIfGp_getCamera(0);
     fopAc_ac_c *player = dComIfGp_getPlayer(0);
     f32 windPow = dKyw_get_wind_pow();
     f32 blend = 1.0f;

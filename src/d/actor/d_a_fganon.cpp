@@ -1645,8 +1645,8 @@ s32 move(fganon_class* i_this) {
 
 /* 00006560-00007434       .text demo_camera__FP12fganon_class */
 void demo_camera(fganon_class* i_this) {
-    camera_class* camera;
-    camera_class* camera2;
+    camera_process_class* camera;
+    camera_process_class* camera2;
     fopEn_enemy_c* a_this;
     fopAc_ac_c* player_actor;
     daPy_py_c* player;

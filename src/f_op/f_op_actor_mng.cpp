@@ -1379,7 +1379,7 @@ void fopAcM_cancelCarryNow(fopAc_ac_c* i_this) {
 /* 80027ED8-800281D8       .text fopAcM_viewCutoffCheck__FP10fopAc_ac_cf */
 BOOL fopAcM_viewCutoffCheck(fopAc_ac_c* actor, f32 param_2) {
     if (param_2 > 0.0f) {
-        camera_class* camera = dComIfGp_getCamera(0);
+        camera_process_class* camera = dComIfGp_getCamera(0);
         cXyz delta = (camera->mLookat.mEye - actor->eyePos);
         if (delta.abs() > param_2) {
             dBgS_LinChk linChk;

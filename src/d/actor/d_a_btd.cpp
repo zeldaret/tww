@@ -1927,7 +1927,7 @@ static void sibuki_move(btd_class* i_this) {
 static void demo_camera(btd_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     f32 fVar2;
-    camera_class* camera2;
+    camera_process_class* camera2;
     cXyz local_38;
     cXyz local_44;
     cXyz local_b0;
@@ -1936,7 +1936,7 @@ static void demo_camera(btd_class* i_this) {
 
     fopAc_ac_c* const player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)player_actor;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     i_this->m6E1A++;
     i_this->m6E18++;
     switch (i_this->m6E16) {

@@ -988,7 +988,7 @@ void dJle_Pb_c::shutterChange() {
 
 /* 80228650-80228788       .text moveCamera__9dJle_Pb_cFv */
 void dJle_Pb_c::moveCamera() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
   
     if (mModeSubState == PB_SUB_CONFIRM_e) {
         camera->mCamera.Stay();

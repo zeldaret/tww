@@ -847,7 +847,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
     /* Nonmatching - regswap */
     fopAc_ac_c* a_player = static_cast<fopAc_ac_c*>(dComIfGp_getPlayer(0));
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
-    camera_class* pCam = dComIfGp_getCamera(0);
+    camera_process_class* pCam = dComIfGp_getCamera(0);
     s32 i;
 
     cXyz eyeDir = i_this->actor.current.pos - pCam->mLookat.mEye;

@@ -15,6 +15,7 @@
 #include "d/d_npc.h"
 #include "d/d_snap.h"
 #include "d/d_camera.h"
+#include "f_op/f_op_camera.h"
 
 class daNpc_kam_HIO1_c {
 public:

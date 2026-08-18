@@ -130,7 +130,7 @@ static BOOL daKui_Draw(kui_class* i_this) {
 
 /* 00000540-00000920       .text demo_camera__FP9kui_class */
 static void demo_camera(kui_class* i_this) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     s8 bVar2 = true;
 
     switch ((s8)i_this->field_0x2E8) {

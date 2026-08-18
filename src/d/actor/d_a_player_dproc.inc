@@ -700,7 +700,7 @@ BOOL daPy_lk_c::dProcGetItem_init() {
     } else {
         mProcVar2.m34D4 = -1;
     }
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     mProcVar3.m34D6 = shape_angle.y - fopCamM_GetAngleY(cam);
     current.angle.y = shape_angle.y;
     m3628 = fpcM_ERROR_PROCESS_ID_e;
@@ -724,7 +724,7 @@ BOOL daPy_lk_c::dProcGetItem() {
         return true;
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < 10.0f) {
-        camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+        camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
         mProcVar3.m34D6 = shape_angle.y - fopCamM_GetAngleY(cam);
     }
     daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
@@ -2083,7 +2083,7 @@ BOOL daPy_lk_c::dProcGetDance_init() {
     mNormalSpeed = 0.0f;
     setSingleMoveAnime(ANM_TAKTDGE, 1.0f, 0.0f, -1, 3.0f);
     mProcVar2.m34D4 = 0;
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     mProcVar3.m34D6 = shape_angle.y - fopCamM_GetAngleY(cam);
     current.angle.y = shape_angle.y;
     m3628 = fpcM_ERROR_PROCESS_ID_e;

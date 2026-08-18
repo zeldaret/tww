@@ -3820,7 +3820,7 @@ static void waki_set(bk_class* i_this) {
     }
     
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
     
     cXyz sp2C;
     u8 sp38[0x100];
@@ -3912,12 +3912,12 @@ static void demo_camera(bk_class* i_this) {
     fopAc_ac_c* actor = i_this;
     fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     
     s8 r28 = true;
     cXyz sp8C;
     cXyz sp80;
-    camera_class* r3;
+    camera_process_class* r3;
     switch (i_this->m1234) {
     case 0:
         break;

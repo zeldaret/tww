@@ -49,7 +49,7 @@ void menu_vrbox_set() {
     stage_vrbox_info_class* vrbox0;
     stage_vrbox_info_class* vrbox1;
 
-    camera_class * pCamera = dComIfGp_getCamera(0);
+    camera_process_class * pCamera = dComIfGp_getCamera(0);
 
     pCamera->mLookat.mEye.x = 9377.0f;
     pCamera->mLookat.mEye.y = 0.0f;

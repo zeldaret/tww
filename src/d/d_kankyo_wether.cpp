@@ -762,7 +762,7 @@ void wether_move_moya() {
 
 /* 800891A8-80089698       .text wether_move_vrkumo__Fv */
 void wether_move_vrkumo() {
-    camera_process_class* camera_p = dComIfGp_getCamera(0);
+    camera_class* camera_p = dComIfGp_getCamera(0);
     static cXyz r09o(-180000.0f, 750.0f, -200000.0f);
 
     if (strcmp(dComIfGp_getStartStageName(), "Name") != 0) {

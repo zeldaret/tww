@@ -110,7 +110,7 @@ static cPhs_State dThunder_Create(kankyo_class* i_ky) {
 /* 80198BC4-801990CC       .text create__10dThunder_cFv */
 cPhs_State dThunder_c::create() {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
-    camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class *pCamera = (camera_process_class*)dComIfGp_getCamera(0);
 
     new (this) dThunder_c();
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_YTHDR00_e);

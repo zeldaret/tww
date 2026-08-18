@@ -145,7 +145,7 @@ cPhs_State dScnName_c::create() {
         g_snHIO.mNo = mDoHIO_root.m_subroot.createChild("名前登録シーン", &g_snHIO);
         dComIfGp_setWindowNum(1);
         dComIfGp_setWindow(0, 0.0f, 0.0f, mDoMch_render_c::getFbWidth(), mDoMch_render_c::getEfbHeight(), 0.0f, 1.0f, 0, 2);
-        g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera = (camera_class*)&field_0x1d4;
+        dComIfGp_setCamera(0, (camera_class*)&field_0x1d4);
         field_0x29c = 5.0f;
         field_0x2a0 = 160000.0f;
         field_0x2a4 = 60.0f;

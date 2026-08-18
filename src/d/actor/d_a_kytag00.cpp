@@ -16,7 +16,7 @@ cXyz get_check_pos(kytag00_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz ret;
 
-    camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class * pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     fopAc_ac_c * pPlayer = dComIfGp_getPlayer(0);
 
     f32 cameraDist = actor->current.pos.abs(pCamera->mLookat.mEye);

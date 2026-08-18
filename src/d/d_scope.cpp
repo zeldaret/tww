@@ -1116,7 +1116,7 @@ void dScp_moveProc(sub_scp_class* i_Scp) {
 
 /* 8023A9AC-8023AAD0       .text dScp_demoProc__FP13sub_scp_class */
 void dScp_demoProc(sub_scp_class* i_Scp) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     f32 max = g_meterHIO.mScopeWipeMaxScale;
 
     if (dComIfGp_getScopeMesgStatus() != fopMsgStts_SCOPE_WAIT_e) {

@@ -9,7 +9,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "f_op/f_op_msg.h"
 
-class camera_class;
+class camera_process_class;
 class daGrid_c;
 class daTornado_c;
 class daPy_FLG1;

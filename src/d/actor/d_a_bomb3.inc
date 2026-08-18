@@ -677,7 +677,7 @@ void daBomb_c::setRoomInfo() {
 
 /* 800DAA60-800DAB28       .text makeFireEffect__8daBomb_cFR4cXyzR5csXyz */
 void daBomb_c::makeFireEffect(cXyz& pos, csXyz& rotation) {
-    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     cXyz scale;
     scale.setall(0.3f);
@@ -765,7 +765,7 @@ void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
 
 /* 800DAF94-800DB024       .text eff_explode__8daBomb_cFv */
 void daBomb_c::eff_explode() {
-    camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     csXyz rot;
     rot.x = -cam->mAngle.x;
     rot.y = cam->mAngle.y + 0x8000;
@@ -781,7 +781,7 @@ void daBomb_c::eff_explode() {
 
 /* 800DB024-800DB630       .text procExplode_init__8daBomb_cFv */
 BOOL daBomb_c::procExplode_init() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.ForceLockOff(fopAcM_GetID(this));
 
     BOOL temp;
@@ -891,7 +891,7 @@ BOOL daBomb_c::procExplode_init() {
 
 /* 800DB630-800DB880       .text procExplode__8daBomb_cFv */
 bool daBomb_c::procExplode() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     f32 f31;
     f32 temp2;
     temp2 = 0.0f;

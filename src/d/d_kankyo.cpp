@@ -580,7 +580,7 @@ void dScnKy_env_light_c::SetSchbit() {
 
 /* 80190ACC-80190C0C       .text setSunpos__18dScnKy_env_light_cFv */
 void dScnKy_env_light_c::setSunpos() {
-    camera_class* camera_p = dComIfGp_getCamera(0);
+    camera_process_class* camera_p = dComIfGp_getCamera(0);
     cXyz sp8;
 
     f32 var_f1;
@@ -2470,7 +2470,7 @@ void dKy_setLight_init() {
 /* 80194BDC-8019514C       .text dKy_setLight__Fv */
 void dKy_setLight() {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
-    camera_class* pCamera = dComIfGp_getCamera(0);
+    camera_process_class* pCamera = dComIfGp_getCamera(0);
     fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
     cXyz camfwd;
     MtxP viewMtx = j3dSys.getViewMtx();
@@ -2906,7 +2906,7 @@ void dKy_Itemgetcol_chg_off() {
 
 /* 80195F84-80196284       .text dKy_Itemgetcol_chg_move__Fv */
 void dKy_Itemgetcol_chg_move() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -3178,7 +3178,7 @@ void dKy_Sound_init() {
 
 /* 801967F4-801969A8       .text dKy_Sound_set__F4cXyziUii */
 void dKy_Sound_set(cXyz pos, int p2, fpc_ProcID p3, int p4) {
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
 
     BOOL ret = FALSE;
     f32 newDist = pos.abs(camera->mLookat.mEye);

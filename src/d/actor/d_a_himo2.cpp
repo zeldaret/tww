@@ -556,7 +556,7 @@ static fopAc_ac_c* search_target(himo2_class* i_this, cXyz param_2) {
                     f4 = std::sqrtf(SQUARE(sp30.x) + SQUARE(sp30.z));
                     if (f4 < f31) {
                         cXyz sp24;
-                        camera_class* camera = dComIfGp_getCamera(0);
+                        camera_process_class* camera = dComIfGp_getCamera(0);
                         sp24.x = param_2.x - camera->mLookat.mEye.x;
                         sp24.y = param_2.y - camera->mLookat.mEye.y;
                         sp24.z = param_2.z - camera->mLookat.mEye.z;
@@ -736,8 +736,8 @@ static void new_himo2_move(himo2_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player_actor;
     daPy_py_c* player;
-    camera_class* camera; // r29
-    camera_class* camera2; // r23
+    camera_process_class* camera; // r29
+    camera_process_class* camera2; // r23
     dAttention_c* attention; // r23
     u32 r30;
     bool r27;
@@ -775,7 +775,7 @@ static void new_himo2_move(himo2_class* i_this) {
 
     player_actor = dComIfGp_getPlayer(0);
     player = (daPy_py_c*)player_actor;
-    camera = (camera_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera = (camera_process_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp100 = i_this->m02EC[0];
     cXyz spF4 = i_this->m02EC[1]; // unused
     cXyz spE8; // unused
@@ -875,7 +875,7 @@ static void new_himo2_move(himo2_class* i_this) {
             i_this->m029E = 0;
             i_this->m02A0 = REG0_S(9) + 10;
             i_this->m02A2 = 3;
-            camera2 = (camera_class*)dComIfGp_getCamera(0);
+            camera2 = (camera_process_class*)dComIfGp_getCamera(0);
             f28 = i_this->m2524.x - camera2->mLookat.mEye.x;
             f27 = i_this->m2524.y - camera2->mLookat.mEye.y;
             f26_3 = i_this->m2524.z - camera2->mLookat.mEye.z;

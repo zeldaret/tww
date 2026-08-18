@@ -2775,7 +2775,7 @@ static void carry_drop(mo2_class* i_this) {
 static void e3_demo(mo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     i_this->m05B4 = 5;
     i_this->mDamageReaction.m4D0 = fopAcM_searchPlayerAngleY(actor);
@@ -3264,7 +3264,7 @@ static u8 damage_check(mo2_class* i_this) {
 /* 0000A3FC-0000A788       .text mo2_demo_camera__FP9mo2_class */
 static void mo2_demo_camera(mo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    camera_class* camera2;
+    camera_process_class* camera2;
 
     dCam_getCamera();
     dCamera_c* camera = dCam_getBody();

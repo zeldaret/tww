@@ -106,7 +106,7 @@ void dKyr_set_btitex(GXTexObj* i_obj, ResTIMG* i_img) {
 /* 8008AE54-8008B44C       .text dKyr_kamome_move__Fv */
 void dKyr_kamome_move() {
     WINDEFF_SET* pWind = dKy_getEnvlight().mpWind;
-    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* pCamera = (camera_process_class*)dComIfGp_getCamera(0);
 
     dKyw_get_wind_vec();
 
@@ -240,7 +240,7 @@ void dKyr_wind_move() {
     /* Nonmatching */
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     WINDEFF_SET* pWind = envLight.mpWind;
-    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     cXyz* pWindVec = dKyw_get_wind_vec();
     f32 windPow = dKyw_get_wind_pow();
     fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
@@ -470,7 +470,7 @@ void dKyr_wind_move() {
 void dKyr_lenzflare_move() {
     dKankyo_sun_Packet* pSunPkt = g_env_light.mpSunPacket;
     dKankyo_sunlenz_Packet* pLenzPkt = g_env_light.mpSunlenzPacket;
-    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* pCamera = (camera_process_class*)dComIfGp_getCamera(0);
 
     if (pSunPkt->mVisibility < 0.0001f)
         return;
@@ -522,10 +522,10 @@ BOOL dKyr_moon_arrival_check() {
 
 /* 8008C8B8-8008CF68       .text dKyr_sun_move__Fv */
 void dKyr_sun_move() {
-    camera_class* pCamera;
+    camera_process_class* pCamera;
     dKankyo_sun_Packet* pSunPkt = dKy_getEnvlight().mpSunPacket;
     dKankyo_sunlenz_Packet* pLenzPkt = dKy_getEnvlight().mpSunlenzPacket;
-    pCamera = (camera_class*)dComIfGp_getCamera(0);
+    pCamera = (camera_process_class*)dComIfGp_getCamera(0);
 
     f32 pulsePos;
     f32 staringAtSunAmount = 0.0f;
@@ -690,7 +690,7 @@ void dKyr_sun_move() {
 
 /* 8008CF68-8008D0B4       .text dKyr_rain_init__Fv */
 void dKyr_rain_init() {
-    camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class * pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     g_env_light.mpRainPacket->mpTxSnow01 = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_I8_TX_SNOW01_e);
     g_env_light.mpRainPacket->mpTxRingAHalf = (u8*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TXA_RING_A_32HAFE_e);
     g_env_light.mpRainPacket->mCamEyePos = pCamera->mLookat.mEye;
@@ -717,7 +717,7 @@ void rain_bg_chk(dKankyo_rain_Packet* pPkt, int idx) {
 
 /* 8008D0DC-8008D53C       .text overhead_bg_chk__Fv */
 bool overhead_bg_chk() {
-    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     bool ret = false;
 
     dBgS_ObjGndChk_All gndChk;
@@ -739,7 +739,7 @@ bool overhead_bg_chk() {
 
 /* 8008D638-8008DAF0       .text forward_overhead_bg_chk__FP4cXyzf */
 bool forward_overhead_bg_chk(cXyz* pPos, f32 dist) {
-    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     bool ret = false;
 
     dBgS_ObjGndChk_All gndChk;
@@ -769,10 +769,10 @@ bool forward_overhead_bg_chk(cXyz* pPos, f32 dist) {
 /* 8008DAF0-8008E79C       .text dKyr_rain_move__Fv */
 void dKyr_rain_move() {
     dKankyo_rain_Packet* rain_packet;
-    camera_class* camera;
+    camera_process_class* camera;
 
     rain_packet = g_env_light.mpRainPacket;
-    camera = (camera_class*)dComIfGp_getCamera(0);
+    camera = (camera_process_class*)dComIfGp_getCamera(0);
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz spFC;
     cXyz spF0;
@@ -1063,7 +1063,7 @@ void dKyr_housi_move() {
     /* Nonmatching */
     dKankyo_housi_Packet* housi_packet = g_env_light.mpHousiPacket;
     HOUSI_EFF* effect;
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     cXyz sp84;
@@ -1229,7 +1229,7 @@ void dKyr_housi_move() {
 
 /* 8008F0BC-8008F23C       .text dKyr_snow_init__Fv */
 void dKyr_snow_init() {
-    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     g_env_light.mpSnowPacket = new(0x20) dKankyo_snow_Packet();
     if (g_env_light.mpSnowPacket != NULL) {
         if (strcmp(dComIfGp_getStartStageName(), "Adanmae") != 0) {
@@ -1290,7 +1290,7 @@ void wave_move() {
     fopAc_ac_c* pPlayer;
     cXyz* windVecP;
     dKankyo_wave_Packet* pPkt;
-    camera_class* pCamera;
+    camera_process_class* pCamera;
     f32 seaLevel;
     cXyz newPos2;
     cXyz eyevect;
@@ -1314,7 +1314,7 @@ void wave_move() {
 
     fili_p = NULL;
     pPkt = g_env_light.mpWavePacket;
-    pCamera = (camera_class*)dComIfGp_getCamera(0);
+    pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     pPlayer = dComIfGp_getPlayer(0);
 
     roomNo = dComIfGp_roomControl_getStayNo();
@@ -1529,7 +1529,7 @@ void wave_move() {
 void cloud_shadow_move() {
     /* Nonmatching */
     dKankyo_cloud_Packet* pPkt = dKy_getEnvlight().mpMoyaPacket;
-    camera_class* pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     Mtx camMtx;
     cXyz windVecPow = dKyw_get_wind_vecpow();
     cXyz center;
@@ -1782,7 +1782,7 @@ void dKy_wave_chan_init() {
 /* 80094144-8009428C       .text snap_sunmoon_proc__FP4cXyzi */
 void snap_sunmoon_proc(cXyz* pPos, int type) {
     dSnap_Obj snapObj;
-    camera_class * pCamera = dComIfGp_getCamera(0);
+    camera_process_class * pCamera = dComIfGp_getCamera(0);
 
     if (dComIfGp_checkPlayerStatus1(0, daPyStts1_PICTO_BOX_AIM_e)) {
         cXyz pos;
@@ -1812,7 +1812,7 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
     /* Nonmatching */
     dKankyo_sun_Packet* pSunPkt;
     dKankyo_sunlenz_Packet* pSunlenzPkt;
-    camera_class* pCamera;
+    camera_process_class* pCamera;
     cXyz pos[4];
     cXyz sunPos;
     cXyz moonPos2;
@@ -2123,7 +2123,7 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* pPos, GXColor& color, u8** pImg) {
     /* Nonmatching */
     dKankyo_sunlenz_Packet* lenz_packet = g_env_light.mpSunlenzPacket;
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
 
     Mtx camMtx;
     Mtx rotMtx;
@@ -2451,7 +2451,7 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* pPos, GXColor& color, u8** pImg) {
 void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
     /* Nonmatching */
     dKankyo_rain_Packet* pPkt = g_env_light.mpRainPacket;
-    camera_class* pCamera = dComIfGp_getCamera(0);
+    camera_process_class* pCamera = dComIfGp_getCamera(0);
 
     Mtx camMtx;
     cXyz pos[4];
@@ -2608,7 +2608,7 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
 
 /* 8009682C-80096D18       .text dKyr_drawSibuki__FPA4_fPPUc */
 void dKyr_drawSibuki(Mtx drawMtx, u8** pImg) {
-    camera_class *pCamera = dComIfGp_getCamera(0);
+    camera_process_class *pCamera = dComIfGp_getCamera(0);
     dKankyo_rain_Packet * pPkt = g_env_light.mpRainPacket;
 
     if (g_env_light.mSnowCount == 0 && dComIfGd_getView() != NULL) {
@@ -3066,7 +3066,7 @@ void dKyr_drawStar(Mtx drawMtx, u8** pImg) {
     /* Nonmatching */
     dScnKy_env_light_c* envlight = &dKy_getEnvlight();
     dKankyo_star_Packet* star_packet = g_env_light.mpStarPacket;
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
 
     static u32 rot = 0;
 
@@ -3281,7 +3281,7 @@ void dKyr_drawStar(Mtx drawMtx, u8** pImg) {
 void drawWave(Mtx drawMtx, u8** pImg) {
     /* Nonmatching */
     dKankyo_wave_Packet* pPkt;
-    camera_class* pCamera;
+    camera_process_class* pCamera;
     GXTexObj texObj;
     Mtx camMtx;
     Mtx rotMtx;
@@ -3433,7 +3433,7 @@ void drawWave(Mtx drawMtx, u8** pImg) {
 /* 8009A5D4-8009AB88       .text drawCloudShadow__FPA4_fPPUc */
 void drawCloudShadow(Mtx drawMtx, u8** pImg) {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
-    camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class *pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     dKankyo_cloud_Packet* pPkt = g_env_light.mpMoyaPacket;
     static f32 rot = 0.0f;
     GXTexObj texObj;
@@ -3589,7 +3589,7 @@ void dKyr_thunder_init() {
 /* 8009B9D8-8009BDEC       .text dKyr_thunder_move__Fv */
 void dKyr_thunder_move() {
     EF_THUNDER * pThunder = &g_env_light.mThunderEff;
-    camera_class * pCamera = dComIfGp_getCamera(0);
+    camera_process_class * pCamera = dComIfGp_getCamera(0);
 
     switch (pThunder->mState) {
     case 0:

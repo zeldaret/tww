@@ -13,8 +13,8 @@
 #include "d/d_spline_path.h"
 #include "global.h"
 
-class camera_class;
 class camera_process_class;
+class camera_class;
 class dBgS_LinChk;
 class dBgS_CamGndChk;
 class d2DBSplinePath;

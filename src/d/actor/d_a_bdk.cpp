@@ -1274,7 +1274,7 @@ static void kuti_attack(bdk_class* i_this) {
 static void wind_set(bdk_class* i_this, cXyz* param2) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player;
-    camera_class* camera;
+    camera_process_class* camera;
     cXyz vec1;
     cXyz vec2;
 
@@ -1296,7 +1296,7 @@ static void wind_set(bdk_class* i_this, cXyz* param2) {
             }
         }
     }
-    camera = static_cast<camera_class*>(dComIfGp_getCamera(0));
+    camera = static_cast<camera_process_class*>(dComIfGp_getCamera(0));
     vec2 = actor->eyePos - camera->mLookat.mEye;
     wind_se_pos = actor->eyePos + (camera->mLookat.mEye - actor->eyePos) * 0.8f;
     mDoAud_seStart(JA_SE_CM_DK_WIND, &wind_se_pos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -2773,7 +2773,7 @@ static void demo_camera(bdk_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player_actor = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)player_actor;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     csXyz local_14C;
     csXyz local_154;
 
@@ -3119,7 +3119,7 @@ static void demo_camera(bdk_class* i_this) {
                 camera->mCamera.Stop();
                 camera->mCamera.SetTrimSize(2);
 
-                camera_class* pCamera = dComIfGp_getCamera(0);
+                camera_process_class* pCamera = dComIfGp_getCamera(0);
                 i_this->m25A8 = pCamera->mLookat.mEye;
                 local_104.x = pCamera->mLookat.mEye.x - i_this->m1150.x;
                 local_104.z = pCamera->mLookat.mEye.z - i_this->m1150.z;

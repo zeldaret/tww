@@ -173,7 +173,7 @@ void first_mode_change(pw_class*) {
 void action_dousa(pw_class* i_this) {
     /* Nonmatching */
     daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     cXyz camfwd;
     switch (i_this->mMode) {
     case 0:

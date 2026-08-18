@@ -1156,7 +1156,7 @@ void demo_camera(bmd_class* i_this) {
 
     fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     switch (i_this->mB74) {
     case 0:
@@ -1174,7 +1174,7 @@ void demo_camera(bmd_class* i_this) {
 #endif
         }
         i_this->mB74++;
-        camera_class* camera2 = dComIfGp_getCamera(0);
+        camera_process_class* camera2 = dComIfGp_getCamera(0);
         i_this->mB7C = camera2->mLookat.mEye;
         i_this->mB88 = camera2->mLookat.mCenter;
         local_44 = player_actor->current.pos - i_this->mB7C;
@@ -1427,7 +1427,7 @@ void demo_camera(bmd_class* i_this) {
             break;
         }
         i_this->mB74++;
-        camera_class* camera2 = dComIfGp_getCamera(0);
+        camera_process_class* camera2 = dComIfGp_getCamera(0);
         i_this->mB7C = camera2->mLookat.mEye;
         i_this->mB88 = camera2->mLookat.mCenter;
         camera->mCamera.Stop();

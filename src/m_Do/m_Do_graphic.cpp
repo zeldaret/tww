@@ -1612,7 +1612,7 @@ bool mDoGph_Painter() {
     if (dComIfGp_getWindowNum() != 0) {
         dDlst_window_c* window = dComIfGp_getWindow(0);
         s32 cameraID = window->getCameraID();
-        camera_class* camera = (camera_class*)dComIfGp_getCamera(cameraID);
+        camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(cameraID);
 
         if (camera != NULL) {
             dComIfGd_imageDrawShadow(camera->mViewMtx);
