@@ -478,7 +478,7 @@ void daObjIce_c::setEffectMtx() {
 #endif
     camera_class* camera = dCam_getCamera();
 
-    sp2C = *eye - camera->mLookat.mEye;
+    sp2C = *eye - camera->view.mLookat.mEye;
     dKyr_get_vectle_calc(&tevStr.mLightPosWorld, eye, &sp20);
     C_VECHalfAngle(&sp2C, &sp20, &sp14);
     C_MTXLookAt(sp98, &cXyz::Zero, &cXyz::BaseY, &sp14);

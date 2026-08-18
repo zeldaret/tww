@@ -1945,8 +1945,8 @@ void demo_camera(fganon_class* i_this) {
 
             camera2 = dComIfGp_getCamera(0);
 
-            i_this->mB5C = camera2->mLookat.mEye;
-            i_this->mB68 = camera2->mLookat.mCenter;
+            i_this->mB5C = camera2->view.mLookat.mEye;
+            i_this->mB68 = camera2->view.mLookat.mCenter;
 
             a_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
         }

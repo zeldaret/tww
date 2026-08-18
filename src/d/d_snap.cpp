@@ -1753,7 +1753,7 @@ bool dSnap_Obj::ChkCamCull() const {
     if (!(field_0x1b & 1) && mCullAngle != 0x7FFF) {
         // TODO: is this VECSubtract supposed to be an inline? dSnap_Obj::GetLen?
         cXyz sp8;
-        VECSubtract(&dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0))->mLookat.mEye, &mCenter, &sp8);
+        VECSubtract(&dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0))->view.mLookat.mEye, &mCenter, &sp8);
         s16 angle = cM_atan2s(sp8.x, sp8.z);
         if (cLib_distanceAngleS(angle, mAngleY) > mCullAngle) {
             return true;
@@ -1930,8 +1930,8 @@ void dSnap_packet::ClearAlphaBuffer() {
     GXPosition3s16(0x1D4, 0x149, -0x005);
     GXPosition3s16(0x0AE, 0x149, -0x005);
     
-    view_class* view = dComIfGp_getCamera(dComIfGp_getWindow(0)->getCameraID());
-    GXSetProjection(view->mProjMtx, GX_PERSPECTIVE);
+    camera_process_class* view = dComIfGp_getCamera(dComIfGp_getWindow(0)->getCameraID());
+    GXSetProjection(view->view.mProjMtx, GX_PERSPECTIVE);
 }
 
 /* 800CE4A8-800CE610       .text Judge__12dSnap_packetFv */

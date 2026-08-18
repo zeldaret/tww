@@ -2091,10 +2091,10 @@ static void demo_camera(btd_class* i_this) {
         }
         i_this->m6E3C = REG0_F(12) + 50.0f;
         camera2 = dComIfGp_getCamera(0);
-        i_this->m6E1C.x = dComIfGp_getCamera(0)->mLookat.mEye.x;
-        i_this->m6E1C.y = camera2->mLookat.mEye.y;
-        i_this->m6E1C.z = camera2->mLookat.mEye.z;
-        i_this->m6E28 = camera2->mLookat.mCenter;
+        i_this->m6E1C.x = dComIfGp_getCamera(0)->view.mLookat.mEye.x;
+        i_this->m6E1C.y = camera2->view.mLookat.mEye.y;
+        i_this->m6E1C.z = camera2->view.mLookat.mEye.z;
+        i_this->m6E28 = camera2->view.mLookat.mCenter;
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(2);
         break;

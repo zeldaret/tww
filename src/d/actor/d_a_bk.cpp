@@ -3827,14 +3827,14 @@ static void waki_set(bk_class* i_this) {
     dPnt* pnt;
     int pnt_idx;
     
-    sp2C = camera->mLookat.mCenter - camera->mLookat.mEye;
+    sp2C = camera->view.mLookat.mCenter - camera->view.mLookat.mEye;
     cXyz sp20;
     s16 r27_1 = cM_atan2s(sp2C.x, sp2C.z);
     pnt = i_this->ppd->m_points;
     for (int i = 0; i < i_this->ppd->m_num; i++, pnt++) {
-        sp2C.x = pnt->m_position.x - camera->mLookat.mEye.x;
-        sp2C.y = pnt->m_position.y - camera->mLookat.mEye.y;
-        sp2C.z = pnt->m_position.z - camera->mLookat.mEye.z;
+        sp2C.x = pnt->m_position.x - camera->view.mLookat.mEye.x;
+        sp2C.y = pnt->m_position.y - camera->view.mLookat.mEye.y;
+        sp2C.z = pnt->m_position.z - camera->view.mLookat.mEye.z;
         cMtx_YrotS(*calc_mtx, -r27_1);
         MtxPosition(&sp2C, &sp20);
         if (sp20.z < 0.0f) {
@@ -4074,8 +4074,8 @@ static void demo_camera(bk_class* i_this) {
         camera->mCamera.SetTrimSize(1);
         i_this->m1234 = 51;
         r3 = dComIfGp_getCamera(0);
-        i_this->m1238 = r3->mLookat.mEye;
-        i_this->m1244 = r3->mLookat.mCenter;
+        i_this->m1238 = r3->view.mLookat.mEye;
+        i_this->m1244 = r3->view.mLookat.mCenter;
         i_this->m1260 = 55.0f;
         i_this->m1236 = 0;
         // Fall-through

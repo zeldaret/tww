@@ -6,8 +6,9 @@
 
 typedef struct leafdraw_method_class leafdraw_method_class;
 
-class camera_class : public view_class {
+class camera_class {
 public:
+    /* 0x000 */ view_class view;
     /* 0x210 */ create_tag_class draw_tag;
     /* 0x224 */ leafdraw_method_class* mpMtd;
     /* 0x228 */ u8 field_0x228[4];

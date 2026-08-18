@@ -3308,8 +3308,8 @@ static void mo2_demo_camera(mo2_class* i_this) {
             camera->SetTrimSize(1);
             i_this->m2A1D = 0x33;
             camera2 = dComIfGp_getCamera(0);
-            i_this->m2A20 = camera2->mLookat.mEye;
-            i_this->m2A2C = camera2->mLookat.mCenter;
+            i_this->m2A20 = camera2->view.mLookat.mEye;
+            i_this->m2A2C = camera2->view.mLookat.mCenter;
             i_this->m2A44 = 55.0f;
             i_this->m2A1E = 0;
             // Fall-through

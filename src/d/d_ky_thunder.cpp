@@ -155,7 +155,7 @@ cPhs_State dThunder_c::create() {
     mScale.y = size * (f30 + f1);
     mScale.z = 1.0f;
 
-    dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &fwd);
+    dKyr_get_vectle_calc(&pCamera->view.mLookat.mEye, &pCamera->view.mLookat.mCenter, &fwd);
     f32 distXZ = std::sqrtf(fwd.x * fwd.x + fwd.z * fwd.z);
 
     s16 rotX = cM_atan2s(fwd.x, fwd.z);
@@ -172,9 +172,9 @@ cPhs_State dThunder_c::create() {
     rot.z = cM_scos(rotY) * cM_scos(rotX);
 
     f32 baseXZ = cM_rndF(offs.x);
-    mPos.x = pCamera->mLookat.mEye.x + fwd.x * 100000.0f + rot.x * baseXZ;
-    mPos.y = pCamera->mLookat.mEye.y + cM_rndFX(offs.y);
-    mPos.z = pCamera->mLookat.mEye.z + fwd.z * 100000.0f + rot.z * baseXZ;
+    mPos.x = pCamera->view.mLookat.mEye.x + fwd.x * 100000.0f + rot.x * baseXZ;
+    mPos.y = pCamera->view.mLookat.mEye.y + cM_rndFX(offs.y);
+    mPos.z = pCamera->view.mLookat.mEye.z + fwd.z * 100000.0f + rot.z * baseXZ;
 
     if (cM_rndF(1.0f) < 0.3f) {
 #if VERSION == VERSION_DEMO

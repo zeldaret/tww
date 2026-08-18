@@ -595,13 +595,13 @@ void dScnKy_env_light_c::setSunpos() {
     sp8.z = std::cosf(DEG2RAD(var_f1)) * -48000.0f;
 
     if (dComIfGp_event_runCheck() == FALSE || g_env_light.mInitAnimTimer != 0) {
-        mSunPos.x = camera_p->mLookat.mEye.x + sp8.x;
-        mSunPos.y = camera_p->mLookat.mEye.y - sp8.y;
-        mSunPos.z = camera_p->mLookat.mEye.z + sp8.z;
+        mSunPos.x = camera_p->view.mLookat.mEye.x + sp8.x;
+        mSunPos.y = camera_p->view.mLookat.mEye.y - sp8.y;
+        mSunPos.z = camera_p->view.mLookat.mEye.z + sp8.z;
 
-        mMoonPos.x = camera_p->mLookat.mEye.x - sp8.x;
-        mMoonPos.y = camera_p->mLookat.mEye.y + sp8.y;
-        mMoonPos.z = camera_p->mLookat.mEye.z - sp8.z;
+        mMoonPos.x = camera_p->view.mLookat.mEye.x - sp8.x;
+        mMoonPos.y = camera_p->view.mLookat.mEye.y + sp8.y;
+        mMoonPos.z = camera_p->view.mLookat.mEye.z - sp8.z;
     }
 }
 
@@ -2474,12 +2474,12 @@ void dKy_setLight() {
     fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
     cXyz camfwd;
     MtxP viewMtx = j3dSys.getViewMtx();
-    dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &camfwd);
+    dKyr_get_vectle_calc(&pCamera->view.mLookat.mEye, &pCamera->view.mLookat.mCenter, &camfwd);
 
     // light
     {
         dKy_setLight__Status& stts = lightStatusPt[0];
-        stts.mPos2 = pCamera->mLookat.mEye;
+        stts.mPos2 = pCamera->view.mLookat.mEye;
         if (pPlayer != NULL) {
             dKy_light_influence_id(pPlayer->current.pos, 0);
         }
@@ -2534,7 +2534,7 @@ void dKy_setLight() {
             f32 power = dKy_eflight_influence_power(eflight);
             f32 v;
             if (power > 0.0f) {
-                v = dKy_eflight_influence_distance(pCamera->mLookat.mEye, eflight) / power;
+                v = dKy_eflight_influence_distance(pCamera->view.mLookat.mEye, eflight) / power;
             } else {
                 v = 1.0f;
             }
@@ -2934,7 +2934,7 @@ void dKy_Itemgetcol_chg_move() {
             }
 
             cXyz camfwd;
-            dKyr_get_vectle_calc(&camera->mLookat.mEye, &camera->mLookat.mCenter, &camfwd);
+            dKyr_get_vectle_calc(&camera->view.mLookat.mEye, &camera->view.mLookat.mCenter, &camfwd);
             f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
             s16 angle = cM_atan2s(camfwd.x, camfwd.z) - offsAngle;
             camfwd.x = cM_scos(0) * cM_ssin(angle);
@@ -3181,8 +3181,8 @@ void dKy_Sound_set(cXyz pos, int p2, fpc_ProcID p3, int p4) {
     camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
 
     BOOL ret = FALSE;
-    f32 newDist = pos.abs(camera->mLookat.mEye);
-    f32 curDist = dKy_getEnvlight().mSound.field_0x0.abs(camera->mLookat.mEye);
+    f32 newDist = pos.abs(camera->view.mLookat.mEye);
+    f32 curDist = dKy_getEnvlight().mSound.field_0x0.abs(camera->view.mLookat.mEye);
 
     if (newDist < curDist) {
         if (curDist < 1500.0f) {
@@ -3657,7 +3657,7 @@ cXyz dKy_get_moon_pos() {
 
 /* 80197614-80197668       .text dKy_get_hokuto_pos__Fv */
 cXyz dKy_get_hokuto_pos() {
-    const Vec & eyePos = dComIfGp_getCamera(0)->mLookat.mEye;
+    const Vec & eyePos = dComIfGp_getCamera(0)->view.mLookat.mEye;
     cXyz pos;
     pos.x = eyePos.x + 10300.0f;
     pos.y = eyePos.y + 13450.0f;
@@ -3667,7 +3667,7 @@ cXyz dKy_get_hokuto_pos() {
 
 /* 80197668-801976BC       .text dKy_get_orion_pos__Fv */
 cXyz dKy_get_orion_pos() {
-    const Vec & eyePos = dComIfGp_getCamera(0)->mLookat.mEye;
+    const Vec & eyePos = dComIfGp_getCamera(0)->view.mLookat.mEye;
     cXyz pos;
     pos.x = eyePos.x + -9400.0f;
     pos.y = eyePos.y + 22500.0f;

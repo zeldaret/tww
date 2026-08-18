@@ -1175,8 +1175,8 @@ void demo_camera(bmd_class* i_this) {
         }
         i_this->mB74++;
         camera_process_class* camera2 = dComIfGp_getCamera(0);
-        i_this->mB7C = camera2->mLookat.mEye;
-        i_this->mB88 = camera2->mLookat.mCenter;
+        i_this->mB7C = camera2->view.mLookat.mEye;
+        i_this->mB88 = camera2->view.mLookat.mCenter;
         local_44 = player_actor->current.pos - i_this->mB7C;
         i_this->mB96 = cM_atan2s(local_44.x, local_44.z);
         camera->mCamera.Stop();
@@ -1428,8 +1428,8 @@ void demo_camera(bmd_class* i_this) {
         }
         i_this->mB74++;
         camera_process_class* camera2 = dComIfGp_getCamera(0);
-        i_this->mB7C = camera2->mLookat.mEye;
-        i_this->mB88 = camera2->mLookat.mCenter;
+        i_this->mB7C = camera2->view.mLookat.mEye;
+        i_this->mB88 = camera2->view.mLookat.mCenter;
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(2);
         i_this->mB9C = 55.0f;

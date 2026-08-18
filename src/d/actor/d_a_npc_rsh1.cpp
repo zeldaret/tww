@@ -1718,7 +1718,7 @@ BOOL daNpc_Rsh1_c::_execute() {
     }
 #endif
 
-    cXyz center = dComIfGp_getCamera(0)->mLookat.mCenter;
+    cXyz center = dComIfGp_getCamera(0)->view.mLookat.mCenter;
     cXyz lookat_diff = center - current.pos;
     f32 lookat_dist = lookat_diff.abs();
 

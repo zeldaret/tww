@@ -56,7 +56,7 @@ static void setEffectMtx(fopAc_ac_c* a_this, J3DModelData* modelData, float scal
     cXyz& eyePos = a_this->eyePos;
     camera_class* camera = dCam_getCamera();
 
-    cXyz look_dir = eyePos - camera->mLookat.mEye;
+    cXyz look_dir = eyePos - camera->view.mLookat.mEye;
 
     cXyz light_dir;
     dKyr_get_vectle_calc(&a_this->tevStr.mLightPosWorld, &eyePos, &light_dir);

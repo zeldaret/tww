@@ -850,7 +850,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
     camera_process_class* pCam = dComIfGp_getCamera(0);
     s32 i;
 
-    cXyz eyeDir = i_this->actor.current.pos - pCam->mLookat.mEye;
+    cXyz eyeDir = i_this->actor.current.pos - pCam->view.mLookat.mEye;
     cXyz spCC;
 
     if (i_this->m033C != 0) {
@@ -858,7 +858,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
     }
     
     if (eyeDir.abs() > 5000.0f) {
-        spCC = pCam->mLookat.mCenter - pCam->mLookat.mEye;
+        spCC = pCam->view.mLookat.mCenter - pCam->view.mLookat.mEye;
         s16 atan = cM_atan2s(spCC.x, spCC.z);
         cMtx_YrotS(*calc_mtx, -atan);
         MtxPosition(&eyeDir, &spCC);

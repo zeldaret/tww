@@ -2565,8 +2565,8 @@ static void demo_camera(tn_class* i_this) {
                 i_this->m14F8 = 0x33;
 
                 camera_process_class* r3 = dComIfGp_getCamera(0);
-                i_this->mCameraEyePos = r3->mLookat.mEye;
-                i_this->mCenterPos = r3->mLookat.mCenter;
+                i_this->mCameraEyePos = r3->view.mLookat.mEye;
+                i_this->mCenterPos = r3->view.mLookat.mCenter;
                 i_this->m1514 = 55.0f;
                 i_this->m14FA = 0;
             }

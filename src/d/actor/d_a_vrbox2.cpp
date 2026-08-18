@@ -155,8 +155,8 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
         windPow = 0.6f;
     }
 
-    eyePosXZ = pCamera->mLookat.mEye;
-    centerPosXZ = pCamera->mLookat.mCenter;
+    eyePosXZ = pCamera->view.mLookat.mEye;
+    centerPosXZ = pCamera->view.mLookat.mCenter;
     eyePosXZ.y = 0.0f;
     centerPosXZ.y = 0.0f;
 

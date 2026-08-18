@@ -899,7 +899,7 @@ bool daBomb_c::procExplode() {
 
     mPntLight.mPower = f31 * field_0x778;
     mPntWind.mStrength = field_0x778;
-    f32 temp = current.pos.abs(camera->mLookat.mEye);
+    f32 temp = current.pos.abs(camera->view.mLookat.mEye);
 
     if(temp < f31) {
         temp2 = 1.0f - (temp / f31);

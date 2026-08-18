@@ -19,12 +19,12 @@ cXyz get_check_pos(kytag00_class* i_this) {
     camera_process_class * pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     fopAc_ac_c * pPlayer = dComIfGp_getPlayer(0);
 
-    f32 cameraDist = actor->current.pos.abs(pCamera->mLookat.mEye);
+    f32 cameraDist = actor->current.pos.abs(pCamera->view.mLookat.mEye);
     f32 playerDist = actor->current.pos.abs(pPlayer->current.pos);
 
     if (dComIfGp_event_runCheck() && i_this->mMode == 0) {
         if (cameraDist < playerDist) {
-            ret = pCamera->mLookat.mEye;
+            ret = pCamera->view.mLookat.mEye;
         } else {
             ret = pPlayer->current.pos;
         }

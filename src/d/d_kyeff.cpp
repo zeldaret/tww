@@ -51,12 +51,12 @@ void menu_vrbox_set() {
 
     camera_process_class * pCamera = dComIfGp_getCamera(0);
 
-    pCamera->mLookat.mEye.x = 9377.0f;
-    pCamera->mLookat.mEye.y = 0.0f;
-    pCamera->mLookat.mEye.z = 7644.0f;
-    pCamera->mLookat.mCenter.x = 4300.0f;
-    pCamera->mLookat.mCenter.y = 4200.0f;
-    pCamera->mLookat.mCenter.z = 1000.0f;
+    pCamera->view.mLookat.mEye.x = 9377.0f;
+    pCamera->view.mLookat.mEye.y = 0.0f;
+    pCamera->view.mLookat.mEye.z = 7644.0f;
+    pCamera->view.mLookat.mCenter.x = 4300.0f;
+    pCamera->view.mLookat.mCenter.y = 4200.0f;
+    pCamera->view.mLookat.mCenter.z = 1000.0f;
 
     g_env_light.mWind.mWindPower = 0.7f;
 

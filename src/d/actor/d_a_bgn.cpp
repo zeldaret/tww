@@ -532,7 +532,7 @@ static void part_draw(bgn_class* i_this, part_s* param_2) {
             param_2->mPartTevStr.mFogStartZ = param_2->mPartTevStr.mFogStartZ + param_2->m0CC;
         }
         camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
-        local_38 = param_2->m224 - camera->mLookat.mEye;
+        local_38 = param_2->m224 - camera->view.mLookat.mEye;
         if (local_38.abs() > l_HIO.m008 * param_2->m0F4) {
             g_env_light.setLightTevColorType(model, &param_2->mPartTevStr);
             if ((actor->health <= 2) && (param_2 == &i_this->mTailParts[BGN_TAIL_MAX - 1])) {

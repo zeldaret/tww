@@ -785,7 +785,7 @@ void wether_move_vrkumo() {
             if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 &&
                 dComIfGp_roomControl_getStayNo() == 9)
             {
-                if (camera_p->mLookat.mEye.abs(r09o) < 2500.0f) {
+                if (camera_p->view.mLookat.mEye.abs(r09o) < 2500.0f) {
                     g_env_light.mVrkumoStrength = 1.0f;
                 }
             }

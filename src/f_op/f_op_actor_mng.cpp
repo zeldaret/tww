@@ -1380,10 +1380,10 @@ void fopAcM_cancelCarryNow(fopAc_ac_c* i_this) {
 BOOL fopAcM_viewCutoffCheck(fopAc_ac_c* actor, f32 param_2) {
     if (param_2 > 0.0f) {
         camera_process_class* camera = dComIfGp_getCamera(0);
-        cXyz delta = (camera->mLookat.mEye - actor->eyePos);
+        cXyz delta = (camera->view.mLookat.mEye - actor->eyePos);
         if (delta.abs() > param_2) {
             dBgS_LinChk linChk;
-            linChk.Set(&camera->mLookat.mEye, &actor->eyePos, actor);
+            linChk.Set(&camera->view.mLookat.mEye, &actor->eyePos, actor);
             return dComIfG_Bgsp()->LineCross(&linChk);
         }
     }

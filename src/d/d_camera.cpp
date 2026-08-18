@@ -5502,15 +5502,15 @@ static bool camera_draw(camera_process_class* i_this) {
 
     int trim_height = body->mTrimHeight;
     window->setScissor(0.0f, trim_height, mDoMch_render_c::getFbWidth(), mDoMch_render_c::getEfbHeight() - trim_height * 2.0f);
-    C_MTXPerspective(i_this->mProjMtx, i_this->mFovy, i_this->mAspect, i_this->mNear, i_this->mFar);
-    mDoMtx_lookAt(i_this->mViewMtx, &i_this->mLookat.mEye, &i_this->mLookat.mCenter, &i_this->mLookat.mUp, i_this->mBank);
+    C_MTXPerspective(i_this->view.mProjMtx, i_this->view.mFovy, i_this->view.mAspect, i_this->view.mNear, i_this->view.mFar);
+    mDoMtx_lookAt(i_this->view.mViewMtx, &i_this->view.mLookat.mEye, &i_this->view.mLookat.mCenter, &i_this->view.mLookat.mUp, i_this->view.mBank);
 
-    j3dSys.setViewMtx(i_this->mViewMtx);
-    cMtx_inverse(i_this->mViewMtx, i_this->mInvViewMtx);
-    mDoAud_getCameraInfo(&i_this->mLookat.mEye, j3dSys.mViewMtx, camera_id);
+    j3dSys.setViewMtx(i_this->view.mViewMtx);
+    cMtx_inverse(i_this->view.mViewMtx, i_this->view.mInvViewMtx);
+    mDoAud_getCameraInfo(&i_this->view.mLookat.mEye, j3dSys.mViewMtx, camera_id);
 
     dBgS_GndChk gndchk;
-    gndchk.SetPos(&i_this->mLookat.mEye);
+    gndchk.SetPos(&i_this->view.mLookat.mEye);
 
     f32 ground_y = dComIfG_Bgsp()->GroundCross(&gndchk);
     if (ground_y != -G_CM3D_F_INF) {
@@ -5518,20 +5518,20 @@ static bool camera_draw(camera_process_class* i_this) {
         mDoAud_setCameraGroupInfo(dComIfG_Bgsp()->GetGrpSoundId(gndchk));
 
         Vec spDC;
-        spDC.x = i_this->mLookat.mEye.x;
+        spDC.x = i_this->view.mLookat.mEye.x;
         spDC.y = ground_y;
-        spDC.z = i_this->mLookat.mEye.z;
+        spDC.z = i_this->view.mLookat.mEye.z;
 
         mDoAud_zelAudio_c::getInterface()->setCameraPolygonPos(&spDC);
     } else {
         mDoAud_zelAudio_c::getInterface()->setCameraPolygonPos(NULL);
     }
 
-    MTXCopy(i_this->mViewMtx, i_this->mViewMtxNoTrans);
-    i_this->mViewMtxNoTrans[0][3] = 0.0f;
-    i_this->mViewMtxNoTrans[1][3] = 0.0f;
-    i_this->mViewMtxNoTrans[2][3] = 0.0f;
-    cMtx_concatProjView(i_this->mProjMtx, i_this->mViewMtx, i_this->mProjViewMtx);
+    MTXCopy(i_this->view.mViewMtx, i_this->view.mViewMtxNoTrans);
+    i_this->view.mViewMtxNoTrans[0][3] = 0.0f;
+    i_this->view.mViewMtxNoTrans[1][3] = 0.0f;
+    i_this->view.mViewMtxNoTrans[2][3] = 0.0f;
+    cMtx_concatProjView(i_this->view.mProjMtx, i_this->view.mViewMtx, i_this->view.mProjViewMtx);
 
     body->Draw();
 

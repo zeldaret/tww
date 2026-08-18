@@ -123,7 +123,7 @@ void Env_c::proc(const cXyz& param_1) {
 
     mPntLight.mPower = field_0x50 * 1500.0f;
     mPntWind.mStrength = field_0x50;
-    f32 temp = param_1.abs(camera->mLookat.mEye);
+    f32 temp = param_1.abs(camera->view.mLookat.mEye);
 
     if(temp < 1500.0f) {
         temp2 = 1.0f - (temp * (1.0f / 1500.0f));
