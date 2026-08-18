@@ -708,7 +708,33 @@ void dMenu_Fmap_c::backClothDispInit() {
 
 /* 801B1210-801B1374       .text calcGetMapCount__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::calcGetMapCount() {
-    /* Nonmatching */
+    int i;
+    int numMap = 0;
+    int completeMap = 0;
+    for (i = 1; i <= 51; i++) {
+        if (i != 35 && i != 36) {
+            if (dComIfGs_isGetCollectMap(i)) {
+                numMap++;
+            }
+            if (dComIfGs_isCompleteCollectMap(i)) {
+                completeMap++;
+            }
+        }
+    }
+
+    char buf[32];
+
+    sprintf(buf, "rupy_num_%02d.bti", completeMap / 10);
+    ((J2DPicture*)mCi31Pane.pane)->changeTexture(buf, 0);
+
+    sprintf(buf, "rupy_num_%02d.bti", completeMap % 10);
+    ((J2DPicture*)mCi32Pane.pane)->changeTexture(buf, 0);
+
+    sprintf(buf, "rupy_num_%02d.bti", numMap / 10);
+    ((J2DPicture*)mCi21Pane.pane)->changeTexture(buf, 0);
+
+    sprintf(buf, "rupy_num_%02d.bti", numMap % 10);
+    ((J2DPicture*)mCi22Pane.pane)->changeTexture(buf, 0);
 }
 
 /* 801B1374-801B14C4       .text dispEndSalvageMark__12dMenu_Fmap_cFv */
