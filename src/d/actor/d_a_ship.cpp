@@ -22,7 +22,6 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_grid.h"
 #include "res/Object/Ship.h"
-#include "cstdint.h"
 
 static char l_arcName[] = "Ship";
 static Vec l_cannon_top = {85.0f, 0.0f, 10.0f};
@@ -4715,7 +4714,8 @@ cPhs_State daShip_c::create() {
         fopAcM_SetMin(this, -325.0f, -50.0f, -325.0f);
         fopAcM_SetMax(this, 325.0f, 570.0f, 240.0f);
         
-        fopKyM_create(fpcNm_WIND_ARROW_e, (std::intptr_t)this, 0, 0, 0);
+        // The this pointer is passed as the param for some reason, but it doesn't actually seem to be used?
+        fopKyM_create(fpcNm_WIND_ARROW_e, (intptr_t)this, 0, 0, 0);
 
         offStateFlg(daSFLG_UNK2_e);
         mAcch.CrrPos(*dComIfG_Bgsp());
