@@ -78,6 +78,9 @@ public:
     void _create();
     void initial();
     void _delete();
+#if VERSION == VERSION_DEMO
+    void _deleteSp();
+#endif
     void setErrMessage(u32, int);
     void closeMessage();
     void resizeMsgBoard(int);

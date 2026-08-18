@@ -1833,6 +1833,11 @@ inline void dComIfGs_initDan(s8 i_stageNo) {
     g_dComIfG_gameInfo.save.initDan(i_stageNo);
 }
 
+// Name from TP
+inline void dComIfGs_resetDan() {
+    g_dComIfG_gameInfo.save.resetDan();
+}
+
 inline void dComIfGs_onActor(int i_no, int i_roomNo) {
     g_dComIfG_gameInfo.save.onActor(i_no, i_roomNo);
 }
@@ -3091,7 +3096,7 @@ inline void dComIfGp_plusMiniGameRupee(s16 count) {
 inline s32 dComIfGp_getWindowNum() { return g_dComIfG_gameInfo.play.getWindowNum(); }
 inline void dComIfGp_setWindowNum(u8 num) { g_dComIfG_gameInfo.play.setWindowNum(num); }
 inline dDlst_window_c * dComIfGp_getWindow(int idx) { return g_dComIfG_gameInfo.play.getWindow(idx); }
-inline void dComIfGp_setWindow(int idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f, int cameraID, int mode) {
+inline void dComIfGp_setWindow(u8 idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f, int cameraID, int mode) {
     g_dComIfG_gameInfo.play.setWindow(idx, x, y, w, h, n, f, cameraID, mode);
 }
 inline J2DOrthoGraph* dComIfGp_getCurrentGrafPort() { return g_dComIfG_gameInfo.play.getCurrentGrafPort(); }

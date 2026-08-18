@@ -79,14 +79,14 @@ MyScreen::~MyScreen() {
 }
 
 /* 8017DF04-8017E010       .text setErrMessage__13dFile_error_cFUli */
-void dFile_error_c::setErrMessage(u32 stringId, int param_2) {
+void dFile_error_c::setErrMessage(u32 msgNo, int param_2) {
     m2fa = (u8) param_2;
 
     char message_buffer[512];
 
     initial();
 
-    fopMsgM_messageGet(message_buffer, stringId);
+    fopMsgM_messageGet(message_buffer, msgNo);
     int line_count = getLineCount(message_buffer);
     if (line_count + 2 < VERSION_SELECT(9, 9, 12, 12)) {
         resizeMsgBoard(line_count + 2);

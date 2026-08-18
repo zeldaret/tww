@@ -16,6 +16,7 @@ class dMenu_save_c;
 class dMCloth_c;
 class dName_c;
 class mDoDvdThd_toMainRam_c;
+class mDoDvdThd_mountXArchive_c;
 
 class dScnName_camera_c : public camera_class {
 public:
@@ -26,7 +27,7 @@ public:
     dSn_HIO_c();
     virtual ~dSn_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -74,10 +75,22 @@ class dScnName_c : public scene_class {
 public:
     ~dScnName_c();
     cPhs_State create();
+#if VERSION == VERSION_PAL
+    void bmg_data_read_all();
+    void bmg_data_set();
+    void tex_data_set();
+#endif
     void cloth_create();
     void cloth_move();
     void cloth2D_create();
     void buttonIconCreate();
+#if VERSION == VERSION_PAL
+    void buttonIconTexChange(u8, u8);
+    void PaneAlphaLangTxt(s16, u8);
+    void languageTexChange();
+    void langTexChg();
+    void langTexChgFast();
+#endif
     BOOL paneTransButtonIcon(s16, u8, f32, f32, u8);
     BOOL execute();
     void setView();
@@ -128,9 +141,21 @@ public:
     void NoneDraw();
     void changeGameScene();
 
+#if VERSION == VERSION_PAL
+    /* 0x01C4 */ mDoDvdThd_mountXArchive_c* field_0x1c4;
+    /* 0x01C8 */ mDoDvdThd_mountXArchive_c* field_0x1c8;
+    /* 0x01CC */ mDoDvdThd_mountXArchive_c* field_0x1cc;
+    /* 0x01D0 */ mDoDvdThd_mountXArchive_c* field_0x1d0;
+    /* 0x01D4 */ mDoDvdThd_mountXArchive_c* field_0x1d4;
+    u8 pad[0x14];
+#endif
     /* 0x01C4 */ request_of_phase_process_class mPhs;
-    /* 0x01CC */ JKRHeap* heap;
+#if VERSION == VERSION_DEMO
+    /* 0x01CC */ JKRSolidHeap* heap;
+#else
+    /* 0x01CC */ JKRExpHeap* heap;
     /* 0x01D0 */ JKRHeap* oldHeap;
+#endif
     /* 0x01D4 */ dScnName_camera_c mCamera;
     /* 0x040C */ JKRMemArchive* mArchive;
     /* 0x0410 */ mDoDvdThd_toMainRam_c* field_0x410;
@@ -146,9 +171,13 @@ public:
     /* 0x04AC */ fopMsgM_pane_class field_0x4ac;
     /* 0x04E4 */ fopMsgM_pane_class field_0x4e4;
     /* 0x051C */ fopMsgM_pane_class field_0x51c;
+#if VERSION == VERSION_PAL
+    /* 0x0554 */ fopMsgM_pane_class field_0x554;
+    /* 0x058C */ fopMsgM_pane_class field_0x58C;
+#endif
     /* 0x0554 */ u8 mMainProc;
-    /* 0x0555 */ u8 field_0x555;
-    /* 0x0556 */ u8 field_0x556;
+    /* 0x0555 */ u8 mOpenProc;
+    /* 0x0556 */ u8 mMemCardCheckProc;
     /* 0x0557 */ u8 mDrawProc;
     /* 0x0558 */ u8 field_0x558;
     /* 0x0559 */ u8 field_0x559;
