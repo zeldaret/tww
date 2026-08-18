@@ -12,9 +12,40 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
-namespace {
-static s32 l_enter_angl_band = abs(0xe00);
+class daObjFirewall_HIO_c : public JORReflexible{
+public:
+    daObjFirewall_HIO_c();
+    virtual ~daObjFirewall_HIO_c(){};
+public:
+    s8 m0;
+    f32 m4;
+    f32 m8;
+    f32 mC;
+    f32 m14;
+    f32 m18;
+    f32 m1C;
+    f32 m20;
+    f32 m24;
+    f32 m28;
+    f32 m2C;
+    s8 m30;
+    s8 m31;
+    s16 m32;
+    u8 m34;
+    u8 m35;
+    u8 m36;
+    u8 m37;
+};
 
+
+#if VERSION == VERSION_DEMO
+static daObjFirewall_HIO_c l_HIO;
+#endif
+
+namespace {
+#if VERSION > VERSION_DEMO
+static s32 l_enter_angl_band = abs(0xe00);
+#endif
 static const char l_arcname[] = "Yswdr00";
 //TODO: Convert values to correct flags
 static const dCcD_SrcCyl l_cyl_src = {
@@ -53,9 +84,11 @@ static const char* l_ev_name_table[] = {
     l_ev_name,
     l_ev_name2,
 };
-
 }
-
+#if VERSION == VERSION_DEMO
+static const char unused4054[] = "Dm\x80";
+static const char unused4055[] = "ﾅﾚﾀ";
+#endif
 /* 00000078-000000EC       .text init_mtx__15daObjFirewall_cFv */
 void daObjFirewall_c::init_mtx() {
     mpModel->setBaseScale(scale);
@@ -70,14 +103,16 @@ BOOL daObjFirewall_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000110-000002DC       .text create_heap__15daObjFirewall_cFv */
 bool daObjFirewall_c::create_heap() {
+
+    J3DModelData* modelData;
     bool ret = true;
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 6));
+    modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(l_arcname, 6));
     J3DAnmTextureSRTKey* pbtk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(l_arcname, 0xc));
     J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(l_arcname, 9));
     if(modelData == NULL || pbtk == NULL || pbrk == NULL) {
-        JUT_ASSERT(0x171, 0);
-        ret = FALSE;
+        JUT_ASSERT(DEMO_SELECT(0x152,0x171), 0);
+        ret = false;
     }
     
     else {
@@ -86,7 +121,7 @@ bool daObjFirewall_c::create_heap() {
         int local_1 = field_0x40c.init(modelData, pbtk, true, 2, 1.0f, 0, -1, false, FALSE);
         int local_2 = field_0x420.init(modelData, pbrk, true, 0, 1.0f, 0, -1, false, 0);
         if(mpModel == NULL|| field_0x408 == NULL || local_1 == 0 || local_2 == 0) {
-            ret = FALSE;
+            ret = false;
         }
     }
     return ret;
@@ -94,12 +129,18 @@ bool daObjFirewall_c::create_heap() {
 
 /* 000002DC-00000568       .text registCollisionTable__15daObjFirewall_cFv */
 void daObjFirewall_c::registCollisionTable() {
+#if VERSION > VERSION_DEMO
     static s16 zou_chk_angl[] = {0xD556,0x2AAA, 0x5555, 0xAAAB,0x8000};
+#endif
     int temp_r3_3;
+
     f32 base_radius;
     f32 height;
-    f32 r_modifier;
-    
+    f32 r_modifier = DEMO_SELECT(l_HIO.m18,0);
+    f32 y_pos_offset = DEMO_SELECT(l_HIO.m1C,0);
+
+
+#if VERSION > VERSION_DEMO
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     r_modifier = -1.0f;
     s16 local_1 = cM_atan2s(player->current.pos.x - current.pos.x, player->current.pos.z - current.pos.z);
@@ -120,25 +161,29 @@ void daObjFirewall_c::registCollisionTable() {
             r_modifier = 100.0f;
         }
     }
-    
+#endif
     cXyz pos = current.pos;
-    pos.y -= 300.0f;
+    pos.y -= DEMO_SELECT(y_pos_offset,300.0f);
 
     base_radius = scale.x * 1000.0f;
-    height = scale.y * 10000.0f + 300.0f;
+    height = DEMO_SELECT(l_HIO.m1C,300.0f) + scale.y * 10000.0f;
     
     mCyl.SetC(pos);
     mCyl.SetR(base_radius - r_modifier);
     mCyl.SetH(height);
     
-    cXyz at_vec = current.pos - player->current.pos;
+    cXyz at_vec = current.pos - DEMO_SELECT(dComIfGp_getPlayer(0)->current.pos,player->current.pos);
     mCyl.SetAtVec(at_vec);
-
-    dComIfG_Ccsp()->Set(&mCyl);
+    if(DEMO_SELECT(l_HIO.m36 == 1,TRUE)){
+        dComIfG_Ccsp()->Set(&mCyl);
+    }
 }
-
+#if VERSION == VERSION_DEMO
+static const f32 unused4058[] = {200.0f,300.0f};
+#endif
 /* 000005A4-00000794       .text setPointLight__15daObjFirewall_cFv */
 void daObjFirewall_c::setPointLight() {
+
     f32 blend;
     cXyz pos;
     cXyz scale;
@@ -155,17 +200,28 @@ void daObjFirewall_c::setPointLight() {
         field_0x46c[i].mColor.b = 0x78;
         field_0x46c[i].mPower = (s16)((REG12_F(0) + 800.0f) * field_0x106c);
         field_0x46c[i].mFluctuation = 250.0f;
-
+        f32 f5;
         if (field_0x106c > 1.0f) {
             pos = field_0xc6c[i];
-            scale.setall(1.5f * field_0x106c);            
+            f5 = 1.5f * field_0x106c;
+            scale.setall(f5);            
             pos.y += (1.1f * ((220.0f + REG12_F(1)) * field_0x106c));
-            
+#if VERSION == VERSION_DEMO
+            if(field_0xf6c[i] == NULL){
+                field_0xf6c[i] = dComIfGp_particle_setProjection(dPa_name::ID_AK_JP_O_KAGEROU00,&pos,NULL,&scale);
+            }else{
+
+                field_0xf6c[i]->setGlobalParticleScale(JGeometry::TVec3<f32>(f5,f5,f5));
+                if(REG12_S(1) == 0){
+                    field_0xf6c[i]->setGlobalTranslation(pos.x,pos.y,pos.z);
+                }
+                field_0xf6c[i]->setEmitterCallBackPtr(dPa_control_c::getKageroEcallBack());
+            }
+#endif
         }
     }
 
     blend = field_0x106c;
-
     if (blend > 1.0f) {
         blend = 1.0f;
     }
@@ -181,25 +237,30 @@ void daObjFirewall_c::setPointLight() {
 
 /* 00000794-00000970       .text particle_set__15daObjFirewall_cFv */
 void daObjFirewall_c::particle_set() {
-    s16 angles_0x438 [6] = {0x1555, -0x1555, 0x4000, -0x4000, 0x6aaa, -0x6aaa};
-    s16 angles_0x450 [5] = {0, -0x2aaa, 0x2aaa, 0x5555, 0xaaab};
+#if VERSION > VERSION_DEMO
+    s16 fire00_set_angl[6] = {0x1555, -0x1555, 0x4000, -0x4000, 0x6aaa, -0x6aaa};
+    s16 fire01_set_angl[5] = {0, -0x2aaa, 0x2aaa, 0x5555, 0xaaab};
+#else
+    static s16 fire00_set_angl[6] = {0x1555, -0x1555, 0x4000, -0x4000, 0x6aaa, -0x6aaa};
+    static s16 fire01_set_angl[5] = {0, -0x2aaa, 0x2aaa, 0x5555, 0xaaab};
+#endif
     csXyz local_1(0,0,0);
     csXyz a;
     for (int i = 0; i < 6; i++) {
-        if(field_0x438[i] == NULL) {
-            local_1.y = angles_0x438[i];
+        if(DEMO_SELECT(TRUE,field_0x438[i] == NULL)) {
+            local_1.y = fire00_set_angl[i];
             field_0x438[i] = dComIfGp_particle_set(dPa_name::ID_AK_SN_SWORDROOMFIRE00, &current.pos,&local_1);
         }
     }
 
     for (int i = 0; i < 5; i++) {
-        if (field_0x450[i] == NULL) {
-            local_1.y = angles_0x450[i];
+        if (DEMO_SELECT(TRUE,field_0x450[i] == NULL)) {
+            local_1.y = fire01_set_angl[i];
             field_0x450[i] = dComIfGp_particle_set(dPa_name::ID_AK_SN_SWORDROOMFIRE01, &current.pos, &local_1);
         }
     }
     
-    if(field_0x464 == NULL) {
+    if(DEMO_SELECT(TRUE,field_0x464 == NULL)) {
         field_0x464 = dComIfGp_particle_set(dPa_name::ID_AK_SN_SWORDROOMFIRE02, &current.pos);
     }
 }
@@ -229,11 +290,26 @@ void daObjFirewall_c::particle_delete() {
 
 /* 00000A1C-00000AB0       .text seStart__15daObjFirewall_cFUl */
 void daObjFirewall_c::seStart(unsigned long param_1) {
+
+#if VERSION == VERSION_DEMO
+    int angle = 0;
+    for(int i = 0; i < 8; i++){
+        cXyz soundpos;
+        soundpos.set(
+            current.pos.x +(cM_ssin(angle)*1000.0f*scale.x),
+            current.pos.y,
+            current.pos.z +(cM_scos(angle)*1000.0f*scale.x)
+        );
+        mDoAud_seStart(param_1,&soundpos);
+        angle += 0x2000;
+    }
+
+#else
     for(int i=0; i < 8; i++) {
         
         mDoAud_seStart(param_1, &field_0x1080[i]);
     }
-    
+#endif
 
 }
 
@@ -251,7 +327,7 @@ void daObjFirewall_c::set_se(bool param_1) {
 
     field_0x107e = param_1;
 }
-
+#if VERSION > VERSION_DEMO
 /* 00000B28-00000B94       .text seDelete__15daObjFirewall_cFv */
 void daObjFirewall_c::seDelete() {
     if(field_0x10e0 == 1){
@@ -260,6 +336,7 @@ void daObjFirewall_c::seDelete() {
         }
     }
 }
+#endif
 
 /* 00000B94-00000C64       .text set_pl_se__15daObjFirewall_cFv */
 void daObjFirewall_c::set_pl_se() {
@@ -287,7 +364,6 @@ void daObjFirewall_c::set_pl_se() {
 
 /* 00000C64-00000DDC       .text setup_burn_up__15daObjFirewall_cFv */
 void daObjFirewall_c::setup_burn_up() {
-    f32 scaledX;
     particle_set();
     if(field_0x408 != NULL) {
         if (!field_0x408->ChkUsed()) {
@@ -295,21 +371,53 @@ void daObjFirewall_c::setup_burn_up() {
         }
     }
     set_se(true);
-    for(int i=0; i < 64; i++) {
+    s16 y_rot;
+    s32 i;
+    for(i=0; i < 64; i++) {
         dKy_plight_set(&field_0x46c[i]);
-        scaledX = scale.x * 1000.0f;
+        f32 scaledX = scale.x * 1000.0f;
+        y_rot = i*0x3ff;
         mDoMtx_stack_c::transS(current.pos);
-        mDoMtx_stack_c::YrotM(i*0x3ff);
+        mDoMtx_stack_c::YrotM(y_rot);
         mDoMtx_stack_c::transM(scaledX,0.0f,0.0f);
         mDoMtx_stack_c::multVecZero(&field_0xc6c[i]);
     }
     field_0x1070 = &daObjFirewall_c::appear_act_proc;
+#if VERSION == VERSION_DEMO
+    l_HIO.m34 = 1;
+    demo_0x107f = 1;
+#else
     field_0x10e1 = 1;
+#endif
+
 }
 
 /* 00000DDC-00000EAC       .text setup_put_the_fire_out__15daObjFirewall_cFv */
 void daObjFirewall_c::setup_put_the_fire_out() {
+#if VERSION == VERSION_DEMO
+    if (demo_0x107f == 1) {
+        particle_delete();
+        if (field_0x408 != NULL ) {
+            if (field_0x408->ChkUsed()) {
+                dComIfG_Bgsp()->Release(field_0x408);
+            }
+        }
+        set_se(false);
 
+        for (int i = 0; i < 64; i++) {
+            dKy_plight_cut(&field_0x46c[i]);
+            if(field_0xf6c[i]){
+                field_0xf6c[i]->becomeInvalidEmitter();
+                field_0xf6c[i]->setEmitterCallBackPtr(NULL);
+                field_0xf6c[i] = NULL;
+            }
+
+        }
+        l_HIO.m34 = 0;
+        demo_0x107f = 0;
+    }
+
+#else
     if (field_0x10e1 == 1) {
         particle_delete();
         if (heap != NULL && field_0x408 != NULL) {
@@ -325,7 +433,7 @@ void daObjFirewall_c::setup_put_the_fire_out() {
         }
         field_0x10e1 = 0;
     }
-    
+#endif
 }
 
 /* 00000EAC-000011F8       .text _create__15daObjFirewall_cFv */
@@ -342,8 +450,8 @@ cPhs_State daObjFirewall_c::_create() {
             mCyl.Set(l_cyl_src);
             mCyl.SetStts(&mStts);
             mCyl.OnBsRevHit();
-
             u16 angle = 0;
+#if VERSION > VERSION_DEMO
             for (int i=0; i < 8; angle += 0x2000, i++) {
                 field_0x1080[i].set(
                     current.pos.x + cM_ssin(angle) * 1000.0f * scale.x, 
@@ -351,6 +459,8 @@ cPhs_State daObjFirewall_c::_create() {
                     current.pos.z + cM_scos(angle) * 1000.0f * scale.x);
             }
             field_0x10e0 = TRUE;
+#endif
+
             mSwitchNo = param_get_swSave();
             if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3520) == 1) {
                 field_0x10e4 = TRUE;
@@ -365,13 +475,18 @@ cPhs_State daObjFirewall_c::_create() {
             result = cPhs_ERROR_e;
         }
     }
-
+#if VERSION == VERSION_DEMO
+    if(l_HIO.m0 < 0){
+        l_HIO.m0 = mDoHIO_createChild("剣の間の炎の壁",&l_HIO); //Fire wall surrounding the sword
+    }
+#endif
     return result;
 }
 
 /* 00001550-000015F4       .text _delete__15daObjFirewall_cFv */
 bool daObjFirewall_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname);
+#if VERSION > VERSION_DEMO
     if(heap != NULL && field_0x408 != NULL) {
         if (field_0x408->ChkUsed()) {
             dComIfG_Bgsp()->Release(field_0x408);
@@ -380,6 +495,14 @@ bool daObjFirewall_c::_delete() {
     }
     setup_put_the_fire_out();
     seDelete();
+#else
+    setup_put_the_fire_out();
+    l_HIO.m34 = 0;
+    if(l_HIO.m0 >= 0){
+        mDoHIO_deleteChild(l_HIO.m0);
+        l_HIO.m0 = -1;
+    }
+#endif
     return true;
 }
 
@@ -399,7 +522,14 @@ void daObjFirewall_c::wait_act_proc() {
             set_pl_se();
         }
     }
-
+#if VERSION == VERSION_DEMO
+    else if(l_HIO.m34 == 1){
+        J3DAnmTevRegKey* brk_anm_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcname,9);
+        JUT_ASSERT(0x384,brk_anm_p != NULL);
+        field_0x420.init(mpModel->getModelData(),brk_anm_p,true,0,1.0,0,-1,1);
+        setup_burn_up();
+    }
+#endif
 }
 
 /* 000016D4-00001820       .text wait2_act_proc__15daObjFirewall_cFv */
@@ -411,7 +541,7 @@ void daObjFirewall_c::wait2_act_proc() {
 
     f32 temp = (player->current.pos - current.pos).absXZ();
     
-    if (temp < 950.0f && player->current.pos.z < -7000.0f) {
+    if (temp < DEMO_SELECT(l_HIO.m4,950.0f) && player->current.pos.z < DEMO_SELECT(l_HIO.m8,-7000.0f)) {
         if(eventInfo.checkCommandDemoAccrpt()) {
             field_0x1070 = &daObjFirewall_c::wait3_act_proc;
         } else {
@@ -470,9 +600,21 @@ void daObjFirewall_c::burn_wait_act_proc() {
 
     if(mSwitchNo != 0xff  && fopAcM_isSwitch(this, mSwitchNo) == 1){
         J3DAnmTevRegKey* brk_anm_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcname,9);
-        JUT_ASSERT(0x4e4, brk_anm_p != NULL);
+        JUT_ASSERT(DEMO_SELECT(0x411,0x4E4), brk_anm_p != NULL);
         field_0x420.init(mpModel->getModelData(),brk_anm_p, true, 0, -1.0f,0,-1,true,false);
         setup_put_the_fire_out();
+#if VERSION == VERSION_DEMO
+        field_0x1070 = &daObjFirewall_c::retire_act_proc;
+        l_HIO.m34 = 0;
+    }
+    else if(l_HIO.m34 == 0){
+            J3DAnmTevRegKey* brk_anm_p = (J3DAnmTevRegKey*)dComIfG_getObjectRes(l_arcname,9);
+            JUT_ASSERT(0x42A, brk_anm_p != NULL);
+            field_0x420.init(mpModel->getModelData(),brk_anm_p, true, 0, -1.0f,0,-1,true,false);
+            setup_put_the_fire_out();
+
+
+#endif
         field_0x1070 = &daObjFirewall_c::retire_act_proc;
     } else{
         set_se(true);
@@ -481,8 +623,7 @@ void daObjFirewall_c::burn_wait_act_proc() {
 
 /* 00001B68-00001BEC       .text retire_act_proc__15daObjFirewall_cFv */
 void daObjFirewall_c::retire_act_proc() {
-    field_0x420.play();
-    
+    field_0x420.play(); 
     if(field_0x420.isStop() == TRUE) {
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_2C01);
         fopAcM_delete(this);
@@ -498,12 +639,40 @@ bool daObjFirewall_c::_execute() {
     }
     field_0x40c.play();
     setPointLight();
+#if VERSION == VERSION_DEMO
+    f32 fVar1 = l_HIO.m24;
+    JGeometry::TVec3<f32> cxVar1(fVar1,l_HIO.m24,l_HIO.m24);
+    int i;
+    for(i = 0; i < 6; i++){
+        if(field_0x438[i] != NULL){
+            field_0x438[i]->setGlobalScale(cxVar1);
+        }
+    }
+    for(i = 0; i <= 4; i++){
+        if(field_0x450[i] != NULL){
+            field_0x450[i]->setGlobalScale(cxVar1);
+        }
+    }
+    if(field_0x464 != NULL){
+        field_0x464->setGlobalScale(cxVar1);
+    }
+#endif
     (this->*field_0x1070)();
     return true;
 }
 
+
+const GXColor unused = {0xFF,0x0,0x0,0x80};
 /* 00001C70-00001CD4       .text _draw__15daObjFirewall_cFv */
 bool daObjFirewall_c::_draw() {
+#if VERSION == VERSION_DEMO
+    if(l_HIO.m37 == 1){
+        s32 iVar1 = 0x0;
+        while(iVar1 < 0x40){
+            iVar1 += 1;
+        }
+    }
+#endif
     field_0x40c.entry(mpModel->getModelData());
     field_0x420.entry(mpModel->getModelData());
     mDoExt_modelUpdateDL(mpModel);

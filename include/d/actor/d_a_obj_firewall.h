@@ -8,11 +8,9 @@
 #include "d/d_a_obj.h"
 
 #include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_hostIO.h"
 
-class daObjFirewall_HIO_c {
-public:
-    daObjFirewall_HIO_c();
-};
+
 
 class daObjFirewall_c : public fopAc_ac_c {
 public:
@@ -64,17 +62,21 @@ public:
     /* 0x468 */ s32 mSwitchNo;
     /* 0x46c */ LIGHT_INFLUENCE field_0x46c[64];
     /* 0xc6c */ cXyz field_0xc6c[64];
-    /* 0xf6c */ u8 field_0xf6c[0x106c-0xf6c]; // filler
+    /* 0xf6c */ JPABaseEmitter* field_0xf6c[64];
     /* 0x106c */ f32 field_0x106c;
     /* 0x1070 */ memberFuncPtr field_0x1070;
     /* 0x107c */ s16 field_0x107c; // event id?
     /* 0x107e */ bool field_0x107e;
+#if VERSION > VERSION_DEMO
     /* 0x1080 */ cXyz field_0x1080[8];
     /* 0x10e0 */ u8 field_0x10e0;
     /* 0x10e1 */ u8 field_0x10e1;
     /* 0x10e2 */ u16 field_0x10e2;
+#else
+                 u8 demo_0x107f;
+#endif
     /* 0x10e4 */ BOOL field_0x10e4;
     /* 0x10e8 */ s32 field_0x10e8;
 }; // Size: 0x10ec
-
+STATIC_ASSERT(sizeof(daObjFirewall_c) == DEMO_SELECT(0x1088,0x10EC));
 #endif /* D_A_OBJ_FIREWALL_H */
