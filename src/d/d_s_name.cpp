@@ -13,6 +13,7 @@
 #include "d/d_menu_save.h"
 #include "d/d_name.h"
 #include "f_ap/f_ap_game.h"
+#include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_overlap_mng.h"
@@ -112,13 +113,16 @@ cPhs_State dScnName_c::create() {
         oldHeap = mDoExt_setCurrentHeap(heap);
         mArchive = new JKRMemArchive();
         mArchive->mountFixed(dComIfG_getStageRes("Stage", 0x17), JKRMEMBREAK_FLAG_UNKNOWN0);
+
         cloth_create();
         buttonIconCreate();
+
         dFs_c = new dFile_select_c();
         JUT_ASSERT(470, dFs_c != NULL);
         dFs_c->field_0x0 = mArchive;
         savePicDatabuf = new (0x20) card_pictdata[3 * 3];
         JUT_ASSERT(476, savePicDatabuf != NULL);
+
         if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             dFs_c->setUseType(0);
             dNm_c = new dName_c();
@@ -131,6 +135,7 @@ cPhs_State dScnName_c::create() {
             dComIfGs_setNewFile(0);
             dComIfGs_setNoFile(0);
         }
+
         if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
             dComIfGs_setClearCount(1);
             dFs_c->setUseType(1);
@@ -141,34 +146,37 @@ cPhs_State dScnName_c::create() {
             dFe_c = NULL;
             dNm_c = NULL;
         }
+
         dFs_c->_create();
+
         g_snHIO.mNo = mDoHIO_root.m_subroot.createChild("名前登録シーン", &g_snHIO);
+
         dComIfGp_setWindowNum(1);
         dComIfGp_setWindow(0, 0.0f, 0.0f, mDoMch_render_c::getFbWidth(), mDoMch_render_c::getEfbHeight(), 0.0f, 1.0f, 0, 2);
-        dComIfGp_setCamera(0, (camera_class*)&field_0x1d4);
-        field_0x29c = 5.0f;
-        field_0x2a0 = 160000.0f;
-        field_0x2a4 = 60.0f;
+        dComIfGp_setCamera(0, &mCamera);
+
+        fopCamM_SetNear(&mCamera, 5.0f);
+        fopCamM_SetFar(&mCamera, 160000.0f);
+        fopCamM_SetFovy(&mCamera, 60.0f);
         f32 aspect = dComIfGp_getWindow(0)->getViewPort()->mWidth / dComIfGp_getWindow(0)->getViewPort()->mHeight;
-        field_0x2a8 = aspect * fapGmHIO_getAspectRatio();
-        field_0x2ac.x = 9377.0f;
-        field_0x2ac.y = 0.0;
-        field_0x2ac.z = 7644.0;
-        field_0x2b8.x = 0.0;
-        field_0x2b8.y = 6311.0;
-        field_0x2b8.z = 1000.0;
-        field_0x2d0 = 0;
+        fopCamM_SetAspect(&mCamera, aspect * fapGmHIO_getAspectRatio());
+        fopCamM_SetEye(&mCamera, 9377.0f, 0.0f, 7644.0f);
+        fopCamM_SetCenter(&mCamera, 0.0f, 6311.0f, 1000.0f);
+        fopCamM_SetBank(&mCamera, 0);
+
         dComIfGp_setPlayer(0, NULL);
         dComIfGd_setWindow(dComIfGp_getWindow(0));
         dComIfGd_setViewport(dComIfGp_getWindow(0)->getViewPort());
-        dComIfGd_setView((view_class*)&field_0x1d4);
+        dComIfGd_setView(&mCamera.view);
         mDoGph_gInf_c::offAutoForcus();
         setView();
+
         dKy_setLight_init();
         fopKyM_Create(fpcNm_KYEFF_e, 0, 0);
         fopKyM_Create(fpcNm_KYEFF2_e, 0, 0);
         fpcSCtRq_Request(fpcLy_CurrentLayer(), fpcNm_VRBOX_e, NULL, NULL, NULL);
         fpcSCtRq_Request(fpcLy_CurrentLayer(), fpcNm_VRBOX2_e, NULL, NULL, NULL);
+
         g_env_light.mVrSkyColor.r = 0x50;
         g_env_light.mVrSkyColor.g = 0x78;
         g_env_light.mVrSkyColor.b = 0xff;
@@ -181,8 +189,10 @@ cPhs_State dScnName_c::create() {
         g_env_light.mVrKasumiMaeColor.g = 0xe5;
         g_env_light.mVrKasumiMaeColor.b = 0xff;
         g_env_light.mVrKasumiMaeColor.a = 0xff;
+
         field_0x558 = g_snHIO.field_0x5;
         field_0x1bb8 = 0;
+
         if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             mMainProc = 0;
             field_0x556 = 0;
@@ -191,6 +201,7 @@ cPhs_State dScnName_c::create() {
             mMainProc = 10;
             mDrawProc = 3;
         }
+
         JFWDisplay::getManager()->setTickRate(OS_TIMER_CLOCK / 30);
     }
     return rt;
@@ -336,15 +347,16 @@ BOOL dScnName_c::execute() {
 
 /* 80230678-80230714       .text setView__10dScnName_cFv */
 void dScnName_c::setView() {
-    C_MTXPerspective(field_0x2d4, field_0x2a4, field_0x2a8, field_0x29c, field_0x2a0);
-    mDoMtx_lookAt(field_0x314, &field_0x2ac, &field_0x2b8, field_0x2d0);
-    mDoMtx_inverse(field_0x314, field_0x344);
-    mDoMtx_copy(field_0x314, field_0x3b4);
-    field_0x3b4[0][3] = 0.0f;
-    field_0x3b4[1][3] = 0.0f;
-    field_0x3b4[2][3] = 0.0f;
-    j3dSys.setViewMtx(field_0x314);
-    mDoMtx_concatProjView(field_0x2d4, field_0x314, field_0x374);
+    camera_class* camera = &mCamera;
+    C_MTXPerspective(camera->view.mProjMtx, camera->view.mFovy, camera->view.mAspect, camera->view.mNear, camera->view.mFar);
+    mDoMtx_lookAt(camera->view.mViewMtx, &camera->view.mLookat.mEye, &camera->view.mLookat.mCenter, camera->view.mBank);
+    cMtx_inverse(camera->view.mViewMtx, camera->view.mInvViewMtx);
+    MTXCopy(camera->view.mViewMtx, camera->view.mViewMtxNoTrans);
+    camera->view.mViewMtxNoTrans[0][3] = 0.0f;
+    camera->view.mViewMtxNoTrans[1][3] = 0.0f;
+    camera->view.mViewMtxNoTrans[2][3] = 0.0f;
+    j3dSys.setViewMtx(camera->view.mViewMtx);
+    cMtx_concatProjView(camera->view.mProjMtx, camera->view.mViewMtx, camera->view.mProjViewMtx);
 }
 
 /* 80230714-802307EC       .text draw__10dScnName_cFv */

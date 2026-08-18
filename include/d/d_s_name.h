@@ -2,6 +2,7 @@
 #define D_S_NAME
 
 #include "d/d_drawlist.h"
+#include "f_op/f_op_camera.h"
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_scene.h"
 #include "m_Do/m_Do_MemCardRWmng.h"
@@ -15,6 +16,10 @@ class dMenu_save_c;
 class dMCloth_c;
 class dName_c;
 class mDoDvdThd_toMainRam_c;
+
+class dScnName_camera_c : public camera_class {
+public:
+};
 
 class dSn_HIO_c : public JORReflexible {
 public:
@@ -126,22 +131,7 @@ public:
     /* 0x01C4 */ request_of_phase_process_class mPhs;
     /* 0x01CC */ JKRHeap* heap;
     /* 0x01D0 */ JKRHeap* oldHeap;
-    /* 0x01D4 */ u8 field_0x1d4[0x29C - 0x1D4];
-    /* 0x029C */ f32 field_0x29c;
-    /* 0x02A0 */ f32 field_0x2a0;
-    /* 0x02A4 */ f32 field_0x2a4;
-    /* 0x02A8 */ f32 field_0x2a8;
-    /* 0x02AC */ Vec field_0x2ac;
-    /* 0x02B8 */ Vec field_0x2b8;
-    /* 0x02C4 */ u8 field_0x2c4[0x2D0 - 0x2C4];
-    /* 0x02D0 */ s16 field_0x2d0;
-    /* 0x02D4 */ Mtx44 field_0x2d4;
-    /* 0x0314 */ Mtx field_0x314;
-    /* 0x0344 */ Mtx field_0x344;
-    /* 0x0374 */ Mtx field_0x374;
-    /* 0x03A4 */ u8 field_0x3a4[0x3B4 - 0x3A4];
-    /* 0x03B4 */ Mtx field_0x3b4;
-    /* 0x03E4 */ u8 field_0x3e4[0x40C - 0x3E4];
+    /* 0x01D4 */ dScnName_camera_c mCamera;
     /* 0x040C */ JKRMemArchive* mArchive;
     /* 0x0410 */ mDoDvdThd_toMainRam_c* field_0x410;
     /* 0x0414 */ dDlst_BTICN_c btnIcon;

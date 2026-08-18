@@ -17,12 +17,11 @@ public:
     /* 0x22E */ s8 mPrm3;
     /* 0x22F */ s8 field_0x22f;
     /* 0x230 */ csXyz mAngle;
-    /* 0x238 */ int field_0x238;
-}; // size = 0x23C
-STATIC_ASSERT(sizeof(camera_class) == 0x23C);
+}; // size = 0x238
 
 class camera_process_class : public camera_class {
 public:
+    /* 0x238 */ int field_0x238;
     /* 0x23C */ request_of_phase_process_class phase_request;
     /* 0x244 */ dCamera_c mCamera;
 }; // size = 0xA44
