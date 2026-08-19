@@ -739,7 +739,25 @@ void dMenu_Fmap_c::calcGetMapCount() {
 
 /* 801B1374-801B14C4       .text dispEndSalvageMark__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::dispEndSalvageMark() {
-    /* Nonmatching */
+    for (int i = 0; i < 49; i++) {
+        aramCmapDatPnt_t* dat = getGridNumToCmapDatPnt(i);
+        if (!dComIfGs_isCompleteCollectMap(dat->collectMapNo)) {
+            mStxxPanes[i].pane->hide();
+        } else {
+            fopMsgM_pane_class pane;
+            fopMsgM_setPaneData(&pane, fmapDl.scrn, hist[i]);
+
+            f32 y = dat->salvagePnt[field_0x5180].y;
+            f32 x = dat->salvagePnt[field_0x5180].x;
+            mStxxPanes[i].mPosCenterOrig.x = pane.mPosCenterOrig.x + x * 56.0f / 100000.0f;
+            mStxxPanes[i].mPosCenterOrig.y = pane.mPosCenterOrig.y + y * 56.0f / 100000.0f;
+            mStxxPanes[i].mPosCenter.x = mStxxPanes[i].mPosCenterOrig.x;
+            mStxxPanes[i].mPosCenter.y = mStxxPanes[i].mPosCenterOrig.y;
+
+            fopMsgM_cposMove(&mStxxPanes[i]);
+            mStxxPanes[i].pane->show();
+        }
+    }
 }
 
 /* 801B14C4-801B1684       .text checkMarkCheck1__12dMenu_Fmap_cFv */

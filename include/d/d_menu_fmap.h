@@ -25,11 +25,20 @@ struct cursorTable_t {
     /* 0x6 */ s8 down;
 };
 
+struct aramCmapSalvagePnt_t {
+    /* 0x0 */ s16 field_0x0;
+    /* 0x2 */ s16 field_0x2;
+    /* 0x4 */ s16 x;
+    /* 0x6 */ s16 y;
+}; // Size: 0x8
+
 struct aramCmapDatPnt_t {
-    s8 gridNo;
-    s8 collectMapNo;
-    s8 cmapIdx;
-    u8 field_0x2[0x23];
+    /* 0x00 */ s8 gridNo;
+    /* 0x01 */ s8 collectMapNo;
+    /* 0x02 */ s8 cmapIdx;
+    /* 0x03 */ u8 field_0x3;
+    /* 0x04 */ s16 field_0x4;
+    /* 0x06 */ aramCmapSalvagePnt_t salvagePnt[4];
 }; // Size: 0x26
 
 struct aramCmapDatPat_t {
