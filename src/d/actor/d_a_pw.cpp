@@ -130,8 +130,12 @@ BOOL Line_check(pw_class* i_this, cXyz destPos, u8 r22) {
 }
 
 /* 00002198-00002254       .text alpha_anime__FP8pw_class */
-void alpha_anime(pw_class*) {
-    /* Nonmatching */
+void alpha_anime(pw_class* i_this) {
+    if (i_this->m33E == 0) {
+        i_this->m38E += 0x400;
+        cLib_addCalcAngleS2(&i_this->m39C, 100, 1, 10);
+        i_this->m39A = (s16)((f32)i_this->m39C - 176.0f + 30.0f * JMASSin(i_this->m38E));
+    }
 }
 
 /* 00002254-00002400       .text fuwafuwa_calc__FP8pw_class */
