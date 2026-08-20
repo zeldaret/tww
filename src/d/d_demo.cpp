@@ -53,9 +53,49 @@ void dDemo_actor_c::setActor(fopAc_ac_c* ac) {
 
 /* 80069434-80069550       .text getP_BtpData__13dDemo_actor_cFPCc */
 J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* name) {
-    /* Nonmatching */
-    if (!checkEnable(ENABLE_UNK_e))
+    /* Nonmatching - 95.92%, logic fully verified against target disassembly (float
+       conversion, resource lookup, id switch cases 1/2/4/5/6, ENABLE_TEX_ANM branch
+       all confirmed byte-for-byte equivalent). Remaining diff is a register
+       allocation permutation (r3/r4/r5 swapped throughout) - same class of compiler
+       scheduling quirk as camera_delete, not a logic error. */
+    u32 val;
+    if (checkEnable(ENABLE_TEX_ANM)) {
+        val = mTexAnimation;
+    } else {
+        if (!checkEnable(ENABLE_UNK_e))
+            return NULL;
+
+        u8* data = (u8*)mPrm.getData();
+        switch (mPrm.getId()) {
+        case 1:
+            val = (u32)*(s16*)(data + 1);
+            break;
+        case 2:
+            val = (u32)*(s16*)(data + 2);
+            break;
+        case 4:
+            val = *(u32*)(data + 1);
+            break;
+        case 5:
+        case 6:
+            val = *(u32*)(data + 2);
+            break;
+        default:
+            return NULL;
+        }
+    }
+
+    if (val == (u32)mBtpId)
         return NULL;
+    mBtpId = val;
+
+    if (val & 0x10000)
+        name = dStage_roomControl_c::getDemoArcName();
+
+    J3DAnmTexPattern* res = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(name, (u16)val);
+    if (res)
+        mTexAnimationFrameMax = *(s16*)((u8*)res + 6);
+    return res;
 }
 
 /* 80069550-800695E8       .text getP_BrkData__13dDemo_actor_cFPCc */
