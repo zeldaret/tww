@@ -18,7 +18,7 @@ BOOL daObjMsdan2::Act_c::Mthd_Execute() {
 
 /* 00000344-0000034C       .text Mthd_Delete__Q211daObjMsdan25Act_cFv */
 BOOL daObjMsdan2::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 namespace daObjMsdan2 {
