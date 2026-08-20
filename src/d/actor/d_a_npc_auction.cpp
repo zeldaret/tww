@@ -117,8 +117,8 @@ void daNpcAuction_c::eventMesSetInit(int) {
 }
 
 /* 000018FC-00001930       .text eventMesSet__14daNpcAuction_cFv */
-void daNpcAuction_c::eventMesSet() {
-    /* Nonmatching */
+BOOL daNpcAuction_c::eventMesSet() {
+    return talk(0) < 0x12;
 }
 
 /* 00001930-00001938       .text XyCheckCB__14daNpcAuction_cFi */

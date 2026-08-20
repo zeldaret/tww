@@ -36,7 +36,7 @@ public:
     void eventMainInit();
     void eventMain();
     void eventMesSetInit(int);
-    void eventMesSet();
+    BOOL eventMesSet();
     s16 XyCheckCB(int);
     s16 XyEventCB(int);
     u16 next_msgStatus(u32*);
