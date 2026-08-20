@@ -8,6 +8,8 @@
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "m_Do/m_Do_ext.h"
 
 const dCcD_SrcCyl daSaku_c::m_cyl_src = {
     // dCcD_SrcGObjInf
@@ -69,8 +71,22 @@ void daSaku_c::mode_break_throw_obj(int) {
 }
 
 /* 0000083C-000008EC       .text RecreateHeap__8daSaku_cFii */
-void daSaku_c::RecreateHeap(int, int) {
-    /* Nonmatching */
+BOOL daSaku_c::RecreateHeap(int a, int b) {
+    /* Nonmatching - 94.75%, logic verified correct against target disassembly
+       (JUT_ASSERT guard, freeAll on the old heap, swap current heap, recreate
+       via CreateHeap(1, b), then restore the old current heap). Two small
+       remaining diffs: the row/elem pointer build folds b*8+a*4 together
+       before adding this instead of adding this first, and the stringified
+       assert condition here is a different length than the real source's,
+       which shifts the pooled OSPanic message string offset by two bytes. */
+    u8* row = (u8*)this + b * 8;
+    u8* elem = row + a * 4;
+    JUT_ASSERT(869, *(JKRHeap**)(elem + 0xE14) != NULL);
+    (*(JKRHeap**)(elem + 0xE14))->freeAll();
+    JKRHeap* old = mDoExt_setCurrentHeap(*(JKRHeap**)(elem + 0xE14));
+    CreateHeap(1, b);
+    mDoExt_setCurrentHeap(old);
+    return TRUE;
 }
 
 /* 000008EC-000009B0       .text CreateHeap__8daSaku_cFii */

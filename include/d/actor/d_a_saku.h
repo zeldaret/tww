@@ -21,7 +21,7 @@ public:
     void mode_break_none(int);
     void mode_break_fire(int);
     void mode_break_throw_obj(int);
-    void RecreateHeap(int, int);
+    BOOL RecreateHeap(int, int);
     void CreateHeap(int, int);
     s32 GetDzbId(int);
     BOOL CreateDummyHeap(int);
