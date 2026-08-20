@@ -22,7 +22,7 @@ public:
     void mode_break_fire(int);
     void mode_break_throw_obj(int);
     BOOL RecreateHeap(int, int);
-    void CreateHeap(int, int);
+    BOOL CreateHeap(int, int);
     s32 GetDzbId(int);
     BOOL CreateDummyHeap(int);
     BOOL loadMoveBG(int, int, int);

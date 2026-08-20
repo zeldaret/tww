@@ -90,8 +90,32 @@ BOOL daSaku_c::RecreateHeap(int a, int b) {
 }
 
 /* 000008EC-000009B0       .text CreateHeap__8daSaku_cFii */
-void daSaku_c::CreateHeap(int, int) {
-    /* Nonmatching */
+BOOL daSaku_c::CreateHeap(int a, int b) {
+    /* Nonmatching - 90.5%, logic and switch case values verified correct
+       address-by-address against target disassembly. Same two open issues as
+       CreateDummyHeap: a single-use field access folds into an indexed load
+       instead of a base pointer plus immediate offset, and the loadModel
+       guard's failure path is placed at the end of the function instead of
+       inline, missing the same loadMoveBG return normalization sequence. */
+    u8* row = (u8*)this + b * 4;
+    s32 state = *(s32*)(row + 0xEF8);
+    int k = a;
+    switch (state) {
+    case 1:
+        k = 0;
+        break;
+    case 2:
+        k = 1;
+        break;
+    case 3:
+        k = 2;
+        break;
+    }
+
+    if (!loadModel(k, a, b))
+        return FALSE;
+
+    return loadMoveBG(GetDzbId(b), a, b);
 }
 
 /* 000009B0-00000A4C       .text GetDzbId__8daSaku_cFi */
