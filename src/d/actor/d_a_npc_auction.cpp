@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_auction.h"
+#include "d/d_com_lib_game.h"
 #include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000268       .text __ct__14daNpcAuction_cFv */
@@ -196,8 +197,14 @@ void daNpcAuction_c::clrEmitter() {
 }
 
 /* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
-static cPhs_State daNpc_AuctionCreate(void*) {
-    /* Nonmatching */
+static cPhs_State daNpc_AuctionCreate(void* i_this) {
+    static request_of_phase_process_fn l_method[3] = {
+        (request_of_phase_process_fn)phase_1,
+        (request_of_phase_process_fn)phase_2,
+        NULL,
+    };
+    daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
+    return dComLbG_PhaseHandler((request_of_phase_process_class*)((u8*)actor + 0x6D8), l_method, i_this);
 }
 
 /* 00002A0C-00002A70       .text daNpc_AuctionDelete__FPv */
