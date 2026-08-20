@@ -23,8 +23,9 @@ static BOOL daNpc_Auction_nodeCallBack2(J3DNode*, int) {
 }
 
 /* 00000848-00000868       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    ((daNpcAuction_c*)i_this)->createHeap();
+    return TRUE;
 }
 
 /* 00000868-00000ACC       .text phase_1__FP14daNpcAuction_c */
@@ -133,8 +134,10 @@ void daNpcAuction_c::setAnmFromMsgTag() {
 }
 
 /* 00002070-00002090       .text getPrmNpcNo__14daNpcAuction_cFv */
-void daNpcAuction_c::getPrmNpcNo() {
-    /* Nonmatching */
+s8 daNpcAuction_c::getPrmNpcNo() {
+    if (argument >= 0 && argument < 8)
+        return argument;
+    return 0;
 }
 
 /* 00002090-00002118       .text setMtx__14daNpcAuction_cFv */

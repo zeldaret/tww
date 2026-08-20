@@ -42,7 +42,7 @@ public:
     u16 next_msgStatus(u32*);
     u32 getMsg();
     void setAnmFromMsgTag();
-    void getPrmNpcNo();
+    s8 getPrmNpcNo();
     void setMtx();
     void lookBack();
     void initTexPatternAnm(bool);
