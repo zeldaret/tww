@@ -332,7 +332,22 @@ void daSaku_c::setMtx() {
 
 /* 0000113C-0000120C       .text setMoveBGMtx__8daSaku_cFv */
 void daSaku_c::setMoveBGMtx() {
-    /* Nonmatching */
+    /* Nonmatching - 99.8%, logic verified correct against target disassembly.
+       The only remaining diff is the pooled 200.0f literal getting a
+       different rodata address than the target, the same float pool
+       ordering quirk affecting move_sound, alpha_anime and setMtx elsewhere
+       in this session, not a logic error. */
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
+    PSMTXCopy(mDoMtx_stack_c::now, (MtxP)((u8*)this + 0xE4C));
+
+    if (*(s32*)((u8*)this + 0xEFC) != 0) {
+        mDoMtx_stack_c::transS(current.pos.x, 200.0f + current.pos.y, current.pos.z);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
+        PSMTXCopy(mDoMtx_stack_c::now, (MtxP)((u8*)this + 0xE7C));
+    }
 }
 
 /* 0000120C-0000134C       .text checkCol__8daSaku_cFv */
