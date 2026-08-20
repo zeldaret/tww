@@ -39,6 +39,7 @@ public:
     void setEffBreak(int);
 
     static const dCcD_SrcCyl m_cyl_src;
+    static const u8 dust_color[4];
 
 public:
     /* 0x290 */ u8 m290[0xEF2 - 0x290];

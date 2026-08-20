@@ -42,12 +42,48 @@ const dCcD_SrcCyl daSaku_c::m_cyl_src = {
 };
 
 
+const u8 daSaku_c::dust_color[4] = { 0x69, 0x5B, 0x30, 0xFF };
+
 class J3DModelData;
 class J3DMaterial;
 
 /* 000000EC-00000200       .text CreateInit__8daSaku_cFv */
 void daSaku_c::CreateInit() {
-    /* Nonmatching */
+    /* Nonmatching - 88.1%, logic verified correct against target disassembly:
+       both counted per-side init loops, cullMtx setup, dCcD_Stts::Init, and
+       the setCol/setMtx calls all match exactly. Only the final dust_color
+       copy loop differs, where the target hoists all four color byte loads
+       above the loop as loop-invariant while this form re-reads them each
+       iteration; hoisting them into locals was tried and made the match
+       worse due to a knock-on register allocation change, so it was left as
+       the higher-scoring form. */
+    for (int i = 0; i < 2; i++) {
+        *(u32*)((u8*)this + i * 4 + 0xEBC) = 0;
+        *(u32*)((u8*)this + i * 4 + 0xEAC) = 0;
+        *(u8*)((u8*)this + i * 2 + 0xEDC) = 0xFF;
+        *(u8*)((u8*)this + i * 2 + 0xEDD) = 0;
+        *(s32*)((u8*)this + i * 4 + 0xEE0) = -1;
+        *(u8*)((u8*)this + i + 0xEF0) = 2;
+    }
+
+    *(u8*)((u8*)this + 0xEF4) = 0;
+    *(u32*)((u8*)this + 0xEEC) = 0;
+
+    void* bottom = *(void**)((u8*)this + 0xE24);
+    cullMtx = (MtxP)((u8*)bottom + 0x24);
+
+    ((dCcD_Stts*)(m290 + (0x2D0 - 0x290)))->Init(0xFF, 0xFF, this);
+
+    setCol();
+    setMtx();
+
+    for (int i = 0; i < 2; i++) {
+        *(u8*)((u8*)this + i * 0x20 + 0x2A6) = dust_color[0];
+        *(u8*)((u8*)this + i * 0x20 + 0x2A7) = dust_color[1];
+        *(u8*)((u8*)this + i * 0x20 + 0x2A8) = dust_color[2];
+        *(u8*)((u8*)this + i * 0x20 + 0x2A9) = dust_color[3];
+        *(u8*)((u8*)this + i * 0x20 + 0x2A1) = 1;
+    }
 }
 
 /* 00000200-000003A8       .text saku_draw_sub__8daSaku_cFi */
