@@ -165,8 +165,14 @@ void move_sound(pw_class*) {
 }
 
 /* 00002A54-00002A90       .text first_mode_change__FP8pw_class */
-void first_mode_change(pw_class*) {
-    /* Nonmatching */
+void first_mode_change(pw_class* i_this) {
+    i_this->m340 = 0;
+    i_this->m39A = 100;
+    i_this->m39C = 100;
+    i_this->attention_info.flags = 4;
+    i_this->actor_status |= 0x20;
+    i_this->m38C = i_this->shape_angle.y;
+    i_this->current.angle.y = i_this->m38C;
 }
 
 /* 00002A90-00003B08       .text action_dousa__FP8pw_class */
