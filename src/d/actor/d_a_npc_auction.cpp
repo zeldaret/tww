@@ -89,7 +89,7 @@ void daNpcAuction_c::privateCut() {
 
 /* 00001548-00001554       .text eventMainInit__14daNpcAuction_cFv */
 void daNpcAuction_c::eventMainInit() {
-    /* Nonmatching */
+    field_745[4] = 1;
 }
 
 /* 00001554-00001888       .text eventMain__14daNpcAuction_cFv */
