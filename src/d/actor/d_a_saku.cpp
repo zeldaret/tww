@@ -139,8 +139,20 @@ void daSaku_c::broken(int) {
 }
 
 /* 00000F60-00000FF4       .text changeCollision__8daSaku_cFi */
-void daSaku_c::changeCollision(int) {
-    /* Nonmatching */
+BOOL daSaku_c::changeCollision(int b) {
+    u8* row = (u8*)this + b * 4;
+    if (*(s32*)(row + 0xEF8) == 0)
+        return FALSE;
+
+    s32 count = *(s32*)(row + 0xEE0);
+    if (count >= 0) {
+        if (count == 0) {
+            g_dComIfG_gameInfo.play.mBgS.Release(*(cBgW**)(row + 0xE44));
+            MoveBGResist(1, b);
+        }
+        *(s32*)(row + 0xEE0) = *(s32*)(row + 0xEE0) - 1;
+    }
+    return TRUE;
 }
 
 /* 00000FF4-0000113C       .text setMtx__8daSaku_cFv */

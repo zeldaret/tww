@@ -29,7 +29,7 @@ public:
     void loadModel(int, int, int);
     BOOL burn();
     void broken(int);
-    void changeCollision(int);
+    BOOL changeCollision(int);
     void setMtx();
     void setMoveBGMtx();
     void checkCol();
