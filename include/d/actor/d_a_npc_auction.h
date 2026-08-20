@@ -37,8 +37,8 @@ public:
     void eventMain();
     void eventMesSetInit(int);
     void eventMesSet();
-    void XyCheckCB(int);
-    void XyEventCB(int);
+    s16 XyCheckCB(int);
+    s16 XyEventCB(int);
     u16 next_msgStatus(u32*);
     u32 getMsg();
     void setAnmFromMsgTag();

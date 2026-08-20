@@ -44,8 +44,8 @@ void daNpcAuction_c::createHeap() {
 }
 
 /* 00000E74-00000E94       .text daNpcAuction_XyCheckCB__FPvi */
-static s16 daNpcAuction_XyCheckCB(void*, int) {
-    /* Nonmatching */
+static s16 daNpcAuction_XyCheckCB(void* i_this, int i_itemBtn) {
+    return ((daNpcAuction_c*)i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 00000E94-00000EB4       .text daNpcAuction_XyEventCB__FPvi */
@@ -109,12 +109,12 @@ void daNpcAuction_c::eventMesSet() {
 }
 
 /* 00001930-00001938       .text XyCheckCB__14daNpcAuction_cFi */
-void daNpcAuction_c::XyCheckCB(int) {
-    /* Nonmatching */
+s16 daNpcAuction_c::XyCheckCB(int) {
+    return 0;
 }
 
 /* 00001938-000019F8       .text XyEventCB__14daNpcAuction_cFi */
-void daNpcAuction_c::XyEventCB(int) {
+s16 daNpcAuction_c::XyEventCB(int) {
     /* Nonmatching */
 }
 
