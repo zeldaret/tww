@@ -160,8 +160,8 @@ void next_dousa_check(pw_class*) {
 }
 
 /* 000029C8-00002A54       .text move_sound__FP8pw_class */
-void move_sound(pw_class*) {
-    /* Nonmatching */
+void move_sound(pw_class* i_this) {
+    fopAcM_seStart(i_this, JA_SE_CHR_PW_MOVE, 0);
 }
 
 /* 00002A54-00002A90       .text first_mode_change__FP8pw_class */
