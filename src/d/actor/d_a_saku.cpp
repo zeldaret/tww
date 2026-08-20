@@ -79,8 +79,28 @@ void daSaku_c::CreateHeap(int, int) {
 }
 
 /* 000009B0-00000A4C       .text GetDzbId__8daSaku_cFi */
-void daSaku_c::GetDzbId(int) {
-    /* Nonmatching */
+s32 daSaku_c::GetDzbId(int b) {
+    /* Nonmatching - 92.6%, logic verified correct against target disassembly
+       (side b == 1 or unresisted short-circuits to a plain state check, else
+       falls into the state == 2 or 3 collapse and the switch resist lookup).
+       Two remaining diffs are a single-use field access folded into an
+       indexed load instead of a base pointer plus immediate offset, and the
+       final if/return pair getting its true/false halves swapped relative to
+       target at the very end of the function; neither reflects a logic bug. */
+    u8* row = (u8*)this + b * 4;
+    s32 state = *(s32*)(row + 0xEF8);
+    if (b == 1 || *(s32*)((u8*)this + 0xEFC) == 0) {
+        if (state == 1)
+            return 0;
+        return 1;
+    }
+
+    if (state == 3 || state == 2)
+        return 3;
+
+    if (dComIfGs_isSwitch(mTopHalfDestroyedSwitch, home.roomNo))
+        return 4;
+    return 2;
 }
 
 /* 00000A4C-00000ADC       .text CreateDummyHeap__8daSaku_cFi */

@@ -23,7 +23,7 @@ public:
     void mode_break_throw_obj(int);
     void RecreateHeap(int, int);
     void CreateHeap(int, int);
-    void GetDzbId(int);
+    s32 GetDzbId(int);
     BOOL CreateDummyHeap(int);
     BOOL loadMoveBG(int, int, int);
     BOOL loadModel(int, int, int);
