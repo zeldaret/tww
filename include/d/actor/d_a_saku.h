@@ -24,9 +24,9 @@ public:
     void RecreateHeap(int, int);
     void CreateHeap(int, int);
     void GetDzbId(int);
-    void CreateDummyHeap(int);
-    void loadMoveBG(int, int, int);
-    void loadModel(int, int, int);
+    BOOL CreateDummyHeap(int);
+    BOOL loadMoveBG(int, int, int);
+    BOOL loadModel(int, int, int);
     BOOL burn();
     void broken(int);
     BOOL changeCollision(int);

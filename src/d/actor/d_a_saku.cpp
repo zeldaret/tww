@@ -84,17 +84,32 @@ void daSaku_c::GetDzbId(int) {
 }
 
 /* 00000A4C-00000ADC       .text CreateDummyHeap__8daSaku_cFi */
-void daSaku_c::CreateDummyHeap(int) {
-    /* Nonmatching */
+BOOL daSaku_c::CreateDummyHeap(int i_dummy) {
+    /* Nonmatching - 90.8%, logic verified correct against target disassembly
+       (sturdiness-based param selection, loadModel guard, loadMoveBG call and
+       its return). Target normalizes loadMoveBG's return through a subic/subfe
+       0-or-1 sequence that this form of the call does not reproduce, meaning
+       loadMoveBG's real return type is probably not a plain BOOL; left as-is
+       until loadMoveBG itself is decompiled and its true return type is known. */
+    int k = i_dummy;
+    if (mSturdinessType == 0)
+        k = 0;
+    else if (mSturdinessType == 1)
+        k = 1;
+
+    if (loadModel(k, 1, i_dummy))
+        return loadMoveBG(1, 1, i_dummy);
+
+    return FALSE;
 }
 
 /* 00000ADC-00000BE8       .text loadMoveBG__8daSaku_cFiii */
-void daSaku_c::loadMoveBG(int, int, int) {
+BOOL daSaku_c::loadMoveBG(int, int, int) {
     /* Nonmatching */
 }
 
 /* 00000BE8-00000D7C       .text loadModel__8daSaku_cFiii */
-void daSaku_c::loadModel(int, int, int) {
+BOOL daSaku_c::loadModel(int, int, int) {
     /* Nonmatching */
 }
 
