@@ -209,7 +209,6 @@ static BOOL daSaku_IsDelete(daSaku_c*) {
 
 /* 000023E0-0000242C       .text daSaku_Draw__FP8daSaku_c */
 static BOOL daSaku_Draw(daSaku_c*) {
-    /* Nonmatching */
 }
 
 /* 0000242C-00002560       .text daSaku_Execute__FP8daSaku_c */
