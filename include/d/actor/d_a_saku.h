@@ -34,7 +34,7 @@ public:
     void setMoveBGMtx();
     void checkCol();
     void setCol();
-    void MoveBGResist(int, int);
+    BOOL MoveBGResist(int, int);
     void setEffFire(int);
     void setEffBreak(int);
 

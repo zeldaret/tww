@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_saku.h"
+#include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 
@@ -163,8 +164,20 @@ void daSaku_c::setCol() {
 }
 
 /* 00001510-00001598       .text MoveBGResist__8daSaku_cFii */
-void daSaku_c::MoveBGResist(int, int) {
-    /* Nonmatching */
+BOOL daSaku_c::MoveBGResist(int a, int b) {
+    /* Nonmatching - 70.7%, logic verified correct against target disassembly
+       (row/elem pointer construction, dBgS::Regist call, storing the resisted
+       board into the per-b slot, then calling Move on it). Remaining diff is an
+       instruction scheduling swap around the second field access that several
+       rewrites (cached vs re-derived pointer, split vs combined expressions,
+       hoisted vs inline locals) could not reproduce exactly. */
+    u8* row = (u8*)this + b * 8;
+    u8* elem = row + a * 4;
+    if (!g_dComIfG_gameInfo.play.mBgS.Regist(*(dBgW**)(elem + 0xE34), this))
+        return FALSE;
+    *(dBgW**)((u8*)this + b * 4 + 0xE44) = *(dBgW**)(elem + 0xE34);
+    (*(dBgW**)((u8*)this + b * 4 + 0xE44))->Move();
+    return TRUE;
 }
 
 /* 00001598-000016C0       .text setEffFire__8daSaku_cFi */
