@@ -28,7 +28,7 @@ public:
     BOOL loadMoveBG(int, int, int);
     BOOL loadModel(int, int, int);
     BOOL burn();
-    void broken(int);
+    BOOL broken(int);
     BOOL changeCollision(int);
     void setMtx();
     void setMoveBGMtx();

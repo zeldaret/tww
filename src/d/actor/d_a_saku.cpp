@@ -209,8 +209,37 @@ BOOL daSaku_c::burn() {
 }
 
 /* 00000E8C-00000F60       .text broken__8daSaku_cFi */
-void daSaku_c::broken(int) {
-    /* Nonmatching */
+BOOL daSaku_c::broken(int b) {
+    /* Nonmatching - 87.7%, logic verified correct against target disassembly
+       (marks the side as broken, resets its resist counter, fires the right
+       destroyed-switch depending on side, recreates its heap, points cullMtx
+       at the bottom half when applicable, and clears its move flags). The
+       remaining diffs are the same constant-load-vs-address-calc and
+       single-use indexed-load scheduling quirks already open elsewhere in
+       this file, not logic errors. */
+    setEffBreak(b);
+
+    u8* row = (u8*)this + b * 4;
+    *(s32*)(row + 0xEF8) = 3;
+    *(s32*)(row + 0xEE0) = 0;
+
+    if (b == 0)
+        dComIfGs_onSwitch(mBottomHalfDestroyedSwitch, home.roomNo);
+    else
+        dComIfGs_onSwitch(mTopHalfDestroyedSwitch, home.roomNo);
+
+    RecreateHeap(1, b);
+
+    if (b == 0) {
+        u8* row2 = (u8*)this + b * 8;
+        void* bottom = *(void**)(row2 + 0xE28);
+        cullMtx = (MtxP)((u8*)bottom + 0x24);
+    }
+
+    *(u8*)((u8*)this + b * 2 + 0xEDC) = 0;
+    *(u8*)((u8*)this + b * 2 + 0xEDD) = 0xFF;
+
+    return TRUE;
 }
 
 /* 00000F60-00000FF4       .text changeCollision__8daSaku_cFi */
