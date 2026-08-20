@@ -71,7 +71,19 @@ void daNpcAuction_c::wait_action() {
 
 /* 00001194-000011EC       .text checkOrder__14daNpcAuction_cFv */
 void daNpcAuction_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        m73E[0] = 0;
+        return;
+    }
+    if (!eventInfo.checkCommandTalk())
+        return;
+    if (m73E[0] != 2 && m73E[0] != 1)
+        return;
+    if (m73C != 0)
+        return;
+    if (field_745[0] != 0)
+        return;
+    m73C = 1;
 }
 
 /* 000011EC-00001270       .text eventOrder__14daNpcAuction_cFv */
