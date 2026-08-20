@@ -27,7 +27,7 @@ public:
     void CreateDummyHeap(int);
     void loadMoveBG(int, int, int);
     void loadModel(int, int, int);
-    void burn();
+    BOOL burn();
     void broken(int);
     void changeCollision(int);
     void setMtx();

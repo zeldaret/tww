@@ -98,38 +98,38 @@ void daSaku_c::loadModel(int, int, int) {
 }
 
 /* 00000D7C-00000E8C       .text burn__8daSaku_cFv */
-void daSaku_c::burn() {
-    if (*(u8*)(mEF3 + 1) != 0)
-        return;
+BOOL daSaku_c::burn() {
+    if (*(u8*)(mEF3 + 1) == 0) {
+        if (*(s32*)(mEF3 + 5) == 1) {
+            *(s32*)(mEF3 + 5) = 2;
+            RecreateHeap(1, 0);
+            *(u32*)(m290 + (0xEE0 - 0x290)) = 0x32;
+        }
+        if (*(s32*)(mEF3 + 9) == 1) {
+            *(s32*)(mEF3 + 9) = 2;
+            RecreateHeap(1, 1);
+            *(u32*)(m290 + (0xEE4 - 0x290)) = 0x32;
+        }
 
-    if (*(s32*)(mEF3 + 5) == 1) {
-        *(s32*)(mEF3 + 5) = 2;
-        RecreateHeap(1, 0);
-        *(u32*)(m290 + (0xEE0 - 0x290)) = 0x32;
+        void* bottom = *(void**)(m290 + (0xE28 - 0x290));
+        if (bottom != NULL) {
+            cullMtx = (MtxP)((u8*)bottom + 0x24);
+        } else {
+            void* top = *(void**)(m290 + (0xE30 - 0x290));
+            if (top != NULL)
+                cullMtx = (MtxP)((u8*)top + 0x24);
+        }
+
+        setEffFire(0);
+        *(u32*)(m290 + (0xEEC - 0x290)) = 0x5a;
+
+        dComIfGs_onSwitch(mBottomHalfDestroyedSwitch, home.roomNo);
+        if (*(s32*)(mEF3 + 9) != 0)
+            dComIfGs_onSwitch(mTopHalfDestroyedSwitch, home.roomNo);
+
+        *(u8*)(mEF3 + 1) = 1;
     }
-    if (*(s32*)(mEF3 + 9) == 1) {
-        *(s32*)(mEF3 + 9) = 2;
-        RecreateHeap(1, 1);
-        *(u32*)(m290 + (0xEE4 - 0x290)) = 0x32;
-    }
-
-    void* bottom = *(void**)(m290 + (0xE28 - 0x290));
-    if (bottom != NULL) {
-        cullMtx = (MtxP)((u8*)bottom + 0x24);
-    } else {
-        void* top = *(void**)(m290 + (0xE30 - 0x290));
-        if (top != NULL)
-            cullMtx = (MtxP)((u8*)top + 0x24);
-    }
-
-    setEffFire(0);
-    *(u32*)(m290 + (0xEEC - 0x290)) = 0x5a;
-
-    dComIfGs_onSwitch(mBottomHalfDestroyedSwitch, home.roomNo);
-    if (*(s32*)(mEF3 + 9) != 0)
-        dComIfGs_onSwitch(mTopHalfDestroyedSwitch, home.roomNo);
-
-    *(u8*)(mEF3 + 1) = 1;
+    return TRUE;
 }
 
 /* 00000E8C-00000F60       .text broken__8daSaku_cFi */
