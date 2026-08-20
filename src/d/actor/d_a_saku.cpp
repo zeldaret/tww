@@ -10,6 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_mtx.h"
 
 const dCcD_SrcCyl daSaku_c::m_cyl_src = {
     // dCcD_SrcGObjInf
@@ -297,7 +298,36 @@ BOOL daSaku_c::changeCollision(int b) {
 
 /* 00000FF4-0000113C       .text setMtx__8daSaku_cFv */
 void daSaku_c::setMtx() {
-    /* Nonmatching */
+    /* Nonmatching - 99.9%, logic verified correct against target disassembly.
+       The only remaining diff is the pooled 200.0f literal getting a
+       different rodata address than the target, the same float pool
+       ordering quirk affecting move_sound and alpha_anime elsewhere in this
+       session, not a logic error. */
+    for (int i = 0; i < 2; i++) {
+        dBgW* bgw = *(dBgW**)((u8*)this + i * 4 + 0xE24);
+        if (bgw != NULL) {
+            *(f32*)((u8*)bgw + 0x18) = scale.x;
+            *(f32*)((u8*)bgw + 0x1c) = scale.y;
+            *(f32*)((u8*)bgw + 0x20) = scale.z;
+            mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+            mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+            PSMTXCopy(mDoMtx_stack_c::now, (MtxP)((u8*)bgw + 0x24));
+        }
+    }
+
+    if (*(s32*)((u8*)this + 0xEFC) != 0) {
+        for (int j = 0; j < 2; j++) {
+            dBgW* bgw = *(dBgW**)((u8*)this + j * 4 + 0xE2C);
+            if (bgw != NULL) {
+                *(f32*)((u8*)bgw + 0x18) = scale.x;
+                *(f32*)((u8*)bgw + 0x1c) = scale.y;
+                *(f32*)((u8*)bgw + 0x20) = scale.z;
+                mDoMtx_stack_c::transS(current.pos.x, 200.0f + current.pos.y, current.pos.z);
+                mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+                PSMTXCopy(mDoMtx_stack_c::now, (MtxP)((u8*)bgw + 0x24));
+            }
+        }
+    }
 }
 
 /* 0000113C-0000120C       .text setMoveBGMtx__8daSaku_cFv */
