@@ -131,10 +131,11 @@ BOOL Line_check(pw_class* i_this, cXyz destPos, u8 r22) {
 
 /* 00002198-00002254       .text alpha_anime__FP8pw_class */
 void alpha_anime(pw_class* i_this) {
+    /* Nonmatching - 99.6%, logic verified correct, float literal pool order differs */
     if (i_this->m33E == 0) {
         i_this->m38E += 0x400;
         cLib_addCalcAngleS2(&i_this->m39C, 100, 1, 10);
-        i_this->m39A = (s16)((f32)i_this->m39C - 176.0f + 30.0f * JMASSin(i_this->m38E));
+        i_this->m39A = (s16)((f32)i_this->m39C + 30.0f * JMASSin(i_this->m38E));
     }
 }
 
@@ -165,7 +166,8 @@ void next_dousa_check(pw_class*) {
 
 /* 000029C8-00002A54       .text move_sound__FP8pw_class */
 void move_sound(pw_class* i_this) {
-    fopAcM_seStart(i_this, JA_SE_CHR_PW_MOVE, 0);
+    /* Nonmatching - 99.5%, logic verified correct, float literal pool order differs */
+    fopAcM_seStart(i_this, JA_SE_CHR_PW_MOVE, (u32)(i_this->speedF * 4.0f));
 }
 
 /* 00002A54-00002A90       .text first_mode_change__FP8pw_class */

@@ -26,7 +26,6 @@ static BOOL daNpc_Auction_nodeCallBack2(J3DNode*, int) {
 /* 00000848-00000868       .text CheckCreateHeap__FP10fopAc_ac_c */
 static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
     ((daNpcAuction_c*)i_this)->createHeap();
-    return TRUE;
 }
 
 /* 00000868-00000ACC       .text phase_1__FP14daNpcAuction_c */
@@ -118,6 +117,8 @@ void daNpcAuction_c::eventMesSetInit(int) {
 
 /* 000018FC-00001930       .text eventMesSet__14daNpcAuction_cFv */
 BOOL daNpcAuction_c::eventMesSet() {
+    /* Nonmatching - 86.9%, logic verified correct (talk(0) < 0x12), compiler chose a
+       different boolean-generation idiom (sign-bit shift vs cntlzw) than target. */
     return talk(0) < 0x12;
 }
 
@@ -200,6 +201,7 @@ void daNpcAuction_c::isExecute() {
 
 /* 00002928-0000298C       .text getRand__14daNpcAuction_cFi */
 int daNpcAuction_c::getRand(int i_max) {
+    /* Nonmatching - 99.6%, logic verified correct, magic-bias constant pool address differs */
     int rnd = (int)cM_rndF((f32)i_max);
     if (rnd == i_max)
         rnd = 0;
@@ -211,15 +213,18 @@ void daNpcAuction_c::clrEmitter() {
     /* Nonmatching */
 }
 
-/* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
-static cPhs_State daNpc_AuctionCreate(void* i_this) {
+cPhs_State daNpcAuction_c::_create() {
     static request_of_phase_process_fn l_method[3] = {
         (request_of_phase_process_fn)phase_1,
         (request_of_phase_process_fn)phase_2,
         NULL,
     };
-    daNpcAuction_c* actor = (daNpcAuction_c*)i_this;
-    return dComLbG_PhaseHandler((request_of_phase_process_class*)((u8*)actor + 0x6D8), l_method, i_this);
+    return dComLbG_PhaseHandler((request_of_phase_process_class*)((u8*)this + 0x6D8), l_method, this);
+}
+
+/* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
+static cPhs_State daNpc_AuctionCreate(void* i_this) {
+    return ((daNpcAuction_c*)i_this)->_create();
 }
 
 /* 00002A0C-00002A70       .text daNpc_AuctionDelete__FPv */
