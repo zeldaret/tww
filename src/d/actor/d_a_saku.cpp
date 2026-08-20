@@ -277,9 +277,19 @@ void daSaku_c::setEffBreak(int) {
     /* Nonmatching */
 }
 
+void changeXluMaterialAlpha(J3DMaterial*, unsigned char, bool);
+
 /* 000019AC-00001A50       .text matAlphaAnim__FP12J3DModelDataUcb */
-void matAlphaAnim(J3DModelData*, unsigned char, bool) {
-    /* Nonmatching */
+BOOL matAlphaAnim(J3DModelData* modelData, unsigned char alpha, bool visible) {
+    /* Nonmatching - 99.7%, logic verified correct against target disassembly.
+       The only remaining diff is a two-byte shift in the pooled assert
+       message string offsets, caused by the stringified condition text here
+       not being exactly the same length as the real source's; the actual
+       parameter names used by JUT_ASSERT's #COND are unknown. */
+    JUT_ASSERT(1489, modelData != NULL);
+    for (u16 i = 0; i < modelData->getMaterialNum(); i++)
+        changeXluMaterialAlpha(modelData->getMaterialNodePointer(i), alpha, visible);
+    return TRUE;
 }
 
 /* 00001A50-00001B98       .text changeXluMaterialAlpha__FP11J3DMaterialUcb */
