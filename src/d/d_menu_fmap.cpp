@@ -163,14 +163,14 @@ dMf_HIO_c::dMf_HIO_c() {
     field_0xEC = 0;
     field_0xED = 255;
     field_0xF2 = 192;
-    field_0xF7 = 0;
-    field_0xF8 = 64;
-    field_0xF9 = 0;
-    field_0xFA = 0;
-    field_0xF3 = 0;
-    field_0xF4 = 129;
-    field_0xF5 = 0;
-    field_0xF6 = 255;
+    field_0xF7.r = 0;
+    field_0xF7.g = 64;
+    field_0xF7.b = 0;
+    field_0xF7.a = 0;
+    field_0xF3.r = 0;
+    field_0xF3.g = 129;
+    field_0xF3.b = 0;
+    field_0xF3.a = 255;
     field_0xFB = 128;
     field_0xFC = 136;
     field_0xFD = 50;
@@ -762,17 +762,95 @@ void dMenu_Fmap_c::dispEndSalvageMark() {
 
 /* 801B14C4-801B1684       .text checkMarkCheck1__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkMarkCheck1() {
-    /* Nonmatching */
+    if (
+        !dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL) ||
+        !dComIfGs_isEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL) ||
+        !dComIfGs_isEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL))
+    {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::MET_KORL)) {
+            mCk1xPanes[0].pane->show();
+        }
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
+            mCk1xPanes[0].pane->hide();
+            mCk1xPanes[2].pane->show();
+        }
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
+            mCk1xPanes[2].pane->hide();
+            mCk1xPanes[1].pane->show();
+        }
+
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E80)) {
+            mCk1xPanes[1].pane->hide();
+        }
+
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3920)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL)) {
+                mCk2xPanes[0].pane->hide();
+            } else {
+                mCk2xPanes[0].pane->show();
+            }
+
+            if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_FARORES_PEARL)) {
+                mCk2xPanes[2].pane->hide();
+            } else {
+                mCk2xPanes[2].pane->show();
+            }
+
+            if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_NAYRUS_PEARL)) {
+                mCk2xPanes[1].pane->hide();
+            } else {
+                mCk2xPanes[1].pane->show();
+            }
+        }
+    }
 }
 
 /* 801B1684-801B1714       .text checkMarkCheck2__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkMarkCheck2() {
-    /* Nonmatching */
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
+        mCk31Pane.pane->show();
+        mCk32Pane.pane->show();
+        if (dComIfGs_isStageBossEnemy(6)) {
+            mCk32Pane.pane->hide();
+        }
+        if (dComIfGs_isStageBossEnemy(7)) {
+            mCk31Pane.pane->hide();
+        }
+    }
 }
 
 /* 801B1714-801B190C       .text checkMarkCheck3__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkMarkCheck3() {
-    /* Nonmatching */
+    if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3940)) {
+        for (int i = 0; i < 8; i++) {
+            u32 bit = i & 7;
+            u8 stat[1];
+            stat[0] = 1;
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102)) {
+                if (((dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF) & 0xFF) >> bit & 1) == 0) {
+                    stat[0] = 0;
+                }
+            }
+
+            if (stat[0] != 0) {
+                ((J2DPicture*)mKr0xPanes[i].pane)->setBlackWhite(g_mfHIO.field_0xF7, g_mfHIO.field_0xF3);
+            }
+
+            ((J2DPicture*)mKr0xPanes[i].pane)->changeTexture(korogStat[stat[0]], 0);
+            mKr0xPanes[i].pane->show();
+            if (dComIfGs_checkBottle(dItemNo_FOREST_WATER_e)) {
+                mKr0xPanes[i].mInitAlpha = 0xC0;
+                mKr0xPanes[i].mNowAlpha = 0xC0;
+                fopMsgM_paneScaleXY(&mKr0xPanes[i], 1.2f);
+            } else {
+                mKr0xPanes[i].mInitAlpha = 0x30;
+                mKr0xPanes[i].mNowAlpha = 0x30;
+                fopMsgM_paneScaleXY(&mKr0xPanes[i], 1.0f);
+            }
+
+            fopMsgM_setAlpha(&mKr0xPanes[i]);
+        }
+    }
 }
 
 /* 801B190C-801B1914       .text isFmapClose__12dMenu_Fmap_cFv */
