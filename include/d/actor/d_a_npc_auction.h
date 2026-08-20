@@ -52,7 +52,7 @@ public:
     void setAnm2(unsigned char, int, float);
     void setAnmTbl(sAnmDat*);
     void isExecute();
-    void getRand(int);
+    int getRand(int);
     void clrEmitter();
 
 public:

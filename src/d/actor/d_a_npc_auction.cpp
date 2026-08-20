@@ -187,8 +187,11 @@ void daNpcAuction_c::isExecute() {
 }
 
 /* 00002928-0000298C       .text getRand__14daNpcAuction_cFi */
-void daNpcAuction_c::getRand(int) {
-    /* Nonmatching */
+int daNpcAuction_c::getRand(int i_max) {
+    int rnd = (int)cM_rndF((f32)i_max);
+    if (rnd == i_max)
+        rnd = 0;
+    return rnd;
 }
 
 /* 0000298C-000029DC       .text clrEmitter__14daNpcAuction_cFv */
