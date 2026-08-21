@@ -824,19 +824,18 @@ void dMenu_Fmap_c::checkMarkCheck3() {
     if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3940)) {
         for (int i = 0; i < 8; i++) {
             u32 bit = i & 7;
-            u8 stat[1];
-            stat[0] = 1;
+            u8 stat = 1;
             if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102)) {
                 if (((dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF) & 0xFF) >> bit & 1) == 0) {
-                    stat[0] = 0;
+                    stat = 0;
                 }
             }
 
-            if (stat[0] != 0) {
+            if (stat != 0) {
                 ((J2DPicture*)mKr0xPanes[i].pane)->setBlackWhite(g_mfHIO.field_0xF7, g_mfHIO.field_0xF3);
             }
 
-            ((J2DPicture*)mKr0xPanes[i].pane)->changeTexture(korogStat[stat[0]], 0);
+            ((J2DPicture*)mKr0xPanes[i].pane)->changeTexture(korogStat[stat], 0);
             mKr0xPanes[i].pane->show();
             if (dComIfGs_checkBottle(dItemNo_FOREST_WATER_e)) {
                 mKr0xPanes[i].mInitAlpha = 0xC0;
@@ -880,13 +879,41 @@ void dMenu_Fmap_c::childPaneMoveSp(fopMsgM_pane_class* i_pane1, fopMsgM_pane_cla
 }
 
 /* 801B19F0-801B1A80       .text selGridMaskAlphaCtrl__12dMenu_Fmap_cFsUcUci */
-BOOL dMenu_Fmap_c::selGridMaskAlphaCtrl(short, u8, u8, int) {
-    /* Nonmatching */
+BOOL dMenu_Fmap_c::selGridMaskAlphaCtrl(short i1, u8 i2, u8 i3, int i4) {
+    if (i1 < 0) {
+        return FALSE;
+    }
+    if (i1 > i2) {
+        return TRUE;
+    }
+    f32 alpha = fopMsgM_valueIncrease(i2, i1, i3);
+    if (i4 != 2) {
+        if (i4 == 1) {
+            alpha = 1.0f - alpha;
+        }
+        fopMsgM_setNowAlpha(&mKkdmPane, alpha);
+        fopMsgM_setAlpha(&mKkdmPane);
+    }
+    return FALSE;
 }
 
 /* 801B1A80-801B1B10       .text fmapMaskAlphaCtrl__12dMenu_Fmap_cFsUcUci */
-BOOL dMenu_Fmap_c::fmapMaskAlphaCtrl(short, u8, u8, int) {
-    /* Nonmatching */
+BOOL dMenu_Fmap_c::fmapMaskAlphaCtrl(short i1, u8 i2, u8 i3, int i4) {
+    if (i1 < 0) {
+        return FALSE;
+    }
+    if (i1 > i2) {
+        return TRUE;
+    }
+    f32 alpha = fopMsgM_valueIncrease(i2, i1, i3);
+    if (i4 != 2) {
+        if (i4 == 1) {
+            alpha = 1.0f - alpha;
+        }
+        fopMsgM_setNowAlpha(&mSmskPane, alpha);
+        fopMsgM_setAlpha(&mSmskPane);
+    }
+    return FALSE;
 }
 
 /* 801B1B10-801B1B58       .text selCursorInit__12dMenu_Fmap_cFv */
