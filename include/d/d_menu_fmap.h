@@ -36,7 +36,7 @@ struct aramCmapDatPnt_t {
     /* 0x00 */ s8 gridNo;
     /* 0x01 */ s8 collectMapNo;
     /* 0x02 */ s8 cmapIdx;
-    /* 0x03 */ u8 field_0x3;
+    /* 0x03 */ s8 field_0x3;
     /* 0x04 */ s16 field_0x4;
     /* 0x06 */ aramCmapSalvagePnt_t salvagePnt[4];
 }; // Size: 0x26
@@ -617,14 +617,8 @@ public:
     /* 0x0F3 */ GXColor field_0xF3;
     /* 0x0F7 */ GXColor field_0xF7;
     /* 0x0FB */ u8 field_0xFB;
-    /* 0x0FC */ u8 field_0xFC;
-    /* 0x0FD */ u8 field_0xFD;
-    /* 0x0FE */ u8 field_0xFE;
-    /* 0x0FF */ u8 field_0xFF;
-    /* 0x100 */ u8 field_0x100;
-    /* 0x101 */ u8 field_0x101;
-    /* 0x102 */ u8 field_0x102;
-    /* 0x103 */ u8 field_0x103;
+    /* 0x0FC */ GXColor field_0xFC;
+    /* 0x100 */ GXColor field_0x100;
     /* 0x104 */ u8 field_0x104;
     /* 0x105 */ u8 field_0x105;
     /* 0x106 */ u8 field_0x106;

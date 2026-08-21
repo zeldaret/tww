@@ -172,14 +172,14 @@ dMf_HIO_c::dMf_HIO_c() {
     field_0xF3.b = 0;
     field_0xF3.a = 255;
     field_0xFB = 128;
-    field_0xFC = 136;
-    field_0xFD = 50;
-    field_0xFE = 0;
-    field_0xFF = 255;
-    field_0x100 = 240;
-    field_0x101 = 0;
-    field_0x102 = 0;
-    field_0x103 = 255;
+    field_0xFC.r = 136;
+    field_0xFC.g = 50;
+    field_0xFC.b = 0;
+    field_0xFC.a = 255;
+    field_0x100.r = 240;
+    field_0x100.g = 0;
+    field_0x100.b = 0;
+    field_0x100.a = 255;
     field_0x34 = 6;
     field_0x33 = 4;
     field_0x36 = 20;
@@ -879,16 +879,16 @@ void dMenu_Fmap_c::childPaneMoveSp(fopMsgM_pane_class* i_pane1, fopMsgM_pane_cla
 }
 
 /* 801B19F0-801B1A80       .text selGridMaskAlphaCtrl__12dMenu_Fmap_cFsUcUci */
-BOOL dMenu_Fmap_c::selGridMaskAlphaCtrl(short i1, u8 i2, u8 i3, int i4) {
-    if (i1 < 0) {
+BOOL dMenu_Fmap_c::selGridMaskAlphaCtrl(short i_value, u8 i_max, u8 i_mode, int i_flag) {
+    if (i_value < 0) {
         return FALSE;
     }
-    if (i1 > i2) {
+    if (i_value > i_max) {
         return TRUE;
     }
-    f32 alpha = fopMsgM_valueIncrease(i2, i1, i3);
-    if (i4 != 2) {
-        if (i4 == 1) {
+    f32 alpha = fopMsgM_valueIncrease(i_max, i_value, i_mode);
+    if (i_flag != 2) {
+        if (i_flag == 1) {
             alpha = 1.0f - alpha;
         }
         fopMsgM_setNowAlpha(&mKkdmPane, alpha);
@@ -898,16 +898,16 @@ BOOL dMenu_Fmap_c::selGridMaskAlphaCtrl(short i1, u8 i2, u8 i3, int i4) {
 }
 
 /* 801B1A80-801B1B10       .text fmapMaskAlphaCtrl__12dMenu_Fmap_cFsUcUci */
-BOOL dMenu_Fmap_c::fmapMaskAlphaCtrl(short i1, u8 i2, u8 i3, int i4) {
-    if (i1 < 0) {
+BOOL dMenu_Fmap_c::fmapMaskAlphaCtrl(short i_value, u8 i_max, u8 i_mode, int i_flag) {
+    if (i_value < 0) {
         return FALSE;
     }
-    if (i1 > i2) {
+    if (i_value > i_max) {
         return TRUE;
     }
-    f32 alpha = fopMsgM_valueIncrease(i2, i1, i3);
-    if (i4 != 2) {
-        if (i4 == 1) {
+    f32 alpha = fopMsgM_valueIncrease(i_max, i_value, i_mode);
+    if (i_flag != 2) {
+        if (i_flag == 1) {
             alpha = 1.0f - alpha;
         }
         fopMsgM_setNowAlpha(&mSmskPane, alpha);
@@ -935,7 +935,12 @@ void dMenu_Fmap_c::selCursorHide() {
 
 /* 801B1B80-801B1CF0       .text selCursorMove__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::selCursorMove() {
-    /* Nonmatching */
+    f32 x = getCtCurWX() * 56.0f;
+    f32 y = getCtCurWY() * 56.0f;
+    for (int i = 0; i < 8; i++) {
+        fopMsgM_paneTrans(&mKk1xPanes[i], x, y);
+    }
+    fopMsgM_paneTrans(&mKkdmPane, x, y);
 }
 
 /* 801B1CF0-801B1D48       .text islandNameChange__12dMenu_Fmap_cFv */
@@ -949,13 +954,44 @@ void dMenu_Fmap_c::islandNameChange() {
 }
 
 /* 801B1D48-801B1FCC       .text changeIslandName__12dMenu_Fmap_cFUc */
-void dMenu_Fmap_c::changeIslandName(u8) {
-    /* Nonmatching */
+void dMenu_Fmap_c::changeIslandName(u8 i_no) {
+    s8 wy = getCtCurWY();
+    s8 wx = getCtCurWX();
+    int grid = wx + (wy + 3) * 7 + 3;
+
+    if (!dComIfGs_isSaveArriveGrid(grid)) {
+        mTxtName[i_no][0] = 0;
+    } else {
+        u32 msgNo;
+        if (grid == 32 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D80)) {
+            msgNo = 0x31D7;
+        } else {
+            msgNo = grid + 0x31A6;
+        }
+
+        if (
+            grid == 0 || grid == 3 || grid == 10 || grid == 12 || grid == 19 ||
+            grid == 22|| grid == 25 || (u32)(grid - 39) <= 1 ||
+            grid == 43 || grid == 44) {
+            ((J2DTextBox*)mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0x100);
+        } else {
+            ((J2DTextBox*)mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0xFC);
+        }
+        fopMsgM_messageGet(mTxtName[i_no], msgNo);
+    }
 }
 
 /* 801B1FCC-801B2044       .text AreaTxtChg__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::AreaTxtChg() {
-    /* Nonmatching */
+    if (mAreaTxtChanging) {
+        int alpha = PaneAlphaAreaTxt(mAreaTxtTimer, g_mfHIO.field_0x32, 0);
+        mAreaTxtTimer++;
+        if (alpha == 1) {
+            mAreaTxtBufIdx ^= 1;
+            mAreaTxtTimer = 0;
+            mAreaTxtChanging = FALSE;
+        }
+    }
 }
 
 /* 801B2044-801B20E0       .text AreaTxtChgFast__12dMenu_Fmap_cFv */
@@ -970,7 +1006,15 @@ void dMenu_Fmap_c::AreaTxtChgFast() {
 
 /* 801B20E0-801B2154       .text salvageGetItemChg__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::salvageGetItemChg() {
-    /* Nonmatching */
+    if (mSalvItmChanging) {
+        int alpha = PaneAlphaSelvageItem(mSalvItmTimer, g_mfHIO.field_0x32);
+        mSalvItmTimer++;
+        if (alpha == 1) {
+            mSalvItmBufIdx ^= 1;
+            mSalvItmTimer = 0;
+            mSalvItmChanging = FALSE;
+        }
+    }
 }
 
 /* 801B2154-801B21AC       .text salvageGetItemChange__12dMenu_Fmap_cFv */
@@ -998,8 +1042,19 @@ void dMenu_Fmap_c::SalvItmDispChgFast() {
 }
 
 /* 801B2274-801B23EC       .text changeSalvageGetItem__12dMenu_Fmap_cFUc */
-void dMenu_Fmap_c::changeSalvageGetItem(u8) {
-    /* Nonmatching */
+void dMenu_Fmap_c::changeSalvageGetItem(u8 i_no) {
+    s8 wy = getCtCurWY();
+    s8 wx = getCtCurWX();
+    aramCmapDatPnt_t* grid = getGridNumToCmapDatPnt(wx + (wy + 3) * 7 + 3);
+
+    if (dComIfGs_isCompleteCollectMap(grid->collectMapNo)) {
+        mFullMapMode = true;
+        ((J2DPicture*)(&mGti1Pane)[i_no].pane)->changeTexture(salvItemex[grid->field_0x3], 0);
+    } else {
+        mFullMapMode = false;
+        fopMsgM_setNowAlpha(&(&mGti1Pane)[i_no], 0.0f);
+        fopMsgM_setAlpha(&(&mGti1Pane)[i_no]);
+    }
 }
 
 /* 801B23EC-801B247C       .text selCursorAnime__12dMenu_Fmap_cFv */
