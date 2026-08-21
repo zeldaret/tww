@@ -19,7 +19,7 @@ public:
     void CreateInit();
     void saku_draw_sub(int);
     void mode_break_none(int);
-    void mode_break_fire(int);
+    BOOL mode_break_fire(int);
     void mode_break_throw_obj(int);
     BOOL RecreateHeap(int, int);
     BOOL CreateHeap(int, int);
@@ -40,6 +40,7 @@ public:
 
     static const dCcD_SrcCyl m_cyl_src;
     static const u8 dust_color[4];
+    static const s32 m_saku_alpha_out_time;
 
 public:
     /* 0x290 */ u8 m290[0xEF2 - 0x290];

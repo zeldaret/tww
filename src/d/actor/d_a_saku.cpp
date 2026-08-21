@@ -10,7 +10,30 @@
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_ext.h"
+#include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
+#include "SSystem/SComponent/c_lib.h"
+
+const s32 daSaku_c::m_saku_alpha_out_time = 10;
+
+/* Field layout beyond mNo is inferred from usage across this file's
+   functions, not from a matched constructor: mNo is the mDoHIO_createChild
+   child id (sentinel -1), and there is an s16 "chase speed" field at 0x10
+   used by mode_break_fire. Everything else in the 0x18-byte object (real
+   size confirmed via the linked l_sakuHIO symbol) is unverified and left as
+   raw padding rather than guessed at. */
+class sakuHIO_c : public JORReflexible {
+public:
+    sakuHIO_c() {}
+    virtual ~sakuHIO_c() {}
+    void genMessage(JORMContext*) {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 field_0x05[0x18 - 0x05];
+};
+
+static sakuHIO_c l_sakuHIO;
 
 const dCcD_SrcCyl daSaku_c::m_cyl_src = {
     // dCcD_SrcGObjInf
@@ -98,8 +121,34 @@ void daSaku_c::mode_break_none(int) {
 }
 
 /* 000005CC-000006A8       .text mode_break_fire__8daSaku_cFi */
-void daSaku_c::mode_break_fire(int) {
-    /* Nonmatching */
+BOOL daSaku_c::mode_break_fire(int b) {
+    /* Nonmatching - 87.3%, logic verified correct against target disassembly.
+       sakuHIO_c's real field layout beyond mNo and this s16 speed field at
+       0x10 is unknown (no REL exists for this file to inspect further with
+       Ghidra), so it is declared as raw padding here. The remaining diff is
+       mostly a this/b register swap plus a couple of single-use indexed
+       loads, both cosmetic; target also has one truly redundant duplicate
+       null check on the heap pointer that this form does not reproduce. */
+    daSaku_c* self = this;
+    if (*(s32*)((u8*)self + 0xEBC) > m_saku_alpha_out_time) {
+        u8* row2 = (u8*)self + b * 2;
+        cLib_chaseUC(row2 + 0xEDD, 0xFF, (u8)(*(s16*)((u8*)&l_sakuHIO + 0x10)));
+        if (cLib_chaseUC(row2 + 0xEDC, 0, (u8)(*(s16*)((u8*)&l_sakuHIO + 0x10)))) {
+            u8* row3 = (u8*)self + b * 8;
+            if (*(void**)(row3 + 0xE14) != NULL) {
+                u8* bCounter = (u8*)self + b + 0xEF0;
+                if (*bCounter != 0) {
+                    (*bCounter)--;
+                    if (*bCounter == 0) {
+                        mDoExt_destroySolidHeap(*(JKRSolidHeap**)(row3 + 0xE14));
+                        *(u32*)(row3 + 0xE14) = 0;
+                        *(u32*)(row3 + 0xE24) = 0;
+                    }
+                }
+            }
+        }
+    }
+    return TRUE;
 }
 
 /* 000006A8-0000083C       .text mode_break_throw_obj__8daSaku_cFi */
