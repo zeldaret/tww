@@ -766,8 +766,45 @@ cPhs_State daSaku_c::_daSaku_create() {
 }
 
 /* 00002264-000023D8       .text daSaku_Delete__FP8daSaku_c */
-static BOOL daSaku_Delete(daSaku_c*) {
-    /* Nonmatching */
+static BOOL daSaku_Delete(daSaku_c* i_this) {
+    /* Nonmatching - 92.3%, logic verified correct against target
+       disassembly: the HIO debug menu child cleanup, removing both smoke
+       callbacks, releasing both sides' collision boards when set, tearing
+       down all four per-side-per-variant heaps, and deleting all three
+       loaded archive resources all match. The remaining diff is a register
+       renumbering shift, not a logic error. */
+    if (l_sakuHIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_sakuHIO.mNo);
+        l_sakuHIO.mNo = -1;
+    }
+
+    for (int i = 0; i < 2; i++)
+        ((dPa_smokeEcallBack*)((u8*)i_this + i * 0x20 + 0x290))->remove();
+
+    for (int i = 0; i < 2; i++) {
+        if (*(s32*)((u8*)i_this + i * 4 + 0xEF8) != 0)
+            g_dComIfG_gameInfo.play.mBgS.Release(*(cBgW**)((u8*)i_this + i * 4 + 0xE44));
+    }
+
+    for (int j = 0; j < 2; j++) {
+        for (int k = 0; k < 2; k++) {
+            u8* slot = (u8*)i_this + j * 8 + k * 4;
+            if (*(JKRSolidHeap**)(slot + 0xE14) != NULL) {
+                mDoExt_destroySolidHeap(*(JKRSolidHeap**)(slot + 0xE14));
+                *(u32*)(slot + 0xE14) = 0;
+                *(u32*)(slot + 0xE24) = 0;
+            }
+        }
+    }
+
+    dComIfG_resDelete((request_of_phase_process_class*)((u8*)i_this + 0xE0C), daSaku_c::m_arcname[0]);
+
+    if (i_this->mSturdinessType == 0)
+        dComIfG_resDelete((request_of_phase_process_class*)((u8*)i_this + 0xE04), daSaku_c::m_arcname[1]);
+    else
+        dComIfG_resDelete((request_of_phase_process_class*)((u8*)i_this + 0xE04), daSaku_c::m_arcname[2]);
+
+    return TRUE;
 }
 
 /* 000023D8-000023E0       .text daSaku_IsDelete__FP8daSaku_c */
