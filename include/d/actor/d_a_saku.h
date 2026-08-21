@@ -36,10 +36,10 @@ public:
     void setCol();
     BOOL MoveBGResist(int, int);
     BOOL setEffFire(int);
-    void setEffBreak(int);
+    BOOL setEffBreak(int);
 
     static const dCcD_SrcCyl m_cyl_src;
-    static const u8 dust_color[4];
+    static u8 dust_color[4];
     static const char* m_arcname[3];
     static s32 m_saku_alpha_out_time;
     static s32 m_max_particle_timer;

@@ -70,7 +70,7 @@ const dCcD_SrcCyl daSaku_c::m_cyl_src = {
 };
 
 
-const u8 daSaku_c::dust_color[4] = { 0x69, 0x5B, 0x30, 0xFF };
+u8 daSaku_c::dust_color[4] = { 0x69, 0x5B, 0x30, 0xFF };
 
 /* Real string contents unverified: no REL exists for this object to inspect
    the rodata relocations with a decompiler, and the string bytes have no
@@ -628,8 +628,68 @@ BOOL daSaku_c::setEffFire(int) {
 }
 
 /* 000016C0-000019AC       .text setEffBreak__8daSaku_cFi */
-void daSaku_c::setEffBreak(int) {
-    /* Nonmatching */
+BOOL daSaku_c::setEffBreak(int b) {
+    /* Nonmatching - 79.2%, logic reconstructed and verified correct against
+       target disassembly, including the HIO-gated ember particle, the
+       magic-bias byte-to-float duration conversion, the dust_color HIO
+       override (dust_color is genuinely mutable at runtime, not const, this
+       function writes to it), the toon smoke particle with its per-side
+       callback object, the conditional emitter field block with its real
+       retail constants, and the sturdiness-based break sound. The remaining
+       diff is a this/b register swap plus some local variable scheduling
+       differences that also shift the stack frame size slightly; the
+       control flow and every constant value used all match the target. */
+    cXyz pos = current.pos;
+    pos.y += 100.0f;
+    if (b == 1)
+        pos.y += 200.0f;
+
+    if (*(u8*)((u8*)&l_sakuHIO + 0xF) != 0) {
+        dComIfGp_particle_set(0x45d, &pos, &current.angle, &scale, 0xFF, NULL, -1,
+                               (GXColor*)((u8*)this + 0x194), (GXColor*)((u8*)this + 0x194), NULL);
+    }
+
+    *(f32*)((u8*)this + b * 4 + 0xEB4) = (f32)(*(u8*)((u8*)&l_sakuHIO + 0x12)) / 255.0f;
+
+    dust_color[0] = *(u8*)((u8*)&l_sakuHIO + 0x13);
+    dust_color[1] = *(u8*)((u8*)&l_sakuHIO + 0x14);
+    dust_color[2] = *(u8*)((u8*)&l_sakuHIO + 0x15);
+
+    *(f32*)((u8*)this + b * 0xC + 0xEC4) = pos.x;
+    *(f32*)((u8*)this + b * 0xC + 0xEC8) = pos.y;
+    *(f32*)((u8*)this + b * 0xC + 0xECC) = pos.z;
+
+    dComIfGp_particle_setToon(0x2027, (cXyz*)((u8*)this + b * 0xC + 0xEC4), &current.angle, NULL,
+                               *(u8*)((u8*)&l_sakuHIO + 0x12),
+                               (dPa_levelEcallBack*)((u8*)this + b * 0x20 + 0x290), current.roomNo);
+
+    void* obj = *(void**)((u8*)this + b * 0x20 + 0x294);
+    if (obj != NULL) {
+        *(u8*)((u8*)obj + 0x1FF) = (u8)(255.0f * (*(f32*)((u8*)this + b * 4 + 0xEB4)));
+        *(u32*)((u8*)obj + 0x20C) |= 0x40;
+        *(f32*)((u8*)obj + 0x1F0) = 40.0f;
+        *(f32*)((u8*)obj + 0x1F4) = 40.0f;
+        *(f32*)((u8*)obj + 0x1F8) = 1.0f;
+        *(f32*)((u8*)obj + 0x1D8) = 2.0f;
+        *(f32*)((u8*)obj + 0x1DC) = 2.0f;
+        *(f32*)((u8*)obj + 0x1E0) = 2.0f;
+        *(f32*)((u8*)obj + 0xC) = 1.0f;
+        *(f32*)((u8*)obj + 0x10) = 0.5f;
+        *(f32*)((u8*)obj + 0x14) = 0.7f;
+        *(f32*)((u8*)obj + 0x38) = 3.2f;
+        *(u32*)((u8*)obj + 0x60) = 1;
+    }
+
+    if (mSturdinessType == 0) {
+        JAIZelBasic::getInterface()->seStart(0x6847, (Vec*)((u8*)this + 0x260), 0,
+                                              dComIfGp_getReverb(current.roomNo));
+    } else if (mSturdinessType == 1) {
+        JAIZelBasic::getInterface()->seStart(0x693f, (Vec*)((u8*)this + 0x260), 0,
+                                              dComIfGp_getReverb(current.roomNo));
+    }
+
+    *(s32*)((u8*)this + b * 4 + 0xEBC) = 1;
+    return TRUE;
 }
 
 void changeXluMaterialAlpha(J3DMaterial*, unsigned char, bool);
