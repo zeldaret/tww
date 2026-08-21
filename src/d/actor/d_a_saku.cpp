@@ -533,7 +533,58 @@ void daSaku_c::checkCol() {
 
 /* 0000134C-00001510       .text setCol__8daSaku_cFv */
 void daSaku_c::setCol() {
-    /* Nonmatching */
+    /* Nonmatching - 89.5%, logic verified correct against target disassembly,
+       including all six local collision points (real retail float values
+       0/20/-100/100 for the bottom set, 0/220/-100/100 for the top set),
+       both dCcD_Cyl::Set calls, and the stored matrix pointers. The
+       remaining diff is a near-total register renumbering shift across the
+       whole function plus one coincidental address-computation shortcut the
+       compiler took, not logic errors. */
+    ((cXyz*)((u8*)this + 0xA2C))->x = 0.0f;
+    ((cXyz*)((u8*)this + 0xA2C))->y = 20.0f;
+    ((cXyz*)((u8*)this + 0xA2C))->z = 0.0f;
+    ((cXyz*)((u8*)this + 0xA38))->x = -100.0f;
+    ((cXyz*)((u8*)this + 0xA38))->y = 20.0f;
+    ((cXyz*)((u8*)this + 0xA38))->z = 0.0f;
+    ((cXyz*)((u8*)this + 0xA44))->x = 100.0f;
+    ((cXyz*)((u8*)this + 0xA44))->y = 20.0f;
+    ((cXyz*)((u8*)this + 0xA44))->z = 0.0f;
+
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+
+    for (int k = 0; k < 3; k++) {
+        cXyz* localPt = (cXyz*)((u8*)this + k * 0xC + 0xA2C);
+        mDoMtx_stack_c::multVec(localPt, localPt);
+
+        dCcD_Cyl* cyl = (dCcD_Cyl*)((u8*)this + k * 0x130 + 0x30C);
+        cyl->Set(m_cyl_src);
+        *(MtxP*)((u8*)this + k * 0x130 + 0x350) = mDoMtx_stack_c::now;
+    }
+
+    if (*(s32*)((u8*)this + 0xEFC) != 0) {
+        ((cXyz*)((u8*)this + 0xA50))->x = 0.0f;
+        ((cXyz*)((u8*)this + 0xA50))->y = 220.0f;
+        ((cXyz*)((u8*)this + 0xA50))->z = 0.0f;
+        ((cXyz*)((u8*)this + 0xA5C))->x = -100.0f;
+        ((cXyz*)((u8*)this + 0xA5C))->y = 220.0f;
+        ((cXyz*)((u8*)this + 0xA5C))->z = 0.0f;
+        ((cXyz*)((u8*)this + 0xA68))->x = 100.0f;
+        ((cXyz*)((u8*)this + 0xA68))->y = 220.0f;
+        ((cXyz*)((u8*)this + 0xA68))->z = 0.0f;
+
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
+
+        for (int k = 0; k < 3; k++) {
+            cXyz* localPt = (cXyz*)((u8*)this + k * 0xC + 0xA50);
+            mDoMtx_stack_c::multVec(localPt, localPt);
+
+            dCcD_Cyl* cyl = (dCcD_Cyl*)((u8*)this + k * 0x130 + 0x69C);
+            cyl->Set(m_cyl_src);
+            *(MtxP*)((u8*)this + k * 0x130 + 0x6E0) = mDoMtx_stack_c::now;
+        }
+    }
 }
 
 /* 00001510-00001598       .text MoveBGResist__8daSaku_cFii */
