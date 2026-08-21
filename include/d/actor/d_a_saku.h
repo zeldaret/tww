@@ -35,7 +35,7 @@ public:
     void checkCol();
     void setCol();
     BOOL MoveBGResist(int, int);
-    void setEffFire(int);
+    BOOL setEffFire(int);
     void setEffBreak(int);
 
     static const dCcD_SrcCyl m_cyl_src;
@@ -43,6 +43,7 @@ public:
     static const char* m_arcname[3];
     static s32 m_saku_alpha_out_time;
     static s32 m_max_particle_timer;
+    static u8 m_smoke_alpha;
 
 public:
     /* 0x290 */ u8 m290[0xEF2 - 0x290];

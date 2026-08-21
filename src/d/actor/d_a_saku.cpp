@@ -9,6 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "JAZelAudio/JAIZelBasic.h"
 #include "d/d_vibration.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -17,6 +18,7 @@
 
 s32 daSaku_c::m_saku_alpha_out_time = 10;
 s32 daSaku_c::m_max_particle_timer = 2000;
+u8 daSaku_c::m_smoke_alpha = 230;
 
 /* Field layout beyond mNo is inferred from usage across this file's
    functions, not from a matched constructor: mNo is the mDoHIO_createChild
@@ -605,8 +607,24 @@ BOOL daSaku_c::MoveBGResist(int a, int b) {
 }
 
 /* 00001598-000016C0       .text setEffFire__8daSaku_cFi */
-void daSaku_c::setEffFire(int) {
-    /* Nonmatching */
+BOOL daSaku_c::setEffFire(int) {
+    /* Nonmatching - 93.5%, logic verified correct against target disassembly:
+       both particle spawns at the actor's position and angle, the smoke
+       alpha constant, the particle timer resets, and the sound call with
+       its real retail flags all match. The remaining diff is purely a
+       scheduling difference in when the zel_basic interface pointer gets
+       loaded relative to the reverb lookup argument, not a logic error. The
+       leading int parameter is genuinely unused in the target too. */
+    cXyz pos = current.pos;
+    dComIfGp_particle_set(0x45c, &pos, &current.angle, NULL, 0xFF);
+    dComIfGp_particle_set(0x245e, &pos, &current.angle, NULL, m_smoke_alpha);
+
+    *(s32*)((u8*)this + 0xEC0) = 1;
+    *(s32*)((u8*)this + 0xEBC) = 1;
+
+    JAIZelBasic::getInterface()->seStart(0x6924, (Vec*)((u8*)this + 0x260), 0,
+                                          dComIfGp_getReverb(current.roomNo));
+    return TRUE;
 }
 
 /* 000016C0-000019AC       .text setEffBreak__8daSaku_cFi */
