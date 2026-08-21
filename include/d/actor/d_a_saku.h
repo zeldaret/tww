@@ -20,7 +20,7 @@ public:
     void saku_draw_sub(int);
     BOOL mode_break_none(int);
     BOOL mode_break_fire(int);
-    void mode_break_throw_obj(int);
+    BOOL mode_break_throw_obj(int);
     BOOL RecreateHeap(int, int);
     BOOL CreateHeap(int, int);
     s32 GetDzbId(int);
@@ -44,6 +44,8 @@ public:
     static s32 m_saku_alpha_out_time;
     static s32 m_max_particle_timer;
     static u8 m_smoke_alpha;
+    static s32 m_alpha_start_time;
+    static s32 m_fade_time;
 
 public:
     /* 0x290 */ u8 m290[0xEF2 - 0x290];

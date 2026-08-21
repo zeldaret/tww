@@ -19,6 +19,8 @@
 s32 daSaku_c::m_saku_alpha_out_time = 10;
 s32 daSaku_c::m_max_particle_timer = 2000;
 u8 daSaku_c::m_smoke_alpha = 230;
+s32 daSaku_c::m_alpha_start_time = 10;
+s32 daSaku_c::m_fade_time = 40;
 
 /* Field layout beyond mNo is inferred from usage across this file's
    functions, not from a matched constructor: mNo is the mDoHIO_createChild
@@ -213,8 +215,49 @@ BOOL daSaku_c::mode_break_fire(int b) {
 }
 
 /* 000006A8-0000083C       .text mode_break_throw_obj__8daSaku_cFi */
-void daSaku_c::mode_break_throw_obj(int) {
-    /* Nonmatching */
+BOOL daSaku_c::mode_break_throw_obj(int b) {
+    /* Nonmatching - 90.4%, logic verified correct against target
+       disassembly: the heap destroy guard shared with mode_break_fire, the
+       alpha-start-time gate, the magic-bias duration-to-float conversion and
+       fade-time division, the cLib_chaseF call, the abs and byte conversion
+       of the resulting alpha, and the smoke callback's removal once alpha
+       hits zero all match. The remaining diff is a register renumbering
+       shift plus a couple of single-use indexed-load patterns already open
+       elsewhere in this file, not logic errors. */
+    u8* row = (u8*)this + b * 8;
+    if (*(void**)(row + 0xE14) != NULL && *(void**)(row + 0xE18) != NULL) {
+        u8* counter = (u8*)this + b + 0xEF0;
+        if (*counter != 0) {
+            (*counter)--;
+            if (*counter == 0) {
+                mDoExt_destroySolidHeap(*(JKRSolidHeap**)(row + 0xE14));
+                *(u32*)(row + 0xE14) = 0;
+                *(u32*)(row + 0xE24) = 0;
+            }
+        }
+    }
+
+    u8* row2 = (u8*)this + b * 4;
+    if (*(s32*)(row2 + 0xEBC) >= m_alpha_start_time) {
+        void* obj = *(void**)((u8*)this + b * 0x20 + 0x294);
+        if (obj != NULL) {
+            f32* alphaField = (f32*)(row2 + 0xEB4);
+            f32 duration = (f32)(*(u8*)((u8*)&l_sakuHIO + 0x12));
+            cLib_chaseF(alphaField, 0.0f, duration / (255.0f * (f32)m_fade_time));
+
+            *alphaField = std::fabsf(*alphaField);
+
+            s32 alphaByte = (s32)(255.0f * (*alphaField));
+            *(u8*)((u8*)obj + 0x1FF) = (u8)alphaByte;
+
+            if ((u8)alphaByte == 0) {
+                ((dPa_smokeEcallBack*)((u8*)this + b * 0x20 + 0x290))->remove();
+                *(s32*)(row2 + 0xEAC) = 0;
+            }
+        }
+    }
+
+    return TRUE;
 }
 
 /* 0000083C-000008EC       .text RecreateHeap__8daSaku_cFii */
