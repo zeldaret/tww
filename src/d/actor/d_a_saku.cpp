@@ -9,6 +9,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_vibration.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_mtx.h"
@@ -117,8 +118,59 @@ void daSaku_c::saku_draw_sub(int) {
 }
 
 /* 000003A8-00000590       .text mode_break_none__8daSaku_cFi */
-void daSaku_c::mode_break_none(int) {
-    /* Nonmatching */
+BOOL daSaku_c::mode_break_none(int b) {
+    /* Nonmatching - 81.3%, logic verified correct against target disassembly,
+       including reverse engineering which AT_TYPE_* flags gate each
+       sturdiness level (SWORD/UNK8/BOMB/MACHETE/UNK800/DARKNUT_SWORD/
+       MOBLIN_SPEAR/SKULL_HAMMER for sturdiness 0, a subset of those for
+       sturdiness 1) and which flags trigger the shock/burn path
+       (FIRE/UNK20000/FIRE_ARROW). The remaining diffs are register swaps on
+       the two accumulator flags plus a couple of extra compares the
+       compiler inserts around them; the underlying control flow and bit
+       tests all match the target address for address. */
+    u8* sideBase = (u8*)this + b * 0x390;
+    BOOL hitFlag = FALSE;
+    BOOL shockFlag = FALSE;
+    for (int k = 0; k < 3; k++) {
+        dCcD_GObjInf* gObjInf = (dCcD_GObjInf*)(sideBase + k * 0x130 + 0x30C);
+        if (!gObjInf->ChkTgHit())
+            continue;
+        cCcD_Obj* hitObj = gObjInf->GetTgHitObj();
+        if (hitObj == NULL)
+            continue;
+
+        if (mSturdinessType == 0) {
+            u32 atType = hitObj->GetAtType();
+            if ((atType & AT_TYPE_SWORD) || (atType & AT_TYPE_UNK8) || (atType & AT_TYPE_BOMB) ||
+                (atType & AT_TYPE_MACHETE) || (atType & AT_TYPE_UNK800) || (atType & AT_TYPE_DARKNUT_SWORD) ||
+                (atType & AT_TYPE_MOBLIN_SPEAR) || (atType & AT_TYPE_SKULL_HAMMER))
+                hitFlag |= TRUE;
+        } else if (mSturdinessType == 1) {
+            u32 atType = hitObj->GetAtType();
+            if ((atType & AT_TYPE_MACHETE) || (atType & AT_TYPE_BOMB) || (atType & AT_TYPE_UNK800) ||
+                (atType & AT_TYPE_DARKNUT_SWORD))
+                hitFlag |= TRUE;
+        }
+
+        if (hitFlag)
+            dComIfGp_getVibration().StartShock(4, -33, cXyz(0.0f, 1.0f, 0.0f));
+
+        u32 atType2 = hitObj->GetAtType();
+        if ((atType2 & AT_TYPE_FIRE) || (atType2 & AT_TYPE_UNK20000) || (atType2 & AT_TYPE_FIRE_ARROW))
+            shockFlag |= TRUE;
+
+        if (shockFlag)
+            break;
+    }
+
+    if (shockFlag) {
+        burn();
+    } else if (hitFlag) {
+        if (b == 1 && *(s32*)((u8*)this + 0xEF8) == 1)
+            broken(0);
+        broken(b);
+    }
+    return TRUE;
 }
 
 /* 000005CC-000006A8       .text mode_break_fire__8daSaku_cFi */

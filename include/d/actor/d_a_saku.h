@@ -18,7 +18,7 @@ public:
 
     void CreateInit();
     void saku_draw_sub(int);
-    void mode_break_none(int);
+    BOOL mode_break_none(int);
     BOOL mode_break_fire(int);
     void mode_break_throw_obj(int);
     BOOL RecreateHeap(int, int);
