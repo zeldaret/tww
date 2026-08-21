@@ -331,8 +331,34 @@ BOOL daSaku_c::loadMoveBG(int a, int b, int c) {
 }
 
 /* 00000BE8-00000D7C       .text loadModel__8daSaku_cFiii */
-BOOL daSaku_c::loadModel(int, int, int) {
-    /* Nonmatching */
+BOOL daSaku_c::loadModel(int k, int p2, int p3) {
+    /* Nonmatching - 91.8%, logic verified correct against target disassembly:
+       both local resource id tables (real retail values read straight from
+       the target's rodata), the sturdiness-based arc and id selection, the
+       assert, the model creation call with its real flags, and the per-slot
+       model pointer store and null check all match. The remaining diffs are
+       a two-byte pooled assert string offset shift and the same single-use
+       indexed-load pattern already open on several other functions in this
+       file, neither of which is a logic error. */
+    const s32 table2402[6] = { 3, 7, 5, 4, 6, 8 };
+    const s32 table4403[6] = { 3, 5, 4, 6, 8, 7 };
+
+    if (p3 == 1)
+        k += 3;
+
+    void* res;
+    if (mSturdinessType == 0) {
+        res = dComIfG_getObjectRes(m_arcname[1], table2402[k]);
+    } else if (mSturdinessType == 1) {
+        res = dComIfG_getObjectRes(m_arcname[2], table4403[k]);
+    }
+
+    JUT_ASSERT(1085, res != NULL);
+    J3DModel* mpModel = mDoExt_J3DModel__create((J3DModelData*)res, 0, 0x11020203);
+    *(J3DModel**)((u8*)this + p3 * 8 + p2 * 4 + 0xE24) = mpModel;
+    if (*(J3DModel**)((u8*)this + p3 * 8 + p2 * 4 + 0xE24) == NULL)
+        return FALSE;
+    return TRUE;
 }
 
 /* 00000D7C-00000E8C       .text burn__8daSaku_cFv */
