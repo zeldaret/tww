@@ -17,7 +17,7 @@ public:
     inline BOOL _daSaku_isdelete();
 
     void CreateInit();
-    void saku_draw_sub(int);
+    BOOL saku_draw_sub(int);
     BOOL mode_break_none(int);
     BOOL mode_break_fire(int);
     BOOL mode_break_throw_obj(int);

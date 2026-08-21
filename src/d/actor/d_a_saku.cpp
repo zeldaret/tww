@@ -83,6 +83,8 @@ const char* daSaku_c::m_arcname[3] = { "Saku", "Saku", "Saku" };
 class J3DModelData;
 class J3DMaterial;
 
+BOOL matAlphaAnim(J3DModelData*, unsigned char, bool);
+
 /* 000000EC-00000200       .text CreateInit__8daSaku_cFv */
 void daSaku_c::CreateInit() {
     /* Nonmatching - 88.1%, logic verified correct against target disassembly:
@@ -123,8 +125,48 @@ void daSaku_c::CreateInit() {
 }
 
 /* 00000200-000003A8       .text saku_draw_sub__8daSaku_cFi */
-void daSaku_c::saku_draw_sub(int) {
-    /* Nonmatching */
+BOOL daSaku_c::saku_draw_sub(int b) {
+    /* Nonmatching - 88.4%, logic verified correct against target
+       disassembly: the HIO alpha threshold gate, both sides' board
+       existence and non-zero-alpha checks, the light and alpha updates for
+       the bottom board with its temporary j3dSys light state swap around
+       mDoExt_modelUpdateDL, and the equivalent light setup and always-run
+       final alpha and draw update calls for the top board all match. The
+       remaining diff is a register renumbering shift and one constant that
+       the compiler folded away here but not in the target, not a logic
+       error. */
+    BOOL fullAlpha = TRUE;
+    u8* pairField = (u8*)this + b * 2;
+    u8 alphaByte = *(u8*)(pairField + 0xEDC);
+    if (alphaByte < *(u8*)((u8*)&l_sakuHIO + 0x16)) {
+        fullAlpha = FALSE;
+        u8* row = (u8*)this + b * 8;
+        if (*(void**)(row + 0xE14) != NULL && *(void**)(row + 0xE24) != NULL && alphaByte != 0) {
+            g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+            g_env_light.setLightTevColorType(*(J3DModel**)(row + 0xE24), &tevStr);
+            matAlphaAnim((*(J3DModel**)(row + 0xE24))->getModelData(), alphaByte, fullAlpha);
+
+            *(u32*)((u8*)&j3dSys + 0x48) = *(u32*)((u8*)&g_dComIfG_gameInfo + 0x5D30);
+            *(u32*)((u8*)&j3dSys + 0x4C) = *(u32*)((u8*)&g_dComIfG_gameInfo + 0x5D34);
+            mDoExt_modelUpdateDL(*(J3DModel**)(row + 0xE24));
+            *(u32*)((u8*)&j3dSys + 0x48) = *(u32*)((u8*)&g_dComIfG_gameInfo + 0x5D38);
+            *(u32*)((u8*)&j3dSys + 0x4C) = *(u32*)((u8*)&g_dComIfG_gameInfo + 0x5D3C);
+            matAlphaAnim((*(J3DModel**)(row + 0xE24))->getModelData(), 0xFF, TRUE);
+        }
+    }
+
+    u8* row2 = (u8*)this + b * 8;
+    if (*(void**)(row2 + 0xE18) != NULL && *(void**)(row2 + 0xE28) != NULL &&
+        *(u8*)(pairField + 0xEDD) != 0) {
+        g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(*(J3DModel**)(row2 + 0xE28), &tevStr);
+    }
+
+    matAlphaAnim((*(J3DModel**)(row2 + 0xE28))->getModelData(), 0xFF, !fullAlpha);
+    mDoExt_modelUpdateDL(*(J3DModel**)(row2 + 0xE28));
+    matAlphaAnim((*(J3DModel**)(row2 + 0xE28))->getModelData(), 0xFF, TRUE);
+
+    return TRUE;
 }
 
 /* 000003A8-00000590       .text mode_break_none__8daSaku_cFi */
