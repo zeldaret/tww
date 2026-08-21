@@ -14,7 +14,8 @@
 #include "m_Do/m_Do_mtx.h"
 #include "SSystem/SComponent/c_lib.h"
 
-const s32 daSaku_c::m_saku_alpha_out_time = 10;
+s32 daSaku_c::m_saku_alpha_out_time = 10;
+s32 daSaku_c::m_max_particle_timer = 2000;
 
 /* Field layout beyond mNo is inferred from usage across this file's
    functions, not from a matched constructor: mNo is the mDoHIO_createChild
@@ -122,7 +123,7 @@ void daSaku_c::mode_break_none(int) {
 
 /* 000005CC-000006A8       .text mode_break_fire__8daSaku_cFi */
 BOOL daSaku_c::mode_break_fire(int b) {
-    /* Nonmatching - 87.3%, logic verified correct against target disassembly.
+    /* Nonmatching - 92.1%, logic verified correct against target disassembly.
        sakuHIO_c's real field layout beyond mNo and this s16 speed field at
        0x10 is unknown (no REL exists for this file to inspect further with
        Ghidra), so it is declared as raw padding here. The remaining diff is
@@ -481,8 +482,45 @@ static BOOL daSaku_Draw(daSaku_c*) {
 }
 
 /* 0000242C-00002560       .text daSaku_Execute__FP8daSaku_c */
-static BOOL daSaku_Execute(daSaku_c*) {
-    /* Nonmatching */
+static BOOL daSaku_Execute(daSaku_c* i_this) {
+    /* Nonmatching - 93.2%, logic and switch dispatch targets verified
+       address-by-address correct against target disassembly (including the
+       case 1/3/2 physical block ordering, which matched once reordered to
+       this exact sequence). The remaining diffs are a this/i0/i1 register
+       swap plus the compiler hoisting the m_max_particle_timer load above
+       the small timer loop instead of re-reading it every iteration like
+       the target does, neither of which is a logic error. */
+    for (int i = 0; i < 2; i++) {
+        s32 timer = *(s32*)((u8*)i_this + i * 4 + 0xEBC);
+        if (timer != 0 && timer < daSaku_c::m_max_particle_timer)
+            *(s32*)((u8*)i_this + i * 4 + 0xEBC) = timer + 1;
+    }
+
+    if (*(s32*)((u8*)i_this + 0xEEC) != 0)
+        (*(s32*)((u8*)i_this + 0xEEC))--;
+    (*(s32*)((u8*)i_this + 0xEE8))++;
+
+    for (int i = 0; i < 2; i++) {
+        s32 state = *(s32*)((u8*)i_this + i * 4 + 0xEF8);
+        switch (state) {
+        case 1:
+            i_this->mode_break_none(i);
+            break;
+        case 3:
+            i_this->mode_break_throw_obj(i);
+            break;
+        case 2:
+            i_this->mode_break_fire(i);
+            break;
+        }
+    }
+
+    for (int j = 0; j < 2; j++)
+        i_this->changeCollision(j);
+
+    i_this->setMtx();
+    i_this->checkCol();
+    return TRUE;
 }
 
 static actor_method_class l_daSaku_Method = {

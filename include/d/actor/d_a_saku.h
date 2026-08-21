@@ -40,7 +40,8 @@ public:
 
     static const dCcD_SrcCyl m_cyl_src;
     static const u8 dust_color[4];
-    static const s32 m_saku_alpha_out_time;
+    static s32 m_saku_alpha_out_time;
+    static s32 m_max_particle_timer;
 
 public:
     /* 0x290 */ u8 m290[0xEF2 - 0x290];
