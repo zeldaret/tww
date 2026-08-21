@@ -824,13 +824,8 @@ void dMenu_Fmap_c::checkMarkCheck3() {
     if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3940)) {
         for (int i = 0; i < 8; i++) {
             u32 bit = i & 7;
-            u8 stat = 1;
-            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102)) {
-                if (((dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF) & 0xFF) >> bit & 1) == 0) {
-                    stat = 0;
-                }
-            }
-
+            bool stat = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) ||
+                        ((dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF) & 0xFF) >> bit & 1);
             if (stat != 0) {
                 ((J2DPicture*)mKr0xPanes[i].pane)->setBlackWhite(g_mfHIO.field_0xF7, g_mfHIO.field_0xF3);
             }
@@ -1059,7 +1054,16 @@ void dMenu_Fmap_c::changeSalvageGetItem(u8 i_no) {
 
 /* 801B23EC-801B247C       .text selCursorAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::selCursorAnime() {
-    /* Nonmatching */
+    if (mKk1xPanes[0].mUserArea == 0) {
+        for (int i = 0; i < 4; i++) {
+            mKk1xPanes[i + (mSelCursorBufIdx ^ 1) * 4].pane->show();
+            mKk1xPanes[i + mSelCursorBufIdx * 4].pane->hide();
+        }
+        mSelCursorBufIdx ^= 1;
+        mKk1xPanes[0].mUserArea = g_mfHIO.field_0x3A;
+    } else {
+        mKk1xPanes[0].mUserArea--;
+    }
 }
 
 /* 801B247C-801B24C4       .text zoomCursorInit__12dMenu_Fmap_cFv */
@@ -1074,7 +1078,16 @@ void dMenu_Fmap_c::zoomCursorInit() {
 
 /* 801B24C4-801B2554       .text zoomCursorAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::zoomCursorAnime() {
-    /* Nonmatching */
+    if (mKk3xPanes[0].mUserArea == 0) {
+        for (int i = 0; i < 4; i++) {
+            mKk3xPanes[i + (mCursorBufIdx ^ 1) * 4].pane->show();
+            mKk3xPanes[i + mCursorBufIdx * 4].pane->hide();
+        }
+        mCursorBufIdx ^= 1;
+        mKk3xPanes[0].mUserArea = g_mfHIO.field_0x3A;
+    } else {
+        mKk3xPanes[0].mUserArea--;
+    }
 }
 
 /* 801B2554-801B2570       .text playerPointGridAnimeInit__12dMenu_Fmap_cFv */
