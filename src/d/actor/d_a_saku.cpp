@@ -503,7 +503,32 @@ void daSaku_c::setMoveBGMtx() {
 
 /* 0000120C-0000134C       .text checkCol__8daSaku_cFv */
 void daSaku_c::checkCol() {
-    /* Nonmatching */
+    if (*(s32*)((u8*)this + 0xEEC) != 0) {
+        for (int k = 0; k < 3; k++) {
+            cM3dGCyl* cyl = (cM3dGCyl*)((u8*)this + k * 0x130 + 0xB8C);
+            cXyz* pos = (cXyz*)((u8*)this + k * 0xC + 0xA2C);
+            cyl->SetC(*pos);
+            g_dComIfG_gameInfo.play.mCcS.Set((cCcD_Obj*)((u8*)this + k * 0x130 + 0xA74));
+        }
+    }
+
+    if (*(s32*)((u8*)this + 0xEF8) == 1) {
+        for (int k = 0; k < 3; k++) {
+            cM3dGCyl* cyl = (cM3dGCyl*)((u8*)this + k * 0x130 + 0x424);
+            cXyz* pos = (cXyz*)((u8*)this + k * 0xC + 0xA2C);
+            cyl->SetC(*pos);
+            g_dComIfG_gameInfo.play.mCcS.Set((cCcD_Obj*)((u8*)this + k * 0x130 + 0x30C));
+        }
+    }
+
+    if (*(s32*)((u8*)this + 0xEFC) != 0 && *(s32*)((u8*)this + 0xEFC) == 1) {
+        for (int k = 0; k < 3; k++) {
+            cM3dGCyl* cyl = (cM3dGCyl*)((u8*)this + k * 0x130 + 0x7B4);
+            cXyz* pos = (cXyz*)((u8*)this + k * 0xC + 0xA50);
+            cyl->SetC(*pos);
+            g_dComIfG_gameInfo.play.mCcS.Set((cCcD_Obj*)((u8*)this + k * 0x130 + 0x69C));
+        }
+    }
 }
 
 /* 0000134C-00001510       .text setCol__8daSaku_cFv */
