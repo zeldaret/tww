@@ -859,13 +859,24 @@ bool dMenu_Fmap_c::isFmapClose() {
 }
 
 /* 801B1914-801B1978       .text setPaneOnOff__12dMenu_Fmap_cFP9J2DScreenUlb */
-void dMenu_Fmap_c::setPaneOnOff(J2DScreen*, u32, bool) {
-    /* Nonmatching */
+void dMenu_Fmap_c::setPaneOnOff(J2DScreen* i_screen, u32 i_arg2, bool i_arg3) {
+    J2DPane* pane = i_screen->search(i_arg2);
+    if (pane != NULL) {
+        if (i_arg3) {
+            pane->show();
+        } else {
+            pane->hide();
+        }
+    }
 }
 
 /* 801B1978-801B19F0       .text childPaneMoveSp__12dMenu_Fmap_cFP18fopMsgM_pane_classP18fopMsgM_pane_classfff */
-void dMenu_Fmap_c::childPaneMoveSp(fopMsgM_pane_class*, fopMsgM_pane_class*, f32, f32, f32) {
-    /* Nonmatching */
+void dMenu_Fmap_c::childPaneMoveSp(fopMsgM_pane_class* i_pane1, fopMsgM_pane_class* i_pane2, f32 i_scale, f32 i_x, f32 i_y) {
+    f32 half = 0.5f;
+    f32 ySize = i_pane2->mSize.y * half;
+    i_pane1->mPosCenter.x = i_pane2->mSize.x * half + i_scale * (i_pane1->mPosCenterOrig.x - i_pane2->mSizeOrig.x * half);
+    i_pane1->mPosCenter.y = ySize + i_scale * (i_pane1->mPosCenterOrig.y - i_pane2->mSizeOrig.y * half);
+    fopMsgM_paneScale(i_pane1, i_x, i_y);
 }
 
 /* 801B19F0-801B1A80       .text selGridMaskAlphaCtrl__12dMenu_Fmap_cFsUcUci */
