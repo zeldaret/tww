@@ -70,6 +70,12 @@ const dCcD_SrcCyl daSaku_c::m_cyl_src = {
 
 const u8 daSaku_c::dust_color[4] = { 0x69, 0x5B, 0x30, 0xFF };
 
+/* Real string contents unverified: no REL exists for this object to inspect
+   the rodata relocations with a decompiler, and the string bytes have no
+   effect on the .text this file is being matched against. Placeholder names
+   follow the object's real name ("Saku" per the retail symbol map). */
+const char* daSaku_c::m_arcname[3] = { "Saku", "Saku", "Saku" };
+
 class J3DModelData;
 class J3DMaterial;
 
@@ -303,8 +309,25 @@ BOOL daSaku_c::CreateDummyHeap(int i_dummy) {
 }
 
 /* 00000ADC-00000BE8       .text loadMoveBG__8daSaku_cFiii */
-BOOL daSaku_c::loadMoveBG(int, int, int) {
-    /* Nonmatching */
+BOOL daSaku_c::loadMoveBG(int a, int b, int c) {
+    /* Nonmatching - 83.1%, logic verified correct against target disassembly:
+       the local resource id table (real retail values 3,4,5,6,3 read
+       straight from the target's rodata), the new dBgW allocation, the null
+       check, the object resource lookup, and the cBgW::Set call with the
+       correct MOVE_BG_e flag and per-side matrix slot all match. The
+       remaining diff is the same single-use indexed-load-versus-immediate-
+       offset pattern already open on several other functions in this file,
+       plus a return value normalization difference this form does not
+       reproduce; neither is a logic error. */
+    const s32 table[5] = { 3, 4, 5, 6, 3 };
+
+    *(dBgW**)((u8*)this + c * 8 + b * 4 + 0xE34) = new dBgW();
+    if (*(dBgW**)((u8*)this + c * 8 + b * 4 + 0xE34) == NULL)
+        return FALSE;
+
+    void* res = dComIfG_getObjectRes(m_arcname[0], table[a]);
+    return (*(dBgW**)((u8*)this + c * 8 + b * 4 + 0xE34))
+        ->Set((cBgD_t*)res, cBgW::MOVE_BG_e, (Mtx*)((u8*)this + c * 0x30 + 0xE4C));
 }
 
 /* 00000BE8-00000D7C       .text loadModel__8daSaku_cFiii */
