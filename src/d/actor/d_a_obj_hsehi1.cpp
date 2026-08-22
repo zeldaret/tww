@@ -5,6 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hsehi1.h"
+#include "d/actor/d_a_player.h"
+#include "d/actor/d_a_ship.h"
 
 static daObj_hsh_HIO_c l_HIO;
 static msg_class* l_msg;
@@ -195,12 +197,67 @@ BOOL daObj_hsh_c::setAction(ActionFunc i_action, void* fnArg) {
 
 /* 00000FBC-000010E8       .text waitAction__11daObj_hsh_cFPv */
 BOOL daObj_hsh_c::waitAction(void*) {
-    /* Nonmatching */
+    if (this->field_0x517 == 0) {
+        this->field_0x517++;
+    }
+    else if (this->field_0x517 != -1) {
+        this->field_0x518 = chkAttention(this->current.pos, this->shape_angle.y);
+
+        if (this->argument == 0) {
+            if (this->field_0x518) {
+                cLib_onBit<u32>(this->attention_info.flags, (fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e));
+                if (this->field_0x514 == -1) {
+                    this->field_0x514 = 5;
+                }
+            }
+            else {
+                cLib_offBit<u32>(this->attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
+            }
+        }
+        else if (this->field_0x518) {
+            cLib_onBit<u32>(this->attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
+            if (this->field_0x514 == -1) {
+                this->field_0x514 = 3;
+            }
+        }
+        else {
+            cLib_offBit<u32>(this->attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
+        }
+        setAttention(TRUE);
+    }
+    return 1;
 }
 
 /* 000010E8-00001214       .text talkAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::talkAction(void*) {
-    /* Nonmatching */
+bool daObj_hsh_c::talkAction(void*) {
+    if (this->field_0x517 == 0) {
+        l_msgId = -1;
+        this->mMsgId = getMsg();
+        this->field_0x517++;
+        if (this->argument == 0) {
+            ((daPy_py_c*)dComIfGp_getLinkPlayer())->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+        }
+    }
+    else if (this->field_0x517 != -1) {
+        if (this->field_0x517 == 1) {
+            BOOL success = talk_init();
+            if (success) {
+                this->field_0x517++;
+            }
+        }
+        else {
+            BOOL success = talk(0);
+            if (success) {
+                setAction(&daObj_hsh_c::waitAction, NULL);
+                dComIfGp_event_onEventFlag(8);
+                if (this->argument == 0) {
+                    ((daPy_py_c*)dComIfGp_getLinkPlayer())->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                }
+            }
+        }
+        setAttention(true);
+    }
+    return true;
 }
 
 /* 00001214-00001230       .text offAction__11daObj_hsh_cFPv */
@@ -238,7 +295,7 @@ void daObj_hsh_c::checkCommandTalk() {
 }
 
 /* 00001478-000015E0       .text chkAttention__11daObj_hsh_cF4cXyzs */
-void daObj_hsh_c::chkAttention(cXyz, short) {
+bool daObj_hsh_c::chkAttention(cXyz, short) {
     /* Nonmatching */
 }
 

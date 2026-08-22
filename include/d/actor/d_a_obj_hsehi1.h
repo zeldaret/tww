@@ -43,13 +43,13 @@ public:
     void action(void*);
     BOOL setAction(ActionFunc, void*);
     BOOL waitAction(void*);
-    void talkAction(void*);
+    bool talkAction(void*);
     BOOL offAction(void*);
     BOOL deleteAction(void*);
     void eventOrder();
     void checkOrder();
     void checkCommandTalk();
-    void chkAttention(cXyz, short);
+    bool chkAttention(cXyz, short);
     void eventProc();
     void eventEnd();
     void initialDefault(int);
@@ -86,11 +86,12 @@ public:
     /* 0x508 */ u32 mMsgId;
     /* 0x50c */ int field_0x50c;  // TODO: Naming -- some flag related to this actor's message
     /* 0x510 */ u32 mMessage;
-    /* 0x514 */ u8 field_0x514; // Padding
+    /* 0x514 */ s8 field_0x514;
     /* 0x515 */ s8 field_0x515;
     /* 0x516 */ u8 field_0x516;
     /* 0x517 */ s8 field_0x517; // TODO: Used in offAction -- Action Counter?
-    /* 0x518 */ u8 field_0x518[0x51c - 0x518];  // Padding
+    /* 0x518 */ bool field_0x518; //TODO: attention?
+    /* 0x519 */ u8 field_0x519[0x51c - 0x519];  // Padding */
     /* 0x51c */ short field_0x51c;  // TODO: Unknown usage, possibly related to action state */
     /* 0x51e */ short field_0x51e;  // TODO: Unknown usage, possibly related to action state */
     /* 0x520 */ short field_0x520;  // TODO: Unknown usage, possibly related to action state */
