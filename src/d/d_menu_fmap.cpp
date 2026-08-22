@@ -6,6 +6,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ghostship.h"
 #include "d/d_menu_fmap.h"
+#include "d/d_kankyo_wether.h"
 #include "dolphin/types.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_msg_mng.h"
@@ -1124,7 +1125,18 @@ void dMenu_Fmap_c::playerPointGridAnime() {
 
 /* 801B2830-801B2A14       .text setDspWindAngle__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::setDspWindAngle() {
-    /* Nonmatching */
+    cXyz* vec = dKyw_get_wind_vec();
+    s16 adj = cM_atan2s(vec->x, vec->z) + 0x8000;
+    f32 angle = fmod((adj * 180.0f) / 32768.0f, 360.0);
+
+    mWnd1Pane.pane->rotate(
+        (f32)(int)(mWnd1Pane.mSizeOrig.x + g_mfHIO.field_0x12),
+        (f32)(int)(mWnd1Pane.mSizeOrig.y * 0.5f + g_mfHIO.field_0x14),
+        ROTATE_Z, angle);
+    mWnd2Pane.pane->rotate(
+        g_mfHIO.field_0x12,
+        (f32)(int)(mWnd2Pane.mSizeOrig.y * 0.5f + g_mfHIO.field_0x14),
+        ROTATE_Z, angle);
 }
 
 /* 801B2A14-801B3284       .text windArrowColorAnime__12dMenu_Fmap_cFv */
