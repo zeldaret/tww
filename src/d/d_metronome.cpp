@@ -574,7 +574,7 @@ void dMetronome_c::_draw() {
 }
 
 /* 802233E4-80223478       .text _open__12dMetronome_cFv */
-BOOL dMetronome_c::_open() {
+bool dMetronome_c::_open() {
     if (!mbOpen) {
         for (s32 i = 0; i < 21; i++) {
             fopMsgM_setInitAlpha(&pane_timing[i]);
@@ -588,11 +588,11 @@ BOOL dMetronome_c::_open() {
         melodyInit(mBeat);
     }
     mbOpen = true;
-    return TRUE;
+    return true;
 }
 
 /* 80223478-80223534       .text _close__12dMetronome_cFv */
-BOOL dMetronome_c::_close() {
+bool dMetronome_c::_close() {
     mbOpen = false;
     if (!mbOpen) {  // nice bug
         for (s32 i = 0; i < 7; i++) {
@@ -611,5 +611,5 @@ BOOL dMetronome_c::_close() {
         fopMsgM_setNowAlphaZero(&pane_echo);
     }
 
-    return TRUE;
+    return true;
 }
