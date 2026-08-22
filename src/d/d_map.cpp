@@ -95,7 +95,7 @@ f32 dMap_c::mEnlargementSizeCenterZ;
 f32 dMap_c::mEnlargementSizeScaleX;
 f32 dMap_c::mEnlargementSizeScaleZ;
 u8 dMap_c::mFmapChkPntValue;
-int dMap_c::mFmapChkPntData_p;
+FmapChkPnt* dMap_c::mFmapChkPntData_p;
 s16 dMap_c::mDispPosLeftUpX;
 s16 dMap_c::mDispPosLeftUpY;
 s16 dMap_c::mDispSizeX;
@@ -1664,8 +1664,17 @@ void dMap_c::point2GridAndLocal(f32 param_1, f32 param_2, s8* i_gridX_p, s8* i_g
 }
 
 /* 8004ABB0-8004AC44       .text getCheckPointUseGrid__6dMap_cFScSc */
-void dMap_c::getCheckPointUseGrid(s8, s8) {
-    /* Nonmatching */
+int dMap_c::getCheckPointUseGrid(s8 i_x, s8 i_y) {
+    FmapChkPnt* pChkPnt = getFmapChkPntDtPnt(0);
+    int i;
+    int ret = -1;
+    for (i = 0; i < mFmapChkPntValue; i++, pChkPnt++) {
+        if (i_x == pChkPnt->mSectorX && i_y == pChkPnt->mSectorY) {
+            ret = i;
+            break;
+        }
+    }
+    return ret;
 }
 
 /* 8004AC44-8004ACD8       .text getFmapChkPntPrm__6dMap_cFiPScPScPsPsPUc */
@@ -1679,8 +1688,15 @@ void dMap_c::setFmapChkDtPrm() {
 }
 
 /* 8004AD00-8004ADC8       .text getFmapChkPntDtPnt__6dMap_cFi */
-void dMap_c::getFmapChkPntDtPnt(int) {
-    /* Nonmatching */
+FmapChkPnt* dMap_c::getFmapChkPntDtPnt(int i_param) {
+    JUT_ASSERT(6075, mFmapChkPntData_p != 0);
+    FmapChkPnt* ret = NULL;
+    if (i_param >= 0 && i_param <= mFmapChkPntValue) {
+        ret = &mFmapChkPntData_p[i_param];
+    } else {
+        JUT_ASSERT(6082, 0)
+    };
+    return ret;
 }
 
 /* 8004ADC8-8004AE28       .text initPoint__6dMap_cFv */

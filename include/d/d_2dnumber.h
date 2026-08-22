@@ -83,6 +83,7 @@ public:
 
 class dDlst_2DOutFont_c {
 public:
+
     dDlst_2DOutFont_c() { m20 = NULL; m18 = NULL; m2C = NULL; m74 = 0; }
     void setLeftUpPos(f32 x, f32 y) { mPosTopLeftX = x; mPosTopLeftY = y; }
     
