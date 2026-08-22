@@ -3,6 +3,7 @@
 
 #include "d/d_drawlist.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_stage.h"
 
 struct ResTIMG;
 struct dmap_dmap_tlut_s;
@@ -329,6 +330,19 @@ public:
     void setFloorTextureOne(u8);
     void init(s16, s16, s16, s16, s16, s16, s16, s16, s16, u8, u8, u8, u8, u8);
     virtual void draw();
+
+public:
+    /* 0x004 */ u8 field_0x4[0x2A0 - 0x4];
+    /* 0x2A0 */ JKRArchive* field_0x2A0;
+    /* 0x2A4 */ u8 field_0x2A4[0x2B6 - 0x2A4];
+    /* 0x2B6 */ u8 field_0x2B6;
+    /* 0x2B7 */ u8 field_0x2B7[0x35C - 0x2B7];
+    /* 0x35C */ s16 field_0x35C;
+    /* 0x35E */ s16 field_0x35E;
+    /* 0x360 */ u8 field_0x360[0x364 - 0x360];
+    /* 0x364 */ s16 field_0x364;
+    /* 0x366 */ s16 field_0x366;
+    /* 0x368 */ u8 field_0x368[0x368 + 0x2B8 - 0x368];
 };
 
 enum {
@@ -514,6 +528,9 @@ public:
     static dMap_RoomInfoCtrl_c mRoomInfoCtrl;
     static dMap_RoomInfo_c* mNowRoomInfoP;
 };
+
+BOOL dMap_GetTopBottomFloorNo(dStage_dt_c* stag, u8* bottom_p, u8* top_p);
+u8 dMap_GetFloorNo(dStage_dt_c*, f32);
 
 inline void dMap_drawPoint(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9) {
     dMap_c::drawPointSingle(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9);
