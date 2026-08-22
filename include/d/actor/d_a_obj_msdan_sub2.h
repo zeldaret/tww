@@ -6,9 +6,17 @@
 namespace daObjMsdanSub2 {
     class Act_c : public dBgS_MoveBgActor {
     public:
-        void prm_get_objNo() const {}
-        void prm_get_swSave() const {}
-    
+        enum Prm_e {
+            PRM_SWSAVE_W = 0x8,
+            PRM_SWSAVE_S = 0x0,
+
+            PRM_OBJNO_W = 0x8,
+            PRM_OBJNO_S = 0x8,
+        };
+
+        s32 prm_get_objNo() const { return daObj::PrmAbstract(this, PRM_OBJNO_W, PRM_OBJNO_S); }
+        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+
         virtual BOOL CreateHeap();
         virtual BOOL Create();
         cPhs_State Mthd_Create();
@@ -18,9 +26,16 @@ namespace daObjMsdanSub2 {
         void init_mtx();
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
-    
+
+        static const char M_arcname[];
+        static Mtx M_tmp_mtx;
+
     public:
-        /* Place member variables here */
+        /* 0x2C8 */ request_of_phase_process_class mPhs;
+        /* 0x2D0 */ J3DModel* mModel;
+        /* 0x2D4 */ s32 m2D4;
+        /* 0x2D8 */ f32 m2D8;
+        /* 0x2DC */ f32 m2DC;
     };
 };
 
