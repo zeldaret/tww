@@ -333,12 +333,9 @@ public:
     /* 0x2934 */ fopMsgM_pane_class mCi21Pane;
     /* 0x296C */ fopMsgM_pane_class mCi32Pane;
     /* 0x29A4 */ fopMsgM_pane_class mCi31Pane;
-    /* 0x29DC */ fopMsgM_pane_class mGti1Pane;
-    /* 0x2A14 */ fopMsgM_pane_class mGti2Pane;
-    /* 0x2A4C */ fopMsgM_pane_class mKk1xPanes[4];
-    /* 0x2B2C */ fopMsgM_pane_class mKk2xPanes[4];
-    /* 0x2C0C */ fopMsgM_pane_class mKk3xPanes[4];
-    /* 0x2CEC */ fopMsgM_pane_class mKk4xPanes[4];
+    /* 0x29DC */ fopMsgM_pane_class mGtixPanes[2];
+    /* 0x2A4C */ fopMsgM_pane_class mKk1xPanes[8];
+    /* 0x2C0C */ fopMsgM_pane_class mKk3xPanes[8];
     /* 0x2DCC */ fopMsgM_pane_class mAreaPane;
     /* 0x2E04 */ fopMsgM_pane_class mLnk1Pane;
     /* 0x2E3C */ fopMsgM_pane_class mSpi1Pane;
