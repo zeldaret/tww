@@ -2,13 +2,14 @@
 #define D_A_OBJ_MSDAN_SUB2_H
 
 #include "d/d_bg_s_movebg_actor.h"
+#include "SSystem/SComponent/c_phase.h"
 
 namespace daObjMsdanSub2 {
     class Act_c : public dBgS_MoveBgActor {
     public:
         void prm_get_objNo() const {}
         void prm_get_swSave() const {}
-    
+
         virtual BOOL CreateHeap();
         virtual BOOL Create();
         cPhs_State Mthd_Create();
@@ -18,9 +19,9 @@ namespace daObjMsdanSub2 {
         void init_mtx();
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
-    
+
     public:
-        /* Place member variables here */
+        /* 0x2C8 */ request_of_phase_process_class mPhs;
     };
 };
 

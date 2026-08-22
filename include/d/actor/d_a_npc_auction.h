@@ -36,13 +36,13 @@ public:
     void eventMainInit();
     void eventMain();
     void eventMesSetInit(int);
-    void eventMesSet();
-    void XyCheckCB(int);
-    void XyEventCB(int);
+    BOOL eventMesSet();
+    s16 XyCheckCB(int);
+    s16 XyEventCB(int);
     u16 next_msgStatus(u32*);
     u32 getMsg();
     void setAnmFromMsgTag();
-    void getPrmNpcNo();
+    s8 getPrmNpcNo();
     void setMtx();
     void lookBack();
     void initTexPatternAnm(bool);
@@ -52,7 +52,7 @@ public:
     void setAnm2(unsigned char, int, float);
     void setAnmTbl(sAnmDat*);
     void isExecute();
-    void getRand(int);
+    int getRand(int);
     void clrEmitter();
 
 public:

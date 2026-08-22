@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_auction.h"
+#include "d/d_com_lib_game.h"
 #include "m_Do/m_Do_ext.h"
 
 /* 000000EC-00000268       .text __ct__14daNpcAuction_cFv */
@@ -23,8 +24,8 @@ static BOOL daNpc_Auction_nodeCallBack2(J3DNode*, int) {
 }
 
 /* 00000848-00000868       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    ((daNpcAuction_c*)i_this)->createHeap();
 }
 
 /* 00000868-00000ACC       .text phase_1__FP14daNpcAuction_c */
@@ -43,8 +44,8 @@ void daNpcAuction_c::createHeap() {
 }
 
 /* 00000E74-00000E94       .text daNpcAuction_XyCheckCB__FPvi */
-static s16 daNpcAuction_XyCheckCB(void*, int) {
-    /* Nonmatching */
+static s16 daNpcAuction_XyCheckCB(void* i_this, int i_itemBtn) {
+    return ((daNpcAuction_c*)i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 00000E94-00000EB4       .text daNpcAuction_XyEventCB__FPvi */
@@ -69,7 +70,19 @@ void daNpcAuction_c::wait_action() {
 
 /* 00001194-000011EC       .text checkOrder__14daNpcAuction_cFv */
 void daNpcAuction_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        m73E[0] = 0;
+        return;
+    }
+    if (!eventInfo.checkCommandTalk())
+        return;
+    if (m73E[0] != 2 && m73E[0] != 1)
+        return;
+    if (m73C != 0)
+        return;
+    if (field_745[0] != 0)
+        return;
+    m73C = 1;
 }
 
 /* 000011EC-00001270       .text eventOrder__14daNpcAuction_cFv */
@@ -89,7 +102,7 @@ void daNpcAuction_c::privateCut() {
 
 /* 00001548-00001554       .text eventMainInit__14daNpcAuction_cFv */
 void daNpcAuction_c::eventMainInit() {
-    /* Nonmatching */
+    field_745[4] = 1;
 }
 
 /* 00001554-00001888       .text eventMain__14daNpcAuction_cFv */
@@ -103,17 +116,19 @@ void daNpcAuction_c::eventMesSetInit(int) {
 }
 
 /* 000018FC-00001930       .text eventMesSet__14daNpcAuction_cFv */
-void daNpcAuction_c::eventMesSet() {
-    /* Nonmatching */
+BOOL daNpcAuction_c::eventMesSet() {
+    /* Nonmatching - 86.9%, logic verified correct (talk(0) < 0x12), compiler chose a
+       different boolean-generation idiom (sign-bit shift vs cntlzw) than target. */
+    return talk(0) < 0x12;
 }
 
 /* 00001930-00001938       .text XyCheckCB__14daNpcAuction_cFi */
-void daNpcAuction_c::XyCheckCB(int) {
-    /* Nonmatching */
+s16 daNpcAuction_c::XyCheckCB(int) {
+    return 0;
 }
 
 /* 00001938-000019F8       .text XyEventCB__14daNpcAuction_cFi */
-void daNpcAuction_c::XyEventCB(int) {
+s16 daNpcAuction_c::XyEventCB(int) {
     /* Nonmatching */
 }
 
@@ -133,8 +148,10 @@ void daNpcAuction_c::setAnmFromMsgTag() {
 }
 
 /* 00002070-00002090       .text getPrmNpcNo__14daNpcAuction_cFv */
-void daNpcAuction_c::getPrmNpcNo() {
-    /* Nonmatching */
+s8 daNpcAuction_c::getPrmNpcNo() {
+    if (argument >= 0 && argument < 8)
+        return argument;
+    return 0;
 }
 
 /* 00002090-00002118       .text setMtx__14daNpcAuction_cFv */
@@ -183,8 +200,12 @@ void daNpcAuction_c::isExecute() {
 }
 
 /* 00002928-0000298C       .text getRand__14daNpcAuction_cFi */
-void daNpcAuction_c::getRand(int) {
-    /* Nonmatching */
+int daNpcAuction_c::getRand(int i_max) {
+    /* Nonmatching - 99.6%, logic verified correct, magic-bias constant pool address differs */
+    int rnd = (int)cM_rndF((f32)i_max);
+    if (rnd == i_max)
+        rnd = 0;
+    return rnd;
 }
 
 /* 0000298C-000029DC       .text clrEmitter__14daNpcAuction_cFv */
@@ -192,9 +213,18 @@ void daNpcAuction_c::clrEmitter() {
     /* Nonmatching */
 }
 
+cPhs_State daNpcAuction_c::_create() {
+    static request_of_phase_process_fn l_method[3] = {
+        (request_of_phase_process_fn)phase_1,
+        (request_of_phase_process_fn)phase_2,
+        NULL,
+    };
+    return dComLbG_PhaseHandler((request_of_phase_process_class*)((u8*)this + 0x6D8), l_method, this);
+}
+
 /* 000029DC-00002A0C       .text daNpc_AuctionCreate__FPv */
-static cPhs_State daNpc_AuctionCreate(void*) {
-    /* Nonmatching */
+static cPhs_State daNpc_AuctionCreate(void* i_this) {
+    return ((daNpcAuction_c*)i_this)->_create();
 }
 
 /* 00002A0C-00002A70       .text daNpc_AuctionDelete__FPv */

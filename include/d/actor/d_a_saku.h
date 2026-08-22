@@ -17,28 +17,35 @@ public:
     inline BOOL _daSaku_isdelete();
 
     void CreateInit();
-    void saku_draw_sub(int);
-    void mode_break_none(int);
-    void mode_break_fire(int);
-    void mode_break_throw_obj(int);
-    void RecreateHeap(int, int);
-    void CreateHeap(int, int);
-    void GetDzbId(int);
-    void CreateDummyHeap(int);
-    void loadMoveBG(int, int, int);
-    void loadModel(int, int, int);
-    void burn();
-    void broken(int);
-    void changeCollision(int);
+    BOOL saku_draw_sub(int);
+    BOOL mode_break_none(int);
+    BOOL mode_break_fire(int);
+    BOOL mode_break_throw_obj(int);
+    BOOL RecreateHeap(int, int);
+    BOOL CreateHeap(int, int);
+    s32 GetDzbId(int);
+    BOOL CreateDummyHeap(int);
+    BOOL loadMoveBG(int, int, int);
+    BOOL loadModel(int, int, int);
+    BOOL burn();
+    BOOL broken(int);
+    BOOL changeCollision(int);
     void setMtx();
     void setMoveBGMtx();
     void checkCol();
     void setCol();
-    void MoveBGResist(int, int);
-    void setEffFire(int);
-    void setEffBreak(int);
+    BOOL MoveBGResist(int, int);
+    BOOL setEffFire(int);
+    BOOL setEffBreak(int);
 
     static const dCcD_SrcCyl m_cyl_src;
+    static u8 dust_color[4];
+    static const char* m_arcname[3];
+    static s32 m_saku_alpha_out_time;
+    static s32 m_max_particle_timer;
+    static u8 m_smoke_alpha;
+    static s32 m_alpha_start_time;
+    static s32 m_fade_time;
 
 public:
     /* 0x290 */ u8 m290[0xEF2 - 0x290];
