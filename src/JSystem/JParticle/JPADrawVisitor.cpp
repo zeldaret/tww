@@ -187,7 +187,7 @@ void JPADrawExecRegisterPrmColorAnm::exec(const JPADrawContext* pDC, JPABasePart
     prm.r = JPA_U8_THRE(prm.r, JPADrawContext::pcb->mPrmColor.r);
     prm.g = JPA_U8_THRE(prm.g, JPADrawContext::pcb->mPrmColor.g);
     prm.b = JPA_U8_THRE(prm.b, JPADrawContext::pcb->mPrmColor.b);
-    u8 a = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    u8 a  = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
     prm.a = params->mAlphaOut * a;
     GXSetTevColor(GX_TEVREG0, prm);
 }
@@ -199,7 +199,7 @@ void JPADrawExecRegisterPrmAlphaAnm::exec(const JPADrawContext* pDC, JPABasePart
     prm.r = JPA_U8_THRE(prm.r, JPADrawContext::pcb->mPrmColor.r);
     prm.g = JPA_U8_THRE(prm.g, JPADrawContext::pcb->mPrmColor.g);
     prm.b = JPA_U8_THRE(prm.b, JPADrawContext::pcb->mPrmColor.b);
-    u8 a = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    u8 a  = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
     prm.a = params->mAlphaOut * a;
     GXSetTevColor(GX_TEVREG0, prm);
 }
@@ -222,7 +222,7 @@ void JPADrawExecRegisterPrmCEnv::exec(const JPADrawContext* pDC, JPABaseParticle
     prm.r = JPA_U8_THRE(prm.r, JPADrawContext::pcb->mPrmColor.r);
     prm.g = JPA_U8_THRE(prm.g, JPADrawContext::pcb->mPrmColor.g);
     prm.b = JPA_U8_THRE(prm.b, JPADrawContext::pcb->mPrmColor.b);
-    u8 a = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    u8 a  = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
     prm.a = params->mAlphaOut * a;
     env.r = JPA_U8_THRE(env.r, JPADrawContext::pcb->mEnvColor.r);
     env.g = JPA_U8_THRE(env.g, JPADrawContext::pcb->mEnvColor.g);
@@ -239,7 +239,7 @@ void JPADrawExecRegisterPrmAEnv::exec(const JPADrawContext* pDC, JPABaseParticle
     prm.r = JPA_U8_THRE(prm.r, JPADrawContext::pcb->mPrmColor.r);
     prm.g = JPA_U8_THRE(prm.g, JPADrawContext::pcb->mPrmColor.g);
     prm.b = JPA_U8_THRE(prm.b, JPADrawContext::pcb->mPrmColor.b);
-    u8 a = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
+    u8 a  = JPA_U8_THRE(prm.a, JPADrawContext::pcb->mPrmColor.a);
     prm.a = params->mAlphaOut * a;
     env.r = JPA_U8_THRE(env.r, JPADrawContext::pcb->mEnvColor.r);
     env.g = JPA_U8_THRE(env.g, JPADrawContext::pcb->mEnvColor.g);
@@ -1408,8 +1408,7 @@ void JPADrawCalcScaleX::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
         params->mScaleX = params->mScaleOut * ((pDC->pesp->getIncreaseRateX() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueX());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
-        params->mScaleX =
-            params->mScaleOut * ((pDC->pesp->getDecreaseRateX() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
+        params->mScaleX = params->mScaleOut * ((pDC->pesp->getDecreaseRateX() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
     } else {
         params->mScaleX = params->mScaleOut;
     }
@@ -1421,8 +1420,7 @@ void JPADrawCalcScaleY::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
         params->mScaleY = params->mScaleOut * ((pDC->pesp->getIncreaseRateY() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueY());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
-        params->mScaleY =
-            params->mScaleOut * ((pDC->pesp->getDecreaseRateY() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
+        params->mScaleY = params->mScaleOut * ((pDC->pesp->getDecreaseRateY() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
     } else {
         params->mScaleY = params->mScaleOut;
     }
@@ -1436,8 +1434,7 @@ void JPADrawCalcScaleXBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* 
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
         params->mScaleX = params->mScaleOut * ((pDC->pesp->getIncreaseRateX() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueX());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
-        params->mScaleX =
-            params->mScaleOut * ((pDC->pesp->getDecreaseRateX() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
+        params->mScaleX = params->mScaleOut * ((pDC->pesp->getDecreaseRateX() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
     } else {
         params->mScaleX = params->mScaleOut;
     }
@@ -1452,8 +1449,7 @@ void JPADrawCalcScaleYBySpeed::calc(const JPADrawContext* pDC, JPABaseParticle* 
     if (JPADrawContext::pcb->mScaleAnmTiming < pDC->pesp->getScaleInTiming()) {
         params->mScaleY = params->mScaleOut * ((pDC->pesp->getIncreaseRateY() * JPADrawContext::pcb->mScaleAnmTiming) + pDC->pesp->getScaleInValueY());
     } else if (JPADrawContext::pcb->mScaleAnmTiming > pDC->pesp->getScaleOutTiming()) {
-        params->mScaleY =
-            params->mScaleOut * ((pDC->pesp->getDecreaseRateY() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
+        params->mScaleY = params->mScaleOut * ((pDC->pesp->getDecreaseRateY() * (JPADrawContext::pcb->mScaleAnmTiming - pDC->pesp->getScaleOutTiming())) + 1.0f);
     } else {
         params->mScaleY = params->mScaleOut;
     }

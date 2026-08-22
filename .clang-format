@@ -1,3 +1,4 @@
+DisableFormat: true
 IndentWidth: 4
 AllowShortFunctionsOnASingleLine: InlineOnly
 PointerAlignment: Left
