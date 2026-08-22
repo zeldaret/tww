@@ -6,9 +6,19 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hsehi1.h"
 
+static daObj_hsh_HIO_c l_HIO;
+
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
-    /* Nonmatching */
+    mNo = -1;
+    static const hio_prm_c init_data = {
+        /* mAttnDist   */ 250.0f,
+        /* field_0x0c  */ 0.0f,
+        /* field_0x10  */ 0.0f,
+        /* mAttnAngle  */ 0x4000,
+        /* field_0x16  */ 0,
+    };
+    prm = init_data;
 }
 
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
@@ -17,68 +27,117 @@ daObj_hsh_c::~daObj_hsh_c() {
 }
 
 /* 000002A4-000002C4       .text daObj_hsh_XyCheckCB__FPvi */
-static s16 daObj_hsh_XyCheckCB(void*, int) {
-    /* Nonmatching */
+static s16 daObj_hsh_XyCheckCB(void* i_this, int i_itemBtn) {
+    return static_cast<daObj_hsh_c*>(i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 000002C4-000002E8       .text XyCheckCB__11daObj_hsh_cFi */
-void daObj_hsh_c::XyCheckCB(int) {
-    /* Nonmatching */
+s16 daObj_hsh_c::XyCheckCB(int i_itemBtn) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_WIND_WAKER_e) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 /* 000002E8-00000308       .text daObj_hsh_XyEventCB__FPvi */
-static s16 daObj_hsh_XyEventCB(void*, int) {
-    /* Nonmatching */
+static s16 daObj_hsh_XyEventCB(void* i_this, int i_itemBtn) {
+    return static_cast<daObj_hsh_c*>(i_this)->XyEventCB(i_itemBtn);
 }
 
 /* 00000308-00000390       .text XyEventCB__11daObj_hsh_cFi */
-void daObj_hsh_c::XyEventCB(int) {
-    /* Nonmatching */
+s16 daObj_hsh_c::XyEventCB(int) {
+    fopAcM_seStart(this, JA_SE_PRE_TAKT, 0);
+    this->mFlags = this->mFlags | 1;
+    this->field_0x515 = 0;
+    return this->field_0x530;
 }
 
 /* 00000390-000003F4       .text particle_set__11daObj_hsh_cFUs */
-void daObj_hsh_c::particle_set(unsigned short) {
-    /* Nonmatching */
+void daObj_hsh_c::particle_set(unsigned short i_particleId) {
+    dComIfGp_particle_set(i_particleId, &this->current.pos, &this->current.angle);
 }
 
 /* 000003F4-00000488       .text particle_set__11daObj_hsh_cFPP14JPABaseEmitterUs */
-void daObj_hsh_c::particle_set(JPABaseEmitter**, unsigned short) {
-    /* Nonmatching */
+void daObj_hsh_c::particle_set(JPABaseEmitter** pEmitter, unsigned short i_particleId) {
+    if (*pEmitter == NULL) {
+        *pEmitter = dComIfGp_particle_set(i_particleId, &this->current.pos, &this->current.angle);
+        if (*pEmitter != NULL) {
+            (*pEmitter)->mFlags |= 0x40;
+        }
+    }
 }
 
 /* 00000488-000004C4       .text emitterDelete__11daObj_hsh_cFPP14JPABaseEmitter */
-void daObj_hsh_c::emitterDelete(JPABaseEmitter**) {
-    /* Nonmatching */
+void daObj_hsh_c::emitterDelete(JPABaseEmitter** pEmitter) {
+    if (*pEmitter != NULL) {
+        (*pEmitter)->quitImmortalEmitter();
+        (*pEmitter)->becomeInvalidEmitter();
+        *pEmitter = NULL;
+    }
 }
 
 /* 000004C4-00000568       .text setAttention__11daObj_hsh_cFb */
-void daObj_hsh_c::setAttention(bool) {
-    /* Nonmatching */
+void daObj_hsh_c::setAttention(bool set) {
+    if (!set) {
+        return;
+    }
+
+    float y1;
+    float currZ;
+    float y2;
+
+    // Hsh variant
+    if (this->argument == 0) {
+        y1 = 90.0f + this->current.pos.y + l_HIO.prm.field_0x10;
+        y2 = 180.0f + this->current.pos.y + l_HIO.prm.field_0x0c;
+    // Hsh2 variant
+    } else {
+        y1 = 80.0f + this->current.pos.y + l_HIO.prm.field_0x10;
+        y2 = 120.0f + this->current.pos.y + l_HIO.prm.field_0x0c;
+    }
+
+    currZ = this->current.pos.z;
+    this->eyePos.set(this->current.pos.x, y1, currZ);
+    this->attention_info.position.set(this->current.pos.x, y2, this->current.pos.z);
 }
 
 /* 00000568-000005AC       .text onOffDraw__11daObj_hsh_cFv */
 void daObj_hsh_c::onOffDraw() {
-    /* Nonmatching */
+    this->mFlags = this->mFlags | 8;
+    if (this->mpBgW != NULL) {
+        dComIfG_Bgsp()->Release(mpBgW);
+    }
 }
 
 /* 000005AC-000005F4       .text offOffDraw__11daObj_hsh_cFv */
 void daObj_hsh_c::offOffDraw() {
-    /* Nonmatching */
+    this->mFlags = this->mFlags & ~8;
+    if (this->mpBgW != NULL) {
+        dComIfG_Bgsp()->Regist(mpBgW, this);
+    }
 }
 
 /* 000005F4-0000062C       .text drawStop__11daObj_hsh_cFv */
 void daObj_hsh_c::drawStop() {
-    /* Nonmatching */
+    onOffDraw();
+    emitterDelete(&mpEmitter);
 }
 
 /* 0000062C-0000064C       .text drawStart__11daObj_hsh_cFv */
 void daObj_hsh_c::drawStart() {
-    /* Nonmatching */
+    offOffDraw();
 }
 
 /* 0000064C-000006C8       .text setBaseMtx__11daObj_hsh_cFv */
 void daObj_hsh_c::setBaseMtx() {
-    /* Nonmatching */
+    J3DModel* model = this->mpModel;
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+
+    model->setBaseTRMtx(mDoMtx_stack_c::get());
+    cMtx_copy(mDoMtx_stack_c::get(), this->mMtx);
 }
 
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
@@ -163,12 +222,11 @@ void daObj_hsh_c::eventEnd() {
 
 /* 000017B0-000017B4       .text initialDefault__11daObj_hsh_cFi */
 void daObj_hsh_c::initialDefault(int) {
-    /* Nonmatching */
 }
 
 /* 000017B4-000017BC       .text actionDefault__11daObj_hsh_cFi */
-void daObj_hsh_c::actionDefault(int) {
-    /* Nonmatching */
+BOOL daObj_hsh_c::actionDefault(int) {
+    return TRUE;
 }
 
 /* 000017BC-00001938       .text initialLinkDispEvent__11daObj_hsh_cFi */
