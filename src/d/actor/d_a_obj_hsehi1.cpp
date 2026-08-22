@@ -163,17 +163,38 @@ void daObj_hsh_c::init() {
 }
 
 /* 00000E60-00000EF4       .text action__11daObj_hsh_cFPv */
-void daObj_hsh_c::action(void*) {
-    /* Nonmatching */
+void daObj_hsh_c::action(void* fnArg) {
+    if (!this->mAction) {
+        this->speedF = 0.0;
+        setAction(&daObj_hsh_c::waitAction, NULL);
+    }
+    (this->*mAction)(fnArg);
 }
 
 /* 00000EF4-00000FBC       .text setAction__11daObj_hsh_cFM11daObj_hsh_cFPCvPvPv_iPv */
-void daObj_hsh_c::setAction(int (daObj_hsh_c::*)(void*), void*) {
-    /* Nonmatching */
+BOOL daObj_hsh_c::setAction(ActionFunc i_action, void* fnArg) {
+    if (mAction != i_action) {
+        if (mAction) {
+            this->field_0x517 = 0xff; 
+            (this->*mAction)(fnArg);
+        }
+
+        this->mAction = i_action;
+
+        this->field_0x517 = 0;
+        this->field_0x51c = 0;
+        this->field_0x51e = 0;
+        this->field_0x520 = 0;
+        this->field_0x522 = 0;
+        this->field_0x528 = 0;
+
+        (this->*mAction)(fnArg);
+    }
+    return 1;
 }
 
 /* 00000FBC-000010E8       .text waitAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::waitAction(void*) {
+BOOL daObj_hsh_c::waitAction(void*) {
     /* Nonmatching */
 }
 
@@ -183,13 +204,22 @@ void daObj_hsh_c::talkAction(void*) {
 }
 
 /* 00001214-00001230       .text offAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::offAction(void*) {
-    /* Nonmatching */
+BOOL daObj_hsh_c::offAction(void*) {
+    if (this->field_0x517 == 0) {
+        this->field_0x517++;
+    }
+    return TRUE;
 }
 
 /* 00001230-00001278       .text deleteAction__11daObj_hsh_cFPv */
-void daObj_hsh_c::deleteAction(void*) {
-    /* Nonmatching */
+BOOL daObj_hsh_c::deleteAction(void*) {
+    if (this->field_0x517 == 0) {
+        this->field_0x517++;
+    }
+    else if (this->field_0x517 != -1) {
+        fopAcM_delete(this);
+    }
+    return TRUE;
 }
 
 /* 00001278-0000135C       .text eventOrder__11daObj_hsh_cFv */
@@ -219,6 +249,9 @@ void daObj_hsh_c::eventProc() {
 
 /* 00001784-000017B0       .text eventEnd__11daObj_hsh_cFv */
 void daObj_hsh_c::eventEnd() {
+    dComIfGp_event_onEventFlag(8);
+    this->mFlags &= ~1;
+    this->field_0x515 = -0x1;
     /* Nonmatching */
 }
 
