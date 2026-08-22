@@ -1,19 +1,27 @@
 #ifndef D_A_OBJ_MSDAN2_H
 #define D_A_OBJ_MSDAN2_H
 
+#include "d/d_a_obj.h"
 #include "f_op/f_op_actor.h"
 
 namespace daObjMsdan2 {
     class Act_c : public fopAc_ac_c {
     public:
-        void prm_get_swSave() const {}
-    
+        enum Prm_e {
+            PRM_SWSAVE_W = 8,
+            PRM_SWSAVE_S = 0,
+        };
+
+        u32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+
         cPhs_State Mthd_Create();
         BOOL Mthd_Execute();
         BOOL Mthd_Delete();
-    
+
     public:
-        /* Place member variables here */
+        /* 0x290 */ u8 m290[0x298 - 0x290];
+        /* 0x298 */ s16 field_0x298;
+        /* 0x29C */ s32 field_0x29c;
     };
 };
 
