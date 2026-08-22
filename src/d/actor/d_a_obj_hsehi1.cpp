@@ -7,6 +7,8 @@
 #include "d/actor/d_a_obj_hsehi1.h"
 
 static daObj_hsh_HIO_c l_HIO;
+static msg_class* l_msg;
+static fpc_ProcID l_msgId;
 
 /* 000000EC-00000130       .text __ct__15daObj_hsh_HIO_cFv */
 daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
@@ -280,22 +282,82 @@ void daObj_hsh_c::actionDeleteEvent(int) {
 }
 
 /* 00001D88-00001DF4       .text talk_init__11daObj_hsh_cFv */
-void daObj_hsh_c::talk_init() {
-    /* Nonmatching */
+BOOL daObj_hsh_c::talk_init() {
+    if (l_msgId == -1) {
+        l_msgId = fopMsgM_messageSet(this->mMsgId, this);
+    } else {
+        l_msg = fopMsgM_SearchByID(l_msgId);
+        if (l_msg != NULL) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /* 00001DF4-00001F1C       .text talk__11daObj_hsh_cFi */
-void daObj_hsh_c::talk(int) {
-    /* Nonmatching */
+BOOL daObj_hsh_c::talk(int param1) {
+    // TODO: Rename parameter
+    u16 status = l_msg->mStatus;
+    if (status == fopMsgStts_MSG_DISPLAYED_e) {
+        if (param1 == 1) {
+            if (g_dComIfG_gameInfo.play.mMesgCancelButton != 0) {
+                l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
+                fopMsgM_messageSendOn();
+                this->mFlags |= 2;
+            } 
+            else {
+                if ((this->mFlags & 4) != 0) {
+                    l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
+                    fopMsgM_messageSendOn();
+                    if (this->mMsgId == 0x5b3) {
+                        s8 roomNo = fopAcM_GetRoomNo(this);
+                        dComIfGs_onSwitch(this->field_0x50c, roomNo);
+                    }
+                }
+            }
+        }
+        else {
+            u16 nextMsgStatus = next_msgStatus(&this->mMsgId);
+            l_msg->mStatus = nextMsgStatus;
+            if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                fopMsgM_messageSet(this->mMsgId);
+            }
+        }
+    }
+    else if (status == fopMsgStts_INPUT_e) {
+        if (param1 == 2) {
+            return 1;
+        }
+    }
+    
+    else if ((status != fopMsgStts_MSG_TYPING_e) && (status == fopMsgStts_BOX_CLOSED_e)) {
+        l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+        return 1;
+    }
+    return 0;
 }
 
 /* 00001F1C-00001F38       .text getMsg__11daObj_hsh_cFv */
-void daObj_hsh_c::getMsg() {
-    /* Nonmatching */
+u32 daObj_hsh_c::getMsg() {
+    if(this->argument == 0) {
+        return 0x1901;
+    }
+
+    return this->mMessage;
 }
 
 /* 00001F38-00001F78       .text next_msgStatus__11daObj_hsh_cFPUl */
-void daObj_hsh_c::next_msgStatus(unsigned long*) {
+u32 daObj_hsh_c::next_msgStatus(unsigned long* pMsg) {
+    fopMsg_MessageStatus_e nextStatus = fopMsgStts_MSG_CONTINUES_e;
+    u32 msg = *pMsg;
+    if ((msg == 0) || (msg == 0xef3) || (msg == this->mMessage)) {
+        nextStatus = fopMsgStts_MSG_ENDS_e;
+    }
+    else if (msg == 0x1901) {
+        nextStatus = fopMsgStts_MSG_ENDS_e;
+    }
+    return nextStatus;
+
     /* Nonmatching */
 }
 

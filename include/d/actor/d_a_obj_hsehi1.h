@@ -1,7 +1,6 @@
 #ifndef D_A_OBJ_HSEHI1_H
 #define D_A_OBJ_HSEHI1_H
 
-#include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "SSystem/SComponent/c_bg_w.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -63,10 +62,10 @@ public:
     void actionAppearEvent(int);
     void initialDeleteEvent(int);
     void actionDeleteEvent(int);
-    void talk_init();
-    void talk(int);
-    void getMsg();
-    void next_msgStatus(unsigned long*);
+    BOOL talk_init();
+    BOOL talk(int);
+    u32 getMsg();
+    u32 next_msgStatus(unsigned long*);
     BOOL execute();
     BOOL draw();
 
@@ -80,7 +79,10 @@ public:
     /* 0x4d4 */ cBgW* mpBgW;
     /* 0x4d8 */ u8 field_0x4d8[0x504 - 0x4d8];
     /* 0x504 */ u32 mFlags;
-    /* 0x508 */ u8 field_0x508[0x515 - 0x508];
+    /* 0x508 */ u32 mMsgId;
+    /* 0x50c */ int field_0x50c;  // TODO: Naming -- some flag related to this actor's message
+    /* 0x510 */ u32 mMessage;
+    /* 0x514 */ u8 field_0x514; // Padding
     /* 0x515 */ u8 field_0x515;
     /* 0x516 */ u8 field_0x516[0x530 - 0x516];
     /* 0x530 */ s16 field_0x530;
