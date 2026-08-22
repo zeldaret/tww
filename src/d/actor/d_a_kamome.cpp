@@ -44,7 +44,7 @@ static s32 esa_check_count;
 static s32 ko_count;
 
 /* 000000EC-000001E4       .text anm_init__FP12kamome_classifUcfi */
-void anm_init(kamome_class* i_this, int anmResIdx, float morf, unsigned char loopMode, float speed, int soundAnmResIdx) {
+static void anm_init(kamome_class* i_this, int anmResIdx, float morf, unsigned char loopMode, float speed, int soundAnmResIdx) {
     if (REG0_S(3) == 0x23) {
         anmResIdx = dRes_INDEX_KAMOME_BCK_KA_LAND1_e;
     } else if (REG0_S(3) == 0x24) {
@@ -81,7 +81,7 @@ static void* s_a_d_sub(void* ac1, void* ac2) {
 }
 
 /* 000008F0-00000A44       .text search_esa__FP12kamome_class */
-fopAc_ac_c* search_esa(kamome_class* i_this) {
+static fopAc_ac_c* search_esa(kamome_class* i_this) {
     esa_check_count = 0;
     fpcM_Search(s_a_d_sub, &i_this->actor);
 
@@ -111,7 +111,7 @@ fopAc_ac_c* search_esa(kamome_class* i_this) {
 }
 
 /* 00000A44-00000A90       .text s_a_i_sub__FPvPv */
-void* s_a_i_sub(void* ac1, void* ac2) {
+static void* s_a_i_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
     if (fopAc_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_NPC_LS1_e) {
         return ac1;
@@ -120,7 +120,7 @@ void* s_a_i_sub(void* ac1, void* ac2) {
 }
 
 /* 00000A90-00000ABC       .text search_imouto__FP12kamome_class */
-fopAc_ac_c* search_imouto(kamome_class* i_this) {
+static fopAc_ac_c* search_imouto(kamome_class* i_this) {
     return (fopAc_ac_c*)fpcM_Search(s_a_i_sub, &i_this->actor);
 }
 
@@ -175,7 +175,7 @@ static BOOL daKamome_Draw(kamome_class* i_this) {
 }
 
 /* 00000CAC-00000F70       .text kamome_pos_move__FP12kamome_class */
-void kamome_pos_move(kamome_class* i_this) {
+static void kamome_pos_move(kamome_class* i_this) {
     f32 fVar4 = i_this->mTargetPos.x - i_this->actor.current.pos.x;
     f32 fVar1 = i_this->mTargetPos.y - i_this->actor.current.pos.y;
     f32 fVar5 = i_this->mTargetPos.z - i_this->actor.current.pos.z;
@@ -214,7 +214,7 @@ void kamome_pos_move(kamome_class* i_this) {
 }
 
 /* 00000F70-00000FFC       .text kamome_bgcheck__FP12kamome_class */
-void kamome_bgcheck(kamome_class* i_this) {
+static void kamome_bgcheck(kamome_class* i_this) {
     f32 fVar1 = i_this->mScale * 40.0f;
     i_this->actor.current.pos.y = i_this->actor.current.pos.y - fVar1;
     i_this->actor.old.pos.y = i_this->actor.old.pos.y - fVar1;
@@ -224,7 +224,7 @@ void kamome_bgcheck(kamome_class* i_this) {
 }
 
 /* 00000FFC-00001150       .text kamome_ground_pos_move__FP12kamome_class */
-void kamome_ground_pos_move(kamome_class* i_this) {
+static void kamome_ground_pos_move(kamome_class* i_this) {
     s16 iVar2 = cM_atan2s(i_this->mTargetPos.x - i_this->actor.current.pos.x, i_this->mTargetPos.z - i_this->actor.current.pos.z);
 
     cLib_addCalcAngleS2(&i_this->actor.current.angle.y, iVar2, REG0_S(3) + 2, i_this->mRotVel * i_this->mRotVelFade);
@@ -255,7 +255,7 @@ void kamome_ground_pos_move(kamome_class* i_this) {
 }
 
 /* 00001150-000011B8       .text ko_s_sub__FPvPv */
-void* ko_s_sub(void* ac1, void* ac2) {
+static void* ko_s_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
     kamome_class* i_this = (kamome_class*)ac1;
     if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == fpcNm_KAMOME_e && (fopAcM_GetParam(&i_this->actor) & 0xf) == 7) {
@@ -265,14 +265,14 @@ void* ko_s_sub(void* ac1, void* ac2) {
 }
 
 /* 000011B8-000011FC       .text ko_check__FP12kamome_class */
-s32 ko_check(kamome_class* i_this) {
+static s32 ko_check(kamome_class* i_this) {
     ko_count = 0;
     fpcM_Search(ko_s_sub, &i_this->actor);
     return ko_count;
 }
 
 /* 000011FC-00001304       .text heisou_control__FP12kamome_class */
-void heisou_control(kamome_class* i_this) {
+static void heisou_control(kamome_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     i_this->mbNoDraw = 1;
 #if VERSION > VERSION_DEMO
@@ -291,7 +291,7 @@ void heisou_control(kamome_class* i_this) {
 }
 
 /* 00001304-00001360       .text h_s_sub__FPvPv */
-void* h_s_sub(void* ac1, void* ac2) {
+static void* h_s_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
     kamome_class* i_this = (kamome_class*)ac1;
     if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == fpcNm_KAMOME_e && (fopAcM_GetParam(&i_this->actor) & 0xf) == 6) {
@@ -301,7 +301,7 @@ void* h_s_sub(void* ac1, void* ac2) {
 }
 
 /* 00001360-000013BC       .text search_master__FP12kamome_class */
-BOOL search_master(kamome_class* i_this) {
+static BOOL search_master(kamome_class* i_this) {
     kamome_class* pvVar1 = (kamome_class*)fpcM_Search(h_s_sub, &i_this->actor);
     if (pvVar1 != NULL && (s32)i_this->mKoMaxCount < pvVar1->mKoMaxCount) {
         return TRUE;
@@ -310,7 +310,7 @@ BOOL search_master(kamome_class* i_this) {
 }
 
 /* 000013BC-00001A0C       .text kamome_heisou_move__FP12kamome_class */
-void kamome_heisou_move(kamome_class* i_this) {
+static void kamome_heisou_move(kamome_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     s32 frame;
@@ -420,7 +420,7 @@ void kamome_heisou_move(kamome_class* i_this) {
 }
 
 /* 00001A0C-00002740       .text kamome_path_move__FP12kamome_class */
-void kamome_path_move(kamome_class* i_this) {
+static void kamome_path_move(kamome_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     s8 moveType = 0;
     s32 frame;
@@ -705,7 +705,7 @@ void kamome_path_move(kamome_class* i_this) {
 }
 
 /* 00002740-00003628       .text kamome_auto_move__FP12kamome_class */
-void kamome_auto_move(kamome_class* i_this) {
+static void kamome_auto_move(kamome_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* pfVar4;
@@ -1017,7 +1017,7 @@ void kamome_auto_move(kamome_class* i_this) {
 }
 
 /* 00003628-00004574       .text kamome_imouto_move__FP12kamome_class */
-void kamome_imouto_move(kamome_class* i_this) {
+static void kamome_imouto_move(kamome_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     s8 cVar8 = 0;
@@ -1306,7 +1306,7 @@ void kamome_imouto_move(kamome_class* i_this) {
 }
 
 /* 00004574-00004680       .text kamome_imouto2_move__FP12kamome_class */
-void kamome_imouto2_move(kamome_class* i_this) {
+static void kamome_imouto2_move(kamome_class* i_this) {
     switch (i_this->mMoveState) {
     case 0:
         i_this->m2AB = 1;
@@ -1327,11 +1327,11 @@ void kamome_imouto2_move(kamome_class* i_this) {
 }
 
 /* 00004680-00004768       .text daKamome_setMtx__FP12kamome_class */
-void daKamome_setMtx(kamome_class* i_this) {
+static void daKamome_setMtx(kamome_class* i_this) {
     MtxTrans(i_this->actor.current.pos.x, i_this->actor.current.pos.y, i_this->actor.current.pos.z, 0);
 
-    cMtx_YrotM(*calc_mtx, i_this->actor.current.angle.y + i_this->mRotY);
-    cMtx_XrotM(*calc_mtx, i_this->actor.current.angle.x + i_this->mRotX);
+    cMtx_YrotM(*calc_mtx, i_this->actor.current.angle.y + i_this->mRot.y);
+    cMtx_XrotM(*calc_mtx, i_this->actor.current.angle.x + i_this->mRot.x);
     cMtx_ZrotM(*calc_mtx, i_this->actor.current.angle.z);
 
     J3DModel* pJVar1 = i_this->mpMorf->getModel();

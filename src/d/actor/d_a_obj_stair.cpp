@@ -154,14 +154,15 @@ cPhs_State daObj_Stair_c::_create() {
         
         if (phase_state == cPhs_COMPLEATE_e) {
             Quaternion quat = {0.0f, 0.0f, 0.0f, 1.0f};
+            f32 f29 = 0.0f;
             f32 sin = cM_ssin(current.angle.y >> 1);
             f32 cos = cM_scos(current.angle.y >> 1);
             phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MKDAN_DZB_MKDAN1_e, NULL, 0x8A0);
             JUT_ASSERT(0x10f, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
 
-            field_0x4A0.x = 0.0f;
+            field_0x4A0.x = f29;
             field_0x4A0.y = sin;
-            field_0x4A0.z = 0.0f;
+            field_0x4A0.z = f29;
             field_0x4A0.w = cos;
 
             field_0x4B0 = quat;
@@ -176,15 +177,11 @@ cPhs_State daObj_Stair_c::_create() {
             cXyz end;
 
             start = end = current.pos;
-            cos = cM_scos(current.angle.y);
             
-            start.x += cos * 125.0f;
-
-            sin = cM_ssin(current.angle.y);
-
-            start.z +=  sin * -125.0f;
-            end.x += cos * -125.0f;
-            end.z += sin * 125.0f;
+            start.x += cM_scos(current.angle.y) * 125.0f;
+            start.z += cM_ssin(current.angle.y) * -125.0f;
+            end.x += cM_scos(current.angle.y) * -125.0f;
+            end.z += cM_ssin(current.angle.y) * 125.0f;
 
             mCps.SetStartEnd(start, end);
             mCps.SetR(50.0f);
@@ -217,8 +214,6 @@ static BOOL daObj_StairExecute(void* i_this) {
 
 /* 00000B20-00001364       .text _execute__13daObj_Stair_cFv */
 bool daObj_Stair_c::_execute() {
-    f32 sin;
-    f32 cos;
     if (field_0x2E4 == 1) {
         if (field_0x2E0 == l_HIO.m18) {
             cXyz temp = field_0x2C8.normZP();
@@ -226,9 +221,9 @@ bool daObj_Stair_c::_execute() {
 
             if(temp2.abs() > 8e-11f){
                 cXyz temp3 = temp2.normZP();
-                f32 temp4 = l_HIO.m10  * 0.5f * field_0x2C8.abs() * 0.01f * field_0x2EC;
-                sin = cM_ssin(DEG2S(temp4));
-                cos = cM_scos(DEG2S(temp4));
+                f32 temp4 = l_HIO.m10 * 0.5f * field_0x2C8.abs() * 0.01f * field_0x2EC;
+                f32 sin = cM_ssin(DEG2S(temp4));
+                f32 cos = cM_scos(DEG2S(temp4));
                 // misses inline cM_deg2s?
                 
                 field_0x4B0.x = sin * temp3.x;
@@ -269,8 +264,8 @@ bool daObj_Stair_c::_execute() {
             fopAc_ac_c* ac = mCps.GetTgHitAc();
             if(ac) {
                 if(fopAcM_IsActor(ac) && fopAcM_GetProfName(ac) == fpcNm_BOMB_e){
-                    sin = cM_ssin(current.angle.y);
-                    cos = cM_scos(current.angle.y);
+                    f32 sin = cM_ssin(current.angle.y);
+                    f32 cos = cM_scos(current.angle.y);
                     field_0x2E4 = 1;
                     field_0x2C8 = ac->current.pos - current.pos;
                     field_0x2D4 = current.pos - ac->current.pos;
