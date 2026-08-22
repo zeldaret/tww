@@ -85,7 +85,7 @@ void JPADrawExecGenPrjTexMtx::exec(const JPADrawContext* pDC) {
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
     f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
-    s32 angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
+    int angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
     f32 sin = JMASSin(angle);
     f32 cos = JMASCos(angle);
 
@@ -126,14 +126,14 @@ void JPADrawExecGenIdtMtx::exec(const JPADrawContext* pDC) {
 
 /* 8025FFB0-802602F0       .text exec__20JPADrawExecSetTexMtxFPC14JPADrawContext */
 void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->getFrame();
+    int tick = pDC->pbe->getFrame();
     f32 tilingX = 0.5f * pDC->pbsp->getTilingX();
     f32 tilingY = 0.5f * pDC->pbsp->getTilingY();
     f32 transX = tick * pDC->pbsp->getTexScrollTransX() + pDC->pbsp->getTexStaticTransX();
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
     f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
-    s32 angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
+    int angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
     f32 sin = JMASSin(angle);
     f32 cos = JMASCos(angle);
 
@@ -250,14 +250,14 @@ void JPADrawExecRegisterPrmAEnv::exec(const JPADrawContext* pDC, JPABaseParticle
 
 /* 80260858-80260B68       .text exec__20JPADrawExecSetTexMtxFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawExecSetTexMtx::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    s32 tick = ptcl->getAge();
+    int tick = ptcl->getAge();
     f32 tilingX = 0.5f * pDC->pbsp->getTilingX();
     f32 tilingY = 0.5f * pDC->pbsp->getTilingY();
     f32 transX = tick * pDC->pbsp->getTexScrollTransX() + pDC->pbsp->getTexStaticTransX();
     f32 transY = tick * pDC->pbsp->getTexScrollTransY() + pDC->pbsp->getTexStaticTransY();
     f32 scaleX = tick * pDC->pbsp->getTexScrollScaleX() + pDC->pbsp->getTexStaticScaleX();
     f32 scaleY = tick * pDC->pbsp->getTexScrollScaleY() + pDC->pbsp->getTexStaticScaleY();
-    s32 angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
+    int angle = 0x8000 * (tick * pDC->pbsp->getTexScrollRotate());
     f32 sin = JMASSin(angle);
     f32 cos = JMASCos(angle);
 
@@ -302,7 +302,7 @@ void JPADrawExecBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* ptcl
 
     JGeometry::TVec3<f32> pt;
     ptcl->getGlobalPosition(pt);
-    MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, pt, &pt);
+    MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, &pt, &pt);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-scaleX + pt.x, +scaleY + pt.y, pt.z);
@@ -336,7 +336,7 @@ void JPADrawExecRotBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* p
 
     JGeometry::TVec3<f32> pt;
     ptcl->getGlobalPosition(pt);
-    MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, pt, &pt);
+    MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, &pt, &pt);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32((x0 * cos - y0 * sin) + pt.x, (x0 * sin + y0 * cos) + pt.y, pt.z);
@@ -373,7 +373,7 @@ void JPADrawExecYBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* ptc
 
     JGeometry::TVec3<f32> pos;
     ptcl->getGlobalPosition(pos);
-    MTXMultVecSR(JPADrawContext::pcb->mDrawMtxPtr, pos, &pos);
+    MTXMultVecSR(JPADrawContext::pcb->mDrawMtxPtr, &pos, &pos);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(pt[0].x + pos.x, pt[0].y + pos.y, pt[0].z + pos.z);
@@ -410,7 +410,7 @@ void JPADrawExecRotYBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* 
 
     JGeometry::TVec3<f32> pos;
     ptcl->getGlobalPosition(pos);
-    MTXMultVecSR(JPADrawContext::pcb->mDrawMtxPtr, pos, &pos);
+    MTXMultVecSR(JPADrawContext::pcb->mDrawMtxPtr, &pos, &pos);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(pt[0].x + pos.x, pt[0].y + pos.y, pt[0].z + pos.z);
@@ -442,7 +442,7 @@ void dirTypePosInv(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3
 
 /* 802613C4-802613E8       .text dirTypeEmtrDir__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
 void dirTypeEmtrDir(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVec3<f32>& out) {
-    out.set(JPABaseEmitter::emtrInfo.mgReRDir);
+    emtr->getgReRDirection(out);
 }
 
 /* 802613E8-802614A8       .text dirTypePrevPtcl__FP15JPABaseParticleP14JPABaseEmitterRQ29JGeometry8TVec3<f> */
@@ -453,7 +453,7 @@ void dirTypePrevPtcl(JPABaseParticle* ptcl, JPABaseEmitter* emtr, JGeometry::TVe
     if (prev != NULL) {
         prev->getObject()->getGlobalPosition(out);
     } else {
-        emtr->calcEmitterGlobalPosition(out);
+        emtr->calcEmitterGlobalTranslation(out);
     }
     out.x -= pos.x;
     out.y -= pos.y;
@@ -877,7 +877,7 @@ void JPADrawExecDirBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* p
     if (dir.isZero())
         return;
     dir.normalize();
-    MTXMultVecSR(JPADrawContext::pcb->mDrawMtxPtr, dir, &dir);
+    MTXMultVecSR(JPADrawContext::pcb->mDrawMtxPtr, &dir, &dir);
 
     JPADrawParams* params = ptcl->getDrawParamPPtr();
     f32 dirY = dir.y;
@@ -908,7 +908,7 @@ void JPADrawExecDirBillBoard::exec(const JPADrawContext* pDC, JPABaseParticle* p
 
     JGeometry::TVec3<f32> pos;
     ptcl->getGlobalPosition(pos);
-    MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, pos, &pos);
+    MTXMultVec(JPADrawContext::pcb->mDrawMtxPtr, &pos, &pos);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(p0.x + pos.x, p0.y + pos.y, pos.z);
@@ -1327,24 +1327,24 @@ void JPADrawCalcColorEnv::calc(const JPADrawContext* pDC) {
 
 /* 802647E0-8026486C       .text calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->getFrame();
-    s32 frame = (tick < pDC->pbsp->getColorRegAnmMaxFrm()) ? tick : pDC->pbsp->getColorRegAnmMaxFrm();
+    int tick = pDC->pbe->getFrame();
+    int frame = (tick < pDC->pbsp->getColorRegAnmMaxFrm()) ? tick : pDC->pbsp->getColorRegAnmMaxFrm();
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 8026486C-802648E0       .text calc__30JPADrawCalcColorAnmFrameRepeatFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* pDC) {
     f32 tick = pDC->pbe->getFrame();
-    s32 frame = ((u32)tick) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
+    int frame = ((u32)tick) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 802648E0-8026495C       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContext */
 void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->getFrame();
-    s32 maxFrame = pDC->pbsp->getColorRegAnmMaxFrm();
-    s32 odd = (tick / maxFrame) & 1; // whether we're on an even or odd loop
-    s32 frame = tick % maxFrame;
+    int tick = pDC->pbe->getFrame();
+    int maxFrame = pDC->pbsp->getColorRegAnmMaxFrm();
+    int odd = (tick / maxFrame) & 1; // whether we're on an even or odd loop
+    int frame = tick % maxFrame;
     JPADrawContext::pcb->mColorAnmFrame = frame + (odd * maxFrame) - 2 * (odd * frame);
 }
 
@@ -1360,23 +1360,23 @@ void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext* pDC) {
 
 /* 8026497C-80264A34       .text calc__32JPADrawCalcTextureAnmIndexNormalFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->getFrame();
-    s32 idx = ((pDC->pbsp->getTextureAnmKeyNum() - 1) < tick) ? pDC->pbsp->getTextureAnmKeyNum() - 1 : tick;
+    int tick = pDC->pbe->getFrame();
+    int idx = ((pDC->pbsp->getTextureAnmKeyNum() - 1) < tick) ? pDC->pbsp->getTextureAnmKeyNum() - 1 : tick;
     pDC->mpDraw->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(idx)];
 }
 
 /* 80264A34-80264AD0       .text calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->getFrame();
+    int tick = pDC->pbe->getFrame();
     pDC->mpDraw->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(tick % pDC->pbsp->getTextureAnmKeyNum())];
 }
 
 /* 80264AD0-80264B80       .text calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContext */
 void JPADrawCalcTextureAnmIndexReverse::calc(const JPADrawContext* pDC) {
-    s32 tick = pDC->pbe->getFrame();
-    s32 maxFrame = pDC->pbsp->getTextureAnmKeyNum() - 1;
-    s32 odd = (tick / maxFrame) & 1; // whether we're on an even or odd loop
-    s32 frame = tick % maxFrame;
+    int tick = pDC->pbe->getFrame();
+    int maxFrame = pDC->pbsp->getTextureAnmKeyNum() - 1;
+    int odd = (tick / maxFrame) & 1; // whether we're on an even or odd loop
+    int frame = tick % maxFrame;
     pDC->mpDraw->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(frame + (odd * maxFrame) - 2 * (odd * frame))];
 }
 
@@ -1392,8 +1392,7 @@ void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext* pDC) {
 
 /* 80264C10-80264C4C       .text exec__19JPADrawExecCallBackFPC14JPADrawContext */
 void JPADrawExecCallBack::exec(const JPADrawContext* pDC) {
-    if (pDC->pbe->mpEmitterCallBack != NULL)
-        pDC->pbe->mpEmitterCallBack->draw(pDC->pbe);
+    pDC->pbe->drawEmitterCallBack();
 }
 
 /* 80264C4C-80264C88       .text exec__19JPADrawExecCallBackFPC14JPADrawContextP15JPABaseParticle */
@@ -1512,43 +1511,43 @@ void JPADrawCalcColorCopyFromEmitter::calc(const JPADrawContext* pDC, JPABasePar
 
 /* 802657E8-80265880       .text calc__30JPADrawCalcColorAnmFrameNormalFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameNormal::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
-    s32 frame = (ptcl->getAge() < pDC->pbsp->getColorRegAnmMaxFrm()) ? ptcl->getAge() : pDC->pbsp->getColorRegAnmMaxFrm();
+    int frame = (ptcl->getAge() < pDC->pbsp->getColorRegAnmMaxFrm()) ? ptcl->getAge() : pDC->pbsp->getColorRegAnmMaxFrm();
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 80265880-80265918       .text calc__30JPADrawCalcColorAnmFrameRepeatFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameRepeat::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    s32 tick = ptcl->getAge();
-    s32 frame = ((params->mLoopOffset & pDC->pbsp->getColLoopOffset()) + tick) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
+    int tick = ptcl->getAge();
+    int frame = ((params->mLoopOffset & pDC->pbsp->getColLoopOffset()) + tick) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 80265918-802659C4       .text calc__31JPADrawCalcColorAnmFrameReverseFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameReverse::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    s32 loopOffset = pDC->pbsp->getColLoopOffset();
+    int loopOffset = pDC->pbsp->getColLoopOffset();
     loopOffset = params->mLoopOffset & loopOffset;
-    s32 maxFrame = pDC->pbsp->getColorRegAnmMaxFrm();
-    s32 t = loopOffset + ptcl->getAge();
-    s32 odd = (t / maxFrame) & 1;
-    s32 frame = t % maxFrame;
+    int maxFrame = pDC->pbsp->getColorRegAnmMaxFrm();
+    int t = loopOffset + ptcl->getAge();
+    int odd = (t / maxFrame) & 1;
+    int frame = t % maxFrame;
     JPADrawContext::pcb->mColorAnmFrame = frame + (odd * maxFrame) - 2 * (odd * frame);
 }
 
 /* 802659C4-80265A90       .text calc__29JPADrawCalcColorAnmFrameMergeFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameMerge::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    s32 start = params->mLoopOffset & pDC->pbsp->getColLoopOffset();
-    s32 maxFrame = pDC->pbsp->getColorRegAnmMaxFrm() + 1;
-    s32 frame = (s32)(start + maxFrame * ptcl->mCurNormTime) % maxFrame;
+    int start = params->mLoopOffset & pDC->pbsp->getColLoopOffset();
+    int maxFrame = pDC->pbsp->getColorRegAnmMaxFrm() + 1;
+    int frame = (int)(start + maxFrame * ptcl->mCurNormTime) % maxFrame;
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
 /* 80265A90-80265B14       .text calc__30JPADrawCalcColorAnmFrameRandomFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcColorAnmFrameRandom::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    s32 frame = (params->mLoopOffset & pDC->pbsp->getColLoopOffset()) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
+    int frame = (params->mLoopOffset & pDC->pbsp->getColLoopOffset()) % (pDC->pbsp->getColorRegAnmMaxFrm() + 1);
     JPADrawContext::pcb->mColorAnmFrame = frame;
 }
 
@@ -1605,14 +1604,14 @@ void JPADrawCalcAlphaFlickMultSin::calc(const JPADrawContext* pDC, JPABasePartic
 /* 80266048-80266100       .text calc__32JPADrawCalcTextureAnmIndexNormalFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexNormal::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    s32 idx = ((pDC->pbsp->getTextureAnmKeyNum() - 1) < (s32)ptcl->getAge()) ? (pDC->pbsp->getTextureAnmKeyNum() - 1) : ptcl->getAge();
+    int idx = ((pDC->pbsp->getTextureAnmKeyNum() - 1) < (int)ptcl->getAge()) ? (pDC->pbsp->getTextureAnmKeyNum() - 1) : ptcl->getAge();
     params->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(idx)];
 }
 
 /* 80266100-802661B4       .text calc__32JPADrawCalcTextureAnmIndexRepeatFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    s32 tick = ptcl->getAge();
+    int tick = ptcl->getAge();
     params->mTexIdx =
         pDC->pTexIdx[pDC->pbsp->getTextureIndex(((params->mLoopOffset & pDC->pbsp->getTexLoopOffset()) + tick) % pDC->pbsp->getTextureAnmKeyNum())];
 }
@@ -1620,28 +1619,28 @@ void JPADrawCalcTextureAnmIndexRepeat::calc(const JPADrawContext* pDC, JPABasePa
 /* 802661B4-80266284       .text calc__33JPADrawCalcTextureAnmIndexReverseFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexReverse::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    s32 loopOffset = pDC->pbsp->getTexLoopOffset();
+    int loopOffset = pDC->pbsp->getTexLoopOffset();
     loopOffset = params->mLoopOffset & loopOffset;
-    s32 maxFrame = pDC->pbsp->getTextureAnmKeyNum() - 1;
-    s32 t = loopOffset + ptcl->getAge();
-    s32 odd = (t / maxFrame) & 1;
-    s32 frame = t % maxFrame;
+    int maxFrame = pDC->pbsp->getTextureAnmKeyNum() - 1;
+    int t = loopOffset + ptcl->getAge();
+    int odd = (t / maxFrame) & 1;
+    int frame = t % maxFrame;
     params->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(frame + (odd * maxFrame) - 2 * (odd * frame))];
 }
 
 /* 80266284-8026636C       .text calc__31JPADrawCalcTextureAnmIndexMergeFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexMerge::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    s32 maxFrame = pDC->pbsp->getTextureAnmKeyNum();
-    s32 start = params->mLoopOffset & pDC->pbsp->getTexLoopOffset();
-    s32 frame = (s32)(start + maxFrame * ptcl->mCurNormTime) % maxFrame;
+    int maxFrame = pDC->pbsp->getTextureAnmKeyNum();
+    int start = params->mLoopOffset & pDC->pbsp->getTexLoopOffset();
+    int frame = (int)(start + maxFrame * ptcl->mCurNormTime) % maxFrame;
     params->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(frame)];
 }
 
 /* 8026636C-8026640C       .text calc__32JPADrawCalcTextureAnmIndexRandomFPC14JPADrawContextP15JPABaseParticle */
 void JPADrawCalcTextureAnmIndexRandom::calc(const JPADrawContext* pDC, JPABaseParticle* ptcl) {
     JPADrawParams* params = ptcl->getDrawParamPPtr();
-    s32 start = params->mLoopOffset & pDC->pbsp->getTexLoopOffset();
+    int start = params->mLoopOffset & pDC->pbsp->getTexLoopOffset();
     params->mTexIdx = pDC->pTexIdx[pDC->pbsp->getTextureIndex(start % pDC->pbsp->getTextureAnmKeyNum())];
 }
 

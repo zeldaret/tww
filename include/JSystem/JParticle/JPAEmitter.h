@@ -320,11 +320,12 @@ public:
 
     f32 getFrame() { return mTick.getFrame(); }
 
+    void drawEmitterCallBack() { drawCB(); }
+    void drawCB() { if (mpEmitterCallBack != NULL) mpEmitterCallBack->draw(this); }
+
+    void calcEmitterGlobalTranslation(JGeometry::TVec3<f32>& out) { calcEmitterGlobalPosition(out); }
+
     // TODO
-    void calcEmitterGlobalTranslation(JGeometry::TVec3<f32>&) {}
-    void drawCB() {}
-    void drawEmitterCallBack() {}
-    void getgReRDirection(JGeometry::TVec3<f32>&) {}
     void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
 
     static JPAEmitterInfo emtrInfo;
@@ -344,6 +345,9 @@ public:
     s32 getCurrentCreateNumber() const {
         return emtrInfo.mVolumeEmitCount;
     }
+    void getgReRDirection(JGeometry::TVec3<f32>& out) {
+        out.set(emtrInfo.mgReRDir);
+    }
 
     static f32 getAspect() { return emtrInfo.mAspect; }
     static f32 getFovy() { return emtrInfo.mFovy; }
@@ -358,7 +362,10 @@ private:
             mpEmitterCallBack->execute(this);
     }
 
-public:
+private:
+    friend class JPAEmitterManager;
+    friend class JPABaseParticle;
+
     /* 0x000 */ VolumeFunc mVolumeFunc;
     /* 0x00C */ JGeometry::TVec3<f32> mEmitterScale;
     /* 0x018 */ JGeometry::TVec3<f32> mEmitterTranslation;

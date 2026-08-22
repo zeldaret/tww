@@ -1274,7 +1274,7 @@ void dPa_trackEcallBack::execute(JPABaseEmitter* emitter) {
         }
         emitter->setGlobalAlpha(local_38);
     }
-    for (JSULink<JPABaseParticle>* link = emitter->mActiveParticles.getFirst(); link;) {
+    for (JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst(); link;) {
         JSULink<JPABaseParticle>* next = link->getNext();
         JPABaseParticle* particle = link->getObject();
         JGeometry::TVec3<f32> local_2c;
@@ -1288,7 +1288,7 @@ void dPa_trackEcallBack::execute(JPABaseEmitter* emitter) {
 /* 8007F3BC-8007F62C       .text draw__18dPa_trackEcallBackFP14JPABaseEmitter */
 void dPa_trackEcallBack::draw(JPABaseEmitter* emitter) {
     /* Nonmatching - regalloc, instruction order */
-    u32 r28 = emitter->mActiveParticles.getNumLinks();
+    u32 r28 = emitter->getParticleList()->getNumLinks();
     if (r28 < 6) {
         return;
     }
@@ -1304,7 +1304,7 @@ void dPa_trackEcallBack::draw(JPABaseEmitter* emitter) {
     local_bc[1][3] = mExTransY * emitter->getFrame();
     GXLoadTexMtxImm(local_bc, GX_TEXMTX1, GX_MTX2x4);
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
-    JSULink<JPABaseParticle>* link = emitter->mActiveParticles.getFirst();
+    JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst();
     u32 i = 0;
     f32 f31 = 0.0f;
     for (; i < r28; i++) {
