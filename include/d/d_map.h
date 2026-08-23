@@ -548,7 +548,9 @@ inline void dMap_setIconDispMode(u8 mode) { return dMap_c::setIconDispMode(mode)
 inline int dMap_getCheckPointUseGrid(s8 i_x, s8 i_y) {
     return dMap_c::getCheckPointUseGrid(i_x, i_y);
 }
-inline void dMap_getFmapChkPntPrm(int, s8*, s8*, s16*, s16*, u8*) {}
+inline void dMap_getFmapChkPntPrm(int i, s8* gx, s8* gy, s16* x, s16* y, u8* prm) {
+    dMap_c::getFmapChkPntPrm(i, gx, gy, x, y, prm);
+}
 inline void dMap_getMapDispSizeHeight() {}
 inline void dMap_getMapDispSizeWidth() {}
 inline void dMap_isSaveArriveGridUseGridNo(int) {}

@@ -148,21 +148,21 @@ dMf_HIO_c::dMf_HIO_c() {
     field_0x31 = 50;
     field_0x32 = 10;
     field_0xE0 = 50;
-    field_0xE1 = 255;
-    field_0xE2 = 255;
-    field_0xE3 = 255;
-    field_0xE5 = 255;
-    field_0xE6 = 255;
-    field_0xE7 = 255;
+    field_0xE1.r = 255;
+    field_0xE1.g = 255;
+    field_0xE1.b = 255;
+    field_0xE5.r = 255;
+    field_0xE5.g = 255;
+    field_0xE5.b = 255;
     field_0xE9 = 50;
-    field_0xEE = 255;
-    field_0xEF = 64;
-    field_0xF0 = 0;
-    field_0xF1 = 0;
-    field_0xEA = 0;
-    field_0xEB = 0;
-    field_0xEC = 0;
-    field_0xED = 255;
+    field_0xEE.r = 255;
+    field_0xEE.g = 64;
+    field_0xEE.b = 0;
+    field_0xEE.a = 0;
+    field_0xEA.r = 0;
+    field_0xEA.g = 0;
+    field_0xEA.b = 0;
+    field_0xEA.a = 255;
     field_0xF2 = 192;
     field_0xF7.r = 0;
     field_0xF7.g = 64;
@@ -1203,7 +1203,44 @@ void dMenu_Fmap_c::checkMarkAnimeInit() {
 
 /* 801B32A0-801B3658       .text checkMarkAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkMarkAnime() {
-    /* Nonmatching */
+    JUtility::TColor white;
+    JUtility::TColor black;
+
+    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.field_0xE0, mFishmanMsgTimer, 2);
+    if (mFishmanMsgToggle == 0) {
+        alpha = 1.0f - alpha;
+    }
+
+    white.r = g_mfHIO.field_0xE1.r + alpha * (mCk1Color2.r - g_mfHIO.field_0xE1.r);
+    white.g = g_mfHIO.field_0xE1.g + alpha * (mCk1Color2.g - g_mfHIO.field_0xE1.g);
+    white.b = g_mfHIO.field_0xE1.b + alpha * (mCk1Color2.b - g_mfHIO.field_0xE1.b);
+    white.a = mCk1Color2.a;
+    black.r = g_mfHIO.field_0xE5.r + alpha * (mCk1Color.r - g_mfHIO.field_0xE5.r);
+    black.g = g_mfHIO.field_0xE5.g + alpha * (mCk1Color.g - g_mfHIO.field_0xE5.g);
+    black.b = g_mfHIO.field_0xE5.b + alpha * (mCk1Color.b - g_mfHIO.field_0xE5.b);
+    black.a = mCk1Color.a;
+
+    if (mFishmanMsgTimer == 0) {
+        mFishmanMsgTimer = g_mfHIO.field_0xE0;
+        mFishmanMsgToggle ^= 1;
+    } else {
+        mFishmanMsgTimer--;
+    }
+
+    for (int i = 0; i < 3; i++) {
+        if (mCk1xPanes[i].pane->isVisible()) {
+            ((J2DPicture*)mCk1xPanes[i].pane)->setBlackWhite(black, white);
+        }
+        if (mCk2xPanes[i].pane->isVisible()) {
+            ((J2DPicture*)mCk2xPanes[i].pane)->setBlackWhite(black, white);
+        }
+    }
+
+    for (int i = 0; i < 2; i++) {
+        if ((&mCk31Pane)[i].pane->isVisible()) {
+            ((J2DPicture*)(&mCk31Pane)[i].pane)->setBlackWhite(black, white);
+        }
+    }
 }
 
 /* 801B3658-801B3698       .text readFmapTexture__12dMenu_Fmap_cFPCc */
@@ -1247,8 +1284,25 @@ aramCmapDatPnt_t* dMenu_Fmap_c::getGridNumToCmapDatPnt(int i_param) {
 }
 
 /* 801B37B0-801B392C       .text setDispIslandPos__12dMenu_Fmap_cFScSc */
-void dMenu_Fmap_c::setDispIslandPos(s8, s8) {
-    /* Nonmatching */
+void dMenu_Fmap_c::setDispIslandPos(s8 i_x, s8 i_y) {
+    s8 i = dMap_getCheckPointUseGrid(i_x, i_y);
+    if (i != -1) {
+        s16 a;
+        s16 b;
+        dMap_getFmapChkPntPrm(i, NULL, NULL, &a, &b, NULL);
+        f32 c = a * ((mClbPane.mSizeOrig.x - 50.0f) / 100000.0f);
+        f32 d = b * ((mClbPane.mSizeOrig.y - 50.0f) / 100000.0f);
+        field_0x5134 = a;
+        field_0x5138 = b;
+        setIslandPos(&mR01bPane, c, d);
+        setIslandPos(&mTsw1Pane, c, d);
+        changeFmapTexture(i_x, i_y);
+        mTsw1Pane.pane->show();
+        mR01bPane.pane->show();
+    } else {
+        mTsw1Pane.pane->hide();
+        mR01bPane.pane->hide();
+    }
 }
 
 /* 801B392C-801B3984       .text setIslandPos__12dMenu_Fmap_cFP18fopMsgM_pane_classff */
