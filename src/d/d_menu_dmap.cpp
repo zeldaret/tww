@@ -1865,38 +1865,38 @@ void dMenu_Dmap_c::bossEyeAnime() {
 /* 801AE65C-801AEB88       .text _create__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::_create() {
     scrn = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(2062, 2138, 2320, 2320), scrn != 0);
+    JUT_ASSERT(VERSION_SELECT(2062, 2138, 2320, 2320), scrn != NULL);
     scrn->set("menu_map_d.blo", mpArc);
 
     scrn2 = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(2066, 2142, 2324, 2324), scrn2 != 0);
+    JUT_ASSERT(VERSION_SELECT(2066, 2142, 2324, 2324), scrn2 != NULL);
     scrn2->set("menu_explanation.blo", mpArc);
 
     stick = new STControl(5, 2, 3, 2);
-    JUT_ASSERT(VERSION_SELECT(2070, 2146, 2328, 2328), stick != 0);
+    JUT_ASSERT(VERSION_SELECT(2070, 2146, 2328, 2328), stick != NULL);
 
     dmap_c = new(0x20) dMap_Dmap_c();
-    JUT_ASSERT(VERSION_SELECT(2073, 2149, 2331, 2331), dmap_c != 0);
+    JUT_ASSERT(VERSION_SELECT(2073, 2149, 2331, 2331), dmap_c != NULL);
     dmap_c->field_0x2A0 = mpArc;
 
     for (int i = 0; i < 32; i++) {
         treasure_p[i].ppane = new J2DPicture("treasurebox.bti");
-        JUT_ASSERT(VERSION_SELECT(2079, 2155, 2337, 2337), treasure_p[i].ppane != 0);
+        JUT_ASSERT(VERSION_SELECT(2079, 2155, 2337, 2337), treasure_p[i].ppane != NULL);
         treasure_p[i].exists = 0;
     }
 
     for (int i = 0; i < 32; i++) {
         door_p[i].ppane = new J2DPicture("black_white_3.bti");
-        JUT_ASSERT(VERSION_SELECT(2085, 2161, 2343, 2343), door_p[i].ppane != 0);
+        JUT_ASSERT(VERSION_SELECT(2085, 2161, 2343, 2343), door_p[i].ppane != NULL);
         door_p[i].exists = 0;
     }
 
     npc_p.ppane = new J2DPicture("f_otmicon.bti");
-    JUT_ASSERT(VERSION_SELECT(2090, 2166, 2348, 2348), npc_p.ppane != 0);
+    JUT_ASSERT(VERSION_SELECT(2090, 2166, 2348, 2348), npc_p.ppane != NULL);
     npc_p.exists = 0;
 
     boss_p.ppane = new J2DPicture("boss_small.bti");
-    JUT_ASSERT(VERSION_SELECT(2094, 2170, 2352, 2352), boss_p.ppane != 0);
+    JUT_ASSERT(VERSION_SELECT(2094, 2170, 2352, 2352), boss_p.ppane != NULL);
     boss_p.exists = 0;
 
     mNoteTimer = 0;
