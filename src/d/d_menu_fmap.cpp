@@ -82,14 +82,14 @@ dMf_HIO_c::dMf_HIO_c() {
     field_0x14 = 2;
     field_0x2A = 15;
     field_0x2C = 5;
-    field_0x09 = 255;
-    field_0x0A = 255;
-    field_0x0B = 255;
-    field_0x0C = 255;
-    field_0x0D = 128;
-    field_0x0E = 128;
-    field_0x0F = 255;
-    field_0x10 = 255;
+    field_0x09.r = 255;
+    field_0x09.g = 255;
+    field_0x09.b = 255;
+    field_0x09.a = 255;
+    field_0x0D.r = 128;
+    field_0x0D.g = 128;
+    field_0x0D.b = 255;
+    field_0x0D.a = 255;
     field_0x1A = 255;
     field_0x1B = 0;
     field_0x1C = 0;
@@ -1141,7 +1141,58 @@ void dMenu_Fmap_c::setDspWindAngle() {
 
 /* 801B2A14-801B3284       .text windArrowColorAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::windArrowColorAnime() {
-    /* Nonmatching */
+    s16 period = g_mfHIO.field_0x26 - (dKyw_get_wind_pow() * 10.0f + 0.5f);
+    s16 holdA = g_mfHIO.field_0x2A;
+    s16 holdB = g_mfHIO.field_0x2C;
+
+    JUtility::TColor colorA;
+    JUtility::TColor colorB;
+
+    mWnd1Pane.mUserArea++;
+    s16 cycle = holdA + period * 2 + holdB;
+    if (mWnd1Pane.mUserArea > cycle) {
+        mWnd1Pane.mUserArea = 0;
+    }
+
+    s16 val = mWnd1Pane.mUserArea;
+    if (val < period) {
+        f32 alpha = fopMsgM_valueIncrease(period, val, 0);
+        colorA.r = g_mfHIO.field_0x0D.r + alpha * (g_mfHIO.field_0x09.r - g_mfHIO.field_0x0D.r);
+        colorA.g = g_mfHIO.field_0x0D.g + alpha * (g_mfHIO.field_0x09.g - g_mfHIO.field_0x0D.g);
+        colorA.b = g_mfHIO.field_0x0D.b + alpha * (g_mfHIO.field_0x09.b - g_mfHIO.field_0x0D.b);
+        colorA.a = g_mfHIO.field_0x0D.a + alpha * (g_mfHIO.field_0x09.a - g_mfHIO.field_0x0D.a);
+    } else if (val < period + holdA) {
+        colorA = JUtility::TColor(g_mfHIO.field_0x09);
+    } else if (val < holdA + period * 2) {
+        f32 alpha = fopMsgM_valueIncrease(period, (holdA + period * 2) - val, 0);
+        colorA.r = g_mfHIO.field_0x0D.r + alpha * (g_mfHIO.field_0x09.r - g_mfHIO.field_0x0D.r);
+        colorA.g = g_mfHIO.field_0x0D.g + alpha * (g_mfHIO.field_0x09.g - g_mfHIO.field_0x0D.g);
+        colorA.b = g_mfHIO.field_0x0D.b + alpha * (g_mfHIO.field_0x09.b - g_mfHIO.field_0x0D.b);
+        colorA.a = g_mfHIO.field_0x0D.a + alpha * (g_mfHIO.field_0x09.a - g_mfHIO.field_0x0D.a);
+    } else {
+        colorA = JUtility::TColor(g_mfHIO.field_0x0D);
+    }
+
+    if (mWnd1Pane.mUserArea < holdA) {
+        colorB = JUtility::TColor(g_mfHIO.field_0x09);
+    } else if (mWnd1Pane.mUserArea < period + holdA) {
+        f32 alpha = fopMsgM_valueIncrease(period, (period + holdA) - mWnd1Pane.mUserArea, 0);
+        colorB.r = g_mfHIO.field_0x0D.r + alpha * (g_mfHIO.field_0x09.r - g_mfHIO.field_0x0D.r);
+        colorB.g = g_mfHIO.field_0x0D.g + alpha * (g_mfHIO.field_0x09.g - g_mfHIO.field_0x0D.g);
+        colorB.b = g_mfHIO.field_0x0D.b + alpha * (g_mfHIO.field_0x09.b - g_mfHIO.field_0x0D.b);
+        colorB.a = g_mfHIO.field_0x0D.a + alpha * (g_mfHIO.field_0x09.a - g_mfHIO.field_0x0D.a);
+    } else if (mWnd1Pane.mUserArea < period + holdA + holdB) {
+        colorB = JUtility::TColor(g_mfHIO.field_0x0D);
+    } else {
+        f32 alpha = fopMsgM_valueIncrease(period, mWnd1Pane.mUserArea - (period + holdA + holdB), 0);
+        colorB.r = g_mfHIO.field_0x0D.r + alpha * (g_mfHIO.field_0x09.r - g_mfHIO.field_0x0D.r);
+        colorB.g = g_mfHIO.field_0x0D.g + alpha * (g_mfHIO.field_0x09.g - g_mfHIO.field_0x0D.g);
+        colorB.b = g_mfHIO.field_0x0D.b + alpha * (g_mfHIO.field_0x09.b - g_mfHIO.field_0x0D.b);
+        colorB.a = g_mfHIO.field_0x0D.a + alpha * (g_mfHIO.field_0x09.a - g_mfHIO.field_0x0D.a);
+    }
+
+    ((J2DPicture*)mWnd1Pane.pane)->setCornerColor(colorA, colorA, colorB, colorB);
+    ((J2DPicture*)mWnd2Pane.pane)->setCornerColor(colorA, colorA, colorB, colorB);
 }
 
 /* 801B3284-801B32A0       .text checkMarkAnimeInit__12dMenu_Fmap_cFv */
