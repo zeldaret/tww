@@ -122,4 +122,4 @@ Contributing
 
 If you've got all the requirements set up and want to learn how to contribute to the decompilation effort, see [this guide](/docs/decompiling.md) for details.
 
-Anyone can open a pull request, but please be aware that we do not accept contributions that are primarily AI-generated or directly copy-pasted from Ghidra. Your PR will be closed if it contains obvious signs of machine-generated code. It is your responsibility to check the code that you are submitting and make sure it is readable and feels like something a human programmer would write. Refer to the [coding guidelines page](coding_guidelines.md) for more information.
+Anyone can open a pull request, but please be aware that we do not accept contributions that are primarily AI-generated or directly copy-pasted from Ghidra. Your PR will be closed if it contains obvious signs of machine-generated code. It is your responsibility to check the code that you are submitting and make sure it is readable and feels like something a human programmer would write. Refer to the [coding guidelines page](/docs/coding_guidelines.md) for more information.
