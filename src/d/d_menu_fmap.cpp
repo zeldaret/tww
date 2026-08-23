@@ -1369,7 +1369,32 @@ void dMenu_Fmap_c::setDspNormalMapLink() {
 
 /* 801B3C4C-801B3DFC       .text setDspLargeMapLink__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::setDspLargeMapLink() {
-    /* Nonmatching */
+    if (mFishmanActive != 0) {
+        f32 x = field_0x511C.x - 100000.0f * mGridX;
+        f32 y = field_0x511C.y - 100000.0f * mGridY;
+
+        f32 scale = 0.5f;
+        f32 size = mClbPane.mSizeOrig.x;
+        mLnk2Pane.mPosCenterOrig.x = size * scale + x * ((size - 50.0f) / 100000.0f);
+        size = mClbPane.mSizeOrig.y;
+        mLnk2Pane.mPosCenterOrig.y = size * scale + y * ((size - 50.0f) / 100000.0f);
+        mLnk2Pane.mPosCenter.x = mLnk2Pane.mPosCenterOrig.x;
+        mLnk2Pane.mPosCenter.y = mLnk2Pane.mPosCenterOrig.y;
+        fopMsgM_cposMove(&mLnk2Pane);
+
+        if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0) {
+            x = field_0x5128.x - 100000.0f * mTargetGridX;
+            y = field_0x5128.y - 100000.0f * mTargetGridY;
+
+            size = mClbPane.mSizeOrig.x;
+            mSpi2Pane.mPosCenterOrig.x = size * scale + x * ((size - 50.0f) / 100000.0f);
+            size = mClbPane.mSizeOrig.y;
+            mSpi2Pane.mPosCenterOrig.y = size * scale + y * ((size - 50.0f) / 100000.0f);
+            mSpi2Pane.mPosCenter.x = mSpi2Pane.mPosCenterOrig.x;
+            mSpi2Pane.mPosCenter.y = mSpi2Pane.mPosCenterOrig.y;
+            fopMsgM_cposMove(&mSpi2Pane);
+        }
+    }
 }
 
 /* 801B3DFC-801B3F28       .text checkDspLargeMapLink__12dMenu_Fmap_cFv */
