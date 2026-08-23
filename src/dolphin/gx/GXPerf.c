@@ -36,7 +36,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF0_TRIANGLES_0CLR:
     case GX_PERF0_TRIANGLES_1CLR:
     case GX_PERF0_TRIANGLES_2CLR:
-        GFWriteBPCmd(0x23000000);
+        GX_WRITE_RAS_REG(0x23000000);
         break;
 
     case GX_PERF0_QUAD_0CVG:
@@ -46,7 +46,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF0_QUAD_3CVG:
     case GX_PERF0_QUAD_4CVG:
     case GX_PERF0_AVG_QUAD_CNT:
-        GFWriteBPCmd(0x24000000);
+        GX_WRITE_RAS_REG(0x24000000);
         break;
 
     case GX_PERF0_NONE:
@@ -64,7 +64,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     case GX_PERF1_TC_CHECK7_8:
     case GX_PERF1_TC_MISS:
     case GX_PERF1_CLOCKS:
-        GFWriteBPCmd(0x67000000);
+        GX_WRITE_RAS_REG(0x67000000);
         break;
 
     case GX_PERF1_VC_ELEMQ_FULL:
@@ -157,74 +157,74 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
         break;
 
     case GX_PERF0_TRIANGLES:
-        GFWriteBPCmd(0x2300AE7F);
+        GX_WRITE_RAS_REG(0x2300AE7F);
         break;
     case GX_PERF0_TRIANGLES_CULLED:
-        GFWriteBPCmd(0x23008E7F);
+        GX_WRITE_RAS_REG(0x23008E7F);
         break;
     case GX_PERF0_TRIANGLES_PASSED:
-        GFWriteBPCmd(0x23009E7F);
+        GX_WRITE_RAS_REG(0x23009E7F);
         break;
     case GX_PERF0_TRIANGLES_SCISSORED:
-        GFWriteBPCmd(0x23001E7F);
+        GX_WRITE_RAS_REG(0x23001E7F);
         break;
     case GX_PERF0_TRIANGLES_0TEX:
-        GFWriteBPCmd(0x2300AC3F);
+        GX_WRITE_RAS_REG(0x2300AC3F);
         break;
     case GX_PERF0_TRIANGLES_1TEX:
-        GFWriteBPCmd(0x2300AC7F);
+        GX_WRITE_RAS_REG(0x2300AC7F);
         break;
     case GX_PERF0_TRIANGLES_2TEX:
-        GFWriteBPCmd(0x2300ACBF);
+        GX_WRITE_RAS_REG(0x2300ACBF);
         break;
     case GX_PERF0_TRIANGLES_3TEX:
-        GFWriteBPCmd(0x2300ACFF);
+        GX_WRITE_RAS_REG(0x2300ACFF);
         break;
     case GX_PERF0_TRIANGLES_4TEX:
-        GFWriteBPCmd(0x2300AD3F);
+        GX_WRITE_RAS_REG(0x2300AD3F);
         break;
     case GX_PERF0_TRIANGLES_5TEX:
-        GFWriteBPCmd(0x2300AD7F);
+        GX_WRITE_RAS_REG(0x2300AD7F);
         break;
     case GX_PERF0_TRIANGLES_6TEX:
-        GFWriteBPCmd(0x2300ADBF);
+        GX_WRITE_RAS_REG(0x2300ADBF);
         break;
     case GX_PERF0_TRIANGLES_7TEX:
-        GFWriteBPCmd(0x2300ADFF);
+        GX_WRITE_RAS_REG(0x2300ADFF);
         break;
     case GX_PERF0_TRIANGLES_8TEX:
-        GFWriteBPCmd(0x2300AE3F);
+        GX_WRITE_RAS_REG(0x2300AE3F);
         break;
     case GX_PERF0_TRIANGLES_0CLR:
-        GFWriteBPCmd(0x2300A27F);
+        GX_WRITE_RAS_REG(0x2300A27F);
         break;
     case GX_PERF0_TRIANGLES_1CLR:
-        GFWriteBPCmd(0x2300A67F);
+        GX_WRITE_RAS_REG(0x2300A67F);
         break;
     case GX_PERF0_TRIANGLES_2CLR:
-        GFWriteBPCmd(0x2300AA7F);
+        GX_WRITE_RAS_REG(0x2300AA7F);
         break;
 
     case GX_PERF0_QUAD_0CVG:
-        GFWriteBPCmd(0x2402C0C6);
+        GX_WRITE_RAS_REG(0x2402C0C6);
         break;
     case GX_PERF0_QUAD_NON0CVG:
-        GFWriteBPCmd(0x2402C16B);
+        GX_WRITE_RAS_REG(0x2402C16B);
         break;
     case GX_PERF0_QUAD_1CVG:
-        GFWriteBPCmd(0x2402C0E7);
+        GX_WRITE_RAS_REG(0x2402C0E7);
         break;
     case GX_PERF0_QUAD_2CVG:
-        GFWriteBPCmd(0x2402C108);
+        GX_WRITE_RAS_REG(0x2402C108);
         break;
     case GX_PERF0_QUAD_3CVG:
-        GFWriteBPCmd(0x2402C129);
+        GX_WRITE_RAS_REG(0x2402C129);
         break;
     case GX_PERF0_QUAD_4CVG:
-        GFWriteBPCmd(0x2402C14A);
+        GX_WRITE_RAS_REG(0x2402C14A);
         break;
     case GX_PERF0_AVG_QUAD_CNT:
-        GFWriteBPCmd(0x2402C1AD);
+        GX_WRITE_RAS_REG(0x2402C1AD);
         break;
 
     case GX_PERF0_NONE:
@@ -235,34 +235,34 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
 
     switch (gx->perf1) {
     case GX_PERF1_TEXELS:
-        GFWriteBPCmd(0x67000042);
+        GX_WRITE_RAS_REG(0x67000042);
         break;
     case GX_PERF1_TX_IDLE:
-        GFWriteBPCmd(0x67000084);
+        GX_WRITE_RAS_REG(0x67000084);
         break;
     case GX_PERF1_TX_REGS:
-        GFWriteBPCmd(0x67000063);
+        GX_WRITE_RAS_REG(0x67000063);
         break;
     case GX_PERF1_TX_MEMSTALL:
-        GFWriteBPCmd(0x67000129);
+        GX_WRITE_RAS_REG(0x67000129);
         break;
     case GX_PERF1_TC_MISS:
-        GFWriteBPCmd(0x67000252);
+        GX_WRITE_RAS_REG(0x67000252);
         break;
     case GX_PERF1_CLOCKS:
-        GFWriteBPCmd(0x67000021);
+        GX_WRITE_RAS_REG(0x67000021);
         break;
     case GX_PERF1_TC_CHECK1_2:
-        GFWriteBPCmd(0x6700014B);
+        GX_WRITE_RAS_REG(0x6700014B);
         break;
     case GX_PERF1_TC_CHECK3_4:
-        GFWriteBPCmd(0x6700018D);
+        GX_WRITE_RAS_REG(0x6700018D);
         break;
     case GX_PERF1_TC_CHECK5_6:
-        GFWriteBPCmd(0x670001CF);
+        GX_WRITE_RAS_REG(0x670001CF);
         break;
     case GX_PERF1_TC_CHECK7_8:
-        GFWriteBPCmd(0x67000211);
+        GX_WRITE_RAS_REG(0x67000211);
         break;
 
     case GX_PERF1_VC_ELEMQ_FULL:

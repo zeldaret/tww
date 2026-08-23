@@ -103,6 +103,18 @@ volatile PPCWGPipe GXFIFO AT_ADDRESS(GXFIFO_ADDR);
     }
 
 // Direct
+inline void GXCmd1u8(const u8 x) {
+    GXFIFO.u8 = x;
+}
+
+inline void GXCmd1u16(const u16 x) {
+    GXFIFO.u16 = x;
+}
+
+inline void GXCmd1u32(const u32 x) {
+    GXFIFO.u32 = x;
+}
+
 inline void GXPosition2f32(f32 x, f32 z) {
     GXFIFO.f32 = x;
     GXFIFO.f32 = z;
@@ -216,11 +228,6 @@ inline void GXColor4x8(u8 r, u8 g, u8 b, u8 a) {
 
 inline void GXTexCoord1x16(u16 x) {
     GXFIFO.u16 = x;
-}
-
-inline void GFWriteBPCmd(u32 x) {
-    GXFIFO.u8 = GX_CMD_LOAD_BP_REG;
-    GXFIFO.u32 = x;
 }
 
 inline void GXEnd() {}

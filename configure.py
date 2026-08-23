@@ -952,11 +952,11 @@ config.libs = [
         "progress_category": "sdk",
         "host": False,
         "objects": [
-            Object(NonMatching, "dolphin/gf/GFGeometry.cpp"),
-            Object(NonMatching, "dolphin/gf/GFLight.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "dolphin/gf/GFPixel.cpp"),
-            Object(NonMatching, "dolphin/gf/GFTev.cpp"),
-            Object(NonMatching, "dolphin/gf/GFTransform.cpp"),
+            Object(Matching, "dolphin/gf/GFGeometry.cpp"),
+            Object(Matching, "dolphin/gf/GFLight.cpp"),
+            Object(Matching, "dolphin/gf/GFPixel.cpp"),
+            Object(Matching, "dolphin/gf/GFTev.cpp"),
+            Object(Matching, "dolphin/gf/GFTransform.cpp"),
         ],
     },
     JSystemLib(
