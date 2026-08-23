@@ -325,22 +325,22 @@ fishManProcFunc FishManProcMain[] = {
 /* 801AF848-801AFB64       .text _create__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_create() {
     fmapDl.scrn = new J2DScreen();
-    JUT_ASSERT(571, fmapDl.scrn != 0);
+    JUT_ASSERT(571, fmapDl.scrn != NULL);
     fmapDl.scrn->set("f_map.blo", dComIfGp_getFmapResArchive());
 
     outFont = new dDlst_2DOutFont_c();
-    JUT_ASSERT(575, outFont != 0);
+    JUT_ASSERT(575, outFont != NULL);
     outFont->m74 = 1;
 
     outFont2 = new dDlst_2DOutFont_c();
-    JUT_ASSERT(579, outFont2 != 0);
+    JUT_ASSERT(579, outFont2 != NULL);
 
     stick = new STControl(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x2000);
-    JUT_ASSERT(582, stick != 0);
+    JUT_ASSERT(582, stick != NULL);
     stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x800);
 
     mChkPntTxt_p = (ResTIMG*)operator new (0x2c00, 0x20);
-    JUT_ASSERT(586, mChkPntTxt_p != 0);
+    JUT_ASSERT(586, mChkPntTxt_p != NULL);
 
     screenSet();
     aramCmapDatRead();
@@ -959,16 +959,16 @@ void dMenu_Fmap_c::changeIslandName(u8 i_no) {
         mTxtName[i_no][0] = 0;
     } else {
         u32 msgNo;
-        if (grid == 32 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D80)) {
+        if (grid == dIsleIdx_PrivateOasis_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D80)) {
             msgNo = 0x31D7;
         } else {
             msgNo = grid + 0x31A6;
         }
 
         if (
-            grid == 0 || grid == 3 || grid == 10 || grid == 12 || grid == 19 ||
-            grid == 22|| grid == 25 || (u32)(grid - 39) <= 1 ||
-            grid == 43 || grid == 44) {
+            grid == dIsleIdx_ForsakenFortress_e || grid == dIsleIdx_GaleIsle_e || grid == dIsleIdx_WindfallIsland_e || grid == dIsleIdx_DragonRoostIsland_e ||
+            grid == dIsleIdx_FireMountain_e || grid == dIsleIdx_GreatfishIsle_e || grid == dIsleIdx_ToweroftheGods_e || grid == dIsleIdx_IceRingIsle_e ||
+            grid == dIsleIdx_ForestHaven_e || grid == dIsleIdx_OutsetIsland_e || grid == dIsleIdx_HeadstoneIsland_e) {
             ((J2DTextBox*)mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0x100);
         } else {
             ((J2DTextBox*)mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0xFC);

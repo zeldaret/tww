@@ -77,83 +77,83 @@ public:
     virtual ~dMenu_Fmap_c() {}
 
     void draw() { _draw(); }
-    inline u8 getCtActive() {
+    u8 getCtActive() {
         JUT_ASSERT(467, fmapSv != NULL);
         return fmapSv->active;
     }
-    inline void setCtActive(u8 val) {
+    void setCtActive(u8 val) {
         JUT_ASSERT(472, fmapSv != NULL);
         fmapSv->active = val;
     }
-    inline s8 getCtCmapSelNo() {
+    s8 getCtCmapSelNo() {
         JUT_ASSERT(478, fmapSv != NULL);
         return fmapSv->cmapSelNo;
     }
-    inline void setCtCmapSelNo(s8 val) {
+    void setCtCmapSelNo(s8 val) {
         JUT_ASSERT(483, fmapSv != NULL);
         fmapSv->cmapSelNo = val;
     }
-    inline s8 getCtCurWX() {
+    s8 getCtCurWX() {
         JUT_ASSERT(489, fmapSv != NULL);
         return fmapSv->curWX;
     }
-    inline void setCtCurWX(s8 val) {
+    void setCtCurWX(s8 val) {
         JUT_ASSERT(494, fmapSv != NULL);
         fmapSv->curWX = val;
     }
-    inline s8 getCtCurWY() {
+    s8 getCtCurWY() {
         JUT_ASSERT(500, fmapSv != NULL);
         return fmapSv->curWY;
     }
-    inline void setCtCurWY(s8 val) {
+    void setCtCurWY(s8 val) {
         JUT_ASSERT(505, fmapSv != NULL);
         fmapSv->curWY = val;
     }
-    inline s8 getCtCurHX() {
+    s8 getCtCurHX() {
         JUT_ASSERT(511, fmapSv != NULL);
         return fmapSv->curHX;
     }
-    inline void setCtCurHX(s8 val) {
+    void setCtCurHX(s8 val) {
         JUT_ASSERT(516, fmapSv != NULL);
         fmapSv->curHX = val;
     }
-    inline s8 getCtCurHY() {
+    s8 getCtCurHY() {
         JUT_ASSERT(522, fmapSv != NULL);
         return fmapSv->curHY;
     }
-    inline void setCtCurHY(s8 val) {
+    void setCtCurHY(s8 val) {
         JUT_ASSERT(527, fmapSv != NULL);
         fmapSv->curHY = val;
     }
-    inline s8 getCtCurX() {
+    s8 getCtCurX() {
         JUT_ASSERT(533, fmapSv != NULL);
         return fmapSv->curX;
     }
-    inline void setCtCurX(s8 val) {
+    void setCtCurX(s8 val) {
         JUT_ASSERT(538, fmapSv != NULL);
         fmapSv->curX = val;
     }
-    inline s8 getCtCurY() {
+    s8 getCtCurY() {
         JUT_ASSERT(543, fmapSv != NULL);
         return fmapSv->curY;
     }
-    inline void setCtCurY(s8 val) {
+    void setCtCurY(s8 val) {
         JUT_ASSERT(548, fmapSv != NULL);
         fmapSv->curY = val;
     }
-    inline s8 getCtZoomGridX() {
+    s8 getCtZoomGridX() {
         JUT_ASSERT(553, fmapSv != NULL);
         return fmapSv->zoomGridX;
     }
-    inline void setCtZoomGridX(s8 val) {
+    void setCtZoomGridX(s8 val) {
         JUT_ASSERT(559, fmapSv != NULL);
         fmapSv->zoomGridX = val;
     }
-    inline s8 getCtZoomGridY() {
+    s8 getCtZoomGridY() {
         JUT_ASSERT(563, fmapSv != NULL);
         return fmapSv->zoomGridY;
     }
-    inline void setCtZoomGridY(s8 val) {
+    void setCtZoomGridY(s8 val) {
         JUT_ASSERT(569, fmapSv != NULL);
         fmapSv->zoomGridY = val;
     }
