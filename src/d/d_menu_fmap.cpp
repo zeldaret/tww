@@ -1332,7 +1332,39 @@ void dMenu_Fmap_c::changeFmapTexture(s8 i_x, s8 i_y) {
 
 /* 801B3A2C-801B3C4C       .text setDspNormalMapLink__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::setDspNormalMapLink() {
-    /* Nonmatching */
+    if (mFishmanActive == 0) {
+        mLnk1Pane.pane->hide();
+        mSpi1Pane.pane->hide();
+    } else {
+        mLnk1Pane.mPosCenterOrig.x = mAreaPane.mPosCenterOrig.x + (field_0x511C.x * 56.0f) / 100000.0f;
+        mLnk1Pane.mPosCenterOrig.y = mAreaPane.mPosCenterOrig.y + (field_0x511C.y * 56.0f) / 100000.0f;
+        mLnk1Pane.mPosCenter.x = mLnk1Pane.mPosCenterOrig.x;
+        mLnk1Pane.mPosCenter.y = mLnk1Pane.mPosCenterOrig.y;
+        fopMsgM_cposMove(&mLnk1Pane);
+
+        mLnk1Pane.pane->rotate(
+            (s32)(mLnk1Pane.mSize.x * 0.5f),
+            (s32)(mLnk1Pane.mSize.y * 0.5f),
+            ROTATE_Z,
+            field_0x511C.z
+        );
+
+        if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0) {
+            mSpi1Pane.mPosCenterOrig.x = mAreaPane.mPosCenterOrig.x + (field_0x5128.x * 56.0f) / 100000.0f;
+            mSpi1Pane.mPosCenterOrig.y = mAreaPane.mPosCenterOrig.y + (field_0x5128.y * 56.0f) / 100000.0f;
+            mSpi1Pane.mPosCenter.x = mSpi1Pane.mPosCenterOrig.x;
+            mSpi1Pane.mPosCenter.y = mSpi1Pane.mPosCenterOrig.y;
+            fopMsgM_cposMove(&mSpi1Pane);
+            mSpi1Pane.pane->rotate(
+                (s32)(mSpi1Pane.mSize.x * 0.5f),
+                (s32)(mSpi1Pane.mSize.y * 0.5f),
+                ROTATE_Z,
+                field_0x5128.z
+            );
+        } else {
+            mSpi1Pane.pane->hide();
+        }
+    }
 }
 
 /* 801B3C4C-801B3DFC       .text setDspLargeMapLink__12dMenu_Fmap_cFv */
