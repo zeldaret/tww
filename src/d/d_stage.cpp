@@ -2323,7 +2323,7 @@ int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 
         if (strcmp(dComIfGp_getStartStageName(), "Asoko") == 0) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)) {
                 if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
-                    dComIfGp_setNextStage("sea", 5, 11, -1, i_speed, i_mode);
+                    dComIfGp_setNextStage("sea", 5, dIsleRoom_WindfallIsland_e, -1, i_speed, i_mode);
                 } else {
                     dComIfGp_setNextStage("MajyuE", 18, 0, -1, i_speed, i_mode);
                 }
@@ -2392,19 +2392,17 @@ void dStage_turnRestart() {
     dKy_set_nexttime(nextTime);
 }
 
+#if VERSION > VERSION_DEMO
 /* 80043BD0-80043C84       .text dStage_escapeRestart__Fv */
 void dStage_escapeRestart() {
     daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-    dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y,
-                            fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
+    dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y, fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
 
-    if (dComIfG_getTimerMode() == 3) {
-        dComIfG_TimerDeleteRequest();
-    }
+    dComIfG_TimerDeleteRequest(3);
 
-    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1,
-                          0.0f, 0, FALSE, 9);
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1, 0.0f, 0, FALSE, 9);
 }
+#endif
 
 /* 80043C84-80043CD0       .text dStage_checkRestart__Fv */
 BOOL dStage_checkRestart() {

@@ -240,9 +240,7 @@ public:
     void onBait(u8);
     BOOL isBait(u8);
     void onReserve(u8);
-#if VERSION == VERSION_DEMO
     void offReserve(u8);
-#endif
     BOOL isReserve(u8);
 
     /* 0x0 */ u32 mReserveFlags;
@@ -489,6 +487,7 @@ public:
     u8 getVibration() { return mVibration; }
     void setVibration(u8 vib) { mVibration = vib; }
 
+private:
     /* 0x0 */ u8 mRuby;
     /* 0x1 */ u8 mSoundMode;
     /* 0x2 */ u8 mAttentionType;
@@ -737,6 +736,7 @@ public:
     BOOL isSwitch(int);
     BOOL revSwitch(int);
 
+    void reset() { mStageNo = -1; } // Name from TP
     u8 getGbaRupeeCount() { return mGbaRupeeCount; }
     void incGbaRupeeCount() { mGbaRupeeCount++; }
 
@@ -950,13 +950,14 @@ public:
 
     void removeZone(int zoneNo) { mZone[zoneNo].reset(); }
     void initDan(s8 i_stage) { mDan.init(i_stage); }
+    void resetDan() { mDan.reset(); } // Name from TP
 
     u8 getDataNum() { return mDataNum; }
     void setDataNum(u8 num) { mDataNum = num; }
     u8 getNoFile() { return mNoFile; }
     void setNoFile(u8 no) { mNoFile = no; }
     u8 getNewFile() { return mNewFile; }
-    void setNewFile(u8 file) {mNewFile = file; }
+    void setNewFile(u8 file) { mNewFile = file; }
     u64 getMemCardCheckID() { return mMemCardCheckID; }
     void setMemCardCheckID(u64 id) { mMemCardCheckID = id; }
 

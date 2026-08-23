@@ -36,6 +36,7 @@ void GXSetNumTexGens(u8 numTexGens);
 void GXGetVtxAttrFmtv(GXVtxFmt param_0, GXVtxAttrFmtList* param_1);
 void GXGetVtxAttrFmt(GXVtxFmt param_0, int param_1, GXCompCnt* param_2, GXCompType* param_3,
                      u8* param_4);
+void GXGetVtxDesc(GXAttr attr, GXAttrType* type);
 void GXGetVtxDescv(GXVtxDescList* attrPtr);
 
 static inline void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType type, GXTexGenSrc src, u32 mtx) {

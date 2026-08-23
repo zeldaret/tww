@@ -1387,7 +1387,7 @@ BOOL daItem_c::initAction() {
     case daItemAct_1_e:
         y_speed = getData()->mLaunchSpeed + cM_rndFX(5.0f);
         speedF = getData()->mSpeedH / 10.0f;
-        if (g_mDoCPd_cpadInfo[0].mMainStickValue) {
+        if (CPad_GET_STICK_VALUE(0)) {
             speedF = getData()->mSpeedH;
         }
         current.angle.y = cM_rndF((f32)0xFFFF);

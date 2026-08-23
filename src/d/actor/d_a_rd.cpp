@@ -24,7 +24,7 @@ public:
     daRd_HIO_c();
     virtual ~daRd_HIO_c() {}
     
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ dNpc_HIO_c mNpc;
@@ -426,7 +426,7 @@ bool daRd_c::createArrowHeap() {
     };
     mpJntHit = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (mpJntHit) {
-        jntHit = mpJntHit;
+        fopAcM_SetJntHit(this, mpJntHit);
     } else {
         return false;
     }
@@ -669,7 +669,7 @@ bool daRd_c::checkTgHit() {
             cXyz* hitPos = mCyl.GetTgHitPosP();
             cc_at_check(this, &atInfo);
             if (mHitType == 1 || mHitType == 7 || mHitType == 8 || health <= 0) {
-                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, mCyl.GetTgHitPosP());
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, hitPos);
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, hitPos, &player->shape_angle, &scale);
                 if (health <= 0) {
@@ -975,8 +975,8 @@ void daRd_c::modeCryInit() {
 void daRd_c::modeCry() {
     setAnm(AnmPrm_WALK, false);
     
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
-    f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
+    f32 stickPosY = CPad_GET_STICK_POS_Y(0);
     if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         if (isLinkControl()) {
             dComIfGp_event_reset();
@@ -1084,8 +1084,8 @@ void daRd_c::modeAttack() {
         return;
     }
     
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
-    f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
+    f32 stickPosY = CPad_GET_STICK_POS_Y(0);
     if (eventInfo.checkCommandDemoAccrpt()) {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
         if (isAnm(AnmPrm_ATACK)) {
@@ -1634,7 +1634,7 @@ bool daRd_c::_execute() {
     if (mMode != MODE_SILENT_PRAY && mMode != MODE_DEATH && mMode != MODE_DAMAGE &&
         mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_CRY_WAIT)
     {
-        daRd_c* corpse = (daRd_c*)fopAcIt_Judge(&searchNeadDeadRd_CB, this);
+        daRd_c* corpse = (daRd_c*)fopAcM_Search(&searchNeadDeadRd_CB, this);
         if (corpse != NULL) {
             mCorpseID = fopAcM_GetID(corpse);
             modeProcInit(MODE_SILENT_PRAY);
@@ -1690,7 +1690,7 @@ bool daRd_c::_execute() {
         lookBack();
     }
     
-    if (mbIkari) {
+    if (isIkari()) {
         cLib_addCalc2(&mD38, l_HIO.m60, 0.1f, l_HIO.m64);
     } else {
         cLib_addCalc2(&mD38, 0.0f, 0.1f, l_HIO.m64);
@@ -1888,13 +1888,13 @@ void daRd_c::createInit() {
 
 /* 000046A4-00004720       .text getArg__6daRd_cFv */
 void daRd_c::getArg() {
-    u32 params = fopAcM_GetParam(this);
-    mWhichIdleAnm = fopAcM_GetParamBit(params, 0x00, 1);
-    u8 radiusParam = fopAcM_GetParamBit(params, 0x01, 7);
-    s32 areaRadius = radiusParam;
-    mChecksSwitch = fopAcM_GetParamBit(params, 0x08, 8);
-    mSwNo = fopAcM_GetParamBit(params, 0x18, 8);
-    if ((s32)radiusParam == 0x7F) {
+    u32 param = fopAcM_GetParam(this);
+    mWhichIdleAnm = fopAcM_GetParamBit(param, 0x00, 1);
+    u8 radiusParam = fopAcM_GetParamBit(param, 0x01, 7);
+    int areaRadius = radiusParam;
+    mChecksSwitch = fopAcM_GetParamBit(param, 0x08, 8);
+    mSwNo = fopAcM_GetParamBit(param, 0x18, 8);
+    if (areaRadius == 0x7F) {
         areaRadius = 0;
     }
     mAreaRadius = l_HIO.m30 + areaRadius;
@@ -1953,6 +1953,7 @@ static BOOL daRdDraw(void* i_this) {
 
 /* 00005044-0000504C       .text daRdIsDelete__FPv */
 static BOOL daRdIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

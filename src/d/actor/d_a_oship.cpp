@@ -132,7 +132,7 @@ void daOship_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
 }
 
 /* 0000044C-00000488       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-int pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
+static int pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
     return ((daOship_c *)i_this)->_pathMove(param_1, param_2, param_3);
 }
 
@@ -202,7 +202,7 @@ bool daOship_c::lineCheck(cXyz* param_1, cXyz* param_2) {
 
 /* 000008F8-00000990       .text changeModeByRange__9daOship_cFv */
 void daOship_c::changeModeByRange() {
-    f32 search_ac_dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 search_ac_dist = fopAcM_searchPlayerDistanceXZ(this);
     Mode_e proc_no;
 
     if (search_ac_dist < l_HIO.mDistRangeA) {
@@ -470,7 +470,7 @@ void daOship_c::setMtx() {
     dLib_waveRot(&current.pos, sway, &mWave);
     
     s16 temp_r30 = f32(mAttackSwayAmount * (REG12_S(5) + 10)) * cM_ssin(mAttackSwayTimer);
-    s16 temp_r0 = shape_angle.y + fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    s16 temp_r0 = shape_angle.y + fopAcM_searchPlayerAngleY(this);
     s16 temp_r4 = f32(temp_r30) * cM_scos(temp_r0);
     s16 temp_r3 = f32(temp_r30) * cM_ssin(temp_r0);
 
@@ -655,7 +655,7 @@ void daOship_c::modeAttackInit() {
         target_dist = 0.0f;
     }
 
-    s16 angle = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    s16 angle = fopAcM_searchPlayerAngleY(this);
 
     mTargetPos.x -= target_dist * cM_ssin(angle);
     mTargetPos.z -= target_dist * cM_scos(angle);
@@ -855,11 +855,11 @@ bool daOship_c::_execute() {
 
     if (fopAcM_GetSpeedF(this) <= 2.0f || 
         cull_box_check || 
-        fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) > 18000.0f) {
+        fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
         mWaveCallback2.remove();
         mWaveCallback1.remove();
         mSplashCallback.remove();
-        mTrackCallback.stop();        
+        mTrackCallback.stop();
     } else {
         setWave();
     }
@@ -913,8 +913,8 @@ void daOship_c::createInit() {
         mCyl[i].SetStts(&mStts);
     }
 
-    mWave.mAnimX = cM_rndF(32768.0f);
-    mWave.mAnimZ = cM_rndF(32768.0f);
+    mWave.mAnimX = cM_rndF(0x8000);
+    mWave.mAnimZ = cM_rndF(0x8000);
 
     setMtx();
     mpModel->calc();

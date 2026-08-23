@@ -206,11 +206,11 @@ int mDoAud_getTactDirection(int stick, int ret) {
     s16 ang;
 
     if (stick != 0) {
-        val = g_mDoCPd_cpadInfo[0].mMainStickValue;
-        ang = g_mDoCPd_cpadInfo[0].mMainStickAngle;
+        val = CPad_GET_STICK_VALUE(0);
+        ang = CPad_GET_STICK_ANGLE(0);
     } else {
-        val = g_mDoCPd_cpadInfo[0].mCStickValue;
-        ang = g_mDoCPd_cpadInfo[0].mCStickAngle;
+        val = CPad_GET_SUBSTICK_VALUE(0);
+        ang = CPad_GET_SUBSTICK_ANGLE(0);
     }
 
     if (val < 0.9f) {

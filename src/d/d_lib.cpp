@@ -342,22 +342,22 @@ void STControl::Yinit() {
 
 /* 80058300-80058310       .text getValueStick__9STControlFv */
 f32 STControl::getValueStick() {
-    return g_mDoCPd_cpadInfo[0].mMainStickValue;
+    return CPad_GET_STICK_VALUE(0);
 }
 
 /* 80058310-80058320       .text getAngleStick__9STControlFv */
 s16 STControl::getAngleStick() {
-    return g_mDoCPd_cpadInfo[0].mMainStickAngle;
+    return CPad_GET_STICK_ANGLE(0);
 }
 
 /* 80058320-80058330       .text getValueStick__10CSTControlFv */
 f32 CSTControl::getValueStick() {
-    return g_mDoCPd_cpadInfo[0].mCStickValue;
+    return CPad_GET_SUBSTICK_VALUE(0);
 }
 
 /* 80058330-80058340       .text getAngleStick__10CSTControlFv */
 s16 CSTControl::getAngleStick() {
-    return g_mDoCPd_cpadInfo[0].mCStickAngle;
+    return CPad_GET_SUBSTICK_ANGLE(0);
 }
 
 /* 80058340-800585D0       .text checkTrigger__9STControlFv */

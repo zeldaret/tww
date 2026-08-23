@@ -463,7 +463,7 @@ void mDoExt_J3DModelPacketS::draw() {
         while (mesh != NULL) {
             if (!mesh->getShape()->checkFlag(J3DShpFlag_Hide)) {
                 matPacket = mpModel->getMatPacket(mesh->getIndex());
-                j3dSys.setTexture(matPacket->mpTexture);
+                j3dSys.setTexture(matPacket->getTexture());
                 j3dSys.setMatPacket(matPacket);
                 mesh->load();
                 setMaterial();
@@ -531,8 +531,8 @@ static void part_draw(bgn_class* i_this, part_s* param_2) {
             param_2->mPartTevStr.mFogColor.b = uVar6 & 0xFF;
             param_2->mPartTevStr.mFogStartZ = param_2->mPartTevStr.mFogStartZ + param_2->m0CC;
         }
-        camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
-        local_38 = param_2->m224 - camera->mLookat.mEye;
+        camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
+        local_38 = param_2->m224 - camera->view.mLookat.mEye;
         if (local_38.abs() > l_HIO.m008 * param_2->m0F4) {
             g_env_light.setLightTevColorType(model, &param_2->mPartTevStr);
             if ((actor->health <= 2) && (param_2 == &i_this->mTailParts[BGN_TAIL_MAX - 1])) {
@@ -668,19 +668,9 @@ static void daBgn_DrawS(bgn_class* i_this) {
     for (s32 i = 0; i < BGN_TAIL_MAX; i++) {
         part_draw(i_this, &i_this->mTailParts[i]);
     }
-#ifdef __MWERKS__
     i_this->mBlueRopeMat.update(60, (GXColor){DEMO_SELECT(0, 0xFF), 0xFF, 0xFF, 0}, &actor->tevStr);
-#else
-    GXColor local_24 = (GXColor){DEMO_SELECT(0, 0xFF), 0xFF, 0xFF, 0};
-    i_this->mBlueRopeMat.update(60, local_24, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mBlueRopeMat);
-#ifdef __MWERKS__
     i_this->mRedRopeMat.update(60, (GXColor){DEMO_SELECT(0xD2, 0xFF), DEMO_SELECT(0x32, 0xFF), DEMO_SELECT(0x5A, 0xFF), 0}, &actor->tevStr);
-#else
-    GXColor local_28 = (GXColor){DEMO_SELECT(0xD2, 0xFF), DEMO_SELECT(0x32, 0xFF), DEMO_SELECT(0x5A, 0xFF), 0};
-    i_this->mRedRopeMat.update(60, local_28, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mRedRopeMat);
 }
 
@@ -752,12 +742,7 @@ static BOOL daBgn2_Draw(bgn2_class* i_this) {
             i_this->m02E4.update();
         }
     }
-#ifdef __MWERKS__
-    i_this->mRedRopeMat.update(60, (GXColor){0xD2, 0x32, 0x5A, 0}, &actor->tevStr);
-#else
-    GXColor local_28 = (GXColor){0xD2, 0x32, 0x5A, 0};
-    i_this->mRedRopeMat.update(60, local_28, &actor->tevStr);
-#endif
+    i_this->mRedRopeMat.update(60, (GXColor){0xD2, 0x32, 0x5A, 0x00}, &actor->tevStr);
     dComIfGd_set3DlineMat(&i_this->mRedRopeMat);
     return TRUE;
 }
@@ -880,12 +865,7 @@ static BOOL daBgn3_Draw(bgn3_class* i_this) {
 #endif
         }
     }
-#ifdef __MWERKS__
     i_this->mRedRopeMat.update(60, (GXColor){0xD2, 0x32, 0x5A, 0}, &actor->tevStr);
-#else
-    GXColor local_48 = (GXColor){0xD2, 0x32, 0x5A, 0};
-    i_this->mRedRopeMat.update(60, local_48, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mRedRopeMat);
     return TRUE;
 }
@@ -1011,12 +991,7 @@ static BOOL daBgn_Draw(bgn_class* i_this) {
         }
 #if VERSION > VERSION_DEMO
         if (i_this->mC720 != 0) {
-#ifdef __MWERKS__
             i_this->mDefeatCSRopeMat.update(60, (GXColor){0xFF, 0xFF, 0xFF, 0}, &actor->tevStr);
-#else
-            GXColor local_18 = (GXColor){0xFF, 0xFF, 0xFF, 0};
-            i_this->mDefeatCSRopeMat.update(60, local_18, &actor->tevStr);
-#endif
             dComIfGd_set3DlineMat(&i_this->mDefeatCSRopeMat);
         }
 #endif
@@ -2007,56 +1982,57 @@ static void dance_0(bgn_class* i_this) {
             }
             i_this->mC74E = 0;
             i_this->mC74A++;
-            goto block_51;
+            break;
         case 1:
-            if (((i_this->mC7AC[0] == 0) && (!ki_check(i_this))) && (l_HIO.m028 != 0)) {
-                if (((i_this->mC754 == 1) || (i_this->mC754 == 2)) || (i_this->mC754 == 3)) {
-                    if (((i_this->mAAA8[0].m2D0 != 0) && (i_this->mAAA8[1].m2D0 != 0)) && (i_this->mC7AC[2] == 0)) {
-                        i_this->mC748 = 4;
-                        i_this->mC74A = 0;
-                        i_this->mCA98 = 0.0f;
-                        return;
-                    }
-                    i_this->mC748 = 1;
-                    i_this->mC7AC[0] = REG0_S(0) + 0x32;
-                    uVar2 = i_this->mAAA8[3].m2D0;
-                    if ((uVar2 == 0) && (i_this->mAAA8[4].m2D0 == 0)) {
-                        i_this->mC74A = 5;
-                        i_this->mC7AC[0] = REG0_S(6) + 0x40;
-                        fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
-                    } else if (uVar2 == 0) {
-                        i_this->mC74A = 3;
-                        fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
-                    } else if (i_this->mAAA8[4].m2D0 == 0) {
-                        i_this->mC74A = 1;
-                        fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
-                    } else if (i_this->mAAA8[7].m2D0 == 0) {
-                        i_this->mC748 = 3;
-                        i_this->mC74A = 0;
-                    } else {
-                        i_this->mC748 = 2;
-                        i_this->mC74A = 0;
-                    }
-                } else if ((i_this->mC754 == 0) || (i_this->mC754 == 5)) {
+            if (i_this->mC7AC[0] != 0 || ki_check(i_this) || l_HIO.m028 == 0) {
+                break;
+            }
+            if (i_this->mC754 == 1 || i_this->mC754 == 2 || i_this->mC754 == 3) {
+                if (i_this->mAAA8[0].m2D0 != 0 && i_this->mAAA8[1].m2D0 != 0 && i_this->mC7AC[2] == 0) {
+                    i_this->mC748 = 4;
+                    i_this->mC74A = 0;
+                    i_this->mCA98 = 0.0f;
+                    return;
+                }
+                i_this->mC748 = 1;
+                i_this->mC7AC[0] = REG0_S(0) + 0x32;
+                uVar2 = i_this->mAAA8[3].m2D0;
+                if (uVar2 == 0 && i_this->mAAA8[4].m2D0 == 0) {
+                    i_this->mC74A = 5;
+                    i_this->mC7AC[0] = REG0_S(6) + 0x40;
+                    fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
+                } else if (uVar2 == 0) {
+                    i_this->mC74A = 3;
+                    fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
+                } else if (i_this->mAAA8[4].m2D0 == 0) {
+                    i_this->mC74A = 1;
+                    fopAcM_monsSeStart(actor, JA_SE_CV_BGN_D_ATTACK, 0);
+                } else if (i_this->mAAA8[7].m2D0 == 0) {
+                    i_this->mC748 = 3;
+                    i_this->mC74A = 0;
+                } else {
+                    i_this->mC748 = 2;
                     i_this->mC74A = 0;
                 }
-                i_this->mC754++;
-                if (i_this->mC754 > 5) {
-                    i_this->mC754 = 0;
-                }
-                // fallthrough
+            } else if (i_this->mC754 == 0 || i_this->mC754 == 5) {
+                i_this->mC74A = 0;
             }
-        default:
-        block_51:
-            switch (i_this->mC74C) {
-                case 0:
-                    dance_A(i_this);
-                    break;
-                case 1:
-                    dance_B(i_this);
-                    break;
+            i_this->mC754++;
+            if (i_this->mC754 > 5) {
+                i_this->mC754 = 0;
             }
+            break;
     }
+    
+    switch (i_this->mC74C) {
+        case 0:
+            dance_A(i_this);
+            break;
+        case 1:
+            dance_B(i_this);
+            break;
+    }
+    
     move_s* pmVar8 = i_this->mAAA8;
     for (s32 i = 0; i < 8; i++, pmVar8++) {
         if (pmVar8->m2D0 == 0) {
@@ -2544,7 +2520,7 @@ static void hensin(bgn_class* i_this) {
                 i_this->mC728.y = REG0_F(2) + -1000.0f;
                 i_this->mC770 = REG0_S(0) + 0x14;
                 for (s32 i = 0; i < 8; i++) {
-                    i_this->mAAA8[i].m2F8 = REG0_S(7) + 0x3c;
+                    i_this->mAAA8[i].m2F8 = REG0_S(7) + 60;
                     i_this->mAAA8[i].m2F4 = REG0_F(15) + 6000.0f;
                 }
                 if (i_this->mC74A == 1) {
@@ -2592,7 +2568,7 @@ static void hensin(bgn_class* i_this) {
             }
             cLib_addCalc2(&i_this->mC728.y, REG0_F(9) + 1000.0f, 0.05f, actor->speed.y);
             cLib_addCalc2(&actor->speed.y, 50.0f, 1.0f, 0.2f);
-            if (i_this->mC7AC[0] <= 0x64) {
+            if (i_this->mC7AC[0] <= 100) {
                 cLib_addCalc0(&i_this->mCC80, 1.0f, 0.02f);
                 if (i_this->mC7AC[0] == 100) {
                     mDoAud_seStart(JA_SE_CM_BGN_D_TO_T_1, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
@@ -2811,6 +2787,7 @@ static void action_s(bgn_class* i_this, move_s* param_2, int param_3) {
                 param_2->m2E0.x = l_HIO.m0CE;
                 param_2->m2E0.y = l_HIO.m0D0;
                 param_2->m2E0.z = l_HIO.m0D2;
+                break;
         }
     }
     if (param_2->m2D0 == 0) {
@@ -2867,7 +2844,7 @@ static void action_main(bgn_class* i_this) {
     pcVar5 = i_this->mRedRopeMat.getSize(0);
     for (s32 i = 0; i < 60; i++, pcVar7++, pcVar5++) {
         dVar9 = i_this->mC774 * cM_ssin(cM_rad2s(0.053247336f * (f32)(i)));
-        dVar9 *= (0.01666667f * (f32)(0x3B - i));
+        dVar9 *= (0.01666667f * (f32)(59 - i));
         local_90.x = dVar9 * cM_ssin(i_this->mC746 * (REG0_S(3) + 300) + i * (REG0_S(4) + 2000));
         local_90.z = dVar9 * cM_ssin(i_this->mC746 * (REG0_S(5) + 0xfa) + i * (REG0_S(6) + 2000));
         *pcVar7 = local_9c + local_90;
@@ -2908,6 +2885,7 @@ static void action_main(bgn_class* i_this) {
             case 10:
                 i_this->mC754 = 1;
                 i_this->mCC80 = 1.0f;
+                break;
         }
         if (i_this->mC748 > 0) {
             cLib_addCalcAngleS2(&i_this->mC750, 0, 10, 0x200);
@@ -3067,7 +3045,7 @@ static void demo_camera(bgn_class* i_this) {
     cXyz camera_center;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mCSMode) {
         case 0:
             break;
@@ -3516,16 +3494,16 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
     pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e);
-    if (!i_this->mRedRopeMat.init(1, 0x3C, pBti, 1)) {
+    if (!i_this->mRedRopeMat.init(1, 60, pBti, 1)) {
         return FALSE;
     }
     pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_HIMO_e);
-    if (!i_this->mBlueRopeMat.init(8, 0x3C, pBti, 1)) {
+    if (!i_this->mBlueRopeMat.init(8, 60, pBti, 1)) {
         return FALSE;
     }
 #if VERSION > VERSION_DEMO
     pBti = (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e);
-    if (!i_this->mDefeatCSRopeMat.init(1, 0x3C, pBti, 1)) {
+    if (!i_this->mDefeatCSRopeMat.init(1, 60, pBti, 1)) {
         return FALSE;
     }
 #endif
@@ -3686,8 +3664,8 @@ static cPhs_State daBgn_Create(fopAc_ac_c* a_this) {
 #endif
             }
             for (s32 i = 0; i < 8; i++) {
-                i_this->mAAA8[i].m2FA = cM_rndF(32768.0f);
-                i_this->mAAA8[i].m2FC = cM_rndF(32768.0f);
+                i_this->mAAA8[i].m2FA = cM_rndF(0x8000);
+                i_this->mAAA8[i].m2FC = cM_rndF(0x8000);
             }
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F10)) {
                 i_this->m02B4 = 0xFF;
@@ -3709,7 +3687,7 @@ static cPhs_State daBgn_Create(fopAc_ac_c* a_this) {
             }
             i_this->mCC80 = 1.0f;
             i_this->mC748 = 7;
-            i_this->mC7AC[0] = 0x3c;
+            i_this->mC7AC[0] = 60;
 #if VERSION > VERSION_DEMO
             bg_tevstr = a_this->tevStr;
             i_this->mWaterTevStr = a_this->tevStr;

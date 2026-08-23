@@ -67,7 +67,7 @@ static void move(fgmahou_class* i_this) {
         case 0:
             i_this->mState = 1;
             i_this->field_0x2D4 = i_this->mOrbNumber * REG6_S(2) - REG6_S(3);
-            i_this->field_0x2D6 = cM_rndF(65536.0f);
+            i_this->field_0x2D6 = cM_rndF(0x10000);
 
             i_this->speedF = REG0_F(0xD) + 50.0f;
             i_this->speedF *= (0.2f + REG0_F(4)) * spdd[i_this->mOrbNumber] + 1.0f;
@@ -104,7 +104,7 @@ static void move(fgmahou_class* i_this) {
 
             if(i_this->mAtSph.ChkAtHit()) {
                 i_this->mAtSph.GetAtHitObj();
-                fganon_class* fganon = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
+                fganon_class* fganon = (fganon_class*)fpcM_Search(boss_s_sub, i_this);
                 if(fganon != NULL) {
                     fganon->m68B = 1;
 
@@ -123,7 +123,7 @@ static void move(fgmahou_class* i_this) {
 
             i_this->mState = 5;
         case 5:
-            fganon2 = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
+            fganon2 = (fganon_class*)fpcM_Search(boss_s_sub, i_this);
             if(fganon2 == NULL) {
                 i_this->field_0x780 = 0x32;
                 break;
@@ -283,6 +283,7 @@ static BOOL daFgmahou_Execute(fgmahou_class* i_this) {
 
 /* 00000DD8-00000DE0       .text daFgmahou_IsDelete__FP13fgmahou_class */
 static BOOL daFgmahou_IsDelete(fgmahou_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

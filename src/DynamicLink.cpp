@@ -192,7 +192,7 @@ JKRArchive* DynamicModuleControl::mountCallback(void* param_0) {
     return sArchive;
 }
 
-void DynamicModuleControl::mountCreate() {
+mDoDvdThd_callback_c* DynamicModuleControl::mountCreate() {
     mDoDvdThd_callback_c::create((mDoDvdThd_callback_func)DynamicModuleControl::mountCallback, NULL);
 }
 

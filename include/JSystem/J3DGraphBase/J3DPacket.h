@@ -3,6 +3,7 @@
 
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
+#include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/gd/GDBase.h"
 #include "dolphin/types.h"
 
@@ -197,15 +198,20 @@ public:
     void beginDiff();
     void endDiff();
 
-    J3DMaterial* getMaterial() const { return mpMaterial; }
-    J3DShapePacket* getShapePacket() const { return mpShapePacket; }
+    J3DMaterial* getMaterial() { return mpMaterial; }
+    J3DShapePacket* getShapePacket() { return mpShapePacket; }
     void setShapePacket(J3DShapePacket* packet) { mpShapePacket = packet; }
-    void setMaterial(J3DMaterial* pMaterial) { mpMaterial = pMaterial; }
+    void setMaterial(J3DMaterial* pMaterial) {
+        J3D_ASSERT(646, pMaterial != NULL, "Error : null pointer.");
+        mpMaterial = pMaterial;
+    }
     void setTexture(J3DTexture* pTexture) { mpTexture = pTexture; }
     void setInitShapePacket(J3DShapePacket* packet) { mpInitShapePacket = packet; }
-    void setMaterialAnmID(J3DMaterialAnm* materialAnm) { mpMaterialAnm = materialAnm; }
-    bool isChanged() const { return mDiffFlag & 0x80000000; }
-    bool isEnabled_Diff() const { return mpInitShapePacket->getDisplayListObj() != NULL; }
+    void setMaterialAnmID(u32 materialAnm) { mpMaterialAnm = (J3DMaterialAnm*)materialAnm; }
+    void setMaterialID(u32 id) { mDiffFlag = id; }
+    bool isChanged() { return mDiffFlag & 0x80000000; }
+    bool isEnabled_Diff() { return mpInitShapePacket->getDisplayListObj() != NULL; }
+    J3DTexture* getTexture() { return mpTexture; }
 
     virtual ~J3DMatPacket();
     virtual int entry(J3DDrawBuffer* param_1) {

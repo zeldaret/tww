@@ -174,7 +174,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
 }
 
 /* 000004E4-00000510       .text coHit_CB__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjInf*) {
+static void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjInf*) {
     if(i_actor) {
         ((daDaiocta_Eye_c *)i_this)->_coHit(i_actor);
     }

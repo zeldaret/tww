@@ -15,13 +15,14 @@
 #include "d/d_npc.h"
 #include "d/d_snap.h"
 #include "d/d_camera.h"
+#include "f_op/f_op_camera.h"
 
 class daNpc_kam_HIO1_c {
 public:
     daNpc_kam_HIO1_c();
     virtual ~daNpc_kam_HIO1_c() {}
     
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
     
 public:
     /* 0x04 */ f32 mSpeedF;
@@ -57,7 +58,7 @@ public:
     daNpc_kam_HIO_c();
     virtual ~daNpc_kam_HIO_c() {}
     
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -600,7 +601,7 @@ BOOL daNpc_kam_c::getStickAngY(s16* pTargetAngleY, s16* pTargetAngleZ) {
     s16 deltaAngleY = 0;
     s16 targetAngleZ = 0;
     
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
     if (stickPosX) {
         deltaAngleY = stickPosX * -mAngVelY;
         targetAngleZ = stickPosX * l_HIO.mHio1.mMaxAngleZ;
@@ -639,7 +640,7 @@ s16 daNpc_kam_c::getAngleX() {
         angle = mAngVelX;
         mLockAngleXTimer = 30;
     } else {
-        angle = g_mDoCPd_cpadInfo[0].mMainStickPosY * mAngVelX;
+        angle = CPad_GET_STICK_POS_Y(0) * mAngVelX;
     }
     return angle;
 }
@@ -1467,6 +1468,7 @@ static BOOL daNpc_kam_Execute(daNpc_kam_c* i_this) {
 
 /* 00004588-00004590       .text daNpc_kam_IsDelete__FP11daNpc_kam_c */
 static BOOL daNpc_kam_IsDelete(daNpc_kam_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -173,7 +173,7 @@ void first_mode_change(pw_class*) {
 void action_dousa(pw_class* i_this) {
     /* Nonmatching */
     daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     cXyz camfwd;
     switch (i_this->mMode) {
     case 0:
@@ -239,7 +239,7 @@ void action_dousa(pw_class* i_this) {
         }
         break;
     case 11:
-        dKyr_get_vectle_calc(&i_this->current.pos, &camera->mLookat.mEye, &camfwd);
+        dKyr_get_vectle_calc(&i_this->current.pos, &camera->view.mLookat.mEye, &camfwd);
         i_this->mActorPlace.pos.x = i_this->m2CC.x + camfwd.x * 150.0f;
         i_this->mActorPlace.pos.y = i_this->m2CC.y;
         i_this->mActorPlace.pos.z = i_this->m2CC.z + camfwd.z * 150.0f;
@@ -322,7 +322,7 @@ void action_dousa(pw_class* i_this) {
                 anm_init(i_this, dRes_INDEX_PW_BCK_IDOU2_e, 7.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
             }
         }
-        i_this->m38C += (s16)cM_rndFX(16384.0f);
+        i_this->m38C += (s16)cM_rndFX(0x4000);
         if (i_this->mPathIndex != 0xFF && i_this->mpPath != NULL) {
             i_this->mMode = 0x14;
         } else {

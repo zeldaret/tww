@@ -71,7 +71,7 @@ public:
     }
     virtual ~bbHIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ u8 unk_04;
@@ -365,7 +365,7 @@ void anm_init(bb_class* i_this, int animFileIdx, f32 morf, u8 loopMode, f32 spee
 }
 
 /* 00000D74-00001048       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* ac1, void* ac2) {
+static void* s_a_d_sub(void* ac1, void* ac2) {
     dBgS_LinChk linChk;
     cXyz sp14;
     cXyz sp8;
@@ -1973,8 +1973,8 @@ void bb_fail_move(bb_class* i_this) {
 
 #if VERSION == VERSION_DEMO
 void bb_key_move(bb_class* i_this) {
-    f32 stickX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
-    f32 stickY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    f32 stickX = CPad_GET_STICK_POS_X(0);
+    f32 stickY = CPad_GET_STICK_POS_Y(0);
 
     switch (i_this->unk_2F0) {
         case 0: {
@@ -2341,48 +2341,48 @@ static BOOL daBb_Execute(bb_class* i_this) {
                 break;
             
             case 2: {
-                    fopAc_ac_c* ac = fopAcM_SearchByID(i_this->unk_2E8);
-                    if (ac != NULL) {
-                        i_this->unk_2E4 = ac;
-                        i_this->unk_2DF = 3;
-                    }
+                fopAc_ac_c* ac = fopAcM_SearchByID(i_this->unk_2E8);
+                if (ac != NULL) {
+                    i_this->unk_2E4 = ac;
+                    i_this->unk_2DF = 3;
                 }
                 break;
+            }
 
             case 3: {
-                    fopAc_ac_c* ac = i_this->unk_2E4;
+                fopAc_ac_c* ac = i_this->unk_2E4;
 
-                    sp10.x = (i_this->unk_A6C[1].x - i_this->unk_A6C[0].x) / 2.0f + i_this->unk_A6C[0].x;
-                    sp10.y = (i_this->unk_A6C[1].y - i_this->unk_A6C[0].y) / 2.0f + i_this->unk_A6C[0].y;
-                    sp10.z = (i_this->unk_A6C[1].z - i_this->unk_A6C[0].z) / 2.0f + i_this->unk_A6C[0].z;
+                sp10.x = (i_this->unk_A6C[1].x - i_this->unk_A6C[0].x) / 2.0f + i_this->unk_A6C[0].x;
+                sp10.y = (i_this->unk_A6C[1].y - i_this->unk_A6C[0].y) / 2.0f + i_this->unk_A6C[0].y;
+                sp10.z = (i_this->unk_A6C[1].z - i_this->unk_A6C[0].z) / 2.0f + i_this->unk_A6C[0].z;
 
-                    ac->current.pos = sp10;
-                    ac->current.angle = i_this->actor.current.angle;
-                    ac->shape_angle = i_this->actor.current.angle;
+                ac->current.pos = sp10;
+                ac->current.angle = i_this->actor.current.angle;
+                ac->shape_angle = i_this->actor.current.angle;
 
-                    if (i_this->unk_2EC == fpcNm_MO2_e || i_this->unk_2EC == fpcNm_BK_e) {
-                        damagereaction* dr;
+                if (i_this->unk_2EC == fpcNm_MO2_e || i_this->unk_2EC == fpcNm_BK_e) {
+                    damagereaction* dr;
 
-                        if (i_this->unk_2EC == fpcNm_MO2_e) {
-                            dr = &((mo2_class*)ac)->mDamageReaction;
-                            dr->m468 = REG0_F(8) * 10.0f + -110.0f;
-                            dr->m46C = REG0_F(9) * 10.0f + 10.0f;
-                        } else if (i_this->unk_2EC == fpcNm_BK_e) {
-                            dr = &((bk_class*)ac)->dr;
-                            dr->m468 = REG0_F(8) * 10.0f + -100.0f;
-                            dr->m46C = REG0_F(9) * 10.0f;
-                        }
-
-                        if (i_this->unk_2E0 != 0) {
-                            i_this->unk_2DF = 0;
-                            anm_init(i_this, dRes_INDEX_BB_BCK_FLY02_e, 12.0f, 2, 1.0f, dRes_INDEX_BB_BAS_FLY02_e);
-                            dr->mAction = 31;
-                            ac->speedF = 40.0f;
-                        }
+                    if (i_this->unk_2EC == fpcNm_MO2_e) {
+                        dr = &((mo2_class*)ac)->mDamageReaction;
+                        dr->m468 = REG0_F(8) * 10.0f + -110.0f;
+                        dr->m46C = REG0_F(9) * 10.0f + 10.0f;
+                    } else if (i_this->unk_2EC == fpcNm_BK_e) {
+                        dr = &((bk_class*)ac)->dr;
+                        dr->m468 = REG0_F(8) * 10.0f + -100.0f;
+                        dr->m46C = REG0_F(9) * 10.0f;
                     }
 
+                    if (i_this->unk_2E0 != 0) {
+                        i_this->unk_2DF = 0;
+                        anm_init(i_this, dRes_INDEX_BB_BCK_FLY02_e, 12.0f, 2, 1.0f, dRes_INDEX_BB_BAS_FLY02_e);
+                        dr->mAction = 31;
+                        ac->speedF = 40.0f;
+                    }
                 }
+
                 break;
+            }
         }
     }
 

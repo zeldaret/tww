@@ -89,7 +89,7 @@ public:
     daFm_HIO_c();
     virtual ~daFm_HIO_c() {};
     
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x004 */ s8 field_0x004;
@@ -365,7 +365,6 @@ BOOL daFm_c::_createHeap() {
 
 /* 00000718-0000086C       .text holeCreateHeap__6daFm_cFv */
 bool daFm_c::holeCreateHeap() {
-
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BDL_YPIT00_e));
     JUT_ASSERT(0x2C7, modelData != NULL);
 
@@ -516,7 +515,6 @@ bool daFm_c::jntHitCreateHeap() {
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
-        
     };
     mpJntHit = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (mpJntHit) {
@@ -528,7 +526,7 @@ bool daFm_c::jntHitCreateHeap() {
 }
 
 /* 00000A30-00000A6C       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-BOOL pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
+static BOOL pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
     return ((daFm_c*)i_this)->_pathMove(param_1, param_2, param_3   );
 }
 
@@ -553,7 +551,7 @@ BOOL daFm_c::_pathMove(cXyz* param_1, cXyz* param_2, cXyz* param_3) {
 }
 
 /* 00000D40-00000D6C       .text searchNearOtherActor_CB__FPvPv */
-void* searchNearOtherActor_CB(void* param_1, void* param_2) {
+static void* searchNearOtherActor_CB(void* param_1, void* param_2) {
     return ((daFm_c*)param_2)->searchNearOtherActor((fopAc_ac_c*)param_1);
 }
 
@@ -577,22 +575,21 @@ fopAc_ac_c* daFm_c::searchNearOtherActor(fopAc_ac_c* i_actor) {
             } else if(fopAcM_GetName(i_actor) == fpcNm_TSUBO_e) {
                 daPy_lk_c* pLink = daPy_getPlayerLinkActorClass();
 
-                f32 dist2 = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-                f32 dist3 = fopAcM_searchActorDistanceXZ(i_actor, dComIfGp_getPlayer(0));
+                f32 dist2 = fopAcM_searchPlayerDistanceXZ(this);
+                f32 dist3 = fopAcM_searchPlayerDistanceXZ(i_actor);
 
                 if(dist2 < l_HIO.field_0x0E8) {
                     if(dist3 > REG12_F(0) + 80.0f || fopAcM_GetID(i_actor) == pLink->getGrabActorID()) {
-                            switch(((daTsubo::Act_c*)i_actor)->prm_get_type()) {
-                                case 0:
-                                case 1:
-                                case 2:
-                                case 4:
-                                case 5:
-                                case 6:
-                                    mpActorTarget = i_actor;
-                                    return i_actor;
-                            }
-
+                        switch(((daTsubo::Act_c*)i_actor)->prm_get_type()) {
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 4:
+                            case 5:
+                            case 6:
+                                mpActorTarget = i_actor;
+                                return i_actor;
+                        }
                     }
                 }
             }
@@ -636,9 +633,9 @@ void daFm_c::moveRndBack() {
         if(!isGrabFoot()) {
             if(cLib_calcTimer(&field_0x648) == 0 || field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
                 if(field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
-                    field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 4096.0f);
+                    field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 0x1000);
                 } else {
-                    field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 4096.0f;
+                    field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 0x1000;
                 }
                 field_0x394 = cM_rndF(9.0f) + 1.0f;
                 field_0x660.z += l_HIO.field_0x0AC * cM_scos(field_0x680);
@@ -646,9 +643,8 @@ void daFm_c::moveRndBack() {
                 field_0x648 = l_HIO.field_0x0A0;
             }
         }
-
-        
     }
+
     if(field_0xAE4 != 0 && !mObjAcch.ChkWallHit()) {
         cLib_addCalcPosXZ2(&current.pos, field_0x660, 0.1f, l_HIO.field_0x0B0);
     }
@@ -656,14 +652,14 @@ void daFm_c::moveRndBack() {
 
 /* 00001384-000015F8       .text moveRndEscape__6daFm_cFv */
 void daFm_c::moveRndEscape() {
-    f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 dist = fopAcM_searchPlayerDistanceXZ(this);
 
     if(cLib_calcTimer(&field_0x648) == 0 || field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
         if(dist < l_HIO.field_0x0B4) {
             if(field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
-                field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 4096.0f);
+                field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 0x1000);
             } else {
-                field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 4096.0f;
+                field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 0x1000;
             }
             field_0x660.set(field_0x690);
             field_0x660.z += l_HIO.field_0x0B8 * cM_scos(field_0x680);
@@ -734,7 +730,6 @@ void daFm_c::bodySetMtx() {
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::transM(field_0x610);
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    
 }
 
 /* 00001864-00001920       .text holeSetMtx__6daFm_cFv */
@@ -745,7 +740,6 @@ void daFm_c::holeSetMtx() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::transM(l_HIO.field_0x020);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    
 }
 
 /* 00001920-00001A50       .text setCollision__6daFm_cFv */
@@ -773,7 +767,6 @@ void daFm_c::setAttention() {
     if(field_0x2E4 != 0) {
         attention_info.position = current.pos;
         eyePos = current.pos;
-        
     } else {
         if(mMode == 0xe || mMode == 0x10 || mMode == 0xf || (mMode == 0 || mMode == 0x11)) {
             attention_info.position = current.pos;
@@ -910,7 +903,6 @@ bool daFm_c::checkTgHit() {
                 mHitType = 0xD;
                 temp = false;
                 break;
-
         }
         CcAtInfo atInfo;
         atInfo.pParticlePos = NULL;
@@ -992,7 +984,6 @@ cXyz daFm_c::getOffsetPos() {
     if(isLink(mpActorTarget)) {
         offset.set(0.0f, -10.0f, 0.0f);
     } else {
-
         s16 procName = fopAcM_GetName(mpActorTarget);
         if(procName == fpcNm_NPC_CB1_e) {
             if(fopAcM_checkCarryNow(mpActorTarget)) {
@@ -1000,19 +991,15 @@ cXyz daFm_c::getOffsetPos() {
             } else {
                 offset.set(0.0f, 80.0f, 0.0f);
             }
-
         } else if(procName == fpcNm_NPC_MD_e) {
             if(fopAcM_checkCarryNow(mpActorTarget)) {
                 offset.set(0.0f, 20.0f, 0.0f);
             } else {
                 offset.set(0.0f, 140.0f, 0.0f);
             }
-
         } else if(procName == fpcNm_BOMB_e) {
             offset.set(0.0f, 80.0f, 0.0f);
-
         } else if(procName == fpcNm_TSUBO_e) {
-
             switch(((daTsubo::Act_c*)mpActorTarget)->prm_get_type()) {
                 case 5:
                 case 0:
@@ -1307,7 +1294,6 @@ void daFm_c::modePathMove() {
     if(isGrabFoot() && !dComIfGp_event_runCheck()) {
         modeProc(PROC_INIT_e,0xf);
     } else {
-        
         dLib_pathMove(&field_0x3B0, &field_0x3BC, mpPath, 3.0f, pathMove_CB, this);
         cLib_addCalcPosXZ2(&current.pos, field_0x3B0, (l_HIO.field_0x0D0 + 1.0f) * 0.005f * field_0x394, 20.0f);
 
@@ -1326,7 +1312,6 @@ void daFm_c::modeGoalKeeperInit() {
 
 /* 000036B4-000038DC       .text modeGoalKeeper__6daFm_cFv */
 void daFm_c::modeGoalKeeper() {
-
     if(field_0x2E5 && dComIfGp_evmng_endCheck("DEFAULT_FM_SUIKOMI_NPC")) {
         modeProc(PROC_INIT_e,6);
         return;
@@ -1407,7 +1392,7 @@ void daFm_c::modeDisappear() {
             if(field_0x2E4 != 0 || field_0x2E5) {
                 modeProc(PROC_INIT_e, 0x12);
             } else {
-                fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                fopAcM_searchPlayerDistanceXZ(this);
                 if(isGrabFoot() && !dComIfGp_event_runCheck()) {
                     modeProc(PROC_INIT_e, 0xf);
                 } else {
@@ -1491,7 +1476,7 @@ void daFm_c::modeWait() {
         }
     }
     if(field_0x2D0 == 2 && (mBaseTarget->current.pos - field_0x69C).absXZ() > field_0x2E0) {
-            modeProc(PROC_INIT_e, 6);
+        modeProc(PROC_INIT_e, 6);
     } else {
         moveRndBack();
     }
@@ -1552,7 +1537,6 @@ void daFm_c::modeAttack() {
                 f32 oldGrabPosY = mGrabPos.y;
                 mGrabPos = daPy_getPlayerLinkActorClass()->current.pos;
                 mGrabPos.y = oldGrabPosY;
-                
             } else {
                 if (isGrabPos()) {
                     setGrabPos();
@@ -1605,7 +1589,7 @@ void daFm_c::modeAttack() {
                                     }
                                     modeProcInit(0xD);
                                 } else {
-                                    f32 temp3 = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                                    f32 temp3 = fopAcM_searchPlayerDistanceXZ(this);
                                     daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
 
                                     if ((temp3 > l_HIO.field_0x0BC || 
@@ -1613,7 +1597,6 @@ void daFm_c::modeAttack() {
                                     !dComIfGp_event_runCheck()) {
                                         modeProcInit(0x10);
                                     } else {
-                                        
                                         modeProcInit(0xD);
                                     }
                                 }
@@ -1646,7 +1629,6 @@ void daFm_c::modeAttack() {
                                 }
                             }
                         }
-                        
                     }
                 } else if (isLink(mpActorTarget) && mAnmPrmIdx == 4) {
                     dist = (mGrabPos - field_0x63C).absXZ();
@@ -1663,7 +1645,6 @@ void daFm_c::modeAttack() {
                             f32 temp5 = l_HIO.field_0x118 * (std::fabsf(dist - l_HIO.field_0x110) / dist3);
                             pLink->setOutPower(temp5, targetAngle, 0);
                         }
-                        
                     } else if (mpMorf->isStop() && cLib_calcTimer(&field_0x650) == 0) {
                         setAnm(5, false);
                     }
@@ -1791,7 +1772,7 @@ void daFm_c::modeGrabFootDemo() {
             pLink->changeOriginalDemo();
 
             if(mAnmPrmIdx != 10) {
-                if(fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) < 3.0f) {
+                if(fopAcM_searchPlayerDistanceXZ(this) < 3.0f) {
                     setAnm(10, false);
                 }  else {
                     cLib_addCalcPosXZ2(&field_0x630, current.pos, 0.3f, 10.0f);
@@ -1925,18 +1906,17 @@ void daFm_c::modeGrab() {
                 if (cLib_distanceAngleS(shape_angle.y, angle) > l_HIO.field_0x09A) {
                     cLib_addCalcAngleS2(&shape_angle.y, angle, 4, l_HIO.field_0x096);
                 }
-                
             } else {
-                dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                dist = fopAcM_searchPlayerDistanceXZ(this);
                 if (field_0x2D0 == 2 && isNpc(mpActorTarget) && dist < l_HIO.field_0x0C4) {
                     fopAcM_Search(searchNearFm_CB, this);
                     if (field_0x3E4.absXZ() != 0.0f) {
                         angle = cLib_targetAngleY(&current.pos, &field_0x3E4);
                     } else {
-                        angle = (s16)fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+                        angle = (s16)fopAcM_searchPlayerAngleY(this);
                     }
                 } else {
-                    angle = (s16)fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+                    angle = (s16)fopAcM_searchPlayerAngleY(this);
                 }
                 cLib_addCalcAngleS2(&shape_angle.y, angle, 4, 0x800);
             }
@@ -1951,8 +1931,6 @@ void daFm_c::modeGrab() {
                         modeProcInit(0xE);
                         field_0x684 = 1;
                     } else {
-                        // temp.absXZ() matches offsets but cant store mGrabPos - field_0x63C in temp first
-                        // dist = temp.absXZ();
                         dist = (mGrabPos - field_0x63C).absXZ();
                         if (dist > l_HIO.field_0x110 && dist < l_HIO.field_0x114) {
                             daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
@@ -1963,7 +1941,6 @@ void daFm_c::modeGrab() {
                             }
                             f32 temp5 = l_HIO.field_0x118 * (std::fabsf(dist - l_HIO.field_0x110) / temp4);
                             pLink->setOutPower(temp5, angle, 0);
-
                         } else {
                             if (!isGrab()) {
                                 setAnm(5, false);
@@ -1975,7 +1952,6 @@ void daFm_c::modeGrab() {
                         }
                    }
                 }
-                
             } else {
                 if (isNpc(mpActorTarget) == true) {
                     mGrabPos = field_0x61C;
@@ -1983,9 +1959,8 @@ void daFm_c::modeGrab() {
                         if (!isLinkControl()) {
                             modeProcInit(0x10);
                         }
-                        
                     } else {
-                        dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                        dist = fopAcM_searchPlayerDistanceXZ(this);
                         if (dist < l_HIO.field_0x0B4 && field_0x2D0 == 2) {
                             angle = cLib_targetAngleY(&current.pos, &field_0x3E4);
 
@@ -2001,7 +1976,6 @@ void daFm_c::modeGrab() {
                         } else if (field_0x2DC == 1) {
                             modeProcInit(9);
                         }
-
                     }
                 } else {
                     s16 procName = fopAcM_GetName(mpActorTarget);
@@ -2189,7 +2163,6 @@ void daFm_c::modeGrabNpcDemo() {
             setAnm(12, false);
             if(mpMorf->isStop()) {
                 dComIfGp_evmng_cutEnd(staffIdx);
-
             }
         } else {
             dComIfGp_evmng_cutEnd(staffIdx);
@@ -2228,7 +2201,6 @@ void daFm_c::modePlayerStartDemo() {
         char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
 
         daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
-
         
         pLink->changeOriginalDemo();
         
@@ -2238,7 +2210,6 @@ void daFm_c::modePlayerStartDemo() {
             pLink->setPlayerPosAndAngle(&pos, &pLink->shape_angle);
             pLink->onPlayerNoDraw();
             dComIfGp_evmng_cutEnd(staffIdx);
-
         } else if(strcmp(cutName, "OPEN") == 0) {
             cXyz pos2 = current.pos;
             pos2.y -= REG12_F(2);
@@ -2247,7 +2218,6 @@ void daFm_c::modePlayerStartDemo() {
             if(setHoleScale(l_HIO.field_0x124, 0.1f, l_HIO.field_0x128)) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
-
         } else if(strcmp(cutName, "PL_OUT") == 0) {
             pLink->offPlayerNoDraw();
             pLink->setThrowDamage(
@@ -2258,13 +2228,11 @@ void daFm_c::modePlayerStartDemo() {
                 0
             );
             dComIfGp_evmng_cutEnd(staffIdx);
-
         } else if(strcmp(cutName, "CLOSE") == 0) {
             pLink->offPlayerNoDraw();
             if(setHoleScale(l_HIO.field_0x120, 0.1f, l_HIO.field_0x128)) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
-
         } else if(strcmp(cutName, "DELETE") == 0) {
             modeProc(PROC_INIT_e, 0x12);
         }
@@ -2332,7 +2300,6 @@ void daFm_c::modeBikubiku() {
 
 /* 000068D0-00006D8C       .text modeProc__6daFm_cFQ26daFm_c6Proc_ei */
 void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
-
     struct ModeEntry {
         ModeFunc init;
         ModeFunc run;
@@ -2962,7 +2929,6 @@ bool daFm_c::areaCheck() {
             if(!lineCheck(&temp2, &field_0xA48[i])) {
                 field_0xAD8[i] = false;
                 ret = false;
-
             } else {
                 field_0xAD8[i] = true;
             }
@@ -3091,7 +3057,6 @@ bool daFm_c::_execute() {
                 case 3:
                     grabTsubo();
                     break;
-
             }
         }
         field_0x660.y = current.pos.y;
@@ -3197,7 +3162,6 @@ void daFm_c::debugDraw() {
         temp5.y += 20.0f;
 
         temp6.y += 20.0f;
-
     }
     if (l_HIO.field_0x009) {
 
@@ -3366,7 +3330,6 @@ void daFm_c::createInit() {
             case FM_JNT_TE_e:
                 modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
                 break;
-
         }
     }
 

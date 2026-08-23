@@ -103,6 +103,7 @@ static BOOL daObjCafelmp_Execute(void* i_this) {
 
 /* 000003F0-000003F8       .text daObjCafelmp_IsDelete__FPv */
 static BOOL daObjCafelmp_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

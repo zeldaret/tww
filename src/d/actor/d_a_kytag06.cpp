@@ -62,7 +62,7 @@ static cPhs_State daKytag06_Create(fopAc_ac_c* i_this) {
     kytag06_class* a_this = (kytag06_class*)i_this;
 
     cPhs_State phase_state;
-    if(dComIfGs_isSymbol(0)) {
+    if(dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
         phase_state = cPhs_ERROR_e;
     } else {
         fopAcM_ct_Demo(i_this, kytag06_class);

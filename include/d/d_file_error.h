@@ -18,7 +18,7 @@ public:
 
     virtual ~dFe_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 m5;
@@ -78,6 +78,9 @@ public:
     void _create();
     void initial();
     void _delete();
+#if VERSION == VERSION_DEMO
+    void _deleteSp();
+#endif
     void setErrMessage(u32, int);
     void closeMessage();
     void resizeMsgBoard(int);

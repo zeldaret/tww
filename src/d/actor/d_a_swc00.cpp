@@ -34,6 +34,7 @@ static BOOL daSwc00_Execute(swc00_class* i_this) {
 
 /* 00000180-00000188       .text daSwc00_IsDelete__FP11swc00_class */
 static BOOL daSwc00_IsDelete(swc00_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

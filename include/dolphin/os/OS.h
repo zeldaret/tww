@@ -25,6 +25,7 @@
 #include "dolphin/os/OSSync.h" // IWYU pragma: export
 #include "dolphin/os/OSThread.h" // IWYU pragma: export
 #include "dolphin/os/OSTime.h" // IWYU pragma: export
+#include "dolphin/os/OSStopwatch.h" // IWYU pragma: export
 #include "dolphin/os/OSUtil.h" // IWYU pragma: export
 
 #ifdef __cplusplus

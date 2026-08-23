@@ -1186,6 +1186,7 @@ static BOOL daAM2_Execute(am2_class* i_this) {
 
 /* 00003AB8-00003AC0       .text daAM2_IsDelete__FP9am2_class */
 static BOOL daAM2_IsDelete(am2_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

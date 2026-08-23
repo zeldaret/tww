@@ -505,6 +505,7 @@ static BOOL daTag_Island_Execute(daTag_Island_c* i_this) {
 
 /* 000012C4-000012CC       .text daTag_Island_IsDelete__FP14daTag_Island_c */
 static BOOL daTag_Island_IsDelete(daTag_Island_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

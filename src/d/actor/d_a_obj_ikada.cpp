@@ -20,6 +20,57 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
+class daObj_Ikada_HIO_c : public mDoHIO_entry_c {
+public:
+    daObj_Ikada_HIO_c();
+    virtual ~daObj_Ikada_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
+
+public:
+    /* 0x04 */ u8 mbDebugDraw;
+    /* 0x05 */ u8 m05;
+    /* 0x06 */ u8 m06;
+    /* 0x07 */ u8 mbNoRotAnim;
+    /* 0x08 */ u8 m08;
+    /* 0x09 */ u8 m09[0x0C - 0x09];
+    /* 0x0C */ cXyz mFlagOffset;
+    /* 0x18 */ f32 mFlagScale;
+    /* 0x1C */ s16 m1C;
+    /* 0x1E */ s16 m1E;
+    /* 0x20 */ f32 m20;
+    /* 0x24 */ s16 m24;
+    /* 0x26 */ u8 m26[0x28 - 0x26];
+    /* 0x28 */ f32 m28;
+    /* 0x2C */ f32 mShipOffsY_Attention;
+    /* 0x30 */ f32 mShipOffsY_Eye;
+    /* 0x34 */ f32 mTerryWaveOffsZ;
+    /* 0x38 */ f32 mTerryWaveOffsY;
+    /* 0x3C */ f32 mTerryTrackOffsZ;
+    /* 0x40 */ f32 mSvWaveOffsX;
+    /* 0x44 */ f32 mSvTrackOffsX;
+    /* 0x48 */ f32 mSvOffsX[4];
+    /* 0x58 */ f32 mTrackIndTransY;
+    /* 0x5C */ f32 mTrackIndScaleY;
+    /* 0x60 */ f32 mSplashScaleMax;
+    /* 0x64 */ f32 mSplashMaxScaleTimer;
+    /* 0x68 */ f32 mWaveVelFade;
+    /* 0x6C */ f32 mTrackVel;
+    /* 0x70 */ f32 mWaveVelSpeed;
+    /* 0x74 */ f32 mWaveVelOffs;
+    /* 0x78 */ f32 mWaveMaxVelocity;
+    /* 0x7C */ cXyz mWaveCollapsePos0;
+    /* 0x88 */ cXyz mWaveCollapsePos1;
+    /* 0x94 */ s16 m94;
+    /* 0x96 */ s16 mPlayerStopDistance;
+    /* 0x98 */ s16 m98;
+    /* 0x9A */ s16 m9A;
+    /* 0x9C */ f32 m9C;
+    /* 0xA0 */ f32 mVelocityTargetTerry1;
+    /* 0xA4 */ f32 mVelocityTargetTerry3;
+    /* 0xA8 */ f32 mA8;
+}; // size = 0xAC
+
 cXyz daObj_Ikada_c::m_rope_base_vec(0.0f, -10.0f, 0.0f);
 cXyz daObj_Ikada_c::m_crane_offset(200.0f, -340.0f, 0.0f);
 static daObj_Ikada_HIO_c l_HIO;
@@ -94,12 +145,12 @@ daObj_Ikada_HIO_c::daObj_Ikada_HIO_c() {
     mWaveVelSpeed = 2.0f;
     mWaveMaxVelocity = 15.0f;
     mWaveVelOffs = 0.0f;
-    mWaveCollapsePos[0].x = -80.0f;
-    mWaveCollapsePos[0].y = -50.0f;
-    mWaveCollapsePos[0].z = -150.0f;
-    mWaveCollapsePos[1].x = -40.0f;
-    mWaveCollapsePos[1].y = -100.0f;
-    mWaveCollapsePos[1].z = -350.0f;
+    mWaveCollapsePos0.x = -80.0f;
+    mWaveCollapsePos0.y = -50.0f;
+    mWaveCollapsePos0.z = -150.0f;
+    mWaveCollapsePos1.x = -40.0f;
+    mWaveCollapsePos1.y = -100.0f;
+    mWaveCollapsePos1.z = -350.0f;
     m94 = 3000;
     mPlayerStopDistance = 6000;
     m98 = 1000;
@@ -127,7 +178,7 @@ void daObj_Ikada_c::_nodeControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = (J3DJoint*)node;
     s32 jntNo = joint->getJntNo();
     mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
-    mDoMtx_stack_c::ZXYrotM(mJointRot[jntNo].x, mJointRot[jntNo].y, mJointRot[jntNo].z);
+    mDoMtx_stack_c::ZXYrotM(mJointRot[jntNo]);
     if (jntNo == VSVSP_JNT_SV_CREAN_e) {
         mDoMtx_stack_c::XrotM(m115A + m115E * (REG12_S(5) + 5) * cM_ssin(m115C));
     }
@@ -136,7 +187,7 @@ void daObj_Ikada_c::_nodeControl(J3DNode* node, J3DModel* model) {
 }
 
 /* 00000458-00000494       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-BOOL pathMove_CB(cXyz* arg1, cXyz* arg2, cXyz* arg3, void* v_this) {
+static BOOL pathMove_CB(cXyz* arg1, cXyz* arg2, cXyz* arg3, void* v_this) {
     return ((daObj_Ikada_c*)v_this)->_pathMove(arg1, arg2, arg3);
 }
 
@@ -179,7 +230,7 @@ BOOL daObj_Ikada_c::_pathMove(cXyz* arg1, cXyz* arg2, cXyz* arg3) {
 }
 
 /* 000007A0-000007C8       .text ride_CB__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_CB(dBgW*, fopAc_ac_c* ac1, fopAc_ac_c* ac2) {
+static void ride_CB(dBgW*, fopAc_ac_c* ac1, fopAc_ac_c* ac2) {
     ((daObj_Ikada_c*)ac1)->_ride(ac2);
 }
 
@@ -347,8 +398,7 @@ void daObj_Ikada_c::createWave() {
         JPABaseEmitter* emitter = mTrackCallBack.getEmitter();
         if (emitter != NULL) {
             JGeometry::TVec3<f32> scale = (Vec){1.0f, 1.0f, 1.0f};
-            emitter->setGlobalDynamicsScale(scale);
-            emitter->setGlobalParticleScale(scale);
+            emitter->setGlobalScale(scale);
         }
     }
 }
@@ -391,14 +441,14 @@ void daObj_Ikada_c::setWave() {
     mWaveRCallback.setPitch(l_HIO.mWaveVelOffs + 1.0f);
     mWaveLCallback.setPitch(1.0f - l_HIO.mWaveVelOffs);
 
-    cXyz sp2C = l_HIO.mWaveCollapsePos[0];
-    cXyz sp20 = l_HIO.mWaveCollapsePos[1];
-    cXyz sp14 = l_HIO.mWaveCollapsePos[0];
-    cXyz sp08 = l_HIO.mWaveCollapsePos[1];
+    cXyz sp2C = l_HIO.mWaveCollapsePos0;
+    cXyz sp20 = l_HIO.mWaveCollapsePos1;
+    cXyz sp14 = sp2C;
+    cXyz sp08 = sp20;
 
     mWaveRCallback.setAnchor(&sp2C, &sp20);
-    sp14.x = (f32)(f64)sp14.x * -1.0f;
-    sp08.x = (f32)(f64)sp08.x * -1.0f;
+    sp14.x *= -1.0f;
+    sp08.x *= -1.0f;
     mWaveLCallback.setAnchor(&sp14, &sp08);
 
     mWaveRCallback.setMaxDisSpeed(l_HIO.mWaveVelSpeed);
@@ -464,7 +514,7 @@ void daObj_Ikada_c::setRopePos() {
     spBC = *pcVar6;
 
     mDoMtx_stack_c::copy(mpModel->getAnmMtx(VSVSP_JNT_SV_CREAN_e));
-    mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
+    mDoMtx_stack_c::transM(m_crane_offset);
     mDoMtx_stack_c::multVecZero(pcVar6);
 
     if (mCurMode == 1) {
@@ -514,7 +564,7 @@ void daObj_Ikada_c::setRopePos() {
         iVar4 = 0;
     } else {
         mDoMtx_stack_c::copy(mpModel->getAnmMtx(VSVSP_JNT_SV_CREAN_e));
-        mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
+        mDoMtx_stack_c::transM(m_crane_offset);
         cMtx_copy(mDoMtx_stack_c::get(), ropeEndMtx);
         spA4.set(pcVar7->x - ropeEndMtx[0][3], pcVar7->y - ropeEndMtx[1][3], pcVar7->z - ropeEndMtx[2][3]);
         iVar3 = 0;
@@ -632,7 +682,7 @@ void daObj_Ikada_c::setMtx() {
 
         mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
         mDoMtx_stack_c::multVec(&sp24, &mFirePos);
-        mDoMtx_stack_c::transM(sp24.x, sp24.y, sp24.z);
+        mDoMtx_stack_c::transM(sp24);
         mDoMtx_stack_c::YrotM(mLightRotY);
         mDoMtx_stack_c::XrotM(mLightRotX);
         mDoMtx_stack_c::scaleM(mLightPower, mLightPower, mLightPower);
@@ -1203,22 +1253,25 @@ bool daObj_Ikada_c::_execute() {
     return false;
 }
 
-const u32 unused_5617[] = {
-    0xFFFF0080,
-    0xFF80,
-    0xFF80,
-    0xFF000080,
-    0xFF000080,
-    0xFF80,
-    0xFF000080,
-    0xFF000080,
-    0xFF000080,
-};
-
 /* 00003CA0-00003CD4       .text debugDraw__13daObj_Ikada_cFv */
 void daObj_Ikada_c::debugDraw() {
     cXyz sp08 = current.pos;
     sp08.y += 20.0f;
+    // Unused colors, needed for the .rodata section to match.
+    GXColor unused_5617 = {0xFF, 0xFF, 0x00, 0x80};
+    GXColor unused_5621 = {0x00, 0x00, 0xFF, 0x80};
+    GXColor unused_5623 = {0x00, 0x00, 0xFF, 0x80};
+    GXColor unused_5625 = {0xFF, 0x00, 0x00, 0x80};
+    GXColor unused_5629 = {0xFF, 0x00, 0x00, 0x80};
+    GXColor unused_5631 = {0x00, 0x00, 0xFF, 0x80};
+    GXColor unused_5636 = {0xFF, 0x00, 0x00, 0x80};
+    GXColor unused_5640 = {0xFF, 0x00, 0x00, 0x80};
+    GXColor unused_5646 = {0xFF, 0x00, 0x00, 0x80};
+    // dDbVw_drawSphereOpa__FR4cXyzfRC8_GXColorUc
+    // dDbVw_drawCircleOpa__FR4cXyzfRC8_GXColorUcUc
+    if (isWave()) {
+        // ?
+    }
 }
 
 /* 00003CD4-00003EE0       .text _draw__13daObj_Ikada_cFv */
@@ -1246,7 +1299,7 @@ bool daObj_Ikada_c::_draw() {
         J3DModelData* modelData = mpModel->getModelData();
         mBckAnm.entry(modelData);
         mDoExt_modelUpdateDL(mpModel);
-        mpModel->getModelData()->getJointNodePointer(VSVSP_JNT_SV_SHIP_ROOT_e)->setMtxCalc(NULL);
+        mBckAnm.remove(mpModel->getModelData());
     } else {
         mDoExt_modelUpdateDL(mpModel);
     }
@@ -1317,8 +1370,8 @@ void daObj_Ikada_c::createInit() {
         mSvId[3] = fopAcM_createChild("Sv3", fopAcM_GetID(this), 0xffffffff, &current.pos, tevStr.mRoomNo, 0, 0, 0);
     }
 
-    mLightRotY = cM_rndF(32768.0f);
-    mLightRotX = cM_rndF(32768.0f);
+    mLightRotY = cM_rndF(0x8000);
+    mLightRotX = cM_rndF(0x8000);
 
     current.pos.y = dLib_getWaterY(current.pos, mObjAcch);
     mpBgW->SetGrpRoomInf(fopAcM_GetRoomNo(this));
@@ -1366,16 +1419,16 @@ void daObj_Ikada_c::createInit() {
             cXyz(0.0f, 0.0f, 0.0f),
             cXyz(100.0f, 530.0f, 0.0f),
         };
-        static const u32 params[] = {4, 4, 4, 4, 0x2000000};
+        static const u32 param[] = {4, 4, 4, 4, 0x2000000};
         static const f32 flag_scale[] = {0.2f, 0.0f, 0.0f, 0.0f, 0.12f};
 
-        mFlagPcId = fopAcM_create(fpcNm_MAJUU_FLAG_e, params[mType], &current.pos, tevStr.mRoomNo, &current.angle);
+        mFlagPcId = fopAcM_create(fpcNm_MAJUU_FLAG_e, param[mType], &current.pos, tevStr.mRoomNo, &current.angle);
         mFlagOffset = flag_offset[mType];
         mFlagScale = flag_scale[mType];
     }
 
-    mWave.mAnimX = cM_rndF(32768.0f);
-    mWave.mAnimZ = cM_rndF(32768.0f);
+    mWave.mAnimX = cM_rndF(0x8000);
+    mWave.mAnimZ = cM_rndF(0x8000);
 
     if (mType == 4) {
         mpModel->calc();
@@ -1385,7 +1438,7 @@ void daObj_Ikada_c::createInit() {
         cXyz* pcVar7 = &m07DC[m07D8 - 1];
 
         mDoMtx_stack_c::copy(mpModel->getAnmMtx(VSVSP_JNT_SV_CREAN_e));
-        mDoMtx_stack_c::transM(m_crane_offset.x, m_crane_offset.y, m_crane_offset.z);
+        mDoMtx_stack_c::transM(m_crane_offset);
         mDoMtx_stack_c::multVecZero(pcVar8);
 
         cXyz sp80(0.0f, -1.0f, 0.0f);

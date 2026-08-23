@@ -40,8 +40,8 @@ static char* M_act_table[] = {
 };
 
 /* 00000078-00000098       .text solidHeapCB__9daYgcwp_cFP10fopAc_ac_c */
-BOOL daYgcwp_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    return ((daYgcwp_c*)i_ac)->create_heap();
+BOOL daYgcwp_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daYgcwp_c*)i_this)->create_heap();
 }
 
 /* 00000098-0000023C       .text create_heap__9daYgcwp_cFv */
@@ -204,27 +204,28 @@ bool daYgcwp_c::_draw() {
 
 namespace {
 /* 000008DC-000008FC       .text Mthd_Create__23@unnamed@d_a_ygcwp_cpp@FPv */
-cPhs_State Mthd_Create(void* i_ac) {
-    return ((daYgcwp_c*)i_ac)->_create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daYgcwp_c*)i_this)->_create();
 }
 
 /* 000008FC-00000920       .text Mthd_Delete__23@unnamed@d_a_ygcwp_cpp@FPv */
-BOOL Mthd_Delete(void* i_ac) {
-    return ((daYgcwp_c*)i_ac)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((daYgcwp_c*)i_this)->_delete();
 }
 
 /* 00000920-00000944       .text Mthd_Execute__23@unnamed@d_a_ygcwp_cpp@FPv */
-BOOL Mthd_Execute(void* i_ac) {
-    return ((daYgcwp_c*)i_ac)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((daYgcwp_c*)i_this)->_execute();
 }
 
 /* 00000944-00000968       .text Mthd_Draw__23@unnamed@d_a_ygcwp_cpp@FPv */
-BOOL Mthd_Draw(void* i_ac) {
-    return ((daYgcwp_c*)i_ac)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((daYgcwp_c*)i_this)->_draw();
 }
 
 /* 00000968-00000970       .text Mthd_IsDelete__23@unnamed@d_a_ygcwp_cpp@FPv */
-BOOL Mthd_IsDelete(void* i_ac) {
+BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

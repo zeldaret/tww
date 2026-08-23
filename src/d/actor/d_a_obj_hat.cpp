@@ -232,6 +232,7 @@ static BOOL daSampleDraw(void* i_this) {
 
 /* 00000AA0-00000AA8       .text daSampleIsDelete__FPv */
 static BOOL daSampleIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

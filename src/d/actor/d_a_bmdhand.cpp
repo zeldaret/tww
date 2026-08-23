@@ -47,12 +47,7 @@ void hand_draw(bmdhand_class* i_this) {
         g_env_light.setLightTevColorType(i_this->mpMorf->getModel(), &actor->tevStr);
         i_this->mpMorf->updateDL();
     }
-#ifdef __MWERKS__
     i_this->mLineMat.update(0x14, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, &actor->tevStr);
-#else
-    GXColor local_18 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    i_this->mLineMat.update(0x14, local_18, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 }
 
@@ -661,7 +656,7 @@ void hand_move(bmdhand_class* i_this) {
 }
 
 /* 00002E74-00002EC0       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* param_1, void* param_2) {
+static void* s_a_d_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
     if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BMD_e)) {
         return param_1;

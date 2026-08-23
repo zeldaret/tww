@@ -304,11 +304,11 @@ u8 daNpc_Mk_Static_c::runAwayProc(fopAc_ac_c* param_1, dNpc_PathRun_c* param_2, 
 }
 
 /* 800CC374-800CC400       .text chkGameSet__17daNpc_Mk_Static_cFv */
-bool daNpc_Mk_Static_c::chkGameSet() {
+BOOL daNpc_Mk_Static_c::chkGameSet() {
     if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0020) && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0010) && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0008) && dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0004)) {
-        return true;
+        return TRUE;
     } else {
-        return false;
+        return FALSE;
     }
 }
 
@@ -333,14 +333,14 @@ void daNpc_Mk_Static_c::setRndPathPos(fopAc_ac_c* param_1, dNpc_PathRun_c* param
 }
 
 /* 800CC664-800CC734       .text chkPointPass__17daNpc_Mk_Static_cFP4cXyzP4cXyzP4cXyz */
-bool daNpc_Mk_Static_c::chkPointPass(cXyz* param_1, cXyz* param_2, cXyz* param_3) {
+BOOL daNpc_Mk_Static_c::chkPointPass(cXyz* param_1, cXyz* param_2, cXyz* param_3) {
     if (param_1->x == param_2->x && param_1->z == param_2->z) {
-        return true;
+        return TRUE;
     } else if (param_3->x == param_2->x && param_3->z == param_2->z) {
-        return true;
+        return TRUE;
     } else if (cM_scos(cLib_targetAngleY(param_1, param_2) - cLib_targetAngleY(param_3, param_2)) < 0.0f) {
-        return true;
+        return TRUE;
     } else {
-        return false;
+        return FALSE;
     }
 }

@@ -13,11 +13,13 @@
 #include "d/d_menu_save.h"
 #include "d/d_name.h"
 #include "f_ap/f_ap_game.h"
+#include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_draw_iter.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_audio.h"
+#include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -99,76 +101,106 @@ cPhs_State resLoad(request_of_phase_process_class* phase, char* resName) {
 
 /* 8022F9FC-802301C8       .text create__10dScnName_cFv */
 cPhs_State dScnName_c::create() {
+#if VERSION == VERSION_DEMO
+    dComIfGp_setNextStage("Name", 0, -1);
+#else
     dComIfGp_offEnableNextStage();
     dComIfGp_setNextStage("Name", 0, 0);
+#endif
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
     dComIfGp_offEnableNextStage();
 
     cPhs_State rt = resLoad(&mPhs, "Stage");
     if (rt == cPhs_COMPLEATE_e) {
+#if VERSION == VERSION_DEMO
+        heap = mDoExt_createSolidHeapFromGameToCurrent(0x68000, 0);
+#else
         heap = JKRCreateExpHeap(0x68000, mDoExt_getGameHeap(), false);
-        JUT_ASSERT(0x1c8, heap != NULL);
+#endif
+        JUT_ASSERT(VERSION_SELECT(303, 305, 456, 459), heap != NULL);
 
+#if VERSION > VERSION_DEMO
         oldHeap = mDoExt_setCurrentHeap(heap);
+#endif
         mArchive = new JKRMemArchive();
         mArchive->mountFixed(dComIfG_getStageRes("Stage", 0x17), JKRMEMBREAK_FLAG_UNKNOWN0);
+
         cloth_create();
         buttonIconCreate();
+
         dFs_c = new dFile_select_c();
-        JUT_ASSERT(470, dFs_c != NULL);
-        dFs_c->field_0x0 = mArchive;
+        JUT_ASSERT(VERSION_SELECT(316, 319, 470, 473), dFs_c != NULL);
+        dFs_c->archive = mArchive;
         savePicDatabuf = new (0x20) card_pictdata[3 * 3];
-        JUT_ASSERT(476, savePicDatabuf != NULL);
+        JUT_ASSERT(VERSION_SELECT(322, 325, 476, 483), savePicDatabuf != NULL);
+
         if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             dFs_c->setUseType(0);
             dNm_c = new dName_c();
-            JUT_ASSERT(484, dNm_c != NULL);
+            JUT_ASSERT(VERSION_SELECT(330, 333, 484, 491), dNm_c != NULL);
             dNm_c->_create();
             dFe_c = new dFile_error_c();
-            JUT_ASSERT(489, dFe_c != NULL);
+            JUT_ASSERT(VERSION_SELECT(335, 338, 489, 496), dFe_c != NULL);
             dFe_c->_create();
+#if VERSION > VERSION_DEMO
             dMs_c = NULL;
+#endif
             dComIfGs_setNewFile(0);
             dComIfGs_setNoFile(0);
         }
+
         if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
+#if VERSION > VERSION_DEMO
             dComIfGs_setClearCount(1);
+#endif
             dFs_c->setUseType(1);
             dMs_c = new dMenu_save_c();
-            JUT_ASSERT(511, dMs_c != NULL);
+            JUT_ASSERT(VERSION_SELECT(350, 360, 511, 518), dMs_c != NULL);
             dMs_c->setUseType(3);
             dMs_c->_create();
             dFe_c = NULL;
+#if VERSION > VERSION_DEMO
             dNm_c = NULL;
+#endif
         }
+
         dFs_c->_create();
+
         g_snHIO.mNo = mDoHIO_root.m_subroot.createChild("名前登録シーン", &g_snHIO);
+
+#if VERSION == VERSION_DEMO
+        mDoExt_restoreCurrentHeap();
+        mDoExt_adjustSolidHeap(heap);
+#endif
+
         dComIfGp_setWindowNum(1);
         dComIfGp_setWindow(0, 0.0f, 0.0f, mDoMch_render_c::getFbWidth(), mDoMch_render_c::getEfbHeight(), 0.0f, 1.0f, 0, 2);
-        g_dComIfG_gameInfo.play.mCameraInfo[0].mpCamera = (camera_class*)&field_0x1d4;
-        field_0x29c = 5.0f;
-        field_0x2a0 = 160000.0f;
-        field_0x2a4 = 60.0f;
-        f32 aspect = dComIfGp_getWindow(0)->getViewPort()->mWidth / dComIfGp_getWindow(0)->getViewPort()->mHeight;
-        field_0x2a8 = aspect * fapGmHIO_getAspectRatio();
-        field_0x2ac.x = 9377.0f;
-        field_0x2ac.y = 0.0;
-        field_0x2ac.z = 7644.0;
-        field_0x2b8.x = 0.0;
-        field_0x2b8.y = 6311.0;
-        field_0x2b8.z = 1000.0;
-        field_0x2d0 = 0;
+        dComIfGp_setCamera(0, &mCamera);
+
+        dDlst_window_c* window = dComIfGp_getWindow(0);
+        view_port_class* viewport = window->getViewPort();
+
+        fopCamM_SetNear(&mCamera, 5.0f);
+        fopCamM_SetFar(&mCamera, 160000.0f);
+        fopCamM_SetFovy(&mCamera, 60.0f);
+        fopCamM_SetAspect(&mCamera, fapGmHIO_getAspectRatio() * (viewport->mWidth / viewport->mHeight));
+        fopCamM_SetEye(&mCamera, 9377.0f, 0.0f, 7644.0f);
+        fopCamM_SetCenter(&mCamera, 0.0f, 6311.0f, 1000.0f);
+        fopCamM_SetBank(&mCamera, 0);
+
         dComIfGp_setPlayer(0, NULL);
         dComIfGd_setWindow(dComIfGp_getWindow(0));
         dComIfGd_setViewport(dComIfGp_getWindow(0)->getViewPort());
-        dComIfGd_setView((view_class*)&field_0x1d4);
+        dComIfGd_setView(&mCamera.view);
         mDoGph_gInf_c::offAutoForcus();
         setView();
+
         dKy_setLight_init();
         fopKyM_Create(fpcNm_KYEFF_e, 0, 0);
         fopKyM_Create(fpcNm_KYEFF2_e, 0, 0);
         fpcSCtRq_Request(fpcLy_CurrentLayer(), fpcNm_VRBOX_e, NULL, NULL, NULL);
         fpcSCtRq_Request(fpcLy_CurrentLayer(), fpcNm_VRBOX2_e, NULL, NULL, NULL);
+
         g_env_light.mVrSkyColor.r = 0x50;
         g_env_light.mVrSkyColor.g = 0x78;
         g_env_light.mVrSkyColor.b = 0xff;
@@ -181,20 +213,54 @@ cPhs_State dScnName_c::create() {
         g_env_light.mVrKasumiMaeColor.g = 0xe5;
         g_env_light.mVrKasumiMaeColor.b = 0xff;
         g_env_light.mVrKasumiMaeColor.a = 0xff;
+
         field_0x558 = g_snHIO.field_0x5;
         field_0x1bb8 = 0;
+
+#if VERSION == VERSION_DEMO
+        mMainProc = 0xE;
+        mDrawProc = 4;
+#else
         if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             mMainProc = 0;
-            field_0x556 = 0;
+            mMemCardCheckProc = 0;
             mDrawProc = 0;
         } else if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
             mMainProc = 10;
             mDrawProc = 3;
         }
+#endif
+
         JFWDisplay::getManager()->setTickRate(OS_TIMER_CLOCK / 30);
     }
     return rt;
 }
+
+#if VERSION == VERSION_PAL
+void dScnName_c::bmg_data_read_all() {
+    /* Nonmatching */
+    dComIfGp_getMsgDtArchive()->unmount();
+    field_0x1c4 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data0/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+    field_0x1c8 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data1/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+    field_0x1cc = mDoDvdThd_mountXArchive_c::create("/res/Msg/data2/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+    field_0x1d0 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data3/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+    field_0x1d4 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data4/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+}
+
+#endif
+
+#if VERSION == VERSION_PAL
+void dScnName_c::bmg_data_set() {
+    /* Nonmatching */
+}
+
+#endif
+
+#if VERSION == VERSION_PAL
+void dScnName_c::tex_data_set() {
+    /* Nonmatching */
+}
+#endif
 
 /* 802301C8-802301FC       .text cloth_create__10dScnName_cFv */
 void dScnName_c::cloth_create() {
@@ -213,7 +279,7 @@ void dScnName_c::cloth_move() {
 void dScnName_c::cloth2D_create() {
     JKRArchive* clothRes = dComIfGp_getClothResArchive();
     cloth.cloth_c = new dMCloth_c();
-    JUT_ASSERT(801, cloth.cloth_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(504, 517, 801, 805), cloth.cloth_c != NULL);
     cloth.cloth_c->setArchive(clothRes);
     cloth.cloth_c->setClothType(MENU_CLOTH_TYPE_FILE_SELECT);
 }
@@ -228,7 +294,7 @@ static void dummy() {
 /* 802302F8-80230500       .text buttonIconCreate__10dScnName_cFv */
 void dScnName_c::buttonIconCreate() {
     btnIcon.scr = new J2DScreen();
-    JUT_ASSERT(866, btnIcon.scr != NULL);
+    JUT_ASSERT(VERSION_SELECT(569, 582, 866, 870), btnIcon.scr != NULL);
     btnIcon.scr->set("main_parts_fileselect.blo", mArchive);
     fopMsgM_setPaneData(&field_0x43c, btnIcon.scr->search('cent'));
     fopMsgM_setPaneData(&field_0x474, btnIcon.scr->search('bab'));
@@ -239,6 +305,36 @@ void dScnName_c::buttonIconCreate() {
     paneTransButtonIcon(field_0x1bb4, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 0);
     field_0x1bb6 = 6;
 }
+
+#if VERSION == VERSION_PAL
+void dScnName_c::buttonIconTexChange(u8, u8) {
+    /* Nonmatching */
+}
+#endif
+
+#if VERSION == VERSION_PAL
+void dScnName_c::PaneAlphaLangTxt(s16, u8) {
+    /* Nonmatching */
+}
+#endif
+
+#if VERSION == VERSION_PAL
+void dScnName_c::languageTexChange() {
+    /* Nonmatching */
+}
+#endif
+
+#if VERSION == VERSION_PAL
+void dScnName_c::langTexChg() {
+    /* Nonmatching */
+}
+#endif
+
+#if VERSION == VERSION_PAL
+void dScnName_c::langTexChgFast() {
+    /* Nonmatching */
+}
+#endif
 
 /* 80230500-802305E0       .text paneTransButtonIcon__10dScnName_cFsUcffUc */
 BOOL dScnName_c::paneTransButtonIcon(s16 param_1, u8 param_2, f32 param_3, f32 param_4, u8 param_5) {
@@ -321,9 +417,12 @@ BOOL dScnName_c::execute() {
         dComIfG_resetToOpening(this);
     }
 
+#if VERSION > VERSION_DEMO
     if (mDoRst::isReset()) {
         return TRUE;
     }
+#endif
+
     cloth_move();
 
     if (dFe_c != NULL) {
@@ -336,22 +435,25 @@ BOOL dScnName_c::execute() {
 
 /* 80230678-80230714       .text setView__10dScnName_cFv */
 void dScnName_c::setView() {
-    C_MTXPerspective(field_0x2d4, field_0x2a4, field_0x2a8, field_0x29c, field_0x2a0);
-    mDoMtx_lookAt(field_0x314, &field_0x2ac, &field_0x2b8, field_0x2d0);
-    mDoMtx_inverse(field_0x314, field_0x344);
-    mDoMtx_copy(field_0x314, field_0x3b4);
-    field_0x3b4[0][3] = 0.0f;
-    field_0x3b4[1][3] = 0.0f;
-    field_0x3b4[2][3] = 0.0f;
-    j3dSys.setViewMtx(field_0x314);
-    mDoMtx_concatProjView(field_0x2d4, field_0x314, field_0x374);
+    camera_class* camera = &mCamera;
+    C_MTXPerspective(camera->view.mProjMtx, camera->view.mFovy, camera->view.mAspect, camera->view.mNear, camera->view.mFar);
+    mDoMtx_lookAt(camera->view.mViewMtx, &camera->view.mLookat.mEye, &camera->view.mLookat.mCenter, camera->view.mBank);
+    cMtx_inverse(camera->view.mViewMtx, camera->view.mInvViewMtx);
+    MTXCopy(camera->view.mViewMtx, camera->view.mViewMtxNoTrans);
+    camera->view.mViewMtxNoTrans[0][3] = 0.0f;
+    camera->view.mViewMtxNoTrans[1][3] = 0.0f;
+    camera->view.mViewMtxNoTrans[2][3] = 0.0f;
+    j3dSys.setViewMtx(camera->view.mViewMtx);
+    cMtx_concatProjView(camera->view.mProjMtx, camera->view.mViewMtx, camera->view.mProjViewMtx);
 }
 
 /* 80230714-802307EC       .text draw__10dScnName_cFv */
 BOOL dScnName_c::draw() {
     setView();
-    for (create_tag_class* pTag = fopDwIt_Begin(); pTag != NULL; pTag = fopDwIt_Next(pTag))
-        fpcM_Draw(pTag->mpTagData);
+    for (create_tag_class* pTag = fopDwIt_Begin(); pTag != NULL; pTag = fopDwIt_Next(pTag)) {
+        void* process = pTag->mpTagData;
+        fpcM_Draw(process);
+    }
     if (field_0x55d && !g_snHIO.field_0xb) {
         dComIfGd_set2DOpa(&cloth);
     }
@@ -362,6 +464,21 @@ BOOL dScnName_c::draw() {
 
 /* 802307EC-80230A14       .text __dt__10dScnName_cFv */
 dScnName_c::~dScnName_c() {
+#if VERSION == VERSION_DEMO
+    mArchive->unmountFixed();
+    delete cloth.cloth_c;
+    dNm_c->_deleteSp();
+    dFs_c->_deleteSp();
+    if (dFe_c) {
+        dFe_c->_deleteSp();
+    }
+    s8 no = g_snHIO.mNo;
+    mDoHIO_root.m_subroot.deleteChild(no);
+    mDoExt_destroySolidHeap(heap);
+    dComIfG_deleteStageRes("Stage");
+    dComIfGp_setWindowNum(0);
+    dComIfGs_setRestartOption(0);
+#else
     dFs_c->_delete();
     delete dFs_c;
     if (dNm_c) {
@@ -380,42 +497,144 @@ dScnName_c::~dScnName_c() {
     delete btnIcon.scr;
     mArchive->unmountFixed();
     delete cloth.cloth_c;
-    mDoHIO_root.m_subroot.deleteChild(g_snHIO.mNo);
+    s8 no = g_snHIO.mNo;
+    mDoHIO_root.m_subroot.deleteChild(no);
     JKRSetCurrentHeap(oldHeap);
     heap->destroy();
     dComIfG_deleteStageRes("Stage");
     dComIfGp_setWindowNum(0);
     dComIfGs_setRestartOption(0);
+#endif
 }
 
 /* 80230A14-80230AD0       .text MemCardCheckMain__10dScnName_cFv */
 void dScnName_c::MemCardCheckMain() {
-    /* Nonmatching */
+    if (mDoMemCd_getProbeStat() == 0 || mDoMemCd_getProbeStat() == 1) {
+#if VERSION > VERSION_DEMO
+        if (!mDoRst::isReset())
+#endif
+        {
+            if (field_0x1bb8 == 0 && dFe_c->getStatus() == 1) {
+                dFe_c->closeMessage();
+                field_0x55a = 0xFF;
+                field_0x55b = 0;
+                mMemCardCheckProc = 2;
+            }
+            mDoMemCd_clearProbeStat();
+        }
+    }
+    (this->*MemCardCheckProc[mMemCardCheckProc])();
 }
 
 /* 80230AD0-80230C78       .text MemCardStatCheck__10dScnName_cFv */
 void dScnName_c::MemCardStatCheck() {
-    /* Nonmatching */
+    if (field_0x558 > 0) {
+        field_0x558--;
+        return;
+    }
+    switch (mDoMemCd_getStatus(0)) {
+    case mDoMemCd_Ctrl_c::CARD_STAT_WAIT:
+        dFe_c->setErrMessage(9, 0);
+        field_0x55b = 4;
+        field_0x55a = 0x1A;
+        mMemCardCheckProc = 2;
+        break;
+    case 8:
+        dFe_c->setErrMessage(0xA, 0);
+        field_0x55b = 4;
+        field_0x55a = 0x1A;
+        mMemCardCheckProc = 2;
+        break;
+    case 9:
+        dFe_c->setErrMessage(0xB, 0);
+        field_0x55b = 4;
+        field_0x55a = 0x1A;
+        mMemCardCheckProc = 2;
+        break;
+    case mDoMemCd_Ctrl_c::CARD_STAT_WRONG_DEVICE:
+        dFe_c->setErrMessage(0xC, 0);
+        field_0x55b = 4;
+        field_0x55a = 0x1A;
+        mMemCardCheckProc = 2;
+        break;
+    case mDoMemCd_Ctrl_c::CARD_STAT_ENCODING:
+    case mDoMemCd_Ctrl_c::CARD_STAT_ERROR:
+        dFe_c->setErrMessage(0x2D, 0);
+        mMemCardCheckProc = 5;
+        break;
+    case 11:
+    case mDoMemCd_Ctrl_c::CARD_STAT_IOERROR:
+        dFe_c->setErrMessage(0xF, 0);
+        mMemCardCheckProc = 3;
+        field_0x55a = 0x60;
+        field_0x55c = 0x61;
+        field_0x55b = 0xD;
+        break;
+    case mDoMemCd_Ctrl_c::CARD_STAT_CREATE:
+        mDoMemCd_setPictDataPtr((u8*)savePicDatabuf);
+        mDoMemCd_Load();
+        mMemCardCheckProc = 1;
+        break;
+    case mDoMemCd_Ctrl_c::CARD_STAT_RESTORE:
+        dFe_c->setErrMessage(0x15, 0);
+        mMemCardCheckProc = 9;
+        break;
+    }
 }
 
 /* 80230C78-80230D20       .text MemCardLoadWait__10dScnName_cFv */
 void dScnName_c::MemCardLoadWait() {
-    /* Nonmatching */
+    int rt = mDoMemCd_LoadSync(saveMemory, sizeof(saveMemory), 0);
+    if (rt == 0)
+        return;
+    if (rt == 1) {
+        dComIfGs_setMemCardCheckID(mDoMemCd_getCardSerialNo());
+#if VERSION > VERSION_JPN
+        if (dComIfGs_getNoFile() != 0) {
+            dComIfGs_setNoFile(0);
+        }
+#endif
+        mMainProc = 1;
+        mDrawProc = 4;
+    } else if (rt == 2) {
+        mMemCardCheckProc = 0;
+    }
 }
 
 /* 80230D20-80230D74       .text MemCardErrMsgWaitKey__10dScnName_cFv */
 void dScnName_c::MemCardErrMsgWaitKey() {
-    /* Nonmatching */
+    if (dFe_c->getStatus() == 2) {
+        if (field_0x55a != 0xFF) {
+            dFe_c->setErrMessage(field_0x55a, 0);
+        }
+        mMemCardCheckProc = field_0x55b;
+    }
 }
 
 /* 80230D74-80230DE8       .text MemCardErrMsgWaitKey2__10dScnName_cFv */
 void dScnName_c::MemCardErrMsgWaitKey2() {
-    /* Nonmatching */
+    if (dFe_c->getStatus() == 2) {
+        if (field_0x55a != 0xFF) {
+            dFe_c->setErrMessage(field_0x55a, 0);
+            field_0x55a = 0xFF;
+            mMemCardCheckProc = 3;
+        } else {
+            dFe_c->setErrMessage(field_0x55c, 0);
+            mMemCardCheckProc = field_0x55b;
+        }
+    }
 }
 
 /* 80230DE8-80230E50       .text MemCardGotoIPLSelect__10dScnName_cFv */
 void dScnName_c::MemCardGotoIPLSelect() {
-    /* Nonmatching */
+    if (dFe_c->getStatus() == 2) {
+        if (dFe_c->getYesNo() != 0) {
+            mMemCardCheckProc = 0xE;
+        } else {
+            dFe_c->setErrMessage(0x1A, 0);
+            mMemCardCheckProc = 4;
+        }
+    }
 }
 
 /* 80230E50-80230E7C       .text MemCardGotoIPL__10dScnName_cFv */
@@ -425,17 +644,53 @@ void dScnName_c::MemCardGotoIPL() {
 
 /* 80230E7C-80230F4C       .text MemCardErrMsgWaitNoSaveSel__10dScnName_cFv */
 void dScnName_c::MemCardErrMsgWaitNoSaveSel() {
-    /* Nonmatching */
+    if (dFe_c->getStatus() == 2) {
+        if (dFe_c->getYesNo() != 0) {
+            dComIfGs_setInitDataToCard(saveMemory, 0);
+            mDoMemCdRWm_SetCheckSumGameData(saveMemory, 0);
+            dComIfGs_setInitDataToCard(saveMemory, 1);
+            mDoMemCdRWm_SetCheckSumGameData(saveMemory, 1);
+            dComIfGs_setInitDataToCard(saveMemory, 2);
+            mDoMemCdRWm_SetCheckSumGameData(saveMemory, 2);
+            dComIfGs_setNoFile(1);
+            mMainProc = 1;
+            mDrawProc = 4;
+        } else {
+            mMemCardCheckProc = 0;
+        }
+    }
 }
 
 /* 80230F4C-80230FD0       .text MemCardErrMsgWaitFormatSel__10dScnName_cFv */
 void dScnName_c::MemCardErrMsgWaitFormatSel() {
-    /* Nonmatching */
+    if (dFe_c->getStatus() == 2) {
+        if (dFe_c->getYesNo() != 0) {
+            dFe_c->setErrMessage(0x11, 0);
+            mMemCardCheckProc = 6;
+        } else {
+            dFe_c->setErrMessage(0x10, 0);
+            field_0x55b = 4;
+            field_0x55a = 0x1A;
+            mMemCardCheckProc = 2;
+        }
+    }
 }
 
 /* 80230FD0-8023106C       .text MemCardErrMsgWaitFormatSel2__10dScnName_cFv */
 void dScnName_c::MemCardErrMsgWaitFormatSel2() {
-    /* Nonmatching */
+    if (dFe_c->getStatus() == 2) {
+        if (dFe_c->getYesNo() != 0) {
+            mDoMemCd_Format();
+            dFe_c->setErrMessage(0x12, 1);
+            mMemCardCheckProc = 7;
+            field_0x1bb8 = 1;
+        } else {
+            dFe_c->setErrMessage(0x10, 0);
+            field_0x55b = 4;
+            field_0x55a = 0x1A;
+            mMemCardCheckProc = 2;
+        }
+    }
 }
 
 /* 8023106C-802310C0       .text MemCardFormat__10dScnName_cFv */
@@ -443,18 +698,51 @@ void dScnName_c::MemCardFormat() {
     field_0x1bbc = mDoMemCd_FormatSync();
     if (field_0x1bbc != 0) {
         dFe_c->closeMessage();
-        field_0x556 = 8;
+        mMemCardCheckProc = 8;
     }
 }
 
 /* 802310C0-8023117C       .text MemCardFormatCheck__10dScnName_cFv */
 void dScnName_c::MemCardFormatCheck() {
-    /* Nonmatching */
+    if (dFe_c->getStatus() == 2) {
+        if (field_0x1bbc == 2) {
+            field_0x55a = 0xFF;
+            field_0x55b = 0;
+            dFe_c->setErrMessage(0x14, 0);
+            mMemCardCheckProc = 2;
+        } else if (field_0x1bbc == 1) {
+            field_0x55a = 0xFF;
+            field_0x55b = 0;
+            dFe_c->setErrMessage(0x13, 0);
+            dFe_c->setTimeCountDownMode();
+            mMemCardCheckProc = 2;
+        }
+        field_0x1bb8 = 0;
+        field_0x55a = 0xFF;
+    }
 }
 
 /* 8023117C-80231284       .text MemCardMakeGameFileSel__10dScnName_cFv */
 void dScnName_c::MemCardMakeGameFileSel() {
-    /* Nonmatching */
+    if (dFe_c->getStatus() == 2) {
+        if (dFe_c->getYesNo() != 0) {
+            dComIfGs_setInitDataToCard(saveMemory, 0);
+            mDoMemCdRWm_SetCheckSumGameData(saveMemory, 0);
+            dComIfGs_setInitDataToCard(saveMemory, 1);
+            mDoMemCdRWm_SetCheckSumGameData(saveMemory, 1);
+            dComIfGs_setInitDataToCard(saveMemory, 2);
+            mDoMemCdRWm_SetCheckSumGameData(saveMemory, 2);
+            mDoMemCd_Save(saveMemory, sizeof(saveMemory), 0);
+            dFe_c->setErrMessage(0x17, 1);
+            mMemCardCheckProc = 0xA;
+            field_0x1bb8 = 1;
+        } else {
+            dFe_c->setErrMessage(0x16, 0);
+            field_0x55b = 4;
+            field_0x55a = 0x1A;
+            mMemCardCheckProc = 2;
+        }
+    }
 }
 
 /* 80231284-802312D8       .text MemCardMakeGameFile__10dScnName_cFv */
@@ -462,13 +750,28 @@ void dScnName_c::MemCardMakeGameFile() {
     field_0x1bbc = mDoMemCd_SaveSync();
     if (field_0x1bbc != 0) {
         dFe_c->closeMessage();
-        field_0x556 = 11;
+        mMemCardCheckProc = 11;
     }
 }
 
 /* 802312D8-80231398       .text MemCardMakeGameFileCheck__10dScnName_cFv */
 void dScnName_c::MemCardMakeGameFileCheck() {
-    /* Nonmatching */
+    if (dFe_c->getStatus() == 2) {
+        if (field_0x1bbc == 2) {
+            field_0x55a = 0xFF;
+            field_0x55b = 0;
+            dFe_c->setErrMessage(0x18, 0);
+            mMemCardCheckProc = 2;
+        } else if (field_0x1bbc == 1) {
+            dComIfGs_setNewFile(1);
+            field_0x55a = 0xFF;
+            field_0x55b = 0xC;
+            dFe_c->setErrMessage(0x19, 0);
+            mMemCardCheckProc = 2;
+        }
+        field_0x1bb8 = 0;
+        field_0x55a = 0xFF;
+    }
 }
 
 /* 80231398-802313AC       .text MemCardGotoFileSelect__10dScnName_cFv */
@@ -482,6 +785,15 @@ void dScnName_c::MemCardCheckDbg() {}
 
 /* 802313B0-80231428       .text MemCardCheckDbgWait__10dScnName_cFv */
 void dScnName_c::MemCardCheckDbgWait() {
+    if (dFe_c->getStatus() == 0) {
+        if (CPad_CHECK_TRIG_Y(0)) {
+            dFe_c->initial();
+            mMemCardCheckProc = 0xF;
+        } else if (CPad_CHECK_TRIG_Z(0)) {
+            mMainProc = 1;
+            mDrawProc = 4;
+        }
+    }
 }
 
 /* 80231428-80231454       .text FileErrorDraw__10dScnName_cFv */
@@ -521,14 +833,14 @@ void dScnName_c::NoteOpenWait() {
         }
         dFs_c->initial();
         mMainProc = 3;
-        field_0x555 = 0;
+        mOpenProc = 0;
         mDrawProc = 1;
     }
 }
 
 /* 802315A8-802315E0       .text FileSelectOpen__10dScnName_cFv */
 void dScnName_c::FileSelectOpen() {
-    (this->*(FileSelOpenProc[field_0x555]))();
+    (this->*(FileSelOpenProc[mOpenProc]))();
 }
 
 /* 802315E0-802319B4       .text buttonIconProc__10dScnName_cFv */
@@ -654,28 +966,31 @@ void dScnName_c::FileSelectMain() {
 
 /* 80231A8C-80231CB8       .text FileSelectMainNormal__10dScnName_cFv */
 void dScnName_c::FileSelectMainNormal() {
-    /* Nonmatching */
-    switch (dFs_c->field_0x392c) {
+    switch (dFs_c->isSelectEnd()) {
     case 1:
         field_0x1bb9 = 0;
-        if (dFs_c->field_0x3914[dFs_c->saveSlot] != 0) {
+        if (dFs_c->isDataNew(dFs_c->getSelectNum())) {
             field_0x1bb6 = 3;
             mMainProc = 5;
         } else {
-            dComIfGs_setCardToMemory(saveMemory, dFs_c->saveSlot);
-            if (dFs_c->saveStatus[dFs_c->saveSlot] != 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3510)) {
+            dComIfGs_setCardToMemory(saveMemory, dFs_c->getSelectNum());
+            if (dFs_c->isDataExtra(dFs_c->getSelectNum()) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3510)) {
                 field_0x1bb9 = 1;
             }
 
             u8 pictureNum = dComIfGs_getPictureNum();
             if (dComIfGs_getPictureNum() != 0) {
-                u8 failed = 0;
-                u8 boxDataIdx = 0;
-                u8 r25 = 0;
-                card_pictdata* workBuf = &savePicDatabuf[dFs_c->saveSlot * 3];
-                for (s32 i = 0; i < 3; i++) {
-                    u32 mask = 1 << i;
-                    if ((dComIfGs_getEventReg(dSv_event_flag_c::UNK_89FF) & mask)) {
+                int i;
+                u8 failed;
+                u8 r25;
+                u8 boxDataIdx;
+                card_pictdata* workBuf;
+                failed = 0;
+                boxDataIdx = 0;
+                r25 = 0;
+                workBuf = &savePicDatabuf[dFs_c->getSelectNum() * 3];
+                for (i = 0; i < 3; i++) {
+                    if ((dComIfGs_getEventReg(dSv_event_flag_c::UNK_89FF) & (1 << i))) {
                         workBuf++;
                         continue;
                     }
@@ -717,8 +1032,7 @@ void dScnName_c::FileSelectMainNormal() {
 
 /* 80231CB8-80231D00       .text FileSelectMainExSave__10dScnName_cFv */
 void dScnName_c::FileSelectMainExSave() {
-    /* Nonmatching */
-    switch (dFs_c->field_0x392c) {
+    switch (dFs_c->isSelectEnd()) {
     case 1:
         field_0x558 = 0x2d;
         mMainProc = 13;
@@ -745,25 +1059,32 @@ void dScnName_c::ResetWait() {
 /* 80231D28-80231E9C       .text FileSelectClose__10dScnName_cFv */
 void dScnName_c::FileSelectClose() {
     if (dFs_c->_close() == 1) {
-        switch (dFs_c->field_0x392c) {
+        switch (dFs_c->isSelectEnd()) {
         case 2:
+#if VERSION == VERSION_DEMO
+            cloth.cloth_c->alpha_out();
+#endif
             if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
                 dMs_c->initialize();
-                dMs_c->field_0x53c = 1;
-                dMs_c->field_0x53d = dFs_c->field_0x392f; // getErrType?
-                if (dFs_c->field_0x392f == 2) {
+                dMs_c->setErrorFlag(1);
+                dMs_c->setErrorType(dFs_c->getErrType());
+                if (dFs_c->getErrType() == 2) {
                     dMs_c->initializeEx();
                 }
                 mMainProc = 10;
                 mDrawProc = 3;
             } else {
+#if VERSION > VERSION_DEMO
                 field_0x55d = 0;
                 cloth.cloth_c->init();
+#endif
                 mMainProc = 0;
-                field_0x556 = 0;
+                mMemCardCheckProc = 0;
                 mDrawProc = 0;
             }
+#if VERSION > VERSION_DEMO
             cloth.cloth_c->alpha_out();
+#endif
             break;
         case 3:
             cloth.cloth_c->alpha_out();
@@ -779,7 +1100,7 @@ void dScnName_c::FileSelectClose() {
             }
             dNm_c->initial();
             mMainProc = 6;
-            field_0x555 = 0;
+            mOpenProc = 0;
             mDrawProc = 2;
             break;
         }
@@ -793,7 +1114,7 @@ void dScnName_c::FileSelectDraw() {
 
 /* 80231EC0-80231EF8       .text NameInOpen__10dScnName_cFv */
 void dScnName_c::NameInOpen() {
-    (this->*(NameOpenProc[field_0x555]))();
+    (this->*(NameOpenProc[mOpenProc]))();
 }
 
 /* 80231EF8-80231F44       .text NameOpenMain__10dScnName_cFv */
@@ -830,7 +1151,7 @@ void dScnName_c::NameInClose() {
     if ((BOOL)dNm_c->_close() == TRUE) {
         dFs_c->initial();
         mMainProc = 3;
-        field_0x555 = 0;
+        mOpenProc = 0;
         mDrawProc = 1;
     }
 }
@@ -910,9 +1231,10 @@ void dScnName_c::changeGameScene() {
         return;
 
     dComIfGs_gameStart();
-    u32 procName = field_0x55f ? fpcNm_OPEN_SCENE_e : fpcNm_PLAY_SCENE_e;
-    if (fopScnM_ChangeReq(this, procName, fpcNm_OVERLAP0_e, 5)) {
-        g_dComIfG_gameInfo.save.getDan().mStageNo = -1;
+    if (fopScnM_ChangeReq(this, field_0x55f ? fpcNm_OPEN_SCENE_e : fpcNm_PLAY_SCENE_e, fpcNm_OVERLAP0_e, 5)) {
+#if VERSION > VERSION_DEMO
+        dComIfGs_resetDan();
+#endif
         dComIfGs_setRestartRoomParam(0);
         mDoAud_setSceneName(dComIfGp_getNextStageName(), dComIfGp_getNextStageRoomNo(), dComIfGp_getNextStageLayer());
     }
@@ -956,8 +1278,7 @@ void dDlst_BTICN_c::draw() {
 void dDlst_FLSEL_CLOTH_c::draw() {
     Mtx44 mtx;
     view_port_class* viewport = dComIfGp_getCurrentViewport();
-    f32 aspect = viewport->mWidth / viewport->mHeight;
-    C_MTXPerspective(mtx, 30.0f, aspect * fapGmHIO_getAspectRatio(), 1.0f, 100000.0f);
+    C_MTXPerspective(mtx, 30.0f, fapGmHIO_getAspectRatio() * (viewport->mWidth / viewport->mHeight), 1.0f, 100000.0f);
     GXSetProjection(mtx, GX_PERSPECTIVE);
     cloth_c->draw(0.0f, (GXColor){0xe3, 0xff, 0xb3, 0xff}, (GXColor){0x00, 0x00, 0x00, 0x00}, 0);
     dComIfGp_getCurrentGrafPort()->setPort();

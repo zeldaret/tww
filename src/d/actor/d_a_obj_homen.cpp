@@ -596,7 +596,7 @@ BOOL Act_c::process_falldown_init() {
     } else {
         field_0x7D6 = 120;
     }
-    field_0x7DC = cM_rndFX(3072.0f);
+    field_0x7DC = cM_rndFX(0xC00);
     return TRUE;
 }
 
@@ -878,6 +878,7 @@ BOOL Mthd_Draw(void* i_this) {
 
 /* 000029E0-000029E8       .text Mthd_IsDelete__Q210daObjHomen27@unnamed@d_a_obj_homen_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

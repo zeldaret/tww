@@ -292,7 +292,7 @@ s32 check_flontofplayer(u32 checkMask, s16 angle1, s16 angle2) {
 
 /* 8009DC28-8009DC74       .text distace_weight__Ffsf */
 f32 distace_weight(f32 distance, s16 angle, f32 ratio) {
-    f32 turns = (f32)angle / 32768.0F;
+    f32 turns = (f32)angle / 0x8000;
     return distance * (f32)((1.0F - ratio) + (f32)(ratio * (turns * turns)));
 }
 
@@ -774,7 +774,7 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
         case LockState_LOCK:
             mLockonTargetID = LockonTargetPId(0);
             if (field_0x01a == 1) {
-                f32 stickY = g_mDoCPd_cpadInfo[mPadNo].mMainStickPosY;
+                f32 stickY = CPad_GET_STICK_POS_Y(mPadNo);
                 if (-0.9f < stickY && nextAttention(interactMask) != NULL && mLockonCount > 1) {
                     setFlag(AttnFlag_00000008);
                 } else {
@@ -908,7 +908,7 @@ void dAttention_c::Draw() {
     Mtx invCamera;
     cMtx_inverse(dComIfGd_getViewRotMtx(), invCamera);
     fopAc_ac_c *target = LockonTarget(0);
-    if (dComIfGp_event_runCheck() || dComIfGp_getScopeMesgStatus() != 0)
+    if (dComIfGp_event_runCheck() || dComIfGp_getScopeMesgStatus() != fopMsgStts_MSG_UNK0_e)
         return;
     if (target != NULL) {
         if (target != NULL) {
@@ -1176,7 +1176,7 @@ void dAttLook_c::init() {
 
 /* 8009FE58-8009FE74       .text proc__10dAttLook_cFv */
 void dAttLook_c::proc() {
-    mLookTargetID = mRequestActorID ;
+    mLookTargetID = mRequestActorID;
     mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }

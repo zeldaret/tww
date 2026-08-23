@@ -15,105 +15,12 @@
 #include "res/Object/Gflag.h"
 #include "res/Object/Tgflag.h"
 #include "d/d_path.h"
-
-#include "assets/l_txa_dummy_hataTEX.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-static Vec l_pos[] = {
-    { -1000.0f,    0.0f, 0.0f },
-    {  -750.0f,    0.0f, 0.0f },
-    {  -500.0f,    0.0f, 0.0f },
-    {  -250.0f,    0.0f, 0.0f },
-    {     0.0f,    0.0f, 0.0f },
-    {   250.0f,    0.0f, 0.0f },
-    {   500.0f,    0.0f, 0.0f },
-    {   750.0f,    0.0f, 0.0f },
-    {  1000.0f,    0.0f, 0.0f },
-    { -1000.0f, -100.0f, 0.0f },
-    {  -750.0f, -100.0f, 0.0f },
-    {  -500.0f, -100.0f, 0.0f },
-    {  -250.0f, -100.0f, 0.0f },
-    {     0.0f, -100.0f, 0.0f },
-    {   250.0f, -100.0f, 0.0f },
-    {   500.0f, -100.0f, 0.0f },
-    {   750.0f, -100.0f, 0.0f },
-    {  1000.0f, -100.0f, 0.0f },
-    { -1000.0f, -200.0f, 0.0f },
-    {  -750.0f, -200.0f, 0.0f },
-    {  -500.0f, -200.0f, 0.0f },
-    {  -250.0f, -200.0f, 0.0f },
-    {     0.0f, -200.0f, 0.0f },
-    {   250.0f, -200.0f, 0.0f },
-    {   500.0f, -200.0f, 0.0f },
-    {   750.0f, -200.0f, 0.0f },
-    {  1000.0f, -200.0f, 0.0f },
-    { -1000.0f, -300.0f, 0.0f },
-    {  -750.0f, -300.0f, 0.0f },
-    {  -500.0f, -300.0f, 0.0f },
-    {  -250.0f, -300.0f, 0.0f },
-    {     0.0f, -300.0f, 0.0f },
-    {   250.0f, -300.0f, 0.0f },
-    {   500.0f, -300.0f, 0.0f },
-    {   750.0f, -300.0f, 0.0f },
-    {  1000.0f, -300.0f, 0.0f },
-    { -1000.0f, -400.0f, 0.0f },
-    {  -750.0f, -400.0f, 0.0f },
-    {  -500.0f, -400.0f, 0.0f },
-    {  -250.0f, -400.0f, 0.0f },
-    {     0.0f, -400.0f, 0.0f },
-    {   250.0f, -400.0f, 0.0f },
-    {   500.0f, -400.0f, 0.0f },
-    {   750.0f, -400.0f, 0.0f },
-    {  1000.0f, -400.0f, 0.0f }
-};
+#include "assets/l_txa_dummy_hataTEX.h"
 
-static cXy l_texCoord[] = {
-    {   1.0f,  0.0f },
-    { 0.875f,  0.0f },
-    {  0.75f,  0.0f },
-    { 0.625f,  0.0f },
-    {   0.5f,  0.0f },
-    { 0.375f,  0.0f },
-    {  0.25f,  0.0f },
-    { 0.125f,  0.0f },
-    {   0.0f,  0.0f },
-    {   1.0f, 0.25f },
-    { 0.875f, 0.25f },
-    {  0.75f, 0.25f },
-    { 0.625f, 0.25f },
-    {   0.5f, 0.25f },
-    { 0.375f, 0.25f },
-    {  0.25f, 0.25f },
-    { 0.125f, 0.25f },
-    {   0.0f, 0.25f },
-    {   1.0f,  0.5f },
-    { 0.875f,  0.5f },
-    {  0.75f,  0.5f },
-    { 0.625f,  0.5f },
-    {   0.5f,  0.5f },
-    { 0.375f,  0.5f },
-    {  0.25f,  0.5f },
-    { 0.125f,  0.5f },
-    {   0.0f,  0.5f },
-    {   1.0f, 0.75f },
-    { 0.875f, 0.75f },
-    {  0.75f, 0.75f },
-    { 0.625f, 0.75f },
-    {   0.5f, 0.75f },
-    { 0.375f, 0.75f },
-    {  0.25f, 0.75f },
-    { 0.125f, 0.75f },
-    {   0.0f, 0.75f },
-    {   1.0f,  1.0f },
-    { 0.875f,  1.0f },
-    {  0.75f,  1.0f },
-    { 0.625f,  1.0f },
-    {   0.5f,  1.0f },
-    { 0.375f,  1.0f },
-    {  0.25f,  1.0f },
-    { 0.125f,  1.0f },
-    {   0.0f,  1.0f }
-};
+#include "assets/l_pos__d_a_goal_flag.h"
+#include "assets/l_texCoord__d_a_goal_flag.h"
 
 #include "assets/l_goal_flag_DL.h"
 #include "assets/l_goal_flag_matDL.h"
@@ -708,7 +615,7 @@ cPhs_State daGoal_Flag_c::_create() {
 
 
 /* 0000183C-00001970       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf */
-void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_idealDist) {
+static void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_idealDist) {
     cXyz vec_to_neighbor = *i_otherP - *i_posP;
     cXyz correction_dir = vec_to_neighbor.normZP();
 
@@ -987,7 +894,7 @@ BOOL daGoal_Flag_c::RaceEnd() {
 
     if (end_chk || (mCamFramesPassed > l_HIO.mEndCamEarlyFrame &&
         (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
-        dComIfGp_setNextStage("sea", 1, 0x30);
+        dComIfGp_setNextStage("sea", 1, dIsleRoom_BoatingCourse_e);
     }
 
     return true;

@@ -76,7 +76,7 @@ void daPy_swimTailEcallBack_c::execute(JPABaseEmitter* emitter) {
 
     if (field_0x20 != NULL) {
         emitter->setGlobalTranslation(mPos.x, mPos.y, mPos.z);
-        JGeometry::TVec3<s16> rot(0, field_0x20->y, 0);
+        JGeometry::TVec3<s16> rot((s16)0, field_0x20->y, (s16)0);
         emitter->setGlobalRotation(rot);
     }else {
         JGeometry::TVec3<f32> sp20;
@@ -181,7 +181,7 @@ void daPy_sightPacket_c::setSight() {
         f32 temp_f3 = 0.65f + (0.35f * var_f2);
 
         mDoMtx_stack_c::scaleM(temp_f3 * mpImg->width, temp_f3 * mpImg->height, temp_f3);
-        mDoMtx_stack_c::ZrotM(32768.0f * cM_ssin(16384.0f * var_f31));
+        mDoMtx_stack_c::ZrotM(0x8000 * cM_ssin(0x4000 * var_f31));
     } else {
         mDoMtx_stack_c::scaleM(10.0f, 10.0f, 10.0f);
     }

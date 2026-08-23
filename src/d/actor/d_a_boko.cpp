@@ -73,12 +73,7 @@ static daBoko_HIO_c l_HIO;
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {
-#ifdef __MWERKS__
     mpLineKe->lineMat.update(0xA, 1.25f, (GXColor){0xFF, 0x64, 0x00, 0xFF}, 2, &tevStr);
-#else
-    GXColor color = {0xFF, 0x64, 0x00, 0xFF};
-    mpLineKe->lineMat.update(0xA, 1.25f, color, 2, &tevStr);
-#endif
     dComIfGd_set3DlineMat(&mpLineKe->lineMat);
 }
 
@@ -174,13 +169,13 @@ BOOL daBoko_c::draw() {
 
     if (checkNoDraw()) {
         if (mParticleCallBack.getEmitter() != NULL) {
-            mParticleCallBack.getEmitter()->setStatus(4);
+            mParticleCallBack.getEmitter()->stopDrawParticle();
         }
         return TRUE;
     }
 
     if (mParticleCallBack.getEmitter() != NULL) {
-        mParticleCallBack.getEmitter()->clearStatus(4);
+        mParticleCallBack.getEmitter()->playDrawParticle();
     }
 
     if (mFlameTimer != 0) {
@@ -269,7 +264,6 @@ BOOL daBoko_c::checkNoDraw() {
 
 /* 00000FA4-00001340       .text setFlameEffect__8daBoko_cFv */
 void daBoko_c::setFlameEffect() {
-    /* Nonmatching */
     static const s16 base_angle[] = {150, 200, 180, 120};
 
     dStage_darkStatus_c* dark_stts = dStage_roomControl_c::getDarkStatus();
@@ -358,7 +352,7 @@ void daBoko_c::setThrowReverse(s16 arg1) {
     fopAcM_SetGravity(this, -3.0f);
     fopAcM_GetSpeed(this).y = 15.0f;
     speedF *= 0.25f;
-    current.angle.y = arg1 + cM_rndFX(12288.0f);
+    current.angle.y = arg1 + cM_rndFX(0x3000);
 
     int sVar1 = cLib_distanceAngleS(current.angle.y, shape_angle.y);
     if (sVar1 >= 0x4000) {
@@ -421,7 +415,6 @@ BOOL daBoko_c::procMove_init() {
 
 /* 0000175C-00001E94       .text procMove__8daBoko_cFv */
 BOOL daBoko_c::procMove() {
-    /* Nonmatching - fpr regswap */
     BOOL bVar4 = FALSE;
     fopAcM_posMoveF(this, NULL);
     f32 fVar14_2 = m2DC.y;
@@ -603,7 +596,7 @@ BOOL daBoko_c::procThrow() {
         }
 
         if (mCps.ChkAtHit()) {
-            unaff_r28 = current.angle.y + cM_rndF(16384.0f);
+            unaff_r28 = current.angle.y + cM_rndF(0x4000);
         } else if (mAcch.ChkWallHit()) {
             unaff_r28 = mAcchCir.GetWallAngleY();
         } else {
@@ -820,6 +813,7 @@ static BOOL daBoko_Execute(daBoko_c* i_this) {
 
 /* 00002A24-00002A2C       .text daBoko_IsDelete__FP8daBoko_c */
 static BOOL daBoko_IsDelete(daBoko_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

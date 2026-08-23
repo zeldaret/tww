@@ -263,7 +263,6 @@ void dAuction_screen_c::rupeeCountDown() {
 
 /* 8016013C-801604A0       .text slotShowAnime__17dAuction_screen_cFv */
 void dAuction_screen_c::slotShowAnime() {
-
     if (slotShow) {
         if (field_0xc.mUserArea <= 7) {
             field_0xc.mUserArea++;
@@ -555,6 +554,7 @@ static BOOL dAs_Execute(dAs_c* i_this) {
 
 /* 80160CBC-80160CC4       .text dAs_IsDelete__FP5dAs_c */
 static BOOL dAs_IsDelete(dAs_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -569,7 +569,7 @@ static cPhs_State dAs_Create(msg_class* msg) {
     talkFlag = FALSE;
 
     dAs_c* i_this = (dAs_c*)msg;
-    i_this->_create();
+    return i_this->_create();
 }
 
 /* 80160D20-80160D70       .text dAuction_screen_create__Fv */

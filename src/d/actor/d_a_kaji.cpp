@@ -120,6 +120,7 @@ static BOOL daKajiDraw(void* i_this) {
 
 /* 00000568-00000570       .text daKajiIsDelete__FPv */
 static BOOL daKajiIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -166,10 +166,10 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20251118"
-config.dtk_tag = "v1.7.6"
-config.objdiff_tag = "v3.5.1"
+config.dtk_tag = "v1.8.3"
+config.objdiff_tag = "v3.7.3"
 config.sjiswrap_tag = "v1.2.2"
-config.wibo_tag = "1.0.0"
+config.wibo_tag = "1.1.0"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -215,7 +215,6 @@ cflags_base = [
     "-enum int",
     "-fp hardware",
     "-Cpp_exceptions off",
-    # "-W all",
     # "-O4,p",
     "-inline auto",
     '-pragma "cats off"',
@@ -366,6 +365,9 @@ NonMatching = False               # Object does not match and should not be link
 Equivalent = config.non_matching  # Object should be linked when configured with --non-matching
 
 
+DEBUG_ONLY = args.debug
+
+
 # Object is only matching for specific versions
 def MatchingFor(*versions):
     return config.version in versions
@@ -410,7 +412,7 @@ config.libs = [
             Object(NonMatching, "m_Do/m_Do_graphic.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_machine.cpp"),
             Object(Matching,    "m_Do/m_Do_mtx.cpp"),
-            Object(NonMatching, "m_Do/m_Do_ext.cpp"),
+            Object(MatchingFor("D44J01"),    "m_Do/m_Do_ext.cpp"),
             Object(Matching,    "m_Do/m_Do_lib.cpp"),
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_Reset.cpp"),
@@ -540,7 +542,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_event_manager.cpp"),
             Object(Matching,    "d/d_magma.cpp"),
             Object(Matching,    "d/d_boss_magma.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_grass.cpp"),
+            Object(Matching,    "d/d_grass.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_tree.cpp"),
             Object(NonMatching, "d/d_particle.cpp"),
             Object(Matching,    "d/d_particle_name.cpp"),
@@ -566,17 +568,17 @@ config.libs = [
             Object(Matching,    "d/d_bg_w_deform.cpp"),
             Object(Matching,    "d/d_bg_w_hf.cpp"),
             Object(Matching,    "d/d_bg_w_sv.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_d.cpp"),
+            Object(Matching,    "d/d_cc_d.cpp"),
             Object(Matching,    "d/d_cc_mass_s.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cc_s.cpp"),
             Object(Matching,    "d/d_cc_uty.cpp"),
-            Object(NonMatching, "d/d_cam_param.cpp"),
+            Object(Matching,    "d/d_cam_param.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_type.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_style.cpp"),
             Object(Matching,    "d/d_cam_type2.cpp"),
             Object(NonMatching, "d/d_ev_camera.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_wood.cpp"),
-            Object(NonMatching, "d/d_flower.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_flower.cpp"),
             Object(Matching,    "d/d_item_data.cpp"),
             Object(Matching,    "d/d_seafightgame.cpp"),
             Object(Matching,    "d/d_spline_path.cpp"),
@@ -587,16 +589,21 @@ config.libs = [
             Object(Matching, "d/d_a_npc_mk_static.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_salvage.cpp"),
             Object(Matching,    "d/d_snap.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_point_wind.cpp"),
+            Object(Matching,    "d/d_point_wind.cpp"),
+            Object(DEBUG_ONLY,  "d/d_debug_viewer.cpp"),
+            Object(DEBUG_ONLY,  "d/d_debug_pad.cpp"),
+            # Object(DEBUG_ONLY,  "d/d_debug_camera.cpp"),
+            # Object(DEBUG_ONLY,  "d/d_event_debug.cpp"),
+            # Object(DEBUG_ONLY,  "d/d_kankyo_debug.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d/actor/d_a_agb.cpp"),
             Object(Matching,    "d/actor/d_a_arrow.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bg.cpp"),
+            Object(Matching,    "d/actor/d_a_bg.cpp"),
             Object(Matching,    "d/actor/d_a_bomb.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bomb2.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/actor/d_a_boomerang.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_dai_item.cpp"),
+            Object(Matching,    "d/actor/d_a_dai_item.cpp"),
             Object(Matching,    "d/actor/d_a_demo00.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_disappear.cpp"),
+            Object(Matching,    "d/actor/d_a_disappear.cpp"),
             Object(Matching,    "d/actor/d_a_esa.cpp"),
             Object(NonMatching, "d/actor/d_a_grid.cpp"),
             Object(NonMatching, "d/actor/d_a_himo2.cpp"),
@@ -607,7 +614,7 @@ config.libs = [
             Object(Matching,    "d/actor/d_a_nh.cpp"),
             Object(Matching,    "d/actor/d_a_npc_fa1.cpp"),
             Object(NonMatching, "d/actor/d_a_obj_search.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_player.cpp"),
+            Object(Matching,    "d/actor/d_a_player.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_player_main.cpp"),
             Object(Matching,    "d/actor/d_a_player_npc.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_sea.cpp"),
@@ -620,9 +627,9 @@ config.libs = [
             Object(Matching,    "d/d_envse.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_file_error.cpp"),
             Object(MatchingFor("D44J01", "GZLJ01", "GZLE01"), "d/d_file_select.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_gameover.cpp"),
+            Object(Matching,    "d/d_gameover.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_kankyo.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_kyeff.cpp"),
+            Object(Matching,    "d/d_kyeff.cpp"),
             Object(Matching,    "d/d_kyeff2.cpp"),
             Object(Matching,    "d/d_ky_thunder.cpp"),
             Object(Matching,    "d/d_letter.cpp"),
@@ -652,15 +659,15 @@ config.libs = [
             Object(Matching,    "d/d_ovlp_fade3.cpp"),
             Object(Matching,    "d/d_ovlp_fade4.cpp"),
             Object(NonMatching, "d/d_picture_box.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_logo.cpp"),
+            Object(Matching,    "d/d_s_logo.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_menu.cpp"),
-            Object(NonMatching, "d/d_s_name.cpp"),
+            Object(EquivalentFor("D44J01", "GZLJ01", "GZLE01"),    "d/d_s_name.cpp"), # stripped vtable padding
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_open.cpp"),
             Object(NonMatching, "d/d_s_open_sub.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_play.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_room.cpp"),
             Object(Matching,    "d/d_s_title.cpp"),
-            Object(NonMatching, "d/d_scope.cpp"),
+            Object(Matching,    "d/d_scope.cpp"),
             Object(Matching,    "d/d_throwstone.cpp"),
             Object(Matching,    "d/d_timer.cpp"),
             Object(Matching,    "d/d_water_mark.cpp"),
@@ -1233,7 +1240,7 @@ config.libs = [
         [
             Object(NonMatching, "dolphin/gx/GXInit.c", extra_cflags=["-opt nopeephole"]),
             Object(Matching,    "dolphin/gx/GXFifo.c"),
-            Object(NonMatching, "dolphin/gx/GXAttr.c"),
+            Object(Matching,    "dolphin/gx/GXAttr.c"),
             Object(NonMatching, "dolphin/gx/GXMisc.c"),
             Object(NonMatching, "dolphin/gx/GXGeometry.c"),
             Object(NonMatching, "dolphin/gx/GXFrameBuf.c"),
@@ -1242,6 +1249,7 @@ config.libs = [
             Object(NonMatching, "dolphin/gx/GXBump.c"),
             Object(NonMatching, "dolphin/gx/GXTev.c"),
             Object(NonMatching, "dolphin/gx/GXPixel.c"),
+            Object(DEBUG_ONLY,  "dolphin/gx/GXDraw.c"),
             Object(Matching,    "dolphin/gx/GXStubs.c"),
             Object(Matching,    "dolphin/gx/GXDisplayList.c"),
             Object(NonMatching, "dolphin/gx/GXTransform.c", extra_cflags=["-fp_contract off"]),
@@ -1452,7 +1460,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lamp"),
     ActorRel(NonMatching, "d_a_lod_bg"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_lwood"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_magma"),
+    ActorRel(Matching,    "d_a_magma"),
     ActorRel(Matching,    "d_a_majuu_flag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_mdoor"),
     ActorRel(MatchingFor("D44J01"), "d_a_msw"),
@@ -1472,18 +1480,18 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_hfuck1"),
     ActorRel(Matching,    "d_a_obj_hole"),
     ActorRel(Matching,    "d_a_obj_ice"),
-    ActorRel(NonMatching, "d_a_obj_ikada"),
+    ActorRel(Matching,    "d_a_obj_ikada"),
     ActorRel(Matching,    "d_a_obj_kanat"),
     ActorRel(Matching,    "d_a_obj_leaves"),
     ActorRel(Matching,    "d_a_obj_lpalm"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_monument"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_movebox"),
+    ActorRel(Matching,    "d_a_obj_monument"),
+    ActorRel(Matching,    "d_a_obj_movebox"),
     ActorRel(Matching,    "d_a_obj_mshokki"),
     ActorRel(Matching,    "d_a_obj_ohatch"),
     ActorRel(Matching,    "d_a_obj_otble"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_pbco"),
+    ActorRel(Matching,    "d_a_obj_pbco"),
     ActorRel(Matching,    "d_a_obj_pirateship"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_quake"),
+    ActorRel(Matching,    "d_a_obj_quake"),
     ActorRel(Matching,    "d_a_obj_rcloud"),
     ActorRel(Matching,    "d_a_obj_roten"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_shelf"),
@@ -1493,7 +1501,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_tenmado"),
     ActorRel(Equivalent,  "d_a_obj_tide"), # Nondeterministic compiler bug? Do not link
     ActorRel(Matching,    "d_a_obj_timer"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_toripost"),
+    ActorRel(Matching,    "d_a_obj_toripost"),
     ActorRel(Matching,    "d_a_obj_tousekiki"),
     ActorRel(Matching,    "d_a_obj_warpt"),
     ActorRel(Matching,    "d_a_obj_wood"),
@@ -1510,7 +1518,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_stone"),
     ActorRel(Matching,    "d_a_stone2"),
     ActorRel(Matching,    "d_a_swc00"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_swhit0"),
+    ActorRel(Matching,    "d_a_swhit0"),
     ActorRel(Matching,    "d_a_swtdoor"),
     ActorRel(Matching,    "d_a_tag_attention"),
     ActorRel(NonMatching, "d_a_tag_ba1"),
@@ -1570,7 +1578,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_canon"),
     ActorRel(Matching,    "d_a_obj_eff"),
     ActorRel(NonMatching, "d_a_obj_magmarock"),
-    ActorRel(NonMatching, "d_a_obj_majyuu_door"),
+    ActorRel(Matching, "d_a_obj_majyuu_door"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_stair"),
     ActorRel(NonMatching, "d_a_obj_swflat"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_swhammer"),
@@ -1654,9 +1662,9 @@ config.libs = [
     ActorRel(Matching,    "d_a_npc_ah"),
     ActorRel(NonMatching, "d_a_npc_aj1"),
     ActorRel(NonMatching, "d_a_npc_auction"),
-    ActorRel(NonMatching, "d_a_npc_ba1"),
+    ActorRel(Matching, "d_a_npc_ba1"),
     ActorRel(NonMatching, "d_a_npc_bj1"),
-    ActorRel(NonMatching, "d_a_npc_bm1"),
+    ActorRel(Matching,    "d_a_npc_bm1"),
     ActorRel(NonMatching, "d_a_npc_bmcon1"),
     ActorRel(NonMatching, "d_a_npc_bms1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_bmsw"),
@@ -1668,8 +1676,8 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_ds1"),
     ActorRel(NonMatching, "d_a_npc_gk1"),
     ActorRel(NonMatching, "d_a_npc_gp1"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_npc_hi1"),
-    ActorRel(Matching, "d_a_npc_ho"),
+    ActorRel(Matching,    "d_a_npc_hi1"),
+    ActorRel(Matching,    "d_a_npc_ho"),
     ActorRel(Matching,    "d_a_npc_hr"),
     ActorRel(Matching,    "d_a_npc_jb1"),
     ActorRel(NonMatching, "d_a_npc_ji1"),
@@ -1682,19 +1690,19 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_ko1"),
     ActorRel(NonMatching, "d_a_npc_kp1"),
     ActorRel(Matching,    "d_a_npc_ls1"),
-    ActorRel(NonMatching, "d_a_npc_mk"),
+    ActorRel(Matching,    "d_a_npc_mk"),
     ActorRel(NonMatching, "d_a_npc_mn"),
     ActorRel(Matching,    "d_a_npc_mt"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_nz"),
     ActorRel(NonMatching, "d_a_npc_ob1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_os"),
-    ActorRel(NonMatching, "d_a_npc_p1"),
+    ActorRel(Matching, "d_a_npc_p1"),
     ActorRel(NonMatching, "d_a_npc_p2"),
     ActorRel(EquivalentFor("GZLJ01", "GZLE01", "GZLP01") or MatchingFor("D44J01"), "d_a_npc_people"), # regalloc 
     ActorRel(NonMatching, "d_a_npc_pf1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_photo"),
     ActorRel(NonMatching, "d_a_npc_pm1"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_roten"),
+    ActorRel(Matching,    "d_a_npc_roten"),
     ActorRel(Matching,    "d_a_npc_rsh1"),
     ActorRel(NonMatching, "d_a_npc_sarace"),
     ActorRel(NonMatching, "d_a_npc_sv"),
@@ -1721,7 +1729,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_correct"),
     ActorRel(Matching,    "d_a_obj_dmgroom"),
     ActorRel(Matching,    "d_a_obj_dragonhead"),
-    ActorRel(NonMatching, "d_a_obj_drift"),
+    ActorRel(Matching,    "d_a_obj_drift"),
     ActorRel(Matching,    "d_a_obj_eayogn"),
     ActorRel(Matching,    "d_a_obj_ebomzo"),
     ActorRel(NonMatching, "d_a_obj_ekskz"),
@@ -1797,8 +1805,8 @@ config.libs = [
     ActorRel(NonMatching, "d_a_pt"),
     ActorRel(NonMatching, "d_a_pw"),
     ActorRel(NonMatching, "d_a_pz"),
-    ActorRel(Matching,  "d_a_sail"),
-    ActorRel(NonMatching, "d_a_salvage_tbox"),
+    ActorRel(Matching,    "d_a_sail"),
+    ActorRel(Matching,    "d_a_salvage_tbox"),
     ActorRel(Matching,    "d_a_scene_change"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter2"),
@@ -1814,7 +1822,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_tag_ret"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_tag_volcano"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_title"),
-    ActorRel(NonMatching, "d_a_tn"),
+    ActorRel(MatchingFor("D44J01"), "d_a_tn"),
     ActorRel(Matching,    "d_a_toge"),
     ActorRel(Matching,    "d_a_tori_flag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_wall"),
@@ -1837,6 +1845,11 @@ config.custom_build_rules = [
     {
         "name": "convert_matDL",
         "command": "$python tools/converters/matDL_dis.py $in $out --symbol $symbol --scope $scope",
+        "description": "CONVERT $symbol",
+    },
+    {
+        "name": "convert_embedded_model_data",
+        "command": "$python tools/converters/extract_model_data.py $in $out --type $type --symbol $symbol --scope $scope",
         "description": "CONVERT $symbol",
     },
 ]
@@ -1871,6 +1884,21 @@ def emit_build_rule(asset):
                 }
             )
 
+        case "Vec" | "cXy" | "GXColor":
+            steps.append(
+                {
+                    "rule": "convert_embedded_model_data",
+                    "inputs": out_dir / "bin" / asset["binary"],
+                    "outputs": out_dir / "include" / asset["header"],
+                    "variables": {
+                        "type": asset.get("custom_type"),
+                        "symbol": asset.get("rename") or asset["symbol"],
+                        "scope": custom_data.get("scope", "local")
+                    },
+                    "implicit": Path("tools/converters/extract_model_data.py"),
+                }
+            )
+
         case _:
             print("Unknown asset type: " + asset["custom_type"])
 
@@ -1888,19 +1916,30 @@ if config_path.exists():
 
 # Optional callback to adjust link order. This can be used to add, remove, or reorder objects.
 # This is called once per module, with the module ID and the current link order.
-#
-# For example, this adds "dummy.c" to the end of the DOL link order if configured with --non-matching.
-# "dummy.c" *must* be configured as a Matching (or Equivalent) object in order to be linked.
 def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
     # Don't modify the link order for matching builds
     if not config.non_matching:
         return objects
-    if module_id == 0:  # DOL
-        return objects + ["dummy.c"]
+    
+    if args.debug and module_id == 0: # Debug DOL
+        # Insert debug-only objects.
+        objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_viewer.cpp")
+        objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_pad.cpp")
+        # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_camera.cpp")
+        # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_event_debug.cpp")
+        # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_kankyo_debug.cpp")
+        objects.insert(objects.index("dolphin/gx/GXPixel.c"), "dolphin/gx/GXDraw.c")
+    
+    # Example of adding new files for modding:
+    # This adds "dummy.c" to the end of the DOL link order if configured with --non-matching.
+    # "dummy.c" *must* be configured as a Matching (or Equivalent) object in order to be linked.
+    # if module_id == 0:  # DOL
+    #     return objects + ["dummy.c"]
+    
     return objects
 
 # Uncomment to enable the link order callback.
-# config.link_order_callback = link_order_callback
+config.link_order_callback = link_order_callback
 
 
 # Optional extra categories for progress tracking
@@ -1916,13 +1955,14 @@ config.progress_report_args = [
     # Marks relocations as mismatching if the target value is different
     # Default is "functionRelocDiffs=none", which is most lenient
     "--config functionRelocDiffs=data_value",
+    "--config preferredStringEncoding=shift_jis",
 ]
 
-# Disable missing return type warnings for incomplete objects
-for lib in config.libs:
-    for obj in lib["objects"]:
-        if not obj.completed:
-            obj.options["extra_clang_flags"].append("-Wno-return-type")
+# # Disable missing return type warnings for incomplete objects
+# for lib in config.libs:
+#     for obj in lib["objects"]:
+#         if not obj.completed:
+#             obj.options["extra_clang_flags"].append("-Wno-return-type")
 
 if args.mode == "configure":
     # Write build.ninja and objdiff.json

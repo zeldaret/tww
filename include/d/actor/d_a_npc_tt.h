@@ -11,7 +11,7 @@ struct tt_ke_s {
     void ke_pos_set(cXyz*);
 };
 
-struct lineKe {
+struct daNpc_Tt_ke_c {
     tt_ke_s field_0x6C8[8];
     mDoExt_3DlineMat0_c mLineMat;
 };
@@ -42,9 +42,10 @@ public:
     void clrEvFlag(u16 evFlag) { mEvFlags &= ~evFlag; }
     void clrFlag(u16 flag) { mFlags &= ~flag; }
 
-    s8 getBackboneJntNum() { return m_jnt.getBackboneJntNum(); }
+    s8 getBackboneJntNum() { return m_backbone_jnt_num; }
+    s8 getHeadJntNum() { return m_head_jnt_num; }
+    s16 getBackbone_x() { return m_jnt.getBackbone_x(); }
     s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
-    s8 getHeadJntNum() { return m_jnt.getHeadJntNum(); }
     s16 getHead_x() { return m_jnt.getHead_x(); }
     s16 getHead_y() { return m_jnt.getHead_y(); }
 
@@ -117,6 +118,7 @@ public:
     void danceInit(int);
     BOOL danceProc();
     BOOL danceNext();
+
 public:
     /* 0x290 */ dNpc_HeadAnm_c mHeadAnm;
     /* 0x2B4 */ s16 mEventIdx;
@@ -152,7 +154,7 @@ public:
     /* 0x6C4 */ u8 mDanceStep;
     /* 0x6C5 */ u8 mDanceStepTimer;
     /* 0x6C6 */ u8 field_0x6C6[0x6C8 - 0x6C6];
-    /* 0x6C8 */ lineKe mLineKe;
+    /* 0x6C8 */ daNpc_Tt_ke_c mLineKe;
     /* 0xE64 */ s8 mTexPatternIdx;
     /* 0xE65 */ s8 mCurrAnmIdx;
     /* 0xE66 */ s8 mAnmLoopCount;

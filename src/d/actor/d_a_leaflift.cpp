@@ -349,6 +349,7 @@ static BOOL daLlift_Execute(void* i_this) {
 
 /* 0000120C-00001214       .text daLlift_IsDelete__FPv */
 static BOOL daLlift_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

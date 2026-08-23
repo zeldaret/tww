@@ -169,9 +169,24 @@ namespace daObjMovebox {
         int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
         int prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         int prm_get_swSave1() const;
-        int prmZ_get_swSave2() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (u8)(mPrmZ >> 8); }
-        int prmZ_get_swSave2_MkieB() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? (u8)(mPrmZ >> 8) : 0xFF; }
-        int prmZ_get_pathId() const { return mType == TYPE_BLACK_BOX_WITH_MKIE ? 0xFF : (mPrmZ & 0x00FF) >> 0; }
+        int prmZ_get_swSave2() const {
+            if (mType == TYPE_BLACK_BOX_WITH_MKIE) {
+                return 0xFF;
+            }
+            return (u32)(mPrmZ >> 8) & 0xFF;
+        }
+        int prmZ_get_swSave2_MkieB() const {
+            if (mType == TYPE_BLACK_BOX_WITH_MKIE) {
+                return (u32)(mPrmZ >> 8) & 0xFF;
+            }
+            return 0xFF;
+        }
+        int prmZ_get_pathId() const {
+            if (mType == TYPE_BLACK_BOX_WITH_MKIE) {
+                return 0xFF;
+            }
+            return mPrmZ & 0xFF;
+        }
         int prmX_get_evId() const { return (mPrmX & 0x00FF) >> 0; }
         int prm_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
         int prm_get_itemSave() const { return daObj::PrmAbstract(this, PRM_ITEMSAVE_W, PRM_ITEMSAVE_S); }
