@@ -231,6 +231,7 @@ static BOOL daAndsw2_Execute(daAndsw2_c* i_this) {
 
 /* 00000574-0000057C       .text daAndsw2_IsDelete__FP10daAndsw2_c */
 static BOOL daAndsw2_IsDelete(daAndsw2_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

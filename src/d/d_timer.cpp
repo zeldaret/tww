@@ -736,6 +736,7 @@ static BOOL dTimer_Execute(dTimer_c* i_this) {
 
 /* 8023D9E0-8023D9E8       .text dTimer_IsDelete__FP8dTimer_c */
 static BOOL dTimer_IsDelete(dTimer_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

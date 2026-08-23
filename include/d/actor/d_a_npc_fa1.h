@@ -25,6 +25,11 @@ public:
 
 class daNpc_Fa1_c : public fopNpc_npc_c {
 public:
+    typedef void(daNpc_Fa1_c::*MoveFunc_t)();
+    typedef void(daNpc_Fa1_c::*MoveSubFunc_t)();
+    typedef void(daNpc_Fa1_c::*BottleMoveSubFunc_t)();
+    typedef void(daNpc_Fa1_c::*BottleBabaSubFunc_t)();
+
     enum Type_e {
         Type_NORMAL_e = 0,
         Type_TIMER_e = 1,
@@ -68,7 +73,7 @@ public:
     u8 getMode() { return mMode; }
     void setMode(u8 mode) { mMode = mode; }
     bool isLinkMode() { return mMode == Mode_PLAYER_MOVE_e; }
-    void isBabaMode() {}
+    bool isBabaMode() { return mMode == Mode_BOTTLE_BABA_MOVE_e; }
     u8 getSubMode() { return mSubMode; }
     void setSubMode(u8 submode) { mSubMode = submode; }
 
@@ -148,12 +153,7 @@ public:
     int CreateHeap();
     void setMtx();
 
-public:
-    typedef void(daNpc_Fa1_c::*MoveFunc_t)();
-    typedef void(daNpc_Fa1_c::*MoveSubFunc_t)();
-    typedef void(daNpc_Fa1_c::*BottleMoveSubFunc_t)();
-    typedef void(daNpc_Fa1_c::*BottleBabaSubFunc_t)();
-
+private:
     /* 0x6C4 */ u8 m6C4[0x6CC - 0x6C4];
     /* 0x6CC */ mDoExt_McaMorf* mpMorf;
     /* 0x6D0 */ daNpc_Fa1_McaMorfCallBack1_c mMcaMorfCallback1;

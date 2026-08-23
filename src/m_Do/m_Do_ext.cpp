@@ -159,15 +159,15 @@ int mDoExt_bpkAnm::init(J3DMaterialTable* i_matTable, J3DAnmColor* i_bpk, BOOL i
 
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -260,7 +260,7 @@ int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk
                 J3DMaterial* material = i_matTable->getMaterialNodePointer(materialId);
                 u8 texMtxId = mpAnm->getUpdateTexMtxID(i);
                 if (texMtxId != 0xFF) {
-                    J3DTexMtx* texMtx = material->getTexGenBlock()->getTexMtx(texMtxId);
+                    J3DTexMtx* texMtx = material->getTexMtx(texMtxId);
                     if (!texMtx) {
                         texMtx = new J3DTexMtx();
                     }
@@ -286,15 +286,15 @@ int mDoExt_btkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTextureSRTKey* i_btk
 
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -365,15 +365,15 @@ int mDoExt_brkAnm::init(J3DMaterialTable* i_matTable, J3DAnmTevRegKey* i_brk, BO
 
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -405,15 +405,15 @@ int mDoExt_bvaAnm::init(J3DModel* i_model, J3DAnmVisibilityFull* i_bva, BOOL i_a
     }
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -442,15 +442,15 @@ int mDoExt_bckAnm::init(J3DModelData* i_modelData, J3DAnmTransform* i_bck, BOOL 
     }
     if (i_anmPlay) {
         int attribute;
-        #if VERSION == VERSION_JPN
+#if VERSION == VERSION_JPN
         if (i_attribute < 0) {
             attribute = mpAnm->getAttribute();
         } else {
             attribute = i_attribute;
         }
-        #else
+#else
         attribute = i_attribute;
-        #endif
+#endif
         if (initPlay(mpAnm->getFrameMax(), attribute, i_rate, i_startF, i_endF, i_modify) == 0) {
             return 0;
         }
@@ -849,10 +849,10 @@ JKRExpHeap* gameHeap;
 /* 80011734-800117E4       .text mDoExt_createGameHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createGameHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2036, 2035, 2050, 2050), gameHeap == NULL || heapSize == 0);
-    gameHeap = JKRExpHeap::create(heapSize, i_heap, true);
-    #if VERSION > VERSION_DEMO
+    gameHeap = JKRCreateExpHeap(heapSize, i_heap, true);
+#if VERSION > VERSION_DEMO
     gameHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
-    #endif
+#endif
     return gameHeap;
 }
 
@@ -880,7 +880,7 @@ JKRExpHeap* zeldaHeap;
 /* 8001181C-800118C0       .text mDoExt_createZeldaHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2081, 2097, 2112, 2112), zeldaHeap == NULL || heapSize == 0);
-    return zeldaHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    return zeldaHeap = JKRCreateExpHeap(heapSize, i_heap, true);
 }
 
 /* 800118C0-800118C8       .text mDoExt_getZeldaHeap__Fv */
@@ -907,7 +907,7 @@ JKRExpHeap* commandHeap;
 /* 800118F8-8001199C       .text mDoExt_createCommandHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2126, 2158, 2173, 2173), commandHeap == NULL || heapSize == 0);
-    return commandHeap = JKRExpHeap::create(heapSize, i_heap, true);
+    return commandHeap = JKRCreateExpHeap(heapSize, i_heap, true);
 }
 
 /* 8001199C-800119A4       .text mDoExt_getCommandHeap__Fv */
@@ -934,10 +934,10 @@ JKRExpHeap* archiveHeap;
 /* 800119D4-80011A84       .text mDoExt_createArchiveHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createArchiveHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2173, 2222, 2237, 2237), archiveHeap == NULL || heapSize == 0);
-    archiveHeap = JKRExpHeap::create(heapSize, i_heap, true);
-    #if VERSION > VERSION_DEMO
+    archiveHeap = JKRCreateExpHeap(heapSize, i_heap, true);
+#if VERSION > VERSION_DEMO
     archiveHeap->setAllocationMode(JKRExpHeap::ALLOC_MODE_1);
-    #endif
+#endif
     return archiveHeap;
 }
 
@@ -955,25 +955,28 @@ s32 mDoExt_getSafeArchiveHeapSize() {
 }
 #endif
 
+#if VERSION == VERSION_DEMO
+static u8 archiveHeapGroupID;
+#endif
+
 JKRHeap* mDoExt_SaveCurrentHeap;
 
 #if VERSION == VERSION_DEMO
-static u8 archiveHeapGroupID;
 static u8 SolidHeapGroupID;
 #endif
 
 /* 80011AB4-80011ABC       .text mDoExt_getArchiveHeap__Fv */
 JKRExpHeap* mDoExt_getArchiveHeap() {
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     JKRExpHeap* heap = archiveHeap;
     heap->changeGroupID(archiveHeapGroupID++);
     if (archiveHeapGroupID >= 200) {
         archiveHeapGroupID = 0;
     }
     return heap;
-    #else
+#else
     return archiveHeap;
-    #endif
+#endif
 }
 
 static void dummy() {
@@ -993,9 +996,9 @@ JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignmen
     u32 size;
     JKRSolidHeap* createdHeap;
 
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     u8 groupID = i_heap->changeGroupID(SolidHeapGroupID);
-    #endif
+#endif
 
     if (i_size == 0 || i_size == -1) {
         createdHeap = JKRSolidHeap::create(-1, i_heap, false);
@@ -1010,15 +1013,15 @@ JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignmen
         createdHeap = JKRSolidHeap::create(size, i_heap, false);
     }
 
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     i_heap->changeGroupID(groupID);
-    #endif
+#endif
 
     if (createdHeap != NULL) {
         createdHeap->setErrorFlag(true);
     }
 
-    #if VERSION == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     if (createdHeap == NULL) {
         // "mDoExt_createMaxSolidHeap: Failed to allocate a %fK solid heap.  Contiguous free space=%fK  Remaining free space=%f\n"
         OSReport_Warning(
@@ -1034,7 +1037,7 @@ JKRSolidHeap* mDoExt_createSolidHeap(u32 i_size, JKRHeap* i_heap, u32 i_alignmen
     } else {
         SolidHeapGroupID = SolidHeapGroupID < 199 ? (u8)(SolidHeapGroupID + 1) : 0;
     }
-    #endif
+#endif
 
     return createdHeap;
 }
@@ -1055,9 +1058,9 @@ JKRSolidHeap* mDoExt_createSolidHeapToCurrent(u32 i_size, JKRHeap* i_parent, u32
     if (!resultHeap) {
         return NULL;
     }
-    #if VERSION > VERSION_DEMO
+#if VERSION > VERSION_DEMO
     JUT_ASSERT(VERSION_SELECT(0, 2530, 2545, 2545), OSGetCurrentThread() == &mainThread);
-    #endif
+#endif
     JUT_ASSERT(VERSION_SELECT(2441, 2531, 2546, 2546), mDoExt_SaveCurrentHeap == NULL);
     mDoExt_SaveCurrentHeap = JKRGetCurrentHeap();
     mDoExt_setCurrentHeap(resultHeap);
@@ -1102,9 +1105,9 @@ JKRHeap* mDoExt_getCurrentHeap() {
 
 /* 80011DDC-80011E98       .text mDoExt_restoreCurrentHeap__Fv */
 void mDoExt_restoreCurrentHeap() {
-    #if VERSION > VERSION_DEMO
+#if VERSION > VERSION_DEMO
     JUT_ASSERT(VERSION_SELECT(0, 2739, 2754, 2754), OSGetCurrentThread() == &mainThread);
-    #endif
+#endif
     JUT_ASSERT(VERSION_SELECT(2647, 2740, 2755, 2755), mDoExt_SaveCurrentHeap != NULL);
     mDoExt_SaveCurrentHeap->becomeCurrentHeap();
     mDoExt_SaveCurrentHeap = NULL;
@@ -1136,6 +1139,7 @@ void mDoExt_MtxCalcAnmBlendTbl::calc(u16 jnt_no) {
     Quaternion quat3;
     mAnmRatio->getAnmTransform()->getTransform(jnt_no, &info2);
     JMAEulerToQuat(info2.mRotation.x, info2.mRotation.y, info2.mRotation.z, &quat1);
+    f32 f30 = mAnmRatio[0].getRatio();
     quat3 = quat1;
     for (int i = 1; i < mNum; i++) {
         J3DAnmTransform* transform = mAnmRatio[i].getAnmTransform();
@@ -1143,7 +1147,7 @@ void mDoExt_MtxCalcAnmBlendTbl::calc(u16 jnt_no) {
             J3DTransformInfo info3;
             transform->getTransform(jnt_no, &info3);
             f32 ratio = mAnmRatio[i].getRatio();
-            f32 f30 = 1.0f - ratio;
+            f30 = 1.0f - ratio;
             JMAEulerToQuat(info3.mRotation.x, info3.mRotation.y, info3.mRotation.z, &quat2);
             JMAQuatLerp(&quat1, &quat2, ratio, &quat3);
             quat1 = quat3;
@@ -1316,7 +1320,7 @@ mDoExt_McaMorf::mDoExt_McaMorf(J3DModelData* modelData, mDoExt_McaMorfCallBack1_
         J3DTransformInfo* info = mpTransformInfo;
         Quaternion* quat = mpQuat;
         J3DModelData* r23 = mpModel->getModelData();
-        u16 jointNum = r23->getJointNum();
+        int jointNum = r23->getJointNum();
         for (int i = 0; i < jointNum; i++) {
             *info = r23->getJointNodePointer(i)->getTransformInfo();
             JMAEulerToQuat(info->mRotation.x, info->mRotation.y, info->mRotation.z, quat);
@@ -1604,7 +1608,7 @@ mDoExt_McaMorf2::mDoExt_McaMorf2(J3DModelData* modelData, mDoExt_McaMorfCallBack
     J3DTransformInfo* info = mpTransformInfo;
     Quaternion* quat = mpQuat;
     J3DModelData* r23 = mpModel->getModelData();
-    u16 jointNum = r23->getJointNum();
+    int jointNum = r23->getJointNum();
     for (int i = 0; i < jointNum; i++) {
         *info = r23->getJointNodePointer(i)->getTransformInfo();
         JMAEulerToQuat(info->mRotation.x, info->mRotation.y, info->mRotation.z, quat);
@@ -1954,9 +1958,9 @@ void mDoExt_3DlineMat0_c::setMaterial() {
         {0xC0, 0x00, 0x00},
     };
     j3dSys.reinitGX();
-    #if VERSION > VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
-    #endif
+#endif
     dKy_setLight_again();
 
     GXClearVtxDesc();
@@ -2008,7 +2012,7 @@ void mDoExt_3DlineMat0_c::draw() {
 }
 
 /* 800148B4-80014E04       .text update__19mDoExt_3DlineMat0_cFUsfR8_GXColorUsP12dKy_tevstr_c */
-void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 space, dKy_tevstr_c* pTevStr) {
+void mDoExt_3DlineMat0_c::update(u16 i_segs, f32 i_size, GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr) {
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
@@ -2020,9 +2024,9 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     cXyz* r_dstPos;
     cXyz* dstPos;
 
-    mColor = newColor;
-    mpTevStr = pTevStr;
-    mNumSegments = segs;
+    mColor = i_color;
+    mpTevStr = i_tevStr;
+    mNumSegments = i_segs;
     if (mNumSegments > mMaxSegments)
         mNumSegments = mMaxSegments;
 
@@ -2030,8 +2034,8 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     line = mpLines;
 
     f32 spacing;
-    if (space != 0) {
-        spacing = size / space;
+    if (i_space != 0) {
+        spacing = i_size / i_space;
     } else {
         spacing = 0.0f;
     }
@@ -2041,7 +2045,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     for (s32 i = 0; i < mNumLines; i++) {
         pos = line->mpSegments;
         dstPos = line->mPosArr[mCurArr];
-        f32 r_size = size;
+        f32 r_size = i_size;
 
         delta = pos[1] - pos[0];
 
@@ -2064,7 +2068,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         nextP1 = pos[0] - delta;
 
         for (s32 j = mNumSegments - 2; j > 0; j--) {
-            if (j < space)
+            if (j < i_space)
                 r_size -= spacing;
 
             delta = pos[1] - pos[0];
@@ -2089,7 +2093,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
             nextP1 = pos[0] - delta;
         }
 
-        if (space != 0) {
+        if (i_space != 0) {
             r_dstPos[0] = pos[0];
             r_dstPos[1] = pos[0];
         } else {
@@ -2103,7 +2107,7 @@ void mDoExt_3DlineMat0_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 }
 
 /* 80014E04-80015328       .text update__19mDoExt_3DlineMat0_cFUsR8_GXColorP12dKy_tevstr_c */
-void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
+void mDoExt_3DlineMat0_c::update(u16 i_segs, GXColor& i_color, dKy_tevstr_c* i_tevStr) {
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
@@ -2116,9 +2120,9 @@ void mDoExt_3DlineMat0_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
     cXyz* dstPos;
     u8* size_p;
 
-    mColor = newColor;
-    mpTevStr = pTevStr;
-    mNumSegments = segs;
+    mColor = i_color;
+    mpTevStr = i_tevStr;
+    mNumSegments = i_segs;
     if (mNumSegments > mMaxSegments)
         mNumSegments = mMaxSegments;
 
@@ -2220,9 +2224,9 @@ void mDoExt_3DlineMat1_c::setMaterial() {
         {0xC0, 0x00, 0x00},
     };
     j3dSys.reinitGX();
-    #if VERSION > VERSION_JPN
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
-    #endif
+#endif
     dKy_setLight_again();
 
     GXClearVtxDesc();
@@ -2284,7 +2288,7 @@ void mDoExt_3DlineMat1_c::draw() {
 }
 
 /* 80015764-80015E54       .text update__19mDoExt_3DlineMat1_cFUsfR8_GXColorUsP12dKy_tevstr_c */
-void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 space, dKy_tevstr_c* pTevStr) {
+void mDoExt_3DlineMat1_c::update(u16 i_segs, f32 i_size, GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr) {
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
@@ -2299,9 +2303,9 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     cXy* r_dstTex;
     cXy* dstTex;
 
-    mColor = newColor;
-    mpTevStr = pTevStr;
-    mNumSegments = segs;
+    mColor = i_color;
+    mpTevStr = i_tevStr;
+    mNumSegments = i_segs;
     if (mNumSegments > mMaxSegments)
         mNumSegments = mMaxSegments;
 
@@ -2309,8 +2313,8 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
     line = mpLines;
 
     f32 spacing;
-    if (space != 0) {
-        spacing = size / space;
+    if (i_space != 0) {
+        spacing = i_size / i_space;
     } else {
         spacing = 0.0f;
     }
@@ -2325,7 +2329,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 
         dstPos = line->mPosArr[mCurArr];
         dstTex = line->mTexArr[mCurArr];
-        r_size = size;
+        r_size = i_size;
 
         dstTex[0].y = dist;
         dstTex[1].y = dist;
@@ -2341,7 +2345,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         delta = delta.outprod(eyeDelta);
         f32 scale = delta.abs();
         if (scale != 0.0f) {
-            scale = size / scale;
+            scale = r_size / scale;
             delta *= scale;
         }
 
@@ -2356,7 +2360,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         nextP1 = pos[0] - delta;
 
         for (s32 j = mNumSegments - 2; j > 0; j--) {
-            if (j < space)
+            if (j < i_space)
                 r_size -= spacing;
 
             r_dstTex[0].y = dist;
@@ -2390,7 +2394,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
         r_dstTex[0].y = dist;
         r_dstTex[1].y = dist;
 
-        if (space != 0) {
+        if (i_space != 0) {
             r_dstPos[0] = pos[0];
             r_dstPos[1] = pos[0];
         } else {
@@ -2405,7 +2409,7 @@ void mDoExt_3DlineMat1_c::update(u16 segs, f32 size, GXColor& newColor, u16 spac
 }
 
 /* 80015E54-80016518       .text update__19mDoExt_3DlineMat1_cFUsR8_GXColorP12dKy_tevstr_c */
-void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTevStr) {
+void mDoExt_3DlineMat1_c::update(u16 i_segs, GXColor& i_color, dKy_tevstr_c* i_tevStr) {
     cXyz eyeDelta;
     cXyz delta;
     cXyz nextP0;
@@ -2421,9 +2425,9 @@ void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
     cXy* dstTex;
     u8* size_p;
 
-    mColor = newColor;
-    mpTevStr = pTevStr;
-    mNumSegments = segs;
+    mColor = i_color;
+    mpTevStr = i_tevStr;
+    mNumSegments = i_segs;
     if (mNumSegments > mMaxSegments)
         mNumSegments = mMaxSegments;
 
@@ -2515,12 +2519,12 @@ void mDoExt_3DlineMat1_c::update(u16 segs, GXColor& newColor, dKy_tevstr_c* pTev
 }
 
 /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
-void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* pMat) {
+void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* i_3DlineMat) {
     if (mp3DlineMat == NULL) {
         j3dSys.getDrawBuffer(0)->entryImm(this, 0);
     }
-    pMat->mpNextLineMat = mp3DlineMat;
-    mp3DlineMat = pMat;
+    i_3DlineMat->mpNextLineMat = mp3DlineMat;
+    mp3DlineMat = i_3DlineMat;
 }
 
 /* 8001657C-800165E4       .text draw__26mDoExt_3DlineMatSortPacketFv */
@@ -2531,10 +2535,551 @@ void mDoExt_3DlineMatSortPacket::draw() {
         lineMat->draw();
         lineMat = lineMat->mpNextLineMat;
     } while (lineMat);
-    #if VERSION > VERSION_JPN
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
-    #endif
+#endif
 }
+
+#if DEBUG
+mDoExt_cube8pPacket::mDoExt_cube8pPacket(cXyz* i_points, const GXColor& i_color) {
+    cXyz* pnt_array = mPoints;
+
+    for (int i = 0; i < 8; i++) {
+        *(pnt_array)++ = *(i_points)++;
+    }
+
+    DCStoreRangeNoSync(mPoints, sizeof(cXyz) * 8);
+    mColor = i_color;
+}
+
+void drawCube(MtxP mtx, cXyz* pos, const GXColor& color) {
+    GXSetArray(GX_VA_POS, pos, sizeof(cXyz));
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP,
+                  GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, color);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetCullMode(GX_CULL_BACK);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXLoadPosMtxImm(mtx, 0);
+    GXSetCurrentMtx(0);
+
+    GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 14);
+    GXPosition1x8(4);
+    GXPosition1x8(6);
+    GXPosition1x8(5);
+    GXPosition1x8(7);
+    GXPosition1x8(3);
+    GXPosition1x8(6);
+    GXPosition1x8(2);
+    GXPosition1x8(4);
+    GXPosition1x8(0);
+    GXPosition1x8(5);
+    GXPosition1x8(1);
+    GXPosition1x8(3);
+    GXPosition1x8(0);
+    GXPosition1x8(2);
+    GXEnd();
+}
+
+void mDoExt_cube8pPacket::draw() {
+    drawCube(j3dSys.getViewMtx(), mPoints, mColor);
+}
+
+mDoExt_cubePacket::mDoExt_cubePacket(cXyz& i_position, cXyz& i_size, csXyz& i_angle, const GXColor& i_color) {
+    mPosition = i_position;
+    mSize = i_size;
+    mAngle = i_angle;
+    mColor = i_color;
+}
+
+void mDoExt_cubePacket::draw() {
+    static cXyz l_pos[8] = {
+        cXyz(-1.0f, 1.0f, -1.0f), cXyz(1.0f, 1.0f, -1.0f),   cXyz(-1.0f, 1.0f, 1.0f),
+        cXyz(1.0f, 1.0f, 1.0f),   cXyz(-1.0f, -1.0f, -1.0f), cXyz(1.0f, -1.0f, -1.0f),
+        cXyz(-1.0f, -1.0f, 1.0f), cXyz(1.0f, -1.0f, 1.0f),
+    };
+
+    mDoMtx_stack_c::transS(mPosition.x, mPosition.y, mPosition.z);
+    mDoMtx_stack_c::XYZrotM(mAngle.x, mAngle.y, mAngle.z);
+    mDoMtx_stack_c::scaleM(mSize.x, mSize.y, mSize.z);
+    mDoMtx_stack_c::revConcat(j3dSys.getViewMtx());
+    drawCube(mDoMtx_stack_c::get(), l_pos, mColor);
+}
+
+mDoExt_quadPacket::mDoExt_quadPacket(cXyz* i_points, const GXColor& i_color, u8 i_clipZ) {
+    cXyz* pnt_array = mPoints;
+
+    for (int i = 0; i < 4; i++) {
+        *(pnt_array)++ = *(i_points)++;
+    }
+
+    DCStoreRangeNoSync(mPoints, sizeof(cXyz) * 4);
+    mColor = i_color;
+    mClipZ = i_clipZ;
+}
+
+void mDoExt_quadPacket::draw() {
+    GXSetArray(GX_VA_POS, mPoints, sizeof(cXyz));
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP,
+                  GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+
+    if (mClipZ) {
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    } else {
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    }
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetCullMode(GX_CULL_BACK);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
+    GXSetCurrentMtx(0);
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition1x8(0);
+    GXPosition1x8(1);
+    GXPosition1x8(2);
+    GXPosition1x8(3);
+    GXEnd();
+}
+
+mDoExt_trianglePacket::mDoExt_trianglePacket(cXyz* i_points, const GXColor& i_color, u8 i_clipZ) {
+    cXyz* pnt_array = mPoints;
+
+    for (int i = 0; i < 3; i++) {
+        *(pnt_array)++ = *(i_points)++;
+    }
+
+    DCStoreRangeNoSync(mPoints, sizeof(cXyz) * 3);
+    mColor = i_color;
+    mClipZ = i_clipZ;
+}
+
+void mDoExt_trianglePacket::draw() {
+    j3dSys.reinitGX();
+
+    GXSetArray(GX_VA_POS, mPoints, sizeof(cXyz));
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
+    GXSetCurrentMtx(0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetZCompLoc(GX_ENABLE);
+
+    if (mClipZ) {
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    } else {
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    }
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetFogRangeAdj(GX_DISABLE, 0, NULL);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(GX_ENABLE);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXSetNumIndStages(0);
+
+    GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
+    GXPosition1x8(0);
+    GXPosition1x8(1);
+    GXPosition1x8(2);
+    GXEnd();
+
+    J3DShape::resetVcdVatCache();
+}
+
+mDoExt_linePacket::mDoExt_linePacket(cXyz& i_start, cXyz& i_end, const GXColor& i_color, u8 i_clipZ, u8 i_width) {
+    mStart = i_start;
+    mEnd = i_end;
+    mColor = i_color;
+    mClipZ = i_clipZ;
+    mWidth = i_width;
+}
+
+void mDoExt_linePacket::draw() {
+    j3dSys.reinitGX();
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
+    GXSetCurrentMtx(0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetZCompLoc(GX_ENABLE);
+
+    if (mClipZ) {
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    } else {
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    }
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetFogRangeAdj(GX_DISABLE, 0, NULL);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(GX_ENABLE);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXSetNumIndStages(0);
+    GXSetLineWidth(mWidth, GX_TO_ZERO);
+
+    GXBegin(GX_LINES, GX_VTXFMT0, 2);
+    GXPosition3f32(mStart.x, mStart.y, mStart.z);
+    GXPosition3f32(mEnd.x, mEnd.y, mEnd.z);
+    GXEnd();
+
+    J3DShape::resetVcdVatCache();
+}
+
+mDoExt_ArrowPacket::mDoExt_ArrowPacket(cXyz& i_position, cXyz& param_1, const GXColor& i_color, u8 i_clipZ, u8 i_lineWidth) {
+    mStart = i_position;
+    mEnd = param_1;
+    mColor = i_color;
+    mClipZ = i_clipZ;
+    mLineWidth = i_lineWidth;
+}
+
+void mDoExt_ArrowPacket::draw() {
+    Mtx sp28;
+    cXyz sp18;
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+
+    if (mClipZ) {
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    } else {
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    }
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXSetLineWidth(mLineWidth, GX_TO_ZERO);
+
+    sp18 = mEnd - mStart;
+    MtxTrans(mStart.x, mStart.y, mStart.z, 0);
+    cMtx_YrotM(*calc_mtx, sp18.atan2sX_Z());
+    cMtx_XrotM(*calc_mtx, cM_atan2s(JMAFastSqrt(SQUARE(sp18.x) + SQUARE(sp18.z)), sp18.y));
+    cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, sp28);
+
+    GXLoadPosMtxImm(sp28, 0);
+    GXSetCurrentMtx(0);
+
+    GXBegin(GX_LINES, GX_VTXFMT0, 2);
+    GXPosition3f32(0.0f, 0.0f, 0.0f);
+    GXPosition3f32(0.0f, sp18.abs(), 0.0f);
+    GXEnd();
+
+    f32 var_f29 = sp18.abs();
+    f32 var_f31 = var_f29 * 0.1f;
+    f32 var_f30 = var_f29 * 0.8f;
+
+    GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, 6);
+    GXPosition3f32(0.0f, var_f29, 0.0f);
+    GXPosition3f32(0.0f, var_f30, var_f31);
+    GXPosition3f32(var_f31, var_f30, 0.0f);
+    GXPosition3f32(0.0f, var_f30, -var_f31);
+    GXPosition3f32(-var_f31, var_f30, 0.0f);
+    GXPosition3f32(0.0f, var_f30, var_f31);
+    GXEnd();
+}
+
+mDoExt_pointPacket::mDoExt_pointPacket(cXyz& i_position, const GXColor& i_color, u8 i_clipZ, u8 i_lineWidth) {
+    mPosition = i_position;
+    mColor = i_color;
+    mClipZ = i_clipZ;
+    mLineWidth = i_lineWidth;
+}
+
+void mDoExt_pointPacket::draw() {
+    j3dSys.reinitGX();
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+
+    if (mClipZ) {
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    } else {
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    }
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXSetPointSize(mLineWidth, GX_TO_ZERO);
+
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
+    GXSetCurrentMtx(0);
+
+    GXBegin(GX_POINTS, GX_VTXFMT0, 1);
+    GXPosition3f32(mPosition.x, mPosition.y, mPosition.z);
+    GXEnd();
+
+    j3dSys.reinitGX();
+    J3DShape::resetVcdVatCache();
+}
+
+mDoExt_circlePacket::mDoExt_circlePacket(cXyz& i_position, f32 i_radius, const GXColor& i_color, u8 i_clipZ, u8 i_lineWidth) {
+    mPosition = i_position;
+    mRadius = i_radius;
+    mColor = i_color;
+    mClipZ = i_clipZ;
+    mLineWidth = i_lineWidth;
+}
+
+void mDoExt_circlePacket::draw() {
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+
+    if (mClipZ) {
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    } else {
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    }
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXSetLineWidth(mLineWidth, GX_TO_ZERO);
+    GXLoadPosMtxImm(j3dSys.getViewMtx(), 0);
+    GXSetCurrentMtx(0);
+
+    cXyz sp38;
+    cXyz sp44;
+    int numEdges = 36;
+    sp38.y = sp44.y = mPosition.y;
+    
+    GXBegin(GX_LINES, GX_VTXFMT0, numEdges * 2);
+    for (int i = 0; i < numEdges; i++) {
+        sp38.x = cM_fcos((i * 6.2831855f) / numEdges) * mRadius;
+        sp38.z = cM_fsin((i * 6.2831855f) / numEdges) * mRadius;
+
+        sp44.x = cM_fcos(((i + 1) * 6.2831855f) / numEdges) * mRadius;
+        sp44.z = cM_fsin(((i + 1) * 6.2831855f) / numEdges) * mRadius;
+
+        sp38.x += mPosition.x;
+        sp38.z += mPosition.z;
+        sp44.x += mPosition.x;
+        sp44.z += mPosition.z;
+        GXPosition3f32(sp38.x, sp38.y, sp38.z);
+        GXPosition3f32(sp44.x, sp44.y, sp44.z);
+    }
+    GXEnd();
+}
+
+mDoExt_spherePacket::mDoExt_spherePacket(cXyz& i_position, f32 i_size, const GXColor& i_color, u8 i_clipZ) {
+    mPosition = i_position;
+    mSize = i_size;
+    mColor = i_color;
+    mClipZ = i_clipZ;
+}
+
+void mDoExt_spherePacket::draw() {
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_ENABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT0, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_RASC, GX_CC_C0, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+
+    if (mClipZ) {
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    } else {
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    }
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetCullMode(GX_CULL_BACK);
+    GXSetClipMode(GX_CLIP_ENABLE);
+
+    mDoMtx_stack_c::copy(j3dSys.getViewMtx());
+    mDoMtx_stack_c::transM(mPosition.x, mPosition.y, mPosition.z);
+    mDoMtx_stack_c::scaleM(mSize, mSize, mSize);
+
+    GXLoadPosMtxImm(mDoMtx_stack_c::get(), 0);
+    mDoMtx_stack_c::inverseTranspose();
+
+    GXLoadNrmMtxImm(mDoMtx_stack_c::get(), 0);
+    GXSetCurrentMtx(0);
+
+    GXDrawSphere(8, 8);
+}
+
+mDoExt_cylinderPacket::mDoExt_cylinderPacket(cXyz& i_position, f32 i_radius, f32 i_height, const GXColor& i_color, u8 i_clipZ) {
+    mPosition = i_position;
+    mRadius = i_radius;
+    mHeight = i_height;
+    mColor = i_color;
+    mClipZ = i_clipZ;
+}
+
+void mDoExt_cylinderPacket::draw() {
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_ENABLE, GX_SRC_REG, GX_SRC_REG, 1, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_RASC, GX_CC_C0, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+
+    if (mClipZ) {
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    } else {
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    }
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetCullMode(GX_CULL_BACK);
+    GXSetClipMode(GX_CLIP_ENABLE);
+
+    f32 var_f31 = mHeight * 0.5f;
+
+    mDoMtx_stack_c::copy(j3dSys.getViewMtx());
+    mDoMtx_stack_c::transM(mPosition.x, mPosition.y + var_f31, mPosition.z);
+    mDoMtx_stack_c::scaleM(mRadius, var_f31, mRadius);
+    mDoMtx_stack_c::XrotM(0x4000);
+
+    GXLoadPosMtxImm(mDoMtx_stack_c::get(), 0);
+    mDoMtx_stack_c::inverseTranspose();
+
+    GXLoadNrmMtxImm(mDoMtx_stack_c::get(), 0);
+    GXSetCurrentMtx(0);
+    GXDrawCylinder(8);
+}
+
+mDoExt_cylinderMPacket::mDoExt_cylinderMPacket(Mtx i_mtx, const GXColor& i_color, u8 i_clipZ) {
+    cMtx_copy(i_mtx, mMatrix);
+    mColor = i_color;
+    mClipZ = i_clipZ;
+}
+
+void mDoExt_cylinderMPacket::draw() {
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_ENABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT0, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, mColor);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_RASC, GX_CC_C0, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_ENABLE, GX_TEVPREV);
+
+    if (mClipZ) {
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
+    } else {
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    }
+
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetCullMode(GX_CULL_BACK);
+    GXSetClipMode(GX_CLIP_ENABLE);
+
+    cMtx_concat(j3dSys.getViewMtx(), mMatrix, mMatrix);
+
+    GXLoadPosMtxImm(mMatrix, 0);
+    cMtx_inverseTranspose(mMatrix, mMatrix);
+
+    GXLoadNrmMtxImm(mMatrix, 0);
+    GXSetCurrentMtx(0);
+
+    GXDrawCylinder(8);
+}
+#endif
 
 /* 800165E4-8001683C       .text mDoExt_initFontCommon__FPP7JUTFontPP7ResFONTP7JKRHeapPCcP10JKRArchiveUcUlUl */
 void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_heap, const char* param_4,
@@ -2549,11 +3094,11 @@ void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_hea
     JUT_ASSERT(VERSION_SELECT(6544, 6637, 6651, 6651), mDoExt_resfont != NULL);
     
     if (param_6 == 0) {
-        #if VERSION <= VERSION_JPN
+#if VERSION <= VERSION_JPN
         u32 temp = (param_8 + 0x40) * param_7;
-        #else
+#else
         u32 temp = (((param_8+0x1F) & ~0x1F) + 0x40) * param_7;
-        #endif
+#endif
         JUTCacheFont* cacheFont = new(p_heap, 0) JUTCacheFont(*p_resfont, temp, p_heap);
         if (cacheFont->isValid()) {
             *p_font = cacheFont;
@@ -2576,18 +3121,29 @@ void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_hea
     JUT_ASSERT(VERSION_SELECT(6575, 6668, 6685, 6685), mDoExt_font != NULL);
 }
 
+#if VERSION == VERSION_DEMO
 JUTFont* mDoExt_font0;
-ResFONT* mDoExt_resfont0;
+JUTFont* mDoExt_font1;
 s32 mDoExt_font0_getCount;
+s32 mDoExt_font1_getCount;
+ResFONT* mDoExt_resfont0;
+ResFONT* mDoExt_resfont1;
+#else
+JUTFont* mDoExt_font0;
+s32 mDoExt_font0_getCount;
+ResFONT* mDoExt_resfont0;
+JUTFont* mDoExt_font1;
+s32 mDoExt_font1_getCount;
+ResFONT* mDoExt_resfont1;
+#endif
 
 #if VERSION <= VERSION_JPN
 void mDoExt_initFont0() {
-    /* Nonmatching */
-    static const char* fontdata[] = {
+    static const char* const fontdata[] = {
         "rock_24_20_4i1.bfn",
         "rock_e_24_20_4i.bfn",
     };
-    u8 r30 = g_msgDHIO.field_0x08;
+    const u8 r30 = g_msgDHIO.field_0x08;
     mDoExt_initFontCommon(&mDoExt_font0, &mDoExt_resfont0, mDoExt_getZeldaHeap(), fontdata[r30], dComIfGp_getFontArchive(), r30, 0xB4, 0x800);
 }
 #else
@@ -2597,10 +3153,6 @@ void mDoExt_initFont0() {
     mDoExt_initFontCommon(&mDoExt_font0, &mDoExt_resfont0, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getFontArchive(), 1, 0, 0);
 }
 #endif
-
-JUTFont* mDoExt_font1;
-ResFONT* mDoExt_resfont1;
-s32 mDoExt_font1_getCount;
 
 #if VERSION <= VERSION_JPN
 void mDoExt_initFont1() {
@@ -2640,11 +3192,11 @@ void mDoExt_removeMesgFont() {
             mDoExt_font0 = NULL;
             
             if (mDoExt_resfont0) {
-                #if VERSION <= VERSION_JPN
+#if VERSION <= VERSION_JPN
                 if (g_msgDHIO.field_0x08 == 0) {
                     JKRFileLoader::removeResource(mDoExt_resfont0, NULL);
                 } else
-                #endif
+#endif
                 {
                     JKRHeap::free(mDoExt_resfont0, NULL);
                 }
@@ -2657,12 +3209,12 @@ void mDoExt_removeMesgFont() {
 #if VERSION > VERSION_JPN
 /* 80016A1C-80016A7C       .text mDoExt_initFont1__Fv */
 void mDoExt_initFont1() {
-    #if VERSION <= VERSION_JPN
+#if VERSION <= VERSION_JPN
     mDoExt_initFontCommon(&mDoExt_font1, &mDoExt_resfont1, mDoExt_getZeldaHeap(), "rodb_16_11_4i.bfn", dComIfGp_getRubyArchive(), 1, 1, 0x8000);
-    #else
+#else
     static const char fontdata[] = "hyrule.bfn";
     mDoExt_initFontCommon(&mDoExt_font1, &mDoExt_resfont1, mDoExt_getZeldaHeap(), fontdata, dComIfGp_getRubyArchive(), 1, 1, 0x8000);
-    #endif
+#endif
 }
 #endif
 
@@ -2727,32 +3279,4 @@ J3DModel* mDoExt_J3DModel__create(J3DModelData* i_modelData, u32 i_modelFlag, u3
         }
     }
     return NULL;
-}
-
-/* 80016C98-80016CC4       .text setGX__7JUTFontFQ28JUtility6TColorQ28JUtility6TColor */
-void JUTFont::setGX(JUtility::TColor col1, JUtility::TColor col2) {
-    setGX();
-}
-
-/* 80016CC4-80016CF0       .text getCellWidth__7JUTFontCFv */
-int JUTFont::getCellWidth() const {
-    return getWidth();
-}
-
-/* 80016CF0-80016D1C       .text getCellHeight__7JUTFontCFv */
-s32 JUTFont::getCellHeight() const {
-    return getHeight();
-}
-
-/* 80016D1C-80016D78       .text __dt__26mDoExt_3DlineMatSortPacketFv */
-mDoExt_3DlineMatSortPacket::~mDoExt_3DlineMatSortPacket() {}
-
-/* 80016D78-80016D80       .text getMaterialID__19mDoExt_3DlineMat1_cFv */
-int mDoExt_3DlineMat1_c::getMaterialID() {
-    return 1;
-}
-
-/* 80016D80-80016D88       .text getMaterialID__19mDoExt_3DlineMat0_cFv */
-int mDoExt_3DlineMat0_c::getMaterialID() {
-    return 0;
 }

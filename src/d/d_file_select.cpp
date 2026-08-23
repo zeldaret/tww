@@ -86,6 +86,25 @@ dFs_HIO_c::dFs_HIO_c() {
     field_0x4C = 0x64;
     field_0x54 = 1.25f;
     field_0x58 = 12.0f;
+#if VERSION == VERSION_PAL
+    field_0x5c = 7;
+    field_0x5d = 0xA0;
+    field_0x5e = 0x50;
+    field_0x5f = 0xE;
+    field_0x60 = 0;
+    field_0x62 = 1;
+    field_0x64 = 1;
+    field_0x66 = 0;
+    field_0x68 = 0;
+    field_0x6a = 0;
+    field_0x6c = 0;
+    field_0x6e = -1;
+    field_0x70 = -1;
+    field_0x72 = 0;
+    field_0x74 = 0;
+    field_0x76 = 0;
+    field_0x78 = 0xA;
+#endif
 }
 
 /* 8017FA20-8017FCC0       .text _create__14dFile_select_cFv */
@@ -96,7 +115,7 @@ void dFile_select_c::_create() {
     JUT_ASSERT(VERSION_SELECT(302, 302, 361, 361), stick != NULL);
     stick2 = new STControl(3, 1, 3, 2);
     JUT_ASSERT(VERSION_SELECT(305, 305, 364, 364), stick2 != NULL);
-    fileSel.Scr->set("file_select.blo", (JKRArchive*)field_0x0);
+    fileSel.Scr->set("file_select.blo", archive);
     fileSel.font = mDoExt_getMesgFont();
     JUT_ASSERT(VERSION_SELECT(311, 311, 370, 370), fileSel.font != NULL);
     g_fsHIO.mNo = mDoHIO_createChild("ファイルセレクト画面", &g_fsHIO);
@@ -104,13 +123,13 @@ void dFile_select_c::_create() {
     mSavePicDataPtr = NULL;
 
     for(int i = 0; i < 3; i++) {
-        field_0x3914[i] = 0;
+        dataNew[i] = 0;
         field_0x3917[i] = 0;
-        saveStatus[i] = 0;
+        dataExtra[i] = 0;
         field_0x391D[i] = 0;
     }
 
-    saveSlot = 0;
+    selectNum = 0;
     screenSet();
     displayInit();
     paneTransInit();
@@ -186,14 +205,14 @@ void dFile_select_c::_move() {
     (this->*DataSelProc[field_0x392b])();
 #else
 #if VERSION <= VERSION_JPN
-    if(g_mDoMemCd_control.field_0x165A == 1 && field_0x3941 == 0)
+    if(mDoMemCd_getProbeStat() == 1 && field_0x3941 == 0)
 #else
-    if((g_mDoMemCd_control.field_0x165A == 0 || g_mDoMemCd_control.field_0x165A == 1) && field_0x3941 == 0)
+    if((mDoMemCd_getProbeStat() == 0 || mDoMemCd_getProbeStat() == 1) && field_0x3941 == 0)
 #endif
     {
         field_0x392e = 1;
         field_0x3930 = 0;
-        field_0x392c = 2;
+        selectEnd = 2;
         mIconMode = 3;
         field_0x392a = 7;
         field_0x392b = 0x26;
@@ -202,7 +221,7 @@ void dFile_select_c::_move() {
         (this->*DataSelProc[field_0x392b])();
     }
 
-    g_mDoMemCd_control.field_0x165A = 2;
+    mDoMemCd_clearProbeStat();
 #endif
 }
 
@@ -249,7 +268,7 @@ bool dFile_select_c::_close() {
 #endif
     }
     else {
-        if(field_0x392c == 3) {
+        if(selectEnd == 3) {
             result = closeBack();
         }
         else {
@@ -266,7 +285,7 @@ bool dFile_select_c::_close() {
 int dFile_select_c::closeEnd() {
     int temp1 = PaneTranceTitle(field_0x3930, g_fsHIO.field_0x08, 0.0f, g_fsHIO.field_0x48, 0, 1);
     int temp2, temp3;
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             temp2 = PaneTranceRecTlt1(field_0x3930, g_fsHIO.field_0x0C, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
             temp3 = PaneTranceRecInfo1(field_0x3930, g_fsHIO.field_0x11, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
@@ -295,7 +314,7 @@ int dFile_select_c::closeEnd() {
 int dFile_select_c::closeCardErr() {
     int temp1 = PaneTranceTitle(field_0x3930, g_fsHIO.field_0x08, 0.0f, g_fsHIO.field_0x48, 0, 1);
     int temp2, temp3;
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             temp2 = PaneTranceRecTlt1(field_0x3930, g_fsHIO.field_0x0C, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
             temp3 = PaneTranceRecInfo1(field_0x3930, g_fsHIO.field_0x11, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
@@ -342,7 +361,7 @@ int dFile_select_c::closeErrErase() {
     int temp1 = PaneTranceTitle(field_0x3930, g_fsHIO.field_0x08, 0.0f, g_fsHIO.field_0x48, 0, 1);
     int temp4 = MessagePaneMove(0.0f, 0.0f, g_fsHIO.field_0x44, 0.0f, g_fsHIO.field_0x31, 0, 1);
     int temp2, temp3;
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             temp2 = PaneTranceRecTlt1(field_0x3930, g_fsHIO.field_0x0C, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
             temp3 = PaneTranceRecInfo1(field_0x3930, g_fsHIO.field_0x11, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
@@ -428,7 +447,7 @@ void dFile_select_c::dataSelect() {
         mDoAud_seStart(JA_SE_MSEL_OK_1);
         mIconMode = 4;
         field_0x2fc0[0].pane->hide();
-        if(field_0x3917[saveSlot]) {
+        if(field_0x3917[selectNum]) {
             fopMsgM_messageGet(field_0x38e8[field_0x392d ^ 1], 0x1C);
         }
         menuColorChange();
@@ -436,9 +455,9 @@ void dFile_select_c::dataSelect() {
         field_0x392b = 0x2;
     }
     else if(stick2->checkUpTrigger()) {
-        if(saveSlot != 0) {
+        if(selectNum != 0) {
             mDoAud_seStart(JA_SE_MSEL_CURSOR);
-            saveSlot--;
+            selectNum--;
             field_0x3948 = 0.0f;
             field_0x3923 = 0xFF;
             field_0x3930 = 0;
@@ -447,9 +466,9 @@ void dFile_select_c::dataSelect() {
         }
     }
     else if(stick2->checkDownTrigger()) {
-        if(saveSlot != 2) {
+        if(selectNum != 2) {
             mDoAud_seStart(JA_SE_MSEL_CURSOR);
-            saveSlot++;
+            selectNum++;
             field_0x3948 = 0.0f;
             field_0x3923 = 0x1;
             field_0x3930 = 0;
@@ -464,7 +483,7 @@ void dFile_select_c::dataSelect() {
 /* 80181810-80181B7C       .text menuColorChange__14dFile_select_cFv */
 void dFile_select_c::menuColorChange() {
 #if VERSION > VERSION_DEMO
-    if(field_0x3914[saveSlot])
+    if(dataNew[selectNum])
 #endif
     {
         ((J2DPicture*)field_0x3618.pane)->setBlackWhite(JUtility::TColor(0x5A, 0x5A, 0x5A, field_0x38c0[0].a), JUtility::TColor(0xC8, 0xC8, 0xC8, field_0x38c8[0].a));
@@ -487,7 +506,7 @@ void dFile_select_c::SelectTitAnime() {
     float temp1 = fopMsgM_valueIncrease(g_fsHIO.field_0x4F, field_0x3930, 5);
     field_0x3948 = g_fsHIO.field_0x4E * temp1 * field_0x3923;
 
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             fopMsgM_paneTrans(field_0x1238, 0.0f, field_0x3948);
             if(field_0x10e8[0].pane->isVisible()) {
@@ -514,7 +533,7 @@ void dFile_select_c::SelectTitAnime() {
             break;
     }
 
-    fopMsgM_paneTrans(field_0x2fc0, 0.0f, saveSlot * 85.0f + field_0x3948);
+    fopMsgM_paneTrans(field_0x2fc0, 0.0f, selectNum * 85.0f + field_0x3948);
     field_0x3930++;
     if(field_0x3930 > g_fsHIO.field_0x4F) {
         field_0x3930 = 0;
@@ -529,7 +548,7 @@ void dFile_select_c::SelectTitAnime() {
 
 /* 80181D7C-80181DCC       .text recCursorMove__14dFile_select_cFv */
 void dFile_select_c::recCursorMove() {
-    fopMsgM_paneTrans(field_0x2fc0, 0.0f, saveSlot * 85.0f);
+    fopMsgM_paneTrans(field_0x2fc0, 0.0f, selectNum * 85.0f);
 }
 
 /* 80181DCC-80181E9C       .text recCursorAnime__14dFile_select_cFv */
@@ -563,7 +582,7 @@ void dFile_select_c::recCursorAlphaInit() {
 /* 80181ED0-80182490       .text recDataPaneMove__14dFile_select_cFv */
 int dFile_select_c::recDataPaneMove() {
     int temp1, temp2, temp3, temp4, temp5, temp6;
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             temp1 = PaneTranceRecTlt2(field_0x3930 - g_fsHIO.field_0x29, g_fsHIO.field_0x28, 0.0f, 0.0f, g_fsHIO.field_0x40, 0.0f, 0, 1);
             temp2 = PaneTranceRecInfo2(field_0x3930 - g_fsHIO.field_0x29, g_fsHIO.field_0x28, 0.0f, 0.0f, g_fsHIO.field_0x40, 0.0f, 0, 1);
@@ -606,16 +625,16 @@ int dFile_select_c::recDataPaneMove() {
 /* 80182490-801824DC       .text dataSelMoveSet__14dFile_select_cFv */
 void dFile_select_c::dataSelMoveSet() {
     field_0x3930 = 0;
-    if(field_0x3917[saveSlot]) {
+    if(field_0x3917[selectNum]) {
         fopMsgM_messageGet(field_0x38e8[2], 0x23);
     }
     else {
-        makeRecInfo(saveSlot);
+        makeRecInfo(selectNum);
     }
 }
 
 /* 801824DC-801827A0       .text makeRecInfo__14dFile_select_cFUc */
-void dFile_select_c::makeRecInfo(u8 param_1) {
+void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     static const char* amariheartTex[] = {
         "heart_03.bti",
         "heart_02.bti",
@@ -624,7 +643,7 @@ void dFile_select_c::makeRecInfo(u8 param_1) {
 
     int i;
 
-    u8* saveData = &mSaveDataPtr[param_1 * sizeof(card_gamedata)];
+    u8* saveData = &mSaveDataPtr[i_dataNo * sizeof(card_gamedata)];
 
     u16 curHealth = *(u16*)(saveData + 2);
 
@@ -651,8 +670,8 @@ void dFile_select_c::makeRecInfo(u8 param_1) {
                 }
             }
             else {
-                    ((J2DPicture*)field_0x828[i].pane)->changeTexture("heart_04_2.bti", 0);
-                    ((J2DPicture*)field_0xc88[i].pane)->changeTexture("heart_04_2.bti", 0);
+                ((J2DPicture*)field_0x828[i].pane)->changeTexture("heart_04_2.bti", 0);
+                ((J2DPicture*)field_0xc88[i].pane)->changeTexture("heart_04_2.bti", 0);
             }
         }
         else {
@@ -720,7 +739,7 @@ void dFile_select_c::dataSelectPaneMove() {
     temp4 = 1;
     temp1 = recDataPaneMove();
     temp5 = 0;
-    if(field_0x3917[saveSlot]) {
+    if(field_0x3917[selectNum]) {
         temp2 = MessagePaneMove(g_fsHIO.field_0x44, 0.0f, 0.0f, 0.0f, g_fsHIO.field_0x30 + field_0x3920, 1, 0);
         temp3 = yesNoPaneMove(g_fsHIO.field_0x42, 0.0f, g_fsHIO.field_0x38 + field_0x3920, 1, 0);
         temp4 = PaneAlphaTitleTxt(field_0x3930 - g_fsHIO.field_0x29, g_fsHIO.field_0x09);
@@ -740,7 +759,7 @@ void dFile_select_c::dataSelectPaneMove() {
         menuCursorAlphaInit();
         field_0x30d8.pane->show();
 
-        if(field_0x3917[saveSlot]) {
+        if(field_0x3917[selectNum]) {
             field_0x3928 = 1;
             yesNoCursorMove();
             field_0x3930 = 0;
@@ -772,11 +791,11 @@ void dFile_select_c::menuSelect() {
     stick->checkTrigger();
     if(CPad_CHECK_TRIG_A(0)) {
         if(field_0x3928 == 0) {
-            if(field_0x3914[saveSlot]) {
+            if(dataNew[selectNum]) {
                 mDoAud_seStart(JA_SE_MSEL_OK_1);
             }
-            else if(saveStatus[saveSlot]) {
-                if(field_0x391D[saveSlot]) {
+            else if(dataExtra[selectNum]) {
+                if(field_0x391D[selectNum]) {
                     mDoAud_seStart(JA_SE_MSEL_OK_1);
                 }
                 else {
@@ -788,15 +807,15 @@ void dFile_select_c::menuSelect() {
             }
             field_0x3930 = 0;
             field_0x30d8.pane->hide();
-            field_0x392c = 1;
-            g_dComIfG_gameInfo.save.setDataNum(saveSlot);
+            selectEnd = 1;
+            g_dComIfG_gameInfo.save.setDataNum(selectNum);
             field_0x392b = 0x26;
         }
         else if(field_0x3928 == 1) {
             mDoAud_seStart(JA_SE_MSEL_OK_1);
             field_0x3930 = 0;
             field_0x30d8.pane->hide();
-            field_0x3924 = saveSlot;
+            field_0x3924 = selectNum;
             saveCopyBWColor();
             field_0x3944 = 85.0f;
             fopMsgM_messageGet(field_0x38e8[field_0x392d ^ 1], 0x1F);
@@ -836,7 +855,7 @@ void dFile_select_c::menuSelect() {
             field_0x3928++;
             if(
 #if VERSION > VERSION_DEMO
-                field_0x3914[saveSlot] && 
+                dataNew[selectNum] && 
 #endif
                 (field_0x3928 == 1 || field_0x3928 == 2)
             ) {
@@ -853,7 +872,7 @@ void dFile_select_c::menuSelect() {
             field_0x3928--;
             if(
 #if VERSION > VERSION_DEMO
-                field_0x3914[saveSlot] &&
+                dataNew[selectNum] &&
 #endif
                 (field_0x3928 == 1 || field_0x3928 == 2)
             ) {
@@ -1726,7 +1745,7 @@ void dFile_select_c::yesNoCursorMove() {
 void dFile_select_c::CmdExecPaneMove0() {
     u8 temp;
     if(field_0x392a == 4) {
-        temp = saveSlot;
+        temp = selectNum;
     }
     else if(field_0x392a == 3) {
         temp = field_0x3926;
@@ -1788,8 +1807,8 @@ void dFile_select_c::CmdExecPaneMove2() {
 /* 80187ADC-80187BF8       .text CommandExec__14dFile_select_cFv */
 void dFile_select_c::CommandExec() {
     if(field_0x392a == 4) {
-        dComIfGs_setInitDataToCard(mSaveDataPtr, saveSlot);
-        mDoMemCdRWm_SetCheckSumGameData(mSaveDataPtr, saveSlot);
+        dComIfGs_setInitDataToCard(mSaveDataPtr, selectNum);
+        mDoMemCdRWm_SetCheckSumGameData(mSaveDataPtr, selectNum);
         mDoMemCd_setPictWriteDataPtr(mSavePicDataPtr);
         mDoMemCd_setCopyToPos(0xFF);
         mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
@@ -1867,7 +1886,7 @@ void dFile_select_c::DataCopyWait() {
 /* 80187DF0-80187FCC       .text ErasePaneMoveOk__14dFile_select_cFv */
 void dFile_select_c::ErasePaneMoveOk() {
     int temp1;
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             temp1 = PaneTranceRecInfo1(field_0x3930 - g_fsHIO.field_0x3A, g_fsHIO.field_0x11, 0.0f, 0.0f, 0.0f, g_fsHIO.field_0x3E, g_fsHIO.field_0x07, 1);
 
@@ -1895,7 +1914,7 @@ void dFile_select_c::ErasePaneMoveOk() {
 /* 80187FCC-801881A8       .text ErasePaneMoveOk2__14dFile_select_cFv */
 void dFile_select_c::ErasePaneMoveOk2() {
     int temp1;
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             temp1 = PaneTranceRecInfo1(field_0x3930 - g_fsHIO.field_0x3B, g_fsHIO.field_0x11, g_fsHIO.field_0x3C, 0.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 0);
 
@@ -1926,15 +1945,15 @@ void dFile_select_c::ErrorMsgPaneMove() {
     if(temp1 == 1 && temp2 == 1) {
         field_0x392d ^= 1;
 
-        int id;
+        int msgNo;
         if(field_0x392a == 4) {
-            id = 0x26;
+            msgNo = 0x26;
         }
         else if(field_0x392a == 3) {
-            id = 0x27;
+            msgNo = 0x27;
         }
 
-        fopMsgM_messageGet(field_0x38e8[2], id);
+        fopMsgM_messageGet(field_0x38e8[2], msgNo);
         MessagePaneMoveSet(g_fsHIO.field_0x44, field_0x3944, 0.0f, field_0x3944, 1, 0);
         field_0x3930 = 0;
         field_0x392b = 0x16;
@@ -2011,7 +2030,7 @@ void dFile_select_c::backDatSelWait2() {
     if(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_X(0) || CPad_CHECK_TRIG_Y(0) || CPad_CHECK_TRIG_L(0) || CPad_CHECK_TRIG_R(0) || CPad_CHECK_TRIG_Z(0) || CPad_CHECK_TRIG_START(0) || field_0x3932 == 0) {
         field_0x392e = 1;
         field_0x3930 = 0;
-        field_0x392c = 2;
+        selectEnd = 2;
         mIconMode = 3;
         field_0x392b = 0x26;
     }
@@ -2020,7 +2039,7 @@ void dFile_select_c::backDatSelWait2() {
 /* 80188704-80188C70       .text DataSelectPaneBackMove__14dFile_select_cFsss */
 int dFile_select_c::DataSelectPaneBackMove(s16 param_1, s16 param_2, s16 param_3) {
     int temp1, temp2, temp3, temp4, temp5, temp6;
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             temp1 = 1;
             temp2 = 1;
@@ -3029,7 +3048,7 @@ void dFile_select_c::displayInit() {
 #endif
     mIconMode = 6;
     field_0x392d = 0;
-    field_0x392c = 0;
+    selectEnd = 0;
     field_0x392e = 0;
     field_0x38e8[2][0] = 0;
     field_0x3932 = g_fsHIO.field_0x4A;
@@ -3076,16 +3095,16 @@ void dFile_select_c::setSaveData() {
 
         ((J2DTextBox*)pane[i]->pane)->setFontSize(field_0x38e0);
 
-        J2DTextBox::TFontSize size;
+        J2DTextBox::TFontSize fontSize;
 
         fopMsgM_paneTrans(pane[i], 0.0f, 0.0f);
         if(mDoMemCdRWm_TestCheckSumGameData(data)) {
             if(data[0x19B]) {
-                saveStatus[i] = 1;
+                dataExtra[i] = 1;
                 field_0x391D[i] = ((data[0x64D] / 16) & 1) ^ 1;
             }
             else {
-                saveStatus[i] = 0;
+                dataExtra[i] = 0;
                 field_0x391D[i] = 0;
             }
 
@@ -3094,14 +3113,14 @@ void dFile_select_c::setSaveData() {
             if(data[0x157] == 0) {
                 fopMsgM_paneScaleXY(pane[i], g_fsHIO.field_0x54);
 
-                size.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-                size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+                fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
+                fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
 
 #if VERSION > VERSION_JPN
                 strcpy(field_0x38f4[i], "New Game");
 #endif
 
-                ((J2DTextBox*)pane[i]->pane)->setFontSize(size);
+                ((J2DTextBox*)pane[i]->pane)->setFontSize(fontSize);
 
                 fopMsgM_paneTrans(pane[i], pane[i]->mPosTopLeftOrig.x - pane[i]->mPosTopLeft.x, pane[i]->mPosTopLeftOrig.y - pane[i]->mPosTopLeft.y + g_fsHIO.field_0x58);
 
@@ -3112,7 +3131,7 @@ void dFile_select_c::setSaveData() {
 
                 strcpy(field_0x3900[i], "");
 
-                field_0x3914[i] = 1;
+                dataNew[i] = 1;
             }
             else {
                 strcpy(field_0x38f4[i], (char*)(&data[0x157]));
@@ -3129,7 +3148,7 @@ void dFile_select_c::setSaveData() {
 #endif
                     time.hours, time.minutes, time.seconds
                 );
-                field_0x3914[i] = 0;
+                dataNew[i] = 0;
             }
 
             field_0x3917[i] = 0;
@@ -3139,18 +3158,18 @@ void dFile_select_c::setSaveData() {
             fopMsgM_paneScaleXY(pane[i], g_fsHIO.field_0x54);
 
 #if VERSION <= VERSION_JPN
-            size.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-            size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+            fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
+            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
 #else
-            size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
-            size.mSizeX = field_0x38e0.mSizeX * 0.9f;
+            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+            fontSize.mSizeX = field_0x38e0.mSizeX * 0.9f;
 #endif
 
 #if VERSION > VERSION_JPN
             strcpy(field_0x38f4[i], "This data is corrupted.");
 #endif
 
-            ((J2DTextBox*)pane[i]->pane)->setFontSize(size);
+            ((J2DTextBox*)pane[i]->pane)->setFontSize(fontSize);
 
             fopMsgM_paneTrans(pane[i], pane[i]->mPosTopLeftOrig.x - pane[i]->mPosTopLeft.x, pane[i]->mPosTopLeftOrig.y - pane[i]->mPosTopLeft.y + g_fsHIO.field_0x58);
 #if VERSION <= VERSION_JPN
@@ -3159,7 +3178,7 @@ void dFile_select_c::setSaveData() {
 #endif
             strcpy(field_0x3900[i], "");
             field_0x3917[i] = 1;
-            field_0x3914[i] = 0;
+            dataNew[i] = 0;
         }
 
         data += 0x770;
@@ -3189,16 +3208,16 @@ void dFile_select_c::setSaveData() {
 
         ((J2DTextBox*)pane->pane)->setFontSize(field_0x38e0);
 
-        J2DTextBox::TFontSize size;
+        J2DTextBox::TFontSize fontSize;
 
         fopMsgM_paneTrans(pane, 0.0f, 0.0f);
         if(mDoMemCdRWm_TestCheckSumGameData(data)) {
             if(data[0x19B]) {
-                saveStatus[i] = 1;
+                dataExtra[i] = 1;
                 field_0x391D[i] = ((data[0x64D] / 16) & 1) ^ 1;
             }
             else {
-                saveStatus[i] = 0;
+                dataExtra[i] = 0;
                 field_0x391D[i] = 0;
             }
 
@@ -3207,14 +3226,14 @@ void dFile_select_c::setSaveData() {
             if(data[0x157] == 0) {
                 fopMsgM_paneScaleXY(pane, g_fsHIO.field_0x54);
 
-                size.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-                size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+                fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
+                fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
 
 #if VERSION > VERSION_JPN
                 strcpy(field_0x38f4[i], "New Game");
 #endif
 
-                ((J2DTextBox*)pane->pane)->setFontSize(size);
+                ((J2DTextBox*)pane->pane)->setFontSize(fontSize);
 
                 fopMsgM_paneTrans(pane, pane->mPosTopLeftOrig.x - pane->mPosTopLeft.x, pane->mPosTopLeftOrig.y - pane->mPosTopLeft.y + g_fsHIO.field_0x58);
 
@@ -3225,7 +3244,7 @@ void dFile_select_c::setSaveData() {
 
                 strcpy(field_0x3900[i], "");
 
-                field_0x3914[i] = 1;
+                dataNew[i] = 1;
             }
             else {
                 strcpy(field_0x38f4[i], (char*)(&data[0x157]));
@@ -3242,7 +3261,7 @@ void dFile_select_c::setSaveData() {
 #endif
                     time.hours, time.minutes, time.seconds
                 );
-                field_0x3914[i] = 0;
+                dataNew[i] = 0;
             }
 
             field_0x3917[i] = 0;
@@ -3252,18 +3271,18 @@ void dFile_select_c::setSaveData() {
             fopMsgM_paneScaleXY(pane, g_fsHIO.field_0x54);
 
 #if VERSION <= VERSION_JPN
-            size.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-            size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+            fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
+            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
 #else
-            size.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
-            size.mSizeX = field_0x38e0.mSizeX * 0.9f;
+            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
+            fontSize.mSizeX = field_0x38e0.mSizeX * 0.9f;
 #endif
 
 #if VERSION > VERSION_JPN
             strcpy(field_0x38f4[i], "This data is corrupted.");
 #endif
 
-            ((J2DTextBox*)pane->pane)->setFontSize(size);
+            ((J2DTextBox*)pane->pane)->setFontSize(fontSize);
 
             fopMsgM_paneTrans(pane, pane->mPosTopLeftOrig.x - pane->mPosTopLeft.x, pane->mPosTopLeftOrig.y - pane->mPosTopLeft.y + g_fsHIO.field_0x58);
 #if VERSION <= VERSION_JPN
@@ -3272,7 +3291,7 @@ void dFile_select_c::setSaveData() {
 #endif
             strcpy(field_0x3900[i], "");
             field_0x3917[i] = 1;
-            field_0x3914[i] = 0;
+            dataNew[i] = 0;
         }
 
         data += 0x770;
@@ -3298,7 +3317,7 @@ void dFile_select_c::changeExtraColor(int param_1) {
         field_0x11c8,
     };
 
-    if(saveStatus[param_1] == 1) {
+    if(dataExtra[param_1] == 1) {
         for(int i = 2; i < 7; i++) {
             ((J2DPicture*)pane0[param_1][i].pane)->setBlackWhite(JUtility::TColor(0x6E, 0x50, 0, 0), JUtility::TColor(0x96, 0x78, 0, 0xFF));
             ((J2DPicture*)pane0[param_1][i + 5].pane)->setBlackWhite(JUtility::TColor(0xDC, 0xA0, 0, 0), JUtility::TColor(0xFF, 0xB4, 0x0F, 0xFF));
@@ -3356,7 +3375,7 @@ void dFile_select_c::changeExtraColor(int param_1) {
     
     ((J2DPicture*)pane0[1].pane)->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0xDC, 0xFF, 0x64, 0xFF));
 
-    if(saveStatus[param_1] == 1) {
+    if(dataExtra[param_1] == 1) {
         for(int i = 2; i < 7; i++) {
             ((J2DPicture*)pane0[i].pane)->setBlackWhite(JUtility::TColor(0x6E, 0x50, 0, 0), JUtility::TColor(0x96, 0x78, 0, 0xFF));
             ((J2DPicture*)pane0[i + 5].pane)->setBlackWhite(JUtility::TColor(0xDC, 0xA0, 0, 0), JUtility::TColor(0xFF, 0xB4, 0x0F, 0xFF));
@@ -3492,14 +3511,14 @@ void dFile_select_c::dataSelectEx() {
         field_0x2fc0[0].pane->hide();
         field_0x3930 = 0;
         field_0x392e = 0;
-        field_0x392c = 3;
+        selectEnd = 3;
         mIconMode = 3;
         field_0x392b = 0x26;
     }
     else if(stick2->checkUpTrigger()) {
-        if(saveSlot != 0) {
+        if(selectNum != 0) {
             mDoAud_seStart(JA_SE_MSEL_CURSOR);
-            saveSlot--;
+            selectNum--;
             field_0x3948 = 0.0f;
             field_0x3923 = 0xFF;
             field_0x3930 = 0;
@@ -3508,9 +3527,9 @@ void dFile_select_c::dataSelectEx() {
         }
     }
     else if(stick2->checkDownTrigger()) {
-        if(saveSlot != 2) {
+        if(selectNum != 2) {
             mDoAud_seStart(JA_SE_MSEL_CURSOR);
-            saveSlot++;
+            selectNum++;
             field_0x3948 = 0.0f;
             field_0x3923 = 0x1;
             field_0x3930 = 0;
@@ -3526,7 +3545,7 @@ void dFile_select_c::dataSelectEx() {
 void dFile_select_c::ExSavePaneMove() {
     int temp1 = recDataPaneMove();
     int temp2;
-    if(field_0x3917[saveSlot]) {
+    if(field_0x3917[selectNum]) {
         temp2 = MessagePaneMove(g_fsHIO.field_0x44, 0.0f, 0.0f, 0.0f, g_fsHIO.field_0x30 + field_0x3920, 1, 0);
     }
     else {
@@ -3556,9 +3575,9 @@ void dFile_select_c::YesNoSelectEx() {
             int result = ExCardCheck();
             if(result) {
                 field_0x392e = 1;
-                field_0x392f = result;
+                errType = result;
                 field_0x392a = 6;
-                field_0x392c = 2;
+                selectEnd = 2;
                 mIconMode = 3;
                 field_0x392b = 0x26;
             }
@@ -3606,7 +3625,7 @@ void dFile_select_c::YesNoSelectEx() {
 /* 8018D0CC-8018D2F4       .text ExSavePaneMove0__14dFile_select_cFv */
 void dFile_select_c::ExSavePaneMove0() {
     int temp1;
-    if(field_0x3917[saveSlot]) {
+    if(field_0x3917[selectNum]) {
         temp1 = MessagePaneMove(0.0f, field_0x3944, g_fsHIO.field_0x46, field_0x3944, g_fsHIO.field_0x31, 0, 1);
     }
     else {
@@ -3639,7 +3658,7 @@ int dFile_select_c::ExCardCheck() {
         return 1;
     }
 
-    if(dComIfGs_getNoFile() == 1) {
+    if(dComIfGs_getNewFile() == 1) {
         return 0;
     }
 
@@ -3647,7 +3666,7 @@ int dFile_select_c::ExCardCheck() {
         return 2;
     }
 
-    if (dComIfGs_getNewFile()) {
+    if (dComIfGs_getNoFile()) {
         return 2;
     }
     
@@ -3690,8 +3709,8 @@ void dFile_select_c::ExSavePaneMove1() {
 /* 8018D590-8018D654       .text ExDataSave__14dFile_select_cFv */
 void dFile_select_c::ExDataSave() {
     dComIfGs_reinit();
-    dComIfGs_setMemoryToCard(mSaveDataPtr, saveSlot);
-    mDoMemCdRWm_SetCheckSumGameData(mSaveDataPtr, saveSlot);
+    dComIfGs_setMemoryToCard(mSaveDataPtr, selectNum);
+    mDoMemCdRWm_SetCheckSumGameData(mSaveDataPtr, selectNum);
 
 #if VERSION > VERSION_DEMO
     for(int i = 0; i < 3; i++) {
@@ -3703,7 +3722,7 @@ void dFile_select_c::ExDataSave() {
     mDoMemCd_setCopyToPos(0xFF);
     mDoMemCd_setPictWriteDataPtr(mSavePicDataPtr);
 #else
-    dComIfGs_setDataNum(saveSlot);
+    dComIfGs_setDataNum(selectNum);
     mDoMemCd_setPictWriteDataPtr(NULL);
 #endif
     mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
@@ -3738,7 +3757,7 @@ void dFile_select_c::ExDataSaveWait() {
 /* 8018D770-8018D9A0       .text ExDataSavePaneMoveOk__14dFile_select_cFv */
 void dFile_select_c::ExDataSavePaneMoveOk() {
     int temp1;
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             temp1 = PaneTranceRecInfo1(field_0x3930 - g_fsHIO.field_0x3A, g_fsHIO.field_0x11, 0.0f, 0.0f, 0.0f, g_fsHIO.field_0x3E, g_fsHIO.field_0x07, 1);
             break;
@@ -3765,7 +3784,7 @@ void dFile_select_c::ExDataSavePaneMoveOk() {
 /* 8018D9A0-8018DB74       .text ExDataSavePaneMoveOk2__14dFile_select_cFv */
 void dFile_select_c::ExDataSavePaneMoveOk2() {
     int temp1;
-    switch(saveSlot) {
+    switch(selectNum) {
         case 0:
             temp1 = PaneTranceRecInfo1(field_0x3930 - g_fsHIO.field_0x3B, g_fsHIO.field_0x11, g_fsHIO.field_0x3C, 0.0f, 0.0f, 0.0f, g_fsHIO.field_0x07, 0);
             break;
@@ -3781,7 +3800,7 @@ void dFile_select_c::ExDataSavePaneMoveOk2() {
     field_0x3930++;
 
     if(temp1 == 1 && temp2 == 1) {
-        field_0x392c = 1;
+        selectEnd = 1;
     }
 }
 

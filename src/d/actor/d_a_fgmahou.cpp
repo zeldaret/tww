@@ -67,7 +67,7 @@ static void move(fgmahou_class* i_this) {
         case 0:
             i_this->mState = 1;
             i_this->field_0x2D4 = i_this->mOrbNumber * REG6_S(2) - REG6_S(3);
-            i_this->field_0x2D6 = cM_rndF(65536.0f);
+            i_this->field_0x2D6 = cM_rndF(0x10000);
 
             i_this->speedF = REG0_F(0xD) + 50.0f;
             i_this->speedF *= (0.2f + REG0_F(4)) * spdd[i_this->mOrbNumber] + 1.0f;
@@ -104,7 +104,7 @@ static void move(fgmahou_class* i_this) {
 
             if(i_this->mAtSph.ChkAtHit()) {
                 i_this->mAtSph.GetAtHitObj();
-                fganon_class* fganon = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
+                fganon_class* fganon = (fganon_class*)fpcM_Search(boss_s_sub, i_this);
                 if(fganon != NULL) {
                     fganon->m68B = 1;
 
@@ -123,7 +123,7 @@ static void move(fgmahou_class* i_this) {
 
             i_this->mState = 5;
         case 5:
-            fganon2 = (fganon_class*)fpcEx_Search(boss_s_sub, i_this);
+            fganon2 = (fganon_class*)fpcM_Search(boss_s_sub, i_this);
             if(fganon2 == NULL) {
                 i_this->field_0x780 = 0x32;
                 break;
@@ -213,9 +213,9 @@ static void move(fgmahou_class* i_this) {
             i_this->health = 1;
 
             JPABaseEmitter* pEmtr = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGHITDARKSHOT00, &i_this->current.pos);
-            pEmtr->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
+            pEmtr->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(YDKSP00_JNT_HEAD_e));
             JPABaseEmitter* pEmtr2 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGHITDARKSHOT01, &i_this->current.pos);
-            pEmtr2->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
+            pEmtr2->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(YDKSP00_JNT_HEAD_e));
 
             fopAcM_seStartCurrent(i_this, JA_SE_OBJ_PG_EBALL_EXP_L, 0);
         }
@@ -267,7 +267,7 @@ static BOOL daFgmahou_Execute(fgmahou_class* i_this) {
     i_this->mpMorf->calc();
 
     if(i_this->mpEmitter) {
-        i_this->mpEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(1));
+        i_this->mpEmitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(YDKSP00_JNT_HEAD_e));
 
         if(i_this->field_0x780 != 0 && i_this->field_0x780 == 0x32) {
             i_this->mpEmitter->becomeInvalidEmitter();
@@ -283,6 +283,7 @@ static BOOL daFgmahou_Execute(fgmahou_class* i_this) {
 
 /* 00000DD8-00000DE0       .text daFgmahou_IsDelete__FP13fgmahou_class */
 static BOOL daFgmahou_IsDelete(fgmahou_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

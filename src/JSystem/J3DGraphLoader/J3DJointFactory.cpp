@@ -19,12 +19,12 @@ J3DJointFactory::J3DJointFactory(const J3DJointBlock& jointBlock) {
 J3DJoint* J3DJointFactory::create(int jntNo) {
     J3DJoint* joint = new J3DJoint();
     joint->mJntNo = jntNo;
-    joint->mKind = mJointInitData[mIndexTable[jntNo]].mKind;
-    joint->mScaleCompensate = mJointInitData[mIndexTable[jntNo]].mScaleCompensate;
-    joint->mTransformInfo = mJointInitData[mIndexTable[jntNo]].mTransformInfo;
-    joint->mRadius = mJointInitData[mIndexTable[jntNo]].mRadius;
-    joint->mMin = mJointInitData[mIndexTable[jntNo]].mMin;
-    joint->mMax = mJointInitData[mIndexTable[jntNo]].mMax;
+    joint->mKind = getKind(jntNo);
+    joint->mScaleCompensate = getScaleCompensate(jntNo);
+    joint->mTransformInfo = getTransformInfo(jntNo);
+    joint->mRadius = getRadius(jntNo);
+    joint->mMin = getMin(jntNo);
+    joint->mMax = getMax(jntNo);
     joint->mMtxCalc = NULL;
     joint->mOldMtxCalc = NULL;
     if (joint->mScaleCompensate == 0xFF) {

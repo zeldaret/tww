@@ -7,7 +7,7 @@
 struct controller_pad_buttons {
     /* 0x00 (0x80 >> 7) */ bool left  : 1;
     /* 0x00 (0x40 >> 6) */ bool right : 1;
-    /* 0x00 (0x10 >> 5) */ bool down  : 1;
+    /* 0x00 (0x20 >> 5) */ bool down  : 1;
     /* 0x00 (0x10 >> 4) */ bool up    : 1;
     /* 0x00 (0x08 >> 3) */ bool z     : 1;
     /* 0x00 (0x04 >> 2) */ bool r     : 1;

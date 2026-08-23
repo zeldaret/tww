@@ -95,22 +95,22 @@ void dMenu_Option_c::screenSet() {
     fopMsgM_messageGet(mDE8[3], 0x1D6);
 #endif
     
-    ((J2DTextBox*)m008.pane)->setFont(mD2C);
+    ((J2DTextBox*)m008.pane)->setFont(mpFont);
 #if VERSION > VERSION_JPN
     ((J2DTextBox*)m008.pane)->setString(mD48);
 #endif
-    ((J2DTextBox*)m740[0].pane)->setFont(mD2C);
-    ((J2DTextBox*)m740[1].pane)->setFont(mD30);
+    ((J2DTextBox*)m740[0].pane)->setFont(mpFont);
+    ((J2DTextBox*)m740[1].pane)->setFont(mpRubyFont);
     
     for (int i = 0; i < 2; i++) {
-        ((J2DTextBox*)m9A8[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)m9A8[i].pane)->setFont(mpFont);
 #if VERSION <= VERSION_JPN
-        ((J2DTextBox*)mA18_jpn[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)mA18_jpn[i].pane)->setFont(mpFont);
 #endif
 #if VERSION > VERSION_JPN
         ((J2DTextBox*)m9A8[i].pane)->setString(mD5C[i]);
 #endif
-        ((J2DTextBox*)mAC0[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)mAC0[i].pane)->setFont(mpFont);
 #if VERSION > VERSION_JPN
         ((J2DTextBox*)mAC0[i].pane)->setString(mD84[i]);
         changeScaleCenter(&m9A8[i], mD5C[i]);
@@ -119,7 +119,7 @@ void dMenu_Option_c::screenSet() {
     }
     
     for (int i = 0; i < 3; i++) {
-        ((J2DTextBox*)mA18[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)mA18[i].pane)->setFont(mpFont);
 #if VERSION > VERSION_JPN
         ((J2DTextBox*)mA18[i].pane)->setString(mDAC[i]);
         changeScaleCenter(&mA18[i], mDAC[i]);
@@ -130,7 +130,7 @@ void dMenu_Option_c::screenSet() {
 #if VERSION > VERSION_JPN
         if (i == 1) continue;
 #endif
-        ((J2DTextBox*)m8C8[i].pane)->setFont(mD2C);
+        ((J2DTextBox*)m8C8[i].pane)->setFont(mpFont);
 #if VERSION > VERSION_JPN
         ((J2DTextBox*)m8C8[i].pane)->setString(mDE8[i]);
         changeScaleRight(&m8C8[i], mDE8[i]);
@@ -539,7 +539,6 @@ void dMenu_Option_c::stickMove(u8 param_1) {
                     }
                     m858[1].mUserArea = 6;
                     mDoAud_seStart(JA_SE_ITM_MENU_OPT_SW);
-                    ;
                     break;
                 }
                 case 3: {
@@ -665,29 +664,29 @@ void dMenu_Option_c::noteSet() {
     msg_entry = msgGet.getMesgEntry(head_p);
 
     msgDataProc.dataInit();
-    msgDataProc.field_0x3C = mesg;
+    msgDataProc.setBmgData((char*)mesg);
     msgDataProc.setOutMessage(mD38, mD3C, mD40, mD44);
-    msgDataProc.font[0] = mD2C;
-    msgDataProc.font[1] = mD30;
-    msgDataProc.field_0x11C = ((J2DTextBox*)m740[0].pane)->getCharSpace();
-    msgDataProc.field_0x124 = ((J2DTextBox*)m740[1].pane)->getCharSpace();
-    msgDataProc.field_0x120 = ((J2DTextBox*)m740[0].pane)->getLineSpace();
-    msgDataProc.field_0x0C = &msg_entry;
-    msgDataProc.field_0x144 = f31;
-    msgDataProc.field_0x14C = f30;
-    msgDataProc.field_0x128 = 0x1D0;
-    msgDataProc.field_0x12C = 0x1D0;
-    msgDataProc.field_0x160 = 2;
-    msgDataProc.field_0x15C = 0;
+    msgDataProc.setFont(mpFont);
+    msgDataProc.setRubyFont(mpRubyFont);
+    msgDataProc.setCharSpace(((J2DTextBox*)m740[0].pane)->getCharSpace());
+    msgDataProc.setRubyCharSpace(((J2DTextBox*)m740[1].pane)->getCharSpace());
+    msgDataProc.setLineSpace(((J2DTextBox*)m740[0].pane)->getLineSpace());
+    msgDataProc.setMesgEntry(&msg_entry);
+    msgDataProc.setFontSize(f31);
+    msgDataProc.setRubyFontSize(f30);
+    msgDataProc.setLineWidth(0x1D0);
+    msgDataProc.setCenterLineWidth(0x1D0);
+    msgDataProc.setSendSpeed(2);
+    msgDataProc.setSpaceTimer(0);
     msgDataProc.field_0x299 = 1;
-    msgDataProc.field_0x29C = 0;
+    msgDataProc.setSpaceFlagOff();
 
     msgDataProc.stringLength();
     msgDataProc.stringShift();
     msgDataProc.iconIdxRefresh();
 
-    s16 r26 = msgDataProc.field_0x130;
-    msgDataProc.field_0x130 = 0;
+    s16 r26 = msgDataProc.getLineCount();
+    msgDataProc.setLineCount(0);
     msgDataProc.stringSet();
     f32 f30_2 = (m740[0].pane->getHeight() - f31 - (f32)r26 * ((J2DTextBox*)m740[0].pane)->getLineSpace()) / 2.0f;
     ((J2DTextBox*)m740[0].pane)->shiftSet(0.0f, f30_2);
@@ -698,21 +697,21 @@ void dMenu_Option_c::noteSet() {
 
     int r31 = ((J2DTextBox*)m740[0].pane)->getLineSpace() / 2.0f;
     for (int i = 0; i < 0xf; i++) {
-        u32 r6 = msgDataProc.field_0x281[i];
+        u8 r6 = msgDataProc.getIconNum(i);
         if (r6 == 0xFF) {
             continue;
         }
         if(m0B0[i].mUserArea != -1) {
             continue;
         }
-        if (r6 == 0x16) {
+        if (r6 == fopMsgM_Icon_INPUT_e) {
             continue;
         }
-        m0B0[i].mPosTopLeft.x = (f32)msgDataProc.field_0x168[i];
-        m0B0[i].mPosTopLeft.y = f30_2 + (f32)(int)(msgDataProc.field_0x1A4[i] * 2 * r31);
-        m0B0[i].mPosTopLeftOrig.y = (f32)r6;
+        m0B0[i].mPosTopLeft.x = (f32)msgDataProc.getIconPosX(i);
+        m0B0[i].mPosTopLeft.y = f30_2 + (f32)(msgDataProc.getIconPosY(i) * 2 * r31);
+        m0B0[i].mPosTopLeftOrig.y = (f32)r6; // ?
 
-        fopMsgM_outFontSet((J2DPicture*)m0B0[i].pane, &m0B0[i].mUserArea, 0xFF, r6);
+        fopMsgM_outFontSet((J2DPicture*)m0B0[i].pane, &m0B0[i].mUserArea, 0x000000FF, r6);
     }
 }
 
@@ -764,16 +763,16 @@ f32 dMenu_Option_c::stringlength(fopMsgM_pane_class* r30, char* r31) {
     J2DTextBox::TFontSize sp18;
     ((J2DTextBox*)r30->pane)->getFontSize(sp18);
     f32 f31 = ((J2DTextBox*)r30->pane)->getCharSpace();
-    f30 = sp18.mSizeX / mD2C->getCellWidth();
+    f30 = sp18.mSizeX / mpFont->getCellWidth();
     while (*r31 != 0) {
         if ((u8)*r31 == 0x1A) {
             r31++;
             r31 += (*r31 - 1);
         } else {
             int r26 = (u8)*r31++;
-            int r28 = mD2C->getWidth(r26);
+            int r28 = mpFont->getWidth(r26);
             if (!r27) {
-                f29 = f30 * (r28 + mD2C->getOffset(r26));
+                f29 = f30 * (r28 + mpFont->getOffset(r26));
                 r27 = true;
             } else{
                 f29 += f31 + r28 * f30;

@@ -65,7 +65,6 @@ public:
     void getLocalPosition(JGeometry::TVec3<f32>& out) const { out.set(mLocalPosition); }
     void getGlobalPosition(JGeometry::TVec3<f32>& out) const { out.set(mGlobalPosition); }
     void getVelVec(JGeometry::TVec3<f32>& out) const { out.set(mVelocity); }
-    s32 getAge() const { return mCurFrame; } // TODO: Not sure about this one, especially the cast to s32; this could also be mCurNormTime?
     void calcCB(JPABaseEmitter* emtr) { if (mpCallBack2 != NULL) mpCallBack2->execute(emtr, this); }
     void drawCB(JPABaseEmitter* emtr) { if (mpCallBack2 != NULL) mpCallBack2->draw(emtr, this); }
     void setCallBackPtr(JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>* cb) { mpCallBack2 = cb; }
@@ -78,12 +77,19 @@ public:
     bool isInvisibleParticle() { return checkStatus(JPAPtclStts_Invisible); }
     void setInvisibleParticleFlag() { setStatus(JPAPtclStts_Invisible); }
 
+    // TODO: this implementation (cast f32 -> int) is too small to match the size in the debug map (0x38)
+    // debug size could be matched by casting f32 -> int -> f32, but that doesn't actually match the code
+    int getAge() const { return (int)mCurFrame; }
+
+    // TODO: does this get mCurNormTime instead of mLifeTime...?
+    void getLifeTime() const {}
+
     JPADrawParams* getDrawParamPPtr() { return &mDrawParams; }
     void getDrawParamCPtr() {}
 
+    // TODO
     void getWidth() {}
     void getHeight() {}
-    void getLifeTime() const {}
 
 public:
     /* 0x00 */ JSULink<JPABaseParticle> mLink;
@@ -97,9 +103,9 @@ public:
     /* 0x64 */ JGeometry::TVec3<f32> mFieldAccel;
     /* 0x70 */ f32 mAirResist;
     /* 0x74 */ f32 mMoment;
-    /* 0x78 */ f32 mCurFrame;
+    /* 0x78 */ f32 mCurFrame; // mAge?
     /* 0x7C */ f32 mLifeTime;
-    /* 0x80 */ f32 mCurNormTime;
+    /* 0x80 */ f32 mCurNormTime; // mTime?
     /* 0x84 */ f32 mFieldDrag;
     /* 0x88 */ f32 mDrag;
     /* 0x8C */ JPADrawParams mDrawParams;

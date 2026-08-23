@@ -48,6 +48,7 @@ static BOOL daSceneChgDraw(void* i_this) {
 
 /* 000001C0-000001C8       .text daSceneChgIsDelete__FPv */
 static BOOL daSceneChgIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

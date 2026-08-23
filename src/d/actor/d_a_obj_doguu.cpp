@@ -348,7 +348,6 @@ void daObjDoguu_c::setQuake(int i_staffIdx) {
     u32 pattern = 0x0010FFEE;
     dComIfGp_getVibration().StartQuake((u8*)&pattern, 0, 63, cXyz(0.0f, 1.0f, 0.0f));
     mTimer = *dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
-
 }
 
 /* 00000FB8-0000100C       .text setJDemo__12daObjDoguu_cFi */
@@ -606,7 +605,7 @@ void daObjDoguu_c::setEffectMtx(const cXyz* i_pos, float i_scale) {
     
     float scale = 1.0f /i_scale;
     camera_class* camera = dCam_getCamera();
-    cXyz lookDir = *i_pos - camera->mLookat.mEye;
+    cXyz lookDir = *i_pos - camera->view.mLookat.mEye;
     cXyz lightDir;
     cXyz refl;
 

@@ -602,7 +602,7 @@ void shot2(fganon_class* i_this) {
             fopAcM_seStart(a_this, JA_SE_CM_PG_EBALL_MAKING_L, 0);
             for (int i = 0; i < 2; i++) {
                 if (i_this->mEmitters2[i] != NULL) {
-                    i_this->mEmitters2[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0x1A));
+                    i_this->mEmitters2[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPG_JNT_J_BPG_ATAMA1_e));
                 }
             }
             if (i_this->mpMorf->isStop()) {
@@ -650,7 +650,7 @@ void shot2(fganon_class* i_this) {
             }
             for (int i = 0; i < 2; i++) {
                 if (i_this->mEmitters2[i] != NULL) {
-                    i_this->mEmitters2[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx((i * 9) + 14));
+                    i_this->mEmitters2[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx((i * BPG_JNT_J_BPG_MUNE1_e) + BPG_JNT_J_BPG_UDE_L3_e));
                 }
             }
             if (i_this->mpMorf->isStop()) {
@@ -975,7 +975,7 @@ void fail(fganon_class* i_this) {
 
             linChk.Set(&offset, &transformedPos, a_this);
 
-            MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(0x18);
+            MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(BPG_JNT_J_BPG_ITEM1_e);
             cMtx_copy(mtx, *calc_mtx);
             
             offset.x = 0.0f;
@@ -1102,7 +1102,6 @@ void standby(fganon_class* i_this) {
             }
         }
     }
-    
 }
 
 /* 00004DB4-00005128       .text start__FP12fganon_class */
@@ -1365,12 +1364,12 @@ void damage_check(fganon_class* i_this) {
 
                     emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGLIGHTARROW00, &a_this->current.pos, NULL);
                     if (emitter != NULL) {
-                        emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
+                        emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPG_JNT_J_BPG_MUNE2_e));
                     }
 
                     emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGLIGHTARROW01, &a_this->current.pos, NULL);
                     if (emitter != NULL) {
-                        emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(10));
+                        emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPG_JNT_J_BPG_MUNE2_e));
                     }
 
                     a_this->speedF = 0.0f;
@@ -1441,7 +1440,7 @@ void damage_check(fganon_class* i_this) {
         if ((i_this->mCyl.ChkTgHit()) || (master->mAction == 8)) {
             emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPGVANISHSMOKE00, &a_this->current.pos, NULL);
             if (emitter != NULL) {
-                emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(0));
+                emitter->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPG_JNT_BPG_ALLROOT_e));
             }
             fopAcM_delete(a_this);
         }
@@ -1646,8 +1645,8 @@ s32 move(fganon_class* i_this) {
 
 /* 00006560-00007434       .text demo_camera__FP12fganon_class */
 void demo_camera(fganon_class* i_this) {
-    camera_class* camera;
-    camera_class* camera2;
+    camera_process_class* camera;
+    camera_process_class* camera2;
     fopEn_enemy_c* a_this;
     fopAc_ac_c* player_actor;
     daPy_py_c* player;
@@ -1946,8 +1945,8 @@ void demo_camera(fganon_class* i_this) {
 
             camera2 = dComIfGp_getCamera(0);
 
-            i_this->mB5C = camera2->mLookat.mEye;
-            i_this->mB68 = camera2->mLookat.mCenter;
+            i_this->mB5C = camera2->view.mLookat.mEye;
+            i_this->mB68 = camera2->view.mLookat.mCenter;
 
             a_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
         }
@@ -2008,6 +2007,7 @@ void demo_camera(fganon_class* i_this) {
             if (DEMO_SELECT(REG17_S(3), REG0_S(3)) == 0) {
                 dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(a_this));
             }
+            // Fall-through
         }
         case 150: {
         case_150:
@@ -2016,6 +2016,7 @@ void demo_camera(fganon_class* i_this) {
             dMeter_mtrShow();
             dComIfGp_event_reset();
             i_this->mB54 = 0;
+            break;
         }
     }
     if (i_this->mB54 && bVar3) {
@@ -2099,7 +2100,7 @@ void energy_ball_move(fganon_class* i_this) {
         i_this->m408 = 2;
     }
     if (i_this->m408 == 2) {
-        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(0xE);
+        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(BPG_JNT_J_BPG_UDE_L3_e);
         cMtx_copy(mtx, *calc_mtx);
         MtxTrans(REG12_F(0) + 30.0f, REG12_F(1) + 30.0f, REG12_F(2), TRUE);
         MtxPosition(&local_50, &i_this->m3E0);
@@ -2452,7 +2453,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     model->setBaseTRMtx(mDoMtx_stack_c::get());
     i_this->mpMorf->calc();
 
-    MtxP mtx = model->getAnmMtx(27);
+    MtxP mtx = model->getAnmMtx(BPG_JNT_J_BPG_AGO1_e);
     cMtx_copy(mtx, *calc_mtx);
     
     MtxPosition(&local_70, &a_this->eyePos);
@@ -2461,7 +2462,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     a_this->attention_info.position.y += 30.0f;
     
     if (i_this->m2D0 == 0) {
-        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(24);
+        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(BPG_JNT_J_BPG_ITEM1_e);
         cMtx_copy(mtx, *calc_mtx);
         
         cMtx_YrotM(*calc_mtx, REG8_S(1) - 400);
@@ -2503,7 +2504,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     for (int i = 0; i < 2; i++) {
         if ((i_this->mbIsMaterialized != 0) && (i_this->mAction != 22)) {
             if (i_this->mEmitters1[i] != NULL) {
-                static u32 jno[2] = {0x7, 0xD};
+                static u32 jno[2] = {BPG_JNT_J_BPG_ASI_R2_e, BPG_JNT_J_BPG_UDE_L2_e};
                 i_this->mEmitters1[i]->setGlobalRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(jno[i]));
             }
             else {
@@ -2519,7 +2520,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
         }
     }
     if (i_this->mbIsMaterialized != 0) {
-        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(10);
+        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(BPG_JNT_J_BPG_MUNE2_e);
         cMtx_copy(mtx, *calc_mtx);
         local_70.x = 0.0f;
         local_70.y = 0.0f;
@@ -2553,7 +2554,7 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
 
     if (i_this->m685 != 0) {
         i_this->mWeponSph.SetR(REG0_F(13) + 60.0f);
-        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(24);
+        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(BPG_JNT_J_BPG_ITEM1_e);
         cMtx_copy(mtx, *calc_mtx);
         local_70.x = 0.0f;
         local_70.y = 0.0f;
@@ -2575,13 +2576,13 @@ static BOOL daFganon_Execute(fganon_class* i_this) {
     i_this->m686 = 0;
     mant_class* cape = (mant_class*)fopAcM_SearchByID(i_this->mCapeID);
     if (cape != NULL) {
-        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(DEMO_SELECT(REG6_S(5), REG0_S(5)) + 20);
+        MtxP mtx = i_this->mpMorf->getModel()->getAnmMtx(DEMO_SELECT(REG6_S(5), REG0_S(5)) + (s16)BPG_JNT_J_BPG_KATA_R1_e);
         cMtx_copy(mtx, *calc_mtx);
         local_70.x = DEMO_SELECT(REG13_F(0), REG0_F(0)) + 35.0f;
         local_70.y = DEMO_SELECT(REG13_F(1), REG0_F(1));
         local_70.z = DEMO_SELECT(REG13_F(2), REG0_F(2)) + -30.0f;
         MtxPosition(&local_70, &cape->m1BE0);
-        mtx = i_this->mpMorf->getModel()->getAnmMtx(DEMO_SELECT(REG6_S(6), REG0_S(6)) + 11);
+        mtx = i_this->mpMorf->getModel()->getAnmMtx(DEMO_SELECT(REG6_S(6), REG0_S(6)) + (s16)BPG_JNT_J_BPG_KATA_L1_e);
         cMtx_copy(mtx, *calc_mtx);
         local_70.x = DEMO_SELECT(REG13_F(3), REG0_F(3)) + 35.0f;
         local_70.y = DEMO_SELECT(REG13_F(4), REG0_F(4));

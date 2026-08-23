@@ -52,7 +52,7 @@ BOOL fopAcM_SearchByID(fpc_ProcID actorID, fopAc_ac_c** pDstActor) {
     if (fpcM_IsCreating(actorID)) {
         *pDstActor = NULL;
     } else {
-        fopAc_ac_c *pActor = fopAcM_Search((fopAcIt_JudgeFunc)fpcSch_JudgeByID, &actorID);
+        fopAc_ac_c *pActor = fopAcM_Search(fpcSch_JudgeByID, &actorID);
         *pDstActor = pActor;
         if (*pDstActor == NULL)
             return FALSE;
@@ -63,7 +63,7 @@ BOOL fopAcM_SearchByID(fpc_ProcID actorID, fopAc_ac_c** pDstActor) {
 
 /* 80024230-800242AC       .text fopAcM_SearchByName__FsPP10fopAc_ac_c */
 BOOL fopAcM_SearchByName(s16 procName, fopAc_ac_c** pDstActor) {
-    *pDstActor = fopAcM_Search((fopAcIt_JudgeFunc)fpcSch_JudgeForPName, &procName);
+    *pDstActor = fopAcM_Search(fpcSch_JudgeForPName, &procName);
     if (*pDstActor == NULL) {
         return FALSE;
     } else {
@@ -1056,7 +1056,7 @@ fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* 
 daItem_c* fopAcM_createItemForSimpleDemo(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, cXyz* scale, f32 speedF, f32 speedY) {
     daItem_c* item = (daItem_c*)fopAcM_fastCreateItem(pos, i_itemNo, roomNo, angle, scale, speedF, speedY, -7.0f);
     if (item != NULL)
-        item->setStatus(5);
+        item->setStatus(daItem_c::STATUS_INIT_NORMAL);
     return item;
 }
 
@@ -1127,7 +1127,7 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
 
 #if VERSION > VERSION_DEMO
 /* 80027254-80027280       .text stealItem_CB__FPv */
-BOOL stealItem_CB(void* actor) {
+static BOOL stealItem_CB(void* actor) {
     if (actor) {
         daItem_c* item = (daItem_c*)actor;
         item->scale.setall(1.0f);
@@ -1379,11 +1379,11 @@ void fopAcM_cancelCarryNow(fopAc_ac_c* i_this) {
 /* 80027ED8-800281D8       .text fopAcM_viewCutoffCheck__FP10fopAc_ac_cf */
 BOOL fopAcM_viewCutoffCheck(fopAc_ac_c* actor, f32 param_2) {
     if (param_2 > 0.0f) {
-        camera_class* camera = dComIfGp_getCamera(0);
-        cXyz delta = (camera->mLookat.mEye - actor->eyePos);
+        camera_process_class* camera = dComIfGp_getCamera(0);
+        cXyz delta = (camera->view.mLookat.mEye - actor->eyePos);
         if (delta.abs() > param_2) {
             dBgS_LinChk linChk;
-            linChk.Set(&camera->mLookat.mEye, &actor->eyePos, actor);
+            linChk.Set(&camera->view.mLookat.mEye, &actor->eyePos, actor);
             return dComIfG_Bgsp()->LineCross(&linChk);
         }
     }

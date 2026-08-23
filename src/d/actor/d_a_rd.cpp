@@ -24,7 +24,7 @@ public:
     daRd_HIO_c();
     virtual ~daRd_HIO_c() {}
     
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ dNpc_HIO_c mNpc;
@@ -261,7 +261,7 @@ BOOL daRd_c::_createHeap() {
         return FALSE;
     }
     
-    modelData->getJointNodePointer(0x0C)->setCallBack(nodeHeadControl_CB); // ree_atama_1
+    modelData->getJointNodePointer(RD_JNT_REE_ATAMA_1_e)->setCallBack(nodeHeadControl_CB);
     
     J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_RD_BRK_NML_e));
     JUT_ASSERT(DEMO_SELECT(553, 550), brk != NULL);
@@ -293,140 +293,140 @@ bool daRd_c::createArrowHeap() {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ RD_JNT_REE_KOSI_1_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ RD_JNT_REE_KOSI_1_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ RD_JNT_REE_KOSI_1_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ kosi3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x02,
+            /* mJointIndex */ RD_JNT_REE_ASI_L1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x03,
+            /* mJointIndex */ RD_JNT_REE_ASI_L2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x04,
+            /* mJointIndex */ RD_JNT_REE_ASI_L3_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x05,
+            /* mJointIndex */ RD_JNT_REE_ASI_R1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x06,
+            /* mJointIndex */ RD_JNT_REE_ASI_R2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x07,
+            /* mJointIndex */ RD_JNT_REE_ASI_R3_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x08,
+            /* mJointIndex */ RD_JNT_REE_MUNE_1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ sebone_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 10.0f,
             /* mpOffsets   */ muneA_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ RD_JNT_REE_MUNE_2_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ muneB3_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0F,
+            /* mJointIndex */ RD_JNT_REE_UDE_L1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x10,
+            /* mJointIndex */ RD_JNT_REE_UDE_L2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x11,
+            /* mJointIndex */ RD_JNT_REE_TEKUBI_L1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x12,
+            /* mJointIndex */ RD_JNT_REE_YUBI_L1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x13,
+            /* mJointIndex */ RD_JNT_REE_UDE_R1_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude1_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x14,
+            /* mJointIndex */ RD_JNT_REE_UDE_R2_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ ude2_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x15,
+            /* mJointIndex */ RD_JNT_REE_TEKUBI_R1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x16,
+            /* mJointIndex */ RD_JNT_REE_YUBI_R1_e,
             /* mRadius     */ 6.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
     };
     mpJntHit = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (mpJntHit) {
-        jntHit = mpJntHit;
+        fopAcM_SetJntHit(this, mpJntHit);
     } else {
         return false;
     }
@@ -669,7 +669,7 @@ bool daRd_c::checkTgHit() {
             cXyz* hitPos = mCyl.GetTgHitPosP();
             cc_at_check(this, &atInfo);
             if (mHitType == 1 || mHitType == 7 || mHitType == 8 || health <= 0) {
-                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, mCyl.GetTgHitPosP());
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, hitPos);
                 cXyz scale(2.0f, 2.0f, 2.0f);
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHIT, hitPos, &player->shape_angle, &scale);
                 if (health <= 0) {
@@ -744,7 +744,7 @@ void daRd_c::setIceCollision() {
 void daRd_c::setAttention() {
     cXyz attnPos(60.0f, 0.0f, 0.0f);
     cXyz eyeballPos(60.0f, 0.0f, 0.0f);
-    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(0x0C)); // ree_atama_1 joint
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(RD_JNT_REE_ATAMA_1_e));
     mDoMtx_stack_c::multVec(&attnPos, &attention_info.position);
     mDoMtx_stack_c::multVecZero(&eyeballPos);
     eyePos = eyeballPos;
@@ -975,8 +975,8 @@ void daRd_c::modeCryInit() {
 void daRd_c::modeCry() {
     setAnm(AnmPrm_WALK, false);
     
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
-    f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
+    f32 stickPosY = CPad_GET_STICK_POS_Y(0);
     if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck("DEFAULT_RD_CRY")) {
         if (isLinkControl()) {
             dComIfGp_event_reset();
@@ -1084,8 +1084,8 @@ void daRd_c::modeAttack() {
         return;
     }
     
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
-    f32 stickPosY = g_mDoCPd_cpadInfo[0].mMainStickPosY;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
+    f32 stickPosY = CPad_GET_STICK_POS_Y(0);
     if (eventInfo.checkCommandDemoAccrpt()) {
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
         if (isAnm(AnmPrm_ATACK)) {
@@ -1634,7 +1634,7 @@ bool daRd_c::_execute() {
     if (mMode != MODE_SILENT_PRAY && mMode != MODE_DEATH && mMode != MODE_DAMAGE &&
         mMode != MODE_ATTACK && mMode != MODE_CRY && mMode != MODE_CRY_WAIT)
     {
-        daRd_c* corpse = (daRd_c*)fopAcIt_Judge(&searchNeadDeadRd_CB, this);
+        daRd_c* corpse = (daRd_c*)fopAcM_Search(&searchNeadDeadRd_CB, this);
         if (corpse != NULL) {
             mCorpseID = fopAcM_GetID(corpse);
             modeProcInit(MODE_SILENT_PRAY);
@@ -1690,7 +1690,7 @@ bool daRd_c::_execute() {
         lookBack();
     }
     
-    if (mbIkari) {
+    if (isIkari()) {
         cLib_addCalc2(&mD38, l_HIO.m60, 0.1f, l_HIO.m64);
     } else {
         cLib_addCalc2(&mD38, 0.0f, 0.1f, l_HIO.m64);
@@ -1788,10 +1788,10 @@ void daRd_c::createInit() {
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     mAcch.SetRoofNone();
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
-    mJntCtrl.setHeadJntNum(0x0A); // ree_kubi_1
-    mJntCtrl.setBackboneJntNum(0x08); // ree_mune_1
-    modelData->getJointNodePointer(0x0A)->setCallBack(nodeControl_CB); // ree_kubi_1
-    modelData->getJointNodePointer(0x08)->setCallBack(nodeControl_CB); // ree_mune_1
+    mJntCtrl.setHeadJntNum(RD_JNT_REE_KUBI_1_e);
+    mJntCtrl.setBackboneJntNum(RD_JNT_REE_MUNE_1_e);
+    modelData->getJointNodePointer(RD_JNT_REE_KUBI_1_e)->setCallBack(nodeControl_CB);
+    modelData->getJointNodePointer(RD_JNT_REE_MUNE_1_e)->setCallBack(nodeControl_CB);
     setBtkAnm(2);
     
     if (mChecksSwitch == 0) {
@@ -1835,12 +1835,32 @@ void daRd_c::createInit() {
     
     mEnemyFire.mpMcaMorf = mpMorf;
     mEnemyFire.mpActor = this;
+    
     static u8 fire_j[ARRAY_SIZE(mEnemyFire.mFlameJntIdxs)] = {
-        0x0C, 0x01, 0x0F, 0x11, 0x13, 0x15, 0x02, 0x04, 0x05, 0x07,
+        RD_JNT_REE_ATAMA_1_e,
+        RD_JNT_REE_KOSI_1_e,
+        RD_JNT_REE_UDE_L1_e,
+        RD_JNT_REE_TEKUBI_L1_e,
+        RD_JNT_REE_UDE_R1_e,
+        RD_JNT_REE_TEKUBI_R1_e,
+        RD_JNT_REE_ASI_L1_e,
+        RD_JNT_REE_ASI_L3_e,
+        RD_JNT_REE_ASI_R1_e,
+        RD_JNT_REE_ASI_R3_e,
     };
     static f32 fire_sc[ARRAY_SIZE(mEnemyFire.mParticleScale)] = {
-        2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        2.0f, // RD_JNT_REE_ATAMA_1_e
+        2.0f, // RD_JNT_REE_KOSI_1_e
+        1.0f, // RD_JNT_REE_UDE_L1_e
+        1.0f, // RD_JNT_REE_TEKUBI_L1_e
+        1.0f, // RD_JNT_REE_UDE_R1_e
+        1.0f, // RD_JNT_REE_TEKUBI_R1_e
+        1.0f, // RD_JNT_REE_ASI_L1_e
+        1.0f, // RD_JNT_REE_ASI_L3_e
+        1.0f, // RD_JNT_REE_ASI_R1_e
+        1.0f, // RD_JNT_REE_ASI_R3_e
     };
+
     for (int i = 0; i < ARRAY_SIZE(mEnemyFire.mFlameJntIdxs); i++) {
         mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
         mEnemyFire.mParticleScale[i] = fire_sc[i];
@@ -1868,13 +1888,13 @@ void daRd_c::createInit() {
 
 /* 000046A4-00004720       .text getArg__6daRd_cFv */
 void daRd_c::getArg() {
-    u32 params = fopAcM_GetParam(this);
-    mWhichIdleAnm = fopAcM_GetParamBit(params, 0x00, 1);
-    u8 radiusParam = fopAcM_GetParamBit(params, 0x01, 7);
-    s32 areaRadius = radiusParam;
-    mChecksSwitch = fopAcM_GetParamBit(params, 0x08, 8);
-    mSwNo = fopAcM_GetParamBit(params, 0x18, 8);
-    if ((s32)radiusParam == 0x7F) {
+    u32 param = fopAcM_GetParam(this);
+    mWhichIdleAnm = fopAcM_GetParamBit(param, 0x00, 1);
+    u8 radiusParam = fopAcM_GetParamBit(param, 0x01, 7);
+    int areaRadius = radiusParam;
+    mChecksSwitch = fopAcM_GetParamBit(param, 0x08, 8);
+    mSwNo = fopAcM_GetParamBit(param, 0x18, 8);
+    if (areaRadius == 0x7F) {
         areaRadius = 0;
     }
     mAreaRadius = l_HIO.m30 + areaRadius;
@@ -1933,6 +1953,7 @@ static BOOL daRdDraw(void* i_this) {
 
 /* 00005044-0000504C       .text daRdIsDelete__FPv */
 static BOOL daRdIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -18,7 +18,7 @@ public:
     daNpc_Os_HIO2_c();
     virtual ~daNpc_Os_HIO2_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x00 - vtable */
@@ -41,7 +41,7 @@ public:
     daNpc_Os_HIO_c();
     virtual ~daNpc_Os_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x00 - vtable*/
@@ -667,7 +667,7 @@ void daNpc_Os_c::setPlayerAction(ActionFunc_t action, void* param_2) {
 
 /* 000017C4-0000180C       .text getStickAngY__10daNpc_Os_cFv */
 s16 daNpc_Os_c::getStickAngY() {
-    return dCam_getControledAngleY(dComIfGp_getCamera(0)) + (g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000);
+    return dCam_getControledAngleY(dComIfGp_getCamera(0)) + (CPad_GET_STICK_ANGLE(0) + 0x8000);
 }
 
 /* 0000180C-00001964       .text calcStickPos__10daNpc_Os_cFsP4cXyz */
@@ -1179,7 +1179,7 @@ BOOL daNpc_Os_c::waitPlayerAction(void*) {
     }
     else if(field_0x7A9 != -1) {
         dAttention_c& attention = dComIfGp_getAttention();
-        if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x9C || attention.Lockon()) {
+        if(CPad_GET_STICK_VALUE(0) >= l_HIO.field_0x9C || attention.Lockon()) {
             s16 target = getStickAngY();
             cLib_addCalcAngleS(&current.angle.y, target, 0x19, 0x7FFF, 1);
             cXyz temp;
@@ -1187,7 +1187,7 @@ BOOL daNpc_Os_c::waitPlayerAction(void*) {
             if(stickPos == 0) {
                 shape_angle.y = current.angle.y;
             }
-            else if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0xA0) {
+            else if(CPad_GET_STICK_VALUE(0) >= l_HIO.field_0xA0) {
                 shape_angle.y = current.angle.y;
             }
 
@@ -1199,7 +1199,7 @@ BOOL daNpc_Os_c::waitPlayerAction(void*) {
             }
 
             current.angle.y = shape_angle.y;
-            if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0xA0 && stickPos == 0) {
+            if(CPad_GET_STICK_VALUE(0) >= l_HIO.field_0xA0 && stickPos == 0) {
                 current.angle.y = target;
                 setPlayerAction(&daNpc_Os_c::walkPlayerAction, 0);
             }
@@ -1225,7 +1225,7 @@ BOOL daNpc_Os_c::walkPlayerAction(void*) {
         field_0x7A9 += 1;
     }
     else if(field_0x7A9 != -1) {
-        f32 stickValue = g_mDoCPd_cpadInfo[0].mMainStickValue;
+        f32 stickValue = CPad_GET_STICK_VALUE(0);
         s16 target = getStickAngY();
         if(stickValue > 0.05f) {
             if(mPrevMorfFrame > l_HIO.field_0xB0 && mPrevMorfFrame < l_HIO.field_0xAC) {
@@ -2462,6 +2462,7 @@ static BOOL daNpc_Os_Draw(daNpc_Os_c* i_this) {
 
 /* 00006EC8-00006ED0       .text daNpc_Os_IsDelete__FP10daNpc_Os_c */
 static BOOL daNpc_Os_IsDelete(daNpc_Os_c* i_this) {
+    UNUSED(i_this);
     return true;
 }
 

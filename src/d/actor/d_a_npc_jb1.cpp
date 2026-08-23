@@ -21,7 +21,7 @@ public:
     daNpc_Jb1_HIO_c();
     virtual ~daNpc_Jb1_HIO_c() {};
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 public:
     /* 0x04 */ s8 mNo;
     /* 0x05 */ s8 field_0x5;
@@ -275,7 +275,7 @@ void daNpc_Jb1_c::checkOrder() {
 
 /* 000007AC-000007B4       .text next_msgStatus__11daNpc_Jb1_cFPUl */
 u16 daNpc_Jb1_c::next_msgStatus(u32* pMsgNo) {
-    return 0x10;
+    return fopMsgStts_MSG_ENDS_e;
 }
 
 /* 000007B4-000007BC       .text getMsg_JB1_0__11daNpc_Jb1_cFv */

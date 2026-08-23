@@ -216,7 +216,7 @@ BOOL himo_create(kokiie_class* i_this) {
 /* 00000A18-00000E98       .text demo_camera__FP12kokiie_class */
 void demo_camera(kokiie_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp5C;
     cXyz sp50;
 
@@ -385,7 +385,6 @@ static cPhs_State daKokiie_Create(fopAc_ac_c* a_this) {
     }
 #endif
     {
-
         i_this->m2A0 = fopAcM_GetParam(a_this);
         if (i_this->m2A0 == 0xff) {
             i_this->m2A0 = 0;

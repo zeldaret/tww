@@ -25,6 +25,7 @@
 #include "dolphin/os/OSSync.h" // IWYU pragma: export
 #include "dolphin/os/OSThread.h" // IWYU pragma: export
 #include "dolphin/os/OSTime.h" // IWYU pragma: export
+#include "dolphin/os/OSStopwatch.h" // IWYU pragma: export
 #include "dolphin/os/OSUtil.h" // IWYU pragma: export
 
 #ifdef __cplusplus
@@ -93,6 +94,7 @@ extern BOOL __OSIsGcam;
 
 extern u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0);
 extern u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);
+extern u8 __gUnknown800030E3 AT_ADDRESS(OS_BASE_CACHED | 0x30E3);
 
 u8* OSGetStackPointer(void);
 void __OSFPRInit(void);

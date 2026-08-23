@@ -149,9 +149,16 @@ public:
     void setScale(f32, f32);
     void setScroll(int, s16, s16);
     virtual void draw();
-    void setAlpha(u8) {}
-    void setBlackColor(GXColor& c) { mC0 = c; }
-    void setWhiteColor(GXColor& c) { mC1 = c; }
+
+    void setAlpha(u8 i_alpha) { mBlack.a = i_alpha; }
+    void setBlackColor(GXColor& i_color) { mBlack = i_color; }
+    void setWhiteColor(GXColor& i_color) { mWhite = i_color; }
+    // some calls to these functions define i_color inline which is illegal in C++ for a non-const
+    // reference parameter - we add these overloads to enable standard compiler compatibility
+#if !__MWERKS__
+    void setBlackColor(const GXColor& i_color) { mBlack = const_cast<GXColor&>(i_color); }
+    void setWhiteColor(const GXColor& i_color) { mWhite = const_cast<GXColor&>(i_color); }
+#endif
 
 public:
     struct TexEntry {
@@ -169,8 +176,8 @@ public:
     /* 0x0A */ s16 mY1;
     /* 0x0C */ f32 mScaleX;
     /* 0x10 */ f32 mScaleY;
-    /* 0x14 */ GXColor mC0;
-    /* 0x18 */ GXColor mC1;
+    /* 0x14 */ GXColor mBlack;
+    /* 0x18 */ GXColor mWhite;
     /* 0x1C */ TexEntry mTex[2];
 };
 
@@ -436,7 +443,7 @@ public:
 
 struct view_port_class;
 struct view_class;
-class camera_class;
+class camera_process_class;
 
 struct dDlst_alphaModelData_c {
 public:
@@ -528,8 +535,8 @@ public:
     J3DDrawBuffer* getXluList() { return mpXluList; }
     J3DDrawBuffer* getXluListP1() { return mpXluListP1; }
 
-    void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, XLU_BUFFER); }
-    void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, OPA_BUFFER); }
+    void setXluDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, J3DSysDrawBuf_Xlu); }
+    void setOpaDrawList(J3DDrawBuffer* buffer) { j3dSys.setDrawBuffer(buffer, J3DSysDrawBuf_Opa); }
     void setOpaList() { setOpaDrawList(mpOpaList); }
     void setXluList() { setXluDrawList(mpXluList); }
     void setOpaListInvisible() { setOpaDrawList(mpOpaListInvisible); }
@@ -632,8 +639,8 @@ public:
     void setWindow(dDlst_window_c* pWindow) { mpWindow = pWindow; }
     void setViewport(view_port_class* pViewPort) { mpViewPort = pViewPort; }
     view_port_class* getViewport() { return mpViewPort; }
-    void setView(view_class* pView) { mpCamera = (camera_class*)pView; }
-    view_class* getView() { return (view_class*)mpCamera; }
+    void setView(view_class* view) { mpView = view; }
+    view_class* getView() { return mpView; }
 
     static void offWipe() { mWipe = false; }
     static f32 getWipeRate() { return mWipeRate; }
@@ -683,7 +690,7 @@ public:
     /* 0x00228 */ dDlst_base_c** mp2DXluEnd;
     /* 0x0022C */ dDlst_window_c* mpWindow;
     /* 0x00230 */ view_port_class* mpViewPort;
-    /* 0x00234 */ camera_class* mpCamera; // should be view_class*
+    /* 0x00234 */ view_class* mpView;
     /* 0x00238 */ u8 field_0x00238[0x00244 - 0x00238];
     /* 0x00244 */ dDlst_alphaModel_c* mpAlphaModel;
     /* 0x00248 */ dDlst_alphaModel_c* mpSpotModel;

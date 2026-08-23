@@ -49,6 +49,7 @@ static BOOL daSpotbox_Execute(daSpotbox_c* i_this) {
 
 /* 00000138-00000140       .text daSpotbox_IsDelete__FP11daSpotbox_c */
 static BOOL daSpotbox_IsDelete(daSpotbox_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

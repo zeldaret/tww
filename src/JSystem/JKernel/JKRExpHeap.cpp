@@ -133,22 +133,17 @@ static JKRExpHeap::CMemBlock* DBnewFreeBlock;
 static JKRExpHeap::CMemBlock* DBnewUsedBlock;
 
 /* 802B192C-802B1B88       .text allocFromHead__10JKRExpHeapFUli */
-// wrong register at end
 void* JKRExpHeap::allocFromHead(u32 size, int align) {
-    u32 foundOffset;
-    int foundSize;
-    CMemBlock* newFreeBlock;
-    CMemBlock* newUsedBlock;
-    CMemBlock* foundBlock;
-
     size = ALIGN_NEXT(size, 4);
-    foundSize = -1;
-    foundOffset = 0;
-    foundBlock = NULL;
+    int foundSize = -1;
+    u32 foundOffset = 0;
+    CMemBlock* foundBlock = NULL;
+    CMemBlock* newFreeBlock = NULL;
+    CMemBlock* newUsedBlock = NULL;
 
     for (CMemBlock* block = mHeadFreeList; block; block = block->mNext) {
-        u32 offset =
-            ALIGN_PREV(align - 1 + (u32)block->getContent(), align) - (u32)block->getContent();
+        u32 alignedContent = ALIGN_NEXT((u32)block->getContent(), align);
+        u32 offset = alignedContent - (u32)block->getContent();
         if (block->size < size + offset) {
             continue;
         }
@@ -217,22 +212,11 @@ void* JKRExpHeap::allocFromHead(u32 size, int align) {
             } else {
                 CMemBlock* prev = foundBlock->mPrev;
                 CMemBlock* next = foundBlock->mNext;
-                // Regalloc doesn't match
-                /*
                 newFreeBlock = foundBlock->allocFore(size, mCurrentGroupId, 0, 0, 0);
                 removeFreeBlock(foundBlock);
                 if (newFreeBlock) {
                     setFreeBlock(newFreeBlock, prev, next);
                 }
-                */
-                // Works but very fake match
-                // /*
-                size = (u32)foundBlock->allocFore(size, mCurrentGroupId, 0, 0, 0);
-                removeFreeBlock(foundBlock);
-                if (size) {
-                    setFreeBlock((CMemBlock*)size, prev, next);
-                }
-                // */
                 appendUsedList(foundBlock);
                 return foundBlock->getContent();
             }
@@ -692,13 +676,15 @@ void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
         OSReport(":::joinTwoBlocks [%x %x %x][%x %x %x]\n", block, block->mFlags, block->size, block->mNext, block->mNext->mFlags, block->mNext->size);
         OSReport(":::: endAddr = %x\n", endAddr);
         OSReport(":::: nextAddr = %x\n", nextAddr);
-        JKRGetCurrentHeap()->dump();
+        JKRHeap* heap = JKRGetCurrentHeap();
+        heap->dump();
         OSPanic(__FILE__, DEMO_SELECT(1710, 1718), ":::: Bad Block\n");
     }
 
     if (endAddr == nextAddr) {
-        block->size = next->size + sizeof(CMemBlock) + next->getAlignment() + block->size;
-        setFreeBlock(block, block->mPrev, next->mNext);
+        block->size = next->size + sizeof(CMemBlock) + (next->mFlags & 0x7f) + block->size;
+        CMemBlock* local_30 = next->mNext;
+        setFreeBlock(block, block->mPrev, local_30);
     }
 }
 

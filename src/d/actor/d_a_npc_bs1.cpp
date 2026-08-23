@@ -43,7 +43,7 @@ public:
     daNpc_Bs1_HIO_c();
     virtual ~daNpc_Bs1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x000 */ // this.__vt
@@ -192,8 +192,8 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             if (jntNo == i_this->getHeadJntNum()) {
                 cXyz offset(0.0f, 0.0f, 0.0f);
-                mDoMtx_XrotM(*calc_mtx, i_this->getHead_y());
-                cMtx_ZrotM(*calc_mtx, -i_this->getHead_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getHead_y());
+                cMtx_ZrotM(*calc_mtx, (s16)-i_this->getHead_x());
                 cXyz pos;
                 MtxPosition(&offset, &pos);
                 i_this->setAttentionBasePos(pos);
@@ -204,8 +204,8 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
                 i_this->setEyePos(pos);
                 i_this->incAttnSetCount();
             } else if (jntNo == i_this->getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                cMtx_ZrotM(*calc_mtx, -i_this->getBackbone_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
+                cMtx_ZrotM(*calc_mtx, (s16)-i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -1208,12 +1208,12 @@ void daNpc_Bs1_c::talkInit() {
 BOOL daNpc_Bs1_c::shopMsgCheck(u32 msgNo) {
     if(mType == 0) {
         if((0xF42 <= msgNo && msgNo <= 0xF54) || (0xF67 <= msgNo && msgNo <= 0xF6E) || (0xF63 <= msgNo && msgNo <= 0xF66) || msgNo == 0xF3E) {
-                return true;
+            return true;
         }
     }
     else {
         if((0x2F4A <= msgNo && msgNo <= 0x2F53) || (0x2F6B <= msgNo && msgNo <= 0x2F78) || msgNo == 0x2F47) {
-                return true;
+            return true;
         }
     }
 
@@ -1267,7 +1267,7 @@ BOOL daNpc_Bs1_c::shopStickMoveMsgCheck(u32 msgNo) {
     }
     else {
         if((0x2F4A <= msgNo && msgNo <= 0x2F4C) || ((0x2F72 <= msgNo && msgNo <= 0x2F76) && !(msgNo & 1)) || msgNo == 0x2F78 || msgNo == 0x2F6B || msgNo == 0x2F47) {
-                return true;
+            return true;
         }
     }
 
@@ -2065,7 +2065,7 @@ BOOL daNpc_Bs1_c::_draw() {
         }
     }
     
-    dSnap_RegistFig(DSNAP_TYPE_BS, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_BS1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
     
     return TRUE;
 }

@@ -86,7 +86,7 @@ void daDaiocta_Eye_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
     cXyz dummy(0.0f, 0.0f, 0.0f);
     mDoMtx_stack_c::copy(i_modelP->getAnmMtx(jnt_no));
 
-    if (jnt_no == 2) {
+    if (jnt_no == DO_EYE1_JNT_J_DO_EYE2_e) {
         mDoMtx_stack_c::ZXYrotM(mCurEyeRot);
         mDoMtx_stack_c::scaleM(mEyeScale);
     }
@@ -109,7 +109,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ 2,
+            /* mJointIndex */ DO_EYE1_JNT_J_DO_EYE2_e,
             /* mRadius     */ 110.0f,
             /* mpOffsets   */ eye_sph_offset
         }
@@ -159,7 +159,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
     }
 
     for (int i = 0; i < 3; i++) {
-        if (i == 2) modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
+        if (i == DO_EYE1_JNT_J_DO_EYE2_e) modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
     }
 
     mpJntHit = JntHit_create(mpModel, search_data, ARRAY_SSIZE(search_data));
@@ -174,7 +174,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
 }
 
 /* 000004E4-00000510       .text coHit_CB__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
-void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjInf*) {
+static void coHit_CB(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* i_actor, dCcD_GObjInf*) {
     if(i_actor) {
         ((daDaiocta_Eye_c *)i_this)->_coHit(i_actor);
     }

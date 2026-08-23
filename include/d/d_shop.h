@@ -6,7 +6,7 @@
 #include "m_Do/m_Do_ext.h"
 #include "f_pc/f_pc_manager.h"
 
-class msg_class;
+struct msg_class;
 class STControl;
 
 typedef u32 (*dShop_DefaultMsgCallback)(void*);

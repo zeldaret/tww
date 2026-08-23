@@ -294,7 +294,7 @@ inline void mDoAud_rainPlay(s32 param_0) {
     mDoAud_zelAudio_c::getInterface()->rainPlay(param_0);
 }
 
-inline f32 mDoAud_tact_getMelodyPattern(s32 melody_no, s32 note_no, s32 * pattern) {
+inline f32 mDoAud_tact_getMelodyPattern(s32 melody_no, s32 note_no, s32* pattern) {
     return mDoAud_zelAudio_c::mTact.getMelodyPattern(melody_no, note_no, pattern);
 }
 
@@ -354,7 +354,9 @@ inline void mDoAud_tact_melodyPlay(s32 param_1) {
     mDoAud_zelAudio_c::getTact().melodyPlay(param_1);
 }
 
-inline void mDoAud_tact_melodyStop() {}
+inline void mDoAud_tact_melodyStop() {
+    mDoAud_zelAudio_c::getTact().melodyStop();
+}
 
 inline BOOL mDoAud_checkCbPracticePlay() {
     return mDoAud_zelAudio_c::getInterface()->checkCbPracticePlay();

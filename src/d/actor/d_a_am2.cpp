@@ -42,19 +42,19 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 
             cXyz offset;
             switch (jntNo) {
-            case 1: // coa (core/weak spot)
+            case AM2_JNT_COA_e: // core/weak spot
                 offset.x = 0.0f;
                 offset.y = 50.0f;
                 offset.z = -40.0f;
                 MtxPosition(&offset, &i_this->mWeakPos);
                 break;
-            case 2: // eye
+            case AM2_JNT_EYE_e:
                 offset.x = 30.0f;
                 offset.y = 0.0f;
                 offset.z = 0.0f;
                 MtxPosition(&offset, &i_this->mEyeballPos);
                 break;
-            case 3: // toge (needles)
+            case AM2_JNT_TOGE_e: // needles
                 offset.x = -10.0f;
                 offset.y = 0.0f;
                 offset.z = 0.0f;
@@ -1186,6 +1186,7 @@ static BOOL daAM2_Execute(am2_class* i_this) {
 
 /* 00003AB8-00003AC0       .text daAM2_IsDelete__FP9am2_class */
 static BOOL daAM2_IsDelete(am2_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -1246,13 +1247,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_CYL2_e,
-            /* mJointIndex */ 0x00, // body joint
+            /* mJointIndex */ AM2_JNT_BODY_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ cyl_eye_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ 0x00, // body joint
+            /* mJointIndex */ AM2_JNT_BODY_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ sph_offset,
         },

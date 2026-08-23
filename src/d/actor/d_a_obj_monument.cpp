@@ -80,7 +80,7 @@ cPhs_State daObjMonument::Act_c::_create() {
 bool daObjMonument::Act_c::_delete() {
     if (mpBgW != NULL && mpBgW->ChkUsed())
         dComIfG_Bgsp()->Release(mpBgW);
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 

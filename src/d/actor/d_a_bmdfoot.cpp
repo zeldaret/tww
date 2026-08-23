@@ -101,7 +101,7 @@ void housi_off(bmdfoot_class* i_this) {
 void wait(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_98;
-    static int eff_id[] = {0x0A, 0x0C, 0x11};
+    static int eff_id[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
 
     int frame = i_this->mpBodyVineMorf->getFrame();
     local_98.setall(0.0f);
@@ -139,7 +139,7 @@ void wait(bmdfoot_class* i_this) {
         i_this->m2BC++;
         anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_WAIT_e, 50.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.2f) + 0.9f, -1);
         i_this->m2C0[0] = cM_rndF(150.0f) + 100.0f;
-        i_this->m3EC = cM_rndFX(32768.0f);
+        i_this->m3EC = cM_rndFX(0x8000);
         for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
             i_this->m3A4[i] = REG14_F(13) + (0.2f + cM_rndFX(0.1f));
         }
@@ -175,8 +175,8 @@ void attack_1(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_5c;
     cXyz cStack_68;
-    static int jno[] = {0x0A, 0x0C, 0x11};
-    static int col_joint[] = {0x01, 0x03, 0x05, 0x07, 0x09};
+    static int jno[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
+    static int col_joint[] = {ASI_JNT_ASI2_e, ASI_JNT_ASI4_e, ASI_JNT_ASI6_e, ASI_JNT_ASI8_e, ASI_JNT_ASI10_e};
 
     bool bVar2 = false;
     local_5c.setall(0.0f);
@@ -329,7 +329,7 @@ void attack_2(bmdfoot_class* i_this) {
     J3DAnmTransform* pBck;
     cXyz local_3c;
     cXyz local_48;
-    static int col_joint[] = {0x11, 0x0F, 0x0C, 0x09};
+    static int col_joint[] = {ASI_JNT_ASI18_e, ASI_JNT_ASI16_e, ASI_JNT_ASI13_e, ASI_JNT_ASI10_e};
 
     local_3c.z = 0.0f;
     local_3c.y = 0.0f;
@@ -350,7 +350,7 @@ void attack_2(bmdfoot_class* i_this) {
         break;
     case 2:
         if ((int)i_this->mpBodyVineMorf->getFrame() == 49) {
-            MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(0x11), *calc_mtx);
+            MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(ASI_JNT_ASI18_e), *calc_mtx);
             MtxPosition(&local_3c, &local_48);
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKHOUSHI00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_BKMSATTACKSOIL00, &local_48, 0xFF, g_whiteColor, g_whiteColor, 0);
@@ -441,7 +441,7 @@ void attack_2(bmdfoot_class* i_this) {
             i_this->m2BC = 0;
         }
     }
-    MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(4), *calc_mtx);
+    MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(ASI_JNT_ASI5_e), *calc_mtx);
     MtxPosition(&local_3c, &local_48);
     i_this->mSph[4].SetC(local_48);
     i_this->mSph[4].SetR(50.0f);
@@ -460,7 +460,7 @@ void damage(bmdfoot_class* i_this) {
         anm_init(i_this, dRes_INDEX_BMDFOOT_BCK_ASI_NOBIKIRU_e, 40.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
         i_this->m2BC++;
         i_this->m2C0[0] = 0x1e;
-        i_this->m3EC = cM_rndFX(32768.0f);
+        i_this->m3EC = cM_rndFX(0x8000);
         for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
             i_this->m3A4[i] = (0.3f + cM_rndFX(0.2f));
         }
@@ -575,6 +575,7 @@ void move(bmdfoot_class* i_this) {
             break;
         case 0xb:
             end(i_this);
+            break;
         }
         if (boss->m332 == 3) {
             housi_off(i_this);
@@ -586,7 +587,7 @@ void move(bmdfoot_class* i_this) {
 }
 
 /* 000021B8-00002204       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* search, void* param_2) {
+static void* s_a_d_sub(void* search, void* param_2) {
     UNUSED(param_2);
     if ((fopAcM_IsActor(search)) && (fopAcM_GetName(search) == fpcNm_BMD_e)) {
         return search;
@@ -632,7 +633,7 @@ static BOOL daBmdfoot_Execute(bmdfoot_class* i_this) {
         sVar1 = sVar1 % 30;
     }
     i_this->btk->setFrame(sVar1);
-    MTXCopy(model->getAnmMtx(REG14_S(6) + 0x10), *calc_mtx);
+    MTXCopy(model->getAnmMtx(REG14_S(6) + (s16)ASI_JNT_ASI17_e), *calc_mtx);
     local_68.z = 0.0f;
     local_68.y = 0.0f;
     local_68.x = 0.0f;

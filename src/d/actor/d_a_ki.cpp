@@ -52,7 +52,7 @@ public:
     }
     virtual ~kiHIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05;
@@ -98,12 +98,12 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         J3DJoint* joint = (J3DJoint*)node;
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
-        ki_class* pvVar3 = (ki_class*)model->getUserArea();
+        ki_class* i_this = (ki_class*)model->getUserArea();
 
-        if (pvVar3 != NULL) {
+        if (i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            cMtx_YrotM(*calc_mtx, pvVar3->m328);
-            cMtx_ZrotM(*calc_mtx, pvVar3->m326);
+            cMtx_YrotM(*calc_mtx, i_this->m328);
+            cMtx_ZrotM(*calc_mtx, i_this->m326);
             model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
@@ -216,7 +216,7 @@ static BOOL daKi_Draw(ki_class* i_this) {
     f32 fVar1 = 30.0f;
     if (i_this->mDamageType == 0) {
         J3DModelData* pModelData = pModel->getModelData();
-        J3DJoint* joint = pModelData->getJointNodePointer(0);
+        J3DJoint* joint = pModelData->getJointNodePointer(KI_JNT_KI_ALLROOT_e);
         J3DMaterial* material = pModelData->getMaterialNodePointer(0);
         J3DShape* shape = material->getShape();
 
@@ -629,7 +629,7 @@ void ki_atack_move(ki_class* i_this) {
             cLib_addCalcAngleS2(&a_this->shape_angle.y, fopAcM_searchPlayerAngleY(a_this), 2, 0x1000);
             if (i_this->mTimers[1] == 0) {
                 i_this->mTimers[1] = cM_rndF(50.0f) + 50.0f;
-                s32 rndFX = cM_rndFX(32768.0f);
+                s32 rndFX = cM_rndFX(0x8000);
                 cMtx_YrotS(*calc_mtx, player->current.angle.y + rndFX);
                 sp24.x = 0.0f;
                 sp24.y = (cM_rndFX(50.0f) + 200.0f) + REG0_F(12);
@@ -922,7 +922,6 @@ void ki_path_move(ki_class* i_this) {
                 }
             }
             break;
-
     }
 
     i_this->mPosMoveTarget = l_kiHIO.m28;
@@ -1257,7 +1256,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
-        if (i == 14) {
+        if (i == KI_JNT_J_KI_HEAD_e) {
             model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }
@@ -1469,10 +1468,32 @@ static cPhs_State daKi_Create(fopAc_ac_c* a_this) {
         i_this->mEnemyFire.mpMcaMorf = i_this->mpMorf;
         i_this->mEnemyFire.mpActor = a_this;
 
-        for (s32 i = 0; i < 10; i++) {
-            static s8 fire_j[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-            static f32 fire_sc[] = { 1.0f, 0.8f, 0.7f, 0.6f, 0.5f, 1.0f, 0.8f, 0.7f, 0.6f, 0.5f };
+        static u8 fire_j[ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs)] = {
+            KI_JNT_J_KI_ARM_L1_e,
+            KI_JNT_J_KI_ARM_L2_e,
+            KI_JNT_J_KI_ARM_LE_e,
+            KI_JNT_J_KI_FINGER1_L_e,
+            KI_JNT_J_KI_FINGER2_L_e,
+            KI_JNT_J_KI_ARM_R1_e,
+            KI_JNT_J_KI_ARM_R2_e,
+            KI_JNT_J_KI_ARM_RE_e,
+            KI_JNT_J_KI_FINGER1_R_e,
+            KI_JNT_J_KI_FINGER2_R_e
+        };
+        static f32 fire_sc[ARRAY_SIZE(i_this->mEnemyFire.mParticleScale)] = {
+            1.0f, // KI_JNT_J_KI_ARM_L1_e
+            0.8f, // KI_JNT_J_KI_ARM_L2_e
+            0.7f, // KI_JNT_J_KI_ARM_LE_e
+            0.6f, // KI_JNT_J_KI_FINGER1_L_e
+            0.5f, // KI_JNT_J_KI_FINGER2_L_e
+            1.0f, // KI_JNT_J_KI_ARM_R1_e
+            0.8f, // KI_JNT_J_KI_ARM_R2_e
+            0.7f, // KI_JNT_J_KI_ARM_RE_e
+            0.6f, // KI_JNT_J_KI_FINGER1_R_e
+            0.5f  // KI_JNT_J_KI_FINGER2_R_e
+        };
 
+        for (int i = 0; i < ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs); i++) {
             i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
             i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
         }

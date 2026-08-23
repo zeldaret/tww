@@ -1,6 +1,6 @@
 /**
  * d_a_tornado.cpp
- * Ballad Of Gales Tornado
+ * Object - Ballad of Gales tornado
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -20,12 +20,12 @@ const float daTornado_HIO_c0::start_dis = 10000.0f;
 /* 000000EC-00000260       .text jointCallBack__11daTornado_cFi */
 BOOL daTornado_c::jointCallBack(int jntNo) {
     int jntIdx = jntNo - 1;
-    if ((jntIdx < 0) || (jntIdx >= 11)) {
+    if ((jntIdx < YTRND00_JNT_ROOT_e) || (jntIdx >= YTRND00_JNT_JOINT11_e)) {
         return TRUE;
     }
 
     mDoMtx_stack_c::transS(mJointX[jntIdx], 0.0f, mJointZ[jntIdx]);
-    if (jntIdx != 10 && jntIdx != 0) {
+    if (jntIdx != YTRND00_JNT_JOINT10_e && jntIdx != YTRND00_JNT_ROOT_e) {
         mDoMtx_stack_c::ZXYrotM(-mJointZ[jntIdx] * 3572.0f * 0.001f, 0.0f, mJointX[jntIdx] * 3572.0f * 0.001f);
     }
 
@@ -208,7 +208,7 @@ BOOL daTornado_c::execute() {
             return TRUE;
         }
     }
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     attention_info.position = current.pos;
     eyePos = current.pos;
@@ -218,7 +218,7 @@ BOOL daTornado_c::execute() {
         dKy_get_seacolor(&colorAmb, &colorDif);
         mPtclCb.getEmitter()->setGlobalPrmColor(colorAmb.r, colorAmb.g, colorAmb.b);
     }
-    mDoMtx_stack_c::transS(mCenter);
+    mDoMtx_stack_c::transS(mCenter.x, mCenter.y, mCenter.z);
     mpModelUnder->setBaseTRMtx(mDoMtx_stack_c::get());
 
     return TRUE;
@@ -320,14 +320,14 @@ cPhs_State daTornado_c::create() {
             dComIfGp_particle_set(dPa_name::ID_AK_SN_WINDUPWATER00, &mCenter, NULL, NULL, 0xFF, &mPtclCb);
             fopAcM_OnStatus(this, fopAcStts_SHOWMAP_e);
         }
-        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
         mpModelUnder->setBaseTRMtx(mDoMtx_stack_c::get());
         J3DModelData* modelData = mpModel->getModelData();
         for (u16 i = 1; i < modelData->getJointNum(); i++) {
             modelData->getJointNodePointer(i)->setCallBack(daTornado_jointCallBack);
         }
-        mpModel->setUserArea((u32) this);
+        mpModel->setUserArea((uintptr_t)this);
     }
     return rt;
 }

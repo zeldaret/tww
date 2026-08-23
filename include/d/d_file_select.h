@@ -83,8 +83,27 @@ public:
     /* 0x50 */ u8 field_0x50;
     /* 0x51 */ u8 field_0x51;
     /* 0x52 */ u8 field_0x52;
-    /* 0x54 */ float field_0x54;
-    /* 0x58 */ float field_0x58;
+    /* 0x54 */ f32 field_0x54;
+    /* 0x58 */ f32 field_0x58;
+#if VERSION == VERSION_PAL
+    /* 0x5C */ u8 field_0x5c;
+    /* 0x5D */ u8 field_0x5d;
+    /* 0x5E */ u8 field_0x5e;
+    /* 0x5F */ u8 field_0x5f;
+    /* 0x60 */ s16 field_0x60;
+    /* 0x62 */ s16 field_0x62;
+    /* 0x64 */ s16 field_0x64;
+    /* 0x66 */ s16 field_0x66;
+    /* 0x68 */ s16 field_0x68;
+    /* 0x6A */ s16 field_0x6a;
+    /* 0x6C */ s16 field_0x6c;
+    /* 0x6E */ s16 field_0x6e;
+    /* 0x70 */ s16 field_0x70;
+    /* 0x72 */ s16 field_0x72;
+    /* 0x74 */ s16 field_0x74;
+    /* 0x76 */ s16 field_0x76;
+    /* 0x78 */ u8 field_0x78;
+#endif
 };
 
 class dDlst_FileSel_c : public dDlst_base_c {
@@ -103,11 +122,11 @@ public:
     void setSavePicDataPtr(u8* dataPtr) { mSavePicDataPtr = dataPtr; }
     void setUseType(u8 useType) { mUseType = useType; }
 
-    void getErrType() {}
-    void getSelectNum() {}
-    void isDataExtra(u8) {}
-    void isDataNew(u8) {}
-    void isSelectEnd() {}
+    u8 getErrType() { return errType; }
+    u8 getSelectNum() { return selectNum; }
+    BOOL isDataExtra(u8 idx) { return dataExtra[idx]; }
+    BOOL isDataNew(u8 idx) { return dataNew[idx]; }
+    u8 isSelectEnd() { return selectEnd; } // ?
 
     dFile_select_c() {}
     void _create();
@@ -215,7 +234,8 @@ public:
     void ExErrorMsgPaneMove2();
 
 public:
-    /* 0x0000 */ JKRMemArchive* field_0x0;
+    /* 0x0000 */ JKRMemArchive* archive;
+private:
     /* 0x0004 */ dDlst_FileSel_c fileSel;
     /* 0x0010 */ fopMsgM_pane_class field_0x10;
     /* 0x0048 */ fopMsgM_pane_class field_0x48;
@@ -272,6 +292,9 @@ public:
     /* 0x3730 */ fopMsgM_pane_class field_0x3730;
     /* 0x3768 */ fopMsgM_pane_class field_0x3768;
     /* 0x37A0 */ fopMsgM_pane_class field_0x37a0;
+#if VERSION == VERSION_PAL
+    fopMsgM_pane_class pad[0xF]; // TODO
+#endif
     /* 0x37D8 */ JUtility::TColor field_0x37d8[11];
     /* 0x3804 */ JUtility::TColor field_0x3804[11];
     /* 0x3830 */ JUtility::TColor field_0x3830[18];
@@ -286,13 +309,13 @@ public:
     /* 0x3900 */ char* field_0x3900[3];
     /* 0x390C */ STControl* stick;
     /* 0x3910 */ STControl* stick2;
-    /* 0x3914 */ u8 field_0x3914[3];
+    /* 0x3914 */ u8 dataNew[3];
     /* 0x3917 */ u8 field_0x3917[3];
-    /* 0x391A */ u8 saveStatus[3];
+    /* 0x391A */ u8 dataExtra[3];
     /* 0x391D */ u8 field_0x391D[3];
     /* 0x3920 */ u8 field_0x3920;
     /* 0x3921 */ u8 field_0x3921;
-    /* 0x3922 */ u8 saveSlot;
+    /* 0x3922 */ u8 selectNum;
     /* 0x3923 */ s8 field_0x3923;
     /* 0x3924 */ u8 field_0x3924;
     /* 0x3925 */ u8 field_0x3925;
@@ -302,10 +325,10 @@ public:
     /* 0x3929 */ u8 field_0x3929;
     /* 0x392A */ u8 field_0x392a;
     /* 0x392B */ u8 field_0x392b;
-    /* 0x392C */ u8 field_0x392c;
+    /* 0x392C */ u8 selectEnd;
     /* 0x392D */ u8 field_0x392d;
     /* 0x392E */ u8 field_0x392e;
-    /* 0x392F */ u8 field_0x392f;
+    /* 0x392F */ u8 errType;
     /* 0x3930 */ s16 field_0x3930;
     /* 0x3932 */ s16 field_0x3932;
     /* 0x3934 */ u8 field_0x3934[0x3936 - 0x3934];

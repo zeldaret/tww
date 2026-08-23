@@ -7,6 +7,7 @@
 #include "d/actor/d_a_warpfout.h"
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
+#include "f_op/f_op_camera.h"
 
 static daWarpfout_c::EventActionInitFunc event_init_tbl[] = {
     &daWarpfout_c::initWarp1, &daWarpfout_c::initWarp2, &daWarpfout_c::initWarp3,

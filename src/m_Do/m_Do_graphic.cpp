@@ -152,6 +152,7 @@ void mDoGph_gInf_c::fadeOut(f32 speed, GXColor& color) {
     mFadeRate = speed >= 0.0f ? 0.0f : 1.0f;
 }
 
+#if VERSION > VERSION_DEMO
 /* 80007F6C-80007F94       .text onBlure__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::onBlure() {
     onBlure(cMtx_getIdentity());
@@ -160,8 +161,9 @@ void mDoGph_gInf_c::onBlure() {
 /* 80007F94-80007FC4       .text onBlure__13mDoGph_gInf_cFPA4_Cf */
 void mDoGph_gInf_c::onBlure(const Mtx mtx) {
     mBlureFlag = true;
-    mDoMtx_copy(mtx, mBlureMtx);
+    cMtx_copy(mtx, mBlureMtx);
 }
+#endif
 
 /* 80007FC4-80007FE8       .text fadeOut__13mDoGph_gInf_cFf */
 void mDoGph_gInf_c::fadeOut(f32 speed) {
@@ -281,7 +283,7 @@ bool mDoGph_AfterOfDraw() {
         BOOL printVisible = false;
 #else
         BOOL consoleVisible = JFWSystem::getSystemConsole()->isVisible();
-        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::Port_3).error == 0;
+        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::Port_3).err == 0;
         BOOL procVisible = pad3Connected && fapGmHIO_getMeter() && !consoleVisible;
         BOOL printVisible = pad3Connected && fapGmHIO_isPrint();
         if (mDoMain::developmentMode == 0) {
@@ -1610,10 +1612,10 @@ bool mDoGph_Painter() {
     if (dComIfGp_getWindowNum() != 0) {
         dDlst_window_c* window = dComIfGp_getWindow(0);
         s32 cameraID = window->getCameraID();
-        camera_class* camera = (camera_class*)dComIfGp_getCamera(cameraID);
+        camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(cameraID);
 
         if (camera != NULL) {
-            dComIfGd_imageDrawShadow(camera->mViewMtx);
+            dComIfGd_imageDrawShadow(camera->view.mViewMtx);
 
             view_port_class viewport_crop;
             view_port_class* viewport_p = window->getViewPort();
@@ -1631,9 +1633,9 @@ bool mDoGph_Painter() {
             GXSetViewport(viewport_p->mXOrig, viewport_p->mYOrig, viewport_p->mWidth, viewport_p->mHeight, viewport_p->mNearZ, viewport_p->mFarZ);
             GXSetScissor(viewport_p->mXOrig, viewport_p->mYOrig, viewport_p->mWidth, viewport_p->mHeight);
 
-            JPADrawInfo jpaDrawInfo(camera->mViewMtx, 45.0f, 1.218f);
-            jpaDrawInfo.setFovy(camera->mFovy);
-            jpaDrawInfo.setAspect(camera->mAspect);
+            JPADrawInfo jpaDrawInfo(camera->view.mViewMtx, 45.0f, 1.218f);
+            jpaDrawInfo.setFovy(camera->view.mFovy);
+            jpaDrawInfo.setAspect(camera->view.mAspect);
 
 #if VERSION > VERSION_DEMO
             BOOL isTower9 = FALSE;
@@ -1641,11 +1643,11 @@ bool mDoGph_Painter() {
                 isTower9 = TRUE;
 #endif
             dComIfGp_setCurrentWindow(window);
-            dComIfGp_setCurrentView(camera);
+            dComIfGp_setCurrentView(&camera->view);
             dComIfGp_setCurrentViewport(viewport_p);
-            GXSetProjection(camera->mProjMtx, GX_PERSPECTIVE);
+            GXSetProjection(camera->view.mProjMtx, GX_PERSPECTIVE);
             PPCSync();
-            j3dSys.setViewMtx(camera->mViewMtx);
+            j3dSys.setViewMtx(camera->view.mViewMtx);
             dKy_setLight();
             dComIfGd_drawOpaListSky();
             dComIfGd_drawXluListSky();
@@ -1655,17 +1657,17 @@ bool mDoGph_Painter() {
 
             GXSetClipMode(GX_CLIP_ENABLE);
             dComIfGd_drawOpaListBG();
-            dComIfGd_drawShadow(camera->mViewMtx);
-            dComIfGd_drawAlphaModel(camera->mViewMtx);
-            drawAlphaBuffer(camera, dComIfGd_getAlphaModelColor());
+            dComIfGd_drawShadow(camera->view.mViewMtx);
+            dComIfGd_drawAlphaModel(camera->view.mViewMtx);
+            drawAlphaBuffer(&camera->view, dComIfGd_getAlphaModelColor());
             if (dComIfGd_getLightModelNum() != 0) {
 #if VERSION == VERSION_DEMO
-                clearAlphaBuffer(camera);
+                clearAlphaBuffer(&camera->view);
 #else
-                clearAlphaBuffer(camera, 0);
+                clearAlphaBuffer(&camera->view, 0);
 #endif
-                dComIfGd_drawLightModel(camera->mViewMtx);
-                drawAlphaBuffer(camera, dComIfGd_getLightModelColor());
+                dComIfGd_drawLightModel(camera->view.mViewMtx);
+                drawAlphaBuffer(&camera->view, dComIfGd_getLightModelColor());
             }
 
             if (!mDoGph_gInf_c::isMonotone()) {
@@ -1678,9 +1680,9 @@ bool mDoGph_Painter() {
 
             if (dComIfGd_getSpotModelNum() != 0)
 #if VERSION == VERSION_DEMO
-                clearAlphaBuffer(camera);
+                clearAlphaBuffer(&camera->view);
 #else
-                clearAlphaBuffer(camera, dComIfGd_getSpotModelColor().a);
+                clearAlphaBuffer(&camera->view, dComIfGd_getSpotModelColor().a);
 #endif
 
             if (!dMenu_flag() && !dPa_control_c::isStatus(0x01))
@@ -1698,8 +1700,8 @@ bool mDoGph_Painter() {
                     dComIfGp_particle_drawP1(&jpaDrawInfo);
 
                 JPADrawInfo windDrawInfo(dPa_control_c::getWindViewMatrix(), 45.0f, 1.218f);
-                windDrawInfo.setFovy(camera->mFovy);
-                windDrawInfo.setAspect(camera->mAspect);
+                windDrawInfo.setFovy(camera->view.mFovy);
+                windDrawInfo.setAspect(camera->view.mAspect);
                 dComIfGp_particle_drawWind(&windDrawInfo);
 
                 dComIfGp_particle_drawToon(&jpaDrawInfo);
@@ -1718,9 +1720,9 @@ bool mDoGph_Painter() {
 #endif
 
             if (dComIfGd_getSpotModelNum() != 0) {
-                dComIfGd_drawAlphaModel(camera->mViewMtx);
-                dComIfGd_drawSpotModel(camera->mViewMtx);
-                drawSpot(camera);
+                dComIfGd_drawAlphaModel(camera->view.mViewMtx);
+                dComIfGd_drawSpotModel(camera->view.mViewMtx);
+                drawSpot(&camera->view);
             }
 
 #if VERSION == VERSION_DEMO
@@ -1732,8 +1734,8 @@ bool mDoGph_Painter() {
             dComIfGd_drawXluListMaskOff();
 
             if (!dMenu_flag()) {
-                motionBlure(camera);
-                drawDepth(camera, viewport_p, dComIfGp_getCamZoomForcus(cameraID));
+                motionBlure(&camera->view);
+                drawDepth(&camera->view, viewport_p, dComIfGp_getCamZoomForcus(cameraID));
                 dComIfGp_particle_drawProjection(&jpaDrawInfo);
 
                 GXSetClipMode(GX_CLIP_ENABLE);
@@ -1749,9 +1751,9 @@ bool mDoGph_Painter() {
 
                 if (mDoGph_gInf_c::isMonotone()) {
 #if VERSION == VERSION_DEMO
-                    clearAlphaBuffer(camera);
+                    clearAlphaBuffer(&camera->view);
 #else
-                    clearAlphaBuffer(camera, 0);
+                    clearAlphaBuffer(&camera->view, 0);
 #endif
                     dComIfGd_drawOpaListP0();
                     dComIfGd_drawOpaListP1();
@@ -1915,7 +1917,7 @@ bool mDoGph_Painter() {
 
     if (dComIfGd_getList2D()->getEntryPacket(0) != NULL) {
         Mtx viewMtx;
-        mDoMtx_copy(j3dSys.getViewMtx(), viewMtx);
+        cMtx_copy(j3dSys.getViewMtx(), viewMtx);
         setLight();
         mDoMtx_stack_c::transS(320.0f, 240.0f, 1000.0f);
         mDoMtx_stack_c::ZrotM(-0x8000);

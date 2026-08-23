@@ -199,14 +199,14 @@ f32 JASystem::TOscillator::calc(s16* i_table) {
         field_0x5 = envMode;
 
         if (envTime == 0) {
-            mTargetPhase = envValue / 32768.0f;
+            mTargetPhase = (f32)envValue / 0x8000;
             field_0x6 += 1;
             continue;
         }
 
         mReleaseRate = envTime * ((Kernel::getDacRate() / 80.0f) / 600.0f) / Driver::getUpdateInterval();
         mInitialReleaseRate = mReleaseRate;
-        mTargetPhase = envValue / 32768.0f;
+        mTargetPhase = (f32)envValue / 0x8000;
 
         if (field_0x5 == 0) {
             mPhaseChangeRate = (mTargetPhase - mPhase) / mReleaseRate;

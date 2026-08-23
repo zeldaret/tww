@@ -1470,7 +1470,7 @@ void daNpc_Ji1_c::set_mtx() {
 #endif
 
         field_0xB90 = field_0xB78;
-        mDoMtx_stack_c::copy(mpSpearMorf->getModel()->getAnmMtx(1));
+        mDoMtx_stack_c::copy(mpSpearMorf->getModel()->getAnmMtx(JI_YARI_JNT_JI_YARI_e));
         mDoMtx_stack_c::multVec(&temp, &field_0xB78);
         mDoMtx_stack_c::multVec(&temp2, &field_0xB84);
     }
@@ -1738,6 +1738,7 @@ u32 daNpc_Ji1_c::evn_sound_proc_init(int staffIdx) {
                 break;
             case 3:
                 dComIfGp_getVibration().StartShock(5, -0x11, cXyz(0.0f, 1.0f, 0.0f));
+                break;
         }
     }
 
@@ -3277,7 +3278,7 @@ void daNpc_Ji1_c::battleSubActionWaitInit() {
 /* 0000A430-0000A564       .text battleSubActionWait__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::battleSubActionWait() {
     if(--field_0xC30 < 0) {
-        f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+        f32 dist = fopAcM_searchPlayerDistanceXZ(this);
         f32 rnd = cM_rndF(10.0f);
 
         if(rnd > 3.3f || dist > 100.0f) {
@@ -3964,7 +3965,10 @@ BOOL daNpc_Ji1_c::battleGuardCheck() {
 
     if(field_0xC3C > 2) {
         if(checkAction(&daNpc_Ji1_c::battleAction)) {
-            dComIfG_TimerDeleteRequest();
+            dTimer_c* timer = dComIfG_getTimerPtr();
+            if (timer != NULL) {
+                timer->deleteRequest();
+            }
             
             if(isClearRecord(field_0xD70)) {
                 setClearRecord(field_0xD70);
@@ -4990,7 +4994,7 @@ BOOL daNpc_Ji1_c::_draw() {
             dComIfGd_addRealShadow(mShadowId, mpSpearMorf->getModel());
         }
 
-        dSnap_RegistFig(DSNAP_TYPE_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_NPC_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
         
         return true;
     }
@@ -5001,7 +5005,7 @@ static cXyz l_head_top(1.0f, 0.0f, 0.0f);
 
 /* 0001031C-00010E3C       .text daNpc_Ji1_setHairAngle__FP11daNpc_Ji1_c */
 static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
-    /* Nonmatching - stack */
+    /* Nonmatching - retail-only load order */
     f32 wind = *dKyw_get_wind_power() * *dKyw_get_wind_power() * 25.0f;
     cXyz* windVec = dKyw_get_wind_vec();
 
@@ -5057,7 +5061,7 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
     i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3_2);
     i_this->field_0xBAA += (s16)(i_this->field_0xBB6 + temp3_2);
-    i_this->field_0xBAA = cLib_minMaxLimit(i_this->field_0xBAA, l_HIO.field_0xF4, l_HIO.field_0xF6);
+    i_this->field_0xBAA = cLib_minMaxLimit<s16>(i_this->field_0xBAA, l_HIO.field_0xF4, l_HIO.field_0xF6);
 
     s16 r4_2 = i_this->current.angle.y + i_this->m_jnt.getHead_y();
     f32 f5 = cM_ssin(r4_2);
@@ -5065,7 +5069,7 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
     cLib_addCalcAngleS2(&i_this->field_0xBAC, cM_atan2s(sp3C.z * f5 - sp3C.x * f6, std::sqrtf(temp10 * temp10 + sp3C.y * sp3C.y)), 5, 0x400);
 
     i_this->field_0xBAC += (s16)(i_this->field_0xBB8 - temp4_2);
-    i_this->field_0xBAC = cLib_minMaxLimit(i_this->field_0xBAC, l_HIO.field_0xE8, l_HIO.field_0xEA);
+    i_this->field_0xBAC = cLib_minMaxLimit<s16>(i_this->field_0xBAC, l_HIO.field_0xE8, l_HIO.field_0xEA);
 
     i_this->field_0xBB6 = (s16)(i_this->field_0xBAA - r26) * 0.2f;
     i_this->field_0xBB8 = (s16)(i_this->field_0xBAC - r25) * 0.2f;
@@ -5262,7 +5266,7 @@ void daNpc_Ji1_c::BackSlide(f32 param_1, f32 param_2) {
 
 /* 0001173C-000118E0       .text harpoonRelease__11daNpc_Ji1_cFP4cXyz */
 void daNpc_Ji1_c::harpoonRelease(cXyz* param_1) {
-    MTXCopy(mpSpearMorf->getModel()->getAnmMtx(1), field_0xCA0);
+    MTXCopy(mpSpearMorf->getModel()->getAnmMtx(JI_YARI_JNT_JI_YARI_e), field_0xCA0);
     mpSpearMorf->setFrame(0.0f);
     field_0xCD0.x = field_0xCA0[0][3];
     field_0xCD0.y = field_0xCA0[1][3];

@@ -62,67 +62,71 @@ static const f64 __THPAANScaleFactor[8] = {
 
 #define THPROUNDUP(a, b) ((((s32)(a)) + ((s32)(b)-1L)) / ((s32)(b)))
 
-daMP_Player_c daMP_ActivePlayer;
+static daMP_Player_c daMP_ActivePlayer;
 
-BOOL daMP_ReadThreadCreated;
-OSMessageQueue daMP_FreeReadBufferQueue;
-OSMessageQueue daMP_ReadedBufferQueue;
-OSMessageQueue daMP_ReadedBufferQueue2;
-OSMessage daMP_FreeReadBufferMessage[10];
-OSMessage daMP_ReadedBufferMessage[10];
-OSMessage daMP_ReadedBufferMessage2[10];
-OSThread daMP_ReadThread;
-u8 daMP_ReadThreadStack[0x1000];
+static BOOL daMP_ReadThreadCreated;
+static OSMessageQueue daMP_FreeReadBufferQueue;
+static OSMessageQueue daMP_ReadedBufferQueue;
+static OSMessageQueue daMP_ReadedBufferQueue2;
+static OSMessage daMP_FreeReadBufferMessage[10];
+static OSMessage daMP_ReadedBufferMessage[10];
+static OSMessage daMP_ReadedBufferMessage2[10];
+static OSThread daMP_ReadThread;
+static u8 daMP_ReadThreadStack[0x1000];
 
-BOOL daMP_VideoDecodeThreadCreated;
-OSThread daMP_VideoDecodeThread;
-u8 daMP_VideoDecodeThreadStack[0x64000];
+static BOOL daMP_VideoDecodeThreadCreated;
+static OSThread daMP_VideoDecodeThread;
+static u8 daMP_VideoDecodeThreadStack[0x64000];
 
-OSMessageQueue daMP_FreeTextureSetQueue;
-OSMessageQueue daMP_DecodedTextureSetQueue;
-OSMessage daMP_FreeTextureSetMessage[3];
-OSMessage daMP_DecodedTextureSetMessage[3];
+static OSMessageQueue daMP_FreeTextureSetQueue;
+static OSMessageQueue daMP_DecodedTextureSetQueue;
+static OSMessage daMP_FreeTextureSetMessage[3];
+static OSMessage daMP_DecodedTextureSetMessage[3];
 
-BOOL daMP_First;
+static BOOL daMP_First;
 
-BOOL daMP_AudioDecodeThreadCreated;
-OSThread daMP_AudioDecodeThread;
-u8 daMP_AudioDecodeThreadStack[0x64000];
-OSMessageQueue daMP_FreeAudioBufferQueue;
-OSMessageQueue daMP_DecodedAudioBufferQueue;
-OSMessage daMP_FreeAudioBufferMessage[3];
-OSMessage daMP_DecodedAudioBufferMessage[3];
+static BOOL daMP_AudioDecodeThreadCreated;
+static OSThread daMP_AudioDecodeThread;
+static u8 daMP_AudioDecodeThreadStack[0x64000];
+static OSMessageQueue daMP_FreeAudioBufferQueue;
+static OSMessageQueue daMP_DecodedAudioBufferQueue;
+static OSMessage daMP_FreeAudioBufferMessage[3];
+static OSMessage daMP_DecodedAudioBufferMessage[3];
 
-BOOL daMP_Initialized;
-u32 daMP_WorkBuffer[16] ALIGN_DECL(32);
-OSMessageQueue daMP_PrepareReadyQueue;
-OSMessageQueue daMP_UsedTextureSetQueue;
-OSMessage daMP_PrepareReadyMessage;
-OSMessage daMP_UsedTextureSetMessage[3];
-VIRetraceCallback daMP_OldVIPostCallback;
+static BOOL daMP_Initialized;
+static u32 daMP_WorkBuffer[16] ALIGN_DECL(32);
+static OSMessageQueue daMP_PrepareReadyQueue;
+static OSMessageQueue daMP_UsedTextureSetQueue;
+static OSMessage daMP_PrepareReadyMessage;
+static OSMessage daMP_UsedTextureSetMessage[3];
+static VIRetraceCallback daMP_OldVIPostCallback;
 
-u32 daMP_SoundBufferIndex;
-u32 daMP_OldAIDCallback;
+static u32 daMP_SoundBufferIndex;
+static u32 daMP_OldAIDCallback;
 
-void* daMP_LastAudioBuffer;
-void* daMP_CurAudioBuffer;
-s32 daMP_AudioSystem;
-s16 daMP_SoundBuffer[2][0x460] ALIGN_DECL(32);
+static void* daMP_LastAudioBuffer;
+static void* daMP_CurAudioBuffer;
+static s32 daMP_AudioSystem;
+static s16 daMP_SoundBuffer[2][0x460] ALIGN_DECL(32);
 
-THPVideoInfo daMP_videoInfo;
-THPAudioInfo daMP_audioInfo;
-u32 daMP_DrawPosX;
-u32 daMP_DrawPosY;
-void* daMP_buffer;
+static THPVideoInfo daMP_videoInfo;
+static THPAudioInfo daMP_audioInfo;
+static u32 daMP_DrawPosX;
+static u32 daMP_DrawPosY;
+static void* daMP_buffer;
 
+#if VERSION > VERSION_DEMO
 BOOL daMP_Fail_alloc;
 u16 daMP_backup_FrameRate;
 u8 daMP_backup_vfilter[7];
+#endif
 
 daMP_Dlst_base_c daMP_c_Dlst_base;
 
+#if VERSION > VERSION_DEMO
 #ifdef __cplusplus
 extern "C" {
+#endif
 #endif
 
 /* 000000EC-00000584       .text THPAudioDecode */
@@ -1646,20 +1650,20 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
                 // clang-format off
 #ifdef __MWERKS__
                 asm {
-                        lwz      cnt,info->cnt;
-                        subfic   code,cnt,33;
-                        lwz      cb,info->currByte;
+                    lwz      cnt,info->cnt;
+                    subfic   code,cnt,33;
+                    lwz      cb,info->currByte;
 
-                        subfc. tmp, code, t;
-                        subi     cnt1,cnt,1;
+                    subfc. tmp, code, t;
+                    subi     cnt1,cnt,1;
 
-                        bgt      _notEnoughBitsDIFF;
-                        add      v,cnt,t;
+                    bgt      _notEnoughBitsDIFF;
+                    add      v,cnt,t;
 
-                        slw      cnt,cb,cnt1;
-                        stw      v,info->cnt;
-                        subfic   v,t,32;
-                        srw      diff,cnt,v;
+                    slw      cnt,cb,cnt1;
+                    stw      v,info->cnt;
+                    subfic   v,t,32;
+                    srw      diff,cnt,v;
                 }
 #endif
                 // clang-format on
@@ -1894,22 +1898,22 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
             // clang-format off
 #ifdef __MWERKS__
             asm {
-                    li  cnt, sizeof(s32)*5;
-                    add     maxcodebase, maxcodebase, cnt;
+                li  cnt, sizeof(s32)*5;
+                add     maxcodebase, maxcodebase, cnt;
 
-                    slwi    tmp, code, 32-5;
-                    li      cnt,5;
-                    rlwimi  tmp, cb, 32-1, 1,31;
+                slwi    tmp, code, 32-5;
+                li      cnt,5;
+                rlwimi  tmp, cb, 32-1, 1,31;
 
-                  __DR4_WHILE_START:
+                __DR4_WHILE_START:
 
-                    subfic  ssss, cnt, 31;
-                    lwzu    tmp2, 4(maxcodebase);
-                    srw     code, tmp, ssss;
-                  __DR4_WHILE_CHECK:
-                    cmpw    code, tmp2
-                    addi    cnt, cnt, 1
-                    bgt     __DR4_WHILE_START;
+                subfic  ssss, cnt, 31;
+                lwzu    tmp2, 4(maxcodebase);
+                srw     code, tmp, ssss;
+                __DR4_WHILE_CHECK:
+                cmpw    code, tmp2
+                addi    cnt, cnt, 1
+                bgt     __DR4_WHILE_START;
 
             }
 #endif
@@ -1930,31 +1934,31 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info, THPCoeff* block)
             // clang-format off
 #ifdef __MWERKS__
             asm {
-                    lwz     tmp, info->c;
-                    subfic  tmp2, cnt, 33;
-                    addi    tmp3, tmp2, 1;
-                    slwi    tmp2, tmp2, 2;
-                    lwzu    cb, 4(tmp);
-                    add     mask,mask, tmp2;
-                    stw     tmp, info->c;
-                    slwi    code, code, 1;
-                    rlwimi  code, cb, 1, 31, 31;
-                    lwzu    tmp2, 4(mask);
-                    li      cnt, 2;
-                    b       __FCNB1_WHILE_CHECK;
+                lwz     tmp, info->c;
+                subfic  tmp2, cnt, 33;
+                addi    tmp3, tmp2, 1;
+                slwi    tmp2, tmp2, 2;
+                lwzu    cb, 4(tmp);
+                add     mask,mask, tmp2;
+                stw     tmp, info->c;
+                slwi    code, code, 1;
+                rlwimi  code, cb, 1, 31, 31;
+                lwzu    tmp2, 4(mask);
+                li      cnt, 2;
+                b       __FCNB1_WHILE_CHECK;
 
-                  __FCNB1_WHILE_START:
-                    slwi    code, code, 1;
+                __FCNB1_WHILE_START:
+                slwi    code, code, 1;
 
-                    addi    tmp3, tmp3, 1;
-                    lwzu    tmp2, 4(mask);
-                    add     code, code, rrrr;
-                    addi    cnt, cnt, 1;
+                addi    tmp3, tmp3, 1;
+                lwzu    tmp2, 4(mask);
+                add     code, code, rrrr;
+                addi    cnt, cnt, 1;
 
-                  __FCNB1_WHILE_CHECK:
-                    cmpw    code, tmp2;
-                    rlwnm   rrrr, cb, cnt, 31, 31;
-                    bgt     __FCNB1_WHILE_START;
+                __FCNB1_WHILE_CHECK:
+                cmpw    code, tmp2;
+                rlwnm   rrrr, cb, cnt, 31, 31;
+                bgt     __FCNB1_WHILE_START;
 
             }
 #endif
@@ -2618,8 +2622,10 @@ static BOOL THPInit() {
     return TRUE;
 }
 
+#if VERSION > VERSION_DEMO
 #ifdef __cplusplus
-}
+} // extern "C"
+#endif
 #endif
 
 /* 00003208-0000323C       .text daMP_PopReadedBuffer__Fv */
@@ -3279,18 +3285,18 @@ static void daMP_MixAudio(s16* destination, s16*, u32 sample) {
 
                 l_mix = 0.7f * (attenuation * curPtr[0] >> 15);
                 // clamp volume
-                if (l_mix < -32768)
-                    l_mix = -32768;
-                if (l_mix > 32767)
-                    l_mix = 32767;
+                if (l_mix < -0x8000)
+                    l_mix = -0x8000;
+                if (l_mix > 0x7FFF)
+                    l_mix = 0x7FFF;
 
                 dst[0] = l_mix;
 
                 r_mix = 0.7f * (attenuation * curPtr[1] >> 15);
-                if (r_mix < -32768)
-                    r_mix = -32768;
-                if (r_mix > 32767)
-                    r_mix = 32767;
+                if (r_mix < -0x8000)
+                    r_mix = -0x8000;
+                if (r_mix > 0x7FFF)
+                    r_mix = 0x7FFF;
 
                 dst[1] = r_mix;
 
@@ -4150,8 +4156,7 @@ static u32 daMP_Get_MovieRestFrame() {
 }
 
 /* 000062F0-00006370       .text daMP_Set_PercentMovieVolume__Ff */
-static u32 daMP_Set_PercentMovieVolume(f32 volume) {
-    /* Nonmatching - regalloc */
+static void daMP_Set_PercentMovieVolume(f32 volume) {
 #if VERSION > VERSION_DEMO
     if (!daMP_Fail_alloc)
 #endif

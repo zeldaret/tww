@@ -57,8 +57,8 @@ BOOL daTag_Mk_c::checkArea(float arg1, float arg2, float arg3) {
 }
 
 /* 000001F8-00000228       .text next_msgStatus__10daTag_Mk_cFPUl */
-u16 daTag_Mk_c::next_msgStatus(unsigned long* arg1) {
-    u16 ret = 0xF;
+u16 daTag_Mk_c::next_msgStatus(u32* arg1) {
+    u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
 
     switch (*arg1) {
         case 0x1BC0:
@@ -68,10 +68,10 @@ u16 daTag_Mk_c::next_msgStatus(unsigned long* arg1) {
             break;
 
         default:
-            ret = 0x10;
+            msg_status = fopMsgStts_MSG_ENDS_e;
             break;
     }
-    return ret;
+    return msg_status;
 }
 
 /* 00000228-00000270       .text getMsg__10daTag_Mk_cFv */
@@ -203,7 +203,7 @@ void daTag_Mk_c::demoInitCom() {
 }
 
 /* 000006F8-000006FC       .text demoProcCom__10daTag_Mk_cFv */
-BOOL daTag_Mk_c::demoProcCom() {
+void daTag_Mk_c::demoProcCom() {
 }
 
 /* 000006FC-00000744       .text getNowEventAction__10daTag_Mk_cFv */

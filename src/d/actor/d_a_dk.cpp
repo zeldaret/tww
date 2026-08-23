@@ -40,7 +40,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         if (a_this != NULL) {
             MTXCopy(model->getAnmMtx(jnt_no), *calc_mtx);
 
-            s32 tail_idx = ((jnt_no - 58) / 2);
+            s32 tail_idx = ((jnt_no - DK_JNT_J_DK_O_LA2_e) / 2);
 
             cXyz pos_vec;
             pos_vec.x = pos_vec.y = pos_vec.z = 0.0f;
@@ -166,7 +166,7 @@ static void tail_draw(dk_class* a_this, tail_s* tail) {
 static void kamen_draw(dk_class* a_this) {
     J3DModel* model = a_this->mpModelKamen;
 
-    MTXCopy(a_this->field_0x2B8->getModel()->getAnmMtx(24), *calc_mtx);
+    MTXCopy(a_this->field_0x2B8->getModel()->getAnmMtx(DK_JNT_J_DK_ATAMA1_e), *calc_mtx);
     cMtx_YrotM(*calc_mtx, 0x4000);
     cMtx_ZrotM(*calc_mtx, -0x4000);
     MtxTrans(REG0_F(0) * 0.01f,
@@ -331,7 +331,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     }
 
     for (u16 i = 0; i < a_this->field_0x2B8->getModel()->getModelData()->getJointNum(); i++) {
-        if (i == 58 || i == 60 || i == 62 || i == 64) {
+        if (i == DK_JNT_J_DK_O_LA2_e || i == DK_JNT_J_DK_O_LB2_e || i == DK_JNT_J_DK_O_RA2_e || i == DK_JNT_J_DK_O_RB2_e) {
             a_this->field_0x2B8->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }

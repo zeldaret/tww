@@ -12,9 +12,10 @@ enum J3DError {
     J3DErrType_OutOfMemory = 4,
 };
 
-enum J3DSysDrawBuffer {
-    /* 0x0 */ OPA_BUFFER,
-    /* 0x1 */ XLU_BUFFER
+enum J3DSysDrawBuf {
+    /* 0x0 */ J3DSysDrawBuf_Opa,
+    /* 0x1 */ J3DSysDrawBuf_Xlu,
+    /* 0x2 */ J3DSysDrawBuf_MAX,
 };
 
 class J3DMtxCalc;

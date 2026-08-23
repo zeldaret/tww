@@ -26,7 +26,7 @@ static f32* wp;
 static f32 ita_z_p[] = { 0.1f, 0.3f, 0.5f, 0.75f, 0.9f, 1.0f, 0.9f, 0.75f, 0.5f, 0.3f, 0.1f };
 
 /* 00000078-00000504       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+static void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     bridge_class* i_this = (bridge_class*)i_ac;
 
     cXyz pos = i_this->mBr[0].mPosition - i_pt->current.pos;
@@ -263,12 +263,7 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
                 }
             }
 
-#ifdef __MWERKS__
             pBr->mLineMat1.update(5, (GXColor){150, 150, 150, 255}, &i_this->actor.tevStr);
-#else
-            GXColor color = (GXColor){150, 150, 150, 255};
-            pBr->mLineMat1.update(5, color, &i_this->actor.tevStr);
-#endif
             dComIfGd_set3DlineMat(&pBr->mLineMat1);
             continue;
         }
@@ -373,12 +368,7 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
             tmp = 4.0f;
         }
 
-#ifdef __MWERKS__
         i_this->mLineMat.update(i_this->m030C + 2, tmp, (GXColor){150, 150, 150, 255}, 0, &i_this->actor.tevStr);
-#else
-        GXColor color = (GXColor){150, 150, 150, 255};
-        i_this->mLineMat.update(i_this->m030C + 2, tmp, color, 0, &i_this->actor.tevStr);
-#endif
         dComIfGd_set3DlineMat(&i_this->mLineMat);
     }
 
@@ -849,7 +839,7 @@ void* s_a_b_sub(void* ac1, void* ac2) {
 
 /* 00002A8C-00002AB8       .text search_aite__FP12bridge_class */
 bridge_class* search_aite(bridge_class* i_this) {
-    return (bridge_class*)fpcEx_Search(s_a_b_sub, &i_this->actor);
+    return (bridge_class*)fpcM_Search(s_a_b_sub, &i_this->actor);
 }
 
 /* 00002AB8-00003C68       .text daBridge_Execute__FP12bridge_class */
@@ -857,10 +847,10 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
     /* Nonmatching - regswap */
     fopAc_ac_c* a_player = static_cast<fopAc_ac_c*>(dComIfGp_getPlayer(0));
     daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
-    camera_class* pCam = dComIfGp_getCamera(0);
+    camera_process_class* pCam = dComIfGp_getCamera(0);
     s32 i;
 
-    cXyz eyeDir = i_this->actor.current.pos - pCam->mLookat.mEye;
+    cXyz eyeDir = i_this->actor.current.pos - pCam->view.mLookat.mEye;
     cXyz spCC;
 
     if (i_this->m033C != 0) {
@@ -868,7 +858,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
     }
     
     if (eyeDir.abs() > 5000.0f) {
-        spCC = pCam->mLookat.mCenter - pCam->mLookat.mEye;
+        spCC = pCam->view.mLookat.mCenter - pCam->view.mLookat.mEye;
         s16 atan = cM_atan2s(spCC.x, spCC.z);
         cMtx_YrotS(*calc_mtx, -atan);
         MtxPosition(&eyeDir, &spCC);

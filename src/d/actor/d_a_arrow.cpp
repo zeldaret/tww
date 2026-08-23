@@ -228,22 +228,22 @@ void daArrow_c::setDrawShapeMaterial() {
         {
             /* mAtType      */ AT_TYPE_NORMAL_ARROW,
             /* mAtp         */ 2,
-            /* mTipJointIdx */ 4,
+            /* mTipJointIdx */ ARROW_JNT_TIPNOMAL_e,
         },
         {
             /* mAtType      */ AT_TYPE_FIRE_ARROW,
             /* mAtp         */ 4,
-            /* mTipJointIdx */ 2,
+            /* mTipJointIdx */ ARROW_JNT_TIPFIRE_e,
         },
         {
             /* mAtType      */ AT_TYPE_ICE_ARROW,
             /* mAtp         */ 4,
-            /* mTipJointIdx */ 3,
+            /* mTipJointIdx */ ARROW_JNT_TIPICE_e,
         },
         {
             /* mAtType      */ AT_TYPE_LIGHT_ARROW,
             /* mAtp         */ 0xFF,
-            /* mTipJointIdx */ 0,
+            /* mTipJointIdx */ ARROWGLITTER_JNT_ARROWGLITTER_e,
         },
     };
     
@@ -559,7 +559,7 @@ void daArrow_c::setStopActorMatrix() {
     s16 xRot = 0;
     if (cLib_calcTimer(&field_0x604) != 0) {
         f32 temp = (field_0x604 / 40.0f);
-        xRot = 1024.0f * temp*temp * cM_ssin(field_0x604 * 0x52FB);
+        xRot = 0x400 * temp*temp * cM_ssin(field_0x604 * 0x52FB);
     }
     fopAc_ac_c* hitActor = fopAcM_SearchByID(mHitActorProcID);
     if (!hitActor) {
@@ -1068,10 +1068,10 @@ BOOL daArrow_c::createInit() {
     
     if (mArrowType != TYPE_LIGHT) {
         J3DModelData* modelData = mpModel->getModelData();
-        modelData->getJointNodePointer(4)->getMesh()->getShape()->hide();
-        modelData->getJointNodePointer(2)->getMesh()->getShape()->hide();
-        modelData->getJointNodePointer(3)->getMesh()->getShape()->hide();
-        modelData->getJointNodePointer(3)->getMesh()->getNext()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPNOMAL_e)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPFIRE_e)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPICE_e)->getMesh()->getShape()->hide();
+        modelData->getJointNodePointer(ARROW_JNT_TIPICE_e)->getMesh()->getNext()->getShape()->hide();
     }
     setDrawShapeMaterial();
     
@@ -1273,6 +1273,7 @@ static BOOL daArrowDraw(void* i_this) {
 
 /* 800D8280-800D8288       .text daArrowIsDelete__FPv */
 static BOOL daArrowIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

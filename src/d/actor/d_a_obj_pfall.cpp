@@ -347,7 +347,7 @@ void daObj_Pfall_c::mode_event() {
             if(l_HIO.field_0x06 != 0) {
                 mode_wait_init();
             } else {
-                dComIfGp_setNextStage("sea", 15, 11);
+                dComIfGp_setNextStage("sea", 15, dIsleRoom_WindfallIsland_e);
             }
         }
     } else {
@@ -406,7 +406,7 @@ void daObj_Pfall_c::nz_draw() {
     J3DModel* pModel = mpMorf->getModel();
     J3DModelData* pModelData = pModel->getModelData();
 
-    J3DJoint* rootJoint = pModelData->getJointNodePointer(0);
+    J3DJoint* rootJoint = pModelData->getJointNodePointer(PFALL_NZ_JNT_KOSI_e);
 
     J3DShape* matShape = pModelData->getMaterialNodePointer(0)->getShape();
     J3DShape* matShape2 = pModelData->getMaterialNodePointer(1)->getShape();

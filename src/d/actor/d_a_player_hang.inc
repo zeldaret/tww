@@ -105,7 +105,7 @@ BOOL daPy_lk_c::changeHangMoveProc(int i_direction) {
 
 /* 801342D8-80134440       .text changeHangEndProc__9daPy_lk_cFi */
 int daPy_lk_c::changeHangEndProc(int param_0) {
-    MtxP mtx = mpCLModel->getAnmMtx(0);
+    MtxP mtx = mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e);
     cXyz pos;
     pos.x = mtx[0][3] - cM_ssin(shape_angle.y) * 4.0f;
     pos.y = mtx[1][3];

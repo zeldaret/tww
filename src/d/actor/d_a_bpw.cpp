@@ -66,10 +66,12 @@ static BOOL body_nodeCallBack(J3DNode* node, int calcTiming) {
         J3DModel* model = j3dSys.getModel();
         bpw_class* i_this = (bpw_class*)model->getUserArea();
         if (i_this != NULL) {
-            if ((((jntNo == 0) || (jntNo == 2)) || (jntNo - 0x1d <= (u32)1)) || (jntNo == 0x25)) {
+            if (jntNo == BPW_JNT_BPW_ALLROOT_e || jntNo == BPW_JNT_J_BPW_KOSI1_e || jntNo == BPW_JNT_J_BPW_UDE_R3_e || jntNo == BPW_JNT_J_BPW_ITEM_e ||
+                jntNo == BPW_JNT_J_BPW_AGO1_e)
+            {
                 MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             }
-            if (jntNo == 0) {
+            if (jntNo == BPW_JNT_BPW_ALLROOT_e) {
                 local_28.x = 0.0f;
                 local_28.y = i_this->m4A0;
                 local_28.z = 0.0f;
@@ -79,31 +81,33 @@ static BOOL body_nodeCallBack(J3DNode* node, int calcTiming) {
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m370);
             }
-            if (jntNo == 2) {
+            if (jntNo == BPW_JNT_J_BPW_KOSI1_e) {
                 local_28.x = 0.0f;
                 local_28.y = 0.0f;
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m394);
             }
-            if (jntNo == 0x1d) {
+            if (jntNo == BPW_JNT_J_BPW_UDE_R3_e) {
                 local_28.x = 0.0f;
                 local_28.y = 0.0f;
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m3B8);
             }
-            if (jntNo == 0x1e) {
+            if (jntNo == BPW_JNT_J_BPW_ITEM_e) {
                 local_28.x = 0.0f;
                 local_28.y = 0.0f;
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->mChildActorPos);
             }
-            if (jntNo == 0x25) {
+            if (jntNo == BPW_JNT_J_BPW_AGO1_e) {
                 local_28.x = 0.0f;
                 local_28.y = 0.0f;
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m3C4);
             }
-            if (((jntNo == 0) || (jntNo == 2)) || (jntNo - 0x1d <= (u32)1 || (jntNo == 0x25))) {
+            if (jntNo == BPW_JNT_BPW_ALLROOT_e || jntNo == BPW_JNT_J_BPW_KOSI1_e || jntNo == BPW_JNT_J_BPW_UDE_R3_e || jntNo == BPW_JNT_J_BPW_ITEM_e ||
+                jntNo == BPW_JNT_J_BPW_AGO1_e)
+            {
                 model->setAnmMtx(jntNo, *calc_mtx);
                 cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             }
@@ -121,10 +125,10 @@ static BOOL kantera_nodeCallBack(J3DNode* node, int calcTiming) {
         J3DModel* model = j3dSys.getModel();
         bpw_class* i_this = (bpw_class*)model->getUserArea();
         if (i_this != NULL) {
-            if ((jntNo == 0) || (jntNo == 1)) {
+            if ((jntNo == BPW_KAN1_JNT_TOTTE_e) || (jntNo == BPW_KAN1_JNT_KANTERA_e)) {
                 MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             }
-            if (jntNo == 1) {
+            if (jntNo == BPW_KAN1_JNT_KANTERA_e) {
                 cMtx_YrotM(*calc_mtx, i_this->mKanteraDousaRot.y);
                 cMtx_XrotM(*calc_mtx, i_this->mKanteraDousaRot.x);
                 cMtx_ZrotM(*calc_mtx, i_this->mKanteraDousaRot.z);
@@ -133,7 +137,7 @@ static BOOL kantera_nodeCallBack(J3DNode* node, int calcTiming) {
                 local_28.z = 0.0f;
                 MtxPosition(&local_28, &i_this->m358);
             }
-            if ((jntNo == 0) || (jntNo == 1)) {
+            if ((jntNo == BPW_KAN1_JNT_TOTTE_e) || (jntNo == BPW_KAN1_JNT_KANTERA_e)) {
                 model->setAnmMtx(jntNo, *calc_mtx);
                 cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             }
@@ -692,7 +696,7 @@ void noroi_check(bpw_class* i_this) {
                 i_this->mSomeCountdownTimers[3] = DEMO_SELECT(REG11_F(17) + 0x14, 0x14);
                 s32 r31 = ACTOR_TYPE_BODY;
                 csXyz local_28 = actor->shape_angle;
-                camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+                camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 i_this->mFire1DousaPos = player2->getHeadTopPos();
                 dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &i_this->mFire1DousaPos);
                 r31 |= ACTOR_TYPE_TORITUKI;
@@ -949,7 +953,7 @@ void search_get_skull(bpw_class* i_this, u8 param_2) {
                         actor2->speed.y = 20.0f;
                     }
                     actor2->current.angle.y = fopAcM_searchActorAngleY(actor, actor2);
-                    actor2->current.angle.y += (int)cM_rndFX(4096.0f);
+                    actor2->current.angle.y += (int)cM_rndFX(0x1000);
                     actor2->shape_angle.x += -0x2000;
                 }
                 break;
@@ -1089,163 +1093,168 @@ void action_dousa(bpw_class* i_this) {
     case 1:
         if (i_this->mSomeCountdownTimers[0] == 0) {
             i_this->mActionState++;
-            // fallthrough
+        } else {
+            break;
+        }
+        // fallthrough
+    case 2:
+        i_this->mSomeCountdownTimers[0] = 0x41;
+        i_this->m490 = 10.0f;
+        i_this->mSomeCountdownTimers[0] += (int)cM_rndF(i_this->mSomeCountdownTimers[0]);
+        i_this->m488 = 1.0f;
+        if (i_this->m3F6 == 2) {
+            i_this->m490 = i_this->m490 * DEMO_SELECT(REG11_F(4) + 1.75f, REG8_F(0) + 1.35f);
+            i_this->m488 = 5.0f;
+        }
+        if (i_this->m3F8 != 0x1d) {
+            anm_init(i_this, dRes_INDEX_BPW_BCK_MOVEF1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        }
+        i_this->mActionState++;
+    case 3:
+        if (i_this->mSomeCountdownTimers[0] != 0) {
+            break;
+        }
+        i_this->m490 = 0.0f;
+        switch (i_this->m3F6) {
+        case 0:
+            i_this->mBodyAction = ACTION_ATTACK_KOUGEKI;
+            i_this->mActionState = 0x14;
+            break;
+        case 1:
         case 2:
-            i_this->mSomeCountdownTimers[0] = 0x41;
-            i_this->m490 = 10.0f;
-            i_this->mSomeCountdownTimers[0] += (int)cM_rndF(i_this->mSomeCountdownTimers[0]);
-            i_this->m488 = 1.0f;
-            if (i_this->m3F6 == 2) {
-                i_this->m490 = i_this->m490 * DEMO_SELECT(REG11_F(4) + 1.75f, REG8_F(0) + 1.35f);
-                i_this->m488 = 5.0f;
-            }
-            if (i_this->m3F8 != 0x1d) {
-                anm_init(i_this, dRes_INDEX_BPW_BCK_MOVEF1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-            }
-            i_this->mActionState++;
-        case 3:
-            if (i_this->mSomeCountdownTimers[0] == 0) {
-                i_this->m490 = 0.0f;
-                switch (i_this->m3F6) {
-                case 0:
-                    i_this->mBodyAction = ACTION_ATTACK_KOUGEKI;
-                    i_this->mActionState = 0x14;
-                    break;
-                case 1:
-                case 2:
-                    if (dComIfGp_getDetect().chk_light(&player->current.pos)) {
-                        i_this->mBodyAction = ACTION_ATTACK_KOUGEKI;
-                        i_this->mActionState = 0x28;
-                    } else if (REG12_S(9) != 0) {
-                        i_this->mActionState = 4;
-                    } else {
-                        if (cM_rnd() < 0.5f) {
-                            f32 f5 = 1100.0f;
-                            f32 fVar15 = i_this->mBodyPos.x - actor->current.pos.x;
-                            f32 fVar3 = i_this->mBodyPos.z - actor->current.pos.z;
-                            if (std::sqrtf(SQUARE(fVar15) + SQUARE(fVar3)) < f5) {
-                                i_this->mBodyAction = ACTION_BODY_DOWN_KARADA_TAORE;
-                                i_this->mActionState = 0x46;
-                                break;
-                            }
-                        }
-                        i_this->mActionState = 4;
+            if (dComIfGp_getDetect().chk_light(&player->current.pos)) {
+                i_this->mBodyAction = ACTION_ATTACK_KOUGEKI;
+                i_this->mActionState = 0x28;
+            } else if (REG12_S(9) != 0) {
+                i_this->mActionState = 4;
+            } else {
+                if (cM_rnd() < 0.5f) {
+                    f32 f5 = 1100.0f;
+                    f32 fVar15 = i_this->mBodyPos.x - actor->current.pos.x;
+                    f32 fVar3 = i_this->mBodyPos.z - actor->current.pos.z;
+                    if (std::sqrtf(SQUARE(fVar15) + SQUARE(fVar3)) < f5) {
+                        i_this->mBodyAction = ACTION_BODY_DOWN_KARADA_TAORE;
+                        i_this->mActionState = 0x46;
+                        break;
                     }
                 }
-                break;
-            case 4:
-                anm_init(i_this, dRes_INDEX_BPW_BCK_MOVEB1_e, REG12_F(0) + 15.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                i_this->mSomeCountdownTimers[0] = (s16)(int)(REG12_F(1) + 40.0f);
-                noroi_brk_check(i_this, 0);
-                fopAcM_monsSeStart(actor, JA_SE_CV_BPW_CURSE, 0);
-                i_this->mActionState++;
-            case 5:
-                maai_sub(i_this);
-                if (i_this->mSomeCountdownTimers[0] == 0) {
-                    i_this->m3E6 = 1;
-                    actor->speedF = REG8_F(12) + 75.0f;
-                    i_this->m488 = REG8_F(13) + 2.0f;
-                    i_this->m490 = 0.0f;
-                    anm_init(i_this, dRes_INDEX_BPW_BCK_MOVES1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-                    i_this->mActionState++;
-
-                    // fallthrough
-                case 6: {
-                    if (actor->speedF < 1.0f) {
-                        actor->speedF = 0.0f;
-                    }
-                    cMtx_YrotS(*calc_mtx, actor->current.angle.y);
-                    local_c0.x = 0.0f;
-                    local_c0.y = 0.0f;
-                    local_c0.z = 500.0f;
-                    MtxPosition(&local_c0, i_this->m328);
-                    i_this->m328[0] += actor->current.pos;
-                    i_this->m328[0].y += 400.0f;
-                    i_this->m304[0] = actor->current.pos;
-                    i_this->m304[0].y += 400.0f;
-                    linChk.Set(i_this->m304, i_this->m328, actor);
-                    if (dComIfG_Bgsp()->LineCross(&linChk)) {
-                        actor->speedF = 0.0f;
-                    }
-                    f32 f0;
-                    f32 f1;
-                    f1 = actor->speedF;
-                    f0 = 0.0f;
-                    if (f1 == f0) {
-                        noroi_brk_check(i_this, 1);
-                        next_status_clear(i_this, 1);
-                        if (player->checkConfuse()) {
-                            i_this->mBodyAction = ACTION_ATTACK_KOUGEKI;
-                            i_this->mActionState = 0x14;
-                        } else {
-                            i_this->mActionState = 0;
-                        }
-                    }
-                    break;
-                }
-                case 10:
-                    search_get_skull(i_this, 2);
-                    for (s32 i = 0; i < 10; i++) {
-                        i_this->mSomeCountdownTimers[i + 10] = 0;
-                    }
-                    if (i_this->m3F8 != 0x2a) {
-                        anm_init(i_this, dRes_INDEX_BPW_BCK_WAIT1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-                    }
-                    i_this->mActionState++;
-                case 0xb:
-                    cLib_addCalcAngleS2(&i_this->m47E, 0, 1, 10);
-                    if (i_this->m47E < 2) {
-                        i_this->m47E = 0;
-                        if (kantera_pos_search(i_this)) {
-                            i_this->mActionState++;
-                        }
-                    }
-                    break;
-                case 0xc:
-                    cLib_addCalcAngleS2(&i_this->m47E, 0x96, 1, 0x1e);
-                    if (i_this->m47E >= 0x95) {
-                        i_this->m47E = 0x96;
-                        i_this->m480 = 0x96;
-                        anm_init(i_this, dRes_INDEX_BPW_BCK_HIROU1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
-                        kantera_pos_search(i_this);
-                        i_this->mActionState++;
-                    }
-                    break;
-                case 0xd:
-                    if (i_this->m462 == 0) {
-                        kantera_pos_search(i_this);
-                    }
-                    if (i_this->mpMorf->checkFrame(12.0f)) {
-                        fopAcM_seStart(actor, JA_SE_CM_BPW_GET_KANTERA, 0);
-                        if (i_this->m3FC != fpcM_ERROR_PROCESS_ID_e) {
-                            bpw_class* pfVar6 = (bpw_class*)fopAcM_SearchByID(i_this->m3FC);
-                            if (pfVar6 != NULL) {
-                                pfVar6->actor.gravity = 0.0f;
-                                pfVar6->actor.speedF = 0.0f;
-                                pfVar6->actor.speed.setall(0.0f);
-                                pfVar6->actor.attention_info.flags = 0;
-                                pfVar6->mActionState = 0;
-                                i_this->m462 = 1;
-                            }
-                        }
-                        i_this->m482 = 0;
-                        i_this->m388 = 0.0f;
-                        i_this->m38C = 0.0f;
-                        i_this->m390 = 0.0f;
-                        i_this->mAttWaitTimer = 1;
-                    }
-                    if (i_this->mpMorf->isStop()) {
-                        next_status_clear(i_this, 1);
-#if VERSION > VERSION_DEMO
-                        i_this->mSomeCountdownTimers[2] = 0;
-#endif
-                        i_this->mBodyAction = ACTION_ATTACK_KOUGEKI;
-                        i_this->mActionState = 0x14;
-                    }
-                    // fallthrough
-                }
+                i_this->mActionState = 4;
             }
         }
+        break;
+    case 4:
+        anm_init(i_this, dRes_INDEX_BPW_BCK_MOVEB1_e, REG12_F(0) + 15.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+        i_this->mSomeCountdownTimers[0] = (s16)(int)(REG12_F(1) + 40.0f);
+        noroi_brk_check(i_this, 0);
+        fopAcM_monsSeStart(actor, JA_SE_CV_BPW_CURSE, 0);
+        i_this->mActionState++;
+    case 5:
+        maai_sub(i_this);
+        if (i_this->mSomeCountdownTimers[0] == 0) {
+            i_this->m3E6 = 1;
+            actor->speedF = REG8_F(12) + 75.0f;
+            i_this->m488 = REG8_F(13) + 2.0f;
+            i_this->m490 = 0.0f;
+            anm_init(i_this, dRes_INDEX_BPW_BCK_MOVES1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+            i_this->mActionState++;
+        } else {
+            break;
+        }
+
+        // fallthrough
+    case 6: {
+        if (actor->speedF < 1.0f) {
+            actor->speedF = 0.0f;
+        }
+        cMtx_YrotS(*calc_mtx, actor->current.angle.y);
+        local_c0.x = 0.0f;
+        local_c0.y = 0.0f;
+        local_c0.z = 500.0f;
+        MtxPosition(&local_c0, i_this->m328);
+        i_this->m328[0] += actor->current.pos;
+        i_this->m328[0].y += 400.0f;
+        i_this->m304[0] = actor->current.pos;
+        i_this->m304[0].y += 400.0f;
+        linChk.Set(i_this->m304, i_this->m328, actor);
+        if (dComIfG_Bgsp()->LineCross(&linChk)) {
+            actor->speedF = 0.0f;
+        }
+        f32 f0;
+        f32 f1;
+        f1 = actor->speedF;
+        f0 = 0.0f;
+        if (f1 == f0) {
+            noroi_brk_check(i_this, 1);
+            next_status_clear(i_this, 1);
+            if (player->checkConfuse()) {
+                i_this->mBodyAction = ACTION_ATTACK_KOUGEKI;
+                i_this->mActionState = 0x14;
+            } else {
+                i_this->mActionState = 0;
+            }
+        }
+        break;
+    }
+    case 10:
+        search_get_skull(i_this, 2);
+        for (s32 i = 0; i < 10; i++) {
+            i_this->mSomeCountdownTimers[i + 10] = 0;
+        }
+        if (i_this->m3F8 != 0x2a) {
+            anm_init(i_this, dRes_INDEX_BPW_BCK_WAIT1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        }
+        i_this->mActionState++;
+    case 0xb:
+        cLib_addCalcAngleS2(&i_this->m47E, 0, 1, 10);
+        if (i_this->m47E < 2) {
+            i_this->m47E = 0;
+            if (kantera_pos_search(i_this)) {
+                i_this->mActionState++;
+            }
+        }
+        break;
+    case 0xc:
+        cLib_addCalcAngleS2(&i_this->m47E, 0x96, 1, 0x1e);
+        if (i_this->m47E >= 0x95) {
+            i_this->m47E = 0x96;
+            i_this->m480 = 0x96;
+            anm_init(i_this, dRes_INDEX_BPW_BCK_HIROU1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_NONE, 1.0f, -1);
+            kantera_pos_search(i_this);
+            i_this->mActionState++;
+        }
+        break;
+    case 0xd:
+        if (i_this->m462 == 0) {
+            kantera_pos_search(i_this);
+        }
+        if (i_this->mpMorf->checkFrame(12.0f)) {
+            fopAcM_seStart(actor, JA_SE_CM_BPW_GET_KANTERA, 0);
+            if (i_this->m3FC != fpcM_ERROR_PROCESS_ID_e) {
+                bpw_class* pfVar6 = (bpw_class*)fopAcM_SearchByID(i_this->m3FC);
+                if (pfVar6 != NULL) {
+                    pfVar6->actor.gravity = 0.0f;
+                    pfVar6->actor.speedF = 0.0f;
+                    pfVar6->actor.speed.setall(0.0f);
+                    pfVar6->actor.attention_info.flags = 0;
+                    pfVar6->mActionState = 0;
+                    i_this->m462 = 1;
+                }
+            }
+            i_this->m482 = 0;
+            i_this->m388 = 0.0f;
+            i_this->m38C = 0.0f;
+            i_this->m390 = 0.0f;
+            i_this->mAttWaitTimer = 1;
+        }
+        if (i_this->mpMorf->isStop()) {
+            next_status_clear(i_this, 1);
+#if VERSION > VERSION_DEMO
+            i_this->mSomeCountdownTimers[2] = 0;
+#endif
+            i_this->mBodyAction = ACTION_ATTACK_KOUGEKI;
+            i_this->mActionState = 0x14;
+        }
+        // fallthrough
     }
     i_this->m4A0 = 0.0f;
     cLib_addCalc2(&actor->speedF, i_this->m490, 1.0f, i_this->m488);
@@ -1339,13 +1348,13 @@ void action_kougeki(bpw_class* i_this) {
         }
 #else
         if (i_this->m540.getEmitter() != NULL) {
-            i_this->m540.getEmitter()->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+            i_this->m540.getEmitter()->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPW_JNT_J_BPW_KOSI1_e));
         }
 #endif
         if (i_this->mSomeCountdownTimers[1] == 0) {
             JPABaseEmitter* emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_BPWINHALE00, &i_this->m394, &actor->shape_angle);
             if (emitter != NULL) {
-                emitter->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+                emitter->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPW_JNT_J_BPW_KOSI1_e));
             }
             i_this->mSomeCountdownTimers[1] = 6;
         }
@@ -1412,11 +1421,11 @@ void action_kougeki(bpw_class* i_this) {
         search_get_skull(i_this, 1);
 #if VERSION == VERSION_DEMO
         if (i_this->m50C_demo != NULL) {
-            i_this->m50C_demo->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+            i_this->m50C_demo->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPW_JNT_J_BPW_KOSI1_e));
         }
 #else
         if (i_this->m52C.getEmitter() != NULL) {
-            i_this->m52C.getEmitter()->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(2));
+            i_this->m52C.getEmitter()->setGlobalSRTMatrix(i_this->mpMorf->getModel()->getAnmMtx(BPW_JNT_J_BPW_KOSI1_e));
         }
 #endif
         i_this->mFire1DousaPos = actor->current.pos;
@@ -2021,13 +2030,13 @@ void action_damage(bpw_class* i_this) {
             csXyz pwAngle = actor->shape_angle;
             local_58 = actor->current.pos;
             int currRandomAngle;
-            int pwSpreadAmount = (int)(65536.0f / actor->health);
+            int pwSpreadAmount = (int)(0x10000 / (f32)actor->health);
             local_58.y = i_this->mAcch.GetGroundH() + 20.0f;
             i_this->m3E9 = 0;
             for (i = 0; i < 15; i++) {
                 i_this->mChildPoeIds[i] = fpcM_ERROR_PROCESS_ID_e;
             }
-            currRandomAngle = (int)cM_rndFX(32768.0f);
+            currRandomAngle = (int)cM_rndFX(0x8000);
             uVar14 = (s16)cM_rndF(4.99f);
             u32 uVar2 = uVar14 << 9 | 0xFF000003;
             for (i = 0; i < actor->health; i++) {
@@ -2064,7 +2073,7 @@ void action_bunri_dousa(bpw_class* i_this) {
     f32 f2;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mActionState) {
     case ACTION_STATE_SEPARATE_BUNRI_DOUSA_INIT: {
         for (s32 i = 0; i < 10; i++) {
@@ -2085,13 +2094,13 @@ void action_bunri_dousa(bpw_class* i_this) {
         csXyz pwAngle = actor->shape_angle;
         local_58 = actor->current.pos;
         int currRandomAngle;
-        int pwSpreadAmount = (int)(65536.0f / actor->health);
+        int pwSpreadAmount = (int)(0x10000 / (f32)actor->health);
         local_58.y = i_this->mAcch.GetGroundH() + 20.0f;
         i_this->m3E9 = 0;
         for (i = 0; i < 15; i++) {
             i_this->mChildPoeIds[i] = fpcM_ERROR_PROCESS_ID_e;
         }
-        currRandomAngle = (int)cM_rndFX(32768.0f);
+        currRandomAngle = (int)cM_rndFX(0x8000);
         uVar14 = (s16)cM_rndF(4.99f);
         u32 uVar2 = uVar14 << 9 | 0xFF000003;
         for (i = 0; i < actor->health; i++) {
@@ -2735,7 +2744,7 @@ void action_bunri_dousa(bpw_class* i_this) {
         i_this->mActionState++;
         // fallthrough
     case 0x83:
-        cLib_addCalcAngleS2(&actor->shape_angle.x, REG18_F(19) + 49152.0f, 1, 0x300);
+        cLib_addCalcAngleS2(&actor->shape_angle.x, REG18_F(19) + 0xC000, 1, 0x300);
         if (i_this->mSomeCountdownTimers[0] != 0) {
             break;
         }
@@ -2764,7 +2773,7 @@ void action_bunri_dousa(bpw_class* i_this) {
 #endif
         // fallthrough
     case 0x85:
-        cLib_addCalcAngleS2(&actor->shape_angle.x, REG18_F(19) + 49152.0f, 1, 0x300);
+        cLib_addCalcAngleS2(&actor->shape_angle.x, REG18_F(19) + 0xC000, 1, 0x300);
         cLib_addCalcAngleS2(&actor->shape_angle.z, 0, 1, 0x300);
         cLib_addCalc2(&i_this->m440, REG6_F(7) + 50.0f, 1.0f, 0.5f);
         fVar2 = std::fabsf(i_this->m40C.x - (REG6_F(8) + -1352.0f));
@@ -2957,7 +2966,7 @@ void action_start_demo(bpw_class* i_this) {
     f32 fVar1;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mActionState) {
     case 200:
         actor->scale.setall(0.0f);
@@ -3984,32 +3993,33 @@ void torituki_execute(bpw_class* i_this) {
     case 1:
         cLib_addCalc2(&actor->scale.x, 0.4f, 1.0f, 0.1f);
         actor->scale.y = actor->scale.z = actor->scale.x;
-        if (!(actor->scale.x < 0.3f)) {
-            anm_init(i_this, dRes_INDEX_BPW_BCK_TORITUKI1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
-            i_this->mSomeCountdownTimers[8] = DEMO_SELECT(0xD2, 0x96);
-            actor->scale.setall(0.4f);
-            i_this->mActionState++;
-            // fallthrough
-        case 2:
-            actor->shape_angle.y += 1000;
-            if (i_this->mSomeCountdownTimers[8] != 0) {
-                daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-                if (((i_this->mSomeCountdownTimers[8] == 1 || (dComIfGp_getDetect().chk_light(&actor->current.pos))) ||
-                     (dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e))) ||
-                    (player->getDamageWaitTimer() != 0 || (player->checkFairyUse())))
-                {
-                    player->offConfuse();
-                    i_this->mSomeCountdownTimers[8] = 0;
-                    if (dComIfGp_getStartStageName()[0] == 'X') {
-                        mDoAud_bgmStart(JA_BGM_PAST_BIG_POW);
-                    } else {
-                        mDoAud_bgmStart(JA_BGM_BIG_POW);
-                    }
-                    i_this->mActionState++;
+        if (actor->scale.x < 0.3f) {
+            break;
+        }
+        anm_init(i_this, dRes_INDEX_BPW_BCK_TORITUKI1_e, DEMO_SELECT(REG11_F(0) + 15.0f, 15.0f), J3DFrameCtrl::EMode_LOOP, 1.0f, -1);
+        i_this->mSomeCountdownTimers[8] = DEMO_SELECT(0xD2, 0x96);
+        actor->scale.setall(0.4f);
+        i_this->mActionState++;
+        // fallthrough
+    case 2: {
+        actor->shape_angle.y += 1000;
+        if (i_this->mSomeCountdownTimers[8] != 0) {
+            daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+            if (i_this->mSomeCountdownTimers[8] == 1 || dComIfGp_getDetect().chk_light(&actor->current.pos) ||
+                dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e) || player->getDamageWaitTimer() != 0 || player->checkFairyUse())
+            {
+                player->offConfuse();
+                i_this->mSomeCountdownTimers[8] = 0;
+                if (dComIfGp_getStartStageName()[0] == 'X') {
+                    mDoAud_bgmStart(JA_BGM_PAST_BIG_POW);
+                } else {
+                    mDoAud_bgmStart(JA_BGM_BIG_POW);
                 }
+                i_this->mActionState++;
             }
         }
         break;
+    }
     case 3:
         cLib_addCalc0(&actor->scale.x, 1.0f, 0.1f);
         actor->scale.y = actor->scale.z = actor->scale.x;
@@ -4375,11 +4385,11 @@ void body_create_init(bpw_class* i_this) {
     fopAcM_SetMtx(actor, i_this->mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(actor, -300.0f, -300.0f, -300.0f, 300.0f, 300.0f, 300.0f);
     actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-    actor->attention_info.distances[2] = 4;
+    actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
     fopAcM_OnStatus(actor, fopAcStts_BOSS_e);
     i_this->mAcch.Set(fopAcM_GetPosition_p(actor), fopAcM_GetOldPosition_p(actor), actor, 1, &i_this->mAcchCir, fopAcM_GetSpeed_p(actor));
     i_this->mStts.Init(0xfe, 1, actor);
-    actor->attention_info.distances[4] = 0x25;
+    actor->attention_info.distances[fopAc_Attn_TYPE_CARRY_e] = 0x25;
     fopAcM_OnStatus(actor, fopAcStts_UNK10000_e);
     i_this->mBodyCoSph.Set(body_co_sph_src);
     i_this->mBodyCoSph.SetStts(&i_this->mStts);
@@ -4612,9 +4622,9 @@ static cPhs_State daBPW_Create(fopAc_ac_c* a_this) {
                 csXyz pwAngle = a_this->shape_angle;
                 local_58 = a_this->current.pos;
                 int currRandomAngle;
-                int pwSpreadAmount = (int)(65536.0f / a_this->health);
+                int pwSpreadAmount = (int)(0x10000 / (f32)a_this->health);
                 local_58.y = i_this->mAcch.GetGroundH() + 20.0f;
-                currRandomAngle = (int)cM_rndFX(32768.0f);
+                currRandomAngle = (int)cM_rndFX(0x8000);
                 uVar14 = (s16)cM_rndF(4.99f);
                 u32 uVar2 = uVar14 << 9 | 0xFF000004;
                 for (s32 i = 0; i < 15; i++) {

@@ -50,7 +50,7 @@ void daObjBlift_ride_actor_check(fopAc_ac_c*) {
 }
 
 /* 00000264-0000033C       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
+static void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c*) {
     /* Nonmatching */
 }
 

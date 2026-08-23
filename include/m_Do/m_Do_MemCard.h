@@ -19,6 +19,19 @@ public:
 #endif
     };
 
+    enum CardStatus {
+        /* 0x0 */ CARD_STAT_WAIT,
+        /* 0x1 */ CARD_STAT_RESTORE,
+        /* 0x2 */ CARD_STAT_CREATE,
+        /* 0x3 */ CARD_STAT_FORMAT,
+        /* 0x4 */ CARD_STAT_READY,
+        /* 0x5 */ CARD_STAT_DETACH,
+        /* 0x6 */ CARD_STAT_ENCODING,
+        /* 0x7 */ CARD_STAT_ERROR,
+        /* 0xA */ CARD_STAT_WRONG_DEVICE = 10,
+        /* 0xC */ CARD_STAT_IOERROR = 12,
+    };
+
     mDoMemCd_Ctrl_c();
     void ThdInit();
     void main();
@@ -57,18 +70,20 @@ public:
     u8 getCopyToPos() { return mCopyToPos; }
     void setCopyToPos(u8 pos) { mCopyToPos = pos; }
 
-    void clearProbeStat() {}
+    void clearProbeStat() { mProbeStat = 2; }
     u64 getCardSerialNo() { return mCardSerialNo; }
-    void getDataVersion() {}
-    void getProbeStat() {}
+    u32 getDataVersion() { return mDataVersion; }
+    u8 getProbeStat() { return mProbeStat; }
 
     /* 0x0000 */ u8 mData[3 * sizeof(card_gamedata)];
     /* 0x1650 */ u8* mPictDataPtr;
     /* 0x1654 */ u8* mPictDataWritePtr;
     /* 0x1658 */ u8 mCardSlot;
     /* 0x1659 */ u8 mCopyToPos;
-    /* 0x165A */ u8 field_0x165A;
+    /* 0x165A */ u8 mProbeStat;
+#if VERSION == VERSION_PAL
     /* 0x165B */ u8 field_0x165B;
+#endif
     /* 0x165C */ s32 mCommand;
     /* 0x1660 */ s32 field_0x1660;
     /* 0x1664 */ OSMutex mMutex;
@@ -91,8 +106,8 @@ inline void mDoMemCd_ThdInit() {
     g_mDoMemCd_control.ThdInit();
 }
 
-inline void mDoMemCd_Save(void* i_data, u32 param_1, u32 param_2) {
-    g_mDoMemCd_control.save(i_data,param_1,param_2);
+inline void mDoMemCd_Save(void* i_data, u32 i_size, u32 i_position) {
+    g_mDoMemCd_control.save(i_data, i_size, i_position);
 }
 
 inline u8 mDoMemCd_getNowSlot() {
@@ -103,28 +118,28 @@ inline u64 mDoMemCd_getCardSerialNo() {
     return g_mDoMemCd_control.getCardSerialNo();
 }
 
-inline void mDoMemCd_setCardSerialNo(u64 v) {
-    g_mDoMemCd_control.setCardSerialNo(v);
+inline void mDoMemCd_setCardSerialNo(u64 i_serialNo) {
+    g_mDoMemCd_control.setCardSerialNo(i_serialNo);
 }
 
-inline void mDoMemCd_setDataVersion(u32 v) {
-    g_mDoMemCd_control.setDataVersion(v);
+inline void mDoMemCd_setDataVersion(u32 i_version) {
+    g_mDoMemCd_control.setDataVersion(i_version);
 }
 
 inline u8* mDoMemCd_getPictDataPtr() {
     return g_mDoMemCd_control.getPictDataPtr();
 }
 
-inline void mDoMemCd_setPictDataPtr(u8* v) {
-    g_mDoMemCd_control.setPictDataPtr(v);
+inline void mDoMemCd_setPictDataPtr(u8* i_dataPtr) {
+    g_mDoMemCd_control.setPictDataPtr(i_dataPtr);
 }
 
 inline u8* mDoMemCd_getPictWriteDataPtr() {
     return g_mDoMemCd_control.getPictWriteDataPtr();
 }
 
-inline void mDoMemCd_setPictWriteDataPtr(u8* v) {
-    g_mDoMemCd_control.setPictWriteDataPtr(v);
+inline void mDoMemCd_setPictWriteDataPtr(u8* i_dataPtr) {
+    g_mDoMemCd_control.setPictWriteDataPtr(i_dataPtr);
 }
 
 inline u8 mDoMemCd_getCopyToPos() {
@@ -151,11 +166,28 @@ inline u32 mDoMemCd_getStatus(u32 status) {
     return g_mDoMemCd_control.getStatus(status);
 }
 
-inline void mDoMemCd_Format() {}
-inline void mDoMemCd_Load() {}
-inline void mDoMemCd_LoadSync(void*, u32, u32) {}
-inline void mDoMemCd_clearProbeStat() {}
-inline void mDoMemCd_getDataVersion() {}
-inline void mDoMemCd_getProbeStat() {}
+inline void mDoMemCd_Format() {
+    g_mDoMemCd_control.command_format();
+}
+
+inline void mDoMemCd_Load() {
+    g_mDoMemCd_control.load();
+}
+
+inline u32 mDoMemCd_LoadSync(void* i_buffer, u32 i_size, u32 i_position) {
+    return g_mDoMemCd_control.LoadSync(i_buffer, i_size, i_position);
+}
+
+inline void mDoMemCd_clearProbeStat() {
+    g_mDoMemCd_control.clearProbeStat();
+}
+
+inline u32 mDoMemCd_getDataVersion() {
+    return g_mDoMemCd_control.getDataVersion();
+}
+
+inline u8 mDoMemCd_getProbeStat() {
+    return g_mDoMemCd_control.getProbeStat();
+}
 
 #endif /* M_DO_M_DO_MEMCARD_H */

@@ -13,11 +13,11 @@ public:
     fapGm_HIO_c();
     virtual ~fapGm_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 field_0x05;
+    /* 0x05 */ u8 mUsingHostIO;
     /* 0x06 */ u8 mDisplayMeter;
     /* 0x07 */ u8 mDisplayFlag;
     /* 0x08 */ u8 field_0x08;
@@ -41,7 +41,7 @@ public:
     /* 0x1D */ u8 field_0x1d;
     /* 0x1E */ u8 field_0x1e;
     /* 0x1F */ u8 field_0x1f;
-    /* 0x20 */ JUtility::TColor field_0x20;
+    /* 0x20 */ JUtility::TColor mColor;
     /* 0x24 */ f32 mTriggerThreshLo;
     /* 0x28 */ f32 mTriggerThreshHi;
     /* 0x2C */ s16 mFbWidth;
@@ -58,16 +58,16 @@ public:
     /* 0x39 */ u8 field_0x39;
     /* 0x3A */ u8 field_0x3a;
     /* 0x3B */ u8 field_0x3b;
-    /* 0x3C */ JUtility::TColor field_0x3c;
-    /* 0x40 */ JUtility::TColor field_0x40;
-    /* 0x44 */ JUtility::TColor field_0x44;
-    /* 0x48 */ JUtility::TColor field_0x48;
-    /* 0x4C */ u16 field_0x4c;
-    /* 0x4E */ u16 field_0x4e;
-    /* 0x50 */ u16 field_0x50;
-    /* 0x52 */ u16 field_0x52;
-    /* 0x54 */ u16 field_0x54;
-    /* 0x56 */ u8 field_0x56;
+    /* 0x3C */ JUtility::TColor mLetterTopColor;
+    /* 0x40 */ JUtility::TColor mLetterBottomColor;
+    /* 0x44 */ JUtility::TColor mLetterTopShadowColor;
+    /* 0x48 */ JUtility::TColor mLetterBottomShadowColor;
+    /* 0x4C */ u16 mLetterPositionX;
+    /* 0x4E */ u16 mLetterPositionY;
+    /* 0x50 */ u16 mLineSpacing;
+    /* 0x52 */ u16 mLetterSpacing;
+    /* 0x54 */ u16 mLetterFontSize;
+    /* 0x56 */ u8 mBackgroundAlpha;
 };  // Size: 0x58
 
 extern fapGm_HIO_c g_HIO;

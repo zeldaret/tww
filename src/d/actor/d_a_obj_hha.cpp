@@ -611,18 +611,16 @@ bool daObjHha_c::_execute() {
                     mState = State_SWITCHING;
                 }
             }
-            else {
-                if(dComIfGp_evmng_startCheck(mEventIdx) != FALSE){
-                    mWtrState = 2;
-                    mWtrTimer = 35;
-                    mPartTimer = 0;
-                    mState = State_CLOSED;
-                }
+            else if(dComIfGp_evmng_startCheck(mEventIdx) != FALSE){
+                mWtrState = 2;
+                mWtrTimer = 35;
+                mPartTimer = 0;
+                mState = State_CLOSED;
             }
         } break;
 
-
-        case State_SWITCHING: if(dComIfGp_evmng_endCheck(mEventIdx)){
+        case State_SWITCHING:
+            if(dComIfGp_evmng_endCheck(mEventIdx)){
                 dComIfGp_event_reset();
                 mState = State_CLOSED;
             }
@@ -699,6 +697,7 @@ BOOL Mthd_Draw(void* i_this) {
 
 /* 00002A80-00002A88       .text Mthd_IsDelete__25@unnamed@d_a_obj_hha_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

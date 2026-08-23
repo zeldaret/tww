@@ -166,6 +166,7 @@ static BOOL dEnvSe_Execute(dEnvSe_c* i_this) {
 
 /* 8017DB00-8017DB08       .text dEnvSe_IsDelete__FP8dEnvSe_c */
 static BOOL dEnvSe_IsDelete(dEnvSe_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -23,11 +23,11 @@ static BOOL nodeCallBack(J3DNode* joint, int calcTiming) {
     J3DModel* model = j3dSys.getModel();
     s32 jntNo = ((J3DJoint*)joint)->getJntNo();
     daObjLpalm_c* i_this = (daObjLpalm_c*)model->getUserArea();
-    if (calcTiming == J3DNodeCBCalcTiming_In && (jntNo == 2 || jntNo == 3)) {
+    if (calcTiming == J3DNodeCBCalcTiming_In && (jntNo == OYASHI_JNT_J_HAPPA1_e || jntNo == OYASHI_JNT_J_HAPPA2_e)) {
         mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
         mDoMtx_stack_c::ZrotM(-0x4000);
         mDoMtx_stack_c::quatM(&i_this->mBaseQuat);
-        if (jntNo == 2)
+        if (jntNo == OYASHI_JNT_J_HAPPA1_e)
             mDoMtx_stack_c::quatM(&i_this->mAnmMtxQuat[0]);
         else
             mDoMtx_stack_c::quatM(&i_this->mAnmMtxQuat[1]);
@@ -67,7 +67,7 @@ void daObjLpalm_c::CreateInit() {
     mAnimDir[0] = 0;
     mAnimDir[1] = 0;
     mAnimWave[0] = 0;
-    mAnimWave[1] = cM_rndFX(32768.0f);
+    mAnimWave[1] = cM_rndFX(0x8000);
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -350.0f, -50.0f, -350.0f, 350.0f, 1300.0f, 350.0f);
     fopAcM_setCullSizeFar(this, 2.37f);
@@ -188,6 +188,7 @@ static BOOL daObjLpalmDraw(void* i_this) {
 
 /* 00000950-00000958       .text daObjLpalmIsDelete__FPv */
 static BOOL daObjLpalmIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

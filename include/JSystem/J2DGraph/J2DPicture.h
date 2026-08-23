@@ -114,7 +114,7 @@ public:
     void setCornerColor(JUtility::TColor c) { setCornerColor(c, c, c, c); }
 
     void setBinding(J2DBinding v) { mBinding = v; }
-    void setMirror(J2DMirror v) {} // untested { mFlag = (mFlag & ~0x03) | v; }
+    void setMirror(J2DMirror v) { mFlag = (mFlag & 0x04) | v; }
     J2DMirror getMirror() const { return J2DMirror(mFlag & 0x03); }
 
     void setTumble(bool v) {} // untested { mFlag = (mFlag & ~0x04) | (v << 2); }

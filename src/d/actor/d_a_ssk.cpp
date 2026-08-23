@@ -15,22 +15,22 @@
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar4 = joint->getJntNo();
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         ssk_class* i_this = (ssk_class*)model->getUserArea();
 
-        if (i_this != NULL && uVar4 < 5) {
-            MTXCopy(model->getAnmMtx(uVar4), *calc_mtx);
+        if (i_this != NULL && jntNo < 5) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
-            cMtx_YrotM(*calc_mtx, i_this->m2F4[uVar4].y);
-            cMtx_XrotM(*calc_mtx, i_this->m2F4[uVar4].x);
-            cMtx_ZrotM(*calc_mtx, i_this->m2F4[uVar4].z);
+            cMtx_YrotM(*calc_mtx, i_this->m2F4[jntNo].y);
+            cMtx_XrotM(*calc_mtx, i_this->m2F4[jntNo].x);
+            cMtx_ZrotM(*calc_mtx, i_this->m2F4[jntNo].z);
 
-            cXyz sp08;
-            sp08.setall(0.0f);
-            MtxPosition(&sp08, &i_this->m314[uVar4]);
+            cXyz offset;
+            offset.setall(0.0f);
+            MtxPosition(&offset, &i_this->m314[jntNo]);
 
-            model->setAnmMtx(uVar4, *calc_mtx);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -299,19 +299,19 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 1,
+            /* mJointIndex */ TURU_02_JNT_B3_e,
             /* mRadius     */ 50.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 2,
+            /* mJointIndex */ TURU_02_JNT_B2_e,
             /* mRadius     */ 30.0f,
             /* mpOffsets   */ &sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_DELETE_e,
-            /* mJointIndex */ 3,
+            /* mJointIndex */ TURU_02_JNT_B1_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ &sph_offset,
         },

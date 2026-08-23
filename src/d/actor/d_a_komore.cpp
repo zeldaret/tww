@@ -114,6 +114,7 @@ BOOL Mthd_Draw(void* i_this) {
 
 /* 000005A4-000005AC       .text Mthd_IsDelete__Q28daKomore24@unnamed@d_a_komore_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

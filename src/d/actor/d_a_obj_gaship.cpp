@@ -37,8 +37,8 @@ void daObjGaship::Act_c::birth_flag() {
 }
 
 /* 00000354-00000378       .text solidHeapCB__Q211daObjGaship5Act_cFP10fopAc_ac_c */
-BOOL daObjGaship::Act_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->create_heap();
+BOOL daObjGaship::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->create_heap();
 }
 
 /* 00000378-00000448       .text create_heap__Q211daObjGaship5Act_cFv */
@@ -111,27 +111,28 @@ bool daObjGaship::Act_c::_draw() {
 namespace daObjGaship {
 namespace {
 /* 0000066C-0000068C       .text Mthd_Create__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-cPhs_State Mthd_Create(void* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->_create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->_create();
 }
 
 /* 0000068C-000006B0       .text Mthd_Delete__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-BOOL Mthd_Delete(void* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->_delete();
 }
 
 /* 000006B0-000006D4       .text Mthd_Execute__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-BOOL Mthd_Execute(void* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->_execute();
 }
 
 /* 000006D4-000006F8       .text Mthd_Draw__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-BOOL Mthd_Draw(void* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->_draw();
 }
 
 /* 000006F8-00000700       .text Mthd_IsDelete__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-BOOL Mthd_IsDelete(void* i_ac) {
+BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -3,6 +3,7 @@
 
 #include "dolphin/types.h"
 #include "d/d_menu_base.h"
+#include "f_op/f_op_msg_mng.h"
 
 class J2DPane;
 struct fopMsgM_pane_class;

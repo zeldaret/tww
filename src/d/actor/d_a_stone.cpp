@@ -203,7 +203,7 @@ cPhs_State Act_c::_create() {
             if (fopAcM_entrySolidHeap(this, CreateHeapCB, data().m78)) {
 #endif
                 if (home.angle.y == 0 && !(data().m70 & 0x10)) {
-                    home.angle.y = cM_rndFX(32768.0f);
+                    home.angle.y = cM_rndFX(0x8000);
                     current.angle.y = home.angle.y;
                     shape_angle.y = home.angle.y;
                 }
@@ -667,7 +667,7 @@ void Act_c::init_mtx() {
 void Act_c::init_rot_throw() {
     m67C.Val(data().m28);
     m67C *= cM_rnd();
-    m67E.Val((s16)cM_rndFX(32768.0f));
+    m67E.Val((s16)cM_rndFX(0x8000));
     m680.Val(data().m2A);
     m682.Val(cSAngle::_0);
     m684.Val(data().m2C);
@@ -910,7 +910,7 @@ void Act_c::set_senv(int arg1, int arg2) const {
 
 /* 00003124-0000315C       .text cam_lockoff__Q27daStone5Act_cCFv */
 void Act_c::cam_lockoff() const {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     camera->mCamera.ForceLockOff(base.base.mBsPcId);
 }
 

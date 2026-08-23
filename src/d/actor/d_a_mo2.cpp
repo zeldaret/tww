@@ -160,7 +160,7 @@ static void yari_off_check(mo2_class* i_this) {
 
     if (i_this->mSpawnWeaponActor != 0) {
         i_this->m05AE = l_mo2HIO.m08A;
-        MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x16), *calc_mtx);
+        MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(MO_JNT_MO_YARI_e), *calc_mtx);
         local_48.setall(0.0f);
         MtxPosition(&local_48, &cStack_54);
         i_this->mWeaponPcId = fopAcM_create(fpcNm_BOKO_e, daBoko_c::Type_MOBLIN_SPEAR_e, &cStack_54, fopAcM_GetRoomNo(actor));
@@ -328,7 +328,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         fopAc_ac_c* actor = &i_this->actor;
         if (i_this) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            if (jntNo == 0x1D) {
+            if (jntNo == MO_JNT_JAWA_J_e) {
                 cMtx_ZrotM(*calc_mtx, i_this->m2952);
                 model->setAnmMtx(jntNo, *calc_mtx);
                 MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
@@ -594,12 +594,7 @@ static void ke_disp(mo2_class* i_this) {
         ke_control(i_this, pkVar2, i);
         ke_draw(i_this, pkVar2, i);
     }
-#ifdef __MWERKS__
     i_this->m3Dline.update(10, 1.25f, (GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
-#else
-    GXColor local_18 = (GXColor){0xFF, 0x64, 0, 0xFF};
-    i_this->m3Dline.update(10, 1.25f, local_18, 2, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->m3Dline);
 }
 
@@ -632,7 +627,7 @@ static void br_draw(mo2_class* i_this) {
         }
     }
 
-    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(0x16), *calc_mtx);
+    MTXCopy(i_this->mpMorf->getModel()->getAnmMtx(MO_JNT_MO_YARI_e), *calc_mtx);
     MtxTrans(l_mo2HIO.m138 + 150.0f, 0.0f, 0.0f, true);
     cMtx_ZrotM(*calc_mtx, 0x4000);
     MtxScale(l_mo2HIO.m014 * i_this->m0590, l_mo2HIO.m014, l_mo2HIO.m014, true);
@@ -659,7 +654,6 @@ static void daMo2_shadowDraw(mo2_class* i_this) {
             i_this->mDamageReaction.mAcch.m_gnd,
             &actor->tevStr
         );
-        ;
     }
 }
 
@@ -1504,7 +1498,7 @@ static void fight_run(mo2_class* i_this) {
     f32 dVar9;
     f32 fVar10;
 
-    dVar9 = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    dVar9 = CPad_GET_STICK_POS_X(0);
     i_this->mDamageReaction.m4D0 = i_this->m05D6;
     if (i_this->m05B0 == 0 && i_this->mDamageReaction.mMode != 0) {
         maxSpeed = 0x400;
@@ -2446,7 +2440,7 @@ static void yogan_fail(mo2_class* i_this) {
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_FIREK_KASU, &actor->current.pos);
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_MAGT_FCHIP, &actor->current.pos);
             if ((i_this->m059C & 3U) == 0) {
-                i_this->m05E8.y = cM_rndF(65536.0f);
+                i_this->m05E8.y = cM_rndF(0x10000);
                 i_this->m05E8.x = -0x2000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m28C8, &i_this->m05E8);
             }
@@ -2624,7 +2618,7 @@ static void hip_damage(mo2_class* i_this) {
             break;
         case 2:
             if ((i_this->m059C & 7) == 0) {
-                i_this->m05E8.y = cM_rndF(65536.0f);
+                i_this->m05E8.y = cM_rndF(0x10000);
                 i_this->m05E8.x = -0x2000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m28C8, &i_this->m05E8);
             }
@@ -2781,7 +2775,7 @@ static void carry_drop(mo2_class* i_this) {
 static void e3_demo(mo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     i_this->m05B4 = 5;
     i_this->mDamageReaction.m4D0 = fopAcM_searchPlayerAngleY(actor);
@@ -3238,6 +3232,7 @@ static u8 damage_check(mo2_class* i_this) {
                 tex_anm_set(i_this, 4);
                 i_this->mDamageReaction.m424 |= 0x10;
                 i_this->mDamageReaction.m428 = 26.0f;
+                break;
         }
         if (i_this->mDamageReaction.m424 != 0) {
             local_54.x = 0.0f;
@@ -3269,7 +3264,7 @@ static u8 damage_check(mo2_class* i_this) {
 /* 0000A3FC-0000A788       .text mo2_demo_camera__FP9mo2_class */
 static void mo2_demo_camera(mo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    camera_class* camera2;
+    camera_process_class* camera2;
 
     dCam_getCamera();
     dCamera_c* camera = dCam_getBody();
@@ -3313,8 +3308,8 @@ static void mo2_demo_camera(mo2_class* i_this) {
             camera->SetTrimSize(1);
             i_this->m2A1D = 0x33;
             camera2 = dComIfGp_getCamera(0);
-            i_this->m2A20 = camera2->mLookat.mEye;
-            i_this->m2A2C = camera2->mLookat.mCenter;
+            i_this->m2A20 = camera2->view.mLookat.mEye;
+            i_this->m2A2C = camera2->view.mLookat.mCenter;
             i_this->m2A44 = 55.0f;
             i_this->m2A1E = 0;
             // Fall-through
@@ -3741,91 +3736,91 @@ static u8 useArrowHeapInit(fopAc_ac_c* a_this) {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ MO_JNT_CENTER_e,
             /* mRadius     */ 25.0f,
             /* mpOffsets   */ kosi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x02,
+            /* mJointIndex */ MO_JNT_HARA_J_e,
             /* mRadius     */ 25.0f,
             /* mpOffsets   */ mata_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x03,
+            /* mJointIndex */ MO_JNT_MUNE_J_e,
             /* mRadius     */ 35.0f,
             /* mpOffsets   */ mune_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ 0x0A,
+            /* mJointIndex */ MO_JNT_UDELA_J_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ kata_l_sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0A,
+            /* mJointIndex */ MO_JNT_UDELA_J_e,
             /* mRadius     */ 10.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0B,
+            /* mJointIndex */ MO_JNT_UDELB_J_e,
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
-            /* mJointIndex */ 0x11,
+            /* mJointIndex */ MO_JNT_UDERA_J_e,
             /* mRadius     */ 20.0f,
             /* mpOffsets   */ kata_l_sph_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x11,
+            /* mJointIndex */ MO_JNT_UDERA_J_e,
             /* mRadius     */ 10.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x12,
+            /* mJointIndex */ MO_JNT_UDERB_J_e,
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ te_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x27,
+            /* mJointIndex */ MO_JNT_ASHILA_J_e,
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ momo_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x28,
+            /* mJointIndex */ MO_JNT_ASHILB_J_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x29,
+            /* mJointIndex */ MO_JNT_ASHILC_J_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x2C,
+            /* mJointIndex */ MO_JNT_ASHIRA_J_e,
             /* mRadius     */ 5.0f,
             /* mpOffsets   */ momo_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x2D,
+            /* mJointIndex */ MO_JNT_ASHIRB_J_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x2E,
+            /* mJointIndex */ MO_JNT_ASHIRC_J_e,
             /* mRadius     */ 2.0f,
             /* mpOffsets   */ asi_cyl_offset,
         },
@@ -4072,10 +4067,7 @@ static cPhs_State daMo2_Create(fopAc_ac_c* a_this) {
         }},
     };
 
-    static u8 fire_j[] = {0x1A, 0x03, 0x11, 0x12, 0x0A, 0x0B, 0x2C, 0x2D, 0x27, 0x28};
-    static f32 fire_sc[] = {2.3f, 2.3f, 1.4f, 1.2f, 1.4f, 1.2f, 1.4f, 1.2f, 1.4f, 1.2f};
-
-    fopAcM_SetupActor(a_this, mo2_class);
+    fopAcM_ct(a_this, mo2_class);
     mo2_class* i_this = (mo2_class*)a_this;
     cPhs_State res = dComIfG_resLoad(&i_this->mPhsSpear, "Spear");
     if (res != cPhs_COMPLEATE_e) {
@@ -4202,6 +4194,32 @@ static cPhs_State daMo2_Create(fopAc_ac_c* a_this) {
     i_this->mEnemyIce.mDeathSwitch = i_this->mDeathSwitch;
     i_this->mEnemyFire.mpMcaMorf = i_this->mpMorf;
     i_this->mEnemyFire.mpActor = a_this;
+
+    static u8 fire_j[ARRAY_SIZE(i_this->mEnemyFire.mFlameJntIdxs)] = {
+        MO_JNT_KAO_J_e,
+        MO_JNT_MUNE_J_e,
+        MO_JNT_UDERA_J_e,
+        MO_JNT_UDERB_J_e,
+        MO_JNT_UDELA_J_e,
+        MO_JNT_UDELB_J_e,
+        MO_JNT_ASHIRA_J_e,
+        MO_JNT_ASHIRB_J_e,
+        MO_JNT_ASHILA_J_e,
+        MO_JNT_ASHILB_J_e
+    };
+    static f32 fire_sc[ARRAY_SIZE(i_this->mEnemyFire.mParticleScale)] = {
+        2.3f, // MO_JNT_KAO_J_e
+        2.3f, // MO_JNT_MUNE_J_e
+        1.4f, // MO_JNT_UDERA_J_e
+        1.2f, // MO_JNT_UDERB_J_e
+        1.4f, // MO_JNT_UDELA_J_e
+        1.2f, // MO_JNT_UDELB_J_e
+        1.4f, // MO_JNT_ASHIRA_J_e
+        1.2f, // MO_JNT_ASHIRB_J_e
+        1.4f, // MO_JNT_ASHILA_J_e
+        1.2f  // MO_JNT_ASHILB_J_e
+    };
+
     for (s32 i = 0; i < 10; i++) {
         i_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
         i_this->mEnemyFire.mParticleScale[i] = fire_sc[i];

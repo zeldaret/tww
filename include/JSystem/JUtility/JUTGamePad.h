@@ -190,7 +190,7 @@ public:
         CRumble(JUTGamePad* pad) { clear(pad); }
 
         static u8 mStatus[4];
-        static PADMask mEnabled;
+        static u32 mEnabled;
 
         enum ERumble {
             LOOP_ONCE    = 0,
@@ -238,7 +238,7 @@ public:
     /* 0x90 */ JUTGamePadRecordBase* mPadReplay;
     /* 0x94 */ u8 field_0x94[4];
     /* 0x98 */ C3ButtonReset mButtonReset;
-    /* 0x9C */ OSTime mResetTime;
+    /* 0xA0 */ OSTime mResetTime;
 
     static JSUList<JUTGamePad> mPadList;
     static bool mListInitialized;

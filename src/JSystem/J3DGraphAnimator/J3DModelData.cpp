@@ -150,10 +150,10 @@ void J3DModelData::indexToPtr() {
 bool J3DModelData::isDeformablePositionFormat() const {
     GXVtxAttrFmtList *vtxAttr = getVtxAttrFmtList();
 
-    for (; vtxAttr->mAttrib != GX_VA_NULL; vtxAttr++) {
-        switch (vtxAttr->mAttrib) {
+    for (; vtxAttr->attr != GX_VA_NULL; vtxAttr++) {
+        switch (vtxAttr->attr) {
         case GX_VA_POS:
-            if (vtxAttr->mCompType == GX_F32 && vtxAttr->mCompCnt == GX_POS_XYZ)
+            if (vtxAttr->type == GX_F32 && vtxAttr->cnt == GX_POS_XYZ)
                 return true;
             break;
         default:

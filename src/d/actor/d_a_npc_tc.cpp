@@ -17,7 +17,7 @@ public:
     daNpc_Tc_HIO_c();
     virtual ~daNpc_Tc_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ dNpc_HIO_c mNpc;
@@ -881,28 +881,28 @@ u16 daNpc_Tc_c::next_msgStatusNormal(u32* pMsgNo) {
 
 /* 00001AEC-00001B64       .text next_msgStatus__10daNpc_Tc_cFPUl */
 u16 daNpc_Tc_c::next_msgStatus(u32* pMsgNo) {
-    u16 msg;
+    u16 msg_status;
     switch(mType) {
         case TYPE_NORMAL:
-            msg = next_msgStatusNormal(pMsgNo);
+            msg_status = next_msgStatusNormal(pMsgNo);
             break;
         case TYPE_NORMAL2:
-            msg = next_msgStatusNormal2(pMsgNo);
+            msg_status = next_msgStatusNormal2(pMsgNo);
             break;
         case TYPE_BLUE:
-            msg = next_msgStatusBlue(pMsgNo);
+            msg_status = next_msgStatusBlue(pMsgNo);
             break;
         case TYPE_RED:
-            msg = next_msgStatusRed(pMsgNo);
+            msg_status = next_msgStatusRed(pMsgNo);
             break;
         case TYPE_WHITE:
-            msg = next_msgStatusWhite(pMsgNo);
+            msg_status = next_msgStatusWhite(pMsgNo);
             break;
         default:
-            msg = fopMsgStts_MSG_ENDS_e;
+            msg_status = fopMsgStts_MSG_ENDS_e;
             break;
     }
-    return msg;
+    return msg_status;
 }
 
 /* 00001B64-00001B88       .text setFirstMsg__10daNpc_Tc_cFPbUlUl */
@@ -1117,7 +1117,6 @@ void daNpc_Tc_c::lookBack() {
         dstPos = &temp6;
         temp3.set(current.pos);
         temp3.y = eyePos.y;
-        
     } else if (mHasAttention){
         temp6 = dNpc_playerEyePos(l_HIO.mNpc.m04);
         dstPos = &temp6;
@@ -1232,7 +1231,6 @@ void daNpc_Tc_c::statusWalkToJail() {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B40);
                 mHasTalkedNearJail  = true;
                 return;
-
             }
             mStatus = STATUS_TALK_NEAR_JAIL;
         } else if (mHasAttention) {
@@ -1293,7 +1291,6 @@ void daNpc_Tc_c::statusWaitNearJail() {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B40);
                 mHasTalkedNearJail = true;
                 return;
-
             }
             mStatus = STATUS_TALK_NEAR_JAIL;
         } else if (mHasAttention) {
@@ -1323,7 +1320,6 @@ void daNpc_Tc_c::statusWalkToStool() {
         if (speedF == 0.0f) {
             mStatus = STATUS_WALK_TO_JAIL;
         }
-        
     } else {
         mStoolLookPos.set(mStoolPos);
         cLib_targetAngleY(&current.pos, &mWalkToStoolPos);
@@ -1707,7 +1703,6 @@ void daNpc_Tc_c::setTower() {
             temp = l_HIO.field_0x6C;
             temp2 = l_HIO.field_0x78;
             break;
-        
     }
 
     switch(mType) {
@@ -1769,7 +1764,6 @@ BOOL daNpc_Tc_c::_execute() {
                     case 0:
                         mAnmPrmIdx = ANM_PRM_IDX_WAIT01;
                         break;
-   
                 }
             } else {
                 mAnmPrmIdx = ANM_PRM_IDX_WAIT01;
@@ -1889,14 +1883,14 @@ BOOL daNpc_Tc_c::_createHeap() {
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    m_jnt.setHeadJntNum(2);
+    m_jnt.setHeadJntNum(TC_JNT_HEAD_e);
 
     JUT_ASSERT(DEMO_SELECT(0xA36, 0xA40), m_jnt.getHeadJntNum() >= 0);
 
-    m_jnt.setBackboneJntNum(1);
+    m_jnt.setBackboneJntNum(TC_JNT_BACKBONE_e);
     JUT_ASSERT(DEMO_SELECT(0xA38, 0xA42), m_jnt.getBackboneJntNum() >= 0);
-    modelData->getJointNodePointer(2)->setCallBack(nodeCallBack);
-    modelData->getJointNodePointer(1)->setCallBack(nodeCallBack);
+    modelData->getJointNodePointer(TC_JNT_HEAD_e)->setCallBack(nodeCallBack);
+    modelData->getJointNodePointer(TC_JNT_BACKBONE_e)->setCallBack(nodeCallBack);
     mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
 
     mTexPatternNum = 0;

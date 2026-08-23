@@ -14,51 +14,12 @@
 static Mtx l_kuroOrthoMtx;
 static Mtx l_colOrthoMtx;
 
-static Vec l_YfloorPos[] = {
-    { -500.0f, -0.0f, 500.0f },
-    { 500.0f, -0.0f, 500.0f },
-    { -500.0f, 0.0f, -500.0f },
-    { 500.0f, 0.0f, -500.0f },
-};
+#include "assets/l_YfloorPos__d_magma.h"
 
 #include "assets/l_YfloorDL.h"
 #include "assets/l_YfloorMatDL.h"
 
-static Vec l_YballPos[] = {
-    {172.280487f, -7.398514f, -167.445663f},
-    {0.000006f, -7.398514f, -236.803879f},
-    {-172.280487f, -7.398515f, -167.445648f},
-    {-243.641357f, -7.398515f, 0.000004f},
-    {-172.280487f, -7.398514f, 167.445602f},
-    {0.000008f, -7.398514f, 236.803879f},
-    {172.280487f, -7.398514f, 167.445602f},
-    {243.641403f, -7.398514f, -0.000015f},
-    {150.773376f, 13.801255f, -149.81015f},
-    {0.000006f, 13.801253f, -211.863525f},
-    {-150.773346f, 13.801253f, -149.81015f},
-    {-213.225739f, 13.801253f, 0.000002f},
-    {-150.773346f, 13.801253f, 149.810089f},
-    {0.000008f, 13.801253f, 211.86348f},
-    {150.773376f, 13.801255f, 149.81012f},
-    {213.225739f, 13.801255f, -0.000014f},
-    {121.820717f, 31.773548f, -118.401939f},
-    {0.000006f, 31.773548f, -167.445648f},
-    {-121.820679f, 31.773542f, -118.401939f},
-    {-172.280487f, 31.773542f, 0.000001f},
-    {-121.820679f, 31.773542f, 118.401939f},
-    {0.000007f, 31.773548f, 167.445602f},
-    {121.820717f, 31.773548f, 118.401909f},
-    {172.280487f, 31.773548f, -0.000012f},
-    {65.928886f, 43.782257f, -64.078682f},
-    {0.000006f, 43.782257f, -90.620918f},
-    {-65.928879f, 43.782257f, -64.078674f},
-    {-93.237503f, 43.782257f, -0.000002f},
-    {-65.928879f, 43.782257f, 64.078667f},
-    {0.000007f, 43.782257f, 90.620911f},
-    {65.928886f, 43.782257f, 64.078667f},
-    {93.237541f, 43.782257f, -0.000009f},
-    {0.000007f, 47.999146f, -0.000006f},
-};
+#include "assets/l_YballPos__d_magma.h"
 
 #include "assets/l_YballDL.h"
 #include "assets/l_YballMatDL.h"
@@ -129,7 +90,7 @@ void dMagma_ballPath_c::setup(f32 offsY, u8 pathNo, int roomNo) {
     mPos.z = pt->m_position.z + cM_rndFX(pt->mArg3 * 100.0f);
     mScale = cM_rndF(1.0f) + 1.0f;
     mBaseY = offsY - cM_rndF(20.0f);
-    mWave = cM_rndF(8.0f) * 4096.0f;
+    mWave = cM_rndF(8.0f) * 0x1000;
     mPos.y = mBaseY + (cM_ssin(mWave) - 1.0f) * 100.0f;
     mWaveTimer = 0;
     mDoMtx_stack_c::transS(mPos);
@@ -289,8 +250,8 @@ dMagma_packet_c::dMagma_packet_c() {
 
     ResTIMG* col = (ResTIMG*)dComIfG_getObjectRes("Magma", dRes_INDEX_MAGMA_BTI_MAG_COL_e);
     mDoLib_setResTimgObj(col, &mColTexObj, 0, NULL);
-    mDoMtx_identity(mFloorMtx);
-    mDoMtx_identity(mBallMtx);
+    cMtx_identity(mFloorMtx);
+    cMtx_identity(mBallMtx);
     mTimer = 0.0f;
 }
 
