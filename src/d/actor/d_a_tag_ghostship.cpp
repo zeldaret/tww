@@ -29,13 +29,13 @@ void daTag_Gship_c::modeClearWait() {
 
 /* 000001C0-00000214 .text modeClearEventInit__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearEventInit() {
-    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803);
+    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::GHOST_SHIP);
 #if VERSION == VERSION_DEMO
     reg += 1;
 #else
     reg = 3;
 #endif
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_8803, reg);
+    dComIfGs_setEventReg(dSv_event_flag_c::GHOST_SHIP, reg);
 }
 
 /* 00000214-00000418 .text modeClearEvent__13daTag_Gship_cFv */
@@ -43,7 +43,7 @@ void daTag_Gship_c::modeClearEvent() {
     if(eventInfo.checkCommandDemoAccrpt()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("PScnChg");
         if(strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "WARAIGOE") == 0) {
-            if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803) == 3) {
+            if(dComIfGs_getEventReg(dSv_event_flag_c::GHOST_SHIP) == 3) {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_SCREAM);
             } else {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_LAUGH);
