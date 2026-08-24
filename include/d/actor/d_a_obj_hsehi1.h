@@ -73,7 +73,6 @@ public:
     BOOL draw();
 
 public:
-    /* Place member variables here */
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29c */ dBgS_ObjAcch mObjAcch;
@@ -86,9 +85,9 @@ public:
     /* 0x4f4 */ ActionFunc mAction;
     /* 0x500 */ u32 mShadowId;
     /* 0x504 */ u32 mFlags;
-    /* 0x508 */ u32 mMsgId;
+    /* 0x508 */ u32 mMsgNo;
     /* 0x50c */ int mSwitchNo;
-    /* 0x510 */ u32 mMessage;
+    /* 0x510 */ u32 mPrmMsgNo;
     /* 0x514 */ s8 field_0x514;
     /* 0x515 */ s8 mEventSelector;
     /* 0x516 */ u8 field_0x516;

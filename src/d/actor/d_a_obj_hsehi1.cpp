@@ -6,6 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hsehi1.h"
 #include "d/actor/d_a_player.h"
+#include "res/Object/Hsehi1.h"
+#include "res/Object/Hsehi2.h"
 
 static daObj_hsh_HIO_c l_HIO;
 static s32 l_hio_counter;
@@ -161,8 +163,8 @@ void daObj_hsh_c::setBaseMtx() {
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::createHeap() {
     if (argument == 0) {
-        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi1", 4);
-        JUT_ASSERT(0x1f9, modelData != 0);
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi1", dRes_INDEX_HSEHI1_BDL_HSEHI1_e);
+        JUT_ASSERT(0x1f9, modelData != NULL);
 
         mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (mpModel == NULL) {
@@ -171,7 +173,7 @@ BOOL daObj_hsh_c::createHeap() {
 
         mpBgW = new dBgW();
         if (mpBgW != NULL) {
-            cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Hsehi1", 7);
+            cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Hsehi1", dRes_INDEX_HSEHI1_DZB_HSEHI1_e);
             if (mpBgW->Set(dzb, cBgW::MOVE_BG_e, &mMtx)) {
                 return FALSE;
             }
@@ -179,8 +181,8 @@ BOOL daObj_hsh_c::createHeap() {
             return FALSE;
         }
     } else {
-        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi2", 4);
-        JUT_ASSERT(0x20f, modelData != 0);
+        J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Hsehi2", dRes_INDEX_HSEHI2_BDL_HSEHI2_e);
+        JUT_ASSERT(0x20f, modelData != NULL);
 
         mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (mpModel == NULL) {
@@ -189,7 +191,7 @@ BOOL daObj_hsh_c::createHeap() {
 
         mpBgW = new dBgW();
         if (mpBgW != NULL) {
-            cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Hsehi2", 7);
+            cBgD_t* dzb = (cBgD_t*)dComIfG_getObjectRes("Hsehi2", dRes_INDEX_HSEHI2_DZB_HSEHI2_e);
             if (mpBgW->Set(dzb, cBgW::MOVE_BG_e, &mMtx)) {
                 return FALSE;
             }
@@ -207,19 +209,19 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000930-00000B44       .text create__11daObj_hsh_cFv */
 cPhs_State daObj_hsh_c::create() {
-    /* Nonmatching */
-    static u32 a_heap_size_tbl;
-    static s8 init;
-    if (init == 0) {
-        a_heap_size_tbl = 0x4000;
-        init = 1;
-    }
+    static u32 a_heap_size_tbl = 0x4000;
 
     fopAcM_ct(this, daObj_hsh_c);
 
+#if VERSION <= VERSION_JPN
+    if (argument == 0 && dComIfGs_isTact(2)) {
+        return cPhs_ERROR_e;
+    }
+#else
     if (argument == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2510)) {
         return cPhs_ERROR_e;
     }
+#endif
 
     cPhs_State st;
     if (argument == 0) {
@@ -243,7 +245,7 @@ cPhs_State daObj_hsh_c::create() {
             }
             l_HIO.mpActor = this;
         }
-        if (this->init() == 0) {
+        if (init() == 0) {
             st = cPhs_ERROR_e;
         }
     }
@@ -258,7 +260,7 @@ static char* event_name_tbl[] = {
 /* 00000C84-00000E60       .text init__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::init() {
     mSwitchNo = fpcM_GetParam(this) & 0xff;
-    mMessage = (fpcM_GetParam(this) >> 8) & 0xffff;
+    mPrmMsgNo = (fpcM_GetParam(this) >> 8) & 0xffff;
     mAttentionLatch = 0;
     field_0x514 = -1;
     mEventSelector = -1;
@@ -352,7 +354,7 @@ BOOL daObj_hsh_c::waitAction(void*) {
 BOOL daObj_hsh_c::talkAction(void*) {
     if (mActionMode == 0) {
         l_msgId = -1;
-        mMsgId = getMsg();
+        mMsgNo = getMsg();
         mActionMode++;
         if (argument == 0) {
             ((daPy_py_c*)dComIfGp_getLinkPlayer())->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
@@ -588,12 +590,12 @@ void daObj_hsh_c::initialLinkDispEvent(int i_staffId) {
 /* 00001938-000019C0       .text initialMsgSetEvent__11daObj_hsh_cFi */
 void daObj_hsh_c::initialMsgSetEvent(int staffIdx) {
     l_msgId = -1;
-    mMsgId = 0x0;
+    mMsgNo = 0x0;
 
     int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
     if (pMsgNo != NULL) {
-        mMsgId = *pMsgNo;
-        if (mMsgId == 0x5b3) {
+        mMsgNo = *pMsgNo;
+        if (mMsgNo == 0x5b3) {
             dComIfGp_setMelodyNum(2); // Command melody
         }
     }
@@ -652,8 +654,6 @@ void daObj_hsh_c::initialAppearEvent(int) {
 
     mAppearDeleteTimer = 30;
     setAction(&daObj_hsh_c::waitAction, NULL);
-
-    /* Nonmatching */
 }
 
 /* 00001C1C-00001C74       .text actionAppearEvent__11daObj_hsh_cFi */
@@ -690,7 +690,7 @@ BOOL daObj_hsh_c::actionDeleteEvent(int) {
 /* 00001D88-00001DF4       .text talk_init__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::talk_init() {
     if (l_msgId == -1) {
-        l_msgId = fopMsgM_messageSet(mMsgId, this);
+        l_msgId = fopMsgM_messageSet(mMsgNo, this);
     } else {
         l_msg = fopMsgM_SearchByID(l_msgId);
         if (l_msg != NULL) {
@@ -713,17 +713,17 @@ BOOL daObj_hsh_c::talk(int i_mode) {
                 if ((mFlags & 4) != 0) {
                     l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
                     fopMsgM_messageSendOn();
-                    if (mMsgId == 0x5b3) {
+                    if (mMsgNo == 0x5b3) {
                         s8 roomNo = fopAcM_GetRoomNo(this);
                         dComIfGs_onSwitch(mSwitchNo, roomNo);
                     }
                 }
             }
         } else {
-            u16 nextMsgStatus = next_msgStatus(&mMsgId);
+            u16 nextMsgStatus = next_msgStatus(&mMsgNo);
             l_msg->mStatus = nextMsgStatus;
             if (l_msg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
-                fopMsgM_messageSet(mMsgId);
+                fopMsgM_messageSet(mMsgNo);
             }
         }
     } else if (status == fopMsgStts_INPUT_e) {
@@ -746,21 +746,19 @@ u32 daObj_hsh_c::getMsg() {
         return 0x1901;
     }
 
-    return mMessage;
+    return mPrmMsgNo;
 }
 
 /* 00001F38-00001F78       .text next_msgStatus__11daObj_hsh_cFPUl */
 u32 daObj_hsh_c::next_msgStatus(unsigned long* pMsg) {
     fopMsg_MessageStatus_e nextStatus = fopMsgStts_MSG_CONTINUES_e;
     u32 msg = *pMsg;
-    if ((msg == 0) || (msg == 0xef3) || (msg == mMessage)) {
+    if ((msg == 0) || (msg == 0xef3) || (msg == mPrmMsgNo)) {
         nextStatus = fopMsgStts_MSG_ENDS_e;
     } else if (msg == 0x1901) {
         nextStatus = fopMsgStts_MSG_ENDS_e;
     }
     return nextStatus;
-
-    /* Nonmatching */
 }
 
 /* 00001F78-00002098       .text execute__11daObj_hsh_cFv */
@@ -775,7 +773,7 @@ BOOL daObj_hsh_c::execute() {
 
     mObjAcch.CrrPos(*dComIfG_Bgsp());
 
-    if (mObjAcch.m_ground_h != -1000000000.0f) {
+    if (mObjAcch.m_ground_h != -G_CM3D_F_INF) {
         s32 roomId = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
         current.roomNo = roomId;
         tevStr.mRoomNo = roomId;
