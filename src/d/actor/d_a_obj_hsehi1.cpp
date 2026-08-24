@@ -83,7 +83,7 @@ void daObj_hsh_c::particle_set(JPABaseEmitter** pEmitter, unsigned short i_parti
     if (*pEmitter == NULL) {
         *pEmitter = dComIfGp_particle_set(i_particleId, &current.pos, &current.angle);
         if (*pEmitter != NULL) {
-            (*pEmitter)->mFlags |= 0x40;
+            (*pEmitter)->becomeImmortalEmitter();
         }
     }
 }
