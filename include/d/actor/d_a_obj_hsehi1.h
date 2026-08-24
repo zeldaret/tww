@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_HSEHI1_H
 #define D_A_OBJ_HSEHI1_H
 
+#include "SSystem/SComponent/c_lib.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_bg_w.h"
 #include "f_op/f_op_actor.h"
@@ -16,21 +17,21 @@ public:
 
     ~daObj_hsh_c();
 
-    void isEventAccept() {}
-    BOOL isOffDraw() { return (mFlags & 8) == TRUE; }
-    void isTactCancel() {}
-    void isTactCorrect() {}
-    void offEventAccept() {}
-    void offTactCancel() {}
-    void offTactCorrect() {}
-    void onEventAccept() {}
-    void onTactCancel() {}
-    void onTactCorrect() {}
+    BOOL isEventAccept() { return cLib_checkBit<u32>(mFlags, 1); }
+    void onEventAccept() { cLib_onBit<u32>(mFlags, 1); }
+    void offEventAccept() { cLib_offBit<u32>(mFlags, 1); }
+    BOOL isTactCancel() { return cLib_checkBit<u32>(mFlags, 2); }
+    void onTactCancel() { cLib_onBit<u32>(mFlags, 2); }
+    void offTactCancel() { cLib_offBit<u32>(mFlags, 2); }
+    BOOL isTactCorrect() { return cLib_checkBit<u32>(mFlags, 4); }
+    void onTactCorrect() { cLib_onBit<u32>(mFlags, 4); }
+    void offTactCorrect() { cLib_offBit<u32>(mFlags, 4); }
+    BOOL isOffDraw() { return cLib_checkBit<u32>(mFlags, 8); }
 
     s16 XyCheckCB(int);
     s16 XyEventCB(int);
-    void particle_set(unsigned short);
-    void particle_set(JPABaseEmitter**, unsigned short);
+    void particle_set(u16);
+    void particle_set(JPABaseEmitter**, u16);
     void emitterDelete(JPABaseEmitter**);
     void setAttention(bool);
     void onOffDraw();
@@ -50,7 +51,7 @@ public:
     void eventOrder();
     void checkOrder();
     BOOL checkCommandTalk();
-    bool chkAttention(cXyz, short);
+    bool chkAttention(cXyz, s16);
     BOOL eventProc();
     void eventEnd();
     void initialDefault(int);
@@ -68,19 +69,19 @@ public:
     BOOL talk_init();
     BOOL talk(int);
     u32 getMsg();
-    u32 next_msgStatus(unsigned long*);
+    u32 next_msgStatus(u32*);
     BOOL execute();
     BOOL draw();
 
 public:
-    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29c */ dBgS_ObjAcch mObjAcch;
     /* 0x460 */ dBgS_AcchCir mAcchCir;
     /* 0x4a0 */ JPABaseEmitter* mpEmitter;
     /* 0x4a4 */ Mtx mMtx;
     /* 0x4d4 */ dBgW* mpBgW;
-    /* 0x4d8 */ u8 field_0x4d8[0x4e4 - 0x4d8]; // Padding
+    /* 0x4d8 */ u8 field_0x4d8[0x4e4 - 0x4d8];
     /* 0x4e4 */ cBgS_PolyInfo mPolyInfo;
     /* 0x4f4 */ ActionFunc mAction;
     /* 0x500 */ u32 mShadowId;
@@ -94,14 +95,14 @@ public:
     /* 0x517 */ s8 mActionMode;
     /* 0x518 */ u8 mAttentionLatch;
     /* 0x519 */ u8 mAppearDeleteTimer;
-    /* 0x51a */ u8 field_0x51a[0x51c - 0x51a]; // Padding
+    /* 0x51a */ u8 field_0x51a[0x51c - 0x51a];
     /* 0x51c */ s16 field_0x51c;
     /* 0x51e */ s16 field_0x51e;
     /* 0x520 */ s16 field_0x520;
     /* 0x522 */ s16 field_0x522;
-    /* 0x524 */ u8 field_0x524[0x528 - 0x524]; // Padding
+    /* 0x524 */ u8 field_0x524[0x528 - 0x524];
     /* 0x528 */ f32 field_0x528;
-    /* 0x52c */ u8 field_0x52c[0x530 - 0x52c]; // Padding
+    /* 0x52c */ u8 field_0x52c[0x530 - 0x52c];
     /* 0x530 */ s16 mEventId[2];
 };
 

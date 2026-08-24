@@ -31,9 +31,9 @@ daObj_hsh_HIO_c::daObj_hsh_HIO_c() {
 /* 00000130-000002A4       .text __dt__11daObj_hsh_cFv */
 daObj_hsh_c::~daObj_hsh_c() {
     if (argument == 0) {
-        dComIfG_resDelete(&mPhs, "Hsehi1");
+        dComIfG_resDelete(&mPhase, "Hsehi1");
     } else {
-        dComIfG_resDelete(&mPhs, "Hsehi2");
+        dComIfG_resDelete(&mPhase, "Hsehi2");
     }
 
     if (mpBgW != NULL) {
@@ -70,18 +70,18 @@ static s16 daObj_hsh_XyEventCB(void* i_this, int i_itemBtn) {
 /* 00000308-00000390       .text XyEventCB__11daObj_hsh_cFi */
 s16 daObj_hsh_c::XyEventCB(int) {
     fopAcM_seStart(this, JA_SE_PRE_TAKT, 0);
-    mFlags = mFlags | 1;
+    onEventAccept();
     mEventSelector = 0;
     return mEventId[0];
 }
 
 /* 00000390-000003F4       .text particle_set__11daObj_hsh_cFUs */
-void daObj_hsh_c::particle_set(unsigned short i_particleId) {
+void daObj_hsh_c::particle_set(u16 i_particleId) {
     dComIfGp_particle_set(i_particleId, &current.pos, &current.angle);
 }
 
 /* 000003F4-00000488       .text particle_set__11daObj_hsh_cFPP14JPABaseEmitterUs */
-void daObj_hsh_c::particle_set(JPABaseEmitter** pEmitter, unsigned short i_particleId) {
+void daObj_hsh_c::particle_set(JPABaseEmitter** pEmitter, u16 i_particleId) {
     if (*pEmitter == NULL) {
         *pEmitter = dComIfGp_particle_set(i_particleId, &current.pos, &current.angle);
         if (*pEmitter != NULL) {
@@ -124,7 +124,7 @@ void daObj_hsh_c::setAttention(bool set) {
 
 /* 00000568-000005AC       .text onOffDraw__11daObj_hsh_cFv */
 void daObj_hsh_c::onOffDraw() {
-    mFlags = mFlags | 8;
+    cLib_onBit<u32>(mFlags, 8);
     if (mpBgW != NULL) {
         dComIfG_Bgsp()->Release(mpBgW);
     }
@@ -132,7 +132,7 @@ void daObj_hsh_c::onOffDraw() {
 
 /* 000005AC-000005F4       .text offOffDraw__11daObj_hsh_cFv */
 void daObj_hsh_c::offOffDraw() {
-    mFlags = mFlags & ~8;
+    cLib_offBit<u32>(mFlags, 8);
     if (mpBgW != NULL) {
         dComIfG_Bgsp()->Regist(mpBgW, this);
     }
@@ -157,7 +157,7 @@ void daObj_hsh_c::setBaseMtx() {
     mDoMtx_stack_c::YrotM(shape_angle.y);
 
     model->setBaseTRMtx(mDoMtx_stack_c::get());
-    cMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
 /* 000006C8-00000910       .text createHeap__11daObj_hsh_cFv */
@@ -211,7 +211,7 @@ static BOOL checkCreateHeap(fopAc_ac_c* i_this) {
 cPhs_State daObj_hsh_c::create() {
     static u32 a_heap_size_tbl = 0x4000;
 
-    fopAcM_ct(this, daObj_hsh_c);
+    fopAcM_ct_Retail(this, daObj_hsh_c);
 
 #if VERSION <= VERSION_JPN
     if (argument == 0 && dComIfGs_isTact(2)) {
@@ -225,13 +225,16 @@ cPhs_State daObj_hsh_c::create() {
 
     cPhs_State st;
     if (argument == 0) {
-        st = dComIfG_resLoad(&mPhs, "Hsehi1");
+        st = dComIfG_resLoad(&mPhase, "Hsehi1");
     } else {
-        st = dComIfG_resLoad(&mPhs, "Hsehi2");
+        st = dComIfG_resLoad(&mPhase, "Hsehi2");
     }
     if (st == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, daObj_hsh_c);
         if (!fopAcM_entrySolidHeap(this, checkCreateHeap, a_heap_size_tbl)) {
+#if VERSION > VERSION_DEMO
             mpBgW = NULL;
+#endif
             return cPhs_ERROR_e;
         }
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -259,8 +262,8 @@ static char* event_name_tbl[] = {
 
 /* 00000C84-00000E60       .text init__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::init() {
-    mSwitchNo = fpcM_GetParam(this) & 0xff;
-    mPrmMsgNo = (fpcM_GetParam(this) >> 8) & 0xffff;
+    mSwitchNo = fopAcM_GetParam(this) & 0xff;
+    mPrmMsgNo = (fopAcM_GetParam(this) >> 8) & 0xffff;
     mAttentionLatch = 0;
     field_0x514 = -1;
     mEventSelector = -1;
@@ -282,7 +285,7 @@ BOOL daObj_hsh_c::init() {
     }
 
     for (int i = 0; i < 2; i++) {
-        mEventId[i] = dComIfGp_getPEvtManager()->getEventIdx(event_name_tbl[i], 0xff);
+        mEventId[i] = dComIfGp_evmng_getEventIdx(event_name_tbl[i], 0xff);
     }
 
     eventInfo.setXyCheckCB(daObj_hsh_XyCheckCB);
@@ -357,7 +360,7 @@ BOOL daObj_hsh_c::talkAction(void*) {
         mMsgNo = getMsg();
         mActionMode++;
         if (argument == 0) {
-            ((daPy_py_c*)dComIfGp_getLinkPlayer())->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+            ((daPy_py_c*)dComIfGp_getLinkPlayer())->onPlayerNoDraw();
         }
     } else if (mActionMode != -1) {
         if (mActionMode == 1) {
@@ -369,7 +372,7 @@ BOOL daObj_hsh_c::talkAction(void*) {
             BOOL success = talk(0);
             if (success) {
                 setAction(&daObj_hsh_c::waitAction, NULL);
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
                 if (argument == 0) {
                     ((daPy_py_c*)dComIfGp_getLinkPlayer())->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
                 }
@@ -400,15 +403,15 @@ BOOL daObj_hsh_c::deleteAction(void*) {
 
 /* 00001278-0000135C       .text eventOrder__11daObj_hsh_cFv */
 void daObj_hsh_c::eventOrder() {
-    if ((mFlags & 1) == 0) {
+    if (!isEventAccept()) {
         if ((field_0x514 == 4) || (field_0x514 == 3)) {
-            eventInfo.mCondition |= dEvtCnd_CANTALK_e;
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
             if (field_0x514 == 4) {
                 fopAcM_orderSpeakEvent(this);
             }
         } else if (field_0x514 == 5) {
-            eventInfo.mCondition |= dEvtCnd_CANTALKITEM_e;
-            eventInfo.mCondition |= dEvtCnd_CANTALK_e;
+            eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
+            eventInfo.onCondition(dEvtCnd_CANTALK_e);
             if (argument == 0) {
                 eventInfo.setEventName("hsehi1_talk");
             }
@@ -422,7 +425,7 @@ void daObj_hsh_c::eventOrder() {
 
 /* 0000135C-0000140C       .text checkOrder__11daObj_hsh_cFv */
 void daObj_hsh_c::checkOrder() {
-    if ((eventInfo.mCommand == dEvtCmd_INTALK_e) && (field_0x514 == 4 || field_0x514 == 3 || field_0x514 == 5)) {
+    if (eventInfo.checkCommandTalk() && (field_0x514 == 4 || field_0x514 == 3 || field_0x514 == 5)) {
         field_0x514 = 0xff;
         if (!dComIfGp_event_chkTalkXY()) {
             setAction(&daObj_hsh_c::talkAction, NULL);
@@ -432,7 +435,7 @@ void daObj_hsh_c::checkOrder() {
 
 /* 0000140C-00001478       .text checkCommandTalk__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::checkCommandTalk() {
-    if (eventInfo.mCommand == dEvtCmd_INTALK_e) {
+    if (eventInfo.checkCommandTalk()) {
         if (dComIfGp_event_chkTalkXY()) {
             if (field_0x514 == 5) {
                 field_0x514 = 0xff;
@@ -445,8 +448,8 @@ BOOL daObj_hsh_c::checkCommandTalk() {
 }
 
 /* 00001478-000015E0       .text chkAttention__11daObj_hsh_cF4cXyzs */
-bool daObj_hsh_c::chkAttention(cXyz i_pos, short i_angleY) {
-    daPy_py_c* player = daPy_getPlayerActorClass();
+bool daObj_hsh_c::chkAttention(cXyz i_pos, s16 i_angleY) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
     f32 dist = l_HIO.prm.mAttnDist;
     int angle = l_HIO.prm.mAttnAngle;
     cXyz delta;
@@ -500,8 +503,8 @@ static char* cut_name_tbl[] = {
 
 /* 000015E0-00001784       .text eventProc__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::eventProc() {
-    if ((eventInfo.mCommand == dEvtCmd_INDEMO_e) && field_0x514 != -1) {
-        mFlags |= 1;
+    if (eventInfo.checkCommandDemoAccrpt() && field_0x514 != -1) {
+        onEventAccept();
         field_0x514 = 0xff;
     }
 
@@ -522,7 +525,7 @@ BOOL daObj_hsh_c::eventProc() {
                 }
             }
         }
-        if ((mFlags & 1) != 0) {
+        if (isEventAccept()) {
             if (dComIfGp_evmng_endCheck(mEventId[mEventSelector])) {
                 eventEnd();
             }
@@ -537,8 +540,8 @@ BOOL daObj_hsh_c::eventProc() {
 
 /* 00001784-000017B0       .text eventEnd__11daObj_hsh_cFv */
 void daObj_hsh_c::eventEnd() {
-    dComIfGp_event_onEventFlag(8);
-    mFlags &= ~1;
+    dComIfGp_event_reset();
+    offEventAccept();
     mEventSelector = -1;
 }
 
@@ -572,9 +575,9 @@ void daObj_hsh_c::initialLinkDispEvent(int i_staffId) {
             strcpy(buf, p);
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
             if (strcmp(buf, "on") == 0)
-                player->offNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                player->offPlayerNoDraw();
             if (strcmp(buf, "off") == 0)
-                player->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_DRAW);
+                player->onPlayerNoDraw();
         }
     } else {
         if (p != NULL) {
@@ -623,22 +626,23 @@ BOOL daObj_hsh_c::actionTactEvent(int staffIdx) {
     if (p_talkMode != NULL) {
         i_talkMode = *p_talkMode;
     }
-    int music = daPy_getPlayerActorClass()->getTactMusic();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    int music = player->getTactMusic();
 
     if (music == i_talkMode) {
-        mFlags |= 4;
+        onTactCorrect();
     }
     talk(1);
 }
 
 /* 00001ADC-00001B3C       .text initialJudgeEvent__11daObj_hsh_cFi */
 void daObj_hsh_c::initialJudgeEvent(int) {
-    if ((mFlags & 4) != 0) {
-        mFlags &= ~4;
+    if (isTactCorrect()) {
+        offTactCorrect();
     } else {
-        if ((mFlags & 2) != 0) {
+        if (isTactCancel()) {
             drawStart();
-            mFlags &= ~2;
+            offTactCancel();
             eventEnd();
         }
     }
@@ -705,18 +709,16 @@ BOOL daObj_hsh_c::talk(int i_mode) {
     u16 status = l_msg->mStatus;
     if (status == fopMsgStts_MSG_DISPLAYED_e) {
         if (i_mode == 1) {
-            if (g_dComIfG_gameInfo.play.mMesgCancelButton != 0) {
+            if (dComIfGp_checkMesgCancelButton() != 0) {
                 l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
                 fopMsgM_messageSendOn();
-                mFlags |= 2;
-            } else {
-                if ((mFlags & 4) != 0) {
-                    l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
-                    fopMsgM_messageSendOn();
-                    if (mMsgNo == 0x5b3) {
-                        s8 roomNo = fopAcM_GetRoomNo(this);
-                        dComIfGs_onSwitch(mSwitchNo, roomNo);
-                    }
+                onTactCancel();
+            } else if (isTactCorrect()) {
+                l_msg->mStatus = fopMsgStts_MSG_ENDS_e;
+                fopMsgM_messageSendOn();
+                if (mMsgNo == 0x5b3) {
+                    s8 roomNo = fopAcM_GetRoomNo(this);
+                    dComIfGs_onSwitch(mSwitchNo, roomNo);
                 }
             }
         } else {
@@ -750,7 +752,7 @@ u32 daObj_hsh_c::getMsg() {
 }
 
 /* 00001F38-00001F78       .text next_msgStatus__11daObj_hsh_cFPUl */
-u32 daObj_hsh_c::next_msgStatus(unsigned long* pMsg) {
+u32 daObj_hsh_c::next_msgStatus(u32* pMsg) {
     fopMsg_MessageStatus_e nextStatus = fopMsgStts_MSG_CONTINUES_e;
     u32 msg = *pMsg;
     if ((msg == 0) || (msg == 0xef3) || (msg == mPrmMsgNo)) {
@@ -773,10 +775,10 @@ BOOL daObj_hsh_c::execute() {
 
     mObjAcch.CrrPos(*dComIfG_Bgsp());
 
-    if (mObjAcch.m_ground_h != -G_CM3D_F_INF) {
-        s32 roomId = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
-        current.roomNo = roomId;
-        tevStr.mRoomNo = roomId;
+    if (mObjAcch.GetGroundH() != -G_CM3D_F_INF) {
+        s32 roomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+        fopAcM_SetRoomNo(this, roomNo);
+        tevStr.mRoomNo = roomNo;
         tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
         mPolyInfo.SetPolyInfo(mObjAcch.m_gnd);
     }
@@ -793,17 +795,20 @@ BOOL daObj_hsh_c::execute() {
 
 /* 00002098-00002158       .text draw__11daObj_hsh_cFv */
 BOOL daObj_hsh_c::draw() {
-    if ((mFlags & 8) != 0) {
+    if (isOffDraw()) {
         return TRUE;
-    } else {
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-        g_env_light.setLightTevColorType(mpModel, &tevStr);
-
-        mDoExt_modelUpdate(mpModel);
-        cXyz shadowPos(current.pos.x, current.pos.y, current.pos.z);
-
-        mShadowId = dComIfGd_setRealShadow2(mShadowId, TRUE, mpModel, &shadowPos, 800.0, mObjAcch.GetGroundH(), &tevStr);
     }
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+
+    mDoExt_modelUpdate(mpModel);
+    cXyz shadowPos(current.pos.x, current.pos.y, current.pos.z);
+
+    mShadowId = dComIfGd_setRealShadow2(mShadowId, TRUE, mpModel, &shadowPos, 800.0, mObjAcch.GetGroundH(), &tevStr);
+
+    // dDbVw_drawCylinderXlu
+
     return TRUE;
 }
 
