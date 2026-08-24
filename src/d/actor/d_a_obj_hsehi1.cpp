@@ -235,8 +235,10 @@ cPhs_State daObj_hsh_c::create() {
         fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
         if (l_HIO.mNo < 0) {
             if (argument == 0) {
+                // "Takuto (wind waker) stone monument"
                 l_HIO.mNo = mDoHIO_createChild("タクト石版", &l_HIO);
             } else {
+                // "Message stone monument"
                 l_HIO.mNo = mDoHIO_createChild("メッセージ石碑", &l_HIO);
             }
             l_HIO.mpActor = this;
