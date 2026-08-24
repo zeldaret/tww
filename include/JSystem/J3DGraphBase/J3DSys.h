@@ -99,7 +99,6 @@ public:
     // Type 1: Xlu Buffer
     void setDrawBuffer(J3DDrawBuffer* buffer, int type) {
         J3D_ASSERT(114, type >= 0 && type < 2, "Error : range over.");
-        J3D_ASSERT(115, buffer, "Error : null pointer.");
         mDrawBuffer[type] = buffer;
     }
 

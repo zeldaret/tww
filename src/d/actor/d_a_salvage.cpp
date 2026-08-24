@@ -717,7 +717,7 @@ BOOL daSalvage_c::isEffectKind(int salvageId) {
 
 /* 0000240C-00002410       .text debugDraw__11daSalvage_cFv */
 void daSalvage_c::debugDraw() {
-    /* Nonmatching */
+    /* Debug Nonmatching */
 }
 
 /* 00002410-00002430       .text daSalvageCreate__FPv */

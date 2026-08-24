@@ -840,7 +840,6 @@ BOOL daNpc_Hi1_c::_draw() {
     mBtpAnm.remove(modelData);
     shadowDraw();
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00001CB4-00001EDC       .text _execute__11daNpc_Hi1_cFv */
