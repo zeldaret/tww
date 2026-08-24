@@ -628,20 +628,20 @@ void dMenu_Fmap_c::initialize() {
     mSalvItmTimer = 0;
     mSalvItmChanging = false;
 
-    if (getCtCurWX() < -3 || getCtCurWY() < -3) {
-        setCtCurWX(mGridX);
-        setCtCurWY(mGridY);
-    }
-
     if (getCtCurX() < -3 || getCtCurY() < -3) {
-        setCtCurX(getCtCurWX());
-        setCtCurY(getCtCurWY());
+        setCtCurX(mGridX);
+        setCtCurY(mGridY);
     }
 
-    switch (getCtActive()) {
+    if (getCtZoomGridX() < -3 || getCtZoomGridY() < -3) {
+        setCtZoomGridX(getCtCurX());
+        setCtZoomGridY(getCtCurY());
+    }
+
+    switch (getCtDispMode()) {
         case 0:
-            setCtZoomGridX(getCtCurWX());
-            setCtZoomGridY(getCtCurWY());
+            setCtCurHX(getCtCurX());
+            setCtCurHY(getCtCurY());
             mMainProcIdx = 0;
             mZoomLocked = false;
             break;
@@ -655,7 +655,7 @@ void dMenu_Fmap_c::initialize() {
     paneTransBase(0, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0f, 0, 0);
     mWarpScrollGuard = false;
     mWarpAnimActive = false;
-    setCtCmapSelNo(0);
+    setCtFmapZoom(0);
     selGridMaskAlphaCtrl(0, g_mfHIO.field_0x2E, 0, 0);
     fmapMaskAlphaCtrl(0, g_mfHIO.field_0x2E, 0, 0);
     paneTranceZoomMap(0, g_mfHIO.field_0x2E, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0);
@@ -750,15 +750,15 @@ void dMenu_Fmap_c::calcGetMapCount() {
 /* 801B1374-801B14C4       .text dispEndSalvageMark__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::dispEndSalvageMark() {
     for (int i = 0; i < 49; i++) {
-        aramCmapDatPnt_t* dat = getGridNumToCmapDatPnt(i);
-        if (!dComIfGs_isCompleteCollectMap(dat->collectMapNo)) {
+        aramCmapDatPnt_t* pnt = getGridNumToCmapDatPnt(i);
+        if (!dComIfGs_isCompleteCollectMap(pnt->collectMapNo)) {
             mStxxPanes[i].pane->hide();
         } else {
             fopMsgM_pane_class pane;
             fopMsgM_setPaneData(&pane, fmapDl.scrn, hist[i]);
 
-            f32 y = dat->salvagePnt[field_0x5180].y;
-            f32 x = dat->salvagePnt[field_0x5180].x;
+            f32 y = pnt->salvagePnt[field_0x5180].y;
+            f32 x = pnt->salvagePnt[field_0x5180].x;
             mStxxPanes[i].mPosCenterOrig.x = pane.mPosCenterOrig.x + x * 56.0f / 100000.0f;
             mStxxPanes[i].mPosCenterOrig.y = pane.mPosCenterOrig.y + y * 56.0f / 100000.0f;
             mStxxPanes[i].mPosCenter.x = mStxxPanes[i].mPosCenterOrig.x;
@@ -940,8 +940,8 @@ void dMenu_Fmap_c::selCursorHide() {
 
 /* 801B1B80-801B1CF0       .text selCursorMove__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::selCursorMove() {
-    f32 x = getCtCurWX() * 56.0f;
-    f32 y = getCtCurWY() * 56.0f;
+    f32 x = getCtCurX() * 56.0f;
+    f32 y = getCtCurY() * 56.0f;
     for (int i = 0; i < 8; i++) {
         fopMsgM_paneTrans(&mKk1xPanes[i], x, y);
     }
@@ -960,8 +960,8 @@ void dMenu_Fmap_c::islandNameChange() {
 
 /* 801B1D48-801B1FCC       .text changeIslandName__12dMenu_Fmap_cFUc */
 void dMenu_Fmap_c::changeIslandName(u8 i_no) {
-    s8 wy = getCtCurWY();
-    s8 wx = getCtCurWX();
+    s8 wy = getCtCurY();
+    s8 wx = getCtCurX();
     int grid = wx + (wy + 3) * 7 + 3;
 
     if (!dComIfGs_isSaveArriveGrid(grid)) {
@@ -1048,13 +1048,13 @@ void dMenu_Fmap_c::SalvItmDispChgFast() {
 
 /* 801B2274-801B23EC       .text changeSalvageGetItem__12dMenu_Fmap_cFUc */
 void dMenu_Fmap_c::changeSalvageGetItem(u8 i_no) {
-    s8 wy = getCtCurWY();
-    s8 wx = getCtCurWX();
-    aramCmapDatPnt_t* grid = getGridNumToCmapDatPnt(wx + (wy + 3) * 7 + 3);
+    s8 wy = getCtCurY();
+    s8 wx = getCtCurX();
+    aramCmapDatPnt_t* pnt = getGridNumToCmapDatPnt(wx + (wy + 3) * 7 + 3);
 
-    if (dComIfGs_isCompleteCollectMap(grid->collectMapNo)) {
+    if (dComIfGs_isCompleteCollectMap(pnt->collectMapNo)) {
         mFullMapMode = true;
-        ((J2DPicture*)mGtixPanes[i_no].pane)->changeTexture(salvItemex[grid->field_0x3], 0);
+        ((J2DPicture*)mGtixPanes[i_no].pane)->changeTexture(salvItemex[pnt->mapType], 0);
     } else {
         mFullMapMode = false;
         fopMsgM_setNowAlpha(&mGtixPanes[i_no], 0.0f);
@@ -1267,29 +1267,12 @@ void dMenu_Fmap_c::aramCmapDatRead() {
 
 /* 801B36F0-801B3760       .text initCmapDatPnt__12dMenu_Fmap_cFP16aramCmapDatPat_t */
 void dMenu_Fmap_c::initCmapDatPnt(aramCmapDatPat_t* a_pat) {
-    if (a_pat != NULL) {
-        mCmapDatPnt.m_0x0 = a_pat->m_0x0;
-        mCmapDatPnt.m_0x4 = (aramCmapDatPnt_t*)&a_pat->m_0x4;
-    } else {
-        JUT_ASSERT(252, FALSE);
-    }
+    mCmapDatPnt.init(a_pat);
 }
 
 /* 801B3760-801B37B0       .text getGridNumToCmapDatPnt__12dMenu_Fmap_cFi */
-aramCmapDatPnt_t* dMenu_Fmap_c::getGridNumToCmapDatPnt(int i_param) {
-    int i;
-    aramCmapDatPnt_t* pat = mCmapDatPnt.m_0x4;
-    int num;
-    for (i = 0, num = mCmapDatPnt.m_0x0; i < num; i++) {
-        if (pat->gridNo == i_param + 1) {
-            break;
-        }
-        pat++;
-    }
-    if (i < num) {
-        return pat;
-    }
-    return NULL;
+aramCmapDatPnt_t* dMenu_Fmap_c::getGridNumToCmapDatPnt(int i_gridIdx) {
+    return mCmapDatPnt.getCmapDatPnt3(i_gridIdx);
 }
 
 /* 801B37B0-801B392C       .text setDispIslandPos__12dMenu_Fmap_cFScSc */
@@ -1526,7 +1509,8 @@ void dMenu_Fmap_c::FmapProcMain() {
 
 /* 801B5034-801B5878       .text SelectGrid__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::SelectGrid() {
-    if (dComIfGs_isSaveArriveGrid(fmapSv->curWX + (fmapSv->curWY + 3) * 7 + 3)) {
+    /* Nonmatching */
+    if (dComIfGs_isSaveArriveGrid(fmapSv->curX + (fmapSv->curY + 3) * 7 + 3)) {
         mButtonIconMode = FMAP_BTN_ICON_LOCKED;
     } else {
         mButtonIconMode = FMAP_BTN_ICON_SECTOR;
@@ -1561,7 +1545,7 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
         if (mButtonIconMode == 1) {
             mDoAud_seStart(JA_SE_CHART_ZOOM_IN);
             mButtonIconMode = FMAP_BTN_ICON_DETAIL;
-            setCtCmapSelNo(0x2);
+            setCtFmapZoom(0x2);
             zoom200x200Init();
             f32 clgOrigX = mClgPane.mSizeOrig.x;
             paneTranceZoom2Map(0, g_mfHIO.field_0x2F, field_0x5134 * (clgOrigX / 100000.0f),
@@ -1594,7 +1578,7 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
 
 /* 801B5F80-801B6084       .text zoom200x200Init__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::zoom200x200Init() {
-    zoomMapAlphaSet(getCtCurWX(), getCtCurWY(), &mR01gPane, 0x1E);
+    zoomMapAlphaSet(getCtCurX(), getCtCurY(), &mR01gPane, 0x1E);
     zoomCursorInit();
     setDspHugeMapLink();
     checkDspHugeMapLink();
@@ -1619,7 +1603,7 @@ void dMenu_Fmap_c::ZoomGridLv1Out() {
         mSmskPane.pane->hide();
         mClbPane.pane->hide();
         mButtonIconMode = FMAP_BTN_ICON_WORLD;
-        setCtCmapSelNo(0x0);
+        setCtFmapZoom(0x0);
         mFmapProcIdx = 0;
     }
 }
@@ -1671,7 +1655,7 @@ void dMenu_Fmap_c::move_normal() {
 void dMenu_Fmap_c::FmapProc() {
     if (CPad_CHECK_TRIG_Y(0)) {
         mDoAud_seStart(JA_SE_CHART_TO_COMPARE);
-        setCtActive(1);
+        setCtDispMode(1);
         mMainProcIdx = 1;
         mHikakuProcIdx = 0;
     } else {
@@ -1820,11 +1804,19 @@ bool dMenu_Fmap_c::_open_warpMode() {
 
 /* 801B79E8-801B7CD0       .text init_warpMode__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::init_warpMode() {
+    /* Nonmatching */
     mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
     mFmapMode = FMAP_MODE_WARP;
     mButtonIconMode = FMAP_BTN_ICON_WARP;
 
     areaTextChangeAnimeInit();
+    fopMsgM_cposMove(&mWt0Pane);
+
+    if (getCtCurWX() < -3 || getCtCurWY() < -3) {
+        setCtCurWX(-2);
+        setCtCurWY(-2);
+    }
+
     mFrameCounter = 0;
     setDspWarpBackCornerColor(0.0);
     warpAreaAnime0();
@@ -1832,8 +1824,8 @@ void dMenu_Fmap_c::init_warpMode() {
 
 /* 801B7CD0-801B7E30       .text selCursorMoveWarp__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::selCursorMoveWarp() {
-    f32 transX = getCtCurHX() * 56.0f;
-    f32 transY = getCtCurHY() * 56.0f;
+    f32 transX = getCtCurWX() * 56.0f;
+    f32 transY = getCtCurWY() * 56.0f;
     for (int i = 0; i < 8; i++) {
         fopMsgM_paneTrans(&mKk1xPanes[i], transX, transY);
     }
@@ -1955,7 +1947,7 @@ void dMenu_Fmap_c::wrapSelWarp() {
 
     if (yskWarp == TRUE && nokWarp == TRUE) {
         mFrameTimer = 0;
-        const cursorTable_t* table = getWarpAreaTablePtr(getCtCurHX(), getCtCurHY());
+        const cursorTable_t* table = getWarpAreaTablePtr(getCtCurWX(), getCtCurWY());
         int warpAreaNo = getWarpAreaNo(table);
 
         if (dComIfGp_getShipActor() != NULL) {

@@ -5,6 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_fmap2.h"
+#include "d/d_menu_fmap.h"
 
 /* 801BB3E4-801BB5B8       .text __ct__10dMf2_HIO_cFv */
 dMf2_HIO_c::dMf2_HIO_c() {
@@ -512,8 +513,8 @@ void dMenu_Fmap2_c::getNowCmapNextNum(signed char, int) {
 }
 
 /* 801C7364-801C73B0       .text getCmapDatPnt4__13dMenu_Fmap2_cFi */
-aramCmapDatPat_t* dMenu_Fmap2_c::getCmapDatPnt4(int) {
-    /* Nonmatching */
+aramCmapDatPnt_t* dMenu_Fmap2_c::getCmapDatPnt4(int i_cmapIdx) {
+    return mpFmapDatPnt->getCmapDatPnt4(i_cmapIdx);
 }
 
 /* 801C73B0-801C7474       .text readPaneCmapTexture__13dMenu_Fmap2_cFPC7ResTIMGi */

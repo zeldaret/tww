@@ -9,9 +9,8 @@ struct fopMsgM_pane_class;
 class J2DScreen;
 struct ResTIMG;
 class aramCmapDat_c;
+class aramCmapDatPnt_t;
 class dMenu_FmapSv_c;
-
-struct aramCmapDatPat_t;
 
 class dDlst_FMAP2GS_c : public dDlst_base_c {
 public:
@@ -39,7 +38,7 @@ public:
     void getCtCurY() {}
     void getCtDispMode() {}
     void lineInter0to1ForU8(unsigned char, unsigned char, float) {}
-    void setAramCmapDat(aramCmapDatPat_t* i_ptr) { mpFmapDatPnt = i_ptr; }
+    void setAramCmapDat(aramCmapDat_c* i_ptr) { mpFmapDatPnt = i_ptr; }
     void setCtActive(unsigned char) {}
     void setCtCmapSelNo(signed char) {}
     void setCtCurHX(signed char) {}
@@ -146,7 +145,7 @@ public:
     void calcFinCollectMap();
     void getNowCmapFirstNum();
     void getNowCmapNextNum(signed char, int);
-    aramCmapDatPat_t* getCmapDatPnt4(int);
+    aramCmapDatPnt_t* getCmapDatPnt4(int);
     void readPaneCmapTexture(const ResTIMG*, int);
     void readFmapTexture(const char*);
     int getButtonIconMode();
@@ -161,7 +160,7 @@ public:
     /* 0x0004 */ u8 padding_0x4[0x10 - 0x4];
     /* 0x0010 */ dMenu_FmapSv_c* fmapSv;
     /* 0x0014 */ u8 padding_0x14[0x1C - 0x14];
-    /* 0x001C */ aramCmapDatPat_t* mpFmapDatPnt;
+    /* 0x001C */ aramCmapDat_c* mpFmapDatPnt;
     /* 0x0020 */ dDlst_FMAP2_c mDlst;
     /* 0x0024 */ u8 padding_0x24[0x28 - 0x24];
     /* 0x0028 */ dDlst_FMAP2GS_c mDlstGs;

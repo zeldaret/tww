@@ -5,6 +5,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_lib.h"
 #include "d/d_menu_fmap_sv.h"
+// #include "d/d_menu_fmapSv.h"
 #include "dolphin/types.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "SSystem/SComponent/c_xyz.h"
@@ -23,27 +24,6 @@ struct cursorTable_t {
     /* 0x4 */ s8 right;
     /* 0x5 */ s8 up;
     /* 0x6 */ s8 down;
-};
-
-struct aramCmapSalvagePnt_t {
-    /* 0x0 */ s16 field_0x0;
-    /* 0x2 */ s16 field_0x2;
-    /* 0x4 */ s16 x;
-    /* 0x6 */ s16 y;
-}; // Size: 0x8
-
-struct aramCmapDatPnt_t {
-    /* 0x00 */ s8 gridNo;
-    /* 0x01 */ s8 collectMapNo;
-    /* 0x02 */ s8 cmapIdx;
-    /* 0x03 */ s8 field_0x3;
-    /* 0x04 */ s16 field_0x4;
-    /* 0x06 */ aramCmapSalvagePnt_t salvagePnt[4];
-}; // Size: 0x26
-
-struct aramCmapDatPat_t {
-    /* 0x00 */ u32 m_0x0;
-    /* 0x04 */ aramCmapDatPnt_t* m_0x4;
 };
 
 enum FmapMode {
@@ -77,90 +57,78 @@ public:
     virtual ~dMenu_Fmap_c() {}
 
     void draw() { _draw(); }
-    u8 getCtActive() {
+    u8 getCtDispMode() {
         JUT_ASSERT(467, fmapSv != NULL);
-        return fmapSv->active;
+        return fmapSv->dispMode;
     }
-    void setCtActive(u8 val) {
+    void setCtDispMode(u8 val) {
         JUT_ASSERT(472, fmapSv != NULL);
-        fmapSv->active = val;
+        fmapSv->dispMode = val;
     }
-    s8 getCtCmapSelNo() {
+    s8 getCtFmapZoom() {
         JUT_ASSERT(478, fmapSv != NULL);
-        return fmapSv->cmapSelNo;
+        return fmapSv->fmapZoom;
     }
-    void setCtCmapSelNo(s8 val) {
+    void setCtFmapZoom(u8 val) {
         JUT_ASSERT(483, fmapSv != NULL);
-        fmapSv->cmapSelNo = val;
-    }
-    s8 getCtCurWX() {
-        JUT_ASSERT(489, fmapSv != NULL);
-        return fmapSv->curWX;
-    }
-    void setCtCurWX(s8 val) {
-        JUT_ASSERT(494, fmapSv != NULL);
-        fmapSv->curWX = val;
-    }
-    s8 getCtCurWY() {
-        JUT_ASSERT(500, fmapSv != NULL);
-        return fmapSv->curWY;
-    }
-    void setCtCurWY(s8 val) {
-        JUT_ASSERT(505, fmapSv != NULL);
-        fmapSv->curWY = val;
-    }
-    s8 getCtCurHX() {
-        JUT_ASSERT(511, fmapSv != NULL);
-        return fmapSv->curHX;
-    }
-    void setCtCurHX(s8 val) {
-        JUT_ASSERT(516, fmapSv != NULL);
-        fmapSv->curHX = val;
-    }
-    s8 getCtCurHY() {
-        JUT_ASSERT(522, fmapSv != NULL);
-        return fmapSv->curHY;
-    }
-    void setCtCurHY(s8 val) {
-        JUT_ASSERT(527, fmapSv != NULL);
-        fmapSv->curHY = val;
+        fmapSv->fmapZoom = val;
     }
     s8 getCtCurX() {
-        JUT_ASSERT(533, fmapSv != NULL);
+        JUT_ASSERT(489, fmapSv != NULL);
         return fmapSv->curX;
     }
     void setCtCurX(s8 val) {
-        JUT_ASSERT(538, fmapSv != NULL);
+        JUT_ASSERT(494, fmapSv != NULL);
         fmapSv->curX = val;
     }
     s8 getCtCurY() {
-        JUT_ASSERT(543, fmapSv != NULL);
+        JUT_ASSERT(500, fmapSv != NULL);
         return fmapSv->curY;
     }
     void setCtCurY(s8 val) {
-        JUT_ASSERT(548, fmapSv != NULL);
+        JUT_ASSERT(505, fmapSv != NULL);
         fmapSv->curY = val;
     }
+    s8 getCtCurWX() {
+        JUT_ASSERT(511, fmapSv != NULL);
+        return fmapSv->curWX;
+    }
+    void setCtCurWX(s8 val) {
+        JUT_ASSERT(516, fmapSv != NULL);
+        fmapSv->curWX = val;
+    }
+    s8 getCtCurWY() {
+        JUT_ASSERT(522, fmapSv != NULL);
+        return fmapSv->curWY;
+    }
+    void setCtCurWY(s8 val) {
+        JUT_ASSERT(527, fmapSv != NULL);
+        fmapSv->curWY = val;
+    }
     s8 getCtZoomGridX() {
-        JUT_ASSERT(553, fmapSv != NULL);
+        JUT_ASSERT(533, fmapSv != NULL);
         return fmapSv->zoomGridX;
     }
     void setCtZoomGridX(s8 val) {
-        JUT_ASSERT(559, fmapSv != NULL);
+        JUT_ASSERT(538, fmapSv != NULL);
         fmapSv->zoomGridX = val;
     }
     s8 getCtZoomGridY() {
-        JUT_ASSERT(563, fmapSv != NULL);
+        JUT_ASSERT(543, fmapSv != NULL);
         return fmapSv->zoomGridY;
     }
     void setCtZoomGridY(s8 val) {
-        JUT_ASSERT(569, fmapSv != NULL);
+        JUT_ASSERT(548, fmapSv != NULL);
         fmapSv->zoomGridY = val;
     }
-    void getCtDispMode() {}
-    void setCtDispMode(u8) {}
-    void getCtFmapZoom() {}
-    void setCtFmapZoom(u8) {}
+    void setCtCurHX(s8 val) {
+        JUT_ASSERT(559, fmapSv != NULL);
+        fmapSv->curHX = val;
+    }
+    void setCtCurHY(s8 val) {
+        JUT_ASSERT(569, fmapSv != NULL);
+        fmapSv->curHY = val;
+    }
     void lineInter0to1(f32, f32, f32) {}
     void lineInter0to1ForU8(u8, u8, f32) {}
     void setFont(JUTFont* font, JUTFont* rfont) {
@@ -324,7 +292,7 @@ public:
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
     /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
     /* 0x2878 */ dMenu_FmapSv_c* fmapSv;
-    /* 0x287C */ aramCmapDatPat_t mCmapDatPnt;
+    /* 0x287C */ aramCmapDat_c mCmapDatPnt;
     /* 0x2884 */ dDlst_2DOutFont_c* outFont;
     /* 0x2888 */ dDlst_2DOutFont_c* outFont2;
     /* 0x288C */ fopMsgM_pane_class mFddmPane;
@@ -487,6 +455,8 @@ class dMf_HIO_c : public JORReflexible {
 public:
     dMf_HIO_c();
     virtual ~dMf_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x004 */ s8 mNo;
