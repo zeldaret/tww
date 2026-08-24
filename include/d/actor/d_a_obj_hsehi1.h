@@ -15,11 +15,9 @@ public:
     typedef BOOL (daObj_hsh_c::*EventActionFunc)(int evtStaffId);
 
     ~daObj_hsh_c();
-    
+
     void isEventAccept() {}
-    BOOL isOffDraw() {
-        return (mFlags & 8) == TRUE;
-    }
+    BOOL isOffDraw() { return (mFlags & 8) == TRUE; }
     void isTactCancel() {}
     void isTactCorrect() {}
     void offEventAccept() {}
@@ -46,13 +44,13 @@ public:
     void action(void*);
     BOOL setAction(ActionFunc, void*);
     BOOL waitAction(void*);
-    bool talkAction(void*);
+    BOOL talkAction(void*);
     BOOL offAction(void*);
     BOOL deleteAction(void*);
     void eventOrder();
     void checkOrder();
     BOOL checkCommandTalk();
-    BOOL chkAttention(cXyz, short);
+    bool chkAttention(cXyz, short);
     BOOL eventProc();
     void eventEnd();
     void initialDefault(int);
@@ -83,10 +81,10 @@ public:
     /* 0x4a0 */ JPABaseEmitter* mpEmitter;
     /* 0x4a4 */ Mtx mMtx;
     /* 0x4d4 */ dBgW* mpBgW;
-    /* 0x4d8 */ u8 field_0x4d8[0x4e4 - 0x4d8];
+    /* 0x4d8 */ u8 field_0x4d8[0x4e4 - 0x4d8]; // Padding
     /* 0x4e4 */ cBgS_PolyInfo mPolyInfo;
     /* 0x4f4 */ ActionFunc mAction;
-    /* 0x500 */ u8 field_0x500[0x504 - 0x500];  // Padding
+    /* 0x500 */ u32 mShadowId;
     /* 0x504 */ u32 mFlags;
     /* 0x508 */ u32 mMsgId;
     /* 0x50c */ int mSwitchNo;
@@ -94,17 +92,17 @@ public:
     /* 0x514 */ s8 field_0x514;
     /* 0x515 */ s8 mEventSelector;
     /* 0x516 */ u8 field_0x516;
-    /* 0x517 */ s8 field_0x517; // TODO: Used in offAction -- Action Counter?
-    /* 0x518 */ u8 field_0x518; //TODO: attention?
-    /* 0x519 */ u8 mpAppearDeleteTimer;
+    /* 0x517 */ s8 mActionMode;
+    /* 0x518 */ u8 mAttentionLatch;
+    /* 0x519 */ u8 mAppearDeleteTimer;
     /* 0x51a */ u8 field_0x51a[0x51c - 0x51a]; // Padding
-    /* 0x51c */ short field_0x51c;  // TODO: Unknown usage, possibly related to action state */
-    /* 0x51e */ short field_0x51e;  // TODO: Unknown usage, possibly related to action state */
-    /* 0x520 */ short field_0x520;  // TODO: Unknown usage, possibly related to action state */
-    /* 0x522 */ short field_0x522;  // TODO: Unknown usage, possibly related to action state */
-    /* 0x524 */ u8 field_0x524[0x528 - 0x524];  // Padding
-    /* 0x528 */ float field_0x528;  // TODO: Unknown usage, possibly related to action state */
-    /* 0x52c */ u8 field_0x52c[0x530 - 0x52c];  // Padding
+    /* 0x51c */ s16 field_0x51c;
+    /* 0x51e */ s16 field_0x51e;
+    /* 0x520 */ s16 field_0x520;
+    /* 0x522 */ s16 field_0x522;
+    /* 0x524 */ u8 field_0x524[0x528 - 0x524]; // Padding
+    /* 0x528 */ f32 field_0x528;
+    /* 0x52c */ u8 field_0x52c[0x530 - 0x52c]; // Padding
     /* 0x530 */ s16 mEventId[2];
 };
 
@@ -117,7 +115,7 @@ public:
         /* 0x10 */ f32 field_0x10;
         /* 0x14 */ s16 mAttnAngle;
         /* 0x16 */ s8 field_0x16;
-    };  // Size: 0x10
+    }; // Size: 0x10
 
 public:
     daObj_hsh_HIO_c();
@@ -129,6 +127,6 @@ public:
     /* 0x04 */ s8 mNo;
     /* 0x08 */ hio_prm_c prm;
     /* 0x18 */ daObj_hsh_c* mpActor;
-};  // Size: 0x1C
+}; // Size: 0x1C
 
 #endif /* D_A_OBJ_HSEHI1_H */
