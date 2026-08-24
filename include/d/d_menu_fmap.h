@@ -42,8 +42,8 @@ struct aramCmapDatPnt_t {
 }; // Size: 0x26
 
 struct aramCmapDatPat_t {
-    u32 m_0x0;
-    aramCmapDatPnt_t* m_0x4;
+    /* 0x00 */ u32 m_0x0;
+    /* 0x04 */ aramCmapDatPnt_t* m_0x4;
 };
 
 enum FmapMode {
@@ -241,7 +241,7 @@ public:
     void checkDspHugeMapShip();
     bool _open();
     bool _close();
-    BOOL _close_normalMode();
+    bool _close_normalMode();
     void _move();
     void _draw();
     void _delete();
@@ -273,7 +273,7 @@ public:
     bool _open_warpMode();
     void init_warpMode();
     void selCursorMoveWarp();
-    BOOL _close_warpMode();
+    bool _close_warpMode();
     void moveMain_warpMode();
     void wrapMove();
     void wrapSelWinFadeIn1();
@@ -301,7 +301,7 @@ public:
     void setWrapBackEmitter(cXyz);
     void setWrapSpotEmitter(int, cXyz);
     bool _open_fishManMode();
-    BOOL _close_fishManMode();
+    bool _close_fishManMode();
     void init_fishManMode();
     void movefishManMode();
     void fmDispArea();
