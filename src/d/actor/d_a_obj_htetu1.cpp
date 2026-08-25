@@ -9,7 +9,9 @@
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_bg_w.h"
+#include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "SSystem/SComponent/c_xyz.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -126,6 +128,14 @@ void daObjHtetu1_c::init_mtx() {
 /* 000006E4-000007F8       .text unlock__13daObjHtetu1_cFv */
 void daObjHtetu1_c::unlock() {
     /* Nonmatching */
+    cXyz xyz = cXyz::BaseY;
+    field_0x2A0 -= field_0x2AC;
+    s16 temp = field_0x2C0 * 0x859;
+    f32 factor = std::fabsf((s16)(cM_ssin(temp) * field_0x2BC));
+    xyz *= factor;
+    field_0x2A0 += xyz;
+    field_0x2AC = xyz;
+    cLib_addCalc(&field_0x2BC, 0.0f, 0.13f, 50.0f, 1.0f);
 }
 
 /* 000007F8-0000098C       .text get_water_h__13daObjHtetu1_cFv */
