@@ -29,8 +29,20 @@ const u16 l_daObjHtetu1_splash_id_table[] = {
 const char daObjHtetu1_c::M_arcname[7] = "Htetu1";
 
 /* 00000078-00000178       .text create_s__19daObjHtetu1Splash_cFUsP4cXyzP5csXyzP12dKy_tevstr_c */
-void daObjHtetu1Splash_c::create_s(unsigned short, cXyz*, csXyz*, dKy_tevstr_c*) {
+void daObjHtetu1Splash_c::create_s(unsigned short p1, cXyz *pPos, csXyz *pRot, dKy_tevstr_c *pTev) {
     /* Nonmatching */
+    mPos = *pPos;
+    mRot = *pRot;
+    dComIfGp_particle_set(p1, &mPos, &mRot, NULL, 0xff, &field_0x00);
+    if (field_0x00.getEmitter() != NULL) {
+        field_0x00.getEmitter()->setGlobalPrmColor(pTev->mColorC0.r, pTev->mColorC0.g, pTev->mColorC0.b);
+    }
+    if (field_0x00.getEmitter() != NULL) {
+        field_0x00.getEmitter()->setStatus(1);
+        field_0x28 = 0;
+    }
+    field_0x28 = 0;
+    field_0x26 = 0xfffe;
 }
 
 /* 00000178-00000198       .text solidHeapCB__13daObjHtetu1_cFP10fopAc_ac_c */
