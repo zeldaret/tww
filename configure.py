@@ -1559,7 +1559,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_himo3"),
     ActorRel(Matching,    "d_a_hmlif"),
     ActorRel(Matching,    "d_a_hys"),
-    ActorRel(Equivalent,  "d_a_kamome"), # fpr regalloc
+    ActorRel(Equivalent,  "d_a_kamome"), # regalloc
     ActorRel(Matching,    "d_a_kamome2"), # Demo-only TU
     ActorRel(NonMatching, "d_a_kantera"),
     ActorRel(Matching,    "d_a_kn"),
