@@ -12,6 +12,7 @@
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_gba_com.h"
 #include "m_Do/m_Do_lib.h"
+#include "m_Do/m_Do_gba_com.h"
 #include "stdio.h"
 
 enum {
@@ -1970,8 +1971,13 @@ void dMap_c::drawPointGc(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 p
 }
 
 /* 8004CC7C-8004CD68       .text drawPointMain__6dMap_cFUcUcfffScsUcUcUcUc */
-void dMap_c::drawPointMain(u8, u8, f32, f32, f32, s8, s16, u8, u8, u8, u8) {
-    /* Nonmatching */
+void dMap_c::drawPointMain(u8 param_1,u8 param_2,f32 param_3,f32 param_4,f32 param_5, s8 param_6,s16 param_7,u8 param_8,u8 param_9,u8 param_10,u8 param_11)
+{
+    if (g_mDoGaC_gbaCom.mDoGaC_GbaLink() != 0 && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(3) != 0) {
+        drawPointAgb(param_1, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10, param_11);
+    }
+    drawPointGc(param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10, param_11);
+    return;
 }
 
 /* 8004CD68-8004CEF4       .text drawPointAgb__6dMap_cFUcfffScsUcUcUcUc */
