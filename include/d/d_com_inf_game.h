@@ -1631,6 +1631,10 @@ inline void dComIfGs_onSaveTbox(int i_stageNo, int i_no) {
 void dComIfGs_onStageTbox(int i_stageNo, int i_no);
 BOOL dComIfGs_isStageTbox(int i_stageNo, int i_no);
 
+inline BOOL dComIfGs_isTbox(int i_stageNo, int i_no) {
+    return dComIfGs_isStageTbox(i_stageNo, i_no);
+}
+
 /**
  * This does not appear in the demo debug maps, but it likely existed and was simply unused until the
  * final release based on the fact that dComIfGs_onSaveSwitch does appear in the maps.

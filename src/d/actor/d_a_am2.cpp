@@ -38,7 +38,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         J3DModel* model = j3dSys.getModel();
         am2_class* i_this = (am2_class*)model->getUserArea();
         if (i_this) {
-            cMtx_copy(model->getAnmMtx(jntNo), *calc_mtx);
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
             cXyz offset;
             switch (jntNo) {
@@ -63,7 +63,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
             }
 
             model->setAnmMtx(jntNo, *calc_mtx);
-            cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
     return TRUE;
@@ -75,7 +75,7 @@ static void draw_SUB(am2_class* i_this) {
 
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(actor->scale);
-    mDoMtx_stack_c::transS(actor->current.pos);
+    mDoMtx_stack_c::transS(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z);
     mDoMtx_stack_c::YrotM(actor->shape_angle.y);
     mDoMtx_stack_c::XrotM(actor->shape_angle.x);
     mDoMtx_stack_c::ZrotM(actor->shape_angle.z);
@@ -103,7 +103,7 @@ static BOOL daAM2_Draw(am2_class* i_this) {
     i_this->mpBrkAnm->remove(model->getModelData());
     i_this->mpBtkAnm->remove(model->getModelData());
 
-    if (!fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
+    if (!fopAcM_checkCarryNow(actor)) {
         dComIfGd_setSimpleShadow2(
             &actor->current.pos, i_this->mAcch.GetGroundH(), 50.0f, i_this->mAcch.m_gnd,
             0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
@@ -181,7 +181,7 @@ static BOOL medama_atari_check(am2_class* i_this) {
                     anm_init(i_this, dRes_INDEX_AM2_BCK_WAIT_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                     actor->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
                     fopAcM_OnStatus(actor, fopAcStts_SHOWMAP_e);
-                    i_this->mNeedleCyl.OnAtSetBit();
+                    i_this->mNeedleCyl.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
                     i_this->mNeedleCyl.OnAtHitBit();
                     i_this->mNeedleCyl.OnTgSetBit();
                     i_this->mAction = ACTION_DOUSA;
@@ -224,7 +224,7 @@ static BOOL week_atari_check(am2_class* i_this) {
             }
             
             u8 hitType = 0;
-            if (hitObj->ChkAtType(AT_TYPE_LIGHT_ARROW)) {
+            if (hitObj->GetAtType() & AT_TYPE_LIGHT_ARROW) {
                 i_this->mEnemyIce.mLightShrinkTimer = 1;
                 i_this->mEnemyIce.mParticleScale = 1.0f;
                 i_this->mEnemyIce.mYOffset = 80.0f;
@@ -327,9 +327,7 @@ static BOOL week_atari_check(am2_class* i_this) {
 /* 00000D30-00000F54       .text body_atari_check__FP9am2_class */
 static BOOL body_atari_check(am2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    // For VERSION_JPN, the redundant daPy_py_c* cast is required to fix a regswap.
-    // For the other versions, the cast has no effect (it doesn't create another regswap).
-    daPy_py_c* player = (daPy_py_c*)daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
     i_this->mStts.Move();
 
@@ -422,14 +420,13 @@ static BOOL naraku_check(am2_class* i_this) {
         }
     }
     
-    if (i_this->mAcch.ChkWaterIn()) {
+    if (i_this->mAcch.MaskWaterIn() != 0) {
         if (!i_this->mbMadeWaterSplash) {
             cXyz waterPillarPos = actor->current.pos;
             if (i_this->mCountDownTimers[4] == 0) {
                 i_this->mCountDownTimers[4] = 1*30;
                 waterPillarPos.y = i_this->mAcch.m_wtr.GetHeight();
-                f32 centerY = actor->current.pos.y + 80.0f;
-                f32 scaleY = (0.1f + REG8_F(1)) * (waterPillarPos.y - centerY);
+                f32 scaleY = (0.1f + REG8_F(1)) * (waterPillarPos.y - (actor->current.pos.y + 80.0f));
                 if (scaleY < 0.0f) {
                     scaleY = 0.3f;
                 } else if (scaleY > 1.0f) {
@@ -447,8 +444,7 @@ static BOOL naraku_check(am2_class* i_this) {
             }
         }
         
-        f32 waterSinkDepth = 80.0f + REG12_F(0);
-        if (actor->current.pos.y < i_this->mAcch.m_wtr.GetHeight() - waterSinkDepth) {
+        if (actor->current.pos.y < i_this->mAcch.m_wtr.GetHeight() - (80.0f + REG12_F(0))) {
             actor->speedF = 0.0f;
             actor->speed.setall(0.0f);
             actor->gravity = 0.0f;
@@ -515,16 +511,16 @@ static void action_dousa(am2_class* i_this) {
         i_this->mMode++;
         // Fall-through
     case 3: {
+        f32 radiusAdjust = 200.0f;
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
             i_this->mCountUpTimers[i] = 0;
         }
         actor->speedF = 0.0f;
         f32 playerDist = fopAcM_searchPlayerDistance(actor);
-        f32 radiusAdjust = 200.0f;
         if (playerDist > i_this->mAreaRadius + radiusAdjust) {
             i_this->mMode = 6;
         } else {
-            i_this->mNeedleCyl.OnAtSetBit();
+            i_this->mNeedleCyl.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
             i_this->mNeedleCyl.OnAtHitBit();
             i_this->mNeedleCyl.OnTgSetBit();
             i_this->mTargetAngleY = fopAcM_searchPlayerAngleY(actor);
@@ -562,15 +558,20 @@ static void action_dousa(am2_class* i_this) {
             i_this->mSmokeCb.remove();
             fopAcM_seStart(actor, JA_SE_CM_AM_JUMP_S, 0);
             
-            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_AMOTHSMOKE00, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
-            if (i_this->mSmokeCb.getEmitter()) {
-                i_this->mSmokeCb.getEmitter()->setRate(12.0f);
+            JPABaseEmitter* emitter = dComIfGp_particle_setToon(
+                dPa_name::ID_AK_ST_AMOTHSMOKE00,
+                &actor->current.pos, &actor->shape_angle,
+                NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor)
+            );
+            if (DEMO_SELECT(emitter, i_this->mSmokeCb.getEmitter())) {
+                DEMO_SELECT(emitter, i_this->mSmokeCb.getEmitter())->setRate(12.0f);
                 JGeometry::TVec3<f32> scale;
                 scale.set(0.45f, 0.45f, 0.45f);
-                i_this->mSmokeCb.getEmitter()->setGlobalScale(scale);
+                DEMO_SELECT(emitter, i_this->mSmokeCb.getEmitter())->setGlobalScale(scale);
             }
             
-            if (i_this->mCountUpTimers[0] > 8) {
+            s16 r0 = 8;
+            if (i_this->mCountUpTimers[0] > r0) {
                 i_this->mMode = 3;
             } else {
                 actor->speedF = 9.0f;
@@ -596,8 +597,8 @@ static void action_dousa(am2_class* i_this) {
             for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
                 i_this->mCountUpTimers[i] = 0;
             }
-            i_this->mNeedleCyl.OffAtSetBit();
-            i_this->mNeedleCyl.OffAtSetBit();
+            i_this->mNeedleCyl.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
+            i_this->mNeedleCyl.ClrAtSet();
             i_this->mNeedleCyl.OffTgSetBit();
             i_this->mNeedleCyl.ClrTgHit();
             i_this->m304 = actor->current.pos;
@@ -636,8 +637,8 @@ static void action_mahi(am2_class* i_this) {
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
             i_this->mCountUpTimers[i] = 0;
         }
-        i_this->mNeedleCyl.OffAtSetBit();
-        i_this->mNeedleCyl.OffAtSetBit();
+        i_this->mNeedleCyl.ClrAtSet();
+        i_this->mNeedleCyl.ClrAtSet();
         i_this->mNeedleCyl.OffTgSetBit();
         i_this->mNeedleCyl.ClrTgHit();
         
@@ -679,7 +680,7 @@ static void action_mahi(am2_class* i_this) {
                 fopAcM_seStart(actor, JA_SE_CM_AM2_JUMP, 0);
                 i_this->mCountUpTimers[1] = 0;
             }
-            if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
+            if (fopAcM_checkCarryNow(actor)) {
                 i_this->mAcchRadius = 40.0f + REG8_F(10);
                 i_this->mbMadeWaterSplash = false;
                 i_this->mRippleCb.remove();
@@ -690,23 +691,23 @@ static void action_mahi(am2_class* i_this) {
                 actor->speed.setall(0.0f);
                 actor->speedF = 0.0f;
                 i_this->mbNotInHomeRoom = false;
-                i_this->mBodyCyl.OffCoSetBit();
+                i_this->mBodyCyl.ClrCoSet();
                 i_this->mMode++;
             }
         }
         break;
     case 13:
         actor->current.angle.y = player->shape_angle.y;
-        if (actor->home.roomNo != actor->current.roomNo) {
+        if (fopAcM_GetHomeRoomNo(actor) != fopAcM_GetRoomNo(actor)) {
             i_this->mbNotInHomeRoom = true;
         }
         if (i_this->mPickedUpYPos + 10.0f <= actor->current.pos.y) {
             cLib_addCalcAngleS2(&actor->shape_angle.y, actor->current.angle.y, 1, 0x1000);
         }
-        if (!fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
+        if (!fopAcM_checkCarryNow(actor)) {
             i_this->mAcchRadius = 40.0f + REG8_F(10);
             i_this->mBodyCyl.OnCoSetBit();
-            if (actor->speedF > 0.0f) {
+            if (fopAcM_GetSpeedF(actor) > 0.0f) {
                 actor->gravity = -5.0f;
                 actor->speed.y = 25.0f;
                 actor->speedF = 35.0f;
@@ -722,6 +723,9 @@ static void action_mahi(am2_class* i_this) {
     case 14:
         if (i_this->mAcch.ChkWallHit()) {
             actor->speedF = 0.0f;
+#if VERSION == VERSION_DEMO
+            i_this->mCountUpTimers[0] = 1;
+#endif
         }
         if (naraku_check(i_this)) {
             if (i_this->mbNotInHomeRoom) {
@@ -744,12 +748,16 @@ static void action_mahi(am2_class* i_this) {
                     i_this->mSmokeCb.remove();
                     fopAcM_seStart(actor, JA_SE_CM_AM2_LANDING, 0);
                     
-                    dComIfGp_particle_setToon(dPa_name::ID_AK_ST_AMOTHSMOKE00, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
-                    if (i_this->mSmokeCb.getEmitter()) {
-                        i_this->mSmokeCb.getEmitter()->setRate(12.0f);
+                    JPABaseEmitter* emitter = dComIfGp_particle_setToon(
+                        dPa_name::ID_AK_ST_AMOTHSMOKE00,
+                        &actor->current.pos, &actor->shape_angle,
+                        NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor)
+                    );
+                    if (DEMO_SELECT(emitter, i_this->mSmokeCb.getEmitter())) {
+                        DEMO_SELECT(emitter, i_this->mSmokeCb.getEmitter())->setRate(12.0f);
                         JGeometry::TVec3<f32> scale;
                         scale.set(0.8f, 0.8f, 0.8f);
-                        i_this->mSmokeCb.getEmitter()->setGlobalScale(scale);
+                        DEMO_SELECT(emitter, i_this->mSmokeCb.getEmitter())->setGlobalScale(scale);
                     }
                     
                     actor->speedF = 7.0f;
@@ -802,7 +810,7 @@ static void action_mahi(am2_class* i_this) {
             i_this->mAction = ACTION_DOUSA;
             i_this->mMode = 0;
             
-            if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
+            if (fopAcM_checkCarryNow(actor)) {
                 fopAcM_cancelCarryNow(actor);
                 cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 actor->gravity = -4.0f;
@@ -822,7 +830,7 @@ static void action_mahi(am2_class* i_this) {
             }
             
             if (i_this->mCountDownTimers[3] == 1) {
-                if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
+                if (fopAcM_checkCarryNow(actor)) {
                     fopAcM_cancelCarryNow(actor);
                     cLib_offBit<u32>(actor->attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
                 }
@@ -835,7 +843,7 @@ static void action_mahi(am2_class* i_this) {
         }
     }
     
-    if (fopAcM_CheckStatus(actor, fopAcStts_CARRY_e) || i_this->mMode == 15 || !week_atari_check(i_this)) {
+    if (fopAcM_checkCarryNow(actor) || i_this->mMode == 15 || !week_atari_check(i_this)) {
         body_atari_check(i_this);
     }
 }
@@ -843,13 +851,15 @@ static void action_mahi(am2_class* i_this) {
 /* 00002B08-000032AC       .text action_itai__FP9am2_class */
 static void action_itai(am2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+
     switch (i_this->mMode) {
     case 20:
         for (int i = 0; i < ARRAY_SIZE(i_this->mCountUpTimers); i++) {
             i_this->mCountUpTimers[i] = 0;
         }
-        i_this->mNeedleCyl.OffAtSetBit();
-        i_this->mNeedleCyl.OffAtSetBit();
+        i_this->mNeedleCyl.ClrAtSet();
+        i_this->mNeedleCyl.ClrAtSet();
         i_this->mNeedleCyl.OffTgSetBit();
         i_this->mNeedleCyl.ClrTgHit();
         
@@ -897,7 +907,7 @@ static void action_itai(am2_class* i_this) {
         if (!i_this->mpMorf->isStop()) {
             break;
         }
-        i_this->mNeedleCyl.OnAtSetBit();
+        i_this->mNeedleCyl.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
         i_this->mNeedleCyl.OnAtHitBit();
         actor->speed.y = 25.0f;
         actor->gravity = -10.0f;
@@ -917,12 +927,16 @@ static void action_itai(am2_class* i_this) {
         
         if (i_this->mAcch.ChkGroundHit()) {
             i_this->mSmokeCb.remove();
-            dComIfGp_particle_setToon(dPa_name::ID_AK_ST_AMOTHSMOKE00, &actor->current.pos, &actor->shape_angle, NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor));
-            if (i_this->mSmokeCb.getEmitter()) {
-                i_this->mSmokeCb.getEmitter()->setRate(12.0f);
+            JPABaseEmitter* emitter = dComIfGp_particle_setToon(
+                dPa_name::ID_AK_ST_AMOTHSMOKE00,
+                &actor->current.pos, &actor->shape_angle,
+                NULL, 0xB9, &i_this->mSmokeCb, fopAcM_GetRoomNo(actor)
+            );
+            if (DEMO_SELECT(emitter, i_this->mSmokeCb.getEmitter())) {
+                DEMO_SELECT(emitter, i_this->mSmokeCb.getEmitter())->setRate(12.0f);
                 JGeometry::TVec3<f32> scale;
                 scale.set(0.45f, 0.45f, 0.45f);
-                i_this->mSmokeCb.getEmitter()->setGlobalScale(scale);
+                DEMO_SELECT(emitter, i_this->mSmokeCb.getEmitter())->setGlobalScale(scale);
             }
             
             fopAcM_seStart(actor, JA_SE_CM_AM2_JUMP2, 0);
@@ -976,7 +990,7 @@ static void action_itai(am2_class* i_this) {
 /* 000032AC-000034A4       .text action_handou_move__FP9am2_class */
 static void action_handou_move(am2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     switch (i_this->mMode) {
     case 30: {
         actor->speedF = 40.0f;
@@ -986,8 +1000,8 @@ static void action_handou_move(am2_class* i_this) {
             actor->current.angle.y = player->shape_angle.y - 0x4000;
             actor->speedF = 40.0f;
         }
-        i_this->mNeedleCyl.OffAtSetBit();
-        i_this->mNeedleCyl.OffAtSetBit();
+        i_this->mNeedleCyl.ClrAtSet();
+        i_this->mNeedleCyl.ClrAtSet();
         i_this->mNeedleCyl.OffTgSetBit();
         i_this->mNeedleCyl.ClrTgHit();
         i_this->mTargetAngleY = actor->current.angle.y;
@@ -1070,8 +1084,8 @@ static void action_modoru_move(am2_class* i_this) {
             i_this->mCountUpTimers[1] = 0;
             actor->scale.setall(1.0f);
             i_this->mWeakSph.OffTgSetBit();
-            i_this->mNeedleCyl.OffAtSetBit();
-            i_this->mNeedleCyl.OffCoSetBit();
+            i_this->mNeedleCyl.ClrAtSet();
+            i_this->mNeedleCyl.ClrCoSet();
             i_this->mNeedleCyl.OffTgSetBit();
             i_this->mWeakSph.ClrTgHit();
             i_this->mNeedleCyl.ClrTgHit();
@@ -1099,10 +1113,13 @@ static BOOL daAM2_Execute(am2_class* i_this) {
         }
     }
 
+#if VERSION > VERSION_DEMO
     fopAcM_setGbaName(actor, dItemNo_BOW_e, 0xB, 0x29);
+#endif
 
     if (enemy_ice(&i_this->mEnemyIce)) {
-        i_this->mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+        J3DModel* model = i_this->mpMorf->getModel();
+        model->setBaseTRMtx(mDoMtx_stack_c::get());
         i_this->mpMorf->calc();
         return TRUE;
     }
@@ -1192,7 +1209,7 @@ static BOOL daAM2_IsDelete(am2_class* i_this) {
 
 /* 00003AC0-00003B18       .text daAM2_Delete__FP9am2_class */
 static BOOL daAM2_Delete(am2_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhase, "AM2");
+    dComIfG_resDeleteDemo(&i_this->mPhase, "AM2");
 
     i_this->mSmokeCb.remove();
     i_this->mRippleCb.remove();
@@ -1237,7 +1254,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
         a_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
 
-    static Vec cyl_eye_offset[] = {
+    static Vec cyl_offset_1[] = {
         {80.0f, -25.0f, 0.0f},
         {80.0f, -30.0f, 0.0f},
     };
@@ -1249,7 +1266,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
             /* mShapeType  */ JntHitType_CYL2_e,
             /* mJointIndex */ AM2_JNT_BODY_e,
             /* mRadius     */ 20.0f,
-            /* mpOffsets   */ cyl_eye_offset,
+            /* mpOffsets   */ cyl_offset_1,
         },
         {
             /* mShapeType  */ JntHitType_SPH_e,
@@ -1260,7 +1277,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     };
     a_this->mEyeJntHit = JntHit_create(a_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (a_this->mEyeJntHit) {
-        i_this->jntHit = a_this->mEyeJntHit;
+        fopAcM_SetJntHit(i_this, a_this->mEyeJntHit);
     } else {
         return FALSE;
     }
@@ -1270,12 +1287,13 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
 
 /* 00003E70-00004250       .text daAM2_Create__FP10fopAc_ac_c */
 static cPhs_State daAM2_Create(fopAc_ac_c* i_this) {
-    fopAcM_ct(i_this, am2_class);
+    fopAcM_ct_Retail(i_this, am2_class);
 
     am2_class* a_this = (am2_class*)i_this;
 
     cPhs_State phase_state = dComIfG_resLoad(&a_this->mPhase, "AM2");
     if (phase_state == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(i_this, am2_class);
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1AA0)) {
             return cPhs_ERROR_e;
         }
@@ -1460,9 +1478,9 @@ static cPhs_State daAM2_Create(fopAc_ac_c* i_this) {
         a_this->mNeedleCyl.Set(sword_co_cyl_src);
         a_this->mNeedleCyl.SetStts(&a_this->mStts);
 
-        a_this->mNeedleCyl.OffAtSetBit();
-        a_this->mNeedleCyl.OffAtSetBit();
-        a_this->mNeedleCyl.OffCoSetBit();
+        a_this->mNeedleCyl.ClrAtSet();
+        a_this->mNeedleCyl.ClrAtSet();
+        a_this->mNeedleCyl.ClrCoSet();
         a_this->mNeedleCyl.OffTgSetBit();
 
         a_this->m304 = i_this->current.pos;
