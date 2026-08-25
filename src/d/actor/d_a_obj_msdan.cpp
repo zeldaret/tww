@@ -5,20 +5,172 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JAZelAudio/JAZelAudio_SE.h"
+#include "m_Do/m_Do_audio.h"
+#include "SSystem/SComponent/c_math.h"
+
+const char daObjMsdan::Act_c::M_arcname[] = "Msdan";
+const char daObjMsdan::Act_c::M_evname[] = "Msdan";
 
 /* 00000078-000003D4       .text Mthd_Create__Q210daObjMsdan5Act_cFv */
 cPhs_State daObjMsdan::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    if ((*(u32*)((u8*)this + 0x1C8) & 0x8) == 0) {
+        new (this) Act_c();
+        *(u32*)((u8*)this + 0x1C8) |= 0x8;
+    }
+
+    cPhs_State phase = dComIfG_resLoad(&mPhs, M_arcname);
+
+    if (phase == cPhs_COMPLEATE_e) {
+        Vec pos;
+        SVec angle;
+
+        pos.x = current.pos.x;
+        pos.y = current.pos.y;
+        pos.z = current.pos.z;
+        *(u32*)&angle = *(u32*)&current.angle;
+        *(u16*)((u8*)&angle + 4) = *(u16*)((u8*)&current.angle + 4);
+        angle.y += 0x8000;
+
+        if (prm_get_size() != 0) {
+            pos.y += 800.0f;
+
+            for (int i = 0, objNo = 0; i < 31; i++, objNo += 0x100) {
+                pos.x += 50.0f * cM_ssin(current.angle.y);
+                pos.z += 50.0f * cM_scos(current.angle.y);
+
+                fopAcM_create(
+                    fpcNm_Obj_MsdanSub_e,
+                    prm_get_swSave() + (prm_get_size() << 16) + objNo,
+                    (cXyz*)&pos,
+                    current.roomNo,
+                    (csXyz*)&angle,
+                    (cXyz*)NULL,
+                    -1,
+                    NULL
+                );
+            }
+        } else {
+            pos.y += 400.0f;
+
+            for (int i = 16, objNo = 0x1000; i < 31; i++, objNo += 0x100) {
+                pos.x += 50.0f * cM_ssin(current.angle.y);
+                pos.z += 50.0f * cM_scos(current.angle.y);
+
+                fopAcM_create(
+                    fpcNm_Obj_MsdanSub_e,
+                    prm_get_swSave() + (prm_get_size() << 16) + objNo,
+                    (cXyz*)&pos,
+                    current.roomNo,
+                    (csXyz*)&angle,
+                    (cXyz*)NULL,
+                    -1,
+                    NULL
+                );
+            }
+        }
+
+        if ((u8)prm_get_evId() == 0xFF) {
+            mEventIdx = dComIfGp_evmng_getEventIdx("Msdan", 0xFF);
+        } else {
+            mEventIdx = dComIfGp_evmng_getEventIdx(NULL, prm_get_evId());
+        }
+
+        if (fopAcM_isSwitch(this, prm_get_swSave())) {
+            mMode = 3;
+        } else {
+            mMode = 0;
+        }
+    }
+
+    return phase;
 }
 
 /* 000003D4-000005C0       .text Mthd_Execute__Q210daObjMsdan5Act_cFv */
 BOOL daObjMsdan::Act_c::Mthd_Execute() {
-    /* Nonmatching */
+    int mode = mMode;
+
+    if (mode == 2) {
+        goto mode_2;
+    }
+    if (mode >= 2) {
+        goto end;
+    }
+    if (mode == 0) {
+        goto mode_0;
+    }
+    if (mode >= 0) {
+        goto mode_1;
+    }
+    goto end;
+
+mode_0:
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        if (prm_get_size() != 0) {
+            mMode = 3;
+            goto end;
+        }
+        if ((u8)prm_get_sound() != 0) {
+            mMode = 3;
+            goto end;
+        }
+        if (mEventIdx == -1) {
+            JAIZelBasic::zel_basic->seStart(
+                JA_SE_READ_RIDDLE_1,
+                NULL,
+                0,
+                0,
+                1.0f,
+                1.0f,
+                -1.0f,
+                -1.0f,
+                0
+            );
+            mMode = 3;
+            goto end;
+        } else {
+            fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
+            mMode = 1;
+            goto end;
+        }
+    }
+    goto end;
+
+mode_1:
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        mMode = 2;
+        JAIZelBasic::zel_basic->seStart(
+            JA_SE_READ_RIDDLE_1,
+            NULL,
+            0,
+            0,
+            1.0f,
+            1.0f,
+            -1.0f,
+            -1.0f,
+            0
+        );
+    } else {
+        fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
+    }
+    goto end;
+
+mode_2:
+    if (dComIfGp_evmng_endCheck(mEventIdx)) {
+        dComIfGp_event_onEventFlag(8);
+        mMode = 3;
+    }
+
+end:
+    return TRUE;
 }
 
 /* 000005C0-000005F0       .text Mthd_Delete__Q210daObjMsdan5Act_cFv */
 BOOL daObjMsdan::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&mPhs, M_arcname);
+    return TRUE;
 }
 
 namespace daObjMsdan {
