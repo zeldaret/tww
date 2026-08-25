@@ -1391,7 +1391,19 @@ void dMenu_Fmap_c::setDspLargeMapLink() {
 
 /* 801B3DFC-801B3F28       .text checkDspLargeMapLink__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkDspLargeMapLink() {
-    /* Nonmatching */
+    if (mFishmanActive == 0) {
+        mLnk2Pane.pane->hide();
+        field_0x5182 = 0;
+    } else {
+        field_0x5111 = dMap_getCheckPointUseGrid(getCtCurX(), getCtCurY());
+        if (field_0x5112 == field_0x5111) {
+            field_0x5182 = 1;
+        } else {
+            mLnk2Pane.pane->hide();
+            field_0x5182 = 0;
+        }
+    }
+    dispEndSalvageLargeMark();
 }
 
 /* 801B3F28-801B405C       .text checkDspLargeMapShip__12dMenu_Fmap_cFv */

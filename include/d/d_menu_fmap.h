@@ -377,8 +377,8 @@ public:
     /* 0x510E */ u8 mCursorBufIdx;
     /* 0x510F */ u8 field_0x510F;
     /* 0x5110 */ u8 field_0x5110;
-    /* 0x5111 */ u8 field_0x5111;
-    /* 0x5112 */ u8 field_0x5112;
+    /* 0x5111 */ s8 field_0x5111;
+    /* 0x5112 */ s8 field_0x5112;
     /* 0x5113 */ u8 mMainProcIdx;
     /* 0x5114 */ u8 mFmapProcIdx;
     /* 0x5115 */ u8 mHikakuProcIdx;
