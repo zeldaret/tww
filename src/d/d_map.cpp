@@ -1976,21 +1976,21 @@ void dMap_c::drawPointMain(u8 pointType,u8 param_2, f32 posX,f32 posY, f32 posZ,
     if (g_mDoGaC_gbaCom.mDoGaC_GbaLink() != 0 && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(3) != 0) {
         drawPointAgb(pointType, posX, posY, posZ, param_6, param_7, param_8, mGbaName, param_10, param_11);
     }
-    drawPointGc(param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10, param_11);
+    drawPointGc(param_2, posX, posY, posZ, param_6, param_7, param_8, mGbaName, param_10, param_11);
     return;
 }
 
 /* 8004CD68-8004CEF4       .text drawPointAgb__6dMap_cFUcfffScsUcUcUcUc */
-void dMap_c::drawPointAgb(u8 pointType,f32 collectPointData,f32 posY,f32 posX,s8 param_5,s16 param_6,u8 mGbaName,u8 param_8,u8 param_9,u8 param_10){
+void dMap_c::drawPointAgb(u8 pointType,f32 posX,f32 posY,f32 posZ,s8 param_5,s16 param_6,u8 param_7,u8 mGbaName,u8 param_9,u8 param_10){
     mAGBPointValueRoomAll = mAGBPointValueRoomAll + 1;
     if (getKindMapType() == 1) {
-        setGbaPoint(pointType,collectPointData,posX,param_6,mGbaName,param_8,param_9,param_10);
+        setGbaPoint(pointType,posX,posZ,param_6,param_7,mGbaName,param_9,param_10);
         return;
     }
     if (mNowRoomInfoP == 0 || mNowRoomInfoP->getEnableFlg() == 0){
         return;
     }
-    if (pointType != 1 && pointType != 3 && pointType != -1 && param_5 != mNowRoomInfoP->getRoomNo()) {
+    if (pointType != 1 && pointType != 3 && param_5 != -1 && param_5 != mNowRoomInfoP->getRoomNo()) {
         return;
     }
     u8 floorNum = dMap_GetFloorNo_WithRoom(param_5, posY);
@@ -1998,7 +1998,7 @@ void dMap_c::drawPointAgb(u8 pointType,f32 collectPointData,f32 posY,f32 posX,s8
     if (!bVar1 && pointType != 1 && pointType != 3 && (IsFloorNo(floorNum) == 0 || IsFloorNo(mNowFloorNo) == 0 || mNowFloorNo != floorNum)) {
         return;
     }
-    setGbaPoint(pointType,collectPointData,posX,param_6,mGbaName,param_8,param_9,param_10);
+    setGbaPoint(pointType,posX,posZ,param_6,param_7,mGbaName,param_9,param_10);
 }
 
 /* 8004CEF4-8004CFA4       .text getTypeAgbGcFromTypeAcs__6dMap_cFUcPUcPUc */
