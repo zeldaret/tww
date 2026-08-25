@@ -1556,7 +1556,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_fallrock"),
     ActorRel(Matching,    "d_a_ff"),
     ActorRel(Matching,    "d_a_gy_ctrl"),
-    ActorRel(Equivalent,  "d_a_himo3"),
+    ActorRel(Matching,    "d_a_himo3"),
     ActorRel(Matching,    "d_a_hmlif"),
     ActorRel(Matching,    "d_a_hys"),
     ActorRel(Equivalent,  "d_a_kamome"), # fpr regalloc
