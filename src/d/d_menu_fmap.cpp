@@ -1408,12 +1408,40 @@ void dMenu_Fmap_c::checkDspLargeMapLink() {
 
 /* 801B3F28-801B405C       .text checkDspLargeMapShip__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkDspLargeMapShip() {
-    /* Nonmatching */
+    if (mFishmanActive == 0) {
+        mSpi2Pane.pane->hide();
+        field_0x5184 = FALSE;
+    } else {
+        if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0 &&
+            mTargetGridX == getCtCurX() && mTargetGridY == getCtCurY()) {
+            field_0x5184 = true;
+            return;
+        }
+        mSpi2Pane.pane->hide();
+        field_0x5184 = false;
+    }
 }
 
 /* 801B405C-801B4264       .text dispEndSalvageLargeMark__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::dispEndSalvageLargeMark() {
-    /* Nonmatching */
+    int grid = getCtCurX() + (getCtCurY() + 3) * 7 + 3;
+    aramCmapDatPnt_t* pnt = mCmapDatPnt.getCmapDatPnt3(grid);
+
+    if (!dComIfGs_isCompleteCollectMap(pnt->collectMapNo)) {
+        mStm1Pane.pane->hide();
+    } else {
+        f32 y = pnt->salvagePnt[field_0x5180].y;
+        f32 x = pnt->salvagePnt[field_0x5180].x;
+        f32 scale = 0.5f;
+        f32 size = mClbPane.mSizeOrig.x;
+        mStm1Pane.mPosCenterOrig.x = size * scale + x * ((size - 50.0f) / 100000.0f);
+        size = mClbPane.mSizeOrig.y;
+        mStm1Pane.mPosCenterOrig.y = size * scale + y * ((size - 50.0f) / 100000.0f);
+        mStm1Pane.mPosCenter.x = mStm1Pane.mPosCenterOrig.x;
+        mStm1Pane.mPosCenter.y = mStm1Pane.mPosCenterOrig.y;
+        fopMsgM_cposMove(&mStm1Pane);
+        mStm1Pane.pane->show();
+    }
 }
 
 /* 801B4264-801B4640       .text setDspHugeMapLink__12dMenu_Fmap_cFv */
