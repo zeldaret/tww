@@ -584,10 +584,10 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 if(*pMsgNo == 0xFD3) {
                     u8 r3 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_7F0F);
                     r3 += getBuyItem();
-                    u8 temp = cLib_maxLimit<u8>(r3, 0xF);
-                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_7F0F, temp);
+                    r3 = cLib_maxLimit<u8>(r3, 0xF);
+                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_7F0F, r3);
 
-                    if(temp < 0xA) {
+                    if(r3 < 0xA) {
                         *pMsgNo = 0xFD5;
                         break;
                     }

@@ -465,17 +465,14 @@ static void kamome_path_move(kamome_class* i_this) {
         }
         break;
 
-    case 3:
+    case 10:
         break;
 
-    case 19:
+    case 20:
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 0;
             anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
         }
-        break;
-
-    case 20:
         break;
     }
 
@@ -688,7 +685,7 @@ static void kamome_path_move(kamome_class* i_this) {
             i_this->mVelocityFwdTarget = 25.0f;
             i_this->mVelocityFwdTargetMaxVel = 2.0f;
             a_this->speedF = 0.0f;
-            i_this->mAnimState = 0x14;
+            i_this->mAnimState = 20;
             i_this->mRiseTimer = REG0_S(4) + 10;
         }
     }
@@ -749,18 +746,15 @@ static void kamome_auto_move(kamome_class* i_this) {
         }
         break;
 
-    case 3:
+    case 10:
         break;
 
-    case 19:
+    case 20:
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
             anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
         }
-
-    case 20:
-        break;
     }
 
     switch (i_this->mMoveState) {
@@ -957,7 +951,7 @@ static void kamome_auto_move(kamome_class* i_this) {
             i_this->mVelocityFwdTargetMaxVel = 1.0f;
         } else {
             i_this->mMoveState = 0;
-            i_this->mAnimState = 0x14;
+            i_this->mAnimState = 20;
             i_this->mTimers[3] = cM_rndF(100.0f) + 100.0f;
             i_this->mRiseTimer = REG0_S(4) + 10;
             if (i_this->mPathIdx != 0xff) {
@@ -1057,17 +1051,15 @@ static void kamome_imouto_move(kamome_class* i_this) {
         }
         break;
 
-    case 3:
+    case 10:
         break;
 
-    case 19:
+    case 20:
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
             anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
         }
-        break;
-    case 20:
         break;
     }
 
@@ -1241,7 +1233,7 @@ static void kamome_imouto_move(kamome_class* i_this) {
             i_this->mVelocityFwdTargetMaxVel = 1.0f;
         } else {
             i_this->mMoveState = 0;
-            i_this->mAnimState = 0x14;
+            i_this->mAnimState = 20;
             i_this->mTimers[3] = cM_rndF(100.0f) + 100.0f;
             i_this->mRiseTimer = REG0_S(4) + 10;
             if (i_this->mPathIdx != 0xff) {

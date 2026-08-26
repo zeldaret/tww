@@ -326,7 +326,7 @@ public:
         /* 0x2B80 */ UNK_2B80 = 0x2B80,
         /* 0x2B40 */ UNK_2B40 = 0x2B40,
         /* 0x2B20 */ UNK_2B20 = 0x2B20,
-        /* 0x2B10 */ UNK_2B10 = 0x2B10,
+        /* 0x2B10 */ UNK_2B10 = 0x2B10, // Command melody monument in Tower of the Gods has been revealed
         /* 0x2B08 */ UNK_2B08 = 0x2B08,
         /* 0x2B04 */ UNK_2B04 = 0x2B04,
         /* 0x2C80 */ UNK_2C80 = 0x2C80,

@@ -146,7 +146,7 @@ cPhs_State daTbox_c::commonShapeSet() {
 
     mpChestMdl->setBaseScale(scale);
 
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpChestMdl->setBaseTRMtx(mDoMtx_stack_c::get());
 
@@ -155,7 +155,7 @@ cPhs_State daTbox_c::commonShapeSet() {
         mpTactPlatformMdl->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 
-    mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+    MTXCopy(mDoMtx_stack_c::get(), mMtx);
 
     return cPhs_COMPLEATE_e;
 }
@@ -170,18 +170,15 @@ cPhs_State daTbox_c::effectShapeSet() {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTransform* flashAnm = (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BCK_IT_TAKARA_FLASH2_e);
-    if (mFlashAnm.init(flashModelData, flashAnm, true, J3DFrameCtrl::EMode_NONE) == 0) {
+    if (mFlashAnm.init(flashModelData, (J3DAnmTransform*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BCK_IT_TAKARA_FLASH2_e), true, J3DFrameCtrl::EMode_NONE) == 0) {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTextureSRTKey* flashTexAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BTK_IT_TAKARA_FLASH_e);
-    if (mFlashTexAnm.init(flashModelData, flashTexAnm, true, J3DFrameCtrl::EMode_NONE) == 0) {
+    if (mFlashTexAnm.init(flashModelData, (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BTK_IT_TAKARA_FLASH_e), true, J3DFrameCtrl::EMode_NONE) == 0) {
         return cPhs_ERROR_e;
     }
 
-    J3DAnmTevRegKey* flashRegAnm = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BRK_IT_TAKARA_FLASH_e);
-    int regInit = mFlashRegAnm.init(flashModelData, flashRegAnm, true, J3DFrameCtrl::EMode_NONE);
+    int regInit = mFlashRegAnm.init(flashModelData, (J3DAnmTevRegKey*)dComIfG_getObjectRes("Dalways", dRes_INDEX_DALWAYS_BRK_IT_TAKARA_FLASH_e), true, J3DFrameCtrl::EMode_NONE);
 
     if (regInit) {
         return cPhs_COMPLEATE_e;
@@ -316,14 +313,10 @@ BOOL daTbox_c::checkEnv() {
 /* 00000CD8-00000D48       .text checkOpen__8daTbox_cFv */
 BOOL daTbox_c::checkOpen() {
     if (getFuncType() == FUNC_TYPE_EXTRA_SAVE_INFO || getFuncType() == FUNC_TYPE_EXTRA_SAVE_INFO_SPAWN) {
-        int stageNo = dSv_save_c::STAGE_SEA2;
-        u8 tBoxNo = getTboxNo();
-
-        return dComIfGs_isStageTbox(stageNo, tBoxNo);
+        return dComIfGs_isTbox(dSv_save_c::STAGE_SEA2, getTboxNo());
     }
     else {
-        u8 tBoxNo = getTboxNo();
-        return dComIfGs_isTbox(tBoxNo);
+        return dComIfGs_isTbox(getTboxNo());
     }
 }
 
@@ -378,7 +371,7 @@ void daTbox_c::surfaceProc() {
 
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y + mAppearingYOffset, current.pos.z);
         mDoMtx_stack_c::YrotM(current.angle.y);
-        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+        MTXCopy(mDoMtx_stack_c::get(), mMtx);
 
         mpBgWCurrent->Move();
     }
@@ -604,7 +597,8 @@ void daTbox_c::darkProc() {
         mAllColRatio = 1.0f;
     }
     else if (mOpenTimer > 0x78) {
-        mAllColRatio = ((mOpenTimer - 0x78) / 30.0f) * 0.6f + 0.4f;
+        f32 temp = (mOpenTimer - 0x78) / 30.0f;
+        mAllColRatio = temp * 0.6f + 0.4f;
     }
 }
 
@@ -623,7 +617,8 @@ void daTbox_c::volmProc() {
         mSmokeEmitter = NULL;
     }
     else if (mOpenTimer > 0x9C) {
-        mSmokeEmitter->setGlobalAlpha((0xB5 - mOpenTimer) * 0x0A);
+        int r3 = 0x0A;
+        mSmokeEmitter->setGlobalAlpha((0xB5 - mOpenTimer) * r3);
     }
 }
 
@@ -766,8 +761,8 @@ s32 daTbox_c::demoProc() {
         ACT_OPEN_SHORT,
     };
 
-    s32 actionIdx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
-    bool bIsAdvance = dComIfGp_evmng_getIsAddvance(mStaffId);
+    int actionIdx = dComIfGp_evmng_getMyActIdx(mStaffId, action_table, ARRAY_SIZE(action_table), FALSE, 0);
+    BOOL bIsAdvance = dComIfGp_evmng_getIsAddvance(mStaffId);
 
     if (bIsAdvance) {
         mHasOpenAnmFinished = false;
@@ -860,8 +855,7 @@ void daTbox_c::OpenInit_com() {
         dComIfGs_onStageTbox(dSv_save_c::STAGE_SEA2, getTboxNo());
     }
     else {
-        u8 tboxNo = getTboxNo();
-        dComIfGs_onTbox(tboxNo);
+        dComIfGs_onTbox(getTboxNo());
     }
 
     s32 openSwNo = home.angle.z & 0xFF;
@@ -902,9 +896,11 @@ void daTbox_c::OpenInit() {
 
 /* 00002444-000024AC       .text setCollision__8daTbox_cFv */
 void daTbox_c::setCollision() {
+    f32 radius = 40.0f;
+    f32 height = 110.0f;
     mColCyl.SetC(current.pos);
-    mColCyl.SetR(40.0f);
-    mColCyl.SetH(110.f);
+    mColCyl.SetR(radius);
+    mColCyl.SetH(height);
 
     dComIfG_Ccsp()->Set(&mColCyl);
 }
@@ -986,16 +982,14 @@ BOOL daTbox_c::actionOpenWait() {
         mStaffId = dComIfGp_evmng_getMyStaffId("TREASURE");
         demoProc();
     }
-    else {
-        if (boxCheck()) {
-            eventInfo.onCondition(dEvtCnd_CANDOOR_e);
+    else if (boxCheck()) {
+        eventInfo.onCondition(dEvtCnd_CANDOOR_e);
 
-            if (getShapeType() == 0) {
-                eventInfo.setEventName("DEFAULT_TREASURE_A");
-            }
-            else {
-                eventInfo.setEventName("DEFAULT_TREASURE");
-            }
+        if (getShapeType() == 0) {
+            eventInfo.setEventName("DEFAULT_TREASURE_A");
+        }
+        else {
+            eventInfo.setEventName("DEFAULT_TREASURE");
         }
     }
 
@@ -1185,7 +1179,7 @@ BOOL daTbox_c::execute() {
         mDoMtx_stack_c::YrotM(home.angle.y);
 
         mpChestMdl->setBaseTRMtx(mDoMtx_stack_c::get());
-        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+        MTXCopy(mDoMtx_stack_c::get(), mMtx);
 
         if (mpBgWCurrent != NULL) {
             mpBgWCurrent->Move();
@@ -1213,7 +1207,7 @@ static s32 daTbox_IsDelete(daTbox_c*) {
 /* 00002FD8-00003070       .text daTbox_Delete__FP8daTbox_c */
 static s32 daTbox_Delete(daTbox_c* i_tbox) {
     i_tbox->deleteProc();
-    dComIfG_resDelete(i_tbox->getPhase(), "Dalways");
+    dComIfG_resDeleteDemo(i_tbox->getPhase(), "Dalways");
 
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
