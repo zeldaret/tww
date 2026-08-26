@@ -8,11 +8,17 @@
 #include "d/actor/d_a_agb.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_stage.h"
+#include "dolphin/gx/GX.h"
+#include "dolphin/gx/GXEnum.h"
+#include "dolphin/gx/GXInit.h"
+#include "dolphin/gx/GXGeometry.h"
 #include "res/Object/Always.h"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_gba_com.h"
 #include "m_Do/m_Do_lib.h"
+#include "m_Do/m_Do_gba_com.h"
 #include "stdio.h"
+
 
 enum {
     Floor_B5F = 123,
@@ -28,6 +34,34 @@ enum {
 
     Floor_Base = Floor_B5F,
 };
+
+enum {
+    MAP_POINT_NONE       = 0,
+    MAP_POINT_PLAYER     = 1,
+    MAP_POINT_AGB_CURSOR = 2,
+    MAP_POINT_ENEMY      = 3,
+    MAP_POINT_ENEMY_ID   = 4,
+    MAP_POINT_SHIP       = 5,
+    MAP_POINT_TBOX       = 6,
+    MAP_POINT_DOOR       = 7,
+    MAP_POINT_FRIEND     = 8,
+    MAP_POINT_RESTART    = 9,
+};
+
+enum {
+    MAP_KIND_UNK   = 1,
+    MAP_KIND_DUNGEON = 2,
+};
+
+enum {
+    MAP_DISP_FULL = 0,
+    MAP_DISP_MINI = 1,
+};
+
+#define MAP_VIEW_HALF   0x78
+#define MAP_VIEW_CENTER 0x3c
+
+
 
 #define Floor_Num (Floor_5F - Floor_B5F + 1)
 #define Floor_Valid(no) (no >= 0) && (no < Floor_Num)
@@ -1965,18 +1999,187 @@ void dMap_c::drawPointShip(f32 param_1, f32 param_2, s16 param_3, f32 param_4, f
 }
 
 /* 8004C144-8004CC7C       .text drawPointGc__6dMap_cFUcfffScsUcUcUcUc */
-void dMap_c::drawPointGc(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9, u8 param_10) {
-    /* Nonmatching */
+void dMap_c::drawPointGc(u8 kind, f32 posX, f32 posY, f32 posZ, s8 roomNo, s16 angle, u8 param_7, u8 gbaName, u8 param_9, u8 gcName) {
+    if (kind == MAP_POINT_NONE) return;
+
+    if (mNowRoomInfoP == NULL || mNowRoomInfoP->getEnableFlg() == 0) {
+        return;
+    }
+
+    if (roomNo != -1 && roomNo != mNowRoomInfoP->getRoomNo()){
+        return;
+    }
+
+    u8 floorNo = dMap_GetFloorNo_WithRoom(roomNo, posY);
+
+    if (kind != MAP_POINT_PLAYER && kind != MAP_POINT_AGB_CURSOR && (IsFloorNo(floorNo) == 0 || IsFloorNo(mNowFloorNo) == 0 || mNowFloorNo != floorNo)) {
+        return;
+    }
+
+    if (mMapDispMode == MAP_DISP_MINI && kind != MAP_POINT_PLAYER &&
+        kind != MAP_POINT_AGB_CURSOR && kind != MAP_POINT_TBOX && kind != MAP_POINT_DOOR &&
+        kind != MAP_POINT_RESTART && kind != MAP_POINT_SHIP && kind != MAP_POINT_FRIEND) return;
+
+    s16 dispX = mNowScaleX * (posX - mNowCenterX);
+    s16 dispY = mNowScaleZ * (posZ - mNowCenterZ);
+
+    u8 size;
+    if (kind == MAP_POINT_AGB_CURSOR) {
+        size = 0x10;
+    } else {
+        size = 4;
+    }
+    u8 halfSize = size / 2;
+
+    if ((s16)dispX + halfSize >= -MAP_VIEW_HALF && dispX - halfSize <= MAP_VIEW_HALF && dispY + halfSize >= -MAP_VIEW_HALF && dispY - halfSize <= MAP_VIEW_HALF) {
+
+        dispX += (s16)(mDispPosLeftUpX + MAP_VIEW_CENTER);
+        dispY += (s16)(mDispPosLeftUpY + MAP_VIEW_CENTER);
+
+
+        switch (kind) {
+            case MAP_POINT_PLAYER:
+                drawPointPlayer(dispX, dispY, angle);
+                break;
+
+            case MAP_POINT_ENEMY:
+                if (getKindMapType() == MAP_KIND_DUNGEON && dComIfGs_isDungeonItemCompass()) {
+                    drawPointEnemy(dispX, dispY);
+                    }
+                    break;
+            case MAP_POINT_ENEMY_ID:
+                if (getKindMapType() == MAP_KIND_UNK) {
+                    if (gcName == 0x18) {
+                        drawPointEnemy(dispX, dispY);
+                    }
+                } else if (getKindMapType() == MAP_KIND_DUNGEON) {
+                    if (gcName == 0x17) {
+                        if (dComIfGs_isDungeonItemCompass()) {
+                            drawPointEnemy(dispX, dispY);
+                        }
+                    } else {
+                        drawPointEnemy(dispX, dispY);
+                    }
+                }
+                break;
+            case MAP_POINT_SHIP:
+                if (getKindMapType() == MAP_KIND_DUNGEON) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointShip(dispX, dispY, angle, 1.1f, 1.3f);
+                    } else {
+                        drawPointShip(dispX, dispY, angle, 1.0f, 1.0f);
+                    }
+                } else if (getKindMapType() == MAP_KIND_UNK) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointShip(dispX, dispY, angle, 1.1f, 1.3f);
+                    } else {
+                        drawPointShip(dispX, dispY, angle, 1.0f, 1.0f);
+                    }
+                }
+                break;
+            case MAP_POINT_AGB_CURSOR:
+                if (param_7 == 0) {
+                    drawPointAgbCursor(dispX, dispY);
+                }
+                break;
+            case MAP_POINT_TBOX:
+                if (param_7 != 0xF && param_7 != 0x10) {
+                    if (getKindMapType() == MAP_KIND_DUNGEON) {
+                        if (dComIfGs_isDungeonItemCompass()) {
+                            if (mMapDispMode == MAP_DISP_FULL) {
+                                drawPointTbox(dispX, dispY, 2.5f, 2.0f);
+                            } else {
+                                drawPointTbox(dispX, dispY, 2.0f, 1.5f);
+                            }
+                        }
+                    } else if (getKindMapType() == MAP_KIND_UNK && mMapDispMode == MAP_DISP_FULL) {
+                        drawPointTbox(dispX, dispY, 2.5f, 2.0f);
+                    }
+                }
+                break;
+            case MAP_POINT_DOOR:
+                if (getKindMapType() == MAP_KIND_DUNGEON) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointDoor(dispX, dispY, 4.0f, 1.5f, angle, mCompAlpha);
+                    } else {
+                        drawPointDoor(dispX, dispY, 1.75f, 0.75f, angle, mAlpha);
+                    }
+                } else if (getKindMapType() == MAP_KIND_UNK) {
+                    if (mNowRoomInfoP->getRoomNo() == 1) {
+                        if (mMapDispMode == MAP_DISP_FULL) {
+                            drawPointDoor(dispX, dispY, 4.0f, 1.5f, angle, mCompAlpha);
+                        } else {
+                            drawPointDoor(dispX, dispY, 1.75f, 0.75f, angle, mAlpha);
+                        }
+                    } else if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointDoor(dispX, dispY, 2.5f, 1.0f, angle, mAlpha);
+                    }
+                }
+                break;
+            case MAP_POINT_RESTART:
+                if (getKindMapType() == MAP_KIND_DUNGEON) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointRestart(dispX, dispY, angle, 1.0f, 1.2f);
+                    } else {
+                        drawPointRestart(dispX, dispY, angle, 1.0f, 1.2f);
+                    }
+                } else if (getKindMapType() == MAP_KIND_UNK) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointRestart(dispX, dispY, angle, 1.0f, 1.2f);
+                    } else {
+                        drawPointRestart(dispX, dispY, angle, 0.8f, 1.0f);
+                    }
+                }
+                break;
+            case MAP_POINT_FRIEND:
+                if (getKindMapType() == MAP_KIND_DUNGEON) {
+                    if (dComIfGs_isDungeonItemCompass()) {
+                        if (mMapDispMode == MAP_DISP_FULL) {
+                            drawPointFriend(dispX, dispY, 2.0f);
+                        } else {
+                            drawPointFriend(dispX, dispY, 1.8f);
+                        }
+                    }
+                } else if (getKindMapType() == MAP_KIND_UNK) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointFriend(dispX, dispY, 2.2f);
+                    } else {
+                        drawPointFriend(dispX, dispY, 2.0f);
+                    }
+                }
+                break;
+            }
+    }
 }
 
 /* 8004CC7C-8004CD68       .text drawPointMain__6dMap_cFUcUcfffScsUcUcUcUc */
-void dMap_c::drawPointMain(u8, u8, f32, f32, f32, s8, s16, u8, u8, u8, u8) {
-    /* Nonmatching */
+void dMap_c::drawPointMain(u8 pointType,u8 param_2, f32 posX,f32 posY, f32 posZ,s8 param_6,s16 param_7,u8 param_8,u8 mGbaName,u8 param_10,u8 param_11)
+{
+    if (mDoGaC_GbaLink() != 0 && mDoGac_SendStatusCheck(3) != 0) {
+        drawPointAgb(pointType, posX, posY, posZ, param_6, param_7, param_8, mGbaName, param_10, param_11);
+    }
+    drawPointGc(param_2, posX, posY, posZ, param_6, param_7, param_8, mGbaName, param_10, param_11);
 }
 
 /* 8004CD68-8004CEF4       .text drawPointAgb__6dMap_cFUcfffScsUcUcUcUc */
-void dMap_c::drawPointAgb(u8, f32, f32, f32, s8, s16, u8, u8, u8, u8) {
-    /* Nonmatching */
+void dMap_c::drawPointAgb(u8 pointType,f32 posX,f32 posY,f32 posZ,s8 param_5,s16 param_6,u8 param_7,u8 mGbaName,u8 param_9,u8 param_10){
+    mAGBPointValueRoomAll = mAGBPointValueRoomAll + 1;
+    if (getKindMapType() == 1) {
+        setGbaPoint(pointType,posX,posZ,param_6,param_7,mGbaName,param_9,param_10);
+        return;
+    }
+    if (mNowRoomInfoP == 0 || mNowRoomInfoP->getEnableFlg() == 0){
+        return;
+    }
+    if (pointType != 1 && pointType != 3 && param_5 != -1 && param_5 != mNowRoomInfoP->getRoomNo()) {
+        return;
+    }
+    u8 floorNum = dMap_GetFloorNo_WithRoom(param_5, posY);
+    bool bVar1 = (int)pointType >= 7 && (int)pointType <= 0xb;
+    if (!bVar1 && pointType != 1 && pointType != 3 && (IsFloorNo(floorNum) == 0 || IsFloorNo(mNowFloorNo) == 0 || mNowFloorNo != floorNum)) {
+        return;
+    }
+    setGbaPoint(pointType,posX,posZ,param_6,param_7,mGbaName,param_9,param_10);
 }
 
 /* 8004CEF4-8004CFA4       .text getTypeAgbGcFromTypeAcs__6dMap_cFUcPUcPUc */
@@ -2162,7 +2365,23 @@ void dMap_2DPoint_c::init(s16 param_1, s16 param_2, const GXColor& param_3, u8 p
 
 /* 8004F0BC-8004F1E4       .text draw__14dMap_2DPoint_cFv */
 void dMap_2DPoint_c::draw() {
-    /* Nonmatching */
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS,GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0,false,GX_SRC_REG,GX_SRC_REG,0,GX_DF_NONE,GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0,field_0x18);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0,GX_TEXCOORD_NULL,GX_TEXMAP_NULL,GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0,GX_PASSCLR);
+    GXSetBlendMode(GX_BM_BLEND,GX_BL_SRC_ALPHA,GX_BL_INV_SRC_ALPHA,GX_LO_SET);
+    GXSetPointSize(field_0x1c,GX_TO_ZERO);
+    GXSetZMode(false,GX_LEQUAL,false);
+    GXSetScissor(field_0x4,field_0x8, field_0xc,field_0x10);
+    GXBegin(GX_POINTS,GX_VTXFMT0,1);
+    GXPosition3s16(field_0x14,field_0x16,0);
+    GXSetScissor(0,0,0x280,0x1e0);
+    return;
 }
 
 /* 8004F1E4-8004F214       .text init__18dMap_2DAGBCursor_cFssRC8_GXColorUc */
