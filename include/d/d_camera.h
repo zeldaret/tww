@@ -4,6 +4,7 @@
 #include "SSystem/SComponent/c_angle.h"
 #include "SSystem/SComponent/c_sxyz.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_stage.h"
 #include "f_pc/f_pc_base.h"
@@ -12,8 +13,8 @@
 #include "d/d_spline_path.h"
 #include "global.h"
 
-class camera_class;
 class camera_process_class;
+class camera_class;
 class dBgS_LinChk;
 class dBgS_CamGndChk;
 class d2DBSplinePath;
@@ -30,25 +31,6 @@ struct dCamera__Type {
     /* 0x18 */ s16 mStyles[20];
 };  // Size: 0x40
 
-struct dCamera_event_data {
-    /* 0x000 */ u8 field_0x00;
-    /* 0x001 */ u8 field_0x01[0x04 - 0x01];
-    /* 0x004 */ int mStaffIdx;
-    /* 0x008 */ int field_0x08;
-    /* 0x00C */ int field_0x0c;
-    /* 0x010 */ u8 field_0x10;
-    /* 0x011 */ u8 field_0x11[0x14 - 0x11];
-    /* 0x014 */ int field_0x14;
-    /* 0x018 */ int field_0x18;
-    /* 0x01C */ int field_0x1c;
-    /* 0x020 */ int field_0x20;
-    /* 0x024 */ int field_0x24;
-    /* 0x028 */ int field_0x28;
-    /* 0x02C */ dCamera__EventParam mEventParams[8];
-    /* 0x0EC */ dStage_Event_dt_c* field_0xec;
-    /* 0x0F0 */ d2DBSplinePath mSpline2DPath;
-};  // Size: 0x124
-
 struct camSphChkdata {
     camSphChkdata(cXyz* i_center, f32 i_radius) {
         field_0x0 = i_center;
@@ -59,23 +41,9 @@ struct camSphChkdata {
     /* 0x00 */ cXyz* field_0x0;
     /* 0x04 */ f32 field_0x4;
     /* 0x08 */ cXyz field_0x8;
+#if VERSION > VERSION_DEMO
     /* 0x14 */ cXyz field_0x14;
-};
-
-class dCamera_monitoring_things {
-public:
-    /* 0x00 */ cXyz mPos;
-    /* 0x0C */ cXyz field_0x0C;
-    /* 0x18 */ int field_0x18;
-    /* 0x1C */ f32 field_0x1C;
-};
-
-class dCamera_DMC_system {
-public:
-    /* 0x0 */ u8 field_0x0;
-    /* 0x1 */ u8 field_0x1;
-    /* 0x2 */ cSAngle field_0x2;
-    /* 0x4 */ cSAngle field_0x4;
+#endif
 };
 
 class dCamForcusLine {
@@ -108,6 +76,39 @@ typedef bool (dCamera_c::*engine_fn)(s32);
 
 class dCamera_c {
 public:
+    struct dCamera_event_data {
+        /* 0x000 */ u8 field_0x00;
+        /* 0x001 */ u8 field_0x01[0x04 - 0x01];
+        /* 0x004 */ int mStaffIdx;
+        /* 0x008 */ int field_0x08;
+        /* 0x00C */ int field_0x0c;
+        /* 0x010 */ u8 field_0x10;
+        /* 0x011 */ u8 field_0x11[0x14 - 0x11];
+        /* 0x014 */ int field_0x14;
+        /* 0x018 */ int field_0x18;
+        /* 0x01C */ int field_0x1c;
+        /* 0x020 */ int field_0x20;
+        /* 0x024 */ int field_0x24;
+        /* 0x028 */ int field_0x28;
+        /* 0x02C */ dCamera__EventParam mEventParams[8];
+        /* 0x0EC */ dStage_Event_dt_c* field_0xec;
+        /* 0x0F0 */ d2DBSplinePath mSpline2DPath;
+    };  // Size: 0x124
+
+    struct dCamera_monitoring_things {
+        /* 0x00 */ cXyz mPos;
+        /* 0x0C */ cXyz field_0x0C;
+        /* 0x18 */ int field_0x18;
+        /* 0x1C */ f32 field_0x1C;
+    };
+
+    struct dCamera_DMC_system {
+        /* 0x0 */ u8 field_0x0;
+        /* 0x1 */ u8 field_0x1;
+        /* 0x2 */ cSAngle field_0x2;
+        /* 0x4 */ cSAngle field_0x4;
+    };
+
     struct BG {
         struct {
             /* 0x00 */ bool m00;
@@ -120,6 +121,12 @@ public:
             /* 0x58 */ f32 m58;
         } m5C;
     };  // Size: 0xB8
+
+    struct SE {
+        // TODO
+        void Chk(u32) {}
+        void Set(u32) {}
+    };  // Size: ?
 
     /* 0x000 */ camera_class* mpCamera;
     /* 0x004 */ u8 mActive;
@@ -185,7 +192,7 @@ public:
     /* 0x114 */ int m114;
     /* 0x118 */ u32 m118;
     /* 0x11C */ u32 m11C;
-    /* 0x120 */ int mCameraInfoIdx;
+    /* 0x120 */ int mCameraID;
     /* 0x124 */ int mPadId;
     /* 0x128 */ fopAc_ac_c* mpPlayerActor;
     /* 0x12C */ fopAc_ac_c* mpLockonTarget;
@@ -267,7 +274,7 @@ public:
         struct {
             /* 0x378 */ int m378;
             /* 0x37C */ int m37C;
-            /* 0x380 */ int m380;
+            /* 0x380 */ f32 m380;
             /* 0x384 */ f32 m384;
             /* 0x388 */ int m388;
             /* 0x38C */ int m38C;
@@ -461,11 +468,6 @@ public:
     void updateMonitor();
     cSAngle calcPeepAngle();
     void Att();
-    void SetWindow(f32 window_width, f32 window_height) {
-        mWindowWidth = window_width;
-        mWindowHeight = window_height;
-        mWindowAspectRatio = window_width / window_height;
-    }
     bool checkForceLockTarget();
     bool Run();
     bool NotRun();
@@ -562,12 +564,6 @@ public:
     bool SetExtendedPosition(cXyz*);
     bool ScopeViewMsgModeOff();
 
-    f32 Fovy() { return mFovy + mFovYShake; }
-    cSAngle Bank() { return mBank + mBankShake; }
-    cXyz Up() { return mUp; }
-    cXyz Center() { return mCenter + mCenterShake; }
-    cXyz Eye() { return mEye + mEyeShake; }
-
     void StartEventCamera(int, int, ...);
     void EndEventCamera(int);
     void searchEventArgData(char*);
@@ -608,6 +604,18 @@ public:
     bool bSplineEvCamera();
     bool twoActor0EvCamera();
 
+    void SetWindow(f32 window_width, f32 window_height) {
+        mWindowWidth = window_width;
+        mWindowHeight = window_height;
+        mWindowAspectRatio = window_width / window_height;
+    }
+
+    f32 Fovy() { return mFovy + mFovYShake; }
+    cSAngle Bank() { return mBank + mBankShake; }
+    cXyz Up() { return mUp; }
+    cXyz Center() { return mCenter + mCenterShake; }
+    cXyz Eye() { return mEye + mEyeShake; }
+
     bool chkFlag(u32 flag) { return (mEventFlags & flag) ? true : false; }
     BOOL setFlag(u32 flag) { return mEventFlags |= flag; }
     void clrFlag(u32 flag) { mEventFlags &= ~flag; }
@@ -623,6 +631,45 @@ public:
 
     bool Active() { return mActive; }
     bool Pause() { return mPause; }
+
+    int CameraID() { return mCameraID; }
+    int Mode() { return mCurMode; }
+
+    f32 footHeightOf(fopAc_ac_c* i_actor) { return i_actor->current.pos.y; }
+
+    void setComStat(u32 i_flag) {
+        dComIfGp_onCameraAttentionStatus(mCameraID, i_flag);
+    }
+    void clrComStat(u32 i_flag) {
+        dComIfGp_offCameraAttentionStatus(mCameraID, i_flag);
+    }
+    bool getComStat(u32 i_flag) {
+        return dComIfGp_getCameraAttentionStatus(mCameraID) & i_flag;
+    }
+    void setComZoomScale(f32 i_scale) {
+        dComIfGp_setCameraZoomScale(mCameraID, i_scale);
+    }
+    void setComZoomForcus(f32 i_focus) {
+        dComIfGp_setCameraZoomForcus(mCameraID, i_focus);
+    }
+
+    void CheckFlag(u32) {}
+    void Owner(fopAc_ac_c*) {}
+    void R() {}
+    void TrimHeight() {}
+    void U() {}
+    void U2(s16) {}
+    void V() {}
+    void isModeOK() {}
+    void positionPntOf(fopAc_ac_c*) {}
+
+    void Far4Debug() {}
+    void Near4Debug() {}
+    void debugDraw() {}
+    void debugDrawInit() {}
+    void debugDrawLine(cXyz&, cXyz&) {}
+    void debugDrawPoint(cXyz&) {}
+    void infoReport() {}
 
     static engine_fn engine_tbl[];
     static const int type_num;

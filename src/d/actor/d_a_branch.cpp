@@ -180,6 +180,7 @@ static BOOL daBranch_Execute(daBranch_c* i_this) {
 
 /* 0000060C-00000614       .text daBranch_IsDelete__FP10daBranch_c */
 static BOOL daBranch_IsDelete(daBranch_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

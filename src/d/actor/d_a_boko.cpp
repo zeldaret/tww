@@ -813,6 +813,7 @@ static BOOL daBoko_Execute(daBoko_c* i_this) {
 
 /* 00002A24-00002A2C       .text daBoko_IsDelete__FP8daBoko_c */
 static BOOL daBoko_IsDelete(daBoko_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

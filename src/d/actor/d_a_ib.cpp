@@ -469,6 +469,7 @@ static BOOL daIball_Delete(daIball_c* i_this) {
 
 /* 800F4BA0-800F4BA8       .text daIball_IsDelete__FP9daIball_c */
 static BOOL daIball_IsDelete(daIball_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

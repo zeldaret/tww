@@ -1058,7 +1058,7 @@ void daPy_lk_c::setOutPower(f32 param_1, s16 param_2, int param_3) {
 
 /* 801056E4-80105814       .text checkSightLine__9daPy_lk_cFfP4cXyz */
 BOOL daPy_lk_c::checkSightLine(f32 param_1, cXyz* param_2) {  
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     cXyz* pcVar2 = fopCamM_GetEye_p(cam);
     cXyz local_44 = (*fopCamM_GetCenter_p(cam) - *pcVar2);
     *param_2 = (local_44.normalize() * param_1) + *pcVar2;
@@ -2710,7 +2710,7 @@ BOOL daPy_lk_c::setBodyAngleToCamera() {
             }
 #endif
         } else {
-            camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+            camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
             shape_angle.y = cam->mAngle.y;
             current.angle.y = shape_angle.y;
             mBodyAngle.x = cam->mAngle.x;

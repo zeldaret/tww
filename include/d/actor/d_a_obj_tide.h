@@ -50,7 +50,7 @@ namespace daObjTide {
     }
 
     class Hio_c : public JORReflexible {
-        void genMessage(JORMContext* ctx) {}
+        void genMessage(JORMContext* ctx) { UNUSED(ctx); }
     };
 
     class Act_c : public dBgS_MoveBgActor {

@@ -212,6 +212,7 @@ static BOOL daEsa_Execute(esa_class* i_this) {
 
 /* 800E89B8-800E89C0       .text daEsa_IsDelete__FP9esa_class */
 static BOOL daEsa_IsDelete(esa_class* i_this) {
+    UNUSED(i_this);
     return true;
 }
 

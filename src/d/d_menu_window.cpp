@@ -13,7 +13,7 @@
 #include "d/d_menu_collect.h"
 #include "d/d_menu_dmap.h"
 #include "d/d_menu_fmap.h"
-#include "d/d_menu_fmap_sv.h"
+#include "d/d_menu_fmapSv.h"
 #include "d/d_menu_item.h"
 #include "d/d_menu_save.h"
 #include "d/d_meter.h"
@@ -1539,18 +1539,18 @@ static cPhs_State dMs_Create(msg_class* i_this) {
 
     dMenu_setMenuStatus(MENU_STATUS_ITEM);
 
-    dMv_CIO_c.field_0x0 = 0;
-    dMv_CIO_c.field_0x1 = 0;
-    dMv_CIO_c.field_0x2 = -10;
-    dMv_CIO_c.field_0x3 = -10;
-    dMv_CIO_c.field_0x4 = -10;
-    dMv_CIO_c.field_0x5 = -10;
-    dMv_CIO_c.field_0x6 = -10;
-    dMv_CIO_c.field_0x7 = -10;
-    dMv_CIO_c.field_0x8 = 0;
-    dMv_CIO_c.field_0x9 = -1;
-    dMv_CIO_c.field_0xA = -10;
-    dMv_CIO_c.field_0xB = -10;
+    dMv_CIO_c.setDispMode(0);
+    dMv_CIO_c.setFmapZoom(0);
+    dMv_CIO_c.setZoomGridX(-10);
+    dMv_CIO_c.setZoomGridY(-10);
+    dMv_CIO_c.setCurX(-10);
+    dMv_CIO_c.setCurY(-10);
+    dMv_CIO_c.setCurWX(-10);
+    dMv_CIO_c.setCurWY(-10);
+    dMv_CIO_c.setActive(0);
+    dMv_CIO_c.setCmapSelNo(-1);
+    dMv_CIO_c.setCurHX(-10);
+    dMv_CIO_c.setCurHY(-10);
 
     fopMsgM_setStageLayer(i_Ms);
 

@@ -20,7 +20,7 @@ public:
     daNpc_Rsh1_HIO_c();
     virtual ~daNpc_Rsh1_HIO_c() {};
 
-    void genMessage(JORMContext* ctx) {};
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); };
 public:
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x05[0x08 - 0x05];
@@ -1668,12 +1668,11 @@ BOOL daNpc_Rsh1_c::_draw() {
         current.pos.z
     );
 
-    f32 ground_y = mAcch.m_ground_h;
     mShadowID = dComIfGd_setShadow(
         mShadowID, 
         1, mpMorf->getModel(), 
         &shadow_pos, 800.0f, 20.0f, 
-        current.pos.y, ground_y, 
+        current.pos.y, mAcch.GetGroundH(), 
         mAcch.m_gnd, &tevStr
     );  
     
@@ -1718,7 +1717,7 @@ BOOL daNpc_Rsh1_c::_execute() {
     }
 #endif
 
-    cXyz center = dComIfGp_getCamera(0)->mLookat.mCenter;
+    cXyz center = dComIfGp_getCamera(0)->view.mLookat.mCenter;
     cXyz lookat_diff = center - current.pos;
     f32 lookat_dist = lookat_diff.abs();
 

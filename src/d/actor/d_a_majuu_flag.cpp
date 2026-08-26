@@ -35,7 +35,7 @@ public:
         m08 = 0;
     }
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ bool mbUseToonTex;
@@ -499,7 +499,7 @@ static BOOL daMajuu_Flag_Draw(daMajuu_Flag_c* i_this) {
 
 /* 00000DCC-00000F00       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf
  */
-void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float distIdeal) {
+static void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float distIdeal) {
     cXyz sp30 = *pOther - *pPos;
     cXyz sp24 = sp30.normZC();
 

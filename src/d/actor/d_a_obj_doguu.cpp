@@ -605,7 +605,7 @@ void daObjDoguu_c::setEffectMtx(const cXyz* i_pos, float i_scale) {
     
     float scale = 1.0f /i_scale;
     camera_class* camera = dCam_getCamera();
-    cXyz lookDir = *i_pos - camera->mLookat.mEye;
+    cXyz lookDir = *i_pos - camera->view.mLookat.mEye;
     cXyz lightDir;
     cXyz refl;
 

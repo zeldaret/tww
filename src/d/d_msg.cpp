@@ -45,7 +45,7 @@ static dDlst_2DMSG_c message;
 dDlst_2Dtact_c capture;
 dDlst_2DM_c multiTex;
 
-char* mLayout[] = {
+const char* mLayout[] = {
     "hukidashi_14_1.blo",
     "hukidashi_14_1.blo",
     "hukidashi_14_3.blo",
@@ -260,18 +260,18 @@ void dMsg_screenDataSetTalk(sub_msg_class* i_Msg) {
         numberPane[i]->setFont(textFont);
     }
     textOffsetY = 2;
-    J2DTextBox::TFontSize size;
-    size.mSizeX = g_msgHIO.field_0x70;
-    size.mSizeY = g_msgHIO.field_0x70;
-    ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(size);
-    ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(size);
-    ((J2DTextBox*)i_Msg->m011C[0].pane)->setFontSize(size);
-    ((J2DTextBox*)i_Msg->m011C[2].pane)->setFontSize(size);
+    J2DTextBox::TFontSize fontSize;
+    fontSize.mSizeX = g_msgHIO.field_0x70;
+    fontSize.mSizeY = g_msgHIO.field_0x70;
+    ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(fontSize);
+    ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(fontSize);
+    ((J2DTextBox*)i_Msg->m011C[0].pane)->setFontSize(fontSize);
+    ((J2DTextBox*)i_Msg->m011C[2].pane)->setFontSize(fontSize);
     for (s32 i = 0; i < 3; i++) {
-        numberPane[i]->setFontSize(size);
-        numberPane[i]->resize(size.mSizeX, size.mSizeY);
+        numberPane[i]->setFontSize(fontSize);
+        numberPane[i]->resize(fontSize.mSizeX, fontSize.mSizeY);
     }
-    maskPane->resize(size.mSizeX, size.mSizeY);
+    maskPane->resize(fontSize.mSizeX, fontSize.mSizeY);
     ((J2DTextBox*)i_Msg->m0544[0].pane)->setCharSpace(g_msgHIO.field_0x5a);
     ((J2DTextBox*)i_Msg->m0544[1].pane)->setCharSpace(g_msgHIO.field_0x5c);
     ((J2DTextBox*)i_Msg->m0544[2].pane)->setCharSpace(g_msgHIO.field_0x5a);
@@ -292,10 +292,10 @@ void dMsg_screenDataSetTalk(sub_msg_class* i_Msg) {
     }
     fopMsgM_blendInit(&i_Msg->m01FC, "cursor_00_02.bti");
     fopMsgM_blendInit(&i_Msg->m0234, "cursor_00_02.bti");
-    J2DTextBox::TFontSize size2;
-    ((J2DTextBox*)i_Msg->m0544[0].pane)->getFontSize(size);
-    i_Msg->m110C = (int)size.mSizeX;
-    i_Msg->m1110 = (int)size2.mSizeX;
+    J2DTextBox::TFontSize rubySize;
+    ((J2DTextBox*)i_Msg->m0544[0].pane)->getFontSize(fontSize);
+    i_Msg->m110C = (int)fontSize.mSizeX;
+    i_Msg->m1110 = (int)rubySize.mSizeX; // !@bug uninitialized use
     i_Msg->m10BC.set(((J2DPicture*)i_Msg->m050C.pane)->getBlack());
     i_Msg->m10C4.set(((J2DPicture*)i_Msg->m050C.pane)->getWhite());
     i_Msg->m026C[0].mUserArea = 0;
@@ -442,21 +442,21 @@ void dMsg_screenDataSetItem(sub_msg_class* i_Msg) {
         numberPane[i]->setFont(textFont);
     }
     textOffsetY = 2;
-    J2DTextBox::TFontSize size;
-    size.mSizeX = g_msgHIO.field_0x70;
-    size.mSizeY = g_msgHIO.field_0x70;
-    ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(size);
-    ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(size);
+    J2DTextBox::TFontSize fontSize;
+    fontSize.mSizeX = g_msgHIO.field_0x70;
+    fontSize.mSizeY = g_msgHIO.field_0x70;
+    ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(fontSize);
+    ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(fontSize);
     for (s32 i = 0; i < 3; i++) {
-        numberPane[i]->setFontSize(size);
-        numberPane[i]->resize(size.mSizeX, size.mSizeY);
+        numberPane[i]->setFontSize(fontSize);
+        numberPane[i]->resize(fontSize.mSizeX, fontSize.mSizeY);
     }
-    maskPane->resize(size.mSizeX, size.mSizeY);
-    J2DTextBox::TFontSize size2;
-    size2.mSizeX = g_msgHIO.field_0x68;
-    size2.mSizeY = g_msgHIO.field_0x68;
-    ((J2DTextBox*)i_Msg->m0544[1].pane)->setFontSize(size2);
-    ((J2DTextBox*)i_Msg->m0544[3].pane)->setFontSize(size2);
+    maskPane->resize(fontSize.mSizeX, fontSize.mSizeY);
+    J2DTextBox::TFontSize rubySize;
+    rubySize.mSizeX = g_msgHIO.field_0x68;
+    rubySize.mSizeY = g_msgHIO.field_0x68;
+    ((J2DTextBox*)i_Msg->m0544[1].pane)->setFontSize(rubySize);
+    ((J2DTextBox*)i_Msg->m0544[3].pane)->setFontSize(rubySize);
     ((J2DTextBox*)i_Msg->m0544[0].pane)->setCharSpace(g_msgHIO.field_0x5a);
     ((J2DTextBox*)i_Msg->m0544[1].pane)->setCharSpace(g_msgHIO.field_0x5c);
     ((J2DTextBox*)i_Msg->m0544[2].pane)->setCharSpace(g_msgHIO.field_0x5a);
@@ -469,9 +469,9 @@ void dMsg_screenDataSetItem(sub_msg_class* i_Msg) {
     for (s32 i = 0; i < 3; i++) {
         numberPane[i]->setLineSpace(g_msgHIO.field_0x5e);
     }
-    ((J2DTextBox*)i_Msg->m0544[0].pane)->getFontSize(size);
-    i_Msg->m110C = (int)size.mSizeX;
-    i_Msg->m1110 = (int)size2.mSizeX;
+    ((J2DTextBox*)i_Msg->m0544[0].pane)->getFontSize(fontSize);
+    i_Msg->m110C = (int)fontSize.mSizeX;
+    i_Msg->m1110 = (int)rubySize.mSizeX;
     i_Msg->m10BC.set(((J2DPicture*)i_Msg->m050C.pane)->getBlack());
     i_Msg->m10C4.set(((J2DPicture*)i_Msg->m050C.pane)->getWhite());
     i_Msg->m026C[0].mUserArea = 0;
@@ -493,36 +493,36 @@ void dMsg_screenDataSetDemo(sub_msg_class* i_Msg) {
         numberPane[i]->setFont(textFont);
     }
 
-    J2DTextBox::TFontSize size;
-    J2DTextBox::TFontSize size2;
+    J2DTextBox::TFontSize fontSize;
+    J2DTextBox::TFontSize rubySize;
 #if VERSION <= VERSION_JPN
     if (g_msgDHIO.field_0x08 == 0) {
-        size.mSizeX = (int)g_msgHIO.field_0x58;
-        size.mSizeY = (int)g_msgHIO.field_0x58;
-        size2.mSizeX = g_msgHIO.field_0x68;
-        size2.mSizeY = g_msgHIO.field_0x68;
-        ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(size);
-        ((J2DTextBox*)i_Msg->m0544[1].pane)->setFontSize(size2);
-        ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(size);
-        ((J2DTextBox*)i_Msg->m0544[3].pane)->setFontSize(size2);
+        fontSize.mSizeX = (int)g_msgHIO.field_0x58;
+        fontSize.mSizeY = (int)g_msgHIO.field_0x58;
+        rubySize.mSizeX = g_msgHIO.field_0x68;
+        rubySize.mSizeY = g_msgHIO.field_0x68;
+        ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(fontSize);
+        ((J2DTextBox*)i_Msg->m0544[1].pane)->setFontSize(rubySize);
+        ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(fontSize);
+        ((J2DTextBox*)i_Msg->m0544[3].pane)->setFontSize(rubySize);
         for (s32 i = 0; i < 3; i++) {
-            numberPane[i]->setFontSize(size);
-            numberPane[i]->resize(size.mSizeX, size.mSizeY);
+            numberPane[i]->setFontSize(fontSize);
+            numberPane[i]->resize(fontSize.mSizeX, fontSize.mSizeY);
         }
-        maskPane->resize(size.mSizeX, size.mSizeY);
+        maskPane->resize(fontSize.mSizeX, fontSize.mSizeY);
     } else
 #endif
     {
         textOffsetY = VERSION_SELECT(4, 4, 2, 2);
-        size.mSizeX = g_msgHIO.field_0x70;
-        size.mSizeY = g_msgHIO.field_0x70;
-        ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(size);
-        ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(size);
+        fontSize.mSizeX = g_msgHIO.field_0x70;
+        fontSize.mSizeY = g_msgHIO.field_0x70;
+        ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(fontSize);
+        ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(fontSize);
         for (s32 i = 0; i < 3; i++) {
-            numberPane[i]->setFontSize(size);
-            numberPane[i]->resize(size.mSizeX, size.mSizeY);
+            numberPane[i]->setFontSize(fontSize);
+            numberPane[i]->resize(fontSize.mSizeX, fontSize.mSizeY);
         }
-        maskPane->resize(size.mSizeX, size.mSizeY);
+        maskPane->resize(fontSize.mSizeX, fontSize.mSizeY);
     }
 
     ((J2DTextBox*)i_Msg->m0544[0].pane)->setCharSpace(g_msgHIO.field_0x5a);
@@ -552,8 +552,8 @@ void dMsg_screenDataSetDemo(sub_msg_class* i_Msg) {
         }
     }
     
-    i_Msg->m110C = (int)size.mSizeX;
-    i_Msg->m1110 = (int)size2.mSizeX; // !@bug uninitialized use
+    i_Msg->m110C = (int)fontSize.mSizeX;
+    i_Msg->m1110 = (int)rubySize.mSizeX; // !@bug uninitialized use
     i_Msg->m026C[0].mUserArea = 0;
 }
 
@@ -610,21 +610,21 @@ void dMsg_screenDataSetTact(sub_msg_class* i_Msg) {
         numberPane[i]->setFont(textFont);
     }
     textOffsetY = 2;
-    J2DTextBox::TFontSize size;
-    size.mSizeX = g_msgHIO.field_0x70;
-    size.mSizeY = g_msgHIO.field_0x70;
-    ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(size);
-    ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(size);
+    J2DTextBox::TFontSize fontSize;
+    fontSize.mSizeX = g_msgHIO.field_0x70;
+    fontSize.mSizeY = g_msgHIO.field_0x70;
+    ((J2DTextBox*)i_Msg->m0544[0].pane)->setFontSize(fontSize);
+    ((J2DTextBox*)i_Msg->m0544[2].pane)->setFontSize(fontSize);
     for (s32 i = 0; i < 3; i++) {
-        numberPane[i]->setFontSize(size);
-        numberPane[i]->resize(size.mSizeX, size.mSizeY);
+        numberPane[i]->setFontSize(fontSize);
+        numberPane[i]->resize(fontSize.mSizeX, fontSize.mSizeY);
     }
-    maskPane->resize(size.mSizeX, size.mSizeY);
-    J2DTextBox::TFontSize size2;
-    size2.mSizeX = g_msgHIO.field_0x68;
-    size2.mSizeY = g_msgHIO.field_0x68;
-    ((J2DTextBox*)i_Msg->m0544[1].pane)->setFontSize(size2);
-    ((J2DTextBox*)i_Msg->m0544[3].pane)->setFontSize(size2);
+    maskPane->resize(fontSize.mSizeX, fontSize.mSizeY);
+    J2DTextBox::TFontSize rubySize;
+    rubySize.mSizeX = g_msgHIO.field_0x68;
+    rubySize.mSizeY = g_msgHIO.field_0x68;
+    ((J2DTextBox*)i_Msg->m0544[1].pane)->setFontSize(rubySize);
+    ((J2DTextBox*)i_Msg->m0544[3].pane)->setFontSize(rubySize);
     ((J2DTextBox*)i_Msg->m0544[0].pane)->setCharSpace(g_msgHIO.field_0x5a);
     ((J2DTextBox*)i_Msg->m0544[1].pane)->setCharSpace(g_msgHIO.field_0x5c);
     ((J2DTextBox*)i_Msg->m0544[2].pane)->setCharSpace(g_msgHIO.field_0x5a);
@@ -637,9 +637,9 @@ void dMsg_screenDataSetTact(sub_msg_class* i_Msg) {
     for (s32 i = 0; i < 3; i++) {
         numberPane[i]->setLineSpace(g_msgHIO.field_0x5e);
     }
-    ((J2DTextBox*)i_Msg->m0544[0].pane)->getFontSize(size);
-    i_Msg->m110C = (int)size.mSizeX;
-    i_Msg->m1110 = (int)size2.mSizeX;
+    ((J2DTextBox*)i_Msg->m0544[0].pane)->getFontSize(fontSize);
+    i_Msg->m110C = (int)fontSize.mSizeX;
+    i_Msg->m1110 = (int)rubySize.mSizeX;
     i_Msg->m1168 = mDoAud_tact_getBeat();
     i_Msg->m1144 = 0;
     i_Msg->buffer_p = (ResTIMG*)i_Msg->mpHeap->alloc(0x1a280, 0x20);
@@ -1495,7 +1495,7 @@ void dMsg_tactGuideShow(sub_msg_class* i_Msg, u8 param_2) {
 
 /* 80210AA0-80210CA4       .text dMsg_numberInput__FP13sub_msg_class */
 void dMsg_numberInput(sub_msg_class* i_Msg) {
-    static char* num_str[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    static const char* num_str[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
     for (s32 i = 0; i < 8; i++) {
         if (i_Msg->mMsgDataProc.getIconNum(i) == fopMsgM_Icon_INPUT_e) {

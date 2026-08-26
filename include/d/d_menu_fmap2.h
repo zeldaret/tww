@@ -2,11 +2,14 @@
 #define D_MENU_FMAP2_H
 
 #include "dolphin/types.h"
+#include "d/d_drawlist.h"
+#include "dolphin/types.h"
 
 struct fopMsgM_pane_class;
 class J2DScreen;
 struct ResTIMG;
 class aramCmapDat_c;
+class aramCmapDatPnt_t;
 class dMenu_FmapSv_c;
 
 class dDlst_FMAP2GS_c : public dDlst_base_c {
@@ -35,7 +38,7 @@ public:
     void getCtCurY() {}
     void getCtDispMode() {}
     void lineInter0to1ForU8(unsigned char, unsigned char, float) {}
-    void setAramCmapDat(aramCmapDat_c*) {}
+    void setAramCmapDat(aramCmapDat_c* i_ptr) { mpFmapDatPnt = i_ptr; }
     void setCtActive(unsigned char) {}
     void setCtCmapSelNo(signed char) {}
     void setCtCurHX(signed char) {}
@@ -88,8 +91,8 @@ public:
     void cmapAlphaSet();
     void changeZoomCmap();
     void ChangeProcMode();
-    void _open();
-    void _close();
+    bool _open();
+    bool _close();
     void _draw();
     void _delete();
     void fCursorInit();
@@ -142,10 +145,10 @@ public:
     void calcFinCollectMap();
     void getNowCmapFirstNum();
     void getNowCmapNextNum(signed char, int);
-    void getCmapDatPnt4(int);
+    aramCmapDatPnt_t* getCmapDatPnt4(int);
     void readPaneCmapTexture(const ResTIMG*, int);
     void readFmapTexture(const char*);
-    void getButtonIconMode();
+    int getButtonIconMode();
     void isLockBbutton();
     void isGetCollectMap(signed char);
     void isOpenCollectMap(signed char);
@@ -154,8 +157,10 @@ public:
     void isCompleteCollectMap(signed char);
 
 public:
-    /* 0x0004 */ u8 padding_0x4[0x1C - 0x4];
-    /* 0x001C */ void* mpFmapDatPnt;
+    /* 0x0004 */ u8 padding_0x4[0x10 - 0x4];
+    /* 0x0010 */ dMenu_FmapSv_c* fmapSv;
+    /* 0x0014 */ u8 padding_0x14[0x1C - 0x14];
+    /* 0x001C */ aramCmapDat_c* mpFmapDatPnt;
     /* 0x0020 */ dDlst_FMAP2_c mDlst;
     /* 0x0024 */ u8 padding_0x24[0x28 - 0x24];
     /* 0x0028 */ dDlst_FMAP2GS_c mDlstGs;

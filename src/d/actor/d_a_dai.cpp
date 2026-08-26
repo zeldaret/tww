@@ -99,12 +99,18 @@ void daDai_c::CreateInit() {
     m850 = fpcM_ERROR_PROCESS_ID_e;
 
     if (dComIfGs_getEventReg(m_savelabel[mSaveID])) {
+        void* dai_item = fopAcM_fastCreate(
+            fpcNm_STANDITEM_e,
+            dComIfGs_getEventReg(m_savelabel[mSaveID]),
+            &current.pos,
 #if VERSION <= VERSION_JPN
-        void* pfVar3 = fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGs_getEventReg(m_savelabel[mSaveID]), &current.pos, -1, &current.angle);
+            -1,
 #else
-        void* pfVar3 = fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGs_getEventReg(m_savelabel[mSaveID]), &current.pos, fopAcM_GetRoomNo(this), &current.angle);
+            fopAcM_GetRoomNo(this),
 #endif
-        m850 = fopAcM_GetID(pfVar3);
+            &current.angle
+        );
+        m850 = fopAcM_GetID(dai_item);
         incNowItemNum();
     }
     incNowDaizaNum();
@@ -181,16 +187,16 @@ void daDai_c::checkOrder() {
 
             if (dComIfGp_evmng_startCheck(mEvtDaiItemIdx) && player->getGrabActorID() != fpcM_ERROR_PROCESS_ID_e) {
                 m850 = player->getGrabActorID();
-                daStandItem_c* pfVar2 = (daStandItem_c*)fopAcM_SearchByID(m850);
-                if (pfVar2 != NULL) {
-                    m84B = pfVar2->mItemNo;
+                daStandItem_c* dai_item = (daStandItem_c*)fopAcM_SearchByID(m850);
+                if (dai_item != NULL) {
+                    m84B = dai_item->mItemNo;
                 }
             }
 
             if (dComIfGp_evmng_endCheck(mEvtDaiItemIdx)) {
-                fopAc_ac_c* pfVar3 = fopAcM_SearchByID(m850);
-                if (pfVar3 != NULL) {
-                    pfVar3->current.pos = current.pos;
+                fopAc_ac_c* dai_item = fopAcM_SearchByID(m850);
+                if (dai_item != NULL) {
+                    dai_item->current.pos = current.pos;
                 }
                 dComIfGs_setEventReg(m_savelabel[mSaveID], m84B);
                 dComIfGs_setReserveItemEmpty();
@@ -279,15 +285,15 @@ bool daDai_c::_draw() {
 
 /* 00000E48-00000EDC       .text getMsg__7daDai_cFv */
 u32 daDai_c::getMsg() {
-    u32 uVar2;
+    u32 msgNo;
     if (dComIfGp_event_chkTalkXY()) {
-        uVar2 = 0xf13;
+        msgNo = 0xF13;
     } else if (dComIfGs_getEventReg(m_savelabel[mSaveID])) {
-        uVar2 = 0xf0d;
+        msgNo = 0xF0D;
     } else {
-        uVar2 = 0xf11;
+        msgNo = 0xF11;
     }
-    return uVar2;
+    return msgNo;
 }
 
 /* 00000EDC-0000109C       .text next_msgStatus__7daDai_cFPUl */
@@ -295,20 +301,20 @@ u16 daDai_c::next_msgStatus(u32* pMsgNo) {
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
     switch (*pMsgNo) {
-    case 0xF11:
-        *pMsgNo = 0xf12;
+    case 0xF11: // Check when empty
+        *pMsgNo = 0xF12;
         break;
 
-    case 0xF0D:
+    case 0xF0D: // Check when item is placed, ask to remove
         switch (mpCurrMsg->mSelectNum) {
-        case 0:
+        case 0: // Yes
             if (dComIfGs_checkReserveItemEmpty() && getRotenItemNumInBag() < 3) {
                 fopAcM_seStart(this, JA_SE_LK_W_DAIZA_TAKEOFF, 0);
-                *pMsgNo = 0xf0f;
+                *pMsgNo = 0xF0F;
 
-                fopAc_ac_c* pfVar4 = fopAcM_SearchByID(m850);
-                if (pfVar4 != NULL) {
-                    fopAcM_delete(pfVar4);
+                fopAc_ac_c* dai_item = fopAcM_SearchByID(m850);
+                if (dai_item != NULL) {
+                    fopAcM_delete(dai_item);
                 }
 
                 u8 uVar5 = dComIfGs_getEventReg(m_savelabel[mSaveID]);
@@ -317,11 +323,11 @@ u16 daDai_c::next_msgStatus(u32* pMsgNo) {
                 decNowItemNum();
                 m84A = 0;
             } else {
-                *pMsgNo = 0xf0e;
+                *pMsgNo = 0xF0E;
             }
             break;
 
-        case 1:
+        case 1: // No
         default:
             msgStatus = fopMsgStts_MSG_ENDS_e;
             break;

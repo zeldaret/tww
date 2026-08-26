@@ -21,8 +21,8 @@ static daObj_Hole_HIO_c l_HIO;
 const char daObj_Hole_c::m_arc_name[] = "Aana";
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_createHeap();
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_createHeap();
 }
 
 /* 0000010C-00000148       .text __ct__16daObj_Hole_HIO_cFv */
@@ -285,27 +285,28 @@ bool daObj_Hole_c::_delete() {
 }
 
 /* 0000125C-0000127C       .text daObj_HoleCreate__FPv */
-static cPhs_State daObj_HoleCreate(void* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_create();
+static cPhs_State daObj_HoleCreate(void* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_create();
 }
 
 /* 0000127C-000012A0       .text daObj_HoleDelete__FPv */
-static BOOL daObj_HoleDelete(void* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_delete();
+static BOOL daObj_HoleDelete(void* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_delete();
 }
 
 /* 000012A0-000012C4       .text daObj_HoleExecute__FPv */
-static BOOL daObj_HoleExecute(void* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_execute();
+static BOOL daObj_HoleExecute(void* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_execute();
 }
 
 /* 000012C4-000012E8       .text daObj_HoleDraw__FPv */
-static BOOL daObj_HoleDraw(void* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_draw();
+static BOOL daObj_HoleDraw(void* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_draw();
 }
 
 /* 000012E8-000012F0       .text daObj_HoleIsDelete__FPv */
-static BOOL daObj_HoleIsDelete(void* i_actor) {
+static BOOL daObj_HoleIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

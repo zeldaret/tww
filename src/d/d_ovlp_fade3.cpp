@@ -73,6 +73,7 @@ static BOOL dOvlpFd3_Execute(dOvlpFd3_c* i_this) {
 }
 
 static BOOL dOvlpFd3_IsDelete(dOvlpFd3_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

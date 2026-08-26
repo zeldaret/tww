@@ -26,11 +26,11 @@ static f32* wp;
 static f32 ita_z_p[] = { 0.1f, 0.3f, 0.5f, 0.75f, 0.9f, 1.0f, 0.9f, 0.75f, 0.5f, 0.3f, 0.1f };
 
 /* 00000078-00000504       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+static void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     bridge_class* i_this = (bridge_class*)i_ac;
 
     cXyz pos = i_this->mBr[0].mPosition - i_pt->current.pos;
-    s32 brIdx = std::sqrtf(pos.x * pos.x + pos.z * pos.z) / 76.5f - -0.5f;
+    int brIdx = std::sqrtf(pos.x * pos.x + pos.z * pos.z) / 76.5f - -0.5f;
     if (brIdx > i_this->mBrCount - 1) {
         brIdx = i_this->mBrCount - 1;
     } else if (brIdx < 0) {
@@ -52,20 +52,20 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     i_pt->speed.y = -5.0f;
 
     f32 fVar7;
-    if (fpcM_GetName(i_pt) == fpcNm_PLAYER_e) {
+    if (fopAcM_GetName(i_pt) == fpcNm_PLAYER_e) {
         fVar7 = 100.0f;
         pBr->m3F4 = -31.0f;
         i_this->m033C = 5;
-    } else if (fpcM_GetName(i_pt) == fpcNm_MO2_e) {
+    } else if (fopAcM_GetName(i_pt) == fpcNm_MO2_e) {
         fVar7 = 150.0f;
         pBr->m3F4 = -40.0f;
         i_pt->speed.y = -20.0f;
-    } else if (fpcM_GetName(i_pt) == fpcNm_BK_e) {
+    } else if (fopAcM_GetName(i_pt) == fpcNm_BK_e) {
         bk_class* bk = (bk_class*)i_pt;
         bk->speed.y = -20.0f;
         fVar7 = 100.0f;
         pBr->m3F4 = -25.0f;
-        bk->dr.m7B8 = fpcM_GetID(i_ac);
+        bk->dr.m7B8 = fopAcM_GetID(i_ac);
         bk->dr.m7B2 = 8;
         bk->dr.m7AC = pBr->mRotation;
         
@@ -82,7 +82,7 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     } else {
         fVar7 = 50.0f;
         pBr->m3F4 = -10.0f;
-        if (fpcM_GetName(i_pt) == fpcNm_BOMB_e) {
+        if (fopAcM_GetName(i_pt) == fpcNm_BOMB_e) {
             daBomb_c* bomb = (daBomb_c*)i_pt;
 
             if (bomb->getBombRestTime() <= 1) {
@@ -124,7 +124,7 @@ void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
 }
 
 /* 00000540-00000614       .text kikuzu_set__FP12bridge_classP4cXyz */
-void kikuzu_set(bridge_class* i_this, cXyz* pPos) {
+static void kikuzu_set(bridge_class* i_this, cXyz* pPos) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     csXyz shapeAngle = player->shape_angle;
     shapeAngle.y -= -0x8000;
@@ -135,7 +135,10 @@ void kikuzu_set(bridge_class* i_this, cXyz* pPos) {
         emitter->setMaxFrame(1);
         emitter->setSpread(0.2f);
         emitter->setVolumeSweep(0.15f);
-        JGeometry::TVec3<f32> scale(0.7f, 0.7f, 0.7f);
+        JGeometry::TVec3<f32> scale;
+        scale.x = 0.7f;
+        scale.y = 0.7f;
+        scale.z = 0.7f;
         emitter->setGlobalParticleScale(scale);
     }
 }
@@ -143,7 +146,7 @@ void kikuzu_set(bridge_class* i_this, cXyz* pPos) {
 /* 00000614-000011EC       .text daBridge_Draw__FP12bridge_class */
 static BOOL daBridge_Draw(bridge_class* i_this) {
     s16 atan;
-    s32 atan2;
+    int atan2;
     s16 sVar7;
     s16 sVar8;
 
@@ -152,7 +155,7 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
     }
 
     br_s* pBr = &i_this->mBr[0];
-    for (s32 i = 0; i < i_this->mBrCount; i++, pBr++) {
+    for (int i = 0; i < i_this->mBrCount; i++, pBr++) {
         g_env_light.setLightTevColorType(pBr->mpModel, &i_this->actor.tevStr);
 
         dComIfGd_setListBG();
@@ -171,14 +174,14 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
         cXyz sp60 = pBr->m0F8[0] - pBr->m0F8[1];
                     
         if ((i_this->mTypeBits & 1) == 0) {
-            s32 uVar16 = (i_this->mTypeBits & 8) ? 5 : 3;
+            int uVar16 = (i_this->mTypeBits & 8) ? 5 : 3;
             cXyz* segment0;
             cXyz* segment1;
             u8* size0 = pBr->mLineMat1.getSize(0);
             u8* size1 = pBr->mLineMat1.getSize(2);
 
             if ((pBr->m408 & 1) == 0) {
-                for (s32 j = 0; j < 5; j++) {
+                for (int j = 0; j < 5; j++) {
                     *size0++ = *size1++ = uVar16;
                 }
             } else {
@@ -191,7 +194,7 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
 
                 f32 fVar3 = pBr->m3A0[0] * cM_ssin(i_this->m0300 * 5);
                 
-                for (s32 j = 0; j < 5; j++, segment0++, segment1++, size0++, size1++) {
+                for (int j = 0; j < 5; j++, segment0++, segment1++, size0++, size1++) {
                     *size0 = uVar16;
 
                     f32 fVar2;
@@ -222,7 +225,7 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
             size0 = pBr->mLineMat1.getSize(1);
             size1 = pBr->mLineMat1.getSize(3);
             if ((pBr->m408 & 2) == 0) {
-                for (s32 j = 0; j < 5; j++) {
+                for (int j = 0; j < 5; j++) {
                     *size0++ = *size1++ = uVar16;
                 }
             } else {
@@ -235,7 +238,7 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
 
                 f32 fVar3 = pBr->m3A0[1] * cM_ssin(i_this->m0300 * 5);
                 
-                for (s32 j = 0; j < 5; j++, segment0++, segment1++, size0++, size1++) {
+                for (int j = 0; j < 5; j++, segment0++, segment1++, size0++, size1++) {
                     *size0 = uVar16;
 
                     f32 fVar2;
@@ -376,7 +379,7 @@ static BOOL daBridge_Draw(bridge_class* i_this) {
 }
 
 /* 000011EC-00001580       .text control1__FP12bridge_classP4br_s */
-void control1(bridge_class* i_this, br_s* pBr) {
+static void control1(bridge_class* i_this, br_s* pBr) {
     cXyz sp3C;
     cXyz sp30;
     cXyz sp24;
@@ -409,7 +412,7 @@ void control1(bridge_class* i_this, br_s* pBr) {
     sp3C.x = 0.0f;
     sp3C.z = 75.0f;
 
-    for (s32 i = 1; i < i_this->mBrCount; i++, pBr++) {
+    for (int i = 1; i < i_this->mBrCount; i++, pBr++) {
         f32 x;
         f32 y;
         f32 z;
@@ -437,7 +440,7 @@ void control1(bridge_class* i_this, br_s* pBr) {
 }
 
 /* 00001580-0000178C       .text control2__FP12bridge_classP4br_s */
-void control2(bridge_class* i_this, br_s* pBr) {
+static void control2(bridge_class* i_this, br_s* pBr) {
     cXyz sp18;
     cXyz sp0C;
 
@@ -446,7 +449,7 @@ void control2(bridge_class* i_this, br_s* pBr) {
     sp18.y = 0.0f;
     sp18.z = 75.0f;
 
-    for (s32 i = 0; i < i_this->mBrCount - 1; i++, pBr--) {
+    for (int i = 0; i < i_this->mBrCount - 1; i++, pBr--) {
         f32 tmp = pBr->m3F8 * 0.5f + (pBr->m3FC * pBr->m3F0 * 0.5f + pBr->m3CC.y);
         f32 y = tmp - pBr[1].m3CC.y;
         
@@ -472,7 +475,7 @@ void control2(bridge_class* i_this, br_s* pBr) {
 }
 
 /* 0000178C-000018A8       .text control3__FP12bridge_classP4br_s */
-void control3(bridge_class* i_this, br_s* pBr) {
+static void control3(bridge_class* i_this, br_s* pBr) {
     f32 x = pBr->m3CC.x - pBr[1].m3CC.x;
     f32 y = pBr->m3CC.y - pBr[1].m3CC.y;
     f32 z = pBr->m3CC.z - pBr[1].m3CC.z;
@@ -482,7 +485,7 @@ void control3(bridge_class* i_this, br_s* pBr) {
 }
 
 /* 000018A8-00001B08       .text cut_control1__FP12bridge_classP4br_s */
-void cut_control1(bridge_class* i_this, br_s* pBr) {
+static void cut_control1(bridge_class* i_this, br_s* pBr) {
     cXyz sp24;
     cXyz sp18;
     cXyz spC;
@@ -495,7 +498,7 @@ void cut_control1(bridge_class* i_this, br_s* pBr) {
     MtxPosition(&sp24, &spC);
     sp24.z = 75.0f;
 
-    for (s32 i = 1; i < i_this->m0304; i++, pBr++) {
+    for (int i = 1; i < i_this->m0304; i++, pBr++) {
         f32 fVar2 = pBr->m3CC.y + pBr->m3FC;
         f32 fVar1 = pBr->m3EC + 30.0f;
         if (fVar2 < fVar1) {
@@ -531,7 +534,7 @@ void cut_control1(bridge_class* i_this, br_s* pBr) {
 }
 
 /* 00001B08-00001D84       .text cut_control2__FP12bridge_classP4br_s */
-void cut_control2(bridge_class* i_this, br_s* pBr) {
+static void cut_control2(bridge_class* i_this, br_s* pBr) {
     cXyz sp24;
     cXyz sp18;
     cXyz spC;
@@ -544,7 +547,7 @@ void cut_control2(bridge_class* i_this, br_s* pBr) {
     MtxPosition(&sp24, &spC);
     sp24.z = 75.0f;
 
-    for (s32 i = 0; i < (i_this->mBrCount - 1) - i_this->m0304; i++, pBr--) {
+    for (int i = 0; i < (i_this->mBrCount - 1) - i_this->m0304; i++, pBr--) {
         f32 fVar2 = pBr->m3CC.y + pBr->m3FC;
         f32 fVar1 = pBr->m3EC + 30.0f;
         if (fVar2 < fVar1) {
@@ -555,7 +558,7 @@ void cut_control2(bridge_class* i_this, br_s* pBr) {
         f32 x = spC.x + (pBr->m3CC.x - pBr[1].m3CC.x);
         f32 z = spC.z + (pBr->m3CC.z - pBr[1].m3CC.z);
         s16 atan2;
-        s32 atan;
+        int atan;
         atan = cM_atan2s(x, z);
         atan2 = -cM_atan2s(y, std::sqrtf(x * x + z * z));
         pBr[1].mRotation.y = atan;
@@ -574,7 +577,7 @@ void cut_control2(bridge_class* i_this, br_s* pBr) {
 }
 
 /* 00001D84-00001FAC       .text himo_cut_control1__FP4cXyz */
-void himo_cut_control1(cXyz* pPos) {
+static void himo_cut_control1(cXyz* pPos) {
     cXyz pos;
     cXyz sp18;
     cXyz transformedPos;
@@ -589,12 +592,12 @@ void himo_cut_control1(cXyz* pPos) {
     pos.z = 23.0f;
 
     pPos++;
-    for (s32 i = 1; i < 5; i++, pPos++) {
+    for (int i = 1; i < 5; i++, pPos++) {
         f32 x = transformedPos.x + (pPos[0].x - pPos[-1].x);
         f32 y = (pPos[0].y - pPos[-1].y) - 10.0f;
         f32 z = transformedPos.z + (pPos[0].z - pPos[-1].z);
         s16 atan2;
-        s32 atan;
+        int atan;
 
         atan = cM_atan2s(x, z);
         atan2 = -cM_atan2s(y, std::sqrtf(x * x + z * z));
@@ -608,11 +611,10 @@ void himo_cut_control1(cXyz* pPos) {
 }
 
 /* 00001FAC-00002A1C       .text bridge_move__FP12bridge_class */
-void bridge_move(bridge_class* i_this) {
-    /* Nonmatching */
-    daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
-    s32 i;
-    s32 j;
+static void bridge_move(bridge_class* i_this) {
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    int i;
+    int j;
     br_s* pBr = &i_this->mBr[0];
     cXyz sp38;
     cXyz sp2C;
@@ -621,7 +623,6 @@ void bridge_move(bridge_class* i_this) {
     f32 fVar14;
     f32 fVar2;
     f32 tmpf;
-    s32 iVar11;
 
     switch (i_this->mMoveProcMode) {
         case 1:
@@ -681,8 +682,7 @@ void bridge_move(bridge_class* i_this) {
 
                 if (pBr->m406 != 0) {
                     for (j = -5; j <= 5; j++) {
-                        iVar11 = i + j;
-                        if ((iVar11 < 0) || (iVar11 >= i_this->mBrCount)) {
+                        if (((i + j) < 0) || ((i + j) >= i_this->mBrCount)) {
                             continue;
                         }
 
@@ -704,8 +704,7 @@ void bridge_move(bridge_class* i_this) {
                     }
 
                     for (j = -5; j <= 5; j++) {
-                        iVar11 = i + j;
-                        if ((iVar11 < 0) || (iVar11 >= i_this->mBrCount)) {
+                        if (((i + j) < 0) || ((i + j) >= i_this->mBrCount)) {
                             continue;
                         }
 
@@ -722,7 +721,7 @@ void bridge_move(bridge_class* i_this) {
 
                             if (i_this->m0308 > 100) {
                                 i_this->mMoveProcMode = 4;
-                                i_this->m0304 = iVar11;
+                                i_this->m0304 = (i + j);
                                 if (i_this->m033C != 0) {
                                     dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                                 }
@@ -732,7 +731,7 @@ void bridge_move(bridge_class* i_this) {
 
                         if (pBr[j].m3F4 < -200.0f) {
                             i_this->mMoveProcMode = 4;
-                            i_this->m0304 = iVar11;
+                            i_this->m0304 = (i + j);
                             break;
                         }
                     }
@@ -742,8 +741,7 @@ void bridge_move(bridge_class* i_this) {
                     f32 fVar141 = (pBr->m3A0[0] | pBr->m3A0[1]) * 150.0f;
                     fVar14 = fVar141 * cM_ssin(i_this->m0300 * 4);
                     for (j = -5; j <= 5; j++) {
-                        iVar11 = i + j;
-                        if (iVar11 < 0 || iVar11 >= i_this->mBrCount) {
+                        if ((i + j) < 0 || (i + j) >= i_this->mBrCount) {
                             continue;
                         }
 
@@ -827,8 +825,8 @@ void bridge_move(bridge_class* i_this) {
 }
 
 /* 00002A1C-00002A8C       .text s_a_b_sub__FPvPv */
-void* s_a_b_sub(void* ac1, void* ac2) {
-    if (fopAc_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_BRIDGE_e && ac1 != ac2) {
+static void* s_a_b_sub(void* ac1, void* ac2) {
+    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_BRIDGE_e && ac1 != ac2) {
         bridge_class* bridge = (bridge_class*)ac1;
         if ((bridge->mTypeBits & 0x82) == 2) {
             return ac1;
@@ -838,19 +836,17 @@ void* s_a_b_sub(void* ac1, void* ac2) {
 }
 
 /* 00002A8C-00002AB8       .text search_aite__FP12bridge_class */
-bridge_class* search_aite(bridge_class* i_this) {
+static bridge_class* search_aite(bridge_class* i_this) {
     return (bridge_class*)fpcM_Search(s_a_b_sub, &i_this->actor);
 }
 
 /* 00002AB8-00003C68       .text daBridge_Execute__FP12bridge_class */
 static BOOL daBridge_Execute(bridge_class* i_this) {
-    /* Nonmatching - regswap */
-    fopAc_ac_c* a_player = static_cast<fopAc_ac_c*>(dComIfGp_getPlayer(0));
-    daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
-    camera_class* pCam = dComIfGp_getCamera(0);
-    s32 i;
+    fopAc_ac_c* a_player = dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)a_player;
+    camera_process_class* pCam = (camera_process_class*)dComIfGp_getCamera(0);
 
-    cXyz eyeDir = i_this->actor.current.pos - pCam->mLookat.mEye;
+    cXyz eyeDir = i_this->actor.current.pos - pCam->view.mLookat.mEye;
     cXyz spCC;
 
     if (i_this->m033C != 0) {
@@ -858,7 +854,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
     }
     
     if (eyeDir.abs() > 5000.0f) {
-        spCC = pCam->mLookat.mCenter - pCam->mLookat.mEye;
+        spCC = pCam->view.mLookat.mCenter - pCam->view.mLookat.mEye;
         s16 atan = cM_atan2s(spCC.x, spCC.z);
         cMtx_YrotS(*calc_mtx, -atan);
         MtxPosition(&eyeDir, &spCC);
@@ -889,7 +885,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
         bGotFlamePos = true;
     }
 
-    for (i = 0; i < i_this->mBrCount; i++, pBr++) {
+    for (int i = 0; i < i_this->mBrCount; i++, pBr++) {
         MtxTrans(pBr->mPosition.x, pBr->mPosition.y, pBr->mPosition.z, false);
         cMtx_YrotM(*calc_mtx, pBr->mRotation.y);
         cMtx_XrotM(*calc_mtx, pBr->mRotation.x);
@@ -1082,7 +1078,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
             dComIfG_Ccsp()->Set(&pBr->mCyl[1]);
         }
 
-        for (s32 i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             if (pBr->m3A0[i] != 0) {
                 pBr->m3A0[i]--;
             }
@@ -1161,16 +1157,15 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
 
     cBgD_Vtx_t* vtxTbl = i_this->mpBgW->GetVtxTbl();
     
-    int idx;
     int sw;
+    int idx;
     int other_i = 0;
-    for (i = 0; i < i_this->mpBgW->GetVtxNum(); i++, pBr++) {
+    for (int i = 0; i < i_this->mpBgW->GetVtxNum(); i++) {
         sw = i & 3;
-        idx = i;
-        idx >>= 2;
+        idx = i >> 2;
 
         if (idx < i_this->m02DD) {
-            br_s* pBr = &i_this->mBr[idx];
+            pBr = &i_this->mBr[idx];
 
             switch (sw) {
                 case 0:
@@ -1238,7 +1233,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
 /* 00003C68-00003CD4       .text daBridge_IsDelete__FP12bridge_class */
 static BOOL daBridge_IsDelete(bridge_class* i_this) {
     br_s* pBr = &i_this->mBr[0];
-    for (s32 i = 0; i < i_this->mBrCount; i++, pBr++) {
+    for (int i = 0; i < i_this->mBrCount; i++, pBr++) {
         mDoAud_seDeleteObject(&pBr->m3CC);
     }
     return TRUE;
@@ -1254,7 +1249,7 @@ static BOOL daBridge_Delete(bridge_class* i_this) {
 }
 
 /* 00003D2C-00003E00       .text CreateInit__FP10fopAc_ac_c */
-void CreateInit(fopAc_ac_c* a_this) {
+static void CreateInit(fopAc_ac_c* a_this) {
     static dCcD_SrcCyl himo_cyl_src = {
         // dCcD_SrcGObjInf
         {
@@ -1290,8 +1285,8 @@ void CreateInit(fopAc_ac_c* a_this) {
     i_this->mStts.Init(0xFF, 0xFF, a_this);
 
     br_s* pBr = i_this->mBr;
-    for (s32 i = 0; i < i_this->mBrCount; i++, pBr++) {
-        for (s32 j = 0; j < 2; j++) {
+    for (int i = 0; i < i_this->mBrCount; i++, pBr++) {
+        for (int j = 0; j < 2; j++) {
             pBr->mCyl[j].Set(himo_cyl_src);
             pBr->mCyl[j].SetStts(&i_this->mStts);
             if ((i_this->mTypeBits & 1) == 0) {
@@ -1304,11 +1299,11 @@ void CreateInit(fopAc_ac_c* a_this) {
 
 /* 00003E00-00004310       .text CallbackCreateHeap__FP10fopAc_ac_c */
 static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
-    static const s32 bridge_bmd[] = { dRes_INDEX_BRIDGE_BDL_OBM_BRIDGE_e, dRes_INDEX_BRIDGE_BDL_OBM_BRIDGE2_e };
+    static const int bridge_bmd[] = { dRes_INDEX_BRIDGE_BDL_OBM_BRIDGE_e, dRes_INDEX_BRIDGE_BDL_OBM_BRIDGE2_e };
     
     bridge_class* i_this = (bridge_class*)a_this;
 
-    s32 modelNum = i_this->mTypeBits & 1;
+    int modelNum = i_this->mTypeBits & 1;
     if (i_this->mTypeBits & 4) {
         modelNum = 1;
     }
@@ -1324,12 +1319,12 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
 
     br_s* pBr = i_this->mBr;
 
-    s32 iVar8 = 2;
+    int iVar8 = 2;
     if (i_this->mTypeBits & 1) {
         iVar8 = 0;
     }
 
-    for (s32 i = 0; i < i_this->mBrCount; i++, pBr++) {
+    for (int i = 0; i < i_this->mBrCount; i++, pBr++) {
         pBr->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11020002);
         if (pBr->mpModel == NULL) {
             return FALSE;
@@ -1423,7 +1418,7 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* a_this) {
     i_this->mpBgW->SetRideCallback(ride_call_back);
     i_this->mpBgW->CopyBackVtx();
     cBgD_Vtx_t* vtxTbl = i_this->mpBgW->GetVtxTbl();
-    for (s32 i = 0; i < i_this->mpBgW->GetVtxNum(); i++) {
+    for (int i = 0; i < i_this->mpBgW->GetVtxNum(); i++) {
         vtxTbl[i].x = i_this->actor.current.pos.x;
         vtxTbl[i].y = i_this->actor.current.pos.y;
         vtxTbl[i].z = i_this->actor.current.pos.z;

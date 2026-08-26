@@ -11,8 +11,6 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_kankyo_wether.h"
-#include "d/actor/d_a_player.h"
-#include "cstdint.h"
 
 static char l_arcName[] = "Trnd";
 
@@ -329,7 +327,7 @@ cPhs_State daTornado_c::create() {
         for (u16 i = 1; i < modelData->getJointNum(); i++) {
             modelData->getJointNodePointer(i)->setCallBack(daTornado_jointCallBack);
         }
-        mpModel->setUserArea((std::uintptr_t)this);
+        mpModel->setUserArea((uintptr_t)this);
     }
     return rt;
 }

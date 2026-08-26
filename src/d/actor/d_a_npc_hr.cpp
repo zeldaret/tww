@@ -986,7 +986,7 @@ static BOOL nodeCallBack_Hr(J3DNode* node, int calcTiming) {
                 i_this->setEyePos(temp2);
                 i_this->incAttnSetCount();
             } else if (jntNo == i_this->getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
             } else if (jntNo == i_this->m_waist_jnt_num) {
                 temp.set(0.0f, 0.0f, 0.0f);
                 MtxPosition(&temp, &i_this->mCloudPos);

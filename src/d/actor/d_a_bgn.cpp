@@ -463,7 +463,7 @@ void mDoExt_J3DModelPacketS::draw() {
         while (mesh != NULL) {
             if (!mesh->getShape()->checkFlag(J3DShpFlag_Hide)) {
                 matPacket = mpModel->getMatPacket(mesh->getIndex());
-                j3dSys.setTexture(matPacket->mpTexture);
+                j3dSys.setTexture(matPacket->getTexture());
                 j3dSys.setMatPacket(matPacket);
                 mesh->load();
                 setMaterial();
@@ -531,8 +531,8 @@ static void part_draw(bgn_class* i_this, part_s* param_2) {
             param_2->mPartTevStr.mFogColor.b = uVar6 & 0xFF;
             param_2->mPartTevStr.mFogStartZ = param_2->mPartTevStr.mFogStartZ + param_2->m0CC;
         }
-        camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
-        local_38 = param_2->m224 - camera->mLookat.mEye;
+        camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
+        local_38 = param_2->m224 - camera->view.mLookat.mEye;
         if (local_38.abs() > l_HIO.m008 * param_2->m0F4) {
             g_env_light.setLightTevColorType(model, &param_2->mPartTevStr);
             if ((actor->health <= 2) && (param_2 == &i_this->mTailParts[BGN_TAIL_MAX - 1])) {
@@ -3045,7 +3045,7 @@ static void demo_camera(bgn_class* i_this) {
     cXyz camera_center;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mCSMode) {
         case 0:
             break;

@@ -762,7 +762,7 @@ void wether_move_moya() {
 
 /* 800891A8-80089698       .text wether_move_vrkumo__Fv */
 void wether_move_vrkumo() {
-    camera_process_class* camera_p = dComIfGp_getCamera(0);
+    camera_class* camera_p = dComIfGp_getCamera(0);
     static cXyz r09o(-180000.0f, 750.0f, -200000.0f);
 
     if (strcmp(dComIfGp_getStartStageName(), "Name") != 0) {
@@ -785,7 +785,7 @@ void wether_move_vrkumo() {
             if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 &&
                 dComIfGp_roomControl_getStayNo() == 9)
             {
-                if (camera_p->mLookat.mEye.abs(r09o) < 2500.0f) {
+                if (camera_p->view.mLookat.mEye.abs(r09o) < 2500.0f) {
                     g_env_light.mVrkumoStrength = 1.0f;
                 }
             }

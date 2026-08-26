@@ -59,7 +59,7 @@ public:
     dFlower_data_c* newData(s8, cXyz&, int, s8);
     int newAnm();
     void setAnm(int, s16);
-    void deleteRoom(s32 roomNo) { mRoom[roomNo].deleteData(); }
+    void deleteRoom(int roomNo) { mRoom[roomNo].deleteData(); }
 
     virtual void draw();
     virtual ~dFlower_packet_c();

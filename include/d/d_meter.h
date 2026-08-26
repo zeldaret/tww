@@ -10,7 +10,7 @@ class J2DPane;
 class JPABaseEmitter;
 class fopAc_ac_c;
 struct fopMsgM_pane_class;
-class msg_class;
+struct msg_class;
 class sub_meter_class;
 
 class dMeter_HIO_c : public JORReflexible {
@@ -731,7 +731,9 @@ public:
     /* 0x3025 */ s8 field_0x3025;
     /* 0x3026 */ u8 field_0x3026;
     /* 0x3027 */ u8 field_0x3027;
+#if VERSION > VERSION_DEMO
     /* 0x3028 */ u8 field_0x3028;
+#endif
     /* 0x3029 */ u8 field_0x3029;
     /* 0x302A */ u8 field_0x302a;
     /* 0x302B */ u8 field_0x302b[0x302C - 0x302B];

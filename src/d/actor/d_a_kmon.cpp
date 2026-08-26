@@ -88,7 +88,7 @@ void daKmon_c::checkTalk() {
         }
     }
     if ((distance_to_player < 300.0f) && (current.pos.y > 200.0f) && !dComIfGs_isEventBit(0xd80) && (g_dComIfG_gameInfo.play.mMiniGameType == 0)) {
-        eventInfo.mCondition |= dEvtCnd_CANTALK_e;
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
 }
 

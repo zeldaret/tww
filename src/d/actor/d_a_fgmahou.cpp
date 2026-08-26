@@ -283,6 +283,7 @@ static BOOL daFgmahou_Execute(fgmahou_class* i_this) {
 
 /* 00000DD8-00000DE0       .text daFgmahou_IsDelete__FP13fgmahou_class */
 static BOOL daFgmahou_IsDelete(fgmahou_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

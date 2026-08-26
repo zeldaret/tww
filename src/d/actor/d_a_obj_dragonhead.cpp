@@ -224,6 +224,7 @@ static BOOL daObjDragonhead_Execute(void* i_this) {
 
 /* 00000A48-00000A50       .text daObjDragonhead_IsDelete__FPv */
 static BOOL daObjDragonhead_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

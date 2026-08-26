@@ -20,16 +20,16 @@ public:
     };
 
     enum CardStatus {
-        CARD_STAT_WAIT,
-        CARD_STAT_RESTORE,
-        CARD_STAT_CREATE,
-        CARD_STAT_FORMAT,
-        CARD_STAT_READY,
-        CARD_STAT_DETACH,
-        CARD_STAT_ENCODING,
-        CARD_STAT_ERROR,
-        CARD_STAT_WRONG_DEVICE = 10,
-        CARD_STAT_IOERROR = 12,
+        /* 0x0 */ CARD_STAT_WAIT,
+        /* 0x1 */ CARD_STAT_RESTORE,
+        /* 0x2 */ CARD_STAT_CREATE,
+        /* 0x3 */ CARD_STAT_FORMAT,
+        /* 0x4 */ CARD_STAT_READY,
+        /* 0x5 */ CARD_STAT_DETACH,
+        /* 0x6 */ CARD_STAT_ENCODING,
+        /* 0x7 */ CARD_STAT_ERROR,
+        /* 0xA */ CARD_STAT_WRONG_DEVICE = 10,
+        /* 0xC */ CARD_STAT_IOERROR = 12,
     };
 
     mDoMemCd_Ctrl_c();
@@ -81,7 +81,9 @@ public:
     /* 0x1658 */ u8 mCardSlot;
     /* 0x1659 */ u8 mCopyToPos;
     /* 0x165A */ u8 mProbeStat;
+#if VERSION == VERSION_PAL
     /* 0x165B */ u8 field_0x165B;
+#endif
     /* 0x165C */ s32 mCommand;
     /* 0x1660 */ s32 field_0x1660;
     /* 0x1664 */ OSMutex mMutex;

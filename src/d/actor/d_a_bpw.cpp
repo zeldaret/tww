@@ -696,7 +696,7 @@ void noroi_check(bpw_class* i_this) {
                 i_this->mSomeCountdownTimers[3] = DEMO_SELECT(REG11_F(17) + 0x14, 0x14);
                 s32 r31 = ACTOR_TYPE_BODY;
                 csXyz local_28 = actor->shape_angle;
-                camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+                camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 i_this->mFire1DousaPos = player2->getHeadTopPos();
                 dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &i_this->mFire1DousaPos);
                 r31 |= ACTOR_TYPE_TORITUKI;
@@ -2073,7 +2073,7 @@ void action_bunri_dousa(bpw_class* i_this) {
     f32 f2;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mActionState) {
     case ACTION_STATE_SEPARATE_BUNRI_DOUSA_INIT: {
         for (s32 i = 0; i < 10; i++) {
@@ -2966,7 +2966,7 @@ void action_start_demo(bpw_class* i_this) {
     f32 fVar1;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mActionState) {
     case 200:
         actor->scale.setall(0.0f);

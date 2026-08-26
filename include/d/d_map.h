@@ -44,6 +44,14 @@ struct dMap_CollectPoint {
     u8 field_0x17;
 };
 
+struct FmapChkPnt {
+    /* 0x0 */ char mSectorX;
+    /* 0x1 */ char mSectorY;
+    /* 0x2 */ s16 field_0x2;
+    /* 0x4 */ s16 field_0x4;
+    /* 0x6 */ u8 field_0x6;
+}; // Size: 0x8
+
 class dMap_2DMtMapSpcl_tex_c {
 public:
     dMap_2DMtMapSpcl_tex_c() {}
@@ -414,10 +422,10 @@ public:
     static void draw(f32, f32, int, f32);
     static void point2Grid(f32, f32, s8*, s8*);
     static void point2GridAndLocal(f32, f32, s8*, s8*, s16*, s16*);
-    static void getCheckPointUseGrid(s8, s8);
+    static int getCheckPointUseGrid(s8, s8);
     static void getFmapChkPntPrm(int, s8*, s8*, s16*, s16*, u8*);
     static void setFmapChkDtPrm();
-    static void getFmapChkPntDtPnt(int);
+    static FmapChkPnt* getFmapChkPntDtPnt(int);
     static void initPoint();
     static void setGbaPoint_ocean(u8, f32, f32, s16, u8, u8, u8, u8);
     static BOOL isPointStayInDspNowRoomAgbScr(s16, s16);
@@ -509,7 +517,7 @@ public:
     static f32 mEnlargementSizeScaleX;
     static f32 mEnlargementSizeScaleZ;
     static u8 mFmapChkPntValue;
-    static int mFmapChkPntData_p;
+    static FmapChkPnt* mFmapChkPntData_p;
     static s16 mDispPosLeftUpX;
     static s16 mDispPosLeftUpY;
     static s16 mDispSizeX;
@@ -554,14 +562,20 @@ inline void dMap_setIconSelfAlpha(u8 alpha) { return dMap_c::setIconSelfAlpha(al
 inline void dMap_setIconSelfScale(f32 scale) { return dMap_c::setIconSelfScale(scale); }
 inline void dMap_setIconDispMode(u8 mode) { return dMap_c::setIconDispMode(mode); }
 
-inline void dMap_getCheckPointUseGrid(s8, s8) {}
-inline void dMap_getFmapChkPntPrm(int, s8*, s8*, s16*, s16*, u8*) {}
+inline int dMap_getCheckPointUseGrid(s8 i_x, s8 i_y) {
+    return dMap_c::getCheckPointUseGrid(i_x, i_y);
+}
+inline void dMap_getFmapChkPntPrm(int i, s8* gx, s8* gy, s16* x, s16* y, u8* prm) {
+    dMap_c::getFmapChkPntPrm(i, gx, gy, x, y, prm);
+}
 inline void dMap_getMapDispSizeHeight() {}
 inline void dMap_getMapDispSizeWidth() {}
 inline void dMap_isSaveArriveGridUseGridNo(int) {}
 inline void dMap_isSaveArriveGridUseGridPos(int, int) {}
 inline void dMap_isSaveArriveGrid_UseWorldPos(f32, f32) {}
 inline void dMap_onSaveArriveGridUseGridNo(int) {}
-inline void dMap_point2Grid(f32, f32, s8*, s8*) {}
+inline void dMap_point2Grid(f32 i_x, f32 i_z, s8* i_gridX_p, s8* i_gridY_p) {
+    dMap_c::point2Grid(i_x, i_z, i_gridX_p, i_gridY_p);
+}
 
 #endif /* D_MAP_H */

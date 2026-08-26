@@ -31,7 +31,7 @@ public:
     daAgb_HIO_c();
     virtual ~daAgb_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ J3DGXColorS10 field_0x04[2];
@@ -1759,6 +1759,7 @@ static BOOL daAgb_Draw(daAgb_c* i_this) {
 
 /* 800D38F0-800D38F8       .text daAgb_IsDelete__FP7daAgb_c */
 static BOOL daAgb_IsDelete(daAgb_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

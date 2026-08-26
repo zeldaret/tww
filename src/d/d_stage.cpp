@@ -2398,9 +2398,7 @@ void dStage_escapeRestart() {
     daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
     dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y, fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
 
-    if (dComIfG_getTimerMode() == 3) {
-        dComIfG_TimerDeleteRequest();
-    }
+    dComIfG_TimerDeleteRequest(3);
 
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1, 0.0f, 0, FALSE, 9);
 }

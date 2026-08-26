@@ -326,7 +326,7 @@ public:
         /* 0x2B80 */ UNK_2B80 = 0x2B80,
         /* 0x2B40 */ UNK_2B40 = 0x2B40,
         /* 0x2B20 */ UNK_2B20 = 0x2B20,
-        /* 0x2B10 */ UNK_2B10 = 0x2B10,
+        /* 0x2B10 */ UNK_2B10 = 0x2B10, // Command melody monument in Tower of the Gods has been revealed
         /* 0x2B08 */ UNK_2B08 = 0x2B08,
         /* 0x2B04 */ UNK_2B04 = 0x2B04,
         /* 0x2C80 */ UNK_2C80 = 0x2C80,
@@ -510,7 +510,7 @@ public:
         /* 0x85FF */ UNK_85FF = 0x85FF,
         /* 0x86FF */ UNK_86FF = 0x86FF,
         /* 0x870F */ UNK_870F = 0x870F,
-        /* 0x8803 */ UNK_8803 = 0x8803,
+        /* 0x8803 */ GHOST_SHIP = 0x8803,
         /* 0x89FF */ UNK_89FF = 0x89FF,
         /* 0x8AFF */ UNK_8AFF = 0x8AFF,
         /* 0x8B03 */ LETTER_ARYLL = 0x8B03,

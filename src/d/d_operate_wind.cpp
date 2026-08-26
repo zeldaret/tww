@@ -278,6 +278,7 @@ static BOOL dOw_Execute(dOw_c* i_this) {
 
 /* 802219A4-802219AC       .text dOw_IsDelete__FP5dOw_c */
 static BOOL dOw_IsDelete(dOw_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

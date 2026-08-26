@@ -22,7 +22,6 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_grid.h"
 #include "res/Object/Ship.h"
-#include "cstdint.h"
 
 static char l_arcName[] = "Ship";
 static Vec l_cannon_top = {85.0f, 0.0f, 10.0f};
@@ -992,9 +991,9 @@ void daShip_c::setYPos() {
 BOOL daShip_c::checkOutRange() {
     dPnt* pnt;
     dPath* path;
-    cXyz* closestPoint;
-    cXyz* nextPoint;
-    cXyz* prevPoint;
+    Vec* closestPoint;
+    Vec* nextPoint;
+    Vec* prevPoint;
     int lastIndex;
     int closestIndex;
     int pathIndex;
@@ -2548,7 +2547,7 @@ BOOL daShip_c::procTurn_init() {
     seStart(JA_SE_SHIP_LOOK_FORWARD, &eyePos);
     mProc = &daShip_c::procTurn;
     m038E = 0;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     cXyz cameraPos = camera->mCamera.Eye() - camera->mCamera.Center();
     cameraPos.normalize();
@@ -2568,7 +2567,7 @@ BOOL daShip_c::procTurn() {
     cXyz local_b8;
     cXyz local_ac;
     
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     local_c4 = current.pos - camera->mCamera.Center();
     fVar5 = local_c4.abs();
     local_ac = camera->mCamera.Center() + (current.pos - m045C);
@@ -2621,7 +2620,7 @@ BOOL daShip_c::procTurn() {
 
 /* 00006C78-00006DE0       .text procTornadoUp_init__8daShip_cFv */
 BOOL daShip_c::procTornadoUp_init() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     onStateFlg((daSHIP_SFLG)(daSFLG_FLY_e | daSFLG_UNK1000_e));
     mCurMode = 12;
     mProc = &daShip_c::procTornadoUp;
@@ -2658,7 +2657,7 @@ BOOL daShip_c::procTornadoUp() {
 
     shape_angle.y += 0x1C25;
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz local_3c(tornado->current.pos.x, current.pos.y, tornado->current.pos.z);
     camera->mCamera.Set(local_3c, camera->mCamera.Eye());
     
@@ -2684,7 +2683,7 @@ BOOL daShip_c::procStartModeWarp_init() {
         setPartOffAnime();
     }
     m03A6 = 0x1C25;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     cXyz local_38(current.pos.x, m03F4 + 1500.0f, current.pos.z + 2000.0f);
     camera->mCamera.Set(current.pos, local_38);
@@ -2704,7 +2703,7 @@ BOOL daShip_c::procStartModeWarp() {
     cXyz local_30;
     
     daTornado_c* tornado = (daTornado_c*)fopAcM_SearchByID(mTactWarpID);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     shape_angle.y += m03A6;
     current.angle.y = shape_angle.y;
     if (tornado) {
@@ -2864,7 +2863,7 @@ BOOL daShip_c::procWhirlDown_init() {
     speed.y = 0.0f;
     onStateFlg(daSFLG_FLY_e);
     onStateFlg(daSFLG_UNK1000_e);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     cXyz local_38(mWhirlActor->current.pos.x, mWhirlActor->current.pos.y + 2500.0f, mWhirlActor->current.pos.z + 4000.0f);
     camera->mCamera.Set(mWhirlActor->current.pos, local_38);
@@ -2909,7 +2908,7 @@ BOOL daShip_c::procStartModeThrow_init() {
         setPartOffAnime();
     }
     m03A6 = l_HIO.throw_return_angle_speed;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     cXyz local_38(current.pos.x + cM_scos(current.angle.y) * 300.0f, 
                   m03F4 + 150.0f, 
@@ -2926,7 +2925,7 @@ BOOL daShip_c::procStartModeThrow() {
     GXColor amb;
     GXColor diff;
     
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     shape_angle.y += m03A6;
     camera->mCamera.Set(current.pos, camera->mCamera.Eye());
     if (m037A == 0) {
@@ -4715,7 +4714,8 @@ cPhs_State daShip_c::create() {
         fopAcM_SetMin(this, -325.0f, -50.0f, -325.0f);
         fopAcM_SetMax(this, 325.0f, 570.0f, 240.0f);
         
-        fopKyM_create(fpcNm_WIND_ARROW_e, (std::intptr_t)this, 0, 0, 0);
+        // The this pointer is passed as the param for some reason, but it doesn't actually seem to be used?
+        fopKyM_create(fpcNm_WIND_ARROW_e, (intptr_t)this, 0, 0, 0);
 
         offStateFlg(daSFLG_UNK2_e);
         mAcch.CrrPos(*dComIfG_Bgsp());

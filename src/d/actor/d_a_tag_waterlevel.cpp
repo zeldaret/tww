@@ -131,6 +131,7 @@ BOOL Mthd_Draw(void* i_this) {
 }
 
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

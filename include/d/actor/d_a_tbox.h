@@ -32,7 +32,7 @@ public:
 
     typedef BOOL (daTbox_c::*ActionFunc)();
 
-    u8 getTboxNo() { return fopAcM_GetParam(this) >> 0x07 & 0x1F; }
+    int getTboxNo() { return fopAcM_GetParam(this) >> 0x07 & 0x1F; }
     int getSwNo() { return fopAcM_GetParam(this) >> 0x0C & 0xFF; }
     u8 getItemNo() { return home.angle.z >> 8 & 0xFF; }
     void flagOn(u16 flag) { mFlags |= flag; }
@@ -138,7 +138,7 @@ public:
     daTbox_HIO_c();
     virtual ~daTbox_HIO_c() { }
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;

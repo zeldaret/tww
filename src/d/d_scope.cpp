@@ -87,7 +87,6 @@ void dDlst_2DSCP_c::outFontDraw() {
 
         if (icon_no != 0xFF) {
             int x = pos_x + mpScp->mpTextBox->getBounds().i.x;
-            // for some reason y computation only match if split in two
             int y = line * (VERSION_SELECT(1, 1, 2, 2) - mpScp->mLineCount + pos_y * 2);
             int y2 = y + mpScp->mpTextBox->getBounds().i.y;
             fopMsgM_outFontDraw(sbutton_icon[i], sbutton_kage[i], x, y2, scale, &sbuttonTimer[i], 0xFF, icon_no);
@@ -464,25 +463,20 @@ void dScp_wipeMove(sub_scp_class* i_Scp, f32 i_rate) {
         fopMsgM_paneScaleXY(&i_Scp->mWipePanel[i], i_rate);
     }
 
-    f32 px0 = i_Scp->mWipePanel[0].mSizeOrig.x / 2.0f * t;
-    f32 py0 = i_Scp->mWipePanel[0].mSizeOrig.y / 2.0f * t;
-    // self assign fake match reused from TP
-    px0 = px0;
-    py0 = py0;
-    fopMsgM_paneTrans(&i_Scp->mWipePanel[0], -px0, -py0);
-    f32 px1 = i_Scp->mWipePanel[1].mSizeOrig.x / 2.0f * t;
-    f32 py1 = i_Scp->mWipePanel[1].mSizeOrig.y / 2.0f * t;
-    px1 = px1;
-    py1 = py1;
-    fopMsgM_paneTrans(&i_Scp->mWipePanel[1], px1, -py1);
-    f32 px2 = i_Scp->mWipePanel[2].mSizeOrig.x / 2.0f * t;
-    f32 py2 = i_Scp->mWipePanel[2].mSizeOrig.y / 2.0f * t;
-    px2 = px2;
-    py2 = py2;
-    fopMsgM_paneTrans(&i_Scp->mWipePanel[2], -px2, py2);
-    f32 px3 = i_Scp->mWipePanel[3].mSizeOrig.x / 2.0f * t;
-    f32 py3 = i_Scp->mWipePanel[3].mSizeOrig.y / 2.0f * t;
-    fopMsgM_paneTrans(&i_Scp->mWipePanel[3], px3, py3);
+    f32 px;
+    f32 py;
+    px = i_Scp->mWipePanel[0].mSizeOrig.x / 2.0f * t;
+    py = i_Scp->mWipePanel[0].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[0], -px, -py);
+    px = i_Scp->mWipePanel[1].mSizeOrig.x / 2.0f * t;
+    py = i_Scp->mWipePanel[1].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[1], px, -py);
+    px = i_Scp->mWipePanel[2].mSizeOrig.x / 2.0f * t;
+    py = i_Scp->mWipePanel[2].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[2], -px, py);
+    px = i_Scp->mWipePanel[3].mSizeOrig.x / 2.0f * t;
+    py = i_Scp->mWipePanel[3].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[3], px, py);
 
     i_Scp->mWipePanel[4].mPosCenter.y = i_Scp->mWipePanel[0].mPosTopLeft.y - i_Scp->mWipePanel[4].mSize.y / 2.0f;
     i_Scp->mWipePanel[5].mPosCenter.y = i_Scp->mWipePanel[5].mSize.y / 2.0f + (i_Scp->mWipePanel[3].mPosTopLeft.y + i_Scp->mWipePanel[3].mSize.y);
@@ -504,25 +498,20 @@ void dScp_wipeMove2(sub_scp_class* i_Scp, f32 i_rate) {
         fopMsgM_paneScaleXY(&i_Scp->mWipePanel[i], i_rate);
     }
 
-    // Same self-assigned temps trick as dScp_wipeMove.
-    f32 px0 = i_Scp->mWipePanel[0].mSizeOrig.x / 2.0f * t;
-    f32 py0 = i_Scp->mWipePanel[0].mSizeOrig.y / 2.0f * t;
-    px0 = px0;
-    py0 = py0;
-    fopMsgM_paneTrans(&i_Scp->mWipePanel[0], -px0, -py0);
-    f32 px1 = i_Scp->mWipePanel[1].mSizeOrig.x / 2.0f * t;
-    f32 py1 = i_Scp->mWipePanel[1].mSizeOrig.y / 2.0f * t;
-    px1 = px1;
-    py1 = py1;
-    fopMsgM_paneTrans(&i_Scp->mWipePanel[1], px1, -py1);
-    f32 px2 = i_Scp->mWipePanel[2].mSizeOrig.x / 2.0f * t;
-    f32 py2 = i_Scp->mWipePanel[2].mSizeOrig.y / 2.0f * t;
-    px2 = px2;
-    py2 = py2;
-    fopMsgM_paneTrans(&i_Scp->mWipePanel[2], -px2, py2);
-    f32 px3 = i_Scp->mWipePanel[3].mSizeOrig.x / 2.0f * t;
-    f32 py3 = i_Scp->mWipePanel[3].mSizeOrig.y / 2.0f * t;
-    fopMsgM_paneTrans(&i_Scp->mWipePanel[3], px3, py3);
+    f32 px;
+    f32 py;
+    px = i_Scp->mWipePanel[0].mSizeOrig.x / 2.0f * t;
+    py = i_Scp->mWipePanel[0].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[0], -px, -py);
+    px = i_Scp->mWipePanel[1].mSizeOrig.x / 2.0f * t;
+    py = i_Scp->mWipePanel[1].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[1], px, -py);
+    px = i_Scp->mWipePanel[2].mSizeOrig.x / 2.0f * t;
+    py = i_Scp->mWipePanel[2].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[2], -px, py);
+    px = i_Scp->mWipePanel[3].mSizeOrig.x / 2.0f * t;
+    py = i_Scp->mWipePanel[3].mSizeOrig.y / 2.0f * t;
+    fopMsgM_paneTrans(&i_Scp->mWipePanel[3], px, py);
 
     if (i_rate >= 1.f) {
         for (int i = 4; i < 8; i++) {
@@ -1127,7 +1116,7 @@ void dScp_moveProc(sub_scp_class* i_Scp) {
 
 /* 8023A9AC-8023AAD0       .text dScp_demoProc__FP13sub_scp_class */
 void dScp_demoProc(sub_scp_class* i_Scp) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     f32 max = g_meterHIO.mScopeWipeMaxScale;
 
     if (dComIfGp_getScopeMesgStatus() != fopMsgStts_SCOPE_WAIT_e) {
@@ -1385,7 +1374,7 @@ static cPhs_State dScp_Create(msg_class* i_this) {
 dDlst_2DSCP_c::~dDlst_2DSCP_c() {
 }
 
-msg_method_class l_dScp_Method = {
+static msg_method_class l_dScp_Method = {
     (process_method_func)dScp_Create,
     (process_method_func)dScp_Delete,
     (process_method_func)dScp_Execute,

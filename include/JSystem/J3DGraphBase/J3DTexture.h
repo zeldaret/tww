@@ -38,19 +38,16 @@ public:
     J3DTexture(u16 num, ResTIMG* res) : mNum(num), mpRes(res) {}
     virtual ~J3DTexture() {}
 
-    void loadGX(u16, GXTexMapID) const;
-    void entryNum(u16);
-    void addResTIMG(u16, ResTIMG const*);
-
     u16 getNum() const { return mNum; }
-    ResTIMG* getResTIMG(u16 entry) const {
-        J3D_ASSERT(72, entry < mNum, "Error : range over.");
-        return &mpRes[entry];   
+    ResTIMG* getResTIMG(u16 index) const {
+        J3D_ASSERT(72, index < mNum, "Error : range over.");
+        return &mpRes[index];   
     }
-    void setResTIMG(u16 entry, const ResTIMG& timg) {
-        mpRes[entry] = timg;
-        mpRes[entry].imageOffset = ((mpRes[entry].imageOffset + (u32)&timg - (u32)(mpRes + entry)));
-        mpRes[entry].paletteOffset = ((mpRes[entry].paletteOffset + (u32)&timg - (u32)(mpRes + entry)));
+    void setResTIMG(u16 index, const ResTIMG& timg) {
+        J3D_ASSERT(81, index < mNum, "Error : range over.");
+        mpRes[index] = timg;
+        mpRes[index].imageOffset = ((mpRes[index].imageOffset + (u32)&timg - (u32)(mpRes + index)));
+        mpRes[index].paletteOffset = ((mpRes[index].paletteOffset + (u32)&timg - (u32)(mpRes + index)));
     }
 };
 

@@ -554,6 +554,7 @@ static BOOL dAs_Execute(dAs_c* i_this) {
 
 /* 80160CBC-80160CC4       .text dAs_IsDelete__FP5dAs_c */
 static BOOL dAs_IsDelete(dAs_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -568,7 +569,7 @@ static cPhs_State dAs_Create(msg_class* msg) {
     talkFlag = FALSE;
 
     dAs_c* i_this = (dAs_c*)msg;
-    i_this->_create();
+    return i_this->_create();
 }
 
 /* 80160D20-80160D70       .text dAuction_screen_create__Fv */

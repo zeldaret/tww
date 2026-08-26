@@ -260,9 +260,7 @@ cPhs_State daObjMtest::Act_c::Mthd_Create() {
         mbAppear = chk_appear();
         
         cXyz& scl_mult = M_scl_mult[M_type];
-        scale.x *= scl_mult.x;
-        scale.y *= scl_mult.y;
-        scale.z *= scl_mult.z;
+        scale *= scl_mult;
         
         phase_state = MoveBGCreate(M_arcname[M_type], dzb_data[dzb_idx][M_type], NULL, heap_size[dzb_idx][M_type]);
         

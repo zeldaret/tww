@@ -141,7 +141,7 @@ public:
     };
 
     enum PRIORITY {
-        
+        // TODO
     };
 
     cBgW();

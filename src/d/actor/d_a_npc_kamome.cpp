@@ -15,13 +15,14 @@
 #include "d/d_npc.h"
 #include "d/d_snap.h"
 #include "d/d_camera.h"
+#include "f_op/f_op_camera.h"
 
 class daNpc_kam_HIO1_c {
 public:
     daNpc_kam_HIO1_c();
     virtual ~daNpc_kam_HIO1_c() {}
     
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
     
 public:
     /* 0x04 */ f32 mSpeedF;
@@ -57,7 +58,7 @@ public:
     daNpc_kam_HIO_c();
     virtual ~daNpc_kam_HIO_c() {}
     
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -1467,6 +1468,7 @@ static BOOL daNpc_kam_Execute(daNpc_kam_c* i_this) {
 
 /* 00004588-00004590       .text daNpc_kam_IsDelete__FP11daNpc_kam_c */
 static BOOL daNpc_kam_IsDelete(daNpc_kam_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

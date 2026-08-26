@@ -8,7 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class msg_class;
+struct msg_class;
 
 namespace daObjMknjD {
     class Act_c : public dBgS_MoveBgActor {
@@ -24,7 +24,7 @@ namespace daObjMknjD {
         int prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWITCH_W, PRM_SWITCH_S); }
         u8 prm_get_Type() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
 
-        void anmAtr(u16) {}
+        void anmAtr(u16 i_msgStatus) { UNUSED(i_msgStatus); }
         u32 getMsg() {
             if (m0500 == 0) {
                 dComIfGp_setMelodyNum(mMelodyNum);

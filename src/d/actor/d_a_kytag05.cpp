@@ -39,7 +39,7 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
         150,
     };
     
-    camera_process_class *camera = dComIfGp_getCamera(0);
+    camera_class *camera = dComIfGp_getCamera(0);
     fopAc_ac_c *player = dComIfGp_getPlayer(0);
     f32 windPow = dKyw_get_wind_pow();
     f32 blend = 1.0f;
@@ -86,20 +86,20 @@ static BOOL daKytag05_Execute(kytag05_class* a_this) {
         }
     }
     
-    if((camera->mLookat.mEye.z > 1445.0f || player->current.pos.z > 1445.0f) &&
-       (camera->mLookat.mEye.x > 520.0f || player->current.pos.x > 520.0f)){
-        if(camera->mLookat.mEye.z > 2100.0f || player->current.pos.z > 2100.0f) {
+    if((camera->view.mLookat.mEye.z > 1445.0f || player->current.pos.z > 1445.0f) &&
+       (camera->view.mLookat.mEye.x > 520.0f || player->current.pos.x > 520.0f)){
+        if(camera->view.mLookat.mEye.z > 2100.0f || player->current.pos.z > 2100.0f) {
             dKyw_evt_wind_set(0, 0x61A8);
-        } else if(camera->mLookat.mEye.z > 1970.0f || player->current.pos.z > 1970.0f) {
+        } else if(camera->view.mLookat.mEye.z > 1970.0f || player->current.pos.z > 1970.0f) {
             dKyw_evt_wind_set(0, 0x4E20);
         } else {
             dKyw_evt_wind_set(0, 0x4650);
         }
-    } else if(camera->mLookat.mEye.z < -4085.0f || player->current.pos.z < -4085.0f) {
+    } else if(camera->view.mLookat.mEye.z < -4085.0f || player->current.pos.z < -4085.0f) {
         dKyw_evt_wind_set(0, -0x3E80);
-    } else if(camera->mLookat.mEye.z < -3108.0f || player->current.pos.z < -3108.0f) {
+    } else if(camera->view.mLookat.mEye.z < -3108.0f || player->current.pos.z < -3108.0f) {
         dKyw_evt_wind_set(0, -0x4B00);
-    } else if(camera->mLookat.mEye.z < -1412.0f || player->current.pos.z < -1412.0f) {
+    } else if(camera->view.mLookat.mEye.z < -1412.0f || player->current.pos.z < -1412.0f) {
         dKyw_evt_wind_set(0, -0x32C8);
     }
 

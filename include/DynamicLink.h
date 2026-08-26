@@ -62,7 +62,7 @@ struct DynamicModuleControl : DynamicModuleControlBase {
     virtual bool do_unlink();
     DynamicModuleControl(char const*);
     static JKRArchive* mountCallback(void*);
-    static void mountCreate();
+    static mDoDvdThd_callback_c* mountCreate();
     static bool initialize();
     static bool callback(void*);
 

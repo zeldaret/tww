@@ -25,7 +25,7 @@ void draw_SUB(ks_class* i_this) {
     J3DModel* pBodyModel = i_this->mpBodyMorf->getModel();
     J3DModel* pEyeModel = i_this->mpEyeMorf->getModel();
 
-    cXyz local_24 = dComIfGp_getCamera(0)->mLookat.mEye - actor->current.pos;
+    cXyz local_24 = dComIfGp_getCamera(0)->view.mLookat.mEye - actor->current.pos;
 
     int iVar3 = cM_atan2s(local_24.x, local_24.z);
     int iVar4 = (s16)-cM_atan2s(local_24.y, std::sqrtf(SQUARE(local_24.x) + SQUARE(local_24.z)));
@@ -70,7 +70,7 @@ static BOOL daKS_Draw(ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
 #if VERSION > VERSION_DEMO
-    cXyz local_24 = actor->current.pos - dComIfGp_getCamera(0)->mLookat.mEye;
+    cXyz local_24 = actor->current.pos - dComIfGp_getCamera(0)->view.mLookat.mEye;
     if (local_24.abs() < REG0_F(10) + 100.0f) {
         return TRUE;
     }
@@ -1181,7 +1181,7 @@ void action_omoi(ks_class* i_this) {
 }
 
 /* 000026DC-000027A0       .text tsubo_search__FPvPv */
-void* tsubo_search(void* param_1, void* i_data) {
+static void* tsubo_search(void* param_1, void* i_data) {
     ks_class* i_this = (ks_class*)i_data;
     fopAc_ac_c* actor = &i_this->actor;
     int r0 = 0;
@@ -1479,6 +1479,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
 
 /* 00003054-0000305C       .text daKS_IsDelete__FP8ks_class */
 static BOOL daKS_IsDelete(ks_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -1437,7 +1437,7 @@ static void demo_camera(bwd_class* i_this) {
     f32 fVar1;
     f32 fVar2;
     s16 sVar3;
-    camera_class* camera2;
+    camera_process_class* camera2;
     fopAc_ac_c* pfVar7;
     cXyz local_98;
     cXyz local_a4;
@@ -1447,7 +1447,7 @@ static void demo_camera(bwd_class* i_this) {
 
     fopAc_ac_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     daPy_py_c* player2 = (daPy_py_c*)player;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->m3C1E) {
     case 0:
         break;
@@ -1459,8 +1459,8 @@ static void demo_camera(bwd_class* i_this) {
         }
         i_this->m3C1E++;
         camera2 = dComIfGp_getCamera(0);
-        i_this->m3C28 = camera2->mLookat.mEye;
-        i_this->m3C34 = camera2->mLookat.mCenter;
+        i_this->m3C28 = camera2->view.mLookat.mEye;
+        i_this->m3C34 = camera2->view.mLookat.mCenter;
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(2);
         i_this->m3C20 = 0;
@@ -1648,8 +1648,8 @@ static void demo_camera(bwd_class* i_this) {
         i_this->m3C22 = 0;
         i_this->m3C48 = 55.0f;
         camera2 = dComIfGp_getCamera(0);
-        i_this->m3C28 = camera2->mLookat.mEye;
-        i_this->m3C34 = camera2->mLookat.mCenter;
+        i_this->m3C28 = camera2->view.mLookat.mEye;
+        i_this->m3C34 = camera2->view.mLookat.mCenter;
         i_this->m3C44 = 0.0f;
         player2->changeOriginalDemo();
         set_pos.x = actor->current.pos.x - 100.0f;

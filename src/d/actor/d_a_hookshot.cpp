@@ -461,6 +461,7 @@ static BOOL daHookshot_Execute(daHookshot_c* i_this) {
 
 /* 800F2B74-800F2B7C       .text daHookshot_IsDelete__FP12daHookshot_c */
 static BOOL daHookshot_IsDelete(daHookshot_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -267,16 +267,16 @@ void dDemo_actor_c::JSGSetTextureAnimationFrame(f32 v) {
 }
 
 /* 80069D10-80069D44       .text getView__Fv */
-camera_class* getView() {
+view_class* getView() {
     if (dComIfGp_getWindowNum() == 0)
         return NULL;
 
-    return dComIfGp_getCamera(dComIfGp_getWindow(0)->getCameraID());
+    return &dComIfGp_getCamera(dComIfGp_getWindow(0)->getCameraID())->view;
 }
 
 /* 80069D44-80069D78       .text JSGGetProjectionNear__14dDemo_camera_cCFv */
 f32 dDemo_camera_c::JSGGetProjectionNear() const {
-    camera_class* view = getView();
+    view_class* view = getView();
     if (view == NULL)
         return 0.0f;
     return view->mNear;
@@ -290,7 +290,7 @@ void dDemo_camera_c::JSGSetProjectionNear(f32 v) {
 
 /* 80069D8C-80069DC0       .text JSGGetProjectionFar__14dDemo_camera_cCFv */
 f32 dDemo_camera_c::JSGGetProjectionFar() const {
-    camera_class* view = getView();
+    view_class* view = getView();
     if (view == NULL)
         return 1.0f;
     return view->mFar;
@@ -304,7 +304,7 @@ void dDemo_camera_c::JSGSetProjectionFar(f32 v) {
 
 /* 80069DD4-80069E08       .text JSGGetProjectionFovy__14dDemo_camera_cCFv */
 f32 dDemo_camera_c::JSGGetProjectionFovy() const {
-    camera_class* view = getView();
+    view_class* view = getView();
     if (view == NULL)
         return 60.0f;
     return view->mFovy;
@@ -318,7 +318,7 @@ void dDemo_camera_c::JSGSetProjectionFovy(f32 v) {
 
 /* 80069E1C-80069E50       .text JSGGetProjectionAspect__14dDemo_camera_cCFv */
 f32 dDemo_camera_c::JSGGetProjectionAspect() const {
-    camera_class* view = getView();
+    view_class* view = getView();
     if (view == NULL)
         return (4.0f/3.0f);
     return view->mAspect;
@@ -332,7 +332,7 @@ void dDemo_camera_c::JSGSetProjectionAspect(f32 v) {
 
 /* 80069E64-80069EC0       .text JSGGetViewPosition__14dDemo_camera_cCFP3Vec */
 void dDemo_camera_c::JSGGetViewPosition(Vec* dst) const {
-    camera_class* view = getView();
+    view_class* view = getView();
     if (view == NULL) {
         dst->x = 0.0f;
         dst->y = 0.0f;
@@ -349,7 +349,7 @@ void dDemo_camera_c::JSGSetViewPosition(const Vec& v) {
 
 /* 80069EE8-80069F48       .text JSGGetViewUpVector__14dDemo_camera_cCFP3Vec */
 void dDemo_camera_c::JSGGetViewUpVector(Vec* dst) const {
-    camera_class* view = getView();
+    view_class* view = getView();
     if (view == NULL) {
         dst->x = 0.0f;
         dst->y = 1.0f;
@@ -366,7 +366,7 @@ void dDemo_camera_c::JSGSetViewUpVector(const Vec& v) {
 
 /* 80069F70-80069FD0       .text JSGGetViewTargetPosition__14dDemo_camera_cCFP3Vec */
 void dDemo_camera_c::JSGGetViewTargetPosition(Vec* dst) const {
-    camera_class* view = getView();
+    view_class* view = getView();
     if (view == NULL) {
         dst->x = 0.0f;
         dst->y = 0.0f;
@@ -383,7 +383,7 @@ void dDemo_camera_c::JSGSetViewTargetPosition(const Vec& v) {
 
 /* 80069FF8-8006A050       .text JSGGetViewRoll__14dDemo_camera_cCFv */
 f32 dDemo_camera_c::JSGGetViewRoll() const {
-    camera_class* view = getView();
+    view_class* view = getView();
     if (view == NULL)
         return 0.0f;
     return cM_sht2d(view->mBank);

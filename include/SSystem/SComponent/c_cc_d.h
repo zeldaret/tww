@@ -15,6 +15,7 @@ class cCcD_TriAttr;
 class cCcD_AabAttr;
 class cCcD_CylAttr;
 class cCcD_SphAttr;
+typedef struct _GXColor GXColor;
 
 enum cCcD_AtSPrm_e {
     /* 0x01 */ cCcD_AtSPrm_Set_e = 0x01,
@@ -590,6 +591,9 @@ public:
     virtual cCcD_GObjInf* GetGObjInf() { return NULL; }
     virtual cCcD_ShapeAttr const* GetShapeAttr() const { return NULL; }
     virtual cCcD_ShapeAttr* GetShapeAttr() { return NULL; }
+#ifdef DEBUG
+    virtual void Draw(GXColor const&) {}
+#endif
     void ct() {
         mFlags = 0;
     }

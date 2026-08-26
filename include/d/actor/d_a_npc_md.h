@@ -124,6 +124,8 @@ public:
     s8 getArmRlocJntNum() { return m_armRloc_jnt_num; }
     s8 getArmLJntNum() { return m_armL_jnt_num; }
     s8 getArmLlocJntNum() { return m_armLloc_jnt_num; }
+    s8 getWingRlocJntNum() { return m_wingRloc_jnt_num; }
+    s8 getWingLlocJntNum() { return m_wingLloc_jnt_num; }
     s8 getHairJntNum(int i) { return m_hair_jnt_nums[i]; }
     
     J3DModel* getModel() { return mpMorf->getModel(); }

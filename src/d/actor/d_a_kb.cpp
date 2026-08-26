@@ -1806,7 +1806,7 @@ void esa_demo_move(kb_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
     daPy_py_c* pPlayer = daPy_getPlayerActorClass();
-    camera_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dBgS_LinChk linChk;
 
     switch(i_this->m420) {
@@ -2342,6 +2342,7 @@ static BOOL daKb_Execute(kb_class* i_this) {
 
 /* 00006E38-00006E40       .text daKb_IsDelete__FP8kb_class */
 static BOOL daKb_IsDelete(kb_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

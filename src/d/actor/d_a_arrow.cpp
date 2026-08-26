@@ -1273,6 +1273,7 @@ static BOOL daArrowDraw(void* i_this) {
 
 /* 800D8280-800D8288       .text daArrowIsDelete__FPv */
 static BOOL daArrowIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

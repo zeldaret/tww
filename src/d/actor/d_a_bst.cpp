@@ -26,7 +26,7 @@ class daBst_HIO_c : public JORReflexible {
 public:
     daBst_HIO_c();
     virtual ~daBst_HIO_c() {}
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ s8 m4;
@@ -2035,7 +2035,7 @@ void demo_camera(bst_class* i_this) {
     cXyz spB0; // offset
     cXyz spA4;
     daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     s8 bVar2 = true;
     switch (i_this->m2E9A) {

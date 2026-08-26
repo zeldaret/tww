@@ -71,7 +71,7 @@ public:
     }
     virtual ~bbHIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ u8 unk_04;
@@ -365,7 +365,7 @@ void anm_init(bb_class* i_this, int animFileIdx, f32 morf, u8 loopMode, f32 spee
 }
 
 /* 00000D74-00001048       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* ac1, void* ac2) {
+static void* s_a_d_sub(void* ac1, void* ac2) {
     dBgS_LinChk linChk;
     cXyz sp14;
     cXyz sp8;

@@ -25,7 +25,7 @@ public:
     daObj_Ikada_HIO_c();
     virtual ~daObj_Ikada_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ u8 mbDebugDraw;
@@ -405,7 +405,6 @@ void daObj_Ikada_c::createWave() {
 
 /* 000012EC-00001528       .text setWave__13daObj_Ikada_cFv */
 void daObj_Ikada_c::setWave() {
-    /* Nonmatching */
     f32 fVar2 = l_HIO.mTrackVel;
     f32 fVar1 = l_HIO.mWaveVelFade;
     f32 target = l_HIO.mSplashScaleMax;

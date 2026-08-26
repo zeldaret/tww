@@ -194,17 +194,17 @@ void dJle_Pb_c::screenSet2() {
     ((J2DTextBox *)(pane_tx[2].pane))->setFont(font0);
     ((J2DTextBox *)(pane_tx[3].pane))->setFont(font1);
 
-#if VERSION <= VERSION_JPN
     J2DTextBox::TFontSize fontSize;
+    J2DTextBox::TFontSize rubySize;
+#if VERSION <= VERSION_JPN
     if (g_msgDHIO.field_0x08 == 0) {
         fontSize.mSizeX = fontSize.mSizeY = (int)g_msgHIO.field_0x58;
-        J2DTextBox::TFontSize fontSize2;
-        fontSize2.mSizeX = fontSize2.mSizeY = g_msgHIO.field_0x68;
+        rubySize.mSizeX = rubySize.mSizeY = g_msgHIO.field_0x68;
 
         ((J2DTextBox *)(pane_tx[0].pane))->setFontSize(fontSize);
-        ((J2DTextBox *)(pane_tx[1].pane))->setFontSize(fontSize2);
+        ((J2DTextBox *)(pane_tx[1].pane))->setFontSize(rubySize);
         ((J2DTextBox *)(pane_tx[2].pane))->setFontSize(fontSize);
-        ((J2DTextBox *)(pane_tx[3].pane))->setFontSize(fontSize2);
+        ((J2DTextBox *)(pane_tx[3].pane))->setFontSize(rubySize);
     } else {
         fontSize.mSizeX = fontSize.mSizeY = g_msgHIO.field_0x70;
 
@@ -212,7 +212,6 @@ void dJle_Pb_c::screenSet2() {
         ((J2DTextBox *)(pane_tx[2].pane))->setFontSize(fontSize);
     }
 #else
-    J2DTextBox::TFontSize fontSize;
     fontSize.mSizeX = fontSize.mSizeY = g_msgHIO.field_0x70;
 
     ((J2DTextBox *)(pane_tx[0].pane))->setFontSize(fontSize);
@@ -989,7 +988,7 @@ void dJle_Pb_c::shutterChange() {
 
 /* 80228650-80228788       .text moveCamera__9dJle_Pb_cFv */
 void dJle_Pb_c::moveCamera() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
   
     if (mModeSubState == PB_SUB_CONFIRM_e) {
         camera->mCamera.Stay();

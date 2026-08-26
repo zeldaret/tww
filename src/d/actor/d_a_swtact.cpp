@@ -25,8 +25,8 @@ bool daSwTact_c::_delete() {
 }
 
 /* 000000AC-000000CC       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
-    return ((daSwTact_c *)i_ac)->CreateHeap();
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daSwTact_c *)i_this)->CreateHeap();
 }
 
 /* 000000CC-00000194       .text CreateHeap__10daSwTact_cFv */
@@ -181,27 +181,28 @@ bool daSwTact_c::_draw() {
 }
 
 /* 00000720-00000740       .text daSwTact_Create__FPv */
-static cPhs_State daSwTact_Create(void* i_ac) {
-    return ((daSwTact_c *)i_ac)->_create();
+static cPhs_State daSwTact_Create(void* i_this) {
+    return ((daSwTact_c *)i_this)->_create();
 }
 
 /* 00000740-00000764       .text daSwTact_Delete__FPv */
-static BOOL daSwTact_Delete(void* i_ac) {
-    return ((daSwTact_c*)i_ac)->_delete();
+static BOOL daSwTact_Delete(void* i_this) {
+    return ((daSwTact_c*)i_this)->_delete();
 }
 
 /* 00000764-00000788       .text daSwTact_Draw__FPv */
-static BOOL daSwTact_Draw(void* i_ac) {
-    return ((daSwTact_c*)i_ac)->_draw();
+static BOOL daSwTact_Draw(void* i_this) {
+    return ((daSwTact_c*)i_this)->_draw();
 }
 
 /* 00000788-000007AC       .text daSwTact_Execute__FPv */
-static BOOL daSwTact_Execute(void* i_ac) {
-    return ((daSwTact_c*)i_ac)->_execute();
+static BOOL daSwTact_Execute(void* i_this) {
+    return ((daSwTact_c*)i_this)->_execute();
 }
 
 /* 000007AC-000007B4       .text daSwTact_IsDelete__FPv */
-static BOOL daSwTact_IsDelete(void* i_ac) {
+static BOOL daSwTact_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

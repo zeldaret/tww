@@ -70,8 +70,8 @@ bool daTagvolcano::Act_c::check_timer_clear() {
 
 /* 00000338-000003BC       .text _delete__Q212daTagvolcano5Act_cFv */
 bool daTagvolcano::Act_c::_delete() {
-    if (check_timer_clear() && dComIfG_getTimerMode() == 3)
-        dComIfG_TimerDeleteRequest();
+    if (check_timer_clear())
+        dComIfG_TimerDeleteRequest(3);
     fopAcM_offSwitch(this, prm_get_swSave());
     return true;
 }
@@ -103,8 +103,7 @@ bool daTagvolcano::Act_c::_execute() {
                                 mDoAud_seStart(JA_SE_ISLE_TIMER_0);
                                 dComIfGp_getVibration().StartShock(6, -33, cXyz(0.0f, 1.0f, 0.0f));
                                 fopAcM_offSwitch(this, prm_get_swSave());
-                                if (dComIfG_getTimerMode() == 3)
-                                    dComIfG_TimerDeleteRequest();
+                                dComIfG_TimerDeleteRequest(3);
 
                                 field_0x298 = 0;
                                 field_0x299 = 0;
@@ -129,8 +128,8 @@ bool daTagvolcano::Act_c::_execute() {
         }
     } else {
         if (dComIfGs_isTbox(prm_get_bitTRB())) {
-            if (dComIfG_getTimerPtr() != NULL && dComIfG_getTimerMode() == 3)
-                dComIfG_TimerDeleteRequest();
+            if (dComIfG_getTimerPtr() != NULL)
+                dComIfG_TimerDeleteRequest(3);
             if (mType == 1)
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_1902);
             else
@@ -148,8 +147,7 @@ bool daTagvolcano::Act_c::_execute() {
             if (dComIfG_getTimerRestTimeMs() <= 0) {
                 mDoAud_seStart(JA_SE_ISLE_TIMER_0);
                 dComIfGp_getVibration().StartShock(6, -33, cXyz(0.0f, 1.0f, 0.0f));
-                if (dComIfG_getTimerMode() == 3)
-                    dComIfG_TimerDeleteRequest();
+                dComIfG_TimerDeleteRequest(3);
 
                 field_0x2a4 = 1;
                 fopAcM_orderOtherEvent(this, "TAG_VOLCANO");

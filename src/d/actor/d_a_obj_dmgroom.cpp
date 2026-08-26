@@ -125,6 +125,7 @@ static BOOL daObjDmgroom_Execute(void* i_this) {
 
 /* 000005CC-000005D4       .text daObjDmgroom_IsDelete__FPv */
 static BOOL daObjDmgroom_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

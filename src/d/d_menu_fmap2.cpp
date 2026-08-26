@@ -5,6 +5,7 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_fmap2.h"
+#include "d/d_menu_fmap.h"
 
 /* 801BB3E4-801BB5B8       .text __ct__10dMf2_HIO_cFv */
 dMf2_HIO_c::dMf2_HIO_c() {
@@ -242,12 +243,12 @@ void dMenu_Fmap2_c::ChangeProcMode() {
 }
 
 /* 801C36C8-801C376C       .text _open__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::_open() {
+bool dMenu_Fmap2_c::_open() {
     /* Nonmatching */
 }
 
 /* 801C376C-801C3858       .text _close__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::_close() {
+bool dMenu_Fmap2_c::_close() {
     /* Nonmatching */
 }
 
@@ -512,8 +513,8 @@ void dMenu_Fmap2_c::getNowCmapNextNum(signed char, int) {
 }
 
 /* 801C7364-801C73B0       .text getCmapDatPnt4__13dMenu_Fmap2_cFi */
-void dMenu_Fmap2_c::getCmapDatPnt4(int) {
-    /* Nonmatching */
+aramCmapDatPnt_t* dMenu_Fmap2_c::getCmapDatPnt4(int i_cmapIdx) {
+    return mpFmapDatPnt->getCmapDatPnt4(i_cmapIdx);
 }
 
 /* 801C73B0-801C7474       .text readPaneCmapTexture__13dMenu_Fmap2_cFPC7ResTIMGi */
@@ -527,8 +528,9 @@ void dMenu_Fmap2_c::readFmapTexture(const char*) {
 }
 
 /* 801C74B4-801C756C       .text getButtonIconMode__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::getButtonIconMode() {
+int dMenu_Fmap2_c::getButtonIconMode() {
     /* Nonmatching */
+    return 0;
 }
 
 /* 801C756C-801C7574       .text isLockBbutton__13dMenu_Fmap2_cFv */

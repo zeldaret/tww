@@ -372,6 +372,7 @@ static BOOL dMinigame_Starter_Execute(dMinigame_Starter_c* i_this) {
 
 /* 80206F1C-80206F24       .text dMinigame_Starter_IsDelete__FP19dMinigame_Starter_c */
 static BOOL dMinigame_Starter_IsDelete(dMinigame_Starter_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

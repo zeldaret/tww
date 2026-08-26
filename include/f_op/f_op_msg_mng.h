@@ -9,7 +9,7 @@
 class JKRExpHeap;
 class JKRHeap;
 class fopAc_ac_c;
-class msg_class;
+struct msg_class;
 class J2DPane;
 class J2DScreen;
 class J2DPicture;

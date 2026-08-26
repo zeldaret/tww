@@ -22,7 +22,7 @@ public:
     daNpc_Md_HIO2_c();
     virtual ~daNpc_Md_HIO2_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 m04;
@@ -47,7 +47,7 @@ public:
     daNpc_Md_HIO3_c();
     virtual ~daNpc_Md_HIO3_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 m04;
@@ -70,7 +70,7 @@ public:
     daNpc_Md_HIO4_c();
     virtual ~daNpc_Md_HIO4_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ f32 m4;
@@ -83,7 +83,7 @@ public:
     daNpc_Md_HIO5_c();
     virtual ~daNpc_Md_HIO5_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ f32 m4;
@@ -95,7 +95,7 @@ public:
     daNpc_Md_HIO6_c();
     virtual ~daNpc_Md_HIO6_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 m04;
@@ -114,7 +114,7 @@ public:
     daNpc_Md_HIO_c();
     virtual ~daNpc_Md_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x004 */ s8 mNo;
@@ -1321,7 +1321,7 @@ BOOL daNpc_Md_c::lightHitCheck() {
 
         if (mCps.ChkAtHit()) {
             fopAc_ac_c* hitActor = mCps.GetAtHitAc();
-            if (fopAcM_CheckStatus(this, fopAcStts_CARRY_e) && !isNoCarryAction()) {
+            if (fopAcM_checkCarryNow(this) && !isNoCarryAction()) {
                 if (hitActor != dComIfGp_getLinkPlayer() && m3058.getEmitter() == NULL) {
                     dComIfGp_particle_set(dPa_name::ID_AK_SN_HITSHIELDLIGHT00, &current.pos, NULL, NULL, 0xFF, &m3058);
                 }
@@ -2038,7 +2038,7 @@ BOOL daNpc_Md_c::carryNpcAction(void*) {
     } else {
         m3131 = 0;
         bVar1 = false;
-        if (fopAcM_CheckStatus(this, fopAcStts_CARRY_e)) {
+        if (fopAcM_checkCarryNow(this)) {
             setRestart(2);
         }
         if (!isNoCarryAction()) {
@@ -2095,7 +2095,7 @@ BOOL daNpc_Md_c::carryNpcAction(void*) {
                 fopAcM_monsSeStart(this, JA_SE_CV_MD_FLY_END, &current.pos, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
             }
         }
-        if (!fopAcM_CheckStatus(this, fopAcStts_CARRY_e)) {
+        if (!fopAcM_checkCarryNow(this)) {
             if (isNoCarryAction()) {
                 if (speedF > 0.0f) {
                     setNpcAction(&daNpc_Md_c::throwNpcAction);
@@ -5404,7 +5404,7 @@ void daNpc_Md_c::setCollision() {
     local_20.setall(0.0f);
     local_2c = current.pos;
     f32 radius = 30.0f;
-    if ((!isShipRide()) && (!fopAcM_CheckStatus(this, fopAcStts_CARRY_e))) {
+    if ((!isShipRide()) && (!fopAcM_checkCarryNow(this))) {
         mCyl1.SetC(local_2c);
         mCyl1.SetR(radius);
         mCyl1.SetH(m30F8);
@@ -5549,7 +5549,7 @@ void daNpc_Md_c::setBaseMtx() {
     J3DModel* model;
 
     model = getModel();
-    if (fopAcM_CheckStatus(this, fopAcStts_CARRY_e)) {
+    if (fopAcM_checkCarryNow(this)) {
         if (isNoCarryAction()) {
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -5772,9 +5772,9 @@ BOOL daNpc_Md_c::draw() {
     }
 
 #if VERSION == VERSION_DEMO
-    if (!isShipRide() && !fopAcM_CheckStatus(this, fopAcStts_CARRY_e))
+    if (!isShipRide() && !fopAcM_checkCarryNow(this))
 #else
-    if (!isShipRide() && !fopAcM_CheckStatus(this, fopAcStts_CARRY_e) && checkStatus(daMdStts_UNK20000))
+    if (!isShipRide() && !fopAcM_checkCarryNow(this) && checkStatus(daMdStts_UNK20000))
 #endif
     {
         cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
@@ -5971,7 +5971,7 @@ BOOL daNpc_Md_c::execute() {
             mStts.SetRoomId(roomNo);
             mPolyInfo.SetPolyInfo(mAcch.m_gnd);
         }
-    } else if (((!isShipRide()) && (!isReturnLink())) && (!fopAcM_CheckStatus(this, fopAcStts_CARRY_e))) {
+    } else if (((!isShipRide()) && (!isReturnLink())) && (!fopAcM_checkCarryNow(this))) {
         if (checkNowPosMove(l_staff_name)) {
             fVar1 = maxFallSpeed;
             fVar2 = speed.y;
@@ -6237,6 +6237,7 @@ static BOOL daNpc_Md_Draw(daNpc_Md_c* i_this) {
 
 /* 00011144-0001114C       .text daNpc_Md_IsDelete__FP10daNpc_Md_c */
 static BOOL daNpc_Md_IsDelete(daNpc_Md_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

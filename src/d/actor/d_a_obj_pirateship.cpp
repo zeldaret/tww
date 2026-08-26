@@ -35,7 +35,7 @@ public:
     }
     virtual ~daObjPirateShipHIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -145,7 +145,7 @@ static int create_idx_tbl_Yuukaigo[] = {0, 1, 5, -1};
 } // namespace daObjPirateship
 
 /* 000000EC-000000FC       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c* arg2) {
+static void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c* arg2) {
     fopAcM_OffStatus(arg2, fopAcStts_NOCULLEXEC_e);
 }
 

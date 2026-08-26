@@ -45,7 +45,7 @@ public:
     daNpc_P1_HIO_c();
     virtual ~daNpc_P1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -946,8 +946,8 @@ static BOOL nodeCallBack1(J3DNode* i_node, int i_param_2) {
                 MtxPosition(&local_28, &i_this->eyePos);
             }
             if (jntNo == i_this->m_jnt.getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
-                mDoMtx_ZrotM(*calc_mtx, i_this->m_jnt.getBackbone_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+                cMtx_ZrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_x());
             }
 
             model->setAnmMtx(jntNo, *calc_mtx);

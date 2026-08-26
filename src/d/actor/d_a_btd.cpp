@@ -1927,7 +1927,7 @@ static void sibuki_move(btd_class* i_this) {
 static void demo_camera(btd_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     f32 fVar2;
-    camera_class* camera2;
+    camera_process_class* camera2;
     cXyz local_38;
     cXyz local_44;
     cXyz local_b0;
@@ -1936,7 +1936,7 @@ static void demo_camera(btd_class* i_this) {
 
     fopAc_ac_c* const player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)player_actor;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     i_this->m6E1A++;
     i_this->m6E18++;
     switch (i_this->m6E16) {
@@ -2091,10 +2091,10 @@ static void demo_camera(btd_class* i_this) {
         }
         i_this->m6E3C = REG0_F(12) + 50.0f;
         camera2 = dComIfGp_getCamera(0);
-        i_this->m6E1C.x = dComIfGp_getCamera(0)->mLookat.mEye.x;
-        i_this->m6E1C.y = camera2->mLookat.mEye.y;
-        i_this->m6E1C.z = camera2->mLookat.mEye.z;
-        i_this->m6E28 = camera2->mLookat.mCenter;
+        i_this->m6E1C.x = dComIfGp_getCamera(0)->view.mLookat.mEye.x;
+        i_this->m6E1C.y = camera2->view.mLookat.mEye.y;
+        i_this->m6E1C.z = camera2->view.mLookat.mEye.z;
+        i_this->m6E28 = camera2->view.mLookat.mCenter;
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(2);
         break;

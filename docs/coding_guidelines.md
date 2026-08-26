@@ -6,13 +6,25 @@ Naming variables properly isn't required to help with the decompilation. You can
 
 ## Table of Contents
 
-1. [Primitive types](#primitive-types)
-2. [Offsets and padding](#offsets-and-padding)
-3. [Includes](#includes)
-4. [Naming style](#naming-style)
-5. [Use the official names where possible](#use-the-official-names-where-possible)
-6. [Resource archive enums](#resource-archive-enums)
-7. [Look at the actor's model](#look-at-the-actors-model)
+1. [Avoid Ghidra-isms](#avoid-ghidra-isms)
+2. [Primitive types](#primitive-types)
+3. [Offsets and padding](#offsets-and-padding)
+4. [Includes](#includes)
+5. [Naming style](#naming-style)
+6. [Use the official names where possible](#use-the-official-names-where-possible)
+7. [Resource archive enums](#resource-archive-enums)
+8. [Look at the actor's model](#look-at-the-actors-model)
+
+## Avoid Ghidra-isms
+
+Try to avoid directly copy-pasting code from Ghidra without cleaning it up. Ghidra tends to produce strange code that humans wouldn't write. Some common examples include:
+
+- Assigning to variables inside of `if` statements using the comma operator instead of creating multiple nested `if` statements
+- Always using `} else { if {` instead of `} else if {`, creating excessive indentation levels
+- Placing excessive unnecessary parentheses around conditions in complex if statements, even when the code would be logically equivalent without them
+- Copying the value of a variable to a second variable and checking the second variable, instead of just checking the first variable directly
+
+These make the code harder for a human to read, and occasionally they can even affect how the code matches in subtle ways (e.g. regalloc).
 
 ## Primitive types
 
