@@ -2591,7 +2591,30 @@ void dMap_2DAGBCursor_c::init(s16 param_1, s16 param_2, const GXColor& param_3, 
 
 /* 8004F214-8004F3C0       .text draw__18dMap_2DAGBCursor_cFv */
 void dMap_2DAGBCursor_c::draw() {
-    /* Nonmatching */
+    u8 uVar1 = field_0x1c / 3;
+    u8 sVar1 = uVar1 / 6;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS,GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0,GX_FALSE,GX_SRC_REG,GX_SRC_REG,0,GX_DF_NONE,GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0,field_0x18);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0,GX_TEXCOORD_NULL,GX_TEXMAP_NULL,GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0,GX_PASSCLR);
+    GXSetBlendMode(GX_BM_BLEND,GX_BL_SRC_ALPHA,GX_BL_INV_SRC_ALPHA,GX_LO_SET);
+    GXSetPointSize(uVar1,GX_TO_ZERO);
+    GXSetZMode(GX_FALSE,GX_LEQUAL,GX_FALSE);
+    GXSetScissor(mScissorX,mScissorY,mScissorWidth,mScissorHeight);
+    GXBegin(GX_POINTS,GX_VTXFMT0,5);
+    GXPosition3s16(field_0x14,field_0x16,0);
+    GXPosition3s16(field_0x14 + sVar1,field_0x16,0);
+    GXPosition3s16(field_0x14 - sVar1,field_0x16,0);
+    GXPosition3s16(field_0x14,field_0x16 + sVar1,0);
+    GXPosition3s16(field_0x14,field_0x16 - sVar1,0);
+    GXSetScissor(0,0,0x280,0x1e0);
+    return;
 }
 
 /* 8004F3C0-8004F778       .text draw__11dMap_2DT2_cFv */
