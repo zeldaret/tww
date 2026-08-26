@@ -8,12 +8,17 @@
 #include "d/actor/d_a_agb.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_stage.h"
+#include "dolphin/gx/GX.h"
+#include "dolphin/gx/GXEnum.h"
+#include "dolphin/gx/GXInit.h"
+#include "dolphin/gx/GXGeometry.h"
 #include "res/Object/Always.h"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_gba_com.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_gba_com.h"
 #include "stdio.h"
+
 
 enum {
     Floor_B5F = 123,
@@ -2364,7 +2369,23 @@ void dMap_2DPoint_c::init(s16 param_1, s16 param_2, const GXColor& param_3, u8 p
 
 /* 8004F0BC-8004F1E4       .text draw__14dMap_2DPoint_cFv */
 void dMap_2DPoint_c::draw() {
-    /* Nonmatching */
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS,GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0,false,GX_SRC_REG,GX_SRC_REG,0,GX_DF_NONE,GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0,field_0x18);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0,GX_TEXCOORD_NULL,GX_TEXMAP_NULL,GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0,GX_PASSCLR);
+    GXSetBlendMode(GX_BM_BLEND,GX_BL_SRC_ALPHA,GX_BL_INV_SRC_ALPHA,GX_LO_SET);
+    GXSetPointSize(field_0x1c,GX_TO_ZERO);
+    GXSetZMode(false,GX_LEQUAL,false);
+    GXSetScissor(field_0x4,field_0x8, field_0xc,field_0x10);
+    GXBegin(GX_POINTS,GX_VTXFMT0,1);
+    GXPosition3s16(field_0x14,field_0x16,0);
+    GXSetScissor(0,0,0x280,0x1e0);
+    return;
 }
 
 /* 8004F1E4-8004F214       .text init__18dMap_2DAGBCursor_cFssRC8_GXColorUc */
