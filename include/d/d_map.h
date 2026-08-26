@@ -6,12 +6,15 @@
 #include "d/d_stage.h"
 
 struct ResTIMG;
-struct dmap_dmap_tlut_s;
 class fopAc_ac_c;
 struct stage_map_info_class;
 
 const int AGB_POINT_TYPE_NUM = 21;
 const int DSP_ENABLE_BOTH_SIZE = 3;
+
+struct dmap_dmap_tlut_s {
+    u16 field_0x0[16];
+};
 
 struct map_dt_c {
     u16 field_0x0;
@@ -32,7 +35,7 @@ struct dMap_CollectPoint {
     f32 field_0x4;
     f32 field_0x8;
     s16 field_0xc;
-    u8 field_0xe;
+    s8 field_0xe;
     u8 field_0xf;
     u8 field_0x10;
     u8 field_0x11;
@@ -40,7 +43,7 @@ struct dMap_CollectPoint {
     u8 field_0x13;
     u8 field_0x14;
     u8 field_0x15;
-    u8 field_0x16;
+    s8 field_0x16;
     u8 field_0x17;
 };
 
@@ -52,6 +55,12 @@ struct FmapChkPnt {
     /* 0x6 */ u8 field_0x6;
 }; // Size: 0x8
 
+// fake name
+struct dMap_FmapChkPnt {
+    u32 field_0x0;
+    FmapChkPnt field_0x4[];
+};
+
 class dMap_2DMtMapSpcl_tex_c {
 public:
     dMap_2DMtMapSpcl_tex_c() {}
@@ -61,9 +70,9 @@ public:
 
     /* 0x00 */ u8 field_0x0;
     /* 0x01 */ u8 field_0x1;
-    /* 0x04 */ GXTexObj field_0x4;
-    /* 0x24 */ GXTlutObj field_0x24;
-    /* 0x30 */ GXColor field_0x30;
+    /* 0x04 */ GXTexObj mTexObj;
+    /* 0x24 */ GXTlutObj mTlutObj;
+    /* 0x30 */ GXColor mColor;
     /* 0x34 */ f32 field_0x34;
     /* 0x38 */ f32 field_0x38;
     /* 0x3C */ f32 field_0x3c;
@@ -335,19 +344,29 @@ class dMap_Dmap_c : public dDlst_base_c {
 public:
     virtual ~dMap_Dmap_c() {}
 
-    void changeTlutDblBufNo() {}
-    void getLoadTlutDblBufNo() {}
-    void setTlutDblBufNo(int) {}
+    void changeTlutDblBufNo() {
+        mNowTlutDblBufNo = 1 - mNowTlutDblBufNo;
+        JUT_ASSERT(357, (mNowTlutDblBufNo == 0) || (mNowTlutDblBufNo == 1));
+    }
 
-    void setAlpha(u8 alpha) { field_0x2B6 = alpha; }
+    int getLoadTlutDblBufNo() {
+        JUT_ASSERT(360, (mNowTlutDblBufNo == 0) || (mNowTlutDblBufNo == 1));
+        return mNowTlutDblBufNo;
+    }
+
+    void setTlutDblBufNo(int) {
+        JUT_ASSERT(368, (mNowTlutDblBufNo == 0) || (mNowTlutDblBufNo == 1));
+    }
+
+    void setAlpha(u8 alpha) { field_0x2b6 = alpha; }
     void setArchive(JKRArchive* i_arc) { mpArc = i_arc; }
     void setMapPos(s16 x, s16 y) {
         field_0x364 = x;
         field_0x366 = y;
     }
     void setMaskPos(s16 x, s16 y) {
-        field_0x35C = x;
-        field_0x35E = y;
+        field_0x35c = x;
+        field_0x35e = y;
     }
 
     void setTlut(dmap_dmap_tlut_s*, u8, u8, u8, f32);
@@ -356,17 +375,37 @@ public:
     virtual void draw();
 
 public:
-    /* 0x004 */ u8 field_0x4[0x2A0 - 0x4];
+    /* 0x004 */ u8 field_0x4[0x20 - 0x4];
+    /* 0x020 */ dmap_dmap_tlut_s field_0x20[2][10];
     /* 0x2A0 */ JKRArchive* mpArc;
-    /* 0x2A4 */ u8 field_0x2A4[0x2B6 - 0x2A4];
-    /* 0x2B6 */ u8 field_0x2B6;
-    /* 0x2B7 */ u8 field_0x2B7[0x35C - 0x2B7];
-    /* 0x35C */ s16 field_0x35C;
-    /* 0x35E */ s16 field_0x35E;
-    /* 0x360 */ u8 field_0x360[0x364 - 0x360];
+    /* 0x2A4 */ ResTIMG* mImageP;
+    /* 0x2A8 */ ResTIMG* mImageSeetP;
+    /* 0x2AC */ ResTIMG* mImageGridP;
+    /* 0x2B0 */ ResTIMG* field_0x2b0;
+    /* 0x2B4 */ u8 field_0x2b4;
+    /* 0x2B5 */ u8 field_0x2b5;
+    /* 0x2B6 */ u8 field_0x2b6;
+    /* 0x2B7 */ u8 mNowTlutDblBufNo;
+    /* 0x2B8 */ u8 field_0x2b8;
+    /* 0x2B9 */ u8 field_0x2b9;
+    /* 0x2BA */ u8 field_0x2ba;
+    /* 0x2BB */ s8 field_0x2bb[10][16];
+    /* 0x35C */ s16 field_0x35c;
+    /* 0x35E */ s16 field_0x35e;
+    /* 0x360 */ s16 field_0x360;
+    /* 0x362 */ s16 mMaskHeight;
     /* 0x364 */ s16 field_0x364;
     /* 0x366 */ s16 field_0x366;
-    /* 0x368 */ u8 field_0x368[0x368 + 0x2B8 - 0x368];
+    /* 0x368 */ s16 field_0x368;
+    /* 0x36A */ s16 field_0x36a;
+    /* 0x36C */ s16 field_0x36c;
+    /* 0x36E */ u16 field_0x36e;
+    /* 0x370 */ GXTexObj field_0x370[10];
+    /* 0x4B0 */ GXTlutObj field_0x4b0[2][10];
+    /* 0x5A0 */ GXTexObj field_0x5a0;
+    /* 0x5C0 */ GXTexObj field_0x5c0;
+    /* 0x5E0 */ GXTexObj field_0x5e0;
+    /* 0x600 */ GXTexObj field_0x600;
 };
 
 enum {
