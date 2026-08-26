@@ -1185,7 +1185,7 @@ config.libs = [
     DolphinLib(
         "vi",
         [
-            Object(MatchingFor("GZLJ01", "GZLE01"), "dolphin/vi/vi.c"),
+            Object(Matching, "dolphin/vi/vi.c"),
         ],
     ),
     DolphinLib(
