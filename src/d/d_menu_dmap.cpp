@@ -205,7 +205,7 @@ void dMenu_Dmap_c::screenSet() {
     fopMsgM_setPaneData(&mNo11Pane, scrn2, 'no11');
     fopMsgM_setPaneData(&mMsk0Pane, scrn2, 'msk0');
 
-    mNo11Pane.mUserArea = mNo11Pane.pane->mRotation;
+    mNo11Pane.mUserArea = mNo11Pane.pane->getRotate();
 
     ((J2DTextBox*)mStr0Pane.pane)->setFont(mRFont);
     ((J2DTextBox*)mSt00Pane.pane)->setFont(mFont);
@@ -259,8 +259,7 @@ void dMenu_Dmap_c::screenSet() {
         fopMsgM_setPaneData(&mItPanes[i], scrn, l_it[i]);
         fopMsgM_setPaneData(&mIkPanes[i], scrn, l_ik[i]);
 
-        JKRArchive* arc = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(mpTIMG[i], 0xC00, 'TIMG', itmTex[i], arc);
+        JKRReadTypeResource(mpTIMG[i], 0xC00, 'TIMG', itmTex[i], dComIfGp_getItemIconArchive());
 
         ((J2DPicture*)mItPanes[i].pane)->changeTexture(mpTIMG[i], 0);
         ((J2DPicture*)mIkPanes[i].pane)->changeTexture(mpTIMG[i], 0);
@@ -344,9 +343,8 @@ void dMenu_Dmap_c::screenSet() {
     mMpp1SizeX = mpp1pane.mSizeOrig.x;
     mMpp1SizeY = mpp1pane.mSizeOrig.y;
 
+    f32 h = scrn->search('mpp2')->getHeight();
     J2DPane* p2 = scrn->search('mpp2');
-    f32 h = p2->getHeight();
-    p2 = scrn->search('mpp2');
     J2DPane* p1 = scrn->search('mpp1');
     mMppGapY = p1->mBounds.i.y - (p2->mBounds.i.y + h);
 }
@@ -371,7 +369,9 @@ void dMenu_Dmap_c::initialize() {
     f32 yPos = dComIfGp_getPlayer(0)->current.pos.y;
     mNm00Pane.mUserArea = 0;
     mCurFloor = dMap_GetFloorNo(&dComIfGp_getStage(), yPos + mapOffsetY());
+#if VERSION > VERSION_DEMO
     mBossFloor = 0xFF;
+#endif
 
     dStage_KeepDoorInfo* doorInfo = dStage_GetKeepDoorInfo();
     stage_tgsc_data_class* tgsc = doorInfo->mDrTgData;
@@ -390,25 +390,21 @@ void dMenu_Dmap_c::initialize() {
     mCurFloorMapY = mMpp1PosY + (mCurFloor - 0x80) * (mMpp1SizeY + mMppGapY);
     mMapDrawOffsetY = 0x1E0;
     mFloorListOffsetY = (mFbPanes[0].mPosCenterOrig.y - mFbPanes[1].mPosCenterOrig.y) * (mBottomFloor - mCurFloor);
+#if VERSION == VERSION_DEMO
+    mBossFloorListOffsetY = (mFbPanes[0].mPosCenterOrig.y - mFbPanes[1].mPosCenterOrig.y) * (mBottomFloor - mBossFloor);
+#else
     if (mBossFloor != 0xFF) {
         mBossFloorListOffsetY = (mFbPanes[0].mPosCenterOrig.y - mFbPanes[1].mPosCenterOrig.y) * (mBottomFloor - mBossFloor);
     } else {
         mBossFloorListOffsetY = 0;
     }
+#endif
 
-    s16 y = mMpmkPosY + mMapDrawOffsetY;
-    dMap_Dmap_c* dmap = dmap_c;
-    dmap->field_0x35C = mMpmkPosX;
-    dmap->field_0x35E = y;
-
-    y = mCurFloorMapY + mMapDrawOffsetY;
-    dmap = dmap_c;
-    dmap->field_0x364 = mMpp1PosX;
-    dmap->field_0x366 = y;
+    dmap_c->setMaskPos(mMpmkPosX, mMpmkPosY + mMapDrawOffsetY);
+    dmap_c->setMapPos(mMpp1PosX, mCurFloorMapY + mMapDrawOffsetY);
 
     for (int i = 0; i < (mTopFloor - mBottomFloor + 1); i++) {
-        J2DPane* pane = mFlPanes[i].pane;
-        changeFloorTexture(pane, mBottomFloor - 0x76 + i);
+        changeFloorTexture(mFlPanes[i].pane, mBottomFloor - 0x76 + i);
     }
 
     mLnkTimer2 = cM_rndF(100.0f) + 100.0f;
@@ -422,24 +418,23 @@ void dMenu_Dmap_c::initialize() {
     mBossEyeState = 0;
     mBossEyeTimer = ((int)(cM_rndF(18.0f) + 40.0f)) << 1;
 
-    f32 scale = 0.5f;
-    mCarOfsX[0] = -(mItPanes[0].mSizeOrig.x) * scale;
-    mCarOfsY[0] =  (mItPanes[0].mSizeOrig.y) * scale;
-    mCarOfsX[1] =  (mItPanes[0].mSizeOrig.x) * scale;
-    mCarOfsY[1] =  (mItPanes[0].mSizeOrig.y) * scale;
-    mCarOfsX[2] = -(mItPanes[0].mSizeOrig.x) * scale;
-    mCarOfsY[2] = -(mItPanes[0].mSizeOrig.y) * scale;
-    mCarOfsX[3] =  (mItPanes[0].mSizeOrig.x) * scale;
-    mCarOfsY[3] = -(mItPanes[0].mSizeOrig.y) * scale;
+    mCarOfsX[0] = -(mItPanes[0].mSizeOrig.x) / 2.0f;
+    mCarOfsY[0] =  (mItPanes[0].mSizeOrig.y) / 2.0f;
+    mCarOfsX[1] =  (mItPanes[0].mSizeOrig.x) / 2.0f;
+    mCarOfsY[1] =  (mItPanes[0].mSizeOrig.y) / 2.0f;
+    mCarOfsX[2] = -(mItPanes[0].mSizeOrig.x) / 2.0f;
+    mCarOfsY[2] = -(mItPanes[0].mSizeOrig.y) / 2.0f;
+    mCarOfsX[3] =  (mItPanes[0].mSizeOrig.x) / 2.0f;
+    mCarOfsY[3] = -(mItPanes[0].mSizeOrig.y) / 2.0f;
 
-    mCarFloorOfsX[0] = -(mFbPanes[0].mSizeOrig.x) * scale;
-    mCarFloorOfsY[0] =  (mFbPanes[0].mSizeOrig.y) * scale;
-    mCarFloorOfsX[1] =  (mFbPanes[0].mSizeOrig.x) * scale;
-    mCarFloorOfsY[1] =  (mFbPanes[0].mSizeOrig.y) * scale;
-    mCarFloorOfsX[2] = -(mFbPanes[0].mSizeOrig.x) * scale;
-    mCarFloorOfsY[2] = -(mFbPanes[0].mSizeOrig.y) * scale;
-    mCarFloorOfsX[3] =  (mFbPanes[0].mSizeOrig.x) * scale;
-    mCarFloorOfsY[3] = -(mFbPanes[0].mSizeOrig.y) * scale;
+    mCarFloorOfsX[0] = -(mFbPanes[0].mSizeOrig.x) / 2.0f;
+    mCarFloorOfsY[0] =  (mFbPanes[0].mSizeOrig.y) / 2.0f;
+    mCarFloorOfsX[1] =  (mFbPanes[0].mSizeOrig.x) / 2.0f;
+    mCarFloorOfsY[1] =  (mFbPanes[0].mSizeOrig.y) / 2.0f;
+    mCarFloorOfsX[2] = -(mFbPanes[0].mSizeOrig.x) / 2.0f;
+    mCarFloorOfsY[2] = -(mFbPanes[0].mSizeOrig.y) / 2.0f;
+    mCarFloorOfsX[3] =  (mFbPanes[0].mSizeOrig.x) / 2.0f;
+    mCarFloorOfsY[3] = -(mFbPanes[0].mSizeOrig.y) / 2.0f;
 
     floorInit();
     itemScale();
@@ -457,10 +452,15 @@ void dMenu_Dmap_c::initialize() {
         mItPanes[2].pane->hide();
         mIkPanes[2].pane->hide();
         mIpPanes[2].pane->hide();
+#if VERSION == VERSION_DEMO
+        mBossPane.pane->hide();
+#endif
     }
+#if VERSION > VERSION_DEMO
     if (!dComIfGs_isDungeonItemCompass() || mBossFloor == 0xFF) {
         mBossPane.pane->hide();
     }
+#endif
     noteInit();
     if ((mSelectItem == 0 && dComIfGs_isDungeonItemMap()) ||
         (mSelectItem == 1 && dComIfGs_isDungeonItemBossKey()) ||
@@ -484,8 +484,7 @@ void dMenu_Dmap_c::treasureSet() {
         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
     };
 
-    dStage_dt_c* stage = &dComIfGp_getStage();
-    s32 saveTbl = dStage_stagInfo_GetSaveTbl(stage->getStagInfo());
+    s32 saveTbl = dStage_stagInfo_GetSaveTbl(dComIfGp_getStage().getStagInfo());
     for (int i = 0; i < 32; i++) {
         treasure_p[i].exists = 0;
     }
@@ -495,211 +494,203 @@ void dMenu_Dmap_c::treasureSet() {
     boss_p.exists = 0;
     npc_p.exists = 0;
 
-    if (stage->getDMap()) {
-        dStage_DMap_c* pinf = stage->getDMap();
-        dStage_DMap_dt_c* entry = pinf->entries;
-        JUT_ASSERT(VERSION_SELECT(572, 572, 609, 609), pinf->num == 1);
+    if (!dComIfGp_getStage().getDMap()) {
+        return;
+    }
 
-        f32 originX;
-        f32 originZ;
-        f32 scale;
-        for (int i = 0; i < pinf->num; i++, entry++) {
-            originX = entry->originX;
-            originZ = entry->originZ;
-            scale = entry->scale;
-        }
+    dStage_DMap_c* pinf = dComIfGp_getStage().getDMap();
+    dStage_DMap_dt_c* entry = pinf->entries;
+    JUT_ASSERT(VERSION_SELECT(562, 572, 609, 609), pinf->num == 1);
 
-        if (dComIfGs_isDungeonItemCompass()) {
-            if ((saveTbl == dSv_save_c::STAGE_ET && !dComIfGs_isCollect(0, 2) && dComIfGs_getPlayerPriestFlag() == 2) ||
-                (saveTbl == dSv_save_c::STAGE_WT && !dComIfGs_isCollect(0, 3) && dComIfGs_getPlayerPriestFlag() == 1)) {
-                cXyz npcPos;
-                if (dComIfGp_getCb1Player()) {
-                    npcPos = dComIfGp_getCb1Player()->current.pos;
-                } else {
-                    npcPos = dComIfGs_getPlayerPriestPos();
-                }
-                if (mCurFloor == dMap_GetFloorNo(stage, npcPos.y)) {
-                    npc_p.exists = 1;
-                    npc_p.ppane->setWhite(g_mdHIO.mNpcWhite);
-                    npc_p.ppane->setBlack(g_mdHIO.mNpcBlack);
-                    npc_p.width = g_mdHIO.mNpcWidth;
-                    npc_p.height = g_mdHIO.mNpcHeight;
-                    f32 half = 0.5f;
-                    npc_p.posX = mMpp1PosX + (npcPos.x - originX) / scale - npc_p.width * half;
-                    npc_p.posY = mMpp1PosY + (npcPos.z - originZ) / scale - npc_p.height * half;
-                } else if (!mCurFloorOnly && mCurFloor - 1 == dMap_GetFloorNo(stage, npcPos.y)) {
-                    npc_p.exists = 1;
-                    npc_p.ppane->setWhite(g_mdHIO.mNpcWhite);
-                    npc_p.ppane->setBlack(g_mdHIO.mNpcBlack);
-                    npc_p.width = g_mdHIO.mNpcWidth;
-                    npc_p.height = g_mdHIO.mNpcHeight;
-                    f32 half = 0.5f;
-                    npc_p.posX = mMpp1PosX + (npcPos.x - originX) / scale - npc_p.width * half;
-                    f32 posY = mMpp1PosY + (npcPos.z - originZ) / scale - npc_p.height * half;
-                    npc_p.posY = posY + (mMpp1SizeY + mMppGapY);
-                } else if (!mCurFloorOnly) {
-                    if (mCurFloor + 1 == dMap_GetFloorNo(stage, npcPos.y)) {
-                        npc_p.exists = 1;
-                        npc_p.ppane->setWhite(g_mdHIO.mNpcWhite);
-                        npc_p.ppane->setBlack(g_mdHIO.mNpcBlack);
-                        npc_p.width = g_mdHIO.mNpcWidth;
-                        npc_p.height = g_mdHIO.mNpcHeight;
-                        f32 half = 0.5f;
-                        npc_p.posX = mMpp1PosX + (npcPos.x - originX) / scale - npc_p.width * half;
-                        npc_p.posY = mMpp1PosY + (npcPos.z - originZ) / scale - npc_p.height * half - (mMpp1SizeY + mMppGapY);
-                    }
-                }
+    f32 originX;
+    f32 originZ;
+    f32 scale;
+    for (int i = 0; i < pinf->num; i++, entry++) {
+        originX = entry->originX;
+        originZ = entry->originZ;
+        scale = entry->scale;
+    }
+
+    if (dComIfGs_isDungeonItemCompass()) {
+        if (
+#if VERSION == VERSION_DEMO
+            (
+                (saveTbl == dSv_save_c::STAGE_ET && !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_ET)) ||
+                (saveTbl == dSv_save_c::STAGE_WT && !dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_WT))
+            ) &&
+            (dComIfGs_getPlayerPriestFlag() == 1 || dComIfGs_getPlayerPriestFlag() == 2)
+#else
+            (saveTbl == dSv_save_c::STAGE_ET && !dComIfGs_isCollect(0, 2) && dComIfGs_getPlayerPriestFlag() == 2) ||
+            (saveTbl == dSv_save_c::STAGE_WT && !dComIfGs_isCollect(0, 3) && dComIfGs_getPlayerPriestFlag() == 1)
+#endif
+        ) {
+#if VERSION == VERSION_DEMO
+            cXyz npcPos = dComIfGs_getPlayerPriestPos();;
+#else
+            cXyz npcPos;
+            if (dComIfGp_getCb1Player()) {
+                npcPos = dComIfGp_getCb1Player()->current.pos;
+            } else {
+                npcPos = dComIfGs_getPlayerPriestPos();
             }
-
-            if (dStage_GetKeepTresureInfo()) {
-                int no = 0;
-                dStage_KeepTresureInfo* tinfo = dStage_GetKeepTresureInfo();
-                stage_tresure_data_class* tentry = tinfo->mTresureData;
-                for (int i = 0; i < tinfo->num; tentry++, i++) {
-                    int tboxNo = (tentry->base.parameters >> 7) & 0x1F;
-                    if (mCurFloor == dMap_GetFloorNo(stage, tentry->base.position.y)) {
-                        if (!dComIfGs_isTbox(tboxNo) && tboxNo != 0xF && tboxNo != 0x10) {
-                            treasure_p[no].exists = 1;
-                            treasure_p[no].ppane->setWhite(g_mdHIO.mTreasureWhite);
-                            treasure_p[no].ppane->setBlack(g_mdHIO.mTreasureBlack);
-                            treasure_p[no].width = g_mdHIO.mTreasureWidth;
-                            treasure_p[no].height = g_mdHIO.mTreasureHeight;
-                            f32 half = 0.5f;
-                            treasure_p[no].posX = mMpp1PosX + (tentry->base.position.x - originX) / scale - treasure_p[no].width * half;
-                            treasure_p[no].posY = mMpp1PosY + (tentry->base.position.z - originZ) / scale - treasure_p[no].height * half;
-                            no++;
-                            continue;
-                        }
-                    }
-                    if (!mCurFloorOnly) {
-                        if (mCurFloor - 1 == dMap_GetFloorNo(stage, tentry->base.position.y)) {
-                            if (!dComIfGs_isTbox(tboxNo) && tboxNo != 0xF && tboxNo != 0x10) {
-                                treasure_p[no].exists = 1;
-                                treasure_p[no].ppane->setWhite(g_mdHIO.mTreasureWhite);
-                                treasure_p[no].ppane->setBlack(g_mdHIO.mTreasureBlack);
-                                treasure_p[no].width = g_mdHIO.mTreasureWidth;
-                                treasure_p[no].height = g_mdHIO.mTreasureHeight;
-                                f32 half = 0.5f;
-                                treasure_p[no].posX = mMpp1PosX + (tentry->base.position.x - originX) / scale - treasure_p[no].width * half;
-                                f32 posY = mMpp1PosY + (tentry->base.position.z - originZ) / scale - treasure_p[no].height * half;
-                                treasure_p[no].posY = posY + (mMpp1SizeY + mMppGapY);
-                                no++;
-                                continue;
-                            }
-                        }
-                    }
-                    if (!mCurFloorOnly) {
-                        if (mCurFloor + 1 == dMap_GetFloorNo(stage, tentry->base.position.y)) {
-                            if (!dComIfGs_isTbox(tboxNo) && tboxNo != 0xF && tboxNo != 0x10) {
-                                treasure_p[no].exists = 1;
-                                treasure_p[no].ppane->setWhite(g_mdHIO.mTreasureWhite);
-                                treasure_p[no].ppane->setBlack(g_mdHIO.mTreasureBlack);
-                                treasure_p[no].width = g_mdHIO.mTreasureWidth;
-                                treasure_p[no].height = g_mdHIO.mTreasureHeight;
-                                f32 half = 0.5f;
-                                treasure_p[no].posX = mMpp1PosX + (tentry->base.position.x - originX) / scale - treasure_p[no].width * half;
-                                treasure_p[no].posY = mMpp1PosY + (tentry->base.position.z - originZ) / scale - treasure_p[no].height * half - (mMpp1SizeY + mMppGapY);
-                                no++;
-                            }
-                        }
-                    }
-                }
+#endif
+            if (mCurFloor == dMap_GetFloorNo(&dComIfGp_getStage(), npcPos.y)) {
+                npc_p.exists = 1;
+                npc_p.ppane->setWhite(g_mdHIO.mNpcWhite);
+                npc_p.ppane->setBlack(g_mdHIO.mNpcBlack);
+                npc_p.width = g_mdHIO.mNpcWidth;
+                npc_p.height = g_mdHIO.mNpcHeight;
+                npc_p.posX = mMpp1PosX + (npcPos.x - originX) / scale - npc_p.width / 2.0f;
+                npc_p.posY = mMpp1PosY + (npcPos.z - originZ) / scale - npc_p.height / 2.0f;
+            } else if (!mCurFloorOnly && mCurFloor - 1 == dMap_GetFloorNo(&dComIfGp_getStage(), npcPos.y)) {
+                npc_p.exists = 1;
+                npc_p.ppane->setWhite(g_mdHIO.mNpcWhite);
+                npc_p.ppane->setBlack(g_mdHIO.mNpcBlack);
+                npc_p.width = g_mdHIO.mNpcWidth;
+                npc_p.height = g_mdHIO.mNpcHeight;
+                npc_p.posX = mMpp1PosX + (npcPos.x - originX) / scale - npc_p.width / 2.0f;
+                npc_p.posY = mMpp1PosY + (npcPos.z - originZ) / scale - npc_p.height / 2.0f +
+                    (mMpp1SizeY + mMppGapY);
+            } else if (!mCurFloorOnly && mCurFloor + 1 == dMap_GetFloorNo(&dComIfGp_getStage(), npcPos.y)) {
+                npc_p.exists = 1;
+                npc_p.ppane->setWhite(g_mdHIO.mNpcWhite);
+                npc_p.ppane->setBlack(g_mdHIO.mNpcBlack);
+                npc_p.width = g_mdHIO.mNpcWidth;
+                npc_p.height = g_mdHIO.mNpcHeight;
+                npc_p.posX = mMpp1PosX + (npcPos.x - originX) / scale - npc_p.width / 2.0f;
+                npc_p.posY = mMpp1PosY + (npcPos.z - originZ) / scale - npc_p.height / 2.0f - (mMpp1SizeY + mMppGapY);
             }
         }
 
-        if (dStage_GetKeepDoorInfo()) {
+        if (dStage_GetKeepTresureInfo()) {
             int no = 0;
-            dStage_KeepDoorInfo* dinfo = dStage_GetKeepDoorInfo();
-            stage_tgsc_data_class* dentry = dinfo->mDrTgData;
-            for (int i = 0; i < dinfo->num; dentry++, i++) {
-                if (mCurFloor == dMap_GetFloorNo(stage, dentry->base.position.y)) {
-                    if (dComIfGs_isDungeonItemMap() ||
-                        dComIfGs_isVisitedRoom(dentry->base.angle.x & 0x3F) ||
-                        dComIfGs_isVisitedRoom((dentry->base.angle.x >> 6) & 0x3F))
-                    {
-                        door_p[no].exists = 1;
-                        door_p[no].ppane->setWhite(g_mdHIO.mDoorWhite);
-                        door_p[no].ppane->setBlack(g_mdHIO.mDoorBlack);
-                        door_p[no].width = g_mdHIO.mDoorWidth;
-                        door_p[no].height = g_mdHIO.mDoorHeight;
-                        door_p[no].angle = dentry->base.angle.y;
-                        f32 half = 0.5f;
-                        door_p[no].posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - door_p[no].width * half;
-                        door_p[no].posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - door_p[no].height * half;
+            dStage_KeepTresureInfo* tinfo = dStage_GetKeepTresureInfo();
+            stage_tresure_data_class* tentry = tinfo->mTresureData;
+            for (int i = 0; i < tinfo->num; tentry++, i++) {
+                int tboxNo = (tentry->base.parameters >> 7) & 0x1F;
+                if (mCurFloor == dMap_GetFloorNo(&dComIfGp_getStage(), tentry->base.position.y)) {
+                    if (!dComIfGs_isTbox(tboxNo) && tboxNo != 0xF && tboxNo != 0x10) {
+                        treasure_p[no].exists = 1;
+                        treasure_p[no].ppane->setWhite(g_mdHIO.mTreasureWhite);
+                        treasure_p[no].ppane->setBlack(g_mdHIO.mTreasureBlack);
+                        treasure_p[no].width = g_mdHIO.mTreasureWidth;
+                        treasure_p[no].height = g_mdHIO.mTreasureHeight;
+                        treasure_p[no].posX = mMpp1PosX + (tentry->base.position.x - originX) / scale - treasure_p[no].width / 2.0f;
+                        treasure_p[no].posY = mMpp1PosY + (tentry->base.position.z - originZ) / scale - treasure_p[no].height / 2.0f;
                         no++;
-                    }
-                } else if (!mCurFloorOnly && mCurFloor - 1 == dMap_GetFloorNo(stage, dentry->base.position.y)) {
-                    if (dComIfGs_isDungeonItemMap()) {
-                        door_p[no].exists = 1;
-                        door_p[no].ppane->setWhite(g_mdHIO.mDoorWhite);
-                        door_p[no].ppane->setBlack(g_mdHIO.mDoorBlack);
-                        door_p[no].width = g_mdHIO.mDoorWidth;
-                        door_p[no].height = g_mdHIO.mDoorHeight;
-                        door_p[no].angle = dentry->base.angle.y;
-                        f32 half = 0.5f;
-                        door_p[no].posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - door_p[no].width * half;
-                        f32 posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - door_p[no].height * half;
-                        door_p[no].posY = posY + (mMpp1SizeY + mMppGapY);
-                        no++;
-                    }
-                } else if (!mCurFloorOnly) {
-                    if (mCurFloor + 1 == dMap_GetFloorNo(stage, dentry->base.position.y)) {
-                        if (dComIfGs_isDungeonItemMap()) {
-                            door_p[no].exists = 1;
-                            door_p[no].ppane->setWhite(g_mdHIO.mDoorWhite);
-                            door_p[no].ppane->setBlack(g_mdHIO.mDoorBlack);
-                            door_p[no].width = g_mdHIO.mDoorWidth;
-                            door_p[no].height = g_mdHIO.mDoorHeight;
-                            door_p[no].angle = dentry->base.angle.y;
-                            f32 half = 0.5f;
-                            door_p[no].posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - door_p[no].width * half;
-                            door_p[no].posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - door_p[no].height * half - (mMpp1SizeY + mMppGapY);
-                            no++;
-                        }
+                        continue;
                     }
                 }
-
-                if (dComIfGs_isDungeonItemCompass() && dMap_isBossDoor(dentry)) {
-                    if (mCurFloor == dMap_GetFloorNo(stage, dentry->base.position.y)) {
-                        boss_p.exists = 1;
-                        boss_p.ppane->setWhite(g_mdHIO.mBossWhite);
-                        boss_p.ppane->setBlack(g_mdHIO.mBossBlack);
-                        boss_p.width = g_mdHIO.mBossWidth;
-                        boss_p.height = g_mdHIO.mBossHeight;
-                        f32 half = 0.5f;
-                        f32 posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - boss_p.width * half;
-                        boss_p.posX = posX + bossOffsetX[saveTbl] + g_mdHIO.mBossOfsX;
-                        f32 posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - boss_p.height * half;
-                        boss_p.posY = posY + bossOffsetY[saveTbl] + g_mdHIO.mBossOfsY;
-                    } else if (!mCurFloorOnly && mCurFloor - 1 == dMap_GetFloorNo(stage, dentry->base.position.y)) {
-                        boss_p.exists = 1;
-                        boss_p.ppane->setWhite(g_mdHIO.mBossWhite);
-                        boss_p.ppane->setBlack(g_mdHIO.mBossBlack);
-                        boss_p.width = g_mdHIO.mBossWidth;
-                        boss_p.height = g_mdHIO.mBossHeight;
-                        f32 half = 0.5f;
-                        f32 posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - boss_p.width * half;
-                        boss_p.posX = posX + bossOffsetX[saveTbl] + g_mdHIO.mBossOfsX;
-                        f32 ofsY = g_mdHIO.mBossOfsY;
-                        f32 bossY = bossOffsetY[saveTbl];
-                        f32 posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - boss_p.height * half;
-                        boss_p.posY = posY + (mMpp1SizeY + mMppGapY) + bossY + ofsY;
-                    } else if (!mCurFloorOnly) {
-                        if (mCurFloor + 1 == dMap_GetFloorNo(stage, dentry->base.position.y)) {
-                            boss_p.exists = 1;
-                            boss_p.ppane->setWhite(g_mdHIO.mBossWhite);
-                            boss_p.ppane->setBlack(g_mdHIO.mBossBlack);
-                            boss_p.width = g_mdHIO.mBossWidth;
-                            boss_p.height = g_mdHIO.mBossHeight;
-                            f32 half = 0.5f;
-                            f32 posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - boss_p.width * half;
-                            boss_p.posX = posX + bossOffsetX[saveTbl] + g_mdHIO.mBossOfsX;
-                            f32 ofsY = g_mdHIO.mBossOfsY;
-                            f32 bossY = bossOffsetY[saveTbl];
-                            f32 posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - boss_p.height * half;
-                            boss_p.posY = posY - (mMpp1SizeY + mMppGapY) + bossY + ofsY;
-                        }
+                if (!mCurFloorOnly && mCurFloor - 1 == dMap_GetFloorNo(&dComIfGp_getStage(), tentry->base.position.y)) {
+                    if (!dComIfGs_isTbox(tboxNo) && tboxNo != 0xF && tboxNo != 0x10) {
+                        treasure_p[no].exists = 1;
+                        treasure_p[no].ppane->setWhite(g_mdHIO.mTreasureWhite);
+                        treasure_p[no].ppane->setBlack(g_mdHIO.mTreasureBlack);
+                        treasure_p[no].width = g_mdHIO.mTreasureWidth;
+                        treasure_p[no].height = g_mdHIO.mTreasureHeight;
+                        treasure_p[no].posX = mMpp1PosX + (tentry->base.position.x - originX) / scale - treasure_p[no].width / 2.0f;
+                        treasure_p[no].posY = mMpp1PosY + (tentry->base.position.z - originZ) / scale - treasure_p[no].height / 2.0f +
+                            (mMpp1SizeY + mMppGapY);
+                        no++;
+                        continue;
                     }
+                }
+                if (!mCurFloorOnly && mCurFloor + 1 == dMap_GetFloorNo(&dComIfGp_getStage(), tentry->base.position.y)) {
+                    if (!dComIfGs_isTbox(tboxNo) && tboxNo != 0xF && tboxNo != 0x10) {
+                        treasure_p[no].exists = 1;
+                        treasure_p[no].ppane->setWhite(g_mdHIO.mTreasureWhite);
+                        treasure_p[no].ppane->setBlack(g_mdHIO.mTreasureBlack);
+                        treasure_p[no].width = g_mdHIO.mTreasureWidth;
+                        treasure_p[no].height = g_mdHIO.mTreasureHeight;
+                        treasure_p[no].posX = mMpp1PosX + (tentry->base.position.x - originX) / scale - treasure_p[no].width / 2.0f;
+                        treasure_p[no].posY = mMpp1PosY + (tentry->base.position.z - originZ) / scale - treasure_p[no].height / 2.0f -
+                            (mMpp1SizeY + mMppGapY);
+                        no++;
+                    }
+                }
+            }
+        }
+    }
+
+    if (dStage_GetKeepDoorInfo()) {
+        int no = 0;
+        dStage_KeepDoorInfo* dinfo = dStage_GetKeepDoorInfo();
+        stage_tgsc_data_class* dentry = dinfo->mDrTgData;
+        for (int i = 0; i < dinfo->num; dentry++, i++) {
+            if (mCurFloor == dMap_GetFloorNo(&dComIfGp_getStage(), dentry->base.position.y)) {
+                if (dComIfGs_isDungeonItemMap() ||
+                    dComIfGs_isVisitedRoom(dentry->base.angle.x & 0x3F) ||
+                    dComIfGs_isVisitedRoom((dentry->base.angle.x >> 6) & 0x3F))
+                {
+                    door_p[no].exists = 1;
+                    door_p[no].ppane->setWhite(g_mdHIO.mDoorWhite);
+                    door_p[no].ppane->setBlack(g_mdHIO.mDoorBlack);
+                    door_p[no].width = g_mdHIO.mDoorWidth;
+                    door_p[no].height = g_mdHIO.mDoorHeight;
+                    door_p[no].angle = dentry->base.angle.y;
+                    door_p[no].posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - door_p[no].width / 2.0f;
+                    door_p[no].posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - door_p[no].height / 2.0f;
+                    no++;
+                }
+            } else if (!mCurFloorOnly && mCurFloor - 1 == dMap_GetFloorNo(&dComIfGp_getStage(), dentry->base.position.y)) {
+                if (dComIfGs_isDungeonItemMap()) {
+                    door_p[no].exists = 1;
+                    door_p[no].ppane->setWhite(g_mdHIO.mDoorWhite);
+                    door_p[no].ppane->setBlack(g_mdHIO.mDoorBlack);
+                    door_p[no].width = g_mdHIO.mDoorWidth;
+                    door_p[no].height = g_mdHIO.mDoorHeight;
+                    door_p[no].angle = dentry->base.angle.y;
+                    door_p[no].posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - door_p[no].width / 2.0f;
+                    door_p[no].posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - door_p[no].height / 2.0f +
+                        (mMpp1SizeY + mMppGapY);
+                    no++;
+                }
+            } else if (!mCurFloorOnly && mCurFloor + 1 == dMap_GetFloorNo(&dComIfGp_getStage(), dentry->base.position.y)) {
+                if (dComIfGs_isDungeonItemMap()) {
+                    door_p[no].exists = 1;
+                    door_p[no].ppane->setWhite(g_mdHIO.mDoorWhite);
+                    door_p[no].ppane->setBlack(g_mdHIO.mDoorBlack);
+                    door_p[no].width = g_mdHIO.mDoorWidth;
+                    door_p[no].height = g_mdHIO.mDoorHeight;
+                    door_p[no].angle = dentry->base.angle.y;
+                    door_p[no].posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - door_p[no].width / 2.0f;
+                    door_p[no].posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - door_p[no].height / 2.0f -
+                        (mMpp1SizeY + mMppGapY);
+                    no++;
+                }
+            }
+
+            if (dComIfGs_isDungeonItemCompass() && dMap_isBossDoor(dentry)) {
+                if (mCurFloor == dMap_GetFloorNo(&dComIfGp_getStage(), dentry->base.position.y)) {
+                    boss_p.exists = 1;
+                    boss_p.ppane->setWhite(g_mdHIO.mBossWhite);
+                    boss_p.ppane->setBlack(g_mdHIO.mBossBlack);
+                    boss_p.width = g_mdHIO.mBossWidth;
+                    boss_p.height = g_mdHIO.mBossHeight;
+                    boss_p.posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - boss_p.width / 2.0f +
+                        bossOffsetX[saveTbl] + g_mdHIO.mBossOfsX;
+                    boss_p.posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - boss_p.height / 2.0f +
+                        bossOffsetY[saveTbl] + g_mdHIO.mBossOfsY;
+                } else if (!mCurFloorOnly && mCurFloor - 1 == dMap_GetFloorNo(&dComIfGp_getStage(), dentry->base.position.y)) {
+                    boss_p.exists = 1;
+                    boss_p.ppane->setWhite(g_mdHIO.mBossWhite);
+                    boss_p.ppane->setBlack(g_mdHIO.mBossBlack);
+                    boss_p.width = g_mdHIO.mBossWidth;
+                    boss_p.height = g_mdHIO.mBossHeight;
+                    boss_p.posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - boss_p.width / 2.0f +
+                        bossOffsetX[saveTbl] + g_mdHIO.mBossOfsX;
+                    boss_p.posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - boss_p.height / 2.0f +
+                        (mMpp1SizeY + mMppGapY) + bossOffsetY[saveTbl] + g_mdHIO.mBossOfsY;
+                } else if (!mCurFloorOnly && mCurFloor + 1 == dMap_GetFloorNo(&dComIfGp_getStage(), dentry->base.position.y)) {
+                    boss_p.exists = 1;
+                    boss_p.ppane->setWhite(g_mdHIO.mBossWhite);
+                    boss_p.ppane->setBlack(g_mdHIO.mBossBlack);
+                    boss_p.width = g_mdHIO.mBossWidth;
+                    boss_p.height = g_mdHIO.mBossHeight;
+                    boss_p.posX = mMpp1PosX + (dentry->base.position.x - originX) / scale - boss_p.width / 2.0f +
+                        bossOffsetX[saveTbl] + g_mdHIO.mBossOfsX;
+                    boss_p.posY = mMpp1PosY + (dentry->base.position.z - originZ) / scale - boss_p.height / 2.0f -
+                        (mMpp1SizeY + mMppGapY) + bossOffsetY[saveTbl] + g_mdHIO.mBossOfsY;
                 }
             }
         }
@@ -714,13 +705,12 @@ void dMenu_Dmap_c::treasureDraw() {
     for (int i = 0; i < 32; i++) {
         if (treasure_p[i].exists != 0) {
             f32 y = treasure_p[i].posY;
-            f32 scale = 0.5f;
-            if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
+            if (y + offsetY > mMpp1PosY - mMpp1SizeY / 2.0f && y + offsetY < mMpp1PosY + mMpp1SizeY / 2.0f) {
                 treasure_p[i].ppane->draw(
                     treasure_p[i].posX, y + drawOffsetY,
                     treasure_p[i].width, treasure_p[i].height,
                     false, false, false);
-                treasure_p[i].ppane->mAlpha = mCc05Pane.mNowAlpha;
+                treasure_p[i].ppane->setAlpha(mCc05Pane.mNowAlpha);
             }
         }
     }
@@ -728,37 +718,34 @@ void dMenu_Dmap_c::treasureDraw() {
     for (int i = 0; i < 32; i++) {
         if (door_p[i].exists != 0) {
             f32 y = door_p[i].posY;
-            f32 scale = 0.5f;
-            if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
+            if (y + offsetY > mMpp1PosY - mMpp1SizeY / 2.0f && y + offsetY < mMpp1PosY + mMpp1SizeY / 2.0f) {
                 door_p[i].ppane->draw(
                     door_p[i].posX, y + drawOffsetY,
                     door_p[i].width, door_p[i].height,
                     false, false, false);
                 door_p[i].ppane->rotate(
-                    door_p[i].width * scale,
-                    door_p[i].height * scale,
+                    door_p[i].width / 2.0f,
+                    door_p[i].height / 2.0f,
                     ROTATE_Z,
-                    door_p[i].angle * 0.005493164f);
-                door_p[i].ppane->mAlpha = mCc05Pane.mNowAlpha;
+                    S2DEG(door_p[i].angle));
+                door_p[i].ppane->setAlpha(mCc05Pane.mNowAlpha);
             }
         }
     }
 
     if (npc_p.exists != 0) {
         f32 y = npc_p.posY;
-        f32 scale = 0.5f;
-        if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
+        if (y + offsetY > mMpp1PosY - mMpp1SizeY / 2.0f && y + offsetY < mMpp1PosY + mMpp1SizeY / 2.0f) {
             npc_p.ppane->draw(npc_p.posX, y + drawOffsetY, npc_p.width, npc_p.height, false, false, false);
-            npc_p.ppane->mAlpha = mCc05Pane.mNowAlpha;
+            npc_p.ppane->setAlpha(mCc05Pane.mNowAlpha);
         }
     }
 
     if (boss_p.exists != 0) {
         f32 y = boss_p.posY;
-        f32 scale = 0.5f;
-        if (y + offsetY > mMpp1PosY - mMpp1SizeY * scale && y + offsetY < mMpp1PosY + mMpp1SizeY * scale) {
+        if (y + offsetY > mMpp1PosY - mMpp1SizeY / 2.0f && y + offsetY < mMpp1PosY + mMpp1SizeY / 2.0f) {
             boss_p.ppane->draw(boss_p.posX, y + drawOffsetY, boss_p.width, boss_p.height, false, false, false);
-            boss_p.ppane->mAlpha = mCc05Pane.mNowAlpha;
+            boss_p.ppane->setAlpha(mCc05Pane.mNowAlpha);
         }
     }
 }
@@ -1025,26 +1012,33 @@ bool dMenu_Dmap_c::noteCheck() {
 /* 801AC2EC-801AC390       .text noteAppear__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::noteAppear() {
     if (mNk00Pane.mUserArea == 1) {
-        if (mNt00Pane.mUserArea <= 17) {
+        s16 r0 = 17;
+        if (mNt00Pane.mUserArea <= r0) {
             noteOpen();
-        } else if (mNt00Pane.mUserArea > 18) {
+            return;
+        }
+        r0 = 18;
+        if (mNt00Pane.mUserArea > r0) {
             noteClose();
-        } else {
-            if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0)) {
-                mNt00Pane.mUserArea++;
-                mDoAud_seStart(JA_SE_ITM_MENU_EXP_OUT);
-            }
+            return;
+        }
+        if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0)) {
+            mNt00Pane.mUserArea++;
+            mDoAud_seStart(JA_SE_ITM_MENU_EXP_OUT);
         }
     }
 }
 
 /* 801AC390-801AC590       .text noteOpen__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::noteOpen() {
-    f32 x = 320.0f - mNo11Pane.mPosCenterOrig.x;
-    f32 y = 240.0f - mNo11Pane.mPosCenterOrig.y;
+    f32 f1 = 320.0f;
+    f32 f2 = 240.0f;
+    f32 x = f1 - mNo11Pane.mPosCenterOrig.x;
+    f32 y = f2 - mNo11Pane.mPosCenterOrig.y;
     f32 alpha = 1.0f - fopMsgM_valueIncrease(17, 17 - mNt00Pane.mUserArea, 0);
 
-    if (mNt00Pane.mUserArea >= 17) {
+    s16 r0 = 17;
+    if (mNt00Pane.mUserArea >= r0) {
         fopMsgM_setInitAlpha(&mMsk0Pane);
         fopMsgM_setInitAlpha(&mStr0Pane);
         fopMsgM_setInitAlpha(&mSt00Pane);
@@ -1065,7 +1059,8 @@ void dMenu_Dmap_c::noteOpen() {
     if (mNt00Pane.mUserArea < 5) {
         alpha = (mNt00Pane.mUserArea * 0.8f) / 5.0f;
     } else {
-        alpha = (1.0f - fopMsgM_valueIncrease(12, 17 - mNt00Pane.mUserArea, 0)) * 0.19999999f + 0.8f;
+        f32 f29 = 0.19999999f;
+        alpha = (1.0f - fopMsgM_valueIncrease(12, 17 - mNt00Pane.mUserArea, 0)) * f29 + 0.8f;
     }
 
     fopMsgM_paneTrans(&mNo11Pane, x * alpha, y * alpha);
@@ -1074,12 +1069,17 @@ void dMenu_Dmap_c::noteOpen() {
 
 /* 801AC590-801AC7C8       .text noteClose__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::noteClose() {
-    f32 out_x = (640.0f - mNo11Pane.mPosCenterOrig.x) - 320.0f;
-    f32 out_y = (480.0f - mNo11Pane.mPosCenterOrig.y) - 240.0f;
-    f32 x = 320.0f - mNo11Pane.mPosCenterOrig.x;
-    f32 y = 240.0f - mNo11Pane.mPosCenterOrig.y;
+    f32 f3 = 320.0f;
+    f32 f4 = 240.0f;
+    f32 f5 = ((f3 * 2.0f) - mNo11Pane.mPosCenterOrig.x);
+    f32 f0 = ((f4 * 2.0f) - mNo11Pane.mPosCenterOrig.y);
+    f32 out_x = f5 - f3;
+    f32 out_y = f0 - f4;
+    f32 x = f3 - mNo11Pane.mPosCenterOrig.x;
+    f32 y = f4 - mNo11Pane.mPosCenterOrig.y;
     
     f32 alpha = fopMsgM_valueIncrease(10, mNt00Pane.mUserArea - 18, 0);
+    f32 f26 = (alpha * -117.0f) + -3.0f;
 
     fopMsgM_paneTrans(&mNo11Pane, (out_x * alpha) + x, (out_y * alpha) + y);
 
@@ -1087,12 +1087,13 @@ void dMenu_Dmap_c::noteClose() {
         mNo11Pane.mSize.x / 2.0f,
         mNo11Pane.mSize.y / 2.0f,
         ROTATE_Z,
-        (alpha * -117.0f) + -3.0f
+        f26
     );
 
     mNt00Pane.mUserArea++;
 
-    if (mNt00Pane.mUserArea > 0x1c) {
+    s16 r0 = 0x1c;
+    if (mNt00Pane.mUserArea > r0) {
         fopMsgM_setInitAlpha(&mNt00Pane);
         fopMsgM_setInitAlpha(&mNk00Pane);
         fopMsgM_setInitAlpha(&mNo11Pane);
@@ -1226,8 +1227,9 @@ void dMenu_Dmap_c::itemScale() {
 
 /* 801ACDE0-801ACEB8       .text floorInit__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::floorInit() {
-    f32 yDif = (mFbPanes[0].mPosTopLeftOrig.y - mFbPanes[1].mPosTopLeftOrig.y) *
-                (6 - ((mTopFloor - mBottomFloor + 1) & 0xFF));
+    int temp = (mTopFloor - mBottomFloor + 1) & 0xFF;
+    f32 temp2 = (mFbPanes[0].mPosTopLeftOrig.y - mFbPanes[1].mPosTopLeftOrig.y);
+    f32 yDif = temp2 * (6 - temp);
     f32 fw00Height = mFw00Pane.mSizeOrig.y;
     f32 fw01Height = mFw01Pane.mSizeOrig.y;
     mFw00Pane.mSizeOrig.y = mFw00Pane.mSize.y = fw00Height - yDif;
@@ -1251,23 +1253,18 @@ void dMenu_Dmap_c::mapMove() {
         f32 a = fopMsgM_valueIncrease(6, 6 - abs(mCc38Pane.mUserArea), 0);
         mCurFloorMapY += (s16)(a * ((mMpp1PosY + (mCurFloor - 0x80) * (mMpp1SizeY + mMppGapY)) - mCurFloorMapY));
     }
-    dMap_Dmap_c* dmap;
-    s16 y = mCurFloorMapY;
-    dmap = dmap_c;
-    dmap->field_0x364 = mMpp1PosX;
-    dmap->field_0x366 = y;
+    dmap_c->setMapPos(mMpp1PosX, mCurFloorMapY);
 }
 
 /* 801AD000-801AD130       .text mapOffsetY__12dMenu_Dmap_cFv */
 f32 dMenu_Dmap_c::mapOffsetY() {
     f32 ret = 0.0f;
-    dStage_dt_c* stage = &dComIfGp_getStage();
-    if (dStage_stagInfo_GetSTType(stage->getStagInfo()) == dStageType_BOSS_e ||
-        dStage_stagInfo_GetSTType(stage->getStagInfo()) == dStageType_MINIBOSS_e) {
-        if (stage->getDMap()) {
-            dStage_DMap_c* pinf = stage->getDMap();
+    if (dStage_stagInfo_GetSTType(dComIfGp_getStage().getStagInfo()) == dStageType_BOSS_e ||
+        dStage_stagInfo_GetSTType(dComIfGp_getStage().getStagInfo()) == dStageType_MINIBOSS_e) {
+        if (dComIfGp_getStage().getDMap()) {
+            dStage_DMap_c* pinf = dComIfGp_getStage().getDMap();
             dStage_DMap_dt_c* entry = pinf->entries;
-            JUT_ASSERT(VERSION_SELECT(1590, 1590, 1627, 1627), pinf->num == 1);
+            JUT_ASSERT(VERSION_SELECT(1519, 1590, 1627, 1627), pinf->num == 1);
             for (int i = 0; i < pinf->num; i++, entry++) {
                 ret = entry->offsetY;
             }
@@ -1389,6 +1386,7 @@ void dMenu_Dmap_c::dnameSet() {
 void dMenu_Dmap_c::itemnameSet() {
     fopMsgM_itemMsgGet_c msgGet;
     u32 msgNo = 0;
+    int r30 = 0;
     int i = 0;
 
     J2DTextBox::TFontSize fontSize0;
@@ -1428,7 +1426,7 @@ void dMenu_Dmap_c::itemnameSet() {
     }
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(VERSION_SELECT(1678, 1678, 1833, 1833), head_p);
+    JUT_ASSERT(VERSION_SELECT(1607, 1678, 1833, 1833), head_p);
 
     J2DTextBox::TFontSize fontSize;
     ((J2DTextBox*)mNm00Pane.pane)->getFontSize(fontSize);
@@ -1487,7 +1485,7 @@ void dMenu_Dmap_c::itemnameSet() {
     }
 
     ((J2DTextBox*)mNm00Pane.pane)->setFontSize(fontSize);
-    ((J2DTextBox*)mNm00Pane.pane)->setCharSpace(0.0f);
+    ((J2DTextBox*)mNm00Pane.pane)->setCharSpace((f32)r30);
     ((J2DTextBox*)mNm00Pane.pane)->setString(mTxtName[0]);
 }
 
@@ -1543,7 +1541,7 @@ void dMenu_Dmap_c::itemnoteSet() {
     }
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(VERSION_SELECT(1808, 1808, 1970, 1970), head_p);
+    JUT_ASSERT(VERSION_SELECT(1737, 1808, 1970, 1970), head_p);
 
     const char* mesg = msgGet.getMessage(head_p);
     JMSMesgEntry_c msg_entry;
@@ -1590,10 +1588,12 @@ void dMenu_Dmap_c::itemnoteSet() {
     int halfSpace = ((J2DTextBox*)mSt00Pane.pane)->getLineSpace() / 2.0f;
     for (int i = 0; i < 15; i++) {
         u8 iconNo = mMsgProc.getIconNum(i);
+#if VERSION > VERSION_DEMO
         u32 color = mMsgProc.getIconColor(i);
         if (color == 0xFFFFFFFF) {
             color = 0xFF;
         }
+#endif
         if (iconNo == 0xFF) {
             continue;
         }
@@ -1607,7 +1607,7 @@ void dMenu_Dmap_c::itemnoteSet() {
         mFtPanes[i].mPosTopLeft.y = (f32)(halfSpace * (unusedLines + mMsgProc.getIconPosY(i) * 2));
         mFtPanes[i].mPosTopLeftOrig.y = (f32)iconNo;
 
-        fopMsgM_outFontSet((J2DPicture*)mFtPanes[i].pane, &mFtPanes[i].mUserArea, color, iconNo);
+        fopMsgM_outFontSet((J2DPicture*)mFtPanes[i].pane, &mFtPanes[i].mUserArea, DEMO_SELECT(mMsgProc.getIconColor(i), color), iconNo);
     }
 }
 
@@ -1754,38 +1754,38 @@ void dMenu_Dmap_c::bossEyeAnime() {
 /* 801AE65C-801AEB88       .text _create__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::_create() {
     scrn = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(2138, 2138, 2320, 2320), scrn != NULL);
+    JUT_ASSERT(VERSION_SELECT(2062, 2138, 2320, 2320), scrn != NULL);
     scrn->set("menu_map_d.blo", mpArc);
 
     scrn2 = new J2DScreen();
-    JUT_ASSERT(VERSION_SELECT(2142, 2142, 2324, 2324), scrn2 != NULL);
+    JUT_ASSERT(VERSION_SELECT(2066, 2142, 2324, 2324), scrn2 != NULL);
     scrn2->set("menu_explanation.blo", mpArc);
 
     stick = new STControl(5, 2, 3, 2);
-    JUT_ASSERT(VERSION_SELECT(2146, 2146, 2328, 2328), stick != NULL);
+    JUT_ASSERT(VERSION_SELECT(2070, 2146, 2328, 2328), stick != NULL);
 
     dmap_c = new(0x20) dMap_Dmap_c();
-    JUT_ASSERT(VERSION_SELECT(2149, 2149, 2331, 2331), dmap_c != NULL);
-    dmap_c->field_0x2A0 = mpArc;
+    JUT_ASSERT(VERSION_SELECT(2073, 2149, 2331, 2331), dmap_c != NULL);
+    dmap_c->setArchive(mpArc);
 
     for (int i = 0; i < 32; i++) {
         treasure_p[i].ppane = new J2DPicture("treasurebox.bti");
-        JUT_ASSERT(VERSION_SELECT(2155, 2155, 2337, 2337), treasure_p[i].ppane != NULL);
+        JUT_ASSERT(VERSION_SELECT(2079, 2155, 2337, 2337), treasure_p[i].ppane != NULL);
         treasure_p[i].exists = 0;
     }
 
     for (int i = 0; i < 32; i++) {
         door_p[i].ppane = new J2DPicture("black_white_3.bti");
-        JUT_ASSERT(VERSION_SELECT(2161, 2161, 2343, 2343), door_p[i].ppane != NULL);
+        JUT_ASSERT(VERSION_SELECT(2085, 2161, 2343, 2343), door_p[i].ppane != NULL);
         door_p[i].exists = 0;
     }
 
     npc_p.ppane = new J2DPicture("f_otmicon.bti");
-    JUT_ASSERT(VERSION_SELECT(2166, 2166, 2348, 2348), npc_p.ppane != NULL);
+    JUT_ASSERT(VERSION_SELECT(2090, 2166, 2348, 2348), npc_p.ppane != NULL);
     npc_p.exists = 0;
 
     boss_p.ppane = new J2DPicture("boss_small.bti");
-    JUT_ASSERT(VERSION_SELECT(2170, 2170, 2352, 2352), boss_p.ppane != NULL);
+    JUT_ASSERT(VERSION_SELECT(2094, 2170, 2352, 2352), boss_p.ppane != NULL);
     boss_p.exists = 0;
 
     mNoteTimer = 0;
@@ -1804,7 +1804,9 @@ void dMenu_Dmap_c::_create() {
 /* 801AEB88-801AED08       .text _delete__12dMenu_Dmap_cFv */
 void dMenu_Dmap_c::_delete() {
     delete scrn;
+#if VERSION > VERSION_DEMO
     delete scrn2;
+#endif
     delete stick;
     delete dmap_c;
 
@@ -1909,7 +1911,7 @@ void dMenu_Dmap_c::_draw() {
     fopMsgM_setAlpha(&mCc00Pane);
     fopMsgM_setAlpha(&mMskPane);
 
-    dmap_c->field_0x2B6 = mCc05Pane.mNowAlpha;
+    dmap_c->setAlpha(mCc05Pane.mNowAlpha);
     J2DOrthoGraph* port = dComIfGp_getCurrentGrafPort();
     port->setPort();
     scrn->draw(0.0f, 0.0f, (J2DGrafContext*)port);
@@ -1937,28 +1939,23 @@ bool dMenu_Dmap_c::_open() {
 
     mNoteTimer++;
 
-    if (mNoteTimer <= 10) {
+    s16 r0 = 10;
+    if (mNoteTimer <= r0) {
         f32 alpha = fopMsgM_valueIncrease(10, mNoteTimer, 0);
         f32 rate = fopMsgM_valueIncrease(10, 10 - mNoteTimer, 0);
         mMapDrawOffsetY = rate * 480.0f;
         paneMove(rate * 480.0f);
 
-        s16 y = mMpmkPosY + mMapDrawOffsetY;
-        dMap_Dmap_c* dmap = dmap_c;
-        dmap->field_0x35C = mMpmkPosX;
-        dmap->field_0x35E = y;
-
-        y = mCurFloorMapY + mMapDrawOffsetY;
-        dmap = dmap_c;
-        dmap->field_0x364 = mMpp1PosX;
-        dmap->field_0x366 = y;
+        dmap_c->setMaskPos(mMpmkPosX, mMpmkPosY + mMapDrawOffsetY);
+        dmap_c->setMapPos(mMpp1PosX, mCurFloorMapY + mMapDrawOffsetY);
 
         paneAlpha(alpha);
         noteOpenProc(mNoteTimer);
         mCurFloorOnly = true;
     }
 
-    if (mNoteTimer >= 10) {
+    r0 = 10;
+    if (mNoteTimer >= r0) {
         ret = true;
         mCurFloorOnly = false;
         mDoAud_seStart(JA_SE_ITM_MENU_ITEMS_IN);
@@ -1976,15 +1973,8 @@ bool dMenu_Dmap_c::_close() {
         mMapDrawOffsetY = rate * 480.0f;
         paneMove(rate * 480.0f);
 
-        s16 y = mMpmkPosY + mMapDrawOffsetY;
-        dMap_Dmap_c* dmap = dmap_c;
-        dmap->field_0x35C = mMpmkPosX;
-        dmap->field_0x35E = y;
-
-        y = mCurFloorMapY + mMapDrawOffsetY;
-        dmap = dmap_c;
-        dmap->field_0x364 = mMpp1PosX;
-        dmap->field_0x366 = y;
+        dmap_c->setMaskPos(mMpmkPosX, mMpmkPosY + mMapDrawOffsetY);
+        dmap_c->setMapPos(mMpp1PosX, mCurFloorMapY + mMapDrawOffsetY);
 
         dComIfGp_setDoStatus(dActStts_BLANK_e);
         decAlpha(alpha);

@@ -3375,6 +3375,10 @@ inline void dComIfGp_roomControl_setStayNo(int stayNo) {
     dStage_roomControl_c::setStayNo(stayNo);
 }
 
+inline int dComIfGp_roomControl_getDarkMode() {
+    return dStage_roomControl_c::getDarkMode();
+}
+
 inline dBgW* dComIfGp_roomControl_getBgW(int i_roomNo) {
     return g_dComIfG_gameInfo.play.getRoomControl()->getBgW(i_roomNo);
 }

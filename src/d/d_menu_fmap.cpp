@@ -1255,7 +1255,7 @@ void dMenu_Fmap_c::checkMarkAnime() {
 /* 801B3658-801B3698       .text readFmapTexture__12dMenu_Fmap_cFPCc */
 u32 dMenu_Fmap_c::readFmapTexture(const char* i_filename) {
     JKRArchive* archive = dComIfGp_getFmapArchive();
-    return JKRArchive::readTypeResource(mChkPntTxt_p, 0x2c00, 'FM  ', i_filename, archive);
+    return JKRReadTypeResource(mChkPntTxt_p, 0x2c00, 'FM  ', i_filename, archive);
 }
 
 /* 801B3698-801B36F0       .text aramCmapDatRead__12dMenu_Fmap_cFv */

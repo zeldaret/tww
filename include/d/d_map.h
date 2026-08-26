@@ -334,6 +334,22 @@ public:
 class dMap_Dmap_c : public dDlst_base_c {
 public:
     virtual ~dMap_Dmap_c() {}
+
+    void changeTlutDblBufNo() {}
+    void getLoadTlutDblBufNo() {}
+    void setTlutDblBufNo(int) {}
+
+    void setAlpha(u8 alpha) { field_0x2B6 = alpha; }
+    void setArchive(JKRArchive* i_arc) { mpArc = i_arc; }
+    void setMapPos(s16 x, s16 y) {
+        field_0x364 = x;
+        field_0x366 = y;
+    }
+    void setMaskPos(s16 x, s16 y) {
+        field_0x35C = x;
+        field_0x35E = y;
+    }
+
     void setTlut(dmap_dmap_tlut_s*, u8, u8, u8, f32);
     void setFloorTextureOne(u8);
     void init(s16, s16, s16, s16, s16, s16, s16, s16, s16, u8, u8, u8, u8, u8);
@@ -341,7 +357,7 @@ public:
 
 public:
     /* 0x004 */ u8 field_0x4[0x2A0 - 0x4];
-    /* 0x2A0 */ JKRArchive* field_0x2A0;
+    /* 0x2A0 */ JKRArchive* mpArc;
     /* 0x2A4 */ u8 field_0x2A4[0x2B6 - 0x2A4];
     /* 0x2B6 */ u8 field_0x2B6;
     /* 0x2B7 */ u8 field_0x2B7[0x35C - 0x2B7];

@@ -326,7 +326,7 @@ void dMsg_screenDataSetItem(sub_msg_class* i_Msg) {
     JUT_ASSERT(661, i_Msg->buffer_p != NULL);
     if ((i_Msg->mMesgEntry.mTextboxType == 9) && (dItem_data::getTexture(i_Msg->mMsgNo - 101) != NULL)) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(i_Msg->buffer_p, 0xc00, 'TIMG', dItem_data::getTexture(i_Msg->mMsgNo - 101), archive);
+        JKRReadTypeResource(i_Msg->buffer_p, 0xc00, 'TIMG', dItem_data::getTexture(i_Msg->mMsgNo - 101), archive);
         ((J2DPicture*)i_Msg->m0624[8].pane)->changeTexture(i_Msg->buffer_p, 0);
     } else {
         for (s32 i = 0; i < 10; i++) {

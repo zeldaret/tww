@@ -340,7 +340,7 @@ dStage_darkStatus_c* dStage_roomControl_c::getDarkStatus() {
 }
 
 /* 80041330-80041370       .text getDarkMode__20dStage_roomControl_cFv */
-s32 dStage_roomControl_c::getDarkMode() {
+int dStage_roomControl_c::getDarkMode() {
     dStage_roomStatus_c * pRoomStatus = &mStatus[mStayNo];
     dStage_FileList_dt_c* plist_p = pRoomStatus->mRoomDt.mpFileList;
 
@@ -2439,4 +2439,4 @@ s8 dStage_roomControl_c::mStayNo;
 s8 dStage_roomControl_c::mOldStayNo;
 u8 dStage_roomControl_c::mDarkRatio;
 char dStage_roomControl_c::mDemoArcName[8];
-s8 dStage_roomControl_c::m_time_pass;
+u8 dStage_roomControl_c::m_time_pass;

@@ -3635,22 +3635,14 @@ u8 fopMsgM_msgDataProc_c::inputNumber(int param_1) {
 
 /* 800320E0-800321CC       .text selectArrow__21fopMsgM_msgDataProc_cFP10J2DPictureffff */
 void fopMsgM_msgDataProc_c::selectArrow(J2DPicture* param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5) {
-    param_1->mBasePosition.x = param_4 / 2.0f;
-    param_1->mBasePosition.y = param_5 / 2.0f;
-    param_1->mRotationAxis = 'z';
-    param_1->mRotation = 90.0f;
-    param_1->calcMtx();
+    param_1->rotate(param_4 / 2.0f, param_5 / 2.0f, ROTATE_Z, 90.0f);
     fopMsgM_arrowAnime(param_1, &field_0x260);
     param_1->draw(param_2, param_3, param_4, param_5, false, false, false);
 }
 
 /* 800321CC-80032288       .text selectArrow__21fopMsgM_msgDataProc_cFP10J2DPictureff */
 void fopMsgM_msgDataProc_c::selectArrow(J2DPicture* param_1, f32 param_2, f32 param_3) {
-    param_1->mBasePosition.x = param_2 / 2.0f;
-    param_1->mBasePosition.y = param_3 / 2.0f;
-    param_1->mRotationAxis = 'z';
-    param_1->mRotation = 90.0f;
-    param_1->calcMtx();
+    param_1->rotate(param_2 / 2.0f, param_3 / 2.0f, ROTATE_Z, 90.0f);
     param_1->resize(param_2, param_3);
     fopMsgM_arrowAnime(param_1, &field_0x260);
 }

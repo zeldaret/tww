@@ -189,7 +189,7 @@ BOOL daBoko_c::draw() {
                 dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[i], dark_stts->getBokoAlpha(i));
             }
 
-            if (getNowMode() == Mode_PLAYER_CARRY_e && dStage_roomControl_c::getDarkMode() != 0) {
+            if (getNowMode() == Mode_PLAYER_CARRY_e && dComIfGp_roomControl_getDarkMode() != 0) {
                 for (int j = i; j < 4; j++) {
                     dComIfGd_setSpotModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[j], dark_stts->getBokoAlpha(j));
                 }

@@ -341,15 +341,15 @@ void dMenu_Collect_c::screenSet() {
         char sp58[24];
         sprintf(sp58, "title_collect_%d.bti", dComIfGs_getPalLanguage());
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(mTitleCollectTexBuffer, 0x1000, 'TIMG', sp58, mpArc);
+        JKRReadTypeResource(mTitleCollectTexBuffer, 0x1000, 'TIMG', sp58, mpArc);
         J2DPicture* r3 = (J2DPicture*)scrn->search('tlcl');
         r3->changeTexture(mTitleCollectTexBuffer, 0);
         sprintf(sp58, "word_save_%d.bti", dComIfGs_getPalLanguage());
-        JKRArchive::readTypeResource(mWordSaveTexBuffer, 0xc00, 'TIMG', sp58, mpArc);
+        JKRReadTypeResource(mWordSaveTexBuffer, 0xc00, 'TIMG', sp58, mpArc);
         J2DPicture* r3_2 = (J2DPicture*)scrn->search('wdsv');
         r3_2->changeTexture(mWordSaveTexBuffer, 0);
         sprintf(sp58, "word_option_%d.bti", dComIfGs_getPalLanguage());
-        JKRArchive::readTypeResource(mWordOptionTexBuffer, 0xc00, 'TIMG', sp58, mpArc);
+        JKRReadTypeResource(mWordOptionTexBuffer, 0xc00, 'TIMG', sp58, mpArc);
         J2DPicture* r3_3 = (J2DPicture*)scrn->search('wdop');
         r3_3->changeTexture(mWordOptionTexBuffer, 0);
     }
@@ -357,7 +357,7 @@ void dMenu_Collect_c::screenSet() {
 
     {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(mTactTexBuffer, 0xc00, 'TIMG', "baton.bti", archive);
+        JKRReadTypeResource(mTactTexBuffer, 0xc00, 'TIMG', "baton.bti", archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mTactTexBuffer, 0xc00);
 #else
@@ -367,7 +367,7 @@ void dMenu_Collect_c::screenSet() {
 
     {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(mMapTexBuffer, 0xc00, 'TIMG', "cmap_treasure2.bti", archive);
+        JKRReadTypeResource(mMapTexBuffer, 0xc00, 'TIMG', "cmap_treasure2.bti", archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mMapTexBuffer, 0xc00);
 #else
@@ -385,7 +385,7 @@ void dMenu_Collect_c::screenSet() {
     for (int i = 0; i < 8; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
         char* r6 = triTex[i];
-        JKRArchive::readTypeResource(mTriforceTexBuffer[i], 0xc00, 'TIMG', r6, archive);
+        JKRReadTypeResource(mTriforceTexBuffer[i], 0xc00, 'TIMG', r6, archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mTriforceTexBuffer[i], 0xc00);
 #else
@@ -401,7 +401,7 @@ void dMenu_Collect_c::screenSet() {
     for (int i = 0; i < 3; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
         char* r6 = symTex[i];
-        JKRArchive::readTypeResource(mSymbolTexBuffer[i], 0xc00, 'TIMG', r6, archive);
+        JKRReadTypeResource(mSymbolTexBuffer[i], 0xc00, 'TIMG', r6, archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mSymbolTexBuffer[i], 0xc00);
 #else
@@ -414,7 +414,7 @@ void dMenu_Collect_c::screenSet() {
     for (int i = 0; i < 5; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
         char* r6 = wepTex[i];
-        JKRArchive::readTypeResource(mItemTexBuffer[i], 0xc00, 'TIMG', r6, archive);
+        JKRReadTypeResource(mItemTexBuffer[i], 0xc00, 'TIMG', r6, archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mItemTexBuffer[i], 0xc00);
 #else
@@ -1697,7 +1697,7 @@ void dMenu_Collect_c::itemBitCheck() {
     } else {
         if (m27F3 != mE08[4].mUserArea) {
             JKRArchive* r7 = dComIfGp_getItemIconArchive();
-            JKRArchive::readTypeResource(
+            JKRReadTypeResource(
                 mTriforceTexBuffer[4],
                 0xC00,
                 'TIMG',

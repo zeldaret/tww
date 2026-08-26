@@ -1523,7 +1523,7 @@ void dMesg_screenDataItem_c::createScreen() {
     JMSMesgEntry_c stack_message = *(JMSMesgEntry_c*)dMesg_gpControl->getMessageEntry(nowMesgCode);
     if (dItem_data::getTexture(stack_message.mMsgNo - 101)) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(texBuffer, 0xc00, 'TIMG', dItem_data::getTexture(stack_message.mMsgNo - 101), archive);
+        JKRReadTypeResource(texBuffer, 0xc00, 'TIMG', dItem_data::getTexture(stack_message.mMsgNo - 101), archive);
         ((J2DPicture*)field_0x1b4.pane)->changeTexture(texBuffer, 0);
     }
     field_0x168.mPosTopLeftOrig.y += 1.0f;

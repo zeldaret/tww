@@ -883,7 +883,7 @@ public:
     void zoneCountCheck(int) const;
     void checkDrawArea() const;
     static dStage_darkStatus_c* getDarkStatus();
-    static s32 getDarkMode();
+    static int getDarkMode();
 
     dKy_tevstr_c* getTevStr(int i_roomNo) { return &mStatus[i_roomNo].mTevStr; }
     BOOL checkStatusFlag(int i_roomNo, u8 flag) const { return cLib_checkBit(mStatus[i_roomNo].mFlags, flag); }
@@ -896,7 +896,7 @@ public:
     static void SetTimePass(int);
     static JKRExpHeap* getMemoryBlock(int);
     static void setStayNo(int);
-    static s32 GetTimePass();
+    static int GetTimePass();
     static void setZoneNo(int i_roomNo, int i_zoneNo) { mStatus[i_roomNo].mZoneNo = i_zoneNo; }
     static int getZoneNo(int i_roomNo) { return mStatus[i_roomNo].mZoneNo; }
     static void setZoneCount(int i_roomNo, int count) { mStatus[i_roomNo].mZoneCount = count; }
@@ -929,7 +929,7 @@ public:
     static fpc_ProcID mProcID;
     static s8 mStayNo;
     static s8 mOldStayNo;
-    static s8 m_time_pass;
+    static u8 m_time_pass;
     static char mDemoArcName[8];
 
 private:
@@ -1020,11 +1020,11 @@ inline u8 dStage_stagInfo_DefaultCameraType(stage_stag_info_class* p_info) {
     return p_info->mCameraMapToolID;
 }
 
-inline s32 dStage_stagInfo_ChkKeyDisp(stage_stag_info_class* i_stagInfo) {
+inline u32 dStage_stagInfo_ChkKeyDisp(stage_stag_info_class* i_stagInfo) {
     return i_stagInfo->mProp & 1;
 }
 
-inline s32 dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
+inline int dStage_stagInfo_GetSaveTbl(stage_stag_info_class* i_stagInfo) {
     return (i_stagInfo->mProp >> 1) & 0x7F;
 }
 
@@ -1071,15 +1071,15 @@ inline u32 dStage_roomRead_dt_c_GetReverb(roomRead_data_class& room) {
     return room.field_0x1 & 0x7F;
 }
 
-inline s32 dStage_roomRead_dt_c_GetTimePass(roomRead_data_class& data) {
+inline u32 dStage_roomRead_dt_c_GetTimePass(roomRead_data_class& data) {
     return data.field_0x2 & 0x03;
 }
 
-inline s32 dStage_sclsInfo_getWipe(stage_scls_info_class* p_info) {
+inline u32 dStage_sclsInfo_getWipe(stage_scls_info_class* p_info) {
     return p_info->mWipe & 0xF;
 }
 
-inline s32 dStage_FileList_dt_CheckDarkOn(dStage_FileList_dt_c* i_fili) {
+inline u32 dStage_FileList_dt_CheckDarkOn(dStage_FileList_dt_c* i_fili) {
     return i_fili->mParam & 0x00000001;
 }
 
