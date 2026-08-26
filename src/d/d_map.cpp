@@ -1966,8 +1966,157 @@ void dMap_c::drawPointShip(f32 param_1, f32 param_2, s16 param_3, f32 param_4, f
 }
 
 /* 8004C144-8004CC7C       .text drawPointGc__6dMap_cFUcfffScsUcUcUcUc */
-void dMap_c::drawPointGc(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9, u8 param_10) {
-    /* Nonmatching */
+//drawPointGc(param_2, posX, posY, posZ, param_6, param_7, param_8, mGbaName, param_10, param_11);
+void dMap_c::drawPointGc(u8 param_5, f32 posX, f32 posY, f32 posZ, s8 floorRet, s16 param_6, u8 param_7, u8 mGbaName, u8 param_9, u8 param_10) {
+    if (param_5 == 0 || mNowRoomInfoP == NULL || mNowRoomInfoP->getEnableFlg() == 0) {
+        return;
+    }
+    if (floorRet != -1 && floorRet != mNowRoomInfoP->getRoomNo()) {
+        return;
+    }
+
+    u8 floorNo = dMap_GetFloorNo_WithRoom(floorRet, posY);
+
+    if (param_5 != 1 && (u32)param_5 != 2 &&
+        (IsFloorNo(floorNo) == 0 || IsFloorNo(mNowFloorNo) == 0 || mNowFloorNo != floorNo)) {
+        return;
+        }
+        if (mMapDispMode == 1 && param_5 != 1 && (u32)param_5 != 2 && (u32)param_5 != 6 &&
+            (u32)param_5 != 7 && (u32)param_5 != 9 && (u32)param_5 != 5 && (u32)param_5 != 8) {
+            return;
+            }
+
+
+            s32 screenX = mNowScaleX * (posX - mNowCenterX);
+            s32 screenY = mNowScaleZ * (posZ - mNowCenterZ);
+
+            u8 size;
+            if (param_5 == 2) {
+                size = 0x10;
+            } else {
+                size = 4;
+            }
+            u8 half = size >> 1;
+
+            if ((s16)screenX + half >= -0x78 && (s16)screenX - half <= 0x78 &&
+                (s16)screenY + half >= -0x78 && (s16)screenY - half <= 0x78) {
+
+                screenX += (s16)(mDispPosLeftUpX + 0x3c);
+            screenY += (s16)(mDispPosLeftUpY + 0x3c);
+
+            switch (param_5) {
+                case 1:
+                    drawPointPlayer((s16)screenX, (s16)screenY, param_6);
+                    break;
+                case 3:
+                    if (getKindMapType() == 2 &&
+                        g_dComIfG_gameInfo.save.mMemory.mMembit.isDungeonItem(1) != 0) {
+                        drawPointEnemy((s16)screenX, (s16)screenY);
+                        }
+                        break;
+                case 4:
+                    if (getKindMapType() == 1) {
+                        if (param_10 == 0x18) {
+                            drawPointEnemy((s16)screenX, (s16)screenY);
+                        }
+                    } else if (getKindMapType() == 2) {
+                        if (param_10 == 0x17) {
+                            if (g_dComIfG_gameInfo.save.mMemory.mMembit.isDungeonItem(1) != 0) {
+                                drawPointEnemy((s16)screenX, (s16)screenY);
+                            }
+                        } else {
+                            drawPointEnemy((s16)screenX, (s16)screenY);
+                        }
+                    }
+                    break;
+                case 5:
+                    if (getKindMapType() == 2) {
+                        if (mMapDispMode == 0) {
+                            drawPointShip((s16)screenX, (s16)screenY, param_6, 1.1f, 1.3f);
+                        } else {
+                            drawPointShip((s16)screenX, (s16)screenY, param_6, 1.0f, 1.0f);
+                        }
+                    } else if (getKindMapType() == 1) {
+                        if (mMapDispMode == 0) {
+                            drawPointShip((s16)screenX, (s16)screenY, param_6, 1.1f, 1.3f);
+                        } else {
+                            drawPointShip((s16)screenX, (s16)screenY, param_6, 1.0f, 1.0f);
+                        }
+                    }
+                    break;
+                case 2:
+                    if (param_7 == 0) {
+                        drawPointAgbCursor((s16)screenX, (s16)screenY);
+                    }
+                    break;
+                case 6:
+                    if (param_7 != 0xF && param_7 != 0x10) {
+                        if (getKindMapType() == 2) {
+                            if (g_dComIfG_gameInfo.save.mMemory.mMembit.isDungeonItem(1) != 0) {
+                                if (mMapDispMode == 0) {
+                                    drawPointTbox((s16)screenX, (s16)screenY, 2.5f, 2.0f);
+                                } else {
+                                    drawPointTbox((s16)screenX, (s16)screenY, 2.0f, 1.5f);
+                                }
+                            }
+                        } else if (getKindMapType() == 1 && mMapDispMode == 0) {
+                            drawPointTbox((s16)screenX, (s16)screenY, 2.5f, 2.0f);
+                        }
+                    }
+                    break;
+                case 7:
+                    if (getKindMapType() == 2) {
+                        if (mMapDispMode == 0) {
+                            drawPointDoor((s16)screenX, (s16)screenY, 4.0f, 1.5f, param_6, mCompAlpha);
+                        } else {
+                            drawPointDoor((s16)screenX, (s16)screenY, 1.75f, 0.75f, param_6, mAlpha);
+                        }
+                    } else if (getKindMapType() == 1) {
+                        if (mNowRoomInfoP->getRoomNo() == 1) {
+                            if (mMapDispMode == 0) {
+                                drawPointDoor((s16)screenX, (s16)screenY, 4.0f, 1.5f, param_6, mCompAlpha);
+                            } else {
+                                drawPointDoor((s16)screenX, (s16)screenY, 1.75f, 0.75f, param_6, mAlpha);
+                            }
+                        } else if (mMapDispMode == 0) {
+                            drawPointDoor((s16)screenX, (s16)screenY, 2.5f, 1.0f, param_6, mAlpha);
+                        }
+                    }
+                    break;
+                case 9:
+                    if (getKindMapType() == 2) {
+                        if (mMapDispMode == 0) {
+                            drawPointRestart((s16)screenX, (s16)screenY, param_6, 1.0f, 1.2f);
+                        } else {
+                            drawPointRestart((s16)screenX, (s16)screenY, param_6, 1.0f, 1.2f);
+                        }
+                    } else if (getKindMapType() == 1) {
+                        if (mMapDispMode == 0) {
+                            drawPointRestart((s16)screenX, (s16)screenY, param_6, 1.0f, 1.2f);
+                        } else {
+                            drawPointRestart((s16)screenX, (s16)screenY, param_6, 0.8f, 1.0f);
+                        }
+                    }
+                    break;
+                case 8:
+                    if (getKindMapType() == 2) {
+                        if (g_dComIfG_gameInfo.save.mMemory.mMembit.isDungeonItem(1) != 0) {
+                            if (mMapDispMode == 0) {
+                                drawPointFriend((s16)screenX, (s16)screenY, 2.0f);
+                            } else {
+                                drawPointFriend((s16)screenX, (s16)screenY, 1.8f);
+                            }
+                        }
+                    } else if (getKindMapType() == 1) {
+                        if (mMapDispMode == 0) {
+                            drawPointFriend((s16)screenX, (s16)screenY, 2.2f);
+                        } else {
+                            drawPointFriend((s16)screenX, (s16)screenY, 2.0f);
+                        }
+                    }
+                    break;
+        }
+    }
 }
 
 /* 8004CC7C-8004CD68       .text drawPointMain__6dMap_cFUcUcfffScsUcUcUcUc */
