@@ -529,7 +529,7 @@ void dMs_dmap_create(sub_ms_screen_class* i_Ms) {
     JUT_ASSERT(2480, dMd_c != NULL);
 
     for (int i = 0; i < 3; i++) {
-        dMd_c->arr_0x1AFC[i] = i_Ms->buffer_p[i];
+        dMd_c->mpTIMG[i] = (ResTIMG*)i_Ms->buffer_p[i];
     }
 
     dMd_c->setArchive(i_Ms->arc);
