@@ -117,7 +117,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKH_e));
-    JUT_ASSERT(0x1B2, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(429, 434), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL) {
@@ -125,7 +125,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
 
     J3DAnmTransform* pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BCK_VBAHX_e));
-    JUT_ASSERT(0x1C3, pbck != NULL);
+    JUT_ASSERT(DEMO_SELECT(446, 451), pbck != NULL);
 
     if (!mBck1.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_RESET)) {
         return FALSE;
@@ -133,7 +133,7 @@ BOOL daBFlower_c::CreateHeap() {
     mBck1.setFrame(mBck1.getEndFrame());
 
     J3DAnmTevRegKey* pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BRK_VBAHX_e));
-    JUT_ASSERT(0x1D9, pbrk != NULL);
+    JUT_ASSERT(DEMO_SELECT(468, 473), pbrk != NULL);
 
     if (!mBrk1.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
@@ -141,7 +141,7 @@ BOOL daBFlower_c::CreateHeap() {
     mBrk1.setPlaySpeed(0.0f);
 
     modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKM_e));
-    JUT_ASSERT(0x1E7, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(482, 487), modelData != NULL);
 
     mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel2 == NULL) {
@@ -149,7 +149,7 @@ BOOL daBFlower_c::CreateHeap() {
     }
 
     pbck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BCK_VBAMX_e));
-    JUT_ASSERT(0x1F7, pbck != NULL);
+    JUT_ASSERT(DEMO_SELECT(498, 503), pbck != NULL);
 
     if (!mBck2.init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
@@ -157,7 +157,7 @@ BOOL daBFlower_c::CreateHeap() {
     mBck2.setPlaySpeed(0.0f);
 
     pbrk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BRK_VBAMX_e));
-    JUT_ASSERT(0x208, pbrk != NULL);
+    JUT_ASSERT(DEMO_SELECT(515, 520), pbrk != NULL);
 
     if (!mBrk2.init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
@@ -306,7 +306,8 @@ BOOL daBFlower_c::actLive() {
         fopAc_ac_c* pActor = fopAcM_SearchByID(mPrevGrabActorID);
 
         if (pActor != NULL) {
-            if ((pActor->current.pos - current.pos).absXZ() < 70.0f) {
+            f32 temp = (pActor->current.pos - current.pos).absXZ();
+            if (temp < 70.0f) {
                 init_bck_anm(dRes_INDEX_VBAKH_BCK_VBAKH_e);
             }
         }
@@ -343,7 +344,11 @@ BOOL daBFlower_c::actLive() {
             cCcD_Obj* tg = mSph.GetTgHitObj();
             if (tg != NULL) {
                 if (tg->ChkAtType(AT_TYPE_BOMB)) {
-                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(fpcNm_Bomb2_e, daBomb2::Act_c::prm_make(daBomb2::Start_UNK0_e, true), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    bool b = true;
+                    u32 prm = daBomb2::Act_c::prm_make(daBomb2::Start_UNK0_e, b);
+                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(
+                        fpcNm_Bomb2_e, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle)
+                    );
                     m58C = 0;
                 } else if (tg->ChkAtType(~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT))) {
                     // TODO: simplify
@@ -352,8 +357,9 @@ BOOL daBFlower_c::actLive() {
                         b = true;
                     }
                     u32 prm = daBomb2::Act_c::prm_make(daBomb2::Start_UNK1_e, b);
-
-                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(fpcNm_Bomb2_e, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+                    mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(
+                        fpcNm_Bomb2_e, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle)
+                    );
                     m58C = 0;
                 }
             }
@@ -364,7 +370,11 @@ BOOL daBFlower_c::actLive() {
 
     if (fopAcM_checkCarryNow(this) && m58D != 0) {
         m58C = 0;
-        mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(fpcNm_Bomb2_e, daBomb2::Act_c::prm_make(daBomb2::Start_UNK2_e, false), &current.pos, fopAcM_GetRoomNo(this), &current.angle));
+        bool b = false;
+        u32 prm = daBomb2::Act_c::prm_make(daBomb2::Start_UNK2_e, b);
+        mpBombActor = static_cast<fopAc_ac_c*>(fopAcM_fastCreate(
+            fpcNm_Bomb2_e, prm, &current.pos, fopAcM_GetRoomNo(this), &current.angle)
+        );
 
         fopAcM_cancelCarryNow(this);
         if (mpBombActor != NULL) {
@@ -482,7 +492,7 @@ bool daBFlower_c::_draw() {
 }
 
 bool daBFlower_c::_delete() {
-    dComIfG_resDelete(&mPhs, m_arcname);
+    dComIfG_resDeleteDemo(&mPhs, m_arcname);
     return TRUE;
 }
 

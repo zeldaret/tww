@@ -72,8 +72,10 @@ namespace daBomb2 {
     public:
         void prm_get_start() const {}
         void prm_get_stick() const {}
-        static u32 prm_make(Start_e start, bool param) { // Might be wrong
-            return start | ((param ? 1 : 0) << 8);
+        static u32 prm_make(Start_e p0, bool p1) { // Might be wrong
+            u32 prm = 0;
+            prm |= (p1 ? 1 : 0) << 8;
+            return prm | p0;
         }
 
         Act_c();

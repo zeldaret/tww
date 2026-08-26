@@ -1051,12 +1051,11 @@ BOOL daTbox_c::actionGenocide() {
 
 /* 00002C10-00002FB0       .text draw__8daTbox_cFv */
 BOOL daTbox_c::draw() {
-    u8 tboxNo;
-
     if (mRoomNo != -1 && !checkRoomDisp(mRoomNo)) {
         return TRUE;
     }
 
+    u8 tboxNo;
     if (flagCheck(daTboxFlg_UNK_01) || (checkEnv() && flagCheck(daTboxFlg_UNK_04))) {
         tboxNo = mTboxNo;
     }
@@ -1071,11 +1070,11 @@ BOOL daTbox_c::draw() {
     tevStr.mRoomNo = mRoomNo;
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 
+    J3DModelData* modelData;
     if (getFuncType() == FUNC_TYPE_TACT) {
-        J3DModelData* platMdlData = mpTactPlatformMdl->getModelData();
-
+        modelData = mpTactPlatformMdl->getModelData();
         g_env_light.setLightTevColorType(mpTactPlatformMdl, &tevStr);
-        mTactPlatformBrk.entry(platMdlData);
+        mTactPlatformBrk.entry(modelData);
         mDoExt_modelUpdateDL(mpTactPlatformMdl);
     }
 
@@ -1085,14 +1084,14 @@ BOOL daTbox_c::draw() {
 
     g_env_light.setLightTevColorType(mpChestMdl, &tevStr);
 
-    J3DModelData* chestMdlData = mpChestMdl->getModelData();
-    mOpenAnm.entry(chestMdlData);
+    modelData = mpChestMdl->getModelData();
+    mOpenAnm.entry(modelData);
 
     if (mpAppearTexAnm != NULL) {
-        mpAppearTexAnm->entry(chestMdlData);
+        mpAppearTexAnm->entry(modelData);
     }
     if (mpAppearRegAnm != NULL) {
-        mpAppearRegAnm->entry(chestMdlData);
+        mpAppearRegAnm->entry(modelData);
     }
 
     if (checkEnv() && flagCheck(daTboxFlg_UNK_04)) {
@@ -1101,8 +1100,8 @@ BOOL daTbox_c::draw() {
 
         float interpVal = (scrollOffset - offsetAsU8) * 0.5f + 0.5f;
 
-        for (u8 i = 0; i < chestMdlData->getMaterialNum(); i++) {
-            J3DMaterial* mat = chestMdlData->getMaterialNodePointer(i);
+        for (u8 i = 0; i < modelData->getMaterialNum(); i++) {
+            J3DMaterial* mat = modelData->getMaterialNodePointer(i);
 
             for (u8 j = 0; j < mat->getIndTexStageNum(); j++) {
                 J3DIndTexMtx* texMtx = mat->getIndTexMtx(j);
@@ -1128,11 +1127,10 @@ BOOL daTbox_c::draw() {
     }
 
     if (mIsFlashPlaying != 0 && mOpenTimer >= 0x24) {
-        J3DModelData* flashMdlData = mpFlashMdl->getModelData();
-
-        mFlashAnm.entry(flashMdlData);
-        mFlashRegAnm.entry(flashMdlData);
-        mFlashTexAnm.entry(flashMdlData);
+        modelData = mpFlashMdl->getModelData();
+        mFlashAnm.entry(modelData);
+        mFlashRegAnm.entry(modelData);
+        mFlashTexAnm.entry(modelData);
 
         dComIfGd_setListMaskOff();
         mDoExt_modelUpdateDL(mpFlashMdl);

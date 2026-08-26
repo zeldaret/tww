@@ -36,7 +36,7 @@ namespace daObjFerris {
 
         bool is_switch() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), param_get_swSave()); }
         void off_switch() const { return fopAcM_offSwitch(const_cast<Act_c*>(this), param_get_swSave()); }
-        s32 param_get_swSave() const { return daObj::PrmAbstract<Param_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        int param_get_swSave() const { return daObj::PrmAbstract<Param_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
 
         bool create_heap();
         cPhs_State _create();
@@ -59,7 +59,7 @@ namespace daObjFerris {
 
     public:
         /* 0x0290 */ dBgW* mpBgW[6];
-        /* 0x02A8 */ s32 mRideState[6];
+        /* 0x02A8 */ int mRideState[6];
         /* 0x02C0 */ cXyz mRidePos;
         /* 0x02CC */ request_of_phase_process_class mPhs;
         /* 0x02D4 */ dCcD_Stts field_0x02d4[5];

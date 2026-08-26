@@ -16,8 +16,8 @@ public:
 
     void set_mtx() {
         mpMorf->getModel()->setBaseScale(scale);
-        mDoMtx_stack_c::transS(current.pos);
-        mDoMtx_stack_c::ZXYrotM(shape_angle);
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+        mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
         mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
         MTXCopy(mDoMtx_stack_c::get(), mMtx);
     }

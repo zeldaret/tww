@@ -155,9 +155,13 @@ static BOOL daBita_IsDelete(bita_class* i_this) {
 
 /* 0000071C-00000778       .text daBita_Delete__FP10bita_class */
 static BOOL daBita_Delete(bita_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Bita");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Bita");
+#if VERSION > VERSION_DEMO
     if (i_this->heap != NULL)
+#endif
+    {
         dComIfG_Bgsp()->Release(i_this->mpBgW);
+    }
     return TRUE;
 }
 
@@ -170,14 +174,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
         type = 1;
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bita", ita_bmd[type]);
-    JUT_ASSERT(0x23b, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(562, 571), modelData != NULL);
     J3DModel* model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (model == NULL)
         return FALSE;
     i_this->mpModel = model;
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Bita", ita_Ef_bmd[type]);
-    JUT_ASSERT(0x247, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(574, 583), modelData != NULL);
     model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (model == NULL)
         return FALSE;
@@ -233,11 +237,12 @@ static cPhs_State daBita_Create(fopAc_ac_c* i_ac) {
         }},
     };
 
-    fopAcM_ct(i_ac, bita_class);
+    fopAcM_ct_Retail(i_ac, bita_class);
     bita_class* i_this = (bita_class*)i_ac;
 
     cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Bita");
     if (rt == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(i_ac, bita_class);
         btd = NULL;
         i_this->mType = (fopAcM_GetParam(i_this) >> 0) & 0xFF;
         i_this->mPrmScale = (fopAcM_GetParam(i_this) >> 8) & 0xFF;
