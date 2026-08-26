@@ -2024,10 +2024,9 @@ void dMap_c::drawPointGc(u8 kind, f32 posX, f32 posY, f32 posZ, s8 roomNo, s16 a
     } else {
         size = 4;
     }
-    u8 halfSize = size >> 1;
+    u8 halfSize = size / 2;
 
-    if ((s16)dispX + halfSize >= -MAP_VIEW_HALF && dispX - halfSize <= MAP_VIEW_HALF &&
-        dispY + halfSize >= -MAP_VIEW_HALF && dispY - halfSize <= MAP_VIEW_HALF) {
+    if ((s16)dispX + halfSize >= -MAP_VIEW_HALF && dispX - halfSize <= MAP_VIEW_HALF && dispY + halfSize >= -MAP_VIEW_HALF && dispY - halfSize <= MAP_VIEW_HALF) {
 
 
     dispX += (s16)(mDispPosLeftUpX + MAP_VIEW_CENTER);
@@ -2040,8 +2039,7 @@ void dMap_c::drawPointGc(u8 kind, f32 posX, f32 posY, f32 posZ, s8 roomNo, s16 a
             break;
 
         case MAP_POINT_ENEMY:
-            if (getKindMapType() == MAP_KIND_DUNGEON &&
-                g_dComIfG_gameInfo.save.mMemory.mMembit.isDungeonItemCompass()) {
+            if (getKindMapType() == MAP_KIND_DUNGEON && dComIfGs_isDungeonItemCompass()) {
                 drawPointEnemy(dispX, dispY);
                 }
                 break;
@@ -2052,9 +2050,9 @@ void dMap_c::drawPointGc(u8 kind, f32 posX, f32 posY, f32 posZ, s8 roomNo, s16 a
                 }
             } else if (getKindMapType() == MAP_KIND_DUNGEON) {
                 if (gcName == 0x17) {
-                    if (g_dComIfG_gameInfo.save.mMemory.mMembit.isDungeonItemCompass()) {
+                    if (dComIfGs_isDungeonItemCompass()) {
                         drawPointEnemy(dispX, dispY);
-                        }
+                    }
                 } else {
                     drawPointEnemy(dispX, dispY);
                 }
@@ -2083,7 +2081,7 @@ void dMap_c::drawPointGc(u8 kind, f32 posX, f32 posY, f32 posZ, s8 roomNo, s16 a
         case MAP_POINT_TBOX:
             if (param_7 != 0xF && param_7 != 0x10) {
                 if (getKindMapType() == MAP_KIND_DUNGEON) {
-                    if (g_dComIfG_gameInfo.save.mMemory.mMembit.isDungeonItemCompass()) {
+                    if (dComIfGs_isDungeonItemCompass()) {
                         if (mMapDispMode == MAP_DISP_FULL) {
                             drawPointTbox(dispX, dispY, 2.5f, 2.0f);
                         } else {
@@ -2131,7 +2129,7 @@ void dMap_c::drawPointGc(u8 kind, f32 posX, f32 posY, f32 posZ, s8 roomNo, s16 a
             break;
         case MAP_POINT_FRIEND:
             if (getKindMapType() == MAP_KIND_DUNGEON) {
-                if (g_dComIfG_gameInfo.save.mMemory.mMembit.isDungeonItemCompass()) {
+                if (dComIfGs_isDungeonItemCompass()) {
                     if (mMapDispMode == MAP_DISP_FULL) {
                         drawPointFriend(dispX, dispY, 2.0f);
                     } else {
@@ -2153,11 +2151,10 @@ void dMap_c::drawPointGc(u8 kind, f32 posX, f32 posY, f32 posZ, s8 roomNo, s16 a
 /* 8004CC7C-8004CD68       .text drawPointMain__6dMap_cFUcUcfffScsUcUcUcUc */
 void dMap_c::drawPointMain(u8 pointType,u8 param_2, f32 posX,f32 posY, f32 posZ,s8 param_6,s16 param_7,u8 param_8,u8 mGbaName,u8 param_10,u8 param_11)
 {
-    if (g_mDoGaC_gbaCom.mDoGaC_GbaLink() != 0 && g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(3) != 0) {
+    if (mDoGaC_GbaLink() != 0 && mDoGac_SendStatusCheck(3) != 0) {
         drawPointAgb(pointType, posX, posY, posZ, param_6, param_7, param_8, mGbaName, param_10, param_11);
     }
     drawPointGc(param_2, posX, posY, posZ, param_6, param_7, param_8, mGbaName, param_10, param_11);
-    return;
 }
 
 /* 8004CD68-8004CEF4       .text drawPointAgb__6dMap_cFUcfffScsUcUcUcUc */
