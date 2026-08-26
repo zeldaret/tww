@@ -2033,123 +2033,122 @@ void dMap_c::drawPointGc(u8 kind, f32 posX, f32 posY, f32 posZ, s8 roomNo, s16 a
 
     if ((s16)dispX + halfSize >= -MAP_VIEW_HALF && dispX - halfSize <= MAP_VIEW_HALF && dispY + halfSize >= -MAP_VIEW_HALF && dispY - halfSize <= MAP_VIEW_HALF) {
 
+        dispX += (s16)(mDispPosLeftUpX + MAP_VIEW_CENTER);
+        dispY += (s16)(mDispPosLeftUpY + MAP_VIEW_CENTER);
 
-    dispX += (s16)(mDispPosLeftUpX + MAP_VIEW_CENTER);
-    dispY += (s16)(mDispPosLeftUpY + MAP_VIEW_CENTER);
 
-
-    switch (kind) {
-        case MAP_POINT_PLAYER:
-            drawPointPlayer(dispX, dispY, angle);
-            break;
-
-        case MAP_POINT_ENEMY:
-            if (getKindMapType() == MAP_KIND_DUNGEON && dComIfGs_isDungeonItemCompass()) {
-                drawPointEnemy(dispX, dispY);
-                }
+        switch (kind) {
+            case MAP_POINT_PLAYER:
+                drawPointPlayer(dispX, dispY, angle);
                 break;
-        case MAP_POINT_ENEMY_ID:
-            if (getKindMapType() == MAP_KIND_UNK) {
-                if (gcName == 0x18) {
+
+            case MAP_POINT_ENEMY:
+                if (getKindMapType() == MAP_KIND_DUNGEON && dComIfGs_isDungeonItemCompass()) {
                     drawPointEnemy(dispX, dispY);
-                }
-            } else if (getKindMapType() == MAP_KIND_DUNGEON) {
-                if (gcName == 0x17) {
-                    if (dComIfGs_isDungeonItemCompass()) {
+                    }
+                    break;
+            case MAP_POINT_ENEMY_ID:
+                if (getKindMapType() == MAP_KIND_UNK) {
+                    if (gcName == 0x18) {
                         drawPointEnemy(dispX, dispY);
                     }
-                } else {
-                    drawPointEnemy(dispX, dispY);
-                }
-            }
-            break;
-        case MAP_POINT_SHIP:
-            if (getKindMapType() == MAP_KIND_DUNGEON) {
-                if (mMapDispMode == MAP_DISP_FULL) {
-                    drawPointShip(dispX, dispY, angle, 1.1f, 1.3f);
-                } else {
-                    drawPointShip(dispX, dispY, angle, 1.0f, 1.0f);
-                }
-            } else if (getKindMapType() == MAP_KIND_UNK) {
-                if (mMapDispMode == MAP_DISP_FULL) {
-                    drawPointShip(dispX, dispY, angle, 1.1f, 1.3f);
-                } else {
-                    drawPointShip(dispX, dispY, angle, 1.0f, 1.0f);
-                }
-            }
-            break;
-        case MAP_POINT_AGB_CURSOR:
-            if (param_7 == 0) {
-                drawPointAgbCursor(dispX, dispY);
-            }
-            break;
-        case MAP_POINT_TBOX:
-            if (param_7 != 0xF && param_7 != 0x10) {
-                if (getKindMapType() == MAP_KIND_DUNGEON) {
-                    if (dComIfGs_isDungeonItemCompass()) {
-                        if (mMapDispMode == MAP_DISP_FULL) {
-                            drawPointTbox(dispX, dispY, 2.5f, 2.0f);
-                        } else {
-                            drawPointTbox(dispX, dispY, 2.0f, 1.5f);
+                } else if (getKindMapType() == MAP_KIND_DUNGEON) {
+                    if (gcName == 0x17) {
+                        if (dComIfGs_isDungeonItemCompass()) {
+                            drawPointEnemy(dispX, dispY);
                         }
+                    } else {
+                        drawPointEnemy(dispX, dispY);
                     }
-                } else if (getKindMapType() == MAP_KIND_UNK && mMapDispMode == MAP_DISP_FULL) {
-                    drawPointTbox(dispX, dispY, 2.5f, 2.0f);
                 }
-            }
-            break;
-        case MAP_POINT_DOOR:
-            if (getKindMapType() == MAP_KIND_DUNGEON) {
-                if (mMapDispMode == MAP_DISP_FULL) {
-                    drawPointDoor(dispX, dispY, 4.0f, 1.5f, angle, mCompAlpha);
-                } else {
-                    drawPointDoor(dispX, dispY, 1.75f, 0.75f, angle, mAlpha);
+                break;
+            case MAP_POINT_SHIP:
+                if (getKindMapType() == MAP_KIND_DUNGEON) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointShip(dispX, dispY, angle, 1.1f, 1.3f);
+                    } else {
+                        drawPointShip(dispX, dispY, angle, 1.0f, 1.0f);
+                    }
+                } else if (getKindMapType() == MAP_KIND_UNK) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointShip(dispX, dispY, angle, 1.1f, 1.3f);
+                    } else {
+                        drawPointShip(dispX, dispY, angle, 1.0f, 1.0f);
+                    }
                 }
-            } else if (getKindMapType() == MAP_KIND_UNK) {
-                if (mNowRoomInfoP->getRoomNo() == 1) {
+                break;
+            case MAP_POINT_AGB_CURSOR:
+                if (param_7 == 0) {
+                    drawPointAgbCursor(dispX, dispY);
+                }
+                break;
+            case MAP_POINT_TBOX:
+                if (param_7 != 0xF && param_7 != 0x10) {
+                    if (getKindMapType() == MAP_KIND_DUNGEON) {
+                        if (dComIfGs_isDungeonItemCompass()) {
+                            if (mMapDispMode == MAP_DISP_FULL) {
+                                drawPointTbox(dispX, dispY, 2.5f, 2.0f);
+                            } else {
+                                drawPointTbox(dispX, dispY, 2.0f, 1.5f);
+                            }
+                        }
+                    } else if (getKindMapType() == MAP_KIND_UNK && mMapDispMode == MAP_DISP_FULL) {
+                        drawPointTbox(dispX, dispY, 2.5f, 2.0f);
+                    }
+                }
+                break;
+            case MAP_POINT_DOOR:
+                if (getKindMapType() == MAP_KIND_DUNGEON) {
                     if (mMapDispMode == MAP_DISP_FULL) {
                         drawPointDoor(dispX, dispY, 4.0f, 1.5f, angle, mCompAlpha);
                     } else {
                         drawPointDoor(dispX, dispY, 1.75f, 0.75f, angle, mAlpha);
                     }
-                } else if (mMapDispMode == MAP_DISP_FULL) {
-                    drawPointDoor(dispX, dispY, 2.5f, 1.0f, angle, mAlpha);
-                }
-            }
-            break;
-        case MAP_POINT_RESTART:
-            if (getKindMapType() == MAP_KIND_DUNGEON) {
-                if (mMapDispMode == MAP_DISP_FULL) {
-                    drawPointRestart(dispX, dispY, angle, 1.0f, 1.2f);
-                } else {
-                    drawPointRestart(dispX, dispY, angle, 1.0f, 1.2f);
-                }
-            } else if (getKindMapType() == MAP_KIND_UNK) {
-                if (mMapDispMode == MAP_DISP_FULL) {
-                    drawPointRestart(dispX, dispY, angle, 1.0f, 1.2f);
-                } else {
-                    drawPointRestart(dispX, dispY, angle, 0.8f, 1.0f);
-                }
-            }
-            break;
-        case MAP_POINT_FRIEND:
-            if (getKindMapType() == MAP_KIND_DUNGEON) {
-                if (dComIfGs_isDungeonItemCompass()) {
-                    if (mMapDispMode == MAP_DISP_FULL) {
-                        drawPointFriend(dispX, dispY, 2.0f);
-                    } else {
-                        drawPointFriend(dispX, dispY, 1.8f);
+                } else if (getKindMapType() == MAP_KIND_UNK) {
+                    if (mNowRoomInfoP->getRoomNo() == 1) {
+                        if (mMapDispMode == MAP_DISP_FULL) {
+                            drawPointDoor(dispX, dispY, 4.0f, 1.5f, angle, mCompAlpha);
+                        } else {
+                            drawPointDoor(dispX, dispY, 1.75f, 0.75f, angle, mAlpha);
+                        }
+                    } else if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointDoor(dispX, dispY, 2.5f, 1.0f, angle, mAlpha);
                     }
                 }
-            } else if (getKindMapType() == MAP_KIND_UNK) {
-                if (mMapDispMode == MAP_DISP_FULL) {
-                    drawPointFriend(dispX, dispY, 2.2f);
-                } else {
-                    drawPointFriend(dispX, dispY, 2.0f);
+                break;
+            case MAP_POINT_RESTART:
+                if (getKindMapType() == MAP_KIND_DUNGEON) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointRestart(dispX, dispY, angle, 1.0f, 1.2f);
+                    } else {
+                        drawPointRestart(dispX, dispY, angle, 1.0f, 1.2f);
+                    }
+                } else if (getKindMapType() == MAP_KIND_UNK) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointRestart(dispX, dispY, angle, 1.0f, 1.2f);
+                    } else {
+                        drawPointRestart(dispX, dispY, angle, 0.8f, 1.0f);
+                    }
                 }
+                break;
+            case MAP_POINT_FRIEND:
+                if (getKindMapType() == MAP_KIND_DUNGEON) {
+                    if (dComIfGs_isDungeonItemCompass()) {
+                        if (mMapDispMode == MAP_DISP_FULL) {
+                            drawPointFriend(dispX, dispY, 2.0f);
+                        } else {
+                            drawPointFriend(dispX, dispY, 1.8f);
+                        }
+                    }
+                } else if (getKindMapType() == MAP_KIND_UNK) {
+                    if (mMapDispMode == MAP_DISP_FULL) {
+                        drawPointFriend(dispX, dispY, 2.2f);
+                    } else {
+                        drawPointFriend(dispX, dispY, 2.0f);
+                    }
+                }
+                break;
             }
-            break;
-        }
     }
 }
 
