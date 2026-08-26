@@ -12,6 +12,10 @@
 #include "SSystem/SComponent/c_math.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_bg_s.h"
+#include "d/d_bg_s_func.h"
+#include "d/d_bg_s_spl_grp_chk.h"
+#include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo.h"
@@ -139,8 +143,19 @@ void daObjHtetu1_c::unlock() {
 }
 
 /* 000007F8-0000098C       .text get_water_h__13daObjHtetu1_cFv */
-void daObjHtetu1_c::get_water_h() {
+f32 daObjHtetu1_c::get_water_h() {
     /* Nonmatching */
+    dBgS_WtrChk wtr_chk;
+    cXyz home_pos = home.pos;
+    f32 ret = current.pos.y;
+    cXyz result;
+    
+    mDoMtx_stack_c::YrotS(current.angle.y);
+    mDoMtx_stack_c::multVec(&cXyz::BaseZ, &result);
+    result *= 400.0f;
+    home_pos += result;
+    if (dBgS_SplGrpChk_In_ObjGnd(home_pos, &wtr_chk, 1.0f)) ret = wtr_chk.GetHeight();
+    return ret;
 }
 
 /* 00000AB0-00000BCC       .text splash_manager__13daObjHtetu1_cFv */

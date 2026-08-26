@@ -41,7 +41,7 @@ public:
     bool _delete();
     void init_mtx();
     void unlock();
-    void get_water_h();
+    f32 get_water_h();
     void splash_manager();
     bool _execute();
     bool _draw();
