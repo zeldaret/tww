@@ -5,13 +5,18 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_map.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "JSystem/JMath/JMATrigonometric.h"
 #include "d/actor/d_a_agb.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_stage.h"
 #include "dolphin/gx/GX.h"
+#include "dolphin/gx/GXAttr.h"
 #include "dolphin/gx/GXEnum.h"
 #include "dolphin/gx/GXInit.h"
 #include "dolphin/gx/GXGeometry.h"
+#include "m_Do/m_Do_mtx.h"
 #include "res/Object/Always.h"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_gba_com.h"
@@ -2543,7 +2548,38 @@ void dMap_2DTri_c::init(s16 i_posX, s16 i_posY, const GXColor& i_color, f32 i_sc
 
 /* 8004EE88-8004F080       .text draw__12dMap_2DTri_cFv */
 void dMap_2DTri_c::draw() {
-    /* Nonmatching */
+    s16 x[3];
+    s16 y[3];
+
+    f32 cosA = JMASCos(mAngle);
+    f32 sinA = JMASSin(mAngle);
+
+    s16 angle = 0;
+    for (int i = 0; i < 3; i++) {
+        f32 sx = mScaleX * JMASSin(angle);
+        f32 sy = mScaleY * JMASCos(angle);
+        x[i] = mPosX + (int)(sx * cosA + sy * sinA);
+        y[i] = mPosY + (int)(sy * cosA - sx * sinA);
+        angle -= 0x5555;
+    }
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, mColor);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetZMode(false, GX_LEQUAL, false);
+    GXSetScissor(mScissorX, mScissorY, mScissorWidth, mScissorHeight);
+    GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
+    GXPosition3s16(x[0], y[0], 0);
+    GXPosition3s16(x[1], y[1], 0);
+    GXPosition3s16(x[2], y[2], 0);
+    GXSetScissor(0, 0, 640, 480);
 }
 
 /* 8004F080-8004F08C       .text setPos__12dMap_2DTri_cFss */
@@ -2619,7 +2655,87 @@ void dMap_2DAGBCursor_c::draw() {
 
 /* 8004F3C0-8004F778       .text draw__11dMap_2DT2_cFv */
 void dMap_2DT2_c::draw() {
-    /* Nonmatching */
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXLoadTexObj(&field_0x4, GX_TEXMAP0);
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, mColorW);
+    GXSetTevColor(GX_TEVREG1, mColorB);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+
+    if (field_0x58 != 0) {
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    } else {
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    }
+
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetZCompLoc(0);
+    GXSetZMode(false, GX_ALWAYS, false);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(1);
+    GXSetClipMode(GX_CLIP_DISABLE);
+
+    mDoMtx_trans(mDoMtx_stack_c::now, mPosX, mPosY, 0.0f);
+    mDoMtx_ZrotM(mDoMtx_stack_c::now, mRotZ);
+
+    GXLoadPosMtxImm(mDoMtx_stack_c::now, 0);
+    GXSetCurrentMtx(0);
+    GXSetScissor(mScissorX, mScissorY, mScissorWidth, mScissorHeight);
+
+    f32 half_w = mWidth * 0.5f;
+    f32 half_h = mHeight * 0.5f;
+
+    f32 tex_u0;
+    f32 tex_u1;
+    if (mScaleX == 0.0f) {
+        tex_u0 = 0.0f;
+        tex_u1 = 0.0f;
+    } else {
+        f32 inv_scale_x = (1.0f / mScaleX) * 0.5f;
+        tex_u0 = 0.5f - inv_scale_x;
+        tex_u1 = 0.5f + inv_scale_x;
+    }
+
+    f32 tex_v0;
+    f32 tex_v1;
+    if (mScaleY == 0.0f) {
+        tex_v0 = 0.0f;
+        tex_v1 = 0.0f;
+    } else {
+        f32 inv_scale_y = (1.0f / mScaleY) * 0.5f;
+        tex_v0 = 0.5f - inv_scale_y;
+        tex_v1 = 0.5f + inv_scale_y;
+    }
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GXPosition2f32(-half_w, -half_h);
+    GXTexCoord2f32(tex_u0, tex_v0);
+
+    GXPosition2f32(half_w, -half_h);
+    GXTexCoord2f32(tex_u1, tex_v0);
+
+    GXPosition2f32(half_w, half_h);
+    GXTexCoord2f32(tex_u1, tex_v1);
+
+    GXPosition2f32(-half_w, half_h);
+    GXTexCoord2f32(tex_u0, tex_v1);
+
+    GXSetScissor(0, 0, 0x280, 0x1e0);
+
+    dComIfGp_getCurrentGrafPort()->setup2D();
 }
 
 /* 8004F778-8004F8B4       .text init__11dMap_2DT2_cFP7ResTIMGffffUcUcUcffs */
