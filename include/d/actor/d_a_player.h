@@ -634,11 +634,11 @@ public:
     virtual fpc_ProcID getGrabActorID() const { return fpcM_ERROR_PROCESS_ID_e; }
     virtual BOOL checkGrabBarrel() { return FALSE; }
     virtual u32 checkPlayerNoDraw() { return FALSE; }
-    virtual BOOL checkRopeTag() { return FALSE; }
-    virtual BOOL checkRopeReadyAnime() const { return FALSE; }
     virtual void voiceStart(u32) {}
     virtual void setOutPower(f32, s16, int) {}
     virtual void onFrollCrashFlg(u32) {}
+    virtual BOOL checkRopeTag() { return FALSE; }
+    virtual BOOL checkRopeReadyAnime() const { return FALSE; }
     virtual MtxP getModelJointMtx(u16) { return NULL; }
     virtual f32 getOldSpeedY() { return 0.0f; }
     virtual BOOL setHookshotCarryOffset(fpc_ProcID, const cXyz*) { return FALSE; }
