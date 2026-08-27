@@ -148,38 +148,55 @@ f32 dMap_c::mNowScaleZ;
 dMap_RoomInfoCtrl_c dMap_c::mRoomInfoCtrl;
 dMap_RoomInfo_c* dMap_c::mNowRoomInfoP;
 
+#if VERSION == VERSION_DEMO
+class dMap_HIO_c {
+public:
+    dMap_HIO_c();
+    virtual ~dMap_HIO_c() {}
+
+public:
+    u8 pad[0xFC];
+};
+
+dMap_HIO_c::dMap_HIO_c() {
+    /* Nonmatching */
+}
+
+dMap_HIO_c g_mapHIO;
+#endif
+
 static inline f32 getMapInfo_map1_X0(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(719, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(730, 719, 719, 719), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x18;
 }
 
 static inline f32 getMapInfo_map1_Z0(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(725, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(740, 725, 725, 725), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x1C;
 }
 
 static inline f32 getMapInfo_map1_X1(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(731, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(750, 731, 731, 731), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x20;
 }
 
 static inline f32 getMapInfo_map1_Z1(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(737, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(760, 737, 737, 737), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x24;
 }
 
 static inline f32 getMapInfo_map1_XC(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(743, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(770, 739, 743, 743), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x28;
 }
 
 static inline f32 getMapInfo_map1_ZC(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(749, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(780, 745, 749, 749), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x2c;
 }
 
 static inline int gridPos2GridNo(int i_gridX, int i_gridY) {
-    JUT_ASSERT(1188, (i_gridX >= -3) && (i_gridX <= 3) && (i_gridY >= -3) && (i_gridY <= 3));
+    JUT_ASSERT(VERSION_SELECT(1258, 1188, 1188, 1188), (i_gridX >= -3) && (i_gridX <= 3) && (i_gridY >= -3) && (i_gridY <= 3));
     return i_gridX + 3 + (i_gridY + 3) * 7;
 }
 
@@ -213,20 +230,22 @@ dStage_FloorInfo_c* getFloorInfo_WithRoom(int i_roomNo) {
     return floor;
 }
 
+#if VERSION > VERSION_DEMO
 /* 800457B8-800458E0       .text mapOffsetY__Fv */
-f32 mapOffsetY() {
+static f32 mapOffsetY() {
     f32 ret = 0.0f;
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e || dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
         if (dComIfGp_getStage().getDMap() != NULL) {
             dStage_DMap_c* pinf = dComIfGp_getStage().getDMap();
             dStage_DMap_dt_c* entry = pinf->entries;
-            JUT_ASSERT(1415, pinf->num == 1);
+            JUT_ASSERT(VERSION_SELECT(1415, 1415, 1415, 1415), pinf->num == 1);
             for (int i = 0; i < pinf->num; i++, entry++)
                 ret = entry->offsetY;
         }
     }
     return ret;
 }
+#endif
 
 /* 800458E0-800459E4       .text dMap_GetTopBottomFloorNo__FP11dStage_dt_cPUcPUc */
 BOOL dMap_GetTopBottomFloorNo(dStage_dt_c* stag, u8* bottom_p, u8* top_p) {
@@ -386,16 +405,17 @@ u8 dMap_GetFloorNo(dStage_dt_c* stag, f32 param_2) {
 
 /* 80045C90-80045E54       .text getRoomDspFloorNo__15dMap_RoomInfo_cFUci */
 u8 dMap_RoomInfo_c::getRoomDspFloorNo(u8 i_no, BOOL search) {
-    s32 no = i_no - Floor_Base;
+    u8 dspFloorNo;
+    int no = i_no - Floor_Base;
 #if VERSION > VERSION_DEMO
-    JUT_ASSERT(1794, Floor_Valid(no));
+    JUT_ASSERT(VERSION_SELECT(1794, 1794, 1794, 1794), Floor_Valid(no));
 #endif
 
-    u8 dspFloorNo = field_0x2[no];
+    dspFloorNo = field_0x2[no];
     if (search && !IsFloorNo(dspFloorNo)) {
         while (!IsFloorNo(dspFloorNo) && --no >= 0) {
 #if VERSION > VERSION_DEMO
-            JUT_ASSERT(1807, Floor_Valid(no));
+            JUT_ASSERT(VERSION_SELECT(1807, 1807, 1807, 1807), Floor_Valid(no));
 #endif
             dspFloorNo = field_0x2[no];
         }
@@ -403,7 +423,7 @@ u8 dMap_RoomInfo_c::getRoomDspFloorNo(u8 i_no, BOOL search) {
         if (!IsFloorNo(dspFloorNo)) {
             while (!IsFloorNo(dspFloorNo) && ++no <= (Floor_Num - 1)) {
 #if VERSION > VERSION_DEMO
-                JUT_ASSERT(1816, Floor_Valid(no));
+                JUT_ASSERT(VERSION_SELECT(1816, 1816, 1816, 1816), Floor_Valid(no));
 #endif
                 dspFloorNo = field_0x2[no];
             }
@@ -444,33 +464,36 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::init(dMap_RoomInfo_c* prev, int p2) {
 
 /* 80045F40-80046314       .text getRoomImage__15dMap_RoomInfo_cFiUciPP7ResTIMGPP7ResTIMGPP8map_dt_cPP20stage_map_info_classPUc */
 u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG** param_4, ResTIMG** param_5, map_dt_c** param_6, stage_map_info_class** param_7, u8* param_8) {
-    /* Nonmatching */
-    bool r24 = false;
-    ResTIMG* r28 = NULL;
-    ResTIMG* r27 = NULL;
-    map_dt_c* r26 = NULL;
-    stage_map_info_class* r25 = NULL;
-    u8 r22 = 0;
+    ResTIMG* r28;
+    ResTIMG* r27;
+    map_dt_c* r26;
+    stage_map_info_class* r25;
+    bool r24;
     u8 r23;
+    u8 r22;
+    r24 = false;
+    r28 = NULL;
+    r27 = NULL;
+    r26 = NULL;
+    r25 = NULL;
+    r22 = 0;
     if (IsFloorNo(param_2)) {
         r23 = param_2;
         char archiveName[0x20];
         sprintf(archiveName, "Room%d", i_roomNo);
-        int r21;
-        while (param_3 && !r24 && IsFloorNo(r21 = r23)) {
+        while (!r24 && IsFloorNo(r23)) {
             char resourceName[0x20];
-            sprintf(resourceName, "s%d.bti", r21);
+            sprintf(resourceName, "s%d.bti", r23);
             r28 = (ResTIMG*)dComIfG_getStageRes(archiveName, resourceName);
-            sprintf(resourceName, "m%d.bti", r21);
+            sprintf(resourceName, "m%d.bti", r23);
             r27 = (ResTIMG*)dComIfG_getStageRes(archiveName, resourceName);
-            sprintf(resourceName, "m%d.amp", r21);
+            sprintf(resourceName, "m%d.amp", r23);
             r26 = (map_dt_c*)dComIfG_getStageRes(archiveName, resourceName);
             r25 = NULL;
-            r21 = r23;
-            u8 r29;
-            while (!r25 && IsFloorNo(r29 = r21)) {
+            u8 r21 = r23;
+            while (!r25 && IsFloorNo(r21)) {
                 dStage_roomDt_c* roomData = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
-                r25 = roomData->getMapInfo2(r29);
+                r25 = roomData->getMapInfo2(r21);
                 r21--;
             }
             if (r28 && r27 && r26 && r25) {
@@ -478,11 +501,14 @@ u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG*
             } else {
                 r23--;
             }
+            if (!param_3) {
+                break;
+            }
         }
         if (r28 && r25 && r25->field_0x08 != r25->field_0x00 && r25->field_0x0C != r25->field_0x04) {
             r22 |= 2;
         }
-        if (r27 && ((r27->width == 128 && r27->height <= 480) || ((r27->width & 7) == 0 && r27->height == 8)) && r25) {
+        if (r27 && ((r27->width == 128 && r27->height <= 480) || ((r27->width % 8) == 0 && r27->height == 8)) && r25) {
             if (getMapInfo_map1_X1(r25) != getMapInfo_map1_X0(r25)) {
                 if (getMapInfo_map1_Z1(r25) != getMapInfo_map1_Z0(r25)) {
                     r22 |= 1;
@@ -531,7 +557,7 @@ BOOL dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int i_roomNo) {
                     if (i_roomNo == floorData->field_0x05[j]) {
                         u8 r22 = getRoomImage(i_roomNo, floorNo, 1, NULL, NULL, NULL, NULL, NULL);
 #if VERSION > VERSION_DEMO
-                        JUT_ASSERT(2195, ((floorNo - Floor_B5F) >= 0) && ((floorNo - Floor_B5F) < (Floor_5F - Floor_B5F + 1)))
+                        JUT_ASSERT(VERSION_SELECT(2195, 2195, 2195, 2195), ((floorNo - Floor_B5F) >= 0) && ((floorNo - Floor_B5F) < (Floor_5F - Floor_B5F + 1)))
 #endif
                         field_0x2[floorNo - Floor_B5F] = r22;
                     }
@@ -545,8 +571,13 @@ BOOL dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int i_roomNo) {
 }
 
 /* 80046470-80046A58       .text roomEntryRoom__15dMap_RoomInfo_cFiUciUcP15dMap_RoomInfo_cssf */
-dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int param_3, u8 param_4, dMap_RoomInfo_c* param_5, s16 param_6, s16 param_7, f32 param_8) {
-    JUT_ASSERT(2241, i_roomNo >= 0);
+#if VERSION == VERSION_DEMO
+dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int param_3, u8 param_4, dMap_RoomInfo_c* param_5, s16 param_6, s16 param_7)
+#else
+dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int param_3, u8 param_4, dMap_RoomInfo_c* param_5, s16 param_6, s16 param_7, f32 param_8)
+#endif
+{
+    JUT_ASSERT(VERSION_SELECT(2397, 2241, 2241, 2241), i_roomNo >= 0);
     if (m_exist == 0) {
         field_0x1 = 0;
         mStageMapInfoP = NULL;
@@ -580,16 +611,16 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int pa
                     field_0x18 = param_6 / (l_mapInfoP->field_0x08 - l_mapInfoP->field_0x00);
                     field_0x1c = param_7 / (l_mapInfoP->field_0x0C - l_mapInfoP->field_0x04);
                 } else {
-                    JUT_ASSERT(2331, 0);
+                    JUT_ASSERT(VERSION_SELECT(2487, 2331, 2331, 2331), 0);
                 }
             } else {
                 field_0x44[0].field_0x0 = 0;
             }
             field_0x30.init(1, field_0x44);
             if ((local_60 & 1)) {
-                JUT_ASSERT(2346, l_mapDtP != 0);
-                JUT_ASSERT(2347, l_image1P != 0);
-                JUT_ASSERT(2348, l_mapInfoP != 0);
+                JUT_ASSERT(VERSION_SELECT(2502, 2346, 2346, 2346), l_mapDtP != NULL);
+                JUT_ASSERT(VERSION_SELECT(2503, 2347, 2347, 2347), l_image1P != NULL);
+                JUT_ASSERT(VERSION_SELECT(2504, 2348, 2348, 2348), l_mapInfoP != NULL);
                 field_0x8c.setImage(l_image1P,l_mapDtP);
                 field_0x28 = mDoLib_cnvind16(l_mapDtP->field_0x0);
                 field_0x2c = mDoLib_cnvind16(l_mapDtP->field_0x2);
@@ -606,14 +637,18 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int pa
                     } else {
                         l_mapDtP->field_0x6 = param_2 - 0x80;
                     }
-                } else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
+                }
+#if VERSION > VERSION_DEMO
+                else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
                     int tmp = dMap_GetFloorNo(&dComIfGp_getStage(), param_8 + mapOffsetY());
                     if (tmp >= 0x80) {
                         l_mapDtP->field_0x6 = tmp - 0x7f;
                     } else {
                         l_mapDtP->field_0x6 = tmp - 0x80;
                     }
-                } else {
+                }
+#endif
+                else {
                     l_mapDtP->field_0x32 = 0;
                     l_mapDtP->field_0x6 = 0;
                 }
@@ -628,7 +663,12 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int pa
 }
 
 /* 80046A58-80046F08       .text Changeimage__15dMap_RoomInfo_cFUcUcissf */
-BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param_4, s16 param_5, f32 param_6) {
+#if VERSION == VERSION_DEMO
+BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param_4, s16 param_5)
+#else
+BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param_4, s16 param_5, f32 param_6)
+#endif
+{
     ResTIMG* local_60 = NULL;
     ResTIMG* local_64 = NULL;
     map_dt_c* local_68 = NULL;
@@ -637,7 +677,7 @@ BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param
     if (IsFloorNo(param_1)) {
         r26 = getRoomDspFloorNo(param_1, m_no == param_3);
     } else {
-        JUT_ASSERT(2453, 0);
+        JUT_ASSERT(VERSION_SELECT(2606, 2453, 2453, 2453), 0);
     }
     if (r26 == field_0xc) {
         return false;
@@ -678,14 +718,18 @@ BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param
             } else {
                 local_68->field_0x6 = param_1 - 0x80;
             }
-        } else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
+        }
+#if VERSION > VERSION_DEMO
+        else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
             int tmp = dMap_GetFloorNo(&dComIfGp_getStage(), param_6 + mapOffsetY());
             if (tmp >= 0x80) {
                 local_68->field_0x6 = tmp - 0x7f;
             } else {
                 local_68->field_0x6 = tmp - 0x80;
             }
-        } else {
+        }
+#endif
+        else {
             local_68->field_0x32 = 0;
             local_68->field_0x6 = 0;
         }
@@ -698,6 +742,7 @@ BOOL dMap_RoomInfo_c::deleteRoom() {
     m_no = -1;
     m_exist = 0;
     mStageMapInfoP = NULL;
+#if VERSION > VERSION_DEMO
     field_0x1 = 0;
     for (int i = 0; i < ARRAY_SIZE(field_0x2); i++) {
         field_0x2[i] = 255;
@@ -713,6 +758,7 @@ BOOL dMap_RoomInfo_c::deleteRoom() {
     field_0x8c.init(NULL, NULL, 0.0f, 0.0f, 0, 0, 0, 0, 1.0f, 1.0f, 0);
     field_0x44[0].field_0x0 = 0;
     field_0x30.init(1, &field_0x44[0]);
+#endif
     return TRUE;
 }
 
@@ -796,17 +842,19 @@ void dMap_RoomInfo_c::roomDrawRoomEnlargementSize(int param_1, int param_2, int 
 }
 
 /* 800475B8-80047834       .text roomDrawRoomRealSize__15dMap_RoomInfo_cFiiiiffffffUc */
-void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3, int param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8, f32 param_9, f32 param_10, u8 param_11) {
-    /* Nonmatching */
+void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3, int param_4,
+    f32 param_5, f32 param_6, f32 param_7, f32 param_8, f32 param_9, f32 param_10, u8 i_alpha
+) {
     if (field_0x1 & 1) {
         f32 f28 = getStageMapInfoP()->field_0x30 / param_9;
         f32 f27 = getStageMapInfoP()->field_0x30 / param_10;
-        f32 f29 = field_0x2c * 0.5f + (param_6 - param_8) / getStageMapInfoP()->field_0x30;
-        field_0x8c.field_0x44 = field_0x28 * 0.5f + (param_5 - param_7) / getStageMapInfoP()->field_0x30;
-        field_0x8c.field_0x48 = f29;
+        field_0x8c.setCenterPos(
+            field_0x28 * 0.5f + (param_5 - param_7) / getStageMapInfoP()->field_0x30,
+            field_0x2c * 0.5f + (param_6 - param_8) / getStageMapInfoP()->field_0x30
+        );
         field_0x8c.setScale(f28, f27);
         field_0x8c.setPos(param_1, param_2, param_1 + param_3, param_2 + param_4);
-        field_0x8c.field_0x54 = param_11;
+        field_0x8c.setAlpha(i_alpha);
         dComIfGd_set2DOpa(&field_0x8c);
     }
 }
@@ -814,11 +862,11 @@ void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3
 /* 80047834-8004793C       .text roomExistenceCheck__19dMap_RoomInfoCtrl_cFiPP15dMap_RoomInfo_c */
 bool dMap_RoomInfoCtrl_c::roomExistenceCheck(int i_no, dMap_RoomInfo_c** roomInfoPP) {
     /* Nonmatching */
-    JUT_ASSERT(2947, roomInfoPP != NULL);
+    JUT_ASSERT(VERSION_SELECT(3075, 2947, 2947, 2947), roomInfoPP != NULL);
     bool ret = false;
     *roomInfoPP = NULL;
     dMap_RoomInfo_c* roomInfoP = m_info;
-    JUT_ASSERT(2955, roomInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(3083, 2955, 2955, 2955), roomInfoP != NULL);
     for (; !ret && roomInfoP != NULL; roomInfoP = roomInfoP->m_next) {
         if (roomInfoP->m_exist) {
             if (i_no == roomInfoP->m_no) {
@@ -846,14 +894,19 @@ dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::getNextRoomP(dMap_RoomInfo_c* info) {
 }
 
 /* 80047960-80047A8C       .text ctrlEntryRoom__19dMap_RoomInfoCtrl_cFiUciUcssf */
-dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::ctrlEntryRoom(int i_no, u8 p1, int p2, u8 p3, s16 p4, s16 p5, f32 p6) {
+#if VERSION == VERSION_DEMO
+dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::ctrlEntryRoom(int i_no, u8 p1, int p2, u8 p3, s16 p4, s16 p5)
+#else
+dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::ctrlEntryRoom(int i_no, u8 p1, int p2, u8 p3, s16 p4, s16 p5, f32 p6)
+#endif
+{
     dMap_RoomInfo_c* roomInfoP;
     if (roomExistenceCheck(i_no, &roomInfoP))
         return NULL;
 
     dMap_RoomInfo_c* prev = NULL;
     roomInfoP = m_info;
-    JUT_ASSERT(3069, roomInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(3196, 3069, 3069, 3069), roomInfoP != NULL);
 
     if (roomInfoP == NULL)
         return NULL;
@@ -862,10 +915,18 @@ dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::ctrlEntryRoom(int i_no, u8 p1, int p2, u8 
         prev = roomInfoP;
 
     if (roomInfoP != NULL) {
+#if VERSION == VERSION_DEMO
+        if (roomInfoP->roomEntryRoom(i_no, p1, p2, p3, prev, p4, p5))
+            return roomInfoP;
+#else
         if (roomInfoP->roomEntryRoom(i_no, p1, p2, p3, prev, p4, p5, p6))
             return roomInfoP;
+#endif
     }
 
+#if VERSION == VERSION_DEMO
+    JUT_ASSERT(3227, FALSE);
+#endif
     return NULL;
 }
 
@@ -896,11 +957,11 @@ void dMap_RoomInfoCtrl_c::ctrlDrawRoomEnlargementSize(int i_no, int p1, int p2, 
 }
 
 /* 80047B8C-80047C64       .text ctrlDrawRoomRealSize__19dMap_RoomInfoCtrl_cFiiiiiffffffUc */
-void dMap_RoomInfoCtrl_c::ctrlDrawRoomRealSize(int i_no, int p1, int p2, int p3, int p4, f32 p5, f32 p6, f32 p7, f32 p8, f32 p9, f32 p10, u8 p11) {
+void dMap_RoomInfoCtrl_c::ctrlDrawRoomRealSize(int i_no, int p1, int p2, int p3, int p4, f32 p5, f32 p6, f32 p7, f32 p8, f32 p9, f32 p10, u8 i_alpha) {
     dMap_RoomInfo_c* roomInfoP = NULL;
     while ((roomInfoP = getNextRoomP(roomInfoP))) {
         if (roomInfoP->m_exist && i_no == roomInfoP->m_no)
-            roomInfoP->roomDrawRoomRealSize(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11);
+            roomInfoP->roomDrawRoomRealSize(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, i_alpha);
     }
 }
 
@@ -1012,29 +1073,29 @@ void dMap_c::create() {
     ResTIMG* timg;
     for (int i = 0; i < 8; i++) {
         timg = (ResTIMG*)dComIfG_getObjectRes("Always", frameArcIdx[i]);
-        JUT_ASSERT(3450, timg != NULL);
+        JUT_ASSERT(VERSION_SELECT(3450, 3450, 3450, 3450), timg != NULL);
         mFrameTexture[i].init(timg, i + 2, (GXColor){255, 255, 255, 255});
         mFrameTexture[i].field_0x0 = 1;
         mFrameTexture[i].setScroll(cord[i][0], cord[i][1], cord[i][2], cord[i][3]);
         mFrameTex[i].init(1, &mFrameTexture[i]);
     }
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_CAMERA_FREE_e);
-    JUT_ASSERT(3476, timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(3476, 3476, 3476, 3476), timg != NULL);
     mIconFreeTexture.init(timg, 10, (GXColor){255, 210, 0, 255});
     mIconFreeTexture.field_0x0 = 1;
     mIconFreeTexture.setScroll(0.0f, 0.0f, 1.0f, 1.0f);
     mIconFreeTex.init(1, &mIconFreeTexture);
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_CAMERA_SELF_e);
-    JUT_ASSERT(3489, timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(3489, 3489, 3489, 3489), timg != NULL);
     mIconSelfTexture.init(timg, 10, (GXColor){255, 222, 255, 255});
     mIconSelfTexture.field_0x0 = 1;
     mIconSelfTexture.setScroll(0.0f, 0.0f, 1.0f, 1.0f);
     mIconSelfTex.init(1, &mIconSelfTexture);
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_F_SHIPICON_e);
-    JUT_ASSERT(3502, timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(3502, 3502, 3502, 3502), timg != NULL);
     mShip.init(timg, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0, 1.0f, 1.0f, 0);
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TREASUREBOX_e);
-    JUT_ASSERT(3511, timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(3511, 3511, 3511, 3511), timg != NULL);
     for (int i = 0; i < 8; i++) {
         mTbox[i].init(timg, 0.0f, 0.0f, 0.0f, 0.0f, 1, 0, 0, 1.0f, 1.0f, 0);
     }
@@ -1080,12 +1141,17 @@ void dMap_c::setImage(int param_1, int param_2, f32 param_3) {
     if (!IsFloorNo(mNowFloorNo)) {
         mNowFloorNo = dMap_GetFloorNo_WithRoom(param_2, param_3);
         if (!IsFloorNo(mNowFloorNo)) {
-            JUT_ASSERT(3694, 0);
+            JUT_ASSERT(VERSION_SELECT(3882, 3694, 3694, 3694), 0);
         }
     }
     u8 r31 = mNowFloorNo;
-    if (!mRoomInfoCtrl.ctrlEntryRoom(param_1, dMap_GetFloorNo_WithRoom(param_2, param_3), param_2, r31, 120, 120, param_3)) {
-        JUT_ASSERT(3714, 0);
+#if VERSION == VERSION_DEMO
+    if (!mRoomInfoCtrl.ctrlEntryRoom(param_1, dMap_GetFloorNo_WithRoom(param_2, param_3), param_2, r31, 120, 120))
+#else
+    if (!mRoomInfoCtrl.ctrlEntryRoom(param_1, dMap_GetFloorNo_WithRoom(param_2, param_3), param_2, r31, 120, 120, param_3))
+#endif
+    {
+        JUT_ASSERT(VERSION_SELECT(3908, 3714, 3714, 3714), 0);
     }
     if (!mNowRoomInfoP && param_1 == param_2 && param_2 != -1) {
         setNowRoom(param_2);
@@ -1107,10 +1173,10 @@ void dMap_c::deleteImage(int param_1) {
 BOOL dMap_c::setNowRoom(int param_1) {
     BOOL r31 = false;
     mNowRoomInfoP = NULL;
-    dMap_RoomInfo_c* var4 = NULL;
-    while (var4 = mRoomInfoCtrl.getNextRoomP(var4)) {
-        if (param_1 == var4->m_no) {
-            mNowRoomInfoP = var4;
+    dMap_RoomInfo_c* roomInfoP = NULL;
+    while ((roomInfoP = mRoomInfoCtrl.getNextRoomP(roomInfoP))) {
+        if (param_1 == roomInfoP->m_no) {
+            mNowRoomInfoP = roomInfoP;
             r31 = true;
             break;
         }
@@ -1141,7 +1207,7 @@ void dMap_2DSQ_c::draw() {
     GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
     GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
-    if (field_0x18 == 0) {
+    if (mMode == 0) {
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
         GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
@@ -1153,11 +1219,11 @@ void dMap_2DSQ_c::draw() {
         GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ZERO, GX_LO_SET);
         GXSetColorUpdate(GX_DISABLE);
         GXSetAlphaUpdate(GX_ENABLE);
-        GXSetDstAlpha(GX_ENABLE, field_0x14);
-    } else if (field_0x18 == 1) {
+        GXSetDstAlpha(GX_ENABLE, mAlpha);
+    } else if (mMode == 1) {
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-        GXSetTevColor(GX_TEVREG0, field_0x1c);
+        GXSetTevColor(GX_TEVREG0, mColor);
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
@@ -1168,10 +1234,10 @@ void dMap_2DSQ_c::draw() {
         GXSetDstAlpha(GX_DISABLE, 0);
     }
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(field_0x4, field_0xc, 0.0f);
-    GXPosition3f32(field_0x8, field_0xc, 0.0f);
-    GXPosition3f32(field_0x8, field_0x10, 0.0f);
-    GXPosition3f32(field_0x4, field_0x10, 0.0f);
+    GXPosition3f32(mDispLeft, mDispTop, 0.0f);
+    GXPosition3f32(mDispRight, mDispTop, 0.0f);
+    GXPosition3f32(mDispRight, mDispBottom, 0.0f);
+    GXPosition3f32(mDispLeft, mDispBottom, 0.0f);
     GXEnd();
     GXSetColorUpdate(GX_ENABLE);
     GXSetAlphaUpdate(GX_DISABLE);
@@ -1230,64 +1296,61 @@ void dMap_c::mapDrawFrame(u8 param_1) {
 
 /* 80048D80-80048F74       .text mapDrawEnlargementSize__6dMap_cFffffUc */
 void dMap_c::mapDrawEnlargementSize(f32 param_1, f32 param_2, f32 param_3, f32 param_4, u8 param_5) {
-    /* Nonmatching */
     static const GXColor l_color_field = {0, 0, 255, 255};
     static const GXColor l_color_dungeon = {0, 0, 0, 255};
 
     if (param_5) {
-        m2DSQdraw.field_0x4 = mDispPosLeftUpX;
-        m2DSQdraw.field_0xc = mDispPosLeftUpY;
-        m2DSQdraw.field_0x8 = m2DSQdraw.field_0x4 + mDispSizeX;
-        m2DSQdraw.field_0x10 = m2DSQdraw.field_0xc + mDispSizeY;
-        m2DSQdraw.field_0x14 = param_5;
-        m2DSQdraw.field_0x18 = 0;
+        m2DSQdraw.setDispPos(mDispPosLeftUpX, mDispPosLeftUpY, mDispPosLeftUpX + mDispSizeX, mDispPosLeftUpY + mDispSizeY);
+        m2DSQdraw.setAlpha(param_5);
+        m2DSQdraw.setMode(0);
         dComIfGd_set2DOpa(&m2DSQdraw);
-        if (mNowRoomInfoP->getEnableFlg() & 2) {
-            mRoomInfoCtrl.ctrlDrawRoomEnlargementSize(mNowRoomInfoP->getRoomNo(), mDispPosLeftUpX, mDispPosLeftUpY, mDispSizeX, mDispSizeY, param_1, param_2, param_3, param_4, param_5);
+        if (getNowRoom()->getEnableFlg() & 2) {
+            mRoomInfoCtrl.ctrlDrawRoomEnlargementSize(getNowRoom()->getRoomNo(), mDispPosLeftUpX, mDispPosLeftUpY, mDispSizeX, mDispSizeY, param_1, param_2, param_3, param_4, param_5);
         }
-        m2DSQdraw2.field_0x4 = mDispPosLeftUpX;
-        m2DSQdraw2.field_0xc = mDispPosLeftUpY;
-        m2DSQdraw2.field_0x8 = m2DSQdraw2.field_0x4 + mDispSizeX;
-        m2DSQdraw2.field_0x10 = m2DSQdraw2.field_0xc + mDispSizeY;
+        m2DSQdraw2.setDispPos(mDispPosLeftUpX, mDispPosLeftUpY, mDispPosLeftUpX + mDispSizeX, mDispPosLeftUpY + mDispSizeY);
         if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_OUTDOORS_e || dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e) {
-            m2DSQdraw2.field_0x1c = l_color_field;
+            m2DSQdraw2.setColor(&l_color_field);
         } else {
-            m2DSQdraw2.field_0x1c = l_color_dungeon;
+            m2DSQdraw2.setColor(&l_color_dungeon);
         }
-        m2DSQdraw2.field_0x18 = 1;
+        m2DSQdraw2.setMode(1);
         dComIfGd_set2DOpa(&m2DSQdraw2);
     }
 }
 
 /* 80048F74-80049354       .text mapDrawRealSize__6dMap_cFffUc */
-void dMap_c::mapDrawRealSize(f32 param_1, f32 param_2, u8 param_3) {
+void dMap_c::mapDrawRealSize(f32 param_1, f32 param_2, u8 i_alpha) {
     /* Nonmatching */
     static const GXColor l_color_field = {0, 0, 255, 255};
     static const GXColor l_color_dungeon = {0, 0, 0, 255};
 
-    if (param_3) {
-        m2DSQdraw.field_0x4 = mDispPosLeftUpX;
-        m2DSQdraw.field_0xc = mDispPosLeftUpY;
-        m2DSQdraw.field_0x8 = m2DSQdraw.field_0x4 + mDispSizeX;
-        m2DSQdraw.field_0x10 = m2DSQdraw.field_0xc + mDispSizeY;
-        m2DSQdraw.field_0x14 = param_3;
-        m2DSQdraw.field_0x18 = 0;
+    if (i_alpha) {
+        m2DSQdraw.setDispPos(mDispPosLeftUpX, mDispPosLeftUpY, mDispPosLeftUpX + mDispSizeX, mDispPosLeftUpY + mDispSizeY);
+        m2DSQdraw.setAlpha(i_alpha);
+        m2DSQdraw.setMode(0);
         dComIfGd_set2DOpa(&m2DSQdraw);
         if (mNowRoomInfoP->getEnableFlg() & 1) {
             f32 f31 = mNowRoomInfoP->getStageMapInfoP()->field_0x30;
             f32 f30 = mNowRoomInfoP->getStageMapInfoP()->field_0x30;
-            mRoomInfoCtrl.ctrlDrawRoomRealSize(mNowRoomInfoP->getRoomNo(), mDispPosLeftUpX, mDispPosLeftUpY, mDispSizeX, mDispSizeY, param_1, param_2, getMapInfo_map1_XC(mNowRoomInfoP->getStageMapInfoP()), getMapInfo_map1_ZC(mNowRoomInfoP->getStageMapInfoP()), f30, f31, param_3);
+            mRoomInfoCtrl.ctrlDrawRoomRealSize(
+                mNowRoomInfoP->getRoomNo(),
+                mDispPosLeftUpX, mDispPosLeftUpY, mDispSizeX, mDispSizeY,
+                param_1, param_2,
+                getMapInfo_map1_XC(mNowRoomInfoP->getStageMapInfoP()),
+                getMapInfo_map1_ZC(mNowRoomInfoP->getStageMapInfoP()),
+                f30, f31, i_alpha
+            );
         }
-        m2DSQdraw2.field_0x4 = mDispPosLeftUpX;
-        m2DSQdraw2.field_0xc = mDispPosLeftUpY;
-        m2DSQdraw2.field_0x8 = m2DSQdraw2.field_0x4 + mDispSizeX;
-        m2DSQdraw2.field_0x10 = m2DSQdraw2.field_0xc + mDispSizeY;
-        if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_OUTDOORS_e || dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e) {
-            m2DSQdraw2.field_0x1c = l_color_field;
+        m2DSQdraw2.setDispPos(mDispPosLeftUpX, mDispPosLeftUpY, mDispPosLeftUpX + mDispSizeX, mDispPosLeftUpY + mDispSizeY);
+        if (
+            dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_OUTDOORS_e ||
+            dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e
+        ) {
+            m2DSQdraw2.setColor(&l_color_field);
         } else {
-            m2DSQdraw2.field_0x1c = l_color_dungeon;
+            m2DSQdraw2.setColor(&l_color_dungeon);
         }
-        m2DSQdraw2.field_0x18 = 1;
+        m2DSQdraw2.setMode(1);
         dComIfGd_set2DOpa(&m2DSQdraw2);
     }
 }
@@ -1420,7 +1483,9 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
         if (mPlayerStayAgbMapTypeNow == 2) {
             if (mPlayerStayAgbMapTypeOld != 2) {
                 agbMapNoSetCall();
+#if VERSION > VERSION_DEMO
                 mAGBMapSendStatus = 0;
+#endif
             }
         } else if (mPlayerStayAgbMapTypeNow == 3) {
             if (mPlayerStayAgbMapTypeOld != 3) {
@@ -1431,11 +1496,15 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
     }
     if (!mDoGaC_GbaLink()) {
         mAGBMapSendStatus = 0;
+#if VERSION > VERSION_DEMO
         mPlayerStayAgbMapTypeOld = 0xff;
+#endif
     } else {
+#if VERSION > VERSION_DEMO
         if (mPlayerStayAgbMapTypeNow != mPlayerStayAgbMapTypeOld) {
             mPlayerStayAgbMapTypeOld = mPlayerStayAgbMapTypeNow;
         }
+#endif
         if (mAGBMapSendStatus > 2 && mAGBMapSendStopFlg) {
             mAGBMapSendStatus = 0;
         }
@@ -1452,7 +1521,12 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
                 case 0:
                     if (!mDoGac_SendEndCheck(2)) {
                         if (mPlayerStayAgbMapTypeNow == 1 || mPlayerStayAgbMapTypeNow == 3) {
-                            if (!strcmp(mAgbSendNowStageName, dComIfGp_getStartStageName()) && mAgbSendNowRoomNo == mNowRoomInfoP->getRoomNo() && mAgbSendNowDspFloorNo == mNowRoomInfoP->field_0xc && mAgbSendNowAgbMapType == mPlayerStayAgbMapTypeNow) {
+                            if (
+                                !strcmp(mAgbSendNowStageName, dComIfGp_getStartStageName()) &&
+                                mAgbSendNowRoomNo == mNowRoomInfoP->getRoomNo() &&
+                                mAgbSendNowDspFloorNo == mNowRoomInfoP->field_0xc &&
+                                mAgbSendNowAgbMapType == mPlayerStayAgbMapTypeNow
+                            ) {
                                 mAGBMapSendStatus = 3;
                             } else {
                                 mAGBMapSendStatus = 0;
@@ -1477,8 +1551,8 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
                     }
                     break;
                 case 2:
-                    JUT_ASSERT(5051, mNowRoomInfoP != 0);
-                    JUT_ASSERT(5052, (mNowRoomInfoP->getEnableFlg() & DSP_ENABLE_BOTH_SIZE) == DSP_ENABLE_BOTH_SIZE);
+                    JUT_ASSERT(VERSION_SELECT(5274, 5051, 5051, 5051), mNowRoomInfoP != NULL);
+                    JUT_ASSERT(VERSION_SELECT(5275, 5052, 5052, 5052), (mNowRoomInfoP->getEnableFlg() & DSP_ENABLE_BOTH_SIZE) == DSP_ENABLE_BOTH_SIZE);
                     if (mDoGac_SendStatusCheck(2)) {
                         memcpy(mAgbSendNowStageName, dComIfGp_getStartStageName(), sizeof(mAgbSendNowStageName));
                         mAgbSendNowRoomNo = mNowRoomInfoP->getRoomNo();
@@ -1492,7 +1566,12 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
                     }
                     break;
                 case 3:
-                    if (mDoGac_SendEndCheck(2)) {
+#if VERSION == VERSION_DEMO
+                    if (mDoGaC_getDataStatus(2) == 0 || mDoGaC_getDataStatus(2) == 4)
+#else
+                    if (mDoGac_SendEndCheck(2))
+#endif
+                    {
                         mAGBMapSendStatus = 4;
                         memset(mAgbSendNowStageName, 0, sizeof(mAgbSendNowStageName));
                         mAgbSendNowRoomNo = -1;
@@ -1619,11 +1698,18 @@ void dMap_c::mapMoveAll(f32 param_1, f32 param_2, int param_3, f32 param_4) {
             }
             calcScissor();
             if (mNowRoomInfoP->mStageMapInfoP) {
-                mCompAlpha = (mNowRoomInfoP->mStageMapInfoP->field_0x34 * mAlpha) / 256;
+                mCompAlpha = ((u8)mNowRoomInfoP->mStageMapInfoP->field_0x34 * mAlpha) >> 8;
             } else {
                 mCompAlpha = 0;
             }
-            setCollectPoint(20, 9, dComIfGs_getRestartRoomPos().x, dComIfGs_getRestartRoomPos().y, dComIfGs_getRestartRoomPos().z, dComIfGs_getRestartRoomNo(), dComIfGs_getRestartRoomAngleY(), 0, 0, 0, 0);
+#if VERSION > VERSION_DEMO
+            cXyz& restartPos = dComIfGs_getRestartRoomPos();
+            setCollectPoint(
+                20, 9,
+                restartPos.x, restartPos.y, restartPos.z,
+                dComIfGs_getRestartRoomNo(), dComIfGs_getRestartRoomAngleY(), 0, 0, 0, 0
+            );
+#endif
         }
     }
 }
@@ -1634,7 +1720,7 @@ void dMap_c::mapDrawAll(f32 param_1, f32 param_2, int param_3, f32 param_4) {
         if (mMapDispMode == 1) {
             mapDrawEnlargementSize(mEnlargementSizeCenterX, mEnlargementSizeCenterZ, mEnlargementSizeScaleX, mEnlargementSizeScaleZ, mCompAlpha);
         } else {
-            mapDrawRealSize(param_1,param_2,mCompAlpha);
+            mapDrawRealSize(param_1, param_2, mCompAlpha);
         }
         mapDrawFrame(mCompAlpha);
     }
@@ -1662,8 +1748,8 @@ void dMap_c::draw(f32 param_1, f32 param_2, int param_3, f32 param_4) {
 
 /* 8004A82C-8004A97C       .text point2Grid__6dMap_cFffPScPSc */
 void dMap_c::point2Grid(f32 param_1, f32 param_2, s8* i_gridX_p, s8* i_gridY_p) {
-    JUT_ASSERT(5751, i_gridX_p != NULL);
-    JUT_ASSERT(5752, i_gridY_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6130, 5751, 5751, 5751), i_gridX_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6131, 5752, 5752, 5752), i_gridY_p != NULL);
     s8 x = floor(param_1 / 100000.0f + 0.5f);
     if (x < -3) {
         x = -3;
@@ -1684,10 +1770,10 @@ void dMap_c::point2Grid(f32 param_1, f32 param_2, s8* i_gridX_p, s8* i_gridY_p) 
 
 /* 8004A97C-8004ABB0       .text point2GridAndLocal__6dMap_cFffPScPScPsPs */
 void dMap_c::point2GridAndLocal(f32 param_1, f32 param_2, s8* i_gridX_p, s8* i_gridY_p, s16* i_localX_p, s16* i_localY_p) {
-    JUT_ASSERT(5803, i_gridX_p != NULL);
-    JUT_ASSERT(5804, i_gridY_p != NULL);
-    JUT_ASSERT(5805, i_localX_p != NULL);
-    JUT_ASSERT(5806, i_localY_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6182, 5803, 5803, 5803), i_gridX_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6183, 5804, 5804, 5804), i_gridY_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6184, 5805, 5805, 5805), i_localX_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6185, 5806, 5806, 5806), i_localY_p != NULL);
     s8 x = floor(param_1 / 100000.0f + 0.5f);
     s8 y = floor(param_2 / 100000.0f + 0.5f);
     if (x < -3) {
@@ -1739,12 +1825,12 @@ void dMap_c::setFmapChkDtPrm() {
 
 /* 8004AD00-8004ADC8       .text getFmapChkPntDtPnt__6dMap_cFi */
 FmapChkPnt* dMap_c::getFmapChkPntDtPnt(int i_param) {
-    JUT_ASSERT(6075, mFmapChkPntData_p != 0);
+    JUT_ASSERT(VERSION_SELECT(6454, 6075, 6075, 6075), mFmapChkPntData_p != NULL);
     FmapChkPnt* ret = NULL;
     if (i_param >= 0 && i_param <= mFmapChkPntValue) {
         ret = &mFmapChkPntData_p[i_param];
     } else {
-        JUT_ASSERT(6082, 0)
+        JUT_ASSERT(VERSION_SELECT(6461, 6082, 6082, 6082), 0)
     };
     return ret;
 }
@@ -1795,7 +1881,7 @@ void dMap_c::setCollectPoint(u8 param_1, u8 param_2, f32 param_3, f32 param_4, f
     }
     int typeNo = param_1 - 1;
 #if VERSION > VERSION_DEMO
-    JUT_ASSERT(6441, (typeNo >= 0) && (typeNo < AGB_POINT_TYPE_NUM));
+    JUT_ASSERT(VERSION_SELECT(6441, 6441, 6441, 6441), (typeNo >= 0) && (typeNo < AGB_POINT_TYPE_NUM));
 #endif
     s8 var1 = mCollectPointDataLinkList[typeNo];
     mCollectPointDataLinkList[typeNo] = mCollectPointDataCnt;
@@ -2208,7 +2294,7 @@ void dMap_c::getTypeAgbGcFromTypeAcs(u8 i_typeAcs, u8* param_2, u8* param_3) {
         6, 4,
     };
 
-    JUT_ASSERT(7814, (i_typeAcs >= 0) && (i_typeAcs < ACS_MAP_POINT_TYPE_MAX));
+    JUT_ASSERT(VERSION_SELECT(8287, 7814, 7814, 7814), (i_typeAcs >= 0) && (i_typeAcs < ACS_MAP_POINT_TYPE_MAX));
     if (param_2) {
         *param_2 = statusMapNo2TypeNoTbl[i_typeAcs][0];
     }
@@ -2219,7 +2305,6 @@ void dMap_c::getTypeAgbGcFromTypeAcs(u8 i_typeAcs, u8* param_2, u8* param_3) {
 
 /* 8004CFA4-8004D0A4       .text drawPointSingle__6dMap_cFUcfffScsUcUcUc */
 void dMap_c::drawPointSingle(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9) {
-    /* Nonmatching */
     static const s8 agbTbl[] = {
         -1, -1, 2, -1,
         6, -1, 0, 0,
@@ -2229,18 +2314,27 @@ void dMap_c::drawPointSingle(u8 param_1, f32 param_2, f32 param_3, f32 param_4, 
         0,
     };
 
+#if VERSION > VERSION_DEMO
     if (dComIfGp_roomControl_getStayNo() < 0 || !mNowRoomInfoP) {
         return;
     }
+#endif
 
     int tmp = param_1 - 1;
     if (tmp < 0 || tmp >= sizeof(agbTbl)) {
-        JUT_ASSERT(7901, 0);
-    } else if (agbTbl[tmp] < 0) {
-        JUT_ASSERT(7908, 0);
-    } else {
-        setCollectPoint(param_1, agbTbl[tmp], param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, 0);
+#if VERSION > VERSION_DEMO
+        JUT_ASSERT(VERSION_SELECT(7901, 7901, 7901, 7901), 0);
+#endif
+        return;
     }
+    int r4 = agbTbl[tmp];
+    if (r4 < 0) {
+#if VERSION > VERSION_DEMO
+        JUT_ASSERT(VERSION_SELECT(7908, 7908, 7908, 7908), 0);
+#endif
+        return;
+    }
+    setCollectPoint(param_1, r4, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, 0);
 }
 
 /* 8004D0A4-8004D260       .text drawActorPointMiniMap__6dMap_cFP10fopAc_ac_c */
@@ -2274,7 +2368,7 @@ void dMap_c::mapSetPointAll() {
     for (int i = 0; i < sizeof(agbSetList); i++) {
         s8 typeNo = agbSetList[i] - 1;
 #if VERSION > VERSION_DEMO
-        JUT_ASSERT(8427, (typeNo >= 0) && (typeNo < AGB_POINT_TYPE_NUM));
+        JUT_ASSERT(VERSION_SELECT(8427, 8427, 8427, 8427), (typeNo >= 0) && (typeNo < AGB_POINT_TYPE_NUM));
 #endif
         for (s8 j = mCollectPointDataLinkList[typeNo]; j >= 0; j = mCollectPointData[j].field_0x16) {
             drawPointMain(
@@ -2429,7 +2523,6 @@ void dMap_2DMtMapSpcl_c::draw() {
 
 /* 8004E068-8004E1CC       .text setImage__18dMap_2DAGBScrDsp_cFP7ResTIMGP8map_dt_c */
 void dMap_2DAGBScrDsp_c::setImage(ResTIMG* i_img, map_dt_c* param_2) {
-    /* Nonmatching */
     field_0x4 = param_2;
     mImg = i_img;
     if (!field_0x4 || !mImg) {
@@ -2437,8 +2530,10 @@ void dMap_2DAGBScrDsp_c::setImage(ResTIMG* i_img, map_dt_c* param_2) {
         return;
     }
     GXInitTlutObj(&field_0x2c, (u8*)mImg + mImg->paletteOffset, GXTlutFmt(mImg->colorFormat), mImg->numColors);
-    GXInitTexObjCI(&field_0xc, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format), GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1, 0);
-    GXInitTexObjLOD(&field_0xc, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f, mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
+    GXInitTexObjCI(&field_0xc, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format),
+        GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1 ? GX_TRUE : GX_FALSE, 0);
+    GXInitTexObjLOD(&field_0xc, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f,
+            mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
     field_0x38 = 0x3c + mDoLib_cnvind32(field_0x4->field_0xc) + mDoLib_cnvind32(field_0x4->field_0x38);
 }
 
@@ -2453,7 +2548,7 @@ void dMap_2DAGBScrDsp_c::init(map_dt_c* param_1, ResTIMG* param_2, f32 param_3, 
     field_0x42 = param_8;
     mScaleX = param_9;
     mScaleY = param_10;
-    field_0x54 = param_11;
+    mAlpha = param_11;
 }
 
 /* 8004E264-8004E384       .text getScrnPrm__18dMap_2DAGBScrDsp_cFffifPiPfPf */
@@ -2725,12 +2820,12 @@ void dMap_Dmap_c::setFloorTextureOne(u8 param_1) {
         dmap_dmap_tlut_s* r23 = &field_0x20[i][r29];
         memset(r23, 0, sizeof(dmap_dmap_tlut_s));
         GXInitTlutObj(&field_0x4b0[i][r29], r23, GXTlutFmt(imageP->colorFormat), imageP->numColors);
-        JUT_ASSERT(10393, imageP->numColors == (16))
+        JUT_ASSERT(VERSION_SELECT(10393, 10393, 10393, 10393), imageP->numColors == (16))
     }
     GXTexObj* texObj = &field_0x370[r29];
     GXInitTexObjCI(texObj, (u8*)imageP + imageP->imageOffset, imageP->width, imageP->height, GXCITexFmt(imageP->format), GXTexWrapMode(imageP->wrapS), GXTexWrapMode(imageP->wrapT), imageP->mipmapCount > 1, r29);
     GXInitTexObjLOD(texObj, GXTexFilter(imageP->minFilter), GXTexFilter(imageP->magFilter), imageP->minLOD * 0.125f, imageP->maxLOD * 0.125f, imageP->LODBias * 0.01f, imageP->biasClamp, imageP->doEdgeLOD, GXAnisotropy(imageP->maxAnisotropy));
-    JUT_ASSERT(10419, (mNowTlutDblBufNo == 0) || (mNowTlutDblBufNo == 1));
+    JUT_ASSERT(VERSION_SELECT(10419, 10419, 10419, 10419), (mNowTlutDblBufNo == 0) || (mNowTlutDblBufNo == 1));
     for (int i = 0; i < 2; i++) {
         setTlut(&field_0x20[i][r29], param_1, field_0x2b8, field_0x2b9, field_0x2ba);
     }
@@ -2757,11 +2852,11 @@ void dMap_Dmap_c::init(s16 param_1, s16 param_2, s16 param_3, s16 param_4, s16 p
     field_0x2ba = 0;
     field_0x36e = 0;
     mImageP = (ResTIMG*)JKRGetResource('TIMG', "dtmap_mask.bti", mpArc);
-    JUT_ASSERT(10504, mImageP != NULL);
+    JUT_ASSERT(VERSION_SELECT(10504, 10504, 10504, 10504), mImageP != NULL);
     mImageSeetP = (ResTIMG*)JKRGetResource('TIMG', "menu_note_02_2.bti", mpArc);
-    JUT_ASSERT(10511, mImageSeetP !=NULL);
+    JUT_ASSERT(VERSION_SELECT(10511, 10511, 10511, 10511), mImageSeetP !=NULL);
     mImageGridP = (ResTIMG*)JKRGetResource('TIMG', "grid_32.bti", mpArc);
-    JUT_ASSERT(10519, mImageGridP !=NULL);
+    JUT_ASSERT(VERSION_SELECT(10519, 10519, 10519, 10519), mImageGridP !=NULL);
     field_0x2b0 = (ResTIMG*)dComIfG_getStageRes("Stage", "dmap_back.bti");
     GXInitTexObj(&field_0x5c0, (u8*)mImageP + mImageP->imageOffset, mImageP->width, mImageP->height, GXTexFmt(mImageP->format), GXTexWrapMode(mImageP->wrapS), GXTexWrapMode(mImageP->wrapT), mImageP->mipmapCount > 1);
     GXInitTexObjLOD(&field_0x5c0, GXTexFilter(mImageP->minFilter), GXTexFilter(mImageP->magFilter), mImageP->minLOD * 0.125f, mImageP->maxLOD * 0.125f, mImageP->LODBias * 0.01f, mImageP->biasClamp, mImageP->doEdgeLOD, GXAnisotropy(mImageP->maxAnisotropy));
@@ -2787,7 +2882,7 @@ void dMap_Dmap_c::draw() {
     static const GXColor wallPaperColorBlack = {255, 255, 255, 255};
     static const GXColor edgeColor = {255, 255, 255, 255};
 
-    JUT_ASSERT(10663, mMaskHeight != 0.0f);
+    JUT_ASSERT(VERSION_SELECT(10663, 10663, 10663, 10663), mMaskHeight != 0.0f);
     f32 f27 = field_0x368 / 64.0f;
     f32 f26 = field_0x36a / 64.0f;
     f32 f23 = 1.0f / GXGetTexObjWidth(&field_0x5e0);
