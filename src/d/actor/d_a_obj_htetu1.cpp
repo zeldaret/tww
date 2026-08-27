@@ -5,26 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_htetu1.h"
-#include "JSystem/J3DGraphAnimator/J3DModel.h"
-#include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "JSystem/JUtility/JUTAssert.h"
-#include "SSystem/SComponent/c_bg_w.h"
-#include "SSystem/SComponent/c_math.h"
-#include "SSystem/SComponent/c_phase.h"
-#include "SSystem/SComponent/c_xyz.h"
-#include "d/d_bg_s.h"
 #include "d/d_bg_s_func.h"
-#include "d/d_bg_s_wtr_chk.h"
-#include "d/d_bg_w.h"
-#include "d/d_com_inf_game.h"
-#include "d/d_kankyo.h"
-#include "d/d_particle_name.h"
-#include "dolphin/types.h"
-#include "f_op/f_op_actor.h"
-#include "f_op/f_op_actor_mng.h"
-#include "f_pc/f_pc_draw_priority.h"
-#include "m_Do/m_Do_ext.h"
-#include "m_Do/m_Do_mtx.h"
 #include "res/Object/Htetu1.h"
 
 const u16 l_daObjHtetu1_splash_id_table[] = {
