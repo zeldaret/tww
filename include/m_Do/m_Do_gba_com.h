@@ -139,12 +139,12 @@ inline void mDoGaC_GbaReboot() {
     g_mDoGaC_gbaCom.mDoGaC_GbaReboot();
 }
 
-inline void mDoGac_SendDataSet(u32* param_0, int param_1, u8 param_2, u32 param_3) {
-    g_mDoGaC_gbaCom.mDoGaC_SendDataSet(param_0, param_1, param_2, param_3);
+inline int mDoGac_SendDataSet(u32* param_0, int param_1, u8 param_2, u32 param_3) {
+    return g_mDoGaC_gbaCom.mDoGaC_SendDataSet(param_0, param_1, param_2, param_3);
 }
 
-inline void mDoGac_SendEndCheck(u8 param_0) {
-    g_mDoGaC_gbaCom.mDoGaC_SendEndCheck(param_0);
+inline int mDoGac_SendEndCheck(u8 param_0) {
+    return g_mDoGaC_gbaCom.mDoGaC_SendEndCheck(param_0);
 }
 
 inline void mDoGaC_SendEntry(u8 param_0, u32 param_1) {
