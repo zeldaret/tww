@@ -14,7 +14,6 @@
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_func.h"
-#include "d/d_bg_s_spl_grp_chk.h"
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_w.h"
 #include "d/d_com_inf_game.h"
@@ -111,6 +110,22 @@ cPhs_State daObjHtetu1_c::_create() {
 /* 00000508-00000610       .text _delete__13daObjHtetu1_cFv */
 bool daObjHtetu1_c::_delete() {
     /* Nonmatching*/
+    if (field_0x2C8 > 0) {
+        dComIfGp_getVibration().StopQuake(-1);
+        field_0x2C8 = -1;
+    }
+    for (int i = 0; i < 2; i++) {
+        if (field_0x2D0[i].field_0x00.getEmitter() != NULL) {
+            field_0x2D0[i].field_0x00.end();
+            field_0x2D0[i].field_0x28 = 0;
+        }
+    }
+    if (heap != NULL && field_0x2CC != NULL && field_0x2CC->ChkUsed()) {
+        dComIfG_Bgsp()->Release(field_0x2CC);
+        field_0x2CC = NULL;
+    }
+    dComIfG_resDelete(&mPhase, M_arcname);
+    return TRUE;
 }
 
 /* 00000610-00000648       .text check_sw__13daObjHtetu1_cFv */
