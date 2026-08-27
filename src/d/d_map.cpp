@@ -861,7 +861,7 @@ void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3
         field_0x8c.mOfsY = f29;
         field_0x8c.setScale(f28, f27);
         field_0x8c.setPos(param_1, param_2, param_1 + param_3, param_2 + param_4);
-        field_0x8c.mAlpha = param_11;
+        field_0x8c.mAlpha = i_alpha;
         dComIfGd_set2DOpa(&field_0x8c);
     }
 }
