@@ -3547,6 +3547,10 @@ inline fopAc_ac_c* dComIfGp_event_getPt2() {
     return g_dComIfG_gameInfo.play.getEvent()->getPt2();
 }
 
+inline void dComIfGp_event_setPt2(void* i_actor) {
+    g_dComIfG_gameInfo.play.getEvent()->setPt2(i_actor);
+}
+
 inline f32 dComIfGp_event_getCullRate() {
     return g_dComIfG_gameInfo.play.getEvent()->getCullRate();
 }
@@ -3839,6 +3843,9 @@ inline void dComIfGd_resetLightModel() { g_dComIfG_gameInfo.drawlist.resetLightM
 
 inline J3DDrawBuffer* dComIfGd_getOpaListP1() { return g_dComIfG_gameInfo.drawlist.getOpaListP1(); }
 inline J3DDrawBuffer* dComIfGd_getOpaListSky() { return g_dComIfG_gameInfo.drawlist.getOpaListSky(); }
+inline J3DDrawBuffer* dComIfGd_getOpaList() { return g_dComIfG_gameInfo.drawlist.getOpaList(); }
+inline J3DDrawBuffer* dComIfGd_getOpaListBG() { return g_dComIfG_gameInfo.drawlist.getOpaListBG(); }
+inline J3DDrawBuffer* dComIfGd_getXluListBG() { return g_dComIfG_gameInfo.drawlist.getXluListBG(); }
 inline J3DDrawBuffer* dComIfGd_getListFilter() { return g_dComIfG_gameInfo.drawlist.getOpaListFilter(); }
 inline J3DDrawBuffer* dComIfGd_getList2D() { return g_dComIfG_gameInfo.drawlist.getOpaList2D(); }
 inline J3DDrawBuffer* dComIfGd_getXluList() { return g_dComIfG_gameInfo.drawlist.getXluList(); }

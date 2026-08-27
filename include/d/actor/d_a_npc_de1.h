@@ -2,73 +2,155 @@
 #define D_A_NPC_DE1_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
+#include "d/d_particle.h"
+#include "d/d_bg_w_deform.h"
+#include "m_Do/m_Do_hostIO.h"
 
-class daNpc_De1_c : public fopAc_ac_c {
+class daNpc_De1_c : public fopNpc_npc_c {
 public:
-    struct anm_prm_c {
-        
+    typedef BOOL (daNpc_De1_c::*ActionFunc)(void*);
+
+    enum {
+        ANM_WAIT01,
+        ANM_SLEEP,
+        ANM_WAKE,
+        ANM_SUFFER,
+        ANM_TALK01,
+        ANM_TALK02,
+        ANM_TALK03,
+        ANM_END,
     };
 
-    void createInit();
+    struct anm_prm_c {
+        /* 0x00 */ s8 mAnmIdx;
+        /* 0x04 */ f32 mMorf;
+        /* 0x08 */ f32 mPlaySpeed;
+        /* 0x0C */ int mLoopMode;
+    };
+
+    bool createInit();
     void setMtx();
-    void anmResID(int, int*, int*);
-    void setAnm_anm(anm_prm_c*);
+    BOOL anmResID(int, int*, int*);
+    BOOL setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int);
     void setAnm();
     void chngAnmTag();
     void ctrlAnmTag();
-    void chngAnmAtr(unsigned char);
+    void chngAnmAtr(u8);
     void ctrlAnmAtr();
     void setAnm_ATR();
-    void anmAtr(unsigned short);
-    void setStt(signed char);
-    void next_msgStatus(unsigned long*);
-    void getMsg();
+    void anmAtr(u16);
+    void setStt(s8);
+    u16 next_msgStatus(u32*);
+    u32 getMsg();
     void eventOrder();
     void checkOrder();
-    void chkAttention();
+    bool chkAttention();
     void setAttention();
-    void searchByID(fpc_ProcID);
+    fopAc_ac_c* searchByID(fpc_ProcID);
     void setDemoStartCenter();
-    void partner_srch();
+    BOOL partner_srch();
     void ccCreate();
     void cc_set();
     void set_pa_happa();
     void del_pa_happa();
     void followPa_happa();
-    void decideType(int);
+    BOOL decideType(int);
+
     void event_actionInit(int);
-    void event_action();
+    BOOL event_action();
     void privateCut();
     void endEvent();
     void event_proc();
-    void set_action(int (daNpc_De1_c::*)(void*), void*);
-    void wait01();
-    void wait02();
-    void wait03();
-    void wait04();
-    void wait05();
-    void talk01();
-    void talk02();
-    void wait_action1(void*);
-    void wait_action2(void*);
-    void demo();
+    BOOL set_action(ActionFunc, void*);
+    BOOL wait01();
+    BOOL wait02();
+    BOOL wait03();
+    BOOL wait04();
+    BOOL wait05();
+    BOOL talk01();
+    BOOL talk02();
+    BOOL wait_action1(void*);
+    BOOL wait_action2(void*);
+    u8 demo();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void CreateHeap();
+    BOOL CreateHeap();
 
 public:
-    /* Place member variables here */
-};
+    /* 0x6C4 */ request_of_phase_process_class mPhs;
+    /* 0x6CC */ s8 m_head_jnt_num;
+    /* 0x6CD */ s8 m_branchL_jnt_num;
+    /* 0x6D0 */ dBgWDeform* mpBgWSv;
+    /* 0x6D4 */ ActionFunc mActionFunc;
+    /* 0x6E0 */ dNpc_EventCut_c mEventCut;
+    /* 0x74C */ csXyz mOrigAngle;
+    /* 0x754 */ cXyz mOrigPos;
+    /* 0x760 */ cXyz mAttentionBasePos;
+    /* 0x76C */ cXyz mAttentionPos;
+    /* 0x778 */ cXyz mHomePos;
+    /* 0x784 */ cXyz mDemoCenterPos;
+    /* 0x790 */ f32 mPrevMorfFrame;
+    /* 0x794 */ u8 field_0x794[4];
+    /* 0x798 */ s16 mSoundTimer;
+    /* 0x79A */ s16 mTimer;
+    /* 0x79C */ u8 field_0x79C[2];
+    /* 0x79E */ s16 mDemoTimer;
+    /* 0x7A0 */ u8 field_0x7A0[4];
+    /* 0x7A4 */ s8 mPlayMorfResult;
+    /* 0x7A5 */ u8 field_0x7A5;
+    /* 0x7A6 */ u8 field_0x7A6;
+    /* 0x7A7 */ u8 field_0x7A7;
+    /* 0x7A8 */ u8 mExecMode;
+    /* 0x7AC */ s32 mMorfFrame;
+    /* 0x7B0 */ u8 field_0x7B0[4];
+    /* 0x7B4 */ u8 mNearPlayer;
+    /* 0x7B5 */ u8 mPartnerNearPlayer;
+    /* 0x7B6 */ u8 field_0x7B6;
+    /* 0x7B7 */ u8 mNoPlayMorf;
+    /* 0x7B8 */ u8 mIsFirstTalk;
+    /* 0x7BC */ dPa_followEcallBack mPaHappa;
+    /* 0x7D0 */ cXyz mPaHappaPos;
+    /* 0x7DC */ fpc_ProcID m_cc_ID[10];
+    /* 0x804 */ s8 m_c0_jnt_num[10];
+    /* 0x810 */ fpc_ProcID mPartnerID;
+    /* 0x814 */ s8 mCutType;
+    /* 0x815 */ s8 mActNo;
+    /* 0x816 */ u8 mAnmAtr;
+    /* 0x817 */ u8 mAnmTag;
+    /* 0x818 */ s8 mCurAnmIdx;
+    /* 0x819 */ s8 mDemoMode;
+    /* 0x81A */ s8 mStatus;
+    /* 0x81B */ s8 mTalk02State;
+    /* 0x81C */ s8 mHeapType;
+    /* 0x81D */ s8 mType;
+    /* 0x81E */ s8 mActionState;
+    /* 0x81F */ s8 mMsgTypingState;
+};  // Size: 0x820
 
 class daNpc_De1_HIO_c {
 public:
+    struct hio_prm_c {
+        /* 0x00 */ f32 m00;
+        /* 0x04 */ f32 m04;
+        /* 0x08 */ f32 m08;
+        /* 0x0C */ f32 m0C;
+        /* 0x10 */ f32 m10;
+        /* 0x14 */ f32 m14;
+        /* 0x18 */ f32 m18;
+        /* 0x1C */ f32 m1C;
+    };  // Size: 0x20
+
     daNpc_De1_HIO_c();
+    virtual ~daNpc_De1_HIO_c() {}
 
 public:
-    /* Place member variables here */
-};
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ s32 mNum;
+    /* 0x0C */ hio_prm_c mPrm;
+};  // Size: 0x2C
 
 #endif /* D_A_NPC_DE1_H */
