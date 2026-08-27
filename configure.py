@@ -1186,6 +1186,9 @@ config.libs = [
         "vi",
         [
             Object(Matching, "dolphin/vi/vi.c"),
+            Object(Matching, "dolphin/vi/i2c.c"),
+            Object(Matching, "dolphin/vi/initphilips.c"),
+            Object(Matching, "dolphin/vi/gpioexi.c"),
         ],
     ),
     DolphinLib(
@@ -1928,6 +1931,9 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_camera.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_event_debug.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_kankyo_debug.cpp")
+        objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/i2c.c")
+        objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/initphilips.c")
+        objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/gpioexi.c")
         objects.insert(objects.index("dolphin/gx/GXPixel.c"), "dolphin/gx/GXDraw.c")
     
     # Example of adding new files for modding:

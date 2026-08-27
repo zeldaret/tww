@@ -111,6 +111,15 @@ public:
     void setPos(s16, s16, s16, s16);
     void setScale(f32, f32);
 
+
+    void getMapDt() {}
+    void getMapDtSize() {}
+    void setAlpha(u8 alpha) { mAlpha = alpha; }
+    void setCenterPos(f32 p0, f32 p1) {
+        mOfsX = p0;
+        mOfsY = p1;
+    }
+
     /* 0x04 */ map_dt_c* mpMapData;
     /* 0x08 */ ResTIMG* mImg;
     /* 0x0C */ GXTexObj mTexObj;
@@ -125,8 +134,6 @@ public:
     /* 0x4C */ f32 mScaleX;
     /* 0x50 */ f32 mScaleY;
     /* 0x54 */ u8 mAlpha;
-
-
 };
 
 class dMap_RoomInfo_c {
@@ -137,8 +144,13 @@ public:
     dMap_RoomInfo_c* init(dMap_RoomInfo_c*, int);
     u8 getRoomImage(int, u8, int, ResTIMG**, ResTIMG**, map_dt_c**, stage_map_info_class**, u8*);
     BOOL makeRoomDspFloorNoTbl(int);
+#if VERSION == VERSION_DEMO
+    dMap_RoomInfo_c* roomEntryRoom(int, u8, int, u8, dMap_RoomInfo_c*, s16, s16);
+    BOOL Changeimage(u8, u8, int, s16, s16);
+#else
     dMap_RoomInfo_c* roomEntryRoom(int, u8, int, u8, dMap_RoomInfo_c*, s16, s16, f32);
     BOOL Changeimage(u8, u8, int, s16, s16, f32);
+#endif
     BOOL deleteRoom();
     bool enlagementSizeTextureCordCalc(f32*, f32*, f32*, f32*, f32, f32, f32, f32, f32, f32);
     void roomDrawRoomEnlargementSize(int, int, int, int, f32, f32, f32, f32, u8);
@@ -174,9 +186,13 @@ public:
 
     u8 getEnableFlg() { return field_0x1; }
     int getRoomNo() { return m_no; }
-    stage_map_info_class* getStageMapInfoP() { JUT_ASSERT(1127, mStageMapInfoP != NULL); return mStageMapInfoP; }
+    stage_map_info_class* getStageMapInfoP() {
+        JUT_ASSERT(DEMO_SELECT(1129, 1127), mStageMapInfoP != NULL);
+        return mStageMapInfoP;
+    }
     dMap_RoomInfo_c* getNextRoomInfoP() { return m_next; }
 
+public:
     /* 0x00 */ u8 m_exist;
     /* 0x01 */ u8 field_0x1;
     /* 0x02 */ u8 field_0x2[10];
@@ -200,7 +216,11 @@ class dMap_RoomInfoCtrl_c {
 public:
     bool roomExistenceCheck(int, dMap_RoomInfo_c**);
     dMap_RoomInfo_c* getNextRoomP(dMap_RoomInfo_c*);
+#if VERSION == VERSION_DEMO
+    dMap_RoomInfo_c* ctrlEntryRoom(int, u8, int, u8, s16, s16);
+#else
     dMap_RoomInfo_c* ctrlEntryRoom(int, u8, int, u8, s16, s16, f32);
+#endif
     bool deleteRoom(int);
     void ctrlDrawRoomEnlargementSize(int, int, int, int, int, f32, f32, f32, f32, u8);
     void ctrlDrawRoomRealSize(int, int, int, int, int, f32, f32, f32, f32, f32, f32, u8);
@@ -217,13 +237,24 @@ public:
     virtual ~dMap_2DSQ_c() {}
     virtual void draw();
 
-    /* 0x04 */ int field_0x4;
-    /* 0x08 */ int field_0x8;
-    /* 0x0C */ int field_0xc;
-    /* 0x10 */ int field_0x10;
-    /* 0x14 */ u8 field_0x14;
-    /* 0x18 */ int field_0x18;
-    /* 0x1C */ GXColor field_0x1c;
+    void setDispPos(s32 left, s32 top, s32 right, s32 bottom) {
+        mDispLeft = left;
+        mDispTop = top;
+        mDispRight = right;
+        mDispBottom = bottom;
+    }
+    void setAlpha(u8 alpha) { mAlpha = alpha; }
+    void setMode(int mode) { mMode = mode;}
+    void setColor(const GXColor* color) { mColor = *color; }
+
+public:
+    /* 0x04 */ s32 mDispLeft;
+    /* 0x08 */ s32 mDispRight;
+    /* 0x0C */ s32 mDispTop;
+    /* 0x10 */ s32 mDispBottom;
+    /* 0x14 */ u8 mAlpha;
+    /* 0x18 */ int mMode;
+    /* 0x1C */ GXColor mColor;
 };
 
 class dMap_2DTri_c : public dDlst_base_c {
@@ -441,8 +472,8 @@ public:
     static s16 getMapDspSizeHeight() { return mDispSizeY; }
     static void setIconFreeScale(f32 scale) { mIconFreeScale = scale; }
     static void setIconSelfScale(f32 scale) { mIconSelfScale = scale; }
+    static dMap_RoomInfo_c* getNowRoom() { return mNowRoomInfoP; }
 
-    static void getNowRoom() {}
     static void isMapDispTypeEnlargementSize() {}
     static void isMapDispTypeRealSize() {}
     static void setMapChgSizeEnlargementSize() {}
