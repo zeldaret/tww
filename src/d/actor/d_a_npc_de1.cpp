@@ -31,7 +31,7 @@ daNpc_De1_HIO_c::daNpc_De1_HIO_c() {
         /* m0C */ 800.0f,
         /* m10 */ 44.0f,
         /* m14 */ 100.0f,
-        /* m18 */ 1000.0f,
+        /* m18 */ 976.0f,
         /* m1C */ 0.0f,
     };
     memcpy(&mPrm, &a_prm_tbl, sizeof(hio_prm_c));
