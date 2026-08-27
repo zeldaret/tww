@@ -450,13 +450,14 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::init(dMap_RoomInfo_c* prev, int p2) {
 /* 80045F40-80046314       .text getRoomImage__15dMap_RoomInfo_cFiUciPP7ResTIMGPP7ResTIMGPP8map_dt_cPP20stage_map_info_classPUc */
 u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG** param_4, ResTIMG** param_5, map_dt_c** param_6, stage_map_info_class** param_7, u8* param_8) {
     /* Nonmatching */
-    bool r24 = false;
     ResTIMG* r28 = NULL;
-    ResTIMG* r27 = NULL;
     map_dt_c* r26 = NULL;
-    stage_map_info_class* r25 = NULL;
+    u8 r24 = false;
     u8 r22 = 0;
+    stage_map_info_class* r25 = NULL;
+    u8 r29;
     u8 r23;
+    ResTIMG* r27 = NULL;
     if (IsFloorNo(param_2)) {
         r23 = param_2;
         char archiveName[0x20];
@@ -472,7 +473,7 @@ u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG*
             r26 = (map_dt_c*)dComIfG_getStageRes(archiveName, resourceName);
             r25 = NULL;
             r21 = r23;
-            u8 r29;
+
             while (!r25 && IsFloorNo(r29 = r21)) {
                 dStage_roomDt_c* roomData = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
                 r25 = roomData->getMapInfo2(r29);
@@ -487,7 +488,7 @@ u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG*
         if (r28 && r25 && r25->field_0x08 != r25->field_0x00 && r25->field_0x0C != r25->field_0x04) {
             r22 |= 2;
         }
-        if (r27 && ((r27->width == 128 && r27->height <= 480) || ((r27->width & 7) == 0 && r27->height == 8)) && r25) {
+        if (r27 && ((r27->width == 128 && r27->height <= 480) || ((r27->width % 8) == 0 && r27->height == 8)) && r25) {
             if (getMapInfo_map1_X1(r25) != getMapInfo_map1_X0(r25)) {
                 if (getMapInfo_map1_Z1(r25) != getMapInfo_map1_Z0(r25)) {
                     r22 |= 1;
@@ -529,7 +530,7 @@ BOOL dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int i_roomNo) {
     }
     if (floor) {
         dStage_FloorInfo_dt_c* floorData = floor->m_entries;
-        for (int i = 0; i < floor->num; i++, floorData++) {
+        for (s8 i = 0; i < floor->num; i++, floorData++) {
             u8 floorNo = floorData->floorNo;
             if (IsFloorNo(floorNo)) {
                 for (int j = 0; j < int(ARRAY_SIZE(floorData->field_0x05)); j++) {
@@ -807,11 +808,11 @@ void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3
         f32 f28 = getStageMapInfoP()->field_0x30 / param_9;
         f32 f27 = getStageMapInfoP()->field_0x30 / param_10;
         f32 f29 = field_0x2c * 0.5f + (param_6 - param_8) / getStageMapInfoP()->field_0x30;
-        field_0x8c.field_0x44 = field_0x28 * 0.5f + (param_5 - param_7) / getStageMapInfoP()->field_0x30;
-        field_0x8c.field_0x48 = f29;
+        field_0x8c.mOfsX = field_0x28 * 0.5f + (param_5 - param_7) / getStageMapInfoP()->field_0x30;
+        field_0x8c.mOfsY = f29;
         field_0x8c.setScale(f28, f27);
         field_0x8c.setPos(param_1, param_2, param_1 + param_3, param_2 + param_4);
-        field_0x8c.field_0x54 = param_11;
+        field_0x8c.mAlpha = param_11;
         dComIfGd_set2DOpa(&field_0x8c);
     }
 }
@@ -1490,7 +1491,7 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
                         mAgbSendNowDspFloorNo = mNowRoomInfoP->field_0xc;
                         mAgbSendNowAgbMapType = mPlayerStayAgbMapTypeNow;
                         agbMapNoSetCall();
-                        if (mDoGac_SendDataSet((u32*)mNowRoomInfoP->field_0x8c.field_0x4, mNowRoomInfoP->field_0x8c.field_0x38, 2, 0)) {
+                        if (mDoGac_SendDataSet((u32*)mNowRoomInfoP->field_0x8c.mpMapData, mNowRoomInfoP->field_0x8c.field_0x38, 2, 0)) {
                             mAGBMapSendStatus = 3;
                             agbResetCursor();
                         }
@@ -2435,30 +2436,30 @@ void dMap_2DMtMapSpcl_c::draw() {
 /* 8004E068-8004E1CC       .text setImage__18dMap_2DAGBScrDsp_cFP7ResTIMGP8map_dt_c */
 void dMap_2DAGBScrDsp_c::setImage(ResTIMG* i_img, map_dt_c* param_2) {
     /* Nonmatching */
-    field_0x4 = param_2;
+    mpMapData = param_2;
     mImg = i_img;
-    if (!field_0x4 || !mImg) {
+    if (!mpMapData || !mImg) {
         field_0x38 = 0;
         return;
     }
-    GXInitTlutObj(&field_0x2c, (u8*)mImg + mImg->paletteOffset, GXTlutFmt(mImg->colorFormat), mImg->numColors);
-    GXInitTexObjCI(&field_0xc, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format), GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1, 0);
-    GXInitTexObjLOD(&field_0xc, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f, mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
-    field_0x38 = 0x3c + mDoLib_cnvind32(field_0x4->field_0xc) + mDoLib_cnvind32(field_0x4->field_0x38);
+    GXInitTlutObj(&mTlutObj, (u8*)mImg + mImg->paletteOffset, GXTlutFmt(mImg->colorFormat), mImg->numColors);
+    GXInitTexObjCI(&mTexObj, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format), GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1, 0);
+    GXInitTexObjLOD(&mTexObj, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f, mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
+    field_0x38 = 0x3c + mDoLib_cnvind32(mpMapData->field_0xc) + mDoLib_cnvind32(mpMapData->field_0x38);
 }
 
 /* 8004E1CC-8004E264       .text init__18dMap_2DAGBScrDsp_cFP8map_dt_cP7ResTIMGffssssffUc */
-void dMap_2DAGBScrDsp_c::init(map_dt_c* param_1, ResTIMG* param_2, f32 param_3, f32 param_4, s16 param_5, s16 param_6, s16 param_7, s16 param_8, f32 param_9, f32 param_10, u8 param_11) {
+void dMap_2DAGBScrDsp_c::init(map_dt_c* param_1, ResTIMG* param_2, f32 i_ofsX, f32 i_ofsY, s16 i_minX, s16 i_minY, s16 i_maxX, s16 i_maxY, f32 i_scaleX, f32 i_scaleY, u8 i_alpha) {
     setImage(param_2, param_1);
-    field_0x44 = param_3;
-    field_0x48 = param_4;
-    field_0x3c = param_5;
-    field_0x3e = param_6;
-    field_0x40 = param_7;
-    field_0x42 = param_8;
-    mScaleX = param_9;
-    mScaleY = param_10;
-    field_0x54 = param_11;
+    mOfsX = i_ofsX;
+    mOfsY = i_ofsY;
+    mMinX = i_minX;
+    mMinY = i_minY;
+    mMaxX = i_maxX;
+    mMaxY = i_maxY;
+    mScaleX = i_scaleX;
+    mScaleY = i_scaleY;
+    mAlpha = i_alpha;
 }
 
 /* 8004E264-8004E384       .text getScrnPrm__18dMap_2DAGBScrDsp_cFffifPiPfPf */
@@ -2519,15 +2520,157 @@ void dMap_2DAGBScrDsp_c::calc_standard_prm(u16 param_1, u16 param_2, f32 param_3
 
 /* 8004E698-8004EE30       .text draw__18dMap_2DAGBScrDsp_cFv */
 void dMap_2DAGBScrDsp_c::draw() {
-    /* Nonmatching */
+	/* Nonmatching */
+    static GXColor masterTevColor = { 0xFF, 0xFF, 0xFF, 0xFF };
+
+    if (mpMapData == NULL || mImg == NULL) {
+        return;
+    }
+    if (mScaleX == 0.0f || mScaleY == 0.0f) {
+        return;
+    }
+
+    GXColor color;
+    GXVtxAttrFmtList vtxFmt[GX_VA_MAX_ATTR + 1];
+    int xNum, yNum;
+    int xStart, yStart;
+    f32 xOfs, yOfs;
+    f32 uMin, uMax;
+    f32 vMin, vMax;
+
+    memcpy(&color, &masterTevColor, sizeof(GXColor));
+
+    GXGetVtxAttrFmtv(GX_VTXFMT0, vtxFmt);
+    GXLoadTlut(&mTlutObj, GX_TLUT0);
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE,
+                      GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+
+    color.a = mAlpha;
+    GXSetTevColor(GX_TEVREG0, color);
+
+    GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetAlphaCompare(GX_GEQUAL, mAlpha, GX_AOP_AND, GX_ALWAYS, 0);
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_TRUE);
+    GXSetDstAlpha(GX_TRUE, 0);
+
+    f32 uScale = 8.0f / (s32)mImg->width;
+    f32 vScale = 8.0f / (s32)mImg->height;
+
+    map_dt_c* mapData = mpMapData;
+    u8 tileNumX = mapData->mScrNumX;
+    u8 tileNumY = mapData->mScrNumY;
+
+    f32 centerX = 0.5f * (mMaxX + mMinX);
+    f32 centerY = 0.5f * (mMaxY + mMinY);
+
+    u16* tileData = (u16*)((u8*)mpMapData + mDoLib_cnvind32(mapData->mScrDataOfs));
+
+    calc_standard_prm(8, 8, mOfsX, mOfsY, mMinX, mMinY, mMaxX, mMaxY, mScaleX, mScaleY,
+                      &xNum, &yNum, &xStart, &yStart, &xOfs, &yOfs,
+                      &uMin, &uMax, &vMin, &vMax);
+
+    for (int i = 0, ty = 0; i < yNum; i++, ty += 8) {
+        f32 y0 = centerY + (yOfs + mScaleY * ty);
+        f32 y1 = y0 + 8.0f * mScaleY;
+
+        int mapY = i + yStart;
+        if (mapY >= 0 && mapY < tileNumY) {
+            f32 vTop = 0.00625f;
+            f32 vBtm = 0.99375f;
+
+            if (i == 0) {
+                vTop = vMin;
+                y0 = mMinY;
+            } else if (i == yNum - 1) {
+                vBtm = vMax;
+                y1 = mMaxY;
+            }
+
+            for (int j = 0, tx = 0; j < xNum; j++, tx += 8) {
+                f32 x0 = centerX + (xOfs + mScaleX * tx);
+                f32 x1 = x0 + 8.0f * mScaleX;
+
+                int mapX = j + xStart;
+                if (mapX >= 0 && mapX < tileNumX) {
+                    f32 uLeft = 0.00625f;
+                    f32 uRight = 0.99375f;
+
+                    if (j == 0) {
+                        uLeft = uMin;
+                        x0 = mMinX;
+                    } else if (j == xNum - 1) {
+                        uRight = uMax;
+                        x1 = mMaxX;
+                    }
+
+                    u16 tile = mDoLib_cnvind16(*(tileData + mapY * tileNumX + mapX));
+
+                    f32 vt, vb;
+                    if (tile & 0x800) {
+                        vt = 1.0f - vTop;
+                        vb = 1.0f - vBtm;
+                    } else {
+                        vt = vTop;
+                        vb = vBtm;
+                    }
+
+                    if (tile & 0x400) {
+                        uLeft = 1.0f - uLeft;
+                        uRight = 1.0f - uRight;
+                    }
+
+                    int cellX = tile & 0xF;
+                    int cellY = (tile >> 4) & 0x3F;
+
+                    f32 u0 = uScale * (cellX + uLeft);
+                    f32 u1 = uScale * (cellX + uRight);
+                    f32 v0 = vScale * (cellY + vt);
+                    f32 v1 = vScale * (cellY + vb);
+
+                    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+                    GXPosition3f32(x0, y0, 0.0f);
+                    GXTexCoord2f32(u0, v0);
+                    GXPosition3f32(x1, y0, 0.0f);
+                    GXTexCoord2f32(u1, v0);
+                    GXPosition3f32(x1, y1, 0.0f);
+                    GXTexCoord2f32(u1, v1);
+                    GXPosition3f32(x0, y1, 0.0f);
+                    GXTexCoord2f32(u0, v1);
+                }
+            }
+        }
+    }
+
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    GXSetDstAlpha(GX_FALSE, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetVtxAttrFmtv(GX_VTXFMT0, vtxFmt);
 }
 
 /* 8004EE30-8004EE44       .text setPos__18dMap_2DAGBScrDsp_cFssss */
-void dMap_2DAGBScrDsp_c::setPos(s16 param_1, s16 param_2, s16 param_3, s16 param_4) {
-    field_0x3c = param_1;
-    field_0x3e = param_2;
-    field_0x40 = param_3;
-    field_0x42 = param_4;
+void dMap_2DAGBScrDsp_c::setPos(s16 i_minX, s16 i_minY, s16 i_maxX, s16 i_maxY) {
+    mMinX = i_minX;
+    mMinY = i_minY;
+    mMaxX = i_maxX;
+    mMaxY = i_maxY;
 }
 
 /* 8004EE44-8004EE50       .text setScale__18dMap_2DAGBScrDsp_cFff */
