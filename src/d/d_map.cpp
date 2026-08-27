@@ -14,7 +14,6 @@
 #include "dolphin/gx/GX.h"
 #include "dolphin/gx/GXAttr.h"
 #include "dolphin/gx/GXEnum.h"
-#include "dolphin/gx/GXInit.h"
 #include "dolphin/gx/GXGeometry.h"
 #include "m_Do/m_Do_mtx.h"
 #include "res/Object/Always.h"
@@ -187,6 +186,7 @@ static inline int gridPos2GridNo(int i_gridX, int i_gridY) {
     JUT_ASSERT(1188, (i_gridX >= -3) && (i_gridX <= 3) && (i_gridY >= -3) && (i_gridY <= 3));
     return i_gridX + 3 + (i_gridY + 3) * 7;
 }
+
 
 /* 800455AC-80045660       .text onSaveArriveGridForAgbUseGridPos__Fii */
 void onSaveArriveGridForAgbUseGridPos(int i_gridX, int i_gridY) {
@@ -463,6 +463,7 @@ u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG*
         char archiveName[0x20];
         sprintf(archiveName, "Room%d", i_roomNo);
         int r21;
+
         while (param_3 && !r24 && IsFloorNo(r21 = r23)) {
             char resourceName[0x20];
             sprintf(resourceName, "s%d.bti", r21);
@@ -2520,7 +2521,6 @@ void dMap_2DAGBScrDsp_c::calc_standard_prm(u16 param_1, u16 param_2, f32 param_3
 
 /* 8004E698-8004EE30       .text draw__18dMap_2DAGBScrDsp_cFv */
 void dMap_2DAGBScrDsp_c::draw() {
-	/* Nonmatching */
     static GXColor masterTevColor = { 0xFF, 0xFF, 0xFF, 0xFF };
 
     if (mpMapData == NULL || mImg == NULL) {
