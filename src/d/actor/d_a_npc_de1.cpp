@@ -568,7 +568,12 @@ void daNpc_De1_c::ccCreate() {
         0x00000102,
     };
     for (int i = 0; i < 10; i++) {
+#if VERSION == VERSION_DEMO
+        s8 roomNo = current.roomNo;
+        m_cc_ID[i] = fopAcM_create(fpcNm_CC_e, a_prm_tbl[i], &current.pos, roomNo, NULL, NULL, -1, NULL);
+#else
         m_cc_ID[i] = fopAcM_create(fpcNm_CC_e, a_prm_tbl[i], &current.pos, current.roomNo, NULL, NULL, -1, NULL);
+#endif
         JUT_ASSERT(883, m_cc_ID[ i] != fpcM_ERROR_PROCESS_ID_e);
     }
 }
@@ -588,21 +593,41 @@ void daNpc_De1_c::cc_set() {
 
 /* 000014A0-00001524       .text set_pa_happa__11daNpc_De1_cFv */
 void daNpc_De1_c::set_pa_happa() {
+#if VERSION == VERSION_DEMO
+    mPaHappa.end();
+    mpPaHappa = dComIfGp_particle_set(dPa_name::ID_IT_SN_DEKU_HAPPA00, &mPaHappaPos, &current.angle, NULL, 0xFF, &mPaHappa, fopAcM_GetRoomNo(this));
+#else
     mPaHappa.end();
     dComIfGp_particle_set(dPa_name::ID_IT_SN_DEKU_HAPPA00, &mPaHappaPos, &current.angle, NULL, 0xFF, &mPaHappa, fopAcM_GetRoomNo(this));
+#endif
 }
 
 /* 00001524-00001550       .text del_pa_happa__11daNpc_De1_cFv */
 void daNpc_De1_c::del_pa_happa() {
+#if VERSION == VERSION_DEMO
+    if (mpPaHappa != NULL) {
+        mpPaHappa->becomeInvalidEmitter();
+        mpPaHappa = NULL;
+    }
     mPaHappa.end();
+#else
+    mPaHappa.end();
+#endif
 }
 
 /* 00001550-000015CC       .text followPa_happa__11daNpc_De1_cFv */
 void daNpc_De1_c::followPa_happa() {
+#if VERSION == VERSION_DEMO
+    if (mpPaHappa != NULL) {
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_branchL_jnt_num));
+        mDoMtx_stack_c::multVecZero(&mPaHappaPos);
+    }
+#else
     if (mPaHappa.getEmitter() != NULL) {
         mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_branchL_jnt_num));
         mDoMtx_stack_c::multVecZero(&mPaHappaPos);
     }
+#endif
 }
 
 /* 000015CC-0000165C       .text decideType__11daNpc_De1_cFi */
@@ -802,10 +827,18 @@ BOOL daNpc_De1_c::wait02() {
     } else {
         fopAc_ac_c* p_actor = searchByID(mPartnerID);
         if (p_actor != NULL) {
+#if VERSION == VERSION_DEMO
+            const f32* p_height = &daLlift_c::m_height;
+            if (p_actor->current.pos.y < p_actor->home.pos.y + *p_height) {
+                setStt(5);
+                return TRUE;
+            }
+#else
             if (p_actor->current.pos.y < p_actor->home.pos.y + daLlift_c::m_height) {
                 setStt(5);
                 return TRUE;
             }
+#endif
         }
         if (mNearPlayer) {
             mDemoMode = 2;
@@ -830,9 +863,13 @@ BOOL daNpc_De1_c::wait04() {
     mDemoMode = 0;
     const cXyz& tmp = dComIfGp_getPlayer(0)->current.pos - mDemoCenterPos;
     cXyz vec;
+#if VERSION == VERSION_DEMO
+    vec.set(tmp.x, 0.0f, tmp.z);
+#else
     vec.x = tmp.x;
     vec.y = 0.0f;
     vec.z = tmp.z;
+#endif
     f32 dist = PSVECSquareMag(&vec);
     dist = std::sqrtf(dist);
     if (dist < l_HIO.mPrm.m0C) {
@@ -958,7 +995,7 @@ u8 daNpc_De1_c::demo() {
     } else {
         mNoPlayMorf = 1;
         dComIfGp_demo_getActor(demoActorID);
-        dDemo_setDemoData(this, 0x6a, mpMorf, "De", 0, NULL, 0, 0);
+        dDemo_setDemoData(this, 0x6a, mpMorf, "De");
     }
     return mNoPlayMorf;
 }
@@ -1015,11 +1052,17 @@ BOOL daNpc_De1_c::_execute() {
 
 /* 00002454-00002500       .text _delete__11daNpc_De1_cFv */
 BOOL daNpc_De1_c::_delete() {
-    dComIfG_resDelete(&mPhs, "De");
+    dComIfG_resDeleteDemo(&mPhs, "De");
     dComIfG_Bgsp()->Release((cBgW*)mpBgWSv);
+#if VERSION == VERSION_DEMO
+    if (mpMorf != NULL) {
+        mpMorf->stopZelAnime();
+    }
+#else
     if (heap != NULL && mpMorf != NULL) {
         mpMorf->stopZelAnime();
     }
+#endif
     del_pa_happa();
     if (l_HIO.mNum >= 0 && (l_HIO.mNum -= 1) < 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
@@ -1034,14 +1077,17 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002520-000027A4       .text _create__11daNpc_De1_cFv */
 cPhs_State daNpc_De1_c::_create() {
+#if VERSION > VERSION_DEMO
     fopAcM_SetupActor(this, daNpc_De1_c);
+#endif
 
     cPhs_State state = (cPhs_State)dComIfG_resLoad(&mPhs, "De");
     if (state != cPhs_COMPLEATE_e) {
         return state;
     }
 
-    if (!(u8)decideType(fopAcM_GetParam(this) & 0xFF)) {
+    u32 prm = fopAcM_GetParam(this) & 0xFF;
+    if (!(u8)decideType(prm)) {
         return cPhs_ERROR_e;
     }
 
@@ -1049,6 +1095,10 @@ cPhs_State daNpc_De1_c::_create() {
         l_HIO.mNo = mDoHIO_createChild("デクの木", (JORReflexible*)&l_HIO); // Deku Tree
     }
     l_HIO.mNum++;
+
+#if VERSION == VERSION_DEMO
+    fopAcM_SetupActor(this, daNpc_De1_c);
+#endif
 
     static u32 a_heap_size_tbl[] = {
         0x272E0,
@@ -1069,11 +1119,75 @@ cPhs_State daNpc_De1_c::_create() {
 
 /* 00002AB0-00002E04       .text CreateHeap__11daNpc_De1_cFv */
 BOOL daNpc_De1_c::CreateHeap() {
+#if VERSION == VERSION_DEMO
+    daNpc_De1_c* a_this = this;
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes("De", dRes_ID_DE_BDL_DE_e);
+    a_this->mpMorf = new mDoExt_McaMorf(
+        modelData,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes("De", dRes_ID_DE_BCK_WAIT01_e),
+        2,
+        1.0f,
+        0,
+        -1,
+        1,
+        NULL,
+        0x00080000,
+        0x11000002
+    );
+
+    if (a_this->mpMorf == NULL) {
+        goto error_early;
+    }
+
+    if (a_this->mpMorf->getModel() == NULL) {
+        goto error_cleanup;
+    }
+
+    a_this->m_branchL_jnt_num = modelData->getJointName()->getIndex("branchL");
+    JUT_ASSERT(1729, m_branchL_jnt_num >= 0);
+
+    a_this->m_head_jnt_num = modelData->getJointName()->getIndex("head");
+    JUT_ASSERT(1731, m_head_jnt_num >= 0);
+
     static char* a_jnt_name_tbl[] = {
         "c1", "c2", "c3", "c4", "c5",
         "c6", "c7", "c8", "c9", "c10",
     };
 
+    for (int i = 0; i < 10; i++) {
+        a_this->m_c0_jnt_num[ i] = modelData->getJointName()->getIndex(a_jnt_name_tbl[i]);
+        JUT_ASSERT(1734, m_c0_jnt_num[ i] >= 0);
+    }
+
+    a_this->mpMorf->getModel()->setUserArea(0);
+
+    a_this->mpBgWSv = new dBgWDeform();
+    if (a_this->mpBgWSv == NULL) {
+        goto error_cleanup;
+    }
+
+    if (a_this->mpBgWSv->Set((cBgD_t*)dComIfG_getObjectIDRes("De", dRes_ID_DE_DZB_DE_e), a_this->mpMorf->getModel(), 0)) {
+        goto error_cleanup;
+    }
+
+    a_this->mAcchCir.SetWall(0.0f, 0.0f);
+    cXyz* p_speed = &a_this->speed;
+    cXyz* p_old = &a_this->old.pos;
+    cXyz* p_pos = &a_this->current.pos;
+    a_this->mObjAcch.Set(p_pos, p_old, a_this, 1, &a_this->mAcchCir, p_speed);
+    a_this->mObjAcch.SetWaterNone();
+    a_this->mObjAcch.SetWallNone();
+    a_this->mObjAcch.SetRoofNone();
+
+    return TRUE;
+
+error_cleanup:
+    a_this->mpMorf = NULL;
+error_early:
+    return FALSE;
+#else
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes("De", dRes_ID_DE_BDL_DE_e);
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -1104,6 +1218,11 @@ BOOL daNpc_De1_c::CreateHeap() {
     m_head_jnt_num = modelData->getJointName()->getIndex("head");
     JUT_ASSERT(1746, m_head_jnt_num >= 0);
 
+    static char* a_jnt_name_tbl[] = {
+        "c1", "c2", "c3", "c4", "c5",
+        "c6", "c7", "c8", "c9", "c10",
+    };
+
     for (int i = 0; i < 10; i++) {
         m_c0_jnt_num[ i] = modelData->getJointName()->getIndex(a_jnt_name_tbl[i]);
         JUT_ASSERT(1749, m_c0_jnt_num[ i] >= 0);
@@ -1125,7 +1244,7 @@ BOOL daNpc_De1_c::CreateHeap() {
     }
 
     mAcchCir.SetWall(0.0f, 0.0f);
-    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed, NULL, NULL);
+    mObjAcch.Set(&current.pos, &old.pos, this, 1, &mAcchCir, &speed);
     mObjAcch.SetWaterNone();
     mObjAcch.SetWallNone();
     mObjAcch.SetRoofNone();
@@ -1136,6 +1255,7 @@ error_cleanup:
     mpMorf = NULL;
 error_early:
     return FALSE;
+#endif
 }
 
 /* 00002E04-00002E24       .text daNpc_De1_Create__FP10fopAc_ac_c */

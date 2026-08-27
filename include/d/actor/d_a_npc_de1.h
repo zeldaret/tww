@@ -112,6 +112,26 @@ public:
     /* 0x7B6 */ u8 field_0x7B6;
     /* 0x7B7 */ u8 mNoPlayMorf;
     /* 0x7B8 */ u8 mIsFirstTalk;
+#if VERSION == VERSION_DEMO
+    /* 0x7BC */ JPABaseEmitter* mpPaHappa;
+    /* 0x7C0 */ dPa_followEcallBack mPaHappa;
+    /* 0x7D4 */ cXyz mPaHappaPos;
+    /* 0x7E0 */ fpc_ProcID m_cc_ID[10];
+    /* 0x808 */ s8 m_c0_jnt_num[10];
+    /* 0x814 */ fpc_ProcID mPartnerID;
+    /* 0x818 */ s8 mCutType;
+    /* 0x819 */ s8 mActNo;
+    /* 0x81A */ u8 mAnmAtr;
+    /* 0x81B */ u8 mAnmTag;
+    /* 0x81C */ s8 mCurAnmIdx;
+    /* 0x81D */ s8 mDemoMode;
+    /* 0x81E */ s8 mStatus;
+    /* 0x81F */ s8 mTalk02State;
+    /* 0x820 */ s8 mHeapType;
+    /* 0x821 */ s8 mType;
+    /* 0x822 */ s8 mActionState;
+    /* 0x823 */ s8 mMsgTypingState;
+#else
     /* 0x7BC */ dPa_followEcallBack mPaHappa;
     /* 0x7D0 */ cXyz mPaHappaPos;
     /* 0x7DC */ fpc_ProcID m_cc_ID[10];
@@ -129,7 +149,8 @@ public:
     /* 0x81D */ s8 mType;
     /* 0x81E */ s8 mActionState;
     /* 0x81F */ s8 mMsgTypingState;
-};  // Size: 0x820
+#endif
+};  // Size: 0x820 (Demo: 0x824)
 
 class daNpc_De1_HIO_c {
 public:
