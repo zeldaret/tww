@@ -882,8 +882,8 @@ struct J3DIndTexOrder : public J3DIndTexOrderInfo {
     J3DIndTexOrder() { *(J3DIndTexOrderInfo*)this = j3dDefaultIndTexOrderNull; }
     explicit J3DIndTexOrder(const J3DIndTexOrderInfo& info) { *(J3DIndTexOrderInfo*)this = info; }
 
-    u8 getCoord() const { return mCoord; }
-    u8 getMap() const { return mMap; }
+    u8 getCoord() { return mCoord; }
+    u8 getMap() { return mMap; }
     void setCoord(u8 coord) { mCoord = coord; }
     void setMap(u8 map) { mMap = map; }
 };

@@ -4832,21 +4832,22 @@ bool dCamera_c::eventCamera(s32) {
             mEventData.field_0x1c = 2;
         }
 
-        u32 evStringData;
-        if (getEvStringData((char*)&evStringData, "Trim", "CINESCO")) {
-            if (evStringData == 'STAN') {
+        char evStringData[12];
+        if (getEvStringData(evStringData, "Trim", "CINESCO")) {
+            u32* evStringPtr = (u32*)evStringData;
+            if (*evStringPtr == 'STAN') {
                 mEventData.field_0x1c = 0;
             }
-            else if (evStringData == 'VIST') {
+            else if (*evStringPtr == 'VIST') {
                 mEventData.field_0x1c = 1;
             }
-            else if (evStringData == 'DEMO') {
+            else if (*evStringPtr == 'DEMO') {
                 mEventData.field_0x1c = 3;
             }
-            else if (evStringData == 'NONE') {
+            else if (*evStringPtr == 'NONE') {
                 mEventData.field_0x1c = 4;
             }
-            else if (evStringData == 'KEEP') {
+            else if (*evStringPtr == 'KEEP') {
                 mEventData.field_0x1c = 999;
             }
         }

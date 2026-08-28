@@ -496,6 +496,8 @@ void J3DModel::calcAnmMtx() {
     getModelData()->getBasicMtxCalc()->recursiveCalc(getModelData()->getRootNode());
 }
 
+static f32 J3DUnit01[] = {0.0f, 1.0f};
+
 /* 802EE67C-802EE874       .text calcWeightEnvelopeMtx__8J3DModelFv */
 void J3DModel::calcWeightEnvelopeMtx() {
     /* Nonmatching */
