@@ -44,7 +44,6 @@ static daNpc_De1_HIO_c l_HIO;
 static fopAc_ac_c* l_check_inf[0x64];
 static int l_check_wrk;
 
-
 /* 000000EC-00000144       .text __ct__15daNpc_De1_HIO_cFv */
 daNpc_De1_HIO_c::daNpc_De1_HIO_c() {
     static hio_prm_c a_prm_tbl = {
@@ -709,7 +708,7 @@ void daNpc_De1_c::event_actionInit(int i_staffIdx) {
             }
             break;
         case 4:
-            fopAcM_seStartCurrent(this,JA_SE_CV_DEKU_AGONY_L,0);
+            fopAcM_seStartCurrent(this, JA_SE_CV_DEKU_AGONY_L, 0);
             mSoundTimer = 84;
             break;
         case 5:
@@ -1100,8 +1099,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002520-000027A4       .text _create__11daNpc_De1_cFv */
 cPhs_State daNpc_De1_c::_create() {
-
-    fopAcM_ct_Retail(this,daNpc_De1_c);
+    fopAcM_ct_Retail(this, daNpc_De1_c);
     cPhs_State state = (cPhs_State)dComIfG_resLoad(&mPhs, "De");
     if (state != cPhs_COMPLEATE_e) {
         return state;
@@ -1117,7 +1115,7 @@ cPhs_State daNpc_De1_c::_create() {
     }
     l_HIO.mNum++;
 
-    fopAcM_ct_Demo(this,daNpc_De1_c);
+    fopAcM_ct_Demo(this, daNpc_De1_c);
 
     static u32 a_heap_size_tbl[] = {
         0x272E0,
