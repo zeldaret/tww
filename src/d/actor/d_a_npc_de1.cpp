@@ -40,10 +40,6 @@ public:
     /* 0x0C */ hio_prm_c mPrm;
 };  // Size: 0x2C
 
-#endif /* D_A_NPC_DE1_H */
-
-
-
 static daNpc_De1_HIO_c l_HIO;
 static fopAc_ac_c* l_check_inf[0x64];
 static int l_check_wrk;

@@ -152,4 +152,4 @@ public:
 #endif
 };  // Size: 0x820 (Demo: 0x824)
 
-
+#endif /* D_A_NPC_DE1_H */
