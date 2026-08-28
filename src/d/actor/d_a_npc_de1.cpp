@@ -18,9 +18,32 @@
 #include "f_pc/f_pc_name.h"
 #include "f_pc/f_pc_manager.h"
 
+class daNpc_De1_HIO_c {
+public:
+    struct hio_prm_c {
+        /* 0x00 */ f32 m00;
+        /* 0x04 */ f32 m04;
+        /* 0x08 */ f32 m08;
+        /* 0x0C */ f32 m0C;
+        /* 0x10 */ f32 m10;
+        /* 0x14 */ f32 m14;
+        /* 0x18 */ f32 m18;
+        /* 0x1C */ f32 m1C;
+    };  // Size: 0x20
+
+    daNpc_De1_HIO_c();
+    virtual ~daNpc_De1_HIO_c() {}
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ s32 mNum;
+    /* 0x0C */ hio_prm_c mPrm;
+};  // Size: 0x2C
+
+static daNpc_De1_HIO_c l_HIO;
 static fopAc_ac_c* l_check_inf[0x64];
 static int l_check_wrk;
-static daNpc_De1_HIO_c l_HIO;
+
 
 /* 000000EC-00000144       .text __ct__15daNpc_De1_HIO_cFv */
 daNpc_De1_HIO_c::daNpc_De1_HIO_c() {
@@ -686,13 +709,13 @@ void daNpc_De1_c::event_actionInit(int i_staffIdx) {
             }
             break;
         case 4:
-            mDoAud_seStart(JA_SE_CV_DEKU_AGONY_L, &current.pos, 0, dComIfGp_getReverb(current.roomNo));
+            fopAcM_seStartCurrent(this,JA_SE_CV_DEKU_AGONY_L,0);
             mSoundTimer = 84;
             break;
         case 5:
             player->changeOriginalDemo();
             player->changeDemoMode(24);
-            player->onFrollCrashFlg(29);
+            player->voiceStart(29);
             break;
         }
     }
@@ -1077,10 +1100,8 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002520-000027A4       .text _create__11daNpc_De1_cFv */
 cPhs_State daNpc_De1_c::_create() {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_De1_c);
-#endif
 
+    fopAcM_ct_Retail(this,daNpc_De1_c);
     cPhs_State state = (cPhs_State)dComIfG_resLoad(&mPhs, "De");
     if (state != cPhs_COMPLEATE_e) {
         return state;
@@ -1096,9 +1117,7 @@ cPhs_State daNpc_De1_c::_create() {
     }
     l_HIO.mNum++;
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_De1_c);
-#endif
+    fopAcM_ct_Demo(this,daNpc_De1_c);
 
     static u32 a_heap_size_tbl[] = {
         0x272E0,
