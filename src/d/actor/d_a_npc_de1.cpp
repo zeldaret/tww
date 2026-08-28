@@ -1077,15 +1077,12 @@ u8 daNpc_De1_c::demo() {
 /* 00002248-00002358       .text _draw__11daNpc_De1_cFv */
 BOOL daNpc_De1_c::_draw() {
     J3DModel* model = mpMorf->getModel();
-#ifdef DEBUG
-    J3DModelData* modelData = model->getModelData();
-#endif
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(model, &tevStr);
-#ifdef DEBUG
     dComIfGd_setListBG();
     mpMorf->entryDL();
     dComIfGd_setList();
+#ifdef DEBUG
     if (*(u8*)&l_HIO.mPrm.m1C) {
         fopAc_ac_c* p_actor = searchByID(mPartnerID);
         if (p_actor != NULL) {
@@ -1099,11 +1096,6 @@ BOOL daNpc_De1_c::_draw() {
         }
     }
 #else
-    j3dSys.mDrawBuffer[0] = dComIfGd_getOpaListBG();
-    j3dSys.mDrawBuffer[1] = dComIfGd_getXluListBG();
-    mpMorf->entryDL();
-    j3dSys.mDrawBuffer[0] = dComIfGd_getOpaList();
-    j3dSys.mDrawBuffer[1] = dComIfGd_getXluList();
     if (*(u8*)&l_HIO.mPrm.m1C) {
         fopAc_ac_c* p_actor = searchByID(mPartnerID);
         if (p_actor != NULL) {
