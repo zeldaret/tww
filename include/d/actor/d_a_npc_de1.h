@@ -152,26 +152,4 @@ public:
 #endif
 };  // Size: 0x820 (Demo: 0x824)
 
-class daNpc_De1_HIO_c {
-public:
-    struct hio_prm_c {
-        /* 0x00 */ f32 m00;
-        /* 0x04 */ f32 m04;
-        /* 0x08 */ f32 m08;
-        /* 0x0C */ f32 m0C;
-        /* 0x10 */ f32 m10;
-        /* 0x14 */ f32 m14;
-        /* 0x18 */ f32 m18;
-        /* 0x1C */ f32 m1C;
-    };  // Size: 0x20
 
-    daNpc_De1_HIO_c();
-    virtual ~daNpc_De1_HIO_c() {}
-
-public:
-    /* 0x04 */ s8 mNo;
-    /* 0x08 */ s32 mNum;
-    /* 0x0C */ hio_prm_c mPrm;
-};  // Size: 0x2C
-
-#endif /* D_A_NPC_DE1_H */
