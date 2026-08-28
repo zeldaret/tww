@@ -2395,8 +2395,16 @@ void dMap_c::mapBufferSendAGB(int) {
 }
 
 /* 8004D9BC-8004DA54       .text checkFloorMoveImageChangeRoom__19dMap_RoomInfoCtrl_cFUcUcissf */
-void dMap_RoomInfoCtrl_c::checkFloorMoveImageChangeRoom(u8, u8, int, s16, s16, f32) {
-    /* Nonmatching */
+void dMap_RoomInfoCtrl_c::checkFloorMoveImageChangeRoom(u8 param_1,u8 param_2,int param_3,short param_4,short param_5,
+                                                        float param_6) {
+    dMap_RoomInfo_c *room= NULL;
+
+    while (room = getNextRoomP(room), room != NULL) {
+        if (room->m_exist) {
+            room->Changeimage(param_1,param_2,param_3,param_4,param_5,param_6);
+        }
+    }
+    return;
 }
 
 /* 8004DA54-8004DBE0       .text init__22dMap_2DMtMapSpcl_tex_cFP7ResTIMGUlRC8_GXColor */
