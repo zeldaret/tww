@@ -64,6 +64,8 @@ public:
     void endEvent();
     void event_proc();
     BOOL set_action(ActionFunc, void*);
+    BOOL chk_action(ActionFunc);
+    bool chk_talk();
     BOOL wait01();
     BOOL wait02();
     BOOL wait03();
