@@ -2618,6 +2618,7 @@ void dMap_2DAGBScrDsp_c::calc_standard_prm(u16 param_1, u16 param_2, f32 param_3
 
 /* 8004E698-8004EE30       .text draw__18dMap_2DAGBScrDsp_cFv */
 void dMap_2DAGBScrDsp_c::draw() {
+	/* Nonmatching */
     static GXColor masterTevColor = { 0xFF, 0xFF, 0xFF, 0xFF };
 
     if (mpMapData == NULL || mImg == NULL) {
