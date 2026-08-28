@@ -2627,14 +2627,24 @@ void dMap_2DAGBScrDsp_c::draw() {
         return;
     }
 
+
     GXColor color;
     GXVtxAttrFmtList vtxFmt[GX_VA_MAX_ATTR + 1];
+    f32 u0, v0, u1, v1;
+    f32 uScale, vScale;
+    f32 centerX, centerY;
+    f32 x0, x1;
+    f32 y0, y1;
+    f32 vt, vb;
+    f32 uLeft;
+    f32 uRight;
+
     int xNum, yNum;
     int xStart, yStart;
     f32 xOfs, yOfs;
     f32 uMin, uMax;
     f32 vMin, vMax;
-
+    //wtf???
     memcpy(&color, &masterTevColor, sizeof(GXColor));
 
     GXGetVtxAttrFmtv(GX_VTXFMT0, vtxFmt);
@@ -2667,91 +2677,93 @@ void dMap_2DAGBScrDsp_c::draw() {
     GXSetAlphaUpdate(GX_TRUE);
     GXSetDstAlpha(GX_TRUE, 0);
 
-    f32 uScale = 8.0f / (s32)mImg->width;
-    f32 vScale = 8.0f / (s32)mImg->height;
+    uScale = 8.0f / (s32)mImg->width;
+    vScale = 8.0f / (s32)mImg->height;
 
-    map_dt_c* mapData = mpMapData;
-    u8 tileNumX = mapData->mScrNumX;
-    u8 tileNumY = mapData->mScrNumY;
+    u8 tileNumX = mpMapData->mScrNumX;
+    u8 tileNumY = mpMapData->mScrNumY;
 
-    f32 centerX = 0.5f * (mMaxX + mMinX);
-    f32 centerY = 0.5f * (mMaxY + mMinY);
+    centerX = 0.5f * (mMaxX + mMinX);
+    centerY = 0.5f * (mMaxY + mMinY);
 
-    u16* tileData = (u16*)((u8*)mpMapData + mDoLib_cnvind32(mapData->mScrDataOfs));
+    u16* tileData = (u16*)((u8*)mpMapData + mDoLib_cnvind32(mpMapData->mScrDataOfs));
 
     calc_standard_prm(8, 8, mOfsX, mOfsY, mMinX, mMinY, mMaxX, mMaxY, mScaleX, mScaleY,
                       &xNum, &yNum, &xStart, &yStart, &xOfs, &yOfs,
                       &uMin, &uMax, &vMin, &vMax);
 
-    for (int i = 0, ty = 0; i < yNum; i++, ty += 8) {
-        f32 y0 = centerY + (yOfs + mScaleY * ty);
-        f32 y1 = y0 + 8.0f * mScaleY;
+    for (int i = 0; i < yNum; i++) {
+        y0 = centerY + (yOfs + mScaleY * (i * 8));
+        y1 = y0 + 8.0f * mScaleY;
 
         int mapY = i + yStart;
-        if (mapY >= 0 && mapY < tileNumY) {
-            f32 vTop = 0.00625f;
-            f32 vBtm = 0.99375f;
+        if (mapY < 0 || mapY >= tileNumY) {
+            continue;
+        }
 
-            if (i == 0) {
-                vTop = vMin;
-                y0 = mMinY;
-            } else if (i == yNum - 1) {
-                vBtm = vMax;
-                y1 = mMaxY;
+        f32 vTop = 0.00625f;
+        f32 vBtm = 0.99375f;
+
+        if (i == 0) {
+            vTop = vMin;
+            y0 = mMinY;
+        } else if (i == yNum - 1) {
+            vBtm = vMax;
+            y1 = mMaxY;
+        }
+
+        for (int j = 0; j < xNum; j++) {
+            x0 = centerX + (xOfs + mScaleX * (j * 8));
+            x1 = x0 + 8.0f * mScaleX;
+
+            int mapX = j + xStart;
+            if (mapX < 0 || mapX >= tileNumX) {
+                continue;
             }
 
-            for (int j = 0, tx = 0; j < xNum; j++, tx += 8) {
-                f32 x0 = centerX + (xOfs + mScaleX * tx);
-                f32 x1 = x0 + 8.0f * mScaleX;
+            uLeft = 0.00625f;
+            uRight = 0.99375f;
 
-                int mapX = j + xStart;
-                if (mapX >= 0 && mapX < tileNumX) {
-                    f32 uLeft = 0.00625f;
-                    f32 uRight = 0.99375f;
-
-                    if (j == 0) {
-                        uLeft = uMin;
-                        x0 = mMinX;
-                    } else if (j == xNum - 1) {
-                        uRight = uMax;
-                        x1 = mMaxX;
-                    }
-
-                    u16 tile = mDoLib_cnvind16(*(tileData + mapY * tileNumX + mapX));
-
-                    f32 vt, vb;
-                    if (tile & 0x800) {
-                        vt = 1.0f - vTop;
-                        vb = 1.0f - vBtm;
-                    } else {
-                        vt = vTop;
-                        vb = vBtm;
-                    }
-
-                    if (tile & 0x400) {
-                        uLeft = 1.0f - uLeft;
-                        uRight = 1.0f - uRight;
-                    }
-
-                    int cellX = tile & 0xF;
-                    int cellY = (tile >> 4) & 0x3F;
-
-                    f32 u0 = uScale * (cellX + uLeft);
-                    f32 u1 = uScale * (cellX + uRight);
-                    f32 v0 = vScale * (cellY + vt);
-                    f32 v1 = vScale * (cellY + vb);
-
-                    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                    GXPosition3f32(x0, y0, 0.0f);
-                    GXTexCoord2f32(u0, v0);
-                    GXPosition3f32(x1, y0, 0.0f);
-                    GXTexCoord2f32(u1, v0);
-                    GXPosition3f32(x1, y1, 0.0f);
-                    GXTexCoord2f32(u1, v1);
-                    GXPosition3f32(x0, y1, 0.0f);
-                    GXTexCoord2f32(u0, v1);
-                }
+            if (j == 0) {
+                uLeft = uMin;
+                x0 = mMinX;
+            } else if (j == xNum - 1) {
+                uRight = uMax;
+                x1 = mMaxX;
             }
+
+            u16 tile = mDoLib_cnvind16(*(tileData + mapY * tileNumX + mapX));
+
+            if (tile & 0x800) {
+                vt = 1.0f - vTop;
+                vb = 1.0f - vBtm;
+            } else {
+                vt = vTop;
+                vb = vBtm;
+            }
+
+            if (tile & 0x400) {
+                uLeft = 1.0f - uLeft;
+                uRight = 1.0f - uRight;
+            }
+
+            int cellX = tile & 0xF;
+            int cellY = (tile >> 4) & 0x3F;
+
+            u0 = uScale * (cellX + uLeft);
+            u1 = uScale * (cellX + uRight);
+            v0 = vScale * (cellY + vt);
+            v1 = vScale * (cellY + vb);
+
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+            GXPosition3f32(x0, y0, 0.0f);
+            GXTexCoord2f32(u0, v0);
+            GXPosition3f32(x1, y0, 0.0f);
+            GXTexCoord2f32(u1, v0);
+            GXPosition3f32(x1, y1, 0.0f);
+            GXTexCoord2f32(u1, v1);
+            GXPosition3f32(x0, y1, 0.0f);
+            GXTexCoord2f32(u0, v1);
         }
     }
 
