@@ -15,12 +15,21 @@ struct J3DGXColorS10 {
         mColor.b = other.b;
         mColor.a = other.a;
     }
+#if __MWERKS__
     J3DGXColorS10(J3DGXColorS10& other) {
         mColor.r = other.mColor.r;
         mColor.g = other.mColor.g;
         mColor.b = other.mColor.b;
         mColor.a = other.mColor.a;
     }
+#else
+    J3DGXColorS10(const J3DGXColorS10& other) {
+        mColor.r = other.mColor.r;
+        mColor.g = other.mColor.g;
+        mColor.b = other.mColor.b;
+        mColor.a = other.mColor.a;
+    }
+#endif
     J3DGXColorS10& operator=(const J3DGXColorS10& other) {
         mColor = other.mColor;
         return *this;
@@ -41,12 +50,21 @@ struct J3DGXColor {
         mColor.b = other.b;
         mColor.a = other.a;
     }
+#if __MWERKS__
     J3DGXColor(J3DGXColor& other) {
         mColor.r = other.mColor.r;
         mColor.g = other.mColor.g;
         mColor.b = other.mColor.b;
         mColor.a = other.mColor.a;
     }
+#else
+    J3DGXColor(const J3DGXColor& other) {
+        mColor.r = other.mColor.r;
+        mColor.g = other.mColor.g;
+        mColor.b = other.mColor.b;
+        mColor.a = other.mColor.a;
+    }
+#endif
     J3DGXColor& operator=(const J3DGXColor& other) {
         mColor = other.mColor;
         return *this;
