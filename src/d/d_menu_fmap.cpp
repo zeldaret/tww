@@ -1423,20 +1423,16 @@ void dMenu_Fmap_c::checkDspLargeMapShip() {
 
 /* 801B405C-801B4264       .text dispEndSalvageLargeMark__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::dispEndSalvageLargeMark() {
-    /* Nonmatching */
     int grid = getCtCurX() + (getCtCurY() + 3) * 7 + 3;
-    aramCmapDatPnt_t* pnt = mCmapDatPnt.getCmapDatPnt3(grid);
+    aramCmapDatPnt_t* pnt = (aramCmapDatPnt_t*)mCmapDatPnt.getCmapDatPnt3(grid);
 
     if (!dComIfGs_isCompleteCollectMap(pnt->collectMapNo)) {
         mStm1Pane.pane->hide();
     } else {
-        f32 y = pnt->salvagePnt[field_0x5180].y;
         f32 x = pnt->salvagePnt[field_0x5180].x;
-        f32 scale = 0.5f;
-        f32 size = mClbPane.mSizeOrig.x;
-        mStm1Pane.mPosCenterOrig.x = size * scale + x * ((size - 50.0f) / 100000.0f);
-        size = mClbPane.mSizeOrig.y;
-        mStm1Pane.mPosCenterOrig.y = size * scale + y * ((size - 50.0f) / 100000.0f);
+        f32 y = pnt->salvagePnt[field_0x5180].y;
+        mStm1Pane.mPosCenterOrig.x = mClbPane.mSizeOrig.x / 2.0f + x * ((mClbPane.mSizeOrig.x - 50.0f) / 100000.0f);
+        mStm1Pane.mPosCenterOrig.y = mClbPane.mSizeOrig.y / 2.0f + y * ((mClbPane.mSizeOrig.y - 50.0f) / 100000.0f);
         mStm1Pane.mPosCenter.x = mStm1Pane.mPosCenterOrig.x;
         mStm1Pane.mPosCenter.y = mStm1Pane.mPosCenterOrig.y;
         fopMsgM_cposMove(&mStm1Pane);
@@ -1506,9 +1502,10 @@ void dMenu_Fmap_c::setDspHugeMapLink() {
 
 /* 801B4640-801B48C4       .text dispEndSalvageHugeMark__12dMenu_Fmap_cFff */
 void dMenu_Fmap_c::dispEndSalvageHugeMark(f32 i_x, f32 i_y) {
-    /* Nonmatching */
-    int grid = getCtCurX() + (getCtCurY() + 3) * 7 + 3;
-    aramCmapDatPnt_t* pnt = mCmapDatPnt.getCmapDatPnt3(grid);
+    s8 curX = getCtCurX();
+    s8 curY = getCtCurY();
+    int grid = curX + (curY + 3) * 7 + 3;
+    aramCmapDatPnt_t* pnt = (aramCmapDatPnt_t*)mCmapDatPnt.getCmapDatPnt3(grid);
 
     if (!dComIfGs_isCompleteCollectMap(pnt->collectMapNo)) {
         mStl1Pane.pane->hide();
@@ -1516,13 +1513,8 @@ void dMenu_Fmap_c::dispEndSalvageHugeMark(f32 i_x, f32 i_y) {
         f32 dx = pnt->salvagePnt[field_0x5180].x - i_x;
         f32 dy = pnt->salvagePnt[field_0x5180].y - i_y;
         if (dx <= 10000.0f && dx >= -10000.0f && dy <= 10000.0f && dy >= -10000.0f) {
-            f32 scale = 0.5f;
-            f32 size = mR01gPane.mSizeOrig.x;
-            mStl1Pane.mPosCenterOrig.x =
-                mR01gPane.mPosTopLeftOrig.x + size * scale + dx * (size / 20000.0f);
-            size = mR01gPane.mSizeOrig.y;
-            mStl1Pane.mPosCenterOrig.y =
-                mR01gPane.mPosTopLeftOrig.y + size * scale + dy * (size / 20000.0f);
+            mStl1Pane.mPosCenterOrig.x = mR01gPane.mPosTopLeftOrig.x + mR01gPane.mSizeOrig.x / 2.0f + dx * (mR01gPane.mSizeOrig.x / 20000.0f);
+            mStl1Pane.mPosCenterOrig.y = mR01gPane.mPosTopLeftOrig.y + mR01gPane.mSizeOrig.y / 2.0f + dy * (mR01gPane.mSizeOrig.y / 20000.0f);
             mStl1Pane.mPosCenter.x = mStl1Pane.mPosCenterOrig.x;
             mStl1Pane.mPosCenter.y = mStl1Pane.mPosCenterOrig.y;
             fopMsgM_cposMove(&mStl1Pane);
