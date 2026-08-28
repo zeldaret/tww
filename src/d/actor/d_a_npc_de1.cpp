@@ -713,13 +713,13 @@ void daNpc_De1_c::event_actionInit(int i_staffIdx) {
             }
             break;
         case 4:
-            mDoAud_seStart(JA_SE_CV_DEKU_AGONY_L, &current.pos, 0, dComIfGp_getReverb(current.roomNo));
+            fopAcM_seStartCurrent(this,JA_SE_CV_DEKU_AGONY_L,0);
             mSoundTimer = 84;
             break;
         case 5:
             player->changeOriginalDemo();
             player->changeDemoMode(24);
-            player->onFrollCrashFlg(29);
+            player->voiceStart(29);
             break;
         }
     }
