@@ -25,14 +25,19 @@ struct cursorTable_t {
     /* 0x6 */ s8 down;
 };
 
-enum FmapMode {
+enum dMf_DispMode {
+    FMAP_DISP_NORMAL = 0,
+    FMAP_DISP_HIKAKU = 1,
+};
+
+enum dMf_Mode {
     FMAP_MODE_NORMAL    = 0,
     FMAP_MODE_WARP      = 1,
     FMAP_MODE_WALLPAPER = 2,
     FMAP_MODE_FISHMAN   = 3,
 };
 
-enum FmapButtonIconMode {
+enum dMf_ButtonIconMode {
     FMAP_BTN_ICON_WORLD     = 0,
     FMAP_BTN_ICON_SECTOR    = 1,
     FMAP_BTN_ICON_DETAIL    = 2,
@@ -497,7 +502,7 @@ public:
     /* 0x034 */ u8 field_0x34;
     /* 0x035 */ u8 padding_0x35[0x36 - 0x35];
     /* 0x036 */ s16 field_0x36;
-    /* 0x038 */ u16 field_0x38;
+    /* 0x038 */ s16 field_0x38;
     /* 0x03A */ u8 field_0x3A;
     /* 0x03B */ u8 field_0x3B;
     /* 0x03C */ u8 field_0x3C;

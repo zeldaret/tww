@@ -639,13 +639,13 @@ void dMenu_Fmap_c::initialize() {
     }
 
     switch (getCtDispMode()) {
-        case 0:
+        case FMAP_DISP_NORMAL:
             setCtCurHX(getCtCurX());
             setCtCurHY(getCtCurY());
             mMainProcIdx = 0;
             mZoomLocked = false;
             break;
-        case 1:
+        case FMAP_DISP_HIKAKU:
             mMainProcIdx = 1;
             mZoomLocked = true;
             break;
@@ -1411,12 +1411,11 @@ void dMenu_Fmap_c::checkDspLargeMapShip() {
     if (mFishmanActive == 0) {
         mSpi2Pane.pane->hide();
         field_0x5184 = FALSE;
+    } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0
+            && mTargetGridX == getCtCurX()
+            && mTargetGridY == getCtCurY()) {
+        field_0x5184 = true;
     } else {
-        if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0 &&
-            mTargetGridX == getCtCurX() && mTargetGridY == getCtCurY()) {
-            field_0x5184 = true;
-            return;
-        }
         mSpi2Pane.pane->hide();
         field_0x5184 = false;
     }
@@ -1536,12 +1535,37 @@ void dMenu_Fmap_c::dispEndSalvageHugeMark(f32 i_x, f32 i_y) {
 
 /* 801B48C4-801B49F0       .text checkDspHugeMapLink__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkDspHugeMapLink() {
-    /* Nonmatching */
+    if (mFishmanActive == 0) {
+        mLnk3Pane.pane->hide();
+    } else {
+        field_0x5111 = dMap_getCheckPointUseGrid(getCtCurX(), getCtCurY());
+        if (field_0x5112 == field_0x5111 && mMapSelectActive) {
+            field_0x5183 = true;
+        } else {
+            mLnk3Pane.pane->hide();
+            field_0x5183 = false;
+        }
+    }
 }
 
 /* 801B49F0-801B4B44       .text checkDspHugeMapShip__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkDspHugeMapShip() {
-    /* Nonmatching */
+    if (mFishmanActive == 0) {
+        mSpi3Pane.pane->hide();
+        field_0x5185 = false;
+    } else  if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0
+            && mTargetGridX == getCtCurX()
+            && mTargetGridY == getCtCurY()) {
+        if (field_0x5186) {
+            field_0x5185 = false;
+            mSpi3Pane.pane->hide();
+        } else {
+            field_0x5185 = true;
+        }
+    } else {
+        mSpi3Pane.pane->hide();
+        field_0x5185 = false;
+    }
 }
 
 /* 801B4B44-801B4C0C       .text _open__12dMenu_Fmap_cFv */
@@ -1583,8 +1607,16 @@ bool dMenu_Fmap_c::_close() {
 
 /* 801B4C78-801B4D78       .text _close_normalMode__12dMenu_Fmap_cFv */
 bool dMenu_Fmap_c::_close_normalMode() {
-    /* Nonmatching */
-    return false;
+    BOOL i = mInputDisabled ? 1 : paneTransBase(mFrameTimer, g_mfHIO.field_0x34, 0.0f, g_mfHIO.field_0x38, 0, 1);
+    mFrameTimer++;
+    if (i == TRUE) {
+        if (!mInputDisabled) {
+            setCtDispMode(FMAP_DISP_NORMAL);
+        }
+        mFrameTimer = 0;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 801B4D78-801B4E14       .text _move__12dMenu_Fmap_cFv */
@@ -1775,7 +1807,7 @@ void dMenu_Fmap_c::move_normal() {
 void dMenu_Fmap_c::FmapProc() {
     if (CPad_CHECK_TRIG_Y(0)) {
         mDoAud_seStart(JA_SE_CHART_TO_COMPARE);
-        setCtDispMode(1);
+        setCtDispMode(FMAP_DISP_HIKAKU);
         mMainProcIdx = 1;
         mHikakuProcIdx = 0;
     } else {
