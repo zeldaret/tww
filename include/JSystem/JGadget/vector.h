@@ -174,9 +174,9 @@ struct TVector {
 
     size_t GetSize_extend_(size_t count) const
     {
-        u32 oldSize        = size();
-        u32 neededNewSpace = oldSize + count;
-        u32 extendedSize   = mExtend(capacity(), oldSize, count);
+        size_t oldSize        = size();
+        size_t neededNewSpace = oldSize + count;
+        size_t extendedSize   = mExtend(capacity(), oldSize, count);
 
         return neededNewSpace > extendedSize ? neededNewSpace : extendedSize;
     }
@@ -236,7 +236,7 @@ struct TVector_pointer_void : public TVector<void*, TAllocator<void*> > {
     void** insert(void**, void* const&);
 
     void clear() { erase(begin(), end()); }
-    void push_back(const void*& value) { insert(end(), (void* const&)value); }
+    void push_back(void* const& value) { insert(end(), (void* const&)value); }
 
     /* 0x00 */ /* TVector */
 };
@@ -257,7 +257,9 @@ struct TVector_pointer : public TVector_pointer_void {
     const T* end() const { return (const T*)TVector_pointer_void::end(); }
     T* end() { return (T*)TVector_pointer_void::end(); }
 
-    void push_back(const T& value) { TVector_pointer_void::push_back((const void*&)value); }
+    void push_back(const T& ref) {
+        TVector_pointer_void::push_back((void* const&)ref);
+    }
 
     /* 0x00 */ /* TVector_pointer_void */
 };

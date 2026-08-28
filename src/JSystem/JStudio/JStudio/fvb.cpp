@@ -19,13 +19,12 @@ namespace fvb {
 TObject::~TObject() {}
 
 /* 802739AC-80273BD0       .text prepare__Q37JStudio3fvb7TObjectFRCQ47JStudio3fvb4data13TParse_TBlockPQ37JStudio3fvb8TControl */
-void TObject::prepare(const data::TParse_TBlock& rBlock, TControl* pControl) {
-    /* Nonmatching - regalloc */
-    TFunctionValueAttributeSet_const set = pfv_->getAttributeSet();
-    const void* pNext;
-    const void* pData;
-    pNext = rBlock.getNext();
-    pData = rBlock.getContent();
+void TObject::prepare(data::TParse_TBlock const& rBlock, TControl* pControl) {
+    // JUT_ASSERT(35, pfv_!=NULL);
+    // JUT_ASSERT(36, pControl!=NULL);
+    TFunctionValueAttributeSet set = pfv_->getAttributeSet();
+    const void* pNext = (const void*)rBlock.getNext();
+    const void* pData = (const void*)rBlock.getContent();
     while (pData < pNext) {
         data::TParse_TParagraph para(pData);
         data::TParse_TParagraph::TData dat;
@@ -33,128 +32,133 @@ void TObject::prepare(const data::TParse_TBlock& rBlock, TControl* pControl) {
         u32 u32Type = dat.u32Type;
         u32 u32Size = dat.u32Size;
         const void* pContent = dat.pContent;
-        TFunctionValueAttribute_range* pfvaRange = set.range_get();
-        TFunctionValueAttribute_refer* referGet;
-        TFunctionValueAttribute_interpolate* pfvaInterpolate = set.interpolate_get();
-
         switch (u32Type) {
         case 0:
-            goto prepare_end;
-        case 1: {
+            goto end;
+        case 1:
             prepare_data_(dat, pControl);
-        } break;
+            break;
         case 0x10: {
-            referGet = set.refer_get();
-
-            if (!referGet) {
+            // JGADGET_ASSERTWARN(61, u32Size>=4);
+            // JUT_ASSERT(62, pContent!=NULL);
+            TFunctionValueAttribute_refer* pfvaRefer = set.refer_get();
+            // JGADGET_ASSERTWARN(64, pfvaRefer!=NULL);
+            if (pfvaRefer == NULL) {
+                // JGADGET_WARNMSG(67, "invalid paragraph");
                 break;
             }
-
-            JGadget::TVector_pointer<TFunctionValue*>& rCnt = referGet->refer_referContainer();
-
-            typedef struct {
-                u32 length;
-                const u8 data[0];
-            } unkDataHeader;
-
-            typedef struct {
-                u32 count;
-                unkDataHeader dataArray[0];
-            } unkDataArray;
-
-            const unkDataArray* i = static_cast<const unkDataArray*>(pContent);
-            u32 dataCount = i->count;
-            const unkDataHeader* d = i->dataArray;
-
-            for (; dataCount != 0; dataCount--) {
-                u32 length = d->length;
-
-                TObject* pObject = pControl->getObject(&d->data, length);
-
-                if (pObject) {
-                    TFunctionValue* rfv = pObject->referFunctionValue();
-                    rCnt.push_back(rfv);
+            JGadget::TVector_pointer<TFunctionValue*>& rCnt = pfvaRefer->refer_referContainer();
+            u8* content = (u8*)pContent;
+            u32 i = *(u32*)content;
+            u8* ptr = content + 4;
+            for (; i != 0; i--) {
+                u32 size = *(u32*)ptr;
+                TObject* pObject = pControl->getObject(ptr + 4, size);
+                if (pObject != NULL) {
+                    rCnt.push_back(pObject->referFunctionValue());
+                } else {
+                    // JGADGET_WARNMSG(85, "object not found by ID");
                 }
-
-#ifdef __MWERKS__ // clang-format off
-                (const u8*)d += align_roundUp(length, sizeof(u32)) + sizeof(u32);
-#else
-                d = (const unkDataHeader*)(((const u8*)d) + align_roundUp(length, sizeof(u32)) + sizeof(u32));
-#endif // clang-format on
+                ptr += align_roundUp(size, 4) + 4;
             }
         } break;
         case 0x11: {
+            // JGADGET_ASSERTWARN(93, u32Size>=4);
+            // JUT_ASSERT(94, pContent!=NULL);
             TFunctionValueAttribute_refer* pfvaRefer = set.refer_get();
-
-            if (!pfvaRefer) {
+            // JGADGET_ASSERTWARN(96, pfvaRefer!=NULL);
+            if (pfvaRefer == NULL) {
+                // JGADGET_WARNMSG(99, "invalid paragraph");
                 break;
             }
 
             JGadget::TVector_pointer<TFunctionValue*>& rCnt = pfvaRefer->refer_referContainer();
-
-            const u32* i = static_cast<const u32*>(pContent);
-            u32 ii = *i;
-
-            for (; i++, ii != 0; ii--) {
-                u32 length = *i;
-                TObject* pObject = pControl->getObject_index(length);
-                if (pObject) {
-                    TFunctionValue* rfv = pObject->referFunctionValue();
-                    rCnt.push_back(rfv);
+            u8* ptr = (u8*)pContent;
+            u32 i = *(u32*)ptr;
+            for (; ptr += 4, i != 0; i--) {
+                u32 index = *(u32*)ptr;
+                TObject* pObject = pControl->getObject_index(index);
+                if (pObject != NULL) {
+                    rCnt.push_back(pObject->referFunctionValue());
+                } else {
+                    // JGADGET_WARNMSG(114, "object not found by index : " << index);
                 }
             }
         } break;
         case 0x12: {
-            if (!pfvaRange) {
+            // JGADGET_ASSERTWARN(121, u32Size==8);
+            // JUT_ASSERT(122, pContent!=NULL);
+            TFunctionValueAttribute_range* pfvaRange = set.range_get();
+            // JGADGET_ASSERTWARN(124, pfvaRange!=NULL);
+            if (pfvaRange == NULL) {
+                // JGADGET_WARNMSG(127, "invalid paragraph");
                 break;
             }
-            const f32* arr = static_cast<const f32*>(pContent);
-
+            f32* arr = (f32*)pContent;
             pfvaRange->range_set(arr[0], arr[1]);
         } break;
         case 0x13: {
-            if (!pfvaRange) {
+            // JGADGET_ASSERTWARN(138, u32Size==4);
+            // JUT_ASSERT(139, pContent!=NULL);
+            TFunctionValueAttribute_range* pfvaRange = set.range_get();
+            // JGADGET_ASSERTWARN(141, pfvaRange!=NULL);
+            if (pfvaRange == NULL) {
+                // JGADGET_WARNMSG(144, "invalid paragraph");
                 break;
             }
 
-            TFunctionValue::TEProgress prog = *static_cast<const TFunctionValue::TEProgress*>(pContent);
+            TFunctionValue::TEProgress prog = *(TFunctionValue::TEProgress*)pContent;
             pfvaRange->range_setProgress(prog);
-
         } break;
         case 0x14: {
-            if (!pfvaRange) {
+            // JGADGET_ASSERTWARN(156, u32Size==4);
+            // JUT_ASSERT(157, pContent!=NULL);
+            TFunctionValueAttribute_range* pfvaRange = set.range_get();
+            // JGADGET_ASSERTWARN(159, pfvaRange!=NULL);
+            if (pfvaRange == NULL) {
+                // JGADGET_WARNMSG(162, "invalid paragraph");
                 break;
             }
 
-            TFunctionValue::TEAdjust adjust = *static_cast<const TFunctionValue::TEAdjust*>(pContent);
+            TFunctionValue::TEAdjust adjust = *(TFunctionValue::TEAdjust*)pContent;
             pfvaRange->range_setAdjust(adjust);
-
         } break;
         case 0x15: {
-            if (!pfvaRange) {
+            // JGADGET_ASSERTWARN(174, u32Size==4);
+            // JUT_ASSERT(175, pContent!=NULL);
+            TFunctionValueAttribute_range* pfvaRange = set.range_get();
+            // JGADGET_ASSERTWARN(177, pfvaRange!=NULL);
+            if (pfvaRange == NULL) {
+                // JGADGET_WARNMSG(180, "invalid paragraph");
                 break;
             }
 
-            TFunctionValue::TEOutside a = (TFunctionValue::TEOutside)(static_cast<const u16*>(pContent))[0];
-            TFunctionValue::TEOutside b = (TFunctionValue::TEOutside)(static_cast<const u16*>(pContent))[1];
-
-            pfvaRange->range_setOutside(a, b);
-
+            u16* out = (u16*)pContent;
+            pfvaRange->range_setOutside((TFunctionValue::TEOutside)out[0],
+                                        (TFunctionValue::TEOutside)out[1]);
         } break;
         case 0x16: {
-            if (!pfvaInterpolate) {
+            // JGADGET_ASSERTWARN(193, u32Size==4);
+            // JUT_ASSERT(194, pContent!=NULL);
+            TFunctionValueAttribute_interpolate* pfvaInterpolate = set.interpolate_get();
+            // JGADGET_ASSERTWARN(197, pfvaInterpolate!=NULL);
+            if (pfvaInterpolate == NULL) {
+                // JGADGET_WARNMSG(200, "invalid paragraph");
                 break;
             }
 
-            TFunctionValue::TEInterpolate interp = *static_cast<const TFunctionValue::TEInterpolate*>(pContent);
+            TFunctionValue::TEInterpolate interp = *(TFunctionValue::TEInterpolate*)pContent;
             pfvaInterpolate->interpolate_set(interp);
-
         } break;
+        default:
+            // JGADGET_WARNMSG(211, "unknown paragraph : " << u32Type);
+            break;
         }
         pData = dat.next;
+        // JUT_ASSERT(214, pData!=NULL);
     }
-
-prepare_end:
+end:
+    // JGADGET_ASSERTWARN(216, pData==pNext);
     pfv_->prepare();
 }
 
@@ -162,12 +166,12 @@ namespace {
 
 /* 80273BD0-80273BDC       .text getCompositeData_raw___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
 TFunctionValue_composite::TData getCompositeData_raw_(const void* arg1) {
-    return TFunctionValue_composite::TData(*(const void**)arg1);
+    return TFunctionValue_composite::TData(*(void**)arg1);
 }
 
 /* 80273BDC-80273BE8       .text getCompositeData_index___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
 TFunctionValue_composite::TData getCompositeData_index_(const void* arg1) {
-    return TFunctionValue_composite::TData(*(u32*)arg1);
+    return TFunctionValue_composite::TData(*(unsigned int*)arg1);
 }
 
 /* 80273BE8-80273BF4       .text getCompositeData_parameter___Q37JStudio3fvb17@unnamed@fvb_cpp@FPCv */
@@ -214,9 +218,7 @@ const data::CompositeOperation* getCompositeOperation_(data::TEComposite r3) {
 }  // namespace
 
 /* 80273C38-80273CB8       .text __ct__Q37JStudio3fvb17TObject_compositeFRCQ47JStudio3fvb4data13TParse_TBlock */
-TObject_composite::TObject_composite(const data::TParse_TBlock& block) : TObject(block, &fnValue) {
-    /* Nonmatching */
-}
+TObject_composite::TObject_composite(const data::TParse_TBlock& block) : TObject(block, &fnValue) {}
 
 /* 80273CB8-80273D1C       .text prepare_data___Q37JStudio3fvb17TObject_compositeFRCQ57JStudio3fvb4data17TParse_TParagraph5TDataPQ37JStudio3fvb8TControl */
 void TObject_composite::prepare_data_(const data::TParse_TParagraph::TData& rData, TControl* control) {
@@ -237,9 +239,7 @@ void TObject_composite::prepare_data_(const data::TParse_TParagraph::TData& rDat
 }
 
 /* 80273D1C-80273D9C       .text __ct__Q37JStudio3fvb16TObject_constantFRCQ47JStudio3fvb4data13TParse_TBlock */
-TObject_constant::TObject_constant(const data::TParse_TBlock& block) : TObject(block, &fnValue) {
-    /* Nonmatching */
-}
+TObject_constant::TObject_constant(const data::TParse_TBlock& block) : TObject(block, &fnValue) {}
 
 /* 80273D9C-80273DAC       .text prepare_data___Q37JStudio3fvb16TObject_constantFRCQ57JStudio3fvb4data17TParse_TParagraph5TDataPQ37JStudio3fvb8TControl */
 void TObject_constant::prepare_data_(const data::TParse_TParagraph::TData& rData, TControl* control) {
@@ -255,9 +255,7 @@ void TObject_constant::prepare_data_(const data::TParse_TParagraph::TData& rData
 }
 
 /* 80273DAC-80273E2C       .text __ct__Q37JStudio3fvb18TObject_transitionFRCQ47JStudio3fvb4data13TParse_TBlock */
-TObject_transition::TObject_transition(const data::TParse_TBlock& block) : TObject(block, &fnValue) {
-    /* Nonmatching */
-}
+TObject_transition::TObject_transition(const data::TParse_TBlock& block) : TObject(block, &fnValue) {}
 
 /* 80273E2C-80273E44       .text prepare_data___Q37JStudio3fvb18TObject_transitionFRCQ57JStudio3fvb4data17TParse_TParagraph5TDataPQ37JStudio3fvb8TControl */
 void TObject_transition::prepare_data_(const data::TParse_TParagraph::TData& rData, TControl* control) {
@@ -273,9 +271,7 @@ void TObject_transition::prepare_data_(const data::TParse_TParagraph::TData& rDa
 }
 
 /* 80273E44-80273EC4       .text __ct__Q37JStudio3fvb12TObject_listFRCQ47JStudio3fvb4data13TParse_TBlock */
-TObject_list::TObject_list(const data::TParse_TBlock& block) : TObject(block, &fnValue) {
-    /* Nonmatching */
-}
+TObject_list::TObject_list(const data::TParse_TBlock& block) : TObject(block, &fnValue) {}
 
 /* 80273EC4-80273EE4       .text prepare_data___Q37JStudio3fvb12TObject_listFRCQ57JStudio3fvb4data17TParse_TParagraph5TDataPQ37JStudio3fvb8TControl */
 void TObject_list::prepare_data_(const data::TParse_TParagraph::TData& rData, TControl* control) {
@@ -292,9 +288,7 @@ void TObject_list::prepare_data_(const data::TParse_TParagraph::TData& rData, TC
 }
 
 /* 80273EE4-80273F64       .text __ct__Q37JStudio3fvb22TObject_list_parameterFRCQ47JStudio3fvb4data13TParse_TBlock */
-TObject_list_parameter::TObject_list_parameter(const data::TParse_TBlock& block) : TObject(block, &fnValue) {
-    /* Nonmatching */
-}
+TObject_list_parameter::TObject_list_parameter(const data::TParse_TBlock& block) : TObject(block, &fnValue) {}
 
 /* 80273F64-80273F94       .text prepare_data___Q37JStudio3fvb22TObject_list_parameterFRCQ57JStudio3fvb4data17TParse_TParagraph5TDataPQ37JStudio3fvb8TControl */
 void TObject_list_parameter::prepare_data_(const data::TParse_TParagraph::TData& rData, TControl* control) {
@@ -310,9 +304,7 @@ void TObject_list_parameter::prepare_data_(const data::TParse_TParagraph::TData&
 }
 
 /* 80273F94-80274014       .text __ct__Q37JStudio3fvb15TObject_hermiteFRCQ47JStudio3fvb4data13TParse_TBlock */
-TObject_hermite::TObject_hermite(const data::TParse_TBlock& block) : TObject(block, &fnValue) {
-    /* Nonmatching */
-}
+TObject_hermite::TObject_hermite(const data::TParse_TBlock& block) : TObject(block, &fnValue) {}
 
 /* 80274014-8027404C       .text prepare_data___Q37JStudio3fvb15TObject_hermiteFRCQ57JStudio3fvb4data17TParse_TParagraph5TDataPQ37JStudio3fvb8TControl */
 void TObject_hermite::prepare_data_(const data::TParse_TParagraph::TData& rData, TControl* control) {
@@ -358,7 +350,6 @@ void TControl::destroyObject_all() {
 
 /* 80274218-802742B8       .text getObject__Q37JStudio3fvb8TControlFPCvUl */
 TObject* TControl::getObject(const void* param_0, u32 param_1) {
-    /* Nonmatching - TPRObject_ID_equal copy issue */
     JGadget::TLinkList<TObject, -12>::iterator begin = ocObject_.begin();
     JGadget::TLinkList<TObject, -12>::iterator end = ocObject_.end();
     JGadget::TLinkList<TObject, -12>::iterator local_50 = std::find_if(begin, end, object::TPRObject_ID_equal(param_0, param_1));
@@ -374,12 +365,9 @@ TObject* TControl::getObject_index(u32 idx) {
         return NULL;
     }
 
-    JGadget::TLinkList<TObject, -12>::iterator begin(ocObject_.begin());
-    while (idx != 0) {
-        begin++;
-        idx--;
-    }
-    return &*begin;
+    JGadget::TLinkList<TObject, -12>::iterator it(ocObject_.begin());
+    std::advance(it, idx);
+    return &*it;
 }
 
 /* 802742FC-80274344       .text __dt__Q37JStudio3fvb8TFactoryFv */

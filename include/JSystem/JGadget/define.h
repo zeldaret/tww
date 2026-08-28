@@ -2,6 +2,7 @@
 #define DEFINE_H
 
 #include "dolphin/types.h"
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,7 +32,13 @@ public:
     }
     JGadget_outMessage& operator<<(s8);
     JGadget_outMessage& operator<<(s32);
-    JGadget_outMessage& operator<<(u32);
+    JGadget_outMessage& operator<<(u32 value) {
+        /* Nonmatching - debug only */
+        char sz[64];
+        snprintf(sz, 64, "%u", value);
+
+        return *this << sz;
+    }
     JGadget_outMessage& operator<<(const void*);
 
 private:

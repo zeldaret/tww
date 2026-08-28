@@ -39,7 +39,7 @@ public:
 
     void prepare(const data::TParse_TBlock& block, TControl* control);
 
-    TFunctionValue* const& referFunctionValue() { return pfv_; }
+    TFunctionValue* const referFunctionValue() { return pfv_; }
 
 private:
     /* 0x0C */ JGadget::TLinkListNode mNode;
@@ -80,7 +80,6 @@ public:
     TObject_composite(JStudio::fvb::data::TParse_TBlock const&);
     virtual void prepare_data_(JStudio::fvb::data::TParse_TParagraph::TData const&,
                                               JStudio::fvb::TControl*);
-    virtual ~TObject_composite() {}
 
 private:
     TFunctionValue_composite fnValue;
@@ -89,7 +88,6 @@ private:
 class TObject_constant : public TObject {
 public:
     TObject_constant(data::TParse_TBlock const&);
-    virtual ~TObject_constant() {}
 
     virtual void prepare_data_(data::TParse_TParagraph::TData const&, TControl*);
 
@@ -100,7 +98,6 @@ private:
 class TObject_transition : public TObject {
 public:
     TObject_transition(data::TParse_TBlock const&);
-    virtual ~TObject_transition() {}
 
     virtual void prepare_data_(data::TParse_TParagraph::TData const&, TControl*);
 
@@ -116,7 +113,6 @@ public:
         /* 0x8 */ f32 _8[0];
     };
     TObject_list(data::TParse_TBlock const&);
-    virtual ~TObject_list() {}
 
     virtual void prepare_data_(data::TParse_TParagraph::TData const&, TControl*);
 
@@ -131,7 +127,6 @@ public:
         f32 _4[0];
     };
     TObject_list_parameter(data::TParse_TBlock const&);
-    virtual ~TObject_list_parameter() {}
 
     virtual void prepare_data_(data::TParse_TParagraph::TData const&, TControl*);
 
@@ -146,7 +141,6 @@ public:
         f32 _4[0];
     };
     TObject_hermite(data::TParse_TBlock const&);
-    virtual ~TObject_hermite() {}
 
     virtual void prepare_data_(data::TParse_TParagraph::TData const&, TControl*);
 
