@@ -1651,7 +1651,19 @@ void dMenu_Fmap_c::_draw() {
 
 /* 801B4E6C-801B4F40       .text _delete__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_delete() {
-    /* Nonmatching */
+    mFmap2._delete();
+    delete fmapDl.scrn;
+    delete stick;
+    delete mChkPntTxt_p;
+    if (outFont != NULL) {
+        delete outFont;
+    }
+    if (outFont2 != NULL) {
+        delete outFont2;
+    }
+    dComIfGp_getFmapResArchive()->removeResourceAll();
+    dComIfGp_getFmapArchive()->removeResourceAll();
+    mDoHIO_deleteChild(g_mfHIO.mNo);
 }
 
 /* 801B4F40-801B5034       .text FmapProcMain__12dMenu_Fmap_cFv */
