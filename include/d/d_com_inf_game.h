@@ -3547,10 +3547,6 @@ inline fopAc_ac_c* dComIfGp_event_getPt2() {
     return g_dComIfG_gameInfo.play.getEvent()->getPt2();
 }
 
-inline void dComIfGp_event_setPt2(void* i_actor) {
-    g_dComIfG_gameInfo.play.getEvent()->setPt2(i_actor);
-}
-
 inline f32 dComIfGp_event_getCullRate() {
     return g_dComIfG_gameInfo.play.getEvent()->getCullRate();
 }
