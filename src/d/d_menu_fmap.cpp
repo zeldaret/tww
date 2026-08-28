@@ -1675,18 +1675,102 @@ void dMenu_Fmap_c::FmapProcMain() {
 
 /* 801B5034-801B5878       .text SelectGrid__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::SelectGrid() {
-    /* Nonmatching */
-    if (dComIfGs_isSaveArriveGrid(fmapSv->curX + (fmapSv->curY + 3) * 7 + 3)) {
-        mButtonIconMode = FMAP_BTN_ICON_LOCKED;
+    stick->checkTrigger();
+    if (CPad_CHECK_TRIG_A(0)) {
+        mDoAud_seStart(JA_SE_CHART_ZOOM_IN);
+        if (dComIfGs_isSaveArriveGrid(getCtCurX() + (getCtCurY() + 3) * 7 + 3)) {
+            mButtonIconMode = FMAP_BTN_ICON_SECTOR;
+        } else {
+            mButtonIconMode = FMAP_BTN_ICON_LOCKED;
+        }
+        setCtZoomGridX(getCtCurX());
+        setCtZoomGridY(getCtCurY());
+        setCtFmapZoom(1);
+        zoom1000x1000Init();
+        mWarpScrollGuard = false;
+        if (mAreaTxtChanging) {
+            AreaTxtChgFast();
+            mAreaTxtChanging = false;
+        }
+        mFrameTimer = 0;
+        mFmapProcIdx = 1;
     } else {
-        mButtonIconMode = FMAP_BTN_ICON_SECTOR;
+        if (stick->checkRightTrigger()) {
+            if (getCtCurX() < 3) {
+                setCtCurX(getCtCurX() + 1);
+                mDoAud_seStart(JA_SE_CHART_CURSOR);
+                selCursorMove();
+                islandNameChange();
+                salvageGetItemChange();
+            }
+        } else {
+            if (stick->checkLeftTrigger()) {
+                if (getCtCurX() > -3) {
+                    setCtCurX(getCtCurX() - 1);
+                    mDoAud_seStart(JA_SE_CHART_CURSOR);
+                    selCursorMove();
+                    islandNameChange();
+                    salvageGetItemChange();
+                }
+            } else {
+                if (stick->checkUpTrigger()) {
+                    if (getCtCurY() > -3) {
+                        setCtCurY(getCtCurY() - 1);
+                        mDoAud_seStart(JA_SE_CHART_CURSOR);
+                        selCursorMove();
+                        islandNameChange();
+                        salvageGetItemChange();
+                    }
+                } else {
+                    if (stick->checkDownTrigger()) {
+                        if (getCtCurY() < 3) {
+                            setCtCurY(getCtCurY() + 1);
+                            mDoAud_seStart(JA_SE_CHART_CURSOR);
+                            selCursorMove();
+                            islandNameChange();
+                            salvageGetItemChange();
+                        }
+                    }
+                }
+            }
+        }
     }
-    JUT_ASSERT(489, fmapSv != NULL);
+    playerPointGridAnime();
+    selCursorAnime();
+    AreaTxtChg();
+    salvageGetItemChg();
 }
 
 /* 801B5878-801B5B58       .text zoom1000x1000Init__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::zoom1000x1000Init() {
-    /* Nonmatching */
+    s8 wy = getCtCurY();
+    s8 wx = getCtCurX();
+    int grid = wx + (wy + 3) * 7 + 3;
+
+    zoomMapAlphaSet(getCtCurX(), getCtCurY(), &mR01bPane, 0x14);
+    checkDspLargeMapLink();
+    checkDspLargeMapShip();
+
+    setDispIslandPos(getCtCurX(), getCtCurY());
+    selCursorInit();
+    zoomCursorInit();
+    mKkdmPane.pane->show();
+    mSmskPane.pane->show();
+    mClbPane.pane->show();
+
+    if (!dComIfGs_isSaveArriveGrid(grid)) {
+        mTsw1Pane.pane->hide();
+        mR01bPane.pane->hide();
+        mKtx1Pane.pane->show();
+        if (!dComIfGs_getOptRuby()) {
+            mKtx2Pane.pane->show();
+        }
+        mClb2Pane.pane->show();
+    } else {
+        mKtx1Pane.pane->hide();
+        mKtx2Pane.pane->hide();
+        mClb2Pane.pane->hide();
+    }
 }
 
 /* 801B5B58-801B5BB4       .text zoomMapAlphaSet__12dMenu_Fmap_cFScScP18fopMsgM_pane_classUc */
