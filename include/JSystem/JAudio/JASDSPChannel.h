@@ -47,7 +47,11 @@ namespace JASystem {
         void setPriorityTime(u16 time) { mPriorityTime = time; }
         u16 getCBInterval() { return mCBInterval; }
         void setCBInterval(u16 interval) { mCBInterval = interval; }
-        void decCBInterval() { mCBInterval--; }
+        void decCBInterval() {
+            if (mCBInterval != 0) {
+                mCBInterval--;
+            }
+        }
         TChannel* getLogicalChannel() {
             if (mCallback != NULL) {
                 return (TChannel*)field_0x8; // ?? is this userdata?
@@ -55,10 +59,23 @@ namespace JASystem {
                 return NULL;
             }
         }
+        BOOL isFree() {
+            if (mStatus == 1) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+        }
+        // is this right?
+        BOOL checkSign(u32 value) {
+            if (field_0x8 == value) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+        }
 
-        // TODO: inlines
-        void checkSign(u32) {}
-        void isFree() {}
+        // TODO
         void forceStop(TDSPChannel*) {}
         void release(TDSPChannel*, u32) {}
 
