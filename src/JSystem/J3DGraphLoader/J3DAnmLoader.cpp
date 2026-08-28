@@ -453,7 +453,7 @@ void J3DAnmKeyLoader_v15::readAnmTransform(const J3DAnmTransformKeyData* dst) {
 
 /* 80300638-803006D4       .text setAnmTransform__19J3DAnmKeyLoader_v15FP18J3DAnmTransformKeyPC22J3DAnmTransformKeyData */
 void J3DAnmKeyLoader_v15::setAnmTransform(J3DAnmTransformKey* dst, const J3DAnmTransformKeyData* data) {
-    dst->field_0x22 = data->field_0xc;
+    dst->field_0x22 = data->mTableCount;
     dst->mFrameMax = data->mFrameMax;
     dst->mAttribute = data->mAttribute;
     dst->mDecShift = data->mDecShift;

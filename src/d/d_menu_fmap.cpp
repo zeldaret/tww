@@ -16,7 +16,7 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "d/actor/d_a_ship.h"
 #include <dolphin/mtx/mtx.h>
-#include "printf.h"
+#include "stdio.h"
 
 dMf_HIO_c g_mfHIO;
 

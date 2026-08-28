@@ -453,6 +453,7 @@ void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GX
 
     GXPosition2u16(param_0, param_1 + param_3);
     GXTexCoord2u8(0, 1);
+    GXEnd();
 
     GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z24X8, 0);
     GXSetZCompLoc(GX_ENABLE);
