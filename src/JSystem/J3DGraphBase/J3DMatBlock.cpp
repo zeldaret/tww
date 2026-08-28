@@ -1400,7 +1400,6 @@ void J3DTevBlock::indexToPtr_private(u32 offs) {
 
 /* 802E6298-802E6494       .text load__15J3DIndBlockFullFv */
 void J3DIndBlockFull::load() {
-    /* Nonmatching - regalloc */
     u8 indTexStageNum = mIndTexStageNum;
     for (u32 i = 0; i < indTexStageNum; i++) {
         mIndTexMtx[i].load(i);
@@ -1433,7 +1432,6 @@ void J3DIndBlockFull::load() {
 
 /* 802E6494-802E657C       .text diff__15J3DIndBlockFullFUl */
 void J3DIndBlockFull::diff(u32 flag) {
-    /* Nonmatching - regalloc */
     if ((flag & 0x08000000) == 0) {
         return;
     }
