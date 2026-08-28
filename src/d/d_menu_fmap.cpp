@@ -1660,7 +1660,17 @@ void dMenu_Fmap_c::_delete() {
 
 /* 801B4F40-801B5034       .text FmapProcMain__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::FmapProcMain() {
-    /* Nonmatching */
+    if (
+        CPad_CHECK_TRIG_LEFT(0) || CPad_CHECK_TRIG_DOWN(0) || mInputDisabled ||
+        (CPad_CHECK_TRIG_B(0) && getCtFmapZoom() == 0)
+    ) {
+        mMapClose = true;
+        return;
+    }
+    (this->*fmapProcMain[mFmapProcIdx])();
+    windArrowColorAnime();
+    checkMarkAnime();
+    gShipMarkAnime();
 }
 
 /* 801B5034-801B5878       .text SelectGrid__12dMenu_Fmap_cFv */

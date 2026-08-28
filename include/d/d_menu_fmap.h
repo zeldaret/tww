@@ -69,7 +69,7 @@ public:
         JUT_ASSERT(472, fmapSv != NULL);
         fmapSv->dispMode = val;
     }
-    s8 getCtFmapZoom() {
+    u8 getCtFmapZoom() {
         JUT_ASSERT(478, fmapSv != NULL);
         return fmapSv->fmapZoom;
     }
