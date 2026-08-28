@@ -609,7 +609,7 @@ void daNpc_De1_c::cc_set() {
         fopAc_ac_c* p_actor = searchByID(m_cc_ID[i]);
         if (p_actor != NULL) {
             mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(m_c0_jnt_num[i]));
-            mDoMtx_copy(mDoMtx_stack_c::get(), ((cc_class*)p_actor)->m7EC);
+            cMtx_copy(mDoMtx_stack_c::get(), ((cc_class*)p_actor)->m7EC);
         }
     }
 }
@@ -896,9 +896,9 @@ BOOL daNpc_De1_c::wait04() {
     f32 dist = PSVECSquareMag(&vec);
     dist = std::sqrtf(dist);
     if (dist < l_HIO.mPrm.m0C) {
-        fopAc_ac_c* player = dComIfGp_getPlayer(0);
+        daPy_py_c* player = static_cast<daPy_py_c*>(dComIfGp_getPlayer(0));
         mDemoMode = 4;
-        *(s16*)((u8*)player + 0x306) = cLib_targetAngleY(&player->current.pos, &current.pos);
+        player->changeDemoMoveAngle(cLib_targetAngleY(&player->current.pos, &current.pos));
     }
     return TRUE;
 }
@@ -1192,10 +1192,7 @@ BOOL daNpc_De1_c::CreateHeap() {
     }
 
     a_this->mAcchCir.SetWall(0.0f, 0.0f);
-    cXyz* p_speed = &a_this->speed;
-    cXyz* p_old = &a_this->old.pos;
-    cXyz* p_pos = &a_this->current.pos;
-    a_this->mObjAcch.Set(p_pos, p_old, a_this, 1, &a_this->mAcchCir, p_speed);
+    a_this->mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), a_this, 1, &a_this->mAcchCir, fopAcM_GetSpeed_p(this));
     a_this->mObjAcch.SetWaterNone();
     a_this->mObjAcch.SetWallNone();
     a_this->mObjAcch.SetRoofNone();
