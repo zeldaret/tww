@@ -473,22 +473,24 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::init(dMap_RoomInfo_c* prev, int p2) {
 
 /* 80045F40-80046314       .text getRoomImage__15dMap_RoomInfo_cFiUciPP7ResTIMGPP7ResTIMGPP8map_dt_cPP20stage_map_info_classPUc */
 u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG** param_4, ResTIMG** param_5, map_dt_c** param_6, stage_map_info_class** param_7, u8* param_8) {
-    /* Nonmatching */
-    ResTIMG* r28 = NULL;
-    map_dt_c* r26 = NULL;
-    u8 r24 = false;
-    u8 r22 = 0;
-    stage_map_info_class* r25 = NULL;
-    u8 r29;
+    ResTIMG* r28;
+    ResTIMG* r27;
+    map_dt_c* r26;
+    stage_map_info_class* r25;
+    bool r24;
     u8 r23;
-    ResTIMG* r27 = NULL;
+    u8 r22;
+    r24 = false;
+    r28 = NULL;
+    r27 = NULL;
+    r26 = NULL;
+    r25 = NULL;
+    r22 = 0;
     if (IsFloorNo(param_2)) {
         r23 = param_2;
         char archiveName[0x20];
         sprintf(archiveName, "Room%d", i_roomNo);
-        int r21;
-
-        while (param_3 && !r24 && IsFloorNo(r21 = r23)) {
+        while (!r24 && IsFloorNo(r23)) {
             char resourceName[0x20];
             sprintf(resourceName, "s%d.bti", r23);
             r28 = (ResTIMG*)dComIfG_getStageRes(archiveName, resourceName);
@@ -497,9 +499,8 @@ u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG*
             sprintf(resourceName, "m%d.amp", r23);
             r26 = (map_dt_c*)dComIfG_getStageRes(archiveName, resourceName);
             r25 = NULL;
-            r21 = r23;
-
-            while (!r25 && IsFloorNo(r29 = r21)) {
+            u8 r21 = r23;
+            while (!r25 && IsFloorNo(r21)) {
                 dStage_roomDt_c* roomData = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
                 r25 = roomData->getMapInfo2(r21);
                 r21--;
@@ -558,15 +559,15 @@ BOOL dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int i_roomNo) {
     }
     if (floor) {
         dStage_FloorInfo_dt_c* floorData = floor->m_entries;
-        for (s8 i = 0; i < floor->num; i++, floorData++) {
+        for (int i = 0; i < floor->num; i++, floorData++) {
             u8 floorNo = floorData->floorNo;
             if (IsFloorNo(floorNo)) {
                 for (int j = 0; j < int(ARRAY_SIZE(floorData->field_0x05)); j++) {
                     if (i_roomNo == floorData->field_0x05[j]) {
                         u8 r22 = getRoomImage(i_roomNo, floorNo, 1, NULL, NULL, NULL, NULL, NULL);
-#if VERSION > VERSION_DEMO
+                        #if VERSION > VERSION_DEMO
                         JUT_ASSERT(VERSION_SELECT(2195, 2195, 2195, 2195), ((floorNo - Floor_B5F) >= 0) && ((floorNo - Floor_B5F) < (Floor_5F - Floor_B5F + 1)))
-#endif
+                        #endif
                         field_0x2[floorNo - Floor_B5F] = r22;
                     }
                 }
@@ -856,12 +857,13 @@ void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3
     if (field_0x1 & 1) {
         f32 f28 = getStageMapInfoP()->field_0x30 / param_9;
         f32 f27 = getStageMapInfoP()->field_0x30 / param_10;
-        f32 f29 = field_0x2c * 0.5f + (param_6 - param_8) / getStageMapInfoP()->field_0x30;
-        field_0x8c.mOfsX = field_0x28 * 0.5f + (param_5 - param_7) / getStageMapInfoP()->field_0x30;
-        field_0x8c.mOfsY = f29;
+        field_0x8c.setCenterPos(
+            field_0x28 * 0.5f + (param_5 - param_7) / getStageMapInfoP()->field_0x30,
+                                field_0x2c * 0.5f + (param_6 - param_8) / getStageMapInfoP()->field_0x30
+        );
         field_0x8c.setScale(f28, f27);
         field_0x8c.setPos(param_1, param_2, param_1 + param_3, param_2 + param_4);
-        field_0x8c.mAlpha = i_alpha;
+        field_0x8c.setAlpha(i_alpha);
         dComIfGd_set2DOpa(&field_0x8c);
     }
 }
@@ -2530,7 +2532,6 @@ void dMap_2DMtMapSpcl_c::draw() {
 
 /* 8004E068-8004E1CC       .text setImage__18dMap_2DAGBScrDsp_cFP7ResTIMGP8map_dt_c */
 void dMap_2DAGBScrDsp_c::setImage(ResTIMG* i_img, map_dt_c* param_2) {
-    /* Nonmatching */
     mpMapData = param_2;
     mImg = i_img;
     if (!mpMapData || !mImg) {
@@ -2538,8 +2539,10 @@ void dMap_2DAGBScrDsp_c::setImage(ResTIMG* i_img, map_dt_c* param_2) {
         return;
     }
     GXInitTlutObj(&mTlutObj, (u8*)mImg + mImg->paletteOffset, GXTlutFmt(mImg->colorFormat), mImg->numColors);
-    GXInitTexObjCI(&mTexObj, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format), GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1, 0);
-    GXInitTexObjLOD(&mTexObj, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f, mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
+    GXInitTexObjCI(&mTexObj, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format),
+                   GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1 ? GX_TRUE : GX_FALSE, 0);
+    GXInitTexObjLOD(&mTexObj, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f,
+                    mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
     field_0x38 = 0x3c + mDoLib_cnvind32(mpMapData->field_0xc) + mDoLib_cnvind32(mpMapData->field_0x38);
 }
 
