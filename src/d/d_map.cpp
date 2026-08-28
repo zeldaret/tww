@@ -2401,7 +2401,11 @@ void dMap_RoomInfoCtrl_c::checkFloorMoveImageChangeRoom(u8 param_1,u8 param_2,in
 
     while (room = getNextRoomP(room), room != NULL) {
         if (room->m_exist) {
+#if VERSION == VERSION_DEMO
+            room->Changeimage(param_1,param_2,param_3,param_4,param_5);
+#else
             room->Changeimage(param_1,param_2,param_3,param_4,param_5,param_6);
+#endif
         }
     }
     return;
