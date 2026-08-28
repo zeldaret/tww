@@ -82,7 +82,7 @@ bool daNpc_De1_c::createInit() {
 
     switch (mType) {
     case 0:
-        if (dComIfGs_isEventBit(0x1801)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801)) {
             set_action(&daNpc_De1_c::wait_action2, NULL);
         } else {
             set_action(&daNpc_De1_c::wait_action1, NULL);
@@ -137,7 +137,7 @@ void daNpc_De1_c::setMtx() {
 
     followPa_happa();
     setDemoStartCenter();
-    if (mType == 0 && !dComIfGs_isEventBit(0x1801)) {
+    if (mType == 0 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1801)) {
         cc_set();
     }
     setAttention();
@@ -338,7 +338,7 @@ u16 daNpc_De1_c::next_msgStatus(unsigned long* pMsgNo) {
         break;
     case 0x13A9:
     case 0x13C5:
-        if (dComIfGs_isEventBit(0x1D40)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1D40)) {
             *pMsgNo = 0x13AA;
         } else {
             *pMsgNo = 0x13AB;
@@ -398,12 +398,12 @@ u16 daNpc_De1_c::next_msgStatus(unsigned long* pMsgNo) {
     case 0x13AD:
         switch (mpCurrMsg->mSelectNum) {
         case 0:
-            if (dComIfGs_isEventBit(0x0102)) {
+            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102)) {
                 *pMsgNo = 0x13B0;
-            } else if (dComIfGs_isEventBit(0x3940)) {
+            } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3940)) {
                 *pMsgNo = 0x13AF;
             } else {
-                dComIfGs_onEventBit(0x3940);
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3940);
                 *pMsgNo = 0x13AE;
             }
             break;
@@ -415,7 +415,7 @@ u16 daNpc_De1_c::next_msgStatus(unsigned long* pMsgNo) {
         }
         break;
     case 0x13B6:
-        if (dComIfGs_isEventBit(0x1820)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820)) {
             if (dComIfGs_isStageBossEnemy(6)) {
                 *pMsgNo = 0x13C2;
             } else {
@@ -455,13 +455,13 @@ u32 daNpc_De1_c::getMsg() {
     switch (mType) {
     case 0:
         if (dComIfGs_checkGetItem(0x20)) {
-            msg = dLib_setFirstMsg(0x0E40, 0x139F, 0x13A1);
+            msg = dLib_setFirstMsg(dSv_event_flag_c::UNK_0E40, 0x139F, 0x13A1);
         } else {
-            msg = dLib_setFirstMsg(0x0E80, 0x139C, 0x139D);
+            msg = dLib_setFirstMsg(dSv_event_flag_c::UNK_0E80, 0x139C, 0x139D);
         }
         break;
     case 1:
-        if (dComIfGs_isEventBit(0x1C40)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1C40)) {
             if (field_0x7A7) {
                 msg = 0x13AC;
             } else {
@@ -469,7 +469,7 @@ u32 daNpc_De1_c::getMsg() {
                 msg = 0x13A8;
             }
         } else {
-            msg = dLib_setFirstMsg(0x1C20, 0x13A3, 0x13A7);
+            msg = dLib_setFirstMsg(dSv_event_flag_c::UNK_1C20, 0x13A3, 0x13A7);
         }
         break;
     }
@@ -506,7 +506,7 @@ void daNpc_De1_c::checkOrder() {
             mDoAud_bgmStart(JA_BGM_DEKU_PINCH);
             mDemoMode = 0;
         } else if (dComIfGp_evmng_startCheck("contact") && mDemoMode == 5) {
-            dComIfGs_onEventBit(0x1801);
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_1801);
             dComIfGp_setNextStage("Omori", 0xD5, 0, 8, 0.0f, 0, 1, 0);
             mDemoMode = 0;
         }
