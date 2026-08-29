@@ -1786,7 +1786,28 @@ void dMenu_Fmap_c::zoomMapAlphaSet(s8 i_gridX, s8 i_gridY, fopMsgM_pane_class* i
 
 /* 801B5BB4-801B5D6C       .text ZoomGridLv1In__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv1In() {
-    /* Nonmatching */
+    BOOL selCursor = paneAlphaFmapCursor(mKk1xPanes, mFrameTimer, g_mfHIO.field_0x3B, 0, 1);
+    BOOL selGridMask = selGridMaskAlphaCtrl(mFrameTimer, g_mfHIO.field_0x2E, 0, 0);
+    BOOL fmapMask = fmapMaskAlphaCtrl(mFrameTimer, g_mfHIO.field_0x2E, 0, 0);
+    BOOL zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E,
+        mKkdmPane.mPosCenter.x - mClbPane.mPosCenterOrig.x,
+        mKkdmPane.mPosCenter.y - mClbPane.mPosCenterOrig.y, 0.0f, 0.0f,
+        mKkdmPane.mSizeOrig.x / mClbPane.mSizeOrig.x, 1.0f, 0x02, 0);
+    BOOL zoomCursor = paneAlphaFmapCursor(mKk3xPanes, mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E, 0, 0);
+    mFrameTimer++;
+    if (CPad_CHECK_TRIG_A(0) && !mWarpScrollGuard) {
+        mWarpScrollGuard = true;
+    }
+    if (selCursor == TRUE && selGridMask == TRUE && fmapMask == TRUE && zoomMap == TRUE && zoomCursor == TRUE) {
+        mFrameTimer = 0;
+        if (field_0x5182 != 0) {
+            mLnk2Pane.pane->show();
+        }
+        if (field_0x5184) {
+            mSpi2Pane.pane->show();
+        }
+        mFmapProcIdx = 2;
+    }
 }
 
 /* 801B5D6C-801B5F80       .text ZoomGridLv1Proc__12dMenu_Fmap_cFv */
@@ -1838,7 +1859,7 @@ void dMenu_Fmap_c::zoom200x200Init() {
 
 /* 801B6084-801B6270       .text ZoomGridLv1Out__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv1Out() {
-    BOOL gridMask = selGridMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, 0, 1);
+    BOOL selGridMask = selGridMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, 0, 1);
     BOOL fmapMask = fmapMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, 0, 1);
     BOOL zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E, 0.0f, 0.0f,
         mKkdmPane.mPosCenter.x - mClbPane.mPosCenterOrig.x,
@@ -1847,7 +1868,7 @@ void dMenu_Fmap_c::ZoomGridLv1Out() {
     BOOL zoomCursor = paneAlphaFmapCursor(mKk3xPanes, mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E, 0, 1);
     BOOL selCursor = paneAlphaFmapCursor(mKk1xPanes, mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x3B, 0, 0);
     mFrameTimer++;
-    if (gridMask == TRUE && fmapMask == TRUE && zoomMap == TRUE && zoomCursor == TRUE && selCursor == TRUE) {
+    if (selGridMask == TRUE && fmapMask == TRUE && zoomMap == TRUE && zoomCursor == TRUE && selCursor == TRUE) {
         mFrameTimer = 0;
         mKkdmPane.pane->hide();
         mSmskPane.pane->hide();
