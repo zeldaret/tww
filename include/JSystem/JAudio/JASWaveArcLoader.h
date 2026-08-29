@@ -30,11 +30,19 @@ namespace JASystem {
         void setEntryNum(s32);
         void setFileName(const char*);
 
+        // fake struct name
+        struct loadToAramCallbackMsg {
+            JASystem::TWaveArc* mpWaveArc;
+            s32 mEntryNum;
+            uintptr_t mBase;
+            u32 field_0xc;
+        };
+
         /* 0x04 */ Kernel::THeap mHeap;
         /* 0x4C */ int field_0x4c;
         /* 0x50 */ OSMutex mMutex;
         /* 0x68 */ int field_0x68;
-        /* 0x6C */ int mFileNo;
+        /* 0x6C */ s32 mEntryNum;
         /* 0x70 */ int mSize;
         /* 0x74 */ int field_0x74;
     };

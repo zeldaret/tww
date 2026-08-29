@@ -56,7 +56,7 @@ char* JASystem::WaveArcLoader::getCurrentDir() {
 JASystem::TWaveArc::TWaveArc() : mHeap(this) {
     field_0x4c = 0;
     field_0x68 = 0;
-    mFileNo = -1;
+    mEntryNum = -1;
     mSize = 0;
     field_0x74 = 0;
     OSInitMutex(&mMutex);
@@ -97,17 +97,10 @@ bool JASystem::TWaveArc::eraseSetup() {
     return true;
 }
 
-struct unk_message {
-    JASystem::TWaveArc* mpWaveArc;
-    int mFileNo;
-    void* field_0x8;
-    u32 field_0xc;
-};
-
 /* 80287EB8-80287F48       .text loadToAramCallback__Q28JASystem8TWaveArcFPv */
 s32 JASystem::TWaveArc::loadToAramCallback(void* param_1) {
-    unk_message* msg = (unk_message*)param_1;
-    if (JKRDvdAramRipper::loadToAram(msg->mFileNo, u32(msg->field_0x8), EXPAND_SWITCH_UNKNOWN0, 0, 0) == 0) {
+    loadToAramCallbackMsg* msg = (loadToAramCallbackMsg*)param_1;
+    if (JKRDvdAramRipper::loadToAram(msg->mEntryNum, msg->mBase, EXPAND_SWITCH_UNKNOWN0, 0, 0) == 0) {
         return -1;
     }
     TWaveArc* waveArc = msg->mpWaveArc;
@@ -123,10 +116,10 @@ bool JASystem::TWaveArc::sendLoadCmd() {
     OSLockMutex(&mMutex);
     field_0x4c = 0;
     field_0x68 = 1;
-    unk_message msg;
+    loadToAramCallbackMsg msg;
     msg.mpWaveArc = this;
-    msg.mFileNo = mFileNo;
-    msg.field_0x8 = mHeap.mBase;
+    msg.mEntryNum = mEntryNum;
+    msg.mBase = (uintptr_t)mHeap.getBase();
     msg.field_0xc = ++field_0x74;
     OSUnlockMutex(&mMutex);
     if (!Dvd::sendCmdMsg(loadToAramCallback, &msg, sizeof(msg))) {
@@ -138,7 +131,7 @@ bool JASystem::TWaveArc::sendLoadCmd() {
 
 /* 80287FE4-802880A0       .text load__Q28JASystem8TWaveArcFPQ38JASystem6Kernel5THeap */
 bool JASystem::TWaveArc::load(Kernel::THeap* heap) {
-    if (mFileNo < 0)
+    if (mEntryNum < 0)
         return false;
 
     OSLockMutex(&mMutex);
@@ -178,7 +171,7 @@ void JASystem::TWaveArc::setEntryNum(s32 entryNum) {
     if (entryNum >= 0 && DVDFastOpen(entryNum, &file)) {
         mSize = file.length;
         DVDClose(&file);
-        mFileNo = entryNum;
+        mEntryNum = entryNum;
     }
 }
 
