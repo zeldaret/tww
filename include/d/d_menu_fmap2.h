@@ -149,7 +149,7 @@ public:
     void readPaneCmapTexture(const ResTIMG*, int);
     void readFmapTexture(const char*);
     int getButtonIconMode();
-    void isLockBbutton();
+    BOOL isLockBbutton();
     void isGetCollectMap(signed char);
     void isOpenCollectMap(signed char);
     void isOpenCollectMapTriforce(signed char);

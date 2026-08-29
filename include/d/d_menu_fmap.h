@@ -234,7 +234,7 @@ public:
     void fmap2Open();
     void fmap2Move();
     void fmap2Close();
-    int paneTransBase(short, u8, f32, f32, u8, int);
+    BOOL paneTransBase(short, u8, f32, f32, u8, int);
     BOOL paneTranceZoomMap(short, u8, f32, f32, f32, f32, f32, f32, u8, int);
     BOOL paneTranceZoomMapAlpah(short, u8, u8, int);
     BOOL paneTranceZoom2Map(short, u8, f32, f32, f32, f32, f32, f32, u8, int);
@@ -347,8 +347,7 @@ public:
     /* 0x3C3C */ fopMsgM_pane_class mStxxPanes[49];
     /* 0x46F4 */ fopMsgM_pane_class mCk1xPanes[3];
     /* 0x479C */ fopMsgM_pane_class mCk2xPanes[3];
-    /* 0x4844 */ fopMsgM_pane_class mCk31Pane;
-    /* 0x487C */ fopMsgM_pane_class mCk32Pane;
+    /* 0x4844 */ fopMsgM_pane_class mCk3xPanes[2];
     /* 0x48B4 */ fopMsgM_pane_class mKr0xPanes[8];
     /* 0x4A74 */ fopMsgM_pane_class mWnd1Pane;
     /* 0x4AAC */ fopMsgM_pane_class mWnd2Pane;

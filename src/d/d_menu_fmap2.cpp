@@ -534,7 +534,7 @@ int dMenu_Fmap2_c::getButtonIconMode() {
 }
 
 /* 801C756C-801C7574       .text isLockBbutton__13dMenu_Fmap2_cFv */
-void dMenu_Fmap2_c::isLockBbutton() {
+BOOL dMenu_Fmap2_c::isLockBbutton() {
     /* Nonmatching */
 }
 
