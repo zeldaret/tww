@@ -85,7 +85,6 @@ public:
     /* 0x20 */ csXyz mRot;
     /* 0x26 */ s16 mTimer;
     /* 0x28 */ bool mPlaying;
-    /* 0x29 */ u8 field_0x29[0x2C - 0x29];
 };  // Size: 0x2C
 
 
@@ -119,12 +118,10 @@ public:
     /* 0x2BC */ f32 field_0x2BC;
     /* 0x2C0 */ u16 field_0x2C0;
     /* 0x2C2 */ u8 field_0x2C2;
-    /* 0x2c3 */ u8 field_0x2c3;
     /* 0x2C4 */ s16 field_0x2C4;
     /* 0x2C6 */ u8 field_0x2C6;
     /* 0x2C7 */ s8 field_0x2C7;
     /* 0x2C8 */ s16 field_0x2C8;
-    /* 0x2CA */ u8 field_0x2CA[0x2CC - 0x2CA];
     /* 0x2CC */ dBgW* mpBgW;
     /* 0x2D0 */ daObjHtetu1Splash_c mSplash[2];
 };  // Size: 0x328

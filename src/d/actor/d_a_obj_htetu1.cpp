@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_htetu1.h"
 #include "d/d_bg_s_func.h"
-#include "d/d_com_inf_game.h"
-#include "f_op/f_op_actor_mng.h"
 #include "res/Object/Htetu1.h"
 
 const u16 l_daObjHtetu1_splash_id_table[] = {
@@ -18,7 +16,6 @@ const char daObjHtetu1_c::M_arcname[7] = "Htetu1";
 
 /* 00000078-00000178       .text create_s__19daObjHtetu1Splash_cFUsP4cXyzP5csXyzP12dKy_tevstr_c */
 void daObjHtetu1Splash_c::create_s(unsigned short p1, cXyz *pPos, csXyz *pRot, dKy_tevstr_c *pTev) {
-    /* Nonmatching */
     mPos = *pPos;
     mRot = *pRot;
 #if VERSION == VERSION_DEMO
@@ -46,13 +43,11 @@ void daObjHtetu1Splash_c::create_s(unsigned short p1, cXyz *pPos, csXyz *pRot, d
 
 /* 00000178-00000198       .text solidHeapCB__13daObjHtetu1_cFP10fopAc_ac_c */
 BOOL daObjHtetu1_c::solidHeapCB(fopAc_ac_c *i_this) {
-    /* Nonmatching */
     return ((daObjHtetu1_c*)i_this)->create_heap();
 }
 
 /* 00000198-00000298       .text create_heap__13daObjHtetu1_cFv */
 BOOL daObjHtetu1_c::create_heap() {
-    /* Nonmatching */
     BOOL ret = TRUE;
     
     J3DModelData *mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_HTETU1_BDL_HTETU1_e));
@@ -60,8 +55,6 @@ BOOL daObjHtetu1_c::create_heap() {
     if (mdl_data == NULL) ret = FALSE;
     else {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
-        // Mtx *mdl = &mpModel->getBaseTRMtx();
-        // cBgD_t *pcVar3 = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_HTETU1_DZB_HTETU1_e);
         mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_HTETU1_DZB_HTETU1_e), cBgW::MOVE_BG_e, &mpModel->getBaseTRMtx());
         if (mpBgW == NULL) ret = FALSE;
     }
@@ -70,7 +63,6 @@ BOOL daObjHtetu1_c::create_heap() {
 
 /* 00000298-00000460       .text _create__13daObjHtetu1_cFv */
 cPhs_State daObjHtetu1_c::_create() {
-    /* Nonmatching */
     fopAcM_ct(this, daObjHtetu1_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
@@ -103,7 +95,6 @@ cPhs_State daObjHtetu1_c::_create() {
 
 /* 00000508-00000610       .text _delete__13daObjHtetu1_cFv */
 bool daObjHtetu1_c::_delete() {
-    /* Nonmatching*/
     if (field_0x2C8 > 0) {
         dComIfGp_getVibration().StopQuake(-1);
         field_0x2C8 = -1;
@@ -112,7 +103,7 @@ bool daObjHtetu1_c::_delete() {
         mSplash[i].delete_s();
     }
 #if VERSION == VERSION_DEMO
-    if (field_0x2CC != NULL && field_0x2CC->ChkUsed()) {
+    if (mpBgW != NULL && mpBgW->ChkUsed()) {
 #else
     if (heap != NULL && mpBgW != NULL && mpBgW->ChkUsed()) {
 #endif
@@ -126,18 +117,16 @@ bool daObjHtetu1_c::_delete() {
 #else
     dComIfG_resDelete(&mPhase, M_arcname);
 #endif
-    return TRUE;
+    return true;
 }
 
 /* 00000610-00000648       .text check_sw__13daObjHtetu1_cFv */
 BOOL daObjHtetu1_c::check_sw() {
-    /* Nonmatching */
     return fopAcM_isSwitch(this, field_0x29C);
 }
 
 /* 00000648-000006E4       .text init_mtx__13daObjHtetu1_cFv */
 void daObjHtetu1_c::init_mtx() {
-    /* Nonmatching */
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -147,7 +136,6 @@ void daObjHtetu1_c::init_mtx() {
 
 /* 000006E4-000007F8       .text unlock__13daObjHtetu1_cFv */
 void daObjHtetu1_c::unlock() {
-    /* Nonmatching */
     cXyz xyz = cXyz::BaseY;
     field_0x2A0 -= field_0x2AC;
     s16 temp = field_0x2C0 * 0x859;
@@ -160,7 +148,6 @@ void daObjHtetu1_c::unlock() {
 
 /* 000007F8-0000098C       .text get_water_h__13daObjHtetu1_cFv */
 f32 daObjHtetu1_c::get_water_h() {
-    /* Nonmatching */
     dBgS_WtrChk wtr_chk;
     cXyz home_pos = home.pos;
     f32 ret = current.pos.y;
@@ -176,7 +163,6 @@ f32 daObjHtetu1_c::get_water_h() {
 
 /* 00000AB0-00000BCC       .text splash_manager__13daObjHtetu1_cFv */
 void daObjHtetu1_c::splash_manager() {
-    /* Nonmatching */
     f32 water_h = get_water_h();
 
     for (int i = 0; i < 2; i++) {
@@ -197,7 +183,6 @@ void daObjHtetu1_c::splash_manager() {
 
 /* 00000BCC-0000101C       .text _execute__13daObjHtetu1_cFv */
 bool daObjHtetu1_c::_execute() {
-    /* Nonmatching */
     int i;
     switch (field_0x2C6) {
         case 0:
@@ -214,7 +199,7 @@ bool daObjHtetu1_c::_execute() {
                     field_0x2C2 = 1;
                     field_0x2C6 = 1;
                     dComIfGp_getVibration().StartShock(5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-                    for (i = 0; i < 2; i++) mSplash[i].timer_play_particle(0x1e);
+                    for (i = 0; i < 2; i++) mSplash[i].timer_play_particle(30);
                 }
             }
             break;
@@ -279,23 +264,22 @@ bool daObjHtetu1_c::_execute() {
     }
     else if (field_0x2C8 > 0) field_0x2C8--;
 #if VERSION == VERSION_DEMO
-    if (field_0x2CC != NULL && field_0x2CC->ChkUsed()) {
+    if (mpBgW != NULL && mpBgW->ChkUsed()) {
 #else
     if (heap != NULL && mpBgW != NULL && mpBgW->ChkUsed()) {
 #endif
         mpBgW->Move();
     }
     
-    return TRUE;
+    return true;
 }
 
 /* 0000101C-0000107C       .text _draw__13daObjHtetu1_cFv */
 bool daObjHtetu1_c::_draw() {
-    /* Nonmatching */
     g_env_light.settingTevStruct(1, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
-    return 1;
+    return true;
 }
 
 namespace {
