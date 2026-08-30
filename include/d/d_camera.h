@@ -565,15 +565,15 @@ public:
     bool ScopeViewMsgModeOff();
 
     void StartEventCamera(int, int, ...);
-    void EndEventCamera(int);
-    void searchEventArgData(char*);
+    bool EndEventCamera(int);
+    int searchEventArgData(char*);
     void getEvIntData(int*, char*);
-    void getEvStringPntData(char*);
+    char* getEvStringPntData(char*);
     void getEvIntData(int*, char*, int);
     void getEvFloatData(f32*, char*, f32);
     void getEvXyzData(cXyz*, char*, cXyz);
     bool getEvStringData(char*, char*, char*);
-    void getEvStringPntData(char*, char*);
+    char* getEvStringPntData(char*, char*);
     void getEvActor(char*);
     void getEvActor(char*, char*);
     bool pauseEvCamera();

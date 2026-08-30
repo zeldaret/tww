@@ -5,7 +5,9 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_camera.h"
+#include "d/d_com_inf_game.h"
 #include "dolphin/types.h"
+#include "string.h"
 
 /* 800B004C-800B0174       .text StartEventCamera__9dCamera_cFiie */
 void dCamera_c::StartEventCamera(int, int, ...) {
@@ -13,13 +15,36 @@ void dCamera_c::StartEventCamera(int, int, ...) {
 }
 
 /* 800B0174-800B01BC       .text EndEventCamera__9dCamera_cFi */
-void dCamera_c::EndEventCamera(int) {
-    /* Nonmatching */
+bool dCamera_c::EndEventCamera(int i_id) {
+    if (!chkFlag(0x20000000)) {
+        return false;
+    }
+
+    if (m0E8 != -1 && i_id != mEventData.field_0x14) {
+        return false;
+    }
+
+    clrFlag(0x20000000);
+    return true;
 }
 
 /* 800B01BC-800B0248       .text searchEventArgData__9dCamera_cFPc */
-void dCamera_c::searchEventArgData(char*) {
-    /* Nonmatching */
+int dCamera_c::searchEventArgData(char* i_name) {
+    int i;
+    bool found = false;
+
+    for (i = 0; i < 8; i++) {
+        if (mEventData.mEventParams[i].mName[0] == '\0') {
+            break;
+        }
+
+        if (strcmp(mEventData.mEventParams[i].mName, i_name) == 0) {
+            found = true;
+            break;
+        }
+    }
+
+    return found ? i : -1;
 }
 
 /* 800B0248-800B0310       .text getEvIntData__9dCamera_cFPiPc */
@@ -28,8 +53,22 @@ void dCamera_c::getEvIntData(int*, char*) {
 }
 
 /* 800B0310-800B03BC       .text getEvStringPntData__9dCamera_cFPc */
-void dCamera_c::getEvStringPntData(char*) {
-    /* Nonmatching */
+char* dCamera_c::getEvStringPntData(char* i_name) {
+    if (chkFlag(0x20000000)) {
+        int idx = searchEventArgData(i_name);
+        if (idx == -1) {
+            return NULL;
+        }
+
+        return (char*)mEventData.mEventParams[idx].mValue;
+    }
+
+    if (dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, i_name) != 0) {
+        return dComIfGp_evmng_getMyStringP(mEventData.mStaffIdx, i_name);
+    }
+
+    mEventData.field_0x10 = 1;
+    return NULL;
 }
 
 /* 800B03BC-800B0484       .text getEvIntData__9dCamera_cFPiPci */
@@ -53,8 +92,21 @@ bool dCamera_c::getEvStringData(char*, char*, char*) {
 }
 
 /* 800B074C-800B07F4       .text getEvStringPntData__9dCamera_cFPcPc */
-void dCamera_c::getEvStringPntData(char*, char*) {
-    /* Nonmatching */
+char* dCamera_c::getEvStringPntData(char* i_name, char* i_default) {
+    if (chkFlag(0x20000000)) {
+        int idx = searchEventArgData(i_name);
+        if (idx == -1) {
+            return i_default;
+        }
+
+        return (char*)mEventData.mEventParams[idx].mValue;
+    }
+
+    if (dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, i_name) != 0) {
+        return dComIfGp_evmng_getMyStringP(mEventData.mStaffIdx, i_name);
+    }
+
+    return i_default;
 }
 
 /* 800B07F4-800B0904       .text getEvActor__9dCamera_cFPc */
@@ -120,7 +172,21 @@ bool dCamera_c::restorePosEvCamera() {
 
 /* 800B7E00-800B7EBC       .text talktoEvCamera__9dCamera_cFv */
 bool dCamera_c::talktoEvCamera() {
-    /* Nonmatching */
+    fopAc_ac_c* talk_actor = dComIfGp_event_getPt1();
+
+    int style = types[mEventData.field_0x0c].mStyles[3];
+
+    if (m108 == 0) {
+        clrFlag(0x200000);
+    }
+
+    if (style < 0) {
+        style = mCamParam.SearchStyle('TT01');
+    }
+
+    talktoCamera(style);
+
+    return m100 && m101 && m102;
 }
 
 /* 800B7EBC-800B8108       .text maptoolIdEvCamera__9dCamera_cFv */
