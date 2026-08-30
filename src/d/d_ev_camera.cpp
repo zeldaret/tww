@@ -373,7 +373,87 @@ bool dCamera_c::talktoEvCamera() {
 
 /* 800B7EBC-800B8108       .text maptoolIdEvCamera__9dCamera_cFv */
 bool dCamera_c::maptoolIdEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - regswap on the field_0x14/field_0x10 locals, plus @stringBase0 and float
+     * literal pool offsets that resolve once the rest of the TU is written */
+    if (m108 == 0) {
+        int ev_id;
+
+        getEvIntData(&ev_id, "ID", -1);
+        mEventData.field_0x08 = 0;
+        m11C = 0;
+
+        dStage_Event_dt_c* event_dt;
+        int id = ev_id;
+
+        if (id == -1) {
+            event_dt = g_dComIfG_gameInfo.play.getEvent()->getStageEventDt();
+        } else {
+            dStage_EventInfo_c* event_info = dComIfGp_getStage().getEventInfo();
+
+            if (id >= 0 && id < event_info->num) {
+                event_dt = &event_info->events[id];
+            } else {
+                event_dt = NULL;
+            }
+        }
+
+        mEventData.field_0xcc = event_dt;
+    }
+
+    if (mEventData.field_0xcc == NULL) {
+        return true;
+    }
+
+    s8 ev_param = mEventData.field_0xcc->field_0x14;
+    u8 maptool_id = mEventData.field_0xcc->field_0x10;
+    int mode = -1;
+
+    if (mEventData.field_0xcc->field_0x12 != 0xFF) {
+        if (mEventData.field_0xcc->field_0x12 & 1) {
+            clrFlag(0x200000);
+        }
+
+        if (mEventData.field_0xcc->field_0x12 & 2) {
+            m068 = 0;
+        }
+
+        if (mEventData.field_0xcc->field_0x12 & 0x80) {
+            mode = 0;
+        }
+
+        if (mEventData.field_0xcc->field_0x12 & 0x40) {
+            mode = 0x1E;
+        }
+    }
+
+    if (m108 == mode) {
+        mDoAud_seStart(0x806);
+    }
+
+    mEventData.field_0x0c = GetCameraTypeFromMapToolID(maptool_id, ev_param);
+
+    if (mEventData.field_0x0c != 0xFF) {
+        s16 style = types[mEventData.field_0x0c].mStyles[0];
+
+        (this->*engine_tbl[mCamParam.Algorythmn(style)])(style);
+
+        if (mEventData.field_0xcc->field_0x11 == 0xFF ||
+            m11C > mEventData.field_0xcc->field_0x11 * 10) {
+            mEventData.field_0xcc =
+                g_dComIfG_gameInfo.play.getEvent()->nextStageEventDt(mEventData.field_0xcc);
+            m102 = 0;
+            m101 = 0;
+            m100 = 0;
+
+            if (mEventData.field_0xcc != NULL) {
+                m11C = -1;
+            }
+        }
+    } else {
+        mEventData.field_0xcc = NULL;
+    }
+
+    return mEventData.field_0xcc == NULL;
 }
 
 /* 800B8108-800B81D0       .text styleEvCamera__9dCamera_cFv */
@@ -397,7 +477,44 @@ bool dCamera_c::gameOverEvCamera() {
 
 /* 800B8AB8-800B8C90       .text tactEvCamera__9dCamera_cFv */
 bool dCamera_c::tactEvCamera() {
-    /* Nonmatching */
+    if (m11C == 0) {
+        mWork.tact.m37C = 0;
+
+        if (m07C & 2) {
+            mWork.tact.m380 = 0;
+        } else {
+            mWork.tact.m380 = 1;
+        }
+
+        SkipSmoother();
+        mEventData.field_0x20 = 0;
+        dComIfGp_saveCameraPosition(0, &mViewCache.mCenter, &mViewCache.mEye, mViewCache.mFovy,
+                                    mViewCache.mBank.Val());
+    }
+
+    cXyz center_ofs(0.426f, -13.479f, 6.372f);
+    cXyz eye_ofs(31.809f, -51.14f, 195.776f);
+
+    if (mWork.tact.m378 != 1) {
+        mWork.tact.m378 = 1;
+    }
+
+    mViewCache.mCenter = relationalPos(mpPlayerActor, &center_ofs);
+
+    if (mWork.tact.m380 != 0) {
+        eye_ofs.x = -eye_ofs.x;
+    }
+
+    mViewCache.mEye = relationalPos(mpPlayerActor, &eye_ofs);
+
+    if (lineBGCheck(&mViewCache.mCenter, &mViewCache.mEye, 0x8F)) {
+        eye_ofs.x = -eye_ofs.x;
+        mViewCache.mEye = relationalPos(mpPlayerActor, &eye_ofs);
+    }
+
+    mViewCache.mFovy = 55.0f;
+    mWork.tact.m37C++;
+    return true;
 }
 
 /* 800B8C90-800B99B8       .text windDirectionEvCamera__9dCamera_cFv */
@@ -417,12 +534,49 @@ bool dCamera_c::tornadoWarpEvCamera() {
 
 /* 800BA688-800BA7BC       .text saveEvCamera__9dCamera_cFv */
 bool dCamera_c::saveEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - @stringBase0 offsets only, resolves once the rest of the TU is written */
+    int slot;
+
+    getEvIntData(&slot, "Slot", 0);
+
+    if (slot == 9) {
+        dComIfGp_saveCameraPosition(0, &mViewCache.mCenter, &mViewCache.mEye, mViewCache.mFovy,
+                                    mViewCache.mBank.Val());
+    } else {
+        m0A4[slot].m00.mCenter = mViewCache.mCenter;
+        m0A4[slot].m00.mEye = mViewCache.mEye;
+        m0A4[slot].m00.mFovY = mViewCache.mFovy;
+        m0A4[slot].m00.mBank = mViewCache.mBank;
+        m0A4[slot].m00.m1E = 1;
+    }
+
+    SkipSmoother();
+    return true;
 }
 
 /* 800BA7BC-800BA904       .text loadEvCamera__9dCamera_cFv */
 bool dCamera_c::loadEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - @stringBase0 offsets only, resolves once the rest of the TU is written */
+    int slot;
+
+    getEvIntData(&slot, "Slot", 0);
+
+    if (slot == 9) {
+        s16 bank;
+
+        dComIfGp_loadCameraPosition(0, &mViewCache.mCenter, &mViewCache.mEye, &mViewCache.mFovy,
+                                    &bank);
+        mViewCache.mBank = cSAngle(bank);
+    } else {
+        mViewCache.mCenter = m0A4[slot].m00.mCenter;
+        mViewCache.mEye = m0A4[slot].m00.mEye;
+        mViewCache.mFovy = m0A4[slot].m00.mFovY;
+        mViewCache.mBank = m0A4[slot].m00.mBank;
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+    }
+
+    SkipSmoother();
+    return true;
 }
 
 /* 800BA904-800BB39C       .text useItem0EvCamera__9dCamera_cFv */
@@ -452,7 +606,73 @@ bool dCamera_c::fixedFramesEvCamera() {
 
 /* 800BCDA0-800BCFE8       .text bSplineEvCamera__9dCamera_cFv */
 bool dCamera_c::bSplineEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - @stringBase0 offsets only, resolves once the rest of the TU is written */
+    bool ret = false;
+
+    if (m11C == 0) {
+        mWork.bSpline.m388 = 9999;
+
+        char* name = "Centers";
+        int num = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, name);
+
+        if (num != 0) {
+            mWork.bSpline.m378 = dComIfGp_evmng_getMyXyzP(mEventData.mStaffIdx, name);
+
+            if (mWork.bSpline.m388 > num) {
+                mWork.bSpline.m388 = num;
+            }
+        } else {
+            return true;
+        }
+
+        name = "Eyes";
+        num = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, name);
+
+        if (num != 0) {
+            mWork.bSpline.m37C = dComIfGp_evmng_getMyXyzP(mEventData.mStaffIdx, name);
+
+            if (mWork.bSpline.m388 > num) {
+                mWork.bSpline.m388 = num;
+            }
+        } else {
+            return true;
+        }
+
+        name = "Fovys";
+        num = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, name);
+
+        if (num != 0) {
+            mWork.bSpline.m380 = dComIfGp_evmng_getMyFloatP(mEventData.mStaffIdx, name);
+
+            if (mWork.bSpline.m388 > num) {
+                mWork.bSpline.m388 = num;
+            }
+        } else {
+            return true;
+        }
+
+        if (!getEvIntData(&mWork.bSpline.m384, "Timer")) {
+            return true;
+        }
+
+        mEventData.mSpline2DPath.Init(mWork.bSpline.m388, mWork.bSpline.m384);
+        SkipSmoother();
+    }
+
+    if (mEventData.mSpline2DPath.Step()) {
+        mViewCache.mCenter = mEventData.mSpline2DPath.Calc(mWork.bSpline.m378);
+        mViewCache.mEye = mEventData.mSpline2DPath.Calc(mWork.bSpline.m37C);
+        mViewCache.mFovy = mEventData.mSpline2DPath.Calc(mWork.bSpline.m380);
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+
+        if (mEventData.mSpline2DPath.mState == 3) {
+            ret = true;
+        }
+    } else {
+        ret = true;
+    }
+
+    return ret;
 }
 
 /* 800BCFE8-800BD678       .text twoActor0EvCamera__9dCamera_cFv */

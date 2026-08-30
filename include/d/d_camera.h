@@ -91,9 +91,9 @@ public:
         /* 0x024 */ int field_0x24;
         /* 0x028 */ int field_0x28;
         /* 0x02C */ dCamera__EventParam mEventParams[8];
-        /* 0x0EC */ dStage_Event_dt_c* field_0xec;
-        /* 0x0F0 */ d2DBSplinePath mSpline2DPath;
-    };  // Size: 0x124
+        /* 0x0CC */ dStage_Event_dt_c* field_0xcc;
+        /* 0x0D0 */ d2DBSplinePath mSpline2DPath;
+    };  // Size: 0x114
 
     struct dCamera_monitoring_things {
         /* 0x00 */ cXyz mPos;
@@ -152,7 +152,7 @@ public:
         static const int PatternLengthMax = 4;
 #endif
     }
-    /* 0x05C */ mViewCache;
+    /* 0x03C */ mViewCache;
     /* 0x064 */ f32 m064;
     /* 0x068 */ int m068;
     /* 0x06C */ cSAngle mAngleY;
@@ -368,6 +368,18 @@ public:
             /* 0x39C */ cXyz m39C;
             /* 0x3A8 */ cXyz m3A8;
         } fixedFrame;
+        struct BSpline {
+            /* 0x378 */ cXyz* m378;
+            /* 0x37C */ cXyz* m37C;
+            /* 0x380 */ f32* m380;
+            /* 0x384 */ int m384;
+            /* 0x388 */ int m388;
+        } bSpline;
+        struct Tact {
+            /* 0x378 */ int m378;
+            /* 0x37C */ int m37C;
+            /* 0x380 */ int m380;
+        } tact;
         struct Pause {
             /* 0x378 */ u8 m378;
             /* 0x379 */ u8 m379[0x37C - 0x379];
