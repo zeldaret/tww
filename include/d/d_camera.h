@@ -368,6 +368,12 @@ public:
             /* 0x39C */ cXyz m39C;
             /* 0x3A8 */ cXyz m3A8;
         } fixedFrame;
+        struct Pause {
+            /* 0x378 */ u8 m378;
+            /* 0x379 */ u8 m379[0x37C - 0x379];
+            /* 0x37C */ int m37C;
+            /* 0x380 */ int m380;
+        } pause;
         struct FixedPos {
             /* 0x378 */ int m378;
             /* 0x37C */ f32 m37C;
@@ -567,10 +573,10 @@ public:
     void StartEventCamera(int, int, ...);
     bool EndEventCamera(int);
     int searchEventArgData(char*);
-    void getEvIntData(int*, char*);
+    bool getEvIntData(int*, char*);
     char* getEvStringPntData(char*);
-    void getEvIntData(int*, char*, int);
-    void getEvFloatData(f32*, char*, f32);
+    bool getEvIntData(int*, char*, int);
+    bool getEvFloatData(f32*, char*, f32);
     void getEvXyzData(cXyz*, char*, cXyz);
     bool getEvStringData(char*, char*, char*);
     char* getEvStringPntData(char*, char*);

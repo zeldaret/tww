@@ -48,8 +48,22 @@ int dCamera_c::searchEventArgData(char* i_name) {
 }
 
 /* 800B0248-800B0310       .text getEvIntData__9dCamera_cFPiPc */
-void dCamera_c::getEvIntData(int*, char*) {
-    /* Nonmatching */
+bool dCamera_c::getEvIntData(int* o_value, char* i_name) {
+    if (chkFlag(0x20000000)) {
+        int idx = searchEventArgData(i_name);
+        if (idx == -1) {
+            return false;
+        }
+
+        *o_value = *(int*)mEventData.mEventParams[idx].mValue;
+    } else if (dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, i_name) != 0) {
+        *o_value = *dComIfGp_evmng_getMyIntegerP(mEventData.mStaffIdx, i_name);
+    } else {
+        mEventData.field_0x10 = 1;
+        return false;
+    }
+
+    return true;
 }
 
 /* 800B0310-800B03BC       .text getEvStringPntData__9dCamera_cFPc */
@@ -72,13 +86,41 @@ char* dCamera_c::getEvStringPntData(char* i_name) {
 }
 
 /* 800B03BC-800B0484       .text getEvIntData__9dCamera_cFPiPci */
-void dCamera_c::getEvIntData(int*, char*, int) {
-    /* Nonmatching */
+bool dCamera_c::getEvIntData(int* o_value, char* i_name, int i_default) {
+    if (chkFlag(0x20000000)) {
+        int idx = searchEventArgData(i_name);
+        if (idx == -1) {
+            *o_value = i_default;
+        } else {
+            *o_value = *(int*)mEventData.mEventParams[idx].mValue;
+        }
+    } else if (dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, i_name) != 0) {
+        *o_value = *dComIfGp_evmng_getMyIntegerP(mEventData.mStaffIdx, i_name);
+    } else {
+        *o_value = i_default;
+        return false;
+    }
+
+    return true;
 }
 
 /* 800B0484-800B055C       .text getEvFloatData__9dCamera_cFPfPcf */
-void dCamera_c::getEvFloatData(f32*, char*, f32) {
-    /* Nonmatching */
+bool dCamera_c::getEvFloatData(f32* o_value, char* i_name, f32 i_default) {
+    if (chkFlag(0x20000000)) {
+        int idx = searchEventArgData(i_name);
+        if (idx == -1) {
+            *o_value = i_default;
+        } else {
+            *o_value = *(f32*)mEventData.mEventParams[idx].mValue;
+        }
+    } else if (dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, i_name) != 0) {
+        *o_value = *dComIfGp_evmng_getMyFloatP(mEventData.mStaffIdx, i_name);
+    } else {
+        *o_value = i_default;
+        return false;
+    }
+
+    return true;
 }
 
 /* 800B055C-800B066C       .text getEvXyzData__9dCamera_cFP4cXyzPc4cXyz */
@@ -121,7 +163,23 @@ void dCamera_c::getEvActor(char*, char*) {
 
 /* 800B0A20-800B0AF8       .text pauseEvCamera__9dCamera_cFv */
 bool dCamera_c::pauseEvCamera() {
-    /* Nonmatching */
+    static int DefaultTimer = -1;
+
+    if (m11C == 0) {
+        SkipSmoother();
+        mWork.pause.m378 = getEvIntData(&mWork.pause.m380, "Timer", DefaultTimer);
+        getEvIntData(&mWork.pause.m37C, "Stay", 0);
+    }
+
+    if (mWork.pause.m37C != 0) {
+        setFlag(1);
+    }
+
+    if (mWork.pause.m378 != 0 && m11C < (u32)mWork.pause.m380) {
+        return false;
+    }
+
+    return true;
 }
 
 /* 800B0AF8-800B14D4       .text fixedFrameEvCamera__9dCamera_cFv */
@@ -196,7 +254,16 @@ bool dCamera_c::maptoolIdEvCamera() {
 
 /* 800B8108-800B81D0       .text styleEvCamera__9dCamera_cFv */
 bool dCamera_c::styleEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - @stringBase0 offsets for "Name"/"FN01", resolves once the rest of the TU is written */
+    if (m108 == 0) {
+        mEventData.field_0x08 = 0;
+        m11C = 0;
+    }
+
+    int style = mCamParam.SearchStyle(*(u32*)getEvStringPntData("Name", "FN01"));
+    (this->*engine_tbl[mCamParam.Algorythmn(style)])(style);
+
+    return m100 && m101 && m102;
 }
 
 /* 800B81D0-800B8AB8       .text gameOverEvCamera__9dCamera_cFv */
