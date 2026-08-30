@@ -14,6 +14,24 @@ namespace {
 
 bool lineCollisionCheck(cXyz, cXyz, fopAc_ac_c*, fopAc_ac_c*);
 
+inline dStage_Event_dt_c* firstMapData(int i_id) {
+    if (i_id == -1) {
+        return dComIfGp_event_getStageEventDt();
+    }
+
+    dStage_EventInfo_c* event_info = dComIfGp_getStage().getEventInfo();
+
+    if (i_id >= 0 && i_id < event_info->num) {
+        return &event_info->events[i_id];
+    }
+
+    return NULL;
+}
+
+inline dStage_Event_dt_c* nextMapData(dStage_Event_dt_c* i_eventDt) {
+    return dComIfGp_event_nextStageEventDt(i_eventDt);
+}
+
 struct PauseWork {
     /* 0x378 */ u8 m378;
     /* 0x379 */ u8 m379[0x37C - 0x379];
@@ -606,30 +624,15 @@ bool dCamera_c::talktoEvCamera() {
 /* 800B7EBC-800B8108       .text maptoolIdEvCamera__9dCamera_cFv */
 bool dCamera_c::maptoolIdEvCamera() {
     /* Nonmatching - regswap on the field_0x14/field_0x10 locals, plus @stringBase0 and float
-     * literal pool offsets that resolve once the rest of the TU is written */
+     * literal pool offsets that resolve once the rest of the TU is written. Inline usage is
+     * confirmed against frameworkD.map (firstMapData/nextMapData/MapToolCameraTimer). */
     if (m108 == 0) {
-        int ev_id;
+        int id;
 
-        getEvIntData(&ev_id, "ID", -1);
+        getEvIntData(&id, "ID", -1);
         mEventData.field_0x08 = 0;
         m11C = 0;
-
-        dStage_Event_dt_c* event_dt;
-        int id = ev_id;
-
-        if (id == -1) {
-            event_dt = g_dComIfG_gameInfo.play.getEvent()->getStageEventDt();
-        } else {
-            dStage_EventInfo_c* event_info = dComIfGp_getStage().getEventInfo();
-
-            if (id >= 0 && id < event_info->num) {
-                event_dt = &event_info->events[id];
-            } else {
-                event_dt = NULL;
-            }
-        }
-
-        mEventData.field_0xcc = event_dt;
+        mEventData.field_0xcc = firstMapData(id);
     }
 
     if (mEventData.field_0xcc == NULL) {
@@ -670,9 +673,8 @@ bool dCamera_c::maptoolIdEvCamera() {
         (this->*engine_tbl[mCamParam.Algorythmn(style)])(style);
 
         if (mEventData.field_0xcc->field_0x11 == 0xFF ||
-            m11C > mEventData.field_0xcc->field_0x11 * 10) {
-            mEventData.field_0xcc =
-                g_dComIfG_gameInfo.play.getEvent()->nextStageEventDt(mEventData.field_0xcc);
+            m11C > mEventData.field_0xcc->field_0x11 * mCamSetup.MapToolCameraTimer()) {
+            mEventData.field_0xcc = nextMapData(mEventData.field_0xcc);
             m102 = 0;
             m101 = 0;
             m100 = 0;

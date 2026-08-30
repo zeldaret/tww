@@ -3443,6 +3443,14 @@ inline BOOL dComIfGp_roomControl_checkRoomDisp(int i_roomNo) {
  * === EVENT ===
  */
 
+inline dStage_Event_dt_c* dComIfGp_event_getStageEventDt() {
+    return g_dComIfG_gameInfo.play.getEvent()->getStageEventDt();
+}
+
+inline dStage_Event_dt_c* dComIfGp_event_nextStageEventDt(void* i_eventDt) {
+    return g_dComIfG_gameInfo.play.getEvent()->nextStageEventDt(i_eventDt);
+}
+
 inline BOOL dComIfGp_event_runCheck() {
     return g_dComIfG_gameInfo.play.getEvent()->runCheck();
 }
