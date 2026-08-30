@@ -32,6 +32,20 @@ inline dStage_Event_dt_c* nextMapData(dStage_Event_dt_c* i_eventDt) {
     return dComIfGp_event_nextStageEventDt(i_eventDt);
 }
 
+struct GetItemWork {
+    /* 0x378 */ int mState;
+    /* 0x37C */ int mDuration;
+    /* 0x380 */ u8 m380[0x384 - 0x380];
+    /* 0x384 */ cXyz mCenter;
+    /* 0x390 */ f32 mFovy;
+    /* 0x394 */ int m394;
+    /* 0x398 */ int mFrame;
+    /* 0x39C */ cSGlobe mGlobe;
+    /* 0x3A4 */ u8 m3A4[0x3BC - 0x3A4];
+    /* 0x3BC */ int mTimer1;
+    /* 0x3C0 */ int mTimer2;
+};
+
 struct TurnToActorWork {
     /* 0x378 */ cXyz mCtrGap;
     /* 0x384 */ cXyz mAttentionPos;
@@ -908,7 +922,118 @@ bool dCamera_c::useItem1EvCamera() {
 
 /* 800BBD88-800BC364       .text getItemEvCamera__9dCamera_cFv */
 bool dCamera_c::getItemEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - regswap between the return flag and the loop index, one hoisted load, plus
+     * literal pool serials that resolve once the rest of the TU is written */
+    cXyz ctr_gap(-0.095f, 0.428f, -7.177f);
+    Vec eye_gap_l[4] = {
+        {0.17f, 97.0f, -57.78f},
+        {-28.844f, 99.996f, -41.073f},
+        {35.098f, 100.791f, -31.185f},
+        {0.17f, 97.0f, -57.78f},
+    };
+    cXyz eye_gap_r[4] = {
+        cXyz(0.17f, 97.0f, -57.78f),
+        cXyz(35.098f, 100.791f, -31.185f),
+        cXyz(-28.844f, 99.996f, -41.073f),
+        cXyz(0.17f, 97.0f, -57.78f),
+    };
+
+    GetItemWork* w = (GetItemWork*)&mWork;
+    bool ret = false;
+
+    if (m11C == 0) {
+        w->mState = 0;
+    }
+
+    switch (w->mState) {
+    default:
+        getEvIntData(&w->mTimer1, "Timer1", 0x1B);
+        getEvIntData(&w->mTimer2, "Timer2", 5);
+        w->m394 = 0;
+        w->mState = 1;
+        w->mFrame = 0;
+        w->mDuration = w->mTimer1;
+        // fall through
+    case 1:
+        setFlag(1);
+
+        if (w->mFrame >= w->mDuration) {
+            w->mState = 0xA;
+        }
+        break;
+    case 0xA: {
+        w->mFrame = 0;
+        w->mCenter = relationalPos(mpPlayerActor, &ctr_gap);
+
+        cXyz eye;
+
+        for (int i = 0; i < 4; i++) {
+            eye = relationalPos(mpPlayerActor, &eye_gap_r[i]);
+
+            if (eye.y < m368 + positionOf(mpPlayerActor).y) {
+                eye.y = m368 + positionOf(mpPlayerActor).y;
+            }
+
+            fopAc_ac_c* ship = NULL;
+
+            if (dComIfGp_checkPlayerStatus0(mPadId, 0x10000)) {
+                ship = fopAcM_SearchByName(fpcNm_SHIP_e);
+            }
+
+            if (!lineBGCheck(&w->mCenter, &eye, 0x8F) &&
+                !lineCollisionCheck(w->mCenter, eye, mpPlayerActor, ship)) {
+                break;
+            }
+        }
+
+        w->mGlobe.Val(eye - w->mCenter);
+        w->mFovy = 79.0f;
+        w->mDuration = w->mTimer2;
+        w->mState = 0xB;
+    }
+        // fall through
+    case 0xB: {
+        f32 ratio = (f32)w->mFrame / (f32)w->mDuration;
+
+        mViewCache.mFovy += (w->mFovy - mViewCache.mFovy) * ratio;
+        w->mCenter = relationalPos(mpPlayerActor, &ctr_gap);
+        mViewCache.mCenter += (w->mCenter - mViewCache.mCenter) * ratio;
+
+        cSAngle inclination;
+        cSAngle azimuth;
+
+        azimuth = mViewCache.mDirection.V();
+        inclination = mViewCache.mDirection.U();
+        f32 radius =
+            mViewCache.mDirection.R() + (w->mGlobe.R() - mViewCache.mDirection.R()) * ratio;
+
+        azimuth += (w->mGlobe.V() - azimuth) * ratio;
+        inclination += (w->mGlobe.U() - inclination) * ratio;
+        mViewCache.mDirection.Val(radius, azimuth, inclination);
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+
+        if (w->mFrame < w->mDuration) {
+            break;
+        }
+
+        w->mState = 0xC;
+    }
+        // fall through
+    case 0xC:
+        mViewCache.mCenter = relationalPos(mpPlayerActor, &ctr_gap);
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        w->mState = 0x63;
+        // fall through
+    case 0x63:
+        SkipSmoother();
+        mViewCache.mCenter = relationalPos(mpPlayerActor, &ctr_gap);
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        ret = true;
+        break;
+    }
+
+    w->mFrame++;
+    return ret;
 }
 
 /* 800BC364-800BC9D8       .text possessedEvCamera__9dCamera_cFv */
