@@ -32,6 +32,20 @@ inline dStage_Event_dt_c* nextMapData(dStage_Event_dt_c* i_eventDt) {
     return dComIfGp_event_nextStageEventDt(i_eventDt);
 }
 
+struct TurnToActorWork {
+    /* 0x378 */ cXyz mCtrGap;
+    /* 0x384 */ cXyz mAttentionPos;
+    /* 0x390 */ cXyz mCenter;
+    /* 0x39C */ f32 mCushion;
+    /* 0x3A0 */ u8 m3A0[0x3A4 - 0x3A0];
+    /* 0x3A4 */ int mTimer;
+    /* 0x3A8 */ fopAc_ac_c* mTarget;
+    /* 0x3AC */ u8 m3AC[0x3BC - 0x3AC];
+    /* 0x3BC */ cSGlobe mGlobe;
+    /* 0x3C4 */ u8 m3C4[0x3C8 - 0x3C4];
+    /* 0x3C8 */ f32 mFrontAngle;
+};
+
 struct PauseWork {
     /* 0x378 */ u8 m378;
     /* 0x379 */ u8 m379[0x37C - 0x379];
@@ -760,7 +774,74 @@ bool dCamera_c::windDirectionEvCamera() {
 
 /* 800B99B8-800B9FB0       .text turnToActorEvCamera__9dCamera_cFv */
 bool dCamera_c::turnToActorEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - @9375 static-object serial only, resolves once the rest of the TU is written */
+    static cXyz DefaultGap(0.0f, 40.0f, 0.0f);
+    static f32 DefaultCushion = 1.0f;
+    static f32 DefaultDist = 120.0f;
+    static int DefaultTimer = 20;
+    static f32 DefaultFrontAngle = 179.0f;
+
+    TurnToActorWork* w = (TurnToActorWork*)&mWork;
+
+    if (m11C == 0) {
+        getEvXyzData(&w->mCtrGap, "CtrGap", DefaultGap);
+        getEvFloatData(&w->mCushion, "Cushion", DefaultCushion);
+        getEvIntData(&w->mTimer, "Timer", DefaultTimer);
+        getEvFloatData(&w->mFrontAngle, "FrontAngle", DefaultFrontAngle);
+        fopAc_ac_c* target = getEvActor("Target", "@PLAYER");
+
+        w->mTarget = target;
+
+        if (target == NULL) {
+            SkipSmoother();
+            return true;
+        }
+
+        w->mAttentionPos = attentionPos(w->mTarget);
+        SkipSmoother();
+    }
+
+    if (m11C == 0) {
+        cXyz center = relationalPos(mpPlayerActor, &w->mCtrGap);
+        cSGlobe globe(center - w->mAttentionPos);
+        cSGlobe eye_globe(mViewCache.mEye - positionOf(w->mTarget));
+        cSAngle diff = eye_globe.U() - directionOf(w->mTarget);
+
+        if (diff < cSAngle::_0) {
+            globe.V(globe.U() + cSAngle(5.0f));
+        } else {
+            globe.V(globe.U() + cSAngle(-5.0f));
+        }
+
+        cSAngle turn = globe.U() - directionOf(w->mTarget);
+
+        if (turn < cSAngle(-w->mFrontAngle)) {
+            globe.V(directionOf(w->mTarget) + cSAngle(-w->mFrontAngle));
+        } else if (turn > cSAngle(w->mFrontAngle)) {
+            globe.V(directionOf(w->mTarget) + cSAngle(w->mFrontAngle));
+        }
+
+        w->mGlobe.Val(120.0f, globe.V(), globe.U());
+        w->mCenter = relationalPos(mpPlayerActor, &w->mCtrGap);
+    }
+
+    if (m11C < (u32)w->mTimer) {
+        f32 ratio = (f32)m11C / (f32)w->mTimer;
+
+        mViewCache.mCenter += (w->mCenter - mViewCache.mCenter) * ratio;
+        mViewCache.mDirection.R(mViewCache.mDirection.R() +
+                                (w->mGlobe.R() - mViewCache.mDirection.R()) * ratio);
+        mViewCache.mDirection.V(mViewCache.mDirection.U() +
+                                (w->mGlobe.U() - mViewCache.mDirection.U()) * ratio);
+        mViewCache.mDirection.U(mViewCache.mDirection.V() +
+                                (w->mGlobe.V() - mViewCache.mDirection.V()) * ratio);
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+        return false;
+    }
+
+    SkipSmoother();
+    return true;
 }
 
 /* 800B9FB0-800BA688       .text tornadoWarpEvCamera__9dCamera_cFv */
