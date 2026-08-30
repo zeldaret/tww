@@ -322,15 +322,7 @@ public:
     /* 0x3034 */ fopMsgM_pane_class mKtx2Pane;
     /* 0x306C */ fopMsgM_pane_class mClb2Pane;
     /* 0x30A4 */ fopMsgM_pane_class mClbPane;
-    /* 0x30DC */ fopMsgM_pane_class mSc11Pane;
-    /* 0x3114 */ fopMsgM_pane_class mSc12Pane;
-    /* 0x314C */ fopMsgM_pane_class mSc13Pane;
-    /* 0x3184 */ fopMsgM_pane_class mSc14Pane;
-    /* 0x31BC */ fopMsgM_pane_class mSc15Pane;
-    /* 0x31F4 */ fopMsgM_pane_class mSc16Pane;
-    /* 0x322C */ fopMsgM_pane_class mSc17Pane;
-    /* 0x3264 */ fopMsgM_pane_class mSc18Pane;
-    /* 0x329C */ fopMsgM_pane_class mSc19Pane;
+    /* 0x30DC */ fopMsgM_pane_class mSc1xPanes[9];
     /* 0x32D4 */ fopMsgM_pane_class mLnk3Pane;
     /* 0x330C */ fopMsgM_pane_class mSpi3Pane;
     /* 0x3344 */ fopMsgM_pane_class mStl1Pane;

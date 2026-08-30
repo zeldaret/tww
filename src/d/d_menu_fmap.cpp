@@ -405,15 +405,15 @@ void dMenu_Fmap_c::screenSet() {
     fopMsgM_setPaneData(&mWnd2Pane, fmapDl.scrn, 'wnd2');
     fopMsgM_setPaneData(&mKkdmPane, fmapDl.scrn, 'kkdm');
     fopMsgM_setPaneData(&mSmskPane, fmapDl.scrn, 'smsk');
-    fopMsgM_setPaneData(&mSc11Pane, fmapDl.scrn, 'sc11');
-    fopMsgM_setPaneData(&mSc12Pane, fmapDl.scrn, 'sc12');
-    fopMsgM_setPaneData(&mSc13Pane, fmapDl.scrn, 'sc13');
-    fopMsgM_setPaneData(&mSc14Pane, fmapDl.scrn, 'sc14');
-    fopMsgM_setPaneData(&mSc15Pane, fmapDl.scrn, 'sc15');
-    fopMsgM_setPaneData(&mSc16Pane, fmapDl.scrn, 'sc16');
-    fopMsgM_setPaneData(&mSc17Pane, fmapDl.scrn, 'sc17');
-    fopMsgM_setPaneData(&mSc18Pane, fmapDl.scrn, 'sc18');
-    fopMsgM_setPaneData(&mSc19Pane, fmapDl.scrn, 'sc19');
+    fopMsgM_setPaneData(&mSc1xPanes[0], fmapDl.scrn, 'sc11');
+    fopMsgM_setPaneData(&mSc1xPanes[1], fmapDl.scrn, 'sc12');
+    fopMsgM_setPaneData(&mSc1xPanes[2], fmapDl.scrn, 'sc13');
+    fopMsgM_setPaneData(&mSc1xPanes[3], fmapDl.scrn, 'sc14');
+    fopMsgM_setPaneData(&mSc1xPanes[4], fmapDl.scrn, 'sc15');
+    fopMsgM_setPaneData(&mSc1xPanes[5], fmapDl.scrn, 'sc16');
+    fopMsgM_setPaneData(&mSc1xPanes[6], fmapDl.scrn, 'sc17');
+    fopMsgM_setPaneData(&mSc1xPanes[7], fmapDl.scrn, 'sc18');
+    fopMsgM_setPaneData(&mSc1xPanes[8], fmapDl.scrn, 'sc19');
     fopMsgM_setPaneData(&mTsw1Pane, fmapDl.scrn, 'tsw1');
     fopMsgM_setPaneData(&mStm1Pane, fmapDl.scrn, 'STM1');
     fopMsgM_setPaneData(&mR01bPane, fmapDl.scrn, 'R01B');
@@ -2040,8 +2040,89 @@ BOOL dMenu_Fmap_c::paneTransBase(short i_frame, u8 i_max, f32 i_x, f32 i_y, u8 i
 }
 
 /* 801B6A7C-801B6F88       .text paneTranceZoomMap__12dMenu_Fmap_cFsUcffffffUci */
-BOOL dMenu_Fmap_c::paneTranceZoomMap(short, u8, f32, f32, f32, f32, f32, f32, u8, int) {
-    /* Nonmatching */
+BOOL dMenu_Fmap_c::paneTranceZoomMap(short i_frame, u8 i_max, f32 i_transStartX, f32 i_transStartY, f32 i_transEndX, f32 i_transEndY, f32 i_scaleStart, f32 i_scaleEnd, u8 i_mode, int i_flag) {
+    if (i_frame < 0) {
+        return FALSE;
+    }
+    if (i_frame > i_max) {
+        return TRUE;
+    }
+
+    f32 scale = i_scaleStart;
+    f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
+
+    J2DTextBox::TFontSize ktx1FontSize;
+    J2DTextBox::TFontSize ktx2FontSize;
+
+    f32 scaleAdj = alpha * (i_scaleEnd - i_scaleStart);
+    fopMsgM_paneScaleXY(&mClbPane, i_scaleStart + scaleAdj);
+    scale = i_scaleStart + scaleAdj;
+    fopMsgM_paneTrans(&mClbPane, (i_transStartX + alpha * (i_transEndX - i_transStartX)), i_transStartY + alpha * (i_transEndY - i_transStartY));
+    if (i_flag == 1) {
+        alpha = 1.0f - alpha;
+    }
+
+    if (mLnk2Pane.pane->isVisible()) {
+        childPaneMoveSp(&mLnk2Pane, &mClbPane, alpha, scale, scale);
+        mLnk2Pane.pane->rotate(
+            (s32)(mLnk2Pane.mSize.x * 0.5f),
+            (s32)(mLnk2Pane.mSize.y * 0.5f),
+            ROTATE_Z,
+            field_0x511C.z
+        );
+    }
+
+    if (mSpi2Pane.pane->isVisible()) {
+        childPaneMoveSp(&mSpi2Pane, &mClbPane, alpha, scale, scale);
+        mSpi2Pane.pane->rotate(
+            (s32)(mSpi2Pane.mSize.x * 0.5f),
+            (s32)(mSpi2Pane.mSize.y * 0.5f),
+            ROTATE_Z,
+            field_0x5128.z
+        );
+    }
+
+    if (mKtx2Pane.pane->isVisible()) {
+        ktx2FontSize.mSizeX = scale * 16.0f;
+        ktx2FontSize.mSizeY = scale * 16.0f;
+        ((J2DTextBox*)mKtx2Pane.pane)->setFontSize(ktx2FontSize);
+        childPaneMoveSp(&mKtx2Pane, &mClbPane, alpha, scale, scale);
+    }
+
+    if (mKtx1Pane.pane->isVisible()) {
+        ktx1FontSize.mSizeX = scale * 27.0f;
+        ktx1FontSize.mSizeY = scale * 29.0f;
+        f32 lineSpace = scale * 47.0f;
+        ((J2DTextBox*)mKtx1Pane.pane)->setFontSize(ktx1FontSize);
+        ((J2DTextBox*)mKtx1Pane.pane)->setLineSpace(lineSpace);
+        childPaneMoveSp(&mKtx1Pane, &mClbPane, alpha, scale, scale);
+        outFont2->messageSet(0x319B);
+        outFont2->setLeftUpPos(mKtx1Pane.mPosTopLeft.x, mKtx1Pane.mPosTopLeft.y);
+        outFont2->move();
+    }
+
+    if (mClb2Pane.pane->isVisible()) {
+        childPaneMoveSp(&mClb2Pane, &mClbPane, alpha, scale, scale);
+    }
+    for (int i = 0; i < 9; i++) {
+        childPaneMoveSp(&mSc1xPanes[i], &mClbPane, alpha, scale, scale);
+    }
+
+    childPaneMoveSp(&mR01bPane, &mClbPane, alpha, scale, scale);
+    childPaneMoveSp(&mStm1Pane, &mClbPane, alpha, scale, scale);
+    childPaneMoveSp(&mTsw1Pane, &mClbPane, alpha, scale, scale);
+
+    for (int i = 0; i < 8; i++) {
+        childPaneMoveSp(&mKk3xPanes[i], &mClbPane, alpha, 1.0f, 1.0f);
+    }
+
+    if (i_flag != 2) {
+        fopMsgM_setNowAlpha(&mR01bPane, alpha);
+        fopMsgM_setAlpha(&mR01bPane);
+        fopMsgM_setNowAlpha(&mClbPane, alpha);
+        fopMsgM_setAlpha(&mClbPane);
+    }
+    return FALSE;
 }
 
 /* 801B6F88-801B7018       .text paneTranceZoomMapAlpah__12dMenu_Fmap_cFsUcUci */
