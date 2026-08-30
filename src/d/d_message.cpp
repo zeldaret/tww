@@ -770,7 +770,7 @@ int dMsg2_closeProc(sub_msg2_class* i_Msg) {
             dMsg2_outFontHide(i_Msg, i);
         }
 
-        JKRFileLoader::removeResource(i_Msg->head_p, NULL);
+        JKRRemoveResource(i_Msg->head_p, NULL);
         i_Msg->msg.mStatus = fopMsgStts_BOX_CLOSED_e;
     }
 

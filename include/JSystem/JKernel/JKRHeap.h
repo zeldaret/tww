@@ -241,4 +241,16 @@ inline JKRHeap* JKRGetRootHeap() {
     return JKRHeap::getRootHeap();
 }
 
+inline JKRErrorHandler JKRSetErrorHandler(JKRErrorHandler errorHandler) {
+    return JKRHeap::setErrorHandler(errorHandler);
+}
+
+inline bool JKRSetErrorFlag(JKRHeap* heap, bool flag) {
+    return heap->setErrorFlag(flag);
+}
+
+inline void JKRSetDebugFillDelete(u8) {}
+inline void JKRSetDebugFillNew(u8) {}
+inline void JKRSetDebugFillNotuse(u8) {}
+
 #endif /* JKRHEAP_H */

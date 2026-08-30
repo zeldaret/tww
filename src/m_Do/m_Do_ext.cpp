@@ -3103,7 +3103,7 @@ void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_hea
         if (cacheFont->isValid()) {
             *p_font = cacheFont;
         }
-        JKRFileLoader::removeResource(*p_resfont, NULL);
+        JKRRemoveResource(*p_resfont, NULL);
         *p_resfont = NULL;
     } else {
         JUTResFont* resFont = new JUTResFont(*p_resfont, p_heap);
@@ -3194,7 +3194,7 @@ void mDoExt_removeMesgFont() {
             if (mDoExt_resfont0) {
 #if VERSION <= VERSION_JPN
                 if (g_msgDHIO.field_0x08 == 0) {
-                    JKRFileLoader::removeResource(mDoExt_resfont0, NULL);
+                    JKRRemoveResource(mDoExt_resfont0, NULL);
                 } else
 #endif
                 {

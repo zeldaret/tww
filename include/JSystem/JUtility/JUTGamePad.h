@@ -38,18 +38,24 @@ struct JUTGamePadRecordBase {
 struct JUTGamePad : public JKRDisposer {
 public:
     enum EStickMode {
-        STICK_MODE_1 = 1,
+        EStickMode1 = 1,
     };
+
     enum EWhichStick {
-        WS_MAIN_STICK,
-        WS_SUB_STICK,
+        EMainStick,
+        ESubStick,
     };
+
     enum EPadPort {
-        Port_Unknown = -1,
-        Port_1,
-        Port_2,
-        Port_3,
-        Port_4,
+        EPortInvalid = -1,
+        EPort1,
+        EPort2,
+        EPort3,
+        EPort4,
+    };
+
+    enum EClampMode {
+        EClampStick = 1,
     };
 
     JUTGamePad(JUTGamePad::EPadPort port);
@@ -73,6 +79,8 @@ public:
         PADSetAnalogMode(mode);
     }
 
+    // TODO: debug maps suggest isResetOccurred should do more than this, maybe the int* param is used for something?
+    static bool isResetOccurred(int*) { return C3ButtonReset::sResetOccurred; }
     static void clearResetOccurred() { C3ButtonReset::sResetOccurred = false; }
 
     static void setResetCallback(callbackFn callback, void* param_0) {
@@ -128,6 +136,8 @@ public:
 
     static PADStatus & getPortStatus(EPadPort port) { return mPadStatus[port]; }
 
+    static void suppressPadReset(u32 val) { mSuppressPadReset = val; }
+
     struct CButton {
         CButton() { clear(); }
         void clear();
@@ -144,11 +154,11 @@ public:
         /* 0x10 */ f32 mAnalogLf;
         /* 0x14 */ f32 mAnalogRf;
         /* 0x18 */ u32 mRepeat;
-        /* 0x1C */ u32 field_0x1c;
-        /* 0x20 */ u32 field_0x20;
-        /* 0x24 */ u32 field_0x24;
-        /* 0x28 */ u32 field_0x28;
-        /* 0x2C */ u32 field_0x2c;
+        /* 0x1C */ u32 mRepeatCount;
+        /* 0x20 */ u32 mRepeatStart;
+        /* 0x24 */ u32 mRepeatMask;
+        /* 0x28 */ u32 mRepeatDelay;
+        /* 0x2C */ u32 mRepeatRate;
     };  // Size: 0x30
 
     struct C3ButtonReset {
@@ -223,10 +233,6 @@ public:
         mRumble.startPatternedRumble(param_2, rumble, param_4);
     }
 
-    // TODO:
-    void isResetOccurred(int*) {}
-    void suppressPadReset(u32) {}
-
     /* 0x18 */ CButton mButton;
     /* 0x48 */ CStick mMainStick;
     /* 0x58 */ CStick mSubStick;
@@ -246,8 +252,8 @@ public:
     static CButton mPadButton[4];
     static CStick mPadMStick[4];
     static CStick mPadSStick[4];
-    static EStickMode sStickMode;
-    static u32 sClampMode;
+    static EStickMode mStickMode;
+    static u32 mClampMode;
     static u8 mPadAssign[4];
     static u32 mSuppressPadReset;
     static s32 sAnalogMode;

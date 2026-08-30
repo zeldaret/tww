@@ -111,6 +111,10 @@ extern mDoGaC_DataManag_c TestDataManager[16];
 
 u32 BigLittleChange(u32);
 
+inline void mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
+    g_mDoGaC_gbaCom.mDoGaC_Initial(param_0, param_1);
+}
+
 inline int mDoGaC_GbaLink() {
     return g_mDoGaC_gbaCom.mDoGaC_GbaLink();
 }
@@ -167,12 +171,20 @@ inline u8 mDoGaC_getDataStatus(u8 param_0) {
     return g_mDoGaC_gbaCom.getDataStatus(param_0);
 }
 
+inline void mDoGaC_Connect() {
+    g_mDoGaC_gbaCom.mDoGaC_Connect();
+}
+
 inline void mDoGaC_ConnectWake() {
     g_mDoGaC_gbaCom.mDoGaC_ConnectWake();
 }
 
 inline void mDoGaC_ConnectSleep() {
     g_mDoGaC_gbaCom.mDoGaC_ConnectSleep();
+}
+
+inline void mDoGaC_getReConnect() {
+    g_mDoGaC_gbaCom.getReConnect();
 }
 
 #endif /* M_DO_GBA_COM_H */

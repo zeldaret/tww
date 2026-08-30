@@ -8,7 +8,6 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramStream.h"
 #include "JSystem/JKernel/JKRDvdAramRipper.h"
-#include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
@@ -39,27 +38,6 @@ static int commandHeapErrors;
 static int archiveHeapErrors;
 static int unknownHeapErrors;
 static u32 heapErrors;
-
-#if VERSION <= VERSION_JPN
-const int FifoBufSize = 0x80000; // 512 KB
-const int CommandHeapSize = 0x1000; // 4 KB
-const int ArchiveHeapSize = 0xA3F000; // 10492 KB
-const int GameHeapSize = 0x2CE000; // 2872 KB
-const int SysHeapNonZeldaSize = 0x10000; // 64 KB
-#else
-const int FifoBufSize = 0xA0000; // 640 KB
-const int CommandHeapSize = 0x1000; // 4 KB
-const int ArchiveHeapSize = 0xA51400; // 10565 KB
-const int GameHeapSize = 0x2CE800; // 2874 KB
-const int SysHeapNonZeldaSize = 0x10000; // 64 KB
-#endif
-
-const int AramAudioBufSize = 0xA00000; // 10240 KB
-const int AramGraphBufSize = 0x5CE000; // 5944 KB
-const int TransBufferSize = 0x2000; // 8 KB
-const int SzpBufferSize = 0x2000; // 8 KB
-
-const int JMASinTableBitSize = 0xC; // 20 KB (5*(2^N) bytes)
 
 /* 8000BD24-8000BEEC       .text myGetHeapTypeByString__FP7JKRHeap */
 const char* myGetHeapTypeByString(JKRHeap* p_heap) {
@@ -174,6 +152,7 @@ void mDoMch_HeapCheckAll() {
     myHeapCheckRecursive(JKRHeap::sRootHeap);
 }
 
+#if VERSION > VERSION_DEMO
 /* 8000C18C-8000C23C       .text developKeyCheck__FUlUl */
 int developKeyCheck(u32 btnTrig, u32 btnHold) {
     static u8 key_link;
@@ -205,15 +184,43 @@ int developKeyCheck(u32 btnTrig, u32 btnHold) {
 
     return mDoMain::developmentMode;
 }
+#endif
 
+#if VERSION == VERSION_DEMO
+void myExceptionCallback(OSError, OSContext*, u32, u32) {
+    mDoMain::sHungUpTime = OSGetTime();
+    JUTException* manager = JUTException::getManager();
+    JUTException::waitTime(3000);
+    OSReportEnable();
+
+    if (mDoMain::developmentMode == 0) {
+        JUTGamePad pad(JUTGamePad::EPort1);
+        manager->enterPad(&pad);
+
+        if (manager != NULL) {
+            OSEnableInterrupts();
+
+            while (true) {
+                u32 btnHold;
+                u32 btnTrig;
+                manager->readPad(&btnTrig, &btnHold);
+                JUTException::waitTime(30);
+
+                if (JUTGamePad::isResetOccurred(NULL)) {
+                    OSResetSystem(1, 0, 0);
+                }
+            }
+        }
+        PPCHalt();
+    }
+}
+#else
 /* 8000C23C-8000C3C0       .text myExceptionCallback__FUsP9OSContextUlUl */
 void myExceptionCallback(OSError, OSContext*, u32, u32) {
-    u32 btnHold;
-    u32 btnTrig;
-
     mDoMain::sHungUpTime = OSGetTime();
     OSReportEnable();
     JUTGamePad::clearForReset();
+
     // "Vibration stopping & resetting to default\n"
     OSReport("振動停止＆原点復帰\n");
 
@@ -224,29 +231,34 @@ void myExceptionCallback(OSError, OSContext*, u32, u32) {
         OSReport("例外マネージャがありません\n");
         PPCHalt();
     }
+
     if (mDoMain::developmentMode == 0) {
-        JUTGamePad pad(JUTGamePad::Port_1);
-        manager->setGamePad(&pad);
+        JUTGamePad pad(JUTGamePad::EPort1);
+        manager->enterPad(&pad);
 
         if (manager != NULL) {
             OSEnableInterrupts();
+
             // "Accepting Key input\n"
             OSReport("キー入力を受け付けています\n");
+
             while (mDoMain::developmentMode == 0) {
+                u32 btnHold;
+                u32 btnTrig;
                 manager->readPad(&btnTrig, &btnHold);
                 developKeyCheck(btnTrig, btnHold);
                 JUTException::waitTime(30);
-                if (JUTGamePad::C3ButtonReset::sResetOccurred) {
+                if (JUTGamePad::isResetOccurred(NULL)) {
                     OSReport("リセット受け付けています\n");
-                    OSResetSystem(1,0,0);
+                    OSResetSystem(1, 0, 0);
                 }
             }
+            
             // "JUTAssertion is visible\n"
             OSReport("JUTAssertionを可視化しました\n");
             JUTAssertion::setVisible(true);
             JUTDbPrint::getManager()->setVisible(true);
-            JFWSystem::getSystemConsole()->setOutput(JUTConsole::OUTPUT_OSREPORT |
-                                                        JUTConsole::OUTPUT_CONSOLE);
+            JFWSystem::getSystemConsole()->setOutput(JUTConsole::OUTPUT_OSREPORT | JUTConsole::OUTPUT_CONSOLE);
         } else {
             PPCHalt();
         }
@@ -256,14 +268,21 @@ void myExceptionCallback(OSError, OSContext*, u32, u32) {
         JUTException::waitTime(3000);
     }
 }
+#endif
+
+#if VERSION == VERSION_DEMO
+static void dummy() {
+    OSReport("myAllocCallback: 条件一致しました\n");
+}
+#endif
 
 /* 8000C3C0-8000C70C       .text fault_callback_scroll__FUsP9OSContextUlUl */
 void fault_callback_scroll(OSError, OSContext* p_context, u32, u32) {
     JUTException* manager = JUTException::getManager();
     JUTConsole* exConsole = manager->getConsole();
 
-    JUTGamePad pad(JUTGamePad::Port_1);
-    manager->setGamePad(&pad);
+    JUTGamePad pad(JUTGamePad::EPort1);
+    manager->enterPad(&pad);
 
     BOOL padDisabled = manager->isEnablePad() == false;
     if (!padDisabled) {
@@ -278,7 +297,7 @@ void fault_callback_scroll(OSError, OSContext* p_context, u32, u32) {
             u32 btnHold, btnTrig;
             manager->readPad(&btnTrig, &btnHold);
 
-            if (JUTGamePad::C3ButtonReset::sResetOccurred) {
+            if (JUTGamePad::isResetOccurred(NULL)) {
                 OSResetSystem(1, 0, 0);
             }
 
@@ -290,13 +309,13 @@ void fault_callback_scroll(OSError, OSContext* p_context, u32, u32) {
 
             if (btnTrig == CButton::Z) {
                 JUTConsole* sysConsole = JFWSystem::getSystemConsole();
-                if (JUTConsoleManager::getManager()->getDirectConsole() != sysConsole) {
+                if (JUTConsoleManager::getManager()->getDirectConsoel() != sysConsole) {
                     exConsole = sysConsole;
-                    exConsole->setFontSize(8.0f, 6.0f);
-                    exConsole->setPosition(8, 32);
-                    exConsole->setHeight(23);
-                    exConsole->setVisible(true);
-                    exConsole->setOutput(JUTConsole::OUTPUT_CONSOLE | JUTConsole::OUTPUT_OSREPORT);
+                    sysConsole->setFontSize(8.0f, 6.0f);
+                    sysConsole->setPosition(8, DEMO_SELECT(26, 32));
+                    sysConsole->setHeight(23);
+                    sysConsole->setVisible(true);
+                    sysConsole->setOutput(JUTConsole::OUTPUT_CONSOLE | JUTConsole::OUTPUT_OSREPORT);
                 } else {
                     exConsole = JUTException::getConsole();
                 }
@@ -479,9 +498,15 @@ GXRenderModeObj g_ntscZeldaProg = {
 
 /* 8000C70C-8000CB48       .text mDoMch_Create__Fv */
 bool mDoMch_Create() {
+#if VERSION == VERSION_DEMO
+    if (mDoMain::developmentMode == 0) {
+        OSReportDisable();
+    }
+#else
     if (mDoMain::developmentMode == 0 || !(OSGetConsoleType() & 0x10000000)) {
         OSReportDisable();
     }
+#endif
 
     JKRHeap::setDefaultDebugFill(mDoMch::mDebugFill);
     JFWSystem::setMaxStdHeap(1);
@@ -495,7 +520,7 @@ bool mDoMch_Create() {
     u32 arenaSize = ((u32)OSGetArenaHi() - (u32)OSGetArenaLo()) - 0xF0;
 #if VERSION != VERSION_PAL
     if (OSGetConsoleSimulatedMemSize() >= 0x3000000) {
-        arenaSize -= 0x1000000;
+        arenaSize -= DEMO_SELECT(0x800000, 0x1000000);
     }
 #endif
 
@@ -503,10 +528,33 @@ bool mDoMch_Create() {
         arenaSize += mDoMain::memMargin;
     }
 
-    JFWSystem::setSysHeapSize(arenaSize - CommandHeapSize - ArchiveHeapSize - GameHeapSize);
-    JFWSystem::setFifoBufSize(FifoBufSize);
-    JFWSystem::setAramAudioBufSize(AramAudioBufSize);
-    JFWSystem::setAramGraphBufSize(AramGraphBufSize);
+    u32 archiveHeapSize;
+    u32 gameHeapSize;
+    u32 commandHeapSize;
+#if VERSION == VERSION_DEMO
+    gameHeapSize = 0x300000; // 3072 KiB
+    archiveHeapSize = 0x880000;
+    archiveHeapSize += 0xED000;
+    archiveHeapSize += 0xA0000;
+    // archiveHeapSize total: 0xA0D000 // 10292 KiB
+#elif VERSION == VERSION_JPN
+    gameHeapSize = 0x2CE000; // 2872 KiB
+    archiveHeapSize = 0xA3F000; // 10492 KiB
+#else // VERSION_USA and VERSION_PAL
+    gameHeapSize = 0x2CE800; // 2874 KiB
+    archiveHeapSize = 0xA51400; // 10565 KiB
+#endif
+    commandHeapSize = 0x1000; // 4 KiB
+    arenaSize -= archiveHeapSize + gameHeapSize + commandHeapSize;
+
+    JFWSystem::setSysHeapSize(arenaSize);
+#if VERSION <= VERSION_JPN
+    JFWSystem::setFifoBufSize(0x80000); // 512 KiB
+#else
+    JFWSystem::setFifoBufSize(0xA0000); // 640 KiB
+#endif
+    JFWSystem::setAramAudioBufSize(0xA00000); // 10240 KiB
+    JFWSystem::setAramGraphBufSize(0x5CE000); // 5944 KiB
 #if VERSION == VERSION_PAL
     if (OSGetResetCode() - 0x80000000 == 0 && OSGetEuRgb60Mode() == 1) {
         mDoMch_render_c::setProgressiveMode();
@@ -515,39 +563,43 @@ bool mDoMch_Create() {
     JFWSystem::setRenderMode(mDoMch_render_c::getRenderModeObj());
     JFWSystem::init();
 
+#if VERSION > VERSION_DEMO
     if (mDoMain::developmentMode == 0) {
         JUTAssertion::setVisible(false);
         JUTDbPrint::getManager()->setVisible(false);
     }
+#endif
 
-    JKRHeap::setErrorHandler(myMemoryErrorRoutine);
-    JKRHeap::getRootHeap()->setErrorFlag(true);
-    JFWSystem::getSystemHeap()->setErrorFlag(true);
+    JKRSetErrorHandler(myMemoryErrorRoutine);
+    JKRSetErrorFlag(JKRHeap::getRootHeap(), true);
+    JKRSetErrorFlag(JFWSystem::getSystemHeap(), true);
 
     JKRHeap* rootHeap = JKRHeap::getRootHeap();
-#if VERSION <= VERSION_JPN
+#if VERSION == VERSION_JPN
     rootHeap->dump_sort();
 #endif
-    mDoExt_createCommandHeap(CommandHeapSize, rootHeap);
-#if VERSION <= VERSION_JPN
+    mDoExt_createCommandHeap(commandHeapSize, rootHeap);
+#if VERSION == VERSION_JPN
     rootHeap->dump_sort();
 #endif
 
-    mDoExt_createArchiveHeap(ArchiveHeapSize, rootHeap);
+    mDoExt_createArchiveHeap(archiveHeapSize, rootHeap);
 
-    mDoExt_createGameHeap(GameHeapSize, rootHeap);
+    mDoExt_createGameHeap(gameHeapSize, rootHeap);
 
 
     JKRHeap* sysHeap = JKRGetSystemHeap();
-    s32 size = sysHeap->getFreeSize() - SysHeapNonZeldaSize;
-    JUT_ASSERT(VERSION_SELECT(996, 996, 1104, 1143), size > 0);
+    s32 size = sysHeap->getFreeSize() - 0x10000; // 64 KiB
+    JUT_ASSERT(VERSION_SELECT(871, 996, 1104, 1143), size > 0);
     JKRHeap* zeldaHeap = mDoExt_createZeldaHeap(size, sysHeap);
-    zeldaHeap->becomeCurrentHeap();
+    JKRSetCurrentHeap(zeldaHeap);
 
-    JKRAramStream::setTransBuffer(NULL, TransBufferSize, JKRGetSystemHeap());
-    JKRAram::setSzpBufferSize(SzpBufferSize);
-    JKRDvdAramRipper::setSzpBufferSize(SzpBufferSize);
-    JKRDvdRipper::setSzpBufferSize(SzpBufferSize);
+    u32 transBufferSize = 0x2000; // 8 KiB
+    JKRSetAramTransferBuffer(NULL, transBufferSize, JKRGetSystemHeap());
+    u32 szpBufferSize = 0x2000; // 8 KiB
+    JKRAram::setSzpBufferSize(szpBufferSize);
+    JKRDvdAramRipper::setSzpBufferSize(szpBufferSize);
+    JKRDvdRipper::setSzpBufferSize(szpBufferSize);
     JKRThreadSwitch::createManager(NULL);
     JKRThread* thread = new JKRThread(OSGetCurrentThread(), 0);
 
@@ -555,10 +607,10 @@ bool mDoMch_Create() {
     sysConsole->setOutput(JUTConsole::OUTPUT_CONSOLE | JUTConsole::OUTPUT_OSREPORT);
     sysConsole->setPosition(16, 42);
 
-    JUTException::appendMapFile("/maps/framework.map");
+    JUTException::setMapFile("/maps/framework.map");
     JUTException::setPreUserCallback(myExceptionCallback);
     JUTException::setPostUserCallback(fault_callback_scroll);
-    JMANewSinTable(JMASinTableBitSize);
+    JMANewSinTable(12); // 20 KiB (5*(2^N) bytes)
 
     cMl::init(mDoExt_getZeldaHeap());
     cM_initRnd(100, 100, 100);

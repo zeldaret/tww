@@ -283,7 +283,7 @@ bool mDoGph_AfterOfDraw() {
         BOOL printVisible = false;
 #else
         BOOL consoleVisible = JFWSystem::getSystemConsole()->isVisible();
-        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::Port_3).err == 0;
+        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::EPort3).err == 0;
         BOOL procVisible = pad3Connected && fapGmHIO_getMeter() && !consoleVisible;
         BOOL printVisible = pad3Connected && fapGmHIO_isPrint();
         if (mDoMain::developmentMode == 0) {

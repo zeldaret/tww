@@ -17,7 +17,7 @@ JKRAramStream* JKRAramStream::sAramStreamObject;
 JKRAramStream* JKRAramStream::create(s32 priority) {
     if (!sAramStreamObject) {
         sAramStreamObject = new (JKRGetSystemHeap(), 0) JKRAramStream(priority);
-        setTransBuffer(NULL, 0, NULL);
+        JKRResetAramTransferBuffer();
     }
 
     return sAramStreamObject;

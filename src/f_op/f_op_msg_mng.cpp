@@ -482,7 +482,7 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* i_actor, cXyz* i_pos, u32* i_ms
             pcId = fopMsgM_create(fpcNm_MSG_e, i_actor, i_pos, i_msgNo, param_4, NULL);
         }
 
-        JKRFileLoader::removeResource(header, NULL);
+        JKRRemoveResource(header, NULL);
     }
 
     return pcId;
@@ -503,7 +503,7 @@ u32 fopMsgM_searchMessageNumber(u32 i_msgNo) {
             return i;
         }
 
-        JKRFileLoader::removeResource(header, NULL);
+        JKRRemoveResource(header, NULL);
     }
 
     return i_msgNo;

@@ -240,4 +240,8 @@ inline u32 JKRReadTypeResource(void* buffer, u32 bufferSize, u32 tag, const char
     return JKRArchive::readTypeResource(buffer, bufferSize, tag, name, arc);
 }
 
+inline JKRArchive* JKRMountArchive(const char* path, JKRArchive::EMountMode mountMode, JKRHeap* heap, JKRArchive::EMountDirection mountDirection) {
+    return JKRArchive::mount(path, mountMode, heap, mountDirection);
+}
+
 #endif

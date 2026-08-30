@@ -104,7 +104,7 @@ void JAIBasic::initArchive() {
     char buffer[0x60];
     if (!JAISequenceMgr::arcPointer) {
         JAISequenceMgr::getArchiveName(buffer);
-        JAISequenceMgr::arcPointer = JKRArchive::mount(buffer, JKRArchive::MOUNT_DVD, msCurrentHeap, JKRArchive::MOUNT_DIRECTION_HEAD);
+        JAISequenceMgr::arcPointer = JKRMountArchive(buffer, JKRArchive::MOUNT_DVD, msCurrentHeap, JKRArchive::MOUNT_DIRECTION_HEAD);
         JUT_ASSERT_MSG(206, JAISequenceMgr::arcPointer, "JAIBasic::initArchive シーケンスアーカイブのマウントに失敗しました。\n");
     }
 }

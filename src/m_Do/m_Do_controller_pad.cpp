@@ -7,6 +7,7 @@
 #include "JSystem/JUtility/JUTGba.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "f_ap/f_ap_game.h"
+#include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_gba_com.h"
 #include "m_Do/m_Do_main.h"
@@ -64,13 +65,27 @@ static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* p
 int mDoCPd_Read() {
     JUTGamePad::read();
 
+#if VERSION == VERSION_DEMO
+    if (!mDoRst::isReset()) {
+        if (mDoRst::isResetPrepare()) {
+            if (mDoMemCd_isCardCommNone()) {
+                mDoRst::onReset();
+            }
+        } else if (mDoRst::is3ButtonReset()) {
+            JUTGamePad* pad = JUTGamePad::getGamePad(mDoRst::get3ButtonResetPort());
+            if (!pad->isPushing3ButtonReset()) {
+                mDoRst::off3ButtonReset();
+            }
+        }
+    }
+#else
     if (!mDoRst::isReset() && mDoRst::is3ButtonReset()) {
         JUTGamePad* pad = JUTGamePad::getGamePad(mDoRst::get3ButtonResetPort());
-
         if (!pad->isPushing3ButtonReset()) {
             mDoRst::off3ButtonReset();
         }
     }
+#endif
 
     JUTGamePad** pad = g_mDoCPd_gamePad;
     interface_of_controller_pad* interface = g_mDoCPd_cpadInfo;
@@ -115,25 +130,30 @@ int mDoCPd_Read() {
         }
     }
 
-    g_mDoGaC_gbaCom.mDoGaC_Connect();
+    mDoGaC_Connect();
     return 1;
 }
 
 /* 80007A70-80007BBC       .text mDoCPd_Create__Fv */
 int mDoCPd_Create() {
-    JUTGamePad::mSuppressPadReset = 1;
+    JUTGamePad::suppressPadReset(1);
 
-    JUTGamePad* pad = new JUTGamePad(JUTGamePad::Port_1);
+    JUTGamePad* pad = new JUTGamePad(JUTGamePad::EPort1);
     g_mDoCPd_gamePad[0] = pad;
     g_mDoCPd_gamePad[1] = NULL;
 
+#if VERSION == VERSION_DEMO
+    g_mDoCPd_gamePad[2] = new JUTGamePad(JUTGamePad::EPort3);
+    g_mDoCPd_gamePad[3] = new JUTGamePad(JUTGamePad::EPort4);
+#else
     if (mDoMain::developmentMode) {
-        g_mDoCPd_gamePad[2] = new JUTGamePad(JUTGamePad::Port_3);
-        g_mDoCPd_gamePad[3] = new JUTGamePad(JUTGamePad::Port_4);
+        g_mDoCPd_gamePad[2] = new JUTGamePad(JUTGamePad::EPort3);
+        g_mDoCPd_gamePad[3] = new JUTGamePad(JUTGamePad::EPort4);
     } else {
         g_mDoCPd_gamePad[2] = NULL;
         g_mDoCPd_gamePad[3] = NULL;
     }
+#endif
 
     JUTGamePad::setAnalogMode(3);
 
@@ -148,7 +168,7 @@ int mDoCPd_Create() {
 #endif
 
     JUTGba::create();
-    g_mDoGaC_gbaCom.mDoGaC_Initial(TestDataManager, 16);
+    mDoGaC_Initial(TestDataManager, 16);
 
     for (int i = 0; i < 4; i++) {
         g_mDoCPd_cpadInfo[i].mHoldLockL = g_mDoCPd_cpadInfo[i].mTrigLockL = false;

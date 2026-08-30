@@ -1083,7 +1083,7 @@ void dMsg_frame_close(sub_msg_class* i_Msg) {
     i_Msg->m1100++;
     if (i_Msg->m1100 == 10) {
         fopMsgM_setNowAlphaZero(&i_Msg->m049C);
-        JKRFileLoader::removeResource(i_Msg->head_p, NULL);
+        JKRRemoveResource(i_Msg->head_p, NULL);
         i_Msg->mStatus = fopMsgStts_BOX_CLOSED_e;
         i_Msg->m049C.pane->hide();
     } else {
@@ -2258,7 +2258,7 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
     ) {
         i_Msg->mMsgDataProc.setSelectFlagOff();
         i_Msg->m1100 = 0;
-        JKRFileLoader::removeResource(i_Msg->head_p, NULL);
+        JKRRemoveResource(i_Msg->head_p, NULL);
         if (i_Msg->mMesgEntry.mTextboxType != 5 && i_Msg->mMesgEntry.mTextboxType != 0xe) {
             dMsg_arrowInit(i_Msg);
         }
