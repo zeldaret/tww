@@ -10,6 +10,83 @@
 #include "stdarg.h"
 #include "string.h"
 
+namespace {
+
+bool lineCollisionCheck(cXyz, cXyz, fopAc_ac_c*, fopAc_ac_c*);
+
+struct PauseWork {
+    /* 0x378 */ u8 m378;
+    /* 0x379 */ u8 m379[0x37C - 0x379];
+    /* 0x37C */ int m37C;
+    /* 0x380 */ int m380;
+};
+
+struct TactWork {
+    /* 0x378 */ int m378;
+    /* 0x37C */ int m37C;
+    /* 0x380 */ int m380;
+};
+
+struct BSplineWork {
+    /* 0x378 */ cXyz* m378;
+    /* 0x37C */ cXyz* m37C;
+    /* 0x380 */ f32* m380;
+    /* 0x384 */ int m384;
+    /* 0x388 */ int m388;
+};
+
+struct StokerWork {
+    /* 0x378 */ u8 mHasTimer;
+    /* 0x379 */ u8 mHasBank;
+    /* 0x37A */ u8 m37A[0x37C - 0x37A];
+    /* 0x37C */ cXyz mEyeGap;
+    /* 0x388 */ cXyz mCtrGap;
+    /* 0x394 */ f32 mFovy;
+    /* 0x398 */ f32 mBank;
+    /* 0x39C */ fopAc_ac_c* mStoker;
+    /* 0x3A0 */ fopAc_ac_c* mTarget;
+    /* 0x3A4 */ fpc_ProcID mStokerId;
+    /* 0x3A8 */ fpc_ProcID mTargetId;
+    /* 0x3AC */ u8 m3AC[0x3B0 - 0x3AC];
+    /* 0x3B0 */ int mTimer;
+};
+
+struct FixedPositionWork {
+    /* 0x378 */ u8 mHasTimer;
+    /* 0x379 */ u8 mHasBank;
+    /* 0x37A */ u8 m37A[0x37C - 0x37A];
+    /* 0x37C */ cXyz mEye;
+    /* 0x388 */ cXyz mCtrGap;
+    /* 0x394 */ cXyz mCenter;
+    /* 0x3A0 */ f32 mFovy;
+    /* 0x3A4 */ f32 mBank;
+    /* 0x3A8 */ f32 mCtrCus;
+    /* 0x3AC */ f32 mStartRadius;
+    /* 0x3B0 */ f32 mRadius;
+    /* 0x3B4 */ fopAc_ac_c* mRelActor;
+    /* 0x3B8 */ fopAc_ac_c* mTarget;
+    /* 0x3BC */ fpc_ProcID mTargetId;
+    /* 0x3C0 */ char mRelUseMask[4];
+    /* 0x3C4 */ int mTimer;
+};
+
+struct FixedFramesWork {
+    /* 0x378 */ u8 mHasTimer;
+    /* 0x379 */ u8 m379[0x37C - 0x379];
+    /* 0x37C */ cXyz mCenter;
+    /* 0x388 */ cXyz mEye;
+    /* 0x394 */ cXyz* mEyes;
+    /* 0x398 */ cXyz* mCenters;
+    /* 0x39C */ f32* mFovys;
+    /* 0x3A0 */ f32 mFovy;
+    /* 0x3A4 */ fopAc_ac_c* mRelActor;
+    /* 0x3A8 */ char mRelUseMask[4];
+    /* 0x3AC */ int mTimer;
+    /* 0x3B0 */ int mNum;
+};
+
+}  // namespace
+
 /* 800B004C-800B0174       .text StartEventCamera__9dCamera_cFiie */
 bool dCamera_c::StartEventCamera(int i_type, int i_id, ...) {
     va_list args;
@@ -289,17 +366,19 @@ fopAc_ac_c* dCamera_c::getEvActor(char* i_name, char* i_default) {
 bool dCamera_c::pauseEvCamera() {
     static int DefaultTimer = -1;
 
+    PauseWork* w = (PauseWork*)&mWork;
+
     if (m11C == 0) {
         SkipSmoother();
-        mWork.pause.m378 = getEvIntData(&mWork.pause.m380, "Timer", DefaultTimer);
-        getEvIntData(&mWork.pause.m37C, "Stay", 0);
+        w->m378 = getEvIntData(&w->m380, "Timer", DefaultTimer);
+        getEvIntData(&w->m37C, "Stay", 0);
     }
 
-    if (mWork.pause.m37C != 0) {
+    if (w->m37C != 0) {
         setFlag(1);
     }
 
-    if (mWork.pause.m378 != 0 && m11C < (u32)mWork.pause.m380) {
+    if (w->m378 != 0 && m11C < (u32)w->m380) {
         return false;
     }
 
@@ -313,7 +392,68 @@ bool dCamera_c::fixedFrameEvCamera() {
 
 /* 800B14D4-800B18E4       .text stokerEvCamera__9dCamera_cFv */
 bool dCamera_c::stokerEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - one instruction of scheduling around the cSAngle bank temp, plus local-static
+     * and literal pool serials that resolve once the rest of the TU is written */
+    static int DefaultTimer = -1;
+    static f32 DefaultBank = 0.0f;
+
+    StokerWork* w = (StokerWork*)&mWork;
+
+    if (m11C == 0) {
+        getEvXyzData(&w->mEyeGap, "EyeGap", cXyz::Zero);
+        getEvXyzData(&w->mCtrGap, "CtrGap", cXyz::Zero);
+        getEvFloatData(&w->mFovy, "Fovy", mFovy);
+        w->mHasBank = getEvFloatData(&w->mBank, "Bank", DefaultBank);
+        w->mHasTimer = getEvIntData(&w->mTimer, "Timer", DefaultTimer);
+        w->mStoker = getEvActor("Stoker", "@STARTER");
+        w->mTarget = getEvActor("Target", "@PLAYER");
+
+        if (w->mStoker == NULL || w->mTarget == NULL) {
+            return true;
+        }
+
+        w->mStokerId = fopAcM_GetID(w->mStoker);
+        w->mTargetId = fopAcM_GetID(w->mTarget);
+        SkipSmoother();
+    }
+
+    cSGlobe globe;
+
+    if (w->mTarget != NULL) {
+        if (fopAcM_SearchByID(w->mTargetId) == NULL) {
+            return true;
+        }
+
+        globe.Val(w->mCtrGap);
+        globe.U(globe.V() + w->mTarget->shape_angle.x);
+        globe.V(globe.U() + w->mTarget->shape_angle.y);
+        mViewCache.mCenter = attentionPos(w->mTarget) + globe.Xyz();
+    }
+
+    if (w->mStoker != NULL) {
+        if (fopAcM_SearchByID(w->mStokerId) == NULL) {
+            return true;
+        }
+
+        globe.Val(w->mEyeGap);
+        globe.U(globe.V() + w->mStoker->shape_angle.x);
+        globe.V(globe.U() + w->mStoker->shape_angle.y);
+        mViewCache.mEye = attentionPos(w->mStoker) + globe.Xyz();
+    }
+
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+    mViewCache.mFovy = w->mFovy;
+
+    if (w->mHasBank) {
+        mViewCache.mBank = cSAngle(DEG2S(w->mBank));
+        setFlag(0x400);
+    }
+
+    if (w->mHasTimer && m11C < (u32)w->mTimer) {
+        return false;
+    }
+
+    return true;
 }
 
 /* 800B18E4-800B2680       .text rollingEvCamera__9dCamera_cFv */
@@ -323,7 +463,91 @@ bool dCamera_c::rollingEvCamera() {
 
 /* 800B2680-800B2B60       .text fixedPositionEvCamera__9dCamera_cFv */
 bool dCamera_c::fixedPositionEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - one instruction of scheduling around the cSAngle bank temp, plus local-static
+     * and literal pool serials that resolve once the rest of the TU is written */
+    static cXyz DefaultGap = cXyz::Zero;
+    static f32 DefaultRadius = 100000.0f;
+    static f32 DefaultCtrCus = 1.0f;
+    static int DefaultTimer = -1;
+    static f32 DefaultBank = 0.0f;
+
+    FixedPositionWork* w = (FixedPositionWork*)&mWork;
+
+    bool ret = true;
+
+    if (m11C == 0) {
+        cXyz eye;
+
+        getEvXyzData(&eye, "Eye", mEye);
+        getEvXyzData(&w->mCtrGap, "CtrGap", DefaultGap);
+        getEvFloatData(&w->mFovy, "Fovy", mFovy);
+        getEvFloatData(&w->mCtrCus, "CtrCus", DefaultCtrCus);
+        getEvFloatData(&w->mRadius, "Radius", DefaultRadius);
+        getEvFloatData(&w->mStartRadius, "StartRadius",
+                       w->mRadius);
+        w->mHasBank =
+            getEvFloatData(&w->mBank, "Bank", DefaultBank);
+        getEvStringData(w->mRelUseMask, "RelUseMask", "o");
+        w->mHasTimer =
+            getEvIntData(&w->mTimer, "Timer", DefaultTimer);
+        fopAc_ac_c* target = getEvActor("Target", "@PLAYER");
+
+        w->mTarget = target;
+
+        if (target == NULL) {
+            return true;
+        }
+
+        w->mTargetId = fopAcM_GetID(w->mTarget);
+        w->mRelActor = getEvActor("RelActor");
+
+        if (w->mRelActor != NULL && w->mRelUseMask[0] != '-') {
+            w->mEye = relationalPos(w->mRelActor, &eye);
+        } else {
+            w->mEye = eye;
+        }
+
+        w->mCenter = mCenter;
+        SkipSmoother();
+    }
+
+    if (fopAcM_SearchByID(w->mTargetId) == NULL) {
+        return true;
+    }
+
+    w->mCenter =
+        relationalPos(w->mTarget, &w->mCtrGap);
+    mViewCache.mCenter +=
+        (w->mCenter - mViewCache.mCenter) * w->mCtrCus;
+    mViewCache.mEye = w->mEye;
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+
+    f32 radius = w->mRadius;
+
+    if (w->mHasTimer && m11C < (u32)w->mTimer) {
+        radius = w->mStartRadius +
+                 (w->mRadius - w->mStartRadius) *
+                     ((f32)m11C / (f32)w->mTimer);
+        ret = false;
+    }
+
+    if (mViewCache.mDirection.R() > radius) {
+        mViewCache.mDirection.R(radius);
+        mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+    }
+
+    mViewCache.mFovy = w->mFovy;
+
+    if (w->mHasBank) {
+        mViewCache.mBank = cSAngle(DEG2S(w->mBank));
+        setFlag(0x400);
+    }
+
+    if (ret) {
+        SkipSmoother();
+    }
+
+    return ret;
 }
 
 /* 800B2B60-800B3CC8       .text uniformTransEvCamera__9dCamera_cFv */
@@ -346,6 +570,14 @@ bool dCamera_c::watchActorEvCamera() {
     /* Nonmatching */
 }
 
+
+namespace {
+
+bool lineCollisionCheck(cXyz i_start, cXyz i_end, fopAc_ac_c* i_actor1, fopAc_ac_c* i_actor2) {
+    return dComIfG_Ccsp()->ChkCamera(i_start, i_end, 15.0f, i_actor1, i_actor2);
+}
+
+}  // namespace
 
 /* 800B76C8-800B7E00       .text restorePosEvCamera__9dCamera_cFv */
 bool dCamera_c::restorePosEvCamera() {
@@ -477,13 +709,15 @@ bool dCamera_c::gameOverEvCamera() {
 
 /* 800B8AB8-800B8C90       .text tactEvCamera__9dCamera_cFv */
 bool dCamera_c::tactEvCamera() {
+    TactWork* w = (TactWork*)&mWork;
+
     if (m11C == 0) {
-        mWork.tact.m37C = 0;
+        w->m37C = 0;
 
         if (m07C & 2) {
-            mWork.tact.m380 = 0;
+            w->m380 = 0;
         } else {
-            mWork.tact.m380 = 1;
+            w->m380 = 1;
         }
 
         SkipSmoother();
@@ -495,13 +729,13 @@ bool dCamera_c::tactEvCamera() {
     cXyz center_ofs(0.426f, -13.479f, 6.372f);
     cXyz eye_ofs(31.809f, -51.14f, 195.776f);
 
-    if (mWork.tact.m378 != 1) {
-        mWork.tact.m378 = 1;
+    if (w->m378 != 1) {
+        w->m378 = 1;
     }
 
     mViewCache.mCenter = relationalPos(mpPlayerActor, &center_ofs);
 
-    if (mWork.tact.m380 != 0) {
+    if (w->m380 != 0) {
         eye_ofs.x = -eye_ofs.x;
     }
 
@@ -513,7 +747,7 @@ bool dCamera_c::tactEvCamera() {
     }
 
     mViewCache.mFovy = 55.0f;
-    mWork.tact.m37C++;
+    w->m37C++;
     return true;
 }
 
@@ -601,25 +835,20 @@ bool dCamera_c::possessedEvCamera() {
 
 /* 800BC9D8-800BCDA0       .text fixedFramesEvCamera__9dCamera_cFv */
 bool dCamera_c::fixedFramesEvCamera() {
-    /* Nonmatching */
-}
-
-/* 800BCDA0-800BCFE8       .text bSplineEvCamera__9dCamera_cFv */
-bool dCamera_c::bSplineEvCamera() {
     /* Nonmatching - @stringBase0 offsets only, resolves once the rest of the TU is written */
-    bool ret = false;
+    FixedFramesWork* w = (FixedFramesWork*)&mWork;
 
     if (m11C == 0) {
-        mWork.bSpline.m388 = 9999;
+        w->mNum = 9999;
 
         char* name = "Centers";
         int num = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, name);
 
         if (num != 0) {
-            mWork.bSpline.m378 = dComIfGp_evmng_getMyXyzP(mEventData.mStaffIdx, name);
+            w->mCenters = dComIfGp_evmng_getMyXyzP(mEventData.mStaffIdx, name);
 
-            if (mWork.bSpline.m388 > num) {
-                mWork.bSpline.m388 = num;
+            if (w->mNum > num) {
+                w->mNum = num;
             }
         } else {
             return true;
@@ -629,10 +858,10 @@ bool dCamera_c::bSplineEvCamera() {
         num = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, name);
 
         if (num != 0) {
-            mWork.bSpline.m37C = dComIfGp_evmng_getMyXyzP(mEventData.mStaffIdx, name);
+            w->mEyes = dComIfGp_evmng_getMyXyzP(mEventData.mStaffIdx, name);
 
-            if (mWork.bSpline.m388 > num) {
-                mWork.bSpline.m388 = num;
+            if (w->mNum > num) {
+                w->mNum = num;
             }
         } else {
             return true;
@@ -642,27 +871,120 @@ bool dCamera_c::bSplineEvCamera() {
         num = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, name);
 
         if (num != 0) {
-            mWork.bSpline.m380 = dComIfGp_evmng_getMyFloatP(mEventData.mStaffIdx, name);
+            w->mFovys = dComIfGp_evmng_getMyFloatP(mEventData.mStaffIdx, name);
 
-            if (mWork.bSpline.m388 > num) {
-                mWork.bSpline.m388 = num;
+            if (w->mNum > num) {
+                w->mNum = num;
             }
         } else {
             return true;
         }
 
-        if (!getEvIntData(&mWork.bSpline.m384, "Timer")) {
+        w->mHasTimer = getEvIntData(&w->mTimer, "Timer", 1);
+        getEvStringData(w->mRelUseMask, "RelUseMask", "oo");
+        w->mRelActor = getEvActor("RelActor");
+
+        for (int i = 0; i < w->mNum; i++) {
+            cXyz center = w->mCenters[i];
+            cXyz eye = w->mEyes[i];
+
+            if (w->mRelActor != NULL && w->mRelUseMask[0] == 'o') {
+                w->mCenter = relationalPos(w->mRelActor, &center);
+            } else {
+                w->mCenter = center;
+            }
+
+            if (w->mRelActor != NULL && w->mRelUseMask[1] == 'o') {
+                w->mEye = relationalPos(w->mRelActor, &eye);
+            } else {
+                w->mEye = eye;
+            }
+
+            w->mFovy = w->mFovys[i];
+
+            if (!lineBGCheck(&w->mCenter, &w->mEye, 0x8F) &&
+                !lineCollisionCheck(w->mCenter, w->mEye,
+                                    mpPlayerActor, w->mRelActor)) {
+                break;
+            }
+        }
+
+        SkipSmoother();
+    }
+
+    mViewCache.mCenter = w->mCenter;
+    mViewCache.mEye = w->mEye;
+    mViewCache.mFovy = w->mFovy;
+    mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+
+    if (w->mHasTimer && m11C < (u32)w->mTimer) {
+        return false;
+    }
+
+    return true;
+}
+
+/* 800BCDA0-800BCFE8       .text bSplineEvCamera__9dCamera_cFv */
+bool dCamera_c::bSplineEvCamera() {
+    /* Nonmatching - @stringBase0 offsets only, resolves once the rest of the TU is written */
+    BSplineWork* w = (BSplineWork*)&mWork;
+
+    bool ret = false;
+
+    if (m11C == 0) {
+        w->m388 = 9999;
+
+        char* name = "Centers";
+        int num = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, name);
+
+        if (num != 0) {
+            w->m378 = dComIfGp_evmng_getMyXyzP(mEventData.mStaffIdx, name);
+
+            if (w->m388 > num) {
+                w->m388 = num;
+            }
+        } else {
             return true;
         }
 
-        mEventData.mSpline2DPath.Init(mWork.bSpline.m388, mWork.bSpline.m384);
+        name = "Eyes";
+        num = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, name);
+
+        if (num != 0) {
+            w->m37C = dComIfGp_evmng_getMyXyzP(mEventData.mStaffIdx, name);
+
+            if (w->m388 > num) {
+                w->m388 = num;
+            }
+        } else {
+            return true;
+        }
+
+        name = "Fovys";
+        num = dComIfGp_evmng_getMySubstanceNum(mEventData.mStaffIdx, name);
+
+        if (num != 0) {
+            w->m380 = dComIfGp_evmng_getMyFloatP(mEventData.mStaffIdx, name);
+
+            if (w->m388 > num) {
+                w->m388 = num;
+            }
+        } else {
+            return true;
+        }
+
+        if (!getEvIntData(&w->m384, "Timer")) {
+            return true;
+        }
+
+        mEventData.mSpline2DPath.Init(w->m388, w->m384);
         SkipSmoother();
     }
 
     if (mEventData.mSpline2DPath.Step()) {
-        mViewCache.mCenter = mEventData.mSpline2DPath.Calc(mWork.bSpline.m378);
-        mViewCache.mEye = mEventData.mSpline2DPath.Calc(mWork.bSpline.m37C);
-        mViewCache.mFovy = mEventData.mSpline2DPath.Calc(mWork.bSpline.m380);
+        mViewCache.mCenter = mEventData.mSpline2DPath.Calc(w->m378);
+        mViewCache.mEye = mEventData.mSpline2DPath.Calc(w->m37C);
+        mViewCache.mFovy = mEventData.mSpline2DPath.Calc(w->m380);
         mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
 
         if (mEventData.mSpline2DPath.mState == 3) {

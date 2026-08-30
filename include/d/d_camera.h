@@ -368,24 +368,6 @@ public:
             /* 0x39C */ cXyz m39C;
             /* 0x3A8 */ cXyz m3A8;
         } fixedFrame;
-        struct BSpline {
-            /* 0x378 */ cXyz* m378;
-            /* 0x37C */ cXyz* m37C;
-            /* 0x380 */ f32* m380;
-            /* 0x384 */ int m384;
-            /* 0x388 */ int m388;
-        } bSpline;
-        struct Tact {
-            /* 0x378 */ int m378;
-            /* 0x37C */ int m37C;
-            /* 0x380 */ int m380;
-        } tact;
-        struct Pause {
-            /* 0x378 */ u8 m378;
-            /* 0x379 */ u8 m379[0x37C - 0x379];
-            /* 0x37C */ int m37C;
-            /* 0x380 */ int m380;
-        } pause;
         struct FixedPos {
             /* 0x378 */ int m378;
             /* 0x37C */ f32 m37C;
