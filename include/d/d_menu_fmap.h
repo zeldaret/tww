@@ -282,7 +282,7 @@ public:
     void islandNameSet(u8);
     void fmMapWrite();
     void fmMapWait();
-    void paneAlphaZoom2Map(short, u8, u8, int);
+    BOOL paneAlphaZoom2Map(short, u8, u8, int);
     void fmZoomGridLv2Out();
     void fmZoomGridLv1Out();
     void fmEndWait();
