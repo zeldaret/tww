@@ -570,18 +570,18 @@ public:
     bool SetExtendedPosition(cXyz*);
     bool ScopeViewMsgModeOff();
 
-    void StartEventCamera(int, int, ...);
+    bool StartEventCamera(int, int, ...);
     bool EndEventCamera(int);
     int searchEventArgData(char*);
     bool getEvIntData(int*, char*);
     char* getEvStringPntData(char*);
     bool getEvIntData(int*, char*, int);
     bool getEvFloatData(f32*, char*, f32);
-    void getEvXyzData(cXyz*, char*, cXyz);
+    bool getEvXyzData(cXyz*, char*, cXyz);
     bool getEvStringData(char*, char*, char*);
     char* getEvStringPntData(char*, char*);
-    void getEvActor(char*);
-    void getEvActor(char*, char*);
+    fopAc_ac_c* getEvActor(char*);
+    fopAc_ac_c* getEvActor(char*, char*);
     bool pauseEvCamera();
     bool fixedFrameEvCamera();
     bool stokerEvCamera();
