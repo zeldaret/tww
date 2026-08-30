@@ -284,11 +284,26 @@ fmapProcFunc fmapProcMain[] = {
     &dMenu_Fmap_c::ZoomGridLv2Out,
 };
 
+enum ZoomProcIdx {
+    FMAP_ZOOM_PROC_SELECT_GRID,
+    FMAP_ZOOM_PROC_LV1_IN,
+    FMAP_ZOOM_PROC_LV1,
+    FMAP_ZOOM_PROC_LV1_OUT,
+    FMAP_ZOOM_PROC_LV2_IN,
+    FMAP_ZOOM_PROC_LV2,
+    FMAP_ZOOM_PROC_LV2_OUT,
+};
+
 typedef void (dMenu_Fmap_c::*mainProcFunc)();
 
 static mainProcFunc mainProc[] = {
     &dMenu_Fmap_c::FmapProc,
     &dMenu_Fmap_c::HikakuProc,
+};
+
+enum MainProcIdx {
+    MAIN_PROC_FMAP,
+    MAIN_PROC_HIKAKU,
 };
 
 typedef void (dMenu_Fmap_c::*hikakuProcFunc)();
@@ -299,6 +314,12 @@ hikakuProcFunc HikakuProcMain[] = {
     &dMenu_Fmap_c::fmap2Close,
 };
 
+enum HikakuProcIdx {
+    HIKAKU_PROC_OPEN,
+    HIKAKU_PROC_MOVE,
+    HIKAKU_PROC_CLOSE,
+};
+
 typedef void (dMenu_Fmap_c::*warpProcFunc)();
 
 warpProcFunc warpProcMain[] = {
@@ -307,6 +328,14 @@ warpProcFunc warpProcMain[] = {
     &dMenu_Fmap_c::wrapSelect,
     &dMenu_Fmap_c::wrapSelWinFadeOut,
     &dMenu_Fmap_c::wrapSelWarp,
+};
+
+enum WarpProcIdx {
+    WARP_PROC_MOVE,
+    WARP_PROC_SEL_WIN_FADE_IN,
+    WARP_PROC_SELECT,
+    WARP_PROC_SEL_WIN_FADE_OUT,
+    WARP_PROC_SEL_WARP,
 };
 
 typedef void (dMenu_Fmap_c::*fishManProcFunc)();
@@ -320,6 +349,17 @@ fishManProcFunc FishManProcMain[] = {
     &dMenu_Fmap_c::fmZoomGridLv2Out,
     &dMenu_Fmap_c::fmZoomGridLv1Out,
     &dMenu_Fmap_c::fmEndWait,
+};
+
+enum FishmanProcIdx {
+    FISHMAN_PROC_DISP_AREA,
+    FISHMAN_PROC_ZOOM_LV1_IN,
+    FISHMAN_PROC_ZOOM_LV2_IN,
+    FISHMAN_PROC_MAP_WRITE,
+    FISHMAN_PROC_MAP_WAIT,
+    FISHMAN_PROC_ZOOM_LV2_OUT,
+    FISHMAN_PROC_ZOOM_LV1_OUT,
+    FISHMAN_PROC_END_WAIT,
 };
 
 /* 801AF848-801AFB64       .text _create__12dMenu_Fmap_cFv */
@@ -642,16 +682,16 @@ void dMenu_Fmap_c::initialize() {
         case FMAP_DISP_NORMAL:
             setCtCurHX(getCtCurX());
             setCtCurHY(getCtCurY());
-            mMainProcIdx = 0;
+            mMainProcIdx = MAIN_PROC_FMAP;
             mZoomLocked = false;
             break;
         case FMAP_DISP_HIKAKU:
-            mMainProcIdx = 1;
+            mMainProcIdx = MAIN_PROC_HIKAKU;
             mZoomLocked = true;
             break;
     }
 
-    mHikakuProcIdx = 0;
+    mHikakuProcIdx = HIKAKU_PROC_OPEN;
     paneTransBase(0, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0f, 0, 0);
     mWarpScrollGuard = false;
     mWarpAnimActive = false;
@@ -661,7 +701,7 @@ void dMenu_Fmap_c::initialize() {
     paneTranceZoomMap(0, g_mfHIO.field_0x2E, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0);
     paneTranceZoom2Map(0, g_mfHIO.field_0x2E, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0);
     paneAlphaFmapCursor(mKk3xPanes, 0, g_mfHIO.field_0x3B, 0, 0);
-    mFmapProcIdx = 0;
+    mFmapProcIdx = FMAP_ZOOM_PROC_SELECT_GRID;
 }
 
 /* 801B0FB4-801B1200       .text displayinit__12dMenu_Fmap_cFv */
@@ -1636,7 +1676,7 @@ void dMenu_Fmap_c::_move() {
 /* 801B4E14-801B4E6C       .text _draw__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_draw() {
     dComIfGd_set2DOpa(&fmapDl);
-    if (mMainProcIdx == 1) {
+    if (mMainProcIdx == MAIN_PROC_HIKAKU) {
         mFmap2._draw();
     }
 }
@@ -1693,7 +1733,7 @@ void dMenu_Fmap_c::SelectGrid() {
             mAreaTxtChanging = false;
         }
         mFrameTimer = 0;
-        mFmapProcIdx = 1;
+        mFmapProcIdx = FMAP_ZOOM_PROC_LV1_IN;
     } else {
         if (stick->checkRightTrigger()) {
             if (getCtCurX() < 3) {
@@ -1806,7 +1846,7 @@ void dMenu_Fmap_c::ZoomGridLv1In() {
         if (field_0x5184) {
             mSpi2Pane.pane->show();
         }
-        mFmapProcIdx = 2;
+        mFmapProcIdx = FMAP_ZOOM_PROC_LV1;
     }
 }
 
@@ -1827,7 +1867,7 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
             }
             mR01bPane.pane->mInheritAlpha = FALSE;
             mFrameTimer = 0;
-            mFmapProcIdx = 4;
+            mFmapProcIdx = FMAP_ZOOM_PROC_LV2_IN;
         }
         mWarpScrollGuard = FALSE;
     } else {
@@ -1841,7 +1881,7 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
             }
             mWarpAnimActive = FALSE;
             zoomCursorInit();
-            mFmapProcIdx = 3;
+            mFmapProcIdx = FMAP_ZOOM_PROC_LV1_OUT;
         }
     }
     zoomCursorAnime();
@@ -1875,7 +1915,7 @@ void dMenu_Fmap_c::ZoomGridLv1Out() {
         mClbPane.pane->hide();
         mButtonIconMode = FMAP_BTN_ICON_WORLD;
         setCtFmapZoom(0x0);
-        mFmapProcIdx = 0;
+        mFmapProcIdx = FMAP_ZOOM_PROC_SELECT_GRID;
     }
 }
 
@@ -1891,7 +1931,7 @@ void dMenu_Fmap_c::ZoomGridLv2In() {
         mFrameTimer = 0;
         field_0x5183 ? mLnk3Pane.pane->show() : mLnk3Pane.pane->hide();
         field_0x5185 ? mSpi3Pane.pane->show() : mSpi3Pane.pane->hide();
-        mFmapProcIdx = 5;
+        mFmapProcIdx = FMAP_ZOOM_PROC_LV2;
     }
 }
 
@@ -1907,7 +1947,7 @@ void dMenu_Fmap_c::ZoomGridLv2Proc() {
         }
         mWarpAnimActive = FALSE;
         zoomCursorInit();
-        mFmapProcIdx = 6;
+        mFmapProcIdx = FMAP_ZOOM_PROC_LV2_OUT;
     }
     zoomCursorAnime();
 }
@@ -1936,7 +1976,7 @@ void dMenu_Fmap_c::ZoomGridLv2Out() {
         }
         mR01bPane.pane->mInheritAlpha = TRUE;
         mFrameTimer = 0;
-        mFmapProcIdx = 2;
+        mFmapProcIdx = FMAP_ZOOM_PROC_LV1;
     }
 }
 
@@ -1950,8 +1990,8 @@ void dMenu_Fmap_c::FmapProc() {
     if (CPad_CHECK_TRIG_Y(0)) {
         mDoAud_seStart(JA_SE_CHART_TO_COMPARE);
         setCtDispMode(FMAP_DISP_HIKAKU);
-        mMainProcIdx = 1;
-        mHikakuProcIdx = 0;
+        mMainProcIdx = MAIN_PROC_HIKAKU;
+        mHikakuProcIdx = HIKAKU_PROC_OPEN;
     } else {
         FmapProcMain();
     }
@@ -1968,7 +2008,7 @@ void dMenu_Fmap_c::fmap2Open() {
         if (mZoomLocked) {
             paneTransBase(0, g_mfHIO.field_0x34, 0.0, 0.0, 0, 1);
         }
-        mHikakuProcIdx = 1;
+        mHikakuProcIdx = HIKAKU_PROC_MOVE;
     }
 }
 
@@ -1977,7 +2017,7 @@ void dMenu_Fmap_c::fmap2Move() {
     mFmap2._move();
     if (CPad_CHECK_TRIG_Y(0) && !mFmap2.isLockBbutton()) {
         mDoAud_seStart(JA_SE_CHART_TO_NORMAL);
-        mHikakuProcIdx = 2;
+        mHikakuProcIdx = HIKAKU_PROC_CLOSE;
         mInputDisabled = false;
         gShipMarkAnimeInit();
         return;
@@ -1988,15 +2028,15 @@ void dMenu_Fmap_c::fmap2Move() {
     } else if (!mFmap2.isLockBbutton()) {
         paneTransBase(0, g_mfHIO.field_0x34, 480.0f, 0.0f, 0, 0);
         mInputDisabled = true;
-        mHikakuProcIdx = 2;
+        mHikakuProcIdx = HIKAKU_PROC_CLOSE;
     }
 }
 
 /* 801B68A0-801B68EC       .text fmap2Close__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmap2Close() {
     if (mFmap2._close() == true) {
-        mMainProcIdx = 0;
-        mHikakuProcIdx = 1;
+        mMainProcIdx = MAIN_PROC_FMAP;
+        mHikakuProcIdx = HIKAKU_PROC_MOVE;
     }
 }
 
@@ -2327,7 +2367,7 @@ bool dMenu_Fmap_c::_open_warpMode() {
             mWarpPanes[i]->playDrawParticle();
         }
         mMainWarpPane->clearStatus(JPAEmtrStts_StopDraw);
-        mWarpProcIdx = 0;
+        mWarpProcIdx = WARP_PROC_MOVE;
         return true;
     }
     return false;
@@ -2422,7 +2462,7 @@ void dMenu_Fmap_c::wrapSelWinFadeIn1() {
     if (backAlpha == TRUE && msg == TRUE && msg2 == TRUE && yesMove == TRUE && noMove == TRUE) {
         mFrameTimer = 0;
         mCur1Pane.pane->show();
-        mWarpProcIdx = 2;
+        mWarpProcIdx = WARP_PROC_SELECT;
     }
 }
 
@@ -2431,15 +2471,15 @@ void dMenu_Fmap_c::wrapSelect() {
     if (CPad_CHECK_TRIG_A(0)) {
         if (mWarpSubState == 0) {
             mDoAud_seStart(JA_SE_SHIPPU_WARP_OK);
-            mWarpProcIdx = 4;
+            mWarpProcIdx = WARP_PROC_SEL_WARP;
         } else {
             mDoAud_seStart(JA_SE_SHIPPU_WARP_CANCEL);
-            mWarpProcIdx = 3;
+            mWarpProcIdx = WARP_PROC_SEL_WIN_FADE_OUT;
         }
         mCur1Pane.pane->hide();
     } else if (CPad_CHECK_TRIG_B(0)) {
         mDoAud_seStart(JA_SE_SHIPPU_WARP_CANCEL);
-        mWarpProcIdx = 3;
+        mWarpProcIdx = WARP_PROC_SEL_WIN_FADE_OUT;
         mCur1Pane.pane->hide();
     } else if (stick->checkRightTrigger()) {
         if (mWarpSubState != 1) {
@@ -2489,7 +2529,7 @@ void dMenu_Fmap_c::wrapSelWinFadeOut() {
         for (int i = 0; i < 9; i++) {
             mWarpPanes[i]->playDrawParticle();
         }
-        mWarpProcIdx = 0;
+        mWarpProcIdx = WARP_PROC_MOVE;
     }
 }
 
@@ -2684,7 +2724,7 @@ bool dMenu_Fmap_c::_open_fishManMode() {
     mFrameTimer++;
     if (ret == TRUE) {
         mFrameTimer = 0;
-        mFishmanProcIdx = 0;
+        mFishmanProcIdx = FISHMAN_PROC_DISP_AREA;
         return true;
     }
     return false;
@@ -2747,7 +2787,7 @@ void dMenu_Fmap_c::init_fishManMode() {
     fopMsgM_setPaneData(&mMr01Pane, fmapDl.scrn, hist[idx]);
     mFishmanTimer2 = g_mfHIO.field_0x118;
     mFishmanTimer3 = g_mfHIO.field_0x119;
-    mFishmanProcIdx = 0;
+    mFishmanProcIdx = FISHMAN_PROC_DISP_AREA;
     mDoAud_seStart(JA_SE_CM_SO_DRAW_MAP);
 }
 
@@ -2828,7 +2868,7 @@ bool dMenu_Fmap_c::_open_wallPaper() {
 
 /* 801BAFCC-801BB024       .text getButtonIconMode__12dMenu_Fmap_cFv */
 int dMenu_Fmap_c::getButtonIconMode() {
-    if (mMainProcIdx == 1) {
+    if (mMainProcIdx == MAIN_PROC_HIKAKU) {
         return mFmap2.getButtonIconMode() + 7;
     }
     if (mInputDisabled) {
