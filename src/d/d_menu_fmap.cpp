@@ -2649,7 +2649,28 @@ void dMenu_Fmap_c::wrapSelWarp() {
 
 /* 801B9288-801B940C       .text warpAreaAnime0__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::warpAreaAnime0() {
-    /* Nonmatching */
+    const cursorTable_t* table = getWarpAreaTablePtr(getCtCurWX(), getCtCurWY());
+    int warpAreaNo = getWarpAreaNo(table);
+
+    cXyz scale;
+    cXyz pos;
+    scale.z = 0.0f;
+    pos.z = 0.0f;
+    for (int i = 0; i < 9; i++) {
+        pos.x = g_mfHIO.field_0x50[i];
+        pos.y = g_mfHIO.field_0x74[i];
+        mWrapSpotEmitters[i]->setGlobalTranslation(pos);
+
+        if (i == warpAreaNo) {
+            scale.x = g_mfHIO.field_0x98;
+            scale.y = g_mfHIO.field_0x98;
+            mWrapSpotEmitters[i]->setGlobalParticleScale(scale);
+        } else {
+            scale.x = g_mfHIO.field_0x9C;
+            scale.y = g_mfHIO.field_0x9C;
+            mWrapSpotEmitters[i]->setGlobalParticleScale(scale);
+        }
+    }
 }
 
 /* 801B940C-801B94F4       .text paneTranceWarpMsg__12dMenu_Fmap_cFP18fopMsgM_pane_classsUcffUci */
@@ -2706,7 +2727,20 @@ void dMenu_Fmap_c::warpSelCursorAnimeInit() {
 
 /* 801B9608-801B96D8       .text warpSelCursorAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::warpSelCursorAnime() {
-    /* Nonmatching */
+    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.field_0x4C, mCur1Pane.mUserArea, 0);
+    if (mWarpBlinkToggle != 0) {
+        alpha = 1.0f - alpha;
+    }
+    f32 range = g_mfHIO.field_0x4E - g_mfHIO.field_0x4D;
+    mCur1Pane.mNowAlpha = g_mfHIO.field_0x4D + (u32)(range * alpha);
+    fopMsgM_setAlpha(&mCur1Pane);
+
+    if (mCur1Pane.mUserArea == 0) {
+        mCur1Pane.mUserArea = g_mfHIO.field_0x4C;
+        mWarpBlinkToggle ^= 1;
+    } else {
+        mCur1Pane.mUserArea--;
+    }
 }
 
 /* 801B96D8-801B96F0       .text getWarpAreaGridX__12dMenu_Fmap_cFi */
