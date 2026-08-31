@@ -42,6 +42,27 @@ inline dStage_Event_dt_c* nextMapData(dStage_Event_dt_c* i_eventDt) {
     return dComIfGp_event_nextStageEventDt(i_eventDt);
 }
 
+struct TwoActor0Work {
+    /* 0x378 */ fopAc_ac_c* mActor1;
+    /* 0x37C */ fopAc_ac_c* mActor2;
+    /* 0x380 */ fpc_ProcID mActor1Id;
+    /* 0x384 */ fpc_ProcID mActor2Id;
+    /* 0x388 */ f32 mCtrCus;
+    /* 0x38C */ f32 mEyeCus;
+    /* 0x390 */ f32 mRadiusMin;
+    /* 0x394 */ f32 mRadiusMax;
+    /* 0x398 */ f32 mLatitudeMin;
+    /* 0x39C */ f32 mLatitudeMax;
+    /* 0x3A0 */ f32 mLongitudeMin;
+    /* 0x3A4 */ f32 mLongitudeMax;
+    /* 0x3A8 */ f32 mFovy;
+    /* 0x3AC */ f32 mCtrRatio;
+    /* 0x3B0 */ cXyz mCtrGap;
+    /* 0x3BC */ f32 mRadius;
+    /* 0x3C0 */ f32 mLatitude;
+    /* 0x3C4 */ f32 mLongitude;
+};
+
 struct TornadoWarpWork {
     /* 0x378 */ int mState;
     /* 0x37C */ int mTimer;
@@ -1598,5 +1619,101 @@ bool dCamera_c::bSplineEvCamera() {
 
 /* 800BCFE8-800BD678       .text twoActor0EvCamera__9dCamera_cFv */
 bool dCamera_c::twoActor0EvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - @11324 static-object serial, plus a slot swap between the cSAngle subtraction
+     * temp and its named copy */
+    static f32 DefaultCtrCus = 1.0f;
+    static f32 DefaultEyeCus = 1.0f;
+    static cXyz DefaultGap(0.0f, 0.0f, 0.0f);
+    static f32 DefaultFovy = 60.0f;
+    static f32 DefaultRadiusMin = 100.0f;
+    static f32 DefaultRadiusMax = 10000.0f;
+    static f32 DefaultLatitudeMin = -60.0f;
+    static f32 DefaultLatitudeMax = 60.0f;
+    static f32 DefaultLongitudeMin = -60.0f;
+    static f32 DefaultLongitudeMax = 60.0f;
+    static f32 IllegalRatio = -0.1f;
+
+    TwoActor0Work* w = (TwoActor0Work*)&mWork;
+
+    if (m11C == 0) {
+        w->mActor1 = getEvActor("Actor1", "@PLAYER");
+        w->mActor2 = getEvActor("Actor2", "@STARTER");
+
+        if (w->mActor1 == NULL || w->mActor2 == NULL) {
+            return true;
+        }
+
+        w->mActor1Id = fopAcM_GetID(w->mActor1);
+        w->mActor2Id = fopAcM_GetID(w->mActor2);
+        getEvXyzData(&w->mCtrGap, "CtrGap", DefaultGap);
+        getEvFloatData(&w->mCtrRatio, "CtrRatio", IllegalRatio);
+        getEvFloatData(&w->mCtrCus, "CtrCus", DefaultCtrCus);
+        getEvFloatData(&w->mEyeCus, "EyeCus", DefaultEyeCus);
+        getEvFloatData(&w->mRadiusMin, "RadiusMin", DefaultRadiusMin);
+        getEvFloatData(&w->mRadiusMax, "RadiusMax", DefaultRadiusMax);
+        getEvFloatData(&w->mLatitudeMin, "LatitudeMin", DefaultLatitudeMin);
+        getEvFloatData(&w->mLatitudeMax, "LatitudeMax", DefaultLatitudeMax);
+        getEvFloatData(&w->mLongitudeMin, "LongitudeMin", DefaultLongitudeMin);
+        getEvFloatData(&w->mLongitudeMax, "LongitudeMax", DefaultLongitudeMax);
+        getEvFloatData(&w->mFovy, "Fovy", DefaultFovy);
+        w->mRadius = mViewCache.mDirection.R();
+        w->mLatitude = mViewCache.mDirection.V().Degree();
+        w->mLongitude = mViewCache.mDirection.U().Degree();
+    }
+
+    cSGlobe globe(attentionPos(w->mActor1) - attentionPos(w->mActor2));
+
+    if (fopAcM_SearchByID(w->mActor1Id) == NULL) {
+        return true;
+    }
+
+    if (fopAcM_SearchByID(w->mActor2Id) == NULL) {
+        return true;
+    }
+
+    cXyz center;
+
+    if (!(w->mCtrRatio >= 0.0f && w->mCtrRatio <= 1.0f)) {
+        center = relationalPos(w->mActor1, w->mActor2, &w->mCtrGap, 0.25f);
+    } else {
+        center = (attentionPos(w->mActor1) + attentionPos(w->mActor2)) * w->mCtrRatio;
+    }
+
+    mViewCache.mCenter += (center - mViewCache.mCenter) * w->mCtrCus;
+
+    cSAngle diff = globe.U() - mViewCache.mDirection.U();
+    f32 longitude = diff.Degree();
+
+    if (w->mLongitude < w->mLongitudeMin) {
+        longitude = w->mLongitudeMin;
+    } else if (w->mLongitude > w->mLongitudeMax) {
+        longitude = w->mLongitudeMax;
+    }
+
+    longitude += globe.U().Degree();
+    w->mLongitude += (longitude - w->mLongitude) * w->mEyeCus;
+
+    f32 latitude = mViewCache.mDirection.V().Degree();
+
+    if (w->mLatitude < w->mLatitudeMin) {
+        latitude = w->mLatitudeMin;
+    } else if (w->mLatitude > w->mLatitudeMax) {
+        latitude = w->mLatitudeMax;
+    }
+
+    w->mLatitude += (latitude - w->mLatitude) * w->mEyeCus;
+
+    f32 radius = mViewCache.mDirection.R();
+
+    if (w->mRadius < w->mRadiusMin) {
+        radius = w->mRadiusMin;
+    } else if (w->mRadius > w->mRadiusMax) {
+        radius = w->mRadiusMax;
+    }
+
+    w->mRadius += (radius - w->mRadius) * w->mEyeCus;
+    mViewCache.mDirection.Val(w->mRadius, cSAngle(w->mLatitude), cSAngle(w->mLongitude));
+    mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+    mViewCache.mFovy += (w->mFovy - mViewCache.mFovy) * w->mCtrCus;
+    return true;
 }
