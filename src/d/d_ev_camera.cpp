@@ -42,6 +42,27 @@ inline dStage_Event_dt_c* nextMapData(dStage_Event_dt_c* i_eventDt) {
     return dComIfGp_event_nextStageEventDt(i_eventDt);
 }
 
+struct RestorePosWork {
+    /* 0x378 */ cXyz mCtrGap;
+    /* 0x384 */ cXyz mCtrPos;
+    /* 0x390 */ f32 mCushion;
+    /* 0x394 */ int mNearTimer;
+    /* 0x398 */ f32 mNearDist;
+    /* 0x39C */ int mFarTimer;
+    /* 0x3A0 */ f32 mFarDist;
+    /* 0x3A4 */ u8 m3A4[0x3AC - 0x3A4];
+    /* 0x3AC */ fopAc_ac_c* mTarget;
+    /* 0x3B0 */ cSGlobe mGlobe;
+    /* 0x3B8 */ int mMode;
+    /* 0x3BC */ int mSlot;
+    /* 0x3C0 */ cXyz mCenter;
+    /* 0x3CC */ cXyz mEye;
+    /* 0x3D8 */ f32 mFovy;
+    /* 0x3DC */ s16 mBank;
+    /* 0x3DE */ u8 m3DE[0x3E0 - 0x3DE];
+    /* 0x3E0 */ int mTargetType;
+};
+
 struct PossessedWork {
     /* 0x378 */ int mState;
     /* 0x37C */ int mType;
@@ -652,7 +673,126 @@ bool lineCollisionCheck(cXyz i_start, cXyz i_end, fopAc_ac_c* i_actor1, fopAc_ac
 
 /* 800B76C8-800B7E00       .text restorePosEvCamera__9dCamera_cFv */
 bool dCamera_c::restorePosEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - @8298 static-object serial only, resolves once the rest of the TU is written */
+    static cXyz DefaultGap = cXyz::Zero;
+    static f32 DefaultCushion = 1.0f;
+    static f32 DefaultNearDist = 750.0f;
+    static f32 DefaultFarDist = 1500.0f;
+    static int DefaultNearTimer = 20;
+    static int DefaultFarTimer = 30;
+    static f32 DefaultZoomDist = 400.0f;
+    static f32 DefaultZoomVAngle = 0.0f;
+
+    RestorePosWork* w = (RestorePosWork*)&mWork;
+
+    if (m11C == 0) {
+        getEvXyzData(&w->mCtrGap, "CtrGap", DefaultGap);
+        getEvFloatData(&w->mCushion, "Cushion", DefaultCushion);
+        getEvFloatData(&w->mNearDist, "NearDist", DefaultNearDist);
+        getEvFloatData(&w->mFarDist, "FarDist", DefaultFarDist);
+        getEvIntData(&w->mNearTimer, "NearTimer", DefaultNearTimer);
+        getEvIntData(&w->mFarTimer, "FarTimer", DefaultFarTimer);
+        getEvIntData(&w->mSlot, "Dest", 2);
+        getEvIntData(&w->mTargetType, "TargetType", 0);
+
+        switch (w->mSlot) {
+        case 0:
+            w->mCenter = m0A4[0].m00.mCenter;
+            w->mEye = m0A4[0].m00.mEye;
+            w->mFovy = m0A4[0].m00.mFovY;
+            break;
+        case 1:
+            w->mCenter = m0A4[1].m00.mCenter;
+            w->mEye = m0A4[1].m00.mEye;
+            w->mFovy = m0A4[1].m00.mFovY;
+            break;
+        case 9:
+            dComIfGp_loadCameraPosition(0, &w->mCenter, &w->mEye, &w->mFovy, &w->mBank);
+            break;
+        default:
+            w->mCenter = m084;
+            w->mEye = m090;
+            w->mFovy = m09C;
+            break;
+        }
+
+        fopAc_ac_c* target = getEvActor("Target", "@PLAYER");
+
+        w->mTarget = target;
+
+        if (target == NULL) {
+            return true;
+        }
+
+        w->mCtrPos = relationalPos(w->mTarget, &w->mCtrGap);
+
+        cSGlobe globe(w->mEye - mViewCache.mCenter);
+
+        if (globe.R() < w->mNearDist) {
+            if (pointInSight(&w->mCtrPos)) {
+                w->mMode = 0;
+            } else {
+                w->mMode = 1;
+            }
+        } else if (globe.R() < w->mFarDist) {
+            if (lineBGCheck(&mEye, &w->mCtrPos, 0x8F)) {
+                w->mMode = 3;
+            } else {
+                w->mMode = 2;
+            }
+        } else {
+            w->mMode = 3;
+        }
+
+        SkipSmoother();
+    }
+
+    switch (w->mMode) {
+    case 0:
+        break;
+    case 1:
+    case 2:
+        if (m11C == 0) {
+            w->mGlobe.Val(w->mEye - w->mCenter);
+        }
+
+        if (m11C < (u32)w->mFarTimer) {
+            f32 ratio = (f32)m11C / (f32)w->mFarTimer;
+
+            if (w->mTargetType == 1) {
+                mViewCache.mCenter += (w->mCenter - mViewCache.mCenter) * ratio;
+            } else {
+                mViewCache.mCenter += (w->mCtrPos - mViewCache.mCenter) * ratio;
+            }
+
+            mViewCache.mDirection.R(mViewCache.mDirection.R() +
+                                    (w->mGlobe.R() - mViewCache.mDirection.R()) * ratio);
+            mViewCache.mDirection.V(mViewCache.mDirection.U() +
+                                    (w->mGlobe.U() - mViewCache.mDirection.U()) * ratio);
+            mViewCache.mDirection.U(mViewCache.mDirection.V() +
+                                    (w->mGlobe.V() - mViewCache.mDirection.V()) * ratio);
+            mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+            mViewCache.mFovy += (w->mFovy - mViewCache.mFovy) * ratio;
+            return false;
+        }
+        break;
+    case 3:
+        if (m11C == 0) {
+            if (w->mTargetType == 1) {
+                mViewCache.mCenter = w->mCenter;
+            } else {
+                mViewCache.mCenter = w->mCtrPos;
+            }
+
+            mViewCache.mDirection.Val(w->mEye - w->mCenter);
+            mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+            mViewCache.mFovy = w->mFovy;
+        }
+        break;
+    }
+
+    SkipSmoother();
+    return true;
 }
 
 /* 800B7E00-800B7EBC       .text talktoEvCamera__9dCamera_cFv */
