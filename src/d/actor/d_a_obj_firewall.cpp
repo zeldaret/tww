@@ -166,7 +166,7 @@ void daObjFirewall_c::registCollisionTable() {
     pos.y -= DEMO_SELECT(y_pos_offset,300.0f);
 
     base_radius = scale.x * 1000.0f;
-    height = DEMO_SELECT(l_HIO.m1C,300.0f) + scale.y * 10000.0f;
+    height = DEMO_SELECT(y_pos_offset,300.0f) + scale.y * 10000.0f;
     
     mCyl.SetC(pos);
     mCyl.SetR(base_radius - r_modifier);
@@ -640,8 +640,14 @@ bool daObjFirewall_c::_execute() {
     field_0x40c.play();
     setPointLight();
 #if VERSION == VERSION_DEMO
-    f32 fVar1 = l_HIO.m24;
-    JGeometry::TVec3<f32> cxVar1(fVar1,l_HIO.m24,l_HIO.m24);
+    f64 fVar1 = l_HIO.m24;
+
+    JGeometry::TVec3<f32> cxVar1;
+    cxVar1.x = fVar1;
+    cxVar1.y = l_HIO.m24;
+    cxVar1.z = l_HIO.m24;
+
+    JGeometry::TVec3<f32>* unused_pointer = &cxVar1; //i really don't know if this is right but its the only way i could get it to match
     int i;
     for(i = 0; i < 6; i++){
         if(field_0x438[i] != NULL){
