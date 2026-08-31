@@ -84,7 +84,11 @@ void mDoGph_gInf_c::create() {
 #endif
     JFWDisplay::createManager(heap, JUTXfb::Double, true);
     JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::Async);
-    JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fbWidth, JUTVideo::getManager()->getRenderMode()->efbHeight, JUtility::TColor(0, 0, 0, 0));
+    JUTFader* faderPtr = new JUTFader(
+        0, 0,
+        JUTGetVideoManager()->getRenderMode()->fbWidth, JUTGetVideoManager()->getRenderMode()->efbHeight,
+        JUtility::TColor(0, 0, 0, 0)
+    );
     JUT_ASSERT(DEMO_SELECT(414, 416), faderPtr != NULL);
     setFader(faderPtr);
     JFWDisplay::getManager()->setFader(faderPtr);
@@ -278,10 +282,7 @@ bool mDoGph_AfterOfDraw() {
         JUTProcBar::getManager()->setVisibleHeapBar(false);
         JUTDbPrint::getManager()->setVisible(true);
     } else {
-#if VERSION == VERSION_DEMO
-        BOOL procVisible = false;
-        BOOL printVisible = false;
-#else
+#if DEBUG || VERSION > VERSION_DEMO
         BOOL consoleVisible = JFWSystem::getSystemConsole()->isVisible();
         BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::EPort3).err == 0;
         BOOL procVisible = pad3Connected && fapGmHIO_getMeter() && !consoleVisible;
@@ -290,6 +291,9 @@ bool mDoGph_AfterOfDraw() {
             procVisible = FALSE;
             printVisible = FALSE;
         }
+#else
+        BOOL procVisible = false;
+        BOOL printVisible = false;
 #endif
         JUTProcBar::getManager()->setVisible(procVisible);
         JUTProcBar::getManager()->setVisibleHeapBar(procVisible);
@@ -313,7 +317,7 @@ bool mDoGph_AfterOfDraw() {
     GXSetCullMode(GX_CULL_NONE);
     mDoMch_render_c::setFbWidth(fapGmHIO_getFbWidth());
     mDoMch_render_c::setEfbHeight(fapGmHIO_getEfbHeight());
-    JUTVideo::getManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
+    JUTGetVideoManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
     dComIfGd_peekZdata();
     mDoGph_gInf_c::endFrame();
     return true;
@@ -591,7 +595,6 @@ void drawSpot(view_class* view) {
 
 /* 80008F34-8000990C       .text drawDepth__FP10view_classP15view_port_classi */
 void drawDepth(view_class* view, view_port_class* viewport, int depth) {
-    /* Nonmatching */
     if (mDoGph_gInf_c::isAutoForcus()) {
         f32 projv[7];
         f32 viewv[6];
@@ -612,7 +615,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
         l_tevColor0.a = mDoGph_gInf_c::getMonotoneRate();
     } else {
         dStage_FileList_dt_c * fili_p = NULL;
-        s32 roomNo = dComIfGp_roomControl_getStayNo();
+        int roomNo = dComIfGp_roomControl_getStayNo();
         if (roomNo >= 0)
             fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
@@ -651,7 +654,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
 
     u16 hw = w >> 1;
     u16 hh = h >> 1;
-    GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, JUTVideo::getManager()->getRenderMode()->vfilter);
+    GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, JUTGetVideoManager()->getRenderMode()->vfilter);
 
     GXSetTexCopySrc(x, y, w, h);
     GXSetTexCopyDst(hw, hh, GX_TF_Z16, GX_TRUE);
@@ -661,10 +664,10 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXSetTexCopyDst(hw, hh, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
     GXCopyTex(fbbuf, GX_FALSE);
 
-    GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zbuf, w, h, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zbuf, hw, hh, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(mDoGph_gInf_c::getZbufferTexObj(), GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 
-    GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), fbbuf, w, h, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), fbbuf, hw, hh, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(mDoGph_gInf_c::getFrameBufferTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXPixModeSync();
     GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP1);
@@ -752,7 +755,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     if (y == 0) {
         s16 h = (s16)viewport->mScissor.mYOrig;
         if (h != 0) {
-            h += (f32)viewport->mScissor.mHeight;
+            s16 h2 = h + (f32)viewport->mScissor.mHeight;
             GXSetNumChans(1);
             GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
             GXSetNumTexGens(0);
@@ -769,11 +772,11 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
             GXBegin(GX_QUADS, GX_VTXFMT0, 8);
                 GXPosition3s16(0, 0, -5);
                 GXPosition3s16(640, 0, -5);
-                GXPosition3s16(640, y, -5);
-                GXPosition3s16(0, y, -5);
-
-                GXPosition3s16(0, h, -5);
                 GXPosition3s16(640, h, -5);
+                GXPosition3s16(0, h, -5);
+
+                GXPosition3s16(0, h2, -5);
+                GXPosition3s16(640, h2, -5);
                 GXPosition3s16(640, 480, -5);
                 GXPosition3s16(0, 480, -5);
             GXEnd();
@@ -1604,7 +1607,7 @@ bool mDoGph_Painter() {
 #endif
 
     J2DOrthoGraph graf(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
-    graf.setOrtho(JGeometry::TBox2<f32>(-9.0f, -21.0f, 650.0f, 503.0f), -1.0f, 1.0f);
+    graf.setOrtho(-9.0f, -21.0f, 659.0f, 524.0f, -1.0f, 1.0f);
     graf.setPort();
 
     dComIfGp_setCurrentGrafPort(&graf);
@@ -1735,7 +1738,7 @@ bool mDoGph_Painter() {
 
             if (!dMenu_flag()) {
                 motionBlure(&camera->view);
-                drawDepth(&camera->view, viewport_p, dComIfGp_getCamZoomForcus(cameraID));
+                drawDepth(&camera->view, viewport_p, dComIfGp_getCameraZoomForcus(cameraID));
                 dComIfGp_particle_drawProjection(&jpaDrawInfo);
 
                 GXSetClipMode(GX_CLIP_ENABLE);
@@ -1904,10 +1907,10 @@ bool mDoGph_Painter() {
     GXSetNumIndStages(0);
 #endif
 
-    graf.setOrtho(JGeometry::TBox2<f32>(-9.0f, -21.0f, 650.0f, 503.0f), 100000.0f, -100000.0f);
+    graf.setOrtho(-9.0f, -21.0f, 659.0f, 524.0f, 100000.0f, -100000.0f);
     graf.setPort();
     Mtx viewMtx;
-    mDoMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
+    cMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
     JPADrawInfo jpaDrawInfo2D(viewMtx, 45.0f, 1.218f);
     jpaDrawInfo2D.setFovy(0.0f);
     jpaDrawInfo2D.setAspect(4.0f/3.0f);

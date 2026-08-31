@@ -273,7 +273,6 @@ public:
     dDetect_c& getDetect() { return mDetect; }
     dDemo_manager_c* getDemo() { return mDemo; }
     camera_class* getCamera(int idx) { return mCameraInfo[idx].mpCamera; }
-    f32 getCamZoomForcus(int idx) { return mCameraInfo[idx].mCameraZoomForcus; }
 
     dMagma_packet_c* getMagma() { return mpMagmaPacket; }
     dGrass_packet_c* getGrass() { return mpGrassPacket; }
@@ -2240,10 +2239,6 @@ bool dComIfGp_getMapTrans(int i_roomNo, f32* o_transX, f32* o_transY, s16* o_ang
 
 inline camera_process_class* dComIfGp_getCamera(int idx) {
     return (camera_process_class*)g_dComIfG_gameInfo.play.getCamera(idx);
-}
-
-inline f32 dComIfGp_getCamZoomForcus(int idx) {
-    return g_dComIfG_gameInfo.play.getCamZoomForcus(idx);
 }
 
 inline const char* dComIfGp_getStartStageName() {
