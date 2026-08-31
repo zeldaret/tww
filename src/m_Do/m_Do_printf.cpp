@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_printf.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_printf.h"
 #include "stdio.h"
 #include "dolphin/base/PPCArch.h"

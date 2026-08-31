@@ -273,7 +273,6 @@ public:
     dDetect_c& getDetect() { return mDetect; }
     dDemo_manager_c* getDemo() { return mDemo; }
     camera_class* getCamera(int idx) { return mCameraInfo[idx].mpCamera; }
-    f32 getCamZoomForcus(int idx) { return mCameraInfo[idx].mCameraZoomForcus; }
 
     dMagma_packet_c* getMagma() { return mpMagmaPacket; }
     dGrass_packet_c* getGrass() { return mpGrassPacket; }
@@ -635,7 +634,7 @@ public:
 
     JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
     void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
-    bool isPictureFlag(u8 i) { return mPictureFlag & (u8)(1 << i); }
+    BOOL isPictureFlag(u8 i) { return (mPictureFlag & (u8)(1 << i)) ? TRUE : FALSE; }
     void onPictureFlag(u8 i) { mPictureFlag |= (u8)(1 << i); }
     void offPictureFlag(u8 i) { mPictureFlag &= ~(u8)(1 << i); }
     u8 getPictureFormat() { return mPictureFormat; }
@@ -2242,10 +2241,6 @@ inline camera_process_class* dComIfGp_getCamera(int idx) {
     return (camera_process_class*)g_dComIfG_gameInfo.play.getCamera(idx);
 }
 
-inline f32 dComIfGp_getCamZoomForcus(int idx) {
-    return g_dComIfG_gameInfo.play.getCamZoomForcus(idx);
-}
-
 inline const char* dComIfGp_getStartStageName() {
     return g_dComIfG_gameInfo.play.getStartStageName();
 }
@@ -3263,7 +3258,7 @@ inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramBlock, int i) {
     g_dComIfG_gameInfo.play.setPictureBoxData(aramBlock, i);
 }
 
-inline bool dComIfGp_isPictureFlag(u8 i) {
+inline BOOL dComIfGp_isPictureFlag(u8 i) {
     return g_dComIfG_gameInfo.play.isPictureFlag(i);
 }
 

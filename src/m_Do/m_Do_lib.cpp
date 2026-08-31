@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_lib.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"

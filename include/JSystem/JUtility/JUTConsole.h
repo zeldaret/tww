@@ -6,6 +6,20 @@
 #include "JSystem/JUtility/JUTFont.h"
 #include "stdarg.h"
 
+class JUTConsole;
+
+extern "C" void JUTConsole_print_f_va_(JUTConsole*, const char*, va_list);
+extern "C" void JUTSetReportConsole(JUTConsole*);
+extern "C" JUTConsole* JUTGetReportConsole();
+extern "C" void JUTSetWarningConsole(JUTConsole*);
+extern "C" JUTConsole* JUTGetWarningConsole();
+extern "C" void JUTReportConsole_f_va(const char*, va_list);
+extern "C" void JUTReportConsole_f(const char*, ...);
+extern "C" void JUTWarningConsole(const char* message);
+extern "C" void JUTWarningConsole_f_va(const char*, va_list);
+extern "C" void JUTWarningConsole_f(const char* message, ...);
+extern "C" void JUTReportConsole(const char* message);
+
 class JUTConsole : public JKRDisposer {
 public:
     enum EConsoleType {
@@ -46,7 +60,7 @@ public:
         mFontSizeX = x;
         mFontSizeY = y;
     }
-    void setHeight(u32 height) {
+    void setHeight(unsigned int height) {
         mHeight = height;
         if (mHeight > mMaxLines) {
             mHeight = mMaxLines;
@@ -67,7 +81,7 @@ public:
     bool isVisible() const { return mVisible; }
     void setVisible(bool visible) { mVisible = visible; }
 
-    u8 getLineAttr(int param_0) { return mBuf[(field_0x20 + 2) * param_0]; }
+    u8 getLineAttr(int param_0) const { return mBuf[(field_0x20 + 2) * param_0]; }
     void setLineAttr(int param_0, u8 param_1) { mBuf[(field_0x20 + 2) * param_0] = param_1; }
     u8* getLinePtr(int param_0) const { return &mBuf[(field_0x20 + 2) * param_0] + 1; }
     int diffIndex(int param_0, int param_1) const {
@@ -88,6 +102,8 @@ public:
 
     void scrollToLastLine() { scroll(mMaxLines); }
     void scrollToFirstLine() { scroll(-mMaxLines); }
+
+    void print_f_va(const char* fmt, std::__tag_va_List* args) { JUTConsole_print_f_va_(this, fmt, args->list); }
 
 public:
     /* 0x18 */ JGadget::TLinkListNode mLinkNode;
@@ -126,7 +142,7 @@ public:
     void drawDirect(bool) const;
     void setDirectConsole(JUTConsole*);
 
-    JUTConsole* getDirectConsole() const { return mDirectConsole; }
+    JUTConsole* getDirectConsoel() const { return mDirectConsole; }
 
     static JUTConsoleManager* getManager() { return sManager; }
 
@@ -144,17 +160,5 @@ private:
     /* 0x0C */ JUTConsole* mActiveConsole;
     /* 0x10 */ JUTConsole* mDirectConsole;
 };  // Size: 0x14
-
-extern "C" void JUTConsole_print_f_va_(JUTConsole*, const char*, va_list);
-extern "C" void JUTSetReportConsole(JUTConsole*);
-extern "C" JUTConsole* JUTGetReportConsole();
-extern "C" void JUTSetWarningConsole(JUTConsole*);
-extern "C" JUTConsole* JUTGetWarningConsole();
-extern "C" void JUTReportConsole_f_va(const char*, va_list);
-extern "C" void JUTReportConsole_f(const char*, ...);
-extern "C" void JUTWarningConsole(const char* message);
-extern "C" void JUTWarningConsole_f_va(const char*, va_list);
-extern "C" void JUTWarningConsole_f(const char* message, ...);
-extern "C" void JUTReportConsole(const char* message);
 
 #endif /* JUTCONSOLE_H */

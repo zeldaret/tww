@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_hostIO.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_hostIO.h"
 #include "string.h"
 #include "m_Do/m_Do_printf.h"

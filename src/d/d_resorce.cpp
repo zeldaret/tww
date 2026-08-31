@@ -191,7 +191,7 @@ int dRes_info_c::loadResource() {
     for (i = 0; i < ARRAY_SIZE(l_readResType); i++, pResType++) {
         JKRFileFinder * pArcFinder = mpArchive->getFirstResource(*pResType);
 
-        for (; pArcFinder->isAvailable(); pArcFinder->findNextFile()) {
+        for (; JKRIsFileFinderAvailable(pArcFinder); pArcFinder->findNextFile()) {
             u32 resType;
             void * pRes = JKRArchive::getGlbResource(*pResType, pArcFinder->mEntryName, mpArchive);
             if (pRes == NULL) {

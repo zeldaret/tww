@@ -182,8 +182,7 @@ static const char* unusedString3 = "\n";
 JKRArchive* DynamicModuleControl::mountCallback(void* param_0) {
     JKRExpHeap* heap = mDoExt_getArchiveHeap();
     sFileCache = JKRFileCache::mount("/rels", heap, NULL);
-    sArchive = JKRArchive::mount("RELS.arc", JKRArchive::MOUNT_COMP, heap,
-                                 JKRArchive::MOUNT_DIRECTION_HEAD);
+    sArchive = JKRMountArchive("RELS.arc", JKRArchive::MOUNT_COMP, heap, JKRArchive::MOUNT_DIRECTION_HEAD);
     if (sArchive == NULL) {
         // "Mount failure, but if the archive isn't created, it was too slow %s\n"
         OSReport_Error("マウント失敗ですが単にアーカイブを作ってないだけなら遅いだけです %s\n",
@@ -380,7 +379,7 @@ BOOL DynamicModuleControl::do_load_async() {
 bool DynamicModuleControl::do_unload() {
     if (mModule != NULL) {
 #if VERSION == VERSION_DEMO
-        JKRFileLoader::removeResource(mModule, NULL);
+        JKRRemoveResource(mModule, NULL);
 #else
         JKRFree(mModule);
 #endif
@@ -497,7 +496,7 @@ error:
     }
     if (mModule != NULL) {
 #if VERSION == VERSION_DEMO
-        JKRFileLoader::removeResource(mModule, NULL);
+        JKRRemoveResource(mModule, NULL);
 #else
         JKRHeap::free(mModule, NULL);
 #endif

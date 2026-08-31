@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_dvd_thread.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_printf.h"
@@ -13,7 +14,6 @@
 #include "SSystem/SComponent/c_list.h"
 #include "dolphin/dvd/dvd.h"
 
-static u8 dummy[0x0c];
 OSThread mDoDvdThd::l_thread;
 mDoDvdThdStack mDoDvdThd::l_threadStack;
 mDoDvdThd_param_c mDoDvdThd::l_param;

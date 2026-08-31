@@ -2183,9 +2183,9 @@ static BOOL dMsg_Delete(sub_mesg_class* i_Msg) {
 
     dMesg_finalize();
     if (header) {
-        JKRFileLoader::removeResource(header, NULL);
+        JKRRemoveResource(header, NULL);
     } if (header2) {
-        JKRFileLoader::removeResource(header2, NULL);
+        JKRRemoveResource(header2, NULL);
     }
     if (oParse) {
         delete oParse;

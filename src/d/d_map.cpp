@@ -1508,7 +1508,7 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
         if (mAGBMapSendStatus > 2 && mAGBMapSendStopFlg) {
             mAGBMapSendStatus = 0;
         }
-        if (mAGBMapSendStatus == 0 && g_mDoGaC_gbaCom.field_0x3) {
+        if (mAGBMapSendStatus == 0 && mDoGaC_getReConnect()) {
             agbMapNoSetCall();
             mAGBMapSendStatus = 0;
             mapAGBSendStatInit();
