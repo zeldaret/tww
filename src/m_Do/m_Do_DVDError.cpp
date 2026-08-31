@@ -3,6 +3,8 @@
 // Translation Unit: m_Do_DVDError.cpp
 //
 
+// PCH not used here? Messes up .bss
+// #include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_DVDError.h"
 #include "JSystem/JKernel/JKRThread.h"
 #include "dolphin/os/OS.h"

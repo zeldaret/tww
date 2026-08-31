@@ -3,6 +3,7 @@
  * Exception Print Functions
  */
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_machine_exception.h"
 #include "DynamicLink.h"
 #include "JSystem/JFramework/JFWSystem.h"

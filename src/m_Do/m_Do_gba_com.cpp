@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_gba_com.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_gba_com.h"
 #include "JSystem/JUtility/JUTGba.h"
 #include "SSystem/SComponent/c_math.h"

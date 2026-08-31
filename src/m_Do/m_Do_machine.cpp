@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_machine.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_machine.h"
 #include "JSystem/JFramework/JFWSystem.h"
 #include "JSystem/JKernel/JKRAram.h"

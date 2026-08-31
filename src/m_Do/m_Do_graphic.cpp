@@ -3,7 +3,7 @@
 // Translation Unit: m_Do_graphic.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"

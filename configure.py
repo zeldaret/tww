@@ -392,6 +392,11 @@ config.precompiled_headers = [
         "cflags": ["-lang=c++", *cflags_rel],
     },
     {
+        "source": "m_Do/machine.pch",
+        "mw_version": "GC/1.3.2",
+        "cflags": ["-lang=c++", *cflags_dolzel],
+    },
+    {
         "source": "JSystem/JSystem.pch",
         "mw_version": "GC/1.3.2",
         "cflags": ["-lang=c++", *cflags_framework],
@@ -410,7 +415,7 @@ config.libs = [
             Object(Matching,    "m_Do/m_Do_audio.cpp"),
             Object(Matching,    "m_Do/m_Do_controller_pad.cpp"),
             Object(NonMatching, "m_Do/m_Do_graphic.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01") or EquivalentFor("D44J01"),    "m_Do/m_Do_machine.cpp"),
+            Object(Matching,    "m_Do/m_Do_machine.cpp"),
             Object(Matching,    "m_Do/m_Do_mtx.cpp"),
             Object(MatchingFor("D44J01"),    "m_Do/m_Do_ext.cpp"),
             Object(Matching,    "m_Do/m_Do_lib.cpp"),
