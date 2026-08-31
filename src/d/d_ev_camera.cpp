@@ -42,6 +42,13 @@ inline dStage_Event_dt_c* nextMapData(dStage_Event_dt_c* i_eventDt) {
     return dComIfGp_event_nextStageEventDt(i_eventDt);
 }
 
+struct TornadoWarpWork {
+    /* 0x378 */ int mState;
+    /* 0x37C */ int mTimer;
+    /* 0x380 */ cXyz mWarpPos;
+    /* 0x38C */ fopAc_ac_c* mShip;
+};
+
 struct RestorePosWork {
     /* 0x378 */ cXyz mCtrGap;
     /* 0x384 */ cXyz mCtrPos;
@@ -1025,7 +1032,117 @@ bool dCamera_c::turnToActorEvCamera() {
 
 /* 800B9FB0-800BA688       .text tornadoWarpEvCamera__9dCamera_cFv */
 bool dCamera_c::tornadoWarpEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - stack slot ordering for the cXyz locals and a regswap between the loop index
+     * and the nearest-candidate index */
+    TornadoWarpWork* w = (TornadoWarpWork*)&mWork;
+
+    if (m11C == 0) {
+        w->mState = 0;
+        w->mTimer = 0;
+        SkipSmoother();
+    }
+
+    cXyz base_gap[2] = {
+        cXyz(0.0f, 60.0f, 0.0f),
+        cXyz(0.0f, -40.0f, 0.0f),
+    };
+    cXyz warp_gap[4] = {
+        cXyz(900.0f, 800.0f, 0.0f),
+        cXyz(-900.0f, 800.0f, 0.0f),
+        cXyz(0.0f, 800.0f, 900.0f),
+        cXyz(0.0f, 800.0f, -900.0f),
+    };
+    cSAngle step(45.0f);
+    cXyz eye;
+
+    switch (w->mState) {
+    case 0:
+    default: {
+        w->mShip = fopAcM_SearchByName(fpcNm_SHIP_e);
+        w->mState = 1;
+        w->mTimer = 0x64;
+
+        cXyz base(-180000.0f, 750.0f, -200000.0f);
+        cXyz center = relationalPos(mpPlayerActor, &base_gap[1]);
+
+        if (m786) {
+            f32 near_dist = 100000000.0f;
+            int near_idx = 3;
+
+            for (int i = 0; i < 4; i++) {
+                eye = relationalPos(mpPlayerActor, &warp_gap[i], step);
+
+                cXyz diff = eye - base;
+                f32 dist = diff.abs();
+
+                if (dist < near_dist) {
+                    near_dist = dist;
+                    near_idx = i;
+                }
+            }
+
+            cXyz rotated = dCamMath::xyzRotateY(warp_gap[near_idx], step);
+
+            eye = relationalPos(mpPlayerActor, &rotated);
+        } else {
+            for (int i = 0; i < 4; i++) {
+                eye = relationalPos(mpPlayerActor, &warp_gap[i], step);
+
+                if (!lineBGCheck(&center, &eye, 0x7F) &&
+                    !lineCollisionCheck(center, eye, mpPlayerActor, w->mShip)) {
+                    break;
+                }
+            }
+        }
+
+        w->mWarpPos = eye;
+    }
+        // fall through
+    case 1: {
+        mViewCache.mCenter +=
+            (relationalPos(mpPlayerActor, &base_gap[1]) - mViewCache.mCenter) * 0.25f;
+
+        f32 ratio = 1.0f / (f32)w->mTimer;
+
+        eye = mViewCache.mEye + (w->mWarpPos - mViewCache.mEye) * ratio;
+
+        mViewCache.mEye += (eye - mViewCache.mEye) * 0.15f;
+        mViewCache.mFovy +=
+            ((mViewCache.mFovy + ratio * (70.0f - mViewCache.mFovy)) - mViewCache.mFovy) * 0.15f;
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+        mViewCache.mBank += (DEG2S(cM_rndFX(6.0f * ratio)) - mViewCache.mBank) * 0.15f;
+        setFlag(0x400);
+
+        if (--w->mTimer != 0) {
+            break;
+        }
+
+        w->mState = 2;
+        w->mTimer = 0xC8;
+    }
+        // fall through
+    case 2: {
+        mViewCache.mCenter +=
+            (relationalPos(mpPlayerActor, &base_gap[0]) - mViewCache.mCenter) * 0.25f;
+
+        eye = w->mWarpPos;
+        eye.y = attentionPos(mpPlayerActor).y;
+        mViewCache.mEye += (eye - mViewCache.mEye) * 0.05f;
+        mViewCache.mFovy += (90.0f - mViewCache.mFovy) * 0.05f;
+        mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
+        mViewCache.mBank -= mViewCache.mBank * 0.02f;
+        setFlag(0x400);
+
+        if (--w->mTimer == 0) {
+            w->mState = 3;
+        }
+        break;
+    }
+    case 3:
+        break;
+    }
+
+    return true;
 }
 
 /* 800BA688-800BA7BC       .text saveEvCamera__9dCamera_cFv */
