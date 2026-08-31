@@ -18,7 +18,7 @@ JMessage::TResourceContainer::TResourceContainer() {
 
 /* 8029FD04-8029FD90       .text Get_groupID__Q28JMessage18TResourceContainerFUs */
 JMessage::TResource* JMessage::TResourceContainer::Get_groupID(u16 groupID) {
-    JGadget::TContainerEnumerator<TResource, 0> enumerator(this);
+    JGadget::TContainerEnumerator<TResourceContainer> enumerator(*this);
     while (enumerator) {
         const TResource* res = &(*enumerator);
         if (res->mInfo.get_groupID() == groupID)
