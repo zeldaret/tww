@@ -677,8 +677,9 @@ bool daObjFirewall_c::_execute() {
     return true;
 }
 
-
+#if VERSION == VERSION_DEMO
 const GXColor unused = {0xFF,0x0,0x0,0x80};
+#endif
 /* 00001C70-00001CD4       .text _draw__15daObjFirewall_cFv */
 bool daObjFirewall_c::_draw() {
 #if VERSION == VERSION_DEMO
