@@ -9438,7 +9438,7 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
 
 #if VERSION == VERSION_PAL
 static void dummy() {
-    OSReport(" ");
+    DEAD_STRING(" ");
 }
 #endif
 
@@ -10192,6 +10192,6 @@ void fopMsgM_destroyExpHeap(JKRExpHeap* i_heap) {
 }
 
 static void dummy2() {
-    OSReport("\x1B""CU[%d]");
-    OSReport("\x1B""CD[%d]");
+    DEAD_STRING("\x1B""CU[%d]");
+    DEAD_STRING("\x1B""CD[%d]");
 }

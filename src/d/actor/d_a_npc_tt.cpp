@@ -86,10 +86,10 @@ void daNpc_Tt_c::setAnmStatus() {
 
 //probably unused JUT_ASSERT
 static void dummy() {
-    OSReport("Tt");
-    OSReport("d_a_npc_tt.cpp");
-    OSReport("0");
-    OSReport("Halt");
+    DEAD_STRING("Tt");
+    DEAD_STRING("d_a_npc_tt.cpp");
+    DEAD_STRING("0");
+    DEAD_STRING("Halt");
 }
 
 #include "d/actor/d_a_npc_tt_anm.inc"

@@ -479,7 +479,7 @@ static SArcHeader* getArcHeader(JKRArchive* pArchive) {
 }
 
 static void dummy() {
-    OSReport("%5.1f %5x %5.1f %5x %3d %s\n");
+    DEAD_STRING("%5.1f %5x %5.1f %5x %3d %s\n");
 }
 
 /* 8006EBF8-8006ECF4       .text dump_long__11dRes_info_cFP11dRes_info_ci */

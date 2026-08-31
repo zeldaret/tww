@@ -79,6 +79,9 @@ extern void __sync();
 #define SJIS(character, value) ((u32)value)
 #endif
 
+// Hack to make strings with no references appear in the string pool for matching.
+#define DEAD_STRING(s) OSReport(s)
+
 // Hack to trick the compiler into not inlining functions that use this macro.
 #define FORCE_DONT_INLINE \
     (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; \

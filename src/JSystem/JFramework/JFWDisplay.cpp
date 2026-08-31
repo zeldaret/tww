@@ -86,8 +86,8 @@ JFWDisplay* JFWDisplay::createManager(JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_nu
 }
 
 static void dummyFunc() {
-    OSReport("sManager");
-    OSReport("mTemporarySingle");
+    DEAD_STRING("sManager");
+    DEAD_STRING("mTemporarySingle");
 }
 
 /* 802553EC-80255444       .text callDirectDraw__Fv */

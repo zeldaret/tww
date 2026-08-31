@@ -1499,7 +1499,7 @@ void JAIZelBasic::loadStaticWaves() {
 }
 
 static void dummy2() {
-    OSReport("Warning : bgm pointer is NULL!\n");
+    DEAD_STRING("Warning : bgm pointer is NULL!\n");
 }
 
 /* 802AB888-802AB8B0       .text checkFirstWaves__11JAIZelBasicFv */

@@ -29,7 +29,7 @@ void print(const char* string) {
 }
 
 static void dummy() {
-    OSReport("--------------------------------------\n");
+    DEAD_STRING("--------------------------------------\n");
 }
 
 #if VERSION == VERSION_DEMO

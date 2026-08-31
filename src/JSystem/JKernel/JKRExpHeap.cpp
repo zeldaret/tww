@@ -527,8 +527,8 @@ s32 JKRExpHeap::getTotalUsedSize() const {
 }
 
 static void dummy1() {
-    OSReport("newSize > 0");
-    OSReport("Halt");
+    DEAD_STRING("newSize > 0");
+    DEAD_STRING("Halt");
 }
 
 /* 802B24EC-802B2584       .text appendUsedList__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock */
@@ -994,15 +994,15 @@ JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::getHeapBlock(void* ptr) {
 }
 
 static void dummy2() {
-    OSReport("+---------------JKRExpHeap\n");
-    OSReport("|         Align Group  size    ( prev , next )\n");
-    OSReport("| ---- FreeFirst\n");
-    OSReport("| %08x  ");
-    OSReport("%2x  %3d  %6x  (%08x %08x)\n");
-    OSReport("| ---- FreeLast\n");
-    OSReport("| ---- UsedFirst\n");
-    OSReport("| ---- UsedLast\n");
-    OSReport("+---------------End\n");
+    DEAD_STRING("+---------------JKRExpHeap\n");
+    DEAD_STRING("|         Align Group  size    ( prev , next )\n");
+    DEAD_STRING("| ---- FreeFirst\n");
+    DEAD_STRING("| %08x  ");
+    DEAD_STRING("%2x  %3d  %6x  (%08x %08x)\n");
+    DEAD_STRING("| ---- FreeLast\n");
+    DEAD_STRING("| ---- UsedFirst\n");
+    DEAD_STRING("| ---- UsedLast\n");
+    DEAD_STRING("+---------------End\n");
 }
 
 /* 802B30A4-802B31D4       .text state_register__10JKRExpHeapCFPQ27JKRHeap6TStateUl */

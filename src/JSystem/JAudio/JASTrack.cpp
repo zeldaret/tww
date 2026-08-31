@@ -272,8 +272,8 @@ void JASystem::TTrack::initTimed() {
 }
 
 static void dummy() {
-    OSReport("i >= 0");
-    OSReport("i < 3");
+    DEAD_STRING("i >= 0");
+    DEAD_STRING("i < 3");
 }
 
 /* 802811DC-80281258       .text connectBus__Q28JASystem6TTrackFii */

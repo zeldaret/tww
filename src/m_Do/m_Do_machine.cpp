@@ -273,7 +273,7 @@ void myExceptionCallback(OSError, OSContext*, u32, u32) {
 
 #if VERSION == VERSION_DEMO
 static void dummy() {
-    OSReport("myAllocCallback: 条件一致しました\n");
+    DEAD_STRING("myAllocCallback: 条件一致しました\n");
 }
 #endif
 

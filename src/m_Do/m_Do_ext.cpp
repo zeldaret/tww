@@ -980,11 +980,11 @@ JKRExpHeap* mDoExt_getArchiveHeap() {
 }
 
 static void dummy() {
-    OSReport("situationHeap == 0 || heapSize == 0");
-    OSReport("situationHeapLocked == 0");
-    OSReport("situationHeap");
-    OSReport("situationHeapLocked");
-    OSReport("heap == situationHeap");
+    DEAD_STRING("situationHeap == 0 || heapSize == 0");
+    DEAD_STRING("situationHeapLocked == 0");
+    DEAD_STRING("situationHeap");
+    DEAD_STRING("situationHeapLocked");
+    DEAD_STRING("heap == situationHeap");
 }
 
 /* 80011ABC-80011B54       .text mDoExt_createSolidHeap__FUlP7JKRHeapUl */

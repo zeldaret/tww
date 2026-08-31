@@ -521,15 +521,15 @@ bool JUTGamePad::recalibrate(u32 mask) {
 }
 
 static void dummy() {
-    OSReport("JUTGamePad.cpp");
-    OSReport("getDataSizePerFrame() > 0");
-    OSReport("Halt");
-    OSReport("mBuffer");
-    OSReport("(u32)mBuffer <= (u32)dataEnd && (u32)dataEnd <= (u32)mBufferEnd");
-    OSReport("part != 0");
-    OSReport("getBuffer() == getDataEnd() || part == mPart");
-    OSReport("JUTGamePad.h");
-    OSReport("size > 0");
-    OSReport("mBuffer && isValidData( mCurrent )");
-    OSReport("mBuffer && isValidBuffer( mCurrent )");
+    DEAD_STRING("JUTGamePad.cpp");
+    DEAD_STRING("getDataSizePerFrame() > 0");
+    DEAD_STRING("Halt");
+    DEAD_STRING("mBuffer");
+    DEAD_STRING("(u32)mBuffer <= (u32)dataEnd && (u32)dataEnd <= (u32)mBufferEnd");
+    DEAD_STRING("part != 0");
+    DEAD_STRING("getBuffer() == getDataEnd() || part == mPart");
+    DEAD_STRING("JUTGamePad.h");
+    DEAD_STRING("size > 0");
+    DEAD_STRING("mBuffer && isValidData( mCurrent )");
+    DEAD_STRING("mBuffer && isValidBuffer( mCurrent )");
 }

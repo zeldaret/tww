@@ -1521,8 +1521,8 @@ void dMsg_numberInput(sub_msg_class* i_Msg) {
 }
 
 static void dummy() {
-    OSReport("hukidashi_021.bti");
-    OSReport("texture != 0");
+    DEAD_STRING("hukidashi_021.bti");
+    DEAD_STRING("texture != 0");
 };
 
 /* 80210CA4-80210F28       .text dMsg_tactInput__FP13sub_msg_class */

@@ -130,7 +130,7 @@ bool dLib_btkInit(J3DModelData* modelData, mDoExt_btkAnm* anm, const char* arcNa
 }
 
 static void dummy() {
-    OSReport("bck != 0");
+    DEAD_STRING("bck != 0");
 }
 
 /* 800576B0-80057844       .text dLib_setAnm__FPCcP14mDoExt_McaMorfPScPScPScPC14dLib_anm_idx_cPC14dLib_anm_prm_cb */

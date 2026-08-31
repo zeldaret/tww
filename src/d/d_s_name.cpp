@@ -285,10 +285,10 @@ void dScnName_c::cloth2D_create() {
 }
 
 static void dummy() {
-    OSReport("baseMdl != 0");
-    OSReport("baseMdl->getModel() != 0");
-    OSReport("brkAnm != 0");
-    OSReport("res != 0");
+    DEAD_STRING("baseMdl != 0");
+    DEAD_STRING("baseMdl->getModel() != 0");
+    DEAD_STRING("brkAnm != 0");
+    DEAD_STRING("res != 0");
 }
 
 /* 802302F8-80230500       .text buttonIconCreate__10dScnName_cFv */
