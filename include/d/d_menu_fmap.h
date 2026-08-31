@@ -149,13 +149,13 @@ public:
         mTxtDummy[1] = dummy1;
     }
     void stopWrapBackEmitter() {
-        if (mMainWarpPane != NULL) {
-            mMainWarpPane->becomeInvalidEmitter();
+        if (mWrapBackEmitter != NULL) {
+            mWrapBackEmitter->becomeInvalidEmitter();
         }
     }
     void stopWrapSpotEmitter(int i_idx) {
-        if (mWarpPanes[i_idx] != NULL) {
-            mWarpPanes[i_idx]->becomeInvalidEmitter();
+        if (mWrapSpotEmitters[i_idx] != NULL) {
+            mWrapSpotEmitters[i_idx]->becomeInvalidEmitter();
         }
     }
 
@@ -361,8 +361,8 @@ public:
     /* 0x50CC */ STControl* stick;
     /* 0x50D0 */ JUTFont* mFont;
     /* 0x50D4 */ JUTFont* mRFont;
-    /* 0x50D8 */ JPABaseEmitter* mMainWarpPane;
-    /* 0x50DC */ JPABaseEmitter* mWarpPanes[9];
+    /* 0x50D8 */ JPABaseEmitter* mWrapBackEmitter;
+    /* 0x50DC */ JPABaseEmitter* mWrapSpotEmitters[9];
     /* 0x5100 */ u8 padding_0x5100[0x510C - 0x5100];
     /* 0x510C */ bool mMapClose;
     /* 0x510D */ u8 mSelCursorBufIdx;
