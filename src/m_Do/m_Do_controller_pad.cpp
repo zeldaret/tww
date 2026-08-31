@@ -169,7 +169,7 @@ int mDoCPd_Create() {
 #endif
 
     JUTGba::create();
-    mDoGaC_Initial(TestDataManager, 16);
+    mDoGaC_Initial(TestDataManager, ARRAY_SIZE(TestDataManager));
 
     for (int i = 0; i < 4; i++) {
         g_mDoCPd_cpadInfo[i].mHoldLockL = g_mDoCPd_cpadInfo[i].mTrigLockL = false;

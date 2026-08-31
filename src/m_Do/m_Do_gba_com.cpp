@@ -79,11 +79,13 @@ void GbaReset(JUTGbaParam*, void*) {
 }
 
 /* 8001A6A0-8001A7B8       .text mDoGaC_Initial__15mDoGaC_agbCom_cFP18mDoGaC_DataManag_cUc */
-void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
-    field_0x0 = 0;
+void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* i_dataMngP, u8 i_dataMngCount) {
+    int i;
+
+    mEnable = 0;
     field_0x1 = 0;
     field_0x2 = 0;
-    field_0x3 = 0;
+    mReConnect = 0;
     field_0x4 = 1;
     field_0x5 = 0;
     mPortNo = 1;
@@ -92,32 +94,35 @@ void mDoGaC_agbCom_c::mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
 #endif
     field_0x7 = 0;
     field_0x8 = 0;
-    field_0x10c = param_1;
+    mDataManagerCount = i_dataMngCount;
     field_0x9 = 0;
     field_0xa = 0;
     field_0xb = 0;
 
-    for (int i = 0; i < 16; i++) {
+    for (i = 0; i < 16; i++) {
         field_0xc[i].field_0x0 = 0;
         field_0xc[i].field_0x4 = 0;
         field_0xc[i].field_0x8 = 0;
         field_0xc[i].field_0xc = 0;
     }
 
-    field_0x110 = param_0;
-    for (int i = 0; i < param_1; i++) {
-        param_0[i].field_0x0 = 0;
-        param_0[i].field_0x4 = 0;
-        param_0[i].field_0x5 = 0;
+    mpDataManager = i_dataMngP;
+    for (i = 0; i < i_dataMngCount; i++) {
+        i_dataMngP[i].mpData = NULL;
+        i_dataMngP[i].mStatus = 0;
+        i_dataMngP[i].field_0x5 = 0;
     }
 
     field_0x114 = 0xFFFFFFFF;
     field_0x118 = 0;
 
-    field_0x12c.U16._12e_1 = (u32)cM_rndF(0x7FFF);
-    field_0x12c.U32bits._12c_2 = cM_rndF(0x7FFF);
-    field_0x12c.U8._12c_0 = 1;
-    field_0x128 = 0;
+    // !@bug This array is length 1, but the demo version accesses past the end of the array.
+    for (i = 0; i < DEMO_SELECT(3, 1); i++) {
+        field_0x128[i].field_0x4.U16._12e_1 = (u32)cM_rndF(0x7FFF);
+        field_0x128[i].field_0x4.U32bits._12c_2 = cM_rndF(0x7FFF);
+        field_0x128[i].field_0x4.U8._12c_0 = i + 1;
+        field_0x128[i].field_0x0 = 0;
+    }
 }
 
 /* 8001A7B8-8001A7C4       .text mDoGaC_ComOpen__15mDoGaC_agbCom_cFv */
@@ -129,11 +134,13 @@ void mDoGaC_agbCom_c::mDoGaC_ComOpen() {
 void mDoGaC_agbCom_c::mDoGaC_ComClose() {
     field_0x4 = 1;
     field_0x2 = 0;
+#if VERSION > VERSION_DEMO
     field_0x10e = 0;
+#endif
 
-    for (int i = 0; i < field_0x10c; i++) {
-        field_0x110[i].field_0x4 = 9;
-        field_0x110[i].field_0x5 = 1;
+    for (int i = 0; i < mDataManagerCount; i++) {
+        mpDataManager[i].mStatus = 9;
+        mpDataManager[i].field_0x5 = 1;
     }
 }
 
@@ -152,10 +159,14 @@ void mDoGaC_agbCom_c::mDoGaC_ComStop() {
 /* 8001A858-8001A8B4       .text mDoGaC_GbaReboot__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_GbaReboot() {
     mDoGaC_ComStop();
-    u8 temp = field_0x0 = 0; // fakematch?
-    field_0x3 = 0;
-    field_0x12c.U32bits._12c_2 = cM_rndF(0x7FFF);
-    field_0x128 = temp;
+    mEnable = 0;
+    mReConnect = 0;
+
+    // !@bug This array is length 1, but the demo version accesses past the end of the array.
+    for (int i = 0; i < DEMO_SELECT(3, 1); i++) {
+        field_0x128[i].field_0x4.U32bits._12c_2 = cM_rndF(0x7FFF);
+        field_0x128[i].field_0x0 = 0;
+    }
 }
 
 /* 8001A8B4-8001A94C       .text mDoGaC_GbaReset__15mDoGaC_agbCom_cFv */
@@ -183,15 +194,15 @@ void mDoGaC_agbCom_c::mDoGaC_ComRestart() {
     field_0xa = 0;
     field_0xb = 0;
 
-    for (int i = 0; i < field_0x10c; i++) {
-        field_0x110[i].field_0x4 = 0;
-        field_0x110[i].field_0x5 = 0;
+    for (int i = 0; i < mDataManagerCount; i++) {
+        mpDataManager[i].mStatus = 0;
+        mpDataManager[i].field_0x5 = 0;
     }
 }
 
 /* 8001A9A4-8001AAD4       .text mDoGaC_Connect__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_Connect() {
-    if (field_0x0 != 0) {
+    if (mEnable != 0) {
         if (mDoRst::isReset()) {
             mDoGaC_ComStop();
             field_0x6 = 0;
@@ -246,12 +257,12 @@ void mDoGaC_agbCom_c::mDoGaC_ConnectWake() {
 
 /* 8001AAF8-8001AB4C       .text mDoGaC_GbaLink__15mDoGaC_agbCom_cFv */
 int mDoGaC_agbCom_c::mDoGaC_GbaLink() {
-    if (field_0x0 == 1 && field_0x2 == 3 && field_0x4 == 0) {
+    if (mEnable == 1 && field_0x2 == 3 && field_0x4 == 0) {
         return 1;
     }
 
 #if VERSION > VERSION_DEMO
-    if (field_0x128 == 1 && field_0x10e < 3) {
+    if (field_0x128[0].field_0x0 == 1 && field_0x10e < 3) {
         return 1;
     }
 #endif
@@ -278,7 +289,7 @@ int mDoGaC_agbCom_c::mDoGaC_SendDataSet(u32* param_0, int param_1, u8 param_2, u
     field_0xc[field_0x9].field_0x4 = param_1;
     field_0xc[field_0x9].field_0x8 = param_2;
     field_0xc[field_0x9].field_0xc = param_3;
-    field_0x110[param_2].field_0x4 = 2;
+    mpDataManager[param_2].mStatus = 2;
 
     field_0x9++;
     if (field_0x9 >= 16) {
@@ -293,8 +304,13 @@ int mDoGaC_agbCom_c::mDoGaC_SendDataSet(u32* param_0, int param_1, u8 param_2, u
 /* 8001AC14-8001AD48       .text mDoGaC_SendDataWrite__15mDoGaC_agbCom_cFv */
 void mDoGaC_agbCom_c::mDoGaC_SendDataWrite() {
     u8 var_r5 = 0;
-    while (field_0x10c > var_r5) {
-        if (field_0x110[var_r5].field_0x5 != 0) {
+    while (mDataManagerCount > var_r5) {
+#if VERSION == VERSION_DEMO
+        if (mpDataManager[var_r5].field_0x5 == 1)
+#else
+        if (mpDataManager[var_r5].field_0x5 != 0)
+#endif
+        {
             u8 temp_r0 = field_0x9 + 1;
             if (temp_r0 >= 16) {
                 temp_r0 = 0;
@@ -304,18 +320,23 @@ void mDoGaC_agbCom_c::mDoGaC_SendDataWrite() {
                 return;
             }
 
-            if (field_0x110[var_r5].field_0x4 == 0 || field_0x110[var_r5].field_0x4 == 1) {
-                if (field_0x110[var_r5].field_0x5 == 1) {
+            if (mpDataManager[var_r5].mStatus == 0 || mpDataManager[var_r5].mStatus == 1) {
+#if VERSION == VERSION_DEMO
+                field_0xc[field_0x9].field_0x0 = &field_0x11C;
+                field_0xc[field_0x9].field_0x4 = 4;
+#else
+                if (mpDataManager[var_r5].field_0x5 == 1) {
                     field_0xc[field_0x9].field_0x0 = &field_0x11C;
                     field_0xc[field_0x9].field_0x4 = 4;
                 } else {
                     field_0xc[field_0x9].field_0x0 = &field_0x120;
                     field_0xc[field_0x9].field_0x4 = 8;
                 }
+#endif
 
                 field_0xc[field_0x9].field_0x8 = var_r5;
                 field_0xc[field_0x9].field_0xc = 0;
-                field_0x110[var_r5].field_0x4 = 2;
+                mpDataManager[var_r5].mStatus = 2;
 
                 field_0x9++;
                 if (field_0x9 >= 16) {
@@ -323,7 +344,7 @@ void mDoGaC_agbCom_c::mDoGaC_SendDataWrite() {
                 }
 
                 field_0xb++;
-                field_0x110[var_r5].field_0x5 = 0;
+                mpDataManager[var_r5].field_0x5 = 0;
             }
         }
 
@@ -333,9 +354,9 @@ void mDoGaC_agbCom_c::mDoGaC_SendDataWrite() {
 
 /* 8001AD48-8001AD84       .text mDoGaC_SendEntry__15mDoGaC_agbCom_cFUcUl */
 int mDoGaC_agbCom_c::mDoGaC_SendEntry(u8 param_0, u32 param_1) {
-    if (field_0x110[param_0].field_0x5 == 0) {
+    if (mpDataManager[param_0].field_0x5 == 0) {
         field_0x11C = param_1;
-        field_0x110[param_0].field_0x5 = 1;
+        mpDataManager[param_0].field_0x5 = 1;
         return 1;
     }
 
@@ -344,7 +365,7 @@ int mDoGaC_agbCom_c::mDoGaC_SendEntry(u8 param_0, u32 param_1) {
 
 /* 8001AD84-8001ADB4       .text mDoGaC_SendStatusCheck__15mDoGaC_agbCom_cFUc */
 int mDoGaC_agbCom_c::mDoGaC_SendStatusCheck(u8 param_0) {
-    if (field_0x110[param_0].field_0x4 == 0 || field_0x110[param_0].field_0x4 == 1) {
+    if (mpDataManager[param_0].mStatus == 0 || mpDataManager[param_0].mStatus == 1) {
         return 1;
     }
 
@@ -353,7 +374,7 @@ int mDoGaC_agbCom_c::mDoGaC_SendStatusCheck(u8 param_0) {
 
 /* 8001ADB4-8001ADE4       .text mDoGaC_SendEndCheck__15mDoGaC_agbCom_cFUc */
 int mDoGaC_agbCom_c::mDoGaC_SendEndCheck(u8 param_0) {
-    if (field_0x110[param_0].field_0x4 == 4 || field_0x110[param_0].field_0x4 == 0) {
+    if (mpDataManager[param_0].mStatus == 4 || mpDataManager[param_0].mStatus == 0) {
         return 1;
     }
 
@@ -362,13 +383,13 @@ int mDoGaC_agbCom_c::mDoGaC_SendEndCheck(u8 param_0) {
 
 /* 8001ADE4-8001AE04       .text mDoGaC_RecvStatusCheck__15mDoGaC_agbCom_cFUc */
 BOOL mDoGaC_agbCom_c::mDoGaC_RecvStatusCheck(u8 param_0) {
-    return field_0x110[param_0].field_0x4 == 8 ? TRUE : FALSE;
+    return mpDataManager[param_0].mStatus == 8 ? TRUE : FALSE;
 }
 
 /* 8001AE04-8001AE44       .text mDoGaC_DataStatusReset__15mDoGaC_agbCom_cFUc */
 void mDoGaC_agbCom_c::mDoGaC_DataStatusReset(u8 param_0) {
-    if (field_0x110[param_0].field_0x4 == 8) {
-        field_0x110[param_0].field_0x4 = 0;
+    if (mpDataManager[param_0].mStatus == 8) {
+        mpDataManager[param_0].mStatus = 0;
         mDoGaC_StatusSendSet(param_0);
     }
 }
@@ -477,8 +498,8 @@ void mDoGaC_agbCom_c::mDoGaC_CodeExchange4() {
 #else
     if (!JUTGba::getManager()->resultGetStatus(mDoGaC_getPortNo(), sp8) && sp8[0] == (0x10 | 0x20)) {
 #endif
-        field_0x12c.U8._12c_0 = mDoGaC_getPortNo();
-        field_0x114 = BigLittleChange(field_0x12c.U32);
+        field_0x128[0].field_0x4.U8._12c_0 = mDoGaC_getPortNo();
+        field_0x114 = BigLittleChange(field_0x128[0].field_0x4.U32);
         JUTGba::getManager()->doWrite(mDoGaC_getPortNo(), (u8*)&field_0x114, ContextSend, NULL);
     } else {
         field_0x2 = 0;
@@ -490,11 +511,11 @@ void mDoGaC_agbCom_c::mDoGaC_ContextCheck() {
     u8 sp8[16];
     if (!JUTGba::getManager()->resultRead(mDoGaC_getPortNo(), sp8)) {
         u32 var_r0 = BigLittleChange(field_0x118);
-        if (var_r0 == field_0x12c.U32) {
-            if (field_0x128 == 1) {
-                field_0x3 = 1;
+        if (var_r0 == field_0x128[0].field_0x4.U32) {
+            if (field_0x128[0].field_0x0 == 1) {
+                mReConnect = 1;
             } else {
-                field_0x128 = 1;
+                field_0x128[0].field_0x0 = 1;
             }
 
             mDoGaC_ComOpen();
@@ -554,15 +575,15 @@ void mDoGaC_agbCom_c::mDoGaC_GbaWrite() {
             field_0x8 = 2;
             break;
         case 2: {
-            u8 temp_r3_2 = field_0x110[temp_r31->field_0x8].field_0x4;
+            u8 temp_r3_2 = mpDataManager[temp_r31->field_0x8].mStatus;
             if (temp_r3_2 == 2) {
-                field_0x110[temp_r31->field_0x8].field_0x4 = 3;
+                mpDataManager[temp_r31->field_0x8].mStatus = 3;
                 field_0x114 = BigLittleChange(3);
                 field_0x8 = 3;
             } else {
                 field_0x114 = BigLittleChange(temp_r3_2);
-                if (field_0x110[temp_r31->field_0x8].field_0x4 == 5) {
-                    field_0x110[temp_r31->field_0x8].field_0x4 = 6;
+                if (mpDataManager[temp_r31->field_0x8].mStatus == 5) {
+                    mpDataManager[temp_r31->field_0x8].mStatus = 6;
                 }
 
                 field_0xb--;
@@ -582,7 +603,7 @@ void mDoGaC_agbCom_c::mDoGaC_GbaWrite() {
             break;
         case 4:
             field_0x114 = BigLittleChange(temp_r31->field_0xc);
-            field_0x110[temp_r31->field_0x8].field_0x4 = 4;
+            mpDataManager[temp_r31->field_0x8].mStatus = 4;
 
             field_0xb--;
             field_0xa++;
@@ -644,20 +665,23 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
             break;
         }
         case 1: {
-            u32 temp_r0_2 = BigLittleChange(field_0x118);
+            u8 temp_r0_2 = BigLittleChange(field_0x118);
             data_type = temp_r0_2;
-            if ((temp_r0_2 & 0xFF) < 0x10) {
-                u8 temp = temp_r0_2 & 0xFF;
-                recv_p = (u32*)field_0x110[temp].field_0x0;
+#if VERSION == VERSION_DEMO
+            recv_p = (u32*)mpDataManager[temp_r0_2].mpData;
+#else
+            if (temp_r0_2 < 0x10) {
+                recv_p = (u32*)mpDataManager[temp_r0_2].mpData;
             } else {
                 recv_p = NULL;
             }
+#endif
             field_0x7 = 2;
             break;
         }
         case 2: {
             u32 temp_r0_3 = BigLittleChange(field_0x118);
-            field_0x110[data_type].field_0x4 = temp_r0_3;
+            mpDataManager[data_type].mStatus = temp_r0_3;
             if (temp_r0_3 == 7) {
                 field_0x7 = 3;
             } else {
@@ -670,7 +694,7 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
         }
         case 3: {
             u32 temp_r0_4 = (BigLittleChange(field_0x118) + 3) & ~3;
-            end_p = (u32*)((u8*)field_0x110[data_type].field_0x0 + temp_r0_4);
+            end_p = (u32*)((u8*)mpDataManager[data_type].mpData + temp_r0_4);
             data_sum = 0;
             if (recv_p == NULL) {
                 field_0x7 = 6;
@@ -682,9 +706,9 @@ void mDoGaC_agbCom_c::mDoGaC_ReadResult() {
         case 4:
             check_sum = BigLittleChange(field_0x118);
             if (data_sum == check_sum) {
-                field_0x110[data_type].field_0x4 = 8;
+                mpDataManager[data_type].mStatus = 8;
             } else {
-                field_0x110[data_type].field_0x4 = 9;
+                mpDataManager[data_type].mStatus = 9;
                 mDoGaC_StatusSendSet(data_type);
                 field_0x4 = 1;
             }

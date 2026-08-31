@@ -244,4 +244,8 @@ inline JKRArchive* JKRMountArchive(const char* path, JKRArchive::EMountMode moun
     return JKRArchive::mount(path, mountMode, heap, mountDirection);
 }
 
+inline void JKRUnmountArchive(JKRArchive* arc) {
+    arc->unmount();
+}
+
 #endif

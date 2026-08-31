@@ -1,12 +1,12 @@
 #ifndef M_DO_GBA_COM_H
 #define M_DO_GBA_COM_H
 
-#include "dolphin/types.h"
+#include "global.h"
 
 class mDoGaC_DataManag_c {
 public:
-    /* 0x0 */ u32 field_0x0;
-    /* 0x4 */ u8 field_0x4;
+    /* 0x0 */ void* mpData;
+    /* 0x4 */ u8 mStatus;
     /* 0x5 */ u8 field_0x5;
 };
 
@@ -54,19 +54,20 @@ public:
     void mDoGaC_GbaRead();
     void mDoGaC_ReadResult();
 
+    mDoGaC_agbCom_c() {}
     ~mDoGaC_agbCom_c() {}
 
-    u8 getEnable() { return field_0x0; }
-    void onEnable() { field_0x0 = 1; }
+    u8 getEnable() { return mEnable; }
+    void onEnable() { mEnable = 1; }
+    u8 getReConnect() { return mReConnect; }
     u8 getPortNo() { return mPortNo; }
     void setPortNo(u8 port) { mPortNo = port; }
-    u8 getDataStatus(u8 param_0) { return field_0x110[param_0].field_0x4; }
-    void getReConnect() {} // TODO
+    u8 getDataStatus(u8 param_0) { return mpDataManager[param_0].mStatus; }
 
-    /* 0x000 */ u8 field_0x0;
+    /* 0x000 */ u8 mEnable;
     /* 0x001 */ u8 field_0x1;
     /* 0x002 */ u8 field_0x2;
-    /* 0x003 */ u8 field_0x3;
+    /* 0x003 */ u8 mReConnect;
     /* 0x004 */ u8 field_0x4;
     /* 0x005 */ u8 field_0x5;
     /* 0x006 */ u8 field_0x6;
@@ -76,34 +77,37 @@ public:
     /* 0x00A */ u8 field_0xa;
     /* 0x00B */ u8 field_0xb;
     /* 0x00C */ mDoGaC_unk_data field_0xc[16];
-    /* 0x10C */ u8 field_0x10c;
+    /* 0x10C */ u8 mDataManagerCount;
     /* 0x10D */ u8 mPortNo;
     /* 0x10E */ u8 field_0x10e;
     /* 0x10F */ u8 field_0x10F[0x110 - 0x10F];
-    /* 0x110 */ mDoGaC_DataManag_c* field_0x110;
+    /* 0x110 */ mDoGaC_DataManag_c* mpDataManager;
     /* 0x114 */ u32 field_0x114;
     /* 0x118 */ u32 field_0x118;
     /* 0x11C */ u32 field_0x11C;
+#if VERSION > VERSION_DEMO
     /* 0x120 */ u32 field_0x120;
     /* 0x124 */ u8 field_0x124[0x128 - 0x124];
-    /* 0x128 */ u8 field_0x128;
-    /* 0x129 */ u8 field_0x129[0x12C - 0x129];
-    union {
-        /* 0x12C */ u32 U32;
-        struct {
-            /* 0x12C */ u32 _12c_0 : 2;
-            /* 0x12C */ u32 _12c_2 : 15;
-        } U32bits;
-        struct {
-            /* 0x12C */ u16 _12c_0 : 2;
-            /* 0x12C */ u16 _12c_2 : 6;
-        } U8;
-        struct {
-            /* 0x12C */ u16 _12c;
-            /* 0x12E */ u16 _12e_0 : 1;
-            /* 0x12E */ u16 _12e_1 : 15;
-        } U16;
-    } field_0x12c;
+#endif
+    struct {
+        u8 field_0x0;
+        union {
+            u32 U32;
+            struct {
+                u32 _12c_0 : 2;
+                u32 _12c_2 : 15;
+            } U32bits;
+            struct {
+                u8 _12c_0 : 2;
+                u8 _12c_2 : 6;
+            } U8;
+            struct {
+                u16 _12c;
+                u16 _12e_0 : 1;
+                u16 _12e_1 : 15;
+            } U16;
+        } field_0x4;
+    } field_0x128[1];
 };
 
 extern mDoGaC_agbCom_c g_mDoGaC_gbaCom;
@@ -111,8 +115,8 @@ extern mDoGaC_DataManag_c TestDataManager[16];
 
 u32 BigLittleChange(u32);
 
-inline void mDoGaC_Initial(mDoGaC_DataManag_c* param_0, u8 param_1) {
-    g_mDoGaC_gbaCom.mDoGaC_Initial(param_0, param_1);
+inline void mDoGaC_Initial(mDoGaC_DataManag_c* i_dataMngP, u8 i_dataMngCount) {
+    g_mDoGaC_gbaCom.mDoGaC_Initial(i_dataMngP, i_dataMngCount);
 }
 
 inline int mDoGaC_GbaLink() {
@@ -183,8 +187,8 @@ inline void mDoGaC_ConnectSleep() {
     g_mDoGaC_gbaCom.mDoGaC_ConnectSleep();
 }
 
-inline void mDoGaC_getReConnect() {
-    g_mDoGaC_gbaCom.getReConnect();
+inline u8 mDoGaC_getReConnect() {
+    return g_mDoGaC_gbaCom.getReConnect();
 }
 
 #endif /* M_DO_GBA_COM_H */

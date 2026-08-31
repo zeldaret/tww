@@ -85,7 +85,7 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
     } else {
         slot = dComIfGs_getDataNum() * 3 + 3;
         for (i = 0; i < 3; i++) {
-            if (dComIfGp_isPictureFlag(i)) {
+            if (dComIfGp_isPictureFlag(i) != FALSE) {
                 memset(sTmpBuf, 0, sizeof(card_pictdata));
                 JKRAramToMainRam(dComIfGp_getPictureBoxData(i), sTmpBuf, sizeof(card_pictdata));
                 ret = CARDWrite(card, sTmpBuf, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
@@ -238,7 +238,7 @@ void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
     ResTIMG* icon = (ResTIMG*)arc->getResource("ipl_icon1.bti");
     memcpy(header->banner, ((char*)banner) + banner->imageOffset, 0xc00 + banner->numColors * 2);
     memcpy(header->icon, ((char*)icon) + icon->imageOffset, 0x400 + icon->numColors * 2);
-    arc->unmount();
+    JKRUnmountArchive(arc);
     delete cmd;
 }
 

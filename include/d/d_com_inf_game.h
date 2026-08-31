@@ -635,7 +635,7 @@ public:
 
     JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
     void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
-    bool isPictureFlag(u8 i) { return mPictureFlag & (u8)(1 << i); }
+    BOOL isPictureFlag(u8 i) { return (mPictureFlag & (u8)(1 << i)) ? TRUE : FALSE; }
     void onPictureFlag(u8 i) { mPictureFlag |= (u8)(1 << i); }
     void offPictureFlag(u8 i) { mPictureFlag &= ~(u8)(1 << i); }
     u8 getPictureFormat() { return mPictureFormat; }
@@ -3263,7 +3263,7 @@ inline void dComIfGp_setPictureBoxData(JKRAramBlock* aramBlock, int i) {
     g_dComIfG_gameInfo.play.setPictureBoxData(aramBlock, i);
 }
 
-inline bool dComIfGp_isPictureFlag(u8 i) {
+inline BOOL dComIfGp_isPictureFlag(u8 i) {
     return g_dComIfG_gameInfo.play.isPictureFlag(i);
 }
 
