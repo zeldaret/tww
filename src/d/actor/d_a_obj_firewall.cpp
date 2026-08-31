@@ -86,8 +86,21 @@ static const char* l_ev_name_table[] = {
 };
 }
 #if VERSION == VERSION_DEMO
-static const char unused4054[] = "Dm\x80";
-static const char unused4055[] = "ﾅﾚﾀ";
+daObjFirewall_HIO_c::daObjFirewall_HIO_c() {
+    m0 = -1;
+    m4 = 950.0f;
+    m8 = -7000.0f;
+    mC = 1000.0f;
+    m14 = 10000.0f;
+    m18 = 200.0f;
+    m1C = 300.0f;
+    m20 = 1.0f;
+    m24 = 1.0f;
+    m34 = 0;
+    m35 = 0;
+    m36 = 0;
+    m37 = 0;
+}
 #endif
 /* 00000078-000000EC       .text init_mtx__15daObjFirewall_cFv */
 void daObjFirewall_c::init_mtx() {
@@ -178,9 +191,6 @@ void daObjFirewall_c::registCollisionTable() {
         dComIfG_Ccsp()->Set(&mCyl);
     }
 }
-#if VERSION == VERSION_DEMO
-static const f32 unused4058[] = {200.0f,300.0f};
-#endif
 /* 000005A4-00000794       .text setPointLight__15daObjFirewall_cFv */
 void daObjFirewall_c::setPointLight() {
 
