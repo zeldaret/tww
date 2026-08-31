@@ -332,17 +332,10 @@ f64 TFunctionValue_composite::composite_index(const JGadget::TVector_pointer<TFu
     return pFront->getValue(param_3);
 }
 
-// TODO: remove when TContainerEnumerator_const is generic enough
-template <typename T>
-struct TContainerEnumerator_const_TVector : public JGadget::TEnumerator<const T*> {
-    inline TContainerEnumerator_const_TVector(JGadget::TVector_pointer<T> const& param_1)
-        : JGadget::TEnumerator<const T*>(param_1.begin(), param_1.end()) {}
-};
-
 /* 80271A04-80271A70       .text composite_parameter__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
 f64 TFunctionValue_composite::composite_parameter(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
     f64 dVar4 = param_3 - param_2.get_value();
-    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    JGadget::TContainerEnumerator_const<JGadget::TVector_pointer<TFunctionValue*> > aTStack_18(param_1);
     while (aTStack_18) {
         TFunctionValue* const* ppiVar3 = *aTStack_18;
         TFunctionValue* piVar3 = *ppiVar3;
@@ -354,7 +347,7 @@ f64 TFunctionValue_composite::composite_parameter(const JGadget::TVector_pointer
 /* 80271A70-80271AF8       .text composite_add__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
 f64 TFunctionValue_composite::composite_add(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
     f64 dVar4 = param_2.get_value();
-    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    JGadget::TContainerEnumerator_const<JGadget::TVector_pointer<TFunctionValue*> > aTStack_18(param_1);
     while (aTStack_18) {
         TFunctionValue* const* ppiVar3 = *aTStack_18;
         TFunctionValue* piVar3 = *ppiVar3;
@@ -369,7 +362,7 @@ f64 TFunctionValue_composite::composite_subtract(const JGadget::TVector_pointer<
     if (size == 0) {
         return 0.0;
     }
-    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    JGadget::TContainerEnumerator_const<JGadget::TVector_pointer<TFunctionValue*> > aTStack_18(param_1);
     TFunctionValue* const* local_148 = *aTStack_18;
     TFunctionValue* pFront = *local_148;
     // JUT_ASSERT(688, pFront!=0);
@@ -386,7 +379,7 @@ f64 TFunctionValue_composite::composite_subtract(const JGadget::TVector_pointer<
 /* 80271BE8-80271C70       .text composite_multiply__Q27JStudio24TFunctionValue_compositeFRCQ27JGadget44TVector_pointer<PQ27JStudio14TFunctionValue>RCQ37JStudio24TFunctionValue_composite5TDatad */
 f64 TFunctionValue_composite::composite_multiply(const JGadget::TVector_pointer<TFunctionValue*>& param_1, const TFunctionValue_composite::TData& param_2, f64 param_3) {
     f64 dVar4 = param_2.get_value();
-    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    JGadget::TContainerEnumerator_const<JGadget::TVector_pointer<TFunctionValue*> > aTStack_18(param_1);
     while (aTStack_18) {
         TFunctionValue* const* ppiVar3 = *aTStack_18;
         TFunctionValue* piVar3 = *ppiVar3;
@@ -401,7 +394,7 @@ f64 TFunctionValue_composite::composite_divide(const JGadget::TVector_pointer<TF
     if (size == 0) {
         return 0.0;
     }
-    TContainerEnumerator_const_TVector<TFunctionValue*> aTStack_18(param_1);
+    JGadget::TContainerEnumerator_const<JGadget::TVector_pointer<TFunctionValue*> > aTStack_18(param_1);
     TFunctionValue* const* local_148 = *aTStack_18;
     TFunctionValue* pFront = *local_148;
     // JUT_ASSERT(724, pFront!=0);

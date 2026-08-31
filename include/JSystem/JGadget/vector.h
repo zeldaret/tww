@@ -15,6 +15,9 @@ typedef u32 (*ExtendFunc)(u32, u32, u32);
 
 template <typename T, class Allocator = JGadget::TAllocator<T> /***/>
 struct TVector {
+    typedef T* iterator;
+    typedef const T* const_iterator;
+
     struct TDestructed_deallocate_ {
         TDestructed_deallocate_(JGadget::TAllocator<T>& alloc, T* pointer)
         {
@@ -244,6 +247,9 @@ struct TVector_pointer_void : public TVector<void*, TAllocator<void*> > {
 
 template <typename T>
 struct TVector_pointer : public TVector_pointer_void {
+    typedef T* iterator;
+    typedef const T* const_iterator;
+
     TVector_pointer(const TAllocator<void*>& allocator)
         : TVector_pointer_void(allocator)
     {
