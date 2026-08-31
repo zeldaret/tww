@@ -6,6 +6,8 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
+#include "f_op/f_op_camera_mng.h"
+#include "m_Do/m_Do_lib.h"
 #include "dolphin/types.h"
 #include "stdarg.h"
 #include "string.h"
@@ -13,6 +15,14 @@
 namespace {
 
 bool lineCollisionCheck(cXyz, cXyz, fopAc_ac_c*, fopAc_ac_c*);
+
+inline int get_camera_id(camera_class* i_camera) {
+    return fopCamM_GetParam(i_camera);
+}
+
+inline dDlst_window_c* get_window(camera_class* i_camera) {
+    return dComIfGp_getWindow(dComIfGp_getCameraWinID(get_camera_id(i_camera)));
+}
 
 inline dStage_Event_dt_c* firstMapData(int i_id) {
     if (i_id == -1) {
@@ -31,6 +41,21 @@ inline dStage_Event_dt_c* firstMapData(int i_id) {
 inline dStage_Event_dt_c* nextMapData(dStage_Event_dt_c* i_eventDt) {
     return dComIfGp_event_nextStageEventDt(i_eventDt);
 }
+
+struct PossessedWork {
+    /* 0x378 */ int mState;
+    /* 0x37C */ int mType;
+    /* 0x380 */ int mTimer;
+    /* 0x384 */ int mFrames;
+    /* 0x388 */ f32 mRadius;
+    /* 0x38C */ cSAngle mLatitude;
+    /* 0x38E */ cSAngle mLongitude;
+    /* 0x390 */ f32 mFovy;
+    /* 0x394 */ f32 mCushion;
+    /* 0x398 */ int mBlure;
+    /* 0x39C */ fopAc_ac_c* mTarget;
+    /* 0x3A0 */ cSGlobe mGlobe;
+};
 
 struct GetItemWork {
     /* 0x378 */ int mState;
@@ -1038,7 +1063,116 @@ bool dCamera_c::getItemEvCamera() {
 
 /* 800BC364-800BC9D8       .text possessedEvCamera__9dCamera_cFv */
 bool dCamera_c::possessedEvCamera() {
-    /* Nonmatching */
+    /* Nonmatching - @stringBase0 offsets only, resolves once the rest of the TU is written */
+    PossessedWork* w = (PossessedWork*)&mWork;
+    bool ret = false;
+
+    if (m11C == 0) {
+        w->mState = 0;
+    }
+
+    switch (w->mState) {
+    case 0:
+    default: {
+        fopAc_ac_c* target = getEvActor("Target", "@PLAYER");
+
+        w->mTarget = target;
+
+        if (target == NULL) {
+            return true;
+        }
+
+        f32 angle;
+
+        getEvIntData(&w->mType, "Type", 0);
+        getEvIntData(&w->mTimer, "Timer", 0xA);
+        getEvFloatData(&w->mRadius, "Radius", 60.0f);
+        getEvFloatData(&w->mCushion, "Cushion", 1.0f);
+        getEvFloatData(&angle, "Latitude", -5.0f);
+        w->mLatitude.Val(angle);
+        getEvFloatData(&angle, "Longitude", 0.0f);
+        w->mLongitude.Val(angle);
+        getEvFloatData(&w->mFovy, "Fovy", 45.0f);
+        getEvIntData(&w->mBlure, "Blure", 0);
+
+        if (w->mType == 0) {
+            w->mGlobe.Val(w->mRadius, w->mLatitude, w->mLongitude + directionOf(w->mTarget));
+            m0A4[1].m00.mCenter = mViewCache.mCenter;
+            m0A4[1].m00.mEye = mViewCache.mEye;
+            m0A4[1].m00.mFovY = mViewCache.mFovy;
+            m0A4[1].m00.mBank = mViewCache.mBank;
+            m0A4[1].m00.m1E = 2;
+        } else {
+            mViewCache.mCenter = eyePos(w->mTarget);
+            w->mGlobe.Val(m0A4[1].m00.mEye - m0A4[1].m00.mCenter);
+            mViewCache.mDirection.Val(w->mRadius, w->mLatitude,
+                                      w->mLongitude + directionOf(w->mTarget));
+            mViewCache.mEye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+            mViewCache.mFovy = w->mFovy;
+        }
+
+        w->mState = 1;
+        w->mFrames = w->mTimer;
+
+        switch (w->mBlure) {
+        case 1:
+            ResetBlure(1);
+            SetBlurePositionType(0xB);
+            SetBlureTimer(w->mTimer);
+            SetBlureAlpha(0.5f);
+            dComIfGp_getVibration().StartShock(1, 0x20, cXyz(0.0f, 1.0f, 0.0f));
+            break;
+        case 2:
+            ResetBlure(0);
+            SetBlurePositionType(0xB);
+            SetBlureTimer(w->mTimer);
+            SetBlureAlpha(0.63000005f);
+            SetBlureScale(0.99f);
+            dComIfGp_getVibration().StartShock(1, 0x20, cXyz(0.0f, 1.0f, 0.0f));
+            break;
+        }
+        break;
+    }
+    case 1: {
+        f32 ratio = 1.0f / (f32)w->mFrames;
+
+        mViewCache.mCenter += (eyePos(w->mTarget) - mViewCache.mCenter) * ratio;
+        mViewCache.mDirection.R(mViewCache.mDirection.R() +
+                                (w->mGlobe.R() - mViewCache.mDirection.R()) * ratio);
+        mViewCache.mDirection.U(mViewCache.mDirection.V() +
+                                (w->mGlobe.V() - mViewCache.mDirection.V()) * ratio);
+        mViewCache.mDirection.V(mViewCache.mDirection.U() +
+                                (w->mGlobe.U() - mViewCache.mDirection.U()) * ratio);
+        cXyz eye = mViewCache.mCenter + mViewCache.mDirection.Xyz();
+
+        mViewCache.mEye += (eye - mViewCache.mEye) * w->mCushion;
+        mViewCache.mFovy += (w->mFovy - mViewCache.mFovy) * ratio;
+
+        if (w->mBlure == 1) {
+            scissor_class* scissor = get_window(mpCamera)->getScissor();
+            cXyz eye = eyePos(w->mTarget);
+            cXyz screen;
+
+            mDoLib_project(&eye, &screen);
+            SetBlurePosition(screen.x / scissor->mWidth, screen.y / scissor->mHeight, 0.0f);
+            SetBlureAlpha(0.5f + 0.7f * ratio);
+            SetBlureScale(1.1f + 0.09f * ratio, 0.98f - 0.18f * ratio, 0.0f);
+        }
+
+        w->mFrames--;
+
+        if (w->mFrames <= 0) {
+            w->mState = 0x63;
+        }
+        break;
+    }
+    case 0x63:
+        ret = true;
+        SkipSmoother();
+        break;
+    }
+
+    return ret;
 }
 
 /* 800BC9D8-800BCDA0       .text fixedFramesEvCamera__9dCamera_cFv */
