@@ -581,7 +581,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_type.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_cam_style.cpp"),
             Object(Matching,    "d/d_cam_type2.cpp"),
-            Object(NonMatching, "d/d_ev_camera.cpp"),
+            Object(MatchingFor("GZLP01"), "d/d_ev_camera.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_wood.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_flower.cpp"),
             Object(Matching,    "d/d_item_data.cpp"),

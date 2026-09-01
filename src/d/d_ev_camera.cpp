@@ -2515,6 +2515,9 @@ bool dCamera_c::gameOverEvCamera() {
         cXyz(85.0f, -50.0f, 165.0f), cXyz(72.0f, -64.0f, 60.0f), cXyz(165.0f, -20.0f, 45.0f),
         cXyz(85.0f, 165.0f, 40.0f),  cXyz(10.0f, -70.0f, 110.0f),
     };
+#if VERSION == VERSION_DEMO
+    int eye_gap_num = 5;
+#endif
     cXyz down_ctr_gap(0.0f, -40.0f, -35.0f);
     cXyz down_eye_gap(0.0f, 170.0f, 115.0f);
     cXyz center;
@@ -2559,7 +2562,7 @@ bool dCamera_c::gameOverEvCamera() {
 
         center = relationalPos(mpPlayerActor, &ctr_gap);
 
-        for (i = 0; i < 5; i++) {
+        for (i = 0; i < DEMO_SELECT(eye_gap_num, 5); i++) {
             if (w->mFlip != 0) {
                 eye_gap[i].x = -eye_gap[i].x;
             }
@@ -2714,6 +2717,9 @@ bool dCamera_c::tactEvCamera() {
 
     cXyz center_ofs(0.426f, -13.479f, 6.372f);
     cXyz eye_ofs(31.809f, -51.14f, 195.776f);
+#if VERSION == VERSION_DEMO
+    f32 fovy = 55.0f;
+#endif
 
     if (w->m378 != 1) {
         w->m378 = 1;
@@ -2732,7 +2738,7 @@ bool dCamera_c::tactEvCamera() {
         mViewCache.mEye = relationalPos(mpPlayerActor, &eye_ofs);
     }
 
-    mViewCache.mFovy = 55.0f;
+    mViewCache.mFovy = DEMO_SELECT(fovy, 55.0f);
     w->m37C++;
     return true;
 }
@@ -3032,6 +3038,12 @@ bool dCamera_c::turnToActorEvCamera() {
 /* 800B9FB0-800BA688       .text tornadoWarpEvCamera__9dCamera_cFv */
 bool dCamera_c::tornadoWarpEvCamera() {
     TornadoWarpWork* w = (TornadoWarpWork*)&mWork;
+#if VERSION == VERSION_DEMO
+    int timer1 = 0x64;
+    int timer2 = 0xC8;
+    f32 fovy1 = 70.0f;
+    f32 fovy2 = 90.0f;
+#endif
 
     if (m11C == 0) {
         w->mState = 0;
@@ -3056,7 +3068,7 @@ bool dCamera_c::tornadoWarpEvCamera() {
     default: {
         w->mShip = fopAcM_SearchByName(fpcNm_SHIP_e);
         w->mState = 1;
-        w->mTimer = 0x64;
+        w->mTimer = DEMO_SELECT(timer1, 0x64);
 
         cXyz base(-180000.0f, 750.0f, -200000.0f);
 
@@ -3105,12 +3117,24 @@ bool dCamera_c::tornadoWarpEvCamera() {
         eye = mViewCache.mEye + (w->mWarpPos - mViewCache.mEye) * ratio;
 
         mViewCache.mEye += (eye - mViewCache.mEye) * 0.15f;
+#if VERSION == VERSION_DEMO
+        f32 fovy = mViewCache.mFovy + ratio * (fovy1 - mViewCache.mFovy);
+
+        mViewCache.mFovy += (fovy - mViewCache.mFovy) * 0.15f;
+#else
         mViewCache.mFovy +=
             ((mViewCache.mFovy + ratio * (70.0f - mViewCache.mFovy)) - mViewCache.mFovy) * 0.15f;
+#endif
         mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
         f32 shake = cM_rndFX(6.0f * ratio);
 
+#if VERSION == VERSION_DEMO
+        s16 bank = DEG2S(shake);
+
+        mViewCache.mBank += (bank - mViewCache.mBank) * 0.15f;
+#else
         mViewCache.mBank += (DEG2S(shake) - mViewCache.mBank) * 0.15f;
+#endif
         setFlag(0x400);
 
         if (--w->mTimer != 0) {
@@ -3118,7 +3142,7 @@ bool dCamera_c::tornadoWarpEvCamera() {
         }
 
         w->mState = 2;
-        w->mTimer = 0xC8;
+        w->mTimer = DEMO_SELECT(timer2, 0xC8);
     }
         // fall through
     case 2: {
@@ -3128,7 +3152,7 @@ bool dCamera_c::tornadoWarpEvCamera() {
         eye = w->mWarpPos;
         eye.y = attentionPos(mpPlayerActor).y;
         mViewCache.mEye += (eye - mViewCache.mEye) * 0.05f;
-        mViewCache.mFovy += (90.0f - mViewCache.mFovy) * 0.05f;
+        mViewCache.mFovy += (DEMO_SELECT(fovy2, 90.0f) - mViewCache.mFovy) * 0.05f;
         mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
         mViewCache.mBank -= mViewCache.mBank * 0.02f;
         setFlag(0x400);
@@ -3506,6 +3530,18 @@ bool dCamera_c::useItem1EvCamera() {
 /* 800BBD88-800BC364       .text getItemEvCamera__9dCamera_cFv */
 bool dCamera_c::getItemEvCamera() {
     cXyz ctr_gap(-0.095f, 0.428f, -7.177f);
+#if VERSION == VERSION_DEMO
+    Vec eye_gap_l[2] = {
+        {0.17f, 97.0f, -57.78f},
+        {-28.844f, 99.996f, -41.073f},
+    };
+    cXyz eye_gap_r[2] = {
+        cXyz(0.17f, 97.0f, -57.78f),
+        cXyz(35.098f, 100.791f, -31.185f),
+    };
+    int eye_gap_num = 2;
+    f32 fovy = 79.0f;
+#else
     Vec eye_gap_l[4] = {
         {0.17f, 97.0f, -57.78f},
         {-28.844f, 99.996f, -41.073f},
@@ -3518,6 +3554,7 @@ bool dCamera_c::getItemEvCamera() {
         cXyz(-28.844f, 99.996f, -41.073f),
         cXyz(0.17f, 97.0f, -57.78f),
     };
+#endif
 
     GetItemWork* w = (GetItemWork*)&mWork;
     int i;
@@ -3550,7 +3587,7 @@ bool dCamera_c::getItemEvCamera() {
 
         cXyz eye;
 
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < DEMO_SELECT(eye_gap_num, 4); i++) {
             eye = relationalPos(mpPlayerActor, &eye_gap_r[i]);
 
             if (eye.y < m368 + positionOf(mpPlayerActor).y) {
@@ -3570,7 +3607,7 @@ bool dCamera_c::getItemEvCamera() {
         }
 
         w->mGlobe.Val(eye - w->mCenter);
-        w->mFovy = 79.0f;
+        w->mFovy = DEMO_SELECT(fovy, 79.0f);
         w->mDuration = w->mTimer2;
         w->mState = 0xB;
     }
