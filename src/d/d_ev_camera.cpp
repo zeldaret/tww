@@ -692,7 +692,13 @@ bool dCamera_c::fixedFrameEvCamera() {
             ctr_gap.x = -ctr_gap.x;
             pos = relationalPos(w->mRelActor, &ctr_gap);
 
+#if VERSION == VERSION_DEMO
+            f32 far_dist = cXyz(pos - positionOf(mpPlayerActor)).abs();
+
+            if (near_dist > far_dist) {
+#else
             if (near_dist > cXyz(pos - positionOf(mpPlayerActor)).abs()) {
+#endif
                 ctr_gap.x = -ctr_gap.x;
             }
 
@@ -740,7 +746,13 @@ bool dCamera_c::fixedFrameEvCamera() {
             eye_gap.x = -eye_gap.x;
             pos = relationalPos(w->mRelActor, &eye_gap);
 
+#if VERSION == VERSION_DEMO
+            f32 far_dist = cXyz(pos - positionOf(mpPlayerActor)).abs();
+
+            if (near_dist > far_dist) {
+#else
             if (near_dist > cXyz(pos - positionOf(mpPlayerActor)).abs()) {
+#endif
                 eye_gap.x = -eye_gap.x;
             }
 
@@ -885,7 +897,13 @@ bool dCamera_c::rollingEvCamera() {
                 w->mCtrGap.x = -w->mCtrGap.x;
                 pos = relationalPos(w->mRelActor, &w->mCtrGap);
 
+#if VERSION == VERSION_DEMO
+                f32 far_dist = cXyz(pos - positionOf(mpPlayerActor)).abs();
+
+                if (near_dist > far_dist) {
+#else
                 if (near_dist > cXyz(pos - positionOf(mpPlayerActor)).abs()) {
+#endif
                     w->mCtrGap.x = -w->mCtrGap.x;
                 }
 
@@ -928,7 +946,13 @@ bool dCamera_c::rollingEvCamera() {
             w->mEyeGap.x = -w->mEyeGap.x;
             pos = relationalPos(w->mRelActor, &w->mEyeGap);
 
+#if VERSION == VERSION_DEMO
+            f32 far_dist = cXyz(pos - positionOf(mpPlayerActor)).abs();
+
+            if (near_dist > far_dist) {
+#else
             if (near_dist > cXyz(pos - positionOf(mpPlayerActor)).abs()) {
+#endif
                 w->mEyeGap.x = -w->mEyeGap.x;
             }
 
@@ -962,7 +986,13 @@ bool dCamera_c::rollingEvCamera() {
             w->mCtrGap.x = -w->mCtrGap.x;
             pos = relationalPos(w->mRelActor, &w->mCtrGap);
 
+#if VERSION == VERSION_DEMO
+            f32 far_dist = cXyz(pos - positionOf(mpPlayerActor)).abs();
+
+            if (near_dist > far_dist) {
+#else
             if (near_dist > cXyz(pos - positionOf(mpPlayerActor)).abs()) {
+#endif
                 w->mCtrGap.x = -w->mCtrGap.x;
             }
 
@@ -1352,13 +1382,25 @@ bool dCamera_c::uniformTransEvCamera() {
         mViewCache.mEye += (eye - mViewCache.mEye) * w->mCushion;
     }
 
+#if VERSION == VERSION_DEMO
+    f32 fovy = w->mStartFovy + ratio * (w->mFovy - w->mStartFovy);
+
+    mViewCache.mFovy += w->mCushion * (fovy - mViewCache.mFovy);
+#else
     mViewCache.mFovy +=
         w->mCushion * (w->mStartFovy + ratio * (w->mFovy - w->mStartFovy) - mViewCache.mFovy);
+#endif
 
     if (w->mHasBank) {
+#if VERSION == VERSION_DEMO
+        f32 bank = w->mStartBank + ratio * (w->mBank - w->mStartBank);
+
+        mViewCache.mBank += (cSAngle(bank) - mViewCache.mBank) * w->mCushion;
+#else
         mViewCache.mBank +=
             (cSAngle(w->mStartBank + ratio * (w->mBank - w->mStartBank)) - mViewCache.mBank) *
             w->mCushion;
+#endif
         setFlag(0x400);
     }
 
@@ -1654,14 +1696,26 @@ bool dCamera_c::uniformBrakeEvCamera() {
         mViewCache.mEye += (eye - mViewCache.mEye) * w->mCushion;
     }
 
+#if VERSION == VERSION_DEMO
+    f32 fovy = w->mStartFovy + ratio * (w->mFovy - w->mStartFovy);
+
+    mViewCache.mFovy += w->mCushion * (fovy - mViewCache.mFovy);
+#else
     mViewCache.mFovy +=
         w->mCushion * (w->mStartFovy + ratio * (w->mFovy - w->mStartFovy) - mViewCache.mFovy);
+#endif
 
     if (w->mHasBank) {
         f32 bank = w->mStartBank;
 
         bank += ratio * (w->mBank - bank);
+#if VERSION == VERSION_DEMO
+        s16 bank_angle = DEG2S(bank);
+
+        mViewCache.mBank += (bank_angle - mViewCache.mBank) * w->mCushion;
+#else
         mViewCache.mBank += (DEG2S(bank) - mViewCache.mBank) * w->mCushion;
+#endif
         setFlag(0x400);
     }
 
@@ -1957,14 +2011,26 @@ bool dCamera_c::uniformAcceleEvCamera() {
         mViewCache.mEye += (eye - mViewCache.mEye) * w->mCushion;
     }
 
+#if VERSION == VERSION_DEMO
+    f32 fovy = w->mStartFovy + ratio * (w->mFovy - w->mStartFovy);
+
+    mViewCache.mFovy += w->mCushion * (fovy - mViewCache.mFovy);
+#else
     mViewCache.mFovy +=
         w->mCushion * (w->mStartFovy + ratio * (w->mFovy - w->mStartFovy) - mViewCache.mFovy);
+#endif
 
     if (w->mHasBank) {
         f32 bank = w->mStartBank;
 
         bank += ratio * (w->mBank - bank);
+#if VERSION == VERSION_DEMO
+        s16 bank_angle = DEG2S(bank);
+
+        mViewCache.mBank += (bank_angle - mViewCache.mBank) * w->mCushion;
+#else
         mViewCache.mBank += (DEG2S(bank) - mViewCache.mBank) * w->mCushion;
+#endif
         setFlag(0x400);
     }
 
@@ -2074,7 +2140,11 @@ bool dCamera_c::watchActorEvCamera() {
 
             cSAngle step;
 
+#if VERSION == VERSION_DEMO
+            if (!(front < cSAngle::_0)) {
+#else
             if (front >= cSAngle::_0) {
+#endif
                 step.Val(-8.0f);
             } else {
                 step.Val(8.0f);
@@ -2149,7 +2219,11 @@ bool dCamera_c::watchActorEvCamera() {
 
             cSAngle step;
 
+#if VERSION == VERSION_DEMO
+            if (!(front < cSAngle::_0)) {
+#else
             if (front >= cSAngle::_0) {
+#endif
                 step.Val(-8.0f);
             } else {
                 step.Val(8.0f);
@@ -2224,7 +2298,11 @@ bool dCamera_c::watchActorEvCamera() {
 
             cSAngle step;
 
+#if VERSION == VERSION_DEMO
+            if (!(front < cSAngle::_0)) {
+#else
             if (front >= cSAngle::_0) {
+#endif
                 step.Val(-8.0f);
             } else {
                 step.Val(8.0f);
@@ -2435,7 +2513,7 @@ bool dCamera_c::maptoolIdEvCamera() {
     }
 
     if (mEventData.field_0xcc == NULL) {
-        return true;
+        return DEMO_SELECT(false, true);
     }
 
     u8 maptool_id;
@@ -2761,8 +2839,15 @@ bool dCamera_c::windDirectionEvCamera() {
     if (m11C == 0) {
         w->mState = 0;
         w->mTimer = 0;
+#if VERSION == VERSION_DEMO
+        dScnKy_env_light_c& env_light = g_env_light;
+
+        w->mWindGlobe.Val(1.0f, env_light.mWind.mTactWindAngleX,
+                          env_light.mWind.mTactWindAngleY);
+#else
         w->mWindGlobe.Val(1.0f, g_env_light.mWind.mTactWindAngleX,
                           g_env_light.mWind.mTactWindAngleY);
+#endif
         w->mBirdActor = dComIfGp_event_getItemPartner();
         getEvFloatData(&w->mBirdFlyDist, "BirdFlyDist", 1620.0f);
         getEvXyzData(&w->mTorishita, "Torishita", cXyz(40.0f, -95.0f, 10.0f));
@@ -2950,9 +3035,15 @@ bool dCamera_c::windDirectionEvCamera() {
             ratio = (dist - w->mStopDist) / (w->mFarDist - w->mStopDist);
         }
 
+#if VERSION == VERSION_DEMO
+        f32 fovy = w->mNearFovy + ratio * (w->mFarFovy - w->mNearFovy);
+
+        mViewCache.mFovy += w->mFovyCushion * (fovy - mViewCache.mFovy);
+#else
         mViewCache.mFovy +=
             w->mFovyCushion *
             (w->mNearFovy + ratio * (w->mFarFovy - w->mNearFovy) - mViewCache.mFovy);
+#endif
     } else {
         mEventData.field_0x20 = 1;
         mViewCache.mFovy = 82.0f;
@@ -3529,19 +3620,20 @@ bool dCamera_c::useItem1EvCamera() {
 
 /* 800BBD88-800BC364       .text getItemEvCamera__9dCamera_cFv */
 bool dCamera_c::getItemEvCamera() {
-    cXyz ctr_gap(-0.095f, 0.428f, -7.177f);
 #if VERSION == VERSION_DEMO
+    cXyz ctr_gap(-0.1f, -14.25f, 0.5f);
     Vec eye_gap_l[2] = {
         {0.17f, 97.0f, -57.78f},
-        {-28.844f, 99.996f, -41.073f},
+        {-10.0f, 75.0f, -5.0f},
     };
     cXyz eye_gap_r[2] = {
         cXyz(0.17f, 97.0f, -57.78f),
-        cXyz(35.098f, 100.791f, -31.185f),
+        cXyz(-10.0f, 75.0f, -5.0f),
     };
     int eye_gap_num = 2;
     f32 fovy = 79.0f;
 #else
+    cXyz ctr_gap(-0.095f, 0.428f, -7.177f);
     Vec eye_gap_l[4] = {
         {0.17f, 97.0f, -57.78f},
         {-28.844f, 99.996f, -41.073f},
