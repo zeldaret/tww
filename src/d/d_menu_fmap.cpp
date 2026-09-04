@@ -58,9 +58,11 @@ const u32 endSalv[] = {
     'ST43', 'ST44', 'ST45', 'ST46', 'ST47', 'ST48', 'ST49',
 };
 
+#if VERSION > VERSION_JPN
 const u32 gsShip[] = {
     'gs07', 'gs01', 'gs02', 'gs03', 'gs04', 'gs05', 'gs06',
 };
+#endif
 
 /* 801AF4F0-801AF848       .text __ct__9dMf_HIO_cFv */
 dMf_HIO_c::dMf_HIO_c() {
@@ -220,9 +222,11 @@ dMf_HIO_c::dMf_HIO_c() {
     mFishmanDispWait = 30;
     mFishmanCloseWait = 0;
     mFishmanCloseFrame = 10;
+#if VERSION > VERSION_JPN
     mMoonAlphaFrame = 20;
     mMoonAlphaMax = 255;
     mMoonAlphaMin = 32;
+#endif
 }
 
 static const char* rollmapTex[] = {
@@ -378,22 +382,24 @@ enum FishmanProcIdx {
 /* 801AF848-801AFB64       .text _create__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::_create() {
     fmapDl.scrn = new J2DScreen();
-    JUT_ASSERT(571, fmapDl.scrn != NULL);
+    JUT_ASSERT(VERSION_SELECT(560, 560, 571, 571), fmapDl.scrn != NULL);
     fmapDl.scrn->set("f_map.blo", dComIfGp_getFmapResArchive());
 
     outFont = new dDlst_2DOutFont_c();
-    JUT_ASSERT(575, outFont != NULL);
+    JUT_ASSERT(VERSION_SELECT(564, 564, 575, 575), outFont != NULL);
+#if VERSION > VERSION_JPN
     outFont->m74 = 1;
+#endif
 
     outFont2 = new dDlst_2DOutFont_c();
-    JUT_ASSERT(579, outFont2 != NULL);
+    JUT_ASSERT(VERSION_SELECT(567, 567, 579, 579), outFont2 != NULL);
 
     stick = new STControl(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x2000);
-    JUT_ASSERT(582, stick != NULL);
+    JUT_ASSERT(VERSION_SELECT(570, 570, 582, 582), stick != NULL);
     stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x800);
 
     mChkPntTxt_p = (ResTIMG*)operator new (0x2c00, 0x20);
-    JUT_ASSERT(586, mChkPntTxt_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(574, 574, 586, 586), mChkPntTxt_p != NULL);
 
     screenSet();
     aramCmapDatRead();
@@ -593,7 +599,7 @@ void dMenu_Fmap_c::screenSet() {
     mYs01Color2.set(((J2DPicture*)mYs01Pane.pane)->getWhite());
     mYs01Color.set(((J2DPicture*)mYs01Pane.pane)->getBlack());
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     ((J2DTextBox*)mWt0Pane.pane)->setBlack(JUtility::TColor(0xffffff00));
     ((J2DTextBox*)mWt0Pane.pane)->setWhite(JUtility::TColor(0xffffffff));
 #endif
@@ -637,7 +643,7 @@ void dMenu_Fmap_c::screenSet() {
 #endif
 
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     for (i = 0; i < 7; i++) {
         fopMsgM_setPaneData(&mGsPanes[i], fmapDl.scrn, gsShip[i]);
     }
@@ -782,7 +788,7 @@ void dMenu_Fmap_c::displayinit() {
     checkMarkCheck3();
     setDspWindAngle();
     calcGetMapCount();
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     gShipMarkAnimeInit();
 #endif
     mFmap2.fmapSv = fmapSv;
@@ -1476,6 +1482,10 @@ void dMenu_Fmap_c::checkDspLargeMapLink() {
     if (!mFishmanActive) {
         mLnk2Pane.pane->hide();
         mDspLargeMapLink = false;
+#if VERSION <= VERSION_JPN
+        mStm1Pane.pane->hide();
+        return;
+#endif
     } else {
         mCurChkPntNo = dMap_getCheckPointUseGrid(getCtCurX(), getCtCurY());
         if (mPlayerChkPntNo == mCurChkPntNo) {
@@ -1524,6 +1534,14 @@ void dMenu_Fmap_c::dispEndSalvageLargeMark() {
 
 /* 801B4264-801B4640       .text setDspHugeMapLink__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::setDspHugeMapLink() {
+#if VERSION <= VERSION_JPN
+    if (!mFishmanActive) {
+        mStl1Pane.pane->hide();
+        mLnk3Pane.pane->hide();
+        mDspHugeMapLink = false;
+        return;
+    }
+#endif
     int i = dMap_getCheckPointUseGrid(getCtZoomGridX(), getCtZoomGridY());
     if (i != -1) {
         s8 gx;
@@ -1531,11 +1549,14 @@ void dMenu_Fmap_c::setDspHugeMapLink() {
         s16 a;
         s16 b;
         dMap_getFmapChkPntPrm(i, &gx, &gy, &a, &b, NULL);
+#if VERSION > VERSION_JPN
         if (!mFishmanActive) {
             mLnk3Pane.pane->hide();
             mDspHugeMapLink = false;
             dispEndSalvageHugeMark(a, b);
-        } else {
+        } else
+#endif
+        {
             f32 islandX = a + 100000.0f * gx;
             f32 islandY = b + 100000.0f * gy;
             f32 dx = mPlayerPos.x - islandX;
@@ -1752,7 +1773,9 @@ void dMenu_Fmap_c::FmapProcMain() {
     (this->*fmapProcMain[mFmapProcIdx])();
     windArrowColorAnime();
     checkMarkAnime();
+#if VERSION > VERSION_JPN
     gShipMarkAnime();
+#endif
 }
 
 /* 801B5034-801B5878       .text SelectGrid__12dMenu_Fmap_cFv */
@@ -2061,7 +2084,9 @@ void dMenu_Fmap_c::fmap2Move() {
         mDoAud_seStart(JA_SE_CHART_TO_NORMAL);
         mHikakuProcIdx = HIKAKU_PROC_CLOSE;
         mInputDisabled = false;
+#if VERSION > VERSION_JPN
         gShipMarkAnimeInit();
+#endif
         return;
     }
 
@@ -2172,7 +2197,7 @@ BOOL dMenu_Fmap_c::paneTranceZoomMap(s16 i_frame, u8 i_max, f32 i_transStartX, f
     }
 
     if (mKtx1Pane.pane->isVisible()) {
-        ktx1FontSize.mSizeX = scale * 27.0f;
+        ktx1FontSize.mSizeX = scale * VERSION_SELECT(29.0f, 29.0f, 27.0f, 27.0f);
         ktx1FontSize.mSizeY = scale * 29.0f;
         f32 lineSpace = scale * 47.0f;
         ((J2DTextBox*)mKtx1Pane.pane)->setFontSize(ktx1FontSize);
@@ -2348,6 +2373,7 @@ BOOL dMenu_Fmap_c::PaneAlphaSelvageItem(s16 i_frame, u8 i_max) {
     return FALSE;
 }
 
+#if VERSION > VERSION_JPN
 /* 801B76A0-801B77A8       .text gShipMarkAnimeInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::gShipMarkAnimeInit() {
     if (dComIfGs_isOpenCollectMap(0x24)) {
@@ -2389,6 +2415,7 @@ void dMenu_Fmap_c::gShipMarkAnime() {
         }
     }
 }
+#endif
 
 /* 801B78B0-801B79E8       .text _open_warpMode__12dMenu_Fmap_cFv */
 bool dMenu_Fmap_c::_open_warpMode() {

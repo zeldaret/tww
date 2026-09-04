@@ -67,75 +67,75 @@ public:
 
     void draw() { _draw(); }
     u8 getCtDispMode() {
-        JUT_ASSERT(467, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(456, 456, 467, 467), fmapSv != NULL);
         return fmapSv->dispMode;
     }
     void setCtDispMode(u8 val) {
-        JUT_ASSERT(472, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(461, 461, 472, 472), fmapSv != NULL);
         fmapSv->dispMode = val;
     }
     u8 getCtFmapZoom() {
-        JUT_ASSERT(478, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(467, 467, 478, 478), fmapSv != NULL);
         return fmapSv->fmapZoom;
     }
     void setCtFmapZoom(u8 val) {
-        JUT_ASSERT(483, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(472, 472, 483, 483), fmapSv != NULL);
         fmapSv->fmapZoom = val;
     }
     s8 getCtCurX() {
-        JUT_ASSERT(489, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(478, 478, 489, 489), fmapSv != NULL);
         return fmapSv->curX;
     }
     void setCtCurX(s8 val) {
-        JUT_ASSERT(494, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(483, 483, 494, 494), fmapSv != NULL);
         fmapSv->curX = val;
     }
     s8 getCtCurY() {
-        JUT_ASSERT(500, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(489, 489, 500, 500), fmapSv != NULL);
         return fmapSv->curY;
     }
     void setCtCurY(s8 val) {
-        JUT_ASSERT(505, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(494, 494, 505, 505), fmapSv != NULL);
         fmapSv->curY = val;
     }
     s8 getCtCurWX() {
-        JUT_ASSERT(511, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(500, 500, 511, 511), fmapSv != NULL);
         return fmapSv->curWX;
     }
     void setCtCurWX(s8 val) {
-        JUT_ASSERT(516, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(505, 505, 516, 516), fmapSv != NULL);
         fmapSv->curWX = val;
     }
     s8 getCtCurWY() {
-        JUT_ASSERT(522, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(511, 511, 522, 522), fmapSv != NULL);
         return fmapSv->curWY;
     }
     void setCtCurWY(s8 val) {
-        JUT_ASSERT(527, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(516, 516, 527, 527), fmapSv != NULL);
         fmapSv->curWY = val;
     }
     s8 getCtZoomGridX() {
-        JUT_ASSERT(533, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(522, 522, 533, 533), fmapSv != NULL);
         return fmapSv->zoomGridX;
     }
     void setCtZoomGridX(s8 val) {
-        JUT_ASSERT(538, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(527, 527, 538, 538), fmapSv != NULL);
         fmapSv->zoomGridX = val;
     }
     s8 getCtZoomGridY() {
-        JUT_ASSERT(543, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(532, 532, 543, 543), fmapSv != NULL);
         return fmapSv->zoomGridY;
     }
     void setCtZoomGridY(s8 val) {
-        JUT_ASSERT(548, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(537, 537, 548, 548), fmapSv != NULL);
         fmapSv->zoomGridY = val;
     }
     void setCtCurHX(s8 val) {
-        JUT_ASSERT(559, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(548, 548, 559, 559), fmapSv != NULL);
         fmapSv->curHX = val;
     }
     void setCtCurHY(s8 val) {
-        JUT_ASSERT(569, fmapSv != NULL);
+        JUT_ASSERT(VERSION_SELECT(558, 558, 569, 569), fmapSv != NULL);
         fmapSv->curHY = val;
     }
     void lineInter0to1(f32, f32, f32) {}
@@ -245,8 +245,10 @@ public:
     BOOL paneTranceZoom2Map(s16, u8, f32, f32, f32, f32, f32, f32, u8, int);
     BOOL paneAlphaFmapCursor(fopMsgM_pane_class*, s16, u8, u8, int);
     BOOL PaneAlphaSelvageItem(s16, u8);
+#if VERSION > VERSION_JPN
     void gShipMarkAnimeInit();
     void gShipMarkAnime();
+#endif
     bool _open_warpMode();
     void init_warpMode();
     void selCursorMoveWarp();
@@ -362,7 +364,9 @@ public:
     /* 0x4E9C */ fopMsgM_pane_class mNok0Pane;
     /* 0x4ED4 */ fopMsgM_pane_class mNoPane;
     /* 0x4F0C */ fopMsgM_pane_class mCur1Pane;
+#if VERSION > VERSION_JPN
     /* 0x4F44 */ fopMsgM_pane_class mGsPanes[7];
+#endif
     /* 0x50CC */ STControl* stick;
     /* 0x50D0 */ JUTFont* mFont;
     /* 0x50D4 */ JUTFont* mRFont;
@@ -437,15 +441,17 @@ public:
     /* 0x51A0 */ JUtility::TColor mKr0Color2;
     /* 0x51A4 */ JUtility::TColor mYs01Color;
     /* 0x51A8 */ JUtility::TColor mYs01Color2;
+#if VERSION > VERSION_JPN
     /* 0x51AC */ bool mMoonAlphaActive;
     /* 0x51AD */ bool mMoonAlphaState1;
     /* 0x51AE */ bool mMoonAlphaState2;
     /* 0x51AF */ u8 mMoonAlphaTimer;
     /* 0x51B0 */ u8 mMoonAlphaToggle;
     /* 0x51B1 */ u8 padding_0x51B1[0x51B4-0x51B1];
+#endif
 }; // Size: 0x51B4
 
-STATIC_ASSERT(sizeof(dMenu_Fmap_c) == 0x51B4);
+STATIC_ASSERT(sizeof(dMenu_Fmap_c) == VERSION_SELECT(0x4E54, 0x4E54, 0x51B4, 0x51B4));
 
 class dMf_HIO_c : public JORReflexible {
 public:
@@ -553,10 +559,12 @@ public:
     /* 0x119 */ u8 mFishmanDispWait;
     /* 0x11A */ u8 mFishmanCloseWait;
     /* 0x11B */ u8 mFishmanCloseFrame;
+#if VERSION > VERSION_JPN
     /* 0x11C */ u8 mMoonAlphaFrame;
     /* 0x11D */ u8 mMoonAlphaMax;
     /* 0x11E */ u8 mMoonAlphaMin;
     /* 0x11F */ u8 padding_0x11F[0x120 - 0x11F];
+#endif
 };
 
 extern dMf_HIO_c g_mfHIO;
