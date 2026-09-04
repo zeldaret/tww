@@ -267,6 +267,19 @@ const char* salvItemex[] = {
     "cmap_hint.bti",
 };
 
+static u32 tag00[] = {
+    'fmn1','fmn2','fmn3','fmn4','fmn5','fmn6','fmn7','fmn8',
+    'fmna','fmnb','fmnc','fmnd','fmne','fmnf','fmnh',
+};
+
+static u32 tagkr[] = {
+    'KR03','KR05','KR01','KR08','KR06','KR02','KR07','KR04',
+};
+
+static u32 txtnm[] = { 'txt1', 'txt3', 'txt2' };
+
+static int islandPos[] = {1, 4, 11, 13, 20, 23, 26, 40, 41, 44, 45};
+
 const char* korogStat[] = {
     "f_korog_kare.bti",
     "f_korog_saki.bti",
@@ -502,11 +515,6 @@ void dMenu_Fmap_c::screenSet() {
     fopMsgM_setPaneData(&mFmxxPanes[3], fmapDl.scrn, 'fmw3');
     fopMsgM_setPaneData(&mFmxxPanes[4], fmapDl.scrn, 'fmw4');
 
-    static u32 tag00[] = {
-        'fmn1','fmn2','fmn3','fmn4','fmn5','fmn6','fmn7','fmn8',
-        'fmna','fmnb','fmnc','fmnd','fmne','fmnf','fmnh',
-    };
-
     for (i = 0; i < 15; i++) {
         fopMsgM_setPaneData(&mFmnPanes[i], fmapDl.scrn, tag00[i]);
     }
@@ -529,10 +537,6 @@ void dMenu_Fmap_c::screenSet() {
     mCk1Color.set(((J2DPicture*)mCk1xPanes[0].pane)->getBlack());
     mCk1Color2.set(((J2DPicture*)mCk1xPanes[0].pane)->getWhite());
 
-    static u32 tagkr[] = {
-        'KR03','KR05','KR01','KR08','KR06','KR02','KR07','KR04',
-    };
-
     for (i = 0; i < 8; i++) {
         fopMsgM_setPaneData(&mKr0xPanes[i], fmapDl.scrn, tagkr[i]);
     }
@@ -552,8 +556,6 @@ void dMenu_Fmap_c::screenSet() {
         str2[i] = 'A';
     }
     str2[0x7F] = 0;
-
-    static u32 txtnm[] = { 'txt1', 'txt3', 'txt2' };
 
     for (i = 0; i < 3; i++) {
         fopMsgM_setPaneData(&mAreaTxtPanes[i], fmapDl.scrn, txtnm[i]);
@@ -711,7 +713,6 @@ void dMenu_Fmap_c::displayinit() {
         setPaneOnOff(fmapDl.scrn, hist[i], !dComIfGs_isSaveArriveGrid(i));
     }
 
-    static int islandPos[] = {1, 4, 11, 13, 20, 23, 26, 40, 41, 44, 45};
     for (i = 0; i < 11; i++) {
         if (dComIfGs_isSaveArriveGrid(islandPos[i] - 1)) {
             mR0xPanes[i].pane->show();
