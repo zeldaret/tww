@@ -4,6 +4,12 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "global.h"
 
+enum dMf_ZoomLevel {
+    FMAP_ZOOM_WORLD  = 0,
+    FMAP_ZOOM_SECTOR = 1,
+    FMAP_ZOOM_DETAIL = 2,
+};
+
 struct aramCmapSalvagePnt_t {
     /* 0x0 */ s16 field_0x0;
     /* 0x2 */ s16 field_0x2;

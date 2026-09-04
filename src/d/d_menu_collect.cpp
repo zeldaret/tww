@@ -3603,7 +3603,9 @@ void dMenu_Collect_c::_create() {
     outFont = new dDlst_2DOutFont_c();
     JUT_ASSERT(VERSION_SELECT(0xe55, 0xe55, 0xe55, 0xe55), outFont != NULL);
 
+#if VERSION > VERSION_JPN
     outFont->m74 = 1;
+#endif
 
     dMo_c = new dMenu_Option_c();
     JUT_ASSERT(VERSION_SELECT(0xe59, 0xe59, 0xe59, 0xe59), dMo_c != NULL);
