@@ -1319,15 +1319,15 @@ aramCmapDatPnt_t* dMenu_Fmap_c::getGridNumToCmapDatPnt(int i_gridIdx) {
 void dMenu_Fmap_c::setDispIslandPos(s8 i_x, s8 i_y) {
     s8 i = dMap_getCheckPointUseGrid(i_x, i_y);
     if (i != -1) {
-        s16 a;
-        s16 b;
-        dMap_getFmapChkPntPrm(i, NULL, NULL, &a, &b, NULL);
-        f32 c = a * ((mClbPane.mSizeOrig.x - 50.0f) / 100000.0f);
-        f32 d = b * ((mClbPane.mSizeOrig.y - 50.0f) / 100000.0f);
-        field_0x5134 = a;
-        field_0x5138 = b;
-        setIslandPos(&mR01bPane, c, d);
-        setIslandPos(&mTsw1Pane, c, d);
+        s16 x;
+        s16 y;
+        dMap_getFmapChkPntPrm(i, NULL, NULL, &x, &y, NULL);
+        f32 offsetX = x * ((mClbPane.mSizeOrig.x - 50.0f) / 100000.0f);
+        f32 offsetY = y * ((mClbPane.mSizeOrig.y - 50.0f) / 100000.0f);
+        field_0x5134 = x;
+        field_0x5138 = y;
+        setIslandPos(&mR01bPane, offsetX, offsetY);
+        setIslandPos(&mTsw1Pane, offsetX, offsetY);
         changeFmapTexture(i_x, i_y);
         mTsw1Pane.pane->show();
         mR01bPane.pane->show();
@@ -1863,9 +1863,9 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
                 field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f), 0.0, 0.0,
                 mTsw1Pane.mSizeOrig.x / clgOrigX, 1.0, 0x2, 0);
             for (int i = 0; i < 8; i++) {
-                mKk3xPanes[i].pane->mInheritAlpha = FALSE;
+                mKk3xPanes[i].pane->mInheritAlpha = false;
             }
-            mR01bPane.pane->mInheritAlpha = FALSE;
+            mR01bPane.pane->mInheritAlpha = false;
             mFrameTimer = 0;
             mFmapProcIdx = FMAP_ZOOM_PROC_LV2_IN;
         }
@@ -1972,9 +1972,9 @@ void dMenu_Fmap_c::ZoomGridLv2Out() {
         }
         mClgPane.pane->hide();
         for (int i = 0; i < 8; i++) {
-            mKk3xPanes[i].pane->mInheritAlpha = TRUE;
+            mKk3xPanes[i].pane->mInheritAlpha = true;
         }
-        mR01bPane.pane->mInheritAlpha = TRUE;
+        mR01bPane.pane->mInheritAlpha = true;
         mFrameTimer = 0;
         mFmapProcIdx = FMAP_ZOOM_PROC_LV1;
     }
@@ -2974,22 +2974,92 @@ void dMenu_Fmap_c::movefishManMode() {
 
 /* 801BA4D4-801BA608       .text fmDispArea__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmDispArea() {
-    /* Nonmatching */
+    if (mFishmanTimer2 == 0) {
+        J2DPane* pane = mMr01Pane.pane;
+        if (pane->isVisible()) {
+            pane->hide();
+        } else {
+            pane->show();
+        }
+        mFishmanTimer2 = g_mfHIO.field_0x118;
+    } else {
+        mFishmanTimer2--;
+    }
+
+    if (mFishmanTimer3 == 0) {
+        mMr01Pane.pane->hide();
+        dComIfGs_onSaveArriveGrid(mGridX + (mGridY + 3) * 7 + 3);
+        mKkdmPane.pane->show();
+        mSmskPane.pane->show();
+        mClbPane.pane->show();
+        mKtx1Pane.pane->hide();
+        mKtx2Pane.pane->hide();
+        mClb2Pane.pane->hide();
+        mDoAud_seStart(JA_SE_CHART_ZOOM_IN);
+        mFishmanProcIdx = FISHMAN_PROC_ZOOM_LV1_IN;
+    } else {
+        mFishmanTimer3--;
+    }
 }
 
 /* 801BA608-801BA768       .text fmZoomGridLv1In__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv1In() {
-    /* Nonmatching */
+    int selGridMask = selGridMaskAlphaCtrl(mFrameTimer, g_mfHIO.field_0x111, 0, 0);
+    int fmapMask = fmapMaskAlphaCtrl(mFrameTimer, g_mfHIO.field_0x111, 0, 0);
+    int zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x111,
+        mKkdmPane.mPosCenter.x - mClbPane.mPosCenterOrig.x,
+        mKkdmPane.mPosCenter.y - mClbPane.mPosCenterOrig.y,0.0f, 0.0f,
+        mKkdmPane.mSizeOrig.x / mClbPane.mSizeOrig.x, 1.0f, 2, 0);
+    mFrameTimer++;
+    if (selGridMask == TRUE && fmapMask == TRUE && zoomMap == TRUE) {
+        mDoAud_seStart(JA_SE_CHART_ZOOM_IN);
+        mFrameTimer = 0;
+        mClgPane.pane->show();
+        for (int i = 0; i < 8; i++) {
+            mKk3xPanes[i].pane->mInheritAlpha = false;
+        }
+        mR01bPane.pane->mInheritAlpha = false;
+        mFishmanProcIdx = FISHMAN_PROC_ZOOM_LV2_IN;
+    }
 }
 
 /* 801BA768-801BA88C       .text fmZoomGridLv2In__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv2In() {
-    /* Nonmatching */
+    int zoomMap = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x114,
+        field_0x5134 * (mClgPane.mSizeOrig.x / 100000.0f),
+        field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f), 0.0f, 0.0f,
+        mTsw1Pane.mSizeOrig.x / mClgPane.mSizeOrig.x, 1.0f, 2, 0);
+    int zoomMapAlpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x114, 0x02, 1);
+    mFrameTimer++;
+    if (zoomMap == TRUE && zoomMapAlpha == TRUE) {
+        mFrameTimer = 0;
+        mTsw1Pane.pane->show();
+        mR01bPane.pane->show();
+        mR01gPane.pane->show();
+        islandNameSet(0);
+        paneAlphaZoom2Map(0, g_mfHIO.field_0x115, 2, 0);
+        mFishmanTimer1 = g_mfHIO.field_0x116;
+        mFishmanProcIdx = FISHMAN_PROC_MAP_WRITE;
+    }
 }
 
 /* 801BA88C-801BAA50       .text islandNameSet__12dMenu_Fmap_cFUc */
-void dMenu_Fmap_c::islandNameSet(u8) {
-    /* Nonmatching */
+void dMenu_Fmap_c::islandNameSet(u8 i_no) {
+    int msgNo;
+    int grid = mGridX + (mGridY + 3) * 7 + 3;
+    if (grid == dIsleIdx_PrivateOasis_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D80)) {
+        msgNo = 0x31D7;
+    } else {
+        msgNo = grid + 0x31a6;
+    }
+    if (grid == dIsleIdx_ForsakenFortress_e || grid == dIsleIdx_GaleIsle_e || grid == dIsleIdx_WindfallIsland_e || grid == dIsleIdx_DragonRoostIsland_e ||
+        grid == dIsleIdx_FireMountain_e || grid == dIsleIdx_GreatfishIsle_e || grid == dIsleIdx_ToweroftheGods_e || grid == dIsleIdx_IceRingIsle_e ||
+        grid == dIsleIdx_ForestHaven_e || grid == dIsleIdx_OutsetIsland_e || grid == dIsleIdx_HeadstoneIsland_e) {
+        ((J2DTextBox*) mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0x100);
+    } else {
+        ((J2DTextBox*) mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0xFC);
+    }
+    fopMsgM_messageGet(mTxtName[i_no], msgNo);
 }
 
 /* 801BAA50-801BAB00       .text fmMapWrite__12dMenu_Fmap_cFv */
@@ -3000,9 +3070,9 @@ void dMenu_Fmap_c::fmMapWrite() {
         if (mFrameTimer == 0) {
             mDoAud_subBgmStart(JA_BGM_BGN_GET_BOX);
         }
-        BOOL a = paneAlphaZoom2Map(mFrameTimer, g_mfHIO.field_0x115, 0x02, 0);
+        BOOL zoomMap = paneAlphaZoom2Map(mFrameTimer, g_mfHIO.field_0x115, 0x02, 0);
         mFrameTimer++;
-        if (a == TRUE) {
+        if (zoomMap == TRUE) {
             mFrameTimer = 0;
             mFishmanTimer1 = g_mfHIO.field_0x117;
             mFishmanProcIdx = FISHMAN_PROC_MAP_WAIT;
@@ -3045,12 +3115,41 @@ BOOL dMenu_Fmap_c::paneAlphaZoom2Map(short i_value, u8 i_max, u8 i_mode, int i_f
 
 /* 801BAC88-801BADB8       .text fmZoomGridLv2Out__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv2Out() {
-    /* Nonmatching */
+    int zoomMap = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x114, 0.0f, 0.0f,
+        field_0x5134 * (mClgPane.mSizeOrig.x / 100000.0f),
+        field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f), 1.0f,
+        mTsw1Pane.mSizeOrig.x / mClgPane.mSizeOrig.x, 2, 1);
+    int zoomAlpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x114, 0x02, 0);
+    mFrameTimer++;
+    if (zoomMap == TRUE && zoomAlpha == TRUE) {
+        mDoAud_seStart(JA_SE_CHART_ZOOM_OUT);
+        mClgPane.pane->hide();
+        for (int i = 0; i < 8; i++) {
+            mKk3xPanes[i].pane->mInheritAlpha = true;
+        }
+        mR01bPane.pane->mInheritAlpha = true;
+        mFrameTimer = 0;
+        mFishmanProcIdx = FISHMAN_PROC_ZOOM_LV1_OUT;
+    }
 }
 
 /* 801BADB8-801BAEF4       .text fmZoomGridLv1Out__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv1Out() {
-    /* Nonmatching */
+    int selGridMask = selGridMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, 0, 1);
+    int fmapMask = fmapMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, 0, 1);
+    int zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x113, 0.0f, 0.0f,
+        mKkdmPane.mPosCenter.x - mClbPane.mPosCenterOrig.x,
+        mKkdmPane.mPosCenter.y - mClbPane.mPosCenterOrig.y, 1.0f,
+        mKkdmPane.mSizeOrig.x / mClbPane.mSizeOrig.x, 2, 1);
+    mFrameTimer++;
+    if (selGridMask == TRUE && fmapMask == TRUE && zoomMap == TRUE) {
+        mFrameTimer = 0;
+        mKkdmPane.pane->hide();
+        mSmskPane.pane->hide();
+        mClbPane.pane->hide();
+        mFishmanTimer1 = g_mfHIO.field_0x11A;
+        mFishmanProcIdx = FISHMAN_PROC_END_WAIT;
+    }
 }
 
 /* 801BAEF4-801BAF18       .text fmEndWait__12dMenu_Fmap_cFv */
