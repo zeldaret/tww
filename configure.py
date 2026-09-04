@@ -1006,6 +1006,7 @@ config.libs = [
     JSystemLib(
         "JGadget",
         [
+            Object(Matching,    "JSystem/JGadget/define.cpp"),
             Object(Matching,    "JSystem/JGadget/binary.cpp"),
             Object(Matching,    "JSystem/JGadget/linklist.cpp"),
             Object(Matching,    "JSystem/JGadget/std-vector.cpp"),
@@ -1936,6 +1937,7 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_camera.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_event_debug.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_kankyo_debug.cpp")
+        objects.insert(objects.index("JSystem/JGadget/binary.cpp"), "JSystem/JGadget/define.cpp")
         objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/i2c.c")
         objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/initphilips.c")
         objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/gpioexi.c")

@@ -46,21 +46,22 @@ JStudio::TCreateObject::~TCreateObject() {}
 JStudio::TFactory::~TFactory() {}
 
 /* 8026E314-8026E360       .text appendCreateObject__Q27JStudio8TFactoryFPQ27JStudio13TCreateObject */
-void JStudio::TFactory::appendCreateObject(JStudio::TCreateObject* param_0) {
-    mList.Push_back(param_0);
+void JStudio::TFactory::appendCreateObject(JStudio::TCreateObject* p) {
+    // JUT_ASSERT(227, p!=NULL);
+    mList.Push_back(p);
 }
 
 /* 8026E360-8026E438       .text create__Q27JStudio8TFactoryFRCQ47JStudio3stb4data20TParse_TBlock_object */
-JStudio::TObject* JStudio::TFactory::create(const JStudio::stb::data::TParse_TBlock_object& param_0) {
+JStudio::TObject* JStudio::TFactory::create(const JStudio::stb::data::TParse_TBlock_object& rParse) {
     JGadget::TContainerEnumerator<JGadget::TLinkList<TCreateObject, -4> > aTStack_368(mList);
     while(aTStack_368) {
         TCreateObject& piVar1 = *aTStack_368;
         JStudio::TObject* obj = NULL;
-        if (piVar1.create(&obj, param_0)) {
+        if (piVar1.create(&obj, rParse)) {
             return obj;
         }
     }
-    return stb::TFactory::create(param_0);
+    return stb::TFactory::create(rParse);
 }
 
 /* 8026E438-8026E48C       .text __ct__Q27JStudio6TParseFPQ27JStudio8TControl */
@@ -73,12 +74,15 @@ JStudio::TParse::~TParse() {}
 bool JStudio::TParse::parseHeader(const JStudio::stb::data::TParse_THeader& param_0, u32 param_1) {
     const JStudio::stb::data::THeader::Target& target = param_0.get_target();
     if (memcmp(target.name, JStudio::data::ga8cSignature, sizeof(JStudio::data::ga8cSignature)) != 0) {
+        JGADGET_WARNMSG(304, "unknown target-system");
         return false;
     }
     if (target.target_version < 2) {
+        JGADGET_WARNMSG1(312, "obsolete version : ", target.target_version);
         return false;
-    } 
+    }
     if (target.target_version > 3) {
+        JGADGET_WARNMSG1(317, "unknown version : ", target.target_version);
         return false;
     }
     return true;
