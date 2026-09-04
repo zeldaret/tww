@@ -47,6 +47,11 @@ enum dMf_ButtonIconMode {
     FMAP_BTN_ICON_FISHMAN   = 6,
 };
 
+enum dMf_WarpSel {
+    FMAP_WARP_SEL_YES = 0,
+    FMAP_WARP_SEL_NO  = 1,
+};
+
 class dDlst_FMAP_c : public dDlst_base_c {
 public:
     virtual ~dDlst_FMAP_c() {}
@@ -412,8 +417,8 @@ public:
     /* 0x5178 */ u8 mFishmanTimer1;
     /* 0x5179 */ u8 mFishmanTimer2;
     /* 0x517A */ u8 mFishmanTimer3;
-    /* 0x517B */ u8 mFishmanMsgTimer;
-    /* 0x517C */ u8 mFishmanMsgToggle;
+    /* 0x517B */ u8 mCheckMarkTimer;
+    /* 0x517C */ u8 mCheckMarkToggle;
     /* 0x517D */ u8 padding_0x517D[0x517F-0x517D];
     /* 0x517F */ bool mFishmanActive;
     /* 0x5180 */ u8 mSalvagePntIdx;
@@ -432,11 +437,11 @@ public:
     /* 0x51A0 */ JUtility::TColor mKr0Color2;
     /* 0x51A4 */ JUtility::TColor mYs01Color;
     /* 0x51A8 */ JUtility::TColor mYs01Color2;
-    /* 0x51AC */ bool mMsgValueActive;
-    /* 0x51AD */ bool mMsgValueState1;
-    /* 0x51AE */ bool mMsgValueState2;
-    /* 0x51AF */ u8 mMsgValueTimer;
-    /* 0x51B0 */ u8 mMsgValueToggle;
+    /* 0x51AC */ bool mMoonAlphaActive;
+    /* 0x51AD */ bool mMoonAlphaState1;
+    /* 0x51AE */ bool mMoonAlphaState2;
+    /* 0x51AF */ u8 mMoonAlphaTimer;
+    /* 0x51B0 */ u8 mMoonAlphaToggle;
     /* 0x51B1 */ u8 padding_0x51B1[0x51B4-0x51B1];
 }; // Size: 0x51B4
 
