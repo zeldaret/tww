@@ -637,7 +637,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_cloth.cpp"),
             Object(NonMatching, "d/d_menu_collect.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_dmap.cpp"),
-            Object(NonMatching, "d/d_menu_fmap.cpp"),
+            Object(MatchingFor("GZLE01"), "d/d_menu_fmap.cpp"),
             Object(NonMatching, "d/d_menu_fmap2.cpp"),
             Object(NonMatching, "d/d_menu_item.cpp"),
             Object(Matching,    "d/d_menu_option.cpp"),
@@ -1698,7 +1698,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_os"),
     ActorRel(Matching, "d_a_npc_p1"),
     ActorRel(NonMatching, "d_a_npc_p2"),
-    ActorRel(EquivalentFor("GZLJ01", "GZLE01", "GZLP01") or MatchingFor("D44J01"), "d_a_npc_people"), # regalloc 
+    ActorRel(EquivalentFor("GZLJ01", "GZLE01", "GZLP01") or MatchingFor("D44J01"), "d_a_npc_people"), # regalloc
     ActorRel(NonMatching, "d_a_npc_pf1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_photo"),
     ActorRel(NonMatching, "d_a_npc_pm1"),
@@ -1920,7 +1920,7 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
     # Don't modify the link order for matching builds
     if not config.non_matching:
         return objects
-    
+
     if args.debug and module_id == 0: # Debug DOL
         # Insert debug-only objects.
         objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_viewer.cpp")
@@ -1929,13 +1929,13 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_event_debug.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_kankyo_debug.cpp")
         objects.insert(objects.index("dolphin/gx/GXPixel.c"), "dolphin/gx/GXDraw.c")
-    
+
     # Example of adding new files for modding:
     # This adds "dummy.c" to the end of the DOL link order if configured with --non-matching.
     # "dummy.c" *must* be configured as a Matching (or Equivalent) object in order to be linked.
     # if module_id == 0:  # DOL
     #     return objects + ["dummy.c"]
-    
+
     return objects
 
 # Uncomment to enable the link order callback.
