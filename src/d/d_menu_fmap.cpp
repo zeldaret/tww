@@ -596,7 +596,48 @@ void dMenu_Fmap_c::screenSet() {
 #if VERSION > VERSION_DEMO
     ((J2DTextBox*)mWt0Pane.pane)->setBlack(JUtility::TColor(0xffffff00));
     ((J2DTextBox*)mWt0Pane.pane)->setWhite(JUtility::TColor(0xffffffff));
+#endif
 
+#if VERSION == VERSION_PAL
+    J2DPicture* kzmW = (J2DPicture*)fmapDl.scrn->search('kzmW');
+    J2DPicture* kzmE = (J2DPicture*)fmapDl.scrn->search('kzmE');
+    char yestxt[4];
+    switch (dComIfGs_getPalLanguage()) {
+        case 0:
+            ((J2DTextBox*)mYesPane.pane)->setString("Yes");
+            ((J2DTextBox*)mNoPane.pane)->setString("No");
+            break;
+        case 1:
+            ((J2DTextBox*)mYesPane.pane)->setString("Ja");
+            ((J2DTextBox*)mNoPane.pane)->setString("Nein");
+            kzmE->changeTexture("f_w_o_big.bti", 0);
+            break;
+        case 2:
+            ((J2DTextBox*)mYesPane.pane)->setString("Oui");
+            ((J2DTextBox*)mNoPane.pane)->setString("Non");
+            kzmW->changeTexture("f_w_o_big.bti", 0);
+            break;
+        case 3: {
+            strcpy(yestxt, "Si");
+            yestxt[1] = 0xED; // Sí
+            ((J2DTextBox*)mYesPane.pane)->setString(yestxt);
+            ((J2DTextBox*)mNoPane.pane)->setString("No");
+            kzmW->changeTexture("f_w_o_big.bti", 0);
+            break;
+        }
+        case 4: {
+            strcpy(yestxt, "Si");
+            yestxt[1] = 0xEC; // Sì
+            ((J2DTextBox*)mYesPane.pane)->setString(yestxt);
+            ((J2DTextBox*)mNoPane.pane)->setString("No");
+            kzmW->changeTexture("f_w_o_big.bti", 0);
+            break;
+        }
+    }
+#endif
+
+
+#if VERSION > VERSION_DEMO
     for (i = 0; i < 7; i++) {
         fopMsgM_setPaneData(&mGsPanes[i], fmapDl.scrn, gsShip[i]);
     }
