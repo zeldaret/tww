@@ -1226,10 +1226,10 @@ int dComIfGd_setShadow(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 
 }
 
 static void dummy() {
-    OSReport("0 <= cam_id && cam_id < mapc->num");
-    OSReport("0 <= arrow_id && arrow_id < mapa->num");
-    OSReport("0 <= room_cam_id && room_cam_id < pcam->num");
-    OSReport("0 <= arrow_id && arrow_id < parr->num");
+    DEAD_STRING("0 <= cam_id && cam_id < mapc->num");
+    DEAD_STRING("0 <= arrow_id && arrow_id < mapa->num");
+    DEAD_STRING("0 <= room_cam_id && room_cam_id < pcam->num");
+    DEAD_STRING("0 <= arrow_id && arrow_id < parr->num");
 }
 
 /* 8005468C-800547BC       .text getSceneList__Fi */

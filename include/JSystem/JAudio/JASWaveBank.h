@@ -29,7 +29,7 @@ namespace JASystem {
     public:
         virtual ~TWaveHandle() {}
         virtual const TWaveInfo* getWaveInfo() const = 0;
-        virtual const void* getWavePtr() const = 0;
+        virtual intptr_t getWavePtr() const = 0;
     };
 
     class TWaveBank {

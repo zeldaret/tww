@@ -392,6 +392,11 @@ config.precompiled_headers = [
         "cflags": ["-lang=c++", *cflags_rel],
     },
     {
+        "source": "m_Do/machine.pch",
+        "mw_version": "GC/1.3.2",
+        "cflags": ["-lang=c++", *cflags_dolzel],
+    },
+    {
         "source": "JSystem/JSystem.pch",
         "mw_version": "GC/1.3.2",
         "cflags": ["-lang=c++", *cflags_framework],
@@ -408,19 +413,19 @@ config.libs = [
             Object(Matching,    "m_Do/m_Do_main.cpp"),
             Object(Matching,    "m_Do/m_Do_printf.cpp"),
             Object(Matching,    "m_Do/m_Do_audio.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_controller_pad.cpp"),
+            Object(Matching,    "m_Do/m_Do_controller_pad.cpp"),
             Object(NonMatching, "m_Do/m_Do_graphic.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_machine.cpp"),
+            Object(Matching,    "m_Do/m_Do_machine.cpp"),
             Object(Matching,    "m_Do/m_Do_mtx.cpp"),
             Object(MatchingFor("D44J01"),    "m_Do/m_Do_ext.cpp"),
             Object(Matching,    "m_Do/m_Do_lib.cpp"),
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_Reset.cpp"),
+            Object(Matching,    "m_Do/m_Do_Reset.cpp"),
             Object(Matching,    "m_Do/m_Do_dvd_thread.cpp"),
             Object(Matching,    "m_Do/m_Do_DVDError.cpp"),
             Object(Matching,    "m_Do/m_Do_MemCard.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_MemCardRWmng.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_gba_com.cpp"),
+            Object(Matching,    "m_Do/m_Do_MemCardRWmng.cpp"),
+            Object(Matching,    "m_Do/m_Do_gba_com.cpp"),
             Object(Matching,    "m_Do/m_Do_machine_exception.cpp"),
         ],
     },
@@ -789,7 +794,7 @@ config.libs = [
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-math.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-object.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/functionvalue.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio/fvb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/object-id.cpp"),
@@ -875,7 +880,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JAudio/JASBNKParser.cpp"),
             Object(Matching,    "JSystem/JAudio/JASWaveArcLoader.cpp"),
             Object(Matching,    "JSystem/JAudio/JASWaveBankMgr.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASBankMgr.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASBankMgr.cpp"),
             Object(Matching,    "JSystem/JAudio/JASAudioThread.cpp"),
             Object(Matching,    "JSystem/JAudio/JASDSPBuf.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASDSPChannel.cpp"),
@@ -884,7 +889,7 @@ config.libs = [
             Object(Matching,    "JSystem/JAudio/JASChGlobal.cpp"),
             Object(Matching,    "JSystem/JAudio/JASChAllocQueue.cpp"),
             Object(Matching,    "JSystem/JAudio/JASChannel.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASChannelMgr.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASChannelMgr.cpp"),
             Object(Matching,    "JSystem/JAudio/JASOscillator.cpp"),
             Object(Matching,    "JSystem/JAudio/JASDriverTables.cpp"),
             Object(Matching,    "JSystem/JAudio/dspproc.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
@@ -1062,7 +1067,7 @@ config.libs = [
             Object(Matching,    "JSystem/J3DGraphBase/J3DShapeMtx.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DShape.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DMaterial.cpp"),
-            Object(Equivalent,  "JSystem/J3DGraphBase/J3DMatBlock.cpp"), # regalloc
+            Object(Matching,    "JSystem/J3DGraphBase/J3DMatBlock.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DTevs.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DDrawBuffer.cpp"),
         ],
@@ -1186,6 +1191,9 @@ config.libs = [
         "vi",
         [
             Object(Matching, "dolphin/vi/vi.c"),
+            Object(Matching, "dolphin/vi/i2c.c"),
+            Object(Matching, "dolphin/vi/initphilips.c"),
+            Object(Matching, "dolphin/vi/gpioexi.c"),
         ],
     ),
     DolphinLib(
@@ -1928,6 +1936,9 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_camera.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_event_debug.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_kankyo_debug.cpp")
+        objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/i2c.c")
+        objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/initphilips.c")
+        objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/gpioexi.c")
         objects.insert(objects.index("dolphin/gx/GXPixel.c"), "dolphin/gx/GXDraw.c")
 
     # Example of adding new files for modding:

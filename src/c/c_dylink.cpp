@@ -555,7 +555,7 @@ cPhs_State cDyl_Link(s16 i_ProfName) {
 
 #if VERSION > VERSION_DEMO
 static void dummy() {
-    OSReport_Error("cDyl_LinkASync: リンクに失敗しました。諦めます\n");
+    DEAD_STRING("cDyl_LinkASync: リンクに失敗しました。諦めます\n");
 }
 #endif
 

@@ -1649,7 +1649,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     mMsgIconDrawState = -1;
 
     if (head_p != NULL) {
-        JKRFileLoader::removeResource(head_p, NULL);
+        JKRRemoveResource(head_p, NULL);
         head_p = NULL;
     }
 
@@ -2267,7 +2267,7 @@ void dJle_Pb_c::draw() {
 /* 8022B9E8-8022BB3C       .text _delete__9dJle_Pb_cFP10JKRExpHeap */
 void dJle_Pb_c::_delete(JKRExpHeap* i_heap) {
     if (head_p != NULL) {
-        JKRFileLoader::removeResource(head_p, NULL);
+        JKRRemoveResource(head_p, NULL);
     }
 
     if (mDoGph_getCaptureStep()) {

@@ -3,7 +3,7 @@
 // Translation Unit: m_Do_ext.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_ext.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
 #include "JSystem/JKernel/JKRArchive.h"
@@ -980,11 +980,11 @@ JKRExpHeap* mDoExt_getArchiveHeap() {
 }
 
 static void dummy() {
-    OSReport("situationHeap == 0 || heapSize == 0");
-    OSReport("situationHeapLocked == 0");
-    OSReport("situationHeap");
-    OSReport("situationHeapLocked");
-    OSReport("heap == situationHeap");
+    DEAD_STRING("situationHeap == 0 || heapSize == 0");
+    DEAD_STRING("situationHeapLocked == 0");
+    DEAD_STRING("situationHeap");
+    DEAD_STRING("situationHeapLocked");
+    DEAD_STRING("heap == situationHeap");
 }
 
 /* 80011ABC-80011B54       .text mDoExt_createSolidHeap__FUlP7JKRHeapUl */
@@ -3103,7 +3103,7 @@ void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_hea
         if (cacheFont->isValid()) {
             *p_font = cacheFont;
         }
-        JKRFileLoader::removeResource(*p_resfont, NULL);
+        JKRRemoveResource(*p_resfont, NULL);
         *p_resfont = NULL;
     } else {
         JUTResFont* resFont = new JUTResFont(*p_resfont, p_heap);
@@ -3194,7 +3194,7 @@ void mDoExt_removeMesgFont() {
             if (mDoExt_resfont0) {
 #if VERSION <= VERSION_JPN
                 if (g_msgDHIO.field_0x08 == 0) {
-                    JKRFileLoader::removeResource(mDoExt_resfont0, NULL);
+                    JKRRemoveResource(mDoExt_resfont0, NULL);
                 } else
 #endif
                 {

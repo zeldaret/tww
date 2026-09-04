@@ -78,21 +78,21 @@ dDlst_2Dm_c tekari;
 dDlst_2Dm_c clock[3];
 
 static void dummy(f32* m, u32 p2, s32 p3) {
-    OSReport("cmap_tri.bti");
-    OSReport("cmap_treasure.bti");
-    OSReport("cmap_tingle.bti");
-    OSReport("cmap_phantomship.bti");
-    OSReport("cmap_hint.bti");
-    OSReport("f_item_tri.bti");
+    DEAD_STRING("cmap_tri.bti");
+    DEAD_STRING("cmap_treasure.bti");
+    DEAD_STRING("cmap_tingle.bti");
+    DEAD_STRING("cmap_phantomship.bti");
+    DEAD_STRING("cmap_hint.bti");
+    DEAD_STRING("f_item_tri.bti");
 #if VERSION == VERSION_DEMO
-    OSReport("get_rupy.bti");
-    OSReport("heart_up_02.bti");
+    DEAD_STRING("get_rupy.bti");
+    DEAD_STRING("heart_up_02.bti");
 #else
-    OSReport("f_get_rupy.bti");
-    OSReport("f_heart_up_02.bti");
+    DEAD_STRING("f_get_rupy.bti");
+    DEAD_STRING("f_heart_up_02.bti");
 #endif
-    OSReport("f_korog_kare.bti");
-    OSReport("f_korog_saki.bti");
+    DEAD_STRING("f_korog_kare.bti");
+    DEAD_STRING("f_korog_saki.bti");
     m[0] = 0.8f;
     m[1] = 0.0f;
     m[2] = 1.2f;

@@ -126,9 +126,9 @@ bool JASystem::Kernel::THeap::free() {
 }
 
 static void dummy(JASystem::Kernel::TDisposer* disposer) {
-    OSReport("------------------------------------\n");
-    OSReport("level >= 0 && level < 7");
-    OSReport("%s Heap %08x [Addr %8x , Max %8x] %c\n");
+    DEAD_STRING("------------------------------------\n");
+    DEAD_STRING("level >= 0 && level < 7");
+    DEAD_STRING("%s Heap %08x [Addr %8x , Max %8x] %c\n");
 }
 
 /* 8027D088-8027D1FC       .text insertChild__Q38JASystem6Kernel5THeapFPQ38JASystem6Kernel5THeapPQ38JASystem6Kernel5THeapPvUlb */

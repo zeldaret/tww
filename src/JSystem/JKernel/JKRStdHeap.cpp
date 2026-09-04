@@ -57,9 +57,9 @@ JKRStdHeap::~JKRStdHeap() {
 }
 
 static void dummy() {
-    OSReport("JKRStdHeap.cpp");
-    OSReport("allocFixed from %x to %x in heap %x");
-    OSReport("allocFixed: cannot alloc memory (from %x to %x).\n");
+    DEAD_STRING("JKRStdHeap.cpp");
+    DEAD_STRING("allocFixed from %x to %x in heap %x");
+    DEAD_STRING("allocFixed: cannot alloc memory (from %x to %x).\n");
 }
 
 /* 802B1104-802B11A4       .text do_alloc__10JKRStdHeapFUli */

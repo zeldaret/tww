@@ -11,7 +11,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-#include "weak_bss_3569.h"  // IWYU pragma: keep
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 int (dSnap_packet::*dSnap_packet::m_judge_tbl[])() = {
     NULL,

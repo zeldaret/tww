@@ -15,12 +15,21 @@ struct J3DGXColorS10 {
         mColor.b = other.b;
         mColor.a = other.a;
     }
+#if __MWERKS__
     J3DGXColorS10(J3DGXColorS10& other) {
         mColor.r = other.mColor.r;
         mColor.g = other.mColor.g;
         mColor.b = other.mColor.b;
         mColor.a = other.mColor.a;
     }
+#else
+    J3DGXColorS10(const J3DGXColorS10& other) {
+        mColor.r = other.mColor.r;
+        mColor.g = other.mColor.g;
+        mColor.b = other.mColor.b;
+        mColor.a = other.mColor.a;
+    }
+#endif
     J3DGXColorS10& operator=(const J3DGXColorS10& other) {
         mColor = other.mColor;
         return *this;
@@ -41,12 +50,21 @@ struct J3DGXColor {
         mColor.b = other.b;
         mColor.a = other.a;
     }
+#if __MWERKS__
     J3DGXColor(J3DGXColor& other) {
         mColor.r = other.mColor.r;
         mColor.g = other.mColor.g;
         mColor.b = other.mColor.b;
         mColor.a = other.mColor.a;
     }
+#else
+    J3DGXColor(const J3DGXColor& other) {
+        mColor.r = other.mColor.r;
+        mColor.g = other.mColor.g;
+        mColor.b = other.mColor.b;
+        mColor.a = other.mColor.a;
+    }
+#endif
     J3DGXColor& operator=(const J3DGXColor& other) {
         mColor = other.mColor;
         return *this;
@@ -601,6 +619,15 @@ struct J3DZMode {
     J3DZMode() { mZModeID = j3dDefaultZModeID; }
     explicit J3DZMode(const J3DZModeInfo& info) { setZModeInfo(info); }
 
+    J3DZMode& operator=(u16 zModeID) {
+        mZModeID = zModeID;
+        return *this;
+    }
+    J3DZMode& operator=(const J3DZMode& other) {
+        mZModeID = other.mZModeID;
+        return *this;
+    }
+
     u8 getCompareEnable() const { return j3dZModeTable[mZModeID * 3 + 0]; }
     u8 getFunc() const { return j3dZModeTable[mZModeID * 3 + 1]; }
     u8 getUpdateEnable() const { return j3dZModeTable[mZModeID * 3 + 2]; }
@@ -621,13 +648,22 @@ struct J3DZMode {
         mZModeID = calcZModeID(j3dZModeTable[mZModeID * 3], j3dZModeTable[mZModeID * 3 + 1], i_enable);
     }
 
+    // void operator==(J3DZMode&) {}
+
+private:
     /* 0x0 */ u16 mZModeID;
 };
 
 struct J3DBlend : public J3DBlendInfo {
-    J3DBlend() { *(J3DBlendInfo*)this = j3dDefaultBlendInfo; }
-    explicit J3DBlend(const J3DBlendInfo& info) { *(J3DBlendInfo*)this = info; }
-    void setBlendInfo(const J3DBlendInfo& info) { *(J3DBlendInfo*)this = info; }
+    J3DBlend() {
+        J3DBlendInfo::operator=(j3dDefaultBlendInfo);
+    }
+    explicit J3DBlend(const J3DBlendInfo& info) {
+        J3DBlendInfo::operator=(info);
+    }
+    void setBlendInfo(const J3DBlendInfo& info) {
+        J3DBlendInfo::operator=(info);
+    }
 
     GXBlendMode getType() const { return (GXBlendMode)mBlendMode; }
     void setType(u8 i_type) { mBlendMode = i_type; }
@@ -637,8 +673,8 @@ struct J3DBlend : public J3DBlendInfo {
     void setDstFactor(u8 i_dst) { mDstFactor = i_dst; }
     GXLogicOp getOp() const { return (GXLogicOp)mLogicOp; }
 
-    void load(u8 ditherEnable) {
-        J3DGDSetBlendMode(getType(), getSrcFactor(), getDstFactor(), getOp(), ditherEnable);
+    void load(u8 ditherEnable) const {
+        J3DGDSetBlendMode((GXBlendMode)mBlendMode, (GXBlendFactor)mSrcFactor, (GXBlendFactor)mDstFactor, (GXLogicOp)mLogicOp, ditherEnable);
     }
 
     // void operator=(const J3DBlend&) {}
@@ -680,7 +716,21 @@ struct J3DAlphaComp {
         mRef1 = info.mRef1;
     }
 
-    GXCompare getComp0() const { return GXCompare(j3dAlphaCmpTable[mAlphaCmpID * 3]); }
+    J3DAlphaComp& operator=(u16 id) { mAlphaCmpID = id; return *this; }
+    J3DAlphaComp& operator=(const J3DAlphaComp& rhs) {
+        mAlphaCmpID = rhs.mAlphaCmpID;
+        mRef0 = rhs.mRef0;
+        mRef1 = rhs.mRef1;
+        return *this;
+    }
+    J3DAlphaComp& operator=(J3DAlphaComp& rhs) {
+        mAlphaCmpID = rhs.mAlphaCmpID;
+        mRef0 = rhs.mRef0;
+        mRef1 = rhs.mRef1;
+        return *this;
+    }
+
+    GXCompare getComp0() const { return GXCompare(j3dAlphaCmpTable[mAlphaCmpID * 3 + 0]); }
     GXAlphaOp getOp() const { return GXAlphaOp(j3dAlphaCmpTable[mAlphaCmpID * 3 + 1]); }
     GXCompare getComp1() const { return GXCompare(j3dAlphaCmpTable[mAlphaCmpID * 3 + 2]); }
     u8 getRef0() const { return mRef0; }
@@ -692,10 +742,17 @@ struct J3DAlphaComp {
         mRef1 = info.mRef1;
     }
 
-    void load() {
-        J3DGDSetAlphaCompare(getComp0(), getRef0(), getOp(), getComp1(), getRef1());
+    void load() const {
+        J3DGDSetAlphaCompare(getComp0(), mRef0, getOp(), getComp1(), mRef1);
     }
 
+    // void operator!=(unsigned short) {}
+    // void operator=(J3DAlphaComp&) {}
+    // void operator=(const J3DAlphaComp&) {}
+    // void operator=(unsigned short) {}
+    // void operator==(J3DAlphaComp&) {}
+
+private:
     /* 0x00 */ u16 mAlphaCmpID;
     /* 0x02 */ u8 mRef0;
     /* 0x03 */ u8 mRef1;
@@ -848,8 +905,12 @@ public:
 };
 
 struct J3DIndTexCoordScale : public J3DIndTexCoordScaleInfo {
-    J3DIndTexCoordScale() { *(J3DIndTexCoordScaleInfo*)this = j3dDefaultIndTexCoordScaleInfo; }
-    explicit J3DIndTexCoordScale(const J3DIndTexCoordScaleInfo& info) {*(J3DIndTexCoordScaleInfo*)this = info; }
+    J3DIndTexCoordScale() {
+        J3DIndTexCoordScaleInfo::operator=(j3dDefaultIndTexCoordScaleInfo);
+    }
+    explicit J3DIndTexCoordScale(const J3DIndTexCoordScaleInfo& info) {
+        J3DIndTexCoordScaleInfo::operator=(info);
+    }
     ~J3DIndTexCoordScale() {}
 
     u8 getScaleS() { return mScaleS; }
@@ -857,8 +918,12 @@ struct J3DIndTexCoordScale : public J3DIndTexCoordScaleInfo {
 };
 
 struct J3DIndTexMtx : public J3DIndTexMtxInfo {
-    J3DIndTexMtx() {*(J3DIndTexMtxInfo*)this = j3dDefaultIndTexMtxInfo; }
-    explicit J3DIndTexMtx(const J3DIndTexMtxInfo& info) { *(J3DIndTexMtxInfo*)this = info; }
+    J3DIndTexMtx() {
+        J3DIndTexMtxInfo::operator=(j3dDefaultIndTexMtxInfo);
+    }
+    explicit J3DIndTexMtx(const J3DIndTexMtxInfo& info) {
+        J3DIndTexMtxInfo::operator=(info);
+    }
     ~J3DIndTexMtx() {}
 
     void load(u32 id) const {
@@ -879,11 +944,19 @@ struct J3DIndTexMtx : public J3DIndTexMtxInfo {
 };  // Size: 0x1C
 
 struct J3DIndTexOrder : public J3DIndTexOrderInfo {
-    J3DIndTexOrder() { *(J3DIndTexOrderInfo*)this = j3dDefaultIndTexOrderNull; }
-    explicit J3DIndTexOrder(const J3DIndTexOrderInfo& info) { *(J3DIndTexOrderInfo*)this = info; }
+    J3DIndTexOrder() {
+        J3DIndTexOrderInfo::operator=(j3dDefaultIndTexOrderNull);
+    }
+    explicit J3DIndTexOrder(const J3DIndTexOrderInfo& info) {
+        J3DIndTexOrderInfo::operator=(info);
+    }
+    J3DIndTexOrder& operator=(const J3DIndTexOrder& other) {
+        J3DIndTexOrderInfo::operator=(other);
+        return *this;
+    }
 
-    u8 getCoord() const { return mCoord; }
-    u8 getMap() const { return mMap; }
+    u8 getCoord() { return mCoord; }
+    u8 getMap() { return mMap; }
     void setCoord(u8 coord) { mCoord = coord; }
     void setMap(u8 map) { mMap = map; }
 };

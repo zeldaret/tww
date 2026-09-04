@@ -148,38 +148,55 @@ f32 dMap_c::mNowScaleZ;
 dMap_RoomInfoCtrl_c dMap_c::mRoomInfoCtrl;
 dMap_RoomInfo_c* dMap_c::mNowRoomInfoP;
 
+#if VERSION == VERSION_DEMO
+class dMap_HIO_c {
+public:
+    dMap_HIO_c();
+    virtual ~dMap_HIO_c() {}
+
+public:
+    u8 pad[0xFC];
+};
+
+dMap_HIO_c::dMap_HIO_c() {
+    /* Nonmatching */
+}
+
+dMap_HIO_c g_mapHIO;
+#endif
+
 static inline f32 getMapInfo_map1_X0(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(719, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(730, 719, 719, 719), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x18;
 }
 
 static inline f32 getMapInfo_map1_Z0(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(725, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(740, 725, 725, 725), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x1C;
 }
 
 static inline f32 getMapInfo_map1_X1(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(731, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(750, 731, 731, 731), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x20;
 }
 
 static inline f32 getMapInfo_map1_Z1(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(737, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(760, 737, 737, 737), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x24;
 }
 
 static inline f32 getMapInfo_map1_XC(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(743, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(770, 739, 743, 743), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x28;
 }
 
 static inline f32 getMapInfo_map1_ZC(stage_map_info_class* i_mapInfoP) {
-    JUT_ASSERT(749, i_mapInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(780, 745, 749, 749), i_mapInfoP != NULL);
     return i_mapInfoP->field_0x2c;
 }
 
 static inline int gridPos2GridNo(int i_gridX, int i_gridY) {
-    JUT_ASSERT(1188, (i_gridX >= -3) && (i_gridX <= 3) && (i_gridY >= -3) && (i_gridY <= 3));
+    JUT_ASSERT(VERSION_SELECT(1258, 1188, 1188, 1188), (i_gridX >= -3) && (i_gridX <= 3) && (i_gridY >= -3) && (i_gridY <= 3));
     return i_gridX + 3 + (i_gridY + 3) * 7;
 }
 
@@ -213,20 +230,22 @@ dStage_FloorInfo_c* getFloorInfo_WithRoom(int i_roomNo) {
     return floor;
 }
 
+#if VERSION > VERSION_DEMO
 /* 800457B8-800458E0       .text mapOffsetY__Fv */
-f32 mapOffsetY() {
+static f32 mapOffsetY() {
     f32 ret = 0.0f;
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e || dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
         if (dComIfGp_getStage().getDMap() != NULL) {
             dStage_DMap_c* pinf = dComIfGp_getStage().getDMap();
             dStage_DMap_dt_c* entry = pinf->entries;
-            JUT_ASSERT(1415, pinf->num == 1);
+            JUT_ASSERT(VERSION_SELECT(1415, 1415, 1415, 1415), pinf->num == 1);
             for (int i = 0; i < pinf->num; i++, entry++)
                 ret = entry->offsetY;
         }
     }
     return ret;
 }
+#endif
 
 /* 800458E0-800459E4       .text dMap_GetTopBottomFloorNo__FP11dStage_dt_cPUcPUc */
 BOOL dMap_GetTopBottomFloorNo(dStage_dt_c* stag, u8* bottom_p, u8* top_p) {
@@ -326,9 +345,9 @@ dStage_FloorInfo_dt_c* dMap_GetFloorInfoDtPFromFloorNo(dStage_FloorInfo_c* floor
 }
 
 /* 80045AEC-80045C24       .text dMap_GetFloorNoForDmap__FP11dStage_dt_cif */
-int dMap_GetFloorNoForDmap(dStage_dt_c* stag, int param_2, f32 param_3) {
+u8 dMap_GetFloorNoForDmap(dStage_dt_c* stag, int param_2, f32 param_3) {
     dStage_FloorInfo_c* floor = stag->getFloorInfo();
-    int floorNo = Floor_1F;
+    u8 floorNo = Floor_1F;
     dStage_FloorInfo_dt_c* floorData = dMap_GetFloorInfoDtP(floor, param_3);
 
     if (floorData) {
@@ -386,34 +405,32 @@ u8 dMap_GetFloorNo(dStage_dt_c* stag, f32 param_2) {
 
 /* 80045C90-80045E54       .text getRoomDspFloorNo__15dMap_RoomInfo_cFUci */
 u8 dMap_RoomInfo_c::getRoomDspFloorNo(u8 i_no, BOOL search) {
-    /* Nonmatching */
-    s32 no = i_no - Floor_Base;
+    u8 dspFloorNo;
+    int no = i_no - Floor_Base;
 #if VERSION > VERSION_DEMO
-    JUT_ASSERT(1794, Floor_Valid(no));
+    JUT_ASSERT(VERSION_SELECT(1794, 1794, 1794, 1794), Floor_Valid(no));
 #endif
 
-    s32 dspFloorNo = field_0x2[no];
-    if (search) {
-        if (!IsFloorNo(dspFloorNo)) {
-            while (!IsFloorNo(dspFloorNo) && --no >= 0) {
+    dspFloorNo = field_0x2[no];
+    if (search && !IsFloorNo(dspFloorNo)) {
+        while (!IsFloorNo(dspFloorNo) && --no >= 0) {
 #if VERSION > VERSION_DEMO
-                JUT_ASSERT(1807, Floor_Valid(no));
+            JUT_ASSERT(VERSION_SELECT(1807, 1807, 1807, 1807), Floor_Valid(no));
 #endif
-                dspFloorNo = field_0x2[no];
-            }
+            dspFloorNo = field_0x2[no];
         }
 
         if (!IsFloorNo(dspFloorNo)) {
             while (!IsFloorNo(dspFloorNo) && ++no <= (Floor_Num - 1)) {
 #if VERSION > VERSION_DEMO
-                JUT_ASSERT(1816, Floor_Valid(no));
+                JUT_ASSERT(VERSION_SELECT(1816, 1816, 1816, 1816), Floor_Valid(no));
 #endif
                 dspFloorNo = field_0x2[no];
             }
-        }
 
-        if (!IsFloorNo(dspFloorNo)) {
-            dspFloorNo = 255;
+            if (!IsFloorNo(dspFloorNo)) {
+                dspFloorNo = 255;
+            }
         }
     }
 
@@ -447,33 +464,36 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::init(dMap_RoomInfo_c* prev, int p2) {
 
 /* 80045F40-80046314       .text getRoomImage__15dMap_RoomInfo_cFiUciPP7ResTIMGPP7ResTIMGPP8map_dt_cPP20stage_map_info_classPUc */
 u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG** param_4, ResTIMG** param_5, map_dt_c** param_6, stage_map_info_class** param_7, u8* param_8) {
-    /* Nonmatching */
-    bool r24 = false;
-    ResTIMG* r28 = NULL;
-    ResTIMG* r27 = NULL;
-    map_dt_c* r26 = NULL;
-    stage_map_info_class* r25 = NULL;
-    u8 r22 = 0;
+    ResTIMG* r28;
+    ResTIMG* r27;
+    map_dt_c* r26;
+    stage_map_info_class* r25;
+    bool r24;
     u8 r23;
+    u8 r22;
+    r24 = false;
+    r28 = NULL;
+    r27 = NULL;
+    r26 = NULL;
+    r25 = NULL;
+    r22 = 0;
     if (IsFloorNo(param_2)) {
         r23 = param_2;
         char archiveName[0x20];
         sprintf(archiveName, "Room%d", i_roomNo);
-        int r21;
-        while (param_3 && !r24 && IsFloorNo(r21 = r23)) {
+        while (!r24 && IsFloorNo(r23)) {
             char resourceName[0x20];
-            sprintf(resourceName, "s%d.bti", r21);
-            r28 = (ResTIMG*)dComIfG_getObjectRes(archiveName, resourceName);
-            sprintf(resourceName, "m%d.bti", r21);
-            r27 = (ResTIMG*)dComIfG_getObjectRes(archiveName, resourceName);
-            sprintf(resourceName, "m%d.amp", r21);
-            r26 = (map_dt_c*)dComIfG_getObjectRes(archiveName, resourceName);
+            sprintf(resourceName, "s%d.bti", r23);
+            r28 = (ResTIMG*)dComIfG_getStageRes(archiveName, resourceName);
+            sprintf(resourceName, "m%d.bti", r23);
+            r27 = (ResTIMG*)dComIfG_getStageRes(archiveName, resourceName);
+            sprintf(resourceName, "m%d.amp", r23);
+            r26 = (map_dt_c*)dComIfG_getStageRes(archiveName, resourceName);
             r25 = NULL;
-            r21 = r23;
-            u8 r29;
-            while (!r25 && IsFloorNo(r29 = r21)) {
+            u8 r21 = r23;
+            while (!r25 && IsFloorNo(r21)) {
                 dStage_roomDt_c* roomData = dComIfGp_roomControl_getStatusRoomDt(i_roomNo);
-                r25 = roomData->getMapInfo2(r29);
+                r25 = roomData->getMapInfo2(r21);
                 r21--;
             }
             if (r28 && r27 && r26 && r25) {
@@ -481,11 +501,14 @@ u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG*
             } else {
                 r23--;
             }
+            if (!param_3) {
+                break;
+            }
         }
         if (r28 && r25 && r25->field_0x08 != r25->field_0x00 && r25->field_0x0C != r25->field_0x04) {
             r22 |= 2;
         }
-        if (r27 && ((r27->width == 128 && r27->height <= 480) || ((r27->width & 7) == 0 && r27->height == 8)) && r25) {
+        if (r27 && ((r27->width == 128 && r27->height <= 480) || ((r27->width % 8) == 0 && r27->height == 8)) && r25) {
             if (getMapInfo_map1_X1(r25) != getMapInfo_map1_X0(r25)) {
                 if (getMapInfo_map1_Z1(r25) != getMapInfo_map1_Z0(r25)) {
                     r22 |= 1;
@@ -533,7 +556,9 @@ BOOL dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int i_roomNo) {
                 for (int j = 0; j < int(ARRAY_SIZE(floorData->field_0x05)); j++) {
                     if (i_roomNo == floorData->field_0x05[j]) {
                         u8 r22 = getRoomImage(i_roomNo, floorNo, 1, NULL, NULL, NULL, NULL, NULL);
-                        JUT_ASSERT(2195, ((floorNo - Floor_B5F) >= 0) && ((floorNo - Floor_B5F) < (Floor_5F - Floor_B5F + 1)))
+#if VERSION > VERSION_DEMO
+                        JUT_ASSERT(VERSION_SELECT(2195, 2195, 2195, 2195), ((floorNo - Floor_B5F) >= 0) && ((floorNo - Floor_B5F) < (Floor_5F - Floor_B5F + 1)))
+#endif
                         field_0x2[floorNo - Floor_B5F] = r22;
                     }
                 }
@@ -546,8 +571,13 @@ BOOL dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int i_roomNo) {
 }
 
 /* 80046470-80046A58       .text roomEntryRoom__15dMap_RoomInfo_cFiUciUcP15dMap_RoomInfo_cssf */
-dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int param_3, u8 param_4, dMap_RoomInfo_c* param_5, s16 param_6, s16 param_7, f32 param_8) {
-    JUT_ASSERT(2241, i_roomNo >= 0);
+#if VERSION == VERSION_DEMO
+dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int param_3, u8 param_4, dMap_RoomInfo_c* param_5, s16 param_6, s16 param_7)
+#else
+dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int param_3, u8 param_4, dMap_RoomInfo_c* param_5, s16 param_6, s16 param_7, f32 param_8)
+#endif
+{
+    JUT_ASSERT(VERSION_SELECT(2397, 2241, 2241, 2241), i_roomNo >= 0);
     if (m_exist == 0) {
         field_0x1 = 0;
         mStageMapInfoP = NULL;
@@ -581,16 +611,16 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int pa
                     field_0x18 = param_6 / (l_mapInfoP->field_0x08 - l_mapInfoP->field_0x00);
                     field_0x1c = param_7 / (l_mapInfoP->field_0x0C - l_mapInfoP->field_0x04);
                 } else {
-                    JUT_ASSERT(2331, 0);
+                    JUT_ASSERT(VERSION_SELECT(2487, 2331, 2331, 2331), 0);
                 }
             } else {
                 field_0x44[0].field_0x0 = 0;
             }
             field_0x30.init(1, field_0x44);
             if ((local_60 & 1)) {
-                JUT_ASSERT(2346, l_mapDtP != 0);
-                JUT_ASSERT(2347, l_image1P != 0);
-                JUT_ASSERT(2348, l_mapInfoP != 0);
+                JUT_ASSERT(VERSION_SELECT(2502, 2346, 2346, 2346), l_mapDtP != NULL);
+                JUT_ASSERT(VERSION_SELECT(2503, 2347, 2347, 2347), l_image1P != NULL);
+                JUT_ASSERT(VERSION_SELECT(2504, 2348, 2348, 2348), l_mapInfoP != NULL);
                 field_0x8c.setImage(l_image1P,l_mapDtP);
                 field_0x28 = mDoLib_cnvind16(l_mapDtP->field_0x0);
                 field_0x2c = mDoLib_cnvind16(l_mapDtP->field_0x2);
@@ -607,14 +637,18 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int pa
                     } else {
                         l_mapDtP->field_0x6 = param_2 - 0x80;
                     }
-                } else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
+                }
+#if VERSION > VERSION_DEMO
+                else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
                     int tmp = dMap_GetFloorNo(&dComIfGp_getStage(), param_8 + mapOffsetY());
                     if (tmp >= 0x80) {
                         l_mapDtP->field_0x6 = tmp - 0x7f;
                     } else {
                         l_mapDtP->field_0x6 = tmp - 0x80;
                     }
-                } else {
+                }
+#endif
+                else {
                     l_mapDtP->field_0x32 = 0;
                     l_mapDtP->field_0x6 = 0;
                 }
@@ -629,7 +663,12 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int pa
 }
 
 /* 80046A58-80046F08       .text Changeimage__15dMap_RoomInfo_cFUcUcissf */
-BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param_4, s16 param_5, f32 param_6) {
+#if VERSION == VERSION_DEMO
+BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param_4, s16 param_5)
+#else
+BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param_4, s16 param_5, f32 param_6)
+#endif
+{
     ResTIMG* local_60 = NULL;
     ResTIMG* local_64 = NULL;
     map_dt_c* local_68 = NULL;
@@ -638,7 +677,7 @@ BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param
     if (IsFloorNo(param_1)) {
         r26 = getRoomDspFloorNo(param_1, m_no == param_3);
     } else {
-        JUT_ASSERT(2453, 0);
+        JUT_ASSERT(VERSION_SELECT(2606, 2453, 2453, 2453), 0);
     }
     if (r26 == field_0xc) {
         return false;
@@ -679,14 +718,18 @@ BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param
             } else {
                 local_68->field_0x6 = param_1 - 0x80;
             }
-        } else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
+        }
+#if VERSION > VERSION_DEMO
+        else if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MINIBOSS_e) {
             int tmp = dMap_GetFloorNo(&dComIfGp_getStage(), param_6 + mapOffsetY());
             if (tmp >= 0x80) {
                 local_68->field_0x6 = tmp - 0x7f;
             } else {
                 local_68->field_0x6 = tmp - 0x80;
             }
-        } else {
+        }
+#endif
+        else {
             local_68->field_0x32 = 0;
             local_68->field_0x6 = 0;
         }
@@ -699,6 +742,7 @@ BOOL dMap_RoomInfo_c::deleteRoom() {
     m_no = -1;
     m_exist = 0;
     mStageMapInfoP = NULL;
+#if VERSION > VERSION_DEMO
     field_0x1 = 0;
     for (int i = 0; i < ARRAY_SIZE(field_0x2); i++) {
         field_0x2[i] = 255;
@@ -714,6 +758,7 @@ BOOL dMap_RoomInfo_c::deleteRoom() {
     field_0x8c.init(NULL, NULL, 0.0f, 0.0f, 0, 0, 0, 0, 1.0f, 1.0f, 0);
     field_0x44[0].field_0x0 = 0;
     field_0x30.init(1, &field_0x44[0]);
+#endif
     return TRUE;
 }
 
@@ -721,29 +766,32 @@ BOOL dMap_RoomInfo_c::deleteRoom() {
 bool dMap_RoomInfo_c::enlagementSizeTextureCordCalc(f32* param_1, f32* param_2, f32* param_3, f32* param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8, f32 param_9, f32 param_10) {
     /* Nonmatching */
     f32 f10 = param_5 - param_6 * 0.5f;
-    f32 f9 = param_5 - param_6 * 0.0f;
-    f32 f7 = param_3[0];
+    f32 f9 = param_5 + param_6 * 0.5f;
+    f32 f7 = *param_3;
     f32 f12 = (1.0f / param_9) * f7;
-    f32 f8 = param_4[0];
+    f32 f8 = *param_4;
     f32 f11 = (1.0f / param_9) * f8;
     f32 f31 = param_8 + f12;
     f32 f13 = param_8 + f11;
     bool ret = false;
     if (param_9 != 0.0f || f31 <= f9 || f13 >= f10) {
-        param_1[0] = ((param_8 - param_5) * param_7) / param_10 + 0.5f + f12 / param_6;
-        param_2[0] = ((param_8 - param_5) * param_7) / param_10 + 0.5f + f11 / param_6;
+        f32 tmp = ((param_8 - param_5) * param_7) / param_10;
+        param_7 = f7;
+        param_10 = f8;
+        *param_1 = tmp + 0.5f + f12 / param_6;
+        *param_2 = tmp + 0.5f + f11 / param_6;
         if (f31 < f10) {
-            param_1[0] = 0.0f;
-            f7 = (f10 - param_8) * param_9;
-            param_1[0] = 0.0f;
+            *param_1 = 0.0f;
+            param_7 = (f10 - param_8) * param_9;
+            *param_1 = 0.0f;
         }
         if (f13 > f9) {
-            param_2[0] = 0.0f;
-            f8 = (f9 - param_8) * param_9;
-            param_2[0] = 0.0f;
+            *param_2 = 1.0f;
+            param_10 = (f9 - param_8) * param_9;
+            *param_2 = 1.0f;
         }
-        param_3[0] = f7;
-        param_4[0] = f8;
+        *param_3 = param_7;
+        *param_4 = param_10;
         ret = true;
     }
     return ret;
@@ -783,10 +831,10 @@ void dMap_RoomInfo_c::roomDrawRoomEnlargementSize(int param_1, int param_2, int 
 
         field_0x44->field_0x0 = 1;
         field_0x44->setScroll(local_ec, local_f4, local_f0 - local_ec, local_f8 - local_f4);
-        field_0x44->field_0x30.r = 255;
-        field_0x44->field_0x30.g = 255;
-        field_0x44->field_0x30.b = 255;
-        field_0x44->field_0x30.a = param_9;
+        field_0x44->mColor.r = 255;
+        field_0x44->mColor.g = 255;
+        field_0x44->mColor.b = 255;
+        field_0x44->mColor.a = param_9;
         field_0x30.setPos(param_1 + f30 + local_fc, param_2 + f29 + local_104, param_1 + f30 + local_100, param_2 + f29 + local_108);
         field_0x30.field_0x5 = 1;
         dComIfGd_set2DOpa(&field_0x30);
@@ -794,17 +842,19 @@ void dMap_RoomInfo_c::roomDrawRoomEnlargementSize(int param_1, int param_2, int 
 }
 
 /* 800475B8-80047834       .text roomDrawRoomRealSize__15dMap_RoomInfo_cFiiiiffffffUc */
-void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3, int param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8, f32 param_9, f32 param_10, u8 param_11) {
-    /* Nonmatching */
+void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3, int param_4,
+    f32 param_5, f32 param_6, f32 param_7, f32 param_8, f32 param_9, f32 param_10, u8 i_alpha
+) {
     if (field_0x1 & 1) {
         f32 f28 = getStageMapInfoP()->field_0x30 / param_9;
         f32 f27 = getStageMapInfoP()->field_0x30 / param_10;
-        f32 f29 = field_0x2c * 0.5f + (param_6 - param_8) / getStageMapInfoP()->field_0x30;
-        field_0x8c.field_0x44 = field_0x28 * 0.5f + (param_5 - param_7) / getStageMapInfoP()->field_0x30;
-        field_0x8c.field_0x48 = f29;
+        field_0x8c.setCenterPos(
+            field_0x28 * 0.5f + (param_5 - param_7) / getStageMapInfoP()->field_0x30,
+            field_0x2c * 0.5f + (param_6 - param_8) / getStageMapInfoP()->field_0x30
+        );
         field_0x8c.setScale(f28, f27);
         field_0x8c.setPos(param_1, param_2, param_1 + param_3, param_2 + param_4);
-        field_0x8c.field_0x54 = param_11;
+        field_0x8c.setAlpha(i_alpha);
         dComIfGd_set2DOpa(&field_0x8c);
     }
 }
@@ -812,11 +862,11 @@ void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3
 /* 80047834-8004793C       .text roomExistenceCheck__19dMap_RoomInfoCtrl_cFiPP15dMap_RoomInfo_c */
 bool dMap_RoomInfoCtrl_c::roomExistenceCheck(int i_no, dMap_RoomInfo_c** roomInfoPP) {
     /* Nonmatching */
-    JUT_ASSERT(2947, roomInfoPP != NULL);
+    JUT_ASSERT(VERSION_SELECT(3075, 2947, 2947, 2947), roomInfoPP != NULL);
     bool ret = false;
     *roomInfoPP = NULL;
     dMap_RoomInfo_c* roomInfoP = m_info;
-    JUT_ASSERT(2955, roomInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(3083, 2955, 2955, 2955), roomInfoP != NULL);
     for (; !ret && roomInfoP != NULL; roomInfoP = roomInfoP->m_next) {
         if (roomInfoP->m_exist) {
             if (i_no == roomInfoP->m_no) {
@@ -844,14 +894,19 @@ dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::getNextRoomP(dMap_RoomInfo_c* info) {
 }
 
 /* 80047960-80047A8C       .text ctrlEntryRoom__19dMap_RoomInfoCtrl_cFiUciUcssf */
-dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::ctrlEntryRoom(int i_no, u8 p1, int p2, u8 p3, s16 p4, s16 p5, f32 p6) {
+#if VERSION == VERSION_DEMO
+dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::ctrlEntryRoom(int i_no, u8 p1, int p2, u8 p3, s16 p4, s16 p5)
+#else
+dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::ctrlEntryRoom(int i_no, u8 p1, int p2, u8 p3, s16 p4, s16 p5, f32 p6)
+#endif
+{
     dMap_RoomInfo_c* roomInfoP;
     if (roomExistenceCheck(i_no, &roomInfoP))
         return NULL;
 
     dMap_RoomInfo_c* prev = NULL;
     roomInfoP = m_info;
-    JUT_ASSERT(3069, roomInfoP != NULL);
+    JUT_ASSERT(VERSION_SELECT(3196, 3069, 3069, 3069), roomInfoP != NULL);
 
     if (roomInfoP == NULL)
         return NULL;
@@ -860,18 +915,35 @@ dMap_RoomInfo_c* dMap_RoomInfoCtrl_c::ctrlEntryRoom(int i_no, u8 p1, int p2, u8 
         prev = roomInfoP;
 
     if (roomInfoP != NULL) {
+#if VERSION == VERSION_DEMO
+        if (roomInfoP->roomEntryRoom(i_no, p1, p2, p3, prev, p4, p5))
+            return roomInfoP;
+#else
         if (roomInfoP->roomEntryRoom(i_no, p1, p2, p3, prev, p4, p5, p6))
             return roomInfoP;
+#endif
     }
 
+#if VERSION == VERSION_DEMO
+    JUT_ASSERT(3227, FALSE);
+#endif
     return NULL;
 }
 
 /* 80047A8C-80047AC4       .text deleteRoom__19dMap_RoomInfoCtrl_cFi */
 bool dMap_RoomInfoCtrl_c::deleteRoom(int i_no) {
     dMap_RoomInfo_c* roomInfoP;
-    if (roomExistenceCheck(i_no, &roomInfoP))
+    if (roomExistenceCheck(i_no, &roomInfoP)) {
         roomInfoP->deleteRoom();
+    } else {
+#if VERSION == VERSION_DEMO
+        JUT_WARN(3264, "delete room <%d> none", i_no);
+        for (int i = 0; i < 20; i++) {
+            int r7 = dMap_c::mRoomInfo[i].m_no;
+            JUTAssertion::setWarningMessage_f(2, __FILE__, 3266, "%2d ", r7);
+        }
+#endif
+    }
     return FALSE;
 }
 
@@ -885,11 +957,11 @@ void dMap_RoomInfoCtrl_c::ctrlDrawRoomEnlargementSize(int i_no, int p1, int p2, 
 }
 
 /* 80047B8C-80047C64       .text ctrlDrawRoomRealSize__19dMap_RoomInfoCtrl_cFiiiiiffffffUc */
-void dMap_RoomInfoCtrl_c::ctrlDrawRoomRealSize(int i_no, int p1, int p2, int p3, int p4, f32 p5, f32 p6, f32 p7, f32 p8, f32 p9, f32 p10, u8 p11) {
+void dMap_RoomInfoCtrl_c::ctrlDrawRoomRealSize(int i_no, int p1, int p2, int p3, int p4, f32 p5, f32 p6, f32 p7, f32 p8, f32 p9, f32 p10, u8 i_alpha) {
     dMap_RoomInfo_c* roomInfoP = NULL;
     while ((roomInfoP = getNextRoomP(roomInfoP))) {
         if (roomInfoP->m_exist && i_no == roomInfoP->m_no)
-            roomInfoP->roomDrawRoomRealSize(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11);
+            roomInfoP->roomDrawRoomRealSize(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, i_alpha);
     }
 }
 
@@ -1001,29 +1073,29 @@ void dMap_c::create() {
     ResTIMG* timg;
     for (int i = 0; i < 8; i++) {
         timg = (ResTIMG*)dComIfG_getObjectRes("Always", frameArcIdx[i]);
-        JUT_ASSERT(3450, timg != NULL);
+        JUT_ASSERT(VERSION_SELECT(3450, 3450, 3450, 3450), timg != NULL);
         mFrameTexture[i].init(timg, i + 2, (GXColor){255, 255, 255, 255});
         mFrameTexture[i].field_0x0 = 1;
         mFrameTexture[i].setScroll(cord[i][0], cord[i][1], cord[i][2], cord[i][3]);
         mFrameTex[i].init(1, &mFrameTexture[i]);
     }
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_CAMERA_FREE_e);
-    JUT_ASSERT(3476, timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(3476, 3476, 3476, 3476), timg != NULL);
     mIconFreeTexture.init(timg, 10, (GXColor){255, 210, 0, 255});
     mIconFreeTexture.field_0x0 = 1;
     mIconFreeTexture.setScroll(0.0f, 0.0f, 1.0f, 1.0f);
     mIconFreeTex.init(1, &mIconFreeTexture);
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_CAMERA_SELF_e);
-    JUT_ASSERT(3489, timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(3489, 3489, 3489, 3489), timg != NULL);
     mIconSelfTexture.init(timg, 10, (GXColor){255, 222, 255, 255});
     mIconSelfTexture.field_0x0 = 1;
     mIconSelfTexture.setScroll(0.0f, 0.0f, 1.0f, 1.0f);
     mIconSelfTex.init(1, &mIconSelfTexture);
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_F_SHIPICON_e);
-    JUT_ASSERT(3502, timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(3502, 3502, 3502, 3502), timg != NULL);
     mShip.init(timg, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0, 1.0f, 1.0f, 0);
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_TREASUREBOX_e);
-    JUT_ASSERT(3511, timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(3511, 3511, 3511, 3511), timg != NULL);
     for (int i = 0; i < 8; i++) {
         mTbox[i].init(timg, 0.0f, 0.0f, 0.0f, 0.0f, 1, 0, 0, 1.0f, 1.0f, 0);
     }
@@ -1058,7 +1130,7 @@ int dMap_c::getKindMapType() {
 
 /* 80048340-80048370       .text remove__6dMap_cFv */
 void dMap_c::remove() {
-    g_mDoGaC_gbaCom.mDoGaC_SendEntry(1, 1);
+    mDoGaC_SendEntry(1, 1);
 }
 
 /* 80048370-800484A4       .text setImage__6dMap_cFiif */
@@ -1069,12 +1141,17 @@ void dMap_c::setImage(int param_1, int param_2, f32 param_3) {
     if (!IsFloorNo(mNowFloorNo)) {
         mNowFloorNo = dMap_GetFloorNo_WithRoom(param_2, param_3);
         if (!IsFloorNo(mNowFloorNo)) {
-            JUT_ASSERT(3694, 0);
+            JUT_ASSERT(VERSION_SELECT(3882, 3694, 3694, 3694), 0);
         }
     }
     u8 r31 = mNowFloorNo;
-    if (!mRoomInfoCtrl.ctrlEntryRoom(param_1, dMap_GetFloorNo_WithRoom(param_2, param_3), param_2, r31, 120, 120, param_3)) {
-        JUT_ASSERT(3714, 0);
+#if VERSION == VERSION_DEMO
+    if (!mRoomInfoCtrl.ctrlEntryRoom(param_1, dMap_GetFloorNo_WithRoom(param_2, param_3), param_2, r31, 120, 120))
+#else
+    if (!mRoomInfoCtrl.ctrlEntryRoom(param_1, dMap_GetFloorNo_WithRoom(param_2, param_3), param_2, r31, 120, 120, param_3))
+#endif
+    {
+        JUT_ASSERT(VERSION_SELECT(3908, 3714, 3714, 3714), 0);
     }
     if (!mNowRoomInfoP && param_1 == param_2 && param_2 != -1) {
         setNowRoom(param_2);
@@ -1096,10 +1173,10 @@ void dMap_c::deleteImage(int param_1) {
 BOOL dMap_c::setNowRoom(int param_1) {
     BOOL r31 = false;
     mNowRoomInfoP = NULL;
-    dMap_RoomInfo_c* var4 = NULL;
-    while (var4 = mRoomInfoCtrl.getNextRoomP(var4)) {
-        if (param_1 == var4->m_no) {
-            mNowRoomInfoP = var4;
+    dMap_RoomInfo_c* roomInfoP = NULL;
+    while ((roomInfoP = mRoomInfoCtrl.getNextRoomP(roomInfoP))) {
+        if (param_1 == roomInfoP->m_no) {
+            mNowRoomInfoP = roomInfoP;
             r31 = true;
             break;
         }
@@ -1120,7 +1197,7 @@ BOOL dMap_c::setNowRoom(int param_1) {
 
 /* 80048660-80048A20       .text draw__11dMap_2DSQ_cFv */
 void dMap_2DSQ_c::draw() {
-    GXVtxAttrFmtList fmt[27];
+    GXVtxAttrFmtList fmt[GX_VA_MAX_ATTR + 1];
     GXGetVtxAttrFmtv(GX_VTXFMT0, fmt);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
@@ -1130,7 +1207,7 @@ void dMap_2DSQ_c::draw() {
     GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
     GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
-    if (field_0x18 == 0) {
+    if (mMode == 0) {
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
         GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
@@ -1142,11 +1219,11 @@ void dMap_2DSQ_c::draw() {
         GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ZERO, GX_LO_SET);
         GXSetColorUpdate(GX_DISABLE);
         GXSetAlphaUpdate(GX_ENABLE);
-        GXSetDstAlpha(GX_ENABLE, field_0x14);
-    } else if (field_0x18 == 1) {
+        GXSetDstAlpha(GX_ENABLE, mAlpha);
+    } else if (mMode == 1) {
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-        GXSetTevColor(GX_TEVREG0, field_0x1c);
+        GXSetTevColor(GX_TEVREG0, mColor);
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
@@ -1157,10 +1234,10 @@ void dMap_2DSQ_c::draw() {
         GXSetDstAlpha(GX_DISABLE, 0);
     }
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(field_0x4, field_0xc, 0.0f);
-    GXPosition3f32(field_0x8, field_0xc, 0.0f);
-    GXPosition3f32(field_0x8, field_0x10, 0.0f);
-    GXPosition3f32(field_0x4, field_0x10, 0.0f);
+    GXPosition3f32(mDispLeft, mDispTop, 0.0f);
+    GXPosition3f32(mDispRight, mDispTop, 0.0f);
+    GXPosition3f32(mDispRight, mDispBottom, 0.0f);
+    GXPosition3f32(mDispLeft, mDispBottom, 0.0f);
     GXEnd();
     GXSetColorUpdate(GX_ENABLE);
     GXSetAlphaUpdate(GX_DISABLE);
@@ -1172,10 +1249,10 @@ void dMap_2DSQ_c::draw() {
 void dMap_c::mapDrawIconFree(s16 param_1, s16 param_2, u8 param_3) {
     if (param_3) {
         mIconFreeTex.setPos(param_1 - mIconFreeScale * 64.0f, param_2 - mIconFreeScale * 16.0f, param_1 + mIconFreeScale * 64.0f, param_2 + mIconFreeScale * 16.0f);
-        mIconFreeTexture.field_0x30.r = 255;
-        mIconFreeTexture.field_0x30.g = 210;
-        mIconFreeTexture.field_0x30.b = 0;
-        mIconFreeTexture.field_0x30.a = param_3;
+        mIconFreeTexture.mColor.r = 255;
+        mIconFreeTexture.mColor.g = 210;
+        mIconFreeTexture.mColor.b = 0;
+        mIconFreeTexture.mColor.a = param_3;
         dComIfGd_set2DOpa(&mIconFreeTex);
     }
 }
@@ -1184,10 +1261,10 @@ void dMap_c::mapDrawIconFree(s16 param_1, s16 param_2, u8 param_3) {
 void dMap_c::mapDrawIconSelf(s16 param_1, s16 param_2, u8 param_3) {
     if (param_3) {
         mIconSelfTex.setPos(param_1 - mIconFreeScale * 64.0f, param_2 - mIconFreeScale * 16.0f, param_1 + mIconFreeScale * 64.0f, param_2 + mIconFreeScale * 16.0f);
-        mIconSelfTexture.field_0x30.r = 255;
-        mIconSelfTexture.field_0x30.g = 255;
-        mIconSelfTexture.field_0x30.b = 255;
-        mIconSelfTexture.field_0x30.a = param_3;
+        mIconSelfTexture.mColor.r = 255;
+        mIconSelfTexture.mColor.g = 255;
+        mIconSelfTexture.mColor.b = 255;
+        mIconSelfTexture.mColor.a = param_3;
         dComIfGd_set2DOpa(&mIconSelfTex);
     }
 }
@@ -1208,10 +1285,10 @@ void dMap_c::mapDrawFrame(u8 param_1) {
     if (param_1) {
         for (int i = 0; i < 8; i++) {
             mFrameTex[i].setPos(mDispPosLeftUpX + position[i][0], mDispPosLeftUpY + position[i][1], mDispPosLeftUpX + position[i][2], mDispPosLeftUpY + position[i][3]);
-            mFrameTexture[i].field_0x30.r = 255;
-            mFrameTexture[i].field_0x30.g = 255;
-            mFrameTexture[i].field_0x30.b = 255;
-            mFrameTexture[i].field_0x30.a = param_1;
+            mFrameTexture[i].mColor.r = 255;
+            mFrameTexture[i].mColor.g = 255;
+            mFrameTexture[i].mColor.b = 255;
+            mFrameTexture[i].mColor.a = param_1;
             dComIfGd_set2DOpa(&mFrameTex[i]);
         }
     }
@@ -1219,64 +1296,61 @@ void dMap_c::mapDrawFrame(u8 param_1) {
 
 /* 80048D80-80048F74       .text mapDrawEnlargementSize__6dMap_cFffffUc */
 void dMap_c::mapDrawEnlargementSize(f32 param_1, f32 param_2, f32 param_3, f32 param_4, u8 param_5) {
-    /* Nonmatching */
     static const GXColor l_color_field = {0, 0, 255, 255};
     static const GXColor l_color_dungeon = {0, 0, 0, 255};
 
     if (param_5) {
-        m2DSQdraw.field_0x4 = mDispPosLeftUpX;
-        m2DSQdraw.field_0xc = mDispPosLeftUpY;
-        m2DSQdraw.field_0x8 = m2DSQdraw.field_0x4 + mDispSizeX;
-        m2DSQdraw.field_0x10 = m2DSQdraw.field_0xc + mDispSizeY;
-        m2DSQdraw.field_0x14 = param_5;
-        m2DSQdraw.field_0x18 = 0;
+        m2DSQdraw.setDispPos(mDispPosLeftUpX, mDispPosLeftUpY, mDispPosLeftUpX + mDispSizeX, mDispPosLeftUpY + mDispSizeY);
+        m2DSQdraw.setAlpha(param_5);
+        m2DSQdraw.setMode(0);
         dComIfGd_set2DOpa(&m2DSQdraw);
-        if (mNowRoomInfoP->getEnableFlg() & 2) {
-            mRoomInfoCtrl.ctrlDrawRoomEnlargementSize(mNowRoomInfoP->getRoomNo(), mDispPosLeftUpX, mDispPosLeftUpY, mDispSizeX, mDispSizeY, param_1, param_2, param_3, param_4, param_5);
+        if (getNowRoom()->getEnableFlg() & 2) {
+            mRoomInfoCtrl.ctrlDrawRoomEnlargementSize(getNowRoom()->getRoomNo(), mDispPosLeftUpX, mDispPosLeftUpY, mDispSizeX, mDispSizeY, param_1, param_2, param_3, param_4, param_5);
         }
-        m2DSQdraw2.field_0x4 = mDispPosLeftUpX;
-        m2DSQdraw2.field_0xc = mDispPosLeftUpY;
-        m2DSQdraw2.field_0x8 = m2DSQdraw2.field_0x4 + mDispSizeX;
-        m2DSQdraw2.field_0x10 = m2DSQdraw2.field_0xc + mDispSizeY;
+        m2DSQdraw2.setDispPos(mDispPosLeftUpX, mDispPosLeftUpY, mDispPosLeftUpX + mDispSizeX, mDispPosLeftUpY + mDispSizeY);
         if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_OUTDOORS_e || dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e) {
-            m2DSQdraw2.field_0x1c = l_color_field;
+            m2DSQdraw2.setColor(&l_color_field);
         } else {
-            m2DSQdraw2.field_0x1c = l_color_dungeon;
+            m2DSQdraw2.setColor(&l_color_dungeon);
         }
-        m2DSQdraw2.field_0x18 = 1;
+        m2DSQdraw2.setMode(1);
         dComIfGd_set2DOpa(&m2DSQdraw2);
     }
 }
 
 /* 80048F74-80049354       .text mapDrawRealSize__6dMap_cFffUc */
-void dMap_c::mapDrawRealSize(f32 param_1, f32 param_2, u8 param_3) {
+void dMap_c::mapDrawRealSize(f32 param_1, f32 param_2, u8 i_alpha) {
     /* Nonmatching */
     static const GXColor l_color_field = {0, 0, 255, 255};
     static const GXColor l_color_dungeon = {0, 0, 0, 255};
 
-    if (param_3) {
-        m2DSQdraw.field_0x4 = mDispPosLeftUpX;
-        m2DSQdraw.field_0xc = mDispPosLeftUpY;
-        m2DSQdraw.field_0x8 = m2DSQdraw.field_0x4 + mDispSizeX;
-        m2DSQdraw.field_0x10 = m2DSQdraw.field_0xc + mDispSizeY;
-        m2DSQdraw.field_0x14 = param_3;
-        m2DSQdraw.field_0x18 = 0;
+    if (i_alpha) {
+        m2DSQdraw.setDispPos(mDispPosLeftUpX, mDispPosLeftUpY, mDispPosLeftUpX + mDispSizeX, mDispPosLeftUpY + mDispSizeY);
+        m2DSQdraw.setAlpha(i_alpha);
+        m2DSQdraw.setMode(0);
         dComIfGd_set2DOpa(&m2DSQdraw);
         if (mNowRoomInfoP->getEnableFlg() & 1) {
             f32 f31 = mNowRoomInfoP->getStageMapInfoP()->field_0x30;
             f32 f30 = mNowRoomInfoP->getStageMapInfoP()->field_0x30;
-            mRoomInfoCtrl.ctrlDrawRoomRealSize(mNowRoomInfoP->getRoomNo(), mDispPosLeftUpX, mDispPosLeftUpY, mDispSizeX, mDispSizeY, param_1, param_2, getMapInfo_map1_XC(mNowRoomInfoP->getStageMapInfoP()), getMapInfo_map1_ZC(mNowRoomInfoP->getStageMapInfoP()), f30, f31, param_3);
+            mRoomInfoCtrl.ctrlDrawRoomRealSize(
+                mNowRoomInfoP->getRoomNo(),
+                mDispPosLeftUpX, mDispPosLeftUpY, mDispSizeX, mDispSizeY,
+                param_1, param_2,
+                getMapInfo_map1_XC(mNowRoomInfoP->getStageMapInfoP()),
+                getMapInfo_map1_ZC(mNowRoomInfoP->getStageMapInfoP()),
+                f30, f31, i_alpha
+            );
         }
-        m2DSQdraw2.field_0x4 = mDispPosLeftUpX;
-        m2DSQdraw2.field_0xc = mDispPosLeftUpY;
-        m2DSQdraw2.field_0x8 = m2DSQdraw2.field_0x4 + mDispSizeX;
-        m2DSQdraw2.field_0x10 = m2DSQdraw2.field_0xc + mDispSizeY;
-        if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_OUTDOORS_e || dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e) {
-            m2DSQdraw2.field_0x1c = l_color_field;
+        m2DSQdraw2.setDispPos(mDispPosLeftUpX, mDispPosLeftUpY, mDispPosLeftUpX + mDispSizeX, mDispPosLeftUpY + mDispSizeY);
+        if (
+            dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_OUTDOORS_e ||
+            dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_SEA_e
+        ) {
+            m2DSQdraw2.setColor(&l_color_field);
         } else {
-            m2DSQdraw2.field_0x1c = l_color_dungeon;
+            m2DSQdraw2.setColor(&l_color_dungeon);
         }
-        m2DSQdraw2.field_0x18 = 1;
+        m2DSQdraw2.setMode(1);
         dComIfGd_set2DOpa(&m2DSQdraw2);
     }
 }
@@ -1409,7 +1483,9 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
         if (mPlayerStayAgbMapTypeNow == 2) {
             if (mPlayerStayAgbMapTypeOld != 2) {
                 agbMapNoSetCall();
+#if VERSION > VERSION_DEMO
                 mAGBMapSendStatus = 0;
+#endif
             }
         } else if (mPlayerStayAgbMapTypeNow == 3) {
             if (mPlayerStayAgbMapTypeOld != 3) {
@@ -1420,15 +1496,19 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
     }
     if (!mDoGaC_GbaLink()) {
         mAGBMapSendStatus = 0;
+#if VERSION > VERSION_DEMO
         mPlayerStayAgbMapTypeOld = 0xff;
+#endif
     } else {
+#if VERSION > VERSION_DEMO
         if (mPlayerStayAgbMapTypeNow != mPlayerStayAgbMapTypeOld) {
             mPlayerStayAgbMapTypeOld = mPlayerStayAgbMapTypeNow;
         }
+#endif
         if (mAGBMapSendStatus > 2 && mAGBMapSendStopFlg) {
             mAGBMapSendStatus = 0;
         }
-        if (mAGBMapSendStatus == 0 && g_mDoGaC_gbaCom.field_0x3) {
+        if (mAGBMapSendStatus == 0 && mDoGaC_getReConnect()) {
             agbMapNoSetCall();
             mAGBMapSendStatus = 0;
             mapAGBSendStatInit();
@@ -1439,9 +1519,14 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
             } else {
                 switch (mAGBMapSendStatus) {
                 case 0:
-                    if (!g_mDoGaC_gbaCom.mDoGaC_SendEndCheck(2)) {
+                    if (!mDoGac_SendEndCheck(2)) {
                         if (mPlayerStayAgbMapTypeNow == 1 || mPlayerStayAgbMapTypeNow == 3) {
-                            if (!strcmp(mAgbSendNowStageName, dComIfGp_getStartStageName()) && mAgbSendNowRoomNo == mNowRoomInfoP->getRoomNo() && mAgbSendNowDspFloorNo == mNowRoomInfoP->field_0xc && mAgbSendNowAgbMapType == mPlayerStayAgbMapTypeNow) {
+                            if (
+                                !strcmp(mAgbSendNowStageName, dComIfGp_getStartStageName()) &&
+                                mAgbSendNowRoomNo == mNowRoomInfoP->getRoomNo() &&
+                                mAgbSendNowDspFloorNo == mNowRoomInfoP->field_0xc &&
+                                mAgbSendNowAgbMapType == mPlayerStayAgbMapTypeNow
+                            ) {
                                 mAGBMapSendStatus = 3;
                             } else {
                                 mAGBMapSendStatus = 0;
@@ -1451,13 +1536,13 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
                         }
                     } else {
                         static const u8 data[] = {0, 1, 0, 0};
-                        if (g_mDoGaC_gbaCom.mDoGaC_SendStatusCheck(1) && g_mDoGaC_gbaCom.mDoGaC_SendDataSet((u32*)data, 4, 1, 0)) {
+                        if (mDoGac_SendStatusCheck(1) && mDoGac_SendDataSet((u32*)data, 4, 1, 0)) {
                             mAGBMapSendStatus = 1;
                         }
                     }
                     break;
                 case 1:
-                    if (g_mDoGaC_gbaCom.mDoGaC_SendEndCheck(2)) {
+                    if (mDoGac_SendEndCheck(2)) {
                         if (mPlayerStayAgbMapTypeNow == 2) {
                             mAGBMapSendStatus = 4;
                         } else if (mAGBMapSendStopFlg == 0) {
@@ -1466,22 +1551,27 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
                     }
                     break;
                 case 2:
-                    JUT_ASSERT(5051, mNowRoomInfoP != 0);
-                    JUT_ASSERT(5052, (mNowRoomInfoP->getEnableFlg() & DSP_ENABLE_BOTH_SIZE) == DSP_ENABLE_BOTH_SIZE);
+                    JUT_ASSERT(VERSION_SELECT(5274, 5051, 5051, 5051), mNowRoomInfoP != NULL);
+                    JUT_ASSERT(VERSION_SELECT(5275, 5052, 5052, 5052), (mNowRoomInfoP->getEnableFlg() & DSP_ENABLE_BOTH_SIZE) == DSP_ENABLE_BOTH_SIZE);
                     if (mDoGac_SendStatusCheck(2)) {
                         memcpy(mAgbSendNowStageName, dComIfGp_getStartStageName(), sizeof(mAgbSendNowStageName));
                         mAgbSendNowRoomNo = mNowRoomInfoP->getRoomNo();
                         mAgbSendNowDspFloorNo = mNowRoomInfoP->field_0xc;
                         mAgbSendNowAgbMapType = mPlayerStayAgbMapTypeNow;
                         agbMapNoSetCall();
-                        if (g_mDoGaC_gbaCom.mDoGaC_SendDataSet((u32*)mNowRoomInfoP->field_0x8c.field_0x4, mNowRoomInfoP->field_0x8c.field_0x38, 2, 0)) {
+                        if (mDoGac_SendDataSet((u32*)mNowRoomInfoP->field_0x8c.field_0x4, mNowRoomInfoP->field_0x8c.field_0x38, 2, 0)) {
                             mAGBMapSendStatus = 3;
                             agbResetCursor();
                         }
                     }
                     break;
                 case 3:
-                    if (g_mDoGaC_gbaCom.mDoGaC_SendEndCheck(2)) {
+#if VERSION == VERSION_DEMO
+                    if (mDoGaC_getDataStatus(2) == 0 || mDoGaC_getDataStatus(2) == 4)
+#else
+                    if (mDoGac_SendEndCheck(2))
+#endif
+                    {
                         mAGBMapSendStatus = 4;
                         memset(mAgbSendNowStageName, 0, sizeof(mAgbSendNowStageName));
                         mAgbSendNowRoomNo = -1;
@@ -1608,11 +1698,18 @@ void dMap_c::mapMoveAll(f32 param_1, f32 param_2, int param_3, f32 param_4) {
             }
             calcScissor();
             if (mNowRoomInfoP->mStageMapInfoP) {
-                mCompAlpha = (mNowRoomInfoP->mStageMapInfoP->field_0x34 * mAlpha) / 256;
+                mCompAlpha = ((u8)mNowRoomInfoP->mStageMapInfoP->field_0x34 * mAlpha) >> 8;
             } else {
                 mCompAlpha = 0;
             }
-            setCollectPoint(20, 9, dComIfGs_getRestartRoomPos().x, dComIfGs_getRestartRoomPos().y, dComIfGs_getRestartRoomPos().z, dComIfGs_getRestartRoomNo(), dComIfGs_getRestartRoomAngleY(), 0, 0, 0, 0);
+#if VERSION > VERSION_DEMO
+            cXyz& restartPos = dComIfGs_getRestartRoomPos();
+            setCollectPoint(
+                20, 9,
+                restartPos.x, restartPos.y, restartPos.z,
+                dComIfGs_getRestartRoomNo(), dComIfGs_getRestartRoomAngleY(), 0, 0, 0, 0
+            );
+#endif
         }
     }
 }
@@ -1623,7 +1720,7 @@ void dMap_c::mapDrawAll(f32 param_1, f32 param_2, int param_3, f32 param_4) {
         if (mMapDispMode == 1) {
             mapDrawEnlargementSize(mEnlargementSizeCenterX, mEnlargementSizeCenterZ, mEnlargementSizeScaleX, mEnlargementSizeScaleZ, mCompAlpha);
         } else {
-            mapDrawRealSize(param_1,param_2,mCompAlpha);
+            mapDrawRealSize(param_1, param_2, mCompAlpha);
         }
         mapDrawFrame(mCompAlpha);
     }
@@ -1651,8 +1748,8 @@ void dMap_c::draw(f32 param_1, f32 param_2, int param_3, f32 param_4) {
 
 /* 8004A82C-8004A97C       .text point2Grid__6dMap_cFffPScPSc */
 void dMap_c::point2Grid(f32 param_1, f32 param_2, s8* i_gridX_p, s8* i_gridY_p) {
-    JUT_ASSERT(5751, i_gridX_p != NULL);
-    JUT_ASSERT(5752, i_gridY_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6130, 5751, 5751, 5751), i_gridX_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6131, 5752, 5752, 5752), i_gridY_p != NULL);
     s8 x = floor(param_1 / 100000.0f + 0.5f);
     if (x < -3) {
         x = -3;
@@ -1673,10 +1770,10 @@ void dMap_c::point2Grid(f32 param_1, f32 param_2, s8* i_gridX_p, s8* i_gridY_p) 
 
 /* 8004A97C-8004ABB0       .text point2GridAndLocal__6dMap_cFffPScPScPsPs */
 void dMap_c::point2GridAndLocal(f32 param_1, f32 param_2, s8* i_gridX_p, s8* i_gridY_p, s16* i_localX_p, s16* i_localY_p) {
-    JUT_ASSERT(5803, i_gridX_p != NULL);
-    JUT_ASSERT(5804, i_gridY_p != NULL);
-    JUT_ASSERT(5805, i_localX_p != NULL);
-    JUT_ASSERT(5806, i_localY_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6182, 5803, 5803, 5803), i_gridX_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6183, 5804, 5804, 5804), i_gridY_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6184, 5805, 5805, 5805), i_localX_p != NULL);
+    JUT_ASSERT(VERSION_SELECT(6185, 5806, 5806, 5806), i_localY_p != NULL);
     s8 x = floor(param_1 / 100000.0f + 0.5f);
     s8 y = floor(param_2 / 100000.0f + 0.5f);
     if (x < -3) {
@@ -1718,24 +1815,28 @@ void dMap_c::getFmapChkPntPrm(int, s8*, s8*, s16*, s16*, u8*) {
 
 /* 8004ACD8-8004AD00       .text setFmapChkDtPrm__6dMap_cFv */
 void dMap_c::setFmapChkDtPrm() {
-    /* Nonmatching */
+    dMap_FmapChkPnt* ptr = (dMap_FmapChkPnt*)dComIfGp_getFmapData();
+    if (!ptr) {
+        return;
+    }
+    mFmapChkPntValue = ptr->field_0x0;
+    mFmapChkPntData_p = ptr->field_0x4;
 }
 
 /* 8004AD00-8004ADC8       .text getFmapChkPntDtPnt__6dMap_cFi */
 FmapChkPnt* dMap_c::getFmapChkPntDtPnt(int i_param) {
-    JUT_ASSERT(6075, mFmapChkPntData_p != 0);
+    JUT_ASSERT(VERSION_SELECT(6454, 6075, 6075, 6075), mFmapChkPntData_p != NULL);
     FmapChkPnt* ret = NULL;
     if (i_param >= 0 && i_param <= mFmapChkPntValue) {
         ret = &mFmapChkPntData_p[i_param];
     } else {
-        JUT_ASSERT(6082, 0)
+        JUT_ASSERT(VERSION_SELECT(6461, 6082, 6082, 6082), 0)
     };
     return ret;
 }
 
 /* 8004ADC8-8004AE28       .text initPoint__6dMap_cFv */
 void dMap_c::initPoint() {
-    /* Nonmatching */
     mDrawPointCntPlayer = 0;
     mDrawPointCntEnemy = 0;
     mDrawPointCntAgbCursor = 0;
@@ -1772,30 +1873,32 @@ BOOL dMap_c::isPointStayInDspNowRoomAgbScr(s16 param_1, s16 param_2) {
 
 /* 8004B1D0-8004B33C       .text setCollectPoint__6dMap_cFUcUcfffScsUcUcUcUc */
 void dMap_c::setCollectPoint(u8 param_1, u8 param_2, f32 param_3, f32 param_4, f32 param_5, s8 param_6, s16 param_7, u8 param_8, u8 param_9, u8 param_10, u8 param_11) {
-    /* Nonmatching */
     if (mCollectPointDataCnt >= 64) {
         return;
     }
-    if (getKindMapType() == 1 || param_1 == 1 || param_1 == 3 || param_6 == -1 || (mNowRoomInfoP && param_6 == mNowRoomInfoP->getRoomNo())) {
-        int typeNo = param_1 - 1;
-        JUT_ASSERT(6441, (typeNo >= 0) && (typeNo < AGB_POINT_TYPE_NUM));
-        s8 var1 = mCollectPointDataLinkList[typeNo];
-        mCollectPointDataLinkList[typeNo] = mCollectPointDataCnt;
-        dMap_CollectPoint* point = &mCollectPointData[mCollectPointDataCnt];
-        point->field_0x0 = param_3;
-        point->field_0x4 = param_4;
-        point->field_0x8 = param_5;
-        point->field_0xc = param_7;
-        point->field_0xf = param_1;
-        point->field_0x10 = param_2;
-        point->field_0xe = param_6;
-        point->field_0x11 = param_8;
-        point->field_0x12 = param_9;
-        point->field_0x13 = param_10;
-        point->field_0x14 = param_11;
-        point->field_0x16 = var1;
-        mCollectPointDataCnt++;
+    if (getKindMapType() != 1 && param_1 != 1 && param_1 != 3 && param_6 != -1 && (!mNowRoomInfoP || param_6 != mNowRoomInfoP->getRoomNo())) {
+        return;
     }
+    int typeNo = param_1 - 1;
+#if VERSION > VERSION_DEMO
+    JUT_ASSERT(VERSION_SELECT(6441, 6441, 6441, 6441), (typeNo >= 0) && (typeNo < AGB_POINT_TYPE_NUM));
+#endif
+    s8 var1 = mCollectPointDataLinkList[typeNo];
+    mCollectPointDataLinkList[typeNo] = mCollectPointDataCnt;
+    dMap_CollectPoint* point = &mCollectPointData[mCollectPointDataCnt];
+    point->field_0x0 = param_3;
+    point->field_0x4 = param_4;
+    point->field_0x8 = param_5;
+    point->field_0xc = param_7;
+    point->field_0xf = param_1;
+    point->field_0x10 = param_2;
+    point->field_0xe = param_6;
+    point->field_0x11 = param_8;
+    point->field_0x12 = param_9;
+    point->field_0x13 = param_10;
+    point->field_0x14 = param_11;
+    point->field_0x16 = var1;
+    mCollectPointDataCnt++;
 }
 
 /* 8004B33C-8004B814       .text setGbaPoint_dungeon__6dMap_cFUcffsUcUcUcUc */
@@ -1832,7 +1935,6 @@ void dMap_c::setGbaPoint(u8 param_1, f32 param_2, f32 param_3, s16 param_4, u8 p
 
 /* 8004B8DC-8004B9C8       .text setArriveInfo__6dMap_cFff */
 void dMap_c::setArriveInfo(f32 param_1, f32 param_2) {
-    /* Nonmatching */
     if (!dComIfGp_event_runCheck() && strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
         s8 gridX;
         s8 gridY;
@@ -2183,13 +2285,56 @@ void dMap_c::drawPointAgb(u8 pointType,f32 posX,f32 posY,f32 posZ,s8 param_5,s16
 }
 
 /* 8004CEF4-8004CFA4       .text getTypeAgbGcFromTypeAcs__6dMap_cFUcPUcPUc */
-void dMap_c::getTypeAgbGcFromTypeAcs(u8, u8*, u8*) {
-    /* Nonmatching */
+void dMap_c::getTypeAgbGcFromTypeAcs(u8 i_typeAcs, u8* param_2, u8* param_3) {
+    const int ACS_MAP_POINT_TYPE_MAX = 25;
+    const static u8 statusMapNo2TypeNoTbl[ACS_MAP_POINT_TYPE_MAX][2] = {
+        2, 3, 1, 1, 4, 5, 12, 0, 6, 0, 6, 0, 13, 0, 14, 0,
+        15, 0, 17, 7, 17, 7, 17, 7, 19, 8, 19, 8, 19, 8, 19, 8,
+        19, 8, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 2, 3, 6, 4,
+        6, 4,
+    };
+
+    JUT_ASSERT(VERSION_SELECT(8287, 7814, 7814, 7814), (i_typeAcs >= 0) && (i_typeAcs < ACS_MAP_POINT_TYPE_MAX));
+    if (param_2) {
+        *param_2 = statusMapNo2TypeNoTbl[i_typeAcs][0];
+    }
+    if (param_3) {
+        *param_3 = statusMapNo2TypeNoTbl[i_typeAcs][1];
+    }
 }
 
 /* 8004CFA4-8004D0A4       .text drawPointSingle__6dMap_cFUcfffScsUcUcUc */
-void dMap_c::drawPointSingle(u8, f32, f32, f32, s8, s16, u8, u8, u8) {
-    /* Nonmatching */
+void dMap_c::drawPointSingle(u8 param_1, f32 param_2, f32 param_3, f32 param_4, s8 param_5, s16 param_6, u8 param_7, u8 param_8, u8 param_9) {
+    static const s8 agbTbl[] = {
+        -1, -1, 2, -1,
+        6, -1, 0, 0,
+        0, 0, 0, -1,
+        -1, -1, -1, 0,
+        -1, -1, -1, -1,
+        0,
+    };
+
+#if VERSION > VERSION_DEMO
+    if (dComIfGp_roomControl_getStayNo() < 0 || !mNowRoomInfoP) {
+        return;
+    }
+#endif
+
+    int tmp = param_1 - 1;
+    if (tmp < 0 || tmp >= sizeof(agbTbl)) {
+#if VERSION > VERSION_DEMO
+        JUT_ASSERT(VERSION_SELECT(7901, 7901, 7901, 7901), 0);
+#endif
+        return;
+    }
+    int r4 = agbTbl[tmp];
+    if (r4 < 0) {
+#if VERSION > VERSION_DEMO
+        JUT_ASSERT(VERSION_SELECT(7908, 7908, 7908, 7908), 0);
+#endif
+        return;
+    }
+    setCollectPoint(param_1, r4, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, 0);
 }
 
 /* 8004D0A4-8004D260       .text drawActorPointMiniMap__6dMap_cFP10fopAc_ac_c */
@@ -2214,7 +2359,25 @@ void dMap_c::mapBufferSendAGB_dungeon() {
 
 /* 8004D4F8-8004D5F8       .text mapSetPointAll__6dMap_cFv */
 void dMap_c::mapSetPointAll() {
-    /* Nonmatching */
+    static const s8 agbSetList[] = {
+        1, 3, 21, 2, 4, 19, 20, 7,
+        17, 18, 12, 8, 9, 10, 11, 16,
+        13, 5, 15, 14, 6
+    };
+
+    for (int i = 0; i < sizeof(agbSetList); i++) {
+        s8 typeNo = agbSetList[i] - 1;
+#if VERSION > VERSION_DEMO
+        JUT_ASSERT(VERSION_SELECT(8427, 8427, 8427, 8427), (typeNo >= 0) && (typeNo < AGB_POINT_TYPE_NUM));
+#endif
+        for (s8 j = mCollectPointDataLinkList[typeNo]; j >= 0; j = mCollectPointData[j].field_0x16) {
+            drawPointMain(
+                mCollectPointData[j].field_0xf, mCollectPointData[j].field_0x10, mCollectPointData[j].field_0x0, mCollectPointData[j].field_0x4,
+                mCollectPointData[j].field_0x8, mCollectPointData[j].field_0xe, mCollectPointData[j].field_0xc, mCollectPointData[j].field_0x11,
+                mCollectPointData[j].field_0x12, mCollectPointData[j].field_0x13, mCollectPointData[j].field_0x14
+            );
+        }
+    }
 }
 
 /* 8004D5F8-8004D9BC       .text mapBufferSendAGB__6dMap_cFi */
@@ -2231,15 +2394,15 @@ void dMap_RoomInfoCtrl_c::checkFloorMoveImageChangeRoom(u8, u8, int, s16, s16, f
 void dMap_2DMtMapSpcl_tex_c::init(ResTIMG* i_img, u32 param_2, const GXColor& param_3) {
     field_0x44 = param_2;
     if (i_img->indexTexture) {
-        GXInitTlutObj(&field_0x24, (u8*)i_img + i_img->paletteOffset, GXTlutFmt(i_img->colorFormat), i_img->numColors);
-        GXInitTexObjCI(&field_0x4, (u8*)i_img + i_img->imageOffset, i_img->width, i_img->height, GXCITexFmt(i_img->format), GXTexWrapMode(i_img->wrapS), GXTexWrapMode(i_img->wrapT), i_img->mipmapCount > 1, param_2);
+        GXInitTlutObj(&mTlutObj, (u8*)i_img + i_img->paletteOffset, GXTlutFmt(i_img->colorFormat), i_img->numColors);
+        GXInitTexObjCI(&mTexObj, (u8*)i_img + i_img->imageOffset, i_img->width, i_img->height, GXCITexFmt(i_img->format), GXTexWrapMode(i_img->wrapS), GXTexWrapMode(i_img->wrapT), i_img->mipmapCount > 1, param_2);
         field_0x1 = 1;
     } else {
-        GXInitTexObj(&field_0x4, (u8*)i_img + i_img->imageOffset, i_img->width, i_img->height, GXTexFmt(i_img->format), GXTexWrapMode(i_img->wrapS), GXTexWrapMode(i_img->wrapT), i_img->mipmapCount > 1);
+        GXInitTexObj(&mTexObj, (u8*)i_img + i_img->imageOffset, i_img->width, i_img->height, GXTexFmt(i_img->format), GXTexWrapMode(i_img->wrapS), GXTexWrapMode(i_img->wrapT), i_img->mipmapCount > 1);
         field_0x1 = 0;
     }
-    GXInitTexObjLOD(&field_0x4, GXTexFilter(i_img->minFilter), GXTexFilter(i_img->magFilter), i_img->minLOD * 0.125f, i_img->maxLOD * 0.125f, i_img->LODBias * 0.01f, i_img->biasClamp, i_img->doEdgeLOD, GXAnisotropy(i_img->maxAnisotropy));
-    field_0x30 = param_3;
+    GXInitTexObjLOD(&mTexObj, GXTexFilter(i_img->minFilter), GXTexFilter(i_img->magFilter), i_img->minLOD * 0.125f, i_img->maxLOD * 0.125f, i_img->LODBias * 0.01f, i_img->biasClamp, i_img->doEdgeLOD, GXAnisotropy(i_img->maxAnisotropy));
+    mColor = param_3;
     field_0x0 = 1;
 }
 
@@ -2269,11 +2432,97 @@ void dMap_2DMtMapSpcl_c::setPos(s16 param_1, s16 param_2, s16 param_3, s16 param
 /* 8004DC1C-8004E068       .text draw__18dMap_2DMtMapSpcl_cFv */
 void dMap_2DMtMapSpcl_c::draw() {
     /* Nonmatching */
+    GXVtxAttrFmtList fmtList[GX_VA_MAX_ATTR + 1];
+    GXGetVtxAttrFmtv(GX_VTXFMT0, fmtList);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
+    dMap_2DMtMapSpcl_tex_c* r27 = field_0x8;
+    int r28 = 0;
+    int r30 = 0;
+    for (int i = 0; i < field_0x4; r27++, i++) {
+        if (r27->field_0x0 == 0) {
+            continue;
+        }
+        if (r27->field_0x1) {
+            GXLoadTlut(&r27->mTlutObj, r27->field_0x44);
+        }
+        GXLoadTexObj(&r27->mTexObj, GXTexMapID(r28));
+        GXSetVtxAttrFmt(GX_VTXFMT0, GXAttr(GX_VA_TEX0 + r28), GX_TEX_ST, GX_F32, 0);
+        GXSetVtxDesc(GXAttr(GX_VA_TEX0 + r28), GX_DIRECT);
+        GXSetTevColor(GXTevRegID(GX_TEVREG0 + r28), r27->mColor);
+        GXSetTexCoordGen(GXTexCoordID(r28), GX_TG_MTX2x4, GXTexGenSrc(GX_TG_TEX0 + r28), GX_IDENTITY);
+        GXSetTevOrder(GXTevStageID(r28), GXTexCoordID(r28), GXTexMapID(r28), GX_COLOR_NULL);
+        GXSetTevColorIn(GXTevStageID(r28), GX_CC_ZERO, GXTevColorArg(GX_CC_C0 + r30), GX_CC_TEXC, r28 ? GX_CC_CPREV : GX_CC_ZERO);
+        GXSetTevColorOp(GXTevStageID(r28), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GXTevStageID(r28), GX_CA_ZERO, GXTevAlphaArg(GX_CA_A0 + r28), GX_CA_TEXA, r28 ? GX_CA_APREV : GX_CA_ZERO);
+        GXSetTevAlphaOp(GXTevStageID(r28), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        r28 += 1;
+        r30 += 2;
+        if (r28 >= 3) {
+            break;
+        }
+    }
+    if (r28 == 0) {
+        return;
+    }
+    GXSetNumChans(0);
+    GXSetNumTexGens(r28);
+    GXSetNumTevStages(r28);
+    switch (field_0x5) {
+    case 0:
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+        break;
+    case 1:
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+        GXSetDstAlpha(GX_ENABLE,0);
+        GXSetAlphaUpdate(GX_ENABLE);
+    case 2:
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_DST_ALPHA, GX_BL_INV_DST_ALPHA, GX_LO_SET);
+        break;
+    case 3:
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_ONE, GX_LO_SET);
+        break;
+    }
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3s16(field_0xc, field_0xe, 0);
+    r27 = field_0x8;
+    for (int i = 0; i < field_0x4; r27++, i++) {
+        if (r27->field_0x0) {
+            GXTexCoord2f32(r27->field_0x34, r27->field_0x38);
+        }
+    }
+    GXPosition3s16(field_0x10, field_0xe, 0);
+    r27 = field_0x8;
+    for (int i = 0; i < field_0x4; r27++, i++) {
+        if (r27->field_0x0) {
+            GXTexCoord2f32(r27->field_0x34 + r27->field_0x3c, r27->field_0x38);
+        }
+    }
+    GXPosition3s16(field_0x10, field_0x12, 0);
+    r27 = field_0x8;
+    for (int i = 0; i < field_0x4; r27++, i++) {
+        if (r27->field_0x0) {
+            GXTexCoord2f32(r27->field_0x34 + r27->field_0x3c, r27->field_0x38 + r27->field_0x40);
+        }
+    }
+    GXPosition3s16(field_0xc, field_0x12, 0);
+    r27 = field_0x8;
+    for (int i = 0; i < field_0x4; r27++, i++) {
+        if (r27->field_0x0) {
+            GXTexCoord2f32(r27->field_0x34, r27->field_0x38 + r27->field_0x40);
+        }
+    }
+    GXEnd();
+    GXSetDstAlpha(GX_DISABLE, 0);
+    GXSetAlphaUpdate(GX_DISABLE);
+    GXSetVtxAttrFmtv(GX_VTXFMT0, fmtList);
 }
 
 /* 8004E068-8004E1CC       .text setImage__18dMap_2DAGBScrDsp_cFP7ResTIMGP8map_dt_c */
 void dMap_2DAGBScrDsp_c::setImage(ResTIMG* i_img, map_dt_c* param_2) {
-    /* Nonmatching */
     field_0x4 = param_2;
     mImg = i_img;
     if (!field_0x4 || !mImg) {
@@ -2281,8 +2530,10 @@ void dMap_2DAGBScrDsp_c::setImage(ResTIMG* i_img, map_dt_c* param_2) {
         return;
     }
     GXInitTlutObj(&field_0x2c, (u8*)mImg + mImg->paletteOffset, GXTlutFmt(mImg->colorFormat), mImg->numColors);
-    GXInitTexObjCI(&field_0xc, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format), GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1, 0);
-    GXInitTexObjLOD(&field_0xc, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f, mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
+    GXInitTexObjCI(&field_0xc, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format),
+        GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1 ? GX_TRUE : GX_FALSE, 0);
+    GXInitTexObjLOD(&field_0xc, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f,
+            mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
     field_0x38 = 0x3c + mDoLib_cnvind32(field_0x4->field_0xc) + mDoLib_cnvind32(field_0x4->field_0x38);
 }
 
@@ -2297,22 +2548,63 @@ void dMap_2DAGBScrDsp_c::init(map_dt_c* param_1, ResTIMG* param_2, f32 param_3, 
     field_0x42 = param_8;
     mScaleX = param_9;
     mScaleY = param_10;
-    field_0x54 = param_11;
+    mAlpha = param_11;
 }
 
 /* 8004E264-8004E384       .text getScrnPrm__18dMap_2DAGBScrDsp_cFffifPiPfPf */
-void dMap_2DAGBScrDsp_c::getScrnPrm(f32, f32, int, f32, int*, f32*, f32*) {
+void dMap_2DAGBScrDsp_c::getScrnPrm(f32 param_1, f32 param_2, int param_3, f32 param_4, int* param_5, f32* param_6, f32* param_7) {
     /* Nonmatching */
+    if (param_4 != 0.0) {
+        f32 f30 = param_3;
+        f32 f31 = param_1 + param_2 * (1.0f / param_4);
+        int tmp1 = floor(f31 / f30);
+        if (param_5) {
+            *param_5 = tmp1;
+        }
+        f32 tmp2 = fmod(f31, f30);
+        tmp2 = fmod(f30 + tmp2, f30);
+        if (param_6) {
+            *param_6 = tmp2;
+        }
+        if (param_7) {
+            *param_7 = tmp2 / f30;
+        }
+    } else {
+        if (param_5) {
+            *param_5 = 0;
+        }
+        if (param_6) {
+            *param_6 = 0.0f;
+        }
+        if (param_7) {
+            *param_7 = 0.0f;
+        }
+    }
 }
 
 /* 8004E384-8004E41C       .text getScrnPrmXY__18dMap_2DAGBScrDsp_cFffffiiffPiPiPfPfPfPf */
-void dMap_2DAGBScrDsp_c::getScrnPrmXY(f32, f32, f32, f32, int, int, f32, f32, int*, int*, f32*, f32*, f32*, f32*) {
-    /* Nonmatching */
+void dMap_2DAGBScrDsp_c::getScrnPrmXY(f32 param_1, f32 param_2, f32 param_3, f32 param_4, int param_5, int param_6, f32 param_7, f32 param_8, int* param_9, int* param_10, f32* param_11, f32* param_12, f32* param_13, f32* param_14) {
+    getScrnPrm(param_1, param_3, param_5, param_7, param_9, param_11, param_13);
+    getScrnPrm(param_2, param_4, param_6, param_8, param_10, param_12, param_14);
 }
 
 /* 8004E41C-8004E698       .text calc_standard_prm__18dMap_2DAGBScrDsp_cFUsUsffssssffPiPiPiPiPfPfPfPfPfPf */
-void dMap_2DAGBScrDsp_c::calc_standard_prm(u16, u16, f32, f32, s16, s16, s16, s16, f32, f32, int*, int*, int*, int*, f32*, f32*, f32*, f32*, f32*, f32*) {
-    /* Nonmatching */
+void dMap_2DAGBScrDsp_c::calc_standard_prm(u16 param_1, u16 param_2, f32 param_3, f32 param_4, s16 param_5, s16 param_6, s16 param_7, s16 param_8, f32 param_9, f32 param_10, int* param_11, int* param_12, int* param_13, int* param_14, f32* param_15, f32* param_16, f32* param_17, f32* param_18, f32* param_19, f32* param_20) {
+    f32 f30 = (param_7 - param_5) * 0.5f;
+    f32 f29 = (param_8 - param_6) * 0.5f;
+    int local_bc;
+    int local_c0;
+    int local_c4;
+    int local_c8;
+    f32 local_cc;
+    f32 local_d0;
+    getScrnPrmXY(param_3, param_4, 0.0f, 0.0f, param_1, param_2, param_9, param_10, &local_c4, &local_c8, &local_cc, &local_d0, NULL, NULL);
+    getScrnPrmXY(param_3, param_4, -f30, -f29, param_1, param_2, param_9, param_10, param_13, param_14, NULL, NULL, param_17, param_19);
+    getScrnPrmXY(param_3, param_4, f30, f29, param_1, param_2, param_9, param_10, &local_bc, &local_c0, NULL, NULL, param_18, param_20);
+    *param_11 = (local_bc - *param_13) + 1;
+    *param_12 = (local_c0 - *param_14) + 1;
+    *param_15 = -(param_9 * (local_cc + (param_1 * (local_c4 - *param_13))));
+    *param_16 = -(param_10 * (local_d0 + (param_2 * (local_c8 - *param_14))));
 }
 
 /* 8004E698-8004EE30       .text draw__18dMap_2DAGBScrDsp_cFv */
@@ -2426,21 +2718,414 @@ void dMap_2DT2_c::init(ResTIMG* param_1, f32 param_2, f32 param_3, f32 param_4, 
 }
 
 /* 8004F8B4-8004FC68       .text setTlut__11dMap_Dmap_cFP16dmap_dmap_tlut_sUcUcUcf */
-void dMap_Dmap_c::setTlut(dmap_dmap_tlut_s*, u8, u8, u8, f32) {
+void dMap_Dmap_c::setTlut(dmap_dmap_tlut_s* param_1, u8 param_2, u8 param_3, u8 param_4, f32 param_5) {
     /* Nonmatching */
+    static const GXColor color_on = {0, 128, 0, 255};
+    static const GXColor color_off_map_possession = {30, 30, 30, 255};
+    static const GXColor color_off_map_none = {0, 0, 0, 0};
+    static const GXColor flash_color = {0, 255, 180, 255};
+
+    dStage_FloorInfo_dt_c* floorInfo = dMap_GetFloorInfoDtPFromFloorNo(dComIfGp_getStage().getFloorInfo(), param_2);
+    if (!floorInfo) {
+        return;
+    }
+    if (param_5 > 1.0f) {
+        param_5 = 1.0f - param_5;
+    }
+    s8* r29 = floorInfo->field_0x05;
+    for (int i = 0; i < 14; i++, r29++) {
+        if (*r29 == -1) {
+            continue;
+        }
+        u16* r30 = NULL;
+        int tmp = field_0x2bb[param_2 - Floor_Base][i + 1];
+        if (tmp >= 0) {
+            r30 = &param_1->field_0x0[tmp];
+        }
+        if (!r30) {
+            continue;
+        }
+        stage_stag_info_class* stageInfo = dComIfGp_getStage().getStagInfo();
+        if ((stageInfo->mStageTypeAndSchbit >> 16 & 7) != 3 && *r29 == param_3) {
+            *r30 =
+                ((u16(flash_color.r + param_5 * (color_on.r - flash_color.r)) << 7) & 0x7C0) |
+                ((u16(flash_color.g + param_5 * (color_on.g - flash_color.g)) << 2) & 0x3E0) |
+                ((u16(flash_color.b + param_5 * (color_on.b - flash_color.b)) >> 3) & 0x1F);
+            continue;
+        }
+        if (!dComIfGs_isDungeonItemMap()) {
+            if (dComIfGs_isVisitedRoom(*r29)) {
+                *r30 = color_on.a >= 0xe0
+                    ? u16(color_on.r & 0xf8) << 7 | u16(color_on.g & 0xf8) << 2 | u16(color_on.b) >> 3
+                    : u16(color_on.r & 0xf0) << 4 | u16(color_on.g & 0xf0) | u16(color_on.b) >> 4 | u16(color_on.a & 0xe0) << 7;
+            } else {
+                *r30 = color_off_map_none.a >= 0xe0
+                    ? u16(color_off_map_none.r & 0xf8) << 7 | u16(color_off_map_none.g & 0xf8) << 2 | u16(color_off_map_none.b) >> 3
+                    : u16(color_off_map_none.r & 0xf0) << 4 | u16(color_off_map_none.g & 0xf0) | u16(color_off_map_none.b) >> 4 | u16(color_off_map_none.a & 0xe0) << 7;
+            }
+            continue;
+        } else {
+            if (dComIfGs_isVisitedRoom(*r29)) {
+                *r30 = color_on.a >= 0xe0
+                    ? u16(color_on.r & 0xf8) << 7 | u16(color_on.g & 0xf8) << 2 | u16(color_on.b) >> 3
+                    : u16(color_on.r & 0xf0) << 4 | u16(color_on.g & 0xf0) | u16(color_on.b) >> 4 | u16(color_on.a & 0xe0) << 7;
+            } else {
+                *r30 = color_off_map_possession.a >= 0xe0
+                    ? u16(color_off_map_possession.r & 0xf8) << 7 | u16(color_off_map_possession.g & 0xf8) << 2 | u16(color_off_map_possession.b) >> 3
+                    : u16(color_off_map_possession.r & 0xf0) << 4 | u16(color_off_map_possession.g & 0xf0) | u16(color_off_map_possession.b) >> 4 | u16(color_off_map_possession.a & 0xe0) << 7;
+            }
+        }
+    }
+    DCStoreRange(param_1, 0x20);
 }
 
 /* 8004FC68-8004FFC8       .text setFloorTextureOne__11dMap_Dmap_cFUc */
-void dMap_Dmap_c::setFloorTextureOne(u8) {
+void dMap_Dmap_c::setFloorTextureOne(u8 param_1) {
     /* Nonmatching */
+    static const u16 l_indexColor[] = {
+        0x0000, 0x8218, 0x821F, 0x83E8,
+        0x83F0, 0x83FF, 0xC3E0, 0xC3F0,
+        0xC3FF, 0xFC00, 0xFE10, 0xFE18,
+        0xFE1F, 0xFFE0, 0xFFF0, 0xFFFF,
+    };
+
+    int r29 = param_1 - Floor_Base;
+    if (r29 > field_0x2b4 - Floor_Base || r29 < field_0x2b5 - Floor_Base) {
+        return;
+    }
+    char local_70[32];
+    sprintf(local_70, "dmap%d.bti", param_1);
+    ResTIMG* imageP = (ResTIMG*)dComIfG_getStageRes("Stage", local_70);
+    if (!imageP) {
+        return;
+    }
+    field_0x36e |= 1 << (r29 & 0x3F);
+    for (int i = 0; i < 16; i++) {
+        field_0x2bb[r29][i] = -1;
+    }
+    for (int i = 0; i < 16; i++) {
+        u16* palette = (u16*)((u8*)imageP + imageP->paletteOffset);
+        u16 color = palette[i];
+        u32 j;
+        for (j = 0; j < 16; j++) {
+            if (color == l_indexColor[j]) {
+                break;
+            }
+        }
+        if (j != 16) {
+            field_0x2bb[r29][j] = i;
+        }
+    }
+    for (int i = 0; i < 2; i++) {
+        dmap_dmap_tlut_s* r23 = &field_0x20[i][r29];
+        memset(r23, 0, sizeof(dmap_dmap_tlut_s));
+        GXInitTlutObj(&field_0x4b0[i][r29], r23, GXTlutFmt(imageP->colorFormat), imageP->numColors);
+        JUT_ASSERT(VERSION_SELECT(10393, 10393, 10393, 10393), imageP->numColors == (16))
+    }
+    GXTexObj* texObj = &field_0x370[r29];
+    GXInitTexObjCI(texObj, (u8*)imageP + imageP->imageOffset, imageP->width, imageP->height, GXCITexFmt(imageP->format), GXTexWrapMode(imageP->wrapS), GXTexWrapMode(imageP->wrapT), imageP->mipmapCount > 1, r29);
+    GXInitTexObjLOD(texObj, GXTexFilter(imageP->minFilter), GXTexFilter(imageP->magFilter), imageP->minLOD * 0.125f, imageP->maxLOD * 0.125f, imageP->LODBias * 0.01f, imageP->biasClamp, imageP->doEdgeLOD, GXAnisotropy(imageP->maxAnisotropy));
+    JUT_ASSERT(VERSION_SELECT(10419, 10419, 10419, 10419), (mNowTlutDblBufNo == 0) || (mNowTlutDblBufNo == 1));
+    for (int i = 0; i < 2; i++) {
+        setTlut(&field_0x20[i][r29], param_1, field_0x2b8, field_0x2b9, field_0x2ba);
+    }
 }
 
 /* 8004FFC8-800504C4       .text init__11dMap_Dmap_cFsssssssssUcUcUcUcUc */
-void dMap_Dmap_c::init(s16, s16, s16, s16, s16, s16, s16, s16, s16, u8, u8, u8, u8, u8) {
+void dMap_Dmap_c::init(s16 param_1, s16 param_2, s16 param_3, s16 param_4, s16 param_5, s16 param_6, s16 param_7, s16 param_8, s16 param_9, u8 param_10, u8 param_11, u8 param_12, u8 param_13, u8 param_14) {
     /* Nonmatching */
+    field_0x35c = param_1;
+    field_0x35e = param_2;
+    field_0x360 = param_3;
+    mMaskHeight = param_4;
+    field_0x364 = param_5;
+    field_0x366 = param_6;
+    field_0x368 = param_7;
+    field_0x36a = param_8;
+    field_0x36c = param_9;
+    field_0x2b4 = param_10;
+    field_0x2b5 = param_11;
+    field_0x2b8 = param_12;
+    field_0x2b9 = param_13;
+    field_0x2b6 = param_14;
+    mNowTlutDblBufNo = 0;
+    field_0x2ba = 0;
+    field_0x36e = 0;
+    mImageP = (ResTIMG*)JKRGetResource('TIMG', "dtmap_mask.bti", mpArc);
+    JUT_ASSERT(VERSION_SELECT(10504, 10504, 10504, 10504), mImageP != NULL);
+    mImageSeetP = (ResTIMG*)JKRGetResource('TIMG', "menu_note_02_2.bti", mpArc);
+    JUT_ASSERT(VERSION_SELECT(10511, 10511, 10511, 10511), mImageSeetP !=NULL);
+    mImageGridP = (ResTIMG*)JKRGetResource('TIMG', "grid_32.bti", mpArc);
+    JUT_ASSERT(VERSION_SELECT(10519, 10519, 10519, 10519), mImageGridP !=NULL);
+    field_0x2b0 = (ResTIMG*)dComIfG_getStageRes("Stage", "dmap_back.bti");
+    GXInitTexObj(&field_0x5c0, (u8*)mImageP + mImageP->imageOffset, mImageP->width, mImageP->height, GXTexFmt(mImageP->format), GXTexWrapMode(mImageP->wrapS), GXTexWrapMode(mImageP->wrapT), mImageP->mipmapCount > 1);
+    GXInitTexObjLOD(&field_0x5c0, GXTexFilter(mImageP->minFilter), GXTexFilter(mImageP->magFilter), mImageP->minLOD * 0.125f, mImageP->maxLOD * 0.125f, mImageP->LODBias * 0.01f, mImageP->biasClamp, mImageP->doEdgeLOD, GXAnisotropy(mImageP->maxAnisotropy));
+    GXInitTexObj(&field_0x5a0, (u8*)mImageSeetP + mImageSeetP->imageOffset, mImageSeetP->width, mImageSeetP->height, GXTexFmt(mImageSeetP->format), GXTexWrapMode(mImageSeetP->wrapS), GXTexWrapMode(mImageSeetP->wrapT), mImageSeetP->mipmapCount > 1);
+    GXInitTexObjLOD(&field_0x5a0, GXTexFilter(mImageSeetP->minFilter), GXTexFilter(mImageSeetP->magFilter), mImageSeetP->minLOD * 0.125f, mImageSeetP->maxLOD * 0.125f, mImageSeetP->LODBias * 0.01f, mImageSeetP->biasClamp, mImageSeetP->doEdgeLOD, GXAnisotropy(mImageSeetP->maxAnisotropy));
+    GXInitTexObj(&field_0x5e0, (u8*)mImageGridP + mImageGridP->imageOffset, mImageGridP->width, mImageGridP->height, GXTexFmt(mImageGridP->format), GXTexWrapMode(mImageGridP->wrapS), GXTexWrapMode(mImageGridP->wrapT), mImageGridP->mipmapCount > 1);
+    GXInitTexObjLOD(&field_0x5e0, GXTexFilter(mImageGridP->minFilter), GXTexFilter(mImageGridP->magFilter), mImageGridP->minLOD * 0.125f, mImageGridP->maxLOD * 0.125f, mImageGridP->LODBias * 0.01f, mImageGridP->biasClamp, mImageGridP->doEdgeLOD, GXAnisotropy(mImageGridP->maxAnisotropy));
+    if (field_0x2b0) {
+        GXInitTexObj(&field_0x600, (u8*)field_0x2b0 + field_0x2b0->imageOffset, field_0x2b0->width, field_0x2b0->height, GXTexFmt(field_0x2b0->format), GXTexWrapMode(field_0x2b0->wrapS), GXTexWrapMode(field_0x2b0->wrapT), field_0x2b0->mipmapCount > 1);
+        GXInitTexObjLOD(&field_0x600, GXTexFilter(field_0x2b0->minFilter), GXTexFilter(field_0x2b0->magFilter), field_0x2b0->minLOD * 0.125f, field_0x2b0->maxLOD * 0.125f, field_0x2b0->LODBias * 0.01f, field_0x2b0->biasClamp, field_0x2b0->doEdgeLOD, GXAnisotropy(field_0x2b0->maxAnisotropy));
+    }
+    for (int i = 0; i < 10; i++) {
+        setFloorTextureOne(i + Floor_Base);
+    }
 }
 
 /* 800504C4-800517AC       .text draw__11dMap_Dmap_cFv */
 void dMap_Dmap_c::draw() {
     /* Nonmatching */
+    static const GXColor backColorWhite = {185, 135, 0, 255};
+    static const GXColor backColorBlack = {150, 80, 0, 255};
+    static const GXColor wallPaperColorWhite = {255, 255, 255, 255};
+    static const GXColor wallPaperColorBlack = {255, 255, 255, 255};
+    static const GXColor edgeColor = {255, 255, 255, 255};
+
+    JUT_ASSERT(VERSION_SELECT(10663, 10663, 10663, 10663), mMaskHeight != 0.0f);
+    f32 f27 = field_0x368 / 64.0f;
+    f32 f26 = field_0x36a / 64.0f;
+    f32 f23 = 1.0f / GXGetTexObjWidth(&field_0x5e0);
+    f32 f25 = 1.0f / GXGetTexObjHeight(&field_0x5e0);
+    f32 f30 = 2.0f * fopMsgM_valueIncrease(40, field_0x2ba, 2);
+    if (f30 > 1.0f) {
+        f30 = 2.0f - f30;
+    }
+    s16 r21 = field_0x35e - (mMaskHeight >> 1);
+    s16 r25 = field_0x364 - (field_0x368 >> 1);
+    s16 r24 = field_0x364 + (field_0x368 >> 1);
+    s16 r23 = field_0x366 + field_0x36c + (field_0x36a + field_0x36c) * 4 + (field_0x36a >> 1);
+    GXVtxAttrFmtList fmtList[GX_VA_MAX_ATTR + 1];
+    GXGetVtxAttrFmtv(GX_VTXFMT0, fmtList);
+    GXLoadPosMtxImm(mDoMtx_getIdentity(), GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    setTlutDblBufNo(0);
+    changeTlutDblBufNo();
+    for (int i = 0; i < 10; i++) {
+        if (r23 <= 480) {
+            s16 r22 = r23 + field_0x36a;
+            if (r22 < 0) {
+                break;
+            }
+            if (field_0x36e & 1 << i && i <= field_0x2b4 - Floor_Base && field_0x2b5 - Floor_Base <= i) {
+                setTlut(&field_0x20[getLoadTlutDblBufNo()][i], i + Floor_Base, field_0x2b8, field_0x2b9, f30);
+                f32 f29 = (f32(r23) - f32(r21)) / mMaskHeight;
+                f32 f28 = (f32(r22) - f32(r21)) / mMaskHeight;
+                GXTexObj* r26 = &field_0x370[i];
+                f32 f24 = 0.3f / GXGetTexObjWidth(r26);
+                f32 f23_2 = 0.3f / GXGetTexObjHeight(r26);
+                GXColor local_2c4;
+                local_2c4.r = backColorWhite.r;
+                local_2c4.g = backColorWhite.g;
+                local_2c4.b = backColorWhite.b;
+                local_2c4.a = backColorWhite.a;
+                GXColor local_2c8;
+                local_2c8.r = wallPaperColorWhite.r;
+                local_2c8.g = wallPaperColorWhite.g;
+                local_2c8.b = wallPaperColorWhite.b;
+                local_2c8.a = wallPaperColorWhite.a;
+                GXColor local_2cc;
+                local_2cc.r = edgeColor.r;
+                local_2cc.g = edgeColor.g;
+                local_2cc.b = edgeColor.b;
+                local_2cc.a = edgeColor.a;
+                local_2c8.r = 128;
+                local_2c8.g = 128;
+                local_2c8.b = 0;
+                GXColor local_2d0;
+                local_2d0.r = backColorBlack.r;
+                local_2d0.g = backColorBlack.g;
+                local_2d0.b = backColorBlack.b;
+                local_2d0.a = backColorBlack.a;
+                GXColor local_2d4;
+                local_2d4.r = wallPaperColorBlack.r;
+                local_2d4.g = wallPaperColorBlack.g;
+                local_2d4.b = wallPaperColorBlack.b;
+                local_2d4.a = wallPaperColorBlack.a;
+                local_2d4.r = 0;
+                local_2d4.g = 0;
+                local_2d4.b = 0;
+                if (field_0x2b0) {
+                    local_2c4.a = 96;
+                } else {
+                    local_2c4.a = 0;
+                }
+                local_2c8.a = 128;
+                local_2cc.a = field_0x2b6;
+                GXSetTevKColor(GX_KCOLOR0, local_2c4);
+                GXSetTevKColor(GX_KCOLOR1, local_2c8);
+                GXSetTevKColor(GX_KCOLOR2, local_2cc);
+                GXSetTevColor(GX_TEVREG0, local_2d0);
+                GXSetTevColor(GX_TEVREG1, local_2d4);
+                GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
+                GXSetTevKColorSel(GX_TEVSTAGE1, GX_TEV_KCSEL_K1);
+                GXSetTevKColorSel(GX_TEVSTAGE7, GX_TEV_KCSEL_K2);
+                GXSetTevKColorSel(GX_TEVSTAGE9, GX_TEV_KCSEL_K1_A);
+                GXSetTevKAlphaSel(GX_TEVSTAGE1, GX_TEV_KASEL_K0_A);
+                GXSetTevKAlphaSel(GX_TEVSTAGE11, GX_TEV_KASEL_K2_A);
+                GXLoadTexObj(&field_0x5a0, GX_TEXMAP0);
+                GXLoadTlut(&field_0x4b0[getLoadTlutDblBufNo()][i], i);
+                GXLoadTexObj(r26, GX_TEXMAP1);
+                GXLoadTexObj(&field_0x5e0, GX_TEXMAP2);
+                GXLoadTexObj(&field_0x5c0, GX_TEXMAP3);
+                if (field_0x2b0) {
+                    GXLoadTexObj(&field_0x600, GX_TEXMAP4);
+                }
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_F32, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX2, GX_TEX_ST, GX_F32, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX3, GX_TEX_ST, GX_F32, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX4, GX_TEX_ST, GX_F32, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX5, GX_TEX_ST, GX_F32, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX6, GX_TEX_ST, GX_F32, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX7, GX_TEX_ST, GX_F32, 0);
+                GXClearVtxDesc();
+                GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+                GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+                GXSetVtxDesc(GX_VA_TEX1, GX_DIRECT);
+                GXSetVtxDesc(GX_VA_TEX2, GX_DIRECT);
+                GXSetVtxDesc(GX_VA_TEX3, GX_DIRECT);
+                GXSetVtxDesc(GX_VA_TEX4, GX_DIRECT);
+                GXSetVtxDesc(GX_VA_TEX5, GX_DIRECT);
+                GXSetVtxDesc(GX_VA_TEX6, GX_DIRECT);
+                GXSetVtxDesc(GX_VA_TEX7, GX_DIRECT);
+                GXSetNumChans(0);
+                GXSetNumTexGens(8);
+                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+                GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY);
+                GXSetTexCoordGen(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX2, GX_IDENTITY);
+                GXSetTexCoordGen(GX_TEXCOORD3, GX_TG_MTX2x4, GX_TG_TEX3, GX_IDENTITY);
+                GXSetTexCoordGen(GX_TEXCOORD4, GX_TG_MTX2x4, GX_TG_TEX4, GX_IDENTITY);
+                GXSetTexCoordGen(GX_TEXCOORD5, GX_TG_MTX2x4, GX_TG_TEX5, GX_IDENTITY);
+                GXSetTexCoordGen(GX_TEXCOORD6, GX_TG_MTX2x4, GX_TG_TEX6, GX_IDENTITY);
+                GXSetTexCoordGen(GX_TEXCOORD7, GX_TG_MTX2x4, GX_TG_TEX7, GX_IDENTITY);
+                GXSetNumTevStages(12);
+                GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+                if (field_0x2b0) {
+                    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD5, GX_TEXMAP4, GX_COLOR_NULL);
+                } else {
+                    GXSetTevOrder(GX_TEVSTAGE7, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+                }
+                GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE4, GX_TEXCOORD2, GX_TEXMAP1, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE5, GX_TEXCOORD3, GX_TEXMAP1, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE6, GX_TEXCOORD4, GX_TEXMAP1, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE7, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE8, GX_TEXCOORD5, GX_TEXMAP1, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE9, GX_TEXCOORD6, GX_TEXMAP2, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE10, GX_TEXCOORD6, GX_TEXMAP2, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE11, GX_TEXCOORD7, GX_TEXMAP3, GX_COLOR_NULL);
+                GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_KONST, GX_CC_TEXC, GX_CC_ZERO);
+                GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
+                if (field_0x2b0) {
+                    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_C1, GX_CC_KONST, GX_CC_TEXC, GX_CC_ZERO);
+                    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_C2, GX_CC_CPREV, GX_CC_APREV, GX_CC_ZERO);
+                    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
+                } else {
+                    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+                    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C2);
+                    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
+                }
+                GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_ONE, GX_CC_TEXA, GX_CC_ZERO);
+                GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevColorIn(GX_TEVSTAGE4, GX_CC_ZERO, GX_CC_ONE, GX_CC_TEXA, GX_CC_CPREV);
+                GXSetTevColorOp(GX_TEVSTAGE4, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevColorIn(GX_TEVSTAGE5, GX_CC_ZERO, GX_CC_ONE, GX_CC_TEXA, GX_CC_CPREV);
+                GXSetTevColorOp(GX_TEVSTAGE5, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevColorIn(GX_TEVSTAGE6, GX_CC_ZERO, GX_CC_ONE, GX_CC_TEXA, GX_CC_CPREV);
+                GXSetTevColorOp(GX_TEVSTAGE6, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevColorIn(GX_TEVSTAGE7, GX_CC_C2, GX_CC_KONST, GX_CC_CPREV, GX_CC_ZERO);
+                GXSetTevColorOp(GX_TEVSTAGE7, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevColorIn(GX_TEVSTAGE8, GX_CC_CPREV, GX_CC_TEXC, GX_CC_TEXA, GX_CC_ZERO);
+                GXSetTevColorOp(GX_TEVSTAGE8, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG2);
+                GXSetTevColorIn(GX_TEVSTAGE9, GX_CC_ZERO, GX_CC_TEXA, GX_CC_KONST, GX_CC_ZERO);
+                GXSetTevColorOp(GX_TEVSTAGE9, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevColorIn(GX_TEVSTAGE10, GX_CC_C2, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
+                GXSetTevColorOp(GX_TEVSTAGE10, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevColorIn(GX_TEVSTAGE11, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+                GXSetTevColorOp(GX_TEVSTAGE11, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                if (field_0x2b0) {
+                    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, GX_CA_ZERO);
+                    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                } else {
+                    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                }
+                GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE4, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE4, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE5, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE5, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE6, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE6, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE7, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE7, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE8, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE8, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE9, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE9, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE10, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE10, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetTevAlphaIn(GX_TEVSTAGE11, GX_CA_ZERO, GX_CA_KONST, GX_CA_TEXA, GX_CA_ZERO);
+                GXSetTevAlphaOp(GX_TEVSTAGE11, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+                GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
+                GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+                GXSetCullMode(GX_CULL_NONE);
+                GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+                GXPosition3s16(r25, r23, 0);
+                GXTexCoord2f32(0.0f, 0.0f);
+                GXTexCoord2f32(-f24, 0.0f);
+                GXTexCoord2f32(f24, 0.0f);
+                GXTexCoord2f32(0.0f, f23_2);
+                GXTexCoord2f32(0.0f, -f23_2);
+                GXTexCoord2f32(0.0f, 0.0f);
+                GXTexCoord2f32(0.0f, f25);
+                GXTexCoord2f32(0.0f, f29);
+                GXPosition3s16(r24, r23, 0);
+                GXTexCoord2f32(f27, 0.0f);
+                GXTexCoord2f32(1.0f - f24, 0.0f);
+                GXTexCoord2f32(1.0f + f24, 0.0f);
+                GXTexCoord2f32(1.0f, f23_2);
+                GXTexCoord2f32(1.0f, -f23_2);
+                GXTexCoord2f32(1.0f, 0.0f);
+                GXTexCoord2f32(6.0f - f23, f25);
+                GXTexCoord2f32(1.0f, f29);
+                GXPosition3s16(r24, r22, 0);
+                GXTexCoord2f32(f27, f26);
+                GXTexCoord2f32(1.0f - f24, 1.0f);
+                GXTexCoord2f32(1.0f + f24, 1.0f);
+                GXTexCoord2f32(1.0f, 1.0f + f23_2);
+                GXTexCoord2f32(1.0f, 1.0f - f23_2);
+                GXTexCoord2f32(1.0f, 1.0f);
+                GXTexCoord2f32(6.0f - f23, 6.0f);
+                GXTexCoord2f32(1.0f, f28);
+                GXPosition3s16(r25, r22, 0);
+                GXTexCoord2f32(0.0f, f26);
+                GXTexCoord2f32(-f24, 1.0f);
+                GXTexCoord2f32(f24, 1.0f);
+                GXTexCoord2f32(0.0f, 1.0f + f23_2);
+                GXTexCoord2f32(0.0f, 1.0f - f23_2);
+                GXTexCoord2f32(0.0f, 1.0f);
+                GXTexCoord2f32(0.0f, 6.0f);
+                GXTexCoord2f32(0.0f, f28);
+                GXEnd();
+            }
+        }
+        r23 -= field_0x36a + field_0x36c;
+    }
+    GXSetVtxAttrFmtv(GX_VTXFMT0, fmtList);
+    field_0x2ba++;
+    if (field_0x2ba > 40) {
+        field_0x2ba = 0;
+    }
 }

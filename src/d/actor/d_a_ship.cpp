@@ -278,7 +278,7 @@ BOOL daShip_c::draw() {
         mDoMtx_stack_c::concat(MStack_50);
         mDoMtx_stack_c::revConcat(m02A8);
         m02A0->setEffectMtx(mDoMtx_stack_c::get());
-        m02A4->mTexMtxInfo.mSRT.mTranslationX = m03D4;
+        m02A4->mSRT.mTranslationX = m03D4;
     }
 
     if (

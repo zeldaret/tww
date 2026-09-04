@@ -859,7 +859,7 @@ int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8 note) {
     }
     u8 r23;
     u8 noteid = r27 & 0x7;
-    int r22 = 0;
+    u32 skipSamples = 0;
     if (!noteid) {
         r23 = track->getSeq()->readByte();
         if (r23 & 0x80) {
@@ -881,7 +881,7 @@ int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8 note) {
             JUT_ASSERT(0x4FE, noteid < 8);
         }
         if (r26 & 1) {
-            r22 = track->exchangeRegisterValue(track->getSeq()->readByte());
+            skipSamples = track->exchangeRegisterValue(track->getSeq()->readByte());
             r26 ^= 1;
         }
 
@@ -912,7 +912,7 @@ int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8 note) {
         }
 
         if (!track->mIsPaused || !(track->mPauseStatus & 0x10)) {
-            track->noteOn(noteid, note, r25, time, r22);
+            track->noteOn(noteid, note, r25, time, skipSamples);
         }
     }
 

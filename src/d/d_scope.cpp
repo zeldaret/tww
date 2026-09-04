@@ -929,7 +929,7 @@ BOOL dScp_outnowProc(sub_scp_class* i_Scp) {
 BOOL dScp_continueProc(sub_scp_class* i_Scp) {
     if (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || i_Scp->mMesgDataProc.getSelectFlag() != fopMsgM_msgDataProc_c::Select_OFF) {
         i_Scp->mMesgDataProc.setSelectFlagOff();
-        JKRFileLoader::removeResource(i_Scp->head_p, NULL);
+        JKRRemoveResource(i_Scp->head_p, NULL);
         dScp_talkBeforeProc(i_Scp);
         mDoAud_seStart(JA_SE_TALK_NEXT, NULL);
     } else {
@@ -941,7 +941,7 @@ BOOL dScp_continueProc(sub_scp_class* i_Scp) {
 
 /* 8023A354-8023A3C0       .text dScp_forceContinueProc__FP13sub_scp_class */
 BOOL dScp_forceContinueProc(sub_scp_class* i_Scp) {
-    JKRFileLoader::removeResource(i_Scp->head_p, NULL);
+    JKRRemoveResource(i_Scp->head_p, NULL);
     dScp_talkBeforeProc(i_Scp);
     mDoAud_seStart(JA_SE_TALK_NEXT, NULL);
     return TRUE;
@@ -1189,7 +1189,7 @@ void dScp_closeProc(sub_scp_class* i_Scp) {
     } else {
         dScp_wipeMove(i_Scp, 3.f);
         dScp_scopeAlphaZero(i_Scp);
-        JKRFileLoader::removeResource(i_Scp->head_p, NULL);
+        JKRRemoveResource(i_Scp->head_p, NULL);
         i_Scp->mStatus = fopMsgStts_BOX_CLOSED_e;
         dComIfGp_setMesgStatus(fopMsgStts_BOX_CLOSED_e);
     }
@@ -1206,7 +1206,7 @@ void dScp_closeDemoProc(sub_scp_class* i_Scp) {
         dScp_wipeMoveDemo(i_Scp, wipe_value, true);
     } else {
         dScp_wipeMoveDemo(i_Scp, 3.0f, true);
-        JKRFileLoader::removeResource(i_Scp->head_p, NULL);
+        JKRRemoveResource(i_Scp->head_p, NULL);
         i_Scp->mStatus = fopMsgStts_BOX_CLOSED_e;
         i_Scp->mStatus = fopMsgStts_BOX_CLOSED_e; // intentionally duplicated store (matches original)
         dComIfGp_setMesgStatus(fopMsgStts_BOX_CLOSED_e);

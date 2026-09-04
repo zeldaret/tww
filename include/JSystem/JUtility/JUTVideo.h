@@ -71,4 +71,8 @@ inline JUTVideo* JUTGetVideoManager() {
     return JUTVideo::getManager();
 }
 
+inline void JUTDestroyVideoManager() {
+    JUTVideo::destroyManager();
+}
+
 #endif /* JUTVIDEO_H */

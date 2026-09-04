@@ -3,7 +3,7 @@
 // Translation Unit: m_Do_graphic.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
@@ -54,7 +54,7 @@ s16 mDoGph_gInf_c::mMonotoneRateSpeed;
 mDoGph_gInf_c g_mDoGph_graphicInfo;
 
 OSThread mCaptureThread;
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
 OSAlarm mCaptureTimeOutAlarm;
 #endif
 s16 mCaptureStep;
@@ -69,7 +69,9 @@ u32 mCaptureTextureSize;
 u32 mCaptureCaptureSize;
 GXDrawSyncCallback mCaptureOldCB;
 OSThreadQueue mCaptureThreadQueue;
+#if VERSION > VERSION_JPN
 u64 mCaptureTimeOutTicks = OS_TIMER_CLOCK;
+#endif
 
 JKRHeap * mDoGph_gInf_c::mHeap[2] = {};
 GXColor mDoGph_gInf_c::mBackColor = {};
@@ -84,7 +86,11 @@ void mDoGph_gInf_c::create() {
 #endif
     JFWDisplay::createManager(heap, JUTXfb::Double, true);
     JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::Async);
-    JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fbWidth, JUTVideo::getManager()->getRenderMode()->efbHeight, JUtility::TColor(0, 0, 0, 0));
+    JUTFader* faderPtr = new JUTFader(
+        0, 0,
+        JUTGetVideoManager()->getRenderMode()->fbWidth, JUTGetVideoManager()->getRenderMode()->efbHeight,
+        JUtility::TColor(0, 0, 0, 0)
+    );
     JUT_ASSERT(DEMO_SELECT(414, 416), faderPtr != NULL);
     setFader(faderPtr);
     JFWDisplay::getManager()->setFader(faderPtr);
@@ -193,7 +199,7 @@ void mDoGph_gInf_c::calcFade() {
         }
     }
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     if (mFadeColor.a != 0) {
         GXSetNumChans(1);
         GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
@@ -278,18 +284,18 @@ bool mDoGph_AfterOfDraw() {
         JUTProcBar::getManager()->setVisibleHeapBar(false);
         JUTDbPrint::getManager()->setVisible(true);
     } else {
-#if VERSION == VERSION_DEMO
-        BOOL procVisible = false;
-        BOOL printVisible = false;
-#else
+#if DEBUG || VERSION > VERSION_DEMO
         BOOL consoleVisible = JFWSystem::getSystemConsole()->isVisible();
-        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::Port_3).err == 0;
+        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::EPort3).err == 0;
         BOOL procVisible = pad3Connected && fapGmHIO_getMeter() && !consoleVisible;
         BOOL printVisible = pad3Connected && fapGmHIO_isPrint();
         if (mDoMain::developmentMode == 0) {
             procVisible = FALSE;
             printVisible = FALSE;
         }
+#else
+        BOOL procVisible = false;
+        BOOL printVisible = false;
 #endif
         JUTProcBar::getManager()->setVisible(procVisible);
         JUTProcBar::getManager()->setVisibleHeapBar(procVisible);
@@ -304,16 +310,24 @@ bool mDoGph_AfterOfDraw() {
     GXSetFogRangeAdj(GX_FALSE, 0, NULL);
     GXSetCoPlanar(GX_FALSE);
     GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z8, 0);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     GXSetDither(GX_FALSE);
 #else
     GXSetDither(GX_TRUE);
 #endif
     GXSetClipMode(GX_CLIP_ENABLE);
     GXSetCullMode(GX_CULL_NONE);
+#if VERSION < VERSION_PAL
     mDoMch_render_c::setFbWidth(fapGmHIO_getFbWidth());
     mDoMch_render_c::setEfbHeight(fapGmHIO_getEfbHeight());
-    JUTVideo::getManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
+#endif
+    JUTGetVideoManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
+#if VERSION == VERSION_PAL
+    if (mDoMch_render_c::getRenderModeObj()->viTVmode == VI_TVMODE_PAL_INT) {
+        VIConfigurePan(0, 0, 640, 532);
+        VIFlush();
+    }
+#endif
     dComIfGd_peekZdata();
     mDoGph_gInf_c::endFrame();
     return true;
@@ -372,7 +386,9 @@ void clearAlphaBuffer(view_class* view, u8 alpha) {
     GXSetDither(GX_TRUE);
     GXSetColorUpdate(GX_FALSE);
     GXSetAlphaUpdate(GX_TRUE);
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     GXColor color = { 0x00, 0x00, 0x00, 0x00 };
     color.a = alpha;
     GXSetTevColor(GX_TEVREG0, color);
@@ -473,7 +489,9 @@ void drawAlphaBuffer(view_class* view, GXColor color) {
     GXSetDither(GX_TRUE);
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_TRUE);
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     Mtx44 mtx;
     C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
@@ -576,7 +594,9 @@ void drawSpot(view_class* view) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_DST_ALPHA, GX_BL_DST_ALPHA, GX_LO_OR);
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_FALSE);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -591,7 +611,6 @@ void drawSpot(view_class* view) {
 
 /* 80008F34-8000990C       .text drawDepth__FP10view_classP15view_port_classi */
 void drawDepth(view_class* view, view_port_class* viewport, int depth) {
-    /* Nonmatching */
     if (mDoGph_gInf_c::isAutoForcus()) {
         f32 projv[7];
         f32 viewv[6];
@@ -612,7 +631,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
         l_tevColor0.a = mDoGph_gInf_c::getMonotoneRate();
     } else {
         dStage_FileList_dt_c * fili_p = NULL;
-        s32 roomNo = dComIfGp_roomControl_getStayNo();
+        int roomNo = dComIfGp_roomControl_getStayNo();
         if (roomNo >= 0)
             fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
@@ -651,7 +670,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
 
     u16 hw = w >> 1;
     u16 hh = h >> 1;
-    GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, JUTVideo::getManager()->getRenderMode()->vfilter);
+    GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, JUTGetVideoManager()->getRenderMode()->vfilter);
 
     GXSetTexCopySrc(x, y, w, h);
     GXSetTexCopyDst(hw, hh, GX_TF_Z16, GX_TRUE);
@@ -661,15 +680,18 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXSetTexCopyDst(hw, hh, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
     GXCopyTex(fbbuf, GX_FALSE);
 
-    GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zbuf, w, h, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zbuf, hw, hh, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(mDoGph_gInf_c::getZbufferTexObj(), GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 
-    GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), fbbuf, w, h, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), fbbuf, hw, hh, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(mDoGph_gInf_c::getFrameBufferTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXPixModeSync();
+#if VERSION == VERSION_PAL
+    GXInvalidateTexAll();
+#endif
     GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP1);
     GXLoadTexObj(mDoGph_gInf_c::getZbufferTexObj(), GX_TEXMAP0);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     mDoGph_gInf_c::calcFade();
 #endif
     GXSetNumChans(0);
@@ -678,7 +700,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetNumTevStages(3);
     GXSetTevColorS10(GX_TEVREG0, l_tevColor0);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     GXSetTevColor(GX_TEVREG2, mDoGph_gInf_c::getFadeColor());
 #endif
     GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_ALPHA, GX_CH_GREEN, GX_CH_BLUE, GX_CH_RED);
@@ -696,13 +718,13 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_TEXA, GX_CA_A0);
     GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_4, GX_TRUE, GX_TEVPREV);
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_TEXC, GX_CC_C2, GX_CC_A2, GX_CC_ZERO);
 #else
     GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
 #endif
     GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_APREV, GX_CA_KONST, GX_CA_A2, GX_CA_ZERO);
 #else
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
@@ -752,7 +774,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     if (y == 0) {
         s16 h = (s16)viewport->mScissor.mYOrig;
         if (h != 0) {
-            h += (f32)viewport->mScissor.mHeight;
+            s16 h2 = h + (f32)viewport->mScissor.mHeight;
             GXSetNumChans(1);
             GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
             GXSetNumTexGens(0);
@@ -769,11 +791,11 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
             GXBegin(GX_QUADS, GX_VTXFMT0, 8);
                 GXPosition3s16(0, 0, -5);
                 GXPosition3s16(640, 0, -5);
-                GXPosition3s16(640, y, -5);
-                GXPosition3s16(0, y, -5);
-
-                GXPosition3s16(0, h, -5);
                 GXPosition3s16(640, h, -5);
+                GXPosition3s16(0, h, -5);
+
+                GXPosition3s16(0, h2, -5);
+                GXPosition3s16(640, h2, -5);
                 GXPosition3s16(640, 480, -5);
                 GXPosition3s16(0, 480, -5);
             GXEnd();
@@ -1395,7 +1417,9 @@ u8* mDoGph_allocFromAny(u32 size, int align) {
         mem = JKRAllocFromSysHeap(size, align);
     if (mem == NULL)
         mem = mDoGph_gInf_c::getZbufferTex();
+#if VERSION > VERSION_JPN
     memset(mem, 0, size);
+#endif
     return (u8*)mem;
 }
 #endif
@@ -1455,7 +1479,9 @@ out:
 /* 8000AAC4-8000AB1C       .text mCaptureProc__FPv */
 u32 mCaptureProc(void* dummy) {
     u32 bytesCopied = encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
-#if VERSION > VERSION_DEMO
+#if VERSION == VERSION_JPN
+    DCFlushRange(mCaptureTextureBuffer, mCaptureTextureSize);
+#elif VERSION > VERSION_JPN
     DCStoreRange(mCaptureTextureBuffer, mCaptureTextureSize);
 #endif
     OSExitThread((void*)bytesCopied);
@@ -1464,22 +1490,23 @@ u32 mCaptureProc(void* dummy) {
 
 /* 8000AB1C-8000ABC4       .text mCaptureGXDrawSyncCallback__FUs */
 void mCaptureGXDrawSyncCallback(u16) {
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     OSCancelAlarm(&mCaptureTimeOutAlarm);
     BOOL interrupt = OSDisableInterrupts();
-    if (mCaptureStep == 2) {
+    if (mCaptureStep == 2)
 #endif
+    {
         void* oldcb = (void*)GXSetDrawSyncCallback(mCaptureOldCB);
-        JUT_ASSERT(DEMO_SELECT(2580, 2655), oldcb == mCaptureGXDrawSyncCallback);
+        JUT_ASSERT(VERSION_SELECT(2580, 2863, 2655, 2662), oldcb == mCaptureGXDrawSyncCallback);
         mCaptureOldCB = NULL;
         mCaptureStep++;
-#if VERSION > VERSION_DEMO
     }
+#if VERSION > VERSION_JPN
     OSRestoreInterrupts(interrupt);
 #endif
 }
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
 /* 8000ABC4-8000AC3C       .text mCaptureGXDrawSyncTimeOut__FP7OSAlarmP9OSContext */
 void mCaptureGXDrawSyncTimeOut(OSAlarm*, OSContext*) {
     OSReport_Error("キャプチャタイムアウト\n");
@@ -1555,9 +1582,9 @@ bool mDoGph_screenCapture() {
     GXCopyTex(mCaptureCaptureBuffer, GX_FALSE);
     GXPixModeSync();
 
-    JUT_ASSERT(DEMO_SELECT(2657, 2753), mCaptureOldCB == NULL);
+    JUT_ASSERT(VERSION_SELECT(2657, 2942, 2753, 2760), mCaptureOldCB == NULL);
     mCaptureOldCB = GXSetDrawSyncCallback(mCaptureGXDrawSyncCallback);
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     OSCreateAlarm(&mCaptureTimeOutAlarm);
     OSSetAlarm(&mCaptureTimeOutAlarm, mCaptureTimeOutTicks, mCaptureGXDrawSyncTimeOut);
 #endif
@@ -1599,12 +1626,12 @@ bool mDoGph_Painter() {
         GXSetCopyFilter(GX_FALSE, NULL, GX_FALSE, NULL);
 
     j3dSys.drawInit();
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     GXSetDither(GX_TRUE);
 #endif
 
     J2DOrthoGraph graf(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
-    graf.setOrtho(JGeometry::TBox2<f32>(-9.0f, -21.0f, 650.0f, 503.0f), -1.0f, 1.0f);
+    graf.setOrtho(-9.0f, -21.0f, 659.0f, 524.0f, -1.0f, 1.0f);
     graf.setPort();
 
     dComIfGp_setCurrentGrafPort(&graf);
@@ -1657,6 +1684,9 @@ bool mDoGph_Painter() {
 
             GXSetClipMode(GX_CLIP_ENABLE);
             dComIfGd_drawOpaListBG();
+#if VERSION == VERSION_JPN
+            j3dSys.reinitGX();
+#endif
             dComIfGd_drawShadow(camera->view.mViewMtx);
             dComIfGd_drawAlphaModel(camera->view.mViewMtx);
             drawAlphaBuffer(&camera->view, dComIfGd_getAlphaModelColor());
@@ -1714,7 +1744,9 @@ bool mDoGph_Painter() {
 
             dComIfGd_drawOpaListFilter();
 
-#if VERSION > VERSION_DEMO
+#if VERSION == VERSION_JPN
+            j3dSys.reinitGX();
+#elif VERSION > VERSION_JPN
             j3dSys.reinitGX();
             GXSetNumIndStages(0);
 #endif
@@ -1735,7 +1767,10 @@ bool mDoGph_Painter() {
 
             if (!dMenu_flag()) {
                 motionBlure(&camera->view);
-                drawDepth(&camera->view, viewport_p, dComIfGp_getCamZoomForcus(cameraID));
+                drawDepth(&camera->view, viewport_p, dComIfGp_getCameraZoomForcus(cameraID));
+#if VERSION == VERSION_PAL
+                GXInvalidateTexAll();
+#endif
                 dComIfGp_particle_drawProjection(&jpaDrawInfo);
 
                 GXSetClipMode(GX_CLIP_ENABLE);
@@ -1744,7 +1779,9 @@ bool mDoGph_Painter() {
 
 #if VERSION > VERSION_DEMO
                 j3dSys.reinitGX();
+#if VERSION > VERSION_JPN
                 GXSetNumIndStages(0);
+#endif
                 if (isTower9)
                     dComIfGp_particle_draw(&jpaDrawInfo);
 #endif
@@ -1768,8 +1805,11 @@ bool mDoGph_Painter() {
                 }
 #endif
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
                 mDoGph_gInf_c::calcFade();
+#endif
+
+#if VERSION > VERSION_DEMO
                 if (mCaptureStep == 1) {
                     if (!mCaptureCansel)
                         mDoGph_screenCapture();
@@ -1858,7 +1898,11 @@ bool mDoGph_Painter() {
             OSCreateAlarm(&alarm);
             OSInitThreadQueue(&mCaptureThreadQueue);
             OSSetAlarm(&alarm, OSMillisecondsToTicks(3), mCaptureAlarmHandler);
-#else
+#elif VERSION == VERSION_JPN
+            OSCreateAlarm(&alarm);
+            OSInitThreadQueue(&mCaptureThreadQueue);
+            OSSetAlarm(&alarm, OSMillisecondsToTicks(10), mCaptureAlarmHandler);
+#else // VERSION_USA and VERSION_PAL
             u64 tickNum = OSMillisecondsToTicks(10);
             OSCreateAlarm(&alarm);
             OSInitThreadQueue(&mCaptureThreadQueue);
@@ -1900,14 +1944,14 @@ bool mDoGph_Painter() {
 
     dDlst_list_c::calcWipe();
     j3dSys.reinitGX();
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
 
-    graf.setOrtho(JGeometry::TBox2<f32>(-9.0f, -21.0f, 650.0f, 503.0f), 100000.0f, -100000.0f);
+    graf.setOrtho(-9.0f, -21.0f, 659.0f, 524.0f, 100000.0f, -100000.0f);
     graf.setPort();
     Mtx viewMtx;
-    mDoMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
+    cMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
     JPADrawInfo jpaDrawInfo2D(viewMtx, 45.0f, 1.218f);
     jpaDrawInfo2D.setFovy(0.0f);
     jpaDrawInfo2D.setAspect(4.0f/3.0f);
@@ -1924,7 +1968,7 @@ bool mDoGph_Painter() {
         j3dSys.setViewMtx(mDoMtx_stack_c::get());
         dComIfGd_drawOpaList2D();
         j3dSys.reinitGX();
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
         GXSetNumIndStages(0);
 #endif
         j3dSys.setViewMtx(viewMtx);
@@ -1953,7 +1997,9 @@ bool mDoGph_Create() {
 #if VERSION > VERSION_DEMO
     mDoExt_adjustSolidHeap(solidHeap);
     mDoExt_restoreCurrentHeap();
+#if VERSION > VERSION_JPN
     JFWAutoAbortGfx = mDoMain::developmentMode ? 0x02 : 0x01;
+#endif
 #endif
     return true;
 }

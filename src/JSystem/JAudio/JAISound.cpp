@@ -79,7 +79,7 @@ void JAISound::setVolume(f32 param_1, u32 param_2, u8 param_3) {
 }
 
 static void dummy1() {
-    OSReport("JAISound::setDirectVolume サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::setDirectVolume サウンドカテゴリービットが異常です。\n");
 }
 
 /* 8029878C-80298864       .text setPan__8JAISoundFfUlUc */
@@ -100,7 +100,7 @@ void JAISound::setPan(f32 param_1, u32 param_2, u8 param_3) {
 }
 
 static void dummy2() {
-    OSReport("JAISound::setDirectPan サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::setDirectPan サウンドカテゴリービットが異常です。\n");
 }
 
 /* 80298864-8029893C       .text setPitch__8JAISoundFfUlUc */
@@ -121,7 +121,7 @@ void JAISound::setPitch(f32 param_1, u32 param_2, u8 param_3) {
 }
 
 static void dummy3() {
-    OSReport("JAISound::setDirectPitch サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::setDirectPitch サウンドカテゴリービットが異常です。\n");
 }
 
 /* 8029893C-80298A04       .text setFxmix__8JAISoundFfUlUc */
@@ -141,7 +141,7 @@ void JAISound::setFxmix(f32 param_1, u32 param_2, u8 param_3) {
 }
 
 static void dummy4() {
-    OSReport("JAISound::setDirectFxmix サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::setDirectFxmix サウンドカテゴリービットが異常です。\n");
 }
 
 /* 80298A04-80298ACC       .text setDolby__8JAISoundFfUlUc */
@@ -161,7 +161,7 @@ void JAISound::setDolby(f32 param_1, u32 param_2, u8 param_3) {
 }
 
 static void dummy5() {
-    OSReport("JAISound::setDirectDolby サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::setDirectDolby サウンドカテゴリービットが異常です。\n");
 }
 
 /* 80298ACC-80298B74       .text setTempoProportion__8JAISoundFfUl */
@@ -277,7 +277,7 @@ void JAISound::setSeqInterVolume(u8 line_, f32 param_2, u32 param_3) {
 }
 
 static void dummy6() {
-    OSReport("JAISound::checkReady サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::checkReady サウンドカテゴリービットが異常です。\n");
 }
 
 /* 8029925C-802993AC       .text setSeqInterPan__8JAISoundFUcfUl */
@@ -654,15 +654,15 @@ BOOL JAInter::MoveParaSet::move() {
 }
 
 static void dummy7() {
-    OSReport("JAISound::getVolume サウンドカテゴリービットが異常です。\n");
-    OSReport("JAISound::getPitch サウンドカテゴリービットが異常です。\n");
-    OSReport("JAISound::getFxmix サウンドカテゴリービットが異常です。\n");
-    OSReport("JAISound::getDolby サウンドカテゴリービットが異常です。\n");
-    OSReport("JAISound::getTempoProportion サウンドカテゴリービットが異常です。\n");
-    OSReport("JAISound::getPortData サウンドカテゴリービットが異常です。\n");
-    OSReport("JAISound::getTrackParameterU7 未定義のサウンドパラメータです。\n");
-    OSReport("JAISound::getTrackParameterF32 未定義のサウンドパラメータです。\n");
-    OSReport("JAISound::getSeParametermeterF32 未定義のサウンドパラメータです。\n");
+    DEAD_STRING("JAISound::getVolume サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::getPitch サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::getFxmix サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::getDolby サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::getTempoProportion サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::getPortData サウンドカテゴリービットが異常です。\n");
+    DEAD_STRING("JAISound::getTrackParameterU7 未定義のサウンドパラメータです。\n");
+    DEAD_STRING("JAISound::getTrackParameterF32 未定義のサウンドパラメータです。\n");
+    DEAD_STRING("JAISound::getSeParametermeterF32 未定義のサウンドパラメータです。\n");
 }
 
 /* 8029B0C4-8029B4AC       .text init__Q27JAInter9LinkSoundFP8JAISoundUl */

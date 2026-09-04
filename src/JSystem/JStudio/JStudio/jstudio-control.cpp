@@ -52,7 +52,7 @@ void JStudio::TFactory::appendCreateObject(JStudio::TCreateObject* param_0) {
 
 /* 8026E360-8026E438       .text create__Q27JStudio8TFactoryFRCQ47JStudio3stb4data20TParse_TBlock_object */
 JStudio::TObject* JStudio::TFactory::create(const JStudio::stb::data::TParse_TBlock_object& param_0) {
-    JGadget::TContainerEnumerator<TCreateObject, -4> aTStack_368(&mList);
+    JGadget::TContainerEnumerator<JGadget::TLinkList<TCreateObject, -4> > aTStack_368(mList);
     while(aTStack_368) {
         TCreateObject& piVar1 = *aTStack_368;
         JStudio::TObject* obj = NULL;
