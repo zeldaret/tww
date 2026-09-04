@@ -2812,7 +2812,30 @@ const cursorTable_t* dMenu_Fmap_c::getWarpAreaTablePtr(s8 i_gridX, s8 i_gridY) {
 
 /* 801B97DC-801B9AB0       .text areaTextChangeAnimeInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::areaTextChangeAnimeInit() {
-    /* Nonmatching */
+    mWarpAnimTimer = g_mfHIO.field_0x31;
+    mAreaTxtBufIdx = 0;
+    *mTxtName[0] = NULL;
+    int grid = getCtCurWX() + (getCtCurWY() + 3) * 7 + 3;
+
+    if (dComIfGs_isSaveArriveGrid(grid)) {
+        if (grid == dIsleIdx_ForsakenFortress_e || grid == dIsleIdx_GaleIsle_e || grid == dIsleIdx_WindfallIsland_e || grid == dIsleIdx_DragonRoostIsland_e ||
+            grid == dIsleIdx_FireMountain_e || grid == dIsleIdx_GreatfishIsle_e || grid == dIsleIdx_ToweroftheGods_e || grid == dIsleIdx_IceRingIsle_e ||
+            grid == dIsleIdx_ForestHaven_e || grid == dIsleIdx_OutsetIsland_e || grid == dIsleIdx_HeadstoneIsland_e) {
+            ((J2DTextBox*) mAreaTxtPanes[1].pane)->setCharColor(g_mfHIO.field_0x100);
+        } else {
+            ((J2DTextBox*) mAreaTxtPanes[1].pane)->setCharColor(g_mfHIO.field_0xFC);
+        }
+        fopMsgM_messageGet(mTxtName[1], grid + 0x31a6);
+    } else {
+        *mTxtName[1] = NULL;
+    }
+    outFont->messageSet(0x5F);
+    fopMsgM_setNowAlpha(&mAreaTxtPanes[mAreaTxtBufIdx + 1], 1.0f);
+    fopMsgM_setAlpha(&mAreaTxtPanes[mAreaTxtBufIdx + 1]);
+    fopMsgM_setNowAlpha(&mAreaTxtPanes[(mAreaTxtBufIdx ^ 1) + 1], 0.0f);
+    fopMsgM_setAlpha(&mAreaTxtPanes[(mAreaTxtBufIdx ^ 1) + 1]);
+    outFont->setAlpha(0);
+
 }
 
 /* 801B9AB0-801B9B40       .text areaTextChangeAnime__12dMenu_Fmap_cFv */
