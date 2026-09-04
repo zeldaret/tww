@@ -173,8 +173,8 @@ public:
     bool isFmapClose();
     void setPaneOnOff(J2DScreen*, u32, bool);
     void childPaneMoveSp(fopMsgM_pane_class*, fopMsgM_pane_class*, f32, f32, f32);
-    BOOL selGridMaskAlphaCtrl(short, u8, u8, int);
-    BOOL fmapMaskAlphaCtrl(short, u8, u8, int);
+    BOOL selGridMaskAlphaCtrl(s16, u8, u8, int);
+    BOOL fmapMaskAlphaCtrl(s16, u8, u8, int);
     void selCursorInit();
     void selCursorHide();
     void selCursorMove();
@@ -234,12 +234,12 @@ public:
     void fmap2Open();
     void fmap2Move();
     void fmap2Close();
-    BOOL paneTransBase(short, u8, f32, f32, u8, int);
-    BOOL paneTranceZoomMap(short, u8, f32, f32, f32, f32, f32, f32, u8, int);
-    BOOL paneTranceZoomMapAlpah(short, u8, u8, int);
-    BOOL paneTranceZoom2Map(short, u8, f32, f32, f32, f32, f32, f32, u8, int);
-    BOOL paneAlphaFmapCursor(fopMsgM_pane_class*, short, u8, u8, int);
-    BOOL PaneAlphaSelvageItem(short, u8);
+    BOOL paneTransBase(s16, u8, f32, f32, u8, int);
+    BOOL paneTranceZoomMap(s16, u8, f32, f32, f32, f32, f32, f32, u8, int);
+    BOOL paneTranceZoomMapAlpah(s16, u8, u8, int);
+    BOOL paneTranceZoom2Map(s16, u8, f32, f32, f32, f32, f32, f32, u8, int);
+    BOOL paneAlphaFmapCursor(fopMsgM_pane_class*, s16, u8, u8, int);
+    BOOL PaneAlphaSelvageItem(s16, u8);
     void gShipMarkAnimeInit();
     void gShipMarkAnime();
     bool _open_warpMode();
@@ -253,8 +253,8 @@ public:
     void wrapSelWinFadeOut();
     void wrapSelWarp();
     void warpAreaAnime0();
-    BOOL paneTranceWarpMsg(fopMsgM_pane_class*, short, u8, f32, f32, u8, int);
-    BOOL paneAlphaWarpMsgBack(short, u8, u8, int);
+    BOOL paneTranceWarpMsg(fopMsgM_pane_class*, s16, u8, f32, f32, u8, int);
+    BOOL paneAlphaWarpMsgBack(s16, u8, u8, int);
     void warpSelCursorMove();
     void warpSelCursorAnimeInit();
     void warpSelCursorAnime();
@@ -268,7 +268,7 @@ public:
     const cursorTable_t* getWarpAreaTablePtr(s8, s8);
     void areaTextChangeAnimeInit();
     void areaTextChangeAnime();
-    BOOL PaneAlphaAreaTxt(short, u8, int);
+    BOOL PaneAlphaAreaTxt(s16, u8, int);
     void setDspWarpBackCornerColor(f32);
     void setWrapBackEmitter(cXyz);
     void setWrapSpotEmitter(int, cXyz);
@@ -282,7 +282,7 @@ public:
     void islandNameSet(u8);
     void fmMapWrite();
     void fmMapWait();
-    BOOL paneAlphaZoom2Map(short, u8, u8, int);
+    BOOL paneAlphaZoom2Map(s16, u8, u8, int);
     void fmZoomGridLv2Out();
     void fmZoomGridLv1Out();
     void fmEndWait();
