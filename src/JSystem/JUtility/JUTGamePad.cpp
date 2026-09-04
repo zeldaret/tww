@@ -167,7 +167,7 @@ void JUTGamePad::checkResetCallback(OSTime holdTime) {
     }
 }
 
-u32 JUTGamePad::C3ButtonReset::sResetPattern = 0x00001600;
+u32 JUTGamePad::C3ButtonReset::sResetPattern = PAD_BUTTON_START | PAD_BUTTON_X | PAD_BUTTON_B;
 u32 JUTGamePad::C3ButtonReset::sResetMaskPattern = 0x0000FFFF;
 
 /* 802C3D3C-802C3F10       .text update__10JUTGamePadFv */
