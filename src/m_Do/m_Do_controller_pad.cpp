@@ -18,31 +18,31 @@ interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 
 /* 80007598-800078C0       .text mDoCPd_Convert__FP27interface_of_controller_padP10JUTGamePad */
 static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad) {
-    pInterface->mButtonHold.up    = pPad->mButton.mButton & CButton::DPAD_UP;
-    pInterface->mButtonHold.down  = pPad->mButton.mButton & CButton::DPAD_DOWN;
-    pInterface->mButtonHold.left  = pPad->mButton.mButton & CButton::DPAD_LEFT;
-    pInterface->mButtonHold.right = pPad->mButton.mButton & CButton::DPAD_RIGHT;
-    pInterface->mButtonHold.z     = pPad->mButton.mButton & CButton::Z;
-    pInterface->mButtonHold.r     = pPad->mButton.mButton & CButton::R;
-    pInterface->mButtonHold.l     = pPad->mButton.mButton & CButton::L;
-    pInterface->mButtonHold.a     = pPad->mButton.mButton & CButton::A;
-    pInterface->mButtonHold.b     = pPad->mButton.mButton & CButton::B;
-    pInterface->mButtonHold.x     = pPad->mButton.mButton & CButton::X;
-    pInterface->mButtonHold.y     = pPad->mButton.mButton & CButton::Y;
-    pInterface->mButtonHold.start = pPad->mButton.mButton & CButton::START;
+    pInterface->mButtonHold.up    = pPad->mButton.mButton & PAD_BUTTON_UP;
+    pInterface->mButtonHold.down  = pPad->mButton.mButton & PAD_BUTTON_DOWN;
+    pInterface->mButtonHold.left  = pPad->mButton.mButton & PAD_BUTTON_LEFT;
+    pInterface->mButtonHold.right = pPad->mButton.mButton & PAD_BUTTON_RIGHT;
+    pInterface->mButtonHold.z     = pPad->mButton.mButton & PAD_TRIGGER_Z;
+    pInterface->mButtonHold.r     = pPad->mButton.mButton & PAD_TRIGGER_R;
+    pInterface->mButtonHold.l     = pPad->mButton.mButton & PAD_TRIGGER_L;
+    pInterface->mButtonHold.a     = pPad->mButton.mButton & PAD_BUTTON_A;
+    pInterface->mButtonHold.b     = pPad->mButton.mButton & PAD_BUTTON_B;
+    pInterface->mButtonHold.x     = pPad->mButton.mButton & PAD_BUTTON_X;
+    pInterface->mButtonHold.y     = pPad->mButton.mButton & PAD_BUTTON_Y;
+    pInterface->mButtonHold.start = pPad->mButton.mButton & PAD_BUTTON_START;
 
-    pInterface->mButtonTrig.up    = pPad->mButton.mTrigger & CButton::DPAD_UP;
-    pInterface->mButtonTrig.down  = pPad->mButton.mTrigger & CButton::DPAD_DOWN;
-    pInterface->mButtonTrig.left  = pPad->mButton.mTrigger & CButton::DPAD_LEFT;
-    pInterface->mButtonTrig.right = pPad->mButton.mTrigger & CButton::DPAD_RIGHT;
-    pInterface->mButtonTrig.z     = pPad->mButton.mTrigger & CButton::Z;
-    pInterface->mButtonTrig.r     = pPad->mButton.mTrigger & CButton::R;
-    pInterface->mButtonTrig.l     = pPad->mButton.mTrigger & CButton::L;
-    pInterface->mButtonTrig.a     = pPad->mButton.mTrigger & CButton::A;
-    pInterface->mButtonTrig.b     = pPad->mButton.mTrigger & CButton::B;
-    pInterface->mButtonTrig.x     = pPad->mButton.mTrigger & CButton::X;
-    pInterface->mButtonTrig.y     = pPad->mButton.mTrigger & CButton::Y;
-    pInterface->mButtonTrig.start = pPad->mButton.mTrigger & CButton::START;
+    pInterface->mButtonTrig.up    = pPad->mButton.mTrigger & PAD_BUTTON_UP;
+    pInterface->mButtonTrig.down  = pPad->mButton.mTrigger & PAD_BUTTON_DOWN;
+    pInterface->mButtonTrig.left  = pPad->mButton.mTrigger & PAD_BUTTON_LEFT;
+    pInterface->mButtonTrig.right = pPad->mButton.mTrigger & PAD_BUTTON_RIGHT;
+    pInterface->mButtonTrig.z     = pPad->mButton.mTrigger & PAD_TRIGGER_Z;
+    pInterface->mButtonTrig.r     = pPad->mButton.mTrigger & PAD_TRIGGER_R;
+    pInterface->mButtonTrig.l     = pPad->mButton.mTrigger & PAD_TRIGGER_L;
+    pInterface->mButtonTrig.a     = pPad->mButton.mTrigger & PAD_BUTTON_A;
+    pInterface->mButtonTrig.b     = pPad->mButton.mTrigger & PAD_BUTTON_B;
+    pInterface->mButtonTrig.x     = pPad->mButton.mTrigger & PAD_BUTTON_X;
+    pInterface->mButtonTrig.y     = pPad->mButton.mTrigger & PAD_BUTTON_Y;
+    pInterface->mButtonTrig.start = pPad->mButton.mTrigger & PAD_BUTTON_START;
     
     pInterface->mMainStickPosX = pPad->getMainStickX();
     pInterface->mMainStickPosY = pPad->getMainStickY();
