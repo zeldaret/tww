@@ -64,71 +64,71 @@ const u32 gsShip[] = {
 
 /* 801AF4F0-801AF848       .text __ct__9dMf_HIO_cFv */
 dMf_HIO_c::dMf_HIO_c() {
-    field_0x107 = 20;
-    field_0x108 = 255;
-    field_0x109 = 255;
-    field_0x10A = 0;
-    field_0x10B = 255;
-    field_0x10C = 128;
-    field_0x10D = 128;
-    field_0x10E = 128;
-    field_0x10F = 255;
+    mWarpBackColorCycle = 20;
+    mWarpBackColor1.r = 255;
+    mWarpBackColor1.g = 255;
+    mWarpBackColor1.b = 0;
+    mWarpBackColor1.a = 255;
+    mWarpBackColor2.r = 128;
+    mWarpBackColor2.g = 128;
+    mWarpBackColor2.b = 128;
+    mWarpBackColor2.a = 255;
     field_0x104 = 7;
     field_0x105 = 2;
     field_0x106 = 5;
-    field_0x26 = 15;
-    field_0x28 = 25;
-    field_0x12 = 0;
-    field_0x14 = 2;
-    field_0x2A = 15;
-    field_0x2C = 5;
-    field_0x09.r = 255;
-    field_0x09.g = 255;
-    field_0x09.b = 255;
-    field_0x09.a = 255;
-    field_0x0D.r = 128;
-    field_0x0D.g = 128;
-    field_0x0D.b = 255;
-    field_0x0D.a = 255;
-    field_0x1A = 255;
-    field_0x1B = 0;
-    field_0x1C = 0;
-    field_0x1D = 255;
-    field_0x16 = 255;
-    field_0x17 = 255;
-    field_0x18 = 0;
-    field_0x19 = 255;
-    field_0x22 = 255;
-    field_0x23 = 142;
-    field_0x24 = 0;
-    field_0x25 = 255;
-    field_0x1E = 255;
-    field_0x1F = 255;
-    field_0x20 = 130;
-    field_0x21 = 155;
-    field_0x2E = 7;
-    field_0x2F = 7;
-    field_0x30 = 5;
-    field_0x50[0] = -193.0f;
-    field_0x74[0] = -137.0f;
-    field_0x50[1] = -82.0f;
-    field_0x74[1] = -137.0f;
-    field_0x50[2] = 30.0f;
-    field_0x74[2] = -137.0f;
-    field_0x50[3] = -193.0f;
-    field_0x74[3] = -25.0f;
-    field_0x50[4] = -26.0f;
-    field_0x74[4] = -25.0f;
-    field_0x50[5] = 30.0f;
-    field_0x74[5] = 86.0f;
-    field_0x50[6] = -193.0f;
-    field_0x74[6] = 145.0f;
-    field_0x50[7] = -137.0f;
-    field_0x74[7] = -80.0f;
-    field_0x50[8] = -83.0f;
-    field_0x74[8] = 86.0f;
-    field_0x98 = 1.6f;
-    field_0x9C = 0.75f;
+    mWindArrowPeriod = 15;
+    mPlayerPointTimer = 25;
+    mWindArrowPivotX = 0;
+    mWindArrowPivotY = 2;
+    mWindArrowHold1 = 15;
+    mWindArrowHold2 = 5;
+    mWindArrowColor1.r = 255;
+    mWindArrowColor1.g = 255;
+    mWindArrowColor1.b = 255;
+    mWindArrowColor1.a = 255;
+    mWindArrowColor2.r = 128;
+    mWindArrowColor2.g = 128;
+    mWindArrowColor2.b = 255;
+    mWindArrowColor2.a = 255;
+    mPlayerPointWhite2.r = 255;
+    mPlayerPointWhite2.g = 0;
+    mPlayerPointWhite2.b = 0;
+    mPlayerPointWhite2.a = 255;
+    mPlayerPointWhite1.r = 255;
+    mPlayerPointWhite1.g = 255;
+    mPlayerPointWhite1.b = 0;
+    mPlayerPointWhite1.a = 255;
+    mPlayerPointBlack2.r = 255;
+    mPlayerPointBlack2.g = 142;
+    mPlayerPointBlack2.b = 0;
+    mPlayerPointBlack2.a = 255;
+    mPlayerPointBlack1.r = 255;
+    mPlayerPointBlack1.g = 255;
+    mPlayerPointBlack1.b = 130;
+    mPlayerPointBlack1.a = 155;
+    mZoomAnimFrame = 7;
+    mZoom2AnimFrame = 7;
+    mZoomOutDelay = 5;
+    mWarpSpotPosX[0] = -193.0f;
+    mWarpSpotPosY[0] = -137.0f;
+    mWarpSpotPosX[1] = -82.0f;
+    mWarpSpotPosY[1] = -137.0f;
+    mWarpSpotPosX[2] = 30.0f;
+    mWarpSpotPosY[2] = -137.0f;
+    mWarpSpotPosX[3] = -193.0f;
+    mWarpSpotPosY[3] = -25.0f;
+    mWarpSpotPosX[4] = -26.0f;
+    mWarpSpotPosY[4] = -25.0f;
+    mWarpSpotPosX[5] = 30.0f;
+    mWarpSpotPosY[5] = 86.0f;
+    mWarpSpotPosX[6] = -193.0f;
+    mWarpSpotPosY[6] = 145.0f;
+    mWarpSpotPosX[7] = -137.0f;
+    mWarpSpotPosY[7] = -80.0f;
+    mWarpSpotPosX[8] = -83.0f;
+    mWarpSpotPosY[8] = 86.0f;
+    mWarpSpotScaleSel = 1.6f;
+    mWarpSpotScale = 0.75f;
     field_0xA0 = 30.0f;
     field_0xAC = -135.0f;
     field_0xA4 = -195.0f;
@@ -145,15 +145,15 @@ dMf_HIO_c::dMf_HIO_c() {
     field_0xD8 = -195.0f;
     field_0xD4 = -137.0f;
     field_0xDC = 145.0f;
-    field_0x31 = 50;
-    field_0x32 = 10;
-    field_0xE0 = 50;
-    field_0xE1.r = 255;
-    field_0xE1.g = 255;
-    field_0xE1.b = 255;
-    field_0xE5.r = 255;
-    field_0xE5.g = 255;
-    field_0xE5.b = 255;
+    mAreaTxtChangeFrame = 50;
+    mAreaTxtAlphaFrame = 10;
+    mCheckMarkAnimFrame = 50;
+    mCheckMarkWhite.r = 255;
+    mCheckMarkWhite.g = 255;
+    mCheckMarkWhite.b = 255;
+    mCheckMarkBlack.r = 255;
+    mCheckMarkBlack.g = 255;
+    mCheckMarkBlack.b = 255;
     field_0xE9 = 50;
     field_0xEE.r = 255;
     field_0xEE.g = 64;
@@ -164,65 +164,65 @@ dMf_HIO_c::dMf_HIO_c() {
     field_0xEA.b = 0;
     field_0xEA.a = 255;
     field_0xF2 = 192;
-    field_0xF7.r = 0;
-    field_0xF7.g = 64;
-    field_0xF7.b = 0;
-    field_0xF7.a = 0;
-    field_0xF3.r = 0;
-    field_0xF3.g = 129;
-    field_0xF3.b = 0;
-    field_0xF3.a = 255;
+    mKorokBlack.r = 0;
+    mKorokBlack.g = 64;
+    mKorokBlack.b = 0;
+    mKorokBlack.a = 0;
+    mKorokWhite.r = 0;
+    mKorokWhite.g = 129;
+    mKorokWhite.b = 0;
+    mKorokWhite.a = 255;
     field_0xFB = 128;
-    field_0xFC.r = 136;
-    field_0xFC.g = 50;
-    field_0xFC.b = 0;
-    field_0xFC.a = 255;
-    field_0x100.r = 240;
-    field_0x100.g = 0;
-    field_0x100.b = 0;
-    field_0x100.a = 255;
-    field_0x34 = 6;
-    field_0x33 = 4;
-    field_0x36 = 20;
-    field_0x38 = 60;
-    field_0x3A = 8;
-    field_0x3B = 3;
-    field_0x3C = 3;
+    mAreaTxtColor.r = 136;
+    mAreaTxtColor.g = 50;
+    mAreaTxtColor.b = 0;
+    mAreaTxtColor.a = 255;
+    mAreaTxtColorMain.r = 240;
+    mAreaTxtColorMain.g = 0;
+    mAreaTxtColorMain.b = 0;
+    mAreaTxtColorMain.a = 255;
+    mBaseAnimFrame = 6;
+    mOpenDelay = 4;
+    mOpenPosY = 20;
+    mClosePosY = 60;
+    mCursorFlashFrame = 8;
+    mSelCursorAlphaFrame = 3;
+    mZoomMapDelay = 3;
     field_0x3D = 3;
-    field_0x3E = 6;
-    field_0x3F = 0;
-    field_0x40 = 0;
-    field_0x41 = 5;
-    field_0x44 = -500;
-    field_0x42 = 0;
+    mWarpMsgBackAlphaFrame = 6;
+    mWarpMsgBackInDelay = 0;
+    mWarpMsgBackOutDelay = 0;
+    mWarpMsgAnimFrame = 5;
+    mWarpMsgPosY = -500;
+    mWarpMsgDelay = 0;
     field_0x43 = 0;
-    field_0x46 = 5;
+    mWarpYesNoAnimFrame = 5;
     field_0x47 = 8;
     field_0x48 = 5;
-    field_0x49 = 2;
-    field_0x4A = 200;
-    field_0x4C = 12;
-    field_0x4E = 140;
-    field_0x4D = 70;
+    mWarpNoDelay = 2;
+    mWarpYesNoPosY = 200;
+    mWarpCursorBlinkFrame = 12;
+    mWarpCursorAlphaMax = 140;
+    mWarpCursorAlphaMin = 70;
     field_0x05 = 0;
     field_0x06 = 0;
     field_0x07 = 0;
     field_0x08 = 0;
-    field_0x110 = 10;
-    field_0x111 = 7;
+    mFishmanOpenFrame = 10;
+    mFishmanZoom1Frame = 7;
     field_0x112 = 7;
-    field_0x113 = 7;
-    field_0x114 = 7;
-    field_0x115 = 30;
-    field_0x116 = 30;
-    field_0x117 = 10;
-    field_0x118 = 2;
-    field_0x119 = 30;
-    field_0x11A = 0;
-    field_0x11B = 10;
-    field_0x11C = 20;
-    field_0x11D = 255;
-    field_0x11E = 32;
+    mFishmanZoom1OutFrame = 7;
+    mFishmanZoom2Frame = 7;
+    mFishmanZoom2AlphaFrame = 30;
+    mFishmanMapWriteWait = 30;
+    mFishmanMapWriteFrame = 10;
+    mFishmanBlinkFrame = 2;
+    mFishmanDispWait = 30;
+    mFishmanCloseWait = 0;
+    mFishmanCloseFrame = 10;
+    mMoonAlphaFrame = 20;
+    mMoonAlphaMax = 255;
+    mMoonAlphaMin = 32;
 }
 
 static const char* rollmapTex[] = {
@@ -694,15 +694,15 @@ void dMenu_Fmap_c::initialize() {
     }
 
     mHikakuProcIdx = HIKAKU_PROC_OPEN;
-    paneTransBase(0, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0f, 0, 0);
+    paneTransBase(0, g_mfHIO.mBaseAnimFrame, g_mfHIO.mOpenPosY, 0.0f, 0, 0);
     mWarpScrollGuard = false;
     mWarpAnimActive = false;
     setCtFmapZoom(0);
-    selGridMaskAlphaCtrl(0, g_mfHIO.field_0x2E, 0, 0);
-    fmapMaskAlphaCtrl(0, g_mfHIO.field_0x2E, 0, 0);
-    paneTranceZoomMap(0, g_mfHIO.field_0x2E, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0);
-    paneTranceZoom2Map(0, g_mfHIO.field_0x2E, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0);
-    paneAlphaFmapCursor(mKk3xPanes, 0, g_mfHIO.field_0x3B, 0, 0);
+    selGridMaskAlphaCtrl(0, g_mfHIO.mZoomAnimFrame, 0, 0);
+    fmapMaskAlphaCtrl(0, g_mfHIO.mZoomAnimFrame, 0, 0);
+    paneTranceZoomMap(0, g_mfHIO.mZoomAnimFrame, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0);
+    paneTranceZoom2Map(0, g_mfHIO.mZoomAnimFrame, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0);
+    paneAlphaFmapCursor(mKk3xPanes, 0, g_mfHIO.mSelCursorAlphaFrame, 0, 0);
     mFmapProcIdx = FMAP_ZOOM_PROC_SELECT_GRID;
 }
 
@@ -878,7 +878,7 @@ void dMenu_Fmap_c::checkMarkCheck3() {
             bool stat = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) ||
                         ((dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF) & 0xFF) >> bit & 1);
             if (stat != 0) {
-                ((J2DPicture*)mKr0xPanes[i].pane)->setBlackWhite(g_mfHIO.field_0xF7, g_mfHIO.field_0xF3);
+                ((J2DPicture*)mKr0xPanes[i].pane)->setBlackWhite(g_mfHIO.mKorokBlack, g_mfHIO.mKorokWhite);
             }
 
             ((J2DPicture*)mKr0xPanes[i].pane)->changeTexture(korogStat[stat], 0);
@@ -969,7 +969,7 @@ void dMenu_Fmap_c::selCursorInit() {
         mKk1xPanes[i].pane->show();
         mKk1xPanes[i + 4].pane->hide();
     }
-    mKk1xPanes->mUserArea = g_mfHIO.field_0x3A;
+    mKk1xPanes->mUserArea = g_mfHIO.mCursorFlashFrame;
 }
 
 /* 801B1B58-801B1B80       .text selCursorHide__12dMenu_Fmap_cFv */
@@ -1019,9 +1019,9 @@ void dMenu_Fmap_c::changeIslandName(u8 i_no) {
             grid == dIsleIdx_ForsakenFortress_e || grid == dIsleIdx_GaleIsle_e || grid == dIsleIdx_WindfallIsland_e || grid == dIsleIdx_DragonRoostIsland_e ||
             grid == dIsleIdx_FireMountain_e || grid == dIsleIdx_GreatfishIsle_e || grid == dIsleIdx_ToweroftheGods_e || grid == dIsleIdx_IceRingIsle_e ||
             grid == dIsleIdx_ForestHaven_e || grid == dIsleIdx_OutsetIsland_e || grid == dIsleIdx_HeadstoneIsland_e) {
-            ((J2DTextBox*)mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0x100);
+            ((J2DTextBox*)mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.mAreaTxtColorMain);
         } else {
-            ((J2DTextBox*)mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0xFC);
+            ((J2DTextBox*)mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.mAreaTxtColor);
         }
         fopMsgM_messageGet(mTxtName[i_no], msgNo);
     }
@@ -1030,7 +1030,7 @@ void dMenu_Fmap_c::changeIslandName(u8 i_no) {
 /* 801B1FCC-801B2044       .text AreaTxtChg__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::AreaTxtChg() {
     if (mAreaTxtChanging) {
-        int alpha = PaneAlphaAreaTxt(mAreaTxtTimer, g_mfHIO.field_0x32, 0);
+        int alpha = PaneAlphaAreaTxt(mAreaTxtTimer, g_mfHIO.mAreaTxtAlphaFrame, 0);
         mAreaTxtTimer++;
         if (alpha == 1) {
             mAreaTxtBufIdx ^= 1;
@@ -1053,7 +1053,7 @@ void dMenu_Fmap_c::AreaTxtChgFast() {
 /* 801B20E0-801B2154       .text salvageGetItemChg__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::salvageGetItemChg() {
     if (mSalvItmChanging) {
-        int alpha = PaneAlphaSelvageItem(mSalvItmTimer, g_mfHIO.field_0x32);
+        int alpha = PaneAlphaSelvageItem(mSalvItmTimer, g_mfHIO.mAreaTxtAlphaFrame);
         mSalvItmTimer++;
         if (alpha == 1) {
             mSalvItmBufIdx ^= 1;
@@ -1111,7 +1111,7 @@ void dMenu_Fmap_c::selCursorAnime() {
             mKk1xPanes[i + mSelCursorBufIdx * 4].pane->hide();
         }
         mSelCursorBufIdx ^= 1;
-        mKk1xPanes[0].mUserArea = g_mfHIO.field_0x3A;
+        mKk1xPanes[0].mUserArea = g_mfHIO.mCursorFlashFrame;
     } else {
         mKk1xPanes[0].mUserArea--;
     }
@@ -1124,7 +1124,7 @@ void dMenu_Fmap_c::zoomCursorInit() {
         mKk3xPanes[i].pane->show();
         mKk3xPanes[i + 4].pane->hide();
     }
-    mKk3xPanes[0].mUserArea = g_mfHIO.field_0x3A;
+    mKk3xPanes[0].mUserArea = g_mfHIO.mCursorFlashFrame;
 }
 
 /* 801B24C4-801B2554       .text zoomCursorAnime__12dMenu_Fmap_cFv */
@@ -1135,7 +1135,7 @@ void dMenu_Fmap_c::zoomCursorAnime() {
             mKk3xPanes[i + mCursorBufIdx * 4].pane->hide();
         }
         mCursorBufIdx ^= 1;
-        mKk3xPanes[0].mUserArea = g_mfHIO.field_0x3A;
+        mKk3xPanes[0].mUserArea = g_mfHIO.mCursorFlashFrame;
     } else {
         mKk3xPanes[0].mUserArea--;
     }
@@ -1143,7 +1143,7 @@ void dMenu_Fmap_c::zoomCursorAnime() {
 
 /* 801B2554-801B2570       .text playerPointGridAnimeInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::playerPointGridAnimeInit() {
-    mPlayerPointTimer = g_mfHIO.field_0x28;
+    mPlayerPointTimer = g_mfHIO.mPlayerPointTimer;
     mPlayerPointToggle = 0;
 }
 
@@ -1151,22 +1151,22 @@ void dMenu_Fmap_c::playerPointGridAnimeInit() {
 void dMenu_Fmap_c::playerPointGridAnime() {
     JUtility::TColor black;
     JUtility::TColor white;
-    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.field_0x28, mPlayerPointTimer, 2);
+    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.mPlayerPointTimer, mPlayerPointTimer, 2);
     if (mPlayerPointToggle == 0) {
         alpha = 1.0f - alpha;
     }
-    black.r = g_mfHIO.field_0x1A + alpha * (g_mfHIO.field_0x22 - g_mfHIO.field_0x1A);
-    black.g = g_mfHIO.field_0x1B + alpha * (g_mfHIO.field_0x23 - g_mfHIO.field_0x1B);
-    black.b = g_mfHIO.field_0x1C + alpha * (g_mfHIO.field_0x24 - g_mfHIO.field_0x1C);
+    black.r = g_mfHIO.mPlayerPointWhite2.r + alpha * (g_mfHIO.mPlayerPointBlack2.r - g_mfHIO.mPlayerPointWhite2.r);
+    black.g = g_mfHIO.mPlayerPointWhite2.g + alpha * (g_mfHIO.mPlayerPointBlack2.g - g_mfHIO.mPlayerPointWhite2.g);
+    black.b = g_mfHIO.mPlayerPointWhite2.b + alpha * (g_mfHIO.mPlayerPointBlack2.b - g_mfHIO.mPlayerPointWhite2.b);
     black.a = mBlackAlpha;
-    white.r = g_mfHIO.field_0x16 + alpha * (g_mfHIO.field_0x1E - g_mfHIO.field_0x16);
-    white.g = g_mfHIO.field_0x17 + alpha * (g_mfHIO.field_0x1F - g_mfHIO.field_0x17);
-    white.b = g_mfHIO.field_0x18 + alpha * (g_mfHIO.field_0x20 - g_mfHIO.field_0x18);
+    white.r = g_mfHIO.mPlayerPointWhite1.r + alpha * (g_mfHIO.mPlayerPointBlack1.r - g_mfHIO.mPlayerPointWhite1.r);
+    white.g = g_mfHIO.mPlayerPointWhite1.g + alpha * (g_mfHIO.mPlayerPointBlack1.g - g_mfHIO.mPlayerPointWhite1.g);
+    white.b = g_mfHIO.mPlayerPointWhite1.b + alpha * (g_mfHIO.mPlayerPointBlack1.b - g_mfHIO.mPlayerPointWhite1.b);
     white.a = mWhiteAlpha;
     ((J2DPicture*)mAreaPane.pane)->setWhite(white);
     ((J2DPicture*)mAreaPane.pane)->setBlack(black);
     if (mPlayerPointTimer == 0) {
-        mPlayerPointTimer = g_mfHIO.field_0x28;
+        mPlayerPointTimer = g_mfHIO.mPlayerPointTimer;
         mPlayerPointToggle ^= 1;
     } else {
         mPlayerPointTimer--;
@@ -1180,20 +1180,20 @@ void dMenu_Fmap_c::setDspWindAngle() {
     f32 angle = fmod((adj * 180.0f) / 32768.0f, 360.0);
 
     mWnd1Pane.pane->rotate(
-        (f32)(int)(mWnd1Pane.mSizeOrig.x + g_mfHIO.field_0x12),
-        (f32)(int)(mWnd1Pane.mSizeOrig.y * 0.5f + g_mfHIO.field_0x14),
+        (f32)(int)(mWnd1Pane.mSizeOrig.x + g_mfHIO.mWindArrowPivotX),
+        (f32)(int)(mWnd1Pane.mSizeOrig.y * 0.5f + g_mfHIO.mWindArrowPivotY),
         ROTATE_Z, angle);
     mWnd2Pane.pane->rotate(
-        g_mfHIO.field_0x12,
-        (f32)(int)(mWnd2Pane.mSizeOrig.y * 0.5f + g_mfHIO.field_0x14),
+        g_mfHIO.mWindArrowPivotX,
+        (f32)(int)(mWnd2Pane.mSizeOrig.y * 0.5f + g_mfHIO.mWindArrowPivotY),
         ROTATE_Z, angle);
 }
 
 /* 801B2A14-801B3284       .text windArrowColorAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::windArrowColorAnime() {
-    s16 period = g_mfHIO.field_0x26 - (dKyw_get_wind_pow() * 10.0f + 0.5f);
-    s16 holdA = g_mfHIO.field_0x2A;
-    s16 holdB = g_mfHIO.field_0x2C;
+    s16 period = g_mfHIO.mWindArrowPeriod - (dKyw_get_wind_pow() * 10.0f + 0.5f);
+    s16 holdA = g_mfHIO.mWindArrowHold1;
+    s16 holdB = g_mfHIO.mWindArrowHold2;
 
     JUtility::TColor colorA;
     JUtility::TColor colorB;
@@ -1207,38 +1207,38 @@ void dMenu_Fmap_c::windArrowColorAnime() {
     s16 val = mWnd1Pane.mUserArea;
     if (val < period) {
         f32 alpha = fopMsgM_valueIncrease(period, val, 0);
-        colorA.r = g_mfHIO.field_0x0D.r + alpha * (g_mfHIO.field_0x09.r - g_mfHIO.field_0x0D.r);
-        colorA.g = g_mfHIO.field_0x0D.g + alpha * (g_mfHIO.field_0x09.g - g_mfHIO.field_0x0D.g);
-        colorA.b = g_mfHIO.field_0x0D.b + alpha * (g_mfHIO.field_0x09.b - g_mfHIO.field_0x0D.b);
-        colorA.a = g_mfHIO.field_0x0D.a + alpha * (g_mfHIO.field_0x09.a - g_mfHIO.field_0x0D.a);
+        colorA.r = g_mfHIO.mWindArrowColor2.r + alpha * (g_mfHIO.mWindArrowColor1.r - g_mfHIO.mWindArrowColor2.r);
+        colorA.g = g_mfHIO.mWindArrowColor2.g + alpha * (g_mfHIO.mWindArrowColor1.g - g_mfHIO.mWindArrowColor2.g);
+        colorA.b = g_mfHIO.mWindArrowColor2.b + alpha * (g_mfHIO.mWindArrowColor1.b - g_mfHIO.mWindArrowColor2.b);
+        colorA.a = g_mfHIO.mWindArrowColor2.a + alpha * (g_mfHIO.mWindArrowColor1.a - g_mfHIO.mWindArrowColor2.a);
     } else if (val < period + holdA) {
-        colorA = JUtility::TColor(g_mfHIO.field_0x09);
+        colorA = JUtility::TColor(g_mfHIO.mWindArrowColor1);
     } else if (val < holdA + period * 2) {
         f32 alpha = fopMsgM_valueIncrease(period, (holdA + period * 2) - val, 0);
-        colorA.r = g_mfHIO.field_0x0D.r + alpha * (g_mfHIO.field_0x09.r - g_mfHIO.field_0x0D.r);
-        colorA.g = g_mfHIO.field_0x0D.g + alpha * (g_mfHIO.field_0x09.g - g_mfHIO.field_0x0D.g);
-        colorA.b = g_mfHIO.field_0x0D.b + alpha * (g_mfHIO.field_0x09.b - g_mfHIO.field_0x0D.b);
-        colorA.a = g_mfHIO.field_0x0D.a + alpha * (g_mfHIO.field_0x09.a - g_mfHIO.field_0x0D.a);
+        colorA.r = g_mfHIO.mWindArrowColor2.r + alpha * (g_mfHIO.mWindArrowColor1.r - g_mfHIO.mWindArrowColor2.r);
+        colorA.g = g_mfHIO.mWindArrowColor2.g + alpha * (g_mfHIO.mWindArrowColor1.g - g_mfHIO.mWindArrowColor2.g);
+        colorA.b = g_mfHIO.mWindArrowColor2.b + alpha * (g_mfHIO.mWindArrowColor1.b - g_mfHIO.mWindArrowColor2.b);
+        colorA.a = g_mfHIO.mWindArrowColor2.a + alpha * (g_mfHIO.mWindArrowColor1.a - g_mfHIO.mWindArrowColor2.a);
     } else {
-        colorA = JUtility::TColor(g_mfHIO.field_0x0D);
+        colorA = JUtility::TColor(g_mfHIO.mWindArrowColor2);
     }
 
     if (mWnd1Pane.mUserArea < holdA) {
-        colorB = JUtility::TColor(g_mfHIO.field_0x09);
+        colorB = JUtility::TColor(g_mfHIO.mWindArrowColor1);
     } else if (mWnd1Pane.mUserArea < period + holdA) {
         f32 alpha = fopMsgM_valueIncrease(period, (period + holdA) - mWnd1Pane.mUserArea, 0);
-        colorB.r = g_mfHIO.field_0x0D.r + alpha * (g_mfHIO.field_0x09.r - g_mfHIO.field_0x0D.r);
-        colorB.g = g_mfHIO.field_0x0D.g + alpha * (g_mfHIO.field_0x09.g - g_mfHIO.field_0x0D.g);
-        colorB.b = g_mfHIO.field_0x0D.b + alpha * (g_mfHIO.field_0x09.b - g_mfHIO.field_0x0D.b);
-        colorB.a = g_mfHIO.field_0x0D.a + alpha * (g_mfHIO.field_0x09.a - g_mfHIO.field_0x0D.a);
+        colorB.r = g_mfHIO.mWindArrowColor2.r + alpha * (g_mfHIO.mWindArrowColor1.r - g_mfHIO.mWindArrowColor2.r);
+        colorB.g = g_mfHIO.mWindArrowColor2.g + alpha * (g_mfHIO.mWindArrowColor1.g - g_mfHIO.mWindArrowColor2.g);
+        colorB.b = g_mfHIO.mWindArrowColor2.b + alpha * (g_mfHIO.mWindArrowColor1.b - g_mfHIO.mWindArrowColor2.b);
+        colorB.a = g_mfHIO.mWindArrowColor2.a + alpha * (g_mfHIO.mWindArrowColor1.a - g_mfHIO.mWindArrowColor2.a);
     } else if (mWnd1Pane.mUserArea < period + holdA + holdB) {
-        colorB = JUtility::TColor(g_mfHIO.field_0x0D);
+        colorB = JUtility::TColor(g_mfHIO.mWindArrowColor2);
     } else {
         f32 alpha = fopMsgM_valueIncrease(period, mWnd1Pane.mUserArea - (period + holdA + holdB), 0);
-        colorB.r = g_mfHIO.field_0x0D.r + alpha * (g_mfHIO.field_0x09.r - g_mfHIO.field_0x0D.r);
-        colorB.g = g_mfHIO.field_0x0D.g + alpha * (g_mfHIO.field_0x09.g - g_mfHIO.field_0x0D.g);
-        colorB.b = g_mfHIO.field_0x0D.b + alpha * (g_mfHIO.field_0x09.b - g_mfHIO.field_0x0D.b);
-        colorB.a = g_mfHIO.field_0x0D.a + alpha * (g_mfHIO.field_0x09.a - g_mfHIO.field_0x0D.a);
+        colorB.r = g_mfHIO.mWindArrowColor2.r + alpha * (g_mfHIO.mWindArrowColor1.r - g_mfHIO.mWindArrowColor2.r);
+        colorB.g = g_mfHIO.mWindArrowColor2.g + alpha * (g_mfHIO.mWindArrowColor1.g - g_mfHIO.mWindArrowColor2.g);
+        colorB.b = g_mfHIO.mWindArrowColor2.b + alpha * (g_mfHIO.mWindArrowColor1.b - g_mfHIO.mWindArrowColor2.b);
+        colorB.a = g_mfHIO.mWindArrowColor2.a + alpha * (g_mfHIO.mWindArrowColor1.a - g_mfHIO.mWindArrowColor2.a);
     }
 
     ((J2DPicture*)mWnd1Pane.pane)->setCornerColor(colorA, colorA, colorB, colorB);
@@ -1247,7 +1247,7 @@ void dMenu_Fmap_c::windArrowColorAnime() {
 
 /* 801B3284-801B32A0       .text checkMarkAnimeInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkMarkAnimeInit() {
-    mFishmanMsgTimer = g_mfHIO.field_0xE0;
+    mFishmanMsgTimer = g_mfHIO.mCheckMarkAnimFrame;
     mFishmanMsgToggle = 1;
 }
 
@@ -1256,22 +1256,22 @@ void dMenu_Fmap_c::checkMarkAnime() {
     JUtility::TColor white;
     JUtility::TColor black;
 
-    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.field_0xE0, mFishmanMsgTimer, 2);
+    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.mCheckMarkAnimFrame, mFishmanMsgTimer, 2);
     if (mFishmanMsgToggle == 0) {
         alpha = 1.0f - alpha;
     }
 
-    white.r = g_mfHIO.field_0xE1.r + alpha * (mCk1Color2.r - g_mfHIO.field_0xE1.r);
-    white.g = g_mfHIO.field_0xE1.g + alpha * (mCk1Color2.g - g_mfHIO.field_0xE1.g);
-    white.b = g_mfHIO.field_0xE1.b + alpha * (mCk1Color2.b - g_mfHIO.field_0xE1.b);
+    white.r = g_mfHIO.mCheckMarkWhite.r + alpha * (mCk1Color2.r - g_mfHIO.mCheckMarkWhite.r);
+    white.g = g_mfHIO.mCheckMarkWhite.g + alpha * (mCk1Color2.g - g_mfHIO.mCheckMarkWhite.g);
+    white.b = g_mfHIO.mCheckMarkWhite.b + alpha * (mCk1Color2.b - g_mfHIO.mCheckMarkWhite.b);
     white.a = mCk1Color2.a;
-    black.r = g_mfHIO.field_0xE5.r + alpha * (mCk1Color.r - g_mfHIO.field_0xE5.r);
-    black.g = g_mfHIO.field_0xE5.g + alpha * (mCk1Color.g - g_mfHIO.field_0xE5.g);
-    black.b = g_mfHIO.field_0xE5.b + alpha * (mCk1Color.b - g_mfHIO.field_0xE5.b);
+    black.r = g_mfHIO.mCheckMarkBlack.r + alpha * (mCk1Color.r - g_mfHIO.mCheckMarkBlack.r);
+    black.g = g_mfHIO.mCheckMarkBlack.g + alpha * (mCk1Color.g - g_mfHIO.mCheckMarkBlack.g);
+    black.b = g_mfHIO.mCheckMarkBlack.b + alpha * (mCk1Color.b - g_mfHIO.mCheckMarkBlack.b);
     black.a = mCk1Color.a;
 
     if (mFishmanMsgTimer == 0) {
-        mFishmanMsgTimer = g_mfHIO.field_0xE0;
+        mFishmanMsgTimer = g_mfHIO.mCheckMarkAnimFrame;
         mFishmanMsgToggle ^= 1;
     } else {
         mFishmanMsgTimer--;
@@ -1610,7 +1610,7 @@ bool dMenu_Fmap_c::_open() {
     if (mZoomLocked) {
         ret = 1;
     } else {
-        ret = paneTransBase(mFrameTimer - g_mfHIO.field_0x33, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0, 0, 0);
+        ret = paneTransBase(mFrameTimer - g_mfHIO.mOpenDelay, g_mfHIO.mBaseAnimFrame, g_mfHIO.mOpenPosY, 0.0, 0, 0);
         mFrameTimer++;
     }
     if (ret == TRUE) {
@@ -1640,7 +1640,7 @@ bool dMenu_Fmap_c::_close() {
 
 /* 801B4C78-801B4D78       .text _close_normalMode__12dMenu_Fmap_cFv */
 bool dMenu_Fmap_c::_close_normalMode() {
-    BOOL i = mInputDisabled ? 1 : paneTransBase(mFrameTimer, g_mfHIO.field_0x34, 0.0f, g_mfHIO.field_0x38, 0, 1);
+    BOOL i = mInputDisabled ? 1 : paneTransBase(mFrameTimer, g_mfHIO.mBaseAnimFrame, 0.0f, g_mfHIO.mClosePosY, 0, 1);
     mFrameTimer++;
     if (i == TRUE) {
         if (!mInputDisabled) {
@@ -1827,14 +1827,14 @@ void dMenu_Fmap_c::zoomMapAlphaSet(s8 i_gridX, s8 i_gridY, fopMsgM_pane_class* i
 
 /* 801B5BB4-801B5D6C       .text ZoomGridLv1In__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv1In() {
-    BOOL selCursor = paneAlphaFmapCursor(mKk1xPanes, mFrameTimer, g_mfHIO.field_0x3B, 0, 1);
-    BOOL selGridMask = selGridMaskAlphaCtrl(mFrameTimer, g_mfHIO.field_0x2E, 0, 0);
-    BOOL fmapMask = fmapMaskAlphaCtrl(mFrameTimer, g_mfHIO.field_0x2E, 0, 0);
-    BOOL zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E,
+    BOOL selCursor = paneAlphaFmapCursor(mKk1xPanes, mFrameTimer, g_mfHIO.mSelCursorAlphaFrame, 0, 1);
+    BOOL selGridMask = selGridMaskAlphaCtrl(mFrameTimer, g_mfHIO.mZoomAnimFrame, 0, 0);
+    BOOL fmapMask = fmapMaskAlphaCtrl(mFrameTimer, g_mfHIO.mZoomAnimFrame, 0, 0);
+    BOOL zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.mZoomMapDelay, g_mfHIO.mZoomAnimFrame,
         mKkdmPane.mPosCenter.x - mClbPane.mPosCenterOrig.x,
         mKkdmPane.mPosCenter.y - mClbPane.mPosCenterOrig.y, 0.0f, 0.0f,
         mKkdmPane.mSizeOrig.x / mClbPane.mSizeOrig.x, 1.0f, 0x02, 0);
-    BOOL zoomCursor = paneAlphaFmapCursor(mKk3xPanes, mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E, 0, 0);
+    BOOL zoomCursor = paneAlphaFmapCursor(mKk3xPanes, mFrameTimer - g_mfHIO.mZoomMapDelay, g_mfHIO.mZoomAnimFrame, 0, 0);
     mFrameTimer++;
     if (CPad_CHECK_TRIG_A(0) && !mWarpScrollGuard) {
         mWarpScrollGuard = true;
@@ -1860,7 +1860,7 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
             setCtFmapZoom(0x2);
             zoom200x200Init();
             f32 clgOrigX = mClgPane.mSizeOrig.x;
-            paneTranceZoom2Map(0, g_mfHIO.field_0x2F, mDispIslandPosX * (clgOrigX / 100000.0f),
+            paneTranceZoom2Map(0, g_mfHIO.mZoom2AnimFrame, mDispIslandPosX * (clgOrigX / 100000.0f),
                 mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f), 0.0, 0.0,
                 mTsw1Pane.mSizeOrig.x / clgOrigX, 1.0, 0x2, 0);
             for (int i = 0; i < 8; i++) {
@@ -1900,14 +1900,14 @@ void dMenu_Fmap_c::zoom200x200Init() {
 
 /* 801B6084-801B6270       .text ZoomGridLv1Out__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv1Out() {
-    BOOL selGridMask = selGridMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, 0, 1);
-    BOOL fmapMask = fmapMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, 0, 1);
-    BOOL zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E, 0.0f, 0.0f,
+    BOOL selGridMask = selGridMaskAlphaCtrl(mFrameTimer - g_mfHIO.mZoomOutDelay, g_mfHIO.mZoomAnimFrame, 0, 1);
+    BOOL fmapMask = fmapMaskAlphaCtrl(mFrameTimer - g_mfHIO.mZoomOutDelay, g_mfHIO.mZoomAnimFrame, 0, 1);
+    BOOL zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.mZoomMapDelay, g_mfHIO.mZoomAnimFrame, 0.0f, 0.0f,
         mKkdmPane.mPosCenter.x - mClbPane.mPosCenterOrig.x,
         mKkdmPane.mPosCenter.y - mClbPane.mPosCenterOrig.y, 1.0,
         mKkdmPane.mSizeOrig.x / mClbPane.mSizeOrig.x, 0x02, 1);
-    BOOL zoomCursor = paneAlphaFmapCursor(mKk3xPanes, mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x2E, 0, 1);
-    BOOL selCursor = paneAlphaFmapCursor(mKk1xPanes, mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x3B, 0, 0);
+    BOOL zoomCursor = paneAlphaFmapCursor(mKk3xPanes, mFrameTimer - g_mfHIO.mZoomMapDelay, g_mfHIO.mZoomAnimFrame, 0, 1);
+    BOOL selCursor = paneAlphaFmapCursor(mKk1xPanes, mFrameTimer - g_mfHIO.mZoomOutDelay, g_mfHIO.mSelCursorAlphaFrame, 0, 0);
     mFrameTimer++;
     if (selGridMask == TRUE && fmapMask == TRUE && zoomMap == TRUE && zoomCursor == TRUE && selCursor == TRUE) {
         mFrameTimer = 0;
@@ -1923,10 +1923,10 @@ void dMenu_Fmap_c::ZoomGridLv1Out() {
 /* 801B6270-801B6388       .text ZoomGridLv2In__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv2In() {
     f32 origX = mClgPane.mSizeOrig.x;
-    BOOL zoom2 = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x2F,
+    BOOL zoom2 = paneTranceZoom2Map(mFrameTimer, g_mfHIO.mZoom2AnimFrame,
         mDispIslandPosX * (origX / 100000.0f), mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f),
         0.0, 0.0, mTsw1Pane.mSizeOrig.x / origX, 1.0, 0x02, 0);
-    BOOL alpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x2F, 0x02, 1);
+    BOOL alpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.mZoom2AnimFrame, 0x02, 1);
     mFrameTimer++;
     if (zoom2 == TRUE && alpha == TRUE) {
         mFrameTimer = 0;
@@ -1956,10 +1956,10 @@ void dMenu_Fmap_c::ZoomGridLv2Proc() {
 /* 801B6440-801B65D8       .text ZoomGridLv2Out__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv2Out() {
     f32 origX = mClgPane.mSizeOrig.x;
-    BOOL zoom2 = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x2F, 0.0f, 0.0f,
+    BOOL zoom2 = paneTranceZoom2Map(mFrameTimer, g_mfHIO.mZoom2AnimFrame, 0.0f, 0.0f,
         mDispIslandPosX * (origX / 100000.0f), mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f),
         1.0f, mTsw1Pane.mSizeOrig.x / origX, 0x02, 1);
-    BOOL alpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x2F, 0x02, 0);
+    BOOL alpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.mZoom2AnimFrame, 0x02, 0);
     if (CPad_CHECK_TRIG_B(0) && !mWarpAnimActive) {
         mWarpAnimActive = true;
     }
@@ -2007,7 +2007,7 @@ void dMenu_Fmap_c::HikakuProc() {
 void dMenu_Fmap_c::fmap2Open() {
     if (mFmap2._open() == true) {
         if (mZoomLocked) {
-            paneTransBase(0, g_mfHIO.field_0x34, 0.0, 0.0, 0, 1);
+            paneTransBase(0, g_mfHIO.mBaseAnimFrame, 0.0, 0.0, 0, 1);
         }
         mHikakuProcIdx = HIKAKU_PROC_MOVE;
     }
@@ -2027,7 +2027,7 @@ void dMenu_Fmap_c::fmap2Move() {
     if (!CPad_CHECK_TRIG_B(0) && !CPad_CHECK_TRIG_LEFT(0) && !CPad_CHECK_TRIG_DOWN(0)) {
         return;
     } else if (!mFmap2.isLockBbutton()) {
-        paneTransBase(0, g_mfHIO.field_0x34, 480.0f, 0.0f, 0, 0);
+        paneTransBase(0, g_mfHIO.mBaseAnimFrame, 480.0f, 0.0f, 0, 0);
         mInputDisabled = true;
         mHikakuProcIdx = HIKAKU_PROC_CLOSE;
     }
@@ -2322,7 +2322,7 @@ void dMenu_Fmap_c::gShipMarkAnimeInit() {
                 mGsPanes[dKy_moon_type_chk()].pane->show();
             }
         }
-        mMsgValueTimer = g_mfHIO.field_0x11C;
+        mMsgValueTimer = g_mfHIO.mMoonAlphaFrame;
         mMsgValueToggle = 1;
     } else {
         mMsgValueActive = false;
@@ -2333,15 +2333,15 @@ void dMenu_Fmap_c::gShipMarkAnimeInit() {
 void dMenu_Fmap_c::gShipMarkAnime() {
     if (mMsgValueActive && !mMsgValueState1 && mMsgValueState2) {
         int moonType = dKy_moon_type_chk();
-        f32 alpha = fopMsgM_valueIncrease(g_mfHIO.field_0x11C, mMsgValueTimer, 2);
+        f32 alpha = fopMsgM_valueIncrease(g_mfHIO.mMoonAlphaFrame, mMsgValueTimer, 2);
         if (mMsgValueToggle == 0) {
             alpha = 1.0f - alpha;
         }
-        f32 range = g_mfHIO.field_0x11D - g_mfHIO.field_0x11E;
-        mGsPanes[moonType].mNowAlpha = g_mfHIO.field_0x11E + (u32)(range * alpha);
+        f32 range = g_mfHIO.mMoonAlphaMax - g_mfHIO.mMoonAlphaMin;
+        mGsPanes[moonType].mNowAlpha = g_mfHIO.mMoonAlphaMin + (u32)(range * alpha);
         fopMsgM_setAlpha(&mGsPanes[moonType]);
         if (mMsgValueTimer == 0) {
-            mMsgValueTimer = g_mfHIO.field_0x11C;
+            mMsgValueTimer = g_mfHIO.mMoonAlphaFrame;
             mMsgValueToggle ^= 1;
         } else {
             mMsgValueTimer--;
@@ -2354,12 +2354,12 @@ bool dMenu_Fmap_c::_open_warpMode() {
     if (mFrameTimer == 0) {
         init_warpMode();
     }
-    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x34, 0.0f, 0.0f, 0, 0);
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.mBaseAnimFrame, 0.0f, 0.0f, 0, 0);
     mFrameTimer++;
-    f32 ratio = (f32)mFrameCounter / (f32)g_mfHIO.field_0x107;
+    f32 ratio = (f32)mFrameCounter / (f32)g_mfHIO.mWarpBackColorCycle;
     mFrameCounter++;
     u8 counter = mFrameCounter;
-    mFrameCounter = counter - (counter / (g_mfHIO.field_0x107 * 4)) * (g_mfHIO.field_0x107 * 4);
+    mFrameCounter = counter - (counter / (g_mfHIO.mWarpBackColorCycle * 4)) * (g_mfHIO.mWarpBackColorCycle * 4);
     setDspWarpBackCornerColor(ratio);
 
     if (ret == TRUE) {
@@ -2404,8 +2404,8 @@ void dMenu_Fmap_c::init_warpMode() {
     int i = 0;
     dMf_HIO_c& hio = g_mfHIO;
     for (; i < 9; i++) {
-        spotEmitter.x = hio.field_0x50[i];
-        spotEmitter.y = hio.field_0x74[i];
+        spotEmitter.x = hio.mWarpSpotPosX[i];
+        spotEmitter.y = hio.mWarpSpotPosY[i];
         spotEmitter.z = 0.0f;
         setWrapSpotEmitter(i, spotEmitter);
         mWrapSpotEmitters[i]->stopDrawParticle();
@@ -2428,7 +2428,7 @@ void dMenu_Fmap_c::selCursorMoveWarp() {
 
 /* 801B7E30-801B7EA8       .text _close_warpMode__12dMenu_Fmap_cFv */
 bool dMenu_Fmap_c::_close_warpMode() {
-    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x34, 0.0, 0.0, 0, 1);
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.mBaseAnimFrame, 0.0, 0.0, 0, 1);
     mFrameTimer++;
     if (ret == 1) {
         mFrameTimer = 0;
@@ -2487,10 +2487,10 @@ void dMenu_Fmap_c::wrapMove() {
         mCur1Pane.pane->hide();
         mFrameTimer = 0;
 
-        paneAlphaWarpMsgBack(mFrameTimer, g_mfHIO.field_0x41, 0, 0);
-        paneTranceWarpMsg(&mCc01Pane, mFrameTimer, g_mfHIO.field_0x41, g_mfHIO.field_0x44, 0.0f, 0, 0);
-        paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.field_0x41, g_mfHIO.field_0x4A, 0.0f, 0, 0);
-        paneTranceWarpMsg(&mNok0Pane, mFrameTimer, g_mfHIO.field_0x41, g_mfHIO.field_0x4A, 0.0f, 0, 0);
+        paneAlphaWarpMsgBack(mFrameTimer, g_mfHIO.mWarpMsgAnimFrame, 0, 0);
+        paneTranceWarpMsg(&mCc01Pane, mFrameTimer, g_mfHIO.mWarpMsgAnimFrame, g_mfHIO.mWarpMsgPosY, 0.0f, 0, 0);
+        paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.mWarpMsgAnimFrame, g_mfHIO.mWarpYesNoPosY, 0.0f, 0, 0);
+        paneTranceWarpMsg(&mNok0Pane, mFrameTimer, g_mfHIO.mWarpMsgAnimFrame, g_mfHIO.mWarpYesNoPosY, 0.0f, 0, 0);
         areaTextChangeAnimeInit();
         for (int i = 0; i < 9; i++) {
             mWrapSpotEmitters[i]->stopDrawParticle();
@@ -2532,23 +2532,23 @@ void dMenu_Fmap_c::wrapMove() {
     outFont->setLeftUpPos(mAreaTxtPanes[2].mPosTopLeftOrig.x, mAreaTxtPanes[2].mPosTopLeftOrig.y);
     outFont->move();
     selCursorAnime();
-    f32 ratio = (f32)mFrameCounter / (f32)g_mfHIO.field_0x107;
+    f32 ratio = (f32)mFrameCounter / (f32)g_mfHIO.mWarpBackColorCycle;
     mFrameCounter++;
     u8 counter = mFrameCounter;
-    mFrameCounter = counter - (counter / (g_mfHIO.field_0x107 * 4)) * (g_mfHIO.field_0x107 * 4);
+    mFrameCounter = counter - (counter / (g_mfHIO.mWarpBackColorCycle * 4)) * (g_mfHIO.mWarpBackColorCycle * 4);
     setDspWarpBackCornerColor(ratio);
 }
 
 /* 801B8754-801B8938       .text wrapSelWinFadeIn1__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::wrapSelWinFadeIn1() {
-    BOOL backAlpha = paneAlphaWarpMsgBack(mFrameTimer - g_mfHIO.field_0x3F, g_mfHIO.field_0x3E, 0, 0);
-    BOOL msg = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - g_mfHIO.field_0x42, g_mfHIO.field_0x41, g_mfHIO.field_0x44, 40.0f, 0, 0);
+    BOOL backAlpha = paneAlphaWarpMsgBack(mFrameTimer - g_mfHIO.mWarpMsgBackInDelay, g_mfHIO.mWarpMsgBackAlphaFrame, 0, 0);
+    BOOL msg = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - g_mfHIO.mWarpMsgDelay, g_mfHIO.mWarpMsgAnimFrame, g_mfHIO.mWarpMsgPosY, 40.0f, 0, 0);
     BOOL msg2;
     if (msg == TRUE) {
-        msg2 = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - (g_mfHIO.field_0x42 + g_mfHIO.field_0x41), g_mfHIO.field_0x41, 40.0f, 0.0f, 0, 2);
+        msg2 = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - (g_mfHIO.mWarpMsgDelay + g_mfHIO.mWarpMsgAnimFrame), g_mfHIO.mWarpMsgAnimFrame, 40.0f, 0.0f, 0, 2);
     }
-    BOOL yesMove = paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.field_0x46, g_mfHIO.field_0x4A, 0.0f, 1, 0);
-    BOOL noMove = paneTranceWarpMsg(&mNok0Pane, mFrameTimer - g_mfHIO.field_0x49, g_mfHIO.field_0x46, g_mfHIO.field_0x4A, 0.0f, 1, 0);
+    BOOL yesMove = paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.mWarpYesNoAnimFrame, g_mfHIO.mWarpYesNoPosY, 0.0f, 1, 0);
+    BOOL noMove = paneTranceWarpMsg(&mNok0Pane, mFrameTimer - g_mfHIO.mWarpNoDelay, g_mfHIO.mWarpYesNoAnimFrame, g_mfHIO.mWarpYesNoPosY, 0.0f, 1, 0);
     mFrameTimer++;
     if (backAlpha == TRUE && msg == TRUE && msg2 == TRUE && yesMove == TRUE && noMove == TRUE) {
         mFrameTimer = 0;
@@ -2606,14 +2606,14 @@ void dMenu_Fmap_c::wrapSelect() {
 
 /* 801B8E60-801B9064       .text wrapSelWinFadeOut__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::wrapSelWinFadeOut() {
-    BOOL backAlpha = paneAlphaWarpMsgBack(mFrameTimer - g_mfHIO.field_0x40, g_mfHIO.field_0x3E, 0, 1);
-    BOOL msg = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - g_mfHIO.field_0x42, g_mfHIO.field_0x41, 0.0f, 40.0f, 0, 2);
+    BOOL backAlpha = paneAlphaWarpMsgBack(mFrameTimer - g_mfHIO.mWarpMsgBackOutDelay, g_mfHIO.mWarpMsgBackAlphaFrame, 0, 1);
+    BOOL msg = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - g_mfHIO.mWarpMsgDelay, g_mfHIO.mWarpMsgAnimFrame, 0.0f, 40.0f, 0, 2);
     BOOL msg2;
     if (msg == TRUE) {
-        msg2 = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - (g_mfHIO.field_0x42 + g_mfHIO.field_0x41), g_mfHIO.field_0x41, 0.0f, g_mfHIO.field_0x44, 0, 1);
+        msg2 = paneTranceWarpMsg(&mCc01Pane, mFrameTimer - (g_mfHIO.mWarpMsgDelay + g_mfHIO.mWarpMsgAnimFrame), g_mfHIO.mWarpMsgAnimFrame, 0.0f, g_mfHIO.mWarpMsgPosY, 0, 1);
     }
-    BOOL yesMove = paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
-    BOOL noMove = paneTranceWarpMsg(&mNok0Pane, mFrameTimer - g_mfHIO.field_0x49, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
+    BOOL yesMove = paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.mWarpYesNoAnimFrame, 0.0f, g_mfHIO.mWarpYesNoPosY, 0, 1);
+    BOOL noMove = paneTranceWarpMsg(&mNok0Pane, mFrameTimer - g_mfHIO.mWarpNoDelay, g_mfHIO.mWarpYesNoAnimFrame, 0.0f, g_mfHIO.mWarpYesNoPosY, 0, 1);
     mFrameTimer++;
     if (backAlpha == TRUE && msg == TRUE && msg2 == TRUE && yesMove == TRUE && noMove == TRUE) {
         mFrameTimer = 0;
@@ -2626,8 +2626,8 @@ void dMenu_Fmap_c::wrapSelWinFadeOut() {
 
 /* 801B9064-801B9288       .text wrapSelWarp__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::wrapSelWarp() {
-    BOOL yskWarp = paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
-    BOOL nokWarp = paneTranceWarpMsg(&mNok0Pane, mFrameTimer - g_mfHIO.field_0x49, g_mfHIO.field_0x46, 0.0f, g_mfHIO.field_0x4A, 0, 1);
+    BOOL yskWarp = paneTranceWarpMsg(&mYsk0Pane, mFrameTimer, g_mfHIO.mWarpYesNoAnimFrame, 0.0f, g_mfHIO.mWarpYesNoPosY, 0, 1);
+    BOOL nokWarp = paneTranceWarpMsg(&mNok0Pane, mFrameTimer - g_mfHIO.mWarpNoDelay, g_mfHIO.mWarpYesNoAnimFrame, 0.0f, g_mfHIO.mWarpYesNoPosY, 0, 1);
     mFrameTimer++;
 
     if (yskWarp == TRUE && nokWarp == TRUE) {
@@ -2658,17 +2658,17 @@ void dMenu_Fmap_c::warpAreaAnime0() {
     scale.z = 0.0f;
     pos.z = 0.0f;
     for (int i = 0; i < 9; i++) {
-        pos.x = g_mfHIO.field_0x50[i];
-        pos.y = g_mfHIO.field_0x74[i];
+        pos.x = g_mfHIO.mWarpSpotPosX[i];
+        pos.y = g_mfHIO.mWarpSpotPosY[i];
         mWrapSpotEmitters[i]->setGlobalTranslation(pos);
 
         if (i == warpAreaNo) {
-            scale.x = g_mfHIO.field_0x98;
-            scale.y = g_mfHIO.field_0x98;
+            scale.x = g_mfHIO.mWarpSpotScaleSel;
+            scale.y = g_mfHIO.mWarpSpotScaleSel;
             mWrapSpotEmitters[i]->setGlobalParticleScale(scale);
         } else {
-            scale.x = g_mfHIO.field_0x9C;
-            scale.y = g_mfHIO.field_0x9C;
+            scale.x = g_mfHIO.mWarpSpotScale;
+            scale.y = g_mfHIO.mWarpSpotScale;
             mWrapSpotEmitters[i]->setGlobalParticleScale(scale);
         }
     }
@@ -2728,16 +2728,16 @@ void dMenu_Fmap_c::warpSelCursorAnimeInit() {
 
 /* 801B9608-801B96D8       .text warpSelCursorAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::warpSelCursorAnime() {
-    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.field_0x4C, mCur1Pane.mUserArea, 0);
+    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.mWarpCursorBlinkFrame, mCur1Pane.mUserArea, 0);
     if (mWarpBlinkToggle != 0) {
         alpha = 1.0f - alpha;
     }
-    f32 range = g_mfHIO.field_0x4E - g_mfHIO.field_0x4D;
-    mCur1Pane.mNowAlpha = g_mfHIO.field_0x4D + (u32)(range * alpha);
+    f32 range = g_mfHIO.mWarpCursorAlphaMax - g_mfHIO.mWarpCursorAlphaMin;
+    mCur1Pane.mNowAlpha = g_mfHIO.mWarpCursorAlphaMin + (u32)(range * alpha);
     fopMsgM_setAlpha(&mCur1Pane);
 
     if (mCur1Pane.mUserArea == 0) {
-        mCur1Pane.mUserArea = g_mfHIO.field_0x4C;
+        mCur1Pane.mUserArea = g_mfHIO.mWarpCursorBlinkFrame;
         mWarpBlinkToggle ^= 1;
     } else {
         mCur1Pane.mUserArea--;
@@ -2813,7 +2813,7 @@ const cursorTable_t* dMenu_Fmap_c::getWarpAreaTablePtr(s8 i_gridX, s8 i_gridY) {
 
 /* 801B97DC-801B9AB0       .text areaTextChangeAnimeInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::areaTextChangeAnimeInit() {
-    mWarpAnimTimer = g_mfHIO.field_0x31;
+    mWarpAnimTimer = g_mfHIO.mAreaTxtChangeFrame;
     mAreaTxtBufIdx = 0;
     *mTxtName[0] = NULL;
     int grid = getCtCurWX() + (getCtCurWY() + 3) * 7 + 3;
@@ -2822,9 +2822,9 @@ void dMenu_Fmap_c::areaTextChangeAnimeInit() {
         if (grid == dIsleIdx_ForsakenFortress_e || grid == dIsleIdx_GaleIsle_e || grid == dIsleIdx_WindfallIsland_e || grid == dIsleIdx_DragonRoostIsland_e ||
             grid == dIsleIdx_FireMountain_e || grid == dIsleIdx_GreatfishIsle_e || grid == dIsleIdx_ToweroftheGods_e || grid == dIsleIdx_IceRingIsle_e ||
             grid == dIsleIdx_ForestHaven_e || grid == dIsleIdx_OutsetIsland_e || grid == dIsleIdx_HeadstoneIsland_e) {
-            ((J2DTextBox*) mAreaTxtPanes[1].pane)->setCharColor(g_mfHIO.field_0x100);
+            ((J2DTextBox*) mAreaTxtPanes[1].pane)->setCharColor(g_mfHIO.mAreaTxtColorMain);
         } else {
-            ((J2DTextBox*) mAreaTxtPanes[1].pane)->setCharColor(g_mfHIO.field_0xFC);
+            ((J2DTextBox*) mAreaTxtPanes[1].pane)->setCharColor(g_mfHIO.mAreaTxtColor);
         }
         fopMsgM_messageGet(mTxtName[1], grid + 0x31a6);
     } else {
@@ -2842,12 +2842,12 @@ void dMenu_Fmap_c::areaTextChangeAnimeInit() {
 /* 801B9AB0-801B9B40       .text areaTextChangeAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::areaTextChangeAnime() {
     if (mWarpAnimTimer == 0) {
-        BOOL alpha = PaneAlphaAreaTxt(mAreaTxtTimer, g_mfHIO.field_0x32, 1);
+        BOOL alpha = PaneAlphaAreaTxt(mAreaTxtTimer, g_mfHIO.mAreaTxtAlphaFrame, 1);
         mAreaTxtTimer++;
         if (alpha == TRUE) {
             mAreaTxtBufIdx ^= 1;
             mAreaTxtTimer = 0;
-            mWarpAnimTimer = g_mfHIO.field_0x31;
+            mWarpAnimTimer = g_mfHIO.mAreaTxtChangeFrame;
         }
     } else {
         mWarpAnimTimer--;
@@ -2882,18 +2882,18 @@ void dMenu_Fmap_c::setDspWarpBackCornerColor(f32 i_ratio) {
     GXColor color[4];
     u8 rgb[4][3];
 
-    rgb[0][0] = g_mfHIO.field_0x108;
-    rgb[0][1] = g_mfHIO.field_0x109;
-    rgb[0][2] = g_mfHIO.field_0x10A;
-    rgb[1][0] = g_mfHIO.field_0x10C;
-    rgb[1][1] = g_mfHIO.field_0x10D;
-    rgb[1][2] = g_mfHIO.field_0x10E;
-    rgb[2][0] = g_mfHIO.field_0x10C;
-    rgb[2][1] = g_mfHIO.field_0x10D;
-    rgb[2][2] = g_mfHIO.field_0x10E;
-    rgb[3][0] = g_mfHIO.field_0x10C;
-    rgb[3][1] = g_mfHIO.field_0x10D;
-    rgb[3][2] = g_mfHIO.field_0x10E;
+    rgb[0][0] = g_mfHIO.mWarpBackColor1.r;
+    rgb[0][1] = g_mfHIO.mWarpBackColor1.g;
+    rgb[0][2] = g_mfHIO.mWarpBackColor1.b;
+    rgb[1][0] = g_mfHIO.mWarpBackColor2.r;
+    rgb[1][1] = g_mfHIO.mWarpBackColor2.g;
+    rgb[1][2] = g_mfHIO.mWarpBackColor2.b;
+    rgb[2][0] = g_mfHIO.mWarpBackColor2.r;
+    rgb[2][1] = g_mfHIO.mWarpBackColor2.g;
+    rgb[2][2] = g_mfHIO.mWarpBackColor2.b;
+    rgb[3][0] = g_mfHIO.mWarpBackColor2.r;
+    rgb[3][1] = g_mfHIO.mWarpBackColor2.g;
+    rgb[3][2] = g_mfHIO.mWarpBackColor2.b;
 
     f32 phase = fmod(i_ratio, 4.0);
     int idx = phase;
@@ -2942,7 +2942,7 @@ bool dMenu_Fmap_c::_open_fishManMode() {
     if (mFrameTimer == 0) {
         init_fishManMode();
     }
-    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x110, 0.0f, 0.0f, 0, 0);
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.mFishmanOpenFrame, 0.0f, 0.0f, 0, 0);
     mFrameTimer++;
     if (ret == TRUE) {
         mFrameTimer = 0;
@@ -2954,7 +2954,7 @@ bool dMenu_Fmap_c::_open_fishManMode() {
 
 /* 801BA19C-801BA214       .text _close_fishManMode__12dMenu_Fmap_cFv */
 bool dMenu_Fmap_c::_close_fishManMode() {
-    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x11B, 0.0, 0.0, 0, 1);
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.mFishmanCloseFrame, 0.0, 0.0, 0, 1);
     mFrameTimer++;
     if (ret == 1) {
         mFrameTimer = 0;
@@ -3007,8 +3007,8 @@ void dMenu_Fmap_c::init_fishManMode() {
     fopMsgM_setAlpha(mAreaTxtPanes);
     s32 idx = mGridX + (mGridY + 3) * 7 + 3;
     fopMsgM_setPaneData(&mMr01Pane, fmapDl.scrn, hist[idx]);
-    mFishmanTimer2 = g_mfHIO.field_0x118;
-    mFishmanTimer3 = g_mfHIO.field_0x119;
+    mFishmanTimer2 = g_mfHIO.mFishmanBlinkFrame;
+    mFishmanTimer3 = g_mfHIO.mFishmanDispWait;
     mFishmanProcIdx = FISHMAN_PROC_DISP_AREA;
     mDoAud_seStart(JA_SE_CM_SO_DRAW_MAP);
 }
@@ -3027,7 +3027,7 @@ void dMenu_Fmap_c::fmDispArea() {
         } else {
             pane->show();
         }
-        mFishmanTimer2 = g_mfHIO.field_0x118;
+        mFishmanTimer2 = g_mfHIO.mFishmanBlinkFrame;
     } else {
         mFishmanTimer2--;
     }
@@ -3050,9 +3050,9 @@ void dMenu_Fmap_c::fmDispArea() {
 
 /* 801BA608-801BA768       .text fmZoomGridLv1In__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv1In() {
-    int selGridMask = selGridMaskAlphaCtrl(mFrameTimer, g_mfHIO.field_0x111, 0, 0);
-    int fmapMask = fmapMaskAlphaCtrl(mFrameTimer, g_mfHIO.field_0x111, 0, 0);
-    int zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x111,
+    int selGridMask = selGridMaskAlphaCtrl(mFrameTimer, g_mfHIO.mFishmanZoom1Frame, 0, 0);
+    int fmapMask = fmapMaskAlphaCtrl(mFrameTimer, g_mfHIO.mFishmanZoom1Frame, 0, 0);
+    int zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.mZoomMapDelay, g_mfHIO.mFishmanZoom1Frame,
         mKkdmPane.mPosCenter.x - mClbPane.mPosCenterOrig.x,
         mKkdmPane.mPosCenter.y - mClbPane.mPosCenterOrig.y,0.0f, 0.0f,
         mKkdmPane.mSizeOrig.x / mClbPane.mSizeOrig.x, 1.0f, 2, 0);
@@ -3071,11 +3071,11 @@ void dMenu_Fmap_c::fmZoomGridLv1In() {
 
 /* 801BA768-801BA88C       .text fmZoomGridLv2In__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv2In() {
-    int zoomMap = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x114,
+    int zoomMap = paneTranceZoom2Map(mFrameTimer, g_mfHIO.mFishmanZoom2Frame,
         mDispIslandPosX * (mClgPane.mSizeOrig.x / 100000.0f),
         mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f), 0.0f, 0.0f,
         mTsw1Pane.mSizeOrig.x / mClgPane.mSizeOrig.x, 1.0f, 2, 0);
-    int zoomMapAlpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x114, 0x02, 1);
+    int zoomMapAlpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.mFishmanZoom2Frame, 0x02, 1);
     mFrameTimer++;
     if (zoomMap == TRUE && zoomMapAlpha == TRUE) {
         mFrameTimer = 0;
@@ -3083,8 +3083,8 @@ void dMenu_Fmap_c::fmZoomGridLv2In() {
         mR01bPane.pane->show();
         mR01gPane.pane->show();
         islandNameSet(0);
-        paneAlphaZoom2Map(0, g_mfHIO.field_0x115, 2, 0);
-        mFishmanTimer1 = g_mfHIO.field_0x116;
+        paneAlphaZoom2Map(0, g_mfHIO.mFishmanZoom2AlphaFrame, 2, 0);
+        mFishmanTimer1 = g_mfHIO.mFishmanMapWriteWait;
         mFishmanProcIdx = FISHMAN_PROC_MAP_WRITE;
     }
 }
@@ -3101,9 +3101,9 @@ void dMenu_Fmap_c::islandNameSet(u8 i_no) {
     if (grid == dIsleIdx_ForsakenFortress_e || grid == dIsleIdx_GaleIsle_e || grid == dIsleIdx_WindfallIsland_e || grid == dIsleIdx_DragonRoostIsland_e ||
         grid == dIsleIdx_FireMountain_e || grid == dIsleIdx_GreatfishIsle_e || grid == dIsleIdx_ToweroftheGods_e || grid == dIsleIdx_IceRingIsle_e ||
         grid == dIsleIdx_ForestHaven_e || grid == dIsleIdx_OutsetIsland_e || grid == dIsleIdx_HeadstoneIsland_e) {
-        ((J2DTextBox*) mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0x100);
+        ((J2DTextBox*) mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.mAreaTxtColorMain);
     } else {
-        ((J2DTextBox*) mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.field_0xFC);
+        ((J2DTextBox*) mAreaTxtPanes[i_no].pane)->setCharColor(g_mfHIO.mAreaTxtColor);
     }
     fopMsgM_messageGet(mTxtName[i_no], msgNo);
 }
@@ -3116,11 +3116,11 @@ void dMenu_Fmap_c::fmMapWrite() {
         if (mFrameTimer == 0) {
             mDoAud_subBgmStart(JA_BGM_BGN_GET_BOX);
         }
-        BOOL zoomMap = paneAlphaZoom2Map(mFrameTimer, g_mfHIO.field_0x115, 0x02, 0);
+        BOOL zoomMap = paneAlphaZoom2Map(mFrameTimer, g_mfHIO.mFishmanZoom2AlphaFrame, 0x02, 0);
         mFrameTimer++;
         if (zoomMap == TRUE) {
             mFrameTimer = 0;
-            mFishmanTimer1 = g_mfHIO.field_0x117;
+            mFishmanTimer1 = g_mfHIO.mFishmanMapWriteFrame;
             mFishmanProcIdx = FISHMAN_PROC_MAP_WAIT;
         }
     }
@@ -3161,11 +3161,11 @@ BOOL dMenu_Fmap_c::paneAlphaZoom2Map(s16 i_value, u8 i_max, u8 i_mode, int i_fla
 
 /* 801BAC88-801BADB8       .text fmZoomGridLv2Out__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv2Out() {
-    int zoomMap = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x114, 0.0f, 0.0f,
+    int zoomMap = paneTranceZoom2Map(mFrameTimer, g_mfHIO.mFishmanZoom2Frame, 0.0f, 0.0f,
         mDispIslandPosX * (mClgPane.mSizeOrig.x / 100000.0f),
         mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f), 1.0f,
         mTsw1Pane.mSizeOrig.x / mClgPane.mSizeOrig.x, 2, 1);
-    int zoomAlpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x114, 0x02, 0);
+    int zoomAlpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.mFishmanZoom2Frame, 0x02, 0);
     mFrameTimer++;
     if (zoomMap == TRUE && zoomAlpha == TRUE) {
         mDoAud_seStart(JA_SE_CHART_ZOOM_OUT);
@@ -3181,9 +3181,9 @@ void dMenu_Fmap_c::fmZoomGridLv2Out() {
 
 /* 801BADB8-801BAEF4       .text fmZoomGridLv1Out__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv1Out() {
-    int selGridMask = selGridMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, 0, 1);
-    int fmapMask = fmapMaskAlphaCtrl(mFrameTimer - g_mfHIO.field_0x30, g_mfHIO.field_0x2E, 0, 1);
-    int zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.field_0x3C, g_mfHIO.field_0x113, 0.0f, 0.0f,
+    int selGridMask = selGridMaskAlphaCtrl(mFrameTimer - g_mfHIO.mZoomOutDelay, g_mfHIO.mZoomAnimFrame, 0, 1);
+    int fmapMask = fmapMaskAlphaCtrl(mFrameTimer - g_mfHIO.mZoomOutDelay, g_mfHIO.mZoomAnimFrame, 0, 1);
+    int zoomMap = paneTranceZoomMap(mFrameTimer - g_mfHIO.mZoomMapDelay, g_mfHIO.mFishmanZoom1OutFrame, 0.0f, 0.0f,
         mKkdmPane.mPosCenter.x - mClbPane.mPosCenterOrig.x,
         mKkdmPane.mPosCenter.y - mClbPane.mPosCenterOrig.y, 1.0f,
         mKkdmPane.mSizeOrig.x / mClbPane.mSizeOrig.x, 2, 1);
@@ -3193,7 +3193,7 @@ void dMenu_Fmap_c::fmZoomGridLv1Out() {
         mKkdmPane.pane->hide();
         mSmskPane.pane->hide();
         mClbPane.pane->hide();
-        mFishmanTimer1 = g_mfHIO.field_0x11A;
+        mFishmanTimer1 = g_mfHIO.mFishmanCloseWait;
         mFishmanProcIdx = FISHMAN_PROC_END_WAIT;
     }
 }
@@ -3213,7 +3213,7 @@ bool dMenu_Fmap_c::_open_wallPaper() {
         mButtonIconMode = FMAP_BTN_ICON_WALLPAPER;
         selCursorHide();
     }
-    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.field_0x34, g_mfHIO.field_0x36, 0.0, 0, 0);
+    BOOL ret = paneTransBase(mFrameTimer, g_mfHIO.mBaseAnimFrame, g_mfHIO.mOpenPosY, 0.0, 0, 0);
     mFrameTimer++;
     if (ret == 1) {
         mFrameTimer = 0;
