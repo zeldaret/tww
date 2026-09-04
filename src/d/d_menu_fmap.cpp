@@ -397,7 +397,7 @@ void dMenu_Fmap_c::_create() {
 
     screenSet();
     aramCmapDatRead();
-    field_0x5180 = dComIfGs_getRandomSalvagePoint();
+    mSalvagePntIdx = dComIfGs_getRandomSalvagePoint();
     initialize();
     displayinit();
     phantomShipCheck();
@@ -608,27 +608,27 @@ void dMenu_Fmap_c::initialize() {
     mFrameTimer = 0;
     mInputDisabled = false;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    field_0x511C.x = player->current.pos.x;
-    field_0x511C.y = player->current.pos.z;
-    field_0x511C.z = (s16)(player->shape_angle.y + 0x8000) * 180.0f / 32768.0f;
+    mPlayerPos.x = player->current.pos.x;
+    mPlayerPos.y = player->current.pos.z;
+    mPlayerPos.z = (s16)(player->shape_angle.y + 0x8000) * 180.0f / 32768.0f;
 
     fopAc_ac_c* ship = dComIfGp_getShipActor();
     if (ship != NULL) {
-        field_0x5128.x = ship->current.pos.x;
-        field_0x5128.y = ship->current.pos.z;
-        field_0x5128.z = (s16)(ship->shape_angle.y + 0x8000) * 180.0f / 32768.0f;
+        mShipPos.x = ship->current.pos.x;
+        mShipPos.y = ship->current.pos.z;
+        mShipPos.z = (s16)(ship->shape_angle.y + 0x8000) * 180.0f / 32768.0f;
     } else {
-        field_0x5128.x = 0.0f;
-        field_0x5128.y = 0.0f;
+        mShipPos.x = 0.0f;
+        mShipPos.y = 0.0f;
     }
 
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
         mFishmanActive = true;
         s8 x, y;
-        dMap_point2Grid(field_0x511C.x, field_0x511C.y, &x, &y);
+        dMap_point2Grid(mPlayerPos.x, mPlayerPos.y, &x, &y);
         mGridX = x;
         mGridY = y;
-        dMap_point2Grid(field_0x5128.x, field_0x5128.y, &x, &y);
+        dMap_point2Grid(mShipPos.x, mShipPos.y, &x, &y);
         mTargetGridX = x;
         mTargetGridY = y;
     } else {
@@ -660,7 +660,7 @@ void dMenu_Fmap_c::initialize() {
         mTargetGridY = mGridY;
     }
 
-    field_0x5112 = dMap_getCheckPointUseGrid(mGridX, mGridY);
+    mPlayerChkPntNo = dMap_getCheckPointUseGrid(mGridX, mGridY);
     mWnd1Pane.mUserArea = 0;
     checkMarkAnimeInit();
     mAreaTxtBufIdx = 0;
@@ -798,8 +798,8 @@ void dMenu_Fmap_c::dispEndSalvageMark() {
             fopMsgM_pane_class pane;
             fopMsgM_setPaneData(&pane, fmapDl.scrn, hist[i]);
 
-            f32 y = pnt->salvagePnt[field_0x5180].y;
-            f32 x = pnt->salvagePnt[field_0x5180].x;
+            f32 y = pnt->salvagePnt[mSalvagePntIdx].y;
+            f32 x = pnt->salvagePnt[mSalvagePntIdx].x;
             mStxxPanes[i].mPosCenterOrig.x = pane.mPosCenterOrig.x + x * 56.0f / 100000.0f;
             mStxxPanes[i].mPosCenterOrig.y = pane.mPosCenterOrig.y + y * 56.0f / 100000.0f;
             mStxxPanes[i].mPosCenter.x = mStxxPanes[i].mPosCenterOrig.x;
@@ -991,10 +991,10 @@ void dMenu_Fmap_c::selCursorMove() {
 
 /* 801B1CF0-801B1D48       .text islandNameChange__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::islandNameChange() {
-    if (mAreaTxtChanging == TRUE) {
+    if (mAreaTxtChanging == true) {
         AreaTxtChgFast();
     } else {
-        mAreaTxtChanging = TRUE;
+        mAreaTxtChanging = true;
     }
     changeIslandName(mAreaTxtBufIdx ^ 1);
 }
@@ -1042,7 +1042,7 @@ void dMenu_Fmap_c::AreaTxtChg() {
 
 /* 801B2044-801B20E0       .text AreaTxtChgFast__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::AreaTxtChgFast() {
-    mAreaTxtTimer = false;
+    mAreaTxtTimer = 0;
     fopMsgM_setNowAlpha(&mAreaTxtPanes[mAreaTxtBufIdx ^ 1], 1.0f);
     fopMsgM_setAlpha(&mAreaTxtPanes[mAreaTxtBufIdx ^ 1]);
     fopMsgM_setNowAlpha(&mAreaTxtPanes[mAreaTxtBufIdx], 0.0f);
@@ -1058,17 +1058,17 @@ void dMenu_Fmap_c::salvageGetItemChg() {
         if (alpha == 1) {
             mSalvItmBufIdx ^= 1;
             mSalvItmTimer = 0;
-            mSalvItmChanging = FALSE;
+            mSalvItmChanging = false;
         }
     }
 }
 
 /* 801B2154-801B21AC       .text salvageGetItemChange__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::salvageGetItemChange() {
-    if (mSalvItmChanging == TRUE) {
+    if (mSalvItmChanging == true) {
         SalvItmDispChgFast();
     } else {
-        mSalvItmChanging = TRUE;
+        mSalvItmChanging = true;
     }
     changeSalvageGetItem(mSalvItmBufIdx ^ 1);
 }
@@ -1076,7 +1076,7 @@ void dMenu_Fmap_c::salvageGetItemChange() {
 /* 801B21AC-801B2274       .text SalvItmDispChgFast__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::SalvItmDispChgFast() {
     mSalvItmTimer = 0;
-    if (mFullMapMode == TRUE) {
+    if (mFullMapMode == true) {
         fopMsgM_setNowAlpha(&mGtixPanes[mSalvItmBufIdx ^ 1], 1.0f);
     } else {
         fopMsgM_setNowAlpha(&mGtixPanes[mSalvItmBufIdx ^ 1], 0.0f);
@@ -1143,16 +1143,16 @@ void dMenu_Fmap_c::zoomCursorAnime() {
 
 /* 801B2554-801B2570       .text playerPointGridAnimeInit__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::playerPointGridAnimeInit() {
-    field_0x510F = g_mfHIO.field_0x28;
-    field_0x5110 = 0;
+    mPlayerPointTimer = g_mfHIO.field_0x28;
+    mPlayerPointToggle = 0;
 }
 
 /* 801B2570-801B2830       .text playerPointGridAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::playerPointGridAnime() {
     JUtility::TColor black;
     JUtility::TColor white;
-    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.field_0x28, field_0x510F, 2);
-    if (field_0x5110 == 0) {
+    f32 alpha = fopMsgM_valueIncrease(g_mfHIO.field_0x28, mPlayerPointTimer, 2);
+    if (mPlayerPointToggle == 0) {
         alpha = 1.0f - alpha;
     }
     black.r = g_mfHIO.field_0x1A + alpha * (g_mfHIO.field_0x22 - g_mfHIO.field_0x1A);
@@ -1165,11 +1165,11 @@ void dMenu_Fmap_c::playerPointGridAnime() {
     white.a = mWhiteAlpha;
     ((J2DPicture*)mAreaPane.pane)->setWhite(white);
     ((J2DPicture*)mAreaPane.pane)->setBlack(black);
-    if (field_0x510F == 0) {
-        field_0x510F = g_mfHIO.field_0x28;
-        field_0x5110 ^= 1;
+    if (mPlayerPointTimer == 0) {
+        mPlayerPointTimer = g_mfHIO.field_0x28;
+        mPlayerPointToggle ^= 1;
     } else {
-        field_0x510F--;
+        mPlayerPointTimer--;
     }
 }
 
@@ -1325,8 +1325,8 @@ void dMenu_Fmap_c::setDispIslandPos(s8 i_x, s8 i_y) {
         dMap_getFmapChkPntPrm(i, NULL, NULL, &x, &y, NULL);
         f32 offsetX = x * ((mClbPane.mSizeOrig.x - 50.0f) / 100000.0f);
         f32 offsetY = y * ((mClbPane.mSizeOrig.y - 50.0f) / 100000.0f);
-        field_0x5134 = x;
-        field_0x5138 = y;
+        mDispIslandPosX = x;
+        mDispIslandPosY = y;
         setIslandPos(&mR01bPane, offsetX, offsetY);
         setIslandPos(&mTsw1Pane, offsetX, offsetY);
         changeFmapTexture(i_x, i_y);
@@ -1365,12 +1365,12 @@ void dMenu_Fmap_c::changeFmapTexture(s8 i_x, s8 i_y) {
 
 /* 801B3A2C-801B3C4C       .text setDspNormalMapLink__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::setDspNormalMapLink() {
-    if (mFishmanActive == 0) {
+    if (!mFishmanActive) {
         mLnk1Pane.pane->hide();
         mSpi1Pane.pane->hide();
     } else {
-        mLnk1Pane.mPosCenterOrig.x = mAreaPane.mPosCenterOrig.x + (field_0x511C.x * 56.0f) / 100000.0f;
-        mLnk1Pane.mPosCenterOrig.y = mAreaPane.mPosCenterOrig.y + (field_0x511C.y * 56.0f) / 100000.0f;
+        mLnk1Pane.mPosCenterOrig.x = mAreaPane.mPosCenterOrig.x + (mPlayerPos.x * 56.0f) / 100000.0f;
+        mLnk1Pane.mPosCenterOrig.y = mAreaPane.mPosCenterOrig.y + (mPlayerPos.y * 56.0f) / 100000.0f;
         mLnk1Pane.mPosCenter.x = mLnk1Pane.mPosCenterOrig.x;
         mLnk1Pane.mPosCenter.y = mLnk1Pane.mPosCenterOrig.y;
         fopMsgM_cposMove(&mLnk1Pane);
@@ -1379,12 +1379,12 @@ void dMenu_Fmap_c::setDspNormalMapLink() {
             (s32)(mLnk1Pane.mSize.x * 0.5f),
             (s32)(mLnk1Pane.mSize.y * 0.5f),
             ROTATE_Z,
-            field_0x511C.z
+            mPlayerPos.z
         );
 
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0) {
-            mSpi1Pane.mPosCenterOrig.x = mAreaPane.mPosCenterOrig.x + (field_0x5128.x * 56.0f) / 100000.0f;
-            mSpi1Pane.mPosCenterOrig.y = mAreaPane.mPosCenterOrig.y + (field_0x5128.y * 56.0f) / 100000.0f;
+            mSpi1Pane.mPosCenterOrig.x = mAreaPane.mPosCenterOrig.x + (mShipPos.x * 56.0f) / 100000.0f;
+            mSpi1Pane.mPosCenterOrig.y = mAreaPane.mPosCenterOrig.y + (mShipPos.y * 56.0f) / 100000.0f;
             mSpi1Pane.mPosCenter.x = mSpi1Pane.mPosCenterOrig.x;
             mSpi1Pane.mPosCenter.y = mSpi1Pane.mPosCenterOrig.y;
             fopMsgM_cposMove(&mSpi1Pane);
@@ -1392,7 +1392,7 @@ void dMenu_Fmap_c::setDspNormalMapLink() {
                 (s32)(mSpi1Pane.mSize.x * 0.5f),
                 (s32)(mSpi1Pane.mSize.y * 0.5f),
                 ROTATE_Z,
-                field_0x5128.z
+                mShipPos.z
             );
         } else {
             mSpi1Pane.pane->hide();
@@ -1402,9 +1402,9 @@ void dMenu_Fmap_c::setDspNormalMapLink() {
 
 /* 801B3C4C-801B3DFC       .text setDspLargeMapLink__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::setDspLargeMapLink() {
-    if (mFishmanActive != 0) {
-        f32 x = field_0x511C.x - 100000.0f * mGridX;
-        f32 y = field_0x511C.y - 100000.0f * mGridY;
+    if (mFishmanActive) {
+        f32 x = mPlayerPos.x - 100000.0f * mGridX;
+        f32 y = mPlayerPos.y - 100000.0f * mGridY;
 
         f32 scale = 0.5f;
         f32 size = mClbPane.mSizeOrig.x;
@@ -1416,8 +1416,8 @@ void dMenu_Fmap_c::setDspLargeMapLink() {
         fopMsgM_cposMove(&mLnk2Pane);
 
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0) {
-            x = field_0x5128.x - 100000.0f * mTargetGridX;
-            y = field_0x5128.y - 100000.0f * mTargetGridY;
+            x = mShipPos.x - 100000.0f * mTargetGridX;
+            y = mShipPos.y - 100000.0f * mTargetGridY;
 
             size = mClbPane.mSizeOrig.x;
             mSpi2Pane.mPosCenterOrig.x = size * scale + x * ((size - 50.0f) / 100000.0f);
@@ -1432,16 +1432,16 @@ void dMenu_Fmap_c::setDspLargeMapLink() {
 
 /* 801B3DFC-801B3F28       .text checkDspLargeMapLink__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkDspLargeMapLink() {
-    if (mFishmanActive == 0) {
+    if (!mFishmanActive) {
         mLnk2Pane.pane->hide();
-        field_0x5182 = 0;
+        mDspLargeMapLink = false;
     } else {
-        field_0x5111 = dMap_getCheckPointUseGrid(getCtCurX(), getCtCurY());
-        if (field_0x5112 == field_0x5111) {
-            field_0x5182 = 1;
+        mCurChkPntNo = dMap_getCheckPointUseGrid(getCtCurX(), getCtCurY());
+        if (mPlayerChkPntNo == mCurChkPntNo) {
+            mDspLargeMapLink = true;
         } else {
             mLnk2Pane.pane->hide();
-            field_0x5182 = 0;
+            mDspLargeMapLink = false;
         }
     }
     dispEndSalvageLargeMark();
@@ -1449,16 +1449,16 @@ void dMenu_Fmap_c::checkDspLargeMapLink() {
 
 /* 801B3F28-801B405C       .text checkDspLargeMapShip__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkDspLargeMapShip() {
-    if (mFishmanActive == 0) {
+    if (!mFishmanActive) {
         mSpi2Pane.pane->hide();
-        field_0x5184 = FALSE;
+        mDspLargeMapShip = false;
     } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0
             && mTargetGridX == getCtCurX()
             && mTargetGridY == getCtCurY()) {
-        field_0x5184 = true;
+        mDspLargeMapShip = true;
     } else {
         mSpi2Pane.pane->hide();
-        field_0x5184 = false;
+        mDspLargeMapShip = false;
     }
 }
 
@@ -1470,8 +1470,8 @@ void dMenu_Fmap_c::dispEndSalvageLargeMark() {
     if (!dComIfGs_isCompleteCollectMap(pnt->collectMapNo)) {
         mStm1Pane.pane->hide();
     } else {
-        f32 x = pnt->salvagePnt[field_0x5180].x;
-        f32 y = pnt->salvagePnt[field_0x5180].y;
+        f32 x = pnt->salvagePnt[mSalvagePntIdx].x;
+        f32 y = pnt->salvagePnt[mSalvagePntIdx].y;
         mStm1Pane.mPosCenterOrig.x = mClbPane.mSizeOrig.x / 2.0f + x * ((mClbPane.mSizeOrig.x - 50.0f) / 100000.0f);
         mStm1Pane.mPosCenterOrig.y = mClbPane.mSizeOrig.y / 2.0f + y * ((mClbPane.mSizeOrig.y - 50.0f) / 100000.0f);
         mStm1Pane.mPosCenter.x = mStm1Pane.mPosCenterOrig.x;
@@ -1490,15 +1490,15 @@ void dMenu_Fmap_c::setDspHugeMapLink() {
         s16 a;
         s16 b;
         dMap_getFmapChkPntPrm(i, &gx, &gy, &a, &b, NULL);
-        if (mFishmanActive == 0) {
+        if (!mFishmanActive) {
             mLnk3Pane.pane->hide();
-            field_0x5183 = false;
+            mDspHugeMapLink = false;
             dispEndSalvageHugeMark(a, b);
         } else {
             f32 islandX = a + 100000.0f * gx;
             f32 islandY = b + 100000.0f * gy;
-            f32 dx = field_0x511C.x - islandX;
-            f32 dy = field_0x511C.y - islandY;
+            f32 dx = mPlayerPos.x - islandX;
+            f32 dy = mPlayerPos.y - islandY;
 
             if (dx <= 10000.0f && dx >= -10000.0f && dy <= 10000.0f && dy >= -10000.0f) {
                 mMapSelectActive = true;
@@ -1516,16 +1516,16 @@ void dMenu_Fmap_c::setDspHugeMapLink() {
             fopMsgM_cposMove(&mLnk3Pane);
 
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0) {
-                f32 shipDx = field_0x5128.x - islandX;
-                f32 shipDy = field_0x5128.y - islandY;
+                f32 shipDx = mShipPos.x - islandX;
+                f32 shipDy = mShipPos.y - islandY;
 
                 if (shipDx <= 10000.0f && shipDx >= -10000.0f && shipDy <= 10000.0f &&
                     shipDy >= -10000.0f) {
-                    field_0x5185 = true;
-                    field_0x5186 = false;
+                    mDspHugeMapShip = true;
+                    mShipOpenWater = false;
                 } else {
-                    field_0x5185 = false;
-                    field_0x5186 = true;
+                    mDspHugeMapShip = false;
+                    mShipOpenWater = true;
                     mSpi3Pane.pane->hide();
                 }
 
@@ -1551,8 +1551,8 @@ void dMenu_Fmap_c::dispEndSalvageHugeMark(f32 i_x, f32 i_y) {
     if (!dComIfGs_isCompleteCollectMap(pnt->collectMapNo)) {
         mStl1Pane.pane->hide();
     } else {
-        f32 dx = pnt->salvagePnt[field_0x5180].x - i_x;
-        f32 dy = pnt->salvagePnt[field_0x5180].y - i_y;
+        f32 dx = pnt->salvagePnt[mSalvagePntIdx].x - i_x;
+        f32 dy = pnt->salvagePnt[mSalvagePntIdx].y - i_y;
         if (dx <= 10000.0f && dx >= -10000.0f && dy <= 10000.0f && dy >= -10000.0f) {
             mStl1Pane.mPosCenterOrig.x = mR01gPane.mPosTopLeftOrig.x + mR01gPane.mSizeOrig.x / 2.0f + dx * (mR01gPane.mSizeOrig.x / 20000.0f);
             mStl1Pane.mPosCenterOrig.y = mR01gPane.mPosTopLeftOrig.y + mR01gPane.mSizeOrig.y / 2.0f + dy * (mR01gPane.mSizeOrig.y / 20000.0f);
@@ -1568,36 +1568,36 @@ void dMenu_Fmap_c::dispEndSalvageHugeMark(f32 i_x, f32 i_y) {
 
 /* 801B48C4-801B49F0       .text checkDspHugeMapLink__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkDspHugeMapLink() {
-    if (mFishmanActive == 0) {
+    if (!mFishmanActive) {
         mLnk3Pane.pane->hide();
     } else {
-        field_0x5111 = dMap_getCheckPointUseGrid(getCtCurX(), getCtCurY());
-        if (field_0x5112 == field_0x5111 && mMapSelectActive) {
-            field_0x5183 = true;
+        mCurChkPntNo = dMap_getCheckPointUseGrid(getCtCurX(), getCtCurY());
+        if (mPlayerChkPntNo == mCurChkPntNo && mMapSelectActive) {
+            mDspHugeMapLink = true;
         } else {
             mLnk3Pane.pane->hide();
-            field_0x5183 = false;
+            mDspHugeMapLink = false;
         }
     }
 }
 
 /* 801B49F0-801B4B44       .text checkDspHugeMapShip__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::checkDspHugeMapShip() {
-    if (mFishmanActive == 0) {
+    if (!mFishmanActive) {
         mSpi3Pane.pane->hide();
-        field_0x5185 = false;
+        mDspHugeMapShip = false;
     } else  if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0
             && mTargetGridX == getCtCurX()
             && mTargetGridY == getCtCurY()) {
-        if (field_0x5186) {
-            field_0x5185 = false;
+        if (mShipOpenWater) {
+            mDspHugeMapShip = false;
             mSpi3Pane.pane->hide();
         } else {
-            field_0x5185 = true;
+            mDspHugeMapShip = true;
         }
     } else {
         mSpi3Pane.pane->hide();
-        field_0x5185 = false;
+        mDspHugeMapShip = false;
     }
 }
 
@@ -1663,9 +1663,9 @@ void dMenu_Fmap_c::_move() {
             break;
         case FMAP_MODE_WALLPAPER:
             if (CPad_CHECK_TRIG_LEFT(0) || CPad_CHECK_TRIG_DOWN(0) || CPad_CHECK_TRIG_B(0)) {
-                mMapClose = TRUE;
+                mMapClose = true;
             } else {
-                mMapClose = FALSE;
+                mMapClose = false;
             }
             break;
         case FMAP_MODE_FISHMAN:
@@ -1841,10 +1841,10 @@ void dMenu_Fmap_c::ZoomGridLv1In() {
     }
     if (selCursor == TRUE && selGridMask == TRUE && fmapMask == TRUE && zoomMap == TRUE && zoomCursor == TRUE) {
         mFrameTimer = 0;
-        if (field_0x5182 != 0) {
+        if (mDspLargeMapLink) {
             mLnk2Pane.pane->show();
         }
-        if (field_0x5184) {
+        if (mDspLargeMapShip) {
             mSpi2Pane.pane->show();
         }
         mFmapProcIdx = FMAP_ZOOM_PROC_LV1;
@@ -1853,15 +1853,15 @@ void dMenu_Fmap_c::ZoomGridLv1In() {
 
 /* 801B5D6C-801B5F80       .text ZoomGridLv1Proc__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::ZoomGridLv1Proc() {
-    if (CPad_CHECK_TRIG_A(0) != 0 || mWarpScrollGuard != false) {
+    if (CPad_CHECK_TRIG_A(0) != 0 || mWarpScrollGuard) {
         if (mButtonIconMode == 1) {
             mDoAud_seStart(JA_SE_CHART_ZOOM_IN);
             mButtonIconMode = FMAP_BTN_ICON_DETAIL;
             setCtFmapZoom(0x2);
             zoom200x200Init();
             f32 clgOrigX = mClgPane.mSizeOrig.x;
-            paneTranceZoom2Map(0, g_mfHIO.field_0x2F, field_0x5134 * (clgOrigX / 100000.0f),
-                field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f), 0.0, 0.0,
+            paneTranceZoom2Map(0, g_mfHIO.field_0x2F, mDispIslandPosX * (clgOrigX / 100000.0f),
+                mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f), 0.0, 0.0,
                 mTsw1Pane.mSizeOrig.x / clgOrigX, 1.0, 0x2, 0);
             for (int i = 0; i < 8; i++) {
                 mKk3xPanes[i].pane->mInheritAlpha = false;
@@ -1870,14 +1870,14 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
             mFrameTimer = 0;
             mFmapProcIdx = FMAP_ZOOM_PROC_LV2_IN;
         }
-        mWarpScrollGuard = FALSE;
+        mWarpScrollGuard = false;
     } else {
         if (CPad_CHECK_TRIG_B(0) || mWarpAnimActive) {
             mDoAud_seStart(JA_SE_CHART_ZOOM_OUT);
-            if (field_0x5182 != 0) {
+            if (mDspLargeMapLink) {
                 mLnk2Pane.pane->hide();
             }
-            if (field_0x5184) {
+            if (mDspLargeMapShip) {
                 mSpi2Pane.pane->hide();
             }
             mWarpAnimActive = FALSE;
@@ -1924,14 +1924,14 @@ void dMenu_Fmap_c::ZoomGridLv1Out() {
 void dMenu_Fmap_c::ZoomGridLv2In() {
     f32 origX = mClgPane.mSizeOrig.x;
     BOOL zoom2 = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x2F,
-        field_0x5134 * (origX / 100000.0f), field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f),
+        mDispIslandPosX * (origX / 100000.0f), mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f),
         0.0, 0.0, mTsw1Pane.mSizeOrig.x / origX, 1.0, 0x02, 0);
     BOOL alpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x2F, 0x02, 1);
     mFrameTimer++;
     if (zoom2 == TRUE && alpha == TRUE) {
         mFrameTimer = 0;
-        field_0x5183 ? mLnk3Pane.pane->show() : mLnk3Pane.pane->hide();
-        field_0x5185 ? mSpi3Pane.pane->show() : mSpi3Pane.pane->hide();
+        mDspHugeMapLink ? mLnk3Pane.pane->show() : mLnk3Pane.pane->hide();
+        mDspHugeMapShip ? mSpi3Pane.pane->show() : mSpi3Pane.pane->hide();
         mFmapProcIdx = FMAP_ZOOM_PROC_LV2;
     }
 }
@@ -1940,10 +1940,10 @@ void dMenu_Fmap_c::ZoomGridLv2In() {
 void dMenu_Fmap_c::ZoomGridLv2Proc() {
     if (CPad_CHECK_TRIG_B(0)) {
         mDoAud_seStart(JA_SE_CHART_ZOOM_OUT);
-        if (field_0x5183) {
+        if (mDspHugeMapLink) {
             mLnk3Pane.pane->hide();
         }
-        if (field_0x5185) {
+        if (mDspHugeMapShip) {
             mSpi3Pane.pane->hide();
         }
         mWarpAnimActive = FALSE;
@@ -1957,7 +1957,7 @@ void dMenu_Fmap_c::ZoomGridLv2Proc() {
 void dMenu_Fmap_c::ZoomGridLv2Out() {
     f32 origX = mClgPane.mSizeOrig.x;
     BOOL zoom2 = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x2F, 0.0f, 0.0f,
-        field_0x5134 * (origX / 100000.0f), field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f),
+        mDispIslandPosX * (origX / 100000.0f), mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f),
         1.0f, mTsw1Pane.mSizeOrig.x / origX, 0x02, 1);
     BOOL alpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x2F, 0x02, 0);
     if (CPad_CHECK_TRIG_B(0) && !mWarpAnimActive) {
@@ -1968,7 +1968,7 @@ void dMenu_Fmap_c::ZoomGridLv2Out() {
     if (zoom2 == TRUE && alpha == TRUE) {
         mButtonIconMode = FMAP_BTN_ICON_SECTOR;
         setCtFmapZoom(1);
-        if (field_0x5182 != 0) {
+        if (mDspLargeMapLink) {
             mLnk2Pane.pane->show();
         }
         mClgPane.pane->hide();
@@ -2109,7 +2109,7 @@ BOOL dMenu_Fmap_c::paneTranceZoomMap(s16 i_frame, u8 i_max, f32 i_transStartX, f
             (s32)(mLnk2Pane.mSize.x * 0.5f),
             (s32)(mLnk2Pane.mSize.y * 0.5f),
             ROTATE_Z,
-            field_0x511C.z
+            mPlayerPos.z
         );
     }
 
@@ -2119,7 +2119,7 @@ BOOL dMenu_Fmap_c::paneTranceZoomMap(s16 i_frame, u8 i_max, f32 i_transStartX, f
             (s32)(mSpi2Pane.mSize.x * 0.5f),
             (s32)(mSpi2Pane.mSize.y * 0.5f),
             ROTATE_Z,
-            field_0x5128.z
+            mShipPos.z
         );
     }
 
@@ -2212,7 +2212,7 @@ BOOL dMenu_Fmap_c::paneTranceZoom2Map(s16 i_frame, u8 i_max, f32 i_transStartX, 
             (s32)(mLnk3Pane.mSize.x * 0.5f),
             (s32)(mLnk3Pane.mSize.y * 0.5f),
             ROTATE_Z,
-            field_0x511C.z
+            mPlayerPos.z
         );
     }
 
@@ -2222,7 +2222,7 @@ BOOL dMenu_Fmap_c::paneTranceZoom2Map(s16 i_frame, u8 i_max, f32 i_transStartX, 
             (s32)(mSpi3Pane.mSize.x * 0.5f),
             (s32)(mSpi3Pane.mSize.y * 0.5f),
             ROTATE_Z,
-            field_0x5128.z
+            mShipPos.z
         );
     }
 
@@ -2300,7 +2300,7 @@ BOOL dMenu_Fmap_c::PaneAlphaSelvageItem(s16 i_frame, u8 i_max) {
         fopMsgM_setNowAlpha(&mGtixPanes[mSalvItmBufIdx], outAlpha);
         fopMsgM_setAlpha(&mGtixPanes[mSalvItmBufIdx]);
     }
-    if (mFullMapMode == TRUE) {
+    if (mFullMapMode == true) {
         fopMsgM_setNowAlpha(&mGtixPanes[(mSalvItmBufIdx ^ 1)], inAlpha);
         fopMsgM_setAlpha(&mGtixPanes[(mSalvItmBufIdx ^ 1)]);
     }
@@ -2323,7 +2323,7 @@ void dMenu_Fmap_c::gShipMarkAnimeInit() {
             }
         }
         mMsgValueTimer = g_mfHIO.field_0x11C;
-        mMsgValueToggle = true;
+        mMsgValueToggle = 1;
     } else {
         mMsgValueActive = false;
     }
@@ -2331,10 +2331,10 @@ void dMenu_Fmap_c::gShipMarkAnimeInit() {
 
 /* 801B77A8-801B78B0       .text gShipMarkAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::gShipMarkAnime() {
-    if (mMsgValueActive && mMsgValueState1 == false && mMsgValueState2) {
+    if (mMsgValueActive && !mMsgValueState1 && mMsgValueState2) {
         int moonType = dKy_moon_type_chk();
         f32 alpha = fopMsgM_valueIncrease(g_mfHIO.field_0x11C, mMsgValueTimer, 2);
-        if (mMsgValueToggle == false) {
+        if (mMsgValueToggle == 0) {
             alpha = 1.0f - alpha;
         }
         f32 range = g_mfHIO.field_0x11D - g_mfHIO.field_0x11E;
@@ -2841,7 +2841,7 @@ void dMenu_Fmap_c::areaTextChangeAnimeInit() {
 
 /* 801B9AB0-801B9B40       .text areaTextChangeAnime__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::areaTextChangeAnime() {
-    if (mWarpAnimTimer == false) {
+    if (mWarpAnimTimer == 0) {
         BOOL alpha = PaneAlphaAreaTxt(mAreaTxtTimer, g_mfHIO.field_0x32, 1);
         mAreaTxtTimer++;
         if (alpha == TRUE) {
@@ -3072,8 +3072,8 @@ void dMenu_Fmap_c::fmZoomGridLv1In() {
 /* 801BA768-801BA88C       .text fmZoomGridLv2In__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv2In() {
     int zoomMap = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x114,
-        field_0x5134 * (mClgPane.mSizeOrig.x / 100000.0f),
-        field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f), 0.0f, 0.0f,
+        mDispIslandPosX * (mClgPane.mSizeOrig.x / 100000.0f),
+        mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f), 0.0f, 0.0f,
         mTsw1Pane.mSizeOrig.x / mClgPane.mSizeOrig.x, 1.0f, 2, 0);
     int zoomMapAlpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x114, 0x02, 1);
     mFrameTimer++;
@@ -3162,8 +3162,8 @@ BOOL dMenu_Fmap_c::paneAlphaZoom2Map(s16 i_value, u8 i_max, u8 i_mode, int i_fla
 /* 801BAC88-801BADB8       .text fmZoomGridLv2Out__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::fmZoomGridLv2Out() {
     int zoomMap = paneTranceZoom2Map(mFrameTimer, g_mfHIO.field_0x114, 0.0f, 0.0f,
-        field_0x5134 * (mClgPane.mSizeOrig.x / 100000.0f),
-        field_0x5138 * (mClgPane.mSizeOrig.y / 100000.0f), 1.0f,
+        mDispIslandPosX * (mClgPane.mSizeOrig.x / 100000.0f),
+        mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f), 1.0f,
         mTsw1Pane.mSizeOrig.x / mClgPane.mSizeOrig.x, 2, 1);
     int zoomAlpha = paneTranceZoomMapAlpah(mFrameTimer, g_mfHIO.field_0x114, 0x02, 0);
     mFrameTimer++;

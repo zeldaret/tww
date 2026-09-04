@@ -367,10 +367,10 @@ public:
     /* 0x510C */ bool mMapClose;
     /* 0x510D */ u8 mSelCursorBufIdx;
     /* 0x510E */ u8 mCursorBufIdx;
-    /* 0x510F */ u8 field_0x510F;
-    /* 0x5110 */ u8 field_0x5110;
-    /* 0x5111 */ s8 field_0x5111;
-    /* 0x5112 */ s8 field_0x5112;
+    /* 0x510F */ u8 mPlayerPointTimer;
+    /* 0x5110 */ u8 mPlayerPointToggle;
+    /* 0x5111 */ s8 mCurChkPntNo;
+    /* 0x5112 */ s8 mPlayerChkPntNo;
     /* 0x5113 */ u8 mMainProcIdx;
     /* 0x5114 */ u8 mFmapProcIdx;
     /* 0x5115 */ u8 mHikakuProcIdx;
@@ -379,10 +379,10 @@ public:
     /* 0x5119 */ s8 mGridY;
     /* 0x511A */ s8 mTargetGridX;
     /* 0x511B */ s8 mTargetGridY;
-    /* 0x511C */ cXyz field_0x511C;
-    /* 0x5128 */ cXyz field_0x5128;
-    /* 0x5134 */ f32 field_0x5134;
-    /* 0x5138 */ f32 field_0x5138;
+    /* 0x511C */ cXyz mPlayerPos;
+    /* 0x5128 */ cXyz mShipPos;
+    /* 0x5134 */ f32 mDispIslandPosX;
+    /* 0x5138 */ f32 mDispIslandPosY;
     /* 0x513C */ bool mFullMapMode;
     /* 0x513D */ u8 mSalvItmBufIdx;
     /* 0x513E */ u8 mSalvItmTimer;
@@ -416,13 +416,13 @@ public:
     /* 0x517C */ u8 mFishmanMsgToggle;
     /* 0x517D */ u8 padding_0x517D[0x517F-0x517D];
     /* 0x517F */ bool mFishmanActive;
-    /* 0x5180 */ u8 field_0x5180;
+    /* 0x5180 */ u8 mSalvagePntIdx;
     /* 0x5181 */ u8 mButtonIconMode;
-    /* 0x5182 */ u8 field_0x5182;
-    /* 0x5183 */ bool field_0x5183;
-    /* 0x5184 */ bool field_0x5184;
-    /* 0x5185 */ bool field_0x5185;
-    /* 0x5186 */ bool field_0x5186;
+    /* 0x5182 */ bool mDspLargeMapLink;
+    /* 0x5183 */ bool mDspHugeMapLink;
+    /* 0x5184 */ bool mDspLargeMapShip;
+    /* 0x5185 */ bool mDspHugeMapShip;
+    /* 0x5186 */ bool mShipOpenWater;
     /* 0x5187 */ u8 padding_0x5187[0x518C-0x5187];
     /* 0x518C */ char* mpKtx1String;
     /* 0x5190 */ char* mpKtx2String;
@@ -436,7 +436,7 @@ public:
     /* 0x51AD */ bool mMsgValueState1;
     /* 0x51AE */ bool mMsgValueState2;
     /* 0x51AF */ u8 mMsgValueTimer;
-    /* 0x51B0 */ bool mMsgValueToggle;
+    /* 0x51B0 */ u8 mMsgValueToggle;
     /* 0x51B1 */ u8 padding_0x51B1[0x51B4-0x51B1];
 }; // Size: 0x51B4
 
