@@ -5,6 +5,7 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "SSystem/SComponent/c_xyz.h"
+#include "d/d_kankyo.h"
 
 class dKy_tevstr_c;
 
@@ -57,11 +58,11 @@ public:
         return false;
     }
 
-    cXyz* getPosP() const { return mpPosArr[mCurArr]; }
-    cXyz* getNrmP() const { return mpNrmArr[mCurArr]; }
-    cXyz* getBackNrmP() const { return mpNrmArrBack[mCurArr]; }
-    cXyz* getSpdP() const { return mpSpeedArr; }
-    u32 getVerticalNum() const { return mHoistGridSize; }
+    cXyz* getPosP() { return mpPosArr[mCurArr]; }
+    cXyz* getNrmP() { return mpNrmArr[mCurArr]; }
+    cXyz* getBackNrmP() { return mpNrmArrBack[mCurArr]; }
+    cXyz* getSpdP() { return mpSpeedArr; }
+    u32 getVarticalNum() const { return mHoistGridSize; }
     GXTexObj* getTexObjP() { return &mTexObj; }
     GXTexObj* getToonTexObjP() { return &mToonTex; }
 
@@ -100,15 +101,20 @@ protected:
     /* 0xF6 */ s16 mRotateY;
     /* 0xF8 */ u8 mCurArr;
 }; // Size: 0xFC
+
 dCloth_packet_c* dCloth_packet_create(
     ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
 );
 
 class dCloth_packetXlu_c : public dCloth_packet_c {
+public:
     virtual void cloth_draw();
     virtual void TevSetting();
 
-private:
+    void setAlpha(dKy_tevstr_c* tevStr, u8 alpha) {
+        tevStr->mColorC0.a = alpha;
+    }
+
     dCloth_packetXlu_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr) {}
 
@@ -123,13 +129,13 @@ dCloth_packetXlu_c* dCloth_packetXlu_create(
 );
 
 class dClothVobj03_c : public dCloth_packet_c {
+public:
     virtual void init();
     virtual void cloth_move();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
     void cloth_copy();
 
-private:
     dClothVobj03_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr) {
         if (posArr) {
@@ -139,7 +145,6 @@ private:
         }
     }
 
-private:
     static dClothVobj03_c* top_pointer;
     static s32 cloth_counter;
 
@@ -150,16 +155,17 @@ private:
     bool mIsStandItem;
     bool mIsIndoors;
 };
+
 dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 class dClothVobj04_c : public dCloth_packet_c {
+public:
     virtual void init();
     virtual void cloth_move();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
     void cloth_copy();
 
-private:
     dClothVobj04_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 60.0f, tevstr, posArr) {
         if (posArr) {
@@ -169,7 +175,6 @@ private:
         }
     };
 
-private:
     static dClothVobj04_c* top_pointer;
     static s32 cloth_counter;
 
@@ -180,16 +185,17 @@ private:
     bool mIsStandItem;
     bool mIsIndoors;
 };
+
 dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 class dClothVobj05_c : public dCloth_packet_c {
+public:
     virtual void init();
     virtual void cloth_move();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
     void cloth_copy();
 
-private:
     dClothVobj05_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, 5, 5, 50.0f, 120.0f, tevstr, posArr) {
         if (posArr) {
@@ -199,7 +205,6 @@ private:
         }
     }
 
-private:
     static dClothVobj05_c* top_pointer;
     static s32 cloth_counter;
 
@@ -210,16 +215,17 @@ private:
     bool mIsStandItem;
     bool mIsIndoors;
 };
+
 dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 class dClothVobj07_0_c : public dCloth_packet_c {
+public:
     virtual void init();
     virtual void cloth_move();
     virtual void TexObjInit(ResTIMG*);
     virtual void TexObjLoad();
     void cloth_copy();
 
-private:
     dClothVobj07_0_c(ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr)
         : dCloth_packet_c(i_toonimage, 5, 5, 120.0f, 70.0f, tevstr, posArr) {
         if (posArr) {
@@ -229,7 +235,6 @@ private:
         }
     }
 
-private:
     static dClothVobj07_0_c* top_pointer;
     static s32 cloth_counter;
 
@@ -240,6 +245,7 @@ private:
     bool mIsStandItem;
     bool mIsIndoors;
 };
+
 dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr);
 
 #endif /* D_A_CLOTH_PACKET_H */

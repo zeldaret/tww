@@ -52,6 +52,12 @@ enum dMf_WarpSel {
     FMAP_WARP_SEL_NO  = 1,
 };
 
+#if VERSION == VERSION_DEMO
+#define FMAP_WARP_COUNT 7
+#else
+#define FMAP_WARP_COUNT 9
+#endif
+
 class dDlst_FMAP_c : public dDlst_base_c {
 public:
     virtual ~dDlst_FMAP_c() {}
@@ -68,75 +74,75 @@ public:
     void draw() { _draw(); }
     u8 getCtDispMode() {
         JUT_ASSERT(VERSION_SELECT(456, 456, 467, 467), fmapSv != NULL);
-        return fmapSv->dispMode;
+        return fmapSv->getDispMode();
     }
     void setCtDispMode(u8 val) {
         JUT_ASSERT(VERSION_SELECT(461, 461, 472, 472), fmapSv != NULL);
-        fmapSv->dispMode = val;
+        fmapSv->setDispMode(val);
     }
     u8 getCtFmapZoom() {
         JUT_ASSERT(VERSION_SELECT(467, 467, 478, 478), fmapSv != NULL);
-        return fmapSv->fmapZoom;
+        return fmapSv->getFmapZoom();
     }
     void setCtFmapZoom(u8 val) {
         JUT_ASSERT(VERSION_SELECT(472, 472, 483, 483), fmapSv != NULL);
-        fmapSv->fmapZoom = val;
+        fmapSv->setFmapZoom(val);
     }
     s8 getCtCurX() {
         JUT_ASSERT(VERSION_SELECT(478, 478, 489, 489), fmapSv != NULL);
-        return fmapSv->curX;
+        return fmapSv->getCurX();
     }
     void setCtCurX(s8 val) {
         JUT_ASSERT(VERSION_SELECT(483, 483, 494, 494), fmapSv != NULL);
-        fmapSv->curX = val;
+        fmapSv->setCurX(val);
     }
     s8 getCtCurY() {
         JUT_ASSERT(VERSION_SELECT(489, 489, 500, 500), fmapSv != NULL);
-        return fmapSv->curY;
+        return fmapSv->getCurY();
     }
     void setCtCurY(s8 val) {
         JUT_ASSERT(VERSION_SELECT(494, 494, 505, 505), fmapSv != NULL);
-        fmapSv->curY = val;
+        fmapSv->setCurY(val);
     }
     s8 getCtCurWX() {
         JUT_ASSERT(VERSION_SELECT(500, 500, 511, 511), fmapSv != NULL);
-        return fmapSv->curWX;
+        return fmapSv->getCurWX();
     }
     void setCtCurWX(s8 val) {
         JUT_ASSERT(VERSION_SELECT(505, 505, 516, 516), fmapSv != NULL);
-        fmapSv->curWX = val;
+        fmapSv->setCurWX(val);
     }
     s8 getCtCurWY() {
         JUT_ASSERT(VERSION_SELECT(511, 511, 522, 522), fmapSv != NULL);
-        return fmapSv->curWY;
+        return fmapSv->getCurWY();
     }
     void setCtCurWY(s8 val) {
         JUT_ASSERT(VERSION_SELECT(516, 516, 527, 527), fmapSv != NULL);
-        fmapSv->curWY = val;
+        fmapSv->setCurWY(val);
     }
     s8 getCtZoomGridX() {
         JUT_ASSERT(VERSION_SELECT(522, 522, 533, 533), fmapSv != NULL);
-        return fmapSv->zoomGridX;
+        return fmapSv->getZoomGridX();
     }
     void setCtZoomGridX(s8 val) {
         JUT_ASSERT(VERSION_SELECT(527, 527, 538, 538), fmapSv != NULL);
-        fmapSv->zoomGridX = val;
+        fmapSv->setZoomGridX(val);
     }
     s8 getCtZoomGridY() {
         JUT_ASSERT(VERSION_SELECT(532, 532, 543, 543), fmapSv != NULL);
-        return fmapSv->zoomGridY;
+        return fmapSv->getZoomGridY();
     }
     void setCtZoomGridY(s8 val) {
         JUT_ASSERT(VERSION_SELECT(537, 537, 548, 548), fmapSv != NULL);
-        fmapSv->zoomGridY = val;
+        fmapSv->setZoomGridY(val);
     }
     void setCtCurHX(s8 val) {
         JUT_ASSERT(VERSION_SELECT(548, 548, 559, 559), fmapSv != NULL);
-        fmapSv->curHX = val;
+        fmapSv->setCurHX(val);
     }
     void setCtCurHY(s8 val) {
         JUT_ASSERT(VERSION_SELECT(558, 558, 569, 569), fmapSv != NULL);
-        fmapSv->curHY = val;
+        fmapSv->setCurHY(val);
     }
     void lineInter0to1(f32, f32, f32) {}
     void lineInter0to1ForU8(u8, u8, f32) {}
@@ -200,6 +206,10 @@ public:
     void windArrowColorAnime();
     void checkMarkAnimeInit();
     void checkMarkAnime();
+#if VERSION == VERSION_DEMO
+    void krogMarkAnimeInit();
+    void krogMarkAnime();
+#endif
     u32 readFmapTexture(const char*);
     void aramCmapDatRead();
     void initCmapDatPnt(aramCmapDatPat_t*);
@@ -301,6 +311,9 @@ public:
     /* 0x0018 */ ResTIMG * mChkPntTxt_p;
     /* 0x001C */ dDlst_FMAP_c fmapDl;
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
+#if VERSION == VERSION_DEMO
+    u8 pad4[0x38 * 2];
+#endif
     /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
     /* 0x2878 */ dMenu_FmapSv_c* fmapSv;
     /* 0x287C */ aramCmapDat_c mCmapDatPnt;
@@ -367,11 +380,14 @@ public:
 #if VERSION > VERSION_JPN
     /* 0x4F44 */ fopMsgM_pane_class mGsPanes[7];
 #endif
+#if VERSION == VERSION_DEMO
+    u8 pad [0x340 + 8];
+#endif
     /* 0x50CC */ STControl* stick;
     /* 0x50D0 */ JUTFont* mFont;
     /* 0x50D4 */ JUTFont* mRFont;
     /* 0x50D8 */ JPABaseEmitter* mWrapBackEmitter;
-    /* 0x50DC */ JPABaseEmitter* mWrapSpotEmitters[9];
+    /* 0x50DC */ JPABaseEmitter* mWrapSpotEmitters[FMAP_WARP_COUNT];
     /* 0x5100 */ u8 padding_0x5100[0x510C - 0x5100];
     /* 0x510C */ bool mMapClose;
     /* 0x510D */ u8 mSelCursorBufIdx;
@@ -423,7 +439,8 @@ public:
     /* 0x517A */ u8 mFishmanTimer3;
     /* 0x517B */ u8 mCheckMarkTimer;
     /* 0x517C */ u8 mCheckMarkToggle;
-    /* 0x517D */ u8 padding_0x517D[0x517F-0x517D];
+    /* 0x517D */ u8 field_0x517D;
+    /* 0x517E */ u8 field_0x517E;
     /* 0x517F */ bool mFishmanActive;
     /* 0x5180 */ u8 mSalvagePntIdx;
     /* 0x5181 */ u8 mButtonIconMode;
@@ -450,8 +467,6 @@ public:
     /* 0x51B1 */ u8 padding_0x51B1[0x51B4-0x51B1];
 #endif
 }; // Size: 0x51B4
-
-STATIC_ASSERT(sizeof(dMenu_Fmap_c) == VERSION_SELECT(0x4E54, 0x4E54, 0x51B4, 0x51B4));
 
 class dMf_HIO_c : public JORReflexible {
 public:
@@ -509,8 +524,8 @@ public:
     /* 0x04D */ u8 mWarpCursorAlphaMin;
     /* 0x04E */ u8 mWarpCursorAlphaMax;
     /* 0x04F */ u8 padding_0x4F[0x50 - 0x4F];
-    /* 0x050 */ f32 mWarpSpotPosX[9];
-    /* 0x074 */ f32 mWarpSpotPosY[9];
+    /* 0x050 */ f32 mWarpSpotPosX[FMAP_WARP_COUNT];
+    /* 0x074 */ f32 mWarpSpotPosY[FMAP_WARP_COUNT];
     /* 0x098 */ f32 mWarpSpotScaleSel;
     /* 0x09C */ f32 mWarpSpotScale;
     /* 0x0A0 */ f32 field_0xA0;
