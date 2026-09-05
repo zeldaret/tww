@@ -41,7 +41,7 @@ for ninja_target in subprocess.check_output(["ninja", "-t", "targets", "all"]).d
   ninja_output, ninja_rule = ninja_target.split(":", 1)
   all_ninja_outputs.append(ninja_output)
 
-all_object_names = []
+all_object_names: list[str] = []
 for output_path in all_ninja_outputs:
   if not output_path.startswith("build/D44J01/"):
     continue
@@ -205,7 +205,13 @@ def get_symbols_from_linker_map(map_contents: str, missing_tree_and_stripped=Fal
   
   return symbols
 
-def is_debug_only_symbol(symbol_name: str):
+def should_ignore_fake_symbol(symbol_name: str):
+  if symbol_name in ["_three$localstatic4$sqrtf__3stdFf", "_half$localstatic3$sqrtf__3stdFf"]:
+    # This weak data from the PCH has no symbol in the target for some reason (but does still exist and take up space).
+    return True
+  return False
+
+def should_ignore_missing_symbol(symbol_name: str):
   if "__11JORMContextF" in symbol_name:
     return True
   return False
@@ -342,8 +348,8 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
       total_wrong_align += 1
       print(f"ALIGN: {symbol_name} (should be {target_symbol.align}, is {base_symbol.align})")
   
-  maybe_fake_symbols = []
-  fake_symbols = []
+  maybe_fake_symbols: list[Symbol] = []
+  fake_symbols: list[Symbol] = []
   for symbol_name, base_symbol in base_symbols.items():
     if symbol_name in target_symbols:
       continue
@@ -354,17 +360,21 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
   
   if print_maybe_fake:
     for base_symbol in maybe_fake_symbols:
+      if should_ignore_fake_symbol(base_symbol.name):
+        continue
       print("FAKE?:", base_symbol.name, "0x%X" % base_symbol.size)
       total_maybe_fake += 1
   
   for base_symbol in fake_symbols:
+    if should_ignore_fake_symbol(base_symbol.name):
+      continue
     print("FAKE:", base_symbol.name, "0x%X" % base_symbol.size)
     total_fake += 1
   
   for symbol_name, target_symbol in target_symbols.items():
     if target_symbol.size == 0:
       continue
-    if is_debug_only_symbol(symbol_name):
+    if should_ignore_missing_symbol(symbol_name):
       continue
     if symbol_name not in base_symbols:
       total_missing += 1
