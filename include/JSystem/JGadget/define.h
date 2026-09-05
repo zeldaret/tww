@@ -11,41 +11,26 @@ class JGadget_outMessage {
 public:
     typedef void (*MessageFunc)(const char*, int, const char*);
 
-    static void warning(const char*, int, const char*) {
-        /* Nonmatching - debug only */
-    }
+    static void warning(const char*, int, const char*);
 
-    JGadget_outMessage(MessageFunc fn, const char* file, int line) {
-        /* Nonmatching - debug only */
-    }
-    ~JGadget_outMessage() {
-        /* Nonmatching - debug only */
-    }
+    JGadget_outMessage(MessageFunc fn, const char* file, int line);
+    ~JGadget_outMessage();
 
     JGadget_outMessage& operator<<(int param_1) { return *this << (s32)param_1; }
-    JGadget_outMessage& operator<<(u16);
-    JGadget_outMessage& operator<<(unsigned int);
+    JGadget_outMessage& operator<<(u16 param_1) { return *this << (u32)param_1; }
+    JGadget_outMessage& operator<<(uint param_1) { return *this << (u32)param_1; }
     JGadget_outMessage& operator<<(u8);
-    JGadget_outMessage& operator<<(const char* str) {
-        /* Nonmatching - debug only */
-        return *this;
-    }
-    JGadget_outMessage& operator<<(s8);
+    JGadget_outMessage& operator<<(const char* str);
+    JGadget_outMessage& operator<<(char);
     JGadget_outMessage& operator<<(s32);
-    JGadget_outMessage& operator<<(u32 value) {
-        /* Nonmatching - debug only */
-        char sz[64];
-        snprintf(sz, 64, "%u", value);
-
-        return *this << sz;
-    }
+    JGadget_outMessage& operator<<(u32 value);
     JGadget_outMessage& operator<<(const void*);
 
 private:
     MessageFunc mMsgFunc;
     char mBuffer[256];
     char* mWrite_p;
-    char* mFile;
+    const char* mFile;
     int mLine;
 };
 

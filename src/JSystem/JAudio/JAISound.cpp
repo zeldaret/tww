@@ -28,12 +28,12 @@ u8 JAISound::getSeCategoryNumber() {
 }
 
 /* 802985E8-802985F4       .text getSwBit__8JAISoundFv */
-int JAISound::getSwBit() {
+u32 JAISound::getSwBit() {
     return ((u32*)field_0x40)[0];
 }
 
 /* 802985F4-80298624       .text checkSwBit__8JAISoundFUl */
-int JAISound::checkSwBit(u32 param_1) {
+u32 JAISound::checkSwBit(u32 param_1) {
     return param_1 & getSwBit();
 }
 

@@ -56,7 +56,7 @@ bool JASystem::Kernel::THeap::alloc(THeap* mother, u32 param_2) {
     bool local_43 = false;
     THeap* local_30 = NULL;
     void* local_34;
-    for (JSUTreeIterator<THeap> it = mother->mTree.getFirstChild(); it != mother->mTree.getEndChild(); it++) {
+    for (JSUTreeIterator<THeap> it = mother->mTree.getFirstChild(); it != mother->mTree.getEndChild(); ++it) {
         if (r29 >= mother->mBase + local_2c) {
             break;
         }
@@ -99,7 +99,7 @@ bool JASystem::Kernel::THeap::free() {
     JSUTreeIterator<THeap> stack_20;
     for (JSUTreeIterator<THeap> it(mTree.getFirstChild()); it != mTree.getEndChild(); it = stack_20) {
         stack_20 = it;
-        stack_20++;
+        ++stack_20;
         it->free();
     }
     JSUTree<THeap>* parentTree = mTree.getParent();

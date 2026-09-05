@@ -50,6 +50,10 @@ namespace JUTAssertion {
     void flushMessage_dbPrint();
     void setVisible(bool);
     void setMessageCount(int);
+
+    inline void setWarningMessage(u32 device, char* file, int line, const char* msg) {
+        setWarningMessage_f(device, file, line, "%s", msg);
+    }
 };
 
 extern "C" {

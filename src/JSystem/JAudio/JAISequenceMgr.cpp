@@ -13,7 +13,7 @@
 
 JAInter::LinkSound JAInter::SequenceMgr::seqControl;
 JAInter::SeqUpdateData* JAInter::SequenceMgr::seqTrackInfo;
-int* JAInter::SequenceMgr::FixSeqBufPointer;
+JAISound** JAInter::SequenceMgr::FixSeqBufPointer;
 JKRArchive* JAInter::SequenceMgr::arcPointer;
 
 /* 80295684-802960A0       .text init__Q27JAInter11SequenceMgrFv */
@@ -22,7 +22,7 @@ void JAInter::SequenceMgr::init() {
     JAIBasic* basic = JAIBasic::getInterface();
     JAISound* soundObjects = basic->makeSound(JAIGlobalParameter::getParamSeqControlBufferMax());
     JUT_ASSERT_MSG(41, soundObjects, "JAISequenceMgr::initHeap Cannot Alloc Heap!!\n");
-    FixSeqBufPointer = new (JAIBasic::getCurrentJAIHeap(), 0x20) int[JAIGlobalParameter::getParamSeqPlayTrackMax()];
+    FixSeqBufPointer = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAISound*[JAIGlobalParameter::getParamSeqPlayTrackMax()];
     seqControl.init(soundObjects, JAIGlobalParameter::getParamSeqControlBufferMax());
     for (int i = 0; i < JAIGlobalParameter::getParamSeqControlBufferMax(); i++) {
         SeqParameter* _para = new (JAIBasic::getCurrentJAIHeap(), 0x20) SeqParameter();
@@ -37,12 +37,12 @@ void JAInter::SequenceMgr::init() {
         _para->seqDolby = new (JAIBasic::getCurrentJAIHeap(), 0x20) MoveParaSet[JAIGlobalParameter::getParamSeqParameterLines()];
         JUT_ASSERT_MSG(56, _para->seqDolby, "JAISequenceMgr::initHeap Cannot Alloc Heap!!\n");
     }
-    FixSeqBufPointer = new (JAIBasic::getCurrentJAIHeap(), 0x20) int[JAIGlobalParameter::getParamSeqPlayTrackMax()];
+    FixSeqBufPointer = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAISound*[JAIGlobalParameter::getParamSeqPlayTrackMax()];
     JUT_ASSERT_MSG(60, FixSeqBufPointer, "JAISequenceMgr::initHeap Cannot Alloc Heap!!\n");
     seqTrackInfo = new (JAIBasic::getCurrentJAIHeap(), 0x20) SeqUpdateData[JAIGlobalParameter::getParamSeqPlayTrackMax()];
     JUT_ASSERT_MSG(62, seqTrackInfo, "JAISequenceMgr::initHeap Cannot Alloc Heap!!\n");
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
-        FixSeqBufPointer[i] = 0;
+        FixSeqBufPointer[i] = NULL;
         SeqUpdateData* update = &seqTrackInfo[i];
         update->mSeqVolume = 1.0f;
         update->mSeqPitch = 0.5f;

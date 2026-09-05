@@ -60,4 +60,6 @@ public:
     static JKRSolidHeap* create(u32, JKRHeap*, bool);
 };  // Size: 0x80
 
+inline JKRSolidHeap* JKRCreateSolidHeap(u32 size, JKRHeap* parent, bool errorFlag) { return JKRSolidHeap::create(size, parent, errorFlag); }
+
 #endif /* JKRSOLIDHEAP_H */

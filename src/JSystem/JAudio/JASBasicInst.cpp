@@ -45,7 +45,7 @@ bool JASystem::TBasicInst::getParam(int key, int velo, TInstParam* param) const 
             continue;
         }
         f32 y = effect->getY(key, velo);
-        switch (effect->mTarget) {
+        switch (effect->getTarget()) {
         case 0:
             param->field_0x18 *= y;
             break;
@@ -76,7 +76,7 @@ bool JASystem::TBasicInst::getParam(int key, int velo, TInstParam* param) const 
     if (!keymap) {
         return false;
     }
-    for (int i = 0; i < keymap->mVeloRegionCount; i++) {
+    for (int i = 0; i < keymap->getVeloRegionCount(); i++) {
         const JASystem::TBasicInst::TVeloRegion * region = keymap->getVeloRegion(i);
         if (velo <= region->mBaseVel) {
             param->field_0x10 *= region->field_0x08;
