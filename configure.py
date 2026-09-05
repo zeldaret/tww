@@ -1006,7 +1006,7 @@ config.libs = [
     JSystemLib(
         "JGadget",
         [
-            Object(Matching,    "JSystem/JGadget/define.cpp"),
+            Object(DEBUG_ONLY,  "JSystem/JGadget/define.cpp"),
             Object(Matching,    "JSystem/JGadget/binary.cpp"),
             Object(Matching,    "JSystem/JGadget/linklist.cpp"),
             Object(Matching,    "JSystem/JGadget/std-vector.cpp"),
@@ -1192,9 +1192,9 @@ config.libs = [
         "vi",
         [
             Object(Matching, "dolphin/vi/vi.c"),
-            Object(Matching, "dolphin/vi/i2c.c"),
-            Object(Matching, "dolphin/vi/initphilips.c"),
-            Object(Matching, "dolphin/vi/gpioexi.c"),
+            Object(DEBUG_ONLY, "dolphin/vi/i2c.c"),
+            Object(DEBUG_ONLY, "dolphin/vi/initphilips.c"),
+            Object(DEBUG_ONLY, "dolphin/vi/gpioexi.c"),
         ],
     ),
     DolphinLib(
