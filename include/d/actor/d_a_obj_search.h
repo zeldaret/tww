@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_SEARCH_H
 #define D_A_OBJ_SEARCH_H
 
+#include "d/d_bg_w.h"
 #include "f_op/f_op_actor.h"
 
 class J3DNode;
@@ -9,7 +10,7 @@ namespace daObj_Search {
     class Act_c : public fopAc_ac_c {
     public:
         enum Proc_e {
-            
+            PROC_UNK0_e = 0
         };
         
         static bool getFindFlag() { return m_find_flag == true; }
@@ -22,10 +23,10 @@ namespace daObj_Search {
         void setBkControl(bool control) { mBkControl = control; }
         void setChildId(fpc_ProcID id) { mChildId = id; }
         
-        void _createHeap();
-        void searchCreateHeap();
-        void beamCreateHeap(int);
-        void _nodeControl(J3DNode*, J3DModel*);
+        BOOL _createHeap();
+        int searchCreateHeap();
+        int beamCreateHeap(int);
+        static void _nodeControl(J3DNode*, J3DModel*);
         void modeSearchRndInit();
         void modeSearchRnd();
         void modeSearchPathInit();
@@ -59,13 +60,25 @@ namespace daObj_Search {
         void bg_check();
         void player_check();
         void set_path_info();
-        void is_path_info();
+        BOOL is_path_info();
         bool _draw();
         bool _delete();
         BOOL _isdelete();
+
+        static const char M_arcname[];
     
     public:
-        /* Place member variables here */
+        /* 0x290 */ u8 field_0x290[0x5F4 - 0x290];
+        /* 0x5F4 */ J3DModel* field_0x5F4;
+        /* 0x5F8 */ u8 field_0x5F8[0x664 - 0x5F8];
+        /* 0x665 */ u8 field_0x665[0x670 - 0x665];
+        /* 0x670 */ dBgW* mpBgW;
+        /* 0x674 */ u8 field_0x674[0x6D4 - 0x674];
+        /* 0x6D4 */ Mtx field_0x6D4;
+        /* 0x704 */ u8 field_0x704[0x7B8 - 0x704];
+        /* 0x7B8 */ bool field_0x7B8;
+        /* 0x7B9 */ u8 field_0x7B9[0x84C - 0x7B9];
+        /* 0x850 */ u8 field_0x850[0x908 - 0x850];
         /* 0x290 */ u8 m290[0x664 - 0x290];
         /* 0x664 */ bool mBkControl;
         /* 0x665 */ u8 m665[0x84C - 0x665];
@@ -82,11 +95,11 @@ namespace daObj_Search {
     };
 
     namespace Mthd {
-        cPhs_State Create(void*);
-        BOOL Delete(void*);
-        BOOL Execute(void*);
-        BOOL Draw(void*);
-        BOOL IsDelete(void*);
+        cPhs_State Create(void* impl);
+        bool Delete(void* impl);
+        bool Execute(void* impl);
+        bool Draw(void* impl);
+        BOOL IsDelete(void* impl);
         extern actor_method_class Table;
     };
 };
