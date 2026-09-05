@@ -253,17 +253,17 @@ void daNpcMn_c::talk3(int) {
 }
 
 /* 00002D68-00002DB8       .text next_msgStatus__9daNpcMn_cFPUl */
-void daNpcMn_c::next_msgStatus(unsigned long*) {
+u16 daNpcMn_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
 /* 00002DB8-00002F7C       .text getMsg__9daNpcMn_cFv */
-void daNpcMn_c::getMsg() {
+u32 daNpcMn_c::getMsg() {
     /* Nonmatching */
 }
 
 /* 00002F7C-00002F8C       .text getMsg3__9daNpcMn_cFv */
-void daNpcMn_c::getMsg3() {
+u32 daNpcMn_c::getMsg3() {
     /* Nonmatching */
 }
 
