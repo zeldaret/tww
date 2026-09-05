@@ -532,6 +532,9 @@ public:
     J3DDrawBuffer* getOpaListSky() { return mpOpaListSky; }
     J3DDrawBuffer* getOpaListFilter() { return mpOpaListFilter; }
     J3DDrawBuffer* getOpaList2D() { return mpOpaList2D; }
+    J3DDrawBuffer* getOpaList() { return mpOpaList; }
+    J3DDrawBuffer* getOpaListBG() { return mpOpaListBG; }
+    J3DDrawBuffer* getXluListBG() { return mpXluListBG; }
     J3DDrawBuffer* getXluList() { return mpXluList; }
     J3DDrawBuffer* getXluListP1() { return mpXluListP1; }
 
