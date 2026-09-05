@@ -15,7 +15,7 @@ from pathlib import Path
 import re
 import subprocess
 import argparse
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 arg_parse = argparse.ArgumentParser()
 arg_parse.add_argument("object_name", nargs="?", help="Name of the object to build and diff, e.g. d_a_bridge or d_a_npc_fa1")
@@ -278,12 +278,12 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
     symbol_size_diffs = []
     total_right_size = 0
     total_wrong_size = 0
-  total_missing = 0
-  total_fake = 0
+  missing_target_symbols: set[str] = set()
+  fake_base_symbols: set[str] = set()
   if print_maybe_fake:
     total_maybe_fake = 0
-  total_wrong_linkage = 0
-  total_wrong_align = 0
+  wrong_linkage_symbols: set[str] = set()
+  wrong_align_symbols: set[str] = set()
   
   if print_size_diffs:
     for symbol_name, target_symbol in target_symbols.items():
@@ -335,7 +335,7 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
       is_wrong_linkage = True
       target_linkage = target_symbol.linkage
     if is_wrong_linkage:
-      total_wrong_linkage += 1
+      wrong_linkage_symbols.add(symbol_name)
       print(f"LINKAGE: {symbol_name} (should be {target_linkage}, is {base_symbol.linkage})")
   
   for symbol_name, target_symbol in target_symbols.items():
@@ -345,7 +345,7 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
       continue
     base_symbol = base_symbols[symbol_name]
     if target_symbol.align != base_symbol.align:
-      total_wrong_align += 1
+      wrong_align_symbols.add(symbol_name)
       print(f"ALIGN: {symbol_name} (should be {target_symbol.align}, is {base_symbol.align})")
   
   maybe_fake_symbols: list[Symbol] = []
@@ -369,7 +369,7 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
     if should_ignore_fake_symbol(base_symbol.name):
       continue
     print("FAKE:", base_symbol.name, "0x%X" % base_symbol.size)
-    total_fake += 1
+    fake_base_symbols.add(base_symbol.name)
   
   for symbol_name, target_symbol in target_symbols.items():
     if target_symbol.size == 0:
@@ -377,7 +377,7 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
     if should_ignore_missing_symbol(symbol_name):
       continue
     if symbol_name not in base_symbols:
-      total_missing += 1
+      missing_target_symbols.add(symbol_name)
       print("MISSING: " + symbol_name, "0x%X" % target_symbol.size)
   
   print("==================================================")
@@ -386,40 +386,56 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
   if print_size_diffs:
     print(f"Total right size: {total_right_size}")
     print(f"Total wrong size: {total_wrong_size}")
-  print(f"Total wrong linkage: {total_wrong_linkage}")
-  print(f"Total wrong alignment: {total_wrong_align}")
+  print(f"Total wrong linkage: {len(wrong_linkage_symbols)}")
+  print(f"Total wrong alignment: {len(wrong_align_symbols)}")
   if print_maybe_fake:
     print(f"Total maybe fake: {total_maybe_fake}")
-  print(f"Total fake: {total_fake}")
-  print(f"Total missing: {total_missing}")
+  print(f"Total fake: {len(fake_base_symbols)}")
+  print(f"Total missing: {len(missing_target_symbols)}")
   
-  return (total_missing, total_fake, total_wrong_linkage, total_wrong_align)
+  return (missing_target_symbols, fake_base_symbols, wrong_linkage_symbols, wrong_align_symbols)
 
 def diff_all_debug_maps():
   retcode = subprocess.call(["ninja"], cwd=decomp_root_path)
   assert retcode == 0, "Ninja build call failed"
   
-  total_missing = 0
-  total_fake = 0
-  total_wrong_linkage = 0
-  total_wrong_align = 0
+  missing_counts: Counter[str] = Counter()
+  fake_counts: Counter[str] = Counter()
+  wrong_linkage_counts: Counter[str] = Counter()
+  wrong_align_counts: Counter[str] = Counter()
   
   for target_object_name in all_object_names:
     if target_object_name in ["__mem", "exception", "executor"]:
       continue
     missing, fake, wrong_linkage, wrong_align = diff_debug_map(target_object_name, call_ninja=False, print_size_diffs=False, print_maybe_fake=False)
-    total_missing += missing
-    total_fake += fake
-    total_wrong_linkage += wrong_linkage
-    total_wrong_align += wrong_align
+    missing_counts.update(missing)
+    fake_counts.update(fake)
+    wrong_linkage_counts.update(wrong_linkage)
+    wrong_align_counts.update(wrong_align)
+  
+  print("=== Most common wrong linkage:")
+  for (symbol_name, count) in wrong_linkage_counts.most_common(10):
+    print(count, symbol_name)
+  
+  print("=== Most common wrong alignment:")
+  for (symbol_name, count) in wrong_align_counts.most_common(10):
+    print(count, symbol_name)
+  
+  print("=== Most common fake:")
+  for (symbol_name, count) in fake_counts.most_common(10):
+    print(count, symbol_name)
+  
+  print("=== Most common missing:")
+  for (symbol_name, count) in missing_counts.most_common(10):
+    print(count, symbol_name)
   
   print("==================================================")
   print("=== Summary for all objects")
   print("==================================================")
-  print(f"Total wrong linkage: {total_wrong_linkage}")
-  print(f"Total wrong alignment: {total_wrong_align}")
-  print(f"Total fake: {total_fake}")
-  print(f"Total missing: {total_missing}")
+  print(f"Total wrong linkage: {sum(wrong_linkage_counts.values())}")
+  print(f"Total wrong alignment: {sum(wrong_align_counts.values())}")
+  print(f"Total fake: {sum(fake_counts.values())}")
+  print(f"Total missing: {sum(missing_counts.values())}")
 
 if __name__ == "__main__":
   if build_all:
