@@ -2360,7 +2360,7 @@ void energy_ball_move(fganon_class* i_this) {
 void* mahou_se_set(void* i_act, void* i_other) {
     fganon_class* i_this = (fganon_class*)i_act;
     fopAc_ac_c* a_this = &i_this->actor;
-    if ((fopAc_IsActor(i_this)) && fopAcM_GetName(a_this) == fpcNm_FGMAHOU_e) {
+    if ((fopAcM_IsActor(i_this)) && fopAcM_GetName(a_this) == fpcNm_FGMAHOU_e) {
         if (a_this->health == 0) {
             fopAcM_seStartCurrent(a_this, JA_SE_OBJ_PG_EBALL_FLY_L, 0);
         }

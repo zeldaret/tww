@@ -1939,7 +1939,7 @@ static BOOL beam_wall_check(cXyz* pos_1, cXyz* pos_2) {
     end.y = start.y;
     gndChk.Set(&start, &end, NULL);
     if (dComIfG_Bgsp()->LineCross(&gndChk)) {
-        *pos_1 = gndChk.mLin.GetEnd();
+        *pos_1 = gndChk.GetCross();
         return TRUE;
     }
     return FALSE;

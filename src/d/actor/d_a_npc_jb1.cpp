@@ -258,11 +258,11 @@ void daNpc_Jb1_c::eventOrder() {
 
 /* 0000076C-000007AC       .text checkOrder__11daNpc_Jb1_cFv */
 void daNpc_Jb1_c::checkOrder() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         return;
     }
 
-    if (eventInfo.mCommand != dEvtCmd_INTALK_e) {
+    if (eventInfo.getCommand() != dEvtCmd_INTALK_e) {
         return;
     }
 

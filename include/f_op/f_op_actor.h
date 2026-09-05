@@ -198,7 +198,7 @@ public:
         return mpPhotoCB(i_actor, i_itemBtn);
     }
 
-public:
+private:
     /* 0x04 */ u16 mCommand;
     /* 0x06 */ u16 mCondition;
     /* 0x08 */ s16 mEventId;

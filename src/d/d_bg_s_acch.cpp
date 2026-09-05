@@ -184,7 +184,7 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
         linChk.Set2(&old_pos, &pos, GetActorPid());
         linChk.SetExtChk(*this);
         if (i_bgs.LineCross(&linChk)) {
-            *pm_pos = linChk.GetLinP()->GetEnd();
+            *pm_pos = linChk.GetCross();
             OnLineCheckHit();
 
             if (pm_out_poly_info != NULL)

@@ -536,6 +536,7 @@ private:
 class mDoExt_invisibleModel {
 public:
     mDoExt_invisibleModel() {}
+    ~mDoExt_invisibleModel() {}
 
     BOOL create(J3DModel*);
 

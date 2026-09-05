@@ -1064,7 +1064,7 @@ void daNpc_Zl1_c::eventOrder() {
 
 /* 0000213C-00002280       .text checkOrder__11daNpc_Zl1_cFv */
 void daNpc_Zl1_c::checkOrder() {
-    static const f32 a_start_pos[] = {-229.76634f, 37.46317f, 305.2134f};
+    static const Vec a_start_pos[] = {-229.76634f, 37.46317f, 305.2134f};
     if(eventInfo.checkCommandDemoAccrpt()) {
         if(dComIfGp_evmng_startCheck(mEventIdx[mEventIdx[4]]) && field_0x84A >= 3) {
             switch(mEventIdx[4]) {
@@ -1072,7 +1072,7 @@ void daNpc_Zl1_c::checkOrder() {
                     field_0x7D3 = true;
                     break;
                 case 2:
-                    dComIfGs_setRestartRoom(*(cXyz*)a_start_pos, 0x4000, 0); // fake match probably
+                    dComIfGs_setRestartRoom(*static_cast<const cXyz*>(a_start_pos), 0x4000, 0);
                     field_0x7C9 = true;
                     break;
                 case 3:

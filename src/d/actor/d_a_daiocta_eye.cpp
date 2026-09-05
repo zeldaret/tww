@@ -164,8 +164,8 @@ BOOL daDaiocta_Eye_c::_createHeap() {
 
     mpJntHit = JntHit_create(mpModel, search_data, ARRAY_SSIZE(search_data));
 
-    if (mpJntHit) {   
-        jntHit = mpJntHit;
+    if (mpJntHit) {
+        fopAcM_SetJntHit(this, mpJntHit);
     } else {
         return FALSE;
     }
@@ -459,7 +459,7 @@ void daDaiocta_Eye_c::createInit() {
     mEyeScale.setall(1.0f);
     if (parentActorID != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* parent_p = fopAcM_SearchByID(parentActorID);
-        if (parent_p && fopAc_IsActor(parent_p) && fpcM_GetName(parent_p) == fpcNm_DAIOCTA_e) {
+        if (parent_p && fopAcM_IsActor(parent_p) && fpcM_GetName(parent_p) == fpcNm_DAIOCTA_e) {
             mpParentActor = (daDaiocta_c *) parent_p;
         }
     }

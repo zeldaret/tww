@@ -116,7 +116,7 @@ struct SafetyCallback {
 void* daComing2::position_is_safety_call_back(void* ac, void* cb) {
     SafetyCallback* callback = (SafetyCallback*)cb;
 
-    if (fopAc_IsActor(ac)) {
+    if (fopAcM_IsActor(ac)) {
         fopAc_ac_c* actor = (fopAc_ac_c*)ac;
         if (fopAcM_GetGroup(actor) == fopAc_ENEMY_e) {
             f32 x = actor->current.pos.x - callback->pos->x;

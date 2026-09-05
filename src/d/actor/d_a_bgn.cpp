@@ -894,7 +894,7 @@ static void room_disp(bgn_class* i_this) {
 /* 00001898-0000192C       .text ten_a_d_sub__FPvPv */
 static void* ten_a_d_sub(void* param_1, void*) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_Obj_Vteng_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_Obj_Vteng_e)) {
         if ((actor->model != NULL) && (bgn != NULL)) {
             bgn->mCC24.setModel(actor->model);
             bgn->mCC24.update();
@@ -908,7 +908,7 @@ static void* ten_a_d_sub(void* param_1, void*) {
 /* 0000192C-00001998       .text ki_a_d_sub__FPvPv */
 static void* ki_a_d_sub(void* param_1, void*) {
     ki_class* keese = (ki_class*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         if (keese->actor.model != NULL) {
             keese->m2B8.setModel(keese->actor.model);
             keese->m2B8.update();
@@ -928,7 +928,7 @@ static void obj_disp(bgn_class* i_this) {
 #if VERSION > VERSION_DEMO
 /* 000019F4-00001A40       .text bgn2_s_sub__FPvPv */
 static void* bgn2_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN2_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN2_e)) {
         return param_1;
     } else {
         return NULL;
@@ -937,7 +937,7 @@ static void* bgn2_s_sub(void* param_1, void*) {
 
 /* 00001A40-00001A8C       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
         return param_1;
     } else {
         return NULL;
@@ -1003,7 +1003,7 @@ static BOOL daBgn_Draw(bgn_class* i_this) {
 /* 00001C40-00001C8C       .text ki_del_sub__FPvPv */
 static void* ki_del_sub(void* param_1, void*) {
     ki_class* keese = (ki_class*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         fopAcM_delete(&keese->actor);
     }
     return NULL;
@@ -1013,7 +1013,7 @@ static void* ki_del_sub(void* param_1, void*) {
 /* 00001C8C-00001CD8       .text ks_del_sub__FPvPv */
 static void* ks_del_sub(void* param_1, void*) {
     ks_class* morth = (ks_class*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KS_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KS_e)) {
         fopAcM_delete(&morth->actor);
     }
     return NULL;
@@ -1022,7 +1022,7 @@ static void* ks_del_sub(void* param_1, void*) {
 
 /* 00001CD8-00001D30       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         ki_all_count++;
     }
     return NULL;
@@ -1082,7 +1082,7 @@ static s32 gr_check(bgn_class* i_this, cXyz* param_2) {
 static void* s_b_sub(void* param_1, void* param_2) {
     bgn_class* bgn = (bgn_class*)param_2;
     daBomb_c* bomb = (daBomb_c*)param_1;
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BOMB_e) && bomb->get_explode_instant()) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BOMB_e) && bomb->get_explode_instant()) {
         cXyz local_18 = bomb->current.pos;
         if (!gr_check(bgn, &local_18)) {
             dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTT1PUNCHSPLASH00, &local_18);
@@ -3270,7 +3270,7 @@ static void demo_camera(bgn_class* i_this) {
 #if VERSION == VERSION_DEMO
 /* 000019F4-00001A40       .text bgn2_s_sub__FPvPv */
 static void* bgn2_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN2_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN2_e)) {
         return param_1;
     } else {
         return NULL;
@@ -3279,7 +3279,7 @@ static void* bgn2_s_sub(void* param_1, void*) {
 
 /* 00001A40-00001A8C       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
         return param_1;
     } else {
         return NULL;

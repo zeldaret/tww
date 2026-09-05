@@ -220,7 +220,7 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
 
     if (
         l_check_wrk < ARRAY_SSIZE(l_check_inf) && 
-        fopAc_IsActor(i_actorP) && 
+        fopAcM_IsActor(i_actorP) && 
         fpcM_GetName(i_actorP) == fpcNm_NPC_BM1_e
     ) {
         l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_actorP;
@@ -234,7 +234,7 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
     UNUSED(i_unusedP);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
+    if (fopAcM_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OnStatus((fopAc_ac_c*)i_actorP, fopAcStts_UNK4000_e);
     }
 
@@ -245,7 +245,7 @@ void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Clr_NOSTOP_DEMO(void* i_actorP, void* i_unused) {
     UNUSED(i_unused);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
+    if (fopAcM_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OffStatus((fopAc_ac_c*) i_actorP, fopAcStts_UNK4000_e);
     }
     
@@ -2102,7 +2102,7 @@ BOOL daNpc_Ls1_c::talk_1() {
             break;
         case 0xBC4:
         case 0xBC6:
-            eventInfo.mEventId = -1;
+            eventInfo.setEventId(-1);
             break;
         }
         fpcM_Search(searchActor_kamome_Clr_NOSTOP_DEMO, this);

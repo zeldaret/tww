@@ -201,7 +201,7 @@ void daObjPaper::Act_c::mode_wait_init() {
 
 /* 00000748-00000784       .text mode_wait__Q210daObjPaper5Act_cFv */
 void daObjPaper::Act_c::mode_wait() {
-    if (eventInfo.mCommand == dEvtCmd_INTALK_e) {
+    if (eventInfo.checkCommandTalk()) {
         mode_talk0_init();
     }
     else {

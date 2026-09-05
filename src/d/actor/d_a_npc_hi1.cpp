@@ -440,7 +440,7 @@ void daNpc_Hi1_c::checkOrder() {
             field_0x7BC = 0xff;
             field_0x7BD = 0xff;
         }
-    } else if(eventInfo.mCommand == dEvtCmd_INTALK_e && (field_0x7C1 == 1 || field_0x7C1 == 2)) {
+    } else if(eventInfo.checkCommandTalk() && (field_0x7C1 == 1 || field_0x7C1 == 2)) {
         field_0x7C1 = 0;
         field_0x7B7 = true;
     }

@@ -179,7 +179,7 @@ static BOOL daTag_Msg_actionEvent(daTag_Msg_c* a_this) {
 static BOOL daTag_Msg_actionHunt(daTag_Msg_c* a_this) {
     u8 swBit;
 
-    if (a_this->eventInfo.mCommand == dEvtCmd_INTALK_e) {
+    if (a_this->eventInfo.checkCommandTalk()) {
         a_this->setActio(3);
         swBit = a_this->getSwbit();
         if ((swBit & 0xff) != 0xff) {

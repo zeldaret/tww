@@ -25,7 +25,7 @@ static u32 ita_Ef[]     = { dRes_INDEX_BITA_BRK_EF_BTDITA0_e, dRes_INDEX_BITA_BR
 /* 00000078-000000C4       .text b_a_sub__FPvPv */
 static void* b_a_sub(void* search, void* user) {
     UNUSED(user);
-    if (fopAc_IsActor(search) && fopAcM_GetName(search) == fpcNm_BTD_e)
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BTD_e)
         return search;
     return NULL;
 }

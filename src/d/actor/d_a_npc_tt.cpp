@@ -110,8 +110,8 @@ void daNpc_Tt_c::eventOrder() {
 
 /* 000003DC-00000484       .text checkOrder__10daNpc_Tt_cFv */
 void daNpc_Tt_c::checkOrder() {
-    if (eventInfo.mCommand != dEvtCmd_INDEMO_e) {
-        if (eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(7)) {
+    if (!eventInfo.checkCommandDemoAccrpt()) {
+        if (eventInfo.checkCommandTalk() && ChkOrder(7)) {
             if (dComIfGp_event_chkTalkXY()) {
                 setFlag(0x4);
             } else {

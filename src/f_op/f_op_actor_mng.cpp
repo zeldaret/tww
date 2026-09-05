@@ -1271,7 +1271,7 @@ void fopAcM_createWarpFlower(cXyz* p_pos, csXyz* p_angle, int i_roomNo, u8 param
 
 /* 80027920-80027970       .text enemySearchJugge__FPvPv */
 fopAc_ac_c * enemySearchJugge(void* ptr, void*) {
-    if (ptr != NULL && fopAc_IsActor(ptr)) {
+    if (ptr != NULL && fopAcM_IsActor(ptr)) {
         fopAc_ac_c * i_ac = (fopAc_ac_c *)ptr;
         if (i_ac->group == fopAc_ENEMY_e)
             return i_ac;

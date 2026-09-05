@@ -661,12 +661,12 @@ void daNpc_Tc_c::eventOrder() {
 
 /* 00001424-00001470       .text checkOrder__10daNpc_Tc_cFv */
 void daNpc_Tc_c::checkOrder() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         mEventIdx = 0;
         return;
     }
 
-    if (eventInfo.mCommand != dEvtCmd_INTALK_e) {
+    if (!eventInfo.checkCommandTalk()) {
         return;
     }
 

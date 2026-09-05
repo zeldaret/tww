@@ -683,7 +683,7 @@ bool daObjDoguu_c::_execute() {
             }
             break;        
         case 1:
-            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+            if(eventInfo.checkCommandDemoAccrpt()){
                 field_0x8AC = 2;
             } else {
                 fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
@@ -706,7 +706,7 @@ bool daObjDoguu_c::_execute() {
             }
             break;
         case 4:
-            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+            if(eventInfo.checkCommandDemoAccrpt()){
                 field_0x8AC = 5;
             }
             break;
@@ -721,7 +721,7 @@ bool daObjDoguu_c::_execute() {
             field_0x8AC = 7;
             break;
         case 7:
-            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+            if(eventInfo.checkCommandDemoAccrpt()){
                 field_0x8AC = 8;
             }
             break;
@@ -747,7 +747,7 @@ bool daObjDoguu_c::_execute() {
             mCyl.SetR(30.0f);
             break;
         case 11:
-            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+            if(eventInfo.checkCommandDemoAccrpt()){
                 field_0x8AC = 12;
             }
             break;

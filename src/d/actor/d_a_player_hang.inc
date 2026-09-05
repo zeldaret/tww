@@ -524,7 +524,7 @@ BOOL daPy_lk_c::procHangMove() {
                             m34EC += (s16)(shape_angle.y - sVar6);
                             shape_angle.y = sVar6;
                             cXyz local_88;
-                            local_88.set(*mLinkLinChk.GetLinP()->GetEndP());
+                            local_88.set(mLinkLinChk.GetCross());
                             local_88.x -= triPla->GetNP()->x * 1.5f;
                             local_88.y += 25.0f;
                             local_88.z -= triPla->GetNP()->z * 1.5f;
@@ -534,9 +534,9 @@ BOOL daPy_lk_c::procHangMove() {
                                 current.pos = local_88;
                             }
                         } else {
-                            current.pos.x = (mLinkLinChk.GetLinP()->GetEndP()->x - 1.5f * triPla->GetNP()->x) -
+                            current.pos.x = (mLinkLinChk.GetCross().x - 1.5f * triPla->GetNP()->x) -
                                             (mNormalSpeed * dVar13);
-                            current.pos.z = (mLinkLinChk.GetLinP()->GetEndP()->z - 1.5f * triPla->GetNP()->z) -
+                            current.pos.z = (mLinkLinChk.GetCross().z - 1.5f * triPla->GetNP()->z) -
                                             (mNormalSpeed * dVar11);
                         }
                     }

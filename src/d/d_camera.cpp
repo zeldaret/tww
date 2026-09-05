@@ -2216,7 +2216,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     local_2a8 = mCenter + globe.Xyz();
                     if (!lineBGCheck(&mCenter, &local_2a8, 0x7f)) {
                         if (lineBGCheck(&m070, &local_2b4, &lin_chk1, 0x7f)) {
-                            local_29c = lin_chk1.GetLinP()->GetEnd();
+                            local_29c = lin_chk1.GetCross();
                             local_2b4 = compWallMargin(&local_29c, gaze_back_margin);
                         }
                         lineBGCheck(&mCenter, &local_2b4, &lin_chk1, i_flags);
@@ -2234,7 +2234,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                 setFlag(0x80);
                 setFlag(0x80);
 
-                local_290 = lin_chk1.GetLinP()->GetEnd();
+                local_290 = lin_chk1.GetCross();
 
                 local_284 = compWallMargin(&local_290, 0.5f + gaze_back_margin);
 

@@ -243,7 +243,7 @@ BOOL daHookshot_c::procShot() {
         cXyz sp8C = current.pos + (mMoveVec * 15.0f);
         mLinChk.Set(&current.pos, &sp8C, this);
         if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
-            sp8C = mLinChk.GetLinP()->GetEnd();
+            sp8C = mLinChk.GetCross();
             if (dComIfG_Bgsp()->ChkPolyHSStick(mLinChk)) {
                 fopAcM_SetParam(this, Mode_Pull);
                 mShipRideFlg = false;
