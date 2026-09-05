@@ -13,6 +13,7 @@ public:
     ~dDlst_2DNumber_c();
     bool init(int, s16, s16, s16, s16, u8);
     void draw();
+    void set(int i) { mValue = i; }
 
 private:
     /* 0x04 */ J2DPicture* mNum[4];
