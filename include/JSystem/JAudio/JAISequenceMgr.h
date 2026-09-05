@@ -139,7 +139,7 @@ namespace JAInter {
 
         extern LinkSound seqControl;
         extern SeqUpdateData* seqTrackInfo;
-        extern int* FixSeqBufPointer;
+        extern JAISound** FixSeqBufPointer;
         extern JKRArchive* arcPointer;
     }
 }

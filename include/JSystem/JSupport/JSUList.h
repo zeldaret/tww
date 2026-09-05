@@ -148,7 +148,7 @@ public:
         return *this;
     }
 
-    T& operator*() { return *this->getObject(); }
+    T& operator*() const { return *mLink->getObject(); }
 
     T* operator->() const { return mLink->getObject(); }
 

@@ -10,6 +10,9 @@ namespace JASystem {
         virtual f32 getY(int, int) const = 0;
         void setTarget(int);
 
+        u8 getTarget() const { return mTarget; }
+
+    private:
         /* 0x04 */ u8 mTarget;
     };
 }

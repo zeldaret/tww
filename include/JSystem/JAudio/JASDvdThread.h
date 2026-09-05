@@ -14,7 +14,7 @@ public:
         /* 0x04 */ u8* argspace;
     };
 
-    JASTaskThread(u32 param_1, int param_2, s32 param_3) : JKRThread(param_1, param_2, param_3) {
+    JASTaskThread(int param_1, int param_2, u32 param_3) : JKRThread(param_3, param_2, param_1) {
         mPaused = 0;
         OSInitThreadQueue(&mQ);
     }

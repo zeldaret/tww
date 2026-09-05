@@ -54,6 +54,8 @@ namespace JASystem {
             void onEraseDone();
             u32 getWaveID(int) const;
 
+            u32 getWaveCount() const { return mWaveCount; }
+
             /* 0x78 */ TBasicWaveBank* mBank;
             /* 0x7C */ TWaveInfo* mCtrlWaveArray;
             /* 0x80 */ u32 mWaveCount;

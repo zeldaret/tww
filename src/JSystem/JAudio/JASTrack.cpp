@@ -15,6 +15,7 @@
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JAudio/JASRate.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 /* 80280960-80280A34       .text __ct__Q28JASystem6TTrackFv */
@@ -1012,7 +1013,7 @@ int JASystem::TTrack::exchangeRegisterValue(u8 target) {
     }
 
     u8 index = target - 0x40;
-    return mTrackPort.mValue[index];
+    return mTrackPort.get(index);
 }
 
 /* 80282DC0-80282ED4       .text readReg32__Q28JASystem6TTrackFUc */
@@ -1089,7 +1090,7 @@ void JASystem::TTrack::writeRegDirect(u8 target, u16 value) {
         case 0:
         case 1:
         case 2:
-            val_u8 = value & 0xFF;
+            val_u8 = JSULoByte(value);
             value = val_u8;
             r4 = Player::extend8to16(val_u8);
             break;
@@ -1097,10 +1098,10 @@ void JASystem::TTrack::writeRegDirect(u8 target, u16 value) {
         case 0x21:
             return;
         case 0x22:
-            writeRegDirect(0, value >> 8);
+            writeRegDirect(0, JSUHiByte(value));
             target = 1;
             r4 = value;
-            value = value & 0xFF;
+            value = JSULoByte(value);
             break;
         default:
             r4 = value;
@@ -1196,8 +1197,8 @@ void JASystem::TTrack::writeRegParam(u8 param) {
             break;
         case 0x2:
             extended_sVar1 *= sVar0;
-            writeRegDirect(4, extended_sVar1 >> 16);
-            writeRegDirect(5, extended_sVar1 & 0xFFFF);
+            writeRegDirect(4, JSUHiHalf(extended_sVar1));
+            writeRegDirect(5, JSULoHalf(extended_sVar1));
             return;
         case 0x3:
             mRegisterParam.setFlag(sVar1 - sVar0);

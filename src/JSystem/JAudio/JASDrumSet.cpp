@@ -40,7 +40,7 @@ bool JASystem::TDrumSet::getParam(int key, int param_2, JASystem::TInstParam* pa
         TInstEffect* effect = perc->mEffect[i];
         if (effect) {
             f32 y = effect->getY(key, param_2);
-            switch (effect->mTarget) {
+            switch (effect->getTarget()) {
             case 0:
                 param_3->field_0x18 *= y;
                 break;

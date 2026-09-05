@@ -27,6 +27,8 @@ namespace JASystem {
             TVeloRegion* getVeloRegion(int);
             const TVeloRegion* getVeloRegion(int) const;
 
+            u32 getVeloRegionCount() const { return mVeloRegionCount; }
+
             /* 0x00 */ int mBaseKey;
             /* 0x04 */ u32 mVeloRegionCount;
             /* 0x08 */ TVeloRegion* mVelomap;
