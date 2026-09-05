@@ -5,100 +5,404 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_light.h"
+#include "f_op/f_op_actor_mng.h"
+#include "JSystem/JUtility/JUTAssert.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_bg_s_movebg_actor.h"
+#include "m_Do/m_Do_ext.h"
+#include "res/Object/Skanran.h"
+#include "SSystem/SComponent/c_counter.h"
+
+namespace daObjLight {
+namespace {
+struct L_attr_t {
+    u32 flags;
+    u16 switchId;
+};
+static const L_attr_t L_attr = { 0x00800002, 0x0014 };
+}  // namespace
+}  // namespace daObjLight
+
+const char daObjLight::Act_c::M_arcname[] = "Skanran";
+
+const dCcD_SrcCyl daObjLight::Act_c::M_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_FIRE_ARROW,
+        /* SrcObjTg  SPrm    */ dCcG_TgSPrm_Shield_e | dCcG_TgSPrm_ShieldFrontRange_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 0,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {
+        0.0f,
+        0.0f,
+        0.0f,   // mCenter
+        80.0f,  // mRadius
+        130.0f, // mHeight
+    },
+};
 
 /* 000000EC-00000110       .text solidHeapCB__Q210daObjLight5Act_cFP10fopAc_ac_c */
-void daObjLight::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
+BOOL daObjLight::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return reinterpret_cast<Act_c*>(i_this)->create_heap();
 }
 
 /* 00000110-00000344       .text create_heap__Q210daObjLight5Act_cFv */
-void daObjLight::Act_c::create_heap() {
-    /* Nonmatching */
+bool daObjLight::Act_c::create_heap() {
+    J3DModelData* mdl_data_lighthouse = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_BDL_STOUDAI_e));
+    JUT_ASSERT(0x10b, mdl_data_lighthouse != NULL);
+    if (mdl_data_lighthouse != NULL) {
+        mpModel[0] = mDoExt_J3DModel__create(mdl_data_lighthouse, 0, 0x11020203);
+    }
+
+    J3DModelData* mdl_data_light = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_BDL_SHIKARI_e));
+    JUT_ASSERT(0x112, mdl_data_light != NULL);
+    if (mdl_data_light != NULL) {
+        mpModel[1] = mDoExt_J3DModel__create(mdl_data_light, 0, 0x11020203);
+        mpModel[2] = mDoExt_J3DModel__create(mdl_data_light, 0, 0x11020203);
+    }
+
+    set_mtx();
+
+    cBgD_t* bgw_data = static_cast<cBgD_t*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SKANRAN_DZB_STOUDAI_e));
+    JUT_ASSERT(0x11c, bgw_data != NULL);
+    if (bgw_data != NULL) {
+        mpBgW = new dBgW();
+        if (mpBgW != NULL && mpBgW->Set(bgw_data, cBgW::MOVE_BG_e, &mMtx) == 1) {
+            return false;
+        }
+    }
+
+    return mdl_data_lighthouse != NULL && mpModel[0] != NULL && mdl_data_light != NULL && mpModel[1] != NULL && mpModel[2] != NULL && bgw_data != NULL && mpBgW != NULL;
 }
 
 /* 00000344-000003C0       .text init_collision__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::init_collision() {
-    /* Nonmatching */
+    mCylStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(M_cyl_src);
+    mCyl.SetStts(&mCylStts);
+    mCyl.SetTgVec((cXyz&)cXyz::Zero);
+    mCyl.OnTgNoHitMark();
 }
 
 /* 000003C0-00000468       .text set_collision__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::set_collision() {
-    /* Nonmatching */
+    if (dKy_daynight_check() == dKy_TIME_NIGHT_e) {
+        if (mCyl.ChkTgHit()) {
+            if (mLitState == 0) {
+                mFireState = 1;
+                mLitState = 1;
+            }
+        } else {
+            cXyz pos = current.pos;
+            pos.y -= 75.0f;
+            mCyl.SetC(pos);
+            dComIfG_Ccsp()->Set(&mCyl);
+        }
+    }
 }
 
 /* 000004A4-0000070C       .text _create__Q210daObjLight5Act_cFv */
 cPhs_State daObjLight::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, Act_c);
+
+    cPhs_State phase = dComIfG_resLoad(&mResLoad, M_arcname);
+    if (phase == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x3840)) {
+            if (dKy_daynight_check() == dKy_TIME_NIGHT_e) {
+                if (dComIfGs_isEventBit(0x1c02)) {
+                    mLightAngle = get_light_dif_angle();
+                }
+            } else {
+                mLightAngle = 0x4000;
+                M_S_light_angle = mLightAngle;
+                M_S_pre_set_frame_FRRS = g_Counter.mCounter0;
+            }
+            cullMtx = mpModel[1]->getBaseTRMtx();
+            fopAcM_setCullSizeBox(this, -300.0f, -300.0f, -10000.0f, 300.0f, 300.0f, 10000.0f);
+            cullSizeFar = 10.0f;
+            dComIfG_Bgsp()->Regist(mpBgW, this);
+            mpBgW->SetCrrFunc(dBgS_MoveBGProc_Typical);
+            init_collision();
+            mLitState = dComIfGs_isEventBit(0x1c02) != 0;
+            if (dKy_daynight_check() == dKy_TIME_NIGHT_e && mLitState == 1) {
+                set_fire(0);
+            }
+            mEventIdx = dComIfGp_evmng_getEventIdx("light_start");
+            mFireState = 0;
+            mCountdown = 0;
+        } else {
+            phase = cPhs_ERROR_e;
+        }
+    }
+    return phase;
 }
 
 /* 000008C4-00000964       .text _delete__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::_delete() {
-    /* Nonmatching */
+    M_S_lod_access = 0;
+    if (heap != NULL && mpBgW != NULL) {
+        if (mpBgW->ChkUsed()) {
+            dComIfG_Bgsp()->Release(mpBgW);
+        }
+    }
+    delete_fire();
+    dComIfG_resDelete(&mResLoad, M_arcname);
+    return true;
 }
 
 /* 00000964-00000A9C       .text set_fire__Q210daObjLight5Act_cFi */
-void daObjLight::Act_c::set_fire(int) {
-    /* Nonmatching */
+BOOL daObjLight::Act_c::set_fire(int i_param) {
+    if (mEff.getEmitter() == NULL) {
+        cXyz scale(1.45f, 1.45f, 1.45f);
+        dComIfGp_particle_set(0x1ea, &current.pos, NULL, &scale, 0xff, &mEff);
+        mEffFrame = 0;
+        exe_fire();
+        if (i_param == 1) {
+            JAIZelBasic::getInterface()->seStart(0x6a03, &current.pos);
+            dComIfGp_getVibration().StartShock(2, -0x11, cXyz(0.0f, 1.0f, 0.0f));
+        }
+        return TRUE;
+    } else {
+        mEff.end();
+        return FALSE;
+    }
 }
 
 /* 00000A9C-00000B04       .text draw_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::draw_fire() {
-    /* Nonmatching */
+    if (mEff.getEmitter() != NULL) {
+        GXColor& color = dComIfGd_getAlphaModelColor();
+        color.r = 0xeb;
+        color.g = 0x7d;
+        color.b = 0;
+        color.a = 0;
+        dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_TWO_SPHERES, mEffMtx, mEffAlpha);
+    }
 }
 
 /* 00000B04-00000C28       .text exe_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::exe_fire() {
-    /* Nonmatching */
+    if (mEff.getEmitter() != NULL) {
+        f32 sin_val = JMASSin(mEffFrame);
+        cXyz pos(current.pos);
+        pos.y += 24.0f;
+        mEffAlpha = (int)(sin_val * 10.0f) + 0x8c;
+        mEffScale = 0.45f + 0.05f * sin_val;
+        mEffXRot += 0x2d0;
+        mDoMtx_stack_c::transS(pos);
+        mDoMtx_stack_c::YrotM(shape_angle.y + mLightAngle);
+        mDoMtx_stack_c::XrotM(mEffXRot);
+        mDoMtx_stack_c::scaleM(mEffScale, mEffScale, mEffScale);
+        mDoMtx_copy(mDoMtx_stack_c::now, mEffMtx);
+        mEffFrame += 0x1194;
+    }
 }
 
 /* 00000C28-00000C60       .text delete_fire__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::delete_fire() {
-    /* Nonmatching */
+    if (mEff.getEmitter() != NULL) {
+        mEff.end();
+    }
 }
 
 /* 00000C60-00000C8C       .text now_event__Q210daObjLight5Act_cFs */
-void daObjLight::Act_c::now_event(short) {
-    /* Nonmatching */
+bool daObjLight::Act_c::now_event(s16 i_event) {
+    bool ret = false;
+    if (mEventState != 0 && mEventId == i_event) {
+        ret = true;
+    }
+    return ret;
 }
 
 /* 00000C8C-00000CB4       .text set_event__Q210daObjLight5Act_cFs */
-void daObjLight::Act_c::set_event(short) {
-    /* Nonmatching */
+BOOL daObjLight::Act_c::set_event(s16 i_event) {
+    if (mEventState == 0) {
+        mEventId = i_event;
+        mEventState = 1;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000CB4-00000D84       .text exe_event__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::exe_event() {
-    /* Nonmatching */
+    switch (mEventState) {
+    case 1:
+        if (eventInfo.checkCommandDemoAccrpt()) {
+            mEventState = 2;
+        } else {
+            fopAcM_orderOtherEventId(this, mEventId);
+            eventInfo.onCondition(dEvtCnd_UNK2_e);
+        }
+        break;
+    case 2:
+        if (dComIfGp_evmng_endCheck(mEventId)) {
+            dComIfGp_event_reset();
+            mEventId = -1;
+            mEventState = 0;
+            mCountdown = 0x14;
+        }
+        break;
+    }
 }
 
 /* 00000D84-00001084       .text set_mtx__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::set_mtx() {
-    /* Nonmatching */
+    for (int i = 0; i < 3; i++) {
+        mpModel[i]->setBaseScale(scale);
+        static cXyz l_offset[3] = {
+            cXyz(0.0f, 0.0f, 0.0f),
+            cXyz(0.0f, 0.0f, 377.74f),
+            cXyz(0.0f, 0.0f, -377.74f),
+        };
+        if (i == 0) {
+            cXyz pos = current.pos;
+            pos += l_offset[i];
+            mDoMtx_stack_c::transS(pos);
+            mDoMtx_stack_c::YrotM(shape_angle.y + mLightAngle);
+            mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+            // indexed by i (only i==0 reaches here) to reproduce the loop's mtx induction variable
+            cMtx_copy(mDoMtx_stack_c::get(), (&mMtx)[i]);
+        } else if (i == 1) {
+            cXyz pos = l_offset[i];
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::YrotM(shape_angle.y + mLightAngle);
+            mDoMtx_stack_c::transM(pos);
+            mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        } else if (i == 2) {
+            cXyz pos = l_offset[i];
+            pos.z += 700.0f;
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::YrotM(shape_angle.y + mLightAngle + 0x8000);
+            mDoMtx_stack_c::transM(pos);
+            mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
+        }
+        mpModel[i]->calc();
+    }
 }
 
 /* 00001084-000011C4       .text renew_angle__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::renew_angle() {
-    /* Nonmatching */
+    bool ret = now_event(mEventIdx);
+    if (ret) {
+        if (mFireState == 0) {
+            mLightAngle += 0x40;
+            JAIZelBasic::getInterface()->seStart(0x303b, &current.pos);
+        } else {
+            mLightAngle = 0;
+        }
+    } else {
+        if (dKy_daynight_check() == dKy_TIME_NIGHT_e) {
+            if (dComIfGs_isEventBit(0x1c02)) {
+                mLightAngle += 0x40;
+                ret = set_light_dif_angle_FRRS(mLightAngle);
+                if (!ret) {
+                    mLightAngle = get_light_dif_angle();
+                }
+            } else {
+                mLightAngle += 0x80;
+            }
+            JAIZelBasic::getInterface()->seStart(0x303b, &current.pos);
+        } else {
+            mLightAngle = 0x4000;
+        }
+    }
 }
 
 /* 000011C4-00001330       .text control_light__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::control_light() {
-    /* Nonmatching */
+    switch (mFireState) {
+    case 0:
+        break;
+    case 1:
+        if (set_event(mEventIdx) == 1) {
+            mFireState++;
+        }
+        break;
+    default:
+        mFireState++;
+        s16 fs = mFireState;
+        if (fs == 10) {
+            set_fire(1);
+        } else if (fs == 0x4b) {
+            dComIfGs_onEventBit(0x1c02);
+            JAIZelBasic::getInterface()->seStart(0x6a04, &current.pos);
+        } else if (fs == 0x4c) {
+            dComIfGs_offEventBit(0x1c02);
+        } else if (fs == 0x4d) {
+            dComIfGs_onEventBit(0x1c02);
+        } else if (fs == 0x4f) {
+            dComIfGs_offEventBit(0x1c02);
+        } else if (fs == 0x50) {
+            dComIfGs_onEventBit(0x1c02);
+            mFireState = 0;
+        }
+        break;
+    }
 }
 
 /* 00001330-00001398       .text control_treasure__Q210daObjLight5Act_cFv */
 void daObjLight::Act_c::control_treasure() {
-    /* Nonmatching */
+    if (mCountdown > 1) {
+        mCountdown--;
+    }
+    if (mCountdown == 1) {
+        dComIfGs_onSwitch(0x5d, home.roomNo);
+        mCountdown = 0;
+    }
 }
 
 /* 00001398-00001400       .text _execute__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::_execute() {
-    /* Nonmatching */
+    exe_fire();
+    exe_event();
+    renew_angle();
+    set_mtx();
+    set_collision();
+    mpBgW->Move();
+    control_light();
+    control_treasure();
+    return true;
 }
 
 /* 00001400-00001528       .text _draw__Q210daObjLight5Act_cFv */
 bool daObjLight::Act_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    for (int i = 0; i < 3; i++) {
+        if (i == 0) {
+            g_dComIfG_gameInfo.drawlist.setOpaListBG();
+            g_dComIfG_gameInfo.drawlist.setXluListBG();
+            g_env_light.setLightTevColorType(mpModel[i], &tevStr);
+            mDoExt_modelUpdateDL(mpModel[i]);
+            g_dComIfG_gameInfo.drawlist.setOpaList();
+            g_dComIfG_gameInfo.drawlist.setXluList();
+        } else {
+            if (dKy_daynight_check() == dKy_TIME_NIGHT_e && dComIfGs_isEventBit(0x1c02) &&
+                M_S_lod_access == 0) {
+                g_env_light.setLightTevColorType(mpModel[i], &tevStr);
+                mDoExt_modelUpdateDL(mpModel[i]);
+            }
+        }
+    }
+    draw_fire();
+    M_S_lod_access = 0;
+    return true;
 }
 
 namespace daObjLight {
