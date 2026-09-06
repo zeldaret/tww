@@ -177,27 +177,26 @@ void GXLoadLightObjImm(GXLightObj* obj, GXLightID light) {
 void GXSetChanAmbColor(GXChannelID channel, GXColor color) {
     u32 reg;
     u32 colorID;
-    u8 alpha;
 
     switch (channel) {
     case GX_COLOR0:
         reg = gx->ambColor[GX_COLOR0];
-        reg = GX_SET_TRUNC(reg, GXCOLOR_AS_U32(color), 0, 23);
+        reg = GX_SET_TRUNC(GXCOLOR_AS_U32(color) & ~0xff, reg, 24, 31);
         colorID = GX_COLOR0;
         break;
     case GX_COLOR1:
         reg = gx->ambColor[GX_COLOR1];
-        reg = GX_SET_TRUNC(reg, GXCOLOR_AS_U32(color), 0, 23);
+        reg = GX_SET_TRUNC(GXCOLOR_AS_U32(color) & ~0xff, reg, 24, 31);
         colorID = GX_COLOR1;
         break;
     case GX_ALPHA0:
         reg = gx->ambColor[GX_COLOR0];
-        reg = GX_SET_TRUNC(reg, color.a, 24, 31);
+        reg = GX_SET_TRUNC(color.a, reg, 0, 23);
         colorID = GX_COLOR0;
         break;
     case GX_ALPHA1:
         reg = gx->ambColor[GX_COLOR1];
-        reg = GX_SET_TRUNC(reg, color.a, 24, 31);
+        reg = GX_SET_TRUNC(color.a, reg, 0, 23);
         colorID = GX_COLOR1;
         break;
     case GX_COLOR0A0:
@@ -218,28 +217,28 @@ void GXSetChanAmbColor(GXChannelID channel, GXColor color) {
 }
 
 void GXSetChanMatColor(GXChannelID channel, GXColor color) {
-    u32 reg = 0;
-    GXChannelID colorID;
+    u32 reg;
+    u32 colorID;
 
     switch (channel) {
     case GX_COLOR0:
         reg = gx->matColor[GX_COLOR0];
-        reg = GX_SET_TRUNC(reg, GXCOLOR_AS_U32(color), 0, 23);
+        reg = GX_SET_TRUNC(GXCOLOR_AS_U32(color) & ~0xff, reg, 24, 31);
         colorID = GX_COLOR0;
         break;
     case GX_COLOR1:
         reg = gx->matColor[GX_COLOR1];
-        reg = GX_SET_TRUNC(reg, GXCOLOR_AS_U32(color), 0, 23);
+        reg = GX_SET_TRUNC(GXCOLOR_AS_U32(color) & ~0xff, reg, 24, 31);
         colorID = GX_COLOR1;
         break;
     case GX_ALPHA0:
         reg = gx->matColor[GX_COLOR0];
-        reg = GX_SET_TRUNC(reg, color.a, 24, 31);
+        reg = GX_SET_TRUNC(color.a, reg, 0, 23);
         colorID = GX_COLOR0;
         break;
     case GX_ALPHA1:
         reg = gx->matColor[GX_COLOR1];
-        reg = GX_SET_TRUNC(reg, color.a, 24, 31);
+        reg = GX_SET_TRUNC(color.a, reg, 0, 23);
         colorID = GX_COLOR1;
         break;
     case GX_COLOR0A0:

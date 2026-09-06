@@ -333,7 +333,7 @@ struct dStage_Event_dt_c {
     /* 0x11 */ u8 field_0x11;
     /* 0x12 */ u8 field_0x12;
     /* 0x13 */ u8 mSpawnSwitchNo; // Keeps track of whether this event has been triggered by a player spawn.
-    /* 0x14 */ u8 field_0x14;
+    /* 0x14 */ s8 field_0x14;
     /* 0x15 */ u8 field_0x15;
     /* 0x16 */ u8 field_0x16;
     /* 0x17 */ u8 field_0x17;
