@@ -61,43 +61,42 @@ void JASystem::TBasicWaveBank::setWaveTableSize(u32 param_1) {
 }
 
 /* 80285CB0-80285D54       .text incWaveTable__Q28JASystem14TBasicWaveBankFPCQ38JASystem14TBasicWaveBank10TWaveGroup */
-void JASystem::TBasicWaveBank::incWaveTable(const TWaveGroup* param_1) {
-    /* Nonmatching */
+void JASystem::TBasicWaveBank::incWaveTable(const TWaveGroup* waveGroup) {
     OSLockMutex(&mMutex);
-    for (int i = 0; i < param_1->getWaveCount(); i++) {
-        u32 waveID = param_1->getWaveID(i);
-        TWaveInfo** table = mWaveTable;
-        TWaveInfo* waveInfo = &param_1->mCtrlWaveArray[i];
+    for (int i = 0; i < waveGroup->getWaveCount(); i++) {
+        TWaveInfo** waveTable = &mWaveTable[waveGroup->getWaveID(i)];
+        TWaveInfo* waveInfo = &waveGroup->mCtrlWaveArray[i];
         waveInfo->mNext = NULL;
-        waveInfo->mPrev = table[waveID];
-        if (table[waveID]) {
-            table[waveID]->mNext = waveInfo;
+        waveInfo->mPrev = *waveTable;
+        if (*waveTable) {
+            (*waveTable)->mNext = waveInfo;
         }
-        table[waveID] = waveInfo;
+        *waveTable = waveInfo;
     }
     OSUnlockMutex(&mMutex);
 }
 
 /* 80285D54-80285E28       .text decWaveTable__Q28JASystem14TBasicWaveBankFPCQ38JASystem14TBasicWaveBank10TWaveGroup */
-void JASystem::TBasicWaveBank::decWaveTable(const TWaveGroup* param_1) {
+void JASystem::TBasicWaveBank::decWaveTable(const TWaveGroup* waveGroup) {
     /* Nonmatching */
     OSLockMutex(&mMutex);
-    for (int i = 0; i < param_1->getWaveCount(); i++) {
-        u32 waveID = param_1->getWaveID(i);
+    for (int i = 0; i < waveGroup->getWaveCount(); i++) {
+        u32 waveID = waveGroup->getWaveID(i);
         TWaveInfo* waveInfo = mWaveTable[waveID];
-        TWaveInfo* waveInfo2 = &param_1->mCtrlWaveArray[i];
+        TWaveInfo* waveInfo2 = &waveGroup->mCtrlWaveArray[i];
         for (; waveInfo; waveInfo = waveInfo->mPrev) {
-            if (waveInfo == waveInfo2) {
-                if (!waveInfo->mNext) {
-                    mWaveTable[waveID] = waveInfo->mPrev;
-                } else {
-                    waveInfo->mNext->mPrev = waveInfo->mPrev;
-                }
-                if (waveInfo->mPrev) {
-                    waveInfo->mPrev->mNext = waveInfo->mNext;
-                }
-                break;
+            if (waveInfo != waveInfo2) {
+                continue;
             }
+            if (!waveInfo->mNext) {
+                mWaveTable[waveID] = waveInfo->mPrev;
+            } else {
+                waveInfo->mNext->mPrev = waveInfo->mPrev;
+            }
+            if (waveInfo->mPrev) {
+                waveInfo->mPrev->mNext = waveInfo->mNext;
+            }
+            break;
         }
     }
     OSUnlockMutex(&mMutex);

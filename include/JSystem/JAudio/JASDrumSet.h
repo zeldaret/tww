@@ -19,9 +19,16 @@ namespace JASystem {
             void setEffect(int, JASystem::TInstEffect*);
             void setRelease(u32);
 
-            /* 0x00 */ f32 field_0x0;
-            /* 0x04 */ f32 field_0x4;
-            /* 0x08 */ f32 field_0x8;
+            void setVolume(f32 volume) { mVolume = volume; }
+            void setPitch(f32 pitch) { mPitch = pitch; }
+            void setPan(f32 pan) { mPan = pan; }
+
+        private:
+            friend class TDrumSet;
+
+            /* 0x00 */ f32 mVolume;
+            /* 0x04 */ f32 mPitch;
+            /* 0x08 */ f32 mPan;
             /* 0x0C */ u16 field_0xc;
             /* 0x10 */ TInstEffect** mEffect;
             /* 0x14 */ u32 mEffectCount;
