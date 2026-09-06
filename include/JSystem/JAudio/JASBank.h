@@ -11,7 +11,7 @@ namespace JASystem {
     class TBank {
     public:
         TBank() {
-            mWaveBank = 0;
+            mWaveBank = NULL;
         }
         virtual ~TBank() {}
         virtual TInst* getInst(int) const = 0;

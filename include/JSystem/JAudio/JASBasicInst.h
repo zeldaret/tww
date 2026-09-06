@@ -27,6 +27,7 @@ namespace JASystem {
             TVeloRegion* getVeloRegion(int);
             const TVeloRegion* getVeloRegion(int) const;
 
+            void setHighKey(int key) { mBaseKey = key; }
             u32 getVeloRegionCount() const { return mVeloRegionCount; }
 
             /* 0x00 */ int mBaseKey;
@@ -46,8 +47,11 @@ namespace JASystem {
         TKeymap* getKeyRegion(int);
         u32 getType() const { return 'BSIC'; }
 
-        /* 0x04 */ f32 field_0x4;
-        /* 0x08 */ f32 field_0x8;
+        void setVolume(f32 volume) { mVolume = volume; }
+        void setPitch(f32 pitch) { mPitch = pitch; }
+
+        /* 0x04 */ f32 mVolume;
+        /* 0x08 */ f32 mPitch;
         /* 0x0C */ TInstEffect** mEffect;
         /* 0x10 */ u32 mEffectCount;
         /* 0x14 */ TOscillator::Osc_** mOsc;

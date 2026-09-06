@@ -22,9 +22,9 @@ bool JASystem::TDrumSet::getParam(int key, int param_2, JASystem::TInstParam* pa
     const TPerc* perc = field_0x4 + key;
     param_3->field_0x0 = 0;
     param_3->field_0x38 = 1;
-    param_3->field_0x10 *= perc->field_0x0;
-    param_3->field_0x14 *= perc->field_0x4;
-    param_3->field_0x20 = perc->field_0x8;
+    param_3->field_0x10 *= perc->mVolume;
+    param_3->field_0x14 *= perc->mPitch;
+    param_3->field_0x20 = perc->mPan;
     param_3->field_0x3a = perc->field_0xc;
     static TOscillator::Osc_ osc;
     osc.field_0x0 = 0;
@@ -84,9 +84,9 @@ JASystem::TDrumSet::TPerc* JASystem::TDrumSet::getPerc(int index) {
 
 /* 80285520-80285554       .text __ct__Q38JASystem8TDrumSet5TPercFv */
 JASystem::TDrumSet::TPerc::TPerc() {
-    field_0x0 = 1.0f;
-    field_0x4 = 1.0f;
-    field_0x8 = 0.5f;
+    mVolume = 1.0f;
+    mPitch = 1.0f;
+    mPan = 0.5f;
     field_0xc = 1000;
     mEffect = NULL;
     mEffectCount = 0;

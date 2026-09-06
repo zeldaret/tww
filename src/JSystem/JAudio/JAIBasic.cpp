@@ -502,16 +502,17 @@ u16 JAIBasic::setParameterSeqSync(JASystem::TTrack* param_1, u16 param_2) {
             }
         }
         break;
-    case 1:
+    case 1: {
         u8 tmp = param_1->field_0x36c;
         JAInter::SeMgr::seTrackUpdate_s* r31 = JAInter::SeMgr::seTrackUpdate;
         JASystem::TTrack::TOuterParam* r28 = param_1->mOuterParam;
-        r28->setParam(1, r31[tmp].field_0x4);
-        r28->setParam(8, r31[tmp].field_0x10);
-        r28->setParam(2, r31[tmp].field_0x8);
-        r28->setParam(4, r31[tmp].field_0xc);
-        r28->setParam(16, msBasic->field_0xd != 2 ? 0.0f : r31[tmp].field_0x14);
+        r28->setParam(OUTERPARAM_Volume, r31[tmp].field_0x4);
+        r28->setParam(OUTERPARAM_Pan, r31[tmp].field_0x10);
+        r28->setParam(OUTERPARAM_Pitch, r31[tmp].field_0x8);
+        r28->setParam(OUTERPARAM_Fxmix, r31[tmp].field_0xc);
+        r28->setParam(OUTERPARAM_Dolby, msBasic->field_0xd != 2 ? 0.0f : r31[tmp].field_0x14);
         break;
+    }
     case 127:
         param_1->writePortApp(0, JAInter::SeMgr::seScene);
         break;

@@ -68,7 +68,7 @@ JAInter::SeqUpdateData::SeqUpdateData() {
     field_0x2 = 0;
     field_0x3 = 0;
     field_0x8 = 0;
-    field_0x48 = 0;
+    field_0x48 = NULL;
     systemTrackParameter = new (JAIBasic::getCurrentJAIHeap(), 0x20) PlayerParameter[33];
     JUT_ASSERT_MSG(81, systemTrackParameter, "JAISeqUpdateData Cannot alloc Heap!!\n");
     trackVolume = new (JAIBasic::getCurrentJAIHeap(), 0x20) f32[JAIGlobalParameter::getParamSeqTrackMax()];
