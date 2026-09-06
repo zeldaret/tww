@@ -33,8 +33,13 @@ static void dummy0() {
     DEAD_STRING("cmap_phantomship.bti");
     DEAD_STRING("cmap_hint.bti");
     DEAD_STRING("f_item_tri.bti");
+#if VERSION == VERSION_DEMO
+    DEAD_STRING("get_rupy.bti");
+    DEAD_STRING("heart_up_02.bti");
+#else
     DEAD_STRING("f_get_rupy.bti");
     DEAD_STRING("f_heart_up_02.bti");
+#endif
     DEAD_STRING("f_korog_kare.bti");
     DEAD_STRING("f_korog_saki.bti");
 }
@@ -159,15 +164,15 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
 
     for (int i = 0; i < 2; i++) {
         i_Ms->name[i] = (char*)i_Ms->childHeap->alloc(0x20, 4);
-        JUT_ASSERT(1936, i_Ms->name[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(1984, 1870, 1936, 1936), i_Ms->name[i] != NULL);
         strcpy(i_Ms->name[i], "");
 
         i_Ms->note[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
-        JUT_ASSERT(1939, i_Ms->note[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(1987, 1873, 1939, 1939), i_Ms->note[i] != NULL);
         strcpy(i_Ms->note[i], "");
 
         i_Ms->dummy[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
-        JUT_ASSERT(1942, i_Ms->dummy[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(1990, 1876, 1942, 1942), i_Ms->dummy[i] != NULL);
         strcpy(i_Ms->dummy[i], "");
     }
 
@@ -175,7 +180,7 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
 
     for (int i = 0; i < 33; i++) {
         i_Ms->buffer_p[i] = i_Ms->childHeap->alloc(0xC00, 0x20);
-        JUT_ASSERT(1951, i_Ms->buffer_p[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(1998, 1884, 1951, 1951), i_Ms->buffer_p[i] != NULL);
         i_Ms->field_0x1B2++;
     }
 
@@ -185,7 +190,7 @@ void dMs_item_create(sub_ms_screen_class* i_Ms) {
 #endif
 
     dMi_c = new dMenu_Item_c();
-    JUT_ASSERT(1962, dMi_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2004, 1890, 1962, 1962), dMi_c != NULL);
 
     for (int i = 0; i < 21; i++) {
         dMi_c->setItemTexBuffer(i, i_Ms->buffer_p[i]);
@@ -253,25 +258,25 @@ void dMs_collect_create(sub_ms_screen_class* i_Ms) {
 
     for (int i = 0; i < 2; i++) {
         i_Ms->name[i] = (char*)i_Ms->childHeap->alloc(0x20, 4);
-        JUT_ASSERT(2089, i_Ms->name[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2119, 2005, 2089, 2089), i_Ms->name[i] != NULL);
 
         i_Ms->note[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
-        JUT_ASSERT(2091, i_Ms->note[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2121, 2007, 2091, 2091), i_Ms->note[i] != NULL);
 
         i_Ms->dummy[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
-        JUT_ASSERT(2093, i_Ms->dummy[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2123, 2009, 2093, 2093), i_Ms->dummy[i] != NULL);
     }
 
     i_Ms->field_0x1B2 = 0;
 
     for (int i = 0; i < 21; i++) {
         i_Ms->buffer_p[i] = i_Ms->childHeap->alloc(0xC00, 0x20);
-        JUT_ASSERT(2101, i_Ms->buffer_p[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2130, 2016, 2101, 2101), i_Ms->buffer_p[i] != NULL);
         i_Ms->field_0x1B2++;
     }
 
     dMc_c = new dMenu_Collect_c();
-    JUT_ASSERT(2112, dMc_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2136, 2022, 2112, 2112), dMc_c != NULL);
 
     dMc_c->setTactTexBuffer(i_Ms->buffer_p[0]);
 
@@ -316,25 +321,25 @@ void dMs_collect_create2(sub_ms_screen_class* i_Ms) {
 
     for (int i = 0; i < 2; i++) {
         i_Ms->name[i] = (char*)i_Ms->childHeap->alloc(0x20, 4);
-        JUT_ASSERT(2183, i_Ms->name[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2201, 2087, 2183, 2183), i_Ms->name[i] != NULL);
 
         i_Ms->note[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
-        JUT_ASSERT(2185, i_Ms->note[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2203, 2089, 2185, 2185), i_Ms->note[i] != NULL);
 
         i_Ms->dummy[i] = (char*)i_Ms->childHeap->alloc(0x200, 4);
-        JUT_ASSERT(2187, i_Ms->dummy[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2205, 2091, 2187, 2187), i_Ms->dummy[i] != NULL);
     }
 
     i_Ms->field_0x1B2 = 0;
 
     for (int i = 0; i < 21; i++) {
         i_Ms->buffer_p[i] = i_Ms->childHeap->alloc(0xC00, 0x20);
-        JUT_ASSERT(2195, i_Ms->buffer_p[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2212, 2098, 2195, 2195), i_Ms->buffer_p[i] != NULL);
         i_Ms->field_0x1B2++;
     }
 
     dMc_c = new dMenu_Collect_c();
-    JUT_ASSERT(2205, dMc_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2218, 2104, 2205, 2205), dMc_c != NULL);
 
     dMc_c->setTactTexBuffer(i_Ms->buffer_p[0]);
 
@@ -414,17 +419,17 @@ void dMs_fmap_create(sub_ms_screen_class* i_Ms) {
 
     for (int i = 0; i < 2; i++) {
         i_Ms->name[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x40, 4);
-        JUT_ASSERT(2343, i_Ms->name[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2342, 2228, 2343, 2343), i_Ms->name[i] != NULL);
 
         i_Ms->note[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x200, 4);
-        JUT_ASSERT(2345, i_Ms->note[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2344, 2230, 2345, 2345), i_Ms->note[i] != NULL);
 
         i_Ms->dummy[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x200, 4);
-        JUT_ASSERT(2347, i_Ms->dummy[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2346, 2232, 2347, 2347), i_Ms->dummy[i] != NULL);
     }
 
     dMf_c = new dMenu_Fmap_c();
-    JUT_ASSERT(2352, dMf_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2351, 2237, 2352, 2352), dMf_c != NULL);
 
     dMf_c->setSvPtr(&dMv_CIO_c);
     dMf_c->setFont(fonttype, rfonttype);
@@ -434,7 +439,7 @@ void dMs_fmap_create(sub_ms_screen_class* i_Ms) {
     dMf_c->_create();
 
     dMs_capture_c = new dDlst_MENU_CAPTURE_c();
-    JUT_ASSERT(2362, dMs_capture_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2361, 2247, 2362, 2362), dMs_capture_c != NULL);
 
     if (i_Ms->mMenuProc == MENU_STATE_FMAP_OPEN_WALLPAPER) {
         dMs_capture_c->setDrawFlagOn();
@@ -482,25 +487,25 @@ void dMs_dmap_create(sub_ms_screen_class* i_Ms) {
 
     for (int i = 0; i < 2; i++) {
         i_Ms->name[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x20, 4);
-        JUT_ASSERT(2464, i_Ms->name[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2463, 2349, 2464, 2464), i_Ms->name[i] != NULL);
 
         i_Ms->note[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x200, 4);
-        JUT_ASSERT(2466, i_Ms->note[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2465, 2351, 2466, 2466), i_Ms->note[i] != NULL);
 
         i_Ms->dummy[i] = (char*)i_Ms->parentHeap_0xfc->alloc(0x200, 4);
-        JUT_ASSERT(2468, i_Ms->dummy[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2467, 2353, 2468, 2468), i_Ms->dummy[i] != NULL);
     }
 
     i_Ms->field_0x1B2 = 0;
 
     for (int i = 0; i < 3; i++) {
         i_Ms->buffer_p[i] = i_Ms->parentHeap_0xfc->alloc(0xC00, 0x20);
-        JUT_ASSERT(2475, i_Ms->buffer_p[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(2474, 2360, 2475, 2475), i_Ms->buffer_p[i] != NULL);
         i_Ms->field_0x1B2++;
     }
 
     dMd_c = new dMenu_Dmap_c();
-    JUT_ASSERT(2480, dMd_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2479, 2365, 2480, 2480), dMd_c != NULL);
 
     for (int i = 0; i < 3; i++) {
         dMd_c->mpTIMG[i] = (ResTIMG*)i_Ms->buffer_p[i];
@@ -514,7 +519,7 @@ void dMs_dmap_create(sub_ms_screen_class* i_Ms) {
     dMd_c->_create();
 
     dMs_capture_c = new dDlst_MENU_CAPTURE_c();
-    JUT_ASSERT(2491, dMs_capture_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2490, 2376, 2491, 2491), dMs_capture_c != NULL);
 }
 
 /* 801DCB30-801DCC80       .text dMs_dmap_delete__FP19sub_ms_screen_class */
@@ -558,12 +563,12 @@ void dMs_name_create(sub_ms_screen_class*) {
     dComIfGp_setHeapLockFlag(10);
 
     dNm_c = new dName_c();
-    JUT_ASSERT(2569, dNm_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2568, 2454, 2569, 2569), dNm_c != NULL);
 
     dNm_c->_create();
 
     dMs_capture_c = new dDlst_MENU_CAPTURE_c();
-    JUT_ASSERT(2573, dMs_capture_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2572, 2458, 2573, 2573), dMs_capture_c != NULL);
 }
 
 /* 801DCDA0-801DCE20       .text dMs_name_delete__FP19sub_ms_screen_class */
@@ -605,19 +610,19 @@ void dMs_cloth_create(sub_ms_screen_class* i_Ms) {
     JKRArchive* arc = dComIfGp_getClothResArchive();
 
     cloth_c = new dMCloth_c();
-    JUT_ASSERT(2674, cloth_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2673, 2559, 2674, 2674), cloth_c != NULL);
 
     cloth_c->setArchive(arc);
     cloth_c->init();
 
     dMs_cloth_c = new dDlst_MENU_CLOTH_c();
-    JUT_ASSERT(2680, dMs_cloth_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2679, 2565, 2680, 2680), dMs_cloth_c != NULL);
 
     dMs_capture_c = new dDlst_MENU_CAPTURE_c();
-    JUT_ASSERT(2683, dMs_capture_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2682, 2568, 2683, 2683), dMs_capture_c != NULL);
 
     i_Ms->childHeap = JKRExpHeap::create(0x506A1, i_Ms->parentHeap_0xfc, false);
-    JUT_ASSERT(2686, i_Ms->childHeap != NULL);
+    JUT_ASSERT(VERSION_SELECT(2685, 2571, 2686, 2686), i_Ms->childHeap != NULL);
 }
 
 /* 801DD090-801DD154       .text dMs_cloth_delete__FP19sub_ms_screen_class */
@@ -645,14 +650,14 @@ void dMs_clothOnly_create(sub_ms_screen_class*) {
     JKRArchive* arc = dComIfGp_getClothResArchive();
 
     cloth_c = new dMCloth_c();
-    JUT_ASSERT(2744, cloth_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2743, 2629, 2744, 2744), cloth_c != NULL);
 
     cloth_c->setArchive(arc);
     cloth_c->setClothType(MENU_CLOTH_TYPE_CLOTH_ONLY);
     cloth_c->init();
 
     dMs_cloth_c = new dDlst_MENU_CLOTH_c();
-    JUT_ASSERT(2751, dMs_cloth_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(2750, 2636, 2751, 2751), dMs_cloth_c != NULL);
 }
 
 /* 801DD270-801DD308       .text dMs_clothOnly_delete__FP19sub_ms_screen_class */
@@ -1488,10 +1493,10 @@ static cPhs_State dMs_Create(msg_class* i_this) {
     i_Ms->parentHeap_0xfc = dComIfGp_getExpHeap2D();
 
     fonttype = mDoExt_getMesgFont();
-    JUT_ASSERT(4097, fonttype != NULL);
+    JUT_ASSERT(VERSION_SELECT(3966, 3966, 4097, 4097), fonttype != NULL);
 
     rfonttype = mDoExt_getRubyFont();
-    JUT_ASSERT(4100, rfonttype != NULL);
+    JUT_ASSERT(VERSION_SELECT(3968, 3968, 4100, 4100), rfonttype != NULL);
 
     event_wait_frame = 0;
 
