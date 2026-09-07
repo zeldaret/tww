@@ -1077,7 +1077,7 @@ config.libs = [
         "J3DGraphAnimator",
         [
             Object(Matching,    "JSystem/J3DGraphAnimator/J3DModelData.cpp"),
-            Object(Matching,    "JSystem/J3DGraphAnimator/J3DModel.cpp"),
+            Object(MatchingFor("GZLE01", "GZLP01"),    "JSystem/J3DGraphAnimator/J3DModel.cpp"),
             Object(Matching,    "JSystem/J3DGraphAnimator/J3DAnimation.cpp"),
             Object(Matching,    "JSystem/J3DGraphAnimator/J3DMaterialAnm.cpp"),
             Object(Matching,    "JSystem/J3DGraphAnimator/J3DVisibility.cpp"),
