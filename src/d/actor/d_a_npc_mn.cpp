@@ -5,40 +5,286 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mn.h"
-#include "m_Do/m_Do_ext.h"
+#include "d/d_com_lib_game.h"
+
+static char* l_npc_staff_id[] = {
+    "Mn"
+};
+
+static const char* l_arcname_tbl[] = {"Mn"};
+
+static sMnAnmDat l_npc_anm_wait = {
+    0x00,
+    0x08,
+    0xFF
+};
+
+static sMnAnmDat l_npc_anm_wait2 = {
+    0x01,
+    0x08,
+    0xFF
+};
+
+
+static sMnAnmDat l_npc_anm_talk = {
+    0x02,
+    0x08,
+    0xFF,
+};
+
+static sMnAnmDat l_npc_anm_talk2 = {
+    0x03,
+    0x08,
+    0xFF,
+};
+
+static sMnAnmDat l_npc_anm_walk = {
+    0x04,
+    0x08,
+    0xFF,
+};
+
+static sMnAnmDat l_npc_anm_bikkuri[] = {
+    {
+        0x05,
+        0x08,
+        0x01,
+    },
+    {
+        0x00,
+        0x08,
+        0xFF,
+    },
+};
+
+static sMnAnmDat l_npc_anm_jump1[] = {
+    {
+        0x06,
+        0x08,
+        0x01,
+    },
+    {
+        0xFF,
+        0x08,
+        0x00,
+    },
+};
+
+static sMnAnmDat l_npc_anm_jump2 = {
+    0x07,
+    0x08,
+    0xFF,
+};
+
+static NpcDatStruct l_npc_dat[] = {
+{
+        0x0FA0, 0x2710, 0x0000, 0x1770,
+        0xF830, 0xD8F0, 0xE890, 0xF060,
+        0x05DC, 0x0000, 0.0f  , 150.0f  ,
+        120.0f, 250.0f, 0.0f, 0x7FFF,
+        0x0514, 0x0190, 0x0000, 60.0f,
+        0.5f, 3.0f , 0x0006, 0x0400  ,
+        0x003C, 0x005A, 0x00C8, 0x012C,
+        0x001E, 0x01, 0x01,
+    },
+    {
+        0x0FA0, 0x2710, 0x0000, 0x1770,
+        0xF830, 0xD8F0, 0xE890, 0xF060,
+        0x05DC, 0x0000, 0.0f  , 150.0f  ,
+        120.0f, 250.0f, 0.0f, 0x7FFF,
+        0x0514, 0x0190, 0x0000, 60.0f,
+        0.5f, 1.5f , 0x0006, 0x0400  ,
+        0x003C, 0x005A, 0x00C8, 0x012C,
+        0x001E, 0x01, 0x01,
+    },
+};
+
+static u32 l_msg_mn_1st_talk[] = {
+    0x35E9,
+    0x35EA,
+    0x35EB,
+    0x0000
+};
+
+static u32 l_msg_mn_2nd_talk[] = {
+    0x35EC,
+    0x35ED,
+    0x35EE,
+    0x0000
+};
+
+static u32 l_msg_mn_1st_talk_in[] = {
+    0x35F1,
+    0x0000
+};
+
+static u32 l_msg_mn_2nd_talk_in[] = {
+    0x35F2,
+    0x0000
+};
+
+static u32 l_msg_mn_3rd_talk_in[] = {
+    0x35F0,
+    0x0000
+};
+
+static u32 l_msg_mn_comp_1st[] = {
+    0x35F3,
+    0x35F4,
+    0x35F5,
+    0x0000
+};
+
+static u32 l_msg_mn_comp_2nd[] = {
+    0x35F6,
+    0x0000
+};
+
+static u32 l_msg_mn_figure[] = {
+    0x35F7,
+    0x35F8,
+    0x35F9,
+    0x35FA,
+    0x35FB,
+    0x35FC,
+    0x35FD,
+    0x35FE,
+    0x35FF,
+    0x3600,
+};
+
+static dCcD_SrcCyl l_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_ALL,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsEnemy_e,
+        /* SrcObjCo  SPrm    */ cCcD_CoSPrm_Set_e | cCcD_CoSPrm_IsPlayer_e | cCcD_CoSPrm_VsEnemy_e,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 40.0f,
+        /* Height */ 160.0f,
+    }},
+};
+
+static char* l_room_name[] = {
+    "sea",
+    "Pfigure",
+    "figureA",
+    "figureB",
+    "figureC",
+    "figureD",
+    "figureE",
+    "figureF",
+    "figureG",
+    "K_Testb",
+};
+
+static u16 l_figure_comp[] = {
+    dSv_event_flag_c::UNK_95FF,
+    dSv_event_flag_c::UNK_94FF,
+    dSv_event_flag_c::UNK_93FF,
+    dSv_event_flag_c::UNK_92FF,
+    dSv_event_flag_c::UNK_91FF,
+    dSv_event_flag_c::UNK_90FF,
+    dSv_event_flag_c::UNK_8FFF,
+    dSv_event_flag_c::UNK_8EFF,
+    dSv_event_flag_c::UNK_8DFF,
+    dSv_event_flag_c::UNK_8CFF,
+    dSv_event_flag_c::UNK_B1FF,
+    dSv_event_flag_c::UNK_9CFF,
+    dSv_event_flag_c::UNK_84FF,
+    dSv_event_flag_c::UNK_83FF,
+    dSv_event_flag_c::UNK_82FF,
+    dSv_event_flag_c::UNK_81FF,
+    dSv_event_flag_c::UNK_80FF,
+};
 
 /* 00000078-00000230       .text __ct__9daNpcMn_cFv */
 daNpcMn_c::daNpcMn_c() {
-    /* Nonmatching */
+    field_0x7B5 = 0;
+    mMoveState = 0;
+    field_0x77C = 0.0f;
+    field_0x798 = 0;
+    field_0x780 = -1.0f;
+    field_0x7BD = 0;
+    mHeadOnlyFollow = true;
+    field_0x7A0 = home.angle.y;
+    mBckIdx = 0;
+    field_0x7A4 = 0;
+    field_0x7C1 = chkPosNo();
+    mNpcNo = getPrmNpcNo();
 }
 
 /* 000005E0-000006F8       .text daNpc_Mn_nodeCallBack__FP7J3DNodei */
-static BOOL daNpc_Mn_nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL daNpc_Mn_nodeCallBack(J3DNode* i_node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DModel* l_model = j3dSys.getModel();
+        daNpcMn_c* i_this = (daNpcMn_c*)l_model->getUserArea();
+        J3DJoint* l_joint = (J3DJoint*)i_node;
+
+        u16 l_jointNo = l_joint->getJntNo();
+        MTXCopy(l_model->getAnmMtx(l_jointNo), *calc_mtx);
+
+        if (l_jointNo == i_this->m_jnt.getHeadJntNum()){
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getHead_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
+        }
+
+        if (l_jointNo == i_this->m_jnt.getBackboneJntNum()){
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
+        }
+        MTXCopy(*calc_mtx, l_model->getAnmMtx(l_jointNo));
+        MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
+    }
+    return TRUE;
 }
 
 /* 000006F8-00000718       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daNpcMn_c*)i_this)->createHeap();
 }
 
 /* 00000718-0000085C       .text phase_1__FP9daNpcMn_c */
-void phase_1(daNpcMn_c*) {
+cPhs__Handler phase_1(daNpcMn_c*) {
     /* Nonmatching */
 }
 
 /* 0000085C-000008D4       .text phase_2__FP9daNpcMn_c */
-void phase_2(daNpcMn_c*) {
+cPhs__Handler phase_2(daNpcMn_c*) {
     /* Nonmatching */
 }
 
 /* 000008D4-00000904       .text _create__9daNpcMn_cFv */
 cPhs_State daNpcMn_c::_create() {
-    /* Nonmatching */
+    static cPhs__Handler l_method[] = {
+        (cPhs__Handler) &phase_1,
+        (cPhs__Handler) &phase_2,
+        (cPhs__Handler) NULL
+    };
+
+    return dComLbG_PhaseHandler(&mPhsMethod, l_method, this);
 }
 
 /* 00000904-00000BE0       .text createHeap__9daNpcMn_cFv */
-void daNpcMn_c::createHeap() {
+BOOL daNpcMn_c::createHeap() {
     /* Nonmatching */
 }
 
@@ -62,6 +308,25 @@ bool daNpcMn_c::_draw() {
     /* Nonmatching */
 }
 
+typedef BOOL(daNpcMn_c::*ExecuteInit_t)();
+static ExecuteInit_t l_execute_init[] = {
+    &daNpcMn_c::executeWaitInit,
+    &daNpcMn_c::executeTalkInit,
+    &daNpcMn_c::executeTalk3Init,
+    &daNpcMn_c::executeWaitInit,
+    &daNpcMn_c::executeTurnInit,
+
+};
+
+typedef void(daNpcMn_c::*MoveProc_t)();
+static MoveProc_t moveProc[]={
+    &daNpcMn_c::executeWait,
+    &daNpcMn_c::executeTalk,
+    &daNpcMn_c::executeTalk3,
+    &daNpcMn_c::executeWait,
+    &daNpcMn_c::executeTurn,
+};
+
 /* 00001154-00001344       .text _execute__9daNpcMn_cFv */
 bool daNpcMn_c::_execute() {
     /* Nonmatching */
@@ -78,7 +343,7 @@ void daNpcMn_c::executeSetMode(unsigned char) {
 }
 
 /* 0000140C-00001518       .text executeWaitInit__9daNpcMn_cFv */
-void daNpcMn_c::executeWaitInit() {
+BOOL daNpcMn_c::executeWaitInit() {
     /* Nonmatching */
 }
 
@@ -88,7 +353,7 @@ void daNpcMn_c::executeWait() {
 }
 
 /* 000017CC-000017D4       .text executeTalkInit__9daNpcMn_cFv */
-void daNpcMn_c::executeTalkInit() {
+BOOL daNpcMn_c::executeTalkInit() {
     /* Nonmatching */
 }
 
@@ -98,7 +363,7 @@ void daNpcMn_c::executeTalk() {
 }
 
 /* 0000184C-0000185C       .text executeTalk3Init__9daNpcMn_cFv */
-void daNpcMn_c::executeTalk3Init() {
+BOOL daNpcMn_c::executeTalk3Init() {
     /* Nonmatching */
 }
 
@@ -108,7 +373,7 @@ void daNpcMn_c::executeTalk3() {
 }
 
 /* 0000191C-00001948       .text executeWalkInit__9daNpcMn_cFv */
-void daNpcMn_c::executeWalkInit() {
+BOOL daNpcMn_c::executeWalkInit() {
     /* Nonmatching */
 }
 
@@ -118,7 +383,7 @@ void daNpcMn_c::executeWalk() {
 }
 
 /* 00001BD4-00001D18       .text executeTurnInit__9daNpcMn_cFv */
-void daNpcMn_c::executeTurnInit() {
+BOOL daNpcMn_c::executeTurnInit() {
     /* Nonmatching */
 }
 
@@ -283,8 +548,8 @@ void daNpcMn_c::setAnmFromMsgTag() {
 }
 
 /* 0000302C-0000303C       .text getPrmNpcNo__9daNpcMn_cFv */
-void daNpcMn_c::getPrmNpcNo() {
-    /* Nonmatching */
+bool daNpcMn_c::getPrmNpcNo() {
+    return field_0x7C1 != false;
 }
 
 /* 0000303C-00003068       .text getPrmRailID__9daNpcMn_cFv */
@@ -363,7 +628,7 @@ void daNpcMn_c::chkEndEvent() {
 }
 
 /* 00003AC4-00003B38       .text chkPosNo__9daNpcMn_cFv */
-void daNpcMn_c::chkPosNo() {
+u8 daNpcMn_c::chkPosNo() {
     /* Nonmatching */
 }
 

@@ -65,22 +65,22 @@ public:
 
     daNpcMn_c();
     cPhs_State _create();
-    void createHeap();
+    BOOL createHeap();
     void createInit();
     bool _delete();
     bool _draw();
     bool _execute();
     void executeCommon();
     void executeSetMode(unsigned char);
-    void executeWaitInit();
+    BOOL executeWaitInit();
     void executeWait();
-    void executeTalkInit();
+    BOOL executeTalkInit();
     void executeTalk();
-    void executeTalk3Init();
+    BOOL executeTalk3Init();
     void executeTalk3();
-    void executeWalkInit();
+    BOOL executeWalkInit();
     void executeWalk();
-    void executeTurnInit();
+    BOOL executeTurnInit();
     void executeTurn();
     void checkOrder();
     void eventOrder();
@@ -113,7 +113,7 @@ public:
     void chkMsg();
     void setMessage(unsigned long);
     void setAnmFromMsgTag();
-    void getPrmNpcNo();
+    bool getPrmNpcNo();
     void getPrmRailID();
     void getPrmSwitchBit();
     void getPrmSwitchBit2();
@@ -129,7 +129,7 @@ public:
     void getRand(int);
     void setCollision(dCcD_Cyl*, cXyz, float, float);
     void chkEndEvent();
-    void chkPosNo();
+    u8 chkPosNo();
     void getPosNo();
     void isChangePos(unsigned char);
 
