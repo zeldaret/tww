@@ -365,8 +365,17 @@ bool daNpcMn_c::_execute() {
 }
 
 /* 00001344-000013B4       .text executeCommon__9daNpcMn_cFv */
-void daNpcMn_c::executeCommon() {
-    /* Nonmatching */
+u8 daNpcMn_c::executeCommon() {
+    if (field_0x7B1) {
+        field_0x7B2 = true;
+    } else {
+        field_0x7B2 = false;
+    }
+
+    if (field_0x7B0 == 1 && mMoveState != MOVE_PROC_TALK) {
+        executeSetMode(MOVE_PROC_TALK);
+    }
+    return field_0x7B0;
 }
 
 /* 000013B4-0000140C       .text executeSetMode__9daNpcMn_cFUc */
@@ -464,8 +473,8 @@ void daNpcMn_c::eventMesSetInit(int) {
 }
 
 /* 0000226C-000022A0       .text eventMesSet__9daNpcMn_cFv */
-void daNpcMn_c::eventMesSet() {
-    /* Nonmatching */
+u32 daNpcMn_c::eventMesSet() {
+    return (0x12 - talk2(0)) == false;
 }
 
 /* 000022A0-000022F8       .text eventGetItemInit__9daNpcMn_cFv */
@@ -554,8 +563,40 @@ void daNpcMn_c::eventJump() {
 }
 
 /* 00002AE8-00002C30       .text talk2__9daNpcMn_cFi */
-void daNpcMn_c::talk2(int) {
-    /* Nonmatching */
+u16 daNpcMn_c::talk2(int i1) {
+    u16 l_status = 0xFF;
+    if (mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e) {
+        if (i1 == 1) {
+            mCurrMsgNo = getMsg();
+        }
+        mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgNo, this);
+        mpCurrMsg = NULL;
+        mLastMsgStatus = -1;
+    } else if (mpCurrMsg) {
+        l_status = mpCurrMsg->mStatus;
+        switch (l_status) {
+            case fopMsgStts_MSG_DISPLAYED_e:
+                mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
+                if (mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                    fopMsgM_messageSet(mCurrMsgNo);
+                }
+                break;
+            case fopMsgStts_MSG_TYPING_e:
+                if (mLastMsgStatus == fopMsgStts_MSG_CONTINUES_e) {
+                    chkMsg();
+                }
+                break;
+            case fopMsgStts_BOX_CLOSED_e:
+                mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+                break;
+        }
+        mLastMsgStatus = l_status;
+        anmAtr(l_status);
+    } else {
+        mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
+    }
+    return l_status;
 }
 
 /* 00002C30-00002D68       .text talk3__9daNpcMn_cFi */

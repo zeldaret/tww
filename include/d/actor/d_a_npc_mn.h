@@ -70,7 +70,7 @@ public:
     bool _delete();
     bool _draw();
     bool _execute();
-    void executeCommon();
+    u8 executeCommon();
     void executeSetMode(u8);
     int executeWaitInit();
     void executeWait();
@@ -87,7 +87,7 @@ public:
     void eventMove();
     void privateCut();
     void eventMesSetInit(int);
-    void eventMesSet();
+    u32 eventMesSet();
     void eventGetItemInit();
     void eventWaitInit(int);
     void eventWait(int);
@@ -105,7 +105,7 @@ public:
     bool eventLook();
     void eventJumpInit(int);
     void eventJump();
-    void talk2(int);
+    u16 talk2(int);
     void talk3(int);
     virtual u16 next_msgStatus(u32*);
     virtual u32 getMsg();
@@ -160,7 +160,7 @@ public:
     /* 0x79C */ s16 field_0x79C;
     /* 0x79E */ s16 field_0x79E;
     /* 0x7A0 */ s16 field_0x7A0;
-    /* 0x7A2 */ s16 field_0x7A2;
+    /* 0x7A2 */ u16 mLastMsgStatus;
     /* 0x7A4 */ u16 field_0x7A4;
     /* 0x7A6 */ s16 field_0x7A6;
     /* 0x7A8 */ s16 field_0x7A8;
@@ -169,7 +169,7 @@ public:
     /* 0x7AE */ s16 mTargetYRot;
     /* 0x7B0 */ u8 field_0x7B0;
     /* 0x7B1 */ u8 field_0x7B1;
-    /* 0x7B2 */ u8 field_0x7B2;
+    /* 0x7B2 */ bool field_0x7B2;
     /* 0x7B3 */ u8 mBtpFrame;
     /* 0x7B4 */ u8 mMoveState;
     /* 0x7B5 */ u8 field_0x7B5;
