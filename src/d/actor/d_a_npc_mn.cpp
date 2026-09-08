@@ -6,12 +6,36 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mn.h"
 #include "d/d_com_lib_game.h"
+#include "res/Object/Mn.h"
 
 static char* l_npc_staff_id[] = {
     "Mn"
 };
 
 static const char* l_arcname_tbl[] = {"Mn"};
+
+static const int l_bmd_ix_tbl[] = {
+    dRes_ID_MN_BDL_MN_e,
+};
+
+static const int l_etc_bmd_ix_tbl[] = {
+    dRes_ID_MN_BDL_MN_BAG_e
+};
+
+static const int l_bck_ix_tbl[] = {
+    dRes_ID_MN_BCK_MN_WAIT01_e,
+    dRes_ID_MN_BCK_MN_WAIT02_e,
+    dRes_ID_MN_BCK_MN_TALK01_e,
+    dRes_ID_MN_BCK_MN_TALK02_e,
+    dRes_ID_MN_BCK_MN_WALK_e,
+    dRes_ID_MN_BCK_MN_BIKKURI_e,
+    dRes_ID_MN_BCK_MN_JUMP01_e,
+    dRes_ID_MN_BCK_MN_JUMP02_e,
+};
+
+static const int l_btp_ix_tbl[] = {
+    dRes_ID_MN_BTP_MN_MABA_e,
+};
 
 static sMnAnmDat l_npc_anm_wait = {
     0x00,
@@ -24,7 +48,6 @@ static sMnAnmDat l_npc_anm_wait2 = {
     0x08,
     0xFF
 };
-
 
 static sMnAnmDat l_npc_anm_talk = {
     0x02,
@@ -216,6 +239,14 @@ static u16 l_figure_comp[] = {
     dSv_event_flag_c::UNK_80FF,
 };
 
+enum MoveProcIdx {
+    MOVE_PROC_WAIT,
+    MOVE_PROC_TALK,
+    MOVE_PROC_TALK3,
+    MOVE_PROC_WALK,
+    MOVE_PROC_TURN,
+};
+
 /* 00000078-00000230       .text __ct__9daNpcMn_cFv */
 daNpcMn_c::daNpcMn_c() {
     field_0x7B5 = 0;
@@ -313,7 +344,7 @@ static ExecuteInit_t l_execute_init[] = {
     &daNpcMn_c::executeWaitInit,
     &daNpcMn_c::executeTalkInit,
     &daNpcMn_c::executeTalk3Init,
-    &daNpcMn_c::executeWaitInit,
+    &daNpcMn_c::executeWalkInit,
     &daNpcMn_c::executeTurnInit,
 
 };
@@ -323,7 +354,7 @@ static MoveProc_t moveProc[]={
     &daNpcMn_c::executeWait,
     &daNpcMn_c::executeTalk,
     &daNpcMn_c::executeTalk3,
-    &daNpcMn_c::executeWait,
+    &daNpcMn_c::executeWalk,
     &daNpcMn_c::executeTurn,
 };
 
@@ -410,6 +441,18 @@ void daNpcMn_c::eventMove() {
 /* 00001F74-00002194       .text privateCut__9daNpcMn_cFv */
 void daNpcMn_c::privateCut() {
     /* Nonmatching */
+    static char* cut_name_tbl[] = {
+        "MES_SET",
+        "GET_ITEM",
+        "WAIT",
+        "HATCH",
+        "BIKKURI",
+        "TURN",
+        "WALK",
+        "LOOK",
+        "JUMP",
+        "SWON",
+    };
 }
 
 /* 00002194-0000226C       .text eventMesSetInit__9daNpcMn_cFi */
