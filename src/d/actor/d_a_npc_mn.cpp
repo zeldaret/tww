@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mn.h"
+#include "d/d_a_obj.h"
 #include "d/d_com_lib_game.h"
 #include "res/Object/Mn.h"
 
@@ -320,8 +321,8 @@ BOOL daNpcMn_c::createHeap() {
 }
 
 /* 00000BE0-00000C00       .text daNpcMn_XyCheckCB__FPvi */
-static s16 daNpcMn_XyCheckCB(void*, int) {
-    /* Nonmatching */
+static s16 daNpcMn_XyCheckCB(daNpcMn_c* i_this, int i_itemBtn) {
+    return i_this->XyCheckCB(i_itemBtn);
 }
 
 /* 00000C00-00000F3C       .text createInit__9daNpcMn_cFv */
@@ -339,7 +340,7 @@ bool daNpcMn_c::_draw() {
     /* Nonmatching */
 }
 
-typedef BOOL(daNpcMn_c::*ExecuteInit_t)();
+typedef int(daNpcMn_c::*ExecuteInit_t)();
 static ExecuteInit_t l_execute_init[] = {
     &daNpcMn_c::executeWaitInit,
     &daNpcMn_c::executeTalkInit,
@@ -374,7 +375,7 @@ void daNpcMn_c::executeSetMode(unsigned char) {
 }
 
 /* 0000140C-00001518       .text executeWaitInit__9daNpcMn_cFv */
-BOOL daNpcMn_c::executeWaitInit() {
+int daNpcMn_c::executeWaitInit() {
     /* Nonmatching */
 }
 
@@ -384,8 +385,8 @@ void daNpcMn_c::executeWait() {
 }
 
 /* 000017CC-000017D4       .text executeTalkInit__9daNpcMn_cFv */
-BOOL daNpcMn_c::executeTalkInit() {
-    /* Nonmatching */
+int daNpcMn_c::executeTalkInit() {
+    return 1;
 }
 
 /* 000017D4-0000184C       .text executeTalk__9daNpcMn_cFv */
@@ -394,8 +395,9 @@ void daNpcMn_c::executeTalk() {
 }
 
 /* 0000184C-0000185C       .text executeTalk3Init__9daNpcMn_cFv */
-BOOL daNpcMn_c::executeTalk3Init() {
-    /* Nonmatching */
+int daNpcMn_c::executeTalk3Init() {
+    field_0x7C3 = 0;
+    return 4;
 }
 
 /* 0000185C-0000191C       .text executeTalk3__9daNpcMn_cFv */
@@ -404,8 +406,9 @@ void daNpcMn_c::executeTalk3() {
 }
 
 /* 0000191C-00001948       .text executeWalkInit__9daNpcMn_cFv */
-BOOL daNpcMn_c::executeWalkInit() {
-    /* Nonmatching */
+int daNpcMn_c::executeWalkInit() {
+    setAnmTbl(&l_npc_anm_walk);
+    return 2;
 }
 
 /* 00001948-00001BD4       .text executeWalk__9daNpcMn_cFv */
@@ -414,7 +417,7 @@ void daNpcMn_c::executeWalk() {
 }
 
 /* 00001BD4-00001D18       .text executeTurnInit__9daNpcMn_cFv */
-BOOL daNpcMn_c::executeTurnInit() {
+int daNpcMn_c::executeTurnInit() {
     /* Nonmatching */
 }
 
@@ -512,7 +515,7 @@ void daNpcMn_c::eventBikkuri() {
 
 /* 00002644-0000266C       .text eventTurnInit__9daNpcMn_cFv */
 void daNpcMn_c::eventTurnInit() {
-    /* Nonmatching */
+    setAnmTbl(&l_npc_anm_wait);
 }
 
 /* 0000266C-000027B4       .text eventTurn__9daNpcMn_cFi */
@@ -522,7 +525,7 @@ void daNpcMn_c::eventTurn(int) {
 
 /* 000027B4-000027DC       .text eventWalkInit__9daNpcMn_cFv */
 void daNpcMn_c::eventWalkInit() {
-    /* Nonmatching */
+    setAnmTbl(&l_npc_anm_walk);
 }
 
 /* 000027DC-0000293C       .text eventWalk__9daNpcMn_cFv */
@@ -532,12 +535,12 @@ void daNpcMn_c::eventWalk() {
 
 /* 0000293C-00002964       .text eventLookInit__9daNpcMn_cFv */
 void daNpcMn_c::eventLookInit() {
-    /* Nonmatching */
+    setAnmTbl(l_npc_anm_jump1);
 }
 
 /* 00002964-00002988       .text eventLook__9daNpcMn_cFv */
-void daNpcMn_c::eventLook() {
-    /* Nonmatching */
+bool daNpcMn_c::eventLook() {
+    return mpMorf->getFrame() >= 72.0f;
 }
 
 /* 00002988-00002A90       .text eventJumpInit__9daNpcMn_cFi */
@@ -572,17 +575,19 @@ u32 daNpcMn_c::getMsg() {
 
 /* 00002F7C-00002F8C       .text getMsg3__9daNpcMn_cFv */
 u32 daNpcMn_c::getMsg3() {
-    /* Nonmatching */
+    mpMsgNo = 0;
+    return 0x35EF;
 }
 
 /* 00002F8C-00002F90       .text chkMsg__9daNpcMn_cFv */
 void daNpcMn_c::chkMsg() {
-    /* Nonmatching */
+    return;
 }
 
 /* 00002F90-00002F98       .text setMessage__9daNpcMn_cFUl */
-void daNpcMn_c::setMessage(unsigned long) {
-    /* Nonmatching */
+void daNpcMn_c::setMessage(u32 i_message) {
+    mCurrMsgNo = i_message;
+    return;
 }
 
 /* 00002F98-0000302C       .text setAnmFromMsgTag__9daNpcMn_cFv */
@@ -596,18 +601,18 @@ bool daNpcMn_c::getPrmNpcNo() {
 }
 
 /* 0000303C-00003068       .text getPrmRailID__9daNpcMn_cFv */
-void daNpcMn_c::getPrmRailID() {
-    /* Nonmatching */
+u8 daNpcMn_c::getPrmRailID() {
+    return daObj::PrmAbstract(this, PRM_RAIL_W, PRM_RAIL_S);
 }
 
 /* 00003068-00003094       .text getPrmSwitchBit__9daNpcMn_cFv */
-void daNpcMn_c::getPrmSwitchBit() {
-    /* Nonmatching */
+u8 daNpcMn_c::getPrmSwitchBit() {
+    return daObj::PrmAbstract(this, PRM_SWITCH_W, PRM_SWITCH_S);
 }
 
 /* 00003094-000030C0       .text getPrmSwitchBit2__9daNpcMn_cFv */
-void daNpcMn_c::getPrmSwitchBit2() {
-    /* Nonmatching */
+u8 daNpcMn_c::getPrmSwitchBit2() {
+    return daObj::PrmAbstract(this, PRM_SWITCH2_W, PRM_SWITCH2_S);
 }
 
 /* 000030C0-00003148       .text setMtx__9daNpcMn_cFv */
@@ -651,8 +656,8 @@ void daNpcMn_c::setAnmTbl(sMnAnmDat*) {
 }
 
 /* 00003974-0000397C       .text XyCheckCB__9daNpcMn_cFi */
-void daNpcMn_c::XyCheckCB(int) {
-    /* Nonmatching */
+s16 daNpcMn_c::XyCheckCB(int) {
+    return false;
 }
 
 /* 0000397C-000039E0       .text getRand__9daNpcMn_cFi */
@@ -681,8 +686,8 @@ void daNpcMn_c::getPosNo() {
 }
 
 /* 00003CD8-00003CE8       .text isChangePos__9daNpcMn_cFUc */
-void daNpcMn_c::isChangePos(unsigned char) {
-    /* Nonmatching */
+u32 daNpcMn_c::isChangePos(u8 i_posNo) {
+    return i_posNo == false;
 }
 
 /* 00003CE8-00003D08       .text daNpc_MnCreate__FPv */
