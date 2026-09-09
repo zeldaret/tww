@@ -921,27 +921,8 @@ void blockenc(u8* block) {
     u32 pix_idx;
     u32 color_num;
 
-    u32 color_0_idx;
-    u32 color_1_idx;
-
     u32 r23;
     u32 r18;
-
-    u32 r0;
-    u32 g0;
-    u32 b0;
-    u32 r1;
-    u32 g1;
-    u32 b1;
-    u32 r2;
-    u32 g2;
-    u32 b2;
-    u32 r3;
-    u32 g3;
-    u32 b3;
-    u32 r4;
-    u32 g4;
-    u32 b4;
 
     u32 r21;
     u32 r20;
@@ -991,29 +972,20 @@ void blockenc(u8* block) {
                     u32 r1 = colors[r21+0] * 30;
                     u32 g1 = colors[r21+1] * 59;
                     u32 b1 = colors[r21+2] * 11;
-                    // r3 = (r0 * 5 + r1 * 3) / 8;
-                    // g3 = (g0 * 5 + g1 * 3) / 8;
-                    // b3 = (b0 * 5 + b1 * 3) / 8;
-                    // r4 = (r1 * 5 + r0 * 3) / 8;
-                    // g4 = (g1 * 5 + g0 * 3) / 8;
-                    // b4 = (b1 * 5 + b0 * 3) / 8;
                     r20 = 0; // r20
                     pix_idx = r20; // r19
                     r22 = pix_idx; // r22
                     for (; r22 < 0x10; r22++, pix_idx += 4) {
-                        // b2 = block[pix_idx + 2] * 11;
-                        // r2 = block[pix_idx + 0] * 30;
-                        // g2 = block[pix_idx + 1] * 59;
-                        u32 r3 = (r0 * 5 + r1 * 3) / 8;
-                        u32 g3 = (g0 * 5 + g1 * 3) / 8;
-                        u32 b3 = (b0 * 5 + b1 * 3) / 8;
-                        u32 r4 = (r1 * 5 + r0 * 3) / 8;
-                        u32 g4 = (g1 * 5 + g0 * 3) / 8;
-                        u32 b4 = (b1 * 5 + b0 * 3) / 8;
+                        u32 r2 = (r0 * 5 + r1 * 3) / 8;
+                        u32 g2 = (g0 * 5 + g1 * 3) / 8;
+                        u32 b2 = (b0 * 5 + b1 * 3) / 8;
+                        u32 r3 = (r1 * 5 + r0 * 3) / 8;
+                        u32 g3 = (g1 * 5 + g0 * 3) / 8;
+                        u32 b3 = (b1 * 5 + b0 * 3) / 8;
                         color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                         color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                        color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                        color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                        color_mags[2] = COLOR_SQUARE_MAG(r2, g2, b2, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                        color_mags[3] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
 
                         u32 r5 = 0;
                         u32 r6 = INT32_MAX;
@@ -1059,23 +1031,20 @@ void blockenc(u8* block) {
         u32 r1 = ((r4_ >> 8) & 0xF8) * 30;
         u32 g1 = ((r4_ >> 3) & 0xFC) * 59;
         u32 b1 = ((r4_ << 3) & 0xFC) * 11;
-        u32 r3 = (r0 * 5 + r1 * 3) / 8;
-        u32 g3 = (g0 * 5 + g1 * 3) / 8;
-        u32 b3 = (b0 * 5 + b1 * 3) / 8;
-        u32 r4 = (r1 * 5 + r0 * 3) / 8;
-        u32 g4 = (g1 * 5 + g0 * 3) / 8;
-        u32 b4 = (b1 * 5 + b0 * 3) / 8;
+        u32 r2 = (r0 * 5 + r1 * 3) / 8;
+        u32 g2 = (g0 * 5 + g1 * 3) / 8;
+        u32 b2 = (b0 * 5 + b1 * 3) / 8;
+        u32 r3 = (r1 * 5 + r0 * 3) / 8;
+        u32 g3 = (g1 * 5 + g0 * 3) / 8;
+        u32 b3 = (b1 * 5 + b0 * 3) / 8;
         r6 = 30; // r6 (bit offset within r8)
         r8 = 0; // r8 (bitfield of color indexes)
         pix_idx = r8;
         for (; pix_idx < 0x40; pix_idx += 4, r6 -= 2) {
-            // b2 = block[pix_idx + 2] * 11;
-            // r2 = block[pix_idx + 0] * 30;
-            // g2 = block[pix_idx + 1] * 59;
             color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
             color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-            color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-            color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+            color_mags[2] = COLOR_SQUARE_MAG(r2, g2, b2, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+            color_mags[3] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
 
             r24 = 0;
             r5 = r24;
@@ -1122,12 +1091,10 @@ void blockenc(u8* block) {
             r23 = 0;
             r18 = INT32_MAX;
             for (; r23 < color_num*3 - 3; r23 += 3) {
-                // u8* colors_r10 = &colors[r23];
                 u32 r0 = colors[r23+0] * 30;
                 u32 g0 = colors[r23+1] * 59;
                 u32 b0 = colors[r23+2] * 11;
                 for (r21 = r23+3; r21 < color_num*3 - 3; r21 += 3) {
-                    // u8* colors_r11 = &colors[r21];
                     u32 r1 = colors[r21+0] * 30;
                     u32 g1 = colors[r21+1] * 59;
                     u32 b1 = colors[r21+2] * 11;
@@ -1139,16 +1106,9 @@ void blockenc(u8* block) {
                     r22 = pix_idx; // r22
                     for (; r22 < 0x10; r22++, pix_idx += 4) {
                         if (block[pix_idx + 3] == 0xFF) {
-                            // b2 = block[pix_idx + 2] * 11;
-                            // r2 = block[pix_idx + 0] * 30;
-                            // g2 = block[pix_idx + 1] * 59;
                             color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                             color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                             color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                            // r4 = (r1 * 5 + r0 * 3) / 8;
-                            // g4 = (g1 * 5 + g0 * 3) / 8;
-                            // b4 = (b1 * 5 + b0 * 3) / 8;
-                            // color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
 
                             u32 r5 = 0;
                             u32 r6 = INT32_MAX;
@@ -1210,16 +1170,9 @@ void blockenc(u8* block) {
         i = r8;
         for (; i < 0x10; i++, pix_idx += 4) {
             if (block[pix_idx+3] == 0xFF) {
-                // b2 = block[pix_idx + 2] * 11;
-                // r2 = block[pix_idx + 0] * 30;
-                // g2 = block[pix_idx + 1] * 59;
                 color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                 color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                 color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                // r4 = (r1 * 5 + r0 * 3) / 8;
-                // g4 = (g1 * 5 + g0 * 3) / 8;
-                // b4 = (b1 * 5 + b0 * 3) / 8;
-                // color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
 
                 r5 = 0;
                 r24 = r5;
@@ -1457,7 +1410,7 @@ out:
 }
 
 /* 8000AAC4-8000AB1C       .text mCaptureProc__FPv */
-u32 mCaptureProc(void* dummy) {
+u32 mCaptureProc(void*) {
     u32 bytesCopied = encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
 #if VERSION == VERSION_JPN
     DCFlushRange(mCaptureTextureBuffer, mCaptureTextureSize);
