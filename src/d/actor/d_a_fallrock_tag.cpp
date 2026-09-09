@@ -5,6 +5,23 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fallrock_tag.h"
+#include "SSystem/SComponent/c_math.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_kankyo.h"
+#include "f_op/f_op_actor_mng.h"
+
+f32 daFallRockTag_c::m_div_num = 6.0f;
+
+daFallRockTag_data daFallRockTag_c::m_data = {
+    250.0f,
+    0.3f,
+    0.8f,
+    -70.0f,
+    -7.0f,
+    90,
+    90,
+    3,
+};
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */
 static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
@@ -12,8 +29,45 @@ static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
 }
 
 /* 00000080-000002A0       .text daFallRockTag_Execute__FP15daFallRockTag_c */
-static BOOL daFallRockTag_Execute(daFallRockTag_c*) {
-    /* Nonmatching */
+static BOOL daFallRockTag_Execute(daFallRockTag_c* i_this) {
+    int timer = (int)(dStage_stagInfo_GetSchSec(dComIfGp_getStage().getStagInfo()) / daFallRockTag_c::m_div_num) * 30;
+
+    u8 sch_bit = dKy_get_schbit();
+    if ((sch_bit & i_this->mSchBit) != 0) {
+        if (timer < dKy_get_schbit_timer()) {
+            timer = dKy_get_schbit_timer() - i_this->getData()->mTimerStart;
+
+            int div = 30 / i_this->getData()->mSpawnNum;
+            if (timer % div == 0) {
+                f32 range = i_this->scale.x * i_this->getData()->mPosRange;
+                Vec rock_scale;
+                Vec pos;
+                SVec angle;
+
+                pos.x = cM_rndFX(range);
+                pos.y = 0.0f;
+                f32 abs_x = fabs(pos.x);
+                pos.z = cM_rndFX(range - abs_x);
+
+                f32 scale_min = i_this->getData()->mScaleMin;
+                f32 scale = scale_min + cM_rndF(i_this->getData()->mScaleMax - scale_min);
+                rock_scale.z = scale;
+                rock_scale.y = scale;
+                rock_scale.x = scale;
+
+                angle.x = cM_rndF(32767.0f);
+                angle.y = cM_rndF(32767.0f);
+                angle.z = cM_rndF(32767.0f);
+
+                i_this->createRock((cXyz*)&pos, (cXyz*)&rock_scale, (csXyz*)&angle, i_this->current.roomNo, 0);
+                fopAcM_seStart(i_this, JA_SE_ATM_RAKUBAN, 0);
+            }
+        } else {
+            i_this->field_0x298 = 0;
+        }
+    }
+
+    return TRUE;
 }
 
 /* 000002A0-000002A8       .text daFallRockTag_IsDelete__FP15daFallRockTag_c */
@@ -22,23 +76,39 @@ static BOOL daFallRockTag_IsDelete(daFallRockTag_c*) {
 }
 
 /* 000002A8-000002EC       .text daFallRockTag_Delete__FP15daFallRockTag_c */
-static BOOL daFallRockTag_Delete(daFallRockTag_c*) {
-    /* Nonmatching */
+static BOOL daFallRockTag_Delete(daFallRockTag_c* i_this) {
+    i_this->~daFallRockTag_c();
+    return TRUE;
 }
 
 /* 000002EC-00000360       .text daFallRockTag_Create__FP10fopAc_ac_c */
-static cPhs_State daFallRockTag_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static cPhs_State daFallRockTag_Create(fopAc_ac_c* i_this) {
+    fopAcM_ct(i_this, daFallRockTag_c);
+
+    cPhs_State phase_state = cDyl_LinkASync(fpcNm_FallRock_e);
+    switch (phase_state) {
+    case cPhs_COMPLEATE_e:
+        ((daFallRockTag_c*)i_this)->mSchBit = fopAcM_GetParam(i_this);
+        fopDwTg_DrawQTo(&i_this->draw_tag);
+        phase_state = cPhs_COMPLEATE_e;
+        break;
+    }
+
+    return phase_state;
 }
 
 /* 00000360-000003D8       .text createRock__15daFallRockTag_cFP4cXyzP4cXyzP5csXyziUl */
-void daFallRockTag_c::createRock(cXyz*, cXyz*, csXyz*, int, unsigned long) {
-    /* Nonmatching */
+void daFallRockTag_c::createRock(cXyz* i_pos, cXyz* i_scale, csXyz* i_angle, int i_roomNo, unsigned long i_prm) {
+    Vec pos;
+    pos.x = current.pos.x + i_pos->x;
+    pos.y = current.pos.y + i_pos->y;
+    pos.z = current.pos.z + i_pos->z;
+    fopAcM_create(fpcNm_FallRock_e, i_prm, (cXyz*)&pos, i_roomNo, i_angle, i_scale, -1, NULL);
 }
 
 /* 000003D8-000003E4       .text getData__15daFallRockTag_cFv */
-void daFallRockTag_c::getData() {
-    /* Nonmatching */
+WEAKFUNC daFallRockTag_data* daFallRockTag_c::getData() {
+    return &m_data;
 }
 
 static actor_method_class l_daFallRockTag_Method = {
