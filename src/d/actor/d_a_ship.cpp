@@ -4067,7 +4067,7 @@ BOOL daShip_c::execute() {
         mpGrid->scale.y = spD8.abs() / 365.0f;
 
         cMtx_multVecSR(model1->getAnmMtx(FN_BODY_JNT_J_FN_SAIL2_e), &XZ_top_offset, &spD8);
-        grid->m2200 = 1.0f - (spD8.abs() / 265.0f); // No idea why this is generating an extra lwz instruction for loading mpGrid when the instructions above don't
+        grid->field_0x2200 = 1.0f - (spD8.abs() / 265.0f); // No idea why this is generating an extra lwz instruction for loading mpGrid when the instructions above don't
 
         if (mTornadoActor) {
             mpGrid->force_calc_wind_rel_angle(DEMO_SELECT(REG4_S(5), 0x3000));
