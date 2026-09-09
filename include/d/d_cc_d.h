@@ -11,6 +11,7 @@
 #include "d/d_particle_name.h"
 
 enum dCcD_ObjAtType {
+    /* 0x00000000 */ AT_TYPE_UNK0           = 0,        //AT_TYPE_NONE ?
     /* 0x00000002 */ AT_TYPE_SWORD          = (1 << 1),
     /* 0x00000008 */ AT_TYPE_UNK8           = (1 << 3),
     /* 0x00000020 */ AT_TYPE_BOMB           = (1 << 5),
