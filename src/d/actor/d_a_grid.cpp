@@ -8,6 +8,84 @@
 #include "res/Object/Cloth.h"
 #include "res/Object/Ship.h"
 
+class daHo_HIO_c : public JORReflexible {
+public:
+    daHo_HIO_c() {
+        mNo = -1;
+        field_0x5 = 1;
+        field_0x7 = 0;
+        field_0x14 = 40.0f;
+        field_0x6 = 0;
+        field_0x8 = 0;
+        field_0x18 = 0.5f;
+        field_0x1c = 0.1f;
+        field_0xc = 0.1f;
+        field_0x20 = 0.4f;
+        field_0x24 = 1.0f;
+        field_0x28 = 1.0f;
+        field_0x2c = 1.0f;
+        field_0x30 = 0xFF;
+        field_0x31 = 50;
+        field_0x34 = 900.0f;
+        field_0x38 = 0;
+        field_0x39 = 0;
+
+        field_0x70[0] = 1.0f;
+        field_0x70[1] = 0.425f;
+        field_0x70[2] = 0.45f;
+        field_0x70[3] = 0.4f;
+        field_0x70[4] = 0.2f;
+        field_0x70[5] = 0.4f;
+        field_0x70[6] = 0.45f;
+        field_0x70[7] = 0.4f;
+        field_0x70[8] = 0.2f;
+        field_0x70[9] = 0.5f;
+        field_0x70[10] = 0.75f;
+        field_0x70[11] = 1.0f;
+        field_0x70[12] = 1.0f;
+
+        field_0x3c[0] = 0.05f;
+        field_0x3c[1] = 0.125f;
+        field_0x3c[2] = 0.175f;
+        field_0x3c[3] = 0.15f;
+        field_0x3c[4] = 0.0625f;
+        field_0x3c[5] = 0.15f;
+        field_0x3c[6] = 0.2f;
+        field_0x3c[7] = 0.15f;
+        field_0x3c[8] = 0.075f;
+        field_0x3c[9] = 0.175f;
+        field_0x3c[10] = 0.175f;
+        field_0x3c[11] = 0.1f;
+        field_0x3c[12] = 0.0f;
+    }
+
+    virtual ~daHo_HIO_c() { mNo = -1; }
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
+
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 field_0x5;
+    /* 0x06 */ u8 field_0x6;
+    /* 0x07 */ u8 field_0x7;
+    /* 0x08 */ u8 field_0x8;
+    /* 0x0C */ f32 field_0xc;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1c;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2c;
+    /* 0x30 */ u8 field_0x30;
+    /* 0x31 */ u8 field_0x31;
+    /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ u8 field_0x38;
+    /* 0x39 */ u8 field_0x39;
+    /* 0x3C */ f32 field_0x3c[13];
+    /* 0x70 */ f32 field_0x70[13];
+};
+
 static daHo_HIO_c l_HIO;
 static daShip_c* l_ship;
 
@@ -156,8 +234,8 @@ void daHo_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
-    GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    GXSetArray(GX_VA_POS, mPos[field_0x18a2], sizeof(cXyz));
+    GXSetArray(GX_VA_NRM, mNrm[field_0x18a2], sizeof(cXyz));
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(cXy));
 
     GXTexObj texObj;
@@ -342,7 +420,7 @@ void ho_move(daGrid_c* i_this) {
     cXyz sp28;
     MtxPosition(&sp34, &sp28);
 
-    f32 temp_f1 = std::fabsf(sp28.z) + 0.02f;
+    f32 temp_f29 = std::fabsf(sp28.z) + 0.02f;
     sp34.x = 1.0f;
     sp34.z = 0.0f;
     MtxPosition(&sp34, &sp28);
@@ -350,8 +428,8 @@ void ho_move(daGrid_c* i_this) {
     f32 temp_f28 = std::fabsf(sp28.z);
     temp_f28 *= 1.0f - i_this->field_0x2200;
     f32 temp_f = 1.0f + (0.01f + REG6_F(15)) * (temp_f28 * cM_ssin(i_this->field_0x1b44));
-    s32 temp_r0_2 = 2500.0f + (9000.0f * (DEMO_SELECT(temp_f15, 0.8f) * windPow)) * DEMO_SELECT((1.0f + REG10_F(3)), 1);
-    i_this->field_0x1b44 += cLib_maxLimit(temp_r0_2, (s32)10000);
+    int temp_r0_2 = 2500.0f + (9000.0f * (DEMO_SELECT(temp_f15, 0.8f) * windPow)) * DEMO_SELECT((1.0f + REG10_F(3)), 1);
+    i_this->field_0x1b44 += cLib_maxLimit(temp_r0_2, 10000);
     i_this->field_0x2212 += (s16)(3000.0f * cM_scos(var_r28));
 
     s16 temp_r3_2;
@@ -397,11 +475,11 @@ void ho_move(daGrid_c* i_this) {
     for (int i = 0; i < 85; i++, pos++) {
         f32 temp_f25 = 1.0f - i_this->field_0x2200;
         f32 temp_f24 = 3 - var_r24;
-        f32 temp_f23 = var_r23 - 2 + DEMO_SELECT(REG0_F(5), 0);
+        f32 temp_f23 = var_r23 - 2 + DEMO_SELECT(REG10_S(5), 0);
         s16 sp50 = 10922.0f * x_rate_tbl[var_r23];
 
-        temp_f31 = temp_f1 * cM_ssin(i_this->field_0x1b44 + i * i_this->field_0x1b4c);
-        temp_f30 = 0.5f * (temp_f1 * cM_scos(i_this->field_0x1b44 + i * i_this->field_0x1b4e));
+        temp_f31 = temp_f29 * cM_ssin(i_this->field_0x1b44 + i * i_this->field_0x1b4c);
+        temp_f30 = 0.5f * (temp_f29 * cM_scos(i_this->field_0x1b44 + i * i_this->field_0x1b4e));
 
         MtxPosition(&sp34, &sp28);
         f32 x_value = 0.25f + 0.75f * windPow;
@@ -422,7 +500,8 @@ void ho_move(daGrid_c* i_this) {
         temp_f30 *= temp_f0_2;
 
         f32 temp_f0_3 = temp_f23 < 0.0f ? temp_f23 : 0.0f;
-        f32 temp_f1_2 = 0.67f + 0.3f * (SQUARE(temp_f0_3) / DEMO_SELECT(SQUARE(2 - REG10_S(5)), 4));
+        f32 temp_f1_4 = (SQUARE(temp_f0_3) / DEMO_SELECT(SQUARE(2 - REG10_S(5)), 4));
+        f32 temp_f1_2 = 0.67f + 0.3f * temp_f1_4;
         f32 temp_f3 = 1.0f - temp_f1_2 * i_this->field_0x2200;
         f32 z_rate;
         f32 temp_f4 = 120.0f;
@@ -452,7 +531,11 @@ void ho_move(daGrid_c* i_this) {
         f32 cos_ = cM_scos(i_this->field_0x2212 + sp50 * var_r24);
         temp_f5 *= (i_this->field_0x2200 * cos_ * var_r24) / 6.0f;
 
-        f32 temp = 1.0f - 0.5f * (SQUARE(temp_f0_3) / 4);
+#if VERSION == VERSION_DEMO
+        f32 temp = 1.0f - 0.5f * SQUARE(temp_f0_3);
+#else
+        f32 temp = 1.0f - 0.5f * (SQUARE(temp_f0_3) / 4.0f);
+#endif
         temp_f5 *= temp;
         temp_f4 *= temp;
 
@@ -460,7 +543,8 @@ void ho_move(daGrid_c* i_this) {
         f32 temp_f1_3 = 0.25f * -temp_f0_5;
         if (var_r24 > 4) {
             f32 temp = std::fabsf(cM_ssin(i_this->field_0x2212 + (sp50 * 2) * var_r24));
-            temp_f1_3 += 4.25f * ((var_r24 - 4) * temp);
+            f32 temp2 = ((var_r24 - 4) * temp);
+            temp_f1_3 += 4.25f * temp2;
         }
 
         if (l_HIO.field_0x39) {
@@ -586,15 +670,13 @@ cPhs_State daGrid_c::_create() {
     }
 
     int var_r29;
-    int i = 0;
-    Vec* pos_p = l_pos;
 
-    for (; i < 85; i++) {
+    for (int i = 0; i < 85; i++) {
         f32 var_f27;
         if (i >= 0 && i <= 6) {
             var_f27 = 10.0f * (4.0f + DEMO_SELECT(REG0_F(18), 0));
         } else if (i >= 7 && i <= 13) {
-            var_f27 = 10.0f * (7.0f + DEMO_SELECT(REG0_F(4), 0));
+            var_f27 = 10.0f * (7.0f + DEMO_SELECT(REG0_F(3), 0));
         } else if ((i >= 49 && i <= 55) || (i >= 42 && i <= 48)) {
             var_f27 = 10.0f * (8.5f + DEMO_SELECT(REG0_F(19), 0));
         } else {
@@ -603,9 +685,9 @@ cPhs_State daGrid_c::_create() {
 
         var_r29 = 6;
 
-        f32 temp_f4 = std::fabsf(pos_p[0].z - pos_p[i].z);
-        f32 temp_f2 = std::fabsf(pos_p[var_r29].z - pos_p[i].z);
-        f32 temp_f0 = std::fabsf(pos_p[0].z - pos_p[var_r29].z);
+        f32 temp_f4 = std::fabsf(l_pos[0].z - l_pos[i].z);
+        f32 temp_f2 = std::fabsf(l_pos[var_r29].z - l_pos[i].z);
+        f32 temp_f0 = std::fabsf(l_pos[0].z - l_pos[var_r29].z);
         temp_f0 *= 0.5f;
 
         f32 temp_f1 = 1.05f * ((M_PI / 2) / temp_f0);
@@ -634,18 +716,18 @@ cPhs_State daGrid_c::_create() {
             }
         }
 
-        f32 pos_y = pos_p[i].y;
-        Vec* temp_r0 = &pos_p[var_r29];
+        f32 pos_y = l_pos[i].y;
 
         f32 temp_f26;
         f32 temp_f1_3;
         f32 temp_f1_4;
-        f32 temp_f0_2;
-        if (pos_y < temp_r0->y) {
-            temp_f0_2 = std::fabsf(pos_p[0].y - pos_y);
-            temp_f1_3 = std::fabsf(temp_r0->y - pos_y);
+        f32 temp_f0_2; // TODO: needs to be moved up to match demo, but this breaks retail?
+        f32 temp_f2_2;
+        if (pos_y < l_pos[var_r29].y) {
+            temp_f0_2 = std::fabsf(l_pos[0].y - pos_y);
+            temp_f1_3 = std::fabsf(l_pos[var_r29].y - pos_y);
 
-            f32 temp_f2_2 = std::fabsf(temp_r0->y - pos_p[0].y);
+            temp_f2_2 = std::fabsf(l_pos[var_r29].y - l_pos[0].y);
             temp_f2_2 *= 0.5f;
             temp_f1_4 = 1.05f * ((M_PI / 2) / temp_f2_2);
 
@@ -657,12 +739,13 @@ cPhs_State daGrid_c::_create() {
                 temp_f26 = 10.0f * (8.0f + DEMO_SELECT(REG0_F(15), 0));
             }
         } else {
-            temp_f0_2 = std::fabsf(temp_r0->y - pos_y);
-            temp_f1_3 = std::fabsf(pos_p[84].y - pos_y);
+            temp_f0_2 = std::fabsf(l_pos[var_r29].y - pos_y);
+            temp_f1_3 = std::fabsf(l_pos[84].y - pos_y);
 
-            f32 temp_f2_2 = std::fabsf(temp_r0->y - pos_p[84].y);
+            temp_f2_2 = std::fabsf(l_pos[var_r29].y - l_pos[84].y);
             temp_f2_2 *= 0.5f;
             temp_f1_4 = 1.15f * ((M_PI / 2) / temp_f2_2);
+
             temp_f26 = 10.0f * (2.0f + DEMO_SELECT(REG0_F(17), 0));
         }
 
@@ -687,8 +770,8 @@ cPhs_State daGrid_c::_create() {
 
 /* 800EAEAC-800EAF28       .text _delete__8daGrid_cFv */
 bool daGrid_c::_delete() {
-    dComIfG_resDelete(&mClothPhase, "Cloth");
-    dComIfG_resDelete(&mShipPhase, "Ship");
+    dComIfG_resDeleteDemo(&mClothPhase, "Cloth");
+    dComIfG_resDeleteDemo(&mShipPhase, "Ship");
 
     if (l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);

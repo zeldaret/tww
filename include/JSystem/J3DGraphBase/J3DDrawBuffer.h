@@ -48,32 +48,31 @@ public:
     void drawTail() const;
     void setCallBackPacket(J3DCallBackPacket* pPacket);
 
-    J3DPacket* getEntryPacket(u16 i) { return mpBuf[i]; }
-    u32 getEntryTableSize() { return mBufSize; } // Unused in TWW, but exists in TP
-    void setNonSort() { mSortType = (u32)SORT_NON; }
-    void setZSort() { mSortType = (u32)SORT_Z; }
-    void setInvalidSort() { mSortType = (u32)SORT_INVALID; }
+    J3DPacket* getEntryPacket(u16 i) { return mpBuffer[i]; }
+    u32 getEntryTableSize() { return mEntryTableSize; } // Unused in TWW, but exists in TP
+    int getSortMode() { return mSortMode; }
+    void setNonSort() { mSortMode = SORT_NON; }
+    void setZSort() { mSortMode = SORT_Z; }
+    void setInvalidSort() { mSortMode = SORT_INVALID; }
     void setZMtx(MtxP mtx) { mpZMtx = mtx; }
     void calcZRatio() {
-        mZRatio = (mZFar - mZNear) / (f32)mBufSize;
+        mZRatio = (mZFar - mZNear) / (f32)mEntryTableSize;
     }
 
-    void getSortMode() {}
+    static sortFunc sortFuncTable[6];
+    static drawFunc drawFuncTable[2];
+    static int entryNum;
 
-public:
-    /* 0x00 */ J3DPacket** mpBuf;
-    /* 0x04 */ u32 mBufSize;
-    /* 0x08 */ u32 mDrawType;
-    /* 0x0C */ u32 mSortType;
+private:
+    /* 0x00 */ J3DPacket** mpBuffer;
+    /* 0x04 */ u32 mEntryTableSize;
+    /* 0x08 */ u32 mDrawMode;
+    /* 0x0C */ u32 mSortMode;
     /* 0x10 */ f32 mZNear;
     /* 0x14 */ f32 mZFar;
     /* 0x18 */ f32 mZRatio;
     /* 0x1C */ MtxP mpZMtx;
     /* 0x20 */ J3DPacket* mpCallBackPacket;
-
-    static sortFunc sortFuncTable[6];
-    static drawFunc drawFuncTable[2];
-    static int entryNum;
 };
 
 #endif /* J3DDRAWBUFFER_H */
