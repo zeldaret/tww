@@ -8,6 +8,7 @@
 #include "d/d_a_obj.h"
 #include "d/d_com_lib_game.h"
 #include "res/Object/Mn.h"
+#include "SSystem/SComponent/c_phase.h"
 
 static char* l_npc_staff_id[] = {
     "Mn"
@@ -295,13 +296,47 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000718-0000085C       .text phase_1__FP9daNpcMn_c */
-cPhs__Handler phase_1(daNpcMn_c*) {
-    /* Nonmatching */
+static cPhs_State phase_1(daNpcMn_c* i_this) {
+    fopAcM_ct(i_this, daNpcMn_c);
+
+    switch (i_this->field_0x7C1) {
+        case 0:
+            dComIfGs_setEventReg(dSv_event_flag_c::UNK_870F, 0);
+            if (fopAcM_isSwitch(i_this, i_this->getPrmSwitchBit())) {
+                return cPhs_STOP_e;
+            }
+            break;
+        default:
+            u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_870F);
+            if (i_this->isChangePos(eventReg)) {
+                if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A01)) {
+                    eventReg = i_this->getPosNo();
+                } else {
+                    eventReg = 1;
+                }
+                dComIfGs_setEventReg(dSv_event_flag_c::UNK_870F, eventReg);
+            }
+            if (eventReg != i_this->field_0x7C1) {
+                return cPhs_STOP_e;
+            }
+    }
+    i_this->setResFlag(1);
+    return cPhs_NEXT_e;
 }
 
 /* 0000085C-000008D4       .text phase_2__FP9daNpcMn_c */
-cPhs__Handler phase_2(daNpcMn_c*) {
-    /* Nonmatching */
+static cPhs_State phase_2(daNpcMn_c* i_this) {
+    cPhs_State state = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[0]);
+
+    if(state == cPhs_COMPLEATE_e) {
+        if(fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0)){
+            state = i_this->createInit();
+        } else {
+            i_this->mpMorf = NULL;
+            return cPhs_ERROR_e;
+        }
+    }
+    return state;
 }
 
 /* 000008D4-00000904       .text _create__9daNpcMn_cFv */
@@ -326,7 +361,7 @@ static s16 daNpcMn_XyCheckCB(daNpcMn_c* i_this, int i_itemBtn) {
 }
 
 /* 00000C00-00000F3C       .text createInit__9daNpcMn_cFv */
-void daNpcMn_c::createInit() {
+cPhs_State daNpcMn_c::createInit() {
     /* Nonmatching */
 }
 
@@ -722,12 +757,12 @@ u8 daNpcMn_c::chkPosNo() {
 }
 
 /* 00003B38-00003CD8       .text getPosNo__9daNpcMn_cFv */
-void daNpcMn_c::getPosNo() {
+u8 daNpcMn_c::getPosNo() {
     /* Nonmatching */
 }
 
 /* 00003CD8-00003CE8       .text isChangePos__9daNpcMn_cFUc */
-u32 daNpcMn_c::isChangePos(u8 i_posNo) {
+BOOL daNpcMn_c::isChangePos(u8 i_posNo) {
     return i_posNo == false;
 }
 

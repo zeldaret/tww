@@ -66,7 +66,7 @@ public:
     daNpcMn_c();
     cPhs_State _create();
     BOOL createHeap();
-    void createInit();
+    cPhs_State createInit();
     bool _delete();
     bool _draw();
     bool _execute();
@@ -130,8 +130,8 @@ public:
     void setCollision(dCcD_Cyl*, cXyz, f32, f32);
     void chkEndEvent();
     u8 chkPosNo();
-    void getPosNo();
-    u32 isChangePos(u8);
+    u8 getPosNo();
+    BOOL isChangePos(u8);
 
 public:
     /* 0x6C4 */ u8 field_0x6C4[0x60];
