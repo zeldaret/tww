@@ -915,31 +915,14 @@ void blockenc(u8* block) {
     /* Nonmatching */
     u8 colors[16*3]; // sp18
     u32 color_mags[4]; // sp08
+
+    u32 i;
+    u32 r9;
     u32 pix_idx;
     u32 color_num;
-    u32 i;
-
-    u32 color_0_idx;
-    u32 color_1_idx;
 
     u32 r23;
     u32 r18;
-
-    u32 r0;
-    u32 g0;
-    u32 b0;
-    u32 r1;
-    u32 g1;
-    u32 b1;
-    u32 r2;
-    u32 g2;
-    u32 b2;
-    u32 r3;
-    u32 g3;
-    u32 b3;
-    u32 r4;
-    u32 g4;
-    u32 b4;
 
     u32 r21;
     u32 r20;
@@ -961,63 +944,52 @@ void blockenc(u8* block) {
         i = 0; // r8
         pix_idx = 0; // r10
         for (; i < 0x30; i += 3, pix_idx += 4) {
-            u32 r9 = 0; // r9
-            u8* pix = &block[pix_idx];
+            r9 = 0; // r9
             for (int j = 0; j < color_num; j++) {
-                u8* temp = &colors[r9*3];
-                if (temp[0] == pix[0] && temp[1] == pix[1] && temp[2] == pix[2]) {
+                if (colors[r9*3+0] == block[pix_idx+0] && colors[r9*3+1] == block[pix_idx+1] && colors[r9*3+2] == block[pix_idx+2]) {
                     break;
                 }
                 r9++;
             }
             if (r9 == color_num) {
-                colors[r9*3 + 0] = pix[0];
-                colors[r9*3 + 1] = pix[1];
-                colors[r9*3 + 2] = pix[2];
+                colors[r9*3 + 0] = block[pix_idx+0];
+                colors[r9*3 + 1] = block[pix_idx+1];
+                colors[r9*3 + 2] = block[pix_idx+2];
                 color_num += 1;
             }
         }
 
-        color_0_idx = 0; // r17
-        color_1_idx = 0; // r16
+        u32 color_0_idx = 0; // r17
+        u32 color_1_idx = 0; // r16
         if (color_num > 1) {
             r23 = 0;
             r18 = INT32_MAX;
             for (; r23 < color_num*3 - 3; r23 += 3) {
-                r0 = colors[r23+0] * 30;
-                g0 = colors[r23+1] * 59;
-                b0 = colors[r23+2] * 11;
-                for (r21 = r23+3; r21 < color_num*3 - 3; r21 += 3) {
-                    r1 = colors[r21+0] * 30;
-                    g1 = colors[r21+1] * 59;
-                    b1 = colors[r21+2] * 11;
-                    // r3 = (r0 * 5 + r1 * 3) / 8;
-                    // g3 = (g0 * 5 + g1 * 3) / 8;
-                    // b3 = (b0 * 5 + b1 * 3) / 8;
-                    // r4 = (r1 * 5 + r0 * 3) / 8;
-                    // g4 = (g1 * 5 + g0 * 3) / 8;
-                    // b4 = (b1 * 5 + b0 * 3) / 8;
+                u32 r0 = colors[r23+0] * 30;
+                u32 g0 = colors[r23+1] * 59;
+                u32 b0 = colors[r23+2] * 11;
+                for (r21 = r23+3; r21 < color_num*3; r21 += 3) {
+                    u32 r1 = colors[r21+0] * 30;
+                    u32 g1 = colors[r21+1] * 59;
+                    u32 b1 = colors[r21+2] * 11;
                     r20 = 0; // r20
                     pix_idx = r20; // r19
                     r22 = pix_idx; // r22
                     for (; r22 < 0x10; r22++, pix_idx += 4) {
-                        // b2 = block[pix_idx + 2] * 11;
-                        // r2 = block[pix_idx + 0] * 30;
-                        // g2 = block[pix_idx + 1] * 59;
+                        u32 r2 = (r0 * 5 + r1 * 3) / 8;
+                        u32 g2 = (g0 * 5 + g1 * 3) / 8;
+                        u32 b2 = (b0 * 5 + b1 * 3) / 8;
+                        u32 r3 = (r1 * 5 + r0 * 3) / 8;
+                        u32 g3 = (g1 * 5 + g0 * 3) / 8;
+                        u32 b3 = (b1 * 5 + b0 * 3) / 8;
                         color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                         color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                        r3 = (r0 * 5 + r1 * 3) / 8;
-                        g3 = (g0 * 5 + g1 * 3) / 8;
-                        b3 = (b0 * 5 + b1 * 3) / 8;
-                        color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                        r4 = (r1 * 5 + r0 * 3) / 8;
-                        g4 = (g1 * 5 + g0 * 3) / 8;
-                        b4 = (b1 * 5 + b0 * 3) / 8;
-                        color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                        color_mags[2] = COLOR_SQUARE_MAG(r2, g2, b2, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                        color_mags[3] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
 
                         u32 r5 = 0;
                         u32 r6 = INT32_MAX;
-                        for (; r5 < ARRAY_SIZE(color_mags); r5++) {
+                        for (; r5 < 4; r5++) {
                             if (color_mags[r5] < r6) {
                                 r6 = color_mags[r5];
                             }
@@ -1053,35 +1025,31 @@ void blockenc(u8* block) {
         block[0x42] = r4_ >> 8;
         block[0x43] = r4_ & 0xFF;
 
-        r0 = ((r11 >> 8) & 0xF8) * 30;
-        g0 = ((r11 >> 3) & 0xFC) * 59;
-        b0 = ((r11 << 3) & 0xFC) * 11;
-        r1 = ((r4_ >> 8) & 0xF8) * 30;
-        g1 = ((r4_ >> 3) & 0xFC) * 59;
-        b1 = ((r4_ << 3) & 0xFC) * 11;
-        r3 = (r0 * 5 + r1 * 3) / 8;
-        g3 = (g0 * 5 + g1 * 3) / 8;
-        b3 = (b0 * 5 + b1 * 3) / 8;
-        r4 = (r1 * 5 + r0 * 3) / 8;
-        g4 = (g1 * 5 + g0 * 3) / 8;
-        b4 = (b1 * 5 + b0 * 3) / 8;
+        u32 r0 = ((r11 >> 8) & 0xF8) * 30;
+        u32 g0 = ((r11 >> 3) & 0xFC) * 59;
+        u32 b0 = ((r11 << 3) & 0xFC) * 11;
+        u32 r1 = ((r4_ >> 8) & 0xF8) * 30;
+        u32 g1 = ((r4_ >> 3) & 0xFC) * 59;
+        u32 b1 = ((r4_ << 3) & 0xFC) * 11;
+        u32 r2 = (r0 * 5 + r1 * 3) / 8;
+        u32 g2 = (g0 * 5 + g1 * 3) / 8;
+        u32 b2 = (b0 * 5 + b1 * 3) / 8;
+        u32 r3 = (r1 * 5 + r0 * 3) / 8;
+        u32 g3 = (g1 * 5 + g0 * 3) / 8;
+        u32 b3 = (b1 * 5 + b0 * 3) / 8;
         r6 = 30; // r6 (bit offset within r8)
         r8 = 0; // r8 (bitfield of color indexes)
         pix_idx = r8;
         for (; pix_idx < 0x40; pix_idx += 4, r6 -= 2) {
-            // b2 = block[pix_idx + 2] * 11;
-            // r2 = block[pix_idx + 0] * 30;
-            // g2 = block[pix_idx + 1] * 59;
             color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
             color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-            color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-            color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+            color_mags[2] = COLOR_SQUARE_MAG(r2, g2, b2, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+            color_mags[3] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
 
             r24 = 0;
-            r5 = 0;
+            r5 = r24;
             r25 = INT32_MAX;
-            u32 n = ARRAY_SIZE(color_mags) - r5;
-            for (; r5 < n; r5++) {
+            for (; r5 < 4; r5++) {
                 if (color_mags[r5] < r25) {
                     r25 = color_mags[r5];
                     r24 = r5;
@@ -1095,20 +1063,18 @@ void blockenc(u8* block) {
         color_num = pix_idx; // r11
         i = color_num; // r8
         for (; i < 0x30; i += 3, pix_idx += 4) {
-            u8* pix = &block[pix_idx];
-            if (pix[3] == 0xFF) {
-                u32 r9 = 0; // r9
+            if (block[pix_idx+3] == 0xFF) {
+                r9 = 0; // r9
                 for (int j = 0; j < color_num; j++) {
-                    u8* temp = &colors[r9*3];
-                    if (temp[0] == pix[0] && temp[1] == pix[1] && temp[2] == pix[2]) {
+                    if (colors[r9*3+0] == block[pix_idx+0] && colors[r9*3+1] == block[pix_idx+1] && colors[r9*3+2] == block[pix_idx+2]) {
                         break;
                     }
                     r9++;
                 }
                 if (r9 == color_num) {
-                    colors[r9*3 + 0] = pix[0];
-                    colors[r9*3 + 1] = pix[1];
-                    colors[r9*3 + 2] = pix[2];
+                    colors[r9*3 + 0] = block[pix_idx+0];
+                    colors[r9*3 + 1] = block[pix_idx+1];
+                    colors[r9*3 + 2] = block[pix_idx+2];
                     color_num += 1;
                 }
             }
@@ -1119,43 +1085,34 @@ void blockenc(u8* block) {
               (colors[2] & 0xF8) >> 3;
         r11 = r4_;
 
-        color_0_idx = 0; // r17
-        color_1_idx = 0; // r16
+        // color_0_idx = 0; // r17
+        // color_1_idx = 0; // r16
         if (color_num > 1) {
             r23 = 0;
             r18 = INT32_MAX;
             for (; r23 < color_num*3 - 3; r23 += 3) {
-                u8* colors_r10 = &colors[r23];
-                r0 = colors_r10[0] * 30;
-                g0 = colors_r10[1] * 59;
-                b0 = colors_r10[2] * 11;
+                u32 r0 = colors[r23+0] * 30;
+                u32 g0 = colors[r23+1] * 59;
+                u32 b0 = colors[r23+2] * 11;
                 for (r21 = r23+3; r21 < color_num*3 - 3; r21 += 3) {
-                    u8* colors_r11 = &colors[r21];
-                    r1 = colors_r11[0] * 30;
-                    g1 = colors_r11[1] * 59;
-                    b1 = colors_r11[2] * 11;
-                    r3 = (r0 + r1) / 2;
-                    g3 = (g0 + g1) / 2;
-                    b3 = (b0 + b1) / 2;
+                    u32 r1 = colors[r21+0] * 30;
+                    u32 g1 = colors[r21+1] * 59;
+                    u32 b1 = colors[r21+2] * 11;
+                    u32 r3 = (r0 + r1) / 2;
+                    u32 g3 = (g0 + g1) / 2;
+                    u32 b3 = (b0 + b1) / 2;
                     r20 = 0; // r20
                     pix_idx = r20; // r19
                     r22 = pix_idx; // r22
                     for (; r22 < 0x10; r22++, pix_idx += 4) {
                         if (block[pix_idx + 3] == 0xFF) {
-                            // b2 = block[pix_idx + 2] * 11;
-                            // r2 = block[pix_idx + 0] * 30;
-                            // g2 = block[pix_idx + 1] * 59;
                             color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                             color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                             color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                            // r4 = (r1 * 5 + r0 * 3) / 8;
-                            // g4 = (g1 * 5 + g0 * 3) / 8;
-                            // b4 = (b1 * 5 + b0 * 3) / 8;
-                            // color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
 
                             u32 r5 = 0;
                             u32 r6 = INT32_MAX;
-                            for (; r5 < ARRAY_SIZE(color_mags); r5++) {
+                            for (; r5 < 3; r5++) {
                                 if (color_mags[r5] < r6) {
                                     r6 = color_mags[r5];
                                 }
@@ -1169,12 +1126,12 @@ void blockenc(u8* block) {
                         r18 = r20;
                         // color_0_idx = r23;
                         // color_1_idx = r21;
-                        r11 = (colors_r10[0] & 0xF8) << 8 |
-                              (colors_r10[1] & 0xFC) << 3 |
-                              (colors_r10[2] & 0xF8) >> 3;
-                        r4_ = (colors_r11[0] & 0xF8) << 8 |
-                              (colors_r11[1] & 0xFC) << 3 |
-                              (colors_r11[2] & 0xF8) >> 3;
+                        r11 = (colors[r23+0] & 0xF8) << 8 |
+                              (colors[r23+1] & 0xFC) << 3 |
+                              (colors[r23+2] & 0xF8) >> 3;
+                        r4_ = (colors[r21+0] & 0xF8) << 8 |
+                              (colors[r21+1] & 0xFC) << 3 |
+                              (colors[r21+2] & 0xF8) >> 3;
                     }
                 }
             }
@@ -1185,50 +1142,42 @@ void blockenc(u8* block) {
             r11 = r4_;
             r4_ = temp;
         } else if (r11 == r4_) {
-            r4_ = 0;
+            r11 = 0;
         }
         block[0x40] = r11 >> 8;
         block[0x41] = r11 & 0xFF;
         block[0x42] = r4_ >> 8;
         block[0x43] = r4_ & 0xFF;
 
-        r0 = (r11 >> 8) & 0xF8;
-        g0 = (r11 >> 3) & 0xFC;
-        b0 = (r11 << 3) & 0xFC;
-        r1 = (r4_ >> 8) & 0xF8;
-        g1 = (r4_ >> 3) & 0xFC;
-        b1 = (r4_ << 3) & 0xFC;
+        u32 r0 = (r11 >> 8) & 0xF8;
+        u32 g0 = (r11 >> 3) & 0xFC;
+        u32 b0 = (r11 << 3) & 0xFC;
+        u32 r1 = (r4_ >> 8) & 0xF8;
+        u32 g1 = (r4_ >> 3) & 0xFC;
+        u32 b1 = (r4_ << 3) & 0xFC;
         r0 *= 30;
         g0 *= 59;
         b0 *= 11;
         r1 *= 30;
         g1 *= 59;
         b1 *= 11;
-        r3 = (r0 + r1) / 2;
-        g3 = (g0 + g1) / 2;
-        b3 = (b0 + b1) / 2;
+        u32 r3 = (r0 + r1) / 2;
+        u32 g3 = (g0 + g1) / 2;
+        u32 b3 = (b0 + b1) / 2;
         // r6 = 30; // r6 (bit offset within r8)
         r8 = 0; // r8 (bitfield of color indexes)
+        pix_idx = r8;
         i = r8;
-        pix_idx = i;
         for (; i < 0x10; i++, pix_idx += 4) {
             if (block[pix_idx+3] == 0xFF) {
-                // b2 = block[pix_idx + 2] * 11;
-                // r2 = block[pix_idx + 0] * 30;
-                // g2 = block[pix_idx + 1] * 59;
                 color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                 color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
                 color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                // r4 = (r1 * 5 + r0 * 3) / 8;
-                // g4 = (g1 * 5 + g0 * 3) / 8;
-                // b4 = (b1 * 5 + b0 * 3) / 8;
-                // color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
 
                 r5 = 0;
-                r24 = 0;
+                r24 = r5;
                 r25 = INT32_MAX;
-                u32 n = 3 - r24;
-                for (; r24 < n; r24++) {
+                for (; r24 < 3; r24++) {
                     if (color_mags[r24] < r25) {
                         r25 = color_mags[r24];
                         r5 = r24;
@@ -1254,35 +1203,31 @@ u32 encode_s3tc(u8* r25, u8* r26, int r27, int r28, GXTexFmt fmt) {
     // params: capture_buffer, texture_buffer, width, height, fmt
     u8 block[0x40 + 0x8]; // sp08;
     u32 r31 = 0;
+    u32 r5_r8_r4;
+    int r3_r9_r5;
     if (fmt == GX_TF_I8) {
         u32 i8low = 255; // r30
         u32 i8high = 0; // r29
         for (int r18 = 0; r18 < r28; r18 += 8) {
-            for (int r19 = 0, r24 = 0; r19 < r27; r19 += 8, r24 += 0x20) {
+            for (int r19 = 0; r19 < r27; r19 += 8) {
                 for (int r20 = 0; r20 < 8; r20 += 4) {
-                    int r21 = 0;
-                    u32 r23 = r24 + r27 * (r18 + r20);
-                    for (; r21 < 8; r21 += 4) {
-                        u32 r5 = 0;
-                        int r3 = 0;
-                        for (; r3 < 4; r3++) {
-                            u32 r10 = r21 + r23;
-                            u32 r9 = 219;
-                            u32 r8 = 255; // r8 (alpha)
-                            for (int i = 0; i < 4; r5++, i++) {
-                                u32 r4 = r3*8 + r10;
-                                u32 r11 = r25[r4 + i];
+                    for (int r21 = 0; r21 < 8; r21 += 4) {
+                        r5_r8_r4 = 0;
+                        for (r3_r9_r5 = 0; r3_r9_r5 < 4; r3_r9_r5++) {
+                            u32 r4 = (r19 * 4) + r27 * (r18 + r20) + r21 + r3_r9_r5*8;
+                            for (int i = 0; i < 4; r5_r8_r4 += 4, i++, r4++) {
+                                u32 r11 = r25[r4];
                                 if (i8low > r11) {
                                     i8low = r11;
                                 }
                                 if (i8high < r11) {
                                     i8high = r11;
                                 }
-                                u32 r0 = ((r11 - 16) * 255) / r9;
-                                block[r5*4+0] = r0 & 0xF8;
-                                block[r5*4+1] = r0 & 0xFC;
-                                block[r5*4+2] = r0 & 0xF8;
-                                block[r5*4+3] = r8;
+                                u32 r0 = ((r11 - 16) * 255) / 219;
+                                block[r5_r8_r4+0] = r0 & 0xF8;
+                                block[r5_r8_r4+1] = r0 & 0xFC;
+                                block[r5_r8_r4+2] = r0 & 0xF8;
+                                block[r5_r8_r4+3] = 255; // r8 (alpha)
                             }
                         }
                         blockenc(block);
@@ -1297,22 +1242,16 @@ u32 encode_s3tc(u8* r25, u8* r26, int r27, int r28, GXTexFmt fmt) {
         for (int r24 = 0; r24 < r28; r24 += 8) {
             for (int r29 = 0; r29 < r27; r29 += 8) {
                 for (int r30 = 0; r30 < 8; r30 += 4) {
-                    int r21 = 0;
-                    u32 r22 = 2 * (r27 * (r24 + r30));
-                    for (; r21 < 8; r21 += 4) {
-                        u32 r8 = 0;
-                        int r9 = 0;
-                        // u32 r3 = 0;
-                        u32 r6 = r22 + 8 * (r29 + r21);
-                        u32 r5 = 255; // r5 (alpha)
-                        for (; r9 < 4; r9++) {//, r3 += 8) {
-                            u32 r10 = r9*8 + r6;
-                            for (int i = 0; i < 4; i++, r8++, r10 += 2) {
+                    for (int r21 = 0; r21 < 8; r21 += 4) {
+                        r5_r8_r4 = 0;
+                        for (r3_r9_r5 = 0; r3_r9_r5 < 4; r3_r9_r5++) {
+                            u32 r10 = ((r27 * (r24 + r30))*2) + (r29 + r21)*8 + r3_r9_r5*8;
+                            for (int i = 0; i < 4; i++, r5_r8_r4 += 4, r10 += 2) {
                                 u32 r11 = *(u16*)(&r25[r10]);
-                                block[r8*4+0] = (r11 >> 8) & 0xF8;
-                                block[r8*4+1] = (r11 >> 3) & 0xFC;
-                                block[r8*4+2] = (r11 << 3) & 0xF8;
-                                block[r8*4+3] = r5;
+                                block[r5_r8_r4+0] = (r11 >> 8) & 0xF8;
+                                block[r5_r8_r4+1] = (r11 >> 3) & 0xFC;
+                                block[r5_r8_r4+2] = (r11 << 3) & 0xF8;
+                                block[r5_r8_r4+3] = 255; // r5 (alpha)
                             }
                         }
                         blockenc(block);
@@ -1326,23 +1265,17 @@ u32 encode_s3tc(u8* r25, u8* r26, int r27, int r28, GXTexFmt fmt) {
         for (int r24 = 0; r24 < r28; r24 += 8) {
             for (int r29 = 0; r29 < r27; r29 += 8) {
                 for (int r30 = 0; r30 < 8; r30 += 4) {
-                    int r21 = 0;
-                    u32 r22 = 4 * (r27 * (r24 + r30));
-                    for (; r21 < 8; r21 += 4) {
-                        u32 r4 = 0;
-                        for (int r5 = 0; r5 < 4; r5++) {
-                            u32 r10 = r22 + 16 * (r29 + r21);
-                            u32 r6 = r5 * 8 + r10;
+                    for (int r21 = 0; r21 < 8; r21 += 4) {
+                        r5_r8_r4 = 0;
+                        for (r3_r9_r5 = 0; r3_r9_r5 < 4; r3_r9_r5++) {
+                            u32 r6 = 16 * (r29 + r21) + (4 * (r27 * (r24 + r30))) + r3_r9_r5 * 8;
                             u32 r7 = r6 + 0x20;
-                            u32 r9 = 255; // r9 (alpha)
-                            for (int i = 0; i < 4; i++, r4++, r6 += 2, r7 += 2) {
-                                u8* r3 = &r25[r6];
-                                block[r4*4+0] = r3[1] & 0xF8;
-                                u8* r12 = &r25[r7];
-                                block[r4*4+1] = r12[0] & 0xFC;
-                                block[r4*4+2] = r12[1] & 0xF8;
-                                block[r4*4+3] = r3[0];
-                                block[r4*4+3] = r9;
+                            for (int i = 0; i < 4; i++, r5_r8_r4 += 4, r6 += 2, r7 += 2) {
+                                block[r5_r8_r4+0] = r25[r6+1] & 0xF8;
+                                block[r5_r8_r4+1] = r25[r7+0] & 0xFC;
+                                block[r5_r8_r4+2] = r25[r7+1] & 0xF8;
+                                block[r5_r8_r4+3] = r25[r6+0];
+                                block[r5_r8_r4+3] = 255; // r9 (alpha)
                             }
                         }
                         blockenc(block);
@@ -1477,7 +1410,7 @@ out:
 }
 
 /* 8000AAC4-8000AB1C       .text mCaptureProc__FPv */
-u32 mCaptureProc(void* dummy) {
+u32 mCaptureProc(void*) {
     u32 bytesCopied = encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
 #if VERSION == VERSION_JPN
     DCFlushRange(mCaptureTextureBuffer, mCaptureTextureSize);
