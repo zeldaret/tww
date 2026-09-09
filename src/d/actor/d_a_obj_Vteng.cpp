@@ -13,8 +13,35 @@
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
 
+#if VERSION == VERSION_DEMO
+#include "SSystem/SComponent/c_phase.h"
+#include "m_Do/m_Do_hostIO.h"
+
+class daObjVteng_HIO_c : public JORReflexible {
+public:
+    daObjVteng_HIO_c();
+    virtual ~daObjVteng_HIO_c() {}
+    void genMessage(JORMContext*) {}
+
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 m05;
+};
+
+static daObjVteng_HIO_c l_HIO;
+
+daObjVteng_HIO_c::daObjVteng_HIO_c() {
+    mNo = -1;
+    m05 = 0;
+}
+#endif
+
 namespace {
     static const char l_arcname[] = "Vteng";
+#if VERSION == VERSION_DEMO
+    static const f32 l_setAnmStartFrame = 1.0f;
+    static const f32 l_setAnmPlaySpeed = 0.0f;
+    static const f32 l_setAnmEndFrame = -1.0f;
+#endif
 };
 
 /* 00000078-00000120       .text init_mtx__12daObjVteng_cFv */
@@ -40,14 +67,14 @@ bool daObjVteng_c::create_heap() {
     J3DAnmTransform * pAnm = (J3DAnmTransform *)dComIfG_getObjectRes(l_arcname, dRes_INDEX_VTENG_BCK_VTENG_e);
 
     if (!pModelData || !pAnm) {
-        JUT_ASSERT(0xb7, FALSE);
+        JUT_ASSERT(DEMO_SELECT(0xb3, 0xb7), FALSE);
         ret = false;
     } else {
         mpMorf = new mDoExt_McaMorf(
             pModelData,
             NULL, NULL,
             pAnm,
-            J3DFrameCtrl::EMode_NONE, 1.0f, 0x3B, -1, 0,
+            J3DFrameCtrl::EMode_NONE, DEMO_SELECT(l_setAnmStartFrame, 1.0f), 0x3B, -1, 0,
             NULL,
             0x00000000,
             0x11020203
@@ -98,6 +125,12 @@ cPhs_State daObjVteng_c::_create() {
         }
     }
 
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("\x83\x4b\x83\x6d\x83\x93\x8f\xe9\x82\xcc\x93\x56\x8a\x57", &l_HIO);
+    }
+#endif
+
     return ret;
 }
 
@@ -105,23 +138,61 @@ cPhs_State daObjVteng_c::_create() {
 bool daObjVteng_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname);
 
-    if (heap != NULL && mpBgW != NULL) {
+#if VERSION == VERSION_DEMO
+    if (mpBgW != NULL)
+#else
+    if (heap != NULL && mpBgW != NULL)
+#endif
+    {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
         }
 
+#if VERSION > VERSION_DEMO
         mpBgW = NULL;
+#endif
     }
+
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+#endif
 
     return true;
 }
 
 /* 00000488-00000510       .text _execute__12daObjVteng_cFv */
 bool daObjVteng_c::_execute() {
+#if VERSION == VERSION_DEMO
+    if (mpBgW != NULL && mpBgW->ChkUsed())
+        mpBgW->Move();
+
+    if (!jokai_demo()) {
+        if (l_HIO.m05 == 1) {
+            l_HIO.m05 = 0;
+            J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes(
+                l_arcname, dRes_INDEX_VTENG_BCK_VTENG_e);
+            mDoExt_McaMorf* morf = mpMorf;
+            morf->setAnm(
+                anm, 0,
+                l_setAnmPlaySpeed,
+                l_setAnmStartFrame,
+                morf->getFrame(),
+                l_setAnmEndFrame,
+                NULL);
+        }
+        mpMorf->play(NULL, 0, 0);
+    }
+    
+#else
     if (mpBgW != NULL && mpBgW->ChkUsed())
         mpBgW->Move();
     if (!jokai_demo())
         mpMorf->play(NULL, 0, 0);
+#endif
+
     return true;
 }
 
