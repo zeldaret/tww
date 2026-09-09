@@ -35,8 +35,8 @@ namespace daObjMagmarock {
         void vanish_proc();
         void CreateHeap();
         void CreateInit();
-        void LiftUpRequest(cXyz&);
-        void BeforeLiftRequest(cXyz&);
+        virtual void LiftUpRequest(cXyz&);
+        virtual void BeforeLiftRequest(cXyz&);
         void calc_ground_quat();
     
     public:
