@@ -24,7 +24,7 @@ static f64 dummyDouble() {
 
 /* 800E8CC0-800E8D48       .text setBackNrm__13daHo_packet_cFv */
 void daHo_packet_c::setBackNrm() {
-    cXyz* nrm_p = getNrm();
+    cXyz* nrm_p = mNrm[field_0x18a2];
     cXyz* backNrm_p = mBackNrm[field_0x18a2];
 
     for (int i = 0; i < 85; i++) {
@@ -301,6 +301,10 @@ void ho_move(daGrid_c* i_this) {
     f32 temp_f31;
     f32 temp_f30;
 
+    #if VERSION == VERSION_DEMO
+    f32 temp_f15 = 0.4f * (2.0f + 0.05f * REG10_F(1));
+    #endif
+
     cXyz* windVec = dKyw_get_wind_vec();
     f32 windPow = dKyw_get_wind_pow();
     i_this->mPacket.changeCurrentPos();
@@ -334,7 +338,7 @@ void ho_move(daGrid_c* i_this) {
     i_this->mIsForceWindRelAngle = FALSE;
 
     cMtx_YrotS(*calc_mtx, i_this->field_0x2210);
-    cXyz sp34(0.0f, 0.0f, 0.064f);
+    cXyz sp34(0.0f, 0.0f, DEMO_SELECT((temp_f15 * 0.08f) * (1.0f + REG10_F(0)), 0.064f));
     cXyz sp28;
     MtxPosition(&sp34, &sp28);
 
@@ -346,7 +350,7 @@ void ho_move(daGrid_c* i_this) {
     f32 temp_f28 = std::fabsf(sp28.z);
     temp_f28 *= 1.0f - i_this->field_0x2200;
     f32 temp_f = 1.0f + (0.01f + REG6_F(15)) * (temp_f28 * cM_ssin(i_this->field_0x1b44));
-    s32 temp_r0_2 = 2500.0f + (9000.0f * (0.8f * windPow));
+    s32 temp_r0_2 = 2500.0f + (9000.0f * (DEMO_SELECT(temp_f15, 0.8f) * windPow)) * DEMO_SELECT((1.0f + REG10_F(3)), 1);
     i_this->field_0x1b44 += cLib_maxLimit(temp_r0_2, (s32)10000);
     i_this->field_0x2212 += (s16)(3000.0f * cM_scos(var_r28));
 
@@ -360,7 +364,7 @@ void ho_move(daGrid_c* i_this) {
 
     f32 temp_f26 = 0.5f * cM_ssin(var_r28);
     sp34.x = 0.0f;
-    sp34.z = 1.6f;
+    sp34.z = DEMO_SELECT(temp_f15 * (REG0_F(14) + 2.0f), 1.6f);
 
     cXyz* pos = i_this->mPacket.getPos();
 
@@ -393,21 +397,18 @@ void ho_move(daGrid_c* i_this) {
     for (int i = 0; i < 85; i++, pos++) {
         f32 temp_f25 = 1.0f - i_this->field_0x2200;
         f32 temp_f24 = 3 - var_r24;
-        f32 temp_f23 = var_r23 - 2;
-        f32 x_rate = x_rate_tbl[var_r23];
-        s16 sp50 = 10922.0f * x_rate;
+        f32 temp_f23 = var_r23 - 2 + DEMO_SELECT(REG0_F(5), 0);
+        s16 sp50 = 10922.0f * x_rate_tbl[var_r23];
 
         temp_f31 = temp_f1 * cM_ssin(i_this->field_0x1b44 + i * i_this->field_0x1b4c);
         temp_f30 = 0.5f * (temp_f1 * cM_scos(i_this->field_0x1b44 + i * i_this->field_0x1b4e));
 
         MtxPosition(&sp34, &sp28);
-        f32 temp_sp28_x = sp28.x;
         f32 x_value = 0.25f + 0.75f * windPow;
-        sp28.x = temp_sp28_x * cLib_maxLimit(x_value, 1.0f);
+        sp28.x = sp28.x * cLib_maxLimit(x_value, 1.0f);
 
-        f32 temp_sp28_z = sp28.z;
         f32 z_value = 0.5f + 0.25f * windPow;
-        sp28.z = temp_sp28_z * cLib_maxLimit(z_value, 1.0f);
+        sp28.z = sp28.z * cLib_maxLimit(z_value, 1.0f);
 
         temp_f31 += i_this->field_0x2204 * (temp_f25 * (sp28.x * temp_f));
         temp_f30 += i_this->field_0x2204 * (temp_f25 * (sp28.z * temp_f28));
@@ -421,7 +422,7 @@ void ho_move(daGrid_c* i_this) {
         temp_f30 *= temp_f0_2;
 
         f32 temp_f0_3 = temp_f23 < 0.0f ? temp_f23 : 0.0f;
-        f32 temp_f1_2 = 0.67f + 0.3f * (SQUARE(temp_f0_3) / 4);
+        f32 temp_f1_2 = 0.67f + 0.3f * (SQUARE(temp_f0_3) / DEMO_SELECT(SQUARE(2 - REG10_S(5)), 4));
         f32 temp_f3 = 1.0f - temp_f1_2 * i_this->field_0x2200;
         f32 z_rate;
         f32 temp_f4 = 120.0f;
@@ -543,9 +544,32 @@ static cPhs_State daGrid_Create(fopAc_ac_c* i_this) {
 
 /* 800EA998-800EAEAC       .text _create__8daGrid_cFv */
 cPhs_State daGrid_c::_create() {
-    fopAcM_ct(this, daGrid_c);
+    #if VERSION == VERSION_DEMO
     field_0x1b48 = fopAcM_GetParam(this);
 
+    cPhs_State phase = dComIfG_resLoad(&mClothPhase, "Cloth");
+    cPhs_State phase2 = dComIfG_resLoad(&mShipPhase, "Ship");
+    if (phase == cPhs_ERROR_e || phase2 == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    }
+
+    if (phase != cPhs_COMPLEATE_e) {
+        return phase;
+    }
+
+    if (phase2 != cPhs_COMPLEATE_e) {
+        return phase2;
+    }
+
+    cPhs_State temp_r0 = cPhs_COMPLEATE_e;
+    if (temp_r0 == cPhs_COMPLEATE_e) {
+    #endif
+
+    fopAcM_ct(this, daGrid_c);
+
+    #if VERSION >= VERSION_JPN
+    field_0x1b48 = fopAcM_GetParam(this);
+    
     cPhs_State phase = dComIfG_resLoad(&mClothPhase, "Cloth");
     if (phase != cPhs_COMPLEATE_e) {
         return phase;
@@ -555,6 +579,7 @@ cPhs_State daGrid_c::_create() {
     if (phase != cPhs_COMPLEATE_e) {
         return phase;
     }
+    #endif
 
     if (l_HIO.mNo < 0) {
         l_HIO.mNo = mDoHIO_createChild("船の帆", &l_HIO);
@@ -567,20 +592,20 @@ cPhs_State daGrid_c::_create() {
     for (; i < 85; i++) {
         f32 var_f27;
         if (i >= 0 && i <= 6) {
-            var_f27 = 40.0f;
+            var_f27 = 10.0f * (4.0f + DEMO_SELECT(REG0_F(18), 0));
         } else if (i >= 7 && i <= 13) {
-            var_f27 = 70.0f;
+            var_f27 = 10.0f * (7.0f + DEMO_SELECT(REG0_F(4), 0));
         } else if ((i >= 49 && i <= 55) || (i >= 42 && i <= 48)) {
-            var_f27 = 85.0f;
+            var_f27 = 10.0f * (8.5f + DEMO_SELECT(REG0_F(19), 0));
         } else {
-            var_f27 = 80.0f;
+            var_f27 = 10.0f * (8.0f + DEMO_SELECT(REG0_F(13), 0));
         }
 
         var_r29 = 6;
 
         f32 temp_f4 = std::fabsf(pos_p[0].z - pos_p[i].z);
-        f32 temp_f2 = std::fabsf(pos_p[6].z - pos_p[i].z);
-        f32 temp_f0 = std::fabsf(pos_p[0].z - pos_p[6].z);
+        f32 temp_f2 = std::fabsf(pos_p[var_r29].z - pos_p[i].z);
+        f32 temp_f0 = std::fabsf(pos_p[0].z - pos_p[var_r29].z);
         temp_f0 *= 0.5f;
 
         f32 temp_f1 = 1.05f * ((M_PI / 2) / temp_f0);
@@ -625,11 +650,11 @@ cPhs_State daGrid_c::_create() {
             temp_f1_4 = 1.05f * ((M_PI / 2) / temp_f2_2);
 
             if (var_r29 == 56) {
-                temp_f26 = 35.0f;
+                temp_f26 = 10.0f * (3.5f + DEMO_SELECT(REG0_F(16), 0));
             } else if (var_r29 == 57) {
-                temp_f26 = 70.0f;
+                temp_f26 = 10.0f * (7.0f + DEMO_SELECT(REG0_F(5), 0));
             } else {
-                temp_f26 = 80.0f;
+                temp_f26 = 10.0f * (8.0f + DEMO_SELECT(REG0_F(15), 0));
             }
         } else {
             temp_f0_2 = std::fabsf(temp_r0->y - pos_y);
@@ -638,7 +663,7 @@ cPhs_State daGrid_c::_create() {
             f32 temp_f2_2 = std::fabsf(temp_r0->y - pos_p[84].y);
             temp_f2_2 *= 0.5f;
             temp_f1_4 = 1.15f * ((M_PI / 2) / temp_f2_2);
-            temp_f26 = 20.0f;
+            temp_f26 = 10.0f * (2.0f + DEMO_SELECT(REG0_F(17), 0));
         }
 
         if (temp_f0_2 > temp_f1_3) {
@@ -652,6 +677,11 @@ cPhs_State daGrid_c::_create() {
 
     l_ship = (daShip_c*)fopAcM_SearchByName(fpcNm_SHIP_e);
     ho_move(this);
+
+#if VERSION == VERSION_DEMO
+    }
+#endif
+
     return cPhs_COMPLEATE_e;
 }
 
