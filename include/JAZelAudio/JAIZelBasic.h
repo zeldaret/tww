@@ -39,7 +39,7 @@ public:
     void onEnemyDamage();
     void mbossBgmMuteProcess();
     void mbossBgmNearByProcess(f32);
-    bool checkBgmPlaying();
+    BOOL checkBgmPlaying();
     int checkPlayingMainBgmFlag();
     BOOL checkSubBgmPlaying();
     int checkPlayingSubBgmFlag();
@@ -100,7 +100,7 @@ public:
     void sceneChange(u32, u32, u32, s32);
     void sceneBgmStart();
     void load1stDynamicWave();
-    BOOL check1stDynamicWave();
+    s32 check1stDynamicWave();
     void load2ndDynamicWave();
     void loadStaticWaves();
     s32 checkFirstWaves();
@@ -122,7 +122,7 @@ public:
     void processTime();
     void processMorningToNormal();
     int checkOnOuterSea(f32*);
-    void checkSeqIDDemoPlaying(u32);
+    BOOL checkSeqIDDemoPlaying(u32);
     u32 checkDemoFanfarePlaying();
     void processDemoFanfareMute();
     void muteMainBgmAll();
@@ -133,9 +133,9 @@ public:
     void initSeaEnvPos();
     void registSeaEnvPos(Vec*);
     void seaEnvSePlay(u32, s8);
-    void calcPosPanLR(Vec*);
-    void calcPosPanSR(Vec*, f32);
-    void calcPosVolume(Vec*, f32);
+    f32 calcPosPanLR(Vec*);
+    f32 calcPosPanSR(Vec*, f32);
+    f32 calcPosVolume(Vec*, f32);
     void seaShoreSE(u32, Vec*, u32, s8);
     void initRiverPos();
     void registRiverPos(Vec*);
@@ -192,26 +192,60 @@ public:
 
     static JAIZelBasic* zel_basic;
 
-    static u8 m_bgm_mute_state[];
+    static u32 m_bgm_mute_state[][4];
 
-    // static charVoiceTable;
-    // static linkVoiceTable;
+    struct CharVoiceStruct{
+        u16 m0;
+        u16 m2;
+    };
+
+    static CharVoiceStruct charVoiceTable[];
+
+    struct LinkVoiceEntry{
+        u8 m0;
+        u8 mVowel;
+    };
+    struct linkVoiceStruct{
+        LinkVoiceEntry entries[4];
+    };
+    static linkVoiceStruct linkVoiceTable[];
 
     static u8 m_bgm_wave_info[];
+
+    struct WaveStruct{
+        u8 m0;
+        u8 m1;
+    };
+
     static u8 m_dy_wave_set_1st[][2];
     static u8 m_dy_wave_set_2nd[][2];
     static scene_info_s m_scene_info[];
     static scene_info_s m_isle_info[];
     static const char* spot_dir_name[];
     static isle_area_s mIsleArea[];
-
+#if VERSION == VERSION_DEMO
+    static const int MAX_CONCURRENT_SE_NUM = 26;
+#else
     static const int MAX_CONCURRENT_SE_NUM = 24;
+#endif
+
+    struct levInsideStruct{
+        f32 m0;
+        f32 m4;
+        f32 m8;
+        s8 mC;
+    };
+    struct levSeSomeStruct{
+        u32 m0;
+        u32 m4;
+        levInsideStruct m8[0x14];
+    };
 
     /* 0x0020 */ u8 field_0x0020;
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0024 */ u8* field_0x0024;
 #if VERSION > VERSION_JPN
-    /* 0x0028 */ int field_0x0028;
+    /* 0x0028 */ u32 field_0x0028;
 #endif
     /* Offsets below are for USA/PAL */
     /* 0x002C */ u8 mHour;
@@ -246,8 +280,8 @@ public:
     /* 0x0068 */ JAISound* mpMainBgmSound;
     /* 0x006C */ JAISound* mpSubBgmSound;
     /* 0x0070 */ JAISound* mpStreamBgmSound;
-    /* 0x0074 */ u32 mSubBgmNum;
-    /* 0x0078 */ u32 mMainBgmNum;
+    /* 0x0074 */ s32 mSubBgmNum;
+    /* 0x0078 */ s32 mMainBgmNum;
     /* 0x007C */ u32 mStreamBgmNum;
     /* 0x0080 */ f32 field_0x0080;
     /* 0x0084 */ f32 field_0x0084;
@@ -280,7 +314,7 @@ public:
 #endif
     /* 0x00C0 */ u8 field_0x00c0;
     /* 0x00C1 */ s8 field_0x00c1;
-    /* 0x00C4 */ int field_0x00c4;
+    /* 0x00C4 */ u32 field_0x00c4;
     /* 0x00C8 */ u8 field_0x00c8;
     /* 0x00C9 */ u8 field_0x00c9;
     /* 0x00CA */ u8 field_0x00ca;
@@ -289,13 +323,14 @@ public:
     /* 0x00CD */ u8 field_0x00cd;
     /* 0x00CE */ u8 field_0x00ce;
     /* 0x00CF */ u8 field_0x00CF[0x00D0 - 0x00CF];
-    /* 0x00D0 */ int field_0x00d0;
+    /* 0x00D0 */ Vec* field_0x00d0;
     /* 0x00D4 */ JAISound* mpSeSound[MAX_CONCURRENT_SE_NUM];
     /* 0x0134 */ u32 mSeNum[MAX_CONCURRENT_SE_NUM];
-    /* 0x0194 */ u32 field_0x0194[MAX_CONCURRENT_SE_NUM];
+    /* 0x0194 */ Vec* field_0x0194[MAX_CONCURRENT_SE_NUM];
     /* 0x01F4 */ int field_0x01f4;
 #if VERSION == VERSION_DEMO
-    u8 temppadding[0x60];
+    u8 temppadding[0x5C];
+    u32 field_demo_0x01f8;
 #endif
     /* 0x01F8 */ u8 field_0x01f8;
     /* 0x01F9 */ u8 field_0x01f9;
@@ -307,7 +342,8 @@ public:
     /* 0x01FF */ u8 field_0x01ff;
     /* 0x0200 */ u8 field_0x0200;
     /* 0x0201 */ u8 field_0x0201;
-    /* 0x0202 */ u8 field_0x0202[0x0204 - 0x0202];
+    /* 0x0202 */ u8 field_0x0202;
+    /* 0x0202 */ u8 field_0x0203;
     /* 0x0204 */ u8 field_0x0204;
 #if VERSION > VERSION_DEMO
     /* 0x0205 */ u8 field_0x0205;
@@ -317,7 +353,7 @@ public:
     /* 0x0208 */ u8 field_0x0208;
     /* 0x020C */ int field_0x020c;
     /* 0x0210 */ int field_0x0210;
-    /* 0x0214 */ int field_0x0214;
+    /* 0x0214 */ JAISound* field_0x0214;
     /* 0x0218 */ u32 field_0x0218;
     /* 0x021C */ u8 mCameraSeaFloorGroupInfo;
     /* 0x021D */ u8 mLinkSeaFloorGroupInfo;
@@ -341,7 +377,9 @@ public:
     /* 0x0238 */ u8 mIslandRoomNo;
     /* 0x0239 */ u8 field_0x0239;
     /* 0x023A */ u8 field_0x023a;
-    /* 0x023B */ u8 field_0x023B[0x1B80 - 0x023B];
+    /* 0x023B */ u8 field_0x023B[0x244 - 0x023B];
+                 levSeSomeStruct field_0x0244[0x10];
+                 u8 field_0x16C4[0x1b80 - 0x16C4];
     /* 0x1B80 */ int field_0x1b80;
     /* 0x1B84 */ u8 field_0x1b84[0x1DD0 - 0x1B84];
     /* 0x1DD0 */ int field_0x1dd0;
@@ -354,25 +392,25 @@ public:
     /* 0x1EC8 */ int field_0x1ec8;
     /* 0x1ECC */ int field_0x1ecc;
     /* 0x1ED0 */ int field_0x1ed0;
-    /* 0x1ED4 */ u8 field_0x1ED4[0x1F34 - 0x1ED4];
+    /* 0x1ED4 */ Vec field_0x1ED4[8];
     /* 0x1F34 */ int field_0x1f34;
     /* 0x1F38 */ JAISound* field_0x1f38;
     /* 0x1F3C */ u8 field_0x1f3c;
     /* 0x1F3D */ u8 mIsSailing;
     /* 0x1F3E */ u8 field_0x1F3E[0x1F40 - 0x1F3E];
     /* 0x1F40 */ f32 field_0x1f40;
-    /* 0x1F44 */ int field_0x1f44;
-    /* 0x1F48 */ int field_0x1f48;
+    /* 0x1F44 */ JAISound* field_0x1f44;
+    /* 0x1F48 */ JAISound* field_0x1f48;
     /* 0x1F4C */ struct {
         int field_0x00;
-        int field_0x04;
+        JAISound* field_0x04;
     } field_0x1f4c[0x1E];
     /* 0x203C */ u8 field_0x203c;
     /* 0x203D */ u8 field_0x203d;
-    /* 0x2040 */ int field_0x2040[4];
-    /* 0x2050 */ int field_0x2050[4];
+    /* 0x2040 */ JAISound* mpKuroboMotion[4];
+    /* 0x2050 */ JAISound* mpKuroboVoice[4];
     /* 0x2060 */ JAISound* field_0x2060;
-    /* 0x2064 */ int field_0x2064;
+    /* 0x2064 */ JAISound* field_0x2064;
     /* 0x2068 */ JMath::TRandom_enough_ field_0x2068;
     /* 0x20F0 */ u8 field_0x20F0[0x20F4 - 0x20F0];
 };

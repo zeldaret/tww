@@ -398,7 +398,7 @@ void JAISound::setSeqPortData(u8 line_, u16 param_2, u32 param_3) {
 }
 
 /* 802999F4-80299B14       .text setTrackVolume__8JAISoundFUcfUl */
-void JAISound::setTrackVolume(u8 line_, f32 param_2, u32 param_3) {
+void JAISound::setTrackVolume(u8 line_, f32 i_volume, u32 i_fade_time) {
     if ((mSoundID & JAISoundID_TypeMask) != JAISoundID_Type_Sequence) {
         return;
     }
@@ -408,10 +408,10 @@ void JAISound::setTrackVolume(u8 line_, f32 param_2, u32 param_3) {
     if (mState >= SOUNDSTATE_Playing && (getSeqParameter()->field_0x135c->field_0x4 & 1 << line_) == 0) {
         return;
     }
-    if (param_3 == 0) {
-        param_3++;
+    if (i_fade_time == 0) {
+        i_fade_time++;
     }
-    int r30 = getSeqParameter()->mTrackVolumes[line_].set(param_2, param_3);
+    int r30 = getSeqParameter()->mTrackVolumes[line_].set(i_volume, i_fade_time);
     if (r30 == 1) {
         getSeqParameter()->field_0x1280 |= 1 << line_;
     }
@@ -644,7 +644,7 @@ void JAISound::initParameter(JAISound**, JAInter::Actor*, u32, u32, u8, void*) {
 }
 
 /* 8029AFCC-8029B07C       .text set__Q27JAInter11MoveParaSetFfUl */
-int JAInter::MoveParaSet::set(f32, u32) {
+int JAInter::MoveParaSet::set(f32 i_volume, u32 i_fade_time) {
     /* Nonmatching */
 }
 
