@@ -67,7 +67,7 @@ public:
     cPhs_State _create();
     BOOL createHeap();
     cPhs_State createInit();
-    bool _delete();
+    BOOL _delete();
     bool _draw();
     bool _execute();
     u8 executeCommon();
@@ -120,7 +120,7 @@ public:
     void setMtx();
     void chkAttention();
     void lookBack();
-    void initTexPatternAnm(bool);
+    BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
     void playAnm();
     void setAnm(u8, int, f32);
@@ -132,6 +132,8 @@ public:
     u8 chkPosNo();
     u8 getPosNo();
     BOOL isChangePos(u8);
+
+    static const char m_arcname[];
 
 public:
     /* 0x6C4 */ u8 field_0x6C4[0x60];

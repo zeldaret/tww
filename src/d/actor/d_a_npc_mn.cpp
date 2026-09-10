@@ -10,6 +10,8 @@
 #include "res/Object/Mn.h"
 #include "SSystem/SComponent/c_phase.h"
 
+const char daNpcMn_c::m_arcname[] = "Mn";
+
 static char* l_npc_staff_id[] = {
     "Mn"
 };
@@ -352,7 +354,55 @@ cPhs_State daNpcMn_c::_create() {
 
 /* 00000904-00000BE0       .text createHeap__9daNpcMn_cFv */
 BOOL daNpcMn_c::createHeap() {
-    /* Nonmatching */
+    J3DModelData* l_modelData = (J3DModelData*) dComIfG_getObjectIDRes(l_arcname_tbl[0], l_bmd_ix_tbl[0]);
+    mpMorf = new mDoExt_McaMorf(
+        l_modelData,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_bck_ix_tbl[mBckIdx]),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0f,
+        0,
+        -1,
+        1,
+        NULL,
+        0x80000,
+        0x15021222
+    );
+
+    m_jnt.setHeadJntNum(l_modelData->getJointTree().getJointName()->getIndex("head"));
+    JUT_ASSERT(996, m_jnt.getHeadJntNum() >= 0);
+    m_jnt.setBackboneJntNum(l_modelData->getJointTree().getJointName()->getIndex("backbone"));
+    JUT_ASSERT(1000, m_jnt.getBackboneJntNum() >= 0);
+
+    if (initTexPatternAnm(false) == FALSE) {
+        return FALSE;
+    }
+
+    for (u16 jntIdx = 0; jntIdx < l_modelData->getJointNum(); jntIdx++){
+        if (jntIdx == m_jnt.getHeadJntNum() || jntIdx == m_jnt.getBackboneJntNum()) {
+            l_modelData->getJointTree().getJointNodePointer(jntIdx)->setCallBack(daNpc_Mn_nodeCallBack);
+        }
+    }
+    mpMorf->getModel()->setUserArea((u32)this);
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mObjAcch.Set(fopAcM_GetPosition_p(this),
+        fopAcM_GetOldPosition_p(this),
+        this,
+        1,
+        &mAcchCir,
+        fopAcM_GetSpeed_p(this),
+        fopAcM_GetAngle_p(this),
+        fopAcM_GetShapeAngle_p(this)
+    );
+
+    J3DModelData* l_etc_modelData = (J3DModelData*) dComIfG_getObjectIDRes(l_arcname_tbl[0], l_etc_bmd_ix_tbl[0]);
+    mpModel = mDoExt_J3DModel__create(l_etc_modelData, 0x80000, 0x11000002);
+    if (mpModel == NULL) {
+        return FALSE;
+    }
+    field_0x7C2 = l_modelData->getJointTree().getJointName()->getIndex("shoulderR");
+    return TRUE;
 }
 
 /* 00000BE0-00000C00       .text daNpcMn_XyCheckCB__FPvi */
@@ -366,8 +416,16 @@ cPhs_State daNpcMn_c::createInit() {
 }
 
 /* 00000F3C-00000FE4       .text _delete__9daNpcMn_cFv */
-bool daNpcMn_c::_delete() {
-    /* Nonmatching */
+BOOL daNpcMn_c::_delete() {
+    dComIfG_resDelete(&mPhs, l_arcname_tbl[0]);
+    if (heap != NULL && mpMorf != NULL) {
+        mpMorf->stopZelAnime();
+    }
+
+    if (dComIfGp_isEnableNextStage() && strcmp(dComIfGp_getNextStageName(), "sea") == 0) {
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_870F, 0);
+    }
+    return TRUE;
 }
 
 /* 00000FE4-00001154       .text _draw__9daNpcMn_cFv */
@@ -707,7 +765,7 @@ void daNpcMn_c::lookBack() {
 }
 
 /* 000035C4-000036D0       .text initTexPatternAnm__9daNpcMn_cFb */
-void daNpcMn_c::initTexPatternAnm(bool) {
+BOOL daNpcMn_c::initTexPatternAnm(bool) {
     /* Nonmatching */
 }
 
