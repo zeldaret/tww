@@ -339,6 +339,7 @@ public:
     f32 FanBank();
     f32 PlayerHideDist();
 
+    int MapToolCameraTimer() { return 10; }
     bool CheckFlag2(u16 i_flag) { return (i_flag & mFlags2) != 0; }
     f32 ChargeBRatio() { return mChargeBRatio; }
     int ChargeTimer() { return mChargeTimer; }
