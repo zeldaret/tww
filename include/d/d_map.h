@@ -17,16 +17,19 @@ struct dmap_dmap_tlut_s {
 };
 
 struct map_dt_c {
-    u16 field_0x0;
-    u16 field_0x2;
-    u8 field_0x4[0x6 - 0x4];
-    u8 field_0x6;
-    u8 field_0x7[0xC - 0x7];
-    int field_0xc;
-    u8 field_0x10[0x32 - 0x10];
-    u8 field_0x32;
-    u8 field_0x33[0x38 - 0x33];
-    int field_0x38;
+    /* 0x00 */ u16 field_0x0;
+    /* 0x02 */ u16 field_0x2;
+    /* 0x04 */ u8  field_0x4[0x6 - 0x4];
+    /* 0x06 */ u8  field_0x6;
+    /* 0x07 */ u8  field_0x7[0xC - 0x7];
+    /* 0x0C */ int field_0xc;
+    /* 0x10 */ u8  field_0x10[0x30 - 0x10];
+    /* 0x30 */ u8  mScrNumX;      // screen width in 8x8 tiles
+    /* 0x31 */ u8  mScrNumY;      // screen height in 8x8 tiles
+    /* 0x32 */ u8  field_0x32;
+    /* 0x33 */ u8  field_0x33[0x34 - 0x33];
+    /* 0x34 */ int mScrDataOfs;   // self-relative offset to the screen entries
+    /* 0x38 */ int field_0x38;
 };
 
 // fake name
@@ -108,26 +111,26 @@ public:
     void setPos(s16, s16, s16, s16);
     void setScale(f32, f32);
 
+
     void getMapDt() {}
     void getMapDtSize() {}
     void setAlpha(u8 alpha) { mAlpha = alpha; }
     void setCenterPos(f32 p0, f32 p1) {
-        field_0x44 = p0;
-        field_0x48 = p1;
+        mOfsX = p0;
+        mOfsY = p1;
     }
 
-public:
-    /* 0x04 */ map_dt_c* field_0x4;
+    /* 0x04 */ map_dt_c* mpMapData;
     /* 0x08 */ ResTIMG* mImg;
-    /* 0x0C */ GXTexObj field_0xc;
-    /* 0x2C */ GXTlutObj field_0x2c;
+    /* 0x0C */ GXTexObj mTexObj;
+    /* 0x2C */ GXTlutObj mTlutObj;
     /* 0x38 */ int field_0x38;
-    /* 0x3C */ s16 field_0x3c;
-    /* 0x3E */ s16 field_0x3e;
-    /* 0x40 */ s16 field_0x40;
-    /* 0x42 */ s16 field_0x42;
-    /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ f32 field_0x48;
+    /* 0x3C */ s16 mMinX;
+    /* 0x3E */ s16 mMinY;
+    /* 0x40 */ s16 mMaxX;
+    /* 0x42 */ s16 mMaxY;
+    /* 0x44 */ f32 mOfsX;
+    /* 0x48 */ f32 mOfsY;
     /* 0x4C */ f32 mScaleX;
     /* 0x50 */ f32 mScaleY;
     /* 0x54 */ u8 mAlpha;
