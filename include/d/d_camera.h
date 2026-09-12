@@ -656,7 +656,7 @@ public:
     void CheckFlag(u32) {}
     void Owner(fopAc_ac_c*) {}
     void R() {}
-    void TrimHeight() {}
+    f32 TrimHeight() { return mTrimHeight; }
     void U() {}
     void U2(s16) {}
     void V() {}
