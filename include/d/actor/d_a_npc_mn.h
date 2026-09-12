@@ -87,7 +87,7 @@ public:
     void eventMove();
     void privateCut();
     void eventMesSetInit(int);
-    u32 eventMesSet();
+    bool eventMesSet();
     void eventGetItemInit();
     void eventWaitInit(int);
     void eventWait(int);

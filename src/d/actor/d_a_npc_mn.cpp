@@ -406,13 +406,82 @@ BOOL daNpcMn_c::createHeap() {
 }
 
 /* 00000BE0-00000C00       .text daNpcMn_XyCheckCB__FPvi */
-static s16 daNpcMn_XyCheckCB(daNpcMn_c* i_this, int i_itemBtn) {
-    return i_this->XyCheckCB(i_itemBtn);
+static s16 daNpcMn_XyCheckCB(void* i_this, int i_itemBtn) {
+    return static_cast<daNpcMn_c*>(i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 00000C00-00000F3C       .text createInit__9daNpcMn_cFv */
 cPhs_State daNpcMn_c::createInit() {
-    /* Nonmatching */
+    int weight = 0xFF;
+    u8 railID = getPrmRailID();
+    if (railID != 0xFF) {
+        mPathRun.setInf(railID, fopAcM_GetRoomNo(this), true);
+        if (mPathRun.getPath() == NULL) {
+            return 5;
+        }
+        dPath_GetNextRoomPath(mPathRun.getPath(), -1);
+        fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
+
+        u8 currPointIdx = 0;
+        while (currPointIdx < mPathRun.maxPoint()) {
+            if (mPathRun.getPath()->m_points[currPointIdx].mArg0 == 0) {
+                break;
+            }
+            currPointIdx++;
+        }
+        if (currPointIdx == mPathRun.maxPoint()) {
+            currPointIdx = 0;
+        }
+        mPathRun.setIdx(currPointIdx);
+        old.pos = mPathRun.getPoint(currPointIdx);
+        current.pos = old.pos;
+        mPathRun.incIdxLoop();
+        field_0x798 = 1;
+        weight = 0xFE;
+    }
+
+    fopAcM_SetGravity(this, -9.0f);
+    setAnmTbl(&l_npc_anm_wait);
+    field_0x796 = dComIfGp_evmng_getEventIdx("FIGURE_HATCH_OPEN");
+    eventInfo.setXyCheckCB(daNpcMn_XyCheckCB);
+    mEventCut.setActorInfo2(l_npc_staff_id[0], this);
+    field_0x7AC = 0;
+    field_0x7B0 = 0;
+    field_0x7B1 = 0;
+    field_0x7C0 = 0;
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+    m_jnt.setParam(
+        l_npc_dat[mNpcNo].mMax_backbone_x,
+        l_npc_dat[mNpcNo].mMax_backbone_y,
+        l_npc_dat[mNpcNo].mMin_backbone_x,
+        l_npc_dat[mNpcNo].mMin_backbone_y,
+        l_npc_dat[mNpcNo].mMax_head_x,
+        l_npc_dat[mNpcNo].mMax_head_y,
+        l_npc_dat[mNpcNo].mMin_head_x,
+        l_npc_dat[mNpcNo].mMin_head_y,
+        l_npc_dat[mNpcNo].mMax_turn_step
+    );
+    field_0x7BE = l_npc_dat[mNpcNo].field_0x4A;
+    field_0x7BF = l_npc_dat[mNpcNo].field_0x4B;
+    field_0x784 = l_npc_dat[mNpcNo].field_0x20;
+    field_0x79E = l_npc_dat[mNpcNo].field_0x28;
+
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
+    if (G_CM3D_F_INF != mObjAcch.GetGroundH()) {
+        current.pos.y = home.pos.y = mObjAcch.GetGroundH();
+    }
+
+    setMtx();
+    mpMorf->getModel()->calc();
+    mStts.Init(weight, 0xFF, this);
+    mCyl.Set(dNpc_cyl_src);
+    mCyl.SetStts(&mStts);
+    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].field_0x30, 150.0f);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000F3C-00000FE4       .text _delete__9daNpcMn_cFv */
@@ -561,18 +630,41 @@ void daNpcMn_c::privateCut() {
 }
 
 /* 00002194-0000226C       .text eventMesSetInit__9daNpcMn_cFi */
-void daNpcMn_c::eventMesSetInit(int) {
-    /* Nonmatching */
+void daNpcMn_c::eventMesSetInit(int i_staffIdx) {
+    int* pData = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
+    if (pData != NULL) {
+        mpMsgNo = NULL;
+        int msg = *pData;
+        switch (msg) {
+            case 1:
+                break;
+            case 0:
+                msg = getMsg();
+                setMessage(msg);
+                break;
+            default:
+                setMessage(msg);
+        }
+        if (mpMsgNo != NULL) {
+            setMessage(*mpMsgNo);
+        }
+    } else {
+        mpMsgNo++;
+        setMessage(*mpMsgNo);
+    }
 }
 
 /* 0000226C-000022A0       .text eventMesSet__9daNpcMn_cFv */
-u32 daNpcMn_c::eventMesSet() {
-    return (0x12 - talk2(0)) == false;
+bool daNpcMn_c::eventMesSet() {
+    return talk2(0) == fopMsgStts_BOX_CLOSED_e;
 }
 
 /* 000022A0-000022F8       .text eventGetItemInit__9daNpcMn_cFv */
 void daNpcMn_c::eventGetItemInit() {
-    /* Nonmatching */
+    fpc_ProcID procItem = fopAcM_createItemForPresentDemo(&current.pos, mItemNo);
+    if(procItem != fpcM_ERROR_PROCESS_ID_e){
+        dComIfGp_event_setItemPartnerId(procItem);
+    }
 }
 
 /* 000022F8-00002358       .text eventWaitInit__9daNpcMn_cFi */
@@ -751,7 +843,10 @@ u8 daNpcMn_c::getPrmSwitchBit2() {
 
 /* 000030C0-00003148       .text setMtx__9daNpcMn_cFv */
 void daNpcMn_c::setMtx() {
-    /* Nonmatching */
+    mpMorf->getModel()->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::now);
 }
 
 /* 00003148-00003478       .text chkAttention__9daNpcMn_cFv */
