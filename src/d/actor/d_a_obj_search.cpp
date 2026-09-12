@@ -5,7 +5,9 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_search.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/d_cc_d.h"
+#include "res/Object/Search.h"
 
 static dCcD_SrcCps cps_src = {
     // dCcD_SrcGObjInf
@@ -37,30 +39,65 @@ static dCcD_SrcCps cps_src = {
     }},
 };
 
+const char daObj_Search::Act_c::M_arcname[] = "Search";
 
 /* 800FDAFC-800FDB1C       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
+    return static_cast<daObj_Search::Act_c*>(i_this)->_createHeap();
 }
 
 /* 800FDB1C-800FDB8C       .text _createHeap__Q212daObj_Search5Act_cFv */
-void daObj_Search::Act_c::_createHeap() {
-    /* Nonmatching */
+BOOL daObj_Search::Act_c::_createHeap() {
+    if (searchCreateHeap() == 0) {
+        return false;
+    }
+
+    if (beamCreateHeap(0) == 0) {
+        return false;
+    }
+
+    if (beamCreateHeap(1) == 0) {
+        return false;
+    }
+
+    return true;
 }
 
 /* 800FDB8C-800FDCAC       .text searchCreateHeap__Q212daObj_Search5Act_cFv */
-void daObj_Search::Act_c::searchCreateHeap() {
-    /* Nonmatching */
+int daObj_Search::Act_c::searchCreateHeap() {
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_SEARCH_BDL_S_SEARCH_e));
+    JUT_ASSERT(57, mdl_data != NULL);
+
+    J3DModel* mdl = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
+    field_0x5F4 = mdl;
+    if (field_0x5F4 == NULL) {
+        return 0;
+    }
+
+    dBgW* bgw = new dBgW();
+    mpBgW = bgw;
+    if (mpBgW == NULL) {
+        return 0;
+    }
+
+    cBgD_t* pDat = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_SEARCH_DZB_S_BASE_e);
+    return (mpBgW->Set(pDat, cBgW::MOVE_BG_e, &field_0x6D4) != 1) ? 1 : 0;
 }
 
 /* 800FDCAC-800FDDBC       .text beamCreateHeap__Q212daObj_Search5Act_cFi */
-void daObj_Search::Act_c::beamCreateHeap(int) {
+int daObj_Search::Act_c::beamCreateHeap(int) {
     /* Nonmatching */
+    return 0;
 }
 
 /* 800FDDBC-800FDE08       .text nodeControl_CB__FP7J3DNodei */
-static BOOL nodeControl_CB(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeControl_CB(J3DNode* node_ptr, int param_2) {
+    if (param_2 == 0) {
+        if (j3dSys.getModel()->getUserArea() != NULL) {
+            daObj_Search::Act_c::_nodeControl(node_ptr, j3dSys.getModel());
+        }
+    }
+    return true;
 }
 
 /* 800FDE08-800FE10C       .text _nodeControl__Q212daObj_Search5Act_cFP7J3DNodeP8J3DModel */
@@ -69,9 +106,7 @@ void daObj_Search::Act_c::_nodeControl(J3DNode*, J3DModel*) {
 }
 
 /* 800FE10C-800FE110       .text modeSearchRndInit__Q212daObj_Search5Act_cFv */
-void daObj_Search::Act_c::modeSearchRndInit() {
-    /* Nonmatching */
-}
+void daObj_Search::Act_c::modeSearchRndInit() {} // no-op
 
 /* 800FE110-800FE200       .text modeSearchRnd__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchRnd() {
@@ -81,6 +116,9 @@ void daObj_Search::Act_c::modeSearchRnd() {
 /* 800FE200-800FE244       .text modeSearchPathInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchPathInit() {
     /* Nonmatching */
+    if (is_path_info() == false) {
+        modeProc(PROC_UNK0_e,0);
+    }
 }
 
 /* 800FE244-800FEA6C       .text modeSearchPath__Q212daObj_Search5Act_cFv */
@@ -89,9 +127,7 @@ void daObj_Search::Act_c::modeSearchPath() {
 }
 
 /* 800FEA6C-800FEA80       .text modeStopInit__Q212daObj_Search5Act_cFv */
-void daObj_Search::Act_c::modeStopInit() {
-    /* Nonmatching */
-}
+void daObj_Search::Act_c::modeStopInit() {} // no-op
 
 /* 800FEA80-800FEA84       .text modeStop__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeStop() {
@@ -193,6 +229,7 @@ void daObj_Search::Act_c::smoke_set(float, int) {
 /* 801010C4-801013AC       .text _execute__Q212daObj_Search5Act_cFv */
 bool daObj_Search::Act_c::_execute() {
     /* Nonmatching */
+    return true;
 }
 
 /* 801013AC-80101464       .text check_bk_control__Q212daObj_Search5Act_cFv */
@@ -232,7 +269,11 @@ void daObj_Search::Act_c::set_moveBG_mtx_light_B() {
 
 /* 80101D30-80101D94       .text bg_check__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::bg_check() {
-    /* Nonmatching */
+    float dist = fopAcM_searchActorDistance(this, daPy_getPlayerLinkActorClass());
+    if ((dist <= 2000.0f) && (!field_0x7B8)) {
+        set_moveBG_mtx_light_A();
+        set_moveBG_mtx_light_B();
+    }
 }
 
 /* 80101D94-8010234C       .text player_check__Q212daObj_Search5Act_cFv */
@@ -246,8 +287,9 @@ void daObj_Search::Act_c::set_path_info() {
 }
 
 /* 80102384-80102398       .text is_path_info__Q212daObj_Search5Act_cFv */
-void daObj_Search::Act_c::is_path_info() {
+BOOL daObj_Search::Act_c::is_path_info() {
     /* Nonmatching */
+    return true;
 }
 
 /* 80102398-801026F8       .text _draw__Q212daObj_Search5Act_cFv */
@@ -262,32 +304,32 @@ bool daObj_Search::Act_c::_delete() {
 
 /* 8010283C-80102844       .text _isdelete__Q212daObj_Search5Act_cFv */
 BOOL daObj_Search::Act_c::_isdelete() {
-    /* Nonmatching */
+    return true;
 }
 
 /* 80102844-80102864       .text Create__Q212daObj_Search4MthdFPv */
-cPhs_State daObj_Search::Mthd::Create(void*) {
-    /* Nonmatching */
+cPhs_State daObj_Search::Mthd::Create(void* impl) {
+    return ((daObj_Search::Act_c*)impl)->_create();
 }
 
 /* 80102864-80102884       .text Delete__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::Delete(void*) {
-    /* Nonmatching */
+bool daObj_Search::Mthd::Delete(void* impl) {
+    return static_cast<daObj_Search::Act_c*>(impl)->_delete();
 }
 
 /* 80102884-801028A4       .text Execute__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::Execute(void*) {
-    /* Nonmatching */
+bool daObj_Search::Mthd::Execute(void* impl) {
+    return static_cast<daObj_Search::Act_c*>(impl)->_execute();
 }
 
 /* 801028A4-801028C4       .text Draw__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::Draw(void*) {
-    /* Nonmatching */
+bool daObj_Search::Mthd::Draw(void* impl) {
+    return static_cast<daObj_Search::Act_c*>(impl)->_draw();
 }
 
 /* 801028C4-801028E4       .text IsDelete__Q212daObj_Search4MthdFPv */
-BOOL daObj_Search::Mthd::IsDelete(void*) {
-    /* Nonmatching */
+BOOL daObj_Search::Mthd::IsDelete(void* impl) {
+    return static_cast<daObj_Search::Act_c*>(impl)->_isdelete();
 }
 
 actor_method_class daObj_Search::Mthd::Table = {
