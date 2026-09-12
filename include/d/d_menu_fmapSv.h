@@ -115,7 +115,7 @@ public:
     void setCurWY(s8 val) { curWY = val; }
     u8 getActive() { return active; }
     void setActive(u8 val) { active = val; }
-    u8 getCmapSelNo() { return cmapSelNo; }
+    s8 getCmapSelNo() { return cmapSelNo; }
     void setCmapSelNo(s8 val) { cmapSelNo = val; }
     s8 getCurHX() { return curHX; }
     void setCurHX(s8 val) { curHX = val; }
