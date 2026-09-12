@@ -23,7 +23,7 @@ const char* rollmapTex[] = {
     "cmap_phantomship.bti",
     "cmap_treasure.bti",
     "cmap_treasure.bti",
-    DEMO_SELECT("cmap_hint.bti" ,"cmap_tingle.bti"),
+    DEMO_SELECT("cmap_hint.bti", "cmap_tingle.bti"),
     "cmap_treasure.bti",
     "cmap_hint.bti",
     "cmap_hint.bti",

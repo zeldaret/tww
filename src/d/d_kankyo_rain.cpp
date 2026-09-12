@@ -1794,6 +1794,10 @@ void wave_move() {
     if (dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_MISC_e) {
         stageWindY = 0;
 
+#if VERSION == VERSION_DEMO
+        windX = g_env_light.mWind.mTactWindAngleX;
+        windY = g_env_light.mWind.mTactWindAngleY;
+#else
         if (strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0)
             stageWindY = 0x4000;
         else if (strcmp(dComIfGp_getStartStageName(), "Orichh") == 0)
@@ -1812,6 +1816,7 @@ void wave_move() {
             windX = g_env_light.mWind.mTactWindAngleX;
             windY = g_env_light.mWind.mTactWindAngleY;
         }
+#endif
 
         windY += stageWindY;
 
@@ -1929,19 +1934,17 @@ void wave_move() {
                 }
 
                 {
+                    f32 outerRadius = 2000.0f;
+                    f32 innerRadius = 200.0f;
                     newPos3 = pPlayer->current.pos;
                     newPos3.y = pos.y;
 
                     f32 dist = pos.abs(newPos3);
-                    f32 innerRadius = 200.0f;
-                    f32 outerRadius = 2000.0f;
-                    f32 range = outerRadius - innerRadius;
                     if (dist < outerRadius) {
                         if (dist < innerRadius) {
                             pPkt->mEff[i].mStrengthEnv = 0.0f;
                         } else {
-                            f32 fade = (dist - innerRadius) / range;
-                            pPkt->mEff[i].mStrengthEnv *= fade;
+                            pPkt->mEff[i].mStrengthEnv *= (dist - innerRadius) / (outerRadius - innerRadius);
                         }
                     }
                 }
@@ -2098,12 +2101,17 @@ void cloud_shadow_move() {
                         pPkt->mEff[i].mPos.y = cM_rndFX(rnd_pos);
                         pPkt->mEff[i].mPos.z = cM_rndFX(rnd_pos);
                     } else {
+#if VERSION > VERSION_DEMO
                         cLib_addCalc(&pPkt->mEff[i].mAlpha, 0.0f, 0.1f, 0.01f, 0.001f);
-                        if (pPkt->mEff[i].mAlpha < 0.001f) {
+                        if (pPkt->mEff[i].mAlpha < 0.001f)
+#endif
+                        {
                             get_vectle_calc(&pos, &center, &pntwind);
+#if VERSION > VERSION_DEMO
                             pntwind.x += cM_rndF(0.5f);
                             pntwind.y += cM_rndF(0.5f);
                             pntwind.z += cM_rndF(0.5f);
+#endif
 
                             pPkt->mEff[i].mPos.x = pntwind.x * rnd_pos;
                             pPkt->mEff[i].mPos.y = pntwind.y * rnd_pos;
@@ -2147,7 +2155,11 @@ void cloud_shadow_move() {
             }
         }
 
+#if VERSION == VERSION_DEMO
+        cLib_addCalc(&pPkt->mEff[i].mAlpha, alphaTarget * maxAlpha, 0.02f, 0.01f, 0.00000001f);
+#else
         cLib_addCalc(&pPkt->mEff[i].mAlpha, alphaTarget * maxAlpha, 0.1f, 0.1f, 0.000000001f);
+#endif
     }
 }
 
@@ -2178,10 +2190,9 @@ void dKyr_poison_light_colision() {
 
     dComIfG_Ccsp()->SetMassAttr(220.0f, 140.0f, 0x0B, 0x03);
 
-    f32 halfHeight = 70.0f;
     for (s32 i = 0; i < g_env_light.mPoisonCount; i++) {
         cXyz pos = pPkt->mBasePos + pPkt->mEff[i].mPos;
-        pos.y -= halfHeight;
+        pos.y -= 70.0f;
         if (light_at_hit_check(&pos) && pPkt->mEff[i].mStatus == 1) {
             pPkt->mEff[i].mStatus = 2;
             pPkt->mEff[i].field_0x2e = 60;
@@ -2317,10 +2328,22 @@ void poison_move() {
     int pattern;
     if (dComIfGp_roomControl_getStayNo() < 16) {
         static const int room_pat_tbl[] = {
-            -1, -1, -1, 0,
-            -1, -1, -1, -1,
-            -1, 4, -1, 3,
-            -1, 1, -1, 2,
+            -1,
+            -1,
+            -1,
+            0,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            4,
+            DEMO_SELECT(1, -1),
+            3,
+            -1,
+            1,
+            -1,
+            2,
         };
         pattern = room_pat_tbl[dComIfGp_roomControl_getStayNo()];
     } else {
@@ -2719,7 +2742,7 @@ void poison_move() {
         if (dComIfGp_getPlayer(0) == dComIfGp_getLinkPlayer() && poison_packet->mEff[i].mAlpha > 0.0001f && poison_packet->mEff[i].field_0x2e == 0) {
             sp94.y -= 50.0f;
             if (sp94.abs(player->current.pos) < poison_packet->mEff[i].mSize * 0.8f) {
-                player->onResetFlg0(daPy_py_c::daPyRFlg0_POISON_CURSE);
+                player->onPoisonCurse();
             }
         }
     }
@@ -2728,27 +2751,31 @@ void poison_move() {
 }
 
 /* 800937BC-800940D4       .text vrkumo_move__Fv */
-// NONMATCHING - some small float reg alloc
+// NONMATCHING - float literal load order
 void vrkumo_move() {
     cXyz wind_vecpow = dKyw_get_wind_vecpow();
     dKankyo_vrkumo_Packet* vrkumo_packet = g_env_light.mpVrkumoPacket;
     camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
     cXyz sp80;
 
-    f32 sp3C = 0.0f;
-    f32 var_f31, var_f30, var_f24, var_f29, var_f25;
-    var_f31 = 4.0f;
-    var_f30 = 1000.0f;
-    var_f24 = 3000.0f;
-    var_f29 = 0.98f;
-    var_f25 = 1.0f;
+    f32 var_f31 = 4.0f;
+    f32 var_f30 = 1000.0f;
+    f32 var_f24 = 3000.0f;
+    f32 var_f29 = 0.98f;
+    f32 var_f25 = 1.0f;
+
+    f32 _8_3 = 8.3f;
+    f32 _500 = 500.0f;
+    f32 _2000 = 2000.0f;
+    f32 _98 = 0.98f;
+    f32 _45 = 0.45f;
 
     f32 strength = g_env_light.mVrkumoStrength;
-    var_f31 += strength * 4.3f;
-    var_f30 += strength * -500.0f;
-    var_f24 += strength * -1000.0f;
-    var_f29 += strength * sp3C;
-    var_f25 += strength * -0.55f;
+    var_f31 += strength * (_8_3 - var_f31);
+    var_f30 += strength * (_500 - var_f30);
+    var_f24 += strength * (_2000 - var_f24);
+    var_f29 += strength * (_98 - var_f29);
+    var_f25 += strength * (_45 - var_f25);
 
     if (strcmp(dComIfGp_getStartStageName(), "M_DragB") == 0) {
         wind_vecpow.x = -1.0f;
@@ -2756,6 +2783,12 @@ void vrkumo_move() {
         wind_vecpow.z = 0.0f;
         var_f30 = 300.0f;
     } else if (dStage_stagInfo_GetSTType(dComIfGp_getStage().getStagInfo()) == 2) {
+        s16 wind_ang_x;
+        s16 wind_ang_y;
+#if VERSION == VERSION_DEMO
+        wind_ang_x = g_env_light.mWind.mTactWindAngleX;
+        wind_ang_y = g_env_light.mWind.mTactWindAngleY;
+#else
         s16 var_r27 = 0;
         if (strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0) {
             var_r27 = 0x4000;
@@ -2769,8 +2802,6 @@ void vrkumo_move() {
             var_r27 = 0x4000;
         }
 
-        s16 wind_ang_x;
-        s16 wind_ang_y;
         if (dComIfGs_getWindX() == -1 && dComIfGs_getWindY() == -1) {
             wind_ang_x = 0;
             wind_ang_y = 0;
@@ -2780,6 +2811,7 @@ void vrkumo_move() {
         }
 
         wind_ang_y = (s16)(wind_ang_y + var_r27);
+#endif
 
         cXyz sp2C;
         sp2C.x = cM_scos(wind_ang_x) * cM_scos(wind_ang_y);
@@ -2803,9 +2835,11 @@ void vrkumo_move() {
             sp2C = dStage_FileList_dt_SeaLevel(filelist);
         }
 
+#if VERSION > VERSION_DEMO
         if (strcmp(dComIfGp_getStartStageName(), "Siren") == 0 && dComIfGp_roomControl_getStayNo() == 17) {
             sp2C = -14101.0f;
         }
+#endif
 
         var_f30 -= 0.09f * (camera->view.mLookat.mEye.y - sp2C);
     }
@@ -2861,7 +2895,8 @@ void vrkumo_move() {
         sp74.y = 0.0f;
 
         f32 sp24 = sp74.abs();
-        f32 sp20 = 1.0f - (sp24 / 15000.0f);
+        f32 f2 = sp24 / 15000.0f;
+        f32 sp20 = 1.0f - f2;
         if (sp20 < 0.0f) {
             sp20 = 0.0f;
         }
@@ -2870,11 +2905,10 @@ void vrkumo_move() {
         f32 sp44 = 1.0f - sp20;
         sp44 = 1.0f - (sp44 * sp44 * sp44);
         vrkumo_packet->mInst[i].mPosition.y = (500.0f * sp1C) + (var_f30 + (var_f24 * sp44));
-        if (sp20 > 1.0f) {
-            sp20 = 1.0f;
+        if (f2 > 1.0f) {
+            f2 = 1.0f;
         }
-        sp20 = 1.0f - (sp20 * sp20 * sp20 * sp20 * sp20 * sp20);
-        vrkumo_packet->mInst[i].mDistFalloff = sp20;
+        vrkumo_packet->mInst[i].mDistFalloff = 1.0f - (f2 * f2 * f2 * f2 * f2 * f2);
 
         f32 max_alpha;
         f32 alpha_step;
@@ -2958,7 +2992,7 @@ void snap_sunmoon_proc(cXyz* pPos, int type) {
     }
 }
 
-/* 8009428C-8009514C       .text dKyr_drawSun__FPA4_fP4cXyzR8GXColorPPUc */
+/* 8009428C-8009514C       .text dKyr_drawSun__FPA4_fP4cXyzR8_GXColorPPUc */
 void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
     /* Nonmatching */
     dKankyo_sun_Packet* pSunPkt;
@@ -2988,288 +3022,290 @@ void dKyr_drawSun(Mtx drawMtx, cXyz* pPos, GXColor& reg0, u8** pImg) {
     if (pSunPkt->mMoonAlpha > 0.0f)
         bDrawMoon = true;
 
-    if (bDrawSun | bDrawMoon) {
-        sunPos = *pPos;
-
-        u32 stType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
-        if (dKy_getEnvlight().mBaseLightInfluence.mColor.r == 0 && stType != dStageType_MISC_e) {
-            if (dKy_getEnvlight().mCurTime > 285.0f || dKy_getEnvlight().mCurTime < 105.0f)
-                bDrawMoon = false;
-
-            moonPos2 = *pPos;
-        } else {
-            moonPos.x = -(pPos->x - pCamera->view.mLookat.mEye.x);
-            moonPos.y = -(pPos->y - pCamera->view.mLookat.mEye.y);
-            moonPos.z = -(pPos->z - pCamera->view.mLookat.mEye.z);
-
-            moonPos2.x = moonPos.x + pCamera->view.mLookat.mEye.x;
-            moonPos2.y = moonPos.y + pCamera->view.mLookat.mEye.y;
-            moonPos2.z = moonPos.z + pCamera->view.mLookat.mEye.z;
-        }
-
-        int dayofweek = dKy_get_dayofweek();
-        if (dComIfGs_getTime() < 180.0f) {
-            if (dayofweek != 0)
-                dayofweek--;
-            else
-                dayofweek = 6;
-        }
-
-        s32 texidx;
-        f32 flipX;
-        switch (dayofweek) {
-        case 0: texidx = 0; flipX = 1.0f; break;
-        case 1: texidx = 1; flipX = 1.0f; break;
-        case 2: texidx = 2; flipX = 1.0f; break;
-        case 3: texidx = 3; flipX = 1.0f; break;
-        case 4: texidx = 3; flipX = -1.0f; break;
-        case 5: texidx = 2; flipX = -1.0f; break;
-        case 6: texidx = 1; flipX = -1.0f; break;
-        }
-
-        reg0.r = dKy_getEnvlight().mFogColor.r;
-        reg0.g = dKy_getEnvlight().mFogColor.g;
-        reg0.b = dKy_getEnvlight().mFogColor.b;
-        reg0.a = 0xFF;
-
-        reg1.r = 0x00;
-        reg1.g = 0x00;
-        reg1.b = 0x00;
-        reg1.a = 0xFF;
-
-        if (dComIfGd_getView() != NULL) {
-            MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
-        } else {
-            if (pSunPkt->field_0x3c < 5)
-                pSunPkt->field_0x3c += 2;
-            pSunPkt->field_0x3d = true;
-            return;
-        }
-
-        dKyr_set_btitex(&texObj, (ResTIMG*)pImg[texidx]);
-
-        GXSetNumChans(0);
-        GXSetTevColor(GX_TEVREG0, reg0);
-        GXSetTevColor(GX_TEVREG1, reg1);
-        GXSetNumTexGens(1);
-        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-        GXSetNumTevStages(1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-        GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
-        GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-        GXSetNumIndStages(0);
-        GXSetCullMode(GX_CULL_NONE);
-
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
-        GXClearVtxDesc();
-        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-
-        if (bDrawMoon == true) {
-            cXyz camfwd;
-            f32 dayscale[7] = { 1.0f, 0.83f, 0.6f, 0.6f, 0.6f, 0.6f, 0.83f, };
-
-            snap_sunmoon_proc(&moonPos2, texidx);
-            dKyr_get_vectle_calc(&pCamera->view.mLookat.mEye, &pCamera->view.mLookat.mCenter, &camfwd);
-
-            f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
-            f32 cam_theta = std::atan2f(camfwd.x, camfwd.z);
-            f32 cam_phi = std::atan2f(camfwd.y, cam_distXZ);
-
-            f32 moon_distXZ = std::sqrtf(moonPos.x*moonPos.x + moonPos.z*moonPos.z);
-            f32 moon_theta = std::atan2f(moonPos.x, moonPos.z);
-            f32 moon_phi = std::atan2f(moonPos.y, moon_distXZ);
-
-            f32 angle = 45.0f + (((moon_theta - cam_theta) / -8.0f) * moon_phi) * 360.0f;
-            MTXRotDeg(rotMtx, 'Z', angle);
-            MTXConcat(camMtx, rotMtx, camMtx);
-            GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
-
-            reg0.r = 0xF3;
-            reg0.g = 0xFF;
-            reg0.b = 0x94;
-
-            f32 size = 700.0f;
-            reg0.a = pSunPkt->mMoonAlpha * 255.0f;
-            GXSetTevColor(GX_TEVREG0, reg0);
-
-            for (s32 j = 0; j < 2; j++) {
-                if (j == 1) {
-                    GXInitTexObj(&texObj, pSunlenzPkt->mpTexSnow01, 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-                    GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-                    GXLoadTexObj(&texObj, GX_TEXMAP0);
-                    size *= 1.7f;
-                    reg0.a = pSunPkt->mMoonAlpha * 76.0f;
-                    reg0.r = 0xFF;
-                    reg0.g = 0xFF;
-                    reg0.b = 0xCF;
-                    reg1.r = 0xC5;
-                    reg1.g = 0x69;
-                    reg1.b = 0x23;
-                    MTXRotDeg(rotMtx, 'Z', 50.0f * flipX);
-                    MTXConcat(camMtx, rotMtx, camMtx);
-                    GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
-                    GXSetCurrentMtx(GX_PNMTX0);
-                }
-
-                GXSetTevColor(GX_TEVREG0, reg0);
-                GXSetTevColor(GX_TEVREG1, reg1);
-
-                vp.x = -size * flipX;
-                vp.y = size;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[0].x = moonPos2.x + lp.x;
-                pos[0].y = moonPos2.y + lp.y;
-                pos[0].z = moonPos2.z + lp.z;
-
-                vp.x = size * flipX;
-                vp.y = size;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[1].x = moonPos2.x + lp.x;
-                pos[1].y = moonPos2.y + lp.y;
-                pos[1].z = moonPos2.z + lp.z;
-
-                if (texidx == 0) {
-                    vp.x = size * flipX;
-                    vp.y = -size;
-                } else {
-                    vp.x = size * flipX * dayscale[dayofweek];
-                    vp.y = -size * dayscale[dayofweek];
-                }
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[2].x = moonPos2.x + lp.x;
-                pos[2].y = moonPos2.y + lp.y;
-                pos[2].z = moonPos2.z + lp.z;
-
-                vp.x = -size * flipX;
-                vp.y = -size;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[3].x = moonPos2.x + lp.x;
-                pos[3].y = moonPos2.y + lp.y;
-                pos[3].z = moonPos2.z + lp.z;
-
-                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
-                GXTexCoord2s16(0, 0);
-                GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
-                GXTexCoord2s16(0xFF, 0);
-                GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
-                GXTexCoord2s16(0xFF, 0xFF);
-                GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
-                GXTexCoord2s16(0, 0xFF);
-                GXEnd();
-            }
-        }
-
-        if (bDrawSun == true) {
-            cXyz camfwd;
-            snap_sunmoon_proc(&sunPos, 9);
-
-            f32 sun_distXZ = std::sqrtf(sunPos.x*sunPos.x + sunPos.z*sunPos.z);
-            f32 sun_theta = std::atan2f(sunPos.x, sunPos.z);
-            f32 sun_phi = std::atan2f(sunPos.y, sun_distXZ);
-
-            dKyr_get_vectle_calc(&pCamera->view.mLookat.mEye, &pCamera->view.mLookat.mCenter, &camfwd);
-
-            f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
-            f32 cam_theta = std::atan2f(camfwd.x, camfwd.z);
-            f32 cam_phi = std::atan2f(camfwd.y, cam_distXZ);
-
-            MTXRotDeg(rotMtx, 'Z', -50.0f + (360.0f * ((sun_theta - cam_theta) / -8.0f)));
-            MTXConcat(camMtx, rotMtx, camMtx);
-            GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
-
-            reg0.r = 0xFF;
-            reg0.g = 0xFF;
-            reg0.b = 0xF1;
-
-            reg1.r = 0xF1;
-            reg1.g = 0x91;
-            reg1.b = 0x49;
-
-            f32 dist = 1.0f - pSunlenzPkt->mDistFalloff;
-            f32 size = 575.0f;
-            if (pSunPkt->mVisibility > 0.0f)
-                size += 500.0f * (dist * dist) * pSunPkt->mVisibility;
-
-            for (s32 j = 0; j < 2; j++) {
-                if (j == 0) {
-                    dKyr_set_btitex(&texObj, (ResTIMG*)pImg[4]);
-                    reg0.a = pSunPkt->mSunAlpha * 255.0f;
-                } else {
-                    GXInitTexObj(&texObj, pSunlenzPkt->mpTexSnow01, 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-                    GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-                    GXLoadTexObj(&texObj, GX_TEXMAP0);
-                    size *= 1.6f;
-                    reg0.a = pSunPkt->mSunAlpha * 76.0f;
-                }
-
-                GXSetTevColor(GX_TEVREG0, reg0);
-                GXSetTevColor(GX_TEVREG1, reg1);
-
-                vp.x = -size * flipX;
-                vp.y = size;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[0].x = sunPos.x + lp.x;
-                pos[0].y = sunPos.y + lp.y;
-                pos[0].z = sunPos.z + lp.z;
-
-                vp.x = size * flipX;
-                vp.y = size;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[1].x = sunPos.x + lp.x;
-                pos[1].y = sunPos.y + lp.y;
-                pos[1].z = sunPos.z + lp.z;
-
-                vp.x = size * flipX;
-                vp.y = -size;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[2].x = sunPos.x + lp.x;
-                pos[2].y = sunPos.y + lp.y;
-                pos[2].z = sunPos.z + lp.z;
-
-                vp.x = -size * flipX;
-                vp.y = -size;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[3].x = sunPos.x + lp.x;
-                pos[3].y = sunPos.y + lp.y;
-                pos[3].z = sunPos.z + lp.z;
-
-                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
-                GXTexCoord2s16(0, 0);
-                GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
-                GXTexCoord2s16(0xFF, 0);
-                GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
-                GXTexCoord2s16(0xFF, 0xFF);
-                GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
-                GXTexCoord2s16(0, 0xFF);
-                GXEnd();
-            }
-        }
-#if VERSION > VERSION_JPN
-        J3DShape::resetVcdVatCache();
-#endif
+    if (!(bDrawSun | bDrawMoon)) {
+        return;
     }
+
+    sunPos = *pPos;
+
+    u32 stType = dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo());
+    if (dKy_getEnvlight().mBaseLightInfluence.mColor.r == 0 && stType != dStageType_MISC_e) {
+        if (dKy_getEnvlight().mCurTime > 285.0f || dKy_getEnvlight().mCurTime < 105.0f)
+            bDrawMoon = false;
+
+        moonPos2 = *pPos;
+    } else {
+        moonPos.x = -(pPos->x - pCamera->view.mLookat.mEye.x);
+        moonPos.y = -(pPos->y - pCamera->view.mLookat.mEye.y);
+        moonPos.z = -(pPos->z - pCamera->view.mLookat.mEye.z);
+
+        moonPos2.x = moonPos.x + pCamera->view.mLookat.mEye.x;
+        moonPos2.y = moonPos.y + pCamera->view.mLookat.mEye.y;
+        moonPos2.z = moonPos.z + pCamera->view.mLookat.mEye.z;
+    }
+
+    int dayofweek = dKy_get_dayofweek();
+    if (dComIfGs_getTime() < 180.0f) {
+        if (dayofweek != 0)
+            dayofweek--;
+        else
+            dayofweek = 6;
+    }
+
+    s32 texidx;
+    f32 flipX;
+    switch (dayofweek) {
+    case 0: texidx = 0; flipX = 1.0f; break;
+    case 1: texidx = 1; flipX = 1.0f; break;
+    case 2: texidx = 2; flipX = 1.0f; break;
+    case 3: texidx = 3; flipX = 1.0f; break;
+    case 4: texidx = 3; flipX = -1.0f; break;
+    case 5: texidx = 2; flipX = -1.0f; break;
+    case 6: texidx = 1; flipX = -1.0f; break;
+    }
+
+    reg0.r = dKy_getEnvlight().mFogColor.r;
+    reg0.g = dKy_getEnvlight().mFogColor.g;
+    reg0.b = dKy_getEnvlight().mFogColor.b;
+    reg0.a = 0xFF;
+
+    reg1.r = 0x00;
+    reg1.g = 0x00;
+    reg1.b = 0x00;
+    reg1.a = 0xFF;
+
+    if (dComIfGd_getView() != NULL) {
+        MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
+    } else {
+        if (pSunPkt->field_0x3c < 5)
+            pSunPkt->field_0x3c += 2;
+        pSunPkt->field_0x3d = true;
+        return;
+    }
+
+    dKyr_set_btitex(&texObj, (ResTIMG*)pImg[texidx]);
+
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, reg0);
+    GXSetTevColor(GX_TEVREG1, reg1);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
+    GXSetNumIndStages(0);
+    GXSetCullMode(GX_CULL_NONE);
+
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+
+    if (bDrawMoon == true) {
+        cXyz camfwd;
+        f32 dayscale[7] = { 1.0f, 0.83f, 0.6f, 0.6f, 0.6f, 0.6f, 0.83f, };
+
+        snap_sunmoon_proc(&moonPos2, texidx);
+        dKyr_get_vectle_calc(&pCamera->view.mLookat.mEye, &pCamera->view.mLookat.mCenter, &camfwd);
+
+        f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
+        f32 cam_theta = std::atan2f(camfwd.x, camfwd.z);
+        f32 cam_phi = std::atan2f(camfwd.y, cam_distXZ);
+
+        f32 moon_distXZ = std::sqrtf(moonPos.x*moonPos.x + moonPos.z*moonPos.z);
+        f32 moon_theta = std::atan2f(moonPos.x, moonPos.z);
+        f32 moon_phi = std::atan2f(moonPos.y, moon_distXZ);
+
+        f32 angle = 45.0f + (((moon_theta - cam_theta) / -8.0f) * moon_phi) * 360.0f;
+        MTXRotDeg(rotMtx, 'Z', angle);
+        MTXConcat(camMtx, rotMtx, camMtx);
+        GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
+
+        reg0.r = 0xF3;
+        reg0.g = 0xFF;
+        reg0.b = 0x94;
+
+        f32 size = 700.0f;
+        reg0.a = pSunPkt->mMoonAlpha * 255.0f;
+        GXSetTevColor(GX_TEVREG0, reg0);
+
+        for (s32 j = 0; j < 2; j++) {
+            if (j == 1) {
+                GXInitTexObj(&texObj, pSunlenzPkt->mpTexSnow01, 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+                GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+                GXLoadTexObj(&texObj, GX_TEXMAP0);
+                size *= 1.7f;
+                reg0.a = pSunPkt->mMoonAlpha * 76.0f;
+                reg0.r = 0xFF;
+                reg0.g = 0xFF;
+                reg0.b = 0xCF;
+                reg1.r = 0xC5;
+                reg1.g = 0x69;
+                reg1.b = 0x23;
+                MTXRotDeg(rotMtx, 'Z', 50.0f * flipX);
+                MTXConcat(camMtx, rotMtx, camMtx);
+                GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+                GXSetCurrentMtx(GX_PNMTX0);
+            }
+
+            GXSetTevColor(GX_TEVREG0, reg0);
+            GXSetTevColor(GX_TEVREG1, reg1);
+
+            vp.x = -size * flipX;
+            vp.y = size;
+            vp.z = 0.0f;
+            MTXMultVec(camMtx, &vp, &lp);
+            pos[0].x = moonPos2.x + lp.x;
+            pos[0].y = moonPos2.y + lp.y;
+            pos[0].z = moonPos2.z + lp.z;
+
+            vp.x = size * flipX;
+            vp.y = size;
+            vp.z = 0.0f;
+            MTXMultVec(camMtx, &vp, &lp);
+            pos[1].x = moonPos2.x + lp.x;
+            pos[1].y = moonPos2.y + lp.y;
+            pos[1].z = moonPos2.z + lp.z;
+
+            if (texidx == 0) {
+                vp.x = size * flipX;
+                vp.y = -size;
+            } else {
+                vp.x = size * flipX * dayscale[dayofweek];
+                vp.y = -size * dayscale[dayofweek];
+            }
+            vp.z = 0.0f;
+            MTXMultVec(camMtx, &vp, &lp);
+            pos[2].x = moonPos2.x + lp.x;
+            pos[2].y = moonPos2.y + lp.y;
+            pos[2].z = moonPos2.z + lp.z;
+
+            vp.x = -size * flipX;
+            vp.y = -size;
+            vp.z = 0.0f;
+            MTXMultVec(camMtx, &vp, &lp);
+            pos[3].x = moonPos2.x + lp.x;
+            pos[3].y = moonPos2.y + lp.y;
+            pos[3].z = moonPos2.z + lp.z;
+
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+            GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+            GXTexCoord2s16(0, 0);
+            GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+            GXTexCoord2s16(0xFF, 0);
+            GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+            GXTexCoord2s16(0xFF, 0xFF);
+            GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
+            GXTexCoord2s16(0, 0xFF);
+            GXEnd();
+        }
+    }
+
+    if (bDrawSun == true) {
+        cXyz camfwd;
+        snap_sunmoon_proc(&sunPos, 9);
+
+        f32 sun_distXZ = std::sqrtf(sunPos.x*sunPos.x + sunPos.z*sunPos.z);
+        f32 sun_theta = std::atan2f(sunPos.x, sunPos.z);
+        f32 sun_phi = std::atan2f(sunPos.y, sun_distXZ);
+
+        dKyr_get_vectle_calc(&pCamera->view.mLookat.mEye, &pCamera->view.mLookat.mCenter, &camfwd);
+
+        f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
+        f32 cam_theta = std::atan2f(camfwd.x, camfwd.z);
+        f32 cam_phi = std::atan2f(camfwd.y, cam_distXZ);
+
+        MTXRotDeg(rotMtx, 'Z', -50.0f + (360.0f * ((sun_theta - cam_theta) / -8.0f)));
+        MTXConcat(camMtx, rotMtx, camMtx);
+        GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
+
+        reg0.r = 0xFF;
+        reg0.g = 0xFF;
+        reg0.b = 0xF1;
+
+        reg1.r = 0xF1;
+        reg1.g = 0x91;
+        reg1.b = 0x49;
+
+        f32 dist = 1.0f - pSunlenzPkt->mDistFalloff;
+        f32 size = 575.0f;
+        if (pSunPkt->mVisibility > 0.0f)
+            size += 500.0f * (dist * dist) * pSunPkt->mVisibility;
+
+        for (s32 j = 0; j < 2; j++) {
+            if (j == 0) {
+                dKyr_set_btitex(&texObj, (ResTIMG*)pImg[4]);
+                reg0.a = pSunPkt->mSunAlpha * 255.0f;
+            } else {
+                GXInitTexObj(&texObj, pSunlenzPkt->mpTexSnow01, 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+                GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+                GXLoadTexObj(&texObj, GX_TEXMAP0);
+                size *= 1.6f;
+                reg0.a = pSunPkt->mSunAlpha * 76.0f;
+            }
+
+            GXSetTevColor(GX_TEVREG0, reg0);
+            GXSetTevColor(GX_TEVREG1, reg1);
+
+            vp.x = -size * flipX;
+            vp.y = size;
+            vp.z = 0.0f;
+            MTXMultVec(camMtx, &vp, &lp);
+            pos[0].x = sunPos.x + lp.x;
+            pos[0].y = sunPos.y + lp.y;
+            pos[0].z = sunPos.z + lp.z;
+
+            vp.x = size * flipX;
+            vp.y = size;
+            vp.z = 0.0f;
+            MTXMultVec(camMtx, &vp, &lp);
+            pos[1].x = sunPos.x + lp.x;
+            pos[1].y = sunPos.y + lp.y;
+            pos[1].z = sunPos.z + lp.z;
+
+            vp.x = size * flipX;
+            vp.y = -size;
+            vp.z = 0.0f;
+            MTXMultVec(camMtx, &vp, &lp);
+            pos[2].x = sunPos.x + lp.x;
+            pos[2].y = sunPos.y + lp.y;
+            pos[2].z = sunPos.z + lp.z;
+
+            vp.x = -size * flipX;
+            vp.y = -size;
+            vp.z = 0.0f;
+            MTXMultVec(camMtx, &vp, &lp);
+            pos[3].x = sunPos.x + lp.x;
+            pos[3].y = sunPos.y + lp.y;
+            pos[3].z = sunPos.z + lp.z;
+
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+            GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+            GXTexCoord2s16(0, 0);
+            GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+            GXTexCoord2s16(0xFF, 0);
+            GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+            GXTexCoord2s16(0xFF, 0xFF);
+            GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
+            GXTexCoord2s16(0, 0xFF);
+            GXEnd();
+        }
+    }
+#if VERSION > VERSION_JPN
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
-/* 8009514C-80095E8C       .text dKyr_drawLenzflare__FPA4_fP4cXyzR8GXColorPPUc */
+/* 8009514C-80095E8C       .text dKyr_drawLenzflare__FPA4_fP4cXyzR8_GXColorPPUc */
 // NONMATCHING - close
 void dKyr_drawLenzflare(Mtx drawMtx, cXyz* pPos, GXColor& color, u8** pImg) {
     dKankyo_sunlenz_Packet* lenz_packet = g_env_light.mpSunlenzPacket;
@@ -3598,7 +3634,9 @@ void dKyr_drawLenzflare(Mtx drawMtx, cXyz* pPos, GXColor& color, u8** pImg) {
         }
     }
 
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 80095E8C-8009682C       .text dKyr_drawRain__FPA4_fPPUc */
@@ -3622,142 +3660,146 @@ void dKyr_drawRain(Mtx drawMtx, u8** pImg) {
 
     static u32 rot = 0;
 
-    if (g_env_light.mSnowCount == 0) {
-        dummy.set(0.0f, -2.0f, 0.0f);
+    if (g_env_light.mSnowCount != 0) {
+        return;
+    }
 
-        if (pPkt->mRainCount != 0) {
-            reg0.r = 0xFF;
-            reg0.g = 0xFF;
-            reg0.b = 0xFF;
+    dummy.set(0.0f, -2.0f, 0.0f);
 
-            reg1.r = 0x80;
-            reg1.g = 0x80;
-            reg1.b = 0x80;
+    if (pPkt->mRainCount == 0) {
+        return;
+    }
 
-            reg0.a = 0x0A;
-            reg1.a = 0x0A;
+    reg0.r = 0xFF;
+    reg0.g = 0xFF;
+    reg0.b = 0xFF;
 
-            if (dComIfGd_getView() != NULL) {
-                MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
-            } else {
-                return;
-            }
+    reg1.r = 0x80;
+    reg1.g = 0x80;
+    reg1.b = 0x80;
 
-            GXTexObj texObj;
-            GXInitTexObj(&texObj, pImg[0], 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-            GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-            GXLoadTexObj(&texObj, GX_TEXMAP0);
-            GXSetNumChans(0);
-            GXSetTevColor(GX_TEVREG0, reg0);
-            GXSetTevColor(GX_TEVREG1, reg1);
-            GXSetNumTexGens(1);
-            GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-            GXSetNumTevStages(1);
-            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
-            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
-            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-            GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
-            GXSetZMode(true, GX_LEQUAL, false);
-            GXSetCullMode(GX_CULL_NONE);
+    reg0.a = 0x0A;
+    reg1.a = 0x0A;
+
+    if (dComIfGd_getView() != NULL) {
+        MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
+    } else {
+        return;
+    }
+
+    GXTexObj texObj;
+    GXInitTexObj(&texObj, pImg[0], 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, reg0);
+    GXSetTevColor(GX_TEVREG1, reg1);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetZMode(true, GX_LEQUAL, false);
+    GXSetCullMode(GX_CULL_NONE);
 #if VERSION > VERSION_JPN
-            GXSetClipMode(GX_CLIP_DISABLE);
+    GXSetClipMode(GX_CLIP_DISABLE);
 #endif
-            GXSetNumIndStages(0);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-            GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-            MTXRotDeg(rotMtx, 'Z', rot);
-            MTXConcat(camMtx, rotMtx, drawMtx);
-            GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
+    GXSetNumIndStages(0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    MTXRotDeg(rotMtx, 'Z', rot);
+    MTXConcat(camMtx, rotMtx, drawMtx);
+    GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
 
-            for (s32 i = 0; i < pPkt->mRainCount; i++) {
-                f32 alpha = pPkt->mEff[i].mAlpha;
-                if (alpha <= 0.0f)
-                    continue;
+    for (s32 i = 0; i < pPkt->mRainCount; i++) {
+        f32 alpha = pPkt->mEff[i].mAlpha;
+        if (alpha <= 0.0f)
+            continue;
 
-                reg0.a = alpha * 14.0f;
-                GXSetTevColor(GX_TEVREG0, reg0);
+        reg0.a = alpha * 14.0f;
+        GXSetTevColor(GX_TEVREG0, reg0);
 
-                p.x = pPkt->mEff[i].mBasePos.x + pPkt->mEff[i].mPos.x;
-                p.y = pPkt->mEff[i].mBasePos.y + pPkt->mEff[i].mPos.y;
-                p.z = pPkt->mEff[i].mBasePos.z + pPkt->mEff[i].mPos.z;
+        p.x = pPkt->mEff[i].mBasePos.x + pPkt->mEff[i].mPos.x;
+        p.y = pPkt->mEff[i].mBasePos.y + pPkt->mEff[i].mPos.y;
+        p.z = pPkt->mEff[i].mBasePos.z + pPkt->mEff[i].mPos.z;
 
-                f32 dist = p.abs(pCamera->view.mLookat.mEye);
-                dist = dist / 1500.0f + 0.1f;
-                if (dist > 1.0f)
-                    dist = 1.0f;
+        f32 dist = p.abs(pCamera->view.mLookat.mEye);
+        dist = dist / 1500.0f + 0.1f;
+        if (dist > 1.0f)
+            dist = 1.0f;
 
-                f32 size = 2.5f + (i / 250.0f);
-                f32 speed = 5.0f + (dist * 70.0f);
-                tilt.x = speed * (dummy.x + (0.08f * (i & 0x07)) + pPkt->mCenterDelta.x * pPkt->mCenterDeltaMul * 10.0f + windvec.x);
-                tilt.y = speed * (dummy.y + pPkt->mCenterDelta.y * pPkt->mCenterDeltaMul + windvec.y);
-                tilt.z = speed * (dummy.z + (0.08f * (i & 0x03)) + pPkt->mCenterDelta.z * pPkt->mCenterDeltaMul * 10.0f + windvec.z);
+        f32 size = 2.5f + (i / 250.0f);
+        f32 speed = 5.0f + (dist * 70.0f);
+        tilt.x = speed * (dummy.x + (0.08f * (i & 0x07)) + pPkt->mCenterDelta.x * pPkt->mCenterDeltaMul * 10.0f + windvec.x);
+        tilt.y = speed * (dummy.y + pPkt->mCenterDelta.y * pPkt->mCenterDeltaMul + windvec.y);
+        tilt.z = speed * (dummy.z + (0.08f * (i & 0x03)) + pPkt->mCenterDelta.z * pPkt->mCenterDeltaMul * 10.0f + windvec.z);
 
-                vp.x = -1.0f * -size;
-                vp.y = 0.0f;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[0].x = (p.x + lp.x) - tilt.x;
-                pos[0].y = (p.y + lp.y) - tilt.y;
-                pos[0].z = (p.z + lp.z) - tilt.z;
+        vp.x = -1.0f * -size;
+        vp.y = 0.0f;
+        vp.z = 0.0f;
+        MTXMultVec(camMtx, &vp, &lp);
+        pos[0].x = (p.x + lp.x) - tilt.x;
+        pos[0].y = (p.y + lp.y) - tilt.y;
+        pos[0].z = (p.z + lp.z) - tilt.z;
 
-                vp.x = -1.0f * size;
-                vp.y = 0.0f;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[1].x = (p.x + lp.x) - tilt.x;
-                pos[1].y = (p.y + lp.y) - tilt.y;
-                pos[1].z = (p.z + lp.z) - tilt.z;
+        vp.x = -1.0f * size;
+        vp.y = 0.0f;
+        vp.z = 0.0f;
+        MTXMultVec(camMtx, &vp, &lp);
+        pos[1].x = (p.x + lp.x) - tilt.x;
+        pos[1].y = (p.y + lp.y) - tilt.y;
+        pos[1].z = (p.z + lp.z) - tilt.z;
 
-                vp.x = -1.0f * -size;
-                vp.y = 0.0f;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[2].x = p.x + lp.x;
-                pos[2].y = p.y + lp.y;
-                pos[2].z = p.z + lp.z;
+        vp.x = -1.0f * -size;
+        vp.y = 0.0f;
+        vp.z = 0.0f;
+        MTXMultVec(camMtx, &vp, &lp);
+        pos[2].x = p.x + lp.x;
+        pos[2].y = p.y + lp.y;
+        pos[2].z = p.z + lp.z;
 
-                vp.x = -1.0f * size;
-                vp.y = 0.0f;
-                vp.z = 0.0f;
-                MTXMultVec(camMtx, &vp, &lp);
-                pos[3].x = p.x + lp.x;
-                pos[3].y = p.y + lp.y;
-                pos[3].z = p.z + lp.z;
+        vp.x = -1.0f * size;
+        vp.y = 0.0f;
+        vp.z = 0.0f;
+        MTXMultVec(camMtx, &vp, &lp);
+        pos[3].x = p.x + lp.x;
+        pos[3].y = p.y + lp.y;
+        pos[3].z = p.z + lp.z;
 
-                for (s32 j = 0; j < 4; j++) {
-                    static const cXyz add_table[4] = {
-                        cXyz(150.0f, 0.0f, 0.0f),
-                        cXyz(0.0f, 150.0f, 150.0f),
-                        cXyz(150.0f, 320.0f, 150.0f),
-                        cXyz(45.0f, 480.0f, 45.0f),
-                    };
+        for (s32 j = 0; j < 4; j++) {
+            static const cXyz add_table[4] = {
+                cXyz(150.0f, 0.0f, 0.0f),
+                cXyz(0.0f, 150.0f, 150.0f),
+                cXyz(150.0f, 320.0f, 150.0f),
+                cXyz(45.0f, 480.0f, 45.0f),
+            };
 
-                    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                    GXPosition3f32(pos[0].x + add_table[j].x, pos[0].y + add_table[j].y, pos[0].z + add_table[j].z);
-                    GXTexCoord2s16(0, 0);
-                    GXPosition3f32(pos[1].x + add_table[j].x, pos[1].y + add_table[j].y, pos[1].z + add_table[j].z);
-                    GXTexCoord2s16(0xFF, 0);
-                    GXPosition3f32(pos[2].x + add_table[j].x, pos[2].y + add_table[j].y, pos[2].z + add_table[j].z);
-                    GXTexCoord2s16(0xFF, 0xFF);
-                    GXPosition3f32(pos[3].x + add_table[j].x, pos[3].y + add_table[j].y, pos[3].z + add_table[j].z);
-                    GXTexCoord2s16(0, 0xFF);
-                    GXEnd();
-                }
-            }
-
-#if VERSION > VERSION_JPN
-            GXSetClipMode(GX_CLIP_ENABLE);
-            J3DShape::resetVcdVatCache();
-#endif
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+            GXPosition3f32(pos[0].x + add_table[j].x, pos[0].y + add_table[j].y, pos[0].z + add_table[j].z);
+            GXTexCoord2s16(0, 0);
+            GXPosition3f32(pos[1].x + add_table[j].x, pos[1].y + add_table[j].y, pos[1].z + add_table[j].z);
+            GXTexCoord2s16(0xFF, 0);
+            GXPosition3f32(pos[2].x + add_table[j].x, pos[2].y + add_table[j].y, pos[2].z + add_table[j].z);
+            GXTexCoord2s16(0xFF, 0xFF);
+            GXPosition3f32(pos[3].x + add_table[j].x, pos[3].y + add_table[j].y, pos[3].z + add_table[j].z);
+            GXTexCoord2s16(0, 0xFF);
+            GXEnd();
         }
     }
+
+#if VERSION > VERSION_JPN
+    GXSetClipMode(GX_CLIP_ENABLE);
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 8009682C-80096D18       .text dKyr_drawSibuki__FPA4_fPPUc */
@@ -4047,162 +4089,166 @@ void dKyr_drawHousi(Mtx drawMtx, u8** pImg) {
     Vec spC4;
     Vec spB8;
 
-    if (housi_packet->mCount != 0) {
-        f32 var_f25 = 120.0f;
+    if (housi_packet->mCount == 0) {
+        return;
+    }
 
-        GXColor color_reg0;
-        color_reg0.r = 0xE5;
-        color_reg0.g = 0xFF;
-        color_reg0.b = 0xC8;
-        color_reg0.a = var_f25;
+    f32 var_f25 = 120.0f;
 
-        GXColor color_reg1;
-        color_reg1.r = 0x43;
-        color_reg1.g = 0xD2;
-        color_reg1.b = 0xCA;
-        color_reg1.a = 0xFF;
+    GXColor color_reg0;
+    color_reg0.r = 0xE5;
+    color_reg0.g = 0xFF;
+    color_reg0.b = 0xC8;
+    color_reg0.a = var_f25;
 
-        if (dComIfGd_getView() != NULL) {
-            MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
+    GXColor color_reg1;
+    color_reg1.r = 0x43;
+    color_reg1.g = 0xD2;
+    color_reg1.b = 0xCA;
+    color_reg1.a = 0xFF;
+
+    if (dComIfGd_getView() != NULL) {
+        MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
+    } else {
+        return;
+    }
+
+    f32 temp_f26 = 1.2f;
+    f32 temp_f24 = 6.5f;
+
+    for (int i = 0; i < 2; i++) {
+        dKyr_set_btitex(&spDC, (ResTIMG*)pImg[0]);
+        GXSetNumChans(0);
+        GXSetTevColor(GX_TEVREG0, color_reg0);
+        GXSetTevColor(GX_TEVREG1, color_reg1);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+        GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+
+        if (i == 1) {
+            GXSetZMode(GX_TRUE, GX_GEQUAL, GX_FALSE);
         } else {
-            return;
+            GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
         }
 
-        f32 temp_f26 = 1.2f;
-        f32 temp_f24 = 6.5f;
+        GXSetCullMode(GX_CULL_NONE);
+        GXSetClipMode(GX_CLIP_DISABLE);
+        GXSetNumIndStages(0);
 
-        for (int i = 0; i < 2; i++) {
-            dKyr_set_btitex(&spDC, (ResTIMG*)pImg[0]);
-            GXSetNumChans(0);
-            GXSetTevColor(GX_TEVREG0, color_reg0);
-            GXSetTevColor(GX_TEVREG1, color_reg1);
-            GXSetNumTexGens(1);
-            GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-            GXSetNumTevStages(1);
-            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-            GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+
+        MTXRotRad(rotMtx, 'Z', DEG2RAD(rot));
+        MTXConcat(camMtx, rotMtx, camMtx);
+
+        GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
+
+        for (int j = 0; j < housi_packet->mCount; j++) {
+            fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+            spD0.x = housi_packet->mEffect[j].mBasePos.x + housi_packet->mEffect[j].mPos.x;
+            spD0.y = housi_packet->mEffect[j].mBasePos.y + housi_packet->mEffect[j].mPos.y;
+            spD0.z = housi_packet->mEffect[j].mBasePos.z + housi_packet->mEffect[j].mPos.z;
+
+            if (i == 1 && j == 0) {
+                color_reg0.r = 0;
+                color_reg0.g = 0;
+                color_reg0.b = 0;
+
+                color_reg1.r = 0;
+                color_reg1.g = 0;
+                color_reg1.b = 0;
+
+                GXSetTevColor(GX_TEVREG1, color_reg1);
+            }
 
             if (i == 1) {
-                GXSetZMode(GX_TRUE, GX_GEQUAL, GX_FALSE);
+                f32 temp_f4 = 100.0f;
+                if (
+                    (spD0.y > player->current.pos.y + temp_f4) ||
+                    (spD0.y < player->current.pos.y - 20.0f) ||
+                    (housi_packet->mEffect[j].mAlpha <= 0.0f)
+                ) {
+                    continue;
+                }
+                color_reg0.a = housi_packet->mEffect[j].mAlpha * 40.0f *
+                                (1.0f - ((spD0.y - player->current.pos.y) / 100.0f));
+                spD0.y = player->current.pos.y - 20.0f;
             } else {
-                GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
+                color_reg0.a = housi_packet->mEffect[j].mAlpha * var_f25;
             }
 
-            GXSetCullMode(GX_CULL_NONE);
-            GXSetClipMode(GX_CLIP_DISABLE);
-            GXSetNumIndStages(0);
+            GXLoadTexObj(&spDC, GX_TEXMAP0);
+            GXSetTevColor(GX_TEVREG0, color_reg0);
 
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 8);
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-            GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+            f32 var_f27 = housi_packet->mEffect[j].field_0x48 * 9.0f;
 
-            MTXRotRad(rotMtx, 'Z', DEG2RAD(rot));
-            MTXConcat(camMtx, rotMtx, camMtx);
+            f32 temp_f28 = (var_f27 * 0.2f) * cM_fsin(housi_packet->mEffect[j].mScale.x * 5.0f);
+            f32 temp_f30 = (var_f27 * 0.2f) * cM_fsin(housi_packet->mEffect[j].mScale.y * 6.0f);
 
-            GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
+            spC4.x = var_f27 - temp_f30;
+            spC4.y = var_f27 - temp_f28;
+            spC4.z = 0.0f;
+            MTXMultVec(camMtx, &spC4, &spB8);
+            pos[0].x = spD0.x + spB8.x;
+            pos[0].y = spD0.y + spB8.y;
+            pos[0].z = spD0.z + spB8.z;
 
-            for (int j = 0; j < housi_packet->mCount; j++) {
-                fopAc_ac_c* player = dComIfGp_getPlayer(0);
+            spC4.x = -var_f27 + temp_f30;
+            spC4.y = var_f27 - temp_f28;
+            spC4.z = 0.0f;
+            MTXMultVec(camMtx, &spC4, &spB8);
+            pos[1].x = spD0.x + spB8.x;
+            pos[1].y = spD0.y + spB8.y;
+            pos[1].z = spD0.z + spB8.z;
 
-                spD0.x = housi_packet->mEffect[j].mBasePos.x + housi_packet->mEffect[j].mPos.x;
-                spD0.y = housi_packet->mEffect[j].mBasePos.y + housi_packet->mEffect[j].mPos.y;
-                spD0.z = housi_packet->mEffect[j].mBasePos.z + housi_packet->mEffect[j].mPos.z;
+            spC4.x = -var_f27 + temp_f30;
+            spC4.y = -var_f27 + temp_f28;
+            spC4.z = 0.0f;
+            MTXMultVec(camMtx, &spC4, &spB8);
+            pos[2].x = spD0.x + spB8.x;
+            pos[2].y = spD0.y + spB8.y;
+            pos[2].z = spD0.z + spB8.z;
 
-                if (i == 1 && j == 0) {
-                    color_reg0.r = 0;
-                    color_reg0.g = 0;
-                    color_reg0.b = 0;
+            spC4.x = var_f27 - temp_f30;
+            spC4.y = -var_f27 + temp_f28;
+            spC4.z = 0.0f;
+            MTXMultVec(camMtx, &spC4, &spB8);
+            pos[3].x = spD0.x + spB8.x;
+            pos[3].y = spD0.y + spB8.y;
+            pos[3].z = spD0.z + spB8.z;
 
-                    color_reg1.r = 0;
-                    color_reg1.g = 0;
-                    color_reg1.b = 0;
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
-                    GXSetTevColor(GX_TEVREG1, color_reg1);
-                }
+            s16 var_r17 = 0x1FF;
 
-                if (i == 1) {
-                    f32 temp_f4 = 100.0f;
-                    if (
-                        (spD0.y > player->current.pos.y + temp_f4) ||
-                        (spD0.y < player->current.pos.y - 20.0f) ||
-                        (housi_packet->mEffect[j].mAlpha <= 0.0f)
-                    ) {
-                        continue;
-                    }
-                    color_reg0.a = housi_packet->mEffect[j].mAlpha * 40.0f *
-                                    (1.0f - ((spD0.y - player->current.pos.y) / 100.0f));
-                    spD0.y = player->current.pos.y - 20.0f;
-                } else {
-                    color_reg0.a = housi_packet->mEffect[j].mAlpha * var_f25;
-                }
-
-                GXLoadTexObj(&spDC, GX_TEXMAP0);
-                GXSetTevColor(GX_TEVREG0, color_reg0);
-
-                f32 var_f27 = housi_packet->mEffect[j].field_0x48 * 9.0f;
-
-                f32 temp_f28 = (var_f27 * 0.2f) * cM_fsin(housi_packet->mEffect[j].mScale.x * 5.0f);
-                f32 temp_f30 = (var_f27 * 0.2f) * cM_fsin(housi_packet->mEffect[j].mScale.y * 6.0f);
-
-                spC4.x = var_f27 - temp_f30;
-                spC4.y = var_f27 - temp_f28;
-                spC4.z = 0.0f;
-                MTXMultVec(camMtx, &spC4, &spB8);
-                pos[0].x = spD0.x + spB8.x;
-                pos[0].y = spD0.y + spB8.y;
-                pos[0].z = spD0.z + spB8.z;
-
-                spC4.x = -var_f27 + temp_f30;
-                spC4.y = var_f27 - temp_f28;
-                spC4.z = 0.0f;
-                MTXMultVec(camMtx, &spC4, &spB8);
-                pos[1].x = spD0.x + spB8.x;
-                pos[1].y = spD0.y + spB8.y;
-                pos[1].z = spD0.z + spB8.z;
-
-                spC4.x = -var_f27 + temp_f30;
-                spC4.y = -var_f27 + temp_f28;
-                spC4.z = 0.0f;
-                MTXMultVec(camMtx, &spC4, &spB8);
-                pos[2].x = spD0.x + spB8.x;
-                pos[2].y = spD0.y + spB8.y;
-                pos[2].z = spD0.z + spB8.z;
-
-                spC4.x = var_f27 - temp_f30;
-                spC4.y = -var_f27 + temp_f28;
-                spC4.z = 0.0f;
-                MTXMultVec(camMtx, &spC4, &spB8);
-                pos[3].x = spD0.x + spB8.x;
-                pos[3].y = spD0.y + spB8.y;
-                pos[3].z = spD0.z + spB8.z;
-
-                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-                s16 var_r17 = 0x1FF;
-
-                GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
-                GXTexCoord2s16(0, 0);
-                GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
-                GXTexCoord2s16(var_r17, 0);
-                GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
-                GXTexCoord2s16(var_r17, var_r17);
-                GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
-                GXTexCoord2s16(0, var_r17);
-                GXEnd();
-            }
+            GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+            GXTexCoord2s16(0, 0);
+            GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+            GXTexCoord2s16(var_r17, 0);
+            GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+            GXTexCoord2s16(var_r17, var_r17);
+            GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
+            GXTexCoord2s16(0, var_r17);
+            GXEnd();
         }
-
-        GXSetClipMode(GX_CLIP_ENABLE);
-        J3DShape::resetVcdVatCache();
     }
+
+#if VERSION > VERSION_JPN
+    GXSetClipMode(GX_CLIP_ENABLE);
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 80097AD0-800987B8       .text dKyr_drawKazanbai__FPA4_fPPUc */
@@ -4238,225 +4284,236 @@ void dKyr_drawKazanbai(Mtx drawMtx, u8** pImg) {
     color0.a = 0xFF;
     color1.a = 0xFF;
 
+    f32 f26 = 3.0f;
+
     if (dComIfGd_getView() != NULL) {
         MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
     } else {
         return;
     }
 
-    if (*pImg != NULL) {
-        for (int i = 0; i < 2; i++) {
-            GXTexObj texObj;
-            dKyr_set_btitex(&texObj, (ResTIMG*)pImg[0]);
-            GXSetNumChans(0);
-            GXSetTevColor(GX_TEVREG0, color0);
-            GXSetTevColor(GX_TEVREG1, color1);
-            GXSetNumTexGens(1);
-            GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
-            GXSetNumTevStages(1);
-            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
-            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
-            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-            GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    if (*pImg == NULL) {
+        return;
+    }
 
-            if (i == 1) {
-                GXSetZMode(GX_ENABLE, GX_GEQUAL, GX_DISABLE);
-            } else {
-                GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
-            }
+    for (int i = 0; i < 2; i++) {
+        GXTexObj texObj;
+        dKyr_set_btitex(&texObj, (ResTIMG*)pImg[0]);
+        GXSetNumChans(0);
+        GXSetTevColor(GX_TEVREG0, color0);
+        GXSetTevColor(GX_TEVREG1, color1);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+        GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
 
-            GXSetCullMode(GX_CULL_NONE);
-            GXSetClipMode(GX_CLIP_DISABLE);
-            GXSetNumIndStages(0);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-            GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        if (i == 1) {
+            GXSetZMode(GX_ENABLE, GX_GEQUAL, GX_DISABLE);
+        } else {
+            GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
+        }
 
-            strcmp(dComIfGp_getStartStageName(), "Adanmae");
+        GXSetCullMode(GX_CULL_NONE);
+#if VERSION > VERSION_DEMO
+        GXSetClipMode(GX_CLIP_DISABLE);
+#endif
+        GXSetNumIndStages(0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 
-            MTXRotDeg(rotMtx, 'Z', rot);
-            MTXConcat(camMtx, rotMtx, camMtx);
+        strcmp(dComIfGp_getStartStageName(), "Adanmae");
 
-            GXLoadPosMtxImm(drawMtx, 0);
-            GXSetCurrentMtx(0);
+        MTXRotDeg(rotMtx, 'Z', rot);
+        MTXConcat(camMtx, rotMtx, camMtx);
 
-            for (int j = 0; j < 2; j++) {
-                if (i != 1 || j != 1) {
-                    int temp_r4;
-                    int sp1D8;
-                    if (j == 0) {
-                        temp_r4 = 0;
-                        sp1D8 = snow_packet->mEffCount;
-                    } else {
-                        temp_r4 = 200;
-                        sp1D8 = snow_packet->mTamariStart + 200;
-                    }
+        GXLoadPosMtxImm(drawMtx, 0);
+        GXSetCurrentMtx(0);
 
-                    for (; temp_r4 < sp1D8; temp_r4++) {
-                        f32 sp44 = -1.0f;
-                        if (i != 1 || snow_packet->mEff[temp_r4].mStatus != 2) {
-                            u8 var_r24 = 8;
+        for (int j = 0; j < 2; j++) {
+            if (i != 1 || j != 1) {
+                int temp_r4;
+                int sp1D8;
+                if (j == 0) {
+                    temp_r4 = 0;
+                    sp1D8 = snow_packet->mEffCount;
+                } else {
+                    temp_r4 = 200;
+                    sp1D8 = snow_packet->mTamariStart + 200;
+                }
 
-                            sp88.x = snow_packet->mEff[temp_r4].mBasePos.x + snow_packet->mEff[temp_r4].mPos.x;
-                            sp88.y = snow_packet->mEff[temp_r4].mBasePos.y + snow_packet->mEff[temp_r4].mPos.y;
-                            sp88.z = snow_packet->mEff[temp_r4].mBasePos.z + snow_packet->mEff[temp_r4].mPos.z;
+                for (; temp_r4 < sp1D8; temp_r4++) {
+                    f32 sp44 = -1.0f;
+                    if (i != 1 || snow_packet->mEff[temp_r4].mStatus != 2) {
+                        u8 var_r24 = 8;
 
-                            color0.a = 0xFF;
+                        sp88.x = snow_packet->mEff[temp_r4].mBasePos.x + snow_packet->mEff[temp_r4].mPos.x;
+                        sp88.y = snow_packet->mEff[temp_r4].mBasePos.y + snow_packet->mEff[temp_r4].mPos.y;
+                        sp88.z = snow_packet->mEff[temp_r4].mBasePos.z + snow_packet->mEff[temp_r4].mPos.z;
 
-                            if (i == 1) {
-                                if (!(sp88.y > temp_f20) || !(sp88.y < temp_f20 + 200.0f)) {
-                                    continue;
-                                }
+                        f32 f22 = 0.0f;
+                        color0.a = 0xFF;
+                        u32 _255 = 0xFF;
 
-                                f32 var_f2 = 1.0f;
-                                f32 var_f1 = var_f2 - (sp88.y - temp_f20) / 200.0f;
-                                sp88.y = temp_f20;
+                        if (i == 1) {
+                            if (!(sp88.y > temp_f20) || !(sp88.y < temp_f20 + 200.0f)) {
+                                continue;
+                            }
 
-                                color0.r = 0;
-                                color0.g = 0;
-                                color0.b = 0;
-                                color0.a = var_f1 * 20.0f;
+                            f32 var_f2 = 1.0f;
+                            f32 var_f1 = var_f2 - (sp88.y - temp_f20) / 200.0f;
+                            sp88.y = temp_f20;
 
-                                color1.r = 0;
-                                color1.g = 0;
-                                color1.b = 0;
-                            } else if (temp_r4 < (int)(snow_packet->mEffCount * 0.4f)) {
-                                f32 temp_f2 = std::fabsf(cM_scos((f32)(temp_r4 * 4000) + (f32)(g_Counter.mCounter0 * 500.0f)));
-                                color0.r = 69.0f + (temp_f2 * 186.0f);
-                                color0.g = 60.0f + (temp_f2 * -60.0f);
-                                color0.b = 39.0f + (temp_f2 * -39.0f);
+                            color0.r = 0;
+                            color0.g = 0;
+                            color0.b = 0;
+                            color0.a = var_f1 * 20.0f;
 
-                                f32 temp_f0 = 124.0f + (temp_f2 * 131.0f);
-                                color1.r = temp_f0;
-                                color1.g = temp_f0;
-                                color1.b = 104.0f + (temp_f2 * -104.0f);
+                            color1.r = 0;
+                            color1.g = 0;
+                            color1.b = 0;
+                        } else if (temp_r4 < (int)(snow_packet->mEffCount * 0.4f)) {
+                            f32 temp_f2 = std::fabsf(cM_scos((f32)(temp_r4 * 4000) + (f32)(g_Counter.mCounter0 * 500.0f)));
+                            u32 _69 = 0x45;
+                            color0.r = (f32)_69 + (temp_f2 * ((f32)_255 - (f32)_69));
+                            u32 _60 = 0x3C;
+                            u32 _0 = 0x00;
+                            color0.g = (f32)_60 + (temp_f2 * ((f32)_0 - (f32)_60));
+                            u32 _39 = 0x27;
+                            color0.b = (f32)_39 + (temp_f2 * ((f32)_0 - (f32)_39));
 
-                                temp_f2 *= temp_f2;
-                                f32 temp_f0_2 = temp_f2 * 255.0f;
-                                color0.r = temp_f0_2;
+                            u32 _124 = 0x7C;
+                            color1.r = (f32)_124 + (temp_f2 * ((f32)_255 - (f32)_124));
+                            color1.g = (f32)_124 + (temp_f2 * ((f32)_255 - (f32)_124));
+                            u32 _104 = 0x68;
+                            color1.b = (f32)_104 + (temp_f2 * ((f32)_255 - (f32)_104));
 
-                                f32 temp = 0.0f; // necessary or else the following line gets optimized to 0
-                                f32 temp_f0_3 = temp_f2 * temp;
-                                color0.g = temp_f0_3;
-                                color0.b = temp_f0_3;
+                            temp_f2 *= temp_f2;
+                            color0.r = temp_f2 * (f32)_255;
+                            color0.g = temp_f2 * (f32)_0;
+                            _0 = 0;
+                            color0.b = temp_f2 * (f32)_0;
 
-                                color1.r = temp_f0_2;
-                                color1.g = temp_f0_2;
-                                color1.b = temp_f0_3;
+                            color1.r = temp_f2 * (f32)_255;
+                            color1.g = temp_f2 * (f32)_255;
+                            _0 = 0;
+                            color1.b = temp_f2 * _0;
+                        } else {
+                            color0.r = 0x45;
+                            color0.g = 0x3C;
+                            color0.b = 0x27;
+
+                            color1.r = 0x7C;
+                            color1.g = 0x7C;
+                            color1.b = 0x68;
+                        }
+
+                        if (j == 1 || snow_packet->mEff[temp_r4].mStatus == 2) {
+                            color0.r = 0;
+                            color0.g = 0;
+                            color0.b = 0;
+                            color0.a = snow_packet->mEff[temp_r4].mScale * 255.0f;
+
+                            color1.r = 0;
+                            color1.g = 0;
+                            color1.b = 0;
+
+                            if (j == 1) {
+                                var_r24 = 1;
+                            }
+                        }
+
+                        GXSetTevColor(GX_TEVREG0, color0);
+                        GXSetTevColor(GX_TEVREG1, color1);
+
+                        f32 var_f25;
+                        if (j == 1 || snow_packet->mEff[temp_r4].mStatus == 2) {
+                            var_f25 = (f26 + (int)(temp_r4 / 250)) * 0.9f;
+                        } else {
+                            var_f25 = f26 + (int)(temp_r4 / 250);
+                        }
+
+                        spA0.x = -var_f25 * sp44;
+                        spA0.y = var_f25 - f22;
+                        spA0.z = 0.0f;
+                        cMtx_multVec(camMtx, &spA0, &sp94);
+                        pos[0].x = sp88.x + sp94.x;
+                        pos[0].y = sp88.y + sp94.y;
+                        pos[0].z = sp88.z + sp94.z;
+
+                        spA0.x = var_f25 * sp44;
+                        spA0.y = var_f25;
+                        spA0.z = 0.0f;
+                        cMtx_multVec(camMtx, &spA0, &sp94);
+                        pos[1].x = sp88.x + sp94.x;
+                        pos[1].y = sp88.y + sp94.y;
+                        pos[1].z = sp88.z + sp94.z;
+
+                        spA0.x = var_f25 * sp44;
+                        spA0.y = -var_f25;
+                        spA0.z = 0.0f;
+                        cMtx_multVec(camMtx, &spA0, &sp94);
+                        pos[2].x = sp88.x + sp94.x;
+                        pos[2].y = sp88.y + sp94.y;
+                        pos[2].z = sp88.z + sp94.z;
+
+                        spA0.x = -var_f25 * sp44;
+                        spA0.y = -var_f25 - f22;
+                        spA0.z = 0.0f;
+                        cMtx_multVec(camMtx, &spA0, &sp94);
+                        pos[3].x = sp88.x + sp94.x;
+                        pos[3].y = sp88.y + sp94.y;
+                        pos[3].z = sp88.z + sp94.z;
+
+                        for (int k = 0; k < var_r24; k++) {
+                            static const cXyz add_table[] = {
+                                cXyz(0.0f, 0.0f, 0.0f),
+                                cXyz(300.0f, 50.0f, 0.0f),
+                                cXyz(0.0f, -50.0f, 300.0f),
+                                cXyz(150.0f, 20.0f, 150.0f),
+                                cXyz(0.0f, 0.0f, -300.0f),
+                                cXyz(0.0f, 100.0f, 0.0f),
+                                cXyz(200.0f, -100.0f, 0.0f),
+                                cXyz(200.0f, 50.0f, 50.0f),
+                            };
+
+                            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+                            f32 temp_f3;
+                            if (snow_packet->mEff[temp_r4].mStatus != 2) {
+                                temp_f3 = add_table[k].y;
                             } else {
-                                color0.r = 0x45;
-                                color0.g = 0x3C;
-                                color0.b = 0x27;
-
-                                color1.r = 0x7C;
-                                color1.g = 0x7C;
-                                color1.b = 0x68;
+                                temp_f3 = temp_r4 & 3;
                             }
 
-                            if (j == 1 || snow_packet->mEff[temp_r4].mStatus == 2) {
-                                color0.r = 0;
-                                color0.g = 0;
-                                color0.b = 0;
-                                color0.a = snow_packet->mEff[temp_r4].mScale * 255.0f;
-
-                                color1.r = 0;
-                                color1.g = 0;
-                                color1.b = 0;
-
-                                if (j == 1) {
-                                    var_r24 = 1;
-                                }
-                            }
-
-                            GXSetTevColor(GX_TEVREG0, color0);
-                            GXSetTevColor(GX_TEVREG1, color1);
-
-                            f32 var_f25;
-                            if (j == 1 || snow_packet->mEff[temp_r4].mStatus == 2) {
-                                var_f25 = ((temp_r4 / 250) + 3.0f) * 0.9f;
-                            } else {
-                                var_f25 = (temp_r4 / 250) + 3.0f;
-                            }
-
-                            f32 sp38 = 0.0f;
-
-                            spA0.x = -var_f25 * sp44;
-                            spA0.y = var_f25 - sp38;
-                            spA0.z = 0.0f;
-                            cMtx_multVec(camMtx, &spA0, &sp94);
-                            pos[0].x = sp88.x + sp94.x;
-                            pos[0].y = sp88.y + sp94.y;
-                            pos[0].z = sp88.z + sp94.z;
-
-                            spA0.x = var_f25 * sp44;
-                            spA0.y = var_f25;
-                            spA0.z = 0.0f;
-                            cMtx_multVec(camMtx, &spA0, &sp94);
-                            pos[1].x = sp88.x + sp94.x;
-                            pos[1].y = sp88.y + sp94.y;
-                            pos[1].z = sp88.z + sp94.z;
-
-                            spA0.x = var_f25 * sp44;
-                            spA0.y = -var_f25;
-                            spA0.z = 0.0f;
-                            cMtx_multVec(camMtx, &spA0, &sp94);
-                            pos[2].x = sp88.x + sp94.x;
-                            pos[2].y = sp88.y + sp94.y;
-                            pos[2].z = sp88.z + sp94.z;
-
-                            spA0.x = -var_f25 * sp44;
-                            spA0.y = -var_f25 - sp38;
-                            spA0.z = 0.0f;
-                            cMtx_multVec(camMtx, &spA0, &sp94);
-                            pos[3].x = sp88.x + sp94.x;
-                            pos[3].y = sp88.y + sp94.y;
-                            pos[3].z = sp88.z + sp94.z;
-
-                            for (int k = 0; k < var_r24; k++) {
-                                static const cXyz add_table[] = {
-                                    cXyz(0.0f, 0.0f, 0.0f),
-                                    cXyz(300.0f, 50.0f, 0.0f),
-                                    cXyz(0.0f, -50.0f, 300.0f),
-                                    cXyz(150.0f, 20.0f, 150.0f),
-                                    cXyz(0.0f, 0.0f, -300.0f),
-                                    cXyz(0.0f, 100.0f, 0.0f),
-                                    cXyz(200.0f, -100.0f, 0.0f),
-                                    cXyz(200.0f, 50.0f, 50.0f),
-                                };
-
-                                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-                                f32 temp_f3;
-                                if (snow_packet->mEff[temp_r4].mStatus != 2) {
-                                    temp_f3 = add_table[k].y;
-                                } else {
-                                    temp_f3 = temp_r4 & 3;
-                                }
-
-                                GXPosition3f32(pos[0].x + add_table[k].x, pos[0].y + temp_f3, pos[0].z + add_table[k].z);
-                                GXTexCoord2s16(0, 0);
-                                GXPosition3f32(pos[1].x + add_table[k].x, pos[1].y + temp_f3, pos[1].z + add_table[k].z);
-                                GXTexCoord2s16(0xFF, 0);
-                                GXPosition3f32(pos[2].x + add_table[k].x, pos[2].y + temp_f3, pos[2].z + add_table[k].z);
-                                GXTexCoord2s16(0xFF, 0xFF);
-                                GXPosition3f32(pos[3].x + add_table[k].x, pos[3].y + temp_f3, pos[3].z + add_table[k].z);
-                                GXTexCoord2s16(0, 0xFF);
-                                GXEnd();
-                            }
+                            GXPosition3f32(pos[0].x + add_table[k].x, pos[0].y + temp_f3, pos[0].z + add_table[k].z);
+                            GXTexCoord2s16(0, 0);
+                            GXPosition3f32(pos[1].x + add_table[k].x, pos[1].y + temp_f3, pos[1].z + add_table[k].z);
+                            GXTexCoord2s16(0xFF, 0);
+                            GXPosition3f32(pos[2].x + add_table[k].x, pos[2].y + temp_f3, pos[2].z + add_table[k].z);
+                            GXTexCoord2s16(0xFF, 0xFF);
+                            GXPosition3f32(pos[3].x + add_table[k].x, pos[3].y + temp_f3, pos[3].z + add_table[k].z);
+                            GXTexCoord2s16(0, 0xFF);
+                            GXEnd();
                         }
                     }
                 }
             }
         }
-
-        GXSetClipMode(GX_CLIP_ENABLE);
-        J3DShape::resetVcdVatCache();
     }
+
+#if VERSION > VERSION_JPN
+    GXSetClipMode(GX_CLIP_ENABLE);
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 800987B8-80098FF0       .text dKyr_drawSnow__FPA4_fPPUc */
@@ -4500,108 +4557,112 @@ void dKyr_drawSnow(Mtx drawMtx, u8** pImg) {
         return;
     }
 
-    if (pImg[0] != NULL) {
-        GXTexObj spA0;
-        GXInitTexObj(&spA0, pImg[0], 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-        GXInitTexObjLOD(&spA0, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        GXLoadTexObj(&spA0, GX_TEXMAP0);
-        GXSetNumChans(0);
-        GXSetTevColor(GX_TEVREG0, color_reg0);
-        GXSetTevColor(GX_TEVREG1, color_reg1);
-        GXSetNumTexGens(1);
-        GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-        GXSetNumTevStages(1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
-        GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
-        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
-        GXSetCullMode(GX_CULL_NONE);
-        GXSetClipMode(GX_CLIP_DISABLE);
-        GXSetNumIndStages(0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
-        GXClearVtxDesc();
-        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-
-        Mtx rotMtx;
-        MTXRotRad(rotMtx, 'Z', DEG_TO_RAD(rot));
-        MTXConcat(camMtx, rotMtx, camMtx);
-        GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
-        GXSetCurrentMtx(GX_PNMTX0);
-
-        for (int i = 0; i < snow_packet->mEffCount; i++) {
-            f32 sp44 = -1.0f;
-
-            sp7C.x = snow_packet->mEff[i].mBasePos.x + snow_packet->mEff[i].mPos.x;
-            sp7C.y = snow_packet->mEff[i].mBasePos.y + snow_packet->mEff[i].mPos.y;
-            sp7C.z = snow_packet->mEff[i].mBasePos.z + snow_packet->mEff[i].mPos.z;
-
-            f32 var_f30;
-            f32 sp38 = 2.0f * (i / 250.0f) * snow_packet->field_0x36d0;
-            f32 temp_f1 = snow_packet->mEff[i].mScale + (snow_packet->mEff[i].mScale - SQUARE(snow_packet->mEff[i].mScale));
-            var_f30 = temp_f1 * ((i / 250) + 8.0f);
-
-            sp94.x = -var_f30 * sp44;
-            sp94.y = var_f30 - sp38;
-            sp94.z = 0.0f;
-            cMtx_multVec(camMtx, &sp94, &sp88);
-            pos[0].x = sp7C.x + sp88.x;
-            pos[0].y = sp7C.y + sp88.y;
-            pos[0].z = sp7C.z + sp88.z;
-
-            sp94.x = var_f30 * sp44;
-            sp94.y = var_f30;
-            sp94.z = 0.0f;
-            cMtx_multVec(camMtx, &sp94, &sp88);
-            pos[1].x = sp7C.x + sp88.x;
-            pos[1].y = sp7C.y + sp88.y;
-            pos[1].z = sp7C.z + sp88.z;
-
-            sp94.x = var_f30 * sp44;
-            sp94.y = -var_f30;
-            sp94.z = 0.0f;
-            cMtx_multVec(camMtx, &sp94, &sp88);
-            pos[2].x = sp7C.x + sp88.x;
-            pos[2].y = sp7C.y + sp88.y;
-            pos[2].z = sp7C.z + sp88.z;
-
-            sp94.x = -var_f30 * sp44;
-            sp94.y = -var_f30 - sp38;
-            sp94.z = 0.0f;
-            cMtx_multVec(camMtx, &sp94, &sp88);
-            pos[3].x = sp7C.x + sp88.x;
-            pos[3].y = sp7C.y + sp88.y;
-            pos[3].z = sp7C.z + sp88.z;
-
-            for (int k = 0; k < 4; k++) {
-                static const cXyz add_table[] = {
-                    cXyz(0.0f, 0.0f, 0.0f),
-                    cXyz(150.0f, 75.0f, 0.0f),
-                    cXyz(0.0f, -75.0f, 150.0f),
-                    cXyz(45.0f, 45.0f, 45.0f),
-                };
-
-                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                GXPosition3f32(pos[0].x + add_table[k].x, pos[0].y + add_table[k].y, pos[0].z + add_table[k].z);
-                GXTexCoord2s16(0, 0);
-                GXPosition3f32(pos[1].x + add_table[k].x, pos[1].y + add_table[k].y, pos[1].z + add_table[k].z);
-                GXTexCoord2s16(0xFF, 0);
-                GXPosition3f32(pos[2].x + add_table[k].x, pos[2].y + add_table[k].y, pos[2].z + add_table[k].z);
-                GXTexCoord2s16(0xFF, 0xFF);
-                GXPosition3f32(pos[3].x + add_table[k].x, pos[3].y + add_table[k].y, pos[3].z + add_table[k].z);
-                GXTexCoord2s16(0, 0xFF);
-                GXEnd();
-            }
-        }
-
-        GXSetClipMode(GX_CLIP_ENABLE);
-        J3DShape::resetVcdVatCache();
+    if (pImg[0] == NULL) {
+        return;
     }
+
+    GXTexObj spA0;
+    GXInitTexObj(&spA0, pImg[0], 64, 64, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&spA0, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&spA0, GX_TEXMAP0);
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, color_reg0);
+    GXSetTevColor(GX_TEVREG1, color_reg1);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetClipMode(GX_CLIP_DISABLE);
+    GXSetNumIndStages(0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBA4, 8);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+
+    Mtx rotMtx;
+    MTXRotRad(rotMtx, 'Z', DEG_TO_RAD(rot));
+    MTXConcat(camMtx, rotMtx, camMtx);
+    GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    for (int i = 0; i < snow_packet->mEffCount; i++) {
+        f32 sp44 = -1.0f;
+
+        sp7C.x = snow_packet->mEff[i].mBasePos.x + snow_packet->mEff[i].mPos.x;
+        sp7C.y = snow_packet->mEff[i].mBasePos.y + snow_packet->mEff[i].mPos.y;
+        sp7C.z = snow_packet->mEff[i].mBasePos.z + snow_packet->mEff[i].mPos.z;
+
+        f32 var_f30;
+        f32 sp38 = 2.0f * (i / 250.0f) * snow_packet->field_0x36d0;
+        f32 temp_f1 = snow_packet->mEff[i].mScale + (snow_packet->mEff[i].mScale - SQUARE(snow_packet->mEff[i].mScale));
+        var_f30 = temp_f1 * ((i / 250) + 8.0f);
+
+        sp94.x = -var_f30 * sp44;
+        sp94.y = var_f30 - sp38;
+        sp94.z = 0.0f;
+        cMtx_multVec(camMtx, &sp94, &sp88);
+        pos[0].x = sp7C.x + sp88.x;
+        pos[0].y = sp7C.y + sp88.y;
+        pos[0].z = sp7C.z + sp88.z;
+
+        sp94.x = var_f30 * sp44;
+        sp94.y = var_f30;
+        sp94.z = 0.0f;
+        cMtx_multVec(camMtx, &sp94, &sp88);
+        pos[1].x = sp7C.x + sp88.x;
+        pos[1].y = sp7C.y + sp88.y;
+        pos[1].z = sp7C.z + sp88.z;
+
+        sp94.x = var_f30 * sp44;
+        sp94.y = -var_f30;
+        sp94.z = 0.0f;
+        cMtx_multVec(camMtx, &sp94, &sp88);
+        pos[2].x = sp7C.x + sp88.x;
+        pos[2].y = sp7C.y + sp88.y;
+        pos[2].z = sp7C.z + sp88.z;
+
+        sp94.x = -var_f30 * sp44;
+        sp94.y = -var_f30 - sp38;
+        sp94.z = 0.0f;
+        cMtx_multVec(camMtx, &sp94, &sp88);
+        pos[3].x = sp7C.x + sp88.x;
+        pos[3].y = sp7C.y + sp88.y;
+        pos[3].z = sp7C.z + sp88.z;
+
+        for (int k = 0; k < 4; k++) {
+            static const cXyz add_table[] = {
+                cXyz(0.0f, 0.0f, 0.0f),
+                cXyz(150.0f, 75.0f, 0.0f),
+                cXyz(0.0f, -75.0f, 150.0f),
+                cXyz(45.0f, 45.0f, 45.0f),
+            };
+
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+            GXPosition3f32(pos[0].x + add_table[k].x, pos[0].y + add_table[k].y, pos[0].z + add_table[k].z);
+            GXTexCoord2s16(0, 0);
+            GXPosition3f32(pos[1].x + add_table[k].x, pos[1].y + add_table[k].y, pos[1].z + add_table[k].z);
+            GXTexCoord2s16(0xFF, 0);
+            GXPosition3f32(pos[2].x + add_table[k].x, pos[2].y + add_table[k].y, pos[2].z + add_table[k].z);
+            GXTexCoord2s16(0xFF, 0xFF);
+            GXPosition3f32(pos[3].x + add_table[k].x, pos[3].y + add_table[k].y, pos[3].z + add_table[k].z);
+            GXTexCoord2s16(0, 0xFF);
+            GXEnd();
+        }
+    }
+
+#if VERSION > VERSION_JPN
+    GXSetClipMode(GX_CLIP_ENABLE);
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 80098FF0-80099D38       .text dKyr_drawStar__FPA4_fPPUc */
@@ -4645,179 +4706,183 @@ void dKyr_drawStar(Mtx drawMtx, u8** pImg) {
         csXyz(0, 30000, 19000),
     };
 
-    if (star_packet->mEffectNum != 0) {
-        GXColor color_reg0;
-        color_reg0.r = 0xDC;
-        color_reg0.g = 0xE6;
-        color_reg0.b = 0xFF;
-        color_reg0.a = 0xFF;
-
-        if (dComIfGd_getView() != NULL) {
-            MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
-        } else {
-            return;
-        }
-
-        mDoLib_project(&envlight->mMoonPos, &moon_proj);
-
-        GXSetNumChans(1);
-        GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
-        GXSetNumTexGens(0);
-        GXSetNumTevStages(1);
-        GXSetTevColor(GX_TEVREG0, color_reg0);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
-        GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
-        GXSetNumIndStages(0);
-        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-        GXClearVtxDesc();
-        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-
-        Mtx rotMtx;
-        MTXRotRad(rotMtx, 'Z', DEG2RAD(rot));
-        MTXConcat(camMtx, rotMtx, camMtx);
-
-        GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
-        GXSetCurrentMtx(GX_PNMTX0);
-
-        rot++;
-        if (rot > 719) {
-            rot = 0;
-        }
-
-        spBC.x = camera->view.mLookat.mEye.x;
-        spBC.y = camera->view.mLookat.mEye.y;
-        spBC.z = camera->view.mLookat.mEye.z;
-
-        f32 sp34 = -1.0f;
-        int sp30 = 0;
-        f32 var_f30 = 0.0f;
-
-        if (dComIfGd_getView() != NULL) {
-            var_f30 = dComIfGd_getView()->mFovy / 45.0f;
-            if (var_f30 >= 1.0f) {
-                var_f30 = 1.0f;
-            }
-            var_f30 = 1.0f - var_f30;
-        }
-
-        f32 temp_f27 = 0.28f * (1.0f - var_f30);
-
-        sp98.x = 0.0f;
-        sp98.y = temp_f27;
-        sp98.z = 0.0f;
-        cMtx_multVec(camMtx, &sp98, &sp8C);
-        pos[0].x = spBC.x + sp8C.x;
-        pos[0].y = spBC.y + sp8C.y;
-        pos[0].z = spBC.z + sp8C.z;
-
-        sp98.x = temp_f27;
-        sp98.y = -(0.5f * temp_f27);
-        sp98.z = 0.0f;
-        cMtx_multVec(camMtx, &sp98, &sp8C);
-        pos[1].x = spBC.x + sp8C.x;
-        pos[1].y = spBC.y + sp8C.y;
-        pos[1].z = spBC.z + sp8C.z;
-
-        sp98.x = -temp_f27;
-        sp98.y = -(0.5f * temp_f27);
-        sp98.z = 0.0f;
-        cMtx_multVec(camMtx, &sp98, &sp8C);
-        pos[2].x = spBC.x + sp8C.x;
-        pos[2].y = spBC.y + sp8C.y;
-        pos[2].z = spBC.z + sp8C.z;
-
-        int sp48 = 0;
-        int sp44 = 0;
-        f32 var_f28 = 0.0f;
-
-        for (int i = 0; i < star_packet->mEffectNum; i++) {
-            f32 star_size;
-            cXyz star_pos;
-            f32 sp2C = 300.0f;
-
-            if (i < (s32)ARRAY_SIZE(hokuto_position)) {
-                star_pos.x = hokuto_position[i].x;
-                star_pos.y = hokuto_position[i].y;
-                star_pos.z = hokuto_position[i].z;
-
-                if (i <= 7) {
-                    star_size = 190.0f + star_packet->mEffect[0].mSin;
-                } else {
-                    star_size = 290.0f + star_packet->mEffect[0].mSin;
-                }
-
-                star_size -= temp_f27 * (0.5f * star_size);
-            } else {
-                star_size = star_packet->mEffect[0].mSin + (0.066f * (i & 0x0F));
-                if (star_size > 1.0f)
-                    star_size = (1.0f - (star_size - 1.0f));
-
-                f32 temp_f29 = 1.0f - (var_f28 * (1.0f / 202.0f));
-                star_pos.x = temp_f29 * (sp2C * -cM_ssin((sp48 - 0x8000)));
-                star_pos.y = 45.0f + var_f28;
-                star_pos.z = temp_f29 * (sp2C * cM_scos((sp48 - 0x8000)));
-
-                sp48 += sp44;
-                sp44 += 2250;
-
-                temp_f29 = var_f28 / 200.0f;
-                temp_f29 *= temp_f29 * temp_f29;
-                var_f28 += 1.0f + (3.0f * temp_f29);
-                if (var_f28 > 200.0f) {
-                    var_f28 = (20.0f * i) / 1000.0f;
-                }
-            }
-
-            static const GXColor star_col[] = {
-                {0xDC, 0xE6, 0xFF, 0xFF},
-                {0xFF, 0xC8, 0xC8, 0xFF},
-                {0xFF, 0xFF, 0xC8, 0xFF},
-                {0xC8, 0xC8, 0xFF, 0xFF},
-            };
-
-            if (i == 6 || i == 8)
-                color_reg0 = star_col[1];
-            else if ((i & 0x3F) == 0)
-                color_reg0 = star_col[(i >> 4) & 3];
-            else
-                color_reg0 = star_col[0];
-            GXSetTevColor(GX_TEVREG0, color_reg0);
-
-            cXyz center;
-            cXyz sp5C;
-            center.x = spBC.x + star_pos.x;
-            center.y = spBC.y + star_pos.y;
-            center.z = spBC.z + star_pos.z;
-
-            mDoLib_project(&center, &star_proj);
-
-            f32 moon_dist_to_star = moon_proj.abs(star_proj);
-            f32 moon_threshold = 80.0f + (700.0f * (var_f30 * var_f30));
-
-            // if a star is too close to the moon then avoid drawing
-            if (moon_dist_to_star > moon_threshold) {
-                GXBegin(GX_QUADS, GX_VTXFMT0, 3);
-                GXPosition3f32(center.x + (star_size * (pos[0].x - spBC.x)), center.y + (star_size * (pos[0].y - spBC.y)), center.z + (star_size * (pos[0].z - spBC.z)));
-                GXPosition3f32(center.x + (star_size * (pos[1].x - spBC.x)), center.y + (star_size * (pos[1].y - spBC.y)), center.z + (star_size * (pos[1].z - spBC.z)));
-                GXPosition3f32(center.x + (star_size * (pos[2].x - spBC.x)), center.y + (star_size * (pos[2].y - spBC.y)), center.z + (star_size * (pos[2].z - spBC.z)));
-                GXEnd();
-                
-                GXBegin(GX_QUADS, GX_VTXFMT0, 3);
-                GXPosition3f32(center.x - (star_size * (pos[0].x - spBC.x)), center.y - (star_size * (pos[0].y - spBC.y)), center.z - (star_size * (pos[0].z - spBC.z)));
-                GXPosition3f32(center.x - (star_size * (pos[1].x - spBC.x)), center.y - (star_size * (pos[1].y - spBC.y)), center.z - (star_size * (pos[1].z - spBC.z)));
-                GXPosition3f32(center.x - (star_size * (pos[2].x - spBC.x)), center.y - (star_size * (pos[2].y - spBC.y)), center.z - (star_size * (pos[2].z - spBC.z)));
-                GXEnd();
-            }
-        }
-
-        J3DShape::resetVcdVatCache();
+    if (star_packet->mEffectNum == 0) {
+        return;
     }
+
+    GXColor color_reg0;
+    color_reg0.r = 0xDC;
+    color_reg0.g = 0xE6;
+    color_reg0.b = 0xFF;
+    color_reg0.a = 0xFF;
+
+    if (dComIfGd_getView() != NULL) {
+        MTXInverse(dComIfGd_getViewRotMtx(), camMtx);
+    } else {
+        return;
+    }
+
+    mDoLib_project(&envlight->mMoonPos, &moon_proj);
+
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevColor(GX_TEVREG0, color_reg0);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetNumIndStages(0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+
+    Mtx rotMtx;
+    MTXRotRad(rotMtx, 'Z', DEG2RAD(rot));
+    MTXConcat(camMtx, rotMtx, camMtx);
+
+    GXLoadPosMtxImm(drawMtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    rot++;
+    if (rot > 719) {
+        rot = 0;
+    }
+
+    spBC.x = camera->view.mLookat.mEye.x;
+    spBC.y = camera->view.mLookat.mEye.y;
+    spBC.z = camera->view.mLookat.mEye.z;
+
+    f32 sp34 = -1.0f;
+    int sp30 = 0;
+    f32 var_f30 = 0.0f;
+
+    if (dComIfGd_getView() != NULL) {
+        var_f30 = dComIfGd_getView()->mFovy / 45.0f;
+        if (var_f30 >= 1.0f) {
+            var_f30 = 1.0f;
+        }
+        var_f30 = 1.0f - var_f30;
+    }
+
+    f32 temp_f27 = 0.28f * (1.0f - var_f30);
+
+    sp98.x = 0.0f;
+    sp98.y = temp_f27;
+    sp98.z = 0.0f;
+    cMtx_multVec(camMtx, &sp98, &sp8C);
+    pos[0].x = spBC.x + sp8C.x;
+    pos[0].y = spBC.y + sp8C.y;
+    pos[0].z = spBC.z + sp8C.z;
+
+    sp98.x = temp_f27;
+    sp98.y = -(0.5f * temp_f27);
+    sp98.z = 0.0f;
+    cMtx_multVec(camMtx, &sp98, &sp8C);
+    pos[1].x = spBC.x + sp8C.x;
+    pos[1].y = spBC.y + sp8C.y;
+    pos[1].z = spBC.z + sp8C.z;
+
+    sp98.x = -temp_f27;
+    sp98.y = -(0.5f * temp_f27);
+    sp98.z = 0.0f;
+    cMtx_multVec(camMtx, &sp98, &sp8C);
+    pos[2].x = spBC.x + sp8C.x;
+    pos[2].y = spBC.y + sp8C.y;
+    pos[2].z = spBC.z + sp8C.z;
+
+    int sp48 = 0;
+    int sp44 = 0;
+    f32 var_f28 = 0.0f;
+
+    for (int i = 0; i < star_packet->mEffectNum; i++) {
+        f32 star_size;
+        cXyz star_pos;
+        f32 sp2C = 300.0f;
+
+        if (i < (s32)ARRAY_SIZE(hokuto_position)) {
+            star_pos.x = hokuto_position[i].x;
+            star_pos.y = hokuto_position[i].y;
+            star_pos.z = hokuto_position[i].z;
+
+            if (i <= 7) {
+                star_size = 190.0f + star_packet->mEffect[0].mSin;
+            } else {
+                star_size = 290.0f + star_packet->mEffect[0].mSin;
+            }
+
+            star_size -= temp_f27 * (0.5f * star_size);
+        } else {
+            star_size = star_packet->mEffect[0].mSin + (0.066f * (i & 0x0F));
+            if (star_size > 1.0f)
+                star_size = (1.0f - (star_size - 1.0f));
+
+            f32 temp_f29 = 1.0f - (var_f28 * (1.0f / 202.0f));
+            star_pos.x = temp_f29 * (sp2C * -cM_ssin((sp48 - 0x8000)));
+            star_pos.y = 45.0f + var_f28;
+            star_pos.z = temp_f29 * (sp2C * cM_scos((sp48 - 0x8000)));
+
+            sp48 += sp44;
+            sp44 += 2250;
+
+            temp_f29 = var_f28 / 200.0f;
+            temp_f29 *= temp_f29 * temp_f29;
+            var_f28 += 1.0f + (3.0f * temp_f29);
+            if (var_f28 > 200.0f) {
+                var_f28 = (20.0f * i) / 1000.0f;
+            }
+        }
+
+        static const GXColor star_col[] = {
+            {0xDC, 0xE6, 0xFF, 0xFF},
+            {0xFF, 0xC8, 0xC8, 0xFF},
+            {0xFF, 0xFF, 0xC8, 0xFF},
+            {0xC8, 0xC8, 0xFF, 0xFF},
+        };
+
+        if (i == 6 || i == 8)
+            color_reg0 = star_col[1];
+        else if ((i & 0x3F) == 0)
+            color_reg0 = star_col[(i >> 4) & 3];
+        else
+            color_reg0 = star_col[0];
+        GXSetTevColor(GX_TEVREG0, color_reg0);
+
+        cXyz center;
+        cXyz sp5C;
+        center.x = spBC.x + star_pos.x;
+        center.y = spBC.y + star_pos.y;
+        center.z = spBC.z + star_pos.z;
+
+        mDoLib_project(&center, &star_proj);
+
+        f32 moon_dist_to_star = moon_proj.abs(star_proj);
+        f32 moon_threshold = 80.0f + (700.0f * (var_f30 * var_f30));
+
+        // if a star is too close to the moon then avoid drawing
+        if (moon_dist_to_star > moon_threshold) {
+            GXBegin(GX_QUADS, GX_VTXFMT0, 3);
+            GXPosition3f32(center.x + (star_size * (pos[0].x - spBC.x)), center.y + (star_size * (pos[0].y - spBC.y)), center.z + (star_size * (pos[0].z - spBC.z)));
+            GXPosition3f32(center.x + (star_size * (pos[1].x - spBC.x)), center.y + (star_size * (pos[1].y - spBC.y)), center.z + (star_size * (pos[1].z - spBC.z)));
+            GXPosition3f32(center.x + (star_size * (pos[2].x - spBC.x)), center.y + (star_size * (pos[2].y - spBC.y)), center.z + (star_size * (pos[2].z - spBC.z)));
+            GXEnd();
+            
+            GXBegin(GX_QUADS, GX_VTXFMT0, 3);
+            GXPosition3f32(center.x - (star_size * (pos[0].x - spBC.x)), center.y - (star_size * (pos[0].y - spBC.y)), center.z - (star_size * (pos[0].z - spBC.z)));
+            GXPosition3f32(center.x - (star_size * (pos[1].x - spBC.x)), center.y - (star_size * (pos[1].y - spBC.y)), center.z - (star_size * (pos[1].z - spBC.z)));
+            GXPosition3f32(center.x - (star_size * (pos[2].x - spBC.x)), center.y - (star_size * (pos[2].y - spBC.y)), center.z - (star_size * (pos[2].z - spBC.z)));
+            GXEnd();
+        }
+    }
+
+#if VERSION > VERSION_JPN
+    J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 80099D38-8009A5D4       .text drawWave__FPA4_fPPUc */
@@ -5119,8 +5184,7 @@ void drawCloudShadow(Mtx drawMtx, u8** pImg) {
 #endif
 }
 
-/* 8009AB88-8009B9C4       .text drawVrkumo__FPA4_fR8GXColorPPUc */
-// NONMATCHING - some float load stuff
+/* 8009AB88-8009B9C4       .text drawVrkumo__FPA4_fR8_GXColorPPUc */
 void drawVrkumo(Mtx drawMtx, GXColor& color, u8** pImg) {
     dKankyo_sun_Packet* sun_packet = g_env_light.mpSunPacket;
     dScnKy_env_light_c& envlight = dKy_getEnvlight();
@@ -5260,196 +5324,202 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** pImg) {
             for (k = 0; k < 100; k++) {
                 cXyz pos[4];
 
-                if (!(vrkumo_packet->mInst[k].mAlpha <= 0.0000000001f) && (pass != 0 || !(vrkumo_packet->mInst[k].mAlpha < 0.2f))) {
-                    if (camera->mAngle.x > -6000 && dComIfGd_getView()->mFovy > 40.0f) {
-                        cXyz sp2C = camera->view.mLookat.mEye + vrkumo_packet->mInst[k].mPosition;
-                        mDoLib_project(&sp2C, &proj);
-                        if (!(proj.x > -700.0f) || !(proj.x < 1340.0f) || !(proj.y > -400.0f) || !(proj.y < 890.0f)) {
-                            continue;
-                        }
-                    }
+                if ((vrkumo_packet->mInst[k].mAlpha <= 0.0000000001f) || (pass == 0 && vrkumo_packet->mInst[k].mAlpha < 0.2f)) {
+                    continue;
+                }
 
-                    f32 sp68;
-                    f32 sp64;
-                    f32 sp60;
-                    f32 sp5C;
-
-                    f32 sp58 = ((j + k) & 15) / 16.0f;
-                    f32 sp54 = 1.0f - (sp58 * sp58 * sp58);
-                    f32 sp50;
-
-                    static f32 howa_loop_cnt = 0.0f;
-
-                    spAC = 0.6f;
-                    spA8 = 0.84f;
-
-                    spAC += g_env_light.mVrkumoStrength * (spA8 - spAC);
-                    sp68 = sp54 * spAC * vrkumo_packet->mInst[k].mDistFalloff;
-
-                    sp50 = cM_fsin(j + (0.0001f * howa_loop_cnt));
-                    sp50 *= vrkumo_packet->mInst[k].mDistFalloff;
-
-                    if (!var_r28) {
-                        howa_loop_cnt += 0.8f * sp58 + 200.0f;
-                        var_r28++;
-                    }
-                    
-                    sp68 += (0.06f * sp68 * sp50);
-                    sp64 = sp68 + (sp68 * vrkumo_packet->mInst[k].mHeight);
-
-                    if (pass == 0) {
-                        color.a = 1;
-                    } else {
-                        f32 sp4C = 1.0f - vrkumo_packet->mInst[k].mDistFalloff;
-                        if (sp4C > 0.1f) {
-                            sp4C -= j * 0.05f;
-                        }
-
-                        color.r = (f32)g_env_light.mVrkumoCenterColor.r + (sp4C * ((f32)g_env_light.mVrkumoColor.r - (f32)g_env_light.mVrkumoCenterColor.r));
-                        color.g = (f32)g_env_light.mVrkumoCenterColor.g + (sp4C * ((f32)g_env_light.mVrkumoColor.g - (f32)g_env_light.mVrkumoCenterColor.g));
-                        color.b = (f32)g_env_light.mVrkumoCenterColor.b + (sp4C * ((f32)g_env_light.mVrkumoColor.b - (f32)g_env_light.mVrkumoCenterColor.b));
-                        color.a = 255.0f * vrkumo_packet->mInst[k].mAlpha;
-                    }
-
-                    if (!(vrkumo_packet->mInst[k].mAlpha <= 0.000001f)) {
-                        GXLoadTexObj(&texobj, GX_TEXMAP0);
-                        GXSetTevColor(GX_TEVREG0, color);
-
-                        sp60 = sp68 * 0.15f;
-                        sp5C = sp68 * 0.25f;
-                        spFC = vrkumo_packet->mInst[k].mPosition;
-
-                        spA4 = 0.0f;
-                        spA0 = 0.0f;
-
-                        if (j != 0) {
-                            switch (k & 3) {
-                            case 0:
-                                if (j == 1) {
-                                    spA4 = sp60;
-                                    spA0 = sp5C;
-                                } else if (j == 2) {
-                                    spA4 = sp5C;
-                                    spA0 = sp60;
-                                }
-                                break;
-                            case 1:
-                                if (j == 1) {
-                                    spA4 = -sp60;
-                                    spA0 = sp60;
-                                } else if (j == 2) {
-                                    spA4 = -sp5C;
-                                    spA0 = sp5C;
-                                }
-                                break;
-                            case 2:
-                                if (j == 1) {
-                                    spA4 = sp5C;
-                                    spA0 = -sp60;
-                                } else if (j == 2) {
-                                    spA4 = sp60;
-                                    spA0 = -sp5C;
-                                }
-                                break;
-                            default:
-                                if (j == 1) {
-                                    spA4 = -sp5C;
-                                    spA0 = sp5C;
-                                } else if (j == 2) {
-                                    spA4 = -sp60;
-                                    spA0 = sp60;
-                                }
-                                break;
-                            }
-                        }
-
-                        spC0 = std::sqrtf((spFC.x * spFC.x) + (spFC.z * spFC.z));
-                        spB0 = std::atan2f(spFC.x, spFC.z);
-                        spB4 = std::atan2f(spFC.y, spC0);
-                        spB0 += spA0;
-                        spB4 += spA4;
-
-                        sp94 = spB4 / 1.9f;
-                        if (sp94 > 1.0f) {
-                            sp94 = 1.0f;
-                        }
-                        sp94 *= sp94 * sp94;
-
-                        sp98 = 0.6f * sp68 * (1.0f + (16.0f * sp94));
-                        sp9C = 0.9f * sp64 * (1.0f + (-4.0f * sp94));
-                        sp8C = 0.6f * sp68 * (1.0f + (2.0f * sp94));
-                        sp90 = 0.0f;
-                        spB8 = spB0 + sp98;
-                        spBC = spB4 + sp9C;
-                        if (spBC > 1.21f) {
-                            spBC = 1.21f;
-                        }
-
-                        sp144.x = std::cosf(spBC) * std::sinf(spB8);
-                        sp144.y = std::sinf(spBC);
-                        sp144.z = std::cosf(spBC) * std::cosf(spB8);
-                        sp12C = sp144;
-
-                        spB8 = spB0 - sp98;
-                        spBC = spB4 + sp9C;
-                        if (spBC > 1.21f) {
-                            spBC = 1.21f;
-                        }
-
-                        sp144.x = std::cosf(spBC) * std::sinf(spB8);
-                        sp144.y = std::sinf(spBC);
-                        sp144.z = std::cosf(spBC) * std::cosf(spB8);
-                        sp120 = sp144;
-
-                        spB8 = spB0 - sp8C;
-                        spBC = spB4 - sp90;
-
-                        sp144.x = std::cosf(spBC) * std::sinf(spB8);
-                        sp144.y = std::sinf(spBC);
-                        sp144.z = std::cosf(spBC) * std::cosf(spB8);
-                        sp114 = sp144;
-
-                        spB8 = spB0 + sp8C;
-                        spBC = spB4 - sp90;
-
-                        sp144.x = std::cosf(spBC) * std::sinf(spB8);
-                        sp144.y = std::sinf(spBC);
-                        sp144.z = std::cosf(spBC) * std::cosf(spB8);
-                        sp108 = sp144;
-
-                        pos[0].x = sp12C.x * spCC;
-                        pos[0].y = sp12C.y * spCC;
-                        pos[0].z = sp12C.z * spCC;
-
-                        pos[1].x = sp120.x * spCC;
-                        pos[1].y = sp120.y * spCC;
-                        pos[1].z = sp120.z * spCC;
-
-                        pos[2].x = sp114.x * spCC;
-                        pos[2].y = sp114.y * spCC;
-                        pos[2].z = sp114.z * spCC;
-
-                        pos[3].x = sp108.x * spCC;
-                        pos[3].y = sp108.y * spCC;
-                        pos[3].z = sp108.z * spCC;
-
-                        pos[0] += camera->view.mLookat.mEye;
-                        pos[1] += camera->view.mLookat.mEye;
-                        pos[2] += camera->view.mLookat.mEye;
-                        pos[3] += camera->view.mLookat.mEye;
-
-                        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                        GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
-                        GXTexCoord2s16(0, 0);
-                        GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
-                        GXTexCoord2s16(0xFF, 0);
-                        GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
-                        GXTexCoord2s16(0xFF, 0xFF);
-                        GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
-                        GXTexCoord2s16(0, 0xFF);
-                        GXEnd();
+                if (fopCamM_GetAngleX(camera) > -6000 && dComIfGd_getView()->mFovy > 40.0f) {
+                    cXyz sp2C = camera->view.mLookat.mEye + vrkumo_packet->mInst[k].mPosition;
+                    f32 f17 = 700.0f;
+                    f32 f18 = 400.0f;
+                    mDoLib_project(&sp2C, &proj);
+                    if (!(proj.x > -f17) || !(proj.x < f17 + 640.0f) || !(proj.y > -f18) || !(proj.y < f18 + 490.0f)) {
+                        continue;
                     }
                 }
+
+                f32 sp68;
+                f32 sp64;
+                f32 sp60;
+                f32 sp5C;
+
+                f32 sp58 = ((j + k) & 15) / 16.0f;
+                f32 sp54 = 1.0f - (sp58 * sp58 * sp58);
+                f32 sp50;
+
+                static f32 howa_loop_cnt = 0.0f;
+
+                spAC = 0.45f;
+                spA8 = 1.0f;
+
+                spAC += g_env_light.mVrkumoStrength * (spA8 - spAC);
+                sp68 = sp54 * spAC * vrkumo_packet->mInst[k].mDistFalloff;
+
+                sp50 = cM_fsin(j + (DEMO_SELECT(0.00015f, 0.0001f) * howa_loop_cnt));
+                sp50 *= vrkumo_packet->mInst[k].mDistFalloff;
+
+                if (!var_r28) {
+                    howa_loop_cnt += 0.8f * sp58 + 200.0f;
+                    var_r28++;
+                }
+                
+                sp68 += (0.06f * sp68 * sp50);
+                sp64 = sp68 + (sp68 * vrkumo_packet->mInst[k].mHeight);
+
+                if (pass == 0) {
+                    color.a = 1;
+                } else {
+                    f32 sp4C = 1.0f - vrkumo_packet->mInst[k].mDistFalloff;
+                    if (sp4C > 0.1f) {
+                        sp4C -= j * 0.05f;
+                    }
+
+                    color.r = (f32)g_env_light.mVrkumoCenterColor.r + (sp4C * ((f32)g_env_light.mVrkumoColor.r - (f32)g_env_light.mVrkumoCenterColor.r));
+                    color.g = (f32)g_env_light.mVrkumoCenterColor.g + (sp4C * ((f32)g_env_light.mVrkumoColor.g - (f32)g_env_light.mVrkumoCenterColor.g));
+                    color.b = (f32)g_env_light.mVrkumoCenterColor.b + (sp4C * ((f32)g_env_light.mVrkumoColor.b - (f32)g_env_light.mVrkumoCenterColor.b));
+                    color.a = 255.0f * vrkumo_packet->mInst[k].mAlpha;
+                }
+
+                if (vrkumo_packet->mInst[k].mAlpha <= 0.000001f) {
+                    continue;
+                }
+
+                GXLoadTexObj(&texobj, GX_TEXMAP0);
+                GXSetTevColor(GX_TEVREG0, color);
+
+                sp60 = sp68 * 0.15f;
+                sp5C = sp68 * 0.25f;
+                spFC = vrkumo_packet->mInst[k].mPosition;
+
+                spA4 = 0.0f;
+                spA0 = 0.0f;
+
+                if (j != 0) {
+                    switch (k & 3) {
+                    case 0:
+                        if (j == 1) {
+                            spA4 = sp60;
+                            spA0 = sp5C;
+                        } else if (j == 2) {
+                            spA4 = sp5C;
+                            spA0 = sp60;
+                        }
+                        break;
+                    case 1:
+                        if (j == 1) {
+                            spA4 = -sp60;
+                            spA0 = sp60;
+                        } else if (j == 2) {
+                            spA4 = -sp5C;
+                            spA0 = sp5C;
+                        }
+                        break;
+                    case 2:
+                        if (j == 1) {
+                            spA4 = sp5C;
+                            spA0 = -sp60;
+                        } else if (j == 2) {
+                            spA4 = sp60;
+                            spA0 = -sp5C;
+                        }
+                        break;
+                    default:
+                        if (j == 1) {
+                            spA4 = -sp5C;
+                            spA0 = sp5C;
+                        } else if (j == 2) {
+                            spA4 = -sp60;
+                            spA0 = sp60;
+                        }
+                        break;
+                    }
+                }
+
+                spC0 = std::sqrtf((spFC.x * spFC.x) + (spFC.z * spFC.z));
+                spB0 = std::atan2f(spFC.x, spFC.z);
+                spB4 = std::atan2f(spFC.y, spC0);
+                spB0 += spA0;
+                spB4 += spA4;
+
+                sp94 = spB4 / 1.9f;
+                if (sp94 > 1.0f) {
+                    sp94 = 1.0f;
+                }
+                sp94 *= sp94 * sp94;
+
+                sp98 = 0.6f * sp68 * (1.0f + (16.0f * sp94));
+                sp9C = 0.9f * sp64 * (1.0f + (-4.0f * sp94));
+                sp8C = 0.6f * sp68 * (1.0f + (2.0f * sp94));
+                sp90 = 0.0f;
+                spB8 = spB0 + sp98;
+                spBC = spB4 + sp9C;
+                if (spBC > 1.21f) {
+                    spBC = 1.21f;
+                }
+
+                sp144.x = std::cosf(spBC) * std::sinf(spB8);
+                sp144.y = std::sinf(spBC);
+                sp144.z = std::cosf(spBC) * std::cosf(spB8);
+                sp12C = sp144;
+
+                spB8 = spB0 - sp98;
+                spBC = spB4 + sp9C;
+                if (spBC > 1.21f) {
+                    spBC = 1.21f;
+                }
+
+                sp144.x = std::cosf(spBC) * std::sinf(spB8);
+                sp144.y = std::sinf(spBC);
+                sp144.z = std::cosf(spBC) * std::cosf(spB8);
+                sp120 = sp144;
+
+                spB8 = spB0 - sp8C;
+                spBC = spB4 - sp90;
+
+                sp144.x = std::cosf(spBC) * std::sinf(spB8);
+                sp144.y = std::sinf(spBC);
+                sp144.z = std::cosf(spBC) * std::cosf(spB8);
+                sp114 = sp144;
+
+                spB8 = spB0 + sp8C;
+                spBC = spB4 - sp90;
+
+                sp144.x = std::cosf(spBC) * std::sinf(spB8);
+                sp144.y = std::sinf(spBC);
+                sp144.z = std::cosf(spBC) * std::cosf(spB8);
+                sp108 = sp144;
+
+                pos[0].x = sp12C.x * spCC;
+                pos[0].y = sp12C.y * spCC;
+                pos[0].z = sp12C.z * spCC;
+
+                pos[1].x = sp120.x * spCC;
+                pos[1].y = sp120.y * spCC;
+                pos[1].z = sp120.z * spCC;
+
+                pos[2].x = sp114.x * spCC;
+                pos[2].y = sp114.y * spCC;
+                pos[2].z = sp114.z * spCC;
+
+                pos[3].x = sp108.x * spCC;
+                pos[3].y = sp108.y * spCC;
+                pos[3].z = sp108.z * spCC;
+
+                pos[0] += camera->view.mLookat.mEye;
+                pos[1] += camera->view.mLookat.mEye;
+                pos[2] += camera->view.mLookat.mEye;
+                pos[3] += camera->view.mLookat.mEye;
+
+                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+                GXPosition3f32(pos[0].x, pos[0].y, pos[0].z);
+                GXTexCoord2s16(0, 0);
+                GXPosition3f32(pos[1].x, pos[1].y, pos[1].z);
+                GXTexCoord2s16(0xFF, 0);
+                GXPosition3f32(pos[2].x, pos[2].y, pos[2].z);
+                GXTexCoord2s16(0xFF, 0xFF);
+                GXPosition3f32(pos[3].x, pos[3].y, pos[3].z);
+                GXTexCoord2s16(0, 0xFF);
+                GXEnd();
             }
 
             sp88 = 1;
@@ -5462,7 +5532,9 @@ void drawVrkumo(Mtx drawMtx, GXColor& color, u8** pImg) {
 
     GXSetClipMode(GX_CLIP_ENABLE);
     dKy_GxFog_set();
+#if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
+#endif
 }
 
 /* 8009B9C4-8009B9D8       .text dKyr_thunder_init__Fv */
