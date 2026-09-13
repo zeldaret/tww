@@ -1840,7 +1840,7 @@ void dMsg_messageShow(sub_msg_class* i_Msg) {
                 iconNum == fopMsgM_Icon_ARROW_UP_e ||
                 iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
                 iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
-                iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+                iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_2_e
             ) && iconColor == 0
         ) {
             iconColor = 0xFFFFFFFF;
@@ -2180,7 +2180,7 @@ s32 dMsg_demoProc(sub_msg_class* i_Msg) {
                                     iconNum == fopMsgM_Icon_ARROW_UP_e ||
                                     iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
                                     iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
-                                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+                                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_2_e
                                 ) && iconColor == 0
                             ) {
                                 iconColor = 0xFFFFFFFF;
@@ -2570,7 +2570,7 @@ s32 dMsg_openTactProc(sub_msg_class* i_Msg) {
                     iconNum == fopMsgM_Icon_ARROW_UP_e ||
                     iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
                     iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
-                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_2_e
                 ) && iconColor == 0
             ) {
                 iconColor = 0xFFFFFFFF;

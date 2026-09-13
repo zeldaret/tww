@@ -421,7 +421,7 @@ void dMsg2_messageOut(sub_msg2_class* i_Msg, u8 i_index, int i_aimLine) {
                     iconNum == fopMsgM_Icon_ARROW_UP_e ||
                     iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
                     iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
-                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_2_e
                 ) && iconColor == 0
             ) {
                 iconColor = 0xFFFFFFFF;

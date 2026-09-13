@@ -272,7 +272,7 @@ void dDlst_2DOutFont_c::initial() {
             }
 
             m7C[i] = 0;
-            mIconNo[i] = 0;
+            mIconNo[i] = fopMsgM_Icon_A_BUTTON_e;
             m76[i] = -1;
         }
     }
@@ -349,28 +349,23 @@ void dDlst_2DOutFont_c::setRubyEx(JUTFont* font, fopMsgM_pane_class* pane, char*
 }
 
 /* 800C9864-800C9908       .text charWidth__17dDlst_2DOutFont_cFi */
-// NONMATCHING - load order
 f32 dDlst_2DOutFont_c::charWidth(int param_0) {
-    JUTFont::TWidth width;
-    mpFont->getWidthEntry(param_0, &width);
-    int var_r31 = width.field_0x1;
-    return mCharSpace + (var_r31 * (m6C / mpFont->getCellWidth()));
+    f32 f1 = mpFont->getWidth(param_0);
+    f32 f0 = m6C / mpFont->getCellWidth();
+    return mCharSpace + (f1 * f0);
 }
 
 /* 800C9908-800C99C0       .text rubyCharWidth__17dDlst_2DOutFont_cFi */
-// NONMATCHING - load order
 f32 dDlst_2DOutFont_c::rubyCharWidth(int param_0) {
     J2DTextBox::TFontSize fontSize;
     mpRubyTextBox->getFontSize(fontSize);
 
-    JUTFont::TWidth width;
-    mpRubyFont->getWidthEntry(param_0, &width);
-    int var_r31 = width.field_0x1;
-    return mCharSpace + (var_r31 * (fontSize.mSizeX / mpRubyFont->getCellWidth()));
+    f32 f30 = mpRubyFont->getWidth(param_0);
+    f32 f0 = fontSize.mSizeX / mpRubyFont->getCellWidth();
+    return mCharSpace + (f30 * f0);
 }
 
 /* 800C99C0-800C9D5C       .text iconset__17dDlst_2DOutFont_cFiPPc */
-// NONMATCHING - reg alloc in the loop
 f32 dDlst_2DOutFont_c::iconset(int i_iconNo, char** param_1) {
     f32 var_f31 = 0.0f;
 
@@ -386,15 +381,15 @@ f32 dDlst_2DOutFont_c::iconset(int i_iconNo, char** param_1) {
         m76[mIconNum] = m82;
 
         switch (i_iconNo) {
-        case 10:
+        case fopMsgM_Icon_ARROW_LEFT_e:
             m38[mIconNum] += m6C;
             mpPic[mIconNum]->rotate(0.0f, 0.0f, ROTATE_Z, 270.0f);
             break;
-        case 11:
+        case fopMsgM_Icon_ARROW_RIGHT_e:
             m44[mIconNum] += m6C;
             mpPic[mIconNum]->rotate(0.0f, 0.0f, ROTATE_Z, 90.0f);
             break;
-        case 12:
+        case fopMsgM_Icon_ARROW_UP_e:
             m38[mIconNum] += m6C;
             m44[mIconNum] += m6C;
             mpPic[mIconNum]->rotate(0.0f, 0.0f, ROTATE_Z, 180.0f);
@@ -409,7 +404,7 @@ f32 dDlst_2DOutFont_c::iconset(int i_iconNo, char** param_1) {
         char c;
         for (char* var_r5 = buffer; c = *var_r5, c != 0; var_r5++) {
             char* temp_r3 = *param_1;
-            *param_1 = temp_r3 + 1;
+            *param_1 = *param_1 + 1;
             *temp_r3 = c;
         }
 
@@ -424,12 +419,12 @@ f32 dDlst_2DOutFont_c::iconset(int i_iconNo, char** param_1) {
 void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
     fopMsgM_itemMsgGet_c msgGet;
     mesg_header* head_p = msgGet.getMesgHeader(i_msgNo);
-    JUT_ASSERT(619, head_p);
+    JUT_ASSERT(DEMO_SELECT(615, 619), head_p);
     const char* message = msgGet.getMessage(head_p);
 
     char sp104[100];
     char spA0[100];
-    char sp6C[48];
+    char sp6C[52];
     char* dst = sp104;
 
     f32 var_f31 = 0.0f;
@@ -445,16 +440,16 @@ void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
     while (*message != '\0') {
         if ((u8)*message == 0x1A) {
             u32 uvar6 = *(u32*)(++message) & 0xFFFFFF;
-            if (uvar6 == 0xFF0000) {
+            if (uvar6 == (0xFF0000 | MsgSpclCode_COLOR)) {
                 char sp50[28];
-                sprintf(sp50, "\x1b""CC[%08x]\x1bGM[0]", fopMsgM_getColorTable(message[5]));
+                sprintf(sp50, "\x1b""CC[%08x]\x1bGM[0]", fopMsgM_getColorTable(message[4]));
 
                 for (char* p = sp50; *p != '\0'; p++) {
                     *(dst++) = *p;
                 }
-            } else if (uvar6 == 0xFF0002) {
+            } else if (uvar6 == (0xFF0000 | MsgSpclCode_RUBY)) {
                 if (mpRubyFont != NULL) {
-                    u8 temp_r3_5 = message[0];
+                    u8 temp_r3_5 = (u8)message[0];
                     if (temp_r3_5 != 5) {
                         int var_r27 = temp_r3_5 - 6;
                         int i = 0;
@@ -464,7 +459,7 @@ void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
                         *sp6C = 0;
                         var_f31 = 0.0f;
                         var_f29 = m68;
-                        var_r30 = message[5];
+                        var_r30 = (u8)message[4];
 
                         for (; i < var_r27; i += 2) {
                             char temp_r0_2 = var_r25[0];
@@ -481,57 +476,58 @@ void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
                         *var_r24 = 0;
                     }
                 }
-            } else if (uvar6 == 10) {
-                m68 += iconset(0, &dst);
-            } else if (uvar6 == 11) {
-                m68 += iconset(1, &dst);
-            } else if (uvar6 == 12) {
-                m68 += iconset(2, &dst);
-            } else if (uvar6 == 13) {
-                m68 += iconset(3, &dst);
-            } else if (uvar6 == 14) {
-                m68 += iconset(4, &dst);
-            } else if (uvar6 == 15) {
-                m68 += iconset(5, &dst);
-            } else if (uvar6 == 16) {
-                m68 += iconset(6, &dst);
-            } else if (uvar6 == 17) {
-                m68 += iconset(7, &dst);
-            } else if (uvar6 == 18) {
-                m68 += iconset(8, &dst);
-            } else if (uvar6 == 19) {
-                m68 += iconset(9, &dst);
-            } else if (uvar6 == 20) {
-                m68 += iconset(10, &dst);
-            } else if (uvar6 == 21) {
-                m68 += iconset(11, &dst);
-            } else if (uvar6 == 22) {
-                m68 += iconset(12, &dst);
-            } else if (uvar6 == 23) {
-                m68 += iconset(13, &dst);
-            } else if (uvar6 == 24) {
-                m68 += iconset(14, &dst);
-            } else if (uvar6 == 25) {
-                m68 += iconset(15, &dst);
-            } else if (uvar6 == 26) {
-                m68 += iconset(16, &dst);
-            } else if (uvar6 == 27) {
-                m68 += iconset(17, &dst);
-            } else if (uvar6 == 28) {
-                m68 += iconset(18, &dst);
-            } else if (uvar6 == 29) {
-                m68 += iconset(19, &dst);
-            } else if (uvar6 == 39) {
-                m68 += iconset(20, &dst);
-            } else if (uvar6 == 57) {
-                m68 += iconset(21, &dst);
-            } else if (uvar6 == 58) {
-                m68 += iconset(22, &dst);
+            } else if (uvar6 == MsgCtrlCode_A_BUTTON) {
+                m68 += iconset(fopMsgM_Icon_A_BUTTON_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_B_BUTTON) {
+                m68 += iconset(fopMsgM_Icon_B_BUTTON_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_C_STICK) {
+                m68 += iconset(fopMsgM_Icon_C_STICK_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_L_BUTTON) {
+                m68 += iconset(fopMsgM_Icon_L_BUTTON_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_R_BUTTON) {
+                m68 += iconset(fopMsgM_Icon_R_BUTTON_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_X_BUTTON) {
+                m68 += iconset(fopMsgM_Icon_X_BUTTON_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_Y_BUTTON) {
+                m68 += iconset(fopMsgM_Icon_Y_BUTTON_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_Z_BUTTON) {
+                m68 += iconset(fopMsgM_Icon_Z_BUTTON_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_DPAD) {
+                m68 += iconset(fopMsgM_Icon_DPAD_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_MAIN_STICK) {
+                m68 += iconset(fopMsgM_Icon_MAIN_STICK_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_ARROW_LEFT) {
+                m68 += iconset(fopMsgM_Icon_ARROW_LEFT_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_ARROW_RIGHT) {
+                m68 += iconset(fopMsgM_Icon_ARROW_RIGHT_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_ARROW_UP) {
+                m68 += iconset(fopMsgM_Icon_ARROW_UP_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_ARROW_DOWN) {
+                m68 += iconset(fopMsgM_Icon_ARROW_DOWN_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_UP) {
+                m68 += iconset(fopMsgM_Icon_MAIN_STICK_UP_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_DOWN) {
+                m68 += iconset(fopMsgM_Icon_MAIN_STICK_DOWN_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_LEFT) {
+                m68 += iconset(fopMsgM_Icon_MAIN_STICK_LEFT_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_RIGHT) {
+                m68 += iconset(fopMsgM_Icon_MAIN_STICK_RIGHT_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_UP_DOWN) {
+                m68 += iconset(fopMsgM_Icon_MAIN_STICK_UP_DOWN_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_LEFT_RIGHT) {
+                m68 += iconset(fopMsgM_Icon_MAIN_STICK_LEFT_RIGHT_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_FLASHING_A_BUTTON) {
+                m68 += iconset(fopMsgM_Icon_FLASHING_A_BUTTON_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_HEART) {
+                m68 += iconset(fopMsgM_Icon_HEART_e, &dst);
+            } else if (uvar6 == MsgCtrlCode_MUSIC_NOTE) {
+                m68 += iconset(fopMsgM_Icon_MUSIC_NOTE_e, &dst);
             }
 
             message += *message - 1;
         } else {
-            int hi_nibble = ((u32)*message >> 4) & 0xF;
+#if VERSION < VERSION_PAL
+            int hi_nibble = ((u8)*message >> 4) & 0xF;
             if (hi_nibble == 8 || hi_nibble == 9) {
                 char temp_r4_2 = message[0];
                 *(dst++) = temp_r4_2;
@@ -545,7 +541,7 @@ void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
                 if (var_r30 != 0) {
                     var_r30--;
                     if (var_r30 == 0) {
-                        char sp34[28];
+                        char sp34[16];
 
                         f32 temp_f0 = (var_f29 + ((m68 - var_f29) / 2)) - (var_f31 / 2);
                         if (var_f30 < temp_f0) {
@@ -564,7 +560,9 @@ void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
                         strcat(spA0, sp6C);
                     }
                 }
-            } else {
+            } else
+#endif
+            {
                 char var_r5_2 = *message;
                 *(dst++) = var_r5_2;
                 message++;
@@ -654,7 +652,7 @@ void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
         if (m2C == NULL) {
             mpRubyTextBox->setString(mEC);
         } else {
-            strcpy(m2C, m88);
+            strcpy(m2C, mEC);
         }
     }
 
@@ -908,34 +906,33 @@ void dDlst_2DOutFont_c::outFontStickAnimePiece(u8 param_0, u8 param_1) {
 void dDlst_2DOutFont_c::move() {
     for (int i = 0; i < mIconNum; i++) {
         switch (mIconNo[i]) {
-        case 9:
+        case fopMsgM_Icon_MAIN_STICK_e:
             outFontStickAnime1(i);
             break;
-        case 14:
+        case fopMsgM_Icon_MAIN_STICK_UP_e:
             outFontStickAnime2(i, 1);
             break;
-        case 15:
+        case fopMsgM_Icon_MAIN_STICK_DOWN_e:
             outFontStickAnime2(i, 3);
             break;
-        case 16:
+        case fopMsgM_Icon_MAIN_STICK_LEFT_e:
             outFontStickAnime2(i, 0);
             break;
-        case 17:
+        case fopMsgM_Icon_MAIN_STICK_RIGHT_e:
             outFontStickAnime2(i, 2);
             break;
-        case 18:
+        case fopMsgM_Icon_MAIN_STICK_UP_DOWN_e:
             outFontStickAnime3(i, 0);
             break;
-        case 19:
+        case fopMsgM_Icon_MAIN_STICK_LEFT_RIGHT_e:
             outFontStickAnime3(i, 1);
             break;
         }
     }
 
-    f32 var_f31 = 1.0f;
     for (int i = 0; i < 3; i++) {
         if (mpPic[i] != NULL) {
-            mpPic[i]->move(mPosTopLeftX + m38[i] + m50[i], (mPosTopLeftY + m44[i] + m5C[i]) - var_f31);
+            mpPic[i]->move(mPosTopLeftX + m38[i] + m50[i], (mPosTopLeftY + m44[i] + m5C[i]) - 1.0f);
         }
     }
 
