@@ -2,10 +2,12 @@
 #define D_2DNUMBER_H
 
 #include "d/d_drawlist.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
 
 struct ResTIMG;
 class JUTFont;
 struct fopMsgM_pane_class;
+class J2DTextBox;
 
 class dDlst_2DNumber_c : public dDlst_base_c {
 public:
@@ -47,7 +49,7 @@ public:
 class dDlst_2DBattery_c : public dDlst_base_c {
 public:
     BOOL init(ResTIMG*, ResTIMG*, ResTIMG*, ResTIMG*);
-    void setRotate(float);
+    void setRotate(f32);
     void draw();
 
 public:
@@ -84,23 +86,27 @@ public:
 class dDlst_2DOutFont_c {
 public:
     dDlst_2DOutFont_c() {
-        m20 = NULL;
-        m18 = NULL;
+        mpRubyFont = NULL;
+        mpRubyTextBox = NULL;
         m2C = NULL;
-#if VERSION > VERSION_JPN
+#if VERSION >= VERSION_USA
         m74 = 0;
 #endif
     }
-    void setLeftUpPos(f32 x, f32 y) { mPosTopLeftX = x; mPosTopLeftY = y; }
+
+    void setLeftUpPos(f32 x, f32 y) {
+        mPosTopLeftX = x;
+        mPosTopLeftY = y;
+    }
 
     void initial();
     void setPane(JUTFont*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*);
     void setPaneEx(JUTFont*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, char*);
     void setRuby(JUTFont*, fopMsgM_pane_class*);
     void setRubyEx(JUTFont*, fopMsgM_pane_class*, char*);
-    void charWidth(int);
-    void rubyCharWidth(int);
-    void iconset(int, char**);
+    f32 charWidth(int);
+    f32 rubyCharWidth(int);
+    f32 iconset(int, char**);
     void messageSet(u32);
     void outFontStickAnime1(u8);
     void outFontStickAnime2(u8, u8);
@@ -109,25 +115,36 @@ public:
     void move();
     void setAlpha(u8);
 
-#if VERSION > VERSION_JPN
-    /* 0x00 */ u8 m00[0x08 - 0x00];
+#if VERSION >= VERSION_USA
+    /* 0x00 */ J2DTextBox::TFontSize mFontSize;
 #endif
-    /* 0x08 */ J2DPane* m08[3];
-    /* 0x14 */ J2DPane* m14;
-    /* 0x18 */ J2DPane* m18;
-    /* 0x1C */ u8 m1C[0x20 - 0x1C];
-    /* 0x20 */ JUTFont* m20;
-    /* 0x24 */ u8 m24[0x2C - 0x24];
-    /* 0x2C */ JUTFont* m2C;
+    /* 0x08 */ J2DPicture* mpPic[3];
+    /* 0x14 */ J2DTextBox* mpTextBox;
+    /* 0x18 */ J2DTextBox* mpRubyTextBox;
+    /* 0x1C */ JUTFont* mpFont;
+    /* 0x20 */ JUTFont* mpRubyFont;
+    /* 0x24 */ char* m24;
+    /* 0x28 */ char* m28;
+    /* 0x2C */ char* m2C;
     /* 0x30 */ f32 mPosTopLeftX;
     /* 0x34 */ f32 mPosTopLeftY;
-#if VERSION > VERSION_JPN
-    /* 0x38 */ u8 m38[0x74 - 0x38];
+    /* 0x38 */ f32 m38[3];
+    /* 0x44 */ f32 m44[3];
+    /* 0x50 */ f32 m50[3];
+    /* 0x5C */ f32 m5C[3];
+    /* 0x68 */ f32 m68;
+    /* 0x6C */ f32 m6C;
+    /* 0x70 */ f32 mCharSpace;
+#if VERSION >= VERSION_USA
     /* 0x74 */ u8 m74;
-    /* 0x75 */ u8 m75[0x150 - 0x75];
-#else
-    /* 0x30 */ u8 m30[0x148 - 0x30];
 #endif
+    /* 0x76 */ s16 m76[3];
+    /* 0x7C */ s16 m7C[3];
+    /* 0x82 */ s16 m82;
+    /* 0x84 */ u8 mIconNum;
+    /* 0x85 */ u8 mIconNo[3];
+    /* 0x88 */ char m88[100];
+    /* 0xEC */ char mEC[100];
 }; // Size = 0x150
 
 STATIC_ASSERT(sizeof(dDlst_2DOutFont_c) == VERSION_SELECT(0x148, 0x148, 0x150, 0x150));

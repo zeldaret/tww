@@ -552,6 +552,8 @@ void fopMsgM_blendDraw(J2DPicture* pic, const char* data);
 void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char* param_4, int param_5, int param_6);
 void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int size, int, int);
 
+const char* fopMsgM_outFontTex(int i_iconNo);
+GXColor fopMsgM_outFontColorWhite(int i_no);
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, s16* i_timer, u32 i_color, u8 i_iconNo);
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, s16* i_timer, u32 i_color, u8 i_iconNo);
 void fopMsgM_outFontDraw(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, int param_3, int param_4, int param_5, s16* i_timer, u8 i_alpha, u8 i_iconNo);
