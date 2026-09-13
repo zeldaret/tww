@@ -90,7 +90,7 @@ public:
     bool eventMesSet();
     void eventGetItemInit();
     void eventWaitInit(int);
-    void eventWait(int);
+    bool eventWait(int);
     void eventSwOnInit(int);
     void eventSwOn();
     void eventHatchInit();
@@ -126,7 +126,7 @@ public:
     void setAnm(u8, int, f32);
     void setAnmTbl(sMnAnmDat*);
     s16 XyCheckCB(int);
-    void getRand(int);
+    int getRand(int);
     void setCollision(dCcD_Cyl*, cXyz, f32, f32);
     BOOL chkEndEvent();
     u8 chkPosNo();

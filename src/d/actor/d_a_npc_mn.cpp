@@ -737,12 +737,66 @@ int daNpcMn_c::executeWalkInit() {
 
 /* 00001948-00001BD4       .text executeWalk__9daNpcMn_cFv */
 void daNpcMn_c::executeWalk() {
-    /* Nonmatching */
+    if (!executeCommon()) {
+        bool reachedEnd = false;
+        if (mPathRun.chkPointPass(current.pos, mPathRun.getDir())) {
+            field_0x790 = mPathRun.pointArg(mPathRun.getIdx());
+            if (field_0x790 != 0xFF) {
+                daObjFigure_c* figure = (daObjFigure_c*)fopAcM_searchFromName("Figure", 0xFF, field_0x790);
+                if (figure != NULL && figure->isDispFigure()) {
+                    field_0x7C5 = getRand(5);
+                    field_0x7C4 = 1;
+                    executeSetMode(MOVE_PROC_WAIT);
+                }
+            }
+            if (!mPathRun.nextIdxAuto()) {
+                reachedEnd = true;
+            }
+        }
+
+        if (field_0x7B1 || field_0x7C0) {
+            field_0x7C4 = 0;
+            executeSetMode(MOVE_PROC_WAIT);
+        } else {
+            if (!reachedEnd) {
+                if (field_0x7C4 != 0) {
+                    return;
+                }
+                cXyz point = mPathRun.getPoint(mPathRun.getIdx());
+                s16 angle;
+                dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
+                mTargetYRot = field_0x7A0 = angle;
+                mHeadOnlyFollow = false;
+                mLookAtMaxVel = l_npc_dat[mNpcNo].field_0x2C;
+                field_0x7BD = 2;
+                m_jnt.setTrn();
+                field_0x77C = l_npc_dat[mNpcNo].field_0x38;
+            } else {
+                mPathRun.turnDir();
+                cXyz point = mPathRun.getPoint(mPathRun.getIdx());
+                s16 angle;
+                dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
+                field_0x7A0 = angle;
+                mPathRun.setInf(0xFF, fopAcM_GetRoomNo(this), true);
+                executeSetMode(MOVE_PROC_WAIT);
+                return;
+            }
+        }
+    }
 }
 
 /* 00001BD4-00001D18       .text executeTurnInit__9daNpcMn_cFv */
 int daNpcMn_c::executeTurnInit() {
-    /* Nonmatching */
+    cXyz point = mPathRun.getPoint(mPathRun.getIdx());
+    s16 angle;
+    dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
+    if (angle == current.angle.y) {
+        setAnmTbl(&l_npc_anm_walk);
+        field_0x798 = l_npc_dat[mNpcNo].field_0x44 + cM_rndF(l_npc_dat[mNpcNo].field_0x46 - l_npc_dat[mNpcNo].field_0x44);
+        return 2;
+    } else {
+        return 3;
+    }
 }
 
 /* 00001D18-00001DE8       .text executeTurn__9daNpcMn_cFv */
@@ -866,13 +920,24 @@ void daNpcMn_c::eventWaitInit(int i_staffIdx) {
 }
 
 /* 00002358-000023E8       .text eventWait__9daNpcMn_cFi */
-void daNpcMn_c::eventWait(int) {
-    /* Nonmatching */
+bool daNpcMn_c::eventWait(int i_staffIdx) {
+    if (field_0x79C != 0) {
+        field_0x79C--;
+        return false;
+    }
+    if (dComIfGp_evmng_getMyIntegerP(i_staffIdx, "SwOn") != NULL) {
+        fopAcM_onSwitch(this, getPrmSwitchBit2());
+    }
+    return true;
 }
 
 /* 000023E8-00002448       .text eventSwOnInit__9daNpcMn_cFi */
-void daNpcMn_c::eventSwOnInit(int) {
-    /* Nonmatching */
+void daNpcMn_c::eventSwOnInit(int i_staffIdx) {
+    int* pData = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
+    field_0x79C = 0;
+    if (pData != NULL) {
+        field_0x79C = *pData;
+    }
 }
 
 /* 00002448-000024AC       .text eventSwOn__9daNpcMn_cFv */
@@ -1090,8 +1155,12 @@ s16 daNpcMn_c::XyCheckCB(int) {
 }
 
 /* 0000397C-000039E0       .text getRand__9daNpcMn_cFi */
-void daNpcMn_c::getRand(int) {
-    /* Nonmatching */
+int daNpcMn_c::getRand(int i_max) {
+    int rnd = cM_rndF(i_max);
+    if (rnd == i_max) {
+        rnd = 0;
+    }
+    return rnd;
 }
 
 /* 000039E0-00003A58       .text setCollision__9daNpcMn_cFP8dCcD_Cyl4cXyzff */
