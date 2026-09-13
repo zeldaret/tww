@@ -94,7 +94,7 @@ public:
     void eventSwOnInit(int);
     void eventSwOn();
     void eventHatchInit();
-    void eventHatch();
+    bool eventHatch();
     void eventBikkuriInit(int);
     void eventBikkuri();
     void eventTurnInit();

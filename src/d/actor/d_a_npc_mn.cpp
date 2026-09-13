@@ -747,17 +747,43 @@ int daNpcMn_c::executeTurnInit() {
 
 /* 00001D18-00001DE8       .text executeTurn__9daNpcMn_cFv */
 void daNpcMn_c::executeTurn() {
-    /* Nonmatching */
+    if (!executeCommon()) {
+        cXyz point = mPathRun.getPoint(mPathRun.getIdx());
+        s16 angle;
+        dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
+        mTargetYRot = angle;
+        mHeadOnlyFollow = false;
+        field_0x7BD = 2;
+        m_jnt.setTrn();
+
+        if (current.angle.y == angle) {
+            executeSetMode(MOVE_PROC_TALK3);
+        }
+    }
 }
 
 /* 00001DE8-00001E80       .text checkOrder__9daNpcMn_cFv */
 void daNpcMn_c::checkOrder() {
-    /* Nonmatching */
+    if (eventInfo.checkCommandDemoAccrpt()) {
+        if (dComIfGp_evmng_startCheck(field_0x796) && field_0x7B2 == 3) {
+            field_0x7B2 = 0;
+        }
+    } else if (eventInfo.checkCommandTalk() && (field_0x7B2 == 2 || field_0x7B2 == 1)) {
+        field_0x7B0 = 1;
+        executeSetMode(MOVE_PROC_TALK);
+    }
 }
 
 /* 00001E80-00001F00       .text eventOrder__9daNpcMn_cFv */
 void daNpcMn_c::eventOrder() {
-    /* Nonmatching */
+    if (field_0x7B2 == 2 || field_0x7B2 == 1) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if (field_0x7B2 == 2) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    } else if (field_0x7B2 == 3) {
+        fopAcM_orderChangeEventId(dComIfGp_getPlayer(0), this, field_0x796, 0, 0xFFFF);
+    }
 }
 
 /* 00001F00-00001F74       .text eventMove__9daNpcMn_cFv */
@@ -831,8 +857,12 @@ void daNpcMn_c::eventGetItemInit() {
 }
 
 /* 000022F8-00002358       .text eventWaitInit__9daNpcMn_cFi */
-void daNpcMn_c::eventWaitInit(int) {
-    /* Nonmatching */
+void daNpcMn_c::eventWaitInit(int i_staffIdx) {
+    int* timer = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
+    field_0x79C = 0;
+    if (timer != NULL) {
+        field_0x79C = *timer;
+    }
 }
 
 /* 00002358-000023E8       .text eventWait__9daNpcMn_cFi */
@@ -856,8 +886,15 @@ void daNpcMn_c::eventHatchInit() {
 }
 
 /* 00002540-00002578       .text eventHatch__9daNpcMn_cFv */
-void daNpcMn_c::eventHatch() {
-    /* Nonmatching */
+bool daNpcMn_c::eventHatch() {
+    mTargetYRot = field_0x7A0;
+    mHeadOnlyFollow = false;
+    field_0x7BD = 2;
+    m_jnt.setTrn();
+    if (field_0x7A0 - current.angle.y == 0) {
+        return true;
+    }
+    return false;
 }
 
 /* 00002578-000025EC       .text eventBikkuriInit__9daNpcMn_cFi */
