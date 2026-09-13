@@ -168,21 +168,21 @@ void dScp_ScreenDataSet(sub_scp_class* i_Scp) {
 
 #if VERSION == VERSION_PAL
     if (dComIfGs_getOptRuby()) {
-        i_Scp->mpTextBox->move(i_Scp->mpTextBox->mBounds.i.x, i_Scp->mpTextBox->mBounds.i.y - 14.0f);
-        i_Scp->mpTextBoxSdw->move(i_Scp->mpTextBoxSdw->mBounds.i.x, i_Scp->mpTextBoxSdw->mBounds.i.y - 14.0f);
+        i_Scp->mpTextBox->move(i_Scp->mpTextBox->getBounds().i.x, i_Scp->mpTextBox->getBounds().i.y - 14.0f);
+        i_Scp->mpTextBoxSdw->move(i_Scp->mpTextBoxSdw->getBounds().i.x, i_Scp->mpTextBoxSdw->getBounds().i.y - 14.0f);
     } else {
-        i_Scp->mpTextBox->move(i_Scp->mpTextBox->mBounds.i.x, i_Scp->mpTextBox->mBounds.i.y - 10.0f);
-        i_Scp->mpTextBoxSdw->move(i_Scp->mpTextBoxSdw->mBounds.i.x, i_Scp->mpTextBoxSdw->mBounds.i.y - 10.0f);
+        i_Scp->mpTextBox->move(i_Scp->mpTextBox->getBounds().i.x, i_Scp->mpTextBox->getBounds().i.y - 10.0f);
+        i_Scp->mpTextBoxSdw->move(i_Scp->mpTextBoxSdw->getBounds().i.x, i_Scp->mpTextBoxSdw->getBounds().i.y - 10.0f);
     }
 #else
     if (dComIfGs_getOptRuby()) {
-        i_Scp->mpTextBox->move(i_Scp->mpTextBox->mBounds.i.x, i_Scp->mpTextBox->mBounds.i.y - 4.0f);
-        i_Scp->mpTextBoxSdw->move(i_Scp->mpTextBoxSdw->mBounds.i.x, i_Scp->mpTextBoxSdw->mBounds.i.y - 4.0f);
+        i_Scp->mpTextBox->move(i_Scp->mpTextBox->getBounds().i.x, i_Scp->mpTextBox->getBounds().i.y - 4.0f);
+        i_Scp->mpTextBoxSdw->move(i_Scp->mpTextBoxSdw->getBounds().i.x, i_Scp->mpTextBoxSdw->getBounds().i.y - 4.0f);
     }
 #endif
 
-    i_Scp->mpRubyBox->move(i_Scp->mpRubyBox->mBounds.i.x, i_Scp->mpRubyBox->mBounds.i.y - 3.0f);
-    i_Scp->mpRubyBoxSdw->move(i_Scp->mpRubyBoxSdw->mBounds.i.x, i_Scp->mpRubyBoxSdw->mBounds.i.y - 3.0f);
+    i_Scp->mpRubyBox->move(i_Scp->mpRubyBox->getBounds().i.x, i_Scp->mpRubyBox->getBounds().i.y - 3.0f);
+    i_Scp->mpRubyBoxSdw->move(i_Scp->mpRubyBoxSdw->getBounds().i.x, i_Scp->mpRubyBoxSdw->getBounds().i.y - 3.0f);
 
     i_Scp->mpTextBox->setFont(font0);
     i_Scp->mpRubyBox->setFont(font1);

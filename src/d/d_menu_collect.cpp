@@ -207,7 +207,7 @@ void dMenu_Collect_c::screenSet() {
     fopMsgM_setPaneData(&m7E8, scrn, 'nk00');
     fopMsgM_setPaneData(&m820, scrn, 'no11');
 
-    m820.mUserArea = m820.pane->mRotation;
+    m820.mUserArea = m820.pane->getRotate();
 
     if (m820.mUserArea > 180)
         m820.mUserArea -= 360;
@@ -1802,53 +1802,21 @@ void dMenu_Collect_c::itemScale() {
                 if (now == 3) {
                     m2478->insertChild(m1498[0].pane, m1738.pane);
                     fopMsgM_paneScaleXY(&m1738, g_menuHIO.field_0x8);
-
-                    J2DPane* pane = m1738.pane;
-                    float y = m1738.mSize.y / 2.0f;
-                    float x = m1738.mSize.x / 2.0f;
-
-                    pane->mBasePosition.x = x;
-                    pane->mBasePosition.y = y;
-                    pane->mRotationAxis = ROTATE_Z;
-                    pane->calcMtx();
+                    m1738.pane->rotate(m1738.mSize.x / 2.0f, m1738.mSize.y / 2.0f, ROTATE_Z, m1738.pane->getRotate());
                 } else {
                     m2478->insertChild(m15E8[5].pane, m1738.pane);
                     fopMsgM_paneScaleXY(&m1738, 1.0f);
-
-                    J2DPane* pane = m1738.pane;
-                    float y = m1738.mSize.y / 2.0f;
-                    float x = m1738.mSize.x / 2.0f;
-
-                    pane->mBasePosition.x = x;
-                    pane->mBasePosition.y = y;
-                    pane->mRotationAxis = ROTATE_Z;
-                    pane->calcMtx();
+                    m1738.pane->rotate(m1738.mSize.x / 2.0f, m1738.mSize.y / 2.0f, ROTATE_Z, m1738.pane->getRotate());
                 }
 
                 if (now == 4) {
                     m2478->insertChild(m1498[0].pane, m1770.pane);
                     fopMsgM_paneScaleXY(&m1770, g_menuHIO.field_0x8);
-
-                    J2DPane* pane = m1770.pane;
-                    float y = m1770.mSize.y / 2.0f;
-                    float x = m1770.mSize.x / 2.0f;
-
-                    pane->mBasePosition.x = x;
-                    pane->mBasePosition.y = y;
-                    pane->mRotationAxis = ROTATE_Z;
-                    pane->calcMtx();
+                    m1770.pane->rotate(m1770.mSize.x / 2.0f, m1770.mSize.y / 2.0f, ROTATE_Z, m1770.pane->getRotate());
                 } else {
                     m2478->insertChild(m15E8[5].pane, m1770.pane);
                     fopMsgM_paneScaleXY(&m1770, 1.0f);
-
-                    J2DPane* pane = m1770.pane;
-                    float y = m1770.mSize.y / 2.0f;
-                    float x = m1770.mSize.x / 2.0f;
-
-                    pane->mBasePosition.x = x;
-                    pane->mBasePosition.y = y;
-                    pane->mRotationAxis = ROTATE_Z;
-                    pane->calcMtx();
+                    m1770.pane->rotate(m1770.mSize.x / 2.0f, m1770.mSize.y / 2.0f, ROTATE_Z, m1770.pane->getRotate());
                 }
 
                 break;
@@ -3495,7 +3463,7 @@ void dMenu_Collect_c::outFontMove() {
             f32 rotOffX = m820.mPosCenter.x - m3F8[i].mPosTopLeft.x;
             f32 rotOffY = m820.mPosCenter.y - m3F8[i].mPosTopLeft.y;
 
-            m3F8[i].pane->rotate(rotOffX, rotOffY, ROTATE_Z, m820.pane->mRotation);
+            m3F8[i].pane->rotate(rotOffX, rotOffY, ROTATE_Z, m820.pane->getRotate());
         } else {
             fopMsgM_setNowAlphaZero(&m0B0[i]);
         }

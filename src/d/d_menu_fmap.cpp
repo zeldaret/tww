@@ -2019,9 +2019,9 @@ void dMenu_Fmap_c::ZoomGridLv1Proc() {
                 mDispIslandPosY * (mClgPane.mSizeOrig.y / 100000.0f), 0.0, 0.0,
                 mTsw1Pane.mSizeOrig.x / clgOrigX, 1.0, 0x2, 0);
             for (int i = 0; i < 8; i++) {
-                mKk3xPanes[i].pane->mInheritAlpha = false;
+                mKk3xPanes[i].pane->setInfluencedAlpha(false);
             }
-            mR01bPane.pane->mInheritAlpha = false;
+            mR01bPane.pane->setInfluencedAlpha(false);
             mFrameTimer = 0;
             mFmapProcIdx = FMAP_ZOOM_PROC_LV2_IN;
         }
@@ -2128,9 +2128,9 @@ void dMenu_Fmap_c::ZoomGridLv2Out() {
         }
         mClgPane.pane->hide();
         for (int i = 0; i < 8; i++) {
-            mKk3xPanes[i].pane->mInheritAlpha = true;
+            mKk3xPanes[i].pane->setInfluencedAlpha(true);
         }
-        mR01bPane.pane->mInheritAlpha = true;
+        mR01bPane.pane->setInfluencedAlpha(true);
         mFrameTimer = 0;
         mFmapProcIdx = FMAP_ZOOM_PROC_LV1;
     }
@@ -3232,9 +3232,9 @@ void dMenu_Fmap_c::fmZoomGridLv1In() {
         mFrameTimer = 0;
         mClgPane.pane->show();
         for (int i = 0; i < 8; i++) {
-            mKk3xPanes[i].pane->mInheritAlpha = false;
+            mKk3xPanes[i].pane->setInfluencedAlpha(false);
         }
-        mR01bPane.pane->mInheritAlpha = false;
+        mR01bPane.pane->setInfluencedAlpha(false);
         mFishmanProcIdx = FISHMAN_PROC_ZOOM_LV2_IN;
     }
 }
@@ -3341,9 +3341,9 @@ void dMenu_Fmap_c::fmZoomGridLv2Out() {
         mDoAud_seStart(JA_SE_CHART_ZOOM_OUT);
         mClgPane.pane->hide();
         for (int i = 0; i < 8; i++) {
-            mKk3xPanes[i].pane->mInheritAlpha = true;
+            mKk3xPanes[i].pane->setInfluencedAlpha(true);
         }
-        mR01bPane.pane->mInheritAlpha = true;
+        mR01bPane.pane->setInfluencedAlpha(true);
         mFrameTimer = 0;
         mFishmanProcIdx = FISHMAN_PROC_ZOOM_LV1_OUT;
     }

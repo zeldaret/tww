@@ -215,12 +215,12 @@ void dMenu_Fmap2_c::screenSet() {
         fopMsgM_setPaneData(&field_0x554[i], fmap2Dl.scrn->search(l_tagNm01[i]));
         fopMsgM_setPaneData(&field_0x90c[i], fmap2Dl.scrn->search(l_tagNm02[i]));
     }
-    field_0x2830 = field_0x554[1].pane->mGlobalBounds.i.x;
-    field_0x2834 = field_0x554[1].pane->mGlobalBounds.i.y;
-    field_0x2838 = field_0x554[3].pane->mGlobalBounds.i.x;
-    field_0x283c = field_0x554[3].pane->mGlobalBounds.i.y;
-    field_0x2840 = field_0x554[1].pane->mGlobalBounds.f.y;
-    field_0x2844 = field_0x554[3].pane->mGlobalBounds.f.y;
+    field_0x2830 = field_0x554[1].pane->getGlbBounds().i.x;
+    field_0x2834 = field_0x554[1].pane->getGlbBounds().i.y;
+    field_0x2838 = field_0x554[3].pane->getGlbBounds().i.x;
+    field_0x283c = field_0x554[3].pane->getGlbBounds().i.y;
+    field_0x2840 = field_0x554[1].pane->getGlbBounds().f.y;
+    field_0x2844 = field_0x554[3].pane->getGlbBounds().f.y;
     ((J2DTextBox*)field_0x554[1].pane)->setFont(field_0x34);
     ((J2DTextBox*)field_0x554[2].pane)->setFont(field_0x34);
     ((J2DTextBox*)field_0x554[3].pane)->setFont(field_0x38);

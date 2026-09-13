@@ -243,7 +243,7 @@ dScnOpen_proc_c::dScnOpen_proc_c() {
     pane2d[PANE_tx2] = m_Screen->search('\0tx2');
 
     #if VERSION >= VERSION_USA
-    pane2d[PANE_tx1]->move(pane2d[PANE_tx1]->mBounds.i.x, 376.0f);
+    pane2d[PANE_tx1]->move(pane2d[PANE_tx1]->getBounds().i.x, 376.0f);
     #endif
 
     m_message->set_pane_pointer(pane2d[PANE_tx1], pane2d[PANE_tx2]);

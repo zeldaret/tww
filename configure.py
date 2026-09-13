@@ -630,7 +630,7 @@ config.libs = [
             Object(Matching,    "d/d_place_name.cpp"),
             Object(NonMatching, "d/d_camera.cpp"),
             Object(Matching,    "d/d_envse.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_file_error.cpp"),
+            Object(Matching,    "d/d_file_error.cpp"),
             Object(MatchingFor("D44J01", "GZLJ01", "GZLE01"), "d/d_file_select.cpp"),
             Object(Matching,    "d/d_gameover.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_kankyo.cpp"),

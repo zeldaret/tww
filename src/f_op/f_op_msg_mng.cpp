@@ -9800,10 +9800,10 @@ fopMsgM_f2d_class fopMsgM_centerPosCalc(fopMsgM_f2d_class param_1, fopMsgM_f2d_c
 
 /* 8003BA40-8003BB34       .text fopMsgM_pane_parts_set__FP18fopMsgM_pane_class */
 void fopMsgM_pane_parts_set(fopMsgM_pane_class* i_pane) {
-    i_pane->mPosTopLeftOrig.x = i_pane->pane->mBounds.i.x;
-    i_pane->mPosTopLeftOrig.y = i_pane->pane->mBounds.i.y;
-    i_pane->mSizeOrig.x = i_pane->pane->mBounds.getWidth();
-    i_pane->mSizeOrig.y = i_pane->pane->mBounds.getHeight();
+    i_pane->mPosTopLeftOrig.x = i_pane->pane->getBounds().i.x;
+    i_pane->mPosTopLeftOrig.y = i_pane->pane->getBounds().i.y;
+    i_pane->mSizeOrig.x = i_pane->pane->getWidth();
+    i_pane->mSizeOrig.y = i_pane->pane->getHeight();
     fopMsgM_f2d_class center = fopMsgM_centerPosCalc(i_pane->mPosTopLeftOrig, i_pane->mSizeOrig);
     i_pane->mPosCenterOrig.x = center.x;
     i_pane->mPosCenterOrig.y = center.y;

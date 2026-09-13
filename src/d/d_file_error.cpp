@@ -78,6 +78,12 @@ void dFile_error_c::_delete() {
 MyScreen::~MyScreen() {
 }
 
+#if VERSION == VERSION_DEMO
+void dFile_error_c::_deleteSp() {
+    mDoHIO_deleteChild(g_feHIO.mNo);
+}
+#endif
+
 /* 8017DF04-8017E010       .text setErrMessage__13dFile_error_cFUli */
 void dFile_error_c::setErrMessage(u32 msgNo, int param_2) {
     m2fa = (u8) param_2;
@@ -123,7 +129,7 @@ void dFile_error_c::closeMessage() {
 /* 8017E068-8017E228       .text resizeMsgBoard__13dFile_error_cFi */
 void dFile_error_c::resizeMsgBoard(int param_1) {
     J2DPane *pane_2_pane = msgPanes[2].pane;
-    f32 pane_2_height = pane_2_pane->mBounds.getHeight();
+    f32 pane_2_height = pane_2_pane->getHeight();
     f32 scale = ((pane_2_height / VERSION_SELECT(9.0f, 9.0f, 12.0f, 12.0f)) * (f32) param_1) / pane_2_height;
 
     fopMsgM_paneScaleY(&msgPanes[2], scale);
@@ -191,8 +197,8 @@ void dFile_error_c::setMessage(char* message) {
     while (*message != '\0') {
         if (*message == '\x1a') {
             m2f7 = 1;
-            msgPanes[0].pane->mVisible = true;
-            msgPanes[1].pane->mVisible = true;
+            msgPanes[0].pane->show();
+            msgPanes[1].pane->show();
 
             message ++;
             for (int i = 0; i < in_r9; i ++) {
@@ -232,7 +238,9 @@ int dFile_error_c::getLineCount(char* text) {
         text ++;
     }
 
-    return line_count + 1;
+    line_count++;
+
+    return line_count;
 }
 
 typedef void(dFile_error_c::*procFunc)();
@@ -379,8 +387,8 @@ void dFile_error_c::yesNoSelectWait() {
             mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
         }
 
-        msgPanes[0].pane->mVisible = false;
-        msgPanes[1].pane->mVisible = false;
+        msgPanes[0].pane->hide();
+        msgPanes[1].pane->hide();
 
         m2fe = 0;
         mState = 2;
@@ -524,8 +532,8 @@ void dFile_error_c::screenSet() {
     search_result = fileErr.Scr->search('cur2');
     fopMsgM_setPaneData(&msgPanes[1], search_result);
 
-    mPane0Rotation = msgPanes[0].pane->mRotation;
-    mPane1Rotation = msgPanes[1].pane->mRotation;
+    mPane0Rotation = msgPanes[0].pane->getRotate();
+    mPane1Rotation = msgPanes[1].pane->getRotate();
 
     int i;
     int id_1 = 'cc00';
@@ -656,8 +664,8 @@ void dFile_error_c::paneTransInit() {
 
     PaneTranceBase(m2fe, g_feHIO.m8, (f32) g_feHIO.m6, 0.0, 0.0, 0.0, 1, 1);
 
-    msgPanes[0].pane->mVisible = false;
-    msgPanes[1].pane->mVisible = false;
+    msgPanes[0].pane->hide();
+    msgPanes[1].pane->hide();
 }
 
 /* 8017F3E0-8017F3FC       .text displayInit__13dFile_error_cFv */
