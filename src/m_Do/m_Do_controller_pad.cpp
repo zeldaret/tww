@@ -3,10 +3,12 @@
 // Translation Unit: m_Do_controller_pad.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_controller_pad.h"
 #include "JSystem/JUtility/JUTGba.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "f_ap/f_ap_game.h"
+#include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_gba_com.h"
 #include "m_Do/m_Do_main.h"
@@ -16,31 +18,31 @@ interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 
 /* 80007598-800078C0       .text mDoCPd_Convert__FP27interface_of_controller_padP10JUTGamePad */
 static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* pPad) {
-    pInterface->mButtonHold.up    = pPad->mButton.mButton & CButton::DPAD_UP;
-    pInterface->mButtonHold.down  = pPad->mButton.mButton & CButton::DPAD_DOWN;
-    pInterface->mButtonHold.left  = pPad->mButton.mButton & CButton::DPAD_LEFT;
-    pInterface->mButtonHold.right = pPad->mButton.mButton & CButton::DPAD_RIGHT;
-    pInterface->mButtonHold.z     = pPad->mButton.mButton & CButton::Z;
-    pInterface->mButtonHold.r     = pPad->mButton.mButton & CButton::R;
-    pInterface->mButtonHold.l     = pPad->mButton.mButton & CButton::L;
-    pInterface->mButtonHold.a     = pPad->mButton.mButton & CButton::A;
-    pInterface->mButtonHold.b     = pPad->mButton.mButton & CButton::B;
-    pInterface->mButtonHold.x     = pPad->mButton.mButton & CButton::X;
-    pInterface->mButtonHold.y     = pPad->mButton.mButton & CButton::Y;
-    pInterface->mButtonHold.start = pPad->mButton.mButton & CButton::START;
+    pInterface->mButtonHold.up    = pPad->mButton.mButton & PAD_BUTTON_UP;
+    pInterface->mButtonHold.down  = pPad->mButton.mButton & PAD_BUTTON_DOWN;
+    pInterface->mButtonHold.left  = pPad->mButton.mButton & PAD_BUTTON_LEFT;
+    pInterface->mButtonHold.right = pPad->mButton.mButton & PAD_BUTTON_RIGHT;
+    pInterface->mButtonHold.z     = pPad->mButton.mButton & PAD_TRIGGER_Z;
+    pInterface->mButtonHold.r     = pPad->mButton.mButton & PAD_TRIGGER_R;
+    pInterface->mButtonHold.l     = pPad->mButton.mButton & PAD_TRIGGER_L;
+    pInterface->mButtonHold.a     = pPad->mButton.mButton & PAD_BUTTON_A;
+    pInterface->mButtonHold.b     = pPad->mButton.mButton & PAD_BUTTON_B;
+    pInterface->mButtonHold.x     = pPad->mButton.mButton & PAD_BUTTON_X;
+    pInterface->mButtonHold.y     = pPad->mButton.mButton & PAD_BUTTON_Y;
+    pInterface->mButtonHold.start = pPad->mButton.mButton & PAD_BUTTON_START;
 
-    pInterface->mButtonTrig.up    = pPad->mButton.mTrigger & CButton::DPAD_UP;
-    pInterface->mButtonTrig.down  = pPad->mButton.mTrigger & CButton::DPAD_DOWN;
-    pInterface->mButtonTrig.left  = pPad->mButton.mTrigger & CButton::DPAD_LEFT;
-    pInterface->mButtonTrig.right = pPad->mButton.mTrigger & CButton::DPAD_RIGHT;
-    pInterface->mButtonTrig.z     = pPad->mButton.mTrigger & CButton::Z;
-    pInterface->mButtonTrig.r     = pPad->mButton.mTrigger & CButton::R;
-    pInterface->mButtonTrig.l     = pPad->mButton.mTrigger & CButton::L;
-    pInterface->mButtonTrig.a     = pPad->mButton.mTrigger & CButton::A;
-    pInterface->mButtonTrig.b     = pPad->mButton.mTrigger & CButton::B;
-    pInterface->mButtonTrig.x     = pPad->mButton.mTrigger & CButton::X;
-    pInterface->mButtonTrig.y     = pPad->mButton.mTrigger & CButton::Y;
-    pInterface->mButtonTrig.start = pPad->mButton.mTrigger & CButton::START;
+    pInterface->mButtonTrig.up    = pPad->mButton.mTrigger & PAD_BUTTON_UP;
+    pInterface->mButtonTrig.down  = pPad->mButton.mTrigger & PAD_BUTTON_DOWN;
+    pInterface->mButtonTrig.left  = pPad->mButton.mTrigger & PAD_BUTTON_LEFT;
+    pInterface->mButtonTrig.right = pPad->mButton.mTrigger & PAD_BUTTON_RIGHT;
+    pInterface->mButtonTrig.z     = pPad->mButton.mTrigger & PAD_TRIGGER_Z;
+    pInterface->mButtonTrig.r     = pPad->mButton.mTrigger & PAD_TRIGGER_R;
+    pInterface->mButtonTrig.l     = pPad->mButton.mTrigger & PAD_TRIGGER_L;
+    pInterface->mButtonTrig.a     = pPad->mButton.mTrigger & PAD_BUTTON_A;
+    pInterface->mButtonTrig.b     = pPad->mButton.mTrigger & PAD_BUTTON_B;
+    pInterface->mButtonTrig.x     = pPad->mButton.mTrigger & PAD_BUTTON_X;
+    pInterface->mButtonTrig.y     = pPad->mButton.mTrigger & PAD_BUTTON_Y;
+    pInterface->mButtonTrig.start = pPad->mButton.mTrigger & PAD_BUTTON_START;
     
     pInterface->mMainStickPosX = pPad->getMainStickX();
     pInterface->mMainStickPosY = pPad->getMainStickY();
@@ -64,13 +66,27 @@ static s32 mDoCPd_Convert(interface_of_controller_pad* pInterface, JUTGamePad* p
 int mDoCPd_Read() {
     JUTGamePad::read();
 
+#if VERSION == VERSION_DEMO
+    if (!mDoRst::isReset()) {
+        if (mDoRst::isResetPrepare()) {
+            if (mDoMemCd_isCardCommNone()) {
+                mDoRst::onReset();
+            }
+        } else if (mDoRst::is3ButtonReset()) {
+            JUTGamePad* pad = JUTGamePad::getGamePad(mDoRst::get3ButtonResetPort());
+            if (!pad->isPushing3ButtonReset()) {
+                mDoRst::off3ButtonReset();
+            }
+        }
+    }
+#else
     if (!mDoRst::isReset() && mDoRst::is3ButtonReset()) {
         JUTGamePad* pad = JUTGamePad::getGamePad(mDoRst::get3ButtonResetPort());
-
         if (!pad->isPushing3ButtonReset()) {
             mDoRst::off3ButtonReset();
         }
     }
+#endif
 
     JUTGamePad** pad = g_mDoCPd_gamePad;
     interface_of_controller_pad* interface = g_mDoCPd_cpadInfo;
@@ -115,25 +131,30 @@ int mDoCPd_Read() {
         }
     }
 
-    g_mDoGaC_gbaCom.mDoGaC_Connect();
+    mDoGaC_Connect();
     return 1;
 }
 
 /* 80007A70-80007BBC       .text mDoCPd_Create__Fv */
 int mDoCPd_Create() {
-    JUTGamePad::mSuppressPadReset = 1;
+    JUTGamePad::suppressPadReset(1);
 
-    JUTGamePad* pad = new JUTGamePad(JUTGamePad::Port_1);
+    JUTGamePad* pad = new JUTGamePad(JUTGamePad::EPort1);
     g_mDoCPd_gamePad[0] = pad;
     g_mDoCPd_gamePad[1] = NULL;
 
+#if VERSION == VERSION_DEMO
+    g_mDoCPd_gamePad[2] = new JUTGamePad(JUTGamePad::EPort3);
+    g_mDoCPd_gamePad[3] = new JUTGamePad(JUTGamePad::EPort4);
+#else
     if (mDoMain::developmentMode) {
-        g_mDoCPd_gamePad[2] = new JUTGamePad(JUTGamePad::Port_3);
-        g_mDoCPd_gamePad[3] = new JUTGamePad(JUTGamePad::Port_4);
+        g_mDoCPd_gamePad[2] = new JUTGamePad(JUTGamePad::EPort3);
+        g_mDoCPd_gamePad[3] = new JUTGamePad(JUTGamePad::EPort4);
     } else {
         g_mDoCPd_gamePad[2] = NULL;
         g_mDoCPd_gamePad[3] = NULL;
     }
+#endif
 
     JUTGamePad::setAnalogMode(3);
 
@@ -148,7 +169,7 @@ int mDoCPd_Create() {
 #endif
 
     JUTGba::create();
-    g_mDoGaC_gbaCom.mDoGaC_Initial(TestDataManager, 16);
+    mDoGaC_Initial(TestDataManager, ARRAY_SIZE(TestDataManager));
 
     for (int i = 0; i < 4; i++) {
         g_mDoCPd_cpadInfo[i].mHoldLockL = g_mDoCPd_cpadInfo[i].mTrigLockL = false;

@@ -41,13 +41,13 @@ void JASystem::TGlobalChannel::init() {
         mgr->addListHead(&sChannel[i], 0);
         sChannel[i].field_0x4 = mgr;
     }
-    mgr->field_0x0 = 256;
+    mgr->mManagedChannels = 256;
     OSReport("----- JASChannel size : %d\n", sizeof(TChannel));
 }
 
 /* 8028AD50-8028ADE8       .text alloc__Q28JASystem14TGlobalChannelFPQ28JASystem11TChannelMgrUl */
-int JASystem::TGlobalChannel::alloc(TChannelMgr* param_1, u32 param_2) {
-    int i;
+u32 JASystem::TGlobalChannel::alloc(TChannelMgr* param_1, u32 param_2) {
+    u32 i;
     for (i = 0; i < param_2; i++) {
         TChannel* channel = sChannelMgr->getListHead(0);
         if (!channel) {
@@ -57,16 +57,16 @@ int JASystem::TGlobalChannel::alloc(TChannelMgr* param_1, u32 param_2) {
         channel->field_0x4 = param_1;
         channel->init();
     }
-    param_1->field_0x0 += i;
-    sChannelMgr->field_0x0 -= i;
+    param_1->mManagedChannels += i;
+    sChannelMgr->mManagedChannels -= i;
     return i;
 }
 
 /* 8028ADE8-8028AE4C       .text release__Q28JASystem14TGlobalChannelFPQ28JASystem8TChannel */
 int JASystem::TGlobalChannel::release(TChannel* param_1) {
     sChannelMgr->addListHead(param_1, 0);
-    param_1->field_0x4->field_0x0--;
-    sChannelMgr->field_0x0++;
+    param_1->field_0x4->mManagedChannels--;
+    sChannelMgr->mManagedChannels++;
     param_1->field_0x4 = sChannelMgr;
     return 0;
 }
@@ -112,7 +112,7 @@ int JASystem::TGlobalChannel::releaseAll(TChannelMgr* param_1) {
         }
         channel->field_0x4 = sChannelMgr;
     }
-    sChannelMgr->field_0x0 += param_1->field_0x0;
-    param_1->field_0x0 = 0;
+    sChannelMgr->mManagedChannels += param_1->mManagedChannels;
+    param_1->mManagedChannels = 0;
     return 0;
 }

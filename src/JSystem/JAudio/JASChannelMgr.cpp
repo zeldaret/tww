@@ -8,32 +8,40 @@
 #include "JSystem/JAudio/JASChannelMgr.h"
 #include "JSystem/JAudio/JASChGlobal.h"
 #include "JSystem/JAudio/JASChannel.h"
+#include "JSystem/JAudio/JASDSPChannel.h"
+#include "JSystem/JAudio/JASChAllocQueue.h"
 #include "dolphin/os/OS.h"
+
+namespace JASystem{
+namespace Driver {
+const u8 polys_table[16] = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x8, 0xa, 0xc, 0xe, 0x10, 0x14, 0x18, 0x1c, 0x20 };
+} // namespace Driver
+} // namespace JASystem
 
 /* 8028D3C0-8028D4D0       .text init__Q28JASystem11TChannelMgrFv */
 void JASystem::TChannelMgr::init() {
-    /* Nonmatching */
+    int i;
     field_0x8 = NULL;
     field_0xc = NULL;
     field_0x10 = NULL;
     field_0x14 = NULL;
     field_0x4 = 0;
-    field_0x0 = 0;
+    mManagedChannels = 0;
     field_0x70 = 1;
     field_0x18 = 1.0f;
     field_0x1c = 1.0f;
     field_0x20 = 0.5f;
     field_0x24 = 0.0f;
     field_0x28 = 0.0f;
-    for (int i = 0; i < 8; i++) {
+    for (i = 0; i < 8; i++) {
         field_0x2c[i] = 0;
     }
     field_0x2c[0] = 0x7fff;
     field_0x4c = 0;
-    for (int i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++) {
         field_0x3c[i] = 0;
     }
-    for (int i = 0; i < 6; i++) {
+    for (i = 0; i < 6; i++) {
         field_0x5a[i] = 0;
     }
     field_0x60 = 0;
@@ -56,7 +64,7 @@ void JASystem::TChannelMgr::init() {
 void JASystem::TChannelMgr::stopAll() {
     TChannel* channel = field_0xc;
     while (channel) {
-        TChannel* r31 = channel->field_0x24;
+        TChannel* r31 = channel->mNext;
         channel->stop(0);
         channel = r31;
     }
@@ -64,15 +72,15 @@ void JASystem::TChannelMgr::stopAll() {
 
 /* 8028D514-8028D558       .text stopAllRelease__Q28JASystem11TChannelMgrFv */
 void JASystem::TChannelMgr::stopAllRelease() {
-    for (TChannel* channel = field_0x10; channel; channel = channel->field_0x24) {
+    for (TChannel* channel = field_0x10; channel; channel = channel->mNext) {
         channel->forceStopOsc(0);
     }
 }
 
 /* 8028D558-8028D5D0       .text initAllocChannel__Q28JASystem11TChannelMgrFUl */
 void JASystem::TChannelMgr::initAllocChannel(u32 param_1) {
-    if (field_0x0) {
-        OSReport("----- Warning JCSにボイスが %d 残っているのでグローバルに返却します\n", field_0x0);
+    if (mManagedChannels) {
+        OSReport("----- Warning JCSにボイスが %d 残っているのでグローバルに返却します\n", mManagedChannels);
         TGlobalChannel::releaseAll(this);
     }
     init();
@@ -81,8 +89,55 @@ void JASystem::TChannelMgr::initAllocChannel(u32 param_1) {
 }
 
 /* 8028D5D0-8028D778       .text getLogicalChannel__Q28JASystem11TChannelMgrFUl */
-JASystem::TChannel* JASystem::TChannelMgr::getLogicalChannel(u32) {
-    /* Nonmatching */
+JASystem::TChannel* JASystem::TChannelMgr::getLogicalChannel(u32 param) {
+    BOOL bVar1 = false;
+    if (!checkLimitStart(param)) {
+        if ((param >> 0x18) & 0x10)
+            return NULL;
+        bVar1 = true;
+    }
+
+    TChannel* head = getListHead(0);
+    if (head == NULL) {
+        if (!TGlobalChannel::alloc(this, 1)) {
+            OSReport("----- getLC グローバル論理チャンネルの残りがない\n");
+            return NULL;
+        }
+
+        field_0x4++;
+        head = getListHead(0);
+        if (field_0x70 == TRUE) {
+            TChannel* chan = getListHead(2);
+            if (chan == NULL) {
+                chan = getListHead(1);
+                if (chan == NULL) {
+                    OSReport("----- getLC Error ----- fjc is NULL again\n");
+                }
+            }
+            if (chan != NULL) {
+                chan->forceStopOsc(0);
+                addListHead(chan, 3);
+                if (chan->field_0x20 != NULL) {
+                    chan->field_0x20->forceStop();
+                } else {
+                    OSReport("----- getLC -----does not have DSP CH\n");
+                }
+            } else {
+                OSReport("cannot FORCESTOP (thisの論理ボイスが飽和?)\n");
+            }
+        }
+    }
+
+    head->init();
+    if (bVar1) {
+        head->mPauseFlag = 1;
+        head->field_0x3 = 1;
+    }
+
+    head->field_0xcc = param;
+    head->field_0x18 = 0;
+    head->setPanPower(1.0f, 1.0f, 1.0f, 1.0f);
+    return head;
 }
 
 /* 8028D778-8028D7D8       .text moveListHead__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
@@ -105,7 +160,6 @@ BOOL JASystem::TChannelMgr::moveListTail(TChannel* param_1, u32 param_2) {
 
 /* 8028D838-8028D8E4       .text addListHead__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
 void JASystem::TChannelMgr::addListHead(TChannel* param_1, u32 param_2) {
-    /* Nonmatching */
     TChannel** r31;
     switch (param_2) {
     case 0:
@@ -130,12 +184,11 @@ void JASystem::TChannelMgr::addListHead(TChannel* param_1, u32 param_2) {
     }
     param_1->field_0x8 = r31;
     *r31 = param_1;
-    param_1->field_0x24 = r30;
+    param_1->mNext = r30;
 }
 
 /* 8028D8E4-8028D9C4       .text addListTail__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
-void JASystem::TChannelMgr::addListTail(TChannel*param_1, u32 param_2) {
-    /* Nonmatching */
+void JASystem::TChannelMgr::addListTail(TChannel* param_1, u32 param_2) {
     TChannel** r31;
     switch (param_2) {
     case 0:
@@ -161,14 +214,14 @@ void JASystem::TChannelMgr::addListTail(TChannel*param_1, u32 param_2) {
     param_1->field_0x8 = r31;
     if (!r30) {
         *r31 = param_1;
-        param_1->field_0x24 = NULL;
+        param_1->mNext = NULL;
         return;
     }
     while (true) {
-        TChannel* tmp = r30->field_0x24;
+        TChannel* tmp = r30->mNext;
         if (!tmp) {
-            r30->field_0x24 = param_1;
-            param_1->field_0x24 = NULL;
+            r30->mNext = param_1;
+            param_1->mNext = NULL;
             break;
         }
         r30 = tmp;
@@ -199,27 +252,194 @@ JASystem::TChannel* JASystem::TChannelMgr::getListHead(u32 param_1) {
     if (!r30) {
         return NULL;
     }
-    *r31 = r30->field_0x24;
+    *r31 = r30->mNext;
     r30->field_0x8 = NULL;
     return r30;
 }
 
 /* 8028DA38-8028DAF0       .text cutList__Q28JASystem11TChannelMgrFPQ28JASystem8TChannel */
-int JASystem::TChannelMgr::cutList(TChannel*) {
-    /* Nonmatching */
+int JASystem::TChannelMgr::cutList(TChannel* channel) {
+    int n = 0;
+
+    TChannel* head = *channel->field_0x8;
+
+    if (!head) {
+        OSReport("cutChList Error: No Member\n");
+        return -1;
+    }
+
+    if (head == channel) {
+        *channel->field_0x8 = channel->mNext;
+        channel->field_0x8 = NULL;
+        return 0;
+    }
+
+    for (;;) {
+        n++;
+        if (head == NULL) {
+            OSReport("cutChList Error: Not Member\n");
+            return -1;
+        }
+        if (head->mNext == channel)
+            break;
+        head = head->mNext;
+    }
+
+    head->mNext = channel->mNext;
+    channel->field_0x8 = NULL;
+    return n;
 }
 
 /* 8028DAF0-8028DC34       .text receiveAllChannels__Q28JASystem11TChannelMgrFPQ28JASystem11TChannelMgr */
-void JASystem::TChannelMgr::receiveAllChannels(TChannelMgr*) {
-    /* Nonmatching */
+int JASystem::TChannelMgr::receiveAllChannels(TChannelMgr* other) {
+    TChannel* stolen;
+    for (;;) {
+        stolen = other->getListHead(0);
+        if (!stolen)
+            break;
+        addListHead(stolen, 0);
+        stolen->field_0x4 = this;
+    }
+    for (;;) {
+        stolen = other->getListHead(1);
+        if (!stolen)
+            break;
+        addListHead(stolen, 1);
+        stolen->field_0x4 = this;
+        stolen->field_0xd4 = 1;
+    }
+    for (;;) {
+        stolen = other->getListHead(2);
+        if (!stolen)
+            break;
+        addListHead(stolen, 2);
+        stolen->field_0x4 = this;
+        stolen->field_0xd4 = 1;
+    }
+    for (;;) {
+        stolen = other->getListHead(3);
+        if (!stolen)
+            break;
+        if (TDSPQueue::deleteQueue(stolen))
+            addListHead(stolen, 0);
+        else
+            addListHead(stolen, 3);
+        stolen->field_0x4 = this;
+    }
+    mManagedChannels += other->mManagedChannels;
+    other->mManagedChannels = 0;
+    field_0x4 += other->field_0x4;
+    other->field_0x4 = 0;
+
+    return 0;
 }
 
 /* 8028DC34-8028DDD0       .text checkLimitStart__Q28JASystem11TChannelMgrFUl */
-int JASystem::TChannelMgr::checkLimitStart(u32) {
-    /* Nonmatching */
+int JASystem::TChannelMgr::checkLimitStart(u32 param) {
+    u8 r5 = Driver::polys_table[(param >> 0x18) & 0xF];
+    if (!r5)
+        return true;
+
+    u32 chNum = 0;
+
+    TChannel* head = field_0x10;
+    if (((param >> 0x18) & 0x20)) {
+        for (;;) {
+            if (!head)
+                break;
+
+            if (head->field_0xcc == param && head->mPauseFlag == 0)
+                chNum++;
+        }
+
+        head = field_0xc;
+        for (;;) {
+            if (!head)
+                break;
+
+            if (head->field_0xcc == param && head->mPauseFlag == 0)
+                chNum++;
+        }
+
+        if (chNum == r5)
+            return false;
+        else if (chNum > r5) {
+            OSReport("----- checkLimitStart Why? chNum is over\n");
+            return false;
+        }
+
+        return true;
+    } else {
+        TChannel* found = NULL;
+        for (;;) {
+            if (!head)
+                break;
+
+            if (head->field_0xcc == param && head->mPauseFlag == 0) {
+                if (found == NULL)
+                    found = head;
+                if (chNum == r5) {
+                    found->forceStopLogicalChannel();
+                    return 1;
+                }
+                chNum++;
+            }
+        }
+
+        head = field_0xc;
+        for (;;) {
+            if (!head)
+                break;
+
+            if (head->field_0xcc == param && head->mPauseFlag == 0) {
+                if (found == NULL)
+                    found = head;
+                if (chNum == r5) {
+                    if ((param >> 0x18) & 0x10)
+                        found->forceStopLogicalChannel();
+                    else
+                        head->setPauseFlagReq(1);
+
+                    return 1;
+                }
+                chNum++;
+            }
+        }
+        return true;
+    }
 }
 
 /* 8028DDD0-8028DE94       .text checkLimitStop__Q28JASystem11TChannelMgrFPQ28JASystem8TChannelUl */
-void JASystem::TChannelMgr::checkLimitStop(TChannel*, u32) {
-    /* Nonmatching */
+void JASystem::TChannelMgr::checkLimitStop(TChannel* channel, u32 param) {
+    TChannel* chan = field_0xc;
+    u8 thing = Driver::polys_table[(param >> 0x18) & 0xF];
+
+    if (param == 0)
+        return;
+    if (thing == 0)
+        return;
+
+    if ((param >> 0x18) & 0x20) {
+        for (;;) {
+            if (!chan)
+                break;
+            if (chan->field_0xcc == param && chan->mPauseFlag == 1) {
+                chan->setPauseFlagReq(0);
+                return;
+            }
+            chan = chan->mNext;
+        }
+    } else {
+        TChannel* found = NULL;
+        for (;;) {
+            if (!chan)
+                break;
+            if (chan->field_0xcc == param && chan->mPauseFlag == 1)
+                found = chan;
+            chan = chan->mNext;
+        }
+
+        if (found)
+            found->setPauseFlagReq(0);
+    }
 }

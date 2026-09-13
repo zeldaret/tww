@@ -87,7 +87,7 @@ static void anm_init(bgn2_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, 
 
 /* 000002BC-00000308       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -96,7 +96,7 @@ static void* bgn_s_sub(void* param_1, void*) {
 
 /* 00000308-00000354       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
         return param_1;
     } else {
         return NULL;
@@ -811,7 +811,7 @@ static void damage_check(bgn2_class* i_this) {
 
 /* 00002C88-00002CE0       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         ki_all_count++;
     }
     return NULL;

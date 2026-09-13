@@ -44,7 +44,9 @@ public:
     void startSoundDirectID(u32, JAISound**, JAInter::Actor*, u32, u8);
     void startSoundBasic(u32, JAISound**, JAInter::Actor*, u32, u8, void*);
     void stopSoundHandle(JAISound*, u32);
+    void stopPlayingCategorySe(u8);
     void stopPlayingCategoryObjectSe(u8, void*);
+    void stopAllSe(u8);
     void stopAllSe(u8, void*);
     void stopActorSoundOneBuffer(void*, JAISound*);
     void stopIDSoundOneBuffer(u32, JAISound*);
@@ -54,6 +56,7 @@ public:
     void stopAllSound(u32, void*);
     void deleteObject(void*);
     u16 getSoundOffsetNumberFromID(u32);
+    void setSeCancelSwitch(u8, u8);
     void setSeCategoryVolume(u8, u8);
     static u16 setParameterSeqSync(JASystem::TTrack*, u16);
     bool allocStreamBuffer(void*, s32);

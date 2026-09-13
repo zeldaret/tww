@@ -23,7 +23,7 @@ struct JFWSystem {
         static s32 decompPriority;
         static s32 aPiecePriority;
         static ResFONT* systemFontRes;
-        static GXRenderModeObj* renderMode;
+        static const GXRenderModeObj* renderMode;
         static u32 exConsoleBufferSize;
     };
 
@@ -53,7 +53,7 @@ struct JFWSystem {
         JUT_ASSERT(61, sInitCalled == FALSE);
         CSetUpParam::aramGraphBufSize = size;
     }
-    static void setRenderMode(GXRenderModeObj* p_modeObj) {
+    static void setRenderMode(const GXRenderModeObj* p_modeObj) {
         JUT_ASSERT(80, sInitCalled == FALSE);
         CSetUpParam::renderMode = p_modeObj;
     }

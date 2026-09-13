@@ -112,7 +112,7 @@ void daArrow_c::_atHit(dCcD_GObjInf* thisObjInf, fopAc_ac_c* hitActor, dCcD_GObj
     if (!hitActor) {
         return;
     }
-    if (!fopAc_IsActor(hitActor)) {
+    if (!fopAcM_IsActor(hitActor)) {
         return;
     }
     if (!fopAcM_GetJntHit(hitActor)) {

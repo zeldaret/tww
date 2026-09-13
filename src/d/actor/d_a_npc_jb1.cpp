@@ -258,11 +258,11 @@ void daNpc_Jb1_c::eventOrder() {
 
 /* 0000076C-000007AC       .text checkOrder__11daNpc_Jb1_cFv */
 void daNpc_Jb1_c::checkOrder() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         return;
     }
 
-    if (eventInfo.mCommand != dEvtCmd_INTALK_e) {
+    if (eventInfo.getCommand() != dEvtCmd_INTALK_e) {
         return;
     }
 
@@ -635,12 +635,12 @@ J3DModelData* daNpc_Jb1_c::create_Anm() {
 
 // Probably unused JUT_ASSERTS
 static void dummy() {
-    OSReport("m_app_mdl != 0");
-    OSReport("m_app_bck != 0");
-    OSReport("m_app_btk != 0");
-    OSReport("m_app_brk != 0");
-    OSReport("splash");
-    OSReport("m_spl_jnt_num >= 0");
+    DEAD_STRING("m_app_mdl != 0");
+    DEAD_STRING("m_app_bck != 0");
+    DEAD_STRING("m_app_btk != 0");
+    DEAD_STRING("m_app_brk != 0");
+    DEAD_STRING("splash");
+    DEAD_STRING("m_spl_jnt_num >= 0");
 }
 
 /* 00001A0C-00001B78       .text create_lgt__11daNpc_Jb1_cFv */

@@ -40,9 +40,7 @@ static dCcD_SrcCyl l_cyl_src = {
 }; 
 static BOOL nodeCallBack(J3DNode*, int);
 
-static BOOL _CheckCreateHeap(fopAc_ac_c* i_this) {
-    return static_cast<daObjPlant_c*>(i_this)->CreateHeap();
-}
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this);
 
 cPhs_State daObjPlant_c::_create() {
     fopAcM_ct(this, daObjPlant_c);
@@ -50,7 +48,7 @@ cPhs_State daObjPlant_c::_create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Plant");
 
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, _CheckCreateHeap, 0x0D20)) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x0D20)) {
             return cPhs_ERROR_e;
         }
     

@@ -1107,7 +1107,7 @@ void daNpcPhoto_c::executeTurn() {
 
 /* 00001E5C-00001FDC       .text checkOrder__12daNpcPhoto_cFv */
 void daNpcPhoto_c::checkOrder() {
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+    if(eventInfo.checkCommandDemoAccrpt()){
         if(dComIfGp_evmng_startCheck(mPhotoLinkBackEventIdx) && field_0x9BE == 3){
             field_0x9BE = 0;
         } else if(dComIfGp_evmng_startCheck(mPhotoGetItemEventIdx) && field_0x9BE == 4){
@@ -1121,7 +1121,7 @@ void daNpcPhoto_c::checkOrder() {
         } else if(dComIfGp_evmng_startCheck(mPhotoDateUB4EventIdx) && field_0x9BE == 10){
             field_0x9BE = 0;
         }
-    } else if(eventInfo.mCommand == dEvtCmd_INTALK_e && (field_0x9BE == 2 || field_0x9BE == 1)){
+    } else if(eventInfo.checkCommandTalk() && (field_0x9BE == 2 || field_0x9BE == 1)){
         field_0x9BC = true;
         executeSetMode(1);
     }
@@ -1166,7 +1166,7 @@ void daNpcPhoto_c::eventMove() {
         field_0x9C6 |= 0x40;
     } else if(dComIfGp_evmng_endCheck(field_0x9A6)){
         field_0x9C6 |= 0x40;
-        eventInfo.mEventId = -1;
+        eventInfo.setEventId(-1);
         field_0x9C7 = true;
         field_0x9BE = 0;
         field_0x9BC = false;

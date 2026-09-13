@@ -482,7 +482,7 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* i_actor, cXyz* i_pos, u32* i_ms
             pcId = fopMsgM_create(fpcNm_MSG_e, i_actor, i_pos, i_msgNo, param_4, NULL);
         }
 
-        JKRFileLoader::removeResource(header, NULL);
+        JKRRemoveResource(header, NULL);
     }
 
     return pcId;
@@ -503,7 +503,7 @@ u32 fopMsgM_searchMessageNumber(u32 i_msgNo) {
             return i;
         }
 
-        JKRFileLoader::removeResource(header, NULL);
+        JKRRemoveResource(header, NULL);
     }
 
     return i_msgNo;
@@ -808,18 +808,6 @@ static f32 dummyfloat2(int _) {
             return 2.0f;
     }
 }
-
-struct fopMsgM_unk_struct {
-    u16 _0;
-    u16 _2;
-    u16 _4;
-    u16 _6;
-    u16 _8;
-    u16 _A;
-    s16 _C;
-    u16 _E;
-    u8 _10;
-};
 
 /* 8002C02C-8002C568       .text fopMsgM_selectMessageGet__FP7J2DPaneP7J2DPanePcPcPcPcUl */
 fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_rubyPane, char* param_3, char* param_4, char* param_5, char* param_6, u32 i_msgNo) {
@@ -1885,7 +1873,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
         field_0xE8[i] = 0;
         field_0x108[i] = 0;
     }
-    
+
     while (bmgData[r29] != '\0') {
         if (bmgData[r29] == 0x1A) {
             if ((u8)bmgData[r29 + 2] == 0xFF && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == SpclCode_UNK1) {
@@ -1949,7 +1937,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                         c = (u8)player_name[i++];
                     }
 #endif
-                    
+
                     f32 f1;
                     if (sp10 != 0) {
                         f1 = charLength(sp08, c, false) + sp0C;
@@ -3099,7 +3087,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
             if (bmgData[r29] == 0xA) {
                 sp10 = 0;
                 sp0C = 0.0f;
-                
+
                 r29++;
                 if (bmgData[r29] == 0) {
                     f32 f3 = (int)(field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f);
@@ -3199,7 +3187,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                 }
                 sp0C = f1;
                 sp10 += 1;
-                
+
                 int r7 = sp18[sp14];
 #if VERSION <= VERSION_JPN
                 sp18[sp14] = (int)(sp0C + 0.5f);
@@ -3212,7 +3200,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                         lineCount++;
                     }
                 }
-                    
+
                 if (lineWidth <= sp18[sp14]) {
                     sp18[sp14] = r7;
                     sp14++;
@@ -3222,7 +3210,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                     if (bmgData[r29] == '\0') {
                         field_0x140 = aimLine;
                     }
-                    
+
                     if (aimLine == nowLine) {
                         if (sp14 >= mesgEntry->field_0x16) {
                             if (
@@ -3256,7 +3244,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                         sp18[sp14] = sp0C + 0.5f;
                     }
                 }
-                
+
                 if (r25) {
                     r29++;
                 } else {
@@ -3269,7 +3257,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
     if (bmgData[r29] == '\0') {
         field_0x140 = aimLine;
     }
-    
+
     if (r27) {
         field_0xE8[sp14] = sp18[sp14];
     } else {
@@ -3280,9 +3268,9 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
             lineCount = 1;
         }
     }
-    
+
     field_0x134 = lineCount;
-    
+
     return r30;
 }
 
@@ -3635,22 +3623,14 @@ u8 fopMsgM_msgDataProc_c::inputNumber(int param_1) {
 
 /* 800320E0-800321CC       .text selectArrow__21fopMsgM_msgDataProc_cFP10J2DPictureffff */
 void fopMsgM_msgDataProc_c::selectArrow(J2DPicture* param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5) {
-    param_1->mBasePosition.x = param_4 / 2.0f;
-    param_1->mBasePosition.y = param_5 / 2.0f;
-    param_1->mRotationAxis = 'z';
-    param_1->mRotation = 90.0f;
-    param_1->calcMtx();
+    param_1->rotate(param_4 / 2.0f, param_5 / 2.0f, ROTATE_Z, 90.0f);
     fopMsgM_arrowAnime(param_1, &field_0x260);
     param_1->draw(param_2, param_3, param_4, param_5, false, false, false);
 }
 
 /* 800321CC-80032288       .text selectArrow__21fopMsgM_msgDataProc_cFP10J2DPictureff */
 void fopMsgM_msgDataProc_c::selectArrow(J2DPicture* param_1, f32 param_2, f32 param_3) {
-    param_1->mBasePosition.x = param_2 / 2.0f;
-    param_1->mBasePosition.y = param_3 / 2.0f;
-    param_1->mRotationAxis = 'z';
-    param_1->mRotation = 90.0f;
-    param_1->calcMtx();
+    param_1->rotate(param_2 / 2.0f, param_3 / 2.0f, ROTATE_Z, 90.0f);
     param_1->resize(param_2, param_3);
     fopMsgM_arrowAnime(param_1, &field_0x260);
 }
@@ -3935,7 +3915,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         field_0xD4[1] = '\0';
                     }
 #endif
-                    
+
                     if (field_0x150 == 0) {
                         field_0x14 = charLength(field_0x148, c, true);
                     } else {
@@ -4588,7 +4568,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
                 if (seconds != 0 || minutes == 0) {
                     fopMsgM_int_to_char(buf, seconds, false);
-                    
+
                     while (buf[i] != '\0') {
                         int hi = (u8)buf[i++];
                         int lo = (u8)buf[i++];
@@ -5498,26 +5478,26 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 field_0x150 = 0;
-                
+
                 nowCursorPos = field_0xF8[lineCount];
 
                 char sp54[16];
                 sprintf(sp54, "\x1b""CR[%d]", (int)nowCursorPos);
                 strcat(field_0x60, sp54);
                 strcat(field_0x68, sp54);
-                
+
                 if (autoSendFlag == 0) {
                     waitTimer = spaceTimer;
                 }
-                
+
                 if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag == Select_OFF) {
                     return;
                 }
             } else {
                 field_0x150 = 0;
-                
+
                 nowCursorPos = field_0x108[lineCount];
-                
+
                 char sp44[16];
                 sprintf(sp44, "\x1b""CR[%d]", (int)(nowCursorPos));
                 strcat(field_0x60, sp44);
@@ -5576,13 +5556,13 @@ void fopMsgM_msgDataProc_c::stringSet() {
             }
 
             field_0x150++;
-            
+
             if (selectFlag != Select_ON) {
                 nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
             } else {
                 nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
             }
-            
+
             if (lineWidth <= (int)(field_0x14 + 0.5f)) {
                 strcat(field_0x60, "\n");
                 strcat(field_0x64, "\n");
@@ -5639,7 +5619,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 } else {
                     field_0x150 = 0;
                     nowCursorPos = field_0x108[lineCount];
-                    
+
                     char sp24[16];
                     sprintf(sp24,  "\x1b""CR[%d]", (int)(nowCursorPos));
                     strcat(field_0x60, sp24);
@@ -6060,7 +6040,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
                 *param_6 += charLength(field_0x148, c, false);
             }
             *param_8 += 1;
-            
+
             if (r21 != 0 && --r21 == 0) {
                 char sp0C[16];
                 f32 f0 = (*param_6 - f30) / 2.0f;
@@ -8430,7 +8410,7 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
     if (minutes == 0 && seconds == 0) {
         seconds = 1;
     }
-    
+
     if (dComIfGs_getPalLanguage() != 0 && dComIfGs_getPalLanguage() != 1) {
         if (seconds != 0 || minutes == 0) {
             if (dComIfGs_getPalLanguage() == 3 && minutes != 0) {
@@ -8440,7 +8420,7 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
                 strcat(field_0x60, " ");
                 strcat(field_0x68, " ");
             }
-            
+
             fopMsgM_int_to_char(buf, seconds, false);
 
             while (buf[i] != '\0') {
@@ -8955,7 +8935,7 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
     if (minutes == 0 && seconds == 0) {
         seconds = 1;
     }
-    
+
     if (dComIfGs_getPalLanguage() != 0 && dComIfGs_getPalLanguage() != 1) {
         if (seconds != 0 || minutes == 0) {
             if (dComIfGs_getPalLanguage() == 3 && minutes != 0) {
@@ -8965,7 +8945,7 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
                 strcat(field_0x60, " ");
                 strcat(field_0x68, " ");
             }
-            
+
             fopMsgM_int_to_char(buf, seconds, false);
 
             while (buf[i] != '\0') {
@@ -9446,7 +9426,7 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
 
 #if VERSION == VERSION_PAL
 static void dummy() {
-    OSReport(" ");
+    DEAD_STRING(" ");
 }
 #endif
 
@@ -10200,6 +10180,6 @@ void fopMsgM_destroyExpHeap(JKRExpHeap* i_heap) {
 }
 
 static void dummy2() {
-    OSReport("\x1B""CU[%d]");
-    OSReport("\x1B""CD[%d]");
+    DEAD_STRING("\x1B""CU[%d]");
+    DEAD_STRING("\x1B""CD[%d]");
 }

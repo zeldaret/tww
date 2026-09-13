@@ -599,7 +599,7 @@ bool daObjHha_c::_execute() {
     switch(mState){
         case State_OPEN: if(check_sw()){
             if(mIsMiddle == 0){
-                if(eventInfo.mCommand != dEvtCmd_INDEMO_e){
+                if(!eventInfo.checkCommandDemoAccrpt()){
                     fopAcM_orderOtherEventId(this, mEventIdx);
                     eventInfo.onCondition(2);
                 }

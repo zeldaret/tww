@@ -68,7 +68,7 @@ static void* searchNearActor_CB(void* arg0, void* arg1) {
 
 /* 000001E4-0000029C       .text searchNearActor__11daGy_Ctrl_cFP10fopAc_ac_c */
 void* daGy_Ctrl_c::searchNearActor(fopAc_ac_c* arg1) {
-    if (fopAc_IsActor(arg1)) {
+    if (fopAcM_IsActor(arg1)) {
         f32 dVar3 = fopAcM_searchActorDistanceXZ(this, arg1);
         if (m328 == 0 && fpcM_GetName(arg1) == fpcNm_GY_CTRLB_e && dVar3 < 6000.0f) {
             return arg1;
@@ -181,7 +181,7 @@ f32 daGy_Ctrl_c::getWaterY(cXyz& arg1) {
 bool daGy_Ctrl_c::lineCheck(cXyz* arg1, cXyz* arg2) {
     mLinChk.Set(arg1, arg2, this);
     if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
-        *arg2 = mLinChk.mLin.GetEnd();
+        *arg2 = mLinChk.GetCross();
         return true;
     }
     return false;

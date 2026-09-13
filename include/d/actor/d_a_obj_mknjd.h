@@ -24,7 +24,7 @@ namespace daObjMknjD {
         int prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWITCH_W, PRM_SWITCH_S); }
         u8 prm_get_Type() const { return daObj::PrmAbstract<Prm_e>(this, PRM_TYPE_W, PRM_TYPE_S); }
 
-        void anmAtr(u16) {}
+        void anmAtr(u16 i_msgStatus) { UNUSED(i_msgStatus); }
         u32 getMsg() {
             if (m0500 == 0) {
                 dComIfGp_setMelodyNum(mMelodyNum);

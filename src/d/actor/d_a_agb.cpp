@@ -1822,10 +1822,10 @@ static cPhs_State daAgb_Create(fopAc_ac_c* i_this) {
         a_this->mAcch.SetGrndNone();
         a_this->mAcchCir.SetWall(171.0f, 40.0f);
 
-        TestDataManager[4].field_0x0 = (u32)&a_this->mGbaFlg;
-        TestDataManager[8].field_0x0 = (u32)&a_this->mSwitch;
-        TestDataManager[6].field_0x0 = (u32)&a_this->mItem;
-        TestDataManager[12].field_0x0 = (u32)&a_this->mShop;
+        TestDataManager[4].mpData = &a_this->mGbaFlg;
+        TestDataManager[8].mpData = &a_this->mSwitch;
+        TestDataManager[6].mpData = &a_this->mItem;
+        TestDataManager[12].mpData = &a_this->mShop;
 
         a_this->field_0x670 = false;
         a_this->field_0x65c = 0;

@@ -1733,8 +1733,6 @@ void attack_move(kb_class* i_this) {
 
 /* 0000519C-000054A8       .text money_drop__FP8kb_class */
 void money_drop(kb_class* i_this) {
-    /* Nonmatching - regalloc */
-
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
     int i;
@@ -1754,12 +1752,13 @@ void money_drop(kb_class* i_this) {
 
     i_this->m407 = 0;
 
+    u32 temp2;
     for(i = 0; i < 2; i++) {
         f32 rnd = cM_rnd();
         if(REG8_S(4) == 0) {
             if(rnd < 0.9f) {
                 rnd *= 10.0f;
-                u32 temp2 = gold_rate_dt[(int)(0.3f * rnd)];
+                temp2 = gold_rate_dt[(int)(0.3f * rnd)];
                 i_this->m407 = 1;
                 cMtx_YrotS(*calc_mtx, cM_rndFX(0x8000));
                 temp3.set(0.0f, 0.0f, 20.0f);
@@ -1780,7 +1779,7 @@ void money_drop(kb_class* i_this) {
         f32 rnd = cM_rnd();
         if(rnd < 0.9f) {
             rnd *= 10.0f;
-            u32 temp2 = item_rate_dt[(int)(0.3f * rnd)];
+            temp2 = item_rate_dt[(int)(0.3f * rnd)];
             i_this->m407 = 1;
             cMtx_YrotS(*calc_mtx, cM_rndFX(0x8000));
             temp3.set(0.0f, 0.0f, 20.0f);
@@ -1801,11 +1800,10 @@ void money_drop(kb_class* i_this) {
 
 /* 000054A8-00006670       .text esa_demo_move__FP8kb_class */
 void esa_demo_move(kb_class* i_this) {
-    /* Nonmatching - regalloc */
-
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
-    daPy_py_c* pPlayer = daPy_getPlayerActorClass();
+    fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)player_actor;
     camera_process_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     dBgS_LinChk linChk;
 
@@ -1827,8 +1825,8 @@ void esa_demo_move(kb_class* i_this) {
                 break;
             }
 
-            pPlayer->changeOriginalDemo();
-            pPlayer->changeDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
+            player->changeOriginalDemo();
+            player->changeDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
 
             pCamera->mCamera.Stop();
             pCamera->mCamera.SetTrimSize(2);
@@ -2025,17 +2023,17 @@ void esa_demo_move(kb_class* i_this) {
         case 0x2E:
             if(i_this->m426[0] == 0x23) {
                 if(i_this->m407) {
-                    pPlayer->changeDemoMode(daPy_demo_c::DEMO_SMILE_e);
+                    player->changeDemoMode(daPy_demo_c::DEMO_SMILE_e);
                 }
                 else {
-                    pPlayer->changeDemoMode(daPy_demo_c::DEMO_UNK_018_e);
+                    player->changeDemoMode(daPy_demo_c::DEMO_UNK_018_e);
                 }
             }
 
             if(i_this->m426[0] == 0) {
                 actor->shape_angle.x = -0x7FFF;
                 
-                pPlayer->changeDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
+                player->changeDemoMode(daPy_demo_c::DEMO_N_WAIT_e);
 
                 i_this->m5D4[1] = actor->current.pos;
                 i_this->m5D4[1].y = i_this->mAcch.GetGroundH() + 15.0f + REG8_F(0x11);
@@ -2104,7 +2102,7 @@ void esa_demo_move(kb_class* i_this) {
                 fopAcM_monsSeStart(actor, JA_SE_CM_PG_L_JUMP, 0);
             }
 
-            pPlayer->cancelOriginalDemo();
+            player->cancelOriginalDemo();
 
             pCamera->mCamera.Reset(i_this->m520, i_this->m514);
             pCamera->mCamera.Start();
@@ -2128,7 +2126,7 @@ void esa_demo_move(kb_class* i_this) {
 
     if(i_this->m420 >= 0x2A) {
         pCamera->mCamera.Set(i_this->m520, i_this->m514, i_this->m53C, 0);
-        pPlayer->setPlayerPosAndAngle(&pPlayer->current.pos, fopAcM_searchActorAngleY(pPlayer, actor));
+        player->setPlayerPosAndAngle(&player_actor->current.pos, fopAcM_searchActorAngleY(player_actor, actor));
     }
 }
 
@@ -2376,7 +2374,6 @@ static BOOL daKb_Delete(kb_class* i_this) {
 
 /* 00006F28-000071F4       .text useHeapInit__FP10fopAc_ac_c */
 static BOOL useHeapInit(fopAc_ac_c* i_actor) {
-    /* Nonmatching - regalloc */
     kb_class* i_this = (kb_class*)i_actor;
 
     J3DModelData* pModelData;
@@ -2427,7 +2424,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
     tex_anm_set(i_this, temp);
 
     i_this->mpMaterialTable = (J3DMaterialTable*)dComIfG_getObjectRes("Kb", kb_bmt_idx[temp]);
-    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+    i_this->mpMorf->getModel()->setUserArea((u32)i_actor);
 
     for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
         i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);

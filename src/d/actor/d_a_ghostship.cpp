@@ -166,6 +166,38 @@ static u32 dummyFunc() {
     return dummy[0];
 }
 
+inline void daGhostship_c::setMtx() {
+    dLib_waveRot(&current.pos, 0.0f, &mWave);
+    shape_angle.x = mWave.mRotX;
+    shape_angle.z = mWave.mRotZ;
+
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::XYZrotM(shape_angle.x, 0, shape_angle.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
+
+    mDoMtx_stack_c::push();
+#if VERSION == VERSION_DEMO
+    mDoMtx_stack_c::transM(0.0f + REG10_F(0), 3200.0f + REG10_F(1), 75.0f);
+    mDoMtx_stack_c::YrotM(REG10_S(0));
+#else
+    mDoMtx_stack_c::transM(0.0f, 3200.0f, 75.0f);
+#endif
+    mpCloth->setMtx(mDoMtx_stack_c::get());
+
+    mDoMtx_stack_c::pop();
+#if VERSION == VERSION_DEMO
+    mDoMtx_stack_c::transM(-900.0f + REG10_F(3), 2080.0f + REG10_F(4), 85.0f + REG10_F(5));
+    mDoMtx_stack_c::YrotM(0x4000 + REG10_S(1));
+#else
+    mDoMtx_stack_c::transM(-900.0f, 2080.0f, 85.0f);
+    mDoMtx_stack_c::YrotM(0x4000);
+#endif
+    mpCloth2->setMtx(mDoMtx_stack_c::get());
+}
+
 /* 00000874-00000C78 .text createInit__13daGhostship_cFv */
 void daGhostship_c::createInit() {
     mPathPos = current.pos;
@@ -193,7 +225,7 @@ void daGhostship_c::createInit() {
     }
 
     if(mPathNo != 0xFF) {
-        mPath = dPath_GetRoomPath(mPathNo, fopAcM_GetRoomNo(this));
+        mPath = dPath_GetRoomPath(mPathNo, current.roomNo);
         modePathMoveInit();
     }
     else {
@@ -204,26 +236,8 @@ void daGhostship_c::createInit() {
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mCir, fopAcM_GetSpeed_p(this));
     mAcch.SetWallNone();
     mAcch.SetRoofNone();
-    dLib_waveRot(&current.pos, 0.0f, &mWave);
-
-    shape_angle.x = mWave.mRotX;
-    shape_angle.z = mWave.mRotZ;
-
-    mpModel->setBaseScale(scale);
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::XYZrotM(shape_angle.x, 0, shape_angle.z);
-    mDoMtx_stack_c::YrotM(shape_angle.y);
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
-
-    mDoMtx_stack_c::push();
-    mDoMtx_stack_c::transM(0.0f, 3200.0f, 75.0f);
-    mpCloth->setMtx(mDoMtx_stack_c::get());
-
-    mDoMtx_stack_c::pop();
-    mDoMtx_stack_c::transM(-900.0f, 2080.0f, 85.0f);
-    mDoMtx_stack_c::YrotM(0x4000);
-    mpCloth2->setMtx(mDoMtx_stack_c::get());
+    
+    setMtx();
 }
 
 /* 00000C78-00000C8C .text getArg__13daGhostship_cFv */
@@ -236,27 +250,38 @@ void daGhostship_c::getArg() {
 cPhs_State daGhostship_c::_create() {
     fopAcM_ct(this, daGhostship_c);
 
-    cPhs_State result = dComIfG_resLoad(&mPhs, m_arc_name);
-    if(result != cPhs_COMPLEATE_e) {
-        return result;
+    cPhs_State res = dComIfG_resLoad(&mPhs, m_arc_name);
+#if VERSION > VERSION_DEMO
+    if (res != cPhs_COMPLEATE_e) {
+        return res;
     }
-
-    result = dComIfG_resLoad(&mClothPhs, m_cloth_arc_name);
-    if(result != cPhs_COMPLEATE_e) {
-        return result;
-    }
-
-    getArg();
-
-    if((s32)dComIfGs_getEventReg(dSv_event_flag_c::GHOST_SHIP) == 3) {
+#endif
+    cPhs_State res2 = dComIfG_resLoad(&mClothPhs, m_cloth_arc_name);
+#if VERSION == VERSION_DEMO
+    if (res == cPhs_ERROR_e || res2 == cPhs_ERROR_e) {
         return cPhs_ERROR_e;
     }
-
-    if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
-        return cPhs_ERROR_e;
+    if (res != cPhs_COMPLEATE_e) {
+        return res;
     }
+#endif
+    if (res2 != cPhs_COMPLEATE_e) {
+        return res2;
+    }
+    int r0 = cPhs_COMPLEATE_e;
+    if (r0 == cPhs_COMPLEATE_e) {
+        getArg();
 
-    createInit();
+        if((s32)dComIfGs_getEventReg(dSv_event_flag_c::GHOST_SHIP) == 3) {
+            return cPhs_ERROR_e;
+        }
+
+        if (!fopAcM_entrySolidHeap(this, createHeap_CB, m_heapsize)) {
+            return cPhs_ERROR_e;
+        }
+
+        createInit();
+    }
 
     return cPhs_COMPLEATE_e;
 }
@@ -266,14 +291,16 @@ static cPhs_State daGhostshipCreate(void* i_this) {
     return ((daGhostship_c*)i_this)->_create();
 }
 
-/* 00000FD8-00001024 .text daGhostshipDelete__FPv */
-static BOOL daGhostshipDelete(void* i_actor) {
-    daGhostship_c* i_this = static_cast<daGhostship_c*>(i_actor);
-
-    dComIfG_resDelete(&i_this->mPhs, daGhostship_c::m_arc_name);
-    dComIfG_resDelete(&i_this->mClothPhs, daGhostship_c::m_cloth_arc_name);
+inline bool daGhostship_c::_delete() {
+    dComIfG_resDelete(&mPhs, daGhostship_c::m_arc_name);
+    dComIfG_resDelete(&mClothPhs, daGhostship_c::m_cloth_arc_name);
 
     return true;
+}
+
+/* 00000FD8-00001024 .text daGhostshipDelete__FPv */
+static BOOL daGhostshipDelete(void* i_this) {
+    return ((daGhostship_c*)i_this)->_delete();
 }
 
 /* 00001024-00001048 .text daGhostshipExecute__FPv */
@@ -285,7 +312,7 @@ static BOOL daGhostshipExecute(void* i_this) {
 bool daGhostship_c::_execute() {
     f32 time = dComIfGs_getTime();
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    // Fakematch, debug map says fopAcM_searchPlayerDistanceXZ was used
+    // Fakematch, debug map says fopAcM_searchPlayerDistanceXZ was used, but that causes regalloc
     f32 dist = fopAcM_searchActorDistanceXZ(this, player);
 
     mbCanEnterShip = false;
@@ -379,35 +406,7 @@ bool daGhostship_c::_execute() {
     modeProcCall();
     mBtk.play();
 
-    dLib_waveRot(&current.pos, 0.0f, &mWave);
-    shape_angle.x = mWave.mRotX;
-    shape_angle.z = mWave.mRotZ;
-
-    mpModel->setBaseScale(scale);
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::XYZrotM(shape_angle.x, 0, shape_angle.z);
-    mDoMtx_stack_c::YrotM(shape_angle.y);
-    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
-
-    mDoMtx_stack_c::push();
-#if VERSION == VERSION_DEMO
-    mDoMtx_stack_c::transM(0.0f + REG10_F(0), 3200.0f + REG10_F(1), 75.0f);
-    mDoMtx_stack_c::YrotM(REG10_S(0));
-#else
-    mDoMtx_stack_c::transM(0.0f, 3200.0f, 75.0f);
-#endif
-    mpCloth->setMtx(mDoMtx_stack_c::get());
-
-    mDoMtx_stack_c::pop();
-#if VERSION == VERSION_DEMO
-    mDoMtx_stack_c::transM(-900.0f + REG10_F(3), 2080.0f + REG10_F(4), 85.0f + REG10_F(5));
-    mDoMtx_stack_c::YrotM(0x4000 + REG10_S(1));
-#else
-    mDoMtx_stack_c::transM(-900.0f, 2080.0f, 85.0f);
-    mDoMtx_stack_c::YrotM(0x4000);
-#endif
-    mpCloth2->setMtx(mDoMtx_stack_c::get());
+    setMtx();
 
     mpCloth->setParam(0.45f, -1.5f, 0.875f, 1.0f, 1.0f, 0x100, 0, 900, -800, 7.0f, 6.0f);
     mpCloth->setGlobalWind(dKyw_get_wind_vec());
@@ -449,22 +448,18 @@ bool daGhostship_c::_draw() {
         mDoExt_modelUpdateDL(mpModel);
         mBtk.remove(modelData);
 
-        tevStr.mColorC0.a = alpha;
+        mpCloth->setAlpha(&tevStr, alpha);
         mpCloth->cloth_draw();
-        tevStr.mColorC0.a = alpha;
+        mpCloth2->setAlpha(&tevStr, alpha);
         mpCloth2->cloth_draw();
     }
 
     return true;
 }
 
-bool daGhostship_c::_delete() {
-    return true;
-}
-
 /* 000019A4-000019AC .text daGhostshipIsDelete__FPv */
 static BOOL daGhostshipIsDelete(void* i_this) {
-    return ((daGhostship_c*)i_this)->_delete();
+    return TRUE;
 }
 
 static actor_method_class daGhostshipMethodTable = {

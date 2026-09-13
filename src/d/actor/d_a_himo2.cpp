@@ -497,7 +497,7 @@ static BOOL daHimo2_Draw(himo2_class* i_this) {
 
 /* 800ECBE8-800ECC54       .text s_a_d_sub__FPvPv */
 static void* s_a_d_sub(void* param_1, void* param_2) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KUI_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KUI_e)) {
         himo2_class* rope = (himo2_class*)param_2;
         rope->m218C[rope->m24AC] = (fopAc_ac_c*)param_1;
         rope->m24AC++;
@@ -641,7 +641,7 @@ BOOL himo2_class::setTargetPos(cXyz* param_1, f32* param_2, f32* param_3) {
 
 /* 800ED2E0-800ED32C       .text dr_a_sub__FPvPv */
 static void* dr_a_sub(void* param_1, void* param_2) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_DR2_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_DR2_e)) {
         return param_1;
     } else {
         return param_2 = NULL;
@@ -650,7 +650,7 @@ static void* dr_a_sub(void* param_1, void* param_2) {
 
 /* 800ED32C-800ED378       .text b_a_sub__FPvPv */
 static void* b_a_sub(void* param_1, void* param_2) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BTD_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BTD_e)) {
         return param_1;
     } else {
         return param_2 = NULL;

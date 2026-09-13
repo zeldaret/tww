@@ -63,6 +63,7 @@ public:
         do_data(arg1, arg2, arg3, arg4);
     }
 
+    TControl* getControl() { return pControl; }
     TControl* getControl() const { return pControl; }
     void setControl_(TControl* control) { pControl = control; }
     int getSuspend() const { return _20; }

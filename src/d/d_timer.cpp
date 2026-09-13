@@ -602,7 +602,7 @@ void dDlst_TimerScrnDraw_c::setIconType(void* tex, u8 type) {
 
     JKRArchive* arc = dComIfGp_getItemIconArchive();
     const char* iconTex = dItem_data::getTexture(itemNo);
-    JKRArchive::readTypeResource(tex, 0xC00, 'TIMG', iconTex, arc);
+    JKRReadTypeResource(tex, 0xC00, 'TIMG', iconTex, arc);
     mIconPicture = new J2DPicture((ResTIMG*)tex);
     ((J2DPicture*)mRupee.pane)->setWhite(JUtility::TColor(0));
     ((J2DPicture*)mRupeeShadow.pane)->setWhite(JUtility::TColor(0));

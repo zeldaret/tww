@@ -49,7 +49,7 @@ public:
     };
 
     MtxP getViewMtx() { return mViewMtx; }
-    void setViewMtx(Mtx m) { MTXCopy(m, mViewMtx); }
+    void setViewMtx(const Mtx m) { MTXCopy(m, mViewMtx); }
 
     void setDrawModeOpaTexEdge() { mDrawMode = OPA_TEX_EDGE; }
 

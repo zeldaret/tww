@@ -29,7 +29,7 @@ void JPATextureResource::registration(JPATexture* res) {
 }
 
 static void dummy() {
-    OSReport("pTexResArray[registNum]");
+    DEAD_STRING("pTexResArray[registNum]");
 }
 
 /* 80258DE4-80258E70       .text __ct__18JPAEmitterResourceFUlP7JKRHeap */
@@ -41,10 +41,10 @@ JPAEmitterResource::JPAEmitterResource(u32 num, JKRHeap* heap) {
 }
 
 static void dummy2() {
-    OSReport("(eArraySize != 0) && (tArraySize != 0)");
-    OSReport("pEmtrResMgr && pTexResMgr");
-    OSReport("jpa file %s was not found\n");
-    OSReport("binData");
+    DEAD_STRING("(eArraySize != 0) && (tArraySize != 0)");
+    DEAD_STRING("pEmtrResMgr && pTexResMgr");
+    DEAD_STRING("jpa file %s was not found\n");
+    DEAD_STRING("binData");
 }
 
 /* 80258E70-80258F18       .text registration__18JPAEmitterResourceFP14JPAEmitterDataUs */

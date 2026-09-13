@@ -12,10 +12,10 @@
 
 /* 8027D6F4-8027D70C       .text __ct__Q38JASystem6Kernel8TPortCmdFv */
 JASystem::Kernel::TPortCmd::TPortCmd() {
-    field_0x0 = NULL;
-    field_0x4 = NULL;
-    field_0x8 = NULL;
-    field_0xc = NULL;
+    mHead = NULL;
+    mNext = NULL;
+    mFunc = NULL;
+    mArgs = NULL;
 }
 
 JASystem::Kernel::TPortHead cmd_once;
@@ -26,32 +26,31 @@ bool JASystem::Kernel::TPortCmd::addPortCmdOnce() {
 }
 
 /* 8027D730-8027D7E8       .text setPortCmd__Q38JASystem6Kernel8TPortCmdFPFPQ38JASystem6Kernel9TPortArgs_vPQ38JASystem6Kernel9TPortArgs */
-bool JASystem::Kernel::TPortCmd::setPortCmd(void (*func)(JASystem::Kernel::TPortArgs*), JASystem::Kernel::TPortArgs* pargs) {
+bool JASystem::Kernel::TPortCmd::setPortCmd(JASystem::Kernel::TPortFunc func, JASystem::Kernel::TPortArgs* pargs) {
     JUT_ASSERT(83, func != NULL);
     JUT_ASSERT(84, pargs != NULL);
-    field_0x8 = func;
-    field_0xc = pargs;
-    field_0x0 = NULL;
+    mFunc = func;
+    mArgs = pargs;
+    mHead = NULL;
     return 1;
 }
 
 /* 8027D7E8-8027D8A4       .text addPortCmd__Q38JASystem6Kernel8TPortCmdFPQ38JASystem6Kernel9TPortHead */
 bool JASystem::Kernel::TPortCmd::addPortCmd(JASystem::Kernel::TPortHead* phead) {
-    /* Nonmatching */
     JUT_ASSERT(105, phead != NULL);
     BOOL enable = OSDisableInterrupts();
-    if (field_0x0) {
+    if (mHead) {
         OSRestoreInterrupts(enable);
         return false;
     }
-    if (phead->field_0x4) {
-        phead->field_0x4->field_0x4 = this;
+    if (phead->mLast) {
+        phead->mLast->mNext = this;
     } else {
-        phead->field_0x0 = this;
+        phead->mFirst = this;
     }
-    phead->field_0x4 = this;
-    field_0x4 = NULL;
-    field_0x0 = phead;
+    phead->mLast = this;
+    mNext = NULL;
+    mHead = phead;
     OSRestoreInterrupts(enable);
     return true;
 }
@@ -64,28 +63,28 @@ void JASystem::Kernel::portCmdProcOnce(JASystem::Kernel::TPortHead* phead) {
         if (!cmd) {
             break;
         }
-        cmd->field_0x8(cmd->field_0xc);
+        cmd->getFunc()(cmd->getArgs());
     }
 }
 
 /* 8027D924-8027D9A4       .text portCmdProcStay__Q28JASystem6KernelFPQ38JASystem6Kernel9TPortHead */
 void JASystem::Kernel::portCmdProcStay(JASystem::Kernel::TPortHead* phead) {
     JUT_ASSERT(245, phead != NULL);
-    TPortCmd* cmd = phead->field_0x0;
+    TPortCmd* cmd = phead->mFirst;
     while (true) {
         if (!cmd) {
             break;
         }
-        cmd->field_0x8(cmd->field_0xc);
-        cmd = cmd->field_0x4;
+        cmd->getFunc()(cmd->getArgs());
+        cmd = cmd->getNext();
     }
 }
 
 /* 8027D9A4-8027DA0C       .text portHeadInit__Q28JASystem6KernelFPQ38JASystem6Kernel9TPortHead */
 void JASystem::Kernel::portHeadInit(JASystem::Kernel::TPortHead* phead) {
     JUT_ASSERT(267, phead != NULL);
-    phead->field_0x0 = NULL;
-    phead->field_0x4 = NULL;
+    phead->mFirst = NULL;
+    phead->mLast = NULL;
 }
 
 JASystem::Kernel::TPortHead cmd_stay;
@@ -102,17 +101,17 @@ JASystem::Kernel::TPortCmd* JASystem::Kernel::getPortCmd(JASystem::Kernel::TPort
     TPortCmd* r31;
     TPortCmd* r30 = NULL;
     JUT_ASSERT(311, phead != NULL);
-    r31 = phead->field_0x0;
+    r31 = phead->mFirst;
     if (r31) {
         r30 = r31;
-        phead->field_0x0 = r31->field_0x4;
-        if (!phead->field_0x0) {
-            phead->field_0x4 = NULL;
+        phead->mFirst = r31->getNext();
+        if (!phead->mFirst) {
+            phead->mLast = NULL;
         }
-        if (phead != r31->field_0x0) {
+        if (phead != r31->getHead()) {
             OSReport("[JASKernel::getPortCmd] 不正な登録データブロックです。\n");
         }
-        r31->field_0x0 = NULL;
+        r31->setHead(NULL);
     }
     return r30;
 }

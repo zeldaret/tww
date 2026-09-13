@@ -179,7 +179,7 @@ void daNpc_Mk_c::eventOrder() {
 
 /* 00000678-000006D4       .text checkOrder__10daNpc_Mk_cFv */
 void daNpc_Mk_c::checkOrder() {
-    if (eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(3)) {
+    if (eventInfo.checkCommandTalk() && ChkOrder(3)) {
         setFlag(1);
         talkInit();
     }
@@ -1092,14 +1092,14 @@ bool daNpc_Mk_c::talk02() {
 /* 00002AC0-00002BB4       .text visitTalkInit__10daNpc_Mk_cFv */
 u8 daNpc_Mk_c::visitTalkInit() {
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F80) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E02)) {
-        mEventIdx = eventInfo.mEventId;
+        mEventIdx = eventInfo.getEventId();
         mState = STATE_DEMO03;
         demo03();
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1E04);
         return 12;
     }
     if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1208) && !dComIfGs_checkGetItem(dItemNo_PICTO_BOX_e) && !dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)) {
-        mEventIdx = eventInfo.mEventId;
+        mEventIdx = eventInfo.getEventId();
         mState = STATE_DEMO03;
         demo03();
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1602);
@@ -1221,7 +1221,7 @@ bool daNpc_Mk_c::climb01() {
 
 /* 00003064-00003108       .text drop01__10daNpc_Mk_cFv */
 bool daNpc_Mk_c::drop01() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         mPrevState = STATE_RUNAWAY;
         mState = STATE_DEMO03;
         mMkStatic.init(0x50, 0x12C);

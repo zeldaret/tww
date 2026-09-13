@@ -16,23 +16,23 @@
 
 /* 802EC74C-802EC7B4       .text initialize__13J3DDrawBufferFv */
 void J3DDrawBuffer::initialize() {
-    mDrawType = DRAW_HEAD;
-    mSortType = SORT_MAT;
+    mDrawMode = DRAW_HEAD;
+    mSortMode = SORT_MAT;
     mZNear = 1.0f;
     mZFar = 10000.0f;
     mpZMtx = NULL;
     mpCallBackPacket = NULL;
-    mBufSize = 0x20;
+    mEntryTableSize = 0x20;
     calcZRatio();
 }
 
 /* 802EC7B4-802EC84C       .text allocBuffer__13J3DDrawBufferFUl */
 J3DError J3DDrawBuffer::allocBuffer(u32 bufSize) {
-    mpBuf = new (0x20) J3DPacket*[bufSize];
-    if (mpBuf == NULL)
+    mpBuffer = new (0x20) J3DPacket*[bufSize];
+    if (mpBuffer == NULL)
         return J3DErrType_OutOfMemory;
 
-    mBufSize = bufSize;
+    mEntryTableSize = bufSize;
     frameInit();
     calcZRatio();
     return J3DErrType_Success;
@@ -42,14 +42,14 @@ J3DError J3DDrawBuffer::allocBuffer(u32 bufSize) {
 J3DDrawBuffer::~J3DDrawBuffer() {
     frameInit();
 
-    delete[] mpBuf;
-    mpBuf = NULL;
+    delete[] mpBuffer;
+    mpBuffer = NULL;
 }
 
 /* 802EC8AC-802EC8E4       .text frameInit__13J3DDrawBufferFv */
 void J3DDrawBuffer::frameInit() {
-    for (u32 i = 0; i < mBufSize; i++)
-        mpBuf[i] = NULL;
+    for (u32 i = 0; i < mEntryTableSize; i++)
+        mpBuffer[i] = NULL;
 
     mpCallBackPacket = NULL;
 }
@@ -60,8 +60,8 @@ int J3DDrawBuffer::entryMatSort(J3DMatPacket* pMatPacket) {
     pMatPacket->getShapePacket()->drawClear();
 
     if (pMatPacket->isChanged()) {
-        pMatPacket->setNextPacket(mpBuf[0]);
-        mpBuf[0] = pMatPacket;
+        pMatPacket->setNextPacket(mpBuffer[0]);
+        mpBuffer[0] = pMatPacket;
         return 1;
     }
 
@@ -73,21 +73,21 @@ int J3DDrawBuffer::entryMatSort(J3DMatPacket* pMatPacket) {
     } else {
         hash = ((u32)texture->getResTIMG(texNo) + texture->getResTIMG(texNo)->imageOffset) >> 5;
     }
-    u32 slot = hash & (mBufSize - 1);
+    u32 slot = hash & (mEntryTableSize - 1);
 
-    if (mpBuf[slot] == NULL) {
-        mpBuf[slot] = pMatPacket;
+    if (mpBuffer[slot] == NULL) {
+        mpBuffer[slot] = pMatPacket;
         return 1;
     } else {
-        for (J3DMatPacket* pkt = (J3DMatPacket*)mpBuf[slot]; pkt != NULL; pkt = (J3DMatPacket*)pkt->getNextPacket()) {
+        for (J3DMatPacket* pkt = (J3DMatPacket*)mpBuffer[slot]; pkt != NULL; pkt = (J3DMatPacket*)pkt->getNextPacket()) {
             if (pkt->isSame(pMatPacket)) {
                 pkt->addShapePacket(pMatPacket->getShapePacket());
                 return 0;
             }
         }
 
-        pMatPacket->setNextPacket(mpBuf[slot]);
-        mpBuf[slot] = pMatPacket;
+        pMatPacket->setNextPacket(mpBuffer[slot]);
+        mpBuffer[slot] = pMatPacket;
         return 1;
     }
 }
@@ -95,18 +95,18 @@ int J3DDrawBuffer::entryMatSort(J3DMatPacket* pMatPacket) {
 /* 802ECA38-802ECAF0       .text entryMatAnmSort__13J3DDrawBufferFP12J3DMatPacket */
 int J3DDrawBuffer::entryMatAnmSort(J3DMatPacket* pMatPacket) {
     J3DMaterialAnm* pMaterialAnm = pMatPacket->mpMaterialAnm;
-    u32 slot = (u32)pMaterialAnm & (mBufSize - 1);
+    u32 slot = (u32)pMaterialAnm & (mEntryTableSize - 1);
 
     if (pMaterialAnm == NULL) {
         return entryMatSort(pMatPacket);
     } else {
         pMatPacket->drawClear();
         pMatPacket->getShapePacket()->drawClear();
-        if (mpBuf[slot] == NULL) {
-            mpBuf[slot] = pMatPacket;
+        if (mpBuffer[slot] == NULL) {
+            mpBuffer[slot] = pMatPacket;
             return 1;
         } else {
-            for (J3DMatPacket* pkt = (J3DMatPacket*)mpBuf[slot]; pkt != NULL;
+            for (J3DMatPacket* pkt = (J3DMatPacket*)mpBuffer[slot]; pkt != NULL;
                  pkt = (J3DMatPacket*)pkt->getNextPacket())
             {
                 if (pkt->mpMaterialAnm == pMaterialAnm) {
@@ -115,8 +115,8 @@ int J3DDrawBuffer::entryMatAnmSort(J3DMatPacket* pMatPacket) {
                 }
             }
 
-            pMatPacket->setNextPacket(mpBuf[slot]);
-            mpBuf[slot] = pMatPacket;
+            pMatPacket->setNextPacket(mpBuffer[slot]);
+            mpBuffer[slot] = pMatPacket;
             return 1;
         }
     }
@@ -139,15 +139,15 @@ int J3DDrawBuffer::entryZSort(J3DMatPacket* i_packet) {
         if (mZFar - mZRatio > value) {
             uvar4 = value / mZRatio;
         } else {
-            uvar4 = mBufSize - 1;
+            uvar4 = mEntryTableSize - 1;
         }
     } else {
         uvar4 = 0;
     }
 
-    u32 idx = (mBufSize - 1) - uvar4;
-    i_packet->setNextPacket(mpBuf[idx]);
-    mpBuf[idx] = i_packet;
+    u32 idx = (mEntryTableSize - 1) - uvar4;
+    i_packet->setNextPacket(mpBuffer[idx]);
+    mpBuffer[idx] = i_packet;
 
     return 1;
 }
@@ -183,16 +183,16 @@ int J3DDrawBuffer::entryNonSort(J3DMatPacket* i_packet) {
     i_packet->drawClear();
     i_packet->mpShapePacket->drawClear();
 
-    i_packet->setNextPacket(mpBuf[0]);
-    mpBuf[0] = i_packet;
+    i_packet->setNextPacket(mpBuffer[0]);
+    mpBuffer[0] = i_packet;
 
     return 1;
 }
 
 /* 802ECCC4-802ECCE4       .text entryImm__13J3DDrawBufferFP9J3DPacketUs */
 int J3DDrawBuffer::entryImm(J3DPacket* i_packet, u16 index) {
-    i_packet->setNextPacket(mpBuf[index]);
-    mpBuf[index] = i_packet;
+    i_packet->setNextPacket(mpBuffer[index]);
+    mpBuffer[index] = i_packet;
 
     return 1;
 }
@@ -213,14 +213,14 @@ J3DDrawBuffer::drawFunc J3DDrawBuffer::drawFuncTable[] = {
 
 /* 802ECCE4-802ECD38       .text draw__13J3DDrawBufferCFv */
 void J3DDrawBuffer::draw() const {
-    drawFunc func = drawFuncTable[mDrawType];
+    drawFunc func = drawFuncTable[mDrawMode];
     (this->*func)();
 }
 
 /* 802ECD38-802ECDB0       .text drawHead__13J3DDrawBufferCFv */
 void J3DDrawBuffer::drawHead() const {
-    u32 size = mBufSize;
-    J3DPacket** buf = mpBuf;
+    u32 size = mEntryTableSize;
+    J3DPacket** buf = mpBuffer;
 
     for (u32 i = 0; i < size; i++) {
         for (J3DPacket* packet = buf[i]; packet != NULL; packet = packet->getNextPacket()) {
@@ -231,10 +231,10 @@ void J3DDrawBuffer::drawHead() const {
 
 /* 802ECDB0-802ECE2C       .text drawTail__13J3DDrawBufferCFv */
 void J3DDrawBuffer::drawTail() const {
-    int num = mBufSize - 1;
+    int num = mEntryTableSize - 1;
 
     for (int i = num; i >= 0; i--) {
-        for (J3DPacket* packet = mpBuf[i]; packet != NULL; packet = packet->getNextPacket()) {
+        for (J3DPacket* packet = mpBuffer[i]; packet != NULL; packet = packet->getNextPacket()) {
             packet->draw();
         }
     }
@@ -245,8 +245,8 @@ void J3DDrawBuffer::setCallBackPacket(J3DCallBackPacket* pPacket) {
     mpCallBackPacket = pPacket;
     if (pPacket != NULL) {
         pPacket->drawClear();
-        pPacket->setNextPacket(mpBuf[0]);
-        mpBuf[0] = pPacket;
+        pPacket->setNextPacket(mpBuffer[0]);
+        mpBuffer[0] = pPacket;
     }
 }
 

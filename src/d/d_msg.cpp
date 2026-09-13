@@ -326,7 +326,7 @@ void dMsg_screenDataSetItem(sub_msg_class* i_Msg) {
     JUT_ASSERT(661, i_Msg->buffer_p != NULL);
     if ((i_Msg->mMesgEntry.mTextboxType == 9) && (dItem_data::getTexture(i_Msg->mMsgNo - 101) != NULL)) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(i_Msg->buffer_p, 0xc00, 'TIMG', dItem_data::getTexture(i_Msg->mMsgNo - 101), archive);
+        JKRReadTypeResource(i_Msg->buffer_p, 0xc00, 'TIMG', dItem_data::getTexture(i_Msg->mMsgNo - 101), archive);
         ((J2DPicture*)i_Msg->m0624[8].pane)->changeTexture(i_Msg->buffer_p, 0);
     } else {
         for (s32 i = 0; i < 10; i++) {
@@ -1083,7 +1083,7 @@ void dMsg_frame_close(sub_msg_class* i_Msg) {
     i_Msg->m1100++;
     if (i_Msg->m1100 == 10) {
         fopMsgM_setNowAlphaZero(&i_Msg->m049C);
-        JKRFileLoader::removeResource(i_Msg->head_p, NULL);
+        JKRRemoveResource(i_Msg->head_p, NULL);
         i_Msg->mStatus = fopMsgStts_BOX_CLOSED_e;
         i_Msg->m049C.pane->hide();
     } else {
@@ -1521,8 +1521,8 @@ void dMsg_numberInput(sub_msg_class* i_Msg) {
 }
 
 static void dummy() {
-    OSReport("hukidashi_021.bti");
-    OSReport("texture != 0");
+    DEAD_STRING("hukidashi_021.bti");
+    DEAD_STRING("texture != 0");
 };
 
 /* 80210CA4-80210F28       .text dMsg_tactInput__FP13sub_msg_class */
@@ -2258,7 +2258,7 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
     ) {
         i_Msg->mMsgDataProc.setSelectFlagOff();
         i_Msg->m1100 = 0;
-        JKRFileLoader::removeResource(i_Msg->head_p, NULL);
+        JKRRemoveResource(i_Msg->head_p, NULL);
         if (i_Msg->mMesgEntry.mTextboxType != 5 && i_Msg->mMesgEntry.mTextboxType != 0xe) {
             dMsg_arrowInit(i_Msg);
         }

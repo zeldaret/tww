@@ -451,7 +451,7 @@ cPhs_State daTag_Island_c::create() {
     s32 swbit = getSwbit();
     makeEvId();
     eventInfo.setEventId(mEventId);
-    eventInfo.mMapToolId = getEventNo();
+    eventInfo.setToolId(getEventNo());
 
     if (mEventId != -1 && swbit != 0xFF && !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACT_ARRIVAL);

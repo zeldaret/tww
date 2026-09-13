@@ -106,7 +106,7 @@ void TChannel::init() {
     if (s32(field_0xc8) == 0) {
         field_0xc8 = 1;
     }
-    field_0xe8 = 0;
+    mSkipSamples = 0;
 }
 
 /* 8028B5A4-8028B620       .text setOscillator__Q28JASystem8TChannelFUlPQ28JASystem11TOscillator */
@@ -160,16 +160,16 @@ void TChannel::effectOsc(u32 oscnum, f32 effect) {
         break;
     case 2:
         effect -= 0.5; // Must be double literal to match
-        mPanVec.mEffect += effect;
-        mPanVec.mEffect = Driver::Clamp01(mPanVec.mEffect);
+        field_0x6c[1].mEffect += effect;
+        field_0x6c[1].mEffect = Driver::Clamp01(field_0x6c[1].mEffect);
         break;
     case 3:
-        mFxmixVec.mEffect += effect;
-        mFxmixVec.mEffect = Driver::Clamp01(mFxmixVec.mEffect);
+        field_0x6c[2].mEffect += effect;
+        field_0x6c[2].mEffect = Driver::Clamp01(field_0x6c[2].mEffect);
         break;
     case 4:
-        mDolbyVec.mEffect += effect;
-        mDolbyVec.mEffect = Driver::Clamp01(mDolbyVec.mEffect);
+        field_0x6c[3].mEffect += effect;
+        field_0x6c[3].mEffect = Driver::Clamp01(field_0x6c[3].mEffect);
         break;
     }
 }
@@ -248,9 +248,9 @@ void TChannel::setPanPower(f32 param_1, f32 param_2, f32 param_3, f32 param_4) {
         OSReport("----- JASChannel::setPanPower : px == 0.0\n");
         px = 1.0f;
     }
-    mPanPower.mSound = param_1 / px;
-    mPanPower.mEffect = param_2 / px;
-    mPanPower.mChannel = param_3 / px;
+    field_0x6c[0].mSound = param_1 / px;
+    field_0x6c[0].mEffect = param_2 / px;
+    field_0x6c[0].mChannel = param_3 / px;
 }
 
 /* 8028BE64-8028BEB8       .text checkLogicalChannel__Q28JASystem8TChannelFv */
@@ -359,7 +359,7 @@ BOOL TChannel::playLogicalChannel() {
 
     switch (field_0xc) {
     case 0:
-        buf->setWaveInfo(field_0x10, field_0x14, field_0xe8);
+        buf->setWaveInfo(field_0x10, field_0x14, mSkipSamples);
         break;
     case 2:
         buf->setOscInfo(field_0x14);
@@ -422,9 +422,9 @@ void TChannel::updateEffectorParam() {
     if (field_0xa4 == field_0x4) {
         field_0xa8 = field_0x4->field_0x1c;
         field_0xac = field_0x4->field_0x18;
-        mPanVec.mChannel = field_0x4->field_0x20;
-        mFxmixVec.mChannel = field_0x4->field_0x24;
-        mDolbyVec.mChannel = field_0x4->field_0x28;
+        field_0x6c[1].mChannel = field_0x4->field_0x20;
+        field_0x6c[2].mChannel = field_0x4->field_0x24;
+        field_0x6c[3].mChannel = field_0x4->field_0x28;
         for (int i = 0; i < 3; i++) {
             mCalcTypes[i] = field_0x4->mCalcTypes[i];
         }
@@ -434,17 +434,17 @@ void TChannel::updateEffectorParam() {
     case 0:
         pan   = 0.5f;
         dolby = 0.0f;
-        fxmix = calcEffect(&mFxmixVec, &mPanPower, mCalcTypes[1]);
+        fxmix = calcEffect(&field_0x6c[2], &field_0x6c[0], mCalcTypes[1]);
         break;
     case 1:
-        pan   = (mCalcTypes[0] == CALC_None) ? 0.5f : calcPan(&mPanVec, &mPanPower, mCalcTypes[0]);
-        fxmix = calcEffect(&mFxmixVec, &mPanPower, mCalcTypes[1]);
+        pan   = (mCalcTypes[0] == CALC_None) ? 0.5f : calcPan(&field_0x6c[1], &field_0x6c[0], mCalcTypes[0]);
+        fxmix = calcEffect(&field_0x6c[2], &field_0x6c[0], mCalcTypes[1]);
         dolby = 0.0f;
         break;
     case 2:
-        pan   = (mCalcTypes[0] == CALC_None) ? 0.5f : calcPan(&mPanVec, &mPanPower, mCalcTypes[0]);
-        fxmix = calcEffect(&mFxmixVec, &mPanPower, mCalcTypes[1]);
-        dolby = calcEffect(&mDolbyVec, &mPanPower, mCalcTypes[2]);
+        pan   = (mCalcTypes[0] == CALC_None) ? 0.5f : calcPan(&field_0x6c[1], &field_0x6c[0], mCalcTypes[0]);
+        fxmix = calcEffect(&field_0x6c[2], &field_0x6c[0], mCalcTypes[1]);
+        dolby = calcEffect(&field_0x6c[3], &field_0x6c[0], mCalcTypes[2]);
         break;
     }
 
@@ -546,9 +546,9 @@ int TChannel::updatecallDSPChannel(TDSPChannel* dspChannel, u32 param_2) {
         if (param_2 == 0) {
             channel->field_0x94 = 1.0f;
             channel->field_0x98 = 1.0f;
-            channel->mPanVec.mEffect = 0.5f;
-            channel->mFxmixVec.mEffect = 0.0f;
-            channel->mDolbyVec.mEffect = 0.0f;
+            channel->field_0x6c[1].mEffect = 0.5f;
+            channel->field_0x6c[2].mEffect = 0.0f;
+            channel->field_0x6c[3].mEffect = 0.0f;
             
             for (i = 0; i < 4; i++) {
                 if (!channel->isOsc(i)) continue;

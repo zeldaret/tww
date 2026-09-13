@@ -27,7 +27,7 @@ bool cCcD_DivideInfo::Chk(const cCcD_DivideInfo& other) const {
 
 /* 80241428-80241558       .text SetArea__15cCcD_DivideAreaFRC8cM3dGAab */
 void cCcD_DivideArea::SetArea(const cM3dGAab& aabb) {
-    *(cM3dGAab*)this = aabb;
+    Set(aabb.GetMinP(), aabb.GetMaxP());
     mScaledXDiff = (GetMaxX() - GetMinX()) * 0.09090909f;
     mXDiffIsZero = cM3d_IsZero(mScaledXDiff);
     if (!mXDiffIsZero)

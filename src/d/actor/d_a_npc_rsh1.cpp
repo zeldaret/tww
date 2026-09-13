@@ -1668,12 +1668,11 @@ BOOL daNpc_Rsh1_c::_draw() {
         current.pos.z
     );
 
-    f32 ground_y = mAcch.m_ground_h;
     mShadowID = dComIfGd_setShadow(
         mShadowID, 
         1, mpMorf->getModel(), 
         &shadow_pos, 800.0f, 20.0f, 
-        current.pos.y, ground_y, 
+        current.pos.y, mAcch.GetGroundH(), 
         mAcch.m_gnd, &tevStr
     );  
     

@@ -106,6 +106,7 @@ struct J3DIndTexMtxInfo {
         }
         mScaleExp = other.mScaleExp;
     }
+
     /* 0x00 */ Mtx23 mOffsetMtx;
     /* 0x18 */ s8 mScaleExp;
 };  // Size: 0x1C
@@ -203,6 +204,12 @@ struct J3DIndTevStageInfo {
 };
 
 struct J3DTexCoordInfo {
+    void operator=(const J3DTexCoordInfo& other) {
+        mTexGenType = other.mTexGenType;
+        mTexGenSrc = other.mTexGenSrc;
+        mTexGenMtx = other.mTexGenMtx;
+    }
+
     /* 0x0 */ u8 mTexGenType ALIGN_DECL(4);
     /* 0x1 */ u8 mTexGenSrc;
     /* 0x2 */ u8 mTexGenMtx;

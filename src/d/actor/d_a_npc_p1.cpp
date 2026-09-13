@@ -1200,7 +1200,7 @@ fpc_ProcID daNpc_P1_c::getKajiID() {
     fpc_ProcID parent_id = parentActorID;
     if (parent_id != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* actor = fopAcM_SearchByID(parent_id);
-        if (fopAc_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Pirateship_e) {
+        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Pirateship_e) {
             kaji_id = ((daObjPirateship::Act_c*)actor)->getKajiID();
         }
     }
@@ -1231,7 +1231,7 @@ BOOL daNpc_P1_c::kaji_anm() {
         }
         if (mKajiId != fpcM_ERROR_PROCESS_ID_e) {
             fopAc_ac_c* kaji = fopAcM_SearchByID(mKajiId);
-            if (fopAc_IsActor(kaji) && fopAcM_GetName(kaji) == fpcNm_Kaji_e) {
+            if (fopAcM_IsActor(kaji) && fopAcM_GetName(kaji) == fpcNm_Kaji_e) {
                 ((daKaji_c*)kaji)->setAnm(mAnmNum - 9, mpMorf->getFrame());
             }
         }

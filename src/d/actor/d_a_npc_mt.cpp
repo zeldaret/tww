@@ -489,7 +489,7 @@ cPhs_State daNpcMt_c::createInit() {
     gravity = -9.0f;
     setAnmTbl(l_npc_anm_wait);
     mMtGetItemEventIdx = dComIfGp_evmng_getEventIdx("MT_GET_ITEM", 0xff);
-    eventInfo.mpCheckCB = daNpcMt_XyCheckCB;
+    eventInfo.setXyCheckCB(daNpcMt_XyCheckCB);
     mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
 #if VERSION == VERSION_DEMO
     setMtx();

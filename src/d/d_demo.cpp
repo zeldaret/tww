@@ -680,7 +680,7 @@ bool dDemo_manager_c::create(const u8* r29, cXyz* r30, f32 f31) {
 
 static void dummy() {
     // "Demo data reloading error!!\n"
-    OSReport_Error("デモデータ再読み込みエラー！！\n");
+    DEAD_STRING("デモデータ再読み込みエラー！！\n");
 }
 
 /* 8006B0D4-8006B12C       .text remove__15dDemo_manager_cFv */

@@ -27,9 +27,9 @@ public:
     void setCurrentHeap(JKRHeap* heap) {
         mCurrentHeap = heap ? heap : JKRHeap::getCurrentHeap();
     }
+    void resume() { OSResumeThread(mThreadRecord); }
 
 protected:
-    void resume() { OSResumeThread(mThreadRecord); }
     BOOL sendMessage(OSMessage message) {
         return OSSendMessage(&mMessageQueue, message, OS_MESSAGE_NOBLOCK);
     }

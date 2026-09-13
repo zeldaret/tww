@@ -10,16 +10,6 @@
 #include "JSystem/JKernel/JKRArchive.h"
 #include "dolphin/os/OSMessage.h"
 
-struct LoadResourceMsg {
-    /* 0x00 */ JKRArchive* mArchive;
-    /* 0x04 */ u16 mId;
-    /* 0x08 */ u8* mBuffer;
-    /* 0x0C */ u32 mSize;
-    /* 0x10 */ void (*mCallback)(u32, u32);
-    /* 0x14 */ u32 mCallbackParam;
-    /* 0x18 */ OSMessageQueue* mMessageQueue;
-};
-
 /* 8027D4C8-8027D4FC       .text getResSize__Q28JASystem12ResArcLoaderFP10JKRArchiveUs */
 u32 JASystem::ResArcLoader::getResSize(JKRArchive* archive, u16 param_2) {
     JKRArchive::SDIFileEntry* entry = archive->findIdResource(param_2);
@@ -31,7 +21,7 @@ u32 JASystem::ResArcLoader::getResSize(JKRArchive* archive, u16 param_2) {
 
 /* 8027D4FC-8027D5A0       .text loadResourceCallback__Q28JASystem12ResArcLoaderFPv */
 s32 JASystem::ResArcLoader::loadResourceCallback(void* param_1) {
-    LoadResourceMsg* msg = (LoadResourceMsg*)param_1;
+    TLoadResInfo* msg = (TLoadResInfo*)param_1;
     u32 var1 = msg->mArchive->readResource(msg->mBuffer, msg->mSize, msg->mId);
     if (msg->mCallback) {
         msg->mCallback(var1, msg->mCallbackParam);
@@ -52,19 +42,12 @@ s32 JASystem::ResArcLoader::loadResourceCallback(void* param_1) {
 /* 8027D5A0-8027D658       .text loadResource__Q28JASystem12ResArcLoaderFP10JKRArchiveUsPUcUl */
 u32 JASystem::ResArcLoader::loadResource(JKRArchive* archive, u16 id, u8* buffer, u32 size) {
     OSMessageQueue queue;
-    LoadResourceMsg msg;
     OSMessage queueMsg;
     OSMessage receiveMsg;
     OSInitMessageQueue(&queue, &queueMsg, 1);
-    msg.mArchive = archive;
-    msg.mId = id;
-    msg.mBuffer = buffer;
-    msg.mSize = size;
-    msg.mCallback = NULL;
-    msg.mCallbackParam = 0;
-    msg.mMessageQueue = NULL;
+    TLoadResInfo msg(archive, id, buffer, size);
     msg.mMessageQueue = &queue;
-    if (!Dvd::sendCmdMsg(loadResourceCallback, &msg, sizeof(LoadResourceMsg))) {
+    if (!Dvd::sendCmdMsg(loadResourceCallback, &msg, sizeof(TLoadResInfo))) {
         return 0;
     }
     OSReceiveMessage(&queue, &receiveMsg, OS_MESSAGE_BLOCK);
@@ -73,15 +56,8 @@ u32 JASystem::ResArcLoader::loadResource(JKRArchive* archive, u16 id, u8* buffer
 
 /* 8027D658-8027D6B0       .text loadResourceAsync__Q28JASystem12ResArcLoaderFP10JKRArchiveUsPUcUlPFUlUl_vUl */
 void JASystem::ResArcLoader::loadResourceAsync(JKRArchive* archive, u16 id, u8* buffer, u32 size, void (*cb)(u32, u32), u32 cbParam) {
-    LoadResourceMsg msg;
-    msg.mArchive = archive;
-    msg.mId = id;
-    msg.mBuffer = buffer;
-    msg.mSize = size;
-    msg.mCallback = NULL;
-    msg.mCallbackParam = 0;
-    msg.mMessageQueue = NULL;
+    TLoadResInfo msg(archive, id, buffer, size);
     msg.mCallback = cb;
     msg.mCallbackParam = cbParam;
-    Dvd::sendCmdMsg(loadResourceCallback, &msg, sizeof(LoadResourceMsg));
+    Dvd::sendCmdMsg(loadResourceCallback, &msg, sizeof(TLoadResInfo));
 }

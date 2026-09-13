@@ -495,7 +495,7 @@ BOOL daDaiocta_c::createArrowHitHeap() {
         return FALSE;
     }
 
-    jntHit = mpJntHit;
+    fopAcM_SetJntHit(this, mpJntHit);
 
     return TRUE;
 }

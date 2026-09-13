@@ -251,7 +251,7 @@ static void daJi1_TgHitCallback(fopAc_ac_c* i_this, dCcD_GObjInf*, fopAc_ac_c* a
 
 /* 00000424-000004A0       .text daJi1_AtHitCallback__FP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 static void daJi1_AtHitCallback(fopAc_ac_c* i_this, dCcD_GObjInf* param_2, fopAc_ac_c* actor, dCcD_GObjInf*) {
-    if(fopAc_IsActor(actor)) {
+    if(fopAcM_IsActor(actor)) {
         if(fpcM_GetName(actor) == fpcNm_PLAYER_e) {
             if(!param_2->ChkAtShieldHit()) {
                 static_cast<daNpc_Ji1_c*>(i_this)->field_0xC3C++;
@@ -1386,7 +1386,7 @@ BOOL daNpc_Ji1_c::speakBadAction(void*) {
 
 /* 00003F54-00004050       .text initPosObject__11daNpc_Ji1_cFPvPv */
 void* daNpc_Ji1_c::initPosObject(void* pActor, void* pData) {
-    if(fopAc_IsActor(pActor) && fopAcM_GetName(pActor) == fpcNm_TSUBO_e) {
+    if(fopAcM_IsActor(pActor) && fopAcM_GetName(pActor) == fpcNm_TSUBO_e) {
         ((daTsubo::Act_c*)pActor)->pos_init();
     }
 

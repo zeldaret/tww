@@ -75,7 +75,7 @@ static BOOL daBmdfoot_Draw(bmdfoot_class* i_this) {
 }
 
 /* 000002B0-000003D8       .text anm_init__FP13bmdfoot_classifUcfi */
-void anm_init(bmdfoot_class* i_this, int bckFileIdx, f32 morf, unsigned char loopMode, f32 speed, int soundFileIdx) {
+static void anm_init(bmdfoot_class* i_this, int bckFileIdx, f32 morf, unsigned char loopMode, f32 speed, int soundFileIdx) {
     if (soundFileIdx >= 0) {
         i_this->mpBodyVineMorf->setAnm(
             (J3DAnmTransform*)dComIfG_getObjectRes("Bmdfoot", bckFileIdx), loopMode, morf, speed, 0.0f, -1.0f, dComIfG_getObjectRes("Bmdfoot", soundFileIdx)
@@ -86,7 +86,7 @@ void anm_init(bmdfoot_class* i_this, int bckFileIdx, f32 morf, unsigned char loo
 }
 
 /* 000003D8-00000440       .text housi_off__FP13bmdfoot_class */
-void housi_off(bmdfoot_class* i_this) {
+static void housi_off(bmdfoot_class* i_this) {
     for (int i = 0; i < ARRAY_SSIZE(i_this->mAsiWaitFollowCB); i++) {
         if (i_this->mAsiWaitFollowCB[i].getEmitter() != NULL) {
             i_this->mAsiWaitFollowCB[i].getEmitter()->stopCreateParticle();
@@ -98,13 +98,13 @@ void housi_off(bmdfoot_class* i_this) {
 }
 
 /* 00000440-00000840       .text wait__FP13bmdfoot_class */
-void wait(bmdfoot_class* i_this) {
+static void wait(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_98;
     static int eff_id[] = {ASI_JNT_ASI11_e, ASI_JNT_ASI13_e, ASI_JNT_ASI18_e};
 
     int frame = i_this->mpBodyVineMorf->getFrame();
-    local_98.setall(0.0f);
+    local_98.set(0.0f, 0.0f, 0.0f);
 
     for (int i = 0; i < ARRAY_SSIZE(i_this->m3F8); i++) {
         MTXCopy(i_this->mpBodyVineMorf->getModel()->getAnmMtx(eff_id[i]), *calc_mtx);
@@ -170,7 +170,7 @@ void wait(bmdfoot_class* i_this) {
 }
 
 /* 0000087C-00000D8C       .text attack_1__FP13bmdfoot_class */
-void attack_1(bmdfoot_class* i_this) {
+static void attack_1(bmdfoot_class* i_this) {
     /* Nonmatching - retail-only regalloc */
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_5c;
@@ -179,7 +179,7 @@ void attack_1(bmdfoot_class* i_this) {
     static int col_joint[] = {ASI_JNT_ASI2_e, ASI_JNT_ASI4_e, ASI_JNT_ASI6_e, ASI_JNT_ASI8_e, ASI_JNT_ASI10_e};
 
     bool bVar2 = false;
-    local_5c.setall(0.0f);
+    local_5c.set(0.0f, 0.0f, 0.0f);
 
     switch (i_this->m2BC) {
     case 0:
@@ -264,13 +264,13 @@ void attack_1(bmdfoot_class* i_this) {
 }
 
 /* 00000D8C-00001180       .text ug_move__FP13bmdfoot_class */
-int ug_move(bmdfoot_class* i_this) {
+static int ug_move(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_4c;
     cXyz cStack_58;
     cXyz local_64;
 
-    daPy_py_c* player = daPy_getPlayerActorClass();
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     u32 uVar4 = 0;
     switch (i_this->mBA8) {
     case 0:
@@ -286,9 +286,7 @@ int ug_move(bmdfoot_class* i_this) {
             dPa_name::ID_AK_ST_BKMLATTACKSMOKE01, &i_this->mBAC, &i_this->mBB8, NULL, 0xB9, &i_this->mLAttackSmoke01CB, (u8)actor->current.roomNo
         );
         break;
-    case 0xa:
-        break;
-    case 2:
+    case 2: {
         local_64 = player->current.pos - i_this->mBAC;
         f32 dVar5 = (local_64.abs() * 10.0f);
         if (dVar5 > (REG14_F(14) + 10000.0f)) {
@@ -314,6 +312,9 @@ int ug_move(bmdfoot_class* i_this) {
         }
         break;
     }
+    case 10:
+        break;
+    }
     MtxTrans(i_this->mBAC.x, i_this->mBAC.y, i_this->mBAC.z, false);
     cMtx_YrotM(*calc_mtx, i_this->mBB8.y);
     J3DModel* model = i_this->mpFloorVineMorf->getModel();
@@ -324,7 +325,7 @@ int ug_move(bmdfoot_class* i_this) {
 }
 
 /* 00001180-00001B00       .text attack_2__FP13bmdfoot_class */
-void attack_2(bmdfoot_class* i_this) {
+static void attack_2(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     J3DAnmTransform* pBck;
     cXyz local_3c;
@@ -451,7 +452,7 @@ void attack_2(bmdfoot_class* i_this) {
 }
 
 /* 00001B00-00001CDC       .text damage__FP13bmdfoot_class */
-void damage(bmdfoot_class* i_this) {
+static void damage(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     f32 dVar5;
 
@@ -481,7 +482,7 @@ void damage(bmdfoot_class* i_this) {
 }
 
 /* 00001CDC-00001ED8       .text start__FP13bmdfoot_class */
-void start(bmdfoot_class* i_this) {
+static void start(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
 
     for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
@@ -522,7 +523,7 @@ void start(bmdfoot_class* i_this) {
 }
 
 /* 00001ED8-00001FB8       .text end__FP13bmdfoot_class */
-void end(bmdfoot_class* i_this) {
+static void end(bmdfoot_class* i_this) {
     for (int i = 2; i <= ARRAY_SSIZE(i_this->m3A4); i++) {
         i_this->m2CC[i].z = 0;
         i_this->m3A4[i] = 0;
@@ -536,7 +537,7 @@ void end(bmdfoot_class* i_this) {
 }
 
 /* 00001FB8-000021B8       .text move__FP13bmdfoot_class */
-void move(bmdfoot_class* i_this) {
+static void move(bmdfoot_class* i_this) {
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_20;
     cXyz cStack_2c;
@@ -573,7 +574,7 @@ void move(bmdfoot_class* i_this) {
         case 10:
             start(i_this);
             break;
-        case 0xb:
+        case 11:
             end(i_this);
             break;
         }
@@ -682,7 +683,7 @@ static BOOL daBmdfoot_Delete(bmdfoot_class* i_this) {
 }
 
 /* 000026B0-000029B4       .text useHeapInit__FP13bmdfoot_class */
-int useHeapInit(bmdfoot_class* i_this) {
+static int useHeapInit(bmdfoot_class* i_this) {
     i_this->mpBodyVineMorf = new mDoExt_McaMorf(
         (J3DModelData*)dComIfG_getObjectRes("Bmdfoot", dRes_INDEX_BMDFOOT_BMD_ASI_e),
         NULL,

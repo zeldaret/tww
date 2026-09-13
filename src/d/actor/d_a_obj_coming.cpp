@@ -330,7 +330,7 @@ void* daObjComing::Act_c::chk_make_pos_act(void* actor, void* data) {
     daObjComing::Act_c* i_this = (daObjComing::Act_c*)actor;
     daObjComing::Act_c::MakeTmp_c* tmp = (daObjComing::Act_c::MakeTmp_c*)data;
 
-    if (fopAc_IsActor(i_this)) {
+    if (fopAcM_IsActor(i_this)) {
         s16 proc = fopAcM_GetName(i_this);
         if (proc != fpcNm_SHIP_e && proc != fpcNm_PLAYER_e && (std::fabsf(i_this->current.pos.y - tmp->m0C.y) < tmp->m1C + 100.0f)) {
             if (i_this->current.pos.absXZ(tmp->m0C) < tmp->m18 + 100.0f) {

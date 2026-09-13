@@ -1150,7 +1150,7 @@ BOOL dSv_memBit_c::isDungeonItem(int i_no) {
 }
 
 static void dummy() {
-    OSReport("(123 <= i_no) && (i_no <= 132)");
+    DEAD_STRING("(123 <= i_no) && (i_no <= 132)");
 }
 
 /* 8005C8E8-8005C908       .text init__11dSv_ocean_cFv */

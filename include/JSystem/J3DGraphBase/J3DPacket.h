@@ -214,9 +214,9 @@ public:
     J3DTexture* getTexture() { return mpTexture; }
 
     virtual ~J3DMatPacket();
-    virtual int entry(J3DDrawBuffer* param_1) {
-        J3DDrawBuffer::sortFunc func = J3DDrawBuffer::sortFuncTable[param_1->mSortType];
-        return (param_1->*func)(this);
+    virtual int entry(J3DDrawBuffer* pBuffer) {
+        J3DDrawBuffer::sortFunc func = J3DDrawBuffer::sortFuncTable[pBuffer->getSortMode()];
+        return (pBuffer->*func)(this);
     }
     virtual void draw();
     virtual bool isSame(J3DMatPacket*) const;

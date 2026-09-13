@@ -392,6 +392,11 @@ config.precompiled_headers = [
         "cflags": ["-lang=c++", *cflags_rel],
     },
     {
+        "source": "m_Do/machine.pch",
+        "mw_version": "GC/1.3.2",
+        "cflags": ["-lang=c++", *cflags_dolzel],
+    },
+    {
         "source": "JSystem/JSystem.pch",
         "mw_version": "GC/1.3.2",
         "cflags": ["-lang=c++", *cflags_framework],
@@ -408,19 +413,19 @@ config.libs = [
             Object(Matching,    "m_Do/m_Do_main.cpp"),
             Object(Matching,    "m_Do/m_Do_printf.cpp"),
             Object(Matching,    "m_Do/m_Do_audio.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_controller_pad.cpp"),
+            Object(Matching,    "m_Do/m_Do_controller_pad.cpp"),
             Object(NonMatching, "m_Do/m_Do_graphic.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_machine.cpp"),
+            Object(Matching,    "m_Do/m_Do_machine.cpp"),
             Object(Matching,    "m_Do/m_Do_mtx.cpp"),
             Object(MatchingFor("D44J01"),    "m_Do/m_Do_ext.cpp"),
             Object(Matching,    "m_Do/m_Do_lib.cpp"),
             Object(Matching,    "m_Do/m_Do_hostIO.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_Reset.cpp"),
+            Object(Matching,    "m_Do/m_Do_Reset.cpp"),
             Object(Matching,    "m_Do/m_Do_dvd_thread.cpp"),
             Object(Matching,    "m_Do/m_Do_DVDError.cpp"),
             Object(Matching,    "m_Do/m_Do_MemCard.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_MemCardRWmng.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "m_Do/m_Do_gba_com.cpp"),
+            Object(Matching,    "m_Do/m_Do_MemCardRWmng.cpp"),
+            Object(Matching,    "m_Do/m_Do_gba_com.cpp"),
             Object(Matching,    "m_Do/m_Do_machine_exception.cpp"),
         ],
     },
@@ -636,8 +641,8 @@ config.libs = [
             Object(Matching,    "d/d_level_se.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_cloth.cpp"),
             Object(NonMatching, "d/d_menu_collect.cpp"),
-            Object(NonMatching, "d/d_menu_dmap.cpp"),
-            Object(NonMatching, "d/d_menu_fmap.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_dmap.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_menu_fmap.cpp"),
             Object(NonMatching, "d/d_menu_fmap2.cpp"),
             Object(NonMatching, "d/d_menu_item.cpp"),
             Object(Matching,    "d/d_menu_option.cpp"),
@@ -789,7 +794,7 @@ config.libs = [
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-math.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/jstudio-object.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/functionvalue.cpp"),
-            Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
+            Object(Matching,    "JSystem/JStudio/JStudio/fvb.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
             Object(Matching,    "JSystem/JStudio/JStudio/object-id.cpp"),
@@ -872,10 +877,10 @@ config.libs = [
             Object(Matching,    "JSystem/JAudio/JASInstSense.cpp"),
             Object(Matching,    "JSystem/JAudio/JASInstRand.cpp"),
             Object(Matching,    "JSystem/JAudio/JASWSParser.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASBNKParser.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASBNKParser.cpp"),
             Object(Matching,    "JSystem/JAudio/JASWaveArcLoader.cpp"),
             Object(Matching,    "JSystem/JAudio/JASWaveBankMgr.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASBankMgr.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASBankMgr.cpp"),
             Object(Matching,    "JSystem/JAudio/JASAudioThread.cpp"),
             Object(Matching,    "JSystem/JAudio/JASDSPBuf.cpp"),
             Object(NonMatching, "JSystem/JAudio/JASDSPChannel.cpp"),
@@ -884,7 +889,7 @@ config.libs = [
             Object(Matching,    "JSystem/JAudio/JASChGlobal.cpp"),
             Object(Matching,    "JSystem/JAudio/JASChAllocQueue.cpp"),
             Object(Matching,    "JSystem/JAudio/JASChannel.cpp"),
-            Object(NonMatching, "JSystem/JAudio/JASChannelMgr.cpp"),
+            Object(Matching,    "JSystem/JAudio/JASChannelMgr.cpp"),
             Object(Matching,    "JSystem/JAudio/JASOscillator.cpp"),
             Object(Matching,    "JSystem/JAudio/JASDriverTables.cpp"),
             Object(Matching,    "JSystem/JAudio/dspproc.c", extra_cflags=["-lang c++", "-O4", "-func_align 32"]),
@@ -1001,6 +1006,7 @@ config.libs = [
     JSystemLib(
         "JGadget",
         [
+            Object(DEBUG_ONLY,  "JSystem/JGadget/define.cpp"),
             Object(Matching,    "JSystem/JGadget/binary.cpp"),
             Object(Matching,    "JSystem/JGadget/linklist.cpp"),
             Object(Matching,    "JSystem/JGadget/std-vector.cpp"),
@@ -1062,7 +1068,7 @@ config.libs = [
             Object(Matching,    "JSystem/J3DGraphBase/J3DShapeMtx.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DShape.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DMaterial.cpp"),
-            Object(Equivalent,  "JSystem/J3DGraphBase/J3DMatBlock.cpp"), # regalloc
+            Object(Matching,    "JSystem/J3DGraphBase/J3DMatBlock.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DTevs.cpp"),
             Object(Matching,    "JSystem/J3DGraphBase/J3DDrawBuffer.cpp"),
         ],
@@ -1071,7 +1077,7 @@ config.libs = [
         "J3DGraphAnimator",
         [
             Object(Matching,    "JSystem/J3DGraphAnimator/J3DModelData.cpp"),
-            Object(NonMatching, "JSystem/J3DGraphAnimator/J3DModel.cpp"),
+            Object(MatchingFor("GZLE01", "GZLP01"),    "JSystem/J3DGraphAnimator/J3DModel.cpp"),
             Object(Matching,    "JSystem/J3DGraphAnimator/J3DAnimation.cpp"),
             Object(Matching,    "JSystem/J3DGraphAnimator/J3DMaterialAnm.cpp"),
             Object(Matching,    "JSystem/J3DGraphAnimator/J3DVisibility.cpp"),
@@ -1185,7 +1191,10 @@ config.libs = [
     DolphinLib(
         "vi",
         [
-            Object(MatchingFor("GZLJ01", "GZLE01"), "dolphin/vi/vi.c"),
+            Object(Matching, "dolphin/vi/vi.c"),
+            Object(DEBUG_ONLY, "dolphin/vi/i2c.c"),
+            Object(DEBUG_ONLY, "dolphin/vi/initphilips.c"),
+            Object(DEBUG_ONLY, "dolphin/vi/gpioexi.c"),
         ],
     ),
     DolphinLib(
@@ -1425,9 +1434,9 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_agbsw0"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_andsw0"),
     ActorRel(Matching,    "d_a_andsw2"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_att"),
+    ActorRel(Matching,    "d_a_att"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bflower"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bita"),
+    ActorRel(Matching,    "d_a_bita"),
     ActorRel(Matching,    "d_a_branch"),
     ActorRel(Matching,    "d_a_bridge"),
     ActorRel(Matching,    "d_a_coming2"),
@@ -1440,11 +1449,11 @@ config.libs = [
     ActorRel(Matching,    "d_a_ep"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_floor"),
     ActorRel(Matching,    "d_a_grass"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_hitobj"),
+    ActorRel(Matching,    "d_a_hitobj"),
     ActorRel(Matching,    "d_a_hot_floor"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_ikari"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_jbo"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_kaji"),
+    ActorRel(Matching,    "d_a_kaji"),
     ActorRel(Matching,    "d_a_kanban"),
     ActorRel(Matching,    "d_a_ki"),
     ActorRel(Matching,    "d_a_knob00"),
@@ -1542,7 +1551,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_ykgr"),
     ActorRel(Matching,    "d_a_alldie"),
     ActorRel(Matching,    "d_a_am"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_am2"),
+    ActorRel(Matching,    "d_a_am2"),
     ActorRel(Matching,    "d_a_amiprop"),
     ActorRel(Matching,    "d_a_arrow_iceeff"),
     ActorRel(Matching,    "d_a_arrow_lighteff"),
@@ -1556,10 +1565,10 @@ config.libs = [
     ActorRel(Matching,    "d_a_fallrock"),
     ActorRel(Matching,    "d_a_ff"),
     ActorRel(Matching,    "d_a_gy_ctrl"),
-    ActorRel(Equivalent,  "d_a_himo3"),
+    ActorRel(Matching,    "d_a_himo3"),
     ActorRel(Matching,    "d_a_hmlif"),
     ActorRel(Matching,    "d_a_hys"),
-    ActorRel(Equivalent,  "d_a_kamome"), # fpr regalloc
+    ActorRel(Equivalent,  "d_a_kamome"), # regalloc
     ActorRel(Matching,    "d_a_kamome2"), # Demo-only TU
     ActorRel(NonMatching, "d_a_kantera"),
     ActorRel(Matching,    "d_a_kn"),
@@ -1641,7 +1650,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_goal_flag"),
     ActorRel(NonMatching, "d_a_gy"),
     ActorRel(NonMatching, "d_a_icelift"),
-    ActorRel(NonMatching, "d_a_kb"),
+    ActorRel(Matching,    "d_a_kb"),
     ActorRel(NonMatching, "d_a_kddoor"),
     ActorRel(Matching,    "d_a_kita"),
     ActorRel(NonMatching, "d_a_klft"),
@@ -1698,7 +1707,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_os"),
     ActorRel(Matching, "d_a_npc_p1"),
     ActorRel(NonMatching, "d_a_npc_p2"),
-    ActorRel(EquivalentFor("GZLJ01", "GZLE01", "GZLP01") or MatchingFor("D44J01"), "d_a_npc_people"), # regalloc 
+    ActorRel(EquivalentFor("GZLJ01", "GZLE01", "GZLP01") or MatchingFor("D44J01"), "d_a_npc_people"), # regalloc
     ActorRel(NonMatching, "d_a_npc_pf1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_photo"),
     ActorRel(NonMatching, "d_a_npc_pm1"),
@@ -1756,10 +1765,10 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_hha"),
     ActorRel(Matching,    "d_a_obj_hlift"),
     ActorRel(Matching,    "d_a_obj_homen"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_homensmoke"),
-    ActorRel(NonMatching, "d_a_obj_hsehi1"),
+    ActorRel(Matching,    "d_a_obj_homensmoke"),
+    ActorRel(Matching,    "d_a_obj_hsehi1"),
     ActorRel(NonMatching, "d_a_obj_htetu1"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_iceisland"),
+    ActorRel(Matching,    "d_a_obj_iceisland"),
     ActorRel(Matching,    "d_a_obj_jump"),
     ActorRel(NonMatching, "d_a_obj_kanoke"),
     ActorRel(Matching,    "d_a_obj_ladder"),
@@ -1808,8 +1817,8 @@ config.libs = [
     ActorRel(Matching,    "d_a_sail"),
     ActorRel(Matching,    "d_a_salvage_tbox"),
     ActorRel(Matching,    "d_a_scene_change"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shutter2"),
+    ActorRel(Matching,    "d_a_shutter"),
+    ActorRel(Matching,    "d_a_shutter2"),
     ActorRel(Matching,    "d_a_st"),
     ActorRel(Matching,    "d_a_steam_tag"),
     ActorRel(Matching,    "d_a_swattack"),
@@ -1920,7 +1929,7 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
     # Don't modify the link order for matching builds
     if not config.non_matching:
         return objects
-    
+
     if args.debug and module_id == 0: # Debug DOL
         # Insert debug-only objects.
         objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_viewer.cpp")
@@ -1928,14 +1937,18 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_camera.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_event_debug.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_kankyo_debug.cpp")
+        objects.insert(objects.index("JSystem/JGadget/binary.cpp"), "JSystem/JGadget/define.cpp")
+        objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/i2c.c")
+        objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/initphilips.c")
+        objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/gpioexi.c")
         objects.insert(objects.index("dolphin/gx/GXPixel.c"), "dolphin/gx/GXDraw.c")
-    
+
     # Example of adding new files for modding:
     # This adds "dummy.c" to the end of the DOL link order if configured with --non-matching.
     # "dummy.c" *must* be configured as a Matching (or Equivalent) object in order to be linked.
     # if module_id == 0:  # DOL
     #     return objects + ["dummy.c"]
-    
+
     return objects
 
 # Uncomment to enable the link order callback.

@@ -2216,7 +2216,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                     local_2a8 = mCenter + globe.Xyz();
                     if (!lineBGCheck(&mCenter, &local_2a8, 0x7f)) {
                         if (lineBGCheck(&m070, &local_2b4, &lin_chk1, 0x7f)) {
-                            local_29c = lin_chk1.GetLinP()->GetEnd();
+                            local_29c = lin_chk1.GetCross();
                             local_2b4 = compWallMargin(&local_29c, gaze_back_margin);
                         }
                         lineBGCheck(&mCenter, &local_2b4, &lin_chk1, i_flags);
@@ -2234,7 +2234,7 @@ bool dCamera_c::bumpCheck(u32 i_flags) {
                 setFlag(0x80);
                 setFlag(0x80);
 
-                local_290 = lin_chk1.GetLinP()->GetEnd();
+                local_290 = lin_chk1.GetCross();
 
                 local_284 = compWallMargin(&local_290, 0.5f + gaze_back_margin);
 
@@ -4832,21 +4832,22 @@ bool dCamera_c::eventCamera(s32) {
             mEventData.field_0x1c = 2;
         }
 
-        u32 evStringData;
-        if (getEvStringData((char*)&evStringData, "Trim", "CINESCO")) {
-            if (evStringData == 'STAN') {
+        char evStringData[12];
+        if (getEvStringData(evStringData, "Trim", "CINESCO")) {
+            u32* evStringPtr = (u32*)evStringData;
+            if (*evStringPtr == 'STAN') {
                 mEventData.field_0x1c = 0;
             }
-            else if (evStringData == 'VIST') {
+            else if (*evStringPtr == 'VIST') {
                 mEventData.field_0x1c = 1;
             }
-            else if (evStringData == 'DEMO') {
+            else if (*evStringPtr == 'DEMO') {
                 mEventData.field_0x1c = 3;
             }
-            else if (evStringData == 'NONE') {
+            else if (*evStringPtr == 'NONE') {
                 mEventData.field_0x1c = 4;
             }
-            else if (evStringData == 'KEEP') {
+            else if (*evStringPtr == 'KEEP') {
                 mEventData.field_0x1c = 999;
             }
         }

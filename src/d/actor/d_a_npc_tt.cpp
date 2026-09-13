@@ -86,10 +86,10 @@ void daNpc_Tt_c::setAnmStatus() {
 
 //probably unused JUT_ASSERT
 static void dummy() {
-    OSReport("Tt");
-    OSReport("d_a_npc_tt.cpp");
-    OSReport("0");
-    OSReport("Halt");
+    DEAD_STRING("Tt");
+    DEAD_STRING("d_a_npc_tt.cpp");
+    DEAD_STRING("0");
+    DEAD_STRING("Halt");
 }
 
 #include "d/actor/d_a_npc_tt_anm.inc"
@@ -110,8 +110,8 @@ void daNpc_Tt_c::eventOrder() {
 
 /* 000003DC-00000484       .text checkOrder__10daNpc_Tt_cFv */
 void daNpc_Tt_c::checkOrder() {
-    if (eventInfo.mCommand != dEvtCmd_INDEMO_e) {
-        if (eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(7)) {
+    if (!eventInfo.checkCommandDemoAccrpt()) {
+        if (eventInfo.checkCommandTalk() && ChkOrder(7)) {
             if (dComIfGp_event_chkTalkXY()) {
                 setFlag(0x4);
             } else {

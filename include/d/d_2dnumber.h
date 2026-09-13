@@ -83,9 +83,16 @@ public:
 
 class dDlst_2DOutFont_c {
 public:
-    dDlst_2DOutFont_c() { m20 = NULL; m18 = NULL; m2C = NULL; m74 = 0; }
+    dDlst_2DOutFont_c() {
+        m20 = NULL;
+        m18 = NULL;
+        m2C = NULL;
+#if VERSION > VERSION_JPN
+        m74 = 0;
+#endif
+    }
     void setLeftUpPos(f32 x, f32 y) { mPosTopLeftX = x; mPosTopLeftY = y; }
-    
+
     void initial();
     void setPane(JUTFont*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*);
     void setPaneEx(JUTFont*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, fopMsgM_pane_class*, char*);
@@ -102,7 +109,9 @@ public:
     void move();
     void setAlpha(u8);
 
+#if VERSION > VERSION_JPN
     /* 0x00 */ u8 m00[0x08 - 0x00];
+#endif
     /* 0x08 */ J2DPane* m08[3];
     /* 0x14 */ J2DPane* m14;
     /* 0x18 */ J2DPane* m18;
@@ -112,9 +121,15 @@ public:
     /* 0x2C */ JUTFont* m2C;
     /* 0x30 */ f32 mPosTopLeftX;
     /* 0x34 */ f32 mPosTopLeftY;
+#if VERSION > VERSION_JPN
     /* 0x38 */ u8 m38[0x74 - 0x38];
     /* 0x74 */ u8 m74;
     /* 0x75 */ u8 m75[0x150 - 0x75];
+#else
+    /* 0x30 */ u8 m30[0x148 - 0x30];
+#endif
 }; // Size = 0x150
+
+STATIC_ASSERT(sizeof(dDlst_2DOutFont_c) == VERSION_SELECT(0x148, 0x148, 0x150, 0x150));
 
 #endif /* D_2DNUMBER_H */

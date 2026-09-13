@@ -546,8 +546,8 @@ void dScnKy_env_light_c::setDaytime() {
 }
 
 /* 80190A18-80190A20       .text GetTimePass__20dStage_roomControl_cFv */
-s32 dStage_roomControl_c::GetTimePass() {
-    return (u8)m_time_pass;
+int dStage_roomControl_c::GetTimePass() {
+    return m_time_pass;
 }
 
 /* 80190A20-80190ACC       .text SetSchbit__18dScnKy_env_light_cFv */

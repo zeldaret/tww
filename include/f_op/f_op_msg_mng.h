@@ -61,6 +61,18 @@ struct fopMsg_prm_timer : public fopMsg_prm_class {
     /* 0x2C */ cXy mRupeePos;
 }; // Size: 0x34
 
+struct fopMsgM_unk_struct {
+    u16 _0;
+    u16 _2;
+    u16 _4;
+    u16 _6;
+    u16 _8;
+    u16 _A;
+    s16 _C;
+    u16 _E;
+    u8 _10;
+};
+
 class J2DScreen;
 
 class fopMsgM_f2d_class {
@@ -514,6 +526,7 @@ void fopMsgM_messageSendOn();
 void fopMsgM_messageSendOff();
 bool fopMsgM_checkMessageSend();
 u32 fopMsgM_tactMessageSet();
+fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_rubyPane, char* param_3, char* param_4, char* param_5, char* param_6, u32 i_msgNo);
 void fopMsgM_demoMsgFlagOn();
 
 bool fopMsgM_getScopeMode();

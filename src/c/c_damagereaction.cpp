@@ -996,7 +996,7 @@ s16 hang_ang_get(damagereaction* dr) {
 
         linChk.Set(&temp3, &dst[i], dr->mpEnemy);
         if(dComIfG_Bgsp()->LineCross(&linChk)) {
-            dst[i] = linChk.GetLinP()->GetEnd();
+            dst[i] = linChk.GetCross();
         }
         else {
             return 0xDCF;
