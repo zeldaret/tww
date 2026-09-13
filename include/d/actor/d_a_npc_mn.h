@@ -171,7 +171,7 @@ public:
     /* 0x7AE */ s16 mTargetYRot;
     /* 0x7B0 */ u8 field_0x7B0;
     /* 0x7B1 */ u8 field_0x7B1;
-    /* 0x7B2 */ bool field_0x7B2;
+    /* 0x7B2 */ u8 field_0x7B2;
     /* 0x7B3 */ u8 mBtpFrame;
     /* 0x7B4 */ u8 mMoveState;
     /* 0x7B5 */ u8 field_0x7B5;

@@ -5,9 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mn.h"
+#include "d/actor/d_a_obj_figure.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_snap.h"
+#include "d/d_scope.h"
 #include "res/Object/Mn.h"
 #include "SSystem/SComponent/c_phase.h"
 
@@ -632,7 +634,53 @@ int daNpcMn_c::executeWaitInit() {
 
 /* 00001518-000017CC       .text executeWait__9daNpcMn_cFv */
 void daNpcMn_c::executeWait() {
-    /* Nonmatching */
+    if (!executeCommon()) {
+        if (field_0x7C1 == 0) {
+            if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
+                field_0x784 = (s16)(l_npc_dat[mNpcNo].field_0x20 * 2.0f);
+            } else {
+                field_0x784 = l_npc_dat[mNpcNo].field_0x20;
+                field_0x7A4 &= 0xFFFE;
+            }
+            if (field_0x7B1 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F08) && dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
+                dComIfGp_setScopeType(dScpTyp_PICTO_BOX_e);
+                if (dComIfGp_getMesgStatus() == fopMsgStts_SCOPE_ACTIVE_e && !(field_0x7A4 & 1)) {
+                    field_0x7A4 |= 1;
+                    executeSetMode(MOVE_PROC_TURN);
+                }
+            }
+
+            if (!(field_0x7B7 & 1) && fopAcM_isSwitch(this, getPrmSwitchBit())) {
+                fopAcM_onSwitch(this, getPrmSwitchBit());
+                field_0x7B7 |= 1;
+                field_0x7BE = 0;
+                field_0x7BF = 0;
+                field_0x7B2 = 3;
+            }
+        } else if (field_0x7C4) {
+            if (field_0x798 == 0) {
+                field_0x7C4 = 0;
+                executeSetMode(MOVE_PROC_WALK);
+            } else {
+                field_0x798--;
+                daObjFigure_c* figure = (daObjFigure_c*)fopAcM_searchFromName("Figure", 0xFF, field_0x790);
+                if (figure != NULL && figure->mbDisplay) {
+                    mEyePos = figure->eyePos;
+                    field_0x7BD = 1;
+                    mHeadOnlyFollow = false;
+                    m_jnt.setTrn();
+                }
+            }
+        } else {
+            if (mPathRun.isPath() && field_0x798 && !field_0x7B1 && !field_0x7C0) {
+                field_0x798--;
+                if (!field_0x798) {
+                    field_0x7C4 = 0;
+                    executeSetMode(MOVE_PROC_WALK);
+                }
+            }
+        }
+    }
 }
 
 /* 000017CC-000017D4       .text executeTalkInit__9daNpcMn_cFv */
