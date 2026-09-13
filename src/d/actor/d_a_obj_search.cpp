@@ -218,7 +218,86 @@ void daObj_Search::Act_c::CreateInit() {
 
 /* 8010071C-80100B08       .text _create__Q212daObj_Search5Act_cFv */
 cPhs_State daObj_Search::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daObj_Search::Act_c);
+
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state != cPhs_COMPLEATE_e) {
+        return phase_state;
+    }
+
+    SetArgData();
+
+    if (!fopAcM_entrySolidHeap(this, createHeap_CB, 0x4620)) {
+        phase_state = cPhs_ERROR_e;
+        return phase_state;
+    }
+
+    CreateInit();
+    field_0x624 = current.pos;
+    field_0x630 = current.pos;
+
+    if (field_0x8D0 == 6) {
+        modeProc(PROC_UNK0_e, 7);
+    } else if (field_0x8D0 == 5) {
+        field_0x860 = true;
+        modeProc(PROC_UNK0_e, 2);
+    } else {
+        if (is_path_info()) {
+            field_0x60C = field_0x838;
+            field_0x618 = field_0x630 + cXyz(1.0f, 1.0f, 1.0f);
+
+            if (fopAcM_isSwitch(this, field_0x7E2)) {
+                mBkControl = false;
+                modeProc(PROC_UNK0_e, 2);
+            }
+            else {
+                mBkControl = true;
+                modeProc(PROC_UNK0_e, 1);
+                set_mtx_light_A();
+                set_mtx_light_B();
+
+                const cXyz dir = field_0x60C - field_0x624;
+                s16 yawTarget = cM_atan2s(dir.x, dir.z) - current.angle.y;
+                s16 pitchTarget = cM_atan2s(dir.y, dir.absXZ());
+
+                field_0x708 = yawTarget;
+                field_0x706 = pitchTarget;
+                field_0x70E = field_0x708;
+            }
+        } else {
+            field_0x60C = field_0x624 + cXyz(1.0f, 1.0f, 1.0f);
+            field_0x618 = field_0x630 + cXyz(1.0f, 1.0f, 1.0f);
+            modeProc(PROC_UNK0_e, 2);
+        }
+    }
+
+    field_0x63C = field_0x60C;
+    field_0x648 = field_0x618;
+
+    dKy_plight_set(&field_0x780);
+
+    field_0x780.mPos = current.pos;
+    field_0x780.mColor.r = 0;
+    field_0x780.mColor.g = 0;
+    field_0x780.mColor.b = 0;
+    field_0x780.mPower = 0.0;
+    field_0x780.mFluctuation = 0.0;
+
+    if (field_0x8D0 == 5) {
+        field_0x77E = 0;
+    } else if (dComIfGs_getTime() >= 240.0f || dComIfGs_getTime() <= 60.0f) {
+        field_0x77E = 0xff;
+    } else {
+        field_0x77E = 0;
+    }
+
+    field_0x82C = 0xeb;
+    field_0x82D = 0x7d;
+
+    _execute();
+    _execute();
+
+    return phase_state;
 }
 
 /* 80100F9C-801010C4       .text smoke_set__Q212daObj_Search5Act_cFfi */
