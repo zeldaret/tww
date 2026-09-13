@@ -7,6 +7,7 @@
 #include "d/actor/d_a_npc_mn.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_lib_game.h"
+#include "d/d_snap.h"
 #include "res/Object/Mn.h"
 #include "SSystem/SComponent/c_phase.h"
 
@@ -455,20 +456,20 @@ cPhs_State daNpcMn_c::createInit() {
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     m_jnt.setParam(
-        l_npc_dat[mNpcNo].mMax_backbone_x,
-        l_npc_dat[mNpcNo].mMax_backbone_y,
-        l_npc_dat[mNpcNo].mMin_backbone_x,
-        l_npc_dat[mNpcNo].mMin_backbone_y,
-        l_npc_dat[mNpcNo].mMax_head_x,
-        l_npc_dat[mNpcNo].mMax_head_y,
-        l_npc_dat[mNpcNo].mMin_head_x,
-        l_npc_dat[mNpcNo].mMin_head_y,
-        l_npc_dat[mNpcNo].mMax_turn_step
+        l_npc_dat[getNpcNo()].mMax_backbone_x,
+        l_npc_dat[getNpcNo()].mMax_backbone_y,
+        l_npc_dat[getNpcNo()].mMin_backbone_x,
+        l_npc_dat[getNpcNo()].mMin_backbone_y,
+        l_npc_dat[getNpcNo()].mMax_head_x,
+        l_npc_dat[getNpcNo()].mMax_head_y,
+        l_npc_dat[getNpcNo()].mMin_head_x,
+        l_npc_dat[getNpcNo()].mMin_head_y,
+        l_npc_dat[getNpcNo()].mMax_turn_step
     );
-    field_0x7BE = l_npc_dat[mNpcNo].field_0x4A;
-    field_0x7BF = l_npc_dat[mNpcNo].field_0x4B;
-    field_0x784 = l_npc_dat[mNpcNo].field_0x20;
-    field_0x79E = l_npc_dat[mNpcNo].field_0x28;
+    field_0x7BE = l_npc_dat[getNpcNo()].field_0x4A;
+    field_0x7BF = l_npc_dat[getNpcNo()].field_0x4B;
+    field_0x784 = l_npc_dat[getNpcNo()].field_0x20;
+    field_0x79E = l_npc_dat[getNpcNo()].field_0x28;
 
     mObjAcch.CrrPos(*dComIfG_Bgsp());
     if (G_CM3D_F_INF != mObjAcch.GetGroundH()) {
@@ -480,7 +481,7 @@ cPhs_State daNpcMn_c::createInit() {
     mStts.Init(weight, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
     mCyl.SetStts(&mStts);
-    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].field_0x30, 150.0f);
+    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].field_0x30, 150.0f);
     return cPhs_COMPLEATE_e;
 }
 
@@ -499,7 +500,41 @@ BOOL daNpcMn_c::_delete() {
 
 /* 00000FE4-00001154       .text _draw__9daNpcMn_cFv */
 bool daNpcMn_c::_draw() {
-    /* Nonmatching */
+    if (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0408)) {
+        return TRUE;
+    }
+
+    J3DModel* morfModel = mpMorf->getModel();
+    J3DModelData* morfModelData = morfModel->getModelData();
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(morfModel, &tevStr);
+    mBtpAnm.entry(morfModelData, mBtpFrame);
+    mpMorf->updateDL();
+    mBtpAnm.remove(morfModelData);
+
+    J3DModelData* _ = mpModel->getModelData();
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mpModel->setBaseTRMtx(morfModel->getAnmMtx(field_0x7C2));
+    mDoExt_modelUpdateDL(mpModel);
+
+    cXyz pos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+    mShadowId = dComIfGd_setShadow(
+        mShadowId,
+        1,
+        mpMorf->getModel(),
+        &pos,
+        800.0f,
+        20.0f,
+        current.pos.y,
+        mObjAcch.GetGroundH(),
+        mObjAcch.m_gnd,
+        &tevStr,
+        0,
+        1.0f,
+        dDlst_shadowControl_c::getSimpleTex()
+    );
+    dSnap_RegistFig(DSNAP_TYPE_NPC_MN, this, 1.0f, 1.0f, 1.0f);
+    return TRUE;
 }
 
 typedef int(daNpcMn_c::*ExecuteInit_t)();
@@ -523,7 +558,42 @@ static MoveProc_t moveProc[]={
 
 /* 00001154-00001344       .text _execute__9daNpcMn_cFv */
 bool daNpcMn_c::_execute() {
-    /* Nonmatching */
+    chkAttention();
+    checkOrder();
+
+    // dBgS* bgsp = dComIfG_Bgsp();
+    if (!dComIfGp_event_runCheck() || eventInfo.checkCommandTalk() || field_0x7C3 != 0) {
+        (this->*moveProc[mMoveState])();
+    } else {
+        eventMove();
+    }
+
+    eventOrder();
+    playTexPatternAnm();
+    playAnm();
+
+    if (mBckIdx == 4) {
+        cLib_chaseF(&speedF, field_0x77C, 0.3f);
+        f32 speed = speedF * l_npc_dat[getNpcNo()].field_0x34;
+        if (speed < 0.5f) {
+            speed = 0.5f;
+        }
+        mpMorf->setPlaySpeed(speed);
+    } else {
+        cLib_chaseF(&speedF, field_0x77C, 0.1f);
+    }
+
+    fopAcM_posMoveF(this, mStts.GetCCMoveP());
+
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
+
+    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].field_0x30, 150.0f);
+    attention_info.position.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].field_0x18, current.pos.z);
+    eyePos.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].field_0x1C, current.pos.z);
+
+    lookBack();
+    setMtx();
+    return false;
 }
 
 /* 00001344-000013B4       .text executeCommon__9daNpcMn_cFv */
