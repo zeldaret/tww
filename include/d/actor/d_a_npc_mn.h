@@ -106,7 +106,7 @@ public:
     void eventJumpInit(int);
     void eventJump();
     u16 talk2(int);
-    void talk3(int);
+    u16 talk3(int);
     virtual u16 next_msgStatus(u32*);
     virtual u32 getMsg();
     u32 getMsg3();
@@ -128,7 +128,7 @@ public:
     s16 XyCheckCB(int);
     void getRand(int);
     void setCollision(dCcD_Cyl*, cXyz, f32, f32);
-    void chkEndEvent();
+    BOOL chkEndEvent();
     u8 chkPosNo();
     u8 getPosNo();
     BOOL isChangePos(u8);
