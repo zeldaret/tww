@@ -35,9 +35,9 @@ public:
     /* 0x22D0 */ JUTFont* rFont;
     /* 0x22D4 */ JKRExpHeap* exp_heap;
     /* 0x22D8 */ f32 alpha;
-    /* 0x22DC */ int field_0x22dc;
-    /* 0x22E0 */ int field_0x22e0;
-    /* 0x22E4 */ u32 field_0x22e4;
+    /* 0x22DC */ int mTimer;
+    /* 0x22E0 */ int mTimerMax;
+    /* 0x22E4 */ u32 mProc;
     /* 0x22E8 */ u8 field_0x22e8;
     /* 0x22EC */ int field_0x22ec;
 };

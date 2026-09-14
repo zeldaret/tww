@@ -25,12 +25,12 @@ void dScnOpen_message_c::set_message(u32 i_msgNo, int param_1) {
     JKRHeap* old_heap = mDoExt_setCurrentHeap(exp_heap);
     fopMsgM_msgGet_c msgGet;
 
-    mesgStatus = 6;
+    mesgStatus = fopMsgStts_MSG_TYPING_e;
     if (i_msgNo == 0) {
-        field_0x22e4 = 4;
+        mProc = 4;
         msgNo = 0x579;
     } else {
-        field_0x22e4 = 0;
+        mProc = 0;
         msgNo = i_msgNo;
     }
 
@@ -39,8 +39,8 @@ void dScnOpen_message_c::set_message(u32 i_msgNo, int param_1) {
     }
 
     alpha = 0.0f;
-    field_0x22dc = 0;
-    field_0x22e0 = dScnOpen_message_timer_table[msgNo - 0x579] * 30;
+    mTimer = 0;
+    mTimerMax = dScnOpen_message_timer_table[msgNo - 0x579] * 30;
     field_0x22e8 = 0;
 
     strcpy(msg1, "");
@@ -107,7 +107,7 @@ void dScnOpen_message_c::set_message(u32 i_msgNo, int param_1) {
 void dScnOpen_message_c::exec() {
     JKRHeap* old_heap = mDoExt_setCurrentHeap(exp_heap);
 
-    if (mesgStatus != 10 && mesgStatus != 14) {
+    if (mesgStatus != fopMsgStts_CLOSE_WAIT_e && mesgStatus != fopMsgStts_MSG_DISPLAYED_e) {
         msgDataProc.stringSet();
         mesgStatus = msgDataProc.mesgStatus;
         tTextBox->setString(msg1);
@@ -118,35 +118,35 @@ void dScnOpen_message_c::exec() {
         #endif
     }
 
-    switch (field_0x22e4) {
+    switch (mProc) {
     case 0:
         if (alpha >= 1.0f) {
-            field_0x22dc = 0;
-            field_0x22e4 = 1;
+            mTimer = 0;
+            mProc = 1;
             alpha = 1.0f;
         } else {
             alpha += 0.1f;
         }
         break;
     case 1:
-        if (field_0x22dc >= field_0x22e0) {
-            field_0x22dc = 0;
-            field_0x22e4 = 2;
+        if (mTimer >= mTimerMax) {
+            mTimer = 0;
+            mProc = 2;
             alpha = 1.0f;
         } else {
-            field_0x22dc++;
+            mTimer++;
         }
         break;
     case 2:
         if (alpha <= 0.0f) {
-            field_0x22dc = 0;
+            mTimer = 0;
             alpha = 0.0f;
 
             if (field_0x22ec == 0) {
                 field_0x22e8 = 1;
-                field_0x22e4 = 4;
+                mProc = 4;
             } else {
-                field_0x22e4 = 3;
+                mProc = 3;
                 field_0x22ec--;
             }
         } else {
@@ -154,12 +154,12 @@ void dScnOpen_message_c::exec() {
         }
         break;
     case 3:
-        if (field_0x22dc >= 45) {
+        if (mTimer >= 45) {
             set_message(msgNo + 1, 0);
-            field_0x22e4 = 0;
-            field_0x22dc = 0;
+            mProc = 0;
+            mTimer = 0;
         } else {
-            field_0x22dc++;
+            mTimer++;
         }
         break;
     case 4:
