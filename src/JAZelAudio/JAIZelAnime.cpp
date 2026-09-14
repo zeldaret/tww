@@ -86,7 +86,7 @@ void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_soun
     i_actor->field_0xc &= 0xFFFFFF;
 
     if (i_actor->field_0x4 != NULL) {
-        MtxP m = basic->mAudioCamera->field_0x8;
+        MtxP m = basic->getCurCamera(0)->field_0x8;
         Vec spC = *i_actor->field_0x4;
         MTXMultVec(m, &spC, &spC);
         f32 temp_f4 = SQUARE(spC.x) + SQUARE(spC.y) + SQUARE(spC.z);
