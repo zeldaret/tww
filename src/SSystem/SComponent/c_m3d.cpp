@@ -2284,6 +2284,14 @@ int cM3d_UpMtx_Base(const Vec& param_0, const Vec& param_1, Mtx m) {
     return 1;
 }
 
+#ifdef DEBUG
+static Vec base_y = {0.0f, 1.0f, 0.0f};
+
+bool cM3d_UpMtx(const Vec& param_1, Mtx param_2) {
+    return cM3d_UpMtx_Base(base_y, param_1, param_2);
+}
+#endif
+
 /* 8025172C-80251758       .text cM3d_PlaneCrossLineProcWork__FfffffffPfPf */
 void cM3d_PlaneCrossLineProcWork(f32 v0, f32 v1, f32 v2, f32 v3, f32 v4, f32 v5, f32 v6, f32* p0, f32* p1) {
     *p0 = (v1 * v6 - v3 * v5) / v4;

@@ -40,7 +40,7 @@ public:
     void demoInitWait();
     BOOL demoProcWait();
     void demoInitCom();
-    BOOL demoProcCom();
+    void demoProcCom();
     s32 getNowEventAction();
     void demoProc();
     BOOL actionEvent();

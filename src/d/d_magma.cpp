@@ -250,8 +250,8 @@ dMagma_packet_c::dMagma_packet_c() {
 
     ResTIMG* col = (ResTIMG*)dComIfG_getObjectRes("Magma", dRes_INDEX_MAGMA_BTI_MAG_COL_e);
     mDoLib_setResTimgObj(col, &mColTexObj, 0, NULL);
-    mDoMtx_identity(mFloorMtx);
-    mDoMtx_identity(mBallMtx);
+    cMtx_identity(mFloorMtx);
+    cMtx_identity(mBallMtx);
     mTimer = 0.0f;
 }
 

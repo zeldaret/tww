@@ -45,12 +45,12 @@ public:
         /* 0x0502 */ UNK_0502 = 0x0502,
         /* 0x0501 */ UNK_0501 = 0x0501,
         /* 0x0640 */ UNK_0640 = 0x0640,
-        /* 0x0608 */ UNK_0608 = 0x0608,
+        /* 0x0608 */ UNK_0608 = 0x0608, // Set by an unused dialogue
         /* 0x0604 */ UNK_0604 = 0x0604,
-        /* 0x0602 */ UNK_0602 = 0x0602,
-        /* 0x0601 */ UNK_0601 = 0x0601,
+        /* 0x0602 */ UNK_0602 = 0x0602, // Grandma dialogue after sword obtained
+        /* 0x0601 */ UNK_0601 = 0x0601, // Grandma dialogue after Helmaroc cutscene (prologue)
         /* 0x0780 */ UNK_0780 = 0x0780,
-        /* 0x0740 */ UNK_0740 = 0x0740,
+        /* 0x0740 */ UNK_0740 = 0x0740, // Grandma dialogue after Aryll kidnapped
         /* 0x0720 */ UNK_0720 = 0x0720,
         /* 0x0710 */ UNK_0710 = 0x0710,
         /* 0x0704 */ UNK_0704 = 0x0704,
@@ -317,7 +317,7 @@ public:
         /* 0x2901 */ UNK_2901 = 0x2901,
         /* 0x2A80 */ UNK_2A80 = 0x2A80,
         /* 0x2A40 */ UNK_2A40 = 0x2A40,
-        /* 0x2A20 */ UNK_2A20 = 0x2A20,
+        /* 0x2A20 */ GRANDMA_HEALED = 0x2A20,
         /* 0x2A10 */ UNK_2A10 = 0x2A10,
         /* 0x2A08 */ RODE_KORL = 0x2A08,
         /* 0x2A04 */ UNK_2A04 = 0x2A04,
@@ -326,7 +326,7 @@ public:
         /* 0x2B80 */ UNK_2B80 = 0x2B80,
         /* 0x2B40 */ UNK_2B40 = 0x2B40,
         /* 0x2B20 */ UNK_2B20 = 0x2B20,
-        /* 0x2B10 */ UNK_2B10 = 0x2B10,
+        /* 0x2B10 */ UNK_2B10 = 0x2B10, // Command melody monument in Tower of the Gods has been revealed
         /* 0x2B08 */ UNK_2B08 = 0x2B08,
         /* 0x2B04 */ UNK_2B04 = 0x2B04,
         /* 0x2C80 */ UNK_2C80 = 0x2C80,
@@ -510,7 +510,7 @@ public:
         /* 0x85FF */ UNK_85FF = 0x85FF,
         /* 0x86FF */ UNK_86FF = 0x86FF,
         /* 0x870F */ UNK_870F = 0x870F,
-        /* 0x8803 */ UNK_8803 = 0x8803,
+        /* 0x8803 */ GHOST_SHIP = 0x8803,
         /* 0x89FF */ UNK_89FF = 0x89FF,
         /* 0x8AFF */ UNK_8AFF = 0x8AFF,
         /* 0x8B03 */ LETTER_ARYLL = 0x8B03,

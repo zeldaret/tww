@@ -254,7 +254,8 @@ static BOOL daSpcItem01_Execute(daSpcItem01_c* i_this) {
 }
 
 /* 8015E3A8-8015E3B0       .text daSpcItem01_IsDelete__FP13daSpcItem01_c */
-static BOOL daSpcItem01_IsDelete(daSpcItem01_c* ignored) {
+static BOOL daSpcItem01_IsDelete(daSpcItem01_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

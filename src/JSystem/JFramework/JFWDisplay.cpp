@@ -86,8 +86,8 @@ JFWDisplay* JFWDisplay::createManager(JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_nu
 }
 
 static void dummyFunc() {
-    OSReport("sManager");
-    OSReport("mTemporarySingle");
+    DEAD_STRING("sManager");
+    DEAD_STRING("mTemporarySingle");
 }
 
 /* 802553EC-80255444       .text callDirectDraw__Fv */
@@ -453,6 +453,7 @@ void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GX
 
     GXPosition2u16(param_0, param_1 + param_3);
     GXTexCoord2u8(0, 1);
+    GXEnd();
 
     GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z24X8, 0);
     GXSetZCompLoc(GX_ENABLE);

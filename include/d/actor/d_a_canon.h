@@ -16,7 +16,6 @@ public:
     inline bool _draw();
     inline bool _execute();
     bool checkProcess(Func func) { return m290 == func; }
-    void getCanonPtr() {}
     void setProcess(Func func) { m290 = func; }
 
     void set_mtx();
@@ -43,7 +42,9 @@ public:
     BOOL CreateHeap();
     void GameInfo2DDraw();
     
+    static daCanon_c* getCanonPtr() { return canon_p; }
     static daCanon_c* canon_p;
+
     static const char M_arcname[];
 
 public:

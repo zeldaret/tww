@@ -158,6 +158,6 @@ void JKRThreadSwitch::callback(OSThread* current, OSThread* next) {
 }
 
 static void dummy() {
-    OSReport("Cannot create JKRTask Manager.");
-    OSReport("sManager != 0");
+    DEAD_STRING("Cannot create JKRTask Manager.");
+    DEAD_STRING("sManager != 0");
 }

@@ -22,21 +22,23 @@ void Act_c::set_mtx() {
         mDoMtx_stack_c::YrotM(shape_angle.y);
         mDoMtx_stack_c::XrotM(shape_angle.x);
         mDoMtx_stack_c::transM(backOffset);
-        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+        MTXCopy(mDoMtx_stack_c::get(), mMtx);
     } else {
         mDoMtx_stack_c::transS(current.pos);
         mDoMtx_stack_c::ZrotM(shape_angle.z);
         mDoMtx_stack_c::YrotM(shape_angle.y);
         mDoMtx_stack_c::XrotM(shape_angle.x);
-        mDoMtx_copy(mDoMtx_stack_c::get(), mMtx);
+        MTXCopy(mDoMtx_stack_c::get(), mMtx);
     }
 }
 
 /* 0000026C-0000048C       .text _create__Q215daObjHomensmoke5Act_cFv */
 cPhs_State Act_c::_create() {
     fopAcM_ct(this, Act_c);
-    
+
+#if VERSION > VERSION_DEMO
     mbInitialized = FALSE;
+#endif
     
     set_mtx();
     fopAcM_SetMtx(this, mMtx);
@@ -66,16 +68,20 @@ cPhs_State Act_c::_create() {
 
 /* 0000048C-000004C8       .text _delete__Q215daObjHomensmoke5Act_cFv */
 bool Act_c::_delete() {
+#if VERSION == VERSION_DEMO
+    mSmokeCb.remove();
+#else
     if (mSmokeCb.getEmitter()) {
         mSmokeCb.remove();
     }
+#endif
     return true;
 }
 
 /* 000004C8-00000738       .text _execute__Q215daObjHomensmoke5Act_cFv */
 bool Act_c::_execute() {
 #if VERSION == VERSION_DEMO
-    if (m2D0 == NULL)
+    if (mpSmokeEmitter == NULL)
 #else
     if (!mbInitialized)
 #endif
@@ -89,34 +95,45 @@ bool Act_c::_execute() {
         }
         
         JPABaseEmitter* smokeEmitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE01, &mSmokePos, NULL, NULL, 0xFF, &mSmokeCb, fopAcM_GetRoomNo(this));
+#if VERSION == VERSION_DEMO
+        mpSmokeEmitter = smokeEmitter;
+#endif
         if (smokeEmitter) {
             static f32 rate_table[2] = {1.0f, 0.5f};
             f32 rate = rate_table[mType & 1];
-            smokeEmitter->setGlobalAlpha(0xB4);
-            smokeEmitter->setRate(50.0f);
-            smokeEmitter->setMaxFrame(1);
+            DEMO_SELECT(mpSmokeEmitter, smokeEmitter)->setGlobalAlpha(0xB4);
+            DEMO_SELECT(mpSmokeEmitter, smokeEmitter)->setRate(50.0f);
+            DEMO_SELECT(mpSmokeEmitter, smokeEmitter)->setMaxFrame(1);
             JGeometry::TVec3<f32> scale;
             scale.set(rate, 0.0f, rate);
-            smokeEmitter->setEmitterScale(scale);
+            DEMO_SELECT(mpSmokeEmitter, smokeEmitter)->setEmitterScale(scale);
             scale.set(rate*5.0f, rate*5.0f, rate*5.0f);
-            smokeEmitter->setGlobalDynamicsScale(scale);
+            DEMO_SELECT(mpSmokeEmitter, smokeEmitter)->setGlobalDynamicsScale(scale);
             scale.set(rate*6.0f, rate*6.0f, rate*6.0f);
-            smokeEmitter->setGlobalParticleScale(scale);
+            DEMO_SELECT(mpSmokeEmitter, smokeEmitter)->setGlobalParticleScale(scale);
         }
         
         JPABaseEmitter* rubbleEmitter = dComIfGp_particle_setToon(dPa_name::ID_AK_SN_KAZEMASKHAHEN00, &current.pos);
+#if VERSION == VERSION_DEMO
+        mpRubbleEmitter = rubbleEmitter;
+#endif
         if (rubbleEmitter) {
-            rubbleEmitter->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
+            DEMO_SELECT(mpRubbleEmitter, rubbleEmitter)->setGlobalPrmColor(tevStr.mColorK0.r, tevStr.mColorK0.g, tevStr.mColorK0.b);
             if (mType == 1) {
                 JGeometry::TVec3<f32> scale(0.6f, 0.6f, 0.6f);
-                rubbleEmitter->setEmitterScale(scale);
-                rubbleEmitter->setGlobalDynamicsScale(scale);
-                rubbleEmitter->setGlobalParticleScale(scale);
+                DEMO_SELECT(mpRubbleEmitter, rubbleEmitter)->setEmitterScale(scale);
+                DEMO_SELECT(mpRubbleEmitter, rubbleEmitter)->setGlobalDynamicsScale(scale);
+                DEMO_SELECT(mpRubbleEmitter, rubbleEmitter)->setGlobalParticleScale(scale);
             }
-            rubbleEmitter->setGlobalRTMatrix(mMtx);
+            DEMO_SELECT(mpRubbleEmitter, rubbleEmitter)->setGlobalRTMatrix(mMtx);
+#if VERSION == VERSION_DEMO
+            mpRubbleEmitter = NULL;
+#endif
         }
         
+#if VERSION > VERSION_DEMO
         mbInitialized = TRUE;
+#endif
     } else if (mSmokeCb.isEnd()) {
         fopAcM_delete(this);
     }

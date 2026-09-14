@@ -299,7 +299,7 @@ bool TControl::forward(u32 param_0) {
     bool rv = mObject_control.forward(param_0);
     int uVar7 = 0xf;
     int uVar6 = 0;
-    JGadget::TContainerEnumerator<JStudio::stb::TObject, -12> enumerator(&mObjectContainer);
+    JGadget::TContainerEnumerator<JGadget::TLinkList<JStudio::stb::TObject, -12> > enumerator(mObjectContainer);
     while (enumerator) {
         JStudio::stb::TObject& object = *enumerator;
         rv = object.forward(param_0) || rv;

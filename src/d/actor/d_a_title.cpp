@@ -558,6 +558,7 @@ static BOOL daTitle_Execute(daTitle_c* i_this) {
 
 /* 00001CF8-00001D00       .text daTitle_IsDelete__FP9daTitle_c */
 static BOOL daTitle_IsDelete(daTitle_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

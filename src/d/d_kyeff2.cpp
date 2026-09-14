@@ -28,6 +28,7 @@ static BOOL dKyeff2_Execute(dKyeff2_c* i_this) {
 
 /* 801987C0-801987C8       .text dKyeff2_IsDelete__FP9dKyeff2_c */
 static BOOL dKyeff2_IsDelete(dKyeff2_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

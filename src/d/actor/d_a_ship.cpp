@@ -22,7 +22,6 @@
 #include "d/actor/d_a_bomb.h"
 #include "d/actor/d_a_grid.h"
 #include "res/Object/Ship.h"
-#include "cstdint.h"
 
 static char l_arcName[] = "Ship";
 static Vec l_cannon_top = {85.0f, 0.0f, 10.0f};
@@ -279,7 +278,7 @@ BOOL daShip_c::draw() {
         mDoMtx_stack_c::concat(MStack_50);
         mDoMtx_stack_c::revConcat(m02A8);
         m02A0->setEffectMtx(mDoMtx_stack_c::get());
-        m02A4->mTexMtxInfo.mSRT.mTranslationX = m03D4;
+        m02A4->mSRT.mTranslationX = m03D4;
     }
 
     if (
@@ -345,10 +344,10 @@ BOOL daShip_c::checkForceMessage() {
     if (dComIfGs_isGetItem(1, 0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) {
         mNextMessageNo = 0x5E0;
     }
-    else if (dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
+    else if (dComIfGs_isSymbol(dSymbol_DIN_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A80)) {
         mNextMessageNo = 0x5EC;
     }
-    else if (dComIfGs_isSymbol(2) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
+    else if (dComIfGs_isSymbol(dSymbol_FARORE_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A08)) {
         mNextMessageNo = 0x5F6;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A01)) {
@@ -357,7 +356,7 @@ BOOL daShip_c::checkForceMessage() {
     else if (dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F02)) {
         mNextMessageNo = 0x624;
     }
-    else if (dComIfGs_isSymbol(0) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
+    else if (dComIfGs_isSymbol(dSymbol_NAYRU_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xD5A;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D10) && !daPy_getPlayerActorClass()->checkMasterSwordEquip()) {
@@ -495,7 +494,7 @@ void daShip_c::setInitMessage() {
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F20)) {
         mNextMessageNo = 0xd62;
     }
-    else if (dComIfGs_isSymbol(0)) {
+    else if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
         mNextMessageNo = 0xd5a;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1940)) {
@@ -557,7 +556,7 @@ void daShip_c::setInitMessage() {
         }
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0A20)) {
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             mNextMessageNo = 0x5f6;
         }
         else {
@@ -584,7 +583,7 @@ void daShip_c::setInitMessage() {
         }
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) {
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             mNextMessageNo = 0x5ec;
         }
         else {
@@ -992,9 +991,9 @@ void daShip_c::setYPos() {
 BOOL daShip_c::checkOutRange() {
     dPnt* pnt;
     dPath* path;
-    cXyz* closestPoint;
-    cXyz* nextPoint;
-    cXyz* prevPoint;
+    Vec* closestPoint;
+    Vec* nextPoint;
+    Vec* prevPoint;
     int lastIndex;
     int closestIndex;
     int pathIndex;
@@ -1019,7 +1018,7 @@ BOOL daShip_c::checkOutRange() {
         if (bVar5) {
             if (
                 (pathIndex == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_0902)) ||
-                (pathIndex == 1 && dComIfGs_isSymbol(2)) ||
+                (pathIndex == 1 && dComIfGs_isSymbol(dSymbol_FARORE_e)) ||
                 (pathIndex == 2 && daPy_getPlayerActorClass()->checkMasterSwordEquip())
             ) {
                 path = dPath_GetNextRoomPath(path, -1);
@@ -1262,7 +1261,6 @@ BOOL daShip_c::checkNextMode(int i_curMode) {
             tgRVecP = mSph.GetTgRVecP();
             tgHitPos = mSph.GetTgHitPosP();
             tgHitObj = mSph.GetTgHitGObj();
-            
         }
         else {
             dCcD_Cyl* cyl = mCyl;
@@ -1413,7 +1411,7 @@ void daShip_c::setSelfMove(int param_1) {
                     fVar6 = cLib_addCalc(&speedF, 0.0f, 0.1f, 1.0f, 0.1f);
                 }
                 else {
-                    fVar6 = g_mDoCPd_cpadInfo[0].mTriggerRight * 10.0f; //Not sure if this is a macro either
+                    fVar6 = CPad_GET_ANALOG_R(0) * 10.0f;
                     bVar1 = FALSE;
                     if (mAcch.ChkWallHit()) {
                         for (int i = 0; i < m03CC; i++) {
@@ -1781,7 +1779,6 @@ BOOL daShip_c::procCannon() {
 
             cLib_addCalcAngleS(&m0396, cM_atan2s(-cannonPos.y, cannonPos.absXZ()) + 0x4000, 5, 0x180, 0x40);
             cLib_addCalcAngleS(&m0394, cM_atan2s(cannonPos.x, cannonPos.z) - shape_angle.y, 5, 0x180, 0x40);
-        
         } else if (!mDoCPd_R_LOCK_BUTTON(0)) {
             float adjust = mStickMVal * (m0404 * 4.0f + 1.0f);
             m0396 += (adjust * 384.0f) * cM_scos(mStickMAng);
@@ -2550,7 +2547,7 @@ BOOL daShip_c::procTurn_init() {
     seStart(JA_SE_SHIP_LOOK_FORWARD, &eyePos);
     mProc = &daShip_c::procTurn;
     m038E = 0;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     cXyz cameraPos = camera->mCamera.Eye() - camera->mCamera.Center();
     cameraPos.normalize();
@@ -2570,7 +2567,7 @@ BOOL daShip_c::procTurn() {
     cXyz local_b8;
     cXyz local_ac;
     
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     local_c4 = current.pos - camera->mCamera.Center();
     fVar5 = local_c4.abs();
     local_ac = camera->mCamera.Center() + (current.pos - m045C);
@@ -2623,7 +2620,7 @@ BOOL daShip_c::procTurn() {
 
 /* 00006C78-00006DE0       .text procTornadoUp_init__8daShip_cFv */
 BOOL daShip_c::procTornadoUp_init() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     onStateFlg((daSHIP_SFLG)(daSFLG_FLY_e | daSFLG_UNK1000_e));
     mCurMode = 12;
     mProc = &daShip_c::procTornadoUp;
@@ -2660,7 +2657,7 @@ BOOL daShip_c::procTornadoUp() {
 
     shape_angle.y += 0x1C25;
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz local_3c(tornado->current.pos.x, current.pos.y, tornado->current.pos.z);
     camera->mCamera.Set(local_3c, camera->mCamera.Eye());
     
@@ -2686,7 +2683,7 @@ BOOL daShip_c::procStartModeWarp_init() {
         setPartOffAnime();
     }
     m03A6 = 0x1C25;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     cXyz local_38(current.pos.x, m03F4 + 1500.0f, current.pos.z + 2000.0f);
     camera->mCamera.Set(current.pos, local_38);
@@ -2706,7 +2703,7 @@ BOOL daShip_c::procStartModeWarp() {
     cXyz local_30;
     
     daTornado_c* tornado = (daTornado_c*)fopAcM_SearchByID(mTactWarpID);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     shape_angle.y += m03A6;
     current.angle.y = shape_angle.y;
     if (tornado) {
@@ -2866,7 +2863,7 @@ BOOL daShip_c::procWhirlDown_init() {
     speed.y = 0.0f;
     onStateFlg(daSFLG_FLY_e);
     onStateFlg(daSFLG_UNK1000_e);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     cXyz local_38(mWhirlActor->current.pos.x, mWhirlActor->current.pos.y + 2500.0f, mWhirlActor->current.pos.z + 4000.0f);
     camera->mCamera.Set(mWhirlActor->current.pos, local_38);
@@ -2911,7 +2908,7 @@ BOOL daShip_c::procStartModeThrow_init() {
         setPartOffAnime();
     }
     m03A6 = l_HIO.throw_return_angle_speed;
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     cXyz local_38(current.pos.x + cM_scos(current.angle.y) * 300.0f, 
                   m03F4 + 150.0f, 
@@ -2928,7 +2925,7 @@ BOOL daShip_c::procStartModeThrow() {
     GXColor amb;
     GXColor diff;
     
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     shape_angle.y += m03A6;
     camera->mCamera.Set(current.pos, camera->mCamera.Eye());
     if (m037A == 0) {
@@ -2986,7 +2983,6 @@ void daShip_c::setEffectData(float param_1, short param_2) {
             mWaveL.stop();
             mSplash.stop();
         }
-        
     }
     fVar3 = speedF + 150.0f;
     mEffPos.set(current.pos.x + fVar3 * cM_ssin(shape_angle.y), param_1, current.pos.z + fVar3 * cM_scos(shape_angle.y));
@@ -3320,20 +3316,20 @@ void daShip_c::setRopePos() {
             }
         }
 
-        m1020.x = r3->x;
-        m1020.y = fVar2;
-        m1020.z = r3->z;
+        mCraneRipplePos.x = r3->x;
+        mCraneRipplePos.y = fVar2;
+        mCraneRipplePos.z = r3->z;
 
         if (mRipple.getEmitter() == NULL) { 
-            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &m1020, NULL, &ripple_scale, 0xFF, &mRipple);
+            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &mCraneRipplePos, NULL, &ripple_scale, 0xFF, &mRipple);
 
             if (mRipple.getEmitter() != NULL) {
                 mRipple.setRate(0.0f);
 
                 if (m034F == 0) {
-                    fopKyM_createWpillar(&m1020, 0.7f, 0.7f, 0);
+                    fopKyM_createWpillar(&mCraneRipplePos, 0.7f, 0.7f, 0);
 
-                    seStart(JA_SE_LK_SHIP_CRANE_DROP, &m1020);
+                    seStart(JA_SE_LK_SHIP_CRANE_DROP, &mCraneRipplePos);
 
                     dComIfGp_getVibration().StartShock(3, 1, cXyz(0.0f, 1.0f, 0.0f));
                 }
@@ -3344,7 +3340,7 @@ void daShip_c::setRopePos() {
         if (fVar17 < fVar2 && !m034F && mRopeCnt >= 20) {
             m034F = 20;
 
-            seStart(JA_SE_LK_SHIP_CRANE_LIFTUP, &m1020);
+            seStart(JA_SE_LK_SHIP_CRANE_LIFTUP, &mCraneRipplePos);
 
             if (mCurMode != MODE_CRANE_UP_e) {
                 if (m19AC.getEmitter() == NULL) {
@@ -3359,7 +3355,7 @@ void daShip_c::setRopePos() {
                     }
                 }
                 
-                fopKyM_createWpillar(&m1020, 0.5f, 0.7f, 0);
+                fopKyM_createWpillar(&mCraneRipplePos, 0.5f, 0.7f, 0);
                 
                 dComIfGp_getVibration().StartShock(3, 1, cXyz(0.0f, 1.0f, 0.0f));
                 
@@ -3590,8 +3586,8 @@ BOOL daShip_c::execute() {
             mStickMAng = 0;
         }
         else {
-            mStickMVal = g_mDoCPd_cpadInfo[0].mMainStickValue;
-            mStickMAng = g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000;
+            mStickMVal = CPad_GET_STICK_VALUE(0);
+            mStickMAng = CPad_GET_STICK_ANGLE(0) + 0x8000;
         }
         mEvtStaffId = -1;
     }
@@ -3786,7 +3782,7 @@ BOOL daShip_c::execute() {
                     fVar4 = m0404 * 30.0f + 10.0f;
                     // Bug? This room check assumes we're on the sea without checking?
                     if (dComIfGs_getBombNum() == 0 && fopAcM_GetRoomNo(this) == dIsleRoom_OutsetIsland_e) {
-                          fVar4 *= 1.2f;
+                        fVar4 *= 1.2f;
                     }
                 }
                 firstDecrementShipSpeed(fVar4);
@@ -3869,7 +3865,6 @@ BOOL daShip_c::execute() {
                 fopAcM_posMove(this, mStts.GetCCMoveP());
                 if (dComIfGp_event_runCheck()) {
                     m1044 = cXyz::Zero;
-                    
                 }
                 else {
                     cXyz sp108;
@@ -3881,7 +3876,6 @@ BOOL daShip_c::execute() {
                     }
                     else {
                         cLib_addCalcPosXZ(&m1044, cXyz::Zero, 0.05f, 0.1f, 0.02f);
-
                     }
                     current.pos += m1044;
                 }
@@ -3993,10 +3987,10 @@ BOOL daShip_c::execute() {
         setRopePos();
         mDoMtx_multVecZero(mpSalvageArmModel->getAnmMtx(VFNCR_JNT_V_CRANE_ROTATION_e), &m102C);
         if (mProc == &daShip_c::procCrane || mProc == &daShip_c::procCraneUp) {
-            m0434 = mRopeLine.getPos(0);
+            mCraneTop = mRopeLine.getPos(0);
         }
         else {
-            m0434 = NULL;
+            mCraneTop = NULL;
         }
     }
     else {
@@ -4006,7 +4000,7 @@ BOOL daShip_c::execute() {
 
         mRopeCnt = 0;
 
-        m0434 = NULL;
+        mCraneTop = NULL;
 
         if (mPart == PART_CANNON_e) {
             mDoMtx_multVecZero(mpCannonModel->getAnmMtx(VFNCN_JNT_CANON2_e), &m1038);
@@ -4014,7 +4008,6 @@ BOOL daShip_c::execute() {
             if (mProc != &daShip_c::procCannon) {
                 m0396 = getAnglePartRate() * 0x4000;
                 m0394 *= getAnglePartRate();
-            
             }
             
             mpCannonModel->calc();
@@ -4074,7 +4067,7 @@ BOOL daShip_c::execute() {
         mpGrid->scale.y = spD8.abs() / 365.0f;
 
         cMtx_multVecSR(model1->getAnmMtx(FN_BODY_JNT_J_FN_SAIL2_e), &XZ_top_offset, &spD8);
-        grid->m2200 = 1.0f - (spD8.abs() / 265.0f); // No idea why this is generating an extra lwz instruction for loading mpGrid when the instructions above don't
+        grid->field_0x2200 = 1.0f - (spD8.abs() / 265.0f); // No idea why this is generating an extra lwz instruction for loading mpGrid when the instructions above don't
 
         if (mTornadoActor) {
             mpGrid->force_calc_wind_rel_angle(DEMO_SELECT(REG4_S(5), 0x3000));
@@ -4133,9 +4126,9 @@ BOOL daShip_c::execute() {
         spC0 = *m0428 - eyePos;
         r23_2 = TRUE;
     } 
-    else if ((mCurMode == 10 || mCurMode == 11) && m0434 && mRopeCnt > 0) {
-            spC0 = *m0434 - eyePos;
-            r23_2 = TRUE;
+    else if ((mCurMode == 10 || mCurMode == 11) && mCraneTop && mRopeCnt > 0) {
+        spC0 = *mCraneTop - eyePos;
+        r23_2 = TRUE;
     }
     else if (mCurMode == 8 || distXz > 125.0f) {
         if (
@@ -4348,7 +4341,6 @@ BOOL daShip_c::execute() {
     if (mPart == PART_STEER_e) {
         dComIfGp_setPlayerStatus1(0, daPyStts1_SAIL_e);
         mDoAud_setShipSailState(1);
-        
     }
     else {
         dComIfGp_clearPlayerStatus1(0, daPyStts1_SAIL_e);
@@ -4386,7 +4378,7 @@ BOOL daShip_c::shipDelete() {
     mDoAud_seDeleteObject(&mTillerTopPos);
     mDoAud_seDeleteObject(&m0444);
     mDoAud_seDeleteObject(&m102C);
-    mDoAud_seDeleteObject(&m1020);
+    mDoAud_seDeleteObject(&mCraneRipplePos);
     mDoAud_seDeleteObject(&m1038);
     dComIfGp_clearPlayerStatus1(0, daPyStts1_SAIL_e);
     dComIfG_resDelete(&mPhs, l_arcName);
@@ -4722,7 +4714,8 @@ cPhs_State daShip_c::create() {
         fopAcM_SetMin(this, -325.0f, -50.0f, -325.0f);
         fopAcM_SetMax(this, 325.0f, 570.0f, 240.0f);
         
-        fopKyM_create(fpcNm_WIND_ARROW_e, (std::intptr_t)this, 0, 0, 0);
+        // The this pointer is passed as the param for some reason, but it doesn't actually seem to be used?
+        fopKyM_create(fpcNm_WIND_ARROW_e, (intptr_t)this, 0, 0, 0);
 
         offStateFlg(daSFLG_UNK2_e);
         mAcch.CrrPos(*dComIfG_Bgsp());

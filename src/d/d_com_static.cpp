@@ -457,6 +457,7 @@ void daTitle_proc_c::daTitle_Kirakira_Sound_flag_on() {
 }
 #endif
 
+#if VERSION > VERSION_DEMO
 /* 80056CCC-80056DE0       .text daiItemNodeCallBack__13daStandItem_cFP7J3DNodei */
 BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
@@ -485,6 +486,7 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
     }
     return TRUE;
 }
+#endif
 
 u8 daNpc_Ji1_c::game_life_point;
 

@@ -278,6 +278,7 @@ static BOOL dOw_Execute(dOw_c* i_this) {
 
 /* 802219A4-802219AC       .text dOw_IsDelete__FP5dOw_c */
 static BOOL dOw_IsDelete(dOw_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -303,3 +304,25 @@ static cPhs_State dOw_Create(msg_class* i_msg) {
     mDoExt_setCurrentHeap(old_heap);
     return cPhs_COMPLEATE_e;
 }
+
+msg_method_class l_dOperate_wind_Method = {
+    (process_method_func)dOw_Create,
+    (process_method_func)dOw_Delete,
+    (process_method_func)dOw_Execute,
+    (process_method_func)dOw_IsDelete,
+    (process_method_func)dOw_Draw,
+};
+
+msg_process_profile_definition g_profile_OPERATE_WIND = {
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OPERATE_WIND_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dOw_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Draw Prio    */ fpcDwPi_OPERATE_WIND_e,
+    /* Msg SubMtd   */ &l_dOperate_wind_Method,
+};

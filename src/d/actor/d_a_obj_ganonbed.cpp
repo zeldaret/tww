@@ -183,6 +183,7 @@ static BOOL daObjGbed_Draw(daObjGbed_c* i_this) {
 
 /* 000004D0-000004D8       .text daObjGbed_IsDelete__FP11daObjGbed_c */
 static BOOL daObjGbed_IsDelete(daObjGbed_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

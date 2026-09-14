@@ -823,6 +823,7 @@ BOOL daDemo00_c::execute() {
 
 /* 800E78A0-800E78A8       .text daDemo00_IsDelete__FP10daDemo00_c */
 static BOOL daDemo00_IsDelete(daDemo00_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

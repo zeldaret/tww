@@ -1995,7 +1995,7 @@ void action_tomaru(cc_class* i_this) {
 }
 
 /* 000056CC-00005778       .text tsubo_search__FPvPv */
-void* tsubo_search(void* arg1, void* arg2) {
+static void* tsubo_search(void* arg1, void* arg2) {
     fopAc_ac_c* actor1 = (fopAc_ac_c*)arg1;
     cc_class* i_this = (cc_class*)arg2;
 

@@ -347,7 +347,7 @@ void daObj_Pfall_c::mode_event() {
             if(l_HIO.field_0x06 != 0) {
                 mode_wait_init();
             } else {
-                dComIfGp_setNextStage("sea", 15, 11);
+                dComIfGp_setNextStage("sea", 15, dIsleRoom_WindfallIsland_e);
             }
         }
     } else {

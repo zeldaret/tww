@@ -325,7 +325,7 @@ void daObjZouk::Act_c::setEffectMtx(const cXyz* pos, f32 scaleMag) {
 
     f32 inv = 1.0f / scaleMag;
     camera_class * camera = dCam_getCamera();
-    cXyz lookDir = *pos - camera->mLookat.mEye;
+    cXyz lookDir = *pos - camera->view.mLookat.mEye;
     cXyz lightDir;
     cXyz refl;
 

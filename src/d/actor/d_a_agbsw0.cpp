@@ -1707,7 +1707,7 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 2:
-            if(dComIfGs_isSymbol(0)) {
+            if(dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
                 return FALSE;
             }
 
@@ -1994,13 +1994,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x2F:
-            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT)) {
+            if(dComIfGs_isSymbol(dSymbol_DIN_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TING_DISCOUNT)) {
                 return FALSE;
             }
 
             break;
         case 0x30:
-            if(dComIfGs_isSymbol(1) && !dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT)) {
+            if(dComIfGs_isSymbol(dSymbol_DIN_e) && !dComIfGs_isEventBit(dSv_event_flag_c::UNLOCK_TINGLE_BALLOON_DISCOUNT)) {
                 return FALSE;
             }
 

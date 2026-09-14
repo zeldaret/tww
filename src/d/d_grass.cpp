@@ -207,18 +207,20 @@ void dGrass_room_c::newData(dGrass_data_c* data) {
 void dGrass_room_c::deleteData() {
     while (mpData != NULL) {
         mpData->mState = 0;
+#if VERSION > VERSION_DEMO
         mDoAud_seDeleteObject(&mpData->mPos);
+#endif
         mpData = mpData->mpNextData;
     }
 }
 
 /* 80077A90-80077CB8       .text __ct__15dGrass_packet_cFv */
 dGrass_packet_c::dGrass_packet_c() {
-    dGrass_data_c* data = getData();
+    dGrass_data_c* data = mGrassData;
     for (s32 i = 0; i < ARRAY_SIZE(mGrassData); i++, data++)
         data->mState = 0;
     mNextIdx = 0;
-    dGrass_anm_c* anm = getAnm();
+    dGrass_anm_c* anm = mGrassAnm;
     for (s32 i = 0; i < ARRAY_SIZE(mGrassAnm); i++, anm++)
         anm->mState = 0;
     s16 angle = 0;
@@ -322,7 +324,11 @@ void dGrass_packet_c::calc() {
 
     f32 windSpeed = 0.0f;
     if (!mDoGph_gInf_c::isMonotone() || strcmp(dComIfGp_getStartStageName(), "Hyrule") != 0) {
+#if VERSION == VERSION_DEMO
+        windSpeed = dKyw_get_wind_pow() * 2000.0f;
+#else
         windSpeed = dKyw_get_wind_pow() * 1000.0f + 1000.0f;
+#endif
         windSpeed = cLib_maxLimit(windSpeed, 2000.0f);
     }
 
@@ -428,7 +434,7 @@ void dGrass_packet_c::setData(dGrass_data_c* data, int nextIdx, cXyz& pos, int i
 
 /* 800785C0-800786FC       .text newData__15dGrass_packet_cFR4cXyziSc */
 dGrass_data_c* dGrass_packet_c::newData(cXyz& pos, int i_roomNo, s8 itemIdx) {
-    JUT_ASSERT(VERSION_SELECT(1530, 1530, 1536, 1536), 0 <= i_roomNo && i_roomNo < 64);
+    JUT_ASSERT(VERSION_SELECT(1529, 1530, 1536, 1536), 0 <= i_roomNo && i_roomNo < 64);
 
     dGrass_data_c* data = &mGrassData[mNextIdx];
     s32 i = mNextIdx;
@@ -452,7 +458,7 @@ dGrass_data_c* dGrass_packet_c::newData(cXyz& pos, int i_roomNo, s8 itemIdx) {
 
 /* 800786FC-80078748       .text newAnm__15dGrass_packet_cFv */
 s32 dGrass_packet_c::newAnm() {
-    dGrass_anm_c* anm = &getAnm(8);
+    dGrass_anm_c* anm = &mGrassAnm[8];
     for (s32 i = 8; i < 104; anm++, i++) {
         if (anm->mState == 0) {
             anm->mState = 1;

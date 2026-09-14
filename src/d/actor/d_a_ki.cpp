@@ -52,7 +52,7 @@ public:
     }
     virtual ~kiHIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05;
@@ -922,7 +922,6 @@ void ki_path_move(ki_class* i_this) {
                 }
             }
             break;
-
     }
 
     i_this->mPosMoveTarget = l_kiHIO.m28;

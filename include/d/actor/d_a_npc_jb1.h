@@ -58,7 +58,7 @@ public:
     bool create_lgt();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_cse_jnt_num;
     /* 0x6CD */ u8 field_0x6CD[0x6D0 - 0x6CD];

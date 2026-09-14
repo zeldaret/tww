@@ -6,8 +6,10 @@
 #include "d/d_drawlist.h"
 #include "dolphin/dvd/dvd.h"
 
+#if VERSION > VERSION_DEMO
 #ifdef __cplusplus
 extern "C" {
+#endif
 #endif
 
 typedef u8 THPSample;
@@ -45,8 +47,10 @@ static void __THPInverseDCTY8(THPCoeff* in, u32 xPos);
 static void __THPGQRSetup();
 static s32 __THPHuffDecodeTab(THPFileInfo* info, THPHuffmanTab* h);
 
+#if VERSION > VERSION_DEMO
 #ifdef __cplusplus
-}
+} // extern "C"
+#endif
 #endif
 
 class daMP_c : public fopAc_ac_c {
@@ -63,7 +67,7 @@ public:
 
 public:
     /* 0x290 */ u32 (*mpGetMovieRestFrame)();
-    /* 0x294 */ u32 (*mpSetPercentMovieVol)(f32);
+    /* 0x294 */ void (*mpSetPercentMovieVol)(f32);
 #if VERSION == VERSION_PAL
     /* 0x29C */ u32 (*mpTHPGetTotalFrame)(void);
 #endif

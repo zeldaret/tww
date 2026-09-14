@@ -192,6 +192,7 @@ static BOOL daObjYboil_Execute(void* i_this) {
 
 /* 00000DF4-00000DFC       .text daObjYboil_IsDelete__FPv */
 static BOOL daObjYboil_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

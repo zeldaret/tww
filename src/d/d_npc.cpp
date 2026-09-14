@@ -77,7 +77,8 @@ bool dNpc_JntCtrl_c::move(s16 param_1, int param_2) {
         param_1 -= (int)angle;
         angles[i] = angle;
         angleL = mAngles[i][param_2];
-        cLib_addCalcAngleL(&angleL, angle, 4, mMaxTurnStep[i][param_2], 1);
+        s16 maxStep = mMaxTurnStep[i][param_2];
+        cLib_addCalcAngleL(&angleL, angle, 4, maxStep, 1);
         mAngles[i][param_2] = angleL;
     }
     
@@ -698,15 +699,26 @@ u16 fopNpc_npc_c::talk(int param_1) {
 /* 8021C120-8021C238       .text dNpc_setAnm_2__FP14mDoExt_McaMorfiffiiPCc */
 bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName) {
     if(0 <= soundFileIdx) {
-        void* pSoundAnimRes = dComIfG_getObjectRes(arcName, soundFileIdx);
-        J3DAnmTransform* pAnimRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcName, animFileIdx));
-        
-        pMorf->setAnm(pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, pSoundAnimRes);
+        pMorf->setAnm(
+            static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcName, animFileIdx)),
+            loopMode,
+            morf,
+            speed,
+            0.0f,
+            -1.0f,
+            dComIfG_getObjectRes(arcName, soundFileIdx)
+        );
     }
     else {
-        J3DAnmTransform* pAnimRes = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcName, animFileIdx));
-
-        pMorf->setAnm(pAnimRes, loopMode, morf, speed, 0.0f, -1.0f, 0);
+        pMorf->setAnm(
+            static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcName, animFileIdx)),
+            loopMode,
+            morf,
+            speed,
+            0.0f,
+            -1.0f,
+            NULL
+        );
     }
 
 

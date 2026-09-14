@@ -6086,7 +6086,6 @@ void daNpcPeople_c::eventUb1TalkInit(int) {
         if(!is1GetMap20()) {
             m73C = l_msg_ub1_no_collect_map20;
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_2102);
-            
         }
         else if(!is1DayGetMap20()) {
             m73C = l_msg_ub1_collect_map20;
@@ -6596,7 +6595,7 @@ u16 daNpcPeople_c::next_msgStatus(u32* pMsgNo) {
                             if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1808)) {
                                 m734 = l_msg_uw1_done_gp1_arasoi;
                             }
-                            else if(dComIfGs_isSymbol(0)) {
+                            else if(dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
                                 m734 = l_msg_uw1_get_pearl1;
                             }
                             else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E10)) {
@@ -8486,6 +8485,7 @@ static BOOL daNpc_PeopleDraw(void* i_this) {
 
 /* 00009968-00009970       .text daNpc_PeopleIsDelete__FPv */
 static BOOL daNpc_PeopleIsDelete(void* i_this) {
+    UNUSED(i_this);
     return true;
 }
 

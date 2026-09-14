@@ -68,8 +68,8 @@ void nzg_00_move(nzg_class* i_this) {
         parameters |= 0x100;
     }
 
-    if (parameters & 0x100 || fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0)) < i_this->m2CC * 0.5f) {
-        if (fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0)) > i_this->m2D0 * 0.5f) {
+    if (parameters & 0x100 || fopAcM_searchPlayerDistance(actor) < i_this->m2CC * 0.5f) {
+        if (fopAcM_searchPlayerDistance(actor) > i_this->m2D0 * 0.5f) {
             parameters |= 1;
             csXyz child_angle = actor->current.angle;
 

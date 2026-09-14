@@ -200,7 +200,7 @@ public:
     cXyz getDirDistToPos(s16, f32);
     void warp();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhase;
     /* 0x6CC */ request_of_phase_process_class mPhase2;
     /* 0x6D4 */ J3DModel* mpHeadModel;

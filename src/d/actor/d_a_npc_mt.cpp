@@ -489,7 +489,7 @@ cPhs_State daNpcMt_c::createInit() {
     gravity = -9.0f;
     setAnmTbl(l_npc_anm_wait);
     mMtGetItemEventIdx = dComIfGp_evmng_getEventIdx("MT_GET_ITEM", 0xff);
-    eventInfo.mpCheckCB = daNpcMt_XyCheckCB;
+    eventInfo.setXyCheckCB(daNpcMt_XyCheckCB);
     mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
 #if VERSION == VERSION_DEMO
     setMtx();
@@ -966,7 +966,7 @@ u32 daNpcMt_c::getMsg() {
         }
     }
     else if (dComIfGp_event_chkTalkXY()) {
-            
+        
     } else if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_3080)) {
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_4080) == 0) {
             if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A01)) {
@@ -1075,6 +1075,7 @@ void daNpcMt_c::setAnmFromMsgTag() {
             break;
         case 6:
             setAnmTbl(l_npc_anm_tukuru);
+            break;
         }
         dComIfGp_setMesgAnimeAttrInfo(0xff);
 }
@@ -1411,6 +1412,7 @@ u8 daNpcMt_c::changePhotoNo(u8 photoNo) {
             break;
         case DSNAP_TYPE_UNK06:
             photoNo = DSNAP_TYPE_NPC_UB4;
+            break;
     }
     return photoNo;
 }

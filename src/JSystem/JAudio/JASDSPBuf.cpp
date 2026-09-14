@@ -26,7 +26,7 @@ u8 JASystem::TDSP_DACBuffer::readBuffer;
 u8 JASystem::TDSP_DACBuffer::dspStatus;
 
 static void dummy() {
-    OSReport("----- JASDSPBuf : DSP-DAC バッファの数を %d にしました\n");
+    DEAD_STRING("----- JASDSPBuf : DSP-DAC バッファの数を %d にしました\n");
 }
 
 /* 802892E0-802893E4       .text init__Q28JASystem14TDSP_DACBufferFv */

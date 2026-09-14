@@ -253,6 +253,7 @@ void daTagPhoto_c::privateCut() {
                 switch(mActIdx) {
                     case 0:
                         eventMesSetInit(staffIdx);
+                        break;
                 }
             }
 

@@ -774,7 +774,7 @@ void dAttention_c::judgementStatusSw(u32 interactMask) {
         case LockState_LOCK:
             mLockonTargetID = LockonTargetPId(0);
             if (field_0x01a == 1) {
-                f32 stickY = g_mDoCPd_cpadInfo[mPadNo].mMainStickPosY;
+                f32 stickY = CPad_GET_STICK_POS_Y(mPadNo);
                 if (-0.9f < stickY && nextAttention(interactMask) != NULL && mLockonCount > 1) {
                     setFlag(AttnFlag_00000008);
                 } else {
@@ -1176,7 +1176,7 @@ void dAttLook_c::init() {
 
 /* 8009FE58-8009FE74       .text proc__10dAttLook_cFv */
 void dAttLook_c::proc() {
-    mLookTargetID = mRequestActorID ;
+    mLookTargetID = mRequestActorID;
     mRequestActorID = fpcM_ERROR_PROCESS_ID_e;
     field_0x4 = 3;
 }

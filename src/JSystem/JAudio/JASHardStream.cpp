@@ -283,25 +283,25 @@ u16 JASystem::HardStream::TControl::getLoopNum() {
 }
 
 static void dummy2() {
-    OSReport(__FILE__);
-    OSReport("playPairs != 0");
-    OSReport("Halt");
-    OSReport("playList != 0");
-    OSReport("name != 0");
-    OSReport("[JASHardStream::setRootDir] ディレクトリ(%s)名が長すぎます。\n");
-    OSReport("filename != 0");
-    OSReport("streamFiles != 0");
-    OSReport("[JASHardStream::setFile] このID(%d)には既にファイルが登録されています。\n");
-    OSReport("pair_id < playPairsMax");
-    OSReport("[JASHardStream::setBgmPair] このＢＧＭペアID(%d)は既に使用されています。\n");
-    OSReport("[JASHardStream::setBgmPair] イントロ部のＢＧＭ番号指定が大きすぎます。(%d)\n");
-    OSReport("[JASHardStream::setBgmPair] ループ部のＢＧＭ番号指定が大きすぎます。(%d)\n");
-    OSReport("[JASHardStream::registBgmPair] このペア(%d)にはイントロ／ループともにありませんので登録できません。\n");
-    OSReport("new_list != 0");
-    OSReport("[JASHardStream::playBgm] まだ前の曲が再生中ですので、新たに開始できません。\n");
-    OSReport("[JASHardStream::main] ファイルが開けません。(%s)\n");
-    OSReport("finfo != 0");
-    OSReport("\x00");
+    DEAD_STRING(__FILE__);
+    DEAD_STRING("playPairs != 0");
+    DEAD_STRING("Halt");
+    DEAD_STRING("playList != 0");
+    DEAD_STRING("name != 0");
+    DEAD_STRING("[JASHardStream::setRootDir] ディレクトリ(%s)名が長すぎます。\n");
+    DEAD_STRING("filename != 0");
+    DEAD_STRING("streamFiles != 0");
+    DEAD_STRING("[JASHardStream::setFile] このID(%d)には既にファイルが登録されています。\n");
+    DEAD_STRING("pair_id < playPairsMax");
+    DEAD_STRING("[JASHardStream::setBgmPair] このＢＧＭペアID(%d)は既に使用されています。\n");
+    DEAD_STRING("[JASHardStream::setBgmPair] イントロ部のＢＧＭ番号指定が大きすぎます。(%d)\n");
+    DEAD_STRING("[JASHardStream::setBgmPair] ループ部のＢＧＭ番号指定が大きすぎます。(%d)\n");
+    DEAD_STRING("[JASHardStream::registBgmPair] このペア(%d)にはイントロ／ループともにありませんので登録できません。\n");
+    DEAD_STRING("new_list != 0");
+    DEAD_STRING("[JASHardStream::playBgm] まだ前の曲が再生中ですので、新たに開始できません。\n");
+    DEAD_STRING("[JASHardStream::main] ファイルが開けません。(%s)\n");
+    DEAD_STRING("finfo != 0");
+    DEAD_STRING("\x00");
 }
 
 /* 8027C5B4-8027C648       .text fileOpen__Q38JASystem10HardStream8TControlFUsP11DVDFileInfo */

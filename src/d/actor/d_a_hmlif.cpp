@@ -416,7 +416,9 @@ void daHmlif_c::lift_normal_move() {
     cLib_addCalcPos2(&current.pos, m450, 1.0f, fopAcM_GetSpeedF(this));
 }
 
-BOOL daHmlif_c::check_path_point(cXyz, cXyz, cXyz, s8) {
+BOOL daHmlif_c::check_path_point(cXyz, cXyz, s8) {
+    // Unused stripped function
+    return FALSE;
 }
 
 /* 00001270-00001410       .text set_next_pnt__9daHmlif_cFv */

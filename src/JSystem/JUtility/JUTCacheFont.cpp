@@ -23,11 +23,9 @@ JUTCacheFont::JUTCacheFont(const ResFONT* p_fontRes, u32 cacheSize, JKRHeap* p_h
 /* 802C0454-802C04E8       .text __dt__12JUTCacheFontFv */
 JUTCacheFont::~JUTCacheFont() {
     if (isValid()) {
-        deleteMemBlocks_CacheFont();
-        initialize_state();
+        delete_and_initialize();
 
-        deleteMemBlocks_ResFont();
-        JUTResFont::initialize_state();
+        JUTResFont::delete_and_initialize();
 
         JUTFont::initialize_state();
     }

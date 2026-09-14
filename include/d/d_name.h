@@ -159,7 +159,9 @@ public:
     void displayInit();
     void NameStrSet();
 
+#if VERSION == VERSION_DEMO
     void _deleteSp();
+#endif
 
     #if VERSION <= VERSION_JPN
     BOOL checkDakuon(int, u8);

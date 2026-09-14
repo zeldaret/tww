@@ -88,7 +88,7 @@ static J3DZModeInfo l_zmodeInfo = { GX_FALSE, GX_LEQUAL, GX_FALSE };
 
 /* 8015EC30-8015F368       .text daVrbox2_color_set__FP12vrbox2_class */
 BOOL daVrbox2_color_set(vrbox2_class* i_this) {
-    camera_class * pCamera;
+    camera_process_class * pCamera;
     cXyz eyePosXZ;
     cXyz centerPosXZ;
     cXyz lookDirXZ;
@@ -110,7 +110,7 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
         return TRUE;
     }
 
-    pCamera = (camera_class*)dComIfGp_getCamera(0);
+    pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     windVec = dKyw_get_wind_vec();
     windPow = dKyw_get_wind_pow();
     windNrmVec = *windVec;
@@ -155,8 +155,8 @@ BOOL daVrbox2_color_set(vrbox2_class* i_this) {
         windPow = 0.6f;
     }
 
-    eyePosXZ = pCamera->mLookat.mEye;
-    centerPosXZ = pCamera->mLookat.mCenter;
+    eyePosXZ = pCamera->view.mLookat.mEye;
+    centerPosXZ = pCamera->view.mLookat.mCenter;
     eyePosXZ.y = 0.0f;
     centerPosXZ.y = 0.0f;
 

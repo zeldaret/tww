@@ -211,7 +211,7 @@ BOOL daBg_c::createHeap() {
         if (bgw->Set(dzb, cBgW::GLOBAL_e, NULL))
             return FALSE;
         dStage_roomControl_c::setBgW(roomNo, bgw);
-        bgw->mWallCorrectPriority = 0;
+        bgw->SetPriority((cBgW::PRIORITY)0);
     } else {
         bgw = NULL;
     }
@@ -226,9 +226,7 @@ static void escapeRestart() {
     daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
     dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y, fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
 
-    if (dComIfG_getTimerMode() == 3) {
-        dComIfG_TimerDeleteRequest();
-    }
+    dComIfG_TimerDeleteRequest(3);
 
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1, 0.0f, 0, FALSE, 9);
 }
@@ -313,6 +311,17 @@ BOOL daBg_c::execute() {
             mUnloadTimer = 1;
 #endif
     } else {
+#if VERSION == VERSION_DEMO
+        if (!mDoGph_gInf_c::isMonotone()) {
+            BgModel * bgm = &bg[0];
+            for (s32 i = 0; i < 4; i++, bgm++) {
+                if (bgm->btk != NULL)
+                    bgm->btk->play();
+                if (bgm->brk != NULL)
+                    bgm->brk->play();
+            }
+        }
+#else
         BgModel * bgm = &bg[0];
         for (s32 i = 0; i < 4; i++, bgm++) {
             if (!mDoGph_gInf_c::isMonotone() || i == 2) {
@@ -322,6 +331,7 @@ BOOL daBg_c::execute() {
                     bgm->brk->play();
             }
         }
+#endif
     }
 
     return TRUE;
@@ -359,25 +369,28 @@ static cPhs_State daBg_Create(fopAc_ac_c* i_ac) {
 cPhs_State daBg_c::create() {
     fopAcM_ct(this, daBg_c);
 
-    s32 roomNo = fopAcM_GetParam(this);
+    int roomNo = fopAcM_GetParam(this);
     JKRExpHeap * roomHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
     if (roomHeap != NULL) {
         heap = JKRSolidHeap::create(-1, roomHeap, false);
-        JUT_ASSERT(0x2fd, heap != NULL);
+        JUT_ASSERT(DEMO_SELECT(796, 765), heap != NULL);
         JKRHeap * oldHeap = mDoExt_setCurrentHeap(heap);
         BOOL rt = createHeap();
-        JUT_ASSERT(0x302, rt == TRUE);
+        JUT_ASSERT(DEMO_SELECT(801, 770), rt == TRUE);
         mDoExt_setCurrentHeap(oldHeap);
         heap->adjustSize();
     } else {
-        if (!fopAcM_entrySolidHeap(this, checkCreateHeap, 0)) {
 #if VERSION == VERSION_DEMO
+        if (REG1_S(0) != 0 || !fopAcM_entrySolidHeap(this, checkCreateHeap, 0)) {
             escapeRestart();
-#else
-            dStage_escapeRestart();
-#endif
             return cPhs_ERROR_e;
         }
+#else
+        if (!fopAcM_entrySolidHeap(this, checkCreateHeap, 0)) {
+            dStage_escapeRestart();
+            return cPhs_ERROR_e;
+        }
+#endif
     }
 
     BgModel * bgm = &bg[0];
@@ -406,17 +419,27 @@ cPhs_State daBg_c::create() {
         }
     }
 
-    if (bgw != NULL && dComIfG_Bgsp()->Regist(bgw, this)) {
 #if VERSION == VERSION_DEMO
+    if (bgw != NULL && (REG1_S(0) != 0 || dComIfG_Bgsp()->Regist(bgw, this))) {
         escapeRestart();
-#else
-        dStage_escapeRestart();
-#endif
         return cPhs_ERROR_e;
     }
+#else
+    if (bgw != NULL && dComIfG_Bgsp()->Regist(bgw, this)) {
+        dStage_escapeRestart();
+        return cPhs_ERROR_e;
+    }
+#endif
 
+#if VERSION == VERSION_DEMO
+    dComIfGp_roomControl_getTevStr(roomNo)->mEnvrIdxOverride = 0xFF;
+    dComIfGp_roomControl_getTevStr(roomNo)->mRoomNo = roomNo;
+#else
     dKy_tevstr_init(dComIfGp_roomControl_getTevStr(roomNo), roomNo, 0xFF);
+#endif
+
     dComIfGp_roomControl_onStatusFlag(roomNo, 0x10);
+
     return cPhs_COMPLEATE_e;
 }
 

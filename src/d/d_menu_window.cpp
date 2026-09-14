@@ -13,7 +13,7 @@
 #include "d/d_menu_collect.h"
 #include "d/d_menu_dmap.h"
 #include "d/d_menu_fmap.h"
-#include "d/d_menu_fmap_sv.h"
+#include "d/d_menu_fmapSv.h"
 #include "d/d_menu_item.h"
 #include "d/d_menu_save.h"
 #include "d/d_meter.h"
@@ -27,42 +27,42 @@
 // TODO: Remove me when all the JUT asserts and other strings are filled out.
 // This is temporary, just to make the strings match.
 static void dummy0() {
-    OSReport("cmap_tri.bti");
-    OSReport("cmap_treasure.bti");
-    OSReport("cmap_tingle.bti");
-    OSReport("cmap_phantomship.bti");
-    OSReport("cmap_hint.bti");
-    OSReport("f_item_tri.bti");
-    OSReport("f_get_rupy.bti");
-    OSReport("f_heart_up_02.bti");
-    OSReport("f_korog_kare.bti");
-    OSReport("f_korog_saki.bti");
-    OSReport("d_menu_window.cpp");
-    OSReport("i_Ms->name[i] != 0");
-    OSReport("Halt");
-    OSReport("");
-    OSReport("i_Ms->note[i] != 0");
-    OSReport("i_Ms->dummy[i] != 0");
-    OSReport("i_Ms->buffer_p[i] != 0");
+    DEAD_STRING("cmap_tri.bti");
+    DEAD_STRING("cmap_treasure.bti");
+    DEAD_STRING("cmap_tingle.bti");
+    DEAD_STRING("cmap_phantomship.bti");
+    DEAD_STRING("cmap_hint.bti");
+    DEAD_STRING("f_item_tri.bti");
+    DEAD_STRING("f_get_rupy.bti");
+    DEAD_STRING("f_heart_up_02.bti");
+    DEAD_STRING("f_korog_kare.bti");
+    DEAD_STRING("f_korog_saki.bti");
+    DEAD_STRING("d_menu_window.cpp");
+    DEAD_STRING("i_Ms->name[i] != 0");
+    DEAD_STRING("Halt");
+    DEAD_STRING("");
+    DEAD_STRING("i_Ms->note[i] != 0");
+    DEAD_STRING("i_Ms->dummy[i] != 0");
+    DEAD_STRING("i_Ms->buffer_p[i] != 0");
 #if VERSION == VERSION_PAL
-    OSReport("i_Ms->title_p != 0");
+    DEAD_STRING("i_Ms->title_p != 0");
 #endif
-    OSReport("dMi_c != 0");
-    OSReport("dMc_c != 0");
-    OSReport("dMf_c != 0");
-    OSReport("dMs_capture_c != 0");
-    OSReport("dMd_c != 0");
-    OSReport("dNm_c != 0");
-    OSReport("dMs_c != 0");
-    OSReport("cloth_c != 0");
-    OSReport("dMs_cloth_c != 0");
-    OSReport("i_Ms->childHeap != 0");
-    OSReport("awake");
-    OSReport("majyuu_shinnyuu");
-    OSReport("アイテムビット");
-    OSReport("ダンジョンビット");
-    OSReport("fonttype != 0");
-    OSReport("rfonttype != 0");
+    DEAD_STRING("dMi_c != 0");
+    DEAD_STRING("dMc_c != 0");
+    DEAD_STRING("dMf_c != 0");
+    DEAD_STRING("dMs_capture_c != 0");
+    DEAD_STRING("dMd_c != 0");
+    DEAD_STRING("dNm_c != 0");
+    DEAD_STRING("dMs_c != 0");
+    DEAD_STRING("cloth_c != 0");
+    DEAD_STRING("dMs_cloth_c != 0");
+    DEAD_STRING("i_Ms->childHeap != 0");
+    DEAD_STRING("awake");
+    DEAD_STRING("majyuu_shinnyuu");
+    DEAD_STRING("アイテムビット");
+    DEAD_STRING("ダンジョンビット");
+    DEAD_STRING("fonttype != 0");
+    DEAD_STRING("rfonttype != 0");
 }
 
 dMenu_FmapSv_c dMv_CIO_c;
@@ -529,7 +529,7 @@ void dMs_dmap_create(sub_ms_screen_class* i_Ms) {
     JUT_ASSERT(2480, dMd_c != NULL);
 
     for (int i = 0; i < 3; i++) {
-        dMd_c->arr_0x1AFC[i] = i_Ms->buffer_p[i];
+        dMd_c->mpTIMG[i] = (ResTIMG*)i_Ms->buffer_p[i];
     }
 
     dMd_c->setArchive(i_Ms->arc);
@@ -706,7 +706,7 @@ BOOL dMs_isButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
 
 /* 801DD340-801DD3A4       .text dMs_isPush_L_Button__FP19sub_ms_screen_class */
 BOOL dMs_isPush_L_Button(sub_ms_screen_class* i_Ms) {
-    if (g_mDoCPd_cpadInfo[0].mHoldLockL != 0 && !dMs_isButtonBit(i_Ms, 1)) {
+    if (mDoCPd_L_LOCK_BUTTON(0) && !dMs_isButtonBit(i_Ms, 1)) {
         dMs_onButtonBit(i_Ms, 1);
         return TRUE;
     } else {
@@ -716,7 +716,7 @@ BOOL dMs_isPush_L_Button(sub_ms_screen_class* i_Ms) {
 
 /* 801DD3A4-801DD408       .text dMs_isPush_R_Button__FP19sub_ms_screen_class */
 BOOL dMs_isPush_R_Button(sub_ms_screen_class* i_Ms) {
-    if (g_mDoCPd_cpadInfo[0].mHoldLockR != 0 && !dMs_isButtonBit(i_Ms, 2)) {
+    if (mDoCPd_R_LOCK_BUTTON(0) && !dMs_isButtonBit(i_Ms, 2)) {
         dMs_onButtonBit(i_Ms, 2);
         return TRUE;
     } else {
@@ -1539,18 +1539,18 @@ static cPhs_State dMs_Create(msg_class* i_this) {
 
     dMenu_setMenuStatus(MENU_STATUS_ITEM);
 
-    dMv_CIO_c.field_0x0 = 0;
-    dMv_CIO_c.field_0x1 = 0;
-    dMv_CIO_c.field_0x2 = -10;
-    dMv_CIO_c.field_0x3 = -10;
-    dMv_CIO_c.field_0x4 = -10;
-    dMv_CIO_c.field_0x5 = -10;
-    dMv_CIO_c.field_0x6 = -10;
-    dMv_CIO_c.field_0x7 = -10;
-    dMv_CIO_c.field_0x8 = 0;
-    dMv_CIO_c.field_0x9 = -1;
-    dMv_CIO_c.field_0xA = -10;
-    dMv_CIO_c.field_0xB = -10;
+    dMv_CIO_c.setDispMode(0);
+    dMv_CIO_c.setFmapZoom(0);
+    dMv_CIO_c.setZoomGridX(-10);
+    dMv_CIO_c.setZoomGridY(-10);
+    dMv_CIO_c.setCurX(-10);
+    dMv_CIO_c.setCurY(-10);
+    dMv_CIO_c.setCurWX(-10);
+    dMv_CIO_c.setCurWY(-10);
+    dMv_CIO_c.setActive(0);
+    dMv_CIO_c.setCmapSelNo(-1);
+    dMv_CIO_c.setCurHX(-10);
+    dMv_CIO_c.setCurHY(-10);
 
     fopMsgM_setStageLayer(i_Ms);
 

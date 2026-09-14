@@ -104,7 +104,7 @@ J3DModelData* J3DModelLoader::load(const void* i_data, u32 i_flags) {
                 OSReport("Unknown data block\n");
                 break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     const J3DModelHierarchy* hierarchy = mpModelData->getHierarchy();
     mpModelData->makeHierarchy(NULL, &hierarchy);
@@ -139,7 +139,7 @@ J3DMaterialTable* J3DModelLoader::loadMaterialTable(const void* i_data) {
                 OSReport("Unknown data block\n");
                 break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     if (mpMaterialTable->getTexture() == NULL) {
         mpMaterialTable->setTexture(new J3DTexture(0, NULL));
@@ -199,7 +199,7 @@ J3DModelData* J3DModelLoader::loadBinaryDisplayList(const void* i_data, u32 i_fl
                 OSReport("Unknown data block\n");
                 break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     J3DModelHierarchy const* hierarchy = mpModelData->getHierarchy();
     mpModelData->makeHierarchy(NULL, &hierarchy);

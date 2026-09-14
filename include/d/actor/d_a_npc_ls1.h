@@ -139,7 +139,7 @@ public:
     bool chk_talk();
     bool chk_parts_notMov();
     fopAc_ac_c* searchByID(fpc_ProcID, int*);
-    bool partner_search_sub(void* (*)(void*, void*));
+    bool partner_search_sub(fpcLyIt_JudgeFunc);
     void partner_search();
     void setEyeCtrl();
     void clrEyeCtrl();
@@ -184,7 +184,7 @@ public:
     BOOL itemCreateHeap();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_hed_jnt_num;
     /* 0x6CD */ s8 m_bbone_jnt_num;
@@ -301,7 +301,7 @@ public:
     daNpc_Ls1_HIO_c();
     inline virtual ~daNpc_Ls1_HIO_c();
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 m04;

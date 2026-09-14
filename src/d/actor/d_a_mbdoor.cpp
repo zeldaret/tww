@@ -562,6 +562,7 @@ static BOOL daMbdoor_Execute(daMbdoor_c* i_this) {
 
 /* 00001558-00001560       .text daMbdoor_IsDelete__FP10daMbdoor_c */
 static BOOL daMbdoor_IsDelete(daMbdoor_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

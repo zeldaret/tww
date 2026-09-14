@@ -800,10 +800,10 @@ bool daObjFigure_c::eventMesSet() {
             else {
                 dComIfGp_setDoStatusForce(dActStts_INFO_e);
                 dComIfGp_setAStatusForce(dActStts_CANCEL_e);
-                if(g_mDoCPd_cpadInfo[0].mMainStickPosX || g_mDoCPd_cpadInfo[0].mMainStickPosY || g_mDoCPd_cpadInfo[0].mCStickPosY) {
+                if(CPad_GET_STICK_POS_X(0) || CPad_GET_STICK_POS_Y(0) || CPad_GET_SUBSTICK_POS_Y(0)) {
                     m738 = l_figure_check_tbl[0].field_0x32;
-                    m734 += (s16)(g_mDoCPd_cpadInfo[0].mMainStickPosX * l_figure_check_tbl[0].field_0x2C);
-                    m728 += (s16)(g_mDoCPd_cpadInfo[0].mMainStickPosY * l_figure_check_tbl[0].field_0x04);
+                    m734 += (s16)(CPad_GET_STICK_POS_X(0) * l_figure_check_tbl[0].field_0x2C);
+                    m728 += (s16)(CPad_GET_STICK_POS_Y(0) * l_figure_check_tbl[0].field_0x04);
 
                     if(m728 < l_figure_check_tbl[0].field_0x0C) {
                         m728 = l_figure_check_tbl[0].field_0x0C;
@@ -812,7 +812,7 @@ bool daObjFigure_c::eventMesSet() {
                         m728 = l_figure_check_tbl[0].field_0x10;
                     }
 
-                    m724 -= g_mDoCPd_cpadInfo[0].mCStickPosY * l_figure_check_tbl[0].field_0x1C;
+                    m724 -= CPad_GET_SUBSTICK_POS_Y(0) * l_figure_check_tbl[0].field_0x1C;
                     if(m724 < l_figure_check_tbl[0].field_0x20) {
                         m724 = l_figure_check_tbl[0].field_0x20;
                     }

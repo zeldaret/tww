@@ -725,7 +725,7 @@ void daObjBarrel2::Act_c::eff_explode() {
 
     fopAcM_seStart(this, JA_SE_OBJ_BARREL_BOMB, 0);
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     csXyz sp18;
     sp18.x = -fopCamM_GetAngleX(camera);
     sp18.y = fopCamM_GetAngleY(camera) - -0x8000;

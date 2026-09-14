@@ -87,7 +87,7 @@ static void anm_init(bgn2_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, 
 
 /* 000002BC-00000308       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -96,7 +96,7 @@ static void* bgn_s_sub(void* param_1, void*) {
 
 /* 00000308-00000354       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
         return param_1;
     } else {
         return NULL;
@@ -403,7 +403,7 @@ static void jumpattack(bgn2_class* i_this) {
         case 0:
             anm_init(i_this, dRes_INDEX_BGN_BCK_JUMP1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
             i_this->m0314 = 1;
-        // fallthrough
+            // fallthrough
         case 1:
             actor->speedF = 0.0f;
             if (frame == 6) {
@@ -417,10 +417,13 @@ static void jumpattack(bgn2_class* i_this) {
                 actor->speed.y = REG0_F(8) + 250.0f;
                 i_this->m0314 = 2;
                 fopAcM_seStart(actor, JA_SE_CM_BGN_T_JUMP_UP, 0);
-                case 2:
-                    actor->speedF = REG0_F(9) + 50.0f;
-                    break;
+            } else {
+                break;
             }
+            // fallthrough
+        case 2:
+            actor->speedF = REG0_F(9) + 50.0f;
+            break;
     }
     if (i_this->m2EC8[0] != NULL) {
         i_this->m2EC8[0]->setGlobalRTMatrix(pBrk->getAnmMtx(2));
@@ -808,7 +811,7 @@ static void damage_check(bgn2_class* i_this) {
 
 /* 00002C88-00002CE0       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         ki_all_count++;
     }
     return NULL;

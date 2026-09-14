@@ -37,7 +37,7 @@ f32 daPy_lk_c::getCrawlMoveSpeed() {
 /* 80138868-801389D0       .text setCrawlMoveDirectionArrow__9daPy_lk_cFv */
 void daPy_lk_c::setCrawlMoveDirectionArrow() {
     u8 direction = 0;
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     BOOL bVar = cLib_distanceAngleS(fopCamM_GetAngleY(cam), shape_angle.y) > 0x4000;
     if (mProcVar6.m3570 & 4) {
         if (!bVar) {

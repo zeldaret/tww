@@ -2829,7 +2829,7 @@ void Act_c::moment_proc_call() {
     if (m678 == 3) {
         cM3dGPla* pcVar1 = NULL;
         if (mAcch.ChkGroundHit()) {
-            pcVar1 = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
+            pcVar1 = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         }
 
         if (pcVar1 != NULL) {

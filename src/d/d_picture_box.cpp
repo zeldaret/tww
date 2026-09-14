@@ -194,17 +194,17 @@ void dJle_Pb_c::screenSet2() {
     ((J2DTextBox *)(pane_tx[2].pane))->setFont(font0);
     ((J2DTextBox *)(pane_tx[3].pane))->setFont(font1);
 
-#if VERSION <= VERSION_JPN
     J2DTextBox::TFontSize fontSize;
+    J2DTextBox::TFontSize rubySize;
+#if VERSION <= VERSION_JPN
     if (g_msgDHIO.field_0x08 == 0) {
         fontSize.mSizeX = fontSize.mSizeY = (int)g_msgHIO.field_0x58;
-        J2DTextBox::TFontSize fontSize2;
-        fontSize2.mSizeX = fontSize2.mSizeY = g_msgHIO.field_0x68;
+        rubySize.mSizeX = rubySize.mSizeY = g_msgHIO.field_0x68;
 
         ((J2DTextBox *)(pane_tx[0].pane))->setFontSize(fontSize);
-        ((J2DTextBox *)(pane_tx[1].pane))->setFontSize(fontSize2);
+        ((J2DTextBox *)(pane_tx[1].pane))->setFontSize(rubySize);
         ((J2DTextBox *)(pane_tx[2].pane))->setFontSize(fontSize);
-        ((J2DTextBox *)(pane_tx[3].pane))->setFontSize(fontSize2);
+        ((J2DTextBox *)(pane_tx[3].pane))->setFontSize(rubySize);
     } else {
         fontSize.mSizeX = fontSize.mSizeY = g_msgHIO.field_0x70;
 
@@ -212,7 +212,6 @@ void dJle_Pb_c::screenSet2() {
         ((J2DTextBox *)(pane_tx[2].pane))->setFontSize(fontSize);
     }
 #else
-    J2DTextBox::TFontSize fontSize;
     fontSize.mSizeX = fontSize.mSizeY = g_msgHIO.field_0x70;
 
     ((J2DTextBox *)(pane_tx[0].pane))->setFontSize(fontSize);
@@ -631,7 +630,7 @@ void dJle_Pb_c::selectMode() {
 
             remainMessageSet(pictureNum);
             mModeSubState = PB_SUB_IDLE_e;
-            dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+            dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
             dMenu_flagSet(0);
         }
     } else if (CPad_CHECK_TRIG_B(0) && mDoGph_getCaptureStep() == 5) {
@@ -640,7 +639,7 @@ void dJle_Pb_c::selectMode() {
         mDoAud_seStart(JA_SE_UTUSHIE_DEL_PIC);
 
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         dMenu_flagSet(0);
     }
 }
@@ -803,13 +802,13 @@ void dJle_Pb_c::pictureEraseWait() {
         }
         
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
     }
     else if (CPad_CHECK_TRIG_B(0)) {
         existMessageSet(dComIfGs_getPictureNum());
         mDoAud_seStart(JA_SE_UTUSHIE_B_LEAVE_PIC);
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
     }
 }
 
@@ -845,13 +844,13 @@ void dJle_Pb_c::pictureDecide() {
             mDoAud_seStart(JA_SE_UTUSHIE_B_LEAVE_PIC);
         }
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
     }
     else if (CPad_CHECK_TRIG_B(0)) {
         existMessageSet(dComIfGs_getPictureNum());
         mDoAud_seStart(JA_SE_UTUSHIE_B_LEAVE_PIC);
         mModeSubState = PB_SUB_IDLE_e;
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
     }
 }
 
@@ -989,7 +988,7 @@ void dJle_Pb_c::shutterChange() {
 
 /* 80228650-80228788       .text moveCamera__9dJle_Pb_cFv */
 void dJle_Pb_c::moveCamera() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
   
     if (mModeSubState == PB_SUB_CONFIRM_e) {
         camera->mCamera.Stay();
@@ -1650,7 +1649,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     mMsgIconDrawState = -1;
 
     if (head_p != NULL) {
-        JKRFileLoader::removeResource(head_p, NULL);
+        JKRRemoveResource(head_p, NULL);
         head_p = NULL;
     }
 
@@ -1675,34 +1674,34 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     mMsgDataProc.setFont(font0);
     mMsgDataProc.setRubyFont(font1);
 
-    mMsgDataProc.charSpace = ((J2DTextBox*)pane_tx[0].pane)->mCharSpace;
-    mMsgDataProc.rubyCharSpace = ((J2DTextBox*)pane_tx[1].pane)->mCharSpace;
-    mMsgDataProc.lineSpace = ((J2DTextBox*)pane_tx[0].pane)->getLineSpace();
+    mMsgDataProc.setCharSpace(((J2DTextBox*)pane_tx[0].pane)->mCharSpace);
+    mMsgDataProc.setRubyCharSpace(((J2DTextBox*)pane_tx[1].pane)->mCharSpace);
+    mMsgDataProc.setLineSpace(((J2DTextBox*)pane_tx[0].pane)->getLineSpace());
 
     mMsgDataProc.setMesgEntry(&mMsgEntry);
 
-    mMsgDataProc.fontSize = tx0FontSizeX;
-    mMsgDataProc.rubyFontSize = tx1FontSizeX;
+    mMsgDataProc.setFontSize(tx0FontSizeX);
+    mMsgDataProc.setRubyFontSize(tx1FontSizeX);
 
-    mMsgDataProc.lineWidth = 0x1F7;
-    mMsgDataProc.centerLineWidth = 0x1E6;
+    mMsgDataProc.setLineWidth(0x1F7);
+    mMsgDataProc.setCenterLineWidth(0x1E6);
 
-    mMsgDataProc.sendSpeed = g_msgHIO.field_0x82;
-    mMsgDataProc.spaceTimer = g_msgHIO.field_0x6c;
+    mMsgDataProc.setSendSpeed(g_msgHIO.field_0x82);
+    mMsgDataProc.setSpaceTimer(g_msgHIO.field_0x6c);
     mMsgDataProc.field_0x299 = 1;
 
     if (g_msgHIO.field_0x83 != 0) {
-        mMsgDataProc.spaceFlag = 1;
+        mMsgDataProc.setSpaceFlagOn();
     } else {
-        mMsgDataProc.spaceFlag = 0;
+        mMsgDataProc.setSpaceFlagOff();
     }
 
     mMsgDataProc.stringLength();
     mMsgDataProc.stringShift();
     mMsgDataProc.iconIdxRefresh();
 
-    mMsgLineCount = mMsgDataProc.lineCount;
-    mMsgDataProc.lineCount = 0;
+    mMsgLineCount = mMsgDataProc.getLineCount();
+    mMsgDataProc.setLineCount(0);
 
     f32 yShift = ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) * (((J2DTextBox*)pane_tx[0].pane)->getLineSpace() / 2.0f));
 
@@ -1719,10 +1718,10 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     for (int i = 0; i < 15; i++) {
         int halfLine = ((J2DTextBox*)pane_tx[0].pane)->getLineSpace() / 2.0f;
 
-        u8 icon = mMsgDataProc.field_0x281[i];
-        u32 fontData = mMsgDataProc.field_0x25C;
+        u8 icon = mMsgDataProc.getIconNum(i);
+        u32 fontColor = mMsgDataProc.getStringColor();
 
-        if (icon == 20) {
+        if (icon == fopMsgM_Icon_SELECT_YOKO_LEFT_e) {
             mChoiceCursorX0 = (int)(
                 ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.x +
                 (f32)mMsgDataProc.getIconPosX(i)
@@ -1748,7 +1747,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
                 firstChoiceSeen = 0;
                 mSelectedChoiceIndex = 0;
             }
-        } else if (icon == 0x15) {
+        } else if (icon == fopMsgM_Icon_SELECT_YOKO_RIGHT_e) {
             mChoiceCursorX1 = (int)(
                 ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.x +
                 (f32)mMsgDataProc.getIconPosX(i)
@@ -1777,7 +1776,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
                 mMsgIconFontMainPic,
                 mMsgIconFontSubPic,
                 &mMsgIconDrawState,
-                fontData,
+                fontColor,
                 icon
             );
         }
@@ -1958,7 +1957,7 @@ void dJle_Pb_c::_copen() {
     cameraAlphaInc(fopMsgM_valueIncrease(10, mFadeTimer, 0));
 
     if (mFadeTimer == 10) {
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         mExecState = PB_EXEC_CAMERA_MOVE_e;
         mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_2);
     }
@@ -1985,7 +1984,7 @@ void dJle_Pb_c::_bopen() {
     browseAlphaInc(fopMsgM_valueIncrease(10, mFadeTimer, 0));
 
     if (mFadeTimer == 10) {
-        dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+        dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
         mExecState = PB_EXEC_BROWSE_MOVE_e;
         mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_2);
     }
@@ -2017,7 +2016,7 @@ void dJle_Pb_c::_gopen() {
             pict->snap_result_detail = 0;
             pict->capture_format = GX_TF_CMPR;
 
-            dComIfGp_setScopeMesgStatus(fopMsgStts_UNKB_e);
+            dComIfGp_setScopeMesgStatus(fopMsgStts_SCOPE_ACTIVE_e);
             mExecState = PB_EXEC_GET_MOVE_e;
             mDoAud_seStart(JA_SE_ITM_SUBMENU_IN_2);
         }
@@ -2170,12 +2169,12 @@ void dJle_Pb_c::draw() {
                     VERSION_SELECT(29.0f, 29.0f, g_msgHIO.field_0x70, g_msgHIO.field_0x70)
                 );
             } else {
-                u8 iconNo = mMsgDataProc.field_0x281[idx];
+                u8 iconNo = mMsgDataProc.getIconNum(idx);
             
-                if (iconNo != 0xFF && iconNo != 20 && iconNo != 0x15) {
+                if (iconNo != fopMsgM_Icon_NONE_e && iconNo != fopMsgM_Icon_SELECT_YOKO_LEFT_e && iconNo != fopMsgM_Icon_SELECT_YOKO_RIGHT_e) {
                     int posX = mMsgDataProc.getIconPosX(idx);
                     int posY = mMsgDataProc.getIconPosY(idx);
-                    u32 color = mMsgDataProc.getIconColor(idx);
+                    int scale = mMsgDataProc.getIconScale(idx);
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
                     f32 lineSpace = base->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
@@ -2189,7 +2188,7 @@ void dJle_Pb_c::draw() {
                         mMsgIconFontSubPic,
                         r5,
                         r6,
-                        color,
+                        scale,
                         &mMsgIconDrawState,
                         alpha,
                         iconNo
@@ -2232,12 +2231,12 @@ void dJle_Pb_c::draw() {
                     VERSION_SELECT(29.0f, 29.0f, g_msgHIO.field_0x70, g_msgHIO.field_0x70)
                 );
             } else {
-                u8 iconNo = mMsgDataProc.field_0x281[idx];
+                u8 iconNo = mMsgDataProc.getIconNum(idx);
             
-                if (iconNo != 0xFF && iconNo != 20 && iconNo != 0x15) {
+                if (iconNo != fopMsgM_Icon_NONE_e && iconNo != fopMsgM_Icon_SELECT_YOKO_LEFT_e && iconNo != fopMsgM_Icon_SELECT_YOKO_RIGHT_e) {
                     int posX = mMsgDataProc.getIconPosX(idx);
                     int posY = mMsgDataProc.getIconPosY(idx);
-                    u32 color = mMsgDataProc.getIconColor(idx);
+                    int scale = mMsgDataProc.getIconScale(idx);
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
                     f32 lineSpace = base->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
@@ -2251,7 +2250,7 @@ void dJle_Pb_c::draw() {
                         mMsgIconFontSubPic,
                         r5,
                         r6,
-                        color,
+                        scale,
                         &mMsgIconDrawState,
                         alpha,
                         iconNo
@@ -2268,7 +2267,7 @@ void dJle_Pb_c::draw() {
 /* 8022B9E8-8022BB3C       .text _delete__9dJle_Pb_cFP10JKRExpHeap */
 void dJle_Pb_c::_delete(JKRExpHeap* i_heap) {
     if (head_p != NULL) {
-        JKRFileLoader::removeResource(head_p, NULL);
+        JKRRemoveResource(head_p, NULL);
     }
 
     if (mDoGph_getCaptureStep()) {

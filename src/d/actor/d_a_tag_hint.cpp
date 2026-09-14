@@ -388,7 +388,7 @@ void* findObjectCallBack(fopAc_ac_c* actor, void* v_this) {
 
 /* 00000C78-00000CAC       .text moveBoxCheck__12daTag_Hint_cFv */
 BOOL daTag_Hint_c::moveBoxCheck() {
-    if (fopAcM_Search((void* (*)(void*, void*))findObjectCallBack, (void*)this) != NULL) {
+    if (fopAcM_Search((fpcLyIt_JudgeFunc)findObjectCallBack, this) != NULL) {
         return TRUE;
     }
     return FALSE;

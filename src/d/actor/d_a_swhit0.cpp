@@ -163,7 +163,7 @@ BOOL daSwhit0_c::CreateInit() {
     mColSph.SetStts(&mColStatus);
     mColSph.SetC(attention_info.position);
     
-    if (dComIfGs_isSwitch(getSwNo(), current.roomNo)) {
+    if (dComIfGs_isSwitch(getSwNo(), fopAcM_GetRoomNo(this))) {
         mState = 4;
         onFlag(0x01);
     }
@@ -326,7 +326,7 @@ s32 daSwhit0_c::actionOnWait() {
     }
 
     if (getType() == 0x02) {
-        if (!dComIfGs_isSwitch(getSwNo(), current.roomNo)) {
+        if (!dComIfGs_isSwitch(getSwNo(), fopAcM_GetRoomNo(this))) {
             offFlag(0x01);
             mState = 0;
 
@@ -349,7 +349,7 @@ s32 daSwhit0_c::actionOnTimer() {
         fopAcM_seStart(this, JA_SE_OBJ_COL_SWC_NSTONE, 0);
     }
 
-    if (dComIfGs_isSwitch(getSwNo2(), current.roomNo)) {
+    if (dComIfGs_isSwitch(getSwNo2(), fopAcM_GetRoomNo(this))) {
         mState = 4;
     }
     else if (mOnTimer > 0) {
@@ -359,7 +359,7 @@ s32 daSwhit0_c::actionOnTimer() {
         offFlag(0x01);
         mState = 0;
 
-        dComIfGs_offSwitch(getSwNo(), current.roomNo);
+        dComIfGs_offSwitch(getSwNo(), fopAcM_GetRoomNo(this));
     }
 
     return TRUE;
@@ -415,58 +415,59 @@ s32 daSwhit0_c::draw() {
 }
 
 /* 000011E4-00001334       .text daSwhit0_Draw__FP10daSwhit0_c */
-static s32 daSwhit0_Draw(daSwhit0_c* i_swhit) {
-    return i_swhit->draw();
+static s32 daSwhit0_Draw(daSwhit0_c* i_this) {
+    return i_this->draw();
 }
 
 /* 00001334-00001420       .text daSwhit0_Execute__FP10daSwhit0_c */
-static s32 daSwhit0_Execute(daSwhit0_c* i_swhit) {
-    i_swhit->mAnm.play();
-    i_swhit->mTexAnm.play();
+static s32 daSwhit0_Execute(daSwhit0_c* i_this) {
+    i_this->mAnm.play();
+    i_this->mTexAnm.play();
 
-    switch (i_swhit->mState) {
+    switch (i_this->mState) {
         case 0:
-            i_swhit->actionOffWait();
+            i_this->actionOffWait();
             break;
         case 1:
-            i_swhit->actionToOnReady();
+            i_this->actionToOnReady();
             break;
         case 2:
-            i_swhit->actionToOnOrder();
+            i_this->actionToOnOrder();
             break;
         case 3:
-            i_swhit->actionToOnDemo();
+            i_this->actionToOnDemo();
             break;
         case 4:
-            i_swhit->actionOnWait();
+            i_this->actionOnWait();
             break;
         case 5:
-            i_swhit->actionOnTimer();
+            i_this->actionOnTimer();
             break;
     }
 
-    if (i_swhit->checkFlag(0x02)) {
-        dComIfG_Ccsp()->Set(&i_swhit->mColCyl);
+    if (i_this->checkFlag(0x02)) {
+        dComIfG_Ccsp()->Set(&i_this->mColCyl);
     }
 
-    dComIfG_Ccsp()->Set(&i_swhit->mColSph);
+    dComIfG_Ccsp()->Set(&i_this->mColSph);
     return TRUE;
 }
 
 /* 00001420-00001428       .text daSwhit0_IsDelete__FP10daSwhit0_c */
-static s32 daSwhit0_IsDelete(daSwhit0_c* i_swhit) {
+static s32 daSwhit0_IsDelete(daSwhit0_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
 /* 00001428-00001450       .text daSwhit0_Delete__FP10daSwhit0_c */
-static s32 daSwhit0_Delete(daSwhit0_c* i_swhit) {
-    i_swhit->~daSwhit0_c();
+static s32 daSwhit0_Delete(daSwhit0_c* i_this) {
+    i_this->~daSwhit0_c();
     return TRUE;
 }
 
 /* 00001450-00001470       .text daSwhit0_Create__FP10fopAc_ac_c */
-static cPhs_State daSwhit0_Create(fopAc_ac_c* i_swhit) {
-    return static_cast<daSwhit0_c*>(i_swhit)->create();
+static cPhs_State daSwhit0_Create(fopAc_ac_c* i_this) {
+    return static_cast<daSwhit0_c*>(i_this)->create();
 }
 
 static actor_method_class l_daSwhit0_Method = {

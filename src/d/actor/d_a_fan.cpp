@@ -282,6 +282,7 @@ static BOOL daFan_Execute(void* i_this) {
 
 /* 00001218-00001220       .text daFan_IsDelete__FPv */
 static BOOL daFan_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

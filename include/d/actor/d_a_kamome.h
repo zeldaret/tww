@@ -52,9 +52,8 @@ struct kamome_class {
     /* 0x304 */ dPath* mpPath;
     /* 0x308 */ u8 m308;
     /* 0x309 */ u8 m309[0x30A - 0x309];
-    /* 0x30A */ s16 mRotX;
-    /* 0x30C */ s16 mRotY;
-    /* 0x30E */ u8 m30E[0x31C - 0x30E];
+    /* 0x30A */ csXyz mRot;
+    /* 0x310 */ u8 m310[0x31C - 0x310];
     /* 0x31C */ dBgS_AcchCir mAcchCir;
     /* 0x35C */ dBgS_ObjAcch mAcch;
     /* 0x520 */ dCcD_Stts mStts;

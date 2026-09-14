@@ -70,7 +70,7 @@ void dComIfG_play_c::init() {
 
 /* 800521D4-80052400       .text itemInit__14dComIfG_play_cFv */
 void dComIfG_play_c::itemInit() {
-    field_0x48b8 = 0.0f;
+    mItemScopeWipeScale = 0.0f;
     mItemLifeCount = 0.0f;
     mItemRupeeCount = 0;
     mAirMeter = 0;
@@ -100,7 +100,7 @@ void dComIfG_play_c::itemInit() {
     mItemNowLife = 0;
     mItemNowRupee = 0;
     mItemSwimTimerStatus = 0;
-    field_0x4929 = 0;
+    mItemScopeWipeTimer = 0;
     mMesgStatus = 0;
     mScopeMesgStatus = 0;
     field_0x492c = 0;
@@ -166,7 +166,7 @@ void dComIfG_play_c::itemInit() {
     strcpy(mInputPassword, "\0");
 
     mMesgBgm = 0;
-    field_0x4978 = 0;
+    mScopeWipeFlag = 0;
     m2dShow = 0;
     field_0x497a = 0;
 #if VERSION > VERSION_DEMO
@@ -971,17 +971,17 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
         }
         break;
     case dItemNo_PEARL_NAYRU_e:
-        if (dComIfGs_isSymbol(0)) {
+        if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_DIN_e:
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_FARORE_e:
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             get_item = 1;
         }
         break;
@@ -1095,17 +1095,17 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
         }
         break;
     case dItemNo_PEARL_NAYRU_e:
-        if (dComIfGs_isSymbol(0)) {
+        if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_DIN_e:
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_FARORE_e:
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             get_item = 1;
         }
         break;
@@ -1226,10 +1226,10 @@ int dComIfGd_setShadow(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 
 }
 
 static void dummy() {
-    OSReport("0 <= cam_id && cam_id < mapc->num");
-    OSReport("0 <= arrow_id && arrow_id < mapa->num");
-    OSReport("0 <= room_cam_id && room_cam_id < pcam->num");
-    OSReport("0 <= arrow_id && arrow_id < parr->num");
+    DEAD_STRING("0 <= cam_id && cam_id < mapc->num");
+    DEAD_STRING("0 <= arrow_id && arrow_id < mapa->num");
+    DEAD_STRING("0 <= room_cam_id && room_cam_id < pcam->num");
+    DEAD_STRING("0 <= arrow_id && arrow_id < parr->num");
 }
 
 /* 8005468C-800547BC       .text getSceneList__Fi */

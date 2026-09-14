@@ -179,6 +179,7 @@ static BOOL daIkariDraw(void* i_this) {
 
 /* 0000066C-00000674       .text daIkariIsDelete__FPv */
 static BOOL daIkariIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

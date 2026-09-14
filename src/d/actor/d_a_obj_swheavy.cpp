@@ -454,6 +454,7 @@ BOOL Mthd_Draw(void* i_this) {
 
 /* 0000124C-00001254       .text Mthd_IsDelete__Q212daObjSwheavy29@unnamed@d_a_obj_swheavy_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -1,7 +1,7 @@
 #ifndef JAISOUND_H
 #define JAISOUND_H
 
-#include "dolphin/types.h"
+#include "dolphin/mtx/vec.h"
 
 enum JAISoundType {
     SOUNDPARAM_Unk0     = 0,
@@ -86,8 +86,8 @@ public:
     virtual void setSePositionDopplar();
 
     u8 getSeCategoryNumber();
-    int getSwBit();
-    int checkSwBit(u32);
+    u32 getSwBit();
+    u32 checkSwBit(u32);
     u8 getInfoPriority();
     void clearMainSoundPPointer();
     void start(u32);
@@ -189,7 +189,7 @@ public:
     /* 0x1c */ int field_0x1c;
     /* 0x20 */ PositionInfo_t* mPositionInfo;
     /* 0x24 */ void* field_0x24;
-    /* 0x28 */ u32 field_0x28;
+    /* 0x28 */ Vec* field_0x28;
     /* 0x2C */ int field_0x2c;
     /* 0x30 */ JAISound* field_0x30;
     /* 0x34 */ JAISound* field_0x34;

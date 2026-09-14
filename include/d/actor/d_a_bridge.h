@@ -11,8 +11,7 @@ class JPABaseEmitter;
 
 struct br_s {
     /* 0x000 */ J3DModel* mpModel;
-    /* 0x004 */ J3DLightObj mLight;
-    /* 0x078 */ u8 m078[0xB4 - 0x78];
+    /* 0x004 */ dKy_tevstr_c mTevStr;
     /* 0x0B4 */ J3DModel* mpModelRope1;
     /* 0x0B8 */ J3DModel* mpModelRope0;
     /* 0x0BC */ mDoExt_3DlineMat1_c mLineMat1;
@@ -75,9 +74,9 @@ struct bridge_class {
     /* 0x02FC */ f32 m02FC;
     /* 0x0300 */ s16 m0300;
     /* 0x0302 */ s16 m0302;
-    /* 0x0304 */ s32 m0304;
-    /* 0x0308 */ s32 m0308;
-    /* 0x030C */ s32 m030C;
+    /* 0x0304 */ int m0304;
+    /* 0x0308 */ int m0308;
+    /* 0x030C */ int m030C;
     /* 0x0310 */ u8 m0310[0x0312 - 0x0310];
     /* 0x0312 */ s16 m0312;
     /* 0x0314 */ cXyz mEndPos;

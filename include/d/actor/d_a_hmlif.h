@@ -23,7 +23,7 @@ public:
     void check_col();
     void lift_smooth_move();
     void lift_normal_move();
-    BOOL check_path_point(cXyz, cXyz, cXyz, s8);
+    BOOL check_path_point(cXyz, cXyz, s8);
     void set_next_pnt();
     BOOL setNextPath();
     bool chkSwitchPathType();

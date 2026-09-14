@@ -173,7 +173,7 @@ void first_mode_change(pw_class*) {
 void action_dousa(pw_class* i_this) {
     /* Nonmatching */
     daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     cXyz camfwd;
     switch (i_this->mMode) {
     case 0:
@@ -239,7 +239,7 @@ void action_dousa(pw_class* i_this) {
         }
         break;
     case 11:
-        dKyr_get_vectle_calc(&i_this->current.pos, &camera->mLookat.mEye, &camfwd);
+        dKyr_get_vectle_calc(&i_this->current.pos, &camera->view.mLookat.mEye, &camfwd);
         i_this->mActorPlace.pos.x = i_this->m2CC.x + camfwd.x * 150.0f;
         i_this->mActorPlace.pos.y = i_this->m2CC.y;
         i_this->mActorPlace.pos.z = i_this->m2CC.z + camfwd.z * 150.0f;

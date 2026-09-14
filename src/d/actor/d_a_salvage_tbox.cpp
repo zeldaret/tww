@@ -5,110 +5,483 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_salvage_tbox.h"
+#include "d/actor/d_a_sea.h"
+#include "d/actor/d_a_ship.h"
+#include "d/d_com_inf_game.h"
+#include "d/d_bg_s_func.h"
+#include "f_op/f_op_kankyo_mng.h"
+
+const char daSTBox_c::m_arcname[] = "Salvage";
+const s16 daSTBox_c::m_heapsize[3] = {0x5000, 0x5000, 0x5000};
+const s16 daSTBox_c::m_bdlidx[3] = { 4, 3, 3 };
+const f32 daSTBox_c::m_rope_max_length = 2500.0f;
+const u8 daSTBox_c::m_shadow_alpha = 0x78;
+const f32 daSTBox_c::m_shadow_depth = 2000.0f;
+const f32 daSTBox_c::m_shadow_scroll = -0.1f;
+const f32 daSTBox_c::m_shadow_scale = 4.0f;
 
 /* 00000078-00000128       .text getMaxWaterY__25daSTBox_shadowEcallBack_cFPQ29JGeometry8TVec3<f> */
-void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<float>*) {
-    /* Nonmatching */
+void daSTBox_shadowEcallBack_c::getMaxWaterY(JGeometry::TVec3<f32>* shipPos) {
+    if (daSea_ChkArea(shipPos->x, shipPos->z)) {
+        f32 wave = daSea_calcWave(shipPos->x, shipPos->z);
+        shipPos->y = wave + 2.0f;
+        f32 waterY = mWaterFlatY;
+        if (waterY > shipPos->y) {
+            shipPos->y = waterY + 2.0f;
+        }
+    }
+    else {
+        if (mWaterFlatY != -G_CM3D_F_INF ) {
+            shipPos->y = mWaterFlatY + 2.0f;
+        }
+        else {
+            shipPos->y = mWaterY;
+        }
+    }
 }
 
 /* 00000128-000002F4       .text execute__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
-void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter*) {
-    /* Nonmatching */
+void daSTBox_shadowEcallBack_c::execute(JPABaseEmitter* emitter) {
+    GXColor amb;
+    GXColor diff;
+    dKy_get_seacolor(&amb, &diff);
+    emitter->setGlobalPrmColor(amb.r, amb.g, amb.b);
+    if (field_0x4 != 0) {
+        emitter->becomeInvalidEmitter();
+        mpEmitter = NULL;
+    }
+    if (emitter->isContinuousParticle() && field_0x4 == 0) {
+        JGeometry::TVec3<f32> trans(mPos.x, mPos.y, mPos.z);
+        emitter->setGlobalTranslation(trans);
+        s16 yAngle;
+        if (field_0x50 >= 0.0f) {
+            yAngle = mpAngle->y;
+        } else {
+            yAngle = (s16)(mpAngle->y + 0x8000);
+        }
+        JGeometry::TVec3<s16> rotation;
+        rotation.x = 0;
+        rotation.y = yAngle;
+        rotation.z = 0;
+        emitter->setGlobalRotation(rotation);
+        f32 f3 = 2000.0f;
+        u8 alpha;
+        if (mDepth < 0.0f || mDepth > f3) {
+            alpha = 0;
+        } else {
+            u32 r0 = 120;
+            alpha = ((f32)r0 * (f3 - mDepth)) / f3;
+        }
+        emitter->setGlobalAlpha(alpha);
+    } else {
+        JGeometry::TVec3<f32> trans;
+        emitter->getGlobalTranslation(trans);
+        trans.y = mWaterY;
+        emitter->setGlobalTranslation(trans);
+        s16 alpha = emitter->getGlobalAlpha();
+        cLib_chaseS(&alpha, 0, 5);
+        alpha = 0xFF;
+        emitter->setGlobalAlpha(alpha);
+    }
+    JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst();
+    while(link != 0) {
+        JSULink<JPABaseParticle>* nextLink = link->getNext();
+
+        JPABaseParticle* ptcl = link->getObject();
+        JGeometry::TVec3<f32> ptclPos;
+        ptcl->getOffsetPosition(ptclPos);
+        getMaxWaterY(&ptclPos);
+        ptcl->setOffsetPosition(ptclPos);
+
+        link = nextLink;
+    }
 }
 
 /* 000002F4-00000570       .text draw__25daSTBox_shadowEcallBack_cFP14JPABaseEmitter */
-void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter*) {
-    /* Nonmatching */
+void daSTBox_shadowEcallBack_c::draw(JPABaseEmitter* emitter) {
+    f32 fVar2;
+    f32 fVar1;
+    u32 particleCount = emitter->getParticleList()->getNumLinks();
+    if (particleCount >= 6){
+        if (dPa_control_c::isStatus(1)) {
+            GXSetZMode(GX_FALSE, GX_NEVER, GX_FALSE);
+        }
+        u32 steps = (u32)((f32)particleCount * 0.33333334f);
+        f32 f30 = 0.5f;
+        f32 fVar3 = (1.0f / (f32)(steps - 1));  
+        GXSetCullMode(GX_CULL_NONE);
+        Mtx mtx;
+        cMtx_identity(mtx);
+        mtx[1][1] = mExScaleY;
+        mtx[1][3] = mExTransY * emitter->getFrame();
+        GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
+        GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
+        JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst();
+        u32 i = 0;
+        fVar1 = 0.0f;
+        for (; i < steps; i++, fVar1 += fVar3) {
+            if (i != 0){
+                GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
+                u32 j = 0;
+                fVar2 = 0.0f;
+                for(; j < ARRAY_SIZE(field_0x14); j++) {
+                    JGeometry::TVec3<f32> ptclPos;
+                    link->getObject()->getGlobalPosition(ptclPos);
+                    getMaxWaterY(&ptclPos);
+                    GXPosition3f32(ptclPos.x, ptclPos.y, ptclPos.z);
+                    GXTexCoord2f32(fVar2, fVar1);
+                    GXPosition3f32(field_0x14[j].x, field_0x14[j].y, field_0x14[j].z);
+                    GXTexCoord2f32(fVar2, fVar1 - fVar3);
+                    field_0x14[j].set(ptclPos);
+                    fVar2 += f30;
+                    link = link->getNext();
+                }
+                GXEnd();
+            } else {
+                for (int j = 0; j < ARRAY_SIZE(field_0x14); j++) {
+                    link->getObject()->getGlobalPosition(field_0x14[j]);
+                    link = link->getNext();
+                }
+            }
+        }
+    }
 }
 
 /* 00000570-000005D8       .text getWaterY__F4cXyz */
-void getWaterY(cXyz) {
-    /* Nonmatching */
+static f32 getWaterY(cXyz shipPos) {
+    f32 waterY;
+    shipPos.y += 500.0f;
+    if (daSea_ChkArea(shipPos.x, shipPos.z)) {
+        waterY = daSea_calcWave(shipPos.x, shipPos.z);   
+    }
+    else {
+        waterY = dBgS_ObjGndChk_Wtr_Func(shipPos);
+    }
+    return waterY;
 }
 
 /* 000005D8-000006E8       .text _delete__9daSTBox_cFv */
 bool daSTBox_c::_delete() {
-    /* Nonmatching */
+    for (int i = 0; i < ARRAY_SIZE(field_0x29C); i++) {
+        if (field_0x29C[i] != NULL) {
+            field_0x29C[i]->quitImmortalEmitter();
+            field_0x29C[i]->becomeInvalidEmitter();
+            field_0x29C[i] = NULL;
+        }
+    }
+    mRippleCallBack.end();
+    mShadowCallback.deleteCallBack();
+    dComIfG_resDelete(&mPhase, m_arcname);
+    u8 eventReg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_ADFF);
+    if (field_0x331 == 2){
+        eventReg += 1;
+        dComIfGs_setEventReg(dSv_event_flag_c::UNK_ADFF, eventReg);
+    }
+    return TRUE;
 }
 
 /* 000006E8-00000708       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
+    daSTBox_c* i_this = (daSTBox_c*)i_actor;
+    return i_this->CreateHeap();
 }
 
 /* 00000708-000007D4       .text CreateHeap__9daSTBox_cFv */
-void daSTBox_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSTBox_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, m_bdlidx[field_0x331]);
+    JUT_ASSERT(461, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
 }
 
 /* 000007D4-00000ADC       .text CreateInit__9daSTBox_cFv */
 void daSTBox_c::CreateInit() {
-    /* Nonmatching */
+    cXyz craneTop;
+    f32 waterY;
+    if (dComIfGp_getShipActor() != NULL && dComIfGp_getShipActor()->getCraneTop() != NULL) {
+        craneTop = *dComIfGp_getShipActor()->getCraneTop();
+        waterY = getWaterY(craneTop);
+        craneTop.y = waterY;
+    }
+    field_0x324.x = craneTop.x;
+    field_0x324.y = craneTop.y;
+    field_0x324.z = craneTop.z;
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -150.0f, -0.0f, -150.0f, 150.0f, 150.0f, 150.0f);
+    set_mtx();
+
+    field_0x330 = daSTBox_prm::getItemNo(this);
+    field_0x334 = 0;
+#if VERSION > VERSION_DEMO
+    field_0x336 = 0;
+#endif
+
+    for (int i = 0; i < 2; i++) {
+        field_0x29C[i] = dComIfGp_particle_set(dPa_name::ID_IT_JN_LK_NURE_POTA00, &current.pos, &current.angle);
+    }
+    if (field_0x331 == 1 || field_0x331 == 2) {
+        field_0x29C[2] = dComIfGp_particle_set(dPa_name::ID_IT_JN_LK_NURE_POTA00, &current.pos, &current.angle);
+
+        f32 f1 = 3.0f;
+        f32 f2 = 1.0f;
+        f32 f3 = 0.0f;
+        f32 f4 = 20.0f;
+        for (int i = 0; i < ARRAY_SIZE(field_0x29C); i++) {
+            if (field_0x29C[i] != NULL) {
+                field_0x29C[i]->becomeImmortalEmitter();
+                
+                field_0x29C[i]->setGlobalParticleScale(1.5f, 1.5f);
+                JGeometry::TVec3<f32> emitterScale(f1, f2, f1);
+                field_0x29C[i]->setEmitterScale(emitterScale); 
+                JGeometry::TVec3<f32> translation(f3, f4, f3);
+                field_0x29C[i]->setEmitterTranslation(translation);
+            }
+        }
+
+        if (mShadowCallback.getEmitter() == NULL) {
+            dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SALVAGE00, &field_0x324, &current.angle, NULL, 0, &mShadowCallback);
+            mShadowCallback.setPos(field_0x324);
+            mShadowCallback.setIndirectTexData(-0.1f, 4.0f);
+        }
+    } else if (field_0x331 == 0) {
+        f32 f1 = 3.5f;
+        f32 f2 = 1.0f;
+        f32 f3 = 0.0f;
+        f32 f4 = -20.0f;
+        for (int i = 0; i < 2; i++) {
+            if (field_0x29C[i] != NULL) {
+#if VERSION > VERSION_DEMO
+                field_0x29C[i]->becomeImmortalEmitter();
+#endif
+                field_0x29C[i]->setGlobalParticleScale(1.5f, 1.5f);
+                JGeometry::TVec3<f32> emitterScale(f1, f2, f1);
+                field_0x29C[i]->setEmitterScale(emitterScale); 
+                JGeometry::TVec3<f32> translation(f3, f4, f3);
+                field_0x29C[i]->setEmitterTranslation(translation);
+            }
+        }
+    }
+#if VERSION > VERSION_DEMO
+    mItemPID = -1;
+#endif
 }
 
 /* 00000ADC-00000BFC       .text _create__9daSTBox_cFv */
 cPhs_State daSTBox_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daSTBox_c);
+    field_0x331 = daSTBox_prm::getBoxType(this);
+    cPhs_State phs_state = dComIfG_resLoad(&mPhase, m_arcname);
+    if (phs_state == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[field_0x331])) {
+            return cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+    return phs_state;
 }
 
 /* 00000BFC-00000C7C       .text set_mtx__9daSTBox_cFv */
 void daSTBox_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
+
+typedef void (daSTBox_c::* eventInitFunc)(int);
+static eventInitFunc event_init_tbl[] = {
+    &daSTBox_c::initWait,
+    &daSTBox_c::initWait02,
+    &daSTBox_c::initWaitGetItem,
+    &daSTBox_c::initWaitDummy,
+    &daSTBox_c::initDrop,
+};
+
+typedef BOOL (daSTBox_c::* eventActionFunc)(int);
+static eventActionFunc event_action_tbl[] = {
+    &daSTBox_c::actWait,
+    &daSTBox_c::actWait02,
+    &daSTBox_c::actWaitGetItem,
+    &daSTBox_c::actWaitDummy,
+    &daSTBox_c::actDrop,
+};
 
 /* 00000C7C-00000EB8       .text _execute__9daSTBox_cFv */
 bool daSTBox_c::_execute() {
-    /* Nonmatching */
+    static char* action_table[] = {"WAIT", "WAIT02", "WAIT_GETITEM", "WAIT_DUMMY", "DROP"};
+    int staffIdx = dComIfGp_evmng_getMyStaffId("STBox");
+    daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+    f32 waterY = 0.0f;
+    cXyz m1020Pos;
+    int actIdx;
+    if (ship != NULL) {
+        m1020Pos.x = ship->getCraneRipplePosX();
+        m1020Pos.y = ship->getCraneRipplePosY();
+        m1020Pos.z = ship->getCraneRipplePosZ();
+        waterY = getWaterY(m1020Pos);
+    }
+    if ((dComIfGp_event_runCheck()) && !eventInfo.checkCommandTalk() && staffIdx != -1) {
+        actIdx = dComIfGp_evmng_getMyActIdx(staffIdx, action_table, ARRAY_SIZE(action_table), FALSE, 0);
+        if(actIdx == -1){
+            dComIfGp_evmng_cutEnd(staffIdx);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                (this->*event_init_tbl[actIdx])(staffIdx);
+            }
+            if ((this->*event_action_tbl[actIdx])(staffIdx)) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            }
+        }
+    }
+
+    for (int i = 0; i < 3; i++) {
+        JPABaseEmitter* emitter = field_0x29C[i];
+        if (emitter != NULL) {
+            emitter->setGlobalTranslation(current.pos);
+        }
+    }
+
+    if (current.pos.y < waterY) {
+        mShadowCallback.setWaterY(waterY + 2.0f);
+        mShadowCallback.setWaterFlatY(waterY + 2.0f); 
+        mShadowCallback.setDepth(waterY - current.pos.y);
+        mShadowCallback.setPos(m1020Pos);
+    } else {
+        mShadowCallback.deleteCallBack();
+    }
+    set_mtx();
+    return TRUE;
 }
 
 /* 00000EB8-00000EBC       .text initWait__9daSTBox_cFi */
 void daSTBox_c::initWait(int) {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000EBC-00000EC8       .text initWait02__9daSTBox_cFi */
 void daSTBox_c::initWait02(int) {
-    /* Nonmatching */
+    field_0x332 = 20;
+#if VERSION == VERSION_DEMO
+    fpc_ProcID itemPID = fopAcM_createItemForTrBoxDemo(&current.pos, field_0x330, -1, dComIfGp_roomControl_getStayNo());
+    if (itemPID != fpcM_ERROR_PROCESS_ID_e) {
+        dComIfGp_event_setItemPartnerId(itemPID);
+    }
+#endif
 }
 
 /* 00000EC8-00000F50       .text initWaitGetItem__9daSTBox_cFi */
 void daSTBox_c::initWaitGetItem(int) {
-    /* Nonmatching */
+    fopAcM_offDraw(this);
+    for(int i = 0; i < 3; i++) {
+        if (field_0x29C[i] != NULL) {
+            field_0x29C[i]->quitImmortalEmitter();
+            field_0x29C[i]->becomeInvalidEmitter();
+            field_0x29C[i] = NULL;
+        }
+    }
+    mRippleCallBack.remove();
 }
 
 /* 00000F50-00000F54       .text initWaitDummy__9daSTBox_cFi */
 void daSTBox_c::initWaitDummy(int) {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000F54-00000F64       .text initDrop__9daSTBox_cFi */
 void daSTBox_c::initDrop(int) {
-    /* Nonmatching */
+    fopAcM_SetGravity(this, -4.0f);
 }
 
+const f32 crane_offset[] = {80.0f, 125.0f, 125.0f};
+
 /* 00000F64-00001218       .text actWait__9daSTBox_cFi */
-void daSTBox_c::actWait(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWait(int) {
+    daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
+    if (ship == NULL) {
+        JUT_ASSERT(DEMO_SELECT(804, 811), FALSE);
+    }
+    cXyz* craneTop = ship->getCraneTop();
+    if (craneTop == NULL) {
+        JUT_ASSERT(DEMO_SELECT(811, 818), FALSE);
+    }
+#if VERSION > VERSION_DEMO
+    cXyz craneTopPos = *craneTop;
+    craneTopPos.y += 5000.0f;
+    f32 waterY = getWaterY(craneTopPos); 
+#endif
+    current.angle.y = ship->getCraneHookAngleY();
+    cXyz craneTopPos2 = *craneTop;
+    craneTopPos2.y -= crane_offset[field_0x331];
+    current.pos = craneTopPos2;
+    attention_info.position = current.pos;
+#if VERSION > VERSION_DEMO
+    if ((field_0x331 == 1 || field_0x331 == 2) && current.pos.y > waterY && (field_0x336 == 0)) {
+        mDoAud_subBgmStart(JA_BGM_BGN_GET_BOX);
+        field_0x336 = 1;
+    }
+#endif
+    if (field_0x335 == 0) {
+        mParticlePos = current.pos;
+        mParticlePos.y += 2500.0f;
+        mParticlePos.y = dBgS_GetWaterHeight(mParticlePos);
+        if (current.pos.y > mParticlePos.y - 10.0f) {
+            dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_HAMON01, &mParticlePos, NULL, &scale, 0xff, &mRippleCallBack);
+            mRippleCallBack.setRate(12.0f);
+            field_0x335 = 1;
+        }
+    }
+#if VERSION > VERSION_DEMO
+    if ((field_0x331 == 1 || field_0x331 == 2) && (mItemPID == fpcM_ERROR_PROCESS_ID_e)) {
+        mItemPID = fopAcM_createItemForTrBoxDemo(&current.pos, field_0x330, -1, dComIfGp_roomControl_getStayNo());
+        if (mItemPID != fpcM_ERROR_PROCESS_ID_e) {
+            dComIfGp_event_setItemPartnerId(mItemPID);
+        }
+    }
+#endif
+    return FALSE;
 }
 
 /* 00001218-00001344       .text actDrop__9daSTBox_cFi */
-void daSTBox_c::actDrop(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actDrop(int) {
+    fopAcM_posMoveF(this, NULL);
+    if (current.pos.y < getWaterY(current.pos) - 50.0f) {
+        return TRUE;
+    }
+    if(current.pos.y < getWaterY(current.pos)) {
+        if(field_0x334 == 0) {
+            fopAcM_seStart(this, JA_SE_OBJ_FALL_WATER_M, 0);
+            fopKyM_createWpillar(&current.pos, 0.8f, 1.0f, 0);
+            field_0x334 = 1;
+        }
+        mRippleCallBack.end();
+    }
+    return FALSE;
 }
 
 /* 00001344-000013AC       .text actWait02__9daSTBox_cFi */
-void daSTBox_c::actWait02(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWait02(int) {
+    cXyz* pos = dComIfGp_getShipActor()->getCraneTop();
+    if (pos != NULL) {
+        cXyz cranePos = *pos;
+        cranePos.y -= crane_offset[field_0x331];
+        current.pos = cranePos;
+    }
+    return FALSE;
 }
 
 /* 000013AC-000013B4       .text actWaitGetItem__9daSTBox_cFi */
-void daSTBox_c::actWaitGetItem(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWaitGetItem(int) {
+    return TRUE;
 }
 
 /* 000013B4-000013BC       .text actWaitDummy__9daSTBox_cFi */
-void daSTBox_c::actWaitDummy(int) {
-    /* Nonmatching */
+BOOL daSTBox_c::actWaitDummy(int) {
+    return TRUE;
 }
 
 /* 000013BC-000013DC       .text daSTBox_Create__FPv */
@@ -121,9 +494,16 @@ static BOOL daSTBox_Delete(void* i_this) {
     return ((daSTBox_c*)i_this)->_delete();
 }
 
+bool daSTBox_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    return 1;
+}
+
 /* 00001400-0000146C       .text daSTBox_Draw__FPv */
-static BOOL daSTBox_Draw(void*) {
-    /* Nonmatching */
+static BOOL daSTBox_Draw(void* ptr) {
+    return ((daSTBox_c*)ptr)->_draw();
 }
 
 /* 0000146C-00001490       .text daSTBox_Execute__FPv */

@@ -20,6 +20,12 @@ public:
     /* 0x2804 */ int mObjTgCount;
     /* 0x2808 */ int mObjCoCount;
     /* 0x280C */ int mObjCount;
+#if DEBUG
+    int mObjAtDrawCount;
+    int mObjTgDrawCount;
+    int mObjCoDrawCount;
+    int mObjDrawCount;
+#endif
     /* 0x2810 */ cCcD_DivideArea mDivideArea;
     /* 0x2850 vtable */
 
@@ -63,6 +69,8 @@ public:
     virtual void SetCoGCorrectProc(cCcD_Obj*, cCcD_Obj*);
 };  // Size = 0x2850
 
+#if !DEBUG
 STATIC_ASSERT(sizeof(cCcS) == 0x2854);
+#endif
 
 #endif /* C_CC_S_H */

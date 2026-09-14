@@ -25,7 +25,7 @@ public:
     /* 0x1F2 */ u16 field_0x1f2;
     /* 0x1F4 */ u16 field_0x1f4;
     /* 0x1F8 */ void * field_0x1f8;
-    /* 0x1FC */ u32 field_0x1fc;
+    /* 0x1FC */ void * field_0x1fc;
 };
 
 #endif /* D_S_LOGO_H */

@@ -98,6 +98,7 @@ static BOOL dWindArrow_Execute(dWindArrow_c* i_this) {
 
 /* 8023E738-8023E740       .text dWindArrow_IsDelete__FP12dWindArrow_c */
 static BOOL dWindArrow_IsDelete(dWindArrow_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

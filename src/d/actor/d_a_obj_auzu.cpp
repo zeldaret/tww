@@ -154,17 +154,13 @@ void daObjAuzu::Act_c::ship_whirl() {
     if (ship_p && fopAcM_GetName(ship_p) == fpcNm_SHIP_e) {
         f32 sqr_mag_xz = fopAcM_searchActorDistanceXZ2(this, ship_p);
 #if VERSION > VERSION_DEMO
-        f32 inner_activation = (daObjAuzu::L_radius * attr().mInnerActivationMult) * 
-                               (daObjAuzu::L_radius * attr().mInnerActivationMult);
+        f32 inner_activation = SQUARE(daObjAuzu::L_radius * attr().mInnerActivationMult);
 
-        f32 outer_activation = (daObjAuzu::L_radius * attr().mOuterActivationMult) * 
-                               (daObjAuzu::L_radius * attr().mOuterActivationMult);
+        f32 outer_activation = SQUARE(daObjAuzu::L_radius * attr().mOuterActivationMult);
 #else
-        f32 outer_activation = (daObjAuzu::L_radius * attr().mOuterActivationMult) * 
-                               (daObjAuzu::L_radius * attr().mOuterActivationMult);
+        f32 outer_activation = SQUARE(daObjAuzu::L_radius * attr().mOuterActivationMult);
 
-        f32 inner_activation = (daObjAuzu::L_radius * attr().mInnerActivationMult) * 
-                               (daObjAuzu::L_radius * attr().mInnerActivationMult);
+        f32 inner_activation = SQUARE(daObjAuzu::L_radius * attr().mInnerActivationMult);
 #endif
         if (sqr_mag_xz < outer_activation) {
             if (mScaleAnimFactor > 0.01f) {
@@ -191,10 +187,10 @@ void daObjAuzu::Act_c::bgm_start() {
 
 /* 000007DC-00000AF8       .text _execute__Q29daObjAuzu5Act_cFv */
 bool daObjAuzu::Act_c::_execute() {
-    f32 scale_target;
 #if VERSION > VERSION_JPN
     set_mtx();
 #endif
+
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         ship_whirl();
     } else {
@@ -202,9 +198,7 @@ bool daObjAuzu::Act_c::_execute() {
             daPy_lk_c* link_p = daPy_getPlayerLinkActorClass();
             fopAcM_searchActorDistanceXZ2(this, daPy_getPlayerLinkActorClass());
             if (
-                fopAcM_searchActorDistanceXZ2(this, link_p) < 
-                ((daObjAuzu::L_radius * attr().mOuterActivationMult) * 
-                 (daObjAuzu::L_radius * attr().mOuterActivationMult))
+                fopAcM_searchActorDistanceXZ2(this, link_p) < SQUARE(daObjAuzu::L_radius * attr().mOuterActivationMult)
             ) {
                 link_p->setWhirlId(fopAcM_GetID(this));
             }
@@ -213,6 +207,7 @@ bool daObjAuzu::Act_c::_execute() {
 
     mBtkAnm.play();
 
+    f32 scale_target;
     if (prm_get_appear() == 1) {
         if (mbToAppear) {
             scale_target = 1.0f;

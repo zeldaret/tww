@@ -81,6 +81,7 @@ static BOOL daTagKbItem_Execute(void* i_this) {
 
 /* 00000258-00000260       .text daTagKbItem_IsDelete__FPv */
 static BOOL daTagKbItem_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

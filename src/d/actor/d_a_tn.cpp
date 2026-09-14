@@ -1114,7 +1114,7 @@ static void fight_run(tn_class* i_this) {
     cXyz local_54;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    f32 stickPosX = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f32 stickPosX = CPad_GET_STICK_POS_X(0);
     i_this->mDamageReaction.m710 = 1;
     i_this->mDamageReaction.m4D0 = i_this->mTargetAngle;
     if (i_this->m03EC == 0 && i_this->mDamageReaction.mMode != 0) {
@@ -1437,7 +1437,7 @@ static void fight(tn_class* i_this) {
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     s8 r29 = false;
     s8 r27 = false;
-    f31 = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    f31 = CPad_GET_STICK_POS_X(0);
     i_this->mDamageReaction.m710 = 1;
     if ((player->getCutType() == daPy_py_c::CUT_TYPE_CUT_TURN) || (player->getCutType() == daPy_py_c::CUT_TYPE_CUT_ROLL)) {
         r27 = true;
@@ -2564,9 +2564,9 @@ static void demo_camera(tn_class* i_this) {
                 camera->SetTrimSize(1);
                 i_this->m14F8 = 0x33;
 
-                camera_class* r3 = dComIfGp_getCamera(0);
-                i_this->mCameraEyePos = r3->mLookat.mEye;
-                i_this->mCenterPos = r3->mLookat.mCenter;
+                camera_process_class* r3 = dComIfGp_getCamera(0);
+                i_this->mCameraEyePos = r3->view.mLookat.mEye;
+                i_this->mCenterPos = r3->view.mLookat.mCenter;
                 i_this->m1514 = 55.0f;
                 i_this->m14FA = 0;
             }
@@ -2701,6 +2701,7 @@ static void Tn_move(tn_class* i_this) {
                     break;
                 case ACTION_S_DEMO:
                     s_demo(i_this);
+                    break;
             }
 #if VERSION == VERSION_DEMO
             if (r29 != 0) {
@@ -3107,6 +3108,7 @@ static u8 damage_check(tn_class* i_this) {
         case 7:
             i_this->mDamageReaction.m424 |= 0x10;
             i_this->mDamageReaction.m428 = 26.0f;
+            break;
     }
     if (i_this->mDamageReaction.m424 != 0) {
         cXyz local_8c(0.0f, 0.0f, -10.0f);

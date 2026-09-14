@@ -166,9 +166,9 @@ s32 JAIZelInst::setStickPos(s32 main_stick, s32 c_stick) {
 }
 
 static f32 dummy() {
-    OSReport("[JAIZelInst::playMelody] melody number too large (%d)\n");
-    OSReport("[JAIZelInst::getPlayingPattern] too large melody number : %d\n");
-    OSReport("[JAIZelInst::getPlayingPattern] too large step : %d\n");
+    DEAD_STRING("[JAIZelInst::playMelody] melody number too large (%d)\n");
+    DEAD_STRING("[JAIZelInst::getPlayingPattern] too large melody number : %d\n");
+    DEAD_STRING("[JAIZelInst::getPlayingPattern] too large step : %d\n");
     return 0.0f;
 }
 

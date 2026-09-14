@@ -31,7 +31,7 @@ public:
         mNo = -1;
     }
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -560,6 +560,7 @@ static BOOL daSail_Execute(sail_class* i_this) {
 
 /* 00002154-0000215C       .text daSail_IsDelete__FP10sail_class */
 static BOOL daSail_IsDelete(sail_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

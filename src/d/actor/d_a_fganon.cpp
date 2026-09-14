@@ -1102,7 +1102,6 @@ void standby(fganon_class* i_this) {
             }
         }
     }
-    
 }
 
 /* 00004DB4-00005128       .text start__FP12fganon_class */
@@ -1646,8 +1645,8 @@ s32 move(fganon_class* i_this) {
 
 /* 00006560-00007434       .text demo_camera__FP12fganon_class */
 void demo_camera(fganon_class* i_this) {
-    camera_class* camera;
-    camera_class* camera2;
+    camera_process_class* camera;
+    camera_process_class* camera2;
     fopEn_enemy_c* a_this;
     fopAc_ac_c* player_actor;
     daPy_py_c* player;
@@ -1946,8 +1945,8 @@ void demo_camera(fganon_class* i_this) {
 
             camera2 = dComIfGp_getCamera(0);
 
-            i_this->mB5C = camera2->mLookat.mEye;
-            i_this->mB68 = camera2->mLookat.mCenter;
+            i_this->mB5C = camera2->view.mLookat.mEye;
+            i_this->mB68 = camera2->view.mLookat.mCenter;
 
             a_this->shape_angle.y = fopAcM_searchPlayerAngleY(a_this);
         }
@@ -2008,6 +2007,7 @@ void demo_camera(fganon_class* i_this) {
             if (DEMO_SELECT(REG17_S(3), REG0_S(3)) == 0) {
                 dComIfGs_onSwitch(i_this->mSwitchNo, fopAcM_GetRoomNo(a_this));
             }
+            // Fall-through
         }
         case 150: {
         case_150:
@@ -2016,6 +2016,7 @@ void demo_camera(fganon_class* i_this) {
             dMeter_mtrShow();
             dComIfGp_event_reset();
             i_this->mB54 = 0;
+            break;
         }
     }
     if (i_this->mB54 && bVar3) {
@@ -2359,7 +2360,7 @@ void energy_ball_move(fganon_class* i_this) {
 void* mahou_se_set(void* i_act, void* i_other) {
     fganon_class* i_this = (fganon_class*)i_act;
     fopAc_ac_c* a_this = &i_this->actor;
-    if ((fopAc_IsActor(i_this)) && fopAcM_GetName(a_this) == fpcNm_FGMAHOU_e) {
+    if ((fopAcM_IsActor(i_this)) && fopAcM_GetName(a_this) == fpcNm_FGMAHOU_e) {
         if (a_this->health == 0) {
             fopAcM_seStartCurrent(a_this, JA_SE_OBJ_PG_EBALL_FLY_L, 0);
         }

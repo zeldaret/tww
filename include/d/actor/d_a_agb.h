@@ -257,7 +257,9 @@ public:
     /* 0x67D */ bool field_0x67d;
     /* 0x67E */ bool field_0x67e;
     /* 0x67F */ bool field_0x67f;
+#if VERSION > VERSION_DEMO
     /* 0x680 */ bool field_0x680;
+#endif
     /* 0x684 */ dPa_followEcallBack field_0x684;
 };
 

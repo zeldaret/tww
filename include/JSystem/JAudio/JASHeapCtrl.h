@@ -27,8 +27,9 @@ namespace JASystem {
             JASystem::Kernel::THeap* getTailHeap();
             u32 getTailOffset();
             u32 getCurOffset();
-
-            bool isAllocated() { return mBase; }
+            
+            void* getBase() { return mBase; }
+            bool isAllocated() const { return mBase != NULL; }
 
             /* 0x00 */ JSUTree<THeap> mTree;
             /* 0x1C */ OSMutex mMutex;

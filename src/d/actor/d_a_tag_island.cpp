@@ -451,7 +451,7 @@ cPhs_State daTag_Island_c::create() {
     s32 swbit = getSwbit();
     makeEvId();
     eventInfo.setEventId(mEventId);
-    eventInfo.mMapToolId = getEventNo();
+    eventInfo.setToolId(getEventNo());
 
     if (mEventId != -1 && swbit != 0xFF && !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACT_ARRIVAL);
@@ -505,6 +505,7 @@ static BOOL daTag_Island_Execute(daTag_Island_c* i_this) {
 
 /* 000012C4-000012CC       .text daTag_Island_IsDelete__FP14daTag_Island_c */
 static BOOL daTag_Island_IsDelete(daTag_Island_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

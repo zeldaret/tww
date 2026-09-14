@@ -6,7 +6,7 @@
 #include "f_pc/f_pc_base.h"
 
 struct layer_class;
-class overlap_task_class;
+struct overlap_task_class;
 
 struct overlap_request_class {
     /* 0x00 */ request_base_class base;

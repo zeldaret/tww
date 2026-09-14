@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_iceisland.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
 #include "res/Object/GiceL.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 
@@ -58,7 +59,12 @@ void daObjIceisland_c::CreateInit() {
     u8 switchNo = daObjIceisland_prm::getSwitchNo(this);
     if(fopAcM_isSwitch(this, switchNo)){
         mBrkAnm.setFrame(mBrkAnm.getEndFrame());
-        if(dComIfGs_getStartPoint() == 2 && current.roomNo == dComIfGs_getRestartRoomNo()){
+        if(
+            dComIfGs_getStartPoint() == 2
+#if VERSION > VERSION_DEMO
+            && current.roomNo == dComIfGs_getRestartRoomNo()
+#endif
+        ){
             field_0x39C = 6;
         }else {
             field_0x39C = 3;
@@ -71,6 +77,9 @@ void daObjIceisland_c::CreateInit() {
     }
     mMeltIceEventIdx = dComIfGp_evmng_getEventIdx("MELT_ICE");
     mFreezeIceEventIdx = dComIfGp_evmng_getEventIdx("FREEZE_ICE");
+#if VERSION == VERSION_DEMO
+    REG17_S(0) = 0x80;
+#endif
 }
 
 /* 00000588-00000608       .text set_mtx__16daObjIceisland_cFv */
@@ -92,7 +101,7 @@ void daObjIceisland_c::daObjIceisland_freeze_main() {
 
 /* 0000067C-00000774       .text daObjIceisland_melt_demo_wait__16daObjIceisland_cFv */
 void daObjIceisland_c::daObjIceisland_melt_demo_wait() {
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+    if(eventInfo.checkCommandDemoAccrpt()){
         mDoAud_seStart(JA_SE_READ_RIDDLE_1);
         JPABaseEmitter* emitter = mEmitter1;
         if(emitter != NULL) {
@@ -131,7 +140,7 @@ void daObjIceisland_c::daObjIceisland_melt_main() {
 
 /* 00000850-000008C0       .text daObjIceisland_freeze_demo_wait__16daObjIceisland_cFv */
 void daObjIceisland_c::daObjIceisland_freeze_demo_wait() {
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+    if(eventInfo.checkCommandDemoAccrpt()){
         daObjIceisland_particle_set();
         mBrkAnm.setPlaySpeed(-1.0f);
         field_0x39C = 5;
@@ -233,17 +242,13 @@ bool daObjIceisland_c::_execute(){
         field_0x396++;
     }
     fopAcM_seStartCurrent(this, JA_SE_ATM_ICEBERG_WIND, field_0x396);
-    JPABaseEmitter* emitter = mEmitter1;
-    if(emitter != NULL) {
-        
-        u8 colorK0R = (mTevStr.mColorK0.r / 2) + 0x80;
-        u8 colorK0G = (mTevStr.mColorK0.g / 2) + 0x80;
-        u8 colorK0B = (mTevStr.mColorK0.b / 2) + 0x80;
+    if(mEmitter1 != NULL) {
+        u8 colorK0R = DEMO_SELECT(REG17_S(0), 0x80) + (mTevStr.mColorK0.r / 2);
+        u8 colorK0G = DEMO_SELECT(REG17_S(0), 0x80) + (mTevStr.mColorK0.g / 2);
+        u8 colorK0B = DEMO_SELECT(REG17_S(0), 0x80) + (mTevStr.mColorK0.b / 2);
 
-        emitter->setGlobalPrmColor(colorK0R, colorK0G, colorK0B);
-        emitter = mEmitter1;
-        emitter->setGlobalEnvColor(colorK0R, colorK0G, colorK0B);
-        
+        mEmitter1->setGlobalPrmColor(colorK0R, colorK0G, colorK0B);
+        mEmitter1->setGlobalEnvColor(colorK0R, colorK0G, colorK0B);
     }
     return true;
 }

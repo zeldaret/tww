@@ -34,4 +34,6 @@ public:
     OSHeapHandle mHeapHandle;
 };
 
+inline JKRStdHeap* JKRCreateStdHeap(u32 size, JKRHeap* parent, bool errorFlag) { return JKRStdHeap::create(size, parent, errorFlag); }
+
 #endif /* JKRSTDHEAP_H */

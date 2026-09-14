@@ -156,3 +156,25 @@ static BOOL dMinigame_Terminater_Delete(dMinigame_Terminater_c*) {
 static cPhs_State dMinigame_Terminater_Create(msg_class*) {
     /* Nonmatching */
 }
+
+msg_method_class l_dMinigame_Terminater_Method = {
+    (process_method_func)dMinigame_Terminater_Create,
+    (process_method_func)dMinigame_Terminater_Delete,
+    (process_method_func)dMinigame_Terminater_Execute,
+    (process_method_func)dMinigame_Terminater_IsDelete,
+    (process_method_func)dMinigame_Terminater_Draw,
+};
+
+msg_process_profile_definition g_profile_MINIGAME_TERMINATER = {
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MINIGAME_TERMINATER_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dMinigame_Terminater_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Draw Prio    */ fpcDwPi_MINIGAME_TERMINATER_e,
+    /* Msg SubMtd   */ &l_dMinigame_Terminater_Method,
+};

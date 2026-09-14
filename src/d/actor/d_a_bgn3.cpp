@@ -107,7 +107,7 @@ daBgn3_HIO_c::daBgn3_HIO_c() {
 #if VERSION > VERSION_DEMO
 /* 000001F4-00000240       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -220,7 +220,7 @@ static void drop_eff_set(bgn3_class* i_this) {
 
 /* 0000101C-00001068       .text esa_s_sub__FPvPv */
 static void* esa_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_ESA_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_ESA_e)) {
         return param_1;
     } else {
         return NULL;
@@ -1043,7 +1043,7 @@ static void move(bgn3_class* i_this) {
 #if VERSION == VERSION_DEMO
 /* 000001F4-00000240       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -1053,7 +1053,7 @@ static void* bgn_s_sub(void* param_1, void*) {
 
 /* 00004058-000040B0       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KS_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KS_e)) {
         ki_all_count++;
     }
     return NULL;
@@ -1078,7 +1078,7 @@ static BOOL daBgn3_Execute(bgn3_class* i_this) {
     if (l_HIO.m06 != 0) {
         actor->health = l_HIO.m06;
     }
-    esa = (esa_class*)fpcEx_Search(esa_s_sub, i_this);
+    esa = (esa_class*)fpcM_Search(esa_s_sub, i_this);
     if (bgn->m02B5 != 2) {
         i_this->m0FD8A = 10;
         actor->current.pos.x = 0.0f;

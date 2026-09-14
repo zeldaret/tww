@@ -185,7 +185,7 @@ BOOL daObjMkie::Act_c::Create() {
 
 #if VERSION > VERSION_DEMO
     if (daObj::PrmAbstract<Prm_e>(this, PRM_FLAG_W, PRM_FLAG_S) != 0) {
-        actor_status &= ~0x3F;
+        fopAcM_ClearStatusMap(this);
         gbaName = 0;
     }
 #endif

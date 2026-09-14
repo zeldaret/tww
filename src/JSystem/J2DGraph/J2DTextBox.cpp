@@ -190,9 +190,8 @@ void J2DTextBox::drawSelf(f32 x, f32 y, Mtx* pMtx) {
     MTXConcat(*pMtx, mDrawMtx, mtx);
     GXLoadPosMtxImm(mtx, 0);
     print.locate(x, y);
-    f32 w = mBounds.f.x - mBounds.i.x + 0.0001f;
-    f32 h = mBounds.f.y - mBounds.i.y;
-    print.printReturn(mStringPtr, w, h, (J2DTextBoxHBinding)mBindingH, (J2DTextBoxVBinding)mBindingV, field_0xd8, field_0xdc, mDrawAlpha);
+    print.printReturn(mStringPtr, mBounds.getWidth() + 0.0001f, mBounds.getHeight(),
+                      (J2DTextBoxHBinding)mBindingH, (J2DTextBoxVBinding)mBindingV, field_0xd8, field_0xdc, mDrawAlpha);
 }
 
 /* 802D5DA4-802D5EB0       .text resize__10J2DTextBoxFff */

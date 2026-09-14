@@ -148,6 +148,7 @@ static BOOL daSwAt_Execute(void* i_this) {
 
 /* 000005F0-000005F8       .text daSwAt_IsDelete__FPv */
 static BOOL daSwAt_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -6,14 +6,6 @@
 #include "d/d_bg_s_acch.h"
 #include "d/d_particle.h"
 
-class camera_class;
-class mant_class;
-class daBoko_c;
-class daPy_py_c;
-class mDoExt_McaMorf;
-class mDoExt_brkAnm;
-class mDoExt_btkAnm;
-
 class fganon_class {
 public:
     /* 0x000 */ fopEn_enemy_c actor;

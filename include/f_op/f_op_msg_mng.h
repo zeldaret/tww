@@ -9,7 +9,7 @@
 class JKRExpHeap;
 class JKRHeap;
 class fopAc_ac_c;
-class msg_class;
+struct msg_class;
 class J2DPane;
 class J2DScreen;
 class J2DPicture;
@@ -60,6 +60,18 @@ struct fopMsg_prm_timer : public fopMsg_prm_class {
     /* 0x24 */ cXy mTimerPos;
     /* 0x2C */ cXy mRupeePos;
 }; // Size: 0x34
+
+struct fopMsgM_unk_struct {
+    u16 _0;
+    u16 _2;
+    u16 _4;
+    u16 _6;
+    u16 _8;
+    u16 _A;
+    s16 _C;
+    u16 _E;
+    u8 _10;
+};
 
 class J2DScreen;
 
@@ -146,6 +158,132 @@ public:
     /* 0x134 */ u8 m134;
 };
 
+enum {
+    /* 0x00 */ fopMsgM_Icon_A_BUTTON_e,
+    /* 0x01 */ fopMsgM_Icon_B_BUTTON_e,
+    /* 0x02 */ fopMsgM_Icon_C_STICK_e,
+    /* 0x03 */ fopMsgM_Icon_L_BUTTON_e,
+    /* 0x04 */ fopMsgM_Icon_R_BUTTON_e,
+    /* 0x05 */ fopMsgM_Icon_X_BUTTON_e,
+    /* 0x06 */ fopMsgM_Icon_Y_BUTTON_e,
+    /* 0x07 */ fopMsgM_Icon_Z_BUTTON_e,
+    /* 0x08 */ fopMsgM_Icon_DPAD_e,
+    /* 0x09 */ fopMsgM_Icon_MAIN_STICK_e,
+    /* 0x0A */ fopMsgM_Icon_ARROW_LEFT_e,
+    /* 0x0B */ fopMsgM_Icon_ARROW_RIGHT_e,
+    /* 0x0C */ fopMsgM_Icon_ARROW_UP_e,
+    /* 0x0D */ fopMsgM_Icon_ARROW_DOWN_e,
+    /* 0x0E */ fopMsgM_Icon_MAIN_STICK_UP_e,
+    /* 0x0F */ fopMsgM_Icon_MAIN_STICK_DOWN_e,
+    /* 0x10 */ fopMsgM_Icon_MAIN_STICK_LEFT_e,
+    /* 0x11 */ fopMsgM_Icon_MAIN_STICK_RIGHT_e,
+    /* 0x12 */ fopMsgM_Icon_MAIN_STICK_UP_DOWN_e,
+    /* 0x13 */ fopMsgM_Icon_MAIN_STICK_LEFT_RIGHT_e,
+    /* 0x14 */ fopMsgM_Icon_FLASHING_A_BUTTON_e,
+    /* 0x15 */ fopMsgM_Icon_HEART_e,
+    /* 0x16 */ fopMsgM_Icon_MUSIC_NOTE_e,
+    /* 0x17 */ fopMsgM_Icon_STARBURST_e,
+
+    // These aren't icons but choices.
+    /* 0x14 */ fopMsgM_Icon_SELECT_YOKO_LEFT_e = 0x14,
+    /* 0x15 */ fopMsgM_Icon_SELECT_YOKO_RIGHT_e,
+    /* 0x16 */ fopMsgM_Icon_INPUT_e,
+
+    // Duplicates of the icons that had their indexes offset by the choices above.
+    /* 0x17 */ fopMsgM_Icon_FLASHING_A_BUTTON_2_e,
+    /* 0x18 */ fopMsgM_Icon_HEART_2_e,
+    /* 0x19 */ fopMsgM_Icon_MUSIC_NOTE_2_e,
+    /* 0x1A */ fopMsgM_Icon_STARBURST_2_e,
+
+    /* 0xFF */ fopMsgM_Icon_NONE_e = 0xFF,
+};
+
+// 1A NN 00 00 XX
+enum MsgControlCodes {
+    /* 0x00 */ MsgCtrlCode_PLAYER_NAME,
+    /* 0x01 */ MsgCtrlCode_UNK01, // draw_instant ?
+    /* 0x02 */ MsgCtrlCode_UNK02, // draw_char ?
+    /* 0x03 */ MsgCtrlCode_UNK03, // wait_dismiss_prompt ?
+    /* 0x04 */ MsgCtrlCode_UNK04, // wait_dismiss ?
+    /* 0x05 */ MsgCtrlCode_UNK05, // dismiss ?
+    /* 0x06 */ MsgCtrlCode_DUMMY, // Does nothing
+    /* 0x07 */ MsgCtrlCode_WAIT,
+    /* 0x08 */ MsgCtrlCode_SELECT_TWO, // Vertical choice, two options
+    /* 0x09 */ MsgCtrlCode_SELECT_THREE, // Vertical choice, three options
+    /* 0x0A */ MsgCtrlCode_A_BUTTON,
+    /* 0x0B */ MsgCtrlCode_B_BUTTON,
+    /* 0x0C */ MsgCtrlCode_C_STICK,
+    /* 0x0D */ MsgCtrlCode_L_BUTTON,
+    /* 0x0E */ MsgCtrlCode_R_BUTTON,
+    /* 0x0F */ MsgCtrlCode_X_BUTTON,
+    /* 0x10 */ MsgCtrlCode_Y_BUTTON,
+    /* 0x11 */ MsgCtrlCode_Z_BUTTON,
+    /* 0x12 */ MsgCtrlCode_DPAD,
+    /* 0x13 */ MsgCtrlCode_MAIN_STICK,
+    /* 0x14 */ MsgCtrlCode_ARROW_LEFT,
+    /* 0x15 */ MsgCtrlCode_ARROW_RIGHT,
+    /* 0x16 */ MsgCtrlCode_ARROW_UP,
+    /* 0x17 */ MsgCtrlCode_ARROW_DOWN,
+    /* 0x18 */ MsgCtrlCode_MAIN_STICK_UP,
+    /* 0x19 */ MsgCtrlCode_MAIN_STICK_DOWN,
+    /* 0x1A */ MsgCtrlCode_MAIN_STICK_LEFT,
+    /* 0x1B */ MsgCtrlCode_MAIN_STICK_RIGHT,
+    /* 0x1C */ MsgCtrlCode_MAIN_STICK_UP_DOWN,
+    /* 0x1D */ MsgCtrlCode_MAIN_STICK_LEFT_RIGHT,
+    /* 0x1E */ MsgCtrlCode_SELECT_YOKO_LEFT, // Horizontal choice, left option
+    /* 0x1F */ MsgCtrlCode_SELECT_YOKO_RIGHT, // Horizontal choice, right option
+    /* 0x20 */ MsgCtrlCode_UNK20, // canon_balls ?
+    /* 0x21 */ MsgCtrlCode_UNK21, // broken_vase_payment ?
+    /* 0x22 */ MsgCtrlCode_UNK22, // auction_character ?
+    /* 0x23 */ MsgCtrlCode_UNK23, // auction_item ?
+    /* 0x24 */ MsgCtrlCode_UNK24, // auction_bid ?
+    /* 0x25 */ MsgCtrlCode_UNK25, // auction_starting_bid ?
+    /* 0x26 */ MsgCtrlCode_UNK26, // player_action_bid_selector ?
+    /* 0x27 */ MsgCtrlCode_FLASHING_A_BUTTON,
+    /* 0x28 */ MsgCtrlCode_UNK28, // orca_blow_count ?
+    /* 0x29 */ MsgCtrlCode_UNK29, // pirate_password ?
+    /* 0x2A */ MsgCtrlCode_STARBURST,
+    /* 0x2B */ MsgCtrlCode_UNK2B, // post_office_game_letter_count ?
+    /* 0x2C */ MsgCtrlCode_UNK2C, // post_office_game_rupee_reward ?
+    /* 0x2D */ MsgCtrlCode_UNK2D, // post_box_letter_count ?
+    /* 0x2E */ MsgCtrlCode_UNK2E, // remaining_korok_count ?
+    /* 0x2F */ MsgCtrlCode_UNK2F, // remaining_forest_water_time ?
+    /* 0x30 */ MsgCtrlCode_UNK30, // flight_platform_time ?
+    /* 0x31 */ MsgCtrlCode_UNK31, // flight_platform_record ?
+    /* 0x32 */ MsgCtrlCode_UNK32, // beedle_point_count ?
+    /* 0x33 */ MsgCtrlCode_UNK33, // ms_marie_pendant_count ?
+    /* 0x34 */ MsgCtrlCode_UNK34, // ms_marie_pendant_total ?
+    /* 0x35 */ MsgCtrlCode_UNK35, // pig_game_time ?
+    /* 0x36 */ MsgCtrlCode_UNK36, // sailing_game_rupee_reward ?
+    /* 0x37 */ MsgCtrlCode_UNK37, // current_bomb_capacity ?
+    /* 0x38 */ MsgCtrlCode_UNK38, // current_arrow_capacity ?
+    /* 0x39 */ MsgCtrlCode_HEART,
+    /* 0x3A */ MsgCtrlCode_MUSIC_NOTE,
+    /* 0x3B */ MsgCtrlCode_UNK3B, // target_letter_count ?
+    /* 0x3C */ MsgCtrlCode_UNK3C, // fishman_hit_count ?
+    /* 0x3D */ MsgCtrlCode_UNK3D, // fishman_rupee_reward ?
+    /* 0x3E */ MsgCtrlCode_UNK3E, // boko_baba_seed_count ?
+    /* 0x3F */ MsgCtrlCode_UNK3F, // skull_necklace_count ?
+    /* 0x40 */ MsgCtrlCode_UNK40, // chu_jelly_count ?
+    /* 0x41 */ MsgCtrlCode_UNK41, // joy_pendant_count ?
+    /* 0x42 */ MsgCtrlCode_UNK42, // golden_feather_count ?
+    /* 0x43 */ MsgCtrlCode_UNK43, // knights_crest_count ?
+    /* 0x44 */ MsgCtrlCode_UNK44, // beedle_rupee_offer ?
+    /* 0x45 */ MsgCtrlCode_UNK45, // boko_baba_sell_selector ?
+    /* 0x46 */ MsgCtrlCode_UNK46, // skull_necklace_sell_selector ?
+    /* 0x47 */ MsgCtrlCode_UNK47, // chu_jelly_sell_selector ?
+    /* 0x48 */ MsgCtrlCode_UNK48, // joy_pendant_sell_selector ?
+    /* 0x49 */ MsgCtrlCode_UNK49, // golden_feather_sell_selector ?
+    /* 0x4A */ MsgCtrlCode_UNK4A, // knights_crest_sell_selector ?
+};
+
+// 1A NN FF 00 XX
+enum MsgSpecialControlCode {
+    /* 0x00 */ MsgSpclCode_COLOR,
+    /* 0x01 */ MsgSpclCode_UNK1,
+    /* 0x02 */ MsgSpclCode_RUBY,
+};
+
 class fopMsgM_msgDataProc_c {
 public:
     fopMsgM_msgDataProc_c();
@@ -165,12 +303,6 @@ public:
     void selectArrow(J2DPicture*, f32, f32);
     void colorAnime(J2DPicture*);
     void stringSet();
-    void setSelectFlagYokoOn();
-    void setSelectFlagOn();
-    void setHandSendFlagOn();
-    void setAutoSendFlagOn();
-    u8 getHandSendFlag();
-    u8 getAutoSendFlag();
     void getString(char*, u32);
     void getString(char*, char*, char*, char*, u32, f32*, f32*, int*);
     void getRubyString(char*, char*, char*, char*, char*, char*, f32*, f32*, int*);
@@ -239,11 +371,11 @@ public:
     void tag_input_kenshi();
 #endif
 
-    u32 getIconColor(int i_no) { return field_0x1E0[i_no]; }
-    u8 getIconNum(int i_no) { return field_0x281[i_no]; }
-    int getIconPosX(int i_no) { return field_0x168[i_no]; }
-    int getIconPosY(int i_no) { return field_0x1A4[i_no]; }
-    void getIconScale(int) {}
+    u8 getIconNum(int i_no) { return iconNum[i_no]; }
+    int getIconPosX(int i_no) { return iconPosX[i_no]; }
+    int getIconPosY(int i_no) { return iconPosY[i_no]; }
+    int getIconScale(int i_no) { return iconScale[i_no]; }
+    u32 getIconColor(int i_no) { return iconColor[i_no]; }
 
     void setCharSpace(int i_space) { charSpace = i_space; }
     void setRubyCharSpace(int i_space) { rubyCharSpace = i_space; }
@@ -259,31 +391,60 @@ public:
         field_0x6C = param_3;
         field_0x4C = param_3;
     }
-    void setSelectMessage(char*, char*, char*, char*) {}
+    void setSelectMessage(char* param_0, char* param_1, char* param_2, char* param_3) {
+        selectMessage[0] = param_0;
+        selectMessage[1] = param_1;
+        selectMessage[2] = param_2;
+        selectMessage[3] = param_3;
+    }
 
     void setMesgEntry(JMSMesgEntry_c* i_entry) { mesgEntry = i_entry; }
 
-    void dec_keyWaitTimer() {}
-    void dec_waitTimer() {}
-    u8 getCharAlpha() { return field_0x293; } // ?
-    u8 getGradAlpha() { return field_0x292; } // ?
+    enum SelectFlag {
+        /* 0x00 */ Select_OFF,
+        /* 0x01 */ Select_ON,
+        /* 0x02 */ Select_YOKO,
+        /* 0x03 */ Select_AUCTION,
+    };
+
+    u8 getSelectFlag() { return selectFlag; }
+    void setSelectFlagOff() { selectFlag = Select_OFF; }
+    void setSelectFlagOn() { selectFlag = Select_ON; }
+    void setSelectFlagYokoOn() { selectFlag = Select_YOKO; }
+    void setSelectFlagAuctionOn() { selectFlag = Select_AUCTION; }
+    u8 getAutoSendFlag() { return autoSendFlag; }
+    void setAutoSendFlagOff() { autoSendFlag = 0; }
+    void setAutoSendFlagOn() { autoSendFlag = 1; }
+    u8 getHandSendFlag() { return handSendFlag; }
+    void setHandSendFlagOff() { handSendFlag = 0; }
+    void setHandSendFlagOn() { handSendFlag = 1; }
+
+    int get_waitTimer() { return waitTimer; }
+    void set_waitTimer(int value) { waitTimer = value; }
+    void set_waitTimerZero() { waitTimer = 0; }
+    int dec_waitTimer() { return waitTimer = waitTimer > 0 ? waitTimer - 1 : 0; }
+
+    int dec_keyWaitTimer() { return keyWaitTimer = keyWaitTimer > 0 ? keyWaitTimer - 1 : 0; }
+
     int getLineCount() { return lineCount; }
     u8 getMesgStatus() { return mesgStatus; }
-    f32 getNowCursorPos() { return field_0x20; }
-    u8 getRCharAlpha() { return field_0x291; } // ?
-    u8 getRGradAlpha() { return field_0x290; } // ?
-    void getSelectFlag() {}
-    void getSelectLength() {}
-    void getStringColor() {}
-    void get_waitTimer() {}
+    f32 getNowCursorPos() { return nowCursorPos; }
+    int getSelectLength() { return selectLength; }
+    u32 getStringColor() { return stringColor; }
+    void setStringColor(u32 i_color) { stringColor = i_color; }
     void resetNowLine() { nowLine = 0; }
-    void selectArrow(J2DPicture*) {}
-    void setActorPosition(cXyz*) {}
+    void selectArrow(J2DPicture* i_arrowPane) {
+        selectArrow(i_arrowPane, field_0x26C, field_0x270, field_0x278, field_0x274);
+    }
+    void setActorPosition(cXyz* i_pos) { actorPosition = i_pos; }
     void setAimLine(int i_line) { aimLine = i_line; }
-    void setAutoSendFlagOff() {}
     void setBmgData(char* i_data) { bmgData = i_data; }
     void setCenterLineWidth(int i_width) { centerLineWidth = i_width; }
 
+    u8 getCharAlpha() { return field_0x290; }
+    u8 getGradAlpha() { return field_0x291; }
+    u8 getRCharAlpha() { return field_0x292; }
+    u8 getRGradAlpha() { return field_0x293; }
     void setCharAlpha(u8 param_0, u8 param_1, u8 param_2, u8 param_3) {
         field_0x290 = param_0;
         field_0x291 = param_1;
@@ -292,57 +453,50 @@ public:
     }
 
     void setCount(int i_count) { count = i_count; }
-    void setFont(JUTFont* i_font) { font[0] = i_font; }
+    void setFont(JUTFont* i_font) { font = i_font; }
     void setFontSize(int i_size) { fontSize = i_size; }
-    void setHandSendFlagOff() {}
+    void setRubyFont(JUTFont* i_font) { rubyFont = i_font; }
+    void setRubyFontSize(int i_size) { rubyFontSize = i_size; }
     void setLineCount(int i_count) { lineCount = i_count; }
     void setLineWidth(int i_width) { lineWidth = i_width; }
-    void setRubyFont(JUTFont* i_font) { font[1] = i_font; }
-    void setRubyFontSize(int i_size) { rubyFontSize = i_size; }
-    void setSelectFlagOff() {}
     void setSelectNum(u8) {}
     void setSendSpeed(int i_speed) { sendSpeed = i_speed; }
     void setSpaceFlagOff() { spaceFlag = 0; }
-    void setSpaceFlagOn() {}
+    void setSpaceFlagOn() { spaceFlag = 1; }
     void setSpaceTimer(int i_timer) { spaceTimer = i_timer; }
-    void setStringColor(u32) {}
-    void set_waitTimer(int) {}
-    void set_waitTimerZero() {}
     void shortCut() { field_0x299 = 1; }
 
-    // fake, replace with real inline once it's figured out
-    u32 get_0x220(int i) { return field_0x220[i]; }
-
 public:
-    /* 0x004 */ JUTFont* font[2];
+    /* 0x004 */ JUTFont* font;
+    /* 0x008 */ JUTFont* rubyFont;
     /* 0x00C */ JMSMesgEntry_c* mesgEntry;
-    /* 0x010 */ u32 field_0x10;
+    /* 0x010 */ cXyz* actorPosition;
     /* 0x014 */ f32 field_0x14;
     /* 0x018 */ f32 field_0x18;
     /* 0x01C */ f32 field_0x1C;
-    /* 0x020 */ f32 field_0x20; // NowCursorPos?
+    /* 0x020 */ f32 nowCursorPos;
     /* 0x024 */ f32 field_0x24;
     /* 0x028 */ f32 field_0x28;
-    /* 0x02C */ u32 field_0x2C;
-    /* 0x030 */ u32 field_0x30;
-    /* 0x034 */ u32 field_0x34;
-    /* 0x038 */ u32 field_0x38;
+    /* 0x02C */ size_t field_0x2C;
+    /* 0x030 */ size_t field_0x30;
+    /* 0x034 */ size_t field_0x34;
+    /* 0x038 */ size_t field_0x38;
     /* 0x03C */ const char* bmgData;
     /* 0x040 */ char* field_0x40;
     /* 0x044 */ char* field_0x44;
     /* 0x048 */ char* field_0x48;
     /* 0x04C */ char* field_0x4C;
-    /* 0x050 */ char* field_0x50[4];
+    /* 0x050 */ char* selectMessage[4]; // TODO: should this be 4 separate fields? or should field_0x40 and field_0x60 also be arrays?
     /* 0x060 */ char* field_0x60;
     /* 0x064 */ char* field_0x64;
     /* 0x068 */ char* field_0x68;
     /* 0x06C */ char* field_0x6C;
     /* 0x070 */ char field_0x70[0x64]; // no idea how big this array is
     /* 0x0D4 */ char field_0xD4[4];
-    /* 0x0D8 */ s32 field_0xD8[4];
-    /* 0x0E8 */ s32 field_0xE8[4];
-    /* 0x0F8 */ s32 field_0xF8[4];
-    /* 0x108 */ s32 field_0x108[4];
+    /* 0x0D8 */ int field_0xD8[4];
+    /* 0x0E8 */ int field_0xE8[4];
+    /* 0x0F8 */ int field_0xF8[4];
+    /* 0x108 */ int field_0x108[4];
     /* 0x118 */ int count;
     /* 0x11C */ int charSpace;
     /* 0x120 */ int lineSpace;
@@ -350,25 +504,25 @@ public:
     /* 0x128 */ int lineWidth;
     /* 0x12C */ int centerLineWidth;
     /* 0x130 */ int lineCount;
-    /* 0x134 */ u32 field_0x134;
+    /* 0x134 */ int field_0x134;
     /* 0x138 */ int nowLine;
     /* 0x13C */ int aimLine;
-    /* 0x140 */ u32 field_0x140;
+    /* 0x140 */ int field_0x140;
     /* 0x144 */ int fontSize;
-    /* 0x148 */ u32 field_0x148;
+    /* 0x148 */ int field_0x148; // size/scale?
     /* 0x14C */ int rubyFontSize;
     /* 0x150 */ int field_0x150;
-    /* 0x154 */ u32 field_0x154;
-    /* 0x158 */ u32 field_0x158;
+    /* 0x154 */ int field_0x154;
+    /* 0x158 */ int waitTimer;
     /* 0x15C */ int spaceTimer;
     /* 0x160 */ int sendSpeed;
-    /* 0x164 */ int field_0x164;      // keyWaitTimer?
-    /* 0x168 */ int field_0x168[0xF]; // IconPosX
-    /* 0x1A4 */ int field_0x1A4[0xF]; // IconPosY
-    /* 0x1E0 */ u32 field_0x1E0[0xF]; // IconColor
-    /* 0x21C */ int field_0x21C;
-    /* 0x220 */ u32 field_0x220[0xF];
-    /* 0x25C */ u32 field_0x25C;
+    /* 0x164 */ int keyWaitTimer;
+    /* 0x168 */ int iconPosX[0xF];
+    /* 0x1A4 */ int iconPosY[0xF];
+    /* 0x1E0 */ int iconScale[0xF];
+    /* 0x21C */ int selectLength;
+    /* 0x220 */ u32 iconColor[0xF];
+    /* 0x25C */ u32 stringColor;
     /* 0x260 */ s16 field_0x260;
     /* 0x264 */ f32 field_0x264;
     /* 0x268 */ f32 field_0x268;
@@ -381,7 +535,7 @@ public:
     /* 0x27E */ u8 field_0x27E;
     /* 0x27F */ u8 field_0x27F;
     /* 0x280 */ u8 field_0x280;
-    /* 0x281 */ u8 field_0x281[0xF]; // IconNum?
+    /* 0x281 */ u8 iconNum[0xF];
     /* 0x290 */ u8 field_0x290;
     /* 0x291 */ u8 field_0x291;
     /* 0x292 */ u8 field_0x292;
@@ -398,7 +552,7 @@ public:
     /* 0x29B */ u8 field_0x29B;
     /* 0x29C */ u8 spaceFlag;
     /* 0x29D */ u8 field_0x29D;
-};
+};  // Size: 0x2A0
 
 typedef int (*fopMsgCreateFunc)(void*);
 
@@ -461,10 +615,13 @@ void fopMsgM_setAlpha(fopMsgM_pane_alpha_class* i_pane);
 
 u32 fopMsgM_searchMessageNumber(u32 i_msgNo);
 bool fopMsgM_forceSendOn();
+bool fopMsgM_checkForceSend();
+void fopMsgM_forceSendOff();
 void fopMsgM_messageSendOn();
 void fopMsgM_messageSendOff();
 bool fopMsgM_checkMessageSend();
 u32 fopMsgM_tactMessageSet();
+fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_rubyPane, char* param_3, char* param_4, char* param_5, char* param_6, u32 i_msgNo);
 void fopMsgM_demoMsgFlagOn();
 
 bool fopMsgM_getScopeMode();
@@ -484,11 +641,14 @@ void fopMsgM_blendInit(J2DPicture* pic, const char* data);
 u8 fopMsgM_itemNumIdx(u8 i_no);
 u8 fopMsgM_itemNum(u8 i_itemNo);
 u32 fopMsgM_getColorTable(u16 i_colorNo);
+void fopMsgM_int_to_char(char* i_dest, int i_value, bool param_3);
 void fopMsgM_blendDraw(fopMsgM_pane_class* i_pane, const char* data);
 void fopMsgM_blendDraw(J2DPicture* pic, const char* data);
 void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char* param_4, int param_5, int param_6);
 void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int size, int, int);
 
+const char* fopMsgM_outFontTex(int i_iconNo);
+GXColor fopMsgM_outFontColorWhite(int i_no);
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, s16* i_timer, u32 i_color, u8 i_iconNo);
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, s16* i_timer, u32 i_color, u8 i_iconNo);
 void fopMsgM_outFontDraw(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, int param_3, int param_4, int param_5, s16* i_timer, u8 i_alpha, u8 i_iconNo);

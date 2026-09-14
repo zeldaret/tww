@@ -986,7 +986,7 @@ static BOOL nodeCallBack_Hr(J3DNode* node, int calcTiming) {
                 i_this->setEyePos(temp2);
                 i_this->incAttnSetCount();
             } else if (jntNo == i_this->getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
             } else if (jntNo == i_this->m_waist_jnt_num) {
                 temp.set(0.0f, 0.0f, 0.0f);
                 MtxPosition(&temp, &i_this->mCloudPos);
@@ -1171,8 +1171,8 @@ void daNpc_Hr_c::eventOrder() {
 
 /* 00002C94-00002D3C       .text checkOrder__10daNpc_Hr_cFv */
 void daNpc_Hr_c::checkOrder() {
-    if (eventInfo.mCommand != dEvtCmd_INDEMO_e) {
-        if (eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(7)) {
+    if (!eventInfo.checkCommandDemoAccrpt()) {
+        if (eventInfo.checkCommandTalk() && ChkOrder(7)) {
             if (dComIfGp_event_chkTalkXY()) {
                 setFlag(HR_FLAG_00000008);
             } else {
@@ -1549,7 +1549,7 @@ bool daNpc_Hr_c::rt_hide() {
     getTornadoPos(0, &tornadoPos);
     current.pos = tornadoPos;
     current.pos.y -= 1500.0f;
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if(eventInfo.checkCommandDemoAccrpt()) {
         mReturnState = 8;
         mState = HR_STATE_RT_INTRO;
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Hr2");
@@ -1677,7 +1677,7 @@ bool daNpc_Hr_c::rt_win() {
 bool daNpc_Hr_c::rt_hit0() {
     daShip_c* pShip = dComIfGp_getShipActor();
 
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if(eventInfo.checkCommandDemoAccrpt()) {
         mState = HR_STATE_RT_HIT_1;
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Hr2");
         setEvFlag(EVFLAG_TORNADO_ACTIVE);

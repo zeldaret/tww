@@ -115,7 +115,7 @@ u32 daNpc_Tc_c::getMsgWhite() {
         m_jnt.onHeadLock();
         
     } else {
-       if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0B80)) {
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0B80)) {
             if (!field_0x80E) {
                 msg = 0xDC8;
                 m_jnt.onHeadLock();

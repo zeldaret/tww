@@ -68,15 +68,6 @@ inline void advance(InputIterator& i, Distance n) {
     __advance(i, n, typename iterator_traits<InputIterator>::iterator_category());
 }
 
-// TODO: combine this with above later
-template <class InputIt, class Distance>
-inline void advance_fake(InputIt& it, Distance n) {
-    while (n > 0) {
-        --n;
-        ++it;
-    }
-}
-
 template <class InputIterator>
 inline typename iterator_traits<InputIterator>::difference_type
 __distance(InputIterator first, InputIterator last, input_iterator_tag) {
@@ -96,12 +87,6 @@ template <class InputIterator>
 inline typename iterator_traits<InputIterator>::difference_type distance(InputIterator first,
                                                                          InputIterator last) {
     return __distance(first, last, typename iterator_traits<InputIterator>::iterator_category());
-}
-
-// This needs to be defined with gcc concepts or something similar. Workaround.
-template <class InputIt, class Distance>
-inline void advance_pointer(InputIt& it, Distance n) {
-    it += n;
 }
 
 }  // namespace std

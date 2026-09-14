@@ -376,7 +376,7 @@ u16 JAIGlobalParameter::getParamSeDistanceWaitMax() {
 }
 
 static void dummy() {
-    OSReport("Seqs/JaiSeInf.bst");
+    DEAD_STRING("Seqs/JaiSeInf.bst");
 }
 
 u8 JAIGlobalParameter::distanceParameterMoveTime = 3;

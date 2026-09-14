@@ -81,7 +81,10 @@ public:
     void setAnmIndex(u16 index) { mAnmIndex = index; }
     bool getAnmFlag() const { return mAnmFlag; }
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
-    void setAnmTransform(J3DAnmTextureSRTKey* transform) { mAnmTransform = transform; }
+    void setAnmTransform(J3DAnmTextureSRTKey* transform) {
+        J3D_ASSERT(0, transform != NULL, "Error : null pointer.");
+        mAnmTransform = transform;
+    }
     void calc(J3DTextureSRTInfo* pSRTInfo) const;
 
 private:

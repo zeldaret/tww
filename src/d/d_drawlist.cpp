@@ -2079,7 +2079,7 @@ void dDlst_texSpecmapST(const cXyz* pos, const dKy_tevstr_c* tevStr, J3DModelDat
 
     f32 inv = 1.0f / scale;
     camera_class * camera = dCam_getCamera();
-    cXyz lookDir = *pos - camera->mLookat.mEye;
+    cXyz lookDir = *pos - camera->view.mLookat.mEye;
     cXyz refl;
     cXyz lightDir;
 

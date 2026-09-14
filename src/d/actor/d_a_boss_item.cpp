@@ -11,6 +11,7 @@
 
 /* 00000078-00000080       .text daBossItem_IsDelete__FP14bossitem_class */
 static BOOL daBossItem_IsDelete(bossitem_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

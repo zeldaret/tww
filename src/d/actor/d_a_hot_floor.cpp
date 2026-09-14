@@ -120,6 +120,7 @@ static BOOL daHot_FloorDraw(void* i_this) {
 
 /* 0000060C-00000614       .text daHot_FloorIsDelete__FPv */
 static BOOL daHot_FloorIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

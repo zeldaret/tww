@@ -12,7 +12,7 @@ daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() {
 }
 
 /* 00000144-00000164       .text daTag_Ba1_XyCheck_cB__FPvi */
-void daTag_Ba1_XyCheck_cB(void*, int) {
+static void daTag_Ba1_XyCheck_cB(void*, int) {
     /* Nonmatching */
 }
 
@@ -22,7 +22,7 @@ void daTag_Ba1_c::XyCheck_cB(int) {
 }
 
 /* 00000184-000001A4       .text daTag_Ba1_XyEvent_cB__FPvi */
-void daTag_Ba1_XyEvent_cB(void*, int) {
+static void daTag_Ba1_XyEvent_cB(void*, int) {
     /* Nonmatching */
 }
 
