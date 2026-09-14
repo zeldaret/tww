@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_mn.h"
 #include "d/actor/d_a_obj_figure.h"
+#include "d/actor/d_a_obj_ohatch.h"
 #include "d/d_a_obj.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_snap.h"
@@ -941,13 +942,23 @@ void daNpcMn_c::eventSwOnInit(int i_staffIdx) {
 }
 
 /* 00002448-000024AC       .text eventSwOn__9daNpcMn_cFv */
-void daNpcMn_c::eventSwOn() {
-    /* Nonmatching */
+bool daNpcMn_c::eventSwOn() {
+    if (field_0x79C) {
+        field_0x79C--;
+        return false;
+    }
+    fopAcM_onSwitch(this, getPrmSwitchBit2());
+    return true;
 }
 
 /* 000024AC-00002540       .text eventHatchInit__9daNpcMn_cFv */
 void daNpcMn_c::eventHatchInit() {
-    /* Nonmatching */
+    daObjOhatch_c* hatch = (daObjOhatch_c*)fopAcM_searchFromName("Ohatch", 0, 0);
+    if (hatch != NULL) {
+        s16 angle;
+        dNpc_calc_DisXZ_AngY(current.pos, hatch->current.pos, NULL, &angle);
+        field_0x7A0 = angle;
+    }
 }
 
 /* 00002540-00002578       .text eventHatch__9daNpcMn_cFv */
@@ -963,13 +974,27 @@ bool daNpcMn_c::eventHatch() {
 }
 
 /* 00002578-000025EC       .text eventBikkuriInit__9daNpcMn_cFi */
-void daNpcMn_c::eventBikkuriInit(int) {
-    /* Nonmatching */
+void daNpcMn_c::eventBikkuriInit(int i_staffIdx) {
+    int* pData = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
+    field_0x79C = 1;
+    if (pData != NULL) {
+        field_0x79C = *pData;
+    }
+    if (field_0x79C <= 0) {
+        field_0x79C = 1;
+    }
 }
 
 /* 000025EC-00002644       .text eventBikkuri__9daNpcMn_cFv */
-void daNpcMn_c::eventBikkuri() {
-    /* Nonmatching */
+bool daNpcMn_c::eventBikkuri() {
+    if (field_0x79C != 0) {
+        field_0x79C--;
+        if (field_0x79C == 0) {
+            setAnmTbl(l_npc_anm_bikkuri);
+        }
+        return false;
+    }
+    return field_0x7B9 & 1;
 }
 
 /* 00002644-0000266C       .text eventTurnInit__9daNpcMn_cFv */
@@ -978,8 +1003,36 @@ void daNpcMn_c::eventTurnInit() {
 }
 
 /* 0000266C-000027B4       .text eventTurn__9daNpcMn_cFi */
-void daNpcMn_c::eventTurn(int) {
-    /* Nonmatching */
+bool daNpcMn_c::eventTurn(int i_staffIdx) {
+    int* pData = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "TurnMode");
+    int msg = 0;
+    if (pData != NULL) {
+        msg = *pData;
+    }
+
+    cXyz pos;
+    daObjOhatch_c* hatch;
+    switch (msg) {
+        case 1:
+            hatch = (daObjOhatch_c*)fopAcM_searchFromName("Ohatch", 0, 0);
+            if (hatch != NULL) {
+                pos = hatch->current.pos;
+                break;
+            }
+        default:
+            pos = mPathRun.getPoint(mPathRun.getIdx());
+            break;
+    }
+    s16 angle;
+    dNpc_calc_DisXZ_AngY(current.pos, pos, NULL, &angle);
+    mTargetYRot = angle;
+    mHeadOnlyFollow = false;
+    field_0x7BD = 2;
+    m_jnt.setTrn();
+    if (current.angle.y == angle) {
+        return true;
+    }
+    return false;
 }
 
 /* 000027B4-000027DC       .text eventWalkInit__9daNpcMn_cFv */
@@ -988,8 +1041,29 @@ void daNpcMn_c::eventWalkInit() {
 }
 
 /* 000027DC-0000293C       .text eventWalk__9daNpcMn_cFv */
-void daNpcMn_c::eventWalk() {
-    /* Nonmatching */
+bool daNpcMn_c::eventWalk() {
+    bool reachedEnd = false;
+    if (mPathRun.chkPointPass(current.pos, mPathRun.getDir())) {
+        if (mPathRun.nextIdxAuto() == NULL) {
+            reachedEnd = true;
+        }
+    }
+    if (!reachedEnd) {
+        cXyz pos = mPathRun.getPoint(mPathRun.getIdx());
+        s16 angle;
+        dNpc_calc_DisXZ_AngY(current.pos, pos, NULL, &angle);
+        mTargetYRot = field_0x7A0 = angle;
+        mHeadOnlyFollow = false;
+        mLookAtMaxVel = l_npc_dat[mNpcNo].field_0x2C;
+        field_0x7BD = 2;
+        m_jnt.setTrn();
+        field_0x77C = l_npc_dat[mNpcNo].field_0x38;
+    } else {
+        fopAcM_SetSpeedF(this, 0.0f);
+        field_0x77C = 0.0f;
+        return true;
+    }
+    return false;
 }
 
 /* 0000293C-00002964       .text eventLookInit__9daNpcMn_cFv */
@@ -1003,13 +1077,40 @@ bool daNpcMn_c::eventLook() {
 }
 
 /* 00002988-00002A90       .text eventJumpInit__9daNpcMn_cFi */
-void daNpcMn_c::eventJumpInit(int) {
-    /* Nonmatching */
+void daNpcMn_c::eventJumpInit(int i_staffIdx) {
+    f32* speedX = dComIfGp_evmng_getMyFloatP(i_staffIdx, "SpeedX");
+    f32* speedY = dComIfGp_evmng_getMyFloatP(i_staffIdx, "SpeedY");
+    f32* gravity = dComIfGp_evmng_getMyFloatP(i_staffIdx, "Gravity");
+
+    if (speedX != NULL) {
+        field_0x77C = speedF = *speedX;
+    } else {
+        fopAcM_SetSpeedF(this, 3.0f);
+        field_0x77C = 3.0f;
+    }
+    if (speedY != NULL) {
+        field_0x788 = *speedY;
+    } else {
+        field_0x788 = 200.0f;
+    }
+    if (gravity != NULL) {
+        fopAcM_SetGravity(this, *gravity);
+    }
+    field_0x77C = 40.0f;
+    field_0x788 = 25.0f;
+    fopAcM_SetGravity(this, -1.0f);
 }
 
 /* 00002A90-00002AE8       .text eventJump__9daNpcMn_cFv */
-void daNpcMn_c::eventJump() {
-    /* Nonmatching */
+bool daNpcMn_c::eventJump() {
+    current.pos.y += field_0x788;
+    field_0x788 += gravity;
+    if (field_0x788 < 0.0f && mObjAcch.ChkGroundLanding()) {
+        fopAcM_SetSpeedF(this, 0.0f);
+        field_0x77C = 0.0f;
+        return true;
+    }
+    return false;
 }
 
 /* 00002AE8-00002C30       .text talk2__9daNpcMn_cFi */
@@ -1055,8 +1156,23 @@ u16 daNpcMn_c::talk3(int) {
 }
 
 /* 00002D68-00002DB8       .text next_msgStatus__9daNpcMn_cFPUl */
-u16 daNpcMn_c::next_msgStatus(unsigned long*) {
-    /* Nonmatching */
+u16 daNpcMn_c::next_msgStatus(u32* i_msgNo) {
+    u16 ret = fopMsgStts_MSG_CONTINUES_e;
+    if (mpMsgNo != NULL) {
+        mpMsgNo++;
+        switch (*mpMsgNo) {
+            case 0:
+                mpMsgNo = 0;
+                ret = fopNpc_npc_c::next_msgStatus(i_msgNo);
+                break;
+            default:
+                *i_msgNo = *mpMsgNo;
+                break;
+        }
+    } else {
+        ret = fopNpc_npc_c::next_msgStatus(i_msgNo);
+    }
+    return ret;
 }
 
 /* 00002DB8-00002F7C       .text getMsg__9daNpcMn_cFv */
