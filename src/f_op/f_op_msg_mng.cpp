@@ -360,10 +360,6 @@ fpc_ProcID fop_Timer_create(s16 i_procName, u8 i_mode, u16 i_limitTimeMs, u8 i_s
 /* 8002B324-8002B520       .text fopMsgM_messageTypeSelect__FP10fopAc_ac_cP4cXyzPUlPUl */
 fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* i_actor, cXyz* i_pos, u32* i_msgNo, u32* param_4) {
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     fpc_ProcID pcId;
     if (*i_msgNo >> 0x10 == 0x63) {
@@ -405,10 +401,6 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* i_actor, cXyz* i_pos, u32* i_ms
 /* 8002B568-8002B634       .text fopMsgM_searchMessageNumber__FUl */
 u32 fopMsgM_searchMessageNumber(u32 i_msgNo) {
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     mesg_header* header;
     for (u32 i = i_msgNo & 0xFFFF; i < 0xFFFF; i++) {
@@ -5748,10 +5740,6 @@ void fopMsgM_int_to_char2(char* i_dest, int i_value) {
 /* 800351E8-80035408       .text getString__21fopMsgM_msgDataProc_cFPcUl */
 void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
 #if VERSION <= VERSION_JPN
     mesg_header* header = msgGet.getMesgHeader(i_msgNo);
@@ -5821,10 +5809,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
 void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3, char* param_4, u32 i_msgNo, f32* param_6, f32* param_7, int* param_8) {
     /* Nonmatching - regalloc */
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
+
     f32 f31;
     f32 f30 = 0.0f;
 

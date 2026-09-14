@@ -668,7 +668,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_menu.cpp"),
             Object(EquivalentFor("D44J01", "GZLJ01", "GZLE01"),    "d/d_s_name.cpp"), # stripped vtable padding
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_open.cpp"),
-            Object(NonMatching, "d/d_s_open_sub.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/d_s_open_sub.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_play.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_room.cpp"),
             Object(Matching,    "d/d_s_title.cpp"),

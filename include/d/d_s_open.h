@@ -22,25 +22,24 @@ public:
     /* 0x0804 */ char msg2[0x800];
     /* 0x1004 */ char msg3[0x800];
     /* 0x1804 */ char msg4[0x800];
-    /* 0x2004 */ fopMsgM_msgDataProc_c mMsgDataProc;
-    /* 0x22A4 */ u8 field_0x22a4[0x22bc - 0x22a4];
-    /* 0x22BC */ u8 field_0x22bc;
+    /* 0x2004 */ fopMsgM_msgDataProc_c msgDataProc;
+    /* 0x22A4 */ JMSMesgEntry_c msgEntry;
+    /* 0x22BC */ u8 mesgStatus;
     /* 0x22BD */ u8 field_0x22bd;
     /* 0x22BE */ u8 field_0x22be;
     /* 0x22BF */ u8 field_0x22bf;
-    /* 0x22C0 */ u32 field_0x22c0;
-    /* 0x22C4 */ J2DTextBox* field_0x22c4;
-    /* 0x22C8 */ J2DTextBox* field_0x22c8;
+    /* 0x22C0 */ u32 msgNo;
+    /* 0x22C4 */ J2DTextBox* tTextBox;
+    /* 0x22C8 */ J2DTextBox* rTextBox;
     /* 0x22CC */ JUTFont* tFont;
     /* 0x22D0 */ JUTFont* rFont;
     /* 0x22D4 */ JKRExpHeap* exp_heap;
-    /* 0x22D8 */ f32 field_0x22d8;
-    /* 0x22DC */ u32 field_0x22dc;
-    /* 0x22E0 */ u32 field_0x22e0;
+    /* 0x22D8 */ f32 alpha;
+    /* 0x22DC */ int field_0x22dc;
+    /* 0x22E0 */ int field_0x22e0;
     /* 0x22E4 */ u32 field_0x22e4;
     /* 0x22E8 */ u8 field_0x22e8;
-    /* 0x22EC */ u32 field_0x22ec;
-    /* 0x22F0 */ u32 field_0x22f0;
+    /* 0x22EC */ int field_0x22ec;
 };
 
 class dScnOpen_proc_c : public dDlst_base_c {
