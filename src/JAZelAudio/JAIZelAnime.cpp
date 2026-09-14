@@ -17,6 +17,7 @@ void JAIZelAnime::setAnimSound(Vec* pos, f32 frame, f32 rate, u32 mtrlSndId, s8 
 }
 
 /* 802AC888-802ACD34       .text startAnimSound__11JAIZelAnimeFPvUlPP8JAISoundPQ27JAInter5ActorUc */
+// NONMATCHING - 1 missing reg move
 void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_sound, JAInter::Actor* i_actor, u8 param_4) {
     JAIZelBasic* basic = (JAIZelBasic*)i_basic;
 
@@ -24,9 +25,11 @@ void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_soun
         return;
     }
 
+    #if VERSION >= VERSION_USA
     if (basic->field_0x0224 == 0x12 && basic->mIslandRoomNo == 0x2C && basic->field_0x0239 == 9 && basic->field_0x0028 < 30) {
         return;
     }
+    #endif
 
     switch (i_soundID) {
     case JA_SE_CM_DRG_MTOP_HAND:
@@ -47,6 +50,7 @@ void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_soun
         return;
     }
 
+    #if VERSION >= VERSION_USA
     if (basic->checkStreamPlaying(JA_STRM_BOSS_CLEAR)
         || basic->checkStreamPlaying(JA_STRM_BST_CLEAR)
         || basic->checkStreamPlaying(JA_STRM_DK_CLEAR)
@@ -56,6 +60,7 @@ void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_soun
             return;
         }
     }
+    #endif
 
     if (basic->field_0x0046 == 1) {
         switch (i_soundID) {
