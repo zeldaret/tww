@@ -5,7 +5,6 @@
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_cc_d.h"
 
-class dCcD_SrcCyl;
 
 class daSaku_c : public fopAc_ac_c {
 public:
