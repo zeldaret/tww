@@ -168,7 +168,9 @@ public:
     void setSeqInterVolumeU7(u8, u8, u32) {}
     void setStatus(u8) {}
     void setTrack(u8) {}
-    void setTrackVolumeU7(u8, u8, u32) {}
+    void setTrackVolumeU7(u8 i_track, u8 i_volume, u32 i_fade_time) {
+        setTrackVolume(i_track, i_volume, i_fade_time);
+    }
     void setVolumeU7(u8 value, u32 moveTime, u8 type) {
         f32 volume = value / 127.0f;
         setVolume(volume, moveTime, type);
