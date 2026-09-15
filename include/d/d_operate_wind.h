@@ -15,8 +15,9 @@ class STControl;
 class dOw_HIO_c : public mDoHIO_entry_c {
 public:
     dOw_HIO_c();
+    ~dOw_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 field_0x04;
@@ -33,7 +34,14 @@ public:
 
 class dDlst_Ow_main_c : public dDlst_base_c {
 public:
-    inline void drawLine(int, f32, f32, f32, f32);
+    ~dDlst_Ow_main_c() {}
+
+    void drawLine(int i, f32 x1, f32 y1, f32 x2, f32 y2) {
+        mX1[i] = x1;
+        mY1[i] = y1;
+        mX2[i] = x2;
+        mY2[i] = y2;
+    }
     void setLineColor(JUtility::TColor c) { color = c; }
     void setLineMax(int v) { mLineMax = v; }
     void setScreen(J2DScreen* s) { scrn = s; }
@@ -52,6 +60,8 @@ public:
 
 class dDlst_Ow_mask_c : public dDlst_base_c {
 public:
+    ~dDlst_Ow_mask_c() {}
+
     void setScreen(J2DScreen* s) { scrn = s; }
     
     void draw();
@@ -62,6 +72,7 @@ public:
 
 class dOperate_wind_c {
 public:
+    dOperate_wind_c() {}
     virtual ~dOperate_wind_c() {}
     void setTimer(s16 i_timer) {
         mTimer = i_timer;
@@ -131,10 +142,18 @@ public:
 
 class dOw_c : public msg_class {
 public:
-    inline void _close();
-    inline bool _draw();
-    inline void _move();
-    inline void _open();
+    bool _open() {
+        return dOw_scrn->_open();
+    }
+    bool _close() {
+        return dOw_scrn->_close();
+    }
+    void _draw() {
+        dOw_scrn->_draw();
+    }
+    void _move() {
+        dOw_scrn->_move();
+    }
 
     JKRExpHeap* getHeap() {
         return heap;
@@ -159,7 +178,7 @@ public:
     void _create();
     void _delete();
 
-public:
+private:
     /* 0x0FC */ JKRExpHeap* heap;
     /* 0x100 */ dOperate_wind_c* dOw_scrn;
     /* 0x104 */ u8 status;

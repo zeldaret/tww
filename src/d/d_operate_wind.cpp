@@ -28,18 +28,12 @@ dOw_HIO_c::dOw_HIO_c() {
 
 dOw_HIO_c g_owHIO;
 
-void dDlst_Ow_main_c::drawLine(int width, f32 x1, f32 y1, f32 x2, f32 y2) {
-    J2DDrawLine(x1, y1, x2, y2, color, width);
-}
-
 /* 8021E5F8-8021E6A4       .text draw__15dDlst_Ow_main_cFv */
 void dDlst_Ow_main_c::draw() {
     J2DOrthoGraph* graf = dComIfGp_getCurrentGrafPort();
     graf->setPort();
 
     for (int i = 0; i < mLineMax; i++) {
-        // should probably be `drawLine(6, mX1[i], mY1[i], mX2[i], mY2[i]);`
-        // but it reverses instuction order
         J2DDrawLine(mX1[i], mY1[i], mX2[i], mY2[i], color, 6);
     }
 
@@ -82,7 +76,7 @@ int dOperate_wind_c::dOw_angleRegular(f32 angle) {
 
 /* 8021E7E4-8021E974       .text dOw_stickControl__15dOperate_wind_cFis */
 int dOperate_wind_c::dOw_stickControl(int ret, s16 ang) {
-    s32 angi = abs(ang);
+    int angi = abs(ang);
     if (ret == 0) {
         if (angi > 0x7000) {
             return 1;
@@ -102,21 +96,30 @@ int dOperate_wind_c::dOw_stickControl(int ret, s16 ang) {
             return 5;
         }
     } else {
-        if (angi > 0x7F80) {
+        s16 r0 = 0x80;
+        if (angi > (s16)(0x8000 - r0)) {
             return 1;
-        } else if (ang >= 0x5800 && ang <= 0x6800) {
+        }
+        s16 r6 = 0x800;
+        if (ang >= (s16)(0x6000 - r6) && ang <= (s16)(0x6000 + r6)) {
             return 2;
-        } else if (ang <= -0x5800 && ang >= -0x6800) {
+        }
+        if (ang <= (s16)(-0x6000 + r6) && ang >= (s16)(-0x6000 - r6)) {
             return 8;
-        } else if (ang >= 0x3F80 && ang <= 0x4080) {
+        }
+        if (ang >= (s16)(0x4000 - r0) && ang <= (s16)(0x4000 + r0)) {
             return 3;
-        } else if (ang <= -0x3F80 && ang >= -0x4080) {
+        }
+        if (ang <= (s16)(-0x4000 + r0) && ang >= (s16)(-0x4000 - r0)) {
             return 7;
-        } else if (ang >= 0x1800 && ang <= 0x2800) {
+        }
+        if (ang >= (s16)(0x2000 - r6) && ang <= (s16)(0x2000 + r6)) {
             return 4;
-        } else if (ang <= -0x1800 && ang >= -0x2800) {
+        }
+        if (ang <= (s16)(-0x2000 + r6) && ang >= (s16)(-0x2000 - r6)) {
             return 6;
-        } else if (angi < 0x80) {
+        }
+        if (angi < r0) {
             return 5;
         }
     }
@@ -212,24 +215,28 @@ void dOperate_wind_c::alphaSet(f32 i_alpha) {
 
 /* 8021EE9C-8021F550       .text arrowColor1__15dOperate_wind_cFv */
 void dOperate_wind_c::arrowColor1() {
+    s16 r0 = 10;
+    int r5 = (r0 * 2) + 5;
+    s16 r4 = r5 + 5;
+
     JUtility::TColor sp24;
     JUtility::TColor sp20;
 
     field_0xec.mUserArea++;
-    if (field_0xec.mUserArea > 30) {
+    if (field_0xec.mUserArea > r4) {
         field_0xec.mUserArea = 0;
     }
 
-    if (field_0xec.mUserArea < 10) {
+    if (field_0xec.mUserArea < r0) {
         f32 temp_f1 = fopMsgM_valueIncrease(10, field_0xec.mUserArea, 0);
         sp20.r = field_0x568.corner1.r + (temp_f1 * (field_0x568.corner0.r - field_0x568.corner1.r));
         sp20.g = field_0x568.corner1.g + (temp_f1 * (field_0x568.corner0.g - field_0x568.corner1.g));
         sp20.b = field_0x568.corner1.b + (temp_f1 * (field_0x568.corner0.b - field_0x568.corner1.b));
         sp20.a = field_0x568.corner1.a + (temp_f1 * (field_0x568.corner0.a - field_0x568.corner1.a));
-    } else if (field_0xec.mUserArea < 15) {
+    } else if (field_0xec.mUserArea < r0 + 5) {
         sp20 = field_0x568.corner0;
-    } else if (field_0xec.mUserArea < 25) {
-        f32 temp_f1 = fopMsgM_valueIncrease(10, 25 - field_0xec.mUserArea, 0);
+    } else if (field_0xec.mUserArea < ((r0 * 2) + 5)) {
+        f32 temp_f1 = fopMsgM_valueIncrease(10, ((r0 * 2) + 5) - field_0xec.mUserArea, 0);
         sp20.r = field_0x568.corner1.r + (temp_f1 * (field_0x568.corner0.r - field_0x568.corner1.r));
         sp20.g = field_0x568.corner1.g + (temp_f1 * (field_0x568.corner0.g - field_0x568.corner1.g));
         sp20.b = field_0x568.corner1.b + (temp_f1 * (field_0x568.corner0.b - field_0x568.corner1.b));
@@ -238,18 +245,18 @@ void dOperate_wind_c::arrowColor1() {
         sp20 = field_0x568.corner1;
     }
 
-    if (field_0xec.mUserArea < 5) {
+    if (field_0xec.mUserArea < r0 - 5) {
         sp24 = field_0x568.corner0;
-    } else if (field_0xec.mUserArea < 15) {
-        f32 temp_f1 = fopMsgM_valueIncrease(10, 15 - field_0xec.mUserArea, 0);
+    } else if (field_0xec.mUserArea < r0 + 5) {
+        f32 temp_f1 = fopMsgM_valueIncrease(10, r0 + 5 - field_0xec.mUserArea, 0);
         sp24.r = field_0x568.corner1.r + (temp_f1 * (field_0x568.corner0.r - field_0x568.corner1.r));
         sp24.g = field_0x568.corner1.g + (temp_f1 * (field_0x568.corner0.g - field_0x568.corner1.g));
         sp24.b = field_0x568.corner1.b + (temp_f1 * (field_0x568.corner0.b - field_0x568.corner1.b));
         sp24.a = field_0x568.corner1.a + (temp_f1 * (field_0x568.corner0.a - field_0x568.corner1.a));
-    } else if (field_0xec.mUserArea < 20) {
+    } else if (field_0xec.mUserArea < r0 + 10) {
         sp24 = field_0x568.corner1;
     } else {
-        f32 temp_f1 = fopMsgM_valueIncrease(10, field_0xec.mUserArea - 20, 0);
+        f32 temp_f1 = fopMsgM_valueIncrease(10, field_0xec.mUserArea - (r0 + 10), 0);
         sp24.r = field_0x568.corner1.r + (temp_f1 * (field_0x568.corner0.r - field_0x568.corner1.r));
         sp24.g = field_0x568.corner1.g + (temp_f1 * (field_0x568.corner0.g - field_0x568.corner1.g));
         sp24.b = field_0x568.corner1.b + (temp_f1 * (field_0x568.corner0.b - field_0x568.corner1.b));
@@ -263,23 +270,25 @@ void dOperate_wind_c::arrowColor1() {
 void dOperate_wind_c::arrowColor2() {
     s16 var_r31 = g_owHIO.field_0x14;
     s16 var_r30 = g_owHIO.field_0x16;
+    s16 r0 = 10;
+    s16 r4 = var_r30 + ((r0 * 2) + var_r31);
     JUtility::TColor sp3C;
     JUtility::TColor sp38;
 
     field_0x124[0].mUserArea++;
-    if (field_0x124[0].mUserArea > (s16)(var_r30 + (var_r31 + 20))) {
+    if (field_0x124[0].mUserArea > r4) {
         field_0x124[0].mUserArea = 0;
     }
 
-    if (field_0x124[0].mUserArea < 10) {
+    if (field_0x124[0].mUserArea < r0) {
         f32 temp_f1 = fopMsgM_valueIncrease(10, field_0x124[0].mUserArea, 0);
         sp38.r = field_0x578.corner0.r + (temp_f1 * (field_0x578.corner1.r - field_0x578.corner0.r));
         sp38.g = field_0x578.corner0.g + (temp_f1 * (field_0x578.corner1.g - field_0x578.corner0.g));
         sp38.b = field_0x578.corner0.b + (temp_f1 * (field_0x578.corner1.b - field_0x578.corner0.b));
     } else if (field_0x124[0].mUserArea < var_r31 + 10) {
         sp38 = field_0x578.corner1;
-    } else if (field_0x124[0].mUserArea < var_r31 + 20) {
-        f32 temp_f1 = fopMsgM_valueIncrease(10, (var_r31 + 20) - field_0x124[0].mUserArea, 0);
+    } else if (field_0x124[0].mUserArea < ((r0 * 2) + var_r31)) {
+        f32 temp_f1 = fopMsgM_valueIncrease(10, ((r0 * 2) + var_r31) - field_0x124[0].mUserArea, 0);
         sp38.r = field_0x578.corner0.r + (temp_f1 * (field_0x578.corner1.r - field_0x578.corner0.r));
         sp38.g = field_0x578.corner0.g + (temp_f1 * (field_0x578.corner1.g - field_0x578.corner0.g));
         sp38.b = field_0x578.corner0.b + (temp_f1 * (field_0x578.corner1.b - field_0x578.corner0.b));
@@ -311,17 +320,18 @@ void dOperate_wind_c::arrowColor2() {
 }
 
 /* 8021FBC0-80220360       .text maskColor__15dOperate_wind_cFv */
-// NONMATCHING - some reg alloc / stack slightly off
 void dOperate_wind_c::maskColor() {
     s16 var_r31 = g_owHIO.field_0x10;
+    s16 r4 = var_r31 * 4;
     JUtility::TColor sp48[4];
 
     field_0x46c[0].mUserArea++;
-    if (field_0x46c[0].mUserArea >= (s16)(var_r31 * 4)) {
+    if (field_0x46c[0].mUserArea >= r4) {
         field_0x46c[0].mUserArea = 0;
     }
 
-    f32 var_f1 = fopMsgM_valueIncrease(var_r31, field_0x46c[0].mUserArea % var_r31, 2);
+    int r4_2 = field_0x46c[0].mUserArea % var_r31;
+    f32 var_f1 = fopMsgM_valueIncrease(var_r31, r4_2, 2);
 
     sp48[0].r = field_0x588.corner0.r + (var_f1 * (field_0x588.corner2.r - field_0x588.corner0.r));
     sp48[0].g = field_0x588.corner0.g + (var_f1 * (field_0x588.corner2.g - field_0x588.corner0.g));
@@ -338,10 +348,10 @@ void dOperate_wind_c::maskColor() {
     sp48[2].b = field_0x588.corner2.b + (var_f1 * (field_0x588.corner3.b - field_0x588.corner2.b));
     sp48[2].a = field_0x588.corner2.a + (var_f1 * (field_0x588.corner3.a - field_0x588.corner2.a));
 
-    sp48[3].r = field_0x588.corner3.r + (var_f1 * (field_0x588.corner1.r - field_0x588.corner0.r));
-    sp48[3].g = field_0x588.corner3.g + (var_f1 * (field_0x588.corner1.g - field_0x588.corner0.g));
-    sp48[3].b = field_0x588.corner3.b + (var_f1 * (field_0x588.corner1.b - field_0x588.corner0.b));
-    sp48[3].a = field_0x588.corner3.a + (var_f1 * (field_0x588.corner1.a - field_0x588.corner0.a));
+    sp48[3].r = field_0x588.corner3.r + (var_f1 * (field_0x588.corner1.r - field_0x588.corner3.r));
+    sp48[3].g = field_0x588.corner3.g + (var_f1 * (field_0x588.corner1.g - field_0x588.corner3.g));
+    sp48[3].b = field_0x588.corner3.b + (var_f1 * (field_0x588.corner1.b - field_0x588.corner3.b));
+    sp48[3].a = field_0x588.corner3.a + (var_f1 * (field_0x588.corner1.a - field_0x588.corner3.a));
 
     if (field_0x46c[0].mUserArea < var_r31) {
         ((J2DPicture*)field_0x554.pane)->setCornerColor(sp48[0], sp48[1], sp48[2], sp48[3]);
@@ -509,26 +519,25 @@ void dOperate_wind_c::directionTrans(f32 param_0) {
 }
 
 /* 80220A60-80220CD8       .text lineInit__15dOperate_wind_cFf */
-// NONMATCHING - not sure what the temp_r29 pattern is
 void dOperate_wind_c::lineInit(f32 param_0) {
     f32 temp_f29 = -((-172.0f - REG6_F(5)) * param_0);
-    f32 temp_f28 = (field_0x2ac[0].mPosTopLeftOrig.y - field_0x194.mPosCenterOrig.y) * param_0;
+    f32 temp = field_0x2ac[0].mPosTopLeftOrig.y - field_0x194.mPosCenterOrig.y;
+    f32 temp_f28 = temp * param_0;
+    f32 var_f27;
+    f32 var_f26;
     f32 temp_f25 = 360.0f / field_0x8ce;
     f32 var_f24 = 11.25f;
 
+    BOOL temp_r29;
     for (int i = 0; i < field_0x8ce; i++) {
-        f32 var_f27;
-        f32 var_f26;
 
-        int temp_r29 = (i >= 0) ? i : -i;
+        temp_r29 = i % 2;
         if (temp_r29) {
-            f32 temp_f26 = M_PI * ((101.25f + var_f24) / 180.0f);
-            var_f27 = mPosX + (temp_f28 * std::sinf(temp_f26));
-            var_f26 = mPosY + (temp_f28 * std::cosf(temp_f26));
+            var_f27 = mPosX + (temp_f28 * std::sinf(M_PI * ((101.25f + var_f24) / 180.0f)));
+            var_f26 = mPosY + (temp_f28 * std::cosf(M_PI * ((101.25f + var_f24) / 180.0f)));
         } else {
-            f32 temp_f26_2 = M_PI * ((78.75f + var_f24) / 180.0f);
-            var_f27 = mPosX + (temp_f28 * std::sinf(temp_f26_2));
-            var_f26 = mPosY + (temp_f28 * std::cosf(temp_f26_2));
+            var_f27 = mPosX + (temp_f28 * std::sinf(M_PI * ((78.75f + var_f24) / 180.0f)));
+            var_f26 = mPosY + (temp_f28 * std::cosf(M_PI * ((78.75f + var_f24) / 180.0f)));
         }
 
         field_0x598[i] = var_f27 + (temp_f29 * std::sinf(M_PI * (var_f24 / 180.0f)));
@@ -549,17 +558,13 @@ void dOperate_wind_c::lineInit(f32 param_0) {
 }
 
 /* 80220CD8-80220D80       .text lineDraw__15dOperate_wind_cFv */
-// NONMATCHING - weird stuff happening in the loop
 void dOperate_wind_c::lineDraw() {
     JUtility::TColor color(0xFF, 0xFF, 0xFF, field_0x8d4);
     mMain->setLineColor(color);
     mMain->setLineMax(field_0x8ce);
 
     for (int i = 0; i < field_0x8ce; i++) {
-        mMain->mX1[i] = field_0x598[i];
-        mMain->mY1[i] = field_0x660[i];
-        mMain->mX2[i] = field_0x728[i];
-        mMain->mY2[i] = field_0x7f0[i];
+        mMain->drawLine(i, field_0x598[i], field_0x660[i], field_0x728[i], field_0x7f0[i]);
     }
 }
 
@@ -765,30 +770,12 @@ void dOw_c::_delete() {
     delete dOw_scrn;
 }
 
-bool dOw_c::_draw() {
-    if (getStatus() != 0)
-        dOw_scrn->_draw();
-
-    return true;
-}
-
 /* 80221880-802218B4       .text dOw_Draw__FP5dOw_c */
 static BOOL dOw_Draw(dOw_c* i_this) {
-    return i_this->_draw();
-}
-
-void dOw_c::_close() {
-    if (!dOw_scrn->_close()) {
-        dOw_scrn->_move();
-    } else {
-        setStatus(0);
-        fopMsgM_Delete(this);
+    if (i_this->getStatus() != 0) {
+        i_this->_draw();
     }
-}
-
-void dOw_c::_open() {
-    if (dOw_scrn->_open())
-        dOw_scrn->_move();
+    return TRUE;
 }
 
 /* 802218B4-802219A4       .text dOw_Execute__FP5dOw_c */
@@ -797,16 +784,16 @@ static BOOL dOw_Execute(dOw_c* i_this) {
     JKRHeap* old_heap = mDoExt_setCurrentHeap(i_this->getHeap());
 
     if (dComIfGp_getOperateWind() == 2) {
-        if (i_this->dOw_scrn->_open()) {
-            i_this->dOw_scrn->_move();
+        if (i_this->_open()) {
+            i_this->_move();
         }
     } else {
         if (wind_flag == 2) {
             i_this->setTimer(g_owHIO.field_0x08);
         }
 
-        if (!i_this->dOw_scrn->_close()) {
-            i_this->dOw_scrn->_move();
+        if (!i_this->_close()) {
+            i_this->_move();
         } else {
             i_this->setStatus(0);
             fopMsgM_Delete(i_this);
@@ -850,13 +837,13 @@ static cPhs_State dOw_Create(msg_class* i_msg) {
     i_this->setHeap(heap);
 
     JKRHeap* old_heap = mDoExt_setCurrentHeap(i_this->getHeap());
-    i_this->status = 1;
+    i_this->setStatus(1);
     i_this->_create();
     mDoExt_setCurrentHeap(old_heap);
     return cPhs_COMPLEATE_e;
 }
 
-msg_method_class l_dOperate_wind_Method = {
+static msg_method_class l_dOperate_wind_Method = {
     (process_method_func)dOw_Create,
     (process_method_func)dOw_Delete,
     (process_method_func)dOw_Execute,
