@@ -151,8 +151,25 @@ void daSaku_c::MoveBGResist(int, int) {
 }
 
 /* 00001598-000016C0       .text setEffFire__8daSaku_cFi */
-void daSaku_c::setEffFire(int) {
-    /* Nonmatching */
+int daSaku_c::setEffFire(int _) {
+    // input param seems to be unused
+    s8 sVar1;
+    cXyz local_18;
+
+    local_18.set(current.pos);
+
+    dComIfGp_particle_set(0x45c, &local_18, &current.angle, 0x0, 0xff, 0x0, -1, 0x0, 0x0, 0x0);
+    dComIfGp_particle_set(0x245e, &local_18, &current.angle, 0x0, m_smoke_alpha, 0x0, -1, 0x0, 0x0, 0x0);
+
+    this->field_0xEC0 = 1;
+    this->field_0xEBC = 1;
+
+    sVar1 = dComIfGp_getReverb(this->current.roomNo);
+
+    JAIZelBasic::zel_basic->seStart(0x6924, &this->eyePos, 0, sVar1, 1.0, 1.0, -1.0, -1.0, 0);
+
+    return 1;
+    
 }
 
 /* 000016C0-000019AC       .text setEffBreak__8daSaku_cFi */

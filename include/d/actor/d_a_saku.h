@@ -36,20 +36,19 @@ public:
     void checkCol();
     void setCol();
     void MoveBGResist(int, int);
-    void setEffFire(int);
+    int setEffFire(int);
     void setEffBreak(int);
 
     static const dCcD_SrcCyl m_cyl_src;
-
-public:
+    static u8 m_smoke_alpha;
 
     /* 0x290 */ u8 field_0x290[0xE4C - 0x290];
     /* 0xE4C */ Mtx field_0xE4C;
     /* 0xE7C */ Mtx field_0xE7C;
-    /* 0xEAC */ u8 field_0xEAC[0xEE8 - 0xEAC];
-    /* 0xEE8 */ u32 field_0xEE8;
-    /* 0xEEC */ u32 field_0xEEC;
-    /* 0xEF0 */ u8 field_0xEF0[0xEF2 - 0xEF0];
+    /* 0xEAC */ u8 field_0xEAC[0xEBC - 0xEAC];
+    /* 0xEBC */ u32 field_0xEBC;
+    /* 0xEC0 */ u32 field_0xEC0;
+    /* 0xEC4 */ u8 field_0xEC4[0xEF2 - 0xEC4];
     /* 0xEF2 */ u8 mSturdinessType;
     /* 0xEF3 */ u8 field_0xEF3[0xEFC - 0xEF3];
     /* 0xEFC */ s32 field_0xEFC;
