@@ -123,13 +123,13 @@ void daSaku_c::setMoveBGMtx() {
     mDoMtx_stack_c::YrotM(this->shape_angle.y);
     mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
 
-    PSMTXCopy(mDoMtx_stack_c::now, this->field_0xE4C);
+    PSMTXCopy(mDoMtx_stack_c::now, this->mMtx[0]);
 
     if(this->field_0xEFC != 0) {
         PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y + 200, current.pos.z);
         mDoMtx_stack_c::YrotM(this->shape_angle.y);
         mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
-        PSMTXCopy(mDoMtx_stack_c::now, this->field_0xE7C);
+        PSMTXCopy(mDoMtx_stack_c::now, this->mMtx[1]);
     };
 
     return;
