@@ -3,6 +3,8 @@
 
 #include "d/d_drawlist.h"
 #include "d/d_menu_fmapSv.h"
+#include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 struct fopMsgM_pane_class;
 class J2DScreen;
@@ -10,6 +12,7 @@ class JUTFont;
 struct ResTIMG;
 class STControl;
 class dDlst_2DOutFont_c;
+class mDoDvdThd_mountArchive_c;
 
 class dDlst_FMAP2GS_c : public dDlst_base_c {
 public:
@@ -459,6 +462,8 @@ class dMf2_HIO_c : public JORReflexible {
 public:
     dMf2_HIO_c();
     virtual ~dMf2_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x5;

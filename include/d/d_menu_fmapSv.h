@@ -39,7 +39,7 @@ public:
             mNum = a_pat->num;
             mpPnt = a_pat->pnt;
         } else {
-            JUT_ASSERT(252, FALSE);
+            JUT_ASSERT(DEMO_SELECT(246, 252), FALSE);
         }
     }
     void getAramCmapDatValue() {}

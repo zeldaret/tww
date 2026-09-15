@@ -491,7 +491,7 @@ void dMenu_Fmap_c::screenSet() {
     mKr0Color.set(((J2DPicture*)mKr0xPanes[0].pane)->getBlack());
     mKr0Color2.set(((J2DPicture*)mKr0xPanes[0].pane)->getWhite());
 
-    for (i = 0; i < 11; i++) {
+    for (i = 0; i < ARRAY_SSIZE(mR0xPanes); i++) {
         static const u32 l_island[] = {
             'R01', 'R04', 'R0B', 'R0D', 'R14', 'R17',
 #if VERSION > VERSION_DEMO
@@ -675,6 +675,9 @@ void dMenu_Fmap_c::initialize() {
     mPlayerChkPntNo = dMap_getCheckPointUseGrid(mGridX, mGridY);
     mWnd1Pane.mUserArea = 0;
     checkMarkAnimeInit();
+#if VERSION == VERSION_DEMO
+    krogMarkAnimeInit();
+#endif
     mAreaTxtBufIdx = 0;
     mAreaTxtTimer = 0;
     mAreaTxtChanging = false;
@@ -725,7 +728,7 @@ void dMenu_Fmap_c::displayinit() {
         setPaneOnOff(fmapDl.scrn, hist[i], !dComIfGs_isSaveArriveGrid(i));
     }
 
-    for (i = 0; i < 11; i++) {
+    for (i = 0; i < ARRAY_SSIZE(mR0xPanes); i++) {
         static int islandPos[] = {
             dIsleRoom_ForsakenFortress_e,
             dIsleRoom_GaleIsle_e,
@@ -1734,15 +1737,20 @@ void dMenu_Fmap_c::checkDspHugeMapShip() {
     if (!mFishmanActive) {
         mSpi3Pane.pane->hide();
         mDspHugeMapShip = false;
-    } else  if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0
+    } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) == 0
             && mTargetGridX == getCtCurX()
-            && mTargetGridY == getCtCurY()) {
+            && mTargetGridY == getCtCurY()
+        ) {
+#if VERSION == VERSION_DEMO
+        mDspHugeMapShip = true;
+#else
         if (mShipOpenWater) {
             mDspHugeMapShip = false;
             mSpi3Pane.pane->hide();
         } else {
             mDspHugeMapShip = true;
         }
+#endif
     } else {
         mSpi3Pane.pane->hide();
         mDspHugeMapShip = false;
@@ -1763,6 +1771,9 @@ bool dMenu_Fmap_c::_open() {
     }
     if (ret == TRUE) {
         mFrameTimer = 0;
+#if VERSION == VERSION_DEMO
+        mButtonIconMode = FMAP_BTN_ICON_WORLD;
+#endif
         return true;
     }
     return false;
@@ -1976,7 +1987,9 @@ void dMenu_Fmap_c::zoomMapAlphaSet(s8 i_gridX, s8 i_gridY, fopMsgM_pane_class* i
     } else {
         i_pane->mInitAlpha = 0xFF;
     }
+#if VERSION > VERSION_DEMO
     i_pane->mInitAlpha = 0xFF;
+#endif
     fopMsgM_setAlpha(i_pane);
 }
 
@@ -2085,8 +2098,22 @@ void dMenu_Fmap_c::ZoomGridLv2In() {
     mFrameTimer++;
     if (zoom2 == TRUE && alpha == TRUE) {
         mFrameTimer = 0;
-        mDspHugeMapLink ? mLnk3Pane.pane->show() : mLnk3Pane.pane->hide();
-        mDspHugeMapShip ? mSpi3Pane.pane->show() : mSpi3Pane.pane->hide();
+        if (mDspHugeMapLink) {
+            mLnk3Pane.pane->show();
+        }
+#if VERSION > VERSION_DEMO
+        else {
+            mLnk3Pane.pane->hide();
+        }
+#endif
+        if (mDspHugeMapShip) {
+            mSpi3Pane.pane->show();
+        }
+#if VERSION > VERSION_DEMO
+        else {
+            mSpi3Pane.pane->hide();
+        }
+#endif
         mFmapProcIdx = FMAP_ZOOM_PROC_LV2;
     }
 }
@@ -2358,11 +2385,17 @@ BOOL dMenu_Fmap_c::paneTranceZoom2Map(s16 i_frame, u8 i_max, f32 i_transStartX, 
         return TRUE;
     }
 
+    f32 scale;
     f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
-    f32 scaleAdj = alpha * (i_scaleEnd - i_scaleStart);
-    fopMsgM_paneTrans(&mClgPane, i_transStartX + alpha * (i_transEndX - i_transStartX), i_transStartY + alpha * (i_transEndY - i_transStartY));
+    f32 transXRange = i_transEndX - i_transStartX;
+    f32 transYRange = i_transEndY - i_transStartY;
+    f32 scaleRange = i_scaleEnd - i_scaleStart;
+    f32 transXAdj = alpha * transXRange;
+    f32 transYAdj = alpha * transYRange;
+    f32 scaleAdj = alpha * scaleRange;
+    fopMsgM_paneTrans(&mClgPane, i_transStartX + transXAdj, i_transStartY + transYAdj);
     fopMsgM_paneScaleXY(&mClgPane, i_scaleStart + scaleAdj);
-    f32 scale = i_scaleStart + scaleAdj;
+    scale = i_scaleStart + scaleAdj;
 
     if (i_flag == 1) {
         alpha = 1.0f - alpha;
@@ -2532,6 +2565,9 @@ bool dMenu_Fmap_c::_open_warpMode() {
             mWrapSpotEmitters[i]->playDrawParticle();
         }
         mWrapBackEmitter->clearStatus(JPAEmtrStts_StopDraw);
+#if VERSION == VERSION_DEMO
+        mButtonIconMode = FMAP_BTN_ICON_WARP;
+#endif
         mWarpProcIdx = WARP_PROC_MOVE;
         return true;
     }
@@ -2571,14 +2607,13 @@ void dMenu_Fmap_c::init_warpMode() {
     setWrapBackEmitter(backEmitter);
     mWrapBackEmitter->setStatus(JPAEmtrStts_StopDraw);
 
-    int i = 0;
-    for (; i < DEMO_SELECT(8, FMAP_WARP_COUNT); i++) {
-        // !@bug Demo iterates 8 times instead of 7, accessing out of bounds of these three arrays.
-        spotEmitter.x = g_mfHIO.mWarpSpotPosX[i];
-        spotEmitter.y = g_mfHIO.mWarpSpotPosY[i];
+    int i = DEMO_SELECT(1, 0);
+    for (; i < FMAP_WARP_COUNT + DEMO_SELECT(1, 0); i++) {
+        spotEmitter.x = g_mfHIO.mWarpSpotPosX[i-DEMO_SELECT(1, 0)];
+        spotEmitter.y = g_mfHIO.mWarpSpotPosY[i-DEMO_SELECT(1, 0)];
         spotEmitter.z = 0.0f;
-        setWrapSpotEmitter(i, spotEmitter);
-        mWrapSpotEmitters[i]->stopDrawParticle();
+        setWrapSpotEmitter(i-DEMO_SELECT(1, 0), spotEmitter);
+        mWrapSpotEmitters[i-DEMO_SELECT(1, 0)]->stopDrawParticle();
     }
 
     areaTextChangeAnimeInit();
@@ -2624,6 +2659,9 @@ void dMenu_Fmap_c::wrapMove() {
     if (CPad_CHECK_TRIG_A(0)) {
         mDoAud_seStart(JA_SE_SHIPPU_DIST_SEL);
         if (dComIfGs_isSaveArriveGrid(getCtCurWX() + (getCtCurWY() + 3) * 7 + 3)) {
+#if VERSION == VERSION_DEMO
+            msgNo += 0x45;
+#else
             if (msgNo == 7) {
                 msgNo = 0x43;
             } else if (msgNo == 8) {
@@ -2631,6 +2669,7 @@ void dMenu_Fmap_c::wrapMove() {
             } else {
                 msgNo += 0x45;
             }
+#endif
         } else {
             msgNo = 0x44;
         }
@@ -2853,7 +2892,8 @@ BOOL dMenu_Fmap_c::paneTranceWarpMsg(fopMsgM_pane_class* i_pane, s16 i_frame, u8
         return TRUE;
     }
     f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
-    fopMsgM_paneTrans(i_pane, 0.0f, i_startY + alpha * (i_endY - i_startY));
+    f32 yAdj = alpha * (i_endY - i_startY);
+    fopMsgM_paneTrans(i_pane, 0.0f, i_startY + yAdj);
     if (i_flag != 2) {
         if (i_flag == 1) {
             alpha = 1.0f - alpha;
@@ -2972,7 +3012,7 @@ int dMenu_Fmap_c::getWarpAreaNoRight(const cursorTable_t* i_table) {
 /* 801B9784-801B97DC       .text getWarpAreaTablePtr__12dMenu_Fmap_cFScSc */
 const cursorTable_t* dMenu_Fmap_c::getWarpAreaTablePtr(s8 i_gridX, s8 i_gridY) {
     const cursorTable_t* table = NULL;
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < FMAP_WARP_COUNT; i++) {
         if (g_cursorTable[i].gridX == i_gridX && g_cursorTable[i].gridY == i_gridY) {
             table = &g_cursorTable[i];
             break;
@@ -3090,11 +3130,16 @@ void dMenu_Fmap_c::setDspWarpBackCornerColor(f32 i_ratio) {
         color[i].a = 255;
     }
 
+    int idx0 = (idx + 0) % 4;
+    int idx1 = (idx + 1) % 4;
+    int idx2 = (idx + 2) % 4;
+    int idx3 = (idx + 3) % 4;
+
     ((J2DPicture*)mClPane.pane)->setCornerColor(
-        color[idx % 4],
-        color[(idx + 1) % 4],
-        color[(idx + 3) % 4],
-        color[(idx + 2) % 4]);
+        color[idx0],
+        color[idx1],
+        color[idx3],
+        color[idx2]);
 }
 
 /* 801BA01C-801BA08C       .text setWrapBackEmitter__12dMenu_Fmap_cF4cXyz */
@@ -3137,7 +3182,9 @@ bool dMenu_Fmap_c::_close_fishManMode() {
 /* 801BA214-801BA49C       .text init_fishManMode__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::init_fishManMode() {
     mFmapMode = FMAP_MODE_FISHMAN;
+#if VERSION > VERSION_DEMO
     mButtonIconMode = FMAP_BTN_ICON_FISHMAN;
+#endif
     selCursorHide();
     int i;
     for (i = 0; i < 3; i++) {
@@ -3284,7 +3331,11 @@ void dMenu_Fmap_c::fmMapWrite() {
         mFishmanTimer1--;
     } else {
         if (mFrameTimer == 0) {
+#if VERSION == VERSION_DEMO
+            mDoAud_seStart(JA_SE_SO_MAP_ADD_FIN);
+#else
             mDoAud_subBgmStart(JA_BGM_BGN_GET_BOX);
+#endif
         }
         BOOL zoomMap = paneAlphaZoom2Map(mFrameTimer, g_mfHIO.mFishmanZoom2AlphaFrame, 0x02, 0);
         mFrameTimer++;

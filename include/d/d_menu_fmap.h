@@ -347,7 +347,7 @@ public:
     /* 0x34CC */ fopMsgM_pane_class mFmnPanes[15];
     /* 0x3814 */ fopMsgM_pane_class mClgPane;
     /* 0x384C */ fopMsgM_pane_class mSc2xPanes[7];
-    /* 0x39D4 */ fopMsgM_pane_class mR0xPanes[11];
+    /* 0x39D4 */ fopMsgM_pane_class mR0xPanes[DEMO_SELECT(10, 11)];
     /* 0x3C3C */ fopMsgM_pane_class mStxxPanes[49];
     /* 0x46F4 */ fopMsgM_pane_class mCk1xPanes[3];
     /* 0x479C */ fopMsgM_pane_class mCk2xPanes[3];
@@ -377,7 +377,7 @@ public:
     /* 0x4F44 */ fopMsgM_pane_class mGsPanes[7];
 #endif
 #if VERSION == VERSION_DEMO
-    u8 pad [0x340 + 8];
+    u8 pad [0x340 + 8 + 0x38];
 #endif
     /* 0x50CC */ STControl* stick;
     /* 0x50D0 */ JUTFont* mFont;
