@@ -1625,11 +1625,6 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     char colorTag[0x1C];
     char whiteTag[0x1C];
 
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
-
     u32 color = fopMsgM_getColorTable(0);
 
     u8 firstChoiceSeen = 0;
