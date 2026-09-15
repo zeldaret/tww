@@ -94,7 +94,7 @@ enum {
     /* 0x56 */ DSNAP_TYPE_KN,
     /* 0x57 */ DSNAP_TYPE_NPC_TT,
     /* 0x58 */ DSNAP_TYPE_NPC_KM1,
-    /* 0x59 */ DSNAP_TYPE_UNK59,
+    /* 0x59 */ DSNAP_TYPE_NPC_KF1,
     /* 0x5A */ DSNAP_TYPE_UNK5A,
     /* 0x5B */ DSNAP_TYPE_UNK5B,
     /* 0x5C */ DSNAP_TYPE_UNK5C,
