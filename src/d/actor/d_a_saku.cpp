@@ -120,14 +120,14 @@ void daSaku_c::setMtx() {
 void daSaku_c::setMoveBGMtx() {
     /* Nonmatching */
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_YrotM(mDoMtx_stack_c::now, this->shape_angle.y);
+    mDoMtx_stack_c::YrotM(this->shape_angle.y);
     mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
 
     PSMTXCopy(mDoMtx_stack_c::now, this->field_0xE4C);
 
     if(this->field_0xEFC != 0) {
         PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y + 200, current.pos.z);
-        mDoMtx_YrotM(mDoMtx_stack_c::now, this->shape_angle.y);
+        mDoMtx_stack_c::YrotM(this->shape_angle.y);
         mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
         PSMTXCopy(mDoMtx_stack_c::now, this->field_0xE7C);
     };
