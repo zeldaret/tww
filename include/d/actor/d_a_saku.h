@@ -1,7 +1,9 @@
 #ifndef D_A_SAKU_H
 #define D_A_SAKU_H
 
+#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
+#include "SSystem/SComponent/c_cc_d.h"
 
 class dCcD_SrcCyl;
 
@@ -41,11 +43,18 @@ public:
     static const dCcD_SrcCyl m_cyl_src;
 
 public:
-    /* 0x290 */ u8 m290[0xEF2 - 0x290];
-    /* 0xEF2 */ u8 mSturdinessType;
-    /* 0xEF3 */ u8 mEF3[0xF00 - 0xEF3];
-    /* 0xF00 */ u32 mBottomHalfDestroyedSwitch;
-    /* 0xF04 */ u32 mTopHalfDestroyedSwitch;
-};
 
+    /* 0x290 */ u8 field_0x290[0xE4C - 0x290];
+    /* 0xE4C */ Mtx field_0xE4C;
+    /* 0xE7C */ Mtx field_0xE7C;
+    /* 0xEAC */ u8 field_0xEAC[0xEE8 - 0xEAC];
+    /* 0xEE8 */ u32 field_0xEE8;
+    /* 0xEEC */ u32 field_0xEEC;
+    /* 0xEF0 */ u8 field_0xEF0[0xEF2 - 0xEF0];
+    /* 0xEF2 */ u8 mSturdinessType;
+    /* 0xEF3 */ u8 field_0xEF3[0xEFC - 0xEF3];
+    /* 0xEFC */ s32 field_0xEFC;
+    /* 0xF00 */ uint mBottomHalfDestroyedSwitch;
+    /* 0xF04 */ uint mTopHalfDestroyedSwitch;
+};  // Size: 0xF08
 #endif /* D_A_SAKU_H */

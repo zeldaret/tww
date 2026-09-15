@@ -119,6 +119,20 @@ void daSaku_c::setMtx() {
 /* 0000113C-0000120C       .text setMoveBGMtx__8daSaku_cFv */
 void daSaku_c::setMoveBGMtx() {
     /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_YrotM(mDoMtx_stack_c::now, this->shape_angle.y);
+    mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
+
+    PSMTXCopy(mDoMtx_stack_c::now, this->field_0xE4C);
+
+    if(this->field_0xEFC != 0) {
+        PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y + 200, current.pos.z);
+        mDoMtx_YrotM(mDoMtx_stack_c::now, this->shape_angle.y);
+        mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
+        PSMTXCopy(mDoMtx_stack_c::now, this->field_0xE7C);
+    };
+
+    return;
 }
 
 /* 0000120C-0000134C       .text checkCol__8daSaku_cFv */
