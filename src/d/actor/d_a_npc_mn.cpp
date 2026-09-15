@@ -1114,10 +1114,10 @@ bool daNpcMn_c::eventJump() {
 }
 
 /* 00002AE8-00002C30       .text talk2__9daNpcMn_cFi */
-u16 daNpcMn_c::talk2(int i1) {
+u16 daNpcMn_c::talk2(int i_param) {
     u16 l_status = 0xFF;
     if (mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e) {
-        if (i1 == 1) {
+        if (i_param == 1) {
             mCurrMsgNo = getMsg();
         }
         mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgNo, this);
@@ -1151,8 +1151,40 @@ u16 daNpcMn_c::talk2(int i1) {
 }
 
 /* 00002C30-00002D68       .text talk3__9daNpcMn_cFi */
-u16 daNpcMn_c::talk3(int) {
-    /* Nonmatching */
+u16 daNpcMn_c::talk3(int i_param) {
+    u16 status = 0xFF;
+    if (mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e) {
+        if (i_param == 1) {
+            mCurrMsgNo = getMsg3();
+        }
+        mCurrMsgBsPcId = fopMsgM_scopeMessageSet(mCurrMsgNo);
+        mpCurrMsg = NULL;
+        mLastMsgStatus = -1;
+    } else if (mpCurrMsg != NULL) {
+        status = dComIfGp_getScopeMesgStatus();
+        switch (status) {
+            case fopMsgStts_MSG_DISPLAYED_e:
+                dComIfGp_setScopeMesgStatus(next_msgStatus(&mCurrMsgNo));
+                if (dComIfGp_getScopeMesgStatus() == fopMsgStts_MSG_CONTINUES_e) {
+                    fopMsgM_scopeMessageSet(mCurrMsgNo);
+                }
+                break;
+            case fopMsgStts_MSG_TYPING_e:
+                if (mLastMsgStatus == fopMsgStts_MSG_CONTINUES_e) {
+                    chkMsg();
+                }
+                break;
+            case fopMsgStts_BOX_CLOSED_e:
+                dComIfGp_setScopeMesgStatus(fopMsgStts_BOX_CLOSING_e);
+                mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+                break;
+        }
+        mLastMsgStatus = status;
+        anmAtr(status);
+    } else {
+        mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
+    }
+    return status;
 }
 
 /* 00002D68-00002DB8       .text next_msgStatus__9daNpcMn_cFPUl */
@@ -1247,7 +1279,14 @@ BOOL daNpcMn_c::initTexPatternAnm(bool) {
 
 /* 000036D0-0000373C       .text playTexPatternAnm__9daNpcMn_cFv */
 void daNpcMn_c::playTexPatternAnm() {
-    /* Nonmatching */
+    if (!cLib_calcTimer(&field_0x7A8)) {
+        if (mBtpFrame >= m_head_tex_pattern->getFrameMax()) {
+            mBtpFrame -= m_head_tex_pattern->getFrameMax();
+            field_0x7A8 = 0x78;
+        } else {
+            mBtpFrame++;
+        }
+    }
 }
 
 /* 0000373C-000037F8       .text playAnm__9daNpcMn_cFv */
