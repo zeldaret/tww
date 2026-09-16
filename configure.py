@@ -495,7 +495,7 @@ config.libs = [
             Object(Matching,    "f_pc/f_pc_node.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "f_pc/f_pc_node_req.cpp"),
             Object(Matching,    "f_pc/f_pc_priority.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "f_pc/f_pc_profile.cpp"),
+            Object(Matching,    "f_pc/f_pc_profile.cpp"),
             Object(Matching,    "f_pc/f_pc_searcher.cpp"),
             Object(Matching,    "f_pc/f_pc_line_tag.cpp"),
             Object(Matching,    "f_pc/f_pc_line_iter.cpp"),

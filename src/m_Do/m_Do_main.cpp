@@ -106,7 +106,7 @@ void CheckHeap(JUTGamePad* i_pad) {
 static int countUsed(JKRExpHeap* heap) {
     OSDisableScheduler();
     int counter = 0;
-    JKRExpHeap::CMemBlock* used_blocks_head = heap->getHeadUsedList();
+    JKRExpHeap::CMemBlock* used_blocks_head = heap->getUsedFirst();
 
     while (used_blocks_head) {
         used_blocks_head = used_blocks_head->getNextBlock();
@@ -124,7 +124,7 @@ s32 HeapCheck::getUsedCount() const {
 
 /* 800058D4-80005B28       .text heapDisplay__9HeapCheckFv */
 void HeapCheck::heapDisplay() {
-    s32 heap_size = mHeap->getSize();
+    s32 heap_size = mHeap->getHeapSize();
     s32 used_count = field_0x14 * mTargetHeapSize;
 
     field_0x10 = used_count;

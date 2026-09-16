@@ -31,6 +31,8 @@ public:
     s32 do_getSize(void* ptr) { return OSReferentSize(ptr); };
     s32 do_getTotalFreeSize() { return getFreeSize(); };
 
+    static void* getState_(TState* state) { return getState_buf_(state); }
+
     OSHeapHandle mHeapHandle;
 };
 

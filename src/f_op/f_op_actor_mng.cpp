@@ -332,7 +332,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
                 mDoExt_destroySolidHeap(heap);
                 heap = NULL;
             } else {
-                u32 allocSize = ALIGN_NEXT(heap->getSize() - heap->getFreeSize(), 0x20);
+                u32 allocSize = ALIGN_NEXT(heap->getHeapSize() - heap->getFreeSize(), 0x20);
                 if (estimatedHeapSize < allocSize + 0x40) {
                     mDoExt_adjustSolidHeap(heap);
                     i_this->heap = heap;
@@ -380,7 +380,7 @@ bool fopAcM_entrySolidHeap(fopAc_ac_c* i_this, heapCallbackFunc createHeapCB, u3
         // If fopAcM::HeapAdjustEntry is set, try to reallocate everything a second time.
         // This time we set the estimated maximum heap size to the exact size allocated last time.
         JKRSolidHeap * heap1 = NULL;
-        u32 allocSize = ALIGN_NEXT(heap->getSize() - heap->getFreeSize(), 0x10);
+        u32 allocSize = ALIGN_NEXT(heap->getHeapSize() - heap->getFreeSize(), 0x10);
         if (allocSize + 0x10 + sizeof(JKRSolidHeap) < mDoExt_getGameHeap()->getFreeSize())
             heap1 = mDoExt_createSolidHeapFromGameToCurrent(allocSize, 0x20);
 
@@ -455,7 +455,8 @@ void fopAcM_calcSpeed(fopAc_ac_c* i_this) {
     f32 speedF = fopAcM_GetSpeedF(i_this);
     f32 gravity = fopAcM_GetGravity(i_this);
     f32 xSpeed = speedF * cM_ssin(i_this->current.angle.y);
-    f32 ySpeed = i_this->speed.y + gravity;
+    cXyz* speed_p = fopAcM_GetSpeed_p(i_this);
+    f32 ySpeed = speed_p->y + gravity;
     f32 zSpeed = speedF * cM_scos(i_this->current.angle.y);
 
     if (ySpeed < fopAcM_GetMaxFallSpeed(i_this))
@@ -466,9 +467,9 @@ void fopAcM_calcSpeed(fopAc_ac_c* i_this) {
 
 /* 800251A0-8002520C       .text fopAcM_posMove__FP10fopAc_ac_cPC4cXyz */
 void fopAcM_posMove(fopAc_ac_c* i_this, const cXyz* move) {
-    i_this->current.pos.x += i_this->speed.x;
-    i_this->current.pos.y += i_this->speed.y;
-    i_this->current.pos.z += i_this->speed.z;
+    i_this->current.pos.x += fopAcM_GetSpeed_p(i_this)->x;
+    i_this->current.pos.y += fopAcM_GetSpeed_p(i_this)->y;
+    i_this->current.pos.z += fopAcM_GetSpeed_p(i_this)->z;
 
     if (move != NULL) {
         i_this->current.pos.x += move->x;
@@ -1047,7 +1048,7 @@ fopAc_ac_c* fopAcM_createItemForKP2(cXyz* pos, int i_itemNo, int roomNo, csXyz* 
     if (ac != NULL) {
         fopAcM_SetSpeedF(ac, speedF);
         ac->speed.y = speedY;
-        fopAcM_SetGravity(ac, gravity);
+        ac->gravity = gravity;
     }
     return ac;
 }
@@ -1071,10 +1072,10 @@ void* fopAcM_fastCreateItem(cXyz* pos, int i_itemNo, int roomNo, csXyz* angle, c
     int i;
     
     u8 itemNo = check_itemno(i_itemNo);
+    u8 itemBitNo = (u8)i_itemBitNo;
     int type = daItemType_0_e;
     int action = daItemAct_A_e;
     int switchNo2 = -1;
-    u8 itemBitNo = i_itemBitNo;
     u32 params = MAKE_ITEM_PARAMS(itemNo, itemBitNo, switchNo2, type, action);
 
     if (isHeart(i_itemNo)) {
@@ -1286,7 +1287,7 @@ fopAc_ac_c* fopAcM_myRoomSearchEnemy(s8 roomNo) {
     scene_class* roomProc = fopScnM_SearchByID(dStage_roomControl_c::getStatusProcID(roomNo));
     JUT_ASSERT(DEMO_SELECT(3572, 3594), roomProc != NULL);
 
-    fpc_ProcID grabProcID = daPy_getPlayerActorClass()->getGrabActorID();
+    fpc_ProcID grabProcID = ((daPy_py_c*)dComIfGp_getPlayer(0))->getGrabActorID();
     fopAc_ac_c* enemy = fopAcM_SearchByID(grabProcID);
     if (enemy != NULL && fopAcM_GetGroup(enemy) == fopAc_ENEMY_e)
         return enemy;
