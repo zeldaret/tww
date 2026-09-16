@@ -113,7 +113,34 @@ void daSaku_c::changeCollision(int) {
 
 /* 00000FF4-0000113C       .text setMtx__8daSaku_cFv */
 void daSaku_c::setMtx() {
-    /* Nonmatching */
+    int i;
+    J3DModel* m;
+
+    for(i = 0; i < 2; i++) {
+        m = mModels0[i];
+        if (m != NULL) {
+            m->setBaseScale(scale);
+
+            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::ZXYrotM(shape_angle);
+            m->setBaseTRMtx(mDoMtx_stack_c::get());
+        }
+    }
+
+    int j;
+    if (this->field_0xEFC != 0) {
+        for(j = 0; j < 2; j++) {
+            m = mModels1[j];
+            if (m != NULL) {
+                m->setBaseScale(scale);
+
+                mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 200, current.pos.z);
+                mDoMtx_stack_c::ZXYrotM(shape_angle);
+                m->setBaseTRMtx(mDoMtx_stack_c::get());
+            }
+        }
+    }
+    return;
 }
 
 /* 0000113C-0000120C       .text setMoveBGMtx__8daSaku_cFv */
@@ -123,13 +150,13 @@ void daSaku_c::setMoveBGMtx() {
     mDoMtx_stack_c::YrotM(this->shape_angle.y);
     mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
 
-    PSMTXCopy(mDoMtx_stack_c::now, this->mMtx[0]);
+    PSMTXCopy(mDoMtx_stack_c::now, this->mMtx0);
 
     if(this->field_0xEFC != 0) {
         PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y + 200, current.pos.z);
         mDoMtx_stack_c::YrotM(this->shape_angle.y);
         mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
-        PSMTXCopy(mDoMtx_stack_c::now, this->mMtx[1]);
+        PSMTXCopy(mDoMtx_stack_c::now, this->mMtx1);
     };
 
     return;
