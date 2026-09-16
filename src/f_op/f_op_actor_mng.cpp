@@ -582,10 +582,8 @@ static fopAc_cullSizeSphere l_cullSizeSphere[8] = {
 };
 
 static void dummy() {
-    static Vec dummy_4863;
-    static Vec min;
-    static Vec dummy_4899;
-    static Vec max;
+    static cXyz min;
+    static cXyz max;
 }
 
 /* 80025660-800259A8       .text fopAcM_cullingCheck__FP10fopAc_ac_c */
