@@ -5,6 +5,7 @@
 #include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_cc_d.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class cCcD_Stts__vtbl;
 
@@ -74,4 +75,40 @@ public:
     /* 0xF04 */ uint mTopHalfDestroyedSwitch;
 };  // Size: 0xF08
 
+class sakuHIO_c : public JORReflexible {
+    public:
+        sakuHIO_c() {
+            field_0x04 = -1;
+            field_0x06 = 0x46;
+            field_0x08 = 0x46;
+            field_0x0A = 0x41;
+            field_0x0C = 7;
+            field_0x0E = 1;
+            field_0x0F = 1;
+            field_0x10 = 5;
+            field_0x12 = 0xB4;
+            field_0x13 = 0x69;
+            field_0x14 = 0x5b;
+            field_0x15 = 0x30;
+            field_0x16 = 100;
+        };
+
+        virtual ~sakuHIO_c();
+
+        /* 0x04 */ s8 field_0x04;
+        /* 0x05 */ u8 field_0x05;
+        /* 0x06 */ s16 field_0x06;
+        /* 0x08 */ s16 field_0x08;
+        /* 0x0A */ s16 field_0x0A;
+        /* 0x0C */ s16 field_0x0C;
+        /* 0x0E */ u8 field_0x0E;
+        /* 0x0F */ u8 field_0x0F;
+        /* 0x10 */ s16 field_0x10;
+        /* 0x12 */ u8 field_0x12;
+        /* 0x13 */ u8 field_0x13;
+        /* 0x14 */ u8 field_0x14;
+        /* 0x15 */ u8 field_0x15;
+        /* 0x16 */ u8 field_0x16;
+        /* 0x17 */ u8 field_0x17;
+};  // Size: 0x18
 #endif /* D_A_SAKU_H */
