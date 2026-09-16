@@ -53,12 +53,14 @@ public:
             }
             pnt++;
         }
-        if (i < mNum) {
-            return pnt;
-        } else {
-            pnt = NULL;
-        }
-        return pnt;
+        // if (i < mNum) {
+        //     return pnt;
+        // } else {
+        //     pnt = NULL;
+        // }
+        // return pnt;
+        // Fakematch: Ternary is needed to match getGridNumToCmapDatPnt for demo, but doesn't match debug map size
+        return i < mNum ? pnt : NULL;
     }
     aramCmapDatPnt_t* getCmapDatPnt4(int i_cmapIdx) {
         aramCmapDatPnt_t* pnt = mpPnt;

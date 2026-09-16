@@ -2270,7 +2270,8 @@ int dMenu_Fmap2_c::getCollectMapKind(s8 i_cmapIdx) {
 
 /* 801C77BC-801C7844       .text isCompleteCollectMap__13dMenu_Fmap2_cFSc */
 BOOL dMenu_Fmap2_c::isCompleteCollectMap(s8 i_cmapIdx) {
-    return dComIfGs_isCompleteCollectMap(mpFmapDatPnt->getCmapDatPnt4(i_cmapIdx)->collectMapNo);
+    aramCmapDatPnt_t* pnt = mpFmapDatPnt->getCmapDatPnt4(i_cmapIdx);
+    return dComIfGs_isCompleteCollectMap(pnt->collectMapNo);
 }
 
 /* 801C7844-801C78A8       .text draw__13dDlst_FMAP2_cFv */
