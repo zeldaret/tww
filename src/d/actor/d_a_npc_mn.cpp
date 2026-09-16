@@ -858,7 +858,6 @@ void daNpcMn_c::eventMove() {
 
 /* 00001F74-00002194       .text privateCut__9daNpcMn_cFv */
 void daNpcMn_c::privateCut() {
-    /* Nonmatching */
     static char* cut_name_tbl[] = {
         "MES_SET",
         "GET_ITEM",
@@ -871,6 +870,85 @@ void daNpcMn_c::privateCut() {
         "JUMP",
         "SWON",
     };
+
+    int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[0]);
+    if (staffIdx != -1) {
+        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 10, TRUE, 0);
+        if (mActIdx == -1) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                switch (mActIdx) {
+                    case 0:
+                        eventMesSetInit(staffIdx);
+                        break;
+                    case 1:
+                        eventGetItemInit();
+                        break;
+                    case 2:
+                        eventWaitInit(staffIdx);
+                        break;
+                    case 3:
+                        eventHatchInit();
+                        break;
+                    case 4:
+                        eventBikkuriInit(staffIdx);
+                        break;
+                    case 5:
+                        eventTurnInit();
+                        break;
+                    case 6:
+                        eventWalkInit();
+                        break;
+                    case 7:
+                        eventLookInit();
+                        break;
+                    case 8:
+                        eventJumpInit(staffIdx);
+                        break;
+                    case 9:
+                        eventSwOnInit(staffIdx);
+                        break;
+                }
+            }
+            bool shouldEnd;
+            switch (mActIdx) {
+                case 0:
+                    shouldEnd = eventMesSet();
+                    break;
+                case 2:
+                    shouldEnd = eventWait(staffIdx);
+                    break;
+                case 3:
+                    shouldEnd = eventHatch();
+                    break;
+                case 4:
+                    shouldEnd = eventBikkuri();
+                    break;
+                case 5:
+                    shouldEnd = eventTurn(staffIdx);
+                    break;
+                case 6:
+                    shouldEnd = eventWalk();
+                    break;
+                case 7:
+                    shouldEnd = eventLook();
+                    break;
+                case 8:
+                    shouldEnd = eventJump();
+                    break;
+                case 9:
+                    shouldEnd = eventSwOn();
+                    break;
+                default:
+                    shouldEnd = true;
+                    break;
+            }
+            if (shouldEnd) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            }
+        }
+    }
 }
 
 /* 00002194-0000226C       .text eventMesSetInit__9daNpcMn_cFi */
