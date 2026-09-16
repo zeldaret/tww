@@ -257,7 +257,7 @@ enum MoveProcIdx {
 
 /* 00000078-00000230       .text __ct__9daNpcMn_cFv */
 daNpcMn_c::daNpcMn_c() {
-    field_0x7B5 = 0;
+    mResFlag = 0;
     mMoveState = 0;
     field_0x77C = 0.0f;
     field_0x798 = 0;
@@ -267,7 +267,7 @@ daNpcMn_c::daNpcMn_c() {
     field_0x7A0 = home.angle.y;
     mBckIdx = 0;
     field_0x7A4 = 0;
-    field_0x7C1 = chkPosNo();
+    mPosFlag = chkPosNo();
     mNpcNo = getPrmNpcNo();
 }
 
@@ -305,7 +305,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 static cPhs_State phase_1(daNpcMn_c* i_this) {
     fopAcM_ct(i_this, daNpcMn_c);
 
-    switch (i_this->field_0x7C1) {
+    switch (i_this->mPosFlag) {
         case 0:
             dComIfGs_setEventReg(dSv_event_flag_c::UNK_870F, 0);
             if (fopAcM_isSwitch(i_this, i_this->getPrmSwitchBit())) {
@@ -322,7 +322,7 @@ static cPhs_State phase_1(daNpcMn_c* i_this) {
                 }
                 dComIfGs_setEventReg(dSv_event_flag_c::UNK_870F, eventReg);
             }
-            if (eventReg != i_this->field_0x7C1) {
+            if (eventReg != i_this->mPosFlag) {
                 return cPhs_STOP_e;
             }
     }
@@ -489,7 +489,7 @@ cPhs_State daNpcMn_c::createInit() {
 }
 
 /* 00000F3C-00000FE4       .text _delete__9daNpcMn_cFv */
-BOOL daNpcMn_c::_delete() {
+bool daNpcMn_c::_delete() {
     dComIfG_resDelete(&mPhs, l_arcname_tbl[0]);
     if (heap != NULL && mpMorf != NULL) {
         mpMorf->stopZelAnime();
@@ -636,7 +636,7 @@ int daNpcMn_c::executeWaitInit() {
 /* 00001518-000017CC       .text executeWait__9daNpcMn_cFv */
 void daNpcMn_c::executeWait() {
     if (!executeCommon()) {
-        if (field_0x7C1 == 0) {
+        if (mPosFlag == 0) {
             if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
                 field_0x784 = (s16)(l_npc_dat[mNpcNo].field_0x20 * 2.0f);
             } else {
@@ -1209,7 +1209,44 @@ u16 daNpcMn_c::next_msgStatus(u32* i_msgNo) {
 
 /* 00002DB8-00002F7C       .text getMsg__9daNpcMn_cFv */
 u32 daNpcMn_c::getMsg() {
-    /* Nonmatching */
+    u32 msg = 0;
+    mpMsgNo = NULL;
+
+    if (!dComIfGp_event_chkTalkXY()) {
+        if (!mPosFlag) {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F08)) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F08);
+                mpMsgNo = l_msg_mn_1st_talk;
+            } else {
+                mpMsgNo = l_msg_mn_2nd_talk;
+            }
+        } else if (mPosFlag == 1 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D08)) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F04);
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3120)) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3120);
+                mpMsgNo = l_msg_mn_comp_1st;
+            } else {
+                mpMsgNo = l_msg_mn_comp_2nd;
+            }
+        } else {
+            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F04)) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F04);
+                mpMsgNo = l_msg_mn_1st_talk_in;
+            } else if (field_0x7C4 != 0) {
+                msg = l_msg_mn_figure[field_0x7C5];
+            } else {
+                if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A01)) {
+                    mpMsgNo = l_msg_mn_2nd_talk_in;
+                } else {
+                    mpMsgNo = l_msg_mn_3rd_talk_in;
+                }
+            }
+        }
+    }
+    if (mpMsgNo != NULL) {
+        msg = *mpMsgNo;
+    }
+    return msg;
 }
 
 /* 00002F7C-00002F8C       .text getMsg3__9daNpcMn_cFv */
@@ -1231,12 +1268,26 @@ void daNpcMn_c::setMessage(u32 i_message) {
 
 /* 00002F98-0000302C       .text setAnmFromMsgTag__9daNpcMn_cFv */
 void daNpcMn_c::setAnmFromMsgTag() {
-    /* Nonmatching */
+    switch (dComIfGp_getMesgAnimeAttrInfo()) {
+        case 0:
+            setAnmTbl(&l_npc_anm_wait);
+            break;
+        case 1:
+            setAnmTbl(&l_npc_anm_talk);
+            break;
+        case 2:
+            setAnmTbl(&l_npc_anm_talk2);
+            break;
+        case 3:
+            setAnmTbl(&l_npc_anm_wait2);
+            break;
+    }
+    dComIfGp_setMesgAnimeAttrInfo(0xFF);
 }
 
 /* 0000302C-0000303C       .text getPrmNpcNo__9daNpcMn_cFv */
 bool daNpcMn_c::getPrmNpcNo() {
-    return field_0x7C1 != false;
+    return mPosFlag != false;
 }
 
 /* 0000303C-00003068       .text getPrmRailID__9daNpcMn_cFv */
@@ -1291,7 +1342,17 @@ void daNpcMn_c::playTexPatternAnm() {
 
 /* 0000373C-000037F8       .text playAnm__9daNpcMn_cFv */
 void daNpcMn_c::playAnm() {
-    /* Nonmatching */
+    if (mpMorf->play(NULL, 0, 0) && mpAnmDat != NULL && field_0x7BA > 0) {
+        field_0x7BA--;
+        if (field_0x7BA == 0) {
+            mpAnmDat++;
+            if (setAnmTbl(mpAnmDat)) {
+                field_0x7B9 |= 1;
+            }
+        } else {
+            setAnm(mpAnmDat->mBckIdx, 0, 0.0f);
+        }
+    }
 }
 
 /* 000037F8-000038C8       .text setAnm__9daNpcMn_cFUcif */
@@ -1300,7 +1361,7 @@ void daNpcMn_c::setAnm(unsigned char, int, float) {
 }
 
 /* 000038C8-00003974       .text setAnmTbl__9daNpcMn_cFP9sMnAnmDat */
-void daNpcMn_c::setAnmTbl(sMnAnmDat*) {
+bool daNpcMn_c::setAnmTbl(sMnAnmDat*) {
     /* Nonmatching */
 }
 

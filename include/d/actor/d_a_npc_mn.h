@@ -60,14 +60,18 @@ public:
 
     u8 getNpcNo() { return mNpcNo; }
     request_of_phase_process_class* getPhaseP() { return &mPhs; }
-    u8 getPosFlag() { return field_0x7C1; }
-    void setResFlag(u8 flag) { field_0x7B5 = flag; }
+    u8 getPosFlag() {
+        return mPosFlag;
+    }
+    void setResFlag(u8 flag) {
+        mResFlag = flag;
+    }
 
     daNpcMn_c();
     cPhs_State _create();
     BOOL createHeap();
     cPhs_State createInit();
-    BOOL _delete();
+    bool _delete();
     bool _draw();
     bool _execute();
     u8 executeCommon();
@@ -124,7 +128,7 @@ public:
     void playTexPatternAnm();
     void playAnm();
     void setAnm(u8, int, f32);
-    void setAnmTbl(sMnAnmDat*);
+    bool setAnmTbl(sMnAnmDat*);
     s16 XyCheckCB(int);
     int getRand(int);
     void setCollision(dCcD_Cyl*, cXyz, f32, f32);
@@ -174,7 +178,7 @@ public:
     /* 0x7B2 */ u8 field_0x7B2;
     /* 0x7B3 */ u8 mBtpFrame;
     /* 0x7B4 */ u8 mMoveState;
-    /* 0x7B5 */ u8 field_0x7B5;
+    /* 0x7B5 */ u8 mResFlag;
     /* 0x7B6 */ u8 mNpcNo;
     /* 0x7B7 */ u8 field_0x7B7;
     /* 0x7B8 */ u8 mBckIdx;
@@ -186,7 +190,7 @@ public:
     /* 0x7BE */ u8 field_0x7BE;
     /* 0x7BF */ u8 field_0x7BF;
     /* 0x7C0 */ u8 field_0x7C0;
-    /* 0x7C1 */ u8 field_0x7C1;
+    /* 0x7C1 */ u8 mPosFlag;
     /* 0x7C2 */ s8 field_0x7C2;
     /* 0x7C3 */ u8 field_0x7C3;
     /* 0x7C4 */ u8 field_0x7C4;
