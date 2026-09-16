@@ -117,7 +117,7 @@ void daSaku_c::setMtx() {
     J3DModel* m;
 
     for(i = 0; i < 2; i++) {
-        m = mModels0[i];
+        m = mModels[0][i];
         if (m != NULL) {
             m->setBaseScale(scale);
 
@@ -130,7 +130,7 @@ void daSaku_c::setMtx() {
     int j;
     if (this->field_0xEFC != 0) {
         for(j = 0; j < 2; j++) {
-            m = mModels1[j];
+            m = mModels[1][j];
             if (m != NULL) {
                 m->setBaseScale(scale);
 
@@ -150,13 +150,13 @@ void daSaku_c::setMoveBGMtx() {
     mDoMtx_stack_c::YrotM(this->shape_angle.y);
     mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
 
-    PSMTXCopy(mDoMtx_stack_c::now, this->mMtx0);
+    PSMTXCopy(mDoMtx_stack_c::now, mMtx[0]);
 
     if(this->field_0xEFC != 0) {
         PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y + 200, current.pos.z);
         mDoMtx_stack_c::YrotM(this->shape_angle.y);
         mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
-        PSMTXCopy(mDoMtx_stack_c::now, this->mMtx1);
+        PSMTXCopy(mDoMtx_stack_c::now, mMtx[1]);
     };
 
     return;
@@ -166,14 +166,14 @@ void daSaku_c::setMoveBGMtx() {
 void daSaku_c::checkCol() {
     if(this->field_0xEEC != 0) {
         for(int i = 0; i < 3; i++) {
-            this->field_0xA74[i].SetC(mPos0[i]);
+            this->field_0xA74[i].SetC(mPos[0][i]);
             g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0xA74[i]);
         }
     }
 
     if(this->field_0xEF8 == 1) {
         for(int i = 0; i < 3; i++) {
-            this->field_0x30C[i].SetC(mPos0[i]);
+            this->field_0x30C[i].SetC(mPos[0][i]);
             g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x30C[i]);
         }
     }
@@ -181,7 +181,7 @@ void daSaku_c::checkCol() {
 
     if(field_0xEFC != 0 && this->field_0xEFC == 1) {
         for(int i = 0; i < 3; i++) {
-            this->field_0x69C[i].SetC(mPos1[i]);
+            this->field_0x69C[i].SetC(mPos[1][i]);
             g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x69C[i]);
         }
     }
