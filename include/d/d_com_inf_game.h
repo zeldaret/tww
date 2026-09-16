@@ -1245,6 +1245,7 @@ inline s32 dComIfGs_getCollectMapNum() {
 inline void dComIfGs_onSaveArriveGrid(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().onSaveArriveGrid(i_no);
 }
+
 inline BOOL dComIfGs_isSaveArriveGrid(int i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGrid(i_no);
 }

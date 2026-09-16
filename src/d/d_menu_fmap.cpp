@@ -148,24 +148,24 @@ dMf_HIO_c::dMf_HIO_c() {
     mCheckMarkBlack.r = 255;
     mCheckMarkBlack.g = 255;
     mCheckMarkBlack.b = 255;
-    field_0xE9 = 50;
-    field_0xEE.r = 255;
-    field_0xEE.g = 64;
-    field_0xEE.b = 0;
-    field_0xEE.a = 0;
-    field_0xEA.r = 0;
-    field_0xEA.g = 0;
-    field_0xEA.b = 0;
-    field_0xEA.a = 255;
+    mKorokMarkAnimFrame = 50;
+    mKorokMarkAnimBlack.r = 255;
+    mKorokMarkAnimBlack.g = 64;
+    mKorokMarkAnimBlack.b = 0;
+    mKorokMarkAnimBlack.a = 0;
+    mKorokMarkAnimWhite.r = 0;
+    mKorokMarkAnimWhite.g = 0;
+    mKorokMarkAnimWhite.b = 0;
+    mKorokMarkAnimWhite.a = 255;
     field_0xF2 = 192;
-    mKorokBlack.r = 0;
-    mKorokBlack.g = 64;
-    mKorokBlack.b = 0;
-    mKorokBlack.a = 0;
-    mKorokWhite.r = 0;
-    mKorokWhite.g = 129;
-    mKorokWhite.b = 0;
-    mKorokWhite.a = 255;
+    mKorokMarkBlack.r = 0;
+    mKorokMarkBlack.g = 64;
+    mKorokMarkBlack.b = 0;
+    mKorokMarkBlack.a = 0;
+    mKorokMarkWhite.r = 0;
+    mKorokMarkWhite.g = 129;
+    mKorokMarkWhite.b = 0;
+    mKorokMarkWhite.a = 255;
     field_0xFB = 128;
     mAreaTxtColor.r = 136;
     mAreaTxtColor.g = 50;
@@ -479,7 +479,7 @@ void dMenu_Fmap_c::screenSet() {
     }
     fopMsgM_setPaneData(&mCk3xPanes[0], fmapDl.scrn, 'CK31');
     fopMsgM_setPaneData(&mCk3xPanes[1], fmapDl.scrn, 'CK32');
-    mCk1Color.set(((J2DPicture*)mCk1xPanes[0].pane)->getBlack());
+    mCk1Color1.set(((J2DPicture*)mCk1xPanes[0].pane)->getBlack());
     mCk1Color2.set(((J2DPicture*)mCk1xPanes[0].pane)->getWhite());
 
     for (i = 0; i < 8; i++) {
@@ -488,7 +488,7 @@ void dMenu_Fmap_c::screenSet() {
         };
         fopMsgM_setPaneData(&mKr0xPanes[i], fmapDl.scrn, tagkr[i]);
     }
-    mKr0Color.set(((J2DPicture*)mKr0xPanes[0].pane)->getBlack());
+    mKr0Color1.set(((J2DPicture*)mKr0xPanes[0].pane)->getBlack());
     mKr0Color2.set(((J2DPicture*)mKr0xPanes[0].pane)->getWhite());
 
     for (i = 0; i < ARRAY_SSIZE(mR0xPanes); i++) {
@@ -556,7 +556,7 @@ void dMenu_Fmap_c::screenSet() {
     ((J2DTextBox*)mWt1Pane.pane)->setFont(mRFont);
 
     mYs01Color2.set(((J2DPicture*)mYs01Pane.pane)->getWhite());
-    mYs01Color.set(((J2DPicture*)mYs01Pane.pane)->getBlack());
+    mYs01Color1.set(((J2DPicture*)mYs01Pane.pane)->getBlack());
 
 #if VERSION > VERSION_JPN
     ((J2DTextBox*)mWt0Pane.pane)->setBlack(JUtility::TColor(0xffffff00));
@@ -774,7 +774,7 @@ void dMenu_Fmap_c::displayinit() {
 #if VERSION > VERSION_JPN
     gShipMarkAnimeInit();
 #endif
-    mFmap2.fmapSv = fmapSv;
+    mFmap2.setSvPtr(fmapSv);
     mFmap2._create();
     mFmap2.setAramCmapDat(&mCmapDatPnt);
     mFmap2.initialize();
@@ -878,8 +878,8 @@ void dMenu_Fmap_c::dispEndSalvageMark() {
             fopMsgM_pane_class pane;
             fopMsgM_setPaneData(&pane, fmapDl.scrn, hist[i]);
 
-            f32 y = pnt->salvagePnt[mSalvagePntIdx].y;
             f32 x = pnt->salvagePnt[mSalvagePntIdx].x;
+            f32 y = pnt->salvagePnt[mSalvagePntIdx].y;
             mStxxPanes[i].mPosCenterOrig.x = pane.mPosCenterOrig.x + x * 56.0f / 100000.0f;
             mStxxPanes[i].mPosCenterOrig.y = pane.mPosCenterOrig.y + y * 56.0f / 100000.0f;
             mStxxPanes[i].mPosCenter.x = mStxxPanes[i].mPosCenterOrig.x;
@@ -910,11 +910,21 @@ void dMenu_Fmap_c::checkMarkCheck1() {
             mCk1xPanes[1].pane->show();
         }
 
+#if VERSION > VERSION_DEMO
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E80)) {
             mCk1xPanes[1].pane->hide();
         }
+#endif
 
-        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3920)) {
+#if VERSION == VERSION_DEMO
+        if (dComIfGs_isSymbol(dSymbol_NAYRU_e))
+#else
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3920))
+#endif
+        {
+#if VERSION == VERSION_DEMO
+            mCk1xPanes[1].pane->hide();
+#endif
             if (dComIfGs_isEventBit(dSv_event_flag_c::PLACED_DINS_PEARL)) {
                 mCk2xPanes[0].pane->hide();
             } else {
@@ -958,7 +968,16 @@ void dMenu_Fmap_c::checkMarkCheck3() {
             bool stat = dComIfGs_isEventBit(dSv_event_flag_c::UNK_0102) ||
                         ((dComIfGs_getEventReg(dSv_event_flag_c::UNK_9EFF) & 0xFF) >> bit & 1);
             if (stat != 0) {
-                ((J2DPicture*)mKr0xPanes[i].pane)->setBlackWhite(g_mfHIO.mKorokBlack, g_mfHIO.mKorokWhite);
+                ((J2DPicture*)mKr0xPanes[i].pane)->setBlackWhite(g_mfHIO.mKorokMarkBlack, g_mfHIO.mKorokMarkWhite);
+#if VERSION == VERSION_DEMO
+                mKr0xPanes[i].mInitAlpha = g_mfHIO.field_0xFB;
+                mKr0xPanes[i].mNowAlpha = g_mfHIO.field_0xFB;
+#endif
+            } else {
+#if VERSION == VERSION_DEMO
+                mKr0xPanes[i].mInitAlpha = g_mfHIO.field_0xF2;
+                mKr0xPanes[i].mNowAlpha = g_mfHIO.field_0xF2;
+#endif
             }
 
             ((J2DPicture*)mKr0xPanes[i].pane)->changeTexture(korogStat[stat], 0);
@@ -999,8 +1018,9 @@ void dMenu_Fmap_c::setPaneOnOff(J2DScreen* i_screen, u32 i_arg2, bool i_arg3) {
 
 /* 801B1978-801B19F0       .text childPaneMoveSp__12dMenu_Fmap_cFP18fopMsgM_pane_classP18fopMsgM_pane_classfff */
 void dMenu_Fmap_c::childPaneMoveSp(fopMsgM_pane_class* i_pane1, fopMsgM_pane_class* i_pane2, f32 i_scale, f32 i_x, f32 i_y) {
+    f32 xSize = i_pane2->mSize.x / 2.0f;
     f32 ySize = i_pane2->mSize.y / 2.0f;
-    i_pane1->mPosCenter.x = i_pane2->mSize.x / 2.0f + i_scale * (i_pane1->mPosCenterOrig.x - i_pane2->mSizeOrig.x / 2.0f);
+    i_pane1->mPosCenter.x = xSize + i_scale * (i_pane1->mPosCenterOrig.x - i_pane2->mSizeOrig.x / 2.0f);
     i_pane1->mPosCenter.y = ySize + i_scale * (i_pane1->mPosCenterOrig.y - i_pane2->mSizeOrig.y / 2.0f);
     fopMsgM_paneScale(i_pane1, i_x, i_y);
 }
@@ -1342,14 +1362,14 @@ void dMenu_Fmap_c::checkMarkAnime() {
         alpha = 1.0f - alpha;
     }
 
-    white.r = g_mfHIO.mCheckMarkWhite.r + alpha * (mCk1Color2.r - g_mfHIO.mCheckMarkWhite.r);
-    white.g = g_mfHIO.mCheckMarkWhite.g + alpha * (mCk1Color2.g - g_mfHIO.mCheckMarkWhite.g);
-    white.b = g_mfHIO.mCheckMarkWhite.b + alpha * (mCk1Color2.b - g_mfHIO.mCheckMarkWhite.b);
+    white.r = lineInter0to1ForU8(g_mfHIO.mCheckMarkWhite.r, mCk1Color2.r, alpha);
+    white.g = lineInter0to1ForU8(g_mfHIO.mCheckMarkWhite.g, mCk1Color2.g, alpha);
+    white.b = lineInter0to1ForU8(g_mfHIO.mCheckMarkWhite.b, mCk1Color2.b, alpha);
     white.a = mCk1Color2.a;
-    black.r = g_mfHIO.mCheckMarkBlack.r + alpha * (mCk1Color.r - g_mfHIO.mCheckMarkBlack.r);
-    black.g = g_mfHIO.mCheckMarkBlack.g + alpha * (mCk1Color.g - g_mfHIO.mCheckMarkBlack.g);
-    black.b = g_mfHIO.mCheckMarkBlack.b + alpha * (mCk1Color.b - g_mfHIO.mCheckMarkBlack.b);
-    black.a = mCk1Color.a;
+    black.r = lineInter0to1ForU8(g_mfHIO.mCheckMarkBlack.r, mCk1Color1.r, alpha);
+    black.g = lineInter0to1ForU8(g_mfHIO.mCheckMarkBlack.g, mCk1Color1.g, alpha);
+    black.b = lineInter0to1ForU8(g_mfHIO.mCheckMarkBlack.b, mCk1Color1.b, alpha);
+    black.a = mCk1Color1.a;
 
     if (mCheckMarkTimer == 0) {
         mCheckMarkTimer = g_mfHIO.mCheckMarkAnimFrame;
@@ -1369,15 +1389,20 @@ void dMenu_Fmap_c::checkMarkAnime() {
 
     for (int i = 0; i < 2; i++) {
         if (mCk3xPanes[i].pane->isVisible()) {
+#if VERSION == VERSION_DEMO
+            // @bug Bad copy paste, sets ck1x again
+            ((J2DPicture*)mCk1xPanes[i].pane)->setBlackWhite(black, white);
+#else
             ((J2DPicture*)mCk3xPanes[i].pane)->setBlackWhite(black, white);
+#endif
         }
     }
 }
 
 #if VERSION == VERSION_DEMO
 void dMenu_Fmap_c::krogMarkAnimeInit() {
-    field_0x517D = g_mfHIO.field_0xE9;
-    field_0x517E = 1;
+    mKorokMarkTimer = g_mfHIO.mKorokMarkAnimFrame;
+    mKorokMarkToggle = 1;
 }
 #endif
 
@@ -1396,20 +1421,20 @@ void dMenu_Fmap_c::krogMarkAnime() {
         alpha = 1.0f - alpha;
     }
 
-    white.r = g_mfHIO.mCheckMarkWhite.r + alpha * (mCk1Color2.r - g_mfHIO.mCheckMarkWhite.r);
-    white.g = g_mfHIO.mCheckMarkWhite.g + alpha * (mCk1Color2.g - g_mfHIO.mCheckMarkWhite.g);
-    white.b = g_mfHIO.mCheckMarkWhite.b + alpha * (mCk1Color2.b - g_mfHIO.mCheckMarkWhite.b);
+    white.r = lineInter0to1ForU8(g_mfHIO.mKorokMarkAnimWhite.r, mKr0Color2.r, alpha);
+    white.g = lineInter0to1ForU8(g_mfHIO.mKorokMarkAnimWhite.g, mKr0Color2.g, alpha);
+    white.b = lineInter0to1ForU8(g_mfHIO.mKorokMarkAnimWhite.b, mKr0Color2.b, alpha);
     white.a = mCk1Color2.a;
-    black.r = g_mfHIO.mCheckMarkBlack.r + alpha * (mCk1Color.r - g_mfHIO.mCheckMarkBlack.r);
-    black.g = g_mfHIO.mCheckMarkBlack.g + alpha * (mCk1Color.g - g_mfHIO.mCheckMarkBlack.g);
-    black.b = g_mfHIO.mCheckMarkBlack.b + alpha * (mCk1Color.b - g_mfHIO.mCheckMarkBlack.b);
-    black.a = mCk1Color.a;
+    black.r = lineInter0to1ForU8(g_mfHIO.mKorokMarkAnimBlack.r, mKr0Color1.r, alpha);
+    black.g = lineInter0to1ForU8(g_mfHIO.mKorokMarkAnimBlack.g, mKr0Color1.g, alpha);
+    black.b = lineInter0to1ForU8(g_mfHIO.mKorokMarkAnimBlack.b, mKr0Color1.b, alpha);
+    black.a = mCk1Color1.a;
 
-    if (mCheckMarkTimer == 0) {
-        mCheckMarkTimer = g_mfHIO.mCheckMarkAnimFrame;
-        mCheckMarkToggle ^= 1;
+    if (mKorokMarkTimer == 0) {
+        mKorokMarkTimer = g_mfHIO.mKorokMarkAnimFrame;
+        mKorokMarkToggle ^= 1;
     } else {
-        mCheckMarkTimer--;
+        mKorokMarkTimer--;
     }
 
     for (int i = 0; i < 8; i++) {
@@ -1760,9 +1785,11 @@ void dMenu_Fmap_c::checkDspHugeMapShip() {
 /* 801B4B44-801B4C0C       .text _open__12dMenu_Fmap_cFv */
 bool dMenu_Fmap_c::_open() {
     BOOL ret;
+#if VERSION > VERSION_DEMO
     if (mFrameTimer == 0) {
         mButtonIconMode = FMAP_BTN_ICON_WORLD;
     }
+#endif
     if (mZoomLocked) {
         ret = TRUE;
     } else {
@@ -2684,8 +2711,8 @@ void dMenu_Fmap_c::wrapMove() {
         ((J2DPicture*) mNo00Pane.pane)->setBlackWhite(
             JUtility::TColor(0x33, 0x15, 0x00, 0x00),
             JUtility::TColor(0x76, 0x54, 0x2F, 0xFF));
-        ((J2DPicture*)mYs01Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
-        ((J2DPicture*)mYs00Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
+        ((J2DPicture*)mYs01Pane.pane)->setBlackWhite(mYs01Color1, mYs01Color2);
+        ((J2DPicture*)mYs00Pane.pane)->setBlackWhite(mYs01Color1, mYs01Color2);
         warpSelCursorMove();
         warpSelCursorAnimeInit();
 
@@ -2792,8 +2819,8 @@ void dMenu_Fmap_c::wrapSelect() {
             ((J2DPicture*)mYs00Pane.pane)->setBlackWhite(
                 JUtility::TColor(0x33, 0x15, 0x00, 0x00),
                 JUtility::TColor(0x76, 0x54, 0x2F, 0xFF));
-            ((J2DPicture*)mNo01Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
-            ((J2DPicture*)mNo00Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
+            ((J2DPicture*)mNo01Pane.pane)->setBlackWhite(mYs01Color1, mYs01Color2);
+            ((J2DPicture*)mNo00Pane.pane)->setBlackWhite(mYs01Color1, mYs01Color2);
         }
     } else if (stick->checkLeftTrigger()) {
         if (mWarpSubState != FMAP_WARP_SEL_YES) {
@@ -2806,8 +2833,8 @@ void dMenu_Fmap_c::wrapSelect() {
             ((J2DPicture*)mNo00Pane.pane)->setBlackWhite(
                 JUtility::TColor(0x33, 0x15, 0x00, 0x00),
                 JUtility::TColor(0x76, 0x54, 0x2F, 0xFF));
-            ((J2DPicture*)mYs01Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
-            ((J2DPicture*)mYs00Pane.pane)->setBlackWhite(mYs01Color, mYs01Color2);
+            ((J2DPicture*)mYs01Pane.pane)->setBlackWhite(mYs01Color1, mYs01Color2);
+            ((J2DPicture*)mYs00Pane.pane)->setBlackWhite(mYs01Color1, mYs01Color2);
         }
     }
     warpSelCursorAnime();
@@ -3115,18 +3142,9 @@ void dMenu_Fmap_c::setDspWarpBackCornerColor(f32 i_ratio) {
             next = 0;
         }
 
-        f32 cur = rgb[i][0];
-        f32 nextC = rgb[next][0];
-        color[i].r = cur + alpha * (nextC - cur);
-
-        cur = rgb[i][1];
-        nextC = rgb[next][1];
-        color[i].g = cur + alpha * (nextC - cur);
-
-        cur = rgb[i][2];
-        nextC = rgb[next][2];
-        color[i].b = cur + alpha * (nextC - cur);
-
+        color[i].r = lineInter0to1(rgb[i][0], rgb[next][0], alpha);
+        color[i].g = lineInter0to1(rgb[i][1], rgb[next][1], alpha);
+        color[i].b = lineInter0to1(rgb[i][2], rgb[next][2], alpha);
         color[i].a = 255;
     }
 
@@ -3161,6 +3179,9 @@ bool dMenu_Fmap_c::_open_fishManMode() {
     mFrameTimer++;
     if (ret == TRUE) {
         mFrameTimer = 0;
+#if VERSION == VERSION_DEMO
+        mButtonIconMode = FMAP_BTN_ICON_FISHMAN;
+#endif
         mFishmanProcIdx = FISHMAN_PROC_DISP_AREA;
         return true;
     }
@@ -3440,6 +3461,9 @@ bool dMenu_Fmap_c::_open_wallPaper() {
     mFrameTimer++;
     if (ret == 1) {
         mFrameTimer = 0;
+#if VERSION == VERSION_DEMO
+        mButtonIconMode = FMAP_BTN_ICON_WALLPAPER;
+#endif
         mFmapMode = FMAP_MODE_WALLPAPER;
         return true;
     }

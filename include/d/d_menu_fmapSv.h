@@ -55,8 +55,10 @@ public:
         }
         if (i < mNum) {
             return pnt;
+        } else {
+            pnt = NULL;
         }
-        return NULL;
+        return pnt;
     }
     aramCmapDatPnt_t* getCmapDatPnt4(int i_cmapIdx) {
         aramCmapDatPnt_t* pnt = mpPnt;
@@ -69,8 +71,10 @@ public:
         }
         if (i < mNum) {
             return pnt;
+        } else {
+            pnt = NULL;
         }
-        return NULL;
+        return pnt;
     }
 
 private:
