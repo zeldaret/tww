@@ -164,7 +164,33 @@ void daSaku_c::setMoveBGMtx() {
 
 /* 0000120C-0000134C       .text checkCol__8daSaku_cFv */
 void daSaku_c::checkCol() {
-    /* Nonmatching */
+    int i = 0; 
+    if(this->field_0xEEC != 0) {
+        for(i = 0; i < 3; i++) {
+            this->field_0xA74[i].SetC(mPos0[i]);
+            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0xA74[i]);
+        }
+    };
+
+    if(this->field_0xEF8 == 1) {
+        for(i = 0; i < 3; i++) {
+            this->field_0x30C[i].SetC(mPos0[i]);
+            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x30C[i]);
+        }
+    }
+
+
+    int j = 0;
+    // double check - unecessary
+    if(field_0xEFC != 0 && this->field_0xEFC == 1) {
+        for(j = 0; j < 3; j ++) {
+            this->field_0x69C[j].SetC(mPos1[j]);
+            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x69C[j]);
+        }
+
+    }
+
+    return;
 }
 
 /* 0000134C-00001510       .text setCol__8daSaku_cFv */

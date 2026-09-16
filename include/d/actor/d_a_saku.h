@@ -46,11 +46,14 @@ public:
     static f32 _m_saku_alpha_out_time;
 
     /* 0x290 */ dPa_smokeEcallBack field_0x290[2];
-    /* 0x2D0 */ u8 field_0x2D0[0x2E8 - 0x2D0];
+    /* 0x2D0 */ cCcD_Stts* field_0x2D0;
+    /* 0x2D4 */ u8 field_0x2D4[0x2E8 - 0x2D4];
     /* 0x2E8 */ cCcD_Stts__vtbl* field_0x2E8;
     /* 0x2EC */ dCcD_GStts field_0x2EC;
-    /* 0x30C */ dCcD_Cyl field_0x30C[6];
-    /* 0xA2C */ cXyz field_0xA2C[6];
+    /* 0x30C */ dCcD_Cyl field_0x30C[3];
+    /* 0x69C */ dCcD_Cyl field_0x69C[3];
+    /* 0xA2C */ cXyz mPos0[3];
+    /* 0xA50 */ cXyz mPos1[3];
     /* 0xA74 */ dCcD_Cyl field_0xA74[3];
     /* 0xE04 */ request_of_phase_process_class field_0xE04;
     /* 0xE0C */ request_of_phase_process_class field_0xE0C;
@@ -63,10 +66,12 @@ public:
     /* 0xEAC */ u8 field_0xEAC[0xEBC - 0xEAC];
     /* 0xEBC */ u32 field_0xEBC;
     /* 0xEC0 */ u32 field_0xEC0;
-    /* 0xEC4 */ u8 field_0xEC4[0xEF2 - 0xEC4];
+    /* 0xEC4 */ u8 field_0xEC4[0xEEC - 0xEC4];
+    /* 0xEEC */ s32 field_0xEEC;
+    /* 0xEF0 */ u8 field_0xEF0[0xEF2 - 0xEF0];
     /* 0xEF2 */ u8 mSturdinessType;
     /* 0xEF3 */ u8 field_0xEF3[0xEF8 - 0xEF3];
-    /* 0xEF8 */ u32 field_0xEF8;
+    /* 0xEF8 */ s32 field_0xEF8;
     /* 0xEFC */ s32 field_0xEFC;
     /* 0xF00 */ uint mBottomHalfDestroyedSwitch;
     /* 0xF04 */ uint mTopHalfDestroyedSwitch;
