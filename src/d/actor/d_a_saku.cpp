@@ -7,6 +7,8 @@
 #include "d/actor/d_a_saku.h"
 #include "d/d_cc_d.h"
 
+static sakuHIO_c l_sakuHIO;
+
 const dCcD_SrcCyl daSaku_c::m_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -62,8 +64,38 @@ void daSaku_c::mode_break_fire(int) {
 }
 
 /* 000006A8-0000083C       .text mode_break_throw_obj__8daSaku_cFi */
-void daSaku_c::mode_break_throw_obj(int) {
+int daSaku_c::mode_break_throw_obj(int i) {
     /* Nonmatching */
+    u8 uVar1;
+
+    if(mHeap[i][0] != NULL && mHeap[i][1] != NULL) {
+        if(this->field_0xEF0[i] != 0) {
+            this->field_0xEF0[i] -= 1;
+
+            if(this->field_0xEF0[i] == 0) {
+                mDoExt_destroySolidHeap(mHeap[i][0]);
+                mHeap[i][0] = NULL;
+                mModels[i][0] = NULL;
+            }
+        }
+    }
+
+    if(this->field_0xEBC[i] >= m_alpha_start_time) {
+        if(this->field_0x290[i].getEmitter() != NULL) {
+            cLib_chaseF(&this->field_0xEB4[i], 0, (f32)l_sakuHIO.field_0x12 / (255.0f * (f32)m_fade_time));
+            this->field_0xEB4[i] = fabs(this->field_0xEB4[i]);
+
+            u8 uVar1 = 255.0f * this->field_0xEB4[i];
+            this->field_0x290[i].getEmitter()->setGlobalAlpha(uVar1);
+
+            if (uVar1 == 0) {
+                this->field_0x290[i].end();
+                this->field_0xEAC[i] = 0.0;
+            }
+        }
+    }
+
+    return 1; 
 }
 
 /* 0000083C-000008EC       .text RecreateHeap__8daSaku_cFii */
@@ -210,8 +242,8 @@ int daSaku_c::setEffFire(int _) {
     dComIfGp_particle_set(0x45c, &local_18, &current.angle, 0x0, 0xff, 0x0, -1, 0x0, 0x0, 0x0);
     dComIfGp_particle_set(0x245e, &local_18, &current.angle, 0x0, m_smoke_alpha, 0x0, -1, 0x0, 0x0, 0x0);
 
-    this->field_0xEC0 = 1;
-    this->field_0xEBC = 1;
+    this->field_0xEBC[1] = 1;
+    this->field_0xEBC[0] = 1;
 
     sVar1 = dComIfGp_getReverb(this->current.roomNo);
 
