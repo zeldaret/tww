@@ -32,7 +32,7 @@ public:
     void loadMoveBG(int, int, int);
     void loadModel(int, int, int);
     void burn();
-    void broken(int);
+    int broken(int);
     void changeCollision(int);
     void setMtx();
     void setMoveBGMtx();

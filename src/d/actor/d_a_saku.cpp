@@ -66,7 +66,6 @@ void daSaku_c::mode_break_fire(int) {
 /* 000006A8-0000083C       .text mode_break_throw_obj__8daSaku_cFi */
 int daSaku_c::mode_break_throw_obj(int i) {
     /* Nonmatching */
-    u8 uVar1;
 
     if(mHeap[i][0] != NULL && mHeap[i][1] != NULL) {
         if(this->field_0xEF0[i] != 0) {
@@ -134,8 +133,28 @@ void daSaku_c::burn() {
 }
 
 /* 00000E8C-00000F60       .text broken__8daSaku_cFi */
-void daSaku_c::broken(int) {
-    /* Nonmatching */
+int daSaku_c::broken(int param_1) {
+    setEffBreak(param_1);
+    this->field_0xEF8[param_1] = 3;
+    this->field_0xEE0[param_1] = 0;
+
+    if (param_1 == 0) {
+        dComIfGs_onSwitch(mBottomHalfDestroyedSwitch, home.roomNo);
+    }
+    else {
+        dComIfGs_onSwitch(mTopHalfDestroyedSwitch, home.roomNo);
+    }
+
+    RecreateHeap(1, param_1);
+
+    if(param_1 == 0) {
+        this->cullMtx = mModels[param_1][1]->getBaseTRMtx();
+    }
+
+    this->field_0xEDC[param_1][0] = 0;
+    this->field_0xEDC[param_1][1] = 0xff;
+
+    return 1;
 }
 
 /* 00000F60-00000FF4       .text changeCollision__8daSaku_cFi */
@@ -160,7 +179,7 @@ void daSaku_c::setMtx() {
     }
 
     int j;
-    if (this->field_0xEFC != 0) {
+    if (this->field_0xEF8[1] != 0) {
         for(j = 0; j < 2; j++) {
             m = mModels[1][j];
             if (m != NULL) {
@@ -184,7 +203,7 @@ void daSaku_c::setMoveBGMtx() {
 
     PSMTXCopy(mDoMtx_stack_c::now, mMtx[0]);
 
-    if(this->field_0xEFC != 0) {
+    if(this->field_0xEF8[1] != 0) {
         PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y + 200, current.pos.z);
         mDoMtx_stack_c::YrotM(this->shape_angle.y);
         mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
@@ -203,7 +222,7 @@ void daSaku_c::checkCol() {
         }
     }
 
-    if(this->field_0xEF8 == 1) {
+    if(this->field_0xEF8[0] == 1) {
         for(int i = 0; i < 3; i++) {
             this->field_0x30C[i].SetC(mPos[0][i]);
             g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x30C[i]);
@@ -211,7 +230,7 @@ void daSaku_c::checkCol() {
     }
 
 
-    if(field_0xEFC != 0 && this->field_0xEFC == 1) {
+    if(field_0xEF8[1] != 0 && this->field_0xEF8[1] == 1) {
         for(int i = 0; i < 3; i++) {
             this->field_0x69C[i].SetC(mPos[1][i]);
             g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x69C[i]);
@@ -292,7 +311,7 @@ static BOOL daSaku_IsDelete(daSaku_c*) {
 static BOOL daSaku_Draw(daSaku_c* m) {
     /* Nonmatching */
     m->saku_draw_sub(0);
-    if(m->field_0xEFC != 0) {
+    if(m->field_0xEF8[1] != 0) {
         m->saku_draw_sub(1);
     }
     
