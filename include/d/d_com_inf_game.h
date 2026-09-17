@@ -1245,6 +1245,7 @@ inline s32 dComIfGs_getCollectMapNum() {
 inline void dComIfGs_onSaveArriveGrid(int i_no) {
     g_dComIfG_gameInfo.save.getPlayer().getMap().onSaveArriveGrid(i_no);
 }
+
 inline BOOL dComIfGs_isSaveArriveGrid(int i_no) {
     return g_dComIfG_gameInfo.save.getPlayer().getMap().isSaveArriveGrid(i_no);
 }
@@ -3519,7 +3520,7 @@ inline s32 dComIfGp_event_order(u16 eventType, u16 priority, u16 flag, u16 hind,
     return g_dComIfG_gameInfo.play.getEvent()->order(eventType, priority, flag, hind, pActor1, pActor2, eventID, infoIdx);
 }
 
-inline s32 dComIfGp_event_orderOld(u16 eventType, u16 priority, u16 flag, u16 hind, void* pActor1, void* pActor2, const char *pEventName) {
+inline s32 dComIfGp_event_orderOld(u16 eventType, u16 priority, u16 flag, u16 hind, void* pActor1, void* pActor2, void* pEventName) {
     return g_dComIfG_gameInfo.play.getEvent()->orderOld(eventType, priority, flag, hind, pActor1, pActor2, pEventName);
 }
 

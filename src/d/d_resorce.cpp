@@ -418,7 +418,7 @@ int dRes_info_c::setRes() {
             mode = 2;
 
             if (mode == 0) {
-                u32 allocSize = (mDataHeap->getSize() - mpParentHeap->getFreeSize()) + 0x8c;
+                u32 allocSize = (mDataHeap->getHeapSize() - mpParentHeap->getFreeSize()) + 0x8c;
                 JKRSolidHeap * pHeap = mDoExt_createSolidHeapFromGameToCurrent(allocSize, 0);
                 if (pHeap != NULL) {
                     mDoExt_adjustSolidHeap(mDataHeap);

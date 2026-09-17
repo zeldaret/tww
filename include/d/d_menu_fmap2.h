@@ -1,8 +1,11 @@
 #ifndef D_MENU_FMAP2_H
 #define D_MENU_FMAP2_H
 
+#include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_drawlist.h"
 #include "d/d_menu_fmapSv.h"
+#include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 struct fopMsgM_pane_class;
 class J2DScreen;
@@ -10,6 +13,7 @@ class JUTFont;
 struct ResTIMG;
 class STControl;
 class dDlst_2DOutFont_c;
+class mDoDvdThd_mountArchive_c;
 
 class dDlst_FMAP2GS_c : public dDlst_base_c {
 public:
@@ -35,7 +39,7 @@ public:
     void getCmapDatValue() {}
     void lineInter0to1ForU8(u8, u8, f32) {}
     void setAramCmapDat(aramCmapDat_c* i_ptr) { mpFmapDatPnt = i_ptr; }
-    void setSvPtr(dMenu_FmapSv_c*) {}
+    void setSvPtr(dMenu_FmapSv_c* i_ptr) { fmapSv = i_ptr; }
 
     void _create();
     void screenSet();
@@ -203,9 +207,9 @@ public:
         fmapSv->setCmapSelNo(no);
     }
 
-public:
-    /* 0x0004 */ void* mChkPntTxt_p;
-    /* 0x0008 */ void* mCmapTxtMain_p[2];
+private:
+    /* 0x0004 */ ResTIMG* mChkPntTxt_p;
+    /* 0x0008 */ ResTIMG* mCmapTxtMain_p[2];
     /* 0x0010 */ dMenu_FmapSv_c* fmapSv;
     /* 0x0014 */ u8 padding_0x14[0x18 - 0x14];
     /* 0x0018 */ mDoDvdThd_mountArchive_c* field_0x18;
@@ -218,10 +222,8 @@ public:
     /* 0x003C */ dDlst_2DOutFont_c* outFont[2];
     /* 0x0044 */ dDlst_2DOutFont_c* outFontS[2];
     /* 0x004C */ fopMsgM_pane_class mClPane;
-    /* 0x0084 */ fopMsgM_pane_class mFc0xPanes[4];
-    /* 0x0164 */ fopMsgM_pane_class mFc1xPanes[4];
-    /* 0x0244 */ fopMsgM_pane_class mCc0xPanes[4];
-    /* 0x0324 */ fopMsgM_pane_class mCc1xPanes[4];
+    /* 0x0084 */ fopMsgM_pane_class mFcxxPanes[8];
+    /* 0x0244 */ fopMsgM_pane_class mCcxxPanes[8];
     /* 0x0404 */ fopMsgM_pane_class mKdmPane;
     /* 0x043c */ fopMsgM_pane_class field_0x43c[5];
     /* 0x0554 */ fopMsgM_pane_class field_0x554[17];
@@ -437,10 +439,8 @@ public:
     /* 0x2824 */ JUtility::TColor color_0x2824;
     /* 0x2828 */ JUtility::TColor color_0x2828;
     /* 0x282C */ JUtility::TColor color_0x282C;
-    /* 0x2830 */ f32 field_0x2830;
-    /* 0x2834 */ f32 field_0x2834;
-    /* 0x2838 */ f32 field_0x2838;
-    /* 0x283C */ f32 field_0x283c;
+    /* 0x2830 */ J2DTextBox::TFontSize field_0x2830;
+    /* 0x2838 */ J2DTextBox::TFontSize field_0x2838;
     /* 0x2840 */ f32 field_0x2840;
     /* 0x2844 */ f32 field_0x2844;
     /* 0x2848 */ u16 field_0x2848[2];
@@ -459,6 +459,8 @@ class dMf2_HIO_c : public JORReflexible {
 public:
     dMf2_HIO_c();
     virtual ~dMf2_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x5;
