@@ -212,7 +212,13 @@ namespace daTsubo {
         void prm_off_moveBg() { fopAcM_SetParam(this, fopAcM_GetParam(this) | 0xC000); }
         void prm_off_stick() { fopAcM_SetParam(this, fopAcM_GetParam(this) & ~0x80000000); }
         void prm_set_cull_non() { fopAcM_SetParam(this, fopAcM_GetParam(this) & ~0x70000000); }
-        void prm_set_itemNo(int) {}
+        void prm_set_itemNo(int i_item_no) {
+            JUT_ASSERT(0x2F4,(i_item_no)!= -1);
+            JUT_ASSERT(0x2F5,(i_item_no & 0x3f) != 0);
+            u32 param = (fopAcM_GetParam(this) & ~0x3F);
+            i_item_no &= 0x3F;
+            fopAcM_SetParam(this, param | i_item_no);
+        }
         void set_drop_spd_y0(f32 drop_speed) { speed.y = drop_speed; }
         bool spec_chk_prm_boko() const { return prm_get_spec() != 0x3F; }
     
