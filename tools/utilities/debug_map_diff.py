@@ -366,7 +366,7 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
     for base_symbol in maybe_fake_symbols:
       if should_ignore_fake_symbol(base_symbol.name):
         continue
-      print("FAKE?:", base_symbol.name, "0x%X" % base_symbol.size)
+      # print("FAKE?:", base_symbol.name, "0x%X" % base_symbol.size)
       total_maybe_fake += 1
   
   for base_symbol in fake_symbols:
