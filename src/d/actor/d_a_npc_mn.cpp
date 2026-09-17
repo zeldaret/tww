@@ -1393,7 +1393,88 @@ void daNpcMn_c::setMtx() {
 
 /* 00003148-00003478       .text chkAttention__9daNpcMn_cFv */
 void daNpcMn_c::chkAttention() {
-    /* Nonmatching */
+    field_0x7C0 = 0;
+    if (mEventCut.getAttnFlag()) {
+        mEyePos = mEventCut.getAttnPos();
+        field_0x7BD = 1;
+        if (field_0x7BE) {
+            mHeadOnlyFollow = false;
+            m_jnt.setTrn();
+        } else {
+            mHeadOnlyFollow = true;
+        }
+        if (field_0x7B1 == 0) {
+            field_0x7B1 = 1;
+        }
+    } else {
+        fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+        f32 maxDist = field_0x784;
+        int maxAngle = field_0x79E;
+
+        f32 dist;
+        s16 angle;
+        dNpc_calc_DisXZ_AngY(current.pos, player->current.pos, &dist, &angle);
+        if (field_0x7B1 != 0) {
+            maxDist += 40.0f;
+            maxAngle += 0x71C;
+        }
+        angle -= shape_angle.y;
+
+        if (maxDist > dist && maxAngle > abs(angle)) {
+            mEyePos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
+            field_0x7BD = 1;
+            if (field_0x7BE) {
+                mHeadOnlyFollow = false;
+            } else {
+                mHeadOnlyFollow = true;
+            }
+
+            if (field_0x7BF == 0) {
+                mTargetYRot = field_0x7A0;
+                mHeadOnlyFollow = false;
+                field_0x7BD = 2;
+                m_jnt.setTrn();
+            }
+            if (field_0x7B1 == 0) {
+                field_0x7B1 = 1;
+            }
+        } else {
+            if (field_0x7B1 == 1) {
+                field_0x7B1 = 0;
+                field_0x79A = l_npc_dat[mNpcNo].field_0x48;
+            }
+            if (l_npc_dat[mNpcNo].field_0x24 > dist) {
+                mEyePos = dNpc_playerEyePos(l_npc_dat[mNpcNo].field_0x14);
+                field_0x7BD = 1;
+                if (field_0x7BE != 0) {
+                    mHeadOnlyFollow = false;
+                } else {
+                    mHeadOnlyFollow = true;
+                }
+
+                if (field_0x7BF == 0) {
+                    mTargetYRot = field_0x7A0;
+                    mHeadOnlyFollow = false;
+                    field_0x7BD = 2;
+                    m_jnt.setTrn();
+                }
+                field_0x7C0 = 1;
+            } else {
+                field_0x7BD = 0;
+                if (!mPathRun.isPath()) {
+                    if (field_0x79A != 0) {
+                        field_0x79A--;
+                    } else {
+                        mTargetYRot = field_0x7A0;
+                        mHeadOnlyFollow = false;
+                        field_0x7BD = 2;
+                        m_jnt.setTrn();
+                    }
+                }
+            }
+        }
+    }
+    mLookAtMaxVel = l_npc_dat[mNpcNo].field_0x2A;
 }
 
 /* 00003478-000035C4       .text lookBack__9daNpcMn_cFv */
