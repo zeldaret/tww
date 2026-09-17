@@ -128,8 +128,45 @@ void daSaku_c::loadModel(int, int, int) {
 }
 
 /* 00000D7C-00000E8C       .text burn__8daSaku_cFv */
-void daSaku_c::burn() {
-    /* Nonmatching */
+int daSaku_c::burn() {
+    if (this->field_0xEF4 == 0) {
+        if (this->field_0xEF8[0] == 1) {
+            this->field_0xEF8[0] = 2;
+            RecreateHeap(1, 0);
+            this->field_0xEE0[0] = 50;
+        }
+
+        if (this->field_0xEF8[1] == 1) {
+            this->field_0xEF8[1] = 2;
+            RecreateHeap(1, 1);
+            this->field_0xEE0[1] = 50;
+        }
+
+        J3DModel* pVar1;
+        pVar1 = mModels[0][1];
+        if(pVar1) {
+            this->cullMtx = pVar1->getBaseTRMtx();
+        }
+        else {
+            pVar1 = mModels[1][1];
+            if(pVar1) {
+                this->cullMtx = pVar1->getBaseTRMtx();
+            }
+        }
+
+        setEffFire(0);
+        this->field_0xEEC = 0x5a;
+        dComIfGs_onSwitch(mBottomHalfDestroyedSwitch, home.roomNo);
+
+        if(this->field_0xEF8[1] != 0) {
+            dComIfGs_onSwitch(mTopHalfDestroyedSwitch, home.roomNo);
+        }
+
+        this->field_0xEF4 = 1;
+    }
+
+    return 1;
+
 }
 
 /* 00000E8C-00000F60       .text broken__8daSaku_cFi */

@@ -32,7 +32,7 @@ public:
     void CreateDummyHeap(int);
     void loadMoveBG(int, int, int);
     void loadModel(int, int, int);
-    void burn();
+    int burn();
     int broken(int);
     bool changeCollision(int);
     void setMtx();
