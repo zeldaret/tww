@@ -49,6 +49,7 @@ public:
     static const char* m_arcname[3];
     static const s32 m_alpha_start_time;
     static s32 m_fade_time;
+    static GXColor dust_color;
 
     /* 0x290 */ dPa_smokeEcallBack field_0x290[2];
     /* 0x2D0 */ dCcD_Stts mStts;
@@ -92,10 +93,10 @@ class sakuHIO_c : public JORReflexible {
             field_0x0F = 1;
             field_0x10 = 5;
             field_0x12 = 0xB4;
-            field_0x13 = 0x69;
-            field_0x14 = 0x5b;
-            field_0x15 = 0x30;
-            field_0x16 = 100;
+            dustColor.r = 0x69;
+            dustColor.g = 0x5b;
+            dustColor.b = 0x30;
+            dustColor.a = 100;
         };
 
         virtual ~sakuHIO_c();
@@ -110,10 +111,7 @@ class sakuHIO_c : public JORReflexible {
         /* 0x0F */ u8 field_0x0F;
         /* 0x10 */ s16 field_0x10;
         /* 0x12 */ u8 field_0x12;
-        /* 0x13 */ u8 field_0x13;
-        /* 0x14 */ u8 field_0x14;
-        /* 0x15 */ u8 field_0x15;
-        /* 0x16 */ u8 field_0x16;
+        /* 0x13 */ GXColor dustColor;
         /* 0x17 */ u8 field_0x17;
 };  // Size: 0x18
 #endif /* D_A_SAKU_H */
