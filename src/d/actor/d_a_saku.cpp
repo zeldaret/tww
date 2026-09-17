@@ -158,8 +158,26 @@ int daSaku_c::broken(int param_1) {
 }
 
 /* 00000F60-00000FF4       .text changeCollision__8daSaku_cFi */
-void daSaku_c::changeCollision(int) {
-    /* Nonmatching */
+bool daSaku_c::changeCollision(int param_1) {
+    bool flag; 
+    if (this->field_0xEF8[param_1] == 0) {
+        flag = FALSE;
+    }
+
+    else {
+        if(this->field_0xEE0[param_1] >= 0) {
+            if(this->field_0xEE0[param_1] == 0){
+                dComIfG_Bgsp()->Release(this->field_0xE44[param_1]);
+                MoveBGResist(1, param_1);
+            }
+            
+            this->field_0xEE0[param_1] -= 1;
+        }
+
+        flag = TRUE;
+    }
+
+    return flag;
 }
 
 /* 00000FF4-0000113C       .text setMtx__8daSaku_cFv */
