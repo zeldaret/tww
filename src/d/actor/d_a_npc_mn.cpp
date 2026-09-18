@@ -1479,7 +1479,39 @@ void daNpcMn_c::chkAttention() {
 
 /* 00003478-000035C4       .text lookBack__9daNpcMn_cFv */
 void daNpcMn_c::lookBack() {
-    /* Nonmatching */
+    s16 target = mLookAtMaxVel;
+    s16 desiredYRot = current.angle.y;
+
+    cXyz* dstTemp = NULL;
+    cXyz temp2;
+    cXyz dstPos = eyePos;
+    bool headOnlyFollow = mHeadOnlyFollow;
+    switch (field_0x7BD) {
+        case 1:
+            temp2 = mEyePos;
+            dstTemp = &temp2;
+            break;
+        case 2:
+            desiredYRot = mTargetYRot;
+            break;
+        case 0:
+        default:
+            break;
+    }
+    if (field_0x7B0 && field_0x7BE) {
+        headOnlyFollow = false;
+        m_jnt.setTrn();
+    }
+    if (m_jnt.trnChk()) {
+        if (mEventCut.getTurnSpeed() != 0) {
+            target = mEventCut.getTurnSpeed();
+        }
+        cLib_addCalcAngleS2(&field_0x7AC, target, 4, 0x800);
+    } else {
+        field_0x7AC = 0;
+    }
+    m_jnt.lookAtTarget(&current.angle.y, dstTemp, dstPos, desiredYRot, field_0x7AC, headOnlyFollow);
+    shape_angle = current.angle;
 }
 
 /* 000035C4-000036D0       .text initTexPatternAnm__9daNpcMn_cFb */
