@@ -103,8 +103,38 @@ void daSaku_c::RecreateHeap(int, int) {
 }
 
 /* 000008EC-000009B0       .text CreateHeap__8daSaku_cFii */
-void daSaku_c::CreateHeap(int, int) {
-    /* Nonmatching */
+bool daSaku_c::CreateHeap(int i_heapId, int i_sakuId) {
+    int iVar1;
+    int iVar2 = i_heapId;
+    bool bVar3;
+
+    iVar1 = this->field_0xEF8[i_sakuId];
+
+    switch(iVar1) {
+        case 1:
+            iVar2 = 0;
+            break;
+        
+        case 3:
+            iVar2 = 2;
+            break;
+
+        case 2:
+            iVar2 = 1;
+            break;
+    }
+
+    iVar1 = loadModel(iVar2, i_heapId, i_sakuId);
+    if (iVar1 == 0) {
+        bVar3 = FALSE;
+    }
+    else {
+        iVar1 = GetDzbId(i_sakuId);
+        iVar1 = loadMoveBG(iVar1, i_heapId, i_sakuId);
+        bVar3 = iVar1 != 0;
+    }
+
+    return bVar3;
 }
 
 /* 000009B0-00000A4C       .text GetDzbId__8daSaku_cFi */
