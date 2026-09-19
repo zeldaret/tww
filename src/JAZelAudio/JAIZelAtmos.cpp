@@ -22,17 +22,17 @@ void JAIZelBasic::seaEnvSePlay(u32, s8) {
 }
 
 /* 802AD54C-802AD63C       .text calcPosPanLR__11JAIZelBasicFP3Vec */
-void JAIZelBasic::calcPosPanLR(Vec*) {
+f32 JAIZelBasic::calcPosPanLR(Vec*) {
     /* Nonmatching */
 }
 
 /* 802AD63C-802AD728       .text calcPosPanSR__11JAIZelBasicFP3Vecf */
-void JAIZelBasic::calcPosPanSR(Vec*, f32) {
+f32 JAIZelBasic::calcPosPanSR(Vec*, f32) {
     /* Nonmatching */
 }
 
 /* 802AD728-802AD878       .text calcPosVolume__11JAIZelBasicFP3Vecf */
-void JAIZelBasic::calcPosVolume(Vec*, f32) {
+f32 JAIZelBasic::calcPosVolume(Vec*, f32) {
     /* Nonmatching */
 }
 
