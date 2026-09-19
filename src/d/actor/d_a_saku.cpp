@@ -108,8 +108,35 @@ void daSaku_c::CreateHeap(int, int) {
 }
 
 /* 000009B0-00000A4C       .text GetDzbId__8daSaku_cFi */
-void daSaku_c::GetDzbId(int) {
-    /* Nonmatching */
+int daSaku_c::GetDzbId(int param_1) {
+    s32 iVar1 = field_0xEF8[param_1];
+    u32 uVar2;
+    bool bVar3;
+
+    if (param_1 == 1 || field_0xEF8[1] == 0) {
+        if (iVar1 == 1) {
+            uVar2 = 0;
+        }
+        else {
+            uVar2 = 1;
+        }
+    }
+
+    else if(iVar1 == 3 || iVar1 == 2) {
+        uVar2 = 3;
+    }
+    else {
+        bVar3 = dComIfGs_isSwitch(mTopHalfDestroyedSwitch, home.roomNo);
+
+        if (bVar3) {
+            uVar2 = 4;
+        }
+        else {
+            uVar2 = 2;
+        }
+    }
+
+    return uVar2;
 }
 
 /* 00000A4C-00000ADC       .text CreateDummyHeap__8daSaku_cFi */
