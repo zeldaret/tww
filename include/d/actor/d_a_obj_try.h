@@ -89,6 +89,8 @@ namespace daObjTry {
         bool _execute();
         bool _draw();
     
+        static const dCcD_SrcCyl M_cyl_src;
+    
     public:
         /* 0x290 */ u8 field_0x290[0x63C - 0x290];
         /* 0x63C */ cXyz field_0x63C;

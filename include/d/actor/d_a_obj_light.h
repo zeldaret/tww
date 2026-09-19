@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_LIGHT_H
 #define D_A_OBJ_LIGHT_H
 
+#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 
 namespace daObjLight {
@@ -36,8 +37,9 @@ namespace daObjLight {
         static u32 M_S_pre_set_frame_LOD;
         static u32 M_S_pre_set_frame_FRRS;
         static u8 M_S_lod_access;
+        static const dCcD_SrcCyl M_cyl_src;
 
-public:
+    public:
         /* Place member variables here */
     };
 };

@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_MMRR_H
 #define D_A_OBJ_MMRR_H
 
+#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 
 namespace daObjMmrr {
@@ -27,6 +28,9 @@ namespace daObjMmrr {
         void eff_remove();
         bool _execute();
         bool _draw();
+    
+        static const dCcD_SrcTri M_tri_src;
+        static const dCcD_SrcCps M_cps_src;
     
     public:
         /* 0x290 */ u8 m290[0xBF8 - 0x290];
