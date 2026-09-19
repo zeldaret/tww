@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_MemCardRWmng.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_dvd_thread.h"
@@ -45,12 +46,12 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
 
     memset(sTmpBuf, 0, sizeof(sTmpBuf));
     card_savedata* save = (card_savedata*)sTmpBuf;
-    save->dataVersion = 0;
+    save->data_version = 0;
     memcpy(save->gamedata, data, size);
 #if VERSION != VERSION_PAL
-    save->saveCount = ++sSaveCount;
+    save->save_count = ++sSaveCount;
 #else
-    save->saveCount = dComIfGs_getPalLanguage();
+    save->save_count = dComIfGs_getPalLanguage();
 #endif
     s32 csum = mDoMemCdRWm_CalcCheckSum(save, sizeof(card_savedata) - sizeof(save->csum));
     save->csum = csum;
@@ -84,7 +85,7 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
     } else {
         slot = dComIfGs_getDataNum() * 3 + 3;
         for (i = 0; i < 3; i++) {
-            if (dComIfGp_isPictureFlag(i)) {
+            if (dComIfGp_isPictureFlag(i) != FALSE) {
                 memset(sTmpBuf, 0, sizeof(card_pictdata));
                 JKRAramToMainRam(dComIfGp_getPictureBoxData(i), sTmpBuf, sizeof(card_pictdata));
                 ret = CARDWrite(card, sTmpBuf, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
@@ -160,16 +161,16 @@ s32 mDoMemCdRWm_Restore(CARDFileInfo* card, void* dst, u32 size) {
 
     memcpy(dst, save->gamedata, size);
 #if VERSION != VERSION_PAL
-    sSaveCount = save->saveCount;
+    sSaveCount = save->save_count;
 #else
-    if (save->saveCount > 4) {
+    if (save->save_count > 4) {
         g_mDoMemCd_control.field_0x165B = 0;
     } else {
-        // TODO: does save->saveCount have the language index in it on PAL?
-        g_mDoMemCd_control.field_0x165B = save->saveCount;
+        // TODO: does save->save_count have the language index in it on PAL?
+        g_mDoMemCd_control.field_0x165B = save->save_count;
     }
 #endif
-    mDoMemCd_setDataVersion(save->dataVersion);
+    mDoMemCd_setDataVersion(save->data_version);
     if (!invalid && mDoMemCd_getPictDataPtr() != NULL) {
         ret = CARDRead(card, mDoMemCd_getPictDataPtr(), 3 * 3 * sizeof(card_pictdata), 3 * sizeof(card_savedata));
         if (ret != CARD_ERROR_READY) return ret;
@@ -192,11 +193,11 @@ s32 mDoMemCdRWm_Restore2(CARDFileInfo* card) {
         if (ret != CARD_ERROR_READY) return ret;
     }
     
-    if (save->saveCount > 4) {
+    if (save->save_count > 4) {
         g_mDoMemCd_control.field_0x165B = 0;
     } else {
-        // TODO: does save->saveCount have the language index in it on PAL?
-        g_mDoMemCd_control.field_0x165B = save->saveCount;
+        // TODO: does save->save_count have the language index in it on PAL?
+        g_mDoMemCd_control.field_0x165B = save->save_count;
     }
     
     return CARD_ERROR_READY;
@@ -237,7 +238,7 @@ void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
     ResTIMG* icon = (ResTIMG*)arc->getResource("ipl_icon1.bti");
     memcpy(header->banner, ((char*)banner) + banner->imageOffset, 0xc00 + banner->numColors * 2);
     memcpy(header->icon, ((char*)icon) + icon->imageOffset, 0x400 + icon->numColors * 2);
-    arc->unmount();
+    JKRUnmountArchive(arc);
     delete cmd;
 }
 
@@ -321,14 +322,14 @@ u16 mDoMemCdRWm_CalcCheckSumPictData(void* p, u32 size) {
 /* 8001A358-8001A39C       .text mDoMemCdRWm_TestCheckSumPictData__FPv */
 BOOL mDoMemCdRWm_TestCheckSumPictData(void* p) {
     card_pictdata* save = (card_pictdata*)p;
-    u32 csum = mDoMemCdRWm_CalcCheckSumPictData(save->data, sizeof(save->data));
+    u32 csum = mDoMemCdRWm_CalcCheckSumPictData(save, sizeof(card_pictdata) - sizeof(save->csum));
     return csum == save->csum;
 }
 
 /* 8001A39C-8001A3D0       .text mDoMemCdRWm_SetCheckSumPictData__FPUc */
 void mDoMemCdRWm_SetCheckSumPictData(u8* p) {
     card_pictdata* save = (card_pictdata*)p;
-    save->csum = mDoMemCdRWm_CalcCheckSumPictData(save->data, sizeof(save->data));
+    save->csum = mDoMemCdRWm_CalcCheckSumPictData(save, sizeof(card_pictdata) - sizeof(save->csum));
 }
 
 /* 8001A3D0-8001A408       .text mDoMemCdRWm_CalcCheckSumGameData__FPvUl */

@@ -12,12 +12,13 @@
 #include "d/d_s_play.h"
 
 /* 00000078-000002D4       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+static void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     msw_class* pActor = static_cast<msw_class*>(i_ac);
 
     cMtx_YrotS(*calc_mtx, -i_ac->current.angle.y);
 
-    cXyz tmp = i_pt->current.pos - i_ac->current.pos;
+    cXyz tmp;
+    tmp = i_pt->current.pos - i_ac->current.pos;
     cXyz pos1;
     MtxPosition(&tmp, &pos1);
     cXyz pos2;
@@ -58,10 +59,10 @@ void chain_Draw(msw_class* i_this) {
     s32 angle2;
 
     for (int i = 0; i < 4; i++) {
-        cXyz tmp = i_this->m310[i] - i_this->m2E0[i];
+        cXyz tmp;
+        tmp = i_this->m310[i] - i_this->m2E0[i];
         angle1 = -cM_atan2s(tmp.y, tmp.z);
 
-        // TODO: std::sqrtf(float)
         angle2 = cM_atan2s(tmp.x, std::sqrtf(tmp.y * tmp.y + tmp.z * tmp.z));
 
         MtxTrans(i_this->m2E0[i].x, i_this->m2E0[i].y, i_this->m2E0[i].z, false);

@@ -17,10 +17,11 @@
 u16 J3DModelLoader::countMaterialNum(const void* i_data) {
     const JUTDataFileHeader* header = (const JUTDataFileHeader*)i_data;
     const JUTDataBlockHeader* block = &header->mFirstBlock;
-    for (int i = 0; i < header->mBlockNum; block = block->getNext(), i++) {
+    for (int i = 0; i < header->mBlockNum; i++) {
         if (block->mType == 'MAT3') {
             return ((const J3DMaterialBlock*)block)->mMaterialNum;
         }
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     return 0;
 }
@@ -63,7 +64,7 @@ u32 J3DModelLoader::calcLoadSize(const void* i_data, u32 i_flags) {
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     return size;
 }
@@ -91,7 +92,7 @@ u32 J3DModelLoader::calcLoadMaterialTableSize(const void* i_data) {
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
 
     if (!hasTextureTable) {
@@ -150,7 +151,7 @@ u32 J3DModelLoader::calcLoadBinaryDisplayListSize(const void* i_data, u32 i_flag
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
     return size;
 }

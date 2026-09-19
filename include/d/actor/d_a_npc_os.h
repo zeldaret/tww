@@ -45,18 +45,19 @@ public:
     s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
     s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
     cXyz& getEyePos() { return field_0x748; }
-    f32 getGroundY() { return mAcch.GetGroundH(); }
+    virtual f32 getGroundY() { return mAcch.GetGroundH(); }
     s16 getHead_x() { return mJntCtrl.getHead_x(); }
     s16 getHead_y() { return mJntCtrl.getHead_y(); }
-    MtxP getLeftHandMatrix() { return cullMtx; }
-    MtxP getRightHandMatrix() { return cullMtx; }
-    f32 getBaseAnimeFrameRate() { return 1.0f; }
-    f32 getBaseAnimeFrame() { return 0.0f; }
+    virtual MtxP getLeftHandMatrix() { return cullMtx; }
+    virtual MtxP getRightHandMatrix() { return cullMtx; }
+    virtual f32 getBaseAnimeFrameRate() { return 1.0f; }
+    virtual f32 getBaseAnimeFrame() { return 0.0f; }
     void incAttnSetCount() {
         if(field_0x7A3 != 0xFF) {
             field_0x7A3 += 1;
         }
     }
+
     BOOL isFinish() { return cLib_checkBit(field_0x784, 0x1UL); }
     void onFinish() { cLib_onBit(field_0x784, 0x1UL); }
     BOOL isSetHomePos() { return cLib_checkBit(field_0x784, 0x2UL); }
@@ -67,6 +68,7 @@ public:
     void onGravity() { cLib_onBit(field_0x784, 0x8UL); }
     void offGravity() { cLib_offBit(field_0x784, 0x8UL); }
     // Note: The 0x10 bit is used in the final release, but not in the demo debug maps, so its official name is unknown.
+
     void offPlayerRoom(int idx) { m_playerRoom[idx] = false; }
     void onPlayerRoom(int idx) { m_playerRoom[idx] = true; }
 

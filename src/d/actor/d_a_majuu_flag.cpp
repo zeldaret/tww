@@ -35,7 +35,7 @@ public:
         m08 = 0;
     }
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ bool mbUseToonTex;
@@ -61,98 +61,8 @@ static u8 unused1[16] = {0}; // IWYU pragma: keep
 
 #include "assets/l_flag02TEX.h"
 
-static Vec l_majuu_flag_pos[] = {
-    {0.0f, -255.0f, 1300.0f}, {0.0f, -306.0f, 1040.0f}, {0.0f, -204.0f, 1040.0f}, {0.0f, -357.0f, 780.0f}, {0.0f, -255.0f, 780.0f}, {0.0f, -153.0f, 780.0f},
-    {0.0f, -408.0f, 520.0f},  {0.0f, -306.0f, 520.0f},  {0.0f, -204.0f, 520.0f},  {0.0f, -102.0f, 520.0f}, {0.0f, -459.0f, 260.0f}, {0.0f, -357.0f, 260.0f},
-    {0.0f, -255.0f, 260.0f},  {0.0f, -153.0f, 260.0f},  {0.0f, -51.0f, 260.0f},   {0.0f, -510.0f, 0.0f},   {0.0f, -408.0f, 0.0f},   {0.0f, -306.0f, 0.0f},
-    {0.0f, -204.0f, 0.0f},    {0.0f, -102.0f, 0.0f},    {0.0f, 0.0f, 0.0f},
-};
-static f32 l_texCoord[][2] = {
-    {
-        -0.280444f,
-        1.069755f,
-    },
-    {
-        0.241439f,
-        0.90587097f,
-    },
-    {
-        0.24137f,
-        1.10964f,
-    },
-    {
-        0.91434f,
-        0.707848f,
-    },
-    {
-        0.91426998f,
-        1.069345f,
-    },
-    {
-        1.352905f,
-        0.52748799f,
-    },
-    {
-        1.352837f,
-        0.954527f,
-    },
-    {
-        1.39049f,
-        0.34673199f,
-    },
-    {
-        1.390421f,
-        0.70902097f,
-    },
-    {
-        -0.28037399f,
-        0.70746398f,
-    },
-    {
-        0.241509f,
-        0.52670997f,
-    },
-    {
-        0.91441f,
-        0.346349f,
-    },
-    {
-        1.352974f,
-        0.100449f,
-    },
-    {
-        -0.280306f,
-        0.34517899f,
-    },
-    {
-        0.241579f,
-        0.147549f,
-    },
-    {
-        0.91447997f,
-        -0.015147f,
-    },
-    {
-        -0.28023499f,
-        -0.017113f,
-    },
-    {
-        0.241649f,
-        -0.186406f,
-    },
-    {
-        -0.27530599f,
-        1.1664619f,
-    },
-    {
-        -0.280164f,
-        -0.061744f,
-    },
-    {
-        1.396762f,
-        0.528265f,
-    },
-};
+#include "assets/l_majuu_flag_pos.h"
+#include "assets/l_texCoord__d_a_majuu_flag.h"
 
 #include "assets/l_majuu_flagDL.h"
 #include "assets/l_majuu_flag_matDL.h"
@@ -589,7 +499,7 @@ static BOOL daMajuu_Flag_Draw(daMajuu_Flag_c* i_this) {
 
 /* 00000DCC-00000F00       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf
  */
-void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float distIdeal) {
+static void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float distIdeal) {
     cXyz sp30 = *pOther - *pPos;
     cXyz sp24 = sp30.normZC();
 

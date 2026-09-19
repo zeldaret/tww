@@ -286,8 +286,10 @@ struct J3DAnmTransformKeyData {
     /* 0x08 */ u8 mAttribute;
     /* 0x09 */ u8 mDecShift;
     /* 0x0A */ s16 mFrameMax;
-    /* 0x0C */ u16 field_0xc;
-    /* 0x10 */ int field_0x10;
+    /* 0x0C */ u16 mTableCount;
+    /* 0x0E */ u16 mScaleCount;
+    /* 0x10 */ u16 mRotCount;
+    /* 0x12 */ u16 mTransCount;
     /* 0x14 */ s32 mTableOffset;
     /* 0x18 */ s32 mScaleOffset;
     /* 0x1c */ s32 mRotOffset;
@@ -430,7 +432,7 @@ public:
     }
     u16 getUpdateMaterialNum() const { return mTrackNum / 3; }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
-    u16 getUpdateTexMtxID(u16 idx) const {
+    int getUpdateTexMtxID(u16 idx) const {
         J3D_ASSERT(1017, idx < (mTrackNum / 3), "Error : range over.");
         return mUpdateTexMtxID[idx];
     }

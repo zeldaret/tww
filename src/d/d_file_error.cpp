@@ -78,15 +78,21 @@ void dFile_error_c::_delete() {
 MyScreen::~MyScreen() {
 }
 
+#if VERSION == VERSION_DEMO
+void dFile_error_c::_deleteSp() {
+    mDoHIO_deleteChild(g_feHIO.mNo);
+}
+#endif
+
 /* 8017DF04-8017E010       .text setErrMessage__13dFile_error_cFUli */
-void dFile_error_c::setErrMessage(u32 stringId, int param_2) {
+void dFile_error_c::setErrMessage(u32 msgNo, int param_2) {
     m2fa = (u8) param_2;
 
     char message_buffer[512];
 
     initial();
 
-    fopMsgM_messageGet(message_buffer, stringId);
+    fopMsgM_messageGet(message_buffer, msgNo);
     int line_count = getLineCount(message_buffer);
     if (line_count + 2 < VERSION_SELECT(9, 9, 12, 12)) {
         resizeMsgBoard(line_count + 2);
@@ -106,7 +112,7 @@ void dFile_error_c::setErrMessage(u32 stringId, int param_2) {
     setMessage(message_buffer);
 
     m2fe = 0;
-    m2f5 = 1;
+    mStatus = 1;
     mState = 1;
 
     mDoAud_seStart(JA_SE_MSEL_ALERT_PANEL_IN);
@@ -123,7 +129,7 @@ void dFile_error_c::closeMessage() {
 /* 8017E068-8017E228       .text resizeMsgBoard__13dFile_error_cFi */
 void dFile_error_c::resizeMsgBoard(int param_1) {
     J2DPane *pane_2_pane = msgPanes[2].pane;
-    f32 pane_2_height = pane_2_pane->mBounds.f.y - pane_2_pane->mBounds.i.y;
+    f32 pane_2_height = pane_2_pane->getHeight();
     f32 scale = ((pane_2_height / VERSION_SELECT(9.0f, 9.0f, 12.0f, 12.0f)) * (f32) param_1) / pane_2_height;
 
     fopMsgM_paneScaleY(&msgPanes[2], scale);
@@ -191,8 +197,8 @@ void dFile_error_c::setMessage(char* message) {
     while (*message != '\0') {
         if (*message == '\x1a') {
             m2f7 = 1;
-            msgPanes[0].pane->mVisible = true;
-            msgPanes[1].pane->mVisible = true;
+            msgPanes[0].pane->show();
+            msgPanes[1].pane->show();
 
             message ++;
             for (int i = 0; i < in_r9; i ++) {
@@ -232,7 +238,9 @@ int dFile_error_c::getLineCount(char* text) {
         text ++;
     }
 
-    return line_count + 1;
+    line_count++;
+
+    return line_count;
 }
 
 typedef void(dFile_error_c::*procFunc)();
@@ -261,7 +269,7 @@ void dFile_error_c::ShowMsgBoard() {
         g_feHIO.m8,
         (f32) g_feHIO.m6,
         40.0f,
-        curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x,
+        curxp[mYesNo] - msgPanes[0].mPosTopLeftOrig.x,
         m300 + (f32) g_feHIO.m12,
         1,
         0
@@ -274,7 +282,7 @@ void dFile_error_c::ShowMsgBoard() {
             g_feHIO.m8,
             40.0f,
             0.0f,
-            curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x,
+            curxp[mYesNo] - msgPanes[0].mPosTopLeftOrig.x,
             m300 + (f32) g_feHIO.m12,
             4,
             2
@@ -297,7 +305,7 @@ void dFile_error_c::ShowMsgBoard() {
 /* 8017E4FC-8017E638       .text ynCursorInit__13dFile_error_cFv */
 void dFile_error_c::ynCursorInit() {
     for (int i = 0; i < 2; i ++) {
-        fopMsgM_paneScaleX(&msgPanes[i], g_feHIO.m14[mSelectedOption]);
+        fopMsgM_paneScaleX(&msgPanes[i], g_feHIO.m14[mYesNo]);
     }
 
     msgPanes[0].pane->rotate(
@@ -322,7 +330,7 @@ void dFile_error_c::HideMsgBoard() {
         g_feHIO.m9,
         0.0f,
         40.0f,
-        curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x,
+        curxp[mYesNo] - msgPanes[0].mPosTopLeftOrig.x,
         m300 + (f32) g_feHIO.m12,
         4,
         2
@@ -335,7 +343,7 @@ void dFile_error_c::HideMsgBoard() {
             g_feHIO.m9,
             40.0f,
             (f32) g_feHIO.m6,
-            curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x,
+            curxp[mYesNo] - msgPanes[0].mPosTopLeftOrig.x,
             m300 + (f32) g_feHIO.m12,
             1,
             1
@@ -345,16 +353,16 @@ void dFile_error_c::HideMsgBoard() {
     m2fe ++;
 
     if (cond1 == 1 && cond2 == 1) {
-        m2fc = 0;
+        mTimeCountDownMode = 0;
         m2fb = 0x5a;
-        m2f5 = 2;
+        mStatus = 2;
         mState = 0;
     }
 }
 
 /* 8017E798-8017E86C       .text msgDispWait__13dFile_error_cFv */
 void dFile_error_c::msgDispWait() {
-    if (m2fc == 1 && m2fb != 0) {
+    if (mTimeCountDownMode == 1 && m2fb != 0) {
         m2fb --;
     }
 
@@ -373,21 +381,21 @@ void dFile_error_c::yesNoSelectWait() {
     stick->checkTrigger();
 
     if (CPad_CHECK_TRIG_A(0)) {
-        if (mSelectedOption == 0) {
+        if (mYesNo == 0) {
             mDoAud_seStart(JA_SE_MSEL_OK_1);
         } else {
             mDoAud_seStart(JA_SE_MSEL_CANCEL_1);
         }
 
-        msgPanes[0].pane->mVisible = false;
-        msgPanes[1].pane->mVisible = false;
+        msgPanes[0].pane->hide();
+        msgPanes[1].pane->hide();
 
         m2fe = 0;
         mState = 2;
 
         mDoAud_seStart(JA_SE_MSEL_ALERT_PANEL_OUT);
     } else if (CPad_CHECK_TRIG_B(0)) {
-        mSelectedOption = 1;
+        mYesNo = 1;
 
         ynCursorMove();
 
@@ -396,17 +404,17 @@ void dFile_error_c::yesNoSelectWait() {
 
         mDoAud_seStart(JA_SE_MSEL_ALERT_PANEL_OUT);
     } else if (stick->checkLeftTrigger()) {
-        if (mSelectedOption != 0) {
+        if (mYesNo != 0) {
             mDoAud_seStart(JA_SE_MSEL_CURSOR);
 
-            mSelectedOption = 0;
+            mYesNo = 0;
             ynCursorMove();
         }
     } else if (stick->checkRightTrigger()) {
-        if (mSelectedOption != 1) {
+        if (mYesNo != 1) {
             mDoAud_seStart(JA_SE_MSEL_CURSOR);
 
-            mSelectedOption = 1;
+            mYesNo = 1;
             ynCursorMove();
         }
     }
@@ -428,10 +436,10 @@ void dFile_error_c::ynCursorMove() {
     fopMsgM_setAlpha(&msgPanes[1]);
 
     for (int i = 0; i < 2; i ++) {
-        fopMsgM_paneScaleX(&msgPanes[i], g_feHIO.m14[mSelectedOption]);
+        fopMsgM_paneScaleX(&msgPanes[i], g_feHIO.m14[mYesNo]);
         fopMsgM_paneTrans(
             &msgPanes[i],
-            curxp[mSelectedOption] - msgPanes[i].mPosTopLeftOrig.x,
+            curxp[mYesNo] - msgPanes[i].mPosTopLeftOrig.x,
             m300 + (f32) g_feHIO.m12
         );
     }
@@ -462,13 +470,13 @@ void dFile_error_c::ynCursorAnime() {
         msgPanes[0].mUserArea = g_feHIO.mc;
         fopMsgM_paneTrans(
             &msgPanes[0],
-            curxp[mSelectedOption] - msgPanes[0].mPosTopLeftOrig.x + xp1[m2f9],
+            curxp[mYesNo] - msgPanes[0].mPosTopLeftOrig.x + xp1[m2f9],
             m300 + (f32) g_feHIO.m12
         );
 
         fopMsgM_paneTrans(
             &msgPanes[1],
-            curxp[mSelectedOption] - msgPanes[1].mPosTopLeftOrig.x + xp2[m2f9],
+            curxp[mYesNo] - msgPanes[1].mPosTopLeftOrig.x + xp2[m2f9],
             m300 + (f32) g_feHIO.m12
         );
 
@@ -524,8 +532,8 @@ void dFile_error_c::screenSet() {
     search_result = fileErr.Scr->search('cur2');
     fopMsgM_setPaneData(&msgPanes[1], search_result);
 
-    mPane0Rotation = msgPanes[0].pane->mRotation;
-    mPane1Rotation = msgPanes[1].pane->mRotation;
+    mPane0Rotation = msgPanes[0].pane->getRotate();
+    mPane1Rotation = msgPanes[1].pane->getRotate();
 
     int i;
     int id_1 = 'cc00';
@@ -652,12 +660,12 @@ void dFile_error_c::paneTransInit() {
     fopMsgM_setAlpha(&msgPanes[0]);
     fopMsgM_setAlpha(&msgPanes[1]);
 
-    mSelectedOption = 1;
+    mYesNo = 1;
 
     PaneTranceBase(m2fe, g_feHIO.m8, (f32) g_feHIO.m6, 0.0, 0.0, 0.0, 1, 1);
 
-    msgPanes[0].pane->mVisible = false;
-    msgPanes[1].pane->mVisible = false;
+    msgPanes[0].pane->hide();
+    msgPanes[1].pane->hide();
 }
 
 /* 8017F3E0-8017F3FC       .text displayInit__13dFile_error_cFv */
@@ -702,9 +710,9 @@ void dFile_error_c::displayInit() {
     }
 #endif
 
-    m2fc = 0;
+    mTimeCountDownMode = 0;
     m2fb = 0x5a;
-    m2f5 = 0;
+    mStatus = 0;
     mState = 0;
 }
 

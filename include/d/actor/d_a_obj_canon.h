@@ -8,7 +8,7 @@
 #include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
-class dCcD_SrcSph;
+struct dCcD_SrcSph;
 
 class daObj_Canon_c : public fopAc_ac_c {
 public:

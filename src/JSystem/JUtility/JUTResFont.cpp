@@ -110,9 +110,9 @@ void JUTResFont::countBlock() {
     mGlyphBlockNum = 0;
     mMapBlockNum = 0;
 
-    const JUTDataBlockHeader* header = (JUTDataBlockHeader*)mResFont->data;
-    for (u32 i = 0; i < mResFont->numBlocks; i++, header = header->getNext()) {
-        switch (header->mType) {
+    const JUTDataBlockHeader* block = (JUTDataBlockHeader*)mResFont->data;
+    for (u32 i = 0; i < mResFont->numBlocks; i++) {
+        switch (block->mType) {
         case 'WID1':
             mWidthBlockNum++;
             break;
@@ -127,6 +127,7 @@ void JUTResFont::countBlock() {
         default:
             JUTReportConsole("JUTResFont: Unknown data block\n");
         }
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
 }
 
@@ -137,26 +138,26 @@ void JUTResFont::setBlock() {
     int mapNum = 0;
     mMaxCode = -1;
 
-    const JUTDataBlockHeader* header = (JUTDataBlockHeader*)mResFont->data;
-    for (u32 i = 0; i < mResFont->numBlocks; i++, header = header->getNext()) {
-        switch (header->mType) {
+    const JUTDataBlockHeader* block = (JUTDataBlockHeader*)mResFont->data;
+    for (u32 i = 0; i < mResFont->numBlocks; i++) {
+        switch (block->mType) {
         case 'INF1': {
-            mInfoBlock = (ResFONT::INF1*)header;
+            mInfoBlock = (ResFONT::INF1*)block;
             u32 u = mInfoBlock->fontType;
             JUT_ASSERT(0xF3, u < suAboutEncoding_)
             mIsLeadByte = (IsLeadByte_func*)&saoAboutEncoding_[u];
             break;
         }
         case 'WID1':
-            mpWidthBlocks[widthNum] = (ResFONT::WID1*)header;
+            mpWidthBlocks[widthNum] = (ResFONT::WID1*)block;
             widthNum++;
             break;
         case 'GLY1':
-            mpGlyphBlocks[glyphNum] = (ResFONT::GLY1*)header;
+            mpGlyphBlocks[glyphNum] = (ResFONT::GLY1*)block;
             glyphNum++;
             break;
         case 'MAP1':
-            mpMapBlocks[mapNum] = (ResFONT::MAP1*)header;
+            mpMapBlocks[mapNum] = (ResFONT::MAP1*)block;
             if (mMaxCode > mpMapBlocks[mapNum]->startCode) {
                 mMaxCode = mpMapBlocks[mapNum]->startCode;
             }
@@ -166,6 +167,7 @@ void JUTResFont::setBlock() {
             JUTReportConsole("Unknown data block\n");
             break;
         }
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
 }
 
@@ -328,7 +330,7 @@ int JUTResFont::getCellWidth() const {
 }
 
 /* 802C2EDC-802C2F28       .text getCellHeight__10JUTResFontCFv */
-s32 JUTResFont::getCellHeight() const {
+int JUTResFont::getCellHeight() const {
     if (mpGlyphBlocks) {
         ResFONT::GLY1* glyph = *mpGlyphBlocks;
         if (glyph) {

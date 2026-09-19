@@ -3,7 +3,7 @@
  * Main Initialization
  */
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_main.h"
 #include "DynamicLink.h"
 #include "JSystem/JFramework/JFWSystem.h"
@@ -90,7 +90,7 @@ void CheckHeap(JUTGamePad* i_pad) {
     bool comboCheck = false;
 
     // if L + R + Z is pressed
-    if ((i_pad->getButton() & ~CButton::Z) == (CButton::L | CButton::R) && i_pad->testTrigger(CButton::Z) != false)
+    if ((i_pad->getButton() & ~PAD_TRIGGER_Z) == (PAD_TRIGGER_L | PAD_TRIGGER_R) && i_pad->testTrigger(PAD_TRIGGER_Z) != false)
         comboCheck = true;
 
     int saveRel = comboCheck;
@@ -106,7 +106,7 @@ void CheckHeap(JUTGamePad* i_pad) {
 static int countUsed(JKRExpHeap* heap) {
     OSDisableScheduler();
     int counter = 0;
-    JKRExpHeap::CMemBlock* used_blocks_head = heap->getHeadUsedList();
+    JKRExpHeap::CMemBlock* used_blocks_head = heap->getUsedFirst();
 
     while (used_blocks_head) {
         used_blocks_head = used_blocks_head->getNextBlock();
@@ -124,7 +124,7 @@ s32 HeapCheck::getUsedCount() const {
 
 /* 800058D4-80005B28       .text heapDisplay__9HeapCheckFv */
 void HeapCheck::heapDisplay() {
-    s32 heap_size = mHeap->getSize();
+    s32 heap_size = mHeap->getHeapSize();
     s32 used_count = field_0x14 * mTargetHeapSize;
 
     field_0x10 = used_count;
@@ -267,25 +267,25 @@ bool Debug_console(JUTGamePad* i_pad) {
         static f32 console_position_y = 30.0f;
         static f32 console_scroll = 0.0f;
 
-        if (i_pad->testTrigger(CButton::Z) && !(i_pad->getButton() & ~CButton::Z)) {
+        if (i_pad->testTrigger(PAD_TRIGGER_Z) && !(i_pad->getButton() & ~PAD_TRIGGER_Z)) {
             console->setVisible(console->isVisible() == false);
             JUTAssertion::setMessageCount(0);
         }
 
         if (console->isVisible()) {
-            if ((i_pad->testButton(CButton::L) && i_pad->testButton(CButton::R)) ||
-                ((i_pad->getAnalogL() != 0 && i_pad->getAnalogR() != 0)))
+            if ((i_pad->testButton(PAD_TRIGGER_L) && i_pad->testButton(PAD_TRIGGER_R)) ||
+                (i_pad->getAnalogL() != 0 && i_pad->getAnalogR() != 0))
             {
                 f32 stick_x = i_pad->getMainStickX();
                 f32 stick_y = i_pad->getMainStickY();
 
-                if (i_pad->testButton(CButton::X) && i_pad->testButton(CButton::Y) &&
-                    i_pad->testTrigger(CButton::START))
+                if (i_pad->testButton(PAD_BUTTON_X) && i_pad->testButton(PAD_BUTTON_Y) &&
+                    i_pad->testTrigger(PAD_BUTTON_START))
                 {
                     console->clear();
                 }
 
-                if (!i_pad->testButton(CButton::X) && !i_pad->testButton(CButton::Y)) {
+                if (!i_pad->testButton(PAD_BUTTON_X) && !i_pad->testButton(PAD_BUTTON_Y)) {
                     console_scroll -= stick_y;
 
                     int scrollAmount;
@@ -302,16 +302,16 @@ bool Debug_console(JUTGamePad* i_pad) {
                         console->scroll(scrollAmount);
                     }
                 } else {
-                    if (i_pad->testButton(CButton::X)) {
+                    if (i_pad->testButton(PAD_BUTTON_X)) {
                         console_position_x += stick_x;
                     }
 
-                    if (i_pad->testButton(CButton::Y)) {
+                    if (i_pad->testButton(PAD_BUTTON_Y)) {
                         console_position_y -= stick_y;
                     }
                 }
 
-                if (i_pad->testTrigger(CButton::A)) {
+                if (i_pad->testTrigger(PAD_BUTTON_A)) {
                     console->dumpToTerminal(0xFFFFFFFF);
                     console->setOutput(JUTConsole::OUTPUT_OSREPORT | JUTConsole::OUTPUT_CONSOLE);
                 }
@@ -323,11 +323,11 @@ bool Debug_console(JUTGamePad* i_pad) {
                           console->getPositionX(), console->getPositionY(), console->getOutput());
             } else {
 #if VERSION > VERSION_DEMO
-                if (i_pad->testTrigger(CButton::DPAD_DOWN)) {
+                if (i_pad->testTrigger(PAD_BUTTON_DOWN)) {
                     g_HIO.mDisplayMeter ^= 1;
                 }
 
-                if (i_pad->testTrigger(CButton::DPAD_LEFT)) {
+                if (i_pad->testTrigger(PAD_BUTTON_LEFT)) {
                     if (JKRAram::getAramHeap()) {
                         JKRAram::getAramHeap()->dump();
                     }
@@ -336,11 +336,11 @@ bool Debug_console(JUTGamePad* i_pad) {
                     dComIfG_dumpResControl();
                 }
 
-                if (i_pad->testTrigger(CButton::DPAD_RIGHT)) {
+                if (i_pad->testTrigger(PAD_BUTTON_RIGHT)) {
                     JKRHeap::getSystemHeap()->dump_sort();
                 }
 
-                if (i_pad->testTrigger(CButton::DPAD_UP)) {
+                if (i_pad->testTrigger(PAD_BUTTON_UP)) {
                     zeldaHeap->dump_sort();
                     gameHeap->dump_sort();
                     archiveHeap->dump_sort();
@@ -380,11 +380,11 @@ void debug() {
             CheckHeap(g_mDoCPd_gamePad[2]);
         }
 
-        if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::R && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
+        if ((g_mDoCPd_gamePad[2]->getButton() & ~PAD_TRIGGER_Z) == PAD_TRIGGER_R && g_mDoCPd_gamePad[2]->testTrigger(PAD_TRIGGER_Z))
             mDisplayHeapSize ^= 1;
 
         if (mDisplayHeapSize) {
-            if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::L && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z)) {
+            if ((g_mDoCPd_gamePad[2]->getButton() & ~PAD_TRIGGER_Z) == PAD_TRIGGER_L && g_mDoCPd_gamePad[2]->testTrigger(PAD_TRIGGER_Z)) {
                 if (mHeapBriefType < 5) {
                     mHeapBriefType++;
                 } else {
@@ -469,11 +469,11 @@ void main01() {
             CheckHeap(g_mDoCPd_gamePad[2]);
         }
 
-        if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::R && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z))
+        if ((g_mDoCPd_gamePad[2]->getButton() & ~PAD_TRIGGER_Z) == PAD_TRIGGER_R && g_mDoCPd_gamePad[2]->testTrigger(PAD_TRIGGER_Z))
             mDisplayHeapSize ^= 1;
 
         if (mDisplayHeapSize) {
-            if ((g_mDoCPd_gamePad[2]->getButton() & ~CButton::Z) == CButton::L && g_mDoCPd_gamePad[2]->testTrigger(CButton::Z)) {
+            if ((g_mDoCPd_gamePad[2]->getButton() & ~PAD_TRIGGER_Z) == PAD_TRIGGER_L && g_mDoCPd_gamePad[2]->testTrigger(PAD_TRIGGER_Z)) {
                 if (mHeapBriefType < 5) {
                     mHeapBriefType++;
                 } else {

@@ -226,7 +226,7 @@ bool daObj_Warpt_c::createBodyHeap() {
 }
 
 /* 00000620-00000648       .text ride_CB__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_CB(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* arg2) {
+static void ride_CB(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* arg2) {
     ((daObj_Warpt_c*)a_this)->_ride(arg2);
 }
 
@@ -235,7 +235,7 @@ void daObj_Warpt_c::_ride(fopAc_ac_c* arg1) {
     if (fpcM_GetName(arg1) == fpcNm_PLAYER_e) {
         daPy_py_c* player = (daPy_py_c*)arg1;
 
-        fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+        fopAcM_searchPlayerAngleY(this);
         dLib_checkPlayerInCircle(m830, 1.0f, 20.0f);
 
         if (l_HIO.m06 == 0) {

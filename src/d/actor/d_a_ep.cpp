@@ -559,8 +559,8 @@ void daEp_CreateInit(fopAc_ac_c* a_this) {
     fopAcM_SetMtx(a_this, i_this->mAlphaModelMtx);
     fopAcM_SetMin(a_this, -160.0f, -160.0f, -160.0f);
     fopAcM_SetMax(a_this, 160.0f, 160.0f, 160.0f);
-    i_this->mAlphaModelRotX = cM_rndF(32768.0f);
-    i_this->mAlphaModelRotY = cM_rndF(32768.0f);
+    i_this->mAlphaModelRotX = cM_rndF(0x8000);
+    i_this->mAlphaModelRotY = cM_rndF(0x8000);
     a_this->attention_info.position.x = a_this->current.pos.x;
     a_this->attention_info.position.y = a_this->current.pos.y + 100.0f;
     a_this->attention_info.position.z = a_this->current.pos.z;

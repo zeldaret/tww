@@ -4,6 +4,7 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
+#include "res/Object/Fdai.h"
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_salvage.h"
@@ -456,6 +457,7 @@ void daTitle_proc_c::daTitle_Kirakira_Sound_flag_on() {
 }
 #endif
 
+#if VERSION > VERSION_DEMO
 /* 80056CCC-80056DE0       .text daiItemNodeCallBack__13daStandItem_cFP7J3DNodei */
 BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
@@ -471,9 +473,9 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
                 mDoMtx_stack_c::XrotM(i_this->m6B4);
                 break;
             case dItemNo_FOUNTAIN_IDOL_e:
-                if (jntNo == 0) {
+                if (jntNo == FOBJ09_JNT_TUBOKO_BASE_e) {
                     mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m630);
-                } else if (jntNo == 1) {
+                } else if (jntNo == FOBJ09_JNT_TUBOKO_HEAD_e) {
                     mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m660);
                 }
                 break;
@@ -484,6 +486,7 @@ BOOL daStandItem_c::daiItemNodeCallBack(J3DNode* node, int calcTiming) {
     }
     return TRUE;
 }
+#endif
 
 u8 daNpc_Ji1_c::game_life_point;
 

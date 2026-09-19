@@ -16,15 +16,15 @@
 static BOOL kantera_nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar2 = joint->getJntNo();
+        s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         kantera_class* i_this = (kantera_class*)model->getUserArea();
 
-        if ((i_this != NULL) && (uVar2 == 0 || (uVar2 == 1))) {
-            MTXCopy(model->getAnmMtx(uVar2), *calc_mtx);
-            cMtx_XrotM(*calc_mtx, i_this->mJointBaseRot.x + i_this->mJointRot[uVar2].x);
-            cMtx_ZrotM(*calc_mtx, i_this->mJointBaseRot.z + i_this->mJointRot[uVar2].z);
-            model->setAnmMtx(uVar2, *calc_mtx);
+        if ((i_this != NULL) && (jntNo == MK_KANTERA_JNT_TOTTE_e || (jntNo == MK_KANTERA_JNT_KANTERA_e))) {
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            cMtx_XrotM(*calc_mtx, i_this->mJointBaseRot.x + i_this->mJointRot[jntNo].x);
+            cMtx_ZrotM(*calc_mtx, i_this->mJointBaseRot.z + i_this->mJointRot[jntNo].z);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -254,7 +254,7 @@ static BOOL daKantera_Execute(kantera_class* i_this) {
 
         i_this->actor.eyePos = i_this->actor.current.pos;
 
-        MTXCopy(model->getAnmMtx(1), *calc_mtx);
+        MTXCopy(model->getAnmMtx(MK_KANTERA_JNT_KANTERA_e), *calc_mtx);
 
         i_this->m2E4 = i_this->mBonPos;
 

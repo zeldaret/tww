@@ -161,7 +161,7 @@ s16 cM_atan2s(float f0, float f1) {
 
 /* 80246270-802462B8       .text cM_atan2f__Fff */
 float cM_atan2f(float f1, float f2) {
-    return 9.58738E-5f * cM_atan2s(f1, f2);
+    return S2RAD(cM_atan2s(f1, f2));
 }
 
 static s32 r0, r1, r2;

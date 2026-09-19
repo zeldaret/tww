@@ -9,9 +9,9 @@
 
 /* 800C1F90-800C20B0       .text init__20dSeaFightGame_info_cFii */
 int dSeaFightGame_info_c::init(int i_bulletNum, int i_scenario) {
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            mGrid[i][j] = 0;
+    for (int x = 0; x < 8; x++) {
+        for (int y = 0; y < 8; y++) {
+            mGrid[x][y] = 0;
         }
     }
 
@@ -42,36 +42,36 @@ int dSeaFightGame_info_c::init(int i_bulletNum, int i_scenario) {
 
 /* 800C20B0-800C225C       .text put_ship__20dSeaFightGame_info_cFUcUc */
 int dSeaFightGame_info_c::put_ship(u8 i_shipNo, u8 i_shipSize) {
-    u8 y;
     u8 x;
+    u8 y;
     u8 direction;
 
     do {
         direction = (s16)cM_rndF(1000.0f) % 2;
-        y = (int)cM_rndF(8.0f);
         x = (int)cM_rndF(8.0f);
-    } while (!checkPutShip(y, x, i_shipSize, direction));
+        y = (int)cM_rndF(8.0f);
+    } while (!checkPutShip(x, y, i_shipSize, direction));
 
     if (direction == 0) {
         for (int i = 0; i < i_shipSize; i++) {
-            mShips[i_shipNo].m_pos[i][0] = y;
-            mShips[i_shipNo].m_pos[i][1] = x + i;
-            mGrid[y][x + i] = i_shipNo + 102;
+            mShips[i_shipNo].m_pos[i][0] = x;
+            mShips[i_shipNo].m_pos[i][1] = y + i;
+            mGrid[x][y + i] = i_shipNo + 102;
         }
 
-        mShips[i_shipNo].field_0xb = y;
-        mShips[i_shipNo].field_0xc = x;
+        mShips[i_shipNo].field_0xb = x;
+        mShips[i_shipNo].field_0xc = y;
         mShips[i_shipNo].field_0xd = 0;
         mShips[i_shipNo].field_0xe = i_shipSize;
     } else {
         for (int i = 0; i < i_shipSize; i++) {
-            mShips[i_shipNo].m_pos[i][0] = y + i;
-            mShips[i_shipNo].m_pos[i][1] = x;
-            mGrid[y + i][x] = i_shipNo + 102;
+            mShips[i_shipNo].m_pos[i][0] = x + i;
+            mShips[i_shipNo].m_pos[i][1] = y;
+            mGrid[x + i][y] = i_shipNo + 102;
         }
 
-        mShips[i_shipNo].field_0xb = y;
-        mShips[i_shipNo].field_0xc = x;
+        mShips[i_shipNo].field_0xb = x;
+        mShips[i_shipNo].field_0xc = y;
         mShips[i_shipNo].field_0xd = i_shipSize;
         mShips[i_shipNo].field_0xe = 0;
     }
@@ -82,20 +82,20 @@ int dSeaFightGame_info_c::put_ship(u8 i_shipNo, u8 i_shipSize) {
 }
 
 /* 800C225C-800C22FC       .text checkPutShip__20dSeaFightGame_info_cFiiii */
-bool dSeaFightGame_info_c::checkPutShip(int i_y, int i_x, int i_shipSize, int i_direction) {
+bool dSeaFightGame_info_c::checkPutShip(int i_x, int i_y, int i_shipSize, int i_direction) {
     if (i_direction == 0) {
         for (int i = 0; i < i_shipSize; i++) {
-            if (i_y > 7 || i_x > 7 || mGrid[i_y][i_x] > 100) {
-                return false;
-            }
-            i_x++;
-        }
-    } else {
-        for (int i = 0; i < i_shipSize; i++) {
-            if (i_y > 7 || i_x > 7 || mGrid[i_y][i_x] > 100) {
+            if (i_x > 7 || i_y > 7 || mGrid[i_x][i_y] > 100) {
                 return false;
             }
             i_y++;
+        }
+    } else {
+        for (int i = 0; i < i_shipSize; i++) {
+            if (i_x > 7 || i_y > 7 || mGrid[i_x][i_y] > 100) {
+                return false;
+            }
+            i_x++;
         }
     }
 
@@ -103,12 +103,12 @@ bool dSeaFightGame_info_c::checkPutShip(int i_y, int i_x, int i_shipSize, int i_
 }
 
 /* 800C22FC-800C239C       .text attack__20dSeaFightGame_info_cFUcUc */
-int dSeaFightGame_info_c::attack(u8 i_y, u8 i_x) {
+int dSeaFightGame_info_c::attack(u8 i_x, u8 i_y) {
     int rt = -1;
 
-    u8 uvar1 = mGrid[i_y][i_x];
+    u8 uvar1 = mGrid[i_x][i_y];
     if (uvar1 == 0) {
-        mGrid[i_y][i_x] = 1;
+        mGrid[i_x][i_y] = 1;
     } else if (uvar1 > 100) {
         rt = uvar1 - 102;
 
@@ -118,7 +118,7 @@ int dSeaFightGame_info_c::attack(u8 i_y, u8 i_x) {
             mDeadShipNum++;
         }
 
-        mGrid[i_y][i_x] = 3;
+        mGrid[i_x][i_y] = 3;
     } else {
         return -2;
     }
@@ -126,4 +126,291 @@ int dSeaFightGame_info_c::attack(u8 i_y, u8 i_x) {
     mBulletNum--;
     mScore++;
     return rt;
+}
+
+struct offset_s {
+    int x;
+    int y;
+};
+
+static const offset_s m_offset_1[] = {
+    {-1, 1},
+    {0, 1},
+    {1, 1},
+    {-1, 0},
+    {1, 0},
+    {-1, -1},
+    {0, -1},
+    {1, -1},
+    {0, 0},
+};
+
+static const offset_s m_offset_2[] = {
+    {-2, 2},
+    {-1, 2},
+    {0, 2},
+    {1, 2},
+    {2, 2},
+    {-2, 1},
+    {2, 1},
+    {-2, 0},
+    {2, 0},
+    {-2, -1},
+    {2, -1},
+    {-2, -2},
+    {-1, -2},
+    {0, -2},
+    {1, -2},
+    {2, -2},
+    {0, 0},
+};
+
+static const offset_s m_offset_3[] = {
+    {-3, 3},
+    {-2, 3},
+    {-1, 3},
+    {0, 3},
+    {1, 3},
+    {2, 3},
+    {3, 3},
+    {-3, 2},
+    {3, 2},
+    {-3, 1},
+    {3, 1},
+    {-3, 0},
+    {3, 0},
+    {-3, -1},
+    {3, -1},
+    {-3, -2},
+    {3, -2},
+    {-3, -3},
+    {-2, -3},
+    {-1, -3},
+    {0, -3},
+    {1, -3},
+    {2, -3},
+    {3, -3},
+    {0, 0},
+};
+
+static const offset_s m_offset_4[] = {
+    {-4, 4},
+    {-3, 4},
+    {-2, 4},
+    {-1, 4},
+    {0, 4},
+    {1, 4},
+    {2, 4},
+    {3, 4},
+    {4, 4},
+    {-4, 3},
+    {4, 3},
+    {-4, 2},
+    {4, 2},
+    {-4, 1},
+    {4, 1},
+    {-4, 0},
+    {4, 0},
+    {-4, -1},
+    {4, -1},
+    {-4, -2},
+    {4, -2},
+    {-4, -3},
+    {4, -3},
+    {-4, -4},
+    {-3, -4},
+    {-2, -4},
+    {-1, -4},
+    {0, -4},
+    {1, -4},
+    {2, -4},
+    {3, -4},
+    {4, -4},
+    {0, 0},
+};
+
+static const offset_s m_offset_5[] = {
+    {-5, 5},
+    {-4, 5},
+    {-3, 5},
+    {-2, 5},
+    {-1, 5},
+    {0, 5},
+    {1, 5},
+    {2, 5},
+    {3, 5},
+    {4, 5},
+    {5, 5},
+    {-5, 4},
+    {5, 4},
+    {-5, 3},
+    {5, 3},
+    {-5, 2},
+    {5, 2},
+    {-5, 1},
+    {5, 1},
+    {-5, 0},
+    {5, 0},
+    {-5, -1},
+    {5, -1},
+    {-5, -2},
+    {5, -2},
+    {-5, -3},
+    {5, -3},
+    {-5, -4},
+    {-5, -4}, // @bug: {-5, -4} appears twice. This second one should be {5, -4} instead.
+    {-5, -5},
+    {-4, -5},
+    {-3, -5},
+    {-2, -5},
+    {-1, -5},
+    {0, -5},
+    {1, -5},
+    {2, -5},
+    {3, -5},
+    {4, -5},
+    {5, -5},
+    {0, 0},
+};
+
+static const offset_s m_offset_6[] = {
+    {-6, 6},
+    {-5, 6},
+    {-4, 6},
+    {-3, 6},
+    {-2, 6},
+    {-1, 6},
+    {0, 6},
+    {1, 6},
+    {2, 6},
+    {3, 6},
+    {4, 6},
+    {5, 6},
+    {6, 6},
+    {-6, 5},
+    {6, 5},
+    {-6, 4},
+    {6, 4},
+    {-6, 3},
+    {6, 3},
+    {-6, 2},
+    {6, 2},
+    {-6, 1},
+    {6, 1},
+    {-6, 0},
+    {6, 0},
+    {-6, -1},
+    {6, -1},
+    {-6, -2},
+    {6, -2},
+    {-6, -3},
+    {6, -3},
+    {-6, -4},
+    {6, -4},
+    {-6, -5},
+    {6, -5},
+    {-6, -6},
+    {-5, -6},
+    {-4, -6},
+    {-3, -6},
+    {-2, -6},
+    {-1, -6},
+    {0, -6},
+    {1, -6},
+    {2, -6},
+    {3, -6},
+    {4, -6},
+    {5, -6},
+    {6, -6},
+    {0, 0},
+};
+
+static const offset_s m_offset_7[] = {
+    {-7, 7},
+    {-6, 7},
+    {-5, 7},
+    {-4, 7},
+    {-3, 7},
+    {-2, 7},
+    {-1, 7},
+    {0, 7},
+    {1, 7},
+    {2, 7},
+    {3, 7},
+    {4, 7},
+    {5, 7},
+    {6, 7},
+    {7, 7},
+    {-7, 6},
+    {7, 6},
+    {-7, 5},
+    {7, 5},
+    {-7, 4},
+    {7, 4},
+    {-7, 3},
+    {7, 3},
+    {-7, 2},
+    {7, 2},
+    {-7, 1},
+    {7, 1},
+    {-7, 0},
+    {7, 0},
+    {-7, -1},
+    {7, -1},
+    {-7, -2},
+    {7, -2},
+    {-7, -3},
+    {7, -3},
+    {-7, -4},
+    {7, -4},
+    {-7, -5},
+    {7, -5},
+    {-7, -6},
+    {7, -6},
+    {-7, -7},
+    {-6, -7},
+    {-5, -7},
+    {-4, -7},
+    {-3, -7},
+    {-2, -7},
+    {-1, -7},
+    {0, -7},
+    {1, -7},
+    {2, -7},
+    {3, -7},
+    {4, -7},
+    {5, -7},
+    {6, -7},
+    {7, -7},
+    {0, 0},
+};
+
+static const offset_s* offset_tbl_p[] = {
+    m_offset_1,
+    m_offset_2,
+    m_offset_3,
+    m_offset_4,
+    m_offset_5,
+    m_offset_6,
+    m_offset_7,
+};
+
+int dSeaFightGame_info_c::getNearEnemy(int i_x, int i_y) {
+    int x;
+    int y;
+    for (int i = 0; i < ARRAY_SIZE(offset_tbl_p); i++) {
+        const offset_s* offset = offset_tbl_p[i];
+        for (; offset->x != 0 || offset->y != 0; offset++) {
+            x = i_x + offset->x;
+            y = i_y + offset->y;
+            if (x < 0) { continue; }
+            if (y < 0) { continue; }
+            if (x >= 8) { continue; }
+            if (y >= 8) { continue; }
+            if (mGrid[x][y] > 100) {
+                return i + 1;
+            }
+        }
+    }
+    return 0;
 }

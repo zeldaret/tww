@@ -1,7 +1,7 @@
 #ifndef JSYSTEM_PCH
 #define JSYSTEM_PCH
 
-#include "JSystem/JSupport/JSUList.h"
-#include "JSystem/J3DGraphBase/J3DShape.h"
+#include "JSystem/JSupport/JSUList.h" // IWYU pragma: export
+#include "JSystem/J3DGraphBase/J3DShape.h" // IWYU pragma: export
 
 #endif /* JSYSTEM_PCH */

@@ -11,6 +11,8 @@
 #include "f_op/f_op_kankyo.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_ext.h"
+#include "res/Object/Humi.h"
+#include "res/Object/Gmtw.h"
 
 namespace daObjTide {
 namespace {
@@ -18,34 +20,175 @@ static const char L_arcname_Humi[] = "Humi";
 static const char L_arcname_Gmtw[] = "Gmtw";
 static const Attr_c L_attr[6] = {
     {
-        L_arcname_Humi, 0xB,  0x20,  0xFFFF, 0xFFFF, 0x19,   0x11000222, 0x6,    0x12,   0x11000022, 0x8000, 0xFE34,      1.0f,
-        12.0f,          1.0f, 0.13f, 0xF060, 0xF95C, 0xF286, 0x2260,     0xF9C0, 0x11F8, true,       1,      0.44999999f,
+        L_arcname_Humi,
+        dRes_INDEX_HUMI_BDL_HUMI0_e,
+        dRes_INDEX_HUMI_DZB_HUMI0_e,
+        -1,
+        -1,
+        dRes_INDEX_HUMI_BTK_HUMI0_e,
+        0x11000222,
+        dRes_INDEX_HUMI_BDL_HNURE0_e,
+        dRes_INDEX_HUMI_BRK_HNURE0_e,
+        0x11000022,
+        0x8000,
+        0xFE34,
+        1.0f,
+        12.0f,
+        1.0f,
+        0.13f,
+        0xF060,
+        0xF95C,
+        0xF286,
+        0x2260,
+        0xF9C0,
+        0x11F8,
+        true,
+        1,
+        0.45f,
     },
     {
-        L_arcname_Humi, 0xE,  0x23,  0xFFFF, 0xFFFF, 0x1C,   0x11000222, 0x9,    0x15,   0x11000022, 0x4000, 0xFD44, 1.0f,
-        14.0f,          1.0f, 0.15f, 0x15E0, 0xF98E, 0xF31C, 0x1C84,     0xF9F2, 0xF8F8, true,       5,      0.5f,
+        L_arcname_Humi,
+        dRes_INDEX_HUMI_BDL_HUMI4_e,
+        dRes_INDEX_HUMI_DZB_HUMI4_e,
+        -1,
+        -1,
+        dRes_INDEX_HUMI_BTK_HUMI4_e,
+        0x11000222,
+        dRes_INDEX_HUMI_BDL_HNURE4_e,
+        dRes_INDEX_HUMI_BRK_HNURE4_e,
+        0x11000022,
+        0x4000,
+        0xFD44,
+        1.0f,
+        14.0f,
+        1.0f,
+        0.15f,
+        0x15E0,
+        0xF98E,
+        0xF31C,
+        0x1C84,
+        0xF9F2,
+        0xF8F8,
+        true,
+        5,
+        0.5f,
     },
     {
-        L_arcname_Humi, 0xF,  0x24,  0xFFFF, 0xFFFF, 0x1D,  0x11000222, 0xA,    0x16,   0x11000022, 0x4000, 0xFDA8, 1.0f,
-        10.0f,          1.0f, 0.11f, 0x1644, 0xF98E, 0x578, 0x1E78,     0xF9F2, 0x12C0, true,       5,      0.5f,
+        L_arcname_Humi,
+        dRes_INDEX_HUMI_BDL_HUMI5_e,
+        dRes_INDEX_HUMI_DZB_HUMI5_e,
+        -1,
+        -1,
+        dRes_INDEX_HUMI_BTK_HUMI5_e,
+        0x11000222,
+        dRes_INDEX_HUMI_BDL_HNURE5_e,
+        dRes_INDEX_HUMI_BRK_HNURE5_e,
+        0x11000022,
+        0x4000,
+        0xFDA8,
+        1.0f,
+        10.0f,
+        1.0f,
+        0.11f,
+        0x1644,
+        0xF98E,
+        0x578,
+        0x1E78,
+        0xF9F2,
+        0x12C0,
+        true,
+        5,
+        0.5f,
     },
     {
-        L_arcname_Gmtw, 0x9,  0xF,           0x6,    0xFFFF, 0xC,    0x11001222, 0xFFFF, 0xFFFF, 0x0,   0x4000, 0xE890, 0.0099999998f,
-        1.0f,           1.0f, 0.0099999998f, 0xF8F8, 0xFED4, 0xF8F8, 0x708,      0x96,   0x708,  false, 0,      1.0f,
+        L_arcname_Gmtw,
+        dRes_INDEX_GMTW_BDL_GMTW00_e,
+        dRes_INDEX_GMTW_DZB_GUMI0_e,
+        dRes_INDEX_GMTW_BCK_GMTW00_e,
+        -1,
+        dRes_INDEX_GMTW_BTK_GMTW00_e,
+        0x11001222,
+        -1,
+        -1,
+        0x0,
+        0x4000,
+        0xE890,
+        0.01f,
+        1.0f,
+        1.0f,
+        0.01f,
+        0xF8F8,
+        0xFED4,
+        0xF8F8,
+        0x708,
+        0x96,
+        0x708,
+        false,
+        0,
+        1.0f,
     },
     {
-        L_arcname_Humi, 0xC,  0x21,  0xFFFF, 0xFFFF, 0x1A,   0x11000222, 0x7,    0x13,  0x11000022, 0x4000, 0xFDDA, 1.0f,
-        12.0f,          1.0f, 0.13f, 0xE3E0, 0xF98E, 0xFED4, 0xF0C4,     0xF9F2, 0x6A4, true,       3,      0.5f,
+        L_arcname_Humi,
+        dRes_INDEX_HUMI_BDL_HUMI2_e,
+        dRes_INDEX_HUMI_DZB_HUMI2_e,
+        -1,
+        -1,
+        dRes_INDEX_HUMI_BTK_HUMI2_e,
+        0x11000222,
+        dRes_INDEX_HUMI_BDL_HNURE2_e,
+        dRes_INDEX_HUMI_BRK_HNURE2_e,
+        0x11000022,
+        0x4000,
+        0xFDDA,
+        1.0f,
+        12.0f,
+        1.0f,
+        0.13f,
+        0xE3E0,
+        0xF98E,
+        0xFED4,
+        0xF0C4,
+        0xF9F2,
+        0x6A4,
+        true,
+        3,
+        0.5f,
     },
     {
-        L_arcname_Humi, 0xD,  0x22,  0xFFFF, 0xFFFF, 0x1B,  0x11000222, 0x8,    0x14,  0x11000022, 0x4000, 0xFDDA, 1.0f,
-        12.0f,          1.0f, 0.13f, 0xED8,  0xF98E, 0x190, 0x1770,     0xF9F2, 0x5DC, true,       5,      0.5f,
+        L_arcname_Humi,
+        dRes_INDEX_HUMI_BDL_HUMI3_e,
+        dRes_INDEX_HUMI_DZB_HUMI3_e,
+        -1,
+        -1,
+        dRes_INDEX_HUMI_BTK_HUMI3_e,
+        0x11000222,
+        dRes_INDEX_HUMI_BDL_HNURE3_e,
+        dRes_INDEX_HUMI_BRK_HNURE3_e,
+        0x11000022,
+        0x4000,
+        0xFDDA,
+        1.0f,
+        12.0f,
+        1.0f,
+        0.13f,
+        0xED8,
+        0xF98E,
+        0x190,
+        0x1770,
+        0xF9F2,
+        0x5DC,
+        true,
+        5,
+        0.5f,
     },
 };
 
 inline const Attr_c& attr(Type_e type) {
-    return L_attr[(s32)type];
+    return L_attr[type];
 }
+
+static Hio_c L_hio;
+
 } // namespace
 
 Mtx Act_c::M_tmp_mtx;
@@ -54,11 +197,11 @@ Mtx Act_c::M_tmp_mtx;
 BOOL Act_c::CreateHeap() {
     const char* arcname = attr(M_type).arcName;
 
-    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, attr(M_type).m04));
+    J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, attr(M_type).bdl_res_index));
     JUT_ASSERT(438, model_data != NULL);
 
-    if (attr(M_type).m10 != 0) {
-        mModel1 = mDoExt_J3DModel__create(model_data, 0x80000, attr(M_type).m10);
+    if (attr(M_type).bdl_dlist_flags != 0) {
+        mModel1 = mDoExt_J3DModel__create(model_data, 0x80000, attr(M_type).bdl_dlist_flags);
     } else {
         mModel1 = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
     }
@@ -67,8 +210,8 @@ BOOL Act_c::CreateHeap() {
     bool bVar3 = true;
     bool bVar4 = true;
 
-    if (attr(M_type).m08 >= 0) {
-        J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, attr(M_type).m08));
+    if (attr(M_type).bck_res_index >= 0) {
+        J3DAnmTransform* bck = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(arcname, attr(M_type).bck_res_index));
         JUT_ASSERT(455, bck != NULL);
 
         mBck1 = new mDoExt_bckAnm();
@@ -77,8 +220,8 @@ BOOL Act_c::CreateHeap() {
         }
     }
 
-    if (attr(M_type).m0A >= 0) {
-        J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(arcname, attr(M_type).m0A));
+    if (attr(M_type).brk_res_index >= 0) {
+        J3DAnmTevRegKey* brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(arcname, attr(M_type).brk_res_index));
         JUT_ASSERT(474, brk != NULL);
 
         mBrk1 = new mDoExt_brkAnm();
@@ -87,8 +230,8 @@ BOOL Act_c::CreateHeap() {
         }
     }
 
-    if (attr(M_type).m0C >= 0) {
-        J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, attr(M_type).m0C));
+    if (attr(M_type).btk_res_index >= 0) {
+        J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(arcname, attr(M_type).btk_res_index));
         JUT_ASSERT(487, btk != NULL);
 
         mBtk = new mDoExt_btkAnm();
@@ -100,16 +243,16 @@ BOOL Act_c::CreateHeap() {
     bool bVar1 = true;
     bool bVar5 = true;
 
-    if (attr(M_type).m14 >= 0 && attr(M_type).m16 >= 0) {
-        J3DModelData* mdl_nure_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, attr(M_type).m14));
+    if (attr(M_type).nure_bdl_res_index >= 0 && attr(M_type).nure_brk_res_index >= 0) {
+        J3DModelData* mdl_nure_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(arcname, attr(M_type).nure_bdl_res_index));
         JUT_ASSERT(504, mdl_nure_data != NULL);
 
-        mModel2 = mDoExt_J3DModel__create(mdl_nure_data, 0x80000, attr(M_type).m18);
+        mModel2 = mDoExt_J3DModel__create(mdl_nure_data, 0x80000, attr(M_type).nure_bdl_dlist_flags);
         if (mModel2 == NULL) {
             bVar1 = false;
         }
 
-        J3DAnmTevRegKey* brk_nure = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(arcname, attr(M_type).m16));
+        J3DAnmTevRegKey* brk_nure = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(arcname, attr(M_type).nure_brk_res_index));
         JUT_ASSERT(515, brk_nure != NULL);
 
         mBrk2 = new mDoExt_brkAnm();
@@ -127,7 +270,7 @@ BOOL Act_c::CreateHeap() {
 BOOL Act_c::Create() {
     fopAcM_SetMtx(this, mModel1->getBaseTRMtx());
     init_mtx();
-    fopAcM_setCullSizeBox(this, attr(M_type).minX, attr(M_type).minY, attr(M_type).minZ, attr(M_type).maxX, attr(M_type).maxY, attr(M_type).maxZ);
+    fopAcM_setCullSizeBox(this, attr(M_type).min_x, attr(M_type).min_y, attr(M_type).min_z, attr(M_type).max_x, attr(M_type).max_y, attr(M_type).max_z);
 
     m2F0 = 0.0f;
     m2F4 = 0;
@@ -168,7 +311,7 @@ cPhs_State Act_c::Mthd_Create() {
         if (attr(M_type).sch_flag) {
             current.pos.y = home.pos.y + (1.0f - daTagWaterlevel::Act_c::get_now()) * attr(M_type).m20;
         }
-        phase_state = MoveBGCreate(attr(M_type).arcName, attr(M_type).m06, dBgS_MoveBGProc_Trans, attr(M_type).resSize);
+        phase_state = MoveBGCreate(attr(M_type).arcName, attr(M_type).dzb_res_index, dBgS_MoveBGProc_Trans, attr(M_type).res_size);
         m2F7 = true;
 
         JUT_ASSERT(641, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
@@ -220,7 +363,7 @@ void Act_c::init_mtx() {
 }
 
 /* 00000B84-00000D04       .text move_to_aim__Q29daObjTide5Act_cFfb */
-void Act_c::move_to_aim(float arg1, bool arg2) {
+void Act_c::move_to_aim(f32 arg1, bool arg2) {
     f32 fVar1 = arg1 - current.pos.y;
     if (std::fabsf(fVar1) < 0.1f) {
         current.pos.y = arg1;
@@ -424,7 +567,7 @@ void Act_c::mode_gmtw_demo() {
 
     if (!m2F6 && gmtw_demo_up_start()) {
         m2F6 = 1;
-        m2F4 = 0x5a;
+        m2F4 = 90;
     }
 
     bVar3 = false;
@@ -440,7 +583,7 @@ void Act_c::mode_gmtw_demo() {
         if (m2F6 == 1) {
             if (--m2F4 <= 0) {
                 m2F6 = 2;
-            } else if (m2F4 == 0x3b) {
+            } else if (m2F4 == 59) {
                 dComIfGp_particle_set(dPa_name::ID_IT_SN_MT_WATER00, &a_this->current.pos);
                 dComIfG_Bgsp()->Regist(mpBgW, a_this);
                 m2F7 = true;
@@ -686,7 +829,7 @@ BOOL Mthd_Draw(void* i_this) {
 
 /* 00001E5C-00001E88       .text Mthd_IsDelete__Q29daObjTide26@unnamed@d_a_obj_tide_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
-    return ((Act_c*)i_this)->IsDelete();
+    return ((Act_c*)i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Table = {

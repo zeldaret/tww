@@ -24,10 +24,13 @@ namespace daObjHomensmoke {
         /* 0x29C */ Mtx mMtx;
         /* 0x2CC */ int mType;
 #if VERSION == VERSION_DEMO
-        /* 0x2D0 */ JPABaseEmitter* m2D0;
+        /* 0x2D0 */ JPABaseEmitter* mpSmokeEmitter;
+        /* 0x2D4 */ JPABaseEmitter* mpRubbleEmitter;
 #endif
         /* 0x2D0 */ dPa_smokeEcallBack mSmokeCb;
+#if VERSION > VERSION_DEMO
         /* 0x2F0 */ BOOL mbInitialized;
+#endif
         /* 0x2F4 */ cXyz mSmokePos;
     };
 };

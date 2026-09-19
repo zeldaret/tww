@@ -2,7 +2,7 @@
 #ifndef F_PC_DRAW_PRIORITY_H_
 #define F_PC_DRAW_PRIORITY_H_
 
-#include "dolphin/types.h"
+#include "global.h"
 
 typedef struct draw_priority_class {
     s16 mPriority;
@@ -488,10 +488,15 @@ enum {
     /* 0x01D5 */ fpcDwPi_SCP_e,
     /* 0x01D6 */ fpcDwPi_PB_e,
     /* 0x01D7 */ fpcDwPi_METER_e,
+#if VERSION == VERSION_PAL
+    /* 0x01D8 */ fpcDwPi_MSG3_e,
+#endif
     /* 0x01D8 */ fpcDwPi_MESG_e,
     /* 0x01D9 */ fpcDwPi_MSG_e,
     /* 0x01DA */ fpcDwPi_MSG2_e,
+#if VERSION < VERSION_PAL
     /* 0x01DB */ fpcDwPi_MSG3_e,
+#endif
     /* 0x01DC */ fpcDwPi_AUCTION_SCREEN_e,
     /* 0x01DD */ fpcDwPi_PLACE_NAME_e,
     /* 0x01DE */ fpcDwPi_GAMEOVER_e,

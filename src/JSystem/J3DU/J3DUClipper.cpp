@@ -10,9 +10,9 @@
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
 #include "math.h"
 
-#include "weak_bss_3569.h"  // IWYU pragma: keep
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
-static const f32 Deg2Rad = 0.017453292f;
+static const f32 Deg2Rad = (M_PI / 180.0f); // 0.017453292f
 
 /* 802566B8-802566CC       .text init__11J3DUClipperFv */
 void J3DUClipper::init() {

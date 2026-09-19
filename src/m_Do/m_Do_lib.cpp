@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_lib.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
@@ -43,7 +44,7 @@ void mDoLib_clipper::setup(f32 fovY, f32 aspect, f32 n, f32 f) {
     mSystemFar = f;
     mClipper.calcViewFrustum();
 
-    s16 ang = (s16)(fovY * 182.04445f);
+    s16 ang = DEG2S(fovY);
     mFovyRate = JMASCos(ang) / JMASSin(ang);
 }
 

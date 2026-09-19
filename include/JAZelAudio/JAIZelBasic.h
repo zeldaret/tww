@@ -171,7 +171,7 @@ public:
     // TODO
     void checkSeMute() {}
     void checkTBoxDemo() {}
-    void getCurCamera(u32) {}
+    JAInter::Camera* getCurCamera(u32 i_no) { return &mAudioCamera[i_no]; }
     void getLinkBootsType() {}
     void getLinkSwShieldBeat() {}
     void isTaktUsing() {}
@@ -211,7 +211,7 @@ public:
     /* 0x0021 */ u8 field_0x0021;
     /* 0x0024 */ u8* field_0x0024;
 #if VERSION > VERSION_JPN
-    /* 0x0028 */ int field_0x0028;
+    /* 0x0028 */ u32 field_0x0028;
 #endif
     /* Offsets below are for USA/PAL */
     /* 0x002C */ u8 mHour;

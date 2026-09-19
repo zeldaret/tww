@@ -911,7 +911,7 @@ BOOL ShopCam_action_c::shop_cam_action_init() {
 
 /* 8005F088-8005F220       .text shop_cam_action__16ShopCam_action_cFv */
 int ShopCam_action_c::shop_cam_action() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stay();
     camera->mCamera.SetTrimSize(1);
     cXyz r1_2C;
@@ -958,7 +958,7 @@ BOOL ShopCam_action_c::rsh_talk_cam_action_init(fopAc_ac_c* param_1, cXyz param_
 
 /* 8005F370-8005F41C       .text rsh_talk_cam_action__16ShopCam_action_cFv */
 int ShopCam_action_c::rsh_talk_cam_action() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stay();
     camera->mCamera.SetTrimSize(1);
     camera->mCamera.Set(m18, m24, m30, 0);
@@ -980,7 +980,7 @@ BOOL ShopCam_action_c::ds_normal_cam_action_init() {
 
 /* 8005F494-8005F570       .text ds_normal_cam_action__16ShopCam_action_cFv */
 int ShopCam_action_c::ds_normal_cam_action() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stay();
     camera->mCamera.SetTrimSize(1);
     
@@ -994,7 +994,7 @@ int ShopCam_action_c::ds_normal_cam_action() {
 
 /* 8005F570-8005F5C0       .text Save__16ShopCam_action_cFv */
 void ShopCam_action_c::Save() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     if (camera) {
         mOrigCenter = *fopCamM_GetCenter_p(camera);
         mOrigEye = *fopCamM_GetEye_p(camera);
@@ -1004,7 +1004,7 @@ void ShopCam_action_c::Save() {
 
 /* 8005F5C0-8005F6C4       .text Reset__16ShopCam_action_cFv */
 void ShopCam_action_c::Reset() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Set(mOrigCenter, mOrigEye, mOrigFovy, 0);
     camera->mCamera.Stay();
     camera->mCamera.Reset(mOrigCenter, mOrigEye, mOrigFovy, 0);

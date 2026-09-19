@@ -12,9 +12,10 @@ enum J3DError {
     J3DErrType_OutOfMemory = 4,
 };
 
-enum J3DSysDrawBuffer {
-    /* 0x0 */ OPA_BUFFER,
-    /* 0x1 */ XLU_BUFFER
+enum J3DSysDrawBuf {
+    /* 0x0 */ J3DSysDrawBuf_Opa,
+    /* 0x1 */ J3DSysDrawBuf_Xlu,
+    /* 0x2 */ J3DSysDrawBuf_MAX,
 };
 
 class J3DMtxCalc;
@@ -48,7 +49,7 @@ public:
     };
 
     MtxP getViewMtx() { return mViewMtx; }
-    void setViewMtx(Mtx m) { MTXCopy(m, mViewMtx); }
+    void setViewMtx(const Mtx m) { MTXCopy(m, mViewMtx); }
 
     void setDrawModeOpaTexEdge() { mDrawMode = OPA_TEX_EDGE; }
 
@@ -98,7 +99,6 @@ public:
     // Type 1: Xlu Buffer
     void setDrawBuffer(J3DDrawBuffer* buffer, int type) {
         J3D_ASSERT(114, type >= 0 && type < 2, "Error : range over.");
-        J3D_ASSERT(115, buffer, "Error : null pointer.");
         mDrawBuffer[type] = buffer;
     }
 

@@ -12,7 +12,6 @@
 #include "dolphin/types.h"
 
 /* 802C882C-802C8944       .text __ct__10JUTProcBarFv */
-// missing instruction
 JUTProcBar::JUTProcBar() {
     mVisible = true;
     mHeapBarVisible = true;

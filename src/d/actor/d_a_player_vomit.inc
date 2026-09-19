@@ -153,7 +153,7 @@ BOOL daPy_lk_c::procVomitWait() {
 BOOL daPy_lk_c::procVomitJump_init(int param_0) {
     commonProcInit(daPyProc_VOMIT_JUMP_e);
     m35C4 = 40.0f;
-    float fVar1;
+    f32 fVar1;
     if (param_0 == 2 || param_0 == 3) {
         fVar1 = 3.0f;
     } else {
@@ -167,9 +167,9 @@ BOOL daPy_lk_c::procVomitJump_init(int param_0) {
     mProcVar0.m34D0 = 2;
     m33A8.makeEmitterColor(
         dPa_name::ID_IT_SN_LK_BLUR00,
-        mpCLModel->getAnmMtx(0x12),
+        mpCLModel->getAnmMtx(CL_JNT_CHIN_JNT_e),
         &current.pos,
-        (csXyz*)&shape_angle,
+        &shape_angle,
         &tevStr.mColorK0,
         &tevStr.mColorK0
     );

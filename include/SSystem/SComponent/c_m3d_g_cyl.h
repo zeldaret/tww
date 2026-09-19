@@ -35,14 +35,26 @@ public:
     void SetR(f32 r);
 #endif
     void Set(const cM3dGCylS & src) {
+#if VERSION == VERSION_DEMO
+        mCenter = src.mCenter;
+        mRadius = src.mRadius;
+        mHeight = src.mHeight;
+#else
         SetC(src.mCenter);
         SetR(src.mRadius);
         SetH(src.mHeight);
+#endif
     }
     void Set(const cXyz& center, f32 radius, f32 height) {
+#if VERSION == VERSION_DEMO
+        mCenter = center;
+        mRadius = radius;
+        mHeight = height;
+#else
         SetC(center);
         SetR(radius);
         SetH(height);
+#endif
     }
     bool cross(const cM3dGSph*, cXyz*) const;
     bool cross(const cM3dGCyl*, cXyz*) const;

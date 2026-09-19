@@ -142,7 +142,12 @@ static f32 l_daObjAjav_cyl_h[6] = {
 };
 
 static const s32 l_daObjAjav_idx_table[6] = {
-    4, 5 ,6 ,7, 8, 9
+    dRes_INDEX_AJAV_BDL_AJAVA_e,
+    dRes_INDEX_AJAV_BDL_AJAVB_e,
+    dRes_INDEX_AJAV_BDL_AJAVC_e,
+    dRes_INDEX_AJAV_BDL_AJAVD_e,
+    dRes_INDEX_AJAV_BDL_AJAVE_e,
+    dRes_INDEX_AJAV_BDL_AJAVF_e
 };
 
 static const char* const l_daObjAjav_ev_name[] = {

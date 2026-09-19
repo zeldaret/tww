@@ -4,7 +4,7 @@
 #include "f_op/f_op_actor.h"
 
 class J3DNode;
-class dCcD_SrcSph;
+struct dCcD_SrcSph;
 
 class daNpc_So_c : public fopAc_ac_c {
 public:

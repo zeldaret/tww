@@ -609,7 +609,7 @@ BOOL daPy_lk_c::procSwimMove() {
         procSwimWait_init(TRUE);
     }
     else if ((mDirection == DIR_FORWARD && frameCtrl.checkPass(20.0f)) || (mDirection != DIR_FORWARD && frameCtrl.checkPass(0.0f))) {
-            seStartOnlyReverb(JA_SE_LK_SWIM);
+        seStartOnlyReverb(JA_SE_LK_SWIM);
     }
 
     setSwimTimerStartStop();

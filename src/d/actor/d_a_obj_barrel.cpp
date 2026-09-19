@@ -753,6 +753,7 @@ BOOL daObjBarrel::Method::Draw(void* i_this) {
 
 /* 000024A8-000024B0       .text IsDelete__Q211daObjBarrel6MethodFPv */
 BOOL daObjBarrel::Method::IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -9,7 +9,7 @@ class daMagma_c : public fopAc_ac_c {
 public:
     inline ~daMagma_c();
     inline cPhs_State create();
-    inline s32 getPathNo() { return fopAcM_GetParam(this); }
+    inline s16 getPathNo() { return fopAcM_GetParam(this); }
 
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

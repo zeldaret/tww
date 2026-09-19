@@ -18,9 +18,9 @@ public:
     u8 goFarLink_2(fopAc_ac_c*, dNpc_PathRun_c*);
     void runaway_com2(dNpc_PathRun_c*, u8);
     u8 runAwayProc(fopAc_ac_c*, dNpc_PathRun_c*, dCcD_Cyl*, s16*);
-    bool chkGameSet();
+    BOOL chkGameSet();
     void setRndPathPos(fopAc_ac_c*, dNpc_PathRun_c*);
-    bool chkPointPass(cXyz*, cXyz*, cXyz*);
+    BOOL chkPointPass(cXyz*, cXyz*, cXyz*);
 
     /* 0x00 */ u8 m0;
     /* 0x04 */ f32 m4;

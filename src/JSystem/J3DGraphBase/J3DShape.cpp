@@ -97,31 +97,31 @@ void J3DShape::makeVtxArrayCmd() {
         array[i] = 0;
     }
 
-    for (; vtxAttr->mAttrib != GX_VA_NULL; vtxAttr++) {
-        switch (vtxAttr->mAttrib) {
+    for (; vtxAttr->attr != GX_VA_NULL; vtxAttr++) {
+        switch (vtxAttr->attr) {
         case GX_VA_POS: {
-            if (vtxAttr->mCompType == GX_F32)
-                stride[vtxAttr->mAttrib - GX_VA_POS] = 0x0C;
+            if (vtxAttr->type == GX_F32)
+                stride[vtxAttr->attr - GX_VA_POS] = 0x0C;
             else
-                stride[vtxAttr->mAttrib - GX_VA_POS] = 0x06;
-            array[vtxAttr->mAttrib - GX_VA_POS] = mVertexData->getVtxPosArray();
-            mVertexData->setVtxPosFrac(vtxAttr->mCompShift);
-            mVertexData->setVtxPosType((GXCompType)vtxAttr->mCompType);
+                stride[vtxAttr->attr - GX_VA_POS] = 0x06;
+            array[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxPosArray();
+            mVertexData->setVtxPosFrac(vtxAttr->frac);
+            mVertexData->setVtxPosType((GXCompType)vtxAttr->type);
         } break;
         case GX_VA_NRM: {
-            if (vtxAttr->mCompType == GX_F32)
-                stride[vtxAttr->mAttrib - GX_VA_POS] = 0x0C;
+            if (vtxAttr->type == GX_F32)
+                stride[vtxAttr->attr - GX_VA_POS] = 0x0C;
             else
-                stride[vtxAttr->mAttrib - GX_VA_POS] = 0x06;
-            array[vtxAttr->mAttrib - GX_VA_POS] = mVertexData->getVtxNrmArray();
-            mVertexData->setVtxNrmFrac(vtxAttr->mCompShift);
-            mVertexData->setVtxNrmType((GXCompType)vtxAttr->mCompType);
+                stride[vtxAttr->attr - GX_VA_POS] = 0x06;
+            array[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxNrmArray();
+            mVertexData->setVtxNrmFrac(vtxAttr->frac);
+            mVertexData->setVtxNrmType((GXCompType)vtxAttr->type);
         } break;
         case GX_VA_CLR0:
         case GX_VA_CLR1: {
-            stride[vtxAttr->mAttrib - GX_VA_POS] = 0x04;
-            array[vtxAttr->mAttrib - GX_VA_POS] =
-                mVertexData->getVtxColorArray(vtxAttr->mAttrib - GX_VA_CLR0);
+            stride[vtxAttr->attr - GX_VA_POS] = 0x04;
+            array[vtxAttr->attr - GX_VA_POS] =
+                mVertexData->getVtxColorArray(vtxAttr->attr - GX_VA_CLR0);
         } break;
         case GX_VA_TEX0:
         case GX_VA_TEX1:
@@ -131,11 +131,11 @@ void J3DShape::makeVtxArrayCmd() {
         case GX_VA_TEX5:
         case GX_VA_TEX6:
         case GX_VA_TEX7: {
-            if (vtxAttr->mCompType == GX_F32)
-                stride[vtxAttr->mAttrib - GX_VA_POS] = 0x08;
+            if (vtxAttr->type == GX_F32)
+                stride[vtxAttr->attr - GX_VA_POS] = 0x08;
             else
-                stride[vtxAttr->mAttrib - GX_VA_POS] = 0x04;
-            array[vtxAttr->mAttrib - GX_VA_POS] = mVertexData->getVtxTexCoordArray(vtxAttr->mAttrib - GX_VA_TEX0);
+                stride[vtxAttr->attr - GX_VA_POS] = 0x04;
+            array[vtxAttr->attr - GX_VA_POS] = mVertexData->getVtxTexCoordArray(vtxAttr->attr - GX_VA_TEX0);
         } break;
         default:
             break;

@@ -87,7 +87,7 @@ bool daObjEayogn_c::_delete() {
 
 /* 00000330-00000360       .text check_ev_bit__13daObjEayogn_cCFv */
 BOOL daObjEayogn_c::check_ev_bit() const {
-    return dComIfGs_isSymbol(1);
+    return dComIfGs_isSymbol(dSymbol_DIN_e);
 }
 
 /* 00000360-000003E8       .text init_mtx__13daObjEayogn_cFv */

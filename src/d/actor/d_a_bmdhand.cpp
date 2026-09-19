@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bmdhand.h"
 #include "d/d_s_play.h"
+#include "res/Object/Bmd.h"
 #include "res/Object/Bmdhand.h"
 #include "d/actor/d_a_bmd.h"
 #include "d/d_cc_d.h"
@@ -34,7 +35,9 @@ static bmd_class* boss;
 static bool hio_set;
 static daBmdhand_HIO_c l_HIO;
 
-static int boss_joint_d[] = {0x1C, 0x1C, 0x1C, 0x1C, 0x25, 0x25, 0x25, 0x25, 0x2E, 0x2E, 0x2E, 0x2E, 0x40, 0x40, 0x40, 0x40, 0x37, 0x37, 0x37, 0x37};
+static int boss_joint_d[] = {BKM_JNT_HANAA7_e, BKM_JNT_HANAA7_e, BKM_JNT_HANAA7_e, BKM_JNT_HANAA7_e, BKM_JNT_HANAB7_e, BKM_JNT_HANAB7_e, BKM_JNT_HANAB7_e,
+                             BKM_JNT_HANAB7_e, BKM_JNT_HANAC7_e, BKM_JNT_HANAC7_e, BKM_JNT_HANAC7_e, BKM_JNT_HANAC7_e, BKM_JNT_HANAE7_e, BKM_JNT_HANAE7_e,
+                             BKM_JNT_HANAE7_e, BKM_JNT_HANAE7_e, BKM_JNT_HANAD7_e, BKM_JNT_HANAD7_e, BKM_JNT_HANAD7_e, BKM_JNT_HANAD7_e};
 static f32 boss_joint_xad[] = {60.0f, 20.0f, -20.0f, -60.0f};
 
 /* 00000118-000001CC       .text hand_draw__FP13bmdhand_class */
@@ -44,12 +47,7 @@ void hand_draw(bmdhand_class* i_this) {
         g_env_light.setLightTevColorType(i_this->mpMorf->getModel(), &actor->tevStr);
         i_this->mpMorf->updateDL();
     }
-#ifdef __MWERKS__
     i_this->mLineMat.update(0x14, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, &actor->tevStr);
-#else
-    GXColor local_18 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    i_this->mLineMat.update(0x14, local_18, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 }
 
@@ -658,7 +656,7 @@ void hand_move(bmdhand_class* i_this) {
 }
 
 /* 00002E74-00002EC0       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* param_1, void* param_2) {
+static void* s_a_d_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
     if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BMD_e)) {
         return param_1;

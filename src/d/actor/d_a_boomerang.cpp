@@ -248,7 +248,7 @@ void daBoomerang_sightPacket_c::setSight(cXyz* pPos, int n) {
         mDoMtx_stack_c::transS(proj);
         mDoMtx_stack_c::scaleM(scaleX, scaleY, scale);
 
-        mDoMtx_stack_c::ZrotM(cM_ssin(imageRot * 16384.0f) * 32768.0f);
+        mDoMtx_stack_c::ZrotM(cM_ssin(imageRot * 0x4000) * 0x8000);
         MTXCopy(mDoMtx_stack_c::get(), mMtxArr[n]);
 
         mSightOnFlg |= 1 << n;
@@ -542,11 +542,11 @@ BOOL daBoomerang_c::procWait() {
 
         procMove();
     } else {
-        if (dCam_getBody()->mCurMode != 0xB) {
+        if (dCam_getBody()->Mode() != 0xB) {
             resetLockActor();
         } else {
             if (pPlayer->checkBoomerangRock()) {
-                camera_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+                camera_process_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 cXyz eyePos = *fopCamM_GetEye_p(pCamera);
                 cXyz topPos = pPlayer->getLineTopPos();
                 mCps.OnAtNoTgHitInfSet();
@@ -646,7 +646,7 @@ BOOL daBoomerang_c::procMove() {
                 } else if (a > 18.0f) {
                     a = 20.0f + 40.0f * (a - 18.0f);
                 }
-                newAngle = a * 256.0f + 1024.0f;
+                newAngle = a * 0x100 + 0x400;
             } else {
                 newAngle = 0x4000;
             }

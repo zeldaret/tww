@@ -38,58 +38,59 @@ public:
     J3DTexture(u16 num, ResTIMG* res) : mNum(num), mpRes(res) {}
     virtual ~J3DTexture() {}
 
-    void loadGX(u16, GXTexMapID) const;
-    void entryNum(u16);
-    void addResTIMG(u16, ResTIMG const*);
-
     u16 getNum() const { return mNum; }
-    ResTIMG* getResTIMG(u16 entry) const {
-        J3D_ASSERT(72, entry < mNum, "Error : range over.");
-        return &mpRes[entry];   
+    ResTIMG* getResTIMG(u16 index) const {
+        J3D_ASSERT(72, index < mNum, "Error : range over.");
+        return &mpRes[index];   
     }
-    void setResTIMG(u16 entry, const ResTIMG& timg) {
-        mpRes[entry] = timg;
-        mpRes[entry].imageOffset = ((mpRes[entry].imageOffset + (u32)&timg - (u32)(mpRes + entry)));
-        mpRes[entry].paletteOffset = ((mpRes[entry].paletteOffset + (u32)&timg - (u32)(mpRes + entry)));
+    void setResTIMG(u16 index, const ResTIMG& timg) {
+        J3D_ASSERT(81, index < mNum, "Error : range over.");
+        mpRes[index] = timg;
+        mpRes[index].imageOffset = ((mpRes[index].imageOffset + (u32)&timg - (u32)(mpRes + index)));
+        mpRes[index].paletteOffset = ((mpRes[index].paletteOffset + (u32)&timg - (u32)(mpRes + index)));
     }
 };
 
-class J3DTexMtx {
+class J3DTexMtx : public J3DTexMtxInfo {
 public:
-    J3DTexMtx() { mTexMtxInfo = j3dDefaultTexMtxInfo; }
+    J3DTexMtx() { J3DTexMtxInfo::operator=(j3dDefaultTexMtxInfo); }
     J3DTexMtx(const J3DTexMtxInfo& info) {
-        mTexMtxInfo = info;
+        J3DTexMtxInfo::operator=(info);
     }
     ~J3DTexMtx() {}
     void load(u32 texMtxID) const {
         GDOverflowCheck(53);
-        J3DGDLoadTexMtxImm((Mtx&)mMtx, GX_TEXMTX0 + texMtxID * 3, (GXTexMtxType)mTexMtxInfo.mProjection);
+        J3DGDLoadTexMtxImm((Mtx&)mMtx, GX_TEXMTX0 + texMtxID * 3, (GXTexMtxType)mProjection);
     };
     void calc();
 
-    J3DTexMtxInfo& getTexMtxInfo() { return mTexMtxInfo; }
+    J3DTexMtxInfo& getTexMtxInfo() { return *this; }
+    J3DTextureSRTInfo& getTextureSRT() { return mSRT;}
     Mtx& getMtx() { return mMtx; }
-    void setEffectMtx(Mtx effectMtx) { mTexMtxInfo.setEffectMtx(effectMtx); }
+    void setEffectMtx(Mtx effectMtx) { J3DTexMtxInfo::setEffectMtx(effectMtx); }
     Mtx& getViewMtx() { return mViewMtx; }
-    void setViewMtx(const Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
-    void setTranslationX(f32 translationX){ mTexMtxInfo.mSRT.mTranslationX = translationX; } // Fakematch
-
-    J3DTextureSRTInfo& getTextureSRT() { return mTexMtxInfo.mSRT;}
+    void setViewMtx(Mtx viewMtx) { MTXCopy(viewMtx, mViewMtx); }
 
 private:
-    /* 0x00 */ J3DTexMtxInfo mTexMtxInfo;
     /* 0x64 */ Mtx mMtx;
     /* 0x94 */ Mtx mViewMtx;
 };  // Size: 0xC4
 
 struct J3DTexCoord : public J3DTexCoordInfo {
-    J3DTexCoord() { *(J3DTexCoordInfo*)this = j3dDefaultTexCoordInfo[0]; }
-    J3DTexCoord(const J3DTexCoordInfo& info) { *(J3DTexCoordInfo*)this = info; }
+    J3DTexCoord() {
+        J3DTexCoordInfo::operator=(j3dDefaultTexCoordInfo[0]);
+    }
+    J3DTexCoord(const J3DTexCoordInfo& info) {
+        J3DTexCoordInfo::operator=(info);
+    }
 
     u8 getTexGenType() const { return mTexGenType; }
     u8 getTexGenSrc() const { return mTexGenSrc; }
     u8 getTexGenMtx() const { return mTexGenMtx; }
     void setTexGenMtx(u8 v) { mTexGenMtx = v; }
+
+    // void operator=(const J3DTexCoord&) {}
+    // void operator==(J3DTexCoord&) {}
 };  // Size: 0x4
 
 #endif /* J3DTEXTURE_H */

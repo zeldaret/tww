@@ -26,8 +26,6 @@ static const int l_btp_ix_tbl[] = {
 
 /* 00000078-0000022C       .text nodeCallBack_Ho__FP7J3DNodei */
 static BOOL nodeCallBack_Ho(J3DNode* node, int calcTiming) {
-    cXyz temp;
-    cXyz temp2;
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DModel* model = j3dSys.getModel();
         daNpc_Ho_c* i_this = (daNpc_Ho_c*)model->getUserArea();
@@ -37,9 +35,10 @@ static BOOL nodeCallBack_Ho(J3DNode* node, int calcTiming) {
         if(i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             if (jntNo == i_this->getHeadJntNum()) {
-                temp.setall(0.0f);
+                cXyz temp(0.0f, 0.0f, 0.0f);
                 cMtx_YrotM(*calc_mtx, -i_this->getHead_y());
                 cMtx_ZrotM(*calc_mtx, -i_this->getHead_x());
+                cXyz temp2;
                 MtxPosition(&temp, &temp2);
                 i_this->setAttentionBasePos(temp2);
                 temp.set(20.0f, -20.0f, 0.0f);
@@ -47,11 +46,10 @@ static BOOL nodeCallBack_Ho(J3DNode* node, int calcTiming) {
                 MtxPosition(&temp, &temp2);
                 i_this->setEyePos(temp2);
                 i_this->incAttnSetCount();
-
             } else if (jntNo == i_this->getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
             }
-            cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
+            MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
         }
     }
@@ -177,7 +175,7 @@ void daNpc_Ho_c::eventOrder() {
 
 /* 00000708-000007A8       .text checkOrder__10daNpc_Ho_cFv */
 void daNpc_Ho_c::checkOrder() {
-    if (eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(7)) {
+    if (eventInfo.checkCommandTalk() && ChkOrder(7)) {
         if (dComIfGp_event_chkTalkXY()) {
             setFlag(HO_FLAG_00000010);
         } else {
@@ -295,7 +293,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             receivePendant(1);
             break;
         case 0x273E:
-            if (dComIfGs_getBeastNum(7) >= 0x14) {
+            if (dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e) >= 20) {
                 *pMsgNo = 0x2741;
             } else {
                 *pMsgNo = 0x273F;
@@ -325,7 +323,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x274D:
             *pMsgNo = 0x274E;
-            receivePendant(dComIfGs_getBeastNum(7));
+            receivePendant(dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e));
             break;
         case 0x274E:
             if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_C0FF) >= 0x28 && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1C04)) {
@@ -336,7 +334,7 @@ u16 daNpc_Ho_c::next_msgStatus(u32* pMsgNo) {
             break;
         case 0x2754: {
             *pMsgNo = 0x2755;
-            int numPendantsGiven = dComIfGs_getBeastNum(7);
+            int numPendantsGiven = dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
             receivePendant(numPendantsGiven);
             if (numPendantsGiven < 3) {
                 mItemNum = dItemNo_RED_RUPEE_e;
@@ -633,7 +631,6 @@ bool daNpc_Ho_c::talk01() {
             mState = HO_STATE_PREACH;
             fopAcM_orderChangeEvent(dComIfGp_getLinkPlayer(), this, "HO_PREACH", 0, 0xFFFF);
             clrFlag(HO_FLAG_00000020);
-
         } else {
             mState = mPrevState;
             setAnmStatus();
@@ -780,7 +777,7 @@ BOOL daNpc_Ho_c::_draw() {
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
 
-    dSnap_RegistFig(DSNAP_TYPE_HO, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_HO, this, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
@@ -823,7 +820,6 @@ BOOL daNpc_Ho_c::_execute() {
                     setAnm(0);
                 }
                 break;
-
         }
     }
     checkOrder();
@@ -842,7 +838,7 @@ BOOL daNpc_Ho_c::_execute() {
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
 
     J3DModel* pModel = mpMorf->getModel();
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
@@ -922,7 +918,7 @@ BOOL daNpc_Ho_c::CreateHeap() {
     }
 
     J3DModel* pModel = mpMorf->getModel();
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();

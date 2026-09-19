@@ -19,7 +19,7 @@ public:
     daObjIce_HIO_c();
     virtual ~daObjIce_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -200,7 +200,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc_ac
                     if (i_this->m44C < 0.0f) {
                         i_this->m44C = 0.0f;
                     }
-                    i_this->m450 = 1.0f - cM_scos(i_this->m44C * 16384.0f);
+                    i_this->m450 = 1.0f - cM_scos(i_this->m44C * 0x4000);
                     if (i_this->m44C < 0.1f) {
                         i_this->m45C = 1;
                     }
@@ -377,7 +377,7 @@ void daObjIce_c::fade_out_retire_act_proc() {
         m454 = 0.0f;
     }
 
-    f32 tmp3 = 1.0f - cM_scos(tmp2 * 16384.0f);
+    f32 tmp3 = 1.0f - cM_scos(tmp2 * 0x4000);
 
     m44C = tmp2;
     m450 = tmp3;
@@ -422,7 +422,7 @@ bool daObjIce_c::_execute() {
 }
 
 /* 00000EB8-00000F48       .text set_material_sub__FP11J3DMaterialUc */
-void set_material_sub(J3DMaterial* material, unsigned char alpha) {
+static void set_material_sub(J3DMaterial* material, unsigned char alpha) {
     while (material != NULL) {
         if (alpha == 0) {
             material->getShape()->hide();
@@ -435,7 +435,7 @@ void set_material_sub(J3DMaterial* material, unsigned char alpha) {
 }
 
 /* 00000F48-00000FB0       .text set_material__FP8J3DModelUc */
-void set_material(J3DModel* model, unsigned char alpha) {
+static void set_material(J3DModel* model, unsigned char alpha) {
     J3DModelData* modelData = model->getModelData();
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         set_material_sub(modelData->getJointNodePointer(i)->getMesh(), alpha);
@@ -478,7 +478,7 @@ void daObjIce_c::setEffectMtx() {
 #endif
     camera_class* camera = dCam_getCamera();
 
-    sp2C = *eye - camera->mLookat.mEye;
+    sp2C = *eye - camera->view.mLookat.mEye;
     dKyr_get_vectle_calc(&tevStr.mLightPosWorld, eye, &sp20);
     C_VECHalfAngle(&sp2C, &sp20, &sp14);
     C_MTXLookAt(sp98, &cXyz::Zero, &cXyz::BaseY, &sp14);

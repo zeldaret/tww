@@ -25,7 +25,7 @@ static u32 ita_Ef[]     = { dRes_INDEX_BITA_BRK_EF_BTDITA0_e, dRes_INDEX_BITA_BR
 /* 00000078-000000C4       .text b_a_sub__FPvPv */
 static void* b_a_sub(void* search, void* user) {
     UNUSED(user);
-    if (fopAc_IsActor(search) && fopAcM_GetName(search) == fpcNm_BTD_e)
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BTD_e)
         return search;
     return NULL;
 }
@@ -49,7 +49,7 @@ static BOOL daBita_Draw(bita_class* i_this) {
 static void mode_normal(bita_class* i_this) {
     if (btd != NULL) {
         if (btd->m6E16 >= 100) {
-            cXyz delta = dComIfGp_getCamera(0)->mLookat.mEye - i_this->current.pos;
+            cXyz delta = dComIfGp_getCamera(0)->view.mLookat.mEye - i_this->current.pos;
             if (delta.abs() < 1500.0f) {
                 fopAcM_delete(i_this);
             }
@@ -149,14 +149,19 @@ static BOOL daBita_Execute(bita_class* i_this) {
 
 /* 00000714-0000071C       .text daBita_IsDelete__FP10bita_class */
 static BOOL daBita_IsDelete(bita_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
 /* 0000071C-00000778       .text daBita_Delete__FP10bita_class */
 static BOOL daBita_Delete(bita_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Bita");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Bita");
+#if VERSION > VERSION_DEMO
     if (i_this->heap != NULL)
+#endif
+    {
         dComIfG_Bgsp()->Release(i_this->mpBgW);
+    }
     return TRUE;
 }
 
@@ -169,14 +174,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_ac) {
         type = 1;
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Bita", ita_bmd[type]);
-    JUT_ASSERT(0x23b, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(562, 571), modelData != NULL);
     J3DModel* model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (model == NULL)
         return FALSE;
     i_this->mpModel = model;
 
     modelData = (J3DModelData*)dComIfG_getObjectRes("Bita", ita_Ef_bmd[type]);
-    JUT_ASSERT(0x247, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(574, 583), modelData != NULL);
     model = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     if (model == NULL)
         return FALSE;
@@ -232,11 +237,12 @@ static cPhs_State daBita_Create(fopAc_ac_c* i_ac) {
         }},
     };
 
-    fopAcM_ct(i_ac, bita_class);
+    fopAcM_ct_Retail(i_ac, bita_class);
     bita_class* i_this = (bita_class*)i_ac;
 
     cPhs_State rt = dComIfG_resLoad(&i_this->mPhs, "Bita");
     if (rt == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(i_ac, bita_class);
         btd = NULL;
         i_this->mType = (fopAcM_GetParam(i_this) >> 0) & 0xFF;
         i_this->mPrmScale = (fopAcM_GetParam(i_this) >> 8) & 0xFF;

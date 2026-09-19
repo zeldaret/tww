@@ -16,7 +16,7 @@ fapGm_HIO_c g_HIO;
 
 /* 8002306C-800231BC       .text __ct__11fapGm_HIO_cFv */
 fapGm_HIO_c::fapGm_HIO_c() {
-    field_0x05 = 1;
+    mUsingHostIO = true;
 
 #if VERSION > VERSION_DEMO
     if (mDoMain::developmentMode) {
@@ -45,25 +45,26 @@ fapGm_HIO_c::fapGm_HIO_c() {
     field_0x1a = 0;
     field_0x1b = 1;
     field_0x1c = 0;
-    mFbWidth = 0x280;
-    mEfbHeight = 0x1e0;
+    mFbWidth = 640;
+    mEfbHeight = 480;
     field_0x30 = 0;
-    field_0x20.r = 0xff;
-    field_0x20.g = 0xff;
-    field_0x20.b = 0xff;
-    field_0x20.a = 0xff;
+
+    mColor = JUtility::TColor(0xff, 0xff, 0xff, 0xff);
+
     mTriggerThreshLo = 0.9f;
     mTriggerThreshHi = 0.6f;
-    field_0x3c = JUtility::TColor(0xff, 0x96, 0x00, 0xff);
-    field_0x40 = JUtility::TColor(0xff, 0x78, 0x00, 0xff);
-    field_0x44 = JUtility::TColor(0x00, 0x00, 0x00, 0xff);
-    field_0x48 = JUtility::TColor(0x00, 0x00, 0x00, 0xff);
-    field_0x4c = 0;
-    field_0x4e = 10;
-    field_0x54 = 0x1b;
-    field_0x50 = 0;
-    field_0x52 = 0;
-    field_0x56 = 0x82;
+
+    mLetterTopColor = JUtility::TColor(0xff, 0x96, 0x00, 0xff);
+    mLetterBottomColor = JUtility::TColor(0xff, 0x78, 0x00, 0xff);
+    mLetterTopShadowColor = JUtility::TColor(0x00, 0x00, 0x00, 0xff);
+    mLetterBottomShadowColor = JUtility::TColor(0x00, 0x00, 0x00, 0xff);
+
+    mLetterPositionX = 0;
+    mLetterPositionY = 10;
+    mLetterFontSize = 27;
+    mLineSpacing = 0;
+    mLetterSpacing = 0;
+    mBackgroundAlpha = 130;
 }
 
 /* 800231BC-800231E4       .text fapGm_After__Fv */

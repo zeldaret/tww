@@ -79,7 +79,7 @@ bool daSalvage_c::CreateInit() {
     mEventIdx = dComIfGp_evmng_getEventIdx("SLVG_HAZURE_LEFT", 0xff);
     mEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_SALVAGELIGHT00, &current.pos);
     if (mEmitter != NULL) {
-        mEmitter->setStatus(1);
+        mEmitter->stopCreateParticle();
     }
     return true;
 }
@@ -717,7 +717,7 @@ BOOL daSalvage_c::isEffectKind(int salvageId) {
 
 /* 0000240C-00002410       .text debugDraw__11daSalvage_cFv */
 void daSalvage_c::debugDraw() {
-    /* Nonmatching */
+    /* Debug Nonmatching */
 }
 
 /* 00002410-00002430       .text daSalvageCreate__FPv */

@@ -13,10 +13,10 @@ typedef struct _GXVtxDescList {
 } GXVtxDescList;  // Size: 0x08
 
 typedef struct _GXVtxAttrFmtList {
-    /* 0x00 */ GXAttr mAttrib;
-    /* 0x04 */ GXCompCnt mCompCnt;
-    /* 0x08 */ GXCompType mCompType;
-    /* 0x0C */ u8 mCompShift;
+    GXAttr attr;
+    GXCompCnt cnt;
+    GXCompType type;
+    u8 frac;
 } GXVtxAttrFmtList;  // Size: 0x10
 
 void GXSetVtxDesc(GXAttr attr, GXAttrType type);
@@ -36,6 +36,7 @@ void GXSetNumTexGens(u8 numTexGens);
 void GXGetVtxAttrFmtv(GXVtxFmt param_0, GXVtxAttrFmtList* param_1);
 void GXGetVtxAttrFmt(GXVtxFmt param_0, int param_1, GXCompCnt* param_2, GXCompType* param_3,
                      u8* param_4);
+void GXGetVtxDesc(GXAttr attr, GXAttrType* type);
 void GXGetVtxDescv(GXVtxDescList* attrPtr);
 
 static inline void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType type, GXTexGenSrc src, u32 mtx) {

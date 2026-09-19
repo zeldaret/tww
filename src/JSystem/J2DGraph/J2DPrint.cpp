@@ -237,9 +237,7 @@ f32 J2DPrint::parse(const u8* param_1, int param_2, int param_3, u16* param_4, J
                 if (mFont->isFixed()) {
                     field_0x34 = mFont->getFixedWidth();
                 } else {
-                    JUTFont::TWidth uStack_ec;
-                    mFont->getWidthEntry(r27, &uStack_ec);
-                    field_0x34 = uStack_ec.field_0x1;
+                    field_0x34 = (u32)mFont->getWidth(r27);
                 }
 
                 field_0x34 *= field_0x18 / mFont->getCellWidth();
@@ -566,5 +564,5 @@ f32 J2DPrint::getNumberF32(const u8** param_1, f32 param_2, f32 param_3, int bas
 }
 
 static void dummy2() {
-    OSReport("buff != 0");
+    DEAD_STRING("buff != 0");
 }

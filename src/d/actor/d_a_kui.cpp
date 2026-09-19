@@ -56,7 +56,7 @@ static void setEffectMtx(fopAc_ac_c* a_this, J3DModelData* modelData, float scal
     cXyz& eyePos = a_this->eyePos;
     camera_class* camera = dCam_getCamera();
 
-    cXyz look_dir = eyePos - camera->mLookat.mEye;
+    cXyz look_dir = eyePos - camera->view.mLookat.mEye;
 
     cXyz light_dir;
     dKyr_get_vectle_calc(&a_this->tevStr.mLightPosWorld, &eyePos, &light_dir);
@@ -69,13 +69,12 @@ static void setEffectMtx(fopAc_ac_c* a_this, J3DModelData* modelData, float scal
     mDoMtx_stack_c::scaleS(scale, scale, 1.0f);
     mDoMtx_stack_c::concat(mtx_adj);
     mDoMtx_stack_c::concat(reflMtx);
-    MtxP mtx = mDoMtx_stack_c::get();
-    mtx[0][3] = 0.0f;
-    mtx[1][3] = 0.0f;
-    mtx[2][3] = 0.0f;
+    mDoMtx_stack_c::get()[0][3] = 0.0f;
+    mDoMtx_stack_c::get()[1][3] = 0.0f;
+    mDoMtx_stack_c::get()[2][3] = 0.0f;
 
     Mtx now_copy;
-    PSMTXCopy(mDoMtx_stack_c::get(), now_copy);
+    cMtx_copy(mDoMtx_stack_c::get(), now_copy);
 
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         J3DMaterial* mat = modelData->getMaterialNodePointer(i);
@@ -131,7 +130,7 @@ static BOOL daKui_Draw(kui_class* i_this) {
 
 /* 00000540-00000920       .text demo_camera__FP9kui_class */
 static void demo_camera(kui_class* i_this) {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     s8 bVar2 = true;
 
     switch ((s8)i_this->field_0x2E8) {
@@ -171,7 +170,10 @@ static void demo_camera(kui_class* i_this) {
             i_this->field_0x2F8.y += REG8_F(0) + 200.0f;
             cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
         
-            cXyz vec(REG8_F(1) + 800.f, REG8_F(2), REG8_F(3) + 100.0f);
+            cXyz vec;
+            vec.x = REG8_F(1) + 800.f;
+            vec.y = REG8_F(2);
+            vec.z = REG8_F(3) + 100.0f;
             cXyz posVec;
             MtxPosition(&vec, &posVec);
         
@@ -311,21 +313,21 @@ static BOOL daKui_Execute(kui_class* i_this) {
         cLib_addCalcAngleS2(&i_this->field_0x2E6, REG17_S(7) + 0x100, 1, REG17_S(8) + 0x40);
 
         MtxTrans(actor->home.pos.x, actor->home.pos.y, actor->home.pos.z, FALSE);
-        mDoMtx_YrotM(*calc_mtx, actor->current.angle.y);
+        cMtx_YrotM(*calc_mtx, actor->current.angle.y);
 
         MtxPush();
-        mDoMtx_YrotM(*calc_mtx, actor->shape_angle.y);
-        mDoMtx_XrotM(*calc_mtx, x + i_this->field_0x2E2);
-        mDoMtx_ZrotM(*calc_mtx, z);
-        mDoMtx_YrotM(*calc_mtx, -actor->shape_angle.y);
+        cMtx_YrotM(*calc_mtx, actor->shape_angle.y);
+        cMtx_XrotM(*calc_mtx, x + i_this->field_0x2E2);
+        cMtx_ZrotM(*calc_mtx, z);
+        cMtx_YrotM(*calc_mtx, -actor->shape_angle.y);
         MtxScale(unk_f, unk_f, unk_f, TRUE);
         i_this->mpModel->setBaseTRMtx(*calc_mtx);
 
 
         MtxPull();
-        mDoMtx_YrotM(*calc_mtx, actor->shape_angle.y + REG0_S(5));
-        mDoMtx_XrotM(*calc_mtx, actor->current.angle.x + REG0_S(6));
-        mDoMtx_YrotM(*calc_mtx, -(actor->shape_angle.y + REG0_S(5) + 0x4000));
+        cMtx_YrotM(*calc_mtx, actor->shape_angle.y + REG0_S(5));
+        cMtx_XrotM(*calc_mtx, actor->current.angle.x + REG0_S(6));
+        cMtx_YrotM(*calc_mtx, -(actor->shape_angle.y + REG0_S(5) + 0x4000));
 
         MtxScale(unk_f, 1.0, unk_f, TRUE);
         i_this->mpModel2->setBaseTRMtx(*calc_mtx);
@@ -335,13 +337,13 @@ static BOOL daKui_Execute(kui_class* i_this) {
         MtxPosition(&temp2, &actor->current.pos);
 
         MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, FALSE);
-        mDoMtx_YrotM(*calc_mtx, actor->current.angle.y);
+        cMtx_YrotM(*calc_mtx, actor->current.angle.y);
         MtxScale(actor->scale.x, actor->scale.y, actor->scale.z, TRUE);
         cMtx_copy(*calc_mtx, i_this->field_0x2A8);
         i_this->field_0x2D8->Move();
     } else {
         MtxTrans(actor->current.pos.x, actor->current.pos.y, actor->current.pos.z, FALSE);
-        mDoMtx_YrotM(*calc_mtx, actor->current.angle.y);
+        cMtx_YrotM(*calc_mtx, actor->current.angle.y);
         if (i_this->type == 2 || i_this->type == 4) {
             i_this->mpModel->setBaseTRMtx(*calc_mtx);
         }
@@ -397,7 +399,7 @@ static BOOL daKui_IsDelete(kui_class*) {
 
 /* 000012EC-00001340       .text daKui_Delete__FP9kui_class */
 static BOOL daKui_Delete(kui_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Kui");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Kui");
     dComIfG_Bgsp()->Release(i_this->field_0x2D8);
     return TRUE;
 }
@@ -410,7 +412,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
     if (i_this->type == 3) {
         // Bell body
         modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_HKANE1_e);
-        JUT_ASSERT(0x353, modelData != NULL);
+        JUT_ASSERT(DEMO_SELECT(836, 851), modelData != NULL);
 
         i_this->mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (!i_this->mpModel) {
@@ -419,7 +421,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
 
         // Bell handle
         modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_HKANE2_e);
-        JUT_ASSERT(0x35F, modelData != NULL);
+        JUT_ASSERT(DEMO_SELECT(848, 863), modelData != NULL);
 
         i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
         if (!i_this->mpModel2) {
@@ -428,7 +430,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
     } else {
         // Rope
         modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_OBI_ROPETAG_e);
-        JUT_ASSERT(0x36B, modelData != NULL);
+        JUT_ASSERT(DEMO_SELECT(860, 875), modelData != NULL);
 
         i_this->mpModel2 = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
         if (!i_this->mpModel2) {
@@ -438,7 +440,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
         if (i_this->type == 2 || i_this->type == 4) {
             // Rope swing attachment
             modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_MROPESW_e);
-            JUT_ASSERT(0x377, modelData != NULL);
+            JUT_ASSERT(DEMO_SELECT(872, 887), modelData != NULL);
 
             i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
             if (!i_this->mpModel) {
@@ -468,11 +470,13 @@ static cPhs_State daKui_Create(fopAc_ac_c* a_this) {
     kui_class* i_this;
     cPhs_State result;
 
-    fopAcM_ct(a_this, kui_class);
+    fopAcM_ct_Retail(a_this, kui_class);
     i_this = (kui_class*) a_this;
 
     result = dComIfG_resLoad(&i_this->mPhs, "Kui");
     if (result == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(a_this, kui_class);
+
         if (fopAcM_GetParam(a_this) == -1) {
             return cPhs_ERROR_e;
         }

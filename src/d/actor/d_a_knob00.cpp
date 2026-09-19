@@ -264,7 +264,7 @@ BOOL daKnob00_c::openProc(int arg1) {
     } else if (mBckAnm.checkFrame(25.0f)) {
         fopAcM_seStart(this, JA_SE_OBJ_DOOR_N_OPEN, 0);
     } else if (mBckAnm.checkFrame(49.0f)) {
-            fopAcM_seStart(this, JA_SE_OBJ_DOOR_N_CLOSE_1, 0);
+        fopAcM_seStart(this, JA_SE_OBJ_DOOR_N_CLOSE_1, 0);
     } else if (mBckAnm.checkFrame(64.0f) && arg1 == 0xf) {
         fopAcM_seStart(this, JA_SE_OBJ_DOOR_N_CLOSE_2, 0);
     }
@@ -286,7 +286,7 @@ void daKnob00_c::openEnd() {
 BOOL daKnob00_c::chkException() {
     switch (home.angle.z) {
         case 0x6A6:
-            if (dComIfGs_isSymbol(0)) {
+            if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
                 return 1;
             }
 
@@ -318,7 +318,7 @@ BOOL daKnob00_c::chkException() {
             break;
 
         case 0x6AA:
-            if (!dComIfGs_isSymbol(1)) {
+            if (!dComIfGs_isSymbol(dSymbol_DIN_e)) {
                 return 1;
             }
 

@@ -10,11 +10,11 @@
 #include "d/d_magma.h"
 
 daMagma_c::~daMagma_c() {
-    dComIfG_resDelete(&mPhs, "Magma");
+    dComIfG_resDeleteDemo(&mPhs, "Magma");
 }
 
 cPhs_State daMagma_c::create() {
-    fopAcM_ct(this, daMagma_c);
+    fopAcM_ct_Retail(this, daMagma_c);
 
     cPhs_State result = dComIfG_resLoad(&mPhs, "Magma");
     if (result != cPhs_COMPLEATE_e) {
@@ -25,7 +25,7 @@ cPhs_State daMagma_c::create() {
         dComIfGp_getMagma()->newFloor(
             current.pos,
             scale,
-            current.roomNo,
+            fopAcM_GetRoomNo(this),
             getPathNo()
         );
     }
@@ -35,6 +35,7 @@ cPhs_State daMagma_c::create() {
 
 /* 00000078-00000080       .text daMagma_IsDelete__FP9daMagma_c */
 static BOOL daMagma_IsDelete(daMagma_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -135,7 +135,7 @@ BOOL daObj_Canon_c::_createHeap() {
 #endif
 
     mpModel->setUserArea((u32)this);
-    modelData->getJointNodePointer(3)->setCallBack(nodeControl_CB);
+    modelData->getJointNodePointer(WALLBOM_JNT_SHOT_e)->setCallBack(nodeControl_CB);
 
     return TRUE;
 }
@@ -189,10 +189,11 @@ bool daObj_Canon_c::checkTgHit() {
     }
 
     if(cLib_calcTimer(&field_0x440) == 0) {
+        cXyz hitPos;
         CcAtInfo atInfo;
         atInfo.pParticlePos = NULL;
         cCcD_Obj* tg = mSph.GetTgHitObj();
-        cXyz hitPos = *mSph.GetTgHitPosP();
+        hitPos = *mSph.GetTgHitPosP();
         atInfo.mpObj = mSph.GetTgHitObj();
         if (tg == NULL) {
             return false;
@@ -335,7 +336,7 @@ void daObj_Canon_c::modeWait() {
                         temp += tmp;
                     }
 
-                    s16 temp2 = fopAcM_searchActorAngleY(this, daPy_getPlayerActorClass());
+                    s16 temp2 = fopAcM_searchPlayerAngleY(this);
 
                     field_0x2CC.x -= temp * cM_ssin(temp2);
                     field_0x2CC.z -= temp * cM_scos(temp2);
@@ -384,7 +385,7 @@ void daObj_Canon_c::modeDeleteInit() {
     setEffect(dPa_name::ID_IT_SN_MJTAIHOU_SENKO00);
     setEffect(dPa_name::ID_IT_JN_MJTAIHOU_SMOKE01);
 
-    fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e | 0x1F);
+    fopAcM_ClearStatusMap(this);
 }
 
 /* 00001174-00001178       .text modeDelete__13daObj_Canon_cFv */
@@ -395,7 +396,7 @@ void daObj_Canon_c::modeDelete() {
 /* 00001178-00001194       .text modeSwWaitInit__13daObj_Canon_cFv */
 void daObj_Canon_c::modeSwWaitInit() {
     field_0x46C = 120.0f;
-    fopAcM_OffStatus(this, fopAcStts_SHOWMAP_e | 0x1F);
+    fopAcM_ClearStatusMap(this);
 }
 
 /* 00001194-000011F4       .text modeSwWait__13daObj_Canon_cFv */
@@ -485,12 +486,12 @@ bool daObj_Canon_c::_execute() {
     temp.x = l_HIO.field_0x14;
     temp.y = l_HIO.field_0x18 * scale.x;
     temp.z = l_HIO.field_0x1C;
-    mDoMtx_multVec(mpModel->getAnmMtx(3), &temp, &field_0x450);
+    cMtx_multVec(mpModel->getAnmMtx(WALLBOM_JNT_SHOT_e), &temp, &field_0x450);
     Vec temp2 = {0.0f, 0.0f, 0.0f};
     temp2.x = REG12_F(0);
     temp2.y = (REG12_F(1) + 60.0f) * scale.x;
     temp2.z = REG12_F(2);
-    mDoMtx_multVec(mpModel->getAnmMtx(3), &temp2, &field_0x45C);
+    cMtx_multVec(mpModel->getAnmMtx(WALLBOM_JNT_SHOT_e), &temp2, &field_0x45C);
 
     if(field_0x470.getEmitter()) {
         if(cLib_calcTimer(&field_0x484) == 0) {
@@ -518,10 +519,10 @@ bool daObj_Canon_c::_draw() {
     }
 
     if(mCurMode == 2 || mCurMode == 3) {
-        mpModel->getModelData()->getJointNodePointer(3)->getMesh()->getShape()->hide();
+        mpModel->getModelData()->getJointNodePointer(WALLBOM_JNT_SHOT_e)->getMesh()->getShape()->hide();
     }
     else {
-        mpModel->getModelData()->getJointNodePointer(3)->getMesh()->getShape()->show();
+        mpModel->getModelData()->getJointNodePointer(WALLBOM_JNT_SHOT_e)->getMesh()->getShape()->show();
     }
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);

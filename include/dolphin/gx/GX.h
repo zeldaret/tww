@@ -17,6 +17,7 @@
 #include "dolphin/gx/GXTev.h" // IWYU pragma: export
 #include "dolphin/gx/GXTexture.h" // IWYU pragma: export
 #include "dolphin/gx/GXTransform.h" // IWYU pragma: export
+#include "dolphin/gx/GXDraw.h" // IWYU pragma: export
 
 #include "dolphin/os/OSUtil.h"
 
@@ -41,6 +42,8 @@ extern "C" {
 #define INSERT_FIELD(reg, value, nbits, shift)                                 \
     (reg) = ((u32) (reg) & ~(((1 << (nbits)) - 1) << (shift))) |               \
             ((u32) (value) << (shift));
+
+#define GET_REG_FIELD(reg, size, shift) ((int)((reg) >> (shift)) & ((1 << (size)) - 1))
 
 #define SET_REG_FIELD(reg, size, shift, val) \
     (reg) = ((u32)(reg) & ~(((1 << (size)) - 1) << (shift))) | ((u32)(val) << (shift)); \
@@ -100,6 +103,18 @@ volatile PPCWGPipe GXFIFO AT_ADDRESS(GXFIFO_ADDR);
     }
 
 // Direct
+inline void GXCmd1u8(const u8 x) {
+    GXFIFO.u8 = x;
+}
+
+inline void GXCmd1u16(const u16 x) {
+    GXFIFO.u16 = x;
+}
+
+inline void GXCmd1u32(const u32 x) {
+    GXFIFO.u32 = x;
+}
+
 inline void GXPosition2f32(f32 x, f32 z) {
     GXFIFO.f32 = x;
     GXFIFO.f32 = z;
@@ -215,11 +230,6 @@ inline void GXTexCoord1x16(u16 x) {
     GXFIFO.u16 = x;
 }
 
-inline void GFWriteBPCmd(u32 x) {
-    GXFIFO.u8 = GX_CMD_LOAD_BP_REG;
-    GXFIFO.u32 = x;
-}
-
 inline void GXEnd() {}
 
 #define GX_WRITE_U8(ub)     \
@@ -233,6 +243,9 @@ inline void GXEnd() {}
 
 #define GX_WRITE_F32(f)     \
     GXFIFO.f32 = (f32)(f);
+
+#define VERIF_RAS_REG(v)
+#define VERIF_XF_REG(r, v)
 
 #define GX_WRITE_XF_REG(addr, value) \
 do { \

@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_MemCard.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_Reset.h"
@@ -27,7 +28,7 @@ void mDoMemCd_Ctrl_c::ThdInit() {
     mPictDataPtr = NULL;
     mPictDataWritePtr = NULL;
     mCopyToPos = 0;
-    field_0x165A = 2;
+    mProbeStat = 2;
     field_0x1660 = CARD_NO_COMMAND;
     mCommand = CARD_NO_COMMAND;
     mCardSlot = 0;
@@ -85,7 +86,7 @@ void mDoMemCd_Ctrl_c::update() {
     if (mDoRst::isReset()) {
         OSLockMutex(&mMutex);
         mCommand = CARD_DETACH;
-        field_0x165A = 3;
+        mProbeStat = 3;
         OSUnlockMutex(&mMutex);
         OSSignalCond(&mCond);
     } else
@@ -94,13 +95,13 @@ void mDoMemCd_Ctrl_c::update() {
         if (getStatus(0) != 14) {
             if (CARDProbe(0) && getStatus(0) == 0) {
                 OSLockMutex(&mMutex);
-                field_0x165A = 0;
+                mProbeStat = 0;
                 mCommand = CARD_ATTACH;
                 OSUnlockMutex(&mMutex);
                 OSSignalCond(&mCond);
             } else if (!CARDProbe(0) && getStatus(0) != 0) {
                 OSLockMutex(&mMutex);
-                field_0x165A = 1;
+                mProbeStat = 1;
                 mCommand = CARD_DETACH;
                 OSUnlockMutex(&mMutex);
                 OSSignalCond(&mCond);

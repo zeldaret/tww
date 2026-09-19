@@ -103,7 +103,7 @@ class daDaiocta_Eye_HIO_c : public mDoHIO_entry_c {
 public:
     daDaiocta_Eye_HIO_c();
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     s16 m04;

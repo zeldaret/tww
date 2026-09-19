@@ -348,7 +348,6 @@ void daObjDoguu_c::setQuake(int i_staffIdx) {
     u32 pattern = 0x0010FFEE;
     dComIfGp_getVibration().StartQuake((u8*)&pattern, 0, 63, cXyz(0.0f, 1.0f, 0.0f));
     mTimer = *dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
-
 }
 
 /* 00000FB8-0000100C       .text setJDemo__12daObjDoguu_cFi */
@@ -606,7 +605,7 @@ void daObjDoguu_c::setEffectMtx(const cXyz* i_pos, float i_scale) {
     
     float scale = 1.0f /i_scale;
     camera_class* camera = dCam_getCamera();
-    cXyz lookDir = *i_pos - camera->mLookat.mEye;
+    cXyz lookDir = *i_pos - camera->view.mLookat.mEye;
     cXyz lightDir;
     cXyz refl;
 
@@ -684,7 +683,7 @@ bool daObjDoguu_c::_execute() {
             }
             break;        
         case 1:
-            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+            if(eventInfo.checkCommandDemoAccrpt()){
                 field_0x8AC = 2;
             } else {
                 fopAcM_orderOtherEventId(this, mDoguuDemo1EventIdx);
@@ -707,7 +706,7 @@ bool daObjDoguu_c::_execute() {
             }
             break;
         case 4:
-            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+            if(eventInfo.checkCommandDemoAccrpt()){
                 field_0x8AC = 5;
             }
             break;
@@ -722,7 +721,7 @@ bool daObjDoguu_c::_execute() {
             field_0x8AC = 7;
             break;
         case 7:
-            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+            if(eventInfo.checkCommandDemoAccrpt()){
                 field_0x8AC = 8;
             }
             break;
@@ -748,7 +747,7 @@ bool daObjDoguu_c::_execute() {
             mCyl.SetR(30.0f);
             break;
         case 11:
-            if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+            if(eventInfo.checkCommandDemoAccrpt()){
                 field_0x8AC = 12;
             }
             break;

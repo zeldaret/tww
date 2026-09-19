@@ -308,8 +308,9 @@ u8* JKRAram::aramToMainRam(JKRAramBlock* block, u8 *buf, u32 p3, u32 p4, JKRExpa
 }
 
 static void dummy() {
-    OSReport("---------------- BAD SYNC. you'd set callback, but now call sync.\n");
+    DEAD_STRING("---------------- BAD SYNC. you'd set callback, but now call sync.\n");
 }
+
 JSUList<JKRAMCommand> JKRAram::sAramCommandList;
 u32 JKRAram::sSzpBufferSize = 0x00000400;
 static u8* szpBuf;

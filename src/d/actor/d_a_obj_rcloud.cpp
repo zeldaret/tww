@@ -24,7 +24,7 @@ public:
     daObjRcloud_HIO_c();
     virtual ~daObjRcloud_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -97,7 +97,7 @@ cPhs_State daObjRcloud_c::_create() {
         }
         break;
     case 1:
-        if (dComIfGs_isSymbol(0) == 0) {
+        if (!dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
             phase = dComIfG_resLoad(&mPhase, l_arcname);
             mResourceLoadedFlag = 1;
         }

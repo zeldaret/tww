@@ -248,6 +248,7 @@ static BOOL daObjHfuck1_Draw(daObjHfuck1_c* i_this) {
 
 /* 000008B8-000008C0       .text daObjHfuck1_IsDelete__FP13daObjHfuck1_c */
 static BOOL daObjHfuck1_IsDelete(daObjHfuck1_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

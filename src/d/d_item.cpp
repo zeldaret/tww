@@ -1069,17 +1069,17 @@ void item_func_triforce8() {
 
 /* 800C43D8-800C4408       .text item_func_pearl1__Fv */
 void item_func_pearl1() {
-    dComIfGs_onSymbol(0);
+    dComIfGs_onSymbol(dSymbol_NAYRU_e);
 }
 
 /* 800C4408-800C4438       .text item_func_pearl2__Fv */
 void item_func_pearl2() {
-    dComIfGs_onSymbol(1);
+    dComIfGs_onSymbol(dSymbol_DIN_e);
 }
 
 /* 800C4438-800C4468       .text item_func_pearl3__Fv */
 void item_func_pearl3() {
-    dComIfGs_onSymbol(2);
+    dComIfGs_onSymbol(dSymbol_FARORE_e);
 }
 
 /* 800C4468-800C446C       .text item_func_knowledge_tf__Fv */
@@ -2433,17 +2433,17 @@ int item_getcheck_func_triforce8() {
 
 /* 800C7010-800C7040       .text item_getcheck_func_pearl1__Fv */
 int item_getcheck_func_pearl1() {
-    return dComIfGs_isSymbol(0);
+    return dComIfGs_isSymbol(dSymbol_NAYRU_e);
 }
 
 /* 800C7040-800C7070       .text item_getcheck_func_pearl2__Fv */
 int item_getcheck_func_pearl2() {
-    return dComIfGs_isSymbol(1);
+    return dComIfGs_isSymbol(dSymbol_DIN_e);
 }
 
 /* 800C7070-800C70A0       .text item_getcheck_func_pearl3__Fv */
 int item_getcheck_func_pearl3() {
-    return dComIfGs_isSymbol(2);
+    return dComIfGs_isSymbol(dSymbol_FARORE_e);
 }
 
 /* 800C70A0-800C70D0       .text item_getcheck_func_tact_song1__Fv */

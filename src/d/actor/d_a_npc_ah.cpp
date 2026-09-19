@@ -135,12 +135,12 @@ static BOOL da_Npc_Ah_nodeCallBack(J3DNode* node, int calcTiming) {
         MTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
 
         if(jointNo == i_this->m_jnt.getHeadJntNum()){
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
-            cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getHead_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
         }
         else if(jointNo == i_this->m_jnt.getBackboneJntNum()){
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
-            cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getBackbone_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
         }
 #if VERSION > VERSION_DEMO
         MTXCopy(*calc_mtx, model->getAnmMtx(jointNo));
@@ -339,7 +339,7 @@ bool daNpcAh_c::_draw() {
                                      mObjAcch.GetGroundH(),
                                      mObjAcch.m_gnd, 
                                      &tevStr);
-    dSnap_RegistFig(DSNAP_TYPE_UNK7F, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_AH, this, 1.0f, 1.0f, 1.0f);
     return true;
 }
 
@@ -571,7 +571,7 @@ void daNpcAh_c::eventGetItemInit() {
 
 /* 00001718-00001860       .text talk2__9daNpcAh_cFi */
 u16 daNpcAh_c::talk2(int i_param) {
-    u16 ret = 0xff;
+    u16 msg_status = 0xff;
     if(mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e){
         if(i_param == 1) mCurrMsgNo = getMsg();
         mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgNo, this);
@@ -580,8 +580,8 @@ u16 daNpcAh_c::talk2(int i_param) {
     }
     else{
         if(mpCurrMsg != NULL) {
-            ret = mpCurrMsg->mStatus;
-            switch(ret){
+            msg_status = mpCurrMsg->mStatus;
+            switch(msg_status){
                 case fopMsgStts_MSG_DISPLAYED_e:
                     mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
                     if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) fopMsgM_messageSet(mCurrMsgNo);
@@ -594,14 +594,14 @@ u16 daNpcAh_c::talk2(int i_param) {
                     mCurrMsgBsPcId = -1;
                     break;
             }
-            field_0x734 = ret;
-            anmAtr(ret);
+            field_0x734 = msg_status;
+            anmAtr(msg_status);
         }
         else{
             mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
         }
     }
-    return ret;
+    return msg_status;
 }
 
 /* 00001860-000018B0       .text next_msgStatus__9daNpcAh_cFPUl */

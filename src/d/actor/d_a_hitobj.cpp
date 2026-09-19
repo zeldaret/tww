@@ -32,18 +32,21 @@ static BOOL daHitobj_Execute(hitobj_class* i_this) {
 
 /* 000000E8-000000F0       .text daHitobj_IsDelete__FP12hitobj_class */
 static BOOL daHitobj_IsDelete(hitobj_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
 /* 000000F0-00000120       .text daHitobj_Delete__FP12hitobj_class */
 static BOOL daHitobj_Delete(hitobj_class* i_this) {
-    dComIfG_resDelete(&i_this->mPhs, "Hitobj");
+    dComIfG_resDeleteDemo(&i_this->mPhs, "Hitobj");
     return TRUE;
 }
 
 /* 00000120-0000025C       .text daHitobj_Create__FP10fopAc_ac_c */
 static cPhs_State daHitobj_Create(fopAc_ac_c* pActor) {
     hitobj_class* i_this = (hitobj_class*)pActor;
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
     fopAcM_ct(i_this, hitobj_class);
 
     cPhs_State res = dComIfG_resLoad(&(i_this->mPhs), "Hitobj");

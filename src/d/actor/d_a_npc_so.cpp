@@ -12,7 +12,7 @@ daNpc_So_HIO_c::daNpc_So_HIO_c() {
 }
 
 /* 000002A4-000002D0       .text searchEsa_CB__FPvPv */
-void searchEsa_CB(void*, void*) {
+static void searchEsa_CB(void*, void*) {
     /* Nonmatching */
 }
 
@@ -32,7 +32,7 @@ void daNpc_So_c::_nodeControl(J3DNode*, J3DModel*) {
 }
 
 /* 000004B0-000004DC       .text searchTagSo_CB__FPvPv */
-void searchTagSo_CB(void*, void*) {
+static void searchTagSo_CB(void*, void*) {
     /* Nonmatching */
 }
 
@@ -42,7 +42,7 @@ void daNpc_So_c::_searchTagSo(fopAc_ac_c*) {
 }
 
 /* 0000054C-00000578       .text searchMinigameTagSo_CB__FPvPv */
-void searchMinigameTagSo_CB(void*, void*) {
+static void searchMinigameTagSo_CB(void*, void*) {
     /* Nonmatching */
 }
 

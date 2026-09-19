@@ -22,7 +22,7 @@ public:
     daNpc_Md_HIO2_c();
     virtual ~daNpc_Md_HIO2_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 m04;
@@ -47,7 +47,7 @@ public:
     daNpc_Md_HIO3_c();
     virtual ~daNpc_Md_HIO3_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 m04;
@@ -70,7 +70,7 @@ public:
     daNpc_Md_HIO4_c();
     virtual ~daNpc_Md_HIO4_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ f32 m4;
@@ -83,7 +83,7 @@ public:
     daNpc_Md_HIO5_c();
     virtual ~daNpc_Md_HIO5_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ f32 m4;
@@ -95,7 +95,7 @@ public:
     daNpc_Md_HIO6_c();
     virtual ~daNpc_Md_HIO6_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 m04;
@@ -114,7 +114,7 @@ public:
     daNpc_Md_HIO_c();
     virtual ~daNpc_Md_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x004 */ s8 mNo;
@@ -1182,10 +1182,10 @@ void daNpc_Md_c::setPlayerAction(ActionFunc actionFunc, void* arg) {
 /* 000033C4-00003430       .text getStickAngY__10daNpc_Md_cFi */
 s16 daNpc_Md_c::getStickAngY(BOOL param_1) {
     if (param_1) {
-        return g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000;
+        return CPad_GET_STICK_ANGLE(0) + 0x8000;
     } else {
         s16 angleY = dCam_getControledAngleY(dComIfGp_getCamera(0));
-        return g_mDoCPd_cpadInfo[0].mMainStickAngle + 0x8000 + angleY;
+        return CPad_GET_STICK_ANGLE(0) + 0x8000 + angleY;
     }
 }
 
@@ -1321,7 +1321,7 @@ BOOL daNpc_Md_c::lightHitCheck() {
 
         if (mCps.ChkAtHit()) {
             fopAc_ac_c* hitActor = mCps.GetAtHitAc();
-            if (fopAcM_CheckStatus(this, fopAcStts_CARRY_e) && !isNoCarryAction()) {
+            if (fopAcM_checkCarryNow(this) && !isNoCarryAction()) {
                 if (hitActor != dComIfGp_getLinkPlayer() && m3058.getEmitter() == NULL) {
                     dComIfGp_particle_set(dPa_name::ID_AK_SN_HITSHIELDLIGHT00, &current.pos, NULL, NULL, 0xFF, &m3058);
                 }
@@ -2038,7 +2038,7 @@ BOOL daNpc_Md_c::carryNpcAction(void*) {
     } else {
         m3131 = 0;
         bVar1 = false;
-        if (fopAcM_CheckStatus(this, fopAcStts_CARRY_e)) {
+        if (fopAcM_checkCarryNow(this)) {
             setRestart(2);
         }
         if (!isNoCarryAction()) {
@@ -2095,7 +2095,7 @@ BOOL daNpc_Md_c::carryNpcAction(void*) {
                 fopAcM_monsSeStart(this, JA_SE_CV_MD_FLY_END, &current.pos, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
             }
         }
-        if (!fopAcM_CheckStatus(this, fopAcStts_CARRY_e)) {
+        if (!fopAcM_checkCarryNow(this)) {
             if (isNoCarryAction()) {
                 if (speedF > 0.0f) {
                     setNpcAction(&daNpc_Md_c::throwNpcAction);
@@ -3011,7 +3011,7 @@ BOOL daNpc_Md_c::waitPlayerAction(void*) {
         mActionStatus++; // ACTION_ONGOING_1
     } else if (mActionStatus != ACTION_ENDING && !flyCheck()) {
         dAttention_c& attention = dComIfGp_getAttention();
-        if (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.m104 || attention.Lockon()) {
+        if (CPad_GET_STICK_VALUE(0) >= l_HIO.m104 || attention.Lockon()) {
             s16 stickAngle = getStickAngY(0);
 #if VERSION == VERSION_DEMO
             cLib_addCalcAngleS(&current.angle.y, stickAngle, 8, 0x2000, 0x400);
@@ -3022,7 +3022,7 @@ BOOL daNpc_Md_c::waitPlayerAction(void*) {
             int temp = calcStickPos(stickAngle, &stickPos);
             if (temp == 0) {
                 shape_angle.y = current.angle.y;
-            } else if (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.m108) {
+            } else if (CPad_GET_STICK_VALUE(0) >= l_HIO.m108) {
                 shape_angle.y = current.angle.y;
             }
             s16 tempAngle = shape_angle.y;
@@ -3033,7 +3033,7 @@ BOOL daNpc_Md_c::waitPlayerAction(void*) {
 #if VERSION > VERSION_DEMO
             current.angle.y = shape_angle.y;
 #endif
-            if (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.m108) {
+            if (CPad_GET_STICK_VALUE(0) >= l_HIO.m108) {
                 if (temp == 0) {
                     current.angle.y = stickAngle;
                     setPlayerAction(&daNpc_Md_c::walkPlayerAction);
@@ -3066,7 +3066,7 @@ BOOL daNpc_Md_c::walkPlayerAction(void*) {
         mAcchCir[1].SetWall(60.0f, 20.0f);
         mActionStatus++;
     } else if ((mActionStatus != ACTION_ENDING) && (!flyCheck())) {
-        dVar4 = g_mDoCPd_cpadInfo[0].mMainStickValue;
+        dVar4 = CPad_GET_STICK_VALUE(0);
         sVar3 = getStickAngY(0);
         walkProc(dVar4, sVar3);
         iVar1 = calcStickPos(sVar3, &cStack_30);
@@ -3243,15 +3243,15 @@ BOOL daNpc_Md_c::flyPlayerAction(void*) {
                 setHane03Emitter();
             }
             dAttention_c& attention = dComIfGp_getAttention();
-            if ((g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.m104) || attention.Lockon()) {
-                dVar8 = (g_mDoCPd_cpadInfo[0].mMainStickValue * l_HIO.m10C);
+            if ((CPad_GET_STICK_VALUE(0) >= l_HIO.m104) || attention.Lockon()) {
+                dVar8 = (CPad_GET_STICK_VALUE(0) * l_HIO.m10C);
                 if ((0.0f < dVar8) && (dVar8 < l_HIO.m0D8)) {
                     dVar8 = l_HIO.m0D8;
                 }
                 sVar2 = getStickAngY(0);
                 cLib_distanceAngleS(sVar2, current.angle.y);
                 dVar7 = l_HIO.m0DC;
-                if (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.m104) {
+                if (CPad_GET_STICK_VALUE(0) >= l_HIO.m104) {
                     cLib_addCalcAngleS(&current.angle.y, sVar2, 8, 0x2000, 0x400);
                 }
                 iVar3 = calcStickPos(sVar2, &cStack_44);
@@ -3263,7 +3263,7 @@ BOOL daNpc_Md_c::flyPlayerAction(void*) {
                 if (iVar3 > 0) {
                     shape_angle.y = tempAngle;
                 } else {
-                    if (g_mDoCPd_cpadInfo[0].mMainStickValue < l_HIO.m104) {
+                    if (CPad_GET_STICK_VALUE(0) < l_HIO.m104) {
                         cLib_addCalcAngleS(&current.angle.y, shape_angle.y, 8, 0x2000, 0x400);
                     }
                 }
@@ -3376,9 +3376,9 @@ BOOL daNpc_Md_c::mkamaePlayerAction(void*) {
                 mActionStatus++; // ACTION_ONGOING_3
             } else {
                 dAttention_c& attention = dComIfGp_getAttention();
-                if (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.m104 || attention.Lockon()) {
+                if (CPad_GET_STICK_VALUE(0) >= l_HIO.m104 || attention.Lockon()) {
                     m311A = getStickAngY(FALSE);
-                    m310C = g_mDoCPd_cpadInfo[0].mMainStickValue;
+                    m310C = CPad_GET_STICK_VALUE(0);
                 } else {
                     m311A = 0;
                     m310C = 0.0f;
@@ -3554,7 +3554,7 @@ void daNpc_Md_c::initialMsgSetEvent(int staffIdx) {
     if (mMsgNo == 0x19DD) {
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1620);
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1608);
-        dComIfGp_setNextStage("sea", 0xE3, 13, 8);
+        dComIfGp_setNextStage("sea", 0xE3, dIsleRoom_DragonRoostIsland_e, 8);
     } else {
         l_msgId = fpcM_ERROR_PROCESS_ID_e;
         int* pMsgNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "MsgNo");
@@ -3908,7 +3908,7 @@ void daNpc_Md_c::initialEndEvent(int staffIdx) {
             if (mMsgNo == 0x19de) {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_1620);
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_1608);
-                dComIfGp_setNextStage("sea", 0xE3, 13, 8);
+                dComIfGp_setNextStage("sea", 0xE3, dIsleRoom_DragonRoostIsland_e, 8);
             }
             // Fall-through
         case -1:
@@ -5404,7 +5404,7 @@ void daNpc_Md_c::setCollision() {
     local_20.setall(0.0f);
     local_2c = current.pos;
     f32 radius = 30.0f;
-    if ((!isShipRide()) && (!fopAcM_CheckStatus(this, fopAcStts_CARRY_e))) {
+    if ((!isShipRide()) && (!fopAcM_checkCarryNow(this))) {
         mCyl1.SetC(local_2c);
         mCyl1.SetR(radius);
         mCyl1.SetH(m30F8);
@@ -5549,7 +5549,7 @@ void daNpc_Md_c::setBaseMtx() {
     J3DModel* model;
 
     model = getModel();
-    if (fopAcM_CheckStatus(this, fopAcStts_CARRY_e)) {
+    if (fopAcM_checkCarryNow(this)) {
         if (isNoCarryAction()) {
             mDoMtx_stack_c::transS(current.pos);
             mDoMtx_stack_c::ZXYrotM(shape_angle);
@@ -5772,9 +5772,9 @@ BOOL daNpc_Md_c::draw() {
     }
 
 #if VERSION == VERSION_DEMO
-    if (!isShipRide() && !fopAcM_CheckStatus(this, fopAcStts_CARRY_e))
+    if (!isShipRide() && !fopAcM_checkCarryNow(this))
 #else
-    if (!isShipRide() && !fopAcM_CheckStatus(this, fopAcStts_CARRY_e) && checkStatus(daMdStts_UNK20000))
+    if (!isShipRide() && !fopAcM_checkCarryNow(this) && checkStatus(daMdStts_UNK20000))
 #endif
     {
         cXyz shadowPos(current.pos.x, current.pos.y + 150.0f, current.pos.z);
@@ -5786,7 +5786,7 @@ BOOL daNpc_Md_c::draw() {
         }
     }
 
-    dSnap_RegistFig(DSNAP_TYPE_MD, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_MD, this, 1.0f, 1.0f, 1.0f);
 
     return TRUE;
 }
@@ -5971,7 +5971,7 @@ BOOL daNpc_Md_c::execute() {
             mStts.SetRoomId(roomNo);
             mPolyInfo.SetPolyInfo(mAcch.m_gnd);
         }
-    } else if (((!isShipRide()) && (!isReturnLink())) && (!fopAcM_CheckStatus(this, fopAcStts_CARRY_e))) {
+    } else if (((!isShipRide()) && (!isReturnLink())) && (!fopAcM_checkCarryNow(this))) {
         if (checkNowPosMove(l_staff_name)) {
             fVar1 = maxFallSpeed;
             fVar2 = speed.y;
@@ -6237,6 +6237,7 @@ static BOOL daNpc_Md_Draw(daNpc_Md_c* i_this) {
 
 /* 00011144-0001114C       .text daNpc_Md_IsDelete__FP10daNpc_Md_c */
 static BOOL daNpc_Md_IsDelete(daNpc_Md_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

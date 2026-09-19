@@ -7,6 +7,7 @@
 #include "d/d_message_paper.h"
 #include "f_op/f_op_msg.h"
 
+#if VERSION < VERSION_PAL
 /* 801EB128-801EB420       .text setDummyTexture__10dmsg3_3d_cFv */
 void dmsg3_3d_c::setDummyTexture() {
     /* Nonmatching */
@@ -256,3 +257,69 @@ static BOOL dMsg3_Delete(sub_msg3_class*) {
 static cPhs_State dMsg3_Create(msg_class*) {
     /* Nonmatching */
 }
+static msg_method_class l_dMsg3_Method = {
+    (process_method_func)dMsg3_Create,
+    (process_method_func)dMsg3_Delete,
+    (process_method_func)dMsg3_Execute,
+    (process_method_func)dMsg3_IsDelete,
+    (process_method_func)dMsg3_Draw
+};
+
+msg_process_profile_definition g_profile_MSG3 = {
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MSG3_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(sub_msg3_class),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Draw Prio    */ fpcDwPi_MSG3_e,
+    /* Msg SubMtd   */ &l_dMsg3_Method,
+};
+#endif
+
+#if VERSION == VERSION_PAL
+static BOOL dMessage_Paper_Draw(dMessage_Paper_c*) {
+    /* Nonmatching */
+}
+
+static BOOL dMessage_Paper_Execute(dMessage_Paper_c*) {
+    /* Nonmatching */
+}
+
+static BOOL dMessage_Paper_IsDelete(dMessage_Paper_c*) {
+    /* Nonmatching */
+}
+
+static BOOL dMessage_Paper_Delete(dMessage_Paper_c*) {
+    /* Nonmatching */
+}
+
+static cPhs_State dMessage_Paper_Create(msg_class*) {
+    /* Nonmatching */
+}
+
+static msg_method_class l_dMessage_Paper_Method = {
+    (process_method_func)dMessage_Paper_Create,
+    (process_method_func)dMessage_Paper_Delete,
+    (process_method_func)dMessage_Paper_Execute,
+    (process_method_func)dMessage_Paper_IsDelete,
+    (process_method_func)dMessage_Paper_Draw
+};
+
+msg_process_profile_definition g_profile_MSG3 = {
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MSG3_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(dMessage_Paper_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopMsg_Method,
+    /* Draw Prio    */ fpcDwPi_MSG3_e,
+    /* Msg SubMtd   */ &l_dMessage_Paper_Method,
+};
+#endif

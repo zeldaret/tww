@@ -2,6 +2,7 @@
 #define C_MATH_H
 
 #include "JSystem/JMath/JMATrigonometric.h"
+#include "SSystem/SComponent/c_angle.h"
 
 s16 cM_rad2s(float rad);
 u16 U_GetAtanTable(float, float);
@@ -40,7 +41,7 @@ inline f32 cM_ssin(s16 x) {
 }
 
 inline s16 cM_deg2s(f32 deg) {
-    return deg * 182.04445f;
+    return DEG2S(deg);
 }
 
 inline f32 cM_fcos(f32 x) {
@@ -52,11 +53,11 @@ inline f32 cM_fsin(f32 x) {
 }
 
 inline f32 cM_sht2d(f32 v) {
-    return v * 0.005493164f;
+    return S2DEG(v);
 }
 
 inline f32 cM_s2rad(s16 x) {
-    return x * 9.58738e-05f;
+    return S2RAD(x);
 }
 
 #endif /* C_MATH_H */

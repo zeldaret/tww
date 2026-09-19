@@ -58,10 +58,10 @@ JKRDvdArchive::~JKRDvdArchive() {
 }
 
 static void dummy() {
-    OSReport(__FILE__);
-    OSReport("isMounted()");
-    OSReport("Halt");
-    OSReport("mMountCount == 1");
+    DEAD_STRING(__FILE__);
+    DEAD_STRING("isMounted()");
+    DEAD_STRING("Halt");
+    DEAD_STRING("mMountCount == 1");
 }
 
 /* 802BAD98-802BB024       .text open__13JKRDvdArchiveFl */

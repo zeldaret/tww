@@ -68,9 +68,7 @@ void daPy_lk_c::setHammerQuake(cBgS_PolyInfo* param_1, const cXyz* param_2, int 
             getGroundAngle(param_1, shape_angle.y), shape_angle.y, getGroundAngle(param_1, shape_angle.y + -0x4000)
         );
         mDoMtx_stack_c::transM(0.0f, 0.0f, -30.0f);
-        local_38.x = mDoMtx_stack_c::now[0][3];
-        local_38.y = mDoMtx_stack_c::now[1][3];
-        local_38.z = mDoMtx_stack_c::now[2][3];
+        mDoMtx_stack_c::multVecZero(&local_38);
         if (!fopAcM_getWaterY(&local_38, &local_54) || (local_54 < (5.0f + local_38.y))) {
             emitter = dComIfGp_particle_setP1(dPa_name::ID_IT_JN_HM_SENKO00, &local_38);
             if (emitter != NULL) {

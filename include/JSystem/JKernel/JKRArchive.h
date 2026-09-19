@@ -236,4 +236,16 @@ inline u32 JKRReadIdResource(void* buffer, u32 bufferSize, u16 id, JKRArchive* a
     return JKRReadResource(buffer, bufferSize, id, arc);
 }
 
+inline u32 JKRReadTypeResource(void* buffer, u32 bufferSize, u32 tag, const char* name, JKRArchive* arc) {
+    return JKRArchive::readTypeResource(buffer, bufferSize, tag, name, arc);
+}
+
+inline JKRArchive* JKRMountArchive(const char* path, JKRArchive::EMountMode mountMode, JKRHeap* heap, JKRArchive::EMountDirection mountDirection) {
+    return JKRArchive::mount(path, mountMode, heap, mountDirection);
+}
+
+inline void JKRUnmountArchive(JKRArchive* arc) {
+    arc->unmount();
+}
+
 #endif

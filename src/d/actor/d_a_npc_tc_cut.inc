@@ -83,6 +83,7 @@ void daNpc_Tc_c::cutProc() {
                     break;
                 case 8:
                     cutPayProc(staffIdx);
+                    break;
             }
         }
     }

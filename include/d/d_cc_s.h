@@ -62,6 +62,8 @@ public:
     /* 0x2854 */ dCcMassS_Mng mMass_Mng;
 };  // Size = 0x29F4
 
+#if !DEBUG
 STATIC_ASSERT(sizeof(dCcS) == 0x29F4);
+#endif
 
 #endif /* D_CC_D_CC_S_H */

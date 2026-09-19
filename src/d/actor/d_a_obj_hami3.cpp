@@ -24,10 +24,10 @@ static BOOL nodeCallBack(J3DNode *node, int calcTiming) {
         J3DJoint *joint = (J3DJoint *)node;
         s32 jntNo = joint->getJntNo();
         J3DModel *model = j3dSys.getModel();
-        daObjHami3::Act_c *userArea = (daObjHami3::Act_c *)model->getUserArea();
-        if (userArea != NULL) {
+        daObjHami3::Act_c* i_this = (daObjHami3::Act_c *)model->getUserArea();
+        if (i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            cMtx_YrotM(*calc_mtx, userArea->field_0x2C8);
+            cMtx_YrotM(*calc_mtx, i_this->field_0x2C8);
             model->setAnmMtx(jntNo, *calc_mtx);
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
         }

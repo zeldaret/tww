@@ -182,7 +182,7 @@ BOOL daPy_lk_c::procBottleDrink() {
                     p_Var3 = &blue;
                 }
                 m33A8.makeEmitterColor(
-                    dPa_name::ID_IT_JN_LK_GEPPU00, mpCLModel->getAnmMtx(0x12), &current.pos, &shape_angle, p_Var3, NULL
+                    dPa_name::ID_IT_JN_LK_GEPPU00, mpCLModel->getAnmMtx(CL_JNT_CHIN_JNT_e), &current.pos, &shape_angle, p_Var3, NULL
                 );
             }
         } else {
@@ -273,7 +273,7 @@ BOOL daPy_lk_c::procBottleOpen() {
             }
         } else if (frameCtrl.checkPass(32.0f)) {
             m355E = 0;
-            mRightHandIdx = 8;
+            mRightHandIdx = HANDS_JNT_CL_RHANDC_e;
         }
     } else {
         if (m32E4.getEmitter() && mProcVar2.m34D4 == 0 && m32E4.getEmitter()->getParticleList() && m32E4.getEmitter()->getParticleList()->getLast()) {
@@ -343,7 +343,7 @@ BOOL daPy_lk_c::procBottleOpen() {
             } else {
                 sp64.y = temp.y;
             }
-            mDoMtx_multVecZero(mpCLModel->getAnmMtx(0x08), &sp58);
+            mDoMtx_multVecZero(mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e), &sp58);
             sp40 = sp64 - sp58;
             mAtCps[0].SetStartEnd(sp58, sp64);
             mAtCps[0].SetAtVec(sp40);
@@ -364,7 +364,7 @@ BOOL daPy_lk_c::procBottleOpen() {
                 (frameCtrl.checkPass(9.0f))
             ) {
                 seStartOnlyReverb(JA_SE_LK_SPRINKLE_WATER);
-                m32E4.makeEmitterColor(dPa_name::ID_AK_JN_SPILLWATER00, mpCLModel->getAnmMtx(0x08), &current.pos, &tevStr.mColorK0, &tevStr.mColorK0);
+                m32E4.makeEmitterColor(dPa_name::ID_AK_JN_SPILLWATER00, mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e), &current.pos, &tevStr.mColorK0, &tevStr.mColorK0);
                 dCcG_At_Spl spl;
                 if (mEquipItem == dItemNo_WATER_BOTTLE_e) {
                     spl = dCcG_At_Spl_UNK0;
@@ -430,7 +430,7 @@ BOOL daPy_lk_c::procBottleSwing_init(int param_0) {
     fopAc_ac_c* catch_target = dComIfGp_att_getCatghTarget();
     BOOL bVar1;
     if (catch_target != 0) {
-        if (catch_target->current.pos.y > mpCLModel->getAnmMtx(0)[1][3]) {
+        if (catch_target->current.pos.y > mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e)[1][3]) {
             bVar1 = false;
         } else {
             bVar1 = true;

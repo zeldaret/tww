@@ -171,7 +171,7 @@ void daPy_lk_c::setLightSaver() {
     {
         simpleAnmPlay(mpSwordBtk);
         if ((m3454.getEmitter() == NULL) && (checkChanceMode() || checkNoResetFlg1(daPyFlg1_SOUP_POWER_UP))) {
-            pJVar7 = m3454.makeEmitter(dPa_name::ID_AK_JN_LIGHTSAVER00, mpSwordModel1->getAnmMtx(2), &current.pos, NULL);
+            pJVar7 = m3454.makeEmitter(dPa_name::ID_AK_JN_LIGHTSAVER00, mpSwordModel1->getAnmMtx(YMSLI00_JNT_SWMSA_JNT_e), &current.pos, NULL);
             if (pJVar7 != 0) {
                 if (checkMasterSwordEquip()) {
                     pJVar7->setGlobalDynamicsScale(d_scale);
@@ -212,7 +212,7 @@ void daPy_lk_c::setLightSaver() {
                 dPa_name::ID_AK_JN_LIGHTSAVER01, &current.pos, NULL, NULL, 0xFF, NULL, -1, pbVar9, pbVar8, NULL
             );
             if (pJVar7 != 0) {
-                pJVar7->setGlobalRTMatrix(mpEquipItemModel->getAnmMtx(2));
+                pJVar7->setGlobalRTMatrix(mpEquipItemModel->getAnmMtx(SWMS_JNT_SWMSA_JNT_e));
                 if (checkMasterSwordEquip()) {
                     pJVar7->setGlobalDynamicsScale(d_scale);
                     pJVar7->setGlobalParticleScale(p_scale);
@@ -1405,17 +1405,17 @@ BOOL daPy_lk_c::procCutTurn_init(BOOL param_0) {
     offResetFlg0(daPyRFlg0_NOT_ATTACKING);
     mAtCyl.SetR(m35A4 * 0.5f);
     if (!checkNoResetFlg0(daPyFlg0_UNK80000000)) {
-        m32E4.makeEmitter(dPa_name::ID_AK_JN_ROUNDATTACKTOE, mpCLModel->getAnmMtx(0x28), &current.pos, NULL);
+        m32E4.makeEmitter(dPa_name::ID_AK_JN_ROUNDATTACKTOE, mpCLModel->getAnmMtx(CL_JNT_RTOE_JNT_e), &current.pos, NULL);
         if (mCurrAttributeCode == dBgS_Attr_GRASS_e) {
             GXColor color = {tevStr.mColorC0.r, tevStr.mColorC0.g, tevStr.mColorC0.b, tevStr.mColorC0.a};
             m32F0.makeEmitterColor(
-                dPa_name::ID_AK_JN_ROUNDATTACKKUSA, mpCLModel->getAnmMtx(0x23), &current.pos, &color, &tevStr.mColorK0
+                dPa_name::ID_AK_JN_ROUNDATTACKKUSA, mpCLModel->getAnmMtx(CL_JNT_LTOE_JNT_e), &current.pos, &color, &tevStr.mColorK0
             );
             m35A0 = 18.0f;
         } else if (mCurrAttributeCode == dBgS_Attr_WATER_e) {
             GXColor amb, dif;
             dKy_get_seacolor(&amb, &dif);
-            m32F0.makeEmitterColor(dPa_name::ID_AK_JN_ROUNDATTACKSHIBUKI, mpCLModel->getAnmMtx(0x23), &current.pos, &amb, NULL);
+            m32F0.makeEmitterColor(dPa_name::ID_AK_JN_ROUNDATTACKSHIBUKI, mpCLModel->getAnmMtx(CL_JNT_LTOE_JNT_e), &current.pos, &amb, NULL);
             m35A0 = 17.0f;
         } else {
             dComIfGp_particle_setToonP1(
@@ -1636,7 +1636,7 @@ BOOL daPy_lk_c::procCutRollEnd_init() {
     static JGeometry::TVec3<f32> emitter_trans(0.0f, 55.0f, 0.0f);
     static JGeometry::TVec3<f32> particle_scale(0.76f, 0.76f, 0.76f);
     JPABaseEmitter* emitter =
-        m33A8.makeEmitter(dPa_name::ID_IT_JN_PIYOPIYO00, mpCLModel->getAnmMtx(15), &current.pos, NULL);
+        m33A8.makeEmitter(dPa_name::ID_IT_JN_PIYOPIYO00, mpCLModel->getAnmMtx(CL_JNT_HEAD_JNT_e), &current.pos, NULL);
     if (emitter != NULL) {
         emitter->becomeImmortalEmitter();
         emitter->setVolumeSize(5);
@@ -1710,8 +1710,8 @@ BOOL daPy_lk_c::procCutTurnMove_init() {
         dComIfGp_getMiniGameType() != 6)
     {
         pcVar4 = checkNormalSwordEquip() ? NULL : (cXyz*)&eff_scale;
-        m32E4.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER00, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
-        m32F0.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER01, mpCLModel->getAnmMtx(8), &current.pos, pcVar4);
+        m32E4.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER00, mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e), &current.pos, pcVar4);
+        m32F0.makeEmitter(dPa_name::ID_AK_JN_CHARGEPOWER01, mpCLModel->getAnmMtx(CL_JNT_CL_LHANDA_e), &current.pos, pcVar4);
         mProcVar0.m34D0 = 47;
     } else {
         mProcVar0.m34D0 = -1;

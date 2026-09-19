@@ -10,7 +10,6 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "d/d_path.h"
 #include "d/d_lib.h"
-#include "m_Do/m_Do_hostIO.h"
 
 class daObj_Ikada_c : public fopAc_ac_c {
 public:
@@ -184,55 +183,5 @@ public:
     /* 0x1308 */ LIGHT_INFLUENCE mPLight;
     /* 0x1328 */ cXyz mInitPos;
 };
-
-class daObj_Ikada_HIO_c : public mDoHIO_entry_c {
-public:
-    daObj_Ikada_HIO_c();
-    virtual ~daObj_Ikada_HIO_c() {}
-
-    void genMessage(JORMContext* ctx) {}
-
-public:
-    /* 0x04 */ u8 mbDebugDraw;
-    /* 0x05 */ u8 m05;
-    /* 0x06 */ u8 m06;
-    /* 0x07 */ u8 mbNoRotAnim;
-    /* 0x08 */ u8 m08;
-    /* 0x09 */ u8 m09[0x0C - 0x09];
-    /* 0x0C */ Vec mFlagOffset;
-    /* 0x18 */ f32 mFlagScale;
-    /* 0x1C */ s16 m1C;
-    /* 0x1E */ s16 m1E;
-    /* 0x20 */ f32 m20;
-    /* 0x24 */ s16 m24;
-    /* 0x26 */ u8 m26[0x28 - 0x26];
-    /* 0x28 */ f32 m28;
-    /* 0x2C */ f32 mShipOffsY_Attention;
-    /* 0x30 */ f32 mShipOffsY_Eye;
-    /* 0x34 */ f32 mTerryWaveOffsZ;
-    /* 0x38 */ f32 mTerryWaveOffsY;
-    /* 0x3C */ f32 mTerryTrackOffsZ;
-    /* 0x40 */ f32 mSvWaveOffsX;
-    /* 0x44 */ f32 mSvTrackOffsX;
-    /* 0x48 */ f32 mSvOffsX[4];
-    /* 0x58 */ f32 mTrackIndTransY;
-    /* 0x5C */ f32 mTrackIndScaleY;
-    /* 0x60 */ f32 mSplashScaleMax;
-    /* 0x64 */ f32 mSplashMaxScaleTimer;
-    /* 0x68 */ f32 mWaveVelFade;
-    /* 0x6C */ f32 mTrackVel;
-    /* 0x70 */ f32 mWaveVelSpeed;
-    /* 0x74 */ f32 mWaveVelOffs;
-    /* 0x78 */ f32 mWaveMaxVelocity;
-    /* 0x7C */ Vec mWaveCollapsePos[2];
-    /* 0x94 */ s16 m94;
-    /* 0x96 */ s16 mPlayerStopDistance;
-    /* 0x98 */ s16 m98;
-    /* 0x9A */ s16 m9A;
-    /* 0x9C */ f32 m9C;
-    /* 0xA0 */ f32 mVelocityTargetTerry1;
-    /* 0xA4 */ f32 mVelocityTargetTerry3;
-    /* 0xA8 */ f32 mA8;
-}; // size = 0xAC
 
 #endif /* D_A_OBJ_IKADA_H */

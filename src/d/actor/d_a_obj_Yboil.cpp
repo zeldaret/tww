@@ -48,7 +48,7 @@ BOOL daObjYboil_c::CreateHeap() {
 void daObjYboil_c::pos_reset(int i) {
     mMdlScale[i].setall(mScaleMin + cM_rndF(mScaleMax - mScaleMin));
     f32 dist = 1300.0f + cM_rndF(1400.0f);
-    s16 angle = cM_rndF(65536.0f);
+    s16 angle = cM_rndF(0x10000);
     mMdlPos[i].x = current.pos.x + dist * cM_ssin(angle);
     mMdlPos[i].y = current.pos.y;
     mMdlPos[i].z = current.pos.z + dist * cM_scos(angle);
@@ -175,7 +175,7 @@ bool daObjYboil_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     for (s32 i = 0; i < 50; i++) {
         g_env_light.setLightTevColorType(mModel[i], &tevStr);
-        set_sea_material(mModel[i]->getModelData()->getJointNodePointer(0)->getMesh());
+        set_sea_material(mModel[i]->getModelData()->getJointNodePointer(YBOIL00_JNT_BOIL_e)->getMesh());
         mBckAnm[i].entry(mModel[i]->getModelData());
         mBtkAnm[i].entry(mModel[i]->getModelData());
         mBrkAnm[i].entry(mModel[i]->getModelData());
@@ -192,6 +192,7 @@ static BOOL daObjYboil_Execute(void* i_this) {
 
 /* 00000DF4-00000DFC       .text daObjYboil_IsDelete__FPv */
 static BOOL daObjYboil_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

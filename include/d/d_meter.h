@@ -10,7 +10,7 @@ class J2DPane;
 class JPABaseEmitter;
 class fopAc_ac_c;
 struct fopMsgM_pane_class;
-class msg_class;
+struct msg_class;
 class sub_meter_class;
 
 class dMeter_HIO_c : public JORReflexible {
@@ -31,8 +31,8 @@ public:
     /* 0x01C */ f32 field_0x1c;
     /* 0x020 */ f32 field_0x20;
     /* 0x024 */ f32 field_0x24;
-    /* 0x028 */ f32 field_0x28;
-    /* 0x02C */ u8 field_0x2c;
+    /* 0x028 */ f32 mScopeWipeMaxScale;
+    /* 0x02C */ u8 mScopeWipeAlpha;
     /* 0x02D */ u8 field_0x2d;
     /* 0x02E */ s16 field_0x2e;
     /* 0x030 */ s16 field_0x30;
@@ -386,42 +386,15 @@ public:
     void genMessage(JORMContext* ctx);
 
     /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 field_0x5;
-    /* 0x06 */ u8 field_0x6;
-    /* 0x07 */ u8 field_0x7;
-    /* 0x08 */ u8 field_0x8;
-    /* 0x09 */ u8 field_0x9;
-    /* 0x0A */ u8 field_0xa;
-    /* 0x0B */ u8 field_0xb;
-    /* 0x0C */ u8 field_0xc;
-    /* 0x0D */ u8 field_0xd;
-    /* 0x0E */ u8 field_0xe;
-    /* 0x0F */ u8 field_0xf;
-    /* 0x10 */ u8 field_0x10;
-    /* 0x11 */ u8 field_0x11;
-    /* 0x12 */ u8 field_0x12;
-    /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ u8 field_0x14;
-    /* 0x15 */ u8 field_0x15;
-    /* 0x16 */ u8 field_0x16;
-    /* 0x17 */ u8 field_0x17;
-    /* 0x18 */ u8 field_0x18;
-    /* 0x19 */ u8 field_0x19;
-    /* 0x1A */ u8 field_0x1a;
-    /* 0x1B */ u8 field_0x1b;
-    /* 0x1C */ u8 field_0x1c;
-    /* 0x1D */ u8 field_0x1d;
-    /* 0x1E */ u8 field_0x1e;
-    /* 0x1F */ u8 field_0x1f;
-    /* 0x20 */ u8 field_0x20;
-    /* 0x21 */ u8 field_0x21;
-    /* 0x22 */ u8 field_0x22;
-    /* 0x23 */ u8 field_0x23;
-    /* 0x24 */ u8 field_0x24;
-    /* 0x25 */ u8 field_0x25;
-    /* 0x26 */ u8 field_0x26;
-    /* 0x27 */ u8 field_0x27;
-    /* 0x28 */ u8 field_0x28;
+    /* 0x05 */ GXColor field_0x5;
+    /* 0x09 */ GXColor field_0x9;
+    /* 0x0D */ GXColor field_0xd;
+    /* 0x11 */ GXColor field_0x11;
+    /* 0x15 */ GXColor field_0x15;
+    /* 0x19 */ GXColor field_0x19;
+    /* 0x1D */ GXColor field_0x1d;
+    /* 0x21 */ GXColor field_0x21;
+    /* 0x25 */ GXColor field_0x25;
     /* 0x29 */ u8 field_0x29;
     /* 0x2A */ u8 field_0x2a;
     /* 0x2B */ u8 field_0x2b;
@@ -758,7 +731,9 @@ public:
     /* 0x3025 */ s8 field_0x3025;
     /* 0x3026 */ u8 field_0x3026;
     /* 0x3027 */ u8 field_0x3027;
+#if VERSION > VERSION_DEMO
     /* 0x3028 */ u8 field_0x3028;
+#endif
     /* 0x3029 */ u8 field_0x3029;
     /* 0x302A */ u8 field_0x302a;
     /* 0x302B */ u8 field_0x302b[0x302C - 0x302B];
@@ -875,5 +850,9 @@ void dMeter_swimLightAnime(sub_meter_class* i_Meter, s16 param_2);
 
 void dMeter_arrowErase(fopMsgM_pane_class* param_1);
 void dMeter_screenDataTimeSet(sub_meter_class* i_Meter);
+
+bool dMeter_isAuctionFlag();
+void dMeter_onAuctionFlag();
+void dMeter_offAuctionFlag();
 
 #endif /* D_METER_H */

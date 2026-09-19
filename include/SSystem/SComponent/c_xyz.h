@@ -46,33 +46,37 @@ struct cXyz : Vec {
         y = vec.y;
         z = vec.z;
     }
+    // void operator=(const cXyz&);
     cXyz operator+(const Vec&) const;
     cXyz operator-(const Vec&) const;
     cXyz operator*(f32) const;
     cXyz operator*(const Vec&) const;
     cXyz operator/(f32) const;
-    // void operator=(const cXyz&);
 
-    void operator+=(f32 f) {
-        x += f;
-        y += f;
-        z += f;
-    }
-    void operator-=(f32 f) {
-        x -= f;
-        y -= f;
-        z -= f;
-    }
-    void operator-=(const Vec& other) { VECSubtract(this, &other, this); }
-    cXyz* operator+=(const Vec& other) {
-        VECAdd(this, &other, this);
+    cXyz* operator*=(f32 scale) {
+        VECScale(this, this, scale);
         return this;
     }
-    void operator*=(f32 scale) { VECScale(this, this, scale); }
     cXyz* operator/=(f32 scale) {
         VECScale(this, this, 1.0f / std::sqrtf(scale));
         return this;
     }
+
+    cXyz* operator+=(const Vec& other) {
+        VECAdd(this, &other, this);
+        return this;
+    }
+    cXyz* operator-=(const Vec& other) {
+        VECSubtract(this, &other, this);
+        return this;
+    }
+    cXyz* operator*=(const Vec& other) {
+        x *= other.x;
+        y *= other.y;
+        z *= other.z;
+        return this;
+    }
+
     cXyz getCrossProduct(const Vec&) const;
     cXyz outprod(const Vec&) const;
     cXyz norm() const;
@@ -126,10 +130,7 @@ struct cXyz : Vec {
     f32 inprod(const Vec& other) const { return getDotProduct(other); }
     f32 inprodXZ(const Vec& other) const { return x * other.x + z * other.z; }
 
-    // TODO
-    // void operator*=(const Vec&) {}
-    // void operator/=(f32) {}
-    // void operator=(const cXyz&) {}
+    // debug-only inline?
     // void print(const char*) {}
 };
 

@@ -440,14 +440,14 @@ void operator delete[](void* ptr) {
 
 static void dummy3() {
 #if VERSION > VERSION_JPN
-    OSReport("\x1B[41;37m:::addr %08x size %08x: Freeされた領域が浸食されている (%08x=%02x)\n\x1B[m");
+    DEAD_STRING("\x1B[41;37m:::addr %08x size %08x: Freeされた領域が浸食されている (%08x=%02x)\n\x1B[m");
 #endif
-    OSReport("%s");
-    OSReport("heap unchanged");
-    OSReport("**** heap changed ****");
-    OSReport("location   : [%s:%d]");
-    OSReport("**** heap changed : old ****");
-    OSReport("**** heap changed : new ****");
+    DEAD_STRING("%s");
+    DEAD_STRING("heap unchanged");
+    DEAD_STRING("**** heap changed ****");
+    DEAD_STRING("location   : [%s:%d]");
+    DEAD_STRING("**** heap changed : old ****");
+    DEAD_STRING("**** heap changed : new ****");
 }
 
 /* 802B0D70-802B0E14       .text state_register__7JKRHeapCFPQ27JKRHeap6TStateUl */
@@ -463,10 +463,10 @@ bool JKRHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2
 }
 
 static void dummy4() {
-    OSReport("heap       : %p / %p");
-    OSReport("check-code : 0x%08x / 0x%08x");
-    OSReport("id         : 0x%08x / 0x%08x");
-    OSReport("used size  : %10u / %10u");
+    DEAD_STRING("heap       : %p / %p");
+    DEAD_STRING("check-code : 0x%08x / 0x%08x");
+    DEAD_STRING("id         : 0x%08x / 0x%08x");
+    DEAD_STRING("used size  : %10u / %10u");
 }
 
 /* 802B0E9C-802B0F24       .text state_dump__7JKRHeapCFRCQ27JKRHeap6TState */
@@ -488,6 +488,6 @@ u8 JKRHeap::do_getCurrentGroupId() {
 
 #if VERSION == VERSION_JPN
 static void dummy5() {
-    OSReport("\x1B[41;37m:::addr %08x size %08x: Freeされた領域が浸食されている (%08x=%02x)\n\x1B[m");
+    DEAD_STRING("\x1B[41;37m:::addr %08x size %08x: Freeされた領域が浸食されている (%08x=%02x)\n\x1B[m");
 }
 #endif

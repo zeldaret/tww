@@ -127,22 +127,6 @@ inline MtxP fopAcM_GetMtx(fopAc_ac_c* pActor) {
     return pActor->cullMtx;
 }
 
-inline u32 fopAcM_CheckStatus(fopAc_ac_c* pActor, u32 status) {
-    return pActor->actor_status & status;
-}
-
-inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
-    return pActor->actor_status & fopAcStts_CARRY_e;
-}
-
-inline void fopAcM_ClearStatusMap(fopAc_ac_c* pActor) {
-    pActor->actor_status &= ~0x3F;
-}
-
-inline bool fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
-    return fopAcM_CheckStatus(pActor, fopAcStts_HOOK_CARRY_e);
-}
-
 inline u32 fopAcM_GetParam(void* pActor) {
     return fpcM_GetParam(pActor);
 }
@@ -179,12 +163,24 @@ inline void fopAcM_SetGroup(fopAc_ac_c* pActor, u8 group) {
     pActor->group = group;
 }
 
+inline u32 fopAcM_CheckStatus(fopAc_ac_c* pActor, u32 status) {
+    return pActor->actor_status & status;
+}
+
 inline void fopAcM_OnStatus(fopAc_ac_c* pActor, u32 flag) {
     pActor->actor_status |= flag;
 }
 
 inline void fopAcM_OffStatus(fopAc_ac_c* pActor, u32 flag) {
     pActor->actor_status &= ~flag;
+}
+
+inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
+    return pActor->actor_status & fopAcStts_CARRY_e;
+}
+
+inline bool fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
+    return fopAcM_CheckStatus(pActor, fopAcStts_HOOK_CARRY_e);
 }
 
 inline BOOL fopAcM_CheckStatusMap(fopAc_ac_c* pActor, u32) {
@@ -194,6 +190,10 @@ inline BOOL fopAcM_CheckStatusMap(fopAc_ac_c* pActor, u32) {
 
 inline void fopAcM_SetStatusMap(fopAc_ac_c* pActor, u32 flag) {
     pActor->actor_status = (pActor->actor_status & ~0x3F) | fopAcStts_SHOWMAP_e | flag;
+}
+
+inline void fopAcM_ClearStatusMap(fopAc_ac_c* pActor) {
+    pActor->actor_status &= ~0x3F;
 }
 
 inline fopAc_ac_c* fopAcM_Search(fopAcIt_JudgeFunc func, void* param) {

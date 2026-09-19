@@ -66,11 +66,11 @@ bool Act_c::create_heap() {
 
     m298 = mDoExt_J3DModel__create(modelData, 0x80000, 0x31000202);
     if (m298 != NULL) {
-        modelData->getJointNodePointer(1)->setCallBack(jnodeCB_moon);
-        modelData->getJointNodePointer(2)->setCallBack(jnodeCB_moon);
-        modelData->getJointNodePointer(3)->setCallBack(jnodeCB_moon);
-        modelData->getJointNodePointer(4)->setCallBack(jnodeCB_moon);
-        modelData->getJointNodePointer(5)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_AFTER_FACE_e)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_AFTER_FIRE1_e)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_AFTER_FIRE2_e)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_BEFORE_FACE_e)->setCallBack(jnodeCB_moon);
+        modelData->getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->setCallBack(jnodeCB_moon);
         m298->setUserArea((u32)this);
     }
 
@@ -455,8 +455,8 @@ bool Act_c::_draw() {
 
     pJVar1 = 0xff - pJVar1;
 
-    setMaterial(pJVar5->getJointNodePointer(4)->getMesh(), pJVar1);
-    setMaterial_Before_mirror(pJVar5->getJointTree().getJointNodePointer(5)->getMesh(), pJVar1);
+    setMaterial(pJVar5->getJointNodePointer(MSUSW_JNT_BEFORE_FACE_e)->getMesh(), pJVar1);
+    setMaterial_Before_mirror(pJVar5->getJointTree().getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->getMesh(), pJVar1);
     mDoExt_modelUpdateDL(m298);
 
     dComIfGd_setList();

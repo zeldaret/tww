@@ -6,6 +6,67 @@
 #include "d/d_cc_s.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_hostIO.h"
+
+#if DEBUG
+class dCcS_HIO : public JORReflexible {
+public:
+    enum flags_e {
+        FLAG_CAM_COL_DISP_e   = 0x1, // TP only?
+        FLAG_AT_ON_e          = 0x2,
+        FLAG_TG_ON_e          = 0x4,
+        FLAG_CO_ON_e          = 0x8,
+        FLAG_DRAW_CLEAR_OFF_e = 0x10,
+        FLAG_COUNTER_e        = 0x20,
+        FLAG_MOVE_OFF_e       = 0x40,
+        FLAG_MASS_OFF_e       = 0x80,
+        FLAG_MOVE_TIMER_e     = 0x100,
+        FLAG_MASS_TIMER_e     = 0x200,
+        FLAG_MASS_COUNTER_e   = 0x400,
+        FLAG_ALL_MASS_TIMER_e = 0x800,
+    };
+
+    dCcS_HIO() {
+        m_flags = 0;
+        m_shield_range = 0x4000;
+    }
+
+    virtual ~dCcS_HIO();
+
+    void genMessage(JORMContext*);
+
+    BOOL ChkMoveTimer() { return m_flags & FLAG_MOVE_TIMER_e; }
+    BOOL ChkMoveOff() { return m_flags & FLAG_MOVE_OFF_e; }
+    BOOL ChkAllMassTimer() { return m_flags & FLAG_ALL_MASS_TIMER_e; }
+    BOOL ChkDrawClearOff() { return m_flags & FLAG_DRAW_CLEAR_OFF_e; }
+    BOOL ChkCounter() { return m_flags & FLAG_COUNTER_e; }
+    BOOL CheckCoOn() { return m_flags & FLAG_CO_ON_e; }
+    BOOL CheckTgOn() { return m_flags & FLAG_TG_ON_e; }
+    BOOL CheckAtOn() { return m_flags & FLAG_AT_ON_e; }
+    BOOL ChkMassCounter() { return m_flags & FLAG_MASS_COUNTER_e; }
+    BOOL ChkMassOff() { return m_flags & FLAG_MASS_OFF_e; }
+    BOOL ChkMassTimer() { return m_flags & FLAG_MASS_TIMER_e; }
+
+    s16 GetShFrontRange() { return m_shield_range; }
+
+    /* 0x4 */ s8 id;
+    /* 0x6 */ u16 m_flags;
+    /* 0x8 */ s16 m_shield_range;
+};
+
+dCcS_HIO::~dCcS_HIO() {}
+
+void dCcS_HIO::genMessage(JORMContext* mctx) {
+    UNUSED(mctx);
+}
+
+static OSStopwatch s_move_timer;
+static OSStopwatch s_mass_timer;
+
+static dCcS_HIO s_Hio;
+
+int g_mass_counter;
+#endif
 
 /* 800AD5B0-800AD5E4       .text Ct__4dCcSFv */
 void dCcS::Ct() {
@@ -460,8 +521,71 @@ void dCcS::Move() {
 
 /* 800AE83C-800AE878       .text Draw__4dCcSFv */
 void dCcS::Draw() {
+    #if DEBUG
+    if (s_Hio.ChkMassCounter()) {
+        OSReport("Mass Counter %d\n", g_mass_counter);
+        g_mass_counter = 0;
+    }
+
+    if (s_Hio.CheckAtOn()) {
+        for (int i = 0; i < mObjAtDrawCount; i++) {
+            if (mpObjAt[i] != NULL && mpObjAt[i]->ChkAtSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjAt[i]->GetGObjInf();
+                if (gobj->ChkAtHit()) {
+                    GXColor color = {0xFF, 0, 0, 0xB4};
+                    mpObjAt[i]->Draw(color);
+                } else {
+                    GXColor color = {0xFF, 0, 0, 0x50};
+                    mpObjAt[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    if (s_Hio.CheckTgOn()) {
+        for (int i = 0; i < mObjTgDrawCount; i++) {
+            if (mpObjTg[i] != NULL && mpObjTg[i]->ChkTgSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjTg[i]->GetGObjInf();
+                if (gobj->ChkTgHit()) {
+                    GXColor color = {0, 0xFF, 0, 0xB4};
+                    mpObjTg[i]->Draw(color);
+                } else {
+                    GXColor color = {0, 0xFF, 0, 0x50};
+                    mpObjTg[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    if (s_Hio.CheckCoOn()) {
+        for (int i = 0; i < mObjCoDrawCount; i++) {
+            if (mpObjCo[i] != NULL && mpObjCo[i]->ChkCoSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjCo[i]->GetGObjInf();
+                if (gobj->ChkCoHit()) {
+                    GXColor color = {0xFF, 0xFF, 0xFF, 0xB4};
+                    mpObjCo[i]->Draw(color);
+                } else {
+                    GXColor color = {0xFF, 0xFF, 0xFF, 0x50};
+                    mpObjCo[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    if (s_Hio.ChkCounter()) {
+        OSReport("At:%d,Tg:%d,Co:%d\n", mObjAtDrawCount, mObjTgDrawCount, mObjCoDrawCount);
+    }
+    #endif
+
     DrawAfter();
-    DrawClear();
+    
+    #if DEBUG
+    if (!s_Hio.ChkDrawClearOff())
+    #endif
+    {
+        DrawClear();
+    }
+    
     mMass_Mng.Clear();
 }
 

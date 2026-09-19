@@ -110,7 +110,7 @@ BOOL daObjJump::Act_c::Create() {
     }
 #if VERSION > VERSION_DEMO
     if (mType == Type_SPRING_ON_BOX_e) {
-        actor_status &= ~0x3F;
+        fopAcM_ClearStatusMap(this);
         gbaName = 0;
     }
 #endif

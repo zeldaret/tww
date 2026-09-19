@@ -51,26 +51,26 @@ struct J3DTevStage {
     }
 
     void setTevColorOp(u8 param_1, u8 param_2, u8 param_3, u8 param_4, u8 param_5) {
-        mTevColorOp = mTevColorOp & ~(0x01 << 2) | param_1 << 2;
+        mTevColorOp = (mTevColorOp & ~(0x01 << 2)) | param_1 << 2;
         if (param_1 <= 1) {
-            mTevColorOp = mTevColorOp & ~(0x03 << 4) | param_3 << 4;
-            mTevColorOp = mTevColorOp & ~0x03 | param_2;
+            mTevColorOp = (mTevColorOp & ~(0x03 << 4)) | param_3 << 4;
+            mTevColorOp = (mTevColorOp & ~0x03) | param_2;
         } else {
-            mTevColorOp = mTevColorOp & ~(0x03 << 4) | (param_1 >> 1 & 3) << 4;
-            mTevColorOp = mTevColorOp & ~0x03 | 3;
+            mTevColorOp = (mTevColorOp & ~(0x03 << 4)) | (param_1 >> 1 & 3) << 4;
+            mTevColorOp = (mTevColorOp & ~0x03) | 3;
         }
-        mTevColorOp = mTevColorOp & ~(0x01 << 3) | param_4 << 3;
-        mTevColorOp = mTevColorOp & ~(0x03 << 6) | param_5 << 6;
+        mTevColorOp = (mTevColorOp & ~(0x01 << 3)) | param_4 << 3;
+        mTevColorOp = (mTevColorOp & ~(0x03 << 6)) | param_5 << 6;
     }
     void setTevColorAB(u8 a, u8 b) { mTevColorAB = a << 4 | b; }
     void setTevColorCD(u8 c, u8 d) { mTevColorCD = c << 4 | d; }
-    void setAlphaA(u8 a) { mTevAlphaAB = mTevAlphaAB & ~(0x07 << 5) | a << 5; }
-    void setAlphaB(u8 b) { mTevAlphaAB = mTevAlphaAB & ~(0x07 << 2) | b << 2; }
+    void setAlphaA(u8 a) { mTevAlphaAB = (mTevAlphaAB & ~(0x07 << 5)) | a << 5; }
+    void setAlphaB(u8 b) { mTevAlphaAB = (mTevAlphaAB & ~(0x07 << 2)) | b << 2; }
     void setAlphaC(u8 c) {
-        mTevAlphaAB = mTevAlphaAB & ~0x03 | c >> 1;
-        mTevSwapModeInfo = mTevSwapModeInfo & ~(0x01 << 7) | c << 7;
+        mTevAlphaAB = (mTevAlphaAB & ~0x03) | c >> 1;
+        mTevSwapModeInfo = (mTevSwapModeInfo & ~(0x01 << 7)) | c << 7;
     }
-    void setAlphaD(u8 d) { mTevSwapModeInfo = mTevSwapModeInfo & ~(0x07 << 4) | d << 4; }
+    void setAlphaD(u8 d) { mTevSwapModeInfo = (mTevSwapModeInfo & ~(0x07 << 4)) | d << 4; }
     void setAlphaABCD(u8 a, u8 b, u8 c, u8 d) {
         setAlphaA(a);
         setAlphaB(b);
@@ -78,16 +78,16 @@ struct J3DTevStage {
         setAlphaD(d);
     }
     void setTevAlphaOp(u8 param_1, u8 param_2, u8 param_3, u8 param_4, u8 param_5) {
-        mTevAlphaOp = mTevAlphaOp & ~(0x01 << 2) | param_1 << 2;
+        mTevAlphaOp = (mTevAlphaOp & ~(0x01 << 2)) | param_1 << 2;
         if (param_1 <= 1) {
-            mTevAlphaOp = mTevAlphaOp & ~0x03 | param_2;
-            mTevAlphaOp = mTevAlphaOp & ~(0x03 << 4) | param_3 << 4;
+            mTevAlphaOp = (mTevAlphaOp & ~0x03) | param_2;
+            mTevAlphaOp = (mTevAlphaOp & ~(0x03 << 4)) | param_3 << 4;
         } else {
-            mTevAlphaOp = mTevAlphaOp & ~(0x03 << 4) | (param_1 >> 1 & 3) << 4;
-            mTevAlphaOp = mTevAlphaOp & ~0x03 | 3;
+            mTevAlphaOp = (mTevAlphaOp & ~(0x03 << 4)) | (param_1 >> 1 & 3) << 4;
+            mTevAlphaOp = (mTevAlphaOp & ~0x03) | 3;
         }
-        mTevAlphaOp = mTevAlphaOp & ~(0x01 << 3) | param_4 << 3;
-        mTevAlphaOp = mTevAlphaOp & ~(0x03 << 6) | param_5 << 6;
+        mTevAlphaOp = (mTevAlphaOp & ~(0x01 << 3)) | param_4 << 3;
+        mTevAlphaOp = (mTevAlphaOp & ~(0x03 << 6)) | param_5 << 6;
     }
     void setTevStageInfo(const J3DTevStageInfo& info) {
         setTevColorOp(info.field_0x5, info.field_0x6, info.field_0x7, info.field_0x8, info.field_0x9);
@@ -97,11 +97,16 @@ struct J3DTevStage {
         setTevAlphaOp(info.field_0xe, info.field_0xf, info.field_0x10, info.field_0x11, info.field_0x12);
     }
 
-    void setTexSel(u8 param_0) { mTevSwapModeInfo = mTevSwapModeInfo & ~0x0C | param_0 << 2; }
-    void setRasSel(u8 param_0) { mTevSwapModeInfo = mTevSwapModeInfo & ~0x03 | param_0; }
+    void setTexSel(u8 param_0) { mTevSwapModeInfo = (mTevSwapModeInfo & ~0x0C) | param_0 << 2; }
+    void setRasSel(u8 param_0) { mTevSwapModeInfo = (mTevSwapModeInfo & ~0x03) | param_0; }
     void setTevSwapModeInfo(const J3DTevSwapModeInfo& info) {
         setTexSel(info.mTexSel);
         setRasSel(info.mRasSel);
+    }
+
+    void setStageNo(u32 i) {
+        mTevColorReg = GX_BP_REG_TEVCOLORCOMBINER0 + i * 2;
+        mTevAlphaReg = GX_BP_REG_TEVALPHACOMBINER0 + i * 2;
     }
 
     void load(u32) const {
@@ -109,6 +114,31 @@ struct J3DTevStage {
         J3DGDWriteBPCmd(*(u32*)&mTevAlphaReg);
     }
 
+    void getABias() const {}
+    void getAClamp() const {}
+    void getAOp() const {}
+    void getAReg() const {}
+    void getAScale() const {}
+    void getAlphaA() const {}
+    void getAlphaB() const {}
+    void getAlphaC() const {}
+    void getAlphaD() const {}
+    void getCBias() const {}
+    void getCClamp() const {}
+    void getCOp() const {}
+    void getCReg() const {}
+    void getCScale() const {}
+    void getColorA() const {}
+    void getColorB() const {}
+    void getColorC() const {}
+    void getColorD() const {}
+    void getRasSel() const {}
+    void getTexSel() const {}
+
+    // void operator=(J3DTevStage&) {}
+    // void operator==(J3DTevStage&) {}
+
+private:
     /* 0x0 */ u8 mTevColorReg;
     /* 0x1 */ u8 mTevColorOp;
     /* 0x2 */ u8 mTevColorAB;
@@ -130,15 +160,15 @@ struct J3DIndTevStage {
         setIndTevStageInfo(info);
     }
 
-    void setIndStage(u8 stage) { mInfo = mInfo & ~0x03 | stage; }
-    void setIndFormat(u8 format) { mInfo = mInfo & ~0x0C | format << 2; }
-    void setBiasSel(u8 sel) { mInfo = mInfo & ~0x70 | sel << 4; }
-    void setAlphaSel(u8 sel) { mInfo = mInfo & ~0x0180 | sel << 7; }
-    void setMtxSel(u8 sel) { mInfo = mInfo & ~0x1E00 | sel << 9; }
-    void setWrapS(u8 wrap) { mInfo = mInfo & ~0xE000 | wrap << 13; }
-    void setWrapT(u8 wrap) { mInfo = mInfo & ~0x070000 | wrap << 16; }
-    void setLod(u8 lod) { mInfo = mInfo & ~0x080000 | lod << 19; }
-    void setPrev(u8 prev) { mInfo = mInfo & ~0x100000 | prev << 20; }
+    void setIndStage(u8 stage) { mInfo = (mInfo & ~0x03) | stage; }
+    void setIndFormat(u8 format) { mInfo = (mInfo & ~0x0C) | format << 2; }
+    void setBiasSel(u8 sel) { mInfo = (mInfo & ~0x70) | sel << 4; }
+    void setAlphaSel(u8 sel) { mInfo = (mInfo & ~0x0180) | sel << 7; }
+    void setMtxSel(u8 sel) { mInfo = (mInfo & ~0x1E00) | sel << 9; }
+    void setWrapS(u8 wrap) { mInfo = (mInfo & ~0xE000) | wrap << 13; }
+    void setWrapT(u8 wrap) { mInfo = (mInfo & ~0x070000) | wrap << 16; }
+    void setLod(u8 lod) { mInfo = (mInfo & ~0x080000) | lod << 19; }
+    void setPrev(u8 prev) { mInfo = (mInfo & ~0x100000) | prev << 20; }
 
     void setIndTevStageInfo(const J3DIndTevStageInfo& info) {
         setIndStage(info.mIndStage);
@@ -152,16 +182,40 @@ struct J3DIndTevStage {
         setAlphaSel(info.mAlphaSel);
     }
 
-    void load(u32 param_1) {
+    void load(u32 param_1) const {
         J3DGDWriteBPCmd(mInfo | (param_1 + 16) << 24);
     }
 
+    void getAlphaSel() const {}
+    void getBiasSel() const {}
+    void getIndFormat() const {}
+    void getIndStage() const {}
+    void getLod() const {}
+    void getMtxSel() const {}
+    void getPrev() const {}
+    void getWrapS() const {}
+    void getWrapT() const {}
+
+    J3DIndTevStage& operator=(J3DIndTevStage& other) {
+        mInfo = other.mInfo;
+        return *this;
+    }
+    J3DIndTevStage& operator=(const J3DIndTevStage& other) {
+        mInfo = other.mInfo;
+        return *this;
+    }
+
+private:
     /* 0x0 */ u32 mInfo;
 };
 
 struct J3DTevOrder : public J3DTevOrderInfo {
-    J3DTevOrder() { *(J3DTevOrderInfo*)this = j3dDefaultTevOrderInfoNull; }
-    explicit J3DTevOrder(const J3DTevOrderInfo& info) { *(J3DTevOrderInfo*)this = info; }
+    J3DTevOrder() {
+        J3DTevOrderInfo::operator=(j3dDefaultTevOrderInfoNull);
+    }
+    explicit J3DTevOrder(const J3DTevOrderInfo& info) {
+        J3DTevOrderInfo::operator=(info);
+    }
 
     J3DTevOrderInfo& getTevOrderInfo() { return *this; }
     u8 getTexMap() { return mTexMap; }
@@ -175,11 +229,12 @@ struct J3DTevSwapModeTable {
     J3DTevSwapModeTable() { mIdx = j3dDefaultTevSwapTableID; }
     explicit J3DTevSwapModeTable(const J3DTevSwapModeTableInfo& info) { mIdx = calcTevSwapTableID(info.field_0x0, info.field_0x1, info.field_0x2, info.field_0x3); }
 
-    u8 getR() { return j3dTevSwapTableTable[mIdx * 4]; }
-    u8 getG() { return j3dTevSwapTableTable[mIdx * 4 + 1]; }
-    u8 getB() { return j3dTevSwapTableTable[mIdx * 4 + 2]; }
-    u8 getA() { return j3dTevSwapTableTable[mIdx * 4 + 3]; }
+    u8 getR() const { return j3dTevSwapTableTable[mIdx * 4]; }
+    u8 getG() const { return j3dTevSwapTableTable[mIdx * 4 + 1]; }
+    u8 getB() const { return j3dTevSwapTableTable[mIdx * 4 + 2]; }
+    u8 getA() const { return j3dTevSwapTableTable[mIdx * 4 + 3]; }
 
+private:
     /* 0x0 */ u8 mIdx;
 };  // Size: 0x1
 
@@ -199,8 +254,12 @@ public:
 };  // Size = 0x74
 
 struct J3DNBTScale : public J3DNBTScaleInfo {
-    J3DNBTScale() { *(J3DNBTScaleInfo*)this = j3dDefaultNBTScaleInfo; }
-    explicit J3DNBTScale(const J3DNBTScaleInfo& info) { *(J3DNBTScaleInfo*)this = info; }
+    J3DNBTScale() {
+        J3DNBTScaleInfo::operator=(j3dDefaultNBTScaleInfo);
+    }
+    explicit J3DNBTScale(const J3DNBTScaleInfo& info) {
+        J3DNBTScaleInfo::operator=(info);
+    }
     Vec* getScale() { return &mScale; }
 };
 

@@ -4017,7 +4017,7 @@ TRK_MINNOW_DOLPHIN/ppc/Generic/targimpl.c:
 TRK_MINNOW_DOLPHIN/ppc/Export/targsupp.s: comment:0
 	.text       start:0x80334A20 end:0x80334A40 align:16
 
-TRK_MINNOW_DOLPHIN/ppc/Generic/__exception.c: comment:0
+TRK_MINNOW_DOLPHIN/ppc/Generic/exception.s: comment:0
 	.init       start:0x80003534 end:0x80005468
 
 TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk.c:

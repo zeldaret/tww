@@ -4,6 +4,7 @@
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "SSystem/SComponent/c_phase.h"
+#include "f_op/f_op_actor_mng.h"
 
 class dBgW;
 
@@ -49,6 +50,8 @@ public:
     /* 0x1420 */ u32 mWindTagId;
 };
 
-STATIC_ASSERT(sizeof(daWindMill_c) == 0x1424);
+namespace daWindMill_prm {
+    inline u8 getType(daWindMill_c* i_this) { return fopAcM_GetParam(i_this) & 0xF; }
+};
 
 #endif /* D_A_WINDMILL_H */

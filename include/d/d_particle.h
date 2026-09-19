@@ -335,7 +335,7 @@ public:
 public:
     /* 0x04 */ u8 mAlpha;
     /* 0x05 */ u8 field_0x5;
-    /* 0x06 */ u16 field_0x6;
+    /* 0x06 */ s16 field_0x6;
     /* 0x08 */ cXyz* mPosArray;
     /* 0x0C */ JPABaseEmitter* mpBaseEmitter;
 };  // Size: 0x10

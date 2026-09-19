@@ -29,12 +29,22 @@ public:
 #endif
     void SetC(f32 x, f32 y, f32 z) { mCenter.x = x; mCenter.y = y; mCenter.z = z; }
     void Set(const cM3dGSphS & src) {
+#if VERSION == VERSION_DEMO
+        mCenter = src.mCenter;
+        mRadius = src.mRadius;
+#else
         SetC(src.mCenter);
         SetR(src.mRadius);
+#endif
     }
     void Set(const cXyz& srcCenter, f32 srcRadius) {
+#if VERSION == VERSION_DEMO
+        mCenter = srcCenter;
+        mRadius = srcRadius;
+#else
         SetC(srcCenter);
         SetR(srcRadius);
+#endif
     }
     bool Cross(const cM3dGCps* cps, cXyz* dst) const {
         return cM3d_Cross_CpsSph(*cps, *this, dst);

@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_VTIL_H
 #define D_A_OBJ_VTIL_H
 
+#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 
 class daObjVtil_c : public fopAc_ac_c {
@@ -41,6 +42,8 @@ public:
     void check_circle();
     bool _execute();
     bool _draw();
+
+    static const dCcD_SrcCyl M_co_cyl_data;
 
 public:
     /* Place member variables here */

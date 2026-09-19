@@ -55,9 +55,9 @@ static BOOL core_nodeCallBack(J3DNode* node, int calcTiming) {
         s32 jntNo = joint->getJntNo();
         J3DModel* model = j3dSys.getModel();
         bmd_class* i_this = (bmd_class*)model->getUserArea();
-        if (((i_this != 0) && (jntNo != 0)) && (jntNo != 5)) {
+        if (((i_this != 0) && (jntNo != BKM_COA_JNT_KUBI1_e)) && (jntNo != BKM_COA_JNT_SITAAGO_e)) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            if (jntNo < 7) {
+            if (jntNo < BKM_COA_JNT_TOSAKA1_e) {
                 cMtx_XrotM(*calc_mtx, i_this->m90C[0].x);
                 cMtx_ZrotM(*calc_mtx, i_this->m90C[0].z);
             } else {
@@ -77,7 +77,7 @@ void mk_draw(bmd_class* i_this) {
     if (i_this->m2DC != 0) {
         g_env_light.setLightTevColorType(i_this->mpBodyMorf->getModel(), &actor->tevStr);
         i_this->mpMakarMorf->entryDL();
-        i_this->mpMakarFaceModel->setBaseTRMtx(i_this->mpMakarMorf->getModel()->getAnmMtx(1));
+        i_this->mpMakarFaceModel->setBaseTRMtx(i_this->mpMakarMorf->getModel()->getAnmMtx(CB_JNT_BACKBONE_e));
         g_env_light.setLightTevColorType(i_this->mpMakarFaceModel, &actor->tevStr);
         mDoExt_modelUpdateDL(i_this->mpMakarFaceModel);
     }
@@ -141,7 +141,7 @@ void damage(bmd_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz local_40;
     cXyz local_4c;
-    static s32 jno[] = {0x1A, 0x23, 0x2C, 0x35, 0x3E};
+    static s32 jno[] = {BKM_JNT_HANAA5_e, BKM_JNT_HANAB5_e, BKM_JNT_HANAC5_e, BKM_JNT_HANAD5_e, BKM_JNT_HANAE5_e};
 
 #if VERSION > VERSION_DEMO
     s8 bVar1 = false;
@@ -510,7 +510,7 @@ void start(bmd_class* i_this) {
 /* 00001B48-00001EFC       .text end__FP9bmd_class */
 void end(bmd_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    static s32 jno[] = {0x19, 0x22, 0x2B, 0x34, 0x3D};
+    static s32 jno[] = {BKM_JNT_HANAA4_e, BKM_JNT_HANAB4_e, BKM_JNT_HANAC4_e, BKM_JNT_HANAD4_e, BKM_JNT_HANAE4_e};
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     i_this->m940 = 0;
@@ -737,7 +737,7 @@ void core_move(bmd_class* i_this) {
         if ((int)i_this->mpHeadDeadMorf->getFrame() == 37) {
             pJVar7 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BKMCORESIGH00, &actor->current.pos);
             if (pJVar7 != NULL) {
-                pJVar7->setGlobalRTMatrix(i_this->mpHeadDeadMorf->getModel()->getAnmMtx(5));
+                pJVar7->setGlobalRTMatrix(i_this->mpHeadDeadMorf->getModel()->getAnmMtx(BKM_COA_DEADMODEL_JNT_UWAAGO_e));
             }
             fopAcM_monsSeStart(actor, JA_SE_CV_BKM_DIE, 0);
         }
@@ -789,7 +789,7 @@ void core_move(bmd_class* i_this) {
         pJVar11->setBaseTRMtx(mDoMtx_stack_c::get());
         i_this->mpHeadMorf->play(&actor->eyePos, 0, 0);
         i_this->mpHeadMorf->calc();
-        MTXCopy(pJVar11->getAnmMtx(6), *calc_mtx);
+        MTXCopy(pJVar11->getAnmMtx(BKM_COA_JNT_UWAAGO_e), *calc_mtx);
         local_40.x = 0.0f;
         local_40.y = -20.0f;
         local_40.z = 30.0f;
@@ -812,7 +812,7 @@ void core_move(bmd_class* i_this) {
         pJVar11->setBaseTRMtx(mDoMtx_stack_c::get());
         i_this->mpHeadDeadMorf->play(&actor->eyePos, 0, 0);
         i_this->mpHeadDeadMorf->calc();
-        MTXCopy(pJVar11->getAnmMtx(REG0_S(4) + 1), *calc_mtx);
+        MTXCopy(pJVar11->getAnmMtx(REG0_S(4) + (s16)BKM_COA_DEADMODEL_JNT_KOUTOUBU_e), *calc_mtx);
         local_40.z = 0.0f;
         local_40.y = 0.0f;
         local_40.x = 0.0f;
@@ -987,7 +987,7 @@ void wait(bmd_class* i_this) {
         move1(i_this);
         if (i_this->m308[1] == 0) {
             i_this->m308[1] = (s16)(int)(cM_rndF(200.0f) + 100.0f);
-            i_this->m336 = (s16)(int)cM_rndFX(32768.0f);
+            i_this->m336 = (s16)(int)cM_rndFX(0x8000);
             i_this->m338 = 0.0f;
         }
         cLib_addCalcAngleS2(&actor->shape_angle.y, i_this->m336, 0x20, i_this->m338);
@@ -1128,7 +1128,7 @@ void eff_cont(bmd_class* i_this) {
 }
 
 /* 00003D48-00003E38       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+static void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     bmd_class* i_this = (bmd_class*)i_ac;
 #if VERSION == VERSION_DEMO
     if (i_this->m304 == 3)
@@ -1156,7 +1156,7 @@ void demo_camera(bmd_class* i_this) {
 
     fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     switch (i_this->mB74) {
     case 0:
@@ -1174,9 +1174,9 @@ void demo_camera(bmd_class* i_this) {
 #endif
         }
         i_this->mB74++;
-        camera_class* camera2 = dComIfGp_getCamera(0);
-        i_this->mB7C = camera2->mLookat.mEye;
-        i_this->mB88 = camera2->mLookat.mCenter;
+        camera_process_class* camera2 = dComIfGp_getCamera(0);
+        i_this->mB7C = camera2->view.mLookat.mEye;
+        i_this->mB88 = camera2->view.mLookat.mCenter;
         local_44 = player_actor->current.pos - i_this->mB7C;
         i_this->mB96 = cM_atan2s(local_44.x, local_44.z);
         camera->mCamera.Stop();
@@ -1427,9 +1427,9 @@ void demo_camera(bmd_class* i_this) {
             break;
         }
         i_this->mB74++;
-        camera_class* camera2 = dComIfGp_getCamera(0);
-        i_this->mB7C = camera2->mLookat.mEye;
-        i_this->mB88 = camera2->mLookat.mCenter;
+        camera_process_class* camera2 = dComIfGp_getCamera(0);
+        i_this->mB7C = camera2->view.mLookat.mEye;
+        i_this->mB88 = camera2->view.mLookat.mCenter;
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(2);
         i_this->mB9C = 55.0f;
@@ -2027,7 +2027,7 @@ static cPhs_State daBmd_Create(fopAc_ac_c* a_this) {
             i_this->mB71 = 1;
         }
         dKyw_pntwind_set(&i_this->mWindInfluence);
-        a_this->attention_info.distances[2] = 4;
+        a_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
         daBmd_Execute(i_this);
         res = cPhs_COMPLEATE_e;
     }

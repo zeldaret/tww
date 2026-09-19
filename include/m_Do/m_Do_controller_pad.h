@@ -4,6 +4,9 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SSystem/SComponent/c_API_controller_pad.h"
 
+// Controller Ports 1 - 4
+enum { PAD_1, PAD_2, PAD_3, PAD_4 };
+
 extern JUTGamePad* g_mDoCPd_gamePad[4];
 extern interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 
@@ -32,6 +35,21 @@ extern interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 #define CPad_CHECK_TRIG_DOWN(padNo)  (g_mDoCPd_cpadInfo[padNo].mButtonTrig.down)
 #define CPad_CHECK_TRIG_RIGHT(padNo) (g_mDoCPd_cpadInfo[padNo].mButtonTrig.right)
 #define CPad_CHECK_TRIG_LEFT(padNo)  (g_mDoCPd_cpadInfo[padNo].mButtonTrig.left)
+
+#define CPad_GET_STICK_POS_X(padNo) (g_mDoCPd_cpadInfo[padNo].mMainStickPosX)
+#define CPad_GET_STICK_POS_Y(padNo) (g_mDoCPd_cpadInfo[padNo].mMainStickPosY)
+#define CPad_GET_STICK_VALUE(padNo) (g_mDoCPd_cpadInfo[padNo].mMainStickValue)
+#define CPad_GET_STICK_ANGLE(padNo) (g_mDoCPd_cpadInfo[padNo].mMainStickAngle)
+
+#define CPad_GET_SUBSTICK_POS_X(padNo) (g_mDoCPd_cpadInfo[padNo].mCStickPosX)
+#define CPad_GET_SUBSTICK_POS_Y(padNo) (g_mDoCPd_cpadInfo[padNo].mCStickPosY)
+#define CPad_GET_SUBSTICK_VALUE(padNo) (g_mDoCPd_cpadInfo[padNo].mCStickValue)
+#define CPad_GET_SUBSTICK_ANGLE(padNo) (g_mDoCPd_cpadInfo[padNo].mCStickAngle)
+
+#define CPad_GET_ANALOG_L(padNo) (g_mDoCPd_cpadInfo[padNo].mTriggerLeft)
+#define CPad_GET_ANALOG_R(padNo) (g_mDoCPd_cpadInfo[padNo].mTriggerRight)
+
+#define CPad_GET_ERROR_STATUS(padNo) (g_mDoCPd_cpadInfo[padNo].mGamepadErrorFlags)
 
 int mDoCPd_Create();
 int mDoCPd_Read();

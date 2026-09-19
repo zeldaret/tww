@@ -103,7 +103,7 @@ public:
     static const char m_arcname[];
 
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ request_of_phase_process_class mPhsMethod;
     /* 0x6D4 */ J3DAnmTexPattern* m_head_tex_pattern;

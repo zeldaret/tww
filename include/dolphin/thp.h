@@ -28,7 +28,7 @@ typedef struct _THPComponent {
     THPCoeff predDC;
 } THPComponent;
 
-typedef struct _THPFileInfo {
+typedef struct _local_THPFileInfo {
     THPQuantTab quantTabs[3];
     THPHuffmanTab huffmanTabs[4];
     THPComponent components[3];
@@ -115,37 +115,6 @@ typedef struct THPHeader {
 #define THP_AUDIO_BUFFER_COUNT 3
 #define THP_READ_BUFFER_COUNT  10
 #define THP_TEXTURE_SET_COUNT  3
-
-static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag);
-static s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info);
-static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr);
-
-s32 __THPAudioGetNewSample(THPAudioDecodeInfo*);
-void __THPAudioInitialize(THPAudioDecodeInfo*, u8*);
-
-static void __THPSetupBuffers(void);
-static u8 __THPReadFrameHeader(void);
-static u8 __THPReadScaneHeader(void);
-static u8 __THPReadQuantizationTable(void);
-static u8 __THPReadHuffmanTableSpecification(void);
-static void __THPHuffGenerateSizeTable(void);
-static void __THPHuffGenerateCodeTable(void);
-static void __THPHuffGenerateDecoderTables(u8 tabIndex);
-static void __THPRestartDefinition(void);
-static void __THPPrepBitStream(void);
-static void __THPDecompressYUV(void* tileY, void* tileU, void* tileV);
-static void __THPGQRRestore(void);
-static void __THPDecompressiMCURow512x448(void);
-static void __THPDecompressiMCURow640x480(void);
-static void __THPDecompressiMCURowNxN(void);
-static void __THPInverseDCTNoYPos(THPCoeff* in, u32 xPos);
-static void __THPHuffDecodeDCTCompY(THPFileInfo* info, THPCoeff* block);
-static void __THPHuffDecodeDCTCompU(THPFileInfo* info, THPCoeff* block);
-static void __THPHuffDecodeDCTCompV(THPFileInfo* info, THPCoeff* block);
-
-static void __THPInverseDCTY8(THPCoeff* in, u32 xPos);
-static void __THPGQRSetup();
-static s32 __THPHuffDecodeTab(THPFileInfo* info, THPHuffmanTab* h);
 
 #ifdef __cplusplus
 }

@@ -7,7 +7,7 @@
 #include "f_op/f_op_msg.h"
 #include "f_op/f_op_msg_mng.h"
 
-class msg_class;
+struct msg_class;
 class sub_msg_class;
 
 class sub_msg_class : public msg_class {
@@ -79,7 +79,10 @@ public:
     virtual void draw();
     void outFontDraw();
 
-    sub_msg_class* field_0x4;
+    void setActorP(sub_msg_class* i_msg) { mpMsg = i_msg; }
+
+private:
+    sub_msg_class* mpMsg;
 };
 
 class dDlst_2Dtact_c : public dDlst_base_c {
@@ -87,6 +90,7 @@ public:
     virtual ~dDlst_2Dtact_c();
     virtual void draw();
 
+private:
     u8 field_0x4[4];
     void* field_0x8;
 };

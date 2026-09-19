@@ -3,7 +3,7 @@
 // Translation Unit: m_Do_graphic.cpp
 //
 
-#include "d/dolzel.h" // IWYU pragma: keep
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "d/d_com_inf_game.h"
@@ -54,7 +54,7 @@ s16 mDoGph_gInf_c::mMonotoneRateSpeed;
 mDoGph_gInf_c g_mDoGph_graphicInfo;
 
 OSThread mCaptureThread;
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
 OSAlarm mCaptureTimeOutAlarm;
 #endif
 s16 mCaptureStep;
@@ -69,7 +69,9 @@ u32 mCaptureTextureSize;
 u32 mCaptureCaptureSize;
 GXDrawSyncCallback mCaptureOldCB;
 OSThreadQueue mCaptureThreadQueue;
+#if VERSION > VERSION_JPN
 u64 mCaptureTimeOutTicks = OS_TIMER_CLOCK;
+#endif
 
 JKRHeap * mDoGph_gInf_c::mHeap[2] = {};
 GXColor mDoGph_gInf_c::mBackColor = {};
@@ -84,7 +86,11 @@ void mDoGph_gInf_c::create() {
 #endif
     JFWDisplay::createManager(heap, JUTXfb::Double, true);
     JFWDisplay::getManager()->setDrawDoneMethod(JFWDisplay::Async);
-    JUTFader* faderPtr = new JUTFader(0, 0, JUTVideo::getManager()->getRenderMode()->fbWidth, JUTVideo::getManager()->getRenderMode()->efbHeight, JUtility::TColor(0, 0, 0, 0));
+    JUTFader* faderPtr = new JUTFader(
+        0, 0,
+        JUTGetVideoManager()->getRenderMode()->fbWidth, JUTGetVideoManager()->getRenderMode()->efbHeight,
+        JUtility::TColor(0, 0, 0, 0)
+    );
     JUT_ASSERT(DEMO_SELECT(414, 416), faderPtr != NULL);
     setFader(faderPtr);
     JFWDisplay::getManager()->setFader(faderPtr);
@@ -152,6 +158,7 @@ void mDoGph_gInf_c::fadeOut(f32 speed, GXColor& color) {
     mFadeRate = speed >= 0.0f ? 0.0f : 1.0f;
 }
 
+#if VERSION > VERSION_DEMO
 /* 80007F6C-80007F94       .text onBlure__13mDoGph_gInf_cFv */
 void mDoGph_gInf_c::onBlure() {
     onBlure(cMtx_getIdentity());
@@ -160,8 +167,9 @@ void mDoGph_gInf_c::onBlure() {
 /* 80007F94-80007FC4       .text onBlure__13mDoGph_gInf_cFPA4_Cf */
 void mDoGph_gInf_c::onBlure(const Mtx mtx) {
     mBlureFlag = true;
-    mDoMtx_copy(mtx, mBlureMtx);
+    cMtx_copy(mtx, mBlureMtx);
 }
+#endif
 
 /* 80007FC4-80007FE8       .text fadeOut__13mDoGph_gInf_cFf */
 void mDoGph_gInf_c::fadeOut(f32 speed) {
@@ -191,7 +199,7 @@ void mDoGph_gInf_c::calcFade() {
         }
     }
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     if (mFadeColor.a != 0) {
         GXSetNumChans(1);
         GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
@@ -276,18 +284,18 @@ bool mDoGph_AfterOfDraw() {
         JUTProcBar::getManager()->setVisibleHeapBar(false);
         JUTDbPrint::getManager()->setVisible(true);
     } else {
-#if VERSION == VERSION_DEMO
-        BOOL procVisible = false;
-        BOOL printVisible = false;
-#else
+#if DEBUG || VERSION > VERSION_DEMO
         BOOL consoleVisible = JFWSystem::getSystemConsole()->isVisible();
-        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::Port_3).error == 0;
+        BOOL pad3Connected = JUTGamePad::getPortStatus(JUTGamePad::EPort3).err == 0;
         BOOL procVisible = pad3Connected && fapGmHIO_getMeter() && !consoleVisible;
         BOOL printVisible = pad3Connected && fapGmHIO_isPrint();
         if (mDoMain::developmentMode == 0) {
             procVisible = FALSE;
             printVisible = FALSE;
         }
+#else
+        BOOL procVisible = false;
+        BOOL printVisible = false;
 #endif
         JUTProcBar::getManager()->setVisible(procVisible);
         JUTProcBar::getManager()->setVisibleHeapBar(procVisible);
@@ -302,16 +310,24 @@ bool mDoGph_AfterOfDraw() {
     GXSetFogRangeAdj(GX_FALSE, 0, NULL);
     GXSetCoPlanar(GX_FALSE);
     GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z8, 0);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     GXSetDither(GX_FALSE);
 #else
     GXSetDither(GX_TRUE);
 #endif
     GXSetClipMode(GX_CLIP_ENABLE);
     GXSetCullMode(GX_CULL_NONE);
+#if VERSION < VERSION_PAL
     mDoMch_render_c::setFbWidth(fapGmHIO_getFbWidth());
     mDoMch_render_c::setEfbHeight(fapGmHIO_getEfbHeight());
-    JUTVideo::getManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
+#endif
+    JUTGetVideoManager()->setRenderMode(mDoMch_render_c::getRenderModeObj());
+#if VERSION == VERSION_PAL
+    if (mDoMch_render_c::getRenderModeObj()->viTVmode == VI_TVMODE_PAL_INT) {
+        VIConfigurePan(0, 0, 640, 532);
+        VIFlush();
+    }
+#endif
     dComIfGd_peekZdata();
     mDoGph_gInf_c::endFrame();
     return true;
@@ -370,7 +386,9 @@ void clearAlphaBuffer(view_class* view, u8 alpha) {
     GXSetDither(GX_TRUE);
     GXSetColorUpdate(GX_FALSE);
     GXSetAlphaUpdate(GX_TRUE);
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     GXColor color = { 0x00, 0x00, 0x00, 0x00 };
     color.a = alpha;
     GXSetTevColor(GX_TEVREG0, color);
@@ -471,7 +489,9 @@ void drawAlphaBuffer(view_class* view, GXColor color) {
     GXSetDither(GX_TRUE);
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_TRUE);
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     Mtx44 mtx;
     C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
@@ -574,7 +594,9 @@ void drawSpot(view_class* view) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_DST_ALPHA, GX_BL_DST_ALPHA, GX_LO_OR);
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
+#endif
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaUpdate(GX_FALSE);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -589,7 +611,6 @@ void drawSpot(view_class* view) {
 
 /* 80008F34-8000990C       .text drawDepth__FP10view_classP15view_port_classi */
 void drawDepth(view_class* view, view_port_class* viewport, int depth) {
-    /* Nonmatching */
     if (mDoGph_gInf_c::isAutoForcus()) {
         f32 projv[7];
         f32 viewv[6];
@@ -610,7 +631,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
         l_tevColor0.a = mDoGph_gInf_c::getMonotoneRate();
     } else {
         dStage_FileList_dt_c * fili_p = NULL;
-        s32 roomNo = dComIfGp_roomControl_getStayNo();
+        int roomNo = dComIfGp_roomControl_getStayNo();
         if (roomNo >= 0)
             fili_p = dComIfGp_roomControl_getStatusRoomDt(roomNo)->getFileListInfo();
 
@@ -649,7 +670,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
 
     u16 hw = w >> 1;
     u16 hh = h >> 1;
-    GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, JUTVideo::getManager()->getRenderMode()->vfilter);
+    GXSetCopyFilter(GX_FALSE, NULL, GX_TRUE, JUTGetVideoManager()->getRenderMode()->vfilter);
 
     GXSetTexCopySrc(x, y, w, h);
     GXSetTexCopyDst(hw, hh, GX_TF_Z16, GX_TRUE);
@@ -659,15 +680,18 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXSetTexCopyDst(hw, hh, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_TRUE);
     GXCopyTex(fbbuf, GX_FALSE);
 
-    GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zbuf, w, h, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(mDoGph_gInf_c::getZbufferTexObj(), zbuf, hw, hh, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(mDoGph_gInf_c::getZbufferTexObj(), GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 
-    GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), fbbuf, w, h, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), fbbuf, hw, hh, (GXTexFmt)mDoGph_gInf_c::getFrameBufferTimg()->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(mDoGph_gInf_c::getFrameBufferTexObj(), GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXPixModeSync();
+#if VERSION == VERSION_PAL
+    GXInvalidateTexAll();
+#endif
     GXLoadTexObj(mDoGph_gInf_c::getFrameBufferTexObj(), GX_TEXMAP1);
     GXLoadTexObj(mDoGph_gInf_c::getZbufferTexObj(), GX_TEXMAP0);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     mDoGph_gInf_c::calcFade();
 #endif
     GXSetNumChans(0);
@@ -676,7 +700,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetNumTevStages(3);
     GXSetTevColorS10(GX_TEVREG0, l_tevColor0);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     GXSetTevColor(GX_TEVREG2, mDoGph_gInf_c::getFadeColor());
 #endif
     GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_ALPHA, GX_CH_GREEN, GX_CH_BLUE, GX_CH_RED);
@@ -694,13 +718,13 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_TEXA, GX_CA_A0);
     GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_4, GX_TRUE, GX_TEVPREV);
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_TEXC, GX_CC_C2, GX_CC_A2, GX_CC_ZERO);
 #else
     GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
 #endif
     GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_APREV, GX_CA_KONST, GX_CA_A2, GX_CA_ZERO);
 #else
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
@@ -750,7 +774,7 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
     if (y == 0) {
         s16 h = (s16)viewport->mScissor.mYOrig;
         if (h != 0) {
-            h += (f32)viewport->mScissor.mHeight;
+            s16 h2 = h + (f32)viewport->mScissor.mHeight;
             GXSetNumChans(1);
             GXSetChanCtrl(GX_ALPHA0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
             GXSetNumTexGens(0);
@@ -767,11 +791,11 @@ void drawDepth(view_class* view, view_port_class* viewport, int depth) {
             GXBegin(GX_QUADS, GX_VTXFMT0, 8);
                 GXPosition3s16(0, 0, -5);
                 GXPosition3s16(640, 0, -5);
-                GXPosition3s16(640, y, -5);
-                GXPosition3s16(0, y, -5);
-
-                GXPosition3s16(0, h, -5);
                 GXPosition3s16(640, h, -5);
+                GXPosition3s16(0, h, -5);
+
+                GXPosition3s16(0, h2, -5);
+                GXPosition3s16(640, h2, -5);
                 GXPosition3s16(640, 480, -5);
                 GXPosition3s16(0, 480, -5);
             GXEnd();
@@ -884,42 +908,26 @@ void mDoGph_CaptureCansel() {
 }
 #endif
 
-#define COLOR_SQUARE_MAG(r0, g0, b0, r1, g1, b1) (r0 - r1)*(r0 - r1) + (g0 - g1)*(g0 - g1) + (b0 - b1)*(b0 - b1)
+#define COLOR_SQUARE_MAG(r0, g0, b0, r1, g1, b1) SQUARE(r0 - r1) + SQUARE(g0 - g1) + SQUARE(b0 - b1)
 
 /* 80009C38-8000A180       .text blockenc__FPUc */
 void blockenc(u8* block) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
     u8 colors[16*3]; // sp18
     u32 color_mags[4]; // sp08
-    u32 pix_idx;
-    u32 color_num;
-    u32 i;
 
-    u32 color_0_idx;
-    u32 color_1_idx;
+    u32 c0[3];
+    u32 c1[3];
+    u32 c2[3];
+    u32 c3[3];
+
+    u32 i;
+    u32 j;
 
     u32 r23;
-    u32 r18;
-
-    u32 r0;
-    u32 g0;
-    u32 b0;
-    u32 r1;
-    u32 g1;
-    u32 b1;
-    u32 r2;
-    u32 g2;
-    u32 b2;
-    u32 r3;
-    u32 g3;
-    u32 b3;
-    u32 r4;
-    u32 g4;
-    u32 b4;
-
+    u32 r22;
     u32 r21;
     u32 r20;
-    u32 r22;
 
     u32 r11;
     u32 r4_;
@@ -927,29 +935,33 @@ void blockenc(u8* block) {
     u32 r6;
     u32 r8;
 
+    u32 offs1;
+    u32 offs2;
+    u32 color_num;
+    u32 r18;
+
     u32 r5;
     u32 r24;
-    u32 r25;
+
+    u32 color_0_idx;
+    u32 color_1_idx;
 
     u32 r0_2 = 0x40;
     if (r0_2 == 0x40) {
         color_num = 0; // r11
         i = 0; // r8
-        pix_idx = 0; // r10
-        for (; i < 0x30; i += 3, pix_idx += 4) {
-            u32 r9 = 0; // r9
-            u8* pix = &block[pix_idx];
-            for (int j = 0; j < color_num; j++) {
-                u8* temp = &colors[r9*3];
-                if (temp[0] == pix[0] && temp[1] == pix[1] && temp[2] == pix[2]) {
+        offs1 = 0; // r10
+        for (; i < 0x30; i += 3, offs1 += 4) {
+            j = 0; // r9
+            for (j = 0; j < color_num; j++) {
+                if (colors[j*3+0] == block[offs1+0] && colors[j*3+1] == block[offs1+1] && colors[j*3+2] == block[offs1+2]) {
                     break;
                 }
-                r9++;
             }
-            if (r9 == color_num) {
-                colors[r9*3 + 0] = pix[0];
-                colors[r9*3 + 1] = pix[1];
-                colors[r9*3 + 2] = pix[2];
+            if (j == color_num) {
+                colors[j*3 + 0] = block[offs1+0];
+                colors[j*3 + 1] = block[offs1+1];
+                colors[j*3 + 2] = block[offs1+2];
                 color_num += 1;
             }
         }
@@ -960,46 +972,35 @@ void blockenc(u8* block) {
             r23 = 0;
             r18 = INT32_MAX;
             for (; r23 < color_num*3 - 3; r23 += 3) {
-                r0 = colors[r23+0] * 30;
-                g0 = colors[r23+1] * 59;
-                b0 = colors[r23+2] * 11;
-                for (r21 = r23+3; r21 < color_num*3 - 3; r21 += 3) {
-                    r1 = colors[r21+0] * 30;
-                    g1 = colors[r21+1] * 59;
-                    b1 = colors[r21+2] * 11;
-                    // r3 = (r0 * 5 + r1 * 3) / 8;
-                    // g3 = (g0 * 5 + g1 * 3) / 8;
-                    // b3 = (b0 * 5 + b1 * 3) / 8;
-                    // r4 = (r1 * 5 + r0 * 3) / 8;
-                    // g4 = (g1 * 5 + g0 * 3) / 8;
-                    // b4 = (b1 * 5 + b0 * 3) / 8;
-                    r20 = 0; // r20
-                    pix_idx = r20; // r19
-                    r22 = pix_idx; // r22
-                    for (; r22 < 0x10; r22++, pix_idx += 4) {
-                        // b2 = block[pix_idx + 2] * 11;
-                        // r2 = block[pix_idx + 0] * 30;
-                        // g2 = block[pix_idx + 1] * 59;
-                        color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                        color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                        r3 = (r0 * 5 + r1 * 3) / 8;
-                        g3 = (g0 * 5 + g1 * 3) / 8;
-                        b3 = (b0 * 5 + b1 * 3) / 8;
-                        color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                        r4 = (r1 * 5 + r0 * 3) / 8;
-                        g4 = (g1 * 5 + g0 * 3) / 8;
-                        b4 = (b1 * 5 + b0 * 3) / 8;
-                        color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                c0[0] = colors[r23+0] * 30;
+                c0[1] = colors[r23+1] * 59;
+                c0[2] = colors[r23+2] * 11;
+                for (r21 = r23+3; r21 < color_num*3; r21 += 3) {
+                    c1[0] = colors[r21+0] * 30;
+                    c1[1] = colors[r21+1] * 59;
+                    c1[2] = colors[r21+2] * 11;
+                    c2[0] = (c0[0] * 5 + c1[0] * 3) / 8;
+                    c2[1] = (c0[1] * 5 + c1[1] * 3) / 8;
+                    c2[2] = (c0[2] * 5 + c1[2] * 3) / 8;
+                    c3[0] = (c1[0] * 5 + c0[0] * 3) / 8;
+                    c3[1] = (c1[1] * 5 + c0[1] * 3) / 8;
+                    c3[2] = (c1[2] * 5 + c0[2] * 3) / 8;
+                    r22 = offs2 = r20 = 0;
+                    for (; r22 < 0x10; r22++, offs2 += 4) {
+                        color_mags[0] = COLOR_SQUARE_MAG(c0[0], c0[1], c0[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
+                        color_mags[1] = COLOR_SQUARE_MAG(c1[0], c1[1], c1[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
+                        color_mags[2] = COLOR_SQUARE_MAG(c2[0], c2[1], c2[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
+                        color_mags[3] = COLOR_SQUARE_MAG(c3[0], c3[1], c3[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
 
-                        u32 r5 = 0;
-                        u32 r6 = INT32_MAX;
-                        for (; r5 < ARRAY_SIZE(color_mags); r5++) {
-                            if (color_mags[r5] < r6) {
-                                r6 = color_mags[r5];
+                        r5 = 0;
+                        u32 r6_r25 = INT32_MAX;
+                        for (; r5 < 4; r5++) {
+                            if (color_mags[r5] < r6_r25) {
+                                r6_r25 = color_mags[r5];
                             }
                         }
 
-                        r20 += r6;
+                        r20 += r6_r25;
                     }
 
                     if (r20 < r18) {
@@ -1029,37 +1030,31 @@ void blockenc(u8* block) {
         block[0x42] = r4_ >> 8;
         block[0x43] = r4_ & 0xFF;
 
-        r0 = ((r11 >> 8) & 0xF8) * 30;
-        g0 = ((r11 >> 3) & 0xFC) * 59;
-        b0 = ((r11 << 3) & 0xFC) * 11;
-        r1 = ((r4_ >> 8) & 0xF8) * 30;
-        g1 = ((r4_ >> 3) & 0xFC) * 59;
-        b1 = ((r4_ << 3) & 0xFC) * 11;
-        r3 = (r0 * 5 + r1 * 3) / 8;
-        g3 = (g0 * 5 + g1 * 3) / 8;
-        b3 = (b0 * 5 + b1 * 3) / 8;
-        r4 = (r1 * 5 + r0 * 3) / 8;
-        g4 = (g1 * 5 + g0 * 3) / 8;
-        b4 = (b1 * 5 + b0 * 3) / 8;
+        c0[0] = ((r11 >> 8) & 0xF8) * 30;
+        c0[1] = ((r11 >> 3) & 0xFC) * 59;
+        c0[2] = ((r11 << 3) & 0xFC) * 11;
+        c1[0] = ((r4_ >> 8) & 0xF8) * 30;
+        c1[1] = ((r4_ >> 3) & 0xFC) * 59;
+        c1[2] = ((r4_ << 3) & 0xFC) * 11;
+        c2[0] = (c0[0] * 5 + c1[0] * 3) / 8;
+        c2[1] = (c0[1] * 5 + c1[1] * 3) / 8;
+        c2[2] = (c0[2] * 5 + c1[2] * 3) / 8;
+        c3[0] = (c1[0] * 5 + c0[0] * 3) / 8;
+        c3[1] = (c1[1] * 5 + c0[1] * 3) / 8;
+        c3[2] = (c1[2] * 5 + c0[2] * 3) / 8;
         r6 = 30; // r6 (bit offset within r8)
-        r8 = 0; // r8 (bitfield of color indexes)
-        pix_idx = r8;
-        for (; pix_idx < 0x40; pix_idx += 4, r6 -= 2) {
-            // b2 = block[pix_idx + 2] * 11;
-            // r2 = block[pix_idx + 0] * 30;
-            // g2 = block[pix_idx + 1] * 59;
-            color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-            color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-            color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-            color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+        offs1 = r8 = 0; // r8 (bitfield of color indexes)
+        for (; offs1 < 0x40; offs1 += 4, r6 -= 2) {
+            color_mags[0] = COLOR_SQUARE_MAG(c0[0], c0[1], c0[2], block[offs1+0] * 30, block[offs1+1] * 59, block[offs1+2] * 11);
+            color_mags[1] = COLOR_SQUARE_MAG(c1[0], c1[1], c1[2], block[offs1+0] * 30, block[offs1+1] * 59, block[offs1+2] * 11);
+            color_mags[2] = COLOR_SQUARE_MAG(c2[0], c2[1], c2[2], block[offs1+0] * 30, block[offs1+1] * 59, block[offs1+2] * 11);
+            color_mags[3] = COLOR_SQUARE_MAG(c3[0], c3[1], c3[2], block[offs1+0] * 30, block[offs1+1] * 59, block[offs1+2] * 11);
 
-            r24 = 0;
-            r5 = 0;
-            r25 = INT32_MAX;
-            u32 n = ARRAY_SIZE(color_mags) - r5;
-            for (; r5 < n; r5++) {
-                if (color_mags[r5] < r25) {
-                    r25 = color_mags[r5];
+            r5 = r24 = 0;
+            u32 r6_r25 = INT32_MAX;
+            for (; r5 < 4; r5++) {
+                if (color_mags[r5] < r6_r25) {
+                    r6_r25 = color_mags[r5];
                     r24 = r5;
                 }
             }
@@ -1067,24 +1062,19 @@ void blockenc(u8* block) {
             r8 |= (r24 & 0x03) << r6;
         }
     } else { // VERSION_DEMO only block (optimized out in retail)
-        pix_idx = 0; // r10
-        color_num = pix_idx; // r11
-        i = color_num; // r8
-        for (; i < 0x30; i += 3, pix_idx += 4) {
-            u8* pix = &block[pix_idx];
-            if (pix[3] == 0xFF) {
-                u32 r9 = 0; // r9
-                for (int j = 0; j < color_num; j++) {
-                    u8* temp = &colors[r9*3];
-                    if (temp[0] == pix[0] && temp[1] == pix[1] && temp[2] == pix[2]) {
+        i = color_num = offs1 = 0;
+        for (; i < 0x30; i += 3, offs1 += 4) {
+            if (block[offs1+3] == 0xFF) {
+                j = 0; // r9
+                for (j = 0; j < color_num; j++) {
+                    if (colors[j*3+0] == block[offs1+0] && colors[j*3+1] == block[offs1+1] && colors[j*3+2] == block[offs1+2]) {
                         break;
                     }
-                    r9++;
                 }
-                if (r9 == color_num) {
-                    colors[r9*3 + 0] = pix[0];
-                    colors[r9*3 + 1] = pix[1];
-                    colors[r9*3 + 2] = pix[2];
+                if (j == color_num) {
+                    colors[j*3 + 0] = block[offs1+0];
+                    colors[j*3 + 1] = block[offs1+1];
+                    colors[j*3 + 2] = block[offs1+2];
                     color_num += 1;
                 }
             }
@@ -1095,49 +1085,38 @@ void blockenc(u8* block) {
               (colors[2] & 0xF8) >> 3;
         r11 = r4_;
 
-        color_0_idx = 0; // r17
-        color_1_idx = 0; // r16
+        // color_0_idx = 0; // r17
+        // color_1_idx = 0; // r16
         if (color_num > 1) {
             r23 = 0;
             r18 = INT32_MAX;
             for (; r23 < color_num*3 - 3; r23 += 3) {
-                u8* colors_r10 = &colors[r23];
-                r0 = colors_r10[0] * 30;
-                g0 = colors_r10[1] * 59;
-                b0 = colors_r10[2] * 11;
-                for (r21 = r23+3; r21 < color_num*3 - 3; r21 += 3) {
-                    u8* colors_r11 = &colors[r21];
-                    r1 = colors_r11[0] * 30;
-                    g1 = colors_r11[1] * 59;
-                    b1 = colors_r11[2] * 11;
-                    r3 = (r0 + r1) / 2;
-                    g3 = (g0 + g1) / 2;
-                    b3 = (b0 + b1) / 2;
-                    r20 = 0; // r20
-                    pix_idx = r20; // r19
-                    r22 = pix_idx; // r22
-                    for (; r22 < 0x10; r22++, pix_idx += 4) {
-                        if (block[pix_idx + 3] == 0xFF) {
-                            // b2 = block[pix_idx + 2] * 11;
-                            // r2 = block[pix_idx + 0] * 30;
-                            // g2 = block[pix_idx + 1] * 59;
-                            color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                            color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                            color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                            // r4 = (r1 * 5 + r0 * 3) / 8;
-                            // g4 = (g1 * 5 + g0 * 3) / 8;
-                            // b4 = (b1 * 5 + b0 * 3) / 8;
-                            // color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+                c0[0] = colors[r23+0] * 30;
+                c0[1] = colors[r23+1] * 59;
+                c0[2] = colors[r23+2] * 11;
+                for (r21 = r23+3; r21 < color_num*3; r21 += 3) {
+                    c1[0] = colors[r21+0] * 30;
+                    c1[1] = colors[r21+1] * 59;
+                    c1[2] = colors[r21+2] * 11;
+                    c2[0] = (c0[0] + c1[0]) / 2;
+                    c2[1] = (c0[1] + c1[1]) / 2;
+                    c2[2] = (c0[2] + c1[2]) / 2;
+                    r22 = offs2 = r20 = 0;
+                    for (; r22 < 0x10; r22++, offs2 += 4) {
+                        if (block[offs2+3] == 0xFF) {
+                            color_mags[0] = COLOR_SQUARE_MAG(c0[0], c0[1], c0[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
+                            color_mags[1] = COLOR_SQUARE_MAG(c1[0], c1[1], c1[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
+                            color_mags[2] = COLOR_SQUARE_MAG(c2[0], c2[1], c2[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
 
-                            u32 r5 = 0;
-                            u32 r6 = INT32_MAX;
-                            for (; r5 < ARRAY_SIZE(color_mags); r5++) {
-                                if (color_mags[r5] < r6) {
-                                    r6 = color_mags[r5];
+                            r5 = 0;
+                            u32 r6_r25 = INT32_MAX;
+                            for (; r5 < 3; r5++) {
+                                if (color_mags[r5] < r6_r25) {
+                                    r6_r25 = color_mags[r5];
                                 }
                             }
 
-                            r20 += r6;
+                            r20 += r6_r25;
                         }
                     }
 
@@ -1145,12 +1124,12 @@ void blockenc(u8* block) {
                         r18 = r20;
                         // color_0_idx = r23;
                         // color_1_idx = r21;
-                        r11 = (colors_r10[0] & 0xF8) << 8 |
-                              (colors_r10[1] & 0xFC) << 3 |
-                              (colors_r10[2] & 0xF8) >> 3;
-                        r4_ = (colors_r11[0] & 0xF8) << 8 |
-                              (colors_r11[1] & 0xFC) << 3 |
-                              (colors_r11[2] & 0xF8) >> 3;
+                        r11 = (colors[r23+0] & 0xF8) << 8 |
+                              (colors[r23+1] & 0xFC) << 3 |
+                              (colors[r23+2] & 0xF8) >> 3;
+                        r4_ = (colors[r21+0] & 0xF8) << 8 |
+                              (colors[r21+1] & 0xFC) << 3 |
+                              (colors[r21+2] & 0xF8) >> 3;
                     }
                 }
             }
@@ -1161,52 +1140,41 @@ void blockenc(u8* block) {
             r11 = r4_;
             r4_ = temp;
         } else if (r11 == r4_) {
-            r4_ = 0;
+            r11 = 0;
         }
         block[0x40] = r11 >> 8;
         block[0x41] = r11 & 0xFF;
         block[0x42] = r4_ >> 8;
         block[0x43] = r4_ & 0xFF;
 
-        r0 = (r11 >> 8) & 0xF8;
-        g0 = (r11 >> 3) & 0xFC;
-        b0 = (r11 << 3) & 0xFC;
-        r1 = (r4_ >> 8) & 0xF8;
-        g1 = (r4_ >> 3) & 0xFC;
-        b1 = (r4_ << 3) & 0xFC;
-        r0 *= 30;
-        g0 *= 59;
-        b0 *= 11;
-        r1 *= 30;
-        g1 *= 59;
-        b1 *= 11;
-        r3 = (r0 + r1) / 2;
-        g3 = (g0 + g1) / 2;
-        b3 = (b0 + b1) / 2;
+        c0[0] = (r11 >> 8) & 0xF8;
+        c0[1] = (r11 >> 3) & 0xFC;
+        c0[2] = (r11 << 3) & 0xFC;
+        c1[0] = (r4_ >> 8) & 0xF8;
+        c1[1] = (r4_ >> 3) & 0xFC;
+        c1[2] = (r4_ << 3) & 0xFC;
+        c0[0] *= 30;
+        c0[1] *= 59;
+        c0[2] *= 11;
+        c1[0] *= 30;
+        c1[1] *= 59;
+        c1[2] *= 11;
+        c2[0] = (c0[0] + c1[0]) / 2;
+        c2[1] = (c0[1] + c1[1]) / 2;
+        c2[2] = (c0[2] + c1[2]) / 2;
         // r6 = 30; // r6 (bit offset within r8)
-        r8 = 0; // r8 (bitfield of color indexes)
-        i = r8;
-        pix_idx = i;
-        for (; i < 0x10; i++, pix_idx += 4) {
-            if (block[pix_idx+3] == 0xFF) {
-                // b2 = block[pix_idx + 2] * 11;
-                // r2 = block[pix_idx + 0] * 30;
-                // g2 = block[pix_idx + 1] * 59;
-                color_mags[0] = COLOR_SQUARE_MAG(r0, g0, b0, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                color_mags[1] = COLOR_SQUARE_MAG(r1, g1, b1, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                color_mags[2] = COLOR_SQUARE_MAG(r3, g3, b3, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
-                // r4 = (r1 * 5 + r0 * 3) / 8;
-                // g4 = (g1 * 5 + g0 * 3) / 8;
-                // b4 = (b1 * 5 + b0 * 3) / 8;
-                // color_mags[3] = COLOR_SQUARE_MAG(r4, g4, b4, block[pix_idx+0] * 30, block[pix_idx+1] * 59, block[pix_idx+2] * 11);
+        i = offs2 = r8 = 0; // r8 (bitfield of color indexes)
+        for (; i < 0x10; i++, offs2 += 4) {
+            if (block[offs2+3] == 0xFF) {
+                color_mags[0] = COLOR_SQUARE_MAG(c0[0], c0[1], c0[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
+                color_mags[1] = COLOR_SQUARE_MAG(c1[0], c1[1], c1[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
+                color_mags[2] = COLOR_SQUARE_MAG(c2[0], c2[1], c2[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
 
-                r5 = 0;
-                r24 = 0;
-                r25 = INT32_MAX;
-                u32 n = 3 - r24;
-                for (; r24 < n; r24++) {
-                    if (color_mags[r24] < r25) {
-                        r25 = color_mags[r24];
+                r24 = r5 = 0;
+                u32 r6_r25 = INT32_MAX;
+                for (; r24 < 3; r24++) {
+                    if (color_mags[r24] < r6_r25) {
+                        r6_r25 = color_mags[r24];
                         r5 = r24;
                     }
                 }
@@ -1226,39 +1194,46 @@ void blockenc(u8* block) {
 
 /* 8000A180-8000A530       .text encode_s3tc__FPUcPUcii9_GXTexFmt */
 u32 encode_s3tc(u8* r25, u8* r26, int r27, int r28, GXTexFmt fmt) {
-    /* Nonmatching */
     // params: capture_buffer, texture_buffer, width, height, fmt
     u8 block[0x40 + 0x8]; // sp08;
-    u32 r31 = 0;
+
+    int i;
+    int r3_r9_r5;
+    int r21;
+    int r20_r30;
+    int r19_r29;
+    int r18_r24;
+    u32 r4_r10_r6;
+    u32 r5_r8_r4;
+    u32 r11;
+    u32 r31;
+
+    r31 = 0;
     if (fmt == GX_TF_I8) {
         u32 i8low = 255; // r30
         u32 i8high = 0; // r29
-        for (int r18 = 0; r18 < r28; r18 += 8) {
-            for (int r19 = 0, r24 = 0; r19 < r27; r19 += 8, r24 += 0x20) {
-                for (int r20 = 0; r20 < 8; r20 += 4) {
-                    int r21 = 0;
-                    u32 r23 = r24 + r27 * (r18 + r20);
-                    for (; r21 < 8; r21 += 4) {
-                        u32 r5 = 0;
-                        int r3 = 0;
-                        for (; r3 < 4; r3++) {
-                            u32 r10 = r21 + r23;
-                            u32 r9 = 219;
-                            u32 r8 = 255; // r8 (alpha)
-                            for (int i = 0; i < 4; r5++, i++) {
-                                u32 r4 = r3*8 + r10;
-                                u32 r11 = r25[r4 + i];
+        for (r18_r24 = 0; r18_r24 < r28; r18_r24 += 8) {
+            for (r19_r29 = 0; r19_r29 < r27; r19_r29 += 8) {
+                for (r20_r30 = 0; r20_r30 < 8; r20_r30 += 4) {
+                    for (r21 = 0; r21 < 8; r21 += 4) {
+                        r5_r8_r4 = 0;
+                        for (r3_r9_r5 = 0; r3_r9_r5 < 4; r3_r9_r5++) {
+                            r4_r10_r6 = (r19_r29 * 4) + r27 * (r18_r24 + r20_r30) + r21 + r3_r9_r5*8;
+                            for (i = 0; i < 4; r5_r8_r4 += 4, i++, r4_r10_r6++) {
+                                r11 = r25[r4_r10_r6];
                                 if (i8low > r11) {
                                     i8low = r11;
                                 }
                                 if (i8high < r11) {
                                     i8high = r11;
                                 }
-                                u32 r0 = ((r11 - 16) * 255) / r9;
-                                block[r5*4+0] = r0 & 0xF8;
-                                block[r5*4+1] = r0 & 0xFC;
-                                block[r5*4+2] = r0 & 0xF8;
-                                block[r5*4+3] = r8;
+                                r11 -= 16;
+                                r11 *= 255;
+                                r11 /= 219;
+                                block[r5_r8_r4+0] = r11 & 0xF8;
+                                block[r5_r8_r4+1] = r11 & 0xFC;
+                                block[r5_r8_r4+2] = r11 & 0xF8;
+                                block[r5_r8_r4+3] = 255; // r8 (alpha)
                             }
                         }
                         blockenc(block);
@@ -1270,25 +1245,19 @@ u32 encode_s3tc(u8* r25, u8* r26, int r27, int r28, GXTexFmt fmt) {
         }
         JUT_ASSERT(VERSION_SELECT(2172, 2429, 2215, 2222), 16 <= i8low && i8high <= 235);
     } else if (fmt == GX_TF_RGB565) {
-        for (int r24 = 0; r24 < r28; r24 += 8) {
-            for (int r29 = 0; r29 < r27; r29 += 8) {
-                for (int r30 = 0; r30 < 8; r30 += 4) {
-                    int r21 = 0;
-                    u32 r22 = 2 * (r27 * (r24 + r30));
-                    for (; r21 < 8; r21 += 4) {
-                        u32 r8 = 0;
-                        int r9 = 0;
-                        // u32 r3 = 0;
-                        u32 r6 = r22 + 8 * (r29 + r21);
-                        u32 r5 = 255; // r5 (alpha)
-                        for (; r9 < 4; r9++) {//, r3 += 8) {
-                            u32 r10 = r9*8 + r6;
-                            for (int i = 0; i < 4; i++, r8++, r10 += 2) {
-                                u32 r11 = *(u16*)(&r25[r10]);
-                                block[r8*4+0] = (r11 >> 8) & 0xF8;
-                                block[r8*4+1] = (r11 >> 3) & 0xFC;
-                                block[r8*4+2] = (r11 << 3) & 0xF8;
-                                block[r8*4+3] = r5;
+        for (r18_r24 = 0; r18_r24 < r28; r18_r24 += 8) {
+            for (r19_r29 = 0; r19_r29 < r27; r19_r29 += 8) {
+                for (r20_r30 = 0; r20_r30 < 8; r20_r30 += 4) {
+                    for (r21 = 0; r21 < 8; r21 += 4) {
+                        r5_r8_r4 = 0;
+                        for (r3_r9_r5 = 0; r3_r9_r5 < 4; r3_r9_r5++) {
+                            r4_r10_r6 = ((r27 * (r18_r24 + r20_r30))*2) + (r19_r29 + r21)*8 + r3_r9_r5*8;
+                            for (i = 0; i < 4; i++, r5_r8_r4 += 4, r4_r10_r6 += 2) {
+                                r11 = *(u16*)(&r25[r4_r10_r6]);
+                                block[r5_r8_r4+0] = (r11 >> 8) & 0xF8;
+                                block[r5_r8_r4+1] = (r11 >> 3) & 0xFC;
+                                block[r5_r8_r4+2] = (r11 << 3) & 0xF8;
+                                block[r5_r8_r4+3] = 255; // r5 (alpha)
                             }
                         }
                         blockenc(block);
@@ -1299,26 +1268,20 @@ u32 encode_s3tc(u8* r25, u8* r26, int r27, int r28, GXTexFmt fmt) {
             }
         }
     } else if (fmt == GX_TF_RGBA8) {
-        for (int r24 = 0; r24 < r28; r24 += 8) {
-            for (int r29 = 0; r29 < r27; r29 += 8) {
-                for (int r30 = 0; r30 < 8; r30 += 4) {
-                    int r21 = 0;
-                    u32 r22 = 4 * (r27 * (r24 + r30));
-                    for (; r21 < 8; r21 += 4) {
-                        u32 r4 = 0;
-                        for (int r5 = 0; r5 < 4; r5++) {
-                            u32 r10 = r22 + 16 * (r29 + r21);
-                            u32 r6 = r5 * 8 + r10;
-                            u32 r7 = r6 + 0x20;
-                            u32 r9 = 255; // r9 (alpha)
-                            for (int i = 0; i < 4; i++, r4++, r6 += 2, r7 += 2) {
-                                u8* r3 = &r25[r6];
-                                block[r4*4+0] = r3[1] & 0xF8;
-                                u8* r12 = &r25[r7];
-                                block[r4*4+1] = r12[0] & 0xFC;
-                                block[r4*4+2] = r12[1] & 0xF8;
-                                block[r4*4+3] = r3[0];
-                                block[r4*4+3] = r9;
+        for (r18_r24 = 0; r18_r24 < r28; r18_r24 += 8) {
+            for (r19_r29 = 0; r19_r29 < r27; r19_r29 += 8) {
+                for (r20_r30 = 0; r20_r30 < 8; r20_r30 += 4) {
+                    for (r21 = 0; r21 < 8; r21 += 4) {
+                        r5_r8_r4 = 0;
+                        for (r3_r9_r5 = 0; r3_r9_r5 < 4; r3_r9_r5++) {
+                            r4_r10_r6 = 16 * (r19_r29 + r21) + (4 * (r27 * (r18_r24 + r20_r30))) + r3_r9_r5 * 8;
+                            u32 r7 = r4_r10_r6 + 0x20;
+                            for (i = 0; i < 4; i++, r5_r8_r4 += 4, r4_r10_r6 += 2, r7 += 2) {
+                                block[r5_r8_r4+0] = r25[r4_r10_r6+1] & 0xF8;
+                                block[r5_r8_r4+1] = r25[r7+0] & 0xFC;
+                                block[r5_r8_r4+2] = r25[r7+1] & 0xF8;
+                                block[r5_r8_r4+3] = r25[r4_r10_r6+0];
+                                block[r5_r8_r4+3] = 255; // r9 (alpha)
                             }
                         }
                         blockenc(block);
@@ -1393,7 +1356,9 @@ u8* mDoGph_allocFromAny(u32 size, int align) {
         mem = JKRAllocFromSysHeap(size, align);
     if (mem == NULL)
         mem = mDoGph_gInf_c::getZbufferTex();
+#if VERSION > VERSION_JPN
     memset(mem, 0, size);
+#endif
     return (u8*)mem;
 }
 #endif
@@ -1451,9 +1416,11 @@ out:
 }
 
 /* 8000AAC4-8000AB1C       .text mCaptureProc__FPv */
-u32 mCaptureProc(void* dummy) {
+u32 mCaptureProc(void*) {
     u32 bytesCopied = encode_s3tc(mCaptureCaptureBuffer, mCaptureTextureBuffer, mCaptureSizeWidth, mCaptureSizeHeight, (GXTexFmt)mCaptureCaptureFormat);
-#if VERSION > VERSION_DEMO
+#if VERSION == VERSION_JPN
+    DCFlushRange(mCaptureTextureBuffer, mCaptureTextureSize);
+#elif VERSION > VERSION_JPN
     DCStoreRange(mCaptureTextureBuffer, mCaptureTextureSize);
 #endif
     OSExitThread((void*)bytesCopied);
@@ -1462,22 +1429,23 @@ u32 mCaptureProc(void* dummy) {
 
 /* 8000AB1C-8000ABC4       .text mCaptureGXDrawSyncCallback__FUs */
 void mCaptureGXDrawSyncCallback(u16) {
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     OSCancelAlarm(&mCaptureTimeOutAlarm);
     BOOL interrupt = OSDisableInterrupts();
-    if (mCaptureStep == 2) {
+    if (mCaptureStep == 2)
 #endif
+    {
         void* oldcb = (void*)GXSetDrawSyncCallback(mCaptureOldCB);
-        JUT_ASSERT(DEMO_SELECT(2580, 2655), oldcb == mCaptureGXDrawSyncCallback);
+        JUT_ASSERT(VERSION_SELECT(2580, 2863, 2655, 2662), oldcb == mCaptureGXDrawSyncCallback);
         mCaptureOldCB = NULL;
         mCaptureStep++;
-#if VERSION > VERSION_DEMO
     }
+#if VERSION > VERSION_JPN
     OSRestoreInterrupts(interrupt);
 #endif
 }
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
 /* 8000ABC4-8000AC3C       .text mCaptureGXDrawSyncTimeOut__FP7OSAlarmP9OSContext */
 void mCaptureGXDrawSyncTimeOut(OSAlarm*, OSContext*) {
     OSReport_Error("キャプチャタイムアウト\n");
@@ -1553,9 +1521,9 @@ bool mDoGph_screenCapture() {
     GXCopyTex(mCaptureCaptureBuffer, GX_FALSE);
     GXPixModeSync();
 
-    JUT_ASSERT(DEMO_SELECT(2657, 2753), mCaptureOldCB == NULL);
+    JUT_ASSERT(VERSION_SELECT(2657, 2942, 2753, 2760), mCaptureOldCB == NULL);
     mCaptureOldCB = GXSetDrawSyncCallback(mCaptureGXDrawSyncCallback);
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     OSCreateAlarm(&mCaptureTimeOutAlarm);
     OSSetAlarm(&mCaptureTimeOutAlarm, mCaptureTimeOutTicks, mCaptureGXDrawSyncTimeOut);
 #endif
@@ -1597,12 +1565,12 @@ bool mDoGph_Painter() {
         GXSetCopyFilter(GX_FALSE, NULL, GX_FALSE, NULL);
 
     j3dSys.drawInit();
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     GXSetDither(GX_TRUE);
 #endif
 
     J2DOrthoGraph graf(0.0f, 0.0f, 640.0f, 480.0f, -1.0f, 1.0f);
-    graf.setOrtho(JGeometry::TBox2<f32>(-9.0f, -21.0f, 650.0f, 503.0f), -1.0f, 1.0f);
+    graf.setOrtho(-9.0f, -21.0f, 659.0f, 524.0f, -1.0f, 1.0f);
     graf.setPort();
 
     dComIfGp_setCurrentGrafPort(&graf);
@@ -1610,10 +1578,10 @@ bool mDoGph_Painter() {
     if (dComIfGp_getWindowNum() != 0) {
         dDlst_window_c* window = dComIfGp_getWindow(0);
         s32 cameraID = window->getCameraID();
-        camera_class* camera = (camera_class*)dComIfGp_getCamera(cameraID);
+        camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(cameraID);
 
         if (camera != NULL) {
-            dComIfGd_imageDrawShadow(camera->mViewMtx);
+            dComIfGd_imageDrawShadow(camera->view.mViewMtx);
 
             view_port_class viewport_crop;
             view_port_class* viewport_p = window->getViewPort();
@@ -1631,9 +1599,9 @@ bool mDoGph_Painter() {
             GXSetViewport(viewport_p->mXOrig, viewport_p->mYOrig, viewport_p->mWidth, viewport_p->mHeight, viewport_p->mNearZ, viewport_p->mFarZ);
             GXSetScissor(viewport_p->mXOrig, viewport_p->mYOrig, viewport_p->mWidth, viewport_p->mHeight);
 
-            JPADrawInfo jpaDrawInfo(camera->mViewMtx, 45.0f, 1.218f);
-            jpaDrawInfo.setFovy(camera->mFovy);
-            jpaDrawInfo.setAspect(camera->mAspect);
+            JPADrawInfo jpaDrawInfo(camera->view.mViewMtx, 45.0f, 1.218f);
+            jpaDrawInfo.setFovy(camera->view.mFovy);
+            jpaDrawInfo.setAspect(camera->view.mAspect);
 
 #if VERSION > VERSION_DEMO
             BOOL isTower9 = FALSE;
@@ -1641,11 +1609,11 @@ bool mDoGph_Painter() {
                 isTower9 = TRUE;
 #endif
             dComIfGp_setCurrentWindow(window);
-            dComIfGp_setCurrentView(camera);
+            dComIfGp_setCurrentView(&camera->view);
             dComIfGp_setCurrentViewport(viewport_p);
-            GXSetProjection(camera->mProjMtx, GX_PERSPECTIVE);
+            GXSetProjection(camera->view.mProjMtx, GX_PERSPECTIVE);
             PPCSync();
-            j3dSys.setViewMtx(camera->mViewMtx);
+            j3dSys.setViewMtx(camera->view.mViewMtx);
             dKy_setLight();
             dComIfGd_drawOpaListSky();
             dComIfGd_drawXluListSky();
@@ -1655,17 +1623,20 @@ bool mDoGph_Painter() {
 
             GXSetClipMode(GX_CLIP_ENABLE);
             dComIfGd_drawOpaListBG();
-            dComIfGd_drawShadow(camera->mViewMtx);
-            dComIfGd_drawAlphaModel(camera->mViewMtx);
-            drawAlphaBuffer(camera, dComIfGd_getAlphaModelColor());
+#if VERSION == VERSION_JPN
+            j3dSys.reinitGX();
+#endif
+            dComIfGd_drawShadow(camera->view.mViewMtx);
+            dComIfGd_drawAlphaModel(camera->view.mViewMtx);
+            drawAlphaBuffer(&camera->view, dComIfGd_getAlphaModelColor());
             if (dComIfGd_getLightModelNum() != 0) {
 #if VERSION == VERSION_DEMO
-                clearAlphaBuffer(camera);
+                clearAlphaBuffer(&camera->view);
 #else
-                clearAlphaBuffer(camera, 0);
+                clearAlphaBuffer(&camera->view, 0);
 #endif
-                dComIfGd_drawLightModel(camera->mViewMtx);
-                drawAlphaBuffer(camera, dComIfGd_getLightModelColor());
+                dComIfGd_drawLightModel(camera->view.mViewMtx);
+                drawAlphaBuffer(&camera->view, dComIfGd_getLightModelColor());
             }
 
             if (!mDoGph_gInf_c::isMonotone()) {
@@ -1678,9 +1649,9 @@ bool mDoGph_Painter() {
 
             if (dComIfGd_getSpotModelNum() != 0)
 #if VERSION == VERSION_DEMO
-                clearAlphaBuffer(camera);
+                clearAlphaBuffer(&camera->view);
 #else
-                clearAlphaBuffer(camera, dComIfGd_getSpotModelColor().a);
+                clearAlphaBuffer(&camera->view, dComIfGd_getSpotModelColor().a);
 #endif
 
             if (!dMenu_flag() && !dPa_control_c::isStatus(0x01))
@@ -1698,8 +1669,8 @@ bool mDoGph_Painter() {
                     dComIfGp_particle_drawP1(&jpaDrawInfo);
 
                 JPADrawInfo windDrawInfo(dPa_control_c::getWindViewMatrix(), 45.0f, 1.218f);
-                windDrawInfo.setFovy(camera->mFovy);
-                windDrawInfo.setAspect(camera->mAspect);
+                windDrawInfo.setFovy(camera->view.mFovy);
+                windDrawInfo.setAspect(camera->view.mAspect);
                 dComIfGp_particle_drawWind(&windDrawInfo);
 
                 dComIfGp_particle_drawToon(&jpaDrawInfo);
@@ -1712,15 +1683,17 @@ bool mDoGph_Painter() {
 
             dComIfGd_drawOpaListFilter();
 
-#if VERSION > VERSION_DEMO
+#if VERSION == VERSION_JPN
+            j3dSys.reinitGX();
+#elif VERSION > VERSION_JPN
             j3dSys.reinitGX();
             GXSetNumIndStages(0);
 #endif
 
             if (dComIfGd_getSpotModelNum() != 0) {
-                dComIfGd_drawAlphaModel(camera->mViewMtx);
-                dComIfGd_drawSpotModel(camera->mViewMtx);
-                drawSpot(camera);
+                dComIfGd_drawAlphaModel(camera->view.mViewMtx);
+                dComIfGd_drawSpotModel(camera->view.mViewMtx);
+                drawSpot(&camera->view);
             }
 
 #if VERSION == VERSION_DEMO
@@ -1732,8 +1705,11 @@ bool mDoGph_Painter() {
             dComIfGd_drawXluListMaskOff();
 
             if (!dMenu_flag()) {
-                motionBlure(camera);
-                drawDepth(camera, viewport_p, dComIfGp_getCamZoomForcus(cameraID));
+                motionBlure(&camera->view);
+                drawDepth(&camera->view, viewport_p, dComIfGp_getCameraZoomForcus(cameraID));
+#if VERSION == VERSION_PAL
+                GXInvalidateTexAll();
+#endif
                 dComIfGp_particle_drawProjection(&jpaDrawInfo);
 
                 GXSetClipMode(GX_CLIP_ENABLE);
@@ -1742,16 +1718,18 @@ bool mDoGph_Painter() {
 
 #if VERSION > VERSION_DEMO
                 j3dSys.reinitGX();
+#if VERSION > VERSION_JPN
                 GXSetNumIndStages(0);
+#endif
                 if (isTower9)
                     dComIfGp_particle_draw(&jpaDrawInfo);
 #endif
 
                 if (mDoGph_gInf_c::isMonotone()) {
 #if VERSION == VERSION_DEMO
-                    clearAlphaBuffer(camera);
+                    clearAlphaBuffer(&camera->view);
 #else
-                    clearAlphaBuffer(camera, 0);
+                    clearAlphaBuffer(&camera->view, 0);
 #endif
                     dComIfGd_drawOpaListP0();
                     dComIfGd_drawOpaListP1();
@@ -1766,8 +1744,11 @@ bool mDoGph_Painter() {
                 }
 #endif
 
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
                 mDoGph_gInf_c::calcFade();
+#endif
+
+#if VERSION > VERSION_DEMO
                 if (mCaptureStep == 1) {
                     if (!mCaptureCansel)
                         mDoGph_screenCapture();
@@ -1856,7 +1837,11 @@ bool mDoGph_Painter() {
             OSCreateAlarm(&alarm);
             OSInitThreadQueue(&mCaptureThreadQueue);
             OSSetAlarm(&alarm, OSMillisecondsToTicks(3), mCaptureAlarmHandler);
-#else
+#elif VERSION == VERSION_JPN
+            OSCreateAlarm(&alarm);
+            OSInitThreadQueue(&mCaptureThreadQueue);
+            OSSetAlarm(&alarm, OSMillisecondsToTicks(10), mCaptureAlarmHandler);
+#else // VERSION_USA and VERSION_PAL
             u64 tickNum = OSMillisecondsToTicks(10);
             OSCreateAlarm(&alarm);
             OSInitThreadQueue(&mCaptureThreadQueue);
@@ -1898,14 +1883,14 @@ bool mDoGph_Painter() {
 
     dDlst_list_c::calcWipe();
     j3dSys.reinitGX();
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
     GXSetNumIndStages(0);
 #endif
 
-    graf.setOrtho(JGeometry::TBox2<f32>(-9.0f, -21.0f, 650.0f, 503.0f), 100000.0f, -100000.0f);
+    graf.setOrtho(-9.0f, -21.0f, 659.0f, 524.0f, 100000.0f, -100000.0f);
     graf.setPort();
     Mtx viewMtx;
-    mDoMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
+    cMtx_trans(viewMtx, 320.0f, 240.0f, 0.0f);
     JPADrawInfo jpaDrawInfo2D(viewMtx, 45.0f, 1.218f);
     jpaDrawInfo2D.setFovy(0.0f);
     jpaDrawInfo2D.setAspect(4.0f/3.0f);
@@ -1915,14 +1900,14 @@ bool mDoGph_Painter() {
 
     if (dComIfGd_getList2D()->getEntryPacket(0) != NULL) {
         Mtx viewMtx;
-        mDoMtx_copy(j3dSys.getViewMtx(), viewMtx);
+        cMtx_copy(j3dSys.getViewMtx(), viewMtx);
         setLight();
         mDoMtx_stack_c::transS(320.0f, 240.0f, 1000.0f);
         mDoMtx_stack_c::ZrotM(-0x8000);
         j3dSys.setViewMtx(mDoMtx_stack_c::get());
         dComIfGd_drawOpaList2D();
         j3dSys.reinitGX();
-#if VERSION > VERSION_DEMO
+#if VERSION > VERSION_JPN
         GXSetNumIndStages(0);
 #endif
         j3dSys.setViewMtx(viewMtx);
@@ -1951,7 +1936,9 @@ bool mDoGph_Create() {
 #if VERSION > VERSION_DEMO
     mDoExt_adjustSolidHeap(solidHeap);
     mDoExt_restoreCurrentHeap();
+#if VERSION > VERSION_JPN
     JFWAutoAbortGfx = mDoMain::developmentMode ? 0x02 : 0x01;
+#endif
 #endif
     return true;
 }

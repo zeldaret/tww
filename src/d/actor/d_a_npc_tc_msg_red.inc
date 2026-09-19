@@ -167,7 +167,6 @@ u32 daNpc_Tc_c::getMsgRed() {
                 return 0xDEB;
             case false:
                 return 0xDEA;
-
         }
     }
 

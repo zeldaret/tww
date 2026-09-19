@@ -17,9 +17,7 @@ struct h3_ga_s {
     /* 0x00 */ J3DModel* mpModel;
     /* 0x04 */ cXyz mPos;
     /* 0x04 */ cXyz m10;
-    /* 0x1C */ s16 m1C;
-    /* 0x1E */ s16 m1E;
-    /* 0x20 */ u8 m20[0x24 - 0x20];
+    /* 0x1C */ csXyz m1C;
     /* 0x24 */ f32 m24;
     /* 0x28 */ f32 m28;
     /* 0x2C */ s16 m2C;
@@ -91,8 +89,7 @@ public:
     /* 0x2110 */ u8 m2110;
     /* 0x2111 */ u8 m2111;
     /* 0x2114 */ h3_ga_s m2114[1];
-    /* 0x2144 */ J3DLightObj m2144;
-    /* 0x21B8 */ u8 m2178[0x21F4 - 0x21B8];
+    /* 0x2144 */ dKy_tevstr_c m2144;
     /* 0x21F4 */ cXyz m21F4;
     /* 0x2200 */ s16 m2200;
 }; // size = 0x2204

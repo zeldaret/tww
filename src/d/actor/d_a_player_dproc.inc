@@ -700,7 +700,7 @@ BOOL daPy_lk_c::dProcGetItem_init() {
     } else {
         mProcVar2.m34D4 = -1;
     }
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     mProcVar3.m34D6 = shape_angle.y - fopCamM_GetAngleY(cam);
     current.angle.y = shape_angle.y;
     m3628 = fpcM_ERROR_PROCESS_ID_e;
@@ -724,7 +724,7 @@ BOOL daPy_lk_c::dProcGetItem() {
         return true;
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < 10.0f) {
-        camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+        camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
         mProcVar3.m34D6 = shape_angle.y - fopCamM_GetAngleY(cam);
     }
     daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
@@ -858,7 +858,7 @@ BOOL daPy_lk_c::dProcLavaDamage_init() {
     commonProcInit(daPyProc_DEMO_LAVA_DAMAGE_e);
     mNormalSpeed = 0.0f;
     setSingleMoveAnime(ANM_LAVADAM, m_HIO->mRestart.m.field_0x0, 0.0f, -1, m_HIO->mRestart.m.field_0x4);
-    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(0), &current.pos, NULL);
+    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &current.pos, NULL);
     if (dComIfGp_event_compulsory(this)) {
         dProcLavaDamage_init_sub();
     } else {
@@ -886,11 +886,11 @@ extern GXColor l_freeze_fade_color;
 /* 8012EF78-8012F0DC       .text dProcFreezeDamage_init_sub__9daPy_lk_cFi */
 void daPy_lk_c::dProcFreezeDamage_init_sub(int param_0) {
     static const u16 eff_joint[] = {
-        0x0007,
-        0x000B,
-        0x001A,
-        0x000E,
-        0x001E,
+        CL_JNT_LARMB_JNT_e,
+        CL_JNT_RARMB_JNT_e,
+        CL_JNT_HATA_JNT_e,
+        CL_JNT_NECK_JNT_e,
+        CL_JNT_WAIST_JNT_e,
     };
 
     if (param_0 != 0) {
@@ -1252,8 +1252,8 @@ BOOL daPy_lk_c::dProcTalismanWait_init() {
     mNormalSpeed = 0.0f;
     setTalismanModel();
     m32E4.makeEmitter(dPa_name::ID_IT_JN_OMAMORI_TSUBU00, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
-    mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(12));
-    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(12));
+    mpEquipItemModel->setBaseTRMtx(mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e));
+    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e));
     f32 adjust = cM_ssin(g_Counter.mTimer * 1512);
     mDoMtx_stack_c::transM(7.0f, 0.0f, 15.0f + 3.0f * adjust);
     mDoMtx_stack_c::multVecZero(&m338C.getPos());
@@ -1268,7 +1268,7 @@ BOOL daPy_lk_c::dProcTalismanWait() {
         setShipRidePos(1);
     }
     cXyz* pcVar1 = &m338C.getPos();
-    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(12));
+    mDoMtx_stack_c::copy(mpCLModel->getAnmMtx(CL_JNT_CL_RHANDA_e));
     f32 adjust = cM_ssin(g_Counter.mTimer * 1512);
     mDoMtx_stack_c::transM(7.0f, 0.0f, 15.0f + 3.0f * adjust);
     mDoMtx_stack_c::multVecZero(pcVar1);
@@ -1714,12 +1714,6 @@ BOOL daPy_lk_c::dProcWindChange() {
 
 /* 80130F98-8013116C       .text dProcStandItemPut_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcStandItemPut_init() {
-    daPy_py_c* pdVar1;
-    fopAc_ac_c* pfVar2;
-    f32 dVar5;
-    double in_f4;
-    csXyz* angle;
-
     if (mCurProc == daPyProc_DEMO_STAND_ITEM_PUT_e) {
         return true;
     }
@@ -1727,27 +1721,24 @@ BOOL daPy_lk_c::dProcStandItemPut_init() {
     mNormalSpeed = 0.0f;
     keepItemData();
     mProcVar6.m3570 = 0;
-    pdVar1 = (daPy_py_c*)fopAcM_getEventPartner(this);
-    if (pdVar1 != NULL) {
-        cXyz local_20 = pdVar1->current.pos - current.pos;
+    fopAc_ac_c* event_partner = fopAcM_getEventPartner(this);
+    csXyz* angle;
+    if (event_partner != NULL) {
+        cXyz local_20 = event_partner->current.pos - current.pos;
         angle = fopAcM_GetShapeAngle_p(this);
-        angle->y = fopAcM_searchActorAngleY(this, pdVar1);
-        dVar5 = local_20.absXZ();
-        if (0.0f < dVar5) {
-            in_f4 = 0.5;
-        }
-        m35C8 = dVar5 - 47.0f;
-        angle = fopAcM_GetShapeAngle_p(pdVar1);
+        angle->y = fopAcM_searchActorAngleY(this, event_partner);
+        m35C8 = local_20.absXZ() - 47.0f;
+        angle = fopAcM_GetShapeAngle_p(event_partner);
     } else {
         m35C8 = 15.0f;
         angle = fopAcM_GetShapeAngle_p(this);
     }
     mProcVar6.m3570 = 1;
     setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, -1.0f);
-    pfVar2 = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
-    if (pfVar2 != NULL) {
-        mActorKeepGrab.setData(pfVar2);
-        fopAcM_setCarryNow(pfVar2, FALSE);
+    fopAc_ac_c* stand_item = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
+    if (stand_item != NULL) {
+        mActorKeepGrab.setData(stand_item);
+        fopAcM_setCarryNow(stand_item, FALSE);
     }
     return true;
 }
@@ -1787,7 +1778,7 @@ BOOL daPy_lk_c::dProcVorcanoFail_init() {
     speed.y = 18.0f;
     gravity = 0.0f;
     setSingleMoveAnime(ANM_LAVADAM, m_HIO->mRestart.m.field_0x0, 0.0f, -1, m_HIO->mRestart.m.field_0x4);
-    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(0), &current.pos, NULL);
+    m32E4.makeEmitter(dPa_name::ID_AK_SN_HIDARUMAFIRE, mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e), &current.pos, NULL);
     return true;
 }
 
@@ -2092,7 +2083,7 @@ BOOL daPy_lk_c::dProcGetDance_init() {
     mNormalSpeed = 0.0f;
     setSingleMoveAnime(ANM_TAKTDGE, 1.0f, 0.0f, -1, 3.0f);
     mProcVar2.m34D4 = 0;
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     mProcVar3.m34D6 = shape_angle.y - fopCamM_GetAngleY(cam);
     current.angle.y = shape_angle.y;
     m3628 = fpcM_ERROR_PROCESS_ID_e;

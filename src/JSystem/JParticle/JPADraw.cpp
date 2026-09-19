@@ -172,12 +172,12 @@ void JPADraw::initParticle(JPABaseParticle* ptcl) {
     params->mLoopOffset = dc.pbe->getRandomF() * dc.pbsp->getLoopOffset();
     if (dc.pesp != NULL) {
         if (dc.pesp->isEnableRotate()) {
-            params->mRotateAngle = (dc.pesp->getRotateAngle() * 32768.0f) + (dc.pbe->getRandomSF() * dc.pesp->getRotateRandomAngle() * 65536.0f);
+            params->mRotateAngle = (dc.pesp->getRotateAngle() * 0x8000) + (dc.pbe->getRandomSF() * dc.pesp->getRotateRandomAngle() * 0x10000);
             s16 rotateSpeed;
             if (dc.pbe->getRandomRF() < dc.pesp->getRotateDirection()) {
-                rotateSpeed = dc.pesp->getRotateSpeed() * (dc.pesp->getRotateRandomSpeed() * dc.pbe->getRandomRF() + 1.0f) * 32768.0f;
+                rotateSpeed = dc.pesp->getRotateSpeed() * (dc.pesp->getRotateRandomSpeed() * dc.pbe->getRandomRF() + 1.0f) * 0x8000;
             } else {
-                rotateSpeed = -dc.pesp->getRotateSpeed() * (dc.pesp->getRotateRandomSpeed() * dc.pbe->getRandomRF() + 1.0f) * 32768.0f;
+                rotateSpeed = -dc.pesp->getRotateSpeed() * (dc.pesp->getRotateRandomSpeed() * dc.pbe->getRandomRF() + 1.0f) * 0x8000;
             }
             params->mRotateSpeed = rotateSpeed;
         } else {
@@ -245,7 +245,7 @@ void JPADraw::initChild(JPABaseParticle* ptcl, JPABaseParticle* chld) {
 
     chld_params->mRotateAngle = params->mRotateAngle;
     if (dc.pssp->isEnableRotate()) {
-        chld_params->mRotateSpeed = dc.pssp->getRotateSpeed() * 32768.0f;
+        chld_params->mRotateSpeed = dc.pssp->getRotateSpeed() * 0x8000;
     } else {
         chld_params->mRotateSpeed = 0;
     }

@@ -581,7 +581,7 @@ int JASystem::TSeqParser::cmdIIRSet(TTrack* track, u32* args) {
     for (u8 i = 0; i < 4; i++) {
         u8 iirIndex = TTrack::TIMED_IIR_Unk0 + i;
         TTrack::MoveParam_* iir = &track->mTimedParam.mMoveParams[iirIndex];
-        iir->mTargetValue = (s16)args[i] / 32768.0f;
+        iir->mTargetValue = (f32)(s16)args[i] / 0x8000;
         iir->mCurrentValue = iir->mTargetValue;
         iir->mMoveAmount = 0.0f;
         iir->mMoveTime = 1.0f;
@@ -596,7 +596,7 @@ int JASystem::TSeqParser::cmdIIRCutOff(TTrack* track, u32* args) {
         s16* table = &JASystem::Player::CUTOFF_TO_IIR_TABLE[iirTableIdx * 4];
         u8 iirIndex = TTrack::TIMED_IIR_Unk0 + i;
         TTrack::MoveParam_* iir = &track->mTimedParam.mMoveParams[iirIndex];
-        iir->mTargetValue = table[i] / (32768.0f - 1.0f);
+        iir->mTargetValue = table[i] / (0x8000 - 1.0f);
         iir->mCurrentValue = iir->mTargetValue;
         iir->mMoveAmount = 0.0f;
         iir->mMoveTime = 1.0f;
@@ -789,7 +789,7 @@ int JASystem::TSeqParser::cmdSetParam(TTrack* track, u8 param_2) {
         break;
     }
 
-    track->setParam(flag, (int)data / 32767.0f, val);
+    track->setParam(flag, data / (f32)0x7FFF, val);
     return 0;
 }
 
@@ -859,7 +859,7 @@ int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8 note) {
     }
     u8 r23;
     u8 noteid = r27 & 0x7;
-    int r22 = 0;
+    u32 skipSamples = 0;
     if (!noteid) {
         r23 = track->getSeq()->readByte();
         if (r23 & 0x80) {
@@ -881,7 +881,7 @@ int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8 note) {
             JUT_ASSERT(0x4FE, noteid < 8);
         }
         if (r26 & 1) {
-            r22 = track->exchangeRegisterValue(track->getSeq()->readByte());
+            skipSamples = track->exchangeRegisterValue(track->getSeq()->readByte());
             r26 ^= 1;
         }
 
@@ -912,7 +912,7 @@ int JASystem::TSeqParser::cmdNoteOn(TTrack* track, u8 note) {
         }
 
         if (!track->mIsPaused || !(track->mPauseStatus & 0x10)) {
-            track->noteOn(noteid, note, r25, time, r22);
+            track->noteOn(noteid, note, r25, time, skipSamples);
         }
     }
 
