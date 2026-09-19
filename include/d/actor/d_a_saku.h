@@ -22,16 +22,16 @@ public:
     inline BOOL _daSaku_isdelete();
 
     void CreateInit();
-    void saku_draw_sub(int);
+    int saku_draw_sub(int);
     void mode_break_none(int);
     void mode_break_fire(int);
     int mode_break_throw_obj(int);
-    void RecreateHeap(int, int);
-    void CreateHeap(int, int);
-    void GetDzbId(int);
-    void CreateDummyHeap(int);
-    void loadMoveBG(int, int, int);
-    void loadModel(int, int, int);
+    int RecreateHeap(int, int);
+    bool CreateHeap(int, int);
+    int GetDzbId(int);
+    int CreateDummyHeap(int);
+    int loadMoveBG(int, int, int);
+    int loadModel(int, int, int);
     int burn();
     int broken(int);
     bool changeCollision(int);
@@ -50,6 +50,7 @@ public:
     static const s32 m_alpha_start_time;
     static s32 m_fade_time;
     static GXColor dust_color;
+    static const s32 m_max_particle_timer;
 
     /* 0x290 */ dPa_smokeEcallBack field_0x290[2];
     /* 0x2D0 */ dCcD_Stts mStts;

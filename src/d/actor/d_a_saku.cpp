@@ -373,9 +373,50 @@ static BOOL daSaku_Draw(daSaku_c* m) {
     return TRUE;
 }
 
+BOOL daSaku_c::_daSaku_execute() {
+    int iVar2;
+
+    for(int i = 0; i < 2; i++) {
+        iVar2 = field_0xEBC[i] ;
+        if(iVar2 != 0 && iVar2 < m_max_particle_timer) {
+            field_0xEBC[i] = iVar2 + 1;
+        }
+    }
+
+    if (field_0xEEC != 0) {
+        field_0xEEC -= 1;
+    }
+    field_0xEE0[2] += 1;
+
+    for(int i = 0; i < 2; i ++) {
+        switch (field_0xEF8[i]) {
+            case 0:
+                break;
+            case 1:
+                mode_break_none(i);
+                break;
+            case 3:
+                mode_break_throw_obj(i);
+                break;
+            case 2:
+                mode_break_fire(i);
+                break;
+        }
+    }
+
+    for(int i = 0; i < 2; i++) {
+        changeCollision(i);
+    }
+
+    setMtx();
+    checkCol();
+
+    return TRUE;
+}
+
 /* 0000242C-00002560       .text daSaku_Execute__FP8daSaku_c */
-static BOOL daSaku_Execute(daSaku_c*) {
-    /* Nonmatching */
+static BOOL daSaku_Execute(daSaku_c* i_this) {
+    return i_this->_daSaku_execute();
 }
 
 static actor_method_class l_daSaku_Method = {
