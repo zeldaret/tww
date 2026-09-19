@@ -283,7 +283,7 @@ void JAIBasic::stopSoundHandle(JAISound* param_1, u32 fadeTime) {
     if (!param_1) {
         return;
     }
-    switch (param_1->mSoundID & JAISoundID_TypeMask) {
+    switch (param_1->getID() & JAISoundID_TypeMask) {
     case JAISoundID_Type_Sequence:
         JAInter::SequenceMgr::releaseSeqBuffer(param_1, fadeTime);
         break;
@@ -487,14 +487,14 @@ u16 JAIBasic::setParameterSeqSync(JASystem::TTrack* param_1, u16 param_2) {
     switch (param_2) {
     case 0:
         for (int i = 0; i < JAIGlobalParameter::seqPlayTrackMax; i++) {
-            if (!JAInter::SequenceMgr::getPlayTrackInfo(i)->field_0x48) {
+            if (!JAInter::SequenceMgr::getPlayTrackInfo(i)->mSequence) {
                 continue;
             }
-            JAInter::SeqParameter* seqParam = JAInter::SequenceMgr::getPlayTrackInfo(i)->field_0x48->getSeqParameter();
+            JAInter::SeqParameter* seqParam = JAInter::SequenceMgr::getPlayTrackInfo(i)->mSequence->getSeqParameter();
             JASystem::TTrack* track = &seqParam->mTrack;
-            if (track == (JAInter::SequenceMgr::getPlayTrackInfo(i)->field_0x48->mSoundID & 0x800 ? param_1->mParent->mParent : param_1->mParent)) {
+            if (track == (JAInter::SequenceMgr::getPlayTrackInfo(i)->mSequence->getID() & 0x800 ? param_1->mParent->mParent : param_1->mParent)) {
                 u32 r28 = JAInter::routeToTrack(param_1->field_0x36c);
-                r30 = JAInter::SoundTable::getInfoPointer(JAInter::SequenceMgr::getPlayTrackInfo(i)->field_0x48->mSoundID)->mFlag >> 8;
+                r30 = JAInter::SoundTable::getInfoPointer(JAInter::SequenceMgr::getPlayTrackInfo(i)->mSequence->getID())->mFlag >> 8;
                 JAInter::SystemInterface::outerInit(JAInter::SequenceMgr::getPlayTrackInfo(i), param_1, r28, r30, param_2 & 1);
                 JAInter::SequenceMgr::getPlayTrackInfo(i)->field_0x4 |= 1 << r28;
                 r30 = 0;
@@ -506,11 +506,11 @@ u16 JAIBasic::setParameterSeqSync(JASystem::TTrack* param_1, u16 param_2) {
         u8 tmp = param_1->field_0x36c;
         JAInter::SeMgr::seTrackUpdate_s* r31 = JAInter::SeMgr::seTrackUpdate;
         JASystem::TTrack::TOuterParam* r28 = param_1->mOuterParam;
-        r28->setParam(OUTERPARAM_Volume, r31[tmp].field_0x4);
-        r28->setParam(OUTERPARAM_Pan, r31[tmp].field_0x10);
-        r28->setParam(OUTERPARAM_Pitch, r31[tmp].field_0x8);
-        r28->setParam(OUTERPARAM_Fxmix, r31[tmp].field_0xc);
-        r28->setParam(OUTERPARAM_Dolby, msBasic->field_0xd != 2 ? 0.0f : r31[tmp].field_0x14);
+        r28->setParam(OUTERPARAM_Volume, r31[tmp].mPlayingVolume);
+        r28->setParam(OUTERPARAM_Pan, r31[tmp].mPlayingPan);
+        r28->setParam(OUTERPARAM_Pitch, r31[tmp].mPlayingPitch);
+        r28->setParam(OUTERPARAM_Fxmix, r31[tmp].mPlayingFxmix);
+        r28->setParam(OUTERPARAM_Dolby, msBasic->field_0xd != 2 ? 0.0f : r31[tmp].mPlayingDolby);
         break;
     }
     case 127:
