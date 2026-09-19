@@ -8,7 +8,7 @@
 
 /* 800685F8-80068608       .text checkClearGame__11daMgBoard_cFv */
 bool daMgBoard_c::checkClearGame() {
-    return mSeaFightGame.mAliveShipNum == 0;
+    return mSeaFightGame.isClearGame();
 }
 
 /* 80068608-80068610       .text getScore__11daMgBoard_cFv */
@@ -23,8 +23,8 @@ void daMgBoard_c::reqStartGame() {
 }
 
 /* 80068624-80068638       .text checkEndGame__11daMgBoard_cFv */
-bool daMgBoard_c::checkEndGame() {
-    return mbEndGame;
+BOOL daMgBoard_c::checkEndGame() {
+    return mbEndGame != 0;
 }
 
 /* 80068638-80068644       .text setGInfoDraw__11daMgBoard_cFv */
