@@ -42,6 +42,17 @@ static dCcD_SrcCps cps_src = {
 };
 
 const char daObj_Search::Act_c::M_arcname[] = "Search";
+const daObj_Search::Act_c::Attr_c daObj_Search::Act_c::M_attr = { // TODO: this is copied from buoyrace.h
+    /* m00    */ 150.0f,
+    /* mScale */ 2.0f,
+    /* m08    */ 0.8f,
+    /* m0C    */ 0.5f,
+    /* m10    */ 0x3E8,
+    /* m14    */ 0.3f,
+    /* m18    */ 0.02f,
+    /* m1C    */ 0.04f,
+    /* m20    */ 0.35f
+};
 
 /* 800FDAFC-800FDB1C       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c* i_this) {
@@ -71,8 +82,8 @@ bool daObj_Search::Act_c::searchCreateHeap() {
     JUT_ASSERT(57, mdl_data != NULL);
 
     J3DModel* mdl = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
-    field_0x5F4 = mdl;
-    if (field_0x5F4 == NULL) {
+    field_0x5F4[0] = mdl;
+    if (field_0x5F4[0] == NULL) {
         return 0;
     }
 
@@ -83,7 +94,7 @@ bool daObj_Search::Act_c::searchCreateHeap() {
     }
 
     cBgD_t* pDat = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_SEARCH_DZB_S_BASE_e);
-    return true; //(mpBgW->Set(pDat, cBgW::MOVE_BG_e, &field_0x6D4) != 1) ? true : false;
+    return (mpBgW->Set(pDat, cBgW::MOVE_BG_e, &field_0x6D4) != 1) ? true : false;
 }
 
 /* 800FDCAC-800FDDBC       .text beamCreateHeap__Q212daObj_Search5Act_cFi */
@@ -117,7 +128,6 @@ void daObj_Search::Act_c::modeSearchRnd() {
 
 /* 800FE200-800FE244       .text modeSearchPathInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchPathInit() {
-    /* Nonmatching */
     if (is_path_info() == false) {
         modeProc(PROC_INIT_e,0);
     }
@@ -178,7 +188,7 @@ void daObj_Search::Act_c::modeFind2nd() {
 
     cXyz dir = (player->current.pos + cXyz()) - *(&field_0x624 + field_0x830);
 
-    //field_0x7A4[2].mYaw = field_0x704[0].mRoll;
+    field_0x7A4 = field_0x704[0].x;
 
     s16 yawTarget = cM_atan2s(dir.x, dir.z) - current.angle.y;
     s16 pitchTarget = cM_atan2s(dir.y, dir.absXZ());
@@ -211,15 +221,15 @@ void daObj_Search::Act_c::modeFind2nd() {
     }
 
     if (field_0x830 == 0) {
-        //field_0x704[1].mRoll = yawTarget;
+        field_0x704[1].y = yawTarget; // TODO rename these
     } else {
         pitchTarget = -pitchTarget;
         yawTarget += -0x8000;
-        //field_0x704[0].mRoll = yawTarget;
+        field_0x704[0].y = yawTarget;
     }
 
-    //cLib_addCalcAngleS2((s16*)&field_0x704[field_0x830].mRoll, yawTarget, 10, 0x400); // these casts are ungodly :(
-    //cLib_addCalcAngleS2((s16*)&field_0x704[field_0x830].mPitch, pitchTarget, 10, 0x400);
+    cLib_addCalcAngleS2(&field_0x704[field_0x830].x, yawTarget, 10, 0x400);
+    cLib_addCalcAngleS2(&field_0x704[field_0x830].x, pitchTarget, 10, 0x400);
 }
 
 /* 800FF7A4-800FF7A8       .text modeSearchBdkInit__Q212daObj_Search5Act_cFv */
@@ -274,8 +284,8 @@ void daObj_Search::Bgc_c::wall_pos(const daObj_Search::Act_c* actor, cXyz* pOldP
 bool daObj_Search::Act_c::m_find_flag;
 
 /* 801002D4-801002E0       .text attr__Q212daObj_Search5Act_cCFv */
-void daObj_Search::Act_c::attr() const {
-    /* Nonmatching */
+const daObj_Search::Act_c::Attr_c& daObj_Search::Act_c::attr() const {
+    return M_attr;
 }
 
 /* 801002E0-8010035C       .text SetArgData__Q212daObj_Search5Act_cFv */
@@ -329,12 +339,12 @@ cPhs_State daObj_Search::Act_c::_create() {
                 set_mtx_light_B();
 
                 const cXyz dir = field_0x60C - field_0x624;
-                s16 yawTarget = cM_atan2s(dir.x, dir.z) - current.angle.y;
+                s16 yawTarget = cM_atan2s(dir.x, dir.z) - current.angle.y; // TODO rename these
                 s16 pitchTarget = cM_atan2s(dir.y, dir.absXZ());
 
-                //field_0x704[0].mYaw = pitchTarget;
-                //field_0x704[0].mPitch = yawTarget;
-                //field_0x704[1].mRoll = field_0x704[0].mRoll;
+                field_0x704[0].x = pitchTarget;
+                field_0x704[0].y = yawTarget;
+                field_0x704[1].z = field_0x704[0].z;
             }
         } else {
             field_0x60C = field_0x624 + cXyz(1.0f, 1.0f, 1.0f);
@@ -405,17 +415,38 @@ void daObj_Search::Act_c::set_mtx_light_B() {
 
 /* 80101BAC-80101C30       .text set_moveBG_mtx_base__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_base() {
-    /* Nonmatching */
+    J3DModel *pModel;
+    pModel = field_0x5F4[0];
+    
+    pModel->getBaseScale()->x = scale.x;
+    pModel->getBaseScale()->y = scale.y;
+    pModel->getBaseScale()->z = scale.z;
+    
+    MTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
+    cMtx_YrotM(mDoMtx_stack_c::now, current.angle.y);
+    MTXCopy(mDoMtx_stack_c::now,field_0x6D4);
+    
+    mpBgW->Move();
 }
 
 /* 80101C30-80101CB0       .text set_moveBG_mtx_light_A__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_light_A() {
-    /* Nonmatching */
+    MTXCopy(field_0x5F4[0]->getAnmMtx(5), mDoMtx_stack_c::now);
+    mDoMtx_XYZrotM(mDoMtx_stack_c::now, 0, 0, -0x4000);
+    mDoMtx_stack_c::transM(40.0f, -270.0f, 30.0f);
+    MTXCopy(mDoMtx_stack_c::now, field_0x674);
+    
+    field_0x668->Move();
 }
 
 /* 80101CB0-80101D30       .text set_moveBG_mtx_light_B__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_light_B() {
-    /* Nonmatching */
+    MTXCopy(field_0x5F4[0]->getAnmMtx(6), mDoMtx_stack_c::now);
+    mDoMtx_XYZrotM(mDoMtx_stack_c::now, 0, 0, -0x4000);
+    mDoMtx_stack_c::transM(40.0f, -270.0f, 30.0f);
+    MTXCopy(mDoMtx_stack_c::now, field_0x6A4);
+    
+    field_0x66C->Move();
 }
 
 /* 80101D30-80101D94       .text bg_check__Q212daObj_Search5Act_cFv */
@@ -432,7 +463,35 @@ void daObj_Search::Act_c::bg_check() {
 
 /* 80101D94-8010234C       .text player_check__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::player_check() {
-    /* Nonmatching */
+    daPy_py_c* player = daPy_getPlayerActorClass();
+    float distA = (player->current.pos - field_0x624).abs();
+    float distB = (player->current.pos - field_0x630).abs();
+
+    field_0x30C[0].GetShapeAttr()->mAab.SetMin(field_0x624);
+    field_0x30C[0].GetShapeAttr()->mAab.SetMax(field_0x63C);
+
+    //field_0x30C[0].Set(dComIfG_Ccsp());
+
+    if (field_0x30C[0].ChkCoHit()) {
+        fopAc_ac_c* pAct = field_0x30C[0].GetAc();
+        cXyz toPlayer = pAct->current.pos - field_0x624;
+        cXyz capsuleDir = (field_0x63C - field_0x624).normZP();
+        f32  proj = capsuleDir.getDotProduct(toPlayer);
+
+        field_0x780.mPos   = this->field_0x624 + capsuleDir * (proj - 250.0f);
+        field_0x780.mColor.r = 0x2d;
+        field_0x780.mColor.g = 0x2d;
+        field_0x780.mPower   = 600.0f;
+
+        if (pAct->base.base.mProcName == 0xa9) {
+            /*if (fVar4 < 2000.0f || fVar5 < 2000.0f) {
+                return;
+            }
+            if (ABS(apdVar1[0]->parent.speedF) >= 0.1f || apdVar1[0]->field13_0x2b0 >= 0.0f) {
+                return;
+            }*/
+        }
+    }
 }
 
 /* 8010234C-80102384       .text set_path_info__Q212daObj_Search5Act_cFv */

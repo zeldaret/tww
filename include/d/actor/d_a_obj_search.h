@@ -5,6 +5,7 @@
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
+#include "d/d_lib.h"
 #include "d/d_particle.h"
 #include "d/d_path.h"
 #include "f_op/f_op_actor.h"
@@ -49,10 +50,24 @@ namespace daObj_Search {
             const char* name;
         };
 
+        struct Attr_c { // TODO
+            /* 0x00 */ f32 m00;
+            /* 0x04 */ f32 mScale;
+            /* 0x08 */ f32 m08;
+            /* 0x0C */ f32 m0C;
+            /* 0x10 */ s16 m10;
+            /* 0x14 */ f32 m14;
+            /* 0x18 */ f32 m18;
+            /* 0x1C */ f32 m1C;
+            /* 0x20 */ f32 m20;
+        };
+
         static bool getFindFlag() { return m_find_flag == true; }
         static void setFindFlag(bool flag) { m_find_flag = flag; }
         
         static bool m_find_flag;
+        static const Attr_c M_attr;
+
         
         void isSecond() {}
         void modeProcInit(int) {}
@@ -80,7 +95,7 @@ namespace daObj_Search {
         void modeSearchBdkInit();
         void modeSearchBdk();
         void modeProc(Proc_e, int);
-        void attr() const;
+        const Attr_c& attr() const;
         void SetArgData();
         void CreateInit();
         cPhs_State _create();
@@ -105,12 +120,10 @@ namespace daObj_Search {
     
     public:
         /* 0x290 */ s32 mMode;
-        /* 0x294 */ u8 field_0x294[0x30C - 0x294];
+        /* 0x294 */ Bgc_c field_0x294;
         /* 0x30C */ dCcD_Cps field_0x30C[2];
         /* 0x57C */ dCcD_Stts field_0x57C[2];
-        /* 0x5F4 */ J3DModel* field_0x5F4;
-        /* 0x5F8 */ J3DModel* field_0x5F8;
-        /* 0x5FC */ J3DModel* field_0x5FC;
+        /* 0x5F4 */ J3DModel* field_0x5F4[3];
         /* 0x600 */ cXyz field_0x600;
         /* 0x60C */ cXyz field_0x60C;
         /* 0x618 */ Vec field_0x618;
@@ -118,26 +131,40 @@ namespace daObj_Search {
         /* 0x630 */ cXyz field_0x630;
         /* 0x63C */ cXyz field_0x63C;
         /* 0x648 */ cXyz field_0x648;
-        /* 0x654 */ u8 field_0x654[0x664 - 0x654];
+        /* 0x654 */ f32 field_0x654;
+        /* 0x658 */ f32 field_0x658;
+        /* 0x65C */ f32 field_0x65C;
+        /* 0x660 */ f32 field_0x660;
         /* 0x664 */ bool mBkControl;
         /* 0x665 */ u8 field_0x665[0x668 - 0x665];
         /* 0x668 */ dBgW* field_0x668;
         /* 0x66C */ dBgW* field_0x66C;
         /* 0x670 */ dBgW* mpBgW;
-        /* 0x674 */ u8 field_0x674[0x704 - 0x674];
+        /* 0x674 */ Mtx field_0x674;
+        /* 0x6A4 */ Mtx field_0x6A4;
+        /* 0x6D4 */ Mtx field_0x6D4;
         /* 0x704 */ csXyz field_0x704[2];
-        /* 0x710 */ u8 field_0x710[0x77E - 0x710];
+        /* 0x710 */ u8 field_0x710[0x712 - 0x710];
+        /* 0x712 */ Mtx field_0x712;
+        /* 0x742 */ Mtx field_0x742;
+        /* 0x772 */ u8 field_0x772[0x77C - 0x772];
+        /* 0x77C */ bool field_0x77C;
+        /* 0x77D */ bool field_0x77D;
         /* 0x77E */ s16 field_0x77E;
         /* 0x780 */ LIGHT_INFLUENCE field_0x780;
-        /* 0x7A0 */ u8 field_0x7A0[0x7B6 - 0x7A0];
+        /* 0x7A0 */ u8 field_0x7A0[0x7A4 - 0x7A0];
+        /* 0x7A4 */ s32 field_0x7A4;
+        /* 0x7A8 */ u8 field_0x7A8[0x7B6 - 0x7A8];
         /* 0x7B6 */ bool field_0x7B6;
         /* 0x7B7 */ bool field_0x7B7;
         /* 0x7B8 */ bool field_0x7B8;
-        /* 0x7B9 */ u8 field_0x7B9[0x7E2 - 0x7B9];
+        /* 0x7B9 */ u8 field_0x7B9[0x7BC - 0x7B9];
+        /* 0x7BC */ dLib_circle_path_c field_0x7BC;
+        /* 0x7E0 */ s16 field_0x7E0;
         /* 0x7E2 */ u8 field_0x7E2;
         /* 0x7E3 */ u8 field_0x7E3[0x808 - 0x7E3];
         /* 0x808 */ dPa_smokeEcallBack field_0x808;
-        /* 0x828 */ u8 field_0x828[0x82C - 0x828];
+        /* 0x828 */ dPa_smokeEcallBack* field_0x828;
         /* 0x82C */ u8 field_0x82C;
         /* 0x82D */ u8 field_0x82D;
         /* 0x82E */ u8 field_0x82E[0x830 - 0x82E];
@@ -152,14 +179,19 @@ namespace daObj_Search {
                     u8 pad84C;
 #endif
         /* 0x84C */ fpc_ProcID mChildId;
-        /* 0x850 */ u8 field_0x850[0x854 - 0x850];
+        /* 0x850 */ int field_0x850;
         /* 0x854 */ request_of_phase_process_class mPhs;
         /* 0x85C */ int field_0x85C;
         /* 0x860 */ bool field_0x860;
         /* 0x861 */ u8 field_0x861[0x864 - 0x861];
         /* 0x864 */ dBgS_LinChk field_0x864;
         /* 0x8D0 */ u8 field_0x8D0;
-        /* 0x8D1 */ u8 field_0x8D1[0x908 - 0x8D1];
+        /* 0x8D1 */ u8 field_0x8D1[0x8D4 - 0x8D1];
+        /* 0x8D4 */ Vec field_0x8D4;
+        /* 0x8E0 */ Vec field_0x8E0;
+        /* 0x8EC */ Vec field_0x8EC;
+        /* 0x8F8 */ Vec field_0x8F8;
+        /* 0x904 */ u8 field_0x904[0x908 - 0x904];
     };
 
     namespace Mthd {
