@@ -6,12 +6,20 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_map.h"
 #include "d/actor/d_a_agb.h"
+#include "JSystem/J2DGraph/J2DOrthoGraph.h"
+#include "JSystem/J3DGraphAnimator/J3DModelData.h"
+#include "JSystem/JMath/JMATrigonometric.h"
+#include "d/actor/d_a_agb.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_stage.h"
 #include "dolphin/gx/GX.h"
+#include "dolphin/gx/GXAttr.h"
+#include "dolphin/gx/GXEnum.h"
+#include "dolphin/gx/GXGeometry.h"
 #include "dolphin/gx/GXEnum.h"
 #include "dolphin/gx/GXInit.h"
 #include "dolphin/gx/GXGeometry.h"
+#include "m_Do/m_Do_mtx.h"
 #include "res/Object/Always.h"
 #include "f_ap/f_ap_game.h"
 #include "m_Do/m_Do_gba_com.h"
@@ -199,6 +207,7 @@ static inline int gridPos2GridNo(int i_gridX, int i_gridY) {
     JUT_ASSERT(VERSION_SELECT(1258, 1188, 1188, 1188), (i_gridX >= -3) && (i_gridX <= 3) && (i_gridY >= -3) && (i_gridY <= 3));
     return i_gridX + 3 + (i_gridY + 3) * 7;
 }
+
 
 /* 800455AC-80045660       .text onSaveArriveGridForAgbUseGridPos__Fii */
 void onSaveArriveGridForAgbUseGridPos(int i_gridX, int i_gridY) {
@@ -556,9 +565,9 @@ BOOL dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int i_roomNo) {
                 for (int j = 0; j < int(ARRAY_SIZE(floorData->field_0x05)); j++) {
                     if (i_roomNo == floorData->field_0x05[j]) {
                         u8 r22 = getRoomImage(i_roomNo, floorNo, 1, NULL, NULL, NULL, NULL, NULL);
-#if VERSION > VERSION_DEMO
+                        #if VERSION > VERSION_DEMO
                         JUT_ASSERT(VERSION_SELECT(2195, 2195, 2195, 2195), ((floorNo - Floor_B5F) >= 0) && ((floorNo - Floor_B5F) < (Floor_5F - Floor_B5F + 1)))
-#endif
+                        #endif
                         field_0x2[floorNo - Floor_B5F] = r22;
                     }
                 }
@@ -850,7 +859,7 @@ void dMap_RoomInfo_c::roomDrawRoomRealSize(int param_1, int param_2, int param_3
         f32 f27 = getStageMapInfoP()->field_0x30 / param_10;
         field_0x8c.setCenterPos(
             field_0x28 * 0.5f + (param_5 - param_7) / getStageMapInfoP()->field_0x30,
-            field_0x2c * 0.5f + (param_6 - param_8) / getStageMapInfoP()->field_0x30
+                                field_0x2c * 0.5f + (param_6 - param_8) / getStageMapInfoP()->field_0x30
         );
         field_0x8c.setScale(f28, f27);
         field_0x8c.setPos(param_1, param_2, param_1 + param_3, param_2 + param_4);
@@ -1559,7 +1568,7 @@ void dMap_c::mapAGBSendMapMain(f32 param_1, f32 param_2) {
                         mAgbSendNowDspFloorNo = mNowRoomInfoP->field_0xc;
                         mAgbSendNowAgbMapType = mPlayerStayAgbMapTypeNow;
                         agbMapNoSetCall();
-                        if (mDoGac_SendDataSet((u32*)mNowRoomInfoP->field_0x8c.field_0x4, mNowRoomInfoP->field_0x8c.field_0x38, 2, 0)) {
+                        if (mDoGac_SendDataSet((u32*)mNowRoomInfoP->field_0x8c.mpMapData, mNowRoomInfoP->field_0x8c.field_0x38, 2, 0)) {
                             mAGBMapSendStatus = 3;
                             agbResetCursor();
                         }
@@ -2386,8 +2395,20 @@ void dMap_c::mapBufferSendAGB(int) {
 }
 
 /* 8004D9BC-8004DA54       .text checkFloorMoveImageChangeRoom__19dMap_RoomInfoCtrl_cFUcUcissf */
-void dMap_RoomInfoCtrl_c::checkFloorMoveImageChangeRoom(u8, u8, int, s16, s16, f32) {
-    /* Nonmatching */
+void dMap_RoomInfoCtrl_c::checkFloorMoveImageChangeRoom(u8 param_1,u8 param_2,int param_3,short param_4,short param_5,
+                                                        float param_6) {
+    dMap_RoomInfo_c *room= NULL;
+
+    while (room = getNextRoomP(room), room != NULL) {
+        if (room->m_exist) {
+#if VERSION == VERSION_DEMO
+            room->Changeimage(param_1,param_2,param_3,param_4,param_5);
+#else
+            room->Changeimage(param_1,param_2,param_3,param_4,param_5,param_6);
+#endif
+        }
+    }
+    return;
 }
 
 /* 8004DA54-8004DBE0       .text init__22dMap_2DMtMapSpcl_tex_cFP7ResTIMGUlRC8_GXColor */
@@ -2523,32 +2544,32 @@ void dMap_2DMtMapSpcl_c::draw() {
 
 /* 8004E068-8004E1CC       .text setImage__18dMap_2DAGBScrDsp_cFP7ResTIMGP8map_dt_c */
 void dMap_2DAGBScrDsp_c::setImage(ResTIMG* i_img, map_dt_c* param_2) {
-    field_0x4 = param_2;
+    mpMapData = param_2;
     mImg = i_img;
-    if (!field_0x4 || !mImg) {
+    if (!mpMapData || !mImg) {
         field_0x38 = 0;
         return;
     }
-    GXInitTlutObj(&field_0x2c, (u8*)mImg + mImg->paletteOffset, GXTlutFmt(mImg->colorFormat), mImg->numColors);
-    GXInitTexObjCI(&field_0xc, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format),
-        GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1 ? GX_TRUE : GX_FALSE, 0);
-    GXInitTexObjLOD(&field_0xc, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f,
-            mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
-    field_0x38 = 0x3c + mDoLib_cnvind32(field_0x4->field_0xc) + mDoLib_cnvind32(field_0x4->field_0x38);
+    GXInitTlutObj(&mTlutObj, (u8*)mImg + mImg->paletteOffset, GXTlutFmt(mImg->colorFormat), mImg->numColors);
+    GXInitTexObjCI(&mTexObj, (u8*)mImg + mImg->imageOffset, mImg->width, mImg->height, GXCITexFmt(mImg->format),
+                   GXTexWrapMode(mImg->wrapS), GXTexWrapMode(mImg->wrapT), mImg->mipmapCount > 1 ? GX_TRUE : GX_FALSE, 0);
+    GXInitTexObjLOD(&mTexObj, GX_NEAR, GX_NEAR, mImg->minLOD * 0.125f, mImg->maxLOD * 0.125f, mImg->LODBias * 0.01f,
+                    mImg->biasClamp, mImg->doEdgeLOD, GXAnisotropy(mImg->maxAnisotropy));
+    field_0x38 = 0x3c + mDoLib_cnvind32(mpMapData->field_0xc) + mDoLib_cnvind32(mpMapData->field_0x38);
 }
 
 /* 8004E1CC-8004E264       .text init__18dMap_2DAGBScrDsp_cFP8map_dt_cP7ResTIMGffssssffUc */
-void dMap_2DAGBScrDsp_c::init(map_dt_c* param_1, ResTIMG* param_2, f32 param_3, f32 param_4, s16 param_5, s16 param_6, s16 param_7, s16 param_8, f32 param_9, f32 param_10, u8 param_11) {
+void dMap_2DAGBScrDsp_c::init(map_dt_c* param_1, ResTIMG* param_2, f32 i_ofsX, f32 i_ofsY, s16 i_minX, s16 i_minY, s16 i_maxX, s16 i_maxY, f32 i_scaleX, f32 i_scaleY, u8 i_alpha) {
     setImage(param_2, param_1);
-    field_0x44 = param_3;
-    field_0x48 = param_4;
-    field_0x3c = param_5;
-    field_0x3e = param_6;
-    field_0x40 = param_7;
-    field_0x42 = param_8;
-    mScaleX = param_9;
-    mScaleY = param_10;
-    mAlpha = param_11;
+    mOfsX = i_ofsX;
+    mOfsY = i_ofsY;
+    mMinX = i_minX;
+    mMinY = i_minY;
+    mMaxX = i_maxX;
+    mMaxY = i_maxY;
+    mScaleX = i_scaleX;
+    mScaleY = i_scaleY;
+    mAlpha = i_alpha;
 }
 
 /* 8004E264-8004E384       .text getScrnPrm__18dMap_2DAGBScrDsp_cFffifPiPfPf */
@@ -2609,15 +2630,169 @@ void dMap_2DAGBScrDsp_c::calc_standard_prm(u16 param_1, u16 param_2, f32 param_3
 
 /* 8004E698-8004EE30       .text draw__18dMap_2DAGBScrDsp_cFv */
 void dMap_2DAGBScrDsp_c::draw() {
-    /* Nonmatching */
+	/* Nonmatching */
+    static GXColor masterTevColor = { 0xFF, 0xFF, 0xFF, 0xFF };
+
+    if (mpMapData == NULL || mImg == NULL) {
+        return;
+    }
+    if (mScaleX == 0.0f || mScaleY == 0.0f) {
+        return;
+    }
+
+
+    GXColor color;
+    GXVtxAttrFmtList vtxFmt[GX_VA_MAX_ATTR + 1];
+    f32 u0, v0, u1, v1;
+    f32 uScale, vScale;
+    f32 centerX, centerY;
+    f32 x0, x1;
+    f32 y0, y1;
+    f32 vt, vb;
+    f32 uLeft;
+    f32 uRight;
+
+    int xNum, yNum;
+    int xStart, yStart;
+    f32 xOfs, yOfs;
+    f32 uMin, uMax;
+    f32 vMin, vMax;
+    //wtf???
+    memcpy(&color, &masterTevColor, sizeof(GXColor));
+
+    GXGetVtxAttrFmtv(GX_VTXFMT0, vtxFmt);
+    GXLoadTlut(&mTlutObj, GX_TLUT0);
+    GXLoadTexObj(&mTexObj, GX_TEXMAP0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE,
+                      GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+
+    color.a = mAlpha;
+    GXSetTevColor(GX_TEVREG0, color);
+
+    GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetAlphaCompare(GX_GEQUAL, mAlpha, GX_AOP_AND, GX_ALWAYS, 0);
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_TRUE);
+    GXSetDstAlpha(GX_TRUE, 0);
+
+    uScale = 8.0f / (s32)mImg->width;
+    vScale = 8.0f / (s32)mImg->height;
+
+    u8 tileNumX = mpMapData->mScrNumX;
+    u8 tileNumY = mpMapData->mScrNumY;
+
+    centerX = 0.5f * (mMaxX + mMinX);
+    centerY = 0.5f * (mMaxY + mMinY);
+
+    u16* tileData = (u16*)((u8*)mpMapData + mDoLib_cnvind32(mpMapData->mScrDataOfs));
+
+    calc_standard_prm(8, 8, mOfsX, mOfsY, mMinX, mMinY, mMaxX, mMaxY, mScaleX, mScaleY,
+                      &xNum, &yNum, &xStart, &yStart, &xOfs, &yOfs,
+                      &uMin, &uMax, &vMin, &vMax);
+
+    for (int i = 0; i < yNum; i++) {
+        y0 = centerY + (yOfs + mScaleY * (i * 8));
+        y1 = y0 + 8.0f * mScaleY;
+
+        int mapY = i + yStart;
+        if (mapY < 0 || mapY >= tileNumY) {
+            continue;
+        }
+
+        f32 vTop = 0.00625f;
+        f32 vBtm = 0.99375f;
+
+        if (i == 0) {
+            vTop = vMin;
+            y0 = mMinY;
+        } else if (i == yNum - 1) {
+            vBtm = vMax;
+            y1 = mMaxY;
+        }
+
+        for (int j = 0; j < xNum; j++) {
+            x0 = centerX + (xOfs + mScaleX * (j * 8));
+            x1 = x0 + 8.0f * mScaleX;
+
+            int mapX = j + xStart;
+            if (mapX < 0 || mapX >= tileNumX) {
+                continue;
+            }
+
+            uLeft = 0.00625f;
+            uRight = 0.99375f;
+
+            if (j == 0) {
+                uLeft = uMin;
+                x0 = mMinX;
+            } else if (j == xNum - 1) {
+                uRight = uMax;
+                x1 = mMaxX;
+            }
+
+            u16 tile = mDoLib_cnvind16(*(tileData + mapY * tileNumX + mapX));
+
+            if (tile & 0x800) {
+                vt = 1.0f - vTop;
+                vb = 1.0f - vBtm;
+            } else {
+                vt = vTop;
+                vb = vBtm;
+            }
+
+            if (tile & 0x400) {
+                uLeft = 1.0f - uLeft;
+                uRight = 1.0f - uRight;
+            }
+
+            int cellX = tile & 0xF;
+            int cellY = (tile >> 4) & 0x3F;
+
+            u0 = uScale * (cellX + uLeft);
+            u1 = uScale * (cellX + uRight);
+            v0 = vScale * (cellY + vt);
+            v1 = vScale * (cellY + vb);
+
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+            GXPosition3f32(x0, y0, 0.0f);
+            GXTexCoord2f32(u0, v0);
+            GXPosition3f32(x1, y0, 0.0f);
+            GXTexCoord2f32(u1, v0);
+            GXPosition3f32(x1, y1, 0.0f);
+            GXTexCoord2f32(u1, v1);
+            GXPosition3f32(x0, y1, 0.0f);
+            GXTexCoord2f32(u0, v1);
+        }
+    }
+
+    GXSetColorUpdate(GX_TRUE);
+    GXSetAlphaUpdate(GX_FALSE);
+    GXSetDstAlpha(GX_FALSE, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+    GXSetVtxAttrFmtv(GX_VTXFMT0, vtxFmt);
 }
 
 /* 8004EE30-8004EE44       .text setPos__18dMap_2DAGBScrDsp_cFssss */
-void dMap_2DAGBScrDsp_c::setPos(s16 param_1, s16 param_2, s16 param_3, s16 param_4) {
-    field_0x3c = param_1;
-    field_0x3e = param_2;
-    field_0x40 = param_3;
-    field_0x42 = param_4;
+void dMap_2DAGBScrDsp_c::setPos(s16 i_minX, s16 i_minY, s16 i_maxX, s16 i_maxY) {
+    mMinX = i_minX;
+    mMinY = i_minY;
+    mMaxX = i_maxX;
+    mMaxY = i_maxY;
 }
 
 /* 8004EE44-8004EE50       .text setScale__18dMap_2DAGBScrDsp_cFff */
@@ -2638,7 +2813,38 @@ void dMap_2DTri_c::init(s16 i_posX, s16 i_posY, const GXColor& i_color, f32 i_sc
 
 /* 8004EE88-8004F080       .text draw__12dMap_2DTri_cFv */
 void dMap_2DTri_c::draw() {
-    /* Nonmatching */
+    s16 x[3];
+    s16 y[3];
+
+    f32 cosA = JMASCos(mAngle);
+    f32 sinA = JMASSin(mAngle);
+
+    s16 angle = 0;
+    for (int i = 0; i < 3; i++) {
+        f32 sx = mScaleX * JMASSin(angle);
+        f32 sy = mScaleY * JMASCos(angle);
+        x[i] = mPosX + (int)(sx * cosA + sy * sinA);
+        y[i] = mPosY + (int)(sy * cosA - sx * sinA);
+        angle -= 0x5555;
+    }
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, mColor);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetZMode(false, GX_LEQUAL, false);
+    GXSetScissor(mScissorX, mScissorY, mScissorWidth, mScissorHeight);
+    GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
+    GXPosition3s16(x[0], y[0], 0);
+    GXPosition3s16(x[1], y[1], 0);
+    GXPosition3s16(x[2], y[2], 0);
+    GXSetScissor(0, 0, 640, 480);
 }
 
 /* 8004F080-8004F08C       .text setPos__12dMap_2DTri_cFss */
@@ -2686,12 +2892,115 @@ void dMap_2DAGBCursor_c::init(s16 param_1, s16 param_2, const GXColor& param_3, 
 
 /* 8004F214-8004F3C0       .text draw__18dMap_2DAGBCursor_cFv */
 void dMap_2DAGBCursor_c::draw() {
-    /* Nonmatching */
+    u8 uVar1 = field_0x1c / 3;
+    u8 sVar1 = uVar1 / 6;
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS,GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0,GX_FALSE,GX_SRC_REG,GX_SRC_REG,0,GX_DF_NONE,GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0,field_0x18);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0,GX_TEXCOORD_NULL,GX_TEXMAP_NULL,GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0,GX_PASSCLR);
+    GXSetBlendMode(GX_BM_BLEND,GX_BL_SRC_ALPHA,GX_BL_INV_SRC_ALPHA,GX_LO_SET);
+    GXSetPointSize(uVar1,GX_TO_ZERO);
+    GXSetZMode(GX_FALSE,GX_LEQUAL,GX_FALSE);
+    GXSetScissor(mScissorX,mScissorY,mScissorWidth,mScissorHeight);
+    GXBegin(GX_POINTS,GX_VTXFMT0,5);
+    GXPosition3s16(field_0x14,field_0x16,0);
+    GXPosition3s16(field_0x14 + sVar1,field_0x16,0);
+    GXPosition3s16(field_0x14 - sVar1,field_0x16,0);
+    GXPosition3s16(field_0x14,field_0x16 + sVar1,0);
+    GXPosition3s16(field_0x14,field_0x16 - sVar1,0);
+    GXSetScissor(0,0,0x280,0x1e0);
+    return;
 }
 
 /* 8004F3C0-8004F778       .text draw__11dMap_2DT2_cFv */
 void dMap_2DT2_c::draw() {
-    /* Nonmatching */
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_F32, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXLoadTexObj(&field_0x4, GX_TEXMAP0);
+    GXSetNumChans(0);
+    GXSetTevColor(GX_TEVREG0, mColorW);
+    GXSetTevColor(GX_TEVREG1, mColorB);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, false, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+
+    if (field_0x58 != 0) {
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
+    } else {
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    }
+
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetZCompLoc(0);
+    GXSetZMode(false, GX_ALWAYS, false);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_CLEAR);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_OR, GX_GREATER, 0);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, g_clearColor);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(1);
+    GXSetClipMode(GX_CLIP_DISABLE);
+
+    mDoMtx_trans(mDoMtx_stack_c::now, mPosX, mPosY, 0.0f);
+    mDoMtx_ZrotM(mDoMtx_stack_c::now, mRotZ);
+
+    GXLoadPosMtxImm(mDoMtx_stack_c::now, 0);
+    GXSetCurrentMtx(0);
+    GXSetScissor(mScissorX, mScissorY, mScissorWidth, mScissorHeight);
+
+    f32 half_w = mWidth * 0.5f;
+    f32 half_h = mHeight * 0.5f;
+
+    f32 tex_u0;
+    f32 tex_u1;
+    if (mScaleX == 0.0f) {
+        tex_u0 = 0.0f;
+        tex_u1 = 0.0f;
+    } else {
+        f32 inv_scale_x = (1.0f / mScaleX) * 0.5f;
+        tex_u0 = 0.5f - inv_scale_x;
+        tex_u1 = 0.5f + inv_scale_x;
+    }
+
+    f32 tex_v0;
+    f32 tex_v1;
+    if (mScaleY == 0.0f) {
+        tex_v0 = 0.0f;
+        tex_v1 = 0.0f;
+    } else {
+        f32 inv_scale_y = (1.0f / mScaleY) * 0.5f;
+        tex_v0 = 0.5f - inv_scale_y;
+        tex_v1 = 0.5f + inv_scale_y;
+    }
+
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GXPosition2f32(-half_w, -half_h);
+    GXTexCoord2f32(tex_u0, tex_v0);
+
+    GXPosition2f32(half_w, -half_h);
+    GXTexCoord2f32(tex_u1, tex_v0);
+
+    GXPosition2f32(half_w, half_h);
+    GXTexCoord2f32(tex_u1, tex_v1);
+
+    GXPosition2f32(-half_w, half_h);
+    GXTexCoord2f32(tex_u0, tex_v1);
+
+    GXSetScissor(0, 0, 0x280, 0x1e0);
+
+    dComIfGp_getCurrentGrafPort()->setup2D();
 }
 
 /* 8004F778-8004F8B4       .text init__11dMap_2DT2_cFP7ResTIMGffffUcUcUcffs */
