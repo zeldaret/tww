@@ -91,9 +91,9 @@ public:
         /* 0x024 */ int field_0x24;
         /* 0x028 */ int field_0x28;
         /* 0x02C */ dCamera__EventParam mEventParams[8];
-        /* 0x0EC */ dStage_Event_dt_c* field_0xec;
-        /* 0x0F0 */ d2DBSplinePath mSpline2DPath;
-    };  // Size: 0x124
+        /* 0x0CC */ dStage_Event_dt_c* field_0xcc;
+        /* 0x0D0 */ d2DBSplinePath mSpline2DPath;
+    };  // Size: 0x114
 
     struct dCamera_monitoring_things {
         /* 0x00 */ cXyz mPos;
@@ -152,7 +152,7 @@ public:
         static const int PatternLengthMax = 4;
 #endif
     }
-    /* 0x05C */ mViewCache;
+    /* 0x03C */ mViewCache;
     /* 0x064 */ f32 m064;
     /* 0x068 */ int m068;
     /* 0x06C */ cSAngle mAngleY;
@@ -564,18 +564,18 @@ public:
     bool SetExtendedPosition(cXyz*);
     bool ScopeViewMsgModeOff();
 
-    void StartEventCamera(int, int, ...);
-    void EndEventCamera(int);
-    void searchEventArgData(char*);
-    void getEvIntData(int*, char*);
-    void getEvStringPntData(char*);
-    void getEvIntData(int*, char*, int);
-    void getEvFloatData(f32*, char*, f32);
-    void getEvXyzData(cXyz*, char*, cXyz);
+    bool StartEventCamera(int, int, ...);
+    bool EndEventCamera(int);
+    int searchEventArgData(char*);
+    bool getEvIntData(int*, char*);
+    char* getEvStringPntData(char*);
+    bool getEvIntData(int*, char*, int);
+    bool getEvFloatData(f32*, char*, f32);
+    bool getEvXyzData(cXyz*, char*, cXyz);
     bool getEvStringData(char*, char*, char*);
-    void getEvStringPntData(char*, char*);
-    void getEvActor(char*);
-    void getEvActor(char*, char*);
+    char* getEvStringPntData(char*, char*);
+    fopAc_ac_c* getEvActor(char*);
+    fopAc_ac_c* getEvActor(char*, char*);
     bool pauseEvCamera();
     bool fixedFrameEvCamera();
     bool stokerEvCamera();
