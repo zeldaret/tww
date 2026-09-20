@@ -1511,9 +1511,7 @@ static void damage_check(bst_class* i_this) {
                     cXyz* hit_pos = i_this->mHandHurtCyl.GetTgHitPosP();
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, hit_pos);
                     cXyz scale;
-                    scale.z = 2.0f;
-                    scale.y = 2.0f;
-                    scale.x = 2.0f;
+                    scale.x = scale.y = scale.z = 2.0f;
                     csXyz angle;
                     angle.x = angle.z = 0;
                     angle.y = fopAcM_searchPlayerAngleY(actor);

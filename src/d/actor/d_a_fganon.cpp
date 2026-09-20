@@ -1340,9 +1340,7 @@ void damage_check(fganon_class* i_this) {
                     
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &a_this->eyePos, NULL);
                     
-                    local_44.z = 2.0f;
-                    local_44.y = 2.0f;
-                    local_44.x = 2.0f;
+                    local_44.x = local_44.y = local_44.z = 2.0f;
                     
                     local_a0.z = 0.0f;
                     local_a0.x = 0.0f;
@@ -1408,9 +1406,7 @@ void damage_check(fganon_class* i_this) {
 
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &a_this->eyePos, NULL);
 
-                local_44.z = 2.0f;
-                local_44.y = 2.0f;
-                local_44.x = 2.0f;
+                local_44.x = local_44.y = local_44.z = 2.0f;
 
                 local_a0.z = 0.0f;
                 local_a0.x = 0.0f;
@@ -1519,9 +1515,7 @@ void damage_check(fganon_class* i_this) {
                 fopAcM_monsSeStart(a_this, JA_SE_CV_PG_HIT_EBALL, 0);
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &a_this->eyePos, NULL);
 
-                local_44.z = 2.0f;
-                local_44.y = 2.0f;
-                local_44.x = 2.0f;
+                local_44.x = local_44.y = local_44.z = 2.0f;
 
                 local_a0.z = 0.0f;
                 local_a0.x = 0.0f;

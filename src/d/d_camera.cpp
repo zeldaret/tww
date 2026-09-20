@@ -553,9 +553,7 @@ void dCamera_c::initMonitor() {
         mMonitor.mPos = cXyz::Zero;
     }
 
-    mMonitor.field_0x0C.z = 0.0f;
-    mMonitor.field_0x0C.y = 0.0f;
-    mMonitor.field_0x0C.x = 0.0f;
+    mMonitor.field_0x0C.x = mMonitor.field_0x0C.y = mMonitor.field_0x0C.z = 0.0f;
     mMonitor.field_0x18 = 0;
     mMonitor.field_0x1C = 0.0f;
 }

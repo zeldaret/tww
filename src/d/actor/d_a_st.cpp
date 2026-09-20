@@ -2035,12 +2035,8 @@ static void part_move(st_class* i_this, int jointIndex) {
                         }
 #endif
                     } else {
-                        this_part->mPartVelocity.z = 0.0f;
-                        this_part->mPartVelocity.y = 0.0f;
-                        this_part->mPartVelocity.x = 0.0f;
-                        this_part->mPartRotAdd.z = 0;
-                        this_part->mPartRotAdd.y = 0;
-                        this_part->mPartRotAdd.x = 0;
+                        this_part->mPartVelocity.x = this_part->mPartVelocity.y = this_part->mPartVelocity.z = 0.0f;
+                        this_part->mPartRotAdd.x = this_part->mPartRotAdd.y = this_part->mPartRotAdd.z = 0;
                         cLib_addCalcAngleS2(&this_part->mPartRot.x, -0x8000, 1, 0xc00);
                         cLib_addCalcAngleS2(&this_part->mPartRot.y, 0, 1, 0xc00);
                     }

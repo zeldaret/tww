@@ -209,9 +209,7 @@ static void himo3_control(himo3_class* i_this, himo3_s* r31) {
 
     for (; i < i_this->m15C0; i++, r31++) {
         cXyz sp60;
-        sp60.z = 0.0f;
-        sp60.y = 0.0f;
-        sp60.x = 0.0f;
+        sp60.x = sp60.y = sp60.z = 0.0f;
 
         Vec f29_f26_f25;
         f29_f26_f25.x = r31->m00.x - r31[-1].m00.x + r31->m0C.x + sp7C.x + sp64.x + sp60.x;
@@ -473,9 +471,7 @@ static BOOL daHimo3_Execute(himo3_class* i_this) {
         MTXCopy(*calc_mtx, i_this->m1840);
 
         cXyz sp28;
-        sp28.z = 0.0f;
-        sp28.y = 0.0f;
-        sp28.x = 0.0f;
+        sp28.x = sp28.y = sp28.z = 0.0f;
         MtxPosition(&sp28, &i_this->m1624);
         i_this->mSph.SetC(i_this->m1624);
         dComIfG_Ccsp()->Set(&i_this->mSph);

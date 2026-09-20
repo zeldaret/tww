@@ -535,7 +535,7 @@ static void part_draw(bgn_class* i_this, part_s* param_2) {
         local_38 = param_2->m224 - camera->view.mLookat.mEye;
         if (local_38.abs() > l_HIO.m008 * param_2->m0F4) {
             g_env_light.setLightTevColorType(model, &param_2->mPartTevStr);
-            if ((actor->health <= 2) && (param_2 == &i_this->mTailParts[BGN_TAIL_MAX - 1])) {
+            if (actor->health <= 2 && param_2 == &i_this->mTailParts[BGN_TAIL_MAX - 1]) {
                 if (actor->health == 1) {
                     i_this->mJyakutenCBrkAnm->entry(model->getModelData());
                 } else {
@@ -581,7 +581,7 @@ static void water0_disp(bgn_class* i_this) {
     tev_kcol->mColor.g = 0xFF;
     tev_kcol->mColor.r = 0xFF;
     f32 fVar1 = l_HIO.m010;
-    if ((i_this->m02B5 == 1) && (l_HIO.m00D == 0)) {
+    if (i_this->m02B5 == 1 && l_HIO.m00D == 0) {
         fVar1 = (REG0_F(5) + 0.01f) * (REG0_F(4) + 4000.0f + bgn2->actor.current.pos.y);
         if (fVar1 > 90.0f) {
             fVar1 = 90.0f;
@@ -894,8 +894,8 @@ static void room_disp(bgn_class* i_this) {
 /* 00001898-0000192C       .text ten_a_d_sub__FPvPv */
 static void* ten_a_d_sub(void* param_1, void*) {
     fopAc_ac_c* actor = (fopAc_ac_c*)param_1;
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_Obj_Vteng_e)) {
-        if ((actor->model != NULL) && (bgn != NULL)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_Obj_Vteng_e) {
+        if (actor->model != NULL && bgn != NULL) {
             bgn->mCC24.setModel(actor->model);
             bgn->mCC24.update();
         }
@@ -908,7 +908,7 @@ static void* ten_a_d_sub(void* param_1, void*) {
 /* 0000192C-00001998       .text ki_a_d_sub__FPvPv */
 static void* ki_a_d_sub(void* param_1, void*) {
     ki_class* keese = (ki_class*)param_1;
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_KI_e) {
         if (keese->actor.model != NULL) {
             keese->m2B8.setModel(keese->actor.model);
             keese->m2B8.update();
@@ -928,7 +928,7 @@ static void obj_disp(bgn_class* i_this) {
 #if VERSION > VERSION_DEMO
 /* 000019F4-00001A40       .text bgn2_s_sub__FPvPv */
 static void* bgn2_s_sub(void* param_1, void*) {
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN2_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BGN2_e) {
         return param_1;
     } else {
         return NULL;
@@ -937,7 +937,7 @@ static void* bgn2_s_sub(void* param_1, void*) {
 
 /* 00001A40-00001A8C       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BGN3_e) {
         return param_1;
     } else {
         return NULL;
@@ -1003,7 +1003,7 @@ static BOOL daBgn_Draw(bgn_class* i_this) {
 /* 00001C40-00001C8C       .text ki_del_sub__FPvPv */
 static void* ki_del_sub(void* param_1, void*) {
     ki_class* keese = (ki_class*)param_1;
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_KI_e) {
         fopAcM_delete(&keese->actor);
     }
     return NULL;
@@ -1013,7 +1013,7 @@ static void* ki_del_sub(void* param_1, void*) {
 /* 00001C8C-00001CD8       .text ks_del_sub__FPvPv */
 static void* ks_del_sub(void* param_1, void*) {
     ks_class* morth = (ks_class*)param_1;
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KS_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_KS_e) {
         fopAcM_delete(&morth->actor);
     }
     return NULL;
@@ -1022,7 +1022,7 @@ static void* ks_del_sub(void* param_1, void*) {
 
 /* 00001CD8-00001D30       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_KI_e) {
         ki_all_count++;
     }
     return NULL;
@@ -1082,7 +1082,7 @@ static s32 gr_check(bgn_class* i_this, cXyz* param_2) {
 static void* s_b_sub(void* param_1, void* param_2) {
     bgn_class* bgn = (bgn_class*)param_2;
     daBomb_c* bomb = (daBomb_c*)param_1;
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BOMB_e) && bomb->get_explode_instant()) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOMB_e && bomb->get_explode_instant()) {
         cXyz local_18 = bomb->current.pos;
         if (!gr_check(bgn, &local_18)) {
             dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTT1PUNCHSPLASH00, &local_18);
@@ -1142,22 +1142,21 @@ static void attack_eff_set(bgn_class* i_this, cXyz param_2, int param_3) {
 static void part_control_0(bgn_class* i_this, int param_2, part_s* param_3, move_s* param_4, f32 param_5) {
     cXyz local_d0;
     cXyz cStack_dc;
-    cXyz local_e8;
+    cXyz local_e8(0.0f, 0.0f, 0.0f);
 
-    local_e8.setall(0.0f);
-    if ((param_3 == &i_this->mHeadParts[0]) && (i_this->mAAA8[0].m2D0 != 0 || (i_this->mAAA8[1].m2D0 != 0))) {
+    if (param_3 == &i_this->mHeadParts[0] && (i_this->mAAA8[0].m2D0 != 0 || i_this->mAAA8[1].m2D0 != 0)) {
         cMtx_YrotS(*calc_mtx, i_this->mC314.y);
         local_d0.x = 0.0f;
         local_d0.y = 0.0f;
         local_d0.z = REG0_F(6) + 200.0f;
         MtxPosition(&local_d0, &local_e8);
-    } else if ((param_3 == &i_this->mLeftArmParts[0]) && (i_this->mAAA8[3].m2D0 != 0)) {
+    } else if (param_3 == &i_this->mLeftArmParts[0] && i_this->mAAA8[3].m2D0 != 0) {
         cMtx_YrotS(*calc_mtx, i_this->mC314.y);
         local_d0.x = REG0_F(8) + 20.0f;
         local_d0.y = 0.0f;
         local_d0.z = 0.0f;
         MtxPosition(&local_d0, &local_e8);
-    } else if ((param_3 == &i_this->mRightArmParts[0]) && (i_this->mAAA8[4].m2D0 != 0)) {
+    } else if (param_3 == &i_this->mRightArmParts[0] && i_this->mAAA8[4].m2D0 != 0) {
         cMtx_YrotS(*calc_mtx, i_this->mC314.y);
         local_d0.x = -(REG0_F(8) + 20.0f);
         local_d0.y = 0.0f;
@@ -1167,7 +1166,7 @@ static void part_control_0(bgn_class* i_this, int param_2, part_s* param_3, move
     f32 temp_f26;
     f32 temp_f30;
     f32 temp_f25;
-    f32 dVar11 = ((i_this->mC7BC - 50.0f) + REG0_F(6));
+    f32 dVar11 = i_this->mC7BC - 50.0f + REG0_F(6);
     f32 dVar10;
     param_3++;
     if (param_4->m2D0 == 0) {
@@ -1236,9 +1235,9 @@ static void part_control_0Z(bgn_class* i_this, int param_2, part_s* param_3, mov
         f32 dVar11 = param_3->m0D4.y + dVar9;
         if (dVar11 <= dVar10) {
             dVar11 = dVar10;
-            if ((i == param_2) && ((i_this->mC746 & 7) == 0)) {
+            if (i == param_2 && ((i_this->mC746 & 7) == 0)) {
                 local_134 = param_3->m0D4;
-                if (!(gr_check(i_this, &local_134))) {
+                if (!gr_check(i_this, &local_134)) {
                     dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_KGTCOMMONHAMON03, &local_134, 0xff, g_whiteColor, g_whiteColor, 0);
                     if (i_this->m0304 == 0) {
                         i_this->m0304 = cM_rndF(20.0f) + 20.0f;
@@ -1248,11 +1247,11 @@ static void part_control_0Z(bgn_class* i_this, int param_2, part_s* param_3, mov
                 }
             }
         }
-        f32 f1 = (param_2 - i);
+        f32 f1 = param_2 - i;
         local_11c.x = local_128.x * f1;
         local_11c.z = local_128.z * f1;
         x = local_11c.x + (param_3->m0D4.x - param_3[-1].m0D4.x);
-        y = (dVar11 - param_3[-1].m0D4.y);
+        y = dVar11 - param_3[-1].m0D4.y;
         z = local_11c.z + (param_3->m0D4.z - param_3[-1].m0D4.z);
         int iVar2 = param_4->m2F4 * cM_ssin(param_4->m2FA + i * (REG0_S(3) + 8000));
         int iVar4 = param_4->m2F4 * cM_scos(param_4->m2FC + i * (REG0_S(4) + 9000));
@@ -1308,9 +1307,7 @@ static void part_mtx_set(bgn_class* i_this, int param_2, part_s* param_3, int pa
     cXyz local_8c;
     cXyz local_98;
 
-    local_8c.z = 0.0f;
-    local_8c.y = 0.0f;
-    local_8c.x = 0.0f;
+    local_8c.x = local_8c.y = local_8c.z = 0.0f;
     for (s32 i = 0; i < param_2; i++, param_3++) {
         if (i_this->m0302 == param_3->m0D2) {
             param_3->mPartArrowHitFlashTimer = 50;
@@ -1326,7 +1323,7 @@ static void part_mtx_set(bgn_class* i_this, int param_2, part_s* param_3, int pa
             param_3->m0D4.y = i_this->mC7BC;
         }
         MtxTrans(param_3->m0D4.x, param_3->m0D4.y, param_3->m0D4.z, false);
-        if ((param_4 == 7) && (i_this->mAAA8[7].m2D0 != 0)) {
+        if (param_4 == 7 && i_this->mAAA8[7].m2D0 != 0) {
             cMtx_YrotM(*calc_mtx, param_3->m0E0.y);
             cMtx_XrotM(*calc_mtx, param_3->m0E0.x);
             cMtx_ZrotM(*calc_mtx, -param_3->m0E0.z);
@@ -1341,7 +1338,7 @@ static void part_mtx_set(bgn_class* i_this, int param_2, part_s* param_3, int pa
         }
         fVar4 = param_3->m0F4 * l_HIO.m0F4;
         dVar10 = fVar4;
-        if ((i != param_2 + -1) && (param_4 == 3 || (param_4 == 4))) {
+        if (i != param_2 + -1 && (param_4 == 3 || param_4 == 4)) {
             fVar5 = (REG0_F(0) + 0.005f) * (i_this->mC324[param_4 + -3] - l_HIO.m124) + 1.0f;
         } else {
             fVar5 = 1.0f;
@@ -1360,7 +1357,7 @@ static void part_mtx_set(bgn_class* i_this, int param_2, part_s* param_3, int pa
             MtxTrans(0.0f, l_HIO.m034, l_HIO.m038, true);
             cMtx_XrotM(*calc_mtx, l_HIO.m03E);
         }
-        if ((param_4 == 7) && (i == param_2 + -1)) {
+        if (param_4 == 7 && i == param_2 + -1) {
             if (actor->health == 3) {
                 param_3->mpPartModel = i_this->mpJyakutenAModel;
             } else if (actor->health == 2) {
@@ -1375,14 +1372,14 @@ static void part_mtx_set(bgn_class* i_this, int param_2, part_s* param_3, int pa
             param_3->mpPartModel->setBaseTRMtx(*calc_mtx);
         }
         if (param_4 == 0) {
-            if (((i_this->mAAA8[0].m2D0 == 0) || (i_this->mAAA8[1].m2D0 == 0)) || ((int)i_this->mpMorf->getFrame() != 0x18)) {
+            if (i_this->mAAA8[0].m2D0 == 0 || i_this->mAAA8[1].m2D0 == 0 || ((int)i_this->mpMorf->getFrame() != 0x18)) {
                 i_this->mpMorf->play(NULL, 0, 0);
             }
             i_this->mpMorf->calc();
         }
         MtxPosition(&zero, &local_98);
         param_3->m224 = local_98;
-        if ((param_4 == 7) && (i == param_2 + -1)) {
+        if (param_4 == 7 && i == param_2 + -1) {
             i_this->mCoreSph.SetR(REG0_F(4) + 150.0f);
             i_this->mCoreSph.SetC(local_98);
             i_this->mCA54 = local_98;
@@ -1444,7 +1441,6 @@ static void damage_check(bgn_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     JPABaseEmitter* emitter;
     char cVar5;
-    f32 dVar8;
     CcAtInfo atInfo;
 
     if (i_this->mC7B6 == 0) {
@@ -1464,19 +1460,18 @@ static void damage_check(bgn_class* i_this) {
 #else
                 mDoAud_seStart(JA_SE_LK_ARROW_HIT, NULL, 0x35, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 #endif
-                dVar8 = (REG0_F(5) + 2.0f);
+                JGeometry::TVec3<f32> scale;
+                scale.x = scale.y = scale.z = REG0_F(5) + 2.0f;
                 if (actor->health == 0) {
                     mDoAud_bgmStop(30);
                     i_this->mC748 = 6;
                     i_this->mC74A = 0;
                     emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTBREAKWEAKPOINT00, &i_this->mCA54);
                     if (emitter != NULL) {
-                        JGeometry::TVec3<f32> scale(dVar8, dVar8, dVar8);
                         emitter->setGlobalScale(scale);
                     }
                     emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTBREAKWEAKPOINT01, &i_this->mCA54);
                     if (emitter != NULL) {
-                        JGeometry::TVec3<f32> scale(dVar8, dVar8, dVar8);
                         emitter->setGlobalScale(scale);
                     }
 #if VERSION == VERSION_DEMO
@@ -1491,7 +1486,6 @@ static void damage_check(bgn_class* i_this) {
                 } else {
                     emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTHITWEAKPOINT00, &i_this->mCA54);
                     if (emitter != NULL) {
-                        JGeometry::TVec3<f32> scale(dVar8, dVar8, dVar8);
                         emitter->setGlobalScale(scale);
                     }
 #if VERSION == VERSION_DEMO
@@ -1543,7 +1537,7 @@ static void damage_check(bgn_class* i_this) {
                 cVar5 = 8;
             }
         }
-        if ((cVar5 != 0) && (i_this->mC7B8 == 0)) {
+        if (cVar5 != 0 && i_this->mC7B8 == 0) {
             i_this->mC7B8 = 10;
             def_se_set(actor, atInfo.mpObj, 0x44);
         }
@@ -1670,18 +1664,18 @@ static void shape_calc(bgn_class* i_this) {
     }
 #endif
     MtxPull();
-    dVar12 = (l_HIO.m11C * l_HIO.m0F4);
-    dVar11 = (l_HIO.m120 * l_HIO.m0F4);
-    dVar10 = (i_this->mC324[0] * l_HIO.m0F4);
-    dVar9 = (i_this->mC324[1] * l_HIO.m0F4);
-    dVar13 = (l_HIO.m128 * l_HIO.m0F4);
+    dVar12 = l_HIO.m11C * l_HIO.m0F4;
+    dVar11 = l_HIO.m120 * l_HIO.m0F4;
+    dVar10 = i_this->mC324[0] * l_HIO.m0F4;
+    dVar9 = i_this->mC324[1] * l_HIO.m0F4;
+    dVar13 = l_HIO.m128 * l_HIO.m0F4;
     MtxPush();
     local_8c.x = l_HIO.m12C;
     local_8c.y = l_HIO.m130;
     local_8c.z = l_HIO.m134;
     MtxPosition(&local_8c, &i_this->mHeadParts[0].m0D4);
     part_control_0(i_this, 1, &i_this->mHeadParts[0], &i_this->mAAA8[0], dVar12);
-    if ((i_this->mAAA8[0].m2D0 == 0) || (i_this->mAAA8[1].m2D0 == 0)) {
+    if (i_this->mAAA8[0].m2D0 == 0 || i_this->mAAA8[1].m2D0 == 0) {
         cMtx_YrotS(*calc_mtx, i_this->mC314.y);
         local_8c.x = l_HIO.m054;
         local_8c.y = l_HIO.m058;
@@ -1875,8 +1869,8 @@ static void dance_A(bgn_class* i_this) {
         }
     }
     uVar2 = i_this->mC750;
-    i_this->mC750 = uVar2 + i_this->mC752;
-    if (((0 < uVar2) && (i_this->mC750 <= i_this->mC752)) || (0x8000 < (u16)uVar2 && ((u16)i_this->mC750 <= (u16)(i_this->mC752 + 0x8000)))) {
+    i_this->mC750 += i_this->mC752;
+    if ((0 < uVar2 && i_this->mC750 <= i_this->mC752) || (0x8000 < (u16)uVar2 && ((u16)i_this->mC750 <= (u16)(i_this->mC752 + 0x8000)))) {
         mDoAud_seStart(JA_SE_CM_BGN_D_KAZEKIRI, &i_this->mCA54, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
     }
     if (actor->health == 3) {
@@ -1961,7 +1955,7 @@ static void dance_0(bgn_class* i_this) {
     cLib_addCalc2(&actor->current.pos.z, i_this->mC758.z, 0.05f, i_this->mC76C);
     cLib_addCalc2(&i_this->mC76C, REG0_F(19) + 20.0f, 1.0f, 0.5f);
     cLib_addCalc2(&i_this->mC728.y, (REG0_F(9) + 50.0f) * cM_ssin(i_this->mC746 * (REG0_S(9) + 500)), 0.5f, REG0_F(8) + 20.0f);
-    if ((i_this->mAAA8[0].m2D0 == 0) || (i_this->mAAA8[1].m2D0 == 0)) {
+    if (i_this->mAAA8[0].m2D0 == 0 || i_this->mAAA8[1].m2D0 == 0) {
         cLib_addCalcAngleS2(&actor->shape_angle.y, fopAcM_searchPlayerAngleY(actor), 10, 0x400);
     }
     switch (i_this->mC74A) {
@@ -2043,7 +2037,7 @@ static void dance_0(bgn_class* i_this) {
             f32 fVar9 = local_34.abs();
             f32 temp_f0_4 = REG0_F(0) + 100.0f;
             if (fVar9 > temp_f0_4) {
-                f32 f4 = (fVar9 - temp_f0_4);
+                f32 f4 = fVar9 - temp_f0_4;
                 if ((s16)(int)(REG0_F(2) + (50.0f + (f4 * (REG0_F(1) + 0.06f)))) > pmVar8->m2F8) {
                     pmVar8->m2F8 = (s16)(int)(REG0_F(2) + (50.0f + (f4 * (REG0_F(1) + 0.06f))));
                 }
@@ -2069,7 +2063,7 @@ static void punch_LR(bgn_class* i_this) {
     bVar3 = false;
     uVar11 = 0;
     local_90 = player->current.pos;
-    if ((i_this->mAAA8[0].m2D0 != 0) && (i_this->mAAA8[1].m2D0 != 0)) {
+    if (i_this->mAAA8[0].m2D0 != 0 && i_this->mAAA8[1].m2D0 != 0) {
         cMtx_YrotS(*calc_mtx, actor->shape_angle.y);
         local_6c.x = cM_rndFX(1000.0f);
         local_6c.y = 0.0f;
@@ -2108,7 +2102,7 @@ static void punch_LR(bgn_class* i_this) {
             i_this->mRightArmParts[BGN_HAND_MAX - 1].mPartSph.OnAtSetBit();
             i_this->mC788 += i_this->mC7A0;
             i_this->mAAA8[4].m2E8 = 100.0f;
-            if ((i_this->mC7AC[0] == 0) || (i_this->mLeftArmParts[BGN_HAND_MAX + 0x14].m0D4.y < i_this->mC7BC + 30.0f)) {
+            if (i_this->mC7AC[0] == 0 || i_this->mLeftArmParts[BGN_HAND_MAX + 0x14].m0D4.y < i_this->mC7BC + 30.0f) {
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 i_this->mC779 = 0;
                 i_this->mAAA8[4].m2F4 = REG0_F(15) + 5000.0f;
@@ -2147,7 +2141,7 @@ static void punch_LR(bgn_class* i_this) {
             i_this->mLeftArmParts[BGN_HAND_MAX - 1].mPartSph.OnAtSetBit();
             i_this->mC77C += i_this->mC794;
             i_this->mC338 = 200.0f;
-            if ((i_this->mC7AC[0] == 0) || (i_this->mPelvisParts[BGN_HAND_MAX + 1].m0D4.y < i_this->mC7BC + 30.0f)) {
+            if (i_this->mC7AC[0] == 0 || i_this->mPelvisParts[BGN_HAND_MAX + 1].m0D4.y < i_this->mC7BC + 30.0f) {
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 i_this->mAAA8[3].m2F4 = REG0_F(15) + 5000.0f;
                 i_this->mC778 = 0;
@@ -2197,7 +2191,7 @@ static void punch_LR(bgn_class* i_this) {
             i_this->mC788 += i_this->mC7A0;
             i_this->mC338 = 200.0f;
             i_this->mC334 = 200.0f;
-            if ((i_this->mC7AC[0] == 0) || (i_this->mPelvisParts[BGN_HAND_MAX + 1].m0D4.y < i_this->mC7BC + 30.0f)) {
+            if (i_this->mC7AC[0] == 0 || i_this->mPelvisParts[BGN_HAND_MAX + 1].m0D4.y < i_this->mC7BC + 30.0f) {
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 8, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 i_this->mAAA8[3].m2F4 = REG0_F(15) + 5000.0f;
                 i_this->mAAA8[4].m2F4 = REG0_F(15) + 5000.0f;
@@ -2228,7 +2222,7 @@ static void punch_LR(bgn_class* i_this) {
             }
         }
     }
-    if ((bVar3) && (i_this->mAAA8[0].m2D0 == 0 || (i_this->mAAA8[1].m2D0 == 0))) {
+    if ((bVar3) && (i_this->mAAA8[0].m2D0 == 0 || i_this->mAAA8[1].m2D0 == 0)) {
         sVar7 = fopAcM_searchPlayerAngleY(actor);
         cLib_addCalcAngleS2(&actor->shape_angle.y, sVar7, 10, 0x400);
     }
@@ -2296,7 +2290,7 @@ static void body_attack(bgn_class* i_this) {
             i_this->mC76C = 0.0f;
             i_this->mC758 = player->current.pos;
             i_this->mC758.y = 0.0f;
-            if ((i_this->mAAA8[0].m2D0 == 0) || (i_this->mAAA8[1].m2D0 == 0)) {
+            if (i_this->mAAA8[0].m2D0 == 0 || i_this->mAAA8[1].m2D0 == 0) {
                 sVar6 = fopAcM_searchPlayerAngleY(actor);
                 i_this->mC764 = sVar6;
             }
@@ -2622,7 +2616,6 @@ static void himo_control(bgn_class* i_this, move_s* param_2, cXyz* param_3) {
     s16 j;
     s16 k;
     s8 bVar9;
-    f32 dVar10;
     cXyz local_ac;
     cXyz local_b8;
     cXyz local_c4;
@@ -2636,20 +2629,19 @@ static void himo_control(bgn_class* i_this, move_s* param_2, cXyz* param_3) {
     i = 1;
     param_3++;
     for (; i < 60; i++, pcVar5++, param_3++) {
-        f32 x = (pcVar5[0].x - pcVar5[-1].x);
+        f32 x = pcVar5[0].x - pcVar5[-1].x;
         f32 z = pcVar5[0].z - pcVar5[-1].z;
-        f32 y2 = ((pcVar5[0].y - 40.0f) + REG0_F(13));
+        f32 y2 = pcVar5[0].y - 40.0f + REG0_F(13);
         if (y2 < 0.0f) {
             y2 = 0.0f;
             bVar9 = true;
         } else {
             bVar9 = false;
         }
-        f32 y = (y2 - pcVar5[-1].y);
-        dVar10 = param_2->m304;
-        if (dVar10 > 0.01f) {
-            j = (dVar10 * cM_ssin(param_2->m2FA + i * (REG0_S(3) + 2000)));
-            k = (dVar10 * cM_scos(param_2->m2FC + i * (REG0_S(4) + 0x9c4)));
+        f32 y = y2 - pcVar5[-1].y;
+        if (param_2->m304 > 0.01f) {
+            j = (param_2->m304 * cM_ssin(param_2->m2FA + i * (REG0_S(3) + 2000)));
+            k = (param_2->m304 * cM_scos(param_2->m2FC + i * (REG0_S(4) + 0x9c4)));
         }
         cMtx_XrotS(*calc_mtx, j - cM_atan2s(y, z));
         cMtx_YrotM(*calc_mtx, k + cM_atan2s(x, std::sqrtf(SQUARE(y) + SQUARE(z))));
@@ -2708,8 +2700,8 @@ static void last_himo_control(bgn_class* i_this) {
     var_r25 = &pcVar8[1];
     u8* var_r28 = &puVar8[1];
     for (; i < 60; i++, pcVar5++, var_r25++, var_r28++) {
-        f32 x = (pcVar5->x - pcVar5[-1].x);
-        f32 y = REG0_F(13) + ((pcVar5->y - pcVar5[-1].y) - 35.0f);
+        f32 x = pcVar5->x - pcVar5[-1].x;
+        f32 y = pcVar5->y - pcVar5[-1].y - 35.0f + REG0_F(13);
         f32 z = pcVar5->z - pcVar5[-1].z;
         if (i_this->mC724 > 0.01f) {
             k = i_this->mC724 * cM_ssin(i_this->mC746 * 2000 + i * (REG0_S(3) + 2000));
@@ -2741,12 +2733,12 @@ static void action_s(bgn_class* i_this, move_s* param_2, int param_3) {
         param_2->m2F8--;
     }
     target = 0.0f;
-    if ((l_HIO.m025 == 0) && (i_this->mC728.y > REG0_F(12) + -900.0f)) {
-        target = (REG0_F(13) + ((param_2->m2F8) * (REG0_F(2) + 20.0f) + 300.0f));
+    if (l_HIO.m025 == 0 && i_this->mC728.y > REG0_F(12) + -900.0f) {
+        target = REG0_F(13) + (param_2->m2F8 * (REG0_F(2) + 20.0f) + 300.0f);
     }
     cLib_addCalc2(&param_2->m2F4, target, 0.5f, REG0_F(8) + 200.0f);
-    param_2->m2FA += (s16)(((param_3 * 3) + 0xa28) + REG0_S(5));
-    param_2->m2FC += (s16)(((param_3 * 3) + 0x8fc) + REG0_S(6));
+    param_2->m2FA += (s16)((param_3 * 3 + 2600) + REG0_S(5));
+    param_2->m2FC += (s16)((param_3 * 3 + 2300) + REG0_S(6));
     if (param_2->m2FE != 0) {
         param_2->m2FE--;
     }
@@ -2943,7 +2935,7 @@ static void move(bgn_class* i_this) {
         pos = actor->current.pos;
         pos.y += 500.0f;
         gndChk.SetPos(&pos);
-        i_this->mC7BC = (((REG0_F(16) + -40.0f) + 30.0f) + 100.0f);
+        i_this->mC7BC = REG0_F(16) + -40.0f + 30.0f + 100.0f;
         sVar1 = 0;
         if (i_this->mAAA8[0].m2D0 != 0) {
             sVar1 = 8000;
@@ -2997,10 +2989,10 @@ static void move(bgn_class* i_this) {
         }
         fVar9 = 0.0f;
         for (s32 i = 0; i < 2; i++) {
-            if ((i == 0) && (i_this->mC778 != 0)) {
+            if (i == 0 && i_this->mC778 != 0) {
                 local_e4 = i_this->mLeftArmParts[BGN_HAND_MAX].m0D4 - i_this->mLeftArmParts[BGN_HAND_MAX - 1].m0D4;
                 fVar9 = local_e4.abs();
-            } else if ((i == 1) && (i_this->mC779 != 0)) {
+            } else if (i == 1 && i_this->mC779 != 0) {
                 local_e4 = i_this->mRightArmParts[BGN_HAND_MAX].m0D4 - i_this->mRightArmParts[BGN_HAND_MAX - 1].m0D4;
                 fVar9 = local_e4.abs();
             }
@@ -3107,7 +3099,7 @@ static void demo_camera(bgn_class* i_this) {
             }
             if (i_this->mKSubCount > (s16)(REG0_S(8) + 110)) {
                 cLib_addCalc2(&i_this->mCSFovY, REG0_F(11) + 35.0f, 0.1f, REG0_F(12) + 0.5f);
-                if ((i_this->mKSubCount == 130) || (i_this->mKSubCount == 180)) {
+                if (i_this->mKSubCount == 130 || i_this->mKSubCount == 180) {
                     mDoAud_seStart(JA_SE_CM_BGN_T_MOUSE_OPEN, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
                 }
                 if (i_this->mKSubCount == 152) {
@@ -3270,7 +3262,7 @@ static void demo_camera(bgn_class* i_this) {
 #if VERSION == VERSION_DEMO
 /* 000019F4-00001A40       .text bgn2_s_sub__FPvPv */
 static void* bgn2_s_sub(void* param_1, void*) {
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN2_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BGN2_e) {
         return param_1;
     } else {
         return NULL;
@@ -3279,7 +3271,7 @@ static void* bgn2_s_sub(void* param_1, void*) {
 
 /* 00001A40-00001A8C       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BGN3_e) {
         return param_1;
     } else {
         return NULL;
@@ -3290,13 +3282,12 @@ static void* bgn3_s_sub(void* param_1, void*) {
 /* 0000AE8C-0000B134       .text daBgn_Execute__FP9bgn_class */
 static BOOL daBgn_Execute(bgn_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    cXyz local_1c;
-    cXyz local_28;
-
     if (i_this->m02B4 == 0xFF) {
         return TRUE;
     }
-    local_1c.setall(0.0f);
+    cXyz local_1c(0.0f, 0.0f, 0.0f);
+    cXyz local_28;
+
     g_env_light.settingTevStruct(TEV_TYPE_BG2, &center_pos, &bg_tevstr);
     bomb_splash_check(i_this);
 #if VERSION == VERSION_DEMO
@@ -3417,7 +3408,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         0,
         0x11020203
     );
-    if ((i_this->mpMorf == NULL) || (i_this->mpMorf->getModel() == NULL)) {
+    if (i_this->mpMorf == NULL || i_this->mpMorf->getModel() == NULL) {
         return FALSE;
     }
     i_this->mHeadParts[0].mpPartModel = i_this->mpMorf->getModel();

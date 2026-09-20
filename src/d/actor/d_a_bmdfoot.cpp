@@ -332,9 +332,7 @@ static void attack_2(bmdfoot_class* i_this) {
     cXyz local_48;
     static int col_joint[] = {ASI_JNT_ASI18_e, ASI_JNT_ASI16_e, ASI_JNT_ASI13_e, ASI_JNT_ASI10_e};
 
-    local_3c.z = 0.0f;
-    local_3c.y = 0.0f;
-    local_3c.x = 0.0f;
+    local_3c.x = local_3c.y = local_3c.z = 0.0f;
     boss->m334 = 10;
     switch (i_this->m2BC) {
     case 0:
@@ -635,9 +633,7 @@ static BOOL daBmdfoot_Execute(bmdfoot_class* i_this) {
     }
     i_this->btk->setFrame(sVar1);
     MTXCopy(model->getAnmMtx(REG14_S(6) + (s16)ASI_JNT_ASI17_e), *calc_mtx);
-    local_68.z = 0.0f;
-    local_68.y = 0.0f;
-    local_68.x = 0.0f;
+    local_68.x = local_68.y = local_68.z = 0.0f;
     MtxPosition(&local_68, &i_this->mAE8);
     if ((boss != NULL) && (i_this->mAE8.y < boss->m328)) {
         i_this->mAE8.y = boss->m328;
