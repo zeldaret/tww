@@ -25,10 +25,10 @@ public:
     inline bool _draw();
     
     static const char* m_arcname[];
-    static const u32 m_heapsize[];    
-    static const s16 m_brkidx[];    
-    static const s16 m_bdlidx[];  
-    static const s16 m_bckidx[];       
+    static const u32 m_heapsize[];
+    static const s16 m_brkidx[];
+    static const s16 m_bdlidx[];
+    static const s16 m_bckidx[];
     static const float m_warp_distance;
 
 public:
@@ -36,21 +36,20 @@ public:
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ mDoExt_brkAnm* mpBrkAnm;
     /* 0x2A0 */ mDoExt_bckAnm* mpBckAnm;
-    /* 0x2A4 */ JPABaseEmitter* mpEmitter;  
-    /* 0x2A8 */ s32 mSwitchNo;        
-    /* 0x2AC */ s32 mSceneNo;      
-    /* 0x2B0 */ s32 mWarpEvtState;
+    /* 0x2A4 */ JPABaseEmitter* mpEmitter;
+    /* 0x2A8 */ s32 mSwitchNo;
+    /* 0x2AC */ s32 mSceneNo;
+    /* 0x2B0 */ s32 mEvtState;
     /* 0x2B4 */ bool mWarpActive;
-    /* 0x2B5 */ bool mActivationEvtPlayed;
+    /* 0x2B5 */ bool mSkipActivationEvt;
     /* 0x2B6 */ u8 mPrevSwitchState;
     /* 0x2B7 */ s8 mStartupDelayTimer;
     /* 0x2B8 */ s16 mActivationEvtIdx;
-    /* 0x2BA */ s16 mWarpEvtIdx;
+    /* 0x2BA */ s16 mWarpingEvtIdx;
     /* 0x2BC */ u8 mWarpType;
-    /* 0x2BD */ u8 mWarpEvtType;
-    /* 0x2BE */ bool mPlayerStartedInsideWarp;
+    /* 0x2BD */ u8 mEvtType;
+    /* 0x2BE */ bool mPlayerStartedInWarp;
 };  // Size: 0x2C0
-
 
 namespace daWarpls_prm {
 inline u8 getEvId(daWarpls_c* i_this) {
