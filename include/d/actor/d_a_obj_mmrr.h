@@ -19,7 +19,7 @@ namespace daObjMmrr {
             current.pos = *pos;
             field_0xBF8 = 1;
         }
-    
+
         static int solidHeapCB(fopAc_ac_c*);
         bool create_heap();
         void init_cc();
@@ -41,20 +41,19 @@ namespace daObjMmrr {
         static const char M_arcname[];
         static const dCcD_SrcTri M_tri_src;
         static const dCcD_SrcCps M_cps_src;
-    
+
     public:
-        /* 0x290 */ request_of_phase_process_class field_0x290;
-        /* 0x298 */ J3DModel* field_0x298;
-        /* 0x29C */ J3DModel* field_0x29C;
-        /* 0x2A0 */ mDoExt_btkAnm field_0x2A0;
-        /* 0x2B4 */ mDoExt_btkAnm field_0x2B4;
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ J3DModel* mpMirrorModel;
+        /* 0x29C */ J3DModel* mpBeamModel;
+        /* 0x2A0 */ mDoExt_btkAnm mMirrorBtkAnm;
+        /* 0x2B4 */ mDoExt_btkAnm mBeamBtkAnm;
         /* 0x2C8 */ dCcD_Tri field_0x2C8[5];
         /* 0x958 */ dCcD_Stts field_0x958[5];
         /* 0xA84 */ dCcD_Cps field_0xA84;
         /* 0xBBC */ dCcD_Stts field_0xBBC;
         /* 0xBF8 */ bool field_0xBF8;
         /* 0xBF9 */ bool field_0xBF9;
-        /* 0xBFA */ u8 field_0xBFA[0xBFC - 0xBFA];
         /* 0xBFC */ f32 field_0xBFC;
         /* 0xC00 */ f32 field_0xC00;
         /* 0xC04 */ Eff_c field_0xC04;
