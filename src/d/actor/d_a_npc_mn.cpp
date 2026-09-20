@@ -45,44 +45,36 @@ static const int l_btp_ix_tbl[] = {
     dRes_ID_MN_BTP_MN_MABA_e,
 };
 
-static sMnAnmDat l_npc_anm_wait = {
-    0x00,
-    0x08,
-    0xFF
-};
+static sMnAnmDat l_npc_anm_wait = { daNpcMn_c::BCK_WAIT01, 0x08, 0xFF };
 
-static sMnAnmDat l_npc_anm_wait2 = {
-    0x01,
-    0x08,
-    0xFF
-};
+static sMnAnmDat l_npc_anm_wait2 = { daNpcMn_c::BCK_WAIT02, 0x08, 0xFF };
 
 static sMnAnmDat l_npc_anm_talk = {
-    0x02,
+    daNpcMn_c::BCK_TALK01,
     0x08,
     0xFF,
 };
 
 static sMnAnmDat l_npc_anm_talk2 = {
-    0x03,
+    daNpcMn_c::BCK_TALK02,
     0x08,
     0xFF,
 };
 
 static sMnAnmDat l_npc_anm_walk = {
-    0x04,
+    daNpcMn_c::BCK_WALK,
     0x08,
     0xFF,
 };
 
 static sMnAnmDat l_npc_anm_bikkuri[] = {
     {
-        0x05,
+        daNpcMn_c::BCK_BIKKURI,
         0x08,
         0x01,
     },
     {
-        0x00,
+        daNpcMn_c::BCK_WAIT01,
         0x08,
         0xFF,
     },
@@ -90,19 +82,19 @@ static sMnAnmDat l_npc_anm_bikkuri[] = {
 
 static sMnAnmDat l_npc_anm_jump1[] = {
     {
-        0x06,
+        daNpcMn_c::BCK_JUMP01,
         0x08,
         0x01,
     },
     {
-        0xFF,
+        daNpcMn_c::BCK_NULL,
         0x08,
         0x00,
     },
 };
 
 static sMnAnmDat l_npc_anm_jump2 = {
-    0x07,
+    daNpcMn_c::BCK_JUMP02,
     0x08,
     0xFF,
 };
@@ -247,25 +239,17 @@ static u16 l_figure_comp[] = {
     dSv_event_flag_c::UNK_80FF,
 };
 
-enum MoveProcIdx {
-    MOVE_PROC_WAIT,
-    MOVE_PROC_TALK,
-    MOVE_PROC_WALK,
-    MOVE_PROC_TURN,
-    MOVE_PROC_TALK3,
-};
-
 /* 00000078-00000230       .text __ct__9daNpcMn_cFv */
 daNpcMn_c::daNpcMn_c() {
     mResFlag = 0;
-    mMoveState = 0;
+    mMoveState = MOVE_PROC_WAIT;
     mTargetSpeedF = 0.0f;
     mWaitTimer = 0;
     mAnmMorfOverride = -1.0f;
-    mLookMode = 0;
+    mLookMode = LOOK_MODE_NONE;
     mHeadOnlyFollow = true;
     mHomeYRot = home.angle.y;
-    mBckIdx = 0;
+    mBckIdx = BCK_WAIT01;
     mEtcFlag = 0;
     mPosFlag = chkPosNo();
     mNpcNo = getPrmNpcNo();
@@ -588,7 +572,7 @@ bool daNpcMn_c::_execute() {
     checkOrder();
 
     // dBgS* bgsp = dComIfG_Bgsp();
-    if (!dComIfGp_event_runCheck() || eventInfo.checkCommandTalk() || mTalk3State != 0) {
+    if (!dComIfGp_event_runCheck() || eventInfo.checkCommandTalk() || mTalk3State != TALK3_INIT) {
         (this->*moveProc[mMoveState])();
     } else {
         eventMove();
@@ -598,7 +582,7 @@ bool daNpcMn_c::_execute() {
     playTexPatternAnm();
     playAnm();
 
-    if (mBckIdx == 4) {
+    if (mBckIdx == BCK_WALK) {
         cLib_chaseF(&speedF, mTargetSpeedF, 0.3f);
         f32 speed = speedF * l_npc_dat[mNpcNo].mWalkAnmRate;
         if (speed < 0.5f) {
@@ -653,7 +637,7 @@ int daNpcMn_c::executeWaitInit() {
         setAnmTbl(&l_npc_anm_wait);
         mWaitTimer = l_npc_dat[mNpcNo].mWaitTimerMin + cM_rndF(l_npc_dat[mNpcNo].mWaitTimerMax - l_npc_dat[mNpcNo].mWaitTimerMin);
     }
-    return 0;
+    return MOVE_PROC_WAIT;
 }
 
 /* 00001518-000017CC       .text executeWait__9daNpcMn_cFv */
@@ -690,7 +674,7 @@ void daNpcMn_c::executeWait() {
                 daObjFigure_c* figure = (daObjFigure_c*)fopAcM_searchFromName("Figure", 0xFF, mFigureArg);
                 if (figure != NULL && figure->mbDisplay) {
                     mLookAtPos = figure->eyePos;
-                    mLookMode = 1;
+                    mLookMode = LOOK_MODE_ATTN;
                     mHeadOnlyFollow = false;
                     m_jnt.setTrn();
                 }
@@ -709,7 +693,7 @@ void daNpcMn_c::executeWait() {
 
 /* 000017CC-000017D4       .text executeTalkInit__9daNpcMn_cFv */
 int daNpcMn_c::executeTalkInit() {
-    return 1;
+    return MOVE_PROC_TALK;
 }
 
 /* 000017D4-0000184C       .text executeTalk__9daNpcMn_cFv */
@@ -726,26 +710,26 @@ void daNpcMn_c::executeTalk() {
 
 /* 0000184C-0000185C       .text executeTalk3Init__9daNpcMn_cFv */
 int daNpcMn_c::executeTalk3Init() {
-    mTalk3State = 0;
-    return 4;
+    mTalk3State = TALK3_INIT;
+    return MOVE_PROC_TALK3;
 }
 
 /* 0000185C-0000191C       .text executeTalk3__9daNpcMn_cFv */
 void daNpcMn_c::executeTalk3() {
     switch (mTalk3State) {
-        case 0:
-        case 1:
+        case TALK3_INIT:
+        case TALK3_ORDER:
             if (eventInfo.checkCommandDemoAccrpt()) {
-                mTalk3State = 2;
+                mTalk3State = TALK3_TALK;
             } else {
                 fopAcM_orderPotentialEvent(this, dEvtFlag_UNKA_e, 0, 0);
                 eventInfo.onCondition(dEvtCnd_UNK2_e);
-                mTalk3State = 1;
+                mTalk3State = TALK3_ORDER;
             }
             break;
-        case 2:
+        case TALK3_TALK:
             if (talk3(1) == 0x12) {
-                mTalk3State = 0;
+                mTalk3State = TALK3_INIT;
                 executeSetMode(MOVE_PROC_WAIT);
                 dComIfGp_event_onEventFlag(8);
             }
@@ -756,7 +740,7 @@ void daNpcMn_c::executeTalk3() {
 /* 0000191C-00001948       .text executeWalkInit__9daNpcMn_cFv */
 int daNpcMn_c::executeWalkInit() {
     setAnmTbl(&l_npc_anm_walk);
-    return 2;
+    return MOVE_PROC_WALK;
 }
 
 /* 00001948-00001BD4       .text executeWalk__9daNpcMn_cFv */
@@ -792,7 +776,7 @@ void daNpcMn_c::executeWalk() {
                 mTargetYRot = mHomeYRot = angle;
                 mHeadOnlyFollow = false;
                 mLookAtMaxVel = l_npc_dat[mNpcNo].mWalkLookAtMaxVel;
-                mLookMode = 2;
+                mLookMode = LOOK_MODE_TURN;
                 m_jnt.setTrn();
                 mTargetSpeedF = l_npc_dat[mNpcNo].mWalkSpeed;
             } else {
@@ -817,9 +801,9 @@ int daNpcMn_c::executeTurnInit() {
     if (angle == current.angle.y) {
         setAnmTbl(&l_npc_anm_walk);
         mWaitTimer = l_npc_dat[mNpcNo].mTurnWaitMin + cM_rndF(l_npc_dat[mNpcNo].mTurnWaitMax - l_npc_dat[mNpcNo].mTurnWaitMin);
-        return 2;
+        return MOVE_PROC_WALK;
     } else {
-        return 3;
+        return MOVE_PROC_TURN;
     }
 }
 
@@ -831,7 +815,7 @@ void daNpcMn_c::executeTurn() {
         dNpc_calc_DisXZ_AngY(current.pos, point, NULL, &angle);
         mTargetYRot = angle;
         mHeadOnlyFollow = false;
-        mLookMode = 2;
+        mLookMode = LOOK_MODE_TURN;
         m_jnt.setTrn();
 
         if (current.angle.y == angle) {
@@ -882,18 +866,8 @@ void daNpcMn_c::eventMove() {
 /* 00001F74-00002194       .text privateCut__9daNpcMn_cFv */
 void daNpcMn_c::privateCut() {
     static char* cut_name_tbl[] = {
-        "MES_SET",
-        "GET_ITEM",
-        "WAIT",
-        "HATCH",
-        "BIKKURI",
-        "TURN",
-        "WALK",
-        "LOOK",
-        "JUMP",
-        "SWON",
+        "MES_SET", "GET_ITEM", "WAIT", "HATCH", "BIKKURI", "TURN", "WALK", "LOOK", "JUMP", "SWON",
     };
-
     int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[0]);
     if (staffIdx != -1) {
         mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 10, TRUE, 0);
@@ -1066,7 +1040,7 @@ void daNpcMn_c::eventHatchInit() {
 bool daNpcMn_c::eventHatch() {
     mTargetYRot = mHomeYRot;
     mHeadOnlyFollow = false;
-    mLookMode = 2;
+    mLookMode = LOOK_MODE_TURN;
     m_jnt.setTrn();
     if (mHomeYRot - current.angle.y == 0) {
         return true;
@@ -1128,7 +1102,7 @@ bool daNpcMn_c::eventTurn(int i_staffIdx) {
     dNpc_calc_DisXZ_AngY(current.pos, pos, NULL, &angle);
     mTargetYRot = angle;
     mHeadOnlyFollow = false;
-    mLookMode = 2;
+    mLookMode = LOOK_MODE_TURN;
     m_jnt.setTrn();
     if (current.angle.y == angle) {
         return true;
@@ -1156,7 +1130,7 @@ bool daNpcMn_c::eventWalk() {
         mTargetYRot = mHomeYRot = angle;
         mHeadOnlyFollow = false;
         mLookAtMaxVel = l_npc_dat[mNpcNo].mWalkLookAtMaxVel;
-        mLookMode = 2;
+        mLookMode = LOOK_MODE_TURN;
         m_jnt.setTrn();
         mTargetSpeedF = l_npc_dat[mNpcNo].mWalkSpeed;
     } else {
@@ -1420,7 +1394,7 @@ void daNpcMn_c::chkAttention() {
     mbNearPlayer = 0;
     if (mEventCut.getAttnFlag()) {
         mLookAtPos = mEventCut.getAttnPos();
-        mLookMode = 1;
+        mLookMode = LOOK_MODE_ATTN;
         if (mbAllowBodyTurn) {
             mHeadOnlyFollow = false;
             m_jnt.setTrn();
@@ -1446,7 +1420,7 @@ void daNpcMn_c::chkAttention() {
 
         if (maxDist > dist && maxAngle > abs(angle)) {
             mLookAtPos = dNpc_playerEyePos(l_npc_dat[mNpcNo].mPlayerEyeOfsY);
-            mLookMode = 1;
+            mLookMode = LOOK_MODE_ATTN;
             if (mbAllowBodyTurn) {
                 mHeadOnlyFollow = false;
             } else {
@@ -1456,7 +1430,7 @@ void daNpcMn_c::chkAttention() {
             if (mbLookOnly == 0) {
                 mTargetYRot = mHomeYRot;
                 mHeadOnlyFollow = false;
-                mLookMode = 2;
+                mLookMode = LOOK_MODE_TURN;
                 m_jnt.setTrn();
             }
             if (mbPlayerAttention == 0) {
@@ -1469,7 +1443,7 @@ void daNpcMn_c::chkAttention() {
             }
             if (l_npc_dat[mNpcNo].mNearDist > dist) {
                 mLookAtPos = dNpc_playerEyePos(l_npc_dat[mNpcNo].mPlayerEyeOfsY);
-                mLookMode = 1;
+                mLookMode = LOOK_MODE_ATTN;
                 if (mbAllowBodyTurn != 0) {
                     mHeadOnlyFollow = false;
                 } else {
@@ -1479,19 +1453,19 @@ void daNpcMn_c::chkAttention() {
                 if (mbLookOnly == 0) {
                     mTargetYRot = mHomeYRot;
                     mHeadOnlyFollow = false;
-                    mLookMode = 2;
+                    mLookMode = LOOK_MODE_TURN;
                     m_jnt.setTrn();
                 }
                 mbNearPlayer = 1;
             } else {
-                mLookMode = 0;
+                mLookMode = LOOK_MODE_NONE;
                 if (!mPathRun.isPath()) {
                     if (mLookResetTimer != 0) {
                         mLookResetTimer--;
                     } else {
                         mTargetYRot = mHomeYRot;
                         mHeadOnlyFollow = false;
-                        mLookMode = 2;
+                        mLookMode = LOOK_MODE_TURN;
                         m_jnt.setTrn();
                     }
                 }
@@ -1511,14 +1485,14 @@ void daNpcMn_c::lookBack() {
     cXyz dstPos = eyePos;
     bool headOnlyFollow = mHeadOnlyFollow;
     switch (mLookMode) {
-        case 1:
+        case LOOK_MODE_ATTN:
             temp2 = mLookAtPos;
             dstTemp = &temp2;
             break;
-        case 2:
+        case LOOK_MODE_TURN:
             desiredYRot = mTargetYRot;
             break;
-        case 0:
+        case LOOK_MODE_NONE:
         default:
             break;
     }
@@ -1594,7 +1568,7 @@ void daNpcMn_c::setAnm(u8 i_bckIdx, int i_loopMode, float i_morf) {
 /* 000038C8-00003974       .text setAnmTbl__9daNpcMn_cFP9sMnAnmDat */
 bool daNpcMn_c::setAnmTbl(sMnAnmDat* i_anmDat) {
     mAnmFlag &= 0xFE;
-    if (i_anmDat->mBckIdx == 0xFF) {
+    if (i_anmDat->mBckIdx == BCK_NULL) {
         mpAnmDat = NULL;
         return TRUE;
     }

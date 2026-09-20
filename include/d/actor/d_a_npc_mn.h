@@ -58,6 +58,38 @@ public:
         PRM_RAIL_S = 0x18,
     };
 
+    enum MoveProcIdx {
+        MOVE_PROC_WAIT = 0,
+        MOVE_PROC_TALK = 1,
+        MOVE_PROC_WALK = 2,
+        MOVE_PROC_TURN = 3,
+        MOVE_PROC_TALK3 = 4,
+    };
+
+    enum LookMode {
+        LOOK_MODE_NONE = 0,
+        LOOK_MODE_ATTN = 1,
+        LOOK_MODE_TURN = 2,
+    };
+
+    enum Talk3State {
+        TALK3_INIT = 0,
+        TALK3_ORDER = 1,
+        TALK3_TALK = 2,
+    };
+
+    enum BckIdx {
+        BCK_WAIT01 = 0,
+        BCK_WAIT02 = 1,
+        BCK_TALK01 = 2,
+        BCK_TALK02 = 3,
+        BCK_WALK = 4,
+        BCK_BIKKURI = 5,
+        BCK_JUMP01 = 6,
+        BCK_JUMP02 = 7,
+        BCK_NULL = 0xFF,
+    };
+
     u8 getNpcNo() { return mNpcNo; }
     request_of_phase_process_class* getPhaseP() { return &mPhs; }
     u8 getPosFlag() {
