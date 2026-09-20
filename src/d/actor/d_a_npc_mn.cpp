@@ -1515,8 +1515,18 @@ void daNpcMn_c::lookBack() {
 }
 
 /* 000035C4-000036D0       .text initTexPatternAnm__9daNpcMn_cFb */
-BOOL daNpcMn_c::initTexPatternAnm(bool) {
-    /* Nonmatching */
+BOOL daNpcMn_c::initTexPatternAnm(bool modify) {
+    J3DModelData* modelData = mpMorf->getModel()->getModelData();
+    m_head_tex_pattern = (J3DAnmTexPattern*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_btp_ix_tbl[0]);
+    JUT_ASSERT(2585, m_head_tex_pattern != NULL);
+    BOOL ret = mBtpAnm.init(modelData, m_head_tex_pattern, 1, 2, 1.0, 0, -1, modify, FALSE);
+    if (ret == FALSE)
+        return FALSE;
+    else {
+        mBtpFrame = 0;
+        field_0x7A8 = 0;
+        return TRUE;
+    }
 }
 
 /* 000036D0-0000373C       .text playTexPatternAnm__9daNpcMn_cFv */
@@ -1547,13 +1557,34 @@ void daNpcMn_c::playAnm() {
 }
 
 /* 000037F8-000038C8       .text setAnm__9daNpcMn_cFUcif */
-void daNpcMn_c::setAnm(unsigned char, int, float) {
-    /* Nonmatching */
+void daNpcMn_c::setAnm(u8 i_bckIdx, int i_loopMode, float i_morf) {
+    if (field_0x780 >= 0.0f) {
+        i_morf = field_0x780;
+        field_0x780 = -1.0f;
+    }
+    J3DAnmTransformKey* pAnm = (J3DAnmTransformKey*)dComIfG_getObjectIDRes(l_arcname_tbl[0], l_bck_ix_tbl[i_bckIdx]);
+    mpMorf->setAnm(pAnm, i_loopMode, i_morf, 1.0f, 0.0f, -1.0f, NULL);
+    mBckIdx = i_bckIdx;
 }
 
 /* 000038C8-00003974       .text setAnmTbl__9daNpcMn_cFP9sMnAnmDat */
-bool daNpcMn_c::setAnmTbl(sMnAnmDat*) {
-    /* Nonmatching */
+bool daNpcMn_c::setAnmTbl(sMnAnmDat* i_anmDat) {
+    field_0x7B9 &= 0xFE;
+    if (i_anmDat->mBckIdx == 0xFF) {
+        mpAnmDat = NULL;
+        return TRUE;
+    }
+    mpAnmDat = i_anmDat;
+    field_0x7BA = mpAnmDat->field_0x02;
+
+    int loopMode = J3DFrameCtrl::EMode_LOOP;
+    if (field_0x7BA > 0) {
+        loopMode = J3DFrameCtrl::EMode_NONE;
+    }
+    if (mBckIdx != mpAnmDat->mBckIdx || loopMode == J3DFrameCtrl::EMode_NONE) {
+        setAnm(mpAnmDat->mBckIdx, loopMode, mpAnmDat->mMorf);
+    }
+    return FALSE;
 }
 
 /* 00003974-0000397C       .text XyCheckCB__9daNpcMn_cFi */
@@ -1571,23 +1602,79 @@ int daNpcMn_c::getRand(int i_max) {
 }
 
 /* 000039E0-00003A58       .text setCollision__9daNpcMn_cFP8dCcD_Cyl4cXyzff */
-void daNpcMn_c::setCollision(dCcD_Cyl*, cXyz, float, float) {
-    /* Nonmatching */
+void daNpcMn_c::setCollision(dCcD_Cyl* i_cyl, cXyz i_center, float i_radius, float i_height) {
+    i_cyl->SetC(i_center);
+    i_cyl->SetR(i_radius);
+    i_cyl->SetH(i_height);
+    dComIfG_Ccsp()->Set(i_cyl);
 }
 
 /* 00003A58-00003AC4       .text chkEndEvent__9daNpcMn_cFv */
 BOOL daNpcMn_c::chkEndEvent() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_endCheck(field_0x796)) {
+        dComIfGp_event_onEventFlag(8);
+        fopAcM_delete(this);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00003AC4-00003B38       .text chkPosNo__9daNpcMn_cFv */
 u8 daNpcMn_c::chkPosNo() {
-    /* Nonmatching */
+    u8 posNo = 0;
+    while (posNo < 10) {
+        if (strcmp(dComIfGp_getNextStageName(), l_room_name[posNo]) != 0) {
+            posNo++;
+        } else {
+            break;
+        }
+    }
+    return posNo;
 }
 
 /* 00003B38-00003CD8       .text getPosNo__9daNpcMn_cFv */
 u8 daNpcMn_c::getPosNo() {
-    /* Nonmatching */
+    int roomCnt[8];
+    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D08) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3120)) {
+        return 1;
+    }
+
+    roomCnt[0] = 1;
+    for (int i = 1; i < 8; i++) {
+        roomCnt[i] = 0;
+    }
+
+    for (int fig = 0; fig < 0x86; fig++) {
+        if (fig / 8 < 0x11) {
+            int bit = fig % 8;
+            u8 reg = dComIfGs_getEventReg(l_figure_comp[fig / 8]);
+            if (reg & (1 << bit)) {
+                int roomId = dSnap_GetFigRoomId(fig);
+                if (roomId != 0xFF && roomId < 8) {
+                    roomCnt[roomId]++;
+                }
+            }
+        }
+    }
+
+    int nonZero = 0;
+    for (int i = 0; i < 8; i++) {
+        if (roomCnt[i] != 0) {
+            nonZero++;
+        }
+    }
+
+    int rnd = getRand(nonZero);
+    for (int i = 0; i < 8; i++) {
+        if (roomCnt[i] != 0) {
+            if (rnd) {
+                rnd--;
+            } else {
+                return i + 1;
+            }
+        }
+    }
+    return 1;
 }
 
 /* 00003CD8-00003CE8       .text isChangePos__9daNpcMn_cFUc */
