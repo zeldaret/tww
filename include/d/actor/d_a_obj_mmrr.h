@@ -8,8 +8,9 @@
 namespace daObjMmrr {
     class Eff_c : public dPa_followEcallBack {
     public:
-        void end();
+        virtual void end();
         void remove();
+        virtual ~Eff_c() {}
     };  // Size: 0x14
 
     class Act_c : public fopAc_ac_c {
@@ -18,14 +19,9 @@ namespace daObjMmrr {
             current.pos = *pos;
             field_0xBF8 = 1;
         }
-
-        struct Attr_c {
-            /* 0x00 */ Vec field_0x00[5][3];
-            /* 0xB4 */ u8 field_0xB4[0xD4 - 0xB4];
-        };  // Size: 0xD4
     
         static int solidHeapCB(fopAc_ac_c*);
-        int create_heap();
+        bool create_heap();
         void init_cc();
         void set_cc_rec_pos();
         void set_cc_trans_pos();
@@ -34,15 +30,15 @@ namespace daObjMmrr {
         bool _delete();
         void set_mtx();
         void init_mtx();
-        BOOL chk_light();
+        bool chk_light();
         void eff_start();
         void eff_stop();
         void eff_remove();
         bool _execute();
         bool _draw();
 
-        static const Attr_c L_attr;
-        static const char * M_arcname;
+        // static const Attr_c L_attr;
+        static const char M_arcname[];
         static const dCcD_SrcTri M_tri_src;
         static const dCcD_SrcCps M_cps_src;
     
@@ -56,8 +52,8 @@ namespace daObjMmrr {
         /* 0x958 */ dCcD_Stts field_0x958[5];
         /* 0xA84 */ dCcD_Cps field_0xA84;
         /* 0xBBC */ dCcD_Stts field_0xBBC;
-        /* 0xBF8 */ u8 field_0xBF8;
-        /* 0xBF9 */ u8 field_0xBF9;
+        /* 0xBF8 */ bool field_0xBF8;
+        /* 0xBF9 */ bool field_0xBF9;
         /* 0xBFA */ u8 field_0xBFA[0xBFC - 0xBFA];
         /* 0xBFC */ f32 field_0xBFC;
         /* 0xC00 */ f32 field_0xC00;

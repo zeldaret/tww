@@ -7,8 +7,55 @@
 #include "d/actor/d_a_obj_mmrr.h"
 #include "d/d_cc_d.h"
 
-const daObjMmrr::Act_c::Attr_c daObjMmrr::Act_c::L_attr = {};
-const char * daObjMmrr::Act_c::M_arcname = "Mmirror";
+namespace daObjMmrr {
+    namespace {
+        struct Attr_c {
+            /* 0x00 */ Vec field_0x00[5][3];
+            /* 0xB4 */ f32 field_0xB4;
+            /* 0xB8 */ f32 field_0xB8;
+            /* 0xBC */ s16 field_0xBC;
+            /* 0xC0 */ f32 field_0xC0;
+            /* 0xC4 */ f32 field_0xC4;
+            /* 0xC8 */ f32 field_0xC8;
+            /* 0xCC */ f32 field_0xCC;
+            /* 0xD0 */ f32 field_0xD0;
+        };  // Size: 0xD4
+
+        const Attr_c L_attr = {
+            {
+                {
+                    {0, 0, 0},
+                    {-50, -230, 0},
+                    {50, -230, 0}
+                },
+                {
+                    {0, 0, 0},
+                    {-60, -20, 0},
+                    {-90, -80, 0}
+                },
+                {
+                    {0, 0, 0},
+                    {90, -80, 0},
+                    {60, -20, 0}
+                },
+                {
+                    {0, 0, 0},
+                    {-90, -80, 0},
+                    {-50, -230, 0}
+                },
+                {
+                    {0, 0, 0},
+                    {50, -230, 0},
+                    {90, -80, 0}
+                },
+            },
+            445, 0, -2000, 0, 320, 40, 120, 10000
+        };
+    }
+
+}
+
+const char daObjMmrr::Act_c::M_arcname[] = "Mmirror";
 
 const dCcD_SrcTri daObjMmrr::Act_c::M_tri_src = {
     // dCcD_SrcGObjInf
@@ -96,21 +143,21 @@ int daObjMmrr::Act_c::solidHeapCB(fopAc_ac_c* i_actor) {
 }
 
 /* 00000110-00000360       .text create_heap__Q29daObjMmrr5Act_cFv */
-int daObjMmrr::Act_c::create_heap() {
+bool daObjMmrr::Act_c::create_heap() {
     /* Nonmatching */
-    J3DModelData* bdl_Mmrr = static_cast<J3DModelData*>(dComIfG_getObjectRes("Mmirror", 0x40));
+    J3DModelData* bdl_Mmrr = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 9));
     JUT_ASSERT(0x1e8, bdl_Mmrr != NULL);
     field_0x298 = mDoExt_J3DModel__create(bdl_Mmrr, 0x80000, 0x11000222);
     
-    J3DModelData* bdl_Yssmr00 = static_cast<J3DModelData*>(dComIfG_getObjectRes("Mmirror", 0x40));
+    J3DModelData* bdl_Yssmr00 = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 0xb));
     JUT_ASSERT(0x1f1, bdl_Yssmr00 != NULL);
     field_0x29C = mDoExt_J3DModel__create(bdl_Yssmr00, 0x80000, 0x11000222);
     
-    J3DAnmTextureSRTKey* btk_Mmrr = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Mmirror", 0x40));
+    J3DAnmTextureSRTKey* btk_Mmrr = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, 0xe));
     JUT_ASSERT(0x1fc, btk_Mmrr != NULL);
     int temp = field_0x2A0.init(bdl_Mmrr, btk_Mmrr, true, J3DFrameCtrl::EMode_LOOP);
     
-    J3DAnmTextureSRTKey* btk_Yssmr00 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Mmirror", 0x40));
+    J3DAnmTextureSRTKey* btk_Yssmr00 = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, 0x10));
     JUT_ASSERT(0x203, btk_Yssmr00 != NULL);
     int temp2 = field_0x2B4.init(bdl_Yssmr00, btk_Yssmr00, true, J3DFrameCtrl::EMode_LOOP);
     
@@ -123,7 +170,8 @@ void daObjMmrr::Act_c::init_cc() {
     for (int i = 0; i < 5; i++) {
         field_0x958[i].Init(0xff, 0xff, this);
         field_0x2C8[i].Set(M_tri_src);
-        field_0x2C8->OnTgNoHitMark();
+        field_0x2C8[i].SetStts(&field_0x958[i]);
+        field_0x2C8[i].OnTgNoHitMark();
         field_0xBBC.Init(0xff, 0xff, this);
         field_0xA84.Set(M_cps_src);
         field_0xA84.SetStts(&field_0xBBC);
@@ -135,91 +183,62 @@ void daObjMmrr::Act_c::init_cc() {
 /* 00000434-000005DC       .text set_cc_rec_pos__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::set_cc_rec_pos() {
     /* Nonmatching */
-    cXyz local_58;
-    cXyz local_4c;
-    cXyz local_40;
     cXyz local_34;
-    PSMTXTrans(mDoMtx_stack_c::now, this->current.pos.x, this->current.pos.y, this->current.pos.z);
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, this->shape_angle.x, this->shape_angle.y, this->shape_angle.z);
-    mDoMtx_stack_c::transM(0, 445, 0);
-    mDoMtx_XrotM(mDoMtx_stack_c::now, 0xf830);
+    cXyz local_40;
+    cXyz local_4c;
+    cXyz local_58;
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::transM(0, L_attr.field_0xB4, L_attr.field_0xB8);
+    mDoMtx_stack_c::XrotM(L_attr.field_0xBC);
     for (int i = 0; i < 5; i++) {
-        local_34.x = L_attr.field_0x00[i][0].x;
-        local_34.y = L_attr.field_0x00[i][0].y;
-        local_34.z = L_attr.field_0x00[i][0].z;
-        PSMTXMultVec(mDoMtx_stack_c::now, &local_34, &local_40);
-        local_34.x = L_attr.field_0x00[i][1].x;
-        local_34.y = L_attr.field_0x00[i][1].y;
-        local_34.z = L_attr.field_0x00[i][1].z;
-        PSMTXMultVec(mDoMtx_stack_c::now, &local_34, &local_4c);
-        local_34.x = L_attr.field_0x00[i][2].x;
-        local_34.y = L_attr.field_0x00[i][2].y;
-        local_34.z = L_attr.field_0x00[i][2].z;
-        PSMTXMultVec(mDoMtx_stack_c::now, &local_34, &local_58);
-        field_0x2C8[i].mA.x = local_40.x;
-        field_0x2C8[i].mA.z = local_40.y;
-        field_0x2C8[i].mA.y = local_40.z;
-        field_0x2C8[i].mB.x = local_4c.x;
-        field_0x2C8[i].mB.z = local_4c.y;
-        field_0x2C8[i].mB.y = local_4c.z;
-        field_0x2C8[i].mC.x = local_58.x;
-        field_0x2C8[i].mC.z = local_58.y;
-        field_0x2C8[i].mC.y = local_58.z;
-        // mDoMtx_stack_c::transS(L_attr.field_0x00[i][0]);
-        // mDoMtx_stack_c::transS(L_attr.field_0x00[i][1]);
-        // mDoMtx_stack_c::transS(L_attr.field_0x00[i][2]);
-        cM3d_CalcPla(&field_0x2C8[i].mA, &field_0x2C8[i].mB, &field_0x2C8[i].mC, &field_0x2C8[i].mNormal, &field_0x2C8[i].mD);
+        local_34 = L_attr.field_0x00[i][0];
+        mDoMtx_stack_c::multVec(&local_34, &local_40);
+        local_34 = L_attr.field_0x00[i][1];
+        mDoMtx_stack_c::multVec(&local_34, &local_4c);
+        local_34 = L_attr.field_0x00[i][2];
+        mDoMtx_stack_c::multVec(&local_34, &local_58);
+        field_0x2C8[i].setPos(&local_40, &local_4c, &local_58);
     }
 }
 
 /* 000005DC-000009FC       .text set_cc_trans_pos__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::set_cc_trans_pos() {
     /* Nonmatching */
-    // cXyz::cXyz(0,0,0);
-    // dBgS_MirLightLinChk()
-    float fVar1;
-    bool bVar2;
-    cXyz *this_00;
-    cBgS_PolyPassChk *pcVar3;
-    float fVar4;
-    cXyz local_e4;
-    cXyz local_d8;
-    cXyz local_cc;
-    cXyz local_c0;
-    float local_b4;
-    cBgS_LinChk local_b0;
-    // cBgS_GrpPassChk__Attr local_48;
-    local_d8.x = 0.0;
-    local_d8.y = 0.0;
-    local_d8.z = 10000;
-    PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_ZXYrotM(mDoMtx_stack_c::now, shape_angle.x, shape_angle.y, shape_angle.z);
-    mDoMtx_stack_c::transM(0, 320, 40);
-    PSMTXMultVec(mDoMtx_stack_c::now, &cXyz::Zero, &local_cc);
-    PSMTXMultVec(mDoMtx_stack_c::now, &local_d8, &local_c0);
-    local_b4 = 120;
-    local_b0.SetPolyPassChk(NULL);
-    local_b0.SetGrpPassChk(NULL);
-    local_b0.OffSameActorChk();
-    local_b0.ct();
+    cM3dGCpsS local_cps;
+    cXyz local_d8(0.0f, 0.0f, L_attr.field_0xD0);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::transM(L_attr.field_0xC0, L_attr.field_0xC4, L_attr.field_0xC8);
+    mDoMtx_stack_c::multVec(&cXyz::Zero, &local_cps.mStart);
+    mDoMtx_stack_c::multVec(&local_d8, &local_cps.mEnd);
+    local_cps.mRadius = L_attr.field_0xCC;
+    
+    dBgS_MirLightLinChk local_b0;
+    local_b0.Set((cXyz*)&local_cps.mStart, (cXyz*)&local_cps.mEnd, this);
+    if (dComIfG_Bgsp()->LineCross(&local_b0)) {
+        local_cps.mEnd = local_b0.GetCross();
+    }
+    field_0xA84.cM3dGCps::Set(local_cps);
+    field_0xA84.CalcAtVec();
+    field_0xA84.GetAtVecP()->normalizeRS();
+    field_0xC00 = cXyz(local_cps.mStart).abs(local_cps.mEnd) / L_attr.field_0xD0;
 }
 
 /* 00000F88-0000102C       .text set_cull__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::set_cull() {
     /* Nonmatching */
-    int iVar1;
-    double dVar2;
-    double dVar3;
+    f32 dVar2;
+    f32 dVar3;
 
     if (field_0xBF9 != 0) {
-        iVar1 = 0xf830 >> (jmaSinShift & 0x3f);
-        dVar2 = jmaSinTable[iVar1] * -10000;
-        dVar3 = jmaSinTable[iVar1] * 10000;
+        dVar2 = -L_attr.field_0xD0 * cM_ssin(L_attr.field_0xBC);
+        dVar3 = L_attr.field_0xD0 * cM_scos(L_attr.field_0xBC);
     } else {
-        dVar2 = 0;
+        dVar2 = 0.0f;
         dVar3 = dVar2;
     }
-    fopAcM_setCullSizeBox(this, -160, -1, -160, 160, dVar2 + 680, dVar3 + 160);
+    fopAcM_setCullSizeBox(this, -160.0f, -1.0f, -160.0f, 160.0f, dVar2 + 680.0f, dVar3 + 160.0f);
 }
 
 /* 0000102C-0000122C       .text _create__Q29daObjMmrr5Act_cFv */
@@ -259,44 +278,38 @@ bool daObjMmrr::Act_c::_delete() {
 /* 0000126C-0000131C       .text set_mtx__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::set_mtx() {
     /* Nonmatching */
-    float z = scale.z * field_0xC00;
-    field_0x29C->getBaseScale()->x = scale.x;
-    field_0x29C->getBaseScale()->y = scale.y;
-    field_0x29C->getBaseScale()->z = z;
-    // field_0x29C->setBaseScale((Vec){scale.x, scale.y, scale.z * field_0xC00});
+    cXyz local_scale(scale.x, scale.y, scale.z * field_0xC00);
+    field_0x29C->setBaseScale(local_scale);
     PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_ZXYrotM(mDoMtx_stack_c::now, shape_angle.x, shape_angle.y, shape_angle.z);
-    PSMTXCopy(mDoMtx_stack_c::now, field_0x298->getBaseTRMtx());
-    PSMTXCopy(mDoMtx_stack_c::now, field_0x29C->getBaseTRMtx());
+    field_0x298->setBaseTRMtx(mDoMtx_stack_c::get());
+    field_0x29C->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 0000131C-00001358       .text init_mtx__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::init_mtx() {
     /* Nonmatching */
-    field_0x298->getBaseScale()->x = scale.x;
-    field_0x298->getBaseScale()->y = scale.y;
-    field_0x298->getBaseScale()->z = scale.z;
+    field_0x298->setBaseScale(scale);
     set_mtx();
 }
 
 /* 00001358-00001418       .text chk_light__Q29daObjMmrr5Act_cFv */
-BOOL daObjMmrr::Act_c::chk_light() {
+bool daObjMmrr::Act_c::chk_light() {
     /* Nonmatching */
-    int iVar1;
-    BOOL ret = FALSE;
-    float fVar5;
-    if (!dComIfGp_getDetect().chk_light(&eyePos)) {for (int i = 0; i < 5; i++) {
-            iVar1 = field_0x2C8[i].ChkTgHit();
-            if (iVar1 != 0) {
-                fVar5 = PSVECDotProduct(field_0x2C8[i].GetTgRVecP(), field_0x2C8[i].GetNP());
-                if (fVar5 < 0) {
-                    ret = TRUE;
+    bool ret = false;
+    if (dComIfGp_getDetect().chk_light(&eyePos)) {
+        ret = true;
+    } else {
+        for (int i = 0; i < 5; i++) {
+            dCcD_Tri* local_tri = &field_0x2C8[i];
+            if (local_tri->ChkTgHit()) {
+
+                if (local_tri->GetNP()->inprod(*local_tri->GetTgRVecP()) < 0.0f) {
+                    ret = true;
                 }
-                field_0x2C8[i].ClrTgHit();
+                local_tri->ClrTgHit();
             }
         }
-    } else {
-        ret = TRUE;
     }
     return ret;
 }
@@ -304,7 +317,7 @@ BOOL daObjMmrr::Act_c::chk_light() {
 /* 00001418-00001480       .text eff_start__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::eff_start() {
     /* Nonmatching */
-    g_dComIfG_gameInfo.play.mParticle->set(0, 0x8294, &current.pos, &shape_angle, NULL, 0xff, &field_0xC04, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(0x8294, &current.pos, &shape_angle, NULL, 0xff, &field_0xC04, -1, NULL, NULL, NULL);
 }
 
 /* 00001480-000014AC       .text eff_stop__Q29daObjMmrr5Act_cFv */
@@ -322,23 +335,19 @@ void daObjMmrr::Act_c::eff_remove() {
 /* 000014D0-000016E8       .text _execute__Q29daObjMmrr5Act_cFv */
 bool daObjMmrr::Act_c::_execute() {
     /* Nonmatching */
-    u8 bVar1;
-    BOOL cVar2;
 
     attention_info.position.x = current.pos.x;
-    attention_info.position.y = current.pos.y + 260;
+    attention_info.position.y = current.pos.y + 260.0f;
     attention_info.position.z = current.pos.z;
-    eyePos.x = attention_info.position.x;
-    eyePos.y = attention_info.position.y;
-    eyePos.z = attention_info.position.z;
-    cVar2 = chk_light();
-    if (!cVar2) {
-        cLib_chaseF(&field_0xBFC, 0, 0.2);
+    eyePos = attention_info.position;
+    if (chk_light()) {
+        cLib_chaseF(&field_0xBFC, 1.0f, 0.2f);
     } else {
-        cLib_chaseF(&field_0xBFC, 1, 0.2);
+        cLib_chaseF(&field_0xBFC, 0.0f, 0.2f);
     }
+    u8 bVar1;
     bVar1 = field_0xBF9;
-    field_0xBF9 = field_0xBFC > 0.999;
+    field_0xBF9 = field_0xBFC > 0.999f;
     field_0x2A0.play();
     field_0x2B4.play();
     if (field_0xBF8 != 0) {
@@ -349,24 +358,25 @@ bool daObjMmrr::Act_c::_execute() {
     }
     set_mtx();
     set_cull();
-    if (field_0xBF9 == 0) {
+    if (field_0xBF9 != 0) {
+        if (bVar1 == 0) {
+            fopAcM_seStart(this, JA_SE_OBJ_MIRROR_REFLECT, 0);
+            eff_start();
+        }
+        fopAcM_seStart(this, JA_SE_OBJ_MIRROR_LIGHT, 0);
+    } else {
         if (bVar1 != 0) {
             eff_stop();
         }
-    } else {
-        if (bVar1 == 0) {
-            fopAcM_seStart(this, JA_SE_OBJ_MIRROR_REFLECT, 0);
-        }
-        fopAcM_seStart(this, JA_SE_OBJ_MIRROR_LIGHT, 0);
     }
     for (int i = 0; i < 5; i++) {
-        g_dComIfG_gameInfo.play.mCcS.Set(&field_0x2C8[i]);
+        dComIfG_Ccsp()->Set(&field_0x2C8[i]);
     }
     if (field_0xBF9 != 0) {
-        g_dComIfG_gameInfo.play.mCcS.Set(&field_0xA84);
+        dComIfG_Ccsp()->Set(&field_0xA84);
     }
     field_0xBF8 = 0;
-    return 1;
+    return true;
 }
 
 /* 000016E8-000017E8       .text _draw__Q29daObjMmrr5Act_cFv */
@@ -376,17 +386,17 @@ bool daObjMmrr::Act_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(field_0x298, &tevStr);
     field_0x2A0.entry(field_0x298->getModelData());
-    if (bVar1 != 0) {
+    if (bVar1) {
         g_env_light.setLightTevColorType(field_0x29C, &tevStr);
         field_0x2B4.entry(field_0x29C->getModelData());
     }
     dComIfGd_setListBG();
     mDoExt_modelUpdateDL(field_0x298);
     dComIfGd_setList();
-    if (bVar1 != 0) {
+    if (bVar1) {
         mDoExt_modelUpdateDL(field_0x29C);
     }
-    return 1;
+    return true;
 }
 
 namespace daObjMmrr {
