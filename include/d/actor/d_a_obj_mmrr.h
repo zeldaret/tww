@@ -37,7 +37,6 @@ namespace daObjMmrr {
         bool _execute();
         bool _draw();
 
-        // static const Attr_c L_attr;
         static const char M_arcname[];
         static const dCcD_SrcTri M_tri_src;
         static const dCcD_SrcCps M_cps_src;
