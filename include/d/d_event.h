@@ -33,7 +33,6 @@ enum {
     dEvtFlag_STAFF_ALL_e = 0x02,
     dEvtFlag_TALK_e = 0x04,
     dEvtFlag_UNK8_e = 0x08,
-    dEvtFlag_UNKA_e = 0x0A,
 };
 enum {
     dEvtMove_NOMOVE_e,

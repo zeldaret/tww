@@ -571,7 +571,6 @@ bool daNpcMn_c::_execute() {
     chkAttention();
     checkOrder();
 
-    // dBgS* bgsp = dComIfG_Bgsp();
     if (!dComIfGp_event_runCheck() || eventInfo.checkCommandTalk() || mTalk3State != TALK3_INIT) {
         (this->*moveProc[mMoveState])();
     } else {
@@ -722,7 +721,7 @@ void daNpcMn_c::executeTalk3() {
             if (eventInfo.checkCommandDemoAccrpt()) {
                 mTalk3State = TALK3_TALK;
             } else {
-                fopAcM_orderPotentialEvent(this, dEvtFlag_UNKA_e, 0, 0);
+                fopAcM_orderPotentialEvent(this, dEvtFlag_STAFF_ALL_e | dEvtFlag_UNK8_e, 0, 0);
                 eventInfo.onCondition(dEvtCnd_UNK2_e);
                 mTalk3State = TALK3_ORDER;
             }
