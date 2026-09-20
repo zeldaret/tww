@@ -1,8 +1,11 @@
 #ifndef D_MENU_FMAP2_H
 #define D_MENU_FMAP2_H
 
+#include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_drawlist.h"
 #include "d/d_menu_fmapSv.h"
+#include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 struct fopMsgM_pane_class;
 class J2DScreen;
@@ -10,6 +13,7 @@ class JUTFont;
 struct ResTIMG;
 class STControl;
 class dDlst_2DOutFont_c;
+class mDoDvdThd_mountArchive_c;
 
 class dDlst_FMAP2GS_c : public dDlst_base_c {
 public:
@@ -35,7 +39,7 @@ public:
     void getCmapDatValue() {}
     void lineInter0to1ForU8(u8, u8, f32) {}
     void setAramCmapDat(aramCmapDat_c* i_ptr) { mpFmapDatPnt = i_ptr; }
-    void setSvPtr(dMenu_FmapSv_c*) {}
+    void setSvPtr(dMenu_FmapSv_c* i_ptr) { fmapSv = i_ptr; }
 
     void _create();
     void screenSet();
@@ -107,28 +111,28 @@ public:
     void cmapPlayerPosDisp();
     void cmapSalvagePosDisp();
     void cmapPlayerPosDispCheck(f32*, f32*);
-    void paneTransBase(s16, u8, f32, f32, u8, u8, int);
-    void paneAlphaFmapBase(s16, u8, u8, int);
-    void paneAlphaCmapBase(s16, u8, u8, int);
-    void paneAlphaZoomCmapBase(s16, u8, f32, f32, u8, u8, int);
-    void paneAlphaCmapName(s16, u8, u8);
-    void paneAlphaMessage2(s16, u8, u8, int);
-    void paneTranceMessage(s16, u8, f32, f32, f32, f32, u8, u8, int);
+    BOOL paneTransBase(s16, u8, f32, f32, u8, u8, int);
+    BOOL paneAlphaFmapBase(s16, u8, u8, int);
+    BOOL paneAlphaCmapBase(s16, u8, u8, int);
+    BOOL paneAlphaZoomCmapBase(s16, u8, f32, f32, u8, u8, int);
+    BOOL paneAlphaCmapName(s16, u8, u8);
+    BOOL paneAlphaMessage2(s16, u8, u8, int);
+    BOOL paneTranceMessage(s16, u8, f32, f32, f32, f32, u8, u8, int);
     void paneScaleXYChild(fopMsgM_pane_class*, f32);
-    void paneTransSelCmapCle(s16, u8, f32, f32, f32, f32, u8, u8, int);
-    void paneTransSelCmapOpn(s16, u8, f32, f32, f32, f32, u8, u8, int);
-    void paneAlphaGostShipMap(s16, u8, u8, int);
-    void paneAlphaTingleMap(s16, u8, u8, int);
-    void paneAlphaTreasureMap(s16, u8, u8, int);
-    void paneAlphaSubdanMap(s16, u8, u8, int);
-    void paneAlphaHeartMMap(s16, u8, u8, int);
-    void paneAlphaYaguraMap(s16, u8, u8, int);
-    void paneAlphaDfaliyMap(s16, u8, u8, int);
-    void paneAlphaHeartPMap(s16, u8, u8, int);
-    void paneAlphaTerryMap(s16, u8, u8, int);
-    void paneAlphaSubMaMap(s16, u8, u8, int);
-    void paneAlphaMoonMap(s16, u8, u8, int);
-    void paneAlphaDoctaMap(s16, u8, u8, int);
+    BOOL paneTransSelCmapCle(s16, u8, f32, f32, f32, f32, u8, u8, int);
+    BOOL paneTransSelCmapOpn(s16, u8, f32, f32, f32, f32, u8, u8, int);
+    BOOL paneAlphaGostShipMap(s16, u8, u8, int);
+    BOOL paneAlphaTingleMap(s16, u8, u8, int);
+    BOOL paneAlphaTreasureMap(s16, u8, u8, int);
+    BOOL paneAlphaSubdanMap(s16, u8, u8, int);
+    BOOL paneAlphaHeartMMap(s16, u8, u8, int);
+    BOOL paneAlphaYaguraMap(s16, u8, u8, int);
+    BOOL paneAlphaDfaliyMap(s16, u8, u8, int);
+    BOOL paneAlphaHeartPMap(s16, u8, u8, int);
+    BOOL paneAlphaTerryMap(s16, u8, u8, int);
+    BOOL paneAlphaSubMaMap(s16, u8, u8, int);
+    BOOL paneAlphaMoonMap(s16, u8, u8, int);
+    BOOL paneAlphaDoctaMap(s16, u8, u8, int);
     void setPaneOnOff(J2DScreen*, u32, bool);
     void getCollectMapTexChange();
     void finCollectMapTexChange();
@@ -138,8 +142,8 @@ public:
     int getNowCmapFirstNum();
     int getNowCmapNextNum(s8, int);
     aramCmapDatPnt_t* getCmapDatPnt4(int);
-    void readPaneCmapTexture(const ResTIMG*, int);
-    void readFmapTexture(const char*);
+    u32 readPaneCmapTexture(const ResTIMG*, int);
+    u32 readFmapTexture(const char*);
     int getButtonIconMode();
     BOOL isLockBbutton();
     BOOL isGetCollectMap(s8);
@@ -203,9 +207,9 @@ public:
         fmapSv->setCmapSelNo(no);
     }
 
-public:
-    /* 0x0004 */ void* mChkPntTxt_p;
-    /* 0x0008 */ void* mCmapTxtMain_p[2];
+private:
+    /* 0x0004 */ ResTIMG* mChkPntTxt_p;
+    /* 0x0008 */ ResTIMG* mCmapTxtMain_p[2];
     /* 0x0010 */ dMenu_FmapSv_c* fmapSv;
     /* 0x0014 */ u8 padding_0x14[0x18 - 0x14];
     /* 0x0018 */ mDoDvdThd_mountArchive_c* field_0x18;
@@ -218,10 +222,8 @@ public:
     /* 0x003C */ dDlst_2DOutFont_c* outFont[2];
     /* 0x0044 */ dDlst_2DOutFont_c* outFontS[2];
     /* 0x004C */ fopMsgM_pane_class mClPane;
-    /* 0x0084 */ fopMsgM_pane_class mFc0xPanes[4];
-    /* 0x0164 */ fopMsgM_pane_class mFc1xPanes[4];
-    /* 0x0244 */ fopMsgM_pane_class mCc0xPanes[4];
-    /* 0x0324 */ fopMsgM_pane_class mCc1xPanes[4];
+    /* 0x0084 */ fopMsgM_pane_class mFcxxPanes[8];
+    /* 0x0244 */ fopMsgM_pane_class mCcxxPanes[8];
     /* 0x0404 */ fopMsgM_pane_class mKdmPane;
     /* 0x043c */ fopMsgM_pane_class field_0x43c[5];
     /* 0x0554 */ fopMsgM_pane_class field_0x554[17];
@@ -257,47 +259,138 @@ public:
     /* 0x1644 */ fopMsgM_pane_class field_0x1644[10];
     /* 0x1874 */ fopMsgM_pane_class field_0x1874[10];
     /* 0x1AA4 */ fopMsgM_pane_class* field_0x1aa4[2];
-    /* 0x1AAC */ fopMsgM_pane_alpha_class mMs01PaneAlpha;
-    /* 0x1AB4 */ fopMsgM_pane_alpha_class mMs02PaneAlpha;
-    /* 0x1ABC */ fopMsgM_pane_alpha_class mSd05PaneAlpha;
-    /* 0x1AC4 */ fopMsgM_pane_alpha_class mHs04PaneAlpha;
-    /* 0x1ACC */ fopMsgM_pane_alpha_class mYg01PaneAlpha;
+    /* 0x1AAC */ fopMsgM_pane_alpha_class mGsMs01PaneAlpha;
+    /* 0x1AB4 */ fopMsgM_pane_alpha_class mGsMs02PaneAlpha;
+    /* 0x1ABC */ fopMsgM_pane_alpha_class mGsSd05PaneAlpha;
+    /* 0x1AC4 */ fopMsgM_pane_alpha_class mGsHs04PaneAlpha;
+    /* 0x1ACC */ fopMsgM_pane_alpha_class mGsYg01PaneAlpha;
 #if VERSION == VERSION_DEMO
-    /* 0x1AD4 */ fopMsgM_pane_alpha_class mWk3PaneAlpha;
+    /* 0x1AD4 */ fopMsgM_pane_alpha_class mGsWk3PaneAlpha;
 #endif
-    /* 0x1AD4 */ fopMsgM_pane_alpha_class mBsdmPaneAlpha;
-    /* 0x1ADC */ fopMsgM_pane_alpha_class mTk0xPaneAlpha[7];
-    /* 0x1B14 */ fopMsgM_pane_alpha_class mTkd2PaneAlpha;
-    /* 0x1B1C */ fopMsgM_pane_alpha_class mTkd1PaneAlpha;
-    /* 0x1B24 */ fopMsgM_pane_alpha_class mS02PaneAlpha;
-    /* 0x1B2C */ fopMsgM_pane_alpha_class mKz05PaneAlpha;
-    /* 0x1B34 */ fopMsgM_pane_alpha_class mKz01PaneAlpha;
+    /* 0x1AD4 */ fopMsgM_pane_alpha_class mGsBsdmPaneAlpha;
+    /* 0x1ADC */ fopMsgM_pane_alpha_class mGsTk0xPaneAlpha[7];
+    /* 0x1B14 */ fopMsgM_pane_alpha_class mGsTkd2PaneAlpha;
+    /* 0x1B1C */ fopMsgM_pane_alpha_class mGsTkd1PaneAlpha;
+    /* 0x1B24 */ fopMsgM_pane_alpha_class mGsS02PaneAlpha;
+    /* 0x1B2C */ fopMsgM_pane_alpha_class mGsKz05PaneAlpha;
+    /* 0x1B34 */ fopMsgM_pane_alpha_class mGsKz01PaneAlpha;
 #if VERSION == VERSION_DEMO
-    /* 0x1B44 */ fopMsgM_pane_alpha_class mBt1PaneAlpha;
-    /* 0x1B4C */ fopMsgM_pane_alpha_class mBt2PaneAlpha;
-    /* 0x1B54 */ fopMsgM_pane_alpha_class mBt3PaneAlpha;
+    /* 0x1B44 */ fopMsgM_pane_alpha_class mGsBt1PaneAlpha;
+    /* 0x1B4C */ fopMsgM_pane_alpha_class mGsBt2PaneAlpha;
+    /* 0x1B54 */ fopMsgM_pane_alpha_class mGsBt3PaneAlpha;
 #endif
 #if VERSION > VERSION_JPN
-    /* 0x1B3C */ fopMsgM_pane_alpha_class mGsixPaneAlpha[7];
+    /* 0x1B3C */ fopMsgM_pane_alpha_class mGsGsixPaneAlpha[7];
 #endif
-    /* 0x1B74 */ fopMsgM_pane_alpha_class mHk00PaneAlpha;
-    /* 0x1B7C */ fopMsgM_pane_alpha_class mHk01PaneAlpha;
-    /* 0x1B84 */ fopMsgM_pane_alpha_class mHn19PaneAlpha;
-    /* 0x1B8C */ fopMsgM_pane_alpha_class mHk29PaneAlpha;
-    /* 0x1B94 */ fopMsgM_pane_class mGddmPane;
-    /* 0x1BCC */ fopMsgM_pane_alpha_class field_0x1bcc[22];
-    /* 0x1C7C */ fopMsgM_pane_class mLnkPane;
-    /* 0x1CB4 */ fopMsgM_pane_class mGdgtPane;
+    /* 0x1B74 */ fopMsgM_pane_alpha_class mTnHk00PaneAlpha;
+    /* 0x1B7C */ fopMsgM_pane_alpha_class mTnHk01PaneAlpha;
+    /* 0x1B84 */ fopMsgM_pane_alpha_class mTnHn19PaneAlpha;
+    /* 0x1B8C */ fopMsgM_pane_alpha_class mTnHk29PaneAlpha;
 #if VERSION > VERSION_JPN
-    /* 0x1CEC */ u8 padding_0x1cec[0x27a1 - 0x1CEC];
-#else
-    /* 0x1CB4 */ u8 padding_0x1cb4[0x25D9 - 0x1CB4];
+    /* 0x1B94 */ fopMsgM_pane_class mTnGddmPane;
 #endif
+    /* 0x1BCC */ fopMsgM_pane_alpha_class field_0x1bcc[VERSION_SELECT(17, 17, 22, 22)];
+#if VERSION > VERSION_JPN
+    /* 0x1C7C */ fopMsgM_pane_class mTnLnkPane;
+    /* 0x1CB4 */ fopMsgM_pane_class mTnGdgtPane;
+#endif
+    /* 0x1CEC */ fopMsgM_pane_alpha_class mTrMs01PaneAlpha;
+    /* 0x1CF4 */ fopMsgM_pane_alpha_class mTrMs02PaneAlpha;
+    /* 0x1CFC */ fopMsgM_pane_alpha_class mTrHs04PaneAlpha;
+    /* 0x1D04 */ fopMsgM_pane_alpha_class mTrSd05PaneAlpha;
+    /* 0x1D0C */ fopMsgM_pane_alpha_class mTrKz05PaneAlpha;
+    /* 0x1D14 */ fopMsgM_pane_class mTrGddmPane;
+    /* 0x1D4C */ fopMsgM_pane_alpha_class mTrMkdmPaneAlpha;
+    /* 0x1D54 */ fopMsgM_pane_class mTrLnkPane;
+    /* 0x1D8C */ fopMsgM_pane_class mTrGdgtPane;
+#if VERSION > VERSION_JPN
+    /* 0x1DC4 */ fopMsgM_pane_alpha_class field_0x1dc4[8];
+    /* 0x1E04 */ fopMsgM_pane_alpha_class field_0x1e04[8];
+    /* 0x1E44 */ fopMsgM_pane_alpha_class field_0x1e44[8];
+#endif
+    /* 0x1E84 */ fopMsgM_pane_alpha_class mIkMs01PaneAlpha;
+    /* 0x1E8C */ fopMsgM_pane_alpha_class mIkMs02PaneAlpha;
+    /* 0x1E94 */ fopMsgM_pane_alpha_class mIkSd05PaneAlpha;
+    /* 0x1E9C */ fopMsgM_pane_alpha_class mIlHs04PaneAlpha;
+    /* 0x1EA4 */ fopMsgM_pane_class mIkGddmPane;
+    /* 0x1EDC */ fopMsgM_pane_alpha_class mIkMkdkPaneAlpha;
+    /* 0x1EE4 */ fopMsgM_pane_class mIkLnkPane;
+    /* 0x1F1C */ fopMsgM_pane_class mIkGdgtPane;
+    /* 0x1F54 */ fopMsgM_pane_alpha_class mHeartPMs01PaneAlpha;
+    /* 0x1F5C */ fopMsgM_pane_alpha_class mHeartPMs02PaneAlpha;
+    /* 0x1F64 */ fopMsgM_pane_alpha_class mHeartPSd05PaneAlpha;
+    /* 0x1F6C */ fopMsgM_pane_alpha_class mHeartPHs04PaneAlpha;
+    /* 0x1F74 */ fopMsgM_pane_class mHeartPGddmPane;
+    /* 0x1FAC */ fopMsgM_pane_alpha_class mHeartPMk20PaneAlpha;
+    /* 0x1FB4 */ fopMsgM_pane_alpha_class mHeartPNm08PaneAlpha;
+    /* 0x1FBC */ fopMsgM_pane_alpha_class mHeartPKk12PaneAlpha;
+    /* 0x1FC4 */ fopMsgM_pane_alpha_class mHeartPBh01PaneAlpha;
+    /* 0x1FCC */ fopMsgM_pane_alpha_class mHeartPBh02PaneAlpha;
+    /* 0x1FD4 */ fopMsgM_pane_class mHeartPLnkPane;
+    /* 0x200C */ fopMsgM_pane_class mHeartPGdgtPane;
+    /* 0x2044 */ fopMsgM_pane_alpha_class mTerryMs01PaneAlpha;
+    /* 0x204C */ fopMsgM_pane_alpha_class mTerryMs02PaneAlpha;
+    /* 0x2054 */ fopMsgM_pane_alpha_class mTerrySd05PaneAlpha;
+    /* 0x205C */ fopMsgM_pane_alpha_class mTerryHs04PaneAlpha;
+    /* 0x2064 */ fopMsgM_pane_class mTerryGddmPane;
+    /* 0x209C */ fopMsgM_pane_class mTerryLnkPane;
+    /* 0x20D4 */ fopMsgM_pane_class mTerryGdgtPane;
+    /* 0x210C */ fopMsgM_pane_alpha_class mSubMaMs01PaneAlpha;
+    /* 0x2114 */ fopMsgM_pane_alpha_class mSubMaMs02PaneAlpha;
+    /* 0x211C */ fopMsgM_pane_alpha_class mSubMaSd05PaneAlpha;
+    /* 0x2124 */ fopMsgM_pane_alpha_class mSubMaHs04PaneAlpha;
+    /* 0x212C */ fopMsgM_pane_class mSubMaGddmPane;
+    /* 0x2164 */ fopMsgM_pane_class mSubMaLnkPane;
+    /* 0x219C */ fopMsgM_pane_class mSubMaGdgtPane;
+    /* 0x21D4 */ fopMsgM_pane_alpha_class mMoonMs01PaneAlpha;
+    /* 0x21DC */ fopMsgM_pane_alpha_class mMoonMs02PaneAlpha;
+    /* 0x21E4 */ fopMsgM_pane_alpha_class mMoonSd05PaneAlpha;
+    /* 0x21EC */ fopMsgM_pane_alpha_class mMoonHs04PaneAlpha;
+    /* 0x21F4 */ fopMsgM_pane_class mMoonGddmPane;
+    /* 0x222C */ fopMsgM_pane_alpha_class field_0x222c[38];
+    /* 0x235C */ fopMsgM_pane_class mMoonLnkPane;
+    /* 0x2394 */ fopMsgM_pane_class mMoonGdgtPane;
+    /* 0x23CC */ fopMsgM_pane_alpha_class mDfaliyMs01PaneAlpha;
+    /* 0x23D4 */ fopMsgM_pane_alpha_class mDfaliyMs02PaneAlpha;
+    /* 0x23DC */ fopMsgM_pane_alpha_class mDfaliySd05PaneAlpha;
+    /* 0x23E4 */ fopMsgM_pane_alpha_class mDfaliyHs04PaneAlpha;
+    /* 0x23EC */ fopMsgM_pane_class mDfaliyGddmPane;
+    /* 0x2424 */ fopMsgM_pane_class mDfaliyLnkPane;
+    /* 0x245C */ fopMsgM_pane_class mDfaliyGdgtPane;
+    /* 0x2494 */ fopMsgM_pane_alpha_class mYaguraMs01PaneAlpha;
+    /* 0x249C */ fopMsgM_pane_alpha_class mYaguraMs02PaneAlpha;
+    /* 0x24A4 */ fopMsgM_pane_alpha_class mYaguraSd05PaneAlpha;
+    /* 0x24AC */ fopMsgM_pane_alpha_class mYaguraHs04PaneAlpha;
+    /* 0x24B4 */ fopMsgM_pane_class mYaguraGddmPane;
+    /* 0x24EC */ fopMsgM_pane_alpha_class mYaguraTtlxPaneAlpha[2];
+    /* 0x24FC */ fopMsgM_pane_class mYaguraLnkPane;
+    /* 0x2534 */ fopMsgM_pane_class mYaguraGdgtPane;
+    /* 0x256C */ fopMsgM_pane_alpha_class mHeartMMs01PaneAlpha;
+    /* 0x2574 */ fopMsgM_pane_alpha_class mHeartMMs02PaneAlpha;
+    /* 0x257C */ fopMsgM_pane_alpha_class mHeartMSd05PaneAlpha;
+    /* 0x2584 */ fopMsgM_pane_alpha_class mHeartMHs04PaneAlpha;
+    /* 0x258C */ fopMsgM_pane_class mHeartMGddmPane;
+    /* 0x25C4 */ fopMsgM_pane_alpha_class mHeartMSt09PaneAlpha;
+    /* 0x25CC */ fopMsgM_pane_alpha_class mHeartMNhxPaneAlpha[DEMO_SELECT(9, 7)];
+    /* 0x2604 */ fopMsgM_pane_alpha_class field_0x2604[DEMO_SELECT(13, 9)];
+    /* 0x264C */ fopMsgM_pane_class mHeartMLnkPane;
+    /* 0x2684 */ fopMsgM_pane_class mHeartMGdgtPane;
+    /* 0x26BC */ fopMsgM_pane_alpha_class mSubdanMs01PaneAlpha;
+    /* 0x26C4 */ fopMsgM_pane_alpha_class mSubdanMs02PaneAlpha;
+    /* 0x26CC */ fopMsgM_pane_alpha_class mSubdanSd05PaneAlpha;
+    /* 0x26D4 */ fopMsgM_pane_alpha_class mSubdanHs04PaneAlpha;
+    /* 0x26DC */ fopMsgM_pane_class mSubdanGddmPane;
+    /* 0x2714 */ fopMsgM_pane_alpha_class mSubdanIg26PaneAlpha;
+    /* 0x271C */ fopMsgM_pane_alpha_class mSubdanIgnxPaneAlpha[DEMO_SELECT(6, 2)];
+    /* 0x272C */ fopMsgM_pane_class mSubdanLnkPane;
+    /* 0x2764 */ fopMsgM_pane_class mSubdanGdgtPane;
+    /* 0x279C */ fopMsgM_pane_class* field_0x279c;
+    /* 0x27A0 */ u8 field_0x27a0;
     /* 0x27A1 */ u8 field_0x27a1;
     /* 0x27A2 */ u8 padding_0x27a2[0x27A8 - 0x27A2];
     /* 0x27A8 */ u8 field_0x27a8;
     /* 0x27A9 */ s8 field_0x27a9;
-    /* 0x27AA */ u8 field_0x27aa;
+    /* 0x27AA */ s8 field_0x27aa;
     /* 0x27AB */ s8 field_0x27ab;
     /* 0x27AC */ s16 field_0x27ac;
     /* 0x27AE */ u8 padding_0x27ae[0x27B0 - 0x27AE];
@@ -346,10 +439,8 @@ public:
     /* 0x2824 */ JUtility::TColor color_0x2824;
     /* 0x2828 */ JUtility::TColor color_0x2828;
     /* 0x282C */ JUtility::TColor color_0x282C;
-    /* 0x2830 */ f32 field_0x2830;
-    /* 0x2834 */ f32 field_0x2834;
-    /* 0x2838 */ f32 field_0x2838;
-    /* 0x283C */ f32 field_0x283c;
+    /* 0x2830 */ J2DTextBox::TFontSize field_0x2830;
+    /* 0x2838 */ J2DTextBox::TFontSize field_0x2838;
     /* 0x2840 */ f32 field_0x2840;
     /* 0x2844 */ f32 field_0x2844;
     /* 0x2848 */ u16 field_0x2848[2];
@@ -357,11 +448,8 @@ public:
     /* 0x284C */ u8 field_0x284c;
     /* 0x284D */ u8 field_0x284d;
     /* 0x284E */ u8 field_0x284e;
-    /* 0x284F */ u8 padding_0x284f[0x2854 - 0x284F];
-#endif
-#if VERSION == VERSION_DEMO
-    // TODO: move these bytes to the correct offsets
-    u8 pad4[0x50];
+    /* 0x284F */ u8 field_0x284f;
+    /* 0x2850 */ u8 field_0x2850;
 #endif
 }; // Size: 0x2854
 
@@ -371,6 +459,8 @@ class dMf2_HIO_c : public JORReflexible {
 public:
     dMf2_HIO_c();
     virtual ~dMf2_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x5;

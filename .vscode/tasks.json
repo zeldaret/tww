@@ -39,5 +39,11 @@
       "command": "ninja changes_all",
       "problemMatcher": [],
     },
+    {
+      "label": "baseline all versions",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} configure.py --version D44J01 && sleep 1 && ninja baseline && ${command:python.interpreterPath} configure.py --version GZLJ01 && sleep 1 && ninja baseline && ${command:python.interpreterPath} configure.py --version GZLE01 && sleep 1 && ninja baseline && ${command:python.interpreterPath} configure.py --version GZLP01 && sleep 1 && ninja baseline",
+      "problemMatcher": [],
+    },
   ]
 }

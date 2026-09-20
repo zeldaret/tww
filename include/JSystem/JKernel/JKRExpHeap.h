@@ -62,10 +62,12 @@ public:
     s32 getUsedSize(u8 groupId) const;
     s32 getTotalUsedSize(void) const;
 
-    CMemBlock* getHeadUsedList() const { return mHeadUsedList; }
+    CMemBlock* getUsedFirst() { return mHeadUsedList; }
     void setAllocationMode(EAllocMode mode) {
         mAllocMode = mode;
     }
+    static s32 getUsedSize_(JKRExpHeap* heap) { return heap->mSize - heap->getTotalFreeSize(); }
+    static void* getState_(TState* state) { return getState_buf_(state); }
 
 public:
     /* vt[04] */ virtual u32 getHeapType();                                     /* override */

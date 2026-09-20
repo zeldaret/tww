@@ -8,6 +8,10 @@
 #include "JSystem/JAudio/JAISequenceMgr.h"
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
+#include "JSystem/JAudio/JAISequenceHeap.h"
+#include "JSystem/JAudio/JAISoundTable.h"
+#include "JSystem/JAudio/JAISystemInterface.h"
+#include "JSystem/JAudio/JASResArcLoader.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "string.h"
 
@@ -43,21 +47,7 @@ void JAInter::SequenceMgr::init() {
     JUT_ASSERT_MSG(62, seqTrackInfo, "JAISequenceMgr::initHeap Cannot Alloc Heap!!\n");
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         FixSeqBufPointer[i] = NULL;
-        SeqUpdateData* update = &seqTrackInfo[i];
-        update->mSeqVolume = 1.0f;
-        update->mSeqPitch = 0.5f;
-        update->mSeqFxmix = 1.0f;
-        update->mSeqPan = 0.0f;
-        update->mSeqDolby = 0.0f;
-        update->mSeqTempo = 1.0f;
-        for (int j = 0; j < JAIGlobalParameter::getParamSeqTrackMax(); j++) {
-            update->trackVolume[j] = 1.0f;
-            update->trackPan[j] = 64.0f;
-            update->trackPitch[j] = 1.0f;
-            update->trackFxmix[j] = 0.0f;
-            update->trackDolby[j] = 0.0f;
-            update->trackupdate[j] = 0;
-        }
+        seqTrackInfo[i].init();
     }
 }
 
@@ -65,10 +55,10 @@ void JAInter::SequenceMgr::init() {
 JAInter::SeqUpdateData::SeqUpdateData() {
     field_0x0 = 0;
     field_0x1 = 0;
-    field_0x2 = 0;
+    mPrepareFlag = 0;
     field_0x3 = 0;
-    field_0x8 = 0;
-    field_0x48 = NULL;
+    mActiveTrackFlag = 0;
+    mSequence = NULL;
     systemTrackParameter = new (JAIBasic::getCurrentJAIHeap(), 0x20) PlayerParameter[33];
     JUT_ASSERT_MSG(81, systemTrackParameter, "JAISeqUpdateData Cannot alloc Heap!!\n");
     trackVolume = new (JAIBasic::getCurrentJAIHeap(), 0x20) f32[JAIGlobalParameter::getParamSeqTrackMax()];
@@ -81,7 +71,7 @@ JAInter::SeqUpdateData::SeqUpdateData() {
     JUT_ASSERT_MSG(89, trackFxmix, "JAISeqUpdateData Cannot Alloc Heap!!\n");
     trackDolby = new (JAIBasic::getCurrentJAIHeap(), 0x20) f32[JAIGlobalParameter::getParamSeqTrackMax()];
     JUT_ASSERT_MSG(91, trackDolby, "JAISeqUpdateData Cannot Alloc Heap!!\n");
-    trackupdate = new (JAIBasic::getCurrentJAIHeap(), 0x20) int[JAIGlobalParameter::getParamSeqTrackMax() + 1];
+    trackupdate = new (JAIBasic::getCurrentJAIHeap(), 0x20) u32[JAIGlobalParameter::getParamSeqTrackMax() + 1];
     JUT_ASSERT_MSG(99, trackupdate, "JAISeqUpdateData Cannot Alloc Heap!!\n");
 }
 
@@ -120,36 +110,238 @@ void JAInter::SequenceMgr::processGFrameSequence() {
 /* 80296860-80296C24       .text checkEntriedSeq__Q27JAInter11SequenceMgrFv */
 void JAInter::SequenceMgr::checkEntriedSeq() {
     /* Nonmatching */
+    u8* buffer;
+    for (u32 i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
+        SeqUpdateData* data = &seqTrackInfo[i];
+        if (!data->mSequence) {
+            continue;
+        }
+
+        if (!(data->mActiveTrackFlag & SOUNDACTIVE_Unk1)) {
+            continue;
+        }
+
+        if (data->field_0x3) {
+            continue;
+        }
+
+        u16 seqOffset = JAIBasic::getInterface()->getSoundOffsetNumberFromID(data->mSequence->getID());
+        u32 resSize = JASystem::ResArcLoader::getResSize(arcPointer, seqOffset);
+
+        u8 heapIdx;
+        buffer = (u8*)HeapMgr::checkOnMemory(data->mSequence->getID() & 0x3FF, &heapIdx);
+        if (!buffer) {
+            if (data->mSequence->checkSwBit(0x10)) {
+                buffer = (u8*)HeapMgr::getFreeStayHeapPointer(resSize, data->mSequence->getID() & 0x3FF);
+                heapIdx = 0xff;
+                data->mSequence->getSeqParameter()->mHeapIndex = 255;
+                if (!buffer && !data->mSequence->checkSwBit(0x20)) {
+                    JUT_ASSERT_MSG(177, buffer, "JAISequenceMgr::ステイヒープに入りませんでした。\n");
+                }
+            }
+
+            if (!buffer && (data->mSequence->checkSwBit(0x20) || !data->mSequence->checkSwBit(0x10))) {
+                heapIdx = HeapMgr::checkUsefulAutoHeapPosition();
+                if (heapIdx >= JAIGlobalParameter::getParamAutoHeapMax()) {
+                    for (u32 j = 0; j < JAIGlobalParameter::getParamAutoHeapMax(); j++) {
+                        if (HeapMgr::getAutoHeapPointer()[j].getUseCounter() != 0xFFFFFFFF) {
+                            u32 k = 0;
+                            for (k; k < JAIGlobalParameter::getParamSeqPlayTrackMax(); k++) {
+                                if (seqTrackInfo[k].mSequence
+                                    && (seqTrackInfo[k].mSequence->getID() & 0x3FF) == HeapMgr::getAutoHeapPointer()[j].getDataNumber()) {
+                                    k = JAIGlobalParameter::getParamSeqPlayTrackMax();
+                                }
+                            }
+                            if (k == JAIGlobalParameter::getParamSeqPlayTrackMax()) {
+                                HeapMgr::releaseAutoHeapPointer(j);
+                                heapIdx = j;
+                            }
+                        }
+                    }
+                    if (heapIdx >= JAIGlobalParameter::getParamAutoHeapMax()) {
+                        data->mSequence->stop(0);
+                        continue;
+                    }
+
+                } else if (resSize >= JAIGlobalParameter::getParamAutoHeapRoomSize()) {
+                    JAIGlobalParameter::getParamAutoHeapRoomSize();
+                    data->mSequence->stop(0);
+                    continue;
+                }
+
+                data->mSequence->getSeqParameter()->mHeapIndex = heapIdx;
+                buffer = (u8*)HeapMgr::getFreeAutoHeapPointer(data->mSequence->getSeqParameter()->mHeapIndex,
+                                                                data->mSequence->getID() & 0x3FF);
+            }
+
+            if (!data->mSequence->checkSwBit(0x40)) {
+                data->mSequence->mState = SOUNDSTATE_Stored;
+                u32 cbArg = (i | seqOffset << 16 | heapIdx << 8);
+                HeapMgr::setAutoHeapLoadedFlag(heapIdx, 1);
+                data->field_0x3 = 1;
+                JASystem::ResArcLoader::loadResourceAsync(arcPointer, seqOffset, buffer, resSize, &checkDvdLoadArc, cbArg);
+            } else {
+                JASystem::ResArcLoader::loadResource(arcPointer, seqOffset, buffer, resSize);
+                data->mSequence->mState = SOUNDSTATE_Loaded;
+            }
+
+        } else {
+            if ((u32)buffer == 0xFFFFFFFF) {
+                continue;
+            }
+            if (heapIdx != 255) {
+                HeapMgr::getFreeAutoHeapPointer(heapIdx, data->mSequence->mSoundID & 0x3FF);
+            }
+
+            data->mSequence->getSeqParameter()->mHeapIndex = heapIdx;
+            data->mSequence->mState = SOUNDSTATE_Loaded;
+        }
+
+        if (buffer) {
+            data->field_0x40 = buffer;
+            data->mActiveTrackFlag ^= SOUNDACTIVE_Unk1;
+        } else {
+            stopSeq(data->mSequence);
+        }
+    }
 }
 
 /* 80296C24-80296CCC       .text checkFadeoutSeq__Q27JAInter11SequenceMgrFv */
 void JAInter::SequenceMgr::checkFadeoutSeq() {
-    /* Nonmatching */
+    for (u32 i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
+        SeqUpdateData* info = &seqTrackInfo[i];
+        if (info->mSequence && info->mSequence->mState == SOUNDSTATE_Fadeout && info->mSequence->getSeqInterVolume(7) == 0.0f) {
+            info->mSequence->getSeqParameter()->mTrack.stopSeq();
+            info->mSequence->clearMainSoundPPointer();
+            stopSeq(info->mSequence);
+            info->mActiveTrackFlag = 0;
+        }
+    }
 }
 
 /* 80296CCC-80296D6C       .text checkStoppedSeq__Q27JAInter11SequenceMgrFv */
 void JAInter::SequenceMgr::checkStoppedSeq() {
-    /* Nonmatching */
+    for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
+        SeqUpdateData* info = &seqTrackInfo[i];
+        if (info->mSequence
+            && (info->mSequence->mState == SOUNDSTATE_Playing || info->mSequence->mState == SOUNDSTATE_Fadeout)
+            && !SystemInterface::checkSeqActiveFlag(&info->mSequence->getSeqParameter()->mTrack)
+        ) {
+            info->mSequence->clearMainSoundPPointer();
+            stopSeq(info->mSequence);
+            info->mActiveTrackFlag = 0;
+        }
+    }
 }
 
 /* 80296D6C-80296E6C       .text checkPlayingSeq__Q27JAInter11SequenceMgrFv */
 void JAInter::SequenceMgr::checkPlayingSeq() {
-    /* Nonmatching */
+    for (u32 i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
+        SeqUpdateData* info = &seqTrackInfo[i];
+        if (info->mSequence && info->mSequence->mState >= SOUNDSTATE_Playing) {
+            checkPlayingSeqTrack(i);
+            for (u8 j = 0; j < JAIGlobalParameter::getParamSeqTrackMax() + 1; j++) {
+                if (info->trackupdate[j] != 0) {
+                    if (j == 32 || (1 << j & info->mSequence->getSeqParameter()->mUpdateData->field_0x4) != 0) {
+                        SystemInterface::setSeqPortargsU32(info, j, 1, info->trackupdate[j]);
+                        info->systemTrackParameter[j].mCommand.addPortCmdOnce();
+                    }
+                }
+            }
+        }
+    }
 }
 
 /* 80296E6C-80296F00       .text checkStartedSeq__Q27JAInter11SequenceMgrFv */
 void JAInter::SequenceMgr::checkStartedSeq() {
-    /* Nonmatching */
+    for (u32 i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
+        SeqUpdateData* info = &seqTrackInfo[i];
+        if (info->mSequence && info->mSequence->mState == SOUNDSTATE_Ready
+            && SystemInterface::checkSeqActiveFlag(&info->mSequence->getSeqParameter()->mTrack)) {
+            info->mSequence->mState = SOUNDSTATE_Playing;
+            SystemInterface::trackInit(info);
+        }
+    }
 }
 
 /* 80296F00-8029713C       .text checkReadSeq__Q27JAInter11SequenceMgrFv */
 void JAInter::SequenceMgr::checkReadSeq() {
     /* Nonmatching */
+    for (u32 i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
+        SeqUpdateData* info = &seqTrackInfo[i];
+        if (!info->mSequence) {
+            continue;
+        }
+        if (info->mSequence->mState != SOUNDSTATE_Loaded) {
+            continue;
+        }
+        if (info->mSequence->getSeqParameter()->field_0x1264 != 0xFFFFFFFF) {
+            continue;
+        }
+        if (info->mSequence->getSeqParameter()->mUpdateData->mPrepareFlag) {
+            continue;
+        }
+        SeqParameter* seqParam = info->mSequence->getSeqParameter();
+        if (seqParam->mTrack.field_0x37e) {
+            continue;
+        }
+
+        seqParam->mTrack.setSeqData(info->field_0x40, JASystem::ResArcLoader::getResSize(arcPointer, JAIBasic::getInterface()->getSoundOffsetNumberFromID(info->mSequence->getID())), 0);
+        seqTrackInfo[info->mSequence->field_0x4].init();
+        info->mSequence->mState = SOUNDSTATE_Ready;
+        if (info->mSequence->mFadeCounter > 1) {
+            info->mSequence->setSeqInterVolume(SOUNDPARAM_Fadeout, 0.0f, 0);
+            info->mSequence->setSeqInterVolume(SOUNDPARAM_Fadeout, 1.0f, info->mSequence->mFadeCounter);
+        }
+        if (info->field_0x0 != 0) {
+            info->mSequence->setPauseMode(info->field_0x0, info->field_0x1);
+            info->mSeqVolume = 1.1f;
+        }
+        JAIBasic::getInterface()->setSeExtParameter(info->mSequence);
+        checkPlayingSeqTrack(i);
+        if (info->mSequence != NULL) {
+            SystemInterface::rootInit(info);
+            seqParam->mTrack.startSeq();
+        }
+    }
 }
 
 /* 8029713C-80297238       .text checkSeqWave__Q27JAInter11SequenceMgrFv */
 void JAInter::SequenceMgr::checkSeqWave() {
     /* Nonmatching */
+    for (u32 i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
+        SeqUpdateData* data = seqTrackInfo;
+        if (!data[i].mSequence) {
+            continue;
+        }
+
+        if (!data[i].mSequence->getSeqParameter()) {
+            continue;
+        }
+
+        if (data[i].mSequence->getSeqParameter()->field_0x1264 == 0xFFFFFFFF) {
+            continue;
+        }
+
+        u32 sceneFlag = BankWave::SceneSetFlag;
+        if (sceneFlag == 0xFFFFFFFF) {
+            continue;
+        }
+
+        u32 flag = data[i].mSequence->getSeqParameter()->field_0x1264;
+        if (flag != BankWave::SceneSetFlag && flag != 0xFF00FF00) {
+            if ((flag & 0xFFFF0000) != (BankWave::SceneSetFlag & 0xFFFF0000) || flag != 0xFFFF) {
+                if ((flag & 0xFFFF) != (BankWave::SceneSetFlag & 0xFFFF)) {
+                    continue;
+                }
+                if (flag != 0xFFFF0000) {
+                    continue;
+                }
+            }
+        }
+
+        data[i].mSequence->getSeqParameter()->field_0x1264 = -1;
+    }
 }
 
 /* 80297238-80297378       .text checkPlayingSeqUpdateMultiplication__Q27JAInter11SequenceMgrFUlUcUlPQ27JAInter11MoveParaSetPUlUcPf */
@@ -183,8 +375,68 @@ void JAInter::SequenceMgr::checkDvdLoadArc(u32, u32) {
 }
 
 /* 80297FD0-80298208       .text storeSeqBuffer__Q27JAInter11SequenceMgrFPP8JAISoundPQ27JAInter5ActorUlUlUcPv */
-void JAInter::SequenceMgr::storeSeqBuffer(JAISound**, JAInter::Actor*, u32, u32, u8, void*) {
+void JAInter::SequenceMgr::storeSeqBuffer(JAISound** soundHandlePtr, JAInter::Actor* actor, u32 soundID, u32 param_4, u8 param_5, void* param_6) {
     /* Nonmatching */
+    SoundInfo* soundInfo = (SoundInfo*)param_6;
+    u8 playSeqNo = soundInfo->_05;
+    if (soundHandlePtr && *soundHandlePtr) {
+        if (playSeqNo != (*soundHandlePtr)->field_0x4) {
+            (*soundHandlePtr)->stop(0);
+        } else if ((*soundHandlePtr)->checkSoundHandle(soundID, param_6)) {
+            return;
+        }
+    }
+
+    u32 val;
+    SeqUpdateData* data = seqTrackInfo;
+    if (!data[playSeqNo].mSequence) {
+        val = 1;
+    } else if (data[playSeqNo].mSequence->mState == 5) {
+        data[playSeqNo].mSequence->getSeqParameter()->getRootTrackPointer()->stopSeq();
+        data[playSeqNo].mSequence->clearMainSoundPPointer();
+        stopSeq(data[playSeqNo].mSequence);
+        val = 1;
+    } else if (data[playSeqNo].mSequence->mState == 1) {
+        *soundHandlePtr = NULL;
+        return;
+    } else if (data[playSeqNo].mSequence->mSoundInfo->mPriority <= soundInfo->mPriority) {
+        data[playSeqNo].mSequence->getSeqParameter()->getRootTrackPointer()->stopSeq();
+        data[playSeqNo].mSequence->clearMainSoundPPointer();
+        stopSeq(data[playSeqNo].mSequence);
+        val = 1;
+    } else {
+        *soundHandlePtr = NULL;
+        return;
+    }
+
+    if (!val) {
+        return;
+    }
+
+    JAISound* r23 = seqControl.getSound();
+    if (!r23) {
+        *soundHandlePtr = NULL;
+        return;
+    }
+
+    r23->getSeqParameter()->init();
+    data[playSeqNo].mSequence = r23;
+    data[playSeqNo].mSequence->setID(soundID);
+    data[playSeqNo].mSequence->getSeqParameter()->mUpdateData = &seqTrackInfo[playSeqNo];
+    data[playSeqNo].mSequence->field_0x4 = playSeqNo;
+    seqTrackInfo[playSeqNo].mActiveTrackFlag = 1;
+    seqTrackInfo[playSeqNo].mPrepareFlag = 0;
+    seqTrackInfo[playSeqNo].field_0x4 = 0;
+    if (soundInfo->mFlag & 1) {
+        for (u32 i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
+            JAISound* sound = seqTrackInfo[i].mSequence;
+            if (i != playSeqNo && sound && !(sound->getSwBit() & 2)) {
+                sound->setSeqInterVolume(10, 0.0f, 10);
+            }
+        }
+    }
+
+    r23->initParameter(soundHandlePtr, actor, soundID, param_4, param_5, param_6);
 }
 
 /* 80298208-802982C0       .text releaseSeqBuffer__Q27JAInter11SequenceMgrFP8JAISoundUl */
@@ -193,8 +445,8 @@ void JAInter::SequenceMgr::releaseSeqBuffer(JAISound*, u32 fadeTime) {
 }
 
 /* 802982C0-802982D0       .text getPlayTrackInfo__Q27JAInter11SequenceMgrFUl */
-JAInter::SeqUpdateData* JAInter::SequenceMgr::getPlayTrackInfo(u32) {
-    /* Nonmatching */
+JAInter::SeqUpdateData* JAInter::SequenceMgr::getPlayTrackInfo(u32 param_1) {
+    return &seqTrackInfo[param_1];
 }
 
 /* 802982D0-802982F0       .text __ct__Q27JAInter7MuteBitFv */

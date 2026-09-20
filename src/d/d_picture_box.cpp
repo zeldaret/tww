@@ -1625,11 +1625,6 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     char colorTag[0x1C];
     char whiteTag[0x1C];
 
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
-
     u32 color = fopMsgM_getColorTable(0);
 
     u8 firstChoiceSeen = 0;
@@ -1723,12 +1718,12 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
 
         if (icon == fopMsgM_Icon_SELECT_YOKO_LEFT_e) {
             mChoiceCursorX0 = (int)(
-                ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.x +
+                ((J2DTextBox*)pane_tx[0].pane)->getBounds().i.x +
                 (f32)mMsgDataProc.getIconPosX(i)
             );
 
             mChoiceCursorY = (int)(
-                ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.y +
+                ((J2DTextBox*)pane_tx[0].pane)->getBounds().i.y +
                 (f32)(
                     halfLine *
                     ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) +
@@ -1749,12 +1744,12 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
             }
         } else if (icon == fopMsgM_Icon_SELECT_YOKO_RIGHT_e) {
             mChoiceCursorX1 = (int)(
-                ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.x +
+                ((J2DTextBox*)pane_tx[0].pane)->getBounds().i.x +
                 (f32)mMsgDataProc.getIconPosX(i)
             );
 
             mChoiceCursorYAlt = (int)(
-                ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.y +
+                ((J2DTextBox*)pane_tx[0].pane)->getBounds().i.y +
                 (f32)(
                     halfLine *
                     ((1 - mMsgLineCount) +
@@ -2178,9 +2173,9 @@ void dJle_Pb_c::draw() {
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
                     f32 lineSpace = base->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
-                    int r5 = posX + base->mBounds.i.x;
+                    int r5 = posX + base->getBounds().i.x;
                     f32 f1 = r9 * ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) + posY * 2);
-                    int r6 = f1 + base->mBounds.i.y;
+                    int r6 = f1 + base->getBounds().i.y;
                     u8 alpha = base->getAlpha();
                     
                     fopMsgM_outFontDraw(
@@ -2240,9 +2235,9 @@ void dJle_Pb_c::draw() {
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
                     f32 lineSpace = base->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
-                    int r5 = posX + base->mBounds.i.x;
+                    int r5 = posX + base->getBounds().i.x;
                     f32 f1 = r9 * ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) + posY * 2);
-                    int r6 = f1 + base->mBounds.i.y;
+                    int r6 = f1 + base->getBounds().i.y;
                     u8 alpha = base->getAlpha();
                     
                     fopMsgM_outFontDraw(

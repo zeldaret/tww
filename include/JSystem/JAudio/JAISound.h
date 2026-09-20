@@ -2,6 +2,7 @@
 #define JAISOUND_H
 
 #include "dolphin/mtx/vec.h"
+#include "JSystem/JAudio/JAISequenceMgr.h"
 
 enum JAISoundType {
     SOUNDPARAM_Unk0     = 0,
@@ -54,6 +55,8 @@ enum JAISoundTrackActiveFlags {
     SOUNDACTIVE_Dolby                = 1 << 22, // 0x400000
     SOUNDACTIVE_TrackInterruptSwitch = 1 << 23, // 0x800000
 };
+
+class SoundInfo;
 
 namespace JAInter {
     class Actor;
@@ -147,7 +150,7 @@ public:
     void getPrevSound() {}
     void getPriority() {}
     void getStatus() {}
-    void getTrack() {}
+    JASystem::TTrack* getTrack() { return getSeqParameter()->getRootTrackPointer(); }
     void getTrans() {}
     void getWait() {}
     void incPlayGameFrameCounter() {}
@@ -157,7 +160,7 @@ public:
     void setDemoPitch(f32 f1, u32 r4) { setPitch(f1, r4, 3); }
     void setDemoVolume(f32 f1, u32 r4) { setVolume(f1, r4, SOUNDPARAM_Unk3); }
     void setFadetime(u32) {}
-    void setID(u32) {}
+    void setID(u32 id) { mSoundID = id; }
     void setMainSoundPPointer(JAISound**) {}
     void setNextSound(JAISound*) {}
     void setPrevSound(JAISound*) {}
@@ -190,57 +193,16 @@ public:
     /* 0x20 */ PositionInfo_t* mPositionInfo;
     /* 0x24 */ void* field_0x24;
     /* 0x28 */ Vec* field_0x28;
-    /* 0x2C */ int field_0x2c;
+    /* 0x2C */ void* field_0x2c;
     /* 0x30 */ JAISound* field_0x30;
     /* 0x34 */ JAISound* field_0x34;
     /* 0x38 */ JAISound** field_0x38;
     /* 0x3C */ void* field_0x3c;
-    /* 0x40 */ void* field_0x40;
+    /* 0x40 */ SoundInfo* mSoundInfo;
 };
 
-namespace JAInter {
-    class MoveParaSet {
-    public:
-        MoveParaSet(f32 param_1=1.0f) { init(param_1); }
-        int set(f32 param_1, u32 param_2);
-        BOOL move();
-
-        void init(f32 value) {
-            mCurrentValue = value;
-            mTargetValue = value;
-            mMoveCounter = 0;
-        }
-
-        /* 0x00 */ f32 mTargetValue;
-        /* 0x04 */ f32 mCurrentValue;
-        /* 0x08 */ f32 mMoveAmount;
-        /* 0x0C */ int mMoveCounter;
-    };
-
-    class MoveParaSetInitHalf : public MoveParaSet {
-    public:
-        MoveParaSetInitHalf() : MoveParaSet(0.5f) {}
-    };
-
-    class MoveParaSetInitZero : public MoveParaSet {
-    public:
-        MoveParaSetInitZero() : MoveParaSet(0.0f) {}
-    };
-
-    class LinkSound {
-    public:
-        void init(JAISound* param_1, u32 param_2);
-        JAISound* getSound();
-        void releaseSound(JAISound* param_1);
-
-        /* 0x00 */ JAISound* field_0x0;
-        /* 0x04 */ JAISound* field_0x4;
-        /* 0x08 */ JAISound* Buffer;
-    };
-}
-
 #define IsJAISoundIDInUse(id)    (((id)&0x800) == 0)
-#define IsJAISoundIDFree(id)     (((id)&0x800) == 1)
+#define IsJAISoundIDFree(id)     (((id)&0x800) != 0)
 #define JAISoundID_TypeMask      0xC0000000
 #define JAISoundID_Type_Se       0x00000000
 #define JAISoundID_Type_Sequence 0x80000000

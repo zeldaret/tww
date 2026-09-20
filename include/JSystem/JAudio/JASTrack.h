@@ -282,7 +282,7 @@ namespace JASystem {
         u8 checkImport(int i) const { return mTrackPort.checkImport(i); }
         u8 checkExport(int i) const { return mTrackPort.checkExport(i); }
         void getActivity() const {}
-        void getRoute() const {}
+        int getRoute() const { return mRoute; }
         TSeqCtrl* getSeq() { return &mSeqCtrl; }
         void pauseTrackAll() { pause(true, true); }
         void unPauseTrackAll() { pause(false, true); }
@@ -311,7 +311,7 @@ namespace JASystem {
         /* 0x360 */ TOuterParam* mOuterParam;
         /* 0x364 */ f32 field_0x364;
         /* 0x368 */ f32 field_0x368;
-        /* 0x36C */ int field_0x36c;
+        /* 0x36C */ int mRoute;
         /* 0x370 */ u32 mUpdateFlags;
         /* 0x374 */ u16 field_0x374;
         /* 0x376 */ u16 field_0x376;

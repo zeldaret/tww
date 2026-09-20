@@ -1086,9 +1086,7 @@ static BOOL daBridge_Execute(bridge_class* i_this) {
 
         cMtx_YrotM(*calc_mtx, pBr->mRotationYExtra);
         if (i >= i_this->m02DD) {
-            pBr->mScale.z = 0.0f;
-            pBr->mScale.y = 0.0f;
-            pBr->mScale.x = 0.0f;
+            pBr->mScale.x = pBr->mScale.y = pBr->mScale.z = 0.0f;
             pBr->mpModel->setBaseScale(pBr->mScale);
             pBr->m408 = 0;
         }

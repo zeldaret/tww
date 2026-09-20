@@ -698,18 +698,14 @@ static void damage_check(bgn2_class* i_this) {
                 i_this->m0358 = REG0_S(5) + 0x14;
                 dScnPly_ply_c::nextPauseTimer = 4;
 #if VERSION == VERSION_DEMO
-                local_58.z = 2.0f;
-                local_58.y = 2.0f;
-                local_58.x = 2.0f;
+                local_58.x = local_58.y = local_58.z = 2.0f;
                 local_78.z = 0;
                 local_78.x = 0;
                 local_78.y = player->shape_angle.y + 0x8000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, i_this->m039C.GetTgHitPosP(), &local_78, &local_58);
 #else
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, i_this->m039C.GetTgHitPosP());
-                local_58.z = 2.0f;
-                local_58.y = 2.0f;
-                local_58.x = 2.0f;
+                local_58.x = local_58.y = local_58.z = 2.0f;
                 local_78.z = 0;
                 local_78.x = 0;
                 local_78.y = fopAcM_searchPlayerAngleY(actor);

@@ -932,9 +932,9 @@ cPhs_State daBoko_c::create() {
         },
         // cM3dGCpsS
         {{
-            /* P0 */ {0.0f, 0.0f, 0.0f},
-            /* P1 */ {0.0f, 0.0f, 0.0f},
-            /* Height */ 20.0f,
+            /* Start  */ {0.0f, 0.0f, 0.0f},
+            /* End    */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 20.0f,
         }},
     };
 

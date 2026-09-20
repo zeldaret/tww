@@ -16,6 +16,7 @@ import re
 import subprocess
 import argparse
 from collections import Counter, defaultdict
+import time
 
 arg_parse = argparse.ArgumentParser()
 arg_parse.add_argument("object_name", nargs="?", help="Name of the object to build and diff, e.g. d_a_bridge or d_a_npc_fa1")
@@ -35,6 +36,9 @@ decomp_root_path = Path(".")
 
 retcode = subprocess.call(["python", "configure.py", "--version", "D44J01", "--debug", "--map", "--non-matching"], cwd=decomp_root_path)
 assert retcode == 0, "Failed to configure"
+
+# Add a short delay between configuring and building to prevent the weird "illegal data in precompiled header" error.
+time.sleep(0.5)
 
 all_ninja_outputs: list[str] = []
 for ninja_target in subprocess.check_output(["ninja", "-t", "targets", "all"]).decode("utf-8").splitlines():
@@ -362,7 +366,7 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
     for base_symbol in maybe_fake_symbols:
       if should_ignore_fake_symbol(base_symbol.name):
         continue
-      print("FAKE?:", base_symbol.name, "0x%X" % base_symbol.size)
+      # print("FAKE?:", base_symbol.name, "0x%X" % base_symbol.size)
       total_maybe_fake += 1
   
   for base_symbol in fake_symbols:

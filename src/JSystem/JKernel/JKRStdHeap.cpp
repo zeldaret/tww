@@ -125,6 +125,8 @@ void* JKRStdHeap::do_getMaxFreeBlock() {
 void JKRStdHeap::state_register(JKRHeap::TState* p, u32 id) const {
     JUT_ASSERT(370, p != NULL);
     JUT_ASSERT(371, p->getHeap() == this);
+
+    getState_(p);
     setState_u32ID_(p, id);
     setState_uUsedSize_(p, 0);
     setState_u32CheckCode_(p, 0);
@@ -134,11 +136,11 @@ void JKRStdHeap::state_register(JKRHeap::TState* p, u32 id) const {
 bool JKRStdHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
     JUT_ASSERT(394, r1.getHeap() == r2.getHeap());
     bool result = true;
-    if (r1.mCheckCode != r2.mCheckCode) {
+    if (r1.getCheckCode() != r2.getCheckCode()) {
         result = false;
     }
 
-    if (r1.mUsedSize != r2.mUsedSize) {
+    if (r1.getUsedSize() != r2.getUsedSize()) {
         result = false;
     }
 

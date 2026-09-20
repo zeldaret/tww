@@ -164,7 +164,7 @@ s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
     currentNode = (request_node_class*)l_fpcNdRq_Queue.mpHead;
     while (currentNode != NULL) {
         currentNdCr = currentNode->mNodeCrReq;
-        if ((currentNdCr->mParameter == 2 || currentNdCr->mParameter == 4 || currentNdCr->mParameter == 1) && currentNdCr->mNodeProc.mProcId == bsPcId)
+        if ((currentNdCr->mParameter == 2 || currentNdCr->mParameter == DEMO_SELECT(3, 4) || currentNdCr->mParameter == 1) && currentNdCr->mNodeProc.mProcId == bsPcId)
             return 0;
         currentNode = (request_node_class*)NODE_GET_NEXT((&currentNode->base));
     }
@@ -189,9 +189,19 @@ s32 fpcNdRq_IsIng(process_node_class* i_procNode) {
 /* 8003F774-8003F8EC       .text fpcNdRq_Create__FUl */
 node_create_request* fpcNdRq_Create(u32 i_requestSize) {
     static node_create_request clear = {
-        NULL, NULL,       NULL, NULL,       0,      NULL, NULL,   NULL, NULL,
-        0,    NULL,       NULL, NULL,       0,      0,    NULL,   5,    0xFFFFFFFF,
-        NULL, 0xFFFFFFFE, NULL, 0xFFFFFFFE, 0x7FFF, NULL, 0x7FFF,
+        /* mCreateTag        */ NULL, NULL, NULL, NULL, 0,
+        /* mProcMthCls       */ NULL, NULL, NULL, NULL, 0, NULL, NULL,
+        /* mReqPhsProc       */ NULL, 0,
+        /* mpPhsHandler      */ NULL,
+        /* mpNodeCrReqMthCls */ NULL,
+        /* mParameter        */ DEMO_SELECT(4, 5),
+        /* mRequestId        */ 0xFFFFFFFF,
+        /* mNodeProc         */ NULL, 0xFFFFFFFE,
+        /* mpLayerClass      */ NULL,
+        /* mCreatingID       */ 0xFFFFFFFE,
+        /* mProcName         */ fpcNm_INVALID_e,
+        /* mpUserData        */ NULL,
+        /* unk_0x60          */ 0x7FFF,
     };
 
     node_create_request* req = (node_create_request*)cMl::memalignB(-4, i_requestSize);
@@ -299,7 +309,7 @@ node_create_request* fpcNdRq_Request(u32 i_requestSize, int i_reqType,
     case 2:
         req = fpcNdRq_ChangeNode(i_requestSize, i_procNode, i_procName, i_data);
         break;
-    case 4:
+    case DEMO_SELECT(3, 4):
         break;
     }
 

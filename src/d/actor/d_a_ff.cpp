@@ -300,9 +300,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
                     pfVar4->base.position.x = a_this->current.pos.x + cM_rndFX(500.0f);
                     pfVar4->base.position.y = a_this->current.pos.y;
                     pfVar4->base.position.z = a_this->current.pos.z + cM_rndFX(500.0f);
-                    pfVar4->base.angle.z = 0;
-                    pfVar4->base.angle.y = 0;
-                    pfVar4->base.angle.x = 0;
+                    pfVar4->base.angle.x = pfVar4->base.angle.y = pfVar4->base.angle.z = 0;
                     pfVar4->base.parameters = fopAcM_GetParam(a_this);
                     fopAcM_Create(fpcNm_FF_e, NULL, pfVar4);
                 }

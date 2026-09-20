@@ -358,7 +358,7 @@ void JKRExpHeap::do_freeAll() {
     JKRHeap::callAllDisposer();
     mHeadFreeList = (CMemBlock*)getStartAddr();
     mTailFreeList = mHeadFreeList;
-    mHeadFreeList->initiate(NULL, NULL, getSize() - 0x10, 0, 0);
+    mHeadFreeList->initiate(NULL, NULL, getHeapSize() - 0x10, 0, 0);
     mHeadUsedList = NULL;
     mTailUsedList = NULL;
     unlock();
@@ -1009,12 +1009,13 @@ static void dummy2() {
 void JKRExpHeap::state_register(TState* p, u32 param_1) const {
     JUT_ASSERT(VERSION_SELECT(2271, 2420, 2423, 2423), p != NULL);
     JUT_ASSERT(VERSION_SELECT(2272, 2421, 2424, 2424), p->getHeap() == this);
-    p->mId = param_1;
+
+    getState_(p);
+    setState_u32ID_(p, param_1);
     if (param_1 <= 0xff) {
-        p->mUsedSize = getUsedSize(param_1);
+        setState_uUsedSize_(p, getUsedSize(param_1));
     } else {
-        s32 freeSize = const_cast<JKRExpHeap*>(this)->getTotalFreeSize();
-        p->mUsedSize = getSize() - freeSize;
+        setState_uUsedSize_(p, getUsedSize_(const_cast<JKRExpHeap*>(this)));
     }
 
     u32 checkCode = 0;
@@ -1028,18 +1029,18 @@ void JKRExpHeap::state_register(TState* p, u32 param_1) const {
             checkCode += (u32)block * 3;
         }
     }
-    p->mCheckCode = checkCode;
+    setState_u32CheckCode_(p, checkCode);
 }
 
 /* 802B31D4-802B327C       .text state_compare__10JKRExpHeapCFRCQ27JKRHeap6TStateRCQ27JKRHeap6TState */
 bool JKRExpHeap::state_compare(const JKRHeap::TState& r1, const JKRHeap::TState& r2) const {
     JUT_ASSERT(VERSION_SELECT(2319, 2468, 2471, 2471), r1.getHeap() == r2.getHeap());
     bool result = true;
-    if (r1.mCheckCode != r2.mCheckCode) {
+    if (r1.getCheckCode() != r2.getCheckCode()) {
         result = false;
     }
 
-    if (r1.mUsedSize != r2.mUsedSize) {
+    if (r1.getUsedSize() != r2.getUsedSize()) {
         result = false;
     }
 

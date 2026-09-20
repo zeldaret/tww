@@ -635,9 +635,7 @@ static void damage_check(bgn3_class* i_this) {
                 i_this->m0FDB4 = 0x14;
                 if (bVar10 >= 4) {
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, i_this->m0FDFC.GetTgHitPosP());
-                    local_58.z = 2.0f;
-                    local_58.y = 2.0f;
-                    local_58.x = 2.0f;
+                    local_58.x = local_58.y = local_58.z = 2.0f;
                     local_78.z = 0;
                     local_78.x = 0;
                     local_78.y = fopAcM_searchPlayerAngleY(actor);

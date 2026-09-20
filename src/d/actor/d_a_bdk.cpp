@@ -1598,9 +1598,7 @@ static void damage_check(bdk_class* i_this) {
                 }
                 i_this->m1138 = 0;
 
-                pos.z = 2.0f;
-                pos.y = 2.0f;
-                pos.x = 2.0f;
+                pos.x = pos.y = pos.z = 2.0f;
                 angle.x = angle.z = 0;
                 angle.y = player->shape_angle.y + 0x8000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, i_this->mHeadTgSph.GetTgHitPosP(), &angle, &pos);
@@ -3496,9 +3494,7 @@ static BOOL daBdk_Execute(bdk_class* i_this) {
     } else {
         fVar1 = l_HIO.m008;
     }
-    actor->scale.z = fVar1;
-    actor->scale.y = fVar1;
-    actor->scale.x = fVar1;
+    actor->scale.x = actor->scale.y = actor->scale.z = fVar1;
 
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(actor->scale);

@@ -27,7 +27,7 @@ public:
     }
 
     f32 acc(s16 param_0, s16 param_1, s16 param_2) {
-        return ((f32)(param_1 - param_2) * (f32)(param_1 - param_2)) / ((f32)(param_0 - param_2) * (f32)(param_0 - param_2));
+        return SQUARE((f32)(param_1 - param_2)) / SQUARE((f32)(param_0 - param_2));
     }
     void deleteScreen() { delete scrn; }
     void setAlpha(f32 alpha) { mAlpha = alpha; }

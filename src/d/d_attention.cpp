@@ -100,7 +100,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
 
     mDoExt_restoreCurrentHeap();
     if (mDoExt_adjustSolidHeap(heap) >= 0)
-        DCStoreRangeNoSync(heap->getStartAddr(), heap->getSize());
+        DCStoreRangeNoSync(heap->getStartAddr(), heap->getHeapSize());
 
     field_0x028 = -1;
     mFlags = 0;
