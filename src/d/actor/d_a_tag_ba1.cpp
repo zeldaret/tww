@@ -11,30 +11,31 @@
 static daTag_Ba1_HIO_c l_HIO;
 
 /* 000000EC-00000144       .text __ct__15daTag_Ba1_HIO_cFv */
-daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() : mPrm() {
-    static hio_prm_c a_prm_tbl = { 0 };
+daTag_Ba1_HIO_c::daTag_Ba1_HIO_c()
+    : mPrm() {
+    static hio_prm_c a_prm_tbl = {0};
     memcpy(&mPrm, &a_prm_tbl, sizeof(hio_prm_c));
     mNo = -1;
     mRefCount = -1;
 }
 
 /* 00000144-00000164       .text daTag_Ba1_XyCheck_cB__FPvi */
-static s16 daTag_Ba1_XyCheck_cB(void* obj, int idx) {
-    return static_cast<daTag_Ba1_c*>(obj)->XyCheck_cB(idx);
+static s16 daTag_Ba1_XyCheck_cB(void* i_this, int i_itemBtn) {
+    return static_cast<daTag_Ba1_c*>(i_this)->XyCheck_cB(i_itemBtn);
 }
 
 /* 00000164-00000184       .text XyCheck_cB__11daTag_Ba1_cFi */
-s16 daTag_Ba1_c::XyCheck_cB(int index) {
-     return dComIfGp_getSelectItem(index) == dItemNo_FAIRY_BOTTLE_e;
+s16 daTag_Ba1_c::XyCheck_cB(int i_itemBtn) {
+    return dComIfGp_getSelectItem(i_itemBtn) == dItemNo_FAIRY_BOTTLE_e;
 }
 
 /* 00000184-000001A4       .text daTag_Ba1_XyEvent_cB__FPvi */
-static s16 daTag_Ba1_XyEvent_cB(void* obj, int idx) {
-    return static_cast<daTag_Ba1_c*>(obj)->XyEvent_cB(idx);
+static s16 daTag_Ba1_XyEvent_cB(void* i_this, int i_itemBtn) {
+    return static_cast<daTag_Ba1_c*>(i_this)->XyEvent_cB(i_itemBtn);
 }
 
 /* 000001A4-000001C0       .text XyEvent_cB__11daTag_Ba1_cFi */
-s16 daTag_Ba1_c::XyEvent_cB(int idx) {
+s16 daTag_Ba1_c::XyEvent_cB(int /* i_itemBtn */) {
     mEventIdx = 0;
     return mEventIds[this->mEventIdx];
 }

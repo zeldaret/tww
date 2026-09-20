@@ -5,31 +5,32 @@
 
 class daTag_Ba1_c : public fopAc_ac_c {
 public:
-  s16 XyCheck_cB(int);
-  s16 XyEvent_cB(int);
-  bool createInit();
-  BOOL _draw();
-  BOOL _execute();
-  BOOL _delete();
-  cPhs_State _create();
+    s16 XyCheck_cB(int);
+    s16 XyEvent_cB(int);
+    bool createInit();
+    BOOL _draw();
+    BOOL _execute();
+    BOOL _delete();
+    cPhs_State _create();
 
 public:
-  /* 0x290 */ s16 mEventIds[1];
-  /* 0x292 */ s16 mEventIdx;
+    /* 0x290 */ s16 mEventIds[1];
+    /* 0x292 */ s16 mEventIdx;
 };
 
 class daTag_Ba1_HIO_c : public JORReflexible {
 public:
-  struct hio_prm_c {
-    /* 0x0 */ u8 field_0x0;
-  };
-  
-  daTag_Ba1_HIO_c();
-  virtual ~daTag_Ba1_HIO_c() {}  
+    struct hio_prm_c {
+        /* 0x0 */ u8 field_0x0;
+    };
+
+    daTag_Ba1_HIO_c();
+    virtual ~daTag_Ba1_HIO_c() {}
+
 public:
-  /* 0x04 */ s8 mNo;
-  /* 0x08 */ s32 mRefCount;
-  /* 0x0C */ hio_prm_c mPrm;
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ s32 mRefCount;
+    /* 0x0C */ hio_prm_c mPrm;
 };
 
 #endif /* D_A_TAG_BA1_H */
