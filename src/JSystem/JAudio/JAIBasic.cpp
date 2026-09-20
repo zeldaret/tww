@@ -414,12 +414,13 @@ void JAIBasic::stopAllSound(u32 soundID, void* param_2) {
 void JAIBasic::deleteObject(void* param_1) {
     /* Nonmatching */
     JAInter::DummyVec* r30 = NULL;
+    bool r29;
     for (int i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
         JAISound* sound = JAInter::SeMgr::seRegist[i].field_0x4;
         while (sound) {
             JAISound* nextSound = sound->field_0x34;
             if (sound->field_0x24 == param_1) {
-                bool r29 = false;
+                r29 = false;
                 if (sound->checkSwBit(0x8000)) {
                     r29 = true;
                     if (!r30) {
@@ -445,12 +446,18 @@ void JAIBasic::deleteObject(void* param_1) {
 
 /* 80290D94-80290DA0       .text getMapInfoFxline__8JAIBasicFUl */
 BOOL JAIBasic::getMapInfoFxline(u32 param_1) {
-    return param_1 ? TRUE : FALSE;
+    if (param_1 != 0) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 80290DA0-80290DAC       .text getMapInfoGround__8JAIBasicFUl */
 BOOL JAIBasic::getMapInfoGround(u32 param_1) {
-    return param_1 ? TRUE : FALSE;
+    if (param_1 != 0) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 80290DAC-80290DC4       .text getMapInfoFxParameter__8JAIBasicFUl */
@@ -481,9 +488,9 @@ void JAIBasic::setSeCategoryVolume(u8 param_1, u8 param_2) {
 }
 
 /* 80290E50-80291034       .text setParameterSeqSync__8JAIBasicFPQ28JASystem6TTrackUs */
-u16 JAIBasic::setParameterSeqSync(JASystem::TTrack* param_1, u16 param_2) {
-    /* Nonmatching */
-    u16 r30 = 0;
+u16 JAIBasic::setParameterSeqSync(JASystem::TTrack* track, u16 param_2) {
+    /* Nonmatching - regalloc */
+    u16 result = 0;
     switch (param_2) {
     case 0:
         for (int i = 0; i < JAIGlobalParameter::seqPlayTrackMax; i++) {
@@ -491,33 +498,33 @@ u16 JAIBasic::setParameterSeqSync(JASystem::TTrack* param_1, u16 param_2) {
                 continue;
             }
             JAInter::SeqParameter* seqParam = JAInter::SequenceMgr::getPlayTrackInfo(i)->mSequence->getSeqParameter();
-            JASystem::TTrack* track = &seqParam->mTrack;
-            if (track == (JAInter::SequenceMgr::getPlayTrackInfo(i)->mSequence->getID() & 0x800 ? param_1->mParent->mParent : param_1->mParent)) {
-                u32 r28 = JAInter::routeToTrack(param_1->field_0x36c);
-                r30 = JAInter::SoundTable::getInfoPointer(JAInter::SequenceMgr::getPlayTrackInfo(i)->mSequence->getID())->mFlag >> 8;
-                JAInter::SystemInterface::outerInit(JAInter::SequenceMgr::getPlayTrackInfo(i), param_1, r28, r30, param_2 & 1);
-                JAInter::SequenceMgr::getPlayTrackInfo(i)->field_0x4 |= 1 << r28;
-                r30 = 0;
+            JASystem::TTrack* seqTrack = seqParam->getRootTrackPointer();
+            if (seqTrack == (JAInter::SequenceMgr::getPlayTrackInfo(i)->mSequence->getID() & 0x800 ? track->getParent()->getParent() : track->getParent())) {
+                u32 trackNo = JAInter::routeToTrack(track->getRoute());
+                u16 paramFlags = (JAInter::SoundTable::getInfoPointer(JAInter::SequenceMgr::getPlayTrackInfo(i)->mSequence->getID())->mFlag >> 8) & 0xFFFF;
+                JAInter::SystemInterface::outerInit(JAInter::SequenceMgr::getPlayTrackInfo(i), track, trackNo, paramFlags, param_2 & 1);
+                JAInter::SequenceMgr::getPlayTrackInfo(i)->field_0x4 |= 1 << trackNo;
+                result = 0;
                 i = JAIGlobalParameter::seqPlayTrackMax;
             }
         }
         break;
     case 1: {
-        u8 tmp = param_1->field_0x36c;
-        JAInter::SeMgr::seTrackUpdate_s* r31 = JAInter::SeMgr::seTrackUpdate;
-        JASystem::TTrack::TOuterParam* r28 = param_1->mOuterParam;
-        r28->setParam(OUTERPARAM_Volume, r31[tmp].mPlayingVolume);
-        r28->setParam(OUTERPARAM_Pan, r31[tmp].mPlayingPan);
-        r28->setParam(OUTERPARAM_Pitch, r31[tmp].mPlayingPitch);
-        r28->setParam(OUTERPARAM_Fxmix, r31[tmp].mPlayingFxmix);
-        r28->setParam(OUTERPARAM_Dolby, msBasic->field_0xd != 2 ? 0.0f : r31[tmp].mPlayingDolby);
+        u8 route = track->getRoute();
+        JAInter::SeMgr::seTrackUpdate_s* trackData = JAInter::SeMgr::seTrackUpdate;
+        JASystem::TTrack::TOuterParam* outerParam = track->getOuterParam();
+        outerParam->setParam(OUTERPARAM_Volume, trackData[route].mPlayingVolume);
+        outerParam->setParam(OUTERPARAM_Pan, trackData[route].mPlayingPan);
+        outerParam->setParam(OUTERPARAM_Pitch, trackData[route].mPlayingPitch);
+        outerParam->setParam(OUTERPARAM_Fxmix, trackData[route].mPlayingFxmix);
+        outerParam->setParam(OUTERPARAM_Dolby, msBasic->field_0xd != 2 ? 0.0f : trackData[route].mPlayingDolby);
         break;
     }
     case 127:
-        param_1->writePortApp(0, JAInter::SeMgr::seScene);
+        track->writePortApp(0, JAInter::SeMgr::seScene);
         break;
     }
-    return r30;
+    return result;
 }
 
 /* 80291034-80291114       .text setSeExtParameter__8JAIBasicFP8JAISound */
