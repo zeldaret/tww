@@ -203,8 +203,29 @@ BOOL daSaku_c::mode_break_none(int param_1) {
 }
 
 /* 000005CC-000006A8       .text mode_break_fire__8daSaku_cFi */
-void daSaku_c::mode_break_fire(int) {
-    /* Nonmatching */
+BOOL daSaku_c::mode_break_fire(int i) {
+    if(field_0xEBC[0] > m_saku_alpha_out_time) {
+        cLib_chaseUC(&field_0xEDC[i][1], 0xff, l_sakuHIO.field_0x10 & 0xff);
+
+        int reuslt = cLib_chaseUC(field_0xEDC[i], 0, l_sakuHIO.field_0x10 & 0xff);
+        
+        if(reuslt != 0) {
+            if(m_heap[i][0] != NULL && m_heap[i][0] != NULL) { // instructions indicate checked twice
+                if(field_0xEF0[i] != 0) {
+                    field_0xEF0[i] -= 1;
+
+                    if(field_0xEF0[i] == 0) {
+                        mDoExt_destroySolidHeap(m_heap[i][0]);
+                        m_heap[i][0] = NULL;
+                        mModels[i][0] = NULL;
+                    }
+                }
+            }
+        }
+
+    }
+
+    return TRUE;
 }
 
 /* 000006A8-0000083C       .text mode_break_throw_obj__8daSaku_cFi */

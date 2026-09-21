@@ -25,7 +25,7 @@ public:
     void CreateInit();
     int saku_draw_sub(int);
     BOOL mode_break_none(int);
-    void mode_break_fire(int);
+    BOOL mode_break_fire(int);
     int mode_break_throw_obj(int);
     BOOL RecreateHeap(int, int);
     BOOL CreateHeap(int, int);
@@ -46,7 +46,7 @@ public:
 
     static const dCcD_SrcCyl m_cyl_src;
     static u8 m_smoke_alpha;
-    static f32 _m_saku_alpha_out_time;
+    static s32 m_saku_alpha_out_time;
     static const char* m_arcname[3];
     static const s32 m_alpha_start_time;
     static s32 m_fade_time;
