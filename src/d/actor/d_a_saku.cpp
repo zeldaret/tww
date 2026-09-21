@@ -525,8 +525,20 @@ void daSaku_c::setCol() {
 }
 
 /* 00001510-00001598       .text MoveBGResist__8daSaku_cFii */
-void daSaku_c::MoveBGResist(int, int) {
-    /* Nonmatching */
+int daSaku_c::MoveBGResist(int param_1, int param_2) {
+    u8 cVar1;
+
+    cVar1 = g_dComIfG_gameInfo.play.mBgS.Regist(field_0xE34[param_2][param_1], this);
+
+    if (cVar1 != 0) {
+            return 0;
+
+    }
+    else {
+        field_0xE44[param_2] = field_0xE34[param_2][param_1];
+        field_0xE44[param_2]->Move();
+        return 1;
+    }
 }
 
 /* 00001598-000016C0       .text setEffFire__8daSaku_cFi */
