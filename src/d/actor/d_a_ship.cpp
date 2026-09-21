@@ -365,7 +365,7 @@ BOOL daShip_c::checkForceMessage() {
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E01) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F80)) {
         mNextMessageNo = 0x1688;
     }
-    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
         mNextMessageNo = 0x1645;
     }
     else {
@@ -3482,7 +3482,7 @@ void daShip_c::setHeadAnm() {
         } 
         else if (
 #if VERSION > VERSION_DEMO
-                (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) &&
+                (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) &&
 #endif
                  (mSph.ChkTgHit() || mCyl[0].ChkTgHit() ||
                   mCyl[1].ChkTgHit() || mCyl[2].ChkTgHit())) {
@@ -3496,7 +3496,7 @@ void daShip_c::setHeadAnm() {
     else {
         if (
 #if VERSION > VERSION_DEMO
-            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) &&
+            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) &&
 #endif
             (mSph.ChkTgHit() || mCyl[0].ChkTgHit() ||
              mCyl[1].ChkTgHit() || mCyl[2].ChkTgHit())) {
@@ -3512,7 +3512,7 @@ void daShip_c::setHeadAnm() {
                  std::fabsf(mpHeadAnm->getPlaySpeed()) < 0.01f && 
                  cM_rnd() < 0.4f && (g_Counter.mTimer & 0x1FF) == 0x1FF && 
 #if VERSION > VERSION_DEMO
-                 (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) &&
+                 (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) &&
 #endif
                  !checkStateFlg(daSFLG_UNK40000000_e)) {
             newFileIndex = dRes_INDEX_SHIP_BCK_AKIBI1_e;
@@ -4133,7 +4133,7 @@ BOOL daShip_c::execute() {
     else if (mCurMode == 8 || distXz > 125.0f) {
         if (
             (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
-            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02))) &&
+            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED))) &&
             dComIfGp_getMiniGameType() != 1
         ) {
 #if VERSION == VERSION_DEMO
@@ -4224,7 +4224,7 @@ BOOL daShip_c::execute() {
     }
     if (
         (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D10) && !daPy_getPlayerLinkActorClass()->checkMasterSwordEquip()) ||
-        (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3804) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) ||
+        (dComIfGs_isEventBit(dSv_event_flag_c::HYRULE_COURTYARD_CUTSCENE) && !dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) ||
         (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E10) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F80))
     ) {
         attention_info.flags &= ~fopAc_Attn_ACTION_SHIP_e;
@@ -4235,7 +4235,7 @@ BOOL daShip_c::execute() {
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3840)) {
             mNextMessageNo = 0x168c;
         }
-        else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
+        else if (dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
             mNextMessageNo = 0x1645;
         }
         else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3380)) {

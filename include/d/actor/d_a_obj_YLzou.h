@@ -1,8 +1,21 @@
 #ifndef D_A_OBJ_YLZOU_H
 #define D_A_OBJ_YLZOU_H
 
+#include "d/d_a_obj.h"
+#include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
-#include "d/actor/d_a_obj_movebox.h"
+
+class dBgW;
+
+class EffSmokeCB : public dPa_smokeEcallBack {
+public:
+    EffSmokeCB() {}
+    virtual ~EffSmokeCB() {}
+
+public:
+    /* 0x20 */ cXyz field_0x20;
+    /* 0x2C */ csXyz field_0x2C;
+};  // Size: 0x34
 
 class daObjYLzou_c : public fopAc_ac_c {
 public:
@@ -55,14 +68,14 @@ public:
     /* 0x298 */ J3DModel* field_0x298;
     /* 0x29C */ dBgW* field_0x29C;
     /* 0x2A0 */ Mtx field_0x2A0;
-    /* 0x2D0 */ void (daObjYLzou_c::*field_0x2D0)();
-    /* 0x2DC */ int field_0x2DC;
+    /* 0x2D0 */ void (daObjYLzou_c::*mCurrentActProc)();
+    /* 0x2DC */ int mActionIdx;
     /* 0x2E0 */ int field_0x2E0;
     /* 0x2E4 */ s16 field_0x2E4;
     /* 0x2E6 */ u8 field_0x2E6[0x2E8 - 0x2E6];
     /* 0x2E8 */ BOOL field_0x2E8;
-    /* 0x2EC */ int field_0x2EC;
-    /* 0x2F0 */ daObjMovebox::EffSmokeCB mSmokeCbs[2];
+    /* 0x2EC */ int mDemoIdx;
+    /* 0x2F0 */ EffSmokeCB mSmokeCbs[2];
     /* 0x358 */ s16 field_0x358;
     /* 0x35A */ u8 field_0x35A[0x35C - 0x35A];
     /* 0x35C */ f32 field_0x35C;

@@ -496,7 +496,7 @@ cPhs_State daTag_Mk_c::create() {
                 setAction(ACT_WAIT_e);
             } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D08)) {
                 setAction(ACT_WAIT_e);
-            } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) {
+            } else if (!dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) {
                 setAction(ACT_WAIT_e);
             } else {
                 setAction(ACT_TAGWP_e);

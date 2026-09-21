@@ -936,7 +936,7 @@ void daObjTpost_c::createInit() {
         dLetter_autoStock(dSv_event_flag_c::LETTER_BAITO);
     }
 
-    if(dComIfGs_isEventBit(DEMO_SELECT(dSv_event_flag_c::UNK_2D04, dSv_event_flag_c::UNK_1E80))) {
+    if(dComIfGs_isEventBit(DEMO_SELECT(dSv_event_flag_c::MASTER_SWORD_CUTSCENE, dSv_event_flag_c::UNK_1E80))) {
         dLetter_autoStock(dSv_event_flag_c::LETTER_ORCA);
     }
 

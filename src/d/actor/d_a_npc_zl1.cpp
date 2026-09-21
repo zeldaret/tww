@@ -128,7 +128,7 @@ static const char* l_evn_tbl[4] = {
     "yuukaigo",
     "ooi",
     "majyuu_shinnyuu",
-    "nakaniwa"
+    "nakaniwa",
 };
 
 /* 00000198-000001F8       .text __ct__18daNpc_Zl1_matAnm_cFv */
@@ -341,15 +341,15 @@ bool daNpc_Zl1_c::init_ZL1_4() {
 
 /* 00000B48-00000CC0       .text init_ZL1_5__11daNpc_Zl1_cFv */
 bool daNpc_Zl1_c::init_ZL1_5() {
-    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) {
+    if(!dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) {
         set_action(&daNpc_Zl1_c::optn_action1, NULL);
         fopAcM_OffStatus(this, fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e);
 #if VERSION > VERSION_DEMO
-        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3804)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::HYRULE_COURTYARD_CUTSCENE)) {
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             field_0x84A = 6;
-            mEventIdx[4] = field_0x84A + -3;
-            fopAcM_orderOtherEventId(this, mEventIdx[mEventIdx[4]]);
+            field_0x7A8 = field_0x84A + -3;
+            fopAcM_orderOtherEventId(this, mEventIdx[field_0x7A8]);
             dComIfGp_evmng_cancelStartDemo();
         } else {
 #endif
@@ -1057,8 +1057,8 @@ void daNpc_Zl1_c::eventOrder() {
             fopAcM_orderSpeakEvent(this);
         }
     } else if(field_0x84A >= 3) {
-        mEventIdx[4] = field_0x84A - 3;
-        fopAcM_orderOtherEventId(this, mEventIdx[mEventIdx[4]]);
+        field_0x7A8 = field_0x84A - 3;
+        fopAcM_orderOtherEventId(this, mEventIdx[field_0x7A8]);
     }
 }
 
@@ -1066,8 +1066,8 @@ void daNpc_Zl1_c::eventOrder() {
 void daNpc_Zl1_c::checkOrder() {
     static const Vec a_start_pos[] = {-229.76634f, 37.46317f, 305.2134f};
     if(eventInfo.checkCommandDemoAccrpt()) {
-        if(dComIfGp_evmng_startCheck(mEventIdx[mEventIdx[4]]) && field_0x84A >= 3) {
-            switch(mEventIdx[4]) {
+        if(dComIfGp_evmng_startCheck(mEventIdx[field_0x7A8]) && field_0x84A >= 3) {
+            switch(field_0x7A8) {
                 case 0:
                     field_0x7D3 = true;
                     break;
@@ -1837,8 +1837,8 @@ int daNpc_Zl1_c::isEventEntry() {
 
 /* 0000383C-00003A1C       .text event_proc__11daNpc_Zl1_cFi */
 void daNpc_Zl1_c::event_proc(int i_staffIdx) {
-    if(dComIfGp_evmng_endCheck(mEventIdx[mEventIdx[4]])) {
-        switch(mEventIdx[4]) {
+    if(dComIfGp_evmng_endCheck(mEventIdx[field_0x7A8])) {
+        switch(field_0x7A8) {
             case 0:
                 field_0x7D3 = false;
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0802);
@@ -1861,7 +1861,7 @@ void daNpc_Zl1_c::event_proc(int i_staffIdx) {
                 field_0x7C9 = false;
                 break;
             case 3:
-                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3804);
+                dComIfGs_onEventBit(dSv_event_flag_c::HYRULE_COURTYARD_CUTSCENE);
                 setStt(3);
                 field_0x7CB = false;
                 break;
@@ -2497,7 +2497,7 @@ int daNpc_Zl1_c::demo_action2(void*) {
 int daNpc_Zl1_c::optn_action1(void*) {
     switch(field_0x850) {
         case 0:
-            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3804)) {
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::HYRULE_COURTYARD_CUTSCENE)) {
                 setStt(5);
                 field_0x850++;
             } else {
