@@ -28,11 +28,7 @@ bool daWarpls_c::_delete() {
         mpEmitter->becomeInvalidEmitter();
         mpEmitter = NULL;
     }
-    #if VERSION == VERSION_DEMO
-    dComIfG_deleteObjectRes(m_arcname[mWarpType]);
-    #else
-    dComIfG_resDelete(&mPhs, m_arcname[mWarpType]);
-    #endif
+    dComIfG_resDeleteDemo(&mPhs, m_arcname[mWarpType]);
     return TRUE;
 }
 
@@ -45,7 +41,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 int daWarpls_c::CreateHeap() {
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mWarpType],m_bdlidx[mWarpType]);
-    JUT_ASSERT(VERSION_SELECT(0xe6, 0xe9, 0xe9, 0xe9), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(230,233), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     
     if (mpModel == NULL) {
@@ -55,7 +51,7 @@ int daWarpls_c::CreateHeap() {
     mpBrkAnm = NULL;
     if (m_brkidx[mWarpType] != -1) {
         J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname[mWarpType],m_brkidx[mWarpType]);
-        JUT_ASSERT(VERSION_SELECT(0xf5, 0xf8, 0xf8, 0xf8), pbrk != NULL);
+        JUT_ASSERT(DEMO_SELECT(245, 248), pbrk != NULL);
 
         mpBrkAnm = new mDoExt_brkAnm();
         if (mpBrkAnm == NULL || !mpBrkAnm->init(modelData, pbrk, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE, 0)) {
@@ -66,7 +62,7 @@ int daWarpls_c::CreateHeap() {
     mpBckAnm = NULL;
     if (m_bckidx[mWarpType] != -1) {
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes( m_arcname[mWarpType],m_bckidx[mWarpType]);
-        JUT_ASSERT(VERSION_SELECT(0x108, 0x10b, 0x10b, 0x10b), pbck != NULL);
+        JUT_ASSERT(DEMO_SELECT(264, 267), pbck != NULL);
 
         mpBckAnm = new mDoExt_bckAnm();
         if (mpBckAnm == NULL || !mpBckAnm->init(modelData, pbck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, FALSE)) {
@@ -86,7 +82,7 @@ void daWarpls_c::CreateInit() {
     };
 
     if (!strcmp(dComIfGp_getStartStageName(), "Siren")) {
-        s8 room_no = current.roomNo;
+        s8 room_no = fopAcM_GetRoomNo(this);
 
         if (room_no == 7) {
             mEvtType = EvtType_TowerUp;
@@ -115,13 +111,7 @@ void daWarpls_c::CreateInit() {
         break;
     }
 
-    #if VERSION == VERSION_DEMO
-    int switch_number = mSwitchNo;
-    char room_no = home.roomNo;
-    BOOL is_switch_on = dComIfGs_isSwitch(switch_number, room_no);
-    #else
-    BOOL is_switch_on = dComIfGs_isSwitch(mSwitchNo, home.roomNo);
-    #endif
+    BOOL is_switch_on = fopAcM_isSwitch(this, mSwitchNo);
     if (is_switch_on || mSwitchNo == 0xFF) {
 
         if (mpEmitter != NULL) {
@@ -171,7 +161,7 @@ cPhs_State daWarpls_c::_create() {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mWarpType])) {
             return cPhs_ERROR_e;
         }
-    CreateInit();
+        CreateInit();
     }
     return rt;
 }
@@ -188,6 +178,7 @@ void daWarpls_c::set_mtx() {
 bool daWarpls_c::_execute() {
 
     u8 is_switch_on = fopAcM_isSwitch(this, mSwitchNo);
+
     if (mStartupDelayTimer > 0) {
         mStartupDelayTimer -= 1;
     }
@@ -222,12 +213,7 @@ void daWarpls_c::checkOrder() {
             dComIfGp_evmng_setGoal(&current.pos);
         }
         if (dComIfGp_evmng_endCheck(mWarpingEvtIdx)) {
-            #if VERSION == VERSION_DEMO
-            s8 room_no = current.roomNo;
-            dLib_setNextStageBySclsNum(mSceneNo, room_no);
-            #else
-            dLib_setNextStageBySclsNum(mSceneNo, current.roomNo);
-            #endif
+            dLib_setNextStageBySclsNum(mSceneNo, fopAcM_GetRoomNo(this));
             fopAcM_seStart(this,JA_SE_LK_WAPR_EFF_WARP,0);
         }
         return;
@@ -238,13 +224,7 @@ void daWarpls_c::checkOrder() {
 /* 00000AC4-00000BFC       .text eventOrder__10daWarpls_cFv */
 void daWarpls_c::eventOrder() {
 
-    #if VERSION == VERSION_DEMO
-    int switch_number = mSwitchNo;
-    char room_no = home.roomNo;
-    u8 is_switch_on = dComIfGs_isSwitch(switch_number, room_no);
-    #else
-    u8 is_switch_on = dComIfGs_isSwitch(mSwitchNo, home.roomNo);
-    #endif
+    u8 is_switch_on = fopAcM_isSwitch(this, mSwitchNo);
 
     if (mEvtState == EvtState_Activation) {
         fopAcM_orderOtherEventId(this, mActivationEvtIdx, daWarpls_prm::getEvId(this), 0xffff, 0, 1);
@@ -282,14 +262,7 @@ bool daWarpls_c::setStatus() {
 /* 00000C7C-00000DC4       .text demo__10daWarpls_cFv */
 bool daWarpls_c::demo() {
 
-    #if VERSION == VERSION_DEMO
-    int switch_number = mSwitchNo;
-    char room_no = home.roomNo;
-    u8 is_switch_on = dComIfGs_isSwitch(switch_number,room_no);
-    #else
-    u8 is_switch_on = dComIfGs_isSwitch(mSwitchNo, home.roomNo);
-    #endif
-
+    u8 is_switch_on = fopAcM_isSwitch(this, mSwitchNo);
 
     if (mPlayerStartedInWarp) {
         if (!check_warp_distance()) {
@@ -326,25 +299,14 @@ bool daWarpls_c::demo() {
 /* 00000DC4-00000EE8       .text check_warp_link__10daWarpls_cFv */
 int daWarpls_c::check_warp_link() {
 
-    #if VERSION == VERSION_DEMO
-    f32 warp_distance;
-    #else
-    f32 warp_distance = 112.5f;
-    #endif
-    f64 distance_to_player = 0.5f;
-
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     if (!(player == dComIfGp_getPlayer(0) && mWarpActive && !mPlayerStartedInWarp)) {
         return FALSE;
     }
 
-    distance_to_player = (player->current.pos - current.pos).absXZ();
+    f32 distance_to_player = (player->current.pos - current.pos).absXZ();
 
-    #if VERSION == VERSION_DEMO
-    warp_distance = 112.5f;
-    #endif
-    
-    if (distance_to_player < warp_distance * scale.x) {
+    if (distance_to_player < m_warp_distance * scale.x) {
         return TRUE;
     }
     return FALSE;
@@ -353,14 +315,12 @@ int daWarpls_c::check_warp_link() {
 /* 00000EE8-00000FF4       .text check_warp_distance__10daWarpls_cFv */
 int daWarpls_c::check_warp_distance() {
 
-    f64 distance_to_player = 0.5f;
-
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
     if (player != dComIfGp_getPlayer(0)) {
         return FALSE;
     }
 
-    distance_to_player = (player->current.pos - current.pos).absXZ();
+    f32 distance_to_player = (player->current.pos - current.pos).absXZ();
     
     if (distance_to_player < m_warp_distance * scale.x) {
         return TRUE;
