@@ -51,7 +51,7 @@ BOOL matAlphaAnim(J3DModelData* modelData, u8 param_1, bool param_2) {
     JUT_ASSERT(0x5d1, modelData != 0);
 
 
-    for (int i = 0; i < modelData->getMaterialNum(); i ++) {
+    for (u16 i = 0; i < modelData->getMaterialNum(); i ++) {
         changeXluMaterialAlpha(modelData->getMaterialNodePointer(i), param_1, param_2);
     }
 
