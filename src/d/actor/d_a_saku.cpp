@@ -45,7 +45,30 @@ class J3DMaterial;
 
 /* 000000EC-00000200       .text CreateInit__8daSaku_cFv */
 void daSaku_c::CreateInit() {
-    /* Nonmatching */
+    for(int i = 0; i < 2; i++) {
+        field_0xEBC[i] = 0;
+        field_0xEAC[i] = 0;
+        
+        field_0xEDC[i][0] = 0xff;
+        field_0xEDC[i][1] = 0;
+
+        field_0xEE0[i] = 0xffffffff;
+        field_0xEF0[i] = 2;
+    }
+
+    this->field_0xEF4 = 0;
+    this->field_0xEEC = 0;
+    this->cullMtx = this->mModels[0][0]->getBaseTRMtx();
+    this->mStts.Init(0xff, 0xff, this);
+    setCol();
+    setMtx();
+
+    for(int i = 0; i < 2; i++) {
+        this->field_0x290[i].setColor(dust_color);
+        this->field_0x290[i].setRateOff(1);
+    }
+    
+    return;
 }
 
 /* 00000200-000003A8       .text saku_draw_sub__8daSaku_cFi */
