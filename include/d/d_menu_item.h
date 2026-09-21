@@ -146,7 +146,7 @@ private:
     /* 0x2334 */ ResTIMG* itemTexBuffer[21];
     /* 0x2388 */ u8 field_0x2388[0x2394 - 0x2388];
     /* 0x2394 */ ResTIMG* subItemTexBuffer[8];
-    /* 0x23B4 */ ResTIMG* field_0x23b4;
+    /* 0x23B4 */ ResTIMG* coverReturnTimg;
 #if VERSION == VERSION_PAL
     /* 0x23B8 */ ResTIMG* field_0x23b8_pal;
     /* 0x23BC */ ResTIMG* field_0x23bc_pal;
@@ -162,13 +162,13 @@ private:
     /* 0x23FC */ s16 field_0x23fc;
     /* 0x23FE */ u8 itemMode;
     /* 0x23FF */ u8 nowItem;
-    /* 0x2400 */ u8 field_0x2400;
-    /* 0x2401 */ u8 field_0x2401;
+    /* 0x2400 */ u8 subMenuItemBase;
+    /* 0x2401 */ u8 selectItemSlot;
     /* 0x2402 */ u8 field_0x2402;
     /* 0x2403 */ u8 field_0x2403;
-    /* 0x2404 */ u8 field_0x2404;
+    /* 0x2404 */ u8 selectItemBtn;
     /* 0x2405 */ u8 field_0x2405;
-    /* 0x2406 */ u8 field_0x2406[21];
+    /* 0x2406 */ u8 mItems[21];
     /* 0x241B */ u8 field_0x241B[0x241E - 0x241B];
     /* 0x241E */ u8 field_0x241e;
     /* 0x241F */ u8 field_0x241f;
