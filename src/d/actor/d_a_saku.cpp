@@ -54,8 +54,62 @@ void daSaku_c::saku_draw_sub(int) {
 }
 
 /* 000003A8-00000590       .text mode_break_none__8daSaku_cFi */
-void daSaku_c::mode_break_none(int) {
-    /* Nonmatching */
+BOOL daSaku_c::mode_break_none(int param_1) {
+    u32 burned = FALSE;
+    u32 broke = FALSE;
+
+    for (int i = 0; i < 3; i++) {
+        dCcD_GObjInf *this_00 = &field_0x30C[param_1][i];
+
+        if (this_00->ChkTgHit() != NULL) {
+            cCcD_Obj* hitObj = this_00->GetTgHitObj();
+
+            if (hitObj != NULL) {
+                if (mSturdinessType == 0) {
+                    broke |= hitObj->ChkAtType(AT_TYPE_SWORD) || 
+                        hitObj->ChkAtType(AT_TYPE_UNK8) || 
+                        hitObj->ChkAtType(AT_TYPE_BOMB) || 
+                        hitObj->ChkAtType(AT_TYPE_MACHETE) || 
+                        hitObj->ChkAtType(AT_TYPE_UNK800) || 
+                        hitObj->ChkAtType(AT_TYPE_DARKNUT_SWORD) || 
+                        hitObj->ChkAtType(AT_TYPE_MOBLIN_SPEAR) || 
+                        hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER);
+                        
+                }
+                else if (mSturdinessType == 1) {
+                    broke |= hitObj->ChkAtType(AT_TYPE_MACHETE) ||
+                        hitObj->ChkAtType(AT_TYPE_BOMB) ||
+                        hitObj->ChkAtType(AT_TYPE_UNK800) ||
+                        hitObj->ChkAtType(AT_TYPE_DARKNUT_SWORD);
+                }
+
+                if (broke) {
+                    g_dComIfG_gameInfo.play.mVibration.StartShock(4, -0x21, cXyz(0, 1.0, 0));
+                }
+
+                burned |= hitObj->ChkAtType(AT_TYPE_FIRE) ||
+                    hitObj->ChkAtType(AT_TYPE_UNK20000) ||
+                    hitObj->ChkAtType(AT_TYPE_FIRE_ARROW);
+
+                if (burned) {
+                    break;
+                }
+            }
+        }
+    }
+
+    if (burned) {
+        return burn();
+    }
+
+    else if (broke) {
+        if(param_1 == 1 && field_0xEF8[0] == 1) {
+            broken(0);
+        }
+        return broken(param_1);
+    }
+
+    return TRUE;
 }
 
 /* 000005CC-000006A8       .text mode_break_fire__8daSaku_cFi */
