@@ -1,7 +1,6 @@
 #ifndef D_A_SAKU_H
 #define D_A_SAKU_H
 
-#include "SSystem/SComponent/c_bg_w.h"
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
@@ -28,7 +27,7 @@ public:
     BOOL mode_break_none(int);
     void mode_break_fire(int);
     int mode_break_throw_obj(int);
-    int RecreateHeap(int, int);
+    BOOL RecreateHeap(int, int);
     BOOL CreateHeap(int, int);
     int GetDzbId(int);
     int CreateDummyHeap(int);

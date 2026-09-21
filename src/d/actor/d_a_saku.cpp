@@ -152,8 +152,19 @@ int daSaku_c::mode_break_throw_obj(int i) {
 }
 
 /* 0000083C-000008EC       .text RecreateHeap__8daSaku_cFii */
-void daSaku_c::RecreateHeap(int, int) {
+BOOL daSaku_c::RecreateHeap(int heap_id, int saku_id) {
     /* Nonmatching */
+    // DONE- WAITING FOR JUT ASSERTION
+    JUT_ASSERT(0x365, m_heap[saku_id][heap_id] != NULL);
+
+    m_heap[saku_id][heap_id]->freeAll();
+    JKRHeap *heap = mDoExt_setCurrentHeap(m_heap[saku_id][heap_id]);
+
+    CreateHeap(1, saku_id);
+
+    mDoExt_setCurrentHeap(heap);
+
+    return TRUE;
 }
 
 /* 000008EC-000009B0       .text CreateHeap__8daSaku_cFii */
