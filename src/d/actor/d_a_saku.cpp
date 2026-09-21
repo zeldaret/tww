@@ -253,8 +253,25 @@ int daSaku_c::GetDzbId(int param_1) {
 }
 
 /* 00000A4C-00000ADC       .text CreateDummyHeap__8daSaku_cFi */
-void daSaku_c::CreateDummyHeap(int) {
-    /* Nonmatching */
+BOOL daSaku_c::CreateDummyHeap(int param_1) {
+    int iVar1; 
+
+    if (mSturdinessType == 0) {
+        iVar1 = 0;
+    }
+    else {
+        iVar1 = param_1;
+
+        if(mSturdinessType == 1) {
+            iVar1 = 1;
+        }
+    }
+
+    if (loadModel(iVar1, 1, param_1) == FALSE) {
+        return FALSE;
+    }
+
+    return loadMoveBG(1, 1, param_1) ? TRUE : FALSE;
 }
 
 /* 00000ADC-00000BE8       .text loadMoveBG__8daSaku_cFiii */

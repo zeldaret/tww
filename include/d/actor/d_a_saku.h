@@ -30,7 +30,7 @@ public:
     BOOL RecreateHeap(int, int);
     BOOL CreateHeap(int, int);
     int GetDzbId(int);
-    int CreateDummyHeap(int);
+    BOOL CreateDummyHeap(int);
     BOOL loadMoveBG(int, int, int);
     int loadModel(int, int, int);
     int burn();
