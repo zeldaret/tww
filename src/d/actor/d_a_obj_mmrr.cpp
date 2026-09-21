@@ -303,7 +303,7 @@ bool daObjMmrr::Act_c::chk_light() {
 
 /* 00001418-00001480       .text eff_start__Q29daObjMmrr5Act_cFv */
 void daObjMmrr::Act_c::eff_start() {
-    dComIfGp_particle_set(0x8294, &current.pos, &shape_angle, NULL, 0xff, &field_0xC04, -1, NULL, NULL, NULL);
+    dComIfGp_particle_set(dPa_name::ID_AK_SN_SASORIMIRROR00, &current.pos, &shape_angle, NULL, 0xff, &field_0xC04, -1, NULL, NULL, NULL);
 }
 
 /* 00001480-000014AC       .text eff_stop__Q29daObjMmrr5Act_cFv */
