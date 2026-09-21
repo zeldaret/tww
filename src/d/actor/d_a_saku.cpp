@@ -158,9 +158,8 @@ void daSaku_c::RecreateHeap(int, int) {
 
 /* 000008EC-000009B0       .text CreateHeap__8daSaku_cFii */
 BOOL daSaku_c::CreateHeap(int i_heapId, int i_sakuId) {
-    int iVar1;
-    int iVar2 = i_heapId;
-    bool bVar3;
+    s32 iVar1;
+    u32 iVar2 = i_heapId;
 
     iVar1 = this->field_0xEF8[i_sakuId];
 
@@ -180,15 +179,11 @@ BOOL daSaku_c::CreateHeap(int i_heapId, int i_sakuId) {
 
     iVar1 = loadModel(iVar2, i_heapId, i_sakuId);
     if (iVar1 == 0) {
-        bVar3 = FALSE;
-    }
-    else {
-        iVar1 = GetDzbId(i_sakuId);
-        iVar1 = loadMoveBG(iVar1, i_heapId, i_sakuId);
-        bVar3 = iVar1 != 0;
+        return FALSE;
     }
 
-    return bVar3;
+    iVar1 = GetDzbId(i_sakuId);
+    return loadMoveBG(iVar1, i_heapId, i_sakuId) ? TRUE : FALSE;
 }
 
 /* 000009B0-00000A4C       .text GetDzbId__8daSaku_cFi */
@@ -234,7 +229,7 @@ void daSaku_c::loadMoveBG(int, int, int) {
 }
 
 /* 00000BE8-00000D7C       .text loadModel__8daSaku_cFiii */
-void daSaku_c::loadModel(int, int, int) {
+int daSaku_c::loadModel(int, int, int) {
     /* Nonmatching */
 }
 

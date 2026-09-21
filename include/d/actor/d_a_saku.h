@@ -32,7 +32,7 @@ public:
     BOOL CreateHeap(int, int);
     int GetDzbId(int);
     int CreateDummyHeap(int);
-    int loadMoveBG(int, int, int);
+    BOOL loadMoveBG(int, int, int);
     int loadModel(int, int, int);
     int burn();
     int broken(int);
