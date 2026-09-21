@@ -43,6 +43,43 @@ const dCcD_SrcCyl daSaku_c::m_cyl_src = {
 class J3DModelData;
 class J3DMaterial;
 
+// declare before matAlphaAnim to use within that func
+static void changeXluMaterialAlpha(J3DMaterial*, u8 , bool);
+
+/* 000019AC-00001A50       .text matAlphaAnim__FP12J3DModelDataUcb */
+int matAlphaAnim(J3DModelData* modelData, u8 param_1, bool param_2) {
+    /* Nonmatching */
+    JUT_ASSERT(0x5d1, modelData != 0);
+
+
+    for (int i = 0; i < modelData->getMaterialNum(); i ++) {
+        changeXluMaterialAlpha(modelData->getMaterialNodePointer(i), param_1, param_2);
+    }
+
+    return 1;
+}
+
+/* 00001A50-00001B98       .text changeXluMaterialAlpha__FP11J3DMaterialUcb */
+void changeXluMaterialAlpha(J3DMaterial* i_material, u8 param_2, bool param_3) {
+    static J3DBlendInfo l_blendInfo = {1, 4, 5, 7};
+    static J3DZModeInfo l_zmodeInfo = {1,3,0};
+    static J3DZModeInfo l_zmodeInfo2 = {1,3,1};
+
+    JUT_ASSERT(0x5ff, i_material != 0);
+
+
+    J3DPEBlock* block = i_material->getPEBlock();
+
+    i_material->getTevKColor(3)->mColor.a = param_2;
+    block->getBlend()->setBlendInfo(l_blendInfo);
+
+    if (param_3) {
+        block->getZMode()->setZModeInfo(l_zmodeInfo2);
+    } else {
+        block->getZMode()->setZModeInfo(l_zmodeInfo);
+    }
+}
+
 /* 000000EC-00000200       .text CreateInit__8daSaku_cFv */
 void daSaku_c::CreateInit() {
     for(int i = 0; i < 2; i++) {
@@ -489,14 +526,7 @@ void daSaku_c::setEffBreak(int) {
     /* Nonmatching */
 }
 
-/* 000019AC-00001A50       .text matAlphaAnim__FP12J3DModelDataUcb */
-void matAlphaAnim(J3DModelData*, unsigned char, bool) {
-    /* Nonmatching */
-}
 
-/* 00001A50-00001B98       .text changeXluMaterialAlpha__FP11J3DMaterialUcb */
-void changeXluMaterialAlpha(J3DMaterial*, unsigned char, bool) {
-    /* Nonmatching */
 }
 
 /* 00001B98-00001BB8       .text daSaku_Create__FP10fopAc_ac_c */
