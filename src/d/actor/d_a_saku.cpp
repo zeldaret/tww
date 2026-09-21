@@ -47,8 +47,7 @@ class J3DMaterial;
 static void changeXluMaterialAlpha(J3DMaterial*, u8 , bool);
 
 /* 000019AC-00001A50       .text matAlphaAnim__FP12J3DModelDataUcb */
-int matAlphaAnim(J3DModelData* modelData, u8 param_1, bool param_2) {
-    /* Nonmatching */
+BOOL matAlphaAnim(J3DModelData* modelData, u8 param_1, bool param_2) {
     JUT_ASSERT(0x5d1, modelData != 0);
 
 
@@ -109,8 +108,39 @@ void daSaku_c::CreateInit() {
 }
 
 /* 00000200-000003A8       .text saku_draw_sub__8daSaku_cFi */
-void daSaku_c::saku_draw_sub(int) {
-    /* Nonmatching */
+int daSaku_c::saku_draw_sub(int param_1) {
+    bool bVar1 = true;
+    if(field_0xEDC[param_1][0] < l_sakuHIO.dustColor.a) {
+        bVar1 = false;
+    }
+
+    if(m_heap[param_1][0] != NULL && mModels[param_1][0] != NULL && field_0xEDC[param_1][0] != NULL) {
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mModels[param_1][0], &tevStr);
+
+        matAlphaAnim(mModels[param_1][0]->getModelData(), field_0xEDC[param_1][0], bVar1);
+
+        j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaListBG;
+        j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluListBG;
+
+        mDoExt_modelUpdateDL(mModels[param_1][0]);
+
+        j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaList;
+        j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluList;
+
+        matAlphaAnim(mModels[param_1][0]->getModelData(), 0xff, true);
+    }
+
+    if (m_heap[param_1][1] != NULL && mModels[param_1][1] != NULL && this->field_0xEDC[param_1][1] != NULL) { 
+        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mModels[param_1][1], &tevStr);
+
+        matAlphaAnim(mModels[param_1][1]->getModelData(), 0xff, bVar1 ? false : true);
+        mDoExt_modelUpdateDL(mModels[param_1][1]);
+        matAlphaAnim(mModels[param_1][1]->getModelData(), 0xff, true);
+    }
+
+    return 1;
 }
 
 /* 000003A8-00000590       .text mode_break_none__8daSaku_cFi */
