@@ -41,7 +41,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 int daWarpls_c::CreateHeap() {
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mWarpType],m_bdlidx[mWarpType]);
-    JUT_ASSERT(DEMO_SELECT(230,233), modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(230, 233), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     
     if (mpModel == NULL) {
