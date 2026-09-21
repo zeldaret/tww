@@ -2,6 +2,7 @@
 #define D_A_TAG_BA1_H
 
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class daTag_Ba1_c : public fopAc_ac_c {
 public:
@@ -26,6 +27,8 @@ public:
 
     daTag_Ba1_HIO_c();
     virtual ~daTag_Ba1_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;

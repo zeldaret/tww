@@ -1211,16 +1211,12 @@ static cPhs_State daBgn2_Create(fopAc_ac_c* a_this) {
             /* Radius */ 70.0f,
         }},
     };
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(a_this, bgn2_class);
-#endif
+    fopAcM_ct_Retail(a_this, bgn2_class);
     bgn2_class* i_this = (bgn2_class*)a_this;
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bgn");
 
     if (res == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(a_this, bgn2_class);
-#endif
+        fopAcM_ct_Demo(a_this, bgn2_class);
         bgn = NULL;
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x96000)) {
             return cPhs_ERROR_e;

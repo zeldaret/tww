@@ -11,8 +11,7 @@
 static daTag_Ba1_HIO_c l_HIO;
 
 /* 000000EC-00000144       .text __ct__15daTag_Ba1_HIO_cFv */
-daTag_Ba1_HIO_c::daTag_Ba1_HIO_c()
-    : mPrm() {
+daTag_Ba1_HIO_c::daTag_Ba1_HIO_c() {
     static hio_prm_c a_prm_tbl = {0};
     memcpy(&mPrm, &a_prm_tbl, sizeof(hio_prm_c));
     mNo = -1;
@@ -37,10 +36,10 @@ static s16 daTag_Ba1_XyEvent_cB(void* i_this, int i_itemBtn) {
 /* 000001A4-000001C0       .text XyEvent_cB__11daTag_Ba1_cFi */
 s16 daTag_Ba1_c::XyEvent_cB(int /* i_itemBtn */) {
     mEventIdx = 0;
-    return mEventIds[this->mEventIdx];
+    return mEventIds[mEventIdx];
 }
 
-static const char* l_evn_tbl[1] = {"Use_Fairy"};
+static const char* l_evn_tbl[] = {"Use_Fairy"};
 
 /* 000001C0-00000288       .text createInit__11daTag_Ba1_cFv */
 bool daTag_Ba1_c::createInit() {
@@ -53,7 +52,9 @@ bool daTag_Ba1_c::createInit() {
     if (needsInit) {
         attention_info.flags = fopAc_Attn_ACTION_SPEAK_e;
         attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x1a;
-        mEventIds[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[0], 0xff);
+        for (int i = 0; i < ARRAY_SIZE(l_evn_tbl); i++) {
+            mEventIds[0] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i], 0xff);
+        }
         eventInfo.setXyCheckCB(daTag_Ba1_XyCheck_cB);
         eventInfo.setXyEventCB(daTag_Ba1_XyEvent_cB);
     }
@@ -70,14 +71,14 @@ BOOL daTag_Ba1_c::_draw() {
 BOOL daTag_Ba1_c::_execute() {
     int staffId = -1;
     if (dComIfGp_event_runCheck()) {
-        if (eventInfo.getCommand() != dEvtCmd_INTALK_e) {
+        if (eventInfo.checkCommandTalk() == FALSE) {
             staffId = dComIfGp_evmng_getMyStaffId("TagBa1", NULL, 0);
         }
     }
 
     if (staffId >= 0) {
-        if (dComIfGp_evmng_endCheck(mEventIds[mEventIdx]) != 0) {
-            dComIfGp_event_onEventFlag(dEvtFlag_UNK8_e);
+        if (dComIfGp_evmng_endCheck(mEventIds[mEventIdx])) {
+            dComIfGp_event_reset();
             fopAcM_delete(this);
         }
     }
@@ -101,7 +102,7 @@ cPhs_State daTag_Ba1_c::_create() {
     }
 
     l_HIO.mRefCount++;
-    fopAcM_SetupActor(this, daTag_Ba1_c);
+    fopAcM_ct(this, daTag_Ba1_c);
     if (!createInit()) {
         return cPhs_ERROR_e;
     }
