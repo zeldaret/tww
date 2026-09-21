@@ -2687,6 +2687,7 @@ void dMenu_Collect_c::itemnameSet() {
     /* Nonmatching */
     fopMsgM_itemMsgGet_c msgGet;
     u32 msgNo = 0;
+    int r30 = 0;
     int i = 0;
 
     J2DTextBox::TFontSize copiedFontSize;
@@ -2696,7 +2697,9 @@ void dMenu_Collect_c::itemnameSet() {
     initialFontSize.mSizeY = 29.0f;
     initialFontSize.mSizeX = 29.0f;
 
+#if VERSION > VERSION_DEMO
     ((J2DTextBox*)m858.pane)->setFontSize(initialFontSize);
+#endif
 
     ((J2DTextBox*)m890[0].pane)->getFontSize(copiedFontSize);
     ((J2DTextBox*)m890[1].pane)->setFontSize(copiedFontSize);
@@ -2936,7 +2939,7 @@ void dMenu_Collect_c::itemnameSet() {
     u8 characterWidth;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(VERSION_SELECT(0xBD1, 0xBD1, 0xBD1, 0xBD1), head_p);
+    JUT_ASSERT(VERSION_SELECT(2992, 2992, 3025, 3025), head_p);
 
     ((J2DTextBox*)m890[0].pane)->getFontSize(nameFontSize);
     nameFontSize.mSizeX = nameFontSize.mSizeY;
@@ -3007,7 +3010,7 @@ void dMenu_Collect_c::itemnameSet() {
     }
 
     ((J2DTextBox*)m890[0].pane)->setFontSize(nameFontSize);
-    ((J2DTextBox*)m890[0].pane)->setCharSpace(0.0f);
+    ((J2DTextBox*)m890[0].pane)->setCharSpace((f32)r30);
     ((J2DTextBox*)m890[0].pane)->setString(name[0]);
 }
 

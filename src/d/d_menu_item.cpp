@@ -9,6 +9,9 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 
+// These items won't appear in your inventory during the greyscale boss rematches.
+#define IS_RECOLLECT_DISABLED_ITEM(itemNo) (recollectBossCheck() && (itemNo == dItemNo_WATER_BOTTLE_e || itemNo == dItemNo_FIREFLY_BOTTLE_e || itemNo == dItemNo_FOREST_WATER_e))
+
 dMi_HIO_c g_miHIO;
 
 /* 801C7B4C-801C7C7C       .text __ct__9dMi_HIO_cFv */
@@ -304,9 +307,8 @@ void dMenu_Item_c::screenSet() {
     }
 
     for (int i = 0; i < 8; i++) {
-        u8 item = dComIfGs_getItemBeast((u8)i);
-        if (item != dItemNo_NONE_e) {
-            JKRReadTypeResource(subItemTexBuffer[i], 0xC00, 'TIMG', dItem_data::getTexture(item), dComIfGp_getItemIconArchive());
+        if (dComIfGs_getItemBeast((u8)i) != dItemNo_NONE_e) {
+            JKRReadTypeResource(subItemTexBuffer[i], 0xC00, 'TIMG', dItem_data::getTexture(dComIfGs_getItemBeast((u8)i)), dComIfGp_getItemIconArchive());
             DCStoreRangeNoSync(subItemTexBuffer[i], 0xC00);
 
             ((J2DPicture*)field_0xe78[i].pane)->changeTexture(subItemTexBuffer[i], 0);
@@ -494,7 +496,7 @@ void dMenu_Item_c::checkMove() {
             if (dMeter_subWinFlag()) {
                 if (select_item >= dInvSlot_ReserveFirst_e) {
                     if (field_0x2405 == 2) {
-                        select_item = select_item - dInvSlot_ReserveFirst_e;
+                        select_item -= dInvSlot_ReserveFirst_e;
                         field_0x2030[i].mPosCenter.x = field_0xe78[select_item].mPosCenter.x;
                         field_0x2030[i].mPosCenter.y = field_0xe78[select_item].mPosCenter.y;
                         field_0x231c->insertChild(field_0x1230.pane, field_0x2030[i].pane);
@@ -506,7 +508,7 @@ void dMenu_Item_c::checkMove() {
                     }
                 } else if (select_item >= dInvSlot_BaitFirst_e) {
                     if (field_0x2405 == 1) {
-                        select_item = select_item - dInvSlot_BaitFirst_e;
+                        select_item -= dInvSlot_BaitFirst_e;
                         field_0x2030[i].mPosCenter.x = field_0xe78[select_item].mPosCenter.x;
                         field_0x2030[i].mPosCenter.y = field_0xe78[select_item].mPosCenter.y;
                         field_0x231c->insertChild(field_0x1230.pane, field_0x2030[i].pane);
@@ -518,7 +520,7 @@ void dMenu_Item_c::checkMove() {
                     }
                 } else if (select_item >= dInvSlot_BeastFirst_e) {
                     if (field_0x2405 == 0) {
-                        select_item = select_item - dInvSlot_BeastFirst_e;
+                        select_item -= dInvSlot_BeastFirst_e;
                         field_0x2030[i].mPosCenter.x = field_0xe78[select_item].mPosCenter.x;
                         field_0x2030[i].mPosCenter.y = field_0xe78[select_item].mPosCenter.y;
                         field_0x231c->insertChild(field_0x1230.pane, field_0x2030[i].pane);
@@ -1094,7 +1096,6 @@ void dMenu_Item_c::itemnameMove() {
 }
 
 /* 801CB168-801CB7C0       .text itemnameSet__12dMenu_Item_cFv */
-// NONMATCHING - stack ordering / missing instruction
 void dMenu_Item_c::itemnameSet() {
     fopMsgM_itemMsgGet_c msgGet;
     u32 msgNo = 0;
@@ -1102,10 +1103,10 @@ void dMenu_Item_c::itemnameSet() {
     int i = 0;
 
     J2DTextBox::TFontSize copiedFontSize;
+    J2DTextBox::TFontSize fontSize;
     J2DTextBox::TFontSize initialFontSize;
 
-    initialFontSize.mSizeX = 29.0f;
-    initialFontSize.mSizeY = 29.0f;
+    initialFontSize.mSizeX = initialFontSize.mSizeY = 29.0f;
     ((J2DTextBox*)field_0x858.pane)->setFontSize(initialFontSize);
     ((J2DTextBox*)field_0x890[0].pane)->getFontSize(copiedFontSize);
     ((J2DTextBox*)field_0x890[1].pane)->setFontSize(copiedFontSize);
@@ -1123,7 +1124,7 @@ void dMenu_Item_c::itemnameSet() {
     if (nowItem == dInvSlot_ItemLast_e) {
         msgNo = 0x1F8;
     } else if (dComIfGs_getItem(nowItem) != dItemNo_NONE_e) {
-        msgNo = dItem_data::getItemMesgNum(dComIfGs_getItem(nowItem));
+        msgNo = (s16)dItem_data::getItemMesgNum(dComIfGs_getItem(nowItem));
         if (msgNo == 0) {
             msgNo = 0x19C;
         }
@@ -1134,7 +1135,6 @@ void dMenu_Item_c::itemnameSet() {
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(VERSION_SELECT(1381, 1381, 1381, 1381), head_p);
 
-    J2DTextBox::TFontSize fontSize;
     ((J2DTextBox*)field_0x890[0].pane)->getFontSize(fontSize);
     fontSize.mSizeX = fontSize.mSizeY;
 
@@ -1741,11 +1741,10 @@ void dMenu_Item_c::itemNumberSet() {
 }
 
 /* 801CD3FC-801CDA14       .text itemCheck__12dMenu_Item_cFi */
-// NONMATCHING - comparison chain not getting optimized?
 void dMenu_Item_c::itemCheck(int i_itemSlot) {
     u8 itemNo = dComIfGs_getItem(i_itemSlot);
     if (itemNo != dItemNo_NONE_e) {
-        if (recollectBossCheck() && (itemNo == dItemNo_WATER_BOTTLE_e || itemNo == dItemNo_FIREFLY_BOTTLE_e || itemNo == dItemNo_FOREST_WATER_e)) {
+        if (IS_RECOLLECT_DISABLED_ITEM(itemNo)) {
             field_0x1658[i_itemSlot].pane->hide();
             field_0x1af0[i_itemSlot].pane->hide();
         }
@@ -1760,7 +1759,7 @@ void dMenu_Item_c::itemCheck(int i_itemSlot) {
             field_0x1f88[1].pane->show();
             field_0x1f88[2].pane->show();
             itemNo = dItemNo_BOW_e;
-        } else if (itemNo == dItemNo_FOREST_WATER_e && (!recollectBossCheck() || (itemNo != dItemNo_WATER_BOTTLE_e && itemNo != dItemNo_FIREFLY_BOTTLE_e && itemNo != dItemNo_FOREST_WATER_e))) {
+        } else if (itemNo == dItemNo_FOREST_WATER_e && !IS_RECOLLECT_DISABLED_ITEM(itemNo)) {
             cXyz sp18(field_0x1658[i_itemSlot].mPosCenter.x - 320.0f, field_0x1658[i_itemSlot].mPosCenter.y - 240.0f, 0.0f);
 
             if (field_0x23b8[0] == NULL) {
@@ -1851,7 +1850,7 @@ void dMenu_Item_c::arrowLightAnime() {
 // NONMATCHING
 int dMenu_Item_c::bottleFwaterCheck() {
     for (int i = 0; i < 4; i++) {
-        if (dComIfGs_getItem((u8)(i + dInvSlot_BOTTLE0_e)) == dItemNo_FOREST_WATER_e) {
+        if (dComIfGs_getItem((u32)(i + dInvSlot_BOTTLE0_e)) == dItemNo_FOREST_WATER_e) {
             return i;
         }
     }
@@ -2103,7 +2102,6 @@ void dMenu_Item_c::_delete() {
 }
 
 /* 801CF618-801D0524       .text _move__12dMenu_Item_cFv */
-// NONMATCHING - weird branch flow
 void dMenu_Item_c::_move() {
     u8 var_r30 = nowItem;
     itemBitCheck(false);
@@ -2116,15 +2114,13 @@ void dMenu_Item_c::_move() {
                         subWindowDelete();
                         mDoAud_seStart(JA_SE_ITM_MENU_CANCEL);
                     } else if (nowItem == dInvSlot_ItemLast_e) {
+#if VERSION > VERSION_DEMO
                         itemMode = 1;
                         dMs_c->initialize();
                         mDoAud_seStart(JA_SE_ITM_MENU_OPT_IN);
+#endif
                     } else if (dComIfGs_getItem(nowItem) != dItemNo_NONE_e) {
-                        if (!recollectBossCheck() || 
-                            (dComIfGs_getItem(nowItem) != dItemNo_WATER_BOTTLE_e
-                                && dComIfGs_getItem(nowItem) != dItemNo_FIREFLY_BOTTLE_e
-                                && dComIfGs_getItem(nowItem) != dItemNo_FOREST_WATER_e))
-                        {
+                        if (!IS_RECOLLECT_DISABLED_ITEM(dComIfGs_getItem(nowItem))) {
                             fopMsgM_setInitAlpha(&field_0x740);
                             fopMsgM_setInitAlpha(&field_0x778);
                             fopMsgM_setInitAlpha(&field_0x7b0);
@@ -2154,11 +2150,7 @@ void dMenu_Item_c::_move() {
                                 } else {
                                     subItemDecide();
                                 }
-                            } else if (!recollectBossCheck() || 
-                                (dComIfGs_getItem(nowItem) != dItemNo_WATER_BOTTLE_e
-                                    && dComIfGs_getItem(nowItem) != dItemNo_FIREFLY_BOTTLE_e
-                                    && dComIfGs_getItem(nowItem) != dItemNo_FOREST_WATER_e))
-                            {
+                            } else if (!IS_RECOLLECT_DISABLED_ITEM(dComIfGs_getItem(nowItem))) {
                                 itemDecide();
                             }
                         }
@@ -2189,18 +2181,12 @@ void dMenu_Item_c::_move() {
 
         if (nowItem == dInvSlot_ItemLast_e) {
             itemnameMove();
-        } else if (dComIfGs_getItem(nowItem) != dItemNo_NONE_e) {
-            if (!recollectBossCheck() || 
-                (dComIfGs_getItem(nowItem) != dItemNo_WATER_BOTTLE_e
-                    && dComIfGs_getItem(nowItem) != dItemNo_FIREFLY_BOTTLE_e
-                    && dComIfGs_getItem(nowItem) != dItemNo_FOREST_WATER_e))
-            {
-                itemnameMove();
-            } else {
-                fopMsgM_setNowAlphaZero(&field_0x890[0]);
-                fopMsgM_setNowAlphaZero(&field_0x890[1]);
-                fopMsgM_setNowAlphaZero(&field_0x858);
-            }
+        } else if (dComIfGs_getItem(nowItem) != dItemNo_NONE_e && !IS_RECOLLECT_DISABLED_ITEM(dComIfGs_getItem(nowItem))) {
+            itemnameMove();
+        } else {
+            fopMsgM_setNowAlphaZero(&field_0x890[0]);
+            fopMsgM_setNowAlphaZero(&field_0x890[1]);
+            fopMsgM_setNowAlphaZero(&field_0x858);
         }
 
         outFontMove();
@@ -2407,7 +2393,6 @@ void dMenu_Item_c::_draw() {
 }
 
 /* 801D0F50-801D1438       .text _open__12dMenu_Item_cFv */
-// NONMATCHING - small branching issue
 bool dMenu_Item_c::_open() {
     const s16 var_r29 = g_miHIO.field_0x26;
     bool rt = false;
@@ -2424,20 +2409,14 @@ bool dMenu_Item_c::_open() {
 
         itemnameSet();
 
-        if (nowItem != dInvSlot_ItemLast_e) {
-            if (!recollectBossCheck() || 
-                (dComIfGs_getItem(nowItem) != dItemNo_WATER_BOTTLE_e
-                    && dComIfGs_getItem(nowItem) != dItemNo_FIREFLY_BOTTLE_e
-                    && dComIfGs_getItem(nowItem) != dItemNo_FOREST_WATER_e))
-            {
-                itemnoteSet();
+        if (nowItem != dInvSlot_ItemLast_e && !IS_RECOLLECT_DISABLED_ITEM(dComIfGs_getItem(nowItem))) {
+            itemnoteSet();
 
-                if (dComIfGs_getItem(nowItem) != dItemNo_NONE_e) {
-                    dComIfGp_setDoStatusForce(0x21);
-                } else {
-                    dComIfGp_setDoStatusForce(0);
-                    dComIfGp_setDoStatus(0);
-                }
+            if (dComIfGs_getItem(nowItem) != dItemNo_NONE_e) {
+                dComIfGp_setDoStatusForce(0x21);
+            } else {
+                dComIfGp_setDoStatusForce(0);
+                dComIfGp_setDoStatus(0);
             }
         } else {
             dComIfGp_setDoStatusForce(0x17);
@@ -2597,7 +2576,6 @@ bool dMenu_Item_c::_close() {
 }
 
 /* 801D1CD4-801D21A0       .text _open2__12dMenu_Item_cFv */
-// NONMATCHING - small branching issues
 bool dMenu_Item_c::_open2() {
     const s16 var_r28 = g_miHIO.field_0x26;
     const s16 var_r30 = g_menuHIO.field_0x92;
@@ -2615,20 +2593,14 @@ bool dMenu_Item_c::_open2() {
 
         itemnameSet();
 
-        if (nowItem != dInvSlot_ItemLast_e) {
-            if (!recollectBossCheck() || 
-                (dComIfGs_getItem(nowItem) != dItemNo_WATER_BOTTLE_e
-                    && dComIfGs_getItem(nowItem) != dItemNo_FIREFLY_BOTTLE_e
-                    && dComIfGs_getItem(nowItem) != dItemNo_FOREST_WATER_e))
-            {
-                itemnoteSet();
+        if (nowItem != dInvSlot_ItemLast_e && !IS_RECOLLECT_DISABLED_ITEM(dComIfGs_getItem(nowItem))) {
+            itemnoteSet();
 
-                if (dComIfGs_getItem(nowItem) != dItemNo_NONE_e) {
-                    dComIfGp_setDoStatusForce(0x21);
-                } else {
-                    dComIfGp_setDoStatusForce(0);
-                    dComIfGp_setDoStatus(0);
-                }
+            if (dComIfGs_getItem(nowItem) != dItemNo_NONE_e) {
+                dComIfGp_setDoStatusForce(0x21);
+            } else {
+                dComIfGp_setDoStatusForce(0);
+                dComIfGp_setDoStatus(0);
             }
         } else {
             dComIfGp_setDoStatusForce(0x17);
