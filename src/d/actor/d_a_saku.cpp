@@ -336,16 +336,16 @@ void daSaku_c::checkCol() {
 
     if(this->field_0xEF8[0] == 1) {
         for(int i = 0; i < 3; i++) {
-            this->field_0x30C[i].SetC(mPos[0][i]);
-            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x30C[i]);
+            this->field_0x30C[0][i].SetC(mPos[0][i]);
+            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x30C[0][i]);
         }
     }
 
 
     if(field_0xEF8[1] != 0 && this->field_0xEF8[1] == 1) {
         for(int i = 0; i < 3; i++) {
-            this->field_0x69C[i].SetC(mPos[1][i]);
-            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x69C[i]);
+            this->field_0x30C[1][i].SetC(mPos[1][i]);
+            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x30C[1][i]);
         }
     }
 

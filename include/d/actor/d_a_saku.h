@@ -55,8 +55,7 @@ public:
 
     /* 0x290 */ dPa_smokeEcallBack field_0x290[2];
     /* 0x2D0 */ dCcD_Stts mStts;
-    /* 0x30C */ dCcD_Cyl field_0x30C[3];
-    /* 0x69C */ dCcD_Cyl field_0x69C[3];
+    /* 0x30C */ dCcD_Cyl field_0x30C[2][3];
     /* 0xA2C */ cXyz mPos[2][3];
     /* 0xA74 */ dCcD_Cyl field_0xA74[3];
     /* 0xE04 */ request_of_phase_process_class field_0xE04;
@@ -71,7 +70,7 @@ public:
     /* 0xEBC */ s32 field_0xEBC[2];
     /* 0xEC4 */ cXyz field_0xEC4[2];
     /* 0xEDC */ u8 field_0xEDC[2][2];
-    /* 0xEE0 */ u32 field_0xEE0[3];
+    /* 0xEE0 */ s32 field_0xEE0[3];
     /* 0xEEC */ s32 field_0xEEC;
     /* 0xEF0 */ u8 field_0xEF0[2];
     /* 0xEF2 */ u8 mSturdinessType;
