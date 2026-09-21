@@ -409,9 +409,47 @@ cPhs_State daSaku_c::_daSaku_create() {
     /* Nonmatching */
 }
 
+BOOL daSaku_c::_daSaku_delete() {
+    if (l_sakuHIO.field_0x04 >= 0) {
+        mDoHIO_deleteChild(l_sakuHIO.field_0x04);
+        l_sakuHIO.field_0x04 = -1;
+    }
+
+    for (int i = 0; i < 2; i ++) {
+        field_0x290[i].end();
+    }
+
+    for (int i = 0; i < 2; i ++) {
+        if (field_0xEF8[i] != 0) {
+            dComIfG_Bgsp()->Release(field_0xE44[i]);
+        }
+    }
+
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            if (m_heap[i][j] != 0) {
+                mDoExt_destroySolidHeap(m_heap[i][j]);
+                m_heap[i][j] = NULL;
+                mModels[i][j] = NULL;
+            }
+        }
+    }
+
+    dComIfG_resDelete(&field_0xE0C, m_arcname[0]);
+    
+    if(mSturdinessType == 0) {
+        dComIfG_resDelete(&field_0xE04, m_arcname[1]);
+    }
+    else {
+        dComIfG_resDelete(&field_0xE04, m_arcname[2]);
+    }
+
+    return true;
+}
+
 /* 00002264-000023D8       .text daSaku_Delete__FP8daSaku_c */
-static BOOL daSaku_Delete(daSaku_c*) {
-    /* Nonmatching */
+static BOOL daSaku_Delete(daSaku_c* i_this) {
+    return i_this->_daSaku_delete();
 }
 
 /* 000023D8-000023E0       .text daSaku_IsDelete__FP8daSaku_c */

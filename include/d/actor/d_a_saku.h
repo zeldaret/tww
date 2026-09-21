@@ -2,6 +2,7 @@
 #define D_A_SAKU_H
 
 #include "SSystem/SComponent/c_bg_w.h"
+#include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
@@ -60,17 +61,17 @@ public:
     /* 0xA74 */ dCcD_Cyl field_0xA74[3];
     /* 0xE04 */ request_of_phase_process_class field_0xE04;
     /* 0xE0C */ request_of_phase_process_class field_0xE0C;
-    /* 0xE14 */ JKRSolidHeap* mHeap[2][2];
+    /* 0xE14 */ JKRSolidHeap* m_heap[2][2];
     /* 0xE24 */ J3DModel* mModels[2][2];
-    /* 0xE34 */ u8 field_0xE34[0xE44 - 0xE34];
-    /* 0xE44 */ cBgW* field_0xE44[2];
+    /* 0xE34 */ dBgW* field_0xE34[2][2];
+    /* 0xE44 */ dBgW* field_0xE44[2];
     /* 0xE4C */ Mtx mMtx[2];
     /* 0xEAC */ u32 field_0xEAC[2];
     /* 0xEB4 */ f32 field_0xEB4[2];
     /* 0xEBC */ s32 field_0xEBC[2];
     /* 0xEC4 */ cXyz field_0xEC4[2];
     /* 0xEDC */ u8 field_0xEDC[2][2];
-    /* 0xEE0 */ s32 field_0xEE0[3];
+    /* 0xEE0 */ u32 field_0xEE0[3];
     /* 0xEEC */ s32 field_0xEEC;
     /* 0xEF0 */ u8 field_0xEF0[2];
     /* 0xEF2 */ u8 mSturdinessType;
