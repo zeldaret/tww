@@ -157,7 +157,7 @@ void daSaku_c::RecreateHeap(int, int) {
 }
 
 /* 000008EC-000009B0       .text CreateHeap__8daSaku_cFii */
-bool daSaku_c::CreateHeap(int i_heapId, int i_sakuId) {
+BOOL daSaku_c::CreateHeap(int i_heapId, int i_sakuId) {
     int iVar1;
     int iVar2 = i_heapId;
     bool bVar3;
@@ -460,7 +460,95 @@ static cPhs_State daSaku_Create(fopAc_ac_c* i_this) {
 
 /* 00001BB8-00001F28       .text _daSaku_create__8daSaku_cFv */
 cPhs_State daSaku_c::_daSaku_create() {
-    /* Nonmatching */
+    /* MATCHING EXCEPT FOR STRINGBASE */
+    s32 size = 0; // not used, but instructions indicate that it has size of solid heap 
+
+    fopAcM_ct(this, daSaku_c);
+    mSturdinessType = daSaku_prm::getType(this);
+
+    int iVar5 = 2;
+    if(mSturdinessType == 0) {
+        iVar5 = 1;
+    }
+
+    cPhs_State phase =  dComIfG_resLoad(&field_0xE04, m_arcname[iVar5]);
+    if(phase != cPhs_COMPLEATE_e) {
+        return phase;
+    }
+
+    phase = dComIfG_resLoad(&field_0xE0C, m_arcname[0]);
+    if(phase != cPhs_COMPLEATE_e) {
+        return phase;
+    }
+
+    mBottomHalfDestroyedSwitch = this->base.base.mParameters >> 8 & 0xff;;
+    mTopHalfDestroyedSwitch = this->base.base.mParameters >> 0x10 & 0xff;;
+
+    field_0xEF8[0] = 1;
+
+    if (dComIfGs_isSwitch(mBottomHalfDestroyedSwitch, home.roomNo)) {
+        field_0xEF8[0] = 3;
+    }
+    field_0xEF8[1]  = 0;
+
+    if ((this->base.base.mParameters & 0xfU) != 0) {
+        this->field_0xEF8[1] = 1;
+
+        if (dComIfGs_isSwitch(mTopHalfDestroyedSwitch, home.roomNo)) {
+            field_0xEF8[1] = 3;
+        }
+    }
+
+    setMoveBGMtx();
+
+    for(int i = 0; i < 2; i ++) {
+        if (field_0xEF8[i] != 0) {
+            m_heap[i][0] = mDoExt_createSolidHeapFromGameToCurrent(0x2280, 0x20);
+
+            if(m_heap[i][0] == NULL) {
+                return cPhs_ERROR_e;
+            }
+
+            BOOL bVar3 = CreateHeap(0, i);
+
+            if (bVar3) {
+                MoveBGResist(0, i);
+            }
+
+            mDoExt_restoreCurrentHeap();
+            size += mDoExt_adjustSolidHeap(m_heap[i][0]);
+
+            if (!bVar3) {
+                return cPhs_ERROR_e;
+            }
+
+            mModels[i][1] = NULL;
+            if(field_0xEF8[i] == 1) {
+                m_heap[i][1]= mDoExt_createSolidHeapFromGameToCurrent(0x2280, 0x20);
+
+                if(m_heap[i][1] == NULL) {
+                    return cPhs_ERROR_e;
+                }
+
+                bVar3 = CreateDummyHeap(i);
+                mModels[i][1] = NULL;
+                mDoExt_restoreCurrentHeap();
+
+                size += mDoExt_adjustSolidHeap(m_heap[i][1]);
+
+                if(!bVar3) {
+                    return cPhs_ERROR_e;
+                }
+            }
+        }
+    }
+
+    CreateInit();
+    if (l_sakuHIO.field_0x04 < 0) {
+        l_sakuHIO.field_0x04 = mDoHIO_createChild("柵", &l_sakuHIO);
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 BOOL daSaku_c::_daSaku_delete() {

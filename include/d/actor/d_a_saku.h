@@ -7,6 +7,7 @@
 #include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 #include "SSystem/SComponent/c_cc_d.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
 class cCcD_Stts__vtbl;
@@ -28,7 +29,7 @@ public:
     void mode_break_fire(int);
     int mode_break_throw_obj(int);
     int RecreateHeap(int, int);
-    bool CreateHeap(int, int);
+    BOOL CreateHeap(int, int);
     int GetDzbId(int);
     int CreateDummyHeap(int);
     int loadMoveBG(int, int, int);
@@ -115,4 +116,8 @@ class sakuHIO_c : public JORReflexible {
         /* 0x13 */ GXColor dustColor;
         /* 0x17 */ u8 field_0x17;
 };  // Size: 0x18
+
+namespace daSaku_prm {
+    inline u8 getType(daSaku_c* ac) { return (fopAcM_GetParam(ac) >> 4) & 0xf; }
+};
 #endif /* D_A_SAKU_H */
