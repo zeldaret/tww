@@ -1485,7 +1485,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_demo_barrel"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_doguu"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_doguu_demo"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_gryw00"),
+    ActorRel(Matching,    "d_a_obj_gryw00"),
     ActorRel(Matching,    "d_a_obj_hfuck1"),
     ActorRel(Matching,    "d_a_obj_hole"),
     ActorRel(Matching,    "d_a_obj_ice"),
