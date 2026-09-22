@@ -44,7 +44,7 @@ public:
     int setEffFire(int);
     void setEffBreak(int);
 
-    static const dCcD_SrcCyl m_cyl_src;
+    static dCcD_SrcCyl m_cyl_src;
     static u8 m_smoke_alpha;
     static s32 m_saku_alpha_out_time;
     static const char* m_arcname[3];

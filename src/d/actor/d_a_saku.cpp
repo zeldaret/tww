@@ -9,7 +9,7 @@
 
 static sakuHIO_c l_sakuHIO;
 
-const dCcD_SrcCyl daSaku_c::m_cyl_src = {
+dCcD_SrcCyl daSaku_c::m_cyl_src = {
     // dCcD_SrcGObjInf
     {
         /* Flags             */ 0,
