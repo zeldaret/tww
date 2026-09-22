@@ -648,12 +648,58 @@ int daSaku_c::setEffFire(int _) {
     
 }
 
-/* 000016C0-000019AC       .text setEffBreak__8daSaku_cFi */
-void daSaku_c::setEffBreak(int) {
-    /* Nonmatching */
-}
+BOOL daSaku_c::setEffBreak(int param_1) {
+    cXyz localPos = current.pos;
+    localPos.y += (f32)100.0;
 
+    if (param_1 == 1) {
+        localPos.y += (f32)200.0;
+    }
 
+    if (l_sakuHIO.field_0x0F != 0) {
+        dComIfGp_particle_set(0x45d, &localPos, &current.angle, &scale, 0xff, 0, -1,
+                              &tevStr.mColorK0, &tevStr.mColorK0, NULL);
+    }
+
+    field_0xEB4[param_1] = (f32)l_sakuHIO.field_0x12 / 255.0f;
+    dust_color.r = l_sakuHIO.dustColor.r;
+    dust_color.g = l_sakuHIO.dustColor.g;
+    dust_color.b = l_sakuHIO.dustColor.b;
+
+    field_0xEC4[param_1] = localPos;
+
+    dComIfGp_particle_setToon(0x2027, &field_0xEC4[param_1], &current.angle, NULL,
+                                           l_sakuHIO.field_0x12, &field_0x290[param_1],
+                                           fopAcM_GetRoomNo(this), 0, 0, 0);
+
+    JPABaseEmitter* em = field_0x290[param_1].getEmitter();
+    if (em != NULL) {
+
+        em->setGlobalAlpha(field_0xEB4[param_1] * 255.0f);
+        field_0x290[param_1].getEmitter()->becomeImmortalEmitter();
+
+        cXyz dScale(2.0f, 2.0f, 2.0f);
+        cXyz eScale(1.0f, 0.5f, 0.7f);
+
+        field_0x290[param_1].getEmitter()->setGlobalParticleScale(3.2f, 3.2f);
+        field_0x290[param_1].getEmitter()->setGlobalDynamicsScale(dScale);
+        field_0x290[param_1].getEmitter()->setEmitterScale(eScale);
+
+        field_0x290[param_1].getEmitter()->setRate(40.0f);
+        field_0x290[param_1].getEmitter()->setMaxFrame(1);
+    }
+
+    if (mSturdinessType == 0) {
+        s8 reverb = dComIfGp_getReverb(current.roomNo);
+        JAIZelBasic::zel_basic->seStart(0x6847, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    } else if (mSturdinessType == 1) {
+        s8 reverb = dComIfGp_getReverb(current.roomNo);
+        JAIZelBasic::zel_basic->seStart(0x693f, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    }
+
+    field_0xEBC[param_1] = 1;
+
+    return TRUE;
 }
 
 /* 00001B98-00001BB8       .text daSaku_Create__FP10fopAc_ac_c */

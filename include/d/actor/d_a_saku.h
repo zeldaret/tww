@@ -42,7 +42,7 @@ public:
     void setCol();
     int MoveBGResist(int, int);
     int setEffFire(int);
-    void setEffBreak(int);
+    BOOL setEffBreak(int);
 
     static dCcD_SrcCyl m_cyl_src;
     static u8 m_smoke_alpha;
