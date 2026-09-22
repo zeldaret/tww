@@ -577,7 +577,36 @@ void daSaku_c::checkCol() {
 
 /* 0000134C-00001510       .text setCol__8daSaku_cFv */
 void daSaku_c::setCol() {
-    /* Nonmatching */
+    mPos[0][0].set(0, 20, 0);
+    mPos[0][1].set(-100, 20, 0);
+    mPos[0][2].set(100, 20, 0);
+
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+    for(int i = 0; i < 3; i++){ 
+        mDoMtx_stack_c::multVec(&mPos[0][i], &mPos[0][i]);
+
+        field_0x30C[0][i].Set(m_cyl_src);
+        field_0x30C[0][i].SetStts(&mStts);
+    }
+
+    if(field_0xEF8[1] != 0) {
+        mPos[1][0].set(0, 220, 0);
+        mPos[1][1].set(-100, 220, 0);
+        mPos[1][2].set(100, 220, 0);
+
+        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+        for(int i = 0; i < 3; i++) {
+            mDoMtx_stack_c::multVec(&mPos[1][i], &mPos[1][i]);
+
+            field_0x30C[1][i].Set(m_cyl_src);
+            field_0x30C[1][i].SetStts(&mStts);
+        }
+    }
+
 }
 
 /* 00001510-00001598       .text MoveBGResist__8daSaku_cFii */
