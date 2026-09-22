@@ -1,11 +1,56 @@
 #ifndef D_A_SSS_H
 #define D_A_SSS_H
 
+#include "JSystem/JParticle/JPAEmitter.h"
+#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_ext.h"
+
+struct sss_s {
+    /* 0x00 */ cXyz cxyz;
+    /* 0x0C */ u8 field_0x0C[0x18 - 0x0C];
+    /* 0x18 */ f32 field_0x18;
+}; // Size: 0x1C
 
 class sss_class : public fopAc_ac_c {
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ u8 field_0x290[0x2AC - 0x290];
+    /* 0x2AC */ request_of_phase_process_class field_0x2AC;
+    /* 0x2B4 */ mDoExt_McaMorf* field_0x2B4;
+    /* 0x2B8 */ u8 field_0x2B8;
+    /* 0x2B9 */ u8 field_0x2B9;
+    /* 0x2BA */ u8 field_0x2BA;
+    /* 0x2BB */ u8 field_0x2BB[0x2BC - 0x2BB];
+    /* 0x2BC */ s16 field_0x2BC;
+    /* 0x2BE */ u8 field_0x2BE[0x2C0 - 0x2BE];
+    /* 0x2C0 */ s16 field_0x2C0;
+    /* 0x2C2 */ s16 field_0x2C2[3];
+    /* 0x2C8 */ cXyz field_0x2C8;
+    /* 0x2D4 */ f32 field_0x2D4;
+    /* 0x2D8 */ f32 field_0x2D8;
+    /* 0x2DC */ f32 field_0x2DC;
+    /* 0x2E0 */ s16 field_0x2E0;
+    /* 0x2E2 */ s16 field_0x2E2;
+    /* 0x2E4 */ u8 field_0x2E4[0x2E8 - 0x2E4];
+    /* 0x2E8 */ f32 field_0x2E8;
+    /* 0x2EC */ u8 field_0x2EC[0x2F0 - 0x2EC];
+    /* 0x2F0 */ f32 field_0x2F0;
+    /* 0x2F4 */ f32 field_0x2F4;
+    /* 0x2F8 */ f32 field_0x2F8;
+    /* 0x2FC */ f32 field_0x2FC;
+    /* 0x300 */ mDoExt_3DlineMat1_c field_0x300;
+    /* 0x33C */ sss_s field_0x33C[10];
+    /* 0x454 */ mDoExt_3DlineMat1_c field_0x454;
+    /* 0x490 */ sss_s field_0x490[5];
+    /* 0x51C */ dCcD_Stts field_0x51C;
+    /* 0x558 */ dCcD_Sph field_0x558[3];
+    /* 0x8DC */ dCcD_Sph field_0x8DC;
+    /* 0xA08 */ f32 field_0xA08;
+    /* 0xA0C */ s16 field_0xA0C;
+    /* 0xA0E */ u8 field_0xA0E[0xA10 - 0xA0E];
+    /* 0xA10 */ JPABaseEmitter* field_0xA10;
+    /* 0xA14 */ JPABaseEmitter* field_0xA14;
+    /* 0xA18 */ u8 field_0xA18[0xA1C - 0xA18];
+};  // Size: 0xA1C
 
 #endif /* D_A_SSS_H */
