@@ -28,16 +28,16 @@ void daSaku_c::CreateInit() {
         field_0xEF0[i] = 2;
     }
 
-    this->field_0xEF4 = 0;
-    this->field_0xEEC = 0;
-    this->cullMtx = this->mModels[0][0]->getBaseTRMtx();
-    this->mStts.Init(0xff, 0xff, this);
+    field_0xEF4 = 0;
+    field_0xEEC = 0;
+    cullMtx = mModels[0][0]->getBaseTRMtx();
+    mStts.Init(0xff, 0xff, this);
     setCol();
     setMtx();
 
     for(int i = 0; i < 2; i++) {
-        this->field_0x290[i].setColor(dust_color);
-        this->field_0x290[i].setRateOff(1);
+        field_0x290[i].setColor(dust_color);
+        field_0x290[i].setRateOff(1);
     }
     
     return;
@@ -67,7 +67,7 @@ int daSaku_c::saku_draw_sub(int param_1) {
         matAlphaAnim(mModels[param_1][0]->getModelData(), 0xff, true);
     }
 
-    if (m_heap[param_1][1] != NULL && mModels[param_1][1] != NULL && this->field_0xEDC[param_1][1] != NULL) { 
+    if (m_heap[param_1][1] != NULL && mModels[param_1][1] != NULL && field_0xEDC[param_1][1] != NULL) { 
         g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mModels[param_1][1], &tevStr);
 
@@ -167,10 +167,10 @@ BOOL daSaku_c::mode_break_fire(int i) {
 /* 000006A8-0000083C       .text mode_break_throw_obj__8daSaku_cFi */
 int daSaku_c::mode_break_throw_obj(int i) {
     if(m_heap[i][0] != NULL && m_heap[i][1] != NULL) {
-        if(this->field_0xEF0[i] != 0) {
-            this->field_0xEF0[i] -= 1;
+        if(field_0xEF0[i] != 0) {
+            field_0xEF0[i] -= 1;
 
-            if(this->field_0xEF0[i] == 0) {
+            if(field_0xEF0[i] == 0) {
                 mDoExt_destroySolidHeap(m_heap[i][0]);
                 m_heap[i][0] = NULL;
                 mModels[i][0] = NULL;
@@ -178,17 +178,17 @@ int daSaku_c::mode_break_throw_obj(int i) {
         }
     }
 
-    if(this->field_0xEBC[i] >= m_alpha_start_time) {
-        if(this->field_0x290[i].getEmitter() != NULL) {
-            cLib_chaseF(&this->field_0xEB4[i], 0, (f32)l_sakuHIO.field_0x12 / (255.0f * (f32)m_fade_time));
-            this->field_0xEB4[i] = fabs(this->field_0xEB4[i]);
+    if(field_0xEBC[i] >= m_alpha_start_time) {
+        if(field_0x290[i].getEmitter() != NULL) {
+            cLib_chaseF(&field_0xEB4[i], 0, (f32)l_sakuHIO.field_0x12 / (255.0f * (f32)m_fade_time));
+            field_0xEB4[i] = fabs(field_0xEB4[i]);
 
-            u8 uVar1 = 255.0f * this->field_0xEB4[i];
-            this->field_0x290[i].getEmitter()->setGlobalAlpha(uVar1);
+            u8 uVar1 = 255.0f * field_0xEB4[i];
+            field_0x290[i].getEmitter()->setGlobalAlpha(uVar1);
 
             if (uVar1 == 0) {
-                this->field_0x290[i].end();
-                this->field_0xEAC[i] = 0.0;
+                field_0x290[i].end();
+                field_0xEAC[i] = 0.0;
             }
         }
     }
@@ -217,7 +217,7 @@ BOOL daSaku_c::CreateHeap(int i_heapId, int i_sakuId) {
     s32 iVar1;
     u32 iVar2 = i_heapId;
 
-    iVar1 = this->field_0xEF8[i_sakuId];
+    iVar1 = field_0xEF8[i_sakuId];
 
     switch(iVar1) {
         case 1:
@@ -345,40 +345,40 @@ BOOL daSaku_c::loadModel(int param_1, int param_2, int param_3) {
 
 /* 00000D7C-00000E8C       .text burn__8daSaku_cFv */
 int daSaku_c::burn() {
-    if (this->field_0xEF4 == 0) {
-        if (this->field_0xEF8[0] == 1) {
-            this->field_0xEF8[0] = 2;
+    if (field_0xEF4 == 0) {
+        if (field_0xEF8[0] == 1) {
+            field_0xEF8[0] = 2;
             RecreateHeap(1, 0);
-            this->field_0xEE0[0] = 50;
+            field_0xEE0[0] = 50;
         }
 
-        if (this->field_0xEF8[1] == 1) {
-            this->field_0xEF8[1] = 2;
+        if (field_0xEF8[1] == 1) {
+            field_0xEF8[1] = 2;
             RecreateHeap(1, 1);
-            this->field_0xEE0[1] = 50;
+            field_0xEE0[1] = 50;
         }
 
         J3DModel* pVar1;
         pVar1 = mModels[0][1];
         if(pVar1) {
-            this->cullMtx = pVar1->getBaseTRMtx();
+            cullMtx = pVar1->getBaseTRMtx();
         }
         else {
             pVar1 = mModels[1][1];
             if(pVar1) {
-                this->cullMtx = pVar1->getBaseTRMtx();
+                cullMtx = pVar1->getBaseTRMtx();
             }
         }
 
         setEffFire(0);
-        this->field_0xEEC = 0x5a;
+        field_0xEEC = 0x5a;
         dComIfGs_onSwitch(mBottomHalfDestroyedSwitch, home.roomNo);
 
-        if(this->field_0xEF8[1] != 0) {
+        if(field_0xEF8[1] != 0) {
             dComIfGs_onSwitch(mTopHalfDestroyedSwitch, home.roomNo);
         }
 
-        this->field_0xEF4 = 1;
+        field_0xEF4 = 1;
     }
 
     return 1;
@@ -388,8 +388,8 @@ int daSaku_c::burn() {
 /* 00000E8C-00000F60       .text broken__8daSaku_cFi */
 int daSaku_c::broken(int param_1) {
     setEffBreak(param_1);
-    this->field_0xEF8[param_1] = 3;
-    this->field_0xEE0[param_1] = 0;
+    field_0xEF8[param_1] = 3;
+    field_0xEE0[param_1] = 0;
 
     if (param_1 == 0) {
         dComIfGs_onSwitch(mBottomHalfDestroyedSwitch, home.roomNo);
@@ -401,11 +401,11 @@ int daSaku_c::broken(int param_1) {
     RecreateHeap(1, param_1);
 
     if(param_1 == 0) {
-        this->cullMtx = mModels[param_1][1]->getBaseTRMtx();
+        cullMtx = mModels[param_1][1]->getBaseTRMtx();
     }
 
-    this->field_0xEDC[param_1][0] = 0;
-    this->field_0xEDC[param_1][1] = 0xff;
+    field_0xEDC[param_1][0] = 0;
+    field_0xEDC[param_1][1] = 0xff;
 
     return 1;
 }
@@ -413,18 +413,18 @@ int daSaku_c::broken(int param_1) {
 /* 00000F60-00000FF4       .text changeCollision__8daSaku_cFi */
 bool daSaku_c::changeCollision(int param_1) {
     bool flag; 
-    if (this->field_0xEF8[param_1] == 0) {
+    if (field_0xEF8[param_1] == 0) {
         flag = FALSE;
     }
 
     else {
-        if(this->field_0xEE0[param_1] >= 0) {
-            if(this->field_0xEE0[param_1] == 0){
-                dComIfG_Bgsp()->Release(this->field_0xE44[param_1]);
+        if(field_0xEE0[param_1] >= 0) {
+            if(field_0xEE0[param_1] == 0){
+                dComIfG_Bgsp()->Release(field_0xE44[param_1]);
                 MoveBGResist(1, param_1);
             }
             
-            this->field_0xEE0[param_1] -= 1;
+            field_0xEE0[param_1] -= 1;
         }
 
         flag = TRUE;
@@ -450,7 +450,7 @@ void daSaku_c::setMtx() {
     }
 
     int j;
-    if (this->field_0xEF8[1] != 0) {
+    if (field_0xEF8[1] != 0) {
         for(j = 0; j < 2; j++) {
             m = mModels[1][j];
             if (m != NULL) {
@@ -469,15 +469,15 @@ void daSaku_c::setMtx() {
 void daSaku_c::setMoveBGMtx() {
     /* Nonmatching */
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-    mDoMtx_stack_c::YrotM(this->shape_angle.y);
-    mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
+    mDoMtx_stack_c::YrotM(shape_angle.y);
+    mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
 
     PSMTXCopy(mDoMtx_stack_c::now, mMtx[0]);
 
-    if(this->field_0xEF8[1] != 0) {
+    if(field_0xEF8[1] != 0) {
         PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y + 200, current.pos.z);
-        mDoMtx_stack_c::YrotM(this->shape_angle.y);
-        mDoMtx_stack_c::scaleM(this->scale.x, this->scale.y, this->scale.z);
+        mDoMtx_stack_c::YrotM(shape_angle.y);
+        mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
         PSMTXCopy(mDoMtx_stack_c::now, mMtx[1]);
     };
 
@@ -486,25 +486,25 @@ void daSaku_c::setMoveBGMtx() {
 
 /* 0000120C-0000134C       .text checkCol__8daSaku_cFv */
 void daSaku_c::checkCol() {
-    if(this->field_0xEEC != 0) {
+    if(field_0xEEC != 0) {
         for(int i = 0; i < 3; i++) {
-            this->field_0xA74[i].SetC(mPos[0][i]);
-            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0xA74[i]);
+            field_0xA74[i].SetC(mPos[0][i]);
+            g_dComIfG_gameInfo.play.mCcS.Set(&field_0xA74[i]);
         }
     }
 
-    if(this->field_0xEF8[0] == 1) {
+    if(field_0xEF8[0] == 1) {
         for(int i = 0; i < 3; i++) {
-            this->field_0x30C[0][i].SetC(mPos[0][i]);
-            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x30C[0][i]);
+            field_0x30C[0][i].SetC(mPos[0][i]);
+            g_dComIfG_gameInfo.play.mCcS.Set(&field_0x30C[0][i]);
         }
     }
 
 
-    if(field_0xEF8[1] != 0 && this->field_0xEF8[1] == 1) {
+    if(field_0xEF8[1] != 0 && field_0xEF8[1] == 1) {
         for(int i = 0; i < 3; i++) {
-            this->field_0x30C[1][i].SetC(mPos[1][i]);
-            g_dComIfG_gameInfo.play.mCcS.Set(&this->field_0x30C[1][i]);
+            field_0x30C[1][i].SetC(mPos[1][i]);
+            g_dComIfG_gameInfo.play.mCcS.Set(&field_0x30C[1][i]);
         }
     }
 
@@ -573,12 +573,12 @@ int daSaku_c::setEffFire(int _) {
     dComIfGp_particle_set(0x45c, &local_18, &current.angle, 0x0, 0xff, 0x0, -1, 0x0, 0x0, 0x0);
     dComIfGp_particle_set(0x245e, &local_18, &current.angle, 0x0, m_smoke_alpha, 0x0, -1, 0x0, 0x0, 0x0);
 
-    this->field_0xEBC[1] = 1;
-    this->field_0xEBC[0] = 1;
+    field_0xEBC[1] = 1;
+    field_0xEBC[0] = 1;
 
-    sVar1 = dComIfGp_getReverb(this->current.roomNo);
+    sVar1 = dComIfGp_getReverb(current.roomNo);
 
-    JAIZelBasic::zel_basic->seStart(0x6924, &this->eyePos, 0, sVar1, 1.0, 1.0, -1.0, -1.0, 0);
+    JAIZelBasic::zel_basic->seStart(0x6924, &eyePos, 0, sVar1, 1.0, 1.0, -1.0, -1.0, 0);
 
     return 1;
     
@@ -702,8 +702,8 @@ cPhs_State daSaku_c::_daSaku_create() {
         return phase;
     }
 
-    mBottomHalfDestroyedSwitch = this->base.base.mParameters >> 8 & 0xff;;
-    mTopHalfDestroyedSwitch = this->base.base.mParameters >> 0x10 & 0xff;;
+    mBottomHalfDestroyedSwitch = base.base.mParameters >> 8 & 0xff;;
+    mTopHalfDestroyedSwitch = base.base.mParameters >> 0x10 & 0xff;;
 
     field_0xEF8[0] = 1;
 
@@ -712,8 +712,8 @@ cPhs_State daSaku_c::_daSaku_create() {
     }
     field_0xEF8[1]  = 0;
 
-    if ((this->base.base.mParameters & 0xfU) != 0) {
-        this->field_0xEF8[1] = 1;
+    if ((base.base.mParameters & 0xfU) != 0) {
+        field_0xEF8[1] = 1;
 
         if (dComIfGs_isSwitch(mTopHalfDestroyedSwitch, home.roomNo)) {
             field_0xEF8[1] = 3;
