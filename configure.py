@@ -16,7 +16,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 from tools.project import (
     Object,
@@ -317,7 +317,7 @@ config.linker_version = "GC/1.3.2"
 
 
 # Helper function for Dolphin libraries
-def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+def DolphinLib(lib_name: str, objects: list[Object]) -> dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/1.2.5n",
@@ -329,7 +329,7 @@ def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
 
 
 # Helper function for REL script objects
-def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+def Rel(lib_name: str, objects: list[Object]) -> dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/1.3.2",
@@ -1595,7 +1595,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_obj_swlight"),
     ActorRel(NonMatching, "d_a_oq"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_pedestal"),
-    ActorRel(NonMatching, "d_a_saku"),
+    ActorRel(MatchingFor("GLZE01"), "d_a_saku"),
     ActorRel(Matching,    "d_a_seatag"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_shand"),
     ActorRel(NonMatching, "d_a_ship"),
@@ -1925,7 +1925,7 @@ if config_path.exists():
 
 # Optional callback to adjust link order. This can be used to add, remove, or reorder objects.
 # This is called once per module, with the module ID and the current link order.
-def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
+def link_order_callback(module_id: int, objects: list[str]) -> list[str]:
     # Don't modify the link order for matching builds
     if not config.non_matching:
         return objects
