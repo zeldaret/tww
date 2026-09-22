@@ -383,7 +383,7 @@ BOOL daSaku_c::loadMoveBG(int param_1, int param_2, int param_3) {
 BOOL daSaku_c::loadModel(int param_1, int param_2, int param_3) {
     J3DModelData *modelData;
 
-    int sp_0x20[6] = {3, 6, 5, 4, 6, 8};
+    int sp_0x20[6] = {3, 7, 5, 4, 6, 8};
     int sp_0x08[6] = {3, 5, 4, 6, 8, 7};
 
     if(param_3 == 1) {
