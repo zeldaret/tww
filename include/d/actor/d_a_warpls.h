@@ -13,7 +13,7 @@ public:
     int CreateHeap();
     void CreateInit();
     cPhs_State _create();
-    void set_mtx(); // weak
+    inline void set_mtx();
     bool _execute();
     void checkOrder();
     void eventOrder();
@@ -61,8 +61,9 @@ inline u8 getSceneNo(daWarpls_c* i_this) {
 inline u8 getSwitchNo(daWarpls_c* i_this) {
     return fopAcM_GetParam(i_this) & 0xFF;
 }
-static inline u8 getType(daWarpls_c* i_this) {
+inline u8 getType(daWarpls_c* i_this) {
     return (fopAcM_GetParam(i_this) >> 0x1C) & 0xFF;
 }
-}
+}; // namespace daWarpls_prm
+
 #endif /* D_A_WARPLS_H */

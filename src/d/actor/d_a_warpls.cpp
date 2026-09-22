@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_warpls.h"
+#include "d/actor/d_a_player_main.h"
 #include "d/d_lib.h"
 #include "f_pc/f_pc_name.h"
 #include "res/Object/Ywarp00.h"
@@ -23,7 +24,6 @@ enum daWarpls_EvtState_e {EvtState_None, EvtState_Activation, EvtState_Warping};
 
 /* 00000078-000000E0       .text _delete__10daWarpls_cFv */
 bool daWarpls_c::_delete() {
-
     if (mpEmitter != NULL) {
         mpEmitter->becomeInvalidEmitter();
         mpEmitter = NULL;
@@ -39,7 +39,6 @@ static BOOL CheckCreateHeap(fopAc_ac_c* actor) {
 
 /* 00000100-000003D8       .text CreateHeap__10daWarpls_cFv */
 int daWarpls_c::CreateHeap() {
-
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mWarpType],m_bdlidx[mWarpType]);
     JUT_ASSERT(DEMO_SELECT(230, 233), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
@@ -74,7 +73,6 @@ int daWarpls_c::CreateHeap() {
 
 /* 00000420-00000764       .text CreateInit__10daWarpls_cFv */
 void daWarpls_c::CreateInit() {
-
     const char* eventNames[3] = {
         "TOWER_WARP_U",
         "TOWER_WARP_D",
@@ -113,15 +111,14 @@ void daWarpls_c::CreateInit() {
 
     BOOL is_switch_on = fopAcM_isSwitch(this, mSwitchNo);
     if (is_switch_on || mSwitchNo == 0xFF) {
-
         if (mpEmitter != NULL) {
-            mpEmitter->clearStatus(JPAEmtrStts_StopEmit);
+            mpEmitter->playCreateParticle();
         }
         if (mpBrkAnm != NULL) {
-            mpBrkAnm->getFrameCtrl()->setFrame(mpBrkAnm->getEndFrame());
+            mpBrkAnm->setFrame(mpBrkAnm->getEndFrame());
         }
         if (mpBckAnm != NULL) {
-            mpBckAnm->getFrameCtrl()->setFrame(mpBckAnm->getEndFrame());
+            mpBckAnm->setFrame(mpBckAnm->getEndFrame());
         }
         mPrevSwitchState = 1;
         mWarpActive = TRUE;
@@ -139,7 +136,7 @@ void daWarpls_c::CreateInit() {
     mEvtState = EvtState_None;
     mActivationEvtIdx = dComIfGp_evmng_getEventIdx(NULL, daWarpls_prm::getEvId(this));
     mWarpingEvtIdx = dComIfGp_evmng_getEventIdx(eventNames[mEvtType], 0xFF);
-    cullMtx = mpModel->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -250.0f, 0.0f, -250.0f, 250.0f, 2600.0f, 250.0f);
     fopAcM_setCullSizeFar(this,1.0f);
     set_mtx();
@@ -151,7 +148,6 @@ void daWarpls_c::CreateInit() {
 
 /* 00000764-0000082C       .text _create__10daWarpls_cFv */
 cPhs_State daWarpls_c::_create() {
-
     cPhs_State rt = cPhs_ERROR_e;
     fopAcM_ct(this, daWarpls_c);
     mWarpType = daWarpls_prm::getType(this);
@@ -167,8 +163,7 @@ cPhs_State daWarpls_c::_create() {
 }
 
 /* 0000082C-0000089C       .text set_mtx__10daWarpls_cFv */
-void daWarpls_c::set_mtx() {
-
+inline void daWarpls_c::set_mtx() {
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -176,7 +171,6 @@ void daWarpls_c::set_mtx() {
 
 /* 0000089C-00000984       .text _execute__10daWarpls_cFv */
 bool daWarpls_c::_execute() {
-
     u8 is_switch_on = fopAcM_isSwitch(this, mSwitchNo);
 
     if (mStartupDelayTimer > 0) {
@@ -198,9 +192,7 @@ bool daWarpls_c::_execute() {
 
 /* 00000984-00000AC4       .text checkOrder__10daWarpls_cFv */
 void daWarpls_c::checkOrder() {
-
     if (eventInfo.checkCommandDemoAccrpt()) {
-
         if (dComIfGp_evmng_startCheck(mActivationEvtIdx) && mEvtState == EvtState_Activation) {
             mEvtState = EvtState_None;
             warp_eff_start();
@@ -223,7 +215,6 @@ void daWarpls_c::checkOrder() {
 
 /* 00000AC4-00000BFC       .text eventOrder__10daWarpls_cFv */
 void daWarpls_c::eventOrder() {
-
     u8 is_switch_on = fopAcM_isSwitch(this, mSwitchNo);
 
     if (mEvtState == EvtState_Activation) {
@@ -253,7 +244,6 @@ void daWarpls_c::eventOrder() {
 
 /* 00000BFC-00000C7C       .text setStatus__10daWarpls_cFv */
 bool daWarpls_c::setStatus() {
-
     if (mWarpActive)
         fopAcM_seStart(this,JA_SE_OBJ_WARP_EFF_SUS,0);
     return TRUE;
@@ -261,7 +251,6 @@ bool daWarpls_c::setStatus() {
 
 /* 00000C7C-00000DC4       .text demo__10daWarpls_cFv */
 bool daWarpls_c::demo() {
-
     u8 is_switch_on = fopAcM_isSwitch(this, mSwitchNo);
 
     if (mPlayerStartedInWarp) {
@@ -298,9 +287,8 @@ bool daWarpls_c::demo() {
 
 /* 00000DC4-00000EE8       .text check_warp_link__10daWarpls_cFv */
 int daWarpls_c::check_warp_link() {
-
-    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
-    if (!(player == dComIfGp_getPlayer(0) && mWarpActive && !mPlayerStartedInWarp)) {
+    fopAc_ac_c* player = daPy_getPlayerLinkActorClass();
+    if (player != daPy_getPlayerActorClass() || !mWarpActive || mPlayerStartedInWarp) {
         return FALSE;
     }
 
@@ -314,9 +302,8 @@ int daWarpls_c::check_warp_link() {
 
 /* 00000EE8-00000FF4       .text check_warp_distance__10daWarpls_cFv */
 int daWarpls_c::check_warp_distance() {
-
-    fopAc_ac_c* player = dComIfGp_getLinkPlayer();
-    if (player != dComIfGp_getPlayer(0)) {
+    fopAc_ac_c* player = daPy_getPlayerLinkActorClass();
+    if (player != daPy_getPlayerActorClass()) {
         return FALSE;
     }
 
@@ -330,7 +317,6 @@ int daWarpls_c::check_warp_distance() {
 
 /* 00000FF4-000010C8       .text warp_eff_start__10daWarpls_cFv */
 void daWarpls_c::warp_eff_start() {
-
     if (mWarpActive) 
         return;
 
@@ -341,14 +327,13 @@ void daWarpls_c::warp_eff_start() {
         mpBckAnm->setPlaySpeed(1.0f);
 
     if (mpEmitter != NULL)
-        mpEmitter->clearStatus(JPAEmtrStts_StopEmit);
+        mpEmitter->playCreateParticle();
 
     fopAcM_seStart(this, JA_SE_OBJ_WARP_EFF_APPEAR, 0);
     mWarpActive = TRUE;
 }
 
 bool daWarpls_c::_draw() {
-
     if (!mWarpActive) 
         return TRUE; 
     
