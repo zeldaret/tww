@@ -230,15 +230,13 @@ BOOL daSaku_c::mode_break_fire(int i) {
 
 /* 000006A8-0000083C       .text mode_break_throw_obj__8daSaku_cFi */
 int daSaku_c::mode_break_throw_obj(int i) {
-    /* Nonmatching */
-
-    if(mHeap[i][0] != NULL && mHeap[i][1] != NULL) {
+    if(m_heap[i][0] != NULL && m_heap[i][1] != NULL) {
         if(this->field_0xEF0[i] != 0) {
             this->field_0xEF0[i] -= 1;
 
             if(this->field_0xEF0[i] == 0) {
-                mDoExt_destroySolidHeap(mHeap[i][0]);
-                mHeap[i][0] = NULL;
+                mDoExt_destroySolidHeap(m_heap[i][0]);
+                m_heap[i][0] = NULL;
                 mModels[i][0] = NULL;
             }
         }
