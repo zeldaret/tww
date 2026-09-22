@@ -9,8 +9,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
-class cCcD_Stts__vtbl;
-
 BOOL matAlphaAnim(J3DModelData*, u8, bool);
 
 class daSaku_c : public fopAc_ac_c {
