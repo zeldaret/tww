@@ -226,7 +226,7 @@ bool daNpc_Ba1_c::createInit() {
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 171;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 171;
-    gravity = -4.5;
+    gravity = -4.5f;
     m79C = current.pos;
     mEventCut.setActorInfo2("Ba1", this);
     mAnmNum = 10;
@@ -1114,8 +1114,8 @@ bool daNpc_Ba1_c::eMove_MOV_POS_() {
     if(ret != 0) {
         current.angle.y = m78A.y;
         m7F5 = false;
-        speedF = 0.0;
-        mEyeOffset = 0.0;
+        speedF = 0.0f;
+        mEyeOffset = 0.0f;
     } else {
         cLib_addCalcAngleS(
             &current.angle.y,
@@ -1144,12 +1144,12 @@ bool daNpc_Ba1_c::eMove_EYE_OFF_ZRO_() {
     ret = (int) mEyeOffsetZero == 0;
     
     if (ret) {
-        mEyeOffset = 0.0;
+        mEyeOffset = 0.0f;
     } else {
-        cLib_chaseF(&mEyeOffset,0.0,mEyeOffsetZero);
+        cLib_chaseF(&mEyeOffset,0.0f,mEyeOffsetZero);
         ret = (int) mEyeOffset == 0;
         if (ret) {
-            mEyeOffset = 0.0;
+            mEyeOffset = 0.0f;
         }
     }
     return ret;
@@ -1222,7 +1222,7 @@ bool daNpc_Ba1_c::cut_move_START_TALE1() {
                 202, 
                 0,
                 8,
-                0.0,
+                0.0f,
                 0,
                 1,
                 0
@@ -1233,7 +1233,7 @@ bool daNpc_Ba1_c::cut_move_START_TALE1() {
                 200, 
                 0,
                 8,
-                0.0,
+                0.0f,
                 0,
                 1,
                 0
@@ -1450,7 +1450,7 @@ BOOL daNpc_Ba1_c::wait_1() {
         if (mbAttention != 0) {
             mEvTimer2 = 60;
         }
-        if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0)) {
+        if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0f)) {
             mLookBackState = 1;
         }
         else {
@@ -1546,7 +1546,7 @@ BOOL daNpc_Ba1_c::wait_2() {
     }
     if (m809) {
         if (m7FF) {
-            dComIfGp_setNextStage("LinkRM",201,0,9,0.0,0,1,0);
+            dComIfGp_setNextStage("LinkRM",201,0,9,0.0f,0,1,0);
             return TRUE;
         }
 
@@ -1556,9 +1556,9 @@ BOOL daNpc_Ba1_c::wait_2() {
         }
         return TRUE;
     } else if (!dComIfGs_checkCollect(1) && dComIfGs_isEventBit(dSv_event_flag_c::UNK_3202)) {
-        current.pos.x = -290.0;
-        current.pos.y = 0.0;
-        current.pos.z = 110.0;
+        current.pos.x = -290.0f;
+        current.pos.y = 0.0f;
+        current.pos.z = 110.0f;
         current.angle.y = -0x8000;
         mInitialPos.set(current.pos);
 
@@ -1576,7 +1576,7 @@ BOOL daNpc_Ba1_c::wait_2() {
     if (mbAttention) {
         mEvTimer2 = 60;
     }
-    if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0)) {
+    if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0f)) {
         mLookBackState = 1;
     } else {
         mLookBackState = 3;
@@ -1613,7 +1613,7 @@ BOOL daNpc_Ba1_c::ZZZwai() {
         if (mbAttention) {
             mEvTimer2 = 60;
         }
-        if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0)) {
+        if (cLib_calcTimer(&mEvTimer2) && chk_drct(61.0f)) {
             mLookBackState = 1;
         } else {
             mLookBackState = 3;
@@ -1831,7 +1831,7 @@ void daNpc_Ba1_c::shadowDraw() {
         mObjAcch.m_gnd,
         &tevStr,
         0,
-        1.0,
+        1.0f,
         dDlst_shadowControl_c::getSimpleTex()
     );
 
@@ -1924,10 +1924,10 @@ BOOL daNpc_Ba1_c::_execute() {
     setMtx(false);
 
     if(!mbInDemo && !m7FE){
-        f32 radius = 50;
-        f32 height = 110.0;
+        f32 radius = 50.0f;
+        f32 height = 110.0f;
         if(m7FD) {
-            radius = 30;
+            radius = 30.0f;
         }
         setCollision(
             radius,
@@ -1984,7 +1984,7 @@ cPhs_State daNpc_Ba1_c::_create() {
         return cPhs_ERROR_e;
     }
     fopAcM_SetMtx(this,mpMorf->getModel()->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this,-50.0,-20.0,-50.0,50.0,120.0,50.0);
+    fopAcM_setCullSizeBox(this,-50.0f,-20.0f,-50.0f,50.0f,120.0f,50.0f);
     if(!createInit()){
         return cPhs_ERROR_e;
     }

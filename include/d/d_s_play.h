@@ -13,7 +13,11 @@ public:
     bool resetGame();
     void offReset();
 
-    static bool isPause() { return pauseTimer != 0; }
+#ifdef DEBUG
+    static s8 isPause() { return pauseTimer | nextPauseTimer; }
+#else
+    static s8 isPause() { return pauseTimer; }
+#endif
     static void setPauseTimer(s8 time) { nextPauseTimer = time; }
 
     static void onDebugPause() {}

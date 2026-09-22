@@ -202,7 +202,7 @@ void body_draw(bpw_class* i_this) {
     if (i_this->m3E0 == 0) {
         dComIfGd_setListMaskOff();
     }
-    // !@bug Jalhalla register's Ganondorf figurine photo here, then the correct photo later.
+    // !@bug Jalhalla registers Ganondorf figurine photo here, then the correct photo later.
     // TODO: Is it possible to actually get a photo of Jalhalla that counts as Ganondorf?
     dSnap_RegistFig(DSNAP_TYPE_GND, actor, 1.0f, 1.0f, 1.0f);
     if (i_this->m3E0 != 0) {
