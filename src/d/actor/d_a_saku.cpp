@@ -368,8 +368,31 @@ void daSaku_c::loadMoveBG(int, int, int) {
 }
 
 /* 00000BE8-00000D7C       .text loadModel__8daSaku_cFiii */
-int daSaku_c::loadModel(int, int, int) {
-    /* Nonmatching */
+BOOL daSaku_c::loadModel(int param_1, int param_2, int param_3) {
+    J3DModelData *modelData;
+
+    int sp_0x20[6] = {3, 6, 5, 4, 6, 8};
+    int sp_0x08[6] = {3, 5, 4, 6, 8, 7};
+
+    if(param_3 == 1) {
+        param_1 += 3;
+    }
+
+    if(mSturdinessType == 0) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[1], sp_0x20[param_1]);
+    }
+
+    else if (mSturdinessType == 1) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[2], sp_0x08[param_1]);
+    }
+
+    JUT_ASSERT(0x43d, modelData != 0);
+    mModels[param_3][param_2] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
+
+    if(mModels[param_3][param_2] == NULL) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00000D7C-00000E8C       .text burn__8daSaku_cFv */

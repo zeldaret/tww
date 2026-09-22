@@ -32,7 +32,7 @@ public:
     int GetDzbId(int);
     BOOL CreateDummyHeap(int);
     BOOL loadMoveBG(int, int, int);
-    int loadModel(int, int, int);
+    BOOL loadModel(int, int, int);
     int burn();
     int broken(int);
     bool changeCollision(int);
