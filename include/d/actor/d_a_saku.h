@@ -11,6 +11,8 @@
 
 class cCcD_Stts__vtbl;
 
+BOOL matAlphaAnim(J3DModelData*, u8, bool);
+
 class daSaku_c : public fopAc_ac_c {
 public:
     void chkFlag(unsigned char) {}
@@ -45,13 +47,18 @@ public:
     BOOL setEffBreak(int);
 
     static dCcD_SrcCyl m_cyl_src;
-    static u8 m_smoke_alpha;
-    static s32 m_saku_alpha_out_time;
-    static const char* m_arcname[3];
-    static const s32 m_alpha_start_time;
-    static s32 m_fade_time;
     static GXColor dust_color;
+    static s32 m_fade_time;
+    static s32 m_saku_alpha_out_time;
+    static const s32 m_alpha_start_time;
+    static u8 m_smoke_alpha;
+
+    static const char* m_arcname[3];
+    static const dCcD_SrcCyl m_at_cyl_src;
+    static const f32 m_saku_height; 
+    static const u16 m_alpha_spd;
     static const s32 m_max_particle_timer;
+    static const u8 m_start_alpha;
 
     /* 0x290 */ dPa_smokeEcallBack field_0x290[2];
     /* 0x2D0 */ dCcD_Stts mStts;

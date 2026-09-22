@@ -9,75 +9,11 @@
 
 static sakuHIO_c l_sakuHIO;
 
-dCcD_SrcCyl daSaku_c::m_cyl_src = {
-    // dCcD_SrcGObjInf
-    {
-        /* Flags             */ 0,
-        /* SrcObjAt  Type    */ 0,
-        /* SrcObjAt  Atp     */ 0,
-        /* SrcObjAt  SPrm    */ 0,
-        /* SrcObjTg  Type    */ AT_TYPE_SWORD | AT_TYPE_UNK8 | AT_TYPE_BOMB | AT_TYPE_FIRE | AT_TYPE_MACHETE | AT_TYPE_UNK800 | AT_TYPE_SKULL_HAMMER | AT_TYPE_UNK20000 | AT_TYPE_FIRE_ARROW,
-        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
-        /* SrcObjCo  SPrm    */ 0,
-        /* SrcGObjAt Se      */ 0,
-        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
-        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
-        /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ 0,
-        /* SrcGObjTg HitMark */ 0,
-        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
-        /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
-        /* SrcGObjCo SPrm    */ 0,
-    },
-    // cM3dGCylS
-    {{
-        /* Center */ {0.0f, 0.0f, 0.0f},
-        /* Radius */ 50.0f,
-        /* Height */ 200.0f,
-    }},
-};
-
 
 class J3DModelData;
 class J3DMaterial;
 
-// declare before matAlphaAnim to use within that func
-static void changeXluMaterialAlpha(J3DMaterial*, u8 , bool);
 
-/* 000019AC-00001A50       .text matAlphaAnim__FP12J3DModelDataUcb */
-BOOL matAlphaAnim(J3DModelData* modelData, u8 param_1, bool param_2) {
-    JUT_ASSERT(0x5d1, modelData != 0);
-
-
-    for (u16 i = 0; i < modelData->getMaterialNum(); i ++) {
-        changeXluMaterialAlpha(modelData->getMaterialNodePointer(i), param_1, param_2);
-    }
-
-    return 1;
-}
-
-/* 00001A50-00001B98       .text changeXluMaterialAlpha__FP11J3DMaterialUcb */
-void changeXluMaterialAlpha(J3DMaterial* i_material, u8 param_2, bool param_3) {
-    static J3DBlendInfo l_blendInfo = {1, 4, 5, 7};
-    static J3DZModeInfo l_zmodeInfo = {1,3,0};
-    static J3DZModeInfo l_zmodeInfo2 = {1,3,1};
-
-    JUT_ASSERT(0x5ff, i_material != 0);
-
-
-    J3DPEBlock* block = i_material->getPEBlock();
-
-    i_material->getTevKColor(3)->mColor.a = param_2;
-    block->getBlend()->setBlendInfo(l_blendInfo);
-
-    if (param_3) {
-        block->getZMode()->setZModeInfo(l_zmodeInfo2);
-    } else {
-        block->getZMode()->setZModeInfo(l_zmodeInfo);
-    }
-}
 
 /* 000000EC-00000200       .text CreateInit__8daSaku_cFv */
 void daSaku_c::CreateInit() {
@@ -702,6 +638,43 @@ BOOL daSaku_c::setEffBreak(int param_1) {
     return TRUE;
 }
 
+static void changeXluMaterialAlpha(J3DMaterial*, u8 , bool);
+
+/* 000019AC-00001A50       .text matAlphaAnim__FP12J3DModelDataUcb */
+BOOL matAlphaAnim(J3DModelData* modelData, u8 param_1, bool param_2) {
+    JUT_ASSERT(0x5d1, modelData != 0);
+
+
+    for (u16 i = 0; i < modelData->getMaterialNum(); i ++) {
+        changeXluMaterialAlpha(modelData->getMaterialNodePointer(i), param_1, param_2);
+    }
+
+    return 1;
+}
+
+/* 00001A50-00001B98       .text changeXluMaterialAlpha__FP11J3DMaterialUcb */
+void changeXluMaterialAlpha(J3DMaterial* i_material, u8 param_2, bool param_3) {
+    static J3DBlendInfo l_blendInfo = {1, 4, 5, 7};
+    static J3DZModeInfo l_zmodeInfo = {1,3,0};
+    static J3DZModeInfo l_zmodeInfo2 = {1,3,1};
+
+    JUT_ASSERT(0x5ff, i_material != 0);
+
+
+    J3DPEBlock* block = i_material->getPEBlock();
+
+    i_material->getTevKColor(3)->mColor.a = param_2;
+    block->getBlend()->setBlendInfo(l_blendInfo);
+
+    if (param_3) {
+        block->getZMode()->setZModeInfo(l_zmodeInfo2);
+    } else {
+        block->getZMode()->setZModeInfo(l_zmodeInfo);
+    }
+}
+
+const char* daSaku_c::m_arcname[3] = {"KsakuCo", "Ksaku_00", "Knsak_00"};
+
 /* 00001B98-00001BB8       .text daSaku_Create__FP10fopAc_ac_c */
 static cPhs_State daSaku_Create(fopAc_ac_c* i_this) {
     return ((daSaku_c*)i_this)->_daSaku_create();
@@ -709,7 +682,6 @@ static cPhs_State daSaku_Create(fopAc_ac_c* i_this) {
 
 /* 00001BB8-00001F28       .text _daSaku_create__8daSaku_cFv */
 cPhs_State daSaku_c::_daSaku_create() {
-    /* MATCHING EXCEPT FOR STRINGBASE */
     s32 size = 0; // not used, but instructions indicate that it has size of solid heap 
 
     fopAcM_ct(this, daSaku_c);
@@ -900,10 +872,85 @@ BOOL daSaku_c::_daSaku_execute() {
     return TRUE;
 }
 
+// Need to instantiate here.
+// If put prior to _daSaku_execute, doesn't get read from .rodata
+// If put after daSaku_Execute, ends up in .data instead of .rodata
+const s32 daSaku_c::m_max_particle_timer = 2000;
+
 /* 0000242C-00002560       .text daSaku_Execute__FP8daSaku_c */
 static BOOL daSaku_Execute(daSaku_c* i_this) {
     return i_this->_daSaku_execute();
 }
+
+u8 daSaku_c::m_smoke_alpha = 230;
+const s32 daSaku_c::m_alpha_start_time = 10;
+s32 daSaku_c::m_saku_alpha_out_time = 10;
+s32 daSaku_c::m_fade_time = 40;
+GXColor daSaku_c::dust_color = {0x69, 0x5B, 0x30, 0xFF};
+
+const u8 daSaku_c::m_start_alpha = 180;
+const u16 daSaku_c::m_alpha_spd = 5;
+const f32 daSaku_c:: m_saku_height = 200.0;
+
+const dCcD_SrcCyl daSaku_c::m_at_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ AT_TYPE_FIRE | AT_TYPE_UNK20000,
+        /* SrcObjAt  Atp     */ 1,
+        /* SrcObjAt  SPrm    */ 15,
+        /* SrcObjTg  Type    */ 0, 
+        /* SrcObjTg  SPrm    */ 0,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ 0,
+        /* SrcGObjAt Spl     */ 0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 1,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ 0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ 6,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0, 0.0, 0.0},
+        /* Radius */ 50.0,
+        /* Height */ 400.0,
+    }},
+};
+
+dCcD_SrcCyl daSaku_c::m_cyl_src = {
+    // dCcD_SrcGObjInf
+    {
+        /* Flags             */ 0,
+        /* SrcObjAt  Type    */ 0,
+        /* SrcObjAt  Atp     */ 0,
+        /* SrcObjAt  SPrm    */ 0,
+        /* SrcObjTg  Type    */ AT_TYPE_SWORD | AT_TYPE_UNK8 | AT_TYPE_BOMB | AT_TYPE_FIRE | AT_TYPE_MACHETE | AT_TYPE_UNK800 | AT_TYPE_SKULL_HAMMER | AT_TYPE_UNK20000 | AT_TYPE_FIRE_ARROW,
+        /* SrcObjTg  SPrm    */ cCcD_TgSPrm_Set_e | cCcD_TgSPrm_IsOther_e,
+        /* SrcObjCo  SPrm    */ 0,
+        /* SrcGObjAt Se      */ 0,
+        /* SrcGObjAt HitMark */ dCcG_AtHitMark_None_e,
+        /* SrcGObjAt Spl     */ dCcG_At_Spl_UNK0,
+        /* SrcGObjAt Mtrl    */ 0,
+        /* SrcGObjAt SPrm    */ 0,
+        /* SrcGObjTg Se      */ 0,
+        /* SrcGObjTg HitMark */ 0,
+        /* SrcGObjTg Spl     */ dCcG_Tg_Spl_UNK0,
+        /* SrcGObjTg Mtrl    */ 0,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoHitMark_e,
+        /* SrcGObjCo SPrm    */ 0,
+    },
+    // cM3dGCylS
+    {{
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 50.0f,
+        /* Height */ 200.0f,
+    }},
+};
 
 static actor_method_class l_daSaku_Method = {
     (process_method_func)daSaku_Create,
