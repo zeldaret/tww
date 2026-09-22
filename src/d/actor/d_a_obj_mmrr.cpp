@@ -244,7 +244,7 @@ cPhs_State daObjMmrr::Act_c::_create() {
 
     state = dComIfG_resLoad(&mPhs, M_arcname);
     if (state == cPhs_COMPLEATE_e) {
-        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x1a80)) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, DEMO_SELECT(0x8000, 0x1a80))) {
             cullMtx = mpMirrorModel->getBaseTRMtx();
             init_mtx();
             init_cc();
@@ -262,7 +262,7 @@ cPhs_State daObjMmrr::Act_c::_create() {
 /* 0000122C-0000126C       .text _delete__Q29daObjMmrr5Act_cFv */
 bool daObjMmrr::Act_c::_delete() {
     eff_remove();
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return true;
 }
 
@@ -428,7 +428,11 @@ actor_process_profile_definition g_profile_Obj_Mmrr = {
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
     /* Draw Prio    */ fpcDwPi_Obj_Mmrr_e,
     /* Actor SubMtd */ &daObjMmrr::Mthd_Table,
+#if VERSION == VERSION_DEMO
+    /* Status       */ 0x4 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+#else
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+#endif
     /* Group        */ fopAc_ACTOR_e,
     /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };
