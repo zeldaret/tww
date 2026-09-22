@@ -100,7 +100,7 @@ class sakuHIO_c : public JORReflexible {
             dustColor.a = 100;
         };
 
-        virtual ~sakuHIO_c();
+        virtual ~sakuHIO_c() {};
 
         /* 0x04 */ s8 field_0x04;
         /* 0x05 */ u8 field_0x05;
