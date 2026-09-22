@@ -28,22 +28,22 @@ public:
     int saku_draw_sub(int);
     BOOL mode_break_none(int);
     BOOL mode_break_fire(int);
-    int mode_break_throw_obj(int);
+    BOOL mode_break_throw_obj(int);
     BOOL RecreateHeap(int, int);
     BOOL CreateHeap(int, int);
     int GetDzbId(int);
     BOOL CreateDummyHeap(int);
     BOOL loadMoveBG(int, int, int);
     BOOL loadModel(int, int, int);
-    int burn();
-    int broken(int);
-    bool changeCollision(int);
+    BOOL burn();
+    BOOL broken(int);
+    BOOL changeCollision(int);
     void setMtx();
     void setMoveBGMtx();
     void checkCol();
     void setCol();
-    int MoveBGResist(int, int);
-    int setEffFire(int);
+    BOOL MoveBGResist(int, int);
+    BOOL setEffFire(int);
     BOOL setEffBreak(int);
 
     static dCcD_SrcCyl m_cyl_src;
@@ -55,7 +55,7 @@ public:
 
     static const char* m_arcname[3];
     static const dCcD_SrcCyl m_at_cyl_src;
-    static const f32 m_saku_height; 
+    static const f32 m_saku_height;
     static const u16 m_alpha_spd;
     static const s32 m_max_particle_timer;
     static const u8 m_start_alpha;
@@ -74,7 +74,7 @@ public:
     /* 0xE4C */ Mtx mMtx[2];
     /* 0xEAC */ u32 field_0xEAC[2];
     /* 0xEB4 */ f32 field_0xEB4[2];
-    /* 0xEBC */ s32 field_0xEBC[2];
+    /* 0xEBC */ s32 mParticleTimers[2];
     /* 0xEC4 */ cXyz field_0xEC4[2];
     /* 0xEDC */ u8 field_0xEDC[2][2];
     /* 0xEE0 */ s32 field_0xEE0[3];
@@ -87,43 +87,45 @@ public:
     /* 0xEF8 */ s32 field_0xEF8[2];
     /* 0xF00 */ uint mBottomHalfDestroyedSwitch;
     /* 0xF04 */ uint mTopHalfDestroyedSwitch;
-};  // Size: 0xF08
+}; // Size: 0xF08
 
 class sakuHIO_c : public JORReflexible {
-    public:
-        sakuHIO_c() {
-            field_0x04 = -1;
-            field_0x06 = 0x46;
-            field_0x08 = 0x46;
-            field_0x0A = 0x41;
-            field_0x0C = 7;
-            field_0x0E = 1;
-            field_0x0F = 1;
-            field_0x10 = 5;
-            field_0x12 = 0xB4;
-            dustColor.r = 0x69;
-            dustColor.g = 0x5b;
-            dustColor.b = 0x30;
-            dustColor.a = 100;
-        };
+public:
+    sakuHIO_c() {
+        field_0x04 = -1;
+        field_0x06 = 0x46;
+        field_0x08 = 0x46;
+        field_0x0A = 0x41;
+        field_0x0C = 7;
+        field_0x0E = 1;
+        field_0x0F = 1;
+        field_0x10 = 5;
+        field_0x12 = 0xB4;
+        dustColor.r = 0x69;
+        dustColor.g = 0x5b;
+        dustColor.b = 0x30;
+        dustColor.a = 100;
+    };
 
-        virtual ~sakuHIO_c() {};
+    virtual ~sakuHIO_c() {};
 
-        /* 0x04 */ s8 field_0x04;
-        /* 0x05 */ u8 field_0x05;
-        /* 0x06 */ s16 field_0x06;
-        /* 0x08 */ s16 field_0x08;
-        /* 0x0A */ s16 field_0x0A;
-        /* 0x0C */ s16 field_0x0C;
-        /* 0x0E */ u8 field_0x0E;
-        /* 0x0F */ u8 field_0x0F;
-        /* 0x10 */ s16 field_0x10;
-        /* 0x12 */ u8 field_0x12;
-        /* 0x13 */ GXColor dustColor;
-        /* 0x17 */ u8 field_0x17;
-};  // Size: 0x18
+    /* 0x04 */ s8 field_0x04;
+    /* 0x05 */ u8 field_0x05;
+    /* 0x06 */ s16 field_0x06;
+    /* 0x08 */ s16 field_0x08;
+    /* 0x0A */ s16 field_0x0A;
+    /* 0x0C */ s16 field_0x0C;
+    /* 0x0E */ u8 field_0x0E;
+    /* 0x0F */ u8 field_0x0F;
+    /* 0x10 */ s16 field_0x10;
+    /* 0x12 */ u8 field_0x12;
+    /* 0x13 */ GXColor dustColor;
+    /* 0x17 */ u8 field_0x17;
+}; // Size: 0x18
 
 namespace daSaku_prm {
-    inline u8 getType(daSaku_c* ac) { return (fopAcM_GetParam(ac) >> 4) & 0xf; }
-};
+inline u8 getType(daSaku_c* ac) {
+    return (fopAcM_GetParam(ac) >> 4) & 0xf;
+}
+}; // namespace daSaku_prm
 #endif /* D_A_SAKU_H */
