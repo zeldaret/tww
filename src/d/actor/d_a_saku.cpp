@@ -363,8 +363,22 @@ BOOL daSaku_c::CreateDummyHeap(int param_1) {
 }
 
 /* 00000ADC-00000BE8       .text loadMoveBG__8daSaku_cFiii */
-void daSaku_c::loadMoveBG(int, int, int) {
-    /* Nonmatching */
+BOOL daSaku_c::loadMoveBG(int param_1, int param_2, int param_3) {
+    int sp[5] =  {3, 4, 5, 6, 3};
+
+    field_0xE34[param_3][param_2] = new dBgW();
+
+    if(field_0xE34[param_3][param_2] != NULL) {
+        cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(m_arcname[0], sp[param_1]);
+
+        if(field_0xE34[param_3][param_2]->Set(bgd, dBgW::MOVE_BG_e, &mMtx[param_3]) != true) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    return FALSE;
+
 }
 
 /* 00000BE8-00000D7C       .text loadModel__8daSaku_cFiii */
