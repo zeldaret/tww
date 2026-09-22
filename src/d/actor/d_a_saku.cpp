@@ -185,8 +185,6 @@ int daSaku_c::mode_break_throw_obj(int i) {
 
 /* 0000083C-000008EC       .text RecreateHeap__8daSaku_cFii */
 BOOL daSaku_c::RecreateHeap(int heap_id, int saku_id) {
-    /* Nonmatching */
-    // DONE- WAITING FOR JUT ASSERTION
     JUT_ASSERT(0x365, m_heap[saku_id][heap_id] != NULL);
 
     m_heap[saku_id][heap_id]->freeAll();
@@ -448,7 +446,6 @@ void daSaku_c::setMtx() {
 
 /* 0000113C-0000120C       .text setMoveBGMtx__8daSaku_cFv */
 void daSaku_c::setMoveBGMtx() {
-    /* Nonmatching */
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
@@ -806,7 +803,6 @@ static BOOL daSaku_IsDelete(daSaku_c*) {
 
 /* 000023E0-0000242C       .text daSaku_Draw__FP8daSaku_c */
 static BOOL daSaku_Draw(daSaku_c* m) {
-    /* Nonmatching */
     m->saku_draw_sub(0);
     if (m->field_0xEF8[1] != 0) {
         m->saku_draw_sub(1);
