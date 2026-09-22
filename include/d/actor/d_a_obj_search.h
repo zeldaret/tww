@@ -50,34 +50,60 @@ namespace daObj_Search {
             const char* name;
         };
 
-        struct Attr_c { // TODO
-            /* 0x00 */ f32 m00;
-            /* 0x04 */ f32 mScale;
-            /* 0x08 */ f32 m08;
-            /* 0x0C */ f32 m0C;
-            /* 0x10 */ s16 m10;
+        struct Attr_c {
+            /* 0x00 */ u8 mSkipExecute;
+            /* 0x01 */ u8 mSkipDraw;
+            /* 0x02 */ s16 m02;
+            /* 0x04 */ f32 m04;
+            /* 0x08 */ s16 m08;
+            /* 0x0A */ u8 m0A[0x10 - 0x0A];
+            /* 0x10 */ f32 m10;
             /* 0x14 */ f32 m14;
             /* 0x18 */ f32 m18;
             /* 0x1C */ f32 m1C;
             /* 0x20 */ f32 m20;
+            /* 0x24 */ u8 m24;
+            /* 0x25 */ u8 m25[0x28 - 0x25];
+            /* 0x28 */ f32 mCpsR;
+            /* 0x2C */ u8 m2C[0x38 - 0x2C];
+            /* 0x38 */ u8 m38;
+            /* 0x39 */ u8 m39;
+            /* 0x3A */ u8 m3A[2];
+            /* 0x3C */ s16 m3C;
+            /* 0x3E */ u8 m3E;
+            /* 0x3F */ u8 m3F[0x42 - 0x3F];
+            /* 0x42 */ u8 m42;
+            /* 0x43 */ u8 m43;
+            /* 0x44 */ u8 m44;
+            /* 0x45 */ u8 m45;
+            /* 0x46 */ u8 m46;
+            /* 0x47 */ u8 m47;
+            /* 0x48 */ u8 m48[0x4C - 0x48];
+            /* 0x4C */ f32 m4C;
+            /* 0x50 */ s16 m50;
+            /* 0x52 */ u8 m52[0x54 - 0x52];
+            /* 0x54 */ f32 m54;
+            /* 0x58 */ f32 m58;
+            /* 0x5C */ s16 m5C;
+            /* 0x5E */ s16 m5E;
         };
 
         static bool getFindFlag() { return m_find_flag == true; }
         static void setFindFlag(bool flag) { m_find_flag = flag; }
         
         static bool m_find_flag;
-        static const Attr_c M_attr;
+        static const Attr_c m_attr;
 
         
-        void isSecond() {}
-        void modeProcInit(int) {}
+        bool isSecond() { return field_0x860 != false; }
+        void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
         void setBkControl(bool control) { mBkControl = control; }
         void setChildId(fpc_ProcID id) { mChildId = id; }
         
         BOOL _createHeap();
         bool searchCreateHeap();
         bool beamCreateHeap(int);
-        static void _nodeControl(J3DNode*, J3DModel*);
+        void _nodeControl(J3DNode*, J3DModel*);
         void modeSearchRndInit();
         void modeSearchRnd();
         void modeSearchPathInit();
@@ -109,52 +135,52 @@ namespace daObj_Search {
         void set_moveBG_mtx_light_A();
         void set_moveBG_mtx_light_B();
         void bg_check();
-        void player_check();
+        bool player_check();
         bool set_path_info();
         bool is_path_info();
         bool _draw();
         bool _delete();
         BOOL _isdelete();
 
-        static const char M_arcname[];
+        static const char m_arc_name[];
     
     public:
         /* 0x290 */ s32 mMode;
         /* 0x294 */ Bgc_c field_0x294;
         /* 0x30C */ dCcD_Cps field_0x30C[2];
         /* 0x57C */ dCcD_Stts field_0x57C[2];
-        /* 0x5F4 */ J3DModel* field_0x5F4[3];
+        /* 0x5F4 */ J3DModel* field_0x5F4;
+        /* 0x5F8 */ J3DModel* field_0x5F8[2];
         /* 0x600 */ cXyz field_0x600;
-        /* 0x60C */ cXyz field_0x60C;
-        /* 0x618 */ Vec field_0x618;
-        /* 0x624 */ cXyz field_0x624;
-        /* 0x630 */ cXyz field_0x630;
-        /* 0x63C */ cXyz field_0x63C;
-        /* 0x648 */ cXyz field_0x648;
+        /* 0x60C */ cXyz field_0x60C[2];
+        /* 0x624 */ cXyz field_0x624[2];
+        /* 0x63C */ cXyz field_0x63C[2];
         /* 0x654 */ f32 field_0x654;
         /* 0x658 */ f32 field_0x658;
         /* 0x65C */ f32 field_0x65C;
         /* 0x660 */ f32 field_0x660;
         /* 0x664 */ bool mBkControl;
         /* 0x665 */ u8 field_0x665[0x668 - 0x665];
-        /* 0x668 */ dBgW* field_0x668;
-        /* 0x66C */ dBgW* field_0x66C;
+        /* 0x668 */ dBgW* field_0x668[2];
         /* 0x670 */ dBgW* mpBgW;
-        /* 0x674 */ Mtx field_0x674;
-        /* 0x6A4 */ Mtx field_0x6A4;
+        /* 0x674 */ Mtx field_0x674[2];
         /* 0x6D4 */ Mtx field_0x6D4;
-        /* 0x704 */ csXyz field_0x704[2];
-        /* 0x710 */ u8 field_0x710[0x712 - 0x710];
-        /* 0x712 */ Mtx field_0x712;
-        /* 0x742 */ Mtx field_0x742;
-        /* 0x772 */ u8 field_0x772[0x77C - 0x772];
-        /* 0x77C */ bool field_0x77C;
-        /* 0x77D */ bool field_0x77D;
+        /* 0x704 */ u8 field_0x704[0x706 - 0x704];
+        /* 0x706 */ csXyz field_0x706[2];
+        /* 0x712 */ u8 field_0x712[0x71C - 0x712];
+        /* 0x71C */ Mtx field_0x71C[2];
+        /* 0x77C */ bool field_0x77C[2];
         /* 0x77E */ s16 field_0x77E;
         /* 0x780 */ LIGHT_INFLUENCE field_0x780;
-        /* 0x7A0 */ u8 field_0x7A0[0x7A4 - 0x7A0];
-        /* 0x7A4 */ s32 field_0x7A4;
-        /* 0x7A8 */ u8 field_0x7A8[0x7B6 - 0x7A8];
+        /* 0x7A0 */ int field_0x7A0;
+        /* 0x7A4 */ int field_0x7A4;
+        /* 0x7A8 */ s16 field_0x7A8;
+        /* 0x7AA */ s16 field_0x7AA;
+        /* 0x7AC */ s16 field_0x7AC;
+        /* 0x7AE */ s16 field_0x7AE;
+        /* 0x7B0 */ s16 field_0x7B0;
+        /* 0x7B2 */ s16 field_0x7B2;
+        /* 0x7B4 */ s16 field_0x7B4;
         /* 0x7B6 */ bool field_0x7B6;
         /* 0x7B7 */ bool field_0x7B7;
         /* 0x7B8 */ bool field_0x7B8;
@@ -162,21 +188,26 @@ namespace daObj_Search {
         /* 0x7BC */ dLib_circle_path_c field_0x7BC;
         /* 0x7E0 */ s16 field_0x7E0;
         /* 0x7E2 */ u8 field_0x7E2;
-        /* 0x7E3 */ u8 field_0x7E3[0x808 - 0x7E3];
+        /* 0x7E3 */ u8 field_0x7E3[0x7F4 - 0x7E3];
+        /* 0x7F4 */ cXyz field_0x7F4;
+        /* 0x800 */ csXyz field_0x800;
+        /* 0x806 */ u8 field_0x806[0x808 - 0x806];
         /* 0x808 */ dPa_smokeEcallBack field_0x808;
-        /* 0x828 */ dPa_smokeEcallBack* field_0x828;
+        /* 0x828 */ int field_0x828;
         /* 0x82C */ u8 field_0x82C;
         /* 0x82D */ u8 field_0x82D;
         /* 0x82E */ u8 field_0x82E[0x830 - 0x82E];
         /* 0x830 */ int field_0x830;
         /* 0x834 */ bool field_0x834;
-        /* 0x835 */ u8 field_0x835[0x837 - 0x835];
+        /* 0x835 */ u8 field_0x835;
+        /* 0x836 */ u8 field_0x836;
         /* 0x837 */ u8 field_0x837;
         /* 0x838 */ cXyz field_0x838;
-        /* 0x844 */ u8 field_0x844[0x848 - 0x844];
+        /* 0x844 */ s8 field_0x844;
+        /* 0x845 */ u8 field_0x845[0x848 - 0x845];
         /* 0x848 */ dPath* field_0x848;
 #if VERSION == VERSION_DEMO
-                    u8 pad84C;
+        u8 pad84C;
 #endif
         /* 0x84C */ fpc_ProcID mChildId;
         /* 0x850 */ int field_0x850;
@@ -184,14 +215,21 @@ namespace daObj_Search {
         /* 0x85C */ int field_0x85C;
         /* 0x860 */ bool field_0x860;
         /* 0x861 */ u8 field_0x861[0x864 - 0x861];
-        /* 0x864 */ dBgS_LinChk field_0x864;
+        /* 0x864 */ dBgS_ObjLinChk field_0x864;
         /* 0x8D0 */ u8 field_0x8D0;
         /* 0x8D1 */ u8 field_0x8D1[0x8D4 - 0x8D1];
-        /* 0x8D4 */ Vec field_0x8D4;
-        /* 0x8E0 */ Vec field_0x8E0;
-        /* 0x8EC */ Vec field_0x8EC;
-        /* 0x8F8 */ Vec field_0x8F8;
-        /* 0x904 */ u8 field_0x904[0x908 - 0x904];
+        /* 0x8D4 */ cXyz field_0x8D4;
+        /* 0x8E0 */ s16 field_0x8E0;
+        /* 0x8E2 */ u8 field_0x8E2[0x8E4 - 0x8E2];
+        /* 0x8E4 */ f32 field_0x8E4;
+        /* 0x8E8 */ f32 field_0x8E8;
+        /* 0x8EC */ s16 field_0x8EC;
+        /* 0x8EE */ u8 field_0x8EE;
+        /* 0x8EF */ int field_0x8EF;
+        /* 0x8F3 */ cXyz field_0x8F3;
+        /* 0x8FF */ int field_0x8FF;
+        /* 0x903 */ int field_0x903;
+        /* 0x907 */ u8 field_0x907[0x908 - 0x907];
     };
 
     namespace Mthd {
