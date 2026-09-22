@@ -1744,7 +1744,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_obj_ekskz"),
     ActorRel(Matching,    "d_a_obj_eskban"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_obj_ferris"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_obj_figure"),
+    ActorRel(Matching,    "d_a_obj_figure"),
     ActorRel(NonMatching, "d_a_obj_firewall"),
     ActorRel(NonMatching, "d_a_obj_flame"),
     ActorRel(NonMatching, "d_a_obj_ftree"),
