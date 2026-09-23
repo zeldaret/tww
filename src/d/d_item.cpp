@@ -2951,7 +2951,7 @@ u8 getEmonoItemFromLifeBallTable(u16 itemTableIdx) {
     items[14] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM14(), itemTableIdx);
     items[15] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM15(), itemTableIdx);
     
-    for (int i = 0; i < (int)ARRAY_SIZE(items); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(items); i++) {
         if (isEmono(items[i])) {
             return items[i];
         }

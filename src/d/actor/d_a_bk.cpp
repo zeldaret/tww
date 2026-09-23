@@ -2203,7 +2203,7 @@ temp_1B8:
                         i_this->m02F4 = 1;
                     }
                     int r0 = (int)i_this->m0B64 - l_bkHIO.m0A0;
-                    if (r0 < (int)ARRAY_SIZE(l_bkHIO.m0A8)) {
+                    if (r0 < ARRAY_SSIZE(l_bkHIO.m0A8)) {
                         i_this->m02EC = l_bkHIO.m0A8[r0];
                     }
                 }
@@ -2215,7 +2215,7 @@ temp_1B8:
                         i_this->m02F4 = 1;
                     }
                     int r0 = (int)i_this->m0B64 - l_bkHIO.m0D0;
-                    if (r0 < (int)ARRAY_SIZE(l_bkHIO.m0D8)) {
+                    if (r0 < ARRAY_SSIZE(l_bkHIO.m0D8)) {
                         i_this->m02EC = l_bkHIO.m0D8[r0];
                     }
                 }

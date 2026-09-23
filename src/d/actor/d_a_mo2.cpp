@@ -1862,7 +1862,7 @@ static void fight(mo2_class* i_this) {
                             i_this->m0598 = 1;
                         }
                         iVar6 = (int)i_this->m2068 - l_mo2HIO.m0D8;
-                        if (iVar6 < (int)ARRAY_SIZE(l_mo2HIO.m0E0)) {
+                        if (iVar6 < ARRAY_SSIZE(l_mo2HIO.m0E0)) {
                             i_this->m0590 = l_mo2HIO.m0E0[iVar6];
                         }
                     }
@@ -1874,7 +1874,7 @@ static void fight(mo2_class* i_this) {
                             i_this->m0598 = 1;
                         }
                         iVar6 = (int)i_this->m2068 - l_mo2HIO.m108;
-                        if (iVar6 < (int)ARRAY_SIZE(l_mo2HIO.m110)) {
+                        if (iVar6 < ARRAY_SSIZE(l_mo2HIO.m110)) {
                             i_this->m0590 = l_mo2HIO.m110[iVar6];
                         }
                     }

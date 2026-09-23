@@ -1409,7 +1409,7 @@ ShopCursor_c::ShopCursor_c(J3DModelData* modelData, J3DAnmTevRegKey* brkData, f3
         mat->getZMode()->setZModeInfo(ZModeInfo);
     }
     
-    for (int i = 0; i < (int)ARRAY_SIZE(mpModels); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mpModels); i++) {
         mpModels[i] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
     }
     
@@ -1466,7 +1466,7 @@ void ShopCursor_c::draw() {
         0xE000, 0x2000, 0x6000, 0xA000,
     };
     const f32 sqrt_2 = 1.4142f; // Approximately sqrt(2)
-    for (int i = 0; i < (int)ARRAY_SIZE(mpModels); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mpModels); i++) {
         mDoMtx_stack_c::transS(mPos);
         mDoMtx_stack_c::XYZrotM(angleX, angleY, 0);
         mDoMtx_stack_c::ZrotM(angle_z[i]);

@@ -64,7 +64,7 @@ void dStage_KeepTresureInfoProc(dStage_dt_c* i_stage, stage_tresure_class* i_tre
         TresureInfo.num = 0;
         return;
     }
-    if (i_tresure->num >= (int)ARRAY_SIZE(TresureInfo.mTresureData) || i_tresure->num < 0) {
+    if (i_tresure->num >= ARRAY_SSIZE(TresureInfo.mTresureData) || i_tresure->num < 0) {
         TresureInfo.num = 0;
         return;
     }
@@ -93,7 +93,7 @@ void dStage_KeepDoorInfoProc(dStage_dt_c* i_stage, stage_tgsc_class* i_drtg) {
         DoorInfo.num = 0;
         return;
     }
-    if (i_drtg->num >= (int)ARRAY_SIZE(DoorInfo.mDrTgData) || i_drtg->num < 0) {
+    if (i_drtg->num >= ARRAY_SSIZE(DoorInfo.mDrTgData) || i_drtg->num < 0) {
         DoorInfo.num = 0;
         return;
     }
@@ -219,7 +219,7 @@ int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms) {
     }
     
     BOOL r26 = TRUE;
-    for (int roomNo = 0; roomNo < (int)ARRAY_SIZE(mStatus); roomNo++) {
+    for (int roomNo = 0; roomNo < ARRAY_SSIZE(mStatus); roomNo++) {
         if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
             if (!stayRoomCheck(roomCount, rooms, roomNo)) {
                 onStatusFlag(roomNo, 0x04);

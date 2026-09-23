@@ -328,13 +328,13 @@ void dFlower_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXSetArray(GX_VA_POS, l_pos, 0xC);
-    GXSetArray(GX_VA_CLR0, l_color, 0x4);
-    GXSetArray(GX_VA_TEX0, l_texCoord, 0x8);
+    GXSetArray(GX_VA_POS, l_pos, sizeof(l_pos[0]));
+    GXSetArray(GX_VA_CLR0, l_color, sizeof(l_color[0]));
+    GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(l_texCoord[0]));
     GXCallDisplayList(l_matDL, 0xA0);
 
     dFlower_room_c* pRoom = &mRoom[0];
-    for(int i = 0; i < (s32)ARRAY_SIZE(mRoom); pRoom++, i++) {
+    for(int i = 0; i < ARRAY_SSIZE(mRoom); pRoom++, i++) {
         dKy_tevstr_c* tevstr = dComIfGp_roomControl_getTevStr(i);
         GXSetTevColorS10(GX_TEVREG0, tevstr->mColorC0);
         GXSetTevColor(GX_TEVREG1, tevstr->mColorK0);
@@ -357,13 +357,13 @@ void dFlower_packet_c::draw() {
         }
     }
 
-    GXSetArray(GX_VA_POS, field_0x4608, 0xC);
-    GXSetArray(GX_VA_CLR0, field_0x460c, 0x4);
-    GXSetArray(GX_VA_TEX0, field_0x4610, 0x8);
+    GXSetArray(GX_VA_POS, field_0x4608, sizeof(*field_0x4608));
+    GXSetArray(GX_VA_CLR0, field_0x460c, sizeof(*field_0x460c));
+    GXSetArray(GX_VA_TEX0, field_0x4610, sizeof(*field_0x4610));
     GXCallDisplayList(field_0x4614, field_0x4618);
 
     pRoom = &mRoom[0];
-    for(int i = 0; i < (s32)ARRAY_SIZE(mRoom); pRoom++, i++) {
+    for(int i = 0; i < ARRAY_SSIZE(mRoom); pRoom++, i++) {
         dKy_tevstr_c* tevstr = dComIfGp_roomControl_getTevStr(i);
         GXSetTevColorS10(GX_TEVREG0, tevstr->mColorC0);
         GXSetTevColor(GX_TEVREG1, tevstr->mColorK0);
@@ -442,7 +442,7 @@ static f32 checkGroundY(cXyz& pos) {
 /* 800C0D38-800C0EF4       .text update__16dFlower_packet_cFv */
 void dFlower_packet_c::update() {
     dFlower_anm_c* pAnm = getAnm();
-    for(int i = 0; i < (s32)ARRAY_SIZE(mAnm); pAnm++, i++) {
+    for(int i = 0; i < ARRAY_SSIZE(mAnm); pAnm++, i++) {
         mDoMtx_stack_c::YrotS(pAnm->field_0x02);
         mDoMtx_stack_c::XrotM(pAnm->field_0x04);
         mDoMtx_stack_c::YrotM(-pAnm->field_0x02);
@@ -452,7 +452,7 @@ void dFlower_packet_c::update() {
     dFlower_data_c* pData = getData();
     pAnm = getAnm();
     int j = 0;
-    for(int i = 0; i < (s32)ARRAY_SIZE(mData); i++, pData++) {
+    for(int i = 0; i < ARRAY_SSIZE(mData); i++, pData++) {
         if(cLib_checkBit<u8>(pData->field_0x00, 0x2)) {
             cLib_calcTimer(&pData->field_0x03);
 
@@ -481,7 +481,7 @@ void dFlower_packet_c::update() {
 }
 
 /* 800C0EF4-800C10D4       .text setData__16dFlower_packet_cFP14dFlower_data_ciScR4cXyziSc */
-void dFlower_packet_c::setData(dFlower_data_c* param_1, int param_2, s8 param_3, cXyz& param_4, int param_5, s8 param_6) {
+void dFlower_packet_c::setData(dFlower_data_c* param_1, int param_2, s8 param_3, cXyz& param_4, int roomNo, s8 param_6) {
     f32 temp;
     if(fopOvlpM_IsPeek()) {
         temp = checkGroundY(param_4);
@@ -502,8 +502,8 @@ void dFlower_packet_c::setData(dFlower_data_c* param_1, int param_2, s8 param_3,
     param_1->field_0x02 = param_6;
     param_1->field_0x03 = 0;
 
-    if(mRoom[param_5].field_0x0 == NULL) {
-        if(strcmp(dComIfGp_getStartStageName(), "sea") == 0 && param_5 == 0x21) {
+    if(mRoom[roomNo].field_0x0 == NULL) {
+        if(strcmp(dComIfGp_getStartStageName(), "sea") == 0 && roomNo == dIsleRoom_PrivateOasis_e) {
             field_0x4608 = l_pos3;
             field_0x460c = l_color3;
             field_0x4610 = l_texCoord3;
@@ -531,7 +531,7 @@ void dFlower_packet_c::setData(dFlower_data_c* param_1, int param_2, s8 param_3,
         cLib_onBit<u8>(param_1->field_0x00, 0x40);
     }
 
-    mRoom[param_5].newData(param_1);
+    mRoom[roomNo].newData(param_1);
 
     field_0x0010 = param_2;
 }
@@ -541,7 +541,7 @@ dFlower_data_c* dFlower_packet_c::newData(s8 param_1, cXyz& param_2, int i_roomN
     JUT_ASSERT(VERSION_SELECT(2927, 2928, 2934, 2934), 0 <= i_roomNo && i_roomNo < 64);
 
     dFlower_data_c* pData = &mData[field_0x0010];
-    for(int i = field_0x0010; i < (s32)ARRAY_SIZE(mData); pData++, i++) {
+    for(int i = field_0x0010; i < ARRAY_SSIZE(mData); pData++, i++) {
         if(!cLib_checkBit<u8>(pData->field_0x00, 0x2)) {
             setData(pData, i, param_1, param_2, i_roomNo, param_4);
             return pData;
