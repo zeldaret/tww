@@ -134,9 +134,9 @@ void daPy_matAnm_c::calc(J3DMaterial* mat) const {
     J3DMaterialAnm::calc(mat);
     
     for (u32 i = 0; i < 8; i++) {
-        if (getTexMtxAnm(i)) {
+        if (mTexMtxAnm[i]) {
             J3DTextureSRTInfo& srt = mat->getTexMtx(i)->getTexMtxInfo().mSRT;
-            if (getMorfFrame() != 0) {
+            if (m_morf_frame != 0) {
                 f32 temp = 1.0f / (m_morf_frame + 1);
                 srt.mTranslationX = mOldOffset.x * (1.0f - temp) + (srt.mTranslationX * temp);
                 srt.mTranslationY = mOldOffset.y * (1.0f - temp) + (srt.mTranslationY * temp);
@@ -704,7 +704,7 @@ u16 daPy_lk_c::checkNormalFace() {
     if (checkNoResetFlg1(daPyFlg1_CONFUSE)) {
         return daPyFace_TMABAH_TABEKOBE;
     }
-    if (checkNoResetFlg0(daPyFlg0_HEAVY_STATE)) {
+    if (getHeavyState()) {
         return daPyFace_TMABAH;
     }
     if (checkNoResetFlg1(daPyFlg1_UNK1000000) && !checkModeFlg(ModeFlg_00000001)) {
@@ -1165,7 +1165,7 @@ s32 daPy_lk_c::setItemModel() {
                 if (mpBottleContentsModel != NULL) {
                     if (mEquipItem == dItemNo_FIREFLY_BOTTLE_e) {
                         cXyz scale;
-                        f32 fVar1 = 1.0f + 0.1f * cM_ssin(cM_rad2s((37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax()));
+                        f32 fVar1 = 1.0f + 0.1f * cM_fsin((37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax());
                         scale.setall(fVar1);
                         mDoMtx_stack_c::transS(11.0f, 0.0f, 0.0f);
                         mDoMtx_stack_c::revConcat(lHandA_jnt_mtx);
@@ -2424,7 +2424,7 @@ void daPy_lk_c::posMoveFromFootPos() {
             f32 f1 = (
                 (speedF * (1.0f - m_HIO->mSwim.m.field_0x60)) +
                 m_HIO->mSwim.m.field_0x60 *
-                (speedF * std::abs(cM_scos(cM_rad2s(M_PI * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() / mFrameCtrlUnder[UNDER_MOVE0_e].getEnd())))))
+                (speedF * std::abs(cM_fcos(M_PI * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() / mFrameCtrlUnder[UNDER_MOVE0_e].getEnd()))))
             ) / (1.0f + (m_HIO->mSwim.m.field_0x7C * getSwimTimerRate()));
             speed.x = f1 * cM_ssin(current.angle.y);
             speed.z = f1 * cM_scos(current.angle.y);
@@ -8513,7 +8513,7 @@ BOOL daPy_lk_c::procNotUse_init(int param_1) {
     setSingleMoveAnime(ANM_PRESENTATIONB, m_HIO->mTurn.m.field_0x34, m_HIO->mTurn.m.field_0x38, m_HIO->mTurn.m.field_0x10, m_HIO->mTurn.m.field_0x3C);
     keepItemData();
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK800_e);
-    m3628 = fpcM_ERROR_PROCESS_ID_e;
+    mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     mProcVar6.m3570 = param_1;
     mProcVar7.m3574 = 5;
     dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar7.m3574, 0);
@@ -8549,10 +8549,10 @@ BOOL daPy_lk_c::procNotUse() {
             setBottleModel(mProcVar6.mBottleItem);
             mProcVar2.m34D4 = 1;
         }
-        if (m3628 == fpcM_ERROR_PROCESS_ID_e) {
-            m3628 = fopMsgM_messageSet(m3624);
+        if (mGameOverId == fpcM_ERROR_PROCESS_ID_e) {
+            mGameOverId = fopMsgM_messageSet(m3624);
         } else {
-            msg_class* msg_p = fopMsgM_SearchByID(m3628);
+            msg_class* msg_p = fopMsgM_SearchByID(mGameOverId);
             if (msg_p != 0) {
                 if (msg_p->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
                     if (m3624 == 0xf0c && msg_p->mSelectNum == 1) {
@@ -11198,7 +11198,7 @@ BOOL daPy_lk_c::execute() {
                 onNoResetFlg1(daPyFlg1_UNK200);
                 dComIfGs_setBottleItemIn(dItemNo_FOREST_WATER_e, dItemNo_WATER_BOTTLE_e);
                 mDemo.setSpecialDemoType();
-                m3628 = fpcM_ERROR_PROCESS_ID_e;
+                mGameOverId = fpcM_ERROR_PROCESS_ID_e;
 #if VERSION > VERSION_JPN
                 if (mCurProc == daPyProc_SCOPE_e) {
                     procWait_init();
@@ -11240,12 +11240,9 @@ BOOL daPy_lk_c::execute() {
     if (dComIfGp_event_runCheck()) {
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Link", this);
         if (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(0x4) && mEquipItem == daPyItem_BOKO_e) {
-            fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
-            if (equip_actor) {
-                s16 angle = shape_angle.y + 0x8000;
-                equip_actor->speed.y = 0.0f;
-                equip_actor->speedF = 5.0f;
-                equip_actor->current.angle.y = angle;
+            daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
+            if (boko) {
+                boko->moveStateInit(5.0f, 0.0f, shape_angle.y + 0x8000);
             }
             deleteEquipItem(FALSE);
         }
@@ -12273,7 +12270,7 @@ void daPy_lk_c::playerInit() {
     mActorKeepThrow.clearData();
     mActorKeepGrab.clearData();
     mActorKeepRope.clearData();
-    m3628 = fpcM_ERROR_PROCESS_ID_e;
+    mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     mWhirlId = fpcM_ERROR_PROCESS_ID_e;
     mTactZevPartnerId = fpcM_ERROR_PROCESS_ID_e;
     m3630 = fpcM_ERROR_PROCESS_ID_e;

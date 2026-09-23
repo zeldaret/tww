@@ -169,7 +169,7 @@ public:
 
     const J3DTexMtxAnm* getTexMtxAnm(int i) const { return mTexMtxAnm[i]; }
 
-private:
+protected:
     /* 0x04 */ J3DMatColorAnm* mMatColorAnm[2];
     /* 0x0C */ J3DTexMtxAnm* mTexMtxAnm[8];
     /* 0x2C */ J3DTexNoAnm* mTexNoAnm[8];

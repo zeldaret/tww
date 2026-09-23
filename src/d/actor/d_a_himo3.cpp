@@ -1,6 +1,6 @@
 /**
  * d_a_himo3.cpp
- * Object - Rope (Pirate Ship rope minigame, Forsaken Fortress)
+ * Object - Climbable Rope (Pirate Ship rope minigame, Forsaken Fortress, Puppet Ganon's room)
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep

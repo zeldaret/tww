@@ -642,12 +642,11 @@ void daPy_lk_c::setWaterRipple() {
             )
         )
     ) {
-
         if (m3280.getEmitter() == NULL) {
             dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, NULL, 0xFF, &m3280);
         }
 
-        f32 var_f1 = (0.1f * std::fabsf(getSpeedF()));
+        f32 var_f1 = (0.1f * std::fabsf(speedF));
         var_f1 *= var_f1;
         if (var_f1 > 1.0f) {
             var_f1 = 1.0f;

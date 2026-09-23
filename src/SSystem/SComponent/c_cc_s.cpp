@@ -66,7 +66,7 @@ void cCcS::ClrCoHitInf() {
             pInf->ClrCoHit();
             cCcD_Stts * pStts = mpObjCo[i]->GetStts();
             if (pStts != NULL)
-                pStts->ClrCcMove();
+                pStts->ClrCo();
         }
     }
 }
@@ -125,7 +125,7 @@ void cCcS::ChkAtTg() {
         for (cCcD_Obj** pObjTg = mpObjTg; pObjTg < objTgEnd; ++pObjTg) {
             if (*pObjTg == NULL || !(*pObjTg)->ChkTgSet())
                 continue;
-            if (!(*pObjAt)->GetDivideInfo().Chk((*pObjTg)->GetDivideInfo()))
+            if (!(*pObjAt)->GetPDivideInfo()->Chk(*(*pObjTg)->GetPDivideInfo()))
                 continue;
             if (ChkNoHitAtTg(*pObjAt, *pObjTg))
                 continue;
@@ -180,7 +180,7 @@ void cCcS::ChkCo() {
         for (cCcD_Obj** objCo2 = objCo1 + 1; objCo2 < objCoEnd; ++objCo2) {
             if (*objCo2 == NULL || !(*objCo2)->ChkCoSet())
                 continue;
-            if (!(*objCo1)->GetDivideInfo().Chk((*objCo2)->GetDivideInfo()))
+            if (!(*objCo1)->GetPDivideInfo()->Chk(*(*objCo2)->GetPDivideInfo()))
                 continue;
             if (ChkNoHitCo(*objCo1, *objCo2))
                 continue;
@@ -421,10 +421,10 @@ void cCcS::CalcArea() {
     mDivideArea.SetArea(aab);
     for (cCcD_Obj** pObj = mpObj; pObj < mpObj + mObjCount; ++pObj) {
         if (*pObj != NULL) {
-            const cCcD_ShapeAttr* objShape = (*pObj)->GetShapeAttr();
+            cCcD_ShapeAttr* objShape = (*pObj)->GetShapeAttr();
             if (objShape == NULL)
                 continue;
-            cCcD_DivideInfo* divideInfo = &(*pObj)->GetDivideInfo();
+            cCcD_DivideInfo* divideInfo = (*pObj)->GetPDivideInfo();
             mDivideArea.CalcDivideInfo(divideInfo, objShape->GetWorkAab(), (*pObj)->ChkBsRevHit());
         }
     }

@@ -493,7 +493,7 @@ bool dCcS::ChkCamera(cXyz& start, cXyz& end, f32 radius, fopAc_ac_c* r26, fopAc_
             continue;
         if ((*pObjCo)->GetAc() == r26 || (*pObjCo)->GetAc() == r27)
             continue;
-        if ((*pObjCo)->GetDivideInfo().Chk(divideInfo)) {
+        if ((*pObjCo)->GetPDivideInfo()->Chk(divideInfo)) {
             cCcD_ShapeAttr* shapeAttr = (*pObjCo)->GetShapeAttr();
             if (shapeAttr == NULL)
                 continue;

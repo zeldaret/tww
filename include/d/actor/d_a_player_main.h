@@ -74,8 +74,6 @@ private:
 
 class daPy_actorKeep_c {
 public:
-    daPy_actorKeep_c() {}
-
     void setActor();
     void setData(fopAc_ac_c*);
     void clearData();
@@ -2296,7 +2294,7 @@ private:
     /* 0x361C */ u32 mMtrlSndId;
     /* 0x3620 */ u32 m3620;
     /* 0x3624 */ u32 m3624;
-    /* 0x3628 */ fpc_ProcID m3628;
+    /* 0x3628 */ fpc_ProcID mGameOverId;
     /* 0x362C */ fpc_ProcID mTactZevPartnerId;
     /* 0x3630 */ fpc_ProcID m3630;
     /* 0x3634 */ fpc_ProcID mWhirlId;
