@@ -204,23 +204,23 @@ BOOL daSaku_c::RecreateHeap(int heap_id, int saku_id) {
 
 /* 000008EC-000009B0       .text CreateHeap__8daSaku_cFii */
 BOOL daSaku_c::CreateHeap(int i_heapId, int i_sakuId) {
-    u32 arcnameIndex;
+    u32 i;
 
     switch (field_0xEF8[i_sakuId]) {
         case 1:
-            arcnameIndex = 0;
+            i = 0;
             break;
 
         case 3:
-            arcnameIndex = 2;
+            i = 2;
             break;
 
         case 2:
-            arcnameIndex = 1;
+            i = 1;
             break;
     }
 
-    if (loadModel(arcnameIndex, i_heapId, i_sakuId) == 0) {
+    if (loadModel(i, i_heapId, i_sakuId) == 0) {
         return FALSE;
     }
 
@@ -256,19 +256,19 @@ int daSaku_c::GetDzbId(int i_sakuId) {
 
 /* 00000A4C-00000ADC       .text CreateDummyHeap__8daSaku_cFi */
 BOOL daSaku_c::CreateDummyHeap(int i_sakuId) {
-    int arcnameIndex;
+    int i;
 
     if (mType == 0) {
-        arcnameIndex = 0;
+        i = 0;
     } else {
-        arcnameIndex = i_sakuId;
+        i = i_sakuId;
 
         if (mType == 1) {
-            arcnameIndex = 1;
+            i = 1;
         }
     }
 
-    if (loadModel(arcnameIndex, 1, i_sakuId) == FALSE) {
+    if (loadModel(i, 1, i_sakuId) == FALSE) {
         return FALSE;
     }
 
@@ -569,7 +569,7 @@ BOOL daSaku_c::setEffBreak(int i_index) {
     localPos.y += 100.0f;
 
     if (i_index == 1) {
-        localPos.y += (f32)200.0;
+        localPos.y += 200.0f;
     }
 
     if (l_sakuHIO.field_0x0F != 0) {
@@ -629,7 +629,7 @@ static void changeXluMaterialAlpha(J3DMaterial*, u8, bool);
 
 /* 000019AC-00001A50       .text matAlphaAnim__FP12J3DModelDataUcb */
 BOOL matAlphaAnim(J3DModelData* modelData, u8 i_alpha, bool i_isZmodeInfo2) {
-    JUT_ASSERT(0x5d1, modelData != 0);
+    JUT_ASSERT(0x5d1, modelData != NULL);
 
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         changeXluMaterialAlpha(modelData->getMaterialNodePointer(i), i_alpha, i_isZmodeInfo2);
@@ -644,7 +644,7 @@ void changeXluMaterialAlpha(J3DMaterial* i_material, u8 alpha, bool i_isZmodeInf
     static J3DZModeInfo l_zmodeInfo = {GX_TRUE, GX_LEQUAL, GX_FALSE};
     static J3DZModeInfo l_zmodeInfo2 = {GX_TRUE, GX_LEQUAL, GX_TRUE};
 
-    JUT_ASSERT(0x5ff, i_material != 0);
+    JUT_ASSERT(0x5ff, i_material != NULL);
 
     J3DPEBlock* block = i_material->getPEBlock();
 
