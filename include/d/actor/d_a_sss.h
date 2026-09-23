@@ -14,7 +14,6 @@ struct sss_s {
 
 class sss_class : public fopAc_ac_c {
 public:
-    /* 0x000 */ fopAc_ac_c actor;
     /* 0x290 */ u8 field_0x290[0x2AC - 0x290];
     /* 0x2AC */ request_of_phase_process_class field_0x2AC;
     /* 0x2B4 */ mDoExt_McaMorf* field_0x2B4;
