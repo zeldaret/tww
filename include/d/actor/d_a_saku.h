@@ -9,8 +9,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
-BOOL matAlphaAnim(J3DModelData*, u8, bool);
-
 class daSaku_c : public fopAc_ac_c {
 public:
     void chkFlag(unsigned char) {}
@@ -78,13 +76,13 @@ public:
     /* 0xEE0 */ s32 field_0xEE0[3];
     /* 0xEEC */ s32 field_0xEEC;
     /* 0xEF0 */ u8 field_0xEF0[2];
-    /* 0xEF2 */ u8 mSturdinessType;
+    /* 0xEF2 */ u8 mType;
     /* 0xEF3 */ u8 field_0xEF3[0xEF4 - 0xEF3];
     /* 0xEF4 */ u8 field_0xEF4;
     /* 0xEF5 */ u8 field_0xEF5[0xEF8 - 0xEF5];
     /* 0xEF8 */ s32 field_0xEF8[2];
-    /* 0xF00 */ uint mBottomHalfDestroyedSwitch;
-    /* 0xF04 */ uint mTopHalfDestroyedSwitch;
+    /* 0xF00 */ u32 mBottomHalfDestroyedSwitch;
+    /* 0xF04 */ u32 mTopHalfDestroyedSwitch;
 }; // Size: 0xF08
 
 class sakuHIO_c : public JORReflexible {
@@ -124,6 +122,16 @@ public:
 namespace daSaku_prm {
 inline u8 getType(daSaku_c* ac) {
     return (fopAcM_GetParam(ac) >> 4) & 0xf;
+}
+inline u8 getSwitchNo(daSaku_c* ac) {
+    return (fopAcM_GetParam(ac) >> 8) & 0xFF;
+}
+inline u8 getSwitchNo2(daSaku_c* ac) {
+    return (fopAcM_GetParam(ac) >> 16) & 0xFF;
+}
+
+inline u8 checkSaku2(daSaku_c* ac) {
+    return fopAcM_GetParam(ac) & 0xf;
 }
 }; // namespace daSaku_prm
 #endif /* D_A_SAKU_H */

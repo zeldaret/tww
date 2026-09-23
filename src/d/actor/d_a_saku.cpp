@@ -6,11 +6,16 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_saku.h"
 #include "d/d_cc_d.h"
+#include "res/Object/KsakuCo.h"
+#include "res/Object/Ksaku_00.h"
+#include "res/Object/Knsak_00.h"
 
 static sakuHIO_c l_sakuHIO;
 
 class J3DModelData;
 class J3DMaterial;
+
+BOOL matAlphaAnim(J3DModelData*, u8, bool);
 
 /* 000000EC-00000200       .text CreateInit__8daSaku_cFv */
 void daSaku_c::CreateInit() {
@@ -21,7 +26,7 @@ void daSaku_c::CreateInit() {
         field_0xEDC[i][0] = 0xff;
         field_0xEDC[i][1] = 0;
 
-        field_0xEE0[i] = 0xffffffff;
+        field_0xEE0[i] = -1;
         field_0xEF0[i] = 2;
     }
 
@@ -88,12 +93,12 @@ BOOL daSaku_c::mode_break_none(int i_sakuId) {
             cCcD_Obj* hitObj = this_00->GetTgHitObj();
 
             if (hitObj != NULL) {
-                if (mSturdinessType == 0) {
+                if (mType == 0) {
                     broke |= hitObj->ChkAtType(AT_TYPE_SWORD) || hitObj->ChkAtType(AT_TYPE_UNK8) || hitObj->ChkAtType(AT_TYPE_BOMB) ||
                              hitObj->ChkAtType(AT_TYPE_MACHETE) || hitObj->ChkAtType(AT_TYPE_UNK800) || hitObj->ChkAtType(AT_TYPE_DARKNUT_SWORD) ||
                              hitObj->ChkAtType(AT_TYPE_MOBLIN_SPEAR) || hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER);
 
-                } else if (mSturdinessType == 1) {
+                } else if (mType == 1) {
                     broke |= hitObj->ChkAtType(AT_TYPE_MACHETE) || hitObj->ChkAtType(AT_TYPE_BOMB) || hitObj->ChkAtType(AT_TYPE_UNK800) ||
                              hitObj->ChkAtType(AT_TYPE_DARKNUT_SWORD);
                 }
@@ -251,19 +256,19 @@ int daSaku_c::GetDzbId(int i_sakuId) {
 
 /* 00000A4C-00000ADC       .text CreateDummyHeap__8daSaku_cFi */
 BOOL daSaku_c::CreateDummyHeap(int i_sakuId) {
-    int i_arcnameIndex;
+    int arcnameIndex;
 
-    if (mSturdinessType == 0) {
-        i_arcnameIndex = 0;
+    if (mType == 0) {
+        arcnameIndex = 0;
     } else {
-        i_arcnameIndex = i_sakuId;
+        arcnameIndex = i_sakuId;
 
-        if (mSturdinessType == 1) {
-            i_arcnameIndex = 1;
+        if (mType == 1) {
+            arcnameIndex = 1;
         }
     }
 
-    if (loadModel(i_arcnameIndex, 1, i_sakuId) == FALSE) {
+    if (loadModel(arcnameIndex, 1, i_sakuId) == FALSE) {
         return FALSE;
     }
 
@@ -272,7 +277,13 @@ BOOL daSaku_c::CreateDummyHeap(int i_sakuId) {
 
 /* 00000ADC-00000BE8       .text loadMoveBG__8daSaku_cFiii */
 BOOL daSaku_c::loadMoveBG(int i_index0, int i_index1, int i_sakuId) {
-    int sp[5] = {3, 4, 5, 6, 3};
+    int sp[5] = {
+        dRes_INDEX_KSAKUCO_DZB_KSAKU_00_e,
+        dRes_INDEX_KSAKUCO_DZB_KSAKU_01_e,
+        dRes_INDEX_KSAKUCO_DZB_KSAKU_02_e,
+        dRes_INDEX_KSAKUCO_DZB_KSAKU_03_e,
+        dRes_INDEX_KSAKUCO_DZB_KSAKU_00_e
+    };
 
     field_0xE34[i_sakuId][i_index1] = new dBgW();
 
@@ -289,26 +300,41 @@ BOOL daSaku_c::loadMoveBG(int i_index0, int i_index1, int i_sakuId) {
 }
 
 /* 00000BE8-00000D7C       .text loadModel__8daSaku_cFiii */
-BOOL daSaku_c::loadModel(int i_arcnameIndex, int i_heapId, int i_sakuId) {
+BOOL daSaku_c::loadModel(int i_index, int i_heapId, int i_sakuId) {
     J3DModelData* modelData;
 
-    int sp_0x20[6] = {3, 7, 5, 4, 6, 8};
-    int sp_0x08[6] = {3, 5, 4, 6, 8, 7};
+    int sp_0x20[6] = {
+        dRes_INDEX_KSAKU_00_BDL_KSAKU_00_e,
+        dRes_INDEX_KSAKU_00_BDL_KSAKU_04_e,
+        dRes_INDEX_KSAKU_00_BDL_KSAKU_02_e,
+        dRes_INDEX_KSAKU_00_BDL_KSAKU_01_e,
+        dRes_INDEX_KSAKU_00_BDL_KSAKU_03_e,
+        dRes_INDEX_KSAKU_00_BDL_KSAKU_05_e
+    };
+    int sp_0x08[6] = {
+
+        dRes_INDEX_KNSAK_00_BDL_KNSAK_00_e,
+        dRes_INDEX_KNSAK_00_BDL_KNSAK_02_e,
+        dRes_INDEX_KNSAK_00_BDL_KNSAK_01_e,
+        dRes_INDEX_KNSAK_00_BDL_KNSAK_03_e,
+        dRes_INDEX_KNSAK_00_BDL_KNSAK_05_e,
+        dRes_INDEX_KNSAK_00_BDL_KNSAK_04_e
+    };
 
     if (i_sakuId == 1) {
-        i_arcnameIndex += 3;
+        i_index += 3;
     }
 
-    if (mSturdinessType == 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[1], sp_0x20[i_arcnameIndex]);
+    if (mType == 0) {
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[1], sp_0x20[i_index]);
     }
 
-    else if (mSturdinessType == 1)
+    else if (mType == 1)
     {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[2], sp_0x08[i_arcnameIndex]);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[2], sp_0x08[i_index]);
     }
 
-    JUT_ASSERT(0x43d, modelData != 0);
+    JUT_ASSERT(0x43d, modelData != NULL);
     mModels[i_sakuId][i_heapId] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
     if (mModels[i_sakuId][i_heapId] == NULL) {
@@ -439,13 +465,13 @@ void daSaku_c::setMoveBGMtx() {
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
 
-    PSMTXCopy(mDoMtx_stack_c::now, mMtx[0]);
+    MTXCopy(mDoMtx_stack_c::get(), mMtx[0]);
 
     if (field_0xEF8[1] != 0) {
-        PSMTXTrans(mDoMtx_stack_c::now, current.pos.x, current.pos.y + 200, current.pos.z);
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 200, current.pos.z);
         mDoMtx_stack_c::YrotM(shape_angle.y);
         mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
-        PSMTXCopy(mDoMtx_stack_c::now, mMtx[1]);
+        MTXCopy(mDoMtx_stack_c::get(), mMtx[1]);
     };
 
     return;
@@ -527,27 +553,27 @@ BOOL daSaku_c::setEffFire(int _) {
     // input param seems to be unused
     cXyz local_18 = current.pos;
 
-    dComIfGp_particle_set(0x45c, &local_18, &current.angle, 0x0, 0xff, 0x0, -1, 0x0, 0x0, 0x0);
-    dComIfGp_particle_set(0x245e, &local_18, &current.angle, 0x0, m_smoke_alpha, 0x0, -1, 0x0, 0x0, 0x0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JN_SK_FIRE_A, &local_18, &current.angle, 0x0, 0xff, 0x0, -1, 0x0, 0x0, 0x0);
+    dComIfGp_particle_set(dPa_name::ID_IT_JT_SK_SMOKE, &local_18, &current.angle, 0x0, m_smoke_alpha, 0x0, -1, 0x0, 0x0, 0x0);
 
     mParticleTimers[1] = 1;
     mParticleTimers[0] = 1;
 
-    JAIZelBasic::zel_basic->seStart(0x6924, &eyePos, 0, dComIfGp_getReverb(current.roomNo), 1.0, 1.0, -1.0, -1.0, 0);
+    fopAcM_seStart(this, JA_SE_OBJ_BURN_WRAILING, 0);
 
     return TRUE;
 }
 
 BOOL daSaku_c::setEffBreak(int i_index) {
     cXyz localPos = current.pos;
-    localPos.y += (f32)100.0;
+    localPos.y += 100.0f;
 
     if (i_index == 1) {
         localPos.y += (f32)200.0;
     }
 
     if (l_sakuHIO.field_0x0F != 0) {
-        dComIfGp_particle_set(0x45d, &localPos, &current.angle, &scale, 0xff, 0, -1, &tevStr.mColorK0, &tevStr.mColorK0, NULL);
+        dComIfGp_particle_set(dPa_name::ID_IT_JN_SK_HAHEN_A, &localPos, &current.angle, &scale, 0xff, 0, -1, &tevStr.mColorK0, &tevStr.mColorK0, NULL);
     }
 
     field_0xEB4[i_index] = (f32)l_sakuHIO.field_0x12 / 255.0f;
@@ -558,7 +584,7 @@ BOOL daSaku_c::setEffBreak(int i_index) {
     field_0xEC4[i_index] = localPos;
 
     dComIfGp_particle_setToon(
-        0x2027,
+        dPa_name::ID_AK_JT_ELEMENTSMOKE01,
         &field_0xEC4[i_index],
         &current.angle,
         NULL,
@@ -587,12 +613,11 @@ BOOL daSaku_c::setEffBreak(int i_index) {
         field_0x290[i_index].getEmitter()->setMaxFrame(1);
     }
 
-    if (mSturdinessType == 0) {
-        s8 reverb = dComIfGp_getReverb(current.roomNo);
-        JAIZelBasic::zel_basic->seStart(0x6847, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
-    } else if (mSturdinessType == 1) {
-        s8 reverb = dComIfGp_getReverb(current.roomNo);
-        JAIZelBasic::zel_basic->seStart(0x693f, &eyePos, 0, reverb, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+    if (mType == 0) {
+        fopAcM_seStart(this, JA_SE_OBJ_COL_BRK_WRAILING, 0);
+
+    } else if (mType == 1) {
+        fopAcM_seStart(this, JA_SE_OBJ_BRK_WRAIL_K, 0);
     }
 
     mParticleTimers[i_index] = 1;
@@ -615,9 +640,9 @@ BOOL matAlphaAnim(J3DModelData* modelData, u8 i_alpha, bool i_isZmodeInfo2) {
 
 /* 00001A50-00001B98       .text changeXluMaterialAlpha__FP11J3DMaterialUcb */
 void changeXluMaterialAlpha(J3DMaterial* i_material, u8 alpha, bool i_isZmodeInfo2) {
-    static J3DBlendInfo l_blendInfo = {1, 4, 5, 7};
-    static J3DZModeInfo l_zmodeInfo = {1, 3, 0};
-    static J3DZModeInfo l_zmodeInfo2 = {1, 3, 1};
+    static J3DBlendInfo l_blendInfo = {GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_OR};
+    static J3DZModeInfo l_zmodeInfo = {GX_TRUE, GX_LEQUAL, GX_FALSE};
+    static J3DZModeInfo l_zmodeInfo2 = {GX_TRUE, GX_LEQUAL, GX_TRUE};
 
     JUT_ASSERT(0x5ff, i_material != 0);
 
@@ -645,10 +670,10 @@ cPhs_State daSaku_c::_daSaku_create() {
     s32 size = 0; // not used, but instructions indicate that it has size of solid heap
 
     fopAcM_ct(this, daSaku_c);
-    mSturdinessType = daSaku_prm::getType(this);
+    mType = daSaku_prm::getType(this);
 
     int arcnameIndex = 2;
-    if (mSturdinessType == 0) {
+    if (mType == 0) {
         arcnameIndex = 1;
     }
 
@@ -662,10 +687,8 @@ cPhs_State daSaku_c::_daSaku_create() {
         return phase;
     }
 
-    mBottomHalfDestroyedSwitch = base.base.mParameters >> 8 & 0xff;
-    ;
-    mTopHalfDestroyedSwitch = base.base.mParameters >> 0x10 & 0xff;
-    ;
+    mBottomHalfDestroyedSwitch = daSaku_prm::getSwitchNo(this);
+    mTopHalfDestroyedSwitch = daSaku_prm::getSwitchNo2(this);
 
     field_0xEF8[0] = 1;
 
@@ -674,7 +697,7 @@ cPhs_State daSaku_c::_daSaku_create() {
     }
     field_0xEF8[1] = 0;
 
-    if ((base.base.mParameters & 0xfU) != 0) {
+    if (daSaku_prm::checkSaku2(this) != 0) {
         field_0xEF8[1] = 1;
 
         if (dComIfGs_isSwitch(mTopHalfDestroyedSwitch, home.roomNo)) {
@@ -762,7 +785,7 @@ BOOL daSaku_c::_daSaku_delete() {
 
     dComIfG_resDelete(&field_0xE0C, m_arcname[0]);
 
-    if (mSturdinessType == 0) {
+    if (mType == 0) {
         dComIfG_resDelete(&field_0xE04, m_arcname[1]);
     } else {
         dComIfG_resDelete(&field_0xE04, m_arcname[2]);
@@ -850,7 +873,7 @@ GXColor daSaku_c::dust_color = {0x69, 0x5B, 0x30, 0xFF};
 
 const u8 daSaku_c::m_start_alpha = 180;
 const u16 daSaku_c::m_alpha_spd = 5;
-const f32 daSaku_c::m_saku_height = 200.0;
+const f32 daSaku_c::m_saku_height = 200.0f;
 
 const dCcD_SrcCyl daSaku_c::m_at_cyl_src = {
     // dCcD_SrcGObjInf
@@ -858,7 +881,7 @@ const dCcD_SrcCyl daSaku_c::m_at_cyl_src = {
         /* Flags             */ 0,
         /* SrcObjAt  Type    */ AT_TYPE_FIRE | AT_TYPE_UNK20000,
         /* SrcObjAt  Atp     */ 1,
-        /* SrcObjAt  SPrm    */ 15,
+        /* SrcObjAt  SPrm    */ cCcD_AtSPrm_Set_e | cCcD_AtSPrm_GrpAll_e,
         /* SrcObjTg  Type    */ 0,
         /* SrcObjTg  SPrm    */ 0,
         /* SrcObjCo  SPrm    */ 0,
@@ -866,19 +889,19 @@ const dCcD_SrcCyl daSaku_c::m_at_cyl_src = {
         /* SrcGObjAt HitMark */ 0,
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
-        /* SrcGObjAt SPrm    */ 1,
+        /* SrcGObjAt SPrm    */ dCcG_AtSPrm_NoConHit_e,
         /* SrcGObjTg Se      */ 0,
         /* SrcGObjTg HitMark */ 0,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
-        /* SrcGObjTg SPrm    */ 6,
+        /* SrcGObjTg SPrm    */ dCcG_TgSPrm_NoConHit_e | dCcG_TgSPrm_NoHitMark_e,
         /* SrcGObjCo SPrm    */ 0,
     },
     // cM3dGCylS
     {{
-        /* Center */ {0.0, 0.0, 0.0},
-        /* Radius */ 50.0,
-        /* Height */ 400.0,
+        /* Center */ {0.0f, 0.0f, 0.0f},
+        /* Radius */ 50.0f,
+        /* Height */ 400.0f,
     }},
 };
 
