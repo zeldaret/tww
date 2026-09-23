@@ -82,40 +82,41 @@ void control3(sss_class* i_this) {
 /* 000004CC-00000804       .text control1__FP9sss_class */
 void control1(sss_class* i_this) {
     /* Nonmatching */
+    cXyz v1;
+    cXyz v2;
+    cXyz v3;
+    cXyz v4;
+
     i_this->field_0x33C[0].field_0x00 = i_this->current.pos;
     sss_s* sp = &i_this->field_0x33C[1];
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    cXyz local_a4;
-    local_a4.x = 0; 
-    local_a4.y = 0;
-    local_a4.z = i_this->field_0x2F0;
-    cXyz local_bc;
-    MtxPosition(&local_a4, &local_bc);
-    local_a4.z = i_this->field_0x2E8;
-    cXyz local_c8;
-    cXyz local_b0;
+    v1.x = 0; 
+    v1.y = 0;
+    v1.z = i_this->field_0x2F0;
+    MtxPosition(&v1, &v2);
+    v1.z = i_this->field_0x2E8;
     f32 f1 = i_this->field_0x2F4;
     for (int i = 1; i < 9; i++) {
-        local_b0.x = f1 * cM_ssin((i_this->field_0x2BC * (REG0_S(5) + 1100)) + i * (REG0_S(6) + 4000));
-        local_b0.y = g_d[i];
-        local_b0.z = f1 * cM_scos((i_this->field_0x2BC * (REG0_S(7) + 800)) + i * (REG0_S(8) + 4000));
+        v4.x = f1 * cM_ssin((i_this->field_0x2BC * (REG0_S(5) + 1100)) + i * (REG0_S(6) + 4000));
+        v4.y = g_d[i];
+        v4.z = f1 * cM_scos((i_this->field_0x2BC * (REG0_S(7) + 800)) + i * (REG0_S(8) + 4000));
         f32 one = 1.0f;
-        MtxPosition(&local_b0, &local_c8);
-        f32 x_val = local_c8.x * one;
-        x_val += (sp[0].field_0x00.x - sp[-1].field_0x00.x) + local_bc.x * one;
-        f32 y_val = local_c8.y * one;
-        y_val += (sp[0].field_0x00.y - sp[-1].field_0x00.y) + local_bc.y * one;
-        f32 z_val = local_c8.z * one;
-        z_val += (sp[0].field_0x00.z - sp[-1].field_0x00.z) + local_bc.z * one;
+        MtxPosition(&v4, &v3);
+        f32 x_val = v3.x * one;
+        x_val += (sp[0].field_0x00.x - sp[-1].field_0x00.x) + v2.x * one;
+        f32 y_val = v3.y * one;
+        y_val += (sp[0].field_0x00.y - sp[-1].field_0x00.y) + v2.y * one;
+        f32 z_val = v3.z * one;
+        z_val += (sp[0].field_0x00.z - sp[-1].field_0x00.z) + v2.z * one;
         int xz_atan = cM_atan2s(x_val, z_val);
         s16 y_atan = -cM_atan2s(y_val, std::sqrtf(SQUARE(x_val) + SQUARE(z_val)));
         MtxPush();
         mDoMtx_YrotS(*calc_mtx, xz_atan);
         mDoMtx_XrotM(*calc_mtx, y_atan);
-        MtxPosition(&local_a4, &local_b0);
+        MtxPosition(&v1, &v4);
         MtxPull();
-        sp[0].field_0x00 = sp[-1].field_0x00 + local_b0;
+        sp[0].field_0x00 = sp[-1].field_0x00 + v4;
         sp++;
     }
 }
@@ -123,12 +124,12 @@ void control1(sss_class* i_this) {
 /* 00000840-00000B0C       .text control2__FP9sss_class */
 void control2(sss_class* i_this) {
     /* Nonmatching */
-    cXyz temp_1;
-    cXyz local_6c;
+    cXyz v1;
+    cXyz v2;
 
-    local_6c.x = 0;
-    local_6c.y = 0;
-    local_6c.z = i_this->field_0x2E8;
+    v2.x = 0;
+    v2.y = 0;
+    v2.z = i_this->field_0x2E8;
     i_this->field_0x33C[9].field_0x00 = i_this->field_0x2C8;
     sss_s* current = &i_this->field_0x33C[8];
     for (int i = 8; i >= 1; i--) {
@@ -140,51 +141,51 @@ void control2(sss_class* i_this) {
         mDoMtx_YrotS(*calc_mtx, xz_atan);
         mDoMtx_XrotM(*calc_mtx, y_atan);
         if (i == 8) {
-            local_6c.z = i_this->field_0x2E8 - 10;
-            if (local_6c.z < 0) {
-                local_6c.z = 0;
+            v2.z = i_this->field_0x2E8 - 10;
+            if (v2.z < 0) {
+                v2.z = 0;
             }
         } else {
-            local_6c.z = i_this->field_0x2E8;
+            v2.z = i_this->field_0x2E8;
         }
-        MtxPosition(&local_6c, &temp_1);
-        current->field_0x00 = current[1].field_0x00 + temp_1;
+        MtxPosition(&v2, &v1);
+        current->field_0x00 = current[1].field_0x00 + v1;
         current--;
     }
     i_this->field_0x2D4 = i_this->field_0x33C[9].field_0x00;
-    cXyz local_90 = i_this->field_0x33C[8].field_0x00 - i_this->field_0x33C[9].field_0x00;
-    i_this->field_0x2E0 = -cM_atan2s(local_90.y, local_90.z);
-    i_this->field_0x2E2 = cM_atan2s(local_6c.x, std::sqrtf(SQUARE(local_6c.y) + SQUARE(local_6c.z)));
+    cXyz v3 = i_this->field_0x33C[8].field_0x00 - i_this->field_0x33C[9].field_0x00;
+    i_this->field_0x2E0 = -cM_atan2s(v3.y, v3.z);
+    i_this->field_0x2E2 = cM_atan2s(v2.x, std::sqrtf(SQUARE(v2.y) + SQUARE(v2.z)));
     hand_mtx_set(i_this);
 }
 
 /* 00000B0C-00000F78       .text cut_control1__FP9sss_class */
 void cut_control1(sss_class* i_this) {
     /* Nonmatching */
-    cXyz temp_1;
-    cXyz local_a0;
+    cXyz v1;
+    cXyz v2;
     
     i_this->field_0x490[0].field_0x00 = i_this->current.pos;
     sss_s* current = &i_this->field_0x490[1];
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    local_a0.z = i_this->field_0x2FC;
+    v2.z = i_this->field_0x2FC;
     f32 reg = REG0_F(18) + 50;
     for (int i = 1; i < 5; i++) {
         cXyz temp_2;
         temp_2.x = reg * cM_ssin((i_this->field_0x2BC * (REG0_S(5) + 4100)) + i * (REG0_S(6) + 10000));
         temp_2.y = REG0_F(17) + 50;
         temp_2.z = reg * cM_scos((i_this->field_0x2BC * (REG0_S(7) + 4400)) + i * (REG0_S(8) + 10000));
-        MtxPosition(&temp_2, &temp_1);
-        f32 x_val = temp_1.x + (current->field_0x00.x - current[-1].field_0x00.x);
-        f32 y_val = temp_1.y + (current->field_0x00.y - current[-1].field_0x00.y);
-        f32 z_val = temp_1.z + (current->field_0x00.z - current[-1].field_0x00.z);
+        MtxPosition(&temp_2, &v1);
+        f32 x_val = v1.x + (current->field_0x00.x - current[-1].field_0x00.x);
+        f32 y_val = v1.y + (current->field_0x00.y - current[-1].field_0x00.y);
+        f32 z_val = v1.z + (current->field_0x00.z - current[-1].field_0x00.z);
         int xz_atan = cM_atan2s(x_val, z_val);
         s16 y_atan = -cM_atan2s(y_val, std::sqrtf(SQUARE(x_val) + SQUARE(z_val)));
         MtxPush();
         mDoMtx_YrotS(*calc_mtx, xz_atan);
         mDoMtx_XrotM(*calc_mtx, y_atan);
-        MtxPosition(&local_a0, &temp_2);
+        MtxPosition(&v2, &temp_2);
         MtxPull();
         current->field_0x00 = current[-1].field_0x00 + temp_2;
         current++;
@@ -194,10 +195,10 @@ void cut_control1(sss_class* i_this) {
         i_this->field_0x2C2[1] = 60;
     }
     if (i_this->field_0xA10) {
-        cXyz local_d0 = i_this->field_0x490[4].field_0x00 - i_this->field_0x490[3].field_0x00;
+        cXyz v = i_this->field_0x490[4].field_0x00 - i_this->field_0x490[3].field_0x00;
         JGeometry::TVec3<s16> rot;
-        rot.y = (int)cM_atan2s(local_d0.x, local_d0.z);
-        rot.x = -cM_atan2s(local_a0.y, std::sqrtf(SQUARE(local_a0.x) + SQUARE(local_a0.z)));
+        rot.y = (int)cM_atan2s(v.x, v.z);
+        rot.x = -cM_atan2s(v2.y, std::sqrtf(SQUARE(v2.x) + SQUARE(v2.z)));
         i_this->field_0xA10->setGlobalTranslation(i_this->field_0x490[4].field_0x00.x, i_this->field_0x490[4].field_0x00.y, i_this->field_0x490[4].field_0x00.z);
         i_this->field_0xA10->setGlobalRotation(rot);
         if (i_this->field_0x2C2[1] == 1) {
@@ -210,56 +211,56 @@ void cut_control1(sss_class* i_this) {
 /* 00000F78-000014F4       .text cut_control2__FP9sss_class */
 void cut_control2(sss_class* i_this) {
     /* Nonmatching */
-    cXyz local_b0;
-    cXyz local_c0;
-    local_b0.x = 0;
-    local_b0.y = 0;
-    local_b0.z = i_this->field_0x2E8;
+    cXyz v1;
+    cXyz v2;
+    v1.x = 0;
+    v1.y = 0;
+    v1.z = i_this->field_0x2E8;
     i_this->field_0x33C[9].field_0x00 = i_this->field_0x2C8;
     sss_s* current = &i_this->field_0x33C[8];
-    f32 val_2f4 = i_this->field_0x2F4;
+    f32 f1 = i_this->field_0x2F4;
     for (int i = 8; i >= 0; i--) {
-        local_c0.x = val_2f4 * cM_ssin(i_this->field_0x2BC * (REG0_S(5) + 2500) + i * (REG0_S(6) + 3000));
-        local_c0.y = val_2f4 * cM_ssin(i_this->field_0x2BC * (REG0_S(5) + 2950) + i * (REG0_S(6) + 4000));
-        local_c0.z = val_2f4 * cM_scos(i_this->field_0x2BC * (REG0_S(7) + 2800) + i * (REG0_S(8) + 3500));
-        f32 x_val = local_c0.x + (current->field_0x00.x - current[1].field_0x00.x);
-        f32 y_val = current->field_0x00.y - 10 + local_c0.y;
-        f32 fVar2 = i_this->field_0x2F8 + 5;
-        if (y_val < fVar2) {
-            y_val = fVar2;
+        v2.x = f1 * cM_ssin(i_this->field_0x2BC * (REG0_S(5) + 2500) + i * (REG0_S(6) + 3000));
+        v2.y = f1 * cM_ssin(i_this->field_0x2BC * (REG0_S(5) + 2950) + i * (REG0_S(6) + 4000));
+        v2.z = f1 * cM_scos(i_this->field_0x2BC * (REG0_S(7) + 2800) + i * (REG0_S(8) + 3500));
+        f32 x_val = v2.x + (current->field_0x00.x - current[1].field_0x00.x);
+        f32 y_val = current->field_0x00.y - 10 + v2.y;
+        f32 f2 = i_this->field_0x2F8 + 5;
+        if (y_val < f2) {
+            y_val = f2;
         }
         y_val -= current[1].field_0x00.y;
-        f32 z_val = local_c0.z + (current->field_0x00.z - current[1].field_0x00.z);
+        f32 z_val = v2.z + (current->field_0x00.z - current[1].field_0x00.z);
         int xz_atan = cM_atan2s(x_val, z_val);
         s16 y_atan = -cM_atan2s(y_val, std::sqrtf(SQUARE(x_val) + SQUARE(z_val)));
         mDoMtx_YrotS(*calc_mtx, xz_atan);
         mDoMtx_XrotM(*calc_mtx, y_atan);
         if (i == 8) {
-            local_b0.z = i_this->field_0x2E8 - 10;
-            if (local_b0.z < 0) {
-                local_b0.z = 0;
+            v1.z = i_this->field_0x2E8 - 10;
+            if (v1.z < 0) {
+                v1.z = 0;
             }
         } else {
-            local_b0.z = i_this->field_0x2E8;
+            v1.z = i_this->field_0x2E8;
         }
         cXyz temp;
-        MtxPosition(&local_b0, &temp);
+        MtxPosition(&v1, &temp);
         current->field_0x00 = current[1].field_0x00 + temp;
         current--;
     }
     i_this->field_0x2D4 = i_this->field_0x33C[9].field_0x00;
-    cXyz local_e0 = i_this->field_0x33C[8].field_0x00 - i_this->field_0x33C[9].field_0x00;
-    i_this->field_0x2E0 = -cM_atan2s(local_e0.y, local_e0.z);
-    i_this->field_0x2E2 = cM_atan2s(local_b0.x, std::sqrtf(SQUARE(local_b0.y) + SQUARE(local_b0.z)));
+    cXyz v = i_this->field_0x33C[8].field_0x00 - i_this->field_0x33C[9].field_0x00;
+    i_this->field_0x2E0 = -cM_atan2s(v.y, v.z);
+    i_this->field_0x2E2 = cM_atan2s(v1.x, std::sqrtf(SQUARE(v1.y) + SQUARE(v1.z)));
     hand_mtx_set(i_this);
     if (!i_this->field_0xA14 && i_this->field_0xA18) {
         i_this->field_0xA14 = dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, &i_this->field_0x33C[0].field_0x00);
     }
     if (i_this->field_0xA14) {
-        cXyz local_ec = i_this->field_0x33C[0].field_0x00 - i_this->field_0x33C[1].field_0x00;
+        cXyz v = i_this->field_0x33C[0].field_0x00 - i_this->field_0x33C[1].field_0x00;
         JGeometry::TVec3<s16> rot;
-        rot.y = (int)cM_atan2s(local_ec.x, local_ec.z);
-        rot.x = -cM_atan2s(local_b0.y, std::sqrtf(SQUARE(local_b0.x) + SQUARE(local_b0.z)));
+        rot.y = (int)cM_atan2s(v.x, v.z);
+        rot.x = -cM_atan2s(v1.y, std::sqrtf(SQUARE(v1.x) + SQUARE(v1.z)));
         rot.z = 0;
         i_this->field_0xA14->setGlobalTranslation(i_this->field_0x33C[0].field_0x00.x, i_this->field_0x33C[0].field_0x00.y, i_this->field_0x33C[0].field_0x00.z);
         i_this->field_0xA14->setGlobalRotation(rot);
@@ -274,65 +275,64 @@ void cut_control2(sss_class* i_this) {
 /* 000014F4-00002614       .text hand_move__FP9sss_class */
 void hand_move(sss_class* i_this) {
     /* Nonmatching */
-    cXyz local_17c; // switch
-    float fVar2; // switch
-    float fVar3; // switch
-    float fVar4; // switch
-    bool bVar6; // switch
-    bool bVar7; // switch
-    float fVar23; // switch
-    float fVar25; // switch
-    float fVar26; // switch
-    cXyz temp; // switch
-    cXyz local_164; // switch
+    bool b1;
+    bool b2;
+    f32 f1;
+    f32 f2;
+    f32 f3;
+    f32 f4;
+    f32 f5;
+    f32 f6;
+    cXyz v1;
+    cXyz v2;
+    cXyz v3;
+    cXyz v4;
 
-    cXyz local_1ac;
-    
     daPy_py_c* player = (daPy_py_c*) dComIfGp_getPlayer(0);
     daPy_lk_c* link = (daPy_lk_c*) dComIfGp_getLinkPlayer();
-    dBgS_GndChk local_13c;
-    local_13c.MaskNormalGrp();
-    bVar6 = false;
-    bVar7 = false;
+    dBgS_GndChk gnd_chk;
+    gnd_chk.MaskNormalGrp();
+    b1 = false;
+    b2 = false;
     f32 speedRatio = 0.1;
-    fVar26 = 8;
-    f32 fVar1 = 0;
+    f6 = 8;
+    f32 f7 = 0;
     f32 target = 30;
     f32 maxSpeed = 1;
-    fVar23 = fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0));
-    fVar2 = 5;
+    f4 = fopAcM_searchActorDistance(i_this, dComIfGp_getPlayer(0));
+    f1 = 5;
     if (i_this->field_0x2B9 != 0xFF) {
-        fVar25 = i_this->field_0x2B9 * 10.0f;
+        f5 = i_this->field_0x2B9 * 10.0f;
     } else {
-        fVar25 = 1000;
+        f5 = 1000;
     }
     mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
     mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
     switch (i_this->field_0x2C0) {
         case 0: {
-            bool bVar5 = false;
-            local_17c = i_this->current.pos;
+            bool b = false;
+            v2 = i_this->current.pos;
             target = 0;
             maxSpeed = 0.5;
-            fVar3 = -20;
+            f2 = -20;
             if (!i_this->field_0x2C2[0]) {
                 if (i_this->field_0x2BA) {
                     if (dComIfGs_isSwitch(i_this->field_0x2BA, fopAcM_GetRoomNo(i_this)) || REG0_S(0)) {
                         i_this->field_0x2C0 = 1;
                         i_this->field_0x2C2[0] = 30;
                         hand_open(i_this);
-                        bVar5 = true;
+                        b = true;
                     }
                 } else {
-                    if (fVar23 < fVar25) {
+                    if (f4 < f5) {
                         i_this->field_0x2C0 = 1;
                         i_this->field_0x2C2[0] = 30;
                         hand_open(i_this);
-                        bVar5 = true;
+                        b = true;
                     }
                 }
             }
-            if (std::abs(i_this->field_0x2C8.y - i_this->current.pos.y) < 5 && bVar5) {
+            if (std::abs(i_this->field_0x2C8.y - i_this->current.pos.y) < 5 && b) {
                 if (i_this->field_0x2B8 == 1) {
                     fopAcM_seStart(i_this, JA_SE_OBJ_SVINE_OUT_WATER, 0);
                 } else {
@@ -342,33 +342,33 @@ void hand_move(sss_class* i_this) {
             break;
         }
         case 1:
-            local_164.x = (REG0_F(13) + 50) * cM_ssin(i_this->field_0x2BC * 600);
-            local_164.y = 250;
-            local_164.z = (REG0_F(13) + 50) * cM_ssin(i_this->field_0x2BC * 700);
-            MtxPosition(&local_164, &temp);
-            local_1ac = i_this->current.pos + temp;
-            if (i_this->field_0x2C2[0] == 0 && fVar23 < REG0_F(14) + 300) {
+            v3.x = (REG0_F(13) + 50) * cM_ssin(i_this->field_0x2BC * 600);
+            v3.y = 250;
+            v3.z = (REG0_F(13) + 50) * cM_ssin(i_this->field_0x2BC * 700);
+            MtxPosition(&v3, &v1);
+            v4 = i_this->current.pos + v1;
+            if (i_this->field_0x2C2[0] == 0 && f4 < REG0_F(14) + 300) {
                 i_this->field_0x2C0 = 2;
             }
-            if ((fVar25 + 100) > fVar23) {
+            if ((f5 + 100) > f4) {
                 i_this->field_0x2C0 = 0;
             }
             break;
         case 2:
-            fVar26 = 15;
-            fVar1 = 10;
-            bVar6 = true;
-            local_17c.x = i_this->current.pos.x;
-            local_17c.z = i_this->current.pos.z;
-            local_17c.y = i_this->current.pos.y;
-            local_17c.y += 70;
-            if (fVar23 > REG0_F(14) + 450) {
+            f6 = 15;
+            f7 = 10;
+            b1 = true;
+            v2.x = i_this->current.pos.x;
+            v2.z = i_this->current.pos.z;
+            v2.y = i_this->current.pos.y;
+            v2.y += 70;
+            if (f4 > REG0_F(14) + 450) {
                 i_this->field_0x2C0 = 1;
-                fVar4 = 0.5;
+                f3 = 0.5;
                 i_this->speedF = 0;
             }
-            local_1ac = local_17c - i_this->field_0x2C8;
-            if (!(std::sqrtf(VECSquareMag(&local_164)) < 20) || player != link) break;
+            v4 = v2 - i_this->field_0x2C8;
+            if (!(std::sqrtf(VECSquareMag(&v3)) < 20) || player != link) break;
             i_this->field_0x2C0 = 3;
             hand_close(i_this);
             fopAcM_seStart(i_this, JA_SE_OBJ_SVINE_GRASP, 0);
@@ -382,32 +382,32 @@ void hand_move(sss_class* i_this) {
                     dComIfGp_setItemMagicCount(-1);
                 }
             }
-            if (fVar23 > REG6_F(2) + 400) {
-                fVar23 = (REG6_F(0) + 0.1f) * (fVar23 - REG6_F(2));
-                if (fVar23 > REG6_F(1) + 100) {
-                    fVar23 = REG6_F(1) + 100;
+            if (f4 > REG6_F(2) + 400) {
+                f4 = (REG6_F(0) + 0.1f) * (f4 - REG6_F(2));
+                if (f4 > REG6_F(1) + 100) {
+                    f4 = REG6_F(1) + 100;
                 }
                 s16 temp = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0));
-                player->setOutPower(fVar23, temp - 0x8000, 0);
+                player->setOutPower(f4, temp - 0x8000, 0);
             }
-            local_17c.x = player->current.pos.x;
-            local_17c.z = player->current.pos.z;
-            local_17c.y = player->current.pos.y;
-            local_17c.y += 70;
-            fVar26 = 200;
+            v2.x = player->current.pos.x;
+            v2.z = player->current.pos.z;
+            v2.y = player->current.pos.y;
+            v2.y += 70;
+            f6 = 200;
             speedRatio = 1;
-            fVar4 = 5;
+            f3 = 5;
             i_this->field_0x2F4 = REG0_F(11) + 10;
-            if (fVar23 > 800) {
+            if (f4 > 800) {
                 i_this->field_0x2C0 = 1;
                 i_this->speedF = 30;
                 hand_open(i_this);
             }
             break;
         case 5:
-            fVar2 = 50;
+            f1 = 50;
             i_this->field_0x2F4 = 50;
-            bVar7 = true;
+            b2 = true;
             target = 25;
             maxSpeed = 1;
             i_this->field_0x2C8 += i_this->speed;
@@ -418,11 +418,11 @@ void hand_move(sss_class* i_this) {
                 f32 temp_y = i_this->field_0x2C8.y;
                 f32 temp_x = i_this->field_0x2C8.x;
                 temp_y += 200;
-                local_13c.m_pos.z = temp_z;
-                local_13c.m_pos.y = temp_y;
-                local_13c.m_pos.x = temp_x;
+                gnd_chk.m_pos.z = temp_z;
+                gnd_chk.m_pos.y = temp_y;
+                gnd_chk.m_pos.x = temp_x;
             }
-            i_this->field_0x2F8 = dComIfG_Bgsp()->GroundCross(&local_13c);
+            i_this->field_0x2F8 = dComIfG_Bgsp()->GroundCross(&gnd_chk);
             if (i_this->field_0x2F8 == -1e9f || i_this->field_0x2C8.y <= i_this->field_0x2F8 + 10) {
                 i_this->field_0x2C8.y = i_this->field_0x2F8 + 10;
                 i_this->field_0x2C2[0] = 100;
@@ -430,11 +430,11 @@ void hand_move(sss_class* i_this) {
             }
             break;
         case 6:
-            bVar7 = true;
-            fVar2 = 0;
+            b2 = true;
+            f1 = 0;
             i_this->field_0x2C2[2] = 10;
             if (i_this->field_0x2C2[0] < 40) {
-                target = fVar2;
+                target = f1;
                 maxSpeed = 1;
                 i_this->field_0x2C8.y -= 2;
             }
@@ -446,17 +446,17 @@ void hand_move(sss_class* i_this) {
             }
     }
     cLib_addCalc2(&i_this->field_0x2E8, target, 0.5, maxSpeed);
-    cLib_addCalc2(&i_this->field_0x2F0, fVar1, 1, 0.2);
-    cLib_addCalc2(&i_this->field_0x2F4, fVar2, 1, 1.5);
-    if (!bVar7) {
-        cLib_addCalc2(&i_this->speedF, fVar26, 1, fVar4);
+    cLib_addCalc2(&i_this->field_0x2F0, f7, 1, 0.2);
+    cLib_addCalc2(&i_this->field_0x2F4, f1, 1, 1.5);
+    if (!b2) {
+        cLib_addCalc2(&i_this->speedF, f6, 1, f3);
         if (i_this->field_0xA08 > 1 && i_this->field_0x2C0 != 3) {
             mDoMtx_YrotS(*calc_mtx, i_this->field_0xA0C);
-            local_164.x = 0;
-            local_164.y = REG6_F(9) + 100;
-            local_164.z = i_this->field_0xA08;
-            MtxPosition(&local_164, &temp);
-            local_1ac = i_this->current.pos + temp;
+            v3.x = 0;
+            v3.y = REG6_F(9) + 100;
+            v3.z = i_this->field_0xA08;
+            MtxPosition(&v3, &v1);
+            v4 = i_this->current.pos + v1;
             speedRatio = 0.1f;
             i_this->speedF = i_this->field_0xA08 * 0.2f;
             if (i_this->speedF > REG6_F(8) + 30) {
@@ -464,11 +464,11 @@ void hand_move(sss_class* i_this) {
             }
         }
         cLib_addCalc0(&i_this->field_0xA08, 1, REG6_F(7) + 5);
-        cLib_addCalc2(&i_this->field_0x2C8.x, local_17c.x, speedRatio, i_this->speedF);
-        cLib_addCalc2(&i_this->field_0x2C8.y, local_17c.y, speedRatio, i_this->speedF);
-        cLib_addCalc2(&i_this->field_0x2C8.z, local_17c.z, speedRatio, i_this->speedF);
-        cLib_addCalc2(&i_this->current.pos.y, i_this->home.pos.y + fVar3, 0.5, 0.5);
-        if (bVar6 && i_this->current.angle.x == 0) {
+        cLib_addCalc2(&i_this->field_0x2C8.x, v2.x, speedRatio, i_this->speedF);
+        cLib_addCalc2(&i_this->field_0x2C8.y, v2.y, speedRatio, i_this->speedF);
+        cLib_addCalc2(&i_this->field_0x2C8.z, v2.z, speedRatio, i_this->speedF);
+        cLib_addCalc2(&i_this->current.pos.y, i_this->home.pos.y + f2, 0.5, 0.5);
+        if (b1 && i_this->current.angle.x == 0) {
             cLib_addCalcAngleS2(&i_this->current.angle.y, fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)), 16, 2048);
         }
         control1(i_this);
@@ -495,7 +495,7 @@ void hand_move(sss_class* i_this) {
     i_this->eyePos = i_this->field_0x300.getPos(0)[5];
     i_this->attention_info.position = i_this->eyePos;
     i_this->field_0x51C.Move();
-    if (bVar7) {
+    if (b2) {
         i_this->field_0x8DC.SetC(non_pos);
     } else {
         i_this->field_0x8DC.SetC(i_this->eyePos);
@@ -503,8 +503,8 @@ void hand_move(sss_class* i_this) {
     dComIfG_Ccsp()->Set(&i_this->field_0x8DC);
     for (int i = 0; i < 3; i++) {
         // TODO
-        if (!bVar7) {
-            i_this->field_0x558[i].SetC(local_1ac);
+        if (!b2) {
+            i_this->field_0x558[i].SetC(v4);
         } else {
             i_this->field_0x558[i].SetC(non_pos);
         }
@@ -515,22 +515,22 @@ void hand_move(sss_class* i_this) {
         }
         dComIfG_Ccsp()->Set(i_this->field_0x558[0].GetCoHitObj());
     }
-    u32 uVar10 = 0;
+    u32 u1 = 0;
     for (int i = 0; i < 3; i++) {
         if (i_this->field_0x558[i].ChkTgHit()) {
-            uVar10 = i + 1 & 0xFF;
+            u1 = i + 1 & 0xFF;
             break;
         }
     }
-    if ((uVar10 != 0 || i_this->field_0x8DC.ChkTgHit() != 0) && i_this->field_0x2C2[2] == 0) {
-        CcAtInfo local_158;
-        local_158.pParticlePos = NULL;
+    if ((u1 != 0 || i_this->field_0x8DC.ChkTgHit() != 0) && i_this->field_0x2C2[2] == 0) {
+        CcAtInfo at_info;
+        at_info.pParticlePos = NULL;
         i_this->field_0x2C2[2] = 20;
-        if (uVar10 == 0) {
-            local_158.mpObj = i_this->field_0x8DC.GetTgHitObj();
-            local_158.pParticlePos = i_this->field_0x8DC.GetTgHitPosP();
-            at_power_check(&local_158);
-            if (local_158.mResultingAttackType == 8) {
+        if (u1 == 0) {
+            at_info.mpObj = i_this->field_0x8DC.GetTgHitObj();
+            at_info.pParticlePos = i_this->field_0x8DC.GetTgHitPosP();
+            at_power_check(&at_info);
+            if (at_info.mResultingAttackType == 8) {
                 i_this->field_0xA08 = REG6_F(6) + 300;
                 i_this->field_0xA0C = fopAcM_searchActorAngleY(i_this, dComIfGp_getPlayer(0)) - 0x8000;
                 return;
@@ -538,8 +538,8 @@ void hand_move(sss_class* i_this) {
         } else {
             // TODO
             dCcD_GObjInf* objInf = NULL;
-            local_158.mpObj = objInf->GetTgHitObj();
-            local_158.pParticlePos = objInf->GetTgHitPosP();
+            at_info.mpObj = objInf->GetTgHitObj();
+            at_info.pParticlePos = objInf->GetTgHitPosP();
         }
         fopAcM_seStart(i_this, JA_SE_LK_LAST_HIT, 0);
         fopAcM_seStart(i_this, JA_SE_OBJ_SVINE_CRASH, 0);
