@@ -5,10 +5,14 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan_sub2.h"
+#include "res/Object/Msdan.h"
 
 /* 00000078-0000012C       .text CreateHeap__Q214daObjMsdanSub25Act_cFv */
 BOOL daObjMsdanSub2::Act_c::CreateHeap() {
-    /* Nonmatching */
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MSDAN_BDL_MSDAN_e);
+    JUT_ASSERT(0x57, model_data != NULL);
+    mModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
+    return mModel != NULL;
 }
 
 /* 0000012C-000002E4       .text Create__Q214daObjMsdanSub25Act_cFv */

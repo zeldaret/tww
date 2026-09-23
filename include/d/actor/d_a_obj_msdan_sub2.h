@@ -18,10 +18,14 @@ namespace daObjMsdanSub2 {
         void init_mtx();
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
+
+        static const char M_arcname[];
     
     public:
-        /* Place member variables here */
-    };
+        /* 0x2C8 */ request_of_phase_process_class mPhs;
+        /* 0x2D0 */ J3DModel* mModel;
+        /* 0x2D4 */ u8 field_0x2D4[0x2E4 - 0x2D4];
+    };  // Size: 0x2E4
 };
 
 #endif /* D_A_OBJ_MSDAN_SUB2_H */
