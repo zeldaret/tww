@@ -24,7 +24,7 @@ BOOL daObjMsdanSub2::Act_c::Create() {
     fopAcM_setCullSizeBox(this, -1500.0f, -1000.0f, -1500.0f, 1500.0f, 1000.0f, 1500.0f);
 
     s32 val = prm_get_size();
-    BOOL isSwitch = dComIfGs_isSwitch(val, home.roomNo);
+    BOOL isSwitch = dComIfGs_isSwitch(val, fopAcM_GetHomeRoomNo(this));
 
     if (isSwitch) {
         if (!(prm_get_swSave() & 1)) {
@@ -62,7 +62,7 @@ cPhs_State daObjMsdanSub2::Act_c::Mthd_Create() {
 
         u32 val = prm_get_size();
 
-        if (dComIfGs_isSwitch(val, home.roomNo) && mpBgW != NULL) {
+        if (dComIfGs_isSwitch(val, fopAcM_GetHomeRoomNo(this)) && mpBgW != NULL) {
             if (mpBgW->ChkUsed()) {
                 dComIfG_Bgsp()->Release(mpBgW);
             }
@@ -80,7 +80,7 @@ BOOL daObjMsdanSub2::Act_c::Delete() {
 /* 0000045C-000004A8       .text Mthd_Delete__Q214daObjMsdanSub25Act_cFv */
 BOOL daObjMsdanSub2::Act_c::Mthd_Delete() {
     BOOL flag = MoveBGDelete();
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
 
     return flag;
 }
@@ -108,7 +108,7 @@ void daObjMsdanSub2::Act_c::init_mtx() {
 /* 00000598-0000090C       .text Execute__Q214daObjMsdanSub25Act_cFPPA3_A4_f */
 BOOL daObjMsdanSub2::Act_c::Execute(Mtx** i_mtx) {
     s32 var = prm_get_size();
-    BOOL isSwitch = dComIfGs_isSwitch(var, home.roomNo);
+    BOOL isSwitch = dComIfGs_isSwitch(var, fopAcM_GetHomeRoomNo(this));
 
     if (isSwitch) {
         if (field_0x2DC < 0.0f) {
