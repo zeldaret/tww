@@ -118,12 +118,12 @@ bool Env_c::is_end() const {
 
 /* 800DD4B0-800DD670       .text proc__Q27daBomb25Env_cFRC4cXyz */
 void Env_c::proc(const cXyz& param_1) {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     f32 temp2 = 0.0f;
 
     mPntLight.mPower = field_0x50 * 1500.0f;
     mPntWind.mStrength = field_0x50;
-    f32 temp = param_1.abs(camera->mLookat.mEye);
+    f32 temp = param_1.abs(camera->view.mLookat.mEye);
 
     if(temp < 1500.0f) {
         temp2 = 1.0f - (temp * (1.0f / 1500.0f));
@@ -480,7 +480,7 @@ void Act_c::cc_set() {
 }
 
 void Act_c::camera_lockoff() const {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.ForceLockOff(fopAcM_GetID((Act_c*)this));
 }
 
@@ -683,7 +683,7 @@ void Act_c::eff_explode() {
     if(!field_0x742) {
         field_0x742 = 1;
 
-        camera_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         csXyz rot;
         rot.x = -cam->mAngle.x;
         rot.y = cam->mAngle.y + 0x8000;
@@ -1319,6 +1319,7 @@ BOOL Mthd_Draw(void* i_this) {
 }
 
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

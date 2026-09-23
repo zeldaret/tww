@@ -65,7 +65,7 @@ void dGrass_data_c::WorkCo(fopAc_ac_c* other, u32, int roomNo) {
     delta.z = mPos.z - other->current.pos.z;
 
     f32 distSq = delta.abs2XZ();
-    if (distSq > 1600.0f)
+    if (distSq > SQUARE(40.0f))
         return;
 
     delta.y = mPos.y - other->current.pos.y;

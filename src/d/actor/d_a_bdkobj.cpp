@@ -53,7 +53,7 @@ static BOOL daBdkobj_Draw(bdkobj_class* i_this) {
         
 #if VERSION > VERSION_DEMO
         if (i_this->m298 < 2) {
-            cXyz vec = (a_this->current.pos - dComIfGp_getCamera(0)->mLookat.mEye);
+            cXyz vec = (a_this->current.pos - dComIfGp_getCamera(0)->view.mLookat.mEye);
             if (vec.abs() > REG8_F(10) + 300.0f) {
                 mDoExt_modelUpdateDL(model);
             }

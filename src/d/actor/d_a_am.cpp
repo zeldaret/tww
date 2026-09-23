@@ -1087,6 +1087,7 @@ static BOOL daAM_Execute(am_class* i_this) {
 
 /* 000039A4-000039AC       .text daAM_IsDelete__FP8am_class */
 static BOOL daAM_IsDelete(am_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -1153,7 +1154,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_this) {
     };
     a_this->mEyeJntHit = JntHit_create(a_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (a_this->mEyeJntHit) {
-        i_this->jntHit = a_this->mEyeJntHit;
+        fopAcM_SetJntHit(i_this, a_this->mEyeJntHit);
     } else {
         return FALSE;
     }

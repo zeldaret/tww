@@ -21,7 +21,7 @@ public:
     daObjOhatch_HIO_c();
     virtual ~daObjOhatch_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;

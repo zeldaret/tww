@@ -396,6 +396,7 @@ static BOOL daLodbg_Execute(daLodbg_c* i_this) {
 
 /* 000012BC-000012C4       .text daLodbg_IsDelete__FP9daLodbg_c */
 static BOOL daLodbg_IsDelete(daLodbg_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

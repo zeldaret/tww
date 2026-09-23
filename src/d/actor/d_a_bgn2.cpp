@@ -87,7 +87,7 @@ static void anm_init(bgn2_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, 
 
 /* 000002BC-00000308       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -96,7 +96,7 @@ static void* bgn_s_sub(void* param_1, void*) {
 
 /* 00000308-00000354       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
         return param_1;
     } else {
         return NULL;
@@ -698,18 +698,14 @@ static void damage_check(bgn2_class* i_this) {
                 i_this->m0358 = REG0_S(5) + 0x14;
                 dScnPly_ply_c::nextPauseTimer = 4;
 #if VERSION == VERSION_DEMO
-                local_58.z = 2.0f;
-                local_58.y = 2.0f;
-                local_58.x = 2.0f;
+                local_58.x = local_58.y = local_58.z = 2.0f;
                 local_78.z = 0;
                 local_78.x = 0;
                 local_78.y = player->shape_angle.y + 0x8000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, i_this->m039C.GetTgHitPosP(), &local_78, &local_58);
 #else
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, i_this->m039C.GetTgHitPosP());
-                local_58.z = 2.0f;
-                local_58.y = 2.0f;
-                local_58.x = 2.0f;
+                local_58.x = local_58.y = local_58.z = 2.0f;
                 local_78.z = 0;
                 local_78.x = 0;
                 local_78.y = fopAcM_searchPlayerAngleY(actor);
@@ -811,7 +807,7 @@ static void damage_check(bgn2_class* i_this) {
 
 /* 00002C88-00002CE0       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
         ki_all_count++;
     }
     return NULL;
@@ -1215,16 +1211,12 @@ static cPhs_State daBgn2_Create(fopAc_ac_c* a_this) {
             /* Radius */ 70.0f,
         }},
     };
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(a_this, bgn2_class);
-#endif
+    fopAcM_ct_Retail(a_this, bgn2_class);
     bgn2_class* i_this = (bgn2_class*)a_this;
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bgn");
 
     if (res == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(a_this, bgn2_class);
-#endif
+        fopAcM_ct_Demo(a_this, bgn2_class);
         bgn = NULL;
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x96000)) {
             return cPhs_ERROR_e;

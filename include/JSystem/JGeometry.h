@@ -395,6 +395,37 @@ struct TBox2 : public TBox<TVec2<T> > {
 
 // clang-format on
 
+// Row-major storage: at()/ref() are transposed relative to SMatrix33C, so
+// setting a direction writes three contiguous floats.
+template <typename T>
+struct SMatrix33R {
+    T mMtx[3][3];
+};
+
+template <>
+struct SMatrix33R<f32> {
+    SMatrix33R() {}
+
+    f32 at(u32 i, u32 j) const { return mMtx[j][i]; }
+    f32& ref(u32 i, u32 j) { return mMtx[j][i]; }
+
+    f32 mMtx[3][3];
+};
+
+template <typename T>
+struct TMatrix33 : public T {
+    TMatrix33() {}
+
+    void mult(const TVec3<f32>& src, TVec3<f32>& dst) const {
+        dst.set(this->at(0, 0) * src.x + this->at(0, 1) * src.y + this->at(0, 2) * src.z,
+                this->at(1, 0) * src.x + this->at(1, 1) * src.y + this->at(1, 2) * src.z,
+                this->at(2, 0) * src.x + this->at(2, 1) * src.y + this->at(2, 2) * src.z);
+    }
+
+    void mult(TVec3<f32>& v) const { mult(v, v); }
+};
+
+
 }  // namespace JGeometry
 
 #endif

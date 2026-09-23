@@ -48,8 +48,8 @@ static BOOL nodeCallBack_Mk(J3DNode* node, int calcTiming) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             if (jntNo == i_this->getHeadJntNum()) {
                 temp.setall(0.0f);
-                mDoMtx_XrotM(*calc_mtx, (s16)i_this->getHead_y());
-                mDoMtx_ZrotM(*calc_mtx, (s16)i_this->getHead_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getHead_y());
+                cMtx_ZrotM(*calc_mtx, (s16)i_this->getHead_x());
                 MtxPosition(&temp, &temp2);
                 i_this->setAttentionBasePos(temp2);
                 temp.set(20.0f, -20.0f, 0.0f);
@@ -59,8 +59,8 @@ static BOOL nodeCallBack_Mk(J3DNode* node, int calcTiming) {
                 i_this->incAttnSetCount();
 
             } else if (jntNo == i_this->getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                mDoMtx_ZrotM(*calc_mtx, i_this->getBackbone_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
+                cMtx_ZrotM(*calc_mtx, (s16)i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -179,7 +179,7 @@ void daNpc_Mk_c::eventOrder() {
 
 /* 00000678-000006D4       .text checkOrder__10daNpc_Mk_cFv */
 void daNpc_Mk_c::checkOrder() {
-    if (eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(3)) {
+    if (eventInfo.checkCommandTalk() && ChkOrder(3)) {
         setFlag(1);
         talkInit();
     }
@@ -498,7 +498,7 @@ u8 daNpc_Mk_c::nextVisitMode() {
             return VISIT_RUN_LINK;
         case VISIT_WALK_PATH:
             dist = pLink->current.pos - current.pos;
-            if(dist.abs2XZ() < 160000.0f && field_0x698.chkInside(&pLink->current.pos)) {
+            if(dist.abs2XZ() < SQUARE(400.0f) && field_0x698.chkInside(&pLink->current.pos)) {
                 return VISIT_NOTICE_LINK;
             }
             return VISIT_WALK_PATH;
@@ -509,7 +509,7 @@ u8 daNpc_Mk_c::nextVisitMode() {
             }
 
             dist = pLink->current.pos - current.pos;
-            if (dist.abs2XZ() < 22500.0f) {
+            if (dist.abs2XZ() < SQUARE(150.0f)) {
                 return VISIT_REACHED_LINK;
             }
             return VISIT_RUN_LINK;
@@ -521,7 +521,7 @@ u8 daNpc_Mk_c::nextVisitMode() {
             }
             dist = pLink->current.pos - current.pos;
 
-            if (dist.abs2XZ() > 32400.0f) {
+            if (dist.abs2XZ() > SQUARE(180.0f)) {
                 return VISIT_RUN_LINK;
             }
             
@@ -542,7 +542,7 @@ u8 daNpc_Mk_c::nextVisitMode() {
             }
             dist = pLink->current.pos - current.pos;
 
-            if (dist.abs2XZ() < 160000.0f && field_0x698.chkInside(&pLink->current.pos)) {
+            if (dist.abs2XZ() < SQUARE(400.0f) && field_0x698.chkInside(&pLink->current.pos)) {
                 return VISIT_RUN_LINK;
             }
             return VISIT_WALK_PATH;
@@ -1092,14 +1092,14 @@ bool daNpc_Mk_c::talk02() {
 /* 00002AC0-00002BB4       .text visitTalkInit__10daNpc_Mk_cFv */
 u8 daNpc_Mk_c::visitTalkInit() {
     if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F80) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E02)) {
-        mEventIdx = eventInfo.mEventId;
+        mEventIdx = eventInfo.getEventId();
         mState = STATE_DEMO03;
         demo03();
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1E04);
         return 12;
     }
     if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1208) && !dComIfGs_checkGetItem(dItemNo_PICTO_BOX_e) && !dComIfGs_checkGetItem(dItemNo_DELUXE_PICTO_BOX_e)) {
-        mEventIdx = eventInfo.mEventId;
+        mEventIdx = eventInfo.getEventId();
         mState = STATE_DEMO03;
         demo03();
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1602);
@@ -1221,7 +1221,7 @@ bool daNpc_Mk_c::climb01() {
 
 /* 00003064-00003108       .text drop01__10daNpc_Mk_cFv */
 bool daNpc_Mk_c::drop01() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         mPrevState = STATE_RUNAWAY;
         mState = STATE_DEMO03;
         mMkStatic.init(0x50, 0x12C);

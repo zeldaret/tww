@@ -8,8 +8,8 @@
 #include "f_pc/f_pc_profile.h"
 
 typedef struct nodedraw_method_class {
-    process_method_class base;
-    process_method_func mpDrawFunc;
+    /* 0x00 */ process_method_class base;
+    /* 0x10 */ process_method_func mpDrawFunc;
 } nodedraw_method_class;
 
 typedef struct process_node_class {

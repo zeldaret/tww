@@ -37,7 +37,7 @@ f32 daPy_lk_c::getCrawlMoveSpeed() {
 /* 80138868-801389D0       .text setCrawlMoveDirectionArrow__9daPy_lk_cFv */
 void daPy_lk_c::setCrawlMoveDirectionArrow() {
     u8 direction = 0;
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     BOOL bVar = cLib_distanceAngleS(fopCamM_GetAngleY(cam), shape_angle.y) > 0x4000;
     if (mProcVar6.m3570 & 4) {
         if (!bVar) {
@@ -184,18 +184,16 @@ int daPy_lk_c::getCrawlMoveVec(cXyz* param_0, cXyz* param_1, cXyz* param_2) {
 
 /* 80138F28-801390B8       .text crawlBgCheck__9daPy_lk_cFP4cXyzP4cXyz */
 void daPy_lk_c::crawlBgCheck(cXyz* param_0, cXyz* param_1) {
-    int iVar1;
-    int iVar2;
     cXyz cStack_50;
     cXyz cStack_44;
     cXyz cStack_38;
 
     mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &l_crawl_top_offset, &cStack_50);
-    iVar1 = getCrawlMoveVec(&cStack_50, param_0, &cStack_44);
+    int iVar1 = getCrawlMoveVec(&cStack_50, param_0, &cStack_44);
     mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &l_crawl_top_up_offset, &cStack_50);
-    iVar2 = getCrawlMoveVec(&cStack_50, param_1, &cStack_38);
+    int iVar2 = getCrawlMoveVec(&cStack_50, param_1, &cStack_38);
     if (iVar1 != 0 && iVar2 != 0) {
-        if (cStack_44.abs2() > cStack_38.abs()) {
+        if (cStack_44.abs2() > cStack_38.abs()) { // abs2 to abs comparison? bug?
             current.pos -= cStack_44;
         } else {
             current.pos -= cStack_38;
@@ -225,7 +223,7 @@ BOOL daPy_lk_c::checkCrawlSideWall(cXyz* param_1, cXyz* param_2, cXyz* param_3, 
             *param_6 = cM_atan2s(plane->GetNP()->x, plane->GetNP()->z);
             cXyz local_9c = *param_3 - *param_4;
             f32 temp_f31 = local_9c.abs2XZ();
-            if (cLib_distanceAngleS(*param_5, *param_6) > 0x7F00 && temp_f31 < 5625.0f && temp_f31 > 3600.0f) {
+            if (cLib_distanceAngleS(*param_5, *param_6) > 0x7F00 && temp_f31 < SQUARE(75.0f) && temp_f31 > SQUARE(60.0f)) {
                 return true;
             }
         }

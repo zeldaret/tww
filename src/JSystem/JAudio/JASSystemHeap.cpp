@@ -23,7 +23,7 @@ void JASystem::Kernel::sysDramSetup(JKRSolidHeap* heap) {
         return;
     }
     OSReport("[JASKernel::sysDramSetup] メモリ指定がありませんので、システムからオーディオヒープを取得します。\n");
-    JASDram = JKRSolidHeap::create(audioDramSize, JKRStdHeap::create(audioDramSize + 0x100, NULL, false), false);
+    JASDram = JKRCreateSolidHeap(audioDramSize, JKRCreateStdHeap(audioDramSize + 0x100, NULL, false), false);
 }
 
 /* 8027DB9C-8027DC30       .text allocFromSysDram__Q28JASystem6KernelFUl */

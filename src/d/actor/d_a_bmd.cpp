@@ -813,9 +813,7 @@ void core_move(bmd_class* i_this) {
         i_this->mpHeadDeadMorf->play(&actor->eyePos, 0, 0);
         i_this->mpHeadDeadMorf->calc();
         MTXCopy(pJVar11->getAnmMtx(REG0_S(4) + (s16)BKM_COA_DEADMODEL_JNT_KOUTOUBU_e), *calc_mtx);
-        local_40.z = 0.0f;
-        local_40.y = 0.0f;
-        local_40.x = 0.0f;
+        local_40.x = local_40.y = local_40.z = 0.0f;
         MtxPosition(&local_40, &actor->eyePos);
         if (i_this->m306 >= 0x6F) {
             actor->eyePos.y += 20000.0f;
@@ -1128,7 +1126,7 @@ void eff_cont(bmd_class* i_this) {
 }
 
 /* 00003D48-00003E38       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
+static void ride_call_back(dBgW* bgw, fopAc_ac_c* i_ac, fopAc_ac_c* i_pt) {
     bmd_class* i_this = (bmd_class*)i_ac;
 #if VERSION == VERSION_DEMO
     if (i_this->m304 == 3)
@@ -1156,7 +1154,7 @@ void demo_camera(bmd_class* i_this) {
 
     fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     switch (i_this->mB74) {
     case 0:
@@ -1174,9 +1172,9 @@ void demo_camera(bmd_class* i_this) {
 #endif
         }
         i_this->mB74++;
-        camera_class* camera2 = dComIfGp_getCamera(0);
-        i_this->mB7C = camera2->mLookat.mEye;
-        i_this->mB88 = camera2->mLookat.mCenter;
+        camera_process_class* camera2 = dComIfGp_getCamera(0);
+        i_this->mB7C = camera2->view.mLookat.mEye;
+        i_this->mB88 = camera2->view.mLookat.mCenter;
         local_44 = player_actor->current.pos - i_this->mB7C;
         i_this->mB96 = cM_atan2s(local_44.x, local_44.z);
         camera->mCamera.Stop();
@@ -1427,9 +1425,9 @@ void demo_camera(bmd_class* i_this) {
             break;
         }
         i_this->mB74++;
-        camera_class* camera2 = dComIfGp_getCamera(0);
-        i_this->mB7C = camera2->mLookat.mEye;
-        i_this->mB88 = camera2->mLookat.mCenter;
+        camera_process_class* camera2 = dComIfGp_getCamera(0);
+        i_this->mB7C = camera2->view.mLookat.mEye;
+        i_this->mB88 = camera2->view.mLookat.mCenter;
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(2);
         i_this->mB9C = 55.0f;

@@ -166,6 +166,7 @@ static BOOL daObjYgush00_Draw(daObjYgush00_c* i_this) {
 
 /* 00000788-00000790       .text daObjYgush00_IsDelete__FP14daObjYgush00_c */
 static BOOL daObjYgush00_IsDelete(daObjYgush00_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

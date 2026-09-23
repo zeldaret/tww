@@ -111,6 +111,7 @@ static BOOL dScnOpen_Execute(dScnOpen_c* i_this) {
 
 /* 80232EAC-80232EB4       .text dScnOpen_IsDelete__FP10dScnOpen_c */
 static BOOL dScnOpen_IsDelete(dScnOpen_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

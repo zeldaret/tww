@@ -26,13 +26,15 @@ daObjQuake_HIO_c::daObjQuake_HIO_c() {
 
 /* 00000134-000002C4       .text _create__12daObjQuake_cFv */
 cPhs_State daObjQuake_c::_create() {
-    fopAcM_ct(this, daObjQuake_c);
+    fopAcM_ct_Retail(this, daObjQuake_c);
 
     if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
         return cPhs_STOP_e;
     }
 
     if (getPrmType() < 3) {
+        fopAcM_ct_Demo(this, daObjQuake_c);
+
         fopAcM_offDraw(this);
         mType = getPrmType();
         m2A1 = false;
@@ -135,8 +137,8 @@ BOOL daObjQuake_c::_execute() {
     u8 sch = getPrmSch();
     bool var_r27 = false;
     if (sch & dKy_get_schbit() && !dComIfGp_event_chkEventFlag(dEvtFlag_TALK_e)) {
-        f32 a = (m29C / 6.0f) * m290;
         f32 b = (m298 / 6.0f) * m290;
+        f32 a = (m29C / 6.0f) * m290;
         if (m294 >= b && m294 < a) {
             var_r27 = true;
         }

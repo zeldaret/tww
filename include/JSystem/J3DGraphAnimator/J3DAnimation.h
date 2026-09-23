@@ -286,8 +286,10 @@ struct J3DAnmTransformKeyData {
     /* 0x08 */ u8 mAttribute;
     /* 0x09 */ u8 mDecShift;
     /* 0x0A */ s16 mFrameMax;
-    /* 0x0C */ u16 field_0xc;
-    /* 0x10 */ int field_0x10;
+    /* 0x0C */ u16 mTableCount;
+    /* 0x0E */ u16 mScaleCount;
+    /* 0x10 */ u16 mRotCount;
+    /* 0x12 */ u16 mTransCount;
     /* 0x14 */ s32 mTableOffset;
     /* 0x18 */ s32 mScaleOffset;
     /* 0x1c */ s32 mRotOffset;
@@ -305,6 +307,10 @@ struct J3DAnmClusterKeyData {
 
 class J3DAnmBase {
 public:
+    J3DAnmBase() {
+        mFrame = 0.0f;
+        mFrameMax = 0;
+    }
     J3DAnmBase(s16 i_frameMax) {
         mFrame = 0.0f;
         mFrameMax = i_frameMax;
@@ -393,7 +399,7 @@ class J3DAnmTextureSRTKey : public J3DAnmBase {
 public:
     friend class J3DAnmKeyLoader_v15;
 
-    J3DAnmTextureSRTKey() : J3DAnmBase(0) {
+    J3DAnmTextureSRTKey() {
         mDecShift = 0;
         mTransNum = 0;
         mRotNum = 0;
@@ -482,7 +488,7 @@ class J3DAnmVisibilityFull : public J3DAnmBase {
 public:
     friend class J3DAnmFullLoader_v15;
 
-    J3DAnmVisibilityFull() : J3DAnmBase(0) {
+    J3DAnmVisibilityFull() {
         mUpdateMaterialNum = 0;
         mAnmTable = NULL;
         field_0x12 = 0;
@@ -507,7 +513,7 @@ class J3DAnmTexPattern : public J3DAnmBase {
 public:
     friend class J3DAnmFullLoader_v15;
 
-    J3DAnmTexPattern() : J3DAnmBase(0) {
+    J3DAnmTexPattern() {
         mTextureIndex = NULL;
         mAnmTable = NULL;
         mKind = 2;
@@ -543,7 +549,7 @@ class J3DAnmTevRegKey : public J3DAnmBase {
 public:
     friend class J3DAnmKeyLoader_v15;
 
-    J3DAnmTevRegKey() : J3DAnmBase(0) {
+    J3DAnmTevRegKey() {
         mKRegUpdateMaterialNum = 0;
         mCRegUpdateMaterialNum = 0;
         mCRegDataCountA = 0;
@@ -621,7 +627,7 @@ private:
 // BPK
 class J3DAnmColor : public J3DAnmBase {
 public:
-    J3DAnmColor() : J3DAnmBase(0) {
+    J3DAnmColor() {
         field_0x16 = 0;
         field_0x14 = 0;
         field_0x12 = 0;
@@ -710,7 +716,7 @@ public:
 
 class J3DAnmVtxColor : public J3DAnmBase {
 public:
-    J3DAnmVtxColor() : J3DAnmBase(0) {
+    J3DAnmVtxColor() {
         mKind = 7;
         for (int i = 0; i < 2; i++) {
             mAnmTableNum[i] = 0;
@@ -776,7 +782,7 @@ protected:
 
 class J3DAnmCluster : public J3DAnmBase {
 public:
-    J3DAnmCluster(s16 param_1, f32* param_2) : J3DAnmBase(0) {
+    J3DAnmCluster(s16 param_1, f32* param_2) {
         mWeight = param_2;
         mKind = param_1;
     }

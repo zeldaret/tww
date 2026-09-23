@@ -7,13 +7,17 @@ namespace JASystem {
     class TInstRand : public TInstEffect {
     public:
         TInstRand() {
-            field_0x8 = 1.0f;
-            field_0xc = 0.0f;
+            mBase = 1.0f;
+            mWidth = 0.0f;
         }
         virtual f32 getY(int, int) const;
 
-        /* 0x08 */ f32 field_0x8;
-        /* 0x0C */ f32 field_0xc;
+        void setBase(f32 base) { mBase = base; }
+        void setWidth(f32 width) { mWidth = width; }
+
+    private:
+        /* 0x08 */ f32 mBase;
+        /* 0x0C */ f32 mWidth;
     };
 }
 

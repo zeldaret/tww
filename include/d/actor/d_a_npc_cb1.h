@@ -46,9 +46,9 @@ public:
     s16 XyEventCB(int) { return mEventIdx[2]; }
     BOOL chkNpcAction(ActionFunc_t action) { return mNpcAction == action; }
     BOOL chkPlayerAction(ActionFunc_t action) { return mPlayerAction == action; }
-    s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
-    s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
-    s16 getHead_y() { return mJntCtrl.getHead_y(); }
+    s16 getBackbone_x() { return mJntCtrl.mAngles[1][0]; }
+    s16 getBackbone_y() { return mJntCtrl.mAngles[1][1]; }
+    s16 getHead_y() { return mJntCtrl.mAngles[0][1]; }
     cXyz& getEyePos() { return mEyePos; }
     cXyz& getNusSpeed() { return mNusSpeed; } // not entirely sure about this one
     cXyz& getNutPos() { return mNutPos; } // not entirely sure about this one
@@ -194,8 +194,10 @@ public:
     BOOL carryPlayerAction(void*);
     BOOL calcFlyingTimer();
     void initAnm(s8, BOOL);
+#if VERSION > VERSION_DEMO
     void musicPlay();
     void musicStop();
+#endif
     BOOL setAnm(u8);
     void playAnm();
     BOOL chkAttention(f32, s32);

@@ -107,6 +107,7 @@ static BOOL dScnRoom_Execute(room_of_scene_class* i_this) {
 
 /* 80236BAC-80236BB4       .text dScnRoom_IsDelete__FP19room_of_scene_class */
 static BOOL dScnRoom_IsDelete(room_of_scene_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

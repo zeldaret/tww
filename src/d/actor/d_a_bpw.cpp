@@ -202,7 +202,9 @@ void body_draw(bpw_class* i_this) {
     if (i_this->m3E0 == 0) {
         dComIfGd_setListMaskOff();
     }
-    dSnap_RegistFig(DSNAP_TYPE_UNKCE, actor, 1.0f, 1.0f, 1.0f);
+    // !@bug Jalhalla registers Ganondorf figurine photo here, then the correct photo later.
+    // TODO: Is it possible to actually get a photo of Jalhalla that counts as Ganondorf?
+    dSnap_RegistFig(DSNAP_TYPE_GND, actor, 1.0f, 1.0f, 1.0f);
     if (i_this->m3E0 != 0) {
         i_this->mpLightFreezeBrkAnm->entry(model->getModelData());
     } else if (i_this->m3E1 != 0) {
@@ -235,7 +237,7 @@ void body_draw(bpw_class* i_this) {
     if ((i_this->m47E == 0) || (fopAcM_checkCarryNow(actor))) {
         return;
     }
-    dSnap_RegistFig(DSNAP_TYPE_UNKCB, actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_BPW, actor, 1.0f, 1.0f, 1.0f);
     local_28.set(actor->current.pos.x, actor->current.pos.y + 400.0f + REG8_F(18), actor->current.pos.z);
     i_this->mShadowId = dComIfGd_setShadow(
         i_this->mShadowId,
@@ -696,7 +698,7 @@ void noroi_check(bpw_class* i_this) {
                 i_this->mSomeCountdownTimers[3] = DEMO_SELECT(REG11_F(17) + 0x14, 0x14);
                 s32 r31 = ACTOR_TYPE_BODY;
                 csXyz local_28 = actor->shape_angle;
-                camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+                camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 i_this->mFire1DousaPos = player2->getHeadTopPos();
                 dComIfGp_particle_set(dPa_name::ID_IT_JN_PIYOHIT00, &i_this->mFire1DousaPos);
                 r31 |= ACTOR_TYPE_TORITUKI;
@@ -2073,7 +2075,7 @@ void action_bunri_dousa(bpw_class* i_this) {
     f32 f2;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mActionState) {
     case ACTION_STATE_SEPARATE_BUNRI_DOUSA_INIT: {
         for (s32 i = 0; i < 10; i++) {
@@ -2966,7 +2968,7 @@ void action_start_demo(bpw_class* i_this) {
     f32 fVar1;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     switch (i_this->mActionState) {
     case 200:
         actor->scale.setall(0.0f);

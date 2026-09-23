@@ -80,13 +80,12 @@ static dCcD_SrcCyl cyl_src_tree = {
 const char daObjVmc::Act_c::M_arcname[4] = "Vmc";
 
 /* 00000078-0000009C       .text solidHeapCB__Q28daObjVmc5Act_cFP10fopAc_ac_c */
-BOOL daObjVmc::Act_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    return ((Act_c*)i_ac)->create_heap();
+BOOL daObjVmc::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((Act_c*)i_this)->create_heap();
 }
 
 /* 0000009C-00000400       .text create_heap__Q28daObjVmc5Act_cFv */
 bool daObjVmc::Act_c::create_heap() {
-    /* Nonmatching */
     J3DModelData* mdl_bs_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMC_BDL_VMCBS_e);
     JUT_ASSERT(200, mdl_bs_data != NULL);
     mModelBase = mDoExt_J3DModel__create(mdl_bs_data, 0, 0x11020203);
@@ -137,7 +136,6 @@ bool daObjVmc::Act_c::create_heap() {
 
 /* 00000400-000005BC       .text CreateInit__Q28daObjVmc5Act_cFv */
 void daObjVmc::Act_c::CreateInit() {
-    /* Nonmatching */
     fopAcM_SetMtx(this, mModelBase->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -300.0f, -0.0f, -300.0, 300.0f, 500.0f, 300.0f);
     mStts.Init(255, 255, this);
@@ -292,7 +290,6 @@ void daObjVmc::Act_c::daObjVmc_tree_main() {
 
 /* 00000EDC-000011D0       .text _execute__Q28daObjVmc5Act_cFv */
 bool daObjVmc::Act_c::_execute() {
-    /* Nonmatching */
     mCyl.SetC(current.pos);
 #if VERSION > VERSION_DEMO
     if (mState == STATE_BASE_MAIN)
@@ -370,27 +367,28 @@ bool daObjVmc::Act_c::_draw() {
 namespace daObjVmc {
 namespace {
 /* 000012CC-000012EC       .text Mthd_Create__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-cPhs_State Mthd_Create(void* i_ac) {
-    return ((Act_c*)i_ac)->_create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((Act_c*)i_this)->_create();
 }
 
 /* 000012EC-00001310       .text Mthd_Delete__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-BOOL Mthd_Delete(void* i_ac) {
-    return ((Act_c*)i_ac)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((Act_c*)i_this)->_delete();
 }
 
 /* 00001310-00001334       .text Mthd_Execute__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-BOOL Mthd_Execute(void* i_ac) {
-    return ((Act_c*)i_ac)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((Act_c*)i_this)->_execute();
 }
 
 /* 00001334-00001358       .text Mthd_Draw__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-BOOL Mthd_Draw(void* i_ac) {
-    return ((Act_c*)i_ac)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((Act_c*)i_this)->_draw();
 }
 
 /* 00001358-00001360       .text Mthd_IsDelete__Q28daObjVmc25@unnamed@d_a_obj_vmc_cpp@FPv */
-BOOL Mthd_IsDelete(void* i_ac) {
+BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

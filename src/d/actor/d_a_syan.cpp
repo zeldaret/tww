@@ -178,6 +178,7 @@ static BOOL daSyan_Execute(syan_class* i_this) {
 
 /* 00000CA0-00000CA8       .text daSyan_IsDelete__FP10syan_class */
 static BOOL daSyan_IsDelete(syan_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -123,6 +123,7 @@ static BOOL daObjAjavW_Draw(daObjAjavW_c* i_this) {
 
 /* 000005F8-00000600       .text daObjAjavW_IsDelete__FP12daObjAjavW_c */
 static BOOL daObjAjavW_IsDelete(daObjAjavW_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

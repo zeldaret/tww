@@ -134,9 +134,9 @@ void daPy_matAnm_c::calc(J3DMaterial* mat) const {
     J3DMaterialAnm::calc(mat);
     
     for (u32 i = 0; i < 8; i++) {
-        if (getTexMtxAnm(i)) {
+        if (mTexMtxAnm[i]) {
             J3DTextureSRTInfo& srt = mat->getTexMtx(i)->getTexMtxInfo().mSRT;
-            if (getMorfFrame() != 0) {
+            if (m_morf_frame != 0) {
                 f32 temp = 1.0f / (m_morf_frame + 1);
                 srt.mTranslationX = mOldOffset.x * (1.0f - temp) + (srt.mTranslationX * temp);
                 srt.mTranslationY = mOldOffset.y * (1.0f - temp) + (srt.mTranslationY * temp);
@@ -704,7 +704,7 @@ u16 daPy_lk_c::checkNormalFace() {
     if (checkNoResetFlg1(daPyFlg1_CONFUSE)) {
         return daPyFace_TMABAH_TABEKOBE;
     }
-    if (checkNoResetFlg0(daPyFlg0_HEAVY_STATE)) {
+    if (getHeavyState()) {
         return daPyFace_TMABAH;
     }
     if (checkNoResetFlg1(daPyFlg1_UNK1000000) && !checkModeFlg(ModeFlg_00000001)) {
@@ -1058,7 +1058,7 @@ void daPy_lk_c::setOutPower(f32 param_1, s16 param_2, int param_3) {
 
 /* 801056E4-80105814       .text checkSightLine__9daPy_lk_cFfP4cXyz */
 BOOL daPy_lk_c::checkSightLine(f32 param_1, cXyz* param_2) {  
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     cXyz* pcVar2 = fopCamM_GetEye_p(cam);
     cXyz local_44 = (*fopCamM_GetCenter_p(cam) - *pcVar2);
     *param_2 = (local_44.normalize() * param_1) + *pcVar2;
@@ -1165,7 +1165,7 @@ s32 daPy_lk_c::setItemModel() {
                 if (mpBottleContentsModel != NULL) {
                     if (mEquipItem == dItemNo_FIREFLY_BOTTLE_e) {
                         cXyz scale;
-                        f32 fVar1 = 1.0f + 0.1f * cM_ssin(cM_rad2s((37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax()));
+                        f32 fVar1 = 1.0f + 0.1f * cM_fsin((37.699112f * mpEquipItemBrk->getFrame()) / mpEquipItemBrk->getFrameMax());
                         scale.setall(fVar1);
                         mDoMtx_stack_c::transS(11.0f, 0.0f, 0.0f);
                         mDoMtx_stack_c::revConcat(lHandA_jnt_mtx);
@@ -2424,7 +2424,7 @@ void daPy_lk_c::posMoveFromFootPos() {
             f32 f1 = (
                 (speedF * (1.0f - m_HIO->mSwim.m.field_0x60)) +
                 m_HIO->mSwim.m.field_0x60 *
-                (speedF * std::abs(cM_scos(cM_rad2s(M_PI * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() / mFrameCtrlUnder[UNDER_MOVE0_e].getEnd())))))
+                (speedF * std::abs(cM_fcos(M_PI * (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() / mFrameCtrlUnder[UNDER_MOVE0_e].getEnd()))))
             ) / (1.0f + (m_HIO->mSwim.m.field_0x7C * getSwimTimerRate()));
             speed.x = f1 * cM_ssin(current.angle.y);
             speed.z = f1 * cM_scos(current.angle.y);
@@ -2710,7 +2710,7 @@ BOOL daPy_lk_c::setBodyAngleToCamera() {
             }
 #endif
         } else {
-            camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+            camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
             shape_angle.y = cam->mAngle.y;
             current.angle.y = shape_angle.y;
             mBodyAngle.x = cam->mAngle.x;
@@ -3061,7 +3061,7 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
         bVar3 = false;
     }
     if (mStickDistance < 0.05f &&
-        ((f1_2 >= 25.0f || ((f1_2 >= 0.09f && ((m34C3 == 9 || m34C3 == 10)))))))
+        ((f1_2 >= SQUARE(5.0f) || ((f1_2 >= SQUARE(0.3f) && ((m34C3 == 9 || m34C3 == 10)))))))
     {
         seStartMapInfo(JA_SE_LK_SLIP_SUS);
         if ((m34C3 != 9 && (bVar3)) || ((m34C3 != 10 && (!bVar3)))) {
@@ -3179,7 +3179,7 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
             m3598 = (f28 * (1.0f - f1));
         } else {
             f32 f1;
-            if (f31 >= 169.0f) {
+            if (f31 >= SQUARE(13.0f)) {
                 f1 = 1.7f * m_HIO->mMove.m.field_0x48;
                 onResetFlg0(daPyRFlg0_UNK40000);
             } else {
@@ -4511,21 +4511,18 @@ BOOL daPy_lk_c::checkNextMode(int r29) {
 
 /* 8010EC78-8010ED68       .text checkIceSlipFall__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkIceSlipFall() {
+    s16 sVar3 = cM_atan2s(m36A0.x, m36A0.z);
     f32 fVar1;
     f32 fVar2;
-
-    s16 sVar3 = cM_atan2s(m36A0.x, m36A0.z);
     if (m34C3 == 1) {
         fVar1 = 15.0f;
-        fVar2 = 169.0f;
+        fVar2 = SQUARE(13.0f);
     } else {
         fVar1 = 10.0f;
-        fVar2 = 49.0f;
+        fVar2 = SQUARE(7.0f);
     }
-    f32 dVar5 = fVar2;
-    f32 dVar6 = fVar1;
-    if (cLib_distanceAngleS(sVar3, current.angle.y) > 0x7000 && mNormalSpeed >= dVar6 &&
-        m36A0.abs2XZ() >= dVar5)
+    if (cLib_distanceAngleS(sVar3, current.angle.y) > 0x7000 && mNormalSpeed >= fVar1 &&
+        m36A0.abs2XZ() >= fVar2)
     {
         mProcVar0.m34D0--;
         if (mProcVar0.m34D0 == 0) {
@@ -8516,7 +8513,7 @@ BOOL daPy_lk_c::procNotUse_init(int param_1) {
     setSingleMoveAnime(ANM_PRESENTATIONB, m_HIO->mTurn.m.field_0x34, m_HIO->mTurn.m.field_0x38, m_HIO->mTurn.m.field_0x10, m_HIO->mTurn.m.field_0x3C);
     keepItemData();
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK800_e);
-    m3628 = fpcM_ERROR_PROCESS_ID_e;
+    mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     mProcVar6.m3570 = param_1;
     mProcVar7.m3574 = 5;
     dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar7.m3574, 0);
@@ -8552,10 +8549,10 @@ BOOL daPy_lk_c::procNotUse() {
             setBottleModel(mProcVar6.mBottleItem);
             mProcVar2.m34D4 = 1;
         }
-        if (m3628 == fpcM_ERROR_PROCESS_ID_e) {
-            m3628 = fopMsgM_messageSet(m3624);
+        if (mGameOverId == fpcM_ERROR_PROCESS_ID_e) {
+            mGameOverId = fopMsgM_messageSet(m3624);
         } else {
-            msg_class* msg_p = fopMsgM_SearchByID(m3628);
+            msg_class* msg_p = fopMsgM_SearchByID(mGameOverId);
             if (msg_p != 0) {
                 if (msg_p->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
                     if (m3624 == 0xf0c && msg_p->mSelectNum == 1) {
@@ -10487,10 +10484,10 @@ void daPy_lk_c::setDemoData() {
                 demo_mode = daPy_demo_c::DEMO_N_WALK_e;
             }
             f32 dVar22 = sp44.abs2XZ();
-            if (dVar22 < 100.0f || (dVar22 < 2500.0f && std::abs(mNormalSpeed) < 0.001f)) {
+            if (dVar22 < SQUARE(10.0f) || (dVar22 < SQUARE(50.0f) && std::abs(mNormalSpeed) < 0.001f)) {
                 demo_mode = daPy_demo_c::DEMO_N_WAIT_e;
                 mNormalSpeed = 0.0f;
-            } else if ((demo_mode == daPy_demo_c::DEMO_N_WALK_e && dVar22 < 400.0f) || dVar22 < 2500.0f) {
+            } else if ((demo_mode == daPy_demo_c::DEMO_N_WALK_e && dVar22 < SQUARE(20.0f)) || dVar22 < SQUARE(50.0f)) {
                 mDemo.setStick(0.0f);
             }
             mDemo.setMoveAngle(cM_atan2s(sp44.x, sp44.z));
@@ -11201,7 +11198,7 @@ BOOL daPy_lk_c::execute() {
                 onNoResetFlg1(daPyFlg1_UNK200);
                 dComIfGs_setBottleItemIn(dItemNo_FOREST_WATER_e, dItemNo_WATER_BOTTLE_e);
                 mDemo.setSpecialDemoType();
-                m3628 = fpcM_ERROR_PROCESS_ID_e;
+                mGameOverId = fpcM_ERROR_PROCESS_ID_e;
 #if VERSION > VERSION_JPN
                 if (mCurProc == daPyProc_SCOPE_e) {
                     procWait_init();
@@ -11243,12 +11240,9 @@ BOOL daPy_lk_c::execute() {
     if (dComIfGp_event_runCheck()) {
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Link", this);
         if (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(0x4) && mEquipItem == daPyItem_BOKO_e) {
-            fopAc_ac_c* equip_actor = mActorKeepEquip.getActor();
-            if (equip_actor) {
-                s16 angle = shape_angle.y + 0x8000;
-                equip_actor->speed.y = 0.0f;
-                equip_actor->speedF = 5.0f;
-                equip_actor->current.angle.y = angle;
+            daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
+            if (boko) {
+                boko->moveStateInit(5.0f, 0.0f, shape_angle.y + 0x8000);
             }
             deleteEquipItem(FALSE);
         }
@@ -12276,7 +12270,7 @@ void daPy_lk_c::playerInit() {
     mActorKeepThrow.clearData();
     mActorKeepGrab.clearData();
     mActorKeepRope.clearData();
-    m3628 = fpcM_ERROR_PROCESS_ID_e;
+    mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     mWhirlId = fpcM_ERROR_PROCESS_ID_e;
     mTactZevPartnerId = fpcM_ERROR_PROCESS_ID_e;
     m3630 = fpcM_ERROR_PROCESS_ID_e;

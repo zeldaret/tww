@@ -6,6 +6,67 @@
 #include "d/d_cc_s.h"
 #include "d/d_cc_d.h"
 #include "d/d_com_inf_game.h"
+#include "m_Do/m_Do_hostIO.h"
+
+#if DEBUG
+class dCcS_HIO : public JORReflexible {
+public:
+    enum flags_e {
+        FLAG_CAM_COL_DISP_e   = 0x1, // TP only?
+        FLAG_AT_ON_e          = 0x2,
+        FLAG_TG_ON_e          = 0x4,
+        FLAG_CO_ON_e          = 0x8,
+        FLAG_DRAW_CLEAR_OFF_e = 0x10,
+        FLAG_COUNTER_e        = 0x20,
+        FLAG_MOVE_OFF_e       = 0x40,
+        FLAG_MASS_OFF_e       = 0x80,
+        FLAG_MOVE_TIMER_e     = 0x100,
+        FLAG_MASS_TIMER_e     = 0x200,
+        FLAG_MASS_COUNTER_e   = 0x400,
+        FLAG_ALL_MASS_TIMER_e = 0x800,
+    };
+
+    dCcS_HIO() {
+        m_flags = 0;
+        m_shield_range = 0x4000;
+    }
+
+    virtual ~dCcS_HIO();
+
+    void genMessage(JORMContext*);
+
+    BOOL ChkMoveTimer() { return m_flags & FLAG_MOVE_TIMER_e; }
+    BOOL ChkMoveOff() { return m_flags & FLAG_MOVE_OFF_e; }
+    BOOL ChkAllMassTimer() { return m_flags & FLAG_ALL_MASS_TIMER_e; }
+    BOOL ChkDrawClearOff() { return m_flags & FLAG_DRAW_CLEAR_OFF_e; }
+    BOOL ChkCounter() { return m_flags & FLAG_COUNTER_e; }
+    BOOL CheckCoOn() { return m_flags & FLAG_CO_ON_e; }
+    BOOL CheckTgOn() { return m_flags & FLAG_TG_ON_e; }
+    BOOL CheckAtOn() { return m_flags & FLAG_AT_ON_e; }
+    BOOL ChkMassCounter() { return m_flags & FLAG_MASS_COUNTER_e; }
+    BOOL ChkMassOff() { return m_flags & FLAG_MASS_OFF_e; }
+    BOOL ChkMassTimer() { return m_flags & FLAG_MASS_TIMER_e; }
+
+    s16 GetShFrontRange() { return m_shield_range; }
+
+    /* 0x4 */ s8 id;
+    /* 0x6 */ u16 m_flags;
+    /* 0x8 */ s16 m_shield_range;
+};
+
+dCcS_HIO::~dCcS_HIO() {}
+
+void dCcS_HIO::genMessage(JORMContext* mctx) {
+    UNUSED(mctx);
+}
+
+static OSStopwatch s_move_timer;
+static OSStopwatch s_mass_timer;
+
+static dCcS_HIO s_Hio;
+
+int g_mass_counter;
+#endif
 
 /* 800AD5B0-800AD5E4       .text Ct__4dCcSFv */
 void dCcS::Ct() {
@@ -67,9 +128,7 @@ void dCcS::CalcTgPlusDmg(cCcD_Obj* obj1, cCcD_Obj* obj2, cCcD_Stts* stts1, cCcD_
     dCcD_GObjInf* inf2 = (dCcD_GObjInf*)obj2->GetGObjInf();
     if (!ChkShield(obj1, obj2, inf1, inf2)) {
         int atp = obj1->GetAtAtp();
-        if (stts2->GetDmg() < atp) {
-            stts2->PlusDmg(atp);
-        }
+        stts2->PlusDmg(atp);
     }
 }
 
@@ -100,37 +159,34 @@ bool dCcS::ChkAtTgHitAfterCross(bool i_setAt, bool i_setTg, const cCcD_GObjInf* 
 }
 
 /* 800AD8EC-800ADA30       .text SetCoGObjInf__4dCcSFbbP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GStts */
-void dCcS::SetCoGObjInf(bool r4, bool r5, cCcD_GObjInf* inf1_, cCcD_GObjInf* inf2_, cCcD_Stts* stts1, cCcD_Stts* stts2,
-                        cCcD_GStts* gstts1_, cCcD_GStts* gstts2_) {
-    dCcD_GObjInf* inf1 = (dCcD_GObjInf*)inf1_;
-    dCcD_GObjInf* inf2 = (dCcD_GObjInf*)inf2_;
-    dCcD_GStts* gstts1 = (dCcD_GStts*)gstts1_;
-    dCcD_GStts* gstts2 = (dCcD_GStts*)gstts2_;
-    if (r4) {
-        inf1->SetCoHitApid(stts2->GetApid());
-        if (gstts2->ChkNoActor())
-            inf1->OnCoHitNoActor();
+void dCcS::SetCoGObjInf(bool i_co1Set, bool i_co2Set, cCcD_GObjInf* i_co1Obj, cCcD_GObjInf* i_co2Obj,
+                        cCcD_Stts* i_co1Stts, cCcD_Stts* stti_co2Stts2, cCcD_GStts* i_co1GStts, cCcD_GStts* i_co2GStts) {
+    dCcD_GObjInf* co1Obj = (dCcD_GObjInf*)i_co1Obj;
+    dCcD_GObjInf* co2Obj = (dCcD_GObjInf*)i_co2Obj;
+    dCcD_GStts* co1GStts = (dCcD_GStts*)i_co1GStts;
+    dCcD_GStts* co2GStts = (dCcD_GStts*)i_co2GStts;
+
+    if (i_co1Set) {
+        co1Obj->SetCoHitApid(stti_co2Stts2->GetApid());
+        if (co2GStts->ChkNoActor())
+            co1Obj->OnCoHitNoActor();
     }
-    if (r5) {
-        inf2->SetCoHitApid(stts1->GetApid());
-        if (gstts1->ChkNoActor())
-            inf2->OnCoHitNoActor();
+    if (i_co2Set) {
+        co2Obj->SetCoHitApid(i_co1Stts->GetApid());
+        if (co1GStts->ChkNoActor())
+            co2Obj->OnCoHitNoActor();
     }
     
-    if (r4) {
-        dCcD_HitCallback callback = inf1->GetCoHitCallback();
+    if (i_co1Set) {
+        dCcD_HitCallback callback = co1Obj->GetCoHitCallback();
         if (callback != NULL) {
-            fopAc_ac_c* ac1 = inf1->GetAc();
-            fopAc_ac_c* ac2 = inf2->GetAc();
-            callback(ac1, inf1, ac2, inf2);
+            callback(co1Obj->GetAc(), co1Obj, co2Obj->GetAc(), co2Obj);
         }
     }
-    if (r5) {
-        dCcD_HitCallback callback = inf2->GetCoHitCallback();
+    if (i_co2Set) {
+        dCcD_HitCallback callback = co2Obj->GetCoHitCallback();
         if (callback != NULL) {
-            fopAc_ac_c* ac2 = inf2->GetAc();
-            fopAc_ac_c* ac1 = inf1->GetAc();
-            callback(ac2, inf2, ac1, inf1);
+            callback(co2Obj->GetAc(), co2Obj, co1Obj->GetAc(), co1Obj);
         }
     }
 }
@@ -336,12 +392,11 @@ void dCcS::ProcAtTgHitmark(bool, bool, cCcD_Obj* atObj, cCcD_Obj* tgObj, dCcD_GO
 }
 
 /* 800AE308-800AE5AC       .text SetAtTgGObjInf__4dCcSFbbP8cCcD_ObjP8cCcD_ObjP12cCcD_GObjInfP12cCcD_GObjInfP9cCcD_SttsP9cCcD_SttsP10cCcD_GSttsP10cCcD_GSttsP4cXyz */
-void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg,
-        cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj,
-        cCcD_GObjInf* i_atObjInf, cCcD_GObjInf* i_tgObjInf,
-        cCcD_Stts* i_atStts, cCcD_Stts* i_tgStts,
-        cCcD_GStts* i_atGStts, cCcD_GStts* i_tgGStts,
-        cXyz* i_hitPos) {
+void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg, cCcD_Obj* i_atObj, cCcD_Obj* i_tgObj,
+                          cCcD_GObjInf* i_atObjInf, cCcD_GObjInf* i_tgObjInf,
+                          cCcD_Stts* i_atStts, cCcD_Stts* i_tgStts,
+                          cCcD_GStts* i_atGStts, cCcD_GStts* i_tgGStts,
+                          cXyz* i_hitPos) {
     dCcD_GObjInf* atObjInf = (dCcD_GObjInf*)i_atObjInf;
     dCcD_GObjInf* tgObjInf = (dCcD_GObjInf*)i_tgObjInf;
     dCcD_GStts* atGStts = (dCcD_GStts*)i_atGStts;
@@ -391,9 +446,7 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg,
         dCcD_HitCallback at_callback = atObjInf->GetAtHitCallback();
 
         if (at_callback != NULL) {
-            fopAc_ac_c* atAc = atObjInf->GetAc();
-            fopAc_ac_c* tgAc = tgObjInf->GetAc();
-            at_callback(atAc, atObjInf, tgAc, tgObjInf);
+            at_callback(atObjInf->GetAc(), atObjInf, tgObjInf->GetAc(), tgObjInf);
         }
     }
 
@@ -401,9 +454,7 @@ void dCcS::SetAtTgGObjInf(bool i_setAt, bool i_setTg,
         dCcD_HitCallback tg_callback = tgObjInf->GetTgHitCallback();
 
         if (tg_callback != NULL) {
-            fopAc_ac_c* tgAc = tgObjInf->GetAc();
-            fopAc_ac_c* atAc = atObjInf->GetAc();
-            tg_callback(tgAc, tgObjInf, atAc, atObjInf);
+            tg_callback(tgObjInf->GetAc(), tgObjInf, atObjInf->GetAc(), atObjInf);
         }
     }
 
@@ -432,7 +483,7 @@ bool dCcS::ChkCamera(cXyz& start, cXyz& end, f32 radius, fopAc_ac_c* r26, fopAc_
             continue;
         if ((*pObjCo)->GetAc() == r26 || (*pObjCo)->GetAc() == r27)
             continue;
-        if ((*pObjCo)->GetDivideInfo().Chk(divideInfo)) {
+        if ((*pObjCo)->GetPDivideInfo()->Chk(divideInfo)) {
             cCcD_ShapeAttr* shapeAttr = (*pObjCo)->GetShapeAttr();
             if (shapeAttr == NULL)
                 continue;
@@ -460,8 +511,71 @@ void dCcS::Move() {
 
 /* 800AE83C-800AE878       .text Draw__4dCcSFv */
 void dCcS::Draw() {
+    #if DEBUG
+    if (s_Hio.ChkMassCounter()) {
+        OSReport("Mass Counter %d\n", g_mass_counter);
+        g_mass_counter = 0;
+    }
+
+    if (s_Hio.CheckAtOn()) {
+        for (int i = 0; i < mObjAtDrawCount; i++) {
+            if (mpObjAt[i] != NULL && mpObjAt[i]->ChkAtSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjAt[i]->GetGObjInf();
+                if (gobj->ChkAtHit()) {
+                    GXColor color = {0xFF, 0, 0, 0xB4};
+                    mpObjAt[i]->Draw(color);
+                } else {
+                    GXColor color = {0xFF, 0, 0, 0x50};
+                    mpObjAt[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    if (s_Hio.CheckTgOn()) {
+        for (int i = 0; i < mObjTgDrawCount; i++) {
+            if (mpObjTg[i] != NULL && mpObjTg[i]->ChkTgSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjTg[i]->GetGObjInf();
+                if (gobj->ChkTgHit()) {
+                    GXColor color = {0, 0xFF, 0, 0xB4};
+                    mpObjTg[i]->Draw(color);
+                } else {
+                    GXColor color = {0, 0xFF, 0, 0x50};
+                    mpObjTg[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    if (s_Hio.CheckCoOn()) {
+        for (int i = 0; i < mObjCoDrawCount; i++) {
+            if (mpObjCo[i] != NULL && mpObjCo[i]->ChkCoSet()) {
+                dCcD_GObjInf* gobj = (dCcD_GObjInf*)mpObjCo[i]->GetGObjInf();
+                if (gobj->ChkCoHit()) {
+                    GXColor color = {0xFF, 0xFF, 0xFF, 0xB4};
+                    mpObjCo[i]->Draw(color);
+                } else {
+                    GXColor color = {0xFF, 0xFF, 0xFF, 0x50};
+                    mpObjCo[i]->Draw(color);
+                }
+            }
+        }
+    }
+
+    if (s_Hio.ChkCounter()) {
+        OSReport("At:%d,Tg:%d,Co:%d\n", mObjAtDrawCount, mObjTgDrawCount, mObjCoDrawCount);
+    }
+    #endif
+
     DrawAfter();
-    DrawClear();
+    
+    #if DEBUG
+    if (!s_Hio.ChkDrawClearOff())
+    #endif
+    {
+        DrawClear();
+    }
+    
     mMass_Mng.Clear();
 }
 

@@ -494,6 +494,7 @@ static BOOL daNh_Execute(daNh_c* i_this) {
 
 /* 800FAE5C-800FAE64       .text daNh_IsDelete__FP6daNh_c */
 static BOOL daNh_IsDelete(daNh_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -155,11 +155,9 @@ void daObjAuzu::Act_c::ship_whirl() {
         f32 sqr_mag_xz = fopAcM_searchActorDistanceXZ2(this, ship_p);
 #if VERSION > VERSION_DEMO
         f32 inner_activation = SQUARE(daObjAuzu::L_radius * attr().mInnerActivationMult);
-
         f32 outer_activation = SQUARE(daObjAuzu::L_radius * attr().mOuterActivationMult);
 #else
         f32 outer_activation = SQUARE(daObjAuzu::L_radius * attr().mOuterActivationMult);
-
         f32 inner_activation = SQUARE(daObjAuzu::L_radius * attr().mInnerActivationMult);
 #endif
         if (sqr_mag_xz < outer_activation) {

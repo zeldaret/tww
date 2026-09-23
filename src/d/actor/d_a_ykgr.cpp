@@ -41,7 +41,7 @@ public:
 #endif
     }
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -224,7 +224,7 @@ static BOOL daYkgrExecute(void* v_this) {
 }
 
 void daYkgr_c::set_mtx() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     current.pos = *fopCamM_GetEye_p(camera);
     current.angle.y = fopCamM_GetAngleY(camera);
     current.angle.x = fopCamM_GetAngleX(camera);

@@ -235,7 +235,7 @@ void daObjVolcano::Act_c::init_mtx() {
 
 /* 00000FDC-0000103C       .text daObjVolcano_fire_demo_wait__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::daObjVolcano_fire_demo_wait() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         StartFire();
         field_0x500 = 5;
     } else {
@@ -277,7 +277,7 @@ void daObjVolcano::Act_c::daObjVolcano_fire_main() {
 
 /* 00001284-000013E4       .text daObjVolcano_freeze_demo_wait__Q212daObjVolcano5Act_cFv */
 void daObjVolcano::Act_c::daObjVolcano_freeze_demo_wait() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         int switchIndex = prm_get_swSave();
         fopAcM_onSwitch(this, switchIndex);
         field_0x4E8 = 0;

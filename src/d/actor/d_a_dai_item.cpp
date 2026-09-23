@@ -857,6 +857,7 @@ static BOOL daStandItem_Execute(void* i_this) {
 
 /* 800E5444-800E544C       .text daStandItem_IsDelete__FPv */
 static BOOL daStandItem_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

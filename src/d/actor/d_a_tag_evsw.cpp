@@ -76,6 +76,7 @@ BOOL Mthd_Draw(void* i_this) {
 
 /* 00000510-00000518       .text Mthd_IsDelete__Q29daTagEvsw26@unnamed@d_a_tag_evsw_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

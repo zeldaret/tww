@@ -599,7 +599,7 @@ bool daObjHha_c::_execute() {
     switch(mState){
         case State_OPEN: if(check_sw()){
             if(mIsMiddle == 0){
-                if(eventInfo.mCommand != dEvtCmd_INDEMO_e){
+                if(!eventInfo.checkCommandDemoAccrpt()){
                     fopAcM_orderOtherEventId(this, mEventIdx);
                     eventInfo.onCondition(2);
                 }
@@ -697,6 +697,7 @@ BOOL Mthd_Draw(void* i_this) {
 
 /* 00002A80-00002A88       .text Mthd_IsDelete__25@unnamed@d_a_obj_hha_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

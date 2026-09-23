@@ -9,8 +9,8 @@
 #include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
-class dCcD_SrcSph;
-class dCcD_SrcCps;
+struct dCcD_SrcSph;
+struct dCcD_SrcCps;
 
 class daDaiocta_c : public fopAc_ac_c {
 public:
@@ -170,7 +170,7 @@ class daDaiocta_HIO_c : public mDoHIO_entry_c {
 public:
     daDaiocta_HIO_c();
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x004 */ u8 m004;

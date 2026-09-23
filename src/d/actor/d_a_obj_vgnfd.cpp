@@ -78,8 +78,8 @@ enum {
 };
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVgnfd_cFP10fopAc_ac_c */
-BOOL daObjVgnfd_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->create_heap();
+BOOL daObjVgnfd_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjVgnfd_c*)i_this)->create_heap();
 }
 
 /* 00000098-0000022C       .text create_bdl_brk__12daObjVgnfd_cFi */
@@ -474,27 +474,28 @@ bool daObjVgnfd_c::_draw() {
 
 namespace {
 /* 000013F0-00001410       .text Mthd_Create__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-cPhs_State Mthd_Create(void* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->_create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjVgnfd_c*)i_this)->_create();
 }
 
 /* 00001410-00001434       .text Mthd_Delete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-BOOL Mthd_Delete(void* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjVgnfd_c*)i_this)->_delete();
 }
 
 /* 00001434-00001458       .text Mthd_Execute__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-BOOL Mthd_Execute(void* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjVgnfd_c*)i_this)->_execute();
 }
 
 /* 00001458-0000147C       .text Mthd_Draw__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-BOOL Mthd_Draw(void* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjVgnfd_c*)i_this)->_draw();
 }
 
 /* 0000147C-00001484       .text Mthd_IsDelete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-BOOL Mthd_IsDelete(void* i_ac) {
+BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

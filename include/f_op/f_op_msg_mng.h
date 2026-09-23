@@ -9,7 +9,7 @@
 class JKRExpHeap;
 class JKRHeap;
 class fopAc_ac_c;
-class msg_class;
+struct msg_class;
 class J2DPane;
 class J2DScreen;
 class J2DPicture;
@@ -61,6 +61,18 @@ struct fopMsg_prm_timer : public fopMsg_prm_class {
     /* 0x2C */ cXy mRupeePos;
 }; // Size: 0x34
 
+struct fopMsgM_unk_struct {
+    u16 _0;
+    u16 _2;
+    u16 _4;
+    u16 _6;
+    u16 _8;
+    u16 _A;
+    s16 _C;
+    u16 _E;
+    u8 _10;
+};
+
 class J2DScreen;
 
 class fopMsgM_f2d_class {
@@ -90,6 +102,13 @@ struct fopMsgM_pane_alpha_class {
 
 class fopMsgM_msgGet_c {
 public:
+    fopMsgM_msgGet_c() {
+        mMsgIdx = 0;
+        mGroupID = 0;
+        mMsgNo = 0;
+        mResMsgNo = 0;
+    }
+
     virtual ~fopMsgM_msgGet_c() {}
     mesg_header* getMesgHeader(u32 i_msgNo);
     mesg_info* getMesgInfo(mesg_header* i_head);
@@ -167,14 +186,109 @@ enum {
     /* 0x11 */ fopMsgM_Icon_MAIN_STICK_RIGHT_e,
     /* 0x12 */ fopMsgM_Icon_MAIN_STICK_UP_DOWN_e,
     /* 0x13 */ fopMsgM_Icon_MAIN_STICK_LEFT_RIGHT_e,
-    /* 0x14 */ fopMsgM_Icon_SELECT_YOKO_LEFT_e,
+    /* 0x14 */ fopMsgM_Icon_FLASHING_A_BUTTON_e,
+    /* 0x15 */ fopMsgM_Icon_HEART_e,
+    /* 0x16 */ fopMsgM_Icon_MUSIC_NOTE_e,
+    /* 0x17 */ fopMsgM_Icon_STARBURST_e,
+
+    // These aren't icons but choices.
+    /* 0x14 */ fopMsgM_Icon_SELECT_YOKO_LEFT_e = 0x14,
     /* 0x15 */ fopMsgM_Icon_SELECT_YOKO_RIGHT_e,
     /* 0x16 */ fopMsgM_Icon_INPUT_e,
-    /* 0x17 */ fopMsgM_Icon_FLASHING_A_BUTTON_e,
-    /* 0x18 */ fopMsgM_Icon_HEART_e,
-    /* 0x19 */ fopMsgM_Icon_MUSIC_NOTE_e,
-    /* 0x1A */ fopMsgM_Icon_STARBURST_e,
+
+    // Duplicates of the icons that had their indexes offset by the choices above.
+    /* 0x17 */ fopMsgM_Icon_FLASHING_A_BUTTON_2_e,
+    /* 0x18 */ fopMsgM_Icon_HEART_2_e,
+    /* 0x19 */ fopMsgM_Icon_MUSIC_NOTE_2_e,
+    /* 0x1A */ fopMsgM_Icon_STARBURST_2_e,
+
     /* 0xFF */ fopMsgM_Icon_NONE_e = 0xFF,
+};
+
+// 1A NN 00 00 XX
+enum MsgControlCodes {
+    /* 0x00 */ MsgCtrlCode_PLAYER_NAME,
+    /* 0x01 */ MsgCtrlCode_UNK01, // draw_instant ?
+    /* 0x02 */ MsgCtrlCode_UNK02, // draw_char ?
+    /* 0x03 */ MsgCtrlCode_UNK03, // wait_dismiss_prompt ?
+    /* 0x04 */ MsgCtrlCode_UNK04, // wait_dismiss ?
+    /* 0x05 */ MsgCtrlCode_UNK05, // dismiss ?
+    /* 0x06 */ MsgCtrlCode_DUMMY, // Does nothing
+    /* 0x07 */ MsgCtrlCode_WAIT,
+    /* 0x08 */ MsgCtrlCode_SELECT_TWO, // Vertical choice, two options
+    /* 0x09 */ MsgCtrlCode_SELECT_THREE, // Vertical choice, three options
+    /* 0x0A */ MsgCtrlCode_A_BUTTON,
+    /* 0x0B */ MsgCtrlCode_B_BUTTON,
+    /* 0x0C */ MsgCtrlCode_C_STICK,
+    /* 0x0D */ MsgCtrlCode_L_BUTTON,
+    /* 0x0E */ MsgCtrlCode_R_BUTTON,
+    /* 0x0F */ MsgCtrlCode_X_BUTTON,
+    /* 0x10 */ MsgCtrlCode_Y_BUTTON,
+    /* 0x11 */ MsgCtrlCode_Z_BUTTON,
+    /* 0x12 */ MsgCtrlCode_DPAD,
+    /* 0x13 */ MsgCtrlCode_MAIN_STICK,
+    /* 0x14 */ MsgCtrlCode_ARROW_LEFT,
+    /* 0x15 */ MsgCtrlCode_ARROW_RIGHT,
+    /* 0x16 */ MsgCtrlCode_ARROW_UP,
+    /* 0x17 */ MsgCtrlCode_ARROW_DOWN,
+    /* 0x18 */ MsgCtrlCode_MAIN_STICK_UP,
+    /* 0x19 */ MsgCtrlCode_MAIN_STICK_DOWN,
+    /* 0x1A */ MsgCtrlCode_MAIN_STICK_LEFT,
+    /* 0x1B */ MsgCtrlCode_MAIN_STICK_RIGHT,
+    /* 0x1C */ MsgCtrlCode_MAIN_STICK_UP_DOWN,
+    /* 0x1D */ MsgCtrlCode_MAIN_STICK_LEFT_RIGHT,
+    /* 0x1E */ MsgCtrlCode_SELECT_YOKO_LEFT, // Horizontal choice, left option
+    /* 0x1F */ MsgCtrlCode_SELECT_YOKO_RIGHT, // Horizontal choice, right option
+    /* 0x20 */ MsgCtrlCode_UNK20, // canon_balls ?
+    /* 0x21 */ MsgCtrlCode_UNK21, // broken_vase_payment ?
+    /* 0x22 */ MsgCtrlCode_UNK22, // auction_character ?
+    /* 0x23 */ MsgCtrlCode_UNK23, // auction_item ?
+    /* 0x24 */ MsgCtrlCode_UNK24, // auction_bid ?
+    /* 0x25 */ MsgCtrlCode_UNK25, // auction_starting_bid ?
+    /* 0x26 */ MsgCtrlCode_UNK26, // player_action_bid_selector ?
+    /* 0x27 */ MsgCtrlCode_FLASHING_A_BUTTON,
+    /* 0x28 */ MsgCtrlCode_UNK28, // orca_blow_count ?
+    /* 0x29 */ MsgCtrlCode_UNK29, // pirate_password ?
+    /* 0x2A */ MsgCtrlCode_STARBURST,
+    /* 0x2B */ MsgCtrlCode_UNK2B, // post_office_game_letter_count ?
+    /* 0x2C */ MsgCtrlCode_UNK2C, // post_office_game_rupee_reward ?
+    /* 0x2D */ MsgCtrlCode_UNK2D, // post_box_letter_count ?
+    /* 0x2E */ MsgCtrlCode_UNK2E, // remaining_korok_count ?
+    /* 0x2F */ MsgCtrlCode_UNK2F, // remaining_forest_water_time ?
+    /* 0x30 */ MsgCtrlCode_UNK30, // flight_platform_time ?
+    /* 0x31 */ MsgCtrlCode_UNK31, // flight_platform_record ?
+    /* 0x32 */ MsgCtrlCode_UNK32, // beedle_point_count ?
+    /* 0x33 */ MsgCtrlCode_UNK33, // ms_marie_pendant_count ?
+    /* 0x34 */ MsgCtrlCode_UNK34, // ms_marie_pendant_total ?
+    /* 0x35 */ MsgCtrlCode_UNK35, // pig_game_time ?
+    /* 0x36 */ MsgCtrlCode_UNK36, // sailing_game_rupee_reward ?
+    /* 0x37 */ MsgCtrlCode_UNK37, // current_bomb_capacity ?
+    /* 0x38 */ MsgCtrlCode_UNK38, // current_arrow_capacity ?
+    /* 0x39 */ MsgCtrlCode_HEART,
+    /* 0x3A */ MsgCtrlCode_MUSIC_NOTE,
+    /* 0x3B */ MsgCtrlCode_UNK3B, // target_letter_count ?
+    /* 0x3C */ MsgCtrlCode_UNK3C, // fishman_hit_count ?
+    /* 0x3D */ MsgCtrlCode_UNK3D, // fishman_rupee_reward ?
+    /* 0x3E */ MsgCtrlCode_UNK3E, // boko_baba_seed_count ?
+    /* 0x3F */ MsgCtrlCode_UNK3F, // skull_necklace_count ?
+    /* 0x40 */ MsgCtrlCode_UNK40, // chu_jelly_count ?
+    /* 0x41 */ MsgCtrlCode_UNK41, // joy_pendant_count ?
+    /* 0x42 */ MsgCtrlCode_UNK42, // golden_feather_count ?
+    /* 0x43 */ MsgCtrlCode_UNK43, // knights_crest_count ?
+    /* 0x44 */ MsgCtrlCode_UNK44, // beedle_rupee_offer ?
+    /* 0x45 */ MsgCtrlCode_UNK45, // boko_baba_sell_selector ?
+    /* 0x46 */ MsgCtrlCode_UNK46, // skull_necklace_sell_selector ?
+    /* 0x47 */ MsgCtrlCode_UNK47, // chu_jelly_sell_selector ?
+    /* 0x48 */ MsgCtrlCode_UNK48, // joy_pendant_sell_selector ?
+    /* 0x49 */ MsgCtrlCode_UNK49, // golden_feather_sell_selector ?
+    /* 0x4A */ MsgCtrlCode_UNK4A, // knights_crest_sell_selector ?
+};
+
+// 1A NN FF 00 XX
+enum MsgSpecialControlCode {
+    /* 0x00 */ MsgSpclCode_COLOR,
+    /* 0x01 */ MsgSpclCode_UNK1,
+    /* 0x02 */ MsgSpclCode_RUBY,
 };
 
 class fopMsgM_msgDataProc_c {
@@ -514,6 +628,7 @@ void fopMsgM_messageSendOn();
 void fopMsgM_messageSendOff();
 bool fopMsgM_checkMessageSend();
 u32 fopMsgM_tactMessageSet();
+fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_rubyPane, char* param_3, char* param_4, char* param_5, char* param_6, u32 i_msgNo);
 void fopMsgM_demoMsgFlagOn();
 
 bool fopMsgM_getScopeMode();
@@ -539,6 +654,8 @@ void fopMsgM_blendDraw(J2DPicture* pic, const char* data);
 void fopMsgM_setFontsizeCenter(char* param_1, char* param_2, char* param_3, char* param_4, int param_5, int param_6);
 void fopMsgM_setFontsizeCenter2(char* a, char* b, char* c, char* d, int, int size, int, int);
 
+const char* fopMsgM_outFontTex(int i_iconNo);
+GXColor fopMsgM_outFontColorWhite(int i_no);
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, s16* i_timer, u32 i_color, u8 i_iconNo);
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, s16* i_timer, u32 i_color, u8 i_iconNo);
 void fopMsgM_outFontDraw(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, int param_3, int param_4, int param_5, s16* i_timer, u8 i_alpha, u8 i_iconNo);

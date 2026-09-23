@@ -43,7 +43,7 @@ BOOL daPy_npc_c::check_moveStop() {
             speedF = 0.0f;
             m4E8 = 0;
         }
-        if (dComIfGp_getPlayer(0)->eventInfo.mCommand != dEvtCmd_INDOOR_e) {
+        if (!dComIfGp_getPlayer(0)->eventInfo.checkCommandDoor()) {
             offNpcCallCommand();
         }
         return TRUE;

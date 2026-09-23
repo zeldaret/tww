@@ -42,7 +42,7 @@ public:
     };  // Size: 0x4C
 
     daNpc_Bm1_childHIO_c();
-    void genMessage(JORMContext* ctx) {};
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); };
 
 public:
     /* 0x04 */ hio_prm_c hio_prm;
@@ -54,7 +54,7 @@ public:
     daNpc_Bm1_HIO_c();
     virtual ~daNpc_Bm1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 m4;
@@ -3908,34 +3908,34 @@ BOOL daNpc_Bm1_c::_draw() {
 
     switch (mType) {
         case TYPE_Quill_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8D, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_PST, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Akoot_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8E, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_SKT_KKT, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Skett_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8E, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_SKT_KKT, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Basht_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK93, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMB_0_1, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Bisht_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK93, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMB_0_1, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Hoskit_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK91, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMB_2, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Ilari_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK90, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMC_0_1_2, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Pashli_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK97, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMC_3, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Namali_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK92, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMD_0, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Kogoli_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8F, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMD_1, this, 1.0f, 1.0f, 1.0f);
             break;
     }
 

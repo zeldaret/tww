@@ -384,7 +384,7 @@ void Act_c::init_mtx() {
 void Act_c::exe_event() {
     switch (field_0x7F6) {
     case 1:
-        if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+        if (eventInfo.checkCommandDemoAccrpt()) {
             field_0x7F6 = 2;
         } else {
             fopAcM_orderOtherEventId(this, field_0x7F4);
@@ -878,6 +878,7 @@ BOOL Mthd_Draw(void* i_this) {
 
 /* 000029E0-000029E8       .text Mthd_IsDelete__Q210daObjHomen27@unnamed@d_a_obj_homen_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

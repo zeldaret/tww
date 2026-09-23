@@ -15,12 +15,13 @@ namespace JASystem {
             const JASystem::TWaveInfo* getWaveInfo() const {
                 return &mWaveInfo;
             }
-            const void* getWavePtr() const {
+            intptr_t getWavePtr() const {
                 JUT_ASSERT(77, mHeap);
-                if (!mHeap->mBase) {
+                void* base = mHeap->getBase();
+                if (base == NULL) {
                     return NULL;
                 }
-                return (u8*)mHeap->mBase + mWaveInfo.mWavePtrOffs;
+                return (intptr_t)base + mWaveInfo.mWavePtrOffs;
             }
 
             /* 0x04 */ JASystem::TWaveInfo mWaveInfo;
@@ -52,6 +53,8 @@ namespace JASystem {
             void onLoadDone();
             void onEraseDone();
             u32 getWaveID(int) const;
+
+            u32 getWaveCount() const { return mWaveCount; }
 
             /* 0x78 */ TBasicWaveBank* mBank;
             /* 0x7C */ TWaveInfo* mCtrlWaveArray;

@@ -139,7 +139,7 @@ void JUTDirectPrint::printSub(u16 position_x, u16 position_y, const char* format
         return;
     }
 
-    int buffer_length = vsnprintf(buffer, ARRAY_SIZE(buffer), format, args);
+    int buffer_length = vsnprintf(buffer, ARRAY_SIZE(buffer), format, args->list);
     u16 x = position_x;
     if (buffer_length > 0) {
         if (clear) {
@@ -177,8 +177,8 @@ void JUTDirectPrint::drawString(u16 position_x, u16 position_y, char* text) {
 void JUTDirectPrint::drawString_f(u16 position_x, u16 position_y, char const* format, ...) {
     if (mFrameBuffer) {
         std::__tag_va_List args;
-        va_start(args, format);
+        va_start(args.list, format);
         printSub(position_x, position_y, format, &args, false);
-        va_end(args);
+        va_end(args.list);
     }
 }

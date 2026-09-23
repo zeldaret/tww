@@ -207,7 +207,7 @@ void dMenu_Collect_c::screenSet() {
     fopMsgM_setPaneData(&m7E8, scrn, 'nk00');
     fopMsgM_setPaneData(&m820, scrn, 'no11');
 
-    m820.mUserArea = m820.pane->mRotation;
+    m820.mUserArea = m820.pane->getRotate();
 
     if (m820.mUserArea > 180)
         m820.mUserArea -= 360;
@@ -341,15 +341,15 @@ void dMenu_Collect_c::screenSet() {
         char sp58[24];
         sprintf(sp58, "title_collect_%d.bti", dComIfGs_getPalLanguage());
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(mTitleCollectTexBuffer, 0x1000, 'TIMG', sp58, mpArc);
+        JKRReadTypeResource(mTitleCollectTexBuffer, 0x1000, 'TIMG', sp58, mpArc);
         J2DPicture* r3 = (J2DPicture*)scrn->search('tlcl');
         r3->changeTexture(mTitleCollectTexBuffer, 0);
         sprintf(sp58, "word_save_%d.bti", dComIfGs_getPalLanguage());
-        JKRArchive::readTypeResource(mWordSaveTexBuffer, 0xc00, 'TIMG', sp58, mpArc);
+        JKRReadTypeResource(mWordSaveTexBuffer, 0xc00, 'TIMG', sp58, mpArc);
         J2DPicture* r3_2 = (J2DPicture*)scrn->search('wdsv');
         r3_2->changeTexture(mWordSaveTexBuffer, 0);
         sprintf(sp58, "word_option_%d.bti", dComIfGs_getPalLanguage());
-        JKRArchive::readTypeResource(mWordOptionTexBuffer, 0xc00, 'TIMG', sp58, mpArc);
+        JKRReadTypeResource(mWordOptionTexBuffer, 0xc00, 'TIMG', sp58, mpArc);
         J2DPicture* r3_3 = (J2DPicture*)scrn->search('wdop');
         r3_3->changeTexture(mWordOptionTexBuffer, 0);
     }
@@ -357,7 +357,7 @@ void dMenu_Collect_c::screenSet() {
 
     {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(mTactTexBuffer, 0xc00, 'TIMG', "baton.bti", archive);
+        JKRReadTypeResource(mTactTexBuffer, 0xc00, 'TIMG', "baton.bti", archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mTactTexBuffer, 0xc00);
 #else
@@ -367,7 +367,7 @@ void dMenu_Collect_c::screenSet() {
 
     {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(mMapTexBuffer, 0xc00, 'TIMG', "cmap_treasure2.bti", archive);
+        JKRReadTypeResource(mMapTexBuffer, 0xc00, 'TIMG', "cmap_treasure2.bti", archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mMapTexBuffer, 0xc00);
 #else
@@ -385,7 +385,7 @@ void dMenu_Collect_c::screenSet() {
     for (int i = 0; i < 8; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
         char* r6 = triTex[i];
-        JKRArchive::readTypeResource(mTriforceTexBuffer[i], 0xc00, 'TIMG', r6, archive);
+        JKRReadTypeResource(mTriforceTexBuffer[i], 0xc00, 'TIMG', r6, archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mTriforceTexBuffer[i], 0xc00);
 #else
@@ -401,7 +401,7 @@ void dMenu_Collect_c::screenSet() {
     for (int i = 0; i < 3; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
         char* r6 = symTex[i];
-        JKRArchive::readTypeResource(mSymbolTexBuffer[i], 0xc00, 'TIMG', r6, archive);
+        JKRReadTypeResource(mSymbolTexBuffer[i], 0xc00, 'TIMG', r6, archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mSymbolTexBuffer[i], 0xc00);
 #else
@@ -414,7 +414,7 @@ void dMenu_Collect_c::screenSet() {
     for (int i = 0; i < 5; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
         char* r6 = wepTex[i];
-        JKRArchive::readTypeResource(mItemTexBuffer[i], 0xc00, 'TIMG', r6, archive);
+        JKRReadTypeResource(mItemTexBuffer[i], 0xc00, 'TIMG', r6, archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mItemTexBuffer[i], 0xc00);
 #else
@@ -1697,7 +1697,7 @@ void dMenu_Collect_c::itemBitCheck() {
     } else {
         if (m27F3 != mE08[4].mUserArea) {
             JKRArchive* r7 = dComIfGp_getItemIconArchive();
-            JKRArchive::readTypeResource(
+            JKRReadTypeResource(
                 mTriforceTexBuffer[4],
                 0xC00,
                 'TIMG',
@@ -1802,53 +1802,21 @@ void dMenu_Collect_c::itemScale() {
                 if (now == 3) {
                     m2478->insertChild(m1498[0].pane, m1738.pane);
                     fopMsgM_paneScaleXY(&m1738, g_menuHIO.field_0x8);
-
-                    J2DPane* pane = m1738.pane;
-                    float y = m1738.mSize.y / 2.0f;
-                    float x = m1738.mSize.x / 2.0f;
-
-                    pane->mBasePosition.x = x;
-                    pane->mBasePosition.y = y;
-                    pane->mRotationAxis = ROTATE_Z;
-                    pane->calcMtx();
+                    m1738.pane->rotate(m1738.mSize.x / 2.0f, m1738.mSize.y / 2.0f, ROTATE_Z, m1738.pane->getRotate());
                 } else {
                     m2478->insertChild(m15E8[5].pane, m1738.pane);
                     fopMsgM_paneScaleXY(&m1738, 1.0f);
-
-                    J2DPane* pane = m1738.pane;
-                    float y = m1738.mSize.y / 2.0f;
-                    float x = m1738.mSize.x / 2.0f;
-
-                    pane->mBasePosition.x = x;
-                    pane->mBasePosition.y = y;
-                    pane->mRotationAxis = ROTATE_Z;
-                    pane->calcMtx();
+                    m1738.pane->rotate(m1738.mSize.x / 2.0f, m1738.mSize.y / 2.0f, ROTATE_Z, m1738.pane->getRotate());
                 }
 
                 if (now == 4) {
                     m2478->insertChild(m1498[0].pane, m1770.pane);
                     fopMsgM_paneScaleXY(&m1770, g_menuHIO.field_0x8);
-
-                    J2DPane* pane = m1770.pane;
-                    float y = m1770.mSize.y / 2.0f;
-                    float x = m1770.mSize.x / 2.0f;
-
-                    pane->mBasePosition.x = x;
-                    pane->mBasePosition.y = y;
-                    pane->mRotationAxis = ROTATE_Z;
-                    pane->calcMtx();
+                    m1770.pane->rotate(m1770.mSize.x / 2.0f, m1770.mSize.y / 2.0f, ROTATE_Z, m1770.pane->getRotate());
                 } else {
                     m2478->insertChild(m15E8[5].pane, m1770.pane);
                     fopMsgM_paneScaleXY(&m1770, 1.0f);
-
-                    J2DPane* pane = m1770.pane;
-                    float y = m1770.mSize.y / 2.0f;
-                    float x = m1770.mSize.x / 2.0f;
-
-                    pane->mBasePosition.x = x;
-                    pane->mBasePosition.y = y;
-                    pane->mRotationAxis = ROTATE_Z;
-                    pane->calcMtx();
+                    m1770.pane->rotate(m1770.mSize.x / 2.0f, m1770.mSize.y / 2.0f, ROTATE_Z, m1770.pane->getRotate());
                 }
 
                 break;
@@ -2719,6 +2687,7 @@ void dMenu_Collect_c::itemnameSet() {
     /* Nonmatching */
     fopMsgM_itemMsgGet_c msgGet;
     u32 msgNo = 0;
+    int r30 = 0;
     int i = 0;
 
     J2DTextBox::TFontSize copiedFontSize;
@@ -2728,7 +2697,9 @@ void dMenu_Collect_c::itemnameSet() {
     initialFontSize.mSizeY = 29.0f;
     initialFontSize.mSizeX = 29.0f;
 
+#if VERSION > VERSION_DEMO
     ((J2DTextBox*)m858.pane)->setFontSize(initialFontSize);
+#endif
 
     ((J2DTextBox*)m890[0].pane)->getFontSize(copiedFontSize);
     ((J2DTextBox*)m890[1].pane)->setFontSize(copiedFontSize);
@@ -2968,7 +2939,7 @@ void dMenu_Collect_c::itemnameSet() {
     u8 characterWidth;
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(VERSION_SELECT(0xBD1, 0xBD1, 0xBD1, 0xBD1), head_p);
+    JUT_ASSERT(VERSION_SELECT(2992, 2992, 3025, 3025), head_p);
 
     ((J2DTextBox*)m890[0].pane)->getFontSize(nameFontSize);
     nameFontSize.mSizeX = nameFontSize.mSizeY;
@@ -3039,7 +3010,7 @@ void dMenu_Collect_c::itemnameSet() {
     }
 
     ((J2DTextBox*)m890[0].pane)->setFontSize(nameFontSize);
-    ((J2DTextBox*)m890[0].pane)->setCharSpace(0.0f);
+    ((J2DTextBox*)m890[0].pane)->setCharSpace((f32)r30);
     ((J2DTextBox*)m890[0].pane)->setString(name[0]);
 }
 
@@ -3495,7 +3466,7 @@ void dMenu_Collect_c::outFontMove() {
             f32 rotOffX = m820.mPosCenter.x - m3F8[i].mPosTopLeft.x;
             f32 rotOffY = m820.mPosCenter.y - m3F8[i].mPosTopLeft.y;
 
-            m3F8[i].pane->rotate(rotOffX, rotOffY, ROTATE_Z, m820.pane->mRotation);
+            m3F8[i].pane->rotate(rotOffX, rotOffY, ROTATE_Z, m820.pane->getRotate());
         } else {
             fopMsgM_setNowAlphaZero(&m0B0[i]);
         }
@@ -3603,7 +3574,9 @@ void dMenu_Collect_c::_create() {
     outFont = new dDlst_2DOutFont_c();
     JUT_ASSERT(VERSION_SELECT(0xe55, 0xe55, 0xe55, 0xe55), outFont != NULL);
 
+#if VERSION > VERSION_JPN
     outFont->m74 = 1;
+#endif
 
     dMo_c = new dMenu_Option_c();
     JUT_ASSERT(VERSION_SELECT(0xe59, 0xe59, 0xe59, 0xe59), dMo_c != NULL);

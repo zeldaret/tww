@@ -15,8 +15,7 @@ public:
 
     u32 get_size() const { return get()->size; }
     const void* getNext() const {
-        u32 size = get_size();
-        return (const void*)((u8*)getRaw() + size);
+        return (const void*)((u8*)getRaw() + get_size());
     }
     u16 get_type() const { return get()->type; }
     u16 get_IDSize() const { return get()->id_size; }
@@ -28,7 +27,7 @@ public:
         return ret;
     }
     const void* getContent() const {
-        return (const void*)((const u8*)getBlockEnd_() + align_roundUp(get_IDSize(), 4));
+        return (const void*)((intptr_t)getBlockEnd_() + align_roundUp(get_IDSize(), 4));
     }
 };
 

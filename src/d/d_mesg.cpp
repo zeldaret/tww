@@ -1152,11 +1152,11 @@ void dMesg_screenData_c::setCommonData() {
     ((J2DTextBox*)field_0x88[2].pane)->setFont(field_0x10);
     ((J2DTextBox*)field_0x88[3].pane)->setFont(field_0x14);
 
-    J2DTextBox::TFontSize size;
-    size.mSizeX = g_msgHIO.field_0x70;
-    size.mSizeY = g_msgHIO.field_0x70;
-    ((J2DTextBox*)field_0x88[0].pane)->setFontSize(size);
-    ((J2DTextBox*)field_0x88[2].pane)->setFontSize(size);
+    J2DTextBox::TFontSize fontSize;
+    fontSize.mSizeX = g_msgHIO.field_0x70;
+    fontSize.mSizeY = g_msgHIO.field_0x70;
+    ((J2DTextBox*)field_0x88[0].pane)->setFontSize(fontSize);
+    ((J2DTextBox*)field_0x88[2].pane)->setFontSize(fontSize);
 
     ((J2DTextBox*)field_0x88[0].pane)->setCharSpace(g_msgHIO.field_0x5a);
     ((J2DTextBox*)field_0x88[1].pane)->setCharSpace(g_msgHIO.field_0x5c);
@@ -1523,7 +1523,7 @@ void dMesg_screenDataItem_c::createScreen() {
     JMSMesgEntry_c stack_message = *(JMSMesgEntry_c*)dMesg_gpControl->getMessageEntry(nowMesgCode);
     if (dItem_data::getTexture(stack_message.mMsgNo - 101)) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(texBuffer, 0xc00, 'TIMG', dItem_data::getTexture(stack_message.mMsgNo - 101), archive);
+        JKRReadTypeResource(texBuffer, 0xc00, 'TIMG', dItem_data::getTexture(stack_message.mMsgNo - 101), archive);
         ((J2DPicture*)field_0x1b4.pane)->changeTexture(texBuffer, 0);
     }
     field_0x168.mPosTopLeftOrig.y += 1.0f;
@@ -2183,9 +2183,9 @@ static BOOL dMsg_Delete(sub_mesg_class* i_Msg) {
 
     dMesg_finalize();
     if (header) {
-        JKRFileLoader::removeResource(header, NULL);
+        JKRRemoveResource(header, NULL);
     } if (header2) {
-        JKRFileLoader::removeResource(header2, NULL);
+        JKRRemoveResource(header2, NULL);
     }
     if (oParse) {
         delete oParse;

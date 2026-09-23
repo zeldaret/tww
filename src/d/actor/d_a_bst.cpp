@@ -26,7 +26,7 @@ class daBst_HIO_c : public JORReflexible {
 public:
     daBst_HIO_c();
     virtual ~daBst_HIO_c() {}
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ s8 m4;
@@ -1511,9 +1511,7 @@ static void damage_check(bst_class* i_this) {
                     cXyz* hit_pos = i_this->mHandHurtCyl.GetTgHitPosP();
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, hit_pos);
                     cXyz scale;
-                    scale.z = 2.0f;
-                    scale.y = 2.0f;
-                    scale.x = 2.0f;
+                    scale.x = scale.y = scale.z = 2.0f;
                     csXyz angle;
                     angle.x = angle.z = 0;
                     angle.y = fopAcM_searchPlayerAngleY(actor);
@@ -1939,7 +1937,7 @@ static BOOL beam_wall_check(cXyz* pos_1, cXyz* pos_2) {
     end.y = start.y;
     gndChk.Set(&start, &end, NULL);
     if (dComIfG_Bgsp()->LineCross(&gndChk)) {
-        *pos_1 = gndChk.mLin.GetEnd();
+        *pos_1 = gndChk.GetCross();
         return TRUE;
     }
     return FALSE;
@@ -2035,7 +2033,7 @@ void demo_camera(bst_class* i_this) {
     cXyz spB0; // offset
     cXyz spA4;
     daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     s8 bVar2 = true;
     switch (i_this->m2E9A) {

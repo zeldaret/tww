@@ -45,7 +45,7 @@ public:
     daNpc_P1_HIO_c();
     virtual ~daNpc_P1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -946,8 +946,8 @@ static BOOL nodeCallBack1(J3DNode* i_node, int i_param_2) {
                 MtxPosition(&local_28, &i_this->eyePos);
             }
             if (jntNo == i_this->m_jnt.getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
-                mDoMtx_ZrotM(*calc_mtx, i_this->m_jnt.getBackbone_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+                cMtx_ZrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_x());
             }
 
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -1200,7 +1200,7 @@ fpc_ProcID daNpc_P1_c::getKajiID() {
     fpc_ProcID parent_id = parentActorID;
     if (parent_id != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* actor = fopAcM_SearchByID(parent_id);
-        if (fopAc_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Pirateship_e) {
+        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Pirateship_e) {
             kaji_id = ((daObjPirateship::Act_c*)actor)->getKajiID();
         }
     }
@@ -1231,7 +1231,7 @@ BOOL daNpc_P1_c::kaji_anm() {
         }
         if (mKajiId != fpcM_ERROR_PROCESS_ID_e) {
             fopAc_ac_c* kaji = fopAcM_SearchByID(mKajiId);
-            if (fopAc_IsActor(kaji) && fopAcM_GetName(kaji) == fpcNm_Kaji_e) {
+            if (fopAcM_IsActor(kaji) && fopAcM_GetName(kaji) == fpcNm_Kaji_e) {
                 ((daKaji_c*)kaji)->setAnm(mAnmNum - 9, mpMorf->getFrame());
             }
         }

@@ -340,7 +340,7 @@ dStage_darkStatus_c* dStage_roomControl_c::getDarkStatus() {
 }
 
 /* 80041330-80041370       .text getDarkMode__20dStage_roomControl_cFv */
-s32 dStage_roomControl_c::getDarkMode() {
+int dStage_roomControl_c::getDarkMode() {
     dStage_roomStatus_c * pRoomStatus = &mStatus[mStayNo];
     dStage_FileList_dt_c* plist_p = pRoomStatus->mRoomDt.mpFileList;
 
@@ -2398,9 +2398,7 @@ void dStage_escapeRestart() {
     daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
     dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y, fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
 
-    if (dComIfG_getTimerMode() == 3) {
-        dComIfG_TimerDeleteRequest();
-    }
+    dComIfG_TimerDeleteRequest(3);
 
     dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1, 0.0f, 0, FALSE, 9);
 }
@@ -2441,4 +2439,4 @@ s8 dStage_roomControl_c::mStayNo;
 s8 dStage_roomControl_c::mOldStayNo;
 u8 dStage_roomControl_c::mDarkRatio;
 char dStage_roomControl_c::mDemoArcName[8];
-s8 dStage_roomControl_c::m_time_pass;
+u8 dStage_roomControl_c::m_time_pass;

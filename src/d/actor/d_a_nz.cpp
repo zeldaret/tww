@@ -64,7 +64,7 @@ void naraku_water_check(nz_class*) {
 }
 
 /* 0000206C-0000214C       .text s_a_d_sub__FPvPv */
-void s_a_d_sub(void*, void*) {
+static void s_a_d_sub(void*, void*) {
     /* Nonmatching */
 }
 

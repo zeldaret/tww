@@ -668,7 +668,7 @@ static s32 target_info_count;
 
 /* 00002C4C-00002CD4       .text s_w_sub__FPvPv */
 static void* s_w_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOKO_e) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOKO_e) {
         daBoko_c* boko = (daBoko_c*)param_1;
         if (fopAcM_GetParam(boko) != daBoko_c::Type_MOBLIN_SPEAR_e && !fopAcM_checkCarryNow(boko)) {
             if (target_info_count < (s32)ARRAY_SIZE(target_info)) {
@@ -739,7 +739,7 @@ static fpc_ProcID search_wepon(bk_class* i_this) {
 
 /* 00002FB0-0000302C       .text s_b_sub__FPvPv */
 static void* s_b_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOMB_e) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOMB_e) {
         daBomb_c* bomb = (daBomb_c*)param_1;
         // TODO: why is it checking the bomb's params as a single field instead of just one param? bug?
         if (fopAcM_GetParam(bomb) != 0) {
@@ -1192,7 +1192,7 @@ static void jyunkai(bk_class* i_this) {
 
 /* 0000488C-000048E4       .text ken_s_sub__FPvPv */
 static void* ken_s_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_ITEM_e) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_ITEM_e) {
         daItem_c* item = (daItem_c*)param_1;
         if (item->getItemNo() == dItemNo_DROPPED_SWORD_e) {
             return param_1;
@@ -1428,7 +1428,7 @@ static void stand(bk_class* i_this) {
 /* 000053E0-000054E0       .text s_s_sub__FPvPv */
 static void* s_s_sub(void* r29, void* r30) {
     bk_class* i_this = (bk_class*)r30;
-    if (fopAc_IsActor(r29) && fopAcM_GetName(r29) == fpcNm_OBJ_SEARCH_e) {
+    if (fopAcM_IsActor(r29) && fopAcM_GetName(r29) == fpcNm_OBJ_SEARCH_e) {
         daObj_Search::Act_c* search = (daObj_Search::Act_c*)r29;
         cXyz sp18 = i_this->home.pos - search->current.pos;
         if (sp18.abs() < 600.0f) {
@@ -1767,7 +1767,7 @@ u16 learn_check;
 
 /* 0000647C-000064D8       .text shot_s_sub__FPvPv */
 static void* shot_s_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && (learn_check & 0x400) && fopAcM_GetName(param_1) == fpcNm_HIMO2_e) {
+    if (fopAcM_IsActor(param_1) && (learn_check & 0x400) && fopAcM_GetName(param_1) == fpcNm_HIMO2_e) {
         return param_1;
     }
     return NULL;
@@ -3780,7 +3780,7 @@ static void damage_check(bk_class* i_this) {
 
 /* 0000BCD4-0000BD30       .text s_s2_sub__FPvPv */
 static void* s_s2_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_OBJ_SEARCH_e) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_OBJ_SEARCH_e) {
         if (daObj_Search::Act_c::getFindFlag()) {
             return param_1;
         }
@@ -3820,21 +3820,21 @@ static void waki_set(bk_class* i_this) {
     }
     
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
     
     cXyz sp2C;
     u8 sp38[0x100];
     dPnt* pnt;
     int pnt_idx;
     
-    sp2C = camera->mLookat.mCenter - camera->mLookat.mEye;
+    sp2C = camera->view.mLookat.mCenter - camera->view.mLookat.mEye;
     cXyz sp20;
     s16 r27_1 = cM_atan2s(sp2C.x, sp2C.z);
     pnt = i_this->ppd->m_points;
     for (int i = 0; i < i_this->ppd->m_num; i++, pnt++) {
-        sp2C.x = pnt->m_position.x - camera->mLookat.mEye.x;
-        sp2C.y = pnt->m_position.y - camera->mLookat.mEye.y;
-        sp2C.z = pnt->m_position.z - camera->mLookat.mEye.z;
+        sp2C.x = pnt->m_position.x - camera->view.mLookat.mEye.x;
+        sp2C.y = pnt->m_position.y - camera->view.mLookat.mEye.y;
+        sp2C.z = pnt->m_position.z - camera->view.mLookat.mEye.z;
         cMtx_YrotS(*calc_mtx, -r27_1);
         MtxPosition(&sp2C, &sp20);
         if (sp20.z < 0.0f) {
@@ -3912,12 +3912,12 @@ static void demo_camera(bk_class* i_this) {
     fopAc_ac_c* actor = i_this;
     fopAc_ac_c* player_actor = dComIfGp_getPlayer(0);
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     
     s8 r28 = true;
     cXyz sp8C;
     cXyz sp80;
-    camera_class* r3;
+    camera_process_class* r3;
     switch (i_this->m1234) {
     case 0:
         break;
@@ -4074,8 +4074,8 @@ static void demo_camera(bk_class* i_this) {
         camera->mCamera.SetTrimSize(1);
         i_this->m1234 = 51;
         r3 = dComIfGp_getCamera(0);
-        i_this->m1238 = r3->mLookat.mEye;
-        i_this->m1244 = r3->mLookat.mCenter;
+        i_this->m1238 = r3->view.mLookat.mEye;
+        i_this->m1244 = r3->view.mLookat.mCenter;
         i_this->m1260 = 55.0f;
         i_this->m1236 = 0;
         // Fall-through
@@ -4501,6 +4501,7 @@ static BOOL daBk_Execute(bk_class* i_this) {
 
 /* 0000DD1C-0000DD24       .text daBk_IsDelete__FP8bk_class */
 static BOOL daBk_IsDelete(bk_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -4986,7 +4987,7 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         i_this->mpJntHit = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
         
         if (i_this->mpJntHit) {
-            i_actor->jntHit = i_this->mpJntHit;
+            fopAcM_SetJntHit(i_actor, i_this->mpJntHit);
         }
         fopAcM_adjustHeap(i_actor);
 #else

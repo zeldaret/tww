@@ -50,17 +50,17 @@ struct WIND_INF_ENTITY {
 
 struct GB_WIND_INFLUENCE {
     /* 0x00 */ cXyz mWindVec;
-    /* 0x04 */ cXyz* mpWindVecOverride;
-    /* 0x08 */ cXyz field_0x8;
-    /* 0x14 */ f32 mWindPower;
-    /* 0x18 */ f32 mWindStrengthOverride;
-    /* 0x1C */ f32 mCustomWindPower;
-    /* 0x20 */ s16 mTactWindAngleX;
-    /* 0x22 */ s16 mTactWindAngleY;
-    /* 0x24 */ s16 mEvtWindAngleX;
-    /* 0x26 */ s16 mEvtWindAngleY;
-    /* 0x28 */ u8 mTactWindAngleFlags;
-    /* 0x2E */ u8 mEvtWindSet;
+    /* 0x0C */ cXyz* mpWindVecOverride;
+    /* 0x10 */ cXyz field_0x8;
+    /* 0x1C */ f32 mWindPower;
+    /* 0x20 */ f32 mWindStrengthOverride;
+    /* 0x24 */ f32 mCustomWindPower;
+    /* 0x28 */ s16 mTactWindAngleX;
+    /* 0x2A */ s16 mTactWindAngleY;
+    /* 0x2C */ s16 mEvtWindAngleX;
+    /* 0x2E */ s16 mEvtWindAngleY;
+    /* 0x30 */ u8 mTactWindAngleFlags;
+    /* 0x31 */ u8 mEvtWindSet;
 };
 
 struct EF_THUNDER {

@@ -70,3 +70,7 @@ void GFSetBlendModeEtc(GXBlendMode type, GXBlendFactor src_factor,
         0x41
     ));
 }
+
+void GFSetDstAlpha(u8 enable, u8 alpha) {
+    GFWriteBPCmd(BP_DST_ALPHA(alpha, enable, 0x42));
+}

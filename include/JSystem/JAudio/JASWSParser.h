@@ -1,36 +1,22 @@
 #ifndef JASWSPARSER_H
 #define JASWSPARSER_H
 
-#include "dolphin/types.h"
+#include "JSystem/JSupport/JSupport.h"
 
 namespace JASystem {
     class TBasicWaveBank;
     class TSimpleWaveBank;
     namespace WSParser {
-        struct TCtrl {
-            /* 0x00 */ u32 mMagic;
-            /* 0x04 */ u32 mWaveCount;
-            /* 0x08 */ u32 mCtrlWaveOffsets[1];
+        // Using this class breaks match for JASystem::WSParser::createSimpleWaveBank
+        template <typename T>
+        class TOffset {
+        public:
+            T *ptr(const void *p) { return JSUConvertOffsetToPtr<T>(p, mOffset); }
+            T *ptr(const void *p) const { return JSUConvertOffsetToPtr<T>(p, mOffset); }
+        private:
+            u32 mOffset;
         };
-        struct TCtrlGroup {
-            /* 0x00 */ u32 mMagic;
-            /* 0x04 */ u8 field_0x4[0x08 - 0x04];
-            /* 0x08 */ u32 mCtrlGroupCount;
-            /* 0x0C */ u32 mCtrlSceneOffsets[1];
-        };
-        struct TCtrlScene {
-            /* 0x00 */ u32 mMagic;
-            /* 0x04 */ u8 field_0x4[0x0C - 0x04];
-            /* 0x0C */ u32 mCtrlOffset;
-        };
-        struct TCtrlWave {
-            /* 0x00 */ u32 field_0x0;
-        };
-        struct THeader {
-            /* 0x00 */ u8 field_0x0[0x10];
-            /* 0x10 */ u32 mArchiveBankOffset;
-            /* 0x14 */ u32 mCtrlGroupOffset;
-        };
+
         struct TWave {
             /* 0x00 */ u8 field_0x0;
             /* 0x01 */ u8 field_0x1;
@@ -55,6 +41,30 @@ namespace JASystem {
             /* 0x00 */ u32 mMagic;
             /* 0x04 */ u8 field_0x4[0x08 - 0x04];
             /* 0x08 */ u32 mArchiveOffsets[1];
+        };
+        struct TCtrlWave {
+            /* 0x00 */ u32 field_0x0;
+        };
+        struct TCtrl {
+            /* 0x00 */ u32 mMagic;
+            /* 0x04 */ u32 mWaveCount;
+            /* 0x08 */ u32 mCtrlWaveOffsets[1];
+        };
+        struct TCtrlScene {
+            /* 0x00 */ u32 mMagic;
+            /* 0x04 */ u8 field_0x4[0x0C - 0x04];
+            /* 0x0C */ u32 mCtrlOffset;
+        };
+        struct TCtrlGroup {
+            /* 0x00 */ u32 mMagic;
+            /* 0x04 */ u8 field_0x4[0x08 - 0x04];
+            /* 0x08 */ u32 mCtrlGroupCount;
+            /* 0x0C */ u32 mCtrlSceneOffsets[1];
+        };
+        struct THeader {
+            /* 0x00 */ u8 field_0x0[0x10];
+            /* 0x10 */ u32 mArchiveBankOffset;
+            /* 0x14 */ u32 mCtrlGroupOffset;
         };
 
         u32 getGroupCount(void*);

@@ -1,6 +1,7 @@
 #ifndef GDGEOMETRY_H
 #define GDGEOMETRY_H
 
+#include "dolphin/gx/GX.h"
 #include "dolphin/types.h"
 
 #ifdef __cplusplus
@@ -504,8 +505,6 @@ extern "C" {
         (u32)(lineHalfAspect) << 22 | \
         (u32)(p5) << 24 \
     )
-
-typedef struct _GXVtxDescList GXVtxDescList;
 
 void GDSetVtxDescv(GXVtxDescList*);
 void GDSetArray(GXAttr attr, void* data, u8 stride);

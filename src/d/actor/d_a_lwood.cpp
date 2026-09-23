@@ -170,6 +170,7 @@ static BOOL daLwood_Execute(void* i_this) {
 
 /* 0000078C-00000794       .text daLwood_IsDelete__FPv */
 static BOOL daLwood_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

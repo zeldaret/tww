@@ -141,92 +141,6 @@ u16 zfont[][2] = {
     0x8256, 0x8789, 0x8257, 0x878a, 0x8258, 0x878b, 0x8141, 0x878c, 0x815b, 0x878d, 0x8175, 0x878e, 0x8176, 0x878f,
 };
 
-// 1A NN 00 00 XX
-enum MsgControlCodes {
-    /* 0x00 */ CtrlCode_PLAYER_NAME,
-    /* 0x01 */ CtrlCode_UNK01, // draw_instant ?
-    /* 0x02 */ CtrlCode_UNK02, // draw_char ?
-    /* 0x03 */ CtrlCode_UNK03, // wait_dismiss_prompt ?
-    /* 0x04 */ CtrlCode_UNK04, // wait_dismiss ?
-    /* 0x05 */ CtrlCode_UNK05, // dismiss ?
-    /* 0x06 */ CtrlCode_DUMMY, // Does nothing
-    /* 0x07 */ CtrlCode_WAIT,
-    /* 0x08 */ CtrlCode_SELECT_TWO, // Vertical choice, two options
-    /* 0x09 */ CtrlCode_SELECT_THREE, // Vertical choice, three options
-    /* 0x0A */ CtrlCode_A_BUTTON,
-    /* 0x0B */ CtrlCode_B_BUTTON,
-    /* 0x0C */ CtrlCode_C_STICK,
-    /* 0x0D */ CtrlCode_L_BUTTON,
-    /* 0x0E */ CtrlCode_R_BUTTON,
-    /* 0x0F */ CtrlCode_X_BUTTON,
-    /* 0x10 */ CtrlCode_Y_BUTTON,
-    /* 0x11 */ CtrlCode_Z_BUTTON,
-    /* 0x12 */ CtrlCode_DPAD,
-    /* 0x13 */ CtrlCode_MAIN_STICK,
-    /* 0x14 */ CtrlCode_ARROW_LEFT,
-    /* 0x15 */ CtrlCode_ARROW_RIGHT,
-    /* 0x16 */ CtrlCode_ARROW_UP,
-    /* 0x17 */ CtrlCode_ARROW_DOWN,
-    /* 0x18 */ CtrlCode_MAIN_STICK_UP,
-    /* 0x19 */ CtrlCode_MAIN_STICK_DOWN,
-    /* 0x1A */ CtrlCode_MAIN_STICK_LEFT,
-    /* 0x1B */ CtrlCode_MAIN_STICK_RIGHT,
-    /* 0x1C */ CtrlCode_MAIN_STICK_UP_DOWN,
-    /* 0x1D */ CtrlCode_MAIN_STICK_LEFT_RIGHT,
-    /* 0x1E */ CtrlCode_SELECT_YOKO_LEFT, // Horizontal choice, left option
-    /* 0x1F */ CtrlCode_SELECT_YOKO_RIGHT, // Horizontal choice, right option
-    /* 0x20 */ CtrlCode_UNK20, // canon_balls ?
-    /* 0x21 */ CtrlCode_UNK21, // broken_vase_payment ?
-    /* 0x22 */ CtrlCode_UNK22, // auction_character ?
-    /* 0x23 */ CtrlCode_UNK23, // auction_item ?
-    /* 0x24 */ CtrlCode_UNK24, // auction_bid ?
-    /* 0x25 */ CtrlCode_UNK25, // auction_starting_bid ?
-    /* 0x26 */ CtrlCode_UNK26, // player_action_bid_selector ?
-    /* 0x27 */ CtrlCode_FLASHING_A_BUTTON,
-    /* 0x28 */ CtrlCode_UNK28, // orca_blow_count ?
-    /* 0x29 */ CtrlCode_UNK29, // pirate_password ?
-    /* 0x2A */ CtrlCode_STARBURST,
-    /* 0x2B */ CtrlCode_UNK2B, // post_office_game_letter_count ?
-    /* 0x2C */ CtrlCode_UNK2C, // post_office_game_rupee_reward ?
-    /* 0x2D */ CtrlCode_UNK2D, // post_box_letter_count ?
-    /* 0x2E */ CtrlCode_UNK2E, // remaining_korok_count ?
-    /* 0x2F */ CtrlCode_UNK2F, // remaining_forest_water_time ?
-    /* 0x30 */ CtrlCode_UNK30, // flight_platform_time ?
-    /* 0x31 */ CtrlCode_UNK31, // flight_platform_record ?
-    /* 0x32 */ CtrlCode_UNK32, // beedle_point_count ?
-    /* 0x33 */ CtrlCode_UNK33, // ms_marie_pendant_count ?
-    /* 0x34 */ CtrlCode_UNK34, // ms_marie_pendant_total ?
-    /* 0x35 */ CtrlCode_UNK35, // pig_game_time ?
-    /* 0x36 */ CtrlCode_UNK36, // sailing_game_rupee_reward ?
-    /* 0x37 */ CtrlCode_UNK37, // current_bomb_capacity ?
-    /* 0x38 */ CtrlCode_UNK38, // current_arrow_capacity ?
-    /* 0x39 */ CtrlCode_HEART,
-    /* 0x3A */ CtrlCode_MUSIC_NOTE,
-    /* 0x3B */ CtrlCode_UNK3B, // target_letter_count ?
-    /* 0x3C */ CtrlCode_UNK3C, // fishman_hit_count ?
-    /* 0x3D */ CtrlCode_UNK3D, // fishman_rupee_reward ?
-    /* 0x3E */ CtrlCode_UNK3E, // boko_baba_seed_count ?
-    /* 0x3F */ CtrlCode_UNK3F, // skull_necklace_count ?
-    /* 0x40 */ CtrlCode_UNK40, // chu_jelly_count ?
-    /* 0x41 */ CtrlCode_UNK41, // joy_pendant_count ?
-    /* 0x42 */ CtrlCode_UNK42, // golden_feather_count ?
-    /* 0x43 */ CtrlCode_UNK43, // knights_crest_count ?
-    /* 0x44 */ CtrlCode_UNK44, // beedle_rupee_offer ?
-    /* 0x45 */ CtrlCode_UNK45, // boko_baba_sell_selector ?
-    /* 0x46 */ CtrlCode_UNK46, // skull_necklace_sell_selector ?
-    /* 0x47 */ CtrlCode_UNK47, // chu_jelly_sell_selector ?
-    /* 0x48 */ CtrlCode_UNK48, // joy_pendant_sell_selector ?
-    /* 0x49 */ CtrlCode_UNK49, // golden_feather_sell_selector ?
-    /* 0x4A */ CtrlCode_UNK4A, // knights_crest_sell_selector ?
-};
-
-// 1A NN FF 00 XX
-enum MsgSpecialControlCode {
-    /* 0x00 */ SpclCode_COLOR,
-    /* 0x01 */ SpclCode_UNK1,
-    /* 0x02 */ SpclCode_RUBY,
-};
-
 /* 8002ABB4-8002AC1C       .text drawSelf__9MyPictureFff */
 void MyPicture::drawSelf(f32 i_posx, f32 i_posy) {
     Mtx mtx;
@@ -446,10 +360,6 @@ fpc_ProcID fop_Timer_create(s16 i_procName, u8 i_mode, u16 i_limitTimeMs, u8 i_s
 /* 8002B324-8002B520       .text fopMsgM_messageTypeSelect__FP10fopAc_ac_cP4cXyzPUlPUl */
 fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* i_actor, cXyz* i_pos, u32* i_msgNo, u32* param_4) {
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     fpc_ProcID pcId;
     if (*i_msgNo >> 0x10 == 0x63) {
@@ -482,7 +392,7 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* i_actor, cXyz* i_pos, u32* i_ms
             pcId = fopMsgM_create(fpcNm_MSG_e, i_actor, i_pos, i_msgNo, param_4, NULL);
         }
 
-        JKRFileLoader::removeResource(header, NULL);
+        JKRRemoveResource(header, NULL);
     }
 
     return pcId;
@@ -491,10 +401,6 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* i_actor, cXyz* i_pos, u32* i_ms
 /* 8002B568-8002B634       .text fopMsgM_searchMessageNumber__FUl */
 u32 fopMsgM_searchMessageNumber(u32 i_msgNo) {
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     mesg_header* header;
     for (u32 i = i_msgNo & 0xFFFF; i < 0xFFFF; i++) {
@@ -503,7 +409,7 @@ u32 fopMsgM_searchMessageNumber(u32 i_msgNo) {
             return i;
         }
 
-        JKRFileLoader::removeResource(header, NULL);
+        JKRRemoveResource(header, NULL);
     }
 
     return i_msgNo;
@@ -809,18 +715,6 @@ static f32 dummyfloat2(int _) {
     }
 }
 
-struct fopMsgM_unk_struct {
-    u16 _0;
-    u16 _2;
-    u16 _4;
-    u16 _6;
-    u16 _8;
-    u16 _A;
-    s16 _C;
-    u16 _E;
-    u8 _10;
-};
-
 /* 8002C02C-8002C568       .text fopMsgM_selectMessageGet__FP7J2DPaneP7J2DPanePcPcPcPcUl */
 fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_rubyPane, char* param_3, char* param_4, char* param_5, char* param_6, u32 i_msgNo) {
     fopMsgM_msgDataProc_c msgData;
@@ -835,10 +729,10 @@ fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_ruby
     strcpy(param_5, "");
     strcpy(param_6, "");
 
-    J2DTextBox::TFontSize size;
-    J2DTextBox::TFontSize size2;
-    ((J2DTextBox*)i_rubyPane)->getFontSize(size);
-    ((J2DTextBox*)i_textPane)->getFontSize(size2);
+    J2DTextBox::TFontSize fontSize;
+    J2DTextBox::TFontSize rubySize;
+    ((J2DTextBox*)i_rubyPane)->getFontSize(rubySize);
+    ((J2DTextBox*)i_textPane)->getFontSize(fontSize);
 
     mesg_header* head_p = msgGet.getMesgHeader(i_msgNo);
     JUT_ASSERT(VERSION_SELECT(1866, 1866, 1947, 1956), head_p);
@@ -857,8 +751,8 @@ fopMsgM_unk_struct fopMsgM_selectMessageGet(J2DPane* i_textPane, J2DPane* i_ruby
     msgData.setRubyCharSpace(((J2DTextBox*)i_rubyPane)->getCharSpace());
     msgData.setLineSpace(((J2DTextBox*)i_textPane)->getLineSpace());
     msgData.setMesgEntry(&entry);
-    msgData.setFontSize(size2.mSizeX);
-    msgData.setRubyFontSize(size.mSizeX);
+    msgData.setFontSize(fontSize.mSizeX);
+    msgData.setRubyFontSize(rubySize.mSizeX);
     msgData.setLineWidth(i_textPane->getWidth());
     msgData.setCenterLineWidth(i_textPane->getWidth());
     msgData.setSendSpeed(2);
@@ -1082,14 +976,14 @@ GXColor fopMsgM_outFontColorWhite(int i_no) {
 /* 8002C6D8-8002C9B0       .text fopMsgM_outFontSet__FP10J2DPictureP10J2DPicturePsUlUc */
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, s16* i_timer, u32 i_color, u8 i_iconNo) {
     // Convert special icon numbers to indexes into fopMsgM_buttonTex/fopMsgM_buttonW.
-    if (i_iconNo == fopMsgM_Icon_FLASHING_A_BUTTON_e) {
-        i_iconNo = 0x14;
-    } else if (i_iconNo == fopMsgM_Icon_HEART_e) {
-        i_iconNo = 0x15;
-    } else if (i_iconNo == fopMsgM_Icon_MUSIC_NOTE_e) {
-        i_iconNo = 0x16;
-    } else if (i_iconNo == fopMsgM_Icon_STARBURST_e) {
-        i_iconNo = 0x17;
+    if (i_iconNo == fopMsgM_Icon_FLASHING_A_BUTTON_2_e) {
+        i_iconNo = fopMsgM_Icon_FLASHING_A_BUTTON_e;
+    } else if (i_iconNo == fopMsgM_Icon_HEART_2_e) {
+        i_iconNo = fopMsgM_Icon_HEART_e;
+    } else if (i_iconNo == fopMsgM_Icon_MUSIC_NOTE_2_e) {
+        i_iconNo = fopMsgM_Icon_MUSIC_NOTE_e;
+    } else if (i_iconNo == fopMsgM_Icon_STARBURST_2_e) {
+        i_iconNo = fopMsgM_Icon_STARBURST_e;
     }
 
     i_iconPic->show();
@@ -1127,14 +1021,14 @@ void fopMsgM_outFontSet(J2DPicture* i_iconPic, J2DPicture* i_sdwPic, s16* i_time
 /* 8002C9B0-8002CBDC       .text fopMsgM_outFontSet__FP10J2DPicturePsUlUc */
 void fopMsgM_outFontSet(J2DPicture* i_iconPic, s16* i_timer, u32 i_color, u8 i_iconNo) {
     // Convert special icon numbers to indexes into fopMsgM_buttonTex/fopMsgM_buttonW.
-    if (i_iconNo == fopMsgM_Icon_FLASHING_A_BUTTON_e) {
-        i_iconNo = 0x14;
-    } else if (i_iconNo == fopMsgM_Icon_HEART_e) {
-        i_iconNo = 0x15;
-    } else if (i_iconNo == fopMsgM_Icon_MUSIC_NOTE_e) {
-        i_iconNo = 0x16;
-    } else if (i_iconNo == fopMsgM_Icon_STARBURST_e) {
-        i_iconNo = 0x17;
+    if (i_iconNo == fopMsgM_Icon_FLASHING_A_BUTTON_2_e) {
+        i_iconNo = fopMsgM_Icon_FLASHING_A_BUTTON_e;
+    } else if (i_iconNo == fopMsgM_Icon_HEART_2_e) {
+        i_iconNo = fopMsgM_Icon_HEART_e;
+    } else if (i_iconNo == fopMsgM_Icon_MUSIC_NOTE_2_e) {
+        i_iconNo = fopMsgM_Icon_MUSIC_NOTE_e;
+    } else if (i_iconNo == fopMsgM_Icon_STARBURST_2_e) {
+        i_iconNo = fopMsgM_Icon_STARBURST_e;
     }
 
     i_iconPic->show();
@@ -1885,17 +1779,17 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
         field_0xE8[i] = 0;
         field_0x108[i] = 0;
     }
-    
+
     while (bmgData[r29] != '\0') {
         if (bmgData[r29] == 0x1A) {
-            if ((u8)bmgData[r29 + 2] == 0xFF && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == SpclCode_UNK1) {
+            if ((u8)bmgData[r29 + 2] == 0xFF && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgSpclCode_UNK1) {
                 int c = ((u8)bmgData[r29 + 5] << 8) | (u8)bmgData[r29 + 6];
                 f32 f31 = (f32)c * 0.01f;
                 if (f31 > 1.0f) {
                     r28 = true;
                 }
                 sp08 = f31 * fontSize + 0.5f;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_PLAYER_NAME) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_PLAYER_NAME) {
                 int i = 0;
 #if VERSION <= VERSION_JPN
                 const char* player_name = dComIfGs_getPlayerName();
@@ -1949,7 +1843,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                         c = (u8)player_name[i++];
                     }
 #endif
-                    
+
                     f32 f1;
                     if (sp10 != 0) {
                         f1 = charLength(sp08, c, false) + sp0C;
@@ -1960,14 +1854,14 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                     sp10 += 1;
                 }
                 sp18[sp14] = (int)(sp0C + 0.5f);
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_SELECT_TWO) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_SELECT_TWO) {
                 r27 = true;
                 for (int i = 0; i < sp14; i++) {
                     field_0xD8[i] = sp18[i];
                 }
                 lineCount = sp14 - 1;
                 sp14 = 0;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_SELECT_THREE) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_SELECT_THREE) {
                 r27 = true;
                 for (int i = 0; i < sp14; i++) {
                     field_0xD8[i] = sp18[i];
@@ -1975,167 +1869,167 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                 }
                 lineCount = sp14 - 1;
                 sp14 = 0;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_A_BUTTON) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_A_BUTTON) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_B_BUTTON) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_B_BUTTON) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_C_STICK) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_C_STICK) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_L_BUTTON) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_L_BUTTON) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_R_BUTTON) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_R_BUTTON) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_X_BUTTON) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_X_BUTTON) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_Y_BUTTON) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_Y_BUTTON) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_Z_BUTTON) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_Z_BUTTON) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_DPAD) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_DPAD) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_MAIN_STICK) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_ARROW_LEFT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_ARROW_LEFT) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_ARROW_RIGHT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_ARROW_RIGHT) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_ARROW_UP) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_ARROW_UP) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_ARROW_DOWN) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_ARROW_DOWN) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_UP) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_MAIN_STICK_UP) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_DOWN) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_MAIN_STICK_DOWN) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_LEFT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_MAIN_STICK_LEFT) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_RIGHT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_MAIN_STICK_RIGHT) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_UP_DOWN) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_MAIN_STICK_UP_DOWN) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MAIN_STICK_LEFT_RIGHT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_MAIN_STICK_LEFT_RIGHT) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_SELECT_YOKO_LEFT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_SELECT_YOKO_LEFT) {
                 sp0C += (f32)sp08;
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_SELECT_YOKO_RIGHT) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_SELECT_YOKO_RIGHT) {
                 sp0C += (f32)sp08;
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_HEART) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_HEART) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_MUSIC_NOTE) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_MUSIC_NOTE) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK20) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK20) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[12];
@@ -2161,11 +2055,11 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                 tag_len_kaisen_game(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
             } else if (
-                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK21) ||
-                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK24) ||
-                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK25) ||
-                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK2C) ||
-                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK36)
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK21) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK24) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK25) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK2C) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK36)
             ) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
@@ -2194,15 +2088,15 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                 tag_len_rupee(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
             } else if (
-                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK22) ||
-                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK23)
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK22) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK23)
             ) {
                 int i = 0;
                 char buf[20];
-                if ((u8)bmgData[r29 + 4] == CtrlCode_UNK22) {
+                if ((u8)bmgData[r29 + 4] == MsgCtrlCode_UNK22) {
                     u32 msgNo = dComIfGp_getNpcNameMessageID();
                     getString(buf, msgNo);
-                } else if ((u8)bmgData[r29 + 4] == CtrlCode_UNK23) {
+                } else if ((u8)bmgData[r29 + 4] == MsgCtrlCode_UNK23) {
                     u32 msgNo = dComIfGp_getItemNameMessageID();
                     getString(buf, msgNo);
                 }
@@ -2224,7 +2118,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                     sp10 += 1;
                 }
                 sp18[sp14] = (int)(sp0C + 0.5f);
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK26) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK26) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[16];
@@ -2256,10 +2150,10 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_num_input(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_FLASHING_A_BUTTON) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_FLASHING_A_BUTTON) {
                 sp0C += (f32)sp08;
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK28) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK28) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2287,7 +2181,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_sword_game(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK29) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK29) {
                 int r26 = 0;
                 char sp28[20];
                 u32 msgNo = 0x1B37 + dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
@@ -2310,14 +2204,14 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                     sp10 += 1;
                 }
                 sp18[sp14] = (int)(sp0C + 0.5f);
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_STARBURST) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_STARBURST) {
                 if (field_0x295 == 0 && lineCount == 0 && field_0x14 == 0.0f) {
                     field_0x295 = 1;
                 }
                 sp0C += (f32)sp08;
                 sp18[sp14] = (int)(sp0C + 0.5f);
                 sp10 += 1;
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK2B) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK2B) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2341,7 +2235,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_letter_game(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK3B) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK3B) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2365,7 +2259,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_letter_game_max(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK3C) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK3C) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2389,7 +2283,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_fish(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK3D) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK3D) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2416,7 +2310,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_fish_rupee(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK2D) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK2D) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2443,7 +2337,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_letter(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK2E) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK2E) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2470,7 +2364,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_rescue(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK2F) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK2F) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2508,8 +2402,8 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                 tag_len_forest_timer(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
             } else if (
-                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK30) ||
-                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK31)
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK30) ||
+                ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK31)
             ) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
@@ -2537,7 +2431,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_birdman(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK32) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK32) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2564,7 +2458,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_point(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK33) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK33) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2591,7 +2485,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_get_pendant(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK34) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK34) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2618,7 +2512,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_rev_pendant(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK35) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK35) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2655,7 +2549,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_pig_timer(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK37) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK37) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2682,7 +2576,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_get_bomb(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK38) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK38) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2709,7 +2603,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_get_arrow(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK3E) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK3E) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2736,7 +2630,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_stock_bokobaba(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK3F) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK3F) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2763,7 +2657,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_stock_dokuro(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK40) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK40) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2790,7 +2684,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_stock_chuchu(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK41) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK41) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2817,7 +2711,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_stock_pendant(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK42) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK42) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2844,7 +2738,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_stock_hane(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK43) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK43) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2871,7 +2765,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_stock_kenshi(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK44) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK44) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -2898,7 +2792,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_terry_rupee(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK45) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK45) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[16];
@@ -2930,7 +2824,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_input_bokobaba(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK46) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK46) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[16];
@@ -2962,7 +2856,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_input_dokuro(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK47) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK47) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[16];
@@ -2994,7 +2888,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_input_chuchu(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK48) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK48) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[16];
@@ -3026,7 +2920,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_input_pendant(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK49) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK49) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[16];
@@ -3058,7 +2952,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
 #else
                 tag_len_input_hane(&sp10, &sp0C, sp18, &sp08, &sp14);
 #endif
-            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_UNK4A) {
+            } else if ((u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_UNK4A) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[16];
@@ -3099,7 +2993,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
             if (bmgData[r29] == 0xA) {
                 sp10 = 0;
                 sp0C = 0.0f;
-                
+
                 r29++;
                 if (bmgData[r29] == 0) {
                     f32 f3 = (int)(field_0x28 + field_0x1C / 2.0f - field_0x18 / 2.0f + 0.5f);
@@ -3127,8 +3021,8 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                         sp14++;
                         if (sp14 >= mesgEntry->field_0x16) {
                             if (
-                                ((u8)bmgData[r29] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_SELECT_TWO) ||
-                                ((u8)bmgData[r29] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_SELECT_THREE)
+                                ((u8)bmgData[r29] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_SELECT_TWO) ||
+                                ((u8)bmgData[r29] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_SELECT_THREE)
                             ) {
                                 r27 = true;
                                 for (int i = 0; i < sp14; i++) {
@@ -3199,7 +3093,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                 }
                 sp0C = f1;
                 sp10 += 1;
-                
+
                 int r7 = sp18[sp14];
 #if VERSION <= VERSION_JPN
                 sp18[sp14] = (int)(sp0C + 0.5f);
@@ -3212,7 +3106,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                         lineCount++;
                     }
                 }
-                    
+
                 if (lineWidth <= sp18[sp14]) {
                     sp18[sp14] = r7;
                     sp14++;
@@ -3222,12 +3116,12 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                     if (bmgData[r29] == '\0') {
                         field_0x140 = aimLine;
                     }
-                    
+
                     if (aimLine == nowLine) {
                         if (sp14 >= mesgEntry->field_0x16) {
                             if (
-                                ((u8)bmgData[r29] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_SELECT_TWO) ||
-                                ((u8)bmgData[r29] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == CtrlCode_SELECT_THREE)
+                                ((u8)bmgData[r29] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_SELECT_TWO) ||
+                                ((u8)bmgData[r29] == 0x1A && (u8)bmgData[r29 + 2] == 0 && (u8)bmgData[r29 + 3] == 0 && (u8)bmgData[r29 + 4] == MsgCtrlCode_SELECT_THREE)
                             ) {
                                 r27 = true;
                                 for (int i = 0; i < sp14; i++) {
@@ -3256,7 +3150,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
                         sp18[sp14] = sp0C + 0.5f;
                     }
                 }
-                
+
                 if (r25) {
                     r29++;
                 } else {
@@ -3269,7 +3163,7 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
     if (bmgData[r29] == '\0') {
         field_0x140 = aimLine;
     }
-    
+
     if (r27) {
         field_0xE8[sp14] = sp18[sp14];
     } else {
@@ -3280,9 +3174,9 @@ u32 fopMsgM_msgDataProc_c::stringLength() {
             lineCount = 1;
         }
     }
-    
+
     field_0x134 = lineCount;
-    
+
     return r30;
 }
 
@@ -3635,22 +3529,14 @@ u8 fopMsgM_msgDataProc_c::inputNumber(int param_1) {
 
 /* 800320E0-800321CC       .text selectArrow__21fopMsgM_msgDataProc_cFP10J2DPictureffff */
 void fopMsgM_msgDataProc_c::selectArrow(J2DPicture* param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5) {
-    param_1->mBasePosition.x = param_4 / 2.0f;
-    param_1->mBasePosition.y = param_5 / 2.0f;
-    param_1->mRotationAxis = 'z';
-    param_1->mRotation = 90.0f;
-    param_1->calcMtx();
+    param_1->rotate(param_4 / 2.0f, param_5 / 2.0f, ROTATE_Z, 90.0f);
     fopMsgM_arrowAnime(param_1, &field_0x260);
     param_1->draw(param_2, param_3, param_4, param_5, false, false, false);
 }
 
 /* 800321CC-80032288       .text selectArrow__21fopMsgM_msgDataProc_cFP10J2DPictureff */
 void fopMsgM_msgDataProc_c::selectArrow(J2DPicture* param_1, f32 param_2, f32 param_3) {
-    param_1->mBasePosition.x = param_2 / 2.0f;
-    param_1->mBasePosition.y = param_3 / 2.0f;
-    param_1->mRotationAxis = 'z';
-    param_1->mRotation = 90.0f;
-    param_1->calcMtx();
+    param_1->rotate(param_2 / 2.0f, param_3 / 2.0f, ROTATE_Z, 90.0f);
     param_1->resize(param_2, param_3);
     fopMsgM_arrowAnime(param_1, &field_0x260);
 }
@@ -3744,7 +3630,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
         }
 
         if (bmgData[count] == 0x1A) {
-            if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == SpclCode_COLOR) {
+            if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgSpclCode_COLOR) {
 #if VERSION > VERSION_JPN
                 if (mesgEntry->mMsgNo == 0x42 || mesgEntry->mMsgNo == 0x43 || mesgEntry->mMsgNo == 0x44 || mesgEntry->mMsgNo == 0x45 ||
                     mesgEntry->mMsgNo == 0x46 || mesgEntry->mMsgNo == 0x47 || mesgEntry->mMsgNo == 0x48 || mesgEntry->mMsgNo == 0x49 ||
@@ -3815,7 +3701,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == SpclCode_UNK1) {
+            } else if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgSpclCode_UNK1) {
                 int c = ((u8)bmgData[count + 5] << 8) | (u8)bmgData[count + 6];
                 f32 f31 = (f32)c * 0.01f;
                 int temp3 = field_0x148;
@@ -3841,7 +3727,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == SpclCode_RUBY) {
+            } else if ((u8)bmgData[count + 2] == 0xFF && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgSpclCode_RUBY) {
 #if VERSION < VERSION_PAL
                 if ((u8)bmgData[count + 1] != 5) {
                     int r28 = count + (u8)bmgData[count + 1];
@@ -3871,7 +3757,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 {
                     count += (u8)bmgData[count + 1];
                 }
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_PLAYER_NAME) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_PLAYER_NAME) {
                 int r28 = 0;
 #if VERSION <= VERSION_JPN
                 const char* player_name = dComIfGs_getPlayerName();
@@ -3935,7 +3821,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         field_0xD4[1] = '\0';
                     }
 #endif
-                    
+
                     if (field_0x150 == 0) {
                         field_0x14 = charLength(field_0x148, c, true);
                     } else {
@@ -3954,18 +3840,18 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK01) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK01) {
                 field_0x29A = 1;
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK02) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK02) {
                 field_0x29A = 0;
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK03) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK03) {
                 waitTimer = (u8)bmgData[count + 5] << 8;
                 waitTimer |= (u8)bmgData[count + 6];
                 setAutoSendFlagOn();
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK04) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK04) {
 #if VERSION > VERSION_DEMO
                 if (
                     mesgEntry->mTextboxType == 0 || mesgEntry->mTextboxType == 1 || mesgEntry->mTextboxType == 5 ||
@@ -3978,14 +3864,14 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 waitTimer |= (u8)bmgData[count + 6];
                 setAutoSendFlagOn();
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK05) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK05) {
                 waitTimer = (u8)bmgData[count + 5] << 8;
                 waitTimer |= (u8)bmgData[count + 6];
                 setHandSendFlagOn();
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_DUMMY) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_DUMMY) {
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_WAIT) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_WAIT) {
                 if (field_0x299 == 0) {
 #if VERSION > VERSION_DEMO
                     if (
@@ -4016,7 +3902,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #endif
 
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_TWO) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_SELECT_TWO) {
                 setSelectFlagOn();
                 lineCount = 0;
                 nowCursorPos = field_0x108[lineCount];
@@ -4026,7 +3912,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 field_0x64 = selectMessage[1];
                 field_0x68 = selectMessage[2];
                 field_0x6C = selectMessage[3];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_THREE) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_SELECT_THREE) {
                 setSelectFlagOn();
                 lineCount = 0;
                 nowCursorPos = field_0x108[lineCount];
@@ -4036,62 +3922,62 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 field_0x64 = selectMessage[1];
                 field_0x68 = selectMessage[2];
                 field_0x6C = selectMessage[3];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_A_BUTTON) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_A_BUTTON) {
                 iconSelect(field_0x148, fopMsgM_Icon_A_BUTTON_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_B_BUTTON) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_B_BUTTON) {
                 iconSelect(field_0x148, fopMsgM_Icon_B_BUTTON_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_C_STICK) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_C_STICK) {
                 iconSelect(field_0x148, fopMsgM_Icon_C_STICK_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_L_BUTTON) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_L_BUTTON) {
                 iconSelect(field_0x148, fopMsgM_Icon_L_BUTTON_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_R_BUTTON) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_R_BUTTON) {
                 iconSelect(field_0x148, fopMsgM_Icon_R_BUTTON_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_X_BUTTON) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_X_BUTTON) {
                 iconSelect(field_0x148, fopMsgM_Icon_X_BUTTON_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_Y_BUTTON) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_Y_BUTTON) {
                 iconSelect(field_0x148, fopMsgM_Icon_Y_BUTTON_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_Z_BUTTON) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_Z_BUTTON) {
                 iconSelect(field_0x148, fopMsgM_Icon_Z_BUTTON_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_DPAD) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_DPAD) {
                 iconSelect(field_0x148, fopMsgM_Icon_DPAD_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_MAIN_STICK) {
                 iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_ARROW_LEFT) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_ARROW_LEFT) {
                 iconSelect(field_0x148, fopMsgM_Icon_ARROW_LEFT_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_ARROW_RIGHT) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_ARROW_RIGHT) {
                 iconSelect(field_0x148, fopMsgM_Icon_ARROW_RIGHT_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_ARROW_UP) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_ARROW_UP) {
                 iconSelect(field_0x148, fopMsgM_Icon_ARROW_UP_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_ARROW_DOWN) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_ARROW_DOWN) {
                 iconSelect(field_0x148, fopMsgM_Icon_ARROW_DOWN_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_UP) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_MAIN_STICK_UP) {
                 iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_UP_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_DOWN) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_MAIN_STICK_DOWN) {
                 iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_DOWN_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_LEFT) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_MAIN_STICK_LEFT) {
                 iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_LEFT_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_RIGHT) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_MAIN_STICK_RIGHT) {
                 iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_RIGHT_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_UP_DOWN) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_MAIN_STICK_UP_DOWN) {
                 iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_UP_DOWN_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MAIN_STICK_LEFT_RIGHT) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_MAIN_STICK_LEFT_RIGHT) {
                 iconSelect(field_0x148, fopMsgM_Icon_MAIN_STICK_LEFT_RIGHT_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_YOKO_LEFT) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_SELECT_YOKO_LEFT) {
                 setSelectFlagYokoOn();
                 iconSelect(field_0x148, fopMsgM_Icon_SELECT_YOKO_LEFT_e);
                 mesgStatus = fopMsgStts_SELECT_YOKO_e;
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_YOKO_RIGHT) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_SELECT_YOKO_RIGHT) {
                 if (selectFlag != Select_OFF) {
                     field_0x27D = 1;
                 } else {
                     field_0x27D = 0;
                 }
                 iconSelect(field_0x148, fopMsgM_Icon_SELECT_YOKO_RIGHT_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_HEART) {
-                iconSelect(field_0x148, fopMsgM_Icon_HEART_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_MUSIC_NOTE) {
-                iconSelect(field_0x148, fopMsgM_Icon_MUSIC_NOTE_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK20) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_HEART) {
+                iconSelect(field_0x148, fopMsgM_Icon_HEART_2_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_MUSIC_NOTE) {
+                iconSelect(field_0x148, fopMsgM_Icon_MUSIC_NOTE_2_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK20) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[12];
@@ -4147,11 +4033,11 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 tag_kaisen_game();
 #endif
             } else if (
-                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK21) ||
-                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK24) ||
-                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK25) ||
-                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK2C) ||
-                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK36)
+                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK21) ||
+                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK24) ||
+                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK25) ||
+                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK2C) ||
+                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK36)
             ) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
@@ -4189,13 +4075,13 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 tag_rupee();
 #endif
             } else if (
-                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK22) ||
-                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK23)
+                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK22) ||
+                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK23)
             ) {
-                if ((u8)bmgData[count + 4] == CtrlCode_UNK22) {
+                if ((u8)bmgData[count + 4] == MsgCtrlCode_UNK22) {
                     u32 msgNo = dComIfGp_getNpcNameMessageID();
                     getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &nowCursorPos, &field_0x24, &field_0x150);
-                } else if ((u8)bmgData[count + 4] == CtrlCode_UNK23) {
+                } else if ((u8)bmgData[count + 4] == MsgCtrlCode_UNK23) {
                     u32 msgNo = dComIfGp_getItemNameMessageID();
                     getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &nowCursorPos, &field_0x24, &field_0x150);
                 }
@@ -4206,7 +4092,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK26) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK26) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[8];
@@ -4250,9 +4136,9 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_num_input();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_FLASHING_A_BUTTON) {
-                iconSelect(field_0x148, fopMsgM_Icon_FLASHING_A_BUTTON_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK28) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_FLASHING_A_BUTTON) {
+                iconSelect(field_0x148, fopMsgM_Icon_FLASHING_A_BUTTON_2_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK28) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4290,7 +4176,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_sword_game();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK29) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK29) {
                 u32 msgNo = 0x1B37 + dComIfGs_getEventReg(dSv_event_flag_c::UNK_BA0F);
                 getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &nowCursorPos, &field_0x24, &field_0x150);
                 if (selectFlag != Select_ON) {
@@ -4300,9 +4186,9 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 count += bmgData[count + 1];
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_STARBURST) {
-                iconSelect(field_0x148, fopMsgM_Icon_STARBURST_e);
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK2B) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_STARBURST) {
+                iconSelect(field_0x148, fopMsgM_Icon_STARBURST_2_e);
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK2B) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4336,7 +4222,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_letter_game();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3B) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK3B) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4370,7 +4256,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_letter_game_max();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3C) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK3C) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4404,7 +4290,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_fish();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3D) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK3D) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4440,7 +4326,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_fish_rupee();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK2D) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK2D) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4478,7 +4364,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_letter();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK2E) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK2E) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4530,7 +4416,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_rescue();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK2F) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK2F) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4588,7 +4474,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
                 if (seconds != 0 || minutes == 0) {
                     fopMsgM_int_to_char(buf, seconds, false);
-                    
+
                     while (buf[i] != '\0') {
                         int hi = (u8)buf[i++];
                         int lo = (u8)buf[i++];
@@ -4621,8 +4507,8 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 tag_forest_timer();
 #endif
             } else if (
-                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK30) ||
-                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK31)
+                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK30) ||
+                ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK31)
             ) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
@@ -4659,7 +4545,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_birdman();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK32) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK32) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4695,7 +4581,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_point();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK33) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK33) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4733,7 +4619,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_get_pendant();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK34) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK34) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4771,7 +4657,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_rev_pendant();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK35) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK35) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4861,7 +4747,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_pig_timer();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK37) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK37) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4899,7 +4785,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_get_bomb();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK38) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK38) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4954,7 +4840,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_get_arrow();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3E) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK3E) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -4992,7 +4878,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_stock_bokobaba();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK3F) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK3F) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -5030,7 +4916,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_stock_dokuro();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK40) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK40) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -5068,7 +4954,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_stock_chuchu();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK41) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK41) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -5106,7 +4992,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_stock_pendant();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK42) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK42) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -5144,7 +5030,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_stock_hane();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK43) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK43) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -5182,7 +5068,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_stock_kenshi();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK44) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK44) {
 #if VERSION <= VERSION_JPN
                 int i = 0;
                 char buf[20];
@@ -5218,7 +5104,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_terry_rupee();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK45) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK45) {
 #if VERSION <= VERSION_JPN
                 char buf[16];
 
@@ -5246,7 +5132,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_input_bokobaba();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK46) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK46) {
 #if VERSION <= VERSION_JPN
                 char buf[16];
 
@@ -5274,7 +5160,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_input_dokuro();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK47) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK47) {
 #if VERSION <= VERSION_JPN
                 char buf[16];
 
@@ -5302,7 +5188,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_input_chuchu();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK48) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK48) {
 #if VERSION <= VERSION_JPN
                 char buf[16];
 
@@ -5330,7 +5216,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_input_pendant();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK49) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK49) {
 #if VERSION <= VERSION_JPN
                 char buf[16];
 
@@ -5358,7 +5244,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 #else
                 tag_input_hane();
 #endif
-            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_UNK4A) {
+            } else if ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK4A) {
 #if VERSION <= VERSION_JPN
                 char buf[16];
 
@@ -5465,7 +5351,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
             field_0x29B = 0;
             if (selectFlag != Select_ON) {
                 if (lineCount >= mesgEntry->field_0x16) {
-                    if (bmgData[count] == 0x1A && (u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_TWO) {
+                    if (bmgData[count] == 0x1A && (u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_SELECT_TWO) {
                         setSelectFlagOn();
                         lineCount = 0;
                         nowCursorPos = field_0x108[lineCount];
@@ -5476,7 +5362,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                         field_0x68 = selectMessage[2];
                         field_0x6C = selectMessage[3];
                         continue;
-                    } else if (bmgData[count] == 0x1A && (u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_THREE) {
+                    } else if (bmgData[count] == 0x1A && (u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_SELECT_THREE) {
                         setSelectFlagOn();
                         lineCount = 0;
                         nowCursorPos = field_0x108[lineCount];
@@ -5498,26 +5384,26 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 }
 
                 field_0x150 = 0;
-                
+
                 nowCursorPos = field_0xF8[lineCount];
 
                 char sp54[16];
                 sprintf(sp54, "\x1b""CR[%d]", (int)nowCursorPos);
                 strcat(field_0x60, sp54);
                 strcat(field_0x68, sp54);
-                
+
                 if (autoSendFlag == 0) {
                     waitTimer = spaceTimer;
                 }
-                
+
                 if (field_0x299 == 0 && field_0x29A == 0 && autoSendFlag == 0 && handSendFlag == 0 && selectFlag == Select_OFF) {
                     return;
                 }
             } else {
                 field_0x150 = 0;
-                
+
                 nowCursorPos = field_0x108[lineCount];
-                
+
                 char sp44[16];
                 sprintf(sp44, "\x1b""CR[%d]", (int)(nowCursorPos));
                 strcat(field_0x60, sp44);
@@ -5576,13 +5462,13 @@ void fopMsgM_msgDataProc_c::stringSet() {
             }
 
             field_0x150++;
-            
+
             if (selectFlag != Select_ON) {
                 nowCursorPos = field_0xF8[lineCount] + field_0x14 + 0.5f;
             } else {
                 nowCursorPos = field_0x108[lineCount] + field_0x14 + 0.5f;
             }
-            
+
             if (lineWidth <= (int)(field_0x14 + 0.5f)) {
                 strcat(field_0x60, "\n");
                 strcat(field_0x64, "\n");
@@ -5595,7 +5481,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
 
                 if (selectFlag != Select_ON) {
                     if (lineCount >= mesgEntry->field_0x16) {
-                        if (bmgData[count] == 0x1A && (u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_TWO) {
+                        if (bmgData[count] == 0x1A && (u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_SELECT_TWO) {
                             setSelectFlagOn();
                             lineCount = 0;
                             nowCursorPos = field_0x108[lineCount];
@@ -5605,7 +5491,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                             field_0x64 = selectMessage[1];
                             field_0x68 = selectMessage[2];
                             field_0x6C = selectMessage[3];
-                        } else if (bmgData[count] == 0x1A && (u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == CtrlCode_SELECT_THREE) {
+                        } else if (bmgData[count] == 0x1A && (u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_SELECT_THREE) {
                             setSelectFlagOn();
                             lineCount = 0;
                             nowCursorPos = field_0x108[lineCount];
@@ -5639,7 +5525,7 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 } else {
                     field_0x150 = 0;
                     nowCursorPos = field_0x108[lineCount];
-                    
+
                     char sp24[16];
                     sprintf(sp24,  "\x1b""CR[%d]", (int)(nowCursorPos));
                     strcat(field_0x60, sp24);
@@ -5854,10 +5740,6 @@ void fopMsgM_int_to_char2(char* i_dest, int i_value) {
 /* 800351E8-80035408       .text getString__21fopMsgM_msgDataProc_cFPcUl */
 void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
 #if VERSION <= VERSION_JPN
     mesg_header* header = msgGet.getMesgHeader(i_msgNo);
@@ -5927,10 +5809,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
 void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3, char* param_4, u32 i_msgNo, f32* param_6, f32* param_7, int* param_8) {
     /* Nonmatching - regalloc */
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
+
     f32 f31;
     f32 f30 = 0.0f;
 
@@ -6012,7 +5891,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
                     }
                     *param_8 += 1;
                 }
-            } else if ((u8)src[offset + 2] == 0xFF && (u8)src[offset + 3] == 0 && (u8)src[offset + 4] == SpclCode_RUBY) {
+            } else if ((u8)src[offset + 2] == 0xFF && (u8)src[offset + 3] == 0 && (u8)src[offset + 4] == MsgSpclCode_RUBY) {
 #if VERSION < VERSION_PAL
                 int r17 = 6;
                 f31 = 0.0f;
@@ -6060,7 +5939,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
                 *param_6 += charLength(field_0x148, c, false);
             }
             *param_8 += 1;
-            
+
             if (r21 != 0 && --r21 == 0) {
                 char sp0C[16];
                 f32 f0 = (*param_6 - f30) / 2.0f;
@@ -8430,7 +8309,7 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
     if (minutes == 0 && seconds == 0) {
         seconds = 1;
     }
-    
+
     if (dComIfGs_getPalLanguage() != 0 && dComIfGs_getPalLanguage() != 1) {
         if (seconds != 0 || minutes == 0) {
             if (dComIfGs_getPalLanguage() == 3 && minutes != 0) {
@@ -8440,7 +8319,7 @@ void fopMsgM_msgDataProc_c::tag_forest_timer() {
                 strcat(field_0x60, " ");
                 strcat(field_0x68, " ");
             }
-            
+
             fopMsgM_int_to_char(buf, seconds, false);
 
             while (buf[i] != '\0') {
@@ -8955,7 +8834,7 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
     if (minutes == 0 && seconds == 0) {
         seconds = 1;
     }
-    
+
     if (dComIfGs_getPalLanguage() != 0 && dComIfGs_getPalLanguage() != 1) {
         if (seconds != 0 || minutes == 0) {
             if (dComIfGs_getPalLanguage() == 3 && minutes != 0) {
@@ -8965,7 +8844,7 @@ void fopMsgM_msgDataProc_c::tag_pig_timer() {
                 strcat(field_0x60, " ");
                 strcat(field_0x68, " ");
             }
-            
+
             fopMsgM_int_to_char(buf, seconds, false);
 
             while (buf[i] != '\0') {
@@ -9446,7 +9325,7 @@ void fopMsgM_msgDataProc_c::tag_stock_pendant() {
 
 #if VERSION == VERSION_PAL
 static void dummy() {
-    OSReport(" ");
+    DEAD_STRING(" ");
 }
 #endif
 
@@ -9921,10 +9800,10 @@ fopMsgM_f2d_class fopMsgM_centerPosCalc(fopMsgM_f2d_class param_1, fopMsgM_f2d_c
 
 /* 8003BA40-8003BB34       .text fopMsgM_pane_parts_set__FP18fopMsgM_pane_class */
 void fopMsgM_pane_parts_set(fopMsgM_pane_class* i_pane) {
-    i_pane->mPosTopLeftOrig.x = i_pane->pane->mBounds.i.x;
-    i_pane->mPosTopLeftOrig.y = i_pane->pane->mBounds.i.y;
-    i_pane->mSizeOrig.x = i_pane->pane->mBounds.getWidth();
-    i_pane->mSizeOrig.y = i_pane->pane->mBounds.getHeight();
+    i_pane->mPosTopLeftOrig.x = i_pane->pane->getBounds().i.x;
+    i_pane->mPosTopLeftOrig.y = i_pane->pane->getBounds().i.y;
+    i_pane->mSizeOrig.x = i_pane->pane->getWidth();
+    i_pane->mSizeOrig.y = i_pane->pane->getHeight();
     fopMsgM_f2d_class center = fopMsgM_centerPosCalc(i_pane->mPosTopLeftOrig, i_pane->mSizeOrig);
     i_pane->mPosCenterOrig.x = center.x;
     i_pane->mPosCenterOrig.y = center.y;
@@ -10200,6 +10079,6 @@ void fopMsgM_destroyExpHeap(JKRExpHeap* i_heap) {
 }
 
 static void dummy2() {
-    OSReport("\x1B""CU[%d]");
-    OSReport("\x1B""CD[%d]");
+    DEAD_STRING("\x1B""CU[%d]");
+    DEAD_STRING("\x1B""CD[%d]");
 }

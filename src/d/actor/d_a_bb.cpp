@@ -71,7 +71,7 @@ public:
     }
     virtual ~bbHIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ u8 unk_04;
@@ -365,12 +365,12 @@ void anm_init(bb_class* i_this, int animFileIdx, f32 morf, u8 loopMode, f32 spee
 }
 
 /* 00000D74-00001048       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* ac1, void* ac2) {
+static void* s_a_d_sub(void* ac1, void* ac2) {
     dBgS_LinChk linChk;
     cXyz sp14;
     cXyz sp8;
 
-    if (esa_check_count < 100 && fopAc_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_ESA_e) {
+    if (esa_check_count < 100 && fopAcM_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_ESA_e) {
         esa_class* esa1 = (esa_class*)ac1;
         esa_class* esa2 = (esa_class*)ac2;
 
@@ -1246,7 +1246,7 @@ void bb_water_check(bb_class* i_this) {
 
 /* 00004000-0000404C       .text pl_name_check__FPvPv */
 void* pl_name_check(void* ac1, void* ac2) {
-    if (fopAc_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_NPC_KAM_e) {
+    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_NPC_KAM_e) {
         return ac1;
     }
     return NULL;

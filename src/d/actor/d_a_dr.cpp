@@ -209,6 +209,7 @@ static BOOL daDr_Execute(dr_class* i_this) {
 
 /* 00000A8C-00000A94       .text daDr_IsDelete__FP8dr_class */
 static BOOL daDr_IsDelete(dr_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -201,7 +201,7 @@ void daObjPaper::Act_c::mode_wait_init() {
 
 /* 00000748-00000784       .text mode_wait__Q210daObjPaper5Act_cFv */
 void daObjPaper::Act_c::mode_wait() {
-    if (eventInfo.mCommand == dEvtCmd_INTALK_e) {
+    if (eventInfo.checkCommandTalk()) {
         mode_talk0_init();
     }
     else {
@@ -343,6 +343,7 @@ static BOOL Mthd_Draw(void* i_this) {
 
 /* 00000C60-00000C68       .text Mthd_IsDelete__Q210daObjPaper27@unnamed@d_a_obj_paper_cpp@FPv */
 static BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

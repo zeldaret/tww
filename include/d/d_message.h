@@ -4,7 +4,7 @@
 #include "f_op/f_op_msg_mng.h"
 #include "d/d_drawlist.h"
 
-class sub_msg2_class;
+struct sub_msg2_class;
 
 class dDlst_2DMSG2_c : public dDlst_base_c {
 public:

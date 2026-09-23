@@ -82,6 +82,7 @@ static BOOL dThunder_Execute(dThunder_c* i_this) {
 
 /* 80198AB4-80198ABC       .text dThunder_IsDelete__FP10dThunder_c */
 static BOOL dThunder_IsDelete(dThunder_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -109,7 +110,7 @@ static cPhs_State dThunder_Create(kankyo_class* i_ky) {
 /* 80198BC4-801990CC       .text create__10dThunder_cFv */
 cPhs_State dThunder_c::create() {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
-    camera_class *pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class *pCamera = (camera_process_class*)dComIfGp_getCamera(0);
 
     new (this) dThunder_c();
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_YTHDR00_e);
@@ -154,7 +155,7 @@ cPhs_State dThunder_c::create() {
     mScale.y = size * (f30 + f1);
     mScale.z = 1.0f;
 
-    dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &fwd);
+    dKyr_get_vectle_calc(&pCamera->view.mLookat.mEye, &pCamera->view.mLookat.mCenter, &fwd);
     f32 distXZ = std::sqrtf(fwd.x * fwd.x + fwd.z * fwd.z);
 
     s16 rotX = cM_atan2s(fwd.x, fwd.z);
@@ -171,9 +172,9 @@ cPhs_State dThunder_c::create() {
     rot.z = cM_scos(rotY) * cM_scos(rotX);
 
     f32 baseXZ = cM_rndF(offs.x);
-    mPos.x = pCamera->mLookat.mEye.x + fwd.x * 100000.0f + rot.x * baseXZ;
-    mPos.y = pCamera->mLookat.mEye.y + cM_rndFX(offs.y);
-    mPos.z = pCamera->mLookat.mEye.z + fwd.z * 100000.0f + rot.z * baseXZ;
+    mPos.x = pCamera->view.mLookat.mEye.x + fwd.x * 100000.0f + rot.x * baseXZ;
+    mPos.y = pCamera->view.mLookat.mEye.y + cM_rndFX(offs.y);
+    mPos.z = pCamera->view.mLookat.mEye.z + fwd.z * 100000.0f + rot.z * baseXZ;
 
     if (cM_rndF(1.0f) < 0.3f) {
 #if VERSION == VERSION_DEMO

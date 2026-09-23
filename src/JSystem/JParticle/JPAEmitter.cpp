@@ -207,7 +207,7 @@ void JPABaseEmitter::calcEmitterInfo() {
     
     Mtx mtxScale, mtxRot, mtx;
     MTXScale(mtxScale, mEmitterScale.x, mEmitterScale.y, mEmitterScale.z);
-    JPAGetXYZRotateMtx((mEmitterRot.x << 14) / 0x5a, (mEmitterRot.y << 14) / 0x5a, (mEmitterRot.z << 14) / 0x5a, mtxRot);
+    JPAGetXYZRotateMtx((mEmitterRot.x * 0x4000) / 90, (mEmitterRot.y * 0x4000) / 90, (mEmitterRot.z * 0x4000) / 90, mtxRot);
     
     MTXScale(mtx, mGlobalDynamicsScale.x, mGlobalDynamicsScale.y, mGlobalDynamicsScale.z);
     MTXConcat(mGlobalRotation, mtx, mtx);
@@ -250,7 +250,7 @@ void JPABaseEmitter::calc() {
 /* 8025D3C0-8025D5D4       .text calcCreatePtcls__14JPABaseEmitterFv */
 void JPABaseEmitter::calcCreatePtcls() {
     if (checkStatus(JPAEmtrStts_RateStepEmit)) {
-        s32 emitCount = 0;
+        int emitCount = 0;
         if (checkEmDataFlag(JPADynFlag_FixedInterval)) {
             emitCount = (mVolumeType == 1) ?
                 (mDivNumber + 1) * (mDivNumber - 1) * 4 + 6 : // Sphere
@@ -274,7 +274,7 @@ void JPABaseEmitter::calcCreatePtcls() {
         if (checkStatus(JPAEmtrStts_StopEmit))
             emitCount = 0;
 
-        for (s32 i = 0; i < emitCount; i++) {
+        for (int i = 0; i < emitCount; i++) {
             JPABaseParticle* ptcl = createParticle();
             if (ptcl == NULL)
                 break;
@@ -292,8 +292,8 @@ void JPABaseEmitter::calcCreatePtcls() {
 
 /* 8025D5D4-8025D670       .text createChildren__14JPABaseEmitterFP15JPABaseParticle */
 void JPABaseEmitter::createChildren(JPABaseParticle* ptcl) {
-    s32 num = getEmitterDataBlockInfoPtr()->getSweepShape()->getRate();
-    for (s32 i = 0; i < num; i++) {
+    int num = getEmitterDataBlockInfoPtr()->getSweepShape()->getRate();
+    for (int i = 0; i < num; i++) {
         JPABaseParticle * chld = getPtclFromVacList();
         if (chld == NULL)
             break;
@@ -368,14 +368,14 @@ void JPABaseEmitter::calcChild() {
 
 /* 8025D8CC-8025DA90       .text calcKey__14JPABaseEmitterFv */
 void JPABaseEmitter::calcKey() {
-    for (s32 i = 0; i < getEmitterDataBlockInfoPtr()->getKeyNum(); i++) {
+    for (int i = 0; i < getEmitterDataBlockInfoPtr()->getKeyNum(); i++) {
         JPAKeyBlock* key = getEmitterDataBlockInfoPtr()->getKey()[i];
         f32 tick = mTick.getFrame();
         const f32* dataPtr = key->getKeyDataPtr();
         u32 dataNum = key->getNumber();
         if (key->isLoopEnable()) {
-            s32 tickMax = (s32)(dataPtr[(dataNum - 1) * 4]) + 1;
-            s32 numLoops = (s32)tick / tickMax;
+            int tickMax = (int)(dataPtr[(dataNum - 1) * 4]) + 1;
+            int numLoops = (int)tick / tickMax;
             tick -= numLoops * tickMax;
         }
         f32 value = JPAGetKeyFrameValue(tick, dataNum, dataPtr);
@@ -474,7 +474,7 @@ void JPABaseEmitter::calcEmitterGlobalPosition(JGeometry::TVec3<float>& dst) {
 void JPABaseEmitter::calcgReRDirection() {
     // gReR = globalRotation emitterRotation
     Mtx mtx;
-    JPAGetXYZRotateMtx((mEmitterRot.x << 14) / 0x5a, (mEmitterRot.y << 14) / 0x5a, (mEmitterRot.z << 14) / 0x5a, mtx);
+    JPAGetXYZRotateMtx((mEmitterRot.x * 0x4000) / 90, (mEmitterRot.y * 0x4000) / 90, (mEmitterRot.z * 0x4000) / 90, mtx);
     MTXConcat(mGlobalRotation, mtx, mtx);
     MTXMultVec(mtx, mEmitterDir, emtrInfo.mgReRDir);
 }

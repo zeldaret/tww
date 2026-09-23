@@ -173,12 +173,12 @@ GXFifoObj* GXInit(void* base, u32 size) {
 
         val1 = (val2 / 2048) | 0x69000400;
 
-        GFWriteBPCmd(val1);
+        GX_WRITE_RAS_REG(val1);
 
         __GXFlushTextureState();
 
         val1 = (val2 / 4224) | 0x46000200;
-        GFWriteBPCmd(val1);
+        GX_WRITE_RAS_REG(val1);
     }
 
     for (i = 0; i < GX_MAX_TEXMAP; i++) {
@@ -210,11 +210,11 @@ GXFifoObj* GXInit(void* base, u32 size) {
     GXFIFO.u32 = 0x1006;
     GXFIFO.u32 = 0;
 
-    GFWriteBPCmd(0x23000000);
+    GX_WRITE_RAS_REG(0x23000000);
 
-    GFWriteBPCmd(0x24000000);
+    GX_WRITE_RAS_REG(0x24000000);
 
-    GFWriteBPCmd(0x67000000);
+    GX_WRITE_RAS_REG(0x67000000);
 
     __GXSetTmemConfig(2);
     __GXInitGX();

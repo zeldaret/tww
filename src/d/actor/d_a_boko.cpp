@@ -189,7 +189,7 @@ BOOL daBoko_c::draw() {
                 dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[i], dark_stts->getBokoAlpha(i));
             }
 
-            if (getNowMode() == Mode_PLAYER_CARRY_e && dStage_roomControl_c::getDarkMode() != 0) {
+            if (getNowMode() == Mode_PLAYER_CARRY_e && dComIfGp_roomControl_getDarkMode() != 0) {
                 for (int j = i; j < 4; j++) {
                     dComIfGd_setSpotModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[j], dark_stts->getBokoAlpha(j));
                 }
@@ -813,6 +813,7 @@ static BOOL daBoko_Execute(daBoko_c* i_this) {
 
 /* 00002A24-00002A2C       .text daBoko_IsDelete__FP8daBoko_c */
 static BOOL daBoko_IsDelete(daBoko_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -931,9 +932,9 @@ cPhs_State daBoko_c::create() {
         },
         // cM3dGCpsS
         {{
-            /* P0 */ {0.0f, 0.0f, 0.0f},
-            /* P1 */ {0.0f, 0.0f, 0.0f},
-            /* Height */ 20.0f,
+            /* Start  */ {0.0f, 0.0f, 0.0f},
+            /* End    */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 20.0f,
         }},
     };
 

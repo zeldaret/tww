@@ -152,6 +152,7 @@ static BOOL daVrbox_Execute(vrbox_class* i_this) {
 
 /* 8015E888-8015E890       .text daVrbox_IsDelete__FP11vrbox_class */
 static BOOL daVrbox_IsDelete(vrbox_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

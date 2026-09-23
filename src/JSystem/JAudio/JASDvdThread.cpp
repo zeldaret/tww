@@ -68,7 +68,7 @@ JASTaskThread* JASystem::Dvd::sThread;
 
 /* 8027B72C-8027B7E8       .text createThread__Q28JASystem3DvdFiiUl */
 bool JASystem::Dvd::createThread(int param_1, int param_2, u32 param_3) {
-    sThread = new (JASDram, 0) JASTaskThread(param_3, param_2, param_1);
+    sThread = new (JASDram, 0) JASTaskThread(param_1, param_2, param_3);
     JUT_ASSERT(136, sThread);
     return true;
 }
@@ -76,7 +76,7 @@ bool JASystem::Dvd::createThread(int param_1, int param_2, u32 param_3) {
 /* 8027B7E8-8027B84C       .text resumeThread__Q28JASystem3DvdFv */
 void JASystem::Dvd::resumeThread() {
     JUT_ASSERT(143, sThread);
-    OSResumeThread(sThread->getThreadRecord());
+    sThread->resume();
 }
 
 /* 8027B84C-8027B8D4       .text sendCmdMsg__Q28JASystem3DvdFPFPv_lPvUl */

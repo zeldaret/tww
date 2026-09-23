@@ -656,7 +656,7 @@ void hand_move(bmdhand_class* i_this) {
 }
 
 /* 00002E74-00002EC0       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* param_1, void* param_2) {
+static void* s_a_d_sub(void* param_1, void* param_2) {
     UNUSED(param_2);
     if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BMD_e)) {
         return param_1;

@@ -137,10 +137,10 @@ void dMenu_Option_c::screenSet() {
 #endif
     }
     
-    m820.mUserArea = m820.pane->mRotation;
-    m008.mUserArea = m008.pane->mRotation;
-    m040.mUserArea = m040.pane->mRotation;
-    m078.mUserArea = m078.pane->mRotation;
+    m820.mUserArea = m820.pane->getRotate();
+    m008.mUserArea = m008.pane->getRotate();
+    m040.mUserArea = m040.pane->getRotate();
+    m078.mUserArea = m078.pane->getRotate();
 
     if (m820.mUserArea > 180) m820.mUserArea -= 360;
     if (m008.mUserArea > 180) m008.mUserArea -= 360;
@@ -733,7 +733,7 @@ void dMenu_Option_c::outFontMove() {
 
             f32 rotation_offset_x = m820.mPosCenter.x - m3F8[i].mPosTopLeft.x;
             f32 rotation_offset_y = m820.mPosCenter.y - m3F8[i].mPosTopLeft.y;
-            m3F8[i].pane->rotate(rotation_offset_x, rotation_offset_y, ROTATE_Z, m820.pane->mRotation);
+            m3F8[i].pane->rotate(rotation_offset_x, rotation_offset_y, ROTATE_Z, m820.pane->getRotate());
         }
         else {
             fopMsgM_setNowAlphaZero(&m0B0[i]); 

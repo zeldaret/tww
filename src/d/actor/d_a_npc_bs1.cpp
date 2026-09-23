@@ -43,7 +43,7 @@ public:
     daNpc_Bs1_HIO_c();
     virtual ~daNpc_Bs1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x000 */ // this.__vt
@@ -192,8 +192,8 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             if (jntNo == i_this->getHeadJntNum()) {
                 cXyz offset(0.0f, 0.0f, 0.0f);
-                mDoMtx_XrotM(*calc_mtx, i_this->getHead_y());
-                cMtx_ZrotM(*calc_mtx, -i_this->getHead_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getHead_y());
+                cMtx_ZrotM(*calc_mtx, (s16)-i_this->getHead_x());
                 cXyz pos;
                 MtxPosition(&offset, &pos);
                 i_this->setAttentionBasePos(pos);
@@ -204,8 +204,8 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
                 i_this->setEyePos(pos);
                 i_this->incAttnSetCount();
             } else if (jntNo == i_this->getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                cMtx_ZrotM(*calc_mtx, -i_this->getBackbone_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
+                cMtx_ZrotM(*calc_mtx, (s16)-i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -584,10 +584,10 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 if(*pMsgNo == 0xFD3) {
                     u8 r3 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_7F0F);
                     r3 += getBuyItem();
-                    u8 temp = cLib_maxLimit<u8>(r3, 0xF);
-                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_7F0F, temp);
+                    r3 = cLib_maxLimit<u8>(r3, 0xF);
+                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_7F0F, r3);
 
-                    if(temp < 0xA) {
+                    if(r3 < 0xA) {
                         *pMsgNo = 0xFD5;
                         break;
                     }

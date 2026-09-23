@@ -10,8 +10,10 @@ class J2DScreen;
 
 class dDlst_StarterScrnDraw_c : public dDlst_base_c {
 public:
-    void acc(s16, s16, s16) {}
-    
+    f32 acc(s16 param_0, s16 param_1, s16 param_2) {
+        return SQUARE((f32)(param_1 - param_2)) / SQUARE((f32)(param_0 - param_2));
+    }
+
     void setScreen(const char*, JKRArchive*);
     BOOL anime1(int);
     BOOL anime2();
@@ -21,12 +23,9 @@ public:
     virtual ~dDlst_StarterScrnDraw_c() {}
     virtual void draw();
 
+protected:
     /* 0x004 */ J2DScreen* mpScrn;
-    #if VERSION > VERSION_JPN
-    /* 0x008 */ fopMsgM_pane_class field_0x008[7];
-    #else
-    /* 0x008 */ fopMsgM_pane_class field_0x008[3];
-    #endif
+    /* 0x008 */ fopMsgM_pane_class field_0x008[VERSION_SELECT(3, 3, 7, 7)];
     /* 0x190 */ fopMsgM_pane_class field_0x190;
     /* 0x1C8 */ fopMsgM_pane_class field_0x1c8[3];
     /* 0x270 */ fopMsgM_pane_class field_0x270[3];

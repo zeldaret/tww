@@ -24,7 +24,7 @@ daDk_HIO_c::daDk_HIO_c() {
 }
 
 static void dummy(f32* out) {
-    OSReport("Dk");
+    DEAD_STRING("Dk");
     *out = 0.0f;
     *out = -1.0f;
 }

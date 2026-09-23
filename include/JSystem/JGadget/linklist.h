@@ -22,6 +22,12 @@ public:
 
 struct TNodeLinkList {
     struct iterator {
+        typedef ptrdiff_t difference_type;
+        typedef TLinkListNode value_type;
+        typedef TLinkListNode* pointer;
+        typedef TLinkListNode& reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
+
         iterator() { node = NULL; }
         explicit iterator(TLinkListNode* pNode) { node = pNode; }
         iterator& operator=(const iterator& other) { node = other.node; return *this; }
@@ -41,6 +47,12 @@ struct TNodeLinkList {
     };
 
     struct const_iterator {
+        typedef ptrdiff_t difference_type;
+        typedef const TLinkListNode value_type;
+        typedef const TLinkListNode* pointer;
+        typedef const TLinkListNode& reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
+
         explicit const_iterator(TLinkListNode* pNode) { node = pNode; }
         explicit const_iterator(iterator it) { node = it.node; }
 
@@ -119,6 +131,12 @@ struct TLinkList : public TNodeLinkList {
     TLinkList() : TNodeLinkList() {}
 
     struct iterator {
+        typedef ptrdiff_t difference_type;
+        typedef T value_type;
+        typedef T* pointer;
+        typedef T& reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
+
         iterator() {}
         explicit iterator(TNodeLinkList::iterator iter) : base(iter) {}
 
@@ -146,17 +164,17 @@ struct TLinkList : public TNodeLinkList {
         T* operator->() const { return Element_toValue(base.operator->()); }
         T& operator*() const { return *operator->(); }
 
-        typedef s32 difference_type;
-        typedef T value_type;
-        typedef T* pointer;
-        typedef T& reference;
-        typedef std::bidirectional_iterator_tag iterator_category;
-
     public:
         /* 0x00 */ TNodeLinkList::iterator base;
     };
 
     struct const_iterator {
+        typedef ptrdiff_t difference_type;
+        typedef const T value_type;
+        typedef const T* pointer;
+        typedef const T& reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
+
         explicit const_iterator(TNodeLinkList::const_iterator iter) : base(iter) {}
         explicit const_iterator(iterator iter) : base(iter.base) {}
 
@@ -251,38 +269,17 @@ TLinkList_factory<T, I>::~TLinkList_factory() {
     JGADGET_ASSERTWARN(934, empty());
 }
 
-template <typename T>
+template <typename Iterator>
 struct TEnumerator {
-    inline TEnumerator(T _current, T _end)
+    typedef typename std::iterator_traits<Iterator>::reference reference;
+
+    inline TEnumerator(Iterator _current, Iterator _end)
         : current(_current), end(_end) {}
 
     bool isEnd() const { return current != end; }
     operator bool() const { return isEnd(); }
-    T operator*() {
-        T rv = current;
-        ++current;
-        return rv;
-    }
-
-    T current;
-    T end;
-};
-
-// TEnumerator2 should be the same but there are two issues:
-// 1. How to derive the iterator return type for operator* (the debug makes it seem like operator* is called
-// so the return value should be what the iterator points to)
-// 2. Calling the * operator seems to make functions using TEnumerator<T*> not work. See
-// JStudio::TAdaptor::adaptor_setVariableValue_n
-// Perhaps template specialization?
-template <typename Iterator, typename T>
-struct TEnumerator2 {
-    inline TEnumerator2(Iterator _current, Iterator _end)
-        : current(_current), end(_end) {}
-
-    bool isEnd() const { return current != end; }
-    operator bool() const { return isEnd(); }
-    T& operator*() {
-        T& rv = *current;
+    reference operator*() {
+        reference rv = *current;
         ++current;
         return rv;
     }
@@ -291,17 +288,34 @@ struct TEnumerator2 {
     Iterator end;
 };
 
-template <typename T, int I>
-struct TContainerEnumerator : public TEnumerator2<typename TLinkList<T, I>::iterator, T> {
-    inline TContainerEnumerator(TLinkList<T, I>* param_0)
-        : TEnumerator2<typename TLinkList<T, I>::iterator, T>(param_0->begin(), param_0->end()) {}
+template <typename T>
+struct TEnumerator<T*> {
+    inline TEnumerator(T* _current, T* _end)
+        : current(_current), end(_end) {}
+
+    bool isEnd() const { return current != end; }
+    operator bool() const { return isEnd(); }
+    T* operator*() {
+        T* rv = current;
+        ++current;
+        return rv;
+    }
+
+    T* current;
+    T* end;
+};
+
+template <typename T>
+struct TContainerEnumerator : public TEnumerator<typename T::iterator> {
+    inline TContainerEnumerator(T& param_0)
+        : TEnumerator<typename T::iterator>(param_0.begin(), param_0.end()) {}
 };
 
 
-template <typename T, int I>
-struct TContainerEnumerator_const : public TEnumerator2<typename TLinkList<T, I>::const_iterator, const T> {
-    inline TContainerEnumerator_const(const TLinkList<T, I>* param_0)
-        : TEnumerator2<typename TLinkList<T, I>::const_iterator, const T>(param_0->begin(), param_0->end()) {}
+template <typename T>
+struct TContainerEnumerator_const : public TEnumerator<typename T::const_iterator> {
+    inline TContainerEnumerator_const(const T& param_0)
+        : TEnumerator<typename T::const_iterator>(param_0.begin(), param_0.end()) {}
 };
 
 namespace {

@@ -142,8 +142,8 @@ BOOL dMenu_save_c::openNormal() {
         rt = openForGameover();
         break;
     case 3:
-        if (field_0x53c != 0) {
-            if (field_0x53d == 2) {
+        if (errorFlag != 0) {
+            if (errorType == 2) {
                 rt = openForEnding2();
             } else {
                 rt = TRUE;
@@ -160,8 +160,8 @@ BOOL dMenu_save_c::openNormal() {
         field_0x394.pane->show();
 
         if (useType == 3) {
-            if (field_0x53c != 0) {
-                if (field_0x53d == 2) {
+            if (errorFlag != 0) {
+                if (errorType == 2) {
                     field_0x53a = 0;
                     field_0x535 = 1;
                     proc = PROC_CAN_NOT_SAVE;
@@ -1648,8 +1648,8 @@ void dMenu_save_c::paneTransInit() {
 /* 801DA2C8-801DA3C4       .text displayInit__12dMenu_save_cFv */
 void dMenu_save_c::displayInit() {
     field_0x536 = 0;
-    field_0x53c = 0;
-    field_0x53d = 0;
+    errorFlag = 0;
+    errorType = 0;
     field_0x53b = 0;
     proc = PROC_SAVE_WAIT;
     saveStatus = 1;

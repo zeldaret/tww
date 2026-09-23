@@ -211,7 +211,7 @@ void dCloth_packet_c::draw() {
 }
 
 /* 800638E4-80063A10       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzff */
-void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float restDist, float springFactor) {
+static void get_cloth_anim_sub_factor(cXyz* pPos, cXyz* pOther, cXyz* pDst, float restDist, float springFactor) {
     cXyz diff = *pOther - *pPos;
     cXyz norm = diff.normZP();
     f32 dist = diff.abs() - restDist;

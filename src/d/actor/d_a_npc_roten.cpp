@@ -411,7 +411,11 @@ static u32 l_msg_xy_invalid_item_B[] = {
 };
 
 static u32 l_msg_xy_invalid_item_C[] = {
+#if VERSION == VERSION_DEMO
+    0x29DE,
+#else
     0x29DD,
+#endif
     0x0000,
 };
 
@@ -1586,16 +1590,15 @@ static BOOL daNpc_Roten_nodeCallBack(J3DNode* node, int calcTiming) {
         daNpcRoten_c* i_this = (daNpcRoten_c*)model->getUserArea();
         
         s32 jntNo = joint->getJntNo();
-        MtxP mtx = model->getAnmMtx(jntNo);
-        cMtx_copy(mtx, *calc_mtx);
+        MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
 
         if(jntNo == i_this->m_jnt.getHeadJntNum()) {
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
-            mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getHead_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
         }
         if(jntNo == i_this->m_jnt.getBackboneJntNum()) {
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
-            mDoMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getBackbone_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
         }
 
         model->setAnmMtx(jntNo, *calc_mtx);
@@ -1739,7 +1742,7 @@ cPhs_State daNpcRoten_c::createInit() {
         weight = 0xFE;
     }
 
-    gravity = -9.0f;
+    fopAcM_SetGravity(this, -9.0f);
 
     field_0x99E = dComIfGp_evmng_getEventIdx("ROTEN_EXCHANGE_1ST");
     field_0x9A0 = dComIfGp_evmng_getEventIdx("ROTEN_EXCHANGE_2ND");

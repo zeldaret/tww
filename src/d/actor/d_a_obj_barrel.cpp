@@ -339,7 +339,7 @@ void daObjBarrel::Act_c::mode_walk() {
         set_walk_rot();
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
 
-        float mag = speed.abs2XZ();
+        f32 mag = speed.abs2XZ();
         if (mag < l_gnd_fric) {
             if (std::fabsf(norm->x) >= 0.001f && std::fabsf(norm->z) >= 0.001f) {
                 mode_wait_init();
@@ -572,8 +572,8 @@ bool daObjBarrel::Act_c::damage_cc_proc() {
                 broken = true;
             } else if ((mMode == MODE_WAIT || mMode == MODE_WALK) && hitObj->ChkAtType(AT_TYPE_WIND)) {
                 cXyz windVec = *mCyl.GetTgRVecP();
-                float windMag2 = windVec.abs2();
-                if (windMag2 > l_wind_max*l_wind_max) {
+                f32 windMag2 = windVec.abs2();
+                if (windMag2 > SQUARE(l_wind_max)) {
                     windVec *= l_wind_max / std::sqrtf(windMag2);
                 }
                 cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
@@ -753,6 +753,7 @@ BOOL daObjBarrel::Method::Draw(void* i_this) {
 
 /* 000024A8-000024B0       .text IsDelete__Q211daObjBarrel6MethodFPv */
 BOOL daObjBarrel::Method::IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

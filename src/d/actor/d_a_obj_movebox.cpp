@@ -145,7 +145,7 @@ void Bgc_c::wrt_pos(const cXyz& pos) {
     f32 roofY = pos.y + 400.0f;
     groundPos.y -= 100.0f;
     M_wrt_work.Set(groundPos, roofY);
-    if (dComIfG_Bgsp()->SplGrpChk(&M_wrt_work)) {
+    if (dComIfG_Bgsp()->WaterChk(&M_wrt_work)) {
         mWaterY = M_wrt_work.GetHeight();
         cLib_onBit(mStateFlags, BgcState_ABOVE_WATER_e);
         if (mWaterY > pos.y) {
@@ -1399,12 +1399,16 @@ void Act_c::afl_sway() {
         m610 *= temp;
     }
     
+    f32 f1;
+    f32 f5;
+    f32 f0;
+    f32 f6;
     f32 temp2 = m614 - m60C;
     f32 temp1 = m618 - m610;
-    f32 f1 = -temp2 * attr()->m50;
-    f32 f5 = -temp1 * attr()->m50;
-    f32 f0 = -m61C * attr()->m54;
-    f32 f6 = -m620 * attr()->m54;
+    f1 = -temp2 * attr()->m50;
+    f5 = -temp1 * attr()->m50;
+    f0 = -m61C * attr()->m54;
+    f6 = -m620 * attr()->m54;
     m61C += f1 + f0;
     m620 += f5 + f6;
     m614 += m61C;
@@ -1580,7 +1584,7 @@ void Act_c::mode_wait() {
     if (r31 != -1) {
         m634 = r31;
         eff_smoke_slip_start();
-        daPy_getPlayerActorClass()->onPushPullKeep();
+        ((daPy_py_c*)dComIfGp_getPlayer(0))->onPushPullKeep();
         mode_walk_init();
         
         if (cLib_checkBit(mPPLabel, dBgW::PPLABEL_PULL)) {
@@ -1650,7 +1654,7 @@ void Act_c::mode_walk() {
         } else if (m634 == 3) {
             m628--;
         }
-        daPy_getPlayerActorClass()->offPushPullKeep();
+        ((daPy_py_c*)dComIfGp_getPlayer(0))->offPushPullKeep();
         mode_wait_init();
     }
 }
@@ -1864,9 +1868,8 @@ BOOL Act_c::Draw() {
         int temp = mBgc.mMaxGroundIdx;
         f32 groundH = mBgc.mGroundY[temp];
         cM3dGPla* triPla = dComIfG_Bgsp()->GetTriPla(mBgc.M_gnd_work[temp]);
-        cXyz* norm = triPla->GetNP();
-        if (norm && groundH != -G_CM3D_F_INF) {
-            dComIfGd_setSimpleShadow(&current.pos, groundH, attr()->m10, norm, shape_angle.y, 1.0f, NULL);
+        if (triPla && groundH != -G_CM3D_F_INF) {
+            dComIfGd_setSimpleShadow(&current.pos, groundH, attr()->m10, &triPla->mNormal, shape_angle.y, 1.0f, NULL);
         }
     }
     

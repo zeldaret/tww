@@ -14,8 +14,8 @@ namespace JASystem {
             /* 0x14 */ int field_0x14;
             /* 0x18 */ int field_0x18;
             /* 0x1C */ int field_0x1c;
-            /* 0x20 */ short field_0x20;
-            /* 0x22 */ short field_0x22;
+            /* 0x20 */ s16 field_0x20;
+            /* 0x22 */ s16 field_0x22;
             /* 0x24 */ u32* field_0x24;
         };
     }
@@ -23,25 +23,25 @@ namespace JASystem {
         struct FxlineConfig_ {
             /* 0x00 */ u8 field_0x0;
             /* 0x02 */ u16 field_0x2;
-            /* 0x04 */ short field_0x4;
+            /* 0x04 */ s16 field_0x4;
             /* 0x06 */ u16 field_0x6;
-            /* 0x08 */ short field_0x8;
+            /* 0x08 */ s16 field_0x8;
             /* 0x0C */ int field_0xc;
-            /* 0x10 */ short field_0x10[8];
+            /* 0x10 */ s16 field_0x10[8];
         };
 
         class FXBuffer {
         public:
             bool setFXLine(s16* param_1, FxlineConfig_* param_2);
 
-            /* 0x00 */ short field_0x0;
-            /* 0x02 */ short field_0x2;
+            /* 0x00 */ s16 field_0x0;
+            /* 0x02 */ s16 field_0x2;
             /* 0x04 */ s16* field_0x4;
-            /* 0x08 */ short field_0x8;
-            /* 0x0A */ short field_0xa;
-            /* 0x0C */ short field_0xc;
-            /* 0x0E */ short field_0xe;
-            /* 0x10 */ short field_0x10[8];
+            /* 0x08 */ s16 field_0x8;
+            /* 0x0A */ s16 field_0xa;
+            /* 0x0C */ s16 field_0xc;
+            /* 0x0E */ s16 field_0xe;
+            /* 0x10 */ s16 field_0x10[8];
         };
 
         class DSPBuffer {
@@ -56,7 +56,7 @@ namespace JASystem {
             void setMixerInitDelayMax(u8 param_1);
             void setMixerInitVolume(u8 param_1, s16 param_2, u8 param_3);
             void setMixerVolume(u8 param_1, s16 param_2, u8 param_3);
-            void setMixerVolumeOnly(u8 param_1, short param_2);
+            void setMixerVolumeOnly(u8 param_1, s16 param_2);
             void setPauseFlag(u8 param_1);
             void flushChannel();
             void initFilter();
@@ -78,45 +78,45 @@ namespace JASystem {
             /* 0x18 */ u8 field_0x18[0x50 - 0x18];
             /* 0x50 */ u16 field_0x50;
             /* 0x52 */ u16 field_0x52;
-            /* 0x54 */ short field_0x54;
+            /* 0x54 */ s16 field_0x54;
             /* 0x56 */ u16 field_0x56;
             /* 0x58 */ u16 field_0x58;
             /* 0x5A */ u8 field_0x5a[0x60 - 0x5a];
-            /* 0x60 */ short field_0x60;
+            /* 0x60 */ s16 field_0x60;
             /* 0x62 */ u8 field_0x62[0x64 - 0x62];
-            /* 0x64 */ short field_0x64;
-            /* 0x66 */ short field_0x66;
+            /* 0x64 */ s16 field_0x64;
+            /* 0x66 */ s16 field_0x66;
             /* 0x68 */ int field_0x68;
             /* 0x6C */ u32 field_0x6c;
             /* 0x70 */ u8 field_0x70[0x74 - 0x70];
             /* 0x74 */ u32 field_0x74;
-            /* 0x78 */ short field_0x78[4];
-            /* 0x80 */ short field_0x80[20];
-            /* 0xA8 */ short field_0xa8[4];
+            /* 0x78 */ s16 field_0x78[4];
+            /* 0x80 */ s16 field_0x80[20];
+            /* 0xA8 */ s16 field_0xa8[4];
             /* 0xB8 */ u16 field_0xb0[16];
             /* 0xD0 */ u8 field_0xd0[0x100 - 0xd0];
             /* 0x100 */ u16 field_0x100;
             /* 0x102 */ u16 field_0x102;
-            /* 0x104 */ short field_0x104;
-            /* 0x106 */ short field_0x106;
-            /* 0x108 */ short field_0x108;
+            /* 0x104 */ s16 field_0x104;
+            /* 0x106 */ s16 field_0x106;
+            /* 0x108 */ s16 field_0x108;
             /* 0x10A */ u16 field_0x10a;
             /* 0x10C */ u32 field_0x10c;
             /* 0x110 */ u32 field_0x110;
             /* 0x114 */ u32 field_0x114;
             /* 0x118 */ u32 field_0x118;
             /* 0x11C */ int field_0x11c;
-            /* 0x120 */ short field_0x120[8];
+            /* 0x120 */ s16 field_0x120[8];
             /* 0x130 */ u8 field_0x130[0x148 - 0x130];
-            /* 0x148 */ short field_0x148[4];
-            /* 0x150 */ short field_0x150;
+            /* 0x148 */ s16 field_0x148[4];
+            /* 0x150 */ s16 field_0x150;
             /* 0x152 */ u8 field_0x152[0x180 - 0x152];
         };
 
 
         void setDSPMixerLevel(float param_1);
         DSPBuffer* getDSPHandle(u8 param_1);
-        void setFilterTable(short* param_1, short* param_2, u32 param_3);
+        void setFilterTable(s16* param_1, s16* param_2, u32 param_3);
         void flushBuffer();
         void invalChannelAll();
         void clearBuffer();

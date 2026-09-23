@@ -123,7 +123,7 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
 }
 
 static void dummy() {
-    OSReport("JX:: disp = %d\n");
-    OSReport("JX:: drawing %d -> ");
-    OSReport("%d\n");
+    DEAD_STRING("JX:: disp = %d\n");
+    DEAD_STRING("JX:: drawing %d -> ");
+    DEAD_STRING("%d\n");
 }

@@ -910,7 +910,7 @@ void Act_c::set_senv(int arg1, int arg2) const {
 
 /* 00003124-0000315C       .text cam_lockoff__Q27daStone5Act_cCFv */
 void Act_c::cam_lockoff() const {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     camera->mCamera.ForceLockOff(base.base.mBsPcId);
 }
 

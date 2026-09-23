@@ -115,12 +115,14 @@ void dName_c::_delete() {
     mDoExt_removeMesgFont();
     delete stick;
     archive->removeResourceAll();
-    mDoHIO_deleteChild(g_nmHIO.id);  // supposed to be _deleteSp?
+    mDoHIO_deleteChild(g_nmHIO.id);
 }
 
+#if VERSION == VERSION_DEMO
 void dName_c::_deleteSp() {
     mDoHIO_deleteChild(g_nmHIO.id);
 }
+#endif
 
 /* 80216248-80216268       .text _move__7dName_cFv */
 void dName_c::_move() {

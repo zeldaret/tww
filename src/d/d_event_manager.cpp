@@ -614,7 +614,7 @@ void dEvent_manager_c::exceptionProc() {
 }
 
 static void dummy1() {
-    OSReport("EVENT_DEBUG_OFF");
+    DEAD_STRING("EVENT_DEBUG_OFF");
 }
 
 

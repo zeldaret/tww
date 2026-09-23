@@ -20,7 +20,7 @@ public:
     }
     virtual ~kamome2HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -167,7 +167,7 @@ static void key_move(kamome2_class* i_this) {
 
 static BOOL daKamome2_Execute(kamome2_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     i_this->m2A8++;
     if (l_HIO.m05 == 0) {

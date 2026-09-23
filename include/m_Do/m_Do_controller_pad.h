@@ -4,6 +4,9 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SSystem/SComponent/c_API_controller_pad.h"
 
+// Controller Ports 1 - 4
+enum { PAD_1, PAD_2, PAD_3, PAD_4 };
+
 extern JUTGamePad* g_mDoCPd_gamePad[4];
 extern interface_of_controller_pad g_mDoCPd_cpadInfo[4];
 

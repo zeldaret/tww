@@ -19,7 +19,7 @@ public:
     daNpc_Btsw_HIO_c();
     virtual ~daNpc_Btsw_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -1423,7 +1423,7 @@ void SwMail2_c::draw(dKy_tevstr_c* tevStr) {
 /* 00004680-00004788       .text Move__8SwCam2_cFv */
 void SwCam2_c::Move() {
     if (field_0x1E != 0) {
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
         cXyz center = camera_center_data[field_0x1D][field_0x1C + 1];
         cLib_addCalcPos(&field_0x00, center, 0.25f, 10.0f, 1.0f);

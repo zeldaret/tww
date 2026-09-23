@@ -112,7 +112,7 @@ void daArrow_c::_atHit(dCcD_GObjInf* thisObjInf, fopAc_ac_c* hitActor, dCcD_GObj
     if (!hitActor) {
         return;
     }
-    if (!fopAc_IsActor(hitActor)) {
+    if (!fopAcM_IsActor(hitActor)) {
         return;
     }
     if (!fopAcM_GetJntHit(hitActor)) {
@@ -1273,6 +1273,7 @@ static BOOL daArrowDraw(void* i_this) {
 
 /* 800D8280-800D8288       .text daArrowIsDelete__FPv */
 static BOOL daArrowIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

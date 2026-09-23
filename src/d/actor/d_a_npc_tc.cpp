@@ -17,7 +17,7 @@ public:
     daNpc_Tc_HIO_c();
     virtual ~daNpc_Tc_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ dNpc_HIO_c mNpc;
@@ -661,12 +661,12 @@ void daNpc_Tc_c::eventOrder() {
 
 /* 00001424-00001470       .text checkOrder__10daNpc_Tc_cFv */
 void daNpc_Tc_c::checkOrder() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         mEventIdx = 0;
         return;
     }
 
-    if (eventInfo.mCommand != dEvtCmd_INTALK_e) {
+    if (!eventInfo.checkCommandTalk()) {
         return;
     }
 
@@ -1624,11 +1624,11 @@ BOOL daNpc_Tc_c::_draw() {
     };
 
     static const u8 a_snap_tbl[] = {
-        DSNAP_TYPE_TC_NORMAL,
-        DSNAP_TYPE_TC_RED,
-        DSNAP_TYPE_TC_WHITE,
-        DSNAP_TYPE_TC_BLUE,
-        DSNAP_TYPE_TC_NORMAL,
+        DSNAP_TYPE_NPC_TC_NORMAL,
+        DSNAP_TYPE_NPC_TC_RED,
+        DSNAP_TYPE_NPC_TC_WHITE,
+        DSNAP_TYPE_NPC_TC_BLUE,
+        DSNAP_TYPE_NPC_TC_NORMAL,
     };
 
     static const u32 dummy[] = {

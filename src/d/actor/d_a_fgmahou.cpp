@@ -23,7 +23,7 @@ static BOOL daFgmahou_Draw(fgmahou_class* i_this) {
 
 /* 000000E4-00000130       .text boss_s_sub__FPvPv */
 static void* boss_s_sub(void* param_1, void*) {
-    if(fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_FGANON_e) {
+    if(fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_FGANON_e) {
         return param_1;
     }
 
@@ -283,6 +283,7 @@ static BOOL daFgmahou_Execute(fgmahou_class* i_this) {
 
 /* 00000DD8-00000DE0       .text daFgmahou_IsDelete__FP13fgmahou_class */
 static BOOL daFgmahou_IsDelete(fgmahou_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

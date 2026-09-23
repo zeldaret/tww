@@ -62,7 +62,7 @@ void dFlower_data_c::WorkCo(fopAc_ac_c* param_1, u32 param_2, int param_3) {
     temp1.z = field_0x04.z - param_1->current.pos.z;
     f32 val = temp1.abs2XZ();
 
-    if(val > 900.0f) {
+    if(val > SQUARE(30.0f)) {
         return;
     }
 

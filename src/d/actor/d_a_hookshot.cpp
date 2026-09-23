@@ -243,7 +243,7 @@ BOOL daHookshot_c::procShot() {
         cXyz sp8C = current.pos + (mMoveVec * 15.0f);
         mLinChk.Set(&current.pos, &sp8C, this);
         if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
-            sp8C = mLinChk.GetLinP()->GetEnd();
+            sp8C = mLinChk.GetCross();
             if (dComIfG_Bgsp()->ChkPolyHSStick(mLinChk)) {
                 fopAcM_SetParam(this, Mode_Pull);
                 mShipRideFlg = false;
@@ -461,6 +461,7 @@ static BOOL daHookshot_Execute(daHookshot_c* i_this) {
 
 /* 800F2B74-800F2B7C       .text daHookshot_IsDelete__FP12daHookshot_c */
 static BOOL daHookshot_IsDelete(daHookshot_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

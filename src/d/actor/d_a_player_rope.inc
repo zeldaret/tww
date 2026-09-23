@@ -14,13 +14,14 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_player_HIO.h"
 #include "d/actor/d_a_himo2.h"
+#include "d/actor/d_a_himo3.h"
 #include "d/d_attention.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_audio.h"
 
 /* 80142D08-80142D68       .text checkRopeAnime__9daPy_lk_cCFv */
 BOOL daPy_lk_c::checkRopeAnime() const {
-    return (checkRopeReadyAnime()) || (checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e));
+    return checkRopeReadyAnime() || checkUpperAnime(dRes_INDEX_LKANM_BCK_ROPETHROW_e);
 }
 
 /* 80142D68-80142E0C       .text freeRopeItem__9daPy_lk_cFv */
@@ -56,11 +57,11 @@ f32 daPy_lk_c::checkRopeRoofHit(s16 param_0) {
 /* 80142E98-80142FC8       .text changeRopeSwingProc__9daPy_lk_cFv */
 int daPy_lk_c::changeRopeSwingProc() {
     if (mCyl.ChkCoHit() != 0) {
-        fopAc_ac_c* pfVar2 = mCyl.GetCoHitAc();
-        if ((pfVar2 != NULL) && (fopAcM_GetName(pfVar2) == fpcNm_HIMO3_e)) {
-            cXyz local_24 = pfVar2->current.pos - current.pos;
-            if ((local_24.abs() - 95.0f >= 100.0f) && (pfVar2->current.pos.y > current.pos.y)) {
-                return procRopeSwing_init(pfVar2, 0x1800);
+        fopAc_ac_c* hit_actor = mCyl.GetCoHitAc();
+        if (hit_actor != NULL && fopAcM_GetName(hit_actor) == fpcNm_HIMO3_e) {
+            cXyz local_24 = hit_actor->current.pos - current.pos;
+            if (local_24.abs() - 95.0f >= 100.0f && hit_actor->current.pos.y > current.pos.y) {
+                return procRopeSwing_init(hit_actor, 0x1800);
             }
         }
     }
@@ -73,7 +74,7 @@ int daPy_lk_c::changeRopeEndProc(int param_0) {
     if (doTrigger() || cancelTrigger() || (!checkRopeTag() && itemTrigger())) {
         freeRopeItem();
         voiceStart(6);
-        if ((cancelTrigger()) && (!checkBossGomaStage())) {
+        if (cancelTrigger() && !checkBossGomaStage()) {
             setAnimeEquipSword(0);
         }
         if (param_0 != 0) {
@@ -200,10 +201,10 @@ void daPy_lk_c::setBlendRopeMoveAnime(int param_0) {
             }
             dVar6 = 1.0f;
             cLib_chaseF(&sp08, dVar6, 0.05f);
-            if (((mProcVar0.m34D0 == -1) && (M_PI / 2 < f30)) || (mProcVar0.m34D0 == 1 && (-M_PI / 2 < f30))) {
+            if ((mProcVar0.m34D0 == -1 && M_PI / 2 < f30) || (mProcVar0.m34D0 == 1 && -M_PI / 2 < f30)) {
                 mProcVar0.m34D0 = 0;
             }
-        } else if (((param_0 != 0) || (mStickDistance <= 0.05f)) || (spActionButton())) {
+        } else if (param_0 != 0 || mStickDistance <= 0.05f || spActionButton()) {
             if (f2 <= M_PI / 2) {
                 anm = ANM_ROPESWINGB;
             } else {
@@ -217,12 +218,12 @@ void daPy_lk_c::setBlendRopeMoveAnime(int param_0) {
                 dVar6 = 0.6f;
             }
         } else {
-            if ((M_PI / 2 > f30) && (M_PI / 10 <= f30)) {
+            if (M_PI / 2 > f30 && M_PI / 10 <= f30) {
                 setMoveAnime(0.0f, m_HIO->mItem.mRope.m.field_0x18, 1.0f, ANM_ROPECATCH, ANM_ROPESWINGF, 7, 7.0f);
                 mProcVar0.m34D0 = -1;
                 return;
             }
-            if ((-M_PI / 2 > f30) && (-2.8274333f <= f30)) {
+            if (-M_PI / 2 > f30 && -2.8274333f <= f30) {
                 setMoveAnime(0.0f, m_HIO->mItem.mRope.m.field_0x18, 1.0f, ANM_ROPECATCH, ANM_ROPESWINGB, 7, 7.0f);
                 mProcVar0.m34D0 = 1;
                 return;
@@ -333,20 +334,18 @@ BOOL daPy_lk_c::checkNextActionRopeReady() {
         } else if (!checkAttentionLock()) {
             dComIfGp_setDoStatus(dActStts_RETURN_e);
         }
-        if (((itemButton()) && (mEquipItem == getReadyItem())) && (m355C == 0)) {
+        if (itemButton() && mEquipItem == getReadyItem() && m355C == 0) {
             m355E = 1;
-        } else {
-            if ((!itemButton()) && (m355E != 0)) {
-                m355E = 0;
-                if (throwRope()) {
-                    return true;
-                }
+        } else if (!itemButton() && m355E != 0) {
+            m355E = 0;
+            if (throwRope()) {
+                return true;
             }
         }
         if (cancelItemUpperReadyAnime()) {
             return true;
         }
-    } else if (((rope->m02DC == 5) || (rope->m02DC == 8)) || (rope->m02DC == 9)) {
+    } else if (rope->m02DC == 5 || rope->m02DC == 8 || rope->m02DC == 9) {
         return procRopeThrowCatch_init();
     } else {
         checkNextRopeMode();
@@ -360,7 +359,7 @@ BOOL daPy_lk_c::checkNextActionRopeReady() {
 
 /* 80143DF4-80143EAC       .text checkNextRopeMode__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkNextRopeMode() {
-    if ((!checkRopeReadyAnime()) && (!fopAcM_GetParam(mActorKeepEquip.getActor()))) {
+    if (!checkRopeReadyAnime() && !fopAcM_GetParam(mActorKeepEquip.getActor())) {
         m355C = 10;
         m355E = 0;
         seStartOnlyReverb(JA_SE_LK_ITEM_TAKEOUT);
@@ -421,8 +420,8 @@ BOOL daPy_lk_c::procRopeSubject() {
         return true;
     }
 
-    himo2_class* grapple = (himo2_class*)mActorKeepEquip.getActor();
-    if (fopAcM_GetParam(grapple) == 0) {
+    himo2_class* rope = (himo2_class*)mActorKeepEquip.getActor();
+    if (fopAcM_GetParam(rope) == 0) {
         dComIfGp_clearPlayerStatus0(0, daPyStts0_UNK40000_e);
     } else {
         dComIfGp_setPlayerStatus0(0, daPyStts0_UNK40000_e);
@@ -442,7 +441,7 @@ BOOL daPy_lk_c::procRopeSubject() {
         mSightPacket.onDrawFlg();
         mSightPacket.setPos(&sight);
 
-        if (grapple->setTargetPos(&sight, &m3600, &m3604)) {
+        if (rope->setTargetPos(&sight, &m3600, &m3604)) {
             mSightPacket.onDrawFlg();
             if (mSightPacket.getLockFlg()) {
                 mSightPacket.incFrame();
@@ -480,7 +479,7 @@ BOOL daPy_lk_c::procRopeReady_init() {
     if (m3600 >= 0.0f) {
         m370C.y = rope->current.pos.y - m3600;
     } else {
-        if ((checkBossGomaStage()) && (rope->current.pos.y - current.pos.y > 700.0f)) {
+        if (checkBossGomaStage() && rope->current.pos.y - current.pos.y > 700.0f) {
             m370C.y = rope->current.pos.y - 700.0f;
         } else {
             mGndChk.SetPos(&rope->current.pos);
@@ -517,7 +516,7 @@ BOOL daPy_lk_c::procRopeReady() {
     cXyz local_48 = m370C - current.pos;
     f32 dVar5 = local_48.abs();
     cLib_chaseF(&m35A0, 50.0f, 5.0f);
-    shape_angle.x = (0.025f * (mProcVar2.m34D4 * m35A0));
+    shape_angle.x = mProcVar2.m34D4 * m35A0 * 0.025f;
     if (dVar5 > m35A0) {
         current.pos += local_48 * (m35A0 / dVar5);
     }
@@ -528,35 +527,35 @@ BOOL daPy_lk_c::procRopeReady() {
 }
 
 /* 80144620-80144C58       .text procRopeSwing_init__9daPy_lk_cFP10fopAc_ac_cs */
-BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
-    himo2_class* pfVar7 = (himo2_class*)param_0;
+BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* rope_actor, s16 param_1) {
+    fopAc_ac_c* i_rope_actor = rope_actor;
     commonProcInit(daPyProc_ROPE_SWING_e);
     
     cXyz local_84;
-    if (param_0 != NULL) {
-        mActorKeepRope.setData(param_0);
-        if (fopAcM_GetName(param_0) == fpcNm_HIMO3_e) {
-            fopAcM_SetParam(param_0, 1);
+    if (rope_actor != NULL) {
+        mActorKeepRope.setData(rope_actor);
+        if (fopAcM_GetName(rope_actor) == fpcNm_HIMO3_e) {
+            himo3_class* rope = (himo3_class*)rope_actor;
+            fopAcM_SetParam(rope_actor, 1);
             deleteEquipItem(TRUE);
             mEquipItem = dItemNo_GRAPPLING_HOOK_e;
-            local_84 = param_0->current.pos - current.pos;
-            f32 dVar8 = (local_84.abs() - 95.0f);
-            cXyz* temp = &((himo2_class*)param_0)->m1120[34].m10;
-            if (dVar8 > DEMO_SELECT(temp->z, temp->y)) {
-                dVar8 = DEMO_SELECT(temp->z, temp->y);
+            local_84 = rope_actor->current.pos - current.pos;
+            f32 dVar8 = local_84.abs() - 95.0f;
+            if (dVar8 > rope->getPlayerMoveLength()) {
+                dVar8 = rope->getPlayerMoveLength();
             }
             local_84.normalize();
-            current.pos = (param_0->current.pos - (local_84 * dVar8));
+            current.pos = rope_actor->current.pos - local_84 * dVar8;
         }
     } else {
-        param_0 = mActorKeepRope.getActor();
+        rope_actor = mActorKeepRope.getActor();
     }
     
-    local_84 = param_0->current.pos - current.pos;
+    local_84 = rope_actor->current.pos - current.pos;
     m35A0 = local_84.abs();
     m35A4 = std::sqrtf(2.0f / m35A0);
     f32 dVar11 = (M_PI / 2.0f) / m35A4;
-    if (pfVar7 != NULL) {
+    if (i_rope_actor != NULL) {
         mProcVar2.m34D4 = m_HIO->mItem.mRope.m.field_0x0;
         if (DEMO_SELECT(!strcmp(dComIfGp_getStartStageName(), "GanonK"), checkSpecialRope())) {
             mProcVar2.m34D4 /= DEMO_SELECT(3, 8.0f);
@@ -574,7 +573,7 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
             sVar4 = -mProcVar2.m34D4;
         }
 
-        f32 dVar8 = ((f32)sVar4 / mProcVar2.m34D4);
+        f32 dVar8 = (f32)sVar4 / mProcVar2.m34D4;
         m35A8 = cM_atan2f(dVar8, std::sqrtf(1.0f - (dVar8 * dVar8))) / m35A4;
         f32 dVar8_3 = std::sqrtf(local_78.y * local_78.y + local_78.z * local_78.z);
         mProcVar3.m34D6 = cM_atan2s(-local_78.x, dVar8_3);
@@ -597,21 +596,21 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* param_0, s16 param_1) {
     mNormalSpeed = 0.0f;
     speed.y = 0.0f;
     gravity = 0.0f;
-    mRopePos = param_0->current.pos;
+    mRopePos = rope_actor->current.pos;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK800000_e);
-    if ((pfVar7 == NULL) || (mActorKeepEquip.getActor() != NULL)) {
+    if (i_rope_actor == NULL || mActorKeepEquip.getActor() != NULL) {
         offModeFlg(ModeFlg_00000400);
         onModeFlg(ModeFlg_00000100);
         setTextureAnime(8, 0);
     } else {
         setBlendRopeMoveAnime(1);
     }
-    if (pfVar7 == NULL) {
+    if (i_rope_actor == NULL) {
         m_old_fdata->initOldFrameMorf(15.0f, 0, 0x2A);
     }
     mFrameCtrlUnder[UNDER_MOVE0_e].setStart(m_HIO->mItem.mRope.m.field_0x1C);
     mFrameCtrlUnder[UNDER_MOVE0_e].setEnd(m_HIO->mItem.mRope.m.field_0x4);
-    if ((pfVar7 != NULL) && (mActorKeepEquip.getActor() == NULL)) {
+    if (i_rope_actor != NULL && mActorKeepEquip.getActor() == NULL) {
         mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
     }
     mProcVar0.m34D0 = 0;
@@ -642,14 +641,14 @@ BOOL daPy_lk_c::procRopeSwing() {
     f32 f30_2;
 #if VERSION == VERSION_DEMO
     if (strcmp(dComIfGp_getStartStageName(), "GanonK") == 0) {
-        if ((0.0f <= f30) && (f30 <= M_PI / 2)) {
+        if (0.0f <= f30 && f30 <= M_PI / 2) {
             f30_2 = -0.1f * cM_fsin(f30);
         } else if (f30 <= -M_PI / 2) {
             f30_2 = 0.1f * cM_fsin(f30);
         } else {
             f30_2 = 0.25f;
         }
-        if ((0.0f <= dVar13) && (dVar13 <= M_PI / 2)) {
+        if (0.0f <= dVar13 && dVar13 <= M_PI / 2) {
             dVar13 = -0.1f * cM_fsin(dVar13);
         } else if (dVar13 <= -M_PI / 2) {
             dVar13 = 0.1f * cM_fsin(dVar13);
@@ -664,14 +663,14 @@ BOOL daPy_lk_c::procRopeSwing() {
     }
 #endif
     else {
-        if ((0.0f <= f30) && (f30 <= M_PI / 2)) {
+        if (0.0f <= f30 && f30 <= M_PI / 2) {
             f30_2 = -0.45f * cM_fsin(f30);
         } else if (f30 <= -M_PI / 2) {
             f30_2 = 0.45f * cM_fsin(f30);
         } else {
             f30_2 = 0.0f;
         }
-        if ((0.0f <= dVar13) && (dVar13 <= M_PI / 2)) {
+        if (0.0f <= dVar13 && dVar13 <= M_PI / 2) {
             dVar13 = -0.45f * cM_fsin(dVar13);
         } else if (dVar13 <= -M_PI / 2) {
             dVar13 = 0.45f * cM_fsin(dVar13);
@@ -692,7 +691,7 @@ BOOL daPy_lk_c::procRopeSwing() {
         f30_2 = f30_2 - M_PI * 2;
         m35AC = f30_2 / m35A4;
     }
-    if ((checkModeFlg(ModeFlg_00000400)) && (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f)) {
+    if (checkModeFlg(ModeFlg_00000400) && mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         offModeFlg(ModeFlg_00000400);
         onModeFlg(ModeFlg_00000100);
         setTextureAnime(8, 0);
@@ -768,9 +767,9 @@ BOOL daPy_lk_c::procRopeSwing() {
         }
     }
 
-    f32 f30_3 = ((f32)mProcVar2.m34D4 / r30);
+    f32 f30_3 = (f32)mProcVar2.m34D4 / r30;
     if (changeRopeEndProc(0)) {
-        dVar13 = (m35A0 / (100.0f * m_HIO->mItem.mRope.m.field_0x14));
+        dVar13 = m35A0 / (100.0f * m_HIO->mItem.mRope.m.field_0x14);
         if (dVar13 < 1.0f) {
             dVar13 = 1.0f;
         }
@@ -782,7 +781,7 @@ BOOL daPy_lk_c::procRopeSwing() {
         speed.y = m_HIO->mItem.mRope.m.field_0x10 * f30_3;
         procFall_init(0, m_HIO->mWallCatch.m.field_0x54);
         onNoResetFlg1(daPyFlg1_UNK8000000);
-    } else if ((mProcVar2.m34D4 == 0) && (mProcVar3.m34D6 == 0)) {
+    } else if (mProcVar2.m34D4 == 0 && mProcVar3.m34D6 == 0) {
         procRopeHangWait_init(0);
     } else if (f30_3 > 0.6f) {
         if (cM_fcos(sp0C) > 0.77f) {
@@ -881,7 +880,7 @@ BOOL daPy_lk_c::procRopeHangWait() {
                         );
                     }
                 }
-            } else if ((direction == DIR_FORWARD) || (direction == DIR_BACKWARD)) {
+            } else if (direction == DIR_FORWARD || direction == DIR_BACKWARD) {
                 procRopeSwingStart_init();
             } else {
                 r29 = 0;
@@ -1042,10 +1041,8 @@ BOOL daPy_lk_c::procRopeDown_init() {
             }
         }
     } else {
-        himo2_class* rope = (himo2_class*)mActorKeepRope.getActor();
-        cXyz* temp = &rope->m1120[34].m10;
-        f32 temp2 = DEMO_SELECT(temp->z, temp->y);
-        m35A4 = mRopePos.y - temp2;
+        himo3_class* rope = (himo3_class*)mActorKeepRope.getActor();
+        m35A4 = mRopePos.y - rope->getPlayerMoveLength();
     }
     
     if (current.pos.y <= m35A4) {
@@ -1186,11 +1183,11 @@ BOOL daPy_lk_c::procRopeMove() {
     if (!checkItemModeActorPointer()) {
         return true;
     }
-    if ((fopAcM_GetParam(mActorKeepEquip.getActor()) == 0) && (checkRopeReadyAnime())) {
+    if (fopAcM_GetParam(mActorKeepEquip.getActor()) == 0 && checkRopeReadyAnime()) {
         if (mpAttnActorLockOn != NULL) {
             setSpeedAndAngleAtnActor();
         } else {
-            if ((m355E == 0) && (!checkAttentionLock())) {
+            if (m355E == 0 && !checkAttentionLock()) {
                 resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
             } else {
                 setSpeedAndAngleAtn();
@@ -1243,7 +1240,7 @@ BOOL daPy_lk_c::procRopeThrowCatch() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f) {
         mProcVar0.m34D0--;
         himo2_class* rope = (himo2_class*)mActorKeepEquip.getActor();
-        if (rope->m02DC == 0 || (mProcVar0.m34D0 == 0)) {
+        if (rope->m02DC == 0 || mProcVar0.m34D0 == 0) {
             checkNextRopeMode();
         }
     }

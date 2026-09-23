@@ -48,8 +48,8 @@ void JASystem::TDSPQueue::deQueue() {
 /* 8028B224-8028B288       .text enQueue__Q28JASystem9TDSPQueueFPQ28JASystem8TChannel */
 void JASystem::TDSPQueue::enQueue(TChannel* param_1) {
     JSUListIterator<TChannel> it;
-    for (it = sDspQueueList.getFirst(); it != sDspQueueList.getEnd(); it++) {
-        if (param_1->getNoteOnPriority() > it->getNoteOnPriority()) {
+    for (it = sDspQueueList.getFirst(); it != sDspQueueList.getEnd(); ++it) {
+        if (param_1->getNoteOnPriority() > (*it).getNoteOnPriority()) {
             break;
         }
     }

@@ -134,6 +134,7 @@ static BOOL daTama_Draw(daTama_c* i_this) {
 
 /* 000006B8-000006C0       .text daTama_IsDelete__FP8daTama_c */
 static BOOL daTama_IsDelete(daTama_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

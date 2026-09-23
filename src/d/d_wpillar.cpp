@@ -2,7 +2,6 @@
 #include "d/d_wpillar.h"
 #include "f_op/f_op_kankyo.h"
 #include "d/actor/d_a_player_main.h"
-#include "cstdint.h"
 
 /* 8023E968-8023E9E4       .text jointCallBack__10dWpillar_cFi */
 int dWpillar_c::jointCallBack(int i_jointNo) {
@@ -175,7 +174,7 @@ cPhs_State dWpillar_c::create() {
             modelData->getJointNodePointer(i)->setCallBack(dWpillar_jointCallBack);
         }
 
-        mpModel->setUserArea((std::uintptr_t)this);
+        mpModel->setUserArea((uintptr_t)this);
         dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON01, &mPos, NULL, &mScale, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
         dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON02, &mPos, NULL, &mScale, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
         dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON03, &mPos, NULL, &mScale, 0xFF, &dPa_control_c::mSingleRippleEcallBack);

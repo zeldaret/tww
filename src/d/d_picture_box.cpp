@@ -194,17 +194,17 @@ void dJle_Pb_c::screenSet2() {
     ((J2DTextBox *)(pane_tx[2].pane))->setFont(font0);
     ((J2DTextBox *)(pane_tx[3].pane))->setFont(font1);
 
-#if VERSION <= VERSION_JPN
     J2DTextBox::TFontSize fontSize;
+    J2DTextBox::TFontSize rubySize;
+#if VERSION <= VERSION_JPN
     if (g_msgDHIO.field_0x08 == 0) {
         fontSize.mSizeX = fontSize.mSizeY = (int)g_msgHIO.field_0x58;
-        J2DTextBox::TFontSize fontSize2;
-        fontSize2.mSizeX = fontSize2.mSizeY = g_msgHIO.field_0x68;
+        rubySize.mSizeX = rubySize.mSizeY = g_msgHIO.field_0x68;
 
         ((J2DTextBox *)(pane_tx[0].pane))->setFontSize(fontSize);
-        ((J2DTextBox *)(pane_tx[1].pane))->setFontSize(fontSize2);
+        ((J2DTextBox *)(pane_tx[1].pane))->setFontSize(rubySize);
         ((J2DTextBox *)(pane_tx[2].pane))->setFontSize(fontSize);
-        ((J2DTextBox *)(pane_tx[3].pane))->setFontSize(fontSize2);
+        ((J2DTextBox *)(pane_tx[3].pane))->setFontSize(rubySize);
     } else {
         fontSize.mSizeX = fontSize.mSizeY = g_msgHIO.field_0x70;
 
@@ -212,7 +212,6 @@ void dJle_Pb_c::screenSet2() {
         ((J2DTextBox *)(pane_tx[2].pane))->setFontSize(fontSize);
     }
 #else
-    J2DTextBox::TFontSize fontSize;
     fontSize.mSizeX = fontSize.mSizeY = g_msgHIO.field_0x70;
 
     ((J2DTextBox *)(pane_tx[0].pane))->setFontSize(fontSize);
@@ -989,7 +988,7 @@ void dJle_Pb_c::shutterChange() {
 
 /* 80228650-80228788       .text moveCamera__9dJle_Pb_cFv */
 void dJle_Pb_c::moveCamera() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
   
     if (mModeSubState == PB_SUB_CONFIRM_e) {
         camera->mCamera.Stay();
@@ -1626,11 +1625,6 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     char colorTag[0x1C];
     char whiteTag[0x1C];
 
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
-
     u32 color = fopMsgM_getColorTable(0);
 
     u8 firstChoiceSeen = 0;
@@ -1650,7 +1644,7 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
     mMsgIconDrawState = -1;
 
     if (head_p != NULL) {
-        JKRFileLoader::removeResource(head_p, NULL);
+        JKRRemoveResource(head_p, NULL);
         head_p = NULL;
     }
 
@@ -1724,12 +1718,12 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
 
         if (icon == fopMsgM_Icon_SELECT_YOKO_LEFT_e) {
             mChoiceCursorX0 = (int)(
-                ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.x +
+                ((J2DTextBox*)pane_tx[0].pane)->getBounds().i.x +
                 (f32)mMsgDataProc.getIconPosX(i)
             );
 
             mChoiceCursorY = (int)(
-                ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.y +
+                ((J2DTextBox*)pane_tx[0].pane)->getBounds().i.y +
                 (f32)(
                     halfLine *
                     ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) +
@@ -1750,12 +1744,12 @@ void dJle_Pb_c::messageSet(u32 msgNo) {
             }
         } else if (icon == fopMsgM_Icon_SELECT_YOKO_RIGHT_e) {
             mChoiceCursorX1 = (int)(
-                ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.x +
+                ((J2DTextBox*)pane_tx[0].pane)->getBounds().i.x +
                 (f32)mMsgDataProc.getIconPosX(i)
             );
 
             mChoiceCursorYAlt = (int)(
-                ((J2DTextBox*)pane_tx[0].pane)->mBounds.i.y +
+                ((J2DTextBox*)pane_tx[0].pane)->getBounds().i.y +
                 (f32)(
                     halfLine *
                     ((1 - mMsgLineCount) +
@@ -2179,9 +2173,9 @@ void dJle_Pb_c::draw() {
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
                     f32 lineSpace = base->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
-                    int r5 = posX + base->mBounds.i.x;
+                    int r5 = posX + base->getBounds().i.x;
                     f32 f1 = r9 * ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) + posY * 2);
-                    int r6 = f1 + base->mBounds.i.y;
+                    int r6 = f1 + base->getBounds().i.y;
                     u8 alpha = base->getAlpha();
                     
                     fopMsgM_outFontDraw(
@@ -2241,9 +2235,9 @@ void dJle_Pb_c::draw() {
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
                     f32 lineSpace = base->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
-                    int r5 = posX + base->mBounds.i.x;
+                    int r5 = posX + base->getBounds().i.x;
                     f32 f1 = r9 * ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) + posY * 2);
-                    int r6 = f1 + base->mBounds.i.y;
+                    int r6 = f1 + base->getBounds().i.y;
                     u8 alpha = base->getAlpha();
                     
                     fopMsgM_outFontDraw(
@@ -2268,7 +2262,7 @@ void dJle_Pb_c::draw() {
 /* 8022B9E8-8022BB3C       .text _delete__9dJle_Pb_cFP10JKRExpHeap */
 void dJle_Pb_c::_delete(JKRExpHeap* i_heap) {
     if (head_p != NULL) {
-        JKRFileLoader::removeResource(head_p, NULL);
+        JKRRemoveResource(head_p, NULL);
     }
 
     if (mDoGph_getCaptureStep()) {

@@ -279,7 +279,7 @@ cPhs_State daObjBarrel2::Act_c::_create() {
                 &sp24,
                 prm_get_coming() ? 1 : 0
             );
-            m45C = 3.4028235e+38f;
+            m45C = FLOAT_MAX;
             m468 = 0;
             m470 = 0;
             m460 = fpcM_ERROR_PROCESS_ID_e;
@@ -725,7 +725,7 @@ void daObjBarrel2::Act_c::eff_explode() {
 
     fopAcM_seStart(this, JA_SE_OBJ_BARREL_BOMB, 0);
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     csXyz sp18;
     sp18.x = -fopCamM_GetAngleX(camera);
     sp18.y = fopCamM_GetAngleY(camera) - -0x8000;
@@ -763,7 +763,7 @@ void daObjBarrel2::Act_c::set_item_position() {
         raceItem->startOffsetPos();
         m45C = fopAcM_searchPlayerDistance2(raceItem);
     } else {
-        m45C = 3.4028235e+38f;
+        m45C = FLOAT_MAX;
     }
 }
 
@@ -777,7 +777,7 @@ void daObjBarrel2::Act_c::item_drop_init(float arg1) {
         raceItem->endOffsetPos(-7.0f, &sp08, arg1, 0.0f, (csXyz*)&csXyz::Zero);
         m45C = fopAcM_searchPlayerDistance2(raceItem);
     } else {
-        m45C = 3.4028235e+38f;
+        m45C = FLOAT_MAX;
     }
 }
 
@@ -786,7 +786,7 @@ void daObjBarrel2::Act_c::item_drop() {
     if (M_tmp_item_actor != NULL) {
         m45C = fopAcM_searchPlayerDistance2(M_tmp_item_actor);
     } else {
-        m45C = 3.4028235e+38f;
+        m45C = FLOAT_MAX;
     }
 }
 

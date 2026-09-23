@@ -8,10 +8,10 @@
 typedef int (*process_method_func)(void*);
 
 typedef struct process_method_class {
-    process_method_func mpCreateFunc;
-    process_method_func mpDeleteFunc;
-    process_method_func mpExecuteFunc;
-    process_method_func mpIsDeleteFunc;
+    /* 0x00 */ process_method_func mpCreateFunc;
+    /* 0x04 */ process_method_func mpDeleteFunc;
+    /* 0x08 */ process_method_func mpExecuteFunc;
+    /* 0x0C */ process_method_func mpIsDeleteFunc;
 } process_method_class;
 
 int fpcMtd_Method(process_method_func pFunc, void* pUserData);

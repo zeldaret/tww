@@ -36,7 +36,7 @@ void mflft_class::setLiftUp(cXyz arg1) {
 }
 
 /* 000001AC-00000408       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW*, fopAc_ac_c* arg1, fopAc_ac_c* arg2) {
+static void ride_call_back(dBgW*, fopAc_ac_c* arg1, fopAc_ac_c* arg2) {
     mflft_class* i_this = (mflft_class*)arg1;
 
     cMtx_YrotS(*calc_mtx, -i_this->actor.current.angle.y);

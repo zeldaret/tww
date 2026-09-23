@@ -9,7 +9,7 @@
 // Align X to the previous N bytes (N must be power of two)
 #define ALIGN_PREV(X, N) ((X) & ~((N)-1))
 // Align X to the next N bytes (N must be power of two)
-#define ALIGN_NEXT(X, N) ALIGN_PREV(((X) + (N)-1), N)
+#define ALIGN_NEXT(X, N) ALIGN_PREV(((X) + (N-1)), N)
 #define IS_ALIGNED(X, N) (((X) & ((N)-1)) == 0)
 #define IS_NOT_ALIGNED(X, N) (((X) & ((N)-1)) != 0)
 
@@ -78,6 +78,9 @@ extern void __sync();
 #else
 #define SJIS(character, value) ((u32)value)
 #endif
+
+// Hack to make strings with no references appear in the string pool for matching.
+#define DEAD_STRING(s) OSReport(s)
 
 // Hack to trick the compiler into not inlining functions that use this macro.
 #define FORCE_DONT_INLINE \

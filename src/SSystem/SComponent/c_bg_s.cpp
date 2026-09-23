@@ -72,7 +72,7 @@ bool cBgS::Regist(cBgW* bgw, fpc_ProcID pid, void* actor) {
 }
 
 static void dummy() {
-    OSReport("c_bg_s_poly_info.h");
+    DEAD_STRING("c_bg_s_poly_info.h");
 }
 
 /* 80246600-8024669C       .text Release__4cBgSFP4cBgW */
@@ -239,7 +239,7 @@ cM3dGPla* cBgS::GetTriPla(int bg_index, int poly_index) const {
 
 static void dummy2() {
     // from c_bg_s_poly_info.h
-    OSReport("0 <= grp_index && grp_index < pm_bgd->m_g_num");
+    DEAD_STRING("0 <= grp_index && grp_index < pm_bgd->m_g_num");
 }
 
 /* 802470B8-80247178       .text GetTriPnt__4cBgSCFR13cBgS_PolyInfoP4cXyzP4cXyzP4cXyz */

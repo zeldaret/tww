@@ -254,7 +254,6 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 
 /* 00000A6C-00000E30       .text daSk_Create__FP10fopAc_ac_c */
 static cPhs_State daSk_Create(fopAc_ac_c* a_this) {
-    /* Nonmatching */
     static dCcD_SrcSph body_co_sph_src = {
         // dCcD_SrcGObjInf
         {

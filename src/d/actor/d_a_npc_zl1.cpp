@@ -58,7 +58,7 @@ struct hio_prm_c {
     daNpc_Zl1_HIO_c();
     virtual ~daNpc_Zl1_HIO_c() {};
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -128,7 +128,7 @@ static const char* l_evn_tbl[4] = {
     "yuukaigo",
     "ooi",
     "majyuu_shinnyuu",
-    "nakaniwa"
+    "nakaniwa",
 };
 
 /* 00000198-000001F8       .text __ct__18daNpc_Zl1_matAnm_cFv */
@@ -341,15 +341,15 @@ bool daNpc_Zl1_c::init_ZL1_4() {
 
 /* 00000B48-00000CC0       .text init_ZL1_5__11daNpc_Zl1_cFv */
 bool daNpc_Zl1_c::init_ZL1_5() {
-    if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) {
+    if(!dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) {
         set_action(&daNpc_Zl1_c::optn_action1, NULL);
         fopAcM_OffStatus(this, fopAcStts_CULL_e | fopAcStts_NOCULLEXEC_e);
 #if VERSION > VERSION_DEMO
-        if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3804)) {
+        if(!dComIfGs_isEventBit(dSv_event_flag_c::HYRULE_COURTYARD_CUTSCENE)) {
             fopAcM_OnStatus(this, fopAcStts_UNK4000_e);
             field_0x84A = 6;
-            mEventIdx[4] = field_0x84A + -3;
-            fopAcM_orderOtherEventId(this, mEventIdx[mEventIdx[4]]);
+            field_0x7A8 = field_0x84A + -3;
+            fopAcM_orderOtherEventId(this, mEventIdx[field_0x7A8]);
             dComIfGp_evmng_cancelStartDemo();
         } else {
 #endif
@@ -1057,22 +1057,22 @@ void daNpc_Zl1_c::eventOrder() {
             fopAcM_orderSpeakEvent(this);
         }
     } else if(field_0x84A >= 3) {
-        mEventIdx[4] = field_0x84A - 3;
-        fopAcM_orderOtherEventId(this, mEventIdx[mEventIdx[4]]);
+        field_0x7A8 = field_0x84A - 3;
+        fopAcM_orderOtherEventId(this, mEventIdx[field_0x7A8]);
     }
 }
 
 /* 0000213C-00002280       .text checkOrder__11daNpc_Zl1_cFv */
 void daNpc_Zl1_c::checkOrder() {
-    static const f32 a_start_pos[] = {-229.76634f, 37.46317f, 305.2134f};
+    static const Vec a_start_pos[] = {-229.76634f, 37.46317f, 305.2134f};
     if(eventInfo.checkCommandDemoAccrpt()) {
-        if(dComIfGp_evmng_startCheck(mEventIdx[mEventIdx[4]]) && field_0x84A >= 3) {
-            switch(mEventIdx[4]) {
+        if(dComIfGp_evmng_startCheck(mEventIdx[field_0x7A8]) && field_0x84A >= 3) {
+            switch(field_0x7A8) {
                 case 0:
                     field_0x7D3 = true;
                     break;
                 case 2:
-                    dComIfGs_setRestartRoom(*(cXyz*)a_start_pos, 0x4000, 0); // fake match probably
+                    dComIfGs_setRestartRoom(*static_cast<const cXyz*>(a_start_pos), 0x4000, 0);
                     field_0x7C9 = true;
                     break;
                 case 3:
@@ -1837,8 +1837,8 @@ int daNpc_Zl1_c::isEventEntry() {
 
 /* 0000383C-00003A1C       .text event_proc__11daNpc_Zl1_cFi */
 void daNpc_Zl1_c::event_proc(int i_staffIdx) {
-    if(dComIfGp_evmng_endCheck(mEventIdx[mEventIdx[4]])) {
-        switch(mEventIdx[4]) {
+    if(dComIfGp_evmng_endCheck(mEventIdx[field_0x7A8])) {
+        switch(field_0x7A8) {
             case 0:
                 field_0x7D3 = false;
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0802);
@@ -1861,7 +1861,7 @@ void daNpc_Zl1_c::event_proc(int i_staffIdx) {
                 field_0x7C9 = false;
                 break;
             case 3:
-                dComIfGs_onEventBit(dSv_event_flag_c::UNK_3804);
+                dComIfGs_onEventBit(dSv_event_flag_c::HYRULE_COURTYARD_CUTSCENE);
                 setStt(3);
                 field_0x7CB = false;
                 break;
@@ -1929,12 +1929,12 @@ void daNpc_Zl1_c::setStt(s8 param_1) {
 /* 00003B8C-00003D14       .text chk_areaIN__11daNpc_Zl1_cFffs4cXyz */
 bool daNpc_Zl1_c::chk_areaIN(f32 param_1, f32 param_2, s16 param_3, cXyz param_4) {
     
-    f32 abs1 = (dComIfGp_getPlayer(0)->current.pos - param_4).absXZ();
-    f32 abs2 = dComIfGp_getPlayer(0)->current.pos.y - param_4.y;
+    f32 distXZ = (dComIfGp_getPlayer(0)->current.pos - param_4).absXZ();
+    f32 distY = dComIfGp_getPlayer(0)->current.pos.y - param_4.y;
     s16 angleY = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
     s16 angle = (angleY - current.angle.y);
     
-    if(abs1 < param_1 && std::fabsf(abs2) < param_2 && abs(angle) < param_3) {
+    if(distXZ < param_1 && std::fabsf(distY) < param_2 && abs(angle) < param_3) {
         return true;
     }
     return false;
@@ -2268,7 +2268,7 @@ BOOL daNpc_Zl1_c::demo_4() {
 /* 00005718-00005954       .text optn_1__11daNpc_Zl1_cFv */
 BOOL daNpc_Zl1_c::optn_1() {
     f32 temp = l_HIO.mPrmTbl.field_34 + 100.0f;
-    f32 actorDist = fopAcM_searchPlayerDistance2(this);
+    f32 actorDistSq = fopAcM_searchPlayerDistance2(this);
     if(field_0x7D7) {
         if(chk_talk()) {
             setStt(2);
@@ -2282,12 +2282,12 @@ BOOL daNpc_Zl1_c::optn_1() {
     field_0x84A = 0;
     field_0x7D8 = true;
 
-    if(actorDist >= temp*temp) {
+    if(actorDistSq >= SQUARE(temp)) {
         s16 angle = fopAcM_searchPlayerAngleY(this);
         cLib_addCalcAngleS(&current.angle.y, angle, 4, 0x800, 0x80);
         if(abs((s16)(angle - current.angle.y)) < 0x1800) {
             setStt(4);
-            if(actorDist > (l_HIO.mPrmTbl.field_4C * l_HIO.mPrmTbl.field_4C)) {
+            if(actorDistSq > SQUARE(l_HIO.mPrmTbl.field_4C)) {
                 field_0x7AE = l_HIO.mPrmTbl.field_32;
                 field_0x7B0 = l_HIO.mPrmTbl.field_2E;
             } else {
@@ -2325,20 +2325,17 @@ BOOL daNpc_Zl1_c::optn_1() {
 
 /* 00005954-00005C68       .text optn_2__11daNpc_Zl1_cFv */
 BOOL daNpc_Zl1_c::optn_2() {
-
     if(field_0x7CC) {
         field_0x7CC = move_jmp(); // maybe rename field to something mIsMoveJumped
         return TRUE;
     }
-    
 
     f32 actorDist = fopAcM_searchPlayerDistance2(this);
 
-    f32 temp = actorDist - (l_HIO.mPrmTbl.field_34 * l_HIO.mPrmTbl.field_34);
+    f32 temp = actorDist - SQUARE(l_HIO.mPrmTbl.field_34);
     f32 temp2 = 0.0f;
     if(temp > 0.0f) {
-        temp2 = temp;
-        temp2 = std::sqrtf(temp2);
+        temp2 = std::sqrtf(temp);
         temp2 = l_HIO.mPrmTbl.field_38 * temp2;
         temp2 = cLib_maxLimit(temp2, l_HIO.mPrmTbl.field_3C);
     }
@@ -2497,7 +2494,7 @@ int daNpc_Zl1_c::demo_action2(void*) {
 int daNpc_Zl1_c::optn_action1(void*) {
     switch(field_0x850) {
         case 0:
-            if(!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3804)) {
+            if(!dComIfGs_isEventBit(dSv_event_flag_c::HYRULE_COURTYARD_CUTSCENE)) {
                 setStt(5);
                 field_0x850++;
             } else {
