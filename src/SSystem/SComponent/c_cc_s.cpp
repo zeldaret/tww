@@ -200,9 +200,7 @@ void cCcS::ChkCo() {
 
 /* 8024352C-80243544       .text CalcTgPlusDmg__4cCcSFP8cCcD_ObjP8cCcD_ObjP9cCcD_SttsP9cCcD_Stts */
 void cCcS::CalcTgPlusDmg(cCcD_Obj* at, cCcD_Obj* tg, cCcD_Stts* at_stts, cCcD_Stts* tg_stts) {
-    s32 atp = at->GetAtAtp();
-    if (tg_stts->GetDmg() >= atp)
-        return;
+    int atp = at->GetAtAtp();
     tg_stts->PlusDmg(atp);
 }
 
