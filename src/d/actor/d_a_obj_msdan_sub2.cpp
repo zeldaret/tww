@@ -8,6 +8,7 @@
 #include "res/Object/Msdan.h"
 
 const char daObjMsdanSub2::Act_c::M_arcname[] = "Msdan";
+Mtx daObjMsdanSub2::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text CreateHeap__Q214daObjMsdanSub25Act_cFv */
 BOOL daObjMsdanSub2::Act_c::CreateHeap() {

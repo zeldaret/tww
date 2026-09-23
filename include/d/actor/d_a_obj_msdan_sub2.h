@@ -6,7 +6,6 @@
 namespace daObjMsdanSub2 {
     class Act_c : public dBgS_MoveBgActor {
     public:
-        void prm_get_objNo() const {}
         s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
         s32 prm_get_size() const { return daObj::PrmAbstract(this, PRM_SIZE_W, PRM_SIZE_H); }
     
@@ -37,8 +36,7 @@ namespace daObjMsdanSub2 {
         /* 0x2D4 */ s32 field_0x2D4;
         /* 0x2D8 */ f32 field_0x2D8;
         /* 0x2DC */ f32 field_0x2DC;
-        /* 0x2E0 */ u8 field_0x2E0[0x2E4 - 0x2E0];
-    };  // Size: 0x2E4
+    };  // Size: 0x2E0
 };
 
 #endif /* D_A_OBJ_MSDAN_SUB2_H */
