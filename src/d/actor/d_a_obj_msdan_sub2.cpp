@@ -86,7 +86,13 @@ BOOL daObjMsdanSub2::Act_c::Mthd_Delete() {
 
 /* 000004A8-00000528       .text set_mtx__Q214daObjMsdanSub25Act_cFv */
 void daObjMsdanSub2::Act_c::set_mtx() {
-    /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+
+    mModel->setBaseTRMtx(mDoMtx_stack_c::get());
+    MTXCopy(mDoMtx_stack_c::get(), M_tmp_mtx);
+
+    return;
 }
 
 /* 00000528-00000598       .text init_mtx__Q214daObjMsdanSub25Act_cFv */

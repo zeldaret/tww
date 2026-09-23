@@ -29,6 +29,7 @@ namespace daObjMsdanSub2 {
         };
 
         static const char M_arcname[];
+        static Mtx M_tmp_mtx;
     
     public:
         /* 0x2C8 */ request_of_phase_process_class mPhs;
