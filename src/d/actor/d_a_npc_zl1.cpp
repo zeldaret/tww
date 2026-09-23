@@ -1929,12 +1929,12 @@ void daNpc_Zl1_c::setStt(s8 param_1) {
 /* 00003B8C-00003D14       .text chk_areaIN__11daNpc_Zl1_cFffs4cXyz */
 bool daNpc_Zl1_c::chk_areaIN(f32 param_1, f32 param_2, s16 param_3, cXyz param_4) {
     
-    f32 abs1 = (dComIfGp_getPlayer(0)->current.pos - param_4).absXZ();
-    f32 abs2 = dComIfGp_getPlayer(0)->current.pos.y - param_4.y;
+    f32 distXZ = (dComIfGp_getPlayer(0)->current.pos - param_4).absXZ();
+    f32 distY = dComIfGp_getPlayer(0)->current.pos.y - param_4.y;
     s16 angleY = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
     s16 angle = (angleY - current.angle.y);
     
-    if(abs1 < param_1 && std::fabsf(abs2) < param_2 && abs(angle) < param_3) {
+    if(distXZ < param_1 && std::fabsf(distY) < param_2 && abs(angle) < param_3) {
         return true;
     }
     return false;
@@ -2268,7 +2268,7 @@ BOOL daNpc_Zl1_c::demo_4() {
 /* 00005718-00005954       .text optn_1__11daNpc_Zl1_cFv */
 BOOL daNpc_Zl1_c::optn_1() {
     f32 temp = l_HIO.mPrmTbl.field_34 + 100.0f;
-    f32 actorDist = fopAcM_searchPlayerDistance2(this);
+    f32 actorDistSq = fopAcM_searchPlayerDistance2(this);
     if(field_0x7D7) {
         if(chk_talk()) {
             setStt(2);
@@ -2282,12 +2282,12 @@ BOOL daNpc_Zl1_c::optn_1() {
     field_0x84A = 0;
     field_0x7D8 = true;
 
-    if(actorDist >= temp*temp) {
+    if(actorDistSq >= SQUARE(temp)) {
         s16 angle = fopAcM_searchPlayerAngleY(this);
         cLib_addCalcAngleS(&current.angle.y, angle, 4, 0x800, 0x80);
         if(abs((s16)(angle - current.angle.y)) < 0x1800) {
             setStt(4);
-            if(actorDist > (l_HIO.mPrmTbl.field_4C * l_HIO.mPrmTbl.field_4C)) {
+            if(actorDistSq > SQUARE(l_HIO.mPrmTbl.field_4C)) {
                 field_0x7AE = l_HIO.mPrmTbl.field_32;
                 field_0x7B0 = l_HIO.mPrmTbl.field_2E;
             } else {
@@ -2325,20 +2325,17 @@ BOOL daNpc_Zl1_c::optn_1() {
 
 /* 00005954-00005C68       .text optn_2__11daNpc_Zl1_cFv */
 BOOL daNpc_Zl1_c::optn_2() {
-
     if(field_0x7CC) {
         field_0x7CC = move_jmp(); // maybe rename field to something mIsMoveJumped
         return TRUE;
     }
-    
 
     f32 actorDist = fopAcM_searchPlayerDistance2(this);
 
-    f32 temp = actorDist - (l_HIO.mPrmTbl.field_34 * l_HIO.mPrmTbl.field_34);
+    f32 temp = actorDist - SQUARE(l_HIO.mPrmTbl.field_34);
     f32 temp2 = 0.0f;
     if(temp > 0.0f) {
-        temp2 = temp;
-        temp2 = std::sqrtf(temp2);
+        temp2 = std::sqrtf(temp);
         temp2 = l_HIO.mPrmTbl.field_38 * temp2;
         temp2 = cLib_maxLimit(temp2, l_HIO.mPrmTbl.field_3C);
     }

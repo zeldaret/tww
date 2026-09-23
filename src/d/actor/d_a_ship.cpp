@@ -3214,8 +3214,7 @@ void daShip_c::setRopePos() {
 
             spEC.set(*currentRopeSegment - *(currentRopeSegment + 1));
 
-            f32 fVar17 = std::sqrtf(spEC.abs2());
-
+            f32 fVar17 = spEC.abs();
             if (fVar17 < 0.01f) {
                 currentRopeSegment->set(*(currentRopeSegment + 1) + l_rope_base_vec);
             }

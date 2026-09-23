@@ -1176,10 +1176,10 @@ int daNpc_Rsh1_c::getAimShopPosIdx() {
     for (int i = 0; i <= condition; i++) {
         cXyz temp = link_pos;
         temp -= mPathPointPos[i];
-        f32 mag = std::sqrtf(temp.abs2XZ());
+        f32 mag = temp.absXZ();
         
         if (mag < fcond) {
-            fcond = std::sqrtf(temp.abs2XZ());
+            fcond = temp.absXZ();
             result_index = i;
         }
     }

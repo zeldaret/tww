@@ -2281,15 +2281,15 @@ bool Act_c::damage_tg_acc() {
         }
 
         if (fVar1 > 0.0f) {
-            f32 abs = m814.abs();
+            f32 temp1 = m814.abs();
             cXyz sp34 = *mCyl.GetTgRVecP();
-            f32 abs2 = sp34.abs();
+            f32 temp2 = sp34.abs();
 
-            if (fVar1 > abs && abs2 > abs) {
-                if (abs2 < fVar1) {
+            if (fVar1 > temp1 && temp2 > temp1) {
+                if (temp2 < fVar1) {
                     m814 = sp34;
                 } else {
-                    m814 = sp34 * (fVar1 / abs2);
+                    m814 = sp34 * (fVar1 / temp2);
                 }
                 m814.y += fVar2;
                 iVar9 = true;

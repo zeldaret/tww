@@ -1304,13 +1304,12 @@ u8 setShadowRealMtx(Mtx viewMtx, Mtx renderProjMtx, Mtx receiverProjMtx, cXyz* l
         lightVec.z *= tmp;
     }
 
-    f32 lightDist = std::sqrtf(lightVec.abs2());
+    f32 lightDist = lightVec.abs();
     if (lightDist != 0.0f) {
         f32 tmp3 = (lightVec.y / lightDist);
         if (tmp3 < 1.5f) {
             lightVec.y = 1.5f * lightDist;
-            lightDist = lightVec.abs2();
-            lightDist = std::sqrtf(lightDist);
+            lightDist = lightVec.abs();
         }
         lightDist = (casterSize * 0.5f) / lightDist;
     }

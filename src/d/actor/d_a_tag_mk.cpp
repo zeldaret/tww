@@ -27,7 +27,7 @@ u8 daTag_Mk_c::getType() {
 }
 
 /* 0000009C-000001F8       .text checkArea__10daTag_Mk_cFfff */
-BOOL daTag_Mk_c::checkArea(float arg1, float arg2, float arg3) {
+BOOL daTag_Mk_c::checkArea(f32 arg1, f32 arg2, f32 arg3) {
     fopAc_ac_c* player = dComIfGp_getLinkPlayer();
 
     cXyz local_54 = player->current.pos - current.pos;
@@ -326,7 +326,7 @@ BOOL daTag_Mk_c::actionVilla() {
     if (eventInfo.checkCommandTalk()) {
         setAction(ACT_VILLATALK_e);
         talkInit();
-    } else if (checkArea(6400.0f, 12100.0f, 62500.0f)) {
+    } else if (checkArea(SQUARE(80.0f), SQUARE(110.0f), SQUARE(250.0f))) {
         eventInfo.onCondition(dEvtCnd_CANTALK_e);
         eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
     }

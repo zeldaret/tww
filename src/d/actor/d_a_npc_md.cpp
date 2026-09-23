@@ -1389,7 +1389,7 @@ void daNpc_Md_c::NpcCall(int* r31) {
         }
     } else {
         f32 temp = 2.0f * l_HIO.m0C4;
-        if (dist_sq >= temp * temp) {
+        if (dist_sq >= SQUARE(temp)) {
             setNpcAction(&daNpc_Md_c::searchNpcAction);
         }
         *r31 = 1;
@@ -2271,8 +2271,6 @@ s16 daNpc_Md_c::windProc() {
         }
     }
     cStack_64.set(local_34.x, 0.0f, local_34.z);
-    //f32 cos = cM_scos(shape_angle.y);
-    //f32 sin = cM_ssin(shape_angle.y);
     cStack_70.set(cM_ssin(shape_angle.y), 0.0f, cM_scos(shape_angle.y));
     dVar6 = l_HIO.m134;
     if (!(std::fabsf(cStack_64.abs2XZ()) < G_CM3D_F_ABS_MIN)) {

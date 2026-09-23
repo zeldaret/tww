@@ -3061,7 +3061,7 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
         bVar3 = false;
     }
     if (mStickDistance < 0.05f &&
-        ((f1_2 >= 25.0f || ((f1_2 >= 0.09f && ((m34C3 == 9 || m34C3 == 10)))))))
+        ((f1_2 >= SQUARE(5.0f) || ((f1_2 >= SQUARE(0.3f) && ((m34C3 == 9 || m34C3 == 10)))))))
     {
         seStartMapInfo(JA_SE_LK_SLIP_SUS);
         if ((m34C3 != 9 && (bVar3)) || ((m34C3 != 10 && (!bVar3)))) {
@@ -3179,7 +3179,7 @@ void daPy_lk_c::setBlendMoveAnime(f32 param_1) {
             m3598 = (f28 * (1.0f - f1));
         } else {
             f32 f1;
-            if (f31 >= 169.0f) {
+            if (f31 >= SQUARE(13.0f)) {
                 f1 = 1.7f * m_HIO->mMove.m.field_0x48;
                 onResetFlg0(daPyRFlg0_UNK40000);
             } else {
@@ -4511,21 +4511,18 @@ BOOL daPy_lk_c::checkNextMode(int r29) {
 
 /* 8010EC78-8010ED68       .text checkIceSlipFall__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkIceSlipFall() {
+    s16 sVar3 = cM_atan2s(m36A0.x, m36A0.z);
     f32 fVar1;
     f32 fVar2;
-
-    s16 sVar3 = cM_atan2s(m36A0.x, m36A0.z);
     if (m34C3 == 1) {
         fVar1 = 15.0f;
-        fVar2 = 169.0f;
+        fVar2 = SQUARE(13.0f);
     } else {
         fVar1 = 10.0f;
-        fVar2 = 49.0f;
+        fVar2 = SQUARE(7.0f);
     }
-    f32 dVar5 = fVar2;
-    f32 dVar6 = fVar1;
-    if (cLib_distanceAngleS(sVar3, current.angle.y) > 0x7000 && mNormalSpeed >= dVar6 &&
-        m36A0.abs2XZ() >= dVar5)
+    if (cLib_distanceAngleS(sVar3, current.angle.y) > 0x7000 && mNormalSpeed >= fVar1 &&
+        m36A0.abs2XZ() >= fVar2)
     {
         mProcVar0.m34D0--;
         if (mProcVar0.m34D0 == 0) {
@@ -10487,10 +10484,10 @@ void daPy_lk_c::setDemoData() {
                 demo_mode = daPy_demo_c::DEMO_N_WALK_e;
             }
             f32 dVar22 = sp44.abs2XZ();
-            if (dVar22 < 100.0f || (dVar22 < 2500.0f && std::abs(mNormalSpeed) < 0.001f)) {
+            if (dVar22 < SQUARE(10.0f) || (dVar22 < SQUARE(50.0f) && std::abs(mNormalSpeed) < 0.001f)) {
                 demo_mode = daPy_demo_c::DEMO_N_WAIT_e;
                 mNormalSpeed = 0.0f;
-            } else if ((demo_mode == daPy_demo_c::DEMO_N_WALK_e && dVar22 < 400.0f) || dVar22 < 2500.0f) {
+            } else if ((demo_mode == daPy_demo_c::DEMO_N_WALK_e && dVar22 < SQUARE(20.0f)) || dVar22 < SQUARE(50.0f)) {
                 mDemo.setStick(0.0f);
             }
             mDemo.setMoveAngle(cM_atan2s(sp44.x, sp44.z));
