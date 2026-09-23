@@ -19,6 +19,11 @@ namespace daObjMsdanSub2 {
         virtual BOOL Execute(Mtx**);
         virtual BOOL Draw();
 
+        enum Prm_e {
+            PRM_SIZE_W = 0x8,
+            PRM_SIZE_S = 0,
+        };
+
         static const char M_arcname[];
     
     public:

@@ -7,6 +7,8 @@
 #include "d/actor/d_a_obj_msdan_sub2.h"
 #include "res/Object/Msdan.h"
 
+const char daObjMsdanSub2::Act_c::M_arcname[] = "Msdan";
+
 /* 00000078-0000012C       .text CreateHeap__Q214daObjMsdanSub25Act_cFv */
 BOOL daObjMsdanSub2::Act_c::CreateHeap() {
     J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MSDAN_BDL_MSDAN_e);
@@ -22,7 +24,26 @@ BOOL daObjMsdanSub2::Act_c::Create() {
 
 /* 000002E4-00000454       .text Mthd_Create__Q214daObjMsdanSub25Act_cFv */
 cPhs_State daObjMsdanSub2::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daObjMsdanSub2::Act_c);
+
+    cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+
+    if (phase_state == cPhs_COMPLEATE_e) {
+        {
+            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MSDAN_DZB_MSDAN_e, dBgS_MoveBGProc_Trans, 0x9A0);
+            JUT_ASSERT(0x91, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+        }
+
+        u32 val = daObj::PrmAbstract(this, PRM_SIZE_W, PRM_SIZE_S);
+
+        if (dComIfGs_isSwitch(val, home.roomNo) && mpBgW != NULL) {
+            if (mpBgW->ChkUsed()) {
+                dComIfG_Bgsp()->Release(mpBgW);
+            }
+        }
+    }
+
+    return phase_state;
 }
 
 /* 00000454-0000045C       .text Delete__Q214daObjMsdanSub25Act_cFv */
