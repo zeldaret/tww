@@ -8,6 +8,7 @@ namespace daObjMsdanSub2 {
     public:
         void prm_get_objNo() const {}
         void prm_get_swSave() const {}
+        s32 prm_get_size() const { return daObj::PrmAbstract(this, PRM_SIZE_W, PRM_SIZE_H); }
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
@@ -21,7 +22,10 @@ namespace daObjMsdanSub2 {
 
         enum Prm_e {
             PRM_SIZE_W = 0x8,
-            PRM_SIZE_S = 0,
+            PRM_SIZE_H = 0,
+
+            PRM_SWSAVE_W = 0,
+            PRM_SWSAVE_S = 0,
         };
 
         static const char M_arcname[];

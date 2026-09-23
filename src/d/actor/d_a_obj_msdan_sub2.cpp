@@ -34,7 +34,7 @@ cPhs_State daObjMsdanSub2::Act_c::Mthd_Create() {
             JUT_ASSERT(0x91, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
         }
 
-        u32 val = daObj::PrmAbstract(this, PRM_SIZE_W, PRM_SIZE_S);
+        u32 val = prm_get_size();
 
         if (dComIfGs_isSwitch(val, home.roomNo) && mpBgW != NULL) {
             if (mpBgW->ChkUsed()) {
