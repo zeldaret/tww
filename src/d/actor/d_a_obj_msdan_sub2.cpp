@@ -105,8 +105,59 @@ void daObjMsdanSub2::Act_c::init_mtx() {
 }
 
 /* 00000598-0000090C       .text Execute__Q214daObjMsdanSub25Act_cFPPA3_A4_f */
-BOOL daObjMsdanSub2::Act_c::Execute(Mtx**) {
-    /* Nonmatching */
+BOOL daObjMsdanSub2::Act_c::Execute(Mtx** i_mtx) {
+    s32 var = prm_get_size();
+    BOOL isSwitch = dComIfGs_isSwitch(var, home.roomNo);
+
+    if (isSwitch) {
+        if (field_0x2DC < 0.0f) {
+            field_0x2DC = 0.0f;
+        }
+
+        if (field_0x2D4 < 16) {
+            if (field_0x2DC == 0.0f) {
+                fopAcM_seStartCurrent(this, JA_SE_OBJ_SW_STAIR2_ON_1, 0);
+            }
+
+            field_0x2DC += 10.0f;
+            field_0x2D8 += field_0x2DC;
+
+            s32 swSave = prm_get_swSave();
+            if (field_0x2D4 == swSave) {
+                if ((field_0x2D4 & 1) == 0) {
+                    current.pos.x = home.pos.x + field_0x2D8 * cM_scos(current.angle.y);
+                    current.pos.z = home.pos.z + field_0x2D8 * cM_ssin(current.angle.y);
+                }
+
+                else {
+                    current.pos.x = home.pos.x - field_0x2D8 * cM_scos(current.angle.y);
+                    current.pos.z = home.pos.z - field_0x2D8 * cM_ssin(current.angle.y);
+                }
+            }
+
+            if (field_0x2D8 >= 600.0f) {
+                if (field_0x2D4 == prm_get_swSave()) {
+                    if ((field_0x2D4 & 1) == 0) {
+                        current.pos.x = home.pos.x + cM_scos(current.angle.y) * 600.0f;
+                        current.pos.z = home.pos.z + cM_ssin(current.angle.y) * 600.0f;
+                    } else {
+                        current.pos.x = home.pos.x - cM_scos(current.angle.y) * 600.0f;
+                        current.pos.z = home.pos.z - cM_ssin(current.angle.y) * 600.0f;
+                    }
+
+                    dComIfGp_getVibration().StartShock(1, 1, cXyz(0.0f, 1.0f, 0.0f));
+                }
+
+                field_0x2D4 += 1;
+                field_0x2DC = 0.0f;
+                field_0x2D8 = 0.0f;
+            }
+        }
+    }
+    set_mtx();
+    *i_mtx = &M_tmp_mtx;
+
+    return TRUE;
 }
 
 /* 0000090C-000009AC       .text Draw__Q214daObjMsdanSub25Act_cFv */
