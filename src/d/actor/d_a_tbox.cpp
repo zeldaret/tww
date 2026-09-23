@@ -354,7 +354,7 @@ void daTbox_c::setDzb() {
     bool rt = dComIfG_Bgsp()->Regist(mpBgWCurrent, this);
     JUT_ASSERT(0x234, !rt);
 
-    mpBgWCurrent->mRoomNo = mRoomNo;
+    mpBgWCurrent->SetRoomId(mRoomNo);
     mColCyl.OnCoSetBit();
 }
 

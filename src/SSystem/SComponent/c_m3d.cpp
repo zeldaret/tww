@@ -170,24 +170,24 @@ bool cM3d_Cross_AabCyl(const cM3dGAab* aab, const cM3dGCyl* cyl) {
 bool cM3d_Cross_AabSph(const cM3dGAab* aab, const cM3dGSph* sph) {
     f32 radius = sph->GetR();
     f32 cx = sph->GetC().x;
-    if (aab->GetMinX() > cx + radius) {
+    if (aab->GetMinP()->x > cx + radius) {
         return false;
     }
-    else if (aab->GetMaxX() < cx - radius) {
+    else if (aab->GetMaxP()->x < cx - radius) {
         return false;
     }
 
     f32 cz = sph->GetC().z;
-    if (aab->GetMinZ() > cz + radius) {
+    if (aab->GetMinP()->z > cz + radius) {
         return false;
-    } else if (aab->GetMaxZ() < cz - radius) {
+    } else if (aab->GetMaxP()->z < cz - radius) {
         return false;
     }
     
     f32 cy = sph->GetC().y;
-    if (aab->GetMinY() > cy + radius) {
+    if (aab->GetMinP()->y > cy + radius) {
         return false;
-    } else if (aab->GetMaxY() < cy - radius) {
+    } else if (aab->GetMaxP()->y < cy - radius) {
         return false;
     }
     return true;

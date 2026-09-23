@@ -28,7 +28,7 @@ void dBgS::ClrMoveFlag() {
     for (s32 i = 0; i < ARRAY_SIZE(m_chk_element); i++) {
         if (m_chk_element[i].ChkUsed()) {
             dBgW* bgwp = (dBgW*)m_chk_element[i].m_bgw_base_ptr;
-            bgwp->mFlag &= ~1;
+            bgwp->OffMoveFlag();
         }
     }
 }
@@ -40,9 +40,7 @@ void dBgS::Move() {
     for (s32 i = 0; i < ARRAY_SIZE(m_chk_element); i++) {
         if (m_chk_element[i].ChkUsed()) {
             dBgW* bgwp = (dBgW*)m_chk_element[i].m_bgw_base_ptr;
-            s16 shape_angle = m_chk_element[i].m_actor_ptr->shape_angle.y;
-            bgwp->mRotYDelta = shape_angle - bgwp->mOldRotY;
-            bgwp->mOldRotY = shape_angle;
+            bgwp->CalcDiffShapeAngleY(m_chk_element[i].m_actor_ptr->shape_angle.y);
         }
     }
 }
@@ -54,8 +52,8 @@ bool dBgS::Regist(cBgW* bgw, fopAc_ac_c* ac) {
 
     if (ac != NULL && bgw->ChkMoveBg()) {
         dBgW* bgwp = (dBgW*)bgw;
-        bgwp->mOldRotY = ac->shape_angle.y;
-        bgwp->mRoomNo = fopAcM_GetRoomNo(ac);
+        bgwp->SetOldShapeAngleY(ac->shape_angle.y);
+        bgwp->SetRoomId(fopAcM_GetRoomNo(ac));
     }
 
     return cBgS::Regist(bgw, fopAcM_GetID(ac), ac);
@@ -125,7 +123,7 @@ int dBgS::GetGrpRoomInfId(cBgS_PolyInfo& polyInfo) {
         return 0xFF;
 
     dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
-    s32 inf = bgwp->mRoomNo2;
+    s32 inf = bgwp->GetGrpRoomInf();
     if (inf != 0xFF)
         return inf;
 
@@ -286,7 +284,7 @@ s32 dBgS::GetRoomId(cBgS_PolyInfo& polyInfo) {
         return -1;
 
     dBgW* bgwp = (dBgW*)m_chk_element[id].m_bgw_base_ptr;
-    s32 roomNo = bgwp->mRoomNo;
+    s32 roomNo = bgwp->GetRoomId();
     if (roomNo == 0xFFFF) {
         s32 grp = GetTriGrp(polyInfo);
         roomNo = GetGrpToRoomId(polyInfo.GetBgIndex(), grp);
@@ -304,8 +302,7 @@ u32 dBgS::ChkPolyHSStick(cBgS_PolyInfo& polyInfo) {
         return FALSE;
 
     dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
-    u32 inf_id = bgwp->GetPolyInfId(polyInfo.GetPolyIndex());
-    return (bgwp->GetPolyInf3(inf_id) & 0x10);
+    return bgwp->GetPolyHSStick(polyInfo.GetPolyIndex());
 }
 
 /* 800A111C-800A12A4       .text LineCrossNonMoveBG__4dBgSFP11cBgS_LinChk */
@@ -344,7 +341,7 @@ void dBgS::WallCorrect(dBgS_Acch* acch) {
                 if (!acch->ChkSameActorPid(elm->m_actor_id)) {
                     dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
                     if (bgwp->ChkPriority(prio))
-                        bgwp->WallCorrectGrpRp(acch, bgwp->m_rootGrpIdx, 1);
+                        bgwp->WallCorrect(acch);
                 }
             }
         }
@@ -360,7 +357,7 @@ f32 dBgS::RoofChk(dBgS_RoofChk* chk) {
         elm = &m_chk_element[bg_index];
         if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
-            if (bgwp->RoofChkGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+            if (bgwp->RoofChk(chk)) {
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
             }
         }
@@ -376,7 +373,7 @@ bool dBgS::SplGrpChk(dBgS_SplGrpChk* chk) {
         cBgS_ChkElm* elm = &m_chk_element[bg_index];
         if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
-            if (bgwp->SplGrpChkGrpRp(chk, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+            if (bgwp->SplGrpChk(chk)) {
                 ret = true;
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
                 chk->OnFind();
@@ -395,7 +392,7 @@ bool dBgS::SphChk(dBgS_SphChk* chk, void* user) {
         elm = &m_chk_element[bg_index];
         if (elm->ChkUsed() && elm->m_bgw_base_ptr->GetVtxTbl() != NULL && !chk->ChkSameActorPid(elm->m_actor_id)) {
             dBgW* bgwp = (dBgW*)elm->m_bgw_base_ptr;
-            if (bgwp->SphChkGrpRp(chk, user, elm->m_bgw_base_ptr->m_rootGrpIdx, 1)) {
+            if (bgwp->SphChk(chk, user)) {
                 chk->SetActorInfo(bg_index, elm->m_bgw_base_ptr, elm->m_actor_id);
                 ret = true;
             }
@@ -444,7 +441,7 @@ void dBgS::MoveBgCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz* 
 
     if (m_chk_element[bg_index].ChkUsed()) {
         dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
-        if (bgwp->mFlag & 1 && ChkPolySafe(polyInfo)) {
+        if (bgwp->ChkMoveFlag() && ChkPolySafe(polyInfo)) {
             bgwp->CrrPos(polyInfo, m_chk_element[bg_index].m_actor_ptr, accept, pos, angle, shape_angle);
         }
     }
@@ -460,7 +457,7 @@ void dBgS::MoveBgTransPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, csXyz
 
     if (m_chk_element[bg_index].ChkUsed()) {
         dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
-        if (bgwp->mFlag & 1 && ChkPolySafe(polyInfo)) {
+        if (bgwp->ChkMoveFlag() && ChkPolySafe(polyInfo)) {
             bgwp->TransPos(polyInfo, m_chk_element[bg_index].m_actor_ptr, accept, pos, angle, shape_angle);
         }
     }
@@ -476,7 +473,7 @@ void dBgS::MoveBgMatrixCrrPos(cBgS_PolyInfo& polyInfo, bool accept, cXyz* pos, c
 
     if (m_chk_element[bg_index].ChkUsed()) {
         dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
-        if (bgwp->mFlag & 1) {
+        if (bgwp->ChkMoveFlag()) {
             bgwp->MatrixCrrPos(polyInfo, m_chk_element[bg_index].m_actor_ptr, accept, pos, angle, shape_angle);
         }
     }
@@ -498,7 +495,7 @@ void dBgS_MoveBGProc_RotY(dBgW* pbgw, void* user, cBgS_PolyInfo& polyInfo, bool 
     if (shape_angle == NULL)
         return;
 
-    s32 rot = pbgw->mRotYDelta;
+    s32 rot = pbgw->GetDiffShapeAngleY();
     if (shape_angle != NULL)
         shape_angle->y += rot;
     if (angle != NULL)
@@ -524,8 +521,8 @@ void dBgS::RideCallBack(cBgS_PolyInfo& polyInfo, fopAc_ac_c* ac) {
     JUT_ASSERT(0x881, 0 <= bg_index && bg_index < 256);
 
     dBgW* bgwp = (dBgW*)m_chk_element[bg_index].m_bgw_base_ptr;
-    if (bgwp->ChkUsed() && bgwp->mpRideCb != NULL)
-        bgwp->mpRideCb(bgwp, m_chk_element[bg_index].m_actor_ptr, ac);
+    if (bgwp->ChkUsed() && bgwp->GetRideCallback() != NULL)
+        bgwp->GetRideCallback()(bgwp, m_chk_element[bg_index].m_actor_ptr, ac);
 }
 
 /* 800A1ED0-800A1FD8       .text PushPullCallBack__4dBgSFR13cBgS_PolyInfoP10fopAc_ac_csQ24dBgW13PushPullLabel */
@@ -538,9 +535,9 @@ fopAc_ac_c* dBgS::PushPullCallBack(cBgS_PolyInfo& polyInfo, fopAc_ac_c* ac, s16 
         return NULL;
     if (m_chk_element[bg_index].m_actor_ptr == NULL)
         return NULL;
-    if (bgwp->mpPushPullCb == NULL)
+    if (bgwp->GetPushPullCallback() == NULL)
         return NULL;
-    return bgwp->mpPushPullCb(m_chk_element[bg_index].m_actor_ptr, ac, inf, lbl);
+    return bgwp->GetPushPullCallback()(m_chk_element[bg_index].m_actor_ptr, ac, inf, lbl);
 }
 
 /* 800A1FD8-800A2550       .text CrrPos__11dBgS_CrrPosFR4dBgS */

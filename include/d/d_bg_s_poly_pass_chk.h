@@ -29,6 +29,14 @@ public:
     }
     virtual ~dBgS_PolyPassChk() {}
 
+    bool ChkObj() { return mbObjThrough; }
+    bool ChkCam() { return mbCamThrough; }
+    bool ChkLink() { return mbLinkThrough; }
+    bool ChkArrow() { return mbArrowThrough; }
+    bool ChkBomb() { return mbBombThrough; }
+    bool ChkBoomerang() { return mbBoomerangThrough; }
+    bool ChkRope() { return mbRopeThrough; }
+
     void SetObj() { mbObjThrough = true; }
     void SetCam() { mbCamThrough = true; }
     void SetLink() { mbLinkThrough = true; }

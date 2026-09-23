@@ -1880,8 +1880,8 @@ BOOL Act_c::Draw() {
 BOOL Act_c::Delete() {
     eff_smoke_slip_remove();
     if (mpBgW) {
-        mpBgW->mpRideCb = NULL;
-        mpBgW->mpPushPullCb = NULL;
+        mpBgW->SetRideCallback(NULL);
+        mpBgW->SetPushPullCallback(NULL);
     }
     return TRUE;
 }

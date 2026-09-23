@@ -41,10 +41,10 @@ struct cBgD_Blk_t {
 
 struct cBgD_Ti_t {
 public:
-    /* 0x00 */ u32 mPolyInf0;
-    /* 0x04 */ u32 mPolyInf1;
-    /* 0x08 */ u32 mPolyInf2;
-    /* 0x0C */ u32 mPolyInf3;
+    /* 0x00 */ u32 m_info0;
+    /* 0x04 */ u32 m_info1;
+    /* 0x08 */ u32 m_info2;
+    /* 0x0C */ u32 m_info3;
 };
 
 struct cBgD_Tri_t {
@@ -177,17 +177,17 @@ public:
     void GetTopUnder(f32*, f32*) const;
 
     s32 GetGrpInf(int grp_id) const {
-        JUT_ASSERT(0x2e1, 0 <= grp_id && grp_id < pm_bgd->m_g_num);
+        JUT_ASSERT(737, 0 <= grp_id && grp_id < pm_bgd->m_g_num);
         return pm_bgd->m_g_tbl[grp_id].m_info;
     }
 
     s32 GetTriGrp(int poly_index) const {
-        JUT_ASSERT(0x2a2, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
+        JUT_ASSERT(674, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
         return pm_bgd->m_t_tbl[poly_index].grp;
     }
 
     cM3dGPla * GetTriPla(int poly_index) {
-        JUT_ASSERT(0x2af, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
+        JUT_ASSERT(687, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
         return &pm_tri[poly_index].m_plane;
     }
 
@@ -203,24 +203,24 @@ public:
     Mtx* GetBaseMtxP() { return pm_base; }
     void SetBaseMtxP(Mtx* mtx_p) { pm_base = mtx_p; }
     u32 GetPolyInfId(int poly_index) const {
-        JUT_ASSERT(0x2f1, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
+        JUT_ASSERT(753, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
         return pm_bgd->m_t_tbl[poly_index].id;
     }
     u32 GetPolyInf0(int id) const {
-        JUT_ASSERT(0x2f8, 0 <= id && id < pm_bgd->m_ti_num);
-        return pm_bgd->m_ti_tbl[id].mPolyInf0;
+        JUT_ASSERT(760, 0 <= id && id < pm_bgd->m_ti_num);
+        return pm_bgd->m_ti_tbl[id].m_info0;
     }
     u32 GetPolyInf1(int id) const {
-        JUT_ASSERT(0x2fd, 0 <= id && id < pm_bgd->m_ti_num);
-        return pm_bgd->m_ti_tbl[id].mPolyInf1;
+        JUT_ASSERT(765, 0 <= id && id < pm_bgd->m_ti_num);
+        return pm_bgd->m_ti_tbl[id].m_info1;
     }
     u32 GetPolyInf2(int id) const {
-        JUT_ASSERT(0x302, 0 <= id && id < pm_bgd->m_ti_num);
-        return pm_bgd->m_ti_tbl[id].mPolyInf2;
+        JUT_ASSERT(770, 0 <= id && id < pm_bgd->m_ti_num);
+        return pm_bgd->m_ti_tbl[id].m_info2;
     }
     u32 GetPolyInf3(int id) const {
-        JUT_ASSERT(0x307, 0 <= id && id < pm_bgd->m_ti_num);
-        return pm_bgd->m_ti_tbl[id].mPolyInf3;
+        JUT_ASSERT(775, 0 <= id && id < pm_bgd->m_ti_num);
+        return pm_bgd->m_ti_tbl[id].m_info3;
     }
     int GetVtxNum() const { return pm_bgd->m_v_num; }
     cBgD_Vtx_t* GetVtxTbl() const { return pm_vtx_tbl; }
