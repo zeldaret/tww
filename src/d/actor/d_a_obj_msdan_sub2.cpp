@@ -97,7 +97,11 @@ void daObjMsdanSub2::Act_c::set_mtx() {
 
 /* 00000528-00000598       .text init_mtx__Q214daObjMsdanSub25Act_cFv */
 void daObjMsdanSub2::Act_c::init_mtx() {
-    /* Nonmatching */
+    scale *= 1.01;
+    mModel->setBaseScale(scale);
+    MTXCopy(M_tmp_mtx, mBgMtx);
+    set_mtx();
+    return;
 }
 
 /* 00000598-0000090C       .text Execute__Q214daObjMsdanSub25Act_cFPPA3_A4_f */
