@@ -19,7 +19,32 @@ BOOL daObjMsdanSub2::Act_c::CreateHeap() {
 
 /* 0000012C-000002E4       .text Create__Q214daObjMsdanSub25Act_cFv */
 BOOL daObjMsdanSub2::Act_c::Create() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -1500.0f, -100.0f, -1500.0f, 1500.0f, 1000.0f, 1500.0f);
+
+    s32 val = prm_get_size();
+    BOOL isSwitch = dComIfGs_isSwitch(val, home.roomNo);
+
+    if (isSwitch) {
+        if (!(prm_get_swSave() & 1)) {
+            current.pos.x = home.pos.x + cM_scos(current.angle.y) * 600.0f;
+            current.pos.z = home.pos.z + cM_ssin(current.angle.y) * 600.0f;
+        } else {
+            current.pos.x = home.pos.x - cM_scos(current.angle.y) * 600.0f;
+            current.pos.z = home.pos.z - cM_ssin(current.angle.y) * 600.0f;
+        }
+
+        field_0x2D4 = 0x10;
+    } else {
+        field_0x2D4 = 0;
+        field_0x2D8 = 0.0f;
+        field_0x2DC = 0.0f;
+    }
+
+    init_mtx();
+    mpBgW->Move();
+
+    return TRUE;
 }
 
 /* 000002E4-00000454       .text Mthd_Create__Q214daObjMsdanSub25Act_cFv */
