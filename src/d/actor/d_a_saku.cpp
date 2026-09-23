@@ -21,7 +21,7 @@ BOOL matAlphaAnim(J3DModelData*, u8, bool);
 void daSaku_c::CreateInit() {
     for (int i = 0; i < 2; i++) {
         mParticleTimers[i] = 0;
-        field_0xEAC[i] = 0;
+        mpEmitter[i] = NULL;
 
         field_0xEDC[i][0] = 0xff;
         field_0xEDC[i][1] = 0;
@@ -37,10 +37,12 @@ void daSaku_c::CreateInit() {
     setCol();
     setMtx();
 
+#if VERSION > VERSION_DEMO
     for (int i = 0; i < 2; i++) {
-        field_0x290[i].setColor(dust_color);
-        field_0x290[i].setRateOff(1);
+        mSmokeCb[i].setColor(dust_color);
+        mSmokeCb[i].setRateOff(1);
     }
+#endif
 
     return;
 }
@@ -57,15 +59,9 @@ int daSaku_c::saku_draw_sub(int i_sakuId) {
         g_env_light.setLightTevColorType(mModels[i_sakuId][0], &tevStr);
 
         matAlphaAnim(mModels[i_sakuId][0]->getModelData(), field_0xEDC[i_sakuId][0], flag);
-
-        j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaListBG;
-        j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluListBG;
-
+        dComIfGd_setListBG();
         mDoExt_modelUpdateDL(mModels[i_sakuId][0]);
-
-        j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaList;
-        j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluList;
-
+        dComIfGd_setList();
         matAlphaAnim(mModels[i_sakuId][0]->getModelData(), 0xff, true);
     }
 
@@ -83,14 +79,12 @@ int daSaku_c::saku_draw_sub(int i_sakuId) {
 
 /* 000003A8-00000590       .text mode_break_none__8daSaku_cFi */
 BOOL daSaku_c::mode_break_none(int i_sakuId) {
-    u32 burned = FALSE;
-    u32 broke = FALSE;
+    u32 burned = 0;
+    u32 broke = 0;
 
     for (int i = 0; i < 3; i++) {
-        dCcD_GObjInf* this_00 = &field_0x30C[i_sakuId][i];
-
-        if (this_00->ChkTgHit() != NULL) {
-            cCcD_Obj* hitObj = this_00->GetTgHitObj();
+        if (field_0x30C[i_sakuId][i].ChkTgHit() != NULL) {
+            cCcD_Obj* hitObj = field_0x30C[i_sakuId][i].GetTgHitObj();
 
             if (hitObj != NULL) {
                 if (mType == 0) {
@@ -104,7 +98,7 @@ BOOL daSaku_c::mode_break_none(int i_sakuId) {
                 }
 
                 if (broke) {
-                    g_dComIfG_gameInfo.play.mVibration.StartShock(4, -0x21, cXyz(0, 1.0, 0));
+                    dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 }
 
                 burned |= hitObj->ChkAtType(AT_TYPE_FIRE) || hitObj->ChkAtType(AT_TYPE_UNK20000) || hitObj->ChkAtType(AT_TYPE_FIRE_ARROW);
@@ -171,16 +165,17 @@ BOOL daSaku_c::mode_break_throw_obj(int i_sakuId) {
     }
 
     if (mParticleTimers[i_sakuId] >= m_alpha_start_time) {
-        if (field_0x290[i_sakuId].getEmitter() != NULL) {
-            cLib_chaseF(&field_0xEB4[i_sakuId], 0, (f32)l_sakuHIO.field_0x12 / (255.0f * (f32)m_fade_time));
+        if (DEMO_SELECT(mpEmitter[i_sakuId], mSmokeCb[i_sakuId].getEmitter()) != NULL) {
+            f32 step = (f32)l_sakuHIO.field_0x12 / (255.0f * (f32)m_fade_time);
+            cLib_chaseF(&field_0xEB4[i_sakuId], 0.0f, step);
             field_0xEB4[i_sakuId] = fabs(field_0xEB4[i_sakuId]);
 
             u8 alpha = 255.0f * field_0xEB4[i_sakuId];
-            field_0x290[i_sakuId].getEmitter()->setGlobalAlpha(alpha);
+            DEMO_SELECT(mpEmitter[i_sakuId], mSmokeCb[i_sakuId].getEmitter())->setGlobalAlpha(alpha);
 
             if (alpha == 0) {
-                field_0x290[i_sakuId].end();
-                field_0xEAC[i_sakuId] = 0.0;
+                DEMO_SELECT(mSmokeCb, mSmokeCb[i_sakuId]).end();
+                mpEmitter[i_sakuId] = 0;
             }
         }
     }
@@ -190,7 +185,7 @@ BOOL daSaku_c::mode_break_throw_obj(int i_sakuId) {
 
 /* 0000083C-000008EC       .text RecreateHeap__8daSaku_cFii */
 BOOL daSaku_c::RecreateHeap(int heap_id, int saku_id) {
-    JUT_ASSERT(0x365, m_heap[saku_id][heap_id] != NULL);
+    JUT_ASSERT(DEMO_SELECT(878, 869), m_heap[saku_id][heap_id] != NULL);
 
     m_heap[saku_id][heap_id]->freeAll();
     JKRHeap* heap = mDoExt_setCurrentHeap(m_heap[saku_id][heap_id]);
@@ -244,7 +239,7 @@ int daSaku_c::GetDzbId(int i_sakuId) {
     {
         dzbId = 3;
     } else {
-        if (dComIfGs_isSwitch(mTopHalfDestroyedSwitch, home.roomNo)) {
+        if (fopAcM_isSwitch(this, mTopHalfDestroyedSwitch)) {
             dzbId = 4;
         } else {
             dzbId = 2;
@@ -268,16 +263,20 @@ BOOL daSaku_c::CreateDummyHeap(int i_sakuId) {
         }
     }
 
-    if (loadModel(i, 1, i_sakuId) == FALSE) {
+    if (!loadModel(i, 1, i_sakuId)) {
         return FALSE;
     }
 
-    return loadMoveBG(1, 1, i_sakuId) ? TRUE : FALSE;
+    if (!loadMoveBG(1, 1, i_sakuId)) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /* 00000ADC-00000BE8       .text loadMoveBG__8daSaku_cFiii */
 BOOL daSaku_c::loadMoveBG(int i_index0, int i_index1, int i_sakuId) {
-    int sp[5] = {
+    int dzb_idx[5] = {
         dRes_INDEX_KSAKUCO_DZB_KSAKU_00_e,
         dRes_INDEX_KSAKUCO_DZB_KSAKU_01_e,
         dRes_INDEX_KSAKUCO_DZB_KSAKU_02_e,
@@ -288,7 +287,7 @@ BOOL daSaku_c::loadMoveBG(int i_index0, int i_index1, int i_sakuId) {
     field_0xE34[i_sakuId][i_index1] = new dBgW();
 
     if (field_0xE34[i_sakuId][i_index1] != NULL) {
-        cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(m_arcname[0], sp[i_index0]);
+        cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(m_arcname[0], dzb_idx[i_index0]);
 
         if (field_0xE34[i_sakuId][i_index1]->Set(bgd, dBgW::MOVE_BG_e, &mMtx[i_sakuId]) != true) {
             return TRUE;
@@ -303,7 +302,7 @@ BOOL daSaku_c::loadMoveBG(int i_index0, int i_index1, int i_sakuId) {
 BOOL daSaku_c::loadModel(int i_index, int i_heapId, int i_sakuId) {
     J3DModelData* modelData;
 
-    int sp_0x20[6] = {
+    int ksaku_bdl_idx[6] = {
         dRes_INDEX_KSAKU_00_BDL_KSAKU_00_e,
         dRes_INDEX_KSAKU_00_BDL_KSAKU_04_e,
         dRes_INDEX_KSAKU_00_BDL_KSAKU_02_e,
@@ -311,8 +310,7 @@ BOOL daSaku_c::loadModel(int i_index, int i_heapId, int i_sakuId) {
         dRes_INDEX_KSAKU_00_BDL_KSAKU_03_e,
         dRes_INDEX_KSAKU_00_BDL_KSAKU_05_e
     };
-    int sp_0x08[6] = {
-
+    int knsak_bdl_idx[6] = {
         dRes_INDEX_KNSAK_00_BDL_KNSAK_00_e,
         dRes_INDEX_KNSAK_00_BDL_KNSAK_02_e,
         dRes_INDEX_KNSAK_00_BDL_KNSAK_01_e,
@@ -326,15 +324,14 @@ BOOL daSaku_c::loadModel(int i_index, int i_heapId, int i_sakuId) {
     }
 
     if (mType == 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[1], sp_0x20[i_index]);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[1], ksaku_bdl_idx[i_index]);
     }
-
     else if (mType == 1)
     {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[2], sp_0x08[i_index]);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[2], knsak_bdl_idx[i_index]);
     }
 
-    JUT_ASSERT(0x43d, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1094, 1085), modelData != NULL);
     mModels[i_sakuId][i_heapId] = mDoExt_J3DModel__create(modelData, 0, 0x11020203);
 
     if (mModels[i_sakuId][i_heapId] == NULL) {
@@ -371,10 +368,10 @@ BOOL daSaku_c::burn() {
 
         setEffFire(0);
         field_0xEEC = 0x5a;
-        dComIfGs_onSwitch(mBottomHalfDestroyedSwitch, home.roomNo);
+        fopAcM_onSwitch(this, mBottomHalfDestroyedSwitch);
 
         if (field_0xEF8[1] != 0) {
-            dComIfGs_onSwitch(mTopHalfDestroyedSwitch, home.roomNo);
+            fopAcM_onSwitch(this, mTopHalfDestroyedSwitch);
         }
 
         field_0xEF4 = 1;
@@ -384,25 +381,25 @@ BOOL daSaku_c::burn() {
 }
 
 /* 00000E8C-00000F60       .text broken__8daSaku_cFi */
-BOOL daSaku_c::broken(int saku_id) {
-    setEffBreak(saku_id);
-    field_0xEF8[saku_id] = 3;
-    field_0xEE0[saku_id] = 0;
+BOOL daSaku_c::broken(int i_sakuId) {
+    setEffBreak(i_sakuId);
+    field_0xEF8[i_sakuId] = 3;
+    field_0xEE0[i_sakuId] = 0;
 
-    if (saku_id == 0) {
-        dComIfGs_onSwitch(mBottomHalfDestroyedSwitch, home.roomNo);
+    if (i_sakuId == 0) {
+        fopAcM_onSwitch(this, mBottomHalfDestroyedSwitch);
     } else {
-        dComIfGs_onSwitch(mTopHalfDestroyedSwitch, home.roomNo);
+        fopAcM_onSwitch(this, mTopHalfDestroyedSwitch);
     }
 
-    RecreateHeap(1, saku_id);
+    RecreateHeap(1, i_sakuId);
 
-    if (saku_id == 0) {
-        cullMtx = mModels[saku_id][1]->getBaseTRMtx();
+    if (i_sakuId == 0) {
+        cullMtx = mModels[i_sakuId][1]->getBaseTRMtx();
     }
 
-    field_0xEDC[saku_id][0] = 0;
-    field_0xEDC[saku_id][1] = 0xff;
+    field_0xEDC[i_sakuId][0] = 0;
+    field_0xEDC[i_sakuId][1] = 0xff;
 
     return TRUE;
 }
@@ -482,21 +479,21 @@ void daSaku_c::checkCol() {
     if (field_0xEEC != 0) {
         for (int i = 0; i < 3; i++) {
             field_0xA74[i].SetC(mPos[0][i]);
-            g_dComIfG_gameInfo.play.mCcS.Set(&field_0xA74[i]);
+            dComIfG_Ccsp()->Set(&field_0xA74[i]);
         }
     }
 
     if (field_0xEF8[0] == 1) {
         for (int i = 0; i < 3; i++) {
             field_0x30C[0][i].SetC(mPos[0][i]);
-            g_dComIfG_gameInfo.play.mCcS.Set(&field_0x30C[0][i]);
+            dComIfG_Ccsp()->Set(&field_0x30C[0][i]);
         }
     }
 
     if (field_0xEF8[1] != 0 && field_0xEF8[1] == 1) {
         for (int i = 0; i < 3; i++) {
             field_0x30C[1][i].SetC(mPos[1][i]);
-            g_dComIfG_gameInfo.play.mCcS.Set(&field_0x30C[1][i]);
+            dComIfG_Ccsp()->Set(&field_0x30C[1][i]);
         }
     }
 
@@ -508,7 +505,7 @@ void daSaku_c::setCol() {
     mPos[0][0].set(0, 20, 0);
     mPos[0][1].set(-100, 20, 0);
     mPos[0][2].set(100, 20, 0);
-
+    
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
 
@@ -538,7 +535,7 @@ void daSaku_c::setCol() {
 
 /* 00001510-00001598       .text MoveBGResist__8daSaku_cFii */
 BOOL daSaku_c::MoveBGResist(int i_index0, int i_index1) {
-    if (g_dComIfG_gameInfo.play.mBgS.Regist(field_0xE34[i_index1][i_index0], this) != 0) {
+    if (dComIfG_Bgsp()->Regist(field_0xE34[i_index1][i_index0], this) != 0) {
         return FALSE;
 
     } else {
@@ -564,11 +561,11 @@ BOOL daSaku_c::setEffFire(int _) {
     return TRUE;
 }
 
-BOOL daSaku_c::setEffBreak(int i_index) {
+BOOL daSaku_c::setEffBreak(int i_sakuId) {
     cXyz localPos = current.pos;
     localPos.y += 100.0f;
 
-    if (i_index == 1) {
+    if (i_sakuId == 1) {
         localPos.y += 200.0f;
     }
 
@@ -576,41 +573,44 @@ BOOL daSaku_c::setEffBreak(int i_index) {
         dComIfGp_particle_set(dPa_name::ID_IT_JN_SK_HAHEN_A, &localPos, &current.angle, &scale, 0xff, 0, -1, &tevStr.mColorK0, &tevStr.mColorK0, NULL);
     }
 
-    field_0xEB4[i_index] = (f32)l_sakuHIO.field_0x12 / 255.0f;
+    field_0xEB4[i_sakuId] = (f32)l_sakuHIO.field_0x12 / 255.0f;
     dust_color.r = l_sakuHIO.dustColor.r;
     dust_color.g = l_sakuHIO.dustColor.g;
     dust_color.b = l_sakuHIO.dustColor.b;
 
-    field_0xEC4[i_index] = localPos;
+    field_0xEC4[i_sakuId] = localPos;
 
+#if VERSION == VERSION_DEMO
+    mpEmitter[i_sakuId] =
+#endif
     dComIfGp_particle_setToon(
         dPa_name::ID_AK_JT_ELEMENTSMOKE01,
-        &field_0xEC4[i_index],
+        &field_0xEC4[i_sakuId],
         &current.angle,
         NULL,
         l_sakuHIO.field_0x12,
-        &field_0x290[i_index],
+        &DEMO_SELECT(mSmokeCb, mSmokeCb[i_sakuId]),
         fopAcM_GetRoomNo(this),
         0,
         0,
         0
     );
 
-    JPABaseEmitter* em = field_0x290[i_index].getEmitter();
+    JPABaseEmitter* em = DEMO_SELECT(mpEmitter[i_sakuId], mSmokeCb[i_sakuId].getEmitter());
     if (em != NULL) {
 
-        em->setGlobalAlpha(field_0xEB4[i_index] * 255.0f);
-        field_0x290[i_index].getEmitter()->becomeImmortalEmitter();
+        em->setGlobalAlpha(field_0xEB4[i_sakuId] * 255.0f);
+        DEMO_SELECT(mpEmitter[i_sakuId], mSmokeCb[i_sakuId].getEmitter())->becomeImmortalEmitter();
 
         cXyz dScale(2.0f, 2.0f, 2.0f);
         cXyz eScale(1.0f, 0.5f, 0.7f);
 
-        field_0x290[i_index].getEmitter()->setGlobalParticleScale(3.2f, 3.2f);
-        field_0x290[i_index].getEmitter()->setGlobalDynamicsScale(dScale);
-        field_0x290[i_index].getEmitter()->setEmitterScale(eScale);
+        DEMO_SELECT(mpEmitter[i_sakuId], mSmokeCb[i_sakuId].getEmitter())->setGlobalParticleScale(3.2f, 3.2f);
+        DEMO_SELECT(mpEmitter[i_sakuId], mSmokeCb[i_sakuId].getEmitter())->setGlobalDynamicsScale(dScale);
+        DEMO_SELECT(mpEmitter[i_sakuId], mSmokeCb[i_sakuId].getEmitter())->setEmitterScale(eScale);
 
-        field_0x290[i_index].getEmitter()->setRate(40.0f);
-        field_0x290[i_index].getEmitter()->setMaxFrame(1);
+        DEMO_SELECT(mpEmitter[i_sakuId], mSmokeCb[i_sakuId].getEmitter())->setRate(40.0f);
+        DEMO_SELECT(mpEmitter[i_sakuId], mSmokeCb[i_sakuId].getEmitter())->setMaxFrame(1);
     }
 
     if (mType == 0) {
@@ -620,7 +620,7 @@ BOOL daSaku_c::setEffBreak(int i_index) {
         fopAcM_seStart(this, JA_SE_OBJ_BRK_WRAIL_K, 0);
     }
 
-    mParticleTimers[i_index] = 1;
+    mParticleTimers[i_sakuId] = 1;
 
     return TRUE;
 }
@@ -629,13 +629,13 @@ static void changeXluMaterialAlpha(J3DMaterial*, u8, bool);
 
 /* 000019AC-00001A50       .text matAlphaAnim__FP12J3DModelDataUcb */
 BOOL matAlphaAnim(J3DModelData* modelData, u8 i_alpha, bool i_isZmodeInfo2) {
-    JUT_ASSERT(0x5d1, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(1520, 1489), modelData != NULL);
 
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         changeXluMaterialAlpha(modelData->getMaterialNodePointer(i), i_alpha, i_isZmodeInfo2);
     }
 
-    return 1;
+    return TRUE;
 }
 
 /* 00001A50-00001B98       .text changeXluMaterialAlpha__FP11J3DMaterialUcb */
@@ -644,7 +644,7 @@ void changeXluMaterialAlpha(J3DMaterial* i_material, u8 alpha, bool i_isZmodeInf
     static J3DZModeInfo l_zmodeInfo = {GX_TRUE, GX_LEQUAL, GX_FALSE};
     static J3DZModeInfo l_zmodeInfo2 = {GX_TRUE, GX_LEQUAL, GX_TRUE};
 
-    JUT_ASSERT(0x5ff, i_material != NULL);
+    JUT_ASSERT(DEMO_SELECT(1566, 1535), i_material != NULL);
 
     J3DPEBlock* block = i_material->getPEBlock();
 
@@ -666,8 +666,8 @@ static cPhs_State daSaku_Create(fopAc_ac_c* i_this) {
 }
 
 /* 00001BB8-00001F28       .text _daSaku_create__8daSaku_cFv */
-cPhs_State daSaku_c::_daSaku_create() {
-    s32 size = 0; // not used, but instructions indicate that it has size of solid heap
+inline cPhs_State daSaku_c::_daSaku_create() {
+    s32 heapSize = 0; // never read
 
     fopAcM_ct(this, daSaku_c);
     mType = daSaku_prm::getType(this);
@@ -677,22 +677,41 @@ cPhs_State daSaku_c::_daSaku_create() {
         arcnameIndex = 1;
     }
 
-    cPhs_State phase = dComIfG_resLoad(&field_0xE04, m_arcname[arcnameIndex]);
-    if (phase != cPhs_COMPLEATE_e) {
-        return phase;
+    cPhs_State res = dComIfG_resLoad(&field_0xE04, m_arcname[arcnameIndex]);
+#if VERSION > VERSION_DEMO
+    if (res != cPhs_COMPLEATE_e) {
+        return res;
     }
-
-    phase = dComIfG_resLoad(&field_0xE0C, m_arcname[0]);
-    if (phase != cPhs_COMPLEATE_e) {
-        return phase;
+#endif
+    cPhs_State res2 = dComIfG_resLoad(&field_0xE0C, m_arcname[0]);
+#if VERSION == VERSION_DEMO
+    if (res == cPhs_COMPLEATE_e) {
+        setFlag(1);
     }
+    if (res2 == cPhs_COMPLEATE_e) {
+        setFlag(2);
+    }
+    if (res == cPhs_ERROR_e || res2 == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    }
+    if (res != cPhs_COMPLEATE_e) {
+        return res;
+    }
+    if (res2 != cPhs_COMPLEATE_e) {
+        return res2;
+    }
+#else
+    if (res2 != cPhs_COMPLEATE_e) {
+        return res2;
+    }
+#endif
 
     mBottomHalfDestroyedSwitch = daSaku_prm::getSwitchNo(this);
     mTopHalfDestroyedSwitch = daSaku_prm::getSwitchNo2(this);
 
     field_0xEF8[0] = 1;
 
-    if (dComIfGs_isSwitch(mBottomHalfDestroyedSwitch, home.roomNo)) {
+    if (fopAcM_isSwitch(this, mBottomHalfDestroyedSwitch)) {
         field_0xEF8[0] = 3;
     }
     field_0xEF8[1] = 0;
@@ -700,7 +719,7 @@ cPhs_State daSaku_c::_daSaku_create() {
     if (daSaku_prm::checkSaku2(this) != 0) {
         field_0xEF8[1] = 1;
 
-        if (dComIfGs_isSwitch(mTopHalfDestroyedSwitch, home.roomNo)) {
+        if (fopAcM_isSwitch(this, mTopHalfDestroyedSwitch)) {
             field_0xEF8[1] = 3;
         }
     }
@@ -722,7 +741,7 @@ cPhs_State daSaku_c::_daSaku_create() {
             }
 
             mDoExt_restoreCurrentHeap();
-            size += mDoExt_adjustSolidHeap(m_heap[i][0]);
+            heapSize += mDoExt_adjustSolidHeap(m_heap[i][0]);
 
             if (!heapCreated) {
                 return cPhs_ERROR_e;
@@ -740,7 +759,7 @@ cPhs_State daSaku_c::_daSaku_create() {
                 mModels[i][1] = NULL;
                 mDoExt_restoreCurrentHeap();
 
-                size += mDoExt_adjustSolidHeap(m_heap[i][1]);
+                heapSize += mDoExt_adjustSolidHeap(m_heap[i][1]);
 
                 if (!heapCreated) {
                     return cPhs_ERROR_e;
@@ -757,15 +776,19 @@ cPhs_State daSaku_c::_daSaku_create() {
     return cPhs_COMPLEATE_e;
 }
 
-BOOL daSaku_c::_daSaku_delete() {
+inline BOOL daSaku_c::_daSaku_delete() {
     if (l_sakuHIO.field_0x04 >= 0) {
         mDoHIO_deleteChild(l_sakuHIO.field_0x04);
         l_sakuHIO.field_0x04 = -1;
     }
 
+#if VERSION == VERSION_DEMO
+    mSmokeCb.end();
+#else
     for (int i = 0; i < 2; i++) {
-        field_0x290[i].end();
+        mSmokeCb[i].end();
     }
+#endif
 
     for (int i = 0; i < 2; i++) {
         if (field_0xEF8[i] != 0) {
@@ -783,13 +806,26 @@ BOOL daSaku_c::_daSaku_delete() {
         }
     }
 
-    dComIfG_resDelete(&field_0xE0C, m_arcname[0]);
+#if VERSION == VERSION_DEMO
+    if (chkFlag(2)) {
+        dComIfG_resDeleteDemo(&field_0xE0C, m_arcname[0]);
+    }
+    if (chkFlag(1)) {
+        if (mType == 0) {
+            dComIfG_resDeleteDemo(&field_0xE04, m_arcname[1]);
+        } else if (mType == 1) {
+            dComIfG_resDeleteDemo(&field_0xE04, m_arcname[2]);
+        }
+    }
+#else
+    dComIfG_resDeleteDemo(&field_0xE0C, m_arcname[0]);
 
     if (mType == 0) {
-        dComIfG_resDelete(&field_0xE04, m_arcname[1]);
+        dComIfG_resDeleteDemo(&field_0xE04, m_arcname[1]);
     } else {
-        dComIfG_resDelete(&field_0xE04, m_arcname[2]);
+        dComIfG_resDeleteDemo(&field_0xE04, m_arcname[2]);
     }
+#endif
 
     return true;
 }
@@ -799,22 +835,30 @@ static BOOL daSaku_Delete(daSaku_c* i_this) {
     return i_this->_daSaku_delete();
 }
 
-/* 000023D8-000023E0       .text daSaku_IsDelete__FP8daSaku_c */
-static BOOL daSaku_IsDelete(daSaku_c*) {
+inline BOOL daSaku_c::_daSaku_isdelete() {
     return TRUE;
 }
 
-/* 000023E0-0000242C       .text daSaku_Draw__FP8daSaku_c */
-static BOOL daSaku_Draw(daSaku_c* i_this) {
-    i_this->saku_draw_sub(0);
-    if (i_this->field_0xEF8[1] != 0) {
-        i_this->saku_draw_sub(1);
+/* 000023D8-000023E0       .text daSaku_IsDelete__FP8daSaku_c */
+static BOOL daSaku_IsDelete(daSaku_c* i_this) {
+    return i_this->_daSaku_isdelete();
+}
+
+inline BOOL daSaku_c::_daSaku_draw() {
+    saku_draw_sub(0);
+    if (field_0xEF8[1] != 0) {
+        saku_draw_sub(1);
     }
 
     return TRUE;
 }
 
-BOOL daSaku_c::_daSaku_execute() {
+/* 000023E0-0000242C       .text daSaku_Draw__FP8daSaku_c */
+static BOOL daSaku_Draw(daSaku_c* i_this) {
+    return i_this->_daSaku_draw();
+}
+
+inline BOOL daSaku_c::_daSaku_execute() {
     int particleTimer;
 
     for (int i = 0; i < 2; i++) {

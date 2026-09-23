@@ -50,7 +50,8 @@ class daObjYLzou_HIO_c : public JORReflexible {
 public:
     daObjYLzou_HIO_c();
     virtual ~daObjYLzou_HIO_c() {};
-    void genMessage(JORMContext*);
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04*/ s8 mNo;

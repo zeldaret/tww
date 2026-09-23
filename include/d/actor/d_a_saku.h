@@ -1,6 +1,7 @@
 #ifndef D_A_SAKU_H
 #define D_A_SAKU_H
 
+#include "SSystem/SComponent/c_lib.h"
 #include "d/d_bg_w.h"
 #include "d/d_cc_d.h"
 #include "d/d_particle.h"
@@ -11,8 +12,12 @@
 
 class daSaku_c : public fopAc_ac_c {
 public:
-    void chkFlag(unsigned char) {}
-    void setFlag(unsigned char) {}
+#if VERSION == VERSION_DEMO
+    daSaku_c() : mSmokeCb(dust_color, NULL, 1) {}
+#endif
+
+    bool chkFlag(u8 flag) { return cLib_checkBit<u8>(mFlag, flag); }
+    void setFlag(u8 flag) { cLib_onBit<u8>(mFlag, flag); }
 
     inline cPhs_State _daSaku_create();
     inline BOOL _daSaku_delete();
@@ -56,7 +61,11 @@ public:
     static const s32 m_max_particle_timer;
     static const u8 m_start_alpha;
 
-    /* 0x290 */ dPa_smokeEcallBack field_0x290[2];
+#if VERSION == VERSION_DEMO
+    /* 0x290 */ dPa_smokeEcallBack mSmokeCb;
+#else
+    /* 0x290 */ dPa_smokeEcallBack mSmokeCb[2];
+#endif
     /* 0x2D0 */ dCcD_Stts mStts;
     /* 0x30C */ dCcD_Cyl field_0x30C[2][3];
     /* 0xA2C */ cXyz mPos[2][3];
@@ -68,7 +77,7 @@ public:
     /* 0xE34 */ dBgW* field_0xE34[2][2];
     /* 0xE44 */ dBgW* field_0xE44[2];
     /* 0xE4C */ Mtx mMtx[2];
-    /* 0xEAC */ u32 field_0xEAC[2];
+    /* 0xEAC */ JPABaseEmitter* mpEmitter[2];
     /* 0xEB4 */ f32 field_0xEB4[2];
     /* 0xEBC */ s32 mParticleTimers[2];
     /* 0xEC4 */ cXyz field_0xEC4[2];
@@ -77,7 +86,7 @@ public:
     /* 0xEEC */ s32 field_0xEEC;
     /* 0xEF0 */ u8 field_0xEF0[2];
     /* 0xEF2 */ u8 mType;
-    /* 0xEF3 */ u8 field_0xEF3[0xEF4 - 0xEF3];
+    /* 0xEF3 */ u8 mFlag;
     /* 0xEF4 */ u8 field_0xEF4;
     /* 0xEF5 */ u8 field_0xEF5[0xEF8 - 0xEF5];
     /* 0xEF8 */ s32 field_0xEF8[2];
@@ -104,6 +113,8 @@ public:
     };
 
     virtual ~sakuHIO_c() {};
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 field_0x04;
     /* 0x05 */ u8 field_0x05;
