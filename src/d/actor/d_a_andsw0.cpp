@@ -335,8 +335,7 @@ static cPhs_State daAndsw0_Create(fopAc_ac_c* ac) {
     if (i_this->mFirstSwitchToCheck == 0xFF)
         i_this->mFirstSwitchToCheck = 0;
     if (i_this->mNumSwitchesToCheck == 0xFF) {
-        i_this->mSwitchToSet = 0;
-        i_this->mBehaviorType = 0;
+        i_this->mBehaviorType = i_this->mSwitchToSet = 0;
     }
 
     return cPhs_COMPLEATE_e;

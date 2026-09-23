@@ -1432,7 +1432,7 @@ config.libs = [
     },
     Rel("f_pc_profile_lst", [Object(Matching, "f_pc/f_pc_profile_lst.cpp")]),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_agbsw0"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_andsw0"),
+    ActorRel(Matching,    "d_a_andsw0"),
     ActorRel(Matching,    "d_a_andsw2"),
     ActorRel(Matching,    "d_a_att"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bflower"),
