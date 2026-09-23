@@ -20,7 +20,7 @@ BOOL daObjMsdanSub2::Act_c::CreateHeap() {
 /* 0000012C-000002E4       .text Create__Q214daObjMsdanSub25Act_cFv */
 BOOL daObjMsdanSub2::Act_c::Create() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
-    fopAcM_setCullSizeBox(this, -1500.0f, -100.0f, -1500.0f, 1500.0f, 1000.0f, 1500.0f);
+    fopAcM_setCullSizeBox(this, -1500.0f, -1000.0f, -1500.0f, 1500.0f, 1000.0f, 1500.0f);
 
     s32 val = prm_get_size();
     BOOL isSwitch = dComIfGs_isSwitch(val, home.roomNo);
