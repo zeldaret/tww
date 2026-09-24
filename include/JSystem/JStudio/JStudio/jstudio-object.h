@@ -4,8 +4,6 @@
 #include "JSystem/JStudio/JStudio/jstudio-control.h"
 #include "limits.h"
 
-typedef struct _GXColor GXColor;
-
 namespace JStudio {
 namespace data {
     enum TEOperationData {

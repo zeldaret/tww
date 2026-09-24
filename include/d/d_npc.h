@@ -107,7 +107,7 @@ public:
 
 class dNpc_EventCut_c {
 private:
-    /* 0x00 */ char* mpEvtStaffName;
+    /* 0x00 */ const char* mpEvtStaffName;
     /* 0x04 */ int mEvtStaffId;
     /* 0x08 */ fopAc_ac_c* mpActor;
     /* 0x0C */ fopNpc_npc_c* mpTalkActor;
@@ -157,7 +157,7 @@ public:
     void cutContinueTalkStart();
     void cutTalkMsgProc();
 
-    char* getActorName() { return mpEvtStaffName; }
+    const char* getActorName() { return mpEvtStaffName; }
     int getNowCut() { return mCurActIdx; }
     bool getAttnFlag() { return mbAttention; }
     void setAttnFlag(bool flag) { mbAttention = flag; }

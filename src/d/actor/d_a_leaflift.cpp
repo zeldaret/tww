@@ -87,7 +87,7 @@ BOOL daLlift_c::CreateHeap() {
         return FALSE;
     }
 
-    mpModel->setUserArea((u32)this);
+    mpModel->setUserArea((uintptr_t)this);
     mpBgW = new dBgW();
     if (mpBgW) {
         cBgD_t* pData = (cBgD_t *)dComIfG_getObjectRes(m_arcname, dRes_INDEX_OLIFT_DZB_OLIFT_e);

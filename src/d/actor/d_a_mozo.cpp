@@ -212,7 +212,7 @@ cPhs_State daMozo_c::CreateInit() {
     }
     field_0x376 = cLib_minMaxLimit<u8>(temp, 0, 2);
 
-    mAnimMorf->getModel()->setUserArea((u32)this);
+    mAnimMorf->getModel()->setUserArea((uintptr_t)this);
     for (u16 i = 0; i < mdlData->getJointNum(); i++) {
         if (i == MOZ_JNT_ATAMA_J_e) {
             mdlData->getJointNodePointer(i)->setCallBack(daMozo_nodeCallBack);

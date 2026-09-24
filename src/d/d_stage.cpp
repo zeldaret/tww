@@ -198,7 +198,7 @@ int createRoomScene(int param_0) {
     }
 
     *ptr = param_0;
-    return fopScnM_CreateReq(fpcNm_ROOM_SCENE_e, fpcNm_INVALID_e, 0, (u32)ptr);
+    return fopScnM_CreateReq(fpcNm_ROOM_SCENE_e, fpcNm_INVALID_e, 0, (uintptr_t)ptr);
 }
 
 /* 80040E38-80040E6C       .text checkRoomDisp__20dStage_roomControl_cCFi */
@@ -1736,8 +1736,8 @@ int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int i_num, void* i_f
     i_stage->setRoom(rtbl);
 
     for (int i = 0; i < rtbl->num; i++) {
-        rtbl_entries[i] = (roomRead_data_class*)((u32)i_file + (u32)rtbl_entries[i]);
-        rtbl_entries[i]->m_rooms = (u8*)((u32)i_file + (u32)rtbl_entries[i]->m_rooms);
+        rtbl_entries[i] = (roomRead_data_class*)((uintptr_t)i_file + (uintptr_t)rtbl_entries[i]);
+        rtbl_entries[i]->m_rooms = (u8*)((uintptr_t)i_file + (uintptr_t)rtbl_entries[i]->m_rooms);
     }
 
     return 1;
@@ -1766,7 +1766,7 @@ int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPathInfo(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
-        pPath->m_points = (dPnt*)((u32)pPath->m_points + i_stage->getPntInf()->m_pnt_offset);
+        pPath->m_points = (dPnt*)((uintptr_t)pPath->m_points + i_stage->getPntInf()->m_pnt_offset);
     return 1;
 }
 
@@ -1784,7 +1784,7 @@ int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPath2Info(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
-        pPath->m_points = (dPnt*)((u32)pPath->m_points + i_stage->getPnt2Inf()->m_pnt_offset);
+        pPath->m_points = (dPnt*)((uintptr_t)pPath->m_points + i_stage->getPnt2Inf()->m_pnt_offset);
     return 1;
 }
 
@@ -2049,7 +2049,7 @@ void dStage_dt_c_offsetToPtr(void* i_data) {
 
     for (int i = 0; i < file->m_chunkCount; i++) {
         if (p_tno->m_offset != 0) {
-            p_tno->m_offset += (u32)i_data;
+            p_tno->m_offset += (uintptr_t)i_data;
         }
         p_tno++;
     }
@@ -2246,7 +2246,7 @@ void dStage_Create() {
 
 /* 80043464-80043514       .text dStage_Delete__Fv */
 void dStage_Delete() {
-    char* demoArcName = dStage_roomControl_c::getDemoArcName();
+    const char* demoArcName = dStage_roomControl_c::getDemoArcName();
     if (*demoArcName != 0) {
         dComIfG_deleteObjectRes(demoArcName);
     }

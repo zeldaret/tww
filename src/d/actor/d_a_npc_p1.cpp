@@ -1159,7 +1159,7 @@ BOOL daNpc_P1_c::CreateHeap() {
             model_data_p->getJointNodePointer(i)->setCallBack(nodeCallBack1);
         }
     }
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mObjAcch.Set(
         fopAcM_GetPosition_p(this),

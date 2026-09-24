@@ -38,7 +38,7 @@ public:
     /* 0x30 */ s32 mNextIdx;
     /* 0x34 */ u32 field_0x34[3];
 
-    char* getName() { return mName; }
+    const char* getName() { return mName; }
     s32 getNext() { return mNextIdx; }
     s32 getNumber() { return mSubstanceSize; }
     s32 getIndex() { return mSubstanceIdx; }
@@ -127,7 +127,7 @@ public:
     BOOL finish_check();
     void specialStaffProc(dEvDtStaff_c*);
 
-    char * getName() { return mName; }
+    char* getName() { return mName; }
     int getStaff(int idx) { return mStaffIdx[idx]; }
     s32 getNStaff() { return mNStaff; }
     u32 getPriority() { return mPriority; }
@@ -187,7 +187,7 @@ public:
     dEvDtEvent_c* getEventP(int i) { return &mEventP[i]; }
     dEvDtData_c* getDataP(int i) { return &mDataP[i]; }
     dEvDtCut_c* getCutP(int i) { return &mCutP[i]; }
-    char* getEventName(int i) { return mEventP[i].getName(); }
+    const char* getEventName(int i) { return mEventP[i].getName(); }
     int getStaffCurrentCut(int i) { return mStaffP[i].getCurrentCut(); }
     dEvDtCut_c* getCutStaffCurrentCutP(int i) { return getCutP(getStaffCurrentCut(i)); }
     int getStaffStartCut(int i) { return mStaffP[i].getStartCut(); }

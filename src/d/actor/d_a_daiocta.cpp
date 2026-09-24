@@ -349,7 +349,7 @@ BOOL daDaiocta_c::createBodyHeap() {
         return FALSE;
     }
 
-    mpMorf->getModel()->setUserArea((u32) this);
+    mpMorf->getModel()->setUserArea((uintptr_t) this);
 
     return TRUE;
 }
@@ -1096,7 +1096,7 @@ void daDaiocta_c::modeDemo() {
 
     if (eventInfo.checkCommandDemoAccrpt()) {
         int staff_id = dComIfGp_evmng_getMyStaffId("Daiocta");
-        char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(staff_id);
+        const char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(staff_id);
 
         cXyz current_pos = current.pos;
         s16 o_angle;
@@ -1228,7 +1228,7 @@ void daDaiocta_c::modeDeleteInit() {
 void daDaiocta_c::modeDelete() {
     if (eventInfo.checkCommandDemoAccrpt()) {
         int staff_id = dComIfGp_evmng_getMyStaffId("Daiocta");
-        char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(staff_id);
+        const char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(staff_id);
 
         if (strcmp(cut_name, "DEATH1") == 0) {
             current.pos.y = mWaterY;

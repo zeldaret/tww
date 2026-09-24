@@ -363,8 +363,8 @@ void daNpc_Rsh1_c::playTexPatternAnm() {
 /* 00000BDC-00000C64       .text setAnm__12daNpc_Rsh1_cFSc */
 void daNpc_Rsh1_c::setAnm(s8 i_index) {
     static int play_mode_tbl[7] = {
-        2, 2, 2, 2,
-        2, 2, 2
+        J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP
     };
 
     static float morf_frame_tbl[7] = {
@@ -1875,7 +1875,7 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
         }
     }
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     cXyz* speed_p = &speed;
     cXyz* old_pos_p = &old.pos;

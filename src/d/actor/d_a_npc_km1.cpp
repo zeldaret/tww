@@ -764,7 +764,7 @@ BOOL daNpc_Km1_c::CreateHeap() {
                             mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Km);
                         }
                     }
-                    mpMorf->getModel()->setUserArea((u32)this);
+                    mpMorf->getModel()->setUserArea((uintptr_t)this);
                     mAcchCir.SetWall(30.0f,60.0f);
                     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
                     return TRUE;

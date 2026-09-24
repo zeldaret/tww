@@ -5011,7 +5011,7 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         fopAcM_SetMin(i_actor, -200.0f, -50.0f, -100.0f);
         fopAcM_SetMax(i_actor, 125.0f, 250.0f, 250.0f);
         fopAcM_SetMtx(i_actor, i_this->mpMorf->getModel()->getBaseTRMtx());
-        i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+        i_this->mpMorf->getModel()->setUserArea((uintptr_t)i_this);
         i_this->initBt(162.5f, 125.0f);
         
         i_this->dr.m70C = 1;

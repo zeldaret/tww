@@ -598,7 +598,7 @@ BOOL daPy_lk_c::setGetDemo() {
                 mMsgId = fpcM_ERROR_PROCESS_ID_e;
             }
             m34CE |= 0x01;
-            char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+            const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
             if (cutName != NULL) {
                 // TODO: is there an inline for parsing link's cut name -> cut
                 // index?

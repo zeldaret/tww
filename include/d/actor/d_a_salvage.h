@@ -89,7 +89,7 @@ public:
         mSalvageId = -1;
     }
 
-    static char* m_arcname;
+    static const char* m_arcname;
     static const f32 m_outersea_near;
     static const f32 m_inside_near;
     static const f32 m_cmap_near;

@@ -369,7 +369,7 @@ void JAInter::StreamMgr::checkPlayingStream() {
 /* 8029C730-8029C858       .text Play_DirectPCM__Q27JAInter9StreamLibFPQ28JASystem11TDSPChannelPsUsUlsUs */
 void JAInter::StreamLib::Play_DirectPCM(JASystem::TDSPChannel* param_1, s16* param_2, u16 param_3, u32 param_4, s16 param_5, u16 param_6) {
     JASystem::DSPInterface::DSPBuffer* buffer = JASystem::DSPInterface::getDSPHandle(param_1->mNumber);
-    buffer->field_0x118 = (u32)param_2;
+    buffer->field_0x118 = (uintptr_t)param_2;
     buffer->field_0x102 = 0;
     buffer->field_0x100 = 33;
     if (JAInter::StreamLib::header.field_0x10 != 0) {
@@ -377,7 +377,7 @@ void JAInter::StreamLib::Play_DirectPCM(JASystem::TDSPChannel* param_1, s16* par
     } else {
         buffer->field_0x74 = param_4;
     }
-    buffer->field_0x110 = (u32)param_2;
+    buffer->field_0x110 = (uintptr_t)param_2;
     buffer->field_0x114 = param_3 << 16;
     JASystem::DSPInterface::getDSPHandle(param_1->mNumber)->setMixerInitDelayMax(0);
     for (u8 i = 0; i < 6; i++) {

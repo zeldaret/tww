@@ -249,7 +249,7 @@ BOOL daRd_c::_createHeap() {
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
+    mpMorf->getModel()->setUserArea(reinterpret_cast<uintptr_t>(this));
     
     if (!mInvisModel.create(mpMorf->getModel())) {
         return FALSE;

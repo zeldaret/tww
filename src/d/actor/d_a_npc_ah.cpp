@@ -252,7 +252,7 @@ BOOL daNpcAh_c::createHeap() {
             modelData->getJointTree().getJointNodePointer(jntIdx)->setCallBack(da_Npc_Ah_nodeCallBack);
         }
     }   
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 30.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
     return TRUE;
@@ -483,7 +483,7 @@ void daNpcAh_c::privateCut() {
         "MES_SET",
         "GET_ITEM",
     };
-    int staff_idx = dComIfGp_evmng_getMyStaffId(*l_npc_staff_id);
+    int staff_idx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[0]);
     if(staff_idx != -1){
         mActIdx = dComIfGp_evmng_getMyActIdx(staff_idx, cut_name_tbl, 2, 1, 0);
         if(mActIdx == -1){
@@ -646,7 +646,7 @@ void daNpcAh_c::chkMsg() {
 }
 
 /* 0000195C-00001964       .text setMessage__9daNpcAh_cFUl */
-void daNpcAh_c::setMessage(unsigned long msgNo) {
+void daNpcAh_c::setMessage(u32 msgNo) {
     mCurrMsgNo = msgNo;
 }
 
@@ -851,7 +851,7 @@ void daNpcAh_c::playAnm() {
 }
 
 /* 00002148-00002218       .text setAnm__9daNpcAh_cFUcif */
-void daNpcAh_c::setAnm(unsigned char bck_ix, int loopMode, float morf) {
+void daNpcAh_c::setAnm(u8 bck_ix, int loopMode, float morf) {
     f32 tempMorf = field_0x71C;
     if(tempMorf>=0.0f){
         morf = tempMorf;

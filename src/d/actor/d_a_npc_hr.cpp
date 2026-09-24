@@ -2210,12 +2210,12 @@ BOOL daNpc_Hr_c::CreateHeap() {
         }
     }
 
-    mpHrMorf->getModel()->setUserArea((u32)this);
+    mpHrMorf->getModel()->setUserArea((uintptr_t)this);
 
     for(u16 i = 0; i < antModelData->getJointNum(); i++) {
         mpAntennaMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Ht_ant);
     }
-    mpAntennaMorf->getModel()->setUserArea((u32)this);
+    mpAntennaMorf->getModel()->setUserArea((uintptr_t)this);
     
     return TRUE;
 }

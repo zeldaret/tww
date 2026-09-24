@@ -3,7 +3,6 @@
 
 #include "JSystem/JUtility/JUTVideo.h"
 
-typedef struct _GXRenderModeObj GXRenderModeObj;
 class JKRHeap;
 
 class JUTXfb {

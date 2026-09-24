@@ -2844,7 +2844,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
                 i_this->m02B8->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBackHead);
             }
         }
-        i_this->m02B8->getModel()->setUserArea((u32)i_this);
+        i_this->m02B8->getModel()->setUserArea((uintptr_t)i_this);
     }
     i_this->m0388 = mDoExt_J3DModel__create(i_this->m02B8->getModel()->getModelData(), 0, 0x11020203);
     if (i_this->m0388 == NULL) {

@@ -71,7 +71,7 @@ bool Act_c::create_heap() {
         modelData->getJointNodePointer(MSUSW_JNT_AFTER_FIRE2_e)->setCallBack(jnodeCB_moon);
         modelData->getJointNodePointer(MSUSW_JNT_BEFORE_FACE_e)->setCallBack(jnodeCB_moon);
         modelData->getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->setCallBack(jnodeCB_moon);
-        m298->setUserArea((u32)this);
+        m298->setUserArea((uintptr_t)this);
     }
 
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MMIRROR_BTK_MSUSW_e));

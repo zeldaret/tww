@@ -9,7 +9,7 @@ extern "C" {
 
 #define ARQ_CHUNK_SIZE_DEFAULT 4096
 
-typedef void (*ARQCallback)(u32 request_address);
+typedef void (*ARQCallback)(uintptr_t request_address);
 
 typedef enum _ARamType {
     ARAM_DIR_MRAM_TO_ARAM,

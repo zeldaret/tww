@@ -270,7 +270,7 @@ void daGy_Ctrl_c::modeProc(daGy_Ctrl_c::Proc_e arg1, int arg2) {
     struct ModeData {
         /* 0x00 */ ModeFunc init;
         /* 0x0C */ ModeFunc exec;
-        /* 0x18 */ char* name;
+        /* 0x18 */ const char* name;
     }; // size = 0x1C
 
     static ModeData mode_tbl[] = {

@@ -4570,7 +4570,7 @@ cPhs_State daShip_c::create() {
         pModel = mpBodyAnm->getModel();
         pModelData = pModel->getModelData();
         
-        pModel->setUserArea(reinterpret_cast<u32>(this));
+        pModel->setUserArea(reinterpret_cast<uintptr_t>(this));
         
         fopAcM_SetMtx(this, pModel->getBaseTRMtx());
         
@@ -4598,7 +4598,7 @@ cPhs_State daShip_c::create() {
         pModel = mpHeadAnm->getModel();
         pModelData = pModel->getModelData();
         
-        pModel->setUserArea(reinterpret_cast<u32>(this));
+        pModel->setUserArea(reinterpret_cast<uintptr_t>(this));
         
         for (u16 jno = 0; jno < pModelData->getJointNum(); jno++) {
             if (jno == FN_HEAD_H_JNT_J_FN_ATAMA_e || jno == FN_HEAD_H_JNT_J_FN_AGO2_e) {
@@ -4618,14 +4618,14 @@ cPhs_State daShip_c::create() {
             }
         }
         
-        mpCannonModel->setUserArea(reinterpret_cast<u32>(this));
+        mpCannonModel->setUserArea(reinterpret_cast<uintptr_t>(this));
         
         pModelData = mpCannonModel->getModelData();
         
         pModelData->getJointNodePointer(VFNCN_JNT_CANON1_e)->setCallBack(daShip_cannonJointCallBack);
         pModelData->getJointNodePointer(VFNCN_JNT_CANON2_e)->setCallBack(daShip_cannonJointCallBack);
         
-        mpSalvageArmModel->setUserArea(reinterpret_cast<u32>(this));
+        mpSalvageArmModel->setUserArea(reinterpret_cast<uintptr_t>(this));
         mpSalvageArmModel->getModelData()->getJointNodePointer(VFNCR_JNT_V_CRANE_ROTATION_e)->setCallBack(daShip_craneJointCallBack);
         
         m034B = fopAcM_GetParam(this);

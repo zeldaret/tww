@@ -82,7 +82,7 @@ BOOL daObjJump::Act_c::CreateHeap() {
     mModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     if (mModel != NULL) {
         model_data->getJointTree().getJointNodePointer(attr().springJntNum)->setCallBack(jnodeCB_lower);
-        mModel->setUserArea((u32)this);
+        mModel->setUserArea((uintptr_t)this);
     }
     return mModel != NULL;
 }

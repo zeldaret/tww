@@ -77,7 +77,7 @@ BOOL daToge_c::CreateHeap() {
         return FALSE;
     }
 
-    mpModel->setUserArea((u32)this);
+    mpModel->setUserArea((uintptr_t)this);
 
     mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1A_e), cBgW::MOVE_BG_e, &mtx1);
     mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1B_e), cBgW::MOVE_BG_e, &mtx2);

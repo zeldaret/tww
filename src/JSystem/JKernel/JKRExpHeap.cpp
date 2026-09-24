@@ -142,8 +142,8 @@ void* JKRExpHeap::allocFromHead(u32 size, int align) {
     CMemBlock* newUsedBlock = NULL;
 
     for (CMemBlock* block = mHeadFreeList; block; block = block->mNext) {
-        u32 alignedContent = ALIGN_NEXT((u32)block->getContent(), align);
-        u32 offset = alignedContent - (u32)block->getContent();
+        uintptr_t alignedContent = ALIGN_NEXT((uintptr_t)block->getContent(), align);
+        u32 offset = alignedContent - (uintptr_t)block->getContent();
         if (block->size < size + offset) {
             continue;
         }
@@ -200,7 +200,7 @@ void* JKRExpHeap::allocFromHead(u32 size, int align) {
                 CMemBlock* prev = foundBlock->mPrev;
                 CMemBlock* next = foundBlock->mNext;
                 removeFreeBlock(foundBlock);
-                newUsedBlock = (CMemBlock*)((u32)foundBlock + foundOffset);
+                newUsedBlock = (CMemBlock*)((uintptr_t)foundBlock + foundOffset);
                 newUsedBlock->size = foundBlock->size - foundOffset;
                 newFreeBlock =
                     newUsedBlock->allocFore(size, mCurrentGroupId, (u8)foundOffset, 0, 0);
@@ -273,8 +273,8 @@ void* JKRExpHeap::allocFromTail(u32 size, int align) {
     u32 start;
 
     for (CMemBlock* block = mTailFreeList; block; block = block->mPrev) {
-        start = ALIGN_PREV((u32)block->getContent() + block->size - size, align);
-        usedSize = (u32)block->getContent() + block->size - start;
+        start = ALIGN_PREV((uintptr_t)block->getContent() + block->size - size, align);
+        usedSize = (uintptr_t)block->getContent() + block->size - start;
         if (block->size >= usedSize) {
             foundBlock = block;
             offset = block->size - usedSize;
@@ -407,7 +407,7 @@ s32 JKRExpHeap::do_resize(void* ptr, u32 size) {
     if (size > block->size) {
         CMemBlock* foundBlock = NULL;
         for (CMemBlock* freeBlock = mHeadFreeList; freeBlock; freeBlock = freeBlock->mNext) {
-            if (freeBlock == (CMemBlock*)((u32)(block + 1) + block->size)) {
+            if (freeBlock == (CMemBlock*)((uintptr_t)(block + 1) + block->size)) {
                 foundBlock = freeBlock;
                 break;
             }
@@ -666,10 +666,10 @@ void JKRExpHeap::recycleFreeBlock(CMemBlock* block) {
 
 /* 802B27D0-802B291C       .text joinTwoBlocks__10JKRExpHeapFPQ210JKRExpHeap9CMemBlock */
 void JKRExpHeap::joinTwoBlocks(CMemBlock* block) {
-    u32 curBlock = (u32)block; // Fakematch?
-    u32 endAddr = (u32)(block + 1) + block->size;
+    uintptr_t curBlock = (uintptr_t)block; // Fakematch?
+    uintptr_t endAddr = (uintptr_t)(block + 1) + block->size;
     CMemBlock* next = block->mNext;
-    u32 nextAddr = (u32)next - (next->mFlags & 0x7f);
+    uintptr_t nextAddr = (uintptr_t)next - (next->mFlags & 0x7f);
     if (endAddr > nextAddr) {
         JUTWarningConsole_f(":::Heap may be broken. (block = %x)", block);
         OSReport(":::block = %x\n", curBlock);
@@ -731,7 +731,7 @@ bool JKRExpHeap::check() {
                                     block->mNext->mPrev);
             }
 
-            if ((u32)block + block->size + sizeof(CMemBlock) > (u32)block->mNext) {
+            if ((uintptr_t)block + block->size + sizeof(CMemBlock) > (uintptr_t)block->mNext) {
                 ok = false;
                 JUTWarningConsole_f(":::addr %08x: bad block size (%08x)\n", block, block->size);
             }
@@ -947,7 +947,7 @@ JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::allocFore(u32 size, u8 groupId1, u
     mGroupId = groupId1;
     mFlags = alignment1;
     if (getSize() >= size + sizeof(CMemBlock)) {
-        block = (CMemBlock*)(size + (u32)this);
+        block = (CMemBlock*)(size + (uintptr_t)this);
         block[1].mGroupId = groupId2;
         block[1].mFlags = alignment2;
         block[1].size = this->size - (size + sizeof(CMemBlock));
@@ -961,7 +961,7 @@ JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::allocFore(u32 size, u8 groupId1, u
 JKRExpHeap::CMemBlock* JKRExpHeap::CMemBlock::allocBack(u32 size, u8 groupId1, u8 alignment1, u8 groupId2, u8 alignment2) {
     CMemBlock* newblock = NULL;
     if (getSize() >= size + sizeof(CMemBlock)) {
-        newblock = (CMemBlock*)((u32)this + getSize() - size);
+        newblock = (CMemBlock*)((uintptr_t)this + getSize() - size);
         newblock->mGroupId = groupId2;
         newblock->mFlags = alignment2 | 0x80;
         newblock->size = size;

@@ -10361,7 +10361,7 @@ void daPy_lk_c::setDemoData() {
             mDemo.setSystemDemoType();
         }
         if (mStaffIdx != -1) {
-            char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(mStaffIdx);
+            const char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(mStaffIdx);
             if (cut_name != NULL) {
                 // Take the first 3 chars in cut_name, convert them to integers, and calculate demo_mode
                 demo_mode = ((cut_name[0] - '0') * 100 + (cut_name[1] - '0') * 10 + (cut_name[2] - '0'));
@@ -12111,8 +12111,8 @@ void daPy_lk_c::playerInit() {
     
     fopAcM_SetMtx(this, mpCLModel->getBaseTRMtx());
     
-    mpCLModel->setUserArea(reinterpret_cast<u32>(this));
-    mpYmgcs00Model->setUserArea(reinterpret_cast<u32>(this));
+    mpCLModel->setUserArea(reinterpret_cast<uintptr_t>(this));
+    mpYmgcs00Model->setUserArea(reinterpret_cast<uintptr_t>(this));
     for (u16 jnt_no = 0; jnt_no < mpYmgcs00Model->getModelData()->getJointNum(); jnt_no++) {
         mpYmgcs00Model->getModelData()->getJointNodePointer(jnt_no)->setCallBack(daPy_auraCallback);
     }
@@ -12127,10 +12127,10 @@ void daPy_lk_c::playerInit() {
     mpCLModelData->getJointNodePointer(CL_JNT_LINK_ROOT_e)->setCallBack(daPy_jointCallback0);
     mpCLModelData->getJointNodePointer(CL_JNT_RTOE_JNT_e)->setCallBack(daPy_jointCallback1);
     
-    m_pbCalc[PART_UNDER_e]->setUserArea(reinterpret_cast<u32>(this));
+    m_pbCalc[PART_UNDER_e]->setUserArea(reinterpret_cast<uintptr_t>(this));
     m_pbCalc[PART_UNDER_e]->setBeforeCalc(daPy_jointBeforeCallback);
     m_pbCalc[PART_UNDER_e]->setAfterCalc(daPy_jointAfterCallback);
-    m_pbCalc[PART_UPPER_e]->setUserArea(reinterpret_cast<u32>(this));
+    m_pbCalc[PART_UPPER_e]->setUserArea(reinterpret_cast<uintptr_t>(this));
     m_pbCalc[PART_UPPER_e]->setBeforeCalc(daPy_jointBeforeCallback);
     m_pbCalc[PART_UPPER_e]->setAfterCalc(daPy_jointAfterCallback);
     

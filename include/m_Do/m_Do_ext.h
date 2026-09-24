@@ -286,15 +286,15 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
         mOldFrame = oldFrame;
         mBeforeCallback = NULL;
         mAfterCallback = NULL;
-        mUserArea = 0;
+        mUserArea = NULL;
     }
     virtual void calc(u16);
 
-    void setUserArea(u32 area)  { mUserArea = area; }
+    void setUserArea(uintptr_t area)  { mUserArea = area; }
     void setBeforeCalc(CalcCallback callback) { mBeforeCallback = callback; }
     void setAfterCalc(CalcCallback callback) { mAfterCallback = callback; }
 
-    /* 0x58 */ u32 mUserArea;
+    /* 0x58 */ uintptr_t mUserArea;
     /* 0x5C */ mDoExt_MtxCalcOldFrame* mOldFrame;
     /* 0x60 */ CalcCallback mBeforeCallback;
     /* 0x64 */ CalcCallback mAfterCallback;
@@ -596,11 +596,11 @@ public:
     // some calls to these functions define i_color inline which is illegal in C++ for a non-const
     // reference parameter - we add these overloads to enable standard compiler compatibility
 #if !__MWERKS__
-    void update(u16 i_segs, f32 i_size, const _GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr) {
-        update(i_segs, i_size, const_cast<_GXColor&>(i_color), i_space, i_tevStr);
+    void update(u16 i_segs, f32 i_size, const GXColor& i_color, u16 i_space, dKy_tevstr_c* i_tevStr) {
+        update(i_segs, i_size, const_cast<GXColor&>(i_color), i_space, i_tevStr);
     }
-    void update(u16 i_segs, const _GXColor& i_color, dKy_tevstr_c* i_tevStr) {
-        update(i_segs, const_cast<_GXColor&>(i_color), i_tevStr);
+    void update(u16 i_segs, const GXColor& i_color, dKy_tevstr_c* i_tevStr) {
+        update(i_segs, const_cast<GXColor&>(i_color), i_tevStr);
     }
 #endif
 

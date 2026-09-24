@@ -35,7 +35,7 @@ u32 daBoko_c::m_heap_size[] = {
     /* Type_PGANON_SWORD_e  */ 0x2000
 };
 
-char* daBoko_c::m_arc_name[] = {
+const char* daBoko_c::m_arc_name[] = {
     /* Type_BOKO_STICK_e    */ "Boko",
     /* Type_MACHETE_e       */ "Nata",
     /* Type_STALFOS_MACE_e  */ "Club",

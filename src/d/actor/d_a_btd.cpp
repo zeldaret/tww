@@ -2675,7 +2675,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             i_this->mpPhase1Morf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }
-    i_this->mpPhase1Morf->getModel()->setUserArea((u32)i_this);
+    i_this->mpPhase1Morf->getModel()->setUserArea((uintptr_t)i_this);
     pModel = i_this->mpPhase1Morf->getModel();
     i_this->btk = new mDoExt_btkAnm();
     JUT_ASSERT(DEMO_SELECT(5327, 5370), i_this->btk);
@@ -2719,7 +2719,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             i_this->mpPhase2Morf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }
-    i_this->mpPhase2Morf->getModel()->setUserArea((u32)i_this);
+    i_this->mpPhase2Morf->getModel()->setUserArea((uintptr_t)i_this);
     pModel = i_this->mpPhase2Morf->getModel();
     i_this->btkS = new mDoExt_btkAnm();
     JUT_ASSERT(DEMO_SELECT(5370, 5432), i_this->btkS);

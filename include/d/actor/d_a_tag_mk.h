@@ -69,7 +69,7 @@ private:
     /* 0x2B0 */ s16 mCutEndTimer;
     /* 0x2B2 */ u8 m2B2[0x2B4 - 0x2B2];
     /* 0x2B4 */ fpc_ProcID m2B4;
-    /* 0x2B8 */ char* m2B8;
+    /* 0x2B8 */ const char* m2B8;
 };  // Size: 0x2BC
 
 #endif /* D_A_TAG_MK_H */

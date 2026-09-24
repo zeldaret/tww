@@ -586,7 +586,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     }
 
     // Evaluate for attacks that will not cut us down
-    if (cLib_checkBit(ret, 0x01UL)) {
+    if (cLib_checkBit<u32>(ret, 0x01UL)) {
         cCcD_Obj *atHitObj = inf.GetAtHitObj();
         if (atHitObj != NULL && (atHitObj->ChkAtType(AT_TYPE_WIND) ||
                                  atHitObj->ChkAtType(AT_TYPE_BOMB) ||
@@ -627,7 +627,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     }
 
     // Check for collisions that are not attacks
-    if (cLib_checkBit(ret, 0x02UL) && actor && inf.GetCoHitObj() &&
+    if (cLib_checkBit<u32>(ret, 0x02UL) && actor && inf.GetCoHitObj() &&
         inf.GetCoHitObj()->GetStts()) {
         animIdx = packet->search_anm(Anm_c::Mode_PushInto);
 
@@ -656,7 +656,7 @@ void dWood::Unit_c::cc_hit_before_cut(dWood::Packet_c *packet) {
     }
 
     // Check for attacks that WILL cut us down
-    if (cLib_checkBit(ret, 0x01UL)) {
+    if (cLib_checkBit<u32>(ret, 0x01UL)) {
         AnmID_e oldAnimIdx = mAnmIdx;
 
         if ((mAnmIdx < 8)) {

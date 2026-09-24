@@ -673,7 +673,7 @@ bool dDemo_manager_c::create(const u8* r29, cXyz* r30, f32 f31) {
     }
     mFrame = 0;
     mFrameNoMsg = 0;
-    mCurFile = (char*)r29;
+    mCurFile = (const char*)r29;
     mMode = 1;
     return true;
 }

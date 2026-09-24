@@ -4124,7 +4124,7 @@ static cPhs_State daMo2_Create(fopAc_ac_c* a_this) {
     fopAcM_SetMin(a_this, -200.0f, -50.0f, -100.0f);
     fopAcM_SetMax(a_this, 125.0f, 250.0f, 250.0f);
     fopAcM_SetMtx(a_this, i_this->mpMorf->getModel()->getBaseTRMtx());
-    i_this->mpMorf->getModel()->setUserArea((u32)a_this);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)a_this);
     i_this->actor.initBt(162.5f, 125.0f);
     i_this->mDamageReaction.m70C = 1;
     i_this->mDamageReaction.mSpawnY = a_this->current.pos.y;

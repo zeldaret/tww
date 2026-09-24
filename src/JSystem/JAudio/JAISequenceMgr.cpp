@@ -186,7 +186,7 @@ void JAInter::SequenceMgr::checkEntriedSeq() {
             }
 
         } else {
-            if ((u32)buffer == 0xFFFFFFFF) {
+            if ((uintptr_t)buffer == 0xFFFFFFFF) {
                 continue;
             }
             if (heapIdx != 255) {

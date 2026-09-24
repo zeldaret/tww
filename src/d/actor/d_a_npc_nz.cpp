@@ -183,7 +183,7 @@ BOOL daNpc_Nz_c::_createHeap() {
         return false;
     }
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
 
     m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
     JUT_ASSERT(0xDA, m_jnt.getHeadJntNum() >= 0);

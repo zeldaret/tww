@@ -20,7 +20,7 @@ public:
 
     void deleteModelData();
 #if VERSION > VERSION_DEMO
-    BOOL loadModelData(const char*, J3DModelData*&, JKRSolidHeap*&, unsigned long&);
+    BOOL loadModelData(const char*, J3DModelData*&, JKRSolidHeap*&, u32&);
     BOOL createModelData();
 #endif
     BOOL execCreateWait();

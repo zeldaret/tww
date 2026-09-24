@@ -1510,7 +1510,7 @@ void dComIfGs_setPlayerRecollectionData() {
 
     // TODO: This matches but could probably be cleaned up somehow.
     dSv_player_status_c_c* stts = dComIfGs_getpPlayerStatusC(tbl);
-    u32 buffer = (u32)dComIfGp_getPlayerInfoBuffer();
+    uintptr_t buffer = (uintptr_t)dComIfGp_getPlayerInfoBuffer();
     memcpy((void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectStatusA)),       dComIfGs_getpPlayerStatusA(),             sizeof(stts->mRecollectStatusA));
     memcpy((void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectItem)),          dComIfGs_getpItem(),                      sizeof(stts->mRecollectItem));
     memcpy((void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectItemRecord)),    &dComIfGs_getpItemRecord()->mItemRecord2, sizeof(stts->mRecollectItemRecord));
@@ -1619,7 +1619,7 @@ void dComIfGs_revPlayerRecollectionData() {
     tmp_item.mItems[dInvSlot_CAMERA_e]  = dComIfGs_getItem(dInvSlot_CAMERA_e);
 
     // TODO: This matches but could probably be cleaned up somehow.
-    u32 buffer = (u32)dComIfGp_getPlayerInfoBuffer();
+    uintptr_t buffer = (uintptr_t)dComIfGp_getPlayerInfoBuffer();
     memcpy(dComIfGs_getpPlayerStatusA(),             (void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectStatusA)),       sizeof(dSv_player_status_c_c().mRecollectStatusA));
     memcpy(dComIfGs_getpItem(),                      (void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectItem)),          sizeof(dSv_player_status_c_c().mRecollectItem));
     memcpy(&dComIfGs_getpItemRecord()->mItemRecord2, (void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectItemRecord)),    sizeof(dSv_player_status_c_c().mRecollectItemRecord));

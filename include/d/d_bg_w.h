@@ -3,6 +3,7 @@
 
 #include "SSystem/SComponent/c_bg_w.h"
 #include "SSystem/SComponent/c_sxyz.h"
+#include "dolphin/gx/GXStruct.h"
 
 class dBgS_Acch;
 class cM3dGPla;
@@ -14,7 +15,6 @@ class dBgS_CrrPos;
 class cBgS_PolyInfo;
 class fopAc_ac_c;
 class dBgS_CaptPoly;
-typedef struct _GXColor GXColor;
 
 class dBgW : public cBgW {
 public:

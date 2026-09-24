@@ -164,7 +164,7 @@ void dMenu_Collect_c::screenSet() {
         'wk03',
     };
 
-    static char* triTex[8] = {
+    static const char* triTex[8] = {
         "triforce_00.bti",
         "triforce_01.bti",
         "triforce_02.bti",
@@ -174,12 +174,12 @@ void dMenu_Collect_c::screenSet() {
         "triforce_06.bti",
         "triforce_07.bti",
     };
-    static char* symTex[3] = {
+    static const char* symTex[3] = {
         "god_symbol_02.bti",
         "god_symbol_00.bti",
         "god_symbol_01.bti",
     };
-    static char* wepTex[5] = {
+    static const char* wepTex[5] = {
         "sword_00.bti",
         "shield_00.bti",
         "gloves_00.bti",
@@ -384,7 +384,7 @@ void dMenu_Collect_c::screenSet() {
 
     for (int i = 0; i < 8; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        char* r6 = triTex[i];
+        const char* r6 = triTex[i];
         JKRReadTypeResource(mTriforceTexBuffer[i], 0xc00, 'TIMG', r6, archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mTriforceTexBuffer[i], 0xc00);
@@ -400,7 +400,7 @@ void dMenu_Collect_c::screenSet() {
 
     for (int i = 0; i < 3; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        char* r6 = symTex[i];
+        const char* r6 = symTex[i];
         JKRReadTypeResource(mSymbolTexBuffer[i], 0xc00, 'TIMG', r6, archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mSymbolTexBuffer[i], 0xc00);
@@ -413,7 +413,7 @@ void dMenu_Collect_c::screenSet() {
 
     for (int i = 0; i < 5; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        char* r6 = wepTex[i];
+        const char* r6 = wepTex[i];
         JKRReadTypeResource(mItemTexBuffer[i], 0xc00, 'TIMG', r6, archive);
 #if VERSION <= VERSION_JPN
         DCFlushRangeNoSync(mItemTexBuffer[i], 0xc00);

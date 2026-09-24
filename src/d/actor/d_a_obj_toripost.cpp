@@ -121,7 +121,7 @@ BOOL daObjTpost_c::_createHeap() {
         return FALSE;
     }
     else {
-        mMorf->getModel()->setUserArea((u32)this);
+        mMorf->getModel()->setUserArea((uintptr_t)this);
 
         return TRUE;
     }

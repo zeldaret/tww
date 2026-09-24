@@ -1499,7 +1499,7 @@ BOOL daObj_Ikada_c::_createHeap() {
         }
     }
 
-    mpModel->setUserArea((u32)this);
+    mpModel->setUserArea((uintptr_t)this);
 
     if (mType == 4) {
         for (u16 i = 0; i < modelData->getJointNum(); i++) {
