@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-char* daHmlif_c::m_arcname[] = {"Hmlif", "Hyuf1", "Hyuf2"};
+const char* daHmlif_c::m_arcname[] = {"Hmlif", "Hyuf1", "Hyuf2"};
 const f32 daHmlif_c::m_speed[] = {
     1.6666666f,
     3.3333333f,

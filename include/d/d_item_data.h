@@ -265,8 +265,8 @@ enum ItemTable {
 #define MSG_NO_FOR_ITEM(item_no) item_no + 101
 
 struct dItem_data_item_resource {
-    /* 0x00 */ char* mArcname;
-    /* 0x04 */ char* mTexture; // Filename in /files/res/Msg/itemicon.arc of its inventory icon.
+    /* 0x00 */ const char* mArcname;
+    /* 0x04 */ const char* mTexture; // Filename in /files/res/Msg/itemicon.arc of its inventory icon.
     /* 0x08 */ s16 mBmdIdx;
     /* 0x0A */ s16 mSrtIdx; // BTK
     /* 0x0C */ s16 mSrtIdx2; // BTK
@@ -283,7 +283,7 @@ struct dItem_data_item_resource {
 STATIC_ASSERT(sizeof(dItem_data_item_resource) == 0x24);
 
 struct dItem_data_field_item_res {
-    /* 0x00 */ char* mArc;
+    /* 0x00 */ const char* mArc;
     /* 0x04 */ s16 mBmdIdx;
     /* 0x06 */ s16 mSrtIdx; // BTK
     /* 0x08 */ s16 mSrtIdx2; // BTK
@@ -315,15 +315,15 @@ STATIC_ASSERT(sizeof(dItem_data_effect_info) == 0x4);
 
 class dItem_data {
 public:
-    static char* item_arcname_tbl[0x70];
-    static char* item_texture_tbl[0x74];
+    static const char* item_arcname_tbl[0x70];
+    static const char* item_texture_tbl[0x74];
     static dItem_data_item_resource item_resource[0x100];
     static dItem_data_field_item_res field_item_res[0x100];
     static dItem_data_item_info item_info[0x100];
     static dItem_data_effect_info effect_info[0x81];
     
-    static char* getArcname(u8 no) { return item_resource[no].mArcname; }
-    static char* getTexture(u8 no) { return item_resource[no].mTexture; }
+    static const char* getArcname(u8 no) { return item_resource[no].mArcname; }
+    static const char* getTexture(u8 no) { return item_resource[no].mTexture; }
     static s16 getBmdIdx(u8 no) { return item_resource[no].mBmdIdx; }
     static s16 getSrtIdx(u8 no) { return item_resource[no].mSrtIdx; }
     static s16 getSrtIdx2(u8 no) { return item_resource[no].mSrtIdx2; }
@@ -335,7 +335,7 @@ public:
     static s16 getItemMesgNum(u8 no) { return item_resource[no].mItemMesgNum; }
     static u32 getHeapSize(u8 no) { return item_resource[no].mHeapSize; }
     
-    static char* getFieldArc(u8 no) { return field_item_res[no].mArc; }
+    static const char* getFieldArc(u8 no) { return field_item_res[no].mArc; }
     static s16 getFieldBmdIdx(u8 no) { return field_item_res[no].mBmdIdx; }
     static s16 getFieldSrtIdx(u8 no) { return field_item_res[no].mSrtIdx; }
     static s16 getFieldSrtIdx2(u8 no) { return field_item_res[no].mSrtIdx2; }

@@ -345,7 +345,7 @@ private:
     /* 0x18 */ dMesg_tControl* mMesgControl;
     /* 0x1C */ JStudio_JMessage::TCreateObject* mMessage;
     /* 0x20 */ dDemo_object_c mDemoObj;
-    /* 0xD0 */ char* mCurFile;
+    /* 0xD0 */ const char* mCurFile;
     /* 0xD4 */ int mFrame;
     /* 0xD8 */ int mFrameNoMsg;
     /* 0xDC */ int mMode;

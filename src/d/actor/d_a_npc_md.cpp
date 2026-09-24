@@ -207,9 +207,9 @@ static daNpc_Md_HIO_c l_HIO;
 static cXyz l_ms_light_local_vec(0.0f, 0.0f, -10000.0f);
 static cXyz l_ms_light_local_start(5.0f, 7.0f, 0.0f);
 
-static char* l_arc_name = "Md";
-static char* l_arc_name_ship = "Md_ship";
-static char* l_staff_name = "Md1";
+static const char* l_arc_name = "Md";
+static const char* l_arc_name_ship = "Md_ship";
+static const char* l_staff_name = "Md1";
 
 static char* event_name_tbl[] = {
     "Md_ItemGet",
@@ -913,7 +913,7 @@ static BOOL hairNodeCallBack(J3DNode* node, int calcTiming) {
     return TRUE;
 }
 
-static char* hairName[] = {
+static const char* hairName[] = {
     "hair1",
     "hair2",
     "hair3",

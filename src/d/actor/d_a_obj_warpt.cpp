@@ -599,7 +599,7 @@ void daObj_Warpt_c::modeProc(daObj_Warpt_c::Proc_e proc, int index) {
     struct mode_entry_t {
         /* 0x00 */ ModeProcFunc init;
         /* 0x04 */ ModeProcFunc run;
-        /* 0x08 */ char* name;
+        /* 0x08 */ const char* name;
     }; // size = 0x8
 
     static mode_entry_t mode_tbl[] = {

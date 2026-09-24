@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 
-char* daObjMtest::Act_c::M_arcname[Type_Max] = {
+const char* daObjMtest::Act_c::M_arcname[Type_Max] = {
     "Mtest",
     "Mtest",
     "Mtest",

@@ -456,7 +456,7 @@ cPhs_State daDitem_c::create() {
     
     m_itemNo = daDitem_prm::getNo(this);
     
-    char* arcName = dItem_data::getArcname(m_itemNo);
+    const char* arcName = dItem_data::getArcname(m_itemNo);
     if (dItem_data::getBmdIdx(m_itemNo) == -1 || arcName == NULL) {
         m_itemNo = dItemNo_GREEN_RUPEE_e;
     }

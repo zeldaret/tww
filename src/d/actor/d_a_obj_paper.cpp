@@ -24,7 +24,7 @@ namespace daObjPaper {
 
 namespace {
     struct Attr_c {
-        /* 0x00 */ char* mResName;
+        /* 0x00 */ const char* mResName;
         /* 0x04 */ s32 mHeapSize;
         /* 0x06 */ s16 mModelId;
         /* 0x08 */ s16 mEyeOffset;

@@ -852,7 +852,7 @@ void daNpc_Bm1_c::setMtx(bool i_param_1) {
 
 /* 000017A8-000017F8       .text anmNum_toResID__11daNpc_Bm1_cFi */
 char* daNpc_Bm1_c::anmNum_toResID(int i_anmNum) {
-    static char* a_BCKName_TBL[0x16] = {"bm_dwait",    "bm_fly01",     "bm_lookup",  "bm_orooro",   "bm_wait01", "bm_wait02",  "bm_talk01", "bm_nadame",
+    static const char* a_BCKName_TBL[0x16] = {"bm_dwait",    "bm_fly01",     "bm_lookup",  "bm_orooro",   "bm_wait01", "bm_wait02",  "bm_talk01", "bm_nadame",
                                         "bm_gliding",  "bm_endurance", "bm_flyaway", "bm_flyaway2", "bm_talk02", "bm_landing", "bm_walk",   "bm02_wait01",
                                         "bm02_talk01", "bm02_talk02",  "bm_talk03",  "bm_turn",     "bm_walk02", "bm_check"};
     strcpy(l_BCKName, a_BCKName_TBL[i_anmNum]);
@@ -861,7 +861,7 @@ char* daNpc_Bm1_c::anmNum_toResID(int i_anmNum) {
 
 /* 000017F8-00001848       .text headAnmNum_toResID__11daNpc_Bm1_cFi */
 char* daNpc_Bm1_c::headAnmNum_toResID(int i_anmNum) {
-    static char* a_BCKName_TBL[0x16] = {"bmhead01_dwait",   "bmhead01_fly01",    "bmhead01_lookup", "bmhead01_orooro",  "bmhead01_wait01",
+    static const char* a_BCKName_TBL[0x16] = {"bmhead01_dwait",   "bmhead01_fly01",    "bmhead01_lookup", "bmhead01_orooro",  "bmhead01_wait01",
                                         "bmhead01_wait02",  "bmhead01_talk01",   "bmhead01_nadame", "bmhead01_gliding", "bmhead01_endurance",
                                         "bmhead01_flyaway", "bmhead01_flyaway2", "bmhead01_talk02", "bmhead01_landing", "bmhead01_walk",
                                         "bmhead01_wait01",  "bmhead01_wait01",   "bmhead01_wait01", "bmhead01_talk03",  "bmhead01_turn",
@@ -872,7 +872,7 @@ char* daNpc_Bm1_c::headAnmNum_toResID(int i_anmNum) {
 
 /* 00001848-00001898       .text wingAnmNum_toResID__11daNpc_Bm1_cFi */
 char* daNpc_Bm1_c::wingAnmNum_toResID(int i_anmNum) {
-    static char* a_BCKName_TBL[0x16] = {"bmwing_dwait", "bmwing_fly01",  "bmwing_lookup",  "bmwing_orooro",    "bmarm_wait01",   "bmarm_wait02",
+    static const char* a_BCKName_TBL[0x16] = {"bmwing_dwait", "bmwing_fly01",  "bmwing_lookup",  "bmwing_orooro",    "bmarm_wait01",   "bmarm_wait02",
                                         "bmarm_talk01", "bmarm_nadame",  "bmwing_gliding", "bmwing_endurance", "bmarm_flyaway",  "bmwing_flyaway2",
                                         "bmarm_talk02", "bmarm_landing", "bmarm_walk",     "bmarm02_wait01",   "bmarm02_talk01", "bmarm02_talk02",
                                         "bmarm_talk03", "bmarm_turn",    "bmarm_walk02",   "bmarm_check"};
@@ -882,8 +882,8 @@ char* daNpc_Bm1_c::wingAnmNum_toResID(int i_anmNum) {
 
 /* 00001898-00001948       .text btpNum_toResID__11daNpc_Bm1_cFi */
 char* daNpc_Bm1_c::btpNum_toResID(int i_param_1) {
-    static char* a_BTPName_TBL[] = {"bmhead01"};
-    static char* a_BTPName_TBL_2[] = {
+    static const char* a_BTPName_TBL[] = {"bmhead01"};
+    static const char* a_BTPName_TBL_2[] = {
         "bmhead01",
         "bmhead01",
         "bmhead01",
@@ -4143,7 +4143,7 @@ J3DModelData* daNpc_Bm1_c::create_Anm() {
 
 /* 00008710-00008878       .text create_hed_Anm__11daNpc_Bm1_cFv */
 J3DModelData* daNpc_Bm1_c::create_hed_Anm() {
-    static char* a_headBDLName_TBL[] = {
+    static const char* a_headBDLName_TBL[] = {
         "bmhead01.bdl",
         "bmhead01.bdl",
         "bmhead01.bdl",

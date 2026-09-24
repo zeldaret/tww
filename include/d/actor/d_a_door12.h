@@ -25,7 +25,7 @@ public:
     BOOL chkStopClose();
     BOOL CreateHeap();
     u8 getShapeType();
-    char* getArcName();
+    const char* getArcName();
     s32 getBdlLf();
     s32 getBdlRt();
     s32 getDzb();

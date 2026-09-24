@@ -20,10 +20,10 @@ const s32 daShutter_c::m_heapsize[2] = {0x1140, 0x3000};
 const Vec daShutter_c::m_cull_min[2] = {{-500.0f, -100.0f, -50.0f}, {-150.0f, -100.0f, -50.0f}};
 const Vec daShutter_c::m_cull_max[2] = {{500.0f, 250.0f, 50.0f}, {150.0f, 250.0f, 50.0f}};
 
-char* daShutter_c::m_arcname[2] = {"Htobi1", "Htobi2"};
-char* daShutter_c::m_open_ev_name[2] = {"HYSDOOROPEN", "R03DOOROPEN"};
-char* daShutter_c::m_close_ev_name[2] = {NULL, "R03DOORCLOSE"};
-char* daShutter_c::m_staff_name[2] = {"Htobi1", "Htobi2"};
+const char* daShutter_c::m_arcname[2] = {"Htobi1", "Htobi2"};
+const char* daShutter_c::m_open_ev_name[2] = {"HYSDOOROPEN", "R03DOOROPEN"};
+const char* daShutter_c::m_close_ev_name[2] = {NULL, "R03DOORCLOSE"};
+const char* daShutter_c::m_staff_name[2] = {"Htobi1", "Htobi2"};
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */
 bool daShutter_c::_delete() {

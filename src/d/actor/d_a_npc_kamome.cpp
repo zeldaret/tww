@@ -67,7 +67,7 @@ public:
     /* 0x24 */ daNpc_kam_HIO1_c mHio1;
 };  // Size: 0x50
 
-static char* l_staff_name = "HyoiKam";
+static const char* l_staff_name = "HyoiKam";
 static daNpc_kam_HIO_c l_HIO;
 static int l_hio_counter;
 static fpc_ProcID l_msgId;

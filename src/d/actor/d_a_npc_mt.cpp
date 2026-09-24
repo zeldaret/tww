@@ -321,7 +321,7 @@ static u16 l_figure_comp[] = {
     dSv_event_flag_c::UNK_80FF,
 };
 
-static char* l_figure_room_name[] = {
+static const char* l_figure_room_name[] = {
     "Pfigure",
     "figureA",
     "figureB",
