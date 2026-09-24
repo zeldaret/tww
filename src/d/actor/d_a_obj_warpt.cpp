@@ -512,7 +512,7 @@ void daObj_Warpt_c::modeEventWarp() {
         }
         player->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_FALL_VOICE);
         int staffIdx = dComIfGp_evmng_getMyStaffId("Warpt");
-        char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+        const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
 
         bool cVar3 = true;
         if (strcmp(cutName, "WARP") == 0) {

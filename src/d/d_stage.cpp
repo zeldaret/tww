@@ -2246,7 +2246,7 @@ void dStage_Create() {
 
 /* 80043464-80043514       .text dStage_Delete__Fv */
 void dStage_Delete() {
-    char* demoArcName = dStage_roomControl_c::getDemoArcName();
+    const char* demoArcName = dStage_roomControl_c::getDemoArcName();
     if (*demoArcName != 0) {
         dComIfG_deleteObjectRes(demoArcName);
     }

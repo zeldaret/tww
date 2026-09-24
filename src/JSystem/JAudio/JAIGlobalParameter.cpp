@@ -301,32 +301,32 @@ f32 JAIGlobalParameter::getParamSeDolbyBehindDistanceMax() {
 }
 
 /* 802923E8-802923F0       .text getParamInitDataFileName__18JAIGlobalParameterFv */
-char* JAIGlobalParameter::getParamInitDataFileName() {
+const char* JAIGlobalParameter::getParamInitDataFileName() {
     return initDataFileName;
 }
 
 /* 802923F0-802923F8       .text getParamWavePath__18JAIGlobalParameterFv */
-char* JAIGlobalParameter::getParamWavePath() {
+const char* JAIGlobalParameter::getParamWavePath() {
     return wavePath;
 }
 
 /* 802923F8-80292400       .text getParamSequenceArchivesPath__18JAIGlobalParameterFv */
-char* JAIGlobalParameter::getParamSequenceArchivesPath() {
+const char* JAIGlobalParameter::getParamSequenceArchivesPath() {
     return sequenceArchivesPath;
 }
 
 /* 80292400-80292408       .text getParamStreamPath__18JAIGlobalParameterFv */
-char* JAIGlobalParameter::getParamStreamPath() {
+const char* JAIGlobalParameter::getParamStreamPath() {
     return streamPath;
 }
 
 /* 80292408-80292410       .text getParamAudioResPath__18JAIGlobalParameterFv */
-char* JAIGlobalParameter::getParamAudioResPath() {
+const char* JAIGlobalParameter::getParamAudioResPath() {
     return audioResPath;
 }
 
 /* 80292410-80292418       .text getParamSequenceArchivesFileName__18JAIGlobalParameterFv */
-char* JAIGlobalParameter::getParamSequenceArchivesFileName() {
+const char* JAIGlobalParameter::getParamSequenceArchivesFileName() {
     return sequenceArchivesFileName;
 }
 
@@ -398,12 +398,12 @@ u32 JAIGlobalParameter::autoHeapMax = 2;
 u32 JAIGlobalParameter::stayHeapMax = 2;
 u32 JAIGlobalParameter::autoHeapRoomSize = 0xC000;
 u32 JAIGlobalParameter::stayHeapSize = 0x00010000;
-char* JAIGlobalParameter::initDataFileName = "JaiInit.aaf";
-char* JAIGlobalParameter::wavePath = "Banks/";
-char* JAIGlobalParameter::sequenceArchivesPath = "Seqs/";
-char* JAIGlobalParameter::streamPath = "Stream/";
-char* JAIGlobalParameter::audioResPath = "AudioRes/";
-char* JAIGlobalParameter::sequenceArchivesFileName = "JaiSeqs.arc";
+const char* JAIGlobalParameter::initDataFileName = "JaiInit.aaf";
+const char* JAIGlobalParameter::wavePath = "Banks/";
+const char* JAIGlobalParameter::sequenceArchivesPath = "Seqs/";
+const char* JAIGlobalParameter::streamPath = "Stream/";
+const char* JAIGlobalParameter::audioResPath = "AudioRes/";
+const char* JAIGlobalParameter::sequenceArchivesFileName = "JaiSeqs.arc";
 f32 JAIGlobalParameter::inputGainDown = 0.5f;
 f32 JAIGlobalParameter::outputGainUp = 1.2f;
 f32 JAIGlobalParameter::distanceMax = 5000.0f;

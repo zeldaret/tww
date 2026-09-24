@@ -157,7 +157,7 @@ void daNpc_Nz_c::cutProc() {
         }
     };
 
-    static char* a_demo_name_tbl[] = {
+    static const char* a_demo_name_tbl[] = {
         "DEFAULT_NPC_NZ_ESA",
     };
 

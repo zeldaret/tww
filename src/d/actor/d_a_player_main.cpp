@@ -10364,7 +10364,7 @@ void daPy_lk_c::setDemoData() {
             mDemo.setSystemDemoType();
         }
         if (mStaffIdx != -1) {
-            char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(mStaffIdx);
+            const char* cut_name = dComIfGp_getPEvtManager()->getMyNowCutName(mStaffIdx);
             if (cut_name != NULL) {
                 // Take the first 3 chars in cut_name, convert them to integers, and calculate demo_mode
                 demo_mode = ((cut_name[0] - '0') * 100 + (cut_name[1] - '0') * 10 + (cut_name[2] - '0'));

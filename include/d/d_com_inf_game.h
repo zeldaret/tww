@@ -3623,7 +3623,7 @@ inline int dComIfGp_evmng_getMyActIdx(int staffIdx, char** pActions, int actionC
     return dComIfGp_getPEvtManager()->getMyActIdx(staffIdx, pActions, actionCount, force, nameType);
 }
 
-inline char* dComIfGp_evmng_getMyActName(int staffIdx) {
+inline const char* dComIfGp_evmng_getMyActName(int staffIdx) {
     return dComIfGp_getPEvtManager()->getMyActName(staffIdx);
 }
 

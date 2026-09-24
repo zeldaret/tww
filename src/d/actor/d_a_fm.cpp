@@ -1753,7 +1753,7 @@ void daFm_c::modeGrabFootDemo() {
     } else {
         if(eventInfo.checkCommandDemoAccrpt()) {
             int staffIdx = dComIfGp_evmng_getMyStaffId("Fmaster");
-            char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+            const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
             if(strcmp(cutName, "Dummy") == 0 || strcmp(cutName, "WAIT") == 0) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
@@ -2195,7 +2195,7 @@ void daFm_c::modePlayerStartDemo() {
     resetInvKine();
     if(dComIfGp_event_runCheck()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Fmaster");
-        char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+        const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
 
         daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
         
