@@ -28,19 +28,19 @@ public:
     typedef void (daNpc_kam_c::*EventActionInitFunc)(int evtStaffId);
     typedef BOOL (daNpc_kam_c::*EventActionFunc)(int evtStaffId);
     
-    void offLineHit() { cLib_offBit(mHitFlags, 0x07UL); }
-    void onFrontLineHit() { cLib_onBit(mHitFlags, 0x01UL); }
-    u32 isFrontLineHit() { return cLib_checkBit(mHitFlags, 0x01UL); }
-    void onLeftLineHit() { cLib_onBit(mHitFlags, 0x02UL); }
-    u32 isLeftLineHit() { return cLib_checkBit(mHitFlags, 0x02UL); }
-    void onRightLineHit() { cLib_onBit(mHitFlags, 0x04UL); }
-    u32 isRightLineHit() { return cLib_checkBit(mHitFlags, 0x04UL); }
-    void onWaterHit() { cLib_onBit(mHitFlags, 0x08UL); }
-    void offWaterHit() { cLib_offBit(mHitFlags, 0x08UL); }
-    u32 isWaterHit() { return cLib_checkBit(mHitFlags, 0x08UL); }
-    void onNoBgCheck() { cLib_onBit(mHitFlags, 0x10UL); }
-    void offNoBgCheck() { cLib_offBit(mHitFlags, 0x10UL); }
-    u32 isNoBgCheck() { return cLib_checkBit(mHitFlags, 0x10UL); }
+    void offLineHit() { cLib_offBit<u32>(mHitFlags, 0x07UL); }
+    void onFrontLineHit() { cLib_onBit<u32>(mHitFlags, 0x01UL); }
+    u32 isFrontLineHit() { return cLib_checkBit<u32>(mHitFlags, 0x01UL); }
+    void onLeftLineHit() { cLib_onBit<u32>(mHitFlags, 0x02UL); }
+    u32 isLeftLineHit() { return cLib_checkBit<u32>(mHitFlags, 0x02UL); }
+    void onRightLineHit() { cLib_onBit<u32>(mHitFlags, 0x04UL); }
+    u32 isRightLineHit() { return cLib_checkBit<u32>(mHitFlags, 0x04UL); }
+    void onWaterHit() { cLib_onBit<u32>(mHitFlags, 0x08UL); }
+    void offWaterHit() { cLib_offBit<u32>(mHitFlags, 0x08UL); }
+    u32 isWaterHit() { return cLib_checkBit<u32>(mHitFlags, 0x08UL); }
+    void onNoBgCheck() { cLib_onBit<u32>(mHitFlags, 0x10UL); }
+    void offNoBgCheck() { cLib_offBit<u32>(mHitFlags, 0x10UL); }
+    u32 isNoBgCheck() { return cLib_checkBit<u32>(mHitFlags, 0x10UL); }
     
     void onHyoiKamome() { m_hyoi_kamome = true; }
     void offHyoiKamome() { m_hyoi_kamome = false; }
