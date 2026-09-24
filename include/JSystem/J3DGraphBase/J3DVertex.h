@@ -5,7 +5,6 @@
 #include "dolphin/mtx/vec.h"
 #include "dolphin/types.h"
 
-typedef struct _GXColor GXColor;
 class J3DModel;
 class J3DAnmVtxColor;
 class J3DVertexBuffer;

@@ -74,7 +74,7 @@ public:
     // void ChkDeleteActorRegist(fopAc_ac_c*) {}
     // void DebugDrawPoly(dBgW&) {}
     // void Draw() {}
-    // void DrawPoly(cBgS_PolyInfo&, _GXColor&) {}
+    // void DrawPoly(cBgS_PolyInfo&, GXColor&) {}
     dBgW* GetBgWPointer(cBgS_PolyInfo& i_poly) { return (dBgW*)cBgS::GetBgWPointer(i_poly); }
     // void GetPolyCamId(cBgS_PolyInfo&) {}
     // void GroundCross(cBgS_GndChk*) {}

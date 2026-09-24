@@ -15,7 +15,6 @@ class cCcD_TriAttr;
 class cCcD_AabAttr;
 class cCcD_CylAttr;
 class cCcD_SphAttr;
-typedef struct _GXColor GXColor;
 
 enum cCcD_AtSPrm_e {
     /* 0x01 */ cCcD_AtSPrm_Set_e = 0x01,
