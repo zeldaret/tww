@@ -34,7 +34,7 @@ public:
     void setPlayerAngle();
     void darkProc();
     void startProc();
-    u16 next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
     u32 getMsg();
     void talkInit();
     u16 talk();

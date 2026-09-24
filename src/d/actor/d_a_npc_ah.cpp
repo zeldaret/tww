@@ -646,7 +646,7 @@ void daNpcAh_c::chkMsg() {
 }
 
 /* 0000195C-00001964       .text setMessage__9daNpcAh_cFUl */
-void daNpcAh_c::setMessage(unsigned long msgNo) {
+void daNpcAh_c::setMessage(u32 msgNo) {
     mCurrMsgNo = msgNo;
 }
 
@@ -851,7 +851,7 @@ void daNpcAh_c::playAnm() {
 }
 
 /* 00002148-00002218       .text setAnm__9daNpcAh_cFUcif */
-void daNpcAh_c::setAnm(unsigned char bck_ix, int loopMode, float morf) {
+void daNpcAh_c::setAnm(u8 bck_ix, int loopMode, float morf) {
     f32 tempMorf = field_0x71C;
     if(tempMorf>=0.0f){
         morf = tempMorf;
