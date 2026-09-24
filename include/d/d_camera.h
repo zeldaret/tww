@@ -314,8 +314,9 @@ public:
             /* 0x38C */ u8 m38C;
             /* 0x390 */ cXyz m390;
             /* 0x39C */ u8 m39C;
-            /* 0x3A0 */ f32 m3A0;
-            /* 0x3A4 */ f32 m3A4;
+            /* 0x39D */ u8 m39D;
+            /* 0x3A0 */ int m3A0;
+            /* 0x3A4 */ int m3A4;
             /* 0x3A8 */ cSGlobe m3A8;
             /* 0x3B0 */ f32 m3B0;
             /* 0x3B4 */ f32 m3B4;
