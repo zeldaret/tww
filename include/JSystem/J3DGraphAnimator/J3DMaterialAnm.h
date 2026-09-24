@@ -82,7 +82,7 @@ public:
     bool getAnmFlag() const { return mAnmFlag; }
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     void setAnmTransform(J3DAnmTextureSRTKey* transform) {
-        J3D_ASSERT(0, transform != NULL, "Error : null pointer.");
+        J3D_ASSERT_NULLPTR(0, transform != NULL);
         mAnmTransform = transform;
     }
     void calc(J3DTextureSRTInfo* pSRTInfo) const;

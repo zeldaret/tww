@@ -431,13 +431,13 @@ public:
     }
 
     u16 getUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(1029, idx < mTrackNum / 3, "Error : range over.");
+        J3D_ASSERT_RANGE(1029, idx < mTrackNum / 3);
         return mUpdateMaterialID[idx];
     }
     u16 getUpdateMaterialNum() const { return mTrackNum / 3; }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
     int getUpdateTexMtxID(u16 idx) const {
-        J3D_ASSERT(1017, idx < (mTrackNum / 3), "Error : range over.");
+        J3D_ASSERT_RANGE(1017, idx < (mTrackNum / 3));
         return mUpdateTexMtxID[idx];
     }
 
@@ -448,7 +448,7 @@ public:
 
     u32 getTexMtxCalcType() { return mTexMtxCalcType; }
     Vec& getSRTCenter(u16 idx) {
-        J3D_ASSERT(1047, idx < mTrackNum / 3, "Error : range over.");
+        J3D_ASSERT_RANGE(1047, idx < mTrackNum / 3);
         return mSRTCenter[idx];
     }
 
@@ -525,7 +525,7 @@ public:
     void searchUpdateMaterialID(J3DModelData*);
 
     u16 getUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(2288, idx < mUpdateMaterialNum, "Error : range over.");
+        J3D_ASSERT_RANGE(2288, idx < mUpdateMaterialNum);
         return mUpdateMaterialID[idx];
     }
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
@@ -583,11 +583,11 @@ public:
     u16 getKRegUpdateMaterialNum() const { return mKRegUpdateMaterialNum; }
 
     u16 getCRegUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(2100, idx < mCRegUpdateMaterialNum, "Error : range over.");
+        J3D_ASSERT_RANGE(2100, idx < mCRegUpdateMaterialNum);
         return mCRegUpdateMaterialID[idx];
     }
     u16 getKRegUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(2140, idx < mKRegUpdateMaterialNum, "Error : range over.");
+        J3D_ASSERT_RANGE(2140, idx < mKRegUpdateMaterialNum);
         return mKRegUpdateMaterialID[idx];
     }
 
@@ -645,7 +645,7 @@ public:
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
     u16 getUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(1578, idx < mUpdateMaterialNum, "Error : range over.");
+        J3D_ASSERT_RANGE(1578, idx < mUpdateMaterialNum);
         return mUpdateMaterialID[idx];
     }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }

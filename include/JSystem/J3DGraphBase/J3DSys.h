@@ -1,6 +1,7 @@
 #ifndef J3DSYS_H
 #define J3DSYS_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/types.h"
@@ -65,7 +66,7 @@ public:
     void setVtxCol(GXColor* pVtxCol) { mVtxCol = pVtxCol; }
 
     void setModel(J3DModel* pModel) {
-        J3D_ASSERT(200, pModel, "Error : null pointer.");
+        J3D_ASSERT_NULLPTR(200, pModel);
         mModel = pModel;
     }
     void setShapePacket(J3DShapePacket* pPacket) { mShapePacket = pPacket; }
@@ -98,14 +99,14 @@ public:
     // Type 0: Opa Buffer
     // Type 1: Xlu Buffer
     void setDrawBuffer(J3DDrawBuffer* buffer, int type) {
-        J3D_ASSERT(114, type >= 0 && type < 2, "Error : range over.");
+        J3D_ASSERT_RANGE(114, type >= 0 && type < J3DSysDrawBuf_MAX);
         mDrawBuffer[type] = buffer;
     }
 
     // Type 0: Opa Buffer
     // Type 1: Xlu Buffer
     J3DDrawBuffer* getDrawBuffer(int type) {
-        J3D_ASSERT(121, type >= 0 && type < 2, "Error : range over.");
+        J3D_ASSERT_RANGE(121, type >= 0 && type < J3DSysDrawBuf_MAX);
         return mDrawBuffer[type];
     }
 
@@ -127,7 +128,7 @@ public:
     /* 0x03C */ J3DMatPacket* mMatPacket;
     /* 0x040 */ J3DShapePacket* mShapePacket;
     /* 0x044 */ J3DShape* mShape;
-    /* 0x048 */ J3DDrawBuffer* mDrawBuffer[2];
+    /* 0x048 */ J3DDrawBuffer* mDrawBuffer[J3DSysDrawBuf_MAX];
     /* 0x050 */ u32 mDrawMode;
     /* 0x054 */ u32 mMaterialMode;
     /* 0x058 */ J3DTexture* mTexture;
