@@ -277,7 +277,7 @@ static BOOL daPirate_Flag_Draw(pirate_flag_class* i_this) {
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mPacket.getMtx());
     i_this->mPacket.setTevStr(&i_this->tevStr);
 
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&i_this->mPacket, 0);
     if (l_HIO.m05 != 0) {
         s16 tmp_r29 = i_this->current.angle.y;
 

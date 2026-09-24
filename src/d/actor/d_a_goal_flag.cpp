@@ -934,7 +934,7 @@ bool daGoal_Flag_c::_draw() {
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, mFlagPacket.getMtx());
 
     mFlagPacket.setTevStr(&tevStr);
-    j3dSys.getDrawBuffer(0)->entryImm(&mFlagPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&mFlagPacket, 0);
 
     for (int i = 0; i < mNumRopes; i++) {
         GXColor rope_color;

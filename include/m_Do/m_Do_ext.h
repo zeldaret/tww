@@ -557,7 +557,7 @@ public:
 
     void draw();
     
-    void entryOpa() { j3dSys.getDrawBuffer(0)->entryImm(this, 0); }
+    void entryOpa() { j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(this, 0); }
 };
 
 class mDoExt_onCupOffAupPacket : public J3DPacket {
@@ -566,7 +566,7 @@ public:
 
     void draw();
     
-    void entryOpa() { j3dSys.getDrawBuffer(0)->entryImm(this, 0); }
+    void entryOpa() { j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(this, 0); }
 };
 
 class mDoExt_3Dline_c {

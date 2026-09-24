@@ -1140,7 +1140,7 @@ void daSea_packet_c::draw() {
 /* 8015D80C-8015D87C       .text daSea_Draw__FP9sea_class */
 static BOOL daSea_Draw(sea_class* i_this) {
     dComIfGd_setListSky();
-    j3dSys.getDrawBuffer(1)->entryImm(&l_cloth, 31);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu)->entryImm(&l_cloth, 31);
     dComIfGd_setList();
     return TRUE;
 }

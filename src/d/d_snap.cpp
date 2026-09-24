@@ -2248,7 +2248,7 @@ void dSnap_RegistFig(u8 photoNo, fopAc_ac_c* actor, const Vec& pos, s16 angleY, 
 void dSnap_DebugDraw() {
     if (l_snap.ChkReleaseShutter()) {
         dComIfGd_setListMaskOff();
-        j3dSys.getDrawBuffer(1)->entryImm(&l_snap, 0xFF);
+        j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu)->entryImm(&l_snap, 0xFF);
         dComIfGd_setList();
     }
 }

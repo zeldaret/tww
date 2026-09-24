@@ -477,7 +477,7 @@ void dFlower_packet_c::update() {
         }
     }
 
-    j3dSys.getDrawBuffer(0)->entryImm(this, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(this, 0);
 }
 
 /* 800C0EF4-800C10D4       .text setData__16dFlower_packet_cFP14dFlower_data_ciScR4cXyziSc */

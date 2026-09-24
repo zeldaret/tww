@@ -1356,17 +1356,17 @@ u32 dDlst_shadowReal_c::set(u32 key, s8 shouldFade, J3DModel* model, cXyz* pos, 
         mModelNum = 0;
     }
 
-    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
-    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu);
     j3dSys.setViewMtx(mViewMtx);
-    j3dSys.setDrawBuffer(mpDrawBuffer, 0);
-    j3dSys.setDrawBuffer(mpDrawBuffer, 1);
+    j3dSys.setDrawBuffer(mpDrawBuffer, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(mpDrawBuffer, J3DSysDrawBuf_Xlu);
     model->entry();
     model->lock();
     model->viewCalc();
     j3dSys.setViewMtx(dComIfGd_getView()->mViewMtx);
-    j3dSys.setDrawBuffer(buffer0, 0);
-    j3dSys.setDrawBuffer(buffer1, 1);
+    j3dSys.setDrawBuffer(buffer0, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(buffer1, J3DSysDrawBuf_Xlu);
     return mKey;
 }
 

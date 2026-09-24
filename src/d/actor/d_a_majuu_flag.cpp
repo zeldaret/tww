@@ -493,7 +493,7 @@ static BOOL daMajuu_Flag_Draw(daMajuu_Flag_c* i_this) {
     } else {
         i_this->mPacket.setTevStr(&i_this->tevStr);
     }
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&i_this->mPacket, 0);
     return TRUE;
 }
 

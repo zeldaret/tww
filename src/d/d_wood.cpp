@@ -853,7 +853,7 @@ void dWood::Packet_c::update() {
     }
 
     dComIfGd_setXluListBG();
-    j3dSys.getDrawBuffer(0)->entryImm(this, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(this, 0);
     dComIfGd_setXluList();
 }
 

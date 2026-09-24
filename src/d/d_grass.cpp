@@ -411,7 +411,7 @@ void dGrass_packet_c::update() {
         data++;
     }
     mDoLib_clipper::resetFar();
-    j3dSys.getDrawBuffer(0)->entryImm(this, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(this, 0);
 }
 
 /* 800784E8-800785C0       .text setData__15dGrass_packet_cFP13dGrass_data_ciR4cXyziSc */

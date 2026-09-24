@@ -69,7 +69,7 @@ static BOOL daBwdg_Draw(bwdg_class* i_this) {
     MtxTrans(0.0f, 10.0f + f1, 0.0f, 0);
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mBwdgPacket.getMtx());
     i_this->mBwdgPacket.setTevStr(&i_this->tevStr);
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mBwdgPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&i_this->mBwdgPacket, 0);
     return TRUE;
 }
 
