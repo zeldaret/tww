@@ -629,6 +629,7 @@ struct dSv_player_c_PACKED {
     /* 0x1A4 */ dSv_player_priest_c mPriest;
     /* 0x1B4 */ dSv_player_status_c_c mStatusC[dSv_player_c::PLAYER_STATUS_C_COUNT];
 };  // Size: 0x374
+#pragma pack()
 #pragma pop
 
 STATIC_ASSERT(sizeof(dSv_player_c_PACKED) == 0x374);
@@ -924,7 +925,8 @@ struct dSv_save_c_PACKED {
     /* 0x5B4 */ dSv_ocean_c mOcean;
     /* 0x618 */ dSv_event_c mEvent;
     /* 0x718 */ dSv_reserve_c mReserve;
-};
+};  // Size: 0x768
+#pragma pack()
 #pragma pop
 
 STATIC_ASSERT(sizeof(dSv_save_c_PACKED) == 0x768);
