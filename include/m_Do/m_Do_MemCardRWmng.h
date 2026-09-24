@@ -28,7 +28,7 @@ STATIC_ASSERT(sizeof(card_pictdata) == 0x2000);
 
 struct card_gamedata
 {
-    /* 0x000 */ u8 data[dSv_save_c::PACKED_STRUCT_SIZE];
+    /* 0x000 */ u8 data[sizeof(dSv_save_c_PACKED)];
     /* 0x768 */ u64 csum;
 };  // Size: 0x770
 

@@ -583,24 +583,6 @@ public:
 
     static const int PLAYER_STATUS_C_COUNT = 4;
 
-    static const int PACKED_STRUCT_SIZE =
-        sizeof(dSv_player_status_a_c) +
-        sizeof(dSv_player_status_b_c) +
-        sizeof(dSv_player_return_place_c) +
-        sizeof(dSv_player_item_c) +
-        sizeof(dSv_player_get_item_c) +
-        sizeof(dSv_player_item_record_c) +
-        sizeof(dSv_player_item_max_c) +
-        sizeof(dSv_player_bag_item_c) +
-        sizeof(dSv_player_get_bag_item_c) +
-        sizeof(dSv_player_bag_item_record_c) +
-        sizeof(dSv_player_collect_c) +
-        sizeof(dSv_player_map_c) +
-        sizeof(dSv_player_info_c) +
-        sizeof(dSv_player_config_c) +
-        sizeof(dSv_player_priest_c) +
-        sizeof(dSv_player_status_c_c) * PLAYER_STATUS_C_COUNT;
-
     /* 0x000 */ dSv_player_status_a_c mPlayerStatusA;
     /* 0x018 */ dSv_player_status_b_c mPlayerStatusB;
     /* 0x030 */ dSv_player_return_place_c mReturnPlace;
@@ -624,6 +606,32 @@ public:
 };  // Size: 0x380
 
 STATIC_ASSERT(sizeof(dSv_player_c) == 0x380);
+
+// The version of this struct saved to the memory card is packed and does not have alignment padding.
+#pragma push
+#pragma pack(1)
+// Fake struct name.
+struct dSv_player_c_PACKED {
+    /* 0x000 */ dSv_player_status_a_c mPlayerStatusA;
+    /* 0x018 */ dSv_player_status_b_c mPlayerStatusB;
+    /* 0x030 */ dSv_player_return_place_c mReturnPlace;
+    /* 0x03C */ dSv_player_item_c mPlayerItem;
+    /* 0x051 */ dSv_player_get_item_c mGetItem;
+    /* 0x066 */ dSv_player_item_record_c mItemRecord;
+    /* 0x06E */ dSv_player_item_max_c mItemMax;
+    /* 0x076 */ dSv_player_bag_item_c mBagItem;
+    /* 0x08E */ dSv_player_get_bag_item_c mGetBagItem;
+    /* 0x09A */ dSv_player_bag_item_record_c mBagItemRecord;
+    /* 0x0B2 */ dSv_player_collect_c mCollect;
+    /* 0x0BF */ dSv_player_map_c mMap;
+    /* 0x143 */ dSv_player_info_c mInfo;
+    /* 0x19F */ dSv_player_config_c mConfig;
+    /* 0x1A4 */ dSv_player_priest_c mPriest;
+    /* 0x1B4 */ dSv_player_status_c_c mStatusC[dSv_player_c::PLAYER_STATUS_C_COUNT];
+};  // Size: 0x374
+#pragma pop
+
+STATIC_ASSERT(sizeof(dSv_player_c_PACKED) == 0x374);
 
 class dSv_memBit_c {
 public:
@@ -896,13 +904,6 @@ public:
         /* 0x10 */ STAGE_MAX,
     };
 
-    static const int PACKED_STRUCT_SIZE =
-        dSv_player_c::PACKED_STRUCT_SIZE +
-        sizeof(dSv_memory_c) * STAGE_MAX +
-        sizeof(dSv_ocean_c) +
-        sizeof(dSv_event_c) +
-        sizeof(dSv_reserve_c);
-
     /* 0x000 */ dSv_player_c mPlayer;
     /* 0x380 */ dSv_memory_c mMemory[STAGE_MAX];
     /* 0x5C0 */ dSv_ocean_c mOcean;
@@ -912,6 +913,21 @@ public:
 };  // Size: 0x778
 
 STATIC_ASSERT(sizeof(dSv_save_c) == 0x778);
+
+// The version of this struct saved to the memory card is packed and does not have alignment padding.
+#pragma push
+#pragma pack(1)
+// Fake struct name.
+struct dSv_save_c_PACKED {
+    /* 0x000 */ dSv_player_c_PACKED mPlayer;
+    /* 0x374 */ dSv_memory_c mMemory[dSv_save_c::STAGE_MAX];
+    /* 0x5B4 */ dSv_ocean_c mOcean;
+    /* 0x618 */ dSv_event_c mEvent;
+    /* 0x718 */ dSv_reserve_c mReserve;
+};
+#pragma pop
+
+STATIC_ASSERT(sizeof(dSv_save_c_PACKED) == 0x768);
 
 class dSv_info_c {
 public:
