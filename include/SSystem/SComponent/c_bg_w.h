@@ -100,6 +100,7 @@ public:
     /* 0x2C */ cBgD_Ti_t* m_ti_tbl;
     /* 0x30 */ u32 flag;
 };
+
 class cBgS_LinChk;
 class cBgS_GndChk;
 class cBgS_ShdwDraw;

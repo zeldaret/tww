@@ -304,8 +304,8 @@ dCamSetup_c::dCamSetup_c() {
     mDrawNear = 1.0f;
     mDrawFar = 100000.0f;
     m00C = 1;
-    mForceType = mModeSwitchType = -1;
-
+    mModeSwitchType = -1;
+    mForceType = -1;
     mCusCus = 0.2f;
     m024 = 0.05f;
     m060 = 80.0f;
@@ -321,7 +321,7 @@ dCamSetup_c::dCamSetup_c() {
     m054 = 0.06f;
     mCurveWeight = 1.0f;
     m034 = 25.0f;
-    m048 = 70.0f;
+    mSubjLinkCullDist = 70.0f;
 
     mParallelDist = 60.0f;
     mTrimVistaHeight = 52.0f;
@@ -329,18 +329,19 @@ dCamSetup_c::dCamSetup_c() {
 
     m094 = 150;
     m098 = DEMO_SELECT(70.0f, 60.0f);
-    m09C = 0.3f;
-    m0A0 = 0.2f;
+    mManualStartCThreshold = 0.3f;
+    mManualEndVal = 0.2f;
     mDMCValue = 0.1f;
     mDMCAngle = 30.0f;
     mDebugFlags = 1;
-    m0A4 = 27.0f;
-    m0A8 = 20;
-    mChargeLatitude = 2.0f;
-    mChargeTimer = 60;
-    mChargeBRatio = 0.15f;
-    mManualStartCThreshold = 0.66f;
-    mManualEndVal = 0.0f;
+
+    mChargeLatitude = 27.0f;
+    mChargeTimer = 20;
+    mChargeBRatio = 2.0f;
+    m0B0 = 60;
+    m0B4 = 0.15f;
+    m0B8 = 0.66f;
+    m0BC = 0.0f;
 
     m06C = 45.0f;
     mForceLockOffDist = 1800.0f;
@@ -349,10 +350,9 @@ dCamSetup_c::dCamSetup_c() {
     m07C = 0.4f;
     m080 = 10.0f;
     m084 = 4.0f;
-
     m0C0 = 60.0f;
-    mLockonChangeCushion = 100.0f;
-    mLockonChangeTimer = -1;
+    m0C4 = 100.0f;
+    m0C8 = -1;
 }
 
 /* 800AFEE0-800AFF40       .text __dt__11dCamSetup_cFv */

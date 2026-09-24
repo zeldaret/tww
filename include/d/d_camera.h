@@ -664,8 +664,12 @@ public:
     void isModeOK() {}
     void positionPntOf(fopAc_ac_c*) {}
 
-    void Far4Debug() {}
-    void Near4Debug() {}
+    f32 Near4Debug() {
+        return mCamSetup.Near();
+    }
+    f32 Far4Debug() {
+        return mCamSetup.Far();
+    }
     void debugDraw() {}
     void debugDrawInit() {}
     void debugDrawLine(cXyz&, cXyz&) {}
