@@ -483,7 +483,7 @@ void daNpcAh_c::privateCut() {
         "MES_SET",
         "GET_ITEM",
     };
-    int staff_idx = dComIfGp_evmng_getMyStaffId(*l_npc_staff_id);
+    int staff_idx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[0]);
     if(staff_idx != -1){
         mActIdx = dComIfGp_evmng_getMyActIdx(staff_idx, cut_name_tbl, 2, 1, 0);
         if(mActIdx == -1){
