@@ -4653,7 +4653,7 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         }
     }
 
-    mpOrcaMorf->getModel()->setUserArea((u32)this);
+    mpOrcaMorf->getModel()->setUserArea((uintptr_t)this);
 
     mAcchCir.SetWall(60.0f, 50.0f);
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));

@@ -487,7 +487,7 @@ BOOL daNpc_Cb1_c::createHeap() {
 
     modelData->getJointNodePointer(m_backbone_jnt_num)->setCallBack(nodeCallBack);
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
 
     mpFaceModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_FACE_e), 0x00080000, 0x11000022);
     if(mpFaceModel == NULL) {
@@ -506,7 +506,7 @@ BOOL daNpc_Cb1_c::createHeap() {
         JUT_ASSERT(DEMO_SELECT(983, 982), m_nut_jnt_num >= 0);
         modelData->getJointNodePointer(m_nut_jnt_num)->setCallBack(nutNodeCallBack);
 
-        mpStickModel->setUserArea((u32)this);
+        mpStickModel->setUserArea((uintptr_t)this);
 
         modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_CELLO_e);
         JUT_ASSERT(DEMO_SELECT(990, 989), modelData != NULL);
@@ -526,7 +526,7 @@ BOOL daNpc_Cb1_c::createHeap() {
     m_center_jnt_num = modelData->getJointName()->getIndex("center");
     modelData->getJointNodePointer(m_center_jnt_num)->setCallBack(ppNodeCallBack);
 
-    mpPropellerModel->setUserArea((u32)this);
+    mpPropellerModel->setUserArea((uintptr_t)this);
 
     if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BCK_M_OPEN_e), FALSE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;

@@ -299,7 +299,7 @@ BOOL daNpc_kam_c::createHeap() {
     m_jnt_body = modelData->getJointName()->getIndex("j_ka_spin1");
     JUT_ASSERT(DEMO_SELECT(782, 783), m_jnt_body >= 0);
     
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     
     return TRUE;
 }

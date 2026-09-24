@@ -1436,7 +1436,7 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    i_this->mpMorf->getModel()->setUserArea((u32)&i_this->actor);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)&i_this->actor);
     return TRUE;
 }
 

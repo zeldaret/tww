@@ -63,8 +63,8 @@ s32 JKRSolidHeap::adjustSize() {
     JKRHeap* parent = getParent();
     if (parent) {
         lock();
-        u32 thisSize = (u32)mStart - (u32)this;
-        u32 newSize = ALIGN_NEXT(mSolidHead - mStart, 0x20);
+        ptrdiff_t thisSize = (uintptr_t)mStart - (uintptr_t)this;
+        ptrdiff_t newSize = ALIGN_NEXT(mSolidHead - mStart, 0x20);
         if (parent->resize(this, thisSize + newSize) != -1) {
             mFreeSize = 0;
             mSize = newSize;
@@ -110,8 +110,8 @@ void* JKRSolidHeap::do_alloc(u32 size, int alignment) {
 void* JKRSolidHeap::allocFromHead(u32 size, int alignment) {
     size = ALIGN_NEXT(size, 0x4);
     void* ptr = NULL;
-    u32 alignedStart = (alignment - 1 + (u32)mSolidHead) & ~(alignment - 1);
-    u32 offset = alignedStart - (u32)mSolidHead;
+    uintptr_t alignedStart = (alignment - 1 + (uintptr_t)mSolidHead) & ~(alignment - 1);
+    u32 offset = alignedStart - (uintptr_t)mSolidHead;
     u32 totalSize = size + offset;
     if (totalSize <= mFreeSize) {
         ptr = (void*)alignedStart;
@@ -131,8 +131,8 @@ void* JKRSolidHeap::allocFromHead(u32 size, int alignment) {
 void* JKRSolidHeap::allocFromTail(u32 size, int alignment) {
     size = ALIGN_NEXT(size, 4);
     void* ptr = NULL;
-    u32 alignedStart = ALIGN_PREV((u32)mSolidTail - size, alignment);
-    u32 totalSize = (u32)mSolidTail - (u32)alignedStart;
+    uintptr_t alignedStart = ALIGN_PREV((uintptr_t)mSolidTail - size, alignment);
+    u32 totalSize = (uintptr_t)mSolidTail - alignedStart;
     if (totalSize <= mFreeSize) {
         ptr = (void*)alignedStart;
         mSolidTail -= totalSize;
@@ -172,7 +172,7 @@ void JKRSolidHeap::do_freeTail() {
         dispose(mSolidTail, mEnd);
     }
 
-    this->mFreeSize = ((u32)mEnd - (u32)mSolidTail + mFreeSize);
+    this->mFreeSize = (mEnd - mSolidTail + mFreeSize);
     this->mSolidTail = mEnd;
 
     JKRSolidHeap::Unknown* unknown = field_0x78;
@@ -201,8 +201,7 @@ bool JKRSolidHeap::check() {
     lock();
 
     bool result = true;
-    u32 calculatedSize =
-        ((u32)mSolidHead - (u32)mStart) + mFreeSize + ((u32)mEnd - (u32)mSolidTail);
+    u32 calculatedSize = (mSolidHead - mStart) + mFreeSize + (mEnd - mSolidTail);
     u32 availableSize = mSize;
     if (calculatedSize != availableSize) {
         result = false;
@@ -224,11 +223,11 @@ bool JKRSolidHeap::dump() {
     bool result = check();
 
     lock();
-    u32 headSize = ((u32)mSolidHead - (u32)mStart);
-    u32 tailSize = ((u32)mEnd - (u32)mSolidTail);
+    u32 headSize = (mSolidHead - mStart);
+    u32 tailSize = (mEnd - mSolidTail);
     s32 htSize = headSize + tailSize;
-    JUTReportConsole_f("head %08x: %08x\n", mStart, headSize);
-    JUTReportConsole_f("tail %08x: %08x\n", mSolidTail, ((u32)mEnd - (u32)mSolidTail));
+    JUTReportConsole_f("head %08x: %08x\n", (uintptr_t)mStart, headSize);
+    JUTReportConsole_f("tail %08x: %08x\n", (uintptr_t)mSolidTail, (uintptr_t)(mEnd - mSolidTail));
 
     u32 totalSize = mSize;
     float percentage = (float)htSize / (float)totalSize * 100.0f;
@@ -246,8 +245,8 @@ void JKRSolidHeap::state_register(JKRHeap::TState* p, u32 id) const {
     getState_(p);
     setState_u32ID_(p, id);
     setState_uUsedSize_(p, getUsedSize((JKRSolidHeap*)this));
-    u32 r29 = (u32)mSolidHead;
-    r29 += (u32)mSolidTail * 3;
+    u32 r29 = (uintptr_t)mSolidHead;
+    r29 += (uintptr_t)mSolidTail * 3;
     setState_u32CheckCode_(p, r29);
 }
 

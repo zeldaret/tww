@@ -413,7 +413,7 @@ bool daFm_c::bodyCreateHeap() {
     if (mInvisibleModel.create(mpMorf->getModel()) == 0) {
         return false;
     }
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     return true;
 }
 

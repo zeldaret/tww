@@ -196,7 +196,7 @@ BOOL daObjMknjD::Act_c::CreateHeap() {
             }
         }
 
-        mMainMdl->setUserArea(reinterpret_cast<u32>(this));
+        mMainMdl->setUserArea(reinterpret_cast<uintptr_t>(this));
 
         int curTblIdx = 0;
         nameTable = mBreakMdl->getModelData()->getJointName();
@@ -214,7 +214,7 @@ BOOL daObjMknjD::Act_c::CreateHeap() {
             }
         }
 
-        mBreakMdl->setUserArea(reinterpret_cast<u32>(this));
+        mBreakMdl->setUserArea(reinterpret_cast<uintptr_t>(this));
         mMainMdlAlpha = 0xFF;
 
         return TRUE;

@@ -2720,7 +2720,7 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             }
         }
 
-        model->setUserArea(reinterpret_cast<u32>(i_this));
+        model->setUserArea(reinterpret_cast<uintptr_t>(i_this));
 
         if (i_this->unk_2DA != 0xFF) {
             i_this->ppd = dPath_GetRoomPath(i_this->unk_2DA, fopAcM_GetRoomNo(a_this));

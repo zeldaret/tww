@@ -1875,7 +1875,7 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
         }
     }
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     cXyz* speed_p = &speed;
     cXyz* old_pos_p = &old.pos;

@@ -237,7 +237,7 @@ void JUTProcBar::drawProcessBar() {
 
 /* 802C9CE4-802C9D4C       .text addrToXPos__FPvi */
 int addrToXPos(void* param_0, int param_1) {
-    return param_1 * (((u32)param_0 - 0x80000000) / (float)JKRHeap::mMemorySize);
+    return param_1 * (((uintptr_t)param_0 - 0x80000000) / (float)JKRHeap::mMemorySize);
 }
 
 /* 802C9D4C-802C9DB4       .text byteToXLen__Fii */

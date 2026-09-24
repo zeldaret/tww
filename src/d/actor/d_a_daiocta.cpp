@@ -349,7 +349,7 @@ BOOL daDaiocta_c::createBodyHeap() {
         return FALSE;
     }
 
-    mpMorf->getModel()->setUserArea((u32) this);
+    mpMorf->getModel()->setUserArea((uintptr_t) this);
 
     return TRUE;
 }

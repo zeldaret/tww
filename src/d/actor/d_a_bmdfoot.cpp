@@ -704,7 +704,7 @@ static int useHeapInit(bmdfoot_class* i_this) {
     }
 #endif
 
-    model->setUserArea((u32)i_this);
+    model->setUserArea((uintptr_t)i_this);
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
         model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }

@@ -286,15 +286,15 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
         mOldFrame = oldFrame;
         mBeforeCallback = NULL;
         mAfterCallback = NULL;
-        mUserArea = 0;
+        mUserArea = NULL;
     }
     virtual void calc(u16);
 
-    void setUserArea(u32 area)  { mUserArea = area; }
+    void setUserArea(uintptr_t area)  { mUserArea = area; }
     void setBeforeCalc(CalcCallback callback) { mBeforeCallback = callback; }
     void setAfterCalc(CalcCallback callback) { mAfterCallback = callback; }
 
-    /* 0x58 */ u32 mUserArea;
+    /* 0x58 */ uintptr_t mUserArea;
     /* 0x5C */ mDoExt_MtxCalcOldFrame* mOldFrame;
     /* 0x60 */ CalcCallback mBeforeCallback;
     /* 0x64 */ CalcCallback mAfterCallback;

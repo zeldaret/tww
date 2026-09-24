@@ -2693,7 +2693,7 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
     }
 #if VERSION == VERSION_DEMO
     J3DModel* model = i_this->mpMorf->getModel();
-    model->setUserArea((u32)i_this);
+    model->setUserArea((uintptr_t)i_this);
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
         if ((i < ST_JNT_ASIR_e + 1) && (i != ST_JNT_BUKI_e)) {
             model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
@@ -2877,7 +2877,7 @@ static cPhs_State daSt_Create(fopAc_ac_c* a_this) {
                 i_this->m02B9 = 0xFF;
             }
         }
-        i_this->mpMorf->getModel()->setUserArea((u32)a_this);
+        i_this->mpMorf->getModel()->setUserArea((uintptr_t)a_this);
         e_this->initBt(162.5f, 125.0f);
         a_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
         fopAcM_OnStatus(a_this, fopAcStts_SHOWMAP_e);

@@ -517,7 +517,7 @@ static dCcD_SrcCps l_at_cps_src = {
 cPhs_State daHookshot_c::create() {
     fopAcM_ct(this, daHookshot_c);
     
-    mShape.setUserArea(reinterpret_cast<u32>(this));
+    mShape.setUserArea(reinterpret_cast<uintptr_t>(this));
     mLinChk.ClrSttsRoofOff();
     procWait_init(FALSE);
     gravity = -5.0f;

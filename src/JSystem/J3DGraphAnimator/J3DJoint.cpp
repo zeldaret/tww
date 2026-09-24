@@ -245,7 +245,7 @@ void J3DJoint::entryIn() {
                 mesh->calc(anmMtx);
             }
             mesh->setCurrentMtx();
-            matPacket->setMaterialAnmID((u32)mesh->getMaterialAnm());
+            matPacket->setMaterialAnmID((uintptr_t)mesh->getMaterialAnm());
             matPacket->setShapePacket(shapePacket);
             J3DDrawBuffer* drawBuffer = j3dSys.getDrawBuffer(mesh->isDrawModeOpaTexEdge());
             if ((u8)matPacket->entry(drawBuffer)) {

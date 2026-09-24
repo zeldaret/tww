@@ -1042,7 +1042,7 @@ BOOL daNpc_Btsw_c::CreateHeap() {
         }
     }
 
-    mpMorf->getModel()->setUserArea((u32) this);
+    mpMorf->getModel()->setUserArea((uintptr_t) this);
 
     field_0x920[0] = &mSwMail0;
     field_0x920[1] = &mSwMail1;

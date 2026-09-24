@@ -974,7 +974,7 @@ BOOL daOship_c::_createHeap() {
         return FALSE;
     }
 
-    mpModel->setUserArea((u32) this);
+    mpModel->setUserArea((uintptr_t) this);
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         switch (i) {
             case VBTSP_JNT_HEAD_e:

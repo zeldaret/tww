@@ -61,8 +61,8 @@ u32 JASystem::DSPInterface::DOLBY2_DELAY_BUF[600];
 
 /* 8028A240-8028A28C       .text setupBuffer__Q28JASystem12DSPInterfaceFv */
 void JASystem::DSPInterface::setupBuffer() {
-    DsetupTable(64, (u32)CH_BUF, (u32)&DSPRES_FILTER, (u32)&DSPADPCM_FILTER, (u32)FX_BUF);
-    DsetDolbyDelay((u32)&DOLBY2_DELAY_BUF, 10);
+    DsetupTable(64, (uintptr_t)CH_BUF, (uintptr_t)DSPRES_FILTER, (uintptr_t)DSPADPCM_FILTER, (uintptr_t)FX_BUF);
+    DsetDolbyDelay((uintptr_t)DOLBY2_DELAY_BUF, 10);
 }
 
 /* 8028A28C-8028A368       .text initBuffer__Q28JASystem12DSPInterfaceFv */

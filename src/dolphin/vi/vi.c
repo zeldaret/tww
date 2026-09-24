@@ -908,7 +908,7 @@ void VISetNextFrameBuffer(void* fb) {
         "VISetNextFrameBuffer(): Frame buffer address(0x%08x) is not 32byte aligned\n",
         fb);
     enabled = OSDisableInterrupts();
-    HorVer.bufAddr = (u32)fb;
+    HorVer.bufAddr = (uintptr_t)fb;
     FBSet = 1;
     setFbbRegs(&HorVer, &HorVer.tfbb, &HorVer.bfbb, &HorVer.rtfbb, &HorVer.rbfbb);
     OSRestoreInterrupts(enabled);

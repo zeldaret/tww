@@ -204,7 +204,7 @@ void daWindMill_c::CreateInit() {
             break;
     }
 
-    mpModel->setUserArea((u32) this);
+    mpModel->setUserArea((uintptr_t)this);
     set_mtx();
 
     for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {

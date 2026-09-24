@@ -5,7 +5,7 @@ SECTION_INIT void* memcpy(void* dst, const void* src, size_t n)
 {
 	const char* p;
 	char* q;
-	int rev = ((u32)src < (u32)dst);
+	int rev = ((uintptr_t)src < (uintptr_t)dst);
 
 	if (!rev) {
 
@@ -24,10 +24,10 @@ SECTION_INIT void __fill_mem(void* dst, int val, u32 n)
 	u32 v = (u8)val;
 	u32 i;
 
-	((u8*)dst) = ((u8*)dst) - 1;
+	dst = ((u8*)dst) - 1;
 
 	if (n >= 32) {
-		i = (~(u32)dst) & 3;
+		i = (~(uintptr_t)dst) & 3;
 
 		if (i) {
 			n -= i;
@@ -40,7 +40,7 @@ SECTION_INIT void __fill_mem(void* dst, int val, u32 n)
 		if (v)
 			v |= v << 24 | v << 16 | v << 8;
 
-		((u32*)dst) = ((u32*)(((u8*)dst) + 1)) - 1;
+		dst = ((u32*)(((u8*)dst) + 1)) - 1;
 
 		i = n >> 5;
 
@@ -63,7 +63,7 @@ SECTION_INIT void __fill_mem(void* dst, int val, u32 n)
 				*++(((u32*)dst)) = v;
 			while (--i);
 
-		((u8*)dst) = ((u8*)(((u32*)dst) + 1)) - 1;
+		dst = ((u8*)(((u32*)dst) + 1)) - 1;
 
 		n = n & 3;
 	}

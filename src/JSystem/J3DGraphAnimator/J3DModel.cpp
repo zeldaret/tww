@@ -32,7 +32,7 @@ void J3DModel::initialize() {
     mFlags = 0;
     mDiffFlag = 0;
     mCalcCallBack = NULL;
-    mUserArea = 0;
+    mUserArea = NULL;
 
     mBaseScale.x = 1.0f;
     mBaseScale.y = 1.0f;

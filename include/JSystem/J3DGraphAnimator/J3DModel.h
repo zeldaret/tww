@@ -133,8 +133,8 @@ public:
     Mtx33* getBumpMtxPtr(int idx) { return mpBumpMtxArr[1][idx][mCurrentViewNo]; }
     Vec* getBaseScale() { return &mBaseScale; } // Unused in TWW
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
-    void setUserArea(u32 area) { mUserArea = area; }
-    u32 getUserArea() const { return mUserArea; }
+    void setUserArea(uintptr_t area) { mUserArea = area; }
+    uintptr_t getUserArea() const { return mUserArea; }
     void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
     J3DSkinDeform* getSkinDeform() { return mpSkinDeform; }
 
@@ -144,7 +144,7 @@ private:
     /* 0x008 */ u32 mFlags;
     /* 0x00C */ u32 mDiffFlag;
     /* 0x010 */ J3DCalcCallBack mCalcCallBack;
-    /* 0x014 */ u32 mUserArea;
+    /* 0x014 */ uintptr_t mUserArea;
     /* 0x018 */ Vec mBaseScale;
     /* 0x024 */ Mtx mBaseTransformMtx;
     /* 0x054 */ Mtx mViewBaseMtx;

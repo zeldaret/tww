@@ -2542,7 +2542,7 @@ BOOL daNpc_Ls1_c::bodyCreateHeap() {
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_hnd_L_jnt_num)->setCallBack(nodeCB_Hand_L);
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_hnd_R_jnt_num)->setCallBack(nodeCB_Hand_R);
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     
     return TRUE;
 }
@@ -2566,7 +2566,7 @@ BOOL daNpc_Ls1_c::handCreateHeap() {
 
     mpLsHandModel->getModelData()->getJointNodePointer(m_lsHnd_L_jnt_num)->setCallBack(Ls_hand_nodeCB_Hand_L);
     mpLsHandModel->getModelData()->getJointNodePointer(m_lsHnd_R_jnt_num)->setCallBack(Ls_hand_nodeCB_Hand_R);
-    mpLsHandModel->setUserArea((u32)this);
+    mpLsHandModel->setUserArea((uintptr_t)this);
     return TRUE;
 }
 

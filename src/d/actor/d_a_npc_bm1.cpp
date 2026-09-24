@@ -4333,19 +4333,19 @@ BOOL daNpc_Bm1_c::CreateHeap() {
                 mpWingMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Wng);
             }
         }
-        mpWingMorf->getModel()->setUserArea((u32)this);
+        mpWingMorf->getModel()->setUserArea((uintptr_t)this);
         for (u16 i = 0; i < arm_anmdata->getJointNum(); i++) {
             if ((i == m_armL1_jnt_num) || (i == m_armL2_jnt_num) || (i == m_armR1_jnt_num) || (i == m_armR2_jnt_num)) {
                 mpArmMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Arm);
             }
         }
-        mpArmMorf->getModel()->setUserArea((u32)this);
+        mpArmMorf->getModel()->setUserArea((uintptr_t)this);
         for (u16 i = 0; i < anm_model->getJointNum(); i++) {
             if ((i == m_hed_jnt_num) || (i == m_nec_jnt_num) || (i == m_bbone_jnt_num) || (i == m_arm_L_jnt_num) || i == m_arm_R_jnt_num) {
                 mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Bm1);
             }
         }
-        mpMorf->getModel()->setUserArea((u32)this);
+        mpMorf->getModel()->setUserArea((uintptr_t)this);
         mAcchCir.SetWall(30.0f, 50.0f);
         mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
 

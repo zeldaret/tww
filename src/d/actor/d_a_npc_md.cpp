@@ -986,7 +986,7 @@ BOOL daNpc_Md_c::createHeap() {
         }
     }
 
-    getModel()->setUserArea((u32)this);
+    getModel()->setUserArea((uintptr_t)this);
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdarm.bdl");
     JUT_ASSERT(DEMO_SELECT(2016, 2051), modelData != NULL);
@@ -1020,7 +1020,7 @@ BOOL daNpc_Md_c::createHeap() {
     modelData->getJointNodePointer(m_armRloc_jnt_num)->setCallBack(armNodeCallBack);
     modelData->getJointNodePointer(m_armLloc_jnt_num)->setCallBack(armNodeCallBack);
 
-    mpArmMorf->getModel()->setUserArea((u32)this);
+    mpArmMorf->getModel()->setUserArea((uintptr_t)this);
 
     if (!isTypeShipRide()) {
         modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdwing.bdl");
@@ -1060,7 +1060,7 @@ BOOL daNpc_Md_c::createHeap() {
         modelData->getJointNodePointer(m_wingRloc_jnt_num)->setCallBack(armNodeCallBack);
         modelData->getJointNodePointer(m_wingLloc_jnt_num)->setCallBack(armNodeCallBack);
 
-        mpWingMorf->getModel()->setUserArea((u32)this);
+        mpWingMorf->getModel()->setUserArea((uintptr_t)this);
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "md_harp.bdl");
