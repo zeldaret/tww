@@ -6,6 +6,7 @@
 #include "SSystem/SComponent/c_m3d_g_cyl.h"
 #include "SSystem/SComponent/c_m3d_g_sph.h"
 #include "SSystem/SComponent/c_m3d_g_tri.h"
+#include "dolphin/gx/GX.h"
 #include "f_pc/f_pc_base.h"
 
 class fopAc_ac_c;
