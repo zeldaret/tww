@@ -48,7 +48,7 @@ u16* __cpReg;
 /* ############################################################################################## */
 u32* __piReg;
 
-static u16 DefaultTexData[] ALIGN_DECL(32) = {
+ALIGN_DECL(32, static u16 DefaultTexData[]) = {
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
 };

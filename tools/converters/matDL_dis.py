@@ -336,7 +336,7 @@ def convert_binary_to_matDL_c_source(src_path, dest_path, symbol_name, scope):
             var_def_prefix = ""
         
         write_macro_line(f"#define {macro_name}(TEX_NAME)")
-        write_macro_line(f"{var_def_prefix}u8 {symbol_name}[] ALIGN_DECL(32) = {{")
+        write_macro_line(f"ALIGN_DECL(32, {var_def_prefix}u8 {symbol_name}[]) = {{")
         
         while True:
             try:

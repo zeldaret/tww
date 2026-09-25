@@ -29,7 +29,7 @@ const Mtx j3dDefaultMtx = {
 };
 
 /* 802DA0A8-802DA0B0       .text __MTGQR7__FUl */
-void __MTGQR7(register u32 v) {
+void __MTGQR7(__REGISTER u32 v) {
 #ifdef __MWERKS__
 asm {
         mtspr GQR7, v
@@ -105,7 +105,7 @@ void J3DCalcYBBoardMtx(Mtx mtx) {
 }
 
 /* 802DA584-802DA64C       .text J3DPSCalcInverseTranspose__FPA4_fPA3_f */
-ASM void J3DPSCalcInverseTranspose(register Mtx src, register Mtx33 dst) {
+ASM void J3DPSCalcInverseTranspose(__REGISTER Mtx src, __REGISTER Mtx33 dst) {
     #ifdef __MWERKS__
         psq_l    f0, 0(src), 1, 0
         psq_l    f1, 4(src), 0, 0
@@ -311,8 +311,8 @@ void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo& srt, Mtx dst) {
 }
 
 /* 802DAB04-802DAB68       .text J3DScaleNrmMtx__FPA4_fRC3Vec */
-void J3DScaleNrmMtx(register Mtx mtx, const register Vec& scl) {
-    register f32 mtx_xy, mtx_z_, scl_xy, scl_z_;
+void J3DScaleNrmMtx(__REGISTER Mtx mtx, const __REGISTER Vec& scl) {
+    __REGISTER f32 mtx_xy, mtx_z_, scl_xy, scl_z_;
 
 #ifdef __MWERKS__
 asm {
@@ -350,11 +350,11 @@ asm {
 }
 
 /* 802DAB68-802DABBC       .text J3DScaleNrmMtx33__FPA3_fRC3Vec */
-void J3DScaleNrmMtx33(register Mtx33 mtx, const register Vec& scl) {
-    register f32 mtx0_xy, mtx0_z_;
-    register f32 mtx1_xy, mtx1_z_;
-    register f32 mtx2_xy, mtx2_z_;
-    register f32 scl__xy, scl__z_;
+void J3DScaleNrmMtx33(__REGISTER Mtx33 mtx, const __REGISTER Vec& scl) {
+    __REGISTER f32 mtx0_xy, mtx0_z_;
+    __REGISTER f32 mtx1_xy, mtx1_z_;
+    __REGISTER f32 mtx2_xy, mtx2_z_;
+    __REGISTER f32 scl__xy, scl__z_;
 
 #ifdef __MWERKS__
 asm {
@@ -383,7 +383,7 @@ asm {
 }
 
 /* 802DABBC-802DACE0       .text J3DMtxProjConcat__FPA4_fPA4_fPA4_f */
-void J3DMtxProjConcat(register Mtx a, register Mtx b, register Mtx dst) {
+void J3DMtxProjConcat(__REGISTER Mtx a, __REGISTER Mtx b, __REGISTER Mtx dst) {
     /* Nonmatching */
     #ifdef __MWERKS__
     asm {
@@ -470,12 +470,12 @@ void J3DMtxProjConcat(register Mtx a, register Mtx b, register Mtx dst) {
 }
 
 /* 802DACE0-802DAD0C       .text J3DPSMtx33Copy__FPA3_fPA3_f */
-void J3DPSMtx33Copy(register Mtx3P src, register Mtx3P dst) {
-    register f32 x1_y1;
-    register f32 z1_x2;
-    register f32 y2_z2;
-    register f32 x3_y3;
-    register f32 z3;
+void J3DPSMtx33Copy(__REGISTER Mtx3P src, __REGISTER Mtx3P dst) {
+    __REGISTER f32 x1_y1;
+    __REGISTER f32 z1_x2;
+    __REGISTER f32 y2_z2;
+    __REGISTER f32 x3_y3;
+    __REGISTER f32 z3;
 
 #ifdef __MWERKS__
 asm {
@@ -494,7 +494,7 @@ asm {
 }
 
 /* 802DAD0C-802DAD40       .text J3DPSMtx33CopyFrom34__FPA4_fPA3_f */
-void J3DPSMtx33CopyFrom34(register MtxP src, register Mtx3P dst) {
+void J3DPSMtx33CopyFrom34(__REGISTER MtxP src, __REGISTER Mtx3P dst) {
 #ifdef __MWERKS__
 asm {
         psq_l  f0, 0(src), 0, 0
@@ -516,7 +516,7 @@ asm {
 static f32 Unit01[2] = { 0.0f, 1.0f };
 
 /* 802DAD40-802DAE1C       .text J3DPSMtxArrayConcat__FPA4_fPA4_fPA4_fUl */
-ASM void J3DPSMtxArrayConcat(register Mtx mA, register Mtx mB, register Mtx mAB, register u32 count) {
+ASM void J3DPSMtxArrayConcat(__REGISTER Mtx mA, __REGISTER Mtx mB, __REGISTER Mtx mAB, __REGISTER u32 count) {
 #ifdef __MWERKS__
     nofralloc
 

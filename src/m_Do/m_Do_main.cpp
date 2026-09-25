@@ -360,7 +360,7 @@ bool Debug_console(JUTGamePad* i_pad) {
 s32 LOAD_COPYDATE(void*) {
     s32 status;
 
-    DVDFileInfo ALIGN_DECL(0x20) fileInfo;
+    ALIGN_DECL(0x20, DVDFileInfo fileInfo);
     u8 buffer[0x20];
     status = DVDOpen("/COPYDATE", &fileInfo);
 
@@ -536,7 +536,7 @@ int main(int argc, const char* argv[]) {
 #endif
 
     OSThread* current_thread = OSGetCurrentThread();
-    u8 ALIGN_DECL(0x20) stack[0xF000];
+    ALIGN_DECL(0x20, u8 stack[0xF000]);
 
     mDoMain::sPowerOnTime = OSGetTime();
     OSReportInit();
