@@ -42,7 +42,7 @@ void J3DPSMtx33Copy(Mtx3P src, Mtx3P dst);
 void J3DPSMtx33CopyFrom34(MtxP src, Mtx3P dst);
 void J3DPSMtxArrayConcat(Mtx, Mtx, Mtx, u32);
 
-inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* dst) {
+inline void J3DPSMulMtxVec(__REGISTER MtxP mtx, __REGISTER Vec* vec, __REGISTER Vec* dst) {
 #ifdef __MWERKS__
     asm {
         psq_l f0, 0(vec), 0, 0
@@ -69,7 +69,7 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register Vec* vec, register Vec* d
 #endif
 }
 
-inline void J3DPSMulMtxVec(register MtxP mtx, register S16Vec* vec, register S16Vec* dst) {
+inline void J3DPSMulMtxVec(__REGISTER MtxP mtx, __REGISTER S16Vec* vec, __REGISTER S16Vec* dst) {
 #ifdef __MWERKS__
     asm {
         psq_l f0, 0(vec), 0, 7
@@ -97,7 +97,7 @@ inline void J3DPSMulMtxVec(register MtxP mtx, register S16Vec* vec, register S16
 }
 
 // regalloc issues
-inline void J3DPSMulMtxVec(register Mtx3P mtx, register Vec* vec, register Vec* dst) {
+inline void J3DPSMulMtxVec(__REGISTER Mtx3P mtx, __REGISTER Vec* vec, __REGISTER Vec* dst) {
 #ifdef __MWERKS__
     asm {
         lis r6, PSMulUnit01@ha
@@ -129,7 +129,7 @@ inline void J3DPSMulMtxVec(register Mtx3P mtx, register Vec* vec, register Vec* 
 }
 
 // regalloc issues
-inline void J3DPSMulMtxVec(register Mtx3P mtx, register S16Vec* vec, register S16Vec* dst) {
+inline void J3DPSMulMtxVec(__REGISTER Mtx3P mtx, __REGISTER S16Vec* vec, __REGISTER S16Vec* dst) {
 #ifdef __MWERKS__
     asm {
         lis r6, PSMulUnit01@ha

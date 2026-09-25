@@ -467,25 +467,25 @@ typedef union {
 #endif
 
 u32 PPCMfmsr(void);
-void PPCMtmsr(register u32 newMSR);
+void PPCMtmsr(__REGISTER u32 newMSR);
 u32 PPCMfhid0(void);
-void PPCMthid0(register u32 newHID0);
+void PPCMthid0(__REGISTER u32 newHID0);
 u32 PPCMfl2cr(void);
-void PPCMtl2cr(register u32 newL2cr);
-void PPCMtdec(register u32 newDec);
+void PPCMtl2cr(__REGISTER u32 newL2cr);
+void PPCMtdec(__REGISTER u32 newDec);
 void PPCSync(void);
 void PPCHalt(void);
-void PPCMtmmcr0(register u32 newMmcr0);
-void PPCMtmmcr1(register u32 newMmcr1);
-void PPCMtpmc1(register u32 newPmc1);
-void PPCMtpmc2(register u32 newPmc2);
-void PPCMtpmc3(register u32 newPmc3);
-void PPCMtpmc4(register u32 newPmc4);
+void PPCMtmmcr0(__REGISTER u32 newMmcr0);
+void PPCMtmmcr1(__REGISTER u32 newMmcr1);
+void PPCMtpmc1(__REGISTER u32 newPmc1);
+void PPCMtpmc2(__REGISTER u32 newPmc2);
+void PPCMtpmc3(__REGISTER u32 newPmc3);
+void PPCMtpmc4(__REGISTER u32 newPmc4);
 u32 PPCMffpscr(void);
-void PPCMtfpscr(register u32 newFPSCR);
+void PPCMtfpscr(__REGISTER u32 newFPSCR);
 u32 PPCMfhid2(void);
-void PPCMthid2(register u32 newhid2);
-void PPCMtwpar(register u32 newwpar);
+void PPCMthid2(__REGISTER u32 newhid2);
+void PPCMtwpar(__REGISTER u32 newwpar);
 void PPCDisableSpeculation(void);
 void PPCSetFpNonIEEEMode(void);
 
