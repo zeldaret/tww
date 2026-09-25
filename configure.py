@@ -604,7 +604,7 @@ config.libs = [
             Object(Matching,    "d/actor/d_a_arrow.cpp"),
             Object(Matching,    "d/actor/d_a_bg.cpp"),
             Object(Matching,    "d/actor/d_a_bomb.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/actor/d_a_bomb2.cpp"),
+            Object(Matching,    "d/actor/d_a_bomb2.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d/actor/d_a_boomerang.cpp"),
             Object(Matching,    "d/actor/d_a_dai_item.cpp"),
             Object(Matching,    "d/actor/d_a_demo00.cpp"),
