@@ -4,7 +4,9 @@
 //
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
+#include "c/c_dylink.h"
 #include "d/actor/d_a_fallrock_tag.h"
+#include "f_pc/f_pc_name.h"
 
 /* 00000078-00000080       .text daFallRockTag_Draw__FP15daFallRockTag_c */
 static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
@@ -12,8 +14,39 @@ static BOOL daFallRockTag_Draw(daFallRockTag_c*) {
 }
 
 /* 00000080-000002A0       .text daFallRockTag_Execute__FP15daFallRockTag_c */
-static BOOL daFallRockTag_Execute(daFallRockTag_c*) {
-    /* Nonmatching */
+static BOOL daFallRockTag_Execute(daFallRockTag_c* i_this) {
+    int timeLimit = (int)(dStage_stagInfo_GetSchSec(dComIfGp_getStageStagInfo()) / daFallRockTag_c::m_div_num) * 30;
+    u8 bit = dKy_get_schbit();
+    if (bit & i_this->m29E) {
+        if (timeLimit < dKy_get_schbit_timer()) {
+            int timer = dKy_get_schbit_timer() - i_this->getData()->m16;
+            if (timer % (30 / i_this->getData()->m18) == 0) {
+                f32 range = i_this->scale.x * i_this->getData()->m00;
+                cXyz speed;
+                cXyz offset;
+                offset.x = cM_rndFX(range);
+                offset.y = 0.0f;
+                offset.z = cM_rndFX(range - std::fabsf(offset.x));
+
+                f32 min_speed = i_this->getData()->m04;
+                f32 speed_scale = min_speed + cM_rndF(i_this->getData()->m08 - min_speed);
+                speed.z = speed_scale;
+                speed.y = speed_scale;
+                speed.x = speed_scale;
+
+                csXyz angle;
+                angle.x = cM_rndF(32767.0f);
+                angle.y = cM_rndF(32767.0f);
+                angle.z = cM_rndF(32767.0f);
+
+                i_this->createRock(&offset, &speed, &angle, i_this->current.roomNo, 0);
+                mDoAud_seStart(JA_SE_ATM_RAKUBAN, &i_this->eyePos, 0, dComIfGp_getReverb(i_this->current.roomNo));
+            }
+        } else {
+            i_this->m298 = 0;
+        }
+    }
+    return TRUE;
 }
 
 /* 000002A0-000002A8       .text daFallRockTag_IsDelete__FP15daFallRockTag_c */
@@ -22,24 +55,52 @@ static BOOL daFallRockTag_IsDelete(daFallRockTag_c*) {
 }
 
 /* 000002A8-000002EC       .text daFallRockTag_Delete__FP15daFallRockTag_c */
-static BOOL daFallRockTag_Delete(daFallRockTag_c*) {
-    /* Nonmatching */
+static BOOL daFallRockTag_Delete(daFallRockTag_c* i_this) {
+    i_this->~daFallRockTag_c();
+    return TRUE;
 }
 
 /* 000002EC-00000360       .text daFallRockTag_Create__FP10fopAc_ac_c */
-static cPhs_State daFallRockTag_Create(fopAc_ac_c*) {
-    /* Nonmatching */
+static s32 daFallRockTag_Create(fopAc_ac_c* i_this) {
+    daFallRockTag_c* a_this = (daFallRockTag_c*)i_this;
+    fopAcM_SetupActor(a_this, daFallRockTag_c);
+
+    s32 phase = cDyl_LinkASync(fpcNm_FallRock_e);
+    if (phase != cPhs_COMPLEATE_e) {
+        return phase;
+    }
+    a_this->m29E = fopAcM_GetParam(a_this);
+    fopAcM_offDraw(a_this);
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000360-000003D8       .text createRock__15daFallRockTag_cFP4cXyzP4cXyzP5csXyziUl */
-void daFallRockTag_c::createRock(cXyz*, cXyz*, csXyz*, int, unsigned long) {
-    /* Nonmatching */
+void daFallRockTag_c::createRock(cXyz* i_offset, cXyz* i_speed, csXyz* i_angle, int i_roomNo, u32 i_param) {
+    cXyz pos;
+    pos.x = current.pos.x + i_offset->x;
+    pos.y = current.pos.y + i_offset->y;
+    pos.z = current.pos.z + i_offset->z;
+    fopAcM_create(fpcNm_FallRock_e, i_param, &pos, i_roomNo, i_angle, i_speed);
 }
 
 /* 000003D8-000003E4       .text getData__15daFallRockTag_cFv */
-void daFallRockTag_c::getData() {
-    /* Nonmatching */
+daFallRockTag_data* daFallRockTag_c::getData() {
+    return &m_data;
 }
+
+f32 daFallRockTag_c::m_div_num = 6.0f;
+
+daFallRockTag_data daFallRockTag_c::m_data = {
+    250.0f,
+    0.3f,
+    0.8f,
+    -70.0f,
+    -7.0f,
+    90,
+    90,
+    3,
+    0,
+};
 
 static actor_method_class l_daFallRockTag_Method = {
     (process_method_func)daFallRockTag_Create,
