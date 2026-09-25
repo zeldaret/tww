@@ -357,10 +357,10 @@ void dFlower_packet_c::draw() {
         }
     }
 
-    GXSetArray(GX_VA_POS, field_0x4608, sizeof(*field_0x4608));
-    GXSetArray(GX_VA_CLR0, field_0x460c, sizeof(*field_0x460c));
-    GXSetArray(GX_VA_TEX0, field_0x4610, sizeof(*field_0x4610));
-    GXCallDisplayList(field_0x4614, field_0x4618);
+    GXSetArray(GX_VA_POS, mPosArray, sizeof(*mPosArray));
+    GXSetArray(GX_VA_CLR0, mColorArray, sizeof(*mColorArray));
+    GXSetArray(GX_VA_TEX0, mTexCoordArray, sizeof(*mTexCoordArray));
+    GXCallDisplayList(mDL1, mDL1Size);
 
     pRoom = &mRoom[0];
     for(int i = 0; i < ARRAY_SSIZE(mRoom); pRoom++, i++) {
@@ -374,10 +374,10 @@ void dFlower_packet_c::draw() {
                 GXLoadPosMtxImm(pNext->field_0x10, 0);
 
                 if(!cLib_checkBit<u8>(pNext->field_0x00, 0x8)) {
-                    GXCallDisplayList(field_0x461c, field_0x4620);
+                    GXCallDisplayList(mDL2, mDL2Size);
                 }
                 else {
-                    GXCallDisplayList(field_0x4624, field_0x4628);
+                    GXCallDisplayList(mDL3, mDL3Size);
                 }
             }
 
@@ -504,30 +504,30 @@ void dFlower_packet_c::setData(dFlower_data_c* param_1, int param_2, s8 param_3,
 
     if(mRoom[roomNo].field_0x0 == NULL) {
         if(strcmp(dComIfGp_getStartStageName(), "sea") == 0 && roomNo == dIsleRoom_PrivateOasis_e) {
-            field_0x4608 = l_pos3;
-            field_0x460c = l_color3;
-            field_0x4610 = l_texCoord3;
-            field_0x4614 = l_matDL3;
-            field_0x4618 = 0xA0;
-            field_0x461c = l_QbsfwDL;
-            field_0x4620 = 0x660;
-            field_0x4624 = l_QbsafDL;
-            field_0x4628 = 0x80;
+            mPosArray = l_pos3;
+            mColorArray = l_color3;
+            mTexCoordArray = l_texCoord3;
+            mDL1 = l_matDL3;
+            mDL1Size = 0xA0;
+            mDL2 = l_QbsfwDL;
+            mDL2Size = 0x660;
+            mDL3 = l_QbsafDL;
+            mDL3Size = 0x80;
         }
         else {
-            field_0x4608 = l_pos2;
-            field_0x460c = l_color2;
-            field_0x4610 = l_texCoord2;
-            field_0x4614 = l_matDL2;
-            field_0x4618 = 0xA0;
-            field_0x461c = l_Ohana_highDL;
-            field_0x4620 = 0x120;
-            field_0x4624 = l_Ohana_high_gutDL;
-            field_0x4628 = 0x80;
+            mPosArray = l_pos2;
+            mColorArray = l_color2;
+            mTexCoordArray = l_texCoord2;
+            mDL1 = l_matDL2;
+            mDL1Size = 0xA0;
+            mDL2 = l_Ohana_highDL;
+            mDL2Size = 0x120;
+            mDL3 = l_Ohana_high_gutDL;
+            mDL3Size = 0x80;
         }
     }
 
-    if(field_0x461c == l_QbsfwDL) {
+    if(mDL2 == l_QbsfwDL) {
         cLib_onBit<u8>(param_1->field_0x00, 0x40);
     }
 
