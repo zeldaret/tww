@@ -34,12 +34,12 @@ public:
     u8 getPrmTagNo();
 
     enum Prm_e {
-        PRM_TAG_NO_W = 8,
+        PRM_TAG_NO_W = 0x08,
         PRM_TAG_NO_S = 0x00,
     };
+
 public:
-    /* Place member variables here */
-    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x298 */ fpc_ProcID mMsgID;
     /* 0x29C */ msg_class* mpCurrMsg;
     /* 0x2A0 */ u32 mMsgNo;

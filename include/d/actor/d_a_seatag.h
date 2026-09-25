@@ -10,7 +10,7 @@ public:
     inline BOOL execute();
 
 public:
-    /* 0x290 */ u8 m290[0x298 - 0x290];
+    /* 0x290 */ request_of_phase_process_class mPhase; // Unused
 };
 
 #endif /* D_A_SEATAG_H */

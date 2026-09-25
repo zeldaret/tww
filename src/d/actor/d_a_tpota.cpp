@@ -78,18 +78,18 @@ void daTpota_c::clear_splash() {
 /* 00000380-000003F4       .text renew_splash__9daTpota_cFv */
 void daTpota_c::renew_splash() {
     if (mpEmitters[1] != NULL) {
-        JSUPtrList* list = mpEmitters[1]->getParticleList();
-        unknown_struct *unknown_struct = field_0x2C4;
+        JSUList<JPABaseParticle>* list = mpEmitters[1]->getParticleList();
+        unknown_struct* unknown_struct = field_0x2C4;
         if(list != NULL){
             clear_splash();
-            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL); link = link->getNext()){
-                JPABaseParticle* particle = (JPABaseParticle*)link->getObjectPtr();
+            for (JSULink<JPABaseParticle>* link = list->getFirst(); link != NULL && link != list->getEnd(); link = link->getNext()) {
+                JPABaseParticle* const particle = link->getObject();
                 JGeometry::TVec3<f32> position;
                 particle->getGlobalPosition(position);
                 unknown_struct->ptcl = particle;
                 unknown_struct->pos_y = position.y;
                 unknown_struct++;
-            }   
+            }
         }
     }
 }
@@ -97,18 +97,15 @@ void daTpota_c::renew_splash() {
 /* 000003F4-000004C8       .text _execute__9daTpota_cFv */
 bool daTpota_c::_execute() {
     if (mpEmitters[1] != NULL){
-        JSUPtrList* list = mpEmitters[1]->getParticleList();
+        JSUList<JPABaseParticle>* list = mpEmitters[1]->getParticleList();
         if(list != NULL){
-            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL);
-            link = link->getNext()){
-                JPABaseParticle* particle = (JPABaseParticle *)link->getObjectPtr();
+            for (JSULink<JPABaseParticle>* link = list->getFirst(); link != NULL && link != list->getEnd(); link = link->getNext()) {
+                JPABaseParticle* const particle = link->getObject();
                 JGeometry::TVec3<f32> position;
                 particle->getGlobalPosition(position);
                 if(check_water_h(particle, position.y)){
                     cXyz local_48;
-                    local_48.x = position.x;
-                    local_48.y = -230.0;
-                    local_48.z = position.z;
+                    local_48.set(position.x, -230.0f, position.z);
                     make_ripple(local_48);
                 }
             }

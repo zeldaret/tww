@@ -312,12 +312,15 @@ static BOOL daAndsw0_IsDelete(andsw0_class*) {
 }
 
 /* 0000096C-00000974       .text daAndsw0_Delete__FP12andsw0_class */
-static BOOL daAndsw0_Delete(andsw0_class*) {
+static BOOL daAndsw0_Delete(andsw0_class*i_this) {
+    fopAcM_RegisterDeleteID(i_this);
     return TRUE;
 }
 
 /* 00000974-00000A64       .text daAndsw0_Create__FP10fopAc_ac_c */
 static cPhs_State daAndsw0_Create(fopAc_ac_c* ac) {
+    fopAcM_RegisterCreateID(ac);
+
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     fopAcM_ct(ac, andsw0_class);

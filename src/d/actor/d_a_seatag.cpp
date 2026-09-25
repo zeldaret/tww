@@ -4,14 +4,27 @@
 #include "d/actor/d_a_seatag.h"
 #include "f_op/f_op_actor_mng.h"
 
-/* 00000078-00000080       .text daSeatag_Draw__FP10daSeatag_c */
-static BOOL daSeatag_Draw(daSeatag_c*) {
+inline BOOL daSeatag_c::draw() {
     return TRUE;
 }
 
-/* 00000080-00000088       .text daSeatag_Execute__FP10daSeatag_c */
-static  BOOL daSeatag_Execute(daSeatag_c*) {
+inline BOOL daSeatag_c::execute() {
     return TRUE;
+}
+
+inline cPhs_State daSeatag_c::create() {
+    fopAcM_ct(this, daSeatag_c);
+    return cPhs_COMPLEATE_e;
+}
+
+/* 00000078-00000080       .text daSeatag_Draw__FP10daSeatag_c */
+static BOOL daSeatag_Draw(daSeatag_c* i_this) {
+    return ((daSeatag_c*)i_this)->draw();
+}
+
+/* 00000080-00000088       .text daSeatag_Execute__FP10daSeatag_c */
+static  BOOL daSeatag_Execute(daSeatag_c* i_this) {
+    return ((daSeatag_c*)i_this)->execute();
 }
 
 /* 00000088-00000090       .text daSeatag_IsDelete__FP10daSeatag_c */
@@ -20,15 +33,16 @@ static BOOL daSeatag_IsDelete(daSeatag_c*) {
 }
 
 /* 00000090-000000C0       .text daSeatag_Delete__FP10daSeatag_c */
-static BOOL daSeatag_Delete(daSeatag_c* a_this) {
-    a_this->~daSeatag_c();
+static BOOL daSeatag_Delete(daSeatag_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this);
+    i_this->~daSeatag_c();
     return TRUE;
 }
 
 /* 000000C0-00000110       .text daSeatag_Create__FP10fopAc_ac_c */
-static cPhs_State daSeatag_Create(fopAc_ac_c* a_this) {
-    fopAcM_ct(a_this, daSeatag_c);
-    return cPhs_COMPLEATE_e;
+static cPhs_State daSeatag_Create(fopAc_ac_c* i_this) {
+    fopAcM_RegisterCreateID(i_this);
+    return ((daSeatag_c*)i_this)->create();
 }
 
 static actor_method_class l_daSeatag_Method = {

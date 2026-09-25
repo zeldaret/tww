@@ -7,7 +7,7 @@
 
 class esa_class : public fopAc_ac_c {
 public:
-    /* 0x290 */ u8 field_0x290[0x298 - 0x290];
+    /* 0x290 */ request_of_phase_process_class mPhase; // Unused
     /* 0x298 */ u8 field_0x298;
     /* 0x29C */ f32 mGroundHeight;
     /* 0x2A0 */ s8 mActionState;

@@ -6,7 +6,7 @@
 
 struct bossitem_class {
     /* 0x000 */ fopAc_ac_c actor;
-    /* 0x290 */ u8 m290[0x298 - 0x290];
+    /* 0x290 */ request_of_phase_process_class mPhase; // Unused
 };  // Size: 0x298
 
 namespace daBossItem_prm {
