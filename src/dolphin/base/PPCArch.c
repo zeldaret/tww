@@ -1,54 +1,56 @@
 #include "dolphin/base/PPCArch.h"
 
-asm u32 PPCMfmsr() {
+#include "global.h"
+
+ASM u32 PPCMfmsr() {
     nofralloc
     mfmsr r3
     blr    
 }
 
-asm void PPCMtmsr(__REGISTER u32 newMSR) {
+ASM void PPCMtmsr(__REGISTER u32 newMSR) {
     nofralloc
     mtmsr newMSR
     blr
 }
 
-asm u32 PPCMfhid0() {
+ASM u32 PPCMfhid0() {
     nofralloc
     mfspr r3, HID0
     blr
 }
 
-asm void PPCMthid0(__REGISTER u32 newHID0) {
+ASM void PPCMthid0(__REGISTER u32 newHID0) {
     nofralloc
     mtspr HID0, newHID0
     blr
 }
 
-asm u32 PPCMfl2cr() {
+ASM u32 PPCMfl2cr() {
     nofralloc
     mfspr r3, L2CR
     blr
 }
 
-asm void PPCMtl2cr(__REGISTER u32 newL2cr) {
+ASM void PPCMtl2cr(__REGISTER u32 newL2cr) {
     nofralloc
     mtspr L2CR, newL2cr
     blr
 }
 
-asm void PPCMtdec(__REGISTER u32 newDec) {
+ASM void PPCMtdec(__REGISTER u32 newDec) {
     nofralloc
     mtdec newDec
     blr
 }
 
-asm void PPCSync() {
+ASM void PPCSync() {
     nofralloc
     sc
     blr
 }
 
-asm void PPCHalt() {
+ASM void PPCHalt() {
     nofralloc
     sync
 loop:
@@ -81,19 +83,19 @@ void PPCMtfpscr(__REGISTER u32 newFPSCR) {
     }
 }
 
-asm u32 PPCMfhid2() {
+ASM u32 PPCMfhid2() {
     nofralloc
     mfspr r3, HID2
     blr
 }
 
-asm void PPCMthid2(__REGISTER u32 newhid2) {
+ASM void PPCMthid2(__REGISTER u32 newhid2) {
     nofralloc
     mtspr HID2, newhid2
     blr
 }
 
-asm void PPCMtwpar(__REGISTER u32 newwpar) {
+ASM void PPCMtwpar(__REGISTER u32 newwpar) {
     nofralloc
     mtspr WPAR, newwpar
     blr
@@ -103,7 +105,7 @@ void PPCDisableSpeculation(void) {
     PPCMthid0(PPCMfhid0() | HID0_SPD);
 }
 
-asm void PPCSetFpNonIEEEMode() {
+ASM void PPCSetFpNonIEEEMode() {
 	nofralloc
 	mtfsb1 29
 	blr
