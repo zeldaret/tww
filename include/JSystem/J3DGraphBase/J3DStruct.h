@@ -157,7 +157,7 @@ struct J3DIndTexOrderInfo {
 };
 
 struct J3DTevSwapModeInfo {
-    /* 0x0 */ u8 mRasSel ALIGN_DECL(4);
+    /* 0x0 */ ALIGN_DECL(4, u8 mRasSel);
     /* 0x1 */ u8 mTexSel;
 };
 
@@ -192,7 +192,7 @@ struct J3DTevStageInfo {
 };
 
 struct J3DIndTevStageInfo {
-    /* 0x0 */ u8 mIndStage ALIGN_DECL(4);
+    /* 0x0 */ ALIGN_DECL(4, u8 mIndStage);
     /* 0x1 */ u8 mIndFormat;
     /* 0x2 */ u8 mBiasSel;
     /* 0x3 */ u8 mMtxSel;
@@ -210,7 +210,7 @@ struct J3DTexCoordInfo {
         mTexGenMtx = other.mTexGenMtx;
     }
 
-    /* 0x0 */ u8 mTexGenType ALIGN_DECL(4);
+    /* 0x0 */ ALIGN_DECL(4, u8 mTexGenType);
     /* 0x1 */ u8 mTexGenSrc;
     /* 0x2 */ u8 mTexGenMtx;
 };
@@ -235,7 +235,7 @@ struct J3DBlendInfo {
 };
 
 struct J3DTevOrderInfo {
-    /* 0x0 */ u8 mTexCoord ALIGN_DECL(2);
+    /* 0x0 */ ALIGN_DECL(2, u8 mTexCoord);
     /* 0x1 */ u8 mTexMap;
     /* 0x2 */ u8 mColorChan;
 };

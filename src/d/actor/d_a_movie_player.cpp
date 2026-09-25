@@ -28,19 +28,19 @@ inline s32 daMP_NEXT_READ_SIZE(daMP_THPReadBuffer* readBuf) {
 
 static u8 THPStatistics[1120];
 
-static THPHuffmanTab* Ydchuff ALIGN_DECL(32);
-static THPHuffmanTab* Udchuff ALIGN_DECL(32);
-static THPHuffmanTab* Vdchuff ALIGN_DECL(32);
-static THPHuffmanTab* Yachuff ALIGN_DECL(32);
-static THPHuffmanTab* Uachuff ALIGN_DECL(32);
-static THPHuffmanTab* Vachuff ALIGN_DECL(32);
-static f32 __THPIDCTWorkspace[64] ALIGN_DECL(32);
+ALIGN_DECL(32, static THPHuffmanTab* Ydchuff);
+ALIGN_DECL(32, static THPHuffmanTab* Udchuff);
+ALIGN_DECL(32, static THPHuffmanTab* Vdchuff);
+ALIGN_DECL(32, static THPHuffmanTab* Yachuff);
+ALIGN_DECL(32, static THPHuffmanTab* Uachuff);
+ALIGN_DECL(32, static THPHuffmanTab* Vachuff);
+ALIGN_DECL(32, static f32 __THPIDCTWorkspace[64]);
 static u8* __THPHuffmanBits;
 static u8* __THPHuffmanSizeTab;
 static u16* __THPHuffmanCodeTab;
-static THPSample* Gbase ALIGN_DECL(32);
-static u32 Gwid ALIGN_DECL(32);
-static f32* Gq ALIGN_DECL(32);
+ALIGN_DECL(32, static THPSample* Gbase);
+ALIGN_DECL(32, static u32 Gwid);
+ALIGN_DECL(32, static f32* Gq);
 static u8* __THPLCWork512[3];
 static u8* __THPLCWork640[3];
 static u32 __THPOldGQR5;
@@ -94,7 +94,7 @@ static OSMessage daMP_FreeAudioBufferMessage[3];
 static OSMessage daMP_DecodedAudioBufferMessage[3];
 
 static BOOL daMP_Initialized;
-static u32 daMP_WorkBuffer[16] ALIGN_DECL(32);
+ALIGN_DECL(32, static u32 daMP_WorkBuffer[16]);
 static OSMessageQueue daMP_PrepareReadyQueue;
 static OSMessageQueue daMP_UsedTextureSetQueue;
 static OSMessage daMP_PrepareReadyMessage;
@@ -107,7 +107,7 @@ static u32 daMP_OldAIDCallback;
 static void* daMP_LastAudioBuffer;
 static void* daMP_CurAudioBuffer;
 static s32 daMP_AudioSystem;
-static s16 daMP_SoundBuffer[2][0x460] ALIGN_DECL(32);
+ALIGN_DECL(32, static s16 daMP_SoundBuffer[2][0x460]);
 
 static THPVideoInfo daMP_videoInfo;
 static THPAudioInfo daMP_audioInfo;

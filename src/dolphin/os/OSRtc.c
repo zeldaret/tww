@@ -6,7 +6,7 @@ static void WriteSramCallback(s32 chan, OSContext* context);
 static BOOL WriteSram(void* buffer, u32 offset, u32 size);
 static BOOL UnlockSram(BOOL commit, u32 offset);
 
-static SramControlBlock Scb ALIGN_DECL(32);
+ALIGN_DECL(32, static SramControlBlock Scb);
 
 static void WriteSramCallback(s32 chan, OSContext* context) {
     Scb.sync = WriteSram(Scb.sram + Scb.offset, Scb.offset, RTC_SRAM_SIZE - Scb.offset);

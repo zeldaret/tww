@@ -20,7 +20,7 @@ typedef struct _ApploaderHeader {
     /* 0x1C */ u32 reserved2;
 } ApploaderHeader; // Size: 0x20
 
-static ApploaderHeader Header ALIGN_DECL(32);
+ALIGN_DECL(32, static ApploaderHeader Header);
 
 ASM static void Run(__REGISTER u32 addr) {
     nofralloc

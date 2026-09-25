@@ -9,8 +9,8 @@ namespace JASystem {
         extern f32 C5BASE_PITCHTABLE[];
     }
     namespace DSPInterface {
-        extern u16 DSPADPCM_FILTER[] ALIGN_DECL(32);
-        extern u16 DSPRES_FILTER[] ALIGN_DECL(32);
+        ALIGN_DECL(32, extern u16 DSPADPCM_FILTER[]);
+        ALIGN_DECL(32, extern u16 DSPRES_FILTER[]);
     }
 }
 
