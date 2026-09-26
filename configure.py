@@ -557,7 +557,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_kankyo_wether.cpp"),
             Object(NonMatching, "d/d_kankyo_rain.cpp"),
             Object(Matching,    "d/d_kankyo_demo.cpp"),
-            Object(NonMatching, "d/d_detect.cpp"),
+            Object(MatchingFor("GZLE01"), "d/d_detect.cpp"),
             Object(Matching,    "d/d_vibration.cpp"),
             Object(Matching,    "d/d_vib_pattern.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_attention.cpp"),
