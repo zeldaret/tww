@@ -565,7 +565,7 @@ bool Reflect(cXyz& surfVec, cXyz* moveVec, f32 param_2, f32 xzMult) {
     moveNorm = moveVec->normalize();
     surfNorm = surfVec.normalize();
     moveNorm = moveNorm * -1.0f;
-    f32 dot = 2.0f*surfNorm.getDotProduct(moveNorm);
+    f32 dot = 2.0f*surfNorm.inprod(moveNorm);
     bool hitFront = true;
     if (dot < 0.0f) {
         hitFront = false;

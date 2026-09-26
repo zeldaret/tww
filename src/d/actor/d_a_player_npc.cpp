@@ -199,7 +199,7 @@ int daPy_npc_c::chkMoveBlock(cXyz* outBlockVel) {
             
             blockRelPos.normalizeZP();
             blockVel.normalizeZP();
-            f32 dot = blockRelPos.getDotProduct(blockVel);
+            f32 dot = blockRelPos.inprod(blockVel);
             
             blockVel.y = 0.0f;
             blockRelPos.y = 0.0f;

@@ -228,17 +228,14 @@ public:
         field_0x1C = 0;
         field_0x1E = 0;
         field_0x20 = 0;
-        field_0x00 = 0;
-        field_0x02 = 0;
-        field_0x04 = 0;
+        field_0x00.setall(0);
     }
+
     void defaultCalcX(s16) {}
     void defaultCalcY(s16) {}
     void setProc(SwingProc proc) { mProc = proc; }
 
-    /* 0x00 */ s16 field_0x00;
-    /* 0x02 */ s16 field_0x02;
-    /* 0x04 */ s16 field_0x04;
+    /* 0x00 */ csXyz field_0x00;
     /* 0x08 */ SwingProc mProc;
     /* 0x14 */ f32 field_0x14;
     /* 0x18 */ f32 field_0x18;

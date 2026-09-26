@@ -444,13 +444,12 @@ void hand_move(sss_class* i_this) {
             i_this->speed.y -= 3.0f;
             i_this->field_0x2C2[2] = 5;
             {
-                f32 temp_x = i_this->field_0x2C8.x;
-                f32 temp_y = i_this->field_0x2C8.y;
-                f32 temp_z = i_this->field_0x2C8.z;
-                temp_y += 200.0f;
-                gnd_chk.m_pos.x = temp_x;
-                gnd_chk.m_pos.y = temp_y;
-                gnd_chk.m_pos.z = temp_z;
+                Vec temp;
+                temp.x = i_this->field_0x2C8.x;
+                temp.y = i_this->field_0x2C8.y;
+                temp.z = i_this->field_0x2C8.z;
+                temp.y += 200.0f;
+                gnd_chk.m_pos = temp;
             }
             i_this->field_0x2F8 = dComIfG_Bgsp()->GroundCross(&gnd_chk);
             if (i_this->field_0x2F8 == -G_CM3D_F_INF || i_this->field_0x2C8.y <= i_this->field_0x2F8 + 10.0f) {

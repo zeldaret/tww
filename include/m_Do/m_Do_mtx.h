@@ -114,11 +114,11 @@ inline void cMtx_multVecSR(const Mtx m, const Vec* src, Vec* dst) {
 }
 
 inline void mDoMtx_quatMultiply(const Quaternion* a, const Quaternion* b, Quaternion* ab) {
-    QUATMultiply(a,b,ab);
+    QUATMultiply(a, b, ab);
 }
 
 inline void mDoMtx_quatSlerp(const Quaternion* a, const Quaternion* b, Quaternion* ab, f32 param_4) {
-    C_QUATSlerp(a,b,ab,param_4);
+    C_QUATSlerp(a, b, ab, param_4);
 }
 
 inline void mDoMtx_quatRotAxisRad(Quaternion* q, const Vec* axis, f32 rad) {

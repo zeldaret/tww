@@ -45,7 +45,7 @@ static BOOL nodeCallBack_Tt(J3DNode* node, int calcTiming) {
             if (jntNo == i_this->getHeadJntNum()) {
                 temp.setall(0.0f);
                 cMtx_YrotM(*calc_mtx, -i_this->getHead_y());
-                cMtx_ZrotM(*calc_mtx, -i_this->getHead_x() - i_this->mHeadAnm.field_0x00);
+                cMtx_ZrotM(*calc_mtx, -i_this->getHead_x() - i_this->mHeadAnm.field_0x00.x);
                 MtxPosition(&temp, &temp2);
                 i_this->setAttentionBasePos(temp2);
                 temp.set(20.0f, -20.0f, 0.0f);

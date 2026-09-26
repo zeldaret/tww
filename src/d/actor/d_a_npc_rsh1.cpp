@@ -168,7 +168,7 @@ BOOL daNpc_Rsh1_c::checkCreateInShopPlayer() {
             cXyz t2_cross_t3 = temp2.outprod(temp3);
             cXyz base_y = cXyz::BaseY;
             
-            if (base_y.getDotProduct(t2_cross_t3) > 0.0f) {
+            if (base_y.inprod(t2_cross_t3) > 0.0f) {
                 l++;
             }
 
@@ -177,7 +177,7 @@ BOOL daNpc_Rsh1_c::checkCreateInShopPlayer() {
         }
 
         if ((l == 4 || l == 0) && 
-            diff.getDotProduct(dir) > 0.0f && 
+            diff.inprod(dir) > 0.0f && 
             std::fabsf(diff.y) < 25.0f) {
             return TRUE;
         }
@@ -206,7 +206,7 @@ static BOOL daNpc_Rsh1_checkRotenBaseTalkArea() {
         cXyz t2_cross_t3 = temp2.outprod(temp3);
         cXyz base_y = cXyz::BaseY;
         
-        if (base_y.getDotProduct(t2_cross_t3) > 0.0f) {
+        if (base_y.inprod(t2_cross_t3) > 0.0f) {
             l++;
         }
 
