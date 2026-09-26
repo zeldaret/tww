@@ -734,9 +734,8 @@ static void pl_pos_add(himo2_class* i_this) {
 static void new_himo2_move(himo2_class* i_this) {
     /* Nonmatching - regalloc */
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
-    fopAc_ac_c* player_actor;
-    daPy_py_c* player;
-    camera_process_class* camera; // r29
+    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera_process_class* camera2; // r23
     dAttention_c* attention; // r23
     u32 r30;
@@ -755,15 +754,15 @@ static void new_himo2_move(himo2_class* i_this) {
     f32 f28_2;
     f32 f26_2;
     f32 f27_2;
-    
+
     f32 f26;
-    
+
     f32 f26_3;
     f32 f27;
     f32 f28;
-    
+
     f32 f27_3;
-    
+
     cXyz sp130;
     cXyz sp124;
     cXyz sp118; // unused
@@ -773,9 +772,6 @@ static void new_himo2_move(himo2_class* i_this) {
     dr2_class* dr;
 #endif
 
-    player_actor = dComIfGp_getPlayer(0);
-    player = (daPy_py_c*)player_actor;
-    camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     cXyz sp100 = i_this->m02EC[0];
     cXyz spF4 = i_this->m02EC[1]; // unused
     cXyz spE8; // unused
@@ -845,7 +841,7 @@ static void new_himo2_move(himo2_class* i_this) {
     case 0: {
         actor->speedF = 0.0f;
         if ((r30 == 0) && player->checkRopeReadyAnime()) {
-            cMtx_YrotS(*calc_mtx, player_actor->shape_angle.y);
+            cMtx_YrotS(*calc_mtx, player->shape_angle.y);
             cMtx_ZrotM(*calc_mtx, REG0_S(2) + -12000);
             cMtx_YrotM(*calc_mtx, i_this->m02D8 * (REG0_S(3) + 0x2000));
             sp130.x = 0.0f;
@@ -865,7 +861,7 @@ static void new_himo2_move(himo2_class* i_this) {
             cLib_addCalc2(&i_this->m2500, 1.0f, 1.0f, 0.005f);
             sp130 = actor->current.pos - sp100;
             if (sp130.abs() > 5.0f) {
-                fopAcM_seStart(player_actor, JA_SE_LK_ROPE_UNWIND, 0);
+                fopAcM_seStart(player, JA_SE_LK_ROPE_UNWIND, 0);
             }
         }
         if (fopAcM_GetParam(actor) == 1) {
@@ -917,7 +913,7 @@ static void new_himo2_move(himo2_class* i_this) {
         break;
     }
     case 1: {
-        cMtx_YrotS(*calc_mtx, player_actor->shape_angle.y);
+        cMtx_YrotS(*calc_mtx, player->shape_angle.y);
         cMtx_ZrotM(*calc_mtx, REG0_S(2) + -12000);
         cMtx_YrotM(*calc_mtx, i_this->m02D8 * (REG0_S(3) + 0x2000));
         sp130.x = 0.0f;
@@ -993,7 +989,7 @@ static void new_himo2_move(himo2_class* i_this) {
         actor->current.pos += actor->speed;
         pl_pos_add(i_this);
         if (i_this->m217C != NULL) {
-            if ((f27_4 < (actor->speedF * 10.0f)) || (i_this->m0308 == 0)) {
+            if ((f26_2 < (actor->speedF * 10.0f)) || (i_this->m0308 == 0)) {
                 i_this->m02DC = 10;
                 i_this->m24D9 = 0xFF;
                 i_this->m24D8 = 1;
@@ -1112,7 +1108,7 @@ static void new_himo2_move(himo2_class* i_this) {
         pl_pos_add(i_this);
         sp130 = actor->current.pos - sp100;
         if (sp130.abs() > 5.0f) {
-            fopAcM_seStart(player_actor, JA_SE_LK_ROPE_UNWIND, 0);
+            fopAcM_seStart(player, JA_SE_LK_ROPE_UNWIND, 0);
         } else {
             fopAcM_SetParam(actor, 0);
             fopAcM_seStart(actor, JA_SE_LK_ROPE_UNCOIL, 0);
@@ -1133,7 +1129,7 @@ static void new_himo2_move(himo2_class* i_this) {
         pl_pos_add(i_this);
         sp130 = actor->current.pos - sp100;
         if (sp130.abs() > 5.0f) {
-            fopAcM_seStart(player_actor, JA_SE_LK_ROPE_UNWIND, 0);
+            fopAcM_seStart(player, JA_SE_LK_ROPE_UNWIND, 0);
         } else {
             fopAcM_SetParam(actor, 0);
             i_this->m02DC = 0;
@@ -1395,12 +1391,12 @@ static void new_himo2_move(himo2_class* i_this) {
             i_this->m24F8 = 65.0f;
             cMtx_YrotS(*calc_mtx, i_this->m2510);
             sp130.x = REG0_F(7) + 100.0f + 200.0f;
-            sp130.y = player_actor->current.pos.y + 700.0f + REG0_F(8);
+            sp130.y = player->current.pos.y + 700.0f + REG0_F(8);
             sp130.z = REG0_F(9) + -500.0f;
             MtxPosition(&sp130, &i_this->m24DC);
-            i_this->m24DC.x = i_this->m24DC.x + player_actor->current.pos.x * (REG0_F(15) + 0.55f);
-            i_this->m24DC.z = i_this->m24DC.z + player_actor->current.pos.z * (REG0_F(15) + 0.55f);
-            i_this->m24E8 = player_actor->current.pos;
+            i_this->m24DC.x = i_this->m24DC.x + player->current.pos.x * (REG0_F(15) + 0.55f);
+            i_this->m24DC.z = i_this->m24DC.z + player->current.pos.z * (REG0_F(15) + 0.55f);
+            i_this->m24E8 = player->current.pos;
             i_this->m24E8.y = i_this->m24E8.y - 50.0f;
             daYkgr_c::show();
         } else {
@@ -1441,14 +1437,14 @@ static void new_himo2_move(himo2_class* i_this) {
         cLib_addCalc2(&i_this->m24F4, i_this->m24F8, 0.1f, 10.0f);
         cMtx_YrotS(*calc_mtx, i_this->m2510);
         sp130.x = REG0_F(7) + 100.0f + 200.0f;
-        sp130.y = player_actor->current.pos.y + 700.0f + REG0_F(8);
+        sp130.y = player->current.pos.y + 700.0f + REG0_F(8);
         sp130.z = REG0_F(9) + -500.0f;
         MtxPosition(&sp130, &i_this->m24DC);
-        i_this->m24DC.x = i_this->m24DC.x + player_actor->current.pos.x * (REG0_F(15) + 0.55f);
-        i_this->m24DC.z = i_this->m24DC.z + player_actor->current.pos.z * (REG0_F(15) + 0.55f);
-        cLib_addCalc2(&i_this->m24E8.x, player_actor->current.pos.x, 0.3f, 100.0f);
-        cLib_addCalc2(&i_this->m24E8.y, (player_actor->current.pos.y - 50.0f) + REG0_F(10), 0.3f, 100.0f);
-        cLib_addCalc2(&i_this->m24E8.z, player_actor->current.pos.z, 0.3f, 100.0f);
+        i_this->m24DC.x = i_this->m24DC.x + player->current.pos.x * (REG0_F(15) + 0.55f);
+        i_this->m24DC.z = i_this->m24DC.z + player->current.pos.z * (REG0_F(15) + 0.55f);
+        cLib_addCalc2(&i_this->m24E8.x, player->current.pos.x, 0.3f, 100.0f);
+        cLib_addCalc2(&i_this->m24E8.y, (player->current.pos.y - 50.0f) + REG0_F(10), 0.3f, 100.0f);
+        cLib_addCalc2(&i_this->m24E8.z, player->current.pos.z, 0.3f, 100.0f);
 #if VERSION > VERSION_DEMO
         if ((i_this->m02A4 == 0) && (!player->checkPlayerFly())) {
             camera->mCamera.Start();
@@ -1553,10 +1549,10 @@ static void new_himo2_move(himo2_class* i_this) {
                 i_this->m029C = 220;
             } else {
                 i_this->m24D9 = 0;
-                cXyz spDC = player_actor->eyePos;
+                cXyz spDC = player->eyePos;
                 spDC.x *= 0.9f;
                 spDC.z *= 0.9f;
-                camera->mCamera.Reset(player_actor->eyePos, spDC);
+                camera->mCamera.Reset(player->eyePos, spDC);
                 camera->mCamera.Start();
                 camera->mCamera.SetTrimSize(0);
                 fopAcM_OffStatus(&btd->actor, fopAcStts_UNK4000_e);
@@ -1594,10 +1590,10 @@ static void new_himo2_move(himo2_class* i_this) {
         }
         if (i_this->m029C == 0) {
             i_this->m24D9 = 0;
-            cXyz spD0 = player_actor->eyePos;
+            cXyz spD0 = player->eyePos;
             spD0.x *= 0.9f;
             spD0.z *= 0.9f;
-            camera->mCamera.Reset(player_actor->eyePos, spD0);
+            camera->mCamera.Reset(player->eyePos, spD0);
             camera->mCamera.Start();
             camera->mCamera.SetTrimSize(0);
             fopAcM_OffStatus(&btd->actor, fopAcStts_UNK4000_e);
