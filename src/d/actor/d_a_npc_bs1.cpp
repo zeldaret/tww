@@ -442,8 +442,8 @@ static void daNpc_Bs1_setPayRupee(int unknownParam1, int unknownParam2) {
 
 /* 000010EC-00001F7C       .text next_msgStatus__11daNpc_Bs1_cFPUl */
 u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching - retail-only regalloc */
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
+    s32 rupee;
 
     switch(*pMsgNo) {
         case 0xF50:
@@ -803,7 +803,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             }
 
             if(l_msg->mSelectNum == 0) {
-                int rupee = dComIfGp_getMessageRupee();
+                rupee = dComIfGp_getMessageRupee();
                 u8 status = dShop_BoughtErrorStatus(&mShopItems, 0, rupee);
 
                 if(status & 1) {
@@ -829,7 +829,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
 
                 fopAcM_seStart(this, JA_SE_SHOP_BOUGHT, 0);
                 mShopItems.hideSelectItem();
-                dComIfGp_setItemRupeeCount(-rupee);
+                dComIfGp_setItemRupeeCount(-(int)rupee);
                 if(mShopItems.getSelectItemNo() == dItemNo_BAIT_BAG_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
                     m76C[mShopItems.mSelectedItemIdx] = 1;
@@ -873,7 +873,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
             }
 
             if(l_msg->mSelectNum == 0) {
-                int rupee = dComIfGp_getMessageRupee();
+                rupee = dComIfGp_getMessageRupee();
                 u32 status = dShop_BoughtErrorStatus(&mShopItems, 0, rupee);
 
                 if(status & 0x20) {
@@ -891,7 +891,7 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
 
                 fopAcM_seStart(this, JA_SE_SHOP_BOUGHT, 0);
                 mShopItems.hideSelectItem();
-                dComIfGp_setItemRupeeCount(-rupee);
+                dComIfGp_setItemRupeeCount(-(int)rupee);
                 u8 itemNo = mShopItems.getSelectItemNo();
                 if(itemNo == dItemNo_EMPTY_BOTTLE_e || itemNo == dItemNo_HEART_PIECE_e || itemNo == dItemNo_COLLECT_MAP_30_e) {
                     mShopItems.SoldOutItem(mShopItems.mSelectedItemIdx);
