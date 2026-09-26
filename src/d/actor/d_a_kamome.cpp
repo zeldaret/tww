@@ -145,7 +145,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 /* 00000B84-00000CAC       .text daKamome_Draw__FP12kamome_class */
 static BOOL daKamome_Draw(kamome_class* i_this) {
     if ((i_this->mSwitchNo != 0) || (i_this->mbNoDraw != 0)) {
-#if VERSION <= VERSION_JPN
+#if VERSION != VERSION_USA
         i_this->mbNoDraw = 0;
 #endif
         return TRUE;
@@ -1337,7 +1337,7 @@ static void daKamome_setMtx(kamome_class* i_this) {
 /* 00004768-000049F8       .text daKamome_Execute__FP12kamome_class */
 static BOOL daKamome_Execute(kamome_class* i_this) {
     i_this->mGlobalTimer++;
-#if VERSION > VERSION_JPN
+#if VERSION == VERSION_USA
     i_this->mbNoDraw = 0;
 #endif
 
