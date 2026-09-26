@@ -3548,10 +3548,6 @@ void fopMsgM_msgDataProc_c::colorAnime(J2DPicture* i_pic) {
 
 /* 800322B4-80034F3C       .text stringSet__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::stringSet() {
-    /* Nonmatching - regalloc */
-    // demo: regswap on int r28
-    // jpn: matches 100%
-    // usa and pal: regswap on s8 r30
     s8 r30 = g_msgHIO.field_0x6c;
 
     field_0x60 = field_0x40;
@@ -4079,11 +4075,9 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK23)
             ) {
                 if ((u8)bmgData[count + 4] == MsgCtrlCode_UNK22) {
-                    u32 msgNo = dComIfGp_getNpcNameMessageID();
-                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &nowCursorPos, &field_0x24, &field_0x150);
+                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, dComIfGp_getNpcNameMessageID(), &nowCursorPos, &field_0x24, &field_0x150);
                 } else if ((u8)bmgData[count + 4] == MsgCtrlCode_UNK23) {
-                    u32 msgNo = dComIfGp_getItemNameMessageID();
-                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &nowCursorPos, &field_0x24, &field_0x150);
+                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, dComIfGp_getItemNameMessageID(), &nowCursorPos, &field_0x24, &field_0x150);
                 }
                 if (selectFlag != Select_ON) {
                     field_0x14 = nowCursorPos - field_0xF8[lineCount];
@@ -5807,7 +5801,6 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
 
 /* 80035408-80035A24       .text getString__21fopMsgM_msgDataProc_cFPcPcPcPcUlPfPfPi */
 void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3, char* param_4, u32 i_msgNo, f32* param_6, f32* param_7, int* param_8) {
-    /* Nonmatching - regalloc */
     fopMsgM_msgGet_c msgGet;
 
     f32 f31;
@@ -5824,8 +5817,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
     if (i_msgNo == 0) {
         src = name;
     } else {
-        mesg_header* header = msgGet.getMesgHeader(i_msgNo);
-        src = msgGet.getMessage(header);
+        src = msgGet.getMessage(msgGet.getMesgHeader(i_msgNo));
     }
 #endif
 

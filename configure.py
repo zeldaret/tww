@@ -469,7 +469,7 @@ config.libs = [
             Object(Matching,    "f_op/f_op_kankyo.cpp"),
             Object(Matching,    "f_op/f_op_msg.cpp"),
             Object(Matching,    "f_op/f_op_kankyo_mng.cpp"),
-            Object(NonMatching, "f_op/f_op_msg_mng.cpp"),
+            Object(MatchingFor("GZLE01"), "f_op/f_op_msg_mng.cpp"),
             Object(Matching,    "f_op/f_op_draw_iter.cpp"),
             Object(Matching,    "f_op/f_op_draw_tag.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "f_op/f_op_scene_pause.cpp"),
@@ -1568,7 +1568,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_himo3"),
     ActorRel(Matching,    "d_a_hmlif"),
     ActorRel(Matching,    "d_a_hys"),
-    ActorRel(Equivalent,  "d_a_kamome"), # regalloc
+    ActorRel(MatchingFor("GZLE01"), "d_a_kamome"),
     ActorRel(Matching,    "d_a_kamome2"), # Demo-only TU
     ActorRel(NonMatching, "d_a_kantera"),
     ActorRel(Matching,    "d_a_kn"),
@@ -1677,7 +1677,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_npc_bmcon1"),
     ActorRel(NonMatching, "d_a_npc_bms1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_npc_bmsw"),
-    ActorRel(MatchingFor("D44J01"), "d_a_npc_bs1"), # regalloc
+    ActorRel(MatchingFor("D44J01", "GZLE01"), "d_a_npc_bs1"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_npc_btsw"),
     ActorRel(Matching,    "d_a_npc_btsw2"),
     ActorRel(NonMatching, "d_a_npc_co1"),

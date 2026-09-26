@@ -164,7 +164,7 @@ static BOOL daKamome_Draw(kamome_class* i_this) {
         &sp08,
         REG0_F(2) * 10.0f + 500.0f,
         20.0f,
-        sp08.y,
+        i_this->actor.current.pos.y,
         i_this->mAcch.GetGroundH(),
         i_this->mAcch.m_gnd,
         &i_this->actor.tevStr
@@ -1212,6 +1212,7 @@ static void kamome_imouto_move(kamome_class* i_this) {
         cVar8 = 1;
         i_this->mVelocityFwdTarget = 0.0f;
         a_this->speedF = 0.0f;
+        frame = i_this->mpMorf->getFrame();
         if (i_this->mpMorf->isStop()) {
             if (cM_rndF(1.0f) < 0.2f) {
                 i_this->mMoveState = 0x13;
