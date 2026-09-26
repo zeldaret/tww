@@ -444,12 +444,16 @@ void hand_move(sss_class* i_this) {
             i_this->speed.y -= 3.0f;
             i_this->field_0x2C2[2] = 5;
             {
-                JGeometry::TVec3<f32> temp = i_this->field_0x2C8;
-                temp.y += 200.0f;
-                gnd_chk.m_pos = temp;
+                f32 temp_x = i_this->field_0x2C8.x;
+                f32 temp_y = i_this->field_0x2C8.y;
+                f32 temp_z = i_this->field_0x2C8.z;
+                temp_y += 200.0f;
+                gnd_chk.m_pos.x = temp_x;
+                gnd_chk.m_pos.y = temp_y;
+                gnd_chk.m_pos.z = temp_z;
             }
             i_this->field_0x2F8 = dComIfG_Bgsp()->GroundCross(&gnd_chk);
-            if (i_this->field_0x2F8 == -1e9f || i_this->field_0x2C8.y <= i_this->field_0x2F8 + 10.0f) {
+            if (i_this->field_0x2F8 == -G_CM3D_F_INF || i_this->field_0x2C8.y <= i_this->field_0x2F8 + 10.0f) {
                 i_this->field_0x2C8.y = i_this->field_0x2F8 + 10.0f;
                 i_this->field_0x2C2[0] = 100;
                 i_this->field_0x2C0 = 6;
@@ -604,11 +608,11 @@ void hand_main(sss_class*) {
 static BOOL daSss_Execute(sss_class* i_this) {
     i_this->field_0x2BC += 1;
     for (int i = 0; i < 2; i++) {
-        if (i_this->field_0x2C2[i] != '\0') {
+        if (i_this->field_0x2C2[i] != 0) {
             i_this->field_0x2C2[i] -= 1;
         }
     }
-    if (i_this->field_0x2C2[2] != '\0') {
+    if (i_this->field_0x2C2[2] != 0) {
         i_this->field_0x2C2[2] -= 1;
     }
     if (!i_this->field_0x2B8) {
