@@ -3318,9 +3318,8 @@ void daNpc_Ji1_c::battleSubActionNockBackInit(int param_1) {
 
 /* 0000A5FC-0000A744       .text battleSubActionNockBack__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::battleSubActionNockBack() {
-    /* Nonmatching - retail-only load order */
-    fopAc_ac_c* player = dComIfGp_getPlayer(0); // doing this in the targetAngleY call fixes load order but breaks regalloc
-    s16 temp = cLib_targetAngleY(&current.pos, &player->current.pos);
+    /* Nonmatching - regalloc */
+    s16 temp = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
     if(mpOrcaMorf->checkFrame(1.0f)) {
         setAnm(5, 4.0f, 0);
         field_0xC9C = 0.0f;
@@ -3330,7 +3329,7 @@ BOOL daNpc_Ji1_c::battleSubActionNockBack() {
 
         return FALSE;
     }
-    
+
     cLib_addCalc2(&field_0xC9C, 50.0f, 0.2f, 10.0f);
     cXyz temp2 = field_0xD38;
     temp2.x -= field_0xC9C * cM_ssin(temp);
@@ -4606,10 +4605,11 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         return false;
     }
 
+    J3DAnmTevRegKey* a_brk;
     J3DModelData* modelData2 = (J3DModelData*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BDL_YJITR00_e));
     mpTearsModel = mDoExt_J3DModel__create(modelData2, 0, 0x11020203);
 
-    J3DAnmTevRegKey* a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BRK_YJITR00_e));
+    a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BRK_YJITR00_e));
     JUT_ASSERT(0x15CD, a_brk != NULL);
 
     J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BTK_YJITR00_e));
@@ -4625,31 +4625,31 @@ BOOL daNpc_Ji1_c::CreateHeap() {
     headTexPattern = (J3DAnmTexPattern*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BTP_JI_e));
     JUT_ASSERT(0x15D8, headTexPattern != NULL);
 
-    temp2 = mBlinkAnim.init(modelData2, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP);
+    temp2 = mBlinkAnim.init(modelData, headTexPattern, TRUE, J3DFrameCtrl::EMode_LOOP);
 #if VERSION > VERSION_DEMO
     if(temp2 == 0) {
         return false;
     }
 #endif
 
-    hair1JointNo = modelData2->getJointName()->getIndex("hair1");
+    hair1JointNo = modelData->getJointName()->getIndex("hair1");
     JUT_ASSERT(0x15DF, hair1JointNo >= 0);
-    hair2JointNo = modelData2->getJointName()->getIndex("hair2");
+    hair2JointNo = modelData->getJointName()->getIndex("hair2");
     JUT_ASSERT(0x15E1, hair2JointNo >= 0);
-    hair3JointNo = modelData2->getJointName()->getIndex("hair3");
+    hair3JointNo = modelData->getJointName()->getIndex("hair3");
     JUT_ASSERT(0x15E3, hair3JointNo >= 0);
 
-    for(u16 i = 0; i < modelData2->getJointNum(); i++) {
+    for(u16 i = 0; i < modelData->getJointNum(); i++) {
         if(i == hair1JointNo || i == hair2JointNo || i == hair3JointNo) {
-            modelData2->getJointNodePointer(i)->setCallBack(nodeCallBack2);
+            modelData->getJointNodePointer(i)->setCallBack(nodeCallBack2);
         }
     }
-    for(u16 i = 0; i < modelData2->getJointNum(); i++) {
+    for(u16 i = 0; i < modelData->getJointNum(); i++) {
         if(i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum()) {
-            modelData2->getJointNodePointer(i)->setCallBack(nodeCallBack1);
+            modelData->getJointNodePointer(i)->setCallBack(nodeCallBack1);
         }
         else if(i == armLJointNo || i == armRJointNo) {
-            modelData2->getJointNodePointer(i)->setCallBack(nodeCallBack3);
+            modelData->getJointNodePointer(i)->setCallBack(nodeCallBack3);
         }
     }
 
@@ -5005,7 +5005,6 @@ static cXyz l_head_top(1.0f, 0.0f, 0.0f);
 
 /* 0001031C-00010E3C       .text daNpc_Ji1_setHairAngle__FP11daNpc_Ji1_c */
 static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
-    /* Nonmatching - retail-only load order */
     f32 wind = *dKyw_get_wind_power() * *dKyw_get_wind_power() * 25.0f;
     cXyz* windVec = dKyw_get_wind_vec();
 
@@ -5073,10 +5072,10 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
     i_this->field_0xBB6 = (s16)(i_this->field_0xBAA - r26) * 0.2f;
     i_this->field_0xBB8 = (s16)(i_this->field_0xBAC - r25) * 0.2f;
-    s16 temp15 = i_this->field_0xBAA - r26;
-    s16 temp16 = i_this->field_0xBAC - r25;
-    i_this->field_0xBAE -= temp15;
-    i_this->field_0xBB0 -= temp16;
+    r26 = i_this->field_0xBAA - r26;
+    r25 = i_this->field_0xBAC - r25;
+    i_this->field_0xBAE -= r26;
+    i_this->field_0xBB0 -= r25;
 
     r26 = i_this->field_0xBAE;
     r25 = i_this->field_0xBB0;
@@ -5092,10 +5091,10 @@ static BOOL daNpc_Ji1_setHairAngle(daNpc_Ji1_c* i_this) {
 
     i_this->field_0xBBA = (s16)(i_this->field_0xBAE - r26) * 0.2f;
     i_this->field_0xBBC = (s16)(i_this->field_0xBB0 - r25) * 0.2f;
-    s16 temp17 = i_this->field_0xBAE - r26;
-    s16 temp18 = i_this->field_0xBB0 - r25;
-    i_this->field_0xBB2 -= temp17;
-    i_this->field_0xBB4 -= temp18;
+    r26 = i_this->field_0xBAE - r26;
+    r25 = i_this->field_0xBB0 - r25;
+    i_this->field_0xBB2 -= r26;
+    i_this->field_0xBB4 -= r25;
 
     r26 = i_this->field_0xBB2;
     r25 = i_this->field_0xBB4;
