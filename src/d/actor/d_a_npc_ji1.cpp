@@ -3318,7 +3318,7 @@ void daNpc_Ji1_c::battleSubActionNockBackInit(int param_1) {
 
 /* 0000A5FC-0000A744       .text battleSubActionNockBack__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::battleSubActionNockBack() {
-    /* Nonmatching - regalloc */
+    /* Nonmatching - retail-only regalloc */
     s16 temp = cLib_targetAngleY(&current.pos, &dComIfGp_getPlayer(0)->current.pos);
     if(mpOrcaMorf->checkFrame(1.0f)) {
         setAnm(5, 4.0f, 0);
@@ -4554,8 +4554,6 @@ cPhs_State daNpc_Ji1_c::_create() {
 
 /* 0000E864-0000F324       .text CreateHeap__11daNpc_Ji1_cFv */
 BOOL daNpc_Ji1_c::CreateHeap() {
-    /* Nonmatching - regalloc */
-
     J3DModelData* modelData = (J3DModelData*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BDL_JI_e));
     mpOrcaMorf = new mDoExt_McaMorf(
         modelData,
@@ -4605,14 +4603,13 @@ BOOL daNpc_Ji1_c::CreateHeap() {
         return false;
     }
 
-    J3DAnmTevRegKey* a_brk;
     J3DModelData* modelData2 = (J3DModelData*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BDL_YJITR00_e));
     mpTearsModel = mDoExt_J3DModel__create(modelData2, 0, 0x11020203);
 
-    a_brk = (J3DAnmTevRegKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BRK_YJITR00_e));
+    J3DAnmTevRegKey* a_brk = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BRK_YJITR00_e));
     JUT_ASSERT(0x15CD, a_brk != NULL);
 
-    J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey*)(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BTK_YJITR00_e));
+    J3DAnmTextureSRTKey* a_btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BTK_YJITR00_e));
     JUT_ASSERT(0x15D0, a_btk != NULL);
 
     int temp1 = mCryBrk.init(modelData2, a_brk, false, J3DFrameCtrl::EMode_LOOP);
