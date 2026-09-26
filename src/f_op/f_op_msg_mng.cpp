@@ -5736,8 +5736,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
     fopMsgM_msgGet_c msgGet;
 
 #if VERSION <= VERSION_JPN
-    mesg_header* header = msgGet.getMesgHeader(i_msgNo);
-    const char* src = msgGet.getMessage(header);
+    const char* src = msgGet.getMessage(msgGet.getMesgHeader(i_msgNo));
     int offset = 0;
     int numRead = 0;
 #else
@@ -5748,8 +5747,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
     if (i_msgNo == 0) {
         src = name;
     } else {
-        mesg_header* header = msgGet.getMesgHeader(i_msgNo);
-        src = msgGet.getMessage(header);
+        src = msgGet.getMessage(msgGet.getMesgHeader(i_msgNo));
     }
 #endif
 
@@ -5807,8 +5805,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
     f32 f30 = 0.0f;
 
 #if VERSION <= VERSION_JPN
-    mesg_header* header = msgGet.getMesgHeader(i_msgNo);
-    const char* src = msgGet.getMessage(header);
+    const char* src = msgGet.getMessage(msgGet.getMesgHeader(i_msgNo));
     int offset = 0;
 #else
     const char* src;

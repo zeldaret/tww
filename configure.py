@@ -469,7 +469,7 @@ config.libs = [
             Object(Matching,    "f_op/f_op_kankyo.cpp"),
             Object(Matching,    "f_op/f_op_msg.cpp"),
             Object(Matching,    "f_op/f_op_kankyo_mng.cpp"),
-            Object(MatchingFor("GZLE01"), "f_op/f_op_msg_mng.cpp"),
+            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "f_op/f_op_msg_mng.cpp"),
             Object(Matching,    "f_op/f_op_draw_iter.cpp"),
             Object(Matching,    "f_op/f_op_draw_tag.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "f_op/f_op_scene_pause.cpp"),
