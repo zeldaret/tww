@@ -231,16 +231,16 @@ void daNpc_So_c::cutSetAnmStart() {
 
     if (name != NULL) {
         if (strcmp(name, "WAIT") == 0) {
-            m6D3 = 1;
+            mAnmPrmIdx = 1;
         } else if (strcmp(name, "TALK") == 0) {
-            m6D3 = 3;
+            mAnmPrmIdx = 3;
         } else if (strcmp(name, "JUMP") == 0) {
-            m6D3 = 4;
+            mAnmPrmIdx = 4;
         } else if (strcmp(name, "SWIM") == 0) {
-            m6D3 = 2;
+            mAnmPrmIdx = 2;
         }
     } else {
-        m6D3 = 1;
+        mAnmPrmIdx = 1;
     }
 }
 
@@ -248,7 +248,7 @@ void daNpc_So_c::cutSetAnmStart() {
 void daNpc_So_c::cutSetAnmProc() {
     const char* name = dComIfGp_evmng_getMyStringP(mB6C, "Name");
 
-    if ((m6D3 == 1) || (m6D3 == 4) || (m6D3 == 3) || (m6D3 == 2)) {
+    if (isAnm(1) || isAnm(4) || isAnm(3) || isAnm(2)) {
         dComIfGp_evmng_cutEnd(mB6C);
     }
 
@@ -526,9 +526,8 @@ void daNpc_So_c::cutMiniGameStart() {
         camera->mCamera.Start();
     }
 
-    link->mDemo.setOriginalDemoType();
-    link->mDemo.setParam0(0);
-    link->mDemo.setDemoMode(daPy_demo_c::DEMO_BOW_MINIGAME_e);
+    link->changeOriginalDemo();
+    link->changeDemoMode(daPy_demo_c::DEMO_BOW_MINIGAME_e);
 
     mBDB = 0;
     mBDE = false;
@@ -556,8 +555,8 @@ void daNpc_So_c::cutMiniGameProc() {
         bVar1 = true;
         if (mB74 <= 6) {
 #if VERSION > VERSION_DEMO
-            player->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
-            player->mDemo.setParam0(1);
+            player->changeDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+            player->changeDemoParam0(1);
             initCam();
             moveCam();
             mDoAud_seStart(JA_SE_END_WHISTLE);
@@ -665,19 +664,20 @@ void daNpc_So_c::cutMiniGameProc() {
     case 7: {
 #if VERSION == VERSION_DEMO
         if (mB84 == 0) {
+            setCollision(70.0f, 140.0f);
+            mSph.SetR(l_HIO.m3C);
+            mSph.SetC(current.pos);
+            dComIfG_Ccsp()->Set(&mSph);
+
+            if (checkTgHit()) {
+                mB7C++;
+            }
+        }
+        f32 dVar8 = dLib_getWaterY(current.pos, mAcch);
 #else
         f32 dVar8 = dLib_getWaterY(current.pos, mAcch);
         if (mB84 == 0 && mB7C < 10) {
-            if (m6D8 == 0)
-#endif
-            {
-#if VERSION == VERSION_DEMO
-                setCollision(70.0f, 140.0f);
-                mSph.SetR(l_HIO.m3C);
-                mSph.SetC(current.pos);
-                dComIfG_Ccsp()->Set(&mSph);
-#else
-
+            if (m6D8 == 0) {
                 if (current.pos.y >= dVar8 + 50.0f) {
                     mSph.SetR(l_HIO.m3C);
                     mSph.SetC(current.pos);
@@ -688,34 +688,26 @@ void daNpc_So_c::cutMiniGameProc() {
                     mSph.SetC(cStack_88);
                     dComIfG_Ccsp()->Set(&mSph);
                 }
-#endif
             }
 
             if (checkTgHit()) {
                 mB7C++;
-#if VERSION > VERSION_DEMO
                 if (mB7C >= 10) {
                     mB7C = 10;
                 }
-#endif
             }
         }
-
-#if VERSION == VERSION_DEMO
-        f32 dVar8 = dLib_getWaterY(current.pos, mAcch);
-        if (current.pos.y <= dVar8)
-#else
-        if (current.pos.y <= dVar8)
 #endif
-        {
+
+        if (current.pos.y <= dVar8) {
             fopAcM_seStart(this, JA_SE_CM_SO_LANDING_L, 0);
             fopKyM_createWpillar(fopAcM_GetPosition_p(this), scale.x * 1.4f, 1.4f, 0);
             mAFC = 0.0f;
             speedF = mAFC;
             mB80++;
             if (mB80 >= 10 || bVar1) {
-                player->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
-                player->mDemo.setParam0(1);
+                player->changeDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+                player->changeDemoParam0(1);
 #if VERSION > VERSION_DEMO
                 initCam();
                 moveCam();
@@ -774,8 +766,7 @@ void daNpc_So_c::cutMiniGameWarpStart() {
 #endif
 
     daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    link->mDemo.setOriginalDemoType();
-    link->mDemo.setParam0(0);
+    link->changeOriginalDemo();
 
     daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
 #if VERSION > VERSION_DEMO
@@ -809,12 +800,11 @@ void daNpc_So_c::cutMiniGameWarpStart() {
 /* 00007324-00007438       .text cutMiniGameWarpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWarpProc() {
     daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    link->mDemo.setOriginalDemoType();
-    link->mDemo.setParam0(0);
+    link->changeOriginalDemo();
 
     daShip_c* ship = dComIfGp_getShipActor();
-    link->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
-    link->mDemo.setParam0(1);
+    link->changeDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+    link->changeDemoParam0(1);
 
     s16 sVar1 = ship->shape_angle.y;
     u16 idx = sVar1 - 0x4000 + REG12_S(6);
@@ -835,8 +825,7 @@ void daNpc_So_c::cutMiniGameReturnStart() {
 #endif
 
     daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    link->mDemo.setOriginalDemoType();
-    link->mDemo.setParam0(0);
+    link->changeOriginalDemo();
 
     daShip_c* ship = (daShip_c*)fopAcM_SearchByName(fpcNm_SHIP_e);
     s16 tmp = mB9C + REG8_S(6);
@@ -862,10 +851,9 @@ void daNpc_So_c::cutMiniGameReturnProc() {
     f32 abs = (mBA0 - current.pos).absXZ();
     if (abs < 400.0f) {
         daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
-        link->mDemo.setOriginalDemoType();
-        link->mDemo.setParam0(0);
-        link->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
-        link->mDemo.setParam0(1);
+        link->changeOriginalDemo();
+        link->changeDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+        link->changeDemoParam0(1);
 
         cXyz local_1C(0.0f, 0.0f, 0.0f);
         cXyz local_28(0.0f, 0.0f, 0.0f);
@@ -935,12 +923,11 @@ void daNpc_So_c::cutMiniGamePlTurnStart() {
 /* 000079AC-00007AC0       .text cutMiniGamePlTurnProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlTurnProc() {
     daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    link->mDemo.setOriginalDemoType();
-    link->mDemo.setParam0(0);
+    link->changeOriginalDemo();
 
     daShip_c* ship = dComIfGp_getShipActor();
-    link->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
-    link->mDemo.setParam0(1);
+    link->changeDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+    link->changeDemoParam0(1);
 
     s16 sVar1 = ship->shape_angle.y;
     u16 iVar5 = sVar1 - 0x4000 + REG12_S(6);
@@ -966,7 +953,7 @@ void daNpc_So_c::cutMiniGamePlUpStart() {
 /* 00007B1C-00007CBC       .text cutMiniGamePlUpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlUpProc() {
     daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
-    link->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+    link->changeDemoMode(daPy_demo_c::DEMO_N_TALK_e);
 
     cXyz local_28(0.0f, 0.0f, 0.0f);
     cXyz local_34(0.0f, 0.0f, 0.0f);

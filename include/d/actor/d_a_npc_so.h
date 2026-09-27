@@ -42,8 +42,8 @@ public:
     };
 
     int getMiniGameRestArrow() { return 10 - mB78; }
-    void isAnm(signed char) {}
-    void modeProcInit(int) {}
+    bool isAnm(s8 idx) { return mAnmPrmIdx == idx; }
+    void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
 
     void* _searchEsa(fopAc_ac_c*);
     void _nodeControl(J3DNode*, J3DModel*);
@@ -62,7 +62,7 @@ public:
     u16 next_msgStatus(u32*);
     void lookBack();
     void setAttention();
-    void setAnm(signed char, bool);
+    void setAnm(s8, bool);
     void setAnmSwimSpeed();
     void setMtx();
     void modeWaitInit();
@@ -164,9 +164,9 @@ public:
     /* 0x6C4 */ u8 m6C4[0x6CC - 0x6C4];
     /* 0x6CC */ s32 m6CC;
     /* 0x6D0 */ s16 m6D0;
-    /* 0x6D2 */ s8 m6D2;
-    /* 0x6D3 */ s8 m6D3;
-    /* 0x6D4 */ s8 m6D4;
+    /* 0x6D2 */ s8 mBckIdx;
+    /* 0x6D3 */ s8 mAnmPrmIdx;
+    /* 0x6D4 */ s8 mOldAnmPrmIdx;
     /* 0x6D8 */ int m6D8;
     /* 0x6DC */ dCcD_Stts mStts2;
     /* 0x718 */ dCcD_Sph mSph;

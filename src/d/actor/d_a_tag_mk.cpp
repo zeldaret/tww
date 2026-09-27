@@ -57,14 +57,14 @@ BOOL daTag_Mk_c::checkArea(f32 arg1, f32 arg2, f32 arg3) {
 }
 
 /* 000001F8-00000228       .text next_msgStatus__10daTag_Mk_cFPUl */
-u16 daTag_Mk_c::next_msgStatus(u32* arg1) {
+u16 daTag_Mk_c::next_msgStatus(u32* pMsgNo) {
     u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
 
-    switch (*arg1) {
+    switch (*pMsgNo) {
         case 0x1BC0:
         case 0x1BC1:
         case 0x1BC2:
-            (*arg1)++;
+            (*pMsgNo)++;
             break;
 
         default:

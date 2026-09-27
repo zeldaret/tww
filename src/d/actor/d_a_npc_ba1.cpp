@@ -955,7 +955,7 @@ void daNpc_Ba1_c::eInit_MOV_POS_() {
 /* 00001F04-00001F48       .text eInit_SET_PLYER_TRN_ANG___11daNpc_Ba1_cFv */
 void daNpc_Ba1_c::eInit_SET_PLYER_TRN_ANG_() {
     daPy_py_c* player = daPy_getPlayerActorClass();
-    player->mDemo.setMoveAngle(
+    player->changeDemoMoveAngle(
         cLib_targetAngleY(
             &dComIfGp_getPlayer(0)->current.pos, 
             &current.pos)

@@ -362,9 +362,9 @@ BOOL daNpcMn_c::createHeap() {
         0x15021222
     );
 
-    m_jnt.setHeadJntNum(modelData->getJointTree().getJointName()->getIndex("head"));
+    m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
     JUT_ASSERT(DEMO_SELECT(0x3E3, 0x3E4), m_jnt.getHeadJntNum() >= 0);
-    m_jnt.setBackboneJntNum(modelData->getJointTree().getJointName()->getIndex("backbone"));
+    m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
     JUT_ASSERT(DEMO_SELECT(0x3E7, 0x3E8), m_jnt.getBackboneJntNum() >= 0);
 
     if (initTexPatternAnm(false) == FALSE) {
@@ -373,7 +373,7 @@ BOOL daNpcMn_c::createHeap() {
 
     for (u16 jntIdx = 0; jntIdx < modelData->getJointNum(); jntIdx++) {
         if (jntIdx == m_jnt.getHeadJntNum() || jntIdx == m_jnt.getBackboneJntNum()) {
-            modelData->getJointTree().getJointNodePointer(jntIdx)->setCallBack(daNpc_Mn_nodeCallBack);
+            modelData->getJointNodePointer(jntIdx)->setCallBack(daNpc_Mn_nodeCallBack);
         }
     }
     mpMorf->getModel()->setUserArea((u32)this);
@@ -393,7 +393,7 @@ BOOL daNpcMn_c::createHeap() {
     if (mpModel == NULL) {
         return FALSE;
     }
-    mShoulderRJoint = modelData->getJointTree().getJointName()->getIndex("shoulderR");
+    mShoulderRJoint = modelData->getJointName()->getIndex("shoulderR");
     return TRUE;
 }
 
