@@ -191,24 +191,34 @@ void daNpc_So_c::_nodeControl(J3DNode* pNode, J3DModel* pModel) {
         local_38.y += DEMO_SELECT(REG12_F(1), 0.0f);
 
         mDoMtx_stack_c::multVec(&local_2C, &mB60);
-        if (DEMO_SELECT(REG12_S(1) != 0, false)) {
+#if VERSION == VERSION_DEMO
+        if (REG12_S(1) != 0) {
             mDoMtx_stack_c::XrotM(REG12_S(2));
             mDoMtx_stack_c::YrotM(REG12_S(3));
             mDoMtx_stack_c::ZrotM(REG12_S(4));
-        } else {
+        } else{
             mDoMtx_stack_c::YrotM((s16)m_jnt.getHead_y());
             mDoMtx_stack_c::ZrotM((s16)m_jnt.getHead_x());
         }
+#else
+        mDoMtx_stack_c::YrotM((s16)m_jnt.getHead_y());
+        mDoMtx_stack_c::ZrotM((s16)m_jnt.getHead_x());
+#endif
         mDoMtx_stack_c::multVec(&local_38, &mB54);
     } else if (jntNo == m_jnt.getBackboneJntNum()) {
-        if (DEMO_SELECT(REG12_S(0) != 0, false)) {
+#if VERSION == VERSION_DEMO
+        if (REG12_S(0) != 0) {
             mDoMtx_stack_c::XrotM(REG12_S(2));
             mDoMtx_stack_c::YrotM(REG12_S(3));
             mDoMtx_stack_c::ZrotM(REG12_S(4));
-        } else {
+        } else{
             mDoMtx_stack_c::XrotM((s16)m_jnt.getBackbone_y());
             mDoMtx_stack_c::ZrotM((s16)m_jnt.getBackbone_x());
         }
+#else
+        mDoMtx_stack_c::XrotM((s16)m_jnt.getBackbone_y());
+        mDoMtx_stack_c::ZrotM((s16)m_jnt.getBackbone_x());
+#endif
     }
 
     cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
@@ -312,7 +322,7 @@ BOOL daNpc_So_c::_createHeap() {
     }
     mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
 
-#if VERSION > EVRSION_DEMO
+#if VERSION > VERSION_DEMO
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BTP_SO_e));
     JUT_ASSERT(528, btp != NULL);
 

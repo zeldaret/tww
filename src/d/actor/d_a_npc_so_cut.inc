@@ -329,10 +329,10 @@ void daNpc_So_c::cutEatesaFirstStart() {
 
 /* 00005C6C-000060FC       .text cutEatesaFirstProc__10daNpc_So_cFv */
 void daNpc_So_c::cutEatesaFirstProc() {
-    fopAc_ac_c* partner = dComIfGp_getPlayer(1);
+    fopAc_ac_c* link = dComIfGp_getLinkPlayer();
     daShip_c* ship = dComIfGp_getShipActor();
 
-    cXyz local_28 = partner->current.pos;
+    cXyz local_28 = link->current.pos;
 
     if (ship != NULL) {
         s32 idx = (s16)(ship->shape_angle.y - 0x4000 + REG12_S(6));
@@ -465,7 +465,7 @@ void daNpc_So_c::cutJumpMapopenProc() {
         if (cLib_chasePosXZ(fopAcM_GetPosition_p(this), mBB0, l_HIO.m90) != 0) {
             current.pos.y = fVar1;
             if (l_HIO.m94 == 0) {
-                g_dComIfG_gameInfo.play.mFmapOpen = 2;
+                dComIfGp_fmapOpenFishOn();
             }
             shape_angle.y += 0x8000;
             mBBC++;
@@ -505,30 +505,30 @@ void daNpc_So_c::cutMiniGameStart() {
     dComIfGp_startMiniGame(8);
     mDoAud_seStart(JA_SE_START_WHISTLE);
 
-    daPy_py_c* partner = (daPy_py_c*)dComIfGp_getPlayer(1);
+    daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
     camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     if (REG8_S(1) == 0) {
         f32 tmp1 = 100.0f;
         f32 tmp2 = -200.0f;
 
-        mBCC = partner->current.pos;
-        mBCC.x += cM_ssin(partner->shape_angle.y) * tmp1;
-        mBCC.z += cM_scos(partner->shape_angle.y) * tmp1;
+        mBCC = link->current.pos;
+        mBCC.x += cM_ssin(link->shape_angle.y) * tmp1;
+        mBCC.z += cM_scos(link->shape_angle.y) * tmp1;
         mBCC.y += 50.0f;
 
-        mBC0 = partner->current.pos;
-        mBC0.x += cM_ssin(partner->shape_angle.y) * tmp2;
-        mBC0.z += cM_scos(partner->shape_angle.y) * tmp2;
+        mBC0 = link->current.pos;
+        mBC0.x += cM_ssin(link->shape_angle.y) * tmp2;
+        mBC0.z += cM_scos(link->shape_angle.y) * tmp2;
         mBC0.y += 100.0f;
 
         camera->mCamera.Reset(mBCC, mBC0);
         camera->mCamera.Start();
     }
 
-    partner->mDemo.setOriginalDemoType();
-    partner->mDemo.setParam0(0);
-    partner->mDemo.setDemoMode(daPy_demo_c::DEMO_BOW_MINIGAME_e);
+    link->mDemo.setOriginalDemoType();
+    link->mDemo.setParam0(0);
+    link->mDemo.setDemoMode(daPy_demo_c::DEMO_BOW_MINIGAME_e);
 
     mBDB = 0;
     mBDE = false;
@@ -773,9 +773,9 @@ void daNpc_So_c::cutMiniGameWarpStart() {
     JAIZelBasic::zel_basic->field_0x00bf = 1;
 #endif
 
-    daPy_py_c* partner = (daPy_py_c*)dComIfGp_getPlayer(1);
-    partner->mDemo.setOriginalDemoType();
-    partner->mDemo.setParam0(0);
+    daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    link->mDemo.setOriginalDemoType();
+    link->mDemo.setParam0(0);
 
     daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
 #if VERSION > VERSION_DEMO
@@ -787,7 +787,7 @@ void daNpc_So_c::cutMiniGameWarpStart() {
 
     csXyz unused(ship->shape_angle);
     s16 tmp = mB9C + REG8_S(6);
-    partner->setPlayerPosAndAngle(&mB90, tmp);
+    link->setPlayerPosAndAngle(&mB90, tmp);
     mAFC = 0.0f;
     speedF = mAFC;
 
@@ -808,13 +808,13 @@ void daNpc_So_c::cutMiniGameWarpStart() {
 
 /* 00007324-00007438       .text cutMiniGameWarpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWarpProc() {
-    daPy_py_c* partner = (daPy_py_c*)dComIfGp_getPlayer(1);
-    partner->mDemo.setOriginalDemoType();
-    partner->mDemo.setParam0(0);
+    daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    link->mDemo.setOriginalDemoType();
+    link->mDemo.setParam0(0);
 
     daShip_c* ship = dComIfGp_getShipActor();
-    partner->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
-    partner->mDemo.setParam0(1);
+    link->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+    link->mDemo.setParam0(1);
 
     s16 sVar1 = ship->shape_angle.y;
     u16 idx = sVar1 - 0x4000 + REG12_S(6);
@@ -834,13 +834,13 @@ void daNpc_So_c::cutMiniGameReturnStart() {
     JAIZelBasic::zel_basic->field_0x00bf = 0;
 #endif
 
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(1);
-    player->mDemo.setOriginalDemoType();
-    player->mDemo.setParam0(0);
+    daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    link->mDemo.setOriginalDemoType();
+    link->mDemo.setParam0(0);
 
     daShip_c* ship = (daShip_c*)fopAcM_SearchByName(fpcNm_SHIP_e);
     s16 tmp = mB9C + REG8_S(6);
-    player->setPlayerPosAndAngle(&mBA0, tmp);
+    link->setPlayerPosAndAngle(&mBA0, tmp);
     ship->initStartPos(&mBA0, mBAC);
     mAFC = 0.0f;
     speedF = mAFC;
@@ -861,22 +861,22 @@ void daNpc_So_c::cutMiniGameReturnProc() {
 
     f32 abs = (mBA0 - current.pos).absXZ();
     if (abs < 400.0f) {
-        daPy_py_c* partner = (daPy_py_c*)dComIfGp_getPlayer(1);
-        partner->mDemo.setOriginalDemoType();
-        partner->mDemo.setParam0(0);
-        partner->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
-        partner->mDemo.setParam0(1);
+        daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
+        link->mDemo.setOriginalDemoType();
+        link->mDemo.setParam0(0);
+        link->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+        link->mDemo.setParam0(1);
 
         cXyz local_1C(0.0f, 0.0f, 0.0f);
         cXyz local_28(0.0f, 0.0f, 0.0f);
-        s16 tmp = partner->shape_angle.y;
+        s16 tmp = link->shape_angle.y;
         mDoMtx_YrotS(*calc_mtx, tmp);
 
         local_1C.set(REG0_F(4) + -50.0f, REG0_F(5) + 50.0f, REG0_F(6) + 100.0f);
         MtxPosition(&local_1C, &local_28);
 
-        mBC0 = partner->current.pos + local_28;
-        mBCC = partner->current.pos;
+        mBC0 = link->current.pos + local_28;
+        mBCC = link->current.pos;
         mBCC.y += REG0_F(7) + 90.0f;
 
         camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
@@ -934,13 +934,13 @@ void daNpc_So_c::cutMiniGamePlTurnStart() {
 
 /* 000079AC-00007AC0       .text cutMiniGamePlTurnProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlTurnProc() {
-    daPy_py_c* partner = (daPy_py_c*)dComIfGp_getPlayer(1);
-    partner->mDemo.setOriginalDemoType();
-    partner->mDemo.setParam0(0);
+    daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    link->mDemo.setOriginalDemoType();
+    link->mDemo.setParam0(0);
 
     daShip_c* ship = dComIfGp_getShipActor();
-    partner->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
-    partner->mDemo.setParam0(1);
+    link->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+    link->mDemo.setParam0(1);
 
     s16 sVar1 = ship->shape_angle.y;
     u16 iVar5 = sVar1 - 0x4000 + REG12_S(6);
@@ -965,19 +965,19 @@ void daNpc_So_c::cutMiniGamePlUpStart() {
 
 /* 00007B1C-00007CBC       .text cutMiniGamePlUpProc__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGamePlUpProc() {
-    daPy_py_c* partner = (daPy_py_c*)dComIfGp_getPlayer(1);
-    partner->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
+    daPy_py_c* link = (daPy_py_c*)dComIfGp_getLinkPlayer();
+    link->mDemo.setDemoMode(daPy_demo_c::DEMO_N_TALK_e);
 
     cXyz local_28(0.0f, 0.0f, 0.0f);
     cXyz local_34(0.0f, 0.0f, 0.0f);
 
-    s16 angle = partner->shape_angle.y;
+    s16 angle = link->shape_angle.y;
     mDoMtx_YrotS(*calc_mtx, angle);
     local_28.set(REG0_F(4) + -50.0f, REG0_F(5) + 50.0f, REG0_F(6) + 100.0f);
     MtxPosition(&local_28, &local_34);
 
-    mBC0 = partner->current.pos + local_34;
-    mBCC = partner->current.pos;
+    mBC0 = link->current.pos + local_34;
+    mBCC = link->current.pos;
     mBCC.y += REG0_F(7) + 90.0f;
 
     camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
@@ -998,17 +998,17 @@ void daNpc_So_c::initCam() {
             camera->mCamera.Stop();
             camera->mCamera.SetTrimSize(1);
 
-            fopAc_ac_c* partner = dComIfGp_getPlayer(1);
+            fopAc_ac_c* link = dComIfGp_getLinkPlayer();
             f32 tmp1 = 100.0f;
             f32 tmp2 = -200.0f;
 
-            mBCC = partner->current.pos;
-            mBCC.x += cM_ssin(partner->shape_angle.y) * tmp1;
-            mBCC.z += cM_scos(partner->shape_angle.y) * tmp1;
+            mBCC = link->current.pos;
+            mBCC.x += cM_ssin(link->shape_angle.y) * tmp1;
+            mBCC.z += cM_scos(link->shape_angle.y) * tmp1;
             mBCC.y += 50.0f;
-            mBC0 = partner->current.pos;
-            mBC0.x += cM_ssin(partner->shape_angle.y) * tmp2;
-            mBC0.z += cM_scos(partner->shape_angle.y) * tmp2;
+            mBC0 = link->current.pos;
+            mBC0.x += cM_ssin(link->shape_angle.y) * tmp2;
+            mBC0.z += cM_scos(link->shape_angle.y) * tmp2;
             mBC0.y += 100.0f;
         }
     }
@@ -1018,21 +1018,21 @@ void daNpc_So_c::initCam() {
 void daNpc_So_c::moveCam() {
     if (REG8_S(1) == 0) {
         camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-        fopAc_ac_c* partner = dComIfGp_getPlayer(1);
+        fopAc_ac_c* link = dComIfGp_getLinkPlayer();
         cXyz local_2C;
         cXyz local_20;
 
         f32 tmp1 = 150.0f;
         f32 tmp2 = -400.0f;
 
-        local_20 = partner->current.pos;
-        local_20.x += cM_ssin(partner->shape_angle.y) * tmp1;
-        local_20.z += cM_scos(partner->shape_angle.y) * tmp1;
+        local_20 = link->current.pos;
+        local_20.x += cM_ssin(link->shape_angle.y) * tmp1;
+        local_20.z += cM_scos(link->shape_angle.y) * tmp1;
         local_20.y += 100.0f;
 
-        local_2C = partner->current.pos;
-        local_2C.x += cM_ssin(partner->shape_angle.y) * tmp2;
-        local_2C.z += cM_scos(partner->shape_angle.y) * tmp2;
+        local_2C = link->current.pos;
+        local_2C.x += cM_ssin(link->shape_angle.y) * tmp2;
+        local_2C.z += cM_scos(link->shape_angle.y) * tmp2;
         local_2C.y += 300.0f;
 
         cLib_addCalcPos2(&mBC0, local_2C, 0.05f, 5.0f);
