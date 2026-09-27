@@ -50,12 +50,12 @@ namespace daObjMagmarock {
         void vanish_proc();
         BOOL CreateHeap();
         BOOL CreateInit();
-        BOOL LiftUpRequest(cXyz&);
-        bool BeforeLiftRequest(cXyz&);
+        virtual BOOL LiftUpRequest(cXyz&);
+        virtual bool BeforeLiftRequest(cXyz&);
         void calc_ground_quat();
-    
+
     public:
-        /* 0290 */ u8 m290[0x298-0x290];
+        /* 0294 */ u8 m294[0x298-0x294];
         /* 0298 */ s16 m298;
         /* 029a */ u16 m29a;
         /* 029c */ s16 m29c;

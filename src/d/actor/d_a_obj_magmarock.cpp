@@ -438,12 +438,12 @@ cPhs_State daObjMagmarock::Method::Create(void *i_this) {
     cPhs_State ret = dComIfG_resLoad(&pthis->mPhase, daObjMagmarock::Act_c::M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
         if (g_dComIfG_gameInfo.play.getMagma() == NULL){
-            return cPhs_INIT_e;
+            ret = cPhs_INIT_e;
+        } else if(!fopAcM_entrySolidHeap(pthis, daObjMagmarock::CheckCreateHeap, 0x5d40)) {
+            ret = cPhs_ERROR_e;
+        } else {
+            pthis->CreateInit();
         }
-        if(!fopAcM_entrySolidHeap(pthis, daObjMagmarock::CheckCreateHeap, 0x5d40)) {
-            return cPhs_ERROR_e;
-        }
-        pthis->CreateInit();
     }
     return ret;
 }
