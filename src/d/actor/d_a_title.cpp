@@ -23,6 +23,7 @@
 #endif
 #if VERSION == VERSION_PAL
 #include "res/Object/TlogoE0.h"
+#include <stdio.h>
 #endif
 
 // Note: For VERSION_PAL the "TlogoE0" string literal is modified at runtime.

@@ -27,6 +27,9 @@
 #include "m_Do/m_Do_printf.h"
 
 #include <cstring>
+#if VERSION == VERSION_DEMO
+#include <stdio.h>
+#endif
 
 
 /* 800056E0-80005748       .text version_check__Fv */
