@@ -39,7 +39,7 @@ void daObjMagmarock::Act_c::set_mtx() {
     mDoMtx_quatMultiply(&m2b0, &m2d0, &temp);
     mDoMtx_stack_c::quatM(&temp);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::now);
-    MTXCopy(mDoMtx_stack_c::now, mtx);
+    mDoMtx_copy(mDoMtx_stack_c::now, mtx);
 }
 
 /* 00000128-00000258       .text demo_move__Q214daObjMagmarock5Act_cFv */
@@ -256,7 +256,7 @@ BOOL daObjMagmarock::Act_c::CreateHeap() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
-    MTXCopy(mDoMtx_stack_c::now, mtx);
+    mDoMtx_copy(mDoMtx_stack_c::now, mtx);
 
     cBgD_t* cBgD = (cBgD_t*)dComIfG_getObjectRes(M_arcname, 0xf);
     mpBgW = dBgW_NewSet(cBgD, cBgW::MOVE_BG_e, &mtx);
@@ -281,7 +281,7 @@ BOOL daObjMagmarock::Act_c::CreateInit() {
         /*maxY=*/ 30.0,
         /*maxZ=*/ 200
     );
-    MTXCopy(mpModel->getBaseTRMtx(), mtx);
+    mDoMtx_copy(mpModel->getBaseTRMtx(), mtx);
     m430 = 0;
     m298 = 0;
     m29a = 0;
