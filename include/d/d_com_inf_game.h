@@ -347,7 +347,7 @@ public:
         resetItemTimer(0);
     }
 
-    int getMessageRupee() { return mMessageRupee; }
+    s16 getMessageRupee() { return mMessageRupee; }
     void setMessageRupee(s16 count) { mMessageRupee = count; }
 
     void setAuctionRupee(s16 count) { mAuctionRupee = count; }
@@ -988,7 +988,7 @@ inline void dComIfGp_decItemTimer() {
     g_dComIfG_gameInfo.play.decItemTimer();
 }
 
-inline int dComIfGp_getMessageRupee() {
+inline s16 dComIfGp_getMessageRupee() {
     return g_dComIfG_gameInfo.play.getMessageRupee();
 }
 
