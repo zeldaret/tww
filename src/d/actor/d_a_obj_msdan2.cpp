@@ -5,20 +5,102 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan2.h"
+#include "d/d_com_inf_game.h"
+#include "f_op/f_op_actor_mng.h"
+#include "SSystem/SComponent/c_math.h"
+
+const char daObjMsdan2::Act_c::M_evname[] = "Msdan2";
 
 /* 00000078-0000024C       .text Mthd_Create__Q211daObjMsdan25Act_cFv */
 cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    if ((*(u32*)((u8*)this + 0x1C8) & 0x8) == 0) {
+        new (this) Act_c();
+        *(u32*)((u8*)this + 0x1C8) |= 0x8;
+    }
+
+    Vec pos;
+    SVec angle;
+
+    pos.x = current.pos.x;
+    pos.y = current.pos.y;
+    pos.z = current.pos.z;
+    *(u32*)&angle = *(u32*)&current.angle;
+    *(u16*)((u8*)&angle + 4) = *(u16*)((u8*)&current.angle + 4);
+    angle.y += 0x8000;
+
+    pos.y += 400.0f;
+
+    for (int i = 0, objNo = 0; i < 16; i++, objNo += 0x100) {
+        pos.x += 50.0f * cM_ssin(current.angle.y);
+        pos.z += 50.0f * cM_scos(current.angle.y);
+
+        fopAcM_create(
+            fpcNm_Obj_MsdanSub2_e,
+            prm_get_swSave() + objNo,
+            (cXyz*)&pos,
+            current.roomNo,
+            (csXyz*)&angle,
+            (cXyz*)NULL,
+            -1,
+            NULL
+        );
+    }
+
+    mEventIdx = dComIfGp_evmng_getEventIdx("Msdan2", 0xFF);
+
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        mMode = 3;
+    } else {
+        mMode = 0;
+    }
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 0000024C-00000344       .text Mthd_Execute__Q211daObjMsdan25Act_cFv */
 BOOL daObjMsdan2::Act_c::Mthd_Execute() {
-    /* Nonmatching */
+    int mode = mMode;
+
+    if (mode == 2) {
+        goto mode_2;
+    }
+    if (mode >= 2) {
+        goto end;
+    }
+    if (mode == 0) {
+        goto mode_0;
+    }
+    if (mode >= 0) {
+        goto mode_1;
+    }
+    goto end;
+
+mode_0:
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        fopAcM_orderOtherEventId(this, mEventIdx, 0xFF, 0xFFFF, 0, 1);
+        mMode = 1;
+    }
+    goto end;
+
+mode_1:
+    if (*(u16*)((u8*)this + 0xF8) == 2) {
+        mMode = 2;
+    }
+    goto end;
+
+mode_2:
+    if (dComIfGp_evmng_endCheck(mEventIdx)) {
+        dComIfGp_event_onEventFlag(8);
+        mMode = 3;
+    }
+
+end:
+    return TRUE;
 }
 
 /* 00000344-0000034C       .text Mthd_Delete__Q211daObjMsdan25Act_cFv */
 BOOL daObjMsdan2::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 namespace daObjMsdan2 {
