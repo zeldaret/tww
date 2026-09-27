@@ -5,25 +5,23 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_swhammer.h"
-#include "d/res/res_mhmrsw.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/MhmrSW.h"
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_player.h"
 
 namespace daObjSwhammer {
     namespace {
         struct Attr_c {
-            /* 0x00 */ float mVSpring;
-            /* 0x04 */ float mIntVSpeedDecay;
-            /* 0x08 */ float mExtVSpeedDecay;
-            /* 0x0C */ float mVibMag0Mult;
-            /* 0x10 */ float mVibSpring;
-            /* 0x14 */ float mAngleSpeedDecay;
-            /* 0x18 */ short mCrushDuration;
-            /* 0x1C */ float mUncrushSpeed0;
-            /* 0x20 */ float mUncrushSpring;
-            /* 0x24 */ float mUncrushSpeedDecay;
+            /* 0x00 */ f32 mVSpring;
+            /* 0x04 */ f32 mIntVSpeedDecay;
+            /* 0x08 */ f32 mExtVSpeedDecay;
+            /* 0x0C */ f32 mVibMag0Mult;
+            /* 0x10 */ f32 mVibSpring;
+            /* 0x14 */ f32 mAngleSpeedDecay;
+            /* 0x18 */ s16 mCrushDuration;
+            /* 0x1C */ f32 mUncrushSpeed0;
+            /* 0x20 */ f32 mUncrushSpring;
+            /* 0x24 */ f32 mUncrushSpeedDecay;
         };
 
         static const Attr_c L_attr = {
@@ -44,7 +42,7 @@ namespace daObjSwhammer {
 }
 
 int daObjSwhammer::Act_c::M_damage;
-short daObjSwhammer::Act_c::M_damage_dir;
+s16 daObjSwhammer::Act_c::M_damage_dir;
 Mtx daObjSwhammer::Act_c::M_tmp_mtx;
 
 const char daObjSwhammer::Act_c::M_arcname[] = "MhmrSW";
@@ -106,21 +104,21 @@ const dCcD_SrcCyl daObjSwhammer::Act_c::M_cyl_src_tg = {
         /* Height */ 112.5f,
     }},
 };
-const GXColor color = {0xA0, 0xA0, 0x80, 0xFF};
 
 /* 000000EC-00000260       .text __ct__Q213daObjSwhammer5Act_cFv */
 daObjSwhammer::Act_c::Act_c() {
+    static const GXColor color = {0xA0, 0xA0, 0x80, 0xFF};
     mSmokeCb.setColor(color);
 }
 
 /* 000004B0-0000058C       .text CreateHeap__Q213daObjSwhammer5Act_cFv */
 BOOL daObjSwhammer::Act_c::CreateHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, MHMRSW_BDL_MHMRSW));
+    J3DModelData* modelData = static_cast<J3DModelData *>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MHMRSW_BDL_MHMRSW_e));
     JUT_ASSERT(0x18b, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel) {
-        modelData->getJointNodePointer(1)->setCallBack(jnodeCB);
-        mpModel->setUserArea((u32) this);
+        modelData->getJointNodePointer(MHMRSW_JNT_HIT_e)->setCallBack(jnodeCB);
+        mpModel->setUserArea((uintptr_t) this);
     }
     return mpModel != NULL;
 }
@@ -168,12 +166,12 @@ BOOL daObjSwhammer::Act_c::Create() {
 
 /* 0000070C-000007F8       .text _create__Q213daObjSwhammer5Act_cFv */
 cPhs_State daObjSwhammer::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, MHMRSW_DZB_MHMRSW, NULL, 0xa80);
-        JUT_ASSERT(0x1e9, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MHMRSW_DZB_MHMRSW_e, NULL, DEMO_SELECT(-1, 0xa80));
+        JUT_ASSERT(DEMO_SELECT(488, 489), (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
 }
@@ -187,7 +185,7 @@ BOOL daObjSwhammer::Act_c::Delete() {
 /* 00000828-0000087C       .text _delete__Q213daObjSwhammer5Act_cFv */
 bool daObjSwhammer::Act_c::_delete() {
     BOOL ret = MoveBGDelete();
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return ret;
 }
 
@@ -213,7 +211,7 @@ void daObjSwhammer::Act_c::set_damage() {
     if (mCylTg.ChkTgHit()) {
         cCcD_Obj *hitObj = mCylTg.GetTgHitObj();
         fopAc_ac_c* hitActor = mCylTg.GetTgHitAc();
-        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == PROC_PLAYER) {
+        if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) && fopAcM_GetProfName(hitActor) == fpcNm_PLAYER_e) {
             if (cutType == daPy_py_c::CUT_TYPE_HAMMER_FRONTSWING || cutType == daPy_py_c::CUT_TYPE_JUMPCUT_HAMMER) {
                 M_damage = 1;
             } else if (cutType == daPy_py_c::CUT_TYPE_HAMMER_SIDESWING) {
@@ -229,15 +227,16 @@ void daObjSwhammer::Act_c::set_damage() {
 }
 
 /* 00000A58-00000ABC       .text vib_start__Q213daObjSwhammer5Act_cFsf */
-void daObjSwhammer::Act_c::vib_start(short dir, float mag) {
-    mAngleSpeedZ = mag * attr().mVibMag0Mult * cM_scos(dir);
-    mAngleSpeedX = mag * attr().mVibMag0Mult * cM_ssin(dir);
+void daObjSwhammer::Act_c::vib_start(s16 dir, f32 mag) {
+    f32 f1 = mag * attr().mVibMag0Mult;
+    mAngleSpeedZ = f1 * cM_scos(dir);
+    mAngleSpeedX = f1 * cM_ssin(dir);
 }
 
 /* 00000ABC-00000B34       .text vib_proc__Q213daObjSwhammer5Act_cFv */
 void daObjSwhammer::Act_c::vib_proc() {
-    float angleAccelX = -(mAngleX * attr().mVibSpring) - mAngleSpeedX * attr().mAngleSpeedDecay;
-    float angleAccelZ = -(mAngleZ * attr().mVibSpring) - mAngleSpeedZ * attr().mAngleSpeedDecay;
+    f32 angleAccelZ = -(mAngleZ * attr().mVibSpring) - mAngleSpeedZ * attr().mAngleSpeedDecay;
+    f32 angleAccelX = -(mAngleX * attr().mVibSpring) - mAngleSpeedX * attr().mAngleSpeedDecay;
 
     mAngleSpeedZ += angleAccelZ;
     mAngleSpeedX += angleAccelX;
@@ -266,7 +265,8 @@ void daObjSwhammer::Act_c::crush_proc() {
         mScaleYSpeed = attr().mUncrushSpeed0;
         return;
     }
-    mScaleYSpeed += -((mScaleY - 1.0f) * attr().mUncrushSpring) - mScaleYSpeed * attr().mUncrushSpeedDecay;
+    f32 f1 = -((mScaleY - 1.0f) * attr().mUncrushSpring);
+    mScaleYSpeed += f1 - mScaleYSpeed * attr().mUncrushSpeedDecay;
     mScaleY += mScaleYSpeed;
 }
 
@@ -291,8 +291,8 @@ void daObjSwhammer::Act_c::eff_crush() {
 
 /* 00000DB8-00000E74       .text calc_top_pos__Q213daObjSwhammer5Act_cFv */
 void daObjSwhammer::Act_c::calc_top_pos() {
-    float diff = mCurHFrac - mTargetHFrac;
-    float decay = mCurHFrac > 0.0f && mCurHFrac < 1.0f
+    f32 diff = mCurHFrac - mTargetHFrac;
+    f32 decay = mCurHFrac > 0.0f && mCurHFrac < 1.0f
         ? attr().mIntVSpeedDecay
         : attr().mExtVSpeedDecay;
 
@@ -309,10 +309,11 @@ BOOL daObjSwhammer::Act_c::jnodeCB(J3DNode* node, int calcTiming) {
         J3DModel* model = (J3DModel*) j3dSys.getModel();
         daObjSwhammer::Act_c *i_this = (daObjSwhammer::Act_c*) model->getUserArea();
         J3DJoint* joint = (J3DJoint*) node;
-        s32 jntNo = joint->getJntNo();
+        u16 jntNo = joint->getJntNo();
 
         mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
-        mDoMtx_stack_c::transM(0.0f, (1.0f - i_this->mScaleY) * 20.0f, 0.0f);
+        f32 y = (1.0f - i_this->mScaleY) * 20.0f;
+        mDoMtx_stack_c::transM(0.0f, y, 0.0f);
         mDoMtx_stack_c::scaleM(1.0f, i_this->mScaleY, 1.0f);
         mDoMtx_stack_c::transM(0.0f, i_this->mTopPos, 0.0f);
 
@@ -432,7 +433,7 @@ BOOL daObjSwhammer::Act_c::Execute(Mtx** mtx) {
 
 /* 00001504-00001564       .text Draw__Q213daObjSwhammer5Act_cFv */
 BOOL daObjSwhammer::Act_c::Draw() {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(DEMO_SELECT(TEV_TYPE_BG0, TEV_TYPE_ACTOR), &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     return TRUE;
@@ -476,18 +477,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjSwhammer
 
 actor_process_profile_definition g_profile_Obj_Swhammer = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Swhammer,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Swhammer_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjSwhammer::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Swhammer,
+    /* Draw Prio    */ fpcDwPi_Obj_Swhammer_e,
     /* Actor SubMtd */ &daObjSwhammer::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

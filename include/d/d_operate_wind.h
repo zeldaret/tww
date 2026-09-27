@@ -15,8 +15,9 @@ class STControl;
 class dOw_HIO_c : public mDoHIO_entry_c {
 public:
     dOw_HIO_c();
+    ~dOw_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 field_0x04;
@@ -33,7 +34,14 @@ public:
 
 class dDlst_Ow_main_c : public dDlst_base_c {
 public:
-    inline void drawLine(int, f32, f32, f32, f32);
+    ~dDlst_Ow_main_c() {}
+
+    void drawLine(int i, f32 x1, f32 y1, f32 x2, f32 y2) {
+        mX1[i] = x1;
+        mY1[i] = y1;
+        mX2[i] = x2;
+        mY2[i] = y2;
+    }
     void setLineColor(JUtility::TColor c) { color = c; }
     void setLineMax(int v) { mLineMax = v; }
     void setScreen(J2DScreen* s) { scrn = s; }
@@ -52,7 +60,9 @@ public:
 
 class dDlst_Ow_mask_c : public dDlst_base_c {
 public:
-    void setScreen(J2DScreen*) {}
+    ~dDlst_Ow_mask_c() {}
+
+    void setScreen(J2DScreen* s) { scrn = s; }
     
     void draw();
 
@@ -62,10 +72,13 @@ public:
 
 class dOperate_wind_c {
 public:
+    dOperate_wind_c() {}
     virtual ~dOperate_wind_c() {}
-    void setTimer(s16) {}
+    void setTimer(s16 i_timer) {
+        mTimer = i_timer;
+    }
     
-    static int dOw_angleRegular(f32);
+    int dOw_angleRegular(f32);
     int dOw_stickControl(int, s16);
     void screenSet();
     void alphaSet(f32);
@@ -90,7 +103,11 @@ public:
 public:
     /* 0x004 */ J2DScreen* scrn1;
     /* 0x008 */ J2DScreen* scrn2;
-    /* 0x00C */ fopMsgM_pane_class field_0x0c[5];
+    /* 0x00C */ fopMsgM_pane_class field_0x0c;
+    /* 0x044 */ fopMsgM_pane_class field_0x44;
+    /* 0x07C */ fopMsgM_pane_class field_0x7c;
+    /* 0x0B4 */ fopMsgM_pane_class field_0xb4;
+    /* 0x0EC */ fopMsgM_pane_class field_0xec;
     /* 0x124 */ fopMsgM_pane_class field_0x124[2];
     /* 0x194 */ fopMsgM_pane_class field_0x194;
     /* 0x1CC */ fopMsgM_pane_class field_0x1cc[4];
@@ -101,27 +118,70 @@ public:
     /* 0x55C */ STControl* stick;
     /* 0x560 */ dDlst_Ow_main_c* mMain;
     /* 0x564 */ dDlst_Ow_mask_c* mMask;
+#if VERSION == VERSION_PAL
+    /* 0x568 */ ResTIMG* shipfontTimg;
+#endif
+    /* 0x568 */ J2DPicture::TCornerColor field_0x568;
+    /* 0x578 */ J2DPicture::TCornerColor field_0x578;
+    /* 0x588 */ J2DPicture::TCornerColor field_0x588;
+    /* 0x598 */ f32 field_0x598[50];
+    /* 0x660 */ f32 field_0x660[50];
+    /* 0x728 */ f32 field_0x728[50];
+    /* 0x7F0 */ f32 field_0x7f0[50];
+    /* 0x8B8 */ f32 field_0x8b8;
+    /* 0x8BC */ u8 field_0x8BC[0x8C0 - 0x8BC];
+    /* 0x8C0 */ f32 mPosX;
+    /* 0x8C4 */ f32 mPosY;
+    /* 0x8C8 */ s16 mTimer;
+    /* 0x8CA */ s16 field_0x8ca;
+    /* 0x8CC */ s16 mDeg;
+    /* 0x8CE */ s16 field_0x8ce;
+    /* 0x8D0 */ int field_0x8d0;
+    /* 0x8D4 */ u8 field_0x8d4;
 };
 
 class dOw_c : public msg_class {
 public:
-    inline void _close();
-    inline bool _draw();
-    inline void _move();
-    inline void _open();
-    JKRExpHeap* getHeap() { return heap; }
-    void getStatus() {}
-    void setHeap(JKRExpHeap* h) { heap = h; }
-    void setStatus(u8) {}
-    void setTimer(s16) {}
+    bool _open() {
+        return dOw_scrn->_open();
+    }
+    bool _close() {
+        return dOw_scrn->_close();
+    }
+    void _draw() {
+        dOw_scrn->_draw();
+    }
+    void _move() {
+        dOw_scrn->_move();
+    }
+
+    JKRExpHeap* getHeap() {
+        return heap;
+    }
+
+    u8 getStatus() {
+        return status;
+    }
+
+    void setHeap(JKRExpHeap* h) {
+        heap = h;
+    }
+
+    void setStatus(u8 i_status) {
+        status = i_status;
+    }
+
+    void setTimer(s16 i_timer) {
+        dOw_scrn->setTimer(i_timer);
+    }
 
     void _create();
     void _delete();
 
-public:
+private:
     /* 0x0FC */ JKRExpHeap* heap;
     /* 0x100 */ dOperate_wind_c* dOw_scrn;
-    /* 0x104 */ u8 field_0x104;
+    /* 0x104 */ u8 status;
 };
 
 #endif /* D_OPERATE_WIND_H */

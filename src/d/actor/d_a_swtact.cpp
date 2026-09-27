@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swtact.h"
-#include "d/res/res_itact.h"
+#include "res/Object/Itact.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
@@ -27,13 +25,13 @@ bool daSwTact_c::_delete() {
 }
 
 /* 000000AC-000000CC       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
-    return ((daSwTact_c *)i_ac)->CreateHeap();
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daSwTact_c *)i_this)->CreateHeap();
 }
 
 /* 000000CC-00000194       .text CreateHeap__10daSwTact_cFv */
 BOOL daSwTact_c::CreateHeap() {
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, ITACT_BDL_ITACT);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname, dRes_INDEX_ITACT_BDL_ITACT_e);
     JUT_ASSERT(0xe1, modelData != NULL);
     model = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (model == NULL)
@@ -72,7 +70,7 @@ void daSwTact_c::set_mtx() {
 
 /* 000002CC-0000038C       .text _create__10daSwTact_cFv */
 cPhs_State daSwTact_c::_create() {
-    fopAcM_SetupActor(this, daSwTact_c);
+    fopAcM_ct(this, daSwTact_c);
 
     s32 result = cPhs_COMPLEATE_e;
     if (daSwTact_prm::getModel(this) == 1) {
@@ -183,27 +181,28 @@ bool daSwTact_c::_draw() {
 }
 
 /* 00000720-00000740       .text daSwTact_Create__FPv */
-static cPhs_State daSwTact_Create(void* i_ac) {
-    return ((daSwTact_c *)i_ac)->_create();
+static cPhs_State daSwTact_Create(void* i_this) {
+    return ((daSwTact_c *)i_this)->_create();
 }
 
 /* 00000740-00000764       .text daSwTact_Delete__FPv */
-static BOOL daSwTact_Delete(void* i_ac) {
-    return ((daSwTact_c*)i_ac)->_delete();
+static BOOL daSwTact_Delete(void* i_this) {
+    return ((daSwTact_c*)i_this)->_delete();
 }
 
 /* 00000764-00000788       .text daSwTact_Draw__FPv */
-static BOOL daSwTact_Draw(void* i_ac) {
-    return ((daSwTact_c*)i_ac)->_draw();
+static BOOL daSwTact_Draw(void* i_this) {
+    return ((daSwTact_c*)i_this)->_draw();
 }
 
 /* 00000788-000007AC       .text daSwTact_Execute__FPv */
-static BOOL daSwTact_Execute(void* i_ac) {
-    return ((daSwTact_c*)i_ac)->_execute();
+static BOOL daSwTact_Execute(void* i_this) {
+    return ((daSwTact_c*)i_this)->_execute();
 }
 
 /* 000007AC-000007B4       .text daSwTact_IsDelete__FPv */
-static BOOL daSwTact_IsDelete(void* i_ac) {
+static BOOL daSwTact_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -216,18 +215,18 @@ static actor_method_class daSwTactMethodTable = {
 };
 
 actor_process_profile_definition g_profile_SW_TACT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SW_TACT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SW_TACT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSwTact_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SW_TACT,
+    /* Draw Prio    */ fpcDwPi_SW_TACT_e,
     /* Actor SubMtd */ &daSwTactMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

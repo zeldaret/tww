@@ -26,31 +26,31 @@ void daRaceItem_c::raceItemForceGet() {
 /* 80068AA4-80068D48       .text raceItemGet__12daRaceItem_cFv */
 void daRaceItem_c::raceItemGet() {
     switch(m_itemNo) {
-        case dItem_GREEN_RUPEE_e:
+        case dItemNo_GREEN_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(1);
             break;
-        case dItem_BLUE_RUPEE_e:
+        case dItemNo_BLUE_RUPEE_e:
             mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(5);
             break;
-        case dItem_YELLOW_RUPEE_e:
+        case dItemNo_YELLOW_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(10);
             break;
-        case dItem_RED_RUPEE_e:
+        case dItemNo_RED_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             dComIfGp_plusMiniGameRupee(20);
             break;
-        case dItem_PURPLE_RUPEE_e:
+        case dItemNo_PURPLE_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(50);
             break;
-        case dItem_ORANGE_RUPEE_e:
+        case dItemNo_ORANGE_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(100);
             break;
-        case dItem_SILVER_RUPEE_e:
+        case dItemNo_SILVER_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             dComIfGp_plusMiniGameRupee(200);
             break;
@@ -66,43 +66,43 @@ void daRaceItem_c::normalItemGet() {
     }
 
     switch(m_itemNo) {
-        case dItem_GREEN_RUPEE_e:
+        case dItemNo_GREEN_RUPEE_e:
             mDoAud_seStart(JA_SE_LUPY_GET);
             break;
-        case dItem_BLUE_RUPEE_e:
+        case dItemNo_BLUE_RUPEE_e:
             mDoAud_seStart(JA_SE_BLUE_LUPY_GET);
             break;
-        case dItem_YELLOW_RUPEE_e:
+        case dItemNo_YELLOW_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case dItem_RED_RUPEE_e:
+        case dItemNo_RED_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case dItem_PURPLE_RUPEE_e:
+        case dItemNo_PURPLE_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case dItem_ORANGE_RUPEE_e:
+        case dItemNo_ORANGE_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case dItem_SILVER_RUPEE_e:
+        case dItemNo_SILVER_RUPEE_e:
             mDoAud_seStart(JA_SE_RED_LUPY_GET);
             break;
-        case dItem_SMALL_MAGIC_e:
+        case dItemNo_SMALL_MAGIC_e:
             mDoAud_seStart(JA_SE_MAGIC_POT_GET_S);
             break;
-        case dItem_LARGE_MAGIC_e:
+        case dItemNo_LARGE_MAGIC_e:
             mDoAud_seStart(JA_SE_MAGIC_POT_GET_L);
             break;
-        case dItem_BOMB_5_e:
-        case dItem_BOMB_10_e:
-        case dItem_BOMB_20_e:
-        case dItem_BOMB_30_e:
-        case dItem_ARROW_10_e:
-        case dItem_ARROW_20_e:
-        case dItem_ARROW_30_e:
+        case dItemNo_BOMB_5_e:
+        case dItemNo_BOMB_10_e:
+        case dItemNo_BOMB_20_e:
+        case dItemNo_BOMB_30_e:
+        case dItemNo_ARROW_10_e:
+        case dItemNo_ARROW_20_e:
+        case dItemNo_ARROW_30_e:
             mDoAud_seStart(JA_SE_CONSUMP_ITEM_GET);
             break;
-        case dItem_TRIPLE_HEART_e:
+        case dItemNo_TRIPLE_HEART_e:
             mDoAud_seStart(JA_SE_HEART_PIECE);
             break;
     }

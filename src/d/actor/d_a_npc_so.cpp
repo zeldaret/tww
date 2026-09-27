@@ -240,7 +240,7 @@ void* daNpc_So_c::_searchTagSo(fopAc_ac_c* arg1) {
 }
 
 /* 0000054C-00000578       .text searchMinigameTagSo_CB__FPvPv */
-void* searchMinigameTagSo_CB(void* arg1, void* i_this) {
+static void* searchMinigameTagSo_CB(void* arg1, void* i_this) {
     daNpc_So_c* a_this = static_cast<daNpc_So_c*>(i_this);
     fopAc_ac_c* ac = static_cast<fopAc_ac_c*>(arg1);
     return a_this->_searchMinigameTagSo(ac);
@@ -1842,18 +1842,18 @@ static actor_method_class daNpc_SoMethodTable = {
 };
 
 actor_process_profile_definition g_profile_NPC_SO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_SO,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_SO_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_So_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_SO,
+    /* Draw Prio    */ fpcDwPi_NPC_SO_e,
     /* Actor SubMtd */ &daNpc_SoMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

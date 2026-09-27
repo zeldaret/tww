@@ -7,7 +7,6 @@
 #include "d/d_magma.h"
 #include "d/actor/d_a_btd.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
 
 static btd_class* btd = NULL;
 
@@ -50,8 +49,8 @@ void dMagma_ballBoss_c::update() {
 }
 
 /* 80076D50-80076D9C       .text b_a_sub__FPvPv */
-void* b_a_sub(void* param_1, void* param_2) {
-    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == PROC_BTD) {
+static void* b_a_sub(void* param_1, void* param_2) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BTD_e) {
         return param_1;
     }
     return NULL;
@@ -69,7 +68,7 @@ void dMagma_ballBoss_c::setup(f32 param_1, u8 param_2, int param_3) {
 
     mBaseY = REG0_F(6) + -150.0f - 20.0f + param_1 + 90.0f;
 
-    btd = (btd_class*)fpcEx_Search(b_a_sub, NULL);
+    btd = (btd_class*)fpcM_Search(b_a_sub, NULL);
 
     if (btd != NULL) {
         if (btd->m6E88 == 1) {
@@ -85,5 +84,5 @@ void dMagma_ballBoss_c::setup(f32 param_1, u8 param_2, int param_3) {
     }
 
     field_0x7C = (cM_rndF(100.0f) + 400.0f);
-    mWave = (cM_rndF(8.0f) * 4096.0f);
+    mWave = (cM_rndF(8.0f) * 0x1000);
 }

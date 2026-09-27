@@ -304,15 +304,9 @@ void dMetronome_c::melodyGuideShow(s32 note, s16 no) {
 
     fopMsgM_cposMove(&pane_cn[no]);
 
-    // This is almost J2DPane::setBasePosition
     f32 centerX = pane_i11[no].mSize.x / 2.0f;
     f32 centerY = pane_i11[no].mSize.y / 2.0f;
-    J2DScreen* scrn = (J2DScreen*)pane_i11[no].pane;
-    scrn->mBasePosition.x = centerX;
-    scrn->mBasePosition.y = centerY;
-    scrn->mRotationAxis = ROTATE_Z;
-    scrn->mRotation = rot[note];
-    scrn->calcMtx();
+    ((J2DScreen*)pane_i11[no].pane)->rotate(centerX, centerY, ROTATE_Z, rot[note]);
 }
 
 /* 80222854-80222C4C       .text melodyShow__12dMetronome_cFv */
@@ -324,7 +318,7 @@ void dMetronome_c::melodyShow() {
         pos.y = 0.0f;
         pos.z = 0.0f;
 
-        s32 note = daPy_getPlayerLinkActorClass()->m34D6;
+        s32 note = daPy_getPlayerLinkActorClass()->getTactLeftHandPos();
         if (pane_wn[0].mUserArea < mBeat) {
             mNote[pane_wn[0].mUserArea] = note;
             melodyGuideShow(note, pane_wn[0].mUserArea);
@@ -574,7 +568,7 @@ void dMetronome_c::_draw() {
 }
 
 /* 802233E4-80223478       .text _open__12dMetronome_cFv */
-BOOL dMetronome_c::_open() {
+bool dMetronome_c::_open() {
     if (!mbOpen) {
         for (s32 i = 0; i < 21; i++) {
             fopMsgM_setInitAlpha(&pane_timing[i]);
@@ -588,11 +582,11 @@ BOOL dMetronome_c::_open() {
         melodyInit(mBeat);
     }
     mbOpen = true;
-    return TRUE;
+    return true;
 }
 
 /* 80223478-80223534       .text _close__12dMetronome_cFv */
-BOOL dMetronome_c::_close() {
+bool dMetronome_c::_close() {
     mbOpen = false;
     if (!mbOpen) {  // nice bug
         for (s32 i = 0; i < 7; i++) {
@@ -611,5 +605,5 @@ BOOL dMetronome_c::_close() {
         fopMsgM_setNowAlphaZero(&pane_echo);
     }
 
-    return TRUE;
+    return true;
 }

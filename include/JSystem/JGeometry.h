@@ -42,42 +42,41 @@ struct TVec3 {
 
     TVec3() {}
 
-    template<T>
-    TVec3(const T x, const T y, const T z) { set(x, y, z); }
+    template <class U>
+    TVec3(U x, U y, U z) { set(x, y, z); }
 
-    template <T>
-    void set(T x_, T y_, T z_) {
-        x = x_;
-        y = y_;
-        z = z_;
+    template <class U>
+    void set(U x_, U y_, U z_) {
+        x = (T)x_;
+        y = (T)y_;
+        z = (T)z_;
     }
 };
 
 template <>
 struct TVec3<s16> : public SVec {
-    // s16 x, y, z;
+    TVec3() {}
+    TVec3(const SVec& b) { set(b); }
 
-    TVec3& operator=(const TVec3& b) {
+    template <class U>
+    TVec3(U x, U y, U z) { set(x, y, z); }
+
+    void set(const SVec& vec) {
+        x = vec.x;
+        y = vec.y;
+        z = vec.z;
+    }
+        
+    template <class U>
+    void set(U x_, U y_, U z_) {
+        x = (s16)x_;
+        y = (s16)y_;
+        z = (s16)z_;
+    }
+
+    TVec3<s16>& operator=(const TVec3<s16>& b) {
         set(b.x, b.y, b.z);
         return *this;
-    }
-
-    TVec3() {}
-
-    TVec3(const s16 x, const s16 y, const s16 z) { set(x, y, z); }
-
-    void set(s16 x_, s16 y_, s16 z_) {
-        x = x_;
-        y = y_;
-        z = z_;
-    }
-
-    TVec3(const int x, const int y, const int z) { set(x, y, z); }
-
-    void set(int x_, int y_, int z_) {
-        x = x_;
-        y = y_;
-        z = z_;
     }
 };
 
@@ -85,18 +84,19 @@ template <>
 struct TVec3<f32> : public Vec {
     TVec3() {}
 
-    TVec3(const f32 x, const f32 y, const f32 z) { set((f32)x, (f32)y, (f32)z); }
+    template <class U>
+    TVec3(U x, U y, U z) { set(x, y, z); }
 
     TVec3(const Vec& b) { set(b); }
 
     operator Vec*() { return (Vec*)&x; }
     operator const Vec*() const { return (Vec*)&x; }
 
-    template<typename f32>
-    void set(const TVec3<f32>& other) {
-        x = other.x;
-        y = other.y;
-        z = other.z;
+    template <class U>
+    void set(const TVec3<U>& other) {
+        x = (f32)other.x;
+        y = (f32)other.y;
+        z = (f32)other.z;
     }
 
     void set(const Vec& vec) {
@@ -105,8 +105,8 @@ struct TVec3<f32> : public Vec {
         z = vec.z;
     }
 
-    template<typename f32>
-    void set(f32 x_, f32 y_, f32 z_) {
+    template <class U>
+    void set(U x_, U y_, U z_) {
         x = (f32)x_;
         y = (f32)y_;
         z = (f32)z_;
@@ -233,8 +233,8 @@ struct TVec3<f32> : public Vec {
         return norm * sq;
     }
 
-    template<typename S>
-    void cubic(const JGeometry::TVec3<f32>& vec1, const JGeometry::TVec3<f32>& vec2, const JGeometry::TVec3<f32>& vec3, const JGeometry::TVec3<f32>& vec4, f32 f19) {
+    template <class U>
+    void cubic(const JGeometry::TVec3<U>& vec1, const JGeometry::TVec3<U>& vec2, const JGeometry::TVec3<U>& vec3, const JGeometry::TVec3<U>& vec4, U f19) {
         // TODO: name variables properly
         f32 f5 = f19 * f19;
         f32 f4 = f5 * f19;
@@ -242,9 +242,9 @@ struct TVec3<f32> : public Vec {
         f32 f2 = (-2.0f * f4) + (3.0f * f5);
         f32 f1 = f19 + (f4 - (2.0f * f5));
         f32 f0 = (f4 - f5);
-        this->x = (f3 * vec1.x) + (f2 * vec2.x) + (f1 * vec4.x) + (f0 * vec3.z);
-        this->y = (f3 * vec1.y) + (f2 * vec2.y) + (f1 * vec4.y) + (f0 * vec3.y);
-        this->z = (f3 * vec1.z) + (f2 * vec2.z) + (f1 * vec4.z) + (f0 * vec3.x);
+        x = (f3 * vec1.x) + (f2 * vec2.x) + (f1 * vec4.x) + (f0 * vec3.z);
+        y = (f3 * vec1.y) + (f2 * vec2.y) + (f1 * vec4.y) + (f0 * vec3.y);
+        z = (f3 * vec1.z) + (f2 * vec2.z) + (f1 * vec4.z) + (f0 * vec3.x);
     }
 
     inline TVec3<f32>& operator+=(const TVec3<f32>& b) {
@@ -271,16 +271,20 @@ struct TVec3<f32> : public Vec {
 template <typename T>
 struct TVec2 {
     TVec2() {}
-    TVec2(const T x, const T y) { set(x, y); }
 
-    void set(const T x, const T y) {
-        this->x = x;
-        this->y = y;
+    template <class U>
+    TVec2(U x, U y) { set(x, y); }
+
+    template <class U>
+    void set(U x_, U y_) {
+        x = (T)x_;
+        y = (T)y_;
     }
 
-    void set(const TVec2<T>& other) {
-        x = other.x;
-        y = other.y;
+    template <class U>
+    void set(const TVec2<U>& other) {
+        x = (T)other.x;
+        y = (T)other.y;
     }
 
     void setMin(const TVec2<T>& min) {
@@ -300,6 +304,11 @@ struct TVec2 {
     void add(const TVec2<T>& other) {
         x += other.x;
         y += other.y;
+    }
+
+    void add(const TVec2<T>& a, const TVec2<T>& b) {
+        x = a.x + b.x;
+        y = a.y + b.y;
     }
 
     bool isAbove(const TVec2<T>& other) const {
@@ -342,9 +351,8 @@ template<> struct TBox<TVec2<f32> > {
         addPos(TVec2<f32>(x, y));
     }
 
-    void setSize(TVec2<f32> size) {
-        f.x = size.x;
-        f.y = size.y;
+    void setSize(const TVec2<f32>& size) {
+        f.add(i, size);
     }
 
     void addPos(const TVec2<f32>& pos) {
@@ -386,6 +394,37 @@ struct TBox2 : public TBox<TVec2<T> > {
 };
 
 // clang-format on
+
+// Row-major storage: at()/ref() are transposed relative to SMatrix33C, so
+// setting a direction writes three contiguous floats.
+template <typename T>
+struct SMatrix33R {
+    T mMtx[3][3];
+};
+
+template <>
+struct SMatrix33R<f32> {
+    SMatrix33R() {}
+
+    f32 at(u32 i, u32 j) const { return mMtx[j][i]; }
+    f32& ref(u32 i, u32 j) { return mMtx[j][i]; }
+
+    f32 mMtx[3][3];
+};
+
+template <typename T>
+struct TMatrix33 : public T {
+    TMatrix33() {}
+
+    void mult(const TVec3<f32>& src, TVec3<f32>& dst) const {
+        dst.set(this->at(0, 0) * src.x + this->at(0, 1) * src.y + this->at(0, 2) * src.z,
+                this->at(1, 0) * src.x + this->at(1, 1) * src.y + this->at(1, 2) * src.z,
+                this->at(2, 0) * src.x + this->at(2, 1) * src.y + this->at(2, 2) * src.z);
+    }
+
+    void mult(TVec3<f32>& v) const { mult(v, v); }
+};
+
 
 }  // namespace JGeometry
 

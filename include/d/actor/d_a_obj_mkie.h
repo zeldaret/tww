@@ -8,7 +8,6 @@ namespace daObjMkie {
 class Act_c : public dBgS_MoveBgActor {
 public:
     static Mtx M_tmp_mtx;
-    static u32 prm_make(u8 eventId, int swNo) { return swNo << 0x10 | (eventId | 0x3000); };
 
     void setup(const cXyz* pos) {
         current.pos = *pos;
@@ -21,23 +20,39 @@ public:
         Vec table[8][3];
     };
 
+    const Attr_c& attr() const { return M_attr[mType]; }
+
     enum Prm_e {
-        PRM_CORRECT_W = 0x01,
-        PRM_CORRECT_S = 0xc,
-
         PRM_EVID_W = 0x08,
-        PRM_EVID_S = 0x0,
-
-        PRM_SWSAVE_W = 0x08,
-        PRM_SWSAVE_S = 0x10,
+        PRM_EVID_S = 0x00,
 
         PRM_TYPE_W = 0x01,
         PRM_TYPE_S = 0x08,
 
+        PRM_CORRECT_W = 0x01,
+        PRM_CORRECT_S = 0x0C,
+
+#if VERSION > VERSION_DEMO
+        // TODO: Come up with a better name for this.
+        // (It doesn't appear in the debug maps as this parameter was added for retail.)
         PRM_FLAG_W = 0x01,
-        PRM_FLAG_S = 0x0d,
+        PRM_FLAG_S = 0x0D,
+#endif
+
+        PRM_SWSAVE_W = 0x08,
+        PRM_SWSAVE_S = 0x10,
     };
 
+    static u32 prm_make(u8 eventId, int swNo) {
+        return
+            swNo << PRM_SWSAVE_S | (
+            true << PRM_CORRECT_S |
+#if VERSION > VERSION_DEMO
+            true << PRM_FLAG_S |
+#endif
+            eventId << PRM_EVID_S
+        );
+    }
     BOOL prm_get_correct() const { return daObj::PrmAbstract<Prm_e>(this, PRM_CORRECT_W, PRM_CORRECT_S); }
     u8 prm_get_evId() const { return daObj::PrmAbstract<Prm_e>(this, PRM_EVID_W, PRM_EVID_S); }
     int prm_get_swSave() const { return daObj::PrmAbstract<Prm_e>(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
@@ -83,7 +98,7 @@ public:
     /* 0xF59 */ bool mStatueDelete;
     /* 0xF5A */ bool mEvtPlaying;
     /* 0xF5B */ bool mBaseAnmPlaying;
-    /* 0xF5C */ s16 mState;
+    /* 0xF5C */ s16 mTimer;
     /* 0xF5E */ s16 mLightCnt;
     /* 0xF60 */ s16 mEvtIdx;
     /* 0xF62 */ bool mSwitch;

@@ -5,13 +5,11 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hole.h"
-#include "d/res/res_aana.h"
+#include "res/Object/Aana.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_lib.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -23,8 +21,8 @@ static daObj_Hole_HIO_c l_HIO;
 const char daObj_Hole_c::m_arc_name[] = "Aana";
 
 /* 000000EC-0000010C       .text createHeap_CB__FP10fopAc_ac_c */
-static BOOL createHeap_CB(fopAc_ac_c* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_createHeap();
+static BOOL createHeap_CB(fopAc_ac_c* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_createHeap();
 }
 
 /* 0000010C-00000148       .text __ct__16daObj_Hole_HIO_cFv */
@@ -218,7 +216,7 @@ void daObj_Hole_c::createInit() {
 
 /* 00000864-00000928       .text _createHeap__12daObj_Hole_cFv */
 BOOL daObj_Hole_c::_createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, AANA_BDL_AANA);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_AANA_BDL_AANA_e);
 
     JUT_ASSERT(0x13D, modelData != NULL);
 
@@ -256,7 +254,7 @@ cPhs_State daObj_Hole_c::_create() {
     if (result == cPhs_COMPLEATE_e)
 #endif
     {
-        fopAcM_SetupActor(this, daObj_Hole_c);
+        fopAcM_ct(this, daObj_Hole_c);
 
 #if VERSION > VERSION_DEMO
         result = dComIfG_resLoad(&mPhs, m_arc_name);
@@ -287,27 +285,28 @@ bool daObj_Hole_c::_delete() {
 }
 
 /* 0000125C-0000127C       .text daObj_HoleCreate__FPv */
-static cPhs_State daObj_HoleCreate(void* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_create();
+static cPhs_State daObj_HoleCreate(void* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_create();
 }
 
 /* 0000127C-000012A0       .text daObj_HoleDelete__FPv */
-static BOOL daObj_HoleDelete(void* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_delete();
+static BOOL daObj_HoleDelete(void* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_delete();
 }
 
 /* 000012A0-000012C4       .text daObj_HoleExecute__FPv */
-static BOOL daObj_HoleExecute(void* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_execute();
+static BOOL daObj_HoleExecute(void* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_execute();
 }
 
 /* 000012C4-000012E8       .text daObj_HoleDraw__FPv */
-static BOOL daObj_HoleDraw(void* i_actor) {
-    return static_cast<daObj_Hole_c*>(i_actor)->_draw();
+static BOOL daObj_HoleDraw(void* i_this) {
+    return static_cast<daObj_Hole_c*>(i_this)->_draw();
 }
 
 /* 000012E8-000012F0       .text daObj_HoleIsDelete__FPv */
-static BOOL daObj_HoleIsDelete(void* i_actor) {
+static BOOL daObj_HoleIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -320,18 +319,18 @@ static actor_method_class daObj_HoleMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_HOLE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_HOLE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_HOLE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Hole_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_HOLE,
+    /* Draw Prio    */ fpcDwPi_OBJ_HOLE_e,
     /* Actor SubMtd */ &daObj_HoleMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

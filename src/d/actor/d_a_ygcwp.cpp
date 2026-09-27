@@ -6,10 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ygcwp.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_ygcwp.h"
+#include "res/Object/Ygcwp.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 enum {
     EVENT_WARP_START,
@@ -18,8 +16,8 @@ enum {
 };
 
 const u32 daYgcwp_c::M_brk_table[] = {
-    YGCWP_BRK_YGCWP00_COMMON,
-    YGCWP_BRK_YGCWP00_WARP,
+    dRes_INDEX_YGCWP_BRK_YGCWP00_COMMON_e,
+    dRes_INDEX_YGCWP_BRK_YGCWP00_WARP_e,
 };
 
 const u32 daYgcwp_c::M_brk_mode_table[] = {
@@ -30,9 +28,9 @@ const u32 daYgcwp_c::M_brk_mode_table[] = {
 const char daYgcwp_c::M_arcname[6] = "Ygcwp";
 
 static void dummy() {
-    OSReport("rtn_warp");
-    OSReport("fg_warp0");
-    OSReport("fg_warp1");
+    DEAD_STRING("rtn_warp");
+    DEAD_STRING("fg_warp0");
+    DEAD_STRING("fg_warp1");
 }
 
 static char* M_act_table[] = {
@@ -42,8 +40,8 @@ static char* M_act_table[] = {
 };
 
 /* 00000078-00000098       .text solidHeapCB__9daYgcwp_cFP10fopAc_ac_c */
-BOOL daYgcwp_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    return ((daYgcwp_c*)i_ac)->create_heap();
+BOOL daYgcwp_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daYgcwp_c*)i_this)->create_heap();
 }
 
 /* 00000098-0000023C       .text create_heap__9daYgcwp_cFv */
@@ -52,7 +50,7 @@ BOOL daYgcwp_c::create_heap() {
     J3DAnmTevRegKey* brk_p;
     s32 i;
     BOOL ret = FALSE;
-    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, YGCWP_BDL_YGCWP00));
+    mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_YGCWP_BDL_YGCWP00_e));
     JUT_ASSERT(0xBE, mdl_data != NULL);
 
     if (mdl_data != NULL) {
@@ -81,7 +79,7 @@ BOOL daYgcwp_c::create_heap() {
 
 /* 0000023C-000003A0       .text _create__9daYgcwp_cFv */
 cPhs_State daYgcwp_c::_create() {
-    fopAcM_SetupActor(this, daYgcwp_c);
+    fopAcM_ct(this, daYgcwp_c);
     cPhs_State rt = dComIfG_resLoad(&mPhs, M_arcname);
     if (rt == cPhs_COMPLEATE_e) {
         rt = cPhs_ERROR_e;
@@ -206,27 +204,28 @@ bool daYgcwp_c::_draw() {
 
 namespace {
 /* 000008DC-000008FC       .text Mthd_Create__23@unnamed@d_a_ygcwp_cpp@FPv */
-cPhs_State Mthd_Create(void* i_ac) {
-    return ((daYgcwp_c*)i_ac)->_create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daYgcwp_c*)i_this)->_create();
 }
 
 /* 000008FC-00000920       .text Mthd_Delete__23@unnamed@d_a_ygcwp_cpp@FPv */
-BOOL Mthd_Delete(void* i_ac) {
-    return ((daYgcwp_c*)i_ac)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((daYgcwp_c*)i_this)->_delete();
 }
 
 /* 00000920-00000944       .text Mthd_Execute__23@unnamed@d_a_ygcwp_cpp@FPv */
-BOOL Mthd_Execute(void* i_ac) {
-    return ((daYgcwp_c*)i_ac)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((daYgcwp_c*)i_this)->_execute();
 }
 
 /* 00000944-00000968       .text Mthd_Draw__23@unnamed@d_a_ygcwp_cpp@FPv */
-BOOL Mthd_Draw(void* i_ac) {
-    return ((daYgcwp_c*)i_ac)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((daYgcwp_c*)i_this)->_draw();
 }
 
 /* 00000968-00000970       .text Mthd_IsDelete__23@unnamed@d_a_ygcwp_cpp@FPv */
-BOOL Mthd_IsDelete(void* i_ac) {
+BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -240,18 +239,18 @@ static actor_method_class Ygcwp_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Ygcwp = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Ygcwp,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Ygcwp_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daYgcwp_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Ygcwp,
+    /* Draw Prio    */ fpcDwPi_Ygcwp_e,
     /* Actor SubMtd */ &Ygcwp_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

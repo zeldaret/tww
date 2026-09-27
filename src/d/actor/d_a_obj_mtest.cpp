@@ -5,16 +5,14 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_mtest.h"
-#include "d/res/res_mtest.h"
-#include "d/res/res_owater.h"
-#include "d/res/res_astop.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Mtest.h"
+#include "res/Object/Owater.h"
+#include "res/Object/Astop.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 
-char* daObjMtest::Act_c::M_arcname[Type_Max] = {
+const char* daObjMtest::Act_c::M_arcname[Type_Max] = {
     "Mtest",
     "Mtest",
     "Mtest",
@@ -82,10 +80,10 @@ bool daObjMtest::Act_c::chk_appear() {
 /* 00000198-00000284       .text CreateHeap__Q210daObjMtest5Act_cFv */
 BOOL daObjMtest::Act_c::CreateHeap() {
     static s16 bmd_data[Type_Max] = {
-        MTEST_BMD_MCUBE,
-        MTEST_BMD_MCYLN,
-        MTEST_BMD_MCUBE,
-        MTEST_BMD_MCYLN,
+        dRes_INDEX_MTEST_BMD_MCUBE_e,
+        dRes_INDEX_MTEST_BMD_MCYLN_e,
+        dRes_INDEX_MTEST_BMD_MCUBE_e,
+        dRes_INDEX_MTEST_BMD_MCYLN_e,
         -1,
         -1,
         -1,
@@ -138,54 +136,54 @@ BOOL daObjMtest::Act_c::Create() {
 cPhs_State daObjMtest::Act_c::Mthd_Create() {
     static s16 dzb_data[5][Type_Max] = {
         {
-            MTEST_DZB_MCUBE,
-            MTEST_DZB_MCYLN,
-            MTEST_DZB_MCUBE,
-            MTEST_DZB_MCYLN,
-            MTEST_DZB_MWTRSB,
-            MTEST_DZB_MYGNSB,
-            OWATER_DZB_OWATER,
-            ASTOP_DZB_ASLOW,
+            dRes_INDEX_MTEST_DZB_MCUBE_e,
+            dRes_INDEX_MTEST_DZB_MCYLN_e,
+            dRes_INDEX_MTEST_DZB_MCUBE_e,
+            dRes_INDEX_MTEST_DZB_MCYLN_e,
+            dRes_INDEX_MTEST_DZB_MWTRSB_e,
+            dRes_INDEX_MTEST_DZB_MYGNSB_e,
+            dRes_INDEX_OWATER_DZB_OWATER_e,
+            dRes_INDEX_ASTOP_DZB_ASLOW_e,
         },
         {
-            MTEST_DZB_MCUBEHG,
-            MTEST_DZB_MCYLNHG,
-            MTEST_DZB_MCUBEHG,
-            MTEST_DZB_MCYLNHG,
-            MTEST_DZB_MWTRSB,
-            MTEST_DZB_MYGNSB,
-            OWATER_DZB_OWATER,
-            ASTOP_DZB_ASLOW00,
+            dRes_INDEX_MTEST_DZB_MCUBEHG_e,
+            dRes_INDEX_MTEST_DZB_MCYLNHG_e,
+            dRes_INDEX_MTEST_DZB_MCUBEHG_e,
+            dRes_INDEX_MTEST_DZB_MCYLNHG_e,
+            dRes_INDEX_MTEST_DZB_MWTRSB_e,
+            dRes_INDEX_MTEST_DZB_MYGNSB_e,
+            dRes_INDEX_OWATER_DZB_OWATER_e,
+            dRes_INDEX_ASTOP_DZB_ASLOW00_e,
         },
         {
-            MTEST_DZB_MCUBENC,
-            MTEST_DZB_MCYLNNC,
-            MTEST_DZB_MCUBENC,
-            MTEST_DZB_MCYLNNC,
-            MTEST_DZB_MWTRSB,
-            MTEST_DZB_MYGNSB,
-            OWATER_DZB_OWATER,
-            ASTOP_DZB_ASTOP,
+            dRes_INDEX_MTEST_DZB_MCUBENC_e,
+            dRes_INDEX_MTEST_DZB_MCYLNNC_e,
+            dRes_INDEX_MTEST_DZB_MCUBENC_e,
+            dRes_INDEX_MTEST_DZB_MCYLNNC_e,
+            dRes_INDEX_MTEST_DZB_MWTRSB_e,
+            dRes_INDEX_MTEST_DZB_MYGNSB_e,
+            dRes_INDEX_OWATER_DZB_OWATER_e,
+            dRes_INDEX_ASTOP_DZB_ASTOP_e,
         },
         {
-            MTEST_DZB_MCUBELK,
-            MTEST_DZB_MCYLN,
-            MTEST_DZB_MCUBELK,
-            MTEST_DZB_MCYLN,
-            MTEST_DZB_MWTRSB,
-            MTEST_DZB_MYGNSB,
-            OWATER_DZB_OWATER,
-            ASTOP_DZB_ASTOP00,
+            dRes_INDEX_MTEST_DZB_MCUBELK_e,
+            dRes_INDEX_MTEST_DZB_MCYLN_e,
+            dRes_INDEX_MTEST_DZB_MCUBELK_e,
+            dRes_INDEX_MTEST_DZB_MCYLN_e,
+            dRes_INDEX_MTEST_DZB_MWTRSB_e,
+            dRes_INDEX_MTEST_DZB_MYGNSB_e,
+            dRes_INDEX_OWATER_DZB_OWATER_e,
+            dRes_INDEX_ASTOP_DZB_ASTOP00_e,
         },
         {
-            MTEST_DZB_MCUBE,
-            MTEST_DZB_MCYLN,
-            MTEST_DZB_MCUBE,
-            MTEST_DZB_MCYLN,
-            MTEST_DZB_MWTRSB,
-            MTEST_DZB_MYGNSB,
-            OWATER_DZB_OWATER,
-            ASTOP_DZB_A00,
+            dRes_INDEX_MTEST_DZB_MCUBE_e,
+            dRes_INDEX_MTEST_DZB_MCYLN_e,
+            dRes_INDEX_MTEST_DZB_MCUBE_e,
+            dRes_INDEX_MTEST_DZB_MCYLN_e,
+            dRes_INDEX_MTEST_DZB_MWTRSB_e,
+            dRes_INDEX_MTEST_DZB_MYGNSB_e,
+            dRes_INDEX_OWATER_DZB_OWATER_e,
+            dRes_INDEX_ASTOP_DZB_A00_e,
         },
     };
     static u32 heap_size[5][Type_Max] = {
@@ -241,7 +239,7 @@ cPhs_State daObjMtest::Act_c::Mthd_Create() {
         },
     };
     
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     
     M_type = prm_get_type();
     JUT_ASSERT(327, M_type < Type_Max);
@@ -262,9 +260,7 @@ cPhs_State daObjMtest::Act_c::Mthd_Create() {
         mbAppear = chk_appear();
         
         cXyz& scl_mult = M_scl_mult[M_type];
-        scale.x *= scl_mult.x;
-        scale.y *= scl_mult.y;
-        scale.z *= scl_mult.z;
+        scale *= scl_mult;
         
         phase_state = MoveBGCreate(M_arcname[M_type], dzb_data[dzb_idx][M_type], NULL, heap_size[dzb_idx][M_type]);
         
@@ -380,18 +376,18 @@ namespace daObjMtest {
 }
 
 actor_process_profile_definition g_profile_Obj_Mtest = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Mtest,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Mtest_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMtest::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Mtest,
+    /* Draw Prio    */ fpcDwPi_Obj_Mtest_e,
     /* Actor SubMtd */ &daObjMtest::Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

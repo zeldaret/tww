@@ -32,7 +32,7 @@ create_tag_class* fopDwIt_Begin() {
         return createTagClass;
     }
 
-    return createTagClass = fopDwIt_GetTag();
+    return fopDwIt_GetTag();
 }
 
 /* 8003C6C0-8003C6EC       .text fopDwIt_Next__FP16create_tag_class */

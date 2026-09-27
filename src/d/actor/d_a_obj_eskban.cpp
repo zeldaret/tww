@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_eskban.h"
-#include "d/res/res_eskban.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Eskban.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
@@ -109,7 +107,7 @@ static dCcD_SrcSph sph_check_src = {
 /* 000000EC-000001FC       .text CreateHeap__Q211daObjEskban5Act_cFv */
 BOOL daObjEskban::Act_c::CreateHeap() {
     J3DModelData* model_data =
-        static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, ESKBAN_BDL_ESKBAN));
+        static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_ESKBAN_BDL_ESKBAN_e));
     JUT_ASSERT(261, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203U);
     M_smoke = new dPa_smokeEcallBack();
@@ -148,7 +146,7 @@ BOOL daObjEskban::Act_c::Create() {
 /* 000003A4-000004D0       .text Mthd_Create__Q211daObjEskban5Act_cFv */
 cPhs_State daObjEskban::Act_c::Mthd_Create() {
     cPhs_State phase_state;
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     M_smoke = NULL;
 
     s32 swSave = param_get_swSave();
@@ -157,7 +155,7 @@ cPhs_State daObjEskban::Act_c::Mthd_Create() {
     }
     phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, ESKBAN_DZB_ESKBAN, NULL, 0x1020);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_ESKBAN_DZB_ESKBAN_e, NULL, 0x1020);
         JUT_ASSERT(336, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -201,9 +199,9 @@ void daObjEskban::Act_c::init_mtx() {
 /* 00000B3C-00000C80       .text eff_m_break__Q211daObjEskban5Act_cFUsUs */
 void daObjEskban::Act_c::eff_m_break(u16 particleID, u16 prm_b) {
     J3DModelData* mdlData =
-        static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", ALWAYS_BDL_MPI_KOISHI));
+        static_cast<J3DModelData*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_MPI_KOISHI_e));
     J3DAnmTexPattern* txPattern =
-        static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", ALWAYS_BTP_MPI_KOISHI));
+        static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTP_MPI_KOISHI_e));
 
     cXyz scale(3.0f, 3.0f, 3.0f);
     JPABaseEmitter* pBEmtr = dComIfGp_particle_set(
@@ -274,7 +272,7 @@ BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
         cCcD_Obj* hitObj = mCheckSph.GetCoHitObj();
         if (hitObj) {
             fopAc_ac_c* hitAct = hitObj->GetAc();
-            if (hitAct && fopAcM_GetName(hitAct) == PROC_NPC_MD) {
+            if (hitAct && fopAcM_GetName(hitAct) == fpcNm_NPC_MD_e) {
                 cXyz dist = hitAct->current.pos - current.pos;
                 dist.y = 0;
                 if (dist.normalizeRS()) {
@@ -297,7 +295,7 @@ BOOL daObjEskban::Act_c::Execute(Mtx** pMtx) {
             break;
         }
         fopAc_ac_c* hitAct = hitObj->GetAc();
-        if (hitAct && fopAcM_GetName(hitAct) == PROC_Bomb2) {
+        if (hitAct && fopAcM_GetName(hitAct) == fpcNm_Bomb2_e) {
             mActorID = fopAcM_GetID(hitAct);
             fopAcM_orderOtherEvent(this, "Eskban");
             mActorState = ST_DESTROYED;
@@ -423,18 +421,18 @@ static actor_method_class Mthd_Eskban = {
 }; // namespace daObjEskban
 
 actor_process_profile_definition g_profile_Obj_Eskban = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Eskban,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Eskban_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEskban::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Eskban,
+    /* Draw Prio    */ fpcDwPi_Obj_Eskban_e,
     /* Actor SubMtd */ &daObjEskban::Mthd_Eskban,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

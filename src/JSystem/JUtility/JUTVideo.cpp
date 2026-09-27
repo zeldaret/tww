@@ -83,7 +83,7 @@ void JUTVideo::preRetraceProc(u32 retrace_count) {
         JUTVideo* videoManager = JUTGetVideoManager();
         const GXRenderModeObj* renderMode = videoManager->getRenderMode();
         JUTDirectPrint* directPrint = JUTDirectPrint::getManager();
-        directPrint->changeFrameBuffer(frameBuffer, renderMode->fb_width, renderMode->efb_height);
+        directPrint->changeFrameBuffer(frameBuffer, renderMode->fbWidth, renderMode->efbHeight);
     }
 
     if (sManager->mSetBlack == 1) {
@@ -181,7 +181,7 @@ void JUTVideo::postRetraceProc(u32 retrace_count) {
 
 /* 802C815C-802C81D4       .text setRenderMode__8JUTVideoFPC16_GXRenderModeObj */
 void JUTVideo::setRenderMode(const GXRenderModeObj* pObj) {
-    if (mRenderObj != NULL && pObj->vi_tv_mode != mRenderObj->vi_tv_mode) {
+    if (mRenderObj != NULL && pObj->viTVmode != mRenderObj->viTVmode) {
         mSetBlack = true;
         mSetBlackFrameCount = 4;
     }

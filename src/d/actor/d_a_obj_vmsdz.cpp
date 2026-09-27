@@ -6,15 +6,13 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vmsdz.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_vmsdz.h"
+#include "res/Object/VmsDZ.h"
 
 const char daObjVmsdz_c::M_arcname[6] = "VmsDZ";
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVmsdz_cFP10fopAc_ac_c */
-BOOL daObjVmsdz_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    return ((daObjVmsdz_c*)i_ac)->create_heap();
+BOOL daObjVmsdz_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjVmsdz_c*)i_this)->create_heap();
 }
 
 /* 00000098-0000015C       .text create_heap__12daObjVmsdz_cFv */
@@ -22,7 +20,7 @@ BOOL daObjVmsdz_c::create_heap() {
     J3DModelData* mdl_data;
     BOOL ret = FALSE;
 
-    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VMSDZ_BDL_VMSDZ);
+    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMSDZ_BDL_VMSDZ_e);
     JUT_ASSERT(0x59, mdl_data != NULL);
 
     if (mdl_data != NULL) {
@@ -39,7 +37,7 @@ BOOL daObjVmsdz_c::create_heap() {
 cPhs_State daObjVmsdz_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjVmsdz_c);
+    fopAcM_ct(this, daObjVmsdz_c);
 
     ret = dComIfG_resLoad(&mPhs, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
@@ -82,27 +80,28 @@ bool daObjVmsdz_c::_draw() {
 
 namespace {
 /* 00000300-00000320       .text Mthd_Create__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-cPhs_State Mthd_Create(void* i_ac) {
-    return ((daObjVmsdz_c*)i_ac)->_create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjVmsdz_c*)i_this)->_create();
 }
 
 /* 00000320-00000344       .text Mthd_Delete__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-BOOL Mthd_Delete(void* i_ac) {
-    return ((daObjVmsdz_c*)i_ac)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjVmsdz_c*)i_this)->_delete();
 }
 
 /* 00000344-00000368       .text Mthd_Execute__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-BOOL Mthd_Execute(void* i_ac) {
-    return ((daObjVmsdz_c*)i_ac)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjVmsdz_c*)i_this)->_execute();
 }
 
 /* 00000368-0000038C       .text Mthd_Draw__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-BOOL Mthd_Draw(void* i_ac) {
-    return ((daObjVmsdz_c*)i_ac)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjVmsdz_c*)i_this)->_draw();
 }
 
 /* 0000038C-00000394       .text Mthd_IsDelete__27@unnamed@d_a_obj_vmsdz_cpp@FPv */
-BOOL Mthd_IsDelete(void* i_ac) {
+BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -116,18 +115,18 @@ static actor_method_class Vmsdz_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Obj_Vmsdz = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vmsdz,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Vmsdz_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVmsdz_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Vmsdz,
+    /* Draw Prio    */ fpcDwPi_Obj_Vmsdz_e,
     /* Actor SubMtd */ &Vmsdz_Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

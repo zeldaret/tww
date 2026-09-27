@@ -27,10 +27,10 @@ public:
     /* 0x1C */ static const Vec m_cull_min[1];
     /* 0x28 */ static const Vec m_cull_max[1];
 
-    static char* m_arcname[1];
-    static char* m_open_ev_name[1];
-    static char* m_close_ev_name[1];
-    static char* m_staff_name[1];
+    static const char* m_arcname[1];
+    static const char* m_open_ev_name[1];
+    static const char* m_close_ev_name[1];
+    static const char* m_staff_name[1];
 
 public:
     /* 0x2C8 */ request_of_phase_process_class mPhs;

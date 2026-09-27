@@ -7,8 +7,6 @@
 #include "d/actor/d_a_disappear.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 
@@ -27,22 +25,22 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
 
             if (dropType != daDisItem_NONE1_e && dropType != daDisItem_NONE3_e) {
                 if (dropType == daDisItem_HEART_CONTAINER_e) {
-                    fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle, NULL, 0);
+                    fopAcM_createItemForBoss(&i_this->current.pos, 0, fopAcM_GetRoomNo(i_this), &i_this->current.angle, NULL, 0);
                 }
                 else if (dropType >= daDisItem_HEART_e && dropType <= daDisItem_NONE13_e) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
                     // This also seems to be used by several other enemies, such as Molgera's spawn.
                     static u32 ki_item_d[] = {
-                        dItem_HEART_e,
-                        dItem_LARGE_MAGIC_e,
-                        dItem_ARROW_10_e,
+                        dItemNo_HEART_e,
+                        dItemNo_LARGE_MAGIC_e,
+                        dItemNo_ARROW_10_e,
                     };
-                    if (dropType < daDisItem_HEART_e + (int)ARRAY_SIZE(ki_item_d)) {
+                    if (dropType < daDisItem_HEART_e + ARRAY_SSIZE(ki_item_d)) {
                         fopAcM_createItem(&i_this->current.pos, ki_item_d[dropType - daDisItem_HEART_e], -1, -1, daItemType_0_e, NULL, daItemAct_4_e);
                     }
                 }
                 else {
-                    fopAcM_createIball(&i_this->current.pos, i_this->itemTableIdx, i_this->current.roomNo, &i_this->current.angle, i_this->mItemBitNo);
+                    fopAcM_createIball(&i_this->current.pos, i_this->itemTableIdx, fopAcM_GetRoomNo(i_this), &i_this->current.angle, i_this->mItemBitNo);
                 }
             }
         }
@@ -101,7 +99,7 @@ void set_disappear(disappear_class* i_this, float scale) {
 static cPhs_State daDisappear_Create(fopAc_ac_c* i_this) {
     disappear_class* dis = static_cast<disappear_class*>(i_this);
 
-    fopAcM_SetupActor(dis, disappear_class);
+    fopAcM_ct(dis, disappear_class);
 
     dis->health = fopAcM_GetParam(dis) & 0xFF; // Drop type param is stored in health
     f32 scaleMag = ((fopAcM_GetParam(dis) >> 8) & 0xFF) * 0.1f;
@@ -125,18 +123,18 @@ static actor_method_class l_daDisappear_Method = {
 };
 
 actor_process_profile_definition g_profile_DISAPPEAR = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DISAPPEAR,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DISAPPEAR_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(disappear_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DISAPPEAR,
+    /* Draw Prio    */ fpcDwPi_DISAPPEAR_e,
     /* Actor SubMtd */ &l_daDisappear_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

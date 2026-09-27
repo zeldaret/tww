@@ -6,13 +6,25 @@ Naming variables properly isn't required to help with the decompilation. You can
 
 ## Table of Contents
 
-1. [Primitive types](#primitive-types)
-2. [Offsets and padding](#offsets-and-padding)
-3. [Includes](#includes)
-4. [Naming style](#naming-style)
-5. [Use the official names where possible](#use-the-official-names-where-possible)
-6. [Resource archive enums](#resource-archive-enums)
-7. [Look at the actor's model](#look-at-the-actors-model)
+1. [Avoid Ghidra-isms](#avoid-ghidra-isms)
+2. [Primitive types](#primitive-types)
+3. [Offsets and padding](#offsets-and-padding)
+4. [Includes](#includes)
+5. [Naming style](#naming-style)
+6. [Use the official names where possible](#use-the-official-names-where-possible)
+7. [Resource archive enums](#resource-archive-enums)
+8. [Look at the actor's model](#look-at-the-actors-model)
+
+## Avoid Ghidra-isms
+
+Try to avoid directly copy-pasting code from Ghidra without cleaning it up. Ghidra tends to produce strange code that humans wouldn't write. Some common examples include:
+
+- Assigning to variables inside of `if` statements using the comma operator instead of creating multiple nested `if` statements
+- Always using `} else { if {` instead of `} else if {`, creating excessive indentation levels
+- Placing excessive unnecessary parentheses around conditions in complex if statements, even when the code would be logically equivalent without them
+- Copying the value of a variable to a second variable and checking the second variable, instead of just checking the first variable directly
+
+These make the code harder for a human to read, and occasionally they can even affect how the code matches in subtle ways (e.g. regalloc).
 
 ## Primitive types
 
@@ -134,19 +146,25 @@ The second argument is the file index of the specific file being loaded from thi
 
 In order to make the code more readable, you should replace all of these file indexes with enums containing the filename instead. But you don't have to create these enums manually, the decomp already has enums for all resource archives.
 
-You can find the header for the archive in question by pressing VSCode's `Ctrl+P` shortcut and typing `res_` followed by the name of the resource archive.  
-In this example, the header you want is located at `include/d/res/res_bk.h` because the archive is named "Bk". The resource archive's name is not necessarily the same as the actor's name (though in this example it is).
+You can find the header for the archive in question by pressing VSCode's `Ctrl+P` shortcut and typing `assets` followed by the name of the resource archive.  
+In this example, the header you want is located at `assets/GZLE01/res/Object/Bk.h` because the archive is named "Bk". The resource archive's name is not necessarily the same as the actor's name (though in this example it is).
 
 Once you open the header, search for the file index, e.g. 0x5B:
 
 ```cpp
-BK_BMD_BK_TATE=0x5B,
+dRes_INDEX_BK_BMD_BK_TATE_e=0x5B,
 ```
 
-This means `BK_BMD_BK_TATE` is the enum for this file, so replace the index with the enum like so:
+This means `dRes_INDEX_BK_BMD_BK_TATE_e` is the enum for this file, so replace the index with the enum like so:
 
 ```cpp
-modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", BK_BMD_BK_TATE);
+modelData = (J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BMD_BK_TATE_e);
+```
+
+Note that you use the `INDEX` enum for calls to `dComIfG_getObjectRes`, but some actors (mostly NPCs) instead call `dComIfG_getObjectIDRes`, in which case you should use the `ID` enum, ignoring the `INDEX` enum entirely. For example:
+
+```cpp
+J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectIDRes("Jb", dRes_ID_JB_BDL_JB_e);
 ```
 
 ## Look at the actor's model
@@ -158,7 +176,7 @@ The official TU name of the actor doesn't tell you much, not only because they'r
 If the actor has a 3D model, you can determine what the actor is by simply viewing the model in a model viewer. First, find the .arc file for this actor. Look in the `createHeap` or `useHeapInit` function for this actor. You should see something like:
 
 ```cpp
-(J3DModelData*)dComIfG_getObjectRes("Bk", BK_BDL_BK)
+(J3DModelData*)dComIfG_getObjectRes("Bk", dRes_INDEX_BK_BDL_BK_e),
 ```
 
 This means the actor's .arc in this example is named "Bk". You can find it your copy of TWW's files at `files/res/Object/Bk.arc`.

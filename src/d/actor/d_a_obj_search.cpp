@@ -5,8 +5,6 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_search.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
 
 static dCcD_SrcCps cps_src = {
@@ -165,6 +163,8 @@ void daObj_Search::Bgc_c::wall_pos(const daObj_Search::Act_c*, cXyz*, cXyz*, boo
     /* Nonmatching */
 }
 
+bool daObj_Search::Act_c::m_find_flag;
+
 /* 801002D4-801002E0       .text attr__Q212daObj_Search5Act_cCFv */
 void daObj_Search::Act_c::attr() const {
     /* Nonmatching */
@@ -299,18 +299,18 @@ actor_method_class daObj_Search::Mthd::Table = {
 };
 
 actor_process_profile_definition g_profile_OBJ_SEARCH = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_SEARCH,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_SEARCH_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Search::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_SEARCH,
+    /* Draw Prio    */ fpcDwPi_OBJ_SEARCH_e,
     /* Actor SubMtd */ &daObj_Search::Mthd::Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

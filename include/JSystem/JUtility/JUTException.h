@@ -8,8 +8,6 @@
 #include "dolphin/os/OSError.h"
 #include "global.h"
 
-typedef struct _GXRenderModeObj GXRenderModeObj;
-typedef struct OSContext OSContext;
 class JUTDirectPrint;
 
 class JUTExternalFB {
@@ -48,7 +46,7 @@ public:
 
     class JUTExMapFile {
     public:
-        JUTExMapFile(char* path) : mLink(this) { mPath = path; }
+        JUTExMapFile(const char* path) : mLink(this) { mPath = const_cast<char*>(path); }
 
     public:
         /* 0x00 */ char* mPath;
@@ -96,9 +94,9 @@ public:
     JUTExternalFB* getFrameMemory() const { return mFrameMemory; }
 
     void setTraceSuppress(u32 param_0) { mTraceSuppress = param_0; }
-    void setGamePad(JUTGamePad* gamePad) {
+    void enterPad(JUTGamePad* gamePad) {
         mGamePad = gamePad;
-        mGamePadPort = JUTGamePad::Port_Unknown;
+        mGamePadPort = JUTGamePad::EPortInvalid;
     }
 
     static void setMapFile(const char* map) {

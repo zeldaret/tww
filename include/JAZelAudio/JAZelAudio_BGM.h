@@ -2,7 +2,7 @@
 #define JAZELAUDIO_BGM_H
 
 enum {
-    // These are official BGM sequence enum names extracted from WWHD.
+    // These are official BGM sequence enum names extracted from TWWHD.
     JA_BGM_SE_SEQUENCE = 0x80000800,
     JA_BGM_ISLAND_LINK = 0x80000001,
     JA_BGM_ITEM_GET = 0x80000002,
@@ -104,7 +104,7 @@ enum {
 };
 
 enum  {
-    // These are official BGM stream enum names extracted from WWHD.
+    // These are official BGM stream enum names extracted from TWWHD.
     JA_STRM_PROLOGUE = 0xC0000000,
     JA_STRM_DEMO_TETRA_FLY = 0xC0000001,
     JA_STRM_BTD_START = 0xC0000002,

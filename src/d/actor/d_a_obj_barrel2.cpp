@@ -10,8 +10,6 @@
 #include "d/actor/d_a_sea.h"
 #include "d/actor/d_a_ship.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 
@@ -213,7 +211,7 @@ bool daObjBarrel2::Act_c::create_heap() {
 
 /* 00000308-0000089C       .text _create__Q212daObjBarrel25Act_cFv */
 cPhs_State daObjBarrel2::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjBarrel2::Act_c);
+    fopAcM_ct(this, daObjBarrel2::Act_c);
 
     m410 = prm_get_type();
 
@@ -281,7 +279,7 @@ cPhs_State daObjBarrel2::Act_c::_create() {
                 &sp24,
                 prm_get_coming() ? 1 : 0
             );
-            m45C = 3.4028235e+38f;
+            m45C = FLOAT_MAX;
             m468 = 0;
             m470 = 0;
             m460 = fpcM_ERROR_PROCESS_ID_e;
@@ -327,7 +325,7 @@ void daObjBarrel2::Act_c::tg_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf* arg2, fopAc
 void daObjBarrel2::Act_c::co_hitCB(fopAc_ac_c* a_this, dCcD_GObjInf*, fopAc_ac_c* a_ship, dCcD_GObjInf*) {
     daObjBarrel2::Act_c* i_this = (daObjBarrel2::Act_c*)a_this;
 
-    if (fopAcM_GetProfName(a_ship) == PROC_SHIP) {
+    if (fopAcM_GetProfName(a_ship) == fpcNm_SHIP_e) {
         daShip_c* ship = (daShip_c*)a_ship;
         const s32 index = i_this->m410;
 
@@ -727,7 +725,7 @@ void daObjBarrel2::Act_c::eff_explode() {
 
     fopAcM_seStart(this, JA_SE_OBJ_BARREL_BOMB, 0);
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     csXyz sp18;
     sp18.x = -fopCamM_GetAngleX(camera);
     sp18.y = fopCamM_GetAngleY(camera) - -0x8000;
@@ -765,7 +763,7 @@ void daObjBarrel2::Act_c::set_item_position() {
         raceItem->startOffsetPos();
         m45C = fopAcM_searchPlayerDistance2(raceItem);
     } else {
-        m45C = 3.4028235e+38f;
+        m45C = FLOAT_MAX;
     }
 }
 
@@ -779,7 +777,7 @@ void daObjBarrel2::Act_c::item_drop_init(float arg1) {
         raceItem->endOffsetPos(-7.0f, &sp08, arg1, 0.0f, (csXyz*)&csXyz::Zero);
         m45C = fopAcM_searchPlayerDistance2(raceItem);
     } else {
-        m45C = 3.4028235e+38f;
+        m45C = FLOAT_MAX;
     }
 }
 
@@ -788,7 +786,7 @@ void daObjBarrel2::Act_c::item_drop() {
     if (M_tmp_item_actor != NULL) {
         m45C = fopAcM_searchPlayerDistance2(M_tmp_item_actor);
     } else {
-        m45C = 3.4028235e+38f;
+        m45C = FLOAT_MAX;
     }
 }
 
@@ -834,7 +832,7 @@ void daObjBarrel2::Act_c::buoy_jump(float speed) {
     if (m460 != fpcM_ERROR_PROCESS_ID_e) {
         daObjBuoyflag::Act_c* buoy = (daObjBuoyflag::Act_c*)fopAcM_SearchByID(m460);
         if (buoy != NULL) {
-            s16 rnd = cM_rndFX(32768.0f);
+            s16 rnd = cM_rndFX(0x8000);
             buoy->speed.y = speed;
             buoy->speedF = 50.0f;
             buoy->current.angle.y = rnd;
@@ -1142,18 +1140,18 @@ actor_method_class daObjBarrel2::Method::Table = {
 };
 
 actor_process_profile_definition g_profile_Obj_Barrel2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Barrel2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Barrel2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBarrel2::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Barrel2,
+    /* Draw Prio    */ fpcDwPi_Obj_Barrel2_e,
     /* Actor SubMtd */ &daObjBarrel2::Method::Table,
     /* Status       */ 0x05 | fopAcStts_SHOWMAP_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLSPHERE_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLSPHERE_CUSTOM_e,
 };

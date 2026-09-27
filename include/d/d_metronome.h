@@ -29,6 +29,8 @@ public:
 
 class dMetronome_c : public dDlst_base_c {
 public:
+    ~dMetronome_c() {}
+
     void screenSet();
     void metronomeMove();
     void melodyInit(u8);
@@ -43,8 +45,8 @@ public:
     void _delete();
     void _move();
     void _draw();
-    BOOL _open();
-    BOOL _close();
+    bool _open();
+    bool _close();
     void draw() { return _draw(); };
 
 public:

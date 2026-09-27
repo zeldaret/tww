@@ -8,8 +8,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_kankyo.h"
 #include "SSystem/SComponent/c_lib.h"
 
@@ -18,15 +16,15 @@ cXyz get_check_pos(kytag00_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz ret;
 
-    camera_class * pCamera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class * pCamera = (camera_process_class*)dComIfGp_getCamera(0);
     fopAc_ac_c * pPlayer = dComIfGp_getPlayer(0);
 
-    f32 cameraDist = actor->current.pos.abs(pCamera->mLookat.mEye);
+    f32 cameraDist = actor->current.pos.abs(pCamera->view.mLookat.mEye);
     f32 playerDist = actor->current.pos.abs(pPlayer->current.pos);
 
     if (dComIfGp_event_runCheck() && i_this->mMode == 0) {
         if (cameraDist < playerDist) {
-            ret = pCamera->mLookat.mEye;
+            ret = pCamera->view.mLookat.mEye;
         } else {
             ret = pPlayer->current.pos;
         }
@@ -342,6 +340,7 @@ static BOOL daKytag00_Execute(kytag00_class* i_this) {
 
 /* 00000D44-00000D4C       .text daKytag00_IsDelete__FP13kytag00_class */
 static BOOL daKytag00_IsDelete(kytag00_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -355,7 +354,7 @@ static BOOL daKytag00_Delete(kytag00_class* i_this) {
 static cPhs_State daKytag00_Create(fopAc_ac_c* i_ac) {
     kytag00_class * i_this = (kytag00_class *)i_ac;
 
-    fopAcM_SetupActor(i_ac, kytag00_class);
+    fopAcM_ct(i_ac, kytag00_class);
 
     i_this->field_0x296 = 0;
     i_this->mPselIdx = (fopAcM_GetParam(i_ac) >> 0) & 0xFF;
@@ -410,18 +409,18 @@ static actor_method_class l_daKytag00_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG00 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYTAG00,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG00_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag00_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG00,
+    /* Draw Prio    */ fpcDwPi_KYTAG00_e,
     /* Actor SubMtd */ &l_daKytag00_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

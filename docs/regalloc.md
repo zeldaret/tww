@@ -93,13 +93,13 @@ Explicitly casting from one type to another can affect regalloc. This applies to
 Even the type of casting operator you use affects it in some cases. For example, this C-style cast:
 
 ```cpp
-J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH);
+J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKH_e);
 ```
 
 Is functionally equivalent to this C++ static_cast:
 
 ```cpp
-J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, VBAKH_BDL_VBAKH));
+J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arcname, dRes_INDEX_VBAKH_BDL_VBAKH_e));
 ```
 
 But the two of them produce different regalloc.

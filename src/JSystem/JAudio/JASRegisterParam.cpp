@@ -6,7 +6,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JAudio/JASRegisterParam.h"
-#include "dolphin/types.h"
+#include "JSystem/JSupport/JSupport.h"
 
 /* 8027E2C0-8027E310       .text __ct__Q28JASystem14TRegisterParamFv */
 JASystem::TRegisterParam::TRegisterParam() {
@@ -74,10 +74,10 @@ void JASystem::TRegisterParam::inherit(const JASystem::TRegisterParam& param_1) 
 
 /* 8027E3E0-8027E3EC       .text getBankNumber__Q28JASystem14TRegisterParamCFv */
 u8 JASystem::TRegisterParam::getBankNumber() const {
-    return field_0xc >> 8 & 0xff;
+    return JSUHiByte(field_0xc);
 }
 
 /* 8027E3EC-8027E3F8       .text getProgramNumber__Q28JASystem14TRegisterParamCFv */
 u8 JASystem::TRegisterParam::getProgramNumber() const {
-    return field_0xc & 0xff;
+    return JSULoByte(field_0xc);
 }

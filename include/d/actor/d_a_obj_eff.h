@@ -5,30 +5,42 @@
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_particle.h"
-#include "d/d_procname.h"
 
 namespace daObjEff {
     class Act_c : public fopAc_ac_c {
     public:
-        typedef BOOL (Act_c::*Proc)();
-        typedef void (Act_c::*voidProc)();
-        typedef bool (Act_c::*HeapProc)();
+        typedef bool (Act_c::*CreateHeapProc)();
+        typedef BOOL (Act_c::*SetProc)();
+        typedef void (Act_c::*RemoveProc)();
+        typedef void (Act_c::*DieProc)();
 
         enum Prm_e {
             PRM_TYPE_W = 8,
             PRM_TYPE_S = 0,
         };
 
-        static void make_barrel_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 0, pos); }
-        static void make_land_smoke(cXyz*, float) {}
-        static void make_pinecone_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 4, pos); }
-        static void make_skull_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 2, pos); }
-        static void make_stool_smoke(cXyz* pos) { fopAcM_create(PROC_Obj_Eff, 1, pos); }
-        static void make_woodBox_smoke(cXyz*) {}
-        int prm_get_type() const {
-            return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S);
+        enum Type_e {
+            Type_BARREL_SMOKE_e = 0,
+            Type_STOOL_SMOKE_e = 1,
+            Type_SKULL_SMOKE_e = 2,
+            Type_LAND_SMOKE_e = 3,
+            Type_PINECONE_SMOKE_e = 4,
+            Type_WOODBOX_SMOKE_e = 5,
+        };
+
+        int prm_get_type() const { return daObj::PrmAbstract(this, PRM_TYPE_W, PRM_TYPE_S); }
+
+        static void make_barrel_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_BARREL_SMOKE_e, pos); }
+        static void make_stool_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_STOOL_SMOKE_e, pos); }
+        static void make_skull_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_SKULL_SMOKE_e, pos); }
+        static void make_land_smoke(cXyz* i_pos, f32 i_scale) {
+            cXyz scale(i_scale, i_scale, i_scale);
+            scale *= (5.0f / 3.0f);
+            fopAcM_create(fpcNm_Obj_Eff_e, Type_LAND_SMOKE_e, i_pos, -1, NULL, &scale);
         }
-    
+        static void make_pinecone_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_PINECONE_SMOKE_e, pos); }
+        static void make_woodBox_smoke(cXyz* pos) { fopAcM_create(fpcNm_Obj_Eff_e, Type_WOODBOX_SMOKE_e, pos); }
+
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap_barrel_smoke();
         bool create_heap_stool_smoke();
@@ -63,7 +75,7 @@ namespace daObjEff {
         bool _execute();
     
     public:
-        /* 0x290 */ int mProcIndex;
+        /* 0x290 */ int mType;
         /* 0x294 */ dPa_followEcallBack* mParticleCallback;
     };
 

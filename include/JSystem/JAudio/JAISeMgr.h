@@ -1,28 +1,33 @@
 #ifndef JAISEMGR_H
 #define JAISEMGR_H
 
-#include "JSystem/JAudio/JAISound.h"
+#include "JSystem/JAudio/JAISoundParams.h"
 
 namespace JAInter {
+    class Actor;
     class SeqUpdateData;
 
     class SeParameter {
     public:
         SeParameter();
 
-        u16 field_0x0[18];
-        MoveParaSet field_0x24[16];
-        MoveParaSet field_0x124[8];
-        MoveParaSetInitHalf field_0x1a4[8];
-        MoveParaSet field_0x224[8];
-        MoveParaSetInitZero field_0x2a4[8];
-        MoveParaSetInitZero field_0x324[8];
-        MoveParaSet field_0x3a4[8];
-        f32* field_0x424;
-        f32 field_0x428;
-        u8 field_0x42c[0x43c - 0x42c];
-        SeParameter* field_0x43c;
-        SeParameter* field_0x440;
+        /* 0x000 */ u16 field_0x0[16];
+        /* 0x020 */ u16 field_0x20;
+        /* 0x024 */ MoveParaSet field_0x24[16];
+        /* 0x124 */ MoveParaSet mVolumes[8];
+        /* 0x1A4 */ MoveParaSetInitHalf mPans[8];
+        /* 0x224 */ MoveParaSet mPitches[8];
+        /* 0x2A4 */ MoveParaSetInitZero mFxmixes[8];
+        /* 0x324 */ MoveParaSetInitZero field_0x324[8];
+        /* 0x3A4 */ MoveParaSet mDolbys[8];
+        /* 0x424 */ f32* field_0x424;
+        /* 0x428 */ f32* field_0x428;
+        /* 0x42C */ f32* field_0x42c;
+        /* 0x430 */ f32* field_0x430;
+        /* 0x434 */ u32 field_0x434;
+        /* 0x438 */ f32* field_0x438;
+        /* 0x43C */ SeParameter* field_0x43c;
+        /* 0x440 */ SeParameter* field_0x440;
     };
 
     namespace SeMgr {
@@ -45,24 +50,33 @@ namespace JAInter {
         void releaseSeBuffer(JAISound* param_1, u32 param_2);
 
         struct seTrackUpdate_s {
-            u8 field_0x0;
-            f32 field_0x4;
-            f32 field_0x8;
-            f32 field_0xc;
-            f32 field_0x10;
-            f32 field_0x14;
+            void init() {
+                mPlayingVolume = 1.0f;
+                mPlayingPitch = 1.0f;
+                mPlayingFxmix = 0.0f;
+                mPlayingPan = 0.5f;
+                field_0x0 = 0xff;
+                mPlayingDolby = 0.0f;
+            }
+
+            /* 0x00 */ u8 field_0x0;
+            /* 0x04 */ f32 mPlayingVolume;
+            /* 0x08 */ f32 mPlayingPitch;
+            /* 0x0C */ f32 mPlayingFxmix;
+            /* 0x10 */ f32 mPlayingPan;
+            /* 0x14 */ f32 mPlayingDolby;
         };
 
         extern seTrackUpdate_s* seTrackUpdate;
         extern u8** categoryInfoTable;
-        extern u32** sePlaySound;
+        extern JAISound*** sePlaySound;
         extern SeParameter* seParameterFreeStartPointer;
         extern SeParameter* seParameterUsedEndPointer;
         extern LinkSound* seRegist;
         extern JAISound** seRegistBuffer;
         extern JAISound* seHandle;
         extern u8 seScene;
-        extern int seqMuteFlagFromSe;
+        extern u32 seqMuteFlagFromSe;
         extern f32* seCategoryVolume;
         extern u8* seEntryCancel;
     }

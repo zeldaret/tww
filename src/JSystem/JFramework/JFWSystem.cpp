@@ -32,7 +32,7 @@ s32 JFWSystem::CSetUpParam::streamPriority = 8;
 s32 JFWSystem::CSetUpParam::decompPriority = 7;
 s32 JFWSystem::CSetUpParam::aPiecePriority = 6;
 ResFONT* JFWSystem::CSetUpParam::systemFontRes = (ResFONT*)JUTResFONT_Ascfont_fix12;
-GXRenderModeObj* JFWSystem::CSetUpParam::renderMode = &GXNtsc480IntDf;
+const GXRenderModeObj* JFWSystem::CSetUpParam::renderMode = &GXNtsc480IntDf;
 u32 JFWSystem::CSetUpParam::exConsoleBufferSize = 0x24F8;
 
 JKRExpHeap* JFWSystem::rootHeap = NULL;
@@ -88,7 +88,7 @@ void JFWSystem::init() {
     systemConsoleManager = JUTConsoleManager::createManager(0);
     systemConsole = JUTConsole::create(0x3C, 200, 0);
     systemConsole->setFont(systemFont);
-    if(CSetUpParam::renderMode->efb_height < 300) {
+    if(CSetUpParam::renderMode->efbHeight < 300) {
         systemConsole->setFontSize(systemFont->getWidth() * 0.85f, systemFont->getHeight() * 0.5f);
         systemConsole->setPosition(20, 25);
     }

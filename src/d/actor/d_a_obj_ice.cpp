@@ -8,9 +8,7 @@
 #include "d/d_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
-#include "d/res/res_ikori.h"
+#include "res/Object/Ikori.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -21,7 +19,7 @@ public:
     daObjIce_HIO_c();
     virtual ~daObjIce_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -141,7 +139,7 @@ BOOL daObjIce_c::solidHeapCB(fopAc_ac_c* a_this) {
 /* 000001EC-000002E4       .text create_heap__10daObjIce_cFv */
 bool daObjIce_c::create_heap() {
     bool uVar5 = true;
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, IKORI_BDL_VICE);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_IKORI_BDL_VICE_e);
 
     if (modelData == NULL) {
         JUT_ASSERT(DEMO_SELECT(392, 395), FALSE);
@@ -149,7 +147,7 @@ bool daObjIce_c::create_heap() {
     } else {
         mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
 
-        cBgD_t* pcVar3 = (cBgD_t*)dComIfG_getObjectRes(l_arcname, IKORI_DZB_VICE);
+        cBgD_t* pcVar3 = (cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_IKORI_DZB_VICE_e);
         mBgw = dBgW_NewSet(pcVar3, cBgW::MOVE_BG_e, &m40C);
 
         if (mModel == NULL || mBgw == NULL) {
@@ -202,7 +200,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc_ac
                     if (i_this->m44C < 0.0f) {
                         i_this->m44C = 0.0f;
                     }
-                    i_this->m450 = 1.0f - cM_scos(i_this->m44C * 16384.0f);
+                    i_this->m450 = 1.0f - cM_scos(i_this->m44C * 0x4000);
                     if (i_this->m44C < 0.1f) {
                         i_this->m45C = 1;
                     }
@@ -228,7 +226,7 @@ void daObjIce_c::tg_hitCallback(fopAc_ac_c* a_this, dCcD_GObjInf* arg1, fopAc_ac
 /* 000005F4-000008C0       .text _create__10daObjIce_cFv */
 cPhs_State daObjIce_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
-    fopAcM_SetupActor(this, daObjIce_c);
+    fopAcM_ct(this, daObjIce_c);
 
     if (fopAcM_IsFirstCreating(this)) {
         m448 = chk_appear();
@@ -379,7 +377,7 @@ void daObjIce_c::fade_out_retire_act_proc() {
         m454 = 0.0f;
     }
 
-    f32 tmp3 = 1.0f - cM_scos(tmp2 * 16384.0f);
+    f32 tmp3 = 1.0f - cM_scos(tmp2 * 0x4000);
 
     m44C = tmp2;
     m450 = tmp3;
@@ -424,7 +422,7 @@ bool daObjIce_c::_execute() {
 }
 
 /* 00000EB8-00000F48       .text set_material_sub__FP11J3DMaterialUc */
-void set_material_sub(J3DMaterial* material, unsigned char alpha) {
+static void set_material_sub(J3DMaterial* material, unsigned char alpha) {
     while (material != NULL) {
         if (alpha == 0) {
             material->getShape()->hide();
@@ -437,7 +435,7 @@ void set_material_sub(J3DMaterial* material, unsigned char alpha) {
 }
 
 /* 00000F48-00000FB0       .text set_material__FP8J3DModelUc */
-void set_material(J3DModel* model, unsigned char alpha) {
+static void set_material(J3DModel* model, unsigned char alpha) {
     J3DModelData* modelData = model->getModelData();
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         set_material_sub(modelData->getJointNodePointer(i)->getMesh(), alpha);
@@ -480,7 +478,7 @@ void daObjIce_c::setEffectMtx() {
 #endif
     camera_class* camera = dCam_getCamera();
 
-    sp2C = *eye - camera->mLookat.mEye;
+    sp2C = *eye - camera->view.mLookat.mEye;
     dKyr_get_vectle_calc(&tevStr.mLightPosWorld, eye, &sp20);
     C_VECHalfAngle(&sp2C, &sp20, &sp14);
     C_MTXLookAt(sp98, &cXyz::Zero, &cXyz::BaseY, &sp14);
@@ -564,18 +562,18 @@ static actor_method_class l_daObjIce_Method = {
 };
 
 actor_process_profile_definition g_profile_Obj_Ice = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ice,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ice_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjIce_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ice,
+    /* Draw Prio    */ fpcDwPi_Obj_Ice_e,
     /* Actor SubMtd */ &l_daObjIce_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

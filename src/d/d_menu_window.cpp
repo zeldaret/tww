@@ -13,58 +13,29 @@
 #include "d/d_menu_collect.h"
 #include "d/d_menu_dmap.h"
 #include "d/d_menu_fmap.h"
-#include "d/d_menu_fmap_sv.h"
+#include "d/d_menu_fmapSv.h"
 #include "d/d_menu_item.h"
 #include "d/d_menu_save.h"
 #include "d/d_meter.h"
 #include "d/d_name.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_player_main.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_controller_pad.h"
 
 #include "d/d_menu_capture.inc"
 
-// TODO: Remove me when all the JUT asserts and other strings are filled out.
-// This is temporary, just to make the strings match.
+// A bunch of unused strings, might match the unused data from d_meter.cpp (header include?)
 static void dummy0() {
-    OSReport("cmap_tri.bti");
-    OSReport("cmap_treasure.bti");
-    OSReport("cmap_tingle.bti");
-    OSReport("cmap_phantomship.bti");
-    OSReport("cmap_hint.bti");
-    OSReport("f_item_tri.bti");
-    OSReport("f_get_rupy.bti");
-    OSReport("f_heart_up_02.bti");
-    OSReport("f_korog_kare.bti");
-    OSReport("f_korog_saki.bti");
-    OSReport("d_menu_window.cpp");
-    OSReport("i_Ms->name[i] != 0");
-    OSReport("Halt");
-    OSReport("");
-    OSReport("i_Ms->note[i] != 0");
-    OSReport("i_Ms->dummy[i] != 0");
-    OSReport("i_Ms->buffer_p[i] != 0");
-#if VERSION == VERSION_PAL
-    OSReport("i_Ms->title_p != 0");
-#endif
-    OSReport("dMi_c != 0");
-    OSReport("dMc_c != 0");
-    OSReport("dMf_c != 0");
-    OSReport("dMs_capture_c != 0");
-    OSReport("dMd_c != 0");
-    OSReport("dNm_c != 0");
-    OSReport("dMs_c != 0");
-    OSReport("cloth_c != 0");
-    OSReport("dMs_cloth_c != 0");
-    OSReport("i_Ms->childHeap != 0");
-    OSReport("awake");
-    OSReport("majyuu_shinnyuu");
-    OSReport("アイテムビット");
-    OSReport("ダンジョンビット");
-    OSReport("fonttype != 0");
-    OSReport("rfonttype != 0");
+    DEAD_STRING("cmap_tri.bti");
+    DEAD_STRING("cmap_treasure.bti");
+    DEAD_STRING("cmap_tingle.bti");
+    DEAD_STRING("cmap_phantomship.bti");
+    DEAD_STRING("cmap_hint.bti");
+    DEAD_STRING("f_item_tri.bti");
+    DEAD_STRING("f_get_rupy.bti");
+    DEAD_STRING("f_heart_up_02.bti");
+    DEAD_STRING("f_korog_kare.bti");
+    DEAD_STRING("f_korog_saki.bti");
 }
 
 dMenu_FmapSv_c dMv_CIO_c;
@@ -531,7 +502,7 @@ void dMs_dmap_create(sub_ms_screen_class* i_Ms) {
     JUT_ASSERT(2480, dMd_c != NULL);
 
     for (int i = 0; i < 3; i++) {
-        dMd_c->arr_0x1AFC[i] = i_Ms->buffer_p[i];
+        dMd_c->mpTIMG[i] = (ResTIMG*)i_Ms->buffer_p[i];
     }
 
     dMd_c->setArchive(i_Ms->arc);
@@ -606,6 +577,11 @@ void dMs_name_delete(sub_ms_screen_class*) {
         delete dMs_capture_c;
         dMs_capture_c = NULL;
     }
+}
+
+// Another unused string, probably a stripped void dMs_save_create(sub_ms_screen_class*)?
+static void dummy1() {
+    DEAD_STRING("dMs_c != 0");
 }
 
 /* 801DCE20-801DCEA0       .text dMs_save_delete__FP19sub_ms_screen_class */
@@ -708,7 +684,7 @@ BOOL dMs_isButtonBit(sub_ms_screen_class* i_Ms, u8 bit) {
 
 /* 801DD340-801DD3A4       .text dMs_isPush_L_Button__FP19sub_ms_screen_class */
 BOOL dMs_isPush_L_Button(sub_ms_screen_class* i_Ms) {
-    if (g_mDoCPd_cpadInfo[0].mHoldLockL != 0 && !dMs_isButtonBit(i_Ms, 1)) {
+    if (mDoCPd_L_LOCK_BUTTON(0) && !dMs_isButtonBit(i_Ms, 1)) {
         dMs_onButtonBit(i_Ms, 1);
         return TRUE;
     } else {
@@ -718,7 +694,7 @@ BOOL dMs_isPush_L_Button(sub_ms_screen_class* i_Ms) {
 
 /* 801DD3A4-801DD408       .text dMs_isPush_R_Button__FP19sub_ms_screen_class */
 BOOL dMs_isPush_R_Button(sub_ms_screen_class* i_Ms) {
-    if (g_mDoCPd_cpadInfo[0].mHoldLockR != 0 && !dMs_isButtonBit(i_Ms, 2)) {
+    if (mDoCPd_R_LOCK_BUTTON(0) && !dMs_isButtonBit(i_Ms, 2)) {
         dMs_onButtonBit(i_Ms, 2);
         return TRUE;
     } else {
@@ -737,19 +713,15 @@ void dMs_childHeap_freeAll(sub_ms_screen_class* i_Ms) {
 void dMs_telescopeMove(sub_ms_screen_class* i_Ms) {
     if (dComIfGp_isHeapLockFlag() == 0) {
         dComIfGp_event_photoCheck();
-        if (dComIfGp_checkCameraAttentionStatus(0, 8)) {
+        if (dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_TELESCOPE_LOOK_e)) {
             i_Ms->field_0x1B0 = 99;
-        } else {
-            if (dComIfGp_checkCameraAttentionStatus(0, 0x40)) {
-                i_Ms->field_0x1B0 = 89;
-            } else {
-                if (dComIfGp_getScopeType() == 2) {
-                    i_Ms->field_0x1B0 = 98;
-                } else if (dComIfGp_getPictureStatus() == 2 || dComIfGp_getPictureStatus() == 3) {
-                    i_Ms->field_0x1B0 = 89;
-                    dMenu_flagSet(1);
-                }
-            }
+        } else if (dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e)) {
+            i_Ms->field_0x1B0 = 89;
+        } else if (dComIfGp_getScopeType() == 2) {
+            i_Ms->field_0x1B0 = 98;
+        } else if (dComIfGp_getPictureStatus() == 2 || dComIfGp_getPictureStatus() == 3) {
+            i_Ms->field_0x1B0 = 89;
+            dMenu_flagSet(1);
         }
 
         if (i_Ms->field_0x1B0 == 99 || i_Ms->field_0x1B0 == 89 || i_Ms->field_0x1B0 == 98) {
@@ -936,13 +908,13 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 
             } else if (dMenu_flag() == 0 && !fopOvlpM_IsDoingReq() && !(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_Z(0))) {
 
-                if (event_wait_frame == 0 || daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0) ||
-                    dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
-                        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908))
+                if (event_wait_frame == 0 || (daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0)) ||
+                    (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)))
                 {
 
                     if (dComIfGp_getMesgStatus() == 0 && dComIfGp_getScopeMesgStatus() == 0) {
-                        if (!dComIfGp_checkCameraAttentionStatus(0, 8) && !dComIfGp_checkCameraAttentionStatus(0, 0x40) &&
+                        if (!dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_TELESCOPE_LOOK_e) && !dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e) &&
                             !dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e))
                         {
 
@@ -1545,25 +1517,25 @@ static cPhs_State dMs_Create(msg_class* i_this) {
 
     dMenu_setMenuStatus(MENU_STATUS_ITEM);
 
-    dMv_CIO_c.field_0x0 = 0;
-    dMv_CIO_c.field_0x1 = 0;
-    dMv_CIO_c.field_0x2 = -10;
-    dMv_CIO_c.field_0x3 = -10;
-    dMv_CIO_c.field_0x4 = -10;
-    dMv_CIO_c.field_0x5 = -10;
-    dMv_CIO_c.field_0x6 = -10;
-    dMv_CIO_c.field_0x7 = -10;
-    dMv_CIO_c.field_0x8 = 0;
-    dMv_CIO_c.field_0x9 = -1;
-    dMv_CIO_c.field_0xA = -10;
-    dMv_CIO_c.field_0xB = -10;
+    dMv_CIO_c.setDispMode(0);
+    dMv_CIO_c.setFmapZoom(0);
+    dMv_CIO_c.setZoomGridX(-10);
+    dMv_CIO_c.setZoomGridY(-10);
+    dMv_CIO_c.setCurX(-10);
+    dMv_CIO_c.setCurY(-10);
+    dMv_CIO_c.setCurWX(-10);
+    dMv_CIO_c.setCurWY(-10);
+    dMv_CIO_c.setActive(0);
+    dMv_CIO_c.setCmapSelNo(-1);
+    dMv_CIO_c.setCurHX(-10);
+    dMv_CIO_c.setCurHY(-10);
 
     fopMsgM_setStageLayer(i_Ms);
 
     return cPhs_COMPLEATE_e;
 }
 
-msg_method_class l_dMs_Method = {
+static msg_method_class l_dMs_Method = {
     /* Create   */ (process_method_func)dMs_Create,
     /* Delete   */ (process_method_func)dMs_Delete,
     /* Execute  */ (process_method_func)dMs_Execute,
@@ -1572,15 +1544,15 @@ msg_method_class l_dMs_Method = {
 };
 
 msg_process_profile_definition g_profile_MENUWINDOW = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x000C,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_MENUWINDOW,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x000C,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_MENUWINDOW_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_ms_screen_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_MENUWINDOW,
+    /* Draw Prio    */ fpcDwPi_MENUWINDOW_e,
     /* Msg SubMtd   */ &l_dMs_Method,
 };

@@ -14,8 +14,8 @@
 
 /* 80284844-80284888       .text __ct__Q28JASystem10TBasicInstFv */
 JASystem::TBasicInst::TBasicInst() {
-    field_0x4 = 1.0f;
-    field_0x8 = 1.0f;
+    mVolume = 1.0f;
+    mPitch = 1.0f;
     mEffect = NULL;
     mEffectCount = 0;
     mOsc = NULL;
@@ -37,15 +37,15 @@ bool JASystem::TBasicInst::getParam(int key, int velo, TInstParam* param) const 
     param->field_0x38 = 0;
     param->mOscData = mOsc;
     param->mOscCount = mOscCount;
-    param->field_0x10 *= field_0x4;
-    param->field_0x14 *= field_0x8;
+    param->field_0x10 *= mVolume;
+    param->field_0x14 *= mPitch;
     for (int i = 0; i < mEffectCount; i++) {
         TInstEffect* effect = mEffect[i];
         if (!effect) {
             continue;
         }
         f32 y = effect->getY(key, velo);
-        switch (effect->mTarget) {
+        switch (effect->getTarget()) {
         case 0:
             param->field_0x18 *= y;
             break;
@@ -76,7 +76,7 @@ bool JASystem::TBasicInst::getParam(int key, int velo, TInstParam* param) const 
     if (!keymap) {
         return false;
     }
-    for (int i = 0; i < keymap->mVeloRegionCount; i++) {
+    for (int i = 0; i < keymap->getVeloRegionCount(); i++) {
         const JASystem::TBasicInst::TVeloRegion * region = keymap->getVeloRegion(i);
         if (velo <= region->mBaseVel) {
             param->field_0x10 *= region->field_0x08;

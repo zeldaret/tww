@@ -2,6 +2,8 @@
 #define D_A_OBJ_APZL_H
 
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
+#include "f_op/f_op_msg.h"
 #include "d/d_lib.h"
 
 class daObjApzl_c : public fopAc_ac_c {

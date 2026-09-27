@@ -61,26 +61,43 @@ void JASystem::TBasicWaveBank::setWaveTableSize(u32 param_1) {
 }
 
 /* 80285CB0-80285D54       .text incWaveTable__Q28JASystem14TBasicWaveBankFPCQ38JASystem14TBasicWaveBank10TWaveGroup */
-void JASystem::TBasicWaveBank::incWaveTable(const TWaveGroup* param_1) {
-    /* Nonmatching */
+void JASystem::TBasicWaveBank::incWaveTable(const TWaveGroup* waveGroup) {
     OSLockMutex(&mMutex);
-    for (int i = 0; i < param_1->mWaveCount; i++) {
-        u32 waveID = param_1->getWaveID(i);
-        TWaveInfo** table = mWaveTable;
-        TWaveInfo* waveInfo = &param_1->mCtrlWaveArray[i];
+    for (int i = 0; i < waveGroup->getWaveCount(); i++) {
+        TWaveInfo** waveTable = &mWaveTable[waveGroup->getWaveID(i)];
+        TWaveInfo* waveInfo = &waveGroup->mCtrlWaveArray[i];
         waveInfo->mNext = NULL;
-        waveInfo->mPrev = table[waveID];
-        if (table[waveID]) {
-            table[waveID]->mNext = waveInfo;
+        waveInfo->mPrev = *waveTable;
+        if (*waveTable) {
+            (*waveTable)->mNext = waveInfo;
         }
-        table[waveID] = waveInfo;
+        *waveTable = waveInfo;
     }
     OSUnlockMutex(&mMutex);
 }
 
 /* 80285D54-80285E28       .text decWaveTable__Q28JASystem14TBasicWaveBankFPCQ38JASystem14TBasicWaveBank10TWaveGroup */
-void JASystem::TBasicWaveBank::decWaveTable(const TWaveGroup*) {
-    /* Nonmatching */
+void JASystem::TBasicWaveBank::decWaveTable(const TWaveGroup* waveGroup) {
+    OSLockMutex(&mMutex);
+    for (int i = 0; i < waveGroup->getWaveCount(); i++) {
+        TWaveInfo** waveTable = &mWaveTable[waveGroup->getWaveID(i)];
+        TWaveInfo* waveInfo = &waveGroup->mCtrlWaveArray[i];
+        for (TWaveInfo* it = *waveTable; it; it = it->mPrev) {
+            if (it != waveInfo) {
+                continue;
+            }
+            if (!it->mNext) {
+                *waveTable = it->mPrev;
+            } else {
+                it->mNext->mPrev = it->mPrev;
+            }
+            if (it->mPrev) {
+                it->mPrev->mNext = it->mNext;
+            }
+            break;
+        }
+    }
+    OSUnlockMutex(&mMutex);
 }
 
 /* 80285E28-80285E58       .text getWaveHandle__Q28JASystem14TBasicWaveBankCFUl */

@@ -6,9 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_fm.h"
 #include "d/actor/d_a_player_main.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
+#include "d/d_cc_uty.h"
 #include "d/d_lib.h"
 #include "d/d_jnt_hit.h"
 #include "d/d_snap.h"
@@ -19,7 +18,7 @@
 #include "d/actor/d_a_npc_md.h"
 #include "d/d_s_play.h"
 #include "d/d_a_obj.h"
-#include "d/res/res_fm.h"
+#include "res/Object/fm.h"
 #include "d/actor/d_a_player_main_data.h"
 
 
@@ -91,7 +90,7 @@ public:
     daFm_HIO_c();
     virtual ~daFm_HIO_c() {};
     
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x004 */ s8 field_0x004;
@@ -307,10 +306,9 @@ static BOOL nodeControl_CB(J3DNode* node, int arg1) {
 void daFm_c::_nodeControl(J3DNode* node, J3DModel* model) {
     J3DJoint* joint = static_cast<J3DJoint*>(node);
     int jntNo = joint->getJntNo();
-              
+
     cXyz temp;
     cXyz temp2;
-    cXyz temp3;
     Mtx mtx;
     MTXCopy(model->getAnmMtx(jntNo), mtx);
 
@@ -319,12 +317,12 @@ void daFm_c::_nodeControl(J3DNode* node, J3DModel* model) {
     mtx[1][3] = 0.0f;
     mtx[0][3] = 0.0f;
     mDoMtx_stack_c::transS(temp);
-    if (jntNo < 6 && jntNo >= field_0x390 && l_HIO.field_0x00F[jntNo] == true) {
+    if (jntNo < FM_JNT_CYUBIA_e && jntNo >= field_0x390 && l_HIO.field_0x00F[jntNo] == true) {
         mDoMtx_stack_c::quatM(&field_0x330[jntNo]);
     }
     mDoMtx_stack_c::concat(mtx);
 
-    if (jntNo == 5) {
+    if (jntNo == FM_JNT_TE_e) {
         if(cLib_calcTimer(&field_0x64C) != 0) {
             field_0x68A += REG12_S(2) + 0x1830;
             cLib_addCalcAngleS2(&field_0x68C, 0, 10, 0x1C8);
@@ -340,7 +338,7 @@ void daFm_c::_nodeControl(J3DNode* node, J3DModel* model) {
         temp2 = l_HIO.field_0x104;
         mDoMtx_stack_c::multVec(&temp2, &field_0x63C);
     }
-    if (jntNo < 6) {
+    if (jntNo < FM_JNT_CYUBIA_e) {
         mDoMtx_stack_c::multVecZero(&field_0x2E8[jntNo]);
     }
     
@@ -367,8 +365,7 @@ BOOL daFm_c::_createHeap() {
 
 /* 00000718-0000086C       .text holeCreateHeap__6daFm_cFv */
 bool daFm_c::holeCreateHeap() {
-
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, FM_BDL_YPIT00));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BDL_YPIT00_e));
     JUT_ASSERT(0x2C7, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x19001222);
@@ -376,7 +373,7 @@ bool daFm_c::holeCreateHeap() {
         return false;
     }
 
-    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, FM_BTK_YPIT00));
+    J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BTK_YPIT00_e));
     JUT_ASSERT(0x2D0, btk != NULL);
 
     if(!mBtkAnm.init(modelData, btk, TRUE, J3DFrameCtrl::EMode_LOOP)) {
@@ -388,7 +385,7 @@ bool daFm_c::holeCreateHeap() {
 
 /* 0000086C-000009CC       .text bodyCreateHeap__6daFm_cFv */
 bool daFm_c::bodyCreateHeap() {
-    J3DModelData* fmModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, FM_BDL_FM));
+    J3DModelData* fmModelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BDL_FM_e));
     JUT_ASSERT(0x2DD, fmModelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
@@ -399,7 +396,7 @@ bool daFm_c::bodyCreateHeap() {
         NULL,
         J3DFrameCtrl::EMode_NULL, 
 #else
-        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, FM_BCK_MODORU)),
+        static_cast<J3DAnmTransformKey*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_FM_BCK_MODORU_e)),
         J3DFrameCtrl::EMode_LOOP, 
 #endif
 
@@ -416,7 +413,7 @@ bool daFm_c::bodyCreateHeap() {
     if (mInvisibleModel.create(mpMorf->getModel()) == 0) {
         return false;
     }
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     return true;
 }
 
@@ -430,99 +427,98 @@ bool daFm_c::jntHitCreateHeap() {
     static __jnt_hit_data_c search_data[] = {
         {
             /* mShapeType  */ JntHitType_CYL2_e,
-            /* mJointIndex */ 0x05,
+            /* mJointIndex */ FM_JNT_TE_e,
             /* mRadius     */ 22.0f,
             /* mpOffsets   */ te_cyl2_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x01,
+            /* mJointIndex */ FM_JNT_UDEA_e,
             /* mRadius     */ 8.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x02,
+            /* mJointIndex */ FM_JNT_UDEB_e,
             /* mRadius     */ 8.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x03,
+            /* mJointIndex */ FM_JNT_UDEC_e,
             /* mRadius     */ 8.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x04,
+            /* mJointIndex */ FM_JNT_UDED_e,
             /* mRadius     */ 8.0f,
             /* mpOffsets   */ ude_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x06,
+            /* mJointIndex */ FM_JNT_CYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x07,
+            /* mJointIndex */ FM_JNT_CYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x08,
+            /* mJointIndex */ FM_JNT_HYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x09,
+            /* mJointIndex */ FM_JNT_HYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0A,
+            /* mJointIndex */ FM_JNT_KYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0B,
+            /* mJointIndex */ FM_JNT_KYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0C,
+            /* mJointIndex */ FM_JNT_NYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0D,
+            /* mJointIndex */ FM_JNT_NYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0E,
+            /* mJointIndex */ FM_JNT_OYUBIA_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
         {
             /* mShapeType  */ JntHitType_CYL_e,
-            /* mJointIndex */ 0x0F,
+            /* mJointIndex */ FM_JNT_OYUBIB_e,
             /* mRadius     */ 4.0f,
             /* mpOffsets   */ yubi_cyl_offset,
         },
-        
     };
     mpJntHit = JntHit_create(mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
     if (mpJntHit) {
-        jntHit = mpJntHit;
+        fopAcM_SetJntHit(this, mpJntHit);
     } else {
         return false;
     }
@@ -530,7 +526,7 @@ bool daFm_c::jntHitCreateHeap() {
 }
 
 /* 00000A30-00000A6C       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-BOOL pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
+static BOOL pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
     return ((daFm_c*)i_this)->_pathMove(param_1, param_2, param_3   );
 }
 
@@ -555,7 +551,7 @@ BOOL daFm_c::_pathMove(cXyz* param_1, cXyz* param_2, cXyz* param_3) {
 }
 
 /* 00000D40-00000D6C       .text searchNearOtherActor_CB__FPvPv */
-void* searchNearOtherActor_CB(void* param_1, void* param_2) {
+static void* searchNearOtherActor_CB(void* param_1, void* param_2) {
     return ((daFm_c*)param_2)->searchNearOtherActor((fopAc_ac_c*)param_1);
 }
 
@@ -564,37 +560,36 @@ fopAc_ac_c* daFm_c::searchNearOtherActor(fopAc_ac_c* i_actor) {
     if(dComIfGp_event_runCheck()) {
         return NULL;
     }
-    if(fopAc_IsActor(i_actor)) {
+    if(fopAcM_IsActor(i_actor)) {
         if(!checkHeight(i_actor)) {
             return NULL;
         }
         f32 dist = fopAcM_searchActorDistanceXZ(this, i_actor);
 
         if(dist < l_HIO.field_0x0E4) {
-            if(fopAcM_GetName(i_actor) == PROC_BOMB) {
+            if(fopAcM_GetName(i_actor) == fpcNm_BOMB_e) {
                 mpActorTarget = i_actor;
                 if(!((daBomb_c*)mpActorTarget)->chk_state(daBomb_c::STATE_0)) {
                     return i_actor;
                 }
-            } else if(fopAcM_GetName(i_actor) == PROC_TSUBO) {
+            } else if(fopAcM_GetName(i_actor) == fpcNm_TSUBO_e) {
                 daPy_lk_c* pLink = daPy_getPlayerLinkActorClass();
 
-                f32 dist2 = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
-                f32 dist3 = fopAcM_searchActorDistanceXZ(i_actor, dComIfGp_getPlayer(0));
+                f32 dist2 = fopAcM_searchPlayerDistanceXZ(this);
+                f32 dist3 = fopAcM_searchPlayerDistanceXZ(i_actor);
 
                 if(dist2 < l_HIO.field_0x0E8) {
                     if(dist3 > REG12_F(0) + 80.0f || fopAcM_GetID(i_actor) == pLink->getGrabActorID()) {
-                            switch(((daTsubo::Act_c*)i_actor)->prm_get_type()) {
-                                case 0:
-                                case 1:
-                                case 2:
-                                case 4:
-                                case 5:
-                                case 6:
-                                    mpActorTarget = i_actor;
-                                    return i_actor;
-                            }
-
+                        switch(((daTsubo::Act_c*)i_actor)->prm_get_type()) {
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 4:
+                            case 5:
+                            case 6:
+                                mpActorTarget = i_actor;
+                                return i_actor;
+                        }
                     }
                 }
             }
@@ -611,7 +606,7 @@ static void* searchNearFm_CB(void* param_1, void* param_2) {
 /* 00000F44-00001150       .text searchNearFm__6daFm_cFP10fopAc_ac_c */
 void* daFm_c::searchNearFm(fopAc_ac_c* i_actor) {
     f32 dist;
-    if(fopAc_IsActor(i_actor) && fopAc_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_FM) { // redundant isactor check?
+    if(fopAcM_IsActor(i_actor) && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_FM_e) { // redundant isactor check?
         f32 abs = (field_0x3E4 - current.pos).absXZ();
         dist = fopAcM_searchActorDistanceXZ(this, i_actor);
         if(dist != 0.0f) {
@@ -638,9 +633,9 @@ void daFm_c::moveRndBack() {
         if(!isGrabFoot()) {
             if(cLib_calcTimer(&field_0x648) == 0 || field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
                 if(field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
-                    field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 4096.0f);
+                    field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 0x1000);
                 } else {
-                    field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 4096.0f;
+                    field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 0x1000;
                 }
                 field_0x394 = cM_rndF(9.0f) + 1.0f;
                 field_0x660.z += l_HIO.field_0x0AC * cM_scos(field_0x680);
@@ -648,9 +643,8 @@ void daFm_c::moveRndBack() {
                 field_0x648 = l_HIO.field_0x0A0;
             }
         }
-
-        
     }
+
     if(field_0xAE4 != 0 && !mObjAcch.ChkWallHit()) {
         cLib_addCalcPosXZ2(&current.pos, field_0x660, 0.1f, l_HIO.field_0x0B0);
     }
@@ -658,16 +652,16 @@ void daFm_c::moveRndBack() {
 
 /* 00001384-000015F8       .text moveRndEscape__6daFm_cFv */
 void daFm_c::moveRndEscape() {
-    f32 dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 dist = fopAcM_searchPlayerDistanceXZ(this);
 
     if(cLib_calcTimer(&field_0x648) == 0 || field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
         if(dist < l_HIO.field_0x0B4) {
             if(field_0xAE4 == 0 || mObjAcch.ChkWallHit()) {
-                field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 4096.0f);
+                field_0x680 += (s16)(0x5000 + field_0x680 + cM_rndF(3.0f) * 0x1000);
             } else {
-                field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 4096.0f;
+                field_0x680 = shape_angle.y + 0x3000 + cM_rndF(5.0f) * 0x1000;
             }
-            field_0x660.set(field_0x690);
+            field_0x660 = field_0x690;
             field_0x660.z += l_HIO.field_0x0B8 * cM_scos(field_0x680);
             field_0x660.x += l_HIO.field_0x0B8 * cM_ssin(field_0x680);
             field_0x648 = l_HIO.field_0x0A0;
@@ -680,7 +674,7 @@ void daFm_c::moveRndEscape() {
 
     if(mAnmPrmIdx != 0xc && field_0xAE4 != 0 && !mObjAcch.ChkWallHit()) {
         cLib_addCalcPosXZ2(&current.pos, field_0x660, (l_HIO.field_0x0CC + 1.0f) *0.005f * field_0x394, l_HIO.field_0x0B0);
-        field_0x690.set(current.pos);
+        field_0x690 = current.pos;
     }
 }
 
@@ -736,7 +730,6 @@ void daFm_c::bodySetMtx() {
     mDoMtx_stack_c::YrotM(shape_angle.y);
     mDoMtx_stack_c::transM(field_0x610);
     pModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    
 }
 
 /* 00001864-00001920       .text holeSetMtx__6daFm_cFv */
@@ -747,7 +740,6 @@ void daFm_c::holeSetMtx() {
     mDoMtx_stack_c::YrotM(current.angle.y);
     mDoMtx_stack_c::transM(l_HIO.field_0x020);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    
 }
 
 /* 00001920-00001A50       .text setCollision__6daFm_cFv */
@@ -775,7 +767,6 @@ void daFm_c::setAttention() {
     if(field_0x2E4 != 0) {
         attention_info.position = current.pos;
         eyePos = current.pos;
-        
     } else {
         if(mMode == 0xe || mMode == 0x10 || mMode == 0xf || (mMode == 0 || mMode == 0x11)) {
             attention_info.position = current.pos;
@@ -912,7 +903,6 @@ bool daFm_c::checkTgHit() {
                 mHitType = 0xD;
                 temp = false;
                 break;
-
         }
         CcAtInfo atInfo;
         atInfo.pParticlePos = NULL;
@@ -969,7 +959,7 @@ void daFm_c::setGrabPos() {
     if (bomb == NULL) {
         mGrabPos = current.pos;
     } else {
-        if (fopAcM_GetName(bomb) == PROC_BOMB && bomb->chk_state(daBomb_c::STATE_0)) {
+        if (fopAcM_GetName(bomb) == fpcNm_BOMB_e && bomb->chk_state(daBomb_c::STATE_0)) {
             mGrabPos = current.pos;
             return;
         }
@@ -994,27 +984,22 @@ cXyz daFm_c::getOffsetPos() {
     if(isLink(mpActorTarget)) {
         offset.set(0.0f, -10.0f, 0.0f);
     } else {
-
         s16 procName = fopAcM_GetName(mpActorTarget);
-        if(procName == PROC_NPC_CB1) {
+        if(procName == fpcNm_NPC_CB1_e) {
             if(fopAcM_checkCarryNow(mpActorTarget)) {
                 offset.set(0.0f, 20.0f, 0.0f);
             } else {
                 offset.set(0.0f, 80.0f, 0.0f);
             }
-
-        } else if(procName == PROC_NPC_MD) {
+        } else if(procName == fpcNm_NPC_MD_e) {
             if(fopAcM_checkCarryNow(mpActorTarget)) {
                 offset.set(0.0f, 20.0f, 0.0f);
             } else {
                 offset.set(0.0f, 140.0f, 0.0f);
             }
-
-        } else if(procName == PROC_BOMB) {
+        } else if(procName == fpcNm_BOMB_e) {
             offset.set(0.0f, 80.0f, 0.0f);
-
-        } else if(procName == PROC_TSUBO) {
-
+        } else if(procName == fpcNm_TSUBO_e) {
             switch(((daTsubo::Act_c*)mpActorTarget)->prm_get_type()) {
                 case 5:
                 case 0:
@@ -1043,7 +1028,7 @@ u8 daFm_c::checkPlayerGrabBomb() {
     if(ac == NULL) {
         return false;
     }
-    return fopAcM_GetName(ac) == PROC_BOMB;
+    return fopAcM_GetName(ac) == fpcNm_BOMB_e;
 }
 
 /* 000028D4-00002954       .text checkPlayerGrabNpc__6daFm_cFv */
@@ -1121,7 +1106,7 @@ bool daFm_c::isGrab() {
         return false;
     }
     
-    if(isLink(mpActorTarget) && (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK100_e) || checkPlayerGrabBomb())) {
+    if(isLink(mpActorTarget) && (dComIfGp_checkPlayerStatus0(0, daPyStts0_HANG_e) || checkPlayerGrabBomb())) {
         return false;
     }
 
@@ -1172,9 +1157,9 @@ bool daFm_c::isGrabFoot() {
     }
 
 #if VERSION <= VERSION_JPN
-    daPy_lk_c* pLink = daPy_getPlayerLinkActorClass();
+    daPy_py_c* pLink = daPy_getPlayerLinkActorClass();
 #endif
-    if(pLink->speedF > 4.0f) {
+    if(pLink->getSpeedF() > 4.0f) {
         return false;
     }
     if(pLink->checkPlayerFly() || pLink->checkFrontRoll() || pLink->getGrabActorID() != -1
@@ -1202,13 +1187,13 @@ void daFm_c::modeSwWait() {
 
     if(field_0x2E4 != 0) {
         setHoleScale(l_HIO.field_0x124, 0.1f, l_HIO.field_0x128);
-        if(eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+        if(eventInfo.checkCommandDemoAccrpt()) {
             if(field_0x2E4 != 0 && cLib_calcTimer(&field_0x650) != 0) {
                 return;
             }
         } else {
             if(dComIfGp_evmng_startCheck("DEFAULT_FM_SW_APEEAR") == 0) {
-                fopAcM_orderOtherEvent2(this,"DEFAULT_FM_SW_APEEAR",dEvtFlag_NOPARTNER_e);
+                fopAcM_orderOtherEvent(this, "DEFAULT_FM_SW_APEEAR");
                 return;
             }
         }
@@ -1309,7 +1294,6 @@ void daFm_c::modePathMove() {
     if(isGrabFoot() && !dComIfGp_event_runCheck()) {
         modeProc(PROC_INIT_e,0xf);
     } else {
-        
         dLib_pathMove(&field_0x3B0, &field_0x3BC, mpPath, 3.0f, pathMove_CB, this);
         cLib_addCalcPosXZ2(&current.pos, field_0x3B0, (l_HIO.field_0x0D0 + 1.0f) * 0.005f * field_0x394, 20.0f);
 
@@ -1328,7 +1312,6 @@ void daFm_c::modeGoalKeeperInit() {
 
 /* 000036B4-000038DC       .text modeGoalKeeper__6daFm_cFv */
 void daFm_c::modeGoalKeeper() {
-
     if(field_0x2E5 && dComIfGp_evmng_endCheck("DEFAULT_FM_SUIKOMI_NPC")) {
         modeProc(PROC_INIT_e,6);
         return;
@@ -1409,7 +1392,7 @@ void daFm_c::modeDisappear() {
             if(field_0x2E4 != 0 || field_0x2E5) {
                 modeProc(PROC_INIT_e, 0x12);
             } else {
-                fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                fopAcM_searchPlayerDistanceXZ(this);
                 if(isGrabFoot() && !dComIfGp_event_runCheck()) {
                     modeProc(PROC_INIT_e, 0xf);
                 } else {
@@ -1493,7 +1476,7 @@ void daFm_c::modeWait() {
         }
     }
     if(field_0x2D0 == 2 && (mBaseTarget->current.pos - field_0x69C).absXZ() > field_0x2E0) {
-            modeProc(PROC_INIT_e, 6);
+        modeProc(PROC_INIT_e, 6);
     } else {
         moveRndBack();
     }
@@ -1554,7 +1537,6 @@ void daFm_c::modeAttack() {
                 f32 oldGrabPosY = mGrabPos.y;
                 mGrabPos = daPy_getPlayerLinkActorClass()->current.pos;
                 mGrabPos.y = oldGrabPosY;
-                
             } else {
                 if (isGrabPos()) {
                     setGrabPos();
@@ -1570,9 +1552,9 @@ void daFm_c::modeAttack() {
                             fopAcM_seStart(this, JA_SE_CM_FM_GRAB_HAND, 0);
                             daPy_getPlayerLinkActorClass()->voiceStart(0x1C);
                         } else {
-                            daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
+                            daPy_py_c* pLink = daPy_getPlayerLinkActorClass();
 
-                            if(pLink->speedF >= 1.0f){
+                            if(pLink->getSpeedF() >= 1.0f){
                                 dist = (mGrabPos - field_0x63C).absXZ();
                                 if(dist > l_HIO.field_0x110 && dist < l_HIO.field_0x114) {
                                     s16 targetAngle2 = cLib_targetAngleY(&field_0x63C, &mGrabPos);
@@ -1587,16 +1569,16 @@ void daFm_c::modeAttack() {
                         }
                     } else {
                         if (isNpc(mpActorTarget) == true) { 
-                            if (!fopAcM_CheckStatus(mpActorTarget, fopAcStts_CARRY_e)) {
+                            if (!fopAcM_checkCarryNow(mpActorTarget)) {
                                 fopAcM_seStart(this, JA_SE_CM_FM_GRAB_HAND, 0);
                                 fopAcM_setCarryNow(mpActorTarget, 0);
                                 field_0x684 = 4;
 
-                                if (fopAcM_GetName(mpActorTarget) == PROC_NPC_CB1) {
+                                if (fopAcM_GetName(mpActorTarget) == fpcNm_NPC_CB1_e) {
                                     ((daNpc_Cb1_c*)mpActorTarget)->noCarryAction();
                                 }
 
-                                if (fopAcM_GetName(mpActorTarget) == PROC_NPC_MD) {
+                                if (fopAcM_GetName(mpActorTarget) == fpcNm_NPC_MD_e) {
                                     ((daNpc_Md_c*)mpActorTarget)->noCarryAction();
                                 }
 
@@ -1607,7 +1589,7 @@ void daFm_c::modeAttack() {
                                     }
                                     modeProcInit(0xD);
                                 } else {
-                                    f32 temp3 = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                                    f32 temp3 = fopAcM_searchPlayerDistanceXZ(this);
                                     daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
 
                                     if ((temp3 > l_HIO.field_0x0BC || 
@@ -1615,7 +1597,6 @@ void daFm_c::modeAttack() {
                                     !dComIfGp_event_runCheck()) {
                                         modeProcInit(0x10);
                                     } else {
-                                        
                                         modeProcInit(0xD);
                                     }
                                 }
@@ -1626,8 +1607,8 @@ void daFm_c::modeAttack() {
                             fopAc_ac_c* actor = mpActorTarget;
                             s16 procName = fopAcM_GetName(actor);
 
-                            if (procName == PROC_BOMB) {
-                                if (!fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
+                            if (procName == fpcNm_BOMB_e) {
+                                if (!fopAcM_checkCarryNow(actor)) {
                                     fopAcM_setCarryNow(actor, 0);
                                     field_0x684 = 2;
                                     fopAcM_seStart(this, JA_SE_CM_FM_GRAB, 0);
@@ -1636,8 +1617,8 @@ void daFm_c::modeAttack() {
                                 } else {
                                     modeProcInit(7);
                                 }
-                            } else if (procName == PROC_TSUBO) {
-                                if (!fopAcM_CheckStatus(actor, fopAcStts_CARRY_e)) {
+                            } else if (procName == fpcNm_TSUBO_e) {
+                                if (!fopAcM_checkCarryNow(actor)) {
                                     fopAcM_setCarryNow(actor, 0);
                                     field_0x684 = 3;
                                     fopAcM_seStart(this, JA_SE_CM_FM_GRAB, 0);
@@ -1648,7 +1629,6 @@ void daFm_c::modeAttack() {
                                 }
                             }
                         }
-                        
                     }
                 } else if (isLink(mpActorTarget) && mAnmPrmIdx == 4) {
                     dist = (mGrabPos - field_0x63C).absXZ();
@@ -1656,7 +1636,7 @@ void daFm_c::modeAttack() {
                     if (dist > l_HIO.field_0x110 && dist < l_HIO.field_0x114) {
                         daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
 
-                        if(pLink->speedF >= 1.0f) {
+                        if(pLink->getSpeedF() >= 1.0f) {
                             s16 targetAngle = cLib_targetAngleY(&field_0x63C, &mGrabPos);
                             f32 dist3 = std::fabsf(l_HIO.field_0x114 - l_HIO.field_0x110);
                             if (dist3 == 0.0f) {
@@ -1665,7 +1645,6 @@ void daFm_c::modeAttack() {
                             f32 temp5 = l_HIO.field_0x118 * (std::fabsf(dist - l_HIO.field_0x110) / dist3);
                             pLink->setOutPower(temp5, targetAngle, 0);
                         }
-                        
                     } else if (mpMorf->isStop() && cLib_calcTimer(&field_0x650) == 0) {
                         setAnm(5, false);
                     }
@@ -1714,7 +1693,7 @@ void daFm_c::modeThrow() {
             field_0x684 = 0;
             mGrabPos = current.pos;
         } else {
-            if(fopAcM_GetName(mpActorTarget) == PROC_BOMB || fopAcM_GetName(mpActorTarget) == PROC_TSUBO) {
+            if(fopAcM_GetName(mpActorTarget) == fpcNm_BOMB_e || fopAcM_GetName(mpActorTarget) == fpcNm_TSUBO_e) {
                 mpActorTarget->current.angle.y = shape_angle.y;
                 mpActorTarget->shape_angle.y = shape_angle.y;
                 mpActorTarget->speedF = l_HIO.field_0x0F0;
@@ -1729,7 +1708,7 @@ void daFm_c::modeThrow() {
                 f32 dropspeed = temp *= l_HIO.field_0x0F4;
                 daTsubo::Act_c* tsubo = (daTsubo::Act_c*)mpActorTarget;
                 
-                if(fopAcM_GetName(mpActorTarget) == PROC_TSUBO) {
+                if(fopAcM_GetName(mpActorTarget) == fpcNm_TSUBO_e) {
                     switch(tsubo->prm_get_type()) {
                         case 0:
                         case 1:
@@ -1763,7 +1742,7 @@ void daFm_c::modeThrow() {
 void daFm_c::modeGrabFootDemoInit() {
     daPy_lk_c* pLink = daPy_getPlayerLinkActorClass();
     field_0x610.setall(0.0f);
-    field_0x630.set(pLink->current.pos);
+    field_0x630 = pLink->current.pos;
 }
 
 /* 00004D20-000050B4       .text modeGrabFootDemo__6daFm_cFv */
@@ -1772,12 +1751,9 @@ void daFm_c::modeGrabFootDemo() {
     if(l_HIO.field_0x00D) {
         modeProc(PROC_INIT_e, 5);
     } else {
-        if(eventInfo.mCommand == dEvtCmd_INDEMO_e) {
-            // char* cutName;
-            // int staffIdx;
-            
+        if(eventInfo.checkCommandDemoAccrpt()) {
             int staffIdx = dComIfGp_evmng_getMyStaffId("Fmaster");
-            char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+            const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
             if(strcmp(cutName, "Dummy") == 0 || strcmp(cutName, "WAIT") == 0) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
@@ -1785,7 +1761,7 @@ void daFm_c::modeGrabFootDemo() {
                 mpMorf->getFrame() == 10.0f) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
-            daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
+            daPy_py_c* pLink = daPy_getPlayerLinkActorClass();
             fopAc_ac_c* ac = fopAcM_SearchByID(pLink->getGrabActorID());
             if(ac != NULL) {
                 fopAcM_cancelCarryNow(ac);
@@ -1793,7 +1769,7 @@ void daFm_c::modeGrabFootDemo() {
             pLink->changeOriginalDemo();
 
             if(mAnmPrmIdx != 10) {
-                if(fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) < 3.0f) {
+                if(fopAcM_searchPlayerDistanceXZ(this) < 3.0f) {
                     setAnm(10, false);
                 }  else {
                     cLib_addCalcPosXZ2(&field_0x630, current.pos, 0.3f, 10.0f);
@@ -1897,7 +1873,7 @@ void daFm_c::modeGrabInit() {
         setAnm(0xC, false);
     } else {
         s16 procName = fopAcM_GetName(mpActorTarget);
-        if(procName == PROC_BOMB || procName == PROC_TSUBO) {
+        if(procName == fpcNm_BOMB_e || procName == fpcNm_TSUBO_e) {
             setAnm(9, false);
         }
     }
@@ -1927,18 +1903,17 @@ void daFm_c::modeGrab() {
                 if (cLib_distanceAngleS(shape_angle.y, angle) > l_HIO.field_0x09A) {
                     cLib_addCalcAngleS2(&shape_angle.y, angle, 4, l_HIO.field_0x096);
                 }
-                
             } else {
-                dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                dist = fopAcM_searchPlayerDistanceXZ(this);
                 if (field_0x2D0 == 2 && isNpc(mpActorTarget) && dist < l_HIO.field_0x0C4) {
                     fopAcM_Search(searchNearFm_CB, this);
                     if (field_0x3E4.absXZ() != 0.0f) {
                         angle = cLib_targetAngleY(&current.pos, &field_0x3E4);
                     } else {
-                        angle = (s16)fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+                        angle = (s16)fopAcM_searchPlayerAngleY(this);
                     }
                 } else {
-                    angle = (s16)fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+                    angle = (s16)fopAcM_searchPlayerAngleY(this);
                 }
                 cLib_addCalcAngleS2(&shape_angle.y, angle, 4, 0x800);
             }
@@ -1953,8 +1928,6 @@ void daFm_c::modeGrab() {
                         modeProcInit(0xE);
                         field_0x684 = 1;
                     } else {
-                        // temp.absXZ() matches offsets but cant store mGrabPos - field_0x63C in temp first
-                        // dist = temp.absXZ();
                         dist = (mGrabPos - field_0x63C).absXZ();
                         if (dist > l_HIO.field_0x110 && dist < l_HIO.field_0x114) {
                             daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
@@ -1965,7 +1938,6 @@ void daFm_c::modeGrab() {
                             }
                             f32 temp5 = l_HIO.field_0x118 * (std::fabsf(dist - l_HIO.field_0x110) / temp4);
                             pLink->setOutPower(temp5, angle, 0);
-
                         } else {
                             if (!isGrab()) {
                                 setAnm(5, false);
@@ -1977,7 +1949,6 @@ void daFm_c::modeGrab() {
                         }
                    }
                 }
-                
             } else {
                 if (isNpc(mpActorTarget) == true) {
                     mGrabPos = field_0x61C;
@@ -1985,9 +1956,8 @@ void daFm_c::modeGrab() {
                         if (!isLinkControl()) {
                             modeProcInit(0x10);
                         }
-                        
                     } else {
-                        dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+                        dist = fopAcM_searchPlayerDistanceXZ(this);
                         if (dist < l_HIO.field_0x0B4 && field_0x2D0 == 2) {
                             angle = cLib_targetAngleY(&current.pos, &field_0x3E4);
 
@@ -2003,11 +1973,10 @@ void daFm_c::modeGrab() {
                         } else if (field_0x2DC == 1) {
                             modeProcInit(9);
                         }
-
                     }
                 } else {
                     s16 procName = fopAcM_GetName(mpActorTarget);
-                    if (procName == PROC_BOMB || procName == PROC_TSUBO) {
+                    if (procName == fpcNm_BOMB_e || procName == fpcNm_TSUBO_e) {
                         moveRndBack();
                         mGrabPos = field_0x61C;
                         if (!daPy_getPlayerLinkActorClass()->checkPlayerGuard()) {
@@ -2039,7 +2008,7 @@ void daFm_c::modeGrabDemoInit() {
 void daFm_c::modeGrabDemo() {
     resetInvKine();
 
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
         pLink->changeOriginalDemo();
         if (mAnmPrmIdx == 6 && mpMorf->getFrame() == 15.0f) {
@@ -2068,13 +2037,13 @@ void daFm_c::modeGrabDemo() {
         } else {
             if (mAnmPrmIdx == 6 && mpMorf->getFrame() == 40.0f) {
                 s16 procName = fopAcM_GetName(mpActorTarget);
-                if (procName == PROC_NPC_MD) {
+                if (procName == fpcNm_NPC_MD_e) {
                     fopAcM_monsSeStart(this, JA_SE_CV_MD_DAMAGE, 0);
-                } else if (procName == PROC_NPC_CB1) {
+                } else if (procName == fpcNm_NPC_CB1_e) {
                     fopAcM_monsSeStart(this, JA_SE_CV_CB_DAMAGE, 0);
                 }
             }
-            if (fopAcM_GetName((daNpc_Md_c *)mpActorTarget) == PROC_NPC_MD) { // ghidra shows cast here but unnecessary
+            if (fopAcM_GetName((daNpc_Md_c *)mpActorTarget) == fpcNm_NPC_MD_e) { // ghidra shows cast here but unnecessary
                 ((daNpc_Md_c *)mpActorTarget)->changeCaught02();
                 field_0x688 = true;
             }
@@ -2082,11 +2051,11 @@ void daFm_c::modeGrabDemo() {
             if (dComIfGp_evmng_endCheck("DEFAULT_FM_SUIKOMI_NPC")) {
                 if (field_0x2C8 != 0xff) {
                     cancelGrab();
-                    if (fopAcM_GetName(mpActorTarget) == PROC_NPC_CB1) {
+                    if (fopAcM_GetName(mpActorTarget) == fpcNm_NPC_CB1_e) {
                         dComIfGs_onEventBit(dSv_event_flag_c::UNK_3408);
                         ((daPy_npc_c *)mpActorTarget)->setPointRestart(field_0x2C8, 1);
                     }
-                    if (fopAcM_GetName(mpActorTarget) == PROC_NPC_MD) {
+                    if (fopAcM_GetName(mpActorTarget) == fpcNm_NPC_MD_e) {
                         dComIfGs_onEventBit(dSv_event_flag_c::UNK_3404);
                         ((daPy_npc_c *)mpActorTarget)->setPointRestart(field_0x2C8, 2);
                     }
@@ -2145,7 +2114,7 @@ void daFm_c::modePrepareItem() {
         if(temp == 3) {
             if(mpMorf->isStop()) {
                 u32 skullPrm = daTsubo::Act_c::prm_make_skull();
-                mProcId2 = fopAcM_create(PROC_TSUBO, skullPrm, &field_0x61C, tevStr.mRoomNo);
+                mProcId2 = fopAcM_create(fpcNm_TSUBO_e, skullPrm, &field_0x61C, tevStr.mRoomNo);
                 return;
             }
         }
@@ -2185,13 +2154,12 @@ void daFm_c::modeGrabNpcDemoInit() {
 void daFm_c::modeGrabNpcDemo() {
     resetInvKine();
     mGrabPos = field_0x61C;
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if(eventInfo.checkCommandDemoAccrpt()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Fmaster");
         if(strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "YAYU") == 0) {
             setAnm(12, false);
             if(mpMorf->isStop()) {
                 dComIfGp_evmng_cutEnd(staffIdx);
-
             }
         } else {
             dComIfGp_evmng_cutEnd(staffIdx);
@@ -2227,10 +2195,9 @@ void daFm_c::modePlayerStartDemo() {
     resetInvKine();
     if(dComIfGp_event_runCheck()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Fmaster");
-        char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+        const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
 
         daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
-
         
         pLink->changeOriginalDemo();
         
@@ -2240,7 +2207,6 @@ void daFm_c::modePlayerStartDemo() {
             pLink->setPlayerPosAndAngle(&pos, &pLink->shape_angle);
             pLink->onPlayerNoDraw();
             dComIfGp_evmng_cutEnd(staffIdx);
-
         } else if(strcmp(cutName, "OPEN") == 0) {
             cXyz pos2 = current.pos;
             pos2.y -= REG12_F(2);
@@ -2249,7 +2215,6 @@ void daFm_c::modePlayerStartDemo() {
             if(setHoleScale(l_HIO.field_0x124, 0.1f, l_HIO.field_0x128)) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
-
         } else if(strcmp(cutName, "PL_OUT") == 0) {
             pLink->offPlayerNoDraw();
             pLink->setThrowDamage(
@@ -2260,13 +2225,11 @@ void daFm_c::modePlayerStartDemo() {
                 0
             );
             dComIfGp_evmng_cutEnd(staffIdx);
-
         } else if(strcmp(cutName, "CLOSE") == 0) {
             pLink->offPlayerNoDraw();
             if(setHoleScale(l_HIO.field_0x120, 0.1f, l_HIO.field_0x128)) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
-
         } else if(strcmp(cutName, "DELETE") == 0) {
             modeProc(PROC_INIT_e, 0x12);
         }
@@ -2334,7 +2297,6 @@ void daFm_c::modeBikubiku() {
 
 /* 000068D0-00006D8C       .text modeProc__6daFm_cFQ26daFm_c6Proc_ei */
 void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
-
     struct ModeEntry {
         ModeFunc init;
         ModeFunc run;
@@ -2464,10 +2426,10 @@ void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
             case 0x10:
             case 0x11:
             case 0x12:
-                attention_info.flags &= ~fopAc_Attn_LOCKON_BATTLE_e;
+                cLib_offBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
                 break;
             default:
-                attention_info.flags |= fopAc_Attn_LOCKON_BATTLE_e;
+                cLib_onBit<u32>(attention_info.flags, fopAc_Attn_LOCKON_BATTLE_e);
                 break;
         }
         mMode = newMode;
@@ -2480,19 +2442,19 @@ void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
 /* 00006D8C-00006DE8       .text setAnm__6daFm_cFScb */
 void daFm_c::setAnm(s8 anmPrmIdx, bool param_2) {
     static const int a_anm_bcks_tbl[] = {
-        FM_BCK_WAIT,
-        FM_BCK_DERU,
-        FM_BCK_MODORU,
-        FM_BCK_TUKAMU,
-        FM_BCK_TUKAMU2WAIT,
-        FM_BCK_HIKIKOMU,
-        FM_BCK_DAMAGE,
-        FM_BCK_TUMAMIWAIT,
-        FM_BCK_ASITUKAMI,
-        FM_BCK_NAGERU,
-        FM_BCK_YAYU,
-        FM_BCK_MAHI,
-        FM_BCK_KUSIZASI
+        dRes_INDEX_FM_BCK_WAIT_e,
+        dRes_INDEX_FM_BCK_DERU_e,
+        dRes_INDEX_FM_BCK_MODORU_e,
+        dRes_INDEX_FM_BCK_TUKAMU_e,
+        dRes_INDEX_FM_BCK_TUKAMU2WAIT_e,
+        dRes_INDEX_FM_BCK_HIKIKOMU_e,
+        dRes_INDEX_FM_BCK_DAMAGE_e,
+        dRes_INDEX_FM_BCK_TUMAMIWAIT_e,
+        dRes_INDEX_FM_BCK_ASITUKAMI_e,
+        dRes_INDEX_FM_BCK_NAGERU_e,
+        dRes_INDEX_FM_BCK_YAYU_e,
+        dRes_INDEX_FM_BCK_MAHI_e,
+        dRes_INDEX_FM_BCK_KUSIZASI_e
     };
 
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
@@ -2627,7 +2589,7 @@ void daFm_c::setAnm(s8 anmPrmIdx, bool param_2) {
 /* 00006DE8-00006EA4       .text cancelGrab__6daFm_cFv */
 void daFm_c::cancelGrab() {
     if(mpActorTarget != NULL) {
-        if(field_0x684 != 0 && fopAcM_CheckStatus(mpActorTarget, fopAcStts_CARRY_e) && !checkPlayerGrabTarget()) {
+        if(field_0x684 != 0 && fopAcM_checkCarryNow(mpActorTarget) && !checkPlayerGrabTarget()) {
             mpActorTarget->gravity = 0.0f;
             mpActorTarget->speedF = 0.0f;
             mpActorTarget->speed.x = 0.0f;
@@ -2644,22 +2606,23 @@ void daFm_c::cancelGrab() {
 }
 
 /* 00006EA4-0000702C       .text calcInvKine__6daFm_cFP10fopAc_ac_c */
-void daFm_c::calcInvKine(fopAc_ac_c* i_this) {
-    if (isBodyAppear() && i_this != NULL) {
-        if (!(fopAcM_searchActorDistanceXZ(this, i_this) <= l_HIO.field_0x0DC)) {
-            for(int i = 5; i >= 0; i--) {
-                field_0x390 = i;
-                cXyz temp(field_0x2E8[i]);
-                if(l_HIO.field_0x00F[field_0x390] == 1) {
-                    cXyz diff = mGrabPos - temp;
-                    cXyz diff2 = field_0x61C - temp;
-                    Quaternion quat;
-                    
-                    daObj::quat_rotVec(&quat, diff2, diff);
-                    mDoMtx_quatSlerp(&field_0x330[i], &quat, &field_0x330[i], 0.75f - REG12_F(0x19));
-                }
-                mpMorf->calc();
+void daFm_c::calcInvKine(fopAc_ac_c* i_target) {
+    if (isBodyAppear() && i_target != NULL) {
+        if (fopAcM_searchActorDistanceXZ(this, i_target) <= l_HIO.field_0x0DC) {
+            return;
+        }
+        for(int i = 5; i >= 0; i--) {
+            field_0x390 = i;
+            cXyz temp(field_0x2E8[i]);
+            if(l_HIO.field_0x00F[field_0x390] == 1) {
+                cXyz diff = mGrabPos - temp;
+                cXyz diff2 = field_0x61C - temp;
+                Quaternion quat;
+                
+                daObj::quat_rotVec(&quat, diff2, diff);
+                mDoMtx_quatSlerp(&field_0x330[i], &quat, &field_0x330[i], 0.75f - REG12_F(0x19));
             }
+            mpMorf->calc();
         }
     }
 }
@@ -2677,10 +2640,10 @@ void daFm_c::resetInvKine() {
 
 /* 000070F4-000071E0       .text grabBomb__6daFm_cFv */
 void daFm_c::grabBomb() {
-    if (fopAcM_GetName(mpActorTarget) == PROC_BOMB) {
+    if (fopAcM_GetName(mpActorTarget) == fpcNm_BOMB_e) {
         cXyz temp_pos(5.0f, -10.0f, 5.0f);
         cXyz pos = l_HIO.field_0x038 + temp_pos;
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(5));
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(FM_JNT_TE_e));
         mDoMtx_stack_c::multVec(&pos, &mpActorTarget->current.pos);
         mpActorTarget->gravity = 0.0f;
         mpActorTarget->speedF = 0.0f;
@@ -2692,7 +2655,7 @@ void daFm_c::grabBomb() {
  
 /* 000071E0-0000743C       .text grabTsubo__6daFm_cFv */
 void daFm_c::grabTsubo() {
-        if(fopAcM_GetName(mpActorTarget) == PROC_TSUBO) {
+        if(fopAcM_GetName(mpActorTarget) == fpcNm_TSUBO_e) {
         daTsubo::Act_c* tsubo = (daTsubo::Act_c*)mpActorTarget;
 
         cXyz pos(0.0f, 0.0f, 0.0f);
@@ -2723,7 +2686,7 @@ void daFm_c::grabTsubo() {
 
         cXyz pos2 = l_HIO.field_0x038 + pos;
 
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(5));
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(FM_JNT_TE_e));
         mDoMtx_stack_c::transM(pos2);
         mDoMtx_stack_c::ZXYrotM(angle);
         MTXCopy(mDoMtx_stack_c::get(), field_0x6BC);
@@ -2746,14 +2709,14 @@ void daFm_c::grabPlayer() {
     switch (mAnmPrmIdx) {
         case 4:
         case 6: {
-            daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
+            daPy_py_c* pLink = daPy_getPlayerLinkActorClass();
             cXyz offset2 = pLink->getHeadTopPos() - pLink->current.pos;
             temp.set(5.0f, 0.0f, 10.0f);
             angle.set(-3000, 0, 7000);
             temp2 = l_HIO.field_0x038 + temp;
             temp2.y -= offset2.abs();
 
-            mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(5));
+            mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(FM_JNT_TE_e));
             mDoMtx_stack_c::ZXYrotM(angle.x, angle.y, angle.z);
             mDoMtx_stack_c::transM(temp2);
             MTXCopy(mDoMtx_stack_c::get(), field_0x6BC);
@@ -2770,21 +2733,21 @@ void daFm_c::grabNPC() {
     if(isNpc(mpActorTarget) == true) {
         cXyz temp(0.0f, 0.0f, 0.0f);
         csXyz angle(0, 0, 0);
-        if(fopAcM_GetName(mpActorTarget) == PROC_NPC_CB1) {
+        if(fopAcM_GetName(mpActorTarget) == fpcNm_NPC_CB1_e) {
             temp.set(-15.0f, -10.0f, 8.0f);
             angle.x = 0;
             angle.y = 16000;
             angle.z = -4000;
         }
 
-        if(fopAcM_GetName(mpActorTarget) == PROC_NPC_MD) {
+        if(fopAcM_GetName(mpActorTarget) == fpcNm_NPC_MD_e) {
             temp.set(10.0f, 0.0f, 5.0f);
             angle.x = 4000;
             angle.y = 18000;
             angle.z = -4000;
         }
         cXyz temp2 = l_HIO.field_0x038 + temp;
-        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(5));
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(FM_JNT_TE_e));
         mDoMtx_stack_c::transM(temp2);
         mDoMtx_stack_c::ZXYrotM(angle.x, angle.y, angle.z);
         MTXCopy(mDoMtx_stack_c::get(), field_0x6BC);
@@ -2798,9 +2761,9 @@ void daFm_c::searchTarget() {
     if(!dComIfGp_event_runCheck() || field_0x2E4 != 0) {
         fopAc_ac_c* actor = mpActorTarget = (fopAc_ac_c*)fopAcM_Search(searchNearOtherActor_CB, this);
         if(mpActorTarget == NULL) {
-            actor = fopAcM_SearchByName(PROC_NPC_CB1);
+            actor = fopAcM_SearchByName(fpcNm_NPC_CB1_e);
             if(actor == NULL) {
-                actor = fopAcM_SearchByName(PROC_NPC_MD);
+                actor = fopAcM_SearchByName(fpcNm_NPC_MD_e);
             }
 
             if(actor != NULL) {
@@ -2819,7 +2782,7 @@ void daFm_c::searchTarget() {
         if(mpActorTarget == NULL && field_0x2DC != 2) {
             fopAc_ac_c* link_actor = dComIfGp_getLinkPlayer();
             daPy_lk_c* link_player = (daPy_lk_c*)link_actor;
-            if(dComIfGp_getLinkPlayer() != NULL && !dComIfGp_checkPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e | daPyStts0_UNK100_e)) {
+            if(dComIfGp_getLinkPlayer() != NULL && !dComIfGp_checkPlayerStatus0(0, daPyStts0_HOOKSHOT_AIM_e | daPyStts0_HANG_e)) {
                 if(!checkPlayerGrabBomb()) {
                     if(!checkPlayerGrabNpc() && !isLinkControl()) {
                         if(!((daPy_lk_c*)dComIfGp_getLinkPlayer())->checkCarryActionNow() && link_player->getGrabActorID() == -1) {
@@ -2845,8 +2808,8 @@ void daFm_c::setBaseTarget() {
     fopAc_ac_c* pMdActor;
     switch(field_0x2DC) {
         case 0:
-            fopAcM_SearchByName(PROC_NPC_CB1);
-            pMdActor = fopAcM_SearchByName(PROC_NPC_MD);
+            fopAcM_SearchByName(fpcNm_NPC_CB1_e);
+            pMdActor = fopAcM_SearchByName(fpcNm_NPC_MD_e);
             pLink = daPy_getPlayerLinkActorClass();
 
             if (field_0x2D0 == 1 || field_0x2D0 == 2) {
@@ -2873,12 +2836,12 @@ void daFm_c::setBaseTarget() {
             mBaseTarget = daPy_getPlayerLinkActorClass();
             break;
         case 2:
-            fopAc_ac_c* actor = fopAcM_SearchByName(PROC_NPC_CB1);
+            fopAc_ac_c* actor = fopAcM_SearchByName(fpcNm_NPC_CB1_e);
 
             if(actor != NULL) {
                 mBaseTarget = actor;
             } else {
-                actor = fopAcM_SearchByName(PROC_NPC_MD);
+                actor = fopAcM_SearchByName(fpcNm_NPC_MD_e);
                 if(actor != NULL) {
                     mBaseTarget = actor;
                 }
@@ -2905,7 +2868,7 @@ bool daFm_c::isNpc(fopAc_ac_c* i_actor) {
     if(i_actor == NULL) {
         return false;
     }
-    return fopAcM_GetName(i_actor) == PROC_NPC_CB1 || fopAcM_GetName(i_actor) == PROC_NPC_MD;
+    return fopAcM_GetName(i_actor) == fpcNm_NPC_CB1_e || fopAcM_GetName(i_actor) == fpcNm_NPC_MD_e;
 }
 
 /* 00007C7C-00007CD0       .text checkHeight__6daFm_cFP10fopAc_ac_c */
@@ -2963,7 +2926,6 @@ bool daFm_c::areaCheck() {
             if(!lineCheck(&temp2, &field_0xA48[i])) {
                 field_0xAD8[i] = false;
                 ret = false;
-
             } else {
                 field_0xAD8[i] = true;
             }
@@ -2976,7 +2938,7 @@ bool daFm_c::areaCheck() {
 bool daFm_c::lineCheck(cXyz* param_1, cXyz* param_2) {
     mLinChk.Set(param_1, param_2, this);
     if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
-        *param_2 = mLinChk.mLin.GetEnd();
+        *param_2 = mLinChk.GetCross();
         return true;
     }
     return false;
@@ -3025,7 +2987,7 @@ bool daFm_c::_execute() {
     holeExecute();
     fopAcM_SearchByID(mProcId, &mpActorTarget);
     daBomb_c* bomb = (daBomb_c*)mpActorTarget;
-    if(bomb != NULL && fopAcM_GetName(bomb) == PROC_BOMB && bomb->chk_state(daBomb_c::STATE_0)) {
+    if(bomb != NULL && fopAcM_GetName(bomb) == fpcNm_BOMB_e && bomb->chk_state(daBomb_c::STATE_0)) {
         mpActorTarget = NULL;
         mProcId = 0;
         modeProcInit(7);
@@ -3092,7 +3054,6 @@ bool daFm_c::_execute() {
                 case 3:
                     grabTsubo();
                     break;
-
             }
         }
         field_0x660.y = current.pos.y;
@@ -3198,7 +3159,6 @@ void daFm_c::debugDraw() {
         temp5.y += 20.0f;
 
         temp6.y += 20.0f;
-
     }
     if (l_HIO.field_0x009) {
 
@@ -3256,7 +3216,7 @@ void daFm_c::debugDraw() {
         dLib_debugDrawAxis(field_0x6BC, 100.0f);
     }
     if (l_HIO.field_0x007) {
-        MTXCopy(fopAcM_GetModel(this)->getAnmMtx(5), mtx);
+        MTXCopy(model->getAnmMtx(FM_JNT_TE_e), mtx);
         dLib_debugDrawAxis(mtx, 100.0f);
     }
     if (l_HIO.field_0x005) {
@@ -3291,7 +3251,7 @@ bool daFm_c::_draw() {
 
     if(isBodyAppear()) {
         bodyDraw();
-        dSnap_RegistFig(DSNAP_TYPE_UNKB5, this, field_0x61C, shape_angle.y, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_FM, this, field_0x61C, shape_angle.y, 1.0f, 1.0f, 1.0f);
     }
     return true;
 }
@@ -3360,14 +3320,13 @@ void daFm_c::createInit() {
     J3DModelData* modelData = mpMorf->getModel()->getModelData();
     for(u16 i = 0; i < modelData->getJointNum(); i++) {
         switch(i) {
-            case 0: 
-            case 1:
-            case 2:
-            case 3:
-            case 5:
+            case FM_JNT_CENTER_e: 
+            case FM_JNT_UDEA_e:
+            case FM_JNT_UDEB_e:
+            case FM_JNT_UDEC_e:
+            case FM_JNT_TE_e:
                 modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
                 break;
-
         }
     }
 
@@ -3441,13 +3400,13 @@ void daFm_c::createInit() {
 
 /* 000090DC-00009258       .text _create__6daFm_cFv */
 cPhs_State daFm_c::_create() {
-    fopAcM_SetupActor(this, daFm_c);
+    fopAcM_ct(this, daFm_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, m_arc_name);
     if(phase_state == cPhs_COMPLEATE_e) {
         if(parentActorID != -1) {
             fopAc_ac_c* ac = fopAcM_SearchByID(parentActorID);
 
-            if(ac != NULL && fopAc_IsActor(ac) && isLink(ac)) {
+            if(ac != NULL && fopAcM_IsActor(ac) && isLink(ac)) {
                 modeProc(PROC_INIT_e, 0x11);
             }
         }
@@ -3518,18 +3477,18 @@ static actor_method_class daFmMethodTable = {
 };
 
 actor_process_profile_definition g_profile_FM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_FM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_FM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daFm_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_FM,
+    /* Draw Prio    */ fpcDwPi_FM_e,
     /* Actor SubMtd */ &daFmMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e | fopAcStts_UNK200000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

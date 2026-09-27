@@ -17,13 +17,13 @@ public:
     virtual const ResFONT* getResFont() const { return mResFont; }
     virtual int getFontType() const { return mInfoBlock->fontType; }
     virtual int getLeading() const { return mInfoBlock->leading; }
-    virtual s32 getWidth() const { return mInfoBlock->width; }
-    virtual s32 getAscent() const { return mInfoBlock->ascent; }
-    virtual s32 getDescent() const { return mInfoBlock->descent; }
-    virtual s32 getHeight() const { return getAscent() + getDescent(); }
+    virtual int getWidth() const { return mInfoBlock->width; }
+    virtual int getAscent() const { return mInfoBlock->ascent; }
+    virtual int getDescent() const { return mInfoBlock->descent; }
+    virtual int getHeight() const { return getAscent() + getDescent(); }
     virtual void getWidthEntry(int, JUTFont::TWidth*) const;
     virtual int getCellWidth() const;
-    virtual s32 getCellHeight() const;
+    virtual int getCellHeight() const;
     virtual bool isLeadByte(int) const;
     virtual void loadImage(int, GXTexMapID);
     virtual void setBlock();

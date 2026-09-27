@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tpota.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "JSystem/JGeometry.h"
 #include "d/d_particle.h"
 #include "JSystem/JParticle/JPAParticle.h"
@@ -17,7 +15,7 @@ const u16 l_daTpota_idx_table[2] = {dPa_name::ID_IT_SN_TAKIURA_POTAA00, dPa_name
 
 /* 00000078-000001D0       .text _create__9daTpota_cFv */
 cPhs_State daTpota_c::_create() {
-    fopAcM_SetupActor(this, daTpota_c);
+    fopAcM_ct(this, daTpota_c);
     JPABaseEmitter* emitter;
     for (int i = 0; i < 2; i++) {
         mPositions[i] = current.pos;
@@ -80,18 +78,18 @@ void daTpota_c::clear_splash() {
 /* 00000380-000003F4       .text renew_splash__9daTpota_cFv */
 void daTpota_c::renew_splash() {
     if (mpEmitters[1] != NULL) {
-        JSUPtrList* list = mpEmitters[1]->getParticleList();
-        unknown_struct *unknown_struct = field_0x2C4;
+        JSUList<JPABaseParticle>* list = mpEmitters[1]->getParticleList();
+        unknown_struct* unknown_struct = field_0x2C4;
         if(list != NULL){
             clear_splash();
-            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL); link = link->getNext()){
-                JPABaseParticle* particle = (JPABaseParticle*)link->getObjectPtr();
+            for (JSULink<JPABaseParticle>* link = list->getFirst(); link != NULL && link != list->getEnd(); link = link->getNext()) {
+                JPABaseParticle* const particle = link->getObject();
                 JGeometry::TVec3<f32> position;
                 particle->getGlobalPosition(position);
                 unknown_struct->ptcl = particle;
                 unknown_struct->pos_y = position.y;
                 unknown_struct++;
-            }   
+            }
         }
     }
 }
@@ -99,18 +97,15 @@ void daTpota_c::renew_splash() {
 /* 000003F4-000004C8       .text _execute__9daTpota_cFv */
 bool daTpota_c::_execute() {
     if (mpEmitters[1] != NULL){
-        JSUPtrList* list = mpEmitters[1]->getParticleList();
+        JSUList<JPABaseParticle>* list = mpEmitters[1]->getParticleList();
         if(list != NULL){
-            for (JSUPtrLink* link = list->getFirstLink(); link != NULL && (link != NULL);
-            link = link->getNext()){
-                JPABaseParticle* particle = (JPABaseParticle *)link->getObjectPtr();
+            for (JSULink<JPABaseParticle>* link = list->getFirst(); link != NULL && link != list->getEnd(); link = link->getNext()) {
+                JPABaseParticle* const particle = link->getObject();
                 JGeometry::TVec3<f32> position;
                 particle->getGlobalPosition(position);
                 if(check_water_h(particle, position.y)){
                     cXyz local_48;
-                    local_48.x = position.x;
-                    local_48.y = -230.0;
-                    local_48.z = position.z;
+                    local_48.set(position.x, -230.0f, position.z);
                     make_ripple(local_48);
                 }
             }
@@ -161,18 +156,18 @@ static actor_method_class Tpota_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Tpota = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Tpota,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Tpota_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTpota_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Tpota,
+    /* Draw Prio    */ fpcDwPi_Tpota_e,
     /* Actor SubMtd */ &Tpota_Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

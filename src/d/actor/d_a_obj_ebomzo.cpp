@@ -8,9 +8,7 @@
 #include "dolphin/types.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/res/res_ebomzo.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Ebomzo.h"
 
 typedef enum {
     /*0*/ Ebomzo_Mode_Check = 0,
@@ -52,7 +50,7 @@ dCcD_SrcSph sph_check_src = {
 
 /* 00000078-0000012C       .text CreateHeap__Q211daObjEbomzo5Act_cFv */
 BOOL daObjEbomzo::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, EBOMZO_BDL_EBOMZO);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_EBOMZO_BDL_EBOMZO_e);
     JUT_ASSERT(140, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
     return mpModel != NULL;
@@ -76,18 +74,20 @@ BOOL daObjEbomzo::Act_c::Create() {
         mMode = Ebomzo_Mode_Fall;
         current.angle.x = 0x4000;
     }
-    else mMode = Ebomzo_Mode_Check;
+    else {
+        mMode = Ebomzo_Mode_Check;
+    }
 
     return TRUE;
 }
 
 /* 0000021C-000003A0       .text Mthd_Create__Q211daObjEbomzo5Act_cFv */
 cPhs_State daObjEbomzo::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjEbomzo::Act_c);
+    fopAcM_ct(this, daObjEbomzo::Act_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, EBOMZO_DZB_EBOMZO, NULL, 0x1200);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_EBOMZO_DZB_EBOMZO_e, NULL, 0x1200);
         JUT_ASSERT(194, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -244,18 +244,18 @@ namespace daObjEbomzo {
 }
 
 actor_process_profile_definition g_profile_Obj_Ebomzo = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ebomzo,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ebomzo_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjEbomzo::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ebomzo,
+    /* Draw Prio    */ fpcDwPi_Obj_Ebomzo_e,
     /* Actor SubMtd */ &daObjEbomzo::Mthd_Ebomzo,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

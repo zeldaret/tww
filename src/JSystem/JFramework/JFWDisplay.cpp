@@ -24,7 +24,7 @@ Mtx e_mtx = {
     {0.0f, 0.0f, 1.0f, 0.0f},
 };
 static GXTexObj clear_z_tobj;
-u8 clear_z_TX[64] ALIGN_DECL(32) = {
+ALIGN_DECL(32, u8 clear_z_TX[64]) = {
     0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
     0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -86,8 +86,8 @@ JFWDisplay* JFWDisplay::createManager(JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_nu
 }
 
 static void dummyFunc() {
-    OSReport("sManager");
-    OSReport("mTemporarySingle");
+    DEAD_STRING("sManager");
+    DEAD_STRING("mTemporarySingle");
 }
 
 /* 802553EC-80255444       .text callDirectDraw__Fv */
@@ -392,8 +392,8 @@ void JFWDisplay::clearEfb_init() {
 
 /* 80255F60-80255FA0       .text clearEfb__10JFWDisplayF8_GXColor */
 void JFWDisplay::clearEfb(GXColor color) {
-    int height = mpRenderMode->efb_height;
-    int width = mpRenderMode->fb_width;
+    int height = mpRenderMode->efbHeight;
+    int width = mpRenderMode->fbWidth;
 
     clearEfb(0, 0, width, height, color);
 }
@@ -401,8 +401,8 @@ void JFWDisplay::clearEfb(GXColor color) {
 /* 80255FA0-8025631C       .text clearEfb__10JFWDisplayFiiii8_GXColor */
 void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GXColor color) {
     Mtx44 mtx;
-    u16 height = mpRenderMode->efb_height;
-    u16 width = mpRenderMode->fb_width;
+    u16 height = mpRenderMode->efbHeight;
+    u16 width = mpRenderMode->fbWidth;
 
     C_MTXOrtho(mtx, 0.0f, height, 0.0f, width, 0.0f, 1.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
@@ -453,6 +453,7 @@ void JFWDisplay::clearEfb(int param_0, int param_1, int param_2, int param_3, GX
 
     GXPosition2u16(param_0, param_1 + param_3);
     GXTexCoord2u8(0, 1);
+    GXEnd();
 
     GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z24X8, 0);
     GXSetZCompLoc(GX_ENABLE);

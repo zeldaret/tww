@@ -18,9 +18,7 @@ public:
         PROC_EXEC_e = 1,
     };
 
-    // objdiff says this is a weak function
-    // but defining it here with {} causes it to be inlined with fopAcM_SetupActor which breaks things
-    daNpc_Nz_c();
+    inline daNpc_Nz_c();
 
     void modeProcInit(int newMode) { modeProc(PROC_INIT_e, newMode); }
 
@@ -52,7 +50,7 @@ public:
     void getArg();
     cPhs_State _create();
     bool _delete();
-    BOOL _searchEsa(fopAc_ac_c*);
+    void* _searchEsa(fopAc_ac_c*);
     void cutProc();
     void cutEatesaStart();
     void cutEatesaProc();
@@ -100,6 +98,9 @@ public:
     /* 0x90C */ fopAc_ac_c* mpBait;
     /* 0x910 */ f32 field_0x910;
     /* 0x914 */ dPa_smokeEcallBack field_0x914;
+#if VERSION == VERSION_DEMO
+    /* 0x934 */ JPABaseEmitter* field_0x934_demo;
+#endif
     /* 0x934 */ mDoExt_3DlineMat1_c field_0x934;
     /* 0x970 */ u32 field_0x970;
     /* 0x974 */ cXyz field_0x974[10];

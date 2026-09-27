@@ -54,13 +54,9 @@ public:
     virtual void move(f32 x, f32 y);
     virtual void add(f32 x, f32 y);
 
-    // fakematch, this getter doesn't exist
-    f32 resize__getMinX() const { return mBounds.i.x; }
     virtual void resize(f32 w, f32 h) {
-        f32 x = resize__getMinX();
-        x += w;
-        mBounds.f.x = x;
-        mBounds.f.y = mBounds.i.y + h;
+        JGeometry::TVec2<f32> size(w, h);
+        mBounds.setSize(size);
     }
     virtual bool setConnectParent(bool connected) {
         mIsConnectParent = 0;
@@ -89,7 +85,7 @@ public:
     void hide() { mVisible = false; }
     bool isVisible() { return mVisible; }
 
-    void getBounds() {}
+    const JGeometry::TBox2<f32>& getBounds() { return mBounds; }
     const JGeometry::TBox2<f32>& getGlbBounds() { return mGlobalBounds; }
     f32 getRotate() const { return mRotation; }
     void place(const JGeometry::TBox2<f32>&) {}
@@ -104,9 +100,9 @@ public:
         mRotation = angle;
         calcMtx();
     }
-    void setInfluencedAlpha(bool) {}
+    void setInfluencedAlpha(bool v) { mInfluencedAlpha = v; }
 
-public:
+protected:
     /* 0x04 */ u32 mMagic;
     /* 0x08 */ int mTag;
     /* 0x0C */ JGeometry::TBox2<f32> mBounds;
@@ -122,7 +118,7 @@ public:
     /* 0xAB */ u8 mCullMode;
     /* 0xAC */ u8 mAlpha;
     /* 0xAD */ u8 mDrawAlpha;
-    /* 0xAE */ u8 mInheritAlpha;
+    /* 0xAE */ bool mInfluencedAlpha;
     /* 0xAF */ u8 mIsConnectParent;
     /* 0xB0 */ JSUTree<J2DPane> mPaneTree;
 };

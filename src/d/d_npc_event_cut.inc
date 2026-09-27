@@ -543,7 +543,7 @@ void dNpc_EventCut_c::cutMoveToPosProc() {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
 
-    f32 dist = std::sqrtf((temp - mpActor->current.pos).abs2XZ());
+    f32 dist = (temp - mpActor->current.pos).absXZ();
 
     cLib_addCalc2(&mpActor->current.pos.x, temp.x, 0.1f, mSpeed);
     cLib_addCalc2(&mpActor->current.pos.z, temp.z, 0.1f, mSpeed);
@@ -553,7 +553,7 @@ void dNpc_EventCut_c::cutMoveToPosProc() {
     }
 }
 
-/* 8021E4C0-8021E58C       .text cutTalkMsgProc__15dNpc_EventCut_cFv */
+/* 8021E338-8021E444       .text cutTalkMsgStart__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgStart() {
     if(mpTalkActor != 0) {
         int* attn = dComIfGp_evmng_getMyIntegerP(mEvtStaffId, "Attention");
@@ -596,7 +596,7 @@ void dNpc_EventCut_c::cutContinueTalkStart() {
     }
 }
 
-/* 8021E338-8021E444       .text cutTalkMsgStart__15dNpc_EventCut_cFv */
+/* 8021E4C0-8021E58C       .text cutTalkMsgProc__15dNpc_EventCut_cFv */
 void dNpc_EventCut_c::cutTalkMsgProc() {
     if(mpTalkActor == NULL || field_0x52 == 0) {
         dComIfGp_evmng_cutEnd(mEvtStaffId);

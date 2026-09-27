@@ -32,7 +32,7 @@ namespace daObjSwhammer {
         void set_mtx();
         void init_mtx();
         void set_damage();
-        void vib_start(short, float);
+        void vib_start(s16, f32);
         void vib_proc();
         void crush_start();
         void crush_proc();
@@ -53,7 +53,7 @@ namespace daObjSwhammer {
         virtual ~Act_c() {}
 
         static int M_damage;
-        static short M_damage_dir;
+        static s16 M_damage_dir;
         static Mtx M_tmp_mtx;
     
         static const char M_arcname[7];
@@ -68,18 +68,18 @@ namespace daObjSwhammer {
         /* 0x440 */ dCcD_Cyl mCylTg;
         /* 0x570 */ dCcD_Stts mSttsTg;
         /* 0x5AC */ int mMode;
-        /* 0x5B0 */ short mCrushTimer;
+        /* 0x5B0 */ s16 mCrushTimer;
         /* 0x5B2 */ u8 mCrushState;
-        /* 0x5B4 */ float mScaleYSpeed;
-        /* 0x5B8 */ float mScaleY;
-        /* 0x5BC */ float mAngleZ;
-        /* 0x5C0 */ float mAngleX;
-        /* 0x5C4 */ float mAngleSpeedZ;
-        /* 0x5C8 */ float mAngleSpeedX;
-        /* 0x5CC */ float mTargetHFrac;
-        /* 0x5D0 */ float mCurHFrac;
-        /* 0x5D4 */ float mVSpeed;
-        /* 0x5D8 */ float mTopPos;
+        /* 0x5B4 */ f32 mScaleYSpeed;
+        /* 0x5B8 */ f32 mScaleY;
+        /* 0x5BC */ f32 mAngleZ;
+        /* 0x5C0 */ f32 mAngleX;
+        /* 0x5C4 */ f32 mAngleSpeedZ;
+        /* 0x5C8 */ f32 mAngleSpeedX;
+        /* 0x5CC */ f32 mTargetHFrac;
+        /* 0x5D0 */ f32 mCurHFrac;
+        /* 0x5D4 */ f32 mVSpeed;
+        /* 0x5D8 */ f32 mTopPos;
         /* 0x5DC */ dPa_smokeEcallBack mSmokeCb;
         /* 0x5FC */ bool m5FC;
     }; /* Size: 0x600 */

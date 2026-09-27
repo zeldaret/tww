@@ -5,15 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ks.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_snap.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_gm.h"
-#include "d/res/res_ks.h"
+#include "res/Object/Ks.h"
 
 static int KS_ALL_COUNT = 0;
 static int KUTTUKU_ALL_COUNT = 0;
@@ -27,7 +25,7 @@ void draw_SUB(ks_class* i_this) {
     J3DModel* pBodyModel = i_this->mpBodyMorf->getModel();
     J3DModel* pEyeModel = i_this->mpEyeMorf->getModel();
 
-    cXyz local_24 = dComIfGp_getCamera(0)->mLookat.mEye - actor->current.pos;
+    cXyz local_24 = dComIfGp_getCamera(0)->view.mLookat.mEye - actor->current.pos;
 
     int iVar3 = cM_atan2s(local_24.x, local_24.z);
     int iVar4 = (s16)-cM_atan2s(local_24.y, std::sqrtf(SQUARE(local_24.x) + SQUARE(local_24.z)));
@@ -72,7 +70,7 @@ static BOOL daKS_Draw(ks_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
 
 #if VERSION > VERSION_DEMO
-    cXyz local_24 = actor->current.pos - dComIfGp_getCamera(0)->mLookat.mEye;
+    cXyz local_24 = actor->current.pos - dComIfGp_getCamera(0)->view.mLookat.mEye;
     if (local_24.abs() < REG0_F(10) + 100.0f) {
         return TRUE;
     }
@@ -213,7 +211,7 @@ BOOL ks_kuttuki_check(ks_class* i_this) {
 void gm_birth_delet(ks_class* i_this) {
     if (i_this->mGmID) {
         gm_class* i_gm = (gm_class*)fopAcM_SearchByID(i_this->mGmID);
-        if (i_gm && fopAc_IsActor(i_gm) && fopAcM_GetName(i_gm) == PROC_GM && i_gm->m31E > 0) {
+        if (i_gm && fopAcM_IsActor(i_gm) && fopAcM_GetName(i_gm) == fpcNm_GM_e && i_gm->m31E > 0) {
             i_gm->m31E--;
         }
     }
@@ -725,7 +723,7 @@ void action_dead_move(ks_class* i_this) {
 
             i_this->mMode++;
 
-            i_this->m2F0[1] = (s16)cM_rndFX(4096.0f);
+            i_this->m2F0[1] = (s16)cM_rndFX(0x1000);
 
             i_this->mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
             i_this->mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
@@ -1153,7 +1151,7 @@ void action_omoi(ks_class* i_this) {
             }
 
             actor->current.angle.y = fopAcM_searchPlayerAngleY(actor) + 0x8000;
-            actor->current.angle.y += (s16)cM_rndFX(16384.0f);
+            actor->current.angle.y += (s16)cM_rndFX(0x4000);
 
             actor->speedF = 15.0f;
             actor->gravity = -3.0f;
@@ -1183,11 +1181,11 @@ void action_omoi(ks_class* i_this) {
 }
 
 /* 000026DC-000027A0       .text tsubo_search__FPvPv */
-void* tsubo_search(void* param_1, void* i_data) {
+static void* tsubo_search(void* param_1, void* i_data) {
     ks_class* i_this = (ks_class*)i_data;
     fopAc_ac_c* actor = &i_this->actor;
     int r0 = 0;
-    if (r0 < 100 && fopAc_IsActor(param_1) && (fopAcM_GetName(param_1) == PROC_TSUBO)) {
+    if (r0 < 100 && fopAcM_IsActor(param_1) && (fopAcM_GetName(param_1) == fpcNm_TSUBO_e)) {
         fopAc_ac_c* tsubo_actor = (fopAc_ac_c*)param_1;
         
         if (std::fabsf(tsubo_actor->current.pos.x - actor->current.pos.x) < 20.0f &&
@@ -1207,7 +1205,7 @@ void action_tubo_search(ks_class* i_this) {
         case 50: {
             i_this->mKsID = fpcM_ERROR_PROCESS_ID_e;
 
-            fpcEx_Search(tsubo_search, actor);
+            fpcM_Search(tsubo_search, actor);
 
             if (i_this->mKsID == fpcM_ERROR_PROCESS_ID_e) {
                 fopAcM_delete(actor);
@@ -1277,7 +1275,7 @@ void action_tubo_search(ks_class* i_this) {
                 actor->shape_angle = actor->current.angle;
                 actor->shape_angle.x = 0;
 
-                fopAcM_create(PROC_KS, 3, &local_24, fopAcM_GetRoomNo(actor), &actor->shape_angle, &actor->scale, 0);
+                fopAcM_create(fpcNm_KS_e, 3, &local_24, fopAcM_GetRoomNo(actor), &actor->shape_angle, &actor->scale, 0);
             }
 
             fopAcM_delete(actor);
@@ -1292,7 +1290,7 @@ void action_kb_birth_check(ks_class* i_this) {
     switch (i_this->mMode) {
         case 60: {
             actor->current.pos.y += REG8_F(13) + 30.0f;
-            actor->current.angle.y = cM_rndFX(32767.0f);
+            actor->current.angle.y = cM_rndFX(0x7FFF);
 
             actor->speedF = REG8_F(8) + 4.0f + cM_rndF(REG8_F(9) + 4.0f);
             actor->speed.y = REG8_F(10) + 20.0f + cM_rndF(REG8_F(11) + 5.0f);
@@ -1360,7 +1358,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
         bool bVar5 = false;
 
         if (gmActor && ((fopAcM_GetParam(gmActor) & 0xff0000) == 0xff0000 || (fopAcM_GetParam(gmActor) & 0xff0000) == 0)) {
-            if (fopAcM_GetName(gmActor) == PROC_GM) {
+            if (fopAcM_GetName(gmActor) == fpcNm_GM_e) {
                 if (gmActor->health <= 0) {
                     bVar5 = true;
                 }
@@ -1481,6 +1479,7 @@ static BOOL daKS_Execute(ks_class* i_this) {
 
 /* 00003054-0000305C       .text daKS_IsDelete__FP8ks_class */
 static BOOL daKS_IsDelete(ks_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -1511,7 +1510,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
 
     ks_class* i_this = (ks_class*)i_act;
 
-    i_this->mpBodyMorf = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("KS", KS_BDL_KS_BODY), NULL, NULL, NULL, 
+    i_this->mpBodyMorf = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("KS", dRes_INDEX_KS_BDL_KS_BODY_e), NULL, NULL, NULL, 
                                             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 0, NULL, 0, 0x11020203);
     if (i_this->mpBodyMorf == NULL || i_this->mpBodyMorf->getModel() == NULL)
         return FALSE;
@@ -1521,12 +1520,12 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     if (i_this->mpBodyBrkAnm == NULL)
         return FALSE;
 
-    if (i_this->mpBodyBrkAnm->init(bodyModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_BODY), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
+    if (i_this->mpBodyBrkAnm->init(bodyModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", dRes_INDEX_KS_BRK_KS_BODY_e), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
         return FALSE;
 
     
-    i_this->mpEyeMorf = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("KS", KS_BDL_KS_EYE), NULL, NULL, 
-                                      (J3DAnmTransformKey *)dComIfG_getObjectRes("KS", KS_BCK_MABATAKI), 
+    i_this->mpEyeMorf = new mDoExt_McaMorf((J3DModelData *)dComIfG_getObjectRes("KS", dRes_INDEX_KS_BDL_KS_EYE_e), NULL, NULL, 
+                                      (J3DAnmTransformKey *)dComIfG_getObjectRes("KS", dRes_INDEX_KS_BCK_MABATAKI_e), 
                                       J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0, 0x11020203);
 
     if (i_this->mpEyeMorf == NULL || i_this->mpEyeMorf->getModel() == NULL)
@@ -1537,14 +1536,14 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
     if (i_this->mpEyeBtkAnm == NULL)
         return FALSE;
 
-    if (i_this->mpEyeBtkAnm->init(eyeModel->getModelData(), (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("KS", KS_BTK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
+    if (i_this->mpEyeBtkAnm->init(eyeModel->getModelData(), (J3DAnmTextureSRTKey *)dComIfG_getObjectRes("KS", dRes_INDEX_KS_BTK_KS_EYE_e), TRUE, J3DFrameCtrl::EMode_NONE) == 0)
         return FALSE;
     
     i_this->mpEyeBrkAnm = new mDoExt_brkAnm();
     if (i_this->mpEyeBrkAnm == NULL)
         return FALSE;
 
-    if (i_this->mpEyeBrkAnm->init(eyeModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", KS_BRK_KS_EYE), TRUE, J3DFrameCtrl::EMode_NONE) == 0) {
+    if (i_this->mpEyeBrkAnm->init(eyeModel->getModelData(), (J3DAnmTevRegKey *)dComIfG_getObjectRes("KS", dRes_INDEX_KS_BRK_KS_EYE_e), TRUE, J3DFrameCtrl::EMode_NONE) == 0) {
         return FALSE;
     }
     return TRUE; 
@@ -1552,16 +1551,12 @@ static BOOL useHeapInit(fopAc_ac_c* i_act) {
 
 /* 000034F8-00003A94       .text daKS_Create__FP10fopAc_ac_c */
 static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, ks_class);
-#endif
+    fopAcM_ct_Retail(i_this, ks_class);
     ks_class* a_this = (ks_class*)i_this;
     
     cPhs_State res = dComIfG_resLoad(&a_this->mPhs, "KS");
     if (res == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(i_this, ks_class);
-#endif
+        fopAcM_ct_Demo(i_this, ks_class);
         if (!fopAcM_entrySolidHeap(i_this, useHeapInit, 0x1060)) {
             return cPhs_ERROR_e;
         }
@@ -1608,7 +1603,7 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
                 i_this->shape_angle = i_this->current.angle;
                 i_this->shape_angle.x = 0;
 
-                fopAcM_create(PROC_KS, param, &local_4c, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &i_this->scale, 0);
+                fopAcM_create(fpcNm_KS_e, param, &local_4c, fopAcM_GetRoomNo(i_this), &i_this->shape_angle, &i_this->scale, 0);
             }
 
             return cPhs_ERROR_e;
@@ -1683,20 +1678,20 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
         a_this->mEnemyFire.mpMcaMorf = a_this->mpBodyMorf;
         a_this->mEnemyFire.mpActor = i_this;
 
-        static s8 fire_j[10] = {
-            0,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            
+        static u8 fire_j[ARRAY_SIZE(a_this->mEnemyFire.mFlameJntIdxs)] = {
+            KS_BODY_JNT_KARADA_e,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF,
+            0xFF
         };
-        static f32 fire_sc[10] = {
+        static f32 fire_sc[ARRAY_SIZE(a_this->mEnemyFire.mParticleScale)] = {
+            1.0f, // KS_BODY_JNT_KARADA_e
             1.0f,
             1.0f,
             1.0f,
@@ -1705,11 +1700,10 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
             1.0f,
             1.0f,
             1.0f,
-            1.0f,
-            1.0f,
+            1.0f
         };
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < ARRAY_SIZE(a_this->mEnemyFire.mFlameJntIdxs); i++) {
             a_this->mEnemyFire.mFlameJntIdxs[i] = fire_j[i];
             a_this->mEnemyFire.mParticleScale[i] = fire_sc[i];
         }
@@ -1723,8 +1717,8 @@ static cPhs_State daKS_Create(fopAc_ac_c* i_this) {
             }
 
             fopAc_ac_c* gm_actor = fopAcM_SearchByID(a_this->mGmID);
-            if (gm_actor && fopAc_IsActor(gm_actor) && fopAcM_GetName(gm_actor) == PROC_GM && a_this->m2C8 == 5) {
-                i_this->current.angle.y += cM_rndFX(8192.0f);
+            if (gm_actor && fopAcM_IsActor(gm_actor) && fopAcM_GetName(gm_actor) == fpcNm_GM_e && a_this->m2C8 == 5) {
+                i_this->current.angle.y += cM_rndFX(0x2000);
                 i_this->speedF = cM_rndF(6.0f) + 34.0f;
                 i_this->speed.y = cM_rndF(8.0f) + 22.0f;
             }
@@ -1779,18 +1773,18 @@ static actor_method_class l_daKS_Method = {
 };
 
 actor_process_profile_definition g_profile_KS = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KS,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KS_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(ks_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KS,
+    /* Draw Prio    */ fpcDwPi_KS_e,
     /* Actor SubMtd */ &l_daKS_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENV_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -40,12 +40,12 @@ BOOL daItemBase_c::CreateItemHeap(const char* resName, s16 resIdx, s16 btkAnm1, 
     }
     
     switch (m_itemNo) {
-    case dItem_ARROW_30_e:
+    case dItemNo_ARROW_30_e:
         mpModelArrow[0] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
         if (!mpModelArrow[0]) {
             return FALSE;
         }
-    case dItem_ARROW_20_e:
+    case dItemNo_ARROW_20_e:
         mpModelArrow[1] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000002);
         if (!mpModelArrow[1]) {
             return FALSE;
@@ -162,10 +162,10 @@ void daItemBase_c::settingBeforeDraw() {
     if (isBomb(m_itemNo)) {
         daPy_lk_c* link = daPy_getPlayerLinkActorClass();
         link->getBombBrk()->setFrame(0.0f);
-        mpModel->getModelData()->getJointNodePointer(0)->setMtxCalc(NULL);
+        mpModel->getModelData()->getJointNodePointer(BOMB_JNT_VBOMB_MODEL_e)->setMtxCalc(NULL);
     }
     
-    if (m_itemNo == dItem_BOMB_BAG_e || m_itemNo == dItem_SKULL_HAMMER_e || m_itemNo == dItem_SMALL_KEY_e) {
+    if (m_itemNo == dItemNo_BOMB_BAG_e || m_itemNo == dItemNo_SKULL_HAMMER_e || m_itemNo == dItemNo_SMALL_KEY_e) {
         dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
     }
 }

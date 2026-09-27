@@ -5,8 +5,6 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_coming2.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_bg_s_wtr_chk.h"
 #include "d/d_bg_s_gnd_chk.h"
@@ -16,21 +14,21 @@
 #include "d/actor/d_a_obj_barrel2.h"
 
 s32 daComing2::coming_make_item_no_table[] = {
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_GREEN_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_BLUE_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
-    dItem_YELLOW_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_GREEN_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_BLUE_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
+    dItemNo_YELLOW_RUPEE_e,
 };
 
 static void dummy() {
@@ -118,7 +116,7 @@ struct SafetyCallback {
 void* daComing2::position_is_safety_call_back(void* ac, void* cb) {
     SafetyCallback* callback = (SafetyCallback*)cb;
 
-    if (fopAc_IsActor(ac)) {
+    if (fopAcM_IsActor(ac)) {
         fopAc_ac_c* actor = (fopAc_ac_c*)ac;
         if (fopAcM_GetGroup(actor) == fopAc_ENEMY_e) {
             f32 x = actor->current.pos.x - callback->pos->x;
@@ -231,7 +229,7 @@ BOOL daComing2::Act_c::make_coming_param(cXyz* outPos, daObjBarrel2::Type_e* out
         *outType = daObjBarrel2::Type_01_e;
         *outHasFlag = false;
 
-        *outDroppedItem = (unk_2A4 < 0xFu) ? coming_make_item_no_table[unk_2A4] : dItem_RECOVER_FAIRY_e;
+        *outDroppedItem = (unk_2A4 < 0xFu) ? coming_make_item_no_table[unk_2A4] : dItemNo_RECOVER_FAIRY_e;
         return TRUE;
     }
     return FALSE;
@@ -293,8 +291,8 @@ BOOL daComing2::Act_c::request_all_flag_exit() {
         daObjBarrel2::Act_c* buoy;
 
         if (buoyProc != fpcM_ERROR_PROCESS_ID_e && fopAcM_SearchByID(buoyProc, (fopAc_ac_c**)&buoy) != NULL && buoy != NULL) {
-             buoy->exit_req();
-             mStartBuoy[i].unk_00 = fpcM_ERROR_PROCESS_ID_e;
+            buoy->exit_req();
+            mStartBuoy[i].unk_00 = fpcM_ERROR_PROCESS_ID_e;
         }
     }
 
@@ -311,28 +309,28 @@ void daComing2::Act_c::barrel_execute(int idx) {
     
     if (barrelProc != fpcM_ERROR_PROCESS_ID_e) {
         if ((BOOL)fopAcM_SearchByID(barrelProc, (fopAc_ac_c**)&barrel) == TRUE) {
-             if (barrel != NULL) {
+            if (barrel != NULL) {
                 mBarrelInfo[idx].unk_06 = barrel->chk_item_give();
-             }
+            }
 
-             if (mBarrelInfo[idx].unk_04 == 0) {
-                 request_barrel_exitN(idx);
-             } else if (mBarrelInfo[idx].unk_04 > 0) {
-                 mBarrelInfo[idx].unk_04--;
-             }
+            if (mBarrelInfo[idx].unk_04 == 0) {
+                request_barrel_exitN(idx);
+            } else if (mBarrelInfo[idx].unk_04 > 0) {
+                mBarrelInfo[idx].unk_04--;
+            }
         } else if (mBarrelInfo[idx].unk_06 == 0) {
-             init_barrelN_info(idx);
-             coming_process_init(0);
+            init_barrelN_info(idx);
+            coming_process_init(0);
         }
 
         if (mBarrelInfo[idx].unk_06 == 1) {
-             if (unk_2A4 >= 15u) {
-                 coming_process_init(0);
-                } else {
-                 request_barrel_exitN(idx);
-                 init_barrelN_info(idx);
-                 unk_29A = 1;
-             }
+            if (unk_2A4 >= 15u) {
+                coming_process_init(0);
+            } else {
+                request_barrel_exitN(idx);
+                init_barrelN_info(idx);
+                unk_29A = 1;
+            }
         }
     }
 }
@@ -589,7 +587,7 @@ void daComing2::Act_c::coming_process_main() {
 
 /* 00002154-00002264       .text _create__Q29daComing25Act_cFv */
 cPhs_State daComing2::Act_c::_create() {
-    fopAcM_SetupActor(this, daComing2::Act_c);
+    fopAcM_ct(this, daComing2::Act_c);
     unk_299 = -1;
     init_barrel_info();
     init_coming_info();
@@ -676,18 +674,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daComing2
 
 actor_process_profile_definition g_profile_Coming2 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Coming2,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Coming2_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daComing2::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Coming2,
+    /* Draw Prio    */ fpcDwPi_Coming2_e,
     /* Actor SubMtd */ &daComing2::Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

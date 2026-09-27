@@ -11,10 +11,8 @@
 #include "d/d_bg_s_lin_chk.h"
 #include "d/d_s_play.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_bg_s_func.h"
-#include "d/res/res_link.h"
+#include "res/Object/Link.h"
 #include "f_op/f_op_actor_mng.h"
 
 /* 800E7E60-800E7EA8       .text daEsa_Draw__FP9esa_class */
@@ -78,14 +76,14 @@ void bg_check(esa_class* i_this) {
             sp6C.x = 0.0f;
             sp6C.y = 0.0f;
             sp6C.z = i_this->speedF;
-            mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+            cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
             MtxPosition(&sp6C, &sp60);
             i_this->speed.x = sp60.x;
             i_this->speed.z = sp60.z;
         }
     }
     else {
-        fopAcM_OffStatus(i_this, fopAcStts_UNK4000_e);
+        cLib_offBit<u32>(i_this->actor_status, fopAcStts_UNK4000_e);
     }
 }
 
@@ -95,12 +93,12 @@ void esa_1_move(esa_class* i_this) {
     switch(i_this->mActionState) {
         case 0:
             i_this->current.angle.y += (s16)cM_rndFX(4000.0f);
-            i_this->current.angle.z = cM_rndFX(32768.0f);
+            i_this->current.angle.z = cM_rndFX(0x8000);
             sp24.x = 0.0f;
             sp24.y = cM_rndF(8.0f) + 15.0f;
             sp24.z = cM_rndF(5.0f) + 10.0f;
             i_this->speedF = sp24.z;
-            mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+            cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
             MtxPosition(&sp24, &i_this->speed);
 
             i_this->mActionState = 1;
@@ -120,7 +118,7 @@ void esa_1_move(esa_class* i_this) {
                 else {
                     if(i_this->speed.y < 5.0f) {
                         i_this->speed.y *= -(cM_rndF(0.05f) + 0.15f);
-                        i_this->current.angle.z = cM_rndFX(32768.0f);
+                        i_this->current.angle.z = cM_rndFX(0x8000);
                     }
 
                     i_this->current.angle.y += (s16)cM_rndFX(8000.0f);
@@ -128,7 +126,7 @@ void esa_1_move(esa_class* i_this) {
                     sp24.x = 0.0f;
                     sp24.y = 0.0f;
                     sp24.z = i_this->speedF;
-                    mDoMtx_YrotS(*calc_mtx, i_this->current.angle.y);
+                    cMtx_YrotS(*calc_mtx, i_this->current.angle.y);
                     cXyz sp18;
                     MtxPosition(&sp24, &sp18);
                     i_this->speed.x = sp18.x;
@@ -202,9 +200,9 @@ static BOOL daEsa_Execute(esa_class* i_this) {
     esa_1_move(i_this);
 
     MtxTrans(i_this->current.pos.x, i_this->current.pos.y, i_this->current.pos.z, false);
-    mDoMtx_YrotM(*calc_mtx, i_this->current.angle.y);
-    mDoMtx_XrotM(*calc_mtx, i_this->current.angle.x);
-    mDoMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
+    cMtx_YrotM(*calc_mtx, i_this->current.angle.y);
+    cMtx_XrotM(*calc_mtx, i_this->current.angle.x);
+    cMtx_ZrotM(*calc_mtx, i_this->current.angle.z);
     i_this->mpModel->setBaseTRMtx(*calc_mtx);
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->current.pos, &i_this->tevStr);
@@ -214,6 +212,7 @@ static BOOL daEsa_Execute(esa_class* i_this) {
 
 /* 800E89B8-800E89C0       .text daEsa_IsDelete__FP9esa_class */
 static BOOL daEsa_IsDelete(esa_class* i_this) {
+    UNUSED(i_this);
     return true;
 }
 
@@ -228,7 +227,7 @@ static BOOL daEsa_Delete(esa_class* i_this) {
 static BOOL daEsa_CreateHeap(fopAc_ac_c* i_actor) {
     esa_class* i_this = static_cast<esa_class*>(i_actor);
 
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", LINK_BDL_ESA));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_ESA_e));
     JUT_ASSERT(0x1E8, modelData != NULL);
     i_this->mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
 
@@ -243,7 +242,7 @@ static BOOL daEsa_CreateHeap(fopAc_ac_c* i_actor) {
 static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
     daPy_py_c* player = daPy_getPlayerActorClass();
 
-    fopAcM_SetupActor(i_actor, esa_class);
+    fopAcM_ct(i_actor, esa_class);
 
     esa_class* i_this = static_cast<esa_class*>(i_actor);
 
@@ -266,15 +265,16 @@ static cPhs_State daEsa_Create(fopAc_ac_c* i_actor) {
                 params->base.position = pos;
                 params->base.angle.x = 0;
                 params->base.angle.y = i_this->current.angle.y;
-                params->base.angle.z = cM_rndF(65536.0f);
+                params->base.angle.z = cM_rndF(0x10000);
                 params->base.parameters = 0x000000FF;
-                fpcM_Create(PROC_ESA, 0, params);
+                fpcM_Create(fpcNm_ESA_e, 0, params);
             }
         }
     }
 
+    f32 f2 = REG0_F(5) + 1.0f;
     f32 temp = REG0_F(6) + 0.65f;
-    f32 scaleF = temp + cM_rndF(REG0_F(5) + 1.0f - temp);
+    f32 scaleF = temp + cM_rndF(f2 - temp);
     cXyz scale(scaleF, scaleF, scaleF);
     i_this->mpModel->setBaseScale(scale);
     fopAcM_SetMtx(i_this, i_this->mpModel->getBaseTRMtx());
@@ -291,18 +291,18 @@ static actor_method_class l_daEsa_Method = {
 };
 
 actor_process_profile_definition g_profile_ESA = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ESA,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ESA_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(esa_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ESA,
+    /* Draw Prio    */ fpcDwPi_ESA_e,
     /* Actor SubMtd */ &l_daEsa_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

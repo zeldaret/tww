@@ -7,10 +7,8 @@
 #include "d/actor/d_a_obj_buoyrace.h"
 #include "d/actor/d_a_goal_flag.h"
 #include "d/actor/d_a_sea.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_khasi_00.h"
-#include "d/res/res_kkiba_00.h"
+#include "res/Object/Khasi_00.h"
+#include "res/Object/Kkiba_00.h"
 
 const char daObjBuoyrace::Act_c::M_arcname_kiba[] = "Kkiba_00";
 const char daObjBuoyrace::Act_c::M_arcname_hasi[] = "Khasi_00";
@@ -35,11 +33,11 @@ BOOL daObjBuoyrace::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 bool daObjBuoyrace::Act_c::create_heap() {
     bool result = false;
 
-    J3DModelData* mdl_data_kiba = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_kiba, KKIBA_00_BDL_KKIBA_00));
+    J3DModelData* mdl_data_kiba = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_kiba, dRes_INDEX_KKIBA_00_BDL_KKIBA_00_e));
     JUT_ASSERT(119, mdl_data_kiba != NULL);
     mpModelKiba = mDoExt_J3DModel__create(mdl_data_kiba, 0x80000, 0x11000022);
 
-    J3DModelData* mdl_data_hasi = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_hasi, KHASI_00_BDL_KHASI_00));
+    J3DModelData* mdl_data_hasi = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname_hasi, dRes_INDEX_KHASI_00_BDL_KHASI_00_e));
     JUT_ASSERT(128, mdl_data_hasi != NULL);
     mpModelHasi = mDoExt_J3DModel__create(mdl_data_hasi, 0x80000, 0x11000022);
 
@@ -69,7 +67,7 @@ cPhs_State daObjBuoyrace::Act_c::create_load() {
 
 /* 00000238-00000374       .text _create__Q213daObjBuoyrace5Act_cFv */
 cPhs_State daObjBuoyrace::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjBuoyrace::Act_c);
+    fopAcM_ct(this, daObjBuoyrace::Act_c);
 
 #if VERSION > VERSION_DEMO
     cPhs_State result = create_load();
@@ -310,18 +308,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjBuoyrace
 
 actor_process_profile_definition g_profile_Obj_Buoyrace = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Buoyrace,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Buoyrace_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjBuoyrace::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Buoyrace,
+    /* Draw Prio    */ fpcDwPi_Obj_Buoyrace_e,
     /* Actor SubMtd */ &daObjBuoyrace::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

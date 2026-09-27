@@ -5,300 +5,298 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_apzl.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_item.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "d/res/res_apzl.h"
+#include "res/Object/Apzl.h"
 
 static const u32 daObjApzl_bmt_table[16][16] = {
     {
-        APZL_BMT_APZLP_I00,
-        APZL_BMT_APZLP_I01,
-        APZL_BMT_APZLP_I02,
-        APZL_BMT_APZLP_I03,
-        APZL_BMT_APZLP_I04,
-        APZL_BMT_APZLP_I05,
-        APZL_BMT_APZLP_I06,
-        APZL_BMT_APZLP_I07,
-        APZL_BMT_APZLP_I08,
-        APZL_BMT_APZLP_I09,
-        APZL_BMT_APZLP_I10,
-        APZL_BMT_APZLP_I11,
-        APZL_BMT_APZLP_I12,
-        APZL_BMT_APZLP_I13,
-        APZL_BMT_APZLP_I14,
-        APZL_BMT_APZLP_I15,
+        dRes_INDEX_APZL_BMT_APZLP_I00_e,
+        dRes_INDEX_APZL_BMT_APZLP_I01_e,
+        dRes_INDEX_APZL_BMT_APZLP_I02_e,
+        dRes_INDEX_APZL_BMT_APZLP_I03_e,
+        dRes_INDEX_APZL_BMT_APZLP_I04_e,
+        dRes_INDEX_APZL_BMT_APZLP_I05_e,
+        dRes_INDEX_APZL_BMT_APZLP_I06_e,
+        dRes_INDEX_APZL_BMT_APZLP_I07_e,
+        dRes_INDEX_APZL_BMT_APZLP_I08_e,
+        dRes_INDEX_APZL_BMT_APZLP_I09_e,
+        dRes_INDEX_APZL_BMT_APZLP_I10_e,
+        dRes_INDEX_APZL_BMT_APZLP_I11_e,
+        dRes_INDEX_APZL_BMT_APZLP_I12_e,
+        dRes_INDEX_APZL_BMT_APZLP_I13_e,
+        dRes_INDEX_APZL_BMT_APZLP_I14_e,
+        dRes_INDEX_APZL_BMT_APZLP_I15_e,
     },
     {
-        APZL_BMT_APZLP_J00,
-        APZL_BMT_APZLP_J01,
-        APZL_BMT_APZLP_J02,
-        APZL_BMT_APZLP_J03,
-        APZL_BMT_APZLP_J04,
-        APZL_BMT_APZLP_J05,
-        APZL_BMT_APZLP_J06,
-        APZL_BMT_APZLP_J07,
-        APZL_BMT_APZLP_J08,
-        APZL_BMT_APZLP_J09,
-        APZL_BMT_APZLP_J10,
-        APZL_BMT_APZLP_J11,
-        APZL_BMT_APZLP_J12,
-        APZL_BMT_APZLP_J13,
-        APZL_BMT_APZLP_J14,
-        APZL_BMT_APZLP_J15,
+        dRes_INDEX_APZL_BMT_APZLP_J00_e,
+        dRes_INDEX_APZL_BMT_APZLP_J01_e,
+        dRes_INDEX_APZL_BMT_APZLP_J02_e,
+        dRes_INDEX_APZL_BMT_APZLP_J03_e,
+        dRes_INDEX_APZL_BMT_APZLP_J04_e,
+        dRes_INDEX_APZL_BMT_APZLP_J05_e,
+        dRes_INDEX_APZL_BMT_APZLP_J06_e,
+        dRes_INDEX_APZL_BMT_APZLP_J07_e,
+        dRes_INDEX_APZL_BMT_APZLP_J08_e,
+        dRes_INDEX_APZL_BMT_APZLP_J09_e,
+        dRes_INDEX_APZL_BMT_APZLP_J10_e,
+        dRes_INDEX_APZL_BMT_APZLP_J11_e,
+        dRes_INDEX_APZL_BMT_APZLP_J12_e,
+        dRes_INDEX_APZL_BMT_APZLP_J13_e,
+        dRes_INDEX_APZL_BMT_APZLP_J14_e,
+        dRes_INDEX_APZL_BMT_APZLP_J15_e,
     },
     {
-        APZL_BMT_APZLP_K00,
-        APZL_BMT_APZLP_K01,
-        APZL_BMT_APZLP_K02,
-        APZL_BMT_APZLP_K03,
-        APZL_BMT_APZLP_K04,
-        APZL_BMT_APZLP_K05,
-        APZL_BMT_APZLP_K06,
-        APZL_BMT_APZLP_K07,
-        APZL_BMT_APZLP_K08,
-        APZL_BMT_APZLP_K09,
-        APZL_BMT_APZLP_K10,
-        APZL_BMT_APZLP_K11,
-        APZL_BMT_APZLP_K12,
-        APZL_BMT_APZLP_K13,
-        APZL_BMT_APZLP_K14,
-        APZL_BMT_APZLP_K15,
+        dRes_INDEX_APZL_BMT_APZLP_K00_e,
+        dRes_INDEX_APZL_BMT_APZLP_K01_e,
+        dRes_INDEX_APZL_BMT_APZLP_K02_e,
+        dRes_INDEX_APZL_BMT_APZLP_K03_e,
+        dRes_INDEX_APZL_BMT_APZLP_K04_e,
+        dRes_INDEX_APZL_BMT_APZLP_K05_e,
+        dRes_INDEX_APZL_BMT_APZLP_K06_e,
+        dRes_INDEX_APZL_BMT_APZLP_K07_e,
+        dRes_INDEX_APZL_BMT_APZLP_K08_e,
+        dRes_INDEX_APZL_BMT_APZLP_K09_e,
+        dRes_INDEX_APZL_BMT_APZLP_K10_e,
+        dRes_INDEX_APZL_BMT_APZLP_K11_e,
+        dRes_INDEX_APZL_BMT_APZLP_K12_e,
+        dRes_INDEX_APZL_BMT_APZLP_K13_e,
+        dRes_INDEX_APZL_BMT_APZLP_K14_e,
+        dRes_INDEX_APZL_BMT_APZLP_K15_e,
     },
     {
-        APZL_BMT_APZLP_L00,
-        APZL_BMT_APZLP_L01,
-        APZL_BMT_APZLP_L02,
-        APZL_BMT_APZLP_L03,
-        APZL_BMT_APZLP_L04,
-        APZL_BMT_APZLP_L05,
-        APZL_BMT_APZLP_L06,
-        APZL_BMT_APZLP_L07,
-        APZL_BMT_APZLP_L08,
-        APZL_BMT_APZLP_L09,
-        APZL_BMT_APZLP_L10,
-        APZL_BMT_APZLP_L11,
-        APZL_BMT_APZLP_L12,
-        APZL_BMT_APZLP_L13,
-        APZL_BMT_APZLP_L14,
-        APZL_BMT_APZLP_L15,
+        dRes_INDEX_APZL_BMT_APZLP_L00_e,
+        dRes_INDEX_APZL_BMT_APZLP_L01_e,
+        dRes_INDEX_APZL_BMT_APZLP_L02_e,
+        dRes_INDEX_APZL_BMT_APZLP_L03_e,
+        dRes_INDEX_APZL_BMT_APZLP_L04_e,
+        dRes_INDEX_APZL_BMT_APZLP_L05_e,
+        dRes_INDEX_APZL_BMT_APZLP_L06_e,
+        dRes_INDEX_APZL_BMT_APZLP_L07_e,
+        dRes_INDEX_APZL_BMT_APZLP_L08_e,
+        dRes_INDEX_APZL_BMT_APZLP_L09_e,
+        dRes_INDEX_APZL_BMT_APZLP_L10_e,
+        dRes_INDEX_APZL_BMT_APZLP_L11_e,
+        dRes_INDEX_APZL_BMT_APZLP_L12_e,
+        dRes_INDEX_APZL_BMT_APZLP_L13_e,
+        dRes_INDEX_APZL_BMT_APZLP_L14_e,
+        dRes_INDEX_APZL_BMT_APZLP_L15_e,
     },
     {
-        APZL_BMT_APZLP_M00,
-        APZL_BMT_APZLP_M01,
-        APZL_BMT_APZLP_M02,
-        APZL_BMT_APZLP_M03,
-        APZL_BMT_APZLP_M04,
-        APZL_BMT_APZLP_M05,
-        APZL_BMT_APZLP_M06,
-        APZL_BMT_APZLP_M07,
-        APZL_BMT_APZLP_M08,
-        APZL_BMT_APZLP_M09,
-        APZL_BMT_APZLP_M10,
-        APZL_BMT_APZLP_M11,
-        APZL_BMT_APZLP_M12,
-        APZL_BMT_APZLP_M13,
-        APZL_BMT_APZLP_M14,
-        APZL_BMT_APZLP_M15,
+        dRes_INDEX_APZL_BMT_APZLP_M00_e,
+        dRes_INDEX_APZL_BMT_APZLP_M01_e,
+        dRes_INDEX_APZL_BMT_APZLP_M02_e,
+        dRes_INDEX_APZL_BMT_APZLP_M03_e,
+        dRes_INDEX_APZL_BMT_APZLP_M04_e,
+        dRes_INDEX_APZL_BMT_APZLP_M05_e,
+        dRes_INDEX_APZL_BMT_APZLP_M06_e,
+        dRes_INDEX_APZL_BMT_APZLP_M07_e,
+        dRes_INDEX_APZL_BMT_APZLP_M08_e,
+        dRes_INDEX_APZL_BMT_APZLP_M09_e,
+        dRes_INDEX_APZL_BMT_APZLP_M10_e,
+        dRes_INDEX_APZL_BMT_APZLP_M11_e,
+        dRes_INDEX_APZL_BMT_APZLP_M12_e,
+        dRes_INDEX_APZL_BMT_APZLP_M13_e,
+        dRes_INDEX_APZL_BMT_APZLP_M14_e,
+        dRes_INDEX_APZL_BMT_APZLP_M15_e,
     },
     {
-        APZL_BMT_APZLP_N00,
-        APZL_BMT_APZLP_N01,
-        APZL_BMT_APZLP_N02,
-        APZL_BMT_APZLP_N03,
-        APZL_BMT_APZLP_N04,
-        APZL_BMT_APZLP_N05,
-        APZL_BMT_APZLP_N06,
-        APZL_BMT_APZLP_N07,
-        APZL_BMT_APZLP_N08,
-        APZL_BMT_APZLP_N09,
-        APZL_BMT_APZLP_N10,
-        APZL_BMT_APZLP_N11,
-        APZL_BMT_APZLP_N12,
-        APZL_BMT_APZLP_N13,
-        APZL_BMT_APZLP_N14,
-        APZL_BMT_APZLP_N15,
+        dRes_INDEX_APZL_BMT_APZLP_N00_e,
+        dRes_INDEX_APZL_BMT_APZLP_N01_e,
+        dRes_INDEX_APZL_BMT_APZLP_N02_e,
+        dRes_INDEX_APZL_BMT_APZLP_N03_e,
+        dRes_INDEX_APZL_BMT_APZLP_N04_e,
+        dRes_INDEX_APZL_BMT_APZLP_N05_e,
+        dRes_INDEX_APZL_BMT_APZLP_N06_e,
+        dRes_INDEX_APZL_BMT_APZLP_N07_e,
+        dRes_INDEX_APZL_BMT_APZLP_N08_e,
+        dRes_INDEX_APZL_BMT_APZLP_N09_e,
+        dRes_INDEX_APZL_BMT_APZLP_N10_e,
+        dRes_INDEX_APZL_BMT_APZLP_N11_e,
+        dRes_INDEX_APZL_BMT_APZLP_N12_e,
+        dRes_INDEX_APZL_BMT_APZLP_N13_e,
+        dRes_INDEX_APZL_BMT_APZLP_N14_e,
+        dRes_INDEX_APZL_BMT_APZLP_N15_e,
     },
     {
-        APZL_BMT_APZLP_O00,
-        APZL_BMT_APZLP_O01,
-        APZL_BMT_APZLP_O02,
-        APZL_BMT_APZLP_O03,
-        APZL_BMT_APZLP_O04,
-        APZL_BMT_APZLP_O05,
-        APZL_BMT_APZLP_O06,
-        APZL_BMT_APZLP_O07,
-        APZL_BMT_APZLP_O08,
-        APZL_BMT_APZLP_O09,
-        APZL_BMT_APZLP_O10,
-        APZL_BMT_APZLP_O11,
-        APZL_BMT_APZLP_O12,
-        APZL_BMT_APZLP_O13,
-        APZL_BMT_APZLP_O14,
-        APZL_BMT_APZLP_O15,
+        dRes_INDEX_APZL_BMT_APZLP_O00_e,
+        dRes_INDEX_APZL_BMT_APZLP_O01_e,
+        dRes_INDEX_APZL_BMT_APZLP_O02_e,
+        dRes_INDEX_APZL_BMT_APZLP_O03_e,
+        dRes_INDEX_APZL_BMT_APZLP_O04_e,
+        dRes_INDEX_APZL_BMT_APZLP_O05_e,
+        dRes_INDEX_APZL_BMT_APZLP_O06_e,
+        dRes_INDEX_APZL_BMT_APZLP_O07_e,
+        dRes_INDEX_APZL_BMT_APZLP_O08_e,
+        dRes_INDEX_APZL_BMT_APZLP_O09_e,
+        dRes_INDEX_APZL_BMT_APZLP_O10_e,
+        dRes_INDEX_APZL_BMT_APZLP_O11_e,
+        dRes_INDEX_APZL_BMT_APZLP_O12_e,
+        dRes_INDEX_APZL_BMT_APZLP_O13_e,
+        dRes_INDEX_APZL_BMT_APZLP_O14_e,
+        dRes_INDEX_APZL_BMT_APZLP_O15_e,
     },
     {
-        APZL_BMT_APZLP_P00,
-        APZL_BMT_APZLP_P01,
-        APZL_BMT_APZLP_P02,
-        APZL_BMT_APZLP_P03,
-        APZL_BMT_APZLP_P04,
-        APZL_BMT_APZLP_P05,
-        APZL_BMT_APZLP_P06,
-        APZL_BMT_APZLP_P07,
-        APZL_BMT_APZLP_P08,
-        APZL_BMT_APZLP_P09,
-        APZL_BMT_APZLP_P10,
-        APZL_BMT_APZLP_P11,
-        APZL_BMT_APZLP_P12,
-        APZL_BMT_APZLP_P13,
-        APZL_BMT_APZLP_P14,
-        APZL_BMT_APZLP_P15,
+        dRes_INDEX_APZL_BMT_APZLP_P00_e,
+        dRes_INDEX_APZL_BMT_APZLP_P01_e,
+        dRes_INDEX_APZL_BMT_APZLP_P02_e,
+        dRes_INDEX_APZL_BMT_APZLP_P03_e,
+        dRes_INDEX_APZL_BMT_APZLP_P04_e,
+        dRes_INDEX_APZL_BMT_APZLP_P05_e,
+        dRes_INDEX_APZL_BMT_APZLP_P06_e,
+        dRes_INDEX_APZL_BMT_APZLP_P07_e,
+        dRes_INDEX_APZL_BMT_APZLP_P08_e,
+        dRes_INDEX_APZL_BMT_APZLP_P09_e,
+        dRes_INDEX_APZL_BMT_APZLP_P10_e,
+        dRes_INDEX_APZL_BMT_APZLP_P11_e,
+        dRes_INDEX_APZL_BMT_APZLP_P12_e,
+        dRes_INDEX_APZL_BMT_APZLP_P13_e,
+        dRes_INDEX_APZL_BMT_APZLP_P14_e,
+        dRes_INDEX_APZL_BMT_APZLP_P15_e,
     },
     {
-        APZL_BMT_APZLP_Q00,
-        APZL_BMT_APZLP_Q01,
-        APZL_BMT_APZLP_Q02,
-        APZL_BMT_APZLP_Q03,
-        APZL_BMT_APZLP_Q04,
-        APZL_BMT_APZLP_Q05,
-        APZL_BMT_APZLP_Q06,
-        APZL_BMT_APZLP_Q07,
-        APZL_BMT_APZLP_Q08,
-        APZL_BMT_APZLP_Q09,
-        APZL_BMT_APZLP_Q10,
-        APZL_BMT_APZLP_Q11,
-        APZL_BMT_APZLP_Q12,
-        APZL_BMT_APZLP_Q13,
-        APZL_BMT_APZLP_Q14,
-        APZL_BMT_APZLP_Q15,
+        dRes_INDEX_APZL_BMT_APZLP_Q00_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q01_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q02_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q03_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q04_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q05_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q06_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q07_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q08_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q09_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q10_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q11_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q12_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q13_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q14_e,
+        dRes_INDEX_APZL_BMT_APZLP_Q15_e,
     },
     {
-        APZL_BMT_APZLP_R00,
-        APZL_BMT_APZLP_R01,
-        APZL_BMT_APZLP_R02,
-        APZL_BMT_APZLP_R03,
-        APZL_BMT_APZLP_R04,
-        APZL_BMT_APZLP_R05,
-        APZL_BMT_APZLP_R06,
-        APZL_BMT_APZLP_R07,
-        APZL_BMT_APZLP_R08,
-        APZL_BMT_APZLP_R09,
-        APZL_BMT_APZLP_R10,
-        APZL_BMT_APZLP_R11,
-        APZL_BMT_APZLP_R12,
-        APZL_BMT_APZLP_R13,
-        APZL_BMT_APZLP_R14,
-        APZL_BMT_APZLP_R15,
+        dRes_INDEX_APZL_BMT_APZLP_R00_e,
+        dRes_INDEX_APZL_BMT_APZLP_R01_e,
+        dRes_INDEX_APZL_BMT_APZLP_R02_e,
+        dRes_INDEX_APZL_BMT_APZLP_R03_e,
+        dRes_INDEX_APZL_BMT_APZLP_R04_e,
+        dRes_INDEX_APZL_BMT_APZLP_R05_e,
+        dRes_INDEX_APZL_BMT_APZLP_R06_e,
+        dRes_INDEX_APZL_BMT_APZLP_R07_e,
+        dRes_INDEX_APZL_BMT_APZLP_R08_e,
+        dRes_INDEX_APZL_BMT_APZLP_R09_e,
+        dRes_INDEX_APZL_BMT_APZLP_R10_e,
+        dRes_INDEX_APZL_BMT_APZLP_R11_e,
+        dRes_INDEX_APZL_BMT_APZLP_R12_e,
+        dRes_INDEX_APZL_BMT_APZLP_R13_e,
+        dRes_INDEX_APZL_BMT_APZLP_R14_e,
+        dRes_INDEX_APZL_BMT_APZLP_R15_e,
     },
     {
-        APZL_BMT_APZLP_S00,
-        APZL_BMT_APZLP_S01,
-        APZL_BMT_APZLP_S02,
-        APZL_BMT_APZLP_S03,
-        APZL_BMT_APZLP_S04,
-        APZL_BMT_APZLP_S05,
-        APZL_BMT_APZLP_S06,
-        APZL_BMT_APZLP_S07,
-        APZL_BMT_APZLP_S08,
-        APZL_BMT_APZLP_S09,
-        APZL_BMT_APZLP_S10,
-        APZL_BMT_APZLP_S11,
-        APZL_BMT_APZLP_S12,
-        APZL_BMT_APZLP_S13,
-        APZL_BMT_APZLP_S14,
-        APZL_BMT_APZLP_S15,
+        dRes_INDEX_APZL_BMT_APZLP_S00_e,
+        dRes_INDEX_APZL_BMT_APZLP_S01_e,
+        dRes_INDEX_APZL_BMT_APZLP_S02_e,
+        dRes_INDEX_APZL_BMT_APZLP_S03_e,
+        dRes_INDEX_APZL_BMT_APZLP_S04_e,
+        dRes_INDEX_APZL_BMT_APZLP_S05_e,
+        dRes_INDEX_APZL_BMT_APZLP_S06_e,
+        dRes_INDEX_APZL_BMT_APZLP_S07_e,
+        dRes_INDEX_APZL_BMT_APZLP_S08_e,
+        dRes_INDEX_APZL_BMT_APZLP_S09_e,
+        dRes_INDEX_APZL_BMT_APZLP_S10_e,
+        dRes_INDEX_APZL_BMT_APZLP_S11_e,
+        dRes_INDEX_APZL_BMT_APZLP_S12_e,
+        dRes_INDEX_APZL_BMT_APZLP_S13_e,
+        dRes_INDEX_APZL_BMT_APZLP_S14_e,
+        dRes_INDEX_APZL_BMT_APZLP_S15_e,
     },
     {
-        APZL_BMT_APZLP_T00,
-        APZL_BMT_APZLP_T01,
-        APZL_BMT_APZLP_T02,
-        APZL_BMT_APZLP_T03,
-        APZL_BMT_APZLP_T04,
-        APZL_BMT_APZLP_T05,
-        APZL_BMT_APZLP_T06,
-        APZL_BMT_APZLP_T07,
-        APZL_BMT_APZLP_T08,
-        APZL_BMT_APZLP_T09,
-        APZL_BMT_APZLP_T10,
-        APZL_BMT_APZLP_T11,
-        APZL_BMT_APZLP_T12,
-        APZL_BMT_APZLP_T13,
-        APZL_BMT_APZLP_T14,
-        APZL_BMT_APZLP_T15,
+        dRes_INDEX_APZL_BMT_APZLP_T00_e,
+        dRes_INDEX_APZL_BMT_APZLP_T01_e,
+        dRes_INDEX_APZL_BMT_APZLP_T02_e,
+        dRes_INDEX_APZL_BMT_APZLP_T03_e,
+        dRes_INDEX_APZL_BMT_APZLP_T04_e,
+        dRes_INDEX_APZL_BMT_APZLP_T05_e,
+        dRes_INDEX_APZL_BMT_APZLP_T06_e,
+        dRes_INDEX_APZL_BMT_APZLP_T07_e,
+        dRes_INDEX_APZL_BMT_APZLP_T08_e,
+        dRes_INDEX_APZL_BMT_APZLP_T09_e,
+        dRes_INDEX_APZL_BMT_APZLP_T10_e,
+        dRes_INDEX_APZL_BMT_APZLP_T11_e,
+        dRes_INDEX_APZL_BMT_APZLP_T12_e,
+        dRes_INDEX_APZL_BMT_APZLP_T13_e,
+        dRes_INDEX_APZL_BMT_APZLP_T14_e,
+        dRes_INDEX_APZL_BMT_APZLP_T15_e,
     },
     {
-        APZL_BMT_APZLP_U00,
-        APZL_BMT_APZLP_U01,
-        APZL_BMT_APZLP_U02,
-        APZL_BMT_APZLP_U03,
-        APZL_BMT_APZLP_U04,
-        APZL_BMT_APZLP_U05,
-        APZL_BMT_APZLP_U06,
-        APZL_BMT_APZLP_U07,
-        APZL_BMT_APZLP_U08,
-        APZL_BMT_APZLP_U09,
-        APZL_BMT_APZLP_U10,
-        APZL_BMT_APZLP_U11,
-        APZL_BMT_APZLP_U12,
-        APZL_BMT_APZLP_U13,
-        APZL_BMT_APZLP_U14,
-        APZL_BMT_APZLP_U15,
+        dRes_INDEX_APZL_BMT_APZLP_U00_e,
+        dRes_INDEX_APZL_BMT_APZLP_U01_e,
+        dRes_INDEX_APZL_BMT_APZLP_U02_e,
+        dRes_INDEX_APZL_BMT_APZLP_U03_e,
+        dRes_INDEX_APZL_BMT_APZLP_U04_e,
+        dRes_INDEX_APZL_BMT_APZLP_U05_e,
+        dRes_INDEX_APZL_BMT_APZLP_U06_e,
+        dRes_INDEX_APZL_BMT_APZLP_U07_e,
+        dRes_INDEX_APZL_BMT_APZLP_U08_e,
+        dRes_INDEX_APZL_BMT_APZLP_U09_e,
+        dRes_INDEX_APZL_BMT_APZLP_U10_e,
+        dRes_INDEX_APZL_BMT_APZLP_U11_e,
+        dRes_INDEX_APZL_BMT_APZLP_U12_e,
+        dRes_INDEX_APZL_BMT_APZLP_U13_e,
+        dRes_INDEX_APZL_BMT_APZLP_U14_e,
+        dRes_INDEX_APZL_BMT_APZLP_U15_e,
     },
     {
-        APZL_BMT_APZLP_V00,
-        APZL_BMT_APZLP_V01,
-        APZL_BMT_APZLP_V02,
-        APZL_BMT_APZLP_V03,
-        APZL_BMT_APZLP_V04,
-        APZL_BMT_APZLP_V05,
-        APZL_BMT_APZLP_V06,
-        APZL_BMT_APZLP_V07,
-        APZL_BMT_APZLP_V08,
-        APZL_BMT_APZLP_V09,
-        APZL_BMT_APZLP_V10,
-        APZL_BMT_APZLP_V11,
-        APZL_BMT_APZLP_V12,
-        APZL_BMT_APZLP_V13,
-        APZL_BMT_APZLP_V14,
-        APZL_BMT_APZLP_V15,
+        dRes_INDEX_APZL_BMT_APZLP_V00_e,
+        dRes_INDEX_APZL_BMT_APZLP_V01_e,
+        dRes_INDEX_APZL_BMT_APZLP_V02_e,
+        dRes_INDEX_APZL_BMT_APZLP_V03_e,
+        dRes_INDEX_APZL_BMT_APZLP_V04_e,
+        dRes_INDEX_APZL_BMT_APZLP_V05_e,
+        dRes_INDEX_APZL_BMT_APZLP_V06_e,
+        dRes_INDEX_APZL_BMT_APZLP_V07_e,
+        dRes_INDEX_APZL_BMT_APZLP_V08_e,
+        dRes_INDEX_APZL_BMT_APZLP_V09_e,
+        dRes_INDEX_APZL_BMT_APZLP_V10_e,
+        dRes_INDEX_APZL_BMT_APZLP_V11_e,
+        dRes_INDEX_APZL_BMT_APZLP_V12_e,
+        dRes_INDEX_APZL_BMT_APZLP_V13_e,
+        dRes_INDEX_APZL_BMT_APZLP_V14_e,
+        dRes_INDEX_APZL_BMT_APZLP_V15_e,
     },
     {
-        APZL_BMT_APZLP_W00,
-        APZL_BMT_APZLP_W01,
-        APZL_BMT_APZLP_W02,
-        APZL_BMT_APZLP_W03,
-        APZL_BMT_APZLP_W04,
-        APZL_BMT_APZLP_W05,
-        APZL_BMT_APZLP_W06,
-        APZL_BMT_APZLP_W07,
-        APZL_BMT_APZLP_W08,
-        APZL_BMT_APZLP_W09,
-        APZL_BMT_APZLP_W10,
-        APZL_BMT_APZLP_W11,
-        APZL_BMT_APZLP_W12,
-        APZL_BMT_APZLP_W13,
-        APZL_BMT_APZLP_W14,
-        APZL_BMT_APZLP_W15,
+        dRes_INDEX_APZL_BMT_APZLP_W00_e,
+        dRes_INDEX_APZL_BMT_APZLP_W01_e,
+        dRes_INDEX_APZL_BMT_APZLP_W02_e,
+        dRes_INDEX_APZL_BMT_APZLP_W03_e,
+        dRes_INDEX_APZL_BMT_APZLP_W04_e,
+        dRes_INDEX_APZL_BMT_APZLP_W05_e,
+        dRes_INDEX_APZL_BMT_APZLP_W06_e,
+        dRes_INDEX_APZL_BMT_APZLP_W07_e,
+        dRes_INDEX_APZL_BMT_APZLP_W08_e,
+        dRes_INDEX_APZL_BMT_APZLP_W09_e,
+        dRes_INDEX_APZL_BMT_APZLP_W10_e,
+        dRes_INDEX_APZL_BMT_APZLP_W11_e,
+        dRes_INDEX_APZL_BMT_APZLP_W12_e,
+        dRes_INDEX_APZL_BMT_APZLP_W13_e,
+        dRes_INDEX_APZL_BMT_APZLP_W14_e,
+        dRes_INDEX_APZL_BMT_APZLP_W15_e,
     },
     {
-        APZL_BMT_APZLP_X00,
-        APZL_BMT_APZLP_X01,
-        APZL_BMT_APZLP_X02,
-        APZL_BMT_APZLP_X03,
-        APZL_BMT_APZLP_X04,
-        APZL_BMT_APZLP_X05,
-        APZL_BMT_APZLP_X06,
-        APZL_BMT_APZLP_X07,
-        APZL_BMT_APZLP_X08,
-        APZL_BMT_APZLP_X09,
-        APZL_BMT_APZLP_X10,
-        APZL_BMT_APZLP_X11,
-        APZL_BMT_APZLP_X12,
-        APZL_BMT_APZLP_X13,
-        APZL_BMT_APZLP_X14,
-        APZL_BMT_APZLP_X15,
+        dRes_INDEX_APZL_BMT_APZLP_X00_e,
+        dRes_INDEX_APZL_BMT_APZLP_X01_e,
+        dRes_INDEX_APZL_BMT_APZLP_X02_e,
+        dRes_INDEX_APZL_BMT_APZLP_X03_e,
+        dRes_INDEX_APZL_BMT_APZLP_X04_e,
+        dRes_INDEX_APZL_BMT_APZLP_X05_e,
+        dRes_INDEX_APZL_BMT_APZLP_X06_e,
+        dRes_INDEX_APZL_BMT_APZLP_X07_e,
+        dRes_INDEX_APZL_BMT_APZLP_X08_e,
+        dRes_INDEX_APZL_BMT_APZLP_X09_e,
+        dRes_INDEX_APZL_BMT_APZLP_X10_e,
+        dRes_INDEX_APZL_BMT_APZLP_X11_e,
+        dRes_INDEX_APZL_BMT_APZLP_X12_e,
+        dRes_INDEX_APZL_BMT_APZLP_X13_e,
+        dRes_INDEX_APZL_BMT_APZLP_X14_e,
+        dRes_INDEX_APZL_BMT_APZLP_X15_e,
     },
 };
 
@@ -337,7 +335,7 @@ bool daObjApzl_c::move_piece() {
     if (swapped == true) {
         swap_piece(mBlankIdx, mSwappedPieceIdx);
         if (check_clear()) {
-            mMoveTimer = 0x28;
+            mMoveTimer = 40;
         } else {
             mMoveTimer = 5;
         }
@@ -639,7 +637,7 @@ void daObjApzl_c::privateCut() {
                         break;
                     case ACT_GETITEM:
                         mGaveReward = true;
-                        mRewardTimer = 0x96;
+                        mRewardTimer = 150;
                         break;
                     case ACT_SOUND:
                         mDoAud_seStart(JA_SE_15PUZZLE_COMPLETE);
@@ -687,38 +685,38 @@ void daObjApzl_c::privateCut() {
                                 if(mPuzzleNo == 15) {
                                     f32 temp2 = cM_rndF(1000.0f);
                                     if(temp2 < 900.0) {
-                                        itemNo = dItem_GREEN_RUPEE_e;
+                                        itemNo = dItemNo_GREEN_RUPEE_e;
                                     } else if (temp2 < 980.0) {
-                                        itemNo = dItem_BLUE_RUPEE_e;
+                                        itemNo = dItemNo_BLUE_RUPEE_e;
                                     } else if (temp2 < 995.0) {
-                                        itemNo = dItem_YELLOW_RUPEE_e;
+                                        itemNo = dItemNo_YELLOW_RUPEE_e;
                                     } else if (temp2 < 999.0) {
-                                        itemNo = dItem_RED_RUPEE_e;
+                                        itemNo = dItemNo_RED_RUPEE_e;
                                     } else {
-                                        itemNo = dItem_PURPLE_RUPEE_e;
+                                        itemNo = dItemNo_PURPLE_RUPEE_e;
                                     }
                                 } else {
-                                    itemNo = dItem_GREEN_RUPEE_e;
+                                    itemNo = dItemNo_GREEN_RUPEE_e;
                                 }
 #else
 
                             if (mPuzzleNo == 15) {
                                 u8 rupeeType = daObjApzl_Rupee_Table[mGivenRupeeCount];
                                 if (rupeeType == 0) {
-                                    itemNo = dItem_GREEN_RUPEE_e;
+                                    itemNo = dItemNo_GREEN_RUPEE_e;
                                 } else if (rupeeType == 1) {
-                                    itemNo = dItem_BLUE_RUPEE_e;
+                                    itemNo = dItemNo_BLUE_RUPEE_e;
                                 } else if (rupeeType == 2) {
-                                    itemNo = dItem_YELLOW_RUPEE_e;
+                                    itemNo = dItemNo_YELLOW_RUPEE_e;
                                 } else if (rupeeType == 3) { 
-                                    itemNo = dItem_RED_RUPEE_e;
+                                    itemNo = dItemNo_RED_RUPEE_e;
                                 } else {
-                                    itemNo = dItem_PURPLE_RUPEE_e;
+                                    itemNo = dItemNo_PURPLE_RUPEE_e;
                                 }
                             } else if (mGivenRupeeCount % 6 == 0) {
-                                itemNo = dItem_BLUE_RUPEE_e;
+                                itemNo = dItemNo_BLUE_RUPEE_e;
                             } else {
-                                itemNo = dItem_GREEN_RUPEE_e;
+                                itemNo = dItemNo_GREEN_RUPEE_e;
                             }
 #endif
 
@@ -731,7 +729,7 @@ void daObjApzl_c::privateCut() {
                             mRupeeIds[mGivenRupeeCount] = fopAcM_GetID(item);
                             mGivenRupeeCount++;
                             mGaveReward = true; 
-                            mRewardTimer = 0x3C;
+                            mRewardTimer = 60;
                         }
                     }
                     break;
@@ -773,7 +771,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000D28-00001088       .text CreateHeap__11daObjApzl_cFv */
 BOOL daObjApzl_c::CreateHeap() {
-    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_APZLP);
+    J3DModelData * modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", dRes_INDEX_APZL_BDL_APZLP_e);
     JUT_ASSERT(VERSION_SELECT(0x2B9, 0x2B9, 0x2E2, 0x2E2), modelData != NULL);
 
     for(int i = 0; i < 16; i++) {
@@ -783,7 +781,7 @@ BOOL daObjApzl_c::CreateHeap() {
         }
     }
 
-    modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_APZLY);
+    modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", dRes_INDEX_APZL_BDL_APZLY_e);
     JUT_ASSERT(VERSION_SELECT(0x2C6, 0x2C6, 0x2EF, 0x2EF), modelData != NULL);
 
     for(int i = 0; i < 4; i++) {
@@ -793,10 +791,10 @@ BOOL daObjApzl_c::CreateHeap() {
         }
     }
     
-    modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", APZL_BDL_VBSRP);
+    modelData = (J3DModelData *)dComIfG_getObjectRes("Apzl", dRes_INDEX_APZL_BDL_VBSRP_e);
     JUT_ASSERT(VERSION_SELECT(0x2D1, 0x2D1, 0x2FA, 0x2FA), modelData != NULL);
 
-    J3DAnmTexPattern* btp_data = (J3DAnmTexPattern *)dComIfG_getObjectRes("Apzl", APZL_BTP_VBSRP);
+    J3DAnmTexPattern* btp_data = (J3DAnmTexPattern *)dComIfG_getObjectRes("Apzl", dRes_INDEX_APZL_BTP_VBSRP_e);
     
     JUT_ASSERT(VERSION_SELECT(0x2D6, 0x2D6, 0x2FF, 0x2FF), btp_data != NULL);
 
@@ -937,7 +935,7 @@ void daObjApzl_c::set_mtx() {
 }
 
 cPhs_State daObjApzl_c::_create(){
-    fopAcM_SetupActor(this, daObjApzl_c);
+    fopAcM_ct(this, daObjApzl_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Apzl");
     if (phase_state == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x1460)) {
@@ -1119,18 +1117,18 @@ static actor_method_class daObj_ApzlMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Apzl = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Apzl,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Apzl_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjApzl_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Apzl,
+    /* Draw Prio    */ fpcDwPi_Obj_Apzl_e,
     /* Actor SubMtd */ &daObj_ApzlMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

@@ -5,9 +5,10 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/actor/d_a_bg.h"
+#include "d/actor/d_a_player_main.h"
+#include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 #include "d/d_magma.h"
 #include "d/d_grass.h"
 #include "d/d_tree.h"
@@ -210,13 +211,26 @@ BOOL daBg_c::createHeap() {
         if (bgw->Set(dzb, cBgW::GLOBAL_e, NULL))
             return FALSE;
         dStage_roomControl_c::setBgW(roomNo, bgw);
-        bgw->mWallCorrectPriority = 0;
+        bgw->SetPriority((cBgW::PRIORITY)0);
     } else {
         bgw = NULL;
     }
 
     return TRUE;
 }
+
+#if VERSION == VERSION_DEMO
+static void escapeRestart() {
+    REG1_S(0) = 0;
+
+    daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
+    dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y, fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
+
+    dComIfG_TimerDeleteRequest(3);
+
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1, 0.0f, 0, FALSE, 9);
+}
+#endif
 
 /* 800D8C50-800D8DB8       .text __dt__6daBg_cFv */
 daBg_c::~daBg_c() {
@@ -297,6 +311,17 @@ BOOL daBg_c::execute() {
             mUnloadTimer = 1;
 #endif
     } else {
+#if VERSION == VERSION_DEMO
+        if (!mDoGph_gInf_c::isMonotone()) {
+            BgModel * bgm = &bg[0];
+            for (s32 i = 0; i < 4; i++, bgm++) {
+                if (bgm->btk != NULL)
+                    bgm->btk->play();
+                if (bgm->brk != NULL)
+                    bgm->brk->play();
+            }
+        }
+#else
         BgModel * bgm = &bg[0];
         for (s32 i = 0; i < 4; i++, bgm++) {
             if (!mDoGph_gInf_c::isMonotone() || i == 2) {
@@ -306,6 +331,7 @@ BOOL daBg_c::execute() {
                     bgm->brk->play();
             }
         }
+#endif
     }
 
     return TRUE;
@@ -341,23 +367,30 @@ static cPhs_State daBg_Create(fopAc_ac_c* i_ac) {
 
 /* 800D9094-800D9318       .text create__6daBg_cFv */
 cPhs_State daBg_c::create() {
-    fopAcM_SetupActor(this, daBg_c);
+    fopAcM_ct(this, daBg_c);
 
-    s32 roomNo = fopAcM_GetParam(this);
+    int roomNo = fopAcM_GetParam(this);
     JKRExpHeap * roomHeap = dStage_roomControl_c::getMemoryBlock(roomNo);
     if (roomHeap != NULL) {
         heap = JKRSolidHeap::create(-1, roomHeap, false);
-        JUT_ASSERT(0x2fd, heap != NULL);
+        JUT_ASSERT(DEMO_SELECT(796, 765), heap != NULL);
         JKRHeap * oldHeap = mDoExt_setCurrentHeap(heap);
         BOOL rt = createHeap();
-        JUT_ASSERT(0x302, rt == TRUE);
+        JUT_ASSERT(DEMO_SELECT(801, 770), rt == TRUE);
         mDoExt_setCurrentHeap(oldHeap);
         heap->adjustSize();
     } else {
+#if VERSION == VERSION_DEMO
+        if (REG1_S(0) != 0 || !fopAcM_entrySolidHeap(this, checkCreateHeap, 0)) {
+            escapeRestart();
+            return cPhs_ERROR_e;
+        }
+#else
         if (!fopAcM_entrySolidHeap(this, checkCreateHeap, 0)) {
             dStage_escapeRestart();
             return cPhs_ERROR_e;
         }
+#endif
     }
 
     BgModel * bgm = &bg[0];
@@ -386,13 +419,27 @@ cPhs_State daBg_c::create() {
         }
     }
 
+#if VERSION == VERSION_DEMO
+    if (bgw != NULL && (REG1_S(0) != 0 || dComIfG_Bgsp()->Regist(bgw, this))) {
+        escapeRestart();
+        return cPhs_ERROR_e;
+    }
+#else
     if (bgw != NULL && dComIfG_Bgsp()->Regist(bgw, this)) {
         dStage_escapeRestart();
         return cPhs_ERROR_e;
     }
+#endif
 
+#if VERSION == VERSION_DEMO
+    dComIfGp_roomControl_getTevStr(roomNo)->mEnvrIdxOverride = 0xFF;
+    dComIfGp_roomControl_getTevStr(roomNo)->mRoomNo = roomNo;
+#else
     dKy_tevstr_init(dComIfGp_roomControl_getTevStr(roomNo), roomNo, 0xFF);
+#endif
+
     dComIfGp_roomControl_onStatusFlag(roomNo, 0x10);
+
     return cPhs_COMPLEATE_e;
 }
 
@@ -405,19 +452,19 @@ static actor_method_class l_daBg_Method = {
 };
 
 actor_process_profile_definition2 g_profile_BG = {
-    fpcLy_CURRENT_e,
-    7,
-    fpcPi_CURRENT_e,
-    PROC_BG,
-    &g_fpcLf_Method.base,
-    sizeof(daBg_c),
-    0,
-    0,
-    &g_fopAc_Method.base,
-    0x01C2,
-    &l_daBg_Method,
-    fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
-    fopAc_ACTOR_e,
-    fopAc_CULLBOX_0_e,
-    0,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 7,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_BG_e,
+    /* Proc SubMtd  */ &g_fpcLf_Method.base,
+    /* Size         */ sizeof(daBg_c),
+    /* Size Other   */ 0,
+    /* Parameters   */ 0,
+    /* Leaf SubMtd  */ &g_fopAc_Method.base,
+    /* Draw Prio    */ fpcDwPi_BG_e,
+    /* Actor SubMtd */ &l_daBg_Method,
+    /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
+    /* Group        */ fopAc_ACTOR_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
+    /* field_0x30   */ 0,
 };

@@ -5,29 +5,27 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vgnfd.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_vgnfd.h"
+#include "res/Object/VgnFD.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 const s32 daObjVgnfd_c::M_bdl_table[] = {
-    VGNFD_BDL_VGNFD0,
-    VGNFD_BDL_VGNFD1,
-    VGNFD_BDL_VGNFD2,
-    VGNFD_BDL_VGNFD3,
-    VGNFD_BDL_VGNFD4,
+    dRes_INDEX_VGNFD_BDL_VGNFD0_e,
+    dRes_INDEX_VGNFD_BDL_VGNFD1_e,
+    dRes_INDEX_VGNFD_BDL_VGNFD2_e,
+    dRes_INDEX_VGNFD_BDL_VGNFD3_e,
+    dRes_INDEX_VGNFD_BDL_VGNFD4_e,
 };
 const s32 daObjVgnfd_c::M_brk_table[] = {
-    VGNFD_BRK_VGNFD0,
-    VGNFD_BRK_VGNFD1,
-    VGNFD_BRK_VGNFD2,
-    VGNFD_BRK_VGNFD3,
-    VGNFD_BRK_VGNFD4,
+    dRes_INDEX_VGNFD_BRK_VGNFD0_e,
+    dRes_INDEX_VGNFD_BRK_VGNFD1_e,
+    dRes_INDEX_VGNFD_BRK_VGNFD2_e,
+    dRes_INDEX_VGNFD_BRK_VGNFD3_e,
+    dRes_INDEX_VGNFD_BRK_VGNFD4_e,
 };
 const s32 daObjVgnfd_c::M_door_bdl_table[] = {
-    VGNFD_BDL_VGNFD5,
-    VGNFD_BDL_YGCBD00,
+    dRes_INDEX_VGNFD_BDL_VGNFD5_e,
+    dRes_INDEX_VGNFD_BDL_YGCBD00_e,
 };
 const u16 daObjVgnfd_c::M_door_ev_table[] = {
     dSv_event_flag_c::TRIALS_DOOR_LIGHT_GOHMA,
@@ -80,8 +78,8 @@ enum {
 };
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVgnfd_cFP10fopAc_ac_c */
-BOOL daObjVgnfd_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->create_heap();
+BOOL daObjVgnfd_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjVgnfd_c*)i_this)->create_heap();
 }
 
 /* 00000098-0000022C       .text create_bdl_brk__12daObjVgnfd_cFi */
@@ -140,7 +138,7 @@ BOOL daObjVgnfd_c::create_heap() {
     }
 
     if (ret) {
-        J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, VGNFD_BTK_YGCBD00));
+        J3DAnmTextureSRTKey* btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VGNFD_BTK_YGCBD00_e));
         JUT_ASSERT(0x144, btk_data != NULL);
 
         if (btk_data == NULL || !mBtkAnm.init(mModel2[1]->getModelData(), btk_data, TRUE, J3DFrameCtrl::EMode_NONE)) {
@@ -150,7 +148,7 @@ BOOL daObjVgnfd_c::create_heap() {
 
     if (ret) {
         M_bgw = dBgW_NewSet(
-            (cBgD_t*)dComIfG_getObjectRes(M_arcname, VGNFD_DZB_VGNFD),
+            (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VGNFD_DZB_VGNFD_e),
             dBgW::MOVE_BG_e,
             &mModel[0]->getBaseTRMtx()
         );
@@ -167,7 +165,7 @@ BOOL daObjVgnfd_c::create_heap() {
 cPhs_State daObjVgnfd_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjVgnfd_c);
+    fopAcM_ct(this, daObjVgnfd_c);
 
     if (!check_fin()) {
         ret = dComIfG_resLoad(&mPhs, M_arcname);
@@ -421,6 +419,7 @@ bool daObjVgnfd_c::_execute() {
                             dComIfGp_getVibration().StartShock(8, 27, cXyz(0.0f, 1.0f, 0.0f));
                             mCurModel = 2;
                             fopAcM_seStartCurrent(this, JA_SE_OBJ_B_BOSS_DR_BRK_3, 0);
+                            break;
                         }
                     }
 
@@ -475,27 +474,28 @@ bool daObjVgnfd_c::_draw() {
 
 namespace {
 /* 000013F0-00001410       .text Mthd_Create__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-cPhs_State Mthd_Create(void* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->_create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjVgnfd_c*)i_this)->_create();
 }
 
 /* 00001410-00001434       .text Mthd_Delete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-BOOL Mthd_Delete(void* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjVgnfd_c*)i_this)->_delete();
 }
 
 /* 00001434-00001458       .text Mthd_Execute__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-BOOL Mthd_Execute(void* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjVgnfd_c*)i_this)->_execute();
 }
 
 /* 00001458-0000147C       .text Mthd_Draw__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-BOOL Mthd_Draw(void* i_ac) {
-    return ((daObjVgnfd_c*)i_ac)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjVgnfd_c*)i_this)->_draw();
 }
 
 /* 0000147C-00001484       .text Mthd_IsDelete__27@unnamed@d_a_obj_vgnfd_cpp@FPv */
-BOOL Mthd_IsDelete(void* i_ac) {
+BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -509,18 +509,18 @@ static actor_method_class Vgnfd_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Obj_Vgnfd = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vgnfd,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Vgnfd_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVgnfd_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Vgnfd,
+    /* Draw Prio    */ fpcDwPi_Obj_Vgnfd_e,
     /* Actor SubMtd */ &Vgnfd_Mthd_Table,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

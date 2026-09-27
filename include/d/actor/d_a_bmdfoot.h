@@ -5,12 +5,10 @@
 #include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 
-class bmdfoot_class {
-public:
-    /* 0x000 */ fopAc_ac_c actor;
-    /* 0x290 */ u8 m290[0x2AC - 0x290];
-    /* 0x2AC */ request_of_phase_process_class m2AC;
-    /* 0x2B4 */ mDoExt_McaMorf* m2B4;
+struct bmdfoot_class {
+    /* 0x000 */ fopEn_enemy_c actor;
+    /* 0x2AC */ request_of_phase_process_class mPhase;
+    /* 0x2B4 */ mDoExt_McaMorf* mpBodyVineMorf;
     /* 0x2B8 */ s16 m2B8;
     /* 0x2BA */ s16 m2BA;
     /* 0x2BC */ s16 m2BC;
@@ -25,15 +23,15 @@ public:
     /* 0x3F4 */ u8 m3F4;
     /* 0x3F5 */ u8 m3F5[0x3F8 - 0x3F5];
     /* 0x3F8 */ cXyz m3F8[3];
-    /* 0x41C */ dPa_followEcallBack m41C[3];
-    /* 0x458 */ dPa_smokeEcallBack m458[2];
+    /* 0x41C */ dPa_followEcallBack mAsiWaitFollowCB[3];
+    /* 0x458 */ dPa_smokeEcallBack mLAttackSmoke00CB[2];
     /* 0x498 */ cXyz m498[2];
-    /* 0x4B0 */ dPa_smokeEcallBack m4B0;
-    /* 0x4D0 */ dCcD_Stts m4D0;
-    /* 0x50C */ dCcD_Sph m50C[5];
+    /* 0x4B0 */ dPa_smokeEcallBack mLAttackSmoke01CB;
+    /* 0x4D0 */ dCcD_Stts mStts;
+    /* 0x50C */ dCcD_Sph mSph[5];
     /* 0xAE8 */ cXyz mAE8;
-    /* 0xAF4 */ mDoExt_McaMorf* mAF4;
-    /* 0xAF8 */ dKy_tevstr_c mAF8;
+    /* 0xAF4 */ mDoExt_McaMorf* mpFloorVineMorf;
+    /* 0xAF8 */ dKy_tevstr_c mTevstr;
     /* 0xBA8 */ u8 mBA8;
     /* 0xBA9 */ u8 mBA9[0xBAC - 0xBA9];
     /* 0xBAC */ cXyz mBAC;

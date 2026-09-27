@@ -5,14 +5,12 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_roten.h"
-#include "d/res/res_roten.h"
+#include "res/Object/Roten.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_bg_s_movebg_actor.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
-daObj_Roten_HIO_c l_HIO;
+static daObj_Roten_HIO_c l_HIO;
 
 /* 000000EC-00000118       .text __ct__17daObj_Roten_HIO_cFv */
 daObj_Roten_HIO_c::daObj_Roten_HIO_c() {
@@ -38,14 +36,14 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 000001A8-000002E4       .text CreateHeap__13daObj_Roten_cFv */
 BOOL daObj_Roten_c::CreateHeap() {
     static u32 bdl_arc_idx[] = {
-        ROTEN_INDEX_BDL_ROTEN02,
-        ROTEN_INDEX_BDL_ROTEN03,
-        ROTEN_INDEX_BDL_ROTEN04
+        dRes_INDEX_ROTEN_BDL_ROTEN02_e,
+        dRes_INDEX_ROTEN_BDL_ROTEN03_e,
+        dRes_INDEX_ROTEN_BDL_ROTEN04_e
     };
     static u32 dzb_arc_idx[] = {
-        ROTEN_INDEX_DZB_ROTEN02,
-        ROTEN_INDEX_DZB_ROTEN03,
-        ROTEN_INDEX_DZB_ROTEN04
+        dRes_INDEX_ROTEN_DZB_ROTEN02_e,
+        dRes_INDEX_ROTEN_DZB_ROTEN03_e,
+        dRes_INDEX_ROTEN_DZB_ROTEN04_e
     };
 
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, bdl_arc_idx[mType]));
@@ -99,7 +97,7 @@ static BOOL Roten_create_check(u8 type) {
 
 
 cPhs_State daObj_Roten_c::_create() {
-    fopAcM_SetupActor(this, daObj_Roten_c);
+    fopAcM_ct(this, daObj_Roten_c);
 
     mType = fopAcM_GetParam(this) >> 0x18;
     mType = cLib_minMaxLimit<u8>(mType, 0, 2);
@@ -189,18 +187,18 @@ static actor_method_class daObj_RotenMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Obj_Roten = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Roten,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Roten_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObj_Roten_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Roten,
+    /* Draw Prio    */ fpcDwPi_Obj_Roten_e,
     /* Actor SubMtd */ &daObj_RotenMethodTable,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

@@ -3,17 +3,28 @@
  */
 #include "d/actor/d_a_seatag.h"
 #include "f_op/f_op_actor_mng.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
-/* 00000078-00000080       .text daSeatag_Draw__FP10daSeatag_c */
-static BOOL daSeatag_Draw(daSeatag_c*) {
+inline BOOL daSeatag_c::draw() {
     return TRUE;
 }
 
-/* 00000080-00000088       .text daSeatag_Execute__FP10daSeatag_c */
-static  BOOL daSeatag_Execute(daSeatag_c*) {
+inline BOOL daSeatag_c::execute() {
     return TRUE;
+}
+
+inline cPhs_State daSeatag_c::create() {
+    fopAcM_ct(this, daSeatag_c);
+    return cPhs_COMPLEATE_e;
+}
+
+/* 00000078-00000080       .text daSeatag_Draw__FP10daSeatag_c */
+static BOOL daSeatag_Draw(daSeatag_c* i_this) {
+    return ((daSeatag_c*)i_this)->draw();
+}
+
+/* 00000080-00000088       .text daSeatag_Execute__FP10daSeatag_c */
+static  BOOL daSeatag_Execute(daSeatag_c* i_this) {
+    return ((daSeatag_c*)i_this)->execute();
 }
 
 /* 00000088-00000090       .text daSeatag_IsDelete__FP10daSeatag_c */
@@ -22,15 +33,16 @@ static BOOL daSeatag_IsDelete(daSeatag_c*) {
 }
 
 /* 00000090-000000C0       .text daSeatag_Delete__FP10daSeatag_c */
-static BOOL daSeatag_Delete(daSeatag_c* a_this) {
-    a_this->~daSeatag_c();
+static BOOL daSeatag_Delete(daSeatag_c* i_this) {
+    fopAcM_RegisterDeleteID(i_this);
+    i_this->~daSeatag_c();
     return TRUE;
 }
 
 /* 000000C0-00000110       .text daSeatag_Create__FP10fopAc_ac_c */
-static cPhs_State daSeatag_Create(fopAc_ac_c* a_this) {
-    fopAcM_SetupActor(a_this, daSeatag_c);
-    return cPhs_COMPLEATE_e;
+static cPhs_State daSeatag_Create(fopAc_ac_c* i_this) {
+    fopAcM_RegisterCreateID(i_this);
+    return ((daSeatag_c*)i_this)->create();
 }
 
 static actor_method_class l_daSeatag_Method = {
@@ -42,18 +54,18 @@ static actor_method_class l_daSeatag_Method = {
 };
 
 actor_process_profile_definition g_profile_SEATAG = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0002,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SEATAG,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0002,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SEATAG_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSeatag_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SEATAG,
+    /* Draw Prio    */ fpcDwPi_SEATAG_e,
     /* Actor SubMtd */ &l_daSeatag_Method,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

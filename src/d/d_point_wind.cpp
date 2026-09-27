@@ -9,6 +9,7 @@
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
 #include "SSystem/SComponent/c_lib.h"
+#include "d/d_s_play.h"
 
 /* 800CF31C-800CF398       .text set_pwind_init__12dPointWind_cFP9cM3dGCpsS */
 void dPointWind_c::set_pwind_init(cM3dGCpsS* pCps) {
@@ -32,7 +33,11 @@ void dPointWind_c::set_pwind_move() {
     dKyr_get_vectle_calc(&p0, &p1, &dir);
 
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0 && dComIfGp_roomControl_getStayNo() == 4) {
+#if VERSION == VERSION_DEMO
+        radScale = 11.0f + REG3_F(3);
+#else
         radScale = 11.0f;
+#endif
         animate = false;
         mWind.mPos = p0 + (dir * -100.0f);
     }

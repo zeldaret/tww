@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_ykgr.h"
 #include "d/actor/d_a_player.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_path.h"
 #include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_hostIO.h"
@@ -43,7 +41,7 @@ public:
 #endif
     }
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -127,7 +125,7 @@ static cPhs_State daYkgrCreate(void* i_this) {
 cPhs_State daYkgr_c::_create() {
     u8 uVar4 = fopAcM_GetParam(this) >> 0x14 & 0xF;
 
-    fopAcM_SetupActor(this, daYkgr_c);
+    fopAcM_ct(this, daYkgr_c);
 
     u8 pathIndex = fopAcM_GetParam(this) >> 8 & 0xFF;
     if (pathIndex != 0xff) {
@@ -136,7 +134,7 @@ cPhs_State daYkgr_c::_create() {
         m_path = NULL;
     }
 
-    if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0 && dComIfGs_isSymbol(1)) {
+    if (strcmp(dComIfGp_getStartStageName(), "Adanmae") == 0 && dComIfGs_isSymbol(dSymbol_DIN_e)) {
         return cPhs_STOP_e;
     }
 
@@ -226,7 +224,7 @@ static BOOL daYkgrExecute(void* v_this) {
 }
 
 void daYkgr_c::set_mtx() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     current.pos = *fopCamM_GetEye_p(camera);
     current.angle.y = fopCamM_GetAngleY(camera);
     current.angle.x = fopCamM_GetAngleX(camera);
@@ -278,18 +276,18 @@ static actor_method_class daYkgrMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Ykgr = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Ykgr,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Ykgr_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daYkgr_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Ykgr,
+    /* Draw Prio    */ fpcDwPi_Ykgr_e,
     /* Actor SubMtd */ &daYkgrMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

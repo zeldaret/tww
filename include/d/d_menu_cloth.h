@@ -116,6 +116,8 @@ public:
     daCLOTH_HIO_c();
     virtual ~daCLOTH_HIO_c() {}
 
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
+
 public:
     /* 0x0004 */ s8 mNo;
     /* 0x0008 */ daCLOTH_ChildHIO_c mChildren[3];

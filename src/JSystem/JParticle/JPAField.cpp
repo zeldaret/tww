@@ -44,7 +44,7 @@ void JPABaseField::loadFieldData(JPAFieldData* data, JPAFieldBlock* block) {
 void JPABaseField::calcVel(JPAFieldData* data, JPABaseParticle* ptcl) {
     JGeometry::TVec3<f32> vel = data->mVel;
 
-    if (!(ptcl->mStatus & 0x04)) {
+    if (!ptcl->checkStatus(JPAPtlcStts_Child)) {
         f32 fadeAffect = calcFadeAffect(data, ptcl->mCurNormTime);
         vel.scale(fadeAffect);
     }
@@ -295,7 +295,7 @@ void JPAConvectionField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
 
 /* 8025B3CC-8025B50C       .text calc__14JPARandomFieldFP12JPAFieldDataP15JPABaseParticle */
 void JPARandomField::calc(JPAFieldData* data, JPABaseParticle* ptcl) {
-    s32 frame = ptcl->getAge();
+    int frame = ptcl->getAge();
     if (frame != 0) {
         if (data->mCycle == 0)
             return;

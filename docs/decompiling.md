@@ -4,6 +4,8 @@ This document describes the basics how to start decompiling code and contributin
 
 If you haven't already, you should first follow the instructions in the [readme](../README.md) to get the decomp set up, as well as the tools you will be using to work on it: objdiff and Ghidra.
 
+You should also read the [coding guidelines page](/docs/coding_guidelines.md) page to ensure that the code you write is clear and readable.
+
 ## Table of Contents
 
 1. [Choosing an object to decompile](#choosing-an-object-to-decompile)
@@ -32,7 +34,7 @@ Once you've chosen which object you want to decompile, you'll usually want to se
 > [!NOTE]
 > Some actors that aren't decompiled may have already had their struct defined in our Ghidra server by someone else in the past, in which case you may be able to skip this step. But this is not the case for most actors.
 
-In objdiff, pick one of the actor's functions (one with "create" in the name would be good to start with). Then open the `main` program in Ghidra, press `G` and type the function name (e.g. `daWall_c::CreateInit`) to go to that function in Ghidra. If the struct hasn't been properly defined for Ghidra, the function may look something like this at first:
+In objdiff, pick one of the actor's functions (one with "create" in the name would be good to start with). Then in Ghidra, open the local copy of the `main` program you made earlier (do not open `main` itself or you won't be able to save your changes), press `G` and type the function name (e.g. `daWall_c::CreateInit`) to go to that function in Ghidra. If the struct hasn't been properly defined for Ghidra, the function may look something like this at first:
 
 ![Ghidra function before defining the struct](images/ghidra_createinit_1.png)
 
@@ -142,10 +144,10 @@ For example, if you were to look at the actor's create function, you should see 
 
 ![Create function in Ghidra](images/ghidra_setup_actor_macro.png)
 
-This code is constructing the actor when it's first created. You shouldn't write it out by hand - instead, use the `fopAcM_SetupActor` macro, like so:
+This code is constructing the actor when it's first created. You shouldn't write it out by hand - instead, use the `fopAcM_ct` macro, like so:
 
 ```cpp
-    fopAcM_SetupActor(this, daWall_c);
+    fopAcM_ct(this, daWall_c);
 ```
 
 That should expand out into the proper code when compiled. If something in there is missing even after using the macro, then you might not have set up all of the actor's member variables properly in the previous step, so add any missing fields now.
@@ -689,4 +691,4 @@ Then you can just submit a pull request as-is instead of worrying about it any m
 
 Once an actor is fully decompiled, you can start naming some of its member variables if you want to. This is completely optional - it's normal to submit a PR without documenting most fields. Leaving them unnamed (e.g. `field_0x290`) is preferable to coming up with wrong names if you aren't sure.
 
-But if you do decide to start naming things, you should check out the [coding guidelines page](coding_guidelines.md).
+But if you do decide to start naming things, you should check out the ['Naming style' section of the coding guidelines page](/docs/coding_guidelines.md#naming-style).

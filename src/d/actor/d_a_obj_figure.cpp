@@ -5,36 +5,38 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_figure.h"
-#include "d/res/res_figure.h"
-#include "d/res/res_figure2.h"
+#include "res/Object/Figure.h"
+#include "res/Object/Figure1.h"
+#include "res/Object/Figure2.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
 #include "d/d_snap.h"
 #include "d/d_camera.h"
 #include "d/d_a_obj.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_player_main.h"
 #include "m_Do/m_Do_controller_pad.h"
+#if VERSION > VERSION_DEMO
+#include "res/Object/Figure2b.h"
+#endif
 
 #define TOTAL_FIGURE_COUNT 0x86
 
 static const char* l_arcname_tbl[] = {
-    "Figure",
-    "Figure2",
-    "Figure1",
-    "Figure0",
-    "Figure6",
-    "Figure5",
-    "Figure3",
-    "Figure4",
+    /* 0x00 */ "Figure",
+    /* 0x01 */ "Figure2",
+    /* 0x02 */ "Figure1",
+    /* 0x03 */ "Figure0",
+    /* 0x04 */ "Figure6",
+    /* 0x05 */ "Figure5",
+    /* 0x06 */ "Figure3",
+    /* 0x07 */ "Figure4",
 #if VERSION > VERSION_DEMO
-    "Figure2a",
-    "Figure2b",
-    "Figure6a",
-    "Figure6b",
-    "Figure6c",
+    /* 0x08 */ "Figure2a",
+    /* 0x09 */ "Figure2b",
+    /* 0x0A */ "Figure6a",
+    /* 0x0B */ "Figure6b",
+    /* 0x0C */ "Figure6c",
 #endif
 };
 
@@ -108,6 +110,7 @@ struct FigureData {
     }
 #endif
 
+// TODO: use enums for bmdId
 static const FigureData l_figure_dat_tbl[TOTAL_FIGURE_COUNT] = {
     FIGUREDAT(0x00, 0x37441422, -1), // 0x00
     FIGUREDAT(0x01, 0x37441422, -1), // 0x01
@@ -398,7 +401,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000005A8-00000624       .text phase_1__FP13daObjFigure_c */
 static cPhs_State phase_1(daObjFigure_c* i_this) {
-    fopAcM_SetupActor(i_this, daObjFigure_c)
+    fopAcM_ct(i_this, daObjFigure_c)
     i_this->setResFlag(0x1);
 
     cPhs_State status = dComIfG_resLoad(i_this->getPhase1P(), "Figure");
@@ -472,7 +475,10 @@ BOOL daObjFigure_c::createHeap() {
     }
 
     if(mFigureNo == 0x3D) {
-        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), FIGURE2_BDL_VF_047));
+        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(
+            DEMO_SELECT(l_arcname_tbl[roomId], arcname),
+            DEMO_SELECT(dRes_ID_FIGURE2_BRK_VF_061_e, dRes_ID_FIGURE2B_BRK_VF_061_e)
+        ));
         if(pBrkData == NULL) {
             return false;
         }
@@ -488,11 +494,14 @@ BOOL daObjFigure_c::createHeap() {
     }
     J3DModelData* pPedestalData;
     if(mFigureNo == 0x40) {
-        pPedestalData = (J3DModelData*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), FIGURE2_BDL_VF_044);
+        pPedestalData = (J3DModelData*)dComIfG_getObjectIDRes(
+            DEMO_SELECT(l_arcname_tbl[roomId], arcname),
+            DEMO_SELECT(dRes_ID_FIGURE2_BDL_VF_064L_e, dRes_ID_FIGURE2B_BDL_VF_064L_e)
+        );
         mpMorf = new mDoExt_McaMorf(
             pPedestalData,
             NULL, NULL,
-            (J3DAnmTransformKey*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), FIGURE2_BCK_VF_064L),
+            (J3DAnmTransformKey*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), dRes_ID_FIGURE2_BCK_VF_064L_e),
             J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, 1,
             NULL,
             0x80000,
@@ -519,7 +528,7 @@ BOOL daObjFigure_c::createHeap() {
 #endif
     }
 
-    pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", FIGURE_BDL_VF_BS));
+    pPedestalData = static_cast<J3DModelData*>(dComIfG_getObjectIDRes("Figure", dRes_ID_FIGURE_BDL_VF_BS_e));
     if(pPedestalData == NULL) {
         return false;
     }
@@ -529,7 +538,7 @@ BOOL daObjFigure_c::createHeap() {
         return false;
     }
 
-    mpPedestalBtp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Figure", FIGURE_BTP_VF_BS));
+    mpPedestalBtp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectIDRes("Figure", dRes_ID_FIGURE_BTP_VF_BS_e));
     if(mpPedestalBtp == NULL) {
         return false;
     }
@@ -800,10 +809,10 @@ bool daObjFigure_c::eventMesSet() {
             else {
                 dComIfGp_setDoStatusForce(dActStts_INFO_e);
                 dComIfGp_setAStatusForce(dActStts_CANCEL_e);
-                if(g_mDoCPd_cpadInfo[0].mMainStickPosX || g_mDoCPd_cpadInfo[0].mMainStickPosY || g_mDoCPd_cpadInfo[0].mCStickPosY) {
+                if(CPad_GET_STICK_POS_X(0) || CPad_GET_STICK_POS_Y(0) || CPad_GET_SUBSTICK_POS_Y(0)) {
                     m738 = l_figure_check_tbl[0].field_0x32;
-                    m734 += (s16)(g_mDoCPd_cpadInfo[0].mMainStickPosX * l_figure_check_tbl[0].field_0x2C);
-                    m728 += (s16)(g_mDoCPd_cpadInfo[0].mMainStickPosY * l_figure_check_tbl[0].field_0x04);
+                    m734 += (s16)(CPad_GET_STICK_POS_X(0) * l_figure_check_tbl[0].field_0x2C);
+                    m728 += (s16)(CPad_GET_STICK_POS_Y(0) * l_figure_check_tbl[0].field_0x04);
 
                     if(m728 < l_figure_check_tbl[0].field_0x0C) {
                         m728 = l_figure_check_tbl[0].field_0x0C;
@@ -812,7 +821,7 @@ bool daObjFigure_c::eventMesSet() {
                         m728 = l_figure_check_tbl[0].field_0x10;
                     }
 
-                    m724 -= g_mDoCPd_cpadInfo[0].mCStickPosY * l_figure_check_tbl[0].field_0x1C;
+                    m724 -= CPad_GET_SUBSTICK_POS_Y(0) * l_figure_check_tbl[0].field_0x1C;
                     if(m724 < l_figure_check_tbl[0].field_0x20) {
                         m724 = l_figure_check_tbl[0].field_0x20;
                     }
@@ -1002,15 +1011,15 @@ u8 daObjFigure_c::isFigureGet(u8 figureNo) {
 int daObjFigure_c::getFigureBmd(u8 figureNo) {
     u32 bmd = l_figure_dat_tbl[figureNo].mBmdId;
     switch(figureNo) {
-        case 0x10:
+        case 0x10: // Mila's Father
             if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
-                bmd = 3;
+                bmd = dRes_ID_FIGURE1_BDL_VF_016B_e;
             }
 
             break;
-        case 0x12:
+        case 0x12: // Maggie's Father
             if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D01)) {
-                bmd = 6;
+                bmd = dRes_ID_FIGURE1_BDL_VF_018B_e;
             }
 
             break;
@@ -1071,12 +1080,12 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
     J3DModelData* modelData = model->getModelData();
 #endif
 
-    J3DJoint* link_root_joint = modelData->getJointNodePointer(0x00); // link_root joint
-    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(0x13);    // cl_eye joint
-    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(0x15);   // cl_mayu joint
+    J3DJoint* link_root_joint = modelData->getJointNodePointer(VF_064L_JNT_LINK_ROOT_e);
+    J3DJoint* cl_eye_joint = modelData->getJointNodePointer(VF_064L_JNT_CL_EYE_e);
+    J3DJoint* cl_mayu_joint = modelData->getJointNodePointer(VF_064L_JNT_CL_MAYU_e);
 
     J3DMaterial* mtl;
-    mtl = modelData->getJointNodePointer(0x13)->getMesh(); // cl_eye joint
+    mtl = modelData->getJointNodePointer(VF_064L_JNT_CL_EYE_e)->getMesh();
     int zoff_blend_cnt = 0;
     int zoff_none_cnt = 0;
     int zon_cnt = 0;
@@ -1098,7 +1107,7 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
             }
             mtl = mtl->getNext();
         }
-        mtl = modelData->getJointNodePointer(0x15)->getMesh(); // cl_mayu joint
+        mtl = modelData->getJointNodePointer(VF_064L_JNT_CL_MAYU_e)->getMesh();
     }
 
     dComIfGd_setListP0();
@@ -1169,8 +1178,8 @@ void linkDraw(mDoExt_McaMorf* pMorf) {
         mtl->getShape()->show();
     }
 
-    modelData->getJointNodePointer(0x14)->getMesh()->getShape()->show(); // cl_hana joint
-    modelData->getJointNodePointer(0x29)->getMesh()->getShape()->show(); // cl_back joint
+    modelData->getJointNodePointer(VF_064L_JNT_CL_HANA_e)->getMesh()->getShape()->show();
+    modelData->getJointNodePointer(VF_064L_JNT_CL_BACK_e)->getMesh()->getShape()->show();
 
 #if VERSION == VERSION_DEMO
     dComIfGd_setList();
@@ -1186,18 +1195,18 @@ static actor_method_class daSampleMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OBJ_FIGURE = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OBJ_FIGURE,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OBJ_FIGURE_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjFigure_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OBJ_FIGURE,
+    /* Draw Prio    */ fpcDwPi_OBJ_FIGURE_e,
     /* Actor SubMtd */ &daSampleMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

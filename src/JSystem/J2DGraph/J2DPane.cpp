@@ -53,7 +53,7 @@ void J2DPane::initiate() {
     mRotation = 0.0f;
     mCullMode = GX_CULL_NONE;
     mAlpha = 0xFF;
-    mInheritAlpha = TRUE;
+    mInfluencedAlpha = true;
     mDrawAlpha = 0xFF;
     mIsConnectParent = 0;
     calcMtx();
@@ -106,9 +106,9 @@ void J2DPane::makePaneStream(J2DPane* pParentPane, JSURandomInputStream* pStream
         size--;
     }
 
-    mInheritAlpha = TRUE;
+    mInfluencedAlpha = true;
     if (size != 0) {
-        mInheritAlpha = pStream->readU8() != 0;
+        mInfluencedAlpha = pStream->readU8() != 0;
         size--;
     }
 
@@ -175,7 +175,7 @@ void J2DPane::draw(f32 x, f32 y, const J2DGrafContext* pCtx, bool clip) {
             }
 
             mDrawAlpha = mAlpha;
-            if (mInheritAlpha)
+            if (mInfluencedAlpha)
                 mDrawAlpha = (mAlpha * pParentPane->mDrawAlpha) / 0xFF;
         } else {
             mGlobalBounds.addPos(x, y);

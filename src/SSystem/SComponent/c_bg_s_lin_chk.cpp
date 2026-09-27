@@ -18,10 +18,10 @@ void cBgS_LinChk::ct() {
 }
 
 /* 80247480-80247500       .text Set2__11cBgS_LinChkFP4cXyzP4cXyzUi */
-void cBgS_LinChk::Set2(cXyz* pStart, cXyz* pEnd, fpc_ProcID actorPid) {
-    mLin.SetStartEnd(*pStart, *pEnd);
-    field_0x40 = *pEnd;
-    SetActorPid(actorPid);
+void cBgS_LinChk::Set2(cXyz* pi_start, cXyz* pi_end, fpc_ProcID pi_actor) {
+    mLin.SetStartEnd(*pi_start, *pi_end);
+    field_0x40 = *pi_end;
+    SetActorPid(pi_actor);
     ClrHit();
     ClearPi();
 }

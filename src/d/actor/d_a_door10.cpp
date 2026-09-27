@@ -5,11 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_door10.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/d_com_inf_game.h"
-#include "d/res/res_doorbs.h"
+#include "res/Object/DoorBs.h"
 
 /* 00000078-000000C8       .text chkMakeKey__10daDoor10_cFv */
 s32 daDoor10_c::chkMakeKey() {
@@ -304,9 +302,9 @@ BOOL daDoor10_c::CreateHeap() {
     cBgD_t* cBgD;
     if (m364 != 0) {
         if (m364 == 4) {
-            cBgD = (cBgD_t*)dComIfG_getObjectRes("DoorBs", DOORBS_DZB_DOOR20_D);
+            cBgD = (cBgD_t*)dComIfG_getObjectRes("DoorBs", dRes_INDEX_DOORBS_DZB_DOOR20_D_e);
         } else {
-            cBgD = (cBgD_t*)dComIfG_getObjectRes("DoorBs", DOORBS_DZB_DOOR20_K);
+            cBgD = (cBgD_t*)dComIfG_getObjectRes("DoorBs", dRes_INDEX_DOORBS_DZB_DOOR20_K_e);
         }
     } else {
         cBgD = (cBgD_t*)dComIfG_getStageRes("Stage", getDzbName());
@@ -513,16 +511,25 @@ cPhs_State daDoor10_c::create() {
     }
 
     cPhs_State ret;
-    if (m364 != 0 && (ret = dComIfG_resLoad(&mPhase, "DoorBs")) != cPhs_COMPLEATE_e) {
-        return ret;
+    if (m364 != 0) {
+        ret = dComIfG_resLoad(&mPhase, "DoorBs");
+        if (ret != cPhs_COMPLEATE_e) {
+            return ret;
+        }
     }
 
-    if (chkMakeKey() && (ret = mKeyLock.keyResLoad()) != cPhs_COMPLEATE_e) {
-        return ret;
+    if (chkMakeKey()) {
+        ret = mKeyLock.keyResLoad();
+        if (ret != cPhs_COMPLEATE_e) {
+            return ret;
+        }
     }
 
-    if (mHkyo.chkUse() && (ret = mHkyo.resLoad()) != cPhs_COMPLEATE_e) {
-        return ret;
+    if (mHkyo.chkUse()) {
+        ret = mHkyo.resLoad();
+        if (ret != cPhs_COMPLEATE_e) {
+            return ret;
+        }
     }
 
     fopAcM_SetRoomNo(this, getFRoomNo());
@@ -837,7 +844,7 @@ static BOOL daDoor10_IsDelete(daDoor10_c*) {
 
 /* 00001CD4-00001E18       .text daDoor10_Delete__FP10daDoor10_c */
 static BOOL daDoor10_Delete(daDoor10_c* i_this) {
-    fpc_ProcID proc = fopAcM_GetID(i_this);
+    fopAcM_RegisterDeleteID(i_this);
 
 #if VERSION > VERSION_DEMO
     if (i_this->heap != NULL)
@@ -867,7 +874,8 @@ static BOOL daDoor10_Delete(daDoor10_c* i_this) {
 
 /* 00001E18-00001EA8       .text daDoor10_Create__FP10fopAc_ac_c */
 static cPhs_State daDoor10_Create(fopAc_ac_c* a_this) {
-    fopAcM_SetupActor(a_this, daDoor10_c);
+    fopAcM_RegisterCreateID(a_this);
+    fopAcM_ct(a_this, daDoor10_c);
     return ((daDoor10_c*)a_this)->create();
 }
 
@@ -880,18 +888,18 @@ static actor_method_class l_daDoor10_Method = {
 };
 
 actor_process_profile_definition g_profile_DOOR10 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DOOR10,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DOOR10_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDoor10_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DOOR10,
+    /* Draw Prio    */ fpcDwPi_DOOR10_e,
     /* Actor SubMtd */ &l_daDoor10_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

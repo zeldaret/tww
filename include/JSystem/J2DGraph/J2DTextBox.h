@@ -37,7 +37,7 @@ public:
 
     void initiate(const ResFONT*, const char*, J2DTextBoxHBinding, J2DTextBoxVBinding);
     void setFont(JUTFont*);
-    JUTFont* getFont() { return mpFont; }
+    JUTFont* getFont() const { return mpFont; }
     void setFontSize(f32 sizeX, f32 sizeY) {
         mFontSizeX = sizeX > 0.0f ? sizeX : 0.0f;
         mFontSizeY = sizeY > 0.0f ? sizeY : 0.0f;
@@ -48,6 +48,10 @@ public:
     void getFontSize(TFontSize& size) const {
         size.mSizeX = mFontSizeX;
         size.mSizeY = mFontSizeY;
+    }
+    void shiftSet(f32 x, f32 y) {
+        field_0xd8 = x;
+        field_0xdc = y;
     }
     void setCharColor(JUtility::TColor c) { mCharColor.set(c); }
     void setGradColor(JUtility::TColor c) { mGradColor.set(c); }
@@ -61,6 +65,11 @@ public:
     void draw(f32, f32, f32, J2DTextBoxHBinding);
     char* getStringPtr() const;
     s32 setString(const char*, ...);
+
+    void setFontColor(JUtility::TColor i_charColor, JUtility::TColor i_GradientColor) {
+        mCharColor = i_charColor;
+        mGradColor = i_GradientColor;
+    }
 
     virtual ~J2DTextBox();
     virtual bool setConnectParent(bool);

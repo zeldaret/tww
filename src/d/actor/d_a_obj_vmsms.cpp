@@ -6,15 +6,13 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vmsms.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_vmsms.h"
+#include "res/Object/VmsMS.h"
 
 const char daObjVmsms_c::M_arcname[6] = "VmsMS";
 
 /* 00000078-00000098       .text solidHeapCB__12daObjVmsms_cFP10fopAc_ac_c */
-BOOL daObjVmsms_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    return ((daObjVmsms_c*)i_ac)->create_heap();
+BOOL daObjVmsms_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjVmsms_c*)i_this)->create_heap();
 }
 
 /* 00000098-0000015C       .text create_heap__12daObjVmsms_cFv */
@@ -22,7 +20,7 @@ BOOL daObjVmsms_c::create_heap() {
     J3DModelData* mdl_data;
     BOOL ret = FALSE;
 
-    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, VMSMS_BDL_VMSMS);
+    mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VMSMS_BDL_VMSMS_e);
     JUT_ASSERT(0x5b, mdl_data != NULL);
 
     if (mdl_data != NULL) {
@@ -39,7 +37,7 @@ BOOL daObjVmsms_c::create_heap() {
 cPhs_State daObjVmsms_c::_create() {
     cPhs_State ret = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjVmsms_c);
+    fopAcM_ct(this, daObjVmsms_c);
 
     if (!check_demo()) {
         ret = dComIfG_resLoad(&mPhs, M_arcname);
@@ -69,7 +67,7 @@ void daObjVmsms_c::init_mtx() {
 
 /* 0000026C-000002A8       .text check_demo__12daObjVmsms_cCFv */
 bool daObjVmsms_c::check_demo() const {
-    return dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D04);
+    return dComIfGs_isEventBit(dSv_event_flag_c::MASTER_SWORD_CUTSCENE);
 }
 
 /* 000002A8-0000030C       .text _execute__12daObjVmsms_cFv */
@@ -91,27 +89,28 @@ bool daObjVmsms_c::_draw() {
 
 namespace {
 /* 0000036C-0000038C       .text Mthd_Create__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-cPhs_State Mthd_Create(void* i_ac) {
-    return ((daObjVmsms_c*)i_ac)->_create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjVmsms_c*)i_this)->_create();
 }
 
 /* 0000038C-000003B0       .text Mthd_Delete__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-BOOL Mthd_Delete(void* i_ac) {
-    return ((daObjVmsms_c*)i_ac)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjVmsms_c*)i_this)->_delete();
 }
 
 /* 000003B0-000003D4       .text Mthd_Execute__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-BOOL Mthd_Execute(void* i_ac) {
-    return ((daObjVmsms_c*)i_ac)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjVmsms_c*)i_this)->_execute();
 }
 
 /* 000003D4-000003F8       .text Mthd_Draw__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-BOOL Mthd_Draw(void* i_ac) {
-    return ((daObjVmsms_c*)i_ac)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjVmsms_c*)i_this)->_draw();
 }
 
 /* 000003F8-00000400       .text Mthd_IsDelete__27@unnamed@d_a_obj_vmsms_cpp@FPv */
-BOOL Mthd_IsDelete(void* i_ac) {
+BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -125,18 +124,18 @@ static actor_method_class Vmsms_Mthd_Table = {
 }; // namespace
 
 actor_process_profile_definition g_profile_Obj_Vmsms = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Vmsms,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Vmsms_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjVmsms_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Vmsms,
+    /* Draw Prio    */ fpcDwPi_Obj_Vmsms_e,
     /* Actor SubMtd */ &Vmsms_Mthd_Table,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

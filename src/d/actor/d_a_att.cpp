@@ -5,9 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_att.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_bgn.h"
 
@@ -21,7 +20,7 @@ static BOOL daAtt_Draw(att_class* i_this) {
 
 /* 000000F4-00000140       .text boss_s_sub__FPvPv */
 static void* boss_s_sub(void* search, void*) {
-    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == PROC_BGN) {
+    if (fopAcM_IsActor(search) && fopAcM_GetName(search) == fpcNm_BGN_e) {
         return search;
     }
     return NULL;
@@ -38,6 +37,7 @@ static BOOL daAtt_Execute(att_class* i_this) {
         dComIfG_Ccsp()->Set(&i_this->mSph);
     }
 #endif
+
     if (i_this->m2B5 == 100) {
         i_this->attention_info.position = i_this->eyePos = i_this->current.pos;
     } else {
@@ -51,44 +51,73 @@ static BOOL daAtt_Execute(att_class* i_this) {
             i_this->m550--;
         }
         
+#if VERSION == VERSION_DEMO
+        if (i_this->m535 != 0) {
+            i_this->m535--;
+        }
+#endif
+
         if (i_this->m550 == 0 && (i_this->mCyl.ChkTgHit() || i_this->mSph.ChkTgHit())) {
             i_this->m550 = 10;
             boss->mAAA8[r30].m308--;
             if (boss->mAAA8[r30].m308 <= 0) {
+#if VERSION == VERSION_DEMO
+                i_this->m535 = 30;
+#endif
                 boss->mAAA8[r30].m2D0 = 1;
-                boss->mAAA8[r30].m304 = 6000.0f;
+                boss->mAAA8[r30].m304 = 6000.0f + DEMO_SELECT(REG6_F(3), 0.0f);
                 mDoAud_seStart(JA_SE_LK_W_WEP_HIT, NULL, 0x21, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                 if (r30 <= 1) {
                     if (boss->mAAA8[1-r30].m2D0 != 0) {
-                        boss->mC7B0 = 600;
+                        boss->mC7AC[2] = 600;
                     }
                 }
             } else {
-                boss->mAAA8[r30].m300 = 15;
+                boss->mAAA8[r30].m300 = 15 + DEMO_SELECT(REG6_S(7), 0);
                 mDoAud_seStart(JA_SE_CM_BGN_D_STRING_PLINK, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             }
         }
         
         i_this->current.pos = boss->mC33C[r30];
+#if VERSION == VERSION_DEMO
+        cXyz sp24 = i_this->current.pos - i_this->old.pos;
+#endif
         cXyz sp08 = i_this->current.pos;
         
         if (
-            boss->m02B5 == 0
-            &&
-            (boss->mC748 != 0 || boss->mC74C != 0 || r30 != 7)
-            &&
-            (boss->mAAA8[r30].m2D0 == 0 && boss->mAAA8[r30].m2EC < 1.0f)
+            (
+                boss->m02B5 == 0 &&
+#if VERSION == VERSION_DEMO
+                sp24.abs() < 100.0f + REG17_F(16) &&
+#else
+                (boss->mC748 != 0 || boss->mC74C != 0 || r30 != 7) &&
+#endif
+                boss->mAAA8[r30].m2D0 == 0 &&
+                boss->mAAA8[r30].m2EC < 1.0f
+            )
+#if VERSION == VERSION_DEMO
+            || i_this->m535 != 0
+#endif
          ) {
+#if VERSION > VERSION_DEMO
             i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-            i_this->mCyl.SetR(200.0f);
+#endif
+            i_this->mCyl.SetR(200.0f + DEMO_SELECT(REG0_F(16), 0.0f));
             i_this->mCyl.SetC(sp08);
-            sp08.y += 1000.0f;
+            sp08.y += 1000.0f + DEMO_SELECT(REG13_F(3), 0.0f);
             i_this->mSph.SetC(sp08);
-            i_this->eyePos = sp08;
-            i_this->attention_info.position = sp08;
+#if VERSION == VERSION_DEMO
+            if (i_this->m535 == 0)
+#endif
+            {
+                i_this->eyePos = sp08;
+                i_this->attention_info.position = sp08;
+            }
         } else {
+#if VERSION > VERSION_DEMO
             fopAcM_OffStatus(i_this, 0);
             i_this->attention_info.flags = 0;
+#endif
             i_this->mCyl.SetC(non_pos);
             i_this->mSph.SetC(non_pos);
         }
@@ -101,6 +130,7 @@ static BOOL daAtt_Execute(att_class* i_this) {
 
 /* 00000568-00000570       .text daAtt_IsDelete__FP9att_class */
 static BOOL daAtt_IsDelete(att_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -200,7 +230,7 @@ static cPhs_State daAtt_Create(fopAc_ac_c* i_this) {
     };
     
     att_class* a_this = (att_class*)i_this;
-    fopAcM_SetupActor(i_this, att_class);
+    fopAcM_ct(i_this, att_class);
     
     a_this->m2B5 = fopAcM_GetParam(a_this) & 0xFF;
     a_this->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
@@ -239,18 +269,18 @@ static actor_method_class l_daAtt_Method = {
 };
 
 actor_process_profile_definition g_profile_ATT = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_ATT,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_ATT_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(att_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_ATT,
+    /* Draw Prio    */ fpcDwPi_ATT_e,
     /* Actor SubMtd */ &l_daAtt_Method,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

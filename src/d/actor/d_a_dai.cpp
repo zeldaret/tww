@@ -7,9 +7,7 @@
 #include "d/actor/d_a_dai.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_dai_item.h"
-#include "d/res/res_fdai.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Fdai.h"
 #include "d/d_item.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
@@ -65,7 +63,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* a_this) {
 
 /* 000000E4-000001A0       .text CreateHeap__7daDai_cFv */
 BOOL daDai_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, FDAI_BDL_FDAI);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_FDAI_BDL_FDAI_e);
     JUT_ASSERT(415, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -92,8 +90,8 @@ void daDai_c::CreateInit() {
     shape_angle = current.angle;
     cLib_onBit<u32>(attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
 
-    eventInfo.mpCheckCB = daDai_XyCheckCB;
-    eventInfo.mpEventCB = daDai_XyEventCB;
+    eventInfo.setXyCheckCB(daDai_XyCheckCB);
+    eventInfo.setXyEventCB(daDai_XyEventCB);
 
     mEvtDaiItemIdx = dComIfGp_evmng_getEventIdx("DAI_ITEM");
     mEvtDefaultTalkIdx = dComIfGp_evmng_getEventIdx("DEFAULT_TALK");
@@ -101,12 +99,18 @@ void daDai_c::CreateInit() {
     m850 = fpcM_ERROR_PROCESS_ID_e;
 
     if (dComIfGs_getEventReg(m_savelabel[mSaveID])) {
+        void* dai_item = fopAcM_fastCreate(
+            fpcNm_STANDITEM_e,
+            dComIfGs_getEventReg(m_savelabel[mSaveID]),
+            &current.pos,
 #if VERSION <= VERSION_JPN
-        void* pfVar3 = fopAcM_fastCreate(PROC_STANDITEM, dComIfGs_getEventReg(m_savelabel[mSaveID]), &current.pos, -1, &current.angle);
+            -1,
 #else
-        void* pfVar3 = fopAcM_fastCreate(PROC_STANDITEM, dComIfGs_getEventReg(m_savelabel[mSaveID]), &current.pos, fopAcM_GetRoomNo(this), &current.angle);
+            fopAcM_GetRoomNo(this),
 #endif
-        m850 = fopAcM_GetID(pfVar3);
+            &current.angle
+        );
+        m850 = fopAcM_GetID(dai_item);
         incNowItemNum();
     }
     incNowDaizaNum();
@@ -114,9 +118,9 @@ void daDai_c::CreateInit() {
 
 /* 000003A8-00000494       .text _create__7daDai_cFv */
 cPhs_State daDai_c::_create() {
-    fopAcM_SetupActor(this, daDai_c);
+    fopAcM_ct(this, daDai_c);
 
-    if (!checkItemGet(dItem_DELIVERY_BAG_e, TRUE)) {
+    if (!checkItemGet(dItemNo_DELIVERY_BAG_e, TRUE)) {
         return cPhs_ERROR_e;
     }
 
@@ -135,7 +139,6 @@ cPhs_State daDai_c::_create() {
     if (PVar3 != cPhs_COMPLEATE_e) {
         return PVar3;
     }
-
 #else
     if (PVar2 != cPhs_COMPLEATE_e) {
         return PVar2;
@@ -184,16 +187,16 @@ void daDai_c::checkOrder() {
 
             if (dComIfGp_evmng_startCheck(mEvtDaiItemIdx) && player->getGrabActorID() != fpcM_ERROR_PROCESS_ID_e) {
                 m850 = player->getGrabActorID();
-                daStandItem_c* pfVar2 = (daStandItem_c*)fopAcM_SearchByID(m850);
-                if (pfVar2 != NULL) {
-                    m84B = pfVar2->mItemNo;
+                daStandItem_c* dai_item = (daStandItem_c*)fopAcM_SearchByID(m850);
+                if (dai_item != NULL) {
+                    m84B = dai_item->mItemNo;
                 }
             }
 
             if (dComIfGp_evmng_endCheck(mEvtDaiItemIdx)) {
-                fopAc_ac_c* pfVar3 = fopAcM_SearchByID(m850);
-                if (pfVar3 != NULL) {
-                    pfVar3->current.pos = current.pos;
+                fopAc_ac_c* dai_item = fopAcM_SearchByID(m850);
+                if (dai_item != NULL) {
+                    dai_item->current.pos = current.pos;
                 }
                 dComIfGs_setEventReg(m_savelabel[mSaveID], m84B);
                 dComIfGs_setReserveItemEmpty();
@@ -207,35 +210,33 @@ void daDai_c::checkOrder() {
 }
 
 /* 00000AFC-00000B1C       .text daDai_XyCheckCB__FPvi */
-static s16 daDai_XyCheckCB(void* v_this, int arg1) {
-    return ((daDai_c*)v_this)->XyCheckCB(arg1);
+static s16 daDai_XyCheckCB(void* i_this, int i_itemBtn) {
+    return ((daDai_c*)i_this)->XyCheckCB(i_itemBtn);
 }
 
 /* 00000B1C-00000BA8       .text XyCheckCB__7daDai_cFi */
-s16 daDai_c::XyCheckCB(int arg1) {
-    u8 item = dComIfGp_getSelectItem(arg1);
+s16 daDai_c::XyCheckCB(int i_itemBtn) {
+    u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
 
-    if (isDaizaItem(item) && !dComIfGs_getEventReg(m_savelabel[mSaveID])) {
-        m84A = item;
+    if (isDaizaItem(itemNo) && !dComIfGs_getEventReg(m_savelabel[mSaveID])) {
+        m84A = itemNo;
         return 1;
     }
     return 0;
 }
 
 /* 00000BA8-00000BC8       .text daDai_XyEventCB__FPvi */
-static s16 daDai_XyEventCB(void* v_this, int arg1) {
-    return ((daDai_c*)v_this)->XyEventCB(arg1);
+static s16 daDai_XyEventCB(void* i_this, int i_itemBtn) {
+    return ((daDai_c*)i_this)->XyEventCB(i_itemBtn);
 }
 
 /* 00000BC8-00000C18       .text XyEventCB__7daDai_cFi */
-s16 daDai_c::XyEventCB(int arg1) {
-    s16 sVar1;
-    if (isDaizaItem(dComIfGp_getSelectItem(arg1))) {
-        sVar1 = mEvtDaiItemIdx;
+s16 daDai_c::XyEventCB(int i_itemBtn) {
+    if (isDaizaItem(dComIfGp_getSelectItem(i_itemBtn))) {
+        return mEvtDaiItemIdx;
     } else {
-        sVar1 = mEvtDefaultTalkIdx;
+        return  mEvtDefaultTalkIdx;
     }
-    return sVar1;
 }
 
 /* 00000C18-00000C78       .text _execute__7daDai_cFv */
@@ -284,15 +285,15 @@ bool daDai_c::_draw() {
 
 /* 00000E48-00000EDC       .text getMsg__7daDai_cFv */
 u32 daDai_c::getMsg() {
-    u32 uVar2;
+    u32 msgNo;
     if (dComIfGp_event_chkTalkXY()) {
-        uVar2 = 0xf13;
+        msgNo = 0xF13;
     } else if (dComIfGs_getEventReg(m_savelabel[mSaveID])) {
-        uVar2 = 0xf0d;
+        msgNo = 0xF0D;
     } else {
-        uVar2 = 0xf11;
+        msgNo = 0xF11;
     }
-    return uVar2;
+    return msgNo;
 }
 
 /* 00000EDC-0000109C       .text next_msgStatus__7daDai_cFPUl */
@@ -300,20 +301,20 @@ u16 daDai_c::next_msgStatus(u32* pMsgNo) {
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
     switch (*pMsgNo) {
-    case 0xF11:
-        *pMsgNo = 0xf12;
+    case 0xF11: // Check when empty
+        *pMsgNo = 0xF12;
         break;
 
-    case 0xF0D:
+    case 0xF0D: // Check when item is placed, ask to remove
         switch (mpCurrMsg->mSelectNum) {
-        case 0:
+        case 0: // Yes
             if (dComIfGs_checkReserveItemEmpty() && getRotenItemNumInBag() < 3) {
                 fopAcM_seStart(this, JA_SE_LK_W_DAIZA_TAKEOFF, 0);
-                *pMsgNo = 0xf0f;
+                *pMsgNo = 0xF0F;
 
-                fopAc_ac_c* pfVar4 = fopAcM_SearchByID(m850);
-                if (pfVar4 != NULL) {
-                    fopAcM_delete(pfVar4);
+                fopAc_ac_c* dai_item = fopAcM_SearchByID(m850);
+                if (dai_item != NULL) {
+                    fopAcM_delete(dai_item);
                 }
 
                 u8 uVar5 = dComIfGs_getEventReg(m_savelabel[mSaveID]);
@@ -322,11 +323,11 @@ u16 daDai_c::next_msgStatus(u32* pMsgNo) {
                 decNowItemNum();
                 m84A = 0;
             } else {
-                *pMsgNo = 0xf0e;
+                *pMsgNo = 0xF0E;
             }
             break;
 
-        case 1:
+        case 1: // No
         default:
             msgStatus = fopMsgStts_MSG_ENDS_e;
             break;
@@ -377,18 +378,18 @@ static actor_method_class daDaiMethodTable = {
 };
 
 actor_process_profile_definition g_profile_DAI = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_DAI,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_DAI_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daDai_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_DAI,
+    /* Draw Prio    */ fpcDwPi_DAI_e,
     /* Actor SubMtd */ &daDaiMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

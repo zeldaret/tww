@@ -4,6 +4,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JAudio/JAIBankWave.h"
 #include "JSystem/JAudio/JAISound.h"
+#include "JSystem/JAudio/JAIConst.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/mtx/vec.h"
 
@@ -39,12 +40,14 @@ public:
     void initCamera();
     BOOL initReadFile();
     void processFrameWork();
-    void startSoundVec(u32, JAISound**, Vec*, u32, u32, u8);
+    void startSoundVec(u32 soundID, JAISound**, Vec*, u32, u32, u8);
     void startSoundActor(u32, JAISound**, JAInter::Actor*, u32, u8);
     void startSoundDirectID(u32, JAISound**, JAInter::Actor*, u32, u8);
     void startSoundBasic(u32, JAISound**, JAInter::Actor*, u32, u8, void*);
     void stopSoundHandle(JAISound*, u32);
+    void stopPlayingCategorySe(u8);
     void stopPlayingCategoryObjectSe(u8, void*);
+    void stopAllSe(u8);
     void stopAllSe(u8, void*);
     void stopActorSoundOneBuffer(void*, JAISound*);
     void stopIDSoundOneBuffer(u32, JAISound*);
@@ -54,6 +57,7 @@ public:
     void stopAllSound(u32, void*);
     void deleteObject(void*);
     u16 getSoundOffsetNumberFromID(u32);
+    void setSeCancelSwitch(u8, u8);
     void setSeCategoryVolume(u8, u8);
     static u16 setParameterSeqSync(JASystem::TTrack*, u16);
     bool allocStreamBuffer(void*, s32);
@@ -89,10 +93,10 @@ public:
     }
 
     // this might be wrong, it matches but the size doesn't seem to match the debug map
-    bool checkEnablePrepare(u32 flags) { return !(flags & 0xc0000000) && !(flags & 0x00000c00); }
+    u32 checkEnablePrepare(u32 soundID) { return (soundID & JAISoundID_TypeMask); }
 
-    void prepareSoundVec(u32 flags, JAISound** pSound, Vec* pos, u32 r7, u32 r8, u8 r9) {
-        startSoundVec(flags, pSound, pos, r7, r8, r9);
+    void prepareSoundVec(u32 soundID, JAISound** pSound, Vec* pos, u32 r7, u32 r8, u8 r9) {
+        startSoundVec(soundID, pSound, pos, r7, r8, r9);
         if (*pSound) {
             (*pSound)->setPrepareFlag(1);
         }

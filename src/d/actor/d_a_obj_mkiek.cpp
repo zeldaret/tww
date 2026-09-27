@@ -8,10 +8,8 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_a_obj.h"
 #include "d/d_particle_name.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_cc_d.h"
-#include "d/res/res_mkiek.h"
+#include "res/Object/MkieK.h"
 #include "f_op/f_op_actor_mng.h"
 
 static dCcD_SrcSph sph_check_src = {
@@ -50,15 +48,15 @@ Mtx daObjMkiek::Act_c::M_tmp_mtx;
 
 /* 00000078-00000240       .text CreateHeap__Q210daObjMkiek5Act_cFv */
 BOOL daObjMkiek::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKIEK_BDL_MKIEK);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKIEK_BDL_MKIEK_e);
     JUT_ASSERT(0x96, model_data != NULL);
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
 
-    J3DModelData* model_data_v = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MKIEK_BDL_YLSMK00);
+    J3DModelData* model_data_v = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKIEK_BDL_YLSMK00_e);
     JUT_ASSERT(0x9C, model_data_v != NULL);
     mpModelV = mDoExt_J3DModel__create(model_data_v, 0, 0x11020203);
 
-    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, MKIEK_BRK_YLSMK00);
+    J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MKIEK_BRK_YLSMK00_e);
     JUT_ASSERT(0xA2, brk != NULL);
 
     int result = mBrkAnm.init(model_data_v, brk, true, J3DFrameCtrl::EMode_NONE);
@@ -86,7 +84,7 @@ BOOL daObjMkiek::Act_c::Create() {
 
 /* 00000314-000004F8       .text Mthd_Create__Q210daObjMkiek5Act_cFv */
 cPhs_State daObjMkiek::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     int switch_index = daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S);
     if (fopAcM_isSwitch(this, switch_index)) {
@@ -95,7 +93,7 @@ cPhs_State daObjMkiek::Act_c::Mthd_Create() {
 
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, MKIEK_DZB_MKIEK, NULL, 0x1220);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MKIEK_DZB_MKIEK_e, NULL, 0x1220);
         JUT_ASSERT(0xD9, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e))
     }
     return phase_state;
@@ -282,18 +280,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjMkiek
 
 actor_process_profile_definition g_profile_Obj_Mkiek = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Mkiek,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Mkiek_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMkiek::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Mkiek,
+    /* Draw Prio    */ fpcDwPi_Obj_Mkiek_e,
     /* Actor SubMtd */ &daObjMkiek::Mthd_Table,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

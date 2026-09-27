@@ -12,7 +12,9 @@ public:
         m_pos = *pos;
     }
     void SetPos(Vec* pos) {
-        m_pos = *pos;
+        m_pos.x = pos->x;
+        m_pos.y = pos->y;
+        m_pos.z = pos->z;
     }
 
     virtual ~cBgS_GndChk() {}

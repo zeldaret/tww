@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_printf.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_printf.h"
 #include "stdio.h"
 #include "dolphin/base/PPCArch.h"
@@ -26,7 +27,10 @@ extern "C" void* OSGetCallerPC(int param_0) {
 }
 
 /* 80006640-800066B0       .text OSGetActiveThreadID */
-extern "C" int OSGetActiveThreadID(OSThread* thread) {
+#if VERSION > VERSION_DEMO
+extern "C"
+#endif
+int OSGetActiveThreadID(OSThread* thread) {
     OSThread* r31;
     int id = -1;
     BOOL enable = OSDisableInterrupts();
@@ -46,19 +50,20 @@ extern "C" int search_partial_address(void* address, int* module_id, int* sectio
 
     OSModuleInfo* module = __OSModuleList.head;
     for (; module != NULL; module = (OSModuleInfo*)module->link.next) {
-        u32 i, addr;
+        u32 i;
+        uintptr_t addr;
         OSSectionInfo* section = (OSSectionInfo*)module->sectionInfoOffset;
 
         for (i = 0; i < module->numSections; section++, i++) {
             if (section->size != 0) {
                 addr = section->offset & ~0x01;
-                if ((addr <= (u32)address) && (u32)address < (addr + section->size)) {
+                if ((addr <= (uintptr_t)address) && (uintptr_t)address < (addr + section->size)) {
                     if (module_id != NULL)
                         *module_id = module->id;
                     if (section_id != NULL)
                         *section_id = i;
                     if (section_offset)
-                        *section_offset = (u32)address - addr;
+                        *section_offset = (uintptr_t)address - addr;
                     if (name_offset)
                         *name_offset = module->nameOffset;
                     return 0;
@@ -71,14 +76,14 @@ extern "C" int search_partial_address(void* address, int* module_id, int* sectio
 }
 
 /* 80006770-800067D0       .text convert_partial_address */
-extern "C" u32 convert_partial_address(void* param_0) {
+extern "C" uintptr_t convert_partial_address(void* param_0) {
     int param_1;
     int param_2;
     int param_3;
     if (search_partial_address(param_0, &param_1, &param_2, &param_3, NULL) == 0) {
         return (param_2 << 28) + (param_3 & 0x01FFFFFF);
     } else {
-        return (u32)param_0;
+        return (uintptr_t)param_0;
     }
 }
 
@@ -205,6 +210,7 @@ void OSPanic(const char* file, s32 line, const char* fmt, ...) {
     u32 i;
     u32* p;
     u32* tmp;
+    u32 tmp2;
 
     OSDisableInterrupts();
     va_start(args, fmt);
@@ -217,7 +223,8 @@ void OSPanic(const char* file, s32 line, const char* fmt, ...) {
         OSReport("0x%08x:   0x%08x    0x%08x\n", p, p[0], p[1]);
     }
 
-    tmp = (u32*)0x1234567;  // ??????
-    *tmp = 0x1234567;
+    tmp2 = 0x1234567;
+    tmp = (u32*)tmp2;
+    *tmp = tmp2;
     PPCHalt();
 }

@@ -97,7 +97,7 @@ public:
     u32 Chk(cXyz* p_xyz, fopAc_ac_c** p_actor, dCcMassS_HitInf* p_hitInf);
     void Clear();
     void Set(cCcD_Obj* p_obj, u8 priority);
-    void SetAreaChk(cCcD_Obj*, u8, void (*)(fopAc_ac_c*, cXyz*, u32));
+    void SetAreaChk(cCcD_Obj*, u8, dCcMassS_ObjCallback);
     void SetCam(cM3dGCps const& cps);
     u32 GetResultCam() const;
     void GetCamTopPos(Vec* p_out);

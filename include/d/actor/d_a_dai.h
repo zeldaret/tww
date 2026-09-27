@@ -25,7 +25,7 @@ public:
     void proc();
     bool _draw();
     u32 getMsg();
-    u16 next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
 
     static void init() {
         mNowDaizaNum = 0;
@@ -40,7 +40,7 @@ public:
     static const char m_arcname[];
     static const char m_cloth_arcname[];
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhsFdai;
     /* 0x6CC */ request_of_phase_process_class mPhsCloth;
     /* 0x6D4 */ J3DModel* mpModel;

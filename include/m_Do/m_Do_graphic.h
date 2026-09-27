@@ -3,6 +3,7 @@
 
 #include "JSystem/JFramework/JFWDisplay.h"
 #include "dolphin/mtx/mtx.h"
+#include "m_Do/m_Do_mtx.h"
 
 bool mDoGph_Create();
 bool mDoGph_BeforeOfDraw();
@@ -10,6 +11,12 @@ bool mDoGph_AfterOfDraw();
 bool mDoGph_Painter();
 void mDoGph_BlankingON();
 void mDoGph_BlankingOFF();
+void mDoGph_setCaptureStep(s16 step);
+void* mDoGph_getCaptureTextureBuffer();
+void mDoGph_setCaptureCaptureFormat(u8 fmt);
+void mDoGph_setCaptureTextureFormat(u8 fmt);
+s16 mDoGph_getCaptureStep();
+void mDoGph_CaptureCansel();
 
 struct ResTIMG;
 
@@ -20,8 +27,19 @@ public:
     static void* alloc(u32, int);
     static void free();
     static void fadeOut(f32, GXColor&);
-    static void onBlure(); // weak?
-    static void onBlure(const Mtx); // weak?
+#if VERSION == VERSION_DEMO
+    static void onBlure() {
+        mBlureFlag = true;
+        setBlureMtx(cMtx_getIdentity());
+    }
+    static void onBlure(const Mtx mtx) {
+        mBlureFlag = true;
+        cMtx_copy(mtx, mBlureMtx);
+    }
+#else
+    static void onBlure();
+    static void onBlure(const Mtx);
+#endif
     static void fadeOut(f32);
     static void calcFade();
     static void onMonotone();
@@ -46,6 +64,7 @@ public:
     static u8 getBlureRate() { return mBlureRate; }
     static void setBlureRate(u8 blurRate) { mBlureRate = blurRate; }
     static MtxP getBlureMtx() { return mBlureMtx; }
+    static void setBlureMtx(const Mtx m) { cMtx_copy(m, mBlureMtx); }
     static void offAutoForcus() { mAutoForcus = false; }
     static void onAutoForcus() { mAutoForcus = true; }
     static BOOL isAutoForcus() { return mAutoForcus; }
@@ -74,7 +93,6 @@ public:
     static void alloc32(u32) {}
     static void getFrameBufferMemory() {}
     static void getFrameBufferSize() {}
-    static void setBlureMtx(const Mtx) {}
 
     static GXTexObj mFrameBufferTexObj;
     static GXTexObj mZbufferTexObj;

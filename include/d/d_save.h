@@ -17,7 +17,17 @@ public:
     void setWalletSize(u8 size) { mWalletSize = size; }
     int getRupee() { return mRupee; }
     void setRupee(u16 rupee) { mRupee = rupee; }
-    u16 getRupeeMax() { return 0; } // TODO
+    u16 getRupeeMax() {
+        switch (mWalletSize) {
+        case 0:
+            return 200;
+        case 1:
+            return 1000;
+        case 2:
+        default:
+            return 5000;
+        }
+    }
     u8 getMagic() { return mMagic; }
     void setMagic(u8 magic) { mMagic = magic; }
     u8 getMaxMagic() { return mMaxMagic; }
@@ -113,6 +123,7 @@ class dSv_player_get_item_c {
 public:
     void init();
     void onItem(int, u8);
+    void offItem(int, u8);
     BOOL isItem(int, u8);
     void onBottleItem(u8);
     BOOL isBottleItem(u8);
@@ -229,9 +240,7 @@ public:
     void onBait(u8);
     BOOL isBait(u8);
     void onReserve(u8);
-#if VERSION == VERSION_DEMO
     void offReserve(u8);
-#endif
     BOOL isReserve(u8);
 
     /* 0x0 */ u32 mReserveFlags;
@@ -269,10 +278,13 @@ public:
     void setCollect(int idx, u8 byte) { mCollect[idx] = byte; }
     u8 checkCollect(int idx) { return mCollect[idx]; }
     void onTact(u8);
+    void offTact(u8);
     BOOL isTact(u8);
     void onTriforce(u8);
+    void offTriforce(u8);
     BOOL isTriforce(u8);
     void onSymbol(u8);
+    void offSymbol(u8);
     BOOL isSymbol(u8);
     int getTriforceNum();
 
@@ -475,6 +487,7 @@ public:
     u8 getVibration() { return mVibration; }
     void setVibration(u8 vib) { mVibration = vib; }
 
+private:
     /* 0x0 */ u8 mRuby;
     /* 0x1 */ u8 mSoundMode;
     /* 0x2 */ u8 mAttentionType;
@@ -570,24 +583,6 @@ public:
 
     static const int PLAYER_STATUS_C_COUNT = 4;
 
-    static const int PACKED_STRUCT_SIZE =
-        sizeof(dSv_player_status_a_c) +
-        sizeof(dSv_player_status_b_c) +
-        sizeof(dSv_player_return_place_c) +
-        sizeof(dSv_player_item_c) +
-        sizeof(dSv_player_get_item_c) +
-        sizeof(dSv_player_item_record_c) +
-        sizeof(dSv_player_item_max_c) +
-        sizeof(dSv_player_bag_item_c) +
-        sizeof(dSv_player_get_bag_item_c) +
-        sizeof(dSv_player_bag_item_record_c) +
-        sizeof(dSv_player_collect_c) +
-        sizeof(dSv_player_map_c) +
-        sizeof(dSv_player_info_c) +
-        sizeof(dSv_player_config_c) +
-        sizeof(dSv_player_priest_c) +
-        sizeof(dSv_player_status_c_c) * PLAYER_STATUS_C_COUNT;
-
     /* 0x000 */ dSv_player_status_a_c mPlayerStatusA;
     /* 0x018 */ dSv_player_status_b_c mPlayerStatusB;
     /* 0x030 */ dSv_player_return_place_c mReturnPlace;
@@ -611,6 +606,33 @@ public:
 };  // Size: 0x380
 
 STATIC_ASSERT(sizeof(dSv_player_c) == 0x380);
+
+// The version of this struct saved to the memory card is packed and does not have alignment padding.
+#pragma push
+#pragma pack(1)
+// Fake struct name.
+struct dSv_player_c_PACKED {
+    /* 0x000 */ dSv_player_status_a_c mPlayerStatusA;
+    /* 0x018 */ dSv_player_status_b_c mPlayerStatusB;
+    /* 0x030 */ dSv_player_return_place_c mReturnPlace;
+    /* 0x03C */ dSv_player_item_c mPlayerItem;
+    /* 0x051 */ dSv_player_get_item_c mGetItem;
+    /* 0x066 */ dSv_player_item_record_c mItemRecord;
+    /* 0x06E */ dSv_player_item_max_c mItemMax;
+    /* 0x076 */ dSv_player_bag_item_c mBagItem;
+    /* 0x08E */ dSv_player_get_bag_item_c mGetBagItem;
+    /* 0x09A */ dSv_player_bag_item_record_c mBagItemRecord;
+    /* 0x0B2 */ dSv_player_collect_c mCollect;
+    /* 0x0BF */ dSv_player_map_c mMap;
+    /* 0x143 */ dSv_player_info_c mInfo;
+    /* 0x19F */ dSv_player_config_c mConfig;
+    /* 0x1A4 */ dSv_player_priest_c mPriest;
+    /* 0x1B4 */ dSv_player_status_c_c mStatusC[dSv_player_c::PLAYER_STATUS_C_COUNT];
+};  // Size: 0x374
+#pragma pack()
+#pragma pop
+
+STATIC_ASSERT(sizeof(dSv_player_c_PACKED) == 0x374);
 
 class dSv_memBit_c {
 public:
@@ -723,6 +745,7 @@ public:
     BOOL isSwitch(int);
     BOOL revSwitch(int);
 
+    void reset() { mStageNo = -1; } // Name from TP
     u8 getGbaRupeeCount() { return mGbaRupeeCount; }
     void incGbaRupeeCount() { mGbaRupeeCount++; }
 
@@ -801,7 +824,7 @@ public:
     cXyz& getRestartOptionPos() { return mOptionRoomPos; }
 
     /* 0x00 */ s8 mRestartRoom;
-    /* 0x01 */ u8 mOption;
+    /* 0x01 */ s8 mOption;
     /* 0x02 */ s8 mOptionRoomNo;
     /* 0x04 */ s16 mOptionPoint;
     /* 0x06 */ s16 mOptionRoomAngleY;
@@ -882,13 +905,6 @@ public:
         /* 0x10 */ STAGE_MAX,
     };
 
-    static const int PACKED_STRUCT_SIZE =
-        dSv_player_c::PACKED_STRUCT_SIZE +
-        sizeof(dSv_memory_c) * STAGE_MAX +
-        sizeof(dSv_ocean_c) +
-        sizeof(dSv_event_c) +
-        sizeof(dSv_reserve_c);
-
     /* 0x000 */ dSv_player_c mPlayer;
     /* 0x380 */ dSv_memory_c mMemory[STAGE_MAX];
     /* 0x5C0 */ dSv_ocean_c mOcean;
@@ -898,6 +914,22 @@ public:
 };  // Size: 0x778
 
 STATIC_ASSERT(sizeof(dSv_save_c) == 0x778);
+
+// The version of this struct saved to the memory card is packed and does not have alignment padding.
+#pragma push
+#pragma pack(1)
+// Fake struct name.
+struct dSv_save_c_PACKED {
+    /* 0x000 */ dSv_player_c_PACKED mPlayer;
+    /* 0x374 */ dSv_memory_c mMemory[dSv_save_c::STAGE_MAX];
+    /* 0x5B4 */ dSv_ocean_c mOcean;
+    /* 0x618 */ dSv_event_c mEvent;
+    /* 0x718 */ dSv_reserve_c mReserve;
+};  // Size: 0x768
+#pragma pack()
+#pragma pop
+
+STATIC_ASSERT(sizeof(dSv_save_c_PACKED) == 0x768);
 
 class dSv_info_c {
 public:
@@ -936,13 +968,14 @@ public:
 
     void removeZone(int zoneNo) { mZone[zoneNo].reset(); }
     void initDan(s8 i_stage) { mDan.init(i_stage); }
+    void resetDan() { mDan.reset(); } // Name from TP
 
     u8 getDataNum() { return mDataNum; }
     void setDataNum(u8 num) { mDataNum = num; }
     u8 getNoFile() { return mNoFile; }
     void setNoFile(u8 no) { mNoFile = no; }
     u8 getNewFile() { return mNewFile; }
-    void setNewFile(u8 file) {mNewFile = file; }
+    void setNewFile(u8 file) { mNewFile = file; }
     u64 getMemCardCheckID() { return mMemCardCheckID; }
     void setMemCardCheckID(u64 id) { mMemCardCheckID = id; }
 
@@ -963,8 +996,8 @@ public:
     /* 0x1158 */ dSv_event_c mTmp;
     /* 0x1258 */ dSv_turnRestart_c mTurnRestart;
     /* 0x1290 */ u8 mDataNum;
-    /* 0x1291 */ u8 mNoFile;
-    /* 0x1292 */ u8 mNewFile;
+    /* 0x1291 */ u8 mNewFile;
+    /* 0x1292 */ u8 mNoFile;
     /* 0x1298 */ u64 mMemCardCheckID;
 };  // Size: 0x12A0
 

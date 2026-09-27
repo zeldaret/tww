@@ -27,17 +27,17 @@ struct btd_sibuki_s {
 
 struct btd_class {
     /* 0x0000 */ fopEn_enemy_c actor;
-    /* 0x02AC */ request_of_phase_process_class m02AC;
-    /* 0x02B4 */ request_of_phase_process_class m02B4;
-    /* 0x02BC */ mDoExt_McaMorf* m02BC;
-    /* 0x02C0 */ mDoExt_btkAnm* btk;
-    /* 0x02C4 */ mDoExt_brkAnm* brk;
-    /* 0x02C8 */ mDoExt_McaMorf* m02C8;
-    /* 0x02CC */ mDoExt_btkAnm* btkS;
-    /* 0x02D0 */ mDoExt_brkAnm* brkS;
-    /* 0x02D4 */ mDoExt_McaMorf* m02D4;
-    /* 0x02D8 */ mDoExt_btkAnm* m02D8;
-    /* 0x02DC */ mDoExt_brkAnm* m02DC;
+    /* 0x02AC */ request_of_phase_process_class mPhaseBtd;
+    /* 0x02B4 */ request_of_phase_process_class mPhaseMagma;
+    /* 0x02BC */ mDoExt_McaMorf* mpPhase1Morf;
+    /* 0x02C0 */ mDoExt_btkAnm* btk; // First phase
+    /* 0x02C4 */ mDoExt_brkAnm* brk; // First phase
+    /* 0x02C8 */ mDoExt_McaMorf* mpPhase2Morf;
+    /* 0x02CC */ mDoExt_btkAnm* btkS; // Second phase
+    /* 0x02D0 */ mDoExt_brkAnm* brkS; // Second phase
+    /* 0x02D4 */ mDoExt_McaMorf* mpDeadHeadMorf;
+    /* 0x02D8 */ mDoExt_btkAnm* mpDeadHeadBtkAnm;
+    /* 0x02DC */ mDoExt_brkAnm* mpDeadHeadBrkAnm;
     /* 0x02E0 */ u8 m02E0;
     /* 0x02E1 */ s8 m02E1;
     /* 0x02E2 */ s16 m02E2;
@@ -57,12 +57,12 @@ struct btd_class {
     /* 0x02FA */ s16 m02FA;
     /* 0x02FC */ cXyz m02FC[19];
     /* 0x03E0 */ cXyz m03E0;
-    /* 0x03EC */ dCcD_Stts m03EC;
-    /* 0x0428 */ dCcD_Sph m0428[19];
-    /* 0x1A6C */ dCcD_Sph m1A6C;
-    /* 0x1B98 */ dCcD_Sph m1B98;
-    /* 0x1CC4 */ dCcD_Sph m1CC4[50];
-    /* 0x575C */ dCcD_Cyl m575C[6];
+    /* 0x03EC */ dCcD_Stts mStts;
+    /* 0x0428 */ dCcD_Sph mAtSphs[19];
+    /* 0x1A6C */ dCcD_Sph mEyeSph;
+    /* 0x1B98 */ dCcD_Sph mFireSph;
+    /* 0x1CC4 */ dCcD_Sph mSibukiSphs[50];
+    /* 0x575C */ dCcD_Cyl mHandCyls[6];
     /* 0x5E7C */ u8 m5E7C;
     /* 0x5E7D */ u8 m5E7D[0x5E80 - 0x5E7D];
     /* 0x5E80 */ f32 m5E80;
@@ -97,7 +97,7 @@ struct btd_class {
     /* 0x6048 */ csXyz m6048;
     /* 0x604E */ u8 m604E[0x6050 - 0x604E];
     /* 0x6050 */ dPa_smokeEcallBack mPa_SmokeEcallBack[3];
-    /* 0x60B0 */ LIGHT_INFLUENCE m60B0;
+    /* 0x60B0 */ LIGHT_INFLUENCE mLightInfluence;
     /* 0x60D0 */ f32 m60D0;
     /* 0x60D4 */ f32 m60D4;
     /* 0x60D8 */ u8 m60D8;
@@ -106,7 +106,7 @@ struct btd_class {
     /* 0x60DB */ u8 mKankyoState;
     /* 0x60DC */ s16 mKankyoTimer;
     /* 0x60DE */ u8 m60DE[0x60E0 - 0x60DE];
-    /* 0x60E0 */ dKy_tevstr_c m60E0;
+    /* 0x60E0 */ dKy_tevstr_c mTevstr;
     /* 0x6190 */ u8 m6190;
     /* 0x6191 */ u8 m6191[0x6194 - 0x6191];
     /* 0x6194 */ btd_hahen_s hahen[35];

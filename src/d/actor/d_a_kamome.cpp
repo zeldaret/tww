@@ -7,11 +7,9 @@
 #include "d/actor/d_a_kamome.h"
 #include "d/actor/d_a_esa.h"
 #include "d/actor/d_a_sea.h"
-#include "d/res/res_kamome.h"
+#include "res/Object/Kamome.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
 #include "d/d_snap.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/d_kankyo.h"
@@ -28,7 +26,7 @@ public:
     }
     virtual ~kamomeHIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -46,11 +44,11 @@ static s32 esa_check_count;
 static s32 ko_count;
 
 /* 000000EC-000001E4       .text anm_init__FP12kamome_classifUcfi */
-void anm_init(kamome_class* i_this, int anmResIdx, float morf, unsigned char loopMode, float speed, int soundAnmResIdx) {
+static void anm_init(kamome_class* i_this, int anmResIdx, float morf, unsigned char loopMode, float speed, int soundAnmResIdx) {
     if (REG0_S(3) == 0x23) {
-        anmResIdx = KAMOME_BCK_KA_LAND1;
+        anmResIdx = dRes_INDEX_KAMOME_BCK_KA_LAND1_e;
     } else if (REG0_S(3) == 0x24) {
-        anmResIdx = KAMOME_BCK_KA_FLY1;
+        anmResIdx = dRes_INDEX_KAMOME_BCK_KA_FLY1_e;
     }
     i_this->mpMorf->setAnm(
         (J3DAnmTransform*)dComIfG_getObjectRes("Kamome", anmResIdx), loopMode, morf, speed, 0.0f, -1.0f, dComIfG_getObjectRes("Kamome", soundAnmResIdx)
@@ -58,11 +56,11 @@ void anm_init(kamome_class* i_this, int anmResIdx, float morf, unsigned char loo
 }
 
 /* 000001E4-000004B8       .text s_a_d_sub__FPvPv */
-void* s_a_d_sub(void* ac1, void* ac2) {
+static void* s_a_d_sub(void* ac1, void* ac2) {
     dBgS_LinChk linChk;
     fopAc_ac_c* actor2 = (fopAc_ac_c*)ac2;
 
-    if ((esa_check_count < 100) && fopAc_IsActor(ac1) && fpcM_GetName(ac1) == PROC_ESA) {
+    if ((esa_check_count < 100) && fopAcM_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_ESA_e) {
         esa_class* esa = (esa_class*)ac1;
         if (esa->field_0x298 == 0) {
             cXyz sp14;
@@ -83,7 +81,7 @@ void* s_a_d_sub(void* ac1, void* ac2) {
 }
 
 /* 000008F0-00000A44       .text search_esa__FP12kamome_class */
-fopAc_ac_c* search_esa(kamome_class* i_this) {
+static fopAc_ac_c* search_esa(kamome_class* i_this) {
     esa_check_count = 0;
     fpcM_Search(s_a_d_sub, &i_this->actor);
 
@@ -113,31 +111,31 @@ fopAc_ac_c* search_esa(kamome_class* i_this) {
 }
 
 /* 00000A44-00000A90       .text s_a_i_sub__FPvPv */
-void* s_a_i_sub(void* ac1, void* ac2) {
+static void* s_a_i_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
-    if (fopAc_IsActor(ac1) && fpcM_GetName(ac1) == PROC_NPC_LS1) {
+    if (fopAcM_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_NPC_LS1_e) {
         return ac1;
     }
     return NULL;
 }
 
 /* 00000A90-00000ABC       .text search_imouto__FP12kamome_class */
-fopAc_ac_c* search_imouto(kamome_class* i_this) {
+static fopAc_ac_c* search_imouto(kamome_class* i_this) {
     return (fopAc_ac_c*)fpcM_Search(s_a_i_sub, &i_this->actor);
 }
 
 /* 00000ABC-00000B84       .text nodeCallBack__FP7J3DNodei */
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
-    if (calcTiming == 0) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 uVar1 = joint->getJntNo();
-        J3DModel* pJVar2 = j3dSys.getModel();
-        kamome_class* pKamome = (kamome_class*)pJVar2->getUserArea();
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        kamome_class* pKamome = (kamome_class*)model->getUserArea();
         if (pKamome != NULL) {
-            MTXCopy(pJVar2->getAnmMtx(uVar1), *calc_mtx);
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             cMtx_YrotM(*calc_mtx, pKamome->mJointRotY);
             cMtx_ZrotM(*calc_mtx, pKamome->mJointRotZ);
-            pJVar2->setAnmMtx(uVar1, *calc_mtx);
+            model->setAnmMtx(jntNo, *calc_mtx);
             MTXCopy(*calc_mtx, J3DSys::mCurrentMtx);
         }
     }
@@ -147,7 +145,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 /* 00000B84-00000CAC       .text daKamome_Draw__FP12kamome_class */
 static BOOL daKamome_Draw(kamome_class* i_this) {
     if ((i_this->mSwitchNo != 0) || (i_this->mbNoDraw != 0)) {
-#if VERSION <= VERSION_JPN
+#if VERSION != VERSION_USA
         i_this->mbNoDraw = 0;
 #endif
         return TRUE;
@@ -166,18 +164,18 @@ static BOOL daKamome_Draw(kamome_class* i_this) {
         &sp08,
         REG0_F(2) * 10.0f + 500.0f,
         20.0f,
-        sp08.y,
+        i_this->actor.current.pos.y,
         i_this->mAcch.GetGroundH(),
         i_this->mAcch.m_gnd,
         &i_this->actor.tevStr
     );
 
-    dSnap_RegistFig(0x55, &i_this->actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_KAMOME, &i_this->actor, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
 /* 00000CAC-00000F70       .text kamome_pos_move__FP12kamome_class */
-void kamome_pos_move(kamome_class* i_this) {
+static void kamome_pos_move(kamome_class* i_this) {
     f32 fVar4 = i_this->mTargetPos.x - i_this->actor.current.pos.x;
     f32 fVar1 = i_this->mTargetPos.y - i_this->actor.current.pos.y;
     f32 fVar5 = i_this->mTargetPos.z - i_this->actor.current.pos.z;
@@ -216,7 +214,7 @@ void kamome_pos_move(kamome_class* i_this) {
 }
 
 /* 00000F70-00000FFC       .text kamome_bgcheck__FP12kamome_class */
-void kamome_bgcheck(kamome_class* i_this) {
+static void kamome_bgcheck(kamome_class* i_this) {
     f32 fVar1 = i_this->mScale * 40.0f;
     i_this->actor.current.pos.y = i_this->actor.current.pos.y - fVar1;
     i_this->actor.old.pos.y = i_this->actor.old.pos.y - fVar1;
@@ -226,7 +224,7 @@ void kamome_bgcheck(kamome_class* i_this) {
 }
 
 /* 00000FFC-00001150       .text kamome_ground_pos_move__FP12kamome_class */
-void kamome_ground_pos_move(kamome_class* i_this) {
+static void kamome_ground_pos_move(kamome_class* i_this) {
     s16 iVar2 = cM_atan2s(i_this->mTargetPos.x - i_this->actor.current.pos.x, i_this->mTargetPos.z - i_this->actor.current.pos.z);
 
     cLib_addCalcAngleS2(&i_this->actor.current.angle.y, iVar2, REG0_S(3) + 2, i_this->mRotVel * i_this->mRotVelFade);
@@ -257,24 +255,24 @@ void kamome_ground_pos_move(kamome_class* i_this) {
 }
 
 /* 00001150-000011B8       .text ko_s_sub__FPvPv */
-void* ko_s_sub(void* ac1, void* ac2) {
+static void* ko_s_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
     kamome_class* i_this = (kamome_class*)ac1;
-    if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == PROC_KAMOME && (fopAcM_GetParam(&i_this->actor) & 0xf) == 7) {
+    if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == fpcNm_KAMOME_e && (fopAcM_GetParam(&i_this->actor) & 0xf) == 7) {
         ko_count++;
     }
     return NULL;
 }
 
 /* 000011B8-000011FC       .text ko_check__FP12kamome_class */
-s32 ko_check(kamome_class* i_this) {
+static s32 ko_check(kamome_class* i_this) {
     ko_count = 0;
     fpcM_Search(ko_s_sub, &i_this->actor);
     return ko_count;
 }
 
 /* 000011FC-00001304       .text heisou_control__FP12kamome_class */
-void heisou_control(kamome_class* i_this) {
+static void heisou_control(kamome_class* i_this) {
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     i_this->mbNoDraw = 1;
 #if VERSION > VERSION_DEMO
@@ -286,24 +284,24 @@ void heisou_control(kamome_class* i_this) {
             if (ko < i_this->mKoMaxCount) {
                 cXyz sp08 = player->current.pos;
                 sp08.y += 4000.0f;
-                fopAcM_create(PROC_KAMOME, ko << 8 | 0xffff0007, &sp08, fopAcM_GetRoomNo(&i_this->actor));
+                fopAcM_create(fpcNm_KAMOME_e, ko << 8 | 0xffff0007, &sp08, fopAcM_GetRoomNo(&i_this->actor));
             }
         }
     }
 }
 
 /* 00001304-00001360       .text h_s_sub__FPvPv */
-void* h_s_sub(void* ac1, void* ac2) {
+static void* h_s_sub(void* ac1, void* ac2) {
     UNUSED(ac2);
     kamome_class* i_this = (kamome_class*)ac1;
-    if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == PROC_KAMOME && (fopAcM_GetParam(&i_this->actor) & 0xf) == 6) {
+    if (fopAcM_IsActor(&i_this->actor) && fopAcM_GetName(&i_this->actor) == fpcNm_KAMOME_e && (fopAcM_GetParam(&i_this->actor) & 0xf) == 6) {
         return &i_this->actor;
     }
     return NULL;
 }
 
 /* 00001360-000013BC       .text search_master__FP12kamome_class */
-BOOL search_master(kamome_class* i_this) {
+static BOOL search_master(kamome_class* i_this) {
     kamome_class* pvVar1 = (kamome_class*)fpcM_Search(h_s_sub, &i_this->actor);
     if (pvVar1 != NULL && (s32)i_this->mKoMaxCount < pvVar1->mKoMaxCount) {
         return TRUE;
@@ -312,7 +310,7 @@ BOOL search_master(kamome_class* i_this) {
 }
 
 /* 000013BC-00001A0C       .text kamome_heisou_move__FP12kamome_class */
-void kamome_heisou_move(kamome_class* i_this) {
+static void kamome_heisou_move(kamome_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     s32 frame;
@@ -322,7 +320,7 @@ void kamome_heisou_move(kamome_class* i_this) {
         frame = i_this->mpMorf->getFrame();
         if ((i_this->mTimers[0] == 0) && (frame == REG0_S(0) + 9)) {
             i_this->mAnimState = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, REG0_F(0) + 12.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, REG0_F(0) + 12.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
 
@@ -330,11 +328,11 @@ void kamome_heisou_move(kamome_class* i_this) {
         if ((i_this->mGlobalTimer & 0x3fU) == 0 && cM_rndF(1.0f) < 0.5f) {
             i_this->mGlobalTimer = (s16)cM_rndF(10000.0f);
             i_this->mAnimState = 2;
-            anm_init(i_this, KAMOME_BCK_KA_SING1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_SING1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
         } else if ((i_this->mTimers[0] == 0) && (a_this->current.pos.y < i_this->mTargetPos.y)) {
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
         }
         break;
 
@@ -346,7 +344,7 @@ void kamome_heisou_move(kamome_class* i_this) {
 
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
     }
@@ -422,7 +420,7 @@ void kamome_heisou_move(kamome_class* i_this) {
 }
 
 /* 00001A0C-00002740       .text kamome_path_move__FP12kamome_class */
-void kamome_path_move(kamome_class* i_this) {
+static void kamome_path_move(kamome_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     s8 moveType = 0;
     s32 frame;
@@ -439,7 +437,7 @@ void kamome_path_move(kamome_class* i_this) {
         if ((a_this->current.pos.y > i_this->mTargetPos.y) && (frame == REG0_S(0) + 9)) {
             i_this->mAnimState = 1;
             i_this->mTimers[0] = cM_rndF(200.0f) + 50.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, REG0_F(0) + 12.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, REG0_F(0) + 12.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
 
@@ -447,10 +445,10 @@ void kamome_path_move(kamome_class* i_this) {
         if (((i_this->mGlobalTimer & 0x3f) == 0) && cM_rndF(1.0) < 0.5f) {
             i_this->mGlobalTimer = (s16)cM_rndF(10000.0f);
             i_this->mAnimState = 2;
-            anm_init(i_this, KAMOME_BCK_KA_SING1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_SING1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
         } else if (a_this->current.pos.y <= i_this->mTargetPos.y) {
             i_this->mAnimState = 0;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
         }
         break;
 
@@ -463,21 +461,18 @@ void kamome_path_move(kamome_class* i_this) {
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 1;
             i_this->mTimers[0] = cM_rndF(100.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
 
-    case 3:
-        break;
-
-    case 19:
-        if (i_this->mpMorf->isStop()) {
-            i_this->mAnimState = 0;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT2);
-        }
+    case 10:
         break;
 
     case 20:
+        if (i_this->mpMorf->isStop()) {
+            i_this->mAnimState = 0;
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
+        }
         break;
     }
 
@@ -565,7 +560,7 @@ void kamome_path_move(kamome_class* i_this) {
 
         if (std::sqrtf(SQUARE(x) + SQUARE(y) + SQUARE(z)) < REG6_F(9) * 10.0f + 300.0f) {
             i_this->mMoveState = 0x14;
-            anm_init(i_this, KAMOME_BCK_KA_LAND1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, KAMOME_BAS_KA_LAND1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_LAND1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KAMOME_BAS_KA_LAND1_e);
             i_this->mAnimState = 10;
             a_this->speed.y = 0.0f;
             i_this->m2FC = a_this->current.angle.y + (s16)cM_rndFX(15000.0f);
@@ -594,7 +589,7 @@ void kamome_path_move(kamome_class* i_this) {
         }
 
         if (i_this->mpMorf->isStop()) {
-            anm_init(i_this, KAMOME_BCK_KA_WAIT3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
         }
 
         if (i_this->mTimers[2] == 0) {
@@ -628,12 +623,12 @@ void kamome_path_move(kamome_class* i_this) {
             i_this->mTargetPos = pdVar8->m_position;
             if (pdVar8->mArg3 == 2) {
                 i_this->mMoveState = 0x19;
-                anm_init(i_this, KAMOME_BCK_KA_FLY1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, KAMOME_BAS_KA_FLY1);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_FLY1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KAMOME_BAS_KA_FLY1_e);
             } else {
                 i_this->mMoveState = 0x17;
                 i_this->mRotVel = 2500.0f;
                 i_this->mRotVelFade = 1.0f;
-                anm_init(i_this, KAMOME_BCK_KA_MOVE1, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_MOVE1);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_MOVE1_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_MOVE1_e);
             }
         }
         i_this->mVelocityFwdTarget = 0.0f;
@@ -665,11 +660,11 @@ void kamome_path_move(kamome_class* i_this) {
                 pdVar8 += i_this->mCurPointIdx;
                 if (cM_rndF(1.0f) < 0.5f) {
                     i_this->mMoveState = 0x13;
-                    anm_init(i_this, KAMOME_BCK_KA_SING2, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+                    anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_SING2_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
                 } else {
                     i_this->mMoveState = 0x16;
                     if (pdVar8->mArg3 == 3) {
-                        anm_init(i_this, KAMOME_BCK_KA_WAIT3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
+                        anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
                         i_this->mTimers[2] = cM_rndF(50.0f) + 50.0f;
                     }
                 }
@@ -690,7 +685,7 @@ void kamome_path_move(kamome_class* i_this) {
             i_this->mVelocityFwdTarget = 25.0f;
             i_this->mVelocityFwdTargetMaxVel = 2.0f;
             a_this->speedF = 0.0f;
-            i_this->mAnimState = 0x14;
+            i_this->mAnimState = 20;
             i_this->mRiseTimer = REG0_S(4) + 10;
         }
     }
@@ -707,8 +702,9 @@ void kamome_path_move(kamome_class* i_this) {
 }
 
 /* 00002740-00003628       .text kamome_auto_move__FP12kamome_class */
-void kamome_auto_move(kamome_class* i_this) {
+static void kamome_auto_move(kamome_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
+    fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     fopAc_ac_c* pfVar4;
     s8 moveType = 0;
     s32 frame;
@@ -722,7 +718,7 @@ void kamome_auto_move(kamome_class* i_this) {
         frame = i_this->mpMorf->getFrame();
         if ((i_this->mTimers[0] == 0) && (frame == REG0_S(0) + 9)) {
             i_this->mAnimState = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, REG0_F(0) + 12.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, REG0_F(0) + 12.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
 
@@ -730,11 +726,11 @@ void kamome_auto_move(kamome_class* i_this) {
         if ((i_this->mGlobalTimer & 0x3f) == 0 && cM_rndF(1.0) < 0.5f) {
             i_this->mGlobalTimer = (s16)cM_rndF(10000.0f);
             i_this->mAnimState = 2;
-            anm_init(i_this, KAMOME_BCK_KA_SING1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_SING1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
         } else if ((i_this->mTimers[0] == 0) && (a_this->current.pos.y < i_this->mTargetPos.y)) {
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
         }
         break;
 
@@ -746,22 +742,19 @@ void kamome_auto_move(kamome_class* i_this) {
 
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
 
-    case 3:
+    case 10:
         break;
 
-    case 19:
+    case 20:
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
         }
-
-    case 20:
-        break;
     }
 
     switch (i_this->mMoveState) {
@@ -816,7 +809,7 @@ void kamome_auto_move(kamome_class* i_this) {
             z = i_this->mTargetPos.z - a_this->current.pos.z;
             if (std::sqrtf(SQUARE(x) + SQUARE(y) + SQUARE(z)) < REG6_F(9) * 10.0f + 300.0f) {
                 i_this->mMoveState = 0x14;
-                anm_init(i_this, KAMOME_BCK_KA_LAND1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, KAMOME_BAS_KA_LAND1);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_LAND1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KAMOME_BAS_KA_LAND1_e);
                 i_this->mAnimState = 10;
                 a_this->speed.y = 0.0f;
                 i_this->m2FC = a_this->current.angle.y + (s16)cM_rndFX(15000.0f);
@@ -848,7 +841,7 @@ void kamome_auto_move(kamome_class* i_this) {
         }
 
         if (i_this->mpMorf->isStop()) {
-            anm_init(i_this, KAMOME_BCK_KA_WAIT3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
         }
 
         if (i_this->mTimers[2] == 0) {
@@ -861,7 +854,7 @@ void kamome_auto_move(kamome_class* i_this) {
         pfVar4 = search_esa(i_this);
         if (pfVar4 == NULL) {
             i_this->mMoveState = 0x19;
-            anm_init(i_this, KAMOME_BCK_KA_FLY1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, KAMOME_BAS_KA_FLY1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_FLY1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KAMOME_BAS_KA_FLY1_e);
         } else {
             i_this->mEsaProcID = fopAcM_GetID(pfVar4);
             i_this->mMoveState = 0x16;
@@ -879,10 +872,10 @@ void kamome_auto_move(kamome_class* i_this) {
             if (pfVar4 != NULL) {
                 i_this->mTargetPos.x = pfVar4->current.pos.x;
                 i_this->mTargetPos.z = pfVar4->current.pos.z;
-                anm_init(i_this, KAMOME_BCK_KA_MOVE1, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_MOVE1);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_MOVE1_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_MOVE1_e);
             } else {
                 i_this->mMoveState = 0x19;
-                anm_init(i_this, KAMOME_BCK_KA_FLY1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, KAMOME_BAS_KA_FLY1);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_FLY1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KAMOME_BAS_KA_FLY1_e);
             }
         }
         break;
@@ -892,7 +885,7 @@ void kamome_auto_move(kamome_class* i_this) {
         if (i_this->mpMorf->isStop()) {
             i_this->mMoveState = 0x15;
             i_this->mTimers[2] = cM_rndF(30.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
         }
         i_this->mVelocityFwdTarget = 0.0f;
         a_this->speedF = 0.0f;
@@ -914,13 +907,13 @@ void kamome_auto_move(kamome_class* i_this) {
             x = i_this->mTargetPos.x - a_this->current.pos.x;
             z = i_this->mTargetPos.z - a_this->current.pos.z;
             if (std::sqrtf(SQUARE(x) + SQUARE(z)) < 85.0f) {
-                anm_init(i_this, KAMOME_BCK_KA_EAT1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_EAT1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
                 i_this->mMoveState = 0x18;
             }
 
             if (i_this->mAcch.ChkWallHit()) {
                 i_this->mMoveState = 0x19;
-                anm_init(i_this, KAMOME_BCK_KA_FLY1, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, KAMOME_BAS_KA_FLY1);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_FLY1_e, 0.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KAMOME_BAS_KA_FLY1_e);
             }
         }
         break;
@@ -940,11 +933,11 @@ void kamome_auto_move(kamome_class* i_this) {
         if (i_this->mpMorf->isStop()) {
             if (cM_rndF(1.0f) < 0.2f) {
                 i_this->mMoveState = 0x13;
-                anm_init(i_this, KAMOME_BCK_KA_SING2, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_SING2_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
             } else {
                 i_this->mMoveState = 0x15;
                 i_this->mTimers[2] = cM_rndF(20.0f);
-                anm_init(i_this, KAMOME_BCK_KA_WAIT3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
             }
         }
         break;
@@ -958,7 +951,7 @@ void kamome_auto_move(kamome_class* i_this) {
             i_this->mVelocityFwdTargetMaxVel = 1.0f;
         } else {
             i_this->mMoveState = 0;
-            i_this->mAnimState = 0x14;
+            i_this->mAnimState = 20;
             i_this->mTimers[3] = cM_rndF(100.0f) + 100.0f;
             i_this->mRiseTimer = REG0_S(4) + 10;
             if (i_this->mPathIdx != 0xff) {
@@ -994,7 +987,7 @@ void kamome_auto_move(kamome_class* i_this) {
                 }
                 i_this->mAnimState = 0;
                 i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
-                anm_init(i_this, KAMOME_BCK_KA_WAIT2, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.5f, KAMOME_BAS_KA_WAIT2);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.5f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
                 if (i_this->mPathIdx != 0xff) {
                     i_this->mbUsePathMovement = i_this->mPathIdx + 1;
                     i_this->mTimers[3] = cM_rndF(250.0f) + 250.0f;
@@ -1018,7 +1011,7 @@ void kamome_auto_move(kamome_class* i_this) {
 }
 
 /* 00003628-00004574       .text kamome_imouto_move__FP12kamome_class */
-void kamome_imouto_move(kamome_class* i_this) {
+static void kamome_imouto_move(kamome_class* i_this) {
     fopAc_ac_c* a_this = (fopAc_ac_c*)&i_this->actor;
     fopAc_ac_c* player = (fopAc_ac_c*)dComIfGp_getPlayer(0);
     s8 cVar8 = 0;
@@ -1030,7 +1023,7 @@ void kamome_imouto_move(kamome_class* i_this) {
         frame = i_this->mpMorf->getFrame();
         if ((i_this->mTimers[0] == 0) && (frame == REG0_S(0) + 9)) {
             i_this->mAnimState = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, REG0_F(0) + 12.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, REG0_F(0) + 12.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
 
@@ -1038,11 +1031,11 @@ void kamome_imouto_move(kamome_class* i_this) {
         if ((i_this->mGlobalTimer & 0x3f) == 0 && (cM_rndF(1.0f) < 0.5f)) {
             i_this->mGlobalTimer = (s16)cM_rndF(10000.0f);
             i_this->mAnimState = 2;
-            anm_init(i_this, KAMOME_BCK_KA_SING1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_SING1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
         } else if ((i_this->mTimers[0] == 0) && (a_this->current.pos.y < i_this->mTargetPos.y)) {
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
         }
         break;
 
@@ -1054,21 +1047,19 @@ void kamome_imouto_move(kamome_class* i_this) {
 
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 1;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT1, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT1_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT1_e);
         }
         break;
 
-    case 3:
+    case 10:
         break;
 
-    case 19:
+    case 20:
         if (i_this->mpMorf->isStop()) {
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 0.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
         }
-        break;
-    case 20:
         break;
     }
 
@@ -1126,7 +1117,7 @@ void kamome_imouto_move(kamome_class* i_this) {
             f32 fVar10 = i_this->mTargetPos.z - a_this->current.pos.z;
             if (std::sqrtf(SQUARE(fVar11) + SQUARE(fVar9) + SQUARE(fVar10)) < REG6_F(9) * 10.0f + 300.0f) {
                 i_this->mMoveState = 0x14;
-                anm_init(i_this, KAMOME_BCK_KA_LAND1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, KAMOME_BAS_KA_LAND1);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_LAND1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_KAMOME_BAS_KA_LAND1_e);
                 i_this->mAnimState = 10;
                 a_this->speed.y = 0.0f;
                 i_this->m2FC = a_this->current.angle.y + (s32)cM_rndFX(15000.0f);
@@ -1157,7 +1148,7 @@ void kamome_imouto_move(kamome_class* i_this) {
         }
 
         if (i_this->mpMorf->isStop()) {
-            anm_init(i_this, KAMOME_BCK_KA_WAIT3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
         }
 
         if (i_this->mTimers[2] == 0) {
@@ -1181,7 +1172,7 @@ void kamome_imouto_move(kamome_class* i_this) {
             i_this->mMoveState = 0x17;
             i_this->mTargetPos.x = i_this->mpTargetActor->current.pos.x + cM_rndFX(REG0_F(8) + 150.0f);
             i_this->mTargetPos.z = i_this->mpTargetActor->current.pos.z + cM_rndFX(REG0_F(8) + 150.0f);
-            anm_init(i_this, KAMOME_BCK_KA_MOVE1, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, KAMOME_BAS_KA_MOVE1);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_MOVE1_e, 3.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, dRes_INDEX_KAMOME_BAS_KA_MOVE1_e);
         }
         break;
 
@@ -1190,7 +1181,7 @@ void kamome_imouto_move(kamome_class* i_this) {
         if (i_this->mpMorf->isStop()) {
             i_this->mMoveState = 0x15;
             i_this->mTimers[2] = cM_rndF(30.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
         }
         i_this->mVelocityFwdTarget = 0.0f;
         a_this->speedF = 0.0f;
@@ -1211,7 +1202,7 @@ void kamome_imouto_move(kamome_class* i_this) {
             f32 fVar11 = i_this->mTargetPos.x - a_this->current.pos.x;
             f32 fVar9 = i_this->mTargetPos.z - a_this->current.pos.z;
             if ((std::sqrtf(SQUARE(fVar11) + SQUARE(fVar9)) < 85.0f) || ((i_this->mAcch.ChkWallHit()) || i_this->mSph.ChkCoHit())) {
-                anm_init(i_this, KAMOME_BCK_KA_EAT1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_EAT1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
                 i_this->mMoveState = 0x18;
             }
         }
@@ -1221,14 +1212,15 @@ void kamome_imouto_move(kamome_class* i_this) {
         cVar8 = 1;
         i_this->mVelocityFwdTarget = 0.0f;
         a_this->speedF = 0.0f;
+        frame = i_this->mpMorf->getFrame();
         if (i_this->mpMorf->isStop()) {
             if (cM_rndF(1.0f) < 0.2f) {
                 i_this->mMoveState = 0x13;
-                anm_init(i_this, KAMOME_BCK_KA_SING2, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_SING2_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
             } else {
                 i_this->mMoveState = 0x15;
                 i_this->mTimers[2] = cM_rndF(20.0f);
-                anm_init(i_this, KAMOME_BCK_KA_WAIT3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
+                anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
             }
         }
         break;
@@ -1242,7 +1234,7 @@ void kamome_imouto_move(kamome_class* i_this) {
             i_this->mVelocityFwdTargetMaxVel = 1.0f;
         } else {
             i_this->mMoveState = 0;
-            i_this->mAnimState = 0x14;
+            i_this->mAnimState = 20;
             i_this->mTimers[3] = cM_rndF(100.0f) + 100.0f;
             i_this->mRiseTimer = REG0_S(4) + 10;
             if (i_this->mPathIdx != 0xff) {
@@ -1275,7 +1267,7 @@ void kamome_imouto_move(kamome_class* i_this) {
             i_this->mMoveState = 0;
             i_this->mAnimState = 0;
             i_this->mTimers[0] = cM_rndF(60.0f) + 20.0f;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 3.0, J3DFrameCtrl::EMode_LOOP, 1.5f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 3.0, J3DFrameCtrl::EMode_LOOP, 1.5f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
 
             if (i_this->mPathIdx != 0xff) {
                 i_this->mbUsePathMovement = i_this->mPathIdx + 1;
@@ -1307,19 +1299,19 @@ void kamome_imouto_move(kamome_class* i_this) {
 }
 
 /* 00004574-00004680       .text kamome_imouto2_move__FP12kamome_class */
-void kamome_imouto2_move(kamome_class* i_this) {
+static void kamome_imouto2_move(kamome_class* i_this) {
     switch (i_this->mMoveState) {
     case 0:
         i_this->m2AB = 1;
         if (i_this->mTimers[1] == 0) {
-            anm_init(i_this, KAMOME_BCK_KA_EAT1, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_EAT1_e, 5.0f, J3DFrameCtrl::EMode_NONE, 1.0f, 0);
             i_this->mMoveState++;
         }
         break;
 
     case 1:
         if (i_this->mpMorf->isStop()) {
-            anm_init(i_this, KAMOME_BCK_KA_WAIT3, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT3_e, 5.0f, J3DFrameCtrl::EMode_LOOP, 1.0f, 0);
             i_this->mTimers[1] = cM_rndF(50.0f) + 50.0f;
             i_this->mMoveState--;
         }
@@ -1328,24 +1320,24 @@ void kamome_imouto2_move(kamome_class* i_this) {
 }
 
 /* 00004680-00004768       .text daKamome_setMtx__FP12kamome_class */
-void daKamome_setMtx(kamome_class* i_this) {
+static void daKamome_setMtx(kamome_class* i_this) {
     MtxTrans(i_this->actor.current.pos.x, i_this->actor.current.pos.y, i_this->actor.current.pos.z, 0);
 
-    cMtx_YrotM(*calc_mtx, i_this->actor.current.angle.y + i_this->mRotY);
-    cMtx_XrotM(*calc_mtx, i_this->actor.current.angle.x + i_this->mRotX);
+    cMtx_YrotM(*calc_mtx, i_this->actor.current.angle.y + i_this->mRot.y);
+    cMtx_XrotM(*calc_mtx, i_this->actor.current.angle.x + i_this->mRot.x);
     cMtx_ZrotM(*calc_mtx, i_this->actor.current.angle.z);
 
     J3DModel* pJVar1 = i_this->mpMorf->getModel();
     pJVar1->setBaseTRMtx(*calc_mtx);
-    pJVar1->getModelData()->getJointNodePointer(8)->setCallBack(nodeCallBack);
+    pJVar1->getModelData()->getJointNodePointer(KA_JNT_J_KA_HEAD1_e)->setCallBack(nodeCallBack);
     i_this->mpMorf->calc();
-    pJVar1->getModelData()->getJointNodePointer(8)->setCallBack(NULL);
+    pJVar1->getModelData()->getJointNodePointer(KA_JNT_J_KA_HEAD1_e)->setCallBack(NULL);
 }
 
 /* 00004768-000049F8       .text daKamome_Execute__FP12kamome_class */
 static BOOL daKamome_Execute(kamome_class* i_this) {
     i_this->mGlobalTimer++;
-#if VERSION > VERSION_JPN
+#if VERSION == VERSION_USA
     i_this->mbNoDraw = 0;
 #endif
 
@@ -1357,7 +1349,7 @@ static BOOL daKamome_Execute(kamome_class* i_this) {
     if (i_this->mSwitchNo != 0) {
         if (dComIfGs_isSwitch(i_this->mSwitchNo - 1, fopAcM_GetRoomNo(&i_this->actor))) {
             i_this->mSwitchNo = 0;
-            anm_init(i_this, KAMOME_BCK_KA_WAIT2, 1.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.5f) + 1.0f, KAMOME_BAS_KA_WAIT2);
+            anm_init(i_this, dRes_INDEX_KAMOME_BCK_KA_WAIT2_e, 1.0f, J3DFrameCtrl::EMode_LOOP, cM_rndF(0.5f) + 1.0f, dRes_INDEX_KAMOME_BAS_KA_WAIT2_e);
             i_this->mTimers[0] = cM_rndF(60.0f) + 40.0f;
             i_this->mVelocityFwdTarget = 30.0f;
             i_this->actor.speedF = 30.0f;
@@ -1428,16 +1420,16 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
     kamome_class* i_this = (kamome_class*)a_this;
 
     i_this->mpMorf = new mDoExt_McaMorf(
-        (J3DModelData*)dComIfG_getObjectRes("Kamome", KAMOME_BDL_KA),
+        (J3DModelData*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BDL_KA_e),
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectRes("Kamome", KAMOME_BCK_KA_WAIT1),
+        (J3DAnmTransform*)dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BCK_KA_WAIT1_e),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
         -1,
         1,
-        dComIfG_getObjectRes("Kamome", KAMOME_BAS_KA_WAIT1),
+        dComIfG_getObjectRes("Kamome", dRes_INDEX_KAMOME_BAS_KA_WAIT1_e),
         0x80000,
         0x11000022
     );
@@ -1445,7 +1437,7 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    i_this->mpMorf->getModel()->setUserArea((u32)&i_this->actor);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)&i_this->actor);
     return TRUE;
 }
 
@@ -1481,17 +1473,11 @@ static cPhs_State daKamome_Create(fopAc_ac_c* a_this) {
     };
 
     kamome_class* i_this = (kamome_class*)a_this;
-
-#if VERSION == VERSION_DEMO
-    cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Kamome");
-    if (PVar1 == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(a_this, kamome_class);
-#else
-    fopAcM_SetupActor(a_this, kamome_class);
+    fopAcM_ct_Retail(a_this, kamome_class);
 
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Kamome");
     if (PVar1 == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(a_this, kamome_class);
 
         i_this->mType = fopAcM_GetParam(a_this);
         if (i_this->mType == 0xff) {
@@ -1572,18 +1558,18 @@ static actor_method_class l_daKamome_Method = {
 };
 
 actor_process_profile_definition g_profile_KAMOME = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KAMOME,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KAMOME_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kamome_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KAMOME,
+    /* Draw Prio    */ fpcDwPi_KAMOME_e,
     /* Actor SubMtd */ &l_daKamome_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -16,7 +16,7 @@ public:
     BOOL CreateHeap();
     void CreateInit();
     void set_mtx();
-    u16 next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
     u32 getMsg();
     void setGoal(int);
     void setPlayerAngle(int);
@@ -26,7 +26,7 @@ public:
     int getFinishEventCount();
     void setFinishMyEvent();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ J3DModel* field_0x6CC;
     /* 0x6D0 */ J3DModel* field_0x6D0;

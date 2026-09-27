@@ -10,7 +10,7 @@
 #include "d/d_lib.h"
 
 class J3DNode;
-class dCcD_SrcSph;
+struct dCcD_SrcSph;
 
 class daNpc_So_c : public fopNpc_npc_c {
     typedef void (daNpc_So_c::*ModeFunc)();

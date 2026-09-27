@@ -41,7 +41,7 @@ namespace daObjMtest {
         // TODO: Look into these meshes more.
         s32 prm_get_arg1() const { return daObj::PrmAbstract(this, PRM_ARG1_W, PRM_ARG1_S); }
         
-        static char* M_arcname[];
+        static const char* M_arcname[];
         static const dCcD_SrcCyl M_cyl_src;
         static cXyz M_scl_mult[];
         

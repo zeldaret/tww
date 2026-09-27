@@ -7,16 +7,16 @@
 #include "d/actor/d_a_obj_barrel.h"
 #include "d/actor/d_a_player.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
+#include "d/d_s_play.h"
 
 /* 000032BC-000032E8       .text searchEsa_CB__FPvPv */
-static BOOL searchEsa_CB(void* param_1, void* i_this) {
+static void* searchEsa_CB(void* param_1, void* i_this) {
     return static_cast<daNpc_Nz_c*>(i_this)->_searchEsa((fopAc_ac_c*)param_1);
 }
 
 /* 000032E8-000034F0       .text _searchEsa__10daNpc_Nz_cFP10fopAc_ac_c */
-BOOL daNpc_Nz_c::_searchEsa(fopAc_ac_c* pActor) {
-    if(fopAcM_GetName(pActor) == PROC_ESA) {
+void* daNpc_Nz_c::_searchEsa(fopAc_ac_c* pActor) {
+    if(fopAcM_GetName(pActor) == fpcNm_ESA_e) {
         esa_class* pBait = static_cast<esa_class*>(pActor);
         if(pBait->field_0x298 == 0) {
             cXyz delta = pBait->current.pos - current.pos;
@@ -34,34 +34,34 @@ BOOL daNpc_Nz_c::_searchEsa(fopAc_ac_c* pActor) {
         }
     }
 
-    return false;
+    return NULL;
 }
 
 /* 000034F0-00003528       .text searchNzAndBomb_CB__FPvPv */
-static BOOL searchNzAndBomb_CB(void* param_1, void*) {
+static void* searchNzAndBomb_CB(void* param_1, void*) {
     fopAc_ac_c* pActor = static_cast<fopAc_ac_c*>(param_1);
 
-    if(fopAcM_GetName(pActor) == PROC_NZ || fopAcM_GetName(pActor) == PROC_BOMB) {
+    if(fopAcM_GetName(pActor) == fpcNm_NZ_e || fopAcM_GetName(pActor) == fpcNm_BOMB_e) {
         fopAcM_delete(pActor);
     }
 
-    return false;
+    return NULL;
 }
 
 /* 00003528-0000377C       .text searchTsuboAndBarrel_CB__FPvPv */
-static BOOL searchTsuboAndBarrel_CB(void* param_1, void* param_2) {
+static void* searchTsuboAndBarrel_CB(void* param_1, void* param_2) {
     fopAc_ac_c* pActor1 = static_cast<fopAc_ac_c*>(param_1);
     daNpc_Nz_c* i_this = static_cast<daNpc_Nz_c*>(param_2);
 
-    if(fopAcM_GetName(param_1) == PROC_TSUBO || fopAcM_GetName(param_1) == PROC_Obj_Barrel) {
+    if(fopAcM_GetName(param_1) == fpcNm_TSUBO_e || fopAcM_GetName(param_1) == fpcNm_Obj_Barrel_e) {
         cXyz delta = i_this->field_0x6C4 - pActor1->current.pos;
 
         if(delta.absXZ() < 300.0f) {
             bool success = false;
-            if(fopAcM_GetName(pActor1) == PROC_TSUBO) {
+            if(fopAcM_GetName(pActor1) == fpcNm_TSUBO_e) {
                 success = static_cast<daTsubo::Act_c*>(pActor1)->pos_init();
             }
-            else if(fopAcM_GetName(pActor1) == PROC_TSUBO) {
+            else if(fopAcM_GetName(pActor1) == fpcNm_TSUBO_e) {
                 success = static_cast<daObjBarrel::Act_c*>(pActor1)->pos_init();
             }
 
@@ -71,19 +71,24 @@ static BOOL searchTsuboAndBarrel_CB(void* param_1, void* param_2) {
         }
     }
 
-    return false;
+    return NULL;
 }
 
 /* 0000377C-00003908       .text searchEsaInit_CB__FPvPv */
-static BOOL searchEsaInit_CB(void* pActor1, void* pActor2) {
-    if(fopAcM_GetName(pActor1) == PROC_ESA) {
+static void* searchEsaInit_CB(void* pActor1, void* pActor2) {
+    if(fopAcM_GetName(pActor1) == fpcNm_ESA_e) {
         esa_class* pBait = static_cast<esa_class*>(pActor1);
         daNpc_Nz_c* pNz = static_cast<daNpc_Nz_c*>(pActor2);
 
         cXyz pos(pNz->field_0x6C4);
         pos.x += cM_ssin(pNz->current.angle.y) * 150.0f;
         pos.z += cM_scos(pNz->current.angle.y) * 150.0f;
-        s16 angle = cAngle::d2s(cM_rndFX(358.0f));
+#if VERSION == VERSION_DEMO
+        f32 rnd = cM_rndFX2(179.0f);
+#else
+        f32 rnd = cM_rndFX(358.0f);
+#endif
+        s16 angle = cM_deg2s(rnd);
         f32 mag = cM_rndF(30.0f);
         pos.x += mag * cM_ssin(angle);
         pos.z += mag * cM_scos(angle);
@@ -96,7 +101,7 @@ static BOOL searchEsaInit_CB(void* pActor1, void* pActor2) {
         pBait->mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 
-    return false;
+    return NULL;
 }
 
 /* 00003908-00003B90       .text cutProc__10daNpc_Nz_cFv */
@@ -158,7 +163,7 @@ void daNpc_Nz_c::cutProc() {
         }
     };
 
-    static char* a_demo_name_tbl[] = {
+    static const char* a_demo_name_tbl[] = {
         "DEFAULT_NPC_NZ_ESA",
     };
 
@@ -182,7 +187,7 @@ void daNpc_Nz_c::cutEatesaStart() {
 
 /* 00003BB8-00003CEC       .text cutEatesaProc__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutEatesaProc() {
-    fopAcM_Search((fopAcIt_JudgeFunc)&searchEsa_CB, this);
+    fopAcM_Search(&searchEsa_CB, this);
     fopAc_ac_c* pBait = mpBait;
 
     if(mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
@@ -204,7 +209,7 @@ void daNpc_Nz_c::cutEatesaProc() {
 
 /* 00003CEC-00003D40       .text cutEatesaFirstStart__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutEatesaFirstStart() {
-    fopAcM_Search((fopAcIt_JudgeFunc)&searchEsa_CB, this);
+    fopAcM_Search(&searchEsa_CB, this);
     current.angle.y = shape_angle.y = home.angle.y;
     setAnm(0xA, false);
 }
@@ -229,7 +234,7 @@ void daNpc_Nz_c::cutEatesaFirstProc() {
         }
     }
     
-    fopAcM_Search((fopAcIt_JudgeFunc)&searchEsa_CB, this);
+    fopAcM_Search(&searchEsa_CB, this);
     fopAc_ac_c* pBait = mpBait;
     if(pBait) {
         if(mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f) && cLib_calcTimer(&field_0x906) == 0) {
@@ -245,16 +250,18 @@ void daNpc_Nz_c::cutEatesaFirstProc() {
 
 /* 00003F54-0000404C       .text cutKillAllStart__10daNpc_Nz_cFv */
 void daNpc_Nz_c::cutKillAllStart() {
-    fopAcM_Search((fopAcIt_JudgeFunc)&searchNzAndBomb_CB, this);
-    fopAcM_Search((fopAcIt_JudgeFunc)&searchTsuboAndBarrel_CB, this);
-    fopAcM_Search((fopAcIt_JudgeFunc)&searchEsaInit_CB, this);
+    fopAcM_Search(&searchNzAndBomb_CB, this);
+    fopAcM_Search(&searchTsuboAndBarrel_CB, this);
+    fopAcM_Search(&searchEsaInit_CB, this);
     
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
     cXyz pos = field_0x6C4;
     s16 r5 = home.angle.y + 0x8000;
     pos.x += cM_ssin(home.angle.y) * 250.0f;
     pos.z += cM_scos(home.angle.y) * 250.0f;
 
-    daPy_getPlayerActorClass()->setPlayerPosAndAngle(&pos, r5);
+    ((daPy_py_c*)dComIfGp_getPlayer(0))->setPlayerPosAndAngle(&pos, r5);
 }
 
 /* 0000404C-00004080       .text cutKillAllProc__10daNpc_Nz_cFv */
@@ -322,15 +329,20 @@ void daNpc_Nz_c::cutSetAnmProc() {
         else if (mpMorf->checkFrame(13.0f)) {
             J3DModel* pModel = mpMorf->getModel();
 
-            cXyz scale(0.65f, 0.65f, 0.65f);
+            f32 f0 = 0.65f + DEMO_SELECT(REG10_F(25), 0.0f);
+            cXyz scale(f0, f0, f0);
             csXyz temp2(current.angle);
             temp2.y -= 0x4000;
-            cXyz temp4(10.0f, 0.0f, 10.0f);
+            cXyz temp4(
+                10.0f + DEMO_SELECT(REG10_F(0), 0.0f),
+                0.0f + DEMO_SELECT(REG10_F(1), 0.0f),
+                10.0f + DEMO_SELECT(REG10_F(2), 0.0f)
+            );
             cXyz pos;
             GXColor color;
-            color.r = 0x80;
-            color.g = 0x80;
-            color.b = 0x80;
+            color.r = 0x80 + DEMO_SELECT(REG10_S(4), 0);
+            color.g = 0x80 + DEMO_SELECT(REG10_S(5), 0);
+            color.b = 0x80 + DEMO_SELECT(REG10_S(6), 0);
 
             mDoMtx_stack_c::copy(pModel->getAnmMtx(m_jnt.getHeadJntNum()));
             mDoMtx_stack_c::multVec(&temp4, &pos);

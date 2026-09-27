@@ -11,7 +11,7 @@ namespace JASystem {
     namespace TGlobalChannel {
         TChannel* getChannelHandle(u32);
         void init();
-        int alloc(TChannelMgr*, u32);
+        u32 alloc(TChannelMgr*, u32);
         int release(TChannel*);
         int releaseAll(TChannelMgr*);
 

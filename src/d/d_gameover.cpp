@@ -6,8 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_gameover.h"
 #include "d/d_meter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_Reset.h"
@@ -85,8 +83,13 @@ cPhs_State dGameover_c::_create() {
 
         dMs_c = new dMenu_save_c();
         JUT_ASSERT(VERSION_SELECT(0xa7, 0xa7, 0xb6, 0xb6), dMs_c != NULL);
+#if VERSION == VERSION_DEMO
+        dMs_c->_create();
+        dMs_c->setUseType(2);
+#else
         dMs_c->setUseType(2);
         dMs_c->_create();
+#endif
 
         dgo_capture_c = new dDlst_Gameover_CAPTURE_c();
         JUT_ASSERT(VERSION_SELECT(0xac, 0xac, 0xbb, 0xbb), dgo_capture_c != NULL);
@@ -107,10 +110,16 @@ BOOL dGameover_c::_execute() {
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(mpHeap);
 
     if (mState == 3) {
+#if VERSION == VERSION_DEMO
+        dComIfGp_setGameoverStatus(3);
+        dMenu_flagSet(0);
+        mDoRst::onReset();
+#else
         if (dMs_c->_open()) {
             mState = 4;
             dComIfGs_setLife(12);
         }
+#endif
     } else if (mState == 4) {
         dMs_c->_move();
         if (dMs_c->getSaveStatus() == 3)
@@ -178,7 +187,7 @@ BOOL dGameover_c::_delete() {
     mpHeap->freeAll();
     dComIfGp_offHeapLockFlag();
     mDoExt_setCurrentHeap(oldHeap);
-    dComIfG_resDelete(&mPhs, "Gover");
+    dComIfG_resDeleteDemo(&mPhs, "Gover");
     return TRUE;
 }
 
@@ -344,16 +353,13 @@ BOOL dDlst_GameOverScrnDraw_c::anime1(int idx) {
             fopMsgM_setInitAlpha(&letter[idx]);
 
         letter[idx].mUserArea++;
-        f32 y = (1.0f - acc(5, letter[idx].mUserArea, 0)) * -288.0f;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, y);
+        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - acc(5, letter[idx].mUserArea, 0)) * -288.0f);
     } else if (letter[idx].mUserArea < 7) {
         letter[idx].mUserArea++;
-        f32 y = acc(2, letter[idx].mUserArea - 5, 0) * -9.0f;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, y);
+        fopMsgM_paneTrans(&letter[idx], 0.0f, acc(2, letter[idx].mUserArea - 5, 0) * -9.0f);
     } else if (letter[idx].mUserArea < 9) {
         letter[idx].mUserArea++;
-        f32 y = (1.0f - acc(2, letter[idx].mUserArea - 7, 0)) * -9.0f;
-        fopMsgM_paneTrans(&letter[idx], 0.0f, y);
+        fopMsgM_paneTrans(&letter[idx], 0.0f, (1.0f - acc(2, letter[idx].mUserArea - 7, 0)) * -9.0f);
         if (letter[idx].mUserArea == 9)
             mDoAud_seStart(JA_SE_EXIT_GAME_OVER);
     }
@@ -386,9 +392,8 @@ BOOL dDlst_GameOverScrnDraw_c::anime2(int idx) {
 
         letter[idx].mUserArea += 1;
 
-        f32 y = letter[idx].mUserArea / 7.0f;
         f32 y2 = (f32)letter[idx].mUserArea * (f32)letter[idx].mUserArea / 49.0f;
-        setRotate(&letter[idx], (f32)mRotate[idx] * (1.0f - y));
+        setRotate(&letter[idx], (f32)mRotate[idx] * (1.0f - (letter[idx].mUserArea / 7.0f)));
         fopMsgM_paneTrans(&letter[idx], 0.0f, y2 * 244.0f);
     }
     
@@ -429,6 +434,7 @@ static BOOL dGameover_Execute(dGameover_c* i_this) {
 
 /* 8018F62C-8018F634       .text dGameover_IsDelete__FP11dGameover_c */
 static BOOL dGameover_IsDelete(dGameover_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -442,7 +448,7 @@ static cPhs_State dGameover_Create(msg_class* i_this) {
     return ((dGameover_c*)i_this)->_create();
 }
 
-msg_method_class l_dGameover_Method = {
+static msg_method_class l_dGameover_Method = {
     (process_method_func)dGameover_Create,
     (process_method_func)dGameover_Delete,
     (process_method_func)dGameover_Execute,
@@ -451,15 +457,15 @@ msg_method_class l_dGameover_Method = {
 };
 
 msg_process_profile_definition g_profile_GAMEOVER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_GAMEOVER,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_GAMEOVER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(dGameover_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_GAMEOVER,
+    /* Draw Prio    */ fpcDwPi_GAMEOVER_e,
     /* Msg SubMtd   */ &l_dGameover_Method,
 };

@@ -30,22 +30,16 @@ public:
     const cXyz* GetMinP() const { return &mMin; }
     cXyz* GetMaxP() { return &mMax; }
     cXyz* GetMinP() { return &mMin; }
-    const f32 GetMaxX() const { return mMax.x; }
-    const f32 GetMaxY() const { return mMax.y; }
-    const f32 GetMaxZ() const { return mMax.z; }
-    const f32 GetMinX() const { return mMin.x; }
-    const f32 GetMinY() const { return mMin.y; }
-    const f32 GetMinZ() const { return mMin.z; }
-    bool Cross(const cM3dGAab *aab) {
+    bool Cross(const cM3dGAab* aab) const {
         return cM3d_Cross_AabAab(this, aab);
     }
-    bool Cross(const cM3dGCyl *cyl) {
+    bool Cross(const cM3dGCyl* cyl) const {
         return cM3d_Cross_AabCyl(this, cyl);
     }
-    bool Cross(const cM3dGSph *sph) {
+    bool Cross(const cM3dGSph* sph) const {
         return cM3d_Cross_AabSph(this, sph);
     }
-    bool Cross(const cM3dGLin *lin) {
+    bool Cross(const cM3dGLin* lin) const {
         return cM3d_Cross_MinMaxBoxLine(GetMinP(), GetMaxP(), lin->GetStartP(), lin->GetEndP());
     }
     void CalcCenter(cXyz* pOut) const {
@@ -53,12 +47,8 @@ public:
         VECScale(pOut, pOut, 0.5f);
     }
     void ClearForMinMax() {
-        mMin.z = G_CM3D_F_INF;
-        mMin.y = G_CM3D_F_INF;
-        mMin.x = G_CM3D_F_INF;
-        mMax.z = -G_CM3D_F_INF;
-        mMax.y = -G_CM3D_F_INF;
-        mMax.x = -G_CM3D_F_INF;
+        mMin.x = mMin.y = mMin.z = G_CM3D_F_INF;
+        mMax.x = mMax.y = mMax.z = -G_CM3D_F_INF;
     }
     void ClearForMinMaxY() {
         mMin.y = G_CM3D_F_INF;
@@ -98,16 +88,19 @@ public:
         }
     }
     bool UnderPlaneYUnder(f32 y) const {
-        return mMin.y < y;
+        if (mMin.y < y) {
+            return true;
+        } else {
+            return false;
+        }
     }
     bool TopPlaneYUnder(f32 y) const {
-        return mMax.y < y;
+        if (mMax.y < y) {
+            return true;
+        } else {
+            return false;
+        }
     }
-
-    void Cross(const cM3dGAab*) const {}
-    void Cross(const cM3dGCyl*) const {}
-    void Cross(const cM3dGLin*) const {}
-    void Cross(const cM3dGSph*) const {}
 };  // Size = 0x1C
 
 STATIC_ASSERT(0x1C == sizeof(cM3dGAab));

@@ -37,13 +37,13 @@ public:
     BOOL checkCreateInShopPlayer();
     BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
-    void setAnm(signed char);
-    void setTexAnm(signed char);
+    void setAnm(s8);
+    void setTexAnm(s8);
     void setAnmFromMsgTag();
-    bool chkAttention(cXyz, short);
+    bool chkAttention(cXyz, s16);
     void eventOrder();
     void checkOrder();
-    u16 next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
     u32 getMsg();
     void setCollision();
     void talkInit();

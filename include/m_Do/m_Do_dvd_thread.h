@@ -89,8 +89,8 @@ private:
 
 class mDoDvdThd_toMainRam_c : public mDoDvdThd_command_c {
 public:
-    mDoDvdThd_toMainRam_c(u8);
-    static mDoDvdThd_toMainRam_c* create(char const*, u8, JKRHeap*);
+    mDoDvdThd_toMainRam_c(u8 direction);
+    static mDoDvdThd_toMainRam_c* create(char const* path, u8 direction, JKRHeap* heap);
     virtual ~mDoDvdThd_toMainRam_c();
     virtual BOOL execute();
 
@@ -106,8 +106,8 @@ private:
 };  // Size = 0x28
 
 struct mDoDvdThdStack {
-    u8 stack[4096];
-} ALIGN_DECL(32);
+    ALIGN_DECL(32, u8 stack[4096]);
+};
 
 struct mDoDvdThd {
     static s32 main(void*);

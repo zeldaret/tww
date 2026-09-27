@@ -11,16 +11,19 @@ struct fopMsgM_pane_class;
 class JKRArchive;
 class JUTFont;
 
-class dMenu_Option_c : public dDlst_base_c {
+class dMenu_Option_c {
 public:
+    dMenu_Option_c() { }
+    virtual ~dMenu_Option_c() {}
+
     void alphaChange(fopMsgM_pane_class*, f32) {}
-    void getQuitStatus() {}
+    u8 getQuitStatus() { return mE40; }
     void setArchive(JKRArchive* archive) {
         mpArchive = archive;
     }
-    void setFont(JUTFont* font_1, JUTFont* font_2) {
-        mD2C = font_1;
-        mD30 = font_2;
+    void setFont(JUTFont* i_font, JUTFont* i_rubyFont) {
+        mpFont = i_font;
+        mpRubyFont = i_rubyFont;
     }
     void setTextArea(char* param_1, char* param_2, char* param_3, char* param_4) {
         mD38 = param_1;
@@ -46,10 +49,12 @@ public:
     void outFontInit();
     void outFontMove();
     void outFontDraw();
+#if VERSION > VERSION_JPN
     f32 stringlength(fopMsgM_pane_class*, char*);
     void changeScaleCenter(fopMsgM_pane_class*, char*);
     void setSoundMode(u32);
     void changeScaleRight(fopMsgM_pane_class*, char*);
+#endif
     void initialize();
     void _create();
     void _delete();
@@ -72,24 +77,29 @@ private:
     /* 0x858 */ fopMsgM_pane_class m858[2];
     /* 0x8C8 */ fopMsgM_pane_class m8C8[4];
     /* 0x9A8 */ fopMsgM_pane_class m9A8[2];
+#if VERSION != VERSION_USA
+    fopMsgM_pane_class mA18_jpn[2];
+#endif
     /* 0xA18 */ fopMsgM_pane_class mA18[3];
     /* 0xAC0 */ fopMsgM_pane_class mAC0[2];
     /* 0xB30 */ fopMsgM_pane_class mB30[6];
     /* 0xC80 */ fopMsgM_pane_class mC80[2];
     /* 0xCF0 */ fopMsgM_pane_class mCF0;
     /* 0xD28 */ JKRArchive* mpArchive;
-    /* 0xD2C */ JUTFont* mD2C;
-    /* 0xD30 */ JUTFont* mD30;
+    /* 0xD2C */ JUTFont* mpFont;
+    /* 0xD30 */ JUTFont* mpRubyFont;
     /* 0xD34 */ STControl* stick;
     /* 0xD38 */ char* mD38;
     /* 0xD3C */ char* mD3C;
     /* 0xD40 */ char* mD40;
     /* 0xD44 */ char* mD44;
+#if VERSION > VERSION_JPN
     /* 0xD48 */ char mD48[20];
     /* 0xD5C */ char mD5C[2][20];
     /* 0xD84 */ char mD84[2][20];
     /* 0xDAC */ char mDAC[3][20];
     /* 0xDE8 */ char mDE8[4][20];
+#endif
     /* 0xE38 */ u8 mE38;
     /* 0xE39 */ u8 mE39;
     /* 0xE3A */ u8 mE3A;
@@ -107,7 +117,7 @@ public:
     dMo_HIO_c();
     virtual ~dMo_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;

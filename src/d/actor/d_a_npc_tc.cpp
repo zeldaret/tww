@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_tc.h"
 #include "m_Do/m_Do_ext.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_tc.h"
+#include "res/Object/Tc.h"
 #include "d/d_s_play.h"
 #include "d/d_snap.h"
 #include "d/actor/d_a_obj_smplbg.h"
@@ -19,7 +17,7 @@ public:
     daNpc_Tc_HIO_c();
     virtual ~daNpc_Tc_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ dNpc_HIO_c mNpc;
@@ -143,7 +141,7 @@ daNpc_Tc_HIO_c::daNpc_Tc_HIO_c() {
 }
 
 static const int l_btp_ix_tbl[] = {
-    TC_BTP_MABA01
+    dRes_INDEX_TC_BTP_MABA01_e
 };
 
 /* 000003D0-0000059C       .text nodeCallBack__FP7J3DNodei */
@@ -182,7 +180,7 @@ static void* searchTower_CB(void* i_actor, void* i_this) {
 
 /* 000005C8-00000630       .text _searchTower__10daNpc_Tc_cFP10fopAc_ac_c */
 fopAc_ac_c* daNpc_Tc_c::_searchTower(fopAc_ac_c* i_actor) {
-    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == PROC_Obj_Smplbg && ((daObjSmplbg::Act_c*)i_actor)->prm_get_type() == 0) {
+    if (fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_Obj_Smplbg_e && ((daObjSmplbg::Act_c*)i_actor)->prm_get_type() == 0) {
         return i_actor;
     }
     return NULL;
@@ -219,7 +217,7 @@ void daNpc_Tc_c::playTexPatternAnm() {
 
 /* 000007D0-00000948       .text smoke_set__10daNpc_Tc_cFfffff */
 void daNpc_Tc_c::smoke_set(f32 i_rate, f32 i_spread, f32 i_initialVelOmni, f32 i_initialVelAxis, f32 i_initialVelDir) {
-    static JGeometry::TVec3<f32> smoke_scale(1.0f, 1.0f, 1.0);
+    static JGeometry::TVec3<f32> smoke_scale(1.0f, 1.0f, 1.0f);
     if(mSmokeCallBack.getEmitter() == NULL) {
         dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &mSmokePos, &mSmokeAngle, NULL, 0xB9, &mSmokeCallBack, fopAcM_GetRoomNo(this));
     }
@@ -237,23 +235,23 @@ void daNpc_Tc_c::smoke_set(f32 i_rate, f32 i_spread, f32 i_initialVelOmni, f32 i
 /* 00000948-00001168       .text setAnm__10daNpc_Tc_cFv */
 void daNpc_Tc_c::setAnm() {
     static const int a_anm_bck_tbl[] = {
-        TC_BCK_WAIT01,
-        TC_BCK_WAIT03,
-        TC_BCK_WAIT02,
-        TC_BCK_TALK01,
-        TC_BCK_WALK01,
-        TC_BCK_JAMP_A,
-        TC_BCK_JAMP_B,
-        TC_BCK_JAMP_C,
-        TC_BCK_GUARD,
-        TC_BCK_JTBT,
-        TC_BCK_HAPPY,
-        TC_BCK_DANCE01,
-        TC_BCK_DANCE02,
-        TC_BCK_GET,
-        TC_BCK_MAWASU,
-        TC_BCK_WAIT04,
-        TC_BCK_TALK02,
+        dRes_INDEX_TC_BCK_WAIT01_e,
+        dRes_INDEX_TC_BCK_WAIT03_e,
+        dRes_INDEX_TC_BCK_WAIT02_e,
+        dRes_INDEX_TC_BCK_TALK01_e,
+        dRes_INDEX_TC_BCK_WALK01_e,
+        dRes_INDEX_TC_BCK_JAMP_A_e,
+        dRes_INDEX_TC_BCK_JAMP_B_e,
+        dRes_INDEX_TC_BCK_JAMP_C_e,
+        dRes_INDEX_TC_BCK_GUARD_e,
+        dRes_INDEX_TC_BCK_JTBT_e,
+        dRes_INDEX_TC_BCK_HAPPY_e,
+        dRes_INDEX_TC_BCK_DANCE01_e,
+        dRes_INDEX_TC_BCK_DANCE02_e,
+        dRes_INDEX_TC_BCK_GET_e,
+        dRes_INDEX_TC_BCK_MAWASU_e,
+        dRes_INDEX_TC_BCK_WAIT04_e,
+        dRes_INDEX_TC_BCK_TALK02_e,
     };
 
     dLib_anm_prm_c a_anm_prm_tbl[24] = {
@@ -663,12 +661,12 @@ void daNpc_Tc_c::eventOrder() {
 
 /* 00001424-00001470       .text checkOrder__10daNpc_Tc_cFv */
 void daNpc_Tc_c::checkOrder() {
-    if (eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if (eventInfo.checkCommandDemoAccrpt()) {
         mEventIdx = 0;
         return;
     }
 
-    if (eventInfo.mCommand != dEvtCmd_INTALK_e) {
+    if (!eventInfo.checkCommandTalk()) {
         return;
     }
 
@@ -731,7 +729,7 @@ void daNpc_Tc_c::anmAtr(u16 i_msgStatus) {
 
 /* 0000156C-00001618       .text stopTower__10daNpc_Tc_cFv */
 void daNpc_Tc_c::stopTower() {
-    JUT_ASSERT(VERSION_SELECT(0x3F5, 0x3F4, 0x3F4, 0x3F4), m_tower_actor != NULL);
+    JUT_ASSERT(DEMO_SELECT(0x3F5, 0x3F4), m_tower_actor != NULL);
 
     daObjSmplbg::Act_c* tower = m_tower_actor;
     switch (mType) {
@@ -749,7 +747,7 @@ void daNpc_Tc_c::stopTower() {
 
 /* 00001618-000017A4       .text startTower__10daNpc_Tc_cFv */
 void daNpc_Tc_c::startTower() {
-    JUT_ASSERT(VERSION_SELECT(0x408, 0x407, 0x407, 0x407), m_tower_actor != NULL);
+    JUT_ASSERT(DEMO_SELECT(0x408, 0x407), m_tower_actor != NULL);
     daObjSmplbg::Act_c* tower = m_tower_actor;
 
     cXyz temp;
@@ -883,28 +881,28 @@ u16 daNpc_Tc_c::next_msgStatusNormal(u32* pMsgNo) {
 
 /* 00001AEC-00001B64       .text next_msgStatus__10daNpc_Tc_cFPUl */
 u16 daNpc_Tc_c::next_msgStatus(u32* pMsgNo) {
-    u16 msg;
+    u16 msg_status;
     switch(mType) {
         case TYPE_NORMAL:
-            msg = next_msgStatusNormal(pMsgNo);
+            msg_status = next_msgStatusNormal(pMsgNo);
             break;
         case TYPE_NORMAL2:
-            msg = next_msgStatusNormal2(pMsgNo);
+            msg_status = next_msgStatusNormal2(pMsgNo);
             break;
         case TYPE_BLUE:
-            msg = next_msgStatusBlue(pMsgNo);
+            msg_status = next_msgStatusBlue(pMsgNo);
             break;
         case TYPE_RED:
-            msg = next_msgStatusRed(pMsgNo);
+            msg_status = next_msgStatusRed(pMsgNo);
             break;
         case TYPE_WHITE:
-            msg = next_msgStatusWhite(pMsgNo);
+            msg_status = next_msgStatusWhite(pMsgNo);
             break;
         default:
-            msg = fopMsgStts_MSG_ENDS_e;
+            msg_status = fopMsgStts_MSG_ENDS_e;
             break;
     }
-    return msg;
+    return msg_status;
 }
 
 /* 00001B64-00001B88       .text setFirstMsg__10daNpc_Tc_cFPbUlUl */
@@ -1119,7 +1117,6 @@ void daNpc_Tc_c::lookBack() {
         dstPos = &temp6;
         temp3.set(current.pos);
         temp3.y = eyePos.y;
-        
     } else if (mHasAttention){
         temp6 = dNpc_playerEyePos(l_HIO.mNpc.m04);
         dstPos = &temp6;
@@ -1144,7 +1141,7 @@ void daNpc_Tc_c::lookBack() {
 /* 000024C4-00002594       .text statusWait__10daNpc_Tc_cFv */
 void daNpc_Tc_c::statusWait() {
     if (mType == TYPE_WHITE || mType == TYPE_RED) {
-        JUT_ASSERT(VERSION_SELECT(0x5FE, 0x601, 0x601, 0x601), m_tower_actor != NULL);
+        JUT_ASSERT(DEMO_SELECT(0x5FE, 0x601), m_tower_actor != NULL);
 
         if (m_tower_actor->isStop()) {
             mAnmPrmIdx = ANM_PRM_IDX_WAIT04;
@@ -1234,7 +1231,6 @@ void daNpc_Tc_c::statusWalkToJail() {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B40);
                 mHasTalkedNearJail  = true;
                 return;
-
             }
             mStatus = STATUS_TALK_NEAR_JAIL;
         } else if (mHasAttention) {
@@ -1295,7 +1291,6 @@ void daNpc_Tc_c::statusWaitNearJail() {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B40);
                 mHasTalkedNearJail = true;
                 return;
-
             }
             mStatus = STATUS_TALK_NEAR_JAIL;
         } else if (mHasAttention) {
@@ -1325,7 +1320,6 @@ void daNpc_Tc_c::statusWalkToStool() {
         if (speedF == 0.0f) {
             mStatus = STATUS_WALK_TO_JAIL;
         }
-        
     } else {
         mStoolLookPos.set(mStoolPos);
         cLib_targetAngleY(&current.pos, &mWalkToStoolPos);
@@ -1623,18 +1617,18 @@ void daNpc_Tc_c::set_mtx() {
 BOOL daNpc_Tc_c::_draw() {
     static const int a_bmt_tbl[5] = {
         -1,
-        TC_BMT_TCB,
-        TC_BMT_TCC,
-        TC_BMT_TCA,
+        dRes_INDEX_TC_BMT_TCB_e,
+        dRes_INDEX_TC_BMT_TCC_e,
+        dRes_INDEX_TC_BMT_TCA_e,
         -1
     };
 
     static const u8 a_snap_tbl[] = {
-        DSNAP_TYPE_TC_NORMAL,
-        DSNAP_TYPE_TC_RED,
-        DSNAP_TYPE_TC_WHITE,
-        DSNAP_TYPE_TC_BLUE,
-        DSNAP_TYPE_TC_NORMAL,
+        DSNAP_TYPE_NPC_TC_NORMAL,
+        DSNAP_TYPE_NPC_TC_RED,
+        DSNAP_TYPE_NPC_TC_WHITE,
+        DSNAP_TYPE_NPC_TC_BLUE,
+        DSNAP_TYPE_NPC_TC_NORMAL,
     };
 
     static const u32 dummy[] = {
@@ -1709,7 +1703,6 @@ void daNpc_Tc_c::setTower() {
             temp = l_HIO.field_0x6C;
             temp2 = l_HIO.field_0x78;
             break;
-        
     }
 
     switch(mType) {
@@ -1771,7 +1764,6 @@ BOOL daNpc_Tc_c::_execute() {
                     case 0:
                         mAnmPrmIdx = ANM_PRM_IDX_WAIT01;
                         break;
-   
                 }
             } else {
                 mAnmPrmIdx = ANM_PRM_IDX_WAIT01;
@@ -1853,15 +1845,10 @@ bool daNpc_Tc_c::isCreate() {
 
 /* 00003FC0-00004090       .text _create__10daNpc_Tc_cFv */
 cPhs_State daNpc_Tc_c::_create() {
-#if VERSION == VERSION_DEMO
+    fopAcM_ct_Retail(this, daNpc_Tc_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Tc");
     if(phase_state == cPhs_COMPLEATE_e) {
-        fopAcM_SetupActor(this, daNpc_Tc_c);
-#else
-    fopAcM_SetupActor(this, daNpc_Tc_c);
-    cPhs_State phase_state = dComIfG_resLoad(&mPhs, "Tc");
-    if(phase_state == cPhs_COMPLEATE_e) {
-#endif
+        fopAcM_ct_Demo(this, daNpc_Tc_c);
         getArg();
 
         if(!isCreate()) {
@@ -1881,8 +1868,8 @@ daNpc_Tc_c::daNpc_Tc_c() {}
 
 /* 000045D0-000047DC       .text _createHeap__10daNpc_Tc_cFv */
 BOOL daNpc_Tc_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Tc", TC_BDL_TC));
-    JUT_ASSERT(VERSION_SELECT(0xA26, 0xA30, 0xA30, 0xA30), modelData != NULL);
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes("Tc", dRes_INDEX_TC_BDL_TC_e));
+    JUT_ASSERT(DEMO_SELECT(0xA26, 0xA30), modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -1896,15 +1883,15 @@ BOOL daNpc_Tc_c::_createHeap() {
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    m_jnt.setHeadJntNum(2);
+    m_jnt.setHeadJntNum(TC_JNT_HEAD_e);
 
-    JUT_ASSERT(VERSION_SELECT(0xA36, 0xA40, 0xA40, 0xA40), m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(0xA36, 0xA40), m_jnt.getHeadJntNum() >= 0);
 
-    m_jnt.setBackboneJntNum(1);
-    JUT_ASSERT(VERSION_SELECT(0xA38, 0xA42, 0xA42, 0xA42), m_jnt.getBackboneJntNum() >= 0);
-    modelData->getJointNodePointer(2)->setCallBack(nodeCallBack);
-    modelData->getJointNodePointer(1)->setCallBack(nodeCallBack);
-    mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
+    m_jnt.setBackboneJntNum(TC_JNT_BACKBONE_e);
+    JUT_ASSERT(DEMO_SELECT(0xA38, 0xA42), m_jnt.getBackboneJntNum() >= 0);
+    modelData->getJointNodePointer(TC_JNT_HEAD_e)->setCallBack(nodeCallBack);
+    modelData->getJointNodePointer(TC_JNT_BACKBONE_e)->setCallBack(nodeCallBack);
+    mpMorf->getModel()->setUserArea(reinterpret_cast<uintptr_t>(this));
 
     mTexPatternNum = 0;
     if (!initTexPatternAnm(false)) {
@@ -1953,18 +1940,18 @@ static actor_method_class l_daNpc_Tc_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_TC = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_TC,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_TC_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Tc_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_TC,
+    /* Draw Prio    */ fpcDwPi_NPC_TC_e,
     /* Actor SubMtd */ &l_daNpc_Tc_Method,
     /* Status       */ DEMO_SELECT(fopAcStts_UNK4000_e, 0) | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_12_e,
+    /* Cull Type    */ fopAc_CULLBOX_12_e,
 };

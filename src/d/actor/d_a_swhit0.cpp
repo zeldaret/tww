@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swhit0.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_mtx.h"
@@ -104,7 +102,7 @@ s32 daSwhit0_c::getSwNo2() {
 
 /* 000000C4-00000230       .text CreateHeap__10daSwhit0_cFv */
 BOOL daSwhit0_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", ALWAYS_BDL_OBM_SYOUGEKISW);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BDL_OBM_SYOUGEKISW_e);
     JUT_ASSERT(0xD5, modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
@@ -112,12 +110,12 @@ BOOL daSwhit0_c::CreateHeap() {
         return FALSE;
     }
 
-    J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("Always", ALWAYS_BCK_OBM_SYOUGEKISW);
+    J3DAnmTransform* anm = (J3DAnmTransform*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BCK_OBM_SYOUGEKISW_e);
     if (mAnm.init(modelData, anm, true, J3DFrameCtrl::EMode_LOOP) == 0) {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* texAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", ALWAYS_BTK_OBM_SYOUGEKISW);
+    J3DAnmTextureSRTKey* texAnm = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTK_OBM_SYOUGEKISW_e);
     if (mTexAnm.init(modelData, texAnm, true, J3DFrameCtrl::EMode_LOOP) == 0) {
         return FALSE;
     }
@@ -165,7 +163,7 @@ BOOL daSwhit0_c::CreateInit() {
     mColSph.SetStts(&mColStatus);
     mColSph.SetC(attention_info.position);
     
-    if (dComIfGs_isSwitch(getSwNo(), current.roomNo)) {
+    if (dComIfGs_isSwitch(getSwNo(), fopAcM_GetRoomNo(this))) {
         mState = 4;
         onFlag(0x01);
     }
@@ -191,7 +189,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actr) {
 
 /* 00000508-000006C0       .text create__10daSwhit0_cFv */
 cPhs_State daSwhit0_c::create() {
-    fopAcM_SetupActor(this, daSwhit0_c);
+    fopAcM_ct(this, daSwhit0_c);
 
     shape_angle.z = 0;
     current.angle.z = 0;
@@ -328,7 +326,7 @@ s32 daSwhit0_c::actionOnWait() {
     }
 
     if (getType() == 0x02) {
-        if (!dComIfGs_isSwitch(getSwNo(), current.roomNo)) {
+        if (!dComIfGs_isSwitch(getSwNo(), fopAcM_GetRoomNo(this))) {
             offFlag(0x01);
             mState = 0;
 
@@ -351,7 +349,7 @@ s32 daSwhit0_c::actionOnTimer() {
         fopAcM_seStart(this, JA_SE_OBJ_COL_SWC_NSTONE, 0);
     }
 
-    if (dComIfGs_isSwitch(getSwNo2(), current.roomNo)) {
+    if (dComIfGs_isSwitch(getSwNo2(), fopAcM_GetRoomNo(this))) {
         mState = 4;
     }
     else if (mOnTimer > 0) {
@@ -361,7 +359,7 @@ s32 daSwhit0_c::actionOnTimer() {
         offFlag(0x01);
         mState = 0;
 
-        dComIfGs_offSwitch(getSwNo(), current.roomNo);
+        dComIfGs_offSwitch(getSwNo(), fopAcM_GetRoomNo(this));
     }
 
     return TRUE;
@@ -417,58 +415,59 @@ s32 daSwhit0_c::draw() {
 }
 
 /* 000011E4-00001334       .text daSwhit0_Draw__FP10daSwhit0_c */
-static s32 daSwhit0_Draw(daSwhit0_c* i_swhit) {
-    return i_swhit->draw();
+static s32 daSwhit0_Draw(daSwhit0_c* i_this) {
+    return i_this->draw();
 }
 
 /* 00001334-00001420       .text daSwhit0_Execute__FP10daSwhit0_c */
-static s32 daSwhit0_Execute(daSwhit0_c* i_swhit) {
-    i_swhit->mAnm.play();
-    i_swhit->mTexAnm.play();
+static s32 daSwhit0_Execute(daSwhit0_c* i_this) {
+    i_this->mAnm.play();
+    i_this->mTexAnm.play();
 
-    switch (i_swhit->mState) {
+    switch (i_this->mState) {
         case 0:
-            i_swhit->actionOffWait();
+            i_this->actionOffWait();
             break;
         case 1:
-            i_swhit->actionToOnReady();
+            i_this->actionToOnReady();
             break;
         case 2:
-            i_swhit->actionToOnOrder();
+            i_this->actionToOnOrder();
             break;
         case 3:
-            i_swhit->actionToOnDemo();
+            i_this->actionToOnDemo();
             break;
         case 4:
-            i_swhit->actionOnWait();
+            i_this->actionOnWait();
             break;
         case 5:
-            i_swhit->actionOnTimer();
+            i_this->actionOnTimer();
             break;
     }
 
-    if (i_swhit->checkFlag(0x02)) {
-        dComIfG_Ccsp()->Set(&i_swhit->mColCyl);
+    if (i_this->checkFlag(0x02)) {
+        dComIfG_Ccsp()->Set(&i_this->mColCyl);
     }
 
-    dComIfG_Ccsp()->Set(&i_swhit->mColSph);
+    dComIfG_Ccsp()->Set(&i_this->mColSph);
     return TRUE;
 }
 
 /* 00001420-00001428       .text daSwhit0_IsDelete__FP10daSwhit0_c */
-static s32 daSwhit0_IsDelete(daSwhit0_c* i_swhit) {
+static s32 daSwhit0_IsDelete(daSwhit0_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
 /* 00001428-00001450       .text daSwhit0_Delete__FP10daSwhit0_c */
-static s32 daSwhit0_Delete(daSwhit0_c* i_swhit) {
-    i_swhit->~daSwhit0_c();
+static s32 daSwhit0_Delete(daSwhit0_c* i_this) {
+    i_this->~daSwhit0_c();
     return TRUE;
 }
 
 /* 00001450-00001470       .text daSwhit0_Create__FP10fopAc_ac_c */
-static cPhs_State daSwhit0_Create(fopAc_ac_c* i_swhit) {
-    return static_cast<daSwhit0_c*>(i_swhit)->create();
+static cPhs_State daSwhit0_Create(fopAc_ac_c* i_this) {
+    return static_cast<daSwhit0_c*>(i_this)->create();
 }
 
 static actor_method_class l_daSwhit0_Method = {
@@ -480,18 +479,18 @@ static actor_method_class l_daSwhit0_Method = {
 };
 
 actor_process_profile_definition g_profile_SWHIT0 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_SWHIT0,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_SWHIT0_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daSwhit0_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_SWHIT0,
+    /* Draw Prio    */ fpcDwPi_SWHIT0_e,
     /* Actor SubMtd */ &l_daSwhit0_Method,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

@@ -6,7 +6,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JRenderer/JRenderer.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gf/GF.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
 
 u8 JRNTexImage1Ids[] = { 0x8c, 0x8d, 0x8e, 0x8f, 0xac, 0xad, 0xae, 0xaf };

@@ -1,6 +1,7 @@
 #ifndef D_A_SHIP_H
 #define D_A_SHIP_H
 
+#include "res/Object/Ship.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
 #include "d/d_bg_s_acch.h"
@@ -8,7 +9,7 @@
 #include "SSystem/SComponent/c_phase.h"
 #include "f_op/f_op_msg.h"
 
-class camera_class;
+class camera_process_class;
 class daGrid_c;
 class daTornado_c;
 class daPy_FLG1;
@@ -63,6 +64,7 @@ public:
         MODE_CANNON_e = 9,
         MODE_CRANE_e = 10,
         MODE_CRANE_UP_e = 11,
+        MODE_TORNADO_UP_e = 12,
         MODE_START_MODE_WARP_e = 13,
         MODE_TACT_WARP_e = 14,
         MODE_START_MODE_THROW_e = 16,
@@ -126,11 +128,11 @@ public:
     
 #if VERSION <= VERSION_JPN
     bool checkCraneMode() const {
-        return mCurMode == 10 && mNextMode == 10;
+        return mCurMode == MODE_CRANE_e && mNextMode == MODE_CRANE_e;
     }
 #else
     bool checkCraneMode() const {
-        return mCurMode == 10 && mNextMode == 10 && speedF < 1.0f && !checkStateFlg(daSFLG_FLY_e)  && !checkForceMove();
+        return mCurMode == MODE_CRANE_e && mNextMode == MODE_CRANE_e && speedF < 1.0f && !checkStateFlg(daSFLG_FLY_e)  && !checkForceMove();
     }
 #endif
 #if VERSION == VERSION_DEMO
@@ -142,26 +144,26 @@ public:
     daTornado_c* getTornadoActor() const { return mTornadoActor; }
     fopAc_ac_c* getWhirlActor() const { return mWhirlActor; }
 #endif
-    void checkTornadoFlg() const {}
-    void checkTornadoUp() const {}
+    bool checkTornadoFlg() const { return mTornadoID != fpcM_ERROR_PROCESS_ID_e; }
+    bool checkTornadoUp() const { return mCurMode == MODE_TORNADO_UP_e; }
     f32 getBeltSpeed() const { return m1044.absXZ(); }
     s16 getCannonAngleX() const { return shape_angle.x + m0396 - 0x4000; }
     s16 getCannonAngleY() const { return shape_angle.y + m0394; }
     s16 getCraneAngle() const { return m0398; }
     s16 getCraneBaseAngle() const { return mCraneBaseAngle; }
-    void getCraneHookAngleY() const {}
-    void getCraneRipplePosX() const {}
-    void getCraneRipplePosY() const {}
-    void getCraneRipplePosZ() const {}
-    cXyz* getCraneTop() { return m0434; }
-    MtxP getHeadJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(8); }
+    s16 getCraneHookAngleY() const { return shape_angle.y; }
+    cXyz* getCraneTop() { return mCraneTop; }
+    f32 getCraneRipplePosX() const { return mCraneRipplePos.x; }
+    f32 getCraneRipplePosY() const { return mCraneRipplePos.y; }
+    f32 getCraneRipplePosZ() const { return mCraneRipplePos.z; }
+    MtxP getHeadJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(FN_HEAD_H_JNT_J_FN_ATAMA_e); }
     f32 getJumpRate() { return mJumpRate; }
     u8 getPart() const { return mPart; }
     s16 getRopeCnt() const { return mRopeCnt; }
     BOOL checkRopeDownStart() const { return mRopeCnt > 20; }
     BOOL checkRopeCntMax() const { return mRopeCnt == 250; }
     s16 getSailAngle() { return mSailAngle; }
-    void getTactJntMtx() {}
+    MtxP getTactJntMtx() { return mpHeadAnm->getModel()->getAnmMtx(FN_HEAD_H_JNT_J_FN_AGO2_e); }
     f32 getTillerAngleRate() { return mTillerAngleRate; }
     cXyz* getTillerTopPosP() { return &mTillerTopPos; }
     void offCraneHookFlg() { offStateFlg(daSFLG_UNK800_e);}
@@ -180,7 +182,6 @@ public:
     void onCraneHookFlg() { onStateFlg(daSFLG_UNK800_e); }
     void onCrashFlg() { onStateFlg(daSFLG_UNK4_e); }
     void onFantomGanonBattle() {}
-    //TODO: Is this right?
     void onLinkSit() { onStateFlg(daSFLG_UNK4000000_e); }
     void onSceneChange() { onStateFlg(daSFLG_UNK20000000_e); }
     void onShortHitFlg() { onStateFlg(daSFLG_UNK20_e); }
@@ -385,13 +386,13 @@ public:
     /* 0x0428 */ cXyz* m0428;
     /* 0x042C */ fpc_ProcID mTactWarpID;
     /* 0x0430 */ fpc_ProcID m0430;
-    /* 0x0434 */ cXyz* m0434;
+    /* 0x0434 */ cXyz* mCraneTop;
     /* 0x0438 */ cXyz mTillerTopPos;
     /* 0x0444 */ cXyz m0444;
     /* 0x0450 */ cXyz m0450;
     /* 0x045C */ cXyz m045C;
     /* 0x0468 */ cXyz mRopeLineSegments[250];
-    /* 0x1020 */ cXyz m1020;
+    /* 0x1020 */ cXyz mCraneRipplePos;
     /* 0x102C */ cXyz m102C;
     /* 0x1038 */ cXyz m1038;
     /* 0x1044 */ cXyz m1044;

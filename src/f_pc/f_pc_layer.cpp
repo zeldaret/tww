@@ -72,11 +72,11 @@ void fpcLy_CreatedMesg(layer_class* i_layer) {
     }
 }
 
-layer_class l_fpcLy_Crear = {
+static layer_class l_fpcLy_Crear = {
     NULL, NULL, 0, 0xFFFFFFFF, NULL, 0, NULL, NULL, NULL, 0, 0, 0,
 };
 
-node_list_class l_fpcLy_LayerList = {
+static node_list_class l_fpcLy_LayerList = {
     NULL,
     NULL,
     0,

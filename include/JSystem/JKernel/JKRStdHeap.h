@@ -31,7 +31,11 @@ public:
     s32 do_getSize(void* ptr) { return OSReferentSize(ptr); };
     s32 do_getTotalFreeSize() { return getFreeSize(); };
 
+    static void* getState_(TState* state) { return getState_buf_(state); }
+
     OSHeapHandle mHeapHandle;
 };
+
+inline JKRStdHeap* JKRCreateStdHeap(u32 size, JKRHeap* parent, bool errorFlag) { return JKRStdHeap::create(size, parent, errorFlag); }
 
 #endif /* JKRSTDHEAP_H */

@@ -5,9 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_ajav.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_ajav.h"
+#include "res/Object/Ajav.h"
 
 static cXyz l_daObjAjav_co_offset[3] = {
     cXyz(0.0f, 2550.0f, 200.0f),
@@ -144,7 +142,12 @@ static f32 l_daObjAjav_cyl_h[6] = {
 };
 
 static const s32 l_daObjAjav_idx_table[6] = {
-    4, 5 ,6 ,7, 8, 9
+    dRes_INDEX_AJAV_BDL_AJAVA_e,
+    dRes_INDEX_AJAV_BDL_AJAVB_e,
+    dRes_INDEX_AJAV_BDL_AJAVC_e,
+    dRes_INDEX_AJAV_BDL_AJAVD_e,
+    dRes_INDEX_AJAV_BDL_AJAVE_e,
+    dRes_INDEX_AJAV_BDL_AJAVF_e
 };
 
 static const char* const l_daObjAjav_ev_name[] = {
@@ -446,7 +449,7 @@ BOOL daObjAjav::Act_c::create_heap() {
     }
 
     if (res != FALSE) {
-        cBgD_t* cbgd_res = (cBgD_t*)dComIfG_getObjectRes(M_arcname, AJAV_DZB_AJAV);
+        cBgD_t* cbgd_res = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_AJAV_DZB_AJAV_e);
         mpBgW = dBgW_NewSet(cbgd_res, cBgW::MOVE_BG_e, &mMtx);
         if (mpBgW == NULL) {
             res = FALSE;
@@ -460,7 +463,7 @@ BOOL daObjAjav::Act_c::create_heap() {
 cPhs_State daObjAjav::Act_c::_create() {
     cPhs_State rt = cPhs_ERROR_e;
 
-    fopAcM_SetupActor(this, daObjAjav::Act_c);
+    fopAcM_ct(this, daObjAjav::Act_c);
 
     mSwNo = fopAcM_GetParam(this) & 0xFF;
     mbResLoaded = false;
@@ -906,18 +909,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjAjav
 
 actor_process_profile_definition g_profile_Obj_Ajav = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Ajav,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Ajav_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjAjav::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Ajav,
+    /* Draw Prio    */ fpcDwPi_Obj_Ajav_e,
     /* Actor SubMtd */ &daObjAjav::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

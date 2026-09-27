@@ -13,8 +13,8 @@ struct hand_s {
 
 struct bmdhand_class {
     /* 0x000 */ fopEn_enemy_c actor;
-    /* 0x2AC */ request_of_phase_process_class m2AC;
-    /* 0x2B4 */ mDoExt_McaMorf* m2B4;
+    /* 0x2AC */ request_of_phase_process_class mPhase;
+    /* 0x2B4 */ mDoExt_McaMorf* mpMorf;
     /* 0x2B8 */ s16 m2B8;
     /* 0x2BA */ s16 m2BA;
     /* 0x2BC */ s16 m2BC;
@@ -39,8 +39,8 @@ struct bmdhand_class {
     /* 0x31C */ f32 m31C;
     /* 0x320 */ f32 m320;
     /* 0x324 */ hand_s m324[20];
-    /* 0x554 */ mDoExt_3DlineMat1_c m554;
-    /* 0x590 */ dCcD_Stts m590;
+    /* 0x554 */ mDoExt_3DlineMat1_c mLineMat;
+    /* 0x590 */ dCcD_Stts mStts;
     /* 0x5CC */ dCcD_Sph m5CC;
     /* 0x6F8 */ dCcD_Sph m6F8;
     /* 0x824 */ u8 m824;

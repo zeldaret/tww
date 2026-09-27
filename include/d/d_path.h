@@ -9,7 +9,7 @@ struct dPnt {
     /* 0x01 */ u8 mArg1;
     /* 0x02 */ u8 mArg2;
     /* 0x03 */ u8 mArg3;
-    /* 0x04 */ cXyz m_position;
+    /* 0x04 */ Vec m_position;
 };
 
 struct dPath {
@@ -22,7 +22,7 @@ struct dPath {
     /* 0x08 */ dPnt* m_points;
 };
 
-inline BOOL dPath_ChkClose(dPath* i_path) { return i_path->m_closed & 1; }
+inline BOOL dPath_ChkClose(dPath* i_path) { return (i_path->m_closed & 1) != 0; }
 
 dPath* dPath_GetRoomPath(int, int);
 dPath* dPath_GetNextRoomPath(dPath*, int);

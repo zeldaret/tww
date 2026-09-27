@@ -26,7 +26,6 @@ public:
 
 class daNpc_Zl1_c : public fopNpc_npc_c {
 public:
-
     typedef int (daNpc_Zl1_c::*ActionFunc)(void*);
 
     struct anm_prm_c {
@@ -37,7 +36,6 @@ public:
         int mLoopMode;
     };
 
-    daNpc_Zl1_c();
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
     BOOL set_startPos(int);
@@ -81,8 +79,8 @@ public:
     void checkOrder();
     bool chk_talk();
     bool chk_parts_notMov();
-    fopAc_ac_c* searchByID(fpc_ProcID, int*);
-    bool partner_search_sub(void* (*)(void*, void*));
+    fopAc_ac_c* searchByID(fpc_ProcID, BOOL*);
+    bool partner_search_sub(fpcLyIt_JudgeFunc);
     void partner_search();
     void setEyeCtrl();
     void clrEyeCtrl();
@@ -120,7 +118,9 @@ public:
     BOOL cut_move_JMP_OFF();
     void cut_init_OMAMORI_ONOFF(int);
     BOOL cut_move_OMAMORI_ONOFF();
+#if VERSION > VERSION_DEMO
     void cut_init_SURPRISED(int);
+#endif
     BOOL cut_move_SURPRISED();
     void privateCut(int);
     void endEvent();
@@ -163,6 +163,7 @@ public:
     BOOL bodyCreateHeap();
     BOOL itemCreateHeap();
     BOOL CreateHeap();
+
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_hed_jnt_num;
@@ -196,8 +197,9 @@ public:
     /* 0x790 */ u8 field_0x790[0x794 - 0x790];
     /* 0x794 */ csXyz field_0x794;
     /* 0x79C */ BOOL field_0x79C;
-    /* 0x7A0 */ s16 mEventIdx[6];
-    /* 0x7AC */ u8 field_0x7AC[0x7AE - 0x7AC];
+    /* 0x7A0 */ s16 mEventIdx[4];
+    /* 0x7A8 */ s16 field_0x7A8;
+    /* 0x7AA */ u8 field_0x7AA[0x7AE - 0x7AA];
     /* 0x7AE */ s16 field_0x7AE;
     /* 0x7B0 */ s16 field_0x7B0;
     /* 0x7B2 */ s16 field_0x7B2;

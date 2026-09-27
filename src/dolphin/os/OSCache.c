@@ -18,7 +18,7 @@ static ASM void DCEnable(void) {
     // clang-format on
 }
 
-ASM void DCInvalidateRange(register void* start, register u32 nBytes) {
+ASM void DCInvalidateRange(__REGISTER void* start, __REGISTER u32 nBytes) {
     // clang-format off
 #ifdef __MWERKS__
     nofralloc
@@ -42,7 +42,7 @@ do_invalidate:
     // clang-format on
 }
 
-ASM void DCFlushRange(register void* start, register u32 nBytes) {
+ASM void DCFlushRange(__REGISTER void* start, __REGISTER u32 nBytes) {
     // clang-format off
 #ifdef __MWERKS__
     nofralloc
@@ -67,7 +67,7 @@ do_flush:
     // clang-format on
 }
 
-ASM void DCStoreRange(register void* start, register u32 nBytes) {
+ASM void DCStoreRange(__REGISTER void* start, __REGISTER u32 nBytes) {
     // clang-format off
 #ifdef __MWERKS__
     nofralloc
@@ -92,7 +92,7 @@ do_store:
     // clang-format on
 }
 
-ASM void DCFlushRangeNoSync(register void* start, register u32 nBytes) {
+ASM void DCFlushRangeNoSync(__REGISTER void* start, __REGISTER u32 nBytes) {
     // clang-format off
 #ifdef __MWERKS__
     nofralloc
@@ -116,7 +116,7 @@ do_flush:
     // clang-format on
 }
 
-ASM void DCStoreRangeNoSync(register void* start, register u32 nBytes) {
+ASM void DCStoreRangeNoSync(__REGISTER void* start, __REGISTER u32 nBytes) {
     // clang-format off
 #ifdef __MWERKS__
     nofralloc
@@ -140,7 +140,7 @@ do_store:
     // clang-format on
 }
 
-ASM void DCZeroRange(register void* start, register u32 nBytes) {
+ASM void DCZeroRange(__REGISTER void* start, __REGISTER u32 nBytes) {
     // clang-format off
 #ifdef __MWERKS__
     nofralloc
@@ -164,7 +164,7 @@ do_zero:
     // clang-format on
 }
 
-ASM void ICInvalidateRange(register void* start, register u32 nBytes) {
+ASM void ICInvalidateRange(__REGISTER void* start, __REGISTER u32 nBytes) {
     // clang-format off
 #ifdef __MWERKS__
     nofralloc
@@ -318,8 +318,8 @@ do_invalidate:
     // clang-format on
 }
 
-static ASM void LCStoreBlocks(register void* destAddr, register void* srcAddr,
-                              register u32 blockNum){
+static ASM void LCStoreBlocks(__REGISTER void* destAddr, __REGISTER void* srcAddr,
+                              __REGISTER u32 blockNum){
     // clang-format off
 #ifdef __MWERKS__
     nofralloc
@@ -359,7 +359,7 @@ u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes) {
     return ret;
 }
 
-ASM void LCQueueWait(register u32 len) {
+ASM void LCQueueWait(__REGISTER u32 len) {
     // clang-format off
 #ifdef __MWERKS__
     nofralloc

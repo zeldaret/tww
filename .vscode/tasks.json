@@ -11,7 +11,7 @@
             "GZLJ01", // GCN JPN
             "GZLE01", // GCN USA
             "GZLP01", // GCN PAL
-            "D44J01 --debug --map",
+            "D44J01 --debug --map --non-matching",
         ],
         "default": "GZLE01",
         "description": "Game version to build."
@@ -37,6 +37,12 @@
       "label": "ninja changes_all",
       "type": "shell",
       "command": "ninja changes_all",
+      "problemMatcher": [],
+    },
+    {
+      "label": "baseline all versions",
+      "type": "shell",
+      "command": "${command:python.interpreterPath} configure.py --version D44J01 && sleep 1 && ninja baseline && ${command:python.interpreterPath} configure.py --version GZLJ01 && sleep 1 && ninja baseline && ${command:python.interpreterPath} configure.py --version GZLE01 && sleep 1 && ninja baseline && ${command:python.interpreterPath} configure.py --version GZLP01 && sleep 1 && ninja baseline",
       "problemMatcher": [],
     },
   ]

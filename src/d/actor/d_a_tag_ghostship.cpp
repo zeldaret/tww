@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_ghostship.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static daTag_Gship_HIO_c l_HIO;
 
@@ -31,13 +29,13 @@ void daTag_Gship_c::modeClearWait() {
 
 /* 000001C0-00000214 .text modeClearEventInit__13daTag_Gship_cFv */
 void daTag_Gship_c::modeClearEventInit() {
-    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803);
+    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::GHOST_SHIP);
 #if VERSION == VERSION_DEMO
     reg += 1;
 #else
     reg = 3;
 #endif
-    dComIfGs_setEventReg(dSv_event_flag_c::UNK_8803, reg);
+    dComIfGs_setEventReg(dSv_event_flag_c::GHOST_SHIP, reg);
 }
 
 /* 00000214-00000418 .text modeClearEvent__13daTag_Gship_cFv */
@@ -45,7 +43,7 @@ void daTag_Gship_c::modeClearEvent() {
     if(eventInfo.checkCommandDemoAccrpt()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("PScnChg");
         if(strcmp(dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx), "WARAIGOE") == 0) {
-            if(dComIfGs_getEventReg(dSv_event_flag_c::UNK_8803) == 3) {
+            if(dComIfGs_getEventReg(dSv_event_flag_c::GHOST_SHIP) == 3) {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_SCREAM);
             } else {
                 mDoAud_seStart(JA_SE_CV_G_SHIP_LAUGH);
@@ -125,7 +123,7 @@ void daTag_Gship_c::getArg() {
 
 /* 00000594-000005EC .text _create__13daTag_Gship_cFv */
 cPhs_State daTag_Gship_c::_create() {
-    fopAcM_SetupActor(this, daTag_Gship_c);
+    fopAcM_ct(this, daTag_Gship_c);
 
     getArg();
 
@@ -171,18 +169,18 @@ static actor_method_class daTag_GshipMethodTable = {
 };
 
 actor_process_profile_definition g_profile_TAG_GSHIP = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_GSHIP,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_GSHIP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Gship_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_GSHIP,
+    /* Draw Prio    */ fpcDwPi_TAG_GSHIP_e,
     /* Actor SubMtd */ &daTag_GshipMethodTable,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_4_e,
+    /* Cull Type    */ fopAc_CULLBOX_4_e,
 };

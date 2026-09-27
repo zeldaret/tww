@@ -7,127 +7,125 @@
 #include "d/actor/d_a_dai_item.h"
 #include "SSystem/SComponent/c_math.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_s_play.h"
-#include "d/res/res_fdai.h"
-#include "d/res/res_cloth.h"
+#include "res/Object/Fdai.h"
+#include "res/Object/Cloth.h"
 
 const char daStandItem_c::m_arcname[] = "Fdai";
 const s16 daStandItem_c::m_bmdidx[] = {
-    FDAI_BDL_FOBJ00, /* FLOWER_1 */
-    FDAI_BDL_FOBJ01, /* FLOWER_2 */
-    FDAI_BDL_FOBJ02, /* FLOWER_3 */
-    FDAI_BDL_FOBJ03, /* HEROS_FLAG */
-    FDAI_BDL_FOBJ04, /* TAIRYO_FLAG */
-    FDAI_BDL_FOBJ05, /* SALES_FLAG */
-    FDAI_BDL_FOBJ06, /* WIND_FLAG */
-    FDAI_BDL_FOBJ07, /* RED_FLAG */
-    FDAI_BDL_FOBJ08, /* FOSSIL_HEAD */
-    FDAI_BDL_FOBJ09, /* WATER_STATUE */
-    FDAI_BDL_FOBJ10, /* POSTMAN_STATUE */
-    FDAI_BDL_FOBJ11, /* PRESIDENT_STATUE */
+    dRes_INDEX_FDAI_BDL_FOBJ00_e, /* dItemNo_TOWN_FLOWER_e */
+    dRes_INDEX_FDAI_BDL_FOBJ01_e, /* dItemNo_SEA_FLOWER_e */
+    dRes_INDEX_FDAI_BDL_FOBJ02_e, /* dItemNo_EXOTIC_FLOWER_e */
+    dRes_INDEX_FDAI_BDL_FOBJ03_e, /* dItemNo_HEROS_FLAG_e */
+    dRes_INDEX_FDAI_BDL_FOBJ04_e, /* dItemNo_BIG_CATCH_FLAG_e */
+    dRes_INDEX_FDAI_BDL_FOBJ05_e, /* dItemNo_BIG_SALE_FLAG_e */
+    dRes_INDEX_FDAI_BDL_FOBJ06_e, /* dItemNo_PINWHEEL_e */
+    dRes_INDEX_FDAI_BDL_FOBJ07_e, /* dItemNo_SICKLE_MOON_FLAG_e */
+    dRes_INDEX_FDAI_BDL_FOBJ08_e, /* dItemNo_SKULL_TOWER_IDOL_e */
+    dRes_INDEX_FDAI_BDL_FOBJ09_e, /* dItemNo_FOUNTAIN_IDOL_e */
+    dRes_INDEX_FDAI_BDL_FOBJ10_e, /* dItemNo_POSTMAN_STATUE_e */
+    dRes_INDEX_FDAI_BDL_FOBJ11_e, /* dItemNo_SHOP_GURU_STATUE_e */
 };
 const s16 daStandItem_c::m_bckidx[] = {
-    FDAI_BCK_FOBJ00,  /* FLOWER_1 */
-    FDAI_BCK_FOBJ01,  /* FLOWER_2 */
-    FDAI_BCK_FOBJ02,  /* FLOWER_3 */
-    -1,               /* HEROS_FLAG */
-    -1,               /* TAIRYO_FLAG */
-    FDAI_BCK_FOBJ05,  /* SALES_FLAG */
-    -1,               /* WIND_FLAG */
-    FDAI_BCK_FOBJ07,  /* RED_FLAG */
-    FDAI_BCK_FOBJ08,  /* FOSSIL_HEAD */
-    FDAI_BCK_FOBJ09,  /* WATER_STATUE */
-    FDAI_BCK_FOBJ10,  /* POSTMAN_STATUE */
-    FDAI_BCK_FOBJ11,  /* PRESIDENT_STATUE */
+    dRes_INDEX_FDAI_BCK_FOBJ00_e,  /* dItemNo_TOWN_FLOWER_e */
+    dRes_INDEX_FDAI_BCK_FOBJ01_e,  /* dItemNo_SEA_FLOWER_e */
+    dRes_INDEX_FDAI_BCK_FOBJ02_e,  /* dItemNo_EXOTIC_FLOWER_e */
+    -1,               /* dItemNo_HEROS_FLAG_e */
+    -1,               /* dItemNo_BIG_CATCH_FLAG_e */
+    dRes_INDEX_FDAI_BCK_FOBJ05_e,  /* dItemNo_BIG_SALE_FLAG_e */
+    -1,               /* dItemNo_PINWHEEL_e */
+    dRes_INDEX_FDAI_BCK_FOBJ07_e,  /* dItemNo_SICKLE_MOON_FLAG_e */
+    dRes_INDEX_FDAI_BCK_FOBJ08_e,  /* dItemNo_SKULL_TOWER_IDOL_e */
+    dRes_INDEX_FDAI_BCK_FOBJ09_e,  /* dItemNo_FOUNTAIN_IDOL_e */
+    dRes_INDEX_FDAI_BCK_FOBJ10_e,  /* dItemNo_POSTMAN_STATUE_e */
+    dRes_INDEX_FDAI_BCK_FOBJ11_e,  /* dItemNo_SHOP_GURU_STATUE_e */
 };
 const u16 daStandItem_c::m_heapsize[] = {
-    0x2000, /* FLOWER_1 */
-    0x2000, /* FLOWER_2 */
-    0x2000, /* FLOWER_3 */
-    0x2000, /* HEROS_FLAG */
-    0x2000, /* TAIRYO_FLAG */
-    0x2000, /* SALES_FLAG */
-    0x2000, /* WIND_FLAG */
-    0x2000, /* RED_FLAG */
-    0x2000, /* FOSSIL_HEAD */
-    0x2000, /* WATER_STATUE */
-    0x2000, /* POSTMAN_STATUE */
-    0x2000, /* PRESIDENT_STATUE */
+    0x2000, /* dItemNo_TOWN_FLOWER_e */
+    0x2000, /* dItemNo_SEA_FLOWER_e */
+    0x2000, /* dItemNo_EXOTIC_FLOWER_e */
+    0x2000, /* dItemNo_HEROS_FLAG_e */
+    0x2000, /* dItemNo_BIG_CATCH_FLAG_e */
+    0x2000, /* dItemNo_BIG_SALE_FLAG_e */
+    0x2000, /* dItemNo_PINWHEEL_e */
+    0x2000, /* dItemNo_SICKLE_MOON_FLAG_e */
+    0x2000, /* dItemNo_SKULL_TOWER_IDOL_e */
+    0x2000, /* dItemNo_FOUNTAIN_IDOL_e */
+    0x2000, /* dItemNo_POSTMAN_STATUE_e */
+    0x2000, /* dItemNo_SHOP_GURU_STATUE_e */
 };
 const s16 daStandItem_c::m_anim_min_time[] = {
-    50, /* FLOWER_1 */
-    50, /* FLOWER_2 */
-    50, /* FLOWER_3 */
-    50, /* HEROS_FLAG */
-    50, /* TAIRYO_FLAG */
-    50, /* SALES_FLAG */
-    50, /* WIND_FLAG */
-    50, /* RED_FLAG */
-    30, /* FOSSIL_HEAD */
-    20, /* WATER_STATUE */
-    50, /* POSTMAN_STATUE */
-    50, /* PRESIDENT_STATUE */
+    50, /* dItemNo_TOWN_FLOWER_e */
+    50, /* dItemNo_SEA_FLOWER_e */
+    50, /* dItemNo_EXOTIC_FLOWER_e */
+    50, /* dItemNo_HEROS_FLAG_e */
+    50, /* dItemNo_BIG_CATCH_FLAG_e */
+    50, /* dItemNo_BIG_SALE_FLAG_e */
+    50, /* dItemNo_PINWHEEL_e */
+    50, /* dItemNo_SICKLE_MOON_FLAG_e */
+    30, /* dItemNo_SKULL_TOWER_IDOL_e */
+    20, /* dItemNo_FOUNTAIN_IDOL_e */
+    50, /* dItemNo_POSTMAN_STATUE_e */
+    50, /* dItemNo_SHOP_GURU_STATUE_e */
 };
 const s16 daStandItem_c::m_anim_max_time[] = {
-    100, /* FLOWER_1 */
-    100, /* FLOWER_2 */
-    100, /* FLOWER_3 */
-    100, /* HEROS_FLAG */
-    100, /* TAIRYO_FLAG */
-    100, /* SALES_FLAG */
-    100, /* WIND_FLAG */
-    100, /* RED_FLAG */
-    100, /* FOSSIL_HEAD */
-    20,  /* WATER_STATUE */
-    100, /* POSTMAN_STATUE */
-    100, /* PRESIDENT_STATUE */
+    100, /* dItemNo_TOWN_FLOWER_e */
+    100, /* dItemNo_SEA_FLOWER_e */
+    100, /* dItemNo_EXOTIC_FLOWER_e */
+    100, /* dItemNo_HEROS_FLAG_e */
+    100, /* dItemNo_BIG_CATCH_FLAG_e */
+    100, /* dItemNo_BIG_SALE_FLAG_e */
+    100, /* dItemNo_PINWHEEL_e */
+    100, /* dItemNo_SICKLE_MOON_FLAG_e */
+    100, /* dItemNo_SKULL_TOWER_IDOL_e */
+    20,  /* dItemNo_FOUNTAIN_IDOL_e */
+    100, /* dItemNo_POSTMAN_STATUE_e */
+    100, /* dItemNo_SHOP_GURU_STATUE_e */
 };
 const s16 daStandItem_c::m_stop_min_time[] = {
-    50,  /* FLOWER_1 */
-    50,  /* FLOWER_2 */
-    50,  /* FLOWER_3 */
-    50,  /* HEROS_FLAG */
-    50,  /* TAIRYO_FLAG */
-    50,  /* SALES_FLAG */
-    50,  /* WIND_FLAG */
-    50,  /* RED_FLAG */
-    50,  /* FOSSIL_HEAD */
-    600, /* WATER_STATUE */
-    50,  /* POSTMAN_STATUE */
-    0,   /* PRESIDENT_STATUE */
+    50,  /* dItemNo_TOWN_FLOWER_e */
+    50,  /* dItemNo_SEA_FLOWER_e */
+    50,  /* dItemNo_EXOTIC_FLOWER_e */
+    50,  /* dItemNo_HEROS_FLAG_e */
+    50,  /* dItemNo_BIG_CATCH_FLAG_e */
+    50,  /* dItemNo_BIG_SALE_FLAG_e */
+    50,  /* dItemNo_PINWHEEL_e */
+    50,  /* dItemNo_SICKLE_MOON_FLAG_e */
+    50,  /* dItemNo_SKULL_TOWER_IDOL_e */
+    600, /* dItemNo_FOUNTAIN_IDOL_e */
+    50,  /* dItemNo_POSTMAN_STATUE_e */
+    0,   /* dItemNo_SHOP_GURU_STATUE_e */
 };
 const s16 daStandItem_c::m_stop_max_time[] = {
-    100,  /* FLOWER_1 */
-    100,  /* FLOWER_2 */
-    100,  /* FLOWER_3 */
-    100,  /* HEROS_FLAG */
-    100,  /* TAIRYO_FLAG */
-    100,  /* SALES_FLAG */
-    100,  /* WIND_FLAG */
-    100,  /* RED_FLAG */
-    200,  /* FOSSIL_HEAD */
-    1000, /* WATER_STATUE */
-    100,  /* POSTMAN_STATUE */
-    0,    /* PRESIDENT_STATUE */
+    100,  /* dItemNo_TOWN_FLOWER_e */
+    100,  /* dItemNo_SEA_FLOWER_e */
+    100,  /* dItemNo_EXOTIC_FLOWER_e */
+    100,  /* dItemNo_HEROS_FLAG_e */
+    100,  /* dItemNo_BIG_CATCH_FLAG_e */
+    100,  /* dItemNo_BIG_SALE_FLAG_e */
+    100,  /* dItemNo_PINWHEEL_e */
+    100,  /* dItemNo_SICKLE_MOON_FLAG_e */
+    200,  /* dItemNo_SKULL_TOWER_IDOL_e */
+    1000, /* dItemNo_FOUNTAIN_IDOL_e */
+    100,  /* dItemNo_POSTMAN_STATUE_e */
+    0,    /* dItemNo_SHOP_GURU_STATUE_e */
 };
 
 /* 800E3638-800E36C8       .text convItemNo__FUc */
 static u32 convItemNo(u8 itemNo) {
     switch (itemNo) {
-    case FLOWER_1: return 0;
-    case FLOWER_2: return 1;
-    case FLOWER_3: return 2;
-    case HEROS_FLAG: return 3;
-    case TAIRYO_FLAG: return 4;
-    case SALES_FLAG: return 5;
-    case WIND_FLAG: return 6;
-    case RED_FLAG: return 7;
-    case FOSSIL_HEAD: return 8;
-    case WATER_STATUE: return 9;
-    case POSTMAN_STATUE: return 10;
-    case PRESIDENT_STATUE: return 11;
+    case dItemNo_TOWN_FLOWER_e: return 0;
+    case dItemNo_SEA_FLOWER_e: return 1;
+    case dItemNo_EXOTIC_FLOWER_e: return 2;
+    case dItemNo_HEROS_FLAG_e: return 3;
+    case dItemNo_BIG_CATCH_FLAG_e: return 4;
+    case dItemNo_BIG_SALE_FLAG_e: return 5;
+    case dItemNo_PINWHEEL_e: return 6;
+    case dItemNo_SICKLE_MOON_FLAG_e: return 7;
+    case dItemNo_SKULL_TOWER_IDOL_e: return 8;
+    case dItemNo_FOUNTAIN_IDOL_e: return 9;
+    case dItemNo_POSTMAN_STATUE_e: return 10;
+    case dItemNo_SHOP_GURU_STATUE_e: return 11;
     default: return 0;
     }
 }
@@ -204,8 +202,8 @@ bool daStandItem_c::_delete() {
         m698 = NULL;
     }
 
-    dComIfG_resDelete(&mPhsDai, m_arcname);
-    dComIfG_resDelete(&mPhsCloth, "Cloth");
+    dComIfG_resDeleteDemo(&mPhsDai, m_arcname);
+    dComIfG_resDeleteDemo(&mPhsCloth, "Cloth");
     return true;
 }
 
@@ -217,9 +215,9 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
 /* 800E37B8-800E3AF8       .text CreateHeap__13daStandItem_cFv */
 BOOL daStandItem_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, m_bmdidx[mItemType]);
-    JUT_ASSERT(0x239, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(566, 569), modelData != NULL);
 
-    if (mItemNo == PRESIDENT_STATUE) {
+    if (mItemNo == dItemNo_SHOP_GURU_STATUE_e) {
         mpModel = mDoExt_J3DModel__create(modelData, 0x0, 0x11020203);
     } else {
         mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -230,22 +228,22 @@ BOOL daStandItem_c::CreateHeap() {
 
     if (m_bckidx[mItemType] != -1) {
         J3DAnmTransform* pbck = (J3DAnmTransform*)dComIfG_getObjectRes(m_arcname, m_bckidx[mItemType]);
-        JUT_ASSERT(0x250, pbck != NULL);
+        JUT_ASSERT(DEMO_SELECT(589, 592), pbck != NULL);
         mpBckAnm = new mDoExt_bckAnm();
 
         static const u32 playmode[] = {
-            /* FLOWER_1         */ J3DFrameCtrl::EMode_LOOP,
-            /* FLOWER_2         */ J3DFrameCtrl::EMode_LOOP,
-            /* FLOWER_3         */ J3DFrameCtrl::EMode_LOOP,
-            /* HEROS_FLAG       */ -1,
-            /* TAIRYO_FLAG      */ -1,
-            /* SALES_FLAG       */ J3DFrameCtrl::EMode_LOOP,
-            /* WIND_FLAG        */ J3DFrameCtrl::EMode_LOOP,
-            /* RED_FLAG         */ J3DFrameCtrl::EMode_LOOP,
-            /* FOSSIL_HEAD      */ J3DFrameCtrl::EMode_LOOP,
-            /* WATER_STATUE     */ J3DFrameCtrl::EMode_NONE,
-            /* POSTMAN_STATUE   */ J3DFrameCtrl::EMode_LOOP,
-            /* PRESIDENT_STATUE */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_TOWN_FLOWER_e      */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_SEA_FLOWER_e       */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_EXOTIC_FLOWER_e    */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_HEROS_FLAG_e       */ -1,
+            /* dItemNo_BIG_CATCH_FLAG_e   */ -1,
+            /* dItemNo_BIG_SALE_FLAG_e    */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_PINWHEEL_e         */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_SICKLE_MOON_FLAG_e */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_SKULL_TOWER_IDOL_e */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_FOUNTAIN_IDOL_e    */ J3DFrameCtrl::EMode_NONE,
+            /* dItemNo_POSTMAN_STATUE_e   */ J3DFrameCtrl::EMode_LOOP,
+            /* dItemNo_SHOP_GURU_STATUE_e */ J3DFrameCtrl::EMode_LOOP,
         };
 
         if (mpBckAnm == NULL || !mpBckAnm->init(modelData, pbck, TRUE, playmode[mItemType]))
@@ -254,7 +252,7 @@ BOOL daStandItem_c::CreateHeap() {
         mpBckAnm->setPlaySpeed(0.0f);
     }
 
-    if (mItemNo == HEROS_FLAG || mItemNo == TAIRYO_FLAG || mItemNo == SALES_FLAG || mItemNo == RED_FLAG) {
+    if (mItemNo == dItemNo_HEROS_FLAG_e || mItemNo == dItemNo_BIG_CATCH_FLAG_e || mItemNo == dItemNo_BIG_SALE_FLAG_e || mItemNo == dItemNo_SICKLE_MOON_FLAG_e) {
         typedef dCloth_packet_c* (*ClothFunc)(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
 
         ClothFunc clothFunc[] = {
@@ -265,30 +263,30 @@ BOOL daStandItem_c::CreateHeap() {
         };
 
         u32 clothTimgRes[] = {
-            FDAI_BTI_FTEX03,
-            FDAI_BTI_FTEX04,
-            FDAI_BTI_FTEX05,
-            FDAI_BTI_FTEX07,
+            dRes_INDEX_FDAI_BTI_FTEX03_e,
+            dRes_INDEX_FDAI_BTI_FTEX04_e,
+            dRes_INDEX_FDAI_BTI_FTEX05_e,
+            dRes_INDEX_FDAI_BTI_FTEX07_e,
         };
 
         switch (mItemNo) {
-            case HEROS_FLAG:
+            case dItemNo_HEROS_FLAG_e:
                 mClothType = 0;
                 break;
-            case TAIRYO_FLAG:
+            case dItemNo_BIG_CATCH_FLAG_e:
                 mClothType = 1;
                 break;
-            case SALES_FLAG:
+            case dItemNo_BIG_SALE_FLAG_e:
                 mClothType = 2;
                 break;
             default:
-            case RED_FLAG:
+            case dItemNo_SICKLE_MOON_FLAG_e:
                 mClothType = 3;
                 break;
         }
 
         ResTIMG* clothTimg = (ResTIMG*)dComIfG_getObjectRes(m_arcname, clothTimgRes[mClothType]);
-        ResTIMG* clothToonTimg = (ResTIMG*)dComIfG_getObjectRes("Cloth", CLOTH_BTI_CLOTHTOON);
+        ResTIMG* clothToonTimg = (ResTIMG*)dComIfG_getObjectRes("Cloth", dRes_INDEX_CLOTH_BTI_CLOTHTOON_e);
         mpCloth = clothFunc[mClothType](clothTimg, clothToonTimg, &tevStr, VobjFlagPosTbl[mClothType]);
         if (mpCloth == NULL)
             return FALSE;
@@ -298,6 +296,37 @@ BOOL daStandItem_c::CreateHeap() {
 
     return TRUE;
 }
+
+#if VERSION == VERSION_DEMO
+// Note: Retail moved this into d_com_static.cpp as daStandItem_c::daiItemNodeCallBack
+static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
+    if (calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        void* userArea = (void*)model->getUserArea();
+        if (userArea && fopAcM_IsActor(userArea) && fopAcM_GetName(userArea) == fpcNm_STANDITEM_e) {
+            daStandItem_c* i_this = (daStandItem_c*)userArea;
+            mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+            switch (i_this->getItemNo()) {
+            case dItemNo_PINWHEEL_e:
+                mDoMtx_stack_c::XrotM(i_this->m6B4);
+                break;
+            case dItemNo_FOUNTAIN_IDOL_e:
+                if (jntNo == FOBJ09_JNT_TUBOKO_BASE_e) {
+                    mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m630);
+                } else if (jntNo == FOBJ09_JNT_TUBOKO_HEAD_e) {
+                    mDoMtx_copy(mDoMtx_stack_c::get(), i_this->m660);
+                }
+                break;
+            }
+            model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+            cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
+}
+#endif
 
 /* 800E3AF8-800E3E94       .text CreateInit__13daStandItem_cFv */
 void daStandItem_c::CreateInit() {
@@ -314,33 +343,35 @@ void daStandItem_c::CreateInit() {
     m6A4 = *dKyw_get_wind_vec();
     m6A2 = cM_atan2s(m6A4.x, m6A4.z);
     set_mtx();
+#if VERSION > VERSION_DEMO
     mpModel->setUserArea(NULL);
+#endif
 
     JUTNameTab* jointNameTab = mpModel->getModelData()->getJointName();
     const char* jointName;
     u16 i;
     switch (mItemNo) {
-    case WIND_FLAG:
+    case dItemNo_PINWHEEL_e:
         {
             for (i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
                 jointName = jointNameTab->getName(i);
                 if (strcmp("top", jointName) == 0) {
-                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
+                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(DEMO_SELECT(nodeCallBack, daiItemNodeCallBack));
                     break;
                 }
             }
-            mpModel->setUserArea((u32)this);
+            mpModel->setUserArea((uintptr_t)this);
             mpModel->calc();
         }
         break;
-    case WATER_STATUE:
+    case dItemNo_FOUNTAIN_IDOL_e:
         {
             for (i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
                 jointName = jointNameTab->getName(i);
                 if (strcmp("tuboko_head", jointName) == 0 || strcmp("tuboko_base", jointName) == 0)
-                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(daiItemNodeCallBack);
+                    mpModel->getModelData()->getJointNodePointer(i)->setCallBack(DEMO_SELECT(nodeCallBack, daiItemNodeCallBack));
             }
-            mpModel->setUserArea((u32)this);
+            mpModel->setUserArea((uintptr_t)this);
             mpModel->calc();
         }
         break;
@@ -354,18 +385,20 @@ void daStandItem_c::CreateInit() {
     s16 stopMaxTime = m_stop_max_time[mItemType];
     s16 r29 = (animMinTime + animMaxTime) / 2;
     s16 r28 = (animMaxTime - animMinTime) / 2;
+    s16 temp3 = (stopMinTime + stopMaxTime) / 2;
     s16 temp = (stopMaxTime - stopMinTime) / 2;
     mBckPlayTimer = 0;
     f32 temp2 = cM_rndFX(temp);
-    s16 temp3 = (stopMinTime + stopMaxTime) / 2;
     mBckStopTimer = temp3 + temp2;
     if (stopMaxTime == 0) {
         mBckPlayTimer = r29 + cM_rndFX(r28);
     }
 
+#if VERSION > VERSION_DEMO
     m690 = NULL;
     m694 = NULL;
     m698 = NULL;
+#endif
 #if VERSION > VERSION_JPN
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
 #endif
@@ -373,11 +406,28 @@ void daStandItem_c::CreateInit() {
 
 /* 800E3E94-800E4048       .text _create__13daStandItem_cFv */
 cPhs_State daStandItem_c::_create() {
-    fopAcM_SetupActor(this, daStandItem_c);
+    fopAcM_ct(this, daStandItem_c);
 
     mItemNo = fopAcM_GetParam(this);
     mItemType = convItemNo(mItemNo);
 
+#if VERSION == VERSION_DEMO
+    cPhs_State rt;
+    cPhs_State cloth_rt;
+    rt = dComIfG_resLoad(&mPhsDai, m_arcname);
+    cloth_rt = dComIfG_resLoad(&mPhsCloth, "Cloth");
+    
+    if (rt == cPhs_ERROR_e || cloth_rt == cPhs_ERROR_e) {
+        return cPhs_ERROR_e;
+    }
+    if (rt != cPhs_COMPLEATE_e) {
+        return rt;
+    }
+    // !@bug They meant to check cloth_rt here, instead they check rt a second time.
+    if (rt != cPhs_COMPLEATE_e) {
+        return cloth_rt;
+    }
+#else
     cPhs_State rt = dComIfG_resLoad(&mPhsDai, m_arcname);
     if (rt != cPhs_COMPLEATE_e)
         return rt;
@@ -385,6 +435,7 @@ cPhs_State daStandItem_c::_create() {
     cPhs_State cloth_rt = dComIfG_resLoad(&mPhsCloth, "Cloth");
     if (cloth_rt != cPhs_COMPLEATE_e)
         return cloth_rt;
+#endif
 
     if (rt == cPhs_COMPLEATE_e && cloth_rt == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mItemType]))
@@ -511,7 +562,8 @@ bool daStandItem_c::actionFobj06() {
         m6C4 = 4.0f;
     }
 
-    m6B2 = m6C4 * 0x600;
+    int r0 = 0x600;
+    m6B2 = (f32)r0 * m6C4;
     cLib_addCalc(&m6C4, 0.0f, 0.08f, dKyw_get_wind_pow() + 0.3f, dKyw_get_wind_pow() + 0.1f);
     m6B4 += m6B2;
     return true;
@@ -574,7 +626,10 @@ bool daStandItem_c::actionFobj09() {
             if (m694 == NULL) {
                 m694 = dComIfGp_particle_set(dPa_name::ID_AK_SN_FOUNTAINFIGURE01, &current.pos, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this), &tevStr.mColorK0);
             }
-            if (m698 == NULL) {
+#if VERSION > VERSION_DEMO
+            if (m698 == NULL)
+#endif
+            {
                 m698 = dComIfGp_particle_set(dPa_name::ID_AK_SN_FOUNTAINFIGURE02, &current.pos, &current.angle);
             }
             if (m698) {
@@ -629,8 +684,8 @@ void daStandItem_c::animTest() {
         }
         if (mBckSpeed == 0.0f || mBckPlayTimer == 0) {
             mpBckAnm->setPlaySpeed(0.0f);
-            s16 temp = (stopMaxTime - stopMinTime) / 2;
             s16 temp2 = (stopMinTime + stopMaxTime) / 2;
+            s16 temp = (stopMaxTime - stopMinTime) / 2;
             mBckStopTimer = temp2 + cM_rndFX(temp);
         }
     } else if (mBckStopTimer > 0) {
@@ -639,8 +694,8 @@ void daStandItem_c::animTest() {
             mBckStopTimer = 1;
         }
         if (mBckStopTimer == 0) {
-            s16 temp = (animMaxTime - animMinTime) / 2;
             s16 temp2 = (animMinTime + animMaxTime) / 2;
+            s16 temp = (animMaxTime - animMinTime) / 2;
             mBckPlayTimer = temp2 + cM_rndFX(temp);
             mBckSpeed = 1.0f;
             if (mpBckAnm) {
@@ -664,8 +719,8 @@ void daStandItem_c::animTestForOneTime() {
         if (mBckStopTimer == 0) {
             mpBckAnm->setPlaySpeed(1.0f);
             mpBckAnm->setFrame(0.0f);
-            s16 temp = (animMaxTime - animMinTime) / 2;
             s16 temp2 = (animMinTime + animMaxTime) / 2;
+            s16 temp = (animMaxTime - animMinTime) / 2;
             mBckPlayTimer = temp2 + cM_rndFX(temp);
         }
     } else if (mBckPlayTimer > 0) {
@@ -674,8 +729,8 @@ void daStandItem_c::animTestForOneTime() {
             mpBckAnm->setPlaySpeed(1.0f);
             mpBckAnm->setFrame(0.0f);
         } else if (mBckPlayTimer == 0 && isStop) {
-            s16 temp = (stopMaxTime - stopMinTime) / 2;
             s16 temp2 = (stopMinTime + stopMaxTime) / 2;
+            s16 temp = (stopMaxTime - stopMinTime) / 2;
             mBckStopTimer = temp2 + cM_rndFX(temp);
         } else if (mBckPlayTimer == 0) {
             mBckPlayTimer = 1;
@@ -756,13 +811,22 @@ void daStandItem_c::mode_drop() {
 bool daStandItem_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
-    if (mItemNo == WIND_FLAG)
+#if VERSION == VERSION_DEMO
+    if (mpBckAnm != NULL)
+        mpBckAnm->entry(mpModel->getModelData());
+    if (mItemNo == dItemNo_PINWHEEL_e)
+        mDoExt_bckAnmRemove(mpModel->getModelData());
+#else
+    if (mItemNo == dItemNo_PINWHEEL_e)
         mDoExt_bckAnmRemove(mpModel->getModelData());
     else if (mpBckAnm != NULL)
         mpBckAnm->entry(mpModel->getModelData());
+#endif
 
-    if (mItemNo == PRESIDENT_STATUE)
-        dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), 1.0f);
+    if (mItemNo == dItemNo_SHOP_GURU_STATUE_e) {
+        f32 scale = 1.0f;
+        dDlst_texSpecmapST(&eyePos, &tevStr, mpModel->getModelData(), scale);
+    }
 
     mDoExt_modelUpdateDL(mpModel);
     if (mpCloth != NULL)
@@ -793,6 +857,7 @@ static BOOL daStandItem_Execute(void* i_this) {
 
 /* 800E5444-800E544C       .text daStandItem_IsDelete__FPv */
 static BOOL daStandItem_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -805,18 +870,18 @@ static actor_method_class daStandItemMethodTable = {
 };
 
 actor_process_profile_definition g_profile_STANDITEM = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_STANDITEM,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_STANDITEM_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daStandItem_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_STANDITEM,
+    /* Draw Prio    */ fpcDwPi_STANDITEM_e,
     /* Actor SubMtd */ &daStandItemMethodTable,
     /* Status       */ fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

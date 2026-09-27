@@ -6,11 +6,9 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_gaship.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_mtx.h"
-#include "d/res/res_gaship.h"
+#include "res/Object/GaShip.h"
 
 const char daObjGaship::Act_c::M_arcname[7] = "GaShip";
 
@@ -31,7 +29,7 @@ void daObjGaship::Act_c::birth_flag() {
             cXyz offset;
             mDoMtx_multVec(mtx, &flag_offset[i], &offset);
             csXyz angle(flag_angle[i]);
-            fpc_ProcID pid = fopAcM_create(PROC_MAJUU_FLAG, 0x01, &offset, fopAcM_GetRoomNo(this), &angle);
+            fpc_ProcID pid = fopAcM_create(fpcNm_MAJUU_FLAG_e, 0x01, &offset, fopAcM_GetRoomNo(this), &angle);
             if (pid != fpcM_ERROR_PROCESS_ID_e)
                 birthFlag[i] = true;
         }
@@ -39,13 +37,13 @@ void daObjGaship::Act_c::birth_flag() {
 }
 
 /* 00000354-00000378       .text solidHeapCB__Q211daObjGaship5Act_cFP10fopAc_ac_c */
-BOOL daObjGaship::Act_c::solidHeapCB(fopAc_ac_c* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->create_heap();
+BOOL daObjGaship::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->create_heap();
 }
 
 /* 00000378-00000448       .text create_heap__Q211daObjGaship5Act_cFv */
 bool daObjGaship::Act_c::create_heap() {
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, GASHIP_BDL_GASHIP));
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GASHIP_BDL_GASHIP_e));
     JUT_ASSERT(140, mdl_data != NULL);
 #if VERSION > VERSION_DEMO
     if (mdl_data != NULL)
@@ -65,7 +63,7 @@ bool daObjGaship::Act_c::create_heap() {
 
 /* 00000448-000004F8       .text _create__Q211daObjGaship5Act_cFv */
 cPhs_State daObjGaship::Act_c::_create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
@@ -113,27 +111,28 @@ bool daObjGaship::Act_c::_draw() {
 namespace daObjGaship {
 namespace {
 /* 0000066C-0000068C       .text Mthd_Create__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-cPhs_State Mthd_Create(void* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->_create();
+cPhs_State Mthd_Create(void* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->_create();
 }
 
 /* 0000068C-000006B0       .text Mthd_Delete__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-BOOL Mthd_Delete(void* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->_delete();
+BOOL Mthd_Delete(void* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->_delete();
 }
 
 /* 000006B0-000006D4       .text Mthd_Execute__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-BOOL Mthd_Execute(void* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->_execute();
+BOOL Mthd_Execute(void* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->_execute();
 }
 
 /* 000006D4-000006F8       .text Mthd_Draw__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-BOOL Mthd_Draw(void* i_ac) {
-    return ((daObjGaship::Act_c*)i_ac)->_draw();
+BOOL Mthd_Draw(void* i_this) {
+    return ((daObjGaship::Act_c*)i_this)->_draw();
 }
 
 /* 000006F8-00000700       .text Mthd_IsDelete__Q211daObjGaship28@unnamed@d_a_obj_gaship_cpp@FPv */
-BOOL Mthd_IsDelete(void* i_ac) {
+BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -148,18 +147,18 @@ static actor_method_class Mthd_Table = {
 }; // namespace daObjGaship
 
 actor_process_profile_definition g_profile_Obj_Gaship = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_Gaship,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_Gaship_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjGaship::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_Gaship,
+    /* Draw Prio    */ fpcDwPi_Obj_Gaship_e,
     /* Actor SubMtd */ &daObjGaship::Mthd_Table,
     /* Status       */ fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

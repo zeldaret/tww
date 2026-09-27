@@ -5,15 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kaji.h"
-#include "d/res/res_kaji.h"
+#include "res/Object/Kaji.h"
 #include "f_op/f_op_actor_mng.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
 #include "d/actor/d_a_obj_pirateship.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static daObjPirateship::Act_c* l_p_ship;
 
@@ -26,15 +24,15 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00000098-000001F4       .text CreateHeap__8daKaji_cFv */
 BOOL daKaji_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, KAJI_INDEX_BDL_ASODA);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_KAJI_BDL_ASODA_e);
     JUT_ASSERT(0x55, modelData != NULL);
     
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL, NULL,
-        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", KAJI_INDEX_BCK_KJ_WAIT),
+        (J3DAnmTransformKey*)dComIfG_getObjectRes("Kaji", dRes_INDEX_KAJI_BCK_KJ_WAIT_e),
         J3DFrameCtrl::EMode_LOOP, 0.0f, 0, -1, 1,
-        dComIfG_getObjectRes("Kaji", KAJI_INDEX_BAS_KJ_WAIT),
+        dComIfG_getObjectRes("Kaji", dRes_INDEX_KAJI_BAS_KJ_WAIT_e),
         0x00080000,
         0x11000002
     );
@@ -43,14 +41,15 @@ BOOL daKaji_c::CreateHeap() {
 }
 
 cPhs_State daKaji_c::_create() {
-    fopAcM_SetupActor(this, daKaji_c);
+    fopAcM_ct_Retail(this, daKaji_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, daKaji_c);
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x660)) {
-            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
             mDoMtx_stack_c::YrotM(shape_angle.y);
-            mDoMtx_stack_c::scaleM(scale);
+            mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
             MTXCopy(mDoMtx_stack_c::get(), mMtx);
             
             l_p_ship = (daObjPirateship::Act_c*)fopAcM_SearchByID(parentActorID);
@@ -68,7 +67,7 @@ cPhs_State daKaji_c::_create() {
 }
 
 bool daKaji_c::_delete() {
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return TRUE;
 }
 
@@ -122,6 +121,7 @@ static BOOL daKajiDraw(void* i_this) {
 
 /* 00000568-00000570       .text daKajiIsDelete__FPv */
 static BOOL daKajiIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -134,18 +134,18 @@ static actor_method_class daKajiMethodTable = {
 };
 
 actor_process_profile_definition g_profile_Kaji = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Kaji,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Kaji_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daKaji_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Kaji,
+    /* Draw Prio    */ fpcDwPi_Kaji_e,
     /* Actor SubMtd */ &daKajiMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

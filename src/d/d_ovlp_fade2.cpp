@@ -6,8 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_ovlp_fade2.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_overlap.h"
@@ -237,7 +235,7 @@ static cPhs_State dOvlpFd2_Create(void* i_this) {
     return cPhs_COMPLEATE_e;
 }
 
-overlap_method_class l_dOvlpFd2_Method = {
+static overlap_method_class l_dOvlpFd2_Method = {
     (process_method_func)dOvlpFd2_Create,
     (process_method_func)dOvlpFd2_Delete,
     (process_method_func)dOvlpFd2_Execute,
@@ -246,31 +244,31 @@ overlap_method_class l_dOvlpFd2_Method = {
 };
 
 overlap_process_profile_definition g_profile_OVERLAP2 = {
-    fpcLy_ROOT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP2,
-    &g_fpcLf_Method.base,
-    sizeof(dOvlpFd2_c),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    PRIO_OVERLAP2,
-    &l_dOvlpFd2_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 2,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP2_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dOvlpFd2_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP2_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd2_Method,
 };
 
 #if VERSION > VERSION_JPN
 overlap_process_profile_definition g_profile_OVERLAP3 = {
-    fpcLy_ROOT_e,
-    2,
-    fpcPi_CURRENT_e,
-    PROC_OVERLAP3,
-    &g_fpcLf_Method.base,
-    sizeof(dOvlpFd2_c),
-    0,
-    0,
-    &g_fopOvlp_Method,
-    PRIO_OVERLAP3,
-    &l_dOvlpFd2_Method,
+    /* Layer ID    */ fpcLy_ROOT_e,
+    /* List ID     */ 2,
+    /* List Prio   */ fpcPi_CURRENT_e,
+    /* Proc Name   */ fpcNm_OVERLAP3_e,
+    /* Proc SubMtd */ &g_fpcLf_Method.base,
+    /* Size        */ sizeof(dOvlpFd2_c),
+    /* Size Other  */ 0,
+    /* Parameters  */ 0,
+    /* Leaf SubMtd */ &g_fopOvlp_Method,
+    /* Draw Prio   */ fpcDwPi_OVERLAP3_e,
+    /* Ovlp SubMtd */ &l_dOvlpFd2_Method,
 };
 #endif

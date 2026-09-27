@@ -31,15 +31,15 @@ JUTXfb::JUTXfb(const GXRenderModeObj* pObj, JKRHeap* pHeap, JUTXfb::EXfbNumber x
     common_init(xfbNum);
 
     if (pObj) {
-        initiate(pObj->fb_width, pObj->xfb_height, pHeap, xfbNum);
+        initiate(pObj->fbWidth, pObj->xfbHeight, pHeap, xfbNum);
     } else {
 #if VERSION <= VERSION_JPN
         GXRenderModeObj* obj = JUTVideo::getManager()->getRenderMode();
-        initiate(obj->fb_width, obj->xfb_height, pHeap, xfbNum);
+        initiate(obj->fbWidth, obj->xfbHeight, pHeap, xfbNum);
 #else
-        u16 fb_width = JUTVideo::getManager()->getRenderMode()->fb_width;
-        u16 efb_height = (u32)JUTVideo::getManager()->getRenderMode()->efb_height;
-        u16 xfb_height = JUTVideo::getManager()->getRenderMode()->xfb_height;
+        u16 fb_width = JUTVideo::getManager()->getRenderMode()->fbWidth;
+        u16 efb_height = (u32)JUTVideo::getManager()->getRenderMode()->efbHeight;
+        u16 xfb_height = JUTVideo::getManager()->getRenderMode()->xfbHeight;
         f32 scale_factor = GXGetYScaleFactor(efb_height, xfb_height);
         u16 xfb_lines = GXGetNumXfbLines(efb_height, scale_factor);
 
@@ -123,7 +123,7 @@ void JUTXfb::initiate(u16 width, u16 height, JKRHeap* pHeap, JUTXfb::EXfbNumber 
 }
 
 static void dummy() {
-    OSReport("JX:: disp = %d\n");
-    OSReport("JX:: drawing %d -> ");
-    OSReport("%d\n");
+    DEAD_STRING("JX:: disp = %d\n");
+    DEAD_STRING("JX:: drawing %d -> ");
+    DEAD_STRING("%d\n");
 }

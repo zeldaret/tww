@@ -6,7 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_event_manager.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
 
 enum {
     ACT_WAIT,
@@ -489,11 +488,11 @@ int dEvent_manager_c::getMyActIdx(int staffIdx, const char* const* action, int a
 }
 
 /* 80074964-800749A0       .text getMyActName__16dEvent_manager_cFi */
-char* dEvent_manager_c::getMyActName(int staffIdx) {
+const char* dEvent_manager_c::getMyActName(int staffIdx) {
     if (staffIdx == -1)
         return NULL;
 
-    char* cutName = getMyNowCutName(staffIdx);
+    const char* cutName = getMyNowCutName(staffIdx);
     if (cutName == NULL)
         return NULL;
 
@@ -615,7 +614,7 @@ void dEvent_manager_c::exceptionProc() {
 }
 
 static void dummy1() {
-    OSReport("EVENT_DEBUG_OFF");
+    DEAD_STRING("EVENT_DEBUG_OFF");
 }
 
 
@@ -688,13 +687,13 @@ fopAc_ac_c* dEvent_manager_c::specialCast(const char* name, int flag) {
         return NULL;
 
     if (strcmp(name, "SHUTTER_DOOR") == 0) {
-        actor = specialCast_Shutter(PROC_DOOR10, flag);
+        actor = specialCast_Shutter(fpcNm_DOOR10_e, flag);
         if (actor == NULL)
-            actor = specialCast_Shutter(PROC_DOOR12, flag);
+            actor = specialCast_Shutter(fpcNm_DOOR12_e, flag);
         if (actor == NULL)
-            actor = specialCast_Shutter(PROC_KDDOOR, flag);
+            actor = specialCast_Shutter(fpcNm_KDDOOR_e, flag);
         if (actor == NULL)
-            actor = specialCast_Shutter(PROC_KNOB00, flag);
+            actor = specialCast_Shutter(fpcNm_KNOB00_e, flag);
         if (actor != NULL)
             dComIfGp_event_onEventFlag(0x10);
     }

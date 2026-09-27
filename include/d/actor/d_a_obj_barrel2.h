@@ -76,7 +76,7 @@ namespace daObjBarrel2 {
         fpc_ProcID get_item_id() { return mItemId; }
         static fpc_ProcID make_coming(cXyz* pos, int roomNo, Type_e type, int droppedItem, bool hasFlag, s16 angleY, daObjBuoyflag::Texture_e tex) {
             csXyz angle(0, angleY, 0);
-            return fopAcM_create(PROC_Obj_Barrel2, make_prm(type, droppedItem, !hasFlag, true, tex), pos, roomNo, &angle);
+            return fopAcM_create(fpcNm_Obj_Barrel2_e, make_prm(type, droppedItem, !hasFlag, true, tex), pos, roomNo, &angle);
         }
         static u32 make_prm(Type_e type, int droppedItem, bool hasFlag, bool _unused, daObjBuoyflag::Texture_e tex) {
             int itemNo = (droppedItem & 0x3F);

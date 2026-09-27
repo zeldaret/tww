@@ -44,7 +44,7 @@ JKRThread::JKRThread(u32 stack_size, int message_count, int param_3) : mThreadLi
 JKRThread::JKRThread(OSThread* thread, int message_count) : mThreadListLink(this) {
     mHeap = NULL;
     mThreadRecord = thread;
-    mStackSize = (u32)thread->stack_end - (u32)thread->stack_base;
+    mStackSize = (uintptr_t)thread->stack_end - (uintptr_t)thread->stack_base;
     mStackMemory = thread->stack_base;
 
     mMessageCount = message_count;
@@ -158,6 +158,6 @@ void JKRThreadSwitch::callback(OSThread* current, OSThread* next) {
 }
 
 static void dummy() {
-    OSReport("Cannot create JKRTask Manager.");
-    OSReport("sManager != 0");
+    DEAD_STRING("Cannot create JKRTask Manager.");
+    DEAD_STRING("sManager != 0");
 }

@@ -12,7 +12,6 @@
 #include "dolphin/types.h"
 
 /* 802C882C-802C8944       .text __ct__10JUTProcBarFv */
-// missing instruction
 JUTProcBar::JUTProcBar() {
     mVisible = true;
     mHeapBarVisible = true;
@@ -125,7 +124,7 @@ void JUTProcBar::draw() {
 void JUTProcBar::drawProcessBar() {
     if (mVisible) {
         int frameDuration = 16666; // duration in miliseconds? for how long a frame takes,
-        if (JUTVideo::getManager() && ((JUTVideo::getManager()->getRenderMode()->vi_tv_mode >> 2) & 0x0f) == 1) // possibly a define
+        if (JUTVideo::getManager() && ((JUTVideo::getManager()->getRenderMode()->viTVmode >> 2) & 0x0f) == 1) // possibly a define
             frameDuration = 20000;                                                                            // duration for PAL
 
         static int cnt = 0;
@@ -238,7 +237,7 @@ void JUTProcBar::drawProcessBar() {
 
 /* 802C9CE4-802C9D4C       .text addrToXPos__FPvi */
 int addrToXPos(void* param_0, int param_1) {
-    return param_1 * (((u32)param_0 - 0x80000000) / (float)JKRHeap::mMemorySize);
+    return param_1 * (((uintptr_t)param_0 - 0x80000000) / (float)JKRHeap::mMemorySize);
 }
 
 /* 802C9D4C-802C9DB4       .text byteToXLen__Fii */

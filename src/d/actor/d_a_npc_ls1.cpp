@@ -11,11 +11,9 @@
 #include "d/d_bg_s_func.h"
 #endif
 #include "f_op/f_op_camera.h"
-#include "d/res/res_link.h"
-#include "d/res/res_ls.h"
+#include "res/Object/Link.h"
+#include "res/Object/Ls.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_snap.h"
 #include "m_Do/m_Do_lib.h"
 
@@ -222,8 +220,8 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
 
     if (
         l_check_wrk < ARRAY_SSIZE(l_check_inf) && 
-        fopAc_IsActor(i_actorP) && 
-        fpcM_GetName(i_actorP) == PROC_NPC_BM1
+        fopAcM_IsActor(i_actorP) && 
+        fpcM_GetName(i_actorP) == fpcNm_NPC_BM1_e
     ) {
         l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_actorP;
         l_check_wrk++;
@@ -236,7 +234,7 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
     UNUSED(i_unusedP);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == PROC_KAMOME) {
+    if (fopAcM_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OnStatus((fopAc_ac_c*)i_actorP, fopAcStts_UNK4000_e);
     }
 
@@ -247,7 +245,7 @@ void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Clr_NOSTOP_DEMO(void* i_actorP, void* i_unused) {
     UNUSED(i_unused);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == PROC_KAMOME) {
+    if (fopAcM_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OffStatus((fopAc_ac_c*) i_actorP, fopAcStts_UNK4000_e);
     }
     
@@ -299,7 +297,7 @@ bool daNpc_Ls1_c::createInit() {
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA9;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xA9;
     gravity = 0.0f;
-    mBckResIndex = 0xE;
+    mBckNum = BCKNUM_NULL_e;
 
     bool init_result;
     switch (mType) {
@@ -351,7 +349,7 @@ bool daNpc_Ls1_c::createInit() {
 /* 00000C6C-00000D48       .text play_animation__11daNpc_Ls1_cFv */
 void daNpc_Ls1_c::play_animation() {
     u32 snd_id = 0;
-    if (mBtkResIDIndex == 0 && m838 == true) {
+    if (mBtkNum == 0 && m838 == true) {
         setEyeCtrl();
     } else {
         clrEyeCtrl();
@@ -401,72 +399,73 @@ void daNpc_Ls1_c::setMtx(bool i_setEyePos) {
 }
 
 /* 00000EF0-00000F04       .text bckResID__11daNpc_Ls1_cFi */
-int daNpc_Ls1_c::bckResID(int i_bckResIDIndex) {
+int daNpc_Ls1_c::bckResID(int i_bckNum) {
     static const int a_resID_tbl[] = {
-        LS_BCK_LS_WAIT01,
-        LS_BCK_LS_WAIT02,
-        LS_BCK_LS_WAIT03,
-        LS_BCK_LS_WAIT04,
-        LS_BCK_LS_WAIT05,
-        LS_BCK_LS_WAIT06,
-        LS_BCK_LS_WATASU,
-        LS_BCK_LS_FURIMUKI,
-        LS_BCK_LS_NOZOKU,
-        LS_BCK_LS_GET,
-        LS_BCK_LS_WAIT07,
-        LS_BCK_LS_TALK01,
-        LS_BCK_LS_DEMOWAIT,
-        LS_BCK_LS_DEMOLOOK
+        dRes_ID_LS_BCK_LS_WAIT01_e,
+        dRes_ID_LS_BCK_LS_WAIT02_e,
+        dRes_ID_LS_BCK_LS_WAIT03_e,
+        dRes_ID_LS_BCK_LS_WAIT04_e,
+        dRes_ID_LS_BCK_LS_WAIT05_e,
+        dRes_ID_LS_BCK_LS_WAIT06_e,
+        dRes_ID_LS_BCK_LS_WATASU_e,
+        dRes_ID_LS_BCK_LS_FURIMUKI_e,
+        dRes_ID_LS_BCK_LS_NOZOKU_e,
+        dRes_ID_LS_BCK_LS_GET_e,
+        dRes_ID_LS_BCK_LS_WAIT07_e,
+        dRes_ID_LS_BCK_LS_TALK01_e,
+        dRes_ID_LS_BCK_LS_DEMOWAIT_e,
+        dRes_ID_LS_BCK_LS_DEMOLOOK_e,
     };
-    return a_resID_tbl[i_bckResIDIndex];
+    return a_resID_tbl[i_bckNum];
 }
 
 /* 00000F04-00000F18       .text btpResID__11daNpc_Ls1_cFi */
-int daNpc_Ls1_c::btpResID(int i_btpResIDIndex) {  
+int daNpc_Ls1_c::btpResID(int i_btpNum) {  
     static const int a_resID_tbl[] = {
-        LS_BTP_FUAN,
-        LS_BTP_MABA,
-        LS_BTP_FUAN02,
-        LS_BTP_KIZUKU,
-        LS_BTP_LS_GET,
-        LS_BTP_NGWARAI,
-        LS_BTP_NOZOKU,
-        LS_BTP_OKORI,
-        LS_BTP_WARAI,
-        LS_BTP_LS_DEMOLOOK,
-        LS_BTP_LS_DEMOWAIT
+        dRes_ID_LS_BTP_FUAN_e,
+        dRes_ID_LS_BTP_MABA_e,
+        dRes_ID_LS_BTP_FUAN02_e,
+        dRes_ID_LS_BTP_KIZUKU_e,
+        dRes_ID_LS_BTP_LS_GET_e,
+        dRes_ID_LS_BTP_NGWARAI_e,
+        dRes_ID_LS_BTP_NOZOKU_e,
+        dRes_ID_LS_BTP_OKORI_e,
+        dRes_ID_LS_BTP_WARAI_e,
+        dRes_ID_LS_BTP_LS_DEMOLOOK_e,
+        dRes_ID_LS_BTP_LS_DEMOWAIT_e,
     };
-    return a_resID_tbl[i_btpResIDIndex];
+    return a_resID_tbl[i_btpNum];
 }
 
 /* 00000F18-00000F2C       .text btkResID__11daNpc_Ls1_cFi */
-int daNpc_Ls1_c::btkResID(int i_btkResIDIndex) {
+int daNpc_Ls1_c::btkResID(int i_btkNum) {
     static const int a_resID_tbl[] = {
-        LS_BTK_LS,
-        LS_BTK_LS_DEMOLOOK,
-        LS_BTK_LS_DEMOWAIT
+        dRes_ID_LS_BTK_LS_e,
+        dRes_ID_LS_BTK_LS_DEMOLOOK_e,
+        dRes_ID_LS_BTK_LS_DEMOWAIT_e,
     };
-    return a_resID_tbl[i_btkResIDIndex];
+    return a_resID_tbl[i_btkNum];
 }
 
 /* 00000F2C-00001030       .text setBtp__11daNpc_Ls1_cFScb */
-bool daNpc_Ls1_c::setBtp(s8 i_btpResIDIndex, bool i_bModify) {
+bool daNpc_Ls1_c::setBtp(s8 i_btpNum, bool i_bModify) {
     J3DModel* morf_model_p = mpMorf->getModel();
 
-    if (i_btpResIDIndex < 0) {
+    if (i_btpNum < 0) {
         return false;
     }
     
-    J3DAnmTexPattern* a_btp = (J3DAnmTexPattern*) dComIfG_getObjectIDRes(mArcName, btpResID(i_btpResIDIndex));
+    J3DAnmTexPattern* a_btp = (J3DAnmTexPattern*) dComIfG_getObjectIDRes(mArcName, btpResID(i_btpNum));
     JUT_ASSERT(DEMO_SELECT(0x301, 0x302), a_btp != NULL);
-    mBtpResIDIndex = i_btpResIDIndex;
+    mBtpNum = i_btpNum;
     mBtpFrame = 0;
     mTimer1 = 0;
 
     return mBtpAnm.init(
         morf_model_p->getModelData(), 
         a_btp, TRUE, 
-        0, 1.0f, 0, -1, 
+        J3DFrameCtrl::EMode_NONE,
+        1.0f, 0, -1, 
         i_bModify, 0
     ) != 0;
 }
@@ -482,23 +481,24 @@ void daNpc_Ls1_c::setMat() {
 }
 
 /* 000010B0-000011CC       .text setBtk__11daNpc_Ls1_cFScb */
-bool daNpc_Ls1_c::setBtk(s8 i_btkResIDIndex, bool i_bModify) {
+bool daNpc_Ls1_c::setBtk(s8 i_btkNum, bool i_bModify) {
     J3DModel* morf_model_p = mpMorf->getModel();
 
-    if (i_btkResIDIndex < 0) {
+    if (i_btkNum < 0) {
         return false;
     }
     
-    J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey *) dComIfG_getObjectIDRes(mArcName, btkResID(i_btkResIDIndex));
+    J3DAnmTextureSRTKey* a_btk = (J3DAnmTextureSRTKey *) dComIfG_getObjectIDRes(mArcName, btkResID(i_btkNum));
     JUT_ASSERT(DEMO_SELECT(0x32B, 0x32C), a_btk != NULL);
 
-    mBtkResIDIndex = i_btkResIDIndex;
+    mBtkNum = i_btkNum;
     mBtkFrame = 0;
 
     if (mBtkAnm.init(
         morf_model_p->getModelData(), 
         a_btk, TRUE, 
-        0, 1.0f, 0, -1, 
+        J3DFrameCtrl::EMode_NONE,
+        1.0f, 0, -1, 
         i_bModify, 0
     ) != 0) {
         if (!i_bModify) {
@@ -511,25 +511,35 @@ bool daNpc_Ls1_c::setBtk(s8 i_btkResIDIndex, bool i_bModify) {
 }
 
 /* 000011CC-00001238       .text init_texPttrnAnm__11daNpc_Ls1_cFScb */
-bool daNpc_Ls1_c::init_texPttrnAnm(s8 i_resIndex, bool i_bModify) {
-    static const u8 a_btk_num_tbl[] = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2
-    };
-
-    if (setBtp(i_resIndex, i_bModify) == false) {
+bool daNpc_Ls1_c::init_texPttrnAnm(s8 i_btpNum, bool i_bModify) {
+    if (setBtp(i_btpNum, i_bModify) == false) {
         return false;
     } 
 
-    return setBtk(a_btk_num_tbl[i_resIndex], i_bModify);
+    // Maps BTP num -> BTK num
+    static const u8 a_btk_num_tbl[] = {
+        BTKNUM_DEFAULT_e,
+        BTKNUM_DEFAULT_e,
+        BTKNUM_DEFAULT_e,
+        BTKNUM_DEFAULT_e,
+        BTKNUM_DEFAULT_e,
+        BTKNUM_DEFAULT_e,
+        BTKNUM_DEFAULT_e,
+        BTKNUM_DEFAULT_e,
+        BTKNUM_DEFAULT_e,
+        BTKNUM_DEMOLOOK_e,
+        BTKNUM_DEMOWAIT_e,
+    };
+    return setBtk(a_btk_num_tbl[i_btpNum], i_bModify);
 }
 
 /* 00001238-000012D4       .text play_btp_anm__11daNpc_Ls1_cFv */
 void daNpc_Ls1_c::play_btp_anm() {
     u8 frame_max = mBtpAnm.getBtpAnm()->getFrameMax();
-    if (mBtpResIDIndex != 1 || cLib_calcTimer(&mTimer1) == 0) {
+    if (mBtpNum != BTPNUM_MABA_e || cLib_calcTimer(&mTimer1) == 0) {
         mBtpFrame++;
         if (mBtpFrame >= frame_max) {
-            if (mBtpResIDIndex != 1) {
+            if (mBtpNum != BTPNUM_MABA_e) {
                 mBtpFrame = frame_max;
             } else {
                 mTimer1 = cLib_getRndValue(60, 90);
@@ -586,63 +596,184 @@ void daNpc_Ls1_c::play_btk_anm() {
 }
 
 /* 000014E8-00001584       .text setAnm_anm__11daNpc_Ls1_cFPQ211daNpc_Ls1_c9anm_prm_c */
-void daNpc_Ls1_c::setAnm_anm(daNpc_Ls1_c::anm_prm_c* i_anmPrmP) {
-    if (i_anmPrmP->mBckResIndex < 0 || mBckResIndex == i_anmPrmP->mBckResIndex) {
+void daNpc_Ls1_c::setAnm_anm(anm_prm_c* i_anmPrmP) {
+    if (i_anmPrmP->bckNum < 0 || mBckNum == i_anmPrmP->bckNum) {
         return;
-    } else {
-        int id = bckResID(i_anmPrmP->mBckResIndex);
-        dNpc_setAnmIDRes(
-            mpMorf, 
-            i_anmPrmP->mLoopMode, 
-            i_anmPrmP->mMorf, i_anmPrmP->mSpeed, 
-            id, -1, 
-            mArcName
-        );
-        mBckResIndex = i_anmPrmP->mBckResIndex;
-        mbMorfAnimStopped = false;
-        m831 = 0;
-        mPrevMorfFrame = 0.0f;
     }
+
+    dNpc_setAnmIDRes(
+        mpMorf,
+        i_anmPrmP->loopMode,
+        i_anmPrmP->morf,
+        i_anmPrmP->speed,
+        bckResID(i_anmPrmP->bckNum),
+        -1,
+        mArcName
+    );
+    mBckNum = i_anmPrmP->bckNum;
+    mbMorfAnimStopped = false;
+    m831 = 0;
+    mPrevMorfFrame = 0.0f;
 }
 
 /* 00001584-000015F4       .text setAnm_NUM__11daNpc_Ls1_cFii */
-void daNpc_Ls1_c::setAnm_NUM(int i_anmPrmIndex, int param_2) {
+void daNpc_Ls1_c::setAnm_NUM(int i_anmNum, BOOL param_2) {
     static anm_prm_c a_anm_prm_tbl[14] = {
-        {  0,  1, 8.0f, 1.0f, 2 },
-        {  1,  1, 8.0f, 1.0f, 0 },
-        {  2,  1, 8.0f, 1.0f, 2 },
-        {  3,  1, 8.0f, 1.0f, 2 },
-        {  4,  1, 8.0f, 1.0f, 2 },
-        {  5,  1, 8.0f, 1.0f, 2 },
-        {  6,  1, 8.0f, 1.0f, 0 },
-        {  7,  1, 8.0f, 1.0f, 0 },
-        {  8,  6, 8.0f, 1.0f, 2 },
-        {  9,  4, 8.0f, 1.0f, 0 },
-        { 10,  1, 8.0f, 1.0f, 2 },
-        { 11,  1, 8.0f, 1.0f, 2 },
-        { 12, 10, 8.0f, 1.0f, 2 },
-        { 13, 10, 8.0f, 1.0f, 0 }
+        {
+            /* bckNum   */ BCKNUM_WAIT01_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT02_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NONE
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT03_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT04_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT05_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT06_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WATASU_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NONE
+        },
+        {
+            /* bckNum   */ BCKNUM_FURIMUKI_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NONE
+        },
+        {
+            /* bckNum   */ BCKNUM_NOZOKU_e,
+            /* btpNum   */ BTPNUM_NOZOKU_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_GET_e,
+            /* btpNum   */ BTPNUM_GET_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NONE
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT07_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_TALK01_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_DEMOWAIT_e,
+            /* btpNum   */ BTPNUM_DEMOWAIT_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_DEMOLOOK_e,
+            /* btpNum   */ BTPNUM_DEMOWAIT_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NONE
+        },
     };
 
-    if (param_2 != 0) {
-        init_texPttrnAnm(a_anm_prm_tbl[i_anmPrmIndex].mResIndex, true);
+    if (param_2) {
+        init_texPttrnAnm(a_anm_prm_tbl[i_anmNum].btpNum, true);
     }
 
-    setAnm_anm(&a_anm_prm_tbl[i_anmPrmIndex]);
+    setAnm_anm(&a_anm_prm_tbl[i_anmNum]);
 }
 
 /* 000015F4-00001660       .text setAnm__11daNpc_Ls1_cFv */
 void daNpc_Ls1_c::setAnm() {
     static anm_prm_c a_anm_prm_tbl[6] = {
-        { -1, -1, 0.0f, 0.0f, -1 },
-        {  0,  1, 8.0f, 1.0f,  2 },
-        {  5,  1, 8.0f, 1.0f,  2 },
-        { 10,  2, 8.0f, 1.0f,  2 },
-        {  5,  1, 8.0f, 1.0f,  2 },
-        { -1, -1, 0.0f, 0.0f, -1 }
+        {
+            /* bckNum   */ -1,
+            /* btpNum   */ -1,
+            /* morf     */ 0.0f,
+            /* speed    */ 0.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NULL
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT01_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT06_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT07_e,
+            /* btpNum   */ BTPNUM_FUAN02_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT06_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ -1,
+            /* btpNum   */ -1,
+            /* morf     */ 0.0f,
+            /* speed    */ 0.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NULL
+        },
     };
 
-    init_texPttrnAnm(a_anm_prm_tbl[m851].mResIndex, true);
+    init_texPttrnAnm(a_anm_prm_tbl[m851].btpNum, true);
     setAnm_anm(&a_anm_prm_tbl[m851]);
 }
 
@@ -650,16 +781,16 @@ void daNpc_Ls1_c::setAnm() {
 void daNpc_Ls1_c::chngAnmTag() {
     switch (mMesgAnimeTag) {
         case 0:
-            init_texPttrnAnm(8, 1);
+            init_texPttrnAnm(BTPNUM_WARAI_e, true);
             return;
         case 11:
-            init_texPttrnAnm(3, 1);
+            init_texPttrnAnm(BTPNUM_KIZUKU_e, true);
             return;
         case 12:
-            init_texPttrnAnm(5, 1);
+            init_texPttrnAnm(BTPNUM_NGWARAI_e, true);
             return;
         case 13:
-            init_texPttrnAnm(0, 1);
+            init_texPttrnAnm(BTPNUM_FUAN_e, true);
         case 0xFF:
             return;
     }
@@ -687,7 +818,7 @@ void daNpc_Ls1_c::ctrlAnmTag() {
 /* 0000171C-00001820       .text chngAnmAtr__11daNpc_Ls1_cFUc */
 void daNpc_Ls1_c::chngAnmAtr(u8 param_1) {
     if ((m84B == 3 || m84B == 5) && (param_1 == 3 || param_1 == 5)) {
-        init_texPttrnAnm(8, true);
+        init_texPttrnAnm(BTPNUM_WARAI_e, true);
         m84B = param_1;
         return;
     }
@@ -697,7 +828,7 @@ void daNpc_Ls1_c::chngAnmAtr(u8 param_1) {
     } 
 
     m84B = param_1;
-    setAnm_ATR(1);
+    setAnm_ATR(TRUE);
     
     switch (param_1) {
         case 1:
@@ -729,13 +860,13 @@ void daNpc_Ls1_c::ctrlAnmAtr() {
     case 1:
         if (cLib_calcTimer(&mTimer2) == 0) {
             m84B = 2;
-            setAnm_ATR(1);
+            setAnm_ATR(TRUE);
         }
         break;
     case 2:
         if (mbMorfAnimStopped) {
             m84B = 1;
-            setAnm_ATR(1);
+            setAnm_ATR(TRUE);
         }
         break;
     case 3:
@@ -754,7 +885,7 @@ void daNpc_Ls1_c::ctrlAnmAtr() {
                 default:
                     break;
             }
-            setAnm_ATR(0);
+            setAnm_ATR(FALSE);
         }
         break;
     case 7:
@@ -769,27 +900,27 @@ void daNpc_Ls1_c::ctrlAnmAtr() {
         if (mbMorfAnimStopped && (cLib_calcTimer(&mTimer2) == 0)) {
             switch (m84B) {
             case 12:
-                if (mBckResIndex != 10) {
-                    setAnm_NUM(10,1);
-                    init_texPttrnAnm(2,true);
+                if (mBckNum != BCKNUM_WAIT07_e) {
+                    setAnm_NUM(ANMNUM_WAIT07_e, TRUE);
+                    init_texPttrnAnm(BTPNUM_FUAN02_e, true);
                 } 
                 break;                     
             case 14:
-                if (mBckResIndex != 5) {
-                    setAnm_NUM(5,1);
-                    init_texPttrnAnm(8, true);
+                if (mBckNum != BCKNUM_WAIT06_e) {
+                    setAnm_NUM(ANMNUM_WAIT06_e, TRUE);
+                    init_texPttrnAnm(BTPNUM_WARAI_e, true);
                 } 
                 break;
             case 15: 
-                if(mBckResIndex != 11) {
-                    setAnm_NUM(0xB,1);
-                    init_texPttrnAnm(8, true);
+                if(mBckNum != BCKNUM_TALK01_e) {
+                    setAnm_NUM(BCKNUM_TALK01_e, TRUE);
+                    init_texPttrnAnm(BTPNUM_WARAI_e, true);
                 }
                 break;
             case 16:
-                if (mBckResIndex != 4) {
-                    setAnm_NUM(4,1);
-                    init_texPttrnAnm(8, true);
+                if (mBckNum != BCKNUM_WAIT05_e) {
+                    setAnm_NUM(BCKNUM_WAIT05_e, TRUE);
+                    init_texPttrnAnm(BTPNUM_WARAI_e, true);
                 }
                 break;
             default:
@@ -803,29 +934,131 @@ void daNpc_Ls1_c::ctrlAnmAtr() {
 }
 
 /* 00001A60-00001ACC       .text setAnm_ATR__11daNpc_Ls1_cFi */
-void daNpc_Ls1_c::setAnm_ATR(int param_1) {
+void daNpc_Ls1_c::setAnm_ATR(BOOL param_1) {
     static anm_prm_c a_anm_prm_tbl[17] = {
-        {  5, 1, 8.0f, 1.0f, 2 },
-        {  0, 1, 8.0f, 1.0f, 2 },
-        {  1, 1, 8.0f, 1.0f, 0 },
-        {  2, 8, 8.0f, 1.0f, 2 },
-        {  3, 2, 8.0f, 1.0f, 2 },
-        {  4, 8, 8.0f, 1.0f, 2 },
-        {  7, 1, 8.0f, 1.0f, 0 },
-        {  6, 8, 8.0f, 1.0f, 0 },
-        {  8, 6, 8.0f, 1.0f, 2 },
-        {  9, 4, 8.0f, 1.0f, 0 },
-        { 10, 0, 8.0f, 1.0f, 2 },
-        { 10, 2, 8.0f, 1.0f, 2 },
-        {  3, 2, 8.0f, 1.0f, 2 },
-        {  5, 8, 8.0f, 1.0f, 2 },
-        { 11, 8, 8.0f, 1.0f, 2 },
-        {  3, 8, 8.0f, 1.0f, 2 },
-        { 11, 8, 8.0f, 1.0f, 2 }
+        {
+            /* bckNum   */ BCKNUM_WAIT06_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT01_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT02_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NONE
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT03_e,
+            /* btpNum   */ BTPNUM_WARAI_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT04_e,
+            /* btpNum   */ BTPNUM_FUAN02_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT05_e,
+            /* btpNum   */ BTPNUM_WARAI_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_FURIMUKI_e,
+            /* btpNum   */ BTPNUM_MABA_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NONE
+        },
+        {
+            /* bckNum   */ BCKNUM_WATASU_e,
+            /* btpNum   */ BTPNUM_WARAI_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NONE
+        },
+        {
+            /* bckNum   */ BCKNUM_NOZOKU_e,
+            /* btpNum   */ BTPNUM_NOZOKU_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_GET_e,
+            /* btpNum   */ BTPNUM_GET_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_NONE
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT07_e,
+            /* btpNum   */ BTPNUM_FUAN_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT07_e,
+            /* btpNum   */ BTPNUM_FUAN02_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT04_e,
+            /* btpNum   */ BTPNUM_FUAN02_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT06_e,
+            /* btpNum   */ BTPNUM_WARAI_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_TALK01_e,
+            /* btpNum   */ BTPNUM_WARAI_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_WAIT04_e,
+            /* btpNum   */ BTPNUM_WARAI_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
+        {
+            /* bckNum   */ BCKNUM_TALK01_e,
+            /* btpNum   */ BTPNUM_WARAI_e,
+            /* morf     */ 8.0f,
+            /* speed    */ 1.0f,
+            /* loopMode */ J3DFrameCtrl::EMode_LOOP
+        },
     };
 
-    if (param_1 != 0) {
-        init_texPttrnAnm(a_anm_prm_tbl[m84B].mResIndex, true);
+    if (param_1) {
+        init_texPttrnAnm(a_anm_prm_tbl[m84B].btpNum, true);
     }
 
     setAnm_anm(&a_anm_prm_tbl[m84B]);
@@ -916,15 +1149,15 @@ u32 daNpc_Ls1_c::getMsg_LS1_0() {
     }
 
 
-    if (dComIfGp_getSelectItem(dItemBtn_X_e) == dItem_TELESCOPE_e) {
+    if (dComIfGp_getSelectItem(dItemBtn_X_e) == dItemNo_TELESCOPE_e) {
         return 0xBCB;
     } 
     
-    if (dComIfGp_getSelectItem(dItemBtn_Y_e) == dItem_TELESCOPE_e) {
+    if (dComIfGp_getSelectItem(dItemBtn_Y_e) == dItemNo_TELESCOPE_e) {
         return 0xBCC;
     } 
 
-    if (dComIfGp_getSelectItem(dItemBtn_Z_e) == dItem_TELESCOPE_e) {
+    if (dComIfGp_getSelectItem(dItemBtn_Z_e) == dItemNo_TELESCOPE_e) {
         return 0xBCD;
     }
     
@@ -983,7 +1216,7 @@ void daNpc_Ls1_c::checkOrder() {
                 break;
             case 2:
                 mTelescopeScale = 0.0f;
-                setAnm_NUM(9, 1);
+                setAnm_NUM(ANMNUM_GET_e, TRUE);
                 break;
             }
             m850 = 0;
@@ -1033,7 +1266,7 @@ fopAc_ac_c* daNpc_Ls1_c::searchByID(fpc_ProcID i_PID, int* param_2) {
 }
 
 /* 000020A4-00002154       .text partner_search_sub__11daNpc_Ls1_cFPFPvPv_Pv */
-bool daNpc_Ls1_c::partner_search_sub(void* (*i_funcP)(void*, void*)) {
+bool daNpc_Ls1_c::partner_search_sub(fpcLyIt_JudgeFunc i_judgeFunc) {
     bool result = false;
     mBm1ProcID = fpcM_ERROR_PROCESS_ID_e;
 
@@ -1042,7 +1275,7 @@ bool daNpc_Ls1_c::partner_search_sub(void* (*i_funcP)(void*, void*)) {
         l_check_inf[i] = NULL;
     }
 
-    fpcEx_Search(i_funcP, this);
+    fpcM_Search(i_judgeFunc, this);
 
     if (l_check_wrk != 0) {
         mBm1ProcID = fpcM_GetID(l_check_inf[0]);
@@ -1276,12 +1509,12 @@ void daNpc_Ls1_c::cut_init_WAI(int param_1) {
 
 /* 0000276C-000027C0       .text cut_move_WAI__11daNpc_Ls1_cFv */
 bool daNpc_Ls1_c::cut_move_WAI() {
-    if (mBckResIndex != 1) {
+    if (mBckNum != BCKNUM_WAIT02_e) {
         return TRUE;
     }
     
     if (mbMorfAnimStopped) {
-        setAnm_NUM(0, 1);
+        setAnm_NUM(ANMNUM_WAIT01_e, TRUE);
         return TRUE;
     }
         
@@ -1291,13 +1524,13 @@ bool daNpc_Ls1_c::cut_move_WAI() {
 /* 000027C0-00002828       .text cut_init_ANM_CHG__11daNpc_Ls1_cFi */
 void daNpc_Ls1_c::cut_init_ANM_CHG(int param_1) {
     int* anm_no_p = (int*)dComIfGp_evmng_getMyIntegerP(param_1, "AnmNo");
-    int anm_no = mBckResIndex;
+    int anm_no = mBckNum;
 
     if (anm_no_p) {
         anm_no = *anm_no_p;
     }
 
-    setAnm_NUM(anm_no, 1);
+    setAnm_NUM(anm_no, TRUE);
 }
 
 /* 00002828-00002830       .text cut_move_ANM_CHG__11daNpc_Ls1_cFv */
@@ -1462,7 +1695,7 @@ void daNpc_Ls1_c::setStt(s8 param_1) {
             mTelescopeScale = 1.0f;
             break;
         case 5:
-            fpcEx_Search(searchActor_kamome_Set_NOSTOP_DEMO, this);
+            fpcM_Search(searchActor_kamome_Set_NOSTOP_DEMO, this);
             m850 = 0;
             m84B = 0xFF;
             mMesgAnimeTag = 0xFF;
@@ -1565,9 +1798,9 @@ bool daNpc_Ls1_c::telescope_proc() {
     }
 
     u8 scope_mesg_status = dComIfGp_getScopeMesgStatus();
-    if (scope_mesg_status == 0) {
+    if (scope_mesg_status == fopMsgStts_MSG_UNK0_e) {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e) != 0) {
-            if (g_dComIfG_gameInfo.play.field_0x4978) {
+            if (g_dComIfG_gameInfo.play.mScopeWipeFlag) {
                 daPy_getPlayerLinkActorClass()->setPlayerPosAndAngle(&m7CC[1], 0xCC70);
             }
             dComIfGp_setScopeType(1);
@@ -1578,7 +1811,7 @@ bool daNpc_Ls1_c::telescope_proc() {
 
     if (m833 == 0) {
         mDoAud_bgmStreamPrepare(JA_STRM_DEMO_TETRA_FLY);
-        bm1_npc_p->m881 = 1;
+        bm1_npc_p->setTelescopeDemo();
         mTimer5 = 150;
         m810 = -1;
         m833 = 1;
@@ -1603,7 +1836,7 @@ bool daNpc_Ls1_c::telescope_proc() {
         }
     // fallthrough
     case fopMsgStts_CLOSE_WAIT_e:
-    case fopMsgStts_UNKD_e: 
+    case fopMsgStts_SCOPE_WAIT_e: 
         {
             u32 temp_msg_no;
             switch (m833) {
@@ -1627,7 +1860,7 @@ bool daNpc_Ls1_c::telescope_proc() {
                         fopMsgM_forceSendOn();
                     }
                     dComIfGp_getCamera(0)->mCamera.setFlag(0x800000);
-                    bm1_npc_p->m882 = 1;
+                    bm1_npc_p->setFocus();
                     mTimer5 = 0;
                     m810 = 0;
                     m833 = 3;
@@ -1636,7 +1869,7 @@ bool daNpc_Ls1_c::telescope_proc() {
                 }
                 break;
             case 3:
-                if (m810 == 0 && bm1_npc_p->m880 != 0) {
+                if (m810 == 0 && bm1_npc_p->getOdoroki()) {
                     if (scope_mesg_status == fopMsgStts_CLOSE_WAIT_e) {
                         fopMsgM_forceSendOn();
                     } else if (fopMsgM_releaseScopeMode()) {
@@ -1701,16 +1934,16 @@ BOOL daNpc_Ls1_c::wait_1() {
     
     m853 = 0;
     
-    if (mBckResIndex == 0) {
+    if (mBckNum == BCKNUM_WAIT01_e) {
         if (cLib_calcTimer(&mTimer5) == 0) {
-            setAnm_NUM(1, 1);
+            setAnm_NUM(ANMNUM_WAIT02_e, TRUE);
         }
         return true;
     }
     
     if (mbMorfAnimStopped) {
         mTimer5 = cLib_getRndValue(60, 90);
-        setAnm_NUM(0, 1);
+        setAnm_NUM(ANMNUM_WAIT01_e, TRUE);
     }
 
     return true;
@@ -1722,14 +1955,14 @@ BOOL daNpc_Ls1_c::wait_2() {
 
     cLib_addCalcAngleS(&current.angle.y, m7A0.y, 4, 0x800, 0x80);
     
-    if (current.angle.y == m7A0.y && mBckResIndex != 0) {
-        setAnm_NUM(0, 1);
+    if (current.angle.y == m7A0.y && mBckNum != BCKNUM_WAIT01_e) {
+        setAnm_NUM(ANMNUM_WAIT01_e, TRUE);
     }
 
     if (m83F) {
         if (chk_talk()) {
             setStt(5);
-            setAnm_NUM(5,1);
+            setAnm_NUM(ANMNUM_WAIT06_e, TRUE);
             m853 = 1;
             m_jnt.offBackBoneLock();
             m840 = 0;
@@ -1757,8 +1990,8 @@ BOOL daNpc_Ls1_c::wait_2() {
         if (m833 != 0) {
             cXyz base_pos(20.0f, 0.0f, 50.0f);
             if (m833 >= 4) {
-                if (mBtpResIDIndex != 2) {
-                    init_texPttrnAnm(2, true);
+                if (mBtpNum != BTPNUM_FUAN02_e) {
+                    init_texPttrnAnm(BTPNUM_FUAN02_e, true);
                 }
                 if (cLib_calcTimer(&mTimer3) != 0) {
                     m853 = 1;
@@ -1773,7 +2006,7 @@ BOOL daNpc_Ls1_c::wait_2() {
             m838 = true; 
             return TRUE;
         } else {
-            if (mbAttention && mBckResIndex == 0) {
+            if (mbAttention && mBckNum == BCKNUM_WAIT01_e) {
                 m853 = 1;
                 return TRUE;
             } else {
@@ -1869,10 +2102,10 @@ BOOL daNpc_Ls1_c::talk_1() {
             break;
         case 0xBC4:
         case 0xBC6:
-            eventInfo.mEventId = -1;
+            eventInfo.setEventId(-1);
             break;
         }
-        fpcEx_Search(searchActor_kamome_Clr_NOSTOP_DEMO, this);
+        fpcM_Search(searchActor_kamome_Clr_NOSTOP_DEMO, this);
         mItemNo = 0xFF;
         m83F = false;
         setStt(m852);
@@ -1895,7 +2128,7 @@ BOOL daNpc_Ls1_c::wait_action1(void* param_1) {
                 if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
                     setStt(3);
                 } else {
-                    if (dComIfGs_checkGetItem(dItem_TELESCOPE_e)) {
+                    if (dComIfGs_checkGetItem(dItemNo_TELESCOPE_e)) {
                         m7A0.y = current.angle.y;
                         setStt(2);
                     } else {
@@ -1942,9 +2175,9 @@ BOOL daNpc_Ls1_c::demo_action1(void* param_1) {
     switch (m856) {
         case 0:
             if (mType == 1) {
-                setAnm_NUM(12, 1);
+                setAnm_NUM(ANMNUM_DEMOWAIT_e, TRUE);
             } else {
-                setAnm_NUM(5, 1);
+                setAnm_NUM(ANMNUM_WAIT06_e, TRUE);
             }
             m856++;
             break;
@@ -1964,8 +2197,8 @@ bool daNpc_Ls1_c::demo() {
     if (demoActorID == 0) {
         if (m841) {
             if (mType == 3) {
-                mBckResIndex = 14;
-                setAnm_NUM(5, 1);
+                mBckNum = BCKNUM_NULL_e;
+                setAnm_NUM(ANMNUM_WAIT06_e, TRUE);
             }
             m841 = false;
         }
@@ -1997,13 +2230,13 @@ bool daNpc_Ls1_c::demo() {
         J3DAnmTexPattern* demo_btp_p = demo_actor_p->getP_BtpData(mArcName);
         if (demo_btp_p) {
             mBtpAnm.init(
-                mpMorf->getModel()->getModelData(), 
-                demo_btp_p, 1, 
-                J3DFrameCtrl::EMode_NONE, 
-                1.0f, 0, -1, 
+                mpMorf->getModel()->getModelData(),
+                demo_btp_p, TRUE,
+                J3DFrameCtrl::EMode_NONE,
+                1.0f, 0, -1,
                 true, 0
             );
-            mBtpResIDIndex = 11;
+            mBtpNum = BTPNUM_NULL_e;
             mBtpFrame = 0;
         }
 
@@ -2020,12 +2253,12 @@ bool daNpc_Ls1_c::demo() {
         if (demo_btk_p) {
             mBtkAnm.init(
                 mpMorf->getModel()->getModelData(), 
-                demo_btk_p, true, 
+                demo_btk_p, TRUE, 
                 J3DFrameCtrl::EMode_NONE, 
                 1.0f, 0, -1, 
                 true, 0
             );
-            mBtkResIDIndex = 3;
+            mBtkNum = BTKNUM_NULL_e;
             mBtkFrame = 0;
         }
 
@@ -2107,7 +2340,7 @@ BOOL daNpc_Ls1_c::_draw() {
     }
 
     shadowDraw();
-    dSnap_RegistFig(DSNAP_TYPE_UNK49, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_LS1, this, 1.0f, 1.0f, 1.0f);
 
     // Does nothing
     if (l_HIO.mPrm.m18) {
@@ -2139,46 +2372,46 @@ BOOL daNpc_Ls1_c::_execute() {
 
     if (m83A && demoActorID == 0) {
         return TRUE;
-    } else {
-        partner_search();
-        checkOrder();
-        if (!demo()) {
-            int staff_id = -1;
-            if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == false) {
-                staff_id = isEventEntry();
-            }
+    }
 
-            if (staff_id >= 0 || m834) {
-                event_proc(staff_id);
-            } else {
-                (this->*mCurrProcFunc)(NULL);
-            }
+    partner_search();
+    checkOrder();
+    if (!demo()) {
+        int staff_id = -1;
+        if (dComIfGp_event_runCheck() && eventInfo.checkCommandTalk() == false) {
+            staff_id = isEventEntry();
+        }
 
-            lookBack();
-
-            if (mType != 0) {
-                fopAcM_posMoveF(this, mStts.GetCCMoveP());
-                mObjAcch.CrrPos(*dComIfG_Bgsp());
-            }
-
-            play_animation();
+        if (staff_id >= 0 || m834) {
+            event_proc(staff_id);
         } else {
-            m83A = false;
+            (this->*mCurrProcFunc)(NULL);
         }
 
-        eventOrder();
-        mAngle = current.angle;
-        if (!m83B) {
-            shape_angle = current.angle;
+        lookBack();
+
+        if (mType != 0) {
+            fopAcM_posMoveF(this, mStts.GetCCMoveP());
+            mObjAcch.CrrPos(*dComIfG_Bgsp());
         }
 
-        tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
-        tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
-        setMtx(false);
+        play_animation();
+    } else {
+        m83A = false;
+    }
 
-        if (!m841) {
-            setCollision(40.0f, 100.0f);
-        }
+    eventOrder();
+    mAngle = current.angle;
+    if (!m83B) {
+        shape_angle = current.angle;
+    }
+
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+    setMtx(false);
+
+    if (!m841) {
+        setCollision(40.0f, 100.0f);
     }
 
     return TRUE;
@@ -2210,9 +2443,7 @@ cPhs_State daNpc_Ls1_c::_create() {
 
     cPhs_State state;
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(this, daNpc_Ls1_c);
-#endif 
+    fopAcM_ct_Retail(this, daNpc_Ls1_c); 
 
     if (!decideType(fopAcM_GetParam(this) & 0xFF)) {
         return cPhs_ERROR_e;
@@ -2226,7 +2457,7 @@ cPhs_State daNpc_Ls1_c::_create() {
 
 #if VERSION == VERSION_DEMO
     l_HIO.entryHIO("アリル"); // Aryll
-    fopAcM_SetupActor(this, daNpc_Ls1_c);
+    fopAcM_ct(this, daNpc_Ls1_c);
 #endif
 
     if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_siz_tbl[m854])) {
@@ -2247,7 +2478,7 @@ daNpc_Ls1_c::daNpc_Ls1_c() {}
 
 /* 00004C98-00005250       .text bodyCreateHeap__11daNpc_Ls1_cFv */
 BOOL daNpc_Ls1_c::bodyCreateHeap() {
-    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(mArcName, LS_BDL_LS);
+    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(mArcName, dRes_ID_LS_BDL_LS_e);
     JUT_ASSERT(DEMO_SELECT(0xBB3, 0xBC9), a_mdl_dat != NULL);
 
     for (u16 i = 0; i < a_mdl_dat->getMaterialNum(); i++) {
@@ -2274,7 +2505,7 @@ BOOL daNpc_Ls1_c::bodyCreateHeap() {
     }
 
     if (mType == 4 || dComIfGs_getClearCount() != 0) {
-        ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectIDRes(mArcName, LS_BTI_LSBODY02);
+        ResTIMG* tex_info_p = (ResTIMG*) dComIfG_getObjectIDRes(mArcName, dRes_ID_LS_BTI_LSBODY02_e);
         
         J3DTexture* a_texture = a_mdl_dat->getTexture();
         JUT_ASSERT(DEMO_SELECT(0xBD1, 0xBE7), a_texture != NULL);
@@ -2290,7 +2521,7 @@ BOOL daNpc_Ls1_c::bodyCreateHeap() {
         }        
     }
 
-    if (!init_texPttrnAnm(0, false)) {
+    if (!init_texPttrnAnm(BTPNUM_FUAN_e, false)) {
         mpMorf = NULL;
         return FALSE;
     }
@@ -2311,7 +2542,7 @@ BOOL daNpc_Ls1_c::bodyCreateHeap() {
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_hnd_L_jnt_num)->setCallBack(nodeCB_Hand_L);
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_hnd_R_jnt_num)->setCallBack(nodeCB_Hand_R);
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     
     return TRUE;
 }
@@ -2319,7 +2550,7 @@ BOOL daNpc_Ls1_c::bodyCreateHeap() {
 /* 00005250-00005428       .text handCreateHeap__11daNpc_Ls1_cFv */
 BOOL daNpc_Ls1_c::handCreateHeap() {
     mpLsHandModel = NULL;
-    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(mArcName, LS_BDL_LSHAND);
+    J3DModelData* a_mdl_dat = (J3DModelData*) dComIfG_getObjectIDRes(mArcName, dRes_ID_LS_BDL_LSHAND_e);
     JUT_ASSERT(DEMO_SELECT(0xC09, 0xC1F), a_mdl_dat != NULL);
     mpLsHandModel = mDoExt_J3DModel__create(a_mdl_dat, 0x80000, 0x11000022);
 
@@ -2335,7 +2566,7 @@ BOOL daNpc_Ls1_c::handCreateHeap() {
 
     mpLsHandModel->getModelData()->getJointNodePointer(m_lsHnd_L_jnt_num)->setCallBack(Ls_hand_nodeCB_Hand_L);
     mpLsHandModel->getModelData()->getJointNodePointer(m_lsHnd_R_jnt_num)->setCallBack(Ls_hand_nodeCB_Hand_R);
-    mpLsHandModel->setUserArea((u32)this);
+    mpLsHandModel->setUserArea((uintptr_t)this);
     return TRUE;
 }
 
@@ -2345,9 +2576,9 @@ BOOL daNpc_Ls1_c::itemCreateHeap() {
 
     J3DModelData* a_mdl_dat = (J3DModelData *) 
 #if VERSION > VERSION_DEMO
-        dComIfG_getObjectRes("Link", LINK_BDL_TELESCOPE);
+    dComIfG_getObjectRes("Link", dRes_INDEX_LINK_BDL_TELESCOPE_e);
 #else
-        dComIfG_getObjectIDRes("Link", LINK_BDL_TELESCOPE);
+    dComIfG_getObjectIDRes("Link", dRes_ID_LINK_BDL_TELESCOPE_e);
 #endif
 
     JUT_ASSERT(DEMO_SELECT(0xC2D, 0xC43), a_mdl_dat != NULL);
@@ -2420,18 +2651,18 @@ static actor_method_class l_daNpc_Ls1_Method = {
 };
 
 actor_process_profile_definition g_profile_NPC_LS1 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_NPC_LS1,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_NPC_LS1_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daNpc_Ls1_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_NPC_LS1,
+    /* Draw Prio    */ fpcDwPi_NPC_LS1_e,
     /* Actor SubMtd */ &l_daNpc_Ls1_Method,
     /* Status       */ 0x08 | fopAcStts_SHOWMAP_e | fopAcStts_NOCULLEXEC_e | fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

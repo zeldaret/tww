@@ -11,7 +11,6 @@
 #include "d/d_camera.h"
 #include "d/d_file_error.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_priority.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_npc_cb1.h"
 #include "d/actor/d_a_npc_ji1.h"
@@ -22,12 +21,12 @@
 #include "d/actor/d_a_player_main.h"
 #include "d/d_s_play.h"
 #include "f_op/f_op_overlap_mng.h"
+#include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_drawlist.h"
 #include "d/d_metronome.h"
-#include "d/d_procname.h"
 #include "d/d_timer.h"
 #include "m_Do/m_Do_lib.h"
 #include "stdio.h"
@@ -79,16 +78,21 @@ dDlst_2Dm_c tekari;
 dDlst_2Dm_c clock[3];
 
 static void dummy(f32* m, u32 p2, s32 p3) {
-    OSReport("cmap_tri.bti");
-    OSReport("cmap_treasure.bti");
-    OSReport("cmap_tingle.bti");
-    OSReport("cmap_phantomship.bti");
-    OSReport("cmap_hint.bti");
-    OSReport("f_item_tri.bti");
-    OSReport("f_get_rupy.bti");
-    OSReport("f_heart_up_02.bti");
-    OSReport("f_korog_kare.bti");
-    OSReport("f_korog_saki.bti");
+    DEAD_STRING("cmap_tri.bti");
+    DEAD_STRING("cmap_treasure.bti");
+    DEAD_STRING("cmap_tingle.bti");
+    DEAD_STRING("cmap_phantomship.bti");
+    DEAD_STRING("cmap_hint.bti");
+    DEAD_STRING("f_item_tri.bti");
+#if VERSION == VERSION_DEMO
+    DEAD_STRING("get_rupy.bti");
+    DEAD_STRING("heart_up_02.bti");
+#else
+    DEAD_STRING("f_get_rupy.bti");
+    DEAD_STRING("f_heart_up_02.bti");
+#endif
+    DEAD_STRING("f_korog_kare.bti");
+    DEAD_STRING("f_korog_saki.bti");
     m[0] = 0.8f;
     m[1] = 0.0f;
     m[2] = 1.2f;
@@ -126,7 +130,7 @@ dMeter_HIO_c::dMeter_HIO_c() {
     field_0x30 = 0;
     field_0x32 = 0;
     field_0x34 = 0;
-    field_0x2c = 0xff;
+    mScopeWipeAlpha = 0xff;
     field_0x20 = 1.5f;
     field_0x24 = 150.0f;
     field_0x2d = 0x8c;
@@ -191,7 +195,7 @@ dMeter_HIO_c::dMeter_HIO_c() {
     field_0x150 = 0x14;
     field_0x152 = 4;
     field_0x154 = 0x32;
-    field_0x28 = 2.1f;
+    mScopeWipeMaxScale = 2.1f;
     field_0x124 = 5;
     field_0x140 = 0;
     field_0xa0 = 0;
@@ -421,7 +425,7 @@ dMeter_msg_HIO_c::dMeter_msg_HIO_c() {
     field_0x64 = 0;
     field_0x82 = 2;
     field_0x58 = 0x1d;
-    field_0x70 = 0x17;
+    field_0x70 = DEMO_SELECT(0x19, 0x17);
     field_0x62 = 0;
     field_0x60 = 0xd;
     field_0x6e = 0xf0;
@@ -456,42 +460,51 @@ dMeter_msg_HIO_c::dMeter_msg_HIO_c() {
 
 /* 801EF75C-801EF924       .text __ct__20dMeter_message_HIO_cFv */
 dMeter_message_HIO_c::dMeter_message_HIO_c() {
-    field_0x5 = 0;
-    field_0x6 = 0;
-    field_0x7 = 0;
-    field_0x8 = 0xff;
-    field_0x9 = 0xff;
-    field_0xa = 0xff;
-    field_0xb = 0xff;
-    field_0xc = 0xff;
-    field_0xd = 0xff;
-    field_0xe = 0xff;
-    field_0xf = 0xff;
-    field_0x10 = 0;
-    field_0x11 = 0xff;
-    field_0x12 = 0xff;
-    field_0x13 = 0xff;
-    field_0x14 = 0xff;
-    field_0x15 = 0xff;
-    field_0x16 = 0xff;
-    field_0x17 = 0xff;
-    field_0x18 = 0xff;
-    field_0x19 = 0xff;
-    field_0x1a = 0xff;
-    field_0x1b = 0xff;
-    field_0x1c = 0;
-    field_0x1d = 0;
-    field_0x1e = 0;
-    field_0x1f = 0;
-    field_0x20 = 0xff;
-    field_0x21 = 0xff;
-    field_0x22 = 0xff;
-    field_0x23 = 0xff;
-    field_0x24 = 0xff;
-    field_0x25 = 0xff;
-    field_0x26 = 0xff;
-    field_0x27 = 0xff;
-    field_0x28 = 0;
+    field_0x5.r = 0;
+    field_0x5.g = 0;
+    field_0x5.b = 0;
+    field_0x5.a = 0xff;
+
+    field_0x9.r = 0xff;
+    field_0x9.g = 0xff;
+    field_0x9.b = 0xff;
+    field_0x9.a = 0xff;
+
+    field_0xd.r = 0xff;
+    field_0xd.g = 0xff;
+    field_0xd.b = 0xff;
+    field_0xd.a = 0;
+
+    field_0x11.r = 0xff;
+    field_0x11.g = 0xff;
+    field_0x11.b = 0xff;
+    field_0x11.a = 0xff;
+
+    field_0x15.r = 0xff;
+    field_0x15.g = 0xff;
+    field_0x15.b = 0xff;
+    field_0x15.a = 0xff;
+
+    field_0x19.r = 0xff;
+    field_0x19.g = 0xff;
+    field_0x19.b = 0xff;
+    field_0x19.a = 0;
+
+    field_0x1d.r = 0;
+    field_0x1d.g = 0;
+    field_0x1d.b = 0;
+    field_0x1d.a = 0xff;
+
+    field_0x21.r = 0xff;
+    field_0x21.g = 0xff;
+    field_0x21.b = 0xff;
+    field_0x21.a = 0xff;
+
+    field_0x25.r = 0xff;
+    field_0x25.g = 0xff;
+    field_0x25.b = 0xff;
+    field_0x25.a = 0;
+
     field_0x29 = 0x80;
     field_0x2a = 0xff;
     field_0x2b = 0xff;
@@ -675,8 +688,8 @@ void dMeter_PaneHide(fopMsgM_pane_class* pane) {
 }
 
 /* 801EFA78-801EFA90       .text dMeter_isBit8__FPUcUc */
-bool dMeter_isBit8(u8* flag, u8 bit) {
-    return (*flag & bit) != 0;
+BOOL dMeter_isBit8(u8* flag, u8 bit) {
+    return (*flag & bit) ? TRUE : FALSE;
 }
 
 /* 801EFA90-801EFAA4       .text dMeter_onBit8__FPUcUc */
@@ -729,44 +742,50 @@ void dMeter_alphaControl(sub_meter_class* i_Meter) {
 
 /* 801EFC40-801F01C0       .text dMeter_statusCheck__FP15sub_meter_class */
 void dMeter_statusCheck(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     i_Meter->mStatusFlags = 0;
-    if ((!dComIfGp_2dShowCheck()) || (dCam_getBody()->chkFlag(0x2000000))) {
+    if (!dComIfGp_2dShowCheck() || (dCam_getBody()->chkFlag(0x2000000))) {
         i_Meter->mStatusFlags |= dMtrStts_UNK4000_e;
-    } else if (((dMeter_isAuctionFlag()) && (dComIfGp_getMesgStatus() == 0)) ||
-               (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0408) && (dComIfGp_getMesgStatus() == 0)) ||
-               (dComIfGp_evmng_startCheck("PUZZLE_GAME") || dComIfGp_evmng_startCheck("PUZZLE_RUPEE")))
+    } else if ((dMeter_isAuctionFlag() && dComIfGp_getMesgStatus() == 0) ||
+               (dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0408) && dComIfGp_getMesgStatus() == 0) ||
+               dComIfGp_evmng_startCheck("PUZZLE_GAME") ||
+               dComIfGp_evmng_startCheck("PUZZLE_RUPEE"))
     {
         i_Meter->mStatusFlags |= dMtrStts_UNK80000_e;
+#if VERSION > VERSION_DEMO
         dComIfGp_setAStatus(dActStts_BLANK_e);
         dComIfGp_setDoStatus(dActStts_BLANK_e);
+#endif
     } else if (dComIfGp_getOperateWind() == 2) {
         dComIfGp_setDoStatusForce(dActStts_CHOOSE_e);
         i_Meter->mStatusFlags |= dMtrStts_UNK400000_e;
-    } else if ((dComIfGp_getMiniGameType() == 8) && (!(dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)))) {
+    } else if (dComIfGp_getMiniGameType() == 8 && !dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
         dComIfGp_setDoStatusForce(dActStts_bow_01);
         dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
         i_Meter->mStatusFlags |= dMtrStts_UNK80000_e;
-    } else if ((dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e)) && (dComIfGp_getAStatus() == dActStts_RETURN_e)) {
+    } else if (dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e) && dComIfGp_getAStatus() == dActStts_RETURN_e) {
         i_Meter->mStatusFlags |= dMtrStts_UNK200000_e;
-    } else if ((dComIfGp_event_runCheck()) && (dMenu_getMenuStatus() != 4)) {
-        if (((dComIfGp_demo_mode() != 1) && (dComIfGp_getMesgStatus() != 0)) && !dComIfGp_getMetronome()) {
+    } else if (dComIfGp_event_runCheck() && dMenu_getMenuStatus() != 4) {
+        if (dComIfGp_demo_mode() != 1 && dComIfGp_getMesgStatus() != 0 && !dComIfGp_getMetronome()) {
             i_Meter->mStatusFlags |= dMtrStts_UNK100_e;
-        } else if ((dComIfGp_demo_mode() != 1) && dComIfGp_getMetronome()) {
+#if VERSION > VERSION_DEMO
+        } else if (dComIfGp_demo_mode() != 1 && dComIfGp_getMetronome()) {
             i_Meter->mStatusFlags |= dMtrStts_UNK200000_e;
             dComIfGp_setAStatusForce(dActStts_HIDDEN_e);
+#endif
         } else {
             i_Meter->mStatusFlags |= dMtrStts_UNK40_e;
         }
     }
     if (dMenu_flag() != 0) {
-        if (((dComIfGp_checkPlayerStatus1(0, daPyStts1_PICTO_BOX_AIM_e)) || (dComIfGp_getPictureStatus() == 2)) ||
-            (dComIfGp_getPictureStatus() == 3 || (dComIfGp_isHeapLockFlag() == 6)))
+        if (dComIfGp_checkPlayerStatus1(0, daPyStts1_PICTO_BOX_AIM_e) || dComIfGp_getPictureStatus() == 2 ||
+            dComIfGp_getPictureStatus() == 3 || dComIfGp_isHeapLockFlag() == 6)
         {
             i_Meter->mStatusFlags |= dMtrStts_UNK20000_e;
+#if VERSION > VERSION_DEMO
             dComIfGp_setAStatus(dActStts_BLANK_e);
             dComIfGp_setDoStatus(dActStts_BLANK_e);
             dComIfGp_setRStatus(dActStts_BLANK_e);
+#endif
         } else if (dMenu_getMenuStatus() == 1) {
             i_Meter->mStatusFlags |= dMtrStts_UNK8_e;
         } else if (dMenu_getMenuStatus() == 2) {
@@ -777,25 +796,40 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
             i_Meter->mStatusFlags |= dMtrStts_UNK20_e;
         }
     } else {
-        if (dComIfGp_getCb1Player() == daPy_getPlayerActorClass() || (daNpc_kam_c::m_hyoi_kamome != 0)) {
+        if (dComIfGp_getCb1Player() == daPy_getPlayerActorClass() || daNpc_kam_c::m_hyoi_kamome != 0) {
             i_Meter->mStatusFlags |= dMtrStts_UNK40000_e;
             if (dComIfGp_getAStatus() == dActStts_sword_01) {
                 dComIfGp_setAStatus(dActStts_BLANK_e);
             }
-        } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK2000_e)) {
+        } else if (
+            dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e) ||
+            // @bug Out of bounds array read.
+            // It seems like the developers probably intended to have a check like this:
+            //   dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_00000100_e)
+            // Which would have checked if bit 0x100 of camera 0's attention statuses is set.
+            // But made a mistake and instead typed:
+            //   dComIfGp_getCameraAttentionStatus(dCamAttnStts_00000100_e)
+            // Which checks if any of camera 0x100's attention statuses are set.
+            // As there is only a single camera, this mistake causes an OoB read 256 elements past the end of the array.
+            // This winds up reading one of the matrix floats of a shadow as an integer, equivalent to the following check:
+            //   *(u32*)&g_dComIfG_gameInfo.drawlist.mShadowControl.mSimple[117].mVolumeMtx[1][2] != 0
+            (dComIfGp_getCameraAttentionStatus(dCamAttnStts_00000100_e) && dComIfGp_checkPlayerStatus0(0, daPyStts0_CRAWL_e))
+        ) {
             i_Meter->mStatusFlags |= dMtrStts_UNK100000_e;
         }
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK10_e)) {
             i_Meter->mStatusFlags |= dMtrStts_UNK100_e;
         } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
             i_Meter->mStatusFlags |= dMtrStts_UNK80_e;
-        } else if (((dComIfGp_checkPlayerStatus1(0, daPyStts1_PICTO_BOX_AIM_e)) || (dComIfGp_getPictureStatus() == 2)) || (dComIfGp_getPictureStatus() == 3) ||
-                   (dComIfGp_isHeapLockFlag() == 6))
+        } else if (dComIfGp_checkPlayerStatus1(0, daPyStts1_PICTO_BOX_AIM_e) || dComIfGp_getPictureStatus() == 2 || dComIfGp_getPictureStatus() == 3 ||
+                   dComIfGp_isHeapLockFlag() == 6)
         {
             i_Meter->mStatusFlags |= dMtrStts_UNK20000_e;
+#if VERSION > VERSION_DEMO
             dComIfGp_setAStatus(dActStts_BLANK_e);
             dComIfGp_setRStatus(dActStts_BLANK_e);
             dComIfGp_setDoStatus(dActStts_BLANK_e);
+#endif
         } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
             i_Meter->mStatusFlags |= dMtrStts_UNK400_e;
         } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_CRAWL_e)) {
@@ -808,7 +842,7 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
             }
         } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)) {
             i_Meter->mStatusFlags |= dMtrStts_UNK2000_e;
-        } else if (dComIfGp_checkPlayerStatus0(0, (daPyStts0_UNK100_e | daPyStts0_UNK2000000_e))) {
+        } else if (dComIfGp_checkPlayerStatus0(0, (daPyStts0_HANG_e | daPyStts0_UNK2000000_e))) {
             i_Meter->mStatusFlags |= dMtrStts_UNK8000_e;
         } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK4000000_e)) {
             i_Meter->mStatusFlags |= dMtrStts_UNK10000_e;
@@ -828,12 +862,13 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
 /* 801F01C0-801F0258       .text dMeter_alphaClose__FPsPs */
 f32 dMeter_alphaClose(s16* timer, s16* value) {
     f32 ret;
+    int r5 = 6;
     if (*timer == 8) {
         *timer = 9;
         ret = 1.0f;
         *value = 1;
     } else if (*timer == 9) {
-        if (*value < 6) {
+        if (*value < r5) {
             ret = 1.0f - fopMsgM_valueIncrease(6, *value, 1);
             (*value)++;
         } else {
@@ -872,67 +907,73 @@ void dMeter_rupy_num(char* buf, s16 num) {
     sprintf(buf, "rupy_num_%02d.bti", num);
 }
 
+#if VERSION < VERSION_PAL
+#define TEXNAME(a) a ".bti"
+#else
+#define TEXNAME(a) a
+#endif
+
 /* 801F0320-801F0378       .text dMeter_actionTex__Fs */
 const char* dMeter_actionTex(s16 id) {
     static const struct {
         u8 id;
         const char* filename;
     } act[] = {
-        {dActStts_BLANK_e, "ba_shiraberu.bti"},
-        {dActStts_LOOK_e, "ba_miru.bti"},
-        {dActStts_SPEAK_e, "ba_syaberu.bti"},
-        {dActStts_CHARTS_e, "ba_shiraberu.bti"},
-        {dActStts_LIFT_e, "ba_motu.bti"},
-        {dActStts_CLIMB_e, "ba_noru.bti"},
-        {dActStts_LET_GO_e, "ba_oriru.bti"},
-        {dActStts_RETURN_e, "ba_modoru.bti"},
-        {dActStts_PUT_AWAY_e, "ba_shimau.bti"},
-        {dActStts_DROP_e, "ba_oku.bti"},
-        {dActStts_CHECK_e, "ba_chekku.bti"},
-        {dActStts_OPEN_e, "ba_hiraku.bti"},
-        {dActStts_ATTACK_e, "ba_attack.bti"},
-        {dActStts_ba_osu, "ba_osu.bti"},
-        {dActStts_THROW_e, "ba_nageru.bti"},
-        {dActStts_CROUCH_e, "ba_shagamu.bti"},
-        {dActStts_SIDLE_e, "ba_harituku.bti"},
-        {dActStts_GRAB_e, "ba_tukamu.bti"},
-        {dActStts_JUMP_e, "ba_jump.bti"},
-        {dActStts_STOP_e, "ba_tomeru.bti"},
-        {dActStts_ba_haru, "ba_haru.bti"},
-        {dActStts_ba_tatamu, "ba_tatamu.bti"},
-        {dActStts_LET_GO_ROPE_e, "ba_hanasu.bti"},
-        {dActStts_CHOOSE_e, "ba_kettei.bti"},
-        {dActStts_ba_kogu, "ba_kogu.bti"},
-        {dActStts_NEXT_e, "ba_tugihe.bti"},
-        {dActStts_PARRY_e, "ba_sake.bti"},
-        {dActStts_PICK_UP_e, "ba_motu_buki.bti"},
-        {dActStts_GET_IN_SHIP_e, "ba_noru_hune.bti"},
-        {dActStts_GET_OUT_SHIP_e, "ba_oriru_hune.bti"},
-        {dActStts_ba_save, "ba_save.bti"},
-        {dActStts_ba_option, "ba_option.bti"},
-        {dActStts_TAKE_PHOTO_e, "ba_toru.bti"},
-        {dActStts_INFO_e, "ba_setumei.bti"},
-        {dActStts_SWAP_MODES_e, "ba_kirikae.bti"},
-        {dActStts_FLY_e, "ba_tobu.bti"},
-        {dActStts_CALL_e, "ba_yobu.bti"},
-        {dActStts_BID_e, "ba_hoshii.bti"},
-        {dActStts_READ_e, "ba_yomu.bti"},
-        {dActStts_CANCEL_e, "ba_yameru.bti"},
-        {dActStts_ba_kakudai, "ba_kakudai.bti"},
-        {dActStts_ba_hikaku, "ba_hikaku.bti"},
-        {dActStts_ba_zoom01, "ba_zoom01.bti"},
-        {dActStts_ba_zoom02, "ba_zoom02.bti"},
-        {dActStts_CRUISE_e, "ba_susumu.bti"},
-        {dActStts_ba_nageru__dupe_2D, "ba_nageru.bti"},
-        {dActStts_ba_motu__dupe_2E, "ba_motu.bti"},
-        {dActStts_SWING_e, "ba_huru.bti"},
-        {dActStts_SEA_CHART_e, "ba_kaizuhe.bti"},
-        {dActStts_ba_sake__dupe_31, "ba_sake.bti"},
-        {dActStts_ba_modoru__dupe_32, "ba_modoru.bti"},
-        {dActStts_ba_save__dupe_33, "ba_save.bti"},
-        {dActStts_ba_save__dupe_34, "ba_save.bti"},
+        {dActStts_BLANK_e, TEXNAME("ba_shiraberu")},
+        {dActStts_LOOK_e, TEXNAME("ba_miru")},
+        {dActStts_SPEAK_e, TEXNAME("ba_syaberu")},
+        {dActStts_CHARTS_e, TEXNAME("ba_shiraberu")},
+        {dActStts_LIFT_e, TEXNAME("ba_motu")},
+        {dActStts_CLIMB_e, TEXNAME("ba_noru")},
+        {dActStts_LET_GO_e, TEXNAME("ba_oriru")},
+        {dActStts_RETURN_e, TEXNAME("ba_modoru")},
+        {dActStts_PUT_AWAY_e, TEXNAME("ba_shimau")},
+        {dActStts_DROP_e, TEXNAME("ba_oku")},
+        {dActStts_CHECK_e, TEXNAME("ba_chekku")},
+        {dActStts_OPEN_e, TEXNAME("ba_hiraku")},
+        {dActStts_ATTACK_e, TEXNAME("ba_attack")},
+        {dActStts_ba_osu, TEXNAME("ba_osu")},
+        {dActStts_THROW_e, TEXNAME("ba_nageru")},
+        {dActStts_CROUCH_e, TEXNAME("ba_shagamu")},
+        {dActStts_SIDLE_e, TEXNAME("ba_harituku")},
+        {dActStts_GRAB_e, TEXNAME("ba_tukamu")},
+        {dActStts_JUMP_e, TEXNAME("ba_jump")},
+        {dActStts_STOP_e, TEXNAME("ba_tomeru")},
+        {dActStts_ba_haru, TEXNAME("ba_haru")},
+        {dActStts_ba_tatamu, TEXNAME("ba_tatamu")},
+        {dActStts_LET_GO_ROPE_e, TEXNAME("ba_hanasu")},
+        {dActStts_CHOOSE_e, TEXNAME("ba_kettei")},
+        {dActStts_ba_kogu, TEXNAME("ba_kogu")},
+        {dActStts_NEXT_e, TEXNAME("ba_tugihe")},
+        {dActStts_PARRY_e, TEXNAME("ba_sake")},
+        {dActStts_PICK_UP_e, TEXNAME("ba_motu_buki")},
+        {dActStts_GET_IN_SHIP_e, TEXNAME("ba_noru_hune")},
+        {dActStts_GET_OUT_SHIP_e, TEXNAME("ba_oriru_hune")},
+        {dActStts_ba_save, TEXNAME("ba_save")},
+        {dActStts_ba_option, TEXNAME("ba_option")},
+        {dActStts_TAKE_PHOTO_e, TEXNAME("ba_toru")},
+        {dActStts_INFO_e, TEXNAME("ba_setumei")},
+        {dActStts_SWAP_MODES_e, TEXNAME("ba_kirikae")},
+        {dActStts_FLY_e, TEXNAME("ba_tobu")},
+        {dActStts_CALL_e, TEXNAME("ba_yobu")},
+        {dActStts_BID_e, TEXNAME("ba_hoshii")},
+        {dActStts_READ_e, TEXNAME("ba_yomu")},
+        {dActStts_CANCEL_e, TEXNAME("ba_yameru")},
+        {dActStts_ba_kakudai, TEXNAME("ba_kakudai")},
+        {dActStts_ba_hikaku, TEXNAME("ba_hikaku")},
+        {dActStts_ba_zoom01, TEXNAME("ba_zoom01")},
+        {dActStts_ba_zoom02, TEXNAME("ba_zoom02")},
+        {dActStts_CRUISE_e, TEXNAME("ba_susumu")},
+        {dActStts_ba_nageru__dupe_2D, TEXNAME("ba_nageru")},
+        {dActStts_ba_motu__dupe_2E, TEXNAME("ba_motu")},
+        {dActStts_SWING_e, TEXNAME("ba_huru")},
+        {dActStts_SEA_CHART_e, TEXNAME("ba_kaizuhe")},
+        {dActStts_ba_sake__dupe_31, TEXNAME("ba_sake")},
+        {dActStts_ba_modoru__dupe_32, TEXNAME("ba_modoru")},
+        {dActStts_ba_save__dupe_33, TEXNAME("ba_save")},
+        {dActStts_ba_save__dupe_34, TEXNAME("ba_save")},
         {dActStts_sword_01, "sword_01.bti"},
-        {dActStts_DEFEND_e, "ba_husegu.bti"},
+        {dActStts_DEFEND_e, TEXNAME("ba_husegu")},
         {dActStts_boko_stick, "boko_stick.bti"},
         {dActStts_hatchet, "hatchet.bti"},
         {dActStts_iron_club, "iron_club.bti"},
@@ -940,7 +981,7 @@ const char* dMeter_actionTex(s16 id) {
         {dActStts_spear, "spear.bti"},
         {dActStts_spear__dupe_3C, "spear.bti"},
         {dActStts_bow_01, "bow_01.bti"},
-        {dActStts_HIDDEN_e, "ba_modoru.bti"},
+        {dActStts_HIDDEN_e, TEXNAME("ba_modoru")},
     };
     int found = 0;
     for (int i = 0; i < ARRAY_SIZE(act); i++) {
@@ -949,7 +990,29 @@ const char* dMeter_actionTex(s16 id) {
             break;
         }
     }
+#if VERSION < VERSION_PAL
     return act[found].filename;
+#else
+    if (
+        found == dActStts_sword_01 ||
+        found == dActStts_boko_stick ||
+        found == dActStts_hatchet ||
+        found == dActStts_iron_club ||
+        found == dActStts_longsword ||
+        found == dActStts_spear ||
+        found == dActStts_spear__dupe_3C ||
+        found == dActStts_bow_01
+    ) {
+        return act[found].filename;
+    }
+    static char tex_name[20];
+    char suffix[16];
+    sprintf(suffix, "_%d.bti", dComIfGs_getPalLanguage());
+    const char* filename = act[found].filename;
+    strcpy(tex_name, filename);
+    strcat(tex_name, suffix);
+    return tex_name;
+#endif
 }
 
 /* 801F0378-801F041C       .text dMeter_weponTex__Fv */
@@ -987,17 +1050,17 @@ const char* dMeter_heartTex(s16 param_1) {
 
 /* 801F0434-801F0608       .text dMeter_recollect_boss_data__Fv */
 void dMeter_recollect_boss_data() {
-    if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e) && (dComIfGs_isStageBossEnemy())) {
-        if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_DRC) && (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D80))) {
+    if ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e) && dComIfGs_isStageBossEnemy()) {
+        if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_DRC) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D80)) {
             dComIfGs_copyPlayerRecollectionData();
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D80);
-        } else if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_FW) && (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D40))) {
+        } else if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_FW) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D40)) {
             dComIfGs_copyPlayerRecollectionData();
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D40);
-        } else if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_ET) && (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D20))) {
+        } else if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_ET) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D20)) {
             dComIfGs_copyPlayerRecollectionData();
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D20);
-        } else if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_WT) && (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D10))) {
+        } else if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_WT) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3D10)) {
             dComIfGs_copyPlayerRecollectionData();
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3D10);
         }
@@ -1097,8 +1160,7 @@ void dMeter_childPaneTransChildTrans(fopMsgM_pane_class* param_1, fopMsgM_pane_c
     param_1->mPosCenter.y += g_meterHIO.field_0x52;
     fopMsgM_paneScaleXY(param_1, param_5);
     J2DPane* j2dPane = param_1->pane;
-    f32 tmp = 0.5f;
-    j2dPane->rotate(param_1->mSize.x * tmp, param_1->mSize.y * tmp, ROTATE_Z, j2dPane->getRotate());
+    j2dPane->rotate(param_1->mSize.x / 2.0f, param_1->mSize.y / 2.0f, ROTATE_Z, j2dPane->getRotate());
 }
 
 /* 801F0C10-801F0D0C       .text dMeter_childPaneTransChildTransOnly__FP18fopMsgM_pane_classP18fopMsgM_pane_classP18fopMsgM_pane_classff */
@@ -1111,8 +1173,7 @@ void dMeter_childPaneTransChildTransOnly(fopMsgM_pane_class* param_1, fopMsgM_pa
     param_1->mPosCenter.y += g_meterHIO.field_0x52;
     fopMsgM_cposMove(param_1);
     J2DPane* j2dPane = param_1->pane;
-    f32 tmp = 0.5f;
-    j2dPane->rotate(param_1->mSize.x * tmp, param_1->mSize.y * tmp, ROTATE_Z, j2dPane->getRotate());
+    j2dPane->rotate(param_1->mSize.x / 2.0f, param_1->mSize.y / 2.0f, ROTATE_Z, j2dPane->getRotate());
 }
 
 /* 801F0D0C-801F0D64       .text dMeter_setHeartScaleXY__FP18fopMsgM_pane_classs */
@@ -1202,13 +1263,19 @@ void dMeter_heartScaleInit(sub_meter_class* i_Meter) {
             dMeter_PaneHide(&i_Meter->mHeart[i]);
             dMeter_PaneHide(&i_Meter->mHeartShadow[i]);
         }
+#if VERSION > VERSION_DEMO
         fopMsgM_paneTrans(&i_Meter->mHeart[i], 0.0f, 0.0f);
         fopMsgM_paneTrans(&i_Meter->mHeartShadow[i], 0.0f, 0.0f);
+#endif
         uVar2 = i_Meter->mCurrHP - 1;
-        if ((i == uVar2 / 4) && (i_Meter->mCurrHP != 0)) {
+        if ((i == uVar2 / 4) && i_Meter->mCurrHP != 0) {
             ((J2DPicture*)i_Meter->field_0x0f00.pane)->changeTexture(dMeter_heartTex(i_Meter->mHeart[i].mUserArea), 0);
             dMeter_heart_data_set(&i_Meter->field_0x0f00, &i_Meter->mHeart[i], &i_Meter->mHeartShadow[i]);
         }
+#if VERSION == VERSION_DEMO
+        fopMsgM_paneTrans(&i_Meter->mHeart[i], 0.0f, 0.0f);
+        fopMsgM_paneTrans(&i_Meter->mHeartShadow[i], 0.0f, 0.0f);
+#endif
     }
 }
 
@@ -1249,15 +1316,14 @@ void dMeter_lifeChange(sub_meter_class* i_Meter, bool* param_2) {
 
 /* 801F11F8-801F13A4       .text dMeter_heartLightMove__FP15sub_meter_class */
 void dMeter_heartLightMove(sub_meter_class* i_Meter) {
-    uint hp;
     int iVar1;
     u32 uVar2;
     f32 dVar3;
     f32 dVar4;
     f32 dVar5;
 
-    hp = dComIfGs_getLife() - 1;
-    if ((int)hp / 4) {
+    int hp = dComIfGs_getLife() - 1;
+    if ((hp / 4) != 0) {
         iVar1 = 22;
     } else {
         iVar1 = 12;
@@ -1273,9 +1339,8 @@ void dMeter_heartLightMove(sub_meter_class* i_Meter) {
     ((J2DPicture*)i_Meter->field_0x0f00.pane)->setBlack((GXColor){uVar2, uVar2, uVar2, 0});
     dVar3 = i_Meter->field_0x0f00.mSize.x * dVar4;
     dVar5 = i_Meter->field_0x0f00.mSize.y * dVar4;
-    f32 tmp = 0.5f;
-    i_Meter->field_0x0f00.mPosTopLeft.x = i_Meter->field_0x0f00.mPosCenter.x - (dVar3 * tmp);
-    i_Meter->field_0x0f00.mPosTopLeft.y = i_Meter->field_0x0f00.mPosCenter.y - (dVar5 * tmp);
+    i_Meter->field_0x0f00.mPosTopLeft.x = i_Meter->field_0x0f00.mPosCenter.x - (dVar3 / 2.0f);
+    i_Meter->field_0x0f00.mPosTopLeft.y = i_Meter->field_0x0f00.mPosCenter.y - (dVar5 / 2.0f);
     i_Meter->field_0x0f00.pane->move(i_Meter->field_0x0f00.mPosTopLeft.x, i_Meter->field_0x0f00.mPosTopLeft.y);
     i_Meter->field_0x0f00.pane->resize(dVar3, dVar5);
 }
@@ -1285,10 +1350,10 @@ void dMeter_heartAlpha(sub_meter_class* i_Meter) {
     f32 dVar5;
 
     if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && (dComIfGp_event_checkHind(0x10)) && (!(dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e)))) ||
-        (dMenu_getCollectMode() == 4) || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(0x10) && !dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e)) ||
+        dMenu_getCollectMode() == 4 || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80000_e)) || (dMeter_isAuctionFlag()) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK20_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80000_e) || dMeter_isAuctionFlag() ||
         ((i_Meter->mStatusFlags & dMtrStts_UNK400000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK800000_e)))
     {
         if (i_Meter->field_0x3014 > 0) {
@@ -1338,25 +1403,18 @@ void dMeter_heartInit(sub_meter_class* i_Meter) {
 
 /* 801F15EC-801F17F0       .text dMeter_LifeMove__FP15sub_meter_classb */
 void dMeter_LifeMove(sub_meter_class* i_Meter, bool bForce) {
-    /* Nonmatching */
-    int iVar1;
-    bool bVar2;
-    s16 maxHP;
-    s16 newHP;
-    int uVar3;
-
     static bool soundOnFlag = false;
-    bVar2 = false;
-    if (dComIfGp_getItemMaxLifeCount() != 0 || ((s16)dComIfGp_getItemLifeCount() != 0) || (bForce)) {
-        maxHP = dComIfGs_getMaxLife() + dComIfGp_getItemMaxLifeCount();
-        uVar3 = (s16)maxHP;
+    bool bVar2 = false;
+    if (dComIfGp_getItemMaxLifeCount() != 0 || ((s16)dComIfGp_getItemLifeCount() != 0) || bForce) {
+        s16 maxHP = dComIfGs_getMaxLife() + dComIfGp_getItemMaxLifeCount();
+        s16 newHP;
         if (dComIfGp_getItemMaxLifeCount() > 0) {
-            newHP = ((int)uVar3 / 4) * 4;
+            newHP = ((int)maxHP / 4) * 4;
         } else {
             newHP = dComIfGs_getLife() + (int)dComIfGp_getItemLifeCount();
         }
         if (dComIfGp_getItemMaxLifeCount() != 0) {
-            if ((int)uVar3 > 0x50) {
+            if ((int)maxHP > 0x50) {
                 maxHP = 0x50;
             } else if (maxHP < 0) {
                 maxHP = 0;
@@ -1364,27 +1422,29 @@ void dMeter_LifeMove(sub_meter_class* i_Meter, bool bForce) {
             i_Meter->field_0x300c = maxHP - i_Meter->mMaxHP;
             dComIfGs_setMaxLife(maxHP);
             g_dComIfG_gameInfo.play.mItemMaxLifeCount = 0;
+#if VERSION == VERSION_DEMO
+            dMeter_magicTrans(i_Meter, 0.0f, 0.0f);
+#else
             i_Meter->field_0x0f38[5].mUserArea = 1;
+#endif
         }
-        uVar3 = (s16)maxHP;
-        iVar1 = ((int)uVar3 / 4) * 4;
-        if (newHP > iVar1) {
-            newHP = iVar1;
+        if (newHP > ((int)maxHP / 4) * 4) {
+            newHP = ((int)maxHP / 4) * 4;
         } else if (newHP < 0) {
             newHP = 0;
         }
         i_Meter->mAdjustHp = newHP - i_Meter->mCurrHP;
-        dComIfGs_setLife(newHP);
+        dComIfGs_setLife((u8)newHP);
         g_dComIfG_gameInfo.play.mItemLifeCount = 0.0f;
         if (i_Meter->mAdjustHp >= 4) {
             soundOnFlag = true;
         }
     }
-    if ((i_Meter->field_0x300c != 0) || (bForce)) {
+    if (i_Meter->field_0x300c != 0 || bForce) {
         dMeter_maxLifeChange(i_Meter);
         bVar2 = true;
     }
-    if ((i_Meter->mAdjustHp != 0) || (bForce)) {
+    if (i_Meter->mAdjustHp != 0 || bForce) {
         dMeter_lifeChange(i_Meter, &soundOnFlag);
         bVar2 = true;
     }
@@ -1400,30 +1460,24 @@ void dMeter_LifeMove(sub_meter_class* i_Meter, bool bForce) {
 
 /* 801F17F0-801F1A48       .text dMeter_BattleLifeMove__FP15sub_meter_classb */
 void dMeter_BattleLifeMove(sub_meter_class* i_Meter, bool param_2) {
-    /* Nonmatching */
-    const char* pFilename;
-    f32 dVar4;
-
     static u8 point = 0;
-    dVar4 = (i_Meter->mHeart[1].mPosCenterOrig.x - i_Meter->mHeart[0].mPosCenterOrig.x);
-    if ((point != daNpc_Ji1_c::game_life_point) || (!param_2)) {
+    f32 dVar4 = (i_Meter->mHeart[1].mPosCenterOrig.x - i_Meter->mHeart[0].mPosCenterOrig.x);
+    if (point != daNpc_Ji1_c::game_life_point || !param_2) {
         for (s32 i = 0; i < 20; i++) {
             point = daNpc_Ji1_c::game_life_point;
-            if ((i == 1) || (i == 2)) {
-                i_Meter->mHeart[i].mPosCenter.x = (s32)(g_meterHIO.field_0x4c + i_Meter->mHeart[i].mPosCenterOrig.x) * (g_meterHIO.field_0x58 * dVar4);
-                i_Meter->mHeartShadow[i].mPosCenter.x =
-                    (s32)(g_meterHIO.field_0x4c + i_Meter->mHeartShadow[i].mPosCenterOrig.x) * (g_meterHIO.field_0x58 * dVar4);
-                i_Meter->mHeart[i].mPosCenter.y = i_Meter->mHeart[i].mPosCenterOrig.y + g_meterHIO.field_0x5c;
-                i_Meter->mHeartShadow[i].mPosCenter.y = i_Meter->mHeartShadow[i].mPosCenterOrig.y + g_meterHIO.field_0x5c;
+            if (i == 1 || i == 2) {
+                i_Meter->mHeart[i].mPosCenter.x = (g_meterHIO.field_0x58 * dVar4 * (f32)i) + i_Meter->mHeart[0].mPosCenterOrig.x + g_meterHIO.field_0x4c;
+                i_Meter->mHeartShadow[i].mPosCenter.x = (g_meterHIO.field_0x58 * dVar4 * (f32)i) + i_Meter->mHeartShadow[0].mPosCenterOrig.x + g_meterHIO.field_0x4c;
+                i_Meter->mHeart[i].mPosCenter.y = i_Meter->mHeart[0].mPosCenterOrig.y + g_meterHIO.field_0x5c;
+                i_Meter->mHeartShadow[i].mPosCenter.y = i_Meter->mHeartShadow[0].mPosCenterOrig.y + g_meterHIO.field_0x5c;
             } else if (i == 0) {
-                i_Meter->mHeart[i].mPosCenter.x = i_Meter->mHeart[i].mPosCenterOrig.x + g_meterHIO.field_0x4c;
-                i_Meter->mHeartShadow[i].mPosCenter.x = i_Meter->mHeartShadow[i].mPosCenterOrig.x + g_meterHIO.field_0x4c;
-                i_Meter->mHeart[i].mPosCenter.y = i_Meter->mHeart[i].mPosCenterOrig.y + g_meterHIO.field_0x5c;
-                i_Meter->mHeartShadow[i].mPosCenter.y = i_Meter->mHeartShadow[i].mPosCenterOrig.y + g_meterHIO.field_0x5c;
+                i_Meter->mHeart[i].mPosCenter.x = i_Meter->mHeart[0].mPosCenterOrig.x + g_meterHIO.field_0x4c;
+                i_Meter->mHeartShadow[i].mPosCenter.x = i_Meter->mHeartShadow[0].mPosCenterOrig.x + g_meterHIO.field_0x4c;
+                i_Meter->mHeart[i].mPosCenter.y = i_Meter->mHeart[0].mPosCenterOrig.y + g_meterHIO.field_0x5c;
+                i_Meter->mHeartShadow[i].mPosCenter.y = i_Meter->mHeartShadow[0].mPosCenterOrig.y + g_meterHIO.field_0x5c;
             }
             if (i < point) {
-                pFilename = dMeter_heartTex(0);
-                dMeter_heartChangeTexture(i_Meter, pFilename, i);
+                dMeter_heartChangeTexture(i_Meter, dMeter_heartTex(0), i);
                 if (i == point - 1) {
                     dMeter_setNowHeartScaleXY2(&i_Meter->mHeart[i]);
                     dMeter_setNowHeartScaleXY2(&i_Meter->mHeartShadow[i]);
@@ -1432,8 +1486,7 @@ void dMeter_BattleLifeMove(sub_meter_class* i_Meter, bool param_2) {
                     dMeter_setHeartScaleXY2(&i_Meter->mHeartShadow[i], 0);
                 }
             } else if (i < 3) {
-                pFilename = dMeter_heartTex(4);
-                dMeter_heartChangeTexture(i_Meter, pFilename, i);
+                dMeter_heartChangeTexture(i_Meter, dMeter_heartTex(4), i);
                 dMeter_setHeartScaleXY2(&i_Meter->mHeart[i], 4);
                 dMeter_setHeartScaleXY2(&i_Meter->mHeartShadow[i], 4);
             } else {
@@ -1450,7 +1503,7 @@ void dMeter_heartColor(sub_meter_class* i_Meter) {
     JUtility::TColor white(0xFF, 0xFF, 0xFF, 0xFF);
     JUtility::TColor black(0x00, 0x00, 0x00, 0x00);
 
-    if ((daPy_getPlayerActorClass()->checkSoupPowerUp()) && (dComIfGp_getMiniGameType() != 6)) {
+    if (daPy_getPlayerActorClass()->checkSoupPowerUp() && dComIfGp_getMiniGameType() != 6) {
         JUtility::TColor white2 = -1;
         JUtility::TColor black2 = -1;
         if (i_Meter->mHeartShadow[0].mUserArea == 0) {
@@ -1517,19 +1570,17 @@ void dMeter_heartDraw(sub_meter_class* i_Meter) {
 
 /* 801F1EBC-801F1F8C       .text dMeter_weponInit__FP15sub_meter_class */
 void dMeter_weponInit(sub_meter_class* i_Meter) {
-    JKRArchive* pArc;
-    const char* pFilename;
-
     i_Meter->field_0x28d0.mUserArea = 0;
     i_Meter->field_0x301a = 0;
     dComIfGp_setAStatus(dActStts_BLANK_e);
-    if ((dComIfGp_getAStatus() == dActStts_RETURN_e) || (dComIfGp_getAStatus() == dActStts_RETURN_e)) {
-        pArc = dComIfGp_getMenuArchive();
+    JKRArchive* archive;
+    if (dComIfGp_getAStatus() == dActStts_RETURN_e || dComIfGp_getAStatus() == dActStts_RETURN_e) {
+        archive = dComIfGp_getMenuArchive();
     } else {
-        pArc = dComIfGp_getActionIconArchive();
+        archive = dComIfGp_getActionIconArchive();
     }
-    pFilename = dMeter_actionTex(dActStts_BLANK_e);
-    JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', pFilename, pArc);
+    const char* filename = dMeter_actionTex(dActStts_BLANK_e);
+    JKRReadTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', filename, archive);
     DCStoreRangeNoSync(i_Meter->actionTex[0], 0xc00);
     ((J2DPicture*)i_Meter->field_0x2828.pane)->changeTexture(i_Meter->actionTex[0], 0);
     ((J2DPicture*)i_Meter->field_0x2860.pane)->changeTexture(i_Meter->actionTex[0], 0);
@@ -1539,7 +1590,6 @@ void dMeter_weponInit(sub_meter_class* i_Meter) {
 
 /* 801F1F8C-801F23B8       .text dMeter_weponMove__FP15sub_meter_class */
 void dMeter_weponMove(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     s16 sVar1;
     u8 uVar2;
     int iVar3;
@@ -1568,22 +1618,20 @@ void dMeter_weponMove(sub_meter_class* i_Meter) {
         } else {
             dVar5 = fopMsgM_valueIncrease(10, 0x14 - iVar3, 0);
         }
-        uVar2 = -(f32)(dVar5 * -255.0f);
+        uVar2 = -f32(dVar5 * -255.0f);
         white.g = uVar2;
         white.r = uVar2;
         ((J2DPicture*)i_Meter->field_0x1d38.pane)->setWhite(black);
         ((J2DPicture*)i_Meter->field_0x1d38.pane)->setBlack(white);
-        i_Meter->field_0x1d38.mNowAlpha = (i_Meter->field_0x1d00.mInitAlpha) - (i_Meter->field_0x1d00.mInitAlpha - 0x78) * dVar5;
+        i_Meter->field_0x1d38.mNowAlpha = i_Meter->field_0x1d00.mInitAlpha - (i_Meter->field_0x1d00.mInitAlpha - 0x78) * dVar5;
     } else if (i_Meter->field_0x1d38.mUserArea != 0) {
-        JUtility::TColor white2(0xFF, 0xFF, 0xFF, 0xFF);
-        ((J2DPicture*)i_Meter->field_0x1d38.pane)->setWhite(white2);
-        JUtility::TColor black2(0x00, 0x00, 0xFF, 0x00);
-        ((J2DPicture*)i_Meter->field_0x1d38.pane)->setBlack(black2);
+        ((J2DPicture*)i_Meter->field_0x1d38.pane)->setWhite(JUtility::TColor(0xFF, 0xFF, 0xFF, 0xFF));
+        ((J2DPicture*)i_Meter->field_0x1d38.pane)->setBlack(JUtility::TColor(0x00, 0x00, 0xFF, 0x00));
         i_Meter->field_0x1d38.mNowAlpha = i_Meter->field_0x1d00.mInitAlpha;
         i_Meter->field_0x1d38.mUserArea = 0;
     }
-    if (((dComIfGp_getDoStatus() == dActStts_ba_sake__dupe_31) || (dComIfGp_getDoStatus() == dActStts_ba_nageru__dupe_2D)) ||
-        (dComIfGp_getDoStatus() == dActStts_ba_motu__dupe_2E))
+    if (dComIfGp_getDoStatus() == dActStts_ba_sake__dupe_31 || dComIfGp_getDoStatus() == dActStts_ba_nageru__dupe_2D ||
+        dComIfGp_getDoStatus() == dActStts_ba_motu__dupe_2E)
     {
         JUtility::TColor white = -1;
         white.a = 0x00;
@@ -1592,8 +1640,10 @@ void dMeter_weponMove(sub_meter_class* i_Meter) {
             i_Meter->field_0x1e18[1].mUserArea = 0;
             if (dComIfGp_getDoStatus() == dActStts_ba_nageru__dupe_2D) {
                 mDoAud_seStart(JA_SE_SEED_OK_BLINK);
+#if VERSION > VERSION_DEMO
             } else if (dComIfGp_getDoStatus() == dActStts_ba_motu__dupe_2E) {
                 mDoAud_seStart(JA_SE_MD_HARP_INDICATOR);
+#endif
             } else {
                 mDoAud_seStart(JA_SE_ITM_OMAMORI_BLINK);
             }
@@ -1613,7 +1663,7 @@ void dMeter_weponMove(sub_meter_class* i_Meter) {
         ((J2DPicture*)i_Meter->field_0x1e18[1].pane)->setBlack(0x00000000);
     }
     sVar1 = i_Meter->field_0x28d0.mUserArea;
-    if ((sVar1 != 0) && (sVar1 <= 0xc)) {
+    if (sVar1 != 0 && sVar1 <= 0xc) {
         dMeter_weponAnime(i_Meter);
         i_Meter->field_0x28d0.mUserArea++;
         if (i_Meter->field_0x28d0.mUserArea > 0xc) {
@@ -1636,57 +1686,89 @@ void dMeter_weponDraw(sub_meter_class* i_Meter) {
 
 /* 801F2408-801F2688       .text dMeter_weponChange__FP15sub_meter_class */
 void dMeter_weponChange(sub_meter_class* i_Meter) {
-    const char* pFilename;
-    JKRArchive* pArc;
+#if VERSION == VERSION_DEMO
+    if (i_Meter->field_0x301a == dComIfGp_getAStatus()) {
+        return;
+    }
+#endif
 
-    if (i_Meter->field_0x2828.mUserArea != 0) {
-        if (i_Meter->field_0x301a == 0x25) {
+#if VERSION > VERSION_DEMO
+    if (i_Meter->field_0x2828.mUserArea != 0)
+#endif
+    {
+        if (i_Meter->field_0x301a == dActStts_BID_e) {
             i_Meter->field_0x1d00.mUserArea = 0;
             ((J2DPicture*)i_Meter->field_0x1d00.pane)->setWhite(0xFFFFFFFF);
             ((J2DPicture*)i_Meter->field_0x1d00.pane)->setBlack(0x0000FF00);
         }
         if (dComIfGp_getAStatus() != dActStts_BLANK_e) {
             if (dComIfGp_getAStatus() == dActStts_sword_01) {
-                pArc = dComIfGp_getItemIconArchive();
-                pFilename = dMeter_weponTex();
-                JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', pFilename, pArc);
+                JKRArchive* archive = dComIfGp_getItemIconArchive();
+                JKRReadTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', dMeter_weponTex(), archive);
+#if VERSION <= VERSION_JPN
+                DCFlushRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#else
                 DCStoreRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#endif
                 ((J2DPicture*)i_Meter->field_0x2828.pane)->changeTexture(i_Meter->actionTex[0], 0);
                 ((J2DPicture*)i_Meter->field_0x2860.pane)->changeTexture(i_Meter->actionTex[0], 0);
+#if VERSION > VERSION_DEMO
                 ((J2DPicture*)i_Meter->field_0x1d00.pane)->changeTexture(i_Meter->actionTex[0], 0);
-            } else if (((((dComIfGp_getAStatus() == dActStts_boko_stick) || (dComIfGp_getAStatus() == dActStts_hatchet)) ||
-                         (dComIfGp_getAStatus() == dActStts_iron_club)) ||
-                        (dComIfGp_getAStatus() == dActStts_longsword || (dComIfGp_getAStatus() == dActStts_spear))) ||
-                       (dComIfGp_getAStatus() == dActStts_spear__dupe_3C))
+#endif
+            } else if (dComIfGp_getAStatus() == dActStts_boko_stick ||
+                       dComIfGp_getAStatus() == dActStts_hatchet ||
+                       dComIfGp_getAStatus() == dActStts_iron_club ||
+                       dComIfGp_getAStatus() == dActStts_longsword ||
+                       dComIfGp_getAStatus() == dActStts_spear ||
+                       dComIfGp_getAStatus() == dActStts_spear__dupe_3C)
             {
-                pArc = dComIfGp_getItemIconArchive();
-                pFilename = dMeter_actionTex(dComIfGp_getAStatus());
-                JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', pFilename, pArc);
+                JKRArchive* archive = dComIfGp_getItemIconArchive();
+                JKRReadTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', dMeter_actionTex(dComIfGp_getAStatus()), archive);
+#if VERSION <= VERSION_JPN
+                DCFlushRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#else
                 DCStoreRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#endif
                 ((J2DPicture*)i_Meter->field_0x2828.pane)->changeTexture(i_Meter->actionTex[0], 0);
                 ((J2DPicture*)i_Meter->field_0x2860.pane)->changeTexture(i_Meter->actionTex[0], 0);
+#if VERSION > VERSION_DEMO
                 ((J2DPicture*)i_Meter->field_0x1d00.pane)->changeTexture(i_Meter->actionTex[0], 0);
+#endif
             } else {
-                if ((dComIfGp_getAStatus() == dActStts_RETURN_e) || (dComIfGp_getAStatus() == dActStts_RETURN_e)) {
-                    pArc = dComIfGp_getMenuArchive();
+                JKRArchive* archive;
+                if (dComIfGp_getAStatus() == dActStts_RETURN_e || dComIfGp_getAStatus() == dActStts_RETURN_e) {
+                    archive = dComIfGp_getMenuArchive();
                 } else {
-                    pArc = dComIfGp_getActionIconArchive();
+                    archive = dComIfGp_getActionIconArchive();
                 }
-                pFilename = dMeter_actionTex(dComIfGp_getAStatus());
-                JKRArchive::readTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', pFilename, pArc);
+                JKRReadTypeResource(i_Meter->actionTex[0], 0xc00, 'TIMG', dMeter_actionTex(dComIfGp_getAStatus()), archive);
+#if VERSION <= VERSION_JPN
+                DCFlushRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#else
                 DCStoreRangeNoSync(i_Meter->actionTex[0], 0xc00);
+#endif
+#if VERSION > VERSION_DEMO
                 ((J2DPicture*)i_Meter->field_0x2828.pane)->changeTexture(i_Meter->actionTex[0], 0);
                 ((J2DPicture*)i_Meter->field_0x2860.pane)->changeTexture(i_Meter->actionTex[0], 0);
+#endif
                 ((J2DPicture*)i_Meter->field_0x1d00.pane)->changeTexture(i_Meter->actionTex[0], 0);
             }
         }
+#if VERSION > VERSION_DEMO
         i_Meter->field_0x2828.mUserArea = 0;
+#endif
     }
+    
+#if VERSION == VERSION_DEMO
+    i_Meter->field_0x28d0.mUserArea = 1;
+    i_Meter->field_0x301a = dComIfGp_getAStatus();
+#else
     if (i_Meter->field_0x301a != dComIfGp_getAStatus()) {
         i_Meter->field_0x2828.mUserArea = 1;
         i_Meter->field_0x28d0.mUserArea = 1;
         i_Meter->field_0x301a = dComIfGp_getAStatus();
     }
+#endif
 }
 
 /* 801F2688-801F2818       .text dMeter_weponAnime__FP15sub_meter_class */
@@ -1696,12 +1778,11 @@ void dMeter_weponAnime(sub_meter_class* i_Meter) {
 
     uVar1 = i_Meter->field_0x28d0.mUserArea;
     if (uVar1 <= 7) {
-        dVar2 = (((s32)(uVar1) * 5.0f) / 7.0f);
+        dVar2 = ((uVar1 * 5.0f) / 7.0f);
     } else if (uVar1 <= 10) {
-        dVar2 = (5.0f - ((s32)(uVar1 - 7) * 13.0f) / 3.0f);
+        dVar2 = (5.0f - ((uVar1 - 7) * 13.0f) / 3.0f);
     } else {
-        f32 tmp = 0.5f;
-        dVar2 = -8.0f + (8.0f * (s32)(uVar1 - 10) * tmp);
+        dVar2 = -8.0f + (8.0f * (uVar1 - 10) / 2.0f);
     }
     i_Meter->field_0x1d00.pane->move(i_Meter->field_0x1d00.mPosTopLeft.x, i_Meter->field_0x1d00.mPosTopLeft.y + dVar2);
     i_Meter->field_0x2828.pane->move(i_Meter->field_0x2828.mPosTopLeft.x, i_Meter->field_0x2828.mPosTopLeft.y + dVar2);
@@ -1712,7 +1793,6 @@ void dMeter_weponAnime(sub_meter_class* i_Meter) {
 
 /* 801F2818-801F337C       .text dMeter_weponTrans__FP15sub_meter_class */
 void dMeter_weponTrans(sub_meter_class* i_Meter) {
-    /* Nonmatching - dMeter_isBit8 */
     static s16 moveNowFrame = 0;
     static s16 moveFlag = 0;
     static s16 moveStatus = 0;
@@ -1721,9 +1801,9 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
     static f32 expX = 0.0f;
     static f32 expY = 0.0f;
     if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && ((dComIfGp_event_checkHind(4)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e)))) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) && (dComIfGp_getScopeMesgStatus() != fopMsgStts_UNKB_e)) ||
-        (((i_Meter->mStatusFlags & dMtrStts_UNK100_e) && (dComIfGp_getAStatus() != dActStts_CANCEL_e)) || (dComIfGp_getAStatus() == dActStts_HIDDEN_e)))
+        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(4) && !(i_Meter->mStatusFlags & dMtrStts_UNK20_e)) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) && dComIfGp_getScopeMesgStatus() != fopMsgStts_SCOPE_ACTIVE_e) ||
+        (((i_Meter->mStatusFlags & dMtrStts_UNK100_e) && dComIfGp_getAStatus() != dActStts_CANCEL_e) || dComIfGp_getAStatus() == dActStts_HIDDEN_e))
     {
         if (moveStatus != 1) {
             moveFlag = 1;
@@ -1744,13 +1824,13 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
             }
             moveStatus = 9;
         } else if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) {
-            if ((((dMeter_Info.mButtonIconMode == 0) || (dMeter_Info.mButtonIconMode == 1)) || (dMeter_Info.mButtonIconMode == 2)) || (dMeter_Info.mButtonIconMode == 3)) {
+            if (dMeter_Info.mButtonIconMode == 0 || dMeter_Info.mButtonIconMode == 1 || dMeter_Info.mButtonIconMode == 2 || dMeter_Info.mButtonIconMode == 3) {
                 if (moveStatus != 8) {
                     moveFlag = 1;
                     dMeter_offBit8(&i_Meter->field_0x3026, 2);
                 }
                 moveStatus = 8;
-            } else if (((dMeter_Info.mButtonIconMode == 7) || (dMeter_Info.mButtonIconMode == 8)) || (dMeter_Info.mButtonIconMode == 9 || (dMeter_Info.mButtonIconMode == 10))) {
+            } else if (dMeter_Info.mButtonIconMode == 7 || dMeter_Info.mButtonIconMode == 8 || dMeter_Info.mButtonIconMode == 9 || dMeter_Info.mButtonIconMode == 10) {
                 if (moveStatus != 10) {
                     moveFlag = 1;
                     dMeter_offBit8(&i_Meter->field_0x3026, 2);
@@ -1770,8 +1850,8 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
                 moveStatus = 9;
             }
         }
-    } else if (((i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e)) ||
-               ((i_Meter->mStatusFlags & dMtrStts_UNK200000_e) && (!(i_Meter->mStatusFlags & dMtrStts_UNK10_e))))
+    } else if ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) ||
+               ((i_Meter->mStatusFlags & dMtrStts_UNK200000_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK10_e)))
     {
         if (moveStatus != 2) {
             moveFlag = 1;
@@ -1784,7 +1864,7 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
             dMeter_offBit8(&i_Meter->field_0x3026, 2);
         }
         moveStatus = 3;
-    } else if ((dMenu_flag()) && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && (dMenu_getPushMenuButton() == 0)))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))) {
         if (dMenu_getItemMode() == 0) {
             if (moveStatus != 4) {
                 moveFlag = 1;
@@ -1798,7 +1878,7 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
             }
             moveStatus = 5;
         }
-    } else if ((dMenu_flag()) && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && (dMenu_getPushMenuButton() == 0)))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) {
         if (moveStatus != 5) {
             moveFlag = 1;
             dMeter_offBit8(&i_Meter->field_0x3026, 2);
@@ -1822,7 +1902,7 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
             dMeter_offBit8(&i_Meter->field_0x3026, 2);
         }
         moveStatus = 5;
-    } else if ((i_Meter->mStatusFlags & dMtrStts_UNK100_e) && (dComIfGp_getAStatus() == dActStts_CANCEL_e)) {
+    } else if ((i_Meter->mStatusFlags & dMtrStts_UNK100_e) && dComIfGp_getAStatus() == dActStts_CANCEL_e) {
         if (moveStatus != 7) {
             moveFlag = 1;
             dMeter_offBit8(&i_Meter->field_0x3026, 2);
@@ -1924,13 +2004,12 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
 
 /* 801F337C-801F36C0       .text dMeter_weponAlpha__FP15sub_meter_class */
 void dMeter_weponAlpha(sub_meter_class* i_Meter) {
-    /* Nonmatching - dMeter_isBit8 */
     f32 dVar4;
 
     static s16 alphaNowFrame = 0;
-    if (((i_Meter->mStatusFlags & dMtrStts_UNK400_e) && (dComIfGp_getAStatus() == dActStts_sword_01)) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK2000_e) && (dComIfGp_getAStatus() != dActStts_SPEAK_e)) ||
-        (((i_Meter->mStatusFlags & dMtrStts_UNK2_e) && (dComIfGp_getAStatus() == dActStts_sword_01)) &&
+    if (((i_Meter->mStatusFlags & dMtrStts_UNK400_e) && dComIfGp_getAStatus() == dActStts_sword_01) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK2000_e) && dComIfGp_getAStatus() != dActStts_SPEAK_e) ||
+        (((i_Meter->mStatusFlags & dMtrStts_UNK2_e) && dComIfGp_getAStatus() == dActStts_sword_01) &&
          (strcmp(dComIfGp_getStartStageName(), "Ojhous") && strcmp(dComIfGp_getStartStageName(), "Orichh"))) ||
         ((i_Meter->mStatusFlags & dMtrStts_UNK8000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK10000_e)))
     {
@@ -1944,12 +2023,16 @@ void dMeter_weponAlpha(sub_meter_class* i_Meter) {
             }
         }
     } else {
-        if ((!(i_Meter->mStatusFlags & dMtrStts_UNK2_e)) ||
-            ((dComIfGp_getAStatus() != dActStts_sword_01 && (dComIfGp_getAStatus() != dActStts_BLANK_e)) && (!dMenu_flag())) ||
+#if VERSION == VERSION_DEMO
+        i_Meter->field_0x3024 |= 2;
+#else
+        if (!(i_Meter->mStatusFlags & dMtrStts_UNK2_e) ||
+            (dComIfGp_getAStatus() != dActStts_sword_01 && dComIfGp_getAStatus() != dActStts_BLANK_e && !dMenu_flag()) ||
             (!strcmp(dComIfGp_getStartStageName(), "Ojhous") || (!strcmp(dComIfGp_getStartStageName(), "Orichh"))))
         {
             i_Meter->field_0x3024 |= 2;
         }
+#endif
         if (alphaNowFrame < 5) {
             alphaNowFrame++;
         } else {
@@ -1963,9 +2046,9 @@ void dMeter_weponAlpha(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2860);
         fopMsgM_setNowAlpha(&i_Meter->field_0x2898, dVar4);
         fopMsgM_setNowAlpha(&i_Meter->field_0x28d0, dVar4);
-    } else if ((dComIfGp_getAStatus() == dActStts_sword_01) || (dComIfGp_getAStatus() == dActStts_boko_stick) || (dComIfGp_getAStatus() == dActStts_hatchet) ||
-               (dComIfGp_getAStatus() == dActStts_iron_club) || (dComIfGp_getAStatus() == dActStts_longsword) || (dComIfGp_getAStatus() == dActStts_spear) ||
-               (dComIfGp_getAStatus() == dActStts_spear__dupe_3C))
+    } else if (dComIfGp_getAStatus() == dActStts_sword_01 || dComIfGp_getAStatus() == dActStts_boko_stick || dComIfGp_getAStatus() == dActStts_hatchet ||
+               dComIfGp_getAStatus() == dActStts_iron_club || dComIfGp_getAStatus() == dActStts_longsword || dComIfGp_getAStatus() == dActStts_spear ||
+               dComIfGp_getAStatus() == dActStts_spear__dupe_3C)
     {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x1d00);
         fopMsgM_setNowAlpha(&i_Meter->field_0x2828, dVar4);
@@ -1981,7 +2064,12 @@ void dMeter_weponAlpha(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x28d0, dVar4);
         fopMsgM_setNowAlpha(&i_Meter->field_0x2908, dVar4);
     }
-    if ((dMeter_isBit8(&i_Meter->field_0x3026, 2) != 0) && (i_Meter->field_0x2828.mUserArea == 0)) {
+    if (
+        dMeter_isBit8(&i_Meter->field_0x3026, 2) != 0
+#if VERSION > VERSION_DEMO
+        && i_Meter->field_0x2828.mUserArea == 0
+#endif
+    ) {
         i_Meter->field_0x1d00.pane->show();
         i_Meter->field_0x2828.pane->show();
         i_Meter->field_0x2860.pane->show();
@@ -1995,13 +2083,18 @@ void dMeter_weponAlpha(sub_meter_class* i_Meter) {
 /* 801F36C0-801F3770       .text dMeter_actionInit__FP15sub_meter_class */
 void dMeter_actionInit(sub_meter_class* i_Meter) {
     i_Meter->field_0x1e18[0].mUserArea = 0;
+#if VERSION > VERSION_DEMO
     i_Meter->field_0x27b8.mUserArea = 0;
+#endif
     i_Meter->field_0x301b = 0;
     dComIfGp_setDoStatus(dActStts_BLANK_e);
-    JKRArchive* pArc = dComIfGp_getActionIconArchive();
-    const char* pFilename = dMeter_actionTex(dActStts_BLANK_e);
-    JKRArchive::readTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', pFilename, pArc);
+    JKRArchive* archive = dComIfGp_getActionIconArchive();
+    JKRReadTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', dMeter_actionTex(dActStts_BLANK_e), archive);
+#if VERSION <= VERSION_JPN
+    DCFlushRangeNoSync(i_Meter->actionTex[1], 0xc00);
+#else
     DCStoreRangeNoSync(i_Meter->actionTex[1], 0xc00);
+#endif
     ((J2DPicture*)i_Meter->field_0x27b8.pane)->changeTexture(i_Meter->actionTex[1], 0);
     ((J2DPicture*)i_Meter->field_0x27f0.pane)->changeTexture(i_Meter->actionTex[1], 0);
     ((J2DPicture*)i_Meter->field_0x1d38.pane)->changeTexture(i_Meter->actionTex[1], 0);
@@ -2037,7 +2130,7 @@ void dMeter_actionDraw(sub_meter_class* i_Meter) {
 /* 801F386C-801F3B60       .text dMeter_actionForce__FP15sub_meter_class */
 void dMeter_actionForce(sub_meter_class* i_Meter) {
     if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && (dComIfGp_event_checkHind(4)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e))))
+        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(4) && !(i_Meter->mStatusFlags & dMtrStts_UNK20_e)))
     {
         dComIfGp_setDoStatus(dActStts_BLANK_e);
         return;
@@ -2050,18 +2143,18 @@ void dMeter_actionForce(sub_meter_class* i_Meter) {
             dComIfGp_setAStatus(dActStts_RETURN_e);
         }
         if ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) {
-            if (((dMeter_Info.mButtonIconMode == 0) || (dMeter_Info.mButtonIconMode == 1 || (dMeter_Info.mButtonIconMode == 2))) || (dMeter_Info.mButtonIconMode == 3)) {
+            if (dMeter_Info.mButtonIconMode == 0 || dMeter_Info.mButtonIconMode == 1 || dMeter_Info.mButtonIconMode == 2 || dMeter_Info.mButtonIconMode == 3) {
                 if (dMeter_Info.mButtonIconMode == 0) {
                     dComIfGp_setDoStatus(dActStts_ba_zoom01);
                 } else if (dMeter_Info.mButtonIconMode == 1) {
                     dComIfGp_setDoStatus(dActStts_ba_zoom02);
-                } else if ((dMeter_Info.mButtonIconMode == 2) || (dMeter_Info.mButtonIconMode == 3)) {
+                } else if (dMeter_Info.mButtonIconMode == 2 || dMeter_Info.mButtonIconMode == 3) {
                     dComIfGp_setDoStatus(dActStts_BLANK_e);
                 }
                 dComIfGp_setRStatus(dActStts_CHARTS_e);
                 return;
             }
-            if ((((dMeter_Info.mButtonIconMode == 7) || (dMeter_Info.mButtonIconMode == 8)) || (dMeter_Info.mButtonIconMode == 9)) || (dMeter_Info.mButtonIconMode == 10)) {
+            if (dMeter_Info.mButtonIconMode == 7 || dMeter_Info.mButtonIconMode == 8 || dMeter_Info.mButtonIconMode == 9 || dMeter_Info.mButtonIconMode == 10) {
                 if (dMeter_Info.mButtonIconMode == 10) {
                     dComIfGp_setDoStatus(dActStts_OPEN_e);
                 } else {
@@ -2099,57 +2192,68 @@ void dMeter_actionForce(sub_meter_class* i_Meter) {
     if (dComIfGp_getDoStatusForce() != dActStts_BLANK_e) {
         dComIfGp_setDoStatusForce(dActStts_BLANK_e);
     }
-    if (dComIfGp_getAStatusForce() == dActStts_BLANK_e) {
-        return;
+    if (dComIfGp_getAStatusForce() != dActStts_BLANK_e) {
+        dComIfGp_setAStatus(dComIfGp_getDoStatusForce());
+        dComIfGp_setAStatusForce(dActStts_BLANK_e);
     }
-    dComIfGp_setAStatus(dComIfGp_getDoStatusForce());
-    dComIfGp_setAStatusForce(dActStts_BLANK_e);
 }
 
 /* 801F3B60-801F3CFC       .text dMeter_actionChange__FP15sub_meter_class */
 void dMeter_actionChange(sub_meter_class* i_Meter) {
-    const char* pFilename;
-    JKRArchive* pArc;
-
-    if (i_Meter->field_0x27b8.mUserArea != 0) {
+#if VERSION == VERSION_DEMO
+    if (i_Meter->field_0x301b != dComIfGp_getDoStatus())
+#else
+    if (i_Meter->field_0x27b8.mUserArea != 0)
+#endif
+    {
         if (dComIfGp_getDoStatus() == dActStts_BLANK_e) {
             i_Meter->field_0x1e18[0].mUserArea = 1;
         } else if (dComIfGp_getDoStatus() == dActStts_PARRY_e) {
             mDoAud_seStart(JA_SE_SP_ATTACK_ON);
-        } else if (((dComIfGp_getDoStatus() != dActStts_ba_sake__dupe_31) && (dComIfGp_getDoStatus() != dActStts_ba_nageru__dupe_2D)) &&
-                   (dComIfGp_getDoStatus() != dActStts_ba_motu__dupe_2E))
+        } else if (dComIfGp_getDoStatus() != dActStts_ba_sake__dupe_31 && dComIfGp_getDoStatus() != dActStts_ba_nageru__dupe_2D &&
+                   dComIfGp_getDoStatus() != dActStts_ba_motu__dupe_2E)
         {
             if (dComIfGp_getDoStatus() == dActStts_bow_01) {
-                pArc = dComIfGp_getItemIconArchive();
-                pFilename = dMeter_actionTex(dComIfGp_getDoStatus());
-                JKRArchive::readTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', pFilename, pArc);
+                JKRArchive* archive = dComIfGp_getItemIconArchive();
+                JKRReadTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', dMeter_actionTex(dComIfGp_getDoStatus()), archive);
+#if VERSION <= VERSION_JPN
+                DCFlushRangeNoSync(i_Meter->actionTex[1], 0xc00);
+#else
                 DCStoreRangeNoSync(i_Meter->actionTex[1], 0xc00);
+#endif
                 ((J2DPicture*)i_Meter->field_0x27b8.pane)->changeTexture(i_Meter->actionTex[1], 0);
                 ((J2DPicture*)i_Meter->field_0x27f0.pane)->changeTexture(i_Meter->actionTex[1], 0);
             } else {
-                if ((dComIfGp_getDoStatus() == dActStts_RETURN_e) || (dComIfGp_getDoStatus() == dActStts_RETURN_e)) {
-                    pArc = dComIfGp_getMenuArchive();
+                JKRArchive* archive;
+                if (dComIfGp_getDoStatus() == dActStts_RETURN_e || dComIfGp_getDoStatus() == dActStts_RETURN_e) {
+                    archive = dComIfGp_getMenuArchive();
                 } else {
-                    pArc = dComIfGp_getActionIconArchive();
+                    archive = dComIfGp_getActionIconArchive();
                 }
-                pFilename = dMeter_actionTex(dComIfGp_getDoStatus());
-                JKRArchive::readTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', pFilename, pArc);
+                JKRReadTypeResource(i_Meter->actionTex[1], 0xc00, 'TIMG', dMeter_actionTex(dComIfGp_getDoStatus()), archive);
+#if VERSION <= VERSION_JPN
+                DCFlushRangeNoSync(i_Meter->actionTex[1], 0xc00);
+#else
                 DCStoreRangeNoSync(i_Meter->actionTex[1], 0xc00);
+#endif
                 ((J2DPicture*)i_Meter->field_0x1d38.pane)->changeTexture(i_Meter->actionTex[1], 0);
                 i_Meter->field_0x1e18[0].mUserArea = 1;
             }
         }
         i_Meter->field_0x301b = dComIfGp_getDoStatus();
+#if VERSION > VERSION_DEMO
         i_Meter->field_0x27b8.mUserArea = 0;
+#endif
     }
+#if VERSION > VERSION_DEMO
     if (i_Meter->field_0x301b != dComIfGp_getDoStatus()) {
         i_Meter->field_0x27b8.mUserArea = 1;
     }
+#endif
 }
 
 /* 801F3CFC-801F489C       .text dMeter_actionTrans__FP15sub_meter_class */
 void dMeter_actionTrans(sub_meter_class* i_Meter) {
-    /* Nonmatching - dMeter_isBit8 */
     f32 dVar7;
     f32 x;
 
@@ -2161,10 +2265,10 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
     static f32 expX = 0.0f;
     static f32 expY = 0.0f;
     if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && (dComIfGp_event_checkHind(2)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e))) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e)) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK200000_e) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK10_e))) ||
-        (dComIfGp_getDoStatus() == dActStts_HIDDEN_e))
+        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(2) && !(i_Meter->mStatusFlags & dMtrStts_UNK20_e)) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK200000_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK20_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK10_e)) ||
+        dComIfGp_getDoStatus() == dActStts_HIDDEN_e)
     {
         if (moveStatus != 1) {
             moveFlag = 1;
@@ -2178,33 +2282,31 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
                 dMeter_offBit8(&i_Meter->field_0x3026, 1);
             }
             moveStatus = 9;
-        } else {
-            if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) {
-                if ((((dMeter_Info.mButtonIconMode == 0) || (dMeter_Info.mButtonIconMode == 1)) || (dMeter_Info.mButtonIconMode == 2)) || (dMeter_Info.mButtonIconMode == 3)) {
-                    if (moveStatus != 8) {
-                        moveFlag = 1;
-                        dMeter_offBit8(&i_Meter->field_0x3026, 1);
-                    }
-                    moveStatus = 8;
-                } else if (((dMeter_Info.mButtonIconMode == 7) || (dMeter_Info.mButtonIconMode == 8)) || (dMeter_Info.mButtonIconMode == 9 || (dMeter_Info.mButtonIconMode == 10))) {
-                    if (moveStatus != 0xb) {
-                        moveFlag = 1;
-                        dMeter_offBit8(&i_Meter->field_0x3026, 1);
-                    }
-                    moveStatus = 0xb;
-                } else if ((dMeter_Info.mButtonIconMode == 0xb) || (dMeter_Info.mButtonIconMode == 6)) {
-                    if (moveStatus != 1) {
-                        moveFlag = 1;
-                        dMeter_offBit8(&i_Meter->field_0x3026, 1);
-                    }
-                    moveStatus = 1;
-                } else {
-                    if (moveStatus != 9) {
-                        moveFlag = 1;
-                        dMeter_offBit8(&i_Meter->field_0x3026, 1);
-                    }
-                    moveStatus = 9;
+        } else if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) {
+            if (dMeter_Info.mButtonIconMode == 0 || dMeter_Info.mButtonIconMode == 1 || dMeter_Info.mButtonIconMode == 2 || dMeter_Info.mButtonIconMode == 3) {
+                if (moveStatus != 8) {
+                    moveFlag = 1;
+                    dMeter_offBit8(&i_Meter->field_0x3026, 1);
                 }
+                moveStatus = 8;
+            } else if (dMeter_Info.mButtonIconMode == 7 || dMeter_Info.mButtonIconMode == 8 || dMeter_Info.mButtonIconMode == 9 || dMeter_Info.mButtonIconMode == 10) {
+                if (moveStatus != 0xb) {
+                    moveFlag = 1;
+                    dMeter_offBit8(&i_Meter->field_0x3026, 1);
+                }
+                moveStatus = 0xb;
+            } else if (dMeter_Info.mButtonIconMode == 0xb || dMeter_Info.mButtonIconMode == 6) {
+                if (moveStatus != 1) {
+                    moveFlag = 1;
+                    dMeter_offBit8(&i_Meter->field_0x3026, 1);
+                }
+                moveStatus = 1;
+            } else {
+                if (moveStatus != 9) {
+                    moveFlag = 1;
+                    dMeter_offBit8(&i_Meter->field_0x3026, 1);
+                }
+                moveStatus = 9;
             }
         }
     } else if (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) {
@@ -2213,7 +2315,14 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
             dMeter_offBit8(&i_Meter->field_0x3026, 1);
         }
         moveStatus = 2;
-    } else if ((dMenu_flag()) && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && (dMenu_getPushMenuButton() == 0)))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))) {
+#if VERSION == VERSION_DEMO
+        if (moveStatus != 3) {
+            moveFlag = 1;
+            dMeter_offBit8(&i_Meter->field_0x3026, 1);
+        }
+        moveStatus = 3;
+#else
         if (dMenu_getItemMode() == 0) {
             if (moveStatus != 3) {
                 moveFlag = 1;
@@ -2227,7 +2336,8 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
             }
             moveStatus = 4;
         }
-    } else if ((dMenu_flag()) && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && (dMenu_getPushMenuButton() == 0)))) {
+#endif
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) {
         if (moveStatus != 4) {
             moveFlag = 1;
             dMeter_offBit8(&i_Meter->field_0x3026, 1);
@@ -2372,15 +2482,19 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
 
 /* 801F489C-801F4C80       .text dMeter_actionAlpha__FP15sub_meter_class */
 void dMeter_actionAlpha(sub_meter_class* i_Meter) {
-    /* Nonmatching - dMeter_isBit8 */
     int iVar1;
     daNpc_So_c* pfVar2;
     f32 dVar2;
 
     static s16 alphaNowFrame = 0;
     if (((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) &&
-        (dMeter_Info.mButtonIconMode == 2 ||
-         (((dMeter_Info.mButtonIconMode == 3 || (dMeter_Info.mButtonIconMode == 7)) || (dMeter_Info.mButtonIconMode == 8)) || (dMeter_Info.mButtonIconMode == 9))))
+        (
+            dMeter_Info.mButtonIconMode == 2 ||
+            dMeter_Info.mButtonIconMode == 3 ||
+            dMeter_Info.mButtonIconMode == 7 ||
+            dMeter_Info.mButtonIconMode == 8 ||
+            dMeter_Info.mButtonIconMode == 9
+        ))
     {
         if (alphaNowFrame > 3) {
             alphaNowFrame--;
@@ -2399,7 +2513,7 @@ void dMeter_actionAlpha(sub_meter_class* i_Meter) {
     }
     dVar2 = fopMsgM_valueIncrease(5, (int)alphaNowFrame, 0);
     if (dComIfGp_getMiniGameType() == 8) {
-        pfVar2 = (daNpc_So_c*)fopAcM_SearchByName(PROC_NPC_SO);
+        pfVar2 = (daNpc_So_c*)fopAcM_SearchByName(fpcNm_NPC_SO_e);
         if (pfVar2 != NULL) {
             iVar1 = pfVar2->getMiniGameRestArrow();
             if (iVar1 < 10) {
@@ -2425,8 +2539,8 @@ void dMeter_actionAlpha(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x27f0);
         fopMsgM_setNowAlpha(&i_Meter->field_0x1e18[0], dVar2);
         fopMsgM_setNowAlpha(&i_Meter->field_0x1da8[0], dVar2);
-    } else if (((dComIfGp_getDoStatus() == dActStts_PARRY_e) || (dComIfGp_getDoStatus() == dActStts_ba_sake__dupe_31)) ||
-               (dComIfGp_getDoStatus() == dActStts_ba_nageru__dupe_2D || (dComIfGp_getDoStatus() == dActStts_ba_motu__dupe_2E)))
+    } else if (dComIfGp_getDoStatus() == dActStts_PARRY_e || dComIfGp_getDoStatus() == dActStts_ba_sake__dupe_31 ||
+               dComIfGp_getDoStatus() == dActStts_ba_nageru__dupe_2D || dComIfGp_getDoStatus() == dActStts_ba_motu__dupe_2E)
     {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x1d38);
         fopMsgM_setNowAlpha(&i_Meter->field_0x1e18[1], dVar2);
@@ -2459,7 +2573,7 @@ void dMeter_actionAlpha(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x27f0);
     }
     fopMsgM_setNowAlpha(&i_Meter->field_0x2908, dVar2);
-    if ((dMeter_isBit8(&i_Meter->field_0x3026, 1) != 0) && (i_Meter->field_0x27b8.mUserArea == 0)) {
+    if (dMeter_isBit8(&i_Meter->field_0x3026, 1) != 0 && i_Meter->field_0x27b8.mUserArea == 0) {
         i_Meter->field_0x1d38.pane->show();
         i_Meter->field_0x27b8.pane->show();
         i_Meter->field_0x27f0.pane->show();
@@ -2515,56 +2629,54 @@ void dMeter_xyInit(sub_meter_class* i_Meter) {
     for (s32 i = 0; i < 8; i++) {
         dMenu_baitNum[i] = dComIfGs_getBaitNum(i);
     }
-    for (int i = 0; i < 3; i++) {
-        dComIfGp_setSelectItem(i);
-        i_Meter->field_0x3021[i] = dComIfGp_getSelectItem(i);
-        dMeter_xyItemChange(i_Meter, i);
+    for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+        dComIfGp_setSelectItem(itemBtn);
+        i_Meter->field_0x3021[itemBtn] = dComIfGp_getSelectItem(itemBtn);
+        dMeter_xyItemChange(i_Meter, itemBtn);
     }
 }
 
 /* 801F4FEC-801F5248       .text dMeter_xyMove__FP15sub_meter_class */
 void dMeter_xyMove(sub_meter_class* i_Meter) {
-    u8 dVar1;
     bool bVar2;
     bool bVar3;
     cXyz local_38;
 
     bVar2 = true;
     bVar3 = false;
-    for (s32 i = 0; i < 3; i++) {
-        if (i_Meter->field_0x3021[i] != dComIfGp_getSelectItem(i)) {
-            dMeter_xyItemChange(i_Meter, i);
+    for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+        if (i_Meter->field_0x3021[itemBtn] != dComIfGp_getSelectItem(itemBtn)) {
+            dMeter_xyItemChange(i_Meter, itemBtn);
             bVar2 = false;
 #if VERSION == VERSION_DEMO
-            if ((i_Meter->field_0x3021[i] == dItem_MAGIC_ARROW_e) || (i_Meter->field_0x3021[i] == dItem_LIGHT_ARROW_e))
+            if (i_Meter->field_0x3021[itemBtn] == dItemNo_MAGIC_ARROW_e || i_Meter->field_0x3021[itemBtn] == dItemNo_LIGHT_ARROW_e)
 #else
-            if ((dComIfGp_getSelectItem(i) != dItem_MAGIC_ARROW_e) && (dComIfGp_getSelectItem(i) != dItem_LIGHT_ARROW_e))
+            if (dComIfGp_getSelectItem(itemBtn) != dItemNo_MAGIC_ARROW_e && dComIfGp_getSelectItem(itemBtn) != dItemNo_LIGHT_ARROW_e)
 #endif
             {
-                i_Meter->field_0x2320[i].pane->hide();
-                i_Meter->field_0x23c8[i].pane->hide();
-                i_Meter->field_0x2470[i].pane->hide();
-                i_Meter->field_0x2320[i].mUserArea = 0;
+                i_Meter->field_0x2320[itemBtn].pane->hide();
+                i_Meter->field_0x23c8[itemBtn].pane->hide();
+                i_Meter->field_0x2470[itemBtn].pane->hide();
+                i_Meter->field_0x2320[itemBtn].mUserArea = 0;
             }
-            i_Meter->field_0x3021[i] = dComIfGp_getSelectItem(i);
+            i_Meter->field_0x3021[itemBtn] = dComIfGp_getSelectItem(itemBtn);
         }
     }
     if (bVar2) {
         dMeter_xyItemCountUp(i_Meter);
     }
     dMeter_xyTrans(i_Meter);
-    for (s32 i = 0; i < 3; i++) {
-        dVar1 = g_dComIfG_gameInfo.play.mSelectItem[i];
-        if ((dVar1 == dItem_MAGIC_ARROW_e) || (dVar1 == dItem_LIGHT_ARROW_e)) {
-            dMeter_xyBowLightAnime(i_Meter, i);
-        } else if (dVar1 == dItem_FOREST_WATER_e) {
+    for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+        if (dComIfGp_getSelectItem(itemBtn) == dItemNo_MAGIC_ARROW_e || dComIfGp_getSelectItem(itemBtn) == dItemNo_LIGHT_ARROW_e) {
+            dMeter_xyBowLightAnime(i_Meter, itemBtn);
+        } else if (dComIfGp_getSelectItem(itemBtn) == dItemNo_FOREST_WATER_e) {
             bVar3 = true;
-            local_38.set(i_Meter->field_0x2080[i].mPosCenter.x - 320.0f, i_Meter->field_0x2080[i].mPosCenter.y - 240.0f, 0.0f);
+            local_38.set(i_Meter->field_0x2080[itemBtn].mPosCenter.x - 320.0f, i_Meter->field_0x2080[itemBtn].mPosCenter.y - 240.0f, 0.0f);
             for (s32 j = 0; j < 2; j++) {
                 if (i_Meter->field_0x2f2c[j] != NULL) {
                     i_Meter->field_0x2f2c[j]->setGlobalTranslation(local_38.x, local_38.y, local_38.z);
                     i_Meter->field_0x2f2c[j]->playDrawParticle();
-                    i_Meter->field_0x2f2c[j]->setGlobalAlpha(i_Meter->field_0x2080[i].mNowAlpha);
+                    i_Meter->field_0x2f2c[j]->setGlobalAlpha(i_Meter->field_0x2080[itemBtn].mNowAlpha);
                 } else {
                     i_Meter->field_0x2f2c[j] = dComIfGp_particle_set2DmenuFore(dPa_name::ID_HM_J2_RUPYLIGHT, &local_38);
                 }
@@ -2603,119 +2715,96 @@ void dMeter_xyDraw(sub_meter_class* i_Meter) {
 }
 
 /* 801F5308-801F543C       .text dMeter_xyEquipItem__Fi */
-int dMeter_xyEquipItem(int param_1) {
-    u8 dVar2;
-    u8 uVar3;
-
-    param_1 = dComIfGs_getSelectItem(param_1);
-    if (param_1 < dInvSlot_ItemLast_e) {
-        dVar2 = g_dComIfG_gameInfo.save.getPlayer().getItem().getItem(param_1);
-    } else if (param_1 < dInvSlot_BeastFirst_e) {
-        dVar2 = dItem_NONE_e;
-    } else if (param_1 < dInvSlot_BeastLast_e) {
-        dVar2 = dComIfGs_getItemBeast(param_1 - dInvSlot_BeastFirst_e);
-    } else if (param_1 < dInvSlot_BaitFirst_e) {
-        dVar2 = dItem_NONE_e;
-    } else if (param_1 < dInvSlot_BaitLast_e) {
-        dVar2 = dComIfGs_getItemBait(param_1 - dInvSlot_BaitFirst_e);
-    } else if (param_1 < dInvSlot_ReserveFirst_e) {
-        dVar2 = dItem_NONE_e;
-    } else if (param_1 < dInvSlot_ReserveLast_e) {
-        dVar2 = dComIfGs_getItemReserve(param_1 - dInvSlot_ReserveFirst_e);
-    } else {
-        dVar2 = dItem_NONE_e;
-    }
-    uVar3 = 0;
-    switch (dVar2) {
-    case dItem_SKULL_NECKLACE_e:
-        uVar3 = 0;
+int dMeter_xyEquipItem(int i_itemBtn) {
+    int invIdx = dComIfGs_getSelectItem(i_itemBtn);
+    u8 itemNo = dComIfGs_getItem(invIdx);
+    u8 beastIdx = 0;
+    switch (itemNo) {
+    case dItemNo_SKULL_NECKLACE_e:
+        beastIdx = dBeastIdx_SKULL_NECKLACE_e;
         break;
-    case dItem_BOKOBABA_SEED_e:
-        uVar3 = 1;
+    case dItemNo_BOKOBABA_SEED_e:
+        beastIdx = dBeastIdx_BOKOBABA_SEED_e;
         break;
-    case dItem_GOLDEN_FEATHER_e:
-        uVar3 = 2;
+    case dItemNo_GOLDEN_FEATHER_e:
+        beastIdx = dBeastIdx_GOLDEN_FEATHER_e;
         break;
-    case BOKO_BELT:
-        uVar3 = 3;
+    case dItemNo_KNIGHTS_CREST_e:
+        beastIdx = dBeastIdx_KNIGHTS_CREST_e;
         break;
-    case dItem_RED_JELLY_e:
-        uVar3 = 4;
+    case dItemNo_RED_JELLY_e:
+        beastIdx = dBeastIdx_RED_JELLY_e;
         break;
-    case dItem_GREEN_JELLY_e:
-        uVar3 = 5;
+    case dItemNo_GREEN_JELLY_e:
+        beastIdx = dBeastIdx_GREEN_JELLY_e;
         break;
-    case dItem_BLUE_JELLY_e:
-        uVar3 = 6;
+    case dItemNo_BLUE_JELLY_e:
+        beastIdx = dBeastIdx_BLUE_JELLY_e;
         break;
-    case dItem_JOY_PENDANT_e:
-        uVar3 = 7;
+    case dItemNo_JOY_PENDANT_e:
+        beastIdx = dBeastIdx_JOY_PENDANT_e;
         break;
     }
-    return uVar3;
+    return beastIdx;
 }
 
 /* 801F543C-801F57B0       .text dMeter_xyItemNumberSet__FP15sub_meter_classi */
-void dMeter_xyItemNumberSet(sub_meter_class* i_Meter, int param_2) {
-    if ((dComIfGp_getSelectItem(param_2) == CAMERA) || (dComIfGp_getSelectItem(param_2) == CAMERA2)) {
-        dMeter_PaneHide(&i_Meter->field_0x1f30[param_2]);
-        dMeter_PaneShow(&i_Meter->field_0x1fd8[param_2]);
-        dMeter_numberSet(i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getPictureNum());
-        dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getPictureNum(), 3);
-    } else if ((dComIfGp_getSelectItem(param_2) == dItem_BOW_e) ||
-               (dComIfGp_getSelectItem(param_2) == dItem_MAGIC_ARROW_e || (dComIfGp_getSelectItem(param_2) == dItem_LIGHT_ARROW_e)))
+void dMeter_xyItemNumberSet(sub_meter_class* i_Meter, int i_itemBtn) {
+    if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_PICTO_BOX_e || dComIfGp_getSelectItem(i_itemBtn) == dItemNo_DELUXE_PICTO_BOX_e) {
+        dMeter_PaneHide(&i_Meter->field_0x1f30[i_itemBtn]);
+        dMeter_PaneShow(&i_Meter->field_0x1fd8[i_itemBtn]);
+        dMeter_numberSet(i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getPictureNum());
+        dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getPictureNum(), 3);
+    } else if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_BOW_e ||
+               (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_MAGIC_ARROW_e || dComIfGp_getSelectItem(i_itemBtn) == dItemNo_LIGHT_ARROW_e))
     {
-        dMeter_PaneShow(&i_Meter->field_0x1f30[param_2]);
-        dMeter_PaneShow(&i_Meter->field_0x1fd8[param_2]);
+        dMeter_PaneShow(&i_Meter->field_0x1f30[i_itemBtn]);
+        dMeter_PaneShow(&i_Meter->field_0x1fd8[i_itemBtn]);
         if (dComIfGs_getArrowNum() < 10) {
-            dMeter_PaneHide(&i_Meter->field_0x1f30[param_2]);
+            dMeter_PaneHide(&i_Meter->field_0x1f30[i_itemBtn]);
         } else {
-            dMeter_numberSet(i_Meter->field_0x1f30[param_2].pane, dComIfGs_getArrowNum() / 10);
-            dMeter_numberColor((J2DPicture*)i_Meter->field_0x1f30[param_2].pane, dComIfGs_getArrowNum(), dComIfGs_getArrowMax());
+            dMeter_numberSet(i_Meter->field_0x1f30[i_itemBtn].pane, dComIfGs_getArrowNum() / 10);
+            dMeter_numberColor((J2DPicture*)i_Meter->field_0x1f30[i_itemBtn].pane, dComIfGs_getArrowNum(), dComIfGs_getArrowMax());
         }
-        dMeter_numberSet(i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getArrowNum() % 10);
-        dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getArrowNum(), dComIfGs_getArrowMax());
-    } else if (dComIfGp_getSelectItem(param_2) == dItem_BOMB_BAG_e) {
-        dMeter_PaneShow(&i_Meter->field_0x1f30[param_2]);
-        dMeter_PaneShow(&i_Meter->field_0x1fd8[param_2]);
+        dMeter_numberSet(i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getArrowNum() % 10);
+        dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getArrowNum(), dComIfGs_getArrowMax());
+    } else if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_BOMB_BAG_e) {
+        dMeter_PaneShow(&i_Meter->field_0x1f30[i_itemBtn]);
+        dMeter_PaneShow(&i_Meter->field_0x1fd8[i_itemBtn]);
         if (dComIfGs_getBombNum() < 10) {
-            dMeter_PaneHide(&i_Meter->field_0x1f30[param_2]);
+            dMeter_PaneHide(&i_Meter->field_0x1f30[i_itemBtn]);
         } else {
-            dMeter_numberSet(i_Meter->field_0x1f30[param_2].pane, dComIfGs_getBombNum() / 10);
-            dMeter_numberColor((J2DPicture*)i_Meter->field_0x1f30[param_2].pane, dComIfGs_getBombNum(), dComIfGs_getBombMax());
+            dMeter_numberSet(i_Meter->field_0x1f30[i_itemBtn].pane, dComIfGs_getBombNum() / 10);
+            dMeter_numberColor((J2DPicture*)i_Meter->field_0x1f30[i_itemBtn].pane, dComIfGs_getBombNum(), dComIfGs_getBombMax());
         }
-        dMeter_numberSet(i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getBombNum() % 10);
-        dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getBombNum(), dComIfGs_getBombMax());
-    } else {
-        if ((dComIfGs_getSelectItem(param_2) >= dInvSlot_BeastFirst_e) && (dComIfGs_getSelectItem(param_2) <= dInvSlot_BeastLast_e - 1)) {
-            dMeter_PaneShow(&i_Meter->field_0x1f30[param_2]);
-            dMeter_PaneShow(&i_Meter->field_0x1fd8[param_2]);
-            int iVar3 = dMeter_xyEquipItem(param_2);
-            if (dComIfGs_getBeastNum(iVar3) < 10) {
-                dMeter_PaneHide(&i_Meter->field_0x1f30[param_2]);
-            } else {
-                dMeter_numberSet(i_Meter->field_0x1f30[param_2].pane, dComIfGs_getBeastNum(iVar3) / 10);
-                dMeter_numberColor((J2DPicture*)i_Meter->field_0x1f30[param_2].pane, dComIfGs_getBeastNum(iVar3), 99);
-            }
-            dMeter_numberSet(i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getBeastNum(iVar3) % 10);
-            dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getBeastNum(iVar3), 99);
+        dMeter_numberSet(i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getBombNum() % 10);
+        dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getBombNum(), dComIfGs_getBombMax());
+    } else if (dComIfGs_getSelectItem(i_itemBtn) >= dInvSlot_BeastFirst_e && (dComIfGs_getSelectItem(i_itemBtn) <= dInvSlot_BeastLast_e - 1)) {
+        dMeter_PaneShow(&i_Meter->field_0x1f30[i_itemBtn]);
+        dMeter_PaneShow(&i_Meter->field_0x1fd8[i_itemBtn]);
+        int beastIdx = dMeter_xyEquipItem(i_itemBtn);
+        if (dComIfGs_getBeastNum(beastIdx) < 10) {
+            dMeter_PaneHide(&i_Meter->field_0x1f30[i_itemBtn]);
         } else {
-            if ((dComIfGs_getSelectItem(param_2) >= dInvSlot_BaitFirst_e) && (dComIfGs_getSelectItem(param_2) <= dInvSlot_BaitLast_e - 1)) {
-                if (dComIfGp_getSelectItem(param_2) == dItem_HYOI_PEAR_e) {
-                    dMeter_PaneHide(&i_Meter->field_0x1f30[param_2]);
-                    dMeter_PaneHide(&i_Meter->field_0x1fd8[param_2]);
-                } else {
-                    dMeter_PaneHide(&i_Meter->field_0x1f30[param_2]);
-                    dMeter_PaneShow(&i_Meter->field_0x1fd8[param_2]);
-                    dMeter_numberSet(i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getBaitNum(dComIfGs_getSelectItem(param_2) - dInvSlot_BaitFirst_e));
-                    dMeter_numberColor(
-                        (J2DPicture*)i_Meter->field_0x1fd8[param_2].pane, dComIfGs_getBaitNum(dComIfGs_getSelectItem(param_2) - dInvSlot_BaitFirst_e), 3
-                    );
-                }
+            dMeter_numberSet(i_Meter->field_0x1f30[i_itemBtn].pane, dComIfGs_getBeastNum(beastIdx) / 10);
+            dMeter_numberColor((J2DPicture*)i_Meter->field_0x1f30[i_itemBtn].pane, dComIfGs_getBeastNum(beastIdx), 99);
+        }
+        dMeter_numberSet(i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getBeastNum(beastIdx) % 10);
+        dMeter_numberColor((J2DPicture*)i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getBeastNum(beastIdx), 99);
+    } else {
+        if (dComIfGs_getSelectItem(i_itemBtn) >= dInvSlot_BaitFirst_e && (dComIfGs_getSelectItem(i_itemBtn) <= dInvSlot_BaitLast_e - 1)) {
+            if (dComIfGp_getSelectItem(i_itemBtn) == dItemNo_HYOI_PEAR_e) {
+                dMeter_PaneHide(&i_Meter->field_0x1f30[i_itemBtn]);
+                dMeter_PaneHide(&i_Meter->field_0x1fd8[i_itemBtn]);
             } else {
-                dMeter_PaneHide(&i_Meter->field_0x1f30[param_2]);
-                dMeter_PaneHide(&i_Meter->field_0x1fd8[param_2]);
+                dMeter_PaneHide(&i_Meter->field_0x1f30[i_itemBtn]);
+                dMeter_PaneShow(&i_Meter->field_0x1fd8[i_itemBtn]);
+                dMeter_numberSet(i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getBaitNum(dComIfGs_getSelectItem(i_itemBtn) - dInvSlot_BaitFirst_e));
+                dMeter_numberColor(i_Meter->field_0x1fd8[i_itemBtn].pane, dComIfGs_getBaitNum(dComIfGs_getSelectItem(i_itemBtn) - dInvSlot_BaitFirst_e), 3);
             }
+        } else {
+            dMeter_PaneHide(&i_Meter->field_0x1f30[i_itemBtn]);
+            dMeter_PaneHide(&i_Meter->field_0x1fd8[i_itemBtn]);
         }
     }
 }
@@ -2739,9 +2828,10 @@ void dMeter_xyBowLightAnime(sub_meter_class* i_Meter, int param_2) {
         dVar4 = fopMsgM_valueIncrease(0x3c, 0x78 - iVar2, 0);
     }
     dVar5 = (1.0f - (dVar4 * 0.39999998f));
-    lVar6 = ((i_Meter->field_0x2320[0].mInitAlpha) - ((i_Meter->field_0x2320[0].mInitAlpha - 50.0f) * dVar4));
+    lVar6 = (i_Meter->field_0x2320[0].mInitAlpha - ((i_Meter->field_0x2320[0].mInitAlpha - 50.0f) * dVar4));
     for (s32 i = 0; i < 3; i++) {
-        fopMsgM_paneScaleXY(&(&i_Meter->field_0x2320[param_2])[i], dVar5);
+        // TODO: this indexing seems wrong. field_0x2320 may be a 2D array of 3x3
+        fopMsgM_paneScaleXY(&(&i_Meter->field_0x2320[param_2])[i*3], dVar5);
         (&i_Meter->field_0x2320[param_2].mNowAlpha)[i] = lVar6;
     }
 }
@@ -2749,18 +2839,12 @@ void dMeter_xyBowLightAnime(sub_meter_class* i_Meter, int param_2) {
 /* 801F58E4-801F5C98       .text dMeter_xyItemCountUp__FP15sub_meter_class */
 void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
     /* Nonmatching */
-    u8 uVar2;
-    bool bVar3;
-    s16 sVar4;
-    s16 uVar5;
-    s32 uVar8;
-
-    bVar3 = false;
+    bool bVar3 = false;
     static u8 arrowMax = dComIfGs_getArrowMax();
     static u8 bombMax = dComIfGs_getBombMax();
-    if (g_dComIfG_gameInfo.play.field_0x48de != 0) {
-        sVar4 = dComIfGs_getPictureNum() + g_dComIfG_gameInfo.play.field_0x48de;
-        g_dComIfG_gameInfo.play.field_0x48de = 0;
+    if (dComIfGp_getItemPictureNumCount() != 0) {
+        s16 sVar4 = dComIfGs_getPictureNum() + dComIfGp_getItemPictureNumCount();
+        dComIfGp_clearItemPictureNumCount();
         if (sVar4 < 0) {
             sVar4 = 0;
         }
@@ -2770,15 +2854,15 @@ void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
         dComIfGs_setPictureNum(sVar4);
         bVar3 = true;
     }
-    if ((((dComIfGs_checkGetItem(dItem_BOW_e)) || (dComIfGs_checkGetItem(dItem_MAGIC_ARROW_e)) || (dComIfGs_checkGetItem(dItem_LIGHT_ARROW_e))) &&
-         (dComIfGp_getItemArrowNumCount() != 0)) ||
-        (arrowMax != dComIfGs_getArrowMax()))
+    if (((dComIfGs_checkGetItem(dItemNo_BOW_e) || dComIfGs_checkGetItem(dItemNo_MAGIC_ARROW_e) || dComIfGs_checkGetItem(dItemNo_LIGHT_ARROW_e)) &&
+         dComIfGp_getItemArrowNumCount() != 0) ||
+        arrowMax != dComIfGs_getArrowMax())
     {
         if (g_meterHIO.field_0x62 != 0) {
-            g_dComIfG_gameInfo.play.mItemArrowNumCount = 0;
+            dComIfGp_clearItemArrowNumCount();
         }
-        uVar5 = dComIfGs_getArrowNum() + dComIfGp_getItemArrowNumCount();
-        g_dComIfG_gameInfo.play.mItemArrowNumCount = 0;
+        s16 uVar5 = dComIfGs_getArrowNum() + dComIfGp_getItemArrowNumCount();
+        dComIfGp_clearItemArrowNumCount();
         if (uVar5 < 0) {
             uVar5 = 0;
         }
@@ -2789,7 +2873,7 @@ void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
         arrowMax = dComIfGs_getArrowMax();
         bVar3 = 1;
     }
-    if (((dComIfGs_checkGetItem(dItem_BOMB_BAG_e)) && (dComIfGp_getItemBombNumCount() != 0)) || (bombMax != dComIfGs_getBombMax())) {
+    if ((dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && dComIfGp_getItemBombNumCount() != 0) || bombMax != dComIfGs_getBombMax()) {
         if (g_meterHIO.field_0x63 != 0) {
             g_dComIfG_gameInfo.play.mItemBombNumCount = 0;
         }
@@ -2805,113 +2889,112 @@ void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
         bombMax = dComIfGs_getBombMax();
         bVar3 = 1;
     }
-    for (s32 i = 0; i < 8; i++) {
-        if (g_dComIfG_gameInfo.play.mItemBeastNumCounts[i] != 0) {
-            sVar4 = dComIfGs_getBeastNum(i) + g_dComIfG_gameInfo.play.mItemBeastNumCounts[i];
-            g_dComIfG_gameInfo.play.mItemBeastNumCounts[i] = 0;
+    for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
+        if (dComIfGp_getItemBeastNumCount(beastIdx) != 0) {
+            s16 sVar4 = dComIfGs_getBeastNum(beastIdx) + dComIfGp_getItemBeastNumCount(beastIdx);
+            dComIfGp_clearItemBeastNumCount(beastIdx);
             if (sVar4 <= 0) {
-                dComIfGs_setBeastNum(i, 0);
-                for (s32 j = 0; j < 3; j++) {
-                    if (dComIfGp_getSelectItem(j) == fopMsgM_itemNumIdx(i + 0x18)) {
-                        dMeter_PaneHide(&i_Meter->field_0x2080[j]);
-                        dMeter_PaneHide(&i_Meter->field_0x2128[j]);
-                        dMeter_PaneHide(&i_Meter->field_0x1f30[j]);
-                        dMeter_PaneHide(&i_Meter->field_0x1fd8[j]);
+                dComIfGs_setBeastNum(beastIdx, 0);
+                for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+                    if (dComIfGp_getSelectItem(itemBtn) == fopMsgM_itemNumIdx(beastIdx + dInvSlot_BeastFirst_e)) {
+                        dMeter_PaneHide(&i_Meter->field_0x2080[itemBtn]);
+                        dMeter_PaneHide(&i_Meter->field_0x2128[itemBtn]);
+                        dMeter_PaneHide(&i_Meter->field_0x1f30[itemBtn]);
+                        dMeter_PaneHide(&i_Meter->field_0x1fd8[itemBtn]);
                     }
                 }
-                uVar8 = fopMsgM_itemNumIdx(i + 0x18);
-                g_dComIfG_gameInfo.save.mSavedata.mPlayer.mBagItem.setBeastItemEmpty(uVar8);
+                int itemNo = fopMsgM_itemNumIdx(beastIdx + dInvSlot_BeastFirst_e);
+                dComIfGs_setBeastItemEmpty(itemNo);
                 bVar3 = true;
             } else {
                 if (sVar4 > 99) {
                     sVar4 = 99;
                 }
-                dComIfGs_setBeastNum(i, sVar4);
+                dComIfGs_setBeastNum(beastIdx, sVar4);
                 bVar3 = true;
             }
         }
-        uVar2 = dComIfGs_getBaitNum(i);
-        if (dMenu_baitNum[i] != uVar2) {
-            dMenu_baitNum[i] = uVar2;
+        if (dMenu_baitNum[beastIdx] != dComIfGs_getBaitNum(beastIdx)) {
+            dMenu_baitNum[beastIdx] = dComIfGs_getBaitNum(beastIdx);
             bVar3 = true;
         }
     }
-    for (s32 i = 0; i < 3; i++) {
-        if (dComIfGp_getSelectItem(i) == dItem_BIRD_BAIT_5_e) {
+
+#if VERSION > VERSION_DEMO
+    for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+        if (dComIfGp_getSelectItem(itemBtn) == dItemNo_BIRD_BAIT_5_e) {
             bVar3 = true;
         }
     }
+#endif
+
     if (bVar3) {
-        for (s32 i = 0; i < 3; i++) {
-            dMeter_xyItemNumberSet(i_Meter, i);
+        for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+            dMeter_xyItemNumberSet(i_Meter, itemBtn);
         }
     }
 }
 
 /* 801F5C98-801F5FDC       .text dMeter_xyItemChange__FP15sub_meter_classi */
-void dMeter_xyItemChange(sub_meter_class* i_Meter, int param_2) {
-    JKRArchive* pArc;
-    const char* pFilename;
-
-    if (dComIfGp_getSelectItem(param_2) != dItem_NONE_e) {
-        if (dComIfGs_getSelectItem(param_2) >= dInvSlot_ReserveFirst_e) {
-            dMeter_PaneShow(&i_Meter->field_0x2080[param_2]);
-            dMeter_PaneShow(&i_Meter->field_0x2128[param_2]);
-            pArc = dComIfGp_getItemIconArchive();
-            pFilename = dItem_data::getTexture(dComIfGp_getSelectItem(param_2));
-            JKRArchive::readTypeResource(i_Meter->xyIconTex[param_2], 0xc00, 'TIMG', pFilename, pArc);
-            DCStoreRangeNoSync(i_Meter->xyIconTex[param_2], 0xc00);
-            ((J2DPicture*)i_Meter->field_0x2080[param_2].pane)->changeTexture(i_Meter->xyIconTex[param_2], 0);
-            ((J2DPicture*)i_Meter->field_0x2128[param_2].pane)->changeTexture(i_Meter->xyIconTex[param_2], 0);
-        } else if (dComIfGs_getSelectItem(param_2) >= dInvSlot_BaitFirst_e) {
-            dMeter_PaneShow(&i_Meter->field_0x2080[param_2]);
-            dMeter_PaneShow(&i_Meter->field_0x2128[param_2]);
-            pArc = dComIfGp_getItemIconArchive();
-            pFilename = dItem_data::getTexture(dComIfGp_getSelectItem(param_2));
-            JKRArchive::readTypeResource(i_Meter->xyIconTex[param_2], 0xc00, 'TIMG', pFilename, pArc);
-            DCStoreRangeNoSync(i_Meter->xyIconTex[param_2], 0xc00);
-            ((J2DPicture*)i_Meter->field_0x2080[param_2].pane)->changeTexture(i_Meter->xyIconTex[param_2], 0);
-            ((J2DPicture*)i_Meter->field_0x2128[param_2].pane)->changeTexture(i_Meter->xyIconTex[param_2], 0);
-        } else if (dComIfGs_getSelectItem(param_2) >= dInvSlot_BeastFirst_e) {
-            dMeter_PaneShow(&i_Meter->field_0x2080[param_2]);
-            dMeter_PaneShow(&i_Meter->field_0x2128[param_2]);
-            pArc = dComIfGp_getItemIconArchive();
-            pFilename = dItem_data::getTexture(dComIfGp_getSelectItem(param_2));
-            JKRArchive::readTypeResource(i_Meter->xyIconTex[param_2], 0xc00, 'TIMG', pFilename, pArc);
-            DCStoreRangeNoSync(i_Meter->xyIconTex[param_2], 0xc00);
-            ((J2DPicture*)i_Meter->field_0x2080[param_2].pane)->changeTexture(i_Meter->xyIconTex[param_2], 0);
-            ((J2DPicture*)i_Meter->field_0x2128[param_2].pane)->changeTexture(i_Meter->xyIconTex[param_2], 0);
+void dMeter_xyItemChange(sub_meter_class* i_Meter, int i_itemBtn) {
+    if (dComIfGp_getSelectItem(i_itemBtn) != dItemNo_NONE_e) {
+        if (dComIfGs_getSelectItem(i_itemBtn) >= dInvSlot_ReserveFirst_e) {
+            dMeter_PaneShow(&i_Meter->field_0x2080[i_itemBtn]);
+            dMeter_PaneShow(&i_Meter->field_0x2128[i_itemBtn]);
+            JKRArchive* archive = dComIfGp_getItemIconArchive();
+            const char* filename = dItem_data::getTexture(dComIfGp_getSelectItem(i_itemBtn));
+            JKRReadTypeResource(i_Meter->xyIconTex[i_itemBtn], 0xc00, 'TIMG', filename, archive);
+            DCStoreRangeNoSync(i_Meter->xyIconTex[i_itemBtn], 0xc00);
+            ((J2DPicture*)i_Meter->field_0x2080[i_itemBtn].pane)->changeTexture(i_Meter->xyIconTex[i_itemBtn], 0);
+            ((J2DPicture*)i_Meter->field_0x2128[i_itemBtn].pane)->changeTexture(i_Meter->xyIconTex[i_itemBtn], 0);
+        } else if (dComIfGs_getSelectItem(i_itemBtn) >= dInvSlot_BaitFirst_e) {
+            dMeter_PaneShow(&i_Meter->field_0x2080[i_itemBtn]);
+            dMeter_PaneShow(&i_Meter->field_0x2128[i_itemBtn]);
+            JKRArchive* archive = dComIfGp_getItemIconArchive();
+            const char* filename = dItem_data::getTexture(dComIfGp_getSelectItem(i_itemBtn));
+            JKRReadTypeResource(i_Meter->xyIconTex[i_itemBtn], 0xc00, 'TIMG', filename, archive);
+            DCStoreRangeNoSync(i_Meter->xyIconTex[i_itemBtn], 0xc00);
+            ((J2DPicture*)i_Meter->field_0x2080[i_itemBtn].pane)->changeTexture(i_Meter->xyIconTex[i_itemBtn], 0);
+            ((J2DPicture*)i_Meter->field_0x2128[i_itemBtn].pane)->changeTexture(i_Meter->xyIconTex[i_itemBtn], 0);
+        } else if (dComIfGs_getSelectItem(i_itemBtn) >= dInvSlot_BeastFirst_e) {
+            dMeter_PaneShow(&i_Meter->field_0x2080[i_itemBtn]);
+            dMeter_PaneShow(&i_Meter->field_0x2128[i_itemBtn]);
+            JKRArchive* archive = dComIfGp_getItemIconArchive();
+            const char* filename = dItem_data::getTexture(dComIfGp_getSelectItem(i_itemBtn));
+            JKRReadTypeResource(i_Meter->xyIconTex[i_itemBtn], 0xc00, 'TIMG', filename, archive);
+            DCStoreRangeNoSync(i_Meter->xyIconTex[i_itemBtn], 0xc00);
+            ((J2DPicture*)i_Meter->field_0x2080[i_itemBtn].pane)->changeTexture(i_Meter->xyIconTex[i_itemBtn], 0);
+            ((J2DPicture*)i_Meter->field_0x2128[i_itemBtn].pane)->changeTexture(i_Meter->xyIconTex[i_itemBtn], 0);
         } else {
-            dMeter_PaneShow(&i_Meter->field_0x2080[param_2]);
-            dMeter_PaneShow(&i_Meter->field_0x2128[param_2]);
-            u8 uVar2 = dComIfGp_getSelectItem(param_2);
-            u8 var_r4 = uVar2;
-            if (uVar2 == dItem_MAGIC_ARROW_e) {
-                i_Meter->field_0x2320[param_2].pane->show();
-                i_Meter->field_0x23c8[param_2].pane->show();
-                i_Meter->field_0x2470[param_2].pane->hide();
-                var_r4 = dItem_BOW_e;
-            } else if (uVar2 == dItem_LIGHT_ARROW_e) {
-                i_Meter->field_0x2320[param_2].pane->show();
-                i_Meter->field_0x23c8[param_2].pane->show();
-                i_Meter->field_0x2470[param_2].pane->show();
-                var_r4 = dItem_BOW_e;
+            dMeter_PaneShow(&i_Meter->field_0x2080[i_itemBtn]);
+            dMeter_PaneShow(&i_Meter->field_0x2128[i_itemBtn]);
+            u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
+            if (itemNo == dItemNo_MAGIC_ARROW_e) {
+                i_Meter->field_0x2320[i_itemBtn].pane->show();
+                i_Meter->field_0x23c8[i_itemBtn].pane->show();
+                i_Meter->field_0x2470[i_itemBtn].pane->hide();
+                itemNo = dItemNo_BOW_e;
+            } else if (itemNo == dItemNo_LIGHT_ARROW_e) {
+                i_Meter->field_0x2320[i_itemBtn].pane->show();
+                i_Meter->field_0x23c8[i_itemBtn].pane->show();
+                i_Meter->field_0x2470[i_itemBtn].pane->show();
+                itemNo = dItemNo_BOW_e;
             }
-            if ((var_r4 == dItem_MAGIC_ARROW_e) || (var_r4 == dItem_LIGHT_ARROW_e)) {
-                var_r4 = dItem_BOW_e;
+            if (itemNo == dItemNo_MAGIC_ARROW_e || itemNo == dItemNo_LIGHT_ARROW_e) {
+                itemNo = dItemNo_BOW_e;
             }
-            pArc = dComIfGp_getItemIconArchive();
-            pFilename = dItem_data::getTexture(var_r4);
-            JKRArchive::readTypeResource(i_Meter->xyIconTex[param_2], 0xc00, 'TIMG', pFilename, pArc);
-            DCStoreRangeNoSync(i_Meter->xyIconTex[param_2], 0xc00);
-            ((J2DPicture*)i_Meter->field_0x2080[param_2].pane)->changeTexture(i_Meter->xyIconTex[param_2], 0);
-            ((J2DPicture*)i_Meter->field_0x2128[param_2].pane)->changeTexture(i_Meter->xyIconTex[param_2], 0);
+            JKRArchive* archive = dComIfGp_getItemIconArchive();
+            const char* filename = dItem_data::getTexture(itemNo);
+            JKRReadTypeResource(i_Meter->xyIconTex[i_itemBtn], 0xc00, 'TIMG', filename, archive);
+            DCStoreRangeNoSync(i_Meter->xyIconTex[i_itemBtn], 0xc00);
+            ((J2DPicture*)i_Meter->field_0x2080[i_itemBtn].pane)->changeTexture(i_Meter->xyIconTex[i_itemBtn], 0);
+            ((J2DPicture*)i_Meter->field_0x2128[i_itemBtn].pane)->changeTexture(i_Meter->xyIconTex[i_itemBtn], 0);
         }
     } else {
-        dMeter_PaneHide(&i_Meter->field_0x2080[param_2]);
-        dMeter_PaneHide(&i_Meter->field_0x2128[param_2]);
+        dMeter_PaneHide(&i_Meter->field_0x2080[i_itemBtn]);
+        dMeter_PaneHide(&i_Meter->field_0x2128[i_itemBtn]);
     }
-    dMeter_xyItemNumberSet(i_Meter, param_2);
+    dMeter_xyItemNumberSet(i_Meter, i_itemBtn);
 }
 
 /* 801F5FDC-801F6084       .text dMeter_xyRotateZ__FP18fopMsgM_pane_classff */
@@ -2923,128 +3006,204 @@ void dMeter_xyRotateZ(fopMsgM_pane_class* param_1, f32 param_2, f32 param_3) {
 
 /* 801F6084-801F69A0       .text dMeter_xyAlpha__FP15sub_meter_class */
 void dMeter_xyAlpha(sub_meter_class* i_Meter) {
-    u8 dVar2;
     f32 dVar10;
     f32 dVar11;
     f32 dVar12;
 
     static s16 alphaNowFrame[] = {0x0000, 0x0000, 0x0000};
 
-    if ((!(i_Meter->mStatusFlags & dMtrStts_UNK4000_e)) && ((!(i_Meter->mStatusFlags & dMtrStts_UNK40_e)) || (!(dComIfGp_event_checkHind(1))))) {
-        if ((((((!(i_Meter->mStatusFlags & dMtrStts_UNK100_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK10_e))) &&
-               (!(i_Meter->mStatusFlags & dMtrStts_UNK800000_e))) &&
-              (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e) || (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) != 1))) &&
-             (!(i_Meter->mStatusFlags & dMtrStts_UNK80_e) &&
-              (!(i_Meter->mStatusFlags & dMtrStts_UNK100000_e) && (!(i_Meter->mStatusFlags & dMtrStts_UNK200000_e))))) &&
-            (!(i_Meter->mStatusFlags & dMtrStts_UNK20000_e) &&
-             ((!(i_Meter->mStatusFlags & dMtrStts_UNK40000_e) && (!(i_Meter->mStatusFlags & dMtrStts_UNK80000_e))) &&
-              (!(i_Meter->mStatusFlags & dMtrStts_UNK400000_e)))))
+    if (
+        !(i_Meter->mStatusFlags & dMtrStts_UNK4000_e) &&
+        (!(i_Meter->mStatusFlags & dMtrStts_UNK40_e) || !dComIfGp_event_checkHind(1)) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK100_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK10_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK800000_e) &&
+        (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e) || (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) != 1)) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK80_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK100000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK200000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK20000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK40000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK80000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK400000_e)
+    )
+    {
+        if (i_Meter->mStatusFlags & dMtrStts_UNK8_e) {
+            for (s32 i = 0; i < 3; i++) {
+                if (alphaNowFrame[i] < 5) {
+                    alphaNowFrame[i]++;
+                } else {
+                    alphaNowFrame[i] = 5;
+                }
+            }
+        } else if (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e) &&
+                    (((i_Meter->mStatusFlags & dMtrStts_UNK800_e) || (i_Meter->mStatusFlags & dMtrStts_UNK2000_e)) ||
+                    ((i_Meter->mStatusFlags & dMtrStts_UNK8000_e) ||
+                        ((i_Meter->mStatusFlags & dMtrStts_UNK200_e) || (i_Meter->mStatusFlags & dMtrStts_UNK10000_e)))))
         {
-            if (i_Meter->mStatusFlags & dMtrStts_UNK8_e) {
-                for (s32 i = 0; i < 3; i++) {
+            for (s32 i = 0; i < 3; i++) {
+                if (alphaNowFrame[i] > 3) {
+                    alphaNowFrame[i]--;
+                } else {
+                    if (alphaNowFrame[i] < 3) {
+                        alphaNowFrame[i]++;
+                    } else {
+                        alphaNowFrame[i] = 3;
+                    }
+                }
+            }
+        } else if ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) {
+            for (s32 i = 0; i < 3; i++) {
+                if (i == 1) {
                     if (alphaNowFrame[i] < 5) {
                         alphaNowFrame[i]++;
                     } else {
                         alphaNowFrame[i] = 5;
                     }
+                } else if ((s32)alphaNowFrame[i] > 0) {
+                    alphaNowFrame[i] = alphaNowFrame[i] - 1;
+                } else {
+                    alphaNowFrame[i] = 0;
                 }
-            } else if ((!(i_Meter->mStatusFlags & dMtrStts_UNK8_e)) &&
-                       (((i_Meter->mStatusFlags & dMtrStts_UNK800_e) || (i_Meter->mStatusFlags & dMtrStts_UNK2000_e)) ||
-                        ((i_Meter->mStatusFlags & dMtrStts_UNK8000_e) ||
-                         ((i_Meter->mStatusFlags & dMtrStts_UNK200_e) || (i_Meter->mStatusFlags & dMtrStts_UNK10000_e)))))
-            {
-                for (s32 i = 0; i < 3; i++) {
-                    if (alphaNowFrame[i] > 3) {
-                        alphaNowFrame[i]--;
+            }
+        } else {
+            for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+                if (((i_Meter->mStatusFlags & dMtrStts_UNK1000_e) && dComIfGp_getSelectItem(itemBtn) != dItemNo_GRAPPLING_HOOK_e) ||
+                    ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) && dComIfGp_getSelectItem(itemBtn) != dItemNo_TELESCOPE_e) ||
+                    (
+                        (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) && (
+                            dComIfGp_getSelectItem(itemBtn) != dItemNo_PICTO_BOX_e || dComIfGp_getSelectItem(itemBtn) != dItemNo_DELUXE_PICTO_BOX_e)
+                        ) ||
+                    (
+                        (i_Meter->mStatusFlags & dMtrStts_UNK400_e) &&
+                        dComIfGp_getMiniGameType() != 1 &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SAIL_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_TELESCOPE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_WIND_WAKER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_GRAPPLING_HOOK_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BOOMERANG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_TINGLE_TUNER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_PICTO_BOX_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_DELUXE_PICTO_BOX_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_MAGIC_ARMOR_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BAIT_BAG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_HYOI_PEAR_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BIRD_BAIT_5_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BOW_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_MAGIC_ARROW_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_LIGHT_ARROW_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BOMB_BAG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_HOOKSHOT_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_EMPTY_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_RED_POTION_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_GREEN_POTION_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BLUE_POTION_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_HALF_SOUP_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SOUP_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_WATER_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_FAIRY_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_FIREFLY_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_FOREST_WATER_e
+                    ) ||
+                    (
+                        dComIfGp_getMiniGameType() == 1 &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SAIL_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_TELESCOPE_e
+                    ) ||
+                    (
+                        dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e &&
+                        (
+                            (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0) ||
+                            (strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0) ||
+                            (strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0) ||
+                            (strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0)
+                        ) &&
+                        (
+                            dComIfGp_getSelectItem(itemBtn) == dItemNo_WATER_BOTTLE_e ||
+                            dComIfGp_getSelectItem(itemBtn) == dItemNo_FIREFLY_BOTTLE_e ||
+                            dComIfGp_getSelectItem(itemBtn) == dItemNo_FOREST_WATER_e
+                        )
+                    ) ||
+                    (
+                        (i_Meter->mStatusFlags & dMtrStts_UNK2_e) &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_TINGLE_TUNER_e &&
+                        (
+                            dComIfGp_getSelectItem(itemBtn) != dItemNo_WIND_WAKER_e ||
+                            (strcmp(dComIfGp_getStartStageName(), "Otkura") != 0)) &&
+                        (
+                            dComIfGp_getSelectItem(itemBtn) != dItemNo_GRAPPLING_HOOK_e ||
+                            (strcmp(dComIfGp_getStartStageName(), "Abesso") != 0)
+                        ) &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_PICTO_BOX_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_DELUXE_PICTO_BOX_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SPOILS_BAG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SKULL_NECKLACE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BOKOBABA_SEED_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_GOLDEN_FEATHER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_KNIGHTS_CREST_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_RED_JELLY_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_GREEN_JELLY_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BLUE_JELLY_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_JOY_PENDANT_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BAIT_BAG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BIRD_BAIT_5_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_HYOI_PEAR_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_EMPTY_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_RED_POTION_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_GREEN_POTION_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BLUE_POTION_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_HALF_SOUP_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SOUP_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_WATER_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_FAIRY_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_FIREFLY_BOTTLE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_FOREST_WATER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_DELIVERY_BAG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_TOWN_FLOWER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SEA_FLOWER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_EXOTIC_FLOWER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_HEROS_FLAG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BIG_CATCH_FLAG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_BIG_SALE_FLAG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_PINWHEEL_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SICKLE_MOON_FLAG_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SKULL_TOWER_IDOL_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_FOUNTAIN_IDOL_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_POSTMAN_STATUE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_SHOP_GURU_STATUE_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_FATHER_LETTER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_NOTE_TO_MOM_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_MAGGIES_LETTER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_MOBLINS_LETTER_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_CABANA_DEED_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_COMPLIMENTARY_ID_e &&
+                        dComIfGp_getSelectItem(itemBtn) != dItemNo_FILL_UP_COUPON_e
+                    )
+                )
+                {
+                    if (alphaNowFrame[itemBtn] > 3) {
+                        alphaNowFrame[itemBtn]--;
+                    } else if (alphaNowFrame[itemBtn] < 3) {
+                        alphaNowFrame[itemBtn]++;
                     } else {
-                        if (alphaNowFrame[i] < 3) {
-                            alphaNowFrame[i]++;
-                        } else {
-                            alphaNowFrame[i] = 3;
-                        }
-                    }
-                }
-            } else {
-                if ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) {
-                    for (s32 i = 0; i < 3; i++) {
-                        if (i == 1) {
-                            if (alphaNowFrame[i] < 5) {
-                                alphaNowFrame[i]++;
-                            } else {
-                                alphaNowFrame[i] = 5;
-                            }
-                        } else if ((s32)alphaNowFrame[i] > 0) {
-                            alphaNowFrame[i] = alphaNowFrame[i] + -1;
-                        } else {
-                            alphaNowFrame[i] = 0;
-                        }
+                        alphaNowFrame[itemBtn] = 3;
                     }
                 } else {
-                    for (s32 i = 0; i < 3; i++) {
-                        if (((i_Meter->mStatusFlags & dMtrStts_UNK1000_e) && (dComIfGp_getSelectItem(i) != dItem_GRAPPLING_HOOK_e)) ||
-                            ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) && (dComIfGp_getSelectItem(i) != dItem_TELESCOPE_e)) ||
-                            ((i_Meter->mStatusFlags & dMtrStts_UNK20000_e) &&
-                             ((dVar2 = dComIfGp_getSelectItem(i), ((dVar2 == CAMERA) == 0)) || (dVar2 != CAMERA2))) ||
-                            ((i_Meter->mStatusFlags & dMtrStts_UNK400_e) && (dComIfGp_getMiniGameType() != 1) &&
-                             (dVar2 = dComIfGp_getSelectItem(i), ((dVar2 == NORMAL_SAIL) == 0)) && (dVar2 != dItem_TELESCOPE_e) &&
-                             (dVar2 != dItem_WIND_WAKER_e) && (dVar2 != dItem_GRAPPLING_HOOK_e) && (dVar2 != dItem_BOOMERANG_e) &&
-                             (dVar2 != dItem_TINGLE_TUNER_e) && (dVar2 != CAMERA) && (dVar2 != CAMERA2) && (dVar2 != dItem_MAGIC_ARMOR_e) &&
-                             (dVar2 != dItem_BAIT_BAG_e) && (dVar2 != dItem_HYOI_PEAR_e) && (dVar2 != dItem_BIRD_BAIT_5_e) && (dVar2 != dItem_BOW_e) &&
-                             (dVar2 != dItem_MAGIC_ARROW_e) && (dVar2 != dItem_LIGHT_ARROW_e) && (dVar2 != dItem_BOMB_BAG_e) && (dVar2 != dItem_HOOKSHOT_e) &&
-                             (dVar2 != dItem_EMPTY_BOTTLE_e) && (dVar2 != dItem_RED_POTION_e) && (dVar2 != dItem_GREEN_POTION_e) &&
-                             (dVar2 != dItem_BLUE_POTION_e) && (dVar2 != dItem_HALF_SOUP_BOTTLE_e) && (dVar2 != dItem_SOUP_BOTTLE_e) &&
-                             (dVar2 != dItem_WATER_BOTTLE_e) && (dVar2 != dItem_FAIRY_BOTTLE_e) && (dVar2 != dItem_FIREFLY_BOTTLE_e) &&
-                             (dVar2 != dItem_FOREST_WATER_e)) ||
-                            ((dComIfGp_getMiniGameType() == 1) && (dVar2 = dComIfGp_getSelectItem(i), ((dVar2 == NORMAL_SAIL) == 0)) &&
-                             (dVar2 != dItem_TELESCOPE_e)) ||
-                            ((dStage_stagInfo_GetSTType(dComIfGp_getStageStagInfo()) == dStageType_BOSS_e) &&
-                             ((strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0) || (strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0) ||
-                              (strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0) || (strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0)) &&
-                             ((dVar2 = dComIfGp_getSelectItem(i), (dVar2 == dItem_WATER_BOTTLE_e)) || ((u8)dVar2 == dItem_FIREFLY_BOTTLE_e) ||
-                              (dVar2 == dItem_FOREST_WATER_e))) ||
-                            ((i_Meter->mStatusFlags & dMtrStts_UNK2_e) && (dVar2 = dComIfGp_getSelectItem(i), (dVar2 == dItem_TINGLE_TUNER_e) == 0) &&
-                             ((dVar2 != dItem_WIND_WAKER_e) || (strcmp(dComIfGp_getStartStageName(), "Otkura") != 0)) &&
-                             ((dComIfGp_getSelectItem(i) != dItem_GRAPPLING_HOOK_e) || (strcmp(dComIfGp_getStartStageName(), "Abesso") != 0)) &&
-                             (dVar2 = dComIfGp_getSelectItem(i), ((dVar2 == CAMERA) == 0)) && (dVar2 != CAMERA2) && (dVar2 != dItem_SPOILS_BAG_e) &&
-                             (dVar2 != dItem_SKULL_NECKLACE_e) && (dVar2 != dItem_BOKOBABA_SEED_e) && (dVar2 != dItem_GOLDEN_FEATHER_e) &&
-                             (dVar2 != BOKO_BELT) && (dVar2 != dItem_RED_JELLY_e) && (dVar2 != dItem_GREEN_JELLY_e) && (dVar2 != dItem_BLUE_JELLY_e) &&
-                             (dVar2 != dItem_JOY_PENDANT_e) && (dVar2 != dItem_BAIT_BAG_e) && (dVar2 != dItem_BIRD_BAIT_5_e) && (dVar2 != dItem_HYOI_PEAR_e) &&
-                             (dVar2 != dItem_EMPTY_BOTTLE_e) && (dVar2 != dItem_RED_POTION_e) && (dVar2 != dItem_GREEN_POTION_e) &&
-                             (dVar2 != dItem_BLUE_POTION_e) && (dVar2 != dItem_HALF_SOUP_BOTTLE_e) && (dVar2 != dItem_SOUP_BOTTLE_e) &&
-                             (dVar2 != dItem_WATER_BOTTLE_e) && (dVar2 != dItem_FAIRY_BOTTLE_e) && (dVar2 != dItem_FIREFLY_BOTTLE_e) &&
-                             (dVar2 != dItem_FOREST_WATER_e) && (dVar2 != dItem_DELIVERY_BAG_e) && (dVar2 != FLOWER_1) && (dVar2 != FLOWER_2) &&
-                             (dVar2 != FLOWER_3) && (dVar2 != HEROS_FLAG) && (dVar2 != TAIRYO_FLAG) && (dVar2 != SALES_FLAG) && (dVar2 != WIND_FLAG) &&
-                             (dVar2 != RED_FLAG) && (dVar2 != FOSSIL_HEAD) && (dVar2 != WATER_STATUE) && (dVar2 != POSTMAN_STATUE) &&
-                             (dVar2 != PRESIDENT_STATUE) && (dVar2 != dItem_FATHER_LETTER_e) && (dVar2 != dItem_NOTE_TO_MOM_e) && (dVar2 != MAGYS_LETTER) &&
-                             (dVar2 != MO_LETTER) && (dVar2 != COTTAGE_PAPER) && (dVar2 != KAISEN_PRESENT1) && (dVar2 != KAISEN_PRESENT2)))
-                        {
-                            if (alphaNowFrame[i] > 3) {
-                                alphaNowFrame[i]--;
-                            } else {
-                                if (alphaNowFrame[i] < 3) {
-                                    alphaNowFrame[i]++;
-                                } else {
-                                    alphaNowFrame[i] = 3;
-                                }
-                            }
-                        } else {
-                            if (alphaNowFrame[i] < 5) {
-                                alphaNowFrame[i]++;
-                            } else {
-                                alphaNowFrame[i] = 5;
-                            }
-                            switch (i) {
-                            case 0:
-                                i_Meter->field_0x3024 |= 4;
-                                break;
-                            case 1:
-                                i_Meter->field_0x3024 |= 8;
-                                break;
-                            case 2:
-                                i_Meter->field_0x3024 |= 0x20;
-                                break;
-                            }
-                        }
+                    if (alphaNowFrame[itemBtn] < 5) {
+                        alphaNowFrame[itemBtn]++;
+                    } else {
+                        alphaNowFrame[itemBtn] = 5;
+                    }
+                    switch (itemBtn) {
+                    case 0:
+                        i_Meter->field_0x3024 |= 4;
+                        break;
+                    case 1:
+                        i_Meter->field_0x3024 |= 8;
+                        break;
+                    case 2:
+                        i_Meter->field_0x3024 |= 0x20;
+                        break;
                     }
                 }
             }
@@ -3088,7 +3247,6 @@ void dMeter_xyAlpha(sub_meter_class* i_Meter) {
 
 /* 801F69A0-801F7034       .text dMeter_xyTrans__FP15sub_meter_class */
 void dMeter_xyTrans(sub_meter_class* i_Meter) {
-    /* Nonmatching - dMeter_isBit8 */
     static s16 moveNowFrame = 0;
     static s16 moveFlag = 0;
     static s16 moveStatus = 0;
@@ -3096,21 +3254,19 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
     static f32 nowY = 0.0f;
     if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(1)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK100_e) ||
-        (((dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && (dMenu_getPushMenuButton() == 0)))) ||
-          (i_Meter->mStatusFlags & dMtrStts_UNK800000_e)) ||
-         (((((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
-            (i_Meter->mStatusFlags & dMtrStts_UNK80_e)) ||
-           (((i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e)) ||
-            ((i_Meter->mStatusFlags & dMtrStts_UNK20000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80000_e))))
-          ) ||
-          (i_Meter->mStatusFlags & dMtrStts_UNK400000_e))))
+        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK40000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK400000_e))
     {
         if (moveStatus != 1) {
             moveFlag = 1;
             dMeter_offBit8(&i_Meter->field_0x3026, 4);
         }
         moveStatus = 1;
-    } else if ((dMenu_flag()) && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && (dMenu_getPushMenuButton() == 0)))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))) {
         if (dMenu_getItemMode() == 0) {
             if (moveStatus != 2) {
                 moveFlag = 1;
@@ -3126,13 +3282,13 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
         }
     } else {
         if (i_Meter->mStatusFlags & dMtrStts_UNK20_e) {
-            if ((((dMeter_Info.mButtonIconMode == 0) || (dMeter_Info.mButtonIconMode == 1)) || (dMeter_Info.mButtonIconMode == 2)) || (dMeter_Info.mButtonIconMode == 3)) {
+            if (dMeter_Info.mButtonIconMode == 0 || dMeter_Info.mButtonIconMode == 1 || dMeter_Info.mButtonIconMode == 2 || dMeter_Info.mButtonIconMode == 3) {
                 if (moveStatus != 3) {
                     moveFlag = 1;
                     dMeter_offBit8(&i_Meter->field_0x3026, 4);
                 }
                 moveStatus = 3;
-            } else if (((dMeter_Info.mButtonIconMode == 7) || (dMeter_Info.mButtonIconMode == 8)) || (dMeter_Info.mButtonIconMode == 9 || (dMeter_Info.mButtonIconMode == 10))) {
+            } else if (dMeter_Info.mButtonIconMode == 7 || dMeter_Info.mButtonIconMode == 8 || dMeter_Info.mButtonIconMode == 9 || dMeter_Info.mButtonIconMode == 10) {
                 if (moveStatus != 4) {
                     moveFlag = 1;
                     dMeter_offBit8(&i_Meter->field_0x3026, 4);
@@ -3214,41 +3370,37 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
 
 /* 801F7034-801F70E0       .text dMeter_rInit__FP15sub_meter_class */
 void dMeter_rInit(sub_meter_class* i_Meter) {
-    JKRArchive* pArc;
-    const char* pFilename;
-
     i_Meter->field_0x26d8.mUserArea = 0;
     i_Meter->field_0x1cc8.mUserArea = 0;
     i_Meter->field_0x301c = 0;
     dComIfGp_setRStatus(dActStts_BLANK_e);
-    if ((dComIfGp_getRStatus() == dActStts_RETURN_e) || (dComIfGp_getRStatus() == dActStts_RETURN_e)) {
-        pArc = dComIfGp_getMenuArchive();
+    JKRArchive* archive;
+    if (dComIfGp_getRStatus() == dActStts_RETURN_e || dComIfGp_getRStatus() == dActStts_RETURN_e) {
+        archive = dComIfGp_getMenuArchive();
     } else {
-        pArc = dComIfGp_getActionIconArchive();
+        archive = dComIfGp_getActionIconArchive();
     }
-    pFilename = dMeter_actionTex(dActStts_BLANK_e);
-    JKRArchive::readTypeResource(i_Meter->actionTex[2], 0xc00, 'TIMG', pFilename, pArc);
+    const char* filename = dMeter_actionTex(dActStts_BLANK_e);
+    JKRReadTypeResource(i_Meter->actionTex[2], 0xc00, 'TIMG', filename, archive);
     DCStoreRangeNoSync(i_Meter->actionTex[2], 0xc00);
     ((J2DPicture*)i_Meter->field_0x1cc8.pane)->changeTexture(i_Meter->actionTex[2], 0);
 }
 
 /* 801F70E0-801F71F4       .text dMeter_rMove__FP15sub_meter_class */
 void dMeter_rMove(sub_meter_class* i_Meter) {
-    const char* pFilename;
-    JKRArchive* pArc;
-
     if (dComIfGp_getRStatusForce() != dActStts_BLANK_e) {
         dComIfGp_setRStatus(dComIfGp_getRStatusForce());
     }
     if (i_Meter->field_0x1cc8.mUserArea != 0) {
         if (dComIfGp_getRStatus() != dActStts_BLANK_e) {
-            if ((dComIfGp_getRStatus() == dActStts_RETURN_e) || (dComIfGp_getRStatus() == dActStts_RETURN_e)) {
-                pArc = dComIfGp_getMenuArchive();
+            JKRArchive* archive;
+            if (dComIfGp_getRStatus() == dActStts_RETURN_e || dComIfGp_getRStatus() == dActStts_RETURN_e) {
+                archive = dComIfGp_getMenuArchive();
             } else {
-                pArc = dComIfGp_getActionIconArchive();
+                archive = dComIfGp_getActionIconArchive();
             }
-            pFilename = dMeter_actionTex(dComIfGp_getRStatus());
-            JKRArchive::readTypeResource(i_Meter->actionTex[2], 0xc00, 'TIMG', pFilename, pArc);
+            const char* filename = dMeter_actionTex(dComIfGp_getRStatus());
+            JKRReadTypeResource(i_Meter->actionTex[2], 0xc00, 'TIMG', filename, archive);
             DCStoreRangeNoSync(i_Meter->actionTex[2], 0xc00);
             ((J2DPicture*)i_Meter->field_0x1cc8.pane)->changeTexture(i_Meter->actionTex[2], 0);
         }
@@ -3273,18 +3425,25 @@ void dMeter_rDraw(sub_meter_class* i_Meter) {
 
 /* 801F7234-801F749C       .text dMeter_rAlpha__FP15sub_meter_class */
 void dMeter_rAlpha(sub_meter_class* i_Meter) {
-    /* Nonmatching - dMeter_isBit8 */
-    s16 sVar2;
-    f32 dVar5;
-    f32 dVar6;
-
     static s16 alphaNowFrame = 0;
-    if (((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && (dComIfGp_event_checkHind(8)))) ||
-        (((((i_Meter->mStatusFlags & dMtrStts_UNK100_e) || (i_Meter->mStatusFlags & dMtrStts_UNK200_e)) || (i_Meter->mStatusFlags & dMtrStts_UNK8_e)) ||
-          ((i_Meter->mStatusFlags & dMtrStts_UNK10_e) || (i_Meter->mStatusFlags & dMtrStts_UNK800000_e))) ||
-         ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e)))) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK200000_e) ||
-         (((i_Meter->mStatusFlags & dMtrStts_UNK40000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80000_e)) || (i_Meter->mStatusFlags & dMtrStts_UNK400000_e))))
+    if (
+        (
+            (i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
+            ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(8)) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK100_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK200_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK8_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK10_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK20_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK40000_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK80000_e) ||
+            (i_Meter->mStatusFlags & dMtrStts_UNK400000_e)
+        )
+    )
     {
         if (alphaNowFrame < 5) {
             alphaNowFrame++;
@@ -3300,6 +3459,7 @@ void dMeter_rAlpha(sub_meter_class* i_Meter) {
             alphaNowFrame = 3;
         }
     } else {
+        s16 sVar2;
         if (alphaNowFrame < 5) {
             sVar2 = alphaNowFrame + 1;
         } else {
@@ -3308,6 +3468,7 @@ void dMeter_rAlpha(sub_meter_class* i_Meter) {
         alphaNowFrame = sVar2;
         i_Meter->field_0x3024 |= 0x10;
     }
+    f32 dVar5;
     dVar5 = fopMsgM_valueIncrease(5, alphaNowFrame, 0);
     if (dComIfGp_getRStatus() == dActStts_BLANK_e) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x1cc8);
@@ -3315,14 +3476,18 @@ void dMeter_rAlpha(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x1cc8, dVar5);
     }
     if ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) {
-        dVar6 = 1.0f - dVar5;
         fopMsgM_setNowAlpha(&i_Meter->field_0x26a0, 1.0f - dVar5);
-        fopMsgM_setNowAlpha(&i_Meter->field_0x26d8, dVar6);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x26d8, 1.0f - dVar5);
     } else {
         fopMsgM_setNowAlpha(&i_Meter->field_0x26a0, dVar5);
         fopMsgM_setNowAlpha(&i_Meter->field_0x26d8, dVar5);
     }
-    if ((dMeter_isBit8(&i_Meter->field_0x3026, 8) != 0) && (i_Meter->field_0x1cc8.mUserArea == 0)) {
+    if (
+        dMeter_isBit8(&i_Meter->field_0x3026, 8) != 0
+#if VERSION > VERSION_DEMO
+        && i_Meter->field_0x1cc8.mUserArea == 0
+#endif
+    ) {
         i_Meter->field_0x1cc8.pane->show();
     } else {
         i_Meter->field_0x1cc8.pane->hide();
@@ -3331,84 +3496,84 @@ void dMeter_rAlpha(sub_meter_class* i_Meter) {
 
 /* 801F749C-801F7B0C       .text dMeter_rTrans__FP15sub_meter_class */
 void dMeter_rTrans(sub_meter_class* i_Meter) {
-    /* Nonmatching - dMeter_isBit8 */
     static s16 moveNowFrame = 0;
     static s16 moveFlag = 0;
     static s16 moveStatus = 0;
     static f32 nowX = 0.0f;
     static f32 nowY = 0.0f;
-    if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && (dComIfGp_event_checkHind(8))) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK100_e) || (dComIfGp_getRStatus() == dActStts_HIDDEN_e)))
-    {
+
+    if (
+        (i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(8)) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK100_e) ||
+        dComIfGp_getRStatus() == dActStts_HIDDEN_e)
+    ) {
         if (moveStatus != 1) {
             moveFlag = 1;
             dMeter_offBit8(&i_Meter->field_0x3026, 8);
         }
         moveStatus = 1;
-    } else {
-        if (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) {
-            if (moveStatus != 2) {
+    } else if (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) {
+        if (moveStatus != 2) {
+            moveFlag = 1;
+            dMeter_offBit8(&i_Meter->field_0x3026, 8);
+        }
+        moveStatus = 2;
+    } else if (i_Meter->mStatusFlags & dMtrStts_UNK40000_e) {
+        if (moveStatus != 4) {
+            moveFlag = 1;
+            dMeter_offBit8(&i_Meter->field_0x3026, 8);
+        }
+        moveStatus = 4;
+    } else if (
+        (
+            dMenu_flag() && dComIfGp_getPictureStatus() != 2 &&
+            (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))
+        ) ||
+        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK80000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK400000_e)
+    ) {
+        if (moveStatus != 1) {
+            moveFlag = 1;
+            dMeter_offBit8(&i_Meter->field_0x3026, 8);
+        }
+        moveStatus = 1;
+    } else if (i_Meter->mStatusFlags & dMtrStts_UNK20_e) {
+        if (dMeter_Info.mButtonIconMode == 0 || dMeter_Info.mButtonIconMode == 1 || dMeter_Info.mButtonIconMode == 2 || dMeter_Info.mButtonIconMode == 3) {
+            if (moveStatus != 3) {
                 moveFlag = 1;
                 dMeter_offBit8(&i_Meter->field_0x3026, 8);
             }
-            moveStatus = 2;
-        } else {
-            if (i_Meter->mStatusFlags & dMtrStts_UNK40000_e) {
-                if (moveStatus != 4) {
-                    moveFlag = 1;
-                    dMeter_offBit8(&i_Meter->field_0x3026, 8);
-                }
-                moveStatus = 4;
-            } else {
-                if (((dMenu_flag()) && (dComIfGp_getPictureStatus() != 2) &&
-                     ((dMenu_getPushMenuButton() == 1) || ((dMenu_getMenuStatus() == 1) && (dMenu_getPushMenuButton() == 0)))) ||
-                    ((dMenu_flag()) && ((dMenu_getPushMenuButton() == 2) || ((dMenu_getMenuStatus() == 2) && (dMenu_getPushMenuButton() == 0)))) ||
-                    (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
-                    ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
-                    (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
-                    ((i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e)) ||
-                    (i_Meter->mStatusFlags & dMtrStts_UNK80000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK400000_e))
-                {
-                    if (moveStatus != 1) {
-                        moveFlag = 1;
-                        dMeter_offBit8(&i_Meter->field_0x3026, 8);
-                    }
-                    moveStatus = 1;
-                } else {
-                    if (i_Meter->mStatusFlags & dMtrStts_UNK20_e) {
-                        if (((dMeter_Info.mButtonIconMode == 0) || (dMeter_Info.mButtonIconMode == 1)) || (dMeter_Info.mButtonIconMode == 2 || (dMeter_Info.mButtonIconMode == 3))) {
-                            if (moveStatus != 3) {
-                                moveFlag = 1;
-                                dMeter_offBit8(&i_Meter->field_0x3026, 8);
-                            }
-                            moveStatus = 3;
-                        } else if ((((dMeter_Info.mButtonIconMode == 7) || (dMeter_Info.mButtonIconMode == 8)) || (dMeter_Info.mButtonIconMode == 9)) ||
-                                   (dMeter_Info.mButtonIconMode == 10))
-                        {
-                            if (moveStatus != 5) {
-                                moveFlag = 1;
-                                dMeter_offBit8(&i_Meter->field_0x3026, 8);
-                            }
-                            moveStatus = 5;
-                        } else {
-                            if (moveStatus != 1) {
-                                moveFlag = 1;
-                                dMeter_offBit8(&i_Meter->field_0x3026, 8);
-                            }
-                            moveStatus = 1;
-                        }
-
-                    } else {
-                        if (moveStatus != 0) {
-                            moveFlag = 1;
-                            dMeter_offBit8(&i_Meter->field_0x3026, 8);
-                        }
-                        moveStatus = 0;
-                    }
-                }
+            moveStatus = 3;
+        } else if (dMeter_Info.mButtonIconMode == 7 || dMeter_Info.mButtonIconMode == 8 || dMeter_Info.mButtonIconMode == 9 ||
+                    dMeter_Info.mButtonIconMode == 10)
+        {
+            if (moveStatus != 5) {
+                moveFlag = 1;
+                dMeter_offBit8(&i_Meter->field_0x3026, 8);
             }
+            moveStatus = 5;
+        } else {
+            if (moveStatus != 1) {
+                moveFlag = 1;
+                dMeter_offBit8(&i_Meter->field_0x3026, 8);
+            }
+            moveStatus = 1;
         }
+    } else {
+        if (moveStatus != 0) {
+            moveFlag = 1;
+            dMeter_offBit8(&i_Meter->field_0x3026, 8);
+        }
+        moveStatus = 0;
     }
+
     if (i_Meter->field_0x3026 != 0xf) {
         if (dMeter_isBit8(&i_Meter->field_0x3026, 8) == 0) {
             if (moveNowFrame >= 5) {
@@ -3476,45 +3641,43 @@ void dMeter_enemyMove(sub_meter_class* i_Meter) {
     stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
     JUT_ASSERT(7176, stage_info != NULL);
     if (attention != NULL) {
-        if (((!dMenu_flag()) && (!dComIfGp_event_runCheck())) && (attention->LockonTarget(0) != NULL) &&
-            ((((((attention->LockonTarget(0)->max_health > 0.0f) && (dComIfGs_isCollect(4, 1) != 0)) &&
-                ((attention->LockonTruth() & 0xff) != 0 &&
-                 (attention->LockonTarget(0)->group == fopAc_ENEMY_e && (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BTD)))) &&
-               (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BMD)) &&
-              (((fopAcM_GetName(attention->LockonTarget(0)) != PROC_BDK && (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BPW)) &&
-                (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BGN)) &&
-               (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BGN2 && (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BGN3)))) &&
-             ((fopAcM_GetName(attention->LockonTarget(0)) != PROC_GND &&
-               (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BST || ((fopAcM_GetParam(attention->LockonTarget(0)) & 0xfU) != 0))) &&
-              (fopAcM_GetName(attention->LockonTarget(0)) != PROC_BWD))))
+        if (!dMenu_flag() && !dComIfGp_event_runCheck() && attention->LockonTarget(0) != NULL && attention->LockonTarget(0)->max_health > 0.0f &&
+            dComIfGs_isCollect(4, 1) != 0 && (attention->LockonTruth() & 0xFF) != 0 && attention->LockonTarget(0)->group == fopAc_ENEMY_e &&
+            fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BTD_e && fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BMD_e &&
+            fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BDK_e && fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BPW_e &&
+            fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BGN_e && fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BGN2_e &&
+            fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BGN3_e && fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_GND_e &&
+            (fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BST_e || (fopAcM_GetParam(attention->LockonTarget(0)) & 0xF) != 0) &&
+            fopAcM_GetName(attention->LockonTarget(0)) != fpcNm_BWD_e)
         {
             dMeter_zakoEnemyMove(i_Meter);
         } else {
             dMeter_zakoEnemyHide(i_Meter);
         }
     }
-    if ((((!dMenu_flag()) && (dComIfGs_isCollect(4, 1) != 0)) && (!dComIfGp_event_runCheck())) &&
-        ((!(i_Meter->mStatusFlags & dMtrStts_UNK80_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20000_e))) &&
-        ((dStage_stagInfo_GetSTType(stage_info) == dStageType_BOSS_e) || (fopAcM_SearchByName(PROC_BDK) != NULL)))
+    if (!dMenu_flag() && dComIfGs_isCollect(4, 1) != 0 && !dComIfGp_event_runCheck() &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK80_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK20000_e) &&
+        (dStage_stagInfo_GetSTType(stage_info) == dStageType_BOSS_e || fopAcM_SearchByName(fpcNm_BDK_e) != NULL))
     {
-        if (((dComIfGs_isStageBossDemo() != 0) && (dComIfGs_isStageBossEnemy() == 0)) ||
-            (strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 ||
-             ((strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0 || (strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0)) ||
-              (strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0))))
+        if ((dComIfGs_isStageBossDemo() != 0 && dComIfGs_isStageBossEnemy() == 0) ||
+            strcmp(dComIfGp_getStartStageName(), "Xboss0") == 0 ||
+            strcmp(dComIfGp_getStartStageName(), "Xboss1") == 0 ||
+            strcmp(dComIfGp_getStartStageName(), "Xboss2") == 0 ||
+            strcmp(dComIfGp_getStartStageName(), "Xboss3") == 0)
         {
             fopAc_ac_c* pfVar3;
-            if (fopAcM_SearchByName(PROC_BTD) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BTD);
-            } else if (fopAcM_SearchByName(PROC_BMD) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BMD);
-            } else if (fopAcM_SearchByName(PROC_BDK) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BDK);
-            } else if (fopAcM_SearchByName(PROC_BST) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BST);
-            } else if (fopAcM_SearchByName(PROC_BWD) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BWD);
-            } else if (fopAcM_SearchByName(PROC_BPW) != NULL) {
-                pfVar3 = fopAcM_SearchByName(PROC_BPW);
+            if (fopAcM_SearchByName(fpcNm_BTD_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BTD_e);
+            } else if (fopAcM_SearchByName(fpcNm_BMD_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BMD_e);
+            } else if (fopAcM_SearchByName(fpcNm_BDK_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BDK_e);
+            } else if (fopAcM_SearchByName(fpcNm_BST_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BST_e);
+            } else if (fopAcM_SearchByName(fpcNm_BWD_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BWD_e);
+            } else if (fopAcM_SearchByName(fpcNm_BPW_e) != NULL) {
+                pfVar3 = fopAcM_SearchByName(fpcNm_BPW_e);
             } else {
                 pfVar3 = NULL;
             }
@@ -3545,7 +3708,7 @@ void dMeter_zakoEnemyMove(sub_meter_class* i_Meter) {
         i_Meter->field_0x0560.mPosTopLeft.x = local_38.x + 50.0f;
     }
     i_Meter->field_0x0560.mPosTopLeft.y = local_38.y;
-    dVar5 = ((f32)(pfVar4->health / (f32)(pfVar4->max_health)));
+    dVar5 = pfVar4->health / (f32)pfVar4->max_health;
     fVar1 = i_Meter->field_0x0528.mPosTopLeftOrig.x - i_Meter->field_0x0560.mPosTopLeftOrig.x;
     fVar2 = i_Meter->field_0x0528.mPosTopLeftOrig.y - i_Meter->field_0x0560.mPosTopLeftOrig.y;
     i_Meter->field_0x0528.mPosTopLeft.x = i_Meter->field_0x0560.mPosTopLeft.x + fVar1;
@@ -3601,7 +3764,7 @@ void dMeter_bossEnemyMove(sub_meter_class* i_Meter, fopAc_ac_c* param_2) {
     f32 dVar5;
 
     if (param_2->max_health != 0) {
-        fVar2 = (f32)(param_2->health) / (f32)(param_2->max_health);
+        fVar2 = (f32)param_2->health / (f32)param_2->max_health;
     } else {
         fVar2 = g_meterHIO.field_0xc;
     }
@@ -3619,7 +3782,7 @@ void dMeter_bossEnemyMove(sub_meter_class* i_Meter, fopAc_ac_c* param_2) {
                 fopMsgM_paneTrans(&i_Meter->field_0x0448[i], 0.0f, fVar2);
             }
         } else {
-            dVar5 = fopMsgM_valueIncrease(0x14, i_Meter->field_0x0448[0].mUserArea + -10, 2);
+            dVar5 = fopMsgM_valueIncrease(0x14, i_Meter->field_0x0448[0].mUserArea - 10, 2);
             fopMsgM_paneScaleX(&i_Meter->field_0x0448[2], fVar2 * dVar5);
             fopMsgM_paneScaleX(&i_Meter->field_0x0448[3], fVar2 * dVar5);
         }
@@ -3698,7 +3861,7 @@ void dMeter_bossEnemyHide(sub_meter_class* i_Meter) {
 /* 801F8888-801F8BA8       .text dMeter_bossAnime__FP15sub_meter_class */
 void dMeter_bossAnime(sub_meter_class* i_Meter) {
     f32 dVar9 = 0.0f;
-    const s16 unk_9010[] = {0x04, 0x0A, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02};
+    s16 unk_9010[] = {0x04, 0x0A, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02};
     s16 unk_array[15];
     unk_array[0] = unk_9010[0];
     for (s32 i = 1; i < 15; i++) {
@@ -3708,39 +3871,37 @@ void dMeter_bossAnime(sub_meter_class* i_Meter) {
     if (i_Meter->field_0x03d8.mUserArea >= i_Meter->field_0x0410.mUserArea) {
         i_Meter->field_0x03d8.mUserArea = 0;
         i_Meter->field_0x0410.mUserArea = cM_rndF(200.0f) + 300.0f;
-    } else {
-        if (i_Meter->field_0x03d8.mUserArea < unk_array[10]) {
-            if (i_Meter->field_0x03d8.mUserArea < unk_array[0]) {
-                dVar9 = fopMsgM_valueIncrease(unk_9010[0], i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[1]) {
-                dVar9 = 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[2]) {
-                dVar9 = fopMsgM_valueIncrease(unk_9010[2], unk_array[2] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[3]) {
-                dVar9 = 0.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[4]) {
-                dVar9 = fopMsgM_valueIncrease(unk_9010[4], unk_array[4] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[5]) {
-                dVar9 = 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[6]) {
-                dVar9 = fopMsgM_valueIncrease(unk_9010[6], unk_array[6] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[7]) {
-                dVar9 = 0.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[8]) {
-                dVar9 = fopMsgM_valueIncrease(unk_9010[8], unk_array[8] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[9]) {
-                dVar9 = 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[10]) {
-                dVar9 = fopMsgM_valueIncrease(unk_9010[10], unk_array[10] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[11]) {
-                dVar9 = 0.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[12]) {
-                dVar9 = fopMsgM_valueIncrease(unk_9010[12], unk_array[12] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[13]) {
-                dVar9 = 2.0f;
-            } else if (i_Meter->field_0x03d8.mUserArea < unk_array[14]) {
-                dVar9 = fopMsgM_valueIncrease(unk_9010[14], unk_array[14] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
-            }
+    } else if (i_Meter->field_0x03d8.mUserArea < unk_array[10]) {
+        if (i_Meter->field_0x03d8.mUserArea < unk_array[0]) {
+            dVar9 = fopMsgM_valueIncrease(unk_9010[0], i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[1]) {
+            dVar9 = 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[2]) {
+            dVar9 = fopMsgM_valueIncrease(unk_9010[2], unk_array[2] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[3]) {
+            dVar9 = 0.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[4]) {
+            dVar9 = fopMsgM_valueIncrease(unk_9010[4], unk_array[4] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[5]) {
+            dVar9 = 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[6]) {
+            dVar9 = fopMsgM_valueIncrease(unk_9010[6], unk_array[6] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[7]) {
+            dVar9 = 0.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[8]) {
+            dVar9 = fopMsgM_valueIncrease(unk_9010[8], unk_array[8] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[9]) {
+            dVar9 = 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[10]) {
+            dVar9 = fopMsgM_valueIncrease(unk_9010[10], unk_array[10] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[11]) {
+            dVar9 = 0.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[12]) {
+            dVar9 = fopMsgM_valueIncrease(unk_9010[12], unk_array[12] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[13]) {
+            dVar9 = 2.0f;
+        } else if (i_Meter->field_0x03d8.mUserArea < unk_array[14]) {
+            dVar9 = fopMsgM_valueIncrease(unk_9010[14], unk_array[14] - i_Meter->field_0x03d8.mUserArea, 0) * 2.0f;
         }
     }
     fopMsgM_paneTrans(&i_Meter->field_0x03d8, 0.0f, -dVar9);
@@ -3783,10 +3944,14 @@ void dMeter_bossEyeAnime(sub_meter_class* i_Meter) {
 /* 801F8CD0-801F8F28       .text dMeter_magicInit__FP15sub_meter_class */
 void dMeter_magicInit(sub_meter_class* i_Meter) {
     if ((g_dComIfG_gameInfo.play.field_0x4965 >> 1 & 1) != 0) {
+#if VERSION > VERSION_DEMO
         i_Meter->field_0x3018 = dComIfGs_getMaxMagic();
+#endif
         i_Meter->field_0x3016 = (i_Meter->field_0x0f38[0].mSizeOrig.x * dComIfGs_getMagic() * 25.0f);
     } else {
+#if VERSION > VERSION_DEMO
         i_Meter->field_0x3018 = 0;
+#endif
         i_Meter->field_0x3016 = 0;
         g_dComIfG_gameInfo.play.field_0x4965 |= 2;
     }
@@ -3802,8 +3967,9 @@ void dMeter_magicInit(sub_meter_class* i_Meter) {
     i_Meter->field_0x1130.mUserArea = 0;
     i_Meter->field_0x11d8.mUserArea = 0;
     i_Meter->field_0x2fc0 = 0.0f;
-    f32 tmp = 0.03125f;
-    dMeter_magicLength(i_Meter, i_Meter->field_0x3018 * tmp);
+#if VERSION > VERSION_DEMO
+    dMeter_magicLength(i_Meter, i_Meter->field_0x3018 / 32.0f);
+#endif
     dMeter_magicChange(i_Meter, i_Meter->field_0x3016 / 100.0f);
     i_Meter->field_0x2f08.set(((J2DPicture*)i_Meter->field_0x11a0.pane)->getWhite());
     i_Meter->field_0x2f0c.set(((J2DPicture*)i_Meter->field_0x11a0.pane)->getBlack());
@@ -3811,7 +3977,11 @@ void dMeter_magicInit(sub_meter_class* i_Meter) {
     i_Meter->field_0x2f14.set(((J2DPicture*)i_Meter->field_0x0f38[0].pane)->getBlack());
     i_Meter->field_0x2f18.set(((J2DPicture*)i_Meter->field_0x0f38[1].pane)->getWhite());
     i_Meter->field_0x2f1c.set(((J2DPicture*)i_Meter->field_0x0f38[1].pane)->getBlack());
+#if VERSION == VERSION_DEMO
+    dMeter_magicTrans(i_Meter, 0.0f, 0.0f);
+#else
     dMeter_magicTransNowInit(i_Meter);
+#endif
     fopMsgM_setInitAlpha(&i_Meter->field_0x10f8);
     fopMsgM_setInitAlpha(&i_Meter->field_0x11a0);
     fopMsgM_setInitAlpha(&i_Meter->field_0x11d8);
@@ -3820,12 +3990,12 @@ void dMeter_magicInit(sub_meter_class* i_Meter) {
 /* 801F8F28-801F9048       .text dMeter_magicMove__FP15sub_meter_class */
 void dMeter_magicMove(sub_meter_class* i_Meter) {
     if (i_Meter->mStatusFlags & dMtrStts_UNK40000_e) {
-        if (dComIfGp_getCb1Player() == fopAcM_SearchByName(PROC_NPC_CB1)) {
+        if (dComIfGp_getCb1Player() == fopAcM_SearchByName(fpcNm_NPC_CB1_e)) {
             int iVar4 = daNpc_Cb1_c::m_flyingTimer;
             u8 uVar2 = daNpc_Cb1_c::m_flying;
             s16 uVar3 = daNpc_Cb1_c::getMaxFlyingTimer();
             dMeter_flyGaugeMove(i_Meter, uVar2, uVar3, iVar4);
-        } else if (dComIfGp_getCb1Player() == fopAcM_SearchByName(PROC_NPC_MD)) {
+        } else if (dComIfGp_getCb1Player() == fopAcM_SearchByName(fpcNm_NPC_MD_e)) {
             int iVar4 = daNpc_Md_c::m_flyingTimer;
             u8 uVar2 = daNpc_Md_c::m_flying;
             s16 uVar3 = daNpc_Md_c::getMaxFlyingTimer();
@@ -3847,10 +4017,10 @@ void dMeter_magicMove(sub_meter_class* i_Meter) {
 
 /* 801F9048-801F961C       .text dMeter_magicGaugeMove__FP15sub_meter_class */
 void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
-    uint uVar2;
+    u32 uVar2;
     s16 sVar4;
     u16 uVar5;
-    uint uVar7;
+    u32 uVar7;
     u16 uVar8;
 
     static bool soundOnFlag = false;
@@ -3867,8 +4037,10 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
         }
         i_Meter->field_0x0f38[0].mUserArea = 0;
         dMeter_magicTransScale(i_Meter, 0.0f, 0.0f, 1.0f);
+#if VERSION > VERSION_DEMO
         dMeter_magicInitTrans(i_Meter);
         dMeter_magicChange(i_Meter, i_Meter->field_0x3016 / 100.0f);
+#endif
     }
     if (dComIfGp_getItemMaxMagicCount() != 0) {
         sVar4 = dComIfGs_getMaxMagic() + dComIfGp_getItemMaxMagicCount();
@@ -3878,14 +4050,14 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
         dComIfGs_setMaxMagic(sVar4);
         g_dComIfG_gameInfo.play.mItemMaxMagicCount = 0;
     }
-    if ((i_Meter->field_0x3018 != dComIfGs_getMaxMagic()) || (i_Meter->field_0x0f38[2].mUserArea == 0)) {
+#if VERSION > VERSION_DEMO
+    if (i_Meter->field_0x3018 != dComIfGs_getMaxMagic() || i_Meter->field_0x0f38[2].mUserArea == 0) {
         if (i_Meter->field_0x3018 < dComIfGs_getMaxMagic()) {
             i_Meter->field_0x3018++;
         } else if (i_Meter->field_0x3018 > dComIfGs_getMaxMagic()) {
             i_Meter->field_0x3018--;
         }
-        f32 tmp = 0.03125f;
-        dMeter_magicLength(i_Meter, i_Meter->field_0x3018 * tmp);
+        dMeter_magicLength(i_Meter, i_Meter->field_0x3018 / 32.0f);
         if (i_Meter->field_0x3018 == dComIfGs_getMaxMagic()) {
             if (dComIfGs_getMaxMagic() <= 0x10) {
                 dMeter_magicLength(i_Meter, 0.5f);
@@ -3895,6 +4067,7 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
             i_Meter->field_0x0f38[2].mUserArea = 1;
         }
     }
+#endif
     if (dComIfGs_getMaxMagic() != 0) {
         if (dComIfGp_getItemMagicCount() != 0) {
             sVar4 = dComIfGs_getMagic() + dComIfGp_getItemMagicCount();
@@ -3908,14 +4081,14 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
     if (dComIfGs_getMagic() > dComIfGs_getMaxMagic()) {
         dComIfGs_setMagic(dComIfGs_getMaxMagic());
     }
-    if (!(fopOvlpM_IsDoingReq()) &&
+    if (!fopOvlpM_IsDoingReq() &&
         (!(i_Meter->mStatusFlags & dMtrStts_UNK40_e) ||
-         (!(dComIfGp_event_checkHind(0x20)) || (!(dComIfGp_evmng_checkStartDemo()) || (dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e))))))
+         !dComIfGp_event_checkHind(0x20) || !dComIfGp_evmng_checkStartDemo() || dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e)))
     {
         uVar8 = (i_Meter->field_0x0f38[0].mSizeOrig.x * (f32)(dComIfGs_getMagic()) * 25.0f);
         uVar5 = i_Meter->field_0x3016;
         uVar7 = uVar5;
-        uVar2 = uVar8 & 0xffff;
+        uVar2 = uVar8;
         if (uVar7 < uVar2) {
             if ((int)(uVar2 - uVar7) < 0x271) {
                 i_Meter->field_0x3016 = uVar8;
@@ -3966,8 +4139,13 @@ void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 
     JUtility::TColor color6(0xB4, 0xB4, 0xFF, 0x00);
 
     if (param_2 != 0) {
+        f32 f30 = (f32)(param_4) / (f32)(param_3) * 25.0f * 8.0f;
+#if VERSION == VERSION_DEMO
+        dMeter_magicInitTrans(i_Meter, 0.0f, 0.0f);
+#else
         dMeter_magicInitTrans(i_Meter);
-        dMeter_magicChange(i_Meter, (((f32)(param_4)) / (f32)(param_3) * 25.0f * 8.0f));
+#endif
+        dMeter_magicChange(i_Meter, f30);
         if (i_Meter->field_0x0f38[0].mUserArea == 0) {
             ((J2DPicture*)i_Meter->field_0x11a0.pane)->setWhite(color1);
             ((J2DPicture*)i_Meter->field_0x11a0.pane)->setBlack(color2);
@@ -3994,7 +4172,7 @@ void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 
             mDoLib_project(&dComIfGp_getCb1Player()->eyePos, &local_50);
             if (i_Meter->field_0x1130.mUserArea > 0x1e) {
                 dVar9 = fopMsgM_valueIncrease(0x14, 0x32 - i_Meter->field_0x1130.mUserArea, 0);
-                dVar10 = fopMsgM_valueIncrease(0x14, i_Meter->field_0x1130.mUserArea + -0x1e, 0);
+                dVar10 = fopMsgM_valueIncrease(0x14, i_Meter->field_0x1130.mUserArea - 0x1e, 0);
                 dMeter_magicTransScale(
                     i_Meter,
                     dVar9 * (local_50.x - i_Meter->field_0x11a0.mPosCenter.x),
@@ -4012,7 +4190,11 @@ void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 
         } else {
             dVar8 = 0.0f;
             i_Meter->field_0x11a0.mUserArea = 0;
+#if VERSION == VERSION_DEMO
+            dMeter_magicTrans(i_Meter, 0.0f, 0.0f);
+#else
             dMeter_magicTransNowInit(i_Meter);
+#endif
         }
         if (i_Meter->field_0x1130.mUserArea != 0) {
             i_Meter->field_0x1130.mUserArea = 0;
@@ -4023,36 +4205,56 @@ void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 
 
 /* 801F9A24-801F9B3C       .text dMeter_magicChange__FP15sub_meter_classf */
 void dMeter_magicChange(sub_meter_class* i_Meter, f32 param_2) {
-    g_dComIfG_gameInfo.play.field_0x48da = (param_2 / i_Meter->field_0x0f38[0].mSizeOrig.x) * 4.0f;
+    dComIfGp_setItemNowMagic((param_2 / i_Meter->field_0x0f38[0].mSizeOrig.x) * 4.0f);
+#if VERSION == VERSION_DEMO
+    dMeter_magicTrans(i_Meter, 0.0f, 0.0f);
+#else
     dMeter_magicTransNowInit(i_Meter);
+#endif
     for (s32 i = 0; i < 8; i++) {
         if (param_2 >= i_Meter->field_0x0f38[i].mSizeOrig.x) {
             fopMsgM_paneScaleXY(&i_Meter->field_0x0f38[i], 1.0f);
             i_Meter->field_0x0f38[i].pane->show();
             param_2 = param_2 - i_Meter->field_0x0f38[i].mSizeOrig.x;
+        } else if (param_2 <= 0.0f) {
+            fopMsgM_paneScaleXY(&i_Meter->field_0x0f38[i], 1.0f);
+            i_Meter->field_0x0f38[i].pane->hide();
         } else {
-            if (param_2 <= 0.0f) {
-                fopMsgM_paneScaleXY(&i_Meter->field_0x0f38[i], 1.0f);
-                i_Meter->field_0x0f38[i].pane->hide();
-            } else {
-                i_Meter->field_0x0f38[i].pane->resize(param_2, i_Meter->field_0x0f38[i].mSizeOrig.y);
-                i_Meter->field_0x0f38[i].pane->show();
-                param_2 = 0.0f;
-            }
+            i_Meter->field_0x0f38[i].pane->resize(param_2, i_Meter->field_0x0f38[i].mSizeOrig.y);
+            i_Meter->field_0x0f38[i].pane->show();
+            param_2 = 0.0f;
         }
     }
 }
 
+#if VERSION == VERSION_DEMO
+void dMeter_magicTrans(sub_meter_class* i_Meter, f32 param_1, f32 param_2) {
+    f32 y;
+    if (dComIfGs_getMaxLife() <= 0x2B) {
+        y = -22.0f + param_2;
+    } else {
+        y = param_2;
+    }
+    f32 fVar2 = param_1 + (i_Meter->field_0x10f8.mPosCenter.x - i_Meter->field_0x10f8.mPosCenterOrig.x);
+    fopMsgM_paneTrans(&i_Meter->field_0x10f8, fVar2, y);
+    fVar2 = param_1 + (i_Meter->field_0x11a0.mPosCenter.x - i_Meter->field_0x11a0.mPosCenterOrig.x);
+    fopMsgM_paneTrans(&i_Meter->field_0x11a0, fVar2, y);
+    fVar2 = param_1 + (i_Meter->field_0x11d8.mPosCenter.x - i_Meter->field_0x11d8.mPosCenterOrig.x);
+    fopMsgM_paneTrans(&i_Meter->field_0x11d8, fVar2, y);
+    for (s32 i = 0; i < 8; i++) {
+        fVar2 = param_1 + (i_Meter->field_0x0f38[i].mPosCenter.x - i_Meter->field_0x0f38[i].mPosCenterOrig.x);
+        fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], fVar2, y);
+    }
+}
+#else
 /* 801F9B3C-801F9C14       .text dMeter_magicTransNowInit__FP15sub_meter_class */
 void dMeter_magicTransNowInit(sub_meter_class* i_Meter) {
-    f32 fVar1;
-
+    f32 y;
     if (dComIfGs_getMaxLife() <= 0x2B) {
-        fVar1 = -22.0f;
+        y = -22.0f;
     } else {
-        fVar1 = 0.0f;
+        y = 0.0f;
     }
-    f32 y = fVar1;
     f32 fVar2 = i_Meter->field_0x10f8.mPosCenter.x - i_Meter->field_0x10f8.mPosCenterOrig.x;
     fopMsgM_paneTrans(&i_Meter->field_0x10f8, fVar2, y);
     fVar2 = i_Meter->field_0x11a0.mPosCenter.x - i_Meter->field_0x11a0.mPosCenterOrig.x;
@@ -4064,17 +4266,33 @@ void dMeter_magicTransNowInit(sub_meter_class* i_Meter) {
         fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], fVar2, y);
     }
 }
+#endif
 
+#if VERSION == VERSION_DEMO
+void dMeter_magicInitTrans(sub_meter_class* i_Meter, f32 param_1, f32 param_2) {
+    /* Nonmatching - regalloc */
+    f32 y;
+    if (dComIfGs_getMaxLife() <= 0x2B) {
+        y = -22.0f + param_2;
+    } else {
+        y = param_2;
+    }
+    fopMsgM_paneTrans(&i_Meter->field_0x10f8, param_1, y);
+    fopMsgM_paneTrans(&i_Meter->field_0x11a0, param_1, y);
+    fopMsgM_paneTrans(&i_Meter->field_0x11d8, param_1, y);
+    for (s32 i = 0; i < 8; i++) {
+        fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], param_1, y);
+    }
+}
+#else
 /* 801F9C14-801F9CCC       .text dMeter_magicInitTrans__FP15sub_meter_class */
 void dMeter_magicInitTrans(sub_meter_class* i_Meter) {
-    f32 fVar1;
-
+    f32 y;
     if (dComIfGs_getMaxLife() <= 0x2B) {
-        fVar1 = -22.0f;
+        y = -22.0f;
     } else {
-        fVar1 = 0.0f;
+        y = 0.0f;
     }
-    f32 y = fVar1;
     fopMsgM_paneTrans(&i_Meter->field_0x10f8, 0.0f, y);
     fopMsgM_paneTrans(&i_Meter->field_0x11a0, 0.0f, y);
     fopMsgM_paneTrans(&i_Meter->field_0x11d8, 0.0f, y);
@@ -4082,6 +4300,7 @@ void dMeter_magicInitTrans(sub_meter_class* i_Meter) {
         fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], 0.0f, y);
     }
 }
+#endif
 
 /* 801F9CCC-801F9F18       .text dMeter_magicTransScale__FP15sub_meter_classfff */
 void dMeter_magicTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, f32 param_4) {
@@ -4111,17 +4330,16 @@ void dMeter_magicTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, 
     i_Meter->field_0x1168.mPosCenter.y = (i_Meter->field_0x1168.mPosCenterOrig.y * param_4);
     fopMsgM_paneScaleXY(&i_Meter->field_0x1168, param_4);
     for (s32 i = 0; i < 8; i++) {
-        dVar5 = 0.5f;
         i_Meter->field_0x0f38[i].mPosCenter.x =
             (param_2 +
              (i_Meter->field_0x11a0.mPosCenterOrig.x + (param_4 * (i_Meter->field_0x0f38[i].mPosCenterOrig.x - i_Meter->field_0x11a0.mPosCenterOrig.x))));
         i_Meter->field_0x0f38[i].mPosCenter.y =
             (param_3 +
              (i_Meter->field_0x11a0.mPosCenterOrig.y + (param_4 * (i_Meter->field_0x0f38[i].mPosCenterOrig.y - i_Meter->field_0x11a0.mPosCenterOrig.y))));
-        i_Meter->field_0x0f38[i].mPosCenter.x -= ((i_Meter->field_0x0f38[i].mSizeOrig.x * param_4) * dVar5);
-        i_Meter->field_0x0f38[i].mSize.x = (param_4 * (i_Meter->field_0x0f38[i].pane->mBounds.f.x - i_Meter->field_0x0f38[i].pane->mBounds.i.x));
-        i_Meter->field_0x0f38[i].mSize.y = (param_4 * (i_Meter->field_0x0f38[i].pane->mBounds.f.y - i_Meter->field_0x0f38[i].pane->mBounds.i.y));
-        i_Meter->field_0x0f38[i].mPosCenter.x += (i_Meter->field_0x0f38[i].mSize.x * dVar5);
+        i_Meter->field_0x0f38[i].mPosCenter.x -= ((i_Meter->field_0x0f38[i].mSizeOrig.x * param_4) / 2.0f);
+        i_Meter->field_0x0f38[i].mSize.x = param_4 * i_Meter->field_0x0f38[i].pane->getWidth();
+        i_Meter->field_0x0f38[i].mSize.y = param_4 * i_Meter->field_0x0f38[i].pane->getHeight();
+        i_Meter->field_0x0f38[i].mPosCenter.x += (i_Meter->field_0x0f38[i].mSize.x / 2.0f);
         fopMsgM_cposMove(&i_Meter->field_0x0f38[i]);
         i_Meter->field_0x0f38[i].mSize.x = i_Meter->field_0x0f38[i].mSizeOrig.x;
         i_Meter->field_0x0f38[i].mSize.y = i_Meter->field_0x0f38[i].mSizeOrig.y;
@@ -4132,12 +4350,18 @@ void dMeter_magicTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, 
 void dMeter_magicColor(sub_meter_class* i_Meter) {
     f32 dVar12;
 
-    if ((!(i_Meter->mStatusFlags & dMtrStts_UNK8_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK10_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK800000_e)) &&
-        (!(i_Meter->mStatusFlags & dMtrStts_UNK100_e)) &&
-        ((daPy_getPlayerActorClass()->checkEquipDragonShield()) || (g_dComIfG_gameInfo.play.field_0x4965 & 1) ||
-         (daPy_getPlayerLinkActorClass()->checkCutRollChange() || (dComIfGp_checkPlayerStatus1(0, daPyStts1_DEKU_LEAF_FLY_e))) ||
-         ((dComIfGp_checkPlayerStatus0(0, daPyStts0_BOW_AIM_e)) && (daArrow_c::getKeepType() != 0) && (daPy_getPlayerActorClass()->getItemID() != -1))))
-    {
+    if (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK10_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK800000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK100_e) &&
+        (
+            daPy_getPlayerActorClass()->checkEquipDragonShield() ||
+            (g_dComIfG_gameInfo.play.field_0x4965 & 1) ||
+           (daPy_getPlayerLinkActorClass()->checkCutRollChange() ||
+            dComIfGp_checkPlayerStatus1(0, daPyStts1_DEKU_LEAF_FLY_e)) ||
+            (dComIfGp_checkPlayerStatus0(0, daPyStts0_BOW_AIM_e) && daArrow_c::getKeepType() != 0 && (daPy_getPlayerActorClass()->getItemID() != -1))
+        )
+    ) {
         JUtility::TColor color1;
         JUtility::TColor color2;
         if (i_Meter->field_0x0f38[4].mUserArea == 0) {
@@ -4179,12 +4403,12 @@ void dMeter_magicColor(sub_meter_class* i_Meter) {
 
 /* 801FA378-801FA53C       .text dMeter_magicAlpha__FP15sub_meter_class */
 void dMeter_magicAlpha(sub_meter_class* i_Meter) {
-    if ((dComIfGs_getMaxMagic() == 0) || (i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && ((dComIfGp_event_checkHind(0x20)) && (!(dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e))))) ||
-        (dMenu_getCollectMode() == 4) || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
+    if (dComIfGs_getMaxMagic() == 0 || (i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(0x20) && !dComIfGp_checkPlayerStatus1(0, daPyStts1_UNK2000_e)) ||
+        dMenu_getCollectMode() == 4 || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK20_e) ||
-        (i_Meter->mStatusFlags & dMtrStts_UNK80000_e) || (dMeter_isAuctionFlag()) || (i_Meter->mStatusFlags & dMtrStts_UNK400000_e) ||
-        (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) || ((strcmp(dComIfGp_getStartStageName(), "Ojhous") == 0) && (dComIfGp_getMiniGameType() == 6)))
+        (i_Meter->mStatusFlags & dMtrStts_UNK80000_e) || dMeter_isAuctionFlag() || (i_Meter->mStatusFlags & dMtrStts_UNK400000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) || ((strcmp(dComIfGp_getStartStageName(), "Ojhous") == 0) && dComIfGp_getMiniGameType() == 6))
     {
         if (i_Meter->field_0x10f8.mUserArea > 0) {
             i_Meter->field_0x10f8.mUserArea--;
@@ -4218,7 +4442,7 @@ void dMeter_gaugeAlpha(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlpha(&i_Meter->mHeartShadow[i], dVar4);
     }
     i_Meter->field_0x0f00.mNowAlpha = i_Meter->field_0x0f00.mNowAlpha * dVar4;
-    i_Meter->field_0x0f00.pane->mAlpha = i_Meter->field_0x0f00.mNowAlpha * dVar4;
+    i_Meter->field_0x0f00.pane->setAlpha(i_Meter->field_0x0f00.mNowAlpha * dVar4);
     for (s32 i = 0; i < 8; i++) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x0f38[i], dVar3);
     }
@@ -4251,13 +4475,13 @@ void dMeter_menuLRMove(sub_meter_class* i_Meter) {
     f32 dVar7;
 
     static u8 frame = dMenu_getPushMenuButton();
-    if ((i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || (dMenu_getCollectMode() == 5)) {
+    if ((i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || dMenu_getCollectMode() == 5) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x0250);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x0288);
     } else {
         sVar5 = 0x14;
         if (frame != dMenu_getPushMenuButton()) {
-            if ((frame != 0) && (dMenu_getPushMenuButton() != 0)) {
+            if (frame != 0 && dMenu_getPushMenuButton() != 0) {
                 sVar5 = g_menuHIO.field_0x92 * 2;
                 i_Meter->field_0x0250.mUserArea = sVar5;
                 i_Meter->field_0x0288.mUserArea = 1;
@@ -4304,7 +4528,6 @@ void dMeter_menuLRMove(sub_meter_class* i_Meter) {
 
 /* 801FA918-801FBB28       .text dMeter_menuPlusMove__FP15sub_meter_class */
 void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     f32 fVar1;
     int iVar3;
     f32 x;
@@ -4327,59 +4550,74 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
         i_Meter->field_0x3027 = 0;
         i_Meter->field_0x0100[0].mUserArea = dComIfGs_isDungeonItemCompass();
     }
-    if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || (fopOvlpM_IsDoingReq()) ||
-        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && (dComIfGp_event_checkHind(0x100))) ||
-        (((((((((i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100_e)) || (i_Meter->mStatusFlags & dMtrStts_UNK80_e)) ||
-              ((i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK20000_e))) ||
-             (i_Meter->mStatusFlags & dMtrStts_UNK8_e)) ||
-            (((i_Meter->mStatusFlags & dMtrStts_UNK10_e) || (i_Meter->mStatusFlags & dMtrStts_UNK800000_e)) ||
-             ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) || (((i_Meter->mStatusFlags & dMtrStts_UNK80000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK800_e)) ||
-                                                             (i_Meter->mStatusFlags & dMtrStts_UNK1000_e))))) ||
-           (((!(i_Meter->mStatusFlags & dMtrStts_UNK400_e)) && (strcmp(dComIfGp_getNextStageName(), "MajyuE") == 0)) &&
-            (!(dComIfGs_isEventBit(dSv_event_flag_c::UNK_0801))))) ||
-          ((!(i_Meter->mStatusFlags & dMtrStts_UNK400_e)) &&
-           ((strcmp(dComIfGp_getNextStageName(), "Hyrule") == 0 || (strcmp(dComIfGp_getNextStageName(), "Hyroom") == 0)) ||
-            (strcmp(dComIfGp_getNextStageName(), "kenroom") == 0)))) ||
-         (dComIfGp_getMiniGameType() == 1 || (dComIfGp_getMiniGameType() == 6))))
-    {
+    if (
+        (i_Meter->mStatusFlags & dMtrStts_UNK4000_e) ||
+        fopOvlpM_IsDoingReq() ||
+        ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(0x100)) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK100_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK8_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK10_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK20_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK80000_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK800_e) ||
+        (i_Meter->mStatusFlags & dMtrStts_UNK1000_e) ||
+        (
+            (!(i_Meter->mStatusFlags & dMtrStts_UNK400_e) &&
+            (strcmp(dComIfGp_getNextStageName(), "MajyuE") == 0)) &&
+            !dComIfGs_isEventBit(dSv_event_flag_c::UNK_0801)
+        ) ||
+        (
+            !(i_Meter->mStatusFlags & dMtrStts_UNK400_e) &&
+            (
+                strcmp(dComIfGp_getNextStageName(), "Hyrule") == 0 ||
+                strcmp(dComIfGp_getNextStageName(), "Hyroom") == 0 ||
+                strcmp(dComIfGp_getNextStageName(), "kenroom") == 0
+            )
+        ) ||
+        dComIfGp_getMiniGameType() == 1 ||
+        dComIfGp_getMiniGameType() == 6
+    ) {
         if (moveStatus != 1) {
             moveFlag = 1;
         }
         moveStatus = 1;
-    } else {
-        if ((i_Meter->field_0x3020 == 1) || (i_Meter->field_0x3020 == 2)) {
-            if (((s32)dMeter_mMapCtrlDisp.field_0x0 != 0x0) && (dMap_isEnableDispMap())) {
-                if (moveStatus != 2) {
-                    moveFlag = 1;
-                }
-                moveStatus = 2;
-            } else if (dMap_isEnableDispMap()) {
-                if (moveStatus != 3) {
-                    moveFlag = 1;
-                }
-                moveStatus = 3;
-            } else if ((i_Meter->mStatusFlags & dMtrStts_UNK400_e) && (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) != dSv_save_c::STAGE_TOTG)) {
-                if (moveStatus != 7) {
-                    moveFlag = 1;
-                }
-                moveStatus = 7;
-            } else {
-                if (moveStatus != 6) {
-                    moveFlag = 1;
-                }
-                moveStatus = 6;
-            }
-        } else if (((i_Meter->field_0x3020 == 5) || (i_Meter->field_0x3020 == 9)) || (i_Meter->field_0x3020 == 3)) {
-            if (moveStatus != 4) {
+    } else if (i_Meter->field_0x3020 == 1 || i_Meter->field_0x3020 == 2) {
+        if (((s32)dMeter_mMapCtrlDisp.field_0x0 != 0x0) && dMap_isEnableDispMap()) {
+            if (moveStatus != 2) {
                 moveFlag = 1;
             }
-            moveStatus = 4;
+            moveStatus = 2;
+        } else if (dMap_isEnableDispMap()) {
+            if (moveStatus != 3) {
+                moveFlag = 1;
+            }
+            moveStatus = 3;
+        } else if ((i_Meter->mStatusFlags & dMtrStts_UNK400_e) && (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) != dSv_save_c::STAGE_TOTG)) {
+            if (moveStatus != 7) {
+                moveFlag = 1;
+            }
+            moveStatus = 7;
         } else {
-            if (moveStatus != 5) {
+            if (moveStatus != 6) {
                 moveFlag = 1;
             }
-            moveStatus = 5;
+            moveStatus = 6;
         }
+    } else if (i_Meter->field_0x3020 == 5 || i_Meter->field_0x3020 == 9 || i_Meter->field_0x3020 == 3) {
+        if (moveStatus != 4) {
+            moveFlag = 1;
+        }
+        moveStatus = 4;
+    } else {
+        if (moveStatus != 5) {
+            moveFlag = 1;
+        }
+        moveStatus = 5;
     }
     if (moveFlag != 0) {
         if (i_Meter->field_0x02c0.mUserArea >= 5) {
@@ -4395,8 +4633,8 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
             sMainParts1->search('cry1')->hide();
             sMainParts1->search('cry3')->hide();
             i_Meter->field_0x0100[0].pane->show();
-            if (((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) ||
-                ((dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) && (!(i_Meter->mStatusFlags & dMtrStts_UNK400000_e))))
+            if ((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) ||
+                (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1 && !(i_Meter->mStatusFlags & dMtrStts_UNK400000_e)))
             {
                 i_Meter->field_0x0100[1].pane->show();
             } else {
@@ -4411,8 +4649,8 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
             i_Meter->field_0x02c0.pane->show();
             sMainParts1->search('cry1')->show();
             i_Meter->field_0x0100[0].pane->hide();
-            if (((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) ||
-                ((dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) && (!(i_Meter->mStatusFlags & dMtrStts_UNK400000_e))))
+            if ((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) ||
+                (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1 && !(i_Meter->mStatusFlags & dMtrStts_UNK400000_e)))
             {
                 i_Meter->field_0x0100[1].pane->show();
                 sMainParts1->search('cry3')->show();
@@ -4428,8 +4666,8 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
             y = g_meterHIO.field_0x9e;
             i_Meter->field_0x02c0.pane->show();
             sMainParts1->search('cry1')->show();
-            if (((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) ||
-                ((dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) && (!(i_Meter->mStatusFlags & dMtrStts_UNK400000_e))))
+            if ((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) ||
+                (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1 && !(i_Meter->mStatusFlags & dMtrStts_UNK400000_e)))
             {
                 sMainParts1->search('cry3')->show();
             } else {
@@ -4447,8 +4685,8 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
             sMainParts1->search('cry1')->hide();
             sMainParts1->search('cry3')->hide();
             i_Meter->field_0x0100[0].pane->hide();
-            if (((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) ||
-                ((dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) && (!(i_Meter->mStatusFlags & dMtrStts_UNK400000_e))))
+            if ((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) ||
+                (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1 && !(i_Meter->mStatusFlags & dMtrStts_UNK400000_e)))
             {
                 i_Meter->field_0x0100[1].pane->show();
             } else {
@@ -4460,8 +4698,8 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
         case 6:
             x = g_meterHIO.field_0x9c;
             y = g_meterHIO.field_0x9e;
-            if (((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) ||
-                ((dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) && (!(i_Meter->mStatusFlags & dMtrStts_UNK400000_e))))
+            if ((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0) ||
+                (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1 && !(i_Meter->mStatusFlags & dMtrStts_UNK400000_e)))
             {
                 i_Meter->field_0x02c0.pane->show();
                 sMainParts1->search('cry1')->hide();
@@ -4479,8 +4717,8 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
         case 7:
             x = g_meterHIO.field_0x9c;
             y = g_meterHIO.field_0x9e;
-            if (((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) ||
-                ((dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) && (!(i_Meter->mStatusFlags & dMtrStts_UNK400000_e))))
+            if ((dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) ||
+                ((dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) && !(i_Meter->mStatusFlags & dMtrStts_UNK400000_e)))
             {
                 i_Meter->field_0x02c0.pane->show();
                 sMainParts1->search('cry1')->show();
@@ -4509,12 +4747,12 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
         switch (moveStatus) {
         case 2:
         case 3:
+        case 6:
+        case 7:
             x = g_meterHIO.field_0x9c;
             y = g_meterHIO.field_0x9e;
             break;
         case 4:
-        case 6:
-        case 7:
             x = g_meterHIO.field_0x9c + 0x52;
             y = g_meterHIO.field_0x9e;
             break;
@@ -4528,39 +4766,35 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
             break;
         }
     }
-    if ((moveStatus == 4) || (moveStatus == 5)) {
-        f32 tmp = 0.5f;
-        local_98_x[0] = ((i_Meter->field_0x12f0.mPosCenter.x + i_Meter->field_0x12f0.mSize.x * tmp) - i_Meter->field_0x0100[0].mPosCenterOrig.x) -
-                        i_Meter->field_0x0100[0].mSizeOrig.x * tmp;
+    if (moveStatus == 4 || moveStatus == 5) {
+        local_98_x[0] = ((i_Meter->field_0x12f0.mPosCenter.x + i_Meter->field_0x12f0.mSize.x / 2.0f) - i_Meter->field_0x0100[0].mPosCenterOrig.x) -
+                        i_Meter->field_0x0100[0].mSizeOrig.x / 2.0f;
         fVar1 = i_Meter->field_0x12f0.mPosCenter.y;
         local_98_y[0] = fVar1 - i_Meter->field_0x0100[0].mPosCenterOrig.y;
         local_98_x[1] = i_Meter->field_0x12f0.mPosCenter.x - i_Meter->field_0x0100[1].mPosCenterOrig.x;
         local_98_y[1] =
-            ((fVar1 - i_Meter->field_0x12f0.mSize.y * tmp) - i_Meter->field_0x0100[1].mPosCenterOrig.y) - i_Meter->field_0x0100[1].mSizeOrig.y * tmp;
-        local_98_x[2] = i_Meter->field_0x0100[2].mSizeOrig.x * tmp +
-                        ((i_Meter->field_0x1948.mPosCenter.x + i_Meter->field_0x16e0.mSize.x * tmp) - i_Meter->field_0x0100[2].mPosCenterOrig.x);
+            ((fVar1 - i_Meter->field_0x12f0.mSize.y / 2.0f) - i_Meter->field_0x0100[1].mPosCenterOrig.y) - i_Meter->field_0x0100[1].mSizeOrig.y / 2.0f;
+        local_98_x[2] = i_Meter->field_0x0100[2].mSizeOrig.x / 2.0f +
+                        ((i_Meter->field_0x1948.mPosCenter.x + i_Meter->field_0x16e0.mSize.x / 2.0f) - i_Meter->field_0x0100[2].mPosCenterOrig.x);
         local_98_y[2] = i_Meter->field_0x1948.mPosCenter.y - i_Meter->field_0x0100[2].mPosCenterOrig.y;
     } else {
-        s16 tmp3 = dMap_c::mDispSizeX;
-        s16 tmp2 = dMap_getMapDispPosLeftUpX();
-        f32 tmp = 0.5f;
-        local_98_x[2] = (tmp2 + tmp3 * tmp) - i_Meter->field_0x0100[1].mPosCenterOrig.x;
-        local_98_x[1] = (tmp2 + tmp3 * tmp) - i_Meter->field_0x0100[1].mPosCenterOrig.x;
-        local_98_x[0] = (tmp2 + tmp3 * tmp) - i_Meter->field_0x0100[1].mPosCenterOrig.x;
-        tmp3 = dMap_c::mDispSizeY;
-        tmp2 = dMap_getMapDispPosLeftUpY();
-        tmp = 0.5f;
-        local_98_y[2] = (tmp2 + tmp3 * tmp) - i_Meter->field_0x0100[0].mPosCenterOrig.y;
-        local_98_y[1] = (tmp2 + tmp3 * tmp) - i_Meter->field_0x0100[0].mPosCenterOrig.y;
-        local_98_y[0] = (tmp2 + tmp3 * tmp) - i_Meter->field_0x0100[0].mPosCenterOrig.y;
+        s16 width = dMap_c::getMapDspSizeWidth();
+        s16 left = dMap_getMapDispPosLeftUpX();
+        local_98_x[2] = (left + width / 2.0f) - i_Meter->field_0x0100[1].mPosCenterOrig.x;
+        local_98_x[1] = (left + width / 2.0f) - i_Meter->field_0x0100[1].mPosCenterOrig.x;
+        local_98_x[0] = (left + width / 2.0f) - i_Meter->field_0x0100[1].mPosCenterOrig.x;
+        s16 height = dMap_c::getMapDspSizeHeight();
+        s16 top = dMap_getMapDispPosLeftUpY();
+        local_98_y[2] = (top + height / 2.0f) - i_Meter->field_0x0100[0].mPosCenterOrig.y;
+        local_98_y[1] = (top + height / 2.0f) - i_Meter->field_0x0100[0].mPosCenterOrig.y;
+        local_98_y[0] = (top + height / 2.0f) - i_Meter->field_0x0100[0].mPosCenterOrig.y;
     }
     dVar13 = dMap_getMapDispPosLeftUpX() - 0x19;
     dVar12 = dMap_getMapDispPosLeftUpY() - 0x152;
     cXyz* pcVar4 = dKyw_get_wind_vec();
     iVar3 = cM_atan2s(pcVar4->x, pcVar4->z);
-    f32 tmp = 0.5f;
     i_Meter->field_0x02f8.pane->rotate(
-        i_Meter->field_0x02f8.mSizeOrig.x, i_Meter->field_0x02f8.mSizeOrig.y * tmp, ROTATE_Z, (iVar3 * 180.0f) / 32768.0f - 180.0f
+        i_Meter->field_0x02f8.mSizeOrig.x, i_Meter->field_0x02f8.mSizeOrig.y / 2.0f, ROTATE_Z, (iVar3 * 180.0f) / 0x8000 - 180.0f
     );
     fopMsgM_paneTrans(&i_Meter->field_0x02c0, x, y);
     fopMsgM_paneTrans(&i_Meter->field_0x02f8, (dVar13 - 7.0f) + g_meterHIO.field_0x64, (dVar12 + 9.0f) + g_meterHIO.field_0x66);
@@ -4569,8 +4803,8 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
     }
     dVar13 = fopMsgM_valueIncrease(5, 5 - i_Meter->field_0x02c0.mUserArea, 0);
     fopMsgM_setNowAlpha(&i_Meter->field_0x02c0, dVar13);
-    dMap_c::mAlpha = dVar13 * 255.0f;
-    if (!(dKyw_gbwind_use_check()) || (dMenu_flag())) {
+    dMap_c::setMapAlpha(dVar13 * 255.0f);
+    if (!dKyw_gbwind_use_check() || dMenu_flag()) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x02f8);
     } else {
         fopMsgM_setNowAlpha(&i_Meter->field_0x02f8, dVar13);
@@ -4588,9 +4822,8 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
 /* 801FBB28-801FBC70       .text dMeter_magicLength__FP15sub_meter_classf */
 void dMeter_magicLength(sub_meter_class* i_Meter, f32 param_2) {
     f32 dVar1 = (i_Meter->field_0x0f38[0].mSizeOrig.x * 8.0f);
-    f32 tmp = 0.5f;
     i_Meter->field_0x10f8.mSize.x = (dVar1 * param_2) + (i_Meter->field_0x10f8.mSizeOrig.x - dVar1);
-    i_Meter->field_0x10f8.mPosCenter.x = i_Meter->field_0x10f8.mPosTopLeftOrig.x + i_Meter->field_0x10f8.mSize.x * tmp;
+    i_Meter->field_0x10f8.mPosCenter.x = i_Meter->field_0x10f8.mPosTopLeftOrig.x + i_Meter->field_0x10f8.mSize.x / 2.0f;
     fopMsgM_cposMove(&i_Meter->field_0x10f8);
     ((MyPicture*)i_Meter->field_0x11a0.pane)->m134 = 1;
     ((MyPicture*)i_Meter->field_0x11a0.pane)->m124 = 0.0f;
@@ -4598,7 +4831,7 @@ void dMeter_magicLength(sub_meter_class* i_Meter, f32 param_2) {
     ((MyPicture*)i_Meter->field_0x11a0.pane)->m12C = 1.6875f;
     ((MyPicture*)i_Meter->field_0x11a0.pane)->m130 = 0.8125f;
     i_Meter->field_0x11a0.mSize.x = i_Meter->field_0x10f8.mSize.x + (i_Meter->field_0x11a0.mSizeOrig.x - i_Meter->field_0x10f8.mSizeOrig.x);
-    i_Meter->field_0x11a0.mPosCenter.x = i_Meter->field_0x11a0.mPosTopLeftOrig.x + i_Meter->field_0x11a0.mSize.x * tmp;
+    i_Meter->field_0x11a0.mPosCenter.x = i_Meter->field_0x11a0.mPosTopLeftOrig.x + i_Meter->field_0x11a0.mSize.x / 2.0f;
     fopMsgM_cposMove(&i_Meter->field_0x11a0);
     ((MyPicture*)i_Meter->field_0x1130.pane)->m134 = 1;
     ((MyPicture*)i_Meter->field_0x1130.pane)->m124 = 0.0f;
@@ -4606,7 +4839,7 @@ void dMeter_magicLength(sub_meter_class* i_Meter, f32 param_2) {
     ((MyPicture*)i_Meter->field_0x1130.pane)->m12C = 1.6875f;
     ((MyPicture*)i_Meter->field_0x1130.pane)->m130 = 0.8125f;
     i_Meter->field_0x1130.mSize.x = i_Meter->field_0x10f8.mSize.x + (i_Meter->field_0x1130.mSizeOrig.x - i_Meter->field_0x10f8.mSizeOrig.x);
-    i_Meter->field_0x1130.mPosCenter.x = i_Meter->field_0x1130.mPosTopLeftOrig.x + i_Meter->field_0x1130.mSize.x * tmp;
+    i_Meter->field_0x1130.mPosCenter.x = i_Meter->field_0x1130.mPosTopLeftOrig.x + i_Meter->field_0x1130.mSize.x / 2.0f;
     fopMsgM_cposMove(&i_Meter->field_0x1130);
 }
 
@@ -4619,59 +4852,93 @@ void dMeter_windInit(sub_meter_class* i_Meter) {
 
 /* 801FBC90-801FBCEC       .text dMeter_metronomeInit__FP15sub_meter_class */
 void dMeter_metronomeInit(sub_meter_class* i_Meter) {
+#if VERSION > VERSION_DEMO
     i_Meter->field_0x3028 = 0;
     if (dMn_c != NULL) {
         dMn_c->_delete();
         delete dMn_c;
         dMn_c = NULL;
     }
+#endif
 }
 
 /* 801FBCEC-801FBD7C       .text dMeter_windMove__FP15sub_meter_class */
 void dMeter_windMove(sub_meter_class* i_Meter) {
     if (dMeter_windStatus != dComIfGp_getOperateWind()) {
         if (dComIfGp_getOperateWind() == 2) {
-            dMeter_windID = fopMsgM_Create(PROC_OPERATE_WIND, NULL, NULL);
+            dMeter_windID = fopMsgM_Create(fpcNm_OPERATE_WIND_e, NULL, NULL);
         }
         dMeter_windStatus = dComIfGp_getOperateWind();
-    } else {
-        if (((dComIfGp_getOperateWind() != 2) && (dMeter_windID != fpcM_ERROR_PROCESS_ID_e)) && (fopMsgM_SearchByID(dMeter_windID) == NULL)) {
+    }
+#if VERSION > VERSION_DEMO
+    else {
+        if (dComIfGp_getOperateWind() != 2 && dMeter_windID != fpcM_ERROR_PROCESS_ID_e && fopMsgM_SearchByID(dMeter_windID) == NULL) {
             dMeter_windID = fpcM_ERROR_PROCESS_ID_e;
         }
     }
+#endif
 }
 
 /* 801FBD7C-801FBF24       .text dMeter_metronomeMove__FP15sub_meter_class */
 void dMeter_metronomeMove(sub_meter_class* i_Meter) {
-    if (((dComIfGp_getMetronome() && (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e))) && (!(i_Meter->mStatusFlags & dMtrStts_UNK10_e))) &&
-        ((!(i_Meter->mStatusFlags & dMtrStts_UNK800000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e))))
+#if VERSION == VERSION_DEMO
+    static u8 metronomeFlag = dComIfGp_getMetronome();
+    if (dComIfGp_getMetronome() && !(i_Meter->mStatusFlags & dMtrStts_UNK8_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK10_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK800000_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK20_e))
     {
-        if ((i_Meter->field_0x3028 == 0) && (dMn_c == NULL)) {
+        if (metronomeFlag == 0 && dMn_c == NULL) {
             dMn_c = new dMetronome_c();
-            JUT_ASSERT(9008, dMn_c != NULL);
+            JUT_ASSERT(8755, dMn_c != NULL);
             dMn_c->_create();
             dMn_c->initialize();
         }
-        if ((dMn_c != NULL) && ((u8)dMn_c->_open() != 0)) {
+        if (dMn_c != NULL && dMn_c->_open()) {
+            dMn_c->_move();
+        }
+        metronomeFlag = 1;
+    } else {
+        if (dMn_c != NULL) {
+            if (!dMn_c->_close()) {
+                dMn_c->_move();
+            } else {
+                dMn_c->_delete();
+                delete dMn_c;
+                dMn_c = NULL;
+            }
+        }
+        metronomeFlag = 0;
+    }
+#else
+    if (dComIfGp_getMetronome() && !(i_Meter->mStatusFlags & dMtrStts_UNK8_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK10_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK800000_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK20_e))
+    {
+        if (i_Meter->field_0x3028 == 0 && dMn_c == NULL) {
+            dMn_c = new dMetronome_c();
+            JUT_ASSERT(VERSION_SELECT(0, 8887, 9008, 9007), dMn_c != NULL);
+            dMn_c->_create();
+            dMn_c->initialize();
+        }
+        if (dMn_c != NULL && dMn_c->_open()) {
             dMn_c->_move();
         }
         i_Meter->field_0x3028 = 1;
     } else {
         if (i_Meter->field_0x3028 == 1) {
             if (dMn_c != NULL) {
-                if ((u8)dMn_c->_close() == 0) {
+                if (!dMn_c->_close()) {
                     dMn_c->_move();
                 } else {
                     i_Meter->field_0x3028 = 2;
                 }
             }
-        } else if ((i_Meter->field_0x3028 == 2) && (dMn_c != NULL)) {
+        } else if (i_Meter->field_0x3028 == 2 && dMn_c != NULL) {
             i_Meter->field_0x3028 = 0;
             dMn_c->_delete();
             delete dMn_c;
             dMn_c = NULL;
         }
     }
+#endif
 }
 
 /* 801FBF24-801FC190       .text dMeter_rupyAlpha__FP15sub_meter_class */
@@ -4681,11 +4948,11 @@ void dMeter_rupyAlpha(sub_meter_class* i_Meter) {
     cXyz local_2c;
     cXyz local_38;
 
-    if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && (dComIfGp_event_checkHind(0x80))) ||
+    if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(0x80)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK400000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK8_e) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK10_e) || (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK20_e) ||
-        (dComIfGp_getMiniGameType() == 1 || (dComIfGp_getMiniGameType() == 6)))
+        (dComIfGp_getMiniGameType() == 1 || dComIfGp_getMiniGameType() == 6))
     {
         dVar7 = dMeter_alphaClose(&i_Meter->field_0x2a20.mUserArea, &i_Meter->field_0x19f0[0].mUserArea);
         if (i_Meter->mpRupyParticle != NULL) {
@@ -4738,9 +5005,6 @@ void dMeter_rupyInit(sub_meter_class* i_Meter) {
 
 /* 801FC2FC-801FC624       .text dMeter_rupyMove__FP15sub_meter_class */
 void dMeter_rupyMove(sub_meter_class* i_Meter) {
-    int maxRupees;
-    int iVar2;
-    int uVar3;
     int local_28[4];
     char acStack_38[16];
 
@@ -4749,21 +5013,22 @@ void dMeter_rupyMove(sub_meter_class* i_Meter) {
         i_Meter->field_0x19f0[1].mUserArea = dComIfGs_getWalletSize();
     }
     if (dComIfGp_getItemRupeeCount() != 0) {
-        maxRupees = (dComIfGs_getRupee() + dComIfGp_getItemRupeeCount());
+        int targetRupees = (dComIfGs_getRupee() + dComIfGp_getItemRupeeCount());
+        int maxRupees;
         if (dComIfGs_getWalletSize() == 0) {
-            iVar2 = 200;
+            maxRupees = 200;
         } else if (dComIfGs_getWalletSize() == 1) {
-            iVar2 = 1000;
+            maxRupees = 1000;
         } else {
-            iVar2 = 5000;
+            maxRupees = 5000;
         }
-        if (maxRupees > iVar2) {
-            maxRupees = iVar2;
-        } else if (maxRupees < 0) {
-            maxRupees = 0;
+        if (targetRupees > maxRupees) {
+            targetRupees = maxRupees;
+        } else if (targetRupees < 0) {
+            targetRupees = 0;
         }
-        i_Meter->mAdjustRupy = maxRupees - i_Meter->mRupyCount;
-        dComIfGs_setRupee(maxRupees);
+        i_Meter->mAdjustRupy = targetRupees - i_Meter->mRupyCount;
+        dComIfGs_setRupee(targetRupees);
         g_dComIfG_gameInfo.play.mItemRupeeCount = 0;
         if (labs(i_Meter->mAdjustRupy) >= 5) {
             rupy_soundOnFlag = 1;
@@ -4787,35 +5052,33 @@ void dMeter_rupyMove(sub_meter_class* i_Meter) {
                     rupy_soundOnFlag = 0;
                 }
             }
-        } else {
-            if (i_Meter->mAdjustRupy < 0) {
-                i_Meter->mRupyCount--;
-                i_Meter->mAdjustRupy++;
-                if (rupy_soundOnFlag != 0) {
-                    if (i_Meter->mAdjustRupy != 0) {
-                        if (rupy_soundSetFlag == 0) {
-                            mDoAud_seStart(JA_SE_LUPY_DEC_CNT_1);
-                            rupy_soundSetFlag = 1;
-                        } else {
-                            rupy_soundSetFlag = 0;
-                        }
+        } else if (i_Meter->mAdjustRupy < 0) {
+            i_Meter->mRupyCount--;
+            i_Meter->mAdjustRupy++;
+            if (rupy_soundOnFlag != 0) {
+                if (i_Meter->mAdjustRupy != 0) {
+                    if (rupy_soundSetFlag == 0) {
+                        mDoAud_seStart(JA_SE_LUPY_DEC_CNT_1);
+                        rupy_soundSetFlag = 1;
                     } else {
-                        mDoAud_seStart(JA_SE_LUPY_DEC_CNT_2);
                         rupy_soundSetFlag = 0;
-                        rupy_soundOnFlag = 0;
                     }
+                } else {
+                    mDoAud_seStart(JA_SE_LUPY_DEC_CNT_2);
+                    rupy_soundSetFlag = 0;
+                    rupy_soundOnFlag = 0;
                 }
             }
         }
-        uVar3 = i_Meter->mRupyCount;
+        int uVar3 = i_Meter->mRupyCount;
         local_28[0] = uVar3 / 1000;
         local_28[1] = (uVar3 % 1000) / 100;
         local_28[2] = (uVar3 % 100) / 10;
         local_28[3] = uVar3 % 10;
         for (s32 i = 0; i < 4; i++) {
             dMeter_rupy_num(acStack_38, local_28[i]);
-            ((J2DPicture*)(i_Meter->field_0x19f0[i].pane))->changeTexture(acStack_38, 0);
-            ((J2DPicture*)(i_Meter->field_0x1b40[i].pane))->changeTexture(acStack_38, 0);
+            ((J2DPicture*)i_Meter->field_0x19f0[i].pane)->changeTexture(acStack_38, 0);
+            ((J2DPicture*)i_Meter->field_0x1b40[i].pane)->changeTexture(acStack_38, 0);
         }
         g_dComIfG_gameInfo.play.mItemNowRupee = i_Meter->mRupyCount;
     }
@@ -4828,22 +5091,22 @@ void dMeter_walletChange(sub_meter_class* i_Meter) {
         f32 x = (i_Meter->field_0x19f0[1].mPosTopLeftOrig.x - i_Meter->field_0x19f0[0].mPosTopLeftOrig.x);
         i_Meter->field_0x19f0[0].pane->hide();
         i_Meter->field_0x1b40[0].pane->hide();
-        ((J2DPicture*)(i_Meter->field_0x2a20).pane)->setBlack(0x0A280A00);
-        ((J2DPicture*)(i_Meter->field_0x2a20).pane)->setWhite(0x28FF28FF);
+        ((J2DPicture*)i_Meter->field_0x2a20.pane)->setBlack(0x0A280A00);
+        ((J2DPicture*)i_Meter->field_0x2a20.pane)->setWhite(0x28FF28FF);
         fopMsgM_paneTrans(&i_Meter->field_0x2a20, x, 0.0f);
         fopMsgM_paneTrans(&i_Meter->field_0x2a58, x, 0.0f);
     } else if (dComIfGs_getWalletSize() == 1) {
         i_Meter->field_0x19f0[0].pane->show();
         i_Meter->field_0x1b40[0].pane->show();
-        ((J2DPicture*)(i_Meter->field_0x2a20).pane)->setBlack(0x1414A000);
-        ((J2DPicture*)(i_Meter->field_0x2a20).pane)->setWhite(0x32C8FFFF);
+        ((J2DPicture*)i_Meter->field_0x2a20.pane)->setBlack(0x1414A000);
+        ((J2DPicture*)i_Meter->field_0x2a20.pane)->setWhite(0x32C8FFFF);
         fopMsgM_paneTrans(&i_Meter->field_0x2a20, 0.0f, 0.0f);
         fopMsgM_paneTrans(&i_Meter->field_0x2a58, 0.0f, 0.0f);
     } else {
         i_Meter->field_0x19f0[0].pane->show();
         i_Meter->field_0x1b40[0].pane->show();
-        ((J2DPicture*)(i_Meter->field_0x2a20).pane)->setBlack(0x50280000);
-        ((J2DPicture*)(i_Meter->field_0x2a20).pane)->setWhite(0xFF8C00FF);
+        ((J2DPicture*)i_Meter->field_0x2a20.pane)->setBlack(0x50280000);
+        ((J2DPicture*)i_Meter->field_0x2a20.pane)->setWhite(0xFF8C00FF);
         fopMsgM_paneTrans(&i_Meter->field_0x2a20, 0.0f, 0.0f);
         fopMsgM_paneTrans(&i_Meter->field_0x2a58, 0.0f, 0.0f);
     }
@@ -4851,7 +5114,6 @@ void dMeter_walletChange(sub_meter_class* i_Meter) {
 
 /* 801FC85C-801FCA98       .text dMeter_keyLight__FP18fopMsgM_pane_classPsf */
 void dMeter_keyLight(fopMsgM_pane_class* param_1, s16* param_2, f32 param_3) {
-    /* Nonmatching */
     f32 dVar6;
     f32 dVar7;
     f32 dVar8;
@@ -4882,18 +5144,13 @@ void dMeter_keyLight(fopMsgM_pane_class* param_1, s16* param_2, f32 param_3) {
     } else {
         param_1->mUserArea = 1;
     }
-    f32 tmp = 0.5f;
     dVar10 = param_1->mSizeOrig.x * dVar8;
     f32 dVar9 = param_1->mSizeOrig.y * dVar8;
-    f32 x = param_1->mPosTopLeftOrig.x - (dVar10 - param_1->mSizeOrig.x) * tmp;
-    f32 y = param_1->mPosTopLeftOrig.y - (dVar9 - param_1->mSizeOrig.y) * tmp;
+    f32 x = param_1->mPosTopLeftOrig.x - (dVar10 - param_1->mSizeOrig.x) / 2.0f;
+    f32 y = param_1->mPosTopLeftOrig.y - (dVar9 - param_1->mSizeOrig.y) / 2.0f;
     param_1->pane->move(x, y);
     param_1->pane->resize(dVar10, dVar9);
-    J2DPane* j2dPane = param_1->pane;
-    j2dPane->mBasePosition.x = (dVar10 * tmp);
-    j2dPane->mBasePosition.y = (dVar9 * tmp);
-    j2dPane->mRotationAxis = ROTATE_Z;
-    j2dPane->calcMtx();
+    param_1->pane->rotate(dVar10 / 2.0f, dVar9 / 2.0f, ROTATE_Z, param_1->pane->getRotate());
     param_1->mNowAlpha = dVar7 * param_3;
 }
 
@@ -4916,7 +5173,7 @@ void dMeter_keyAlpha(sub_meter_class* i_Meter) {
     local_28[2] = 0x2d;
     local_28[3] = 0x32;
     local_28[4] = 0x3A;
-    if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && (dComIfGp_event_checkHind(0x40))) ||
+    if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(0x40)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK400000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK400_e) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK8_e) || (i_Meter->mStatusFlags & dMtrStts_UNK10_e) || (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
@@ -5000,10 +5257,11 @@ void dMeter_keyMove(sub_meter_class* i_Meter) {
 
 /* 801FD09C-801FD104       .text dMeter_compassRotate__FP18fopMsgM_pane_classP18fopMsgM_pane_classf */
 void dMeter_compassRotate(fopMsgM_pane_class* param_1, fopMsgM_pane_class* param_2, f32 param_3) {
-    /* Nonmatching */
-    f32 fVar1 = param_1->pane->mBounds.f.x - param_1->pane->mBounds.i.x;
-    f32 fVar2 = param_1->pane->mBounds.f.y - param_1->pane->mBounds.i.y;
-    param_1->pane->rotate(fVar2 * 0.5f, fVar1 * 0.5f, ROTATE_Z, param_3);
+    f32 offsetX = param_1->pane->getWidth();
+    offsetX /= 2.0f;
+    f32 offsetY = param_1->pane->getHeight();
+    offsetY /= 2.0f;
+    param_1->pane->rotate(offsetX, offsetY, ROTATE_Z, param_3);
 }
 
 /* 801FD104-801FD410       .text dMeter_compassGetOnProc__FP15sub_meter_class */
@@ -5011,7 +5269,7 @@ void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
     switch (i_Meter->field_0x3020) {
     case 1:
         if (((s32)dMeter_mMapCtrlDisp.field_0x0 != 0) &&
-            ((!(i_Meter->mStatusFlags & dMtrStts_UNK400_e)) || (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_TOTG)))
+            (!(i_Meter->mStatusFlags & dMtrStts_UNK400_e) || dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_TOTG))
         {
             i_Meter->field_0x3020 = 2;
             i_Meter->field_0x3029 = 1;
@@ -5037,7 +5295,7 @@ void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
         dMeter_compassDirOpen(i_Meter);
         break;
     case 3:
-        if (((CPad_CHECK_TRIG_RIGHT(0) && (!(CPad_CHECK_TRIG_UP(0)))) && (!(CPad_CHECK_TRIG_DOWN(0)))) || (i_Meter->field_0x1948.mUserArea != 0)) {
+        if ((CPad_CHECK_TRIG_RIGHT(0) && !CPad_CHECK_TRIG_UP(0) && !CPad_CHECK_TRIG_DOWN(0)) || i_Meter->field_0x1948.mUserArea != 0) {
             i_Meter->field_0x3020 = 6;
             i_Meter->field_0x1948.mUserArea = 1;
             dMeter_compassWindOpen(i_Meter);
@@ -5046,7 +5304,7 @@ void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
         }
         break;
     case 6:
-        if ((CPad_CHECK_TRIG_LEFT(0) && (!(CPad_CHECK_TRIG_UP(0)))) && (!(CPad_CHECK_TRIG_DOWN(0)))) {
+        if (CPad_CHECK_TRIG_LEFT(0) && !CPad_CHECK_TRIG_UP(0) && !CPad_CHECK_TRIG_DOWN(0)) {
             i_Meter->field_0x3020 = 8;
             i_Meter->field_0x1948.mUserArea = 0;
             dMeter_compassWindClose(i_Meter);
@@ -5055,7 +5313,7 @@ void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
         }
         break;
     case 8:
-        if ((CPad_CHECK_TRIG_RIGHT(0) && (!(CPad_CHECK_TRIG_UP(0)))) && (!(CPad_CHECK_TRIG_DOWN(0)))) {
+        if (CPad_CHECK_TRIG_RIGHT(0) && !CPad_CHECK_TRIG_UP(0) && !CPad_CHECK_TRIG_DOWN(0)) {
             i_Meter->field_0x3020 = 6;
             i_Meter->field_0x1948.mUserArea = 1;
             dMeter_compassWindOpen(i_Meter);
@@ -5070,7 +5328,7 @@ void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
         dMeter_compassAnimeMove(i_Meter);
         break;
     }
-    f32 dVar3 = (-(s16)(fopAcM_SearchByName(PROC_SHIP)->shape_angle.y + 0x8000) * 180.0f) / 32768.0f;
+    f32 dVar3 = (-(s16)(fopAcM_SearchByName(fpcNm_SHIP_e)->shape_angle.y + 0x8000) * 180.0f) / 0x8000;
     dMeter_compassRotate(&i_Meter->field_0x1670, &i_Meter->field_0x16a8, (-dComIfGs_getTime() - 90.0f));
     dMeter_compassRotate(&i_Meter->field_0x1248, &i_Meter->field_0x12f0, dVar3);
     dMeter_compassRotate(&i_Meter->field_0x1280, &i_Meter->field_0x12f0, dVar3);
@@ -5079,14 +5337,15 @@ void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
 
 /* 801FD410-801FD48C       .text dMeter_compassGetOffProc__FP15sub_meter_class */
 void dMeter_compassGetOffProc(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     switch (i_Meter->field_0x3020) {
     case 3:
+    case 5:
         i_Meter->field_0x3020 = 9;
     case 9:
         dMeter_compassDirClose(i_Meter);
         break;
-    case 5:
+    case 6:
+    case 7:
         i_Meter->field_0x3020 = 8;
         i_Meter->field_0x1948.mUserArea = 0;
     case 8:
@@ -5100,21 +5359,12 @@ void dMeter_compassGetOffProc(sub_meter_class* i_Meter) {
 
 /* 801FD48C-801FD6C8       .text dMeter_compassDirOpen__FP15sub_meter_class */
 void dMeter_compassDirOpen(sub_meter_class* i_Meter) {
-    /* Nonmatching */
-    f32 dVar9;
-    f32 dVar8;
-    f32 dVar7;
-    f32 dVar6;
-    f32 dVar5;
-    f32 fVar1;
-
-    f32 tmp = 0.5f;
-    fVar1 = i_Meter->field_0x13d0.pane->mBounds.f.x - i_Meter->field_0x13d0.pane->mBounds.i.x;
-    dVar9 = ((i_Meter->field_0x1948.pane->mBounds.f.x - i_Meter->field_0x1948.pane->mBounds.i.x) * tmp - (fVar1 * tmp));
-    dVar8 = ((i_Meter->field_0x1948.pane->mBounds.f.y - i_Meter->field_0x1948.pane->mBounds.i.y) * tmp);
-    dVar7 = ((i_Meter->field_0x16a8.pane->mBounds.f.x - i_Meter->field_0x16a8.pane->mBounds.i.x) * tmp - (fVar1 * tmp));
-    dVar6 = ((i_Meter->field_0x16a8.pane->mBounds.f.y - i_Meter->field_0x16a8.pane->mBounds.i.y) * tmp);
+    f32 dVar9 = i_Meter->field_0x1948.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar8 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar7 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar6 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
     i_Meter->field_0x12f0.mUserArea++;
+    f32 dVar5;
     if (i_Meter->field_0x12f0.mUserArea >= 5) {
         i_Meter->field_0x12f0.mUserArea = 5;
         i_Meter->field_0x3020 = 3;
@@ -5140,21 +5390,12 @@ void dMeter_compassDirOpen(sub_meter_class* i_Meter) {
 
 /* 801FD6C8-801FD8C0       .text dMeter_compassWindOpen__FP15sub_meter_class */
 void dMeter_compassWindOpen(sub_meter_class* i_Meter) {
-    /* Nonmatching */
-    f32 dVar9;
-    f32 dVar8;
-    f32 dVar7;
-    f32 dVar6;
-    f32 dVar5;
-    f32 fVar1;
-
-    f32 tmp = 0.5f;
-    fVar1 = i_Meter->field_0x13d0.pane->mBounds.f.x - i_Meter->field_0x13d0.pane->mBounds.i.x;
-    dVar9 = ((i_Meter->field_0x1948.pane->mBounds.f.x - i_Meter->field_0x1948.pane->mBounds.i.x) * tmp - (fVar1 * tmp));
-    dVar8 = ((i_Meter->field_0x1948.pane->mBounds.f.y - i_Meter->field_0x1948.pane->mBounds.i.y) * tmp);
-    dVar7 = ((i_Meter->field_0x16a8.pane->mBounds.f.x - i_Meter->field_0x16a8.pane->mBounds.i.x) * tmp - (fVar1 * tmp));
-    dVar6 = ((i_Meter->field_0x16a8.pane->mBounds.f.y - i_Meter->field_0x16a8.pane->mBounds.i.y) * tmp);
+    f32 dVar9 = i_Meter->field_0x1948.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar8 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar7 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar6 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
     i_Meter->field_0x12f0.mUserArea++;
+    f32 dVar5;
     if (i_Meter->field_0x12f0.mUserArea >= 10) {
         i_Meter->field_0x12f0.mUserArea = 10;
         i_Meter->field_0x3020 = 7;
@@ -5177,32 +5418,25 @@ void dMeter_compassWindOpen(sub_meter_class* i_Meter) {
 /* 801FD8C0-801FDB64       .text dMeter_compassWindClose__FP15sub_meter_class */
 void dMeter_compassWindClose(sub_meter_class* i_Meter) {
     /* Nonmatching */
-    s16 sVar6;
-    f32 dVar11;
-    f32 dVar10;
-    f32 dVar9;
-    f32 dVar8;
-    f32 dVar7;
-    f32 fVar1;
-
-    f32 tmp = 0.5f;
-    fVar1 = i_Meter->field_0x13d0.pane->mBounds.f.x - i_Meter->field_0x13d0.pane->mBounds.i.x;
-    dVar11 = ((i_Meter->field_0x1948.pane->mBounds.f.x - i_Meter->field_0x1948.pane->mBounds.i.x) * tmp - (fVar1 * tmp));
-    dVar10 = ((i_Meter->field_0x1948.pane->mBounds.f.y - i_Meter->field_0x1948.pane->mBounds.i.y) * tmp);
-    dVar9 = ((i_Meter->field_0x16a8.pane->mBounds.f.x - i_Meter->field_0x16a8.pane->mBounds.i.x) * tmp - (fVar1 * tmp));
-    dVar8 = ((i_Meter->field_0x16a8.pane->mBounds.f.y - i_Meter->field_0x16a8.pane->mBounds.i.y) * tmp);
+    f32 dVar11 = i_Meter->field_0x1948.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar10 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar9 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar8 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
     i_Meter->field_0x12f0.mUserArea--;
-    if ((dComIfGs_getTime() >= 90.0f) && (dComIfGs_getTime() < 270.0f)) {
+
+    s16 sVar6;
+    if (dComIfGs_getTime() >= 90.0f && dComIfGs_getTime() < 270.0f) {
         sVar6 = 0;
     } else {
         sVar6 = 1;
     }
+
+    f32 dVar7;
     if (i_Meter->field_0x12f0.mUserArea <= 5) {
         i_Meter->field_0x12f0.mUserArea = 5;
-        f32 tmp = 0.0f;
-        if ((((dComIfGp_roomControl_getTimePass()) && (i_Meter->field_0x2f68 == tmp)) ||
-             (!(dComIfGp_roomControl_getTimePass()) && (i_Meter->field_0x2f68 != tmp))) ||
-            (!(dComIfGp_roomControl_getTimePass()) && (i_Meter->field_0x3012 != sVar6)))
+        if ((dComIfGp_roomControl_getTimePass() && !i_Meter->field_0x2f68) ||
+            (!dComIfGp_roomControl_getTimePass() && i_Meter->field_0x2f68) ||
+            (!dComIfGp_roomControl_getTimePass() && i_Meter->field_0x3012 != sVar6))
         {
             dMeter_clockShow(i_Meter);
             i_Meter->field_0x3020 = 6;
@@ -5228,21 +5462,13 @@ void dMeter_compassWindClose(sub_meter_class* i_Meter) {
 
 /* 801FDB64-801FDDA4       .text dMeter_compassDirClose__FP15sub_meter_class */
 void dMeter_compassDirClose(sub_meter_class* i_Meter) {
-    /* Nonmatching */
-    f32 dVar9;
-    f32 dVar8;
-    f32 dVar7;
-    f32 dVar6;
-    f32 dVar5;
-    f32 fVar2;
+    f32 dVar9 = i_Meter->field_0x1948.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar8 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar7 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar6 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
+    i_Meter->field_0x12f0.mUserArea--;
 
-    f32 tmp = 0.5f;
-    fVar2 = i_Meter->field_0x13d0.pane->mBounds.f.x - i_Meter->field_0x13d0.pane->mBounds.i.x;
-    dVar9 = ((i_Meter->field_0x1948.pane->mBounds.f.x - i_Meter->field_0x1948.pane->mBounds.i.x) * tmp - (fVar2 * tmp));
-    dVar8 = ((i_Meter->field_0x1948.pane->mBounds.f.y - i_Meter->field_0x1948.pane->mBounds.i.y) * tmp);
-    dVar7 = ((i_Meter->field_0x16a8.pane->mBounds.f.x - i_Meter->field_0x16a8.pane->mBounds.i.x) * tmp - (fVar2 * tmp));
-    dVar6 = ((i_Meter->field_0x16a8.pane->mBounds.f.y - i_Meter->field_0x16a8.pane->mBounds.i.y) * tmp);
-    i_Meter->field_0x12f0.mUserArea = i_Meter->field_0x12f0.mUserArea + -1;
+    f32 dVar5;
     if (i_Meter->field_0x12f0.mUserArea <= 0) {
         dMeter_compassValueInit(i_Meter);
         i_Meter->field_0x12f0.mUserArea = 0;
@@ -5270,14 +5496,13 @@ void dMeter_compassDirClose(sub_meter_class* i_Meter) {
 void dMeter_compassAnimeMove(sub_meter_class* i_Meter) {
     s16 sVar2;
 
-    if ((dComIfGs_getTime() >= 90.0f) && (dComIfGs_getTime() < 270.0f)) {
+    if (dComIfGs_getTime() >= 90.0f && dComIfGs_getTime() < 270.0f) {
         sVar2 = 0;
     } else {
         sVar2 = 1;
     }
-    f32 tmp = 0.0f;
-    if (((!(CPad_CHECK_TRIG_LEFT(0)) || (CPad_CHECK_TRIG_UP(0))) || (CPad_CHECK_TRIG_DOWN(0))) &&
-        (!(dComIfGp_roomControl_getTimePass()) || (i_Meter->field_0x2f68 != tmp)) && (dComIfGp_roomControl_getTimePass() || (i_Meter->field_0x2f68 == tmp)))
+    if ((!CPad_CHECK_TRIG_LEFT(0) || CPad_CHECK_TRIG_UP(0) || CPad_CHECK_TRIG_DOWN(0)) &&
+        (!dComIfGp_roomControl_getTimePass() || i_Meter->field_0x2f68) && (dComIfGp_roomControl_getTimePass() || !i_Meter->field_0x2f68))
     {
         if (dComIfGp_roomControl_getTimePass()) {
             return;
@@ -5294,37 +5519,28 @@ void dMeter_compassAnimeMove(sub_meter_class* i_Meter) {
 
 /* 801FDEC4-801FE0D0       .text dMeter_compassValueInit__FP15sub_meter_class */
 void dMeter_compassValueInit(sub_meter_class* i_Meter) {
-    /* Nonmatching */
-    f32 x;
-    f32 dVar4;
-    f32 dVar5;
-    f32 dVar6;
-    f32 dVar7;
-    f32 dVar8;
-
     if (dComIfGp_roomControl_getTimePass()) {
         i_Meter->field_0x2f68 = 1.0f;
     } else {
         i_Meter->field_0x2f68 = 0.0f;
     }
-    if ((dComIfGs_getTime() >= 90.0f) && (dComIfGs_getTime() < 270.0f)) {
+    if (dComIfGs_getTime() >= 90.0f && dComIfGs_getTime() < 270.0f) {
         i_Meter->field_0x3012 = 0;
     } else {
         i_Meter->field_0x3012 = 1;
     }
     i_Meter->field_0x12f0.mUserArea = 0;
     i_Meter->field_0x302a = 0;
-    dVar8 = i_Meter->field_0x13d0.pane->mBounds.f.x - i_Meter->field_0x13d0.pane->mBounds.i.x;
-    dVar7 = i_Meter->field_0x1948.pane->mBounds.f.x - i_Meter->field_0x1948.pane->mBounds.i.x;
-    dVar6 = i_Meter->field_0x1948.pane->mBounds.f.y - i_Meter->field_0x1948.pane->mBounds.i.y;
-    dVar5 = i_Meter->field_0x16a8.pane->mBounds.f.x - i_Meter->field_0x16a8.pane->mBounds.i.x;
-    dVar4 = i_Meter->field_0x16a8.pane->mBounds.f.y - i_Meter->field_0x16a8.pane->mBounds.i.y;
-    x = -(i_Meter->field_0x1948.mPosTopLeftOrig.x + i_Meter->field_0x1948.mSizeOrig.x);
+    f32 temp2 = (i_Meter->field_0x1948.pane->getWidth() / 2.0f) - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar6 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar5 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f;
+    f32 temp1 = dVar5 - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar4 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
+    f32 x = -(i_Meter->field_0x1948.mPosTopLeftOrig.x + i_Meter->field_0x1948.mSizeOrig.x);
     fopMsgM_paneTrans(&i_Meter->field_0x12f0, x, 0.0f);
     fopMsgM_paneTrans(&i_Meter->field_0x1948, x, 0.0f);
-    f32 tmp = 0.5f;
-    i_Meter->field_0x16a8.pane->rotate((dVar5 * tmp) - (dVar8 * tmp), dVar4 * tmp, ROTATE_Z, 180.0f);
-    i_Meter->field_0x1948.pane->rotate((dVar7 * tmp) - (dVar8 * tmp), dVar6 * tmp, ROTATE_Z, 180.0f);
+    i_Meter->field_0x16a8.pane->rotate(temp1, dVar4, ROTATE_Z, 180.0f);
+    i_Meter->field_0x1948.pane->rotate(temp2, dVar6, ROTATE_Z, 180.0f);
     i_Meter->field_0x1210.pane->hide();
     i_Meter->field_0x12f0.pane->hide();
     dMeter_clockHide(i_Meter);
@@ -5383,23 +5599,23 @@ void dMeter_compassInit(sub_meter_class* i_Meter) {
 
 /* 801FE2EC-801FE444       .text dMeter_compassMove__FP15sub_meter_class */
 void dMeter_compassMove(sub_meter_class* i_Meter) {
-    if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && (dComIfGp_event_checkHind(0x100))) ||
+    if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(0x100)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK200000_e))
     {
         dMeter_compassValueInit(i_Meter);
     } else if ((i_Meter->mStatusFlags & dMtrStts_UNK100_e) || (i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) ||
                (i_Meter->mStatusFlags & dMtrStts_UNK20000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK8_e) || (i_Meter->mStatusFlags & dMtrStts_UNK10_e) ||
-               ((i_Meter->mStatusFlags & dMtrStts_UNK800000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK20_e)) || (dComIfGp_getMiniGameType() == 1) ||
-               (dComIfGp_getMiniGameType() == 8))
+               ((i_Meter->mStatusFlags & dMtrStts_UNK800000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK20_e)) || dComIfGp_getMiniGameType() == 1 ||
+               dComIfGp_getMiniGameType() == 8)
     {
         dMeter_compassValueInit(i_Meter);
     } else if ((i_Meter->mStatusFlags & dMtrStts_UNK400_e) && (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) != dSv_save_c::STAGE_TOTG)) {
         dMeter_compassGetOnProc(i_Meter);
         dMeter_compassAlpha(i_Meter);
         if (i_Meter->field_0x3027 == 0) {
-            dMap_c::mMapDispMode = 1;
+            dMap_c::setMapDispMode(1);
         } else {
-            dMap_c::mMapDispMode = 0;
+            dMap_c::setMapDispMode(0);
         }
     } else {
         dMeter_compassGetOffProc(i_Meter);
@@ -5415,7 +5631,7 @@ void dMeter_clockShow(sub_meter_class* i_Meter) {
     } else {
         i_Meter->field_0x2f68 = 0.0f;
     }
-    if ((dComIfGs_getTime() >= 90.0f) && (dComIfGs_getTime() < 270.0f)) {
+    if (dComIfGs_getTime() >= 90.0f && dComIfGs_getTime() < 270.0f) {
         i_Meter->field_0x3012 = 0;
     } else {
         i_Meter->field_0x3012 = 1;
@@ -5462,7 +5678,7 @@ void dMeter_clockShow(sub_meter_class* i_Meter) {
         }
         i_Meter->field_0x1670.pane->hide();
         i_Meter->field_0x16a8.pane->hide();
-        if ((dComIfGs_getTime() >= 90.0f) && (dComIfGs_getTime() < 270.0f)) {
+        if (dComIfGs_getTime() >= 90.0f && dComIfGs_getTime() < 270.0f) {
             i_Meter->field_0x16e0.pane->show();
             i_Meter->field_0x17f8.pane->hide();
             i_Meter->field_0x1830.pane->show();
@@ -5650,15 +5866,15 @@ void dMeter_clockMultiMove(sub_meter_class* i_Meter) {
         fVar2 = i_Meter->field_0x1868[i].mPosCenter.y;
         clock[i].setPos(sVar4, sVar5, sVar4 + i_Meter->field_0x1830.mSizeOrig.x, sVar5 + i_Meter->field_0x1830.mSizeOrig.y);
         GXColor color1 = {0xFF, 0XFF, 0XFF, 0XFF};
-        clock[i].mC0.r = color1.r;
-        clock[i].mC0.g = color1.g;
-        clock[i].mC0.b = color1.b;
-        clock[i].mC0.a = color1.a;
+        clock[i].mBlack.r = color1.r;
+        clock[i].mBlack.g = color1.g;
+        clock[i].mBlack.b = color1.b;
+        clock[i].mBlack.a = color1.a;
         GXColor color2 = {0x00, 0x00, 0XFF, 0x00};
-        clock[i].mC1.r = color2.r;
-        clock[i].mC1.g = color2.g;
-        clock[i].mC1.b = color2.b;
-        clock[i].mC1.a = color2.a;
+        clock[i].mWhite.r = color2.r;
+        clock[i].mWhite.g = color2.g;
+        clock[i].mWhite.b = color2.b;
+        clock[i].mWhite.a = color2.a;
         clock[i].setScroll(0, 0, 0);
         clock[i].setScroll(1, fVar1, fVar2);
         clock[i].setScale((100.0f * (1.0f / scaleX[i]) / g_meterHIO.field_0x78[i]), (100.0f * (1.0f / scaleY[i])) / g_meterHIO.field_0x78[i]);
@@ -5682,30 +5898,28 @@ void dMeter_mapMove(sub_meter_class* i_Meter) {
     if (fopOvlpM_IsDoingReq() == 0) {
         if (i_Meter->field_0x3027 == 0xFF) {
             stageFlag = 1;
-        } else {
-            if (stayNo != dComIfGp_roomControl_getStayNo()) {
-                stageFlag = 2;
-                stayNo = dComIfGp_roomControl_getStayNo();
-            }
+        } else if (stayNo != dComIfGp_roomControl_getStayNo()) {
+            stageFlag = 2;
+            stayNo = dComIfGp_roomControl_getStayNo();
         }
     }
-    if ((!(i_Meter->mStatusFlags & dMtrStts_UNK4000_e)) && ((!(i_Meter->mStatusFlags & dMtrStts_UNK40_e)) || (!(dComIfGp_event_checkHind(0x100)))) &&
-        (!(i_Meter->mStatusFlags & dMtrStts_UNK200000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK100_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK80_e)) &&
-        (!(i_Meter->mStatusFlags & dMtrStts_UNK100000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e)) &&
-        (((!(i_Meter->mStatusFlags & dMtrStts_UNK10_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e))) && (dMap_isEnableDispMap())) &&
-        ((strcmp(dComIfGp_getNextStageName(), "MajyuE") != 0) || (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0801))))
+    if (!(i_Meter->mStatusFlags & dMtrStts_UNK4000_e) && (!(i_Meter->mStatusFlags & dMtrStts_UNK40_e) || !dComIfGp_event_checkHind(0x100)) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK200000_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK100_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK80_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK100000_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK20000_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK8_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK10_e) && !(i_Meter->mStatusFlags & dMtrStts_UNK20_e) && dMap_isEnableDispMap() &&
+        ((strcmp(dComIfGp_getNextStageName(), "MajyuE") != 0) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_0801)))
     {
         if ((i_Meter->mStatusFlags & dMtrStts_UNK400_e) && (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) != dSv_save_c::STAGE_TOTG)) {
-            if (((s32)dMeter_mMapCtrlDisp.field_0x0 != 0) && (dMap_isEnableDispMap())) {
+            if (((s32)dMeter_mMapCtrlDisp.field_0x0 != 0) && dMap_isEnableDispMap()) {
                 dMeter_mMapCtrlDisp.field_0x0 = 0;
                 dMeter_mMapCtrlDisp.field_0x1 = 7;
             }
         } else {
-            if (!(CPad_CHECK_TRIG_UP(0)) && !(CPad_CHECK_TRIG_DOWN(0)) && (!(dComIfGp_getMiniGameType() == 1)) &&
-                ((CPad_CHECK_TRIG_LEFT(0) != 0) || (CPad_CHECK_TRIG_RIGHT(0))))
+            if (!CPad_CHECK_TRIG_UP(0) && !CPad_CHECK_TRIG_DOWN(0) && dComIfGp_getMiniGameType() != 1 &&
+                (CPad_CHECK_TRIG_LEFT(0) != 0 || CPad_CHECK_TRIG_RIGHT(0)))
             {
                 if (CPad_CHECK_TRIG_LEFT(0) != 0) {
-                    if ((dMap_c::mAlpha != 0) && ((s32)dMeter_mMapCtrlDisp.field_0x0 != 0)) {
+                    if (dMap_c::getMapAlpha() != 0 && ((s32)dMeter_mMapCtrlDisp.field_0x0 != 0)) {
                         if (dMap_isEnableDispMap()) {
                             dMeter_mMapCtrlDisp.field_0x0 = 0;
                             dMeter_mMapCtrlDisp.field_0x1 = 0;
@@ -5713,7 +5927,7 @@ void dMeter_mapMove(sub_meter_class* i_Meter) {
                         i_Meter->field_0x3029 = 0;
                         mDoAud_seStart(JA_SE_MAP_CANCEL);
                     }
-                } else if ((CPad_CHECK_TRIG_RIGHT(0) != 0) && (dMap_c::mAlpha != 0)) {
+                } else if (CPad_CHECK_TRIG_RIGHT(0) != 0 && dMap_c::getMapAlpha() != 0) {
                     if ((s32)dMeter_mMapCtrlDisp.field_0x0 == 0) {
                         if (dMap_isEnableDispMap()) {
                             dMeter_mMapCtrlDisp.field_0x0 = 1;
@@ -5729,7 +5943,7 @@ void dMeter_mapMove(sub_meter_class* i_Meter) {
                         mDoAud_seStart(JA_SE_MAP_ZOOM);
                     }
                 }
-            } else if ((i_Meter->field_0x3029 != 0) && ((i_Meter->field_0x3020 == 1 && ((s32)dMeter_mMapCtrlDisp.field_0x0 == 0)) && (dMap_isEnableDispMap())))
+            } else if (i_Meter->field_0x3029 != 0 && i_Meter->field_0x3020 == 1 && (s32)dMeter_mMapCtrlDisp.field_0x0 == 0 && dMap_isEnableDispMap())
             {
                 dMeter_mMapCtrlDisp.field_0x0 = 1;
                 dMeter_mMapCtrlDisp.field_0x1 = 7;
@@ -5749,11 +5963,11 @@ void dMeter_mapMove(sub_meter_class* i_Meter) {
                 i_Meter->field_0x3027 = 0;
             }
             if (i_Meter->field_0x3027 == 0) {
-                dMap_c::mMapDispMode = 1;
+                dMap_c::setMapDispMode(1);
             } else {
-                dMap_c::mMapDispMode = 0;
+                dMap_c::setMapDispMode(0);
             }
-            if (((s32)dMeter_mMapCtrlDisp.field_0x0 != 0) && (mapTimer != 6)) {
+            if ((s32)dMeter_mMapCtrlDisp.field_0x0 != 0 && mapTimer != 6) {
                 mapTimer = 6;
             }
         }
@@ -5774,9 +5988,9 @@ void dMeter_arwInit(sub_meter_class* i_Meter) {
     }
     for (s32 i = 0; i < 2; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(i_Meter->arrowTex[i], 0xc00, 'TIMG', arrowTexImage[uVar1], archive);
+        JKRReadTypeResource(i_Meter->arrowTex[i], 0xc00, 'TIMG', arrowTexImage[uVar1], archive);
         DCStoreRangeNoSync(i_Meter->arrowTex[i], 0xc00);
-        ((J2DPicture*)(i_Meter->field_0x2940[i].pane))->changeTexture(i_Meter->arrowTex[i], 0);
+        ((J2DPicture*)i_Meter->field_0x2940[i].pane)->changeTexture(i_Meter->arrowTex[i], 0);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2940[i]);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x29b0[i]);
         fopMsgM_setAlpha(&i_Meter->field_0x2940[i]);
@@ -5802,25 +6016,30 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
     static u8 arrowType = daArrow_c::getKeepType();
     static u8 oldType = arrowType;
     dVar16 = (i_Meter->field_0x29b0[0].mPosCenterOrig.x - i_Meter->field_0x29b0[1].mPosCenterOrig.x);
-    if (((((dComIfGp_checkPlayerStatus0(0, daPyStts0_BOW_AIM_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK4000_e))) &&
-          (!(i_Meter->mStatusFlags & dMtrStts_UNK40_e))) &&
-         (((!(i_Meter->mStatusFlags & dMtrStts_UNK200000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK80_e))) &&
-          ((!(i_Meter->mStatusFlags & dMtrStts_UNK100000_e)) &&
-           ((!(i_Meter->mStatusFlags & dMtrStts_UNK20000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e)))))) &&
-        ((!(i_Meter->mStatusFlags & dMtrStts_UNK10_e)) &&
-         ((((!(i_Meter->mStatusFlags & dMtrStts_UNK800000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e))) &&
-           (!(i_Meter->mStatusFlags & dMtrStts_UNK100_e))) &&
-          (dComIfGp_getMiniGameType() != 8))))
-    {
+    if (
+        dComIfGp_checkPlayerStatus0(0, daPyStts0_BOW_AIM_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK4000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK40_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK200000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK80_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK100000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK20000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK8_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK10_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK800000_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK20_e) &&
+        !(i_Meter->mStatusFlags & dMtrStts_UNK100_e) &&
+        dComIfGp_getMiniGameType() != 8
+    ) {
         if (arrowType != daArrow_c::getKeepType()) {
             archive = dComIfGp_getItemIconArchive();
-            JKRArchive::readTypeResource(i_Meter->arrowTex[0], 0xc00, 'TIMG', arrowTexImage[arrowType], archive);
+            JKRReadTypeResource(i_Meter->arrowTex[0], 0xc00, 'TIMG', arrowTexImage[arrowType], archive);
             DCStoreRangeNoSync(i_Meter->arrowTex[0], 0xc00);
             ((J2DPicture*)i_Meter->field_0x2940[0].pane)->changeTexture(i_Meter->arrowTex[0], 0);
             oldType = arrowType;
             arrowType = daArrow_c::getKeepType();
             archive = dComIfGp_getItemIconArchive();
-            JKRArchive::readTypeResource(i_Meter->arrowTex[1], 0xc00, 'TIMG', arrowTexImage[arrowType], archive);
+            JKRReadTypeResource(i_Meter->arrowTex[1], 0xc00, 'TIMG', arrowTexImage[arrowType], archive);
             DCStoreRangeNoSync(i_Meter->arrowTex[1], 0xc00);
             ((J2DPicture*)i_Meter->field_0x2940[1].pane)->changeTexture(i_Meter->arrowTex[1], 0);
             i_Meter->field_0x29b0[0].mUserArea = 0;
@@ -5933,7 +6152,7 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
             f32 x = i_Meter->field_0x29b0[1].mPosCenter.x - 320.0f;
             f32 y = i_Meter->field_0x29b0[1].mPosCenter.y - 240.0f;
             i_Meter->field_0x2f24[i]->setGlobalTranslation(x, y, 0.0f);
-            i_Meter->field_0x2f24[i]->mGlobalPrmColor.a = i_Meter->field_0x2940[i].mNowAlpha;
+            i_Meter->field_0x2f24[i]->setGlobalAlpha(i_Meter->field_0x2940[i].mNowAlpha);
         }
     }
 }
@@ -5941,92 +6160,101 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
 /* 801FFEB0-801FFF30       .text dMeter_moveItemInit__FP15sub_meter_class */
 void dMeter_moveItemInit(sub_meter_class* i_Meter) {
     JKRArchive* archive = dComIfGp_getItemIconArchive();
-    const char* pFilename = dItem_data::getTexture(0x27);
-    JKRArchive::readTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', pFilename, archive);
+    const char* filename = dItem_data::getTexture(dItemNo_BOW_e);
+    JKRReadTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', filename, archive);
     DCStoreRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
     moveItemPane = new J2DPicture(i_Meter->moveIconTex[0]);
 }
 
 /* 801FFF30-80200398       .text dMeter_moveItemMove__FP15sub_meter_class */
 void dMeter_moveItemMove(sub_meter_class* i_Meter) {
-    /* Nonmatching */
-    int iVar3;
-    f32 dVar4;
-    f32 in_f31;
-    f32 in_f30;
-    const char* pFilename;
-    JKRArchive* archive;
+    int uVar1 = g_menuHIO.field_0xc8;
 
-    u8 uVar1 = g_menuHIO.field_0xc8;
     if (dMeter_itemTimer == 0) {
         if (dMeter_itemNum >= dInvSlot_ReserveFirst_e) {
-            archive = dComIfGp_getItemIconArchive();
-            pFilename = dItem_data::getTexture(dComIfGs_getItemReserve(dMeter_itemNum - dInvSlot_ReserveFirst_e));
-            JKRArchive::readTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', pFilename, archive);
+            JKRArchive* archive = dComIfGp_getItemIconArchive();
+            const char* filename = dItem_data::getTexture(dComIfGs_getItemReserve(dMeter_itemNum - dInvSlot_ReserveFirst_e));
+            JKRReadTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', filename, archive);
+#if VERSION <= VERSION_JPN
+            DCFlushRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
+#else
             DCStoreRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
+#endif
             moveItemPane->changeTexture(i_Meter->moveIconTex[0], 0);
         } else if (dMeter_itemNum >= dInvSlot_BaitFirst_e) {
-            archive = dComIfGp_getItemIconArchive();
-            pFilename = dItem_data::getTexture(dComIfGs_getItemBait(dMeter_itemNum - dInvSlot_BaitFirst_e));
-            JKRArchive::readTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', pFilename, archive);
+            JKRArchive* archive = dComIfGp_getItemIconArchive();
+            const char* filename = dItem_data::getTexture(dComIfGs_getItemBait(dMeter_itemNum - dInvSlot_BaitFirst_e));
+            JKRReadTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', filename, archive);
+#if VERSION <= VERSION_JPN
+            DCFlushRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
+#else
             DCStoreRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
+#endif
             moveItemPane->changeTexture(i_Meter->moveIconTex[0], 0);
         } else if (dMeter_itemNum >= dInvSlot_BeastFirst_e) {
-            archive = dComIfGp_getItemIconArchive();
-            pFilename = dItem_data::getTexture(dComIfGs_getItemBeast(dMeter_itemNum - dInvSlot_BeastFirst_e));
-            JKRArchive::readTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', pFilename, archive);
+            JKRArchive* archive = dComIfGp_getItemIconArchive();
+            const char* filename = dItem_data::getTexture(dComIfGs_getItemBeast(dMeter_itemNum - dInvSlot_BeastFirst_e));
+            JKRReadTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', filename, archive);
+#if VERSION <= VERSION_JPN
+            DCFlushRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
+#else
             DCStoreRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
+#endif
             moveItemPane->changeTexture(i_Meter->moveIconTex[0], 0);
         } else {
-            u8 uVar2_2 = dComIfGs_getItem(dMeter_itemNum);
-            if ((uVar2_2 == 0x35) || (uVar2_2 == 0x36)) {
-                uVar2_2 = 0x27;
+            u8 itemNo = dComIfGs_getItem(dMeter_itemNum);
+            if (itemNo == dItemNo_MAGIC_ARROW_e || itemNo == dItemNo_LIGHT_ARROW_e) {
+                itemNo = dItemNo_BOW_e;
             }
-            archive = dComIfGp_getItemIconArchive();
-            pFilename = dItem_data::getTexture(uVar2_2);
-            JKRArchive::readTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', pFilename, archive);
+            JKRArchive* archive = dComIfGp_getItemIconArchive();
+            const char* filename = dItem_data::getTexture(itemNo);
+            JKRReadTypeResource(i_Meter->moveIconTex[0], 0xc00, 'TIMG', filename, archive);
+#if VERSION <= VERSION_JPN
+            DCFlushRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
+#else
             DCStoreRangeNoSync(i_Meter->moveIconTex[0], 0xc00);
+#endif
             moveItemPane->changeTexture(i_Meter->moveIconTex[0], 0);
         }
     }
+
+    f32 f31;
+    f32 f30;
     if (dMeter_btn_chk == 0) {
-        in_f31 = (i_Meter->field_0x2080[0].mPosCenter.x - item_parts.mPosCenterOrig.x);
-        in_f30 = (i_Meter->field_0x2080[0].mPosCenter.y - item_parts.mPosCenterOrig.y);
+        f31 = (i_Meter->field_0x2080[0].mPosCenter.x - item_parts.mPosCenterOrig.x);
+        f30 = (i_Meter->field_0x2080[0].mPosCenter.y - item_parts.mPosCenterOrig.y);
     } else if (dMeter_btn_chk == 1) {
-        in_f31 = (i_Meter->field_0x2080[1].mPosCenter.x - item_parts.mPosCenterOrig.x);
-        in_f30 = (i_Meter->field_0x2080[1].mPosCenter.y - item_parts.mPosCenterOrig.y);
+        f31 = (i_Meter->field_0x2080[1].mPosCenter.x - item_parts.mPosCenterOrig.x);
+        f30 = (i_Meter->field_0x2080[1].mPosCenter.y - item_parts.mPosCenterOrig.y);
     } else if (dMeter_btn_chk == 2) {
-        in_f31 = (i_Meter->field_0x2080[2].mPosCenter.x - item_parts.mPosCenterOrig.x);
-        in_f30 = (i_Meter->field_0x2080[2].mPosCenter.y - item_parts.mPosCenterOrig.y);
+        f31 = (i_Meter->field_0x2080[2].mPosCenter.x - item_parts.mPosCenterOrig.x);
+        f30 = (i_Meter->field_0x2080[2].mPosCenter.y - item_parts.mPosCenterOrig.y);
     }
+
     dMeter_itemTimer++;
-    iVar3 = (s16)uVar1;
-    if (dMeter_itemTimer <= (s16)iVar3) {
-        dVar4 = fopMsgM_valueIncrease(iVar3, (s16)dMeter_itemTimer, 2);
-        item_parts.mPosCenter.x = item_parts.mPosCenterOrig.x + (in_f31 * dVar4);
-        item_parts.mPosCenter.y = item_parts.mPosCenterOrig.y + (in_f30 * dVar4);
-        f32 temp_f3 = item_parts.mSizeOrig.x * g_menuHIO.field_0x8;
-        f32 temp_f3_2 = temp_f3 - i_Meter->field_0x2080[0].mSizeOrig.x;
-        f32 temp_f2 = item_parts.mSizeOrig.y * g_menuHIO.field_0x8;
-        f32 temp_f2_2 = temp_f2 - i_Meter->field_0x2080[0].mSizeOrig.y;
+    if (dMeter_itemTimer <= (s16)uVar1) {
+        f32 dVar4 = fopMsgM_valueIncrease((s16)uVar1, dMeter_itemTimer, 2);
+        item_parts.mPosCenter.x = item_parts.mPosCenterOrig.x + (f31 * dVar4);
+        item_parts.mPosCenter.y = item_parts.mPosCenterOrig.y + (f30 * dVar4);
+        f32 temp_f3_2 = item_parts.mSizeOrig.x * g_menuHIO.field_0x8 - i_Meter->field_0x2080[0].mSizeOrig.x;
+        f32 temp_f2_2 = item_parts.mSizeOrig.y * g_menuHIO.field_0x8 - i_Meter->field_0x2080[0].mSizeOrig.y;
         switch (g_menuHIO.field_0xc9) {
         case 1:
-            item_parts.mSize.x = temp_f3;
-            item_parts.mSize.y = temp_f2;
+            item_parts.mSize.x = item_parts.mSizeOrig.x * g_menuHIO.field_0x8;
+            item_parts.mSize.y = item_parts.mSizeOrig.y * g_menuHIO.field_0x8;
             break;
         case 2:
-            item_parts.mSize.x = temp_f3 - (temp_f3_2 * dVar4);
-            item_parts.mSize.y = temp_f2 - (temp_f2_2 * dVar4);
+            item_parts.mSize.x = item_parts.mSizeOrig.x * g_menuHIO.field_0x8 - (temp_f3_2 * dVar4);
+            item_parts.mSize.y = item_parts.mSizeOrig.y * g_menuHIO.field_0x8 - (temp_f2_2 * dVar4);
             break;
         default:
             item_parts.mSize.x = item_parts.mSizeOrig.x;
             item_parts.mSize.y = item_parts.mSizeOrig.y;
             break;
         }
-        f32 tmp = 0.5f;
-        item_parts.mPosTopLeft.x = item_parts.mPosCenter.x - item_parts.mSize.x * tmp;
-        item_parts.mPosTopLeft.y = item_parts.mPosCenter.y - item_parts.mSize.y * tmp;
-        if (dMeter_itemTimer == iVar3 + -1) {
+        item_parts.mPosTopLeft.x = item_parts.mPosCenter.x - item_parts.mSize.x / 2.0f;
+        item_parts.mPosTopLeft.y = item_parts.mPosCenter.y - item_parts.mSize.y / 2.0f;
+        if (dMeter_itemTimer == (s16)uVar1 - 1) {
             dMeter_itemMoveFlag = 2;
         }
     }
@@ -6035,7 +6263,7 @@ void dMeter_moveItemMove(sub_meter_class* i_Meter) {
 /* 80200398-8020042C       .text dMeter_moveItemDraw__FP15sub_meter_class */
 void dMeter_moveItemDraw(sub_meter_class* i_Meter) {
     s16 uVar1 = g_menuHIO.field_0xc8;
-    if (((dMeter_itemMoveFlagCheck()) && (dMeter_itemTimer != 0)) && (moveItemPane != NULL)) {
+    if (dMeter_itemMoveFlagCheck() && dMeter_itemTimer != 0 && moveItemPane != NULL) {
         moveItemPane->draw(item_parts.mPosTopLeft.x, item_parts.mPosTopLeft.y, item_parts.mSize.x, item_parts.mSize.y, false, false, false);
         if (dMeter_itemTimer >= uVar1) {
             dMeter_itemMoveFlag = 0;
@@ -6045,17 +6273,16 @@ void dMeter_moveItemDraw(sub_meter_class* i_Meter) {
 
 /* 8020042C-8020054C       .text dMeter_swimTransY__FP15sub_meter_classf */
 void dMeter_swimTransY(sub_meter_class* i_Meter, f32 param_2) {
-    f32 fVar1 = 0.5f;
     for (s32 i = 0; i < 9; i++) {
-        i_Meter->field_0x2a90[i].mPosCenterOrig.y = param_2 + (i_Meter->field_0x2a90[i].mPosTopLeftOrig.y + i_Meter->field_0x2a90[i].mSizeOrig.y * fVar1);
+        i_Meter->field_0x2a90[i].mPosCenterOrig.y = param_2 + (i_Meter->field_0x2a90[i].mPosTopLeftOrig.y + i_Meter->field_0x2a90[i].mSizeOrig.y / 2.0f);
     }
-    i_Meter->field_0x2c88.mPosCenterOrig.y = param_2 + (i_Meter->field_0x2c88.mPosTopLeftOrig.y + i_Meter->field_0x2c88.mSizeOrig.y * fVar1);
+    i_Meter->field_0x2c88.mPosCenterOrig.y = param_2 + (i_Meter->field_0x2c88.mPosTopLeftOrig.y + i_Meter->field_0x2c88.mSizeOrig.y / 2.0f);
     fopMsgM_paneTrans(&i_Meter->field_0x2c88, 0.0f, 0.0f);
-    i_Meter->field_0x2cc0.mPosCenterOrig.y = param_2 + (i_Meter->field_0x2cc0.mPosTopLeftOrig.y + i_Meter->field_0x2cc0.mSizeOrig.y * fVar1);
+    i_Meter->field_0x2cc0.mPosCenterOrig.y = param_2 + (i_Meter->field_0x2cc0.mPosTopLeftOrig.y + i_Meter->field_0x2cc0.mSizeOrig.y / 2.0f);
     fopMsgM_paneTrans(&i_Meter->field_0x2cc0, 0.0f, 0.0f);
-    i_Meter->field_0x2d30.mPosCenterOrig.y = param_2 + (i_Meter->field_0x2d30.mPosTopLeftOrig.y + i_Meter->field_0x2d30.mSizeOrig.y * fVar1);
+    i_Meter->field_0x2d30.mPosCenterOrig.y = param_2 + (i_Meter->field_0x2d30.mPosTopLeftOrig.y + i_Meter->field_0x2d30.mSizeOrig.y / 2.0f);
     fopMsgM_paneTrans(&i_Meter->field_0x2d30, 0.0f, 0.0f);
-    i_Meter->field_0x2dd8.mPosCenterOrig.y = param_2 + (i_Meter->field_0x2dd8.mPosTopLeftOrig.y + i_Meter->field_0x2dd8.mSizeOrig.y * fVar1);
+    i_Meter->field_0x2dd8.mPosCenterOrig.y = param_2 + (i_Meter->field_0x2dd8.mPosTopLeftOrig.y + i_Meter->field_0x2dd8.mSizeOrig.y / 2.0f);
     fopMsgM_paneTrans(&i_Meter->field_0x2dd8, 0.0f, 0.0f);
 }
 
@@ -6079,7 +6306,7 @@ void dMeter_swimPaneHide(sub_meter_class* i_Meter) {
     fopMsgM_setNowAlphaZero(&i_Meter->field_0x2d30);
     fopMsgM_setNowAlphaZero(&i_Meter->field_0x2da0);
     fopMsgM_setNowAlphaZero(&i_Meter->field_0x2dd8);
-    tekari.mC0.a = 0;
+    tekari.mBlack.a = 0;
 }
 
 /* 80200630-802006AC       .text dMeter_swimPaneTransY__FP15sub_meter_classf */
@@ -6137,7 +6364,7 @@ void dMeter_swimMove(sub_meter_class* i_Meter) {
     }
     if (i_Meter->field_0x2da0.mUserArea == 0) {
         if (dComIfGp_getItemTimeCount() != 0) {
-            if ((sScrTimer1 == NULL) && (sScrTimer2 == NULL)) {
+            if (sScrTimer1 == NULL && sScrTimer2 == NULL) {
                 dMeter_swimInit(i_Meter);
             }
             i_Meter->field_0x2da0.mUserArea = 1;
@@ -6165,7 +6392,7 @@ void dMeter_swimMove(sub_meter_class* i_Meter) {
         }
     } else if (i_Meter->field_0x2da0.mUserArea == 1) {
         if (dComIfGp_getItemTimeCount() != 0) {
-            if (((!dMenu_flag()) && (!dComIfGp_event_runCheck())) && (dComIfGp_getItemSwimTimerStatus() != false)) {
+            if (!dMenu_flag() && !dComIfGp_event_runCheck() && dComIfGp_getItemSwimTimerStatus() != false) {
                 dMeter_swimOpenProc(i_Meter);
             } else {
                 dMeter_swimPaneHide(i_Meter);
@@ -6173,7 +6400,7 @@ void dMeter_swimMove(sub_meter_class* i_Meter) {
         } else {
             dMeter_swimPaneHide(i_Meter);
             i_Meter->field_0x2da0.mUserArea = 0;
-            if ((sScrTimer1 != NULL) && (sScrTimer2 != NULL)) {
+            if (sScrTimer1 != NULL && sScrTimer2 != NULL) {
                 dComIfGp_getSwimResArchive()->removeResourceAll();
                 delete sScrTimer1;
                 delete sScrTimer2;
@@ -6183,7 +6410,7 @@ void dMeter_swimMove(sub_meter_class* i_Meter) {
         }
     } else if (i_Meter->field_0x2da0.mUserArea == 2) {
         if (dComIfGp_getItemTimeCount() != 0) {
-            if (((!dMenu_flag()) && (!dComIfGp_event_runCheck())) && (dComIfGp_getItemSwimTimerStatus() != false)) {
+            if (!dMenu_flag() && !dComIfGp_event_runCheck() && dComIfGp_getItemSwimTimerStatus() != false) {
                 dMeter_swimMoveProc(i_Meter);
             } else {
                 dMeter_swimPaneHide(i_Meter);
@@ -6191,7 +6418,7 @@ void dMeter_swimMove(sub_meter_class* i_Meter) {
         } else {
             dMeter_swimPaneHide(i_Meter);
             i_Meter->field_0x2da0.mUserArea = 0;
-            if ((sScrTimer1 != NULL) && (sScrTimer2 != NULL)) {
+            if (sScrTimer1 != NULL && sScrTimer2 != NULL) {
                 dComIfGp_getSwimResArchive()->removeResourceAll();
                 delete sScrTimer1;
                 delete sScrTimer2;
@@ -6227,36 +6454,40 @@ void dMeter_swimDraw(sub_meter_class* i_Meter) {
 
 /* 80200E18-802011D0       .text dMeter_swimOpenProc__FP15sub_meter_class */
 void dMeter_swimOpenProc(sub_meter_class* i_Meter) {
-    /* Nonmatching */
-    s16 sVar1;
-    f32 dVar3;
-
-    sVar1 = i_Meter->field_0x2c88.mUserArea + 1;
-    i_Meter->field_0x2c88.mUserArea = sVar1;
+    int r31 = ++i_Meter->field_0x2c88.mUserArea;
     static f32 dist_buf = 0.0f;
-    if (sVar1 == 1) {
+    f32 alpha;
+    f32 scale;
+    if (r31 == 1) {
         fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, 0.1f);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2dd8);
-    } else if (sVar1 < 5) {
-        dVar3 = fopMsgM_valueIncrease(4, sVar1 - 1, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, (dVar3 * 0.9f) + 0.1f);
-        fopMsgM_setNowAlpha(&i_Meter->field_0x2dd8, dVar3);
-    } else if (sVar1 < 8) {
-        dVar3 = fopMsgM_valueIncrease(3, sVar1 - 5, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, 1.0f - (dVar3 * 0.3f));
-    } else if (sVar1 < 10) {
-        dVar3 = fopMsgM_valueIncrease(2, sVar1 - 8, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, (dVar3 * 0.3f) + 0.7f);
-    } else if (sVar1 < 0xc) {
-        dVar3 = fopMsgM_valueIncrease(2, sVar1 - 10, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, 1.0f - (dVar3 * 0.100000024f));
-    } else if (sVar1 < 0xe) {
-        dVar3 = fopMsgM_valueIncrease(2, sVar1 - 0xc, 0);
-        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, (dVar3 * 0.100000024f) + 0.9f);
-    } else if (sVar1 == 0xe) {
+    } else if (r31 < 5) {
+        alpha = fopMsgM_valueIncrease(4, r31 - 1, 0);
+        scale = (alpha * 0.9f) + 0.1f;
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x2dd8, alpha);
+    } else if (r31 < 8) {
+        alpha = fopMsgM_valueIncrease(3, r31 - 5, 0);
+        scale = 1.0f - (alpha * 0.3f);
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
+    } else if (r31 < 10) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 8, 0);
+        scale = (alpha * 0.3f) + 0.7f;
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
+    } else if (r31 < 12) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 10, 0);
+        scale = 1.0f - (alpha * 0.100000024f);
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
+    } else if (r31 < 14) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 12, 0);
+        scale = (alpha * 0.100000024f) + 0.9f;
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, scale);
+    } else if (r31 == 14) {
         fopMsgM_paneScaleXY(&i_Meter->field_0x2dd8, 1.0f);
     }
-    if (sVar1 == 1) {
+
+    f32 transY;
+    if (r31 == 1) {
         dMeter_swimPaneTransY(i_Meter, -130.0f);
         fopMsgM_paneScaleY(&i_Meter->field_0x2cf8, 1.0f);
         fopMsgM_paneScaleY(&i_Meter->field_0x2da0, 1.0f);
@@ -6266,27 +6497,32 @@ void dMeter_swimOpenProc(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2da0);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2d30);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2c88);
-    } else if (sVar1 <= 5) {
-        dVar3 = fopMsgM_valueIncrease(4, sVar1 - 1, 0);
-        dMeter_swimPaneTransY(i_Meter, -((1.0f - dVar3) * 130.0f));
-        dMeter_swimPaneAlpha(i_Meter, dVar3);
-    } else if (sVar1 <= 8) {
-        dVar3 = fopMsgM_valueIncrease(3, sVar1 - 5, 0);
-        dMeter_swimPaneTransY(i_Meter, (-25.0f - (1.0f - dVar3) * -25.0f));
+    } else if (r31 <= 5) {
+        alpha = fopMsgM_valueIncrease(4, r31 - 1, 0);
+        transY = -((1.0f - alpha) * 130.0f);
+        dMeter_swimPaneTransY(i_Meter, transY);
+        dMeter_swimPaneAlpha(i_Meter, alpha);
+    } else if (r31 <= 8) {
+        alpha = fopMsgM_valueIncrease(3, r31 - 5, 0);
+        transY = -25.0f - (1.0f - alpha) * -25.0f;
+        dMeter_swimPaneTransY(i_Meter, transY);
         dMeter_swimPaneShow(i_Meter);
-    } else if (sVar1 <= 0xa) {
-        dVar3 = fopMsgM_valueIncrease(2, sVar1 - 8, 0);
-        dMeter_swimPaneTransY(i_Meter, -((1.0f - dVar3) * 25.0f));
+    } else if (r31 <= 0xa) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 8, 0);
+        transY = -((1.0f - alpha) * 25.0f);
+        dMeter_swimPaneTransY(i_Meter, transY);
         dMeter_swimPaneShow(i_Meter);
-    } else if (sVar1 <= 0xc) {
-        dVar3 = fopMsgM_valueIncrease(2, sVar1 - 10, 0);
-        dMeter_swimPaneTransY(i_Meter, (-6.0f - (1.0f - dVar3) * -6.0f));
+    } else if (r31 <= 12) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 10, 0);
+        transY = -6.0f - (1.0f - alpha) * -6.0f;
+        dMeter_swimPaneTransY(i_Meter, transY);
         dMeter_swimPaneShow(i_Meter);
-    } else if (sVar1 < 0xe) {
-        dVar3 = fopMsgM_valueIncrease(2, sVar1 - 0xc, 0);
-        dMeter_swimPaneTransY(i_Meter, -((1.0f - dVar3) * 6.0f));
+    } else if (r31 < 14) {
+        alpha = fopMsgM_valueIncrease(2, r31 - 12, 0);
+        transY = -((1.0f - alpha) * 6.0f);
+        dMeter_swimPaneTransY(i_Meter, transY);
         dMeter_swimPaneShow(i_Meter);
-    } else if (sVar1 == 0xe) {
+    } else if (r31 == 14) {
         dMeter_swimPaneTransY(i_Meter, 0);
         fopMsgM_paneScaleY(&i_Meter->field_0x2cf8, 1.0f);
         fopMsgM_paneScaleY(&i_Meter->field_0x2da0, 1.0f);
@@ -6310,42 +6546,28 @@ void dMeter_swimMoveProc(sub_meter_class* i_Meter) {
 
 /* 80201224-802012CC       .text dMeter_swimMainRotate__FP15sub_meter_class */
 void dMeter_swimMainRotate(sub_meter_class* i_Meter) {
-    /* Nonmatching */
-    s16 sVar1;
-    s16 sVar2;
-    int iVar4;
-    f32 in_f1;
-
-    sVar1 = g_meterHIO.field_0x132;
-    iVar4 = g_meterHIO.field_0x132;
-    sVar2 = i_Meter->field_0x2c88.mUserArea + 1;
-    i_Meter->field_0x2c88.mUserArea = sVar2;
-    if ((int)sVar2 < iVar4) {
-        in_f1 = ((sVar2 * 360.0f) / sVar1);
-    } else if (sVar2 == (int)sVar1) {
+    const s16 r5 = g_meterHIO.field_0x132;
+    s16 r4 = ++i_Meter->field_0x2c88.mUserArea;
+    f32 f1;
+    if (r4 < r5) {
+        f1 = ((r4 * 360.0f) / r5);
+    } else if (r4 == r5) {
         i_Meter->field_0x2c88.mUserArea = 0;
-        in_f1 = 0.0f;
+        f1 = 0.0f;
     }
-    dMeter_xyRotateZ(&i_Meter->field_0x2cf8, in_f1, 0.0f);
+    dMeter_xyRotateZ(&i_Meter->field_0x2cf8, f1, 0.0f);
 }
 
 /* 802012CC-80201C08       .text dMeter_swimMainBlink__FP15sub_meter_class */
 void dMeter_swimMainBlink(sub_meter_class* i_Meter) {
-    /* Nonmatching */
-    f32 fVar2;
-    s32 uVar5;
-    int iVar6;
-    s16 uVar7;
-    f32 dVar8;
-
     JUtility::TColor local_100 = i_Meter->field_0x2f00;
     JUtility::TColor local_104 = i_Meter->field_0x2ef0;
     JUtility::TColor local_108 = i_Meter->field_0x2ef4;
-    uVar7 = i_Meter->field_0x2dd8.mUserArea + 1;
-    i_Meter->field_0x2dd8.mUserArea = uVar7;
+    int uVar5;
+    int uVar7 = ++i_Meter->field_0x2dd8.mUserArea;
     uVar5 = i_Meter->field_0x3000;
-    if ((int)uVar7 < (int)uVar5) {
-        fVar2 = ((f32)uVar7 / (f32)(uVar5));
+    if (uVar7 < uVar5) {
+        f32 fVar2 = ((f32)uVar7 / (f32)uVar5);
         local_100.r = (75.0f + (fVar2 * (f32)(i_Meter->field_0x2f04.r - 0x4B)));
         local_100.g = (75.0f + (fVar2 * (f32)(i_Meter->field_0x2f04.g - 0x4B)));
         local_100.b = (255.0f + (fVar2 * (f32)(i_Meter->field_0x2f04.b - 0xFF)));
@@ -6354,65 +6576,61 @@ void dMeter_swimMainBlink(sub_meter_class* i_Meter) {
         local_104.b = (i_Meter->field_0x2ef0.b + fVar2 * (i_Meter->field_0x2ef8.b - i_Meter->field_0x2ef0.b));
         local_108.r = (i_Meter->field_0x2ef4.r + fVar2 * (i_Meter->field_0x2efc.r - i_Meter->field_0x2ef4.r));
         local_108.g = (i_Meter->field_0x2ef4.g + fVar2 * (i_Meter->field_0x2efc.g - i_Meter->field_0x2ef4.g));
-        local_108.b = ((i_Meter->field_0x2ef4.b) + fVar2 * (i_Meter->field_0x2efc.b - i_Meter->field_0x2ef4.b));
-    } else {
-        if ((int)uVar7 < (s16)(uVar5 * 2)) {
-            fVar2 = ((f32)(uVar7 - (f32)(uVar5)) / (f32)(uVar5));
-            local_100.r = (i_Meter->field_0x2f04.r + fVar2 * (0x4b - i_Meter->field_0x2f04.r));
-            local_100.g = (i_Meter->field_0x2f04.g + fVar2 * (0x4b - i_Meter->field_0x2f04.g));
-            local_100.b = (i_Meter->field_0x2f04.b + fVar2 * (0xff - i_Meter->field_0x2f04.b));
-            local_104.r = (i_Meter->field_0x2ef8.r + fVar2 * (i_Meter->field_0x2ef0.r - i_Meter->field_0x2ef8.r));
-            local_104.g = (i_Meter->field_0x2ef8.g + fVar2 * (i_Meter->field_0x2ef0.g - i_Meter->field_0x2ef8.g));
-            local_104.b = (i_Meter->field_0x2ef8.b + fVar2 * (i_Meter->field_0x2ef0.b - i_Meter->field_0x2ef8.b));
-            local_108.r = ((i_Meter->field_0x2efc.r) + fVar2 * (i_Meter->field_0x2ef4.r - i_Meter->field_0x2efc.r));
-            local_108.g = ((i_Meter->field_0x2efc.g) + fVar2 * (i_Meter->field_0x2ef4.g - i_Meter->field_0x2efc.g));
-            local_108.b = (i_Meter->field_0x2efc.b + fVar2 * (i_Meter->field_0x2ef4.b - i_Meter->field_0x2efc.b));
-        } else if ((int)uVar7 >= (s16)(uVar5 * 2)) {
-            i_Meter->field_0x2dd8.mUserArea = 0;
-            local_100.r = 0x4b;
-            local_100.g = 0x4b;
-            local_100.b = 0xff;
-            local_104 = i_Meter->field_0x2ef0;
-            local_108 = i_Meter->field_0x2ef4;
-            if (dComIfGp_getItemTimeCount() <= 0) {
-                i_Meter->field_0x3000 = 0;
-            } else {
-                iVar6 = dComIfGp_getItemTimeMax() / 2;
-                if (dComIfGp_getItemTimeCount() < iVar6) {
-                    dVar8 = fopMsgM_valueIncrease(iVar6, iVar6 - dComIfGp_getItemTimeCount(), 1);
-                    i_Meter->field_0x3000 = (s16)(g_meterHIO.field_0x130 + (dVar8 * (g_meterHIO.field_0x134 - g_meterHIO.field_0x130)));
-                    i_Meter->field_0x2f04.r = g_meterHIO.field_0x14a;
-                    i_Meter->field_0x2f04.g = g_meterHIO.field_0x14b;
-                    i_Meter->field_0x2f04.b = g_meterHIO.field_0x14c;
-                    i_Meter->field_0x2ef8.r = g_meterHIO.field_0x14a;
-                    i_Meter->field_0x2ef8.g = g_meterHIO.field_0x14b;
-                    i_Meter->field_0x2ef8.b = g_meterHIO.field_0x14c;
-                    i_Meter->field_0x2efc.r = g_meterHIO.field_0x14a;
-                    i_Meter->field_0x2efc.g = g_meterHIO.field_0x14b;
-                    i_Meter->field_0x2efc.b = g_meterHIO.field_0x14c;
-                    if (i_Meter->field_0x2cf8.mUserArea <= 0) {
-                        i_Meter->field_0x2cf8.mUserArea = 2;
-                        if (!dComIfGp_event_runCheck()) {
-                            mDoAud_seStart(JA_SE_SWIM_TIMER_BLINLK);
-                        }
-                    } else {
-                        i_Meter->field_0x2cf8.mUserArea--;
-                    }
-                } else if (dComIfGp_getItemTimeCount() < 0) {
-                    i_Meter->field_0x3000 = g_meterHIO.field_0x134;
-                    i_Meter->field_0x2f04.r = g_meterHIO.field_0x14a;
-                    i_Meter->field_0x2f04.g = g_meterHIO.field_0x14b;
-                    i_Meter->field_0x2f04.b = g_meterHIO.field_0x14c;
-                    i_Meter->field_0x2ef8.r = g_meterHIO.field_0x14a;
-                    i_Meter->field_0x2ef8.g = g_meterHIO.field_0x14b;
-                    i_Meter->field_0x2ef8.b = g_meterHIO.field_0x14c;
-                    i_Meter->field_0x2efc.r = g_meterHIO.field_0x14a;
-                    i_Meter->field_0x2efc.g = g_meterHIO.field_0x14b;
-                    i_Meter->field_0x2efc.b = g_meterHIO.field_0x14c;
+        local_108.b = (i_Meter->field_0x2ef4.b + fVar2 * (i_Meter->field_0x2efc.b - i_Meter->field_0x2ef4.b));
+    } else if (uVar7 < (s16)(uVar5 * 2)) {
+        f32 fVar2 = (f32)(uVar7 - (f32)uVar5) / (f32)uVar5;
+        local_100.r = (i_Meter->field_0x2f04.r + fVar2 * (0x4b - i_Meter->field_0x2f04.r));
+        local_100.g = (i_Meter->field_0x2f04.g + fVar2 * (0x4b - i_Meter->field_0x2f04.g));
+        local_100.b = (i_Meter->field_0x2f04.b + fVar2 * (0xff - i_Meter->field_0x2f04.b));
+        local_104.r = (i_Meter->field_0x2ef8.r + fVar2 * (i_Meter->field_0x2ef0.r - i_Meter->field_0x2ef8.r));
+        local_104.g = (i_Meter->field_0x2ef8.g + fVar2 * (i_Meter->field_0x2ef0.g - i_Meter->field_0x2ef8.g));
+        local_104.b = (i_Meter->field_0x2ef8.b + fVar2 * (i_Meter->field_0x2ef0.b - i_Meter->field_0x2ef8.b));
+        local_108.r = (i_Meter->field_0x2efc.r + fVar2 * (i_Meter->field_0x2ef4.r - i_Meter->field_0x2efc.r));
+        local_108.g = (i_Meter->field_0x2efc.g + fVar2 * (i_Meter->field_0x2ef4.g - i_Meter->field_0x2efc.g));
+        local_108.b = (i_Meter->field_0x2efc.b + fVar2 * (i_Meter->field_0x2ef4.b - i_Meter->field_0x2efc.b));
+    } else if (uVar7 >= (s16)(uVar5 * 2)) {
+        i_Meter->field_0x2dd8.mUserArea = 0;
+        local_100.r = 0x4b;
+        local_100.g = 0x4b;
+        local_100.b = 0xff;
+        local_104 = i_Meter->field_0x2ef0;
+        local_108 = i_Meter->field_0x2ef4;
+        if (dComIfGp_getItemTimeCount() <= 0) {
+            i_Meter->field_0x3000 = 0;
+        } else if (dComIfGp_getItemTimeCount() < dComIfGp_getItemTimeMax() / 2) {
+            f32 dVar8 = fopMsgM_valueIncrease(dComIfGp_getItemTimeMax() / 2, dComIfGp_getItemTimeMax() / 2 - dComIfGp_getItemTimeCount(), 1);
+            i_Meter->field_0x3000 = (s16)(g_meterHIO.field_0x130 + (dVar8 * (g_meterHIO.field_0x134 - g_meterHIO.field_0x130)));
+            i_Meter->field_0x2f04.r = g_meterHIO.field_0x14a;
+            i_Meter->field_0x2f04.g = g_meterHIO.field_0x14b;
+            i_Meter->field_0x2f04.b = g_meterHIO.field_0x14c;
+            i_Meter->field_0x2ef8.r = g_meterHIO.field_0x14a;
+            i_Meter->field_0x2ef8.g = g_meterHIO.field_0x14b;
+            i_Meter->field_0x2ef8.b = g_meterHIO.field_0x14c;
+            i_Meter->field_0x2efc.r = g_meterHIO.field_0x14a;
+            i_Meter->field_0x2efc.g = g_meterHIO.field_0x14b;
+            i_Meter->field_0x2efc.b = g_meterHIO.field_0x14c;
+            if (i_Meter->field_0x2cf8.mUserArea <= 0) {
+                i_Meter->field_0x2cf8.mUserArea = 2;
+                if (!dComIfGp_event_runCheck()) {
+                    mDoAud_seStart(JA_SE_SWIM_TIMER_BLINLK);
                 }
+            } else {
+                i_Meter->field_0x2cf8.mUserArea--;
             }
+        } else if (dComIfGp_getItemTimeCount() < 0) {
+            i_Meter->field_0x3000 = g_meterHIO.field_0x134;
+            i_Meter->field_0x2f04.r = g_meterHIO.field_0x14a;
+            i_Meter->field_0x2f04.g = g_meterHIO.field_0x14b;
+            i_Meter->field_0x2f04.b = g_meterHIO.field_0x14c;
+            i_Meter->field_0x2ef8.r = g_meterHIO.field_0x14a;
+            i_Meter->field_0x2ef8.g = g_meterHIO.field_0x14b;
+            i_Meter->field_0x2ef8.b = g_meterHIO.field_0x14c;
+            i_Meter->field_0x2efc.r = g_meterHIO.field_0x14a;
+            i_Meter->field_0x2efc.g = g_meterHIO.field_0x14b;
+            i_Meter->field_0x2efc.b = g_meterHIO.field_0x14c;
         }
     }
+
     if (i_Meter->field_0x3000 != 0) {
         ((J2DPicture*)i_Meter->field_0x2c88.pane)->setBlack(local_104);
         ((J2DPicture*)i_Meter->field_0x2c88.pane)->setWhite(local_108);
@@ -6431,16 +6649,15 @@ void dMeter_swimMainDown(sub_meter_class* i_Meter) {
     s16 sVar1;
 
     sVar1 = (s16)dComIfGp_getItemTimeCount();
-    dMeter_paneBottomScaleY(&i_Meter->field_0x2d30, ((f32)(sVar1) / (f32)(i_Meter->field_0x2d30.mUserArea)));
-    f32 fVar1 = 0.5f;
+    dMeter_paneBottomScaleY(&i_Meter->field_0x2d30, ((f32)sVar1 / (f32)i_Meter->field_0x2d30.mUserArea));
     i_Meter->field_0x2da0.mPosTopLeft.y =
-        (i_Meter->field_0x2d30.mPosCenterOrig.y - i_Meter->field_0x2d30.mSizeOrig.y * fVar1) - i_Meter->field_0x2d30.mPosTopLeft.y;
-    i_Meter->field_0x2da0.mPosCenter.y = i_Meter->field_0x2da0.mPosTopLeft.y + i_Meter->field_0x2da0.mSize.y * fVar1;
+        (i_Meter->field_0x2d30.mPosCenterOrig.y - i_Meter->field_0x2d30.mSizeOrig.y / 2.0f) - i_Meter->field_0x2d30.mPosTopLeft.y;
+    i_Meter->field_0x2da0.mPosCenter.y = i_Meter->field_0x2da0.mPosTopLeft.y + i_Meter->field_0x2da0.mSize.y / 2.0f;
     fopMsgM_cposMove(&i_Meter->field_0x2da0);
     i_Meter->field_0x2cf8.mPosCenter.y = i_Meter->field_0x2da0.mPosCenter.y;
     fopMsgM_cposMove(&i_Meter->field_0x2cf8);
     if (sVar1 > 0) {
-        if ((!dComIfGp_event_runCheck()) && (dComIfGp_getItemSwimTimerStatus() != false)) {
+        if (!dComIfGp_event_runCheck() && dComIfGp_getItemSwimTimerStatus() != false) {
             g_dComIfG_gameInfo.play.mAirMeter--;
         }
         if (dComIfGp_getItemTimeCount() == 0) {
@@ -6452,31 +6669,18 @@ void dMeter_swimMainDown(sub_meter_class* i_Meter) {
 
 /* 80201D2C-80201FC0       .text dMeter_swimTekariScroll__FP15sub_meter_class */
 void dMeter_swimTekariScroll(sub_meter_class* i_Meter) {
-    /* Nonmatching */
-    s16 temp_r0;
-    s16 temp_r0_2;
-    s16 temp_r0_3;
-    s16 temp_r0_4;
-    s16 temp_r0_5;
-    s16 temp_r26;
-    s16 temp_r29;
-    s16 temp_r28;
-    s16 temp_r27;
-    s16 var_r30;
-    s16 temp_r4;
+    s16 temp_r0 = g_meterHIO.field_0x14e + g_meterHIO.field_0x150;
+    s16 temp_r0_2 = temp_r0 + g_meterHIO.field_0x14e;
+    s16 temp_r0_3 = temp_r0_2 + g_meterHIO.field_0x152;
+    s16 temp_r0_4 = temp_r0_3 + g_meterHIO.field_0x14e;
+    s16 temp_r0_5 = temp_r0_4 + g_meterHIO.field_0x154;
     f32 dVar12;
-
-    temp_r0 = g_meterHIO.field_0x14e + g_meterHIO.field_0x150;
-    temp_r0_2 = temp_r0 + g_meterHIO.field_0x14e;
-    temp_r0_3 = temp_r0_2 + g_meterHIO.field_0x152;
-    temp_r0_4 = temp_r0_3 + g_meterHIO.field_0x14e;
-    temp_r0_5 = temp_r0_4 + g_meterHIO.field_0x154;
-    f32 tmp = 0.5f;
-    temp_r29 = (REG6_F(0) + (i_Meter->field_0x2c88.mPosCenterOrig.x - i_Meter->field_0x2c88.mSizeOrig.x * tmp));
-    temp_r28 = (REG6_F(1) + (i_Meter->field_0x2c88.mPosCenterOrig.y - i_Meter->field_0x2c88.mSizeOrig.y * tmp));
-    temp_r27 = (REG6_F(0) + (i_Meter->field_0x2c88.mPosCenterOrig.x + i_Meter->field_0x2c88.mSizeOrig.x * tmp));
-    temp_r26 = (REG6_F(1) + (i_Meter->field_0x2c88.mPosCenterOrig.y + i_Meter->field_0x2c88.mSizeOrig.y * tmp));
-    temp_r4 = i_Meter->field_0x2fc4;
+    s16 var_r30;
+    s16 temp_r29 = (REG6_F(0) + (i_Meter->field_0x2c88.mPosCenterOrig.x - i_Meter->field_0x2c88.mSizeOrig.x / 2.0f));
+    s16 temp_r28 = (REG6_F(1) + (i_Meter->field_0x2c88.mPosCenterOrig.y - i_Meter->field_0x2c88.mSizeOrig.y / 2.0f));
+    s16 temp_r27 = (REG6_F(0) + (i_Meter->field_0x2c88.mPosCenterOrig.x + i_Meter->field_0x2c88.mSizeOrig.x / 2.0f));
+    s16 temp_r26 = (REG6_F(1) + (i_Meter->field_0x2c88.mPosCenterOrig.y + i_Meter->field_0x2c88.mSizeOrig.y / 2.0f));
+    s16 temp_r4 = i_Meter->field_0x2fc4;
     if (temp_r4 < g_meterHIO.field_0x14e) {
         dVar12 = fopMsgM_valueIncrease(g_meterHIO.field_0x14e, temp_r4, 0);
         var_r30 = (0.5f + (28.0f - (64.0f * dVar12)));
@@ -6499,17 +6703,17 @@ void dMeter_swimTekariScroll(sub_meter_class* i_Meter) {
     }
     tekari.setPos(temp_r29, temp_r28, temp_r27, temp_r26);
     GXColor color1 = {0xFF, 0xFF, 0xFF, 0XFF};
-    tekari.mC0.r = color1.r;
-    tekari.mC0.g = color1.g;
-    tekari.mC0.b = color1.b;
-    tekari.mC0.a = color1.a;
+    tekari.mBlack.r = color1.r;
+    tekari.mBlack.g = color1.g;
+    tekari.mBlack.b = color1.b;
+    tekari.mBlack.a = color1.a;
     GXColor color2 = {0xFF, 0xFF, 0xFF, 0X00};
-    tekari.mC1.r = color2.r;
-    tekari.mC1.g = color2.g;
-    tekari.mC1.b = color2.b;
-    tekari.mC1.a = color2.a;
+    tekari.mWhite.r = color2.r;
+    tekari.mWhite.g = color2.g;
+    tekari.mWhite.b = color2.b;
+    tekari.mWhite.a = color2.a;
     tekari.setScroll(0, 0, 0);
-    tekari.mC0.a = 0xFF;
+    tekari.mBlack.a = 0xFF;
     tekari.setScroll(1, var_r30, var_r30);
 }
 
@@ -6544,48 +6748,39 @@ void dMeter_swimLightBirth(sub_meter_class* i_Meter) {
     i_Meter->field_0x2f74[iVar3] = (cM_rndF(3.0f) + 5.0f);
     i_Meter->field_0x2f98[iVar3] = cM_rndFX(5.0f);
     i_Meter->field_0x2a90[iVar3].mUserArea = 1;
-    i_Meter->field_0x2a90[iVar3].mPosCenter.y = (i_Meter->field_0x2d30).mPosTopLeft.y + g_meterHIO.field_0x13c;
+    i_Meter->field_0x2a90[iVar3].mPosCenter.y = i_Meter->field_0x2d30.mPosTopLeft.y + g_meterHIO.field_0x13c;
     fopMsgM_cposMove(&i_Meter->field_0x2a90[iVar3]);
     i_Meter->field_0x3010 = cM_rndF((f32)g_meterHIO.field_0x138);
 }
 
 /* 802021B4-8020238C       .text dMeter_swimLightAnime__FP15sub_meter_classs */
 void dMeter_swimLightAnime(sub_meter_class* i_Meter, s16 param_2) {
-    /* Nonmatching */
-    s16 sVar1;
-    s16 sVar2;
-    s16 iVar3;
-    fopMsgM_pane_class* pane2;
-    int iVar4;
-    int iVar5;
-    f32 dVar6;
-    s16 iVar7;
+    s16 sVar2 = g_meterHIO.field_0x136;
+    s16 iVar5 = g_meterHIO.field_0x136;
+    s16 iVar4 = g_meterHIO.field_0x136 + g_meterHIO.field_0x138;
+    s16 sVar1 = i_Meter->field_0x2a90[param_2].mUserArea;
 
-    sVar2 = g_meterHIO.field_0x136;
-    iVar5 = g_meterHIO.field_0x136;
-    iVar4 = (int)(s16)(g_meterHIO.field_0x136 + g_meterHIO.field_0x138);
-    sVar1 = i_Meter->field_0x2a90[param_2].mUserArea;
-    dVar6 = sin((f32)((int)sVar1 * 0.5235988f));
+    f32 dVar6 = sin((f32)(i_Meter->field_0x2a90[param_2].mUserArea * 0.5235988f));
     i_Meter->field_0x2a90[param_2].mPosCenter.x = i_Meter->field_0x2a90[param_2].mPosCenterOrig.x + i_Meter->field_0x2f98[param_2] * dVar6;
     i_Meter->field_0x2a90[param_2].mPosCenter.y = i_Meter->field_0x2a90[param_2].mPosCenter.y - i_Meter->field_0x2f74[param_2];
     i_Meter->field_0x2a90[param_2].mSize.x = g_meterHIO.field_0x7e;
     i_Meter->field_0x2a90[param_2].mSize.y = g_meterHIO.field_0x7e;
-    pane2 = &i_Meter->field_0x2a90[param_2];
-    fopMsgM_cposMove(pane2);
+    fopMsgM_cposMove(&i_Meter->field_0x2a90[param_2]);
     i_Meter->field_0x2f74[param_2] = i_Meter->field_0x2f74[param_2] * (cM_rndF(0.2f) + 0.8f);
     i_Meter->field_0x2f98[param_2] = i_Meter->field_0x2f98[param_2] * (cM_rndF(0.1f) + 0.9f);
-    iVar3 = (int)sVar1;
-    iVar7 = (int)sVar2;
+
+    s16 iVar3 = (int)sVar1;
+    s16 iVar7 = (int)sVar2;
     if (iVar3 == 1) {
-        fopMsgM_setNowAlphaZero(pane2);
+        fopMsgM_setNowAlphaZero(&i_Meter->field_0x2a90[param_2]);
     } else if (iVar3 < iVar7) {
-        dVar6 = fopMsgM_valueIncrease(iVar5 + -1, iVar3 + -1, 1);
-        fopMsgM_setNowAlpha(pane2, dVar6);
+        f32 dVar6 = fopMsgM_valueIncrease(iVar5 - 1, iVar3 - 1, 1);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x2a90[param_2], dVar6);
     } else if (iVar3 < iVar4) {
-        dVar6 = fopMsgM_valueIncrease(iVar4 - iVar5, iVar3 - iVar5, 0);
-        fopMsgM_setNowAlpha(pane2, (f32)(1.0f - dVar6));
+        f32 dVar6 = fopMsgM_valueIncrease(iVar4 - iVar5, iVar3 - iVar5, 0);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x2a90[param_2], (f32)(1.0f - dVar6));
     } else if (iVar3 == iVar4) {
-        fopMsgM_setNowAlphaZero(pane2);
+        fopMsgM_setNowAlphaZero(&i_Meter->field_0x2a90[param_2]);
     }
     i_Meter->field_0x2a90[param_2].mUserArea++;
     if (i_Meter->field_0x2a90[param_2].mUserArea > iVar4) {
@@ -6597,7 +6792,7 @@ void dMeter_swimLightAnime(sub_meter_class* i_Meter, s16 param_2) {
 void dMeter_placeNameMove() {
     if (!dMeter_place_name) {
         if (dComIfGp_checkStageName() == 2) {
-            fopMsgM_create(PROC_PLACE_NAME);
+            fopMsgM_create(fpcNm_PLACE_NAME_e);
             dMeter_place_name = true;
         }
     } else {
@@ -6619,7 +6814,7 @@ void dMeter_arrowInit(sub_meter_class* i_Meter) {
 void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     if ((g_dComIfG_gameInfo.play.getDirection() & 1) != 0) {
         if (i_Meter->field_0x2e10[0].mUserArea == 0) {
-            if ((i_Meter->field_0x3025 == 0) || (i_Meter->field_0x3025 == 0x14)) {
+            if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[0].mUserArea = 1;
             }
         }
@@ -6628,7 +6823,7 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     }
     if ((g_dComIfG_gameInfo.play.getDirection() & 2) != 0) {
         if (i_Meter->field_0x2e10[1].mUserArea == 0) {
-            if ((i_Meter->field_0x3025 == 0) || (i_Meter->field_0x3025 == 0x14)) {
+            if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[1].mUserArea = 1;
             }
         }
@@ -6637,7 +6832,7 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     }
     if ((g_dComIfG_gameInfo.play.getDirection() & 4) != 0) {
         if (i_Meter->field_0x2e10[2].mUserArea == 0) {
-            if ((i_Meter->field_0x3025 == 0) || (i_Meter->field_0x3025 == 0x14)) {
+            if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[2].mUserArea = 1;
             }
         }
@@ -6646,7 +6841,7 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     }
     if ((g_dComIfG_gameInfo.play.getDirection() & 8) != 0) {
         if (i_Meter->field_0x2e10[3].mUserArea == 0) {
-            if (i_Meter->field_0x3025 == 0 || (i_Meter->field_0x3025 == 0x14)) {
+            if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[3].mUserArea = 1;
             }
         }
@@ -6657,7 +6852,6 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
 
 /* 80202580-80202770       .text dMeter_arrowTransScale__FP15sub_meter_classffi */
 void dMeter_arrowTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, int param_4) {
-    /* Nonmatching */
     f32 fVar1;
     f32 fVar2;
     f32 fVar3;
@@ -6665,38 +6859,36 @@ void dMeter_arrowTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, 
 
     switch (param_4) {
     case 0:
-        fVar1 = i_Meter->field_0x2e10[0].mPosTopLeftOrig.x;
-        dVar4 = i_Meter->field_0x2e10[0].mSizeOrig.x;
+        fVar1 = i_Meter->field_0x2e10[0].mPosTopLeftOrig.x + i_Meter->field_0x2e10[0].mSizeOrig.x;
         fVar2 = i_Meter->field_0x2e10[0].mPosTopLeftOrig.y;
-        i_Meter->field_0x2e10[0].mSize.x = (f32)(dVar4 * param_3);
+        i_Meter->field_0x2e10[0].mSize.x = i_Meter->field_0x2e10[0].mSizeOrig.x * param_3;
         i_Meter->field_0x2e10[0].mSize.y = i_Meter->field_0x2e10[0].mSizeOrig.y;
-        i_Meter->field_0x2e10[0].mPosTopLeft.x = (f32)((f32)(fVar1 + dVar4) - param_2) - i_Meter->field_0x2e10[0].mSize.x;
+        i_Meter->field_0x2e10[0].mPosTopLeft.x =fVar1 - param_2 - i_Meter->field_0x2e10[0].mSize.x;
         i_Meter->field_0x2e10[0].mPosTopLeft.y = fVar2;
         break;
     case 1:
         fVar1 = i_Meter->field_0x2e10[1].mPosTopLeftOrig.x;
         fVar2 = i_Meter->field_0x2e10[1].mPosTopLeftOrig.y;
         i_Meter->field_0x2e10[1].mSize.x = i_Meter->field_0x2e10[1].mSizeOrig.x;
-        i_Meter->field_0x2e10[1].mSize.y = (f32)(i_Meter->field_0x2e10[1].mSizeOrig.y * param_3);
+        i_Meter->field_0x2e10[1].mSize.y = i_Meter->field_0x2e10[1].mSizeOrig.y * param_3;
         i_Meter->field_0x2e10[1].mPosTopLeft.x = fVar1;
-        i_Meter->field_0x2e10[1].mPosTopLeft.y = (f32)(fVar2 + param_2);
+        i_Meter->field_0x2e10[1].mPosTopLeft.y = fVar2 + param_2;
         break;
     case 2:
         fVar1 = i_Meter->field_0x2e10[2].mPosTopLeftOrig.x;
         fVar2 = i_Meter->field_0x2e10[2].mPosTopLeftOrig.y;
-        i_Meter->field_0x2e10[2].mSize.x = (f32)(i_Meter->field_0x2e10[2].mSizeOrig.x * param_3);
+        i_Meter->field_0x2e10[2].mSize.x = i_Meter->field_0x2e10[2].mSizeOrig.x * param_3;
         i_Meter->field_0x2e10[2].mSize.y = i_Meter->field_0x2e10[2].mSizeOrig.y;
-        i_Meter->field_0x2e10[2].mPosTopLeft.x = (f32)(fVar1 + param_2);
+        i_Meter->field_0x2e10[2].mPosTopLeft.x = fVar1 + param_2;
         i_Meter->field_0x2e10[2].mPosTopLeft.y = fVar2;
         break;
     case 3:
         fVar1 = i_Meter->field_0x2e10[3].mPosTopLeftOrig.x;
-        fVar2 = i_Meter->field_0x2e10[3].mPosTopLeftOrig.y;
-        fVar3 = i_Meter->field_0x2e10[3].mSizeOrig.y;
+        fVar2 = i_Meter->field_0x2e10[3].mPosTopLeftOrig.y + i_Meter->field_0x2e10[3].mSizeOrig.y;
         i_Meter->field_0x2e10[3].mSize.x = i_Meter->field_0x2e10[3].mSizeOrig.x;
-        i_Meter->field_0x2e10[3].mSize.y = (f32)(i_Meter->field_0x2e10[3].mSizeOrig.y * param_3);
+        i_Meter->field_0x2e10[3].mSize.y = i_Meter->field_0x2e10[3].mSizeOrig.y * param_3;
         i_Meter->field_0x2e10[3].mPosTopLeft.x = fVar1;
-        i_Meter->field_0x2e10[3].mPosTopLeft.y = (f32)((fVar2 + fVar3) - param_2) - i_Meter->field_0x2e10[3].mSize.y;
+        i_Meter->field_0x2e10[3].mPosTopLeft.y = fVar2 - param_2 - i_Meter->field_0x2e10[3].mSize.y;
         break;
     }
     i_Meter->field_0x2e10[param_4].pane->move((int)i_Meter->field_0x2e10[param_4].mPosTopLeft.x, (int)i_Meter->field_0x2e10[param_4].mPosTopLeft.y);
@@ -6717,7 +6909,7 @@ void dMeter_arrowAnime(sub_meter_class* i_Meter) {
         if (i_Meter->field_0x2e10[i].mUserArea == 1) {
             iVar6 = i_Meter->field_0x3025;
             if (iVar6 > 0x14) {
-                iVar6 = (s16)(i_Meter->field_0x3025 + -0x14);
+                iVar6 = (s16)(i_Meter->field_0x3025 - 0x14);
             }
             dVar7 = fopMsgM_valueIncrease(10, iVar6, 0);
             dMeter_arrowTransScale(i_Meter, (dVar7 * (trans[1] - trans[0])) + trans[0], (dVar7 * (scale[1] - scale[0])) + scale[0], i);
@@ -6734,12 +6926,12 @@ void dMeter_arrowAnime(sub_meter_class* i_Meter) {
             color2.a = (dVar7 * (white[7] - white[3])) + white[3];
             ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setBlack(color1);
             ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setWhite(color2);
-            if ((s16)iVar6 == 10) {
+            if (iVar6 == 10) {
                 i_Meter->field_0x2e10[i].mUserArea = 2;
             }
         } else if (i_Meter->field_0x2e10[i].mUserArea == 2) {
             if (i_Meter->field_0x3025 <= 0x14) {
-                dVar7 = fopMsgM_valueIncrease(10, (i_Meter->field_0x3025 + -10), 0);
+                dVar7 = fopMsgM_valueIncrease(10, (i_Meter->field_0x3025 - 10), 0);
                 dMeter_arrowTransScale(i_Meter, (dVar7 * (trans[2] - trans[1])) + trans[1], (dVar7 * (scale[2] - scale[1])) + scale[1], i);
                 GXColor color1;
                 color1.r = (dVar7 * (black[8] - black[4])) + black[4];
@@ -6754,7 +6946,7 @@ void dMeter_arrowAnime(sub_meter_class* i_Meter) {
                 ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setBlack(color1);
                 ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setWhite(color2);
             } else {
-                dVar7 = fopMsgM_valueIncrease(10, (i_Meter->field_0x3025 + -0x14), 0);
+                dVar7 = fopMsgM_valueIncrease(10, (i_Meter->field_0x3025 - 0x14), 0);
                 dMeter_arrowTransScale(i_Meter, (dVar7 * (trans[3] - trans[2])) + trans[2], (dVar7 * (scale[3] - scale[2])) + scale[2], i);
                 GXColor color1;
                 color1.r = (dVar7 * (black[12] - black[8])) + black[8];
@@ -6787,7 +6979,7 @@ void dMeter_arrowErase(fopMsgM_pane_class* param_1) {
 
 /* 80203354-80203410       .text dMeter_arrowMove__FP15sub_meter_class */
 void dMeter_arrowMove(sub_meter_class* i_Meter) {
-    if ((dComIfGp_getAdvanceDirection() != 0) && (!dMenu_flag())) {
+    if (dComIfGp_getAdvanceDirection() != 0 && !dMenu_flag()) {
         dMeter_arrowCheckStatus(i_Meter);
         i_Meter->field_0x3025++;
         dMeter_arrowAnime(i_Meter);
@@ -7057,13 +7249,13 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
     fopMsgM_setAlpha(&i_Meter->field_0x1830);
     fopMsgM_setAlpha(&i_Meter->field_0x1910);
     fopMsgM_setAlpha(&i_Meter->field_0x1948);
-    if ((i_Meter->field_0x1830.pane->isVisible()) && (i_Meter->field_0x3020 == 7)) {
+    if (i_Meter->field_0x1830.pane->isVisible() && i_Meter->field_0x3020 == 7) {
         for (s32 i = 0; i < 3; i++) {
-            clock[i].mC0.a = i_Meter->field_0x1830.mNowAlpha;
+            clock[i].mBlack.a = i_Meter->field_0x1830.mNowAlpha;
         }
     } else {
         for (s32 i = 0; i < 3; i++) {
-            clock[i].mC0.a = 0;
+            clock[i].mBlack.a = 0;
         }
     }
     fopMsgM_setAlpha(&i_Meter->field_0x1980);
@@ -7090,14 +7282,23 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
         for (s32 i = 0; i < 3; i++) {
             dComIfGd_set2DOpa(&clock[i]);
         }
-        if ((sScrTimer1 != NULL) && (sScrTimer2 != NULL)) {
+        if (sScrTimer1 != NULL && sScrTimer2 != NULL) {
             dComIfGd_set2DOpa(&tekari);
         }
         dComIfGd_set2DOpaTop(&meter2);
         dMeter_moveItemDraw(i_Meter);
-        if ((i_Meter->field_0x3028 == 1) && dComIfGp_getMetronome() && (!(i_Meter->mStatusFlags & dMtrStts_UNK8_e)) &&
-            (!(i_Meter->mStatusFlags & dMtrStts_UNK10_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK800000_e)) && (!(i_Meter->mStatusFlags & dMtrStts_UNK20_e)))
-        {
+        if (
+#if VERSION == VERSION_DEMO
+            dMn_c != NULL &&
+#else
+            i_Meter->field_0x3028 == 1 &&
+#endif
+            dComIfGp_getMetronome() &&
+            !(i_Meter->mStatusFlags & dMtrStts_UNK8_e) &&
+            !(i_Meter->mStatusFlags & dMtrStts_UNK10_e) &&
+            !(i_Meter->mStatusFlags & dMtrStts_UNK800000_e) &&
+            !(i_Meter->mStatusFlags & dMtrStts_UNK20_e)
+        ) {
             dComIfGd_set2DOpa(dMn_c);
         }
     }
@@ -7185,6 +7386,7 @@ static BOOL dMeter_Execute(sub_meter_class* i_Meter) {
 
 /* 80204C20-80204C28       .text dMeter_IsDelete__FP15sub_meter_class */
 static BOOL dMeter_IsDelete(sub_meter_class* i_Meter) {
+    UNUSED(i_Meter);
     return TRUE;
 }
 
@@ -7246,7 +7448,7 @@ static BOOL dMeter_Delete(sub_meter_class* i_Meter) {
     delete sMainParts1;
     delete sMainParts2;
     delete sMainParts3;
-    if ((sScrTimer1 != NULL) && (sScrTimer2 != NULL)) {
+    if (sScrTimer1 != NULL && sScrTimer2 != NULL) {
         dComIfGp_getSwimResArchive()->removeResourceAll();
         delete sScrTimer1;
         delete sScrTimer2;
@@ -7271,6 +7473,7 @@ static BOOL dMeter_Delete(sub_meter_class* i_Meter) {
 static cPhs_State dMeter_Create(msg_class* i_this) {
     sub_meter_class* i_Meter = (sub_meter_class*)i_this;
 
+#if VERSION > VERSION_DEMO
     mapAlpha = 0;
     menu_status = 0;
     menu_status_old = 0;
@@ -7293,57 +7496,62 @@ static cPhs_State dMeter_Create(msg_class* i_this) {
     dMeter_collectMode = 0;
     rupy_soundSetFlag = 0;
     rupy_soundOnFlag = 0;
+#endif
 
     i_Meter->heap = fopMsgM_createExpHeap(0x2a819);
-    JUT_ASSERT(13475, i_Meter->heap != NULL);
+    JUT_ASSERT(VERSION_SELECT(13172, 13354, 13475, 13474), i_Meter->heap != NULL);
 
     JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Meter->heap);
     sMainParts1 = new MyScreen();
-    JUT_ASSERT(13480, sMainParts1 != NULL);
+    JUT_ASSERT(VERSION_SELECT(13177, 13359, 13480, 13479), sMainParts1 != NULL);
     sMainParts1->set("main_parts1.blo", dComIfGp_getMenuArchive());
 
     sMainParts2 = new J2DScreen();
-    JUT_ASSERT(13484, sMainParts2 != NULL);
+    JUT_ASSERT(VERSION_SELECT(13181, 13363, 13484, 13483), sMainParts2 != NULL);
     sMainParts2->set("main_parts2.blo", dComIfGp_getMenuArchive());
 
     sMainParts3 = new J2DScreen();
-    JUT_ASSERT(13488, sMainParts3 != NULL);
+    JUT_ASSERT(VERSION_SELECT(13185, 13367, 13488, 13487), sMainParts3 != NULL);
     sMainParts3->set("main_parts3.blo", dComIfGp_getMenuArchive());
 
     sChoiceRoad = new J2DScreen();
-    JUT_ASSERT(13492, sChoiceRoad != NULL);
+    JUT_ASSERT(VERSION_SELECT(13189, 13371, 13492, 13491), sChoiceRoad != NULL);
     sChoiceRoad->set("choice_road.blo", dComIfGp_getMenuArchive());
 
     for (s32 i = 0; i < 3; i++) {
         i_Meter->actionTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(13497, i_Meter->actionTex[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(13194, 13376, 13497, 13496), i_Meter->actionTex[i] != NULL);
 
         i_Meter->xyIconTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(13499, i_Meter->xyIconTex[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(13196, 13378, 13499, 13498), i_Meter->xyIconTex[i] != NULL);
     }
 
     for (s32 i = 0; i < 2; i++) {
         if (i == 0) {
             i_Meter->moveIconTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-            JUT_ASSERT(13506, i_Meter->moveIconTex[i] != NULL);
+            JUT_ASSERT(VERSION_SELECT(13203, 13385, 13506, 13505), i_Meter->moveIconTex[i] != NULL);
         }
 
         i_Meter->arrowTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
-        JUT_ASSERT(13509, i_Meter->arrowTex[i] != NULL);
+        JUT_ASSERT(VERSION_SELECT(13206, 13388, 13509, 13508), i_Meter->arrowTex[i] != NULL);
     }
 
+#if VERSION == VERSION_DEMO
+    fopMsgM_Create(fpcNm_MENUWINDOW_e, NULL, NULL);
+#else
     if (strcmp(dComIfGp_getStartStageName(), "sea_T") != 0) {
-        fopMsgM_Create(PROC_MENUWINDOW, NULL, NULL);
+        fopMsgM_Create(fpcNm_MENUWINDOW_e, NULL, NULL);
     }
+#endif
 
-    fopMsgM_Create(PROC_MESG, NULL, NULL);
+    fopMsgM_Create(fpcNm_MESG_e, NULL, NULL);
 
     dComIfGp_setDoStatusForce(dActStts_BLANK_e);
     dComIfGp_setRStatusForce(dActStts_BLANK_e);
     dComIfGp_setAStatusForce(dActStts_BLANK_e);
 
-    g_meterHIO.mNo = mDoHIO_createChild("通常画面表示", &g_meterHIO);        // "Normal Screen Display"
-    g_menuHIO.mNo = mDoHIO_createChild("メニュー画面", &g_menuHIO);          // "Menu Screen"
+    g_meterHIO.mNo = mDoHIO_createChild("通常画面表示", &g_meterHIO);         // "Normal Screen Display"
+    g_menuHIO.mNo = mDoHIO_createChild("メニュー画面", &g_menuHIO);           // "Menu Screen"
     g_msgHIO.mNo = mDoHIO_createChild("Message（会話）", &g_msgHIO);         // "Message (Talk)"
     g_messageHIO.mNo = mDoHIO_createChild("Message（看板）", &g_messageHIO); // "Message (Sign)"
     g_meter_mapHIO.mNo = mDoHIO_createChild("マップ２", &g_meter_mapHIO);    // "Map 2"
@@ -7435,9 +7643,7 @@ void mapCtrlDisp_c::initMapCtrlDisp() {
 /* 80205A44-80205D24       .text moveMapCtrlDisp__13mapCtrlDisp_cFv */
 void mapCtrlDisp_c::moveMapCtrlDisp() {
     f32 fVar1;
-    s8 uVar6;
     f32 dVar7;
-
     if (dCam_isManual(dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0))) != 0) {
         if (field_0x2 < 9) {
             field_0x2++;
@@ -7463,36 +7669,36 @@ void mapCtrlDisp_c::moveMapCtrlDisp() {
         dVar7 = fopMsgM_valueIncrease(5, field_0x2, 2);
         fVar1 = 1.1f;
     }
-    dMap_c::mIconDispMode = 0;
-    uVar6 = (u8)((dVar7 * 255.0f) * (g_meter_mapHIO.field_0x6 / 255.0f));
-    dMap_c::mIconFreeAlpha = (u8)uVar6;
-    dMap_c::mIconFreeScale = fVar1 * g_meter_mapHIO.field_0x10;
-    if ((u8)uVar6 != 0) {
-        dMap_c::mIconDispMode = 1;
+    dMap_c::setIconDispMode(dMapIconDisp_NONE_e);
+    s8 alpha = (u8)((dVar7 * 255.0f) * (g_meter_mapHIO.field_0x6 / 255.0f));
+    dMap_c::setIconFreeAlpha(alpha);
+    dMap_c::setIconFreeScale(fVar1 * g_meter_mapHIO.field_0x10);
+    if ((u8)alpha != 0) {
+        dMap_c::setIconDispMode(dMapIconDisp_FREE_e);
     }
-    if (dComIfGp_checkCameraAttentionStatus(0, 0x400)) {
+    if (dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_00000400_e)) {
         daPy_py_c* player = daPy_getPlayerActorClass();
         BOOL temp = player->checkSubjectAccept() && !dComIfGp_event_runCheck();
         if (temp) {
-            dMap_c::mIconSelfAlpha = 0xcc;
-            dMap_c::mIconDispMode = 2;
+            dMap_c::setIconSelfAlpha(0xCC);
+            dMap_c::setIconDispMode(dMapIconDisp_SELF_e );
         }
     }
-    if (dCam_getBody()->mCurMode == 4) {
-        dMap_c::mIconDispMode = 0;
+    if (dCam_getBody()->Mode() == 4) {
+        dMap_c::setIconDispMode(dMapIconDisp_NONE_e);
     }
     if (field_0x0 != 0) {
-        if (((field_0x4 != 0) && (cLib_addCalcAngleS(&field_0x4, 0, 2, 0x3c, 10) == 0)) && ((field_0x1 & 4) == 0)) {
+        if (field_0x4 != 0 && cLib_addCalcAngleS(&field_0x4, 0, 2, 0x3c, 10) == 0 && ((field_0x1 & 4) == 0)) {
             mDoAud_seStart(JA_SE_MAP_SHOW_END);
         }
     } else {
         cLib_addCalcAngleS(&field_0x4, g_meter_mapHIO.field_0xc - g_meter_mapHIO.field_0x8, 2, 0x3c, 10);
     }
     int uVar6_2 = ((dComIfGp_getWindow(0)->getScissor()->mYOrig + dComIfGp_getWindow(0)->getScissor()->mHeight) - 452.0f);
-    dMap_c::mDispPosLeftUpX = g_meter_mapHIO.field_0x8 + field_0x4;
-    dMap_c::mDispPosLeftUpY = g_meter_mapHIO.field_0xa;
+    dMap_c::setMapDispPosLeftUpX(g_meter_mapHIO.field_0x8 + field_0x4);
+    dMap_c::setMapDispPosLeftUpY(g_meter_mapHIO.field_0xa);
     if ((f32)(uVar6_2) < 0.0f) {
-        dMap_c::mDispPosLeftUpY = uVar6_2 + g_meter_mapHIO.field_0xa;
+        dMap_c::setMapDispPosLeftUpY(uVar6_2 + g_meter_mapHIO.field_0xa);
     }
 }
 
@@ -7500,7 +7706,7 @@ void mapCtrlDisp_c::moveMapCtrlDisp() {
 dMeter_map_HIO_c::~dMeter_map_HIO_c() {
 }
 
-msg_method_class l_dMeter_Method = {
+static msg_method_class l_dMeter_Method = {
     (process_method_func)dMeter_Create,
     (process_method_func)dMeter_Delete,
     (process_method_func)dMeter_Execute,
@@ -7509,15 +7715,15 @@ msg_method_class l_dMeter_Method = {
 };
 
 msg_process_profile_definition g_profile_METER = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 12,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_METER,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 12,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_METER_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(sub_meter_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopMsg_Method,
-    /* Priority     */ PRIO_METER,
+    /* Draw Prio    */ fpcDwPi_METER_e,
     /* Msg SubMtd   */ &l_dMeter_Method,
 };

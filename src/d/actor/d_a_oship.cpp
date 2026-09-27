@@ -10,9 +10,7 @@
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_salvage.h"
 #include "d/actor/d_a_ship.h"
-#include "d/res/res_oship.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
+#include "res/Object/Oship.h"
 #include "d/d_cc_d.h"
 
 const s32 daOship_c::m_heapsize = 0x1280;
@@ -117,10 +115,10 @@ void daOship_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
     csXyz aim_rot(0, 0, 0);
 
     switch (jnt_no) {
-        case 1:
+        case VBTSP_JNT_HEAD_e:
             aim_rot.x = mAimRotY;
             break;
-        case 2:
+        case VBTSP_JNT_CANON_e:
             mDoMtx_stack_c::ZrotM(l_HIO.mNode2RotZ);
             aim_rot.z = -mAimRotX;
             break;
@@ -134,7 +132,7 @@ void daOship_c::_nodeControl(J3DNode* i_nodeP, J3DModel* i_modelP) {
 }
 
 /* 0000044C-00000488       .text pathMove_CB__FP4cXyzP4cXyzP4cXyzPv */
-int pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
+static int pathMove_CB(cXyz* param_1, cXyz* param_2, cXyz* param_3, void* i_this) {
     return ((daOship_c *)i_this)->_pathMove(param_1, param_2, param_3);
 }
 
@@ -204,7 +202,7 @@ bool daOship_c::lineCheck(cXyz* param_1, cXyz* param_2) {
 
 /* 000008F8-00000990       .text changeModeByRange__9daOship_cFv */
 void daOship_c::changeModeByRange() {
-    f32 search_ac_dist = fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0));
+    f32 search_ac_dist = fopAcM_searchPlayerDistanceXZ(this);
     Mode_e proc_no;
 
     if (search_ac_dist < l_HIO.mDistRangeA) {
@@ -224,8 +222,8 @@ void daOship_c::changeModeByRange() {
 
 /* 00000990-00000C08       .text createWave__9daOship_cFv */
 void daOship_c::createWave() {
-    static const JGeometry::TVec3<f32> wave_l_direction(0.5, 1.0f, -0.3f);
-    static const JGeometry::TVec3<f32> wave_r_direction(-0.5, 1.0f, -0.3f);
+    static const JGeometry::TVec3<f32> wave_l_direction(0.5f, 1.0f, -0.3f);
+    static const JGeometry::TVec3<f32> wave_r_direction(-0.5f, 1.0f, -0.3f);
 
     if (!mWaveCallback1.getEmitter()) {
         dComIfGp_particle_set(dPa_name::ID_AK_JN_SHIPWAVE00, &mWavePos, &mWaveRot, NULL, 0xFF, &mWaveCallback1);
@@ -447,7 +445,7 @@ void daOship_c::attackCannon(int i_index) {
     
     int bomb_prm = daBomb_c::prm_make(daBomb_c::STATE_4, true, true);
     daBomb_c* bomb_p = (daBomb_c *) fopAcM_fastCreate(
-        PROC_BOMB, bomb_prm, 
+        fpcNm_BOMB_e, bomb_prm, 
         &mBombSpawnPos, tevStr.mRoomNo, 
         &rot
     );
@@ -472,7 +470,7 @@ void daOship_c::setMtx() {
     dLib_waveRot(&current.pos, sway, &mWave);
     
     s16 temp_r30 = f32(mAttackSwayAmount * (REG12_S(5) + 10)) * cM_ssin(mAttackSwayTimer);
-    s16 temp_r0 = shape_angle.y + fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    s16 temp_r0 = shape_angle.y + fopAcM_searchPlayerAngleY(this);
     s16 temp_r4 = f32(temp_r30) * cM_scos(temp_r0);
     s16 temp_r3 = f32(temp_r30) * cM_ssin(temp_r0);
 
@@ -657,7 +655,7 @@ void daOship_c::modeAttackInit() {
         target_dist = 0.0f;
     }
 
-    s16 angle = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    s16 angle = fopAcM_searchPlayerAngleY(this);
 
     mTargetPos.x -= target_dist * cM_ssin(angle);
     mTargetPos.z -= target_dist * cM_scos(angle);
@@ -724,7 +722,7 @@ void daOship_c::modeDelete() {
             
             if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f && mSwitchA != 0xFF) {
                 dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
-                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(PROC_Salvage);
+                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(fpcNm_Salvage_e);
                 salvage_p->onSalvageForOship(this);
                 mDoAud_seStart(JA_SE_READ_RIDDLE_1);
             }
@@ -733,7 +731,7 @@ void daOship_c::modeDelete() {
 #if VERSION > VERSION_DEMO
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_3E80);
 #endif
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
                 fopAcM_delete(this);
             }
         } else {
@@ -751,7 +749,7 @@ void daOship_c::modeDelete() {
         if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f) {
             if (mSwitchA != 0xFF) {
                 dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
-                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(PROC_Salvage);
+                daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(fpcNm_Salvage_e);
                 salvage_p->onSalvageForOship(this);
             }
 
@@ -844,24 +842,24 @@ bool daOship_c::_execute() {
 
     Vec bomb_offset = { 0.0f, 0.0f, 0.0f };
     bomb_offset = l_HIO.mBombOffset;
-    cMtx_multVec(mpModel->getAnmMtx(2), &bomb_offset, &mBombSpawnPos);
+    cMtx_multVec(mpModel->getAnmMtx(VBTSP_JNT_CANON_e), &bomb_offset, &mBombSpawnPos);
     
     Vec smoke_offset = { 0.0f, 0.0f, 0.0f };
-    cMtx_multVec(mpModel->getAnmMtx(1), &smoke_offset, &mSmokePos);
+    cMtx_multVec(mpModel->getAnmMtx(VBTSP_JNT_HEAD_e), &smoke_offset, &mSmokePos);
 
     setAttention();
     setCollision();
     setMtx();
 
-    s32 cull_box_check = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
+    bool cull_box_check = fopAcM_checkCullingBox(mpModel->getBaseTRMtx(), -300.0f, -100.0f, -650.0f, 300.0f, 700.0f, 800.0f);
 
     if (fopAcM_GetSpeedF(this) <= 2.0f || 
-        (cull_box_check & 0xFF) || 
-        fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) > 18000.0f) {
+        cull_box_check || 
+        fopAcM_searchPlayerDistanceXZ(this) > 18000.0f) {
         mWaveCallback2.remove();
         mWaveCallback1.remove();
         mSplashCallback.remove();
-        mTrackCallback.stop();        
+        mTrackCallback.stop();
     } else {
         setWave();
     }
@@ -915,8 +913,8 @@ void daOship_c::createInit() {
         mCyl[i].SetStts(&mStts);
     }
 
-    mWave.mAnimX = cM_rndF(32768.0f);
-    mWave.mAnimZ = cM_rndF(32768.0f);
+    mWave.mAnimX = cM_rndF(0x8000);
+    mWave.mAnimZ = cM_rndF(0x8000);
 
     setMtx();
     mpModel->calc();
@@ -932,7 +930,7 @@ void daOship_c::createInit() {
 
     if (!isSpecial()) {
         mFlagPcId = fopAcM_create(
-            PROC_MAJUU_FLAG, 4, 
+            fpcNm_MAJUU_FLAG_e, 4, 
             &current.pos, tevStr.mRoomNo, 
             &current.angle
         );
@@ -962,9 +960,9 @@ void daOship_c::createInit() {
 BOOL daOship_c::_createHeap() {
     int file_index;
 
-    file_index = OSHIP_BDL_VBTSP;
+    file_index = dRes_INDEX_OSHIP_BDL_VBTSP_e;
     if (isSpecial()) {
-        file_index = OSHIP_BDL_VBTST;
+        file_index = dRes_INDEX_OSHIP_BDL_VBTST_e;
     }
 
     J3DModelData* modelData = (J3DModelData *) dComIfG_getObjectRes(m_arc_name, file_index);
@@ -976,11 +974,11 @@ BOOL daOship_c::_createHeap() {
         return FALSE;
     }
 
-    mpModel->setUserArea((u32) this);
+    mpModel->setUserArea((uintptr_t) this);
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         switch (i) {
-            case 1:
-            case 2:
+            case VBTSP_JNT_HEAD_e:
+            case VBTSP_JNT_CANON_e:
                 modelData->getJointNodePointer(i)->setCallBack(nodeControl_CB);
                 break;
             default:
@@ -1013,7 +1011,7 @@ void daOship_c::getArg() {
 
 /* 00002F90-000030EC       .text _create__9daOship_cFv */
 cPhs_State daOship_c::_create() {
-    fopAcM_SetupActor(this, daOship_c);
+    fopAcM_ct(this, daOship_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhs, m_arc_name);
     
@@ -1100,18 +1098,18 @@ static actor_method_class daOshipMethodTable = {
 };
 
 actor_process_profile_definition g_profile_OSHIP = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_OSHIP,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_OSHIP_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daOship_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_OSHIP,
+    /* Draw Prio    */ fpcDwPi_OSHIP_e,
     /* Actor SubMtd */ &daOshipMethodTable,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ENEMY_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

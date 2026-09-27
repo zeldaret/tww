@@ -15,7 +15,6 @@
 #include "m_Do/m_Do_mtx.h"
 #include "d/d_cc_uty.h"
 #include "d/d_bg_s_lin_chk.h"
-#include "d/d_procname.h"
 
 cXyz non_pos(-20000.0f, -20000.0f, 20000.0f);
 
@@ -90,7 +89,7 @@ dCcD_SrcCyl cc_cyl_src = {
         /* SrcGObjAt Spl     */ 0,
         /* SrcGObjAt Mtrl    */ 0,
         /* SrcGObjAt SPrm    */ 0,
-        /* SrcGObjTg Se      */ dCcG_SE_UNK5,
+        /* SrcGObjTg Se      */ dCcG_SE_METAL,
         /* SrcGObjTg HitMark */ dCcg_TgHitMark_Purple_e,
         /* SrcGObjTg Spl     */ 0,
         /* SrcGObjTg Mtrl    */ 0,
@@ -158,7 +157,7 @@ BOOL enemy_ice(enemyice* ei) {
                 if (ei->mLightShrinkTimer > (s8)(90 + REG14_S(2))) {
                     fopAcM_delete(ac);
                     fopAcM_onActor(ac);
-                    if (fopAcM_GetName(ac) != PROC_PZ) {
+                    if (fopAcM_GetName(ac) != fpcNm_PZ_e) {
                         // If the actor is not Princess Zelda, drop an item ball.
                         // TODO: Why the Zelda check? Is she coded to be able to die to Light Arrows?
                         fopAcM_createIball(&pos, ac->itemTableIdx, fopAcM_GetRoomNo(ac), &ac->current.angle, ac->stealItemBitNo);
@@ -997,7 +996,7 @@ s16 hang_ang_get(damagereaction* dr) {
 
         linChk.Set(&temp3, &dst[i], dr->mpEnemy);
         if(dComIfG_Bgsp()->LineCross(&linChk)) {
-            dst[i] = linChk.GetLinP()->GetEnd();
+            dst[i] = linChk.GetCross();
         }
         else {
             return 0xDCF;
@@ -1471,10 +1470,10 @@ void dr_damage_anime(damagereaction* dr) {
         if(temp2 < -22000.0f) {
             temp2 = -22000.0f;
         }
-        dr->m010[8].y = 0.4f * temp2 + 8192.0f;
-        dr->m010[4].z = 0.4f * -temp2 - 8192.0f;
-        dr->m010[8].z = 0.4f * zero + 8192.0f;
-        dr->m010[4].y = 0.4f * zero + 8192.0f;
+        dr->m010[8].y = 0.4f * temp2 + 0x2000;
+        dr->m010[4].z = 0.4f * -temp2 - 0x2000;
+        dr->m010[8].z = 0.4f * zero + 0x2000;
+        dr->m010[4].y = 0.4f * zero + 0x2000;
 
         f32 temp3 = temp;
         if(temp3 > 22000.0f) {
@@ -1483,10 +1482,10 @@ void dr_damage_anime(damagereaction* dr) {
         if(temp3 < -5000.0f) {
             temp3 = -5000.0f;
         }
-        dr->m010[9].y = 0.4f * temp3 - 8192.0f;
-        dr->m010[5].z = 0.4f * temp3 - 8192.0f;
-        dr->m010[9].z = 0.4f * zero + 8192.0f;
-        dr->m010[5].y = 0.4f * -zero - 8192.0f;
+        dr->m010[9].y = 0.4f * temp3 - 0x2000;
+        dr->m010[5].z = 0.4f * temp3 - 0x2000;
+        dr->m010[9].z = 0.4f * zero + 0x2000;
+        dr->m010[5].y = 0.4f * -zero - 0x2000;
 
         f32 temp4 = temp;
         if(temp4 > 20000.0f) {
@@ -1508,7 +1507,7 @@ void dr_damage_anime(damagereaction* dr) {
             temp5 = -10000.0f;
         }
         dr->m010[6].x = (3000.0f - temp5) + REG0_S(0);
-        dr->m010[6].z = (-zero - 16384.0f) + REG0_S(1);
+        dr->m010[6].z = (-zero - 0x4000) + REG0_S(1);
 
         f32 temp6 = temp;
         if(temp6 > 10000.0f) {
@@ -1518,7 +1517,7 @@ void dr_damage_anime(damagereaction* dr) {
             temp6 = -7000.0f;
         }
         dr->m010[7].x = (-temp6 - 3000.0f);
-        dr->m010[7].z = (-zero - 16384.0f);
+        dr->m010[7].z = (-zero - 0x4000);
     }
     else {
         dr->m010[6].y += dr->m4B8;

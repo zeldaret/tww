@@ -8,8 +8,6 @@
 #include "d/actor/d_a_obj_ikada.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 static fpc_ProcID l_msgId;
 static msg_class* l_msg;
@@ -123,7 +121,7 @@ BOOL daTag_Island_c::arrivalTerms() {
     case 7:
         if (!dKy_checkEventNightStop())
             return FALSE;
-        if (!dComIfGs_checkGetItem(dItem_BOMB_BAG_e))
+        if (!dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e))
             return FALSE;
         break;
     }
@@ -138,7 +136,7 @@ void daTag_Island_c::demoInitProc() {
 }
 
 /* 00000550-00000558       .text next_msgStatus__14daTag_Island_cFPUl */
-int daTag_Island_c::next_msgStatus(unsigned long*) {
+int daTag_Island_c::next_msgStatus(u32*) {
     return fopMsgStts_MSG_ENDS_e;
 }
 
@@ -449,11 +447,11 @@ BOOL daTag_Island_c::actionWait() {
 }
 
 cPhs_State daTag_Island_c::create() {
-    fopAcM_SetupActor(this, daTag_Island_c);
+    fopAcM_ct(this, daTag_Island_c);
     s32 swbit = getSwbit();
     makeEvId();
     eventInfo.setEventId(mEventId);
-    eventInfo.mMapToolId = getEventNo();
+    eventInfo.setToolId(getEventNo());
 
     if (mEventId != -1 && swbit != 0xFF && !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACT_ARRIVAL);
@@ -507,6 +505,7 @@ static BOOL daTag_Island_Execute(daTag_Island_c* i_this) {
 
 /* 000012C4-000012CC       .text daTag_Island_IsDelete__FP14daTag_Island_c */
 static BOOL daTag_Island_IsDelete(daTag_Island_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -530,18 +529,18 @@ static actor_method_class l_daTag_Island_Method = {
 };
 
 actor_process_profile_definition g_profile_TAG_ISLAND = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_TAG_ISLAND,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_TAG_ISLAND_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daTag_Island_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_TAG_ISLAND,
+    /* Draw Prio    */ fpcDwPi_TAG_ISLAND_e,
     /* Actor SubMtd */ &l_daTag_Island_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_6_e,
+    /* Cull Type    */ fopAc_CULLBOX_6_e,
 };

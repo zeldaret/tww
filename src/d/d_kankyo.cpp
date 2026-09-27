@@ -10,8 +10,6 @@
 #include "d/d_kankyo_data.h"
 #include "d/d_kankyo_rain.h"
 #include "d/d_kankyo_wether.h"
-#include "d/d_priority.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "d/d_stage.h"
 #include "dolphin/gf/GF.h"
@@ -153,7 +151,8 @@ static f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
     f32 temp_f4 = param_0 - param_1;
 
     if (0.0f != temp_f4) {
-        temp_f1 = 1.0f - (param_0 - param_2) / temp_f4;
+        f32 f0 = (param_0 - param_2);
+        temp_f1 = 1.0f - f0 / temp_f4;
         if (!(temp_f1 >= 1.0f)) {
             return temp_f1;
         }
@@ -547,8 +546,8 @@ void dScnKy_env_light_c::setDaytime() {
 }
 
 /* 80190A18-80190A20       .text GetTimePass__20dStage_roomControl_cFv */
-s32 dStage_roomControl_c::GetTimePass() {
-    return (u8)m_time_pass;
+int dStage_roomControl_c::GetTimePass() {
+    return m_time_pass;
 }
 
 /* 80190A20-80190ACC       .text SetSchbit__18dScnKy_env_light_cFv */
@@ -581,7 +580,7 @@ void dScnKy_env_light_c::SetSchbit() {
 
 /* 80190ACC-80190C0C       .text setSunpos__18dScnKy_env_light_cFv */
 void dScnKy_env_light_c::setSunpos() {
-    camera_class* camera_p = dComIfGp_getCamera(0);
+    camera_process_class* camera_p = dComIfGp_getCamera(0);
     cXyz sp8;
 
     f32 var_f1;
@@ -591,18 +590,18 @@ void dScnKy_env_light_c::setSunpos() {
         var_f1 = g_env_light.mCurTime + 345.0f;
     }
 
-    sp8.x = std::sinf(DEG_TO_RAD(var_f1)) * 80000.0f;
-    sp8.y = std::cosf(DEG_TO_RAD(var_f1)) * 80000.0f;
-    sp8.z = std::cosf(DEG_TO_RAD(var_f1)) * -48000.0f;
+    sp8.x = std::sinf(DEG2RAD(var_f1)) * 80000.0f;
+    sp8.y = std::cosf(DEG2RAD(var_f1)) * 80000.0f;
+    sp8.z = std::cosf(DEG2RAD(var_f1)) * -48000.0f;
 
     if (dComIfGp_event_runCheck() == FALSE || g_env_light.mInitAnimTimer != 0) {
-        mSunPos.x = camera_p->mLookat.mEye.x + sp8.x;
-        mSunPos.y = camera_p->mLookat.mEye.y - sp8.y;
-        mSunPos.z = camera_p->mLookat.mEye.z + sp8.z;
+        mSunPos.x = camera_p->view.mLookat.mEye.x + sp8.x;
+        mSunPos.y = camera_p->view.mLookat.mEye.y - sp8.y;
+        mSunPos.z = camera_p->view.mLookat.mEye.z + sp8.z;
 
-        mMoonPos.x = camera_p->mLookat.mEye.x - sp8.x;
-        mMoonPos.y = camera_p->mLookat.mEye.y + sp8.y;
-        mMoonPos.z = camera_p->mLookat.mEye.z - sp8.z;
+        mMoonPos.x = camera_p->view.mLookat.mEye.x - sp8.x;
+        mMoonPos.y = camera_p->view.mLookat.mEye.y + sp8.y;
+        mMoonPos.z = camera_p->view.mLookat.mEye.z - sp8.z;
     }
 }
 
@@ -837,10 +836,11 @@ void dScnKy_env_light_c::setLight() {
     int palIdx0;
     int palIdx1;
 
+    u8* initAnmTimer_p = &g_env_light.mInitAnimTimer;
     setLight_palno_get(&g_env_light.mEnvrIdxPrev, &g_env_light.mEnvrIdxCurr,
                        &g_env_light.mColpatPrev, &g_env_light.mColpatCurr, &pale0, &pale1, &pale2,
                        &pale3, &blendAB, &palIdx0, &palIdx1, &g_env_light.mColPatBlend,
-                       &g_env_light.mInitAnimTimer);
+                       initAnmTimer_p);
 
     stage_palet_info_class* pale0_p = &g_env_light.mpPaletInfo[pale0];
     stage_palet_info_class* pale1_p = &g_env_light.mpPaletInfo[pale1];
@@ -1829,24 +1829,24 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
     }
 
     if (i_material->getFog() != NULL) {
-        J3DFog* fog_p = i_material->getFog();
-        if (fog_p->getFogInfo()->mType != 0) {
-            fog_p->getFogInfo()->mStartZ = i_tevstr->mFogStartZ;
-            fog_p->getFogInfo()->mEndZ = i_tevstr->mFogEndZ;
-            if (fog_p->getFogInfo()->mStartZ > fog_p->getFogInfo()->mEndZ) {
-                fog_p->getFogInfo()->mStartZ = fog_p->getFogInfo()->mEndZ;
+        J3DFogInfo* fog_info = i_material->getFog()->getFogInfo();
+        if (fog_info->mType != 0) {
+            fog_info->mStartZ = i_tevstr->mFogStartZ;
+            fog_info->mEndZ = i_tevstr->mFogEndZ;
+            if (fog_info->mStartZ > fog_info->mEndZ) {
+                fog_info->mStartZ = fog_info->mEndZ;
             }
 
-            fog_p->getFogInfo()->mNearZ = dComIfGd_getView()->mNear;
-            fog_p->getFogInfo()->mFarZ = dComIfGd_getView()->mFar;
-            fog_p->getFogInfo()->mColor.r = i_tevstr->mFogColor.r;
-            fog_p->getFogInfo()->mColor.g = i_tevstr->mFogColor.g;
-            fog_p->getFogInfo()->mColor.b = i_tevstr->mFogColor.b;
-            fog_p->getFogInfo()->mAdjEnable = g_env_light.mFogAdjEnable;
+            fog_info->mNearZ = dComIfGd_getView()->mNear;
+            fog_info->mFarZ = dComIfGd_getView()->mFar;
+            fog_info->mColor.r = i_tevstr->mFogColor.r;
+            fog_info->mColor.g = i_tevstr->mFogColor.g;
+            fog_info->mColor.b = i_tevstr->mFogColor.b;
+            fog_info->mAdjEnable = g_env_light.mFogAdjEnable;
 
-            if (fog_p->getFogInfo()->mAdjEnable == true) {
-                fog_p->getFogInfo()->mCenter = g_env_light.mFogAdjCenter;
-                memcpy(fog_p->getFogInfo()->mFogAdjTable, &g_env_light.mFogAdjTable, sizeof(GXFogAdjTable));
+            if (fog_info->mAdjEnable == true) {
+                fog_info->mCenter = g_env_light.mFogAdjCenter;
+                memcpy(fog_info->mFogAdjTable, &g_env_light.mFogAdjTable, sizeof(GXFogAdjTable));
             }
         }
     }
@@ -2148,7 +2148,7 @@ BOOL phantomship_wether() {
         }
     }
 
-    if (cur_time > 285.0f || cur_time < 90.0f) {
+    if (cur_time > DEMO_SELECT(330.0f, 285.0f) || cur_time < 90.0f) {
         s32 roomNo = dComIfGp_roomControl_getStayNo();
         if ((roomNo == dIsleRoom_CrescentMoonIsland_e  && weekday == 0) ||
             (roomNo == dIsleRoom_DiamondSteppeIsland_e && weekday == 1) ||
@@ -2439,7 +2439,7 @@ static cPhs_State dKy_Create(void*) {
     return cPhs_COMPLEATE_e;
 }
 
-kankyo_method_class l_dKy_Method = {
+static kankyo_method_class l_dKy_Method = {
     (process_method_func)dKy_Create,
     (process_method_func)dKy_Delete,
     (process_method_func)dKy_Execute,
@@ -2448,17 +2448,17 @@ kankyo_method_class l_dKy_Method = {
 };
 
 kankyo_process_profile_definition g_profile_KANKYO = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0001,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KANKYO,
-    /* Proc SubMtd  */ &g_fpcLf_Method.base,
-    /* Size         */ sizeof(sub_kankyo__class),
-    /* SizeOther    */ 0,
-    /* Parameters   */ 0,
-    /* Leaf SubMtd  */ &g_fopKy_Method,
-    /* Priority     */ PRIO_KANKYO,
-    /* Actor SubMtd */ &l_dKy_Method,
+    /* Layer ID      */ fpcLy_CURRENT_e,
+    /* List ID       */ 0x0001,
+    /* List Prio     */ fpcPi_CURRENT_e,
+    /* Proc Name     */ fpcNm_KANKYO_e,
+    /* Proc SubMtd   */ &g_fpcLf_Method.base,
+    /* Size          */ sizeof(sub_kankyo__class),
+    /* Size Other    */ 0,
+    /* Parameters    */ 0,
+    /* Leaf SubMtd   */ &g_fopKy_Method,
+    /* Draw Prio     */ fpcDwPi_KANKYO_e,
+    /* Kankyo SubMtd */ &l_dKy_Method,
 };
 
 /* 80194974-80194BDC       .text dKy_setLight_init__Fv */
@@ -2470,16 +2470,16 @@ void dKy_setLight_init() {
 /* 80194BDC-8019514C       .text dKy_setLight__Fv */
 void dKy_setLight() {
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
-    camera_class* pCamera = dComIfGp_getCamera(0);
+    camera_process_class* pCamera = dComIfGp_getCamera(0);
     fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
     cXyz camfwd;
     MtxP viewMtx = j3dSys.getViewMtx();
-    dKyr_get_vectle_calc(&pCamera->mLookat.mEye, &pCamera->mLookat.mCenter, &camfwd);
+    dKyr_get_vectle_calc(&pCamera->view.mLookat.mEye, &pCamera->view.mLookat.mCenter, &camfwd);
 
     // light
     {
         dKy_setLight__Status& stts = lightStatusPt[0];
-        stts.mPos2 = pCamera->mLookat.mEye;
+        stts.mPos2 = pCamera->view.mLookat.mEye;
         if (pPlayer != NULL) {
             dKy_light_influence_id(pPlayer->current.pos, 0);
         }
@@ -2522,12 +2522,7 @@ void dKy_setLight() {
 
     // eflight
     {
-        s32 eflight;
-        if (pPlayer == NULL) {
-            eflight = -1;
-        } else {
-            eflight = dKy_eflight_influence_id(pPlayer->current.pos, 0);
-        }
+        int eflight = pPlayer == NULL ? -1 : dKy_eflight_influence_id(pPlayer->current.pos, 0);
 
         if (eflight < 0) {
             lightMask = 1;
@@ -2539,7 +2534,7 @@ void dKy_setLight() {
             f32 power = dKy_eflight_influence_power(eflight);
             f32 v;
             if (power > 0.0f) {
-                v = dKy_eflight_influence_distance(pCamera->mLookat.mEye, eflight) / power;
+                v = dKy_eflight_influence_distance(pCamera->view.mLookat.mEye, eflight) / power;
             } else {
                 v = 1.0f;
             }
@@ -2911,7 +2906,7 @@ void dKy_Itemgetcol_chg_off() {
 
 /* 80195F84-80196284       .text dKy_Itemgetcol_chg_move__Fv */
 void dKy_Itemgetcol_chg_move() {
-    camera_class* camera = dComIfGp_getCamera(0);
+    camera_process_class* camera = dComIfGp_getCamera(0);
     dScnKy_env_light_c& envLight = dKy_getEnvlight();
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
@@ -2939,7 +2934,7 @@ void dKy_Itemgetcol_chg_move() {
             }
 
             cXyz camfwd;
-            dKyr_get_vectle_calc(&camera->mLookat.mEye, &camera->mLookat.mCenter, &camfwd);
+            dKyr_get_vectle_calc(&camera->view.mLookat.mEye, &camera->view.mLookat.mCenter, &camfwd);
             f32 cam_distXZ = std::sqrtf(camfwd.x*camfwd.x + camfwd.z*camfwd.z);
             s16 angle = cM_atan2s(camfwd.x, camfwd.z) - offsAngle;
             camfwd.x = cM_scos(0) * cM_ssin(angle);
@@ -3164,7 +3159,7 @@ void dKy_arrowcol_chg_move() {
 
 /* 80196764-801967C4       .text dKy_checkEventNightStop__Fv */
 BOOL dKy_checkEventNightStop() {
-    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isSymbol(0)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::ENDLESS_NIGHT) && !dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
         return true;
     }
 
@@ -3183,11 +3178,11 @@ void dKy_Sound_init() {
 
 /* 801967F4-801969A8       .text dKy_Sound_set__F4cXyziUii */
 void dKy_Sound_set(cXyz pos, int p2, fpc_ProcID p3, int p4) {
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(0);
+    camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
 
     BOOL ret = FALSE;
-    f32 newDist = pos.abs(camera->mLookat.mEye);
-    f32 curDist = dKy_getEnvlight().mSound.field_0x0.abs(camera->mLookat.mEye);
+    f32 newDist = pos.abs(camera->view.mLookat.mEye);
+    f32 curDist = dKy_getEnvlight().mSound.field_0x0.abs(camera->view.mLookat.mEye);
 
     if (newDist < curDist) {
         if (curDist < 1500.0f) {
@@ -3436,11 +3431,11 @@ void dKy_usonami_set(f32 param_0) {
         g_env_light.mWaveChan.mWaveReset = 0;
         g_env_light.mWaveChan.mWaveScale = 300.0f;
         g_env_light.mWaveChan.mWaveScaleRand = 0.001f;
-        g_env_light.mWaveChan.mWaveCounterSpeedScale = 1.2f;
+        g_env_light.mWaveChan.mWaveCounterSpeedScale = DEMO_SELECT(1.3f, 1.2f);
         g_env_light.mWaveChan.field_0x2f = 0;
         g_env_light.mWaveChan.mWaveScaleBottom = 6.0f;
         g_env_light.mWaveChan.mWaveCount = 300;
-        g_env_light.mWaveChan.mWaveSpeed = 30.0f;
+        g_env_light.mWaveChan.mWaveSpeed = DEMO_SELECT(60.0f, 30.0f);
     }
 
     g_env_light.mWaveChan.mWaveFlatInter = param_0;
@@ -3662,7 +3657,7 @@ cXyz dKy_get_moon_pos() {
 
 /* 80197614-80197668       .text dKy_get_hokuto_pos__Fv */
 cXyz dKy_get_hokuto_pos() {
-    const Vec & eyePos = dComIfGp_getCamera(0)->mLookat.mEye;
+    const Vec & eyePos = dComIfGp_getCamera(0)->view.mLookat.mEye;
     cXyz pos;
     pos.x = eyePos.x + 10300.0f;
     pos.y = eyePos.y + 13450.0f;
@@ -3672,7 +3667,7 @@ cXyz dKy_get_hokuto_pos() {
 
 /* 80197668-801976BC       .text dKy_get_orion_pos__Fv */
 cXyz dKy_get_orion_pos() {
-    const Vec & eyePos = dComIfGp_getCamera(0)->mLookat.mEye;
+    const Vec & eyePos = dComIfGp_getCamera(0)->view.mLookat.mEye;
     cXyz pos;
     pos.x = eyePos.x + -9400.0f;
     pos.y = eyePos.y + 22500.0f;

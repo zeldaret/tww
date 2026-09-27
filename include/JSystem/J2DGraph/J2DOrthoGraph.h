@@ -15,12 +15,12 @@ public:
     virtual s32 getGrafType() const { return 1; }
     virtual void setLookat();
 
-    f32 getWidthPower() const { return mBounds.getWidth() / mOrtho.getWidth(); }
-    f32 getHeightPower() const { return mBounds.getHeight() / mOrtho.getHeight(); }
+    f32 getWidthPower() { return mBounds.getWidth() / mOrtho.getWidth(); }
+    f32 getHeightPower() { return mBounds.getHeight() / mOrtho.getHeight(); }
 
+    const JGeometry::TBox2<f32>* getOrtho() const { return &mOrtho; }
     void setOrtho(f32 x, f32 y, f32 width, f32 height, f32 far, f32 near) {
-        JGeometry::TBox2<f32> ortho(x, y, x + width, y + height);
-        setOrtho(ortho, far, near);
+        setOrtho(JGeometry::TBox2<f32>(x, y, x + width, y + height), far, near);
     }
 
 private:

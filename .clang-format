@@ -1,3 +1,4 @@
+DisableFormat: true
 IndentWidth: 4
 AllowShortFunctionsOnASingleLine: InlineOnly
 PointerAlignment: Left
@@ -19,3 +20,6 @@ SortIncludes: false
 IncludeCategories:
   - Regex: '"d/dolzel(_rel)?\.h"'
     Priority: -1000
+IndentCaseBlocks: true
+IndentCaseLabels: true
+AllowAllArgumentsOnNextLine: false

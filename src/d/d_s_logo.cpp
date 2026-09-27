@@ -5,14 +5,13 @@
 
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_s_logo.h"
-#include "d/res/res_logo.h"
-#include "d/res/res_system.h"
+#include "res/Object/Logo.h"
+#include "res/Object/System.h"
 #include "f_op/f_op_scene.h"
 #include "f_op/f_op_scene_mng.h"
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_com_lib_game.h"
-#include "d/d_procname.h"
 #include "d/d_s_play.h"
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_audio.h"
@@ -25,6 +24,7 @@
 #endif
 #include "m_Do/m_Do_Reset.h"
 #include "m_Do/m_Do_dvd_thread.h"
+#include "DynamicLink.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramBlock.h"
@@ -67,7 +67,7 @@ mDoDvdThd_toMainRam_c * l_itemTableCommand;
 mDoDvdThd_toMainRam_c * l_ActorDataCommand;
 mDoDvdThd_toMainRam_c * l_FmapDataCommand;
 #if VERSION == VERSION_DEMO
-mDoDvdThd_mountXArchive_c * l_DmcMountCommand;
+mDoDvdThd_callback_c * l_DmcMountCommand;
 #else
 mDoDvdThd_mountXArchive_c * l_lodCommand;
 #endif
@@ -88,18 +88,23 @@ enum {
 
 /* 8022C0B4-8022C130       .text checkProgSelect__FP10dScnLogo_c */
 void checkProgSelect(dScnLogo_c* i_this) {
-#if VERSION == VERSION_PAL
-    if (OSGetResetCode() == 0 || OSGetResetCode() == 1) {
-        if (OSGetEuRgb60Mode() == 1 || CPad_CHECK_HOLD_B(0)) {
+#if VERSION == VERSION_DEMO
+    if (VIGetDTVStatus() != 0 && (OSGetProgressiveMode() == 1 || CPad_CHECK_HOLD_B(0))) {
+        i_this->field_0x1ea = 1;
+        i_this->mInterFlag = 0;
+    }
+#elif VERSION <= VERSION_USA
+    if (OSGetResetCode() == 0) {
+        if (VIGetDTVStatus() != 0 && (OSGetProgressiveMode() == 1 || CPad_CHECK_HOLD_B(0))) {
             i_this->field_0x1ea = 1;
             i_this->mInterFlag = 0;
         }
     } else {
         i_this->field_0x1ea = 0;
     }
-#else
-    if (OSGetResetCode() == 0) {
-        if (VIGetDTVStatus() != 0 && (OSGetProgressiveMode() == 1 || CPad_CHECK_HOLD_B(0))) {
+#else // VERSION_PAL
+    if (OSGetResetCode() == 0 || OSGetResetCode() == 1) {
+        if (OSGetEuRgb60Mode() == 1 || CPad_CHECK_HOLD_B(0)) {
             i_this->field_0x1ea = 1;
             i_this->mInterFlag = 0;
         }
@@ -168,7 +173,8 @@ BOOL progInDraw(dScnLogo_c* i_this) {
     dComIfGd_set2DOpa(i_this->progyesImg);
     dComIfGd_set2DOpa(i_this->prognoImg);
 
-    u8 alpha = (1.0f - (i_this->mTimer / 30.0f)) * 0xFF;
+    f32 temp = 1.0f - (i_this->mTimer / 30.0f);
+    u8 alpha = temp * 0xFF;
     i_this->progchoiceImg->setAlpha(alpha);
     i_this->progyesImg->setAlpha(alpha);
     i_this->prognoImg->setAlpha(alpha);
@@ -198,7 +204,7 @@ BOOL progSelDraw(dScnLogo_c* i_this) {
 
     if (i_this->field_0x1eb == 0) {
         if (i_this->mInterFlag == 0) {
-            if (CPad_CHECK_HOLD_RIGHT(0) || g_mDoCPd_cpadInfo[0].mMainStickPosX > 0.5f) {
+            if (CPad_CHECK_HOLD_RIGHT(0) || CPad_GET_STICK_POS_X(0) > 0.5f) {
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
                 i_this->mInterFlag = 1;
                 i_this->field_0x1ee = 30;
@@ -206,7 +212,7 @@ BOOL progSelDraw(dScnLogo_c* i_this) {
                 i_this->field_0x1f2 = 0;
             }
         } else {
-            if (CPad_CHECK_HOLD_LEFT(0) || g_mDoCPd_cpadInfo[0].mMainStickPosX < -0.5f) {
+            if (CPad_CHECK_HOLD_LEFT(0) || CPad_GET_STICK_POS_X(0) < -0.5f) {
                 mDoAud_seStart(JA_SE_TALK_CURSOR);
                 i_this->mInterFlag = 0;
                 i_this->field_0x1ee = 30;
@@ -275,7 +281,8 @@ BOOL progSelDraw(dScnLogo_c* i_this) {
 
 /* 8022CAA8-8022CC54       .text progOutDraw__FP10dScnLogo_c */
 BOOL progOutDraw(dScnLogo_c* i_this) {
-    u8 alpha = (i_this->mTimer / 30.0f) * 0xFF;
+    f32 temp = i_this->mTimer / 30.0f;
+    u8 alpha = temp * 0xFF;
     i_this->progchoiceImg->setAlpha(alpha);
     i_this->progyesImg->setAlpha(alpha);
     i_this->prognoImg->setAlpha(alpha);
@@ -287,18 +294,21 @@ BOOL progOutDraw(dScnLogo_c* i_this) {
 
     if (i_this->mTimer == 0) {
 #if VERSION == VERSION_PAL
-        if (OSGetEuRgb60Mode() == 1 && !i_this->mInterFlag) {
+        if (OSGetEuRgb60Mode() == 1 && !i_this->mInterFlag)
 #else
-        if (OSGetProgressiveMode() && !i_this->mInterFlag) {
+        if (OSGetProgressiveMode() && !i_this->mInterFlag)
 #endif
+        {
             i_this->mAction = ACT_nintendoOut2Draw;
             i_this->mTimer = 30;
             mDoGph_gInf_c::startFadeOut(30);
+        }
 #if VERSION == VERSION_PAL
-        } else if (OSGetEuRgb60Mode() == 0 && i_this->mInterFlag) {
+        else if (OSGetEuRgb60Mode() == 0 && i_this->mInterFlag)
 #else
-        } else if (!OSGetProgressiveMode() && i_this->mInterFlag) {
+        else if (!OSGetProgressiveMode() && i_this->mInterFlag)
 #endif
+        {
             i_this->mAction = ACT_nintendoOutDraw;
             i_this->mTimer = 30;
             mDoGph_gInf_c::startFadeOut(30);
@@ -320,7 +330,8 @@ BOOL progOutDraw(dScnLogo_c* i_this) {
 BOOL progSetDraw(dScnLogo_c* i_this) {
     u8 alpha;
     if (i_this->field_0x1f0 != 0) {
-        alpha = (1.0f - (i_this->field_0x1f0 / 30.0f)) * 0xFF;
+        f32 temp = 1.0f - (i_this->field_0x1f0 / 30.0f);
+        alpha = temp * 0xFF;
         i_this->field_0x1f0--;
     } else {
         alpha = 0xFF;
@@ -439,12 +450,14 @@ BOOL dvdWaitDraw(dScnLogo_c* i_this) {
         && l_itemTableCommand->sync()
         && l_ActorDataCommand->sync()
         && l_FmapDataCommand->sync()
-#if VERSION > VERSION_DEMO
+#if VERSION == VERSION_DEMO
+        && l_DmcMountCommand->sync()
+#else
         && l_lodCommand->sync() && !mDoRst::isReset()
 #endif
     ) {
 
-        dComIfG_changeOpeningScene(i_this, PROC_OPENING_SCENE);
+        dComIfG_changeOpeningScene(i_this, fpcNm_OPENING_SCENE_e);
     }
     return TRUE;
 }
@@ -474,19 +487,20 @@ static BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
 /* 8022D1DC-8022D21C       .text dScnLogo_Execute__FP10dScnLogo_c */
 static BOOL dScnLogo_Execute(dScnLogo_c* i_this) {
     if (mDoRst::isReset())
-        fopScnM_ChangeReq(i_this, PROC_LOGO_SCENE, PROC_OVERLAP0, 5);
+        fopScnM_ChangeReq(i_this, fpcNm_LOGO_SCENE_e, fpcNm_OVERLAP0_e, 5);
     return TRUE;
 }
 
 /* 8022D21C-8022D224       .text dScnLogo_IsDelete__FP10dScnLogo_c */
 static BOOL dScnLogo_IsDelete(dScnLogo_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
 /* 8022D224-8022D984       .text dScnLogo_Delete__FP10dScnLogo_c */
 static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     if (mDoRst::isReset())
-        mDoRst_reset(0, 0x80000000, 0);
+        mDoRst_reset(0, DEMO_SELECT(0, 0x80000000), 0);
 
     delete i_this->nintendoImg;
     delete i_this->dolbyImg;
@@ -583,7 +597,7 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
     delete l_lodCommand;
 #endif
 
-    ResTIMG * timg = (ResTIMG *)dComIfG_getObjectRes("Always", ALWAYS_I4_BALL128B);
+    ResTIMG * timg = (ResTIMG *)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_I4_BALL128B_e);
     dDlst_shadowControl_c::setSimpleTex(timg);
     dComIfG_deleteObjectRes("Logo");
     dComIfGp_setWindowNum(0);
@@ -617,7 +631,10 @@ static BOOL dScnLogo_Delete(dScnLogo_c* i_this) {
 
 /* 8022D984-8022DB20       .text phase_0__FP10dScnLogo_c */
 cPhs_State phase_0(dScnLogo_c* i_this) {
-#if VERSION != VERSION_PAL
+#if VERSION == VERSION_DEMO
+    if (!VIGetDTVStatus())
+        OSSetProgressiveMode(0);
+#elif VERSION <= VERSION_USA
     if (!OSGetResetCode()) {
         if (!VIGetDTVStatus())
             OSSetProgressiveMode(0);
@@ -642,17 +659,24 @@ cPhs_State phase_0(dScnLogo_c* i_this) {
     
     rt = dComIfG_setObjectRes("System", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
 
-    JUT_ASSERT(VERSION_SELECT(1169, 1169, 1350, 1378), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(1128, 1169, 1350, 1378), rt == 1);
 
+#if VERSION <= VERSION_DEMO
+    rt = dComIfG_setObjectRes("Logo", JKRArchive::MOUNT_DIRECTION_HEAD, NULL);
+#else
     rt = dComIfG_setObjectRes("Logo", JKRArchive::MOUNT_DIRECTION_TAIL, NULL);
-    JUT_ASSERT(VERSION_SELECT(1173, 1173, 1354, 1382), rt == 1);
+#endif
+    JUT_ASSERT(VERSION_SELECT(1131, 1173, 1354, 1382), rt == 1);
 
 #if VERSION == VERSION_PAL
     g_mDoMemCd_control.load2();
 #endif
 
+#if VERSION > VERSION_DEMO
     i_this->field_0x1ea = 0;
     archiveHeap->dump_sort();
+#endif
+
     return cPhs_NEXT_e;
 }
 
@@ -682,16 +706,20 @@ cPhs_State phase_1(dScnLogo_c* i_this) {
 
     ResTIMG * toonImage;
 
-    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOON);
+    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", dRes_INDEX_SYSTEM_BTI_TOON_e);
 
-    JUT_ASSERT(VERSION_SELECT(1208, 1208, 1426, 1466), toonImage != NULL);
+    JUT_ASSERT(VERSION_SELECT(1161, 1208, 1426, 1466), toonImage != NULL);
     dDlst_list_c::setToonImage(toonImage);
 
-    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", SYSTEM_BTI_TOONEX);
-    JUT_ASSERT(VERSION_SELECT(1213, 1213, 1431, 1471), toonImage != NULL);
+    toonImage = (ResTIMG *)dComIfG_getObjectRes("System", dRes_INDEX_SYSTEM_BTI_TOONEX_e);
+    JUT_ASSERT(VERSION_SELECT(1166, 1213, 1431, 1471), toonImage != NULL);
     dDlst_list_c::setToonExImage(toonImage);
 
     i_this->field_0x1f8 = mDoExt_getGameHeap()->alloc(0x3c8a0, 4);
+#if VERSION == VERSION_DEMO
+    i_this->field_0x1fc = mDoExt_getArchiveHeap()->alloc(0xf24e0, 4);
+#endif
+
     return cPhs_NEXT_e;
 }
 
@@ -710,7 +738,7 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     s32 rt;
     
     rt = dComIfG_syncObjectRes("Logo");
-    JUT_ASSERT(VERSION_SELECT(1251, 1251, 1469, 1509), rt >= 0);
+    JUT_ASSERT(VERSION_SELECT(1202, 1251, 1469, 1509), rt >= 0);
 
     if (rt != 0)
         return cPhs_INIT_e;
@@ -719,10 +747,10 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
 
     ResTIMG * timg;
     
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_NINTENDO_376X104);
-    JUT_ASSERT(VERSION_SELECT(1264, 1264, 1482, 1522), timg != NULL);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", dRes_INDEX_LOGO_BTI_NINTENDO_376X104_e);
+    JUT_ASSERT(VERSION_SELECT(1214, 1264, 1482, 1522), timg != NULL);
     i_this->nintendoImg = new dDlst_2D_c(timg, 133, 170, 0);
-    JUT_ASSERT(VERSION_SELECT(1267, 1267, 1485, 1525), i_this->nintendoImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1216, 1267, 1485, 1525), i_this->nintendoImg != NULL);
     i_this->nintendoImg->setAlpha(0xFF);
 #if VERSION <= VERSION_JPN
     // Blue Nintendo logo for JPN.
@@ -732,103 +760,106 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     i_this->nintendoImg->getPicture()->setWhite((GXColor){0xDC, 0x00, 0x00, 0xFF});
 #endif
 
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_TITLE_DOLBY_MARK);
-    JUT_ASSERT(VERSION_SELECT(1276, 1276, 1498, 1538), timg != NULL);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", dRes_INDEX_LOGO_BTI_TITLE_DOLBY_MARK_e);
+    JUT_ASSERT(VERSION_SELECT(1224, 1276, 1498, 1538), timg != NULL);
     i_this->dolbyImg = new dDlst_2D_c(timg, 218, 166, 0);
-    JUT_ASSERT(VERSION_SELECT(1280, 1280, 1502, 1542), i_this->dolbyImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1226, 1280, 1502, 1542), i_this->dolbyImg != NULL);
     i_this->dolbyImg->setAlpha(0xFF);
 
 #if VERSION == VERSION_PAL
     static const u8 choice[] = {
-        LOGO_BTI_PROGRESSIVE_CHOICE,
-        LOGO_BTI_PROGRESSIVE_CHOICE_GM,
-        LOGO_BTI_PROGRESSIVE_CHOICE_FR,
-        LOGO_BTI_PROGRESSIVE_CHOICE_SP,
-        LOGO_BTI_PROGRESSIVE_CHOICE_IT,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_CHOICE_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_CHOICE_GM_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_CHOICE_FR_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_CHOICE_SP_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_CHOICE_IT_e,
     };
     static const u8 yes[] = {
-        LOGO_BTI_PROGRESSIVE_YES,
-        LOGO_BTI_PROGRESSIVE_YES_GM,
-        LOGO_BTI_PROGRESSIVE_YES_FR,
-        LOGO_BTI_PROGRESSIVE_YES_SP,
-        LOGO_BTI_PROGRESSIVE_YES_IT,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_YES_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_YES_GM_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_YES_FR_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_YES_SP_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_YES_IT_e,
     };
     static const u8 no[] = {
-        LOGO_BTI_PROGRESSIVE_NO,
-        LOGO_BTI_PROGRESSIVE_NO_GM,
-        LOGO_BTI_PROGRESSIVE_NO_FR,
-        LOGO_BTI_PROGRESSIVE_NO_SP,
-        LOGO_BTI_PROGRESSIVE_NO_IT,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_NO_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_NO_GM_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_NO_FR_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_NO_SP_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_NO_IT_e,
     };
     static const u8 prog[] = {
-        LOGO_BTI_PROGRESSIVE_PRO,
-        LOGO_BTI_PROGRESSIVE_PRO_GM,
-        LOGO_BTI_PROGRESSIVE_PRO_FR,
-        LOGO_BTI_PROGRESSIVE_PRO_SP,
-        LOGO_BTI_PROGRESSIVE_PRO_IT,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_PRO_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_PRO_GM_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_PRO_FR_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_PRO_SP_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_PRO_IT_e,
     };
     static const u8 intr[] = {
-        LOGO_BTI_PROGRESSIVE_INTER,
-        LOGO_BTI_PROGRESSIVE_INTER_GM,
-        LOGO_BTI_PROGRESSIVE_INTER_FR,
-        LOGO_BTI_PROGRESSIVE_INTER_SP,
-        LOGO_BTI_PROGRESSIVE_INTER_IT,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_INTER_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_INTER_GM_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_INTER_FR_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_INTER_SP_e,
+        dRes_INDEX_LOGO_BTI_PROGRESSIVE_INTER_IT_e,
     };
 #endif
 
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", choice[dComIfGs_getPalLanguage()]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_CHOICE);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", dRes_INDEX_LOGO_BTI_PROGRESSIVE_CHOICE_e);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1286, 1286, 1565, 1605), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1232, 1286, 1565, 1605), timg != NULL);
     i_this->progchoiceImg = new dDlst_2D_c(timg, 113, 281, 0);
-    JUT_ASSERT(VERSION_SELECT(1288, 1288, 1567, 1607), i_this->progchoiceImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1234, 1288, 1567, 1607), i_this->progchoiceImg != NULL);
     i_this->progchoiceImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", yes[dComIfGs_getPalLanguage()]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_YES);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", dRes_INDEX_LOGO_BTI_PROGRESSIVE_YES_e);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1295, 1295, 1579, 1619), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1240, 1295, 1579, 1619), timg != NULL);
     i_this->progyesImg = new dDlst_2D_c(timg, 211, 372, 0);
-    JUT_ASSERT(VERSION_SELECT(1297, 1297, 1581, 1621), i_this->progyesImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1242, 1297, 1581, 1621), i_this->progyesImg != NULL);
     i_this->progyesImg->getPicture()->setWhite((GXColor){0xFF, 0xC8, 0x00, 0xFF});
     i_this->progyesImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", no[dComIfGs_getPalLanguage()]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_NO);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", dRes_INDEX_LOGO_BTI_PROGRESSIVE_NO_e);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1305, 1305, 1594, 1634), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1249, 1305, 1594, 1634), timg != NULL);
     i_this->prognoImg = new dDlst_2D_c(timg, 350, 372, 0);
-    JUT_ASSERT(VERSION_SELECT(1307, 1307, 1596, 1636), i_this->prognoImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1251, 1307, 1596, 1636), i_this->prognoImg != NULL);
     i_this->prognoImg->getPicture()->setWhite((GXColor){0xA0, 0xA0, 0xA0, 0xFF});
     i_this->prognoImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", prog[dComIfGs_getPalLanguage()]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_PRO);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", dRes_INDEX_LOGO_BTI_PROGRESSIVE_PRO_e);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1315, 1315, 1609, 1649), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1258, 1315, 1609, 1649), timg != NULL);
     i_this->progImg = new dDlst_2D_c(timg, 153, 309, 0);
-    JUT_ASSERT(VERSION_SELECT(1317, 1317, 1611, 1651), i_this->progImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1260, 1317, 1611, 1651), i_this->progImg != NULL);
     i_this->progImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", intr[dComIfGs_getPalLanguage()]);
 #else
-    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", LOGO_BTI_PROGRESSIVE_INTER);
+    timg = (ResTIMG *)dComIfG_getObjectRes("Logo", dRes_INDEX_LOGO_BTI_PROGRESSIVE_INTER_e);
 #endif
-    JUT_ASSERT(VERSION_SELECT(1324, 1324, 1623, 1663), timg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1266, 1324, 1623, 1663), timg != NULL);
     i_this->interImg = new dDlst_2D_c(timg, 153, 309, 0);
-    JUT_ASSERT(VERSION_SELECT(1326, 1326, 1625, 1665), i_this->interImg != NULL);
+    JUT_ASSERT(VERSION_SELECT(1268, 1326, 1625, 1665), i_this->interImg != NULL);
     i_this->interImg->setAlpha(0x00);
 
     JKRHeap::free(i_this->field_0x1f8, NULL);
+#if VERSION == VERSION_DEMO
+    JKRHeap::free(i_this->field_0x1fc, NULL);
+#endif
 
 #if VERSION > VERSION_DEMO
     l_lodCommand = aramMount("/res/Stage/sea/LODALL.arc");
@@ -836,17 +867,17 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
 #endif
     
     rt = dComIfG_setObjectRes("Always", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1351, 1351, 1650, 1690), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(1280, 1351, 1650, 1690), rt == 1);
 
 #if VERSION > VERSION_DEMO
     archiveHeap->dump_sort();
 #endif
 
     rt = dComIfG_setObjectRes("Link", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1356, 1356, 1655, 1695), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(1283, 1356, 1655, 1695), rt == 1);
 
     rt = dComIfG_setObjectRes("Agb", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1360, 1360, 1659, 1699), rt == 1);
+    JUT_ASSERT(VERSION_SELECT(1286, 1360, 1659, 1699), rt == 1);
 
     l_anmCommand = aramMount("/res/Object/LkAnm.arc");
     l_fmapCommand = aramMount("/res/Fmap/Fmap.arc");
@@ -899,11 +930,15 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     l_rubyCommand = onMemMount("/res/Msg/rubyres.arc");
     l_particleCommand = mDoDvdThd_toMainRam_c::create("/res/Particle/common.jpc", JKRArchive::DEFAULT_MOUNT_DIRECTION, dComIfGp_particle_getCommonHeap());
     l_itemTableCommand = mDoDvdThd_toMainRam_c::create("/res/ItemTable/item_table.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1418, 1418, 1743, 1783), l_itemTableCommand != NULL);
+    JUT_ASSERT(VERSION_SELECT(1342, 1418, 1743, 1783), l_itemTableCommand != NULL);
     l_ActorDataCommand = mDoDvdThd_toMainRam_c::create("/res/ActorDat/ActorDat.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1422, 1422, 1747, 1787), l_ActorDataCommand != NULL);
+    JUT_ASSERT(VERSION_SELECT(1346, 1422, 1747, 1787), l_ActorDataCommand != NULL);
     l_FmapDataCommand = mDoDvdThd_toMainRam_c::create("/res/FmapDat/FmapDat.bin", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
-    JUT_ASSERT(VERSION_SELECT(1426, 1426, 1751, 1791), l_FmapDataCommand != NULL);
+    JUT_ASSERT(VERSION_SELECT(1350, 1426, 1751, 1791), l_FmapDataCommand != NULL);
+#if VERSION == VERSION_DEMO
+    l_DmcMountCommand = DynamicModuleControl::mountCreate();
+    JUT_ASSERT(VERSION_SELECT(1354, 1426, 1751, 1791), l_DmcMountCommand != NULL);
+#endif
 
     mDoAud_loadStaticWaves();
     mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 60);
@@ -937,7 +972,7 @@ static cPhs_State dScnLogo_Create(scene_class* i_scn) {
     return dComLbG_PhaseHandler(&i_this->mPhs, l_method, i_this);
 }
 
-scene_method_class l_dScnLogo_Method = {
+static scene_method_class l_dScnLogo_Method = {
     (process_method_func)dScnLogo_Create,
     (process_method_func)dScnLogo_Delete,
     (process_method_func)dScnLogo_Execute,
@@ -946,13 +981,13 @@ scene_method_class l_dScnLogo_Method = {
 };
 
 scene_process_profile_definition g_profile_LOGO_SCENE = {
-    /* LayerID      */ fpcLy_ROOT_e,
-    /* ListID       */ 1,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_LOGO_SCENE,
+    /* Layer ID     */ fpcLy_ROOT_e,
+    /* List ID      */ 1,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_LOGO_SCENE_e,
     /* Proc SubMtd  */ &g_fpcNd_Method.base,
     /* Size         */ sizeof(dScnLogo_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Node SubMtd  */ &g_fopScn_Method.base,
     /* Scene SubMtd */ &l_dScnLogo_Method,

@@ -6,8 +6,6 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_kytag07.h"
 #include "d/d_com_inf_game.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 
 /* 00000078-00000080       .text daKytag07_Draw__FP13kytag07_class */
 static BOOL daKytag07_Draw(kytag07_class* i_this) {
@@ -86,16 +84,12 @@ static cPhs_State daKytag07_Create(fopAc_ac_c* i_this) {
     kytag07_class* a_this = (kytag07_class*)i_this;
     dScnKy_env_light_c& env_light = dKy_getEnvlight();
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag07_class);
-#endif
+    fopAcM_ct_Retail(i_this, kytag07_class);
 
     if (strcmp(dComIfGp_getStartStageName(), "GTower") != 0)
         env_light.mbDayNightTactStop = true;
 
-#if VERSION == VERSION_DEMO
-    fopAcM_SetupActor(i_this, kytag07_class);
-#endif
+    fopAcM_ct_Demo(i_this, kytag07_class);
 
     return cPhs_COMPLEATE_e;
 }
@@ -109,18 +103,18 @@ static actor_method_class l_daKytag07_Method = {
 };
 
 actor_process_profile_definition g_profile_KYTAG07 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0007,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_KYTAG07,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0007,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_KYTAG07_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(kytag07_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_KYTAG07,
+    /* Draw Prio    */ fpcDwPi_KYTAG07_e,
     /* Actor SubMtd */ &l_daKytag07_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

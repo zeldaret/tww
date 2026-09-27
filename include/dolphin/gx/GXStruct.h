@@ -19,15 +19,15 @@ typedef struct _GXColorS10 {
 } GXColorS10;
 
 typedef struct _GXRenderModeObj {
-    /* 0x00 */ s32 vi_tv_mode;
-    /* 0x04 */ u16 fb_width;
-    /* 0x06 */ u16 efb_height;
-    /* 0x08 */ u16 xfb_height;
-    /* 0x0A */ u16 vi_x_origin;
-    /* 0x0C */ u16 vi_y_origin;
-    /* 0x0E */ u16 vi_width;
-    /* 0x10 */ u16 vi_height;
-    /* 0x14 */ s32 xfb_mode;
+    /* 0x00 */ VITVMode viTVmode;
+    /* 0x04 */ u16 fbWidth;
+    /* 0x06 */ u16 efbHeight;
+    /* 0x08 */ u16 xfbHeight;
+    /* 0x0A */ u16 viXOrigin;
+    /* 0x0C */ u16 viYOrigin;
+    /* 0x0E */ u16 viWidth;
+    /* 0x10 */ u16 viHeight;
+    /* 0x14 */ VIXFBMode xFBmode;
     /* 0x18 */ u8 field_rendering;
     /* 0x19 */ u8 antialiasing;
     /* 0x1A */ u8 sample_pattern[12][2];

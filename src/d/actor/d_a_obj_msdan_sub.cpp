@@ -5,16 +5,14 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_msdan_sub.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_msdan.h"
+#include "res/Object/Msdan.h"
 
 const char daObjMsdanSub::Act_c::M_arcname[] = "Msdan";
 Mtx daObjMsdanSub::Act_c::M_tmp_mtx;
 
 /* 00000078-0000012C       .text CreateHeap__Q213daObjMsdanSub5Act_cFv */
 BOOL daObjMsdanSub::Act_c::CreateHeap() {
-    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, MSDAN_BDL_MSDAN);
+    J3DModelData* model_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_MSDAN_BDL_MSDAN_e);
     JUT_ASSERT(93, model_data != NULL);
     mModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
     return mModel != NULL;
@@ -51,11 +49,11 @@ BOOL daObjMsdanSub::Act_c::Create() {
 
 /* 00000304-00000400       .text Mthd_Create__Q213daObjMsdanSub5Act_cFv */
 cPhs_State daObjMsdanSub::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, Act_c);
+    fopAcM_ct(this, Act_c);
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
 
     if (phase_state == cPhs_COMPLEATE_e) {
-        phase_state = MoveBGCreate(M_arcname, MSDAN_DZB_MSDAN, dBgS_MoveBGProc_Trans, 0x9A0);
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_MSDAN_DZB_MSDAN_e, dBgS_MoveBGProc_Trans, 0x9A0);
         JUT_ASSERT(155, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
     return phase_state;
@@ -233,18 +231,18 @@ static actor_method_class Mthd_MsdanSub = {
 }; // namespace daObjMsdanSub
 
 actor_process_profile_definition g_profile_Obj_MsdanSub = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0003,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_Obj_MsdanSub,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0003,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_Obj_MsdanSub_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(daObjMsdanSub::Act_c),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_Obj_MsdanSub,
+    /* Draw Prio    */ fpcDwPi_Obj_MsdanSub_e,
     /* Actor SubMtd */ &daObjMsdanSub::Mthd_MsdanSub,
     /* Status       */ fopAcStts_CULL_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_CUSTOM_e,
+    /* Cull Type    */ fopAc_CULLBOX_CUSTOM_e,
 };

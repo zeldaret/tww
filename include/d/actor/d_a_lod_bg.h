@@ -19,8 +19,10 @@ public:
     void setExecute(BOOL (daLodbg_c::*func)()) { mExecuteFunc = func; }
 
     void deleteModelData();
-    BOOL loadModelData(const char*, J3DModelData*&, JKRSolidHeap*&, unsigned long&);
+#if VERSION > VERSION_DEMO
+    BOOL loadModelData(const char*, J3DModelData*&, JKRSolidHeap*&, u32&);
     BOOL createModelData();
+#endif
     BOOL execCreateWait();
     BOOL execReadWait();
     BOOL execDeleteWait();

@@ -191,7 +191,7 @@ int dRes_info_c::loadResource() {
     for (i = 0; i < ARRAY_SIZE(l_readResType); i++, pResType++) {
         JKRFileFinder * pArcFinder = mpArchive->getFirstResource(*pResType);
 
-        for (; pArcFinder->isAvailable(); pArcFinder->findNextFile()) {
+        for (; JKRIsFileFinderAvailable(pArcFinder); pArcFinder->findNextFile()) {
             u32 resType;
             void * pRes = JKRArchive::getGlbResource(*pResType, pArcFinder->mEntryName, mpArchive);
             if (pRes == NULL) {
@@ -418,7 +418,7 @@ int dRes_info_c::setRes() {
             mode = 2;
 
             if (mode == 0) {
-                u32 allocSize = (mDataHeap->getSize() - mpParentHeap->getFreeSize()) + 0x8c;
+                u32 allocSize = (mDataHeap->getHeapSize() - mpParentHeap->getFreeSize()) + 0x8c;
                 JKRSolidHeap * pHeap = mDoExt_createSolidHeapFromGameToCurrent(allocSize, 0);
                 if (pHeap != NULL) {
                     mDoExt_adjustSolidHeap(mDataHeap);
@@ -479,7 +479,7 @@ static SArcHeader* getArcHeader(JKRArchive* pArchive) {
 }
 
 static void dummy() {
-    OSReport("%5.1f %5x %5.1f %5x %3d %s\n");
+    DEAD_STRING("%5.1f %5x %5.1f %5x %3d %s\n");
 }
 
 /* 8006EBF8-8006ECF4       .text dump_long__11dRes_info_cFP11dRes_info_ci */
@@ -549,7 +549,7 @@ dRes_control_c::~dRes_control_c() {
 }
 
 /* 8006EF34-8006F01C       .text setRes__14dRes_control_cFPCcP11dRes_info_ciPCcUcP7JKRHeap */
-BOOL dRes_control_c::setRes(const char* pArcName, dRes_info_c* pInfoArr, int infoNum, const char* pArcPath, u8 direction, JKRHeap* pHeap) {
+int dRes_control_c::setRes(const char* pArcName, dRes_info_c* pInfoArr, int infoNum, const char* pArcPath, u8 direction, JKRHeap* pHeap) {
     dRes_info_c * pInfo = getResInfo(pArcName, pInfoArr, infoNum);
 
     if (pInfo == NULL) {
@@ -557,18 +557,18 @@ BOOL dRes_control_c::setRes(const char* pArcName, dRes_info_c* pInfoArr, int inf
         if (pInfo == NULL) {
             OSReport_Error("<%s.arc> dRes_control_c::setRes: 空きリソース情報ポインタがありません\n", pArcName);
             pInfo->~dRes_info_c();
-            return FALSE;
+            return 0;
         }
 
         if (!pInfo->set(pArcName, pArcPath, direction, pHeap)) {
             OSReport_Error("<%s.arc> dRes_control_c::setRes: res info set error !!\n", pArcName);
             pInfo->~dRes_info_c();
-            return FALSE;
+            return 0;
         }
     }
 
     pInfo->incCount();
-    return TRUE;
+    return 1;
 }
 
 /* 8006F01C-8006F074       .text syncRes__14dRes_control_cFPCcP11dRes_info_ci */
@@ -703,7 +703,7 @@ int dRes_control_c::syncAllRes(dRes_info_c* pInfo, int infoNum) {
 }
 
 /* 8006F430-8006F500       .text setStageRes__14dRes_control_cFPCcP7JKRHeap */
-BOOL dRes_control_c::setStageRes(char const* pArcName, JKRHeap* pHeap) {
+int dRes_control_c::setStageRes(char const* pArcName, JKRHeap* pHeap) {
     char path[20];
     snprintf(path, sizeof(path), "/res/Stage/%s/", strcmp(dComIfGp_getStartStageName(), "ma2room") == 0 && dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) ? "ma3room" : dComIfGp_getStartStageName());
     return setRes(pArcName, &mStageInfo[0], ARRAY_SIZE(mStageInfo), path, 1, pHeap);

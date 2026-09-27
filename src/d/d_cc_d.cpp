@@ -4,9 +4,11 @@
 //
 
 #include "d/d_cc_d.h"
+#include "d/d_debug_viewer.h"
 #include "f_op/f_op_actor_mng.h"
 #include "dolphin/types.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "m_Do/m_Do_mtx.h"
 
 /* 800AB2AC-800AB328       .text GetAc__22dCcD_GAtTgCoCommonBaseFv */
 fopAc_ac_c* dCcD_GAtTgCoCommonBase::GetAc() {
@@ -273,16 +275,57 @@ void dCcD_Cps::Set(const dCcD_SrcCps& src) {
     cCcD_CpsAttr::Set(src.mCpsAttr);
 }
 
+#ifdef DEBUG
+void dCcD_Cps::Draw(const GXColor& color) {
+    Mtx auStack_68;
+    Mtx auStack_98;
+    Mtx auStack_c8;
+    
+    MTXIdentity(auStack_68);
+
+    cXyz cStack_d8;
+    CalcVec(&cStack_d8);
+    cMtx_trans(auStack_98, GetStartP()->x, GetStartP()->y, GetStartP()->z);
+    cM3d_UpMtx(cStack_d8, auStack_c8);
+    cMtx_concat(auStack_98, auStack_c8, auStack_68);
+    cMtx_scale(auStack_98, GetR(), 0.5f * GetLen(), GetR());
+    cMtx_concat(auStack_68, auStack_98, auStack_68);
+    cMtx_trans(auStack_98, 0.0f, 1.0f, 0.0f);
+    cMtx_concat(auStack_68, auStack_98, auStack_68);
+    cMtx_XrotS(auStack_98, 0x4000);
+    cMtx_concat(auStack_68, auStack_98, auStack_68);
+    dDbVw_drawCylinderMXlu(auStack_68, color, 1);
+    dDbVw_drawSphereXlu(*GetStartP(), GetR(), color, 1);
+    dDbVw_drawSphereXlu(*GetEndP(), GetR(), color, 1);
+}
+#endif
+
 /* 800ABD34-800ABD54       .text Set__8dCcD_TriFRC11dCcD_SrcTri */
 void dCcD_Tri::Set(const dCcD_SrcTri& src) {
     dCcD_GObjInf::Set(src.mObjInf);
 }
+
+#if DEBUG
+void dCcD_Tri::Draw(const GXColor& color) {
+    cXyz cStack_34[3];
+    cStack_34[0] = mA;
+    cStack_34[1] = mB;
+    cStack_34[2] = mC;
+    dDbVw_drawTriangleXlu(cStack_34, color, 1);
+}
+#endif
 
 /* 800ABD54-800ABDCC       .text Set__8dCcD_CylFRC11dCcD_SrcCyl */
 void dCcD_Cyl::Set(const dCcD_SrcCyl& src) {
     dCcD_GObjInf::Set(src.mObjInf);
     cCcD_CylAttr::Set(src.mCylAttr);
 }
+
+#if DEBUG
+void dCcD_Cyl::Draw(const GXColor& color) {
+    dDbVw_drawCylinderXlu(*GetCP(), GetR(), GetH(), color, 1);
+}
+#endif
 
 /* 800ABDCC-800ABE18       .text StartCAt__8dCcD_CylFR4cXyz */
 void dCcD_Cyl::StartCAt(cXyz& pos) {
@@ -300,8 +343,8 @@ void dCcD_Cyl::StartCTg(cXyz& pos) {
 
 /* 800ABE64-800ABEE0       .text MoveCAtTg__8dCcD_CylFR4cXyz */
 void dCcD_Cyl::MoveCAtTg(cXyz& pos) {
-    cXyz& center = GetC();
-    cXyz vel = pos - center;
+    const cXyz* center = GetCP();
+    cXyz vel = pos - *center;
     SetAtVec(vel);
     SetTgVec(vel);
     SetC(pos);
@@ -309,16 +352,16 @@ void dCcD_Cyl::MoveCAtTg(cXyz& pos) {
 
 /* 800ABEE0-800ABF50       .text MoveCAt__8dCcD_CylFR4cXyz */
 void dCcD_Cyl::MoveCAt(cXyz& pos) {
-    cXyz& center = GetC();
-    cXyz vel = pos - center;
+    const cXyz* center = GetCP();
+    cXyz vel = pos - *center;
     SetAtVec(vel);
     SetC(pos);
 }
 
 /* 800ABF50-800ABFC0       .text MoveCTg__8dCcD_CylFR4cXyz */
 void dCcD_Cyl::MoveCTg(cXyz& pos) {
-    cXyz& center = GetC();
-    cXyz vel = pos - center;
+    const cXyz* center = GetCP();
+    cXyz vel = pos - *center;
     SetTgVec(vel);
     SetC(pos);
 }
@@ -328,6 +371,12 @@ void dCcD_Sph::Set(const dCcD_SrcSph& src) {
     dCcD_GObjInf::Set(src.mObjInf);
     cCcD_SphAttr::Set(src.mSphAttr);
 }
+
+#ifdef DEBUG
+void dCcD_Sph::Draw(const GXColor& color) {
+    dDbVw_drawSphereXlu(*GetCP(), GetR(), color, 1);
+}
+#endif
 
 /* 800AC02C-800AC078       .text StartCAt__8dCcD_SphFR4cXyz */
 void dCcD_Sph::StartCAt(cXyz& pos) {

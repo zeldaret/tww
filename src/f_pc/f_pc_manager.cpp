@@ -85,7 +85,8 @@ void messageSet(u32 status) {
 #else
     BMG_INF1* inf1 = (BMG_INF1*)&msg_data[0x20];
 #endif
-    const char * msg = (const char*)((u8*)inf1->getNext() + sizeof(JUTDataBlockHeader) + inf1->entries[status]);
+    u8* dat1Block = (u8*)inf1 + inf1->mSize;
+    const char * msg = (const char*)(dat1Block + sizeof(JUTDataBlockHeader) + inf1->entries[status]);
 
     f32 f30 = 0.0f;
     f32 f31 = 660.0f;
@@ -100,17 +101,17 @@ void messageSet(u32 status) {
     J2DPicture * ppane = new J2DPicture('PIC1', JGeometry::TBox2<f32>(0.0f, 0.0f, 665.0f, 530.0f), (ResTIMG*)black_tex, NULL);
     JUT_ASSERT(VERSION_SELECT(312, 312, 334, 334), ppane != NULL);
 
-    J2DTextBox::TFontSize size;
-    size.mSizeX = 27.0f;
-    size.mSizeY = 27.0f;
-    tpane->setFontSize(size);
+    J2DTextBox::TFontSize fontSize;
+    fontSize.mSizeX = 27.0f;
+    fontSize.mSizeY = 27.0f;
+    tpane->setFontSize(fontSize);
     tpane->setCharColor(JUtility::TColor(0xFF, 0xC8, 0x00, 0xFF));
     tpane->setGradColor(JUtility::TColor(0xFF, 0xB4, 0x00, 0xFF));
     tpane->setCharSpace(0.0f);
     tpane->setLineSpace(27.0f);
     tpane->setBlack(JUtility::TColor(0xFF, 0xFF, 0xFF, 0x00));
 
-    spane->setFontSize(size);
+    spane->setFontSize(fontSize);
     spane->setCharColor(JUtility::TColor(0x00, 0x00, 0x00, 0xC8));
     spane->setGradColor(JUtility::TColor(0x00, 0x00, 0x00, 0xC8));
     spane->setCharSpace(0.0f);

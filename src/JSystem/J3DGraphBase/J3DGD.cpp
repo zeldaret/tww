@@ -179,73 +179,73 @@ void J3DGDSetVtxAttrFmtv(GXVtxFmt fmt, GXVtxAttrFmtList* vtxAttr, bool forceNBT)
     GXCompType tex7CompType = GX_F32;
     u32 tex7CompShift = 0;
 
-    for (; vtxAttr->mAttrib != GX_VA_NULL; vtxAttr++) {
-        switch (vtxAttr->mAttrib) {
+    for (; vtxAttr->attr != GX_VA_NULL; vtxAttr++) {
+        switch (vtxAttr->attr) {
         case GX_VA_POS:
-            posCompCnt = vtxAttr->mCompCnt;
-            posCompType = vtxAttr->mCompType;
-            posCompShift = vtxAttr->mCompShift;
+            posCompCnt = vtxAttr->cnt;
+            posCompType = vtxAttr->type;
+            posCompShift = vtxAttr->frac;
             break;
         case GX_VA_NRM:
         case GX_VA_NBT:
-            nrmCompType = vtxAttr->mCompType;
-            if (vtxAttr->mCompCnt == GX_NRM_NBT3) {
+            nrmCompType = vtxAttr->type;
+            if (vtxAttr->cnt == GX_NRM_NBT3) {
                 nrmCompCnt = GX_NRM_NBT;
                 nbt3 = true;
             } else {
-                // possible fakematch? need to cast vtxAttr->mCompCnt to int to put value in r0 temporarily
-                // nrmCompCnt = forceNBT ? GX_NRM_NBT : vtxAttr->mCompCnt;
-                nrmCompCnt = (GXCompCnt)(forceNBT ? GX_NRM_NBT : (int)(vtxAttr->mCompCnt));
+                // possible fakematch? need to cast vtxAttr->cnt to int to put value in r0 temporarily
+                // nrmCompCnt = forceNBT ? GX_NRM_NBT : vtxAttr->cnt;
+                nrmCompCnt = (GXCompCnt)(forceNBT ? GX_NRM_NBT : (int)(vtxAttr->cnt));
                 nbt3 = false;
             }
             break;
         case GX_VA_CLR0:
-            clr0CompCnt = vtxAttr->mCompCnt;
-            clr0CompType = vtxAttr->mCompType;
+            clr0CompCnt = vtxAttr->cnt;
+            clr0CompType = vtxAttr->type;
             break;
         case GX_VA_CLR1:
-            clr1CompCnt = vtxAttr->mCompCnt;
-            clr1CompType = vtxAttr->mCompType;
+            clr1CompCnt = vtxAttr->cnt;
+            clr1CompType = vtxAttr->type;
             break;
         case GX_VA_TEX0:
-            tex0CompCnt = vtxAttr->mCompCnt;
-            tex0CompType = vtxAttr->mCompType;
-            tex0CompShift = vtxAttr->mCompShift;
+            tex0CompCnt = vtxAttr->cnt;
+            tex0CompType = vtxAttr->type;
+            tex0CompShift = vtxAttr->frac;
             break;
         case GX_VA_TEX1:
-            tex1CompCnt = vtxAttr->mCompCnt;
-            tex1CompType = vtxAttr->mCompType;
-            tex1CompShift = vtxAttr->mCompShift;
+            tex1CompCnt = vtxAttr->cnt;
+            tex1CompType = vtxAttr->type;
+            tex1CompShift = vtxAttr->frac;
             break;
         case GX_VA_TEX2:
-            tex2CompCnt = vtxAttr->mCompCnt;
-            tex2CompType = vtxAttr->mCompType;
-            tex2CompShift = vtxAttr->mCompShift;
+            tex2CompCnt = vtxAttr->cnt;
+            tex2CompType = vtxAttr->type;
+            tex2CompShift = vtxAttr->frac;
             break;
         case GX_VA_TEX3:
-            tex3CompCnt = vtxAttr->mCompCnt;
-            tex3CompType = vtxAttr->mCompType;
-            tex3CompShift = vtxAttr->mCompShift;
+            tex3CompCnt = vtxAttr->cnt;
+            tex3CompType = vtxAttr->type;
+            tex3CompShift = vtxAttr->frac;
             break;
         case GX_VA_TEX4:
-            tex4CompCnt = vtxAttr->mCompCnt;
-            tex4CompType = vtxAttr->mCompType;
-            tex4CompShift = vtxAttr->mCompShift;
+            tex4CompCnt = vtxAttr->cnt;
+            tex4CompType = vtxAttr->type;
+            tex4CompShift = vtxAttr->frac;
             break;
         case GX_VA_TEX5:
-            tex5CompCnt = vtxAttr->mCompCnt;
-            tex5CompType = vtxAttr->mCompType;
-            tex5CompShift = vtxAttr->mCompShift;
+            tex5CompCnt = vtxAttr->cnt;
+            tex5CompType = vtxAttr->type;
+            tex5CompShift = vtxAttr->frac;
             break;
         case GX_VA_TEX6:
-            tex6CompCnt = vtxAttr->mCompCnt;
-            tex6CompType = vtxAttr->mCompType;
-            tex6CompShift = vtxAttr->mCompShift;
+            tex6CompCnt = vtxAttr->cnt;
+            tex6CompType = vtxAttr->type;
+            tex6CompShift = vtxAttr->frac;
             break;
         case GX_VA_TEX7:
-            tex7CompCnt = vtxAttr->mCompCnt;
-            tex7CompType = vtxAttr->mCompType;
-            tex7CompShift = vtxAttr->mCompShift;
+            tex7CompCnt = vtxAttr->cnt;
+            tex7CompType = vtxAttr->type;
+            tex7CompShift = vtxAttr->frac;
             break;
         default:
             break;

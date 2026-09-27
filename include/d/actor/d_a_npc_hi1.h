@@ -71,7 +71,7 @@ public:
     BOOL bodyCreateHeap();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_hed_jnt_num;
     /* 0x6CD */ s8 m_bbone_jnt_num;
@@ -99,7 +99,9 @@ public:
     /* 0x784 */ u8 field_0x784[0x788 - 0x784];
     /* 0x788 */ csXyz field_0x788;
     /* 0x790 */ int field_0x790;
-    /* 0x794 */ s16 mEventIdx[6];
+    /* 0x794 */ s16 mEventIdx[1];
+    /* 0x796 */ s16 field_0x796;
+    /* 0x798 */ u8 field_0x798[0x7A0 - 0x798];
     /* 0x7A0 */ s16 mTimer2;
     /* 0x7A2 */ u8 field_0x7A2[0x7AA - 0x7A2];
     /* 0x7AA */ s16 field_0x7AA;

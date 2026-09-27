@@ -34,7 +34,10 @@ public:
     void onSmokeParticle() { m5F9 = true; }
     void setDefaultProc(Func func) { m55C = func; }
     void setEmitterOffset(float) {}
-    void setPosAngle(cXyz&, csXyz&) {}
+    void setPosAngle(cXyz& pos, csXyz& angle) {
+        current.pos = pos;
+        current.angle = angle;
+    }
     void setSearchProc(Func func) { m550 = func; }
 
     void set_mtx();

@@ -1,20 +1,18 @@
 /**
  * d_a_himo3.cpp
- * Object - Rope (Pirate Ship rope minigame, Forsaken Fortress)
+ * Object - Climbable Rope (Pirate Ship rope minigame, Forsaken Fortress, Puppet Ganon's room)
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_himo3.h"
 #include "d/actor/d_a_player.h"
-#include "d/res/res_always.h"
+#include "res/Object/Always.h"
 #if VERSION > VERSION_DEMO
-#include "d/res/res_bgn.h"
+#include "res/Object/Bgn.h"
 #endif
-#include "d/res/res_link.h"
-#include "d/res/res_himo3.h"
+#include "res/Object/Link.h"
+#include "res/Object/Himo3.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_actor_mng.h"
@@ -32,7 +30,7 @@ public:
     }
     virtual ~himo3HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -50,19 +48,21 @@ static bool hio_set;
 static himo3HIO_c l_HIO;
 
 /* 000000EC-00000C58       .text himo3_control__FP11himo3_classP7himo3_s */
-void himo3_control(himo3_class* i_this, himo3_s* r31) {
+static void himo3_control(himo3_class* i_this, himo3_s* r31) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    int i = 1;
+    int i;
+
     cXyz spAC;
     cXyz spA0;
     cXyz sp94;
-    f32 tmp200;
-    f32 tmpReg;
     f32 f28;
+    f32 tmpReg;
+    f32 tmp200;
     f32 f27;
 
-    r31 += 1;
+    i = 1;
+    r31++;
 
     if (i_this->m02BE != 0) {
         s16 target;
@@ -84,15 +84,15 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
 
         cXyz sp88 = spAC - actor->current.pos;
         f32 sqrt = sp88.abs();
-        int iVar8 = sqrt / HIMO3_SCALE;
-        f28 = sqrt / HIMO3_SCALE - iVar8;
-        if (iVar8 >= i_this->m15C0 - 1) {
-            iVar8 = i_this->m15C0 - 1;
+        int iVar8_2 = sqrt / HIMO3_SCALE;
+        f28 = sqrt / HIMO3_SCALE - iVar8_2;
+        if (iVar8_2 >= i_this->m15C0 - 1) {
+            iVar8_2 = i_this->m15C0 - 1;
         }
 
-        if (iVar8 > 1) {
-            for (i = 1; i < iVar8; i++, r31++) {
-                f32 fVar12 = (f32)i / (iVar8 - 1);
+        if (iVar8_2 > 1) {
+            for (i = 1; i < iVar8_2; i++, r31++) {
+                f32 fVar12 = (f32)i / (iVar8_2 - 1);
                 r31->m00.x = actor->current.pos.x + sp88.x * fVar12;
                 r31->m00.y = actor->current.pos.y + sp88.y * fVar12;
                 r31->m00.z = actor->current.pos.z + sp88.z * fVar12;
@@ -121,7 +121,7 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
             cLib_addCalc2(&i_this->m15E4, 0.1f, 1.0f, 0.05f);
         }
 
-        if (fopAcM_GetParam(i_this) == 3) {
+        if (fopAcM_GetParam(actor) == 3) {
             i_this->m02BE = 0;
             i_this->m02BC = 0x1e;
             i_this->m15E0 = 0.0f;
@@ -137,7 +137,7 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
         i_this->m15DC += tmp;
         cLib_addCalc0(&i_this->m15D8, 0.05f, DEMO_SELECT(REG0_F(9) + 1.0f, 1.0f));
 
-        if (fopAcM_GetParam(i_this) == 1) {
+        if (fopAcM_GetParam(actor) == 1) {
             i_this->m02BE = 1;
             i_this->m15E0 = 1.0f;
             if (strcmp(dComIfGp_getStartStageName(), "majroom") == 0 || strcmp(dComIfGp_getStartStageName(), "Majroom") == 0 ||
@@ -145,7 +145,7 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
             {
                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_0402);
             }
-        } else if (fopAcM_GetParam(i_this) == 2) {
+        } else if (fopAcM_GetParam(actor) == 2) {
             i_this->m02BE = 2;
             i_this->m15E0 = 1.0f;
         }
@@ -194,7 +194,10 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
     spA0.y = 0.0f;
     tmp200 = DEMO_SELECT(REG0_F(8) + -200.0f, -200.0f);
 
-    int j = 0;
+    s16 unaff_r24;
+    s16 unaff_r23;
+    int j;
+    j = 0;
 
     if ((i_this->m02BE == 0) && (i_this->m02BC == 0)) {
         f27 = DEMO_SELECT(REG0_F(2) + 30.0f + 20.0f - 20.0f, 30.0f);
@@ -202,22 +205,18 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
         f27 = -200.0f;
     }
 
-    s16 unaff_r24;
-    s16 unaff_r23;
     u8 bVar4 = 0;
 
     for (; i < i_this->m15C0; i++, r31++) {
         cXyz sp60;
-        sp60.z = 0.0f;
-        sp60.y = 0.0f;
-        sp60.x = 0.0f;
+        sp60.x = sp60.y = sp60.z = 0.0f;
 
         Vec f29_f26_f25;
         f29_f26_f25.x = r31->m00.x - r31[-1].m00.x + r31->m0C.x + sp7C.x + sp64.x + sp60.x;
         f29_f26_f25.y = r31->m00.y - r31[-1].m00.y + tmp200 + r31->m0C.y + sp60.y;
         f29_f26_f25.z = r31->m00.z - r31[-1].m00.z + r31->m0C.z + sp7C.z + sp64.z + sp60.z;
 
-        unaff_r24 = -cM_atan2s(f29_f26_f25.y, f29_f26_f25.z);
+        unaff_r24 = (s16)-cM_atan2s(f29_f26_f25.y, f29_f26_f25.z);
         unaff_r23 = (s16)cM_atan2s(f29_f26_f25.x + 0.0f, std::sqrtf(SQUARE(f29_f26_f25.y) + SQUARE(f29_f26_f25.z)));
         cMtx_XrotS(*calc_mtx, unaff_r24);
         cMtx_YrotM(*calc_mtx, unaff_r23);
@@ -234,7 +233,7 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
         r31->m0C.y = (r31->m00.y - r31->m0C.y) * tmpReg;
         r31->m0C.z = (r31->m00.z - r31->m0C.z) * tmpReg;
 
-        if ((i_this->m0298 == 0xf) && (i == i_this->m15C0 - 1)) {
+        if (i_this->m0298 == 0xf && i == i_this->m15C0 - 1) {
             if (i_this->m02BE == 0) {
                 i_this->mCyl.SetC(r31->m00);
             } else {
@@ -242,7 +241,7 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
                 i_this->mCyl.SetC(sp4C);
             }
             dComIfG_Ccsp()->Set(&i_this->mCyl);
-        } else if (((i + i_this->m02BA * 3 & 0xf) == 0) && (j < 5)) {
+        } else if ((i + (i_this->m02BA * 3) & 0xf) == 0 && j < 5) {
             i_this->mSphs[j].SetR(f27);
             i_this->mSphs[j].SetC(r31->m00);
             dComIfG_Ccsp()->Set(&i_this->mSphs[j]);
@@ -250,15 +249,16 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
         }
     }
 
-    cXyz* pcVar10 = i_this->mLineMat.getPos(0);
-    himo3_s* phVar11 = i_this->m02C0;
-    for (int i = 0; i < i_this->m15C0; i++, phVar11++, pcVar10++) {
+    cXyz* pcVar10;
+    pcVar10 = i_this->mLineMat.getPos(0);
+    r31 = i_this->m02C0;
+    for (i = 0; i < i_this->m15C0; i++, r31++, pcVar10++) {
         if (i_this->m15E0 >= 0.999f) {
-            *pcVar10 = phVar11->m00;
+            *pcVar10 = r31->m00;
         } else {
-            cLib_addCalc2(&pcVar10->x, phVar11->m00.x, 1.0f, i_this->m15E0 * 100.0f);
-            cLib_addCalc2(&pcVar10->y, phVar11->m00.y, 1.0f, i_this->m15E0 * 100.0f);
-            cLib_addCalc2(&pcVar10->z, phVar11->m00.z, 1.0f, i_this->m15E0 * 100.0f);
+            cLib_addCalc2(&pcVar10->x, r31->m00.x, 1.0f, i_this->m15E0 * 100.0f);
+            cLib_addCalc2(&pcVar10->y, r31->m00.y, 1.0f, i_this->m15E0 * 100.0f);
+            cLib_addCalc2(&pcVar10->z, r31->m00.z, 1.0f, i_this->m15E0 * 100.0f);
         }
 
         if ((i_this->m0298 != 0xf) && (i == i_this->m15C0 - 1)) {
@@ -279,14 +279,14 @@ void himo3_control(himo3_class* i_this, himo3_s* r31) {
 }
 
 /* 00000C58-00000D1C       .text ga_draw__FP11himo3_class */
-void ga_draw(himo3_class* i_this) {
+static void ga_draw(himo3_class* i_this) {
     h3_ga_s* ga = &i_this->m2114[0];
 
     for (int i = 0; i < ARRAY_SSIZE(i_this->m2114); i++, ga++) {
         if (ga->m2E == 1) {
             MtxTrans(ga->mPos.x, ga->mPos.y, ga->mPos.z, 0);
-            cMtx_YrotM(*calc_mtx, ga->m1E);
-            cMtx_XrotM(*calc_mtx, ga->m1C);
+            cMtx_YrotM(*calc_mtx, ga->m1C.y);
+            cMtx_XrotM(*calc_mtx, ga->m1C.x);
             MtxScale(ga->m24, ga->m24 * ga->m28, ga->m24, true);
             MtxTrans(0.0f, -18.0f, 0.0f, 1);
             ga->mpModel->setBaseTRMtx(*calc_mtx);
@@ -306,12 +306,7 @@ static BOOL daHimo3_Draw(himo3_class* i_this) {
         fVar1 = DEMO_SELECT(REG0_F(0) + 3.75f, 3.75f);
     }
 
-#ifdef __MWERKS__
     i_this->mLineMat.update(i_this->m15C0, fVar1, (GXColor){200, 150, 50, 255}, 0, &actor->tevStr);
-#else
-    GXColor color = (GXColor){200, 150, 50, 255};
-    i_this->mLineMat.update(i_this->m15C0, fVar1, color, 0, &actor->tevStr);
-#endif
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 
     if (i_this->m0298 != 0xf) {
@@ -344,7 +339,7 @@ static BOOL daHimo3_Draw(himo3_class* i_this) {
 }
 
 /* 00000EF8-00001108       .text ga_move__FP11himo3_class */
-void ga_move(himo3_class* i_this) {
+static void ga_move(himo3_class* i_this) {
     cXyz sp30(0.0f, 0.0f, 10.0f);
     cXyz sp24;
 
@@ -359,10 +354,10 @@ void ga_move(himo3_class* i_this) {
         }
 
         cXyz sp0C = i_this->m2114[0].m10 - i_this->m2114[0].mPos;
-        cLib_addCalcAngleS2(&i_this->m2114[0].m1E, cM_atan2s(sp0C.x, sp0C.z), 2, 0x1000);
-        cLib_addCalcAngleS2(&i_this->m2114[0].m1C, -cM_atan2s(sp0C.y, std::sqrtf(SQUARE(sp0C.x) + SQUARE(sp0C.z))), 2, 0x1000);
-        cMtx_YrotS(*calc_mtx, i_this->m2114[0].m1E);
-        cMtx_XrotM(*calc_mtx, i_this->m2114[0].m1C);
+        cLib_addCalcAngleS2(&i_this->m2114[0].m1C.y, cM_atan2s(sp0C.x, sp0C.z), 2, 0x1000);
+        cLib_addCalcAngleS2(&i_this->m2114[0].m1C.x, -cM_atan2s(sp0C.y, std::sqrtf(SQUARE(sp0C.x) + SQUARE(sp0C.z))), 2, 0x1000);
+        cMtx_YrotS(*calc_mtx, i_this->m2114[0].m1C.y);
+        cMtx_XrotM(*calc_mtx, i_this->m2114[0].m1C.x);
         MtxPosition(&sp30, &sp24);
         i_this->m2114[0].mPos += sp24;
         i_this->m2114[0].m28 = cM_ssin(i_this->m2114[0].m2C);
@@ -377,7 +372,7 @@ void himo3_class::setActorHang(cXyz arg1, short arg2) {
 }
 
 /* 00001128-000014F8       .text path_move__FP11himo3_class */
-void path_move(himo3_class* i_this) {
+static void path_move(himo3_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     cXyz sp28;
     cXyz sp10;
@@ -476,9 +471,7 @@ static BOOL daHimo3_Execute(himo3_class* i_this) {
         MTXCopy(*calc_mtx, i_this->m1840);
 
         cXyz sp28;
-        sp28.z = 0.0f;
-        sp28.y = 0.0f;
-        sp28.x = 0.0f;
+        sp28.x = sp28.y = sp28.z = 0.0f;
         MtxPosition(&sp28, &i_this->m1624);
         i_this->mSph.SetC(i_this->m1624);
         dComIfG_Ccsp()->Set(&i_this->mSph);
@@ -613,20 +606,20 @@ static BOOL daHimo3_Delete(himo3_class* i_this) {
 }
 
 /* 00001AE0-00001DD4       .text useHeapInit__FP11himo3_class */
-cPhs_State useHeapInit(himo3_class* i_this) {
+static cPhs_State useHeapInit(himo3_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    static int hook_bmd[] = {HIMO3_BMD_SLAMP_00, LINK_BDL_ROPEEND, HIMO3_BMD_SLAMP_00, HIMO3_BMD_SLAMP_00, HIMO3_BMD_SLAMP_00};
+    static int hook_bmd[] = {dRes_INDEX_HIMO3_BMD_SLAMP_00_e, dRes_INDEX_LINK_BDL_ROPEEND_e, dRes_INDEX_HIMO3_BMD_SLAMP_00_e, dRes_INDEX_HIMO3_BMD_SLAMP_00_e, dRes_INDEX_HIMO3_BMD_SLAMP_00_e};
 
 #if VERSION == VERSION_DEMO
-    if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Always", i_this->m0298 == 0xf ? ALWAYS_BTI_TXM_ROPE1 : ALWAYS_BTI_ROPE), 0)) {
+    if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Always", i_this->m0298 == 0xf ? dRes_INDEX_ALWAYS_BTI_TXM_ROPE1_e : dRes_INDEX_ALWAYS_BTI_ROPE_e), 0)) {
         return cPhs_ERROR_e;
     }
 #else
     if (i_this->m0298 == 0xf) {
-        if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Bgn", BGN_BTI_NOT_CUT1), 0)) {
+        if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Bgn", dRes_INDEX_BGN_BTI_NOT_CUT1_e), 0)) {
             return cPhs_ERROR_e;
         }
-    } else if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Always", ALWAYS_BTI_ROPE), 0)) {
+    } else if (!i_this->mLineMat.init(1, 200, (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_ROPE_e), 0)) {
         return cPhs_ERROR_e;
     }
 #endif
@@ -648,7 +641,7 @@ cPhs_State useHeapInit(himo3_class* i_this) {
     }
 
     if (i_this->m0298 == 0) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes("Himo3", HIMO3_BMD_H3_GA);
+        modelData = (J3DModelData*)dComIfG_getObjectRes("Himo3", dRes_INDEX_HIMO3_BMD_H3_GA_e);
         JUT_ASSERT(DEMO_SELECT(1264, 1298), modelData != NULL);
         s32 tmp = 0;
 
@@ -671,7 +664,6 @@ cPhs_State useHeapInit(himo3_class* i_this) {
 
 /* 00001DD4-00002128       .text daHimo3_Create__FP10fopAc_ac_c */
 static cPhs_State daHimo3_Create(fopAc_ac_c* a_this) {
-    /* Nonmatching */
     static dCcD_SrcCyl cc_cyl_src = {
         // dCcD_SrcGObjInf
         {
@@ -760,7 +752,7 @@ static cPhs_State daHimo3_Create(fopAc_ac_c* a_this) {
 
     himo3_class* i_this = (himo3_class*)a_this;
 
-    fopAcM_SetupActor(a_this, himo3_class);
+    fopAcM_ct(a_this, himo3_class);
 
     cPhs_State PVar1 = dComIfG_resLoad(&i_this->mPhase, "Himo3");
     if (PVar1 == cPhs_COMPLEATE_e) {
@@ -859,18 +851,18 @@ static actor_method_class l_daHimo3_Method = {
 };
 
 actor_process_profile_definition g_profile_HIMO3 = {
-    /* LayerID      */ fpcLy_CURRENT_e,
-    /* ListID       */ 0x0008,
-    /* ListPrio     */ fpcPi_CURRENT_e,
-    /* ProcName     */ PROC_HIMO3,
+    /* Layer ID     */ fpcLy_CURRENT_e,
+    /* List ID      */ 0x0008,
+    /* List Prio    */ fpcPi_CURRENT_e,
+    /* Proc Name    */ fpcNm_HIMO3_e,
     /* Proc SubMtd  */ &g_fpcLf_Method.base,
     /* Size         */ sizeof(himo3_class),
-    /* SizeOther    */ 0,
+    /* Size Other   */ 0,
     /* Parameters   */ 0,
     /* Leaf SubMtd  */ &g_fopAc_Method.base,
-    /* Priority     */ PRIO_HIMO3,
+    /* Draw Prio    */ fpcDwPi_HIMO3_e,
     /* Actor SubMtd */ &l_daHimo3_Method,
     /* Status       */ fopAcStts_UNK4000_e | fopAcStts_UNK40000_e,
     /* Group        */ fopAc_ACTOR_e,
-    /* CullType     */ fopAc_CULLBOX_0_e,
+    /* Cull Type    */ fopAc_CULLBOX_0_e,
 };

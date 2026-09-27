@@ -54,7 +54,7 @@ struct RAIN_EFF {
     RAIN_EFF();
     ~RAIN_EFF();
 
-    /* 0x00 */ u8 mStatus;
+    /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ cXyz mBasePos;
     /* 0x1C */ f32 field_0x1c;
@@ -96,7 +96,7 @@ struct SNOW_EFF {
     SNOW_EFF();
     ~SNOW_EFF();
 
-    /* 0x00 */ u8 mStatus;
+    /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ cXyz mBasePos;
     /* 0x1C */ f32 mPosWaveX;
@@ -154,7 +154,10 @@ struct POISON_EFF {
 
     /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPos;
-    /* 0x10 */ u8 field_0x10[0x10];
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1c;
     /* 0x20 */ f32 field_0x20;
     /* 0x24 */ f32 mAlpha;
     /* 0x28 */ f32 mSize;
@@ -211,7 +214,7 @@ struct HOUSI_EFF {
     HOUSI_EFF();
     ~HOUSI_EFF();
 
-    /* 0x00 */ u8 mStatus;
+    /* 0x00 */ s8 mStatus;
     /* 0x04 */ cXyz mPos;
     /* 0x10 */ cXyz mBasePos;
     /* 0x1C */ cXyz mSpeed;
@@ -245,7 +248,7 @@ struct VRKUMO_EFF {
     VRKUMO_EFF();
     ~VRKUMO_EFF();
 
-    /* 0x00 */ u8 mStatus;
+    /* 0x00 */ s8 mStatus;
     /* 0x01 */ u8 field_0x01[0x04 - 0x01];
     /* 0x04 */ cXyz mPosition;
     /* 0x10 */ u8 field_0x10[0x1C - 0x10];
@@ -369,6 +372,7 @@ void dKyw_pwind_cylinder_set(WIND_INFLUENCE*);
 cXyz dKyw_pntwind_get_vecpow(cXyz* pPos);
 void dKyw_evt_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_evt_wind_set_go();
+void dKyw_tact_wind_set(s16 i_windX, s16 i_windY);
 void dKyw_get_AllWind_vec(cXyz* param_0, cXyz* i_direction, f32* i_power);
 cXyz dKyw_get_AllWind_vecpow(cXyz* param_0);
 int dKyw_get_tactwind_dir();

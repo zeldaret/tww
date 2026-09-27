@@ -9,7 +9,6 @@
 #include "JSystem/JAudio/JASBasicWaveBank.h"
 #include "JSystem/JAudio/JASSimpleWaveBank.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include "JSystem/JSupport/JSupport.h"
 
 u32 JASystem::WSParser::sUsedHeapSize;
 
@@ -24,7 +23,7 @@ JASystem::TBasicWaveBank* JASystem::WSParser::createBasicWaveBank(void* stream) 
     TWaveArchive* archiveRaw;
     JKRHeap* heap = TWaveBank::getCurrentHeap();
     const u32 priorFreeSize = heap->getFreeSize();
-    const THeader* header = (THeader*)stream;
+    THeader* header = (THeader*)stream;
     TBasicWaveBank* bank = new (heap, 0) TBasicWaveBank();
     if (bank == NULL) {
         return NULL;
@@ -34,8 +33,8 @@ JASystem::TBasicWaveBank* JASystem::WSParser::createBasicWaveBank(void* stream) 
     bank->setGroupCount(ctrlGroupRaw->mCtrlGroupCount);
     u32 maxSize = 0;
     for (int groupIndex = 0; groupIndex < ctrlGroupRaw->mCtrlGroupCount; groupIndex++) {
-        TCtrlScene* ctrlSceneRaw = JSUConvertOffsetToPtr<TCtrlScene>(header, ctrlGroupRaw->mCtrlSceneOffsets[groupIndex]);
-        TCtrl* ctrlRaw = JSUConvertOffsetToPtr<TCtrl>(header, ctrlSceneRaw->mCtrlOffset);
+        const TCtrlScene* ctrlSceneRaw = JSUConvertOffsetToPtr<TCtrlScene>(header, ctrlGroupRaw->mCtrlSceneOffsets[groupIndex]);
+        const TCtrl* ctrlRaw = JSUConvertOffsetToPtr<TCtrl>(header, ctrlSceneRaw->mCtrlOffset);
         TBasicWaveBank::TWaveGroup* waveGroup = bank->getWaveGroup(groupIndex);
         TWaveArchiveBank* archiveBankRaw = JSUConvertOffsetToPtr<TWaveArchiveBank>(header, header->mArchiveBankOffset);
         archiveRaw = JSUConvertOffsetToPtr<TWaveArchive>(header, archiveBankRaw->mArchiveOffsets[groupIndex]);
@@ -73,10 +72,10 @@ JASystem::TBasicWaveBank* JASystem::WSParser::createBasicWaveBank(void* stream) 
 
 /* 80286E38-80287048       .text createSimpleWaveBank__Q28JASystem8WSParserFPv */
 JASystem::TSimpleWaveBank* JASystem::WSParser::createSimpleWaveBank(void* stream) {
-    const TWaveArchive* archiveRaw;
+    TWaveArchive* archiveRaw;
     JKRHeap* heap = TWaveBank::getCurrentHeap();
     const u32 priorFreeSize = heap->getFreeSize();
-    const THeader* header = (THeader*)stream;
+    THeader* header = (THeader*)stream;
     const TCtrlGroup* ctrlGroupRaw = JSUConvertOffsetToPtr<TCtrlGroup>(header, header->mCtrlGroupOffset);
     if (ctrlGroupRaw->mCtrlGroupCount != 1) {
         return NULL;
@@ -89,7 +88,7 @@ JASystem::TSimpleWaveBank* JASystem::WSParser::createSimpleWaveBank(void* stream
 
     const TCtrlScene* ctrlSceneRaw = JSUConvertOffsetToPtr<TCtrlScene>(header, ctrlGroupRaw->mCtrlSceneOffsets[0]);
     const TCtrl* ctrlRaw = JSUConvertOffsetToPtr<TCtrl>(header, ctrlSceneRaw->mCtrlOffset);
-    const TWaveArchiveBank* archiveBankRaw = JSUConvertOffsetToPtr<TWaveArchiveBank>(header, header->mArchiveBankOffset);
+    TWaveArchiveBank* archiveBankRaw = JSUConvertOffsetToPtr<TWaveArchiveBank>(header, header->mArchiveBankOffset);
     archiveRaw = JSUConvertOffsetToPtr<TWaveArchive>(header, archiveBankRaw->mArchiveOffsets[0]);
     for (int waveIndex = 0; waveIndex < ctrlRaw->mWaveCount; waveIndex++) {
         TCtrlWave* ctrlWaveRaw = JSUConvertOffsetToPtr<TCtrlWave>(header, ctrlRaw->mCtrlWaveOffsets[waveIndex]);

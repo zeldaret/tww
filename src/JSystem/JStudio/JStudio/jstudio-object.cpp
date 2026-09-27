@@ -94,7 +94,6 @@ void JStudio::TAdaptor::adaptor_do_data(const JStudio::TObject* param_0, const v
 
 /* 8026EB18-8026EBB8       .text adaptor_setVariableValue__Q27JStudio8TAdaptorFPQ27JStudio7TObjectUlQ37JStudio4data15TEOperationDataPCvUl */
 void JStudio::TAdaptor::adaptor_setVariableValue(JStudio::TObject* pObject, u32 param_2, JStudio::data::TEOperationData param_3, const void* param_4, u32 param_5) {
-    /* Nonmatching */
     setVarFunc func;
     switch (param_3) {
     case JStudio::data::TEOD_Unknown_01:
@@ -288,8 +287,131 @@ JStudio::TAdaptor_actor::~TAdaptor_actor() {}
 JStudio::TObject_actor::TObject_actor(const JStudio::stb::data::TParse_TBlock_object& param_0, JStudio::TAdaptor_actor* param_1) : TObject(param_0, param_1) {}
 
 /* 8026F47C-8026F7B0       .text do_paragraph__Q27JStudio13TObject_actorFUlPCvUl */
-void JStudio::TObject_actor::do_paragraph(u32, const void*, u32) {
-    /* Nonmatching */
+void JStudio::TObject_actor::do_paragraph(u32 param_1, const void* param_2, u32 param_3) {
+    TAdaptor* adaptor = getAdaptor();
+    if (adaptor == NULL) {
+        return;
+    }
+    typedef void (TAdaptor_actor::*actorParagraphFunc)(JStudio::data::TEOperationData, const void*, u32); 
+
+    u32 uVar1 = (param_1 >> 5);
+    data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1F);
+    u32 u;
+    const u32* pN;
+    actorParagraphFunc pmfn_ = NULL;
+    TVariableValue::TOutput *pOutput;
+    switch (uVar1) {
+        case 57:
+            pmfn_ = &TAdaptor_actor::adaptor_do_SHAPE;
+            goto fun;
+        case 58:
+            pmfn_ = &TAdaptor_actor::adaptor_do_ANIMATION;
+            goto fun;
+        case 67:
+            pmfn_ = &TAdaptor_actor::adaptor_do_ANIMATION_MODE;
+            goto fun;
+        case 76:
+            pmfn_ = &TAdaptor_actor::adaptor_do_TEXTURE_ANIMATION;
+            goto fun;
+        case 78:
+            pmfn_ = &TAdaptor_actor::adaptor_do_TEXTURE_ANIMATION_MODE;
+            goto fun;
+        case 48:
+            pmfn_ = &TAdaptor_actor::adaptor_do_PARENT;
+            goto fun;
+        case 49:
+            pmfn_ = &TAdaptor_actor::adaptor_do_PARENT_NODE;
+            goto fun;
+        case 50:
+            pmfn_ = &TAdaptor_actor::adaptor_do_PARENT_ENABLE;
+            u = 12;
+            pOutput = &JStudio::soovv_actor_PARENT_ENABLE_;
+            goto value_or_fun;
+        case 51:
+            pmfn_ = &TAdaptor_actor::adaptor_do_RELATION;
+            goto fun;
+        case 52:
+            pmfn_ = &TAdaptor_actor::adaptor_do_RELATION_NODE;
+            goto fun;
+        case 53:
+            pmfn_ = &TAdaptor_actor::adaptor_do_RELATION_ENABLE;
+            u = 13;
+            pOutput = &JStudio::soovv_actor_RELATION_ENABLE_;
+            goto value_or_fun;
+        case 59:
+            u = 0;
+            goto value;
+        case 75:
+            u = 1;
+            goto value;
+        case 9:
+            u = 3;
+            goto value;
+        case 10:
+            u = 4;
+            goto value;
+        case 11:
+            u = 5;
+            goto value;
+        case 13:
+            u = 6;
+            goto value;
+        case 14:
+            u = 7;
+            goto value;
+        case 15:
+            u = 8;
+            goto value;
+        case 17:
+            u = 9;
+            goto value;
+        case 18:
+            u = 10;
+            goto value;
+        case 19:
+            u = 11;
+            goto value;
+        case 12:
+            pN = TAdaptor_actor::sauVariableValue_3_TRANSLATION_XYZ;
+            u = 3;
+            goto value_n;
+        case 16:
+            pN = TAdaptor_actor::sauVariableValue_3_ROTATION_XYZ;
+            u = 3;
+            goto value_n;
+        case 20:
+            pN = TAdaptor_actor::sauVariableValue_3_SCALING_XYZ;
+            u = 3;
+            goto value_n;
+        default:
+            return;
+    }
+
+value_or_fun:
+    switch (operation) {
+        case data::TEOD_Unknown_10:
+        case data::TEOD_Unknown_11:
+        case data::TEOD_Unknown_12:
+            adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+            adaptor->adaptor_referVariableValue(u)->setOutput(pOutput);
+            break;
+        default:
+            (((TAdaptor_actor*)adaptor)->*pmfn_)(operation, param_2, param_3);
+            break;
+    }
+    return;
+
+value:
+    adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+    return;
+
+value_n:
+    adaptor->adaptor_setVariableValue_n(this, pN, u, operation, param_2, param_3);
+    return;
+
+fun:
+    (((TAdaptor_actor*)adaptor)->*pmfn_)(operation, param_2, param_3);
+    return;
 }
 
 const u32 JStudio::TAdaptor_ambientLight::sauVariableValue_3_COLOR_RGB[3] = {0, 1, 2};
@@ -302,8 +424,48 @@ JStudio::TAdaptor_ambientLight::~TAdaptor_ambientLight() {}
 JStudio::TObject_ambientLight::TObject_ambientLight(const JStudio::stb::data::TParse_TBlock_object& param_0, JStudio::TAdaptor_ambientLight* param_1) : TObject(param_0, param_1) {}
 
 /* 8026F84C-8026F928       .text do_paragraph__Q27JStudio20TObject_ambientLightFUlPCvUl */
-void JStudio::TObject_ambientLight::do_paragraph(u32, const void*, u32) {
-    /* Nonmatching */
+void JStudio::TObject_ambientLight::do_paragraph(u32 param_1, const void* param_2, u32 param_3) {
+    TAdaptor* adaptor = getAdaptor();
+    if (adaptor == NULL) {
+        return;
+    }
+
+    u32 uVar1 = (param_1 >> 5);
+    data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1F);
+    u32 u;
+    const u32* pN;
+    switch (uVar1) {
+        case 29:
+            u = 0;
+            goto value;
+        case 30:
+            u = 1;
+            goto value;
+        case 31:
+            u = 2;
+            goto value;
+        case 32:
+            u = 3;
+            goto value;
+        case 33:
+            pN = TAdaptor_ambientLight::sauVariableValue_3_COLOR_RGB;
+            u = 3;
+            goto value_n;
+        case 34:
+            pN = TAdaptor_ambientLight::sauVariableValue_4_COLOR_RGBA;
+            u = 4;
+            goto value_n;
+        default:
+            return;
+    }
+
+value:
+    adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+    return;
+
+value_n:
+    adaptor->adaptor_setVariableValue_n(this, pN, u, operation, param_2, param_3);
+    return;
 }
 
 const u32 JStudio::TAdaptor_camera::sauVariableValue_3_POSITION_XYZ[3] = {0, 1, 2};
@@ -317,8 +479,102 @@ JStudio::TAdaptor_camera::~TAdaptor_camera() {}
 JStudio::TObject_camera::TObject_camera(const JStudio::stb::data::TParse_TBlock_object& param_0, JStudio::TAdaptor_camera* param_1) : TObject(param_0, param_1) {}
 
 /* 8026F9C4-8026FBFC       .text do_paragraph__Q27JStudio14TObject_cameraFUlPCvUl */
-void JStudio::TObject_camera::do_paragraph(u32, const void*, u32) {
-    /* Nonmatching */
+void JStudio::TObject_camera::do_paragraph(u32 param_1, const void* param_2, u32 param_3) {
+    TAdaptor* adaptor = getAdaptor();
+    if (adaptor == NULL) {
+        return;
+    }
+    typedef void (TAdaptor_camera::*cameraParagraphFunc)(JStudio::data::TEOperationData, const void*, u32); 
+
+    u32 uVar1 = (param_1 >> 5);
+    data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1F);
+    u32 u;
+    const u32* pN;
+    cameraParagraphFunc pmfn_ = NULL;
+    TVariableValue::TOutput *pOutput;
+    switch (uVar1) {
+        case 48:
+            pmfn_ = &TAdaptor_camera::adaptor_do_PARENT;
+            goto fun;
+        case 49:
+            pmfn_ = &TAdaptor_camera::adaptor_do_PARENT_NODE;
+            goto fun;
+        case 50:
+            pmfn_ = &TAdaptor_camera::adaptor_do_PARENT_ENABLE;
+            u = 10;
+            pOutput = &JStudio::soovv_camera_PARENT_ENABLE_;
+            goto value_or_fun;
+        case 21:
+            u = 0;
+            goto value;
+        case 22:
+            u = 1;
+            goto value;
+        case 23:
+            u = 2;
+            goto value;
+        case 25:
+            u = 3;
+            goto value;
+        case 26:
+            u = 4;
+            goto value;
+        case 27:
+            u = 5;
+            goto value;
+        case 39:
+            u = 6;
+            goto value;
+        case 38:
+            u = 7;
+            goto value;
+        case 40:
+            u = 8;
+            goto value;
+        case 41:
+            u = 9;
+            goto value;
+        case 24:
+            pN = TAdaptor_camera::sauVariableValue_3_POSITION_XYZ;
+            u = 3;
+            goto value_n;
+        case 28:
+            pN = TAdaptor_camera::sauVariableValue_3_TARGET_POSITION_XYZ;
+            u = 3;
+            goto value_n;
+        case 42:
+            pN = TAdaptor_camera::sauVariableValue_2_DISTANCE_NEAR_FAR;
+            u = 2;
+            goto value_n;
+        default:
+            return;
+    }
+
+value_or_fun:
+    switch (operation) {
+        case data::TEOD_Unknown_10:
+        case data::TEOD_Unknown_11:
+        case data::TEOD_Unknown_12:
+            adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+            adaptor->adaptor_referVariableValue(u)->setOutput(pOutput);
+            break;
+        default:
+            (((TAdaptor_camera*)adaptor)->*pmfn_)(operation, param_2, param_3);
+            break;
+    }
+    return;
+
+value:
+    adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+    return;
+
+value_n:
+    adaptor->adaptor_setVariableValue_n(this, pN, u, operation, param_2, param_3);
+    return;
+
+fun:
+    (((TAdaptor_camera*)adaptor)->*pmfn_)(operation, param_2, param_3);
+    return;
 }
 
 const u32 JStudio::TAdaptor_fog::sauVariableValue_3_COLOR_RGB[3] = {0, 1, 2};
@@ -332,8 +588,58 @@ JStudio::TAdaptor_fog::~TAdaptor_fog() {}
 JStudio::TObject_fog::TObject_fog(const JStudio::stb::data::TParse_TBlock_object& param_0, JStudio::TAdaptor_fog* param_1) : TObject(param_0, param_1) {}
 
 /* 8026FC98-8026FD80       .text do_paragraph__Q27JStudio11TObject_fogFUlPCvUl */
-void JStudio::TObject_fog::do_paragraph(u32, const void*, u32) {
-    /* Nonmatching */
+void JStudio::TObject_fog::do_paragraph(u32 param_1, const void* param_2, u32 param_3) {
+    TAdaptor* adaptor = getAdaptor();
+    if (adaptor == NULL) {
+        return;
+    }
+
+    u32 uVar1 = (param_1 >> 5);
+    data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1F);
+    u32 u;
+    const u32* pN;
+    switch (uVar1) {
+        case 29:
+            u = 0;
+            goto value;
+        case 30:
+            u = 1;
+            goto value;
+        case 31:
+            u = 2;
+            goto value;
+        case 32:
+            u = 3;
+            goto value;
+        case 43:
+            u = 4;
+            goto value;
+        case 44:
+            u = 5;
+            goto value;
+        case 33:
+            pN = TAdaptor_fog::sauVariableValue_3_COLOR_RGB;
+            u = 3;
+            goto value_n;
+        case 34:
+            pN = TAdaptor_fog::sauVariableValue_4_COLOR_RGBA;
+            u = 4;
+            goto value_n;
+        case 45:
+            pN = TAdaptor_fog::sauVariableValue_2_RANGE_BEGIN_END;
+            u = 2;
+            goto value_n;
+        default:
+            return;
+    }
+
+value:
+    adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+    return;
+
+value_n:
+    adaptor->adaptor_setVariableValue_n(this, pN, u, operation, param_2, param_3);
+    return;
 }
 
 const u32 JStudio::TAdaptor_light::sauVariableValue_3_COLOR_RGB[3] = {0, 1, 2};
@@ -349,8 +655,115 @@ JStudio::TAdaptor_light::~TAdaptor_light() {}
 JStudio::TObject_light::TObject_light(const JStudio::stb::data::TParse_TBlock_object& param_0, JStudio::TAdaptor_light* param_1) : TObject(param_0, param_1) {}
 
 /* 8026FE1C-80270058       .text do_paragraph__Q27JStudio13TObject_lightFUlPCvUl */
-void JStudio::TObject_light::do_paragraph(u32, const void*, u32) {
-    /* Nonmatching */
+void JStudio::TObject_light::do_paragraph(u32 param_1, const void* param_2, u32 param_3) {
+    TAdaptor* adaptor = getAdaptor();
+    TControl* control;
+    if (adaptor == NULL) {
+        return;
+    }
+    typedef void (TAdaptor_light::*lightParagraphFunc)(JStudio::data::TEOperationData, const void*, u32); 
+
+    control = getControl();
+    u32 uVar1 = (param_1 >> 5);
+    data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1F);
+    u32 u;
+    const u32* pN;
+    lightParagraphFunc pmfn_ = NULL;
+    TVariableValue::TOutput *pOutput;
+    switch (uVar1) {
+        case 54:
+            pmfn_ = &TAdaptor_light::adaptor_do_ENABLE;
+            u = 12;
+            pOutput = &JStudio::soovv_light_ENABLE_;
+            goto value_or_fun;
+        case 55:
+            pmfn_ = &TAdaptor_light::adaptor_do_FACULTY;
+            goto fun;
+        case 29:
+            u = 0;
+            goto value;
+        case 30:
+            u = 1;
+            goto value;
+        case 31:
+            u = 2;
+            goto value;
+        case 32:
+            u = 3;
+            goto value;
+        case 21:
+            u = 4;
+            goto value;
+        case 22:
+            u = 5;
+            goto value;
+        case 23:
+            u = 6;
+            goto value;
+        case 25:
+            u = 7;
+            goto value;
+        case 26:
+            u = 8;
+            goto value;
+        case 27:
+            u = 9;
+            goto value;
+        case 35:
+            u = 10;
+            goto value;
+        case 36:
+            u = 11;
+            goto value;
+        case 33:
+            pN = TAdaptor_light::sauVariableValue_3_COLOR_RGB;
+            u = 3;
+            goto value_n;
+        case 34:
+            pN = TAdaptor_light::sauVariableValue_4_COLOR_RGBA;
+            u = 4;
+            goto value_n;
+        case 24:
+            pN = TAdaptor_light::sauVariableValue_3_POSITION_XYZ;
+            u = 3;
+            goto value_n;
+        case 28:
+            pN = TAdaptor_light::sauVariableValue_3_TARGET_POSITION_XYZ;
+            u = 3;
+            goto value_n;
+        case 37:
+            pN = TAdaptor_light::sauVariableValue_2_DIRECTION_THETA_PHI;
+            u = 2;
+            goto value_n;
+        default:
+            return;
+    }
+
+value_or_fun:
+    switch (operation) {
+        case data::TEOD_Unknown_10:
+        case data::TEOD_Unknown_11:
+        case data::TEOD_Unknown_12:
+            adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+            adaptor->adaptor_referVariableValue(u)->setOutput(pOutput);
+            break;
+        default:
+            (((TAdaptor_light*)adaptor)->*pmfn_)(operation, param_2, param_3);
+            break;
+    }
+    return;
+
+value:
+    adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+    return;
+
+value_n:
+    adaptor->adaptor_setVariableValue_n(this, pN, u, operation, param_2, param_3);
+    return;
+
+fun:
+    (((TAdaptor_light*)adaptor)->*pmfn_)(operation, param_2, param_3);
+    return;
 }
 
 /* 80270058-802700B8       .text __dt__Q27JStudio16TAdaptor_messageFv */
@@ -364,17 +777,17 @@ void JStudio::TObject_message::do_paragraph(u32 param_1, const void* param_2, u3
     TAdaptor* adaptor = getAdaptor();
     if (adaptor != NULL) {
         u32 uVar1 = (param_1 >> 5);
-        param_1 &= 0x1f;
-        u8 temp = param_1; // fakematch?
-        paragraphFunc pmfn_ = NULL;
+        data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1f);
+        typedef void (TAdaptor_message::*messageParagraphFunc)(JStudio::data::TEOperationData, const void*, u32); 
+        messageParagraphFunc pmfn_ = NULL;
         switch (uVar1) {
         case 0x42:
-            pmfn_ = &TObject::do_paragraph;
+            pmfn_ = &TAdaptor_message::adaptor_do_MESSAGE;
             break;
         default:
             return;
         }
-        (((TObject*)adaptor)->*pmfn_)(temp, param_2, param_3);
+        (((TAdaptor_message*)adaptor)->*pmfn_)(operation, param_2, param_3);
     }
 }
 
@@ -393,8 +806,150 @@ JStudio::TAdaptor_particle::~TAdaptor_particle() {}
 JStudio::TObject_particle::TObject_particle(const JStudio::stb::data::TParse_TBlock_object& param_0, JStudio::TAdaptor_particle* param_1) : TObject(param_0, param_1) {}
 
 /* 80270220-802704E4       .text do_paragraph__Q27JStudio16TObject_particleFUlPCvUl */
-void JStudio::TObject_particle::do_paragraph(u32, const void*, u32) {
-    /* Nonmatching */
+void JStudio::TObject_particle::do_paragraph(u32 param_1, const void* param_2, u32 param_3) {
+    TAdaptor* adaptor = getAdaptor();
+    TControl* control;
+    if (adaptor == NULL) {
+        return;
+    }
+    typedef void (TAdaptor_particle::*particleParagraphFunc)(JStudio::data::TEOperationData, const void*, u32); 
+
+    control = getControl();
+    u32 uVar1 = (param_1 >> 5);
+    data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1F);
+    u32 u;
+    const u32* pN;
+    particleParagraphFunc pmfn_ = NULL;
+    TVariableValue::TOutput *pOutput;
+    switch (uVar1) {
+        case 68:
+            pmfn_ = &TAdaptor_particle::adaptor_do_PARTICLE;
+            goto fun;
+        case 48:
+            pmfn_ = &TAdaptor_particle::adaptor_do_PARENT;
+            goto fun;
+        case 49:
+            pmfn_ = &TAdaptor_particle::adaptor_do_PARENT_NODE;
+            goto fun;
+        case 50:
+            pmfn_ = &TAdaptor_particle::adaptor_do_PARENT_ENABLE;
+            u = 17;
+            pOutput = &JStudio::soovv_particle_PARENT_ENABLE_;
+            goto value_or_fun;
+        case 9:
+            u = 0;
+            goto value;
+        case 10:
+            u = 1;
+            goto value;
+        case 11:
+            u = 2;
+            goto value;
+        case 13:
+            u = 3;
+            goto value;
+        case 14:
+            u = 4;
+            goto value;
+        case 15:
+            u = 5;
+            goto value;
+        case 17:
+            u = 6;
+            goto value;
+        case 18:
+            u = 7;
+            goto value;
+        case 19:
+            u = 8;
+            goto value;
+        case 29:
+            u = 9;
+            goto value;
+        case 30:
+            u = 10;
+            goto value;
+        case 31:
+            u = 11;
+            goto value;
+        case 32:
+            u = 12;
+            goto value;
+        case 69:
+            u = 13;
+            goto value;
+        case 70:
+            u = 14;
+            goto value;
+        case 71:
+            u = 15;
+            goto value;
+        case 72:
+            u = 16;
+            goto value;
+        case 46:
+            u = 18;
+            goto value;
+        case 47:
+            u = 19;
+            goto value;
+        case 12:
+            pN = TAdaptor_particle::sauVariableValue_3_TRANSLATION_XYZ;
+            u = 3;
+            goto value_n;
+        case 16:
+            pN = TAdaptor_particle::sauVariableValue_3_ROTATION_XYZ;
+            u = 3;
+            goto value_n;
+        case 20:
+            pN = TAdaptor_particle::sauVariableValue_3_SCALING_XYZ;
+            u = 3;
+            goto value_n;
+        case 33:
+            pN = TAdaptor_particle::sauVariableValue_3_COLOR_RGB;
+            u = 3;
+            goto value_n;
+        case 34:
+            pN = TAdaptor_particle::sauVariableValue_4_COLOR_RGBA;
+            u = 4;
+            goto value_n;
+        case 73:
+            pN = TAdaptor_particle::sauVariableValue_3_COLOR1_RGB;
+            u = 3;
+            goto value_n;
+        case 74:
+            pN = TAdaptor_particle::sauVariableValue_4_COLOR1_RGBA;
+            u = 4;
+            goto value_n;
+        default:
+            return;
+    }
+
+value_or_fun:
+    switch (operation) {
+        case data::TEOD_Unknown_10:
+        case data::TEOD_Unknown_11:
+        case data::TEOD_Unknown_12:
+            adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+            adaptor->adaptor_referVariableValue(u)->setOutput(pOutput);
+            break;
+        default:
+            (((TAdaptor_particle*)adaptor)->*pmfn_)(operation, param_2, param_3);
+            break;
+    }
+    return;
+
+value:
+    adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+    return;
+
+value_n:
+    adaptor->adaptor_setVariableValue_n(this, pN, u, operation, param_2, param_3);
+    return;
+
+fun:
+    (((TAdaptor_particle*)adaptor)->*pmfn_)(operation, param_2, param_3);
+    return;
 }
 
 const u32 JStudio::TAdaptor_sound::sauVariableValue_3_POSITION_XYZ[3] = {0, 1, 2};
@@ -406,30 +961,91 @@ JStudio::TAdaptor_sound::~TAdaptor_sound() {}
 JStudio::TObject_sound::TObject_sound(const JStudio::stb::data::TParse_TBlock_object& param_0, JStudio::TAdaptor_sound* param_1) : TObject(param_0, param_1) {}
 
 /* 80270580-80270778       .text do_paragraph__Q27JStudio13TObject_soundFUlPCvUl */
-void JStudio::TObject_sound::do_paragraph(u32, const void*, u32) {
-    /* Nonmatching */
+void JStudio::TObject_sound::do_paragraph(u32 param_1, const void* param_2, u32 param_3) {
+    TAdaptor* adaptor = getAdaptor();
+    TControl* control;
+    if (adaptor == NULL) {
+        return;
+    }
+    typedef void (TAdaptor_sound::*soundParagraphFunc)(JStudio::data::TEOperationData, const void*, u32); 
+
+    control = getControl();
+    u32 uVar1 = (param_1 >> 5);
+    data::TEOperationData operation = (data::TEOperationData)(param_1 &= 0x1F);
+    u32 u;
+    const u32* pN;
+    soundParagraphFunc pmfn_ = NULL;
+    TVariableValue::TOutput *pOutput;
+    switch (uVar1) {
+        case 60:
+            pmfn_ = &TAdaptor_sound::adaptor_do_SOUND;
+            goto fun;
+        case 56:
+            pmfn_ = &TAdaptor_sound::adaptor_do_LOCATED;
+            u = 5;
+            pOutput = &JStudio::soovv_sound_LOCATED_;
+            goto value_or_fun;
+        case 21:
+            u = 0;
+            goto value;
+        case 22:
+            u = 1;
+            goto value;
+        case 23:
+            u = 2;
+            goto value;
+        case 46:
+            u = 3;
+            goto value;
+        case 47:
+            u = 4;
+            goto value;
+        case 61:
+            u = 6;
+            goto value;
+        case 62:
+            u = 7;
+            goto value;
+        case 63:
+            u = 8;
+            goto value;
+        case 64:
+            u = 9;
+            goto value;
+        case 65:
+            u = 10;
+            goto value;
+        case 24:
+            pN = TAdaptor_sound::sauVariableValue_3_POSITION_XYZ;
+            u = 3;
+            goto value_n;
+        default:
+            return;
+    }
+
+value_or_fun:
+    switch (operation) {
+        case data::TEOD_Unknown_10:
+        case data::TEOD_Unknown_11:
+        case data::TEOD_Unknown_12:
+            adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+            adaptor->adaptor_referVariableValue(u)->setOutput(pOutput);
+            break;
+        default:
+            (((TAdaptor_sound*)adaptor)->*pmfn_)(operation, param_2, param_3);
+            break;
+    }
+    return;
+
+value:
+    adaptor->adaptor_setVariableValue(this, u, operation, param_2, param_3);
+    return;
+
+value_n:
+    adaptor->adaptor_setVariableValue_n(this, pN, u, operation, param_2, param_3);
+    return;
+
+fun:
+    (((TAdaptor_sound*)adaptor)->*pmfn_)(operation, param_2, param_3);
+    return;
 }
-
-/* 80270778-802707D8       .text __dt__Q27JStudio13TObject_soundFv */
-JStudio::TObject_sound::~TObject_sound() {}
-
-/* 802707D8-80270838       .text __dt__Q27JStudio16TObject_particleFv */
-JStudio::TObject_particle::~TObject_particle() {}
-
-/* 80270838-80270898       .text __dt__Q27JStudio15TObject_messageFv */
-JStudio::TObject_message::~TObject_message() {}
-
-/* 80270898-802708F8       .text __dt__Q27JStudio13TObject_lightFv */
-JStudio::TObject_light::~TObject_light() {}
-
-/* 802708F8-80270958       .text __dt__Q27JStudio11TObject_fogFv */
-JStudio::TObject_fog::~TObject_fog() {}
-
-/* 80270958-802709B8       .text __dt__Q27JStudio14TObject_cameraFv */
-JStudio::TObject_camera::~TObject_camera() {}
-
-/* 802709B8-80270A18       .text __dt__Q27JStudio20TObject_ambientLightFv */
-JStudio::TObject_ambientLight::~TObject_ambientLight() {}
-
-/* 80270A18-80270A78       .text __dt__Q27JStudio13TObject_actorFv */
-JStudio::TObject_actor::~TObject_actor() {}
