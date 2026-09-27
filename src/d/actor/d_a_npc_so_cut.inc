@@ -6,7 +6,6 @@
 #include "f_op/f_op_camera.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "d/d_procname.h"
 #include "d/actor/d_a_esa.h"
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_player.h"
@@ -507,7 +506,7 @@ void daNpc_So_c::cutMiniGameStart() {
     mDoAud_seStart(JA_SE_START_WHISTLE);
 
     daPy_py_c* partner = (daPy_py_c*)dComIfGp_getPlayer(1);
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     if (REG8_S(1) == 0) {
         f32 tmp1 = 100.0f;
@@ -802,7 +801,7 @@ void daNpc_So_c::cutMiniGameWarpStart() {
     mBDB = 1;
     mA9C = REG12_S(1) + 10;
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Reset(mBCC, mBC0);
     camera->mCamera.Start();
 }
@@ -839,7 +838,7 @@ void daNpc_So_c::cutMiniGameReturnStart() {
     player->mDemo.setOriginalDemoType();
     player->mDemo.setParam0(0);
 
-    daShip_c* ship = (daShip_c*)fopAcM_SearchByName(PROC_SHIP);
+    daShip_c* ship = (daShip_c*)fopAcM_SearchByName(fpcNm_SHIP_e);
     s16 tmp = mB9C + REG8_S(6);
     player->setPlayerPosAndAngle(&mBA0, tmp);
     ship->initStartPos(&mBA0, mBAC);
@@ -880,7 +879,7 @@ void daNpc_So_c::cutMiniGameReturnProc() {
         mBCC = partner->current.pos;
         mBCC.y += REG0_F(7) + 90.0f;
 
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         camera->mCamera.Reset(mBCC, mBC0);
         camera->mCamera.Start();
         dComIfGp_evmng_cutEnd(mB6C);
@@ -900,7 +899,7 @@ void daNpc_So_c::cutPartnerShipProc() {
 
 /* 00007878-000078E0       .text cutMiniGameWaitStart__10daNpc_So_cFv */
 void daNpc_So_c::cutMiniGameWaitStart() {
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     if (REG8_S(1) == 0) {
         camera->mCamera.Stop();
         camera->mCamera.SetTrimSize(1);
@@ -959,7 +958,7 @@ void daNpc_So_c::cutMiniGamePlTurnProc() {
 void daNpc_So_c::cutMiniGamePlUpStart() {
     mA9C = 30;
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Stop();
     camera->mCamera.SetTrimSize(1);
 }
@@ -981,7 +980,7 @@ void daNpc_So_c::cutMiniGamePlUpProc() {
     mBCC = partner->current.pos;
     mBCC.y += REG0_F(7) + 90.0f;
 
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     camera->mCamera.Set(mBCC, mBC0);
 
     if (cLib_calcTimer(&mA9C) == 0) {
@@ -993,7 +992,7 @@ void daNpc_So_c::cutMiniGamePlUpProc() {
 void daNpc_So_c::initCam() {
     if (mBDE != 1) {
         mBDE = 1;
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
         if (REG8_S(1) == 0) {
             camera->mCamera.Stop();
@@ -1018,7 +1017,7 @@ void daNpc_So_c::initCam() {
 /* 00007E74-00008010       .text moveCam__10daNpc_So_cFv */
 void daNpc_So_c::moveCam() {
     if (REG8_S(1) == 0) {
-        camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         fopAc_ac_c* partner = dComIfGp_getPlayer(1);
         cXyz local_2C;
         cXyz local_20;

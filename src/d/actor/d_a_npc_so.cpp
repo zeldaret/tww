@@ -6,19 +6,17 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_so.h"
 #include "d/d_npc.h"
-#include "d/d_procname.h"
 #include "d/d_snap.h"
 #include "d/d_s_play.h"
 #include "d/actor/d_a_ship.h"
 #include "d/actor/d_a_player.h"
 #include "d/actor/d_a_tag_so.h"
 #include "d/actor/d_a_esa.h"
-#include "d/d_priority.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_camera.h"
-#include "d/res/res_so.h"
+#include "res/Object/So.h"
 
 class daNpc_So_HIO_c : public mDoHIO_entry_c {
 public:
@@ -159,7 +157,7 @@ static void* searchEsa_CB(void* arg1, void* i_this) {
 
 /* 000002D0-000002F8       .text _searchEsa__10daNpc_So_cFP10fopAc_ac_c */
 void* daNpc_So_c::_searchEsa(fopAc_ac_c* arg1) {
-    if (fopAcM_GetName(arg1) == PROC_ESA) {
+    if (fopAcM_GetName(arg1) == fpcNm_ESA_e) {
         esa_class* esa = static_cast<esa_class*>(arg1);
         if (esa->field_0x298 == 0) {
             return esa;
@@ -226,7 +224,7 @@ static void* searchTagSo_CB(void* arg1, void* i_this) {
 
 /* 000004DC-0000054C       .text _searchTagSo__10daNpc_So_cFP10fopAc_ac_c */
 void* daNpc_So_c::_searchTagSo(fopAc_ac_c* arg1) {
-    if (fopAcM_GetName(arg1) == PROC_TAG_SO) {
+    if (fopAcM_GetName(arg1) == fpcNm_TAG_SO_e) {
         daTag_So_c* tag_so = static_cast<daTag_So_c*>(arg1);
         u8 tmp = tag_so->m290;
         if (mA79 == tmp && tag_so->m298 != 1) {
@@ -248,7 +246,7 @@ static void* searchMinigameTagSo_CB(void* arg1, void* i_this) {
 
 /* 00000578-000005C8       .text _searchMinigameTagSo__10daNpc_So_cFP10fopAc_ac_c */
 void* daNpc_So_c::_searchMinigameTagSo(fopAc_ac_c* arg1) {
-    if (fopAcM_GetName(arg1) == PROC_TAG_SO) {
+    if (fopAcM_GetName(arg1) == fpcNm_TAG_SO_e) {
         daTag_So_c* tag_so = static_cast<daTag_So_c*>(arg1);
         if (tag_so->m298 == 1) {
             mB90 = tag_so->current.pos;
@@ -278,7 +276,7 @@ s16 daNpc_So_c::XyCheckCB(int arg1) {
         return 0;
     }
 
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getSelectItem(arg1) == dItem_BIRD_BAIT_5_e) {
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) && dComIfGp_getSelectItem(arg1) == dItemNo_BIRD_BAIT_5_e) {
         return 1;
     }
 
@@ -305,7 +303,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 
 /* 0000070C-00000A20       .text _createHeap__10daNpc_So_cFv */
 BOOL daNpc_So_c::_createHeap() {
-    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, SO_BDL_SO));
+    J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BDL_SO_e));
     JUT_ASSERT(DEMO_SELECT(537, 509), modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(modelData, NULL, NULL, NULL, ~J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0x80000, 0x11020022);
@@ -315,7 +313,7 @@ BOOL daNpc_So_c::_createHeap() {
     mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
 
 #if VERSION > EVRSION_DEMO
-    J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, SO_BTP_SO));
+    J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BTP_SO_e));
     JUT_ASSERT(528, btp != NULL);
 
     if (!mBtpAnm.init(modelData, btp, 1, 0, 1.0f, 0, -1, false, 0)) {
@@ -332,7 +330,7 @@ BOOL daNpc_So_c::_createHeap() {
     modelData->getJointTree().getJointNodePointer(11)->setCallBack(nodeControl_CB);
     modelData->getJointTree().getJointNodePointer(1)->setCallBack(nodeControl_CB);
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, SO_BDL_SO_FUDE);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BDL_SO_FUDE_e);
     JUT_ASSERT(DEMO_SELECT(568, 545), modelData != NULL);
 
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
@@ -769,7 +767,13 @@ void daNpc_So_c::setAttention() {
 
 /* 00001430-00001524       .text setAnm__10daNpc_So_cFScb */
 void daNpc_So_c::setAnm(signed char arg1, bool arg2) {
-    static const int a_anm_bcks_tbl[] = {SO_BCK_SO_WAIT01, SO_BCK_SO_SWIM01, SO_BCK_SO_TALK01, SO_BCK_SO_JUMP, SO_BCK_SO_TALK02};
+    static const int a_anm_bcks_tbl[] = {
+         dRes_INDEX_SO_BCK_SO_WAIT01_e,
+         dRes_INDEX_SO_BCK_SO_SWIM01_e,
+         dRes_INDEX_SO_BCK_SO_TALK01_e,
+         dRes_INDEX_SO_BCK_SO_JUMP_e,
+         dRes_INDEX_SO_BCK_SO_TALK02_e,
+    };
     static const dLib_anm_prm_c a_anm_prm_tbl[] = {
         {0, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
         {0, -1, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
@@ -1026,7 +1030,7 @@ void daNpc_So_c::modeEventFirstWait() {
         current.pos = ship->current.pos;
         f32 abs = (ship->current.pos - mAAC).absXZ();
 
-        if (abs >= l_HIO.m54 && dComIfGs_checkGetItem(NORMAL_SAIL)) {
+        if (abs >= l_HIO.m54 && dComIfGs_checkGetItem(dItemNo_SAIL_e)) {
             if (dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_DRC) && dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
                 modeProc(daNpc_So_c::PROC_INIT_e, daNpc_So_c::MODE_EVENT_FIRST_e);
             }
@@ -1155,7 +1159,7 @@ void daNpc_So_c::modeEventBow() {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3A10);
 #endif
 
-            camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+            camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
             camera->mCamera.Reset(mBCC, mBC0);
             camera->mCamera.Start();
 
@@ -1749,8 +1753,8 @@ void daNpc_So_c::createInit() {
     gravity = -2.5f;
     attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x22;
     attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x22;
-    eventInfo.mpCheckCB = daNpc_So_XyCheckCB;
-    eventInfo.mpEventCB = daNpc_So_XyEventCB;
+    eventInfo.setXyCheckCB(daNpc_So_XyCheckCB);
+    eventInfo.setXyEventCB(daNpc_So_XyEventCB);
     mEventCut.setActorInfo2("NpcSo", this);
 }
 
@@ -1778,7 +1782,7 @@ cPhs_State daNpc_So_c::_create() {
 
 #if VERSION == VERSION_DEMO
         if ((strcmp(dComIfGp_getStartStageName(), "sea") == 0 && fopAcM_GetRoomNo(this) != dIsleRoom_DragonRoostIsland_e &&
-             !dComIfGs_checkGetItem(NORMAL_SAIL)) ||
+             !dComIfGs_checkGetItem(dItemNo_SAIL_e)) ||
             dComIfGs_isStageBossEnemy(dSv_save_c::STAGE_DRC) == 0)
         {
             return cPhs_ERROR_e;
