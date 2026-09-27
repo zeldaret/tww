@@ -23,11 +23,11 @@ BOOL daObjMsdanSub2::Act_c::Create() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -1500.0f, -1000.0f, -1500.0f, 1500.0f, 1000.0f, 1500.0f);
 
-    s32 val = prm_get_size();
+    s32 val = prm_get_swSave();
     BOOL isSwitch = dComIfGs_isSwitch(val, fopAcM_GetHomeRoomNo(this));
 
     if (isSwitch) {
-        if (!(prm_get_swSave() & 1)) {
+        if (!(prm_get_objNo() & 1)) {
             current.pos.x = home.pos.x + cM_scos(current.angle.y) * 600.0f;
             current.pos.z = home.pos.z + cM_ssin(current.angle.y) * 600.0f;
         } else {
@@ -60,7 +60,7 @@ cPhs_State daObjMsdanSub2::Act_c::Mthd_Create() {
             JUT_ASSERT(0x91, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
         }
 
-        u32 val = prm_get_size();
+        u32 val = prm_get_swSave();
 
         if (dComIfGs_isSwitch(val, fopAcM_GetHomeRoomNo(this)) && mpBgW != NULL) {
             if (mpBgW->ChkUsed()) {
@@ -107,7 +107,7 @@ void daObjMsdanSub2::Act_c::init_mtx() {
 
 /* 00000598-0000090C       .text Execute__Q214daObjMsdanSub25Act_cFPPA3_A4_f */
 BOOL daObjMsdanSub2::Act_c::Execute(Mtx** i_mtx) {
-    s32 var = prm_get_size();
+    s32 var = prm_get_swSave();
     BOOL isSwitch = dComIfGs_isSwitch(var, fopAcM_GetHomeRoomNo(this));
 
     if (isSwitch) {
@@ -123,8 +123,8 @@ BOOL daObjMsdanSub2::Act_c::Execute(Mtx** i_mtx) {
             field_0x2DC += 10.0f;
             field_0x2D8 += field_0x2DC;
 
-            s32 swSave = prm_get_swSave();
-            if (field_0x2D4 == swSave) {
+            s32 objNo = prm_get_objNo();
+            if (field_0x2D4 == objNo) {
                 if ((field_0x2D4 & 1) == 0) {
                     current.pos.x = home.pos.x + field_0x2D8 * cM_scos(current.angle.y);
                     current.pos.z = home.pos.z + field_0x2D8 * cM_ssin(current.angle.y);
@@ -137,7 +137,7 @@ BOOL daObjMsdanSub2::Act_c::Execute(Mtx** i_mtx) {
             }
 
             if (field_0x2D8 >= 600.0f) {
-                if (field_0x2D4 == prm_get_swSave()) {
+                if (field_0x2D4 == prm_get_objNo()) {
                     if ((field_0x2D4 & 1) == 0) {
                         current.pos.x = home.pos.x + cM_scos(current.angle.y) * 600.0f;
                         current.pos.z = home.pos.z + cM_ssin(current.angle.y) * 600.0f;

@@ -6,8 +6,8 @@
 namespace daObjMsdanSub2 {
     class Act_c : public dBgS_MoveBgActor {
     public:
-        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-        s32 prm_get_size() const { return daObj::PrmAbstract(this, PRM_SIZE_W, PRM_SIZE_H); }
+        s32 prm_get_objNo() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SIZE_W, PRM_SIZE_H); }
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
