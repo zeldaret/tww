@@ -452,6 +452,7 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
 
             yPos -= yStep;
         }
+        GXEnd();
 
         xPos += xStep;
     }
@@ -538,6 +539,7 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
 
             yPos -= yStep;
         }
+        GXEnd();
 
         xPos += xStep;
     }
