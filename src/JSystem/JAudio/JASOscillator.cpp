@@ -10,7 +10,8 @@
 #include "JSystem/JAudio/JASRate.h"
 #include "dolphin/os/OS.h"
 #include "dolphin/types.h"
-#include "math.h"
+
+#include <cmath>
 
 s16 JASystem::TOscillator::oscTableForceStop[] = {
     0, 15, 0,

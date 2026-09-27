@@ -1,0 +1,40 @@
+#ifndef MSL_CMATH_H_
+#define MSL_CMATH_H_
+
+#include "math.h"
+
+namespace std {
+    using ::sqrt;
+    using ::fabsf;
+    using ::abs;
+    using ::fmodf;
+    using ::atan2f;
+    inline float sinf(float x) { return sin(x); }
+    inline float cosf(float x) { return cos(x); }
+    inline float tanf(float x) { return tan(x); }
+    using ::sqrtf;
+    using ::abs;
+    using ::labs;
+    using ::acos;
+    using ::acosf;
+    using ::asin;
+    using ::atan;
+    using ::atan2;
+    using ::ceil;
+    using ::copysign;
+    using ::cos;
+    using ::exp;
+    using ::fabs;
+    using ::floor;
+    using ::fmod;
+    using ::frexp;
+    using ::ldexp;
+    using ::modf;
+    using ::pow;
+    using ::sin;
+    using ::tan;
+
+    inline float abs(float f) { return fabsf(f); }
+}; // namespace std
+
+#endif /* MSL_CMATH_H_ */

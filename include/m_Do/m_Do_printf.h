@@ -1,8 +1,9 @@
 #ifndef M_DO_M_DO_PRINTF_H
 #define M_DO_M_DO_PRINTF_H
 
-#include "stdarg.h"
 #include "m_Do/m_Do_main.h"
+
+#include <cstdarg>
 
 extern "C" {
     void OSReportDisable();

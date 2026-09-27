@@ -720,7 +720,7 @@ void daOship_c::modeDelete() {
 
             f32 temp2 = cLib_addCalc(&current.pos.y, water_height2, 0.02f, 50.0f, 10.0f);
             
-            if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f && mSwitchA != 0xFF) {
+            if (s16(std::abs((f32)temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f && mSwitchA != 0xFF) {
                 dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
                 daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(fpcNm_Salvage_e);
                 salvage_p->onSalvageForOship(this);
@@ -746,7 +746,7 @@ void daOship_c::modeDelete() {
 
         f32 temp2 = cLib_addCalc(&current.pos.y, water_height2, 0.02f, 50.0f, 10.0f);
 
-        if (s16(std::abs(temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f) {
+        if (s16(std::abs((f32)temp)) <= 0x100 && std::fabsf(temp2 - water_height) < 500.0f) {
             if (mSwitchA != 0xFF) {
                 dComIfGs_onSwitch(mSwitchA, fopAcM_GetRoomNo(this));
                 daSalvage_c* salvage_p = (daSalvage_c *) fopAcM_SearchByName(fpcNm_Salvage_e);

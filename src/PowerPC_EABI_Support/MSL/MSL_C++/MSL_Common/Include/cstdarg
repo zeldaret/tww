@@ -1,0 +1,14 @@
+#ifndef _MSL_COMMON_CSTDARG_H
+#define _MSL_COMMON_CSTDARG_H
+
+#include "stdarg.h"
+
+namespace std {
+
+struct __tag_va_List {
+    va_list list;
+};
+
+}
+
+#endif /* _MSL_COMMON_CSTDARG_H */

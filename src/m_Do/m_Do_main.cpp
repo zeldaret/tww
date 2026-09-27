@@ -13,7 +13,6 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "JSystem/JUtility/JUTReport.h"
-#include "string.h"
 #include "c/c_dylink.h"
 #include "d/d_com_inf_game.h"
 #include "f_ap/f_ap_game.h"
@@ -26,7 +25,9 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_machine.h"
 #include "m_Do/m_Do_printf.h"
-#include <stdio.h>
+
+#include <cstring>
+
 
 /* 800056E0-80005748       .text version_check__Fv */
 void version_check() {

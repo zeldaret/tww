@@ -9,6 +9,8 @@
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/JMath/JMATrigonometric.h"
 
+#include <cmath>
+
 // This symbol needs to go in .data, but as it's only 8 bytes long, it would normally go in .sdata or .sdata2.
 // But if the array doesn't have a size specified in its declaration, and its definition comes *after* it gets used,
 // that forces it into .data instead because the size is unknown when it's used. Even const is ignored.

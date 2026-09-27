@@ -8,7 +8,9 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "stdio.h"
+
+#include <stdio.h>
+
 
 void dMsg2_messageDataInit(sub_msg2_class* i_Msg, int);
 void dMsg2_textPosition(sub_msg2_class* i_Msg, u8 i_index);

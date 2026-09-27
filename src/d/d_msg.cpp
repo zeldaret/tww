@@ -18,7 +18,9 @@
 #include "dolphin/types.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_lib.h"
+
 #include <stdio.h>
+
 
 class J2DTextBox;
 struct fopMsgM_pane_class;

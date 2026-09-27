@@ -14,7 +14,8 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "DynamicLink.h"
 #include "dolphin/os/OS.h"
-#include "string.h"
+
+#include <cstring>
 
 DynamicModuleControlBase * DMC[fpcNm_MAX_NUM_e];
 #if VERSION == VERSION_DEMO

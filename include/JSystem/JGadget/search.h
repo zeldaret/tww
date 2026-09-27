@@ -1,9 +1,11 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#include <iterator.h>
-#include <functional.h>
-#include <algorithm.h>
+#include <iterator>
+#include <functional>
+#include <algorithm>
+
+#include "dolphin/types.h"
 
 namespace JGadget {
 

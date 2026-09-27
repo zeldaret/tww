@@ -40,11 +40,6 @@ inline int toupper(int c) { return (c == -1 ? -1 : (int)__upper_map[(unsigned ch
 #ifdef __cplusplus
 };
 
-namespace std {
-inline int tolower(int c) { return (c == -1 ? -1 : (int)__lower_map[(unsigned char)c]); }
-using ::toupper;
-}; // namespace std
-
 #endif
 
 #endif /* _MSL_COMMON_CTYPE_H */

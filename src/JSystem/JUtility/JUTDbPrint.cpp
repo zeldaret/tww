@@ -9,8 +9,9 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTVideo.h"
-#include "stdio.h"
-#include "stdarg.h"
+
+#include <stdio.h>
+#include <cstdarg>
 
 /* 802C328C-802C32D4       .text __ct__10JUTDbPrintFP7JUTFontP7JKRHeap */
 JUTDbPrint::JUTDbPrint(JUTFont* pFont, JKRHeap* pHeap) {

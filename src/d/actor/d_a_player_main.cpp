@@ -7676,7 +7676,7 @@ BOOL daPy_lk_c::procLargeDamage_init(int param_1, int param_2, s16 param_3, s16 
             current.angle.y = cM_atan2s(damage_vec->x, damage_vec->z);
         }
         sVar3 = current.angle.y - shape_angle.y;
-        if (std::abs(sVar3) < 0x2000) {
+        if (std::abs((f32)sVar3) < 0x2000) {
             if (sVar3 >= 0) {
                 sVar3 = 0x2000;
             } else {

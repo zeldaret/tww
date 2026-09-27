@@ -6,7 +6,6 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_com_inf_game.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "string.h"
 #include "SSystem/SComponent/c_phase.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/d_com_lib_game.h"
@@ -23,6 +22,8 @@
 #include "m_Do/m_Do_audio.h"
 #include "d/actor/d_a_arrow.h"
 #include "d/actor/d_a_ship.h"
+
+#include <cstring>
 
 dComIfG_inf_c g_dComIfG_gameInfo;
 

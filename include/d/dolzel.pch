@@ -10,7 +10,7 @@
 #endif
 
 // Fixes weak .data
-#include "math.h" // IWYU pragma: export
+#include <cmath> // IWYU pragma: export
 #include "JSystem/J3DGraphBase/J3DMatBlock.h" // IWYU pragma: export
 #include "JSystem/J3DGraphAnimator/J3DJoint.h" // IWYU pragma: export
 

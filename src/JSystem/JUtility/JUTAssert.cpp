@@ -9,8 +9,10 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
-#include "stdio.h"
+
 #include "dolphin/vi/vi.h"
+
+#include <stdio.h>
 
 namespace JUTAssertion {
     namespace {

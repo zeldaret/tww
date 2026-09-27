@@ -4,9 +4,10 @@
 //
 
 #include "JSystem/JSystem.h" // IWYU pragma: keep
-#include <algorithm.h>
 
 #include "JSystem/JGadget/linklist.h"
+
+#include <algorithm>
 
 /* 802BFC00-802BFC3C       .text __dt__Q27JGadget13TNodeLinkListFv */
 JGadget::TNodeLinkList::~TNodeLinkList() {

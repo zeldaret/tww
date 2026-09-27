@@ -2,8 +2,8 @@
 #define _MSL_COMMON_STRING_H
 
 #include "stddef.h"
+
 #include "extras.h"
-#include "global.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,12 +28,6 @@ size_t strlen(const char* str);
 
 #ifdef __cplusplus
 };
-
-
-namespace std {
-using ::strlen;
-using ::strrchr;
-}; // namespace std
 #endif
 
 #endif /* _MSL_COMMON_STRING_H */

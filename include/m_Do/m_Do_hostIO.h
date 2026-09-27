@@ -2,7 +2,7 @@
 #define M_DO_M_DO_HOSTIO_H
 
 #include "dolphin/types.h"
-#include <string.h>
+#include <cstring>
 
 // move JOR stuff later
 class JOREventListener;
@@ -57,7 +57,7 @@ public:
     ~mDoHIO_child_c() {}
 
     const char* getName() { return mName; }
-    void setName(const char* i_name) { strncpy(mName, i_name, sizeof(mName)); }
+    void setName(const char* i_name) { std::strncpy(mName, i_name, sizeof(mName)); }
     JORReflexible* getPt() { return mPt; }
     void setPt(JORReflexible* i_pt) { mPt = i_pt; }
 

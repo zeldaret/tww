@@ -4,6 +4,7 @@
 #include "d/d_com_inf_game.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
+
 #include <stdio.h>
 
 /* 800C8498-800C84B4       .text __ct__16dDlst_2DNumber_cFv */

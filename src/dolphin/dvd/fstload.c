@@ -1,6 +1,7 @@
 #include "dolphin/dvd/fstload.h"
 #include "dolphin/os/OS.h"
-#include "string.h"
+
+#include <string.h>
 
 // .bss
 static unsigned char bb2Buf[63]; // size: 0x3F, address: 0x0
