@@ -8,17 +8,56 @@
 
 /* 00000078-0000024C       .text Mthd_Create__Q211daObjMsdan25Act_cFv */
 cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
-    /* Nonmatching */
+    fopAcM_SetupActor(this, daObjMsdan2::Act_c);
+
+    cXyz pos = current.pos;
+    csXyz angle = current.angle;
+    angle.y += 0x8000;
+    pos.y += 400.0f;
+    for (int i = 0; i < 16; i++) {
+        pos.x += 50.0f * cM_ssin(current.angle.y);
+        pos.z += 50.0f * cM_scos(current.angle.y);
+        fopAcM_create(fpcNm_Obj_MsdanSub2_e, (i << 8) + prm_get_swSave(), &pos, current.roomNo, &angle);
+    }
+
+    mEventIdx = dComIfGp_evmng_getEventIdx("Msdan2");
+    if (fopAcM_isSwitch(this, prm_get_swSave())) {
+        mMode = 3;
+    } else {
+        mMode = 0;
+    }
+    return cPhs_COMPLEATE_e;
 }
 
 /* 0000024C-00000344       .text Mthd_Execute__Q211daObjMsdan25Act_cFv */
 BOOL daObjMsdan2::Act_c::Mthd_Execute() {
-    /* Nonmatching */
+    switch (mMode) {
+    case 0:
+        if (fopAcM_isSwitch(this, prm_get_swSave())) {
+            fopAcM_orderOtherEventId(this, mEventIdx);
+            mMode = 1;
+        }
+        break;
+    case 1:
+        if (eventInfo.checkCommandDemoAccrpt()) {
+            mMode = 2;
+        }
+        break;
+    case 2:
+        if (dComIfGp_evmng_endCheck(mEventIdx)) {
+            dComIfGp_event_reset();
+            mMode = 3;
+        }
+        break;
+    case 3:
+        break;
+    }
+    return TRUE;
 }
 
 /* 00000344-0000034C       .text Mthd_Delete__Q211daObjMsdan25Act_cFv */
 BOOL daObjMsdan2::Act_c::Mthd_Delete() {
-    /* Nonmatching */
+    return TRUE;
 }
 
 namespace daObjMsdan2 {
