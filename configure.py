@@ -918,7 +918,7 @@ config.libs = [
         [
             Object(Matching,    "JSystem/JMessage/data.cpp"),
             Object(Matching,    "JSystem/JMessage/control.cpp"),
-            Object(NonMatching, "JSystem/JMessage/processor.cpp"),
+            Object(MatchingFor("GZLE01"), "JSystem/JMessage/processor.cpp"),
             Object(NonMatching, "JSystem/JMessage/resource.cpp"),
         ],
     ),
