@@ -31,7 +31,6 @@
 
 /* 00000078-00000128       .text set_mtx__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::set_mtx() {
-    /* Nonmatching */
     Quaternion temp;
     mpModel->setBaseScale(scale);
     mDoMtx_stack_c::transS(current.pos);
@@ -44,7 +43,6 @@ void daObjMagmarock::Act_c::set_mtx() {
 
 /* 00000128-00000258       .text demo_move__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::demo_move() {
-    /* Nonmatching */
     if (dComIfGs_isEventBit(0x380) || m29f != NULL) {
         return;
     }
@@ -107,7 +105,6 @@ void daObjMagmarock::Act_c::ControlEffect() {
 
 /* 0000044C-00000560       .text play_anim__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::play_anim() {
-    /* Nonmatching: regalloc */
     if (m44c > 375 && m438 > 0.0f) {
         m438 = m438 - 1.0f;
     } else if ((m44c < 15 || m44c > 60) && m438 < M_brk->getFrameMax()) {
@@ -129,7 +126,6 @@ void daObjMagmarock::Act_c::appear_proc_init() {
 
 /* 0000058C-000005EC       .text appear_proc__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::appear_proc() {
-    /* Nonmatching */
     if (m448 == 10) {
         dComIfG_Bgsp()->Regist(mpBgW, this);
     }
@@ -432,7 +428,6 @@ void daObjMagmarock::Act_c::calc_ground_quat() {
 
 /* 000017DC-0000198C       .text Create__Q214daObjMagmarock6MethodFPv */
 cPhs_State daObjMagmarock::Method::Create(void *i_this) {
-    /* Nonmatching */
     daObjMagmarock::Act_c* pthis = (Act_c*)i_this;
     fopAcM_ct(pthis, Act_c);
     cPhs_State ret = dComIfG_resLoad(&pthis->mPhase, daObjMagmarock::Act_c::M_arcname);
@@ -463,7 +458,6 @@ BOOL daObjMagmarock::Method::Delete(void *i_this) {
 
 /* 00001B14-00001B38       .text Execute__Q214daObjMagmarock6MethodFPv */
 BOOL daObjMagmarock::Method::Execute(void *i_this) {
-    /* Nonmatching */
     Act_c* pthis = (Act_c*)i_this;
     return pthis->_execute();
 }
