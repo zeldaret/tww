@@ -463,6 +463,71 @@ void dPa_smokePcallBack::execute(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
 /* 8007BCB4-8007C380       .text draw__18dPa_smokePcallBackFP14JPABaseEmitterP15JPABaseParticle */
 void dPa_smokePcallBack::draw(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
     /* Nonmatching */
+    JGeometry::TVec3<f32> local_168;
+    ptcl->getGlobalPosition(local_168);
+    f32 f30 = JMASSin(ptcl->getDrawParamPPtr()->mRotateAngle);
+    f32 f29 = JMASCos(ptcl->getDrawParamPPtr()->mRotateAngle);
+    f32 f15 = ptcl->getDrawParamPPtr()->mScaleX * 2.0f * JPADraw::cb.mGlobalScaleX;
+    f32 f31 = ptcl->getDrawParamPPtr()->mScaleY * 2.0f * JPADraw::cb.mGlobalScaleY;
+    f32 f14 = -(f15 * emtr->getPivotX() * 0.5f);
+    f15 += f14;
+    f32 f16 = -(f31 * emtr->getPivotY() * 0.5f);
+    f32 f17 = f31 + f16;
+    u8 r30 = emtr->getGlobalAlpha();
+    MtxP r29 = JPADraw::cb.mDrawMtxPtr;
+    MTXMultVec(r29, &local_168, &local_168);
+    f32 f28 = f29 * f14 - f30 * f17 + local_168.x;
+    f32 f27 = f29 * f17 + f30 * f14 + local_168.y;
+    f32 local_134 = f29 * (f15 + f14) - f30 * f17 + local_168.x;
+    f32 local_138 = f30 * (f15 + f14) + f29 * f17 + local_168.y;
+    f32 local_13c = f29 * (f15 + f14) - f30 * f16 + local_168.x;
+    f32 local_140 = f30 * (f15 + f14) + f29 * f16 + local_168.y;
+    f32 local_144 = f29 * f14 - f30 * f16 + local_168.x;
+    f32 local_148 = f29 * f16 + f30 * f14 + local_168.y;
+    JGeometry::TVec3<f32> norm1(r29[0][3] - local_168.x, r29[1][3] - local_168.y, r29[2][3] - local_168.z); // f29, f30, f26
+    JGeometry::TVec3<f32> norm2(f28 - local_168.x, f27 - local_168.y, local_168.z - local_168.z); // f25, f24, f23
+    JGeometry::TVec3<f32> norm3(local_134 - local_168.x, local_138 - local_168.y, local_168.z - local_168.z); // f22, f21, f20
+    JGeometry::TVec3<f32> norm4(local_13c - local_168.x, local_140 - local_168.y, local_168.z - local_168.z); // f19, f18, f17,
+    JGeometry::TVec3<f32> norm5(local_144 - local_168.x, local_148 - local_168.y, local_168.z - local_168.z); // f16, f15, f14,
+    norm1.normalize();
+    norm2.normalize();
+    norm3.normalize();
+    norm4.normalize();
+    norm5.normalize();
+    GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, 6);
+
+    GXPosition3f32(local_168.x, local_168.y, local_168.z);
+    GXNormal3f32(norm1.x, norm1.y, norm1.z);
+    GXColor4x8(255, 255, 255, r30);
+    GXTexCoord2f32(0.5f, 0.5f);
+
+    GXPosition3f32(f28, f27, local_168.z);
+    GXNormal3f32(norm2.x, norm2.y, norm2.z);
+    GXColor4x8(255, 255, 255, r30);
+    GXTexCoord2f32(0.0f, 0.0f);
+
+    GXPosition3f32(local_134, local_138, local_168.z);
+    GXNormal3f32(norm3.x, norm3.y, norm3.z);
+    GXColor4x8(255, 255, 255, r30);
+    GXTexCoord2f32(1.0f, 0.0f);
+
+    GXPosition3f32(local_13c, local_140, local_168.z);
+    GXNormal3f32(norm4.x, norm4.y, norm4.z);
+    GXColor4x8(255, 255, 255, r30);
+    GXTexCoord2f32(1.0f, 1.0f);
+
+    GXPosition3f32(local_144, local_148, local_168.z);
+    GXNormal3f32(norm5.x, norm5.y, norm5.z);
+    GXColor4x8(255, 255, 255, r30);
+    GXTexCoord2f32(0.0f, 1.0f);
+
+    GXPosition3f32(f28, f27, local_168.z);
+    GXNormal3f32(norm2.x, norm2.y, norm2.z);
+    GXColor4x8(255, 255, 255, r30);
+    GXTexCoord2f32(0.0f, 0.0f);
+
+    GXEnd();
+    ptcl->setInvisibleParticleFlag();
 }
 
 /* 8007C380-8007C3B0       .text draw__22dPa_selectTexEcallBackFP14JPABaseEmitter */
@@ -1089,6 +1154,40 @@ void dPa_waveEcallBack::executeAfter(JPABaseEmitter* emitter) {
 /* 8007E484-8007E804       .text draw__17dPa_waveEcallBackFP14JPABaseEmitter */
 void dPa_waveEcallBack::draw(JPABaseEmitter* emitter) {
     /* Nonmatching */
+    u32 r26 = emitter->getParticleList()->getNumLinks();
+    JGeometry::TVec3<f32> globalTranslation;
+    emitter->getGlobalTranslation(globalTranslation);
+    f32 f27 = 1.0f / (r26 - 1);
+    if (r26 < 2) {
+        return;
+    }
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXSetMisc(GX_MT_XF_FLUSH, 8);
+    GXColor local_ec;
+    GXColor local_f0;
+    dKy_get_seacolor(&local_ec, &local_f0);
+    local_ec.a = 255;
+    local_f0.a = 255;
+    GXSetTevColor(GX_TEVREG0, local_ec);
+    GXSetTevColor(GX_TEVREG1, local_f0);
+    cXyz* collapsePos = mCollapsePos;
+    for (int i = 0; i < 2; i++, collapsePos++) {
+        f32 f28 = 0.0f;
+        JGeometry::TVec3<f32> local_b8 = (*(JGeometry::TVec3<f32>*)&mRotMtx[0]) * collapsePos->x + (*(JGeometry::TVec3<f32>*)&mRotMtx[1]) * collapsePos->y + (*(JGeometry::TVec3<f32>*)&mRotMtx[2]) * collapsePos->z;
+
+        GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, r26 + 1);
+        GXPosition3f32(globalTranslation.x + local_b8.x, globalTranslation.y + local_b8.y, globalTranslation.z + local_b8.z);
+        GXTexCoord2f32(0.5f, 0.5f);
+        for (JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst(); link != emitter->getParticleList()->getEnd(); link = link->getNext()) {
+            JPABaseParticle* particle = link->getObject();
+            GXPosition3f32(particle->mGlobalPosition.x, particle->mGlobalPosition.y, particle->mGlobalPosition.z);
+            GXTexCoord2f32(f28, 1.0f);
+            f28 += f27;
+        }
+        GXEnd();
+    }
+    GXSetMisc(GX_MT_XF_FLUSH, 0);
 }
 
 /* 8007E804-8007E81C       .text setup__19dPa_splashEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
