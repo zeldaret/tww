@@ -6,9 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_magmarock.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
-#include "JSystem/JGeometry.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "JSystem/JMath/JMath.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_bg_s.h"
@@ -23,7 +21,6 @@
 #include "dolphin/gx/GXStruct.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/mtx/quat.h"
-#include "dolphin/mtx/vec.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_mng.h"
 #include "global.h"
@@ -353,8 +350,8 @@ BOOL daObjMagmarock::Act_c::LiftUpRequest(cXyz &param_1) {
                 temp.y = 0.0f;
                 temp.z = 1.0f;
             }
-            PSVECScale(&temp, &temp, 10.0f);
-            PSVECAdd(&current.pos, &temp, &current.pos);
+            temp *= 10.0f;
+            current.pos += temp;
             return FALSE;
         }
     }
@@ -417,7 +414,7 @@ void daObjMagmarock::Act_c::calc_ground_quat() {
 
     for(int i = 0; i < 3; i++) {
         cXyz *pPos = &m40c[i];
-        PSVECAdd(pPos, &home.pos, pPos);
+        *pPos += home.pos;
         float y;
         if (g_dComIfG_gameInfo.play.getMagma() != NULL) {
             y = g_dComIfG_gameInfo.play.getMagma()->checkYpos(*pPos);
