@@ -111,13 +111,13 @@ void daObjMagmarock::Act_c::play_anim() {
     if (m44c > 375 && m438 > 0.0f) {
         m438 = m438 - 1.0f;
     } else if ((m44c < 15 || m44c > 60) && m438 < M_brk->getFrameMax()) {
-        m438 = m438 + 1.0f;
+        m438 += 1.0f;
     }
 
     if (m44c < 60 && m434 < M_bck->getFrameMax()) {
-        m434 = m434 + 1.0f;
+        m434 += 1.0f;
     } else if (m44c > 375 && m434 > 0.0f) {
-        m434 = m434 - 1.0f;
+        m434 -= 1.0f;
     }
 }
 
