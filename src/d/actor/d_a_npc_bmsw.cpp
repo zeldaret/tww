@@ -1253,8 +1253,8 @@ BOOL daNpc_Bmsw_c::CreateHeap() {
             armModelData->getJointNodePointer(i)->setCallBack(nodeCallBackArm);
         }
     }
-    mpMorf->getModel()->setUserArea((u32) this);
-    mpMorfHand->getModel()->setUserArea((u32) this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
+    mpMorfHand->getModel()->setUserArea((uintptr_t)this);
 
     field_0x930[0] = &mSwMail0;
     field_0x930[1] = &mSwMail1;

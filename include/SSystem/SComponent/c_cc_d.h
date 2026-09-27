@@ -6,6 +6,7 @@
 #include "SSystem/SComponent/c_m3d_g_cyl.h"
 #include "SSystem/SComponent/c_m3d_g_sph.h"
 #include "SSystem/SComponent/c_m3d_g_tri.h"
+#include "dolphin/gx/GX.h"
 #include "f_pc/f_pc_base.h"
 
 class fopAc_ac_c;
@@ -15,7 +16,6 @@ class cCcD_TriAttr;
 class cCcD_AabAttr;
 class cCcD_CylAttr;
 class cCcD_SphAttr;
-typedef struct _GXColor GXColor;
 
 enum cCcD_AtSPrm_e {
     /* 0x01 */ cCcD_AtSPrm_Set_e = 0x01,
@@ -91,7 +91,6 @@ public:
     virtual bool GetNVec(cXyz const&, cXyz*) const = 0;
 
     cM3dGAab& GetWorkAab() { return mAab; }
-    cM3dGAab const& GetWorkAab() const { return mAab; }
 
     static cXyz m_virtual_center;
 };  // Size: 0x20
@@ -353,13 +352,19 @@ public:
     void ClrCcMove() {
         m_cc_move.x = m_cc_move.y = m_cc_move.z = 0.0f;
     }
-    void PlusDmg(int dmg) { m_dmg = dmg; }
-    u8 GetDmg() { return m_dmg; }
+    void PlusDmg(int dmg) {
+        if (m_dmg >= dmg) {
+            return;
+        }
+        m_dmg = dmg;
+    }
+    u8 GetDmg() const { return m_dmg; }
     f32 GetWeightF() const { return (s32)m_weight; }
     u8 GetWeightUc() const { return m_weight; }
     void SetWeight(u8 weight) { m_weight = weight; }
     virtual void ClrAt() {}
     virtual void ClrTg() { m_dmg = 0; }
+    void ClrCo() { ClrCcMove(); }
     
     fopAc_ac_c* GetActor() const { return mp_actor; }
     void SetActor(void* ac) { mp_actor = (fopAc_ac_c*)ac; }
@@ -530,7 +535,7 @@ public:
     void SetAtHit(cCcD_Obj* obj) { mObjAt.SetHit(obj); }
     void SetTgHit(cCcD_Obj* obj) { mObjTg.SetHit(obj); }
     void SetCoHit(cCcD_Obj* obj) { mObjCo.SetHit(obj); }
-    bool ChkAtType(u32 type) const { return mObjAt.MskType(type); }
+    u32 ChkAtType(u32 type) const { return mObjAt.MskType(type); }
     u32 ChkCoNoCrr() const { return mObjCo.ChkNoCrr(); }
     u32 ChkCoSph3DCrr() const { return mObjCo.ChkSph3DCrr(); }
     void OnAtSPrmBit(u32 flag) { mObjAt.OnSPrmBit(flag); }
@@ -601,10 +606,15 @@ public:
 
     cCcD_Stts* GetStts() { return mStts; }
     void SetStts(cCcD_Stts* stts) { mStts = stts; }
-    fopAc_ac_c* GetAc() { return mStts == NULL ? NULL : mStts->GetActor(); }
-    cCcD_DivideInfo& GetDivideInfo() { return mDivideInfo; }
+    fopAc_ac_c* GetAc() {
+        if (mStts == NULL) {
+            return NULL;
+        } else {
+            return mStts->GetActor();
+        }
+    }
     cCcD_DivideInfo* GetPDivideInfo() { return &mDivideInfo; }
-    u32 ChkBsRevHit() const { return mFlags & 2; }
+    u32 ChkBsRevHit() { return mFlags & 2; }
     void OnBsRevHit() { mFlags |= 2; }
 
 private:

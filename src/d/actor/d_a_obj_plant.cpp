@@ -140,7 +140,7 @@ BOOL daObjPlant_c::CreateHeap() {
                 break;
             }
         }
-        mpModel->setUserArea((u32)this);
+        mpModel->setUserArea((uintptr_t)this);
     } else {
         return FALSE; 
     }

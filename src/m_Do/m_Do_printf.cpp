@@ -50,19 +50,20 @@ extern "C" int search_partial_address(void* address, int* module_id, int* sectio
 
     OSModuleInfo* module = __OSModuleList.head;
     for (; module != NULL; module = (OSModuleInfo*)module->link.next) {
-        u32 i, addr;
+        u32 i;
+        uintptr_t addr;
         OSSectionInfo* section = (OSSectionInfo*)module->sectionInfoOffset;
 
         for (i = 0; i < module->numSections; section++, i++) {
             if (section->size != 0) {
                 addr = section->offset & ~0x01;
-                if ((addr <= (u32)address) && (u32)address < (addr + section->size)) {
+                if ((addr <= (uintptr_t)address) && (uintptr_t)address < (addr + section->size)) {
                     if (module_id != NULL)
                         *module_id = module->id;
                     if (section_id != NULL)
                         *section_id = i;
                     if (section_offset)
-                        *section_offset = (u32)address - addr;
+                        *section_offset = (uintptr_t)address - addr;
                     if (name_offset)
                         *name_offset = module->nameOffset;
                     return 0;
@@ -75,14 +76,14 @@ extern "C" int search_partial_address(void* address, int* module_id, int* sectio
 }
 
 /* 80006770-800067D0       .text convert_partial_address */
-extern "C" u32 convert_partial_address(void* param_0) {
+extern "C" uintptr_t convert_partial_address(void* param_0) {
     int param_1;
     int param_2;
     int param_3;
     if (search_partial_address(param_0, &param_1, &param_2, &param_3, NULL) == 0) {
         return (param_2 << 28) + (param_3 & 0x01FFFFFF);
     } else {
-        return (u32)param_0;
+        return (uintptr_t)param_0;
     }
 }
 

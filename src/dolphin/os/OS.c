@@ -581,8 +581,8 @@ entry __OSEVEnd
 #endif
 }
 
-static ASM void OSDefaultExceptionHandler(register __OSException exception,
-                                          register OSContext* context) {
+static ASM void OSDefaultExceptionHandler(__REGISTER __OSException exception,
+                                          __REGISTER OSContext* context) {
 #ifdef __MWERKS__
     // clang-format off
     nofralloc

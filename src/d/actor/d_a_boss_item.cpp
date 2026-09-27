@@ -17,11 +17,13 @@ static BOOL daBossItem_IsDelete(bossitem_class* i_this) {
 
 /* 00000080-00000088       .text daBossItem_Delete__FP14bossitem_class */
 static BOOL daBossItem_Delete(bossitem_class* i_this) {
+    fopAcM_RegisterDeleteID(i_this);
     return TRUE;
 }
 
 /* 00000088-00000128       .text daBossItem_Create__FP10fopAc_ac_c */
 static cPhs_State daBossItem_Create(fopAc_ac_c* i_this) {
+    fopAcM_RegisterCreateID(i_this);
     bossitem_class* a_this = (bossitem_class*)i_this;
     fopAcM_ct(i_this, bossitem_class);
 

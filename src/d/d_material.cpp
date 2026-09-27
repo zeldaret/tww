@@ -53,8 +53,8 @@ void dMat_ice_c::copy(J3DModelData* modelData) {
 
 /* 8006F83C-8006F90C       .text updateDL__10dMat_ice_cFP8J3DModelScP21mDoExt_invisibleModel */
 void dMat_ice_c::updateDL(J3DModel* model, s8 backupNo, mDoExt_invisibleModel* inv) {
-    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
-    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu);
     J3DModelData* modelData = model->getModelData();
     if (backupNo < 0)
         dMat_control_c::push(modelData);
@@ -69,14 +69,14 @@ void dMat_ice_c::updateDL(J3DModel* model, s8 backupNo, mDoExt_invisibleModel* i
     if (inv != NULL)
         inv->entry();
 
-    j3dSys.setDrawBuffer(buffer0, 0);
-    j3dSys.setDrawBuffer(buffer1, 1);
+    j3dSys.setDrawBuffer(buffer0, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(buffer1, J3DSysDrawBuf_Xlu);
 }
 
 /* 8006F90C-8006F9E0       .text updateDL__10dMat_ice_cFP14mDoExt_McaMorfScP21mDoExt_invisibleModel */
 void dMat_ice_c::updateDL(mDoExt_McaMorf* morf, s8 backupNo, mDoExt_invisibleModel* inv) {
-    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
-    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu);
     J3DModelData* modelData = morf->getModel()->getModelData();
     if (backupNo < 0)
         dMat_control_c::push(modelData);
@@ -91,14 +91,14 @@ void dMat_ice_c::updateDL(mDoExt_McaMorf* morf, s8 backupNo, mDoExt_invisibleMod
     if (inv != NULL)
         inv->entry();
 
-    j3dSys.setDrawBuffer(buffer0, 0);
-    j3dSys.setDrawBuffer(buffer1, 1);
+    j3dSys.setDrawBuffer(buffer0, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(buffer1, J3DSysDrawBuf_Xlu);
 }
 
 /* 8006F9E0-8006FAB0       .text entryDL__10dMat_ice_cFP8J3DModelScP21mDoExt_invisibleModel */
 void dMat_ice_c::entryDL(J3DModel* model, s8 backupNo, mDoExt_invisibleModel* inv) {
-    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
-    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu);
     J3DModelData* modelData = model->getModelData();
     if (backupNo < 0)
         dMat_control_c::push(modelData);
@@ -113,14 +113,14 @@ void dMat_ice_c::entryDL(J3DModel* model, s8 backupNo, mDoExt_invisibleModel* in
     if (inv != NULL)
         inv->entry();
 
-    j3dSys.setDrawBuffer(buffer0, 0);
-    j3dSys.setDrawBuffer(buffer1, 1);
+    j3dSys.setDrawBuffer(buffer0, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(buffer1, J3DSysDrawBuf_Xlu);
 }
 
 /* 8006FAB0-8006FB84       .text entryDL__10dMat_ice_cFP14mDoExt_McaMorfScP21mDoExt_invisibleModel */
 void dMat_ice_c::entryDL(mDoExt_McaMorf* morf, s8 backupNo, mDoExt_invisibleModel* inv) {
-    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
-    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu);
     J3DModelData* modelData = morf->getModel()->getModelData();
     if (backupNo < 0)
         dMat_control_c::push(modelData);
@@ -135,8 +135,8 @@ void dMat_ice_c::entryDL(mDoExt_McaMorf* morf, s8 backupNo, mDoExt_invisibleMode
     if (inv != NULL)
         inv->entry();
 
-    j3dSys.setDrawBuffer(buffer0, 0);
-    j3dSys.setDrawBuffer(buffer1, 1);
+    j3dSys.setDrawBuffer(buffer0, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(buffer1, J3DSysDrawBuf_Xlu);
 }
 
 /* 8006FB84-8006FCF0       .text create__14dMat_control_cFP16J3DMaterialTableP19J3DAnmTextureSRTKey */

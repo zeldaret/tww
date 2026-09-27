@@ -3896,7 +3896,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         0x11020203
     );
     model = i_this->mpBodyMorf->getModel();
-    model->setUserArea((u32)i_this);
+    model->setUserArea((uintptr_t)i_this);
     int r3;
     for (u16 i = 0; i <= ARRAY_SSIZE(joint_check) - 1; i++) {
         r3 = joint_check[i];
@@ -3925,7 +3925,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         0x11020203
     );
     model = i_this->mpShieldMorf->getModel();
-    model->setUserArea((u32)i_this);
+    model->setUserArea((uintptr_t)i_this);
     model->getModelData()->getJointNodePointer(TN_MAIN_JNT_J_TN_MUNE1_e)->setCallBack(nodeCallBack_kata);
     i_this->mpBrkAnm = new mDoExt_brkAnm();
     if (i_this->mpBrkAnm == NULL) {

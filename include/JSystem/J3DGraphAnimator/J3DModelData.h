@@ -8,7 +8,6 @@
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
 
-typedef struct _GXColor GXColor;
 class JUTNameTab;
 
 enum J3DMaterialCopyFlag {

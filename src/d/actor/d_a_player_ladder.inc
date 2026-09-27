@@ -75,15 +75,13 @@ int daPy_lk_c::changeLadderMoveProc(int param_0) {
 
 /* 80133240-801333A8       .text setMoveBGLadderCorrect__9daPy_lk_cFv */
 int daPy_lk_c::setMoveBGLadderCorrect() {
-    if (dComIfG_Bgsp()->ChkPolySafe(mPolyInfo)) {
-        if (dComIfG_Bgsp()->ChkMoveBG(mPolyInfo)) {
-            dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &current.pos, &current.angle, &shape_angle);
-            dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &m370C, NULL, NULL);
-        }
+    if (dComIfG_Bgsp()->ChkPolySafe(mPolyInfo) && dComIfG_Bgsp()->ChkMoveBG(mPolyInfo)) {
+        dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &current.pos, &current.angle, &shape_angle);
+        dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &m370C, NULL, NULL);
     }
     cXyz local_18(m370C.x + cM_ssin(current.angle.y) * 50.0f, m370C.y, m370C.z + cM_scos(current.angle.y) * 50.0f);
     mLinkLinChk.Set(&m370C, &local_18, this);
-    if ((!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) || (dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 4)) {
+    if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk) || dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 4) {
         return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     } else {
         mPolyInfo = mLinkLinChk;

@@ -157,7 +157,7 @@ bool daObjSwpush::Act_c::create_heap() {
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, flag);
     if (mpModel) {
         model_data->getJointNodePointer(1)->setCallBack(jnodeCB);
-        mpModel->setUserArea((u32) this);
+        mpModel->setUserArea((uintptr_t) this);
     }
 
     BOOL btp_success = TRUE;

@@ -67,7 +67,7 @@ public:
     /* 0x24 */ daNpc_kam_HIO1_c mHio1;
 };  // Size: 0x50
 
-static char* l_staff_name = "HyoiKam";
+static const char* l_staff_name = "HyoiKam";
 static daNpc_kam_HIO_c l_HIO;
 static int l_hio_counter;
 static fpc_ProcID l_msgId;
@@ -299,7 +299,7 @@ BOOL daNpc_kam_c::createHeap() {
     m_jnt_body = modelData->getJointName()->getIndex("j_ka_spin1");
     JUT_ASSERT(DEMO_SELECT(782, 783), m_jnt_body >= 0);
     
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     
     return TRUE;
 }
@@ -713,12 +713,12 @@ int daNpc_kam_c::waitNpcAction(void*) {
             } else {
                 if (cLib_calcTimer(&mC0C) == 0) {
                     mC0C = cLib_getRndValue(10, 80);
-                    setAnm(l_anm_type[cLib_getRndValue(0, (int)ARRAY_SIZE(l_anm_type)-2)]);
+                    setAnm(l_anm_type[cLib_getRndValue(0, ARRAY_SSIZE(l_anm_type)-2)]);
                 }
                 if (!npcTurnCheck(&targetAngleY) && cLib_calcTimer(&mC08) == 0) {
                     mActionStatus = ACTION_ONGOING_3;
                     mC08 = cLib_getRndValue(60, 60);
-                    mC0A = l_turn_angleY[cLib_getRndValue(0, (int)ARRAY_SIZE(l_turn_angleY)-2)];
+                    mC0A = l_turn_angleY[cLib_getRndValue(0, ARRAY_SSIZE(l_turn_angleY)-2)];
                 }
             }
         } else if (mActionStatus == ACTION_ONGOING_2) {

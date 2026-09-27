@@ -360,10 +360,6 @@ fpc_ProcID fop_Timer_create(s16 i_procName, u8 i_mode, u16 i_limitTimeMs, u8 i_s
 /* 8002B324-8002B520       .text fopMsgM_messageTypeSelect__FP10fopAc_ac_cP4cXyzPUlPUl */
 fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* i_actor, cXyz* i_pos, u32* i_msgNo, u32* param_4) {
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     fpc_ProcID pcId;
     if (*i_msgNo >> 0x10 == 0x63) {
@@ -405,10 +401,6 @@ fpc_ProcID fopMsgM_messageTypeSelect(fopAc_ac_c* i_actor, cXyz* i_pos, u32* i_ms
 /* 8002B568-8002B634       .text fopMsgM_searchMessageNumber__FUl */
 u32 fopMsgM_searchMessageNumber(u32 i_msgNo) {
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
     mesg_header* header;
     for (u32 i = i_msgNo & 0xFFFF; i < 0xFFFF; i++) {
@@ -3556,10 +3548,6 @@ void fopMsgM_msgDataProc_c::colorAnime(J2DPicture* i_pic) {
 
 /* 800322B4-80034F3C       .text stringSet__21fopMsgM_msgDataProc_cFv */
 void fopMsgM_msgDataProc_c::stringSet() {
-    /* Nonmatching - regalloc */
-    // demo: regswap on int r28
-    // jpn: matches 100%
-    // usa and pal: regswap on s8 r30
     s8 r30 = g_msgHIO.field_0x6c;
 
     field_0x60 = field_0x40;
@@ -4087,11 +4075,9 @@ void fopMsgM_msgDataProc_c::stringSet() {
                 ((u8)bmgData[count + 2] == 0 && (u8)bmgData[count + 3] == 0 && (u8)bmgData[count + 4] == MsgCtrlCode_UNK23)
             ) {
                 if ((u8)bmgData[count + 4] == MsgCtrlCode_UNK22) {
-                    u32 msgNo = dComIfGp_getNpcNameMessageID();
-                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &nowCursorPos, &field_0x24, &field_0x150);
+                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, dComIfGp_getNpcNameMessageID(), &nowCursorPos, &field_0x24, &field_0x150);
                 } else if ((u8)bmgData[count + 4] == MsgCtrlCode_UNK23) {
-                    u32 msgNo = dComIfGp_getItemNameMessageID();
-                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, msgNo, &nowCursorPos, &field_0x24, &field_0x150);
+                    getString(field_0x60, field_0x68, field_0x64, field_0x6C, dComIfGp_getItemNameMessageID(), &nowCursorPos, &field_0x24, &field_0x150);
                 }
                 if (selectFlag != Select_ON) {
                     field_0x14 = nowCursorPos - field_0xF8[lineCount];
@@ -5748,14 +5734,9 @@ void fopMsgM_int_to_char2(char* i_dest, int i_value) {
 /* 800351E8-80035408       .text getString__21fopMsgM_msgDataProc_cFPcUl */
 void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
 
 #if VERSION <= VERSION_JPN
-    mesg_header* header = msgGet.getMesgHeader(i_msgNo);
-    const char* src = msgGet.getMessage(header);
+    const char* src = msgGet.getMessage(msgGet.getMesgHeader(i_msgNo));
     int offset = 0;
     int numRead = 0;
 #else
@@ -5766,8 +5747,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
     if (i_msgNo == 0) {
         src = name;
     } else {
-        mesg_header* header = msgGet.getMesgHeader(i_msgNo);
-        src = msgGet.getMessage(header);
+        src = msgGet.getMessage(msgGet.getMesgHeader(i_msgNo));
     }
 #endif
 
@@ -5819,18 +5799,13 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, u32 i_msgNo) {
 
 /* 80035408-80035A24       .text getString__21fopMsgM_msgDataProc_cFPcPcPcPcUlPfPfPi */
 void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3, char* param_4, u32 i_msgNo, f32* param_6, f32* param_7, int* param_8) {
-    /* Nonmatching - regalloc */
     fopMsgM_msgGet_c msgGet;
-    msgGet.mMsgIdx = 0;
-    msgGet.mGroupID = 0;
-    msgGet.mMsgNo = 0;
-    msgGet.mResMsgNo = 0;
+
     f32 f31;
     f32 f30 = 0.0f;
 
 #if VERSION <= VERSION_JPN
-    mesg_header* header = msgGet.getMesgHeader(i_msgNo);
-    const char* src = msgGet.getMessage(header);
+    const char* src = msgGet.getMessage(msgGet.getMesgHeader(i_msgNo));
     int offset = 0;
 #else
     const char* src;
@@ -5839,8 +5814,7 @@ void fopMsgM_msgDataProc_c::getString(char* i_dest, char* param_2, char* param_3
     if (i_msgNo == 0) {
         src = name;
     } else {
-        mesg_header* header = msgGet.getMesgHeader(i_msgNo);
-        src = msgGet.getMessage(header);
+        src = msgGet.getMessage(msgGet.getMesgHeader(i_msgNo));
     }
 #endif
 
@@ -9815,10 +9789,10 @@ fopMsgM_f2d_class fopMsgM_centerPosCalc(fopMsgM_f2d_class param_1, fopMsgM_f2d_c
 
 /* 8003BA40-8003BB34       .text fopMsgM_pane_parts_set__FP18fopMsgM_pane_class */
 void fopMsgM_pane_parts_set(fopMsgM_pane_class* i_pane) {
-    i_pane->mPosTopLeftOrig.x = i_pane->pane->mBounds.i.x;
-    i_pane->mPosTopLeftOrig.y = i_pane->pane->mBounds.i.y;
-    i_pane->mSizeOrig.x = i_pane->pane->mBounds.getWidth();
-    i_pane->mSizeOrig.y = i_pane->pane->mBounds.getHeight();
+    i_pane->mPosTopLeftOrig.x = i_pane->pane->getBounds().i.x;
+    i_pane->mPosTopLeftOrig.y = i_pane->pane->getBounds().i.y;
+    i_pane->mSizeOrig.x = i_pane->pane->getWidth();
+    i_pane->mSizeOrig.y = i_pane->pane->getHeight();
     fopMsgM_f2d_class center = fopMsgM_centerPosCalc(i_pane->mPosTopLeftOrig, i_pane->mSizeOrig);
     i_pane->mPosCenterOrig.x = center.x;
     i_pane->mPosCenterOrig.y = center.y;

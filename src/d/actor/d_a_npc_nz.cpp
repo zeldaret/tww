@@ -10,6 +10,7 @@
 #include "d/d_lib.h"
 #include "d/d_item.h"
 
+#include "d/d_s_play.h"
 #include "res/Object/Npcnz.h"
 #include "res/Object/Nz.h"
 
@@ -67,7 +68,7 @@ BOOL daNpc_Nz_c::NodeCallBack(J3DNode* node, int calcTiming) {
         }
 
         model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
-        cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
     }
 
     return true;
@@ -101,6 +102,10 @@ BOOL daNpc_Nz_c::TailNodeCallBack(J3DNode* node, int calcTiming) {
 
 /* 000003A4-00000978       .text TailControl__10daNpc_Nz_cFv */
 void daNpc_Nz_c::TailControl() {
+    int i;
+    s16 temp9;
+    int temp7;
+
     cXyz sp64;
     cXyz sp58;
     cXyz sp4C;
@@ -115,9 +120,6 @@ void daNpc_Nz_c::TailControl() {
     mDoMtx_stack_c::XrotM(angle2);
     mDoMtx_stack_c::multVec(&sp58, &sp40);
 
-    int i;
-    s16 temp9;
-    int temp7;
     cXyz* r19 = &field_0x974[1];
     cXyz* r18 = &field_0x9EC[1];
     cXyz* r17 = field_0x934.getPos(0);
@@ -167,7 +169,7 @@ static BOOL createHeap_CB(fopAc_ac_c* i_this) {
 /* 00000D18-00000F98       .text _createHeap__10daNpc_Nz_cFv */
 BOOL daNpc_Nz_c::_createHeap() {
     J3DModelData* modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(m_bdl_arc_name, dRes_INDEX_NPCNZ_BDL_NZ_e));
-    JUT_ASSERT(0xD0, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(209, 208), modelData != NULL);
 
     mpMorf = new mDoExt_McaMorf(
         modelData,
@@ -183,13 +185,13 @@ BOOL daNpc_Nz_c::_createHeap() {
         return false;
     }
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
 
     m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
-    JUT_ASSERT(0xDA, m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(219, 218), m_jnt.getHeadJntNum() >= 0);
 
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("mune"));
-    JUT_ASSERT(0xDD, m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(222, 221), m_jnt.getBackboneJntNum() >= 0);
 
     for(u16 i = 0; i < modelData->getJointNum(); i++) {
         if(i == m_jnt.getHeadJntNum() || i == m_jnt.getBackboneJntNum()) {
@@ -233,7 +235,7 @@ static s16 daNpc_Nz_XyCheckCB(void* i_actor, int i_itemBtn) {
 
     if(dComIfGp_getSelectItem(i_itemBtn) == dItemNo_BIRD_BAIT_5_e) {
         f32 temp2 = l_HIO.field_0x20;
-        daPy_py_c* player = daPy_getPlayerActorClass();
+        fopAc_ac_c* player = dComIfGp_getPlayer(0);
         cXyz temp(player->current.pos);
         temp.x += temp2 * cM_ssin(player->current.angle.y);
         temp.z += temp2 * cM_scos(player->current.angle.y);
@@ -286,7 +288,7 @@ void daNpc_Nz_c::checkOrder() {
 /* 000012D0-000012F4       .text setAttention__10daNpc_Nz_cFv */
 void daNpc_Nz_c::setAttention() {
     attention_info.position = current.pos;
-    attention_info.position.y = eyePos.y;
+    attention_info.position.y = eyePos.y + DEMO_SELECT(REG10_F(9), 0.0f);
 }
 
 /* 000012F4-000013E8       .text LookBack__10daNpc_Nz_cFv */
@@ -375,32 +377,35 @@ void daNpc_Nz_c::setMtx() {
     daShopItem_c* item = getShopItem(field_0x909);
     if(item) {
         cXyz* pScale = item->getScaleP();
-        field_0xA90 = cLib_maxLimit<int>(field_0xA90 + 1, 20);
-        f32 temp4 = 0.0f;
+        field_0xA90 = cLib_maxLimit<int>(field_0xA90 + 1, 20 + DEMO_SELECT(REG10_S(2), 0));
+        s16 r7 = 12 + DEMO_SELECT(REG10_S(0), 0);
+        s16 r8 = 16 + DEMO_SELECT(REG10_S(1), 0);
+        s16 r6 = 18 + DEMO_SELECT(REG10_S(2), 0);
 
         f32 scaleX;
         f32 scaleY;
-        f32 multX1 = 0.85f;
-        f32 multY1 = 1.4f;
-        f32 multX2 = 1.1f;
-        f32 multY2 = 0.8f;
-        f32 multX3 = 1.0f;
-        f32 multY3 = 1.0f;
-        if(field_0xA90 < 12) {
-            scaleX = field_0xA90 / 12.0f;
-            scaleY = field_0xA90 / 12.0f;
+        f32 multX1 = 0.85f + DEMO_SELECT(REG10_F(0), 0.0f);
+        f32 multY1 = 1.4f + DEMO_SELECT(REG10_F(1), 0.0f);
+        f32 multX2 = 1.1f + DEMO_SELECT(REG10_F(2), 0.0f);
+        f32 multY2 = 0.8f + DEMO_SELECT(REG10_F(3), 0.0f);
+        f32 multX3 = 1.0f + DEMO_SELECT(REG10_F(4), 0.0f);
+        f32 multY3 = 1.0f + DEMO_SELECT(REG10_F(5), 0.0f);
+        f32 temp4 = 0.0f;
+        if(field_0xA90 < r7) {
+            scaleX = field_0xA90 / (f32)r7;
+            scaleY = field_0xA90 / (f32)r7;
             scaleX *= multX1;
             scaleY *= multY1;
         }
-        else if(field_0xA90 < 16) {
-            scaleX = (field_0xA90 - 12) / 4.0f;
-            scaleY = (field_0xA90 - 12) / 4.0f;
+        else if(field_0xA90 < r8) {
+            scaleX = (field_0xA90 - r7) / (f32)(r8 - r7);
+            scaleY = (field_0xA90 - r7) / (f32)(r8 - r7);
             scaleX = (scaleX * multX2) + (1.0f - scaleX) * multX1;
             scaleY = (scaleY * multY2) + (1.0f - scaleY) * multY1;
         }
         else {
-            scaleX = (field_0xA90 - 16) / 2.0f;
-            scaleY = (field_0xA90 - 16) / 2.0f;
+            scaleX = (field_0xA90 - r8) / (f32)(r6 - r8);
+            scaleY = (field_0xA90 - r8) / (f32)(r6 - r8);
             scaleX = (scaleX * multX3) + (1.0f - scaleX) * multX2;
             scaleY = (scaleY * multY3) + (1.0f - scaleY) * multY2;
         }
@@ -440,7 +445,9 @@ void daNpc_Nz_c::setMtx() {
         }
 
         temp3 *= 0.5f;
-        temp3.y += scaleY * 20.0f + -20.0f;
+        temp3.x += DEMO_SELECT(REG10_F(10), 0.0f);
+        temp3.y += (-20.0f + DEMO_SELECT(REG10_F(11), 0.0f)) + scaleY * (20.0f + DEMO_SELECT(REG10_F(13), 0.0f));
+        temp3.z += DEMO_SELECT(REG10_F(12), 0.0f);
         temp3.y += temp4;
         item->getPosP()->set(temp3);
     }
@@ -696,7 +703,8 @@ u16 daNpc_Nz_c::next_msgStatus(u32* pMsgNo) {
                     }
 
                     setAnm(0, false);
-                    dComIfGp_setItemRupeeCount(-dComIfGp_getMessageRupee());
+                    int msg_rupee = dComIfGp_getMessageRupee();
+                    dComIfGp_setItemRupeeCount(-msg_rupee);
                     field_0x8F8 = 3;
                     field_0x8FA = dComIfGp_evmng_getEventIdx("DEFAULT_NPC_NZ_GETITEM");
                     dComIfGp_event_setGtItm(field_0x908);
@@ -857,8 +865,7 @@ bool daNpc_Nz_c::_draw() {
 
         GXColor unusedColor_5609 = {255, 255, 0, 128};
         GXColor unusedColor_5611 = {255, 0, 0, 128};
-        GXColor color = {200, 200, 200, 255};
-        field_0x934.update(10, scale.x * 5.0f, color, 6, &tevStr);
+        field_0x934.update(10, scale.x * 5.0f, (GXColor){200, 200, 200, 255}, 6, &tevStr);
         dComIfGd_set3DlineMat(&field_0x934);
     }
 
@@ -872,10 +879,12 @@ BOOL daNpc_Nz_c::createInit() {
 
     mAcchCir.SetWall(30.0f, 10.0f);
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
+#if VERSION > VERSION_DEMO
     mAcch.OnLineCheckNone();
+#endif
     mAcch.SetWallNone();
     mAcch.SetRoofNone();
-    gravity = 0.0f;
+    fopAcM_SetGravity(this, 0.0f);
     mAcch.CrrPos(*dComIfG_Bgsp());
 
     setMtx();
@@ -897,6 +906,9 @@ BOOL daNpc_Nz_c::createInit() {
     home.pos.x -= cM_ssin(home.angle.y) * 50.0f;
     home.pos.z -= cM_scos(home.angle.y) * 50.0f;
     current.pos = home.pos;
+#if VERSION == VERSION_DEMO
+    field_0x934_demo = 0;
+#endif
     field_0xA88 = -1;
     field_0xA8C = -1;
 
@@ -905,57 +917,80 @@ BOOL daNpc_Nz_c::createInit() {
 
 /* 00002768-0000282C       .text setSmokeParticle__10daNpc_Nz_cFv */
 void daNpc_Nz_c::setSmokeParticle() {
-    if(field_0x914.getEmitter() != NULL) {
-        field_0x914.remove();
+    if(DEMO_SELECT(field_0x934_demo, field_0x914.getEmitter()) != NULL) {
+        field_0x914.end();
+#if VERSION == VERSION_DEMO
+        field_0x934_demo = NULL;
+#endif
     }
 
-    if(field_0x914.getEmitter() == NULL) {
-        JPABaseEmitter* emitter = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, &current.angle, 0, 0xB9, &field_0x914, fopAcM_GetRoomNo(this));
-        if(emitter) {
-            emitter->setRate(3.0f);
-            emitter->setSpread(0.2f);
-            emitter->setAwayFromAxisSpeed(0.2f);
-            emitter->setMaxFrame(3);
+    if(DEMO_SELECT(field_0x934_demo, field_0x914.getEmitter()) == NULL) {
+        JPABaseEmitter* emitter;
+        DEMO_SELECT(field_0x934_demo, emitter) = dComIfGp_particle_setToon(dPa_name::ID_AK_JT_ELEMENTSMOKE00, &current.pos, &current.angle, 0, 0xB9, &field_0x914, fopAcM_GetRoomNo(this));
+        if(DEMO_SELECT(field_0x934_demo, emitter)) {
+            DEMO_SELECT(field_0x934_demo, emitter)->setRate(3.0f);
+            DEMO_SELECT(field_0x934_demo, emitter)->setSpread(0.2f);
+            DEMO_SELECT(field_0x934_demo, emitter)->setAwayFromAxisSpeed(0.2f);
+            DEMO_SELECT(field_0x934_demo, emitter)->setMaxFrame(3);
         }
     }
 }
 
 /* 0000282C-00002830       .text getArg__10daNpc_Nz_cFv */
 void daNpc_Nz_c::getArg() {
-    return;
+    fopAcM_GetParam(this);
 }
 
 /* 00002830-000028FC       .text _create__10daNpc_Nz_cFv */
 cPhs_State daNpc_Nz_c::_create() {
-    fopAcM_ct(this, daNpc_Nz_c);
+    fopAcM_ct_Retail(this, daNpc_Nz_c);
 
     getArg();
 
-    cPhs_State result = dComIfG_resLoad(&mPhs1, m_arc_name);
-    if(result != cPhs_COMPLEATE_e) {
-        return result;
+    cPhs_State res = dComIfG_resLoad(&mPhs1, m_arc_name);
+#if VERSION > VERSION_DEMO
+    if(res != cPhs_COMPLEATE_e) {
+        return res;
     }
-
-    result = dComIfG_resLoad(&mPhs2, m_bdl_arc_name);
-    if(result != cPhs_COMPLEATE_e) {
-        return result;
+#endif
+    cPhs_State res2 = dComIfG_resLoad(&mPhs2, m_bdl_arc_name);
+#if VERSION > VERSION_DEMO
+    if(res2 != cPhs_COMPLEATE_e) {
+        return res2;
     }
-
-    if(!fopAcM_entrySolidHeap(this, createHeap_CB, 0x2FE0)) {
+#endif
+#if VERSION == VERSION_DEMO
+    if (res == cPhs_ERROR_e || res2 == cPhs_ERROR_e) {
         return cPhs_ERROR_e;
     }
+    if (res != cPhs_COMPLEATE_e) {
+        return res;
+    }
+    if (res2 != cPhs_COMPLEATE_e) {
+        return res2;
+    }
+#endif
 
-    BOOL success = createInit();
-    if (!success) {
-        // Fakematch?
-        if (success) {
-            return cPhs_ERROR_e;
-        } else {
+    cPhs_State res3 = cPhs_COMPLEATE_e;
+    if (res3 == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, daNpc_Nz_c);
+
+        if(!fopAcM_entrySolidHeap(this, createHeap_CB, 0x2FE0)) {
             return cPhs_ERROR_e;
         }
-    } else {
-        return cPhs_COMPLEATE_e;
+
+        BOOL success = createInit();
+        if (!success) {
+            // Fakematch?
+            if (success) {
+                return cPhs_ERROR_e;
+            } else {
+                return cPhs_ERROR_e;
+            }
+        }
     }
+    
+    return cPhs_COMPLEATE_e;
 }
 
 /* 000028FC-00002AF0       .text __ct__10daNpc_Nz_cFv */
@@ -964,12 +999,15 @@ daNpc_Nz_c::daNpc_Nz_c() {
 
 /* 00002E00-00002E6C       .text _delete__10daNpc_Nz_cFv */
 bool daNpc_Nz_c::_delete() {
-    if(field_0x914.getEmitter()) {
-        field_0x914.remove();
+    if(DEMO_SELECT(field_0x934_demo, field_0x914.getEmitter())) {
+        field_0x914.end();
+#if VERSION == VERSION_DEMO
+        field_0x934_demo = NULL;
+#endif
     }
 
-    dComIfG_resDelete(&mPhs1, m_arc_name);
-    dComIfG_resDelete(&mPhs2, m_bdl_arc_name);
+    dComIfG_resDeleteDemo(&mPhs1, m_arc_name);
+    dComIfG_resDeleteDemo(&mPhs2, m_bdl_arc_name);
 
     return true;
 }

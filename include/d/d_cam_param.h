@@ -4,6 +4,8 @@
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_angle.h"
 
+class JORMContext;
+
 enum dCamStyle_e {
     dCamStyle_NONE_e = -1,
     /* 0x00 */ dCamStyle_NN00_e,
@@ -281,12 +283,12 @@ public:
     /* 0x000 */ f32 mDrawNear;
     /* 0x004 */ f32 mDrawFar;
     /* 0x008 */ u16 mDebugFlags;
-    /* 0x00A */ u16 mFlags2;
+    /* 0x00A */ u16 mFlags2; // TP-only field? remove?
     /* 0x00C */ int m00C;
-    /* 0x010 */ int mModeSwitchType;
+    /* 0x010 */ s32 mModeSwitchType;
     /* 0x014 */ void* mTypeTable;
-    /* 0x018 */ int mTypeNum;
-    /* 0x01C */ int mForceType;
+    /* 0x018 */ s32 mTypeNum;
+    /* 0x01C */ s32 mForceType;
     /* 0x020 */ f32 mCusCus;
     /* 0x024 */ f32 m024;
     /* 0x028 */ f32 m028;
@@ -297,7 +299,7 @@ public:
     /* 0x03C */ f32 mJumpCushion;
     /* 0x040 */ f32 mParallelDist;
     /* 0x044 */ f32 m044;
-    /* 0x048 */ f32 m048;
+    /* 0x048 */ f32 mSubjLinkCullDist;
     /* 0x04C */ f32 mCurveWeight;
     /* 0x050 */ f32 m050;
     /* 0x054 */ f32 m054;
@@ -318,28 +320,25 @@ public:
     /* 0x090 */ f32 m090;
     /* 0x094 */ int m094;
     /* 0x098 */ f32 m098;
-    /* 0x09C */ f32 m09C;
-    /* 0x0A0 */ f32 m0A0;
-    /* 0x0A4 */ f32 m0A4;
-    /* 0x0A8 */ int m0A8;
-    /* 0x0AC */ f32 mChargeLatitude;
-    /* 0x0B0 */ int mChargeTimer;
-    /* 0x0B4 */ f32 mChargeBRatio;
-    /* 0x0B8 */ f32 mManualStartCThreshold;
-    /* 0x0BC */ f32 mManualEndVal;
+    /* 0x09C */ f32 mManualStartCThreshold;
+    /* 0x0A0 */ f32 mManualEndVal;
+    /* 0x0A4 */ f32 mChargeLatitude;
+    /* 0x0A8 */ int mChargeTimer;
+    /* 0x0AC */ f32 mChargeBRatio;
+    /* 0x0B0 */ int m0B0;
+    /* 0x0B4 */ f32 m0B4;
+    /* 0x0B8 */ f32 m0B8;
+    /* 0x0BC */ f32 m0BC;
     /* 0x0C0 */ f32 m0C0;
-    /* 0x0C4 */ f32 mLockonChangeCushion;
-    /* 0x0C8 */ int mLockonChangeTimer;
+    /* 0x0C4 */ f32 m0C4;
+    /* 0x0C8 */ int m0C8;
 
 public:
     dCamSetup_c();
-    virtual ~dCamSetup_c();
 
     bool CheckLatitudeRange(s16*);
     f32 FanBank();
-    f32 PlayerHideDist();
 
-    bool CheckFlag2(u16 i_flag) { return (i_flag & mFlags2) != 0; }
     f32 ChargeBRatio() { return mChargeBRatio; }
     int ChargeTimer() { return mChargeTimer; }
     f32 ChargeLatitude() { return mChargeLatitude; }
@@ -349,8 +348,6 @@ public:
     f32 VistaTrimHeight() { return mTrimVistaHeight; }
     f32 ForceLockOffTimer() { return mForceLockOffTimer; }
     f32 ForceLockOffDist() { return mForceLockOffDist; }
-    f32 LockonChangeCushion() { return mLockonChangeCushion; }
-    int LockonChangeTimer() { return mLockonChangeTimer; }
     f32 Cushion4Base() { return mBaseCushion; }
     f32 Cushion4Jump() { return mJumpCushion; }
     f32 CusCus() { return mCusCus; }
@@ -358,6 +355,38 @@ public:
     f32 CurveWeight() { return mCurveWeight; }
     f32 DMCAngle() { return mDMCAngle; }
     f32 DMCValue() { return mDMCValue; }
+    f32 PlayerHideDist() { return mSubjLinkCullDist; }
+
+    // TODO (in TP)
+    void LockonChangeCushion() {}
+    void LockonChangeTimer() {}
+
+    // TODO (not in TP)
+    void FanSwing() {}
+    void FanWind() {}
+    void FlowerMargin() {}
+    void GrassMargin() {}
+    void LockonCushion() {}
+    void ManualMiniDist() {}
+    void ManualStartVal() {}
+    void MapToolCameraTimer() {}
+    void ShipPitching() {}
+    void SubjectCushion() {}
+
+    // Debug-only funcs
+    bool CheckFlag(u16 i_flag) { return (i_flag & mDebugFlags) != 0; }
+    void SetTypeTable(void* i_typeTable, s32 i_typeNum) {
+        mTypeTable = i_typeTable;
+        mTypeNum = i_typeNum;
+    }
+    s32 ForceType() { return mForceType; }
+    s32 ModeSwitchType() { return mModeSwitchType; }
+    f32 Far() { return mDrawFar; }
+    f32 Near() { return mDrawNear; }
+    void genMessage(JORMContext*) {}
+
+public:
+    virtual ~dCamSetup_c();
 
 public:
     /* 0x0D0 */ dCstick_c mCstick;

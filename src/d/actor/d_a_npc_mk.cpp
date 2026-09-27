@@ -498,7 +498,7 @@ u8 daNpc_Mk_c::nextVisitMode() {
             return VISIT_RUN_LINK;
         case VISIT_WALK_PATH:
             dist = pLink->current.pos - current.pos;
-            if(dist.abs2XZ() < 160000.0f && field_0x698.chkInside(&pLink->current.pos)) {
+            if(dist.abs2XZ() < SQUARE(400.0f) && field_0x698.chkInside(&pLink->current.pos)) {
                 return VISIT_NOTICE_LINK;
             }
             return VISIT_WALK_PATH;
@@ -509,7 +509,7 @@ u8 daNpc_Mk_c::nextVisitMode() {
             }
 
             dist = pLink->current.pos - current.pos;
-            if (dist.abs2XZ() < 22500.0f) {
+            if (dist.abs2XZ() < SQUARE(150.0f)) {
                 return VISIT_REACHED_LINK;
             }
             return VISIT_RUN_LINK;
@@ -521,7 +521,7 @@ u8 daNpc_Mk_c::nextVisitMode() {
             }
             dist = pLink->current.pos - current.pos;
 
-            if (dist.abs2XZ() > 32400.0f) {
+            if (dist.abs2XZ() > SQUARE(180.0f)) {
                 return VISIT_RUN_LINK;
             }
             
@@ -542,7 +542,7 @@ u8 daNpc_Mk_c::nextVisitMode() {
             }
             dist = pLink->current.pos - current.pos;
 
-            if (dist.abs2XZ() < 160000.0f && field_0x698.chkInside(&pLink->current.pos)) {
+            if (dist.abs2XZ() < SQUARE(400.0f) && field_0x698.chkInside(&pLink->current.pos)) {
                 return VISIT_RUN_LINK;
             }
             return VISIT_WALK_PATH;
@@ -1715,7 +1715,7 @@ BOOL daNpc_Mk_c::CreateHeap() {
         }
     }
 
-    mpMorf->getModel()->setUserArea((u32)(this));
+    mpMorf->getModel()->setUserArea((uintptr_t)(this));
 
     mAcchCir.SetWall(60.0f, 30.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));

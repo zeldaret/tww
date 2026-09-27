@@ -35,7 +35,7 @@ u32 daBoko_c::m_heap_size[] = {
     /* Type_PGANON_SWORD_e  */ 0x2000
 };
 
-char* daBoko_c::m_arc_name[] = {
+const char* daBoko_c::m_arc_name[] = {
     /* Type_BOKO_STICK_e    */ "Boko",
     /* Type_MACHETE_e       */ "Nata",
     /* Type_STALFOS_MACE_e  */ "Club",
@@ -932,9 +932,9 @@ cPhs_State daBoko_c::create() {
         },
         // cM3dGCpsS
         {{
-            /* P0 */ {0.0f, 0.0f, 0.0f},
-            /* P1 */ {0.0f, 0.0f, 0.0f},
-            /* Height */ 20.0f,
+            /* Start  */ {0.0f, 0.0f, 0.0f},
+            /* End    */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 20.0f,
         }},
     };
 

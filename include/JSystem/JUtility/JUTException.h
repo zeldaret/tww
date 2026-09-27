@@ -8,8 +8,6 @@
 #include "dolphin/os/OSError.h"
 #include "global.h"
 
-typedef struct _GXRenderModeObj GXRenderModeObj;
-typedef struct OSContext OSContext;
 class JUTDirectPrint;
 
 class JUTExternalFB {

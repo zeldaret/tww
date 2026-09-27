@@ -4,6 +4,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JAudio/JAIBankWave.h"
 #include "JSystem/JAudio/JAISound.h"
+#include "JSystem/JAudio/JAIConst.h"
 #include "dolphin/mtx/mtx.h"
 #include "dolphin/mtx/vec.h"
 

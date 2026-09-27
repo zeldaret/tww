@@ -47,7 +47,7 @@ public:
 
     static u32 m_bound_se[6];
     static u32 m_heap_size[6];
-    static char* m_arc_name[6];
+    static const char* m_arc_name[6];
     static Vec m_cull_min[6];
     static Vec m_cull_max[6];
 

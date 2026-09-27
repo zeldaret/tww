@@ -50,7 +50,7 @@ BOOL daObjLpalm_c::CreateHeap() {
     if (mModel == NULL)
         return false;
 
-    mModel->setUserArea((u32)this);
+    mModel->setUserArea((uintptr_t)this);
     mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OYASHI_DZB_OYASHI_e), dBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
     if (mpBgW == NULL)
         return false;

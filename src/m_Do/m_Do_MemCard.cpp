@@ -12,9 +12,9 @@
 #include "global.h"
 #include "string.h"
 
-u8 MemCardStack[0x1000] ALIGN_DECL(32);
+ALIGN_DECL(32, u8 MemCardStack[0x1000]);
 OSThread MemCardThread;
-u8 MemCardWorkArea0[0xa000] ALIGN_DECL(32);
+ALIGN_DECL(32, u8 MemCardWorkArea0[0xa000]);
 
 mDoMemCd_Ctrl_c g_mDoMemCd_control;
 

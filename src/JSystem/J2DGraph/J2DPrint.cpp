@@ -186,7 +186,7 @@ f32 J2DPrint::parse(const u8* param_1, int param_2, int param_3, u16* param_4, J
             local_f0 = 1;
         }
 
-        if (r27 == 0 || ((u32)param_1 - (u32)local_a4) > param_2) {
+        if (r27 == 0 || ((uintptr_t)param_1 - (uintptr_t)local_a4) > param_2) {
             if (param_7 == 0 && param_4 != NULL) {
                 param_4[r29] = 0.5f + f31;
             }
@@ -227,7 +227,7 @@ f32 J2DPrint::parse(const u8* param_1, int param_2, int param_3, u16* param_4, J
                         f31 = 0.0f;
                     }
                 }
-            } else if (local_f0 && ((u32)param_1 - (u32)local_a4 > (u32)param_2)) {
+            } else if (local_f0 && ((uintptr_t)param_1 - (uintptr_t)local_a4 > (u32)param_2)) {
                 if ((!param_7) && (param_4 != NULL)) {
                     param_4[r29] = 0.5f + f31;
                 }
@@ -500,11 +500,11 @@ s32 J2DPrint::getNumberS32(const u8** param_1, s32 param_2, s32 param_3, int bas
     uVar2 = 0;
     char* local_28;
     if (base == 10) {
-        uVar2 = strtol((char*)*param_1, &local_28, base);
+        uVar2 = strtol((const char*)*param_1, &local_28, base);
     } else if (base == 16) {
-        uVar2 = strtoul((char*)*param_1, &local_28, base);
-        if ((u32)local_28 - (u32)*param_1 != 8) {
-            if ((u32)local_28 - (u32)*param_1 == 6) {
+        uVar2 = strtoul((const char*)*param_1, &local_28, base);
+        if ((uintptr_t)local_28 - (uintptr_t)*param_1 != 8) {
+            if ((uintptr_t)local_28 - (uintptr_t)*param_1 == 6) {
                 uVar2 = (uVar2 << 8) | 0xff;
             } else {
                 *param_1 = puVar1;
@@ -537,11 +537,11 @@ f32 J2DPrint::getNumberF32(const u8** param_1, f32 param_2, f32 param_3, int bas
     uVar2 = 0;
     char* local_28;
     if (base == 10) {
-        uVar2 = strtol((char*)*param_1, &local_28, base);
+        uVar2 = strtol((const char*)*param_1, &local_28, base);
     } else if (base == 16) {
-        uVar2 = strtoul((char*)*param_1, &local_28, base);
-        if ((u32)local_28 - (u32)*param_1 != 8) {
-            if ((u32)local_28 - (u32)*param_1 == 6) {
+        uVar2 = strtoul((const char*)*param_1, &local_28, base);
+        if ((uintptr_t)local_28 - (uintptr_t)*param_1 != 8) {
+            if ((uintptr_t)local_28 - (uintptr_t)*param_1 == 6) {
                 uVar2 = (uVar2 << 8) | 0xff;
             } else {
                 *param_1 = puVar1;

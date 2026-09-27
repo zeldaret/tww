@@ -23,7 +23,7 @@ JASystem::TTrack::TTrack() {
     mParent = NULL;
     field_0x364 = 0.0f;
     field_0x368 = 0.0f;
-    field_0x36c = 0;
+    mRoute = 0;
     mUpdateFlags = 0;
     field_0x374 = 0;
     field_0x376 = 0x78;
@@ -70,7 +70,7 @@ void JASystem::TTrack::init() {
     }
     field_0x364 = 0.0f;
     field_0x368 = 1.0f;
-    field_0x36c = 0;
+    mRoute = 0;
     mVibrate.init();
     mUpdateFlags = 0;
     field_0x374 = 0;
@@ -972,13 +972,13 @@ JASystem::TTrack* JASystem::TTrack::openChild(u8 trk_no, u8 param_2) {
     new_track->mParent = this;
     new_track->field_0x37b = param_2;
 
-    u32 top_nibble = field_0x36c & 0xf0000000;
+    u32 top_nibble = mRoute & 0xf0000000;
     if (top_nibble >= 0x70000000) {
         // "JASTrack:openTrack: The hierarchy exceeds 8 levels and an invalid track ID is generated.\n"
         OSReport("JASTrack:openTrack: 階層が8段階を超えてしまい、不正なトラックIDが生成されました\n");
     }
-    new_track->field_0x36c = (top_nibble + 0x10000000) |
-                             (((field_0x36c) << 4 | ((u32) trk_no)) & 0x0FFFFFFF);
+    new_track->mRoute = (top_nibble + 0x10000000) |
+                        (((mRoute) << 4 | ((u32) trk_no)) & 0x0FFFFFFF);
     mChildren[(int)trk_no] = new_track;
     new_track->inherit();
     return new_track;

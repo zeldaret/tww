@@ -1317,7 +1317,7 @@ bool daObj_Ikada_c::_draw() {
     }
 
     if (isCrane()) {
-        dSnap_RegistFig(DSNAP_TYPE_UNK83, this, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_SALVAGE_CORP, this, 1.0f, 1.0f, 1.0f);
     }
 
     return true;
@@ -1499,7 +1499,7 @@ BOOL daObj_Ikada_c::_createHeap() {
         }
     }
 
-    mpModel->setUserArea((u32)this);
+    mpModel->setUserArea((uintptr_t)this);
 
     if (mType == 4) {
         for (u16 i = 0; i < modelData->getJointNum(); i++) {

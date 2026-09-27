@@ -1,18 +1,27 @@
 #ifndef D_A_OBJ_MMRR_H
 #define D_A_OBJ_MMRR_H
 
+#include "d/d_cc_d.h"
+#include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 
 namespace daObjMmrr {
+    class Eff_c : public dPa_followEcallBack {
+    public:
+        virtual void end();
+        void remove();
+        virtual ~Eff_c() {}
+    };  // Size: 0x14
+
     class Act_c : public fopAc_ac_c {
     public:
         void setup(const cXyz* pos) {
             current.pos = *pos;
-            mBF8 = 1;
+            field_0xBF8 = 1;
         }
-    
-        void solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+
+        static int solidHeapCB(fopAc_ac_c*);
+        bool create_heap();
         void init_cc();
         void set_cc_rec_pos();
         void set_cc_trans_pos();
@@ -21,24 +30,33 @@ namespace daObjMmrr {
         bool _delete();
         void set_mtx();
         void init_mtx();
-        void chk_light();
+        bool chk_light();
         void eff_start();
         void eff_stop();
         void eff_remove();
         bool _execute();
         bool _draw();
-    
-    public:
-        /* 0x290 */ u8 m290[0xBF8 - 0x290];
-        /* 0xBF8 */ u8 mBF8;
-        /* 0xBF9 */ u8 mBF9[0xC18 - 0xBF9];
-    };
 
-    class Eff_c {
+        static const char M_arcname[];
+        static const dCcD_SrcTri M_tri_src;
+        static const dCcD_SrcCps M_cps_src;
+
     public:
-        void end();
-        void remove();
-    };
+        /* 0x290 */ request_of_phase_process_class mPhs;
+        /* 0x298 */ J3DModel* mpMirrorModel;
+        /* 0x29C */ J3DModel* mpBeamModel;
+        /* 0x2A0 */ mDoExt_btkAnm mMirrorBtkAnm;
+        /* 0x2B4 */ mDoExt_btkAnm mBeamBtkAnm;
+        /* 0x2C8 */ dCcD_Tri field_0x2C8[5];
+        /* 0x958 */ dCcD_Stts field_0x958[5];
+        /* 0xA84 */ dCcD_Cps field_0xA84;
+        /* 0xBBC */ dCcD_Stts field_0xBBC;
+        /* 0xBF8 */ bool field_0xBF8;
+        /* 0xBF9 */ bool field_0xBF9;
+        /* 0xBFC */ f32 field_0xBFC;
+        /* 0xC00 */ f32 field_0xC00;
+        /* 0xC04 */ Eff_c field_0xC04;
+    };  // Size: 0xC18
 };
 
 #endif /* D_A_OBJ_MMRR_H */

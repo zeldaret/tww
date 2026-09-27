@@ -229,7 +229,7 @@ void daPy_lk_c::setBowModel() {
     lineDamMAT_mtl->getShape()->hide();
     tmp_modelData->getJointNodePointer(LINK_BOW_JNT_LINEAB_JNT_e)->setCallBack(daPy_bowJointCB);
     tmp_modelData->getJointNodePointer(LINK_BOW_JNT_LINEBB_JNT_e)->setCallBack(daPy_bowJointCB);
-    mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
+    mpEquipItemModel->setUserArea(reinterpret_cast<uintptr_t>(this));
 }
 
 /* 8014A834-8014A8D4       .text procBowSubject_init__9daPy_lk_cFv */

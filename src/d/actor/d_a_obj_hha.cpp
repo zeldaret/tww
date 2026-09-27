@@ -154,7 +154,7 @@ void daObjHhaPart_c::exe_normal(daObjHha_c* parent) {
 void daObjHhaPart_c::exe_move(daObjHha_c* parent) {
     mPos.y += mDeltaY;
     cXyz positionDelta = mPosTarget - mPos;
-    if(mPosDeltaDir.getDotProduct(positionDelta) <= 0.0f){
+    if(mPosDeltaDir.inprod(positionDelta) <= 0.0f){
         mPos = mPosTarget;
         setExeProc(&daObjHhaPart_c::exe_normal);
         if(mbMid == 0 && mPartIdx == 0){

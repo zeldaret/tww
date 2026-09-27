@@ -512,13 +512,13 @@ bool mDoMch_Create() {
     JKRHeap::setDefaultDebugFill(mDoMch::mDebugFill);
     JFWSystem::setMaxStdHeap(1);
 
-    u32 arenaHi = (u32)OSGetArenaHi();
-    u32 arenaLo = (u32)OSGetArenaLo();
+    uintptr_t arenaHi = (uintptr_t)OSGetArenaHi();
+    uintptr_t arenaLo = (uintptr_t)OSGetArenaLo();
     if (arenaHi > 0x81800000 && arenaHi - 0x1800000 > arenaLo) {
         OSSetArenaHi((void*)(arenaHi - 0x1800000));
     }
 
-    u32 arenaSize = ((u32)OSGetArenaHi() - (u32)OSGetArenaLo()) - 0xF0;
+    u32 arenaSize = ((uintptr_t)OSGetArenaHi() - (uintptr_t)OSGetArenaLo()) - 0xF0;
 #if VERSION != VERSION_PAL
     if (OSGetConsoleSimulatedMemSize() >= 0x3000000) {
         arenaSize -= DEMO_SELECT(0x800000, 0x1000000);

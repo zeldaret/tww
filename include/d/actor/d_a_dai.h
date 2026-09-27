@@ -25,7 +25,7 @@ public:
     void proc();
     bool _draw();
     u32 getMsg();
-    u16 next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
 
     static void init() {
         mNowDaizaNum = 0;

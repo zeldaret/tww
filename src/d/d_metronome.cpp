@@ -304,15 +304,9 @@ void dMetronome_c::melodyGuideShow(s32 note, s16 no) {
 
     fopMsgM_cposMove(&pane_cn[no]);
 
-    // This is almost J2DPane::setBasePosition
     f32 centerX = pane_i11[no].mSize.x / 2.0f;
     f32 centerY = pane_i11[no].mSize.y / 2.0f;
-    J2DScreen* scrn = (J2DScreen*)pane_i11[no].pane;
-    scrn->mBasePosition.x = centerX;
-    scrn->mBasePosition.y = centerY;
-    scrn->mRotationAxis = ROTATE_Z;
-    scrn->mRotation = rot[note];
-    scrn->calcMtx();
+    ((J2DScreen*)pane_i11[no].pane)->rotate(centerX, centerY, ROTATE_Z, rot[note]);
 }
 
 /* 80222854-80222C4C       .text melodyShow__12dMetronome_cFv */

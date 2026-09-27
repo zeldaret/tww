@@ -144,8 +144,12 @@ public:
         JUT_ASSERT(VERSION_SELECT(558, 558, 569, 569), fmapSv != NULL);
         fmapSv->setCurHY(val);
     }
-    void lineInter0to1(f32, f32, f32) {}
-    void lineInter0to1ForU8(u8, u8, f32) {}
+    f32 lineInter0to1(f32 a, f32 b, f32 c) {
+        return a + (b - a) * c;
+    }
+    u8 lineInter0to1ForU8(u8 a, u8 b, f32 c) {
+        return a + (b - a) * c;
+    }
     void setFont(JUTFont* font, JUTFont* rfont) {
         mFont = font;
         mRFont = rfont;
@@ -306,7 +310,7 @@ public:
     bool _open_wallPaper();
     int getButtonIconMode();
 
-public:
+private:
     /* 0x0004 */ u8 padding_0x4[0x18 - 0x4];
     /* 0x0018 */ ResTIMG * mChkPntTxt_p;
     /* 0x001C */ dDlst_FMAP_c fmapDl;
@@ -347,7 +351,7 @@ public:
     /* 0x34CC */ fopMsgM_pane_class mFmnPanes[15];
     /* 0x3814 */ fopMsgM_pane_class mClgPane;
     /* 0x384C */ fopMsgM_pane_class mSc2xPanes[7];
-    /* 0x39D4 */ fopMsgM_pane_class mR0xPanes[11];
+    /* 0x39D4 */ fopMsgM_pane_class mR0xPanes[DEMO_SELECT(10, 11)];
     /* 0x3C3C */ fopMsgM_pane_class mStxxPanes[49];
     /* 0x46F4 */ fopMsgM_pane_class mCk1xPanes[3];
     /* 0x479C */ fopMsgM_pane_class mCk2xPanes[3];
@@ -377,7 +381,7 @@ public:
     /* 0x4F44 */ fopMsgM_pane_class mGsPanes[7];
 #endif
 #if VERSION == VERSION_DEMO
-    u8 pad [0x340 + 8];
+    u8 pad [0x340 + 8 + 0x38];
 #endif
     /* 0x50CC */ STControl* stick;
     /* 0x50D0 */ JUTFont* mFont;
@@ -435,8 +439,8 @@ public:
     /* 0x517A */ u8 mFishmanTimer3;
     /* 0x517B */ u8 mCheckMarkTimer;
     /* 0x517C */ u8 mCheckMarkToggle;
-    /* 0x517D */ u8 field_0x517D;
-    /* 0x517E */ u8 field_0x517E;
+    /* 0x517D */ u8 mKorokMarkTimer;
+    /* 0x517E */ u8 mKorokMarkToggle;
     /* 0x517F */ bool mFishmanActive;
     /* 0x5180 */ u8 mSalvagePntIdx;
     /* 0x5181 */ u8 mButtonIconMode;
@@ -448,11 +452,11 @@ public:
     /* 0x5187 */ u8 padding_0x5187[0x518C-0x5187];
     /* 0x518C */ char* mpKtx1String;
     /* 0x5190 */ char* mpKtx2String;
-    /* 0x5194 */ JUtility::TColor mCk1Color;
+    /* 0x5194 */ JUtility::TColor mCk1Color1;
     /* 0x5198 */ JUtility::TColor mCk1Color2;
-    /* 0x519C */ JUtility::TColor mKr0Color;
+    /* 0x519C */ JUtility::TColor mKr0Color1;
     /* 0x51A0 */ JUtility::TColor mKr0Color2;
-    /* 0x51A4 */ JUtility::TColor mYs01Color;
+    /* 0x51A4 */ JUtility::TColor mYs01Color1;
     /* 0x51A8 */ JUtility::TColor mYs01Color2;
 #if VERSION > VERSION_JPN
     /* 0x51AC */ bool mMoonAlphaActive;
@@ -543,12 +547,12 @@ public:
     /* 0x0E0 */ u8 mCheckMarkAnimFrame;
     /* 0x0E1 */ GXColor mCheckMarkWhite;
     /* 0x0E5 */ GXColor mCheckMarkBlack;
-    /* 0x0E9 */ u8 field_0xE9;
-    /* 0x0EA */ GXColor field_0xEA;
-    /* 0x0EE */ GXColor field_0xEE;
+    /* 0x0E9 */ u8 mKorokMarkAnimFrame;
+    /* 0x0EA */ GXColor mKorokMarkAnimWhite;
+    /* 0x0EE */ GXColor mKorokMarkAnimBlack;
     /* 0x0F2 */ u8 field_0xF2;
-    /* 0x0F3 */ GXColor mKorokWhite;
-    /* 0x0F7 */ GXColor mKorokBlack;
+    /* 0x0F3 */ GXColor mKorokMarkWhite;
+    /* 0x0F7 */ GXColor mKorokMarkBlack;
     /* 0x0FB */ u8 field_0xFB;
     /* 0x0FC */ GXColor mAreaTxtColor;
     /* 0x100 */ GXColor mAreaTxtColorMain;

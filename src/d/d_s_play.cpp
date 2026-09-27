@@ -44,7 +44,7 @@ static const int PRELOAD_RES_MAX = 0x23;
 static const int PRELOAD_DYL_MAX = 0x1B;
 
 struct PreLoadInfoT_s {
-    char* stageName;
+    const char* stageName;
     const s16* dylKeyTbl;
     const char** resName;
     u8 dylKeyTblNum;

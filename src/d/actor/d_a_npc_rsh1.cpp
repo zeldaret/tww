@@ -168,7 +168,7 @@ BOOL daNpc_Rsh1_c::checkCreateInShopPlayer() {
             cXyz t2_cross_t3 = temp2.outprod(temp3);
             cXyz base_y = cXyz::BaseY;
             
-            if (base_y.getDotProduct(t2_cross_t3) > 0.0f) {
+            if (base_y.inprod(t2_cross_t3) > 0.0f) {
                 l++;
             }
 
@@ -177,7 +177,7 @@ BOOL daNpc_Rsh1_c::checkCreateInShopPlayer() {
         }
 
         if ((l == 4 || l == 0) && 
-            diff.getDotProduct(dir) > 0.0f && 
+            diff.inprod(dir) > 0.0f && 
             std::fabsf(diff.y) < 25.0f) {
             return TRUE;
         }
@@ -206,7 +206,7 @@ static BOOL daNpc_Rsh1_checkRotenBaseTalkArea() {
         cXyz t2_cross_t3 = temp2.outprod(temp3);
         cXyz base_y = cXyz::BaseY;
         
-        if (base_y.getDotProduct(t2_cross_t3) > 0.0f) {
+        if (base_y.inprod(t2_cross_t3) > 0.0f) {
             l++;
         }
 
@@ -363,8 +363,8 @@ void daNpc_Rsh1_c::playTexPatternAnm() {
 /* 00000BDC-00000C64       .text setAnm__12daNpc_Rsh1_cFSc */
 void daNpc_Rsh1_c::setAnm(s8 i_index) {
     static int play_mode_tbl[7] = {
-        2, 2, 2, 2,
-        2, 2, 2
+        J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP
     };
 
     static float morf_frame_tbl[7] = {
@@ -1176,10 +1176,10 @@ int daNpc_Rsh1_c::getAimShopPosIdx() {
     for (int i = 0; i <= condition; i++) {
         cXyz temp = link_pos;
         temp -= mPathPointPos[i];
-        f32 mag = std::sqrtf(temp.abs2XZ());
+        f32 mag = temp.absXZ();
         
         if (mag < fcond) {
-            fcond = std::sqrtf(temp.abs2XZ());
+            fcond = temp.absXZ();
             result_index = i;
         }
     }
@@ -1875,7 +1875,7 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
         }
     }
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     cXyz* speed_p = &speed;
     cXyz* old_pos_p = &old.pos;

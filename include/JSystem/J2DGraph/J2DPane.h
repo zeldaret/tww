@@ -100,9 +100,9 @@ public:
         mRotation = angle;
         calcMtx();
     }
-    void setInfluencedAlpha(bool) {}
+    void setInfluencedAlpha(bool v) { mInfluencedAlpha = v; }
 
-public:
+protected:
     /* 0x04 */ u32 mMagic;
     /* 0x08 */ int mTag;
     /* 0x0C */ JGeometry::TBox2<f32> mBounds;
@@ -118,7 +118,7 @@ public:
     /* 0xAB */ u8 mCullMode;
     /* 0xAC */ u8 mAlpha;
     /* 0xAD */ u8 mDrawAlpha;
-    /* 0xAE */ u8 mInheritAlpha;
+    /* 0xAE */ bool mInfluencedAlpha;
     /* 0xAF */ u8 mIsConnectParent;
     /* 0xB0 */ JSUTree<J2DPane> mPaneTree;
 };

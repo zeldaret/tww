@@ -40,7 +40,7 @@ public:
         typedef void (daDaiocta_c::*ModeProcFunc)(void);
         ModeProcFunc mInitFunc;
         ModeProcFunc mUpdFunc;
-        char* mModeName;
+        const char* mModeName;
     };
 
     u8 getSw() { return mSwitchNo; }

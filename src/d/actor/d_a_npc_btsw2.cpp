@@ -391,7 +391,7 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
     modelData = mpMorf->getModel()->getModelData();
     modelData->getJointNodePointer(m_jnt.getHeadJntNum())->setCallBack(nodeCallBack);
     modelData->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(nodeCallBack);
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     

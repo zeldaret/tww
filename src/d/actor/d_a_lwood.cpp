@@ -26,7 +26,7 @@ BOOL daLwood_c::CreateHeap() {
     if (mModel == NULL)
         return FALSE;
 
-    mModel->setUserArea((u32)this);
+    mModel->setUserArea((uintptr_t)this);
     setMoveBGMtx();
     cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_LWOOD_DZB_ALWD_e);
     mpBgW = dBgW_NewSet(bgp, dBgW::MOVE_BG_e, &mtx);

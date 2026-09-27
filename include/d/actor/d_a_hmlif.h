@@ -29,7 +29,7 @@ public:
     bool chkSwitchPathType();
     virtual BOOL Draw();
 
-    static char* m_arcname[];
+    static const char* m_arcname[];
     static const f32 m_speed[];
     static const s16 m_bmdidx[];
     static const s16 m_dzbidx[];

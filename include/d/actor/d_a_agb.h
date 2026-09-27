@@ -128,13 +128,13 @@ public:
     struct daAgb_Item {
         /* 0x0 */ u8 field_0x0;
         /* 0x1 */ u8 field_0x1;
-    } ALIGN_DECL(4);
+    } ATTRIBUTE_ALIGN(4);
 
     struct daAgb_Shop {
         /* 0x0 */ u8 field_0x0;
         /* 0x1 */ u8 field_0x1;
         /* 0x2 */ u8 field_0x2;
-    } ALIGN_DECL(4);
+    } ATTRIBUTE_ALIGN(4);
 
     static int mEffect;
     static daAgb_ItemBuy mItemBuy;

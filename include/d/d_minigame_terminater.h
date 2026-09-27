@@ -2,6 +2,7 @@
 #define D_MINIGAME_TERMINATER_H
 
 #include "d/d_drawlist.h"
+#include "f_op/f_op_msg.h"
 
 class JKRArchive;
 class J2DPane;
@@ -9,7 +10,9 @@ struct fopMsgM_pane_class;
 
 class dDlst_TerminaterScrnDraw_c : public dDlst_base_c {
 public:
-    void acc(s16, s16, s16) {}
+    f32 acc(s16 param_0, s16 param_1, s16 param_2) {
+        return SQUARE((f32)(param_1 - param_2)) / SQUARE((f32)(param_0 - param_2));
+    }
 
     void setScreen(const char*, JKRArchive*);
     void setScrnFailed();

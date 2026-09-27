@@ -37,6 +37,16 @@ AMBIGUOUS_JOINT_ENUM_NAMES = [
     "NZ_JNT",
 ]
 
+# Keep one arcname's version of the duplicate enum unqualified, but qualify the other arcnames.
+AMBIGUOUS_JOINT_ENUM_NAMES_KEEP_UNQUALIFIED = {
+    "VF_061_JNT": "Figure2",
+    "VF_062_JNT": "Figure2",
+    "VF_063_JNT": "Figure2",
+    "VF_064_JNT": "Figure2",
+    "VF_064L_JNT": "Figure2",
+    "VF_064S_JNT": "Figure2",
+}
+
 class ArcFile(NamedTuple):
     file_name:str
     index:int
@@ -115,6 +125,8 @@ def parse_bmd(src_path:Path, arc_name: str):
                     out_enum_name = sanitize_string(src_path.name.split(".")[0]).upper() + "_JNT"
 
                 if out_enum_name in AMBIGUOUS_JOINT_ENUM_NAMES:
+                    out_enum_name = arc_name + "_" + out_enum_name
+                elif out_enum_name in AMBIGUOUS_JOINT_ENUM_NAMES_KEEP_UNQUALIFIED and AMBIGUOUS_JOINT_ENUM_NAMES_KEEP_UNQUALIFIED[out_enum_name].upper() != arc_name:
                     out_enum_name = arc_name + "_" + out_enum_name
 
                 for i in range(num_strings):

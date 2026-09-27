@@ -58,6 +58,8 @@ public:
     s32 adjustSize(void);
 
     static JKRSolidHeap* create(u32, JKRHeap*, bool);
+
+    static void* getState_(TState* state) { return getState_buf_(state); }
 };  // Size: 0x80
 
 inline JKRSolidHeap* JKRCreateSolidHeap(u32 size, JKRHeap* parent, bool errorFlag) { return JKRSolidHeap::create(size, parent, errorFlag); }

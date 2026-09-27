@@ -102,6 +102,13 @@ struct fopMsgM_pane_alpha_class {
 
 class fopMsgM_msgGet_c {
 public:
+    fopMsgM_msgGet_c() {
+        mMsgIdx = 0;
+        mGroupID = 0;
+        mMsgNo = 0;
+        mResMsgNo = 0;
+    }
+
     virtual ~fopMsgM_msgGet_c() {}
     mesg_header* getMesgHeader(u32 i_msgNo);
     mesg_info* getMesgInfo(mesg_header* i_head);

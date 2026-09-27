@@ -183,7 +183,7 @@ BOOL daObjShmrgrd_c::create_heap() {
         mpModel = mDoExt_J3DModel__create(mdl_data, 0, 0x11020203);
         if (mpModel) {
             mdl_data->getJointNodePointer(SHMRGRD_JNT_HIT_e)->setCallBack(jnodeCB);
-            mpModel->setUserArea((u32) this);
+            mpModel->setUserArea((uintptr_t) this);
             mpBgW = dBgW_NewSet((cBgD_t *)dComIfG_getObjectRes(M_arcname, dRes_INDEX_SHMRGRD_DZB_HGBASE_e), cBgW::MOVE_BG_e, &mMtx);
             if (mpBgW) {
                 rt = TRUE;

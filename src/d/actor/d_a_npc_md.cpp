@@ -207,9 +207,9 @@ static daNpc_Md_HIO_c l_HIO;
 static cXyz l_ms_light_local_vec(0.0f, 0.0f, -10000.0f);
 static cXyz l_ms_light_local_start(5.0f, 7.0f, 0.0f);
 
-static char* l_arc_name = "Md";
-static char* l_arc_name_ship = "Md_ship";
-static char* l_staff_name = "Md1";
+static const char* l_arc_name = "Md";
+static const char* l_arc_name_ship = "Md_ship";
+static const char* l_staff_name = "Md1";
 
 static char* event_name_tbl[] = {
     "Md_ItemGet",
@@ -913,7 +913,7 @@ static BOOL hairNodeCallBack(J3DNode* node, int calcTiming) {
     return TRUE;
 }
 
-static char* hairName[] = {
+static const char* hairName[] = {
     "hair1",
     "hair2",
     "hair3",
@@ -979,14 +979,14 @@ BOOL daNpc_Md_c::createHeap() {
     if (m_hair_jnt_nums[i] >= 0) {
         modelData->getJointNodePointer(m_hair_jnt_nums[i])->setCallBack(hairTopNodeCallBack);
     }
-    for (i = 1; i < (int)ARRAY_SIZE(hairName); i++) {
+    for (i = 1; i < ARRAY_SSIZE(hairName); i++) {
         m_hair_jnt_nums[i] = modelData->getJointName()->getIndex(hairName[i]);
         if (m_hair_jnt_nums[i] >= 0) {
             modelData->getJointNodePointer(m_hair_jnt_nums[i])->setCallBack(hairNodeCallBack);
         }
     }
 
-    getModel()->setUserArea((u32)this);
+    getModel()->setUserArea((uintptr_t)this);
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdarm.bdl");
     JUT_ASSERT(DEMO_SELECT(2016, 2051), modelData != NULL);
@@ -1020,7 +1020,7 @@ BOOL daNpc_Md_c::createHeap() {
     modelData->getJointNodePointer(m_armRloc_jnt_num)->setCallBack(armNodeCallBack);
     modelData->getJointNodePointer(m_armLloc_jnt_num)->setCallBack(armNodeCallBack);
 
-    mpArmMorf->getModel()->setUserArea((u32)this);
+    mpArmMorf->getModel()->setUserArea((uintptr_t)this);
 
     if (!isTypeShipRide()) {
         modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdwing.bdl");
@@ -1060,7 +1060,7 @@ BOOL daNpc_Md_c::createHeap() {
         modelData->getJointNodePointer(m_wingRloc_jnt_num)->setCallBack(armNodeCallBack);
         modelData->getJointNodePointer(m_wingLloc_jnt_num)->setCallBack(armNodeCallBack);
 
-        mpWingMorf->getModel()->setUserArea((u32)this);
+        mpWingMorf->getModel()->setUserArea((uintptr_t)this);
     }
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "md_harp.bdl");
@@ -1389,7 +1389,7 @@ void daNpc_Md_c::NpcCall(int* r31) {
         }
     } else {
         f32 temp = 2.0f * l_HIO.m0C4;
-        if (dist_sq >= temp * temp) {
+        if (dist_sq >= SQUARE(temp)) {
             setNpcAction(&daNpc_Md_c::searchNpcAction);
         }
         *r31 = 1;
@@ -2271,8 +2271,6 @@ s16 daNpc_Md_c::windProc() {
         }
     }
     cStack_64.set(local_34.x, 0.0f, local_34.z);
-    //f32 cos = cM_scos(shape_angle.y);
-    //f32 sin = cM_ssin(shape_angle.y);
     cStack_70.set(cM_ssin(shape_angle.y), 0.0f, cM_scos(shape_angle.y));
     dVar6 = l_HIO.m134;
     if (!(std::fabsf(cStack_64.abs2XZ()) < G_CM3D_F_ABS_MIN)) {
@@ -5924,7 +5922,7 @@ BOOL daNpc_Md_c::execute() {
             return TRUE;
         }
         initialRestartOption(2, isTypeM_Dai());
-        if ((dComIfGp_getCb1Player() == this) && ((!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1620) || (isTypeShipRide())) || (isTypeM_DaiB()))) {
+        if (dComIfGp_getCb1Player() == this && (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1620) || isTypeShipRide() || isTypeM_DaiB())) {
             dComIfGp_setCb1Player(NULL);
         }
         fopAcM_setStageLayer(this);
@@ -5938,7 +5936,7 @@ BOOL daNpc_Md_c::execute() {
             m312B = 0;
             return TRUE;
         }
-        if (((m3131 != 0) && (dComIfG_Bgsp()->ChkPolySafe(mPolyInfo))) && (dComIfG_Bgsp()->ChkMoveBG(mPolyInfo))) {
+        if (m3131 != 0 && dComIfG_Bgsp()->ChkPolySafe(mPolyInfo) && dComIfG_Bgsp()->ChkMoveBG(mPolyInfo)) {
             local_30 = old.pos;
             dComIfG_Bgsp()->MoveBgCrrPos(mPolyInfo, true, &old.pos, NULL, NULL);
         }

@@ -124,7 +124,7 @@ BOOL daDaiocta_Eye_c::_createHeap() {
         return FALSE;
     }
     
-    mpModel->setUserArea((u32)this);
+    mpModel->setUserArea((uintptr_t)this);
 
     mpBrk = static_cast<J3DAnmTevRegKey *>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_DAIOCTA_BRK_DAMAGE_EYE_A1_e));
 

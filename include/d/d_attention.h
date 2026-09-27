@@ -249,7 +249,7 @@ public:
         f32 mDeltaYMax;
         f32 mDeltaYMin;
         f32 mWeightDivisor;
-        int mFrontAngleCheckBits;
+        u32 mFrontAngleCheckBits;
     } dist_table[];
 
     // TODO:

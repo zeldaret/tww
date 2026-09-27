@@ -34,14 +34,14 @@
 #define GLUE(a, b) a##b
 #define GLUE2(a, b) GLUE(a, b)
 #define STATIC_ASSERT(cond) typedef char GLUE2(static_assertion_failed, __LINE__)[(cond) ? 1 : -1]
-#define ALIGN_DECL(ALIGNMENT) __attribute__((aligned(ALIGNMENT)))
+#define ALIGN_DECL(alignment, decl) decl ATTRIBUTE_ALIGN(alignment)
 #define SECTION_DATA __declspec(section ".data")
 #define SECTION_INIT __declspec(section ".init")
 #define ASM asm
 #define WEAKFUNC __declspec(weak)
 #else
 #define STATIC_ASSERT(...)
-#define ALIGN_DECL(...)
+#define ALIGN_DECL(alignment, decl) ATTRIBUTE_ALIGN(alignment) decl
 #define SECTION_DATA
 #define SECTION_INIT
 #define ASM

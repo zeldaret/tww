@@ -2035,12 +2035,8 @@ static void part_move(st_class* i_this, int jointIndex) {
                         }
 #endif
                     } else {
-                        this_part->mPartVelocity.z = 0.0f;
-                        this_part->mPartVelocity.y = 0.0f;
-                        this_part->mPartVelocity.x = 0.0f;
-                        this_part->mPartRotAdd.z = 0;
-                        this_part->mPartRotAdd.y = 0;
-                        this_part->mPartRotAdd.x = 0;
+                        this_part->mPartVelocity.x = this_part->mPartVelocity.y = this_part->mPartVelocity.z = 0.0f;
+                        this_part->mPartRotAdd.x = this_part->mPartRotAdd.y = this_part->mPartRotAdd.z = 0;
                         cLib_addCalcAngleS2(&this_part->mPartRot.x, -0x8000, 1, 0xc00);
                         cLib_addCalcAngleS2(&this_part->mPartRot.y, 0, 1, 0xc00);
                     }
@@ -2697,7 +2693,7 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
     }
 #if VERSION == VERSION_DEMO
     J3DModel* model = i_this->mpMorf->getModel();
-    model->setUserArea((u32)i_this);
+    model->setUserArea((uintptr_t)i_this);
     for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
         if ((i < ST_JNT_ASIR_e + 1) && (i != ST_JNT_BUKI_e)) {
             model->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
@@ -2881,7 +2877,7 @@ static cPhs_State daSt_Create(fopAc_ac_c* a_this) {
                 i_this->m02B9 = 0xFF;
             }
         }
-        i_this->mpMorf->getModel()->setUserArea((u32)a_this);
+        i_this->mpMorf->getModel()->setUserArea((uintptr_t)a_this);
         e_this->initBt(162.5f, 125.0f);
         a_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
         fopAcM_OnStatus(a_this, fopAcStts_SHOWMAP_e);

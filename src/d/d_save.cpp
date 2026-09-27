@@ -1781,8 +1781,8 @@ int dSv_info_c::memory_to_card(char* i_cardPtr, int i_dataNum) {
     buffer += sizeof(dSv_reserve_c);
 
     s32 save_size = buffer - buffer_start;
-    if (save_size > dSv_save_c::PACKED_STRUCT_SIZE) {
-        printf("SAVE size over(%d/%d)\n", dSv_save_c::PACKED_STRUCT_SIZE, save_size);
+    if (save_size > (s32)sizeof(dSv_save_c_PACKED)) {
+        printf("SAVE size over(%d/%d)\n", sizeof(dSv_save_c_PACKED), save_size);
         return -1;
     } else {
         printf("SAVE size:%d\n", save_size);
@@ -1868,8 +1868,8 @@ int dSv_info_c::card_to_memory(char* i_cardPtr, int i_dataNum) {
     buffer += sizeof(dSv_reserve_c);
 
     s32 load_size = buffer - buffer_start;
-    if (load_size > dSv_save_c::PACKED_STRUCT_SIZE) {
-        printf("LOAD size over(%d/%d)\n", dSv_save_c::PACKED_STRUCT_SIZE, load_size);
+    if (load_size > (s32)sizeof(dSv_save_c_PACKED)) {
+        printf("LOAD size over(%d/%d)\n", sizeof(dSv_save_c_PACKED), load_size);
         return -1;
     } else {
         printf("LOAD size:%d\n", load_size);
@@ -2011,8 +2011,8 @@ int dSv_info_c::initdata_to_card(char* i_cardPtr, int i_dataNum) {
     buffer += sizeof(dSv_reserve_c);
 
     s32 load_size = buffer - buffer_start;
-    if (load_size > dSv_save_c::PACKED_STRUCT_SIZE) {
-        printf("INIT size over %d/%d\n", dSv_save_c::PACKED_STRUCT_SIZE, load_size);
+    if (load_size > (s32)sizeof(dSv_save_c_PACKED)) {
+        printf("INIT size over %d/%d\n", sizeof(dSv_save_c_PACKED), load_size);
         return -1;
     } else {
         printf("INIT size:%d\n", load_size);

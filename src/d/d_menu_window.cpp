@@ -24,8 +24,7 @@
 
 #include "d/d_menu_capture.inc"
 
-// TODO: Remove me when all the JUT asserts and other strings are filled out.
-// This is temporary, just to make the strings match.
+// A bunch of unused strings, might match the unused data from d_meter.cpp (header include?)
 static void dummy0() {
     DEAD_STRING("cmap_tri.bti");
     DEAD_STRING("cmap_treasure.bti");
@@ -37,32 +36,6 @@ static void dummy0() {
     DEAD_STRING("f_heart_up_02.bti");
     DEAD_STRING("f_korog_kare.bti");
     DEAD_STRING("f_korog_saki.bti");
-    DEAD_STRING("d_menu_window.cpp");
-    DEAD_STRING("i_Ms->name[i] != 0");
-    DEAD_STRING("Halt");
-    DEAD_STRING("");
-    DEAD_STRING("i_Ms->note[i] != 0");
-    DEAD_STRING("i_Ms->dummy[i] != 0");
-    DEAD_STRING("i_Ms->buffer_p[i] != 0");
-#if VERSION == VERSION_PAL
-    DEAD_STRING("i_Ms->title_p != 0");
-#endif
-    DEAD_STRING("dMi_c != 0");
-    DEAD_STRING("dMc_c != 0");
-    DEAD_STRING("dMf_c != 0");
-    DEAD_STRING("dMs_capture_c != 0");
-    DEAD_STRING("dMd_c != 0");
-    DEAD_STRING("dNm_c != 0");
-    DEAD_STRING("dMs_c != 0");
-    DEAD_STRING("cloth_c != 0");
-    DEAD_STRING("dMs_cloth_c != 0");
-    DEAD_STRING("i_Ms->childHeap != 0");
-    DEAD_STRING("awake");
-    DEAD_STRING("majyuu_shinnyuu");
-    DEAD_STRING("アイテムビット");
-    DEAD_STRING("ダンジョンビット");
-    DEAD_STRING("fonttype != 0");
-    DEAD_STRING("rfonttype != 0");
 }
 
 dMenu_FmapSv_c dMv_CIO_c;
@@ -604,6 +577,11 @@ void dMs_name_delete(sub_ms_screen_class*) {
         delete dMs_capture_c;
         dMs_capture_c = NULL;
     }
+}
+
+// Another unused string, probably a stripped void dMs_save_create(sub_ms_screen_class*)?
+static void dummy1() {
+    DEAD_STRING("dMs_c != 0");
 }
 
 /* 801DCE20-801DCEA0       .text dMs_save_delete__FP19sub_ms_screen_class */

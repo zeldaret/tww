@@ -24,8 +24,8 @@
 #define HEADER_COMMENT "%d/%d Save Data"
 #endif
 
-static u8 sTmpBuf[0x2000] ALIGN_DECL(32);
-static u8 sTmpBuf2[0x2000] ALIGN_DECL(32);
+ALIGN_DECL(32, static u8 sTmpBuf[0x2000]);
+ALIGN_DECL(32, static u8 sTmpBuf2[0x2000]);
 static u32 sSaveCount;
 
 /* 80019940-80019CE8       .text mDoMemCdRWm_Store__FP12CARDFileInfoPvUl */

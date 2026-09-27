@@ -16,7 +16,7 @@ public:
     BOOL CreateHeap();
     void CreateInit();
     void set_mtx();
-    u16 next_msgStatus(unsigned long*);
+    u16 next_msgStatus(u32*);
     u32 getMsg();
     void setGoal(int);
     void setPlayerAngle(int);

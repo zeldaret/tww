@@ -112,11 +112,11 @@ void daBomb_fuseSparksEcallBack::execute(JPABaseEmitter* emitter) {
     JGeometry::TVec3<f32> pos(mpPos->x, mpPos->y, mpPos->z);
     emitter->setGlobalTranslation(pos);
     
-    JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
-    while(link != 0) {
-        JSUPtrLink* next = link->getNext();
+    JSUList<JPABaseParticle>* list = emitter->getParticleList();
+    for (JSULink<JPABaseParticle>* link = list->getFirst(); link != NULL;) {
+        JSULink<JPABaseParticle>* next = link->getNext();
 
-        JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
+        JPABaseParticle* ptcl = link->getObject();
         ptcl->setOffsetPosition(pos);
 
         link = next;

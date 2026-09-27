@@ -635,9 +635,7 @@ static void damage_check(bgn3_class* i_this) {
                 i_this->m0FDB4 = 0x14;
                 if (bVar10 >= 4) {
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, i_this->m0FDFC.GetTgHitPosP());
-                    local_58.z = 2.0f;
-                    local_58.y = 2.0f;
-                    local_58.x = 2.0f;
+                    local_58.x = local_58.y = local_58.z = 2.0f;
                     local_78.z = 0;
                     local_78.x = 0;
                     local_78.y = fopAcM_searchPlayerAngleY(actor);
@@ -1288,15 +1286,11 @@ static cPhs_State daBgn3_Create(fopAc_ac_c* a_this) {
         }},
     };
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(a_this, bgn3_class);
-#endif
+    fopAcM_ct_Retail(a_this, bgn3_class);
     bgn3_class* i_this = (bgn3_class*)a_this;
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bgn");
     if (res == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(a_this, bgn3_class);
-#endif
+        fopAcM_ct_Demo(a_this, bgn3_class);
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x96000)) {
             return cPhs_ERROR_e;
         }

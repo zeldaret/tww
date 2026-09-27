@@ -685,7 +685,7 @@ int JASystem::TSeqParser::cmdPrintf(TTrack* track, u32* args) {
         if (byteArray[i] == 2) {
             registers[i] = (int)track->getSeq()->getAddr(registers[i]);
         } else if (byteArray[i] == 5) {
-            registers[i] = track->field_0x36c;
+            registers[i] = track->mRoute;
         } else if (byteArray[i] >= 3) {
             registers[i] = track->exchangeRegisterValue(registers[i]);
         }

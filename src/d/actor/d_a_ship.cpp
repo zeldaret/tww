@@ -365,7 +365,7 @@ BOOL daShip_c::checkForceMessage() {
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E01) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F80)) {
         mNextMessageNo = 0x1688;
     }
-    else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
+    else if (dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
         mNextMessageNo = 0x1645;
     }
     else {
@@ -3105,7 +3105,7 @@ void daShip_c::incRopeCnt(int lengthChange, int minSegmentLimit) {
     int targetRopeCnt = currRopeCnt + lengthChange;
 
     // Ensure the new segment index is within valid bounds
-    if (targetRopeCnt >= (int)ARRAY_SIZE(mRopeLineSegments)) {
+    if (targetRopeCnt >= ARRAY_SSIZE(mRopeLineSegments)) {
         targetRopeCnt = ARRAY_SIZE(mRopeLineSegments);
     }
     else if (targetRopeCnt < minSegmentLimit) {
@@ -3214,8 +3214,7 @@ void daShip_c::setRopePos() {
 
             spEC.set(*currentRopeSegment - *(currentRopeSegment + 1));
 
-            f32 fVar17 = std::sqrtf(spEC.abs2());
-
+            f32 fVar17 = spEC.abs();
             if (fVar17 < 0.01f) {
                 currentRopeSegment->set(*(currentRopeSegment + 1) + l_rope_base_vec);
             }
@@ -3482,7 +3481,7 @@ void daShip_c::setHeadAnm() {
         } 
         else if (
 #if VERSION > VERSION_DEMO
-                (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) &&
+                (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) &&
 #endif
                  (mSph.ChkTgHit() || mCyl[0].ChkTgHit() ||
                   mCyl[1].ChkTgHit() || mCyl[2].ChkTgHit())) {
@@ -3496,7 +3495,7 @@ void daShip_c::setHeadAnm() {
     else {
         if (
 #if VERSION > VERSION_DEMO
-            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) &&
+            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) &&
 #endif
             (mSph.ChkTgHit() || mCyl[0].ChkTgHit() ||
              mCyl[1].ChkTgHit() || mCyl[2].ChkTgHit())) {
@@ -3512,7 +3511,7 @@ void daShip_c::setHeadAnm() {
                  std::fabsf(mpHeadAnm->getPlaySpeed()) < 0.01f && 
                  cM_rnd() < 0.4f && (g_Counter.mTimer & 0x1FF) == 0x1FF && 
 #if VERSION > VERSION_DEMO
-                 (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) &&
+                 (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) &&
 #endif
                  !checkStateFlg(daSFLG_UNK40000000_e)) {
             newFileIndex = dRes_INDEX_SHIP_BCK_AKIBI1_e;
@@ -4133,7 +4132,7 @@ BOOL daShip_c::execute() {
     else if (mCurMode == 8 || distXz > 125.0f) {
         if (
             (!dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e) &&
-            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02))) &&
+            (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910) || dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED))) &&
             dComIfGp_getMiniGameType() != 1
         ) {
 #if VERSION == VERSION_DEMO
@@ -4224,7 +4223,7 @@ BOOL daShip_c::execute() {
     }
     if (
         (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D10) && !daPy_getPlayerLinkActorClass()->checkMasterSwordEquip()) ||
-        (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3804) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) ||
+        (dComIfGs_isEventBit(dSv_event_flag_c::HYRULE_COURTYARD_CUTSCENE) && !dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) ||
         (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3E10) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3F80))
     ) {
         attention_info.flags &= ~fopAc_Attn_ACTION_SHIP_e;
@@ -4235,7 +4234,7 @@ BOOL daShip_c::execute() {
         if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E40) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3840)) {
             mNextMessageNo = 0x168c;
         }
-        else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
+        else if (dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3201)) {
             mNextMessageNo = 0x1645;
         }
         else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1820) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_3380)) {
@@ -4571,7 +4570,7 @@ cPhs_State daShip_c::create() {
         pModel = mpBodyAnm->getModel();
         pModelData = pModel->getModelData();
         
-        pModel->setUserArea(reinterpret_cast<u32>(this));
+        pModel->setUserArea(reinterpret_cast<uintptr_t>(this));
         
         fopAcM_SetMtx(this, pModel->getBaseTRMtx());
         
@@ -4599,7 +4598,7 @@ cPhs_State daShip_c::create() {
         pModel = mpHeadAnm->getModel();
         pModelData = pModel->getModelData();
         
-        pModel->setUserArea(reinterpret_cast<u32>(this));
+        pModel->setUserArea(reinterpret_cast<uintptr_t>(this));
         
         for (u16 jno = 0; jno < pModelData->getJointNum(); jno++) {
             if (jno == FN_HEAD_H_JNT_J_FN_ATAMA_e || jno == FN_HEAD_H_JNT_J_FN_AGO2_e) {
@@ -4619,14 +4618,14 @@ cPhs_State daShip_c::create() {
             }
         }
         
-        mpCannonModel->setUserArea(reinterpret_cast<u32>(this));
+        mpCannonModel->setUserArea(reinterpret_cast<uintptr_t>(this));
         
         pModelData = mpCannonModel->getModelData();
         
         pModelData->getJointNodePointer(VFNCN_JNT_CANON1_e)->setCallBack(daShip_cannonJointCallBack);
         pModelData->getJointNodePointer(VFNCN_JNT_CANON2_e)->setCallBack(daShip_cannonJointCallBack);
         
-        mpSalvageArmModel->setUserArea(reinterpret_cast<u32>(this));
+        mpSalvageArmModel->setUserArea(reinterpret_cast<uintptr_t>(this));
         mpSalvageArmModel->getModelData()->getJointNodePointer(VFNCR_JNT_V_CRANE_ROTATION_e)->setCallBack(daShip_craneJointCallBack);
         
         m034B = fopAcM_GetParam(this);

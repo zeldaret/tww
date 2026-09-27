@@ -161,16 +161,16 @@ void* cBgS::ConvDzb(void* work) {
     JUT_ASSERT(0x219, ((int)pbgd->m_ti_tbl % 4) == 0);
 
     if (pbgd->m_v_tbl != NULL)
-        pbgd->m_v_tbl = (cBgD_Vtx_t*)((u32)pbgd->m_v_tbl + (u32)pbgd);
+        pbgd->m_v_tbl = (cBgD_Vtx_t*)((u32)pbgd->m_v_tbl + (uintptr_t)pbgd);
 
-    pbgd->m_t_tbl = (cBgD_Tri_t*)((u32)pbgd->m_t_tbl + (u32)pbgd);
-    pbgd->m_b_tbl = (cBgD_Blk_t*)((u32)pbgd->m_b_tbl + (u32)pbgd);
-    pbgd->m_tree_tbl = (cBgD_Tree_t*)((u32)pbgd->m_tree_tbl + (u32)pbgd);
-    pbgd->m_g_tbl = (cBgD_Grp_t*)((u32)pbgd->m_g_tbl + (u32)pbgd);
-    pbgd->m_ti_tbl = (cBgD_Ti_t*)((u32)pbgd->m_ti_tbl + (u32)pbgd);
+    pbgd->m_t_tbl = (cBgD_Tri_t*)((u32)pbgd->m_t_tbl + (uintptr_t)pbgd);
+    pbgd->m_b_tbl = (cBgD_Blk_t*)((u32)pbgd->m_b_tbl + (uintptr_t)pbgd);
+    pbgd->m_tree_tbl = (cBgD_Tree_t*)((u32)pbgd->m_tree_tbl + (uintptr_t)pbgd);
+    pbgd->m_g_tbl = (cBgD_Grp_t*)((u32)pbgd->m_g_tbl + (uintptr_t)pbgd);
+    pbgd->m_ti_tbl = (cBgD_Ti_t*)((u32)pbgd->m_ti_tbl + (uintptr_t)pbgd);
 
     for (s32 i = 0; i < pbgd->m_g_num; i++) {
-        pbgd->m_g_tbl[i].m_name = (char*)((u32)pbgd + (u32)pbgd->m_g_tbl[i].m_name);
+        pbgd->m_g_tbl[i].m_name = (char*)((u32)pbgd->m_g_tbl[i].m_name + (uintptr_t)pbgd);
     }
 
     return pbgd;

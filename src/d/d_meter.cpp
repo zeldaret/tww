@@ -4337,8 +4337,8 @@ void dMeter_magicTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, 
             (param_3 +
              (i_Meter->field_0x11a0.mPosCenterOrig.y + (param_4 * (i_Meter->field_0x0f38[i].mPosCenterOrig.y - i_Meter->field_0x11a0.mPosCenterOrig.y))));
         i_Meter->field_0x0f38[i].mPosCenter.x -= ((i_Meter->field_0x0f38[i].mSizeOrig.x * param_4) / 2.0f);
-        i_Meter->field_0x0f38[i].mSize.x = param_4 * i_Meter->field_0x0f38[i].pane->mBounds.getWidth();
-        i_Meter->field_0x0f38[i].mSize.y = param_4 * i_Meter->field_0x0f38[i].pane->mBounds.getHeight();
+        i_Meter->field_0x0f38[i].mSize.x = param_4 * i_Meter->field_0x0f38[i].pane->getWidth();
+        i_Meter->field_0x0f38[i].mSize.y = param_4 * i_Meter->field_0x0f38[i].pane->getHeight();
         i_Meter->field_0x0f38[i].mPosCenter.x += (i_Meter->field_0x0f38[i].mSize.x / 2.0f);
         fopMsgM_cposMove(&i_Meter->field_0x0f38[i]);
         i_Meter->field_0x0f38[i].mSize.x = i_Meter->field_0x0f38[i].mSizeOrig.x;
@@ -5150,11 +5150,7 @@ void dMeter_keyLight(fopMsgM_pane_class* param_1, s16* param_2, f32 param_3) {
     f32 y = param_1->mPosTopLeftOrig.y - (dVar9 - param_1->mSizeOrig.y) / 2.0f;
     param_1->pane->move(x, y);
     param_1->pane->resize(dVar10, dVar9);
-    J2DPane* j2dPane = param_1->pane;
-    j2dPane->mBasePosition.x = (dVar10 / 2.0f);
-    j2dPane->mBasePosition.y = (dVar9 / 2.0f);
-    j2dPane->mRotationAxis = ROTATE_Z;
-    j2dPane->calcMtx();
+    param_1->pane->rotate(dVar10 / 2.0f, dVar9 / 2.0f, ROTATE_Z, param_1->pane->getRotate());
     param_1->mNowAlpha = dVar7 * param_3;
 }
 
@@ -5261,9 +5257,9 @@ void dMeter_keyMove(sub_meter_class* i_Meter) {
 
 /* 801FD09C-801FD104       .text dMeter_compassRotate__FP18fopMsgM_pane_classP18fopMsgM_pane_classf */
 void dMeter_compassRotate(fopMsgM_pane_class* param_1, fopMsgM_pane_class* param_2, f32 param_3) {
-    f32 offsetX = param_1->pane->mBounds.getWidth();
+    f32 offsetX = param_1->pane->getWidth();
     offsetX /= 2.0f;
-    f32 offsetY = param_1->pane->mBounds.getHeight();
+    f32 offsetY = param_1->pane->getHeight();
     offsetY /= 2.0f;
     param_1->pane->rotate(offsetX, offsetY, ROTATE_Z, param_3);
 }
@@ -5363,10 +5359,10 @@ void dMeter_compassGetOffProc(sub_meter_class* i_Meter) {
 
 /* 801FD48C-801FD6C8       .text dMeter_compassDirOpen__FP15sub_meter_class */
 void dMeter_compassDirOpen(sub_meter_class* i_Meter) {
-    f32 dVar9 = i_Meter->field_0x1948.pane->mBounds.getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar8 = i_Meter->field_0x1948.pane->mBounds.getHeight() / 2.0f;
-    f32 dVar7 = i_Meter->field_0x16a8.pane->mBounds.getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar6 = i_Meter->field_0x16a8.pane->mBounds.getHeight() / 2.0f;
+    f32 dVar9 = i_Meter->field_0x1948.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar8 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar7 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar6 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
     i_Meter->field_0x12f0.mUserArea++;
     f32 dVar5;
     if (i_Meter->field_0x12f0.mUserArea >= 5) {
@@ -5394,10 +5390,10 @@ void dMeter_compassDirOpen(sub_meter_class* i_Meter) {
 
 /* 801FD6C8-801FD8C0       .text dMeter_compassWindOpen__FP15sub_meter_class */
 void dMeter_compassWindOpen(sub_meter_class* i_Meter) {
-    f32 dVar9 = i_Meter->field_0x1948.pane->mBounds.getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar8 = i_Meter->field_0x1948.pane->mBounds.getHeight() / 2.0f;
-    f32 dVar7 = i_Meter->field_0x16a8.pane->mBounds.getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar6 = i_Meter->field_0x16a8.pane->mBounds.getHeight() / 2.0f;
+    f32 dVar9 = i_Meter->field_0x1948.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar8 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar7 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar6 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
     i_Meter->field_0x12f0.mUserArea++;
     f32 dVar5;
     if (i_Meter->field_0x12f0.mUserArea >= 10) {
@@ -5422,10 +5418,10 @@ void dMeter_compassWindOpen(sub_meter_class* i_Meter) {
 /* 801FD8C0-801FDB64       .text dMeter_compassWindClose__FP15sub_meter_class */
 void dMeter_compassWindClose(sub_meter_class* i_Meter) {
     /* Nonmatching */
-    f32 dVar11 = i_Meter->field_0x1948.pane->mBounds.getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar10 = i_Meter->field_0x1948.pane->mBounds.getHeight() / 2.0f;
-    f32 dVar9 = i_Meter->field_0x16a8.pane->mBounds.getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar8 = i_Meter->field_0x16a8.pane->mBounds.getHeight() / 2.0f;
+    f32 dVar11 = i_Meter->field_0x1948.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar10 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar9 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar8 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
     i_Meter->field_0x12f0.mUserArea--;
 
     s16 sVar6;
@@ -5466,10 +5462,10 @@ void dMeter_compassWindClose(sub_meter_class* i_Meter) {
 
 /* 801FDB64-801FDDA4       .text dMeter_compassDirClose__FP15sub_meter_class */
 void dMeter_compassDirClose(sub_meter_class* i_Meter) {
-    f32 dVar9 = i_Meter->field_0x1948.pane->mBounds.getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar8 = i_Meter->field_0x1948.pane->mBounds.getHeight() / 2.0f;
-    f32 dVar7 = i_Meter->field_0x16a8.pane->mBounds.getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar6 = i_Meter->field_0x16a8.pane->mBounds.getHeight() / 2.0f;
+    f32 dVar9 = i_Meter->field_0x1948.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar8 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar7 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar6 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
     i_Meter->field_0x12f0.mUserArea--;
 
     f32 dVar5;
@@ -5535,11 +5531,11 @@ void dMeter_compassValueInit(sub_meter_class* i_Meter) {
     }
     i_Meter->field_0x12f0.mUserArea = 0;
     i_Meter->field_0x302a = 0;
-    f32 temp2 = (i_Meter->field_0x1948.pane->mBounds.getWidth() / 2.0f) - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar6 = i_Meter->field_0x1948.pane->mBounds.getHeight() / 2.0f;
-    f32 dVar5 = i_Meter->field_0x16a8.pane->mBounds.getWidth() / 2.0f;
-    f32 temp1 = dVar5 - (i_Meter->field_0x13d0.pane->mBounds.getWidth() / 2.0f);
-    f32 dVar4 = i_Meter->field_0x16a8.pane->mBounds.getHeight() / 2.0f;
+    f32 temp2 = (i_Meter->field_0x1948.pane->getWidth() / 2.0f) - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar6 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
+    f32 dVar5 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f;
+    f32 temp1 = dVar5 - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
+    f32 dVar4 = i_Meter->field_0x16a8.pane->getHeight() / 2.0f;
     f32 x = -(i_Meter->field_0x1948.mPosTopLeftOrig.x + i_Meter->field_0x1948.mSizeOrig.x);
     fopMsgM_paneTrans(&i_Meter->field_0x12f0, x, 0.0f);
     fopMsgM_paneTrans(&i_Meter->field_0x1948, x, 0.0f);

@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_BUOYFLAG_H
 #define D_A_OBJ_BUOYFLAG_H
 
+#include "d/d_cc_d.h"
 #include "f_op/f_op_actor.h"
 #include "m_Do/m_Do_mtx.h"
 #include "f_op/f_op_actor_mng.h"
@@ -81,6 +82,8 @@ namespace daObjBuoyflag {
         void mtx_init();
         void mode_afl();
         void mode_jumpToSea();
+    
+        static const dCcD_SrcCyl M_cyl_src;
     
     public:
         /* 0x0290 */ u8 m0290[0x1090 - 0x0290];

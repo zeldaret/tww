@@ -464,9 +464,7 @@ static void damage_check(btd_class* i_this) {
         if ((actor->health <= 0) || (l_HIO.m06 != 0)) {
             dScnPly_ply_c::setPauseTimer(REG0_S(7) + 8);
             dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &i_this->m03E0);
-            pos.z = 2.0f;
-            pos.y = 2.0f;
-            pos.x = 2.0f;
+            pos.x = pos.y = pos.z = 2.0f;
             angle.z = 0;
             angle.x = 0;
             angle.y = fopAcM_searchPlayerAngleY(actor);
@@ -2677,7 +2675,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             i_this->mpPhase1Morf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }
-    i_this->mpPhase1Morf->getModel()->setUserArea((u32)i_this);
+    i_this->mpPhase1Morf->getModel()->setUserArea((uintptr_t)i_this);
     pModel = i_this->mpPhase1Morf->getModel();
     i_this->btk = new mDoExt_btkAnm();
     JUT_ASSERT(DEMO_SELECT(5327, 5370), i_this->btk);
@@ -2721,7 +2719,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
             i_this->mpPhase2Morf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
         }
     }
-    i_this->mpPhase2Morf->getModel()->setUserArea((u32)i_this);
+    i_this->mpPhase2Morf->getModel()->setUserArea((uintptr_t)i_this);
     pModel = i_this->mpPhase2Morf->getModel();
     i_this->btkS = new mDoExt_btkAnm();
     JUT_ASSERT(DEMO_SELECT(5370, 5432), i_this->btkS);

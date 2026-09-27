@@ -58,15 +58,15 @@ public:
         }
     }
 
-    BOOL isFinish() { return cLib_checkBit(field_0x784, 0x1UL); }
-    void onFinish() { cLib_onBit(field_0x784, 0x1UL); }
-    BOOL isSetHomePos() { return cLib_checkBit(field_0x784, 0x2UL); }
-    void onSetHomePos() { cLib_onBit(field_0x784, 0x2UL); }
-    BOOL isWaterHit() { return cLib_checkBit(field_0x784, 0x4UL); }
-    void onWaterHit() { cLib_onBit(field_0x784, 0x4UL); }
-    BOOL isGravity() { return cLib_checkBit(field_0x784, 0x8UL); }
-    void onGravity() { cLib_onBit(field_0x784, 0x8UL); }
-    void offGravity() { cLib_offBit(field_0x784, 0x8UL); }
+    BOOL isFinish() { return cLib_checkBit<u32>(field_0x784, 0x1UL); }
+    void onFinish() { cLib_onBit<u32>(field_0x784, 0x1UL); }
+    BOOL isSetHomePos() { return cLib_checkBit<u32>(field_0x784, 0x2UL); }
+    void onSetHomePos() { cLib_onBit<u32>(field_0x784, 0x2UL); }
+    BOOL isWaterHit() { return cLib_checkBit<u32>(field_0x784, 0x4UL); }
+    void onWaterHit() { cLib_onBit<u32>(field_0x784, 0x4UL); }
+    BOOL isGravity() { return cLib_checkBit<u32>(field_0x784, 0x8UL); }
+    void onGravity() { cLib_onBit<u32>(field_0x784, 0x8UL); }
+    void offGravity() { cLib_offBit<u32>(field_0x784, 0x8UL); }
     // Note: The 0x10 bit is used in the final release, but not in the demo debug maps, so its official name is unknown.
 
     void offPlayerRoom(int idx) { m_playerRoom[idx] = false; }

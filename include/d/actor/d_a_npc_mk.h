@@ -209,7 +209,7 @@ public:
     /* 0x6DC */ cXyz field_0x6DC;
     /* 0x6E8 */ s16 field_0x6E8;
     /* 0x6EA */ s16 mEventIdx;
-    /* 0x6EC */ char* mpName;
+    /* 0x6EC */ const char* mpName;
     /* 0x6F0 */ s16 field_0x6F0;
     /* 0x6F2 */ u8 field_0x6F2[0x6F4 - 0x6F2];
     /* 0x6F4 */ u32 mMsgNo;

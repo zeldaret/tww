@@ -326,7 +326,7 @@ void daDitem_c::set_effect() {
     s16 angleX = dCam_getAngleX(dComIfGp_getCamera(0)) - 0x2000;
     // Fakematch? Just angleY needs to be const to match the demo build. No effect on retail.
     const s16 angleY = dCam_getAngleY(dComIfGp_getCamera(0));
-    for (int i = 0; i < (int)ARRAY_SIZE(mpEmitters); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mpEmitters); i++) {
         if (mpEmitters[i] == NULL) {
             continue;
         }
@@ -456,7 +456,7 @@ cPhs_State daDitem_c::create() {
     
     m_itemNo = daDitem_prm::getNo(this);
     
-    char* arcName = dItem_data::getArcname(m_itemNo);
+    const char* arcName = dItem_data::getArcname(m_itemNo);
     if (dItem_data::getBmdIdx(m_itemNo) == -1 || arcName == NULL) {
         m_itemNo = dItemNo_GREEN_RUPEE_e;
     }

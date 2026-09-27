@@ -325,7 +325,7 @@ BOOL daNpc_Os_c::createHeap() {
         modelData->getJointNodePointer(mTuno3JointIdx)->setCallBack(&tunoNodeCallBack);
     }
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
 
     u8 anm;
     if(wakeupCheck()) {

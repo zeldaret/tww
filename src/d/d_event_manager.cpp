@@ -488,11 +488,11 @@ int dEvent_manager_c::getMyActIdx(int staffIdx, const char* const* action, int a
 }
 
 /* 80074964-800749A0       .text getMyActName__16dEvent_manager_cFi */
-char* dEvent_manager_c::getMyActName(int staffIdx) {
+const char* dEvent_manager_c::getMyActName(int staffIdx) {
     if (staffIdx == -1)
         return NULL;
 
-    char* cutName = getMyNowCutName(staffIdx);
+    const char* cutName = getMyNowCutName(staffIdx);
     if (cutName == NULL)
         return NULL;
 

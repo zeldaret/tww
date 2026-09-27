@@ -341,10 +341,7 @@ void dMenu_Dmap_c::screenSet() {
     mMpp1SizeX = mpp1pane.mSizeOrig.x;
     mMpp1SizeY = mpp1pane.mSizeOrig.y;
 
-    f32 h = scrn->search('mpp2')->getHeight();
-    J2DPane* p2 = scrn->search('mpp2');
-    J2DPane* p1 = scrn->search('mpp1');
-    mMppGapY = p1->mBounds.i.y - (p2->mBounds.i.y + h);
+    mMppGapY = scrn->search('mpp1')->getBounds().i.y - (scrn->search('mpp2')->getBounds().i.y + scrn->search('mpp2')->getHeight());
 }
 
 /* 801A92D4-801A9364       .text dMap_isBossDoor__FP21stage_tgsc_data_class */

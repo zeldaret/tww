@@ -106,7 +106,7 @@ void CheckHeap(JUTGamePad* i_pad) {
 static int countUsed(JKRExpHeap* heap) {
     OSDisableScheduler();
     int counter = 0;
-    JKRExpHeap::CMemBlock* used_blocks_head = heap->getHeadUsedList();
+    JKRExpHeap::CMemBlock* used_blocks_head = heap->getUsedFirst();
 
     while (used_blocks_head) {
         used_blocks_head = used_blocks_head->getNextBlock();
@@ -124,7 +124,7 @@ s32 HeapCheck::getUsedCount() const {
 
 /* 800058D4-80005B28       .text heapDisplay__9HeapCheckFv */
 void HeapCheck::heapDisplay() {
-    s32 heap_size = mHeap->getSize();
+    s32 heap_size = mHeap->getHeapSize();
     s32 used_count = field_0x14 * mTargetHeapSize;
 
     field_0x10 = used_count;
@@ -360,7 +360,7 @@ bool Debug_console(JUTGamePad* i_pad) {
 s32 LOAD_COPYDATE(void*) {
     s32 status;
 
-    DVDFileInfo ALIGN_DECL(0x20) fileInfo;
+    ALIGN_DECL(0x20, DVDFileInfo fileInfo);
     u8 buffer[0x20];
     status = DVDOpen("/COPYDATE", &fileInfo);
 
@@ -536,7 +536,7 @@ int main(int argc, const char* argv[]) {
 #endif
 
     OSThread* current_thread = OSGetCurrentThread();
-    u8 ALIGN_DECL(0x20) stack[0xF000];
+    ALIGN_DECL(0x20, u8 stack[0xF000]);
 
     mDoMain::sPowerOnTime = OSGetTime();
     OSReportInit();

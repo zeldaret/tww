@@ -157,7 +157,7 @@ static cPhs_State dMinigame_Terminater_Create(msg_class*) {
     /* Nonmatching */
 }
 
-msg_method_class l_dMinigame_Terminater_Method = {
+static msg_method_class l_dMinigame_Terminater_Method = {
     (process_method_func)dMinigame_Terminater_Create,
     (process_method_func)dMinigame_Terminater_Delete,
     (process_method_func)dMinigame_Terminater_Execute,

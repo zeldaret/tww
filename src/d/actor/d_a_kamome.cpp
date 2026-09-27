@@ -145,7 +145,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 /* 00000B84-00000CAC       .text daKamome_Draw__FP12kamome_class */
 static BOOL daKamome_Draw(kamome_class* i_this) {
     if ((i_this->mSwitchNo != 0) || (i_this->mbNoDraw != 0)) {
-#if VERSION <= VERSION_JPN
+#if VERSION != VERSION_USA
         i_this->mbNoDraw = 0;
 #endif
         return TRUE;
@@ -164,7 +164,7 @@ static BOOL daKamome_Draw(kamome_class* i_this) {
         &sp08,
         REG0_F(2) * 10.0f + 500.0f,
         20.0f,
-        sp08.y,
+        i_this->actor.current.pos.y,
         i_this->mAcch.GetGroundH(),
         i_this->mAcch.m_gnd,
         &i_this->actor.tevStr
@@ -1212,6 +1212,7 @@ static void kamome_imouto_move(kamome_class* i_this) {
         cVar8 = 1;
         i_this->mVelocityFwdTarget = 0.0f;
         a_this->speedF = 0.0f;
+        frame = i_this->mpMorf->getFrame();
         if (i_this->mpMorf->isStop()) {
             if (cM_rndF(1.0f) < 0.2f) {
                 i_this->mMoveState = 0x13;
@@ -1336,7 +1337,7 @@ static void daKamome_setMtx(kamome_class* i_this) {
 /* 00004768-000049F8       .text daKamome_Execute__FP12kamome_class */
 static BOOL daKamome_Execute(kamome_class* i_this) {
     i_this->mGlobalTimer++;
-#if VERSION > VERSION_JPN
+#if VERSION == VERSION_USA
     i_this->mbNoDraw = 0;
 #endif
 
@@ -1436,7 +1437,7 @@ static BOOL createHeap(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    i_this->mpMorf->getModel()->setUserArea((u32)&i_this->actor);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)&i_this->actor);
     return TRUE;
 }
 

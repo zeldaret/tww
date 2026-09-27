@@ -56,7 +56,7 @@ public:
     J3DDisplayListObj* getSharedDisplayListObj() { return mSharedDLObj; }
     J3DIndBlock* getIndBlock() { return mIndBlock; }
     J3DMaterialAnm* getMaterialAnm() {
-        if ((u32)mMaterialAnm < 0xC0000000) {
+        if ((uintptr_t)mMaterialAnm < 0xC0000000) {
             return mMaterialAnm;
         } else {
             return NULL;

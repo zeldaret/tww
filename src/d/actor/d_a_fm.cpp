@@ -413,7 +413,7 @@ bool daFm_c::bodyCreateHeap() {
     if (mInvisibleModel.create(mpMorf->getModel()) == 0) {
         return false;
     }
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     return true;
 }
 
@@ -1753,7 +1753,7 @@ void daFm_c::modeGrabFootDemo() {
     } else {
         if(eventInfo.checkCommandDemoAccrpt()) {
             int staffIdx = dComIfGp_evmng_getMyStaffId("Fmaster");
-            char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+            const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
             if(strcmp(cutName, "Dummy") == 0 || strcmp(cutName, "WAIT") == 0) {
                 dComIfGp_evmng_cutEnd(staffIdx);
             }
@@ -1784,7 +1784,7 @@ void daFm_c::modeGrabFootDemo() {
                     pLink->voiceStart(28);
                 }
                 if(mpMorf->getFrame() == 10.0f) {
-                    pLink->mDemo.setDemoMode(0x11);
+                    pLink->changeDemoMode(0x11);
                 }
                 if(mpMorf->getFrame() >= 10.0f && mpMorf->getFrame() <= 40.0f) {
                     pLink->setPlayerPosAndAngle(&field_0x61C, &pLink->current.angle);
@@ -2195,7 +2195,7 @@ void daFm_c::modePlayerStartDemo() {
     resetInvKine();
     if(dComIfGp_event_runCheck()) {
         int staffIdx = dComIfGp_evmng_getMyStaffId("Fmaster");
-        char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+        const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
 
         daPy_py_c* pLink = (daPy_py_c*)dComIfGp_getLinkPlayer();
         
@@ -2440,7 +2440,7 @@ void daFm_c::modeProc(daFm_c::Proc_e proc, int newMode) {
 }
 
 /* 00006D8C-00006DE8       .text setAnm__6daFm_cFScb */
-void daFm_c::setAnm(s8 anmPrmIdx, bool param_2) {
+void daFm_c::setAnm(s8 anmPrmIdx, bool force) {
     static const int a_anm_bcks_tbl[] = {
         dRes_INDEX_FM_BCK_WAIT_e,
         dRes_INDEX_FM_BCK_DERU_e,
@@ -2583,7 +2583,7 @@ void daFm_c::setAnm(s8 anmPrmIdx, bool param_2) {
         mAnmPrmIdx = anmPrmIdx;
     }
 
-    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
+    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, force);
 }
 
 /* 00006DE8-00006EA4       .text cancelGrab__6daFm_cFv */
