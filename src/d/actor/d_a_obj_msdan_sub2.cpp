@@ -166,13 +166,9 @@ BOOL daObjMsdanSub2::Act_c::Draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mModel, &tevStr);
 
-    j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaListBG;
-    j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluListBG;
-
+    dComIfGd_setListBG();
     mDoExt_modelUpdateDL(mModel);
-
-    j3dSys.mDrawBuffer[0] = g_dComIfG_gameInfo.drawlist.mpOpaList;
-    j3dSys.mDrawBuffer[1] = g_dComIfG_gameInfo.drawlist.mpXluList;
+    dComIfGd_setList();
 
     return TRUE;
 }
