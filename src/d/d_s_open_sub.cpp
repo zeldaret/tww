@@ -230,17 +230,17 @@ dScnOpen_proc_c::dScnOpen_proc_c() {
     JUT_ASSERT(VERSION_SELECT(215, 216, 235, 235), resInfo != NULL);
 
     m_Screen->set("Opening.blo", resInfo->getArchive());
-    pane2d[PANE_d1] = m_Screen->search('\0\0d1');
-    pane2d[PANE_d2] = m_Screen->search('\0\0d2');
-    pane2d[PANE_d3] = m_Screen->search('\0\0d3');
-    pane2d[PANE_d4] = m_Screen->search('\0\0d4');
-    pane2d[PANE_d42] = m_Screen->search('\0d42');
-    pane2d[PANE_d5] = m_Screen->search('\0\0d5');
-    pane2d[PANE_d6] = m_Screen->search('\0\0d6');
+    pane2d[PANE_d1] = m_Screen->search('d1');
+    pane2d[PANE_d2] = m_Screen->search('d2');
+    pane2d[PANE_d3] = m_Screen->search('d3');
+    pane2d[PANE_d4] = m_Screen->search('d4');
+    pane2d[PANE_d42] = m_Screen->search('d42');
+    pane2d[PANE_d5] = m_Screen->search('d5');
+    pane2d[PANE_d6] = m_Screen->search('d6');
     pane2d[PANE_mak1] = m_Screen->search('mak1');
     pane2d[PANE_mak2] = m_Screen->search('mak2');
-    pane2d[PANE_tx1] = m_Screen->search('\0tx1');
-    pane2d[PANE_tx2] = m_Screen->search('\0tx2');
+    pane2d[PANE_tx1] = m_Screen->search('tx1');
+    pane2d[PANE_tx2] = m_Screen->search('tx2');
 
     #if VERSION >= VERSION_USA
     pane2d[PANE_tx1]->move(pane2d[PANE_tx1]->getBounds().i.x, 376.0f);
