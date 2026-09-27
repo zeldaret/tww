@@ -333,7 +333,7 @@ static BOOL daSail_Draw(sail_class* i_this) {
 
     i_this->mSailPacket.setTevStr(&i_this->tevStr);
 
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mSailPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&i_this->mSailPacket, 0);
 
     return TRUE;
 }

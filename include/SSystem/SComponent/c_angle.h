@@ -64,9 +64,14 @@ public:
     void operator*=(float);
     bool operator<(const cSAngle& other) const { return mAngle < other.mAngle; }
     bool operator>(const cSAngle& other) const { return mAngle > other.mAngle; }
+    bool operator>=(const cSAngle& other) const { return mAngle >= other.mAngle; }
+    bool operator<=(const cSAngle& other) const { return mAngle <= other.mAngle; }
     operator s16() const { return mAngle; }
     static inline cSAngle getMaxNegative() { return cSAngle((s16)-0x8000); }
     inline void mirrorAtMaxNeg() { *this = cSAngle((s16)-0x8000) - *this; }
+
+    // void operator=(const cSAngle&) {}
+    // void operator==(const cSAngle&) const {}
 };
 
 cSAngle operator+(short, const cSAngle&);

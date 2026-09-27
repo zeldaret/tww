@@ -427,15 +427,15 @@ void daNpc_Hi1_c::eventOrder() {
             fopAcM_orderSpeakEvent(this);
         }
     } else if(field_0x7C1 >= 3) {
-        mEventIdx[1] = field_0x7C1 - 3;
-        fopAcM_orderOtherEventId(this, mEventIdx[mEventIdx[1]]);
+        field_0x796 = field_0x7C1 - 3;
+        fopAcM_orderOtherEventId(this, mEventIdx[field_0x796]);
     }
 }
 
 /* 00000EB0-00000F64       .text checkOrder__11daNpc_Hi1_cFv */
 void daNpc_Hi1_c::checkOrder() {
     if(eventInfo.checkCommandDemoAccrpt()) {
-        if(dComIfGp_evmng_startCheck(mEventIdx[mEventIdx[1]]) && field_0x7C1 >= 3) {
+        if(dComIfGp_evmng_startCheck(mEventIdx[field_0x796]) && field_0x7C1 >= 3) {
             field_0x7C1 = 0;
             field_0x7BC = 0xff;
             field_0x7BD = 0xff;
@@ -615,7 +615,7 @@ int daNpc_Hi1_c::isEventEntry() {
 
 /* 000014B0-00001534       .text event_proc__11daNpc_Hi1_cFi */
 void daNpc_Hi1_c::event_proc(int i_staffIdx) {    
-    if(dComIfGp_evmng_endCheck(mEventIdx[mEventIdx[1]])) {
+    if(dComIfGp_evmng_endCheck(mEventIdx[field_0x796])) {
         endEvent();
     } else {
         if(!mEventCut.cutProc()) {

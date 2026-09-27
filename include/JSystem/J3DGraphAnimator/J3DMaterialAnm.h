@@ -82,7 +82,7 @@ public:
     bool getAnmFlag() const { return mAnmFlag; }
     void setAnmFlag(bool flag) { mAnmFlag = flag; }
     void setAnmTransform(J3DAnmTextureSRTKey* transform) {
-        J3D_ASSERT(0, transform != NULL, "Error : null pointer.");
+        J3D_ASSERT_NULLPTR(0, transform != NULL);
         mAnmTransform = transform;
     }
     void calc(J3DTextureSRTInfo* pSRTInfo) const;
@@ -169,7 +169,7 @@ public:
 
     const J3DTexMtxAnm* getTexMtxAnm(int i) const { return mTexMtxAnm[i]; }
 
-private:
+protected:
     /* 0x04 */ J3DMatColorAnm* mMatColorAnm[2];
     /* 0x0C */ J3DTexMtxAnm* mTexMtxAnm[8];
     /* 0x2C */ J3DTexNoAnm* mTexNoAnm[8];

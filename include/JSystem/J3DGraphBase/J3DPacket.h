@@ -1,6 +1,7 @@
 #ifndef J3DPACKET_H
 #define J3DPACKET_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -202,7 +203,7 @@ public:
     J3DShapePacket* getShapePacket() { return mpShapePacket; }
     void setShapePacket(J3DShapePacket* packet) { mpShapePacket = packet; }
     void setMaterial(J3DMaterial* pMaterial) {
-        J3D_ASSERT(646, pMaterial != NULL, "Error : null pointer.");
+        J3D_ASSERT_NULLPTR(646, pMaterial != NULL);
         mpMaterial = pMaterial;
     }
     void setTexture(J3DTexture* pTexture) { mpTexture = pTexture; }

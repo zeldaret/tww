@@ -855,4 +855,10 @@ bool dMeter_isAuctionFlag();
 void dMeter_onAuctionFlag();
 void dMeter_offAuctionFlag();
 
+void dMeter_itemMoveSet(fopMsgM_pane_class* pane, u8 btn, u8 item);
+u8 dMeter_itemMoveFlagCheck();
+
+void dMeter_subWinFlagOn();
+void dMeter_subWinFlagOff();
+
 #endif /* D_METER_H */

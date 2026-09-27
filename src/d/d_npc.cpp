@@ -741,8 +741,8 @@ void dNpc_HeadAnm_c::swing_vertical() {
     s16 temp2 = field_0x1C;
     field_0x1C += field_0x1E;
     s16 temp = cM_ssin(field_0x1C) * field_0x14;
-    cLib_addCalcAngleS(&field_0x00, temp, 4, 0x1000, 0x100);
-    cLib_addCalcAngleS(&field_0x02, 0, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x00.x, temp, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x00.y, 0, 4, 0x1000, 0x100);
     
     if (temp2 < 0 && field_0x1C >= 0 && --field_0x20 <= 0) {
         setProc(NULL);
@@ -765,8 +765,8 @@ void dNpc_HeadAnm_c::swing_horizone() {
     s16 temp2 = field_0x1C;
     field_0x1C += field_0x1E;
     s16 temp = cM_ssin(field_0x1C) * field_0x18;
-    cLib_addCalcAngleS(&field_0x00, 0, 4, 0x1000, 0x100);
-    cLib_addCalcAngleS(&field_0x02, temp, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x00.x, 0, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x00.y, temp, 4, 0x1000, 0x100);
     
     if (temp2 < 0 && field_0x1C >= 0 && --field_0x20 <= 0) {
         setProc(NULL);
@@ -779,8 +779,8 @@ void dNpc_HeadAnm_c::move() {
         (this->*mProc)();
     }
     else {
-        cLib_addCalcAngleS(&field_0x00, 0, 4, 0x1000, 0x100);
-        cLib_addCalcAngleS(&field_0x02, 0, 4, 0x1000, 0x100);
+        cLib_addCalcAngleS(&field_0x00.x, 0, 4, 0x1000, 0x100);
+        cLib_addCalcAngleS(&field_0x00.y, 0, 4, 0x1000, 0x100);
     }
 }
 

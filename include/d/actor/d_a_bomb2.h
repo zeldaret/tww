@@ -107,8 +107,10 @@ namespace daBomb2 {
         void camera_lockoff() const;
         void posMoveF();
         void bgCrrPos();
+#if VERSION > VERSION_DEMO
         void bgCrrPos_lava();
         void bgCrrPos_water();
+#endif
         bool chk_water_in() const;
         bool chk_lava_in() const;
         void setRoomInfo();
@@ -186,10 +188,15 @@ namespace daBomb2 {
         /* 0x488 */ dBgS_AcchCir mCir;
         /* 0x4C8 */ dBgS_ObjGndChk_Yogan mGndChk;
         /* 0x51C */ f32 field_0x51C;
+#if VERSION > VERSION_DEMO
         /* 0x520 */ f32 field_0x520;
         /* 0x524 */ bool field_0x524;
         /* 0x525 */ bool mbWaterIn;
-        /* 0x526 */ u8 field_0x526;
+        /* 0x526 */ bool field_0x526;
+#else
+        /* 0x520 */ bool field_0x524;
+        /* 0x524 */ f32 field_0x520;
+#endif
         /* 0x528 */ f32 field_0x528;
         /* 0x52C */ dCcD_Stts mStts;
         /* 0x568 */ dCcD_Sph mSph;

@@ -68,53 +68,65 @@ public:
     void SetCrrFunc(dBgW_CrrFunc func) { m_crr_func = func; }
     void SetRideCallback(dBgW_RideCallBack func) { mpRideCb = func; }
     void SetPushPullCallback(dBgW_PPCallBack func) { mpPushPullCb = func; }
+    dBgW_RideCallBack GetRideCallback() { return mpRideCb; }
+    dBgW_PPCallBack GetPushPullCallback() { return mpPushPullCb; }
 
-    // TODO:
-    void CalcDiffShapeAngleY(s16) {}
-    void CaptPoly(dBgS_CaptPoly&) {}
-    void CaptPolyGrpRp(dBgS_CaptPoly&, int) {}
-    void CaptPolyRp(dBgS_CaptPoly&, int) {}
-    void ChkMoveFlag() {}
-    void ClrGrpRoomInf() {}
-    void ClrRoomId() {}
+    u16 GetRoomId() { return mRoomId; }
+    u8 GetGrpRoomInf() { return mGrpRoomInf; }
+    void SetRoomId(u16 roomNo) { mRoomId = roomNo; }
+    void SetGrpRoomInf(int roomNo) { mGrpRoomInf = roomNo; }
+    void ClrRoomId() { mRoomId = -1; }
+    void ClrGrpRoomInf() { mGrpRoomInf = -1; }
+
+    u32 ChkMoveFlag() { return mFlag & 0x01; }
+    void OnMoveFlag() { mFlag |= 0x01; }
+    void OffMoveFlag() { mFlag &= ~0x01; }
+
+    void CalcDiffShapeAngleY(s16 shape_angle) {
+        mRotYDelta = shape_angle - mOldRotY;
+        mOldRotY = shape_angle;
+    }
+    s16 GetDiffShapeAngleY() { return mRotYDelta; }
+    void SetOldShapeAngleY(s16 angle) { mOldRotY = angle; }
+
+    bool WallCorrect(dBgS_Acch* acch) { return WallCorrectGrpRp(acch, m_rootGrpIdx, 1); }
+    bool RoofChk(dBgS_RoofChk* chk) { return RoofChkGrpRp(chk, m_rootGrpIdx, 1); }
+    bool SplGrpChk(dBgS_SplGrpChk* chk) { return SplGrpChkGrpRp(chk, m_rootGrpIdx, 1); }
+    bool SphChk(dBgS_SphChk* chk, void* i_data) { return SphChkGrpRp(chk, i_data, m_rootGrpIdx, 1); }
+
+    u32 GetMaskPolyInfo0(int poly_index, u32 mask, u32 shift) {
+        return (GetPolyInf0(GetPolyInfId(poly_index)) >> shift) & mask;
+    }
+    u32 GetMaskPolyInfo3_NoShift(int poly_index, u32 mask) {
+        return GetPolyInf3(GetPolyInfId(poly_index)) & mask;
+    }
+    u32 GetShdwThrough(int poly_index) { return GetMaskPolyInfo0(poly_index, 0x01, 27); }
+    u32 GetPolyObjThrough(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x02); }
+    u32 GetPolyCamThrough(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x01); }
+    u32 GetPolyLinkThrough(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x04); }
+    u32 GetPolyArrowThrough(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x08); }
+    u32 GetPolyBombThrough(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x20); }
+    u32 GetPolyBoomerangThrough(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x40); }
+    u32 GetPolyRopeThrough(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x80); }
+    u32 GetPolyHSStick(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x10); }
+    
+    // Debug-only funcs
     void DebugDraw() {}
     void DrawBox() {}
     void DrawPoly(cBgS_PolyInfo&, GXColor&) {}
-    void GetDiffShapeAngleY() {}
-    void GetGrpRoomInf() {}
-    void GetMaskPolyInfo0(int, u32, u32) {}
-    void GetMaskPolyInfo3_NoShift(int, u32) {}
-    void GetPolyArrowThrough(int) {}
-    void GetPolyBombThrough(int) {}
-    void GetPolyBoomerangThrough(int) {}
-    void GetPolyCamThrough(int) {}
-    void GetPolyHSStick(int) {}
-    void GetPolyLinkThrough(int) {}
-    void GetPolyObjThrough(int) {}
-    void GetPolyRopeThrough(int) {}
-    void GetPushPullCallback() {}
-    void GetRideCallback() {}
-    void GetRoomId() {}
-    void GetShdwThrough(int) {}
-    void OffMoveFlag() {}
-    void OnMoveFlag() {}
-    void RoofChk(dBgS_RoofChk*) {}
+    void CaptPoly(dBgS_CaptPoly&) {}
+    void CaptPolyGrpRp(dBgS_CaptPoly&, int) {}
+    void CaptPolyRp(dBgS_CaptPoly&, int) {}
     void RwgCaptPoly(int, dBgS_CaptPoly&) {}
-    void SetGrpRoomInf(int room) { mRoomNo2 = room; }
-    void SetOldShapeAngleY(s16) {}
-    void SetRoomId(u16 roomNo) { mRoomNo = roomNo; }
-    void SphChk(dBgS_SphChk*, void*) {}
-    void SplGrpChk(dBgS_SplGrpChk*) {}
-    void WallCorrect(dBgS_Acch*) {}
 
     /* 0xA8 */ dBgW_CrrFunc m_crr_func;
     /* 0xAC */ s16 mOldRotY;
     /* 0xAE */ s16 mRotYDelta;
     /* 0xB0 */ dBgW_RideCallBack mpRideCb;
     /* 0xB4 */ dBgW_PPCallBack mpPushPullCb;
-    /* 0xB8 */ u16 mRoomNo;
+    /* 0xB8 */ u16 mRoomId;
     /* 0xBA */ u8 mFlag;
-    /* 0xBB */ u8 mRoomNo2;
+    /* 0xBB */ u8 mGrpRoomInf;
 };  // Size: 0xBC
 
 dBgW* dBgW_NewSet(cBgD_t*, u32, Mtx*);

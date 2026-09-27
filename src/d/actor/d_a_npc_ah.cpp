@@ -240,16 +240,16 @@ BOOL daNpcAh_c::createHeap() {
 #if VERSION > VERSION_DEMO
     if(mpMorf == NULL || mpMorf->getModel() == NULL) return FALSE;
 #endif
-    m_jnt.setHeadJntNum(modelData->getJointTree().getJointName()->getIndex("head"));
+    m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
     JUT_ASSERT(DEMO_SELECT(0x2B4, 0x2B8), m_jnt.getHeadJntNum() >= 0);
-    m_jnt.setBackboneJntNum(modelData->getJointTree().getJointName()->getIndex("backbone"));
+    m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
     JUT_ASSERT(DEMO_SELECT(0x2B8, 0x2BC), m_jnt.getBackboneJntNum() >= 0);
 
     if(initTexPatternAnm(false) == FALSE) return FALSE;
 
     for(u16 jntIdx = 0; jntIdx < modelData->getJointNum(); jntIdx++){
         if(jntIdx == m_jnt.getHeadJntNum() || jntIdx == m_jnt.getBackboneJntNum()){
-            modelData->getJointTree().getJointNodePointer(jntIdx)->setCallBack(da_Npc_Ah_nodeCallBack);
+            modelData->getJointNodePointer(jntIdx)->setCallBack(da_Npc_Ah_nodeCallBack);
         }
     }   
     mpMorf->getModel()->setUserArea((uintptr_t)this);

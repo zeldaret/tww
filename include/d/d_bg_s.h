@@ -146,17 +146,17 @@ public:
     void CrrPos(dBgS&);
 
     void Set(cXyz* i_pos, cXyz* i_line, void* actor, cXyz* param_3) {
-        // not 100% sure if this is right
-        Set(i_pos, i_line, fpcM_GetID(actor), param_3);
+        // Not sure why this takes a void* param but doesn't use it
+        Set(i_pos, i_line, fpcM_ERROR_PROCESS_ID_e, param_3);
     }
     void Set(cXyz* i_pos, cXyz* i_line, fpc_ProcID actorPid, cXyz* param_3) {
-        // not 100% sure if this is right
         pm_pos = i_pos;
         pm_old_pos = i_line;
         field_0x58 = param_3;
         SetActorPid(actorPid);
     }
 
+    void ClrNoRoof() { mFlag &= ~8; }
     void SetWallHit() { mFlag |= 0x10; }
     void ClrWallHit() { mFlag &= ~0x10; }
     void SetXCrr() { mFlag |= 0x20; }
@@ -167,10 +167,6 @@ public:
     bool ChkZCrr() { return mFlag & 0x40; }
 
     void SetGndUpY(f32 y) { mGndUpY = y; }
-    void ClrNoRoof() {
-        mGndChk.OffWall();
-        mFlag &= ~8;
-    }
     void ClrPosVec() { m_pos_vec.x = m_pos_vec.y = m_pos_vec.z = 0.0f; }
 
     f32 GetWallH() const { return mWallHeight; }

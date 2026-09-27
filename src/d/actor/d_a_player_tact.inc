@@ -514,9 +514,9 @@ BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
     dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
     mProcVar6.m3570 = r27;
     if (r31 == 0) {
-        m3628 = fopMsgM_messageSet(0x5AD + r27);
+        mGameOverId = fopMsgM_messageSet(0x5AD + r27);
     } else {
-        m3628 = fpcM_ERROR_PROCESS_ID_e;
+        mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     }
     mDoAud_tact_setVolume(0.0f);
     resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
@@ -590,14 +590,14 @@ BOOL daPy_lk_c::procTactPlay() {
             return TRUE;
         }
 
-        msg_class* msg_p = fopMsgM_SearchByID(m3628);
+        msg_class* msg_p = fopMsgM_SearchByID(mGameOverId);
         if (msg_p == NULL || msg_p->mStatus == fopMsgStts_BOX_CLOSED_e) {
             fopAc_ac_c* tactZevPartner = NULL;
             dComIfGp_setMetronomeOff();
 
             if (msg_p != NULL) {
                 msg_p->mStatus = fopMsgStts_MSG_DESTROYED_e;
-                m3628 = fpcM_ERROR_PROCESS_ID_e;
+                mGameOverId = fpcM_ERROR_PROCESS_ID_e;
             }
 
             if (mTactZevPartnerId != fpcM_ERROR_PROCESS_ID_e && m34CC == mProcVar6.m3570) {

@@ -2,6 +2,7 @@
 #define J3DVERTEX_H
 
 #include "dolphin/gx/GXAttr.h"
+#include "dolphin/gx/GXStruct.h"
 #include "dolphin/mtx/vec.h"
 #include "dolphin/types.h"
 

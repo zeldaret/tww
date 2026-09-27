@@ -644,9 +644,9 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
 
     int i;
 
-    u8* saveData = &mSaveDataPtr[i_dataNo * sizeof(card_gamedata)];
+    dSv_save_c_PACKED* saveData = (dSv_save_c_PACKED*)&mSaveDataPtr[i_dataNo * sizeof(card_gamedata)];
 
-    u16 curHealth = *(u16*)(saveData + 2);
+    u16 curHealth = saveData->mPlayer.mPlayerStatusA.mLife;
 
     int curHearts = curHealth / 4;
     int healthMod4 = curHealth % 4;
@@ -656,7 +656,7 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
 
     // display hearts
     for(i = 0; i < 0x14; i++) {
-        if(i < *(u16*)saveData / 4) {
+        if(i < saveData->mPlayer.mPlayerStatusA.mMaxLife / 4) {
             field_0x828[i].pane->show();
             field_0xc88[i].pane->show();
 
@@ -682,12 +682,12 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     }
 
     // triforce (shards)
-    int temp = *(saveData + 0xBC); // surely this weirdly used temp is not real
+    int temp = saveData->mPlayer.mCollect.mTriforce; // surely this weirdly used temp is not real
     if(temp) {
         field_0x208[2].pane->hide();
         field_0x5f8.pane->show();
 
-        temp = *(saveData + 0xBC);
+        temp = saveData->mPlayer.mCollect.mTriforce;
         if(temp == 0xFF) {
             for(i = 0; i < 8; i++) {
                 field_0x630[i].pane->hide();
@@ -696,16 +696,16 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
         }
         else {
             field_0x630[8].pane->hide();
-            int shardBit = 1;
+            u8 shardBit = 1;
             for(i = 0; i < 8; i++) {
-                if(*(saveData + 0xBC) & (shardBit & 0xFF)) {
+                if(saveData->mPlayer.mCollect.mTriforce & shardBit) {
                     field_0x630[i].pane->show();
                 }
                 else {
                     field_0x630[i].pane->hide();
                 }
 
-                shardBit = (shardBit & 0x7F) << 1;
+                shardBit <<= 1;
             }
         }
     }
@@ -718,9 +718,9 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     }
 
     // display pearls
-    int pearlBit = 1;
+    u8 pearlBit = 1;
     for(i = 0; i < 3; i++) {
-        if(*(saveData + 0xBD) & (pearlBit & 0xFF)) {
+        if(saveData->mPlayer.mCollect.mSymbol & pearlBit) {
             field_0x4a8[i].pane->show();
             field_0x550[i].pane->show();
         }
@@ -729,7 +729,7 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
             field_0x550[i].pane->hide();
         }
 
-        pearlBit = (pearlBit & 0x7F) << 1;
+        pearlBit <<= 1;
     }
 }
 
@@ -1812,22 +1812,22 @@ void dFile_select_c::CommandExec() {
         mDoMemCdRWm_SetCheckSumGameData(mSaveDataPtr, selectNum);
         mDoMemCd_setPictWriteDataPtr(mSavePicDataPtr);
         mDoMemCd_setCopyToPos(0xFF);
-        mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
+        mDoMemCd_Save(mSaveDataPtr, sizeof(card_gamedata) * 3, 0);
         field_0x392b = 0xF;
     }
     else if(field_0x392a == 3) {
         u8* r4 = mSaveDataPtr;
-        r4 += (field_0x3924 * 0x770);
+        r4 += (field_0x3924 * sizeof(card_gamedata));
         u8* r3 = mSaveDataPtr;
-        r3 += (field_0x3926 * 0x770);
-        memcpy(r3, r4, 0x770);
+        r3 += (field_0x3926 * sizeof(card_gamedata));
+        memcpy(r3, r4, sizeof(card_gamedata));
         mDoMemCdRWm_SetCheckSumGameData(mSaveDataPtr, field_0x3926);
-        u8* r4_2 = &mSavePicDataPtr[field_0x3924 * 0x6000];
-        u8* r30 = &mSavePicDataPtr[field_0x3926 * 0x6000];
-        memcpy(r30, r4_2, 0x6000);
+        u8* r4_2 = &mSavePicDataPtr[field_0x3924 * sizeof(card_pictdata) * 3];
+        u8* r30 = &mSavePicDataPtr[field_0x3926 * sizeof(card_pictdata) * 3];
+        memcpy(r30, r4_2, sizeof(card_pictdata) * 3);
         mDoMemCd_setCopyToPos(field_0x3926);
         mDoMemCd_setPictWriteDataPtr(r30);
-        mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
+        mDoMemCd_Save(mSaveDataPtr, sizeof(card_gamedata) * 3, 0);
         field_0x392b = 0x10;
     }
 }
@@ -3182,7 +3182,7 @@ void dFile_select_c::setSaveData() {
             dataNew[i] = 0;
         }
 
-        data += 0x770;
+        data += sizeof(card_gamedata);
     }
 }
 #else
@@ -3295,7 +3295,7 @@ void dFile_select_c::setSaveData() {
             dataNew[i] = 0;
         }
 
-        data += 0x770;
+        data += sizeof(card_gamedata);
     }
 }
 #endif
@@ -3726,7 +3726,7 @@ void dFile_select_c::ExDataSave() {
     dComIfGs_setDataNum(selectNum);
     mDoMemCd_setPictWriteDataPtr(NULL);
 #endif
-    mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
+    mDoMemCd_Save(mSaveDataPtr, sizeof(card_gamedata) * 3, 0);
     field_0x392b = 0x20;
 }
 

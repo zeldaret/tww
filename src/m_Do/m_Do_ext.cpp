@@ -824,24 +824,24 @@ void mDoExt_invisibleModel::entryMaskOff() {
 
 /* 80011654-800116C4       .text updateDL__21mDoExt_invisibleModelFP8J3DModel */
 void mDoExt_invisibleModel::updateDL(J3DModel* model) {
-    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
-    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu);
     dComIfGd_setList();
     mDoExt_modelUpdateDL(model);
     entry();
-    j3dSys.setDrawBuffer(buffer0, 0);
-    j3dSys.setDrawBuffer(buffer1, 1);
+    j3dSys.setDrawBuffer(buffer0, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(buffer1, J3DSysDrawBuf_Xlu);
 }
 
 /* 800116C4-80011734       .text updateDL__21mDoExt_invisibleModelFP14mDoExt_McaMorf */
 void mDoExt_invisibleModel::updateDL(mDoExt_McaMorf* param_0) {
-    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
-    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu);
     dComIfGd_setList();
     param_0->updateDL();
     entry();
-    j3dSys.setDrawBuffer(buffer0, 0);
-    j3dSys.setDrawBuffer(buffer1, 1);
+    j3dSys.setDrawBuffer(buffer0, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(buffer1, J3DSysDrawBuf_Xlu);
 }
 
 JKRExpHeap* gameHeap;
@@ -880,7 +880,8 @@ JKRExpHeap* zeldaHeap;
 /* 8001181C-800118C0       .text mDoExt_createZeldaHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createZeldaHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2081, 2097, 2112, 2112), zeldaHeap == NULL || heapSize == 0);
-    return zeldaHeap = JKRCreateExpHeap(heapSize, i_heap, true);
+    zeldaHeap = JKRCreateExpHeap(heapSize, i_heap, true);
+    return zeldaHeap;
 }
 
 /* 800118C0-800118C8       .text mDoExt_getZeldaHeap__Fv */
@@ -907,7 +908,8 @@ JKRExpHeap* commandHeap;
 /* 800118F8-8001199C       .text mDoExt_createCommandHeap__FUlP7JKRHeap */
 JKRExpHeap* mDoExt_createCommandHeap(u32 heapSize, JKRHeap* i_heap) {
     JUT_ASSERT(VERSION_SELECT(2126, 2158, 2173, 2173), commandHeap == NULL || heapSize == 0);
-    return commandHeap = JKRCreateExpHeap(heapSize, i_heap, true);
+    commandHeap = JKRCreateExpHeap(heapSize, i_heap, true);
+    return commandHeap;
 }
 
 /* 8001199C-800119A4       .text mDoExt_getCommandHeap__Fv */
@@ -2521,7 +2523,7 @@ void mDoExt_3DlineMat1_c::update(u16 i_segs, GXColor& i_color, dKy_tevstr_c* i_t
 /* 80016518-8001657C       .text setMat__26mDoExt_3DlineMatSortPacketFP18mDoExt_3DlineMat_c */
 void mDoExt_3DlineMatSortPacket::setMat(mDoExt_3DlineMat_c* i_3DlineMat) {
     if (mp3DlineMat == NULL) {
-        j3dSys.getDrawBuffer(0)->entryImm(this, 0);
+        j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(this, 0);
     }
     i_3DlineMat->mpNextLineMat = mp3DlineMat;
     mp3DlineMat = i_3DlineMat;

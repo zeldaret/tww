@@ -1,6 +1,7 @@
 #ifndef J3DSHAPE_H
 #define J3DSHAPE_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DShapeDraw.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/gx/GX.h"
@@ -181,7 +182,7 @@ public:
     static u8 sNBTFlag;
 
     static void setCurrentPipeline(u32 pipeline) {
-        J3D_ASSERT(91, pipeline < 4, "Error : range over.");
+        J3D_ASSERT_RANGE(91, pipeline < 4);
         sCurrentPipeline = pipeline;
     }
 

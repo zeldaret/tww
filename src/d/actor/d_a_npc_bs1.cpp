@@ -442,7 +442,6 @@ static void daNpc_Bs1_setPayRupee(int unknownParam1, int unknownParam2) {
 
 /* 000010EC-00001F7C       .text next_msgStatus__11daNpc_Bs1_cFPUl */
 u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching - retail-only regalloc */
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
     switch(*pMsgNo) {

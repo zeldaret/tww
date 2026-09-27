@@ -19,13 +19,13 @@ dBgW::dBgW() {
     mpRideCb = NULL;
     mpPushPullCb = NULL;
     mFlag = 0;
-    mRoomNo = 0xFFFF;
-    mRoomNo2 = 0xFF;
+    ClrRoomId();
+    ClrGrpRoomInf();
 }
 
 /* 800A5CA8-800A5CD4       .text Move__4dBgWFv */
 void dBgW::Move() {
-    mFlag |= 0x01;
+    OnMoveFlag();
     cBgW::Move();
 }
 
@@ -877,32 +877,33 @@ void dBgW::TransPos(cBgS_PolyInfo& poly, void* user, bool accept, cXyz* pos, csX
 }
 
 /* 800A8D2C-800A9474       .text ChkPolyThrough__4dBgWFiP16cBgS_PolyPassChk */
-bool dBgW::ChkPolyThrough(int poly_index, cBgS_PolyPassChk* chk) {
-    if (chk == NULL)
+bool dBgW::ChkPolyThrough(int poly_index, cBgS_PolyPassChk* ppass_chk) {
+    if (ppass_chk == NULL)
         return false;
-    if (chk->mbObjThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x02)
+    dBgS_PolyPassChk* chk = (dBgS_PolyPassChk*)ppass_chk;
+    if (chk->ChkObj() && GetPolyObjThrough(poly_index))
         return true;
-    if (chk->mbCamThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x01)
+    if (chk->ChkCam() && GetPolyCamThrough(poly_index))
         return true;
-    if (chk->mbLinkThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x04)
+    if (chk->ChkLink() && GetPolyLinkThrough(poly_index))
         return true;
-    if (chk->mbArrowThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x08)
+    if (chk->ChkArrow() && GetPolyArrowThrough(poly_index))
         return true;
-    if (chk->mbBombThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x20)
+    if (chk->ChkBomb() && GetPolyBombThrough(poly_index))
         return true;
-    if (chk->mbBoomerangThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x40)
+    if (chk->ChkBoomerang() && GetPolyBoomerangThrough(poly_index))
         return true;
-    if (chk->mbRopeThrough && GetPolyInf3(GetPolyInfId(poly_index)) & 0x80)
+    if (chk->ChkRope() && GetPolyRopeThrough(poly_index))
         return true;
     return false;
 }
 
 /* 800A9474-800A9684       .text ChkShdwDrawThrough__4dBgWFiP16cBgS_PolyPassChk */
 bool dBgW::ChkShdwDrawThrough(int poly_index, cBgS_PolyPassChk* chk) {
-    if ((GetPolyInf0(GetPolyInfId(poly_index)) >> 27) & 1)
+    if (GetShdwThrough(poly_index))
         return true;
 
-    if (GetPolyInf3(GetPolyInfId(poly_index)) & 0x08)
+    if (GetPolyArrowThrough(poly_index))
         return true;
 
     return false;
@@ -932,9 +933,9 @@ bool dBgW::ChkGrpThrough(int grp_id, cBgS_GrpPassChk* _chk, int depth) {
 void dBgW::ChangeAttributeCodeByPathPntNo(int pnt_no, u32 attr) {
     if (pm_bgd != NULL) {
         for (s32 i = 0; i < pm_bgd->m_ti_num; i++) {
-            u32 ti_pnt_no = dBgS_GetRoomPathPntNo(pm_bgd->m_ti_tbl[i].mPolyInf2);
+            u32 ti_pnt_no = dBgS_GetRoomPathPntNo(pm_bgd->m_ti_tbl[i].m_info2);
             if (ti_pnt_no == pnt_no)
-                dBgS_ChangeAttributeCode(attr, &pm_bgd->m_ti_tbl[i].mPolyInf1);
+                dBgS_ChangeAttributeCode(attr, &pm_bgd->m_ti_tbl[i].m_info1);
         }
     }
 }

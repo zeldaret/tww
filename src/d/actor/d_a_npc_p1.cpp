@@ -941,8 +941,8 @@ static BOOL nodeCallBack1(J3DNode* i_node, int i_param_2) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             if (jntNo == i_this->m_jnt.getHeadJntNum()) {
                 cXyz local_28(REG10_F(0), REG10_F(1), REG10_F(2));
-                cMtx_YrotM(*calc_mtx, -i_this->m_jnt.getHead_y() - i_this->mHeadAnm.field_0x02);
-                cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x() - i_this->mHeadAnm.field_0x00);
+                cMtx_YrotM(*calc_mtx, -i_this->m_jnt.getHead_y() - i_this->mHeadAnm.field_0x00.y);
+                cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x() - i_this->mHeadAnm.field_0x00.x);
                 MtxPosition(&local_28, &i_this->eyePos);
             }
             if (jntNo == i_this->m_jnt.getBackboneJntNum()) {

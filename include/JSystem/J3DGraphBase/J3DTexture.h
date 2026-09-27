@@ -1,6 +1,7 @@
 #ifndef J3DTEXTURE_H
 #define J3DTEXTURE_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
@@ -40,11 +41,11 @@ public:
 
     u16 getNum() const { return mNum; }
     ResTIMG* getResTIMG(u16 index) const {
-        J3D_ASSERT(72, index < mNum, "Error : range over.");
+        J3D_ASSERT_RANGE(72, index < mNum);
         return &mpRes[index];   
     }
     void setResTIMG(u16 index, const ResTIMG& timg) {
-        J3D_ASSERT(81, index < mNum, "Error : range over.");
+        J3D_ASSERT_RANGE(81, index < mNum);
         mpRes[index] = timg;
         mpRes[index].imageOffset = ((mpRes[index].imageOffset + (uintptr_t)&timg - (uintptr_t)(mpRes + index)));
         mpRes[index].paletteOffset = ((mpRes[index].paletteOffset + (uintptr_t)&timg - (uintptr_t)(mpRes + index)));

@@ -1,6 +1,7 @@
 #ifndef J3DMATBLOCK_H
 #define J3DMATBLOCK_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
@@ -273,7 +274,7 @@ public:
     virtual void setTexNo(u32 idx, const u16* pNo) { mTexNo[idx] = *pNo; }
     virtual void setTexNo(u32 idx, u16 no) { mTexNo[idx] = no; }
     virtual u16 getTexNo(u32 idx) const {
-        J3D_ASSERT(1353, idx < 8, "Error : range over.");
+        J3D_ASSERT_RANGE(1353, idx < 8);
         return mTexNo[idx];
     }
     virtual void setTevOrder(u32 idx, const J3DTevOrder* pOrder) { mTevOrder[idx] = *pOrder; }
@@ -347,7 +348,7 @@ public:
     virtual void setTexNo(u32 idx, const u16* pNo) { mTexNo[idx] = *pNo; }
     virtual void setTexNo(u32 idx, u16 no) { mTexNo[idx] = no; }
     virtual u16 getTexNo(u32 idx) const {
-        J3D_ASSERT(2019, idx < 4, "Error : range over.");
+        J3D_ASSERT_RANGE(2019, idx < 4);
         return mTexNo[idx];
     }
     virtual void setTevOrder(u32 idx, const J3DTevOrder* pOrder) { mTevOrder[idx] = *pOrder; }
@@ -425,7 +426,7 @@ public:
     virtual void setTexNo(u32 idx, const u16* pNo) { mTexNo[idx] = *pNo; }
     virtual void setTexNo(u32 idx, u16 no) { mTexNo[idx] = no; }
     virtual u16 getTexNo(u32 idx) const {
-        J3D_ASSERT(1730, idx < 2, "Error : range over.");
+        J3D_ASSERT_RANGE(1730, idx < 2);
         return mTexNo[idx];
     }
     virtual void setTevOrder(u32 idx, const J3DTevOrder* pOrder) { mTevOrder[idx] = *pOrder; }
@@ -503,7 +504,7 @@ public:
     virtual void setTexNo(u32 idx, const u16* pNo) { mTexNo[idx] = *pNo; }
     virtual void setTexNo(u32 idx, u16 no) { mTexNo[idx] = no; }
     virtual u16 getTexNo(u32 idx) const {
-        J3D_ASSERT(2308, idx < 8, "Error : range over.");
+        J3D_ASSERT_RANGE(2308, idx < 8);
         return mTexNo[idx];
     }
     virtual void setTevOrder(u32 idx, const J3DTevOrder* pOrder) { mTevOrder[idx] = *pOrder; }
@@ -584,7 +585,7 @@ public:
     virtual void setTexNo(u32 idx, const u16* pNo) { mTexNo[idx] = *pNo; }
     virtual void setTexNo(u32 idx, u16 no) { mTexNo[idx] = no; }
     virtual u16 getTexNo(u32 idx) const {
-        J3D_ASSERT(1574, idx < 1, "Error : range over.");
+        J3D_ASSERT_RANGE(1574, idx < 1);
         return mTexNo[idx];
     }
     virtual void setTevOrder(u32 idx, const J3DTevOrder* pOrder) { mTevOrder[idx] = *pOrder; }

@@ -1055,26 +1055,13 @@ BOOL daPy_lk_c::procShipCrane() {
             mProcVar2.m34D4 = 1;
             daPy_ANM anm;
             if (ship->getCraneBaseAngle() > 0) {
-                // TODO: is this salvage type stuff an inline?
-                int type;
-                if (daSalvage_c::isValidSalvageId()) {
-                    type = daSalvage_c::mTagData_p->getType(daSalvage_c::getSalvageId());
-                } else {
-                    type = -1;
-                }
-                if (type == 1) {
+                if (daSalvage_c::getSalvageKind() == 1) {
                     anm = ANM_SALVRGOOD;
                 } else {
                     anm = ANM_SALVRBAD;
                 }
             } else {
-                int type;
-                if (daSalvage_c::isValidSalvageId()) {
-                    type = daSalvage_c::mTagData_p->getType(daSalvage_c::getSalvageId());
-                } else {
-                    type = -1;
-                }
-                if (type == 1) {
+                if (daSalvage_c::getSalvageKind() == 1) {
                     anm = ANM_SALVLGOOD;
                 } else {
                     anm = ANM_SALVLBAD;

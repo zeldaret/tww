@@ -344,7 +344,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
             a_this->mSph.Set(cc_sph_src);
             a_this->mSph.SetStts(&a_this->mStts);
         } else {
-            return phase_state = cPhs_ERROR_e;
+            return cPhs_ERROR_e;
         }
     }
     return phase_state;

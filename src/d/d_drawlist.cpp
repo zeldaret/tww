@@ -1304,13 +1304,12 @@ u8 setShadowRealMtx(Mtx viewMtx, Mtx renderProjMtx, Mtx receiverProjMtx, cXyz* l
         lightVec.z *= tmp;
     }
 
-    f32 lightDist = std::sqrtf(lightVec.abs2());
+    f32 lightDist = lightVec.abs();
     if (lightDist != 0.0f) {
         f32 tmp3 = (lightVec.y / lightDist);
         if (tmp3 < 1.5f) {
             lightVec.y = 1.5f * lightDist;
-            lightDist = lightVec.abs2();
-            lightDist = std::sqrtf(lightDist);
+            lightDist = lightVec.abs();
         }
         lightDist = (casterSize * 0.5f) / lightDist;
     }
@@ -1357,17 +1356,17 @@ u32 dDlst_shadowReal_c::set(u32 key, s8 shouldFade, J3DModel* model, cXyz* pos, 
         mModelNum = 0;
     }
 
-    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
-    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu);
     j3dSys.setViewMtx(mViewMtx);
-    j3dSys.setDrawBuffer(mpDrawBuffer, 0);
-    j3dSys.setDrawBuffer(mpDrawBuffer, 1);
+    j3dSys.setDrawBuffer(mpDrawBuffer, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(mpDrawBuffer, J3DSysDrawBuf_Xlu);
     model->entry();
     model->lock();
     model->viewCalc();
     j3dSys.setViewMtx(dComIfGd_getView()->mViewMtx);
-    j3dSys.setDrawBuffer(buffer0, 0);
-    j3dSys.setDrawBuffer(buffer1, 1);
+    j3dSys.setDrawBuffer(buffer0, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(buffer1, J3DSysDrawBuf_Xlu);
     return mKey;
 }
 

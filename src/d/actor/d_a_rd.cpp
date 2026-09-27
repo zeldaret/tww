@@ -1439,7 +1439,7 @@ void daRd_c::setBtkAnm(s8 idx) {
 }
 
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
-void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
+void daRd_c::setAnm(s8 anmPrmIdx, bool force) {
     static const int a_anm_bcks_tbl[] = {
         dRes_INDEX_RD_BCK_TACHIP_e,
         dRes_INDEX_RD_BCK_SUWARIP_e,
@@ -1614,7 +1614,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
         mBrkAnm.setFrame(mpMorf->getFrame());
     }
     
-    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
+    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, force);
 }
 
 /* 00003C48-000040A8       .text _execute__6daRd_cFv */

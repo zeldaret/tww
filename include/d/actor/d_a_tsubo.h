@@ -168,7 +168,7 @@ namespace daTsubo {
 
         bool pos_init() {
             if (m678 == 2) {
-                current.pos = home.pos;
+                current.pos.set(home.pos);
                 current.angle = home.angle;
                 shape_angle = home.angle;
 

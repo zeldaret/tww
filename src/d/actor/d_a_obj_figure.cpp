@@ -16,24 +16,27 @@
 #include "d/d_a_obj.h"
 #include "d/actor/d_a_player_main.h"
 #include "m_Do/m_Do_controller_pad.h"
+#if VERSION > VERSION_DEMO
+#include "res/Object/Figure2b.h"
+#endif
 
 #define TOTAL_FIGURE_COUNT 0x86
 
 static const char* l_arcname_tbl[] = {
-    "Figure",
-    "Figure2",
-    "Figure1",
-    "Figure0",
-    "Figure6",
-    "Figure5",
-    "Figure3",
-    "Figure4",
+    /* 0x00 */ "Figure",
+    /* 0x01 */ "Figure2",
+    /* 0x02 */ "Figure1",
+    /* 0x03 */ "Figure0",
+    /* 0x04 */ "Figure6",
+    /* 0x05 */ "Figure5",
+    /* 0x06 */ "Figure3",
+    /* 0x07 */ "Figure4",
 #if VERSION > VERSION_DEMO
-    "Figure2a",
-    "Figure2b",
-    "Figure6a",
-    "Figure6b",
-    "Figure6c",
+    /* 0x08 */ "Figure2a",
+    /* 0x09 */ "Figure2b",
+    /* 0x0A */ "Figure6a",
+    /* 0x0B */ "Figure6b",
+    /* 0x0C */ "Figure6c",
 #endif
 };
 
@@ -472,7 +475,10 @@ BOOL daObjFigure_c::createHeap() {
     }
 
     if(mFigureNo == 0x3D) {
-        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), dRes_ID_FIGURE2_BDL_VF_047_e));
+        J3DAnmTevRegKey* pBrkData = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectIDRes(
+            DEMO_SELECT(l_arcname_tbl[roomId], arcname),
+            DEMO_SELECT(dRes_ID_FIGURE2_BRK_VF_061_e, dRes_ID_FIGURE2B_BRK_VF_061_e)
+        ));
         if(pBrkData == NULL) {
             return false;
         }
@@ -488,7 +494,10 @@ BOOL daObjFigure_c::createHeap() {
     }
     J3DModelData* pPedestalData;
     if(mFigureNo == 0x40) {
-        pPedestalData = (J3DModelData*)dComIfG_getObjectIDRes(DEMO_SELECT(l_arcname_tbl[roomId], arcname), dRes_ID_FIGURE2_BDL_VF_044_e);
+        pPedestalData = (J3DModelData*)dComIfG_getObjectIDRes(
+            DEMO_SELECT(l_arcname_tbl[roomId], arcname),
+            DEMO_SELECT(dRes_ID_FIGURE2_BDL_VF_064L_e, dRes_ID_FIGURE2B_BDL_VF_064L_e)
+        );
         mpMorf = new mDoExt_McaMorf(
             pPedestalData,
             NULL, NULL,

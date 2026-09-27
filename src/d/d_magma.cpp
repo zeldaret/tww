@@ -366,7 +366,7 @@ void dMagma_packet_c::update() {
         if (floor->getBall() != NULL)
             floor->update();
     }
-    j3dSys.getDrawBuffer(0)->entryImm(this, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(this, 0);
 }
 
 /* 800767E4-80076924       .text checkYpos__15dMagma_packet_cFR4cXyz */

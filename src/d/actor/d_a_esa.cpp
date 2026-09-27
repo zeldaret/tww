@@ -83,7 +83,7 @@ void bg_check(esa_class* i_this) {
         }
     }
     else {
-        fopAcM_OffStatus(i_this, fopAcStts_UNK4000_e);
+        cLib_offBit<u32>(i_this->actor_status, fopAcStts_UNK4000_e);
     }
 }
 

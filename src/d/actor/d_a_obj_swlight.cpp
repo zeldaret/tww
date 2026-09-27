@@ -456,7 +456,7 @@ bool Act_c::_draw() {
     pJVar1 = 0xff - pJVar1;
 
     setMaterial(pJVar5->getJointNodePointer(MSUSW_JNT_BEFORE_FACE_e)->getMesh(), pJVar1);
-    setMaterial_Before_mirror(pJVar5->getJointTree().getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->getMesh(), pJVar1);
+    setMaterial_Before_mirror(pJVar5->getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->getMesh(), pJVar1);
     mDoExt_modelUpdateDL(m298);
 
     dComIfGd_setList();
