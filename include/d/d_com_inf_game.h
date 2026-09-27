@@ -356,7 +356,7 @@ public:
     void setAuctionGauge(s16 gauge) { mAuctionGauge = gauge; }
     s16 getAuctionGauge() { return mAuctionGauge; }
 
-    int getItemRupeeCount() { return mItemRupeeCount; }
+    s32 getItemRupeeCount() { return mItemRupeeCount; }
     void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
     s16 getMessageCountNumber() { return mMsgCountNumber; }
@@ -421,7 +421,7 @@ public:
     s16 getItemMaxMagicCount() { return mItemMaxMagicCount; }
     void setItemMaxMagicCount(s16 magic) { mItemMaxMagicCount += magic; }
 
-    int getItemBombNumCount() { return mItemBombNumCount; }
+    s32 getItemBombNumCount() { return mItemBombNumCount; }
     void setItemBombNumCount(s16 num) { mItemBombNumCount += num; }
 
     u16 getItemNowLife() { return mItemNowLife; }
@@ -437,11 +437,11 @@ public:
     void setItemPictureNumCount(s16 num) { mItemPictureNumCount += num; }
     void clearItemPictureNumCount() { mItemPictureNumCount = 0; }
 
-    int getItemArrowNumCount() { return mItemArrowNumCount; }
+    s32 getItemArrowNumCount() { return mItemArrowNumCount; }
     void setItemArrowNumCount(s16 num) { mItemArrowNumCount += num; }
     void clearItemArrowNumCount() { mItemArrowNumCount = 0; }
 
-    int getItemNowMagic() { return mItemNowMagicCount; }
+    s16 getItemNowMagic() { return mItemNowMagicCount; }
     void setItemNowMagic(s16 num) { mItemNowMagicCount = num; }
 
     u32 getNpcNameMessageID() { return mNpcNameMessageID; }
@@ -535,7 +535,7 @@ public:
     void setCurrentView(view_class* i_view) { mCurrentView = i_view; }
     view_port_class* getCurrentViewport() { return mCurrentViewport; }
     void setCurrentViewport(view_port_class* i_viewport) { mCurrentViewport = i_viewport; }
-    s32 getWindowNum() { return mDlstWindowNum; }
+    int getWindowNum() { return mDlstWindowNum; }
     void setWindowNum(u8 num) { mDlstWindowNum = num; }
     dDlst_window_c * getWindow(int idx) { return &mDlstWindow[idx]; }
     void setWindow(int idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f, int cameraID, int mode) {
@@ -631,7 +631,7 @@ public:
     void setItemTable(void * pData) { mpItemTable = (ItemTableList*)pData; }
     ItemTableList* getItemTable() { return mpItemTable; }
     void* getFmapData() { return mpFmapData; }
-    void setFmapData(void * pData) { mpFmapData = pData; }
+    void setFmapData(void* pData) { mpFmapData = pData; }
 
     JKRAramBlock* getPictureBoxData(int i) { return mPictureBoxData[i]; }
     void setPictureBoxData(JKRAramBlock* aramBlock, int i) { mPictureBoxData[i] = aramBlock; }
@@ -691,7 +691,7 @@ public:
     u8 getButtonInfo(int idx) { return mButtonInfo[idx]; }
     void setButtonInfo(int idx, u8 info) { mButtonInfo[idx] = info; }
 
-    char* getInputPassword() { return mInputPassword; }
+    const char* getInputPassword() { return mInputPassword; }
     void setInputPassword(const char* password) { strcpy(mInputPassword, password); }
 
     u8 getDirection() { return mDirection; }
@@ -2609,7 +2609,7 @@ inline void dComIfGp_loadCameraPosition(int i, cXyz* o_pos, cXyz* o_target, f32*
     g_dComIfG_gameInfo.play.loadCameraPosition(i, o_pos, o_target, o_fovy, o_bank);
 }
 
-inline int dComIfGp_getItemRupeeCount() {
+inline s32 dComIfGp_getItemRupeeCount() {
     return g_dComIfG_gameInfo.play.getItemRupeeCount();
 }
 
@@ -2733,7 +2733,7 @@ inline void dComIfGp_setItemMaxMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMaxMagicCount(magic);
 }
 
-inline int dComIfGp_getItemBombNumCount() {
+inline s32 dComIfGp_getItemBombNumCount() {
     return g_dComIfG_gameInfo.play.getItemBombNumCount();
 }
 
@@ -2753,7 +2753,7 @@ inline void dComIfGp_clearItemPictureNumCount() {
     g_dComIfG_gameInfo.play.clearItemPictureNumCount();
 }
 
-inline int dComIfGp_getItemArrowNumCount() {
+inline s32 dComIfGp_getItemArrowNumCount() {
     return g_dComIfG_gameInfo.play.getItemArrowNumCount();
 }
 
@@ -3103,7 +3103,7 @@ inline void dComIfGp_plusMiniGameRupee(s16 count) {
     g_dComIfG_gameInfo.play.plusMiniGameRupee(count);
 }
 
-inline s32 dComIfGp_getWindowNum() { return g_dComIfG_gameInfo.play.getWindowNum(); }
+inline int dComIfGp_getWindowNum() { return g_dComIfG_gameInfo.play.getWindowNum(); }
 inline void dComIfGp_setWindowNum(u8 num) { g_dComIfG_gameInfo.play.setWindowNum(num); }
 inline dDlst_window_c * dComIfGp_getWindow(int idx) { return g_dComIfG_gameInfo.play.getWindow(idx); }
 inline void dComIfGp_setWindow(u8 idx, f32 x, f32 y, f32 w, f32 h, f32 n, f32 f, int cameraID, int mode) {
@@ -3324,7 +3324,7 @@ inline void dComIfGp_setButtonInfo(int idx, u8 info) {
     g_dComIfG_gameInfo.play.setButtonInfo(idx, info);
 }
 
-inline char* dComIfGp_getInputPassword() {
+inline const char* dComIfGp_getInputPassword() {
     return g_dComIfG_gameInfo.play.getInputPassword();
 }
 

@@ -164,7 +164,7 @@ s32 daKnob00_c::chkPassward() {
     char acStack_38[17];
     
 #if VERSION <= VERSION_JPN
-    char* password = dComIfGp_getInputPassword();
+    const char* password = dComIfGp_getInputPassword();
 #else
     strcpy(acStack_24, dComIfGp_getInputPassword());
 #endif
