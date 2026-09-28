@@ -212,10 +212,10 @@ public:
 
     u8 getGlobalAlpha() { return mGlobalPrmColor.a; }
     void setGlobalAlpha(u8 alpha) { mGlobalPrmColor.a = alpha; }
-    void setGlobalRTMatrix(MtxP mtx) {
+    void setGlobalRTMatrix(const MtxP mtx) {
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
-    void setGlobalSRTMatrix(MtxP mtx) {
+    void setGlobalSRTMatrix(const MtxP mtx) {
         JPASetRMtxSTVecfromMtx(mtx, mGlobalRotation, mGlobalDynamicsScale, mGlobalTranslation);
     }
     void setGlobalRotation(const JGeometry::TVec3<s16>& rot) {

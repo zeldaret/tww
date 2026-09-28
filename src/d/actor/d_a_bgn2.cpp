@@ -181,7 +181,6 @@ static void asi_hamon_set(bgn2_class* i_this) {
 
 /* 00000D88-00000FA8       .text attack_eff_set__FP10bgn2_class4cXyz */
 static void attack_eff_set(bgn2_class* i_this, cXyz param_2) {
-    /* Nonmatching - retail-only regalloc */
 #if VERSION == VERSION_DEMO
     fopAc_ac_c* actor = &i_this->actor;
 #endif
