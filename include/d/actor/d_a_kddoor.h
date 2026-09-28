@@ -62,10 +62,10 @@ public:
 
 class daKddoor_c : public dDoor_info_c {
 public:
-    void checkFlag(unsigned short) {}
+    bool checkFlag(unsigned short flag) { return (field_0x94A & flag) != 0; }
     inline BOOL execute();
-    void offFlag(unsigned short) {}
-    void onFlag(unsigned short) {}
+    void offFlag(unsigned short flag) { field_0x94A &= ~flag; }
+    void onFlag(unsigned short flag) { field_0x94A |= flag; }
     void setAction(unsigned char) {}
 
     BOOL chkMakeKey();
@@ -85,16 +85,18 @@ public:
     BOOL CreateHeap();
     void setEventPrm();
     void openInit();
-    void openProc();
+    BOOL openProc();
     void openEnd();
     void closeInit();
-    void closeProc();
+    BOOL closeProc();
     void closeEnd();
     void calcMtx();
-    void CreateInit();
+    BOOL CreateInit();
     cPhs_State create();
     void demoProc();
     BOOL draw();
+
+    static const char M_arcname[];
 
 public:
     /* 0x2D0 */ request_of_phase_process_class field_0x2D0;
@@ -103,7 +105,8 @@ public:
     /* 0x334 */ dDoor_ssk_c field_0x334;
     /* 0x940 */ J3DModel* field_0x940;
     /* 0x944 */ dBgW* field_0x944;
-    /* 0x948 */ u8 field_0x948[0x94A - 0x948];
+    /* 0x948 */ u8 field_0x948;
+    /* 0x949 */ u8 field_0x949[0x94A - 0x949];
     /* 0x94A */ u16 field_0x94A;
     /* 0x94C */ f32 field_0x94C;
 };  // Size: 0x950

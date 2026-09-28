@@ -8,6 +8,8 @@
 #include "d/d_cc_d.h"
 #include "res/Object/Ssk.h"
 
+const char daKddoor_c::M_arcname[] = "Ssk";
+
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */
 BOOL daKddoor_c::chkMakeKey() {
     /* Nonmatching */
@@ -48,16 +50,16 @@ int daKddoor_c::chkStopF() {
     u8 room_no = getFRoomNo();
     if (swbit == 0xFF) {
         return 0;
-    } else {
-        switch (type) {
-            case 0:
-            case 1:
-                if (dComIfGp_roomControl_checkStatusFlag(room_no, 1) == 0) {
-                    return -1;
-                } else {
-                    return !dComIfGs_isSwitch(swbit, room_no);
-                }
-        }
+    }
+    switch (type) {
+        case 0:
+        case 1:
+            if (dComIfGp_roomControl_checkStatusFlag(room_no, 1) == 0) {
+                return -1;
+            } else {
+                return !dComIfGs_isSwitch(swbit, room_no);
+            }
+            break;
     }
     return 0;
 }
@@ -69,11 +71,11 @@ int daKddoor_c::chkStopB() {
     u8 room_no = getBRoomNo();
     if (swbit2 == 0xFF) {
         return 0;
-    } else if (dComIfGp_roomControl_checkStatusFlag(room_no, 1) == 0) {
-        return -1;
-    } else {
-        return !dComIfGs_isSwitch(swbit2, room_no);
     }
+    if (dComIfGp_roomControl_checkStatusFlag(room_no, 1) == 0) {
+        return -1;
+    }
+    return !dComIfGs_isSwitch(swbit2, room_no);
 }
 
 /* 000002D0-0000034C       .text setStop__10daKddoor_cFv */
@@ -308,20 +310,18 @@ void dDoor_ssk_c::closeInit() {
 /* 00000C08-00000C98       .text closeProc__11dDoor_ssk_cFP12dDoor_info_c */
 BOOL dDoor_ssk_c::closeProc(dDoor_info_c* i_door) {
     /* Nonmatching */
-    BOOL ret;
     if (field_0x55B == 0) {
         return TRUE;
-    } else {
-        ret = TRUE;
-        for (int i = 0; i < 3; i++) {
-            BOOL sub_ret = field_0x000[i].closeProc(i_door);
-            if (!sub_ret) {
-                ret = FALSE;
-            }
+    }
+    BOOL ret = TRUE;
+    for (int i = 0; i < 3; i++) {
+        BOOL sub_ret = field_0x000[i].closeProc(i_door);
+        if (!sub_ret) {
+            ret = FALSE;
         }
-        if (ret) {
-            field_0x55B = 0;
-        }
+    }
+    if (ret) {
+        field_0x55B = 0;
     }
     return ret;
 }
@@ -338,21 +338,19 @@ void dDoor_ssk_c::openInit() {
 /* 00000CF0-00000D84       .text openProc__11dDoor_ssk_cFP12dDoor_info_c */
 BOOL dDoor_ssk_c::openProc(dDoor_info_c* i_door) {
     /* Nonmatching */
-    BOOL ret;
     if (field_0x55B == 0) {
         return TRUE;
-    } else {
-        ret = TRUE;
-        for (int i = 0; i < 3; i++) {
-            BOOL sub_ret = field_0x000[i].openProc(i_door);
-            if (!sub_ret) {
-                ret = FALSE;
-            }
+    }
+    BOOL ret = TRUE;
+    for (int i = 0; i < 3; i++) {
+        BOOL sub_ret = field_0x000[i].openProc(i_door);
+        if (!sub_ret) {
+            ret = FALSE;
         }
-        if (ret) {
-            field_0x55B = 0;
-            field_0x558 = 0;
-        }
+    }
+    if (ret) {
+        field_0x55B = 0;
+        field_0x558 = 0;
     }
     return ret;
 }
@@ -453,13 +451,12 @@ BOOL dDoor_ssk_sub_c::openProc(dDoor_info_c* i_door) {
 /* 00000FB4-00001024       .text closeInit__15dDoor_ssk_sub_cFv */
 void dDoor_ssk_sub_c::closeInit() {
     /* Nonmatching */
-    // TODO: Investigate, those should all be 0.0f, but it still matches
-    field_0x1A0.x = 1.0f;
-    field_0x1A0.y = 1.0f;
-    field_0x1A0.z = 1.0f;
-    field_0x1AC.x = 1.0f;
-    field_0x1AC.y = 1.0f;
-    field_0x1AC.z = 1.0f;
+    field_0x1A0.x = 0.0f;
+    field_0x1A0.y = 0.0f;
+    field_0x1A0.z = 0.0f;
+    field_0x1AC.x = 0.0f;
+    field_0x1AC.y = 0.0f;
+    field_0x1AC.z = 0.0f;
     field_0x19C = cM_rnd() * 5.0f;
     field_0x1C4 = 0;
 }
@@ -560,27 +557,27 @@ BOOL dDoor_ssk_sub_c::drawSet() {
 }
 
 /* 00001778-00001904       .text calcMtx__15dDoor_ssk_sub_cFP12dDoor_info_cffUc */
-void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_door, f32 i_param1, f32 i_param2, u8 i_param3) {
+void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_door, float i_param1, float i_param2, unsigned char i_param3) {
     /* Nonmatching */
     if (field_0x000 != NULL) {
         J3DModel* model = field_0x000->getModel();
         model->setBaseScale(field_0x1A0);
         model = field_0x004->getModel();
         model->setBaseScale(field_0x1AC);
-        MTXTrans(mDoMtx_stack_c::get(), i_door->current.pos.x, i_door->current.pos.y, i_door->current.pos.z);
-        mDoMtx_YrotM(mDoMtx_stack_c::get(), i_door->current.angle.y);
+        mDoMtx_stack_c::transS(i_door->current.pos);
+        mDoMtx_stack_c::YrotM(i_door->current.angle.y);
         if (i_param3 == 1) {
-            mDoMtx_YrotM(mDoMtx_stack_c::get(), 0x7FFF);
+            mDoMtx_stack_c::YrotM(0x7FFF);
         }
         mDoMtx_stack_c::transM(i_param1, 0.0f, i_param2);
-        mDoMtx_YrotM(mDoMtx_stack_c::get(), field_0x19A);
+        mDoMtx_stack_c::YrotM(field_0x19A);
         field_0x000->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
         field_0x004->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
         cXyz sp08;
         sp08.x = 0.0f;
         sp08.y = 0.0f;
         sp08.z = 0.0f;
-        MTXMultVec(mDoMtx_stack_c::get(), &sp08, &field_0x1B8);
+        mDoMtx_stack_c::multVec(&sp08, &field_0x1B8);
         field_0x064.SetC(field_0x1B8);
         field_0x064.SetR(field_0x1AC.x * 50.0f);
     }
@@ -655,81 +652,338 @@ BOOL daKddoor_c::CreateHeap() {
 /* 00001B74-00001CD0       .text setEventPrm__10daKddoor_cFv */
 void daKddoor_c::setEventPrm() {
     /* Nonmatching */
+    if (mFrontCheck == 0) {
+        m2C6 = 2;
+        if (field_0x334.field_0x55A == 0xFF) {
+            field_0x334.field_0x55A = chkStopB();
+        }
+    } else {
+        m2C6 = 3;
+        if (field_0x334.field_0x55A == 0xFF) {
+            field_0x334.field_0x55A = chkStopF();
+        }
+    }
+    if (field_0x334.field_0x558 == 0) {
+        if (field_0x334.field_0x55A == 1) {
+            m2C6 += 2;
+        }
+        if (!field_0x310.mbEnabled || dComIfGs_getKeyNum() != 0) {
+            u8 swbit = getSwbit();
+            if (chkFeelerCase() && swbit != 0xFF) {
+                if (!dComIfGs_isSwitch(swbit, getFRoomNo())) {
+                    return;
+                }
+            }
+            if (checkArea(12100.0f, 12100.0f, 62500.0f)) {
+                eventInfo.setEventId(mEventIdx[m2C6]);
+                eventInfo.setToolId(mToolId[m2C6]);
+                eventInfo.onCondition(dEvtCnd_CANDOOR_e);
+            }
+        }
+    }
 }
 
 /* 00001CD0-00001D7C       .text openInit__10daKddoor_cFv */
 void daKddoor_c::openInit() {
     /* Nonmatching */
+    openInitCom(1);
+    onFlag(1);
+    dComIfG_Bgsp()->Release(field_0x944);
+    field_0x94C = 0.0f;
+    speedF = 0.0f;
+    fopAcM_seStart(this, JA_SE_OBJ_STN_DOOR_MOVE_U, 0);
 }
 
 /* 00001D7C-00001DF0       .text openProc__10daKddoor_cFv */
-void daKddoor_c::openProc() {
+BOOL daKddoor_c::openProc() {
     /* Nonmatching */
+    BOOL ret = FALSE;
+    cLib_chaseF(&speedF, 30.0f, 4.0f);
+    if (cLib_chaseF(&field_0x94C, 300.0f, speedF) != 0) {
+        ret = TRUE;
+    }
+    calcMtx();
+    return ret;
 }
 
 /* 00001DF0-00001E84       .text openEnd__10daKddoor_cFv */
 void daKddoor_c::openEnd() {
     /* Nonmatching */
+    fopAcM_seStart(this, JA_SE_OBJ_STN_DOOR_STOP_U, 0);
+    offFlag(1);
+    field_0x94C = 300.0f;
+    speedF = 0.0f;
 }
 
 /* 00001E84-00001F64       .text closeInit__10daKddoor_cFv */
 void daKddoor_c::closeInit() {
     /* Nonmatching */
+    onFlag(2);
+    bool rt = dComIfG_Bgsp()->Regist(field_0x944, this);
+    JUT_ASSERT(0x3FF, !rt);
+    dComIfGp_map_clrAGBMapSendStopFlg();
+    fopAcM_seStart(this, JA_SE_OBJ_STN_DOOR_MOVE_D, 0);
 }
 
 /* 00001F64-00001FD8       .text closeProc__10daKddoor_cFv */
-void daKddoor_c::closeProc() {
+BOOL daKddoor_c::closeProc() {
     /* Nonmatching */
+    BOOL ret = FALSE;
+    cLib_chaseF(&speedF, 60.0f, 6.0f);
+    if (cLib_chaseF(&field_0x94C, 0.0f, speedF) != 0) {
+        ret = TRUE;
+    }
+    calcMtx();
+    return ret;
 }
 
 /* 00001FD8-00002090       .text closeEnd__10daKddoor_cFv */
 void daKddoor_c::closeEnd() {
     /* Nonmatching */
+    offFlag(2);
+    closeEndCom();
+    dComIfGp_getVibration().StartShock(4, -33, cXyz(0.0f, 1.0f, 0.0f));
+    fopAcM_seStart(this, JA_SE_OBJ_STN_DOOR_STOP_D, 0);
 }
 
 /* 00002090-00002108       .text calcMtx__10daKddoor_cFv */
 void daKddoor_c::calcMtx() {
     /* Nonmatching */
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::YrotM(home.angle.y);
+    mDoMtx_stack_c::transM(0.0f, field_0x94C, 0.0f);
+    field_0x940->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00002108-0000220C       .text CreateInit__10daKddoor_cFv */
-void daKddoor_c::CreateInit() {
+BOOL daKddoor_c::CreateInit() {
     /* Nonmatching */
+    if (dComIfG_Bgsp()->Regist(field_0x944, this)) {
+        JUT_ASSERT(0x43E, FALSE);
+    }
+    tevStr.mRoomNo = current.roomNo;
+    field_0x94C = 0.0f;
+    field_0x948 = 0;
+    attention_info.position.y += 150.0f;
+    eyePos.y += 150.0f;
+    attention_info.flags = fopAc_Attn_ACTION_DOOR_e;
+    calcMtx();
+    field_0x944->Move();
+    field_0x944->SetRoomId(getFRoomNo());
+    initProc(1);
+    field_0x334.init(this);
+    return TRUE;
 }
 
 /* 0000220C-000023CC       .text create__10daKddoor_cFv */
 cPhs_State daKddoor_c::create() {
     /* Nonmatching */
+    cPhs_State state = dComIfG_resLoad(&field_0x2D0, M_arcname);
+    fopAcM_ct(this, daKddoor_c);
+    if (state != cPhs_COMPLEATE_e) {
+        return state;
+    }
+    if (chkMakeKey()) {
+        state = field_0x310.keyResLoad();
+        if (state != cPhs_COMPLEATE_e) {
+            return state;
+        }
+    }
+    current.roomNo = getFRoomNo();
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xD960)) {
+        field_0x944 = NULL;
+        state = cPhs_ERROR_e;
+    } else {
+        CreateInit();
+        state = cPhs_COMPLEATE_e;
+    }
+    return state;
 }
 
 /* 000023CC-00002678       .text demoProc__10daKddoor_cFv */
 void daKddoor_c::demoProc() {
     /* Nonmatching */
+    s32 r28 = getDemoAction();
+    if (dComIfGp_evmng_getIsAddvance(mStaffId)) {
+        switch (r28) {
+            case 3:
+                openInit();
+                break;
+            case 4:
+                closeInit();
+                break;
+            case 7:
+                setGoal();
+                break;
+            case 5:
+                field_0x2D8.smokeInit(this);
+                break;
+            case 6:
+                field_0x2D8.smokeEnd();
+                break;
+            case 8:
+                field_0x310.keyInit(this);
+                break;
+            case 2:
+                setStop();
+                if (field_0x334.field_0x558 != 0) {
+                    field_0x334.closeInit();
+                }
+                break;
+            case 1:
+                field_0x334.openInit();
+                break;
+        }
+    }
+    switch (r28) {
+        case 3:
+            if (checkFlag(1)) {
+                if (openProc()) {
+                    openEnd();
+                    dComIfGp_evmng_cutEnd(mStaffId);
+                }
+            } else {
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+            break;
+        case 4:
+            if (checkFlag(2)) {
+                if (closeProc()) {
+                    closeEnd();
+                    dComIfGp_evmng_cutEnd(mStaffId);
+                }
+            } else {
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+            break;
+        case 5:
+            field_0x2D8.smokeProc(this);
+            dComIfGp_evmng_cutEnd(mStaffId);
+            break;
+        case 8:
+            if (field_0x310.keyProc()) {
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+            field_0x310.calcMtx(this);
+            break;
+        case 2:
+            if (field_0x334.closeProc(this)) {
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+            field_0x334.calcMtx(this);
+            break;
+        case 1:
+            if (field_0x334.openProc(this)) {
+                dComIfGp_evmng_cutEnd(mStaffId);
+            }
+            field_0x334.calcMtx(this);
+            break;
+        case 19:
+            if (dComIfGp_event_chkEventFlag(1)) {
+                field_0x948 = 1;
+                dComIfGp_event_onEventFlag(8);
+                shape_angle.y = current.angle.y;
+                dComIfGp_event_offEventFlag(1);
+                if (dComIfGp_evmng_checkStartDemo()) {
+                    dComIfGp_evmng_cancelStartDemo();
+                }
+            }
+            dComIfGp_evmng_cutEnd(mStaffId);
+            break;
+        default:
+            dComIfGp_evmng_cutEnd(mStaffId);
+            break;
+    }
 }
 
 /* 00002678-000027C0       .text daKddoor_actionWait__FP10daKddoor_c */
-void daKddoor_actionWait(daKddoor_c*) {
+BOOL daKddoor_actionWait(daKddoor_c* i_this) {
     /* Nonmatching */
+    if (i_this->eventInfo.checkCommandDoor()) {
+        i_this->initOpenDemo(1);
+        i_this->field_0x948 = 3;
+        i_this->demoProc();
+    } else if (i_this->field_0x334.field_0x558 != 0) {
+        if (i_this->eventInfo.checkCommandDemoAccrpt()) {
+            i_this->mStaffId = dComIfGp_evmng_getMyStaffId("SHUTTER_DOOR");
+            i_this->shape_angle.y = i_this->current.angle.y;
+            if (i_this->mFrontCheck == 1) {
+                i_this->shape_angle.y += 0x7FFF;
+            }
+            i_this->field_0x948 = 3;
+            i_this->demoProc();
+        } else {
+            if (i_this->chkStopOpen()) {
+                i_this->setStopDemo();
+                fopAcM_orderOtherEventId(i_this, i_this->mEventIdx[i_this->m2C6], i_this->mToolId[i_this->m2C6]);
+            }
+        }
+    } else {
+        if (i_this->chkStopClose()) {
+            i_this->field_0x334.field_0x558 = 1;
+            i_this->field_0x334.closeInit();
+            i_this->field_0x334.calcMtx(i_this);
+            i_this->field_0x948 = 2;
+        } else {
+            i_this->setEventPrm();
+        }
+    }
+    return TRUE;
 }
 
 /* 000027C0-00002814       .text daKddoor_actionStopClose__FP10daKddoor_c */
-void daKddoor_actionStopClose(daKddoor_c*) {
+BOOL daKddoor_actionStopClose(daKddoor_c* i_this) {
     /* Nonmatching */
+    if (i_this->field_0x334.closeProc(i_this)) {
+        i_this->field_0x948 = 1;
+    }
+    i_this->field_0x334.calcMtx(i_this);
+    return TRUE;
 }
 
 /* 00002814-00002898       .text daKddoor_actionDemo__FP10daKddoor_c */
-void daKddoor_actionDemo(daKddoor_c*) {
+BOOL daKddoor_actionDemo(daKddoor_c* i_this) {
     /* Nonmatching */
+    if (dComIfGp_evmng_endCheck(i_this->mEventIdx[i_this->m2C6])) {
+        i_this->field_0x948 = 1;
+        dComIfGp_event_onEventFlag(8);
+        i_this->shape_angle.y = i_this->current.angle.y;
+    } else {
+        i_this->demoProc();
+    }
+    return TRUE;
 }
 
 /* 00002898-000028F8       .text daKddoor_actionInit__FP10daKddoor_c */
-void daKddoor_actionInit(daKddoor_c*) {
+BOOL daKddoor_actionInit(daKddoor_c* i_this) {
     /* Nonmatching */
+    i_this->setKey();
+    i_this->field_0x310.calcMtx(i_this);
+    i_this->setStop();
+    i_this->field_0x334.calcMtx(i_this);
+    daKddoor_actionWait(i_this);
+    i_this->field_0x948 = 1;
+    return TRUE;
 }
 
 /* 000028F8-000029E0       .text draw__10daKddoor_cFv */
 BOOL daKddoor_c::draw() {
     /* Nonmatching */
+    if (!drawCheck(0)) {
+        return TRUE;
+    }
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(field_0x940, &tevStr);
+    dComIfGd_setListBG();
+    mDoExt_modelUpdateDL(field_0x940);
+    dComIfGd_setList();
+    if (field_0x310.mbEnabled) {
+        field_0x310.draw(this);
+    }
+    if (field_0x334.field_0x558 != 0) {
+        field_0x334.draw(this);
+    }
+    return TRUE;
 }
 
 /* 000029E0-00002A00       .text daKddoor_Draw__FP10daKddoor_c */
@@ -737,9 +991,40 @@ static BOOL daKddoor_Draw(daKddoor_c* i_this) {
     return ((daKddoor_c*)i_this)->draw();
 }
 
+inline BOOL daKddoor_c::execute() {
+    static BOOL (*l_action[])(daKddoor_c*) = {
+        daKddoor_actionInit,
+        daKddoor_actionWait,
+        daKddoor_actionStopClose,
+        daKddoor_actionDemo,
+    };
+    return l_action[field_0x948](this);
+}
+
 /* 00002A00-00002AF4       .text daKddoor_Execute__FP10daKddoor_c */
-static BOOL daKddoor_Execute(daKddoor_c*) {
+static BOOL daKddoor_Execute(daKddoor_c* i_this) {
     /* Nonmatching */
+    
+    switch (i_this->checkExecute()) {
+        case 0:
+            i_this->field_0x948 = 0;
+            break;
+        case 2:
+            i_this->execute();
+            break;
+        case 1:
+            i_this->startDemoProc();
+            i_this->demoProc();
+            break;
+        default:
+            JUT_ASSERT(0x57D, FALSE);
+            break;
+    }
+    i_this->mRoomNo2 = dComIfGp_roomControl_getStayNo();
+    if (i_this->field_0x334.field_0x558 != 0) {
+        i_this->field_0x334.execute(i_this);
+    }
+    return TRUE;
 }
 
 /* 00002AF4-00002AFC       .text daKddoor_IsDelete__FP10daKddoor_c */
@@ -748,8 +1033,19 @@ static BOOL daKddoor_IsDelete(daKddoor_c*) {
 }
 
 /* 00002AFC-00002C44       .text daKddoor_Delete__FP10daKddoor_c */
-static BOOL daKddoor_Delete(daKddoor_c*) {
+static BOOL daKddoor_Delete(daKddoor_c* i_this) {
     /* Nonmatching */
+    if (i_this->heap != NULL) {
+        dComIfG_Bgsp()->Release(i_this->field_0x944);
+    }
+    i_this->field_0x334.end();
+    dComIfG_resDelete(&i_this->field_0x2D0, daKddoor_c::M_arcname);
+    if (i_this->chkMakeKey()) {
+        i_this->field_0x310.keyResDelete();
+    }
+    i_this->field_0x2D8.smokeEnd();
+    i_this->~daKddoor_c();
+    return TRUE;
 }
 
 /* 00002C44-00002C64       .text daKddoor_Create__FP10fopAc_ac_c */
