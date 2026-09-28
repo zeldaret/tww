@@ -366,7 +366,7 @@ static void ga_move(himo3_class* i_this) {
 }
 
 /* 00001108-00001128       .text setActorHang__11himo3_classF4cXyzs */
-void himo3_class::setActorHang(cXyz arg1, short arg2) {
+void himo3_class::setActorHang(cXyz arg1, s16 arg2) {
     m21F4 = arg1;
     m2200 = arg2;
 }

@@ -156,16 +156,15 @@ void Bgc_c::wrt_pos(const cXyz& pos) {
 
 /* 00000474-00000748       .text wall_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cisf */
 void Bgc_c::wall_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, s16 param_4, f32 param_5) {
-    s16 angle;
     cXyz startPos;
     cXyz endPos;
     cXyz temp_2c;
     cXyz temp_20;
     
-    angle = movebox->home.angle.y + param_4;
+    const s16 angle = movebox->home.angle.y + param_4;
     mWallIdx = -1;
     mNearestWallDist = FLOAT_MAX;
-    mDoMtx_stack_c::YrotS((s16)angle);
+    mDoMtx_stack_c::YrotS(angle);
     mDoMtx_stack_c::XrotM(0x4000);
     mDoMtx_stack_c::multVec(&cXyz::BaseY, &temp_20);
     temp_20 *= param_5 + movebox->attr()->mScaleXZ * 0.5f;
@@ -174,7 +173,7 @@ void Bgc_c::wall_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCou
         mDoMtx_stack_c::XrotS(0x4000);
         cXyz temp_14(bgcSrc->m0C, 0.0f, bgcSrc->m08);
         mDoMtx_stack_c::multVec(&temp_14, &temp_2c);
-        mDoMtx_stack_c::YrotS((s16)angle);
+        mDoMtx_stack_c::YrotS(angle);
         mDoMtx_stack_c::transM(temp_2c);
         mDoMtx_stack_c::scaleM(movebox->attr()->mScaleXZ, movebox->attr()->mScaleY, movebox->attr()->mScaleXZ);
         mDoMtx_stack_c::transM(0.0f, 0.5f, 0.0f);
@@ -253,8 +252,8 @@ bool Bgc_c::chk_wall_touch(const Act_c* movebox, const BgcSrc_c* bgcSrc, s16 dir
     cXyz temp_20;
     cXyz direction;
     
-    s16 angle = movebox->home.angle.y + dirAngle;
-    mDoMtx_stack_c::YrotS((s16)angle);
+    const s16 angle = movebox->home.angle.y + dirAngle;
+    mDoMtx_stack_c::YrotS(angle);
     mDoMtx_stack_c::XrotM(0x4000);
     offset.set(bgcSrc->m0C, 0.0f, bgcSrc->m08);
     mDoMtx_stack_c::multVec(&cXyz::BaseY, &direction);
@@ -263,7 +262,7 @@ bool Bgc_c::chk_wall_touch(const Act_c* movebox, const BgcSrc_c* bgcSrc, s16 dir
     mDoMtx_stack_c::XrotM(0x4000);
     offset.set(bgcSrc->m0C, 0.0f, bgcSrc->m08);
     mDoMtx_stack_c::multVec(&offset, &temp_20);
-    mDoMtx_stack_c::YrotS((s16)angle);
+    mDoMtx_stack_c::YrotS(angle);
     mDoMtx_stack_c::transM(temp_20);
     mDoMtx_stack_c::scaleM(movebox->attr()->mScaleXZ, movebox->attr()->mScaleY, movebox->attr()->mScaleXZ);
     mDoMtx_stack_c::transM(0.0f, 0.5f, 0.0f);
