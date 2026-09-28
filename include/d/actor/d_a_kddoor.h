@@ -18,6 +18,8 @@ public:
     BOOL drawSet();
     void calcMtx(dDoor_info_c*, float, float, unsigned char);
 
+    ~dDoor_ssk_sub_c() {}
+
 public:
     /* 0x000 */ mDoExt_McaMorf* field_0x000;
     /* 0x004 */ mDoExt_McaMorf* field_0x004;
