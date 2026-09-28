@@ -54,7 +54,7 @@ static BOOL daFallRockTag_Execute(daFallRockTag_c* i_this) {
                 angle.z = cM_rndF(32767.0f);
 
                 i_this->createRock(&pos, &scale, &angle, fopAcM_GetRoomNo(i_this), 0);
-                mDoAud_seStart(JA_SE_ATM_RAKUBAN, &i_this->eyePos, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
+                fopAcM_seStart(i_this, JA_SE_ATM_RAKUBAN, 0);
             }
         } else {
             i_this->field_0x298 = 0;
@@ -83,7 +83,7 @@ cPhs_State daFallRockTag_c::create() {
     }
 
     mSchBit = fopAcM_GetParam(this);
-    fopDwTg_DrawQTo(&draw_tag);
+    fopAcM_offDraw(this);
     return cPhs_COMPLEATE_e;
 }
 
