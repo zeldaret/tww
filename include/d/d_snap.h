@@ -185,7 +185,7 @@ enum {
     /* 0xB1 */ DSNAP_TYPE_UNKB1,
     /* 0xB2 */ DSNAP_TYPE_UNKB2,
     /* 0xB3 */ DSNAP_TYPE_KS,
-    /* 0xB4 */ DSNAP_TYPE_UNKB4,
+    /* 0xB4 */ DSNAP_TYPE_BL,
     /* 0xB5 */ DSNAP_TYPE_FM,
     /* 0xB6 */ DSNAP_TYPE_AM2,
     /* 0xB7 */ DSNAP_TYPE_AM,
