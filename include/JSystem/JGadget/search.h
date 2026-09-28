@@ -10,11 +10,9 @@ namespace JGadget {
 namespace search {
 
 template <typename T>
-struct TExpandStride_ {};
-
-template <>
-struct TExpandStride_<s32> {
-    static s32 get(s32 n) { return n << 3; }
+struct TExpandStride_ {
+    TExpandStride_() {}
+    static T get(T n) { return n << 3; }
 };
 
 }  // namespace search
