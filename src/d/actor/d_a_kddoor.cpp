@@ -8,8 +8,6 @@
 #include "d/d_cc_d.h"
 #include "res/Object/Ssk.h"
 
-const char daKddoor_c::M_arcname[] = "Ssk";
-
 /* 00000078-000000A8       .text chkMakeKey__10daKddoor_cFv */
 BOOL daKddoor_c::chkMakeKey() {
     /* Nonmatching */
@@ -507,19 +505,12 @@ BOOL dDoor_ssk_sub_c::closeProc(dDoor_info_c* i_door) {
 /* 0000121C-00001390       .text __ct__15dDoor_ssk_sub_cFv */
 dDoor_ssk_sub_c::dDoor_ssk_sub_c() {
     /* Nonmatching */
-    f32 f1 = cM_rnd();
-    f1 = f1 * 3.0f;
-    field_0x198 = f1 + 2.0f;
-    f1 = cM_rnd();
-    if (f1 < 0.5f) {
+    field_0x198 = (cM_rnd() * 3.0f) + 2.0f;
+    if (cM_rnd() < 0.5f) {
         field_0x198 *= -1;
     }
-    f1 = cM_rnd();
-    f1 = f1 * 100.0f;
-    field_0x19E = f1 + 450.0f;
-    f1 = cM_rnd();
-    f1 -= 0.5f;
-    field_0x19A = f1 * 12000.0f;
+    field_0x19E = (cM_rnd() * 100.0f) + 450.0f;
+    field_0x19A = (cM_rnd() - 0.5f) * 12000.0f;
     field_0x1A0.x = 1.0f;
     field_0x1A0.y = 1.0f;
     field_0x1A0.z = 1.0f;
@@ -582,6 +573,8 @@ void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_door, float i_param1, float i_para
         field_0x064.SetR(field_0x1AC.x * 50.0f);
     }
 }
+
+const char daKddoor_c::M_arcname[] = "Ssk";
 
 /* 00001904-00001914       .text getBmdName__10daKddoor_cFv */
 char* daKddoor_c::getBmdName() {
