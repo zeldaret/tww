@@ -574,6 +574,11 @@ void dDoor_ssk_sub_c::calcMtx(dDoor_info_c* i_door, float i_param1, float i_para
     }
 }
 
+// Needed to add otherwise missing .rodata entry
+f32 dummy() {
+    return 10000.0f;
+}
+
 const char daKddoor_c::M_arcname[] = "Ssk";
 
 /* 00001904-00001914       .text getBmdName__10daKddoor_cFv */
