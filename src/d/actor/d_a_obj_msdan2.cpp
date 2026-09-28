@@ -8,7 +8,7 @@
 
 /* 00000078-0000024C       .text Mthd_Create__Q211daObjMsdan25Act_cFv */
 cPhs_State daObjMsdan2::Act_c::Mthd_Create() {
-    fopAcM_SetupActor(this, daObjMsdan2::Act_c);
+    fopAcM_ct(this, daObjMsdan2::Act_c);
 
     cXyz pos = current.pos;
     csXyz angle = current.angle;

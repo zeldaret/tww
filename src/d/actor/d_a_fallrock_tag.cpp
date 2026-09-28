@@ -75,12 +75,14 @@ static BOOL daFallRockTag_Delete(daFallRockTag_c* i_this) {
 }
 
 cPhs_State daFallRockTag_c::create() {
-    fopAcM_SetupActor(this, daFallRockTag_c);
+    fopAcM_ct_Retail(this, daFallRockTag_c);
 
     cPhs_State ret = cDyl_LinkASync(fpcNm_FallRock_e);
     if (ret != cPhs_COMPLEATE_e) {
         return ret;
     }
+
+    fopAcM_ct_Demo(this, daFallRockTag_c);
 
     mSchBit = fopAcM_GetParam(this);
     fopAcM_offDraw(this);
