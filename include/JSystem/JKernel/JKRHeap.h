@@ -131,7 +131,6 @@ public:
 
     static void copyMemory(void* dst, void* src, u32 size);
     static void fillMemory(void* dst, u32 size, u8 value);  // NOTE: never used
-    static bool checkMemoryFilled(void* src, u32 size, u8 value);
 
     static JKRErrorHandler setErrorHandler(JKRErrorHandler errorHandler);
 

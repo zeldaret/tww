@@ -1768,7 +1768,7 @@ void daNpc_So_c::getArg() {
 
 /* 00003E24-00003F38       .text _create__10daNpc_So_cFv */
 cPhs_State daNpc_So_c::_create() {
-    fopAcM_SetupActor(this, daNpc_So_c);
+    fopAcM_ct(this, daNpc_So_c);
 
     cPhs_State PVar1 = dComIfG_resLoad(&mPhase, m_arc_name);
     if (PVar1 == cPhs_COMPLEATE_e) {

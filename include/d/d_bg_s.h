@@ -69,17 +69,20 @@ public:
     fopAc_ac_c* GetActorPointer(cBgS_PolyInfo& i_poly) const {
         return cBgS::GetActorPointer(i_poly);
     }
-
-    // void CaptPoly(dBgS_CaptPoly&) {}
-    // void ChkDeleteActorRegist(fopAc_ac_c*) {}
-    // void DebugDrawPoly(dBgW&) {}
-    // void Draw() {}
-    // void DrawPoly(cBgS_PolyInfo&, GXColor&) {}
     dBgW* GetBgWPointer(cBgS_PolyInfo& i_poly) { return (dBgW*)cBgS::GetBgWPointer(i_poly); }
-    // void GetPolyCamId(cBgS_PolyInfo&) {}
+    int GetPolyCamId(cBgS_PolyInfo& i_poly) { return GetPolyCamId(i_poly.GetBgIndex(), i_poly.GetPolyIndex()); }
+
+#if DEBUG
+    // TODO
+    void DebugDrawPoly(dBgW&);
+    void DrawPoly(cBgS_PolyInfo&, GXColor&);
+    void Draw() {}
+    void CaptPoly(dBgS_CaptPoly&) {}
     // void GroundCross(cBgS_GndChk*) {}
     // void LineCross(cBgS_LinChk*) {}
     // void ShdwDraw(cBgS_ShdwDraw*) {}
+    void ChkDeleteActorRegist(fopAc_ac_c*) {}
+#endif
 
     virtual void Ct();
     virtual void Dt();
@@ -122,6 +125,11 @@ public:
     void MoveBgMatrixCrrPos(cBgS_PolyInfo&, bool, cXyz*, csXyz*, csXyz*);
     void RideCallBack(cBgS_PolyInfo&, fopAc_ac_c*);
     fopAc_ac_c* PushPullCallBack(cBgS_PolyInfo&, fopAc_ac_c*, short, dBgW::PushPullLabel);
+
+#if DEBUG
+    /* 0x1404 */ u8 field_0x1404[0x1408 - 0x1404];
+    // /* 0x1408 */ dBgS_HIO m_hio;
+#endif
 };  // Size: 0x1404
 
 class dBgS_CrrPos : public cBgS_PolyInfo, public dBgS_Chk, public cBgS_Chk {

@@ -1027,8 +1027,8 @@ static void move(bgn3_class* i_this) {
     cXyz* pcVar13 = i_this->mRedRopeMat.getPos(0);
     u8* pcVar14 = i_this->mRedRopeMat.getSize(0);
     for (s32 i = 0; i < 60; i++, pcVar13++, pcVar14++) {
-        fVar1 = i_this->m100A0 * cM_ssin(cM_rad2s(0.053247336f * (f32)(i)));
-        fVar1 *= (0.01666667f * (f32)(0x3B - i));
+        fVar1 = i_this->m100A0 * cM_fsin(0.053247336f * (f32)(i));
+        fVar1 *= (0.01666667f * (f32)(59 - i));
         local_d8.x = fVar1 * cM_ssin(i_this->m0FD88 * (REG0_S(3) + 300) + i * (REG0_S(4) + 2000));
         local_d8.y = 0.0f;
         local_d8.z = fVar1 * cM_ssin(i_this->m0FD88 * (REG0_S(5) + 0xfa) + i * (REG0_S(6) + 2000));

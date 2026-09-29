@@ -74,12 +74,12 @@ u32 at_se_getC(cCcD_Obj* obj) {
 }
 
 /* 800AEAD8-800AEB50       .text def_se_set__FP10fopAc_ac_cP8cCcD_ObjUl */
-void def_se_set(fopAc_ac_c* actor, cCcD_Obj* obj, unsigned long r5) {
+void def_se_set(fopAc_ac_c* actor, cCcD_Obj* obj, u32 r5) {
     fopAcM_seStart(actor, at_se_get(obj), r5);
 }
 
 /* 800AEB50-800AEBCC       .text def_se_set_p__FP10fopAc_ac_cP4cXyzP8cCcD_ObjUl */
-void def_se_set_p(fopAc_ac_c* actor, cXyz* sePos, cCcD_Obj* obj, unsigned long r6) {
+void def_se_set_p(fopAc_ac_c* actor, cXyz* sePos, cCcD_Obj* obj, u32 r6) {
     mDoAud_seStart(at_se_get(obj), sePos, r6, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 

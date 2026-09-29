@@ -2804,12 +2804,12 @@ static void action_s(bgn_class* i_this, move_s* param_2, int param_3) {
         cMtx_YrotS(*calc_mtx, (int)(param_3 * (REG0_S(2) + 13000)));
         for (s32 i = 0; i < 60; i++, pcVar4++, pcVar7++) {
             if (param_2->m300 != 0) {
-                fVar3 = (REG0_F(12) + 10.0f) * (param_2->m300 * cM_ssin(cM_rad2s((s32)(i) * 0.053247336f)));
+                fVar3 = (REG0_F(12) + 10.0f) * (param_2->m300 * cM_fsin((s32)(i) * 0.053247336f));
                 local_70.x = fVar3 * cM_scos(i_this->mC746 * (REG0_S(3) + 0x5800));
                 local_70.z = fVar3 * cM_scos(i_this->mC746 * (REG0_S(5) + 0x5200));
             } else {
-                fVar3 = param_2->m2EC * cM_ssin(cM_rad2s(0.053247336f * (f32)(i)));
-                fVar3 *= (0.01666667f * (f32)(0x3B - i));
+                fVar3 = param_2->m2EC * cM_fsin(0.053247336f * (f32)(i));
+                fVar3 *= (0.01666667f * (f32)(59 - i));
                 local_70.x = fVar3 * cM_scos(i_this->mC746 * (REG0_S(3) + 200) + i * (REG0_S(4) + 2000));
                 local_70.z = fVar3 * cM_scos(i_this->mC746 * (REG0_S(5) + 0xfa) + i * (REG0_S(6) + 2000));
             }
@@ -2835,7 +2835,7 @@ static void action_main(bgn_class* i_this) {
     pcVar7 = i_this->mRedRopeMat.getPos(0);
     pcVar5 = i_this->mRedRopeMat.getSize(0);
     for (s32 i = 0; i < 60; i++, pcVar7++, pcVar5++) {
-        dVar9 = i_this->mC774 * cM_ssin(cM_rad2s(0.053247336f * (f32)(i)));
+        dVar9 = i_this->mC774 * cM_fsin(0.053247336f * (f32)(i));
         dVar9 *= (0.01666667f * (f32)(59 - i));
         local_90.x = dVar9 * cM_ssin(i_this->mC746 * (REG0_S(3) + 300) + i * (REG0_S(4) + 2000));
         local_90.z = dVar9 * cM_ssin(i_this->mC746 * (REG0_S(5) + 0xfa) + i * (REG0_S(6) + 2000));

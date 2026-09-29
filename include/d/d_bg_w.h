@@ -110,14 +110,16 @@ public:
     u32 GetPolyRopeThrough(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x80); }
     u32 GetPolyHSStick(int poly_index) { return GetMaskPolyInfo3_NoShift(poly_index, 0x10); }
     
-    // Debug-only funcs
-    void DebugDraw() {}
-    void DrawBox() {}
-    void DrawPoly(cBgS_PolyInfo&, GXColor&) {}
+#if DEBUG
+    void DrawBox();
+    void DebugDraw();
+    void DrawPoly(cBgS_PolyInfo&, GXColor&);
+    // TODO
     void CaptPoly(dBgS_CaptPoly&) {}
     void CaptPolyGrpRp(dBgS_CaptPoly&, int) {}
     void CaptPolyRp(dBgS_CaptPoly&, int) {}
     void RwgCaptPoly(int, dBgS_CaptPoly&) {}
+#endif
 
     /* 0xA8 */ dBgW_CrrFunc m_crr_func;
     /* 0xAC */ s16 mOldRotY;

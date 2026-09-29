@@ -16,7 +16,7 @@
 #include "d/d_cc_uty.h"
 #include "d/d_bg_s_lin_chk.h"
 
-cXyz non_pos(-20000.0f, -20000.0f, 20000.0f);
+static cXyz non_pos(-20000.0f, -20000.0f, 20000.0f);
 
 /* 8001BEDC-8001C0B4       .text ice_bg_check__FP8enemyice */
 BOOL ice_bg_check(enemyice* ei) {

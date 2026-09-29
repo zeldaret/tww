@@ -18,9 +18,6 @@
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                                                  \
     }
 
-// Unofficial name, kept to avoid conflicts with open PRs. TODO: Remove later.
-#define fopAcM_SetupActor fopAcM_ct
-
 #if VERSION == VERSION_DEMO
 #define fopAcM_ct_Demo fopAcM_ct
 #define fopAcM_ct_Retail(ptr, ClassName)

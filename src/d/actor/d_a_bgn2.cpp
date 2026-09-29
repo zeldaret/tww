@@ -8,7 +8,9 @@
 #include "d/actor/d_a_bgn.h"
 #include "d/actor/d_a_bgn3.h"
 #include "d/actor/d_a_player.h"
+#include "d/d_bg_s_lin_chk.h"
 #include "d/d_cc_d.h"
+#include "d/d_cc_uty.h"
 #include "d/d_s_play.h"
 #include "res/Object/Bgn.h"
 
@@ -72,7 +74,7 @@ static cXyz zero(0.0f, 0.0f, 0.0f);
 static bool hio_set;
 static daBgn2_HIO_c l_HIO;
 static dKy_tevstr_c bg_tevstr;
-static s32 ki_all_count;
+static int ki_all_count;
 
 /* 00000194-000002BC       .text anm_init__FP10bgn2_classifUcfi */
 static void anm_init(bgn2_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, f32 speed, int soundFileIdx) {
@@ -87,7 +89,7 @@ static void anm_init(bgn2_class* i_this, int bckFileIdx, f32 morf, u8 loopMode, 
 
 /* 000002BC-00000308       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BGN_e) {
         return param_1;
     } else {
         return NULL;
@@ -96,7 +98,7 @@ static void* bgn_s_sub(void* param_1, void*) {
 
 /* 00000308-00000354       .text bgn3_s_sub__FPvPv */
 static void* bgn3_s_sub(void* param_1, void*) {
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN3_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BGN3_e) {
         return param_1;
     } else {
         return NULL;
@@ -109,7 +111,7 @@ static BOOL daBgn2_Draw(bgn2_class*) {
 }
 
 /* 0000035C-000006EC       .text gr_check__FP10bgn2_classP4cXyz */
-static s32 gr_check(bgn2_class* i_this, cXyz* param_2) {
+static int gr_check(bgn2_class* i_this, cXyz* param_2) {
     fopAc_ac_c* actor = &i_this->actor;
     dBgS_LinChk linChk;
 
@@ -135,8 +137,8 @@ static void asi_eff_set(bgn2_class* i_this) {
 
     local_28.setall(0.0f);
     g_env_light.settingTevStruct(TEV_TYPE_BG2, &local_28, &bg_tevstr);
-    for (s32 i = 0; i < 6; i++) {
-        s32 j = i * 5 + 8;
+    for (int i = 0; i < 6; i++) {
+        int j = i * 5 + 8;
         local_1c = i_this->m2B98[j];
         if (!gr_check(i_this, &local_1c)) {
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_KGTT2JUMPHANDSPLASH00, &local_1c, 0xFF, g_whiteColor, g_whiteColor, 0);
@@ -170,10 +172,10 @@ static void asi_hamon_set(bgn2_class* i_this) {
 
     local_28.setall(0.0f);
     g_env_light.settingTevStruct(TEV_TYPE_BG2, &local_28, &bg_tevstr);
-    for (s32 i = 0; i < 30; i++) {
-        s32 j = i + 4;
+    for (int i = 0; i < 30; i++) {
+        int j = i + 4;
         local_1c = i_this->m2B98[j];
-        if ((!gr_check(i_this, &local_1c)) && (!(i_this->m0310 + i & 7))) {
+        if (!gr_check(i_this, &local_1c) && (!(i_this->m0310 + i & 7))) {
             dComIfGp_particle_setSimple(dPa_name::ID_AK_SN_O_KGTCOMMONHAMON00, &local_1c, 0xFF, g_whiteColor, g_whiteColor, 0);
         }
     }
@@ -181,24 +183,22 @@ static void asi_hamon_set(bgn2_class* i_this) {
 
 /* 00000D88-00000FA8       .text attack_eff_set__FP10bgn2_class4cXyz */
 static void attack_eff_set(bgn2_class* i_this, cXyz param_2) {
-    /* Nonmatching - retail-only regalloc */
 #if VERSION == VERSION_DEMO
     fopAc_ac_c* actor = &i_this->actor;
 #endif
     JPABaseEmitter* emitter;
-    J3DModel* model;
     cXyz local_28;
 
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     if (!gr_check(i_this, &param_2)) {
-        model = i_this->mpBodyMorf->getModel();
+        J3DModel* bodyModel = i_this->mpBodyMorf->getModel();
         emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTT2CHESTSPLASH00, &param_2);
         if (emitter != NULL) {
-            emitter->setGlobalRTMatrix(model->getAnmMtx(2));
+            emitter->setGlobalRTMatrix(bodyModel->getAnmMtx(BGN_KUMO1_JNT_J_BGN2_KARADA1_e));
         }
         emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTT2STOMACHSPLASH00, &param_2);
         if (emitter != NULL) {
-            emitter->setGlobalRTMatrix(model->getAnmMtx(0x22));
+            emitter->setGlobalRTMatrix(bodyModel->getAnmMtx(BGN_KUMO1_JNT_J_BGN2_KARADA2_e));
         }
         fopAcM_seStart(player, JA_SE_CM_BGN_T_FALL_WATER, 0);
     } else {
@@ -212,7 +212,7 @@ static void attack_eff_set(bgn2_class* i_this, cXyz param_2) {
             emitter->setGlobalEnvColor(bg_tevstr.mColorK0.r, bg_tevstr.mColorK0.g, bg_tevstr.mColorK0.b);
         }
 #else
-        for (s32 i = 0; i < 16; i++) {
+        for (int i = 0; i < 16; i++) {
             local_28.x = param_2.x + cM_rndFX(500.0f);
             local_28.y = param_2.y + cM_rndF(100.0f);
             local_28.z = param_2.z + cM_rndFX(500.0f);
@@ -223,7 +223,7 @@ static void attack_eff_set(bgn2_class* i_this, cXyz param_2) {
 }
 
 /* 00000FA8-00000FE4       .text checkGround__FP10bgn2_class */
-static s32 checkGround(bgn2_class* i_this) {
+static int checkGround(bgn2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     if (actor->current.pos.y <= l_HIO.m08) {
         actor->current.pos.y = l_HIO.m08;
@@ -257,7 +257,7 @@ static void move_se_set(bgn2_class* i_this) {
 }
 
 /* 00001210-0000137C       .text pos_move__FP10bgn2_class */
-static s32 pos_move(bgn2_class* i_this) {
+static int pos_move(bgn2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     f32 fVar1;
     cXyz local_18;
@@ -312,7 +312,6 @@ static void ki_set(bgn2_class* i_this) {
 /* 00001474-00001860       .text plesattack__FP10bgn2_class */
 static void plesattack(bgn2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    s8 sVar6;
 
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     s8 bVar1 = false;
@@ -342,8 +341,11 @@ static void plesattack(bgn2_class* i_this) {
             }
             // fallthrough
         case 2:
-            if ((i_this->m0330[0] != 0) && (actor->speed.y = actor->speed.y - l_HIO.m14, i_this->m0330[0] == 1)) {
-                fopAcM_seStart(actor, JA_SE_CM_BGN_T_FALL_WIND, 0);
+            if (i_this->m0330[0] != 0) {
+                actor->speed.y -= l_HIO.m14;
+                if (i_this->m0330[0] == 1) {
+                    fopAcM_seStart(actor, JA_SE_CM_BGN_T_FALL_WIND, 0);
+                }
             }
             i_this->m2E78 = 1;
             i_this->m2E79 = 1;
@@ -352,10 +354,9 @@ static void plesattack(bgn2_class* i_this) {
                 anm_init(i_this, dRes_INDEX_BGN_BCK_SETTI1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
                 i_this->m0314 = 3;
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
-                sVar6 = actor->health;
-                if (sVar6 == 3) {
+                if (actor->health == 3) {
                     i_this->m0330[0] = l_HIO.m24;
-                } else if (sVar6 == 2) {
+                } else if (actor->health == 2) {
                     i_this->m0330[0] = l_HIO.m26;
                 } else {
                     i_this->m0330[0] = l_HIO.m28;
@@ -390,7 +391,6 @@ static void plesattack(bgn2_class* i_this) {
 /* 00001860-00001C5C       .text jumpattack__FP10bgn2_class */
 static void jumpattack(bgn2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    J3DModel* pBrk;
     cXyz local_34;
 
 #if VERSION == VERSION_DEMO
@@ -398,7 +398,7 @@ static void jumpattack(bgn2_class* i_this) {
 #endif
     int frame = (int)i_this->mpBodyMorf->getFrame();
     i_this->m2E82 = 0;
-    pBrk = i_this->mpBodyMorf->getModel();
+    J3DModel* bodyModel = i_this->mpBodyMorf->getModel();
     switch (i_this->m0314) {
         case 0:
             anm_init(i_this, dRes_INDEX_BGN_BCK_JUMP1_e, 1.0f, J3DFrameCtrl::EMode_NONE, 1.0f, -1);
@@ -410,7 +410,7 @@ static void jumpattack(bgn2_class* i_this) {
                 i_this->m2EC8[0] = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTT2CHESTPOTA00, &actor->current.pos);
                 i_this->m2EC8[1] = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTT2STOMACHPOTA00, &actor->current.pos);
             }
-            if ((frame >= 5) && (frame <= 20)) {
+            if (frame >= 5 && frame <= 20) {
                 asi_eff_set(i_this);
             }
             if (frame == REG0_S(0) + 0x14) {
@@ -426,35 +426,38 @@ static void jumpattack(bgn2_class* i_this) {
             break;
     }
     if (i_this->m2EC8[0] != NULL) {
-        i_this->m2EC8[0]->setGlobalRTMatrix(pBrk->getAnmMtx(2));
+        i_this->m2EC8[0]->setGlobalRTMatrix(bodyModel->getAnmMtx(BGN_KUMO1_JNT_J_BGN2_KARADA1_e));
     }
     if (i_this->m2EC8[1] != NULL) {
-        i_this->m2EC8[1]->setGlobalRTMatrix(pBrk->getAnmMtx(0x22));
+        i_this->m2EC8[1]->setGlobalRTMatrix(bodyModel->getAnmMtx(BGN_KUMO1_JNT_J_BGN2_KARADA2_e));
     }
     actor->current.angle.y = cM_atan2s(-actor->current.pos.x, -actor->current.pos.z);
     local_34 = actor->current.pos;
     local_34.y = 0.0f;
     actor->current.pos.y += actor->speed.y;
     actor->speed.y -= (REG0_F(10) + 8.0f);
-    if ((actor->speed.y <= 0.0f) && (actor->speed.y = 0.0f, i_this->m0314 >= 2)) {
-        for (s32 i = 0; i < 2; i++) {
-            if (i_this->m2EC8[i] != NULL) {
-                i_this->m2EC8[i]->becomeInvalidEmitter();
-                i_this->m2EC8[i] = NULL;
+    if (actor->speed.y <= 0.0f) {
+        actor->speed.y = 0.0f;
+        if (i_this->m0314 >= 2) {
+            for (int i = 0; i < 2; i++) {
+                if (i_this->m2EC8[i] != NULL) {
+                    i_this->m2EC8[i]->becomeInvalidEmitter();
+                    i_this->m2EC8[i] = NULL;
+                }
             }
-        }
-        if (pos_move(i_this) || (local_34.abs() < 500.0f)) {
-            i_this->m0312 = 1;
-            i_this->m0314 = 0;
-            if (actor->health == 3) {
-                i_this->m2E82 = l_HIO.m18;
-            } else if (actor->health == 2) {
-                i_this->m2E82 = l_HIO.m1A;
-            } else {
-                i_this->m2E82 = l_HIO.m1C;
-            }
-            if (cM_rndF(1.0f) < 0.5f) {
-                i_this->m2E82 *= -1;
+            if (pos_move(i_this) || local_34.abs() < 500.0f) {
+                i_this->m0312 = 1;
+                i_this->m0314 = 0;
+                if (actor->health == 3) {
+                    i_this->m2E82 = l_HIO.m18;
+                } else if (actor->health == 2) {
+                    i_this->m2E82 = l_HIO.m1A;
+                } else {
+                    i_this->m2E82 = l_HIO.m1C;
+                }
+                if (cM_rndF(1.0f) < 0.5f) {
+                    i_this->m2E82 *= -1;
+                }
             }
         }
     }
@@ -506,7 +509,7 @@ static void damage(bgn2_class* i_this) {
             }
         // fallthrough
         case 2:
-            if ((actor->current.pos.y > 1490.0f) && (i_this->m0314 == 2)) {
+            if (actor->current.pos.y > 1490.0f && i_this->m0314 == 2) {
                 i_this->m0312 = 2;
                 actor->speed.y = REG0_F(8) + 250.0f;
                 i_this->m0314 = 2;
@@ -642,7 +645,7 @@ static void move(bgn2_class* i_this) {
     }
     cLib_addCalc2(&actor->current.pos.x, i_this->m0340.x, 0.05f, 1000.0f);
     cLib_addCalc2(&actor->current.pos.z, i_this->m0340.z, 0.05f, 1000.0f);
-    actor->shape_angle.y = actor->shape_angle.y + i_this->m2E80;
+    actor->shape_angle.y += i_this->m2E80;
     fVar1 = i_this->m2E80;
     if (fVar1 < 0.0f) {
         fVar1 *= -1.0f;
@@ -653,15 +656,15 @@ static void move(bgn2_class* i_this) {
     }
     fopAcM_seStart(actor, JA_SE_CM_BGN_T_ROUND, fVar1);
     cLib_addCalcAngleS2(&i_this->m2E80, i_this->m2E82, 1, 100);
-    MTXCopy(i_this->mpBodyMorf->getModel()->getAnmMtx(2), *calc_mtx);
+    MTXCopy(i_this->mpBodyMorf->getModel()->getAnmMtx(BGN_KUMO1_JNT_J_BGN2_KARADA1_e), *calc_mtx);
     local_a0.setall(0.0f);
     MtxPosition(&local_a0, &cStack_ac);
     cLib_addCalc0(&i_this->m2EC4, 1.0f, 25.0f);
     pcVar8 = i_this->mRedRopeMat.getPos(0);
     pcVar7 = i_this->mRedRopeMat.getSize(0);
-    for (s32 i = 0; i < 60; i++) {
-        dVar9 = i_this->m2EC4 * cM_ssin(cM_rad2s(0.053247336f * (f32)(i)));
-        dVar9 *= (0.01666667f * (f32)(0x3B - i));
+    for (int i = 0; i < 60; i++) {
+        dVar9 = i_this->m2EC4 * cM_fsin(0.053247336f * (f32)(i));
+        dVar9 *= (0.01666667f * (f32)(59 - i));
         local_a0.x = dVar9 * cM_ssin(i_this->m0310 * (REG0_S(3) + 300) + i * (REG0_S(4) + 2000));
         local_a0.y = 0.0f;
         local_a0.z = dVar9 * cM_ssin(i_this->m0310 * (REG0_S(5) + 0xfa) + i * (REG0_S(6) + 2000));
@@ -678,7 +681,6 @@ static void damage_check(bgn2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     char cVar5;
     JPABaseEmitter* emitter;
-    f32 dVar8;
     csXyz local_78;
     cXyz local_58;
     CcAtInfo atInfo;
@@ -691,12 +693,12 @@ static void damage_check(bgn2_class* i_this) {
         if (i_this->m039C.ChkTgHit()) {
             atInfo.mpObj = i_this->m039C.GetTgHitObj();
             at_power_check(&atInfo);
-            if ((atInfo.mResultingAttackType == 9) || (atInfo.mResultingAttackType == 2)) {
+            if (atInfo.mResultingAttackType == 9 || atInfo.mResultingAttackType == 2) {
                 i_this->m0312 = 4;
                 i_this->m0314 = 0;
                 i_this->m033A = 0x14;
                 i_this->m0358 = REG0_S(5) + 0x14;
-                dScnPly_ply_c::nextPauseTimer = 4;
+                dScnPly_ply_c::setPauseTimer(4);
 #if VERSION == VERSION_DEMO
                 local_58.x = local_58.y = local_58.z = 2.0f;
                 local_78.z = 0;
@@ -735,7 +737,8 @@ static void damage_check(bgn2_class* i_this) {
 #if VERSION > VERSION_DEMO
                 mDoAud_seStart(JA_SE_LK_ARROW_HIT, NULL, 0x35, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 #endif
-                dVar8 = (REG0_F(5) + 2.0f);
+                f32 dVar8 = REG0_F(5) + 2.0f;
+                JGeometry::TVec3<f32> scale(dVar8, dVar8, dVar8);
                 if (actor->health == 0) {
                     mDoAud_bgmStop(30);
 #if VERSION == VERSION_DEMO
@@ -751,16 +754,14 @@ static void damage_check(bgn2_class* i_this) {
                     i_this->m0314 = 0;
                     emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTBREAKWEAKPOINT00, &i_this->m2E6C);
                     if (emitter != NULL) {
-                        JGeometry::TVec3<f32> scale(dVar8, dVar8, dVar8);
                         emitter->setGlobalScale(scale);
                     }
                     emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTBREAKWEAKPOINT01, &i_this->m2E6C);
                     if (emitter != NULL) {
-                        JGeometry::TVec3<f32> scale(dVar8, dVar8, dVar8);
                         emitter->setGlobalScale(scale);
                     }
 #if VERSION > VERSION_DEMO
-                    for (s32 i = 0; i < 2; i++) {
+                    for (int i = 0; i < 2; i++) {
                         if (i_this->m2EC8[i] != NULL) {
                             i_this->m2EC8[i]->becomeInvalidEmitter();
                             i_this->m2EC8[i] = NULL;
@@ -775,7 +776,6 @@ static void damage_check(bgn2_class* i_this) {
 #endif
                     emitter = dComIfGp_particle_set(dPa_name::ID_AK_SN_KGTHITWEAKPOINT00, &i_this->m2E6C);
                     if (emitter != NULL) {
-                        JGeometry::TVec3<f32> scale(dVar8, dVar8, dVar8);
                         emitter->setGlobalScale(scale);
                     }
                 }
@@ -786,19 +786,19 @@ static void damage_check(bgn2_class* i_this) {
             atInfo.mpObj = i_this->m039C.GetTgHitObj();
             cVar5 = 1;
         }
-        for (s32 i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             if (i_this->m04C8[i].ChkTgHit()) {
                 atInfo.mpObj = i_this->m04C8[i].GetTgHitObj();
                 cVar5 = 2;
             }
         }
-        for (s32 i = 0; i < 30; i++) {
+        for (int i = 0; i < 30; i++) {
             if (i_this->m0720[i].ChkTgHit()) {
                 atInfo.mpObj = i_this->m0720[i].GetTgHitObj();
                 cVar5 = 3;
             }
         }
-        if ((cVar5 != 0) && (i_this->m033C == 0)) {
+        if (cVar5 != 0 && i_this->m033C == 0) {
             i_this->m033C = 10;
             def_se_set(actor, atInfo.mpObj, 0x44);
         }
@@ -807,14 +807,14 @@ static void damage_check(bgn2_class* i_this) {
 
 /* 00002C88-00002CE0       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KI_e)) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_KI_e) {
         ki_all_count++;
     }
     return NULL;
 }
 
 /* 00002CE0-00002D24       .text ki_check__FP10bgn2_class */
-static s32 ki_check(bgn2_class* i_this) {
+static int ki_check(bgn2_class* i_this) {
     ki_all_count = 0;
     fpcM_Search(ki_c_sub, i_this);
     return ki_all_count;
@@ -823,11 +823,10 @@ static s32 ki_check(bgn2_class* i_this) {
 /* 00002D24-000037B0       .text daBgn2_Execute__FP10bgn2_class */
 static BOOL daBgn2_Execute(bgn2_class* i_this) {
     /* Nonmatching - retail-only regalloc */
-    static s32 body_d[] = {
-        0x00000001,
-        0x00000022,
+    static int body_d[] = {
+        BGN_KUMO1_JNT_BGN2_SKLROOT_e,
+        BGN_KUMO1_JNT_J_BGN2_KARADA2_e,
     };
-
     static f32 body_scale[] = {
         550.0f,
         400.0f,
@@ -850,7 +849,6 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
 
     fopAc_ac_c* actor = &i_this->actor;
     f32 fVar2;
-    f32 dVar18;
     cXyz local_a0;
 #if VERSION > VERSION_DEMO
     cXyz local_ac;
@@ -887,7 +885,7 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
     cLib_addCalc2(&i_this->m2E7C, 0.0f, 1.0f, 0.01f);
     i_this->m0310++;
     actor->attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 4;
-    for (s32 i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) {
         if (i_this->m0330[i] != 0) {
             i_this->m0330[i]--;
         }
@@ -913,32 +911,30 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
     mDoMtx_stack_c::XrotM(actor->shape_angle.x);
     mDoMtx_stack_c::ZrotM(actor->shape_angle.z);
     J3DModel* bodyModel = i_this->mpBodyMorf->getModel();
-    MtxP mtx = mDoMtx_stack_c::get();
-    bodyModel->setBaseTRMtx(mtx);
+    bodyModel->setBaseTRMtx(mDoMtx_stack_c::get());
     local_a0.setall(0.0f);
     i_this->mpBodyMorf->calc();
-    mtx = bodyModel->getAnmMtx(3);
-    cMtx_copy(mtx, *calc_mtx);
+    MtxP headMtx = bodyModel->getAnmMtx(BGN_KUMO1_JNT_ATAMA_e);
+    cMtx_copy(headMtx, *calc_mtx);
     MtxTrans(REG0_F(0), REG0_F(1), REG0_F(2) + 100.0f, true);
     if (i_this->m0358 != 0) {
         i_this->m0358--;
     }
-    dVar18 = (i_this->m0358 * (REG0_F(14) + 500.0f));
+    f32 dVar18 = (i_this->m0358 * (REG0_F(14) + 500.0f));
     s16 y = dVar18 * cM_ssin(i_this->m0310 * 0x2100);
     s16 x = dVar18 * cM_scos(i_this->m0310 * 0x2300);
     cMtx_YrotM(*calc_mtx, y);
     cMtx_XrotM(*calc_mtx, x);
     MtxScale(REG0_F(7) + 2.0f, REG0_F(7) + 2.0f, REG0_F(7) + 2.0f, true);
     J3DModel* headModel = i_this->mpHeadMorf->getModel();
-    mtx = *calc_mtx;
-    headModel->setBaseTRMtx(mtx);
+    headModel->setBaseTRMtx(*calc_mtx);
     MtxPosition(&local_a0, &i_this->m2B74);
     i_this->mpHeadMorf->calc();
-    MTXCopy(bodyModel->getAnmMtx(0x23), *calc_mtx);
+    MTXCopy(bodyModel->getAnmMtx(BGN_KUMO1_JNT_JYAKUTEN_e), *calc_mtx);
     MtxTrans(REG0_F(3) + 150.0f, REG0_F(4) + 150.0f, REG0_F(5), true);
     cMtx_YrotM(*calc_mtx, 0x4000);
     MtxScale(REG0_F(6) + 2.0f, REG0_F(6) + 2.0f, REG0_F(6) + 2.0f, true);
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         J3DModel* model = i_this->mpJyakutenModel[i];
         model->setBaseTRMtx(*calc_mtx);
     }
@@ -946,10 +942,9 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
     i_this->m039C.SetC(i_this->m2B74);
     i_this->m039C.SetR(REG0_F(0) + 150.0f);
     dComIfG_Ccsp()->Set(&i_this->m039C);
-    actor->eyePos = i_this->m2B74;
-    actor->attention_info.position = actor->eyePos;
+    actor->attention_info.position = actor->eyePos = i_this->m2B74;
     actor->attention_info.position.y += 100.0f;
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         MTXCopy(bodyModel->getAnmMtx(body_d[i]), *calc_mtx);
         if (i == 1) {
             local_a0.x = 400.0f;
@@ -966,6 +961,7 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
     }
     i_this->m2E78 = 0;
     local_a0.x = 0.0f;
+
 #if VERSION > VERSION_DEMO
     if (i_this->m2D6A != 0) {
         i_this->m2D6A++;
@@ -977,11 +973,12 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
         i_this->mArrowHitFlashTimer--;
     }
 #endif
-    for (s32 i = 0; i < DEMO_SELECT(30, 32); i++) {
+
+    for (int i = 0; i < DEMO_SELECT(30, 32); i++) {
 #if VERSION > VERSION_DEMO
         if (i < 30) {
 #endif
-            MTXCopy(bodyModel->getAnmMtx(i + 4), *calc_mtx);
+            MTXCopy(bodyModel->getAnmMtx(i + BGN_KUMO1_JNT_J_BGN2_ASHI_LB1_e), *calc_mtx);
             MtxPosition(&local_a0, &i_this->m2B98[i]);
             i_this->m0720[i].SetC(i_this->m2B98[i]);
             fVar2 = (REG0_F(2) + 1.6f) * asi_scale[i % 5];
@@ -1011,18 +1008,17 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
                 fVar2 = (REG8_F(4) + 400.0f);
             }
             f32 f29 = (REG8_F(0) + 0.0003f) * (fVar2 * i_this->mArrowHitEffectTimer[i]);
+            JGeometry::TVec3<f32> scale(f29, f29, f29);
             if (i_this->mpArrowHitEmitter1[i] == NULL) {
                 i_this->mpArrowHitEmitter1[i] = dComIfGp_particle_set(dPa_name::ID_AK_JN_CCTHUNDER00, &local_ac);
             } else {
                 i_this->mpArrowHitEmitter1[i]->setGlobalTranslation(local_ac.x, local_ac.y, local_ac.z);
-                JGeometry::TVec3<f32> scale(f29, f29, f29);
                 i_this->mpArrowHitEmitter1[i]->setGlobalScale(scale);
             }
             if (i_this->mpArrowHitEmitter2[i] == NULL) {
                 i_this->mpArrowHitEmitter2[i] = dComIfGp_particle_set(dPa_name::ID_AK_JN_CCTHUNDER01, &local_ac);
             } else {
                 i_this->mpArrowHitEmitter2[i]->setGlobalTranslation(local_ac.x, local_ac.y, local_ac.z);
-                JGeometry::TVec3<f32> scale(f29, f29, f29);
                 i_this->mpArrowHitEmitter2[i]->setGlobalScale(scale);
             }
         } else {
@@ -1037,6 +1033,7 @@ static BOOL daBgn2_Execute(bgn2_class* i_this) {
         }
 #endif
     }
+
     i_this->m2E79 = 0;
     i_this->m2A48.SetC(i_this->m2E6C);
     i_this->m2A48.SetR(REG0_F(9) + 210.0f);
@@ -1091,7 +1088,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         0,
         0x11020203
     );
-    if ((i_this->mpHeadMorf == NULL) || (i_this->mpHeadMorf->getModel() == NULL)) {
+    if (i_this->mpHeadMorf == NULL || i_this->mpHeadMorf->getModel() == NULL) {
         return FALSE;
     }
     i_this->mpBodyMorf = new mDoExt_McaMorf(
@@ -1108,7 +1105,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         0,
         0x11020203
     );
-    if ((i_this->mpBodyMorf == NULL) || (i_this->mpBodyMorf->getModel() == NULL)) {
+    if (i_this->mpBodyMorf == NULL || i_this->mpBodyMorf->getModel() == NULL) {
         return FALSE;
     }
     modelData = (J3DModelData*)dComIfG_getObjectRes("Bgn", DEMO_SELECT(dRes_INDEX_BGN_BDL_BGN_JYAKUTENA_e, dRes_INDEX_BGN_BDL_BGN_JYAKUTENA2_e));
@@ -1230,12 +1227,12 @@ static cPhs_State daBgn2_Create(fopAc_ac_c* a_this) {
         i_this->m039C.Set(cc_sph_src);
         i_this->m039C.SetStts(&i_this->mStts);
         i_this->m039C.OffAtSetBit();
-        for (s32 i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             i_this->m04C8[i].Set(cc_sph_src);
             i_this->m04C8[i].SetStts(&i_this->mStts);
             i_this->m04C8[i].OffAtSetBit();
         }
-        for (s32 i = 0; i < 30; i++) {
+        for (int i = 0; i < 30; i++) {
             i_this->m0720[i].Set(cc_sph_src);
             i_this->m0720[i].SetStts(&i_this->mStts);
         }

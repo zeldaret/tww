@@ -12,7 +12,7 @@
 
 f32 size_d[10] = {10.0f, 10.0f, 9.5f, 9.0f, 8.5f, 8.0f, 7.5f, 7.0f, 6.5f, 6.5f};
 
-cXyz non_pos;
+static cXyz non_pos;
 
 /* 000000EC-000001F0       .text hand_draw__FP9sss_class */
 void hand_draw(sss_class* i_this) {

@@ -470,7 +470,7 @@ void J3DMtxProjConcat(__REGISTER Mtx a, __REGISTER Mtx b, __REGISTER Mtx dst) {
 }
 
 /* 802DACE0-802DAD0C       .text J3DPSMtx33Copy__FPA3_fPA3_f */
-void J3DPSMtx33Copy(__REGISTER Mtx3P src, __REGISTER Mtx3P dst) {
+void J3DPSMtx33Copy(__REGISTER const Mtx3P src, __REGISTER Mtx3P dst) {
     __REGISTER f32 x1_y1;
     __REGISTER f32 z1_x2;
     __REGISTER f32 y2_z2;
@@ -494,7 +494,7 @@ asm {
 }
 
 /* 802DAD0C-802DAD40       .text J3DPSMtx33CopyFrom34__FPA4_fPA3_f */
-void J3DPSMtx33CopyFrom34(__REGISTER MtxP src, __REGISTER Mtx3P dst) {
+void J3DPSMtx33CopyFrom34(__REGISTER const MtxP src, __REGISTER Mtx3P dst) {
 #ifdef __MWERKS__
 asm {
         psq_l  f0, 0(src), 0, 0

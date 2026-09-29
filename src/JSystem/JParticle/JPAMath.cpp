@@ -94,7 +94,7 @@ void JPAGetDirMtx(const JGeometry::TVec3<f32>& dir, Mtx dst) {
 }
 
 /* 80259B6C-80259C90       .text JPASetSVecfromMtx__FPA4_fRQ29JGeometry8TVec3<f> */
-void JPASetSVecfromMtx(Mtx mtx, JGeometry::TVec3<f32>& scale) {
+void JPASetSVecfromMtx(const MtxP mtx, JGeometry::TVec3<f32>& scale) {
     f32 m00 = mtx[0][0], m10 = mtx[1][0], m20 = mtx[2][0];
     scale.x = JGeometry::TUtil<f32>::sqrt(m00*m00 + m10*m10 + m20*m20);
 
@@ -106,13 +106,13 @@ void JPASetSVecfromMtx(Mtx mtx, JGeometry::TVec3<f32>& scale) {
 }
 
 /* 80259C90-80259CB8       .text JPASetRMtxTVecfromMtx__FPA4_fPA4_fRQ29JGeometry8TVec3<f> */
-void JPASetRMtxTVecfromMtx(Mtx src, Mtx dst, JGeometry::TVec3<f32>& translate) {
+void JPASetRMtxTVecfromMtx(const MtxP src, Mtx dst, JGeometry::TVec3<f32>& translate) {
     JGeometry::TVec3<f32> scale;
     JPASetRMtxSTVecfromMtx(src, dst, scale, translate);
 }
 
 /* 80259CB8-80259DD0       .text JPASetRMtxSTVecfromMtx__FPA4_fPA4_fRQ29JGeometry8TVec3<f>RQ29JGeometry8TVec3<f> */
-void JPASetRMtxSTVecfromMtx(Mtx src, Mtx dst, JGeometry::TVec3<f32>& scale, JGeometry::TVec3<f32>& translate) {
+void JPASetRMtxSTVecfromMtx(const MtxP src, Mtx dst, JGeometry::TVec3<f32>& scale, JGeometry::TVec3<f32>& translate) {
     JPASetSVecfromMtx(src, scale);
     MTXIdentity(dst);
     if (scale.x != 0.0f) {

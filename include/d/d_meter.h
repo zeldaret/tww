@@ -18,7 +18,7 @@ public:
     dMeter_HIO_c();
     virtual ~dMeter_HIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 field_0x5[0x006 - 0x005];
@@ -185,7 +185,7 @@ public:
     dMeter_menuHIO_c();
     virtual ~dMeter_menuHIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x5[0x08 - 0x05];
@@ -288,7 +288,7 @@ public:
     dMeter_msg_HIO_c();
     virtual ~dMeter_msg_HIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ GXColor field_0x5;
@@ -383,7 +383,7 @@ public:
     dMeter_message_HIO_c();
     virtual ~dMeter_message_HIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ GXColor field_0x5;
@@ -475,7 +475,7 @@ public:
     dMeter_map_HIO_c();
     virtual ~dMeter_map_HIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x5;

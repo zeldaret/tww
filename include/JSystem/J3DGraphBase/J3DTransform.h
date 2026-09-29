@@ -38,8 +38,8 @@ void J3DGetTextureMtxMayaOld(const J3DTextureSRTInfo&, Mtx);
 void J3DScaleNrmMtx(Mtx, const Vec&);
 void J3DScaleNrmMtx33(Mtx33, const Vec&);
 void J3DMtxProjConcat(Mtx, Mtx, Mtx);
-void J3DPSMtx33Copy(Mtx3P src, Mtx3P dst);
-void J3DPSMtx33CopyFrom34(MtxP src, Mtx3P dst);
+void J3DPSMtx33Copy(const Mtx3P src, Mtx3P dst);
+void J3DPSMtx33CopyFrom34(const MtxP src, Mtx3P dst);
 void J3DPSMtxArrayConcat(Mtx, Mtx, Mtx, u32);
 
 inline void J3DPSMulMtxVec(__REGISTER MtxP mtx, __REGISTER Vec* vec, __REGISTER Vec* dst) {
