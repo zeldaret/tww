@@ -630,7 +630,7 @@ BOOL daNpc_Km1_c::_draw() {
             &current.pos,
             mObjAcch.GetGroundH(),
             40.0f,
-            dComIfG_Bgsp()->GetTriPla(mObjAcch.m_gnd)->GetNP()
+            &dComIfG_Bgsp()->GetTriPla(mObjAcch.m_gnd)->mNormal
         );
     }
     dSnap_RegistFig(DSNAP_TYPE_NPC_KM1_KK1,this,1.0f,1.0f,1.0f);
