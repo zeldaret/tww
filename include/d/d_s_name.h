@@ -86,7 +86,7 @@ public:
     void buttonIconCreate();
 #if VERSION == VERSION_PAL
     void buttonIconTexChange(u8, u8);
-    void PaneAlphaLangTxt(s16, u8);
+    int PaneAlphaLangTxt(s16, u8);
     void languageTexChange();
     void langTexChg();
     void langTexChgFast();
@@ -196,6 +196,11 @@ public:
     /* 0x1BB9 */ u8 field_0x1bb9;
     /* 0x1BBA */ u8 field_0x1bba[0x1BBC - 0x1BBA];
     /* 0x1BBC */ int field_0x1bbc;
+#if VERSION == VERSION_PAL
+    /* 0x1C58 */ u8 field_0x1c58;   // current language flag (to be confirmed)
+    /* 0x1C59 */ u8 field_0x1c59;   // transition in progress
+    /* 0x1C5A */ u8 field_0x1c5a;   // fade frame counter
+#endif
 };
 
 extern dSn_HIO_c g_snHIO;

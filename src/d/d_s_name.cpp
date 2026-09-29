@@ -313,7 +313,7 @@ void dScnName_c::buttonIconTexChange(u8, u8) {
 #endif
 
 #if VERSION == VERSION_PAL
-void dScnName_c::PaneAlphaLangTxt(s16, u8) {
+int dScnName_c::PaneAlphaLangTxt(s16, u8) {
     /* Nonmatching */
 }
 #endif
@@ -326,7 +326,15 @@ void dScnName_c::languageTexChange() {
 
 #if VERSION == VERSION_PAL
 void dScnName_c::langTexChg() {
-    /* Nonmatching */
+    if (field_0x1c59 != 0) {
+        int result = PaneAlphaLangTxt(field_0x1c5a, 10);
+        field_0x1c5a++;
+        if (result == 1) {
+            field_0x1c58 ^= 1;
+            field_0x1c5a = 0;
+            field_0x1c59 = 0;
+        }
+    }
 }
 #endif
 
