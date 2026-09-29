@@ -2543,7 +2543,7 @@ void dCamera_c::checkGroundInfo() {
     mRoomNo = -1;
 
     if (mBG.m00.m00 && check_owner_action(mPadId, daPyStts0_SWIM_e)) {
-        mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m00.m04.GetBgIndex(), mBG.m00.m04.GetPolyIndex());
+        mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m00.m04);
     }
     else if (m360 == 0) {
         mRoomMapToolCameraIdx = 0x1ff;
@@ -2551,7 +2551,7 @@ void dCamera_c::checkGroundInfo() {
     else if (mBG.m5C.m00) {
         mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetRoomCamId(mBG.m5C.m04);
         if (mRoomMapToolCameraIdx == 0xff) {
-            mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m5C.m04.GetBgIndex(), mBG.m5C.m04.GetPolyIndex());
+            mRoomMapToolCameraIdx = dComIfG_Bgsp()->GetPolyCamId(mBG.m5C.m04);
         }
         else {
             mRoomNo = dComIfG_Bgsp()->GetRoomId(mBG.m5C.m04);;

@@ -10,6 +10,115 @@
 #include "SSystem/SComponent/c_m2d.h"
 #include "SSystem/SComponent/c_math.h"
 
+#if DEBUG
+#include "d/d_debug_viewer.h"
+#endif
+
+#if DEBUG
+// Copied from TP debug build decomp.
+void dBgW::DrawBox() {
+    cXyz min;
+    cXyz max;
+    cXyz points[8];
+
+    min = *pm_grp[m_rootGrpIdx].aab.GetMinP();
+    max = *pm_grp[m_rootGrpIdx].aab.GetMaxP();
+
+    points[0].x = min.x;
+    points[0].y = max.y;
+    points[0].z = min.z;
+
+    points[1].x = max.x;
+    points[1].y = max.y;
+    points[1].z = min.z;
+
+    points[2].x = min.x;
+    points[2].y = max.y;
+    points[2].z = max.z;
+    
+    points[3].x = max.x;
+    points[3].y = max.y;
+    points[3].z = max.z;
+
+    points[4].x = min.x;
+    points[4].y = min.y;
+    points[4].z = min.z;
+
+    points[5].x = max.x;
+    points[5].y = min.y;
+    points[5].z = min.z;
+
+    points[6].x = min.x;
+    points[6].y = min.y;
+    points[6].z = max.z;
+    
+    points[7].x = max.x;
+    points[7].y = min.y;
+    points[7].z = max.z;
+
+    dDbVw_drawCube8pXlu(points, (GXColor){0x00, 0xFF, 0x00, 0x64});
+}
+
+void dBgW::DebugDraw() {
+    GXColor ground_color = {0xFF, 0x00, 0x00, 0x80};
+    GXColor roof_color = {0x00, 0x00, 0xFF, 0x80};
+    GXColor wall_color = {0x00, 0xFF, 0x00, 0x80};
+
+    cBgD_Tri_t* t_tbl = pm_bgd->m_t_tbl;
+    for (int i = 0; i < pm_bgd->m_t_num; i++) {
+        cXyz normal;
+        normal = pm_tri[i].m_plane.mNormal;
+
+        cBgD_Vtx_t* v0 = &pm_vtx_tbl[t_tbl[i].vtx0];
+        cBgD_Vtx_t* v1 = &pm_vtx_tbl[t_tbl[i].vtx1];
+        cBgD_Vtx_t* v2 = &pm_vtx_tbl[t_tbl[i].vtx2];
+
+        cXyz points[3];
+        points[0].set(*v0);
+        points[1].set(*v1);
+        points[2].set(*v2);
+
+        points[0] += normal;
+        points[1] += normal;
+        points[2] += normal;
+
+        GXColor* pcolor;
+        if (cBgW_CheckBGround(normal.y)) {
+            pcolor = &ground_color;
+        } else if (cBgW_CheckBRoof(normal.y)) {
+            pcolor = &roof_color;
+        } else {
+            pcolor = &wall_color;
+        }
+
+        dDbVw_drawTriangleXlu(points, *pcolor, TRUE);
+    }
+}
+
+void dBgW::DrawPoly(cBgS_PolyInfo& polyinfo, GXColor& color) {
+    int poly_index = polyinfo.GetPolyIndex();
+    JUT_ASSERT(2579, 0 <= poly_index && poly_index < pm_bgd->m_t_num);
+
+    cXyz normal;
+    normal = pm_tri[poly_index].m_plane.mNormal;
+
+    cBgD_Tri_t* t_tbl = pm_bgd->m_t_tbl;
+    cBgD_Vtx_t* v0 = &pm_vtx_tbl[t_tbl[poly_index].vtx0];
+    cBgD_Vtx_t* v1 = &pm_vtx_tbl[t_tbl[poly_index].vtx1];
+    cBgD_Vtx_t* v2 = &pm_vtx_tbl[t_tbl[poly_index].vtx2];
+
+    cXyz points[3];
+    points[0].set(*v0);
+    points[1].set(*v1);
+    points[2].set(*v2);
+
+    points[0] += normal;
+    points[1] += normal;
+    points[2] += normal;
+
+    dDbVw_drawTriangleXlu(points, color, TRUE);
+}
+#endif
 
 /* 800A5C3C-800A5CA8       .text __ct__4dBgWFv */
 dBgW::dBgW() {
