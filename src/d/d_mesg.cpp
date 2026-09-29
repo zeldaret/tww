@@ -677,7 +677,6 @@ char* dMesg_tSequenceProcessor::ruby_character(char* param_1, int param_2) {
 
 /* 801E1858-801E1B5C       .text do_systemTagCode__24dMesg_tSequenceProcessorFUsPCvUl */
 bool dMesg_tSequenceProcessor::do_systemTagCode(u16 param_1, const void* param_2, u32 param_3) {
-    /* Nonmatching */
     static const u32 colorTable[] = {
         0xFFFFFFFF,
         0xFF5A5AFF,
@@ -712,7 +711,7 @@ bool dMesg_tSequenceProcessor::do_systemTagCode(u16 param_1, const void* param_2
     case 1:
     case 6:
         if (param_3 == 2) {
-            u16 tmp = *(u16*)param_2;
+            u16 tmp = u16(*(u16*)param_2);
             int r31 = mesgControl->getNowFontSize();
             int r29 = (tmp * mesgControl->getInitFontSize()) / 100.0f + 0.5f;
             mesgControl->setNowFontSize(r29);
@@ -1039,13 +1038,12 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
 
 /* 801E27BC-801E28A8       .text do_systemTagCode__23dMesg_tMeasureProcessorFUsPCvUl */
 bool dMesg_tMeasureProcessor::do_systemTagCode(u16 param_1, const void* param_2, u32 param_3) {
-    /* Nonmatching */
     dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     int var2 = field_0x50 - field_0x4c;
     switch (param_1) {
     case 1:
         if (param_3 == 2) {
-            u16 var1 = *(u16*)param_2;
+            u16 var1 = u16(*(u16*)param_2);
             mesgControl->setNowFontSize((var1 * mesgControl->getInitFontSize()) / 100.0f + 0.5f);
             if (var2 >= 1 && var2 <= 2 && var1 > 100 && m_strSizeFlag == 0) {
                 linemax--;
@@ -1268,7 +1266,6 @@ void dMesg_screenData_c::dotAnimeInit() {
 
 /* 801E3194-801E36A8       .text dotAnime__18dMesg_screenData_cFv */
 void dMesg_screenData_c::dotAnime() {
-    /* Nonmatching */
     f32 f31 = 150.0f - field_0x1b0.r;
     f32 f30 = 150.0f - field_0x1b0.g;
     f32 f29 = 150.0f - field_0x1b0.b;
@@ -1287,13 +1284,15 @@ void dMesg_screenData_c::dotAnime() {
             resetTimer();
         }
     } else {
-        if (mTimer >= 60) {
+        int timer = mTimer;
+        if (timer >= 60) {
             black = field_0x1b0;
             white = field_0x1ac;
             fopMsgM_setInitAlpha(&field_0x18);
             resetTimer();
-        } else if (mTimer > 30) {
-            f32 tmp = fopMsgM_valueIncrease(30, 60 - mTimer, 0);
+        } else if (timer > 30) {
+            timer = 60 - timer;
+            f32 tmp = fopMsgM_valueIncrease(30, timer, 0);
             black.r = field_0x1b0.r + f31 * tmp;
             black.g = field_0x1b0.g + f30 * tmp;
             black.b = field_0x1b0.b + f29 * tmp;
@@ -1302,7 +1301,7 @@ void dMesg_screenData_c::dotAnime() {
             white.b = field_0x1ac.b + f26 * tmp;
             field_0x18.mNowAlpha = field_0x18.mInitAlpha + f25 * tmp;
         } else {
-            f32 tmp = fopMsgM_valueIncrease(30, mTimer, 0);
+            f32 tmp = fopMsgM_valueIncrease(30, timer, 0);
             black.r = field_0x1b0.r + f31 * tmp;
             black.g = field_0x1b0.g + f30 * tmp;
             black.b = field_0x1b0.b + f29 * tmp;
@@ -1358,8 +1357,7 @@ void dMesg_screenDataTalk_c::changeFont(JUTFont* font) {
 
 /* 801E39F8-801E3BBC       .text openAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::openAnime() {
-    /* Nonmatching - fpr regswap */
-    f32 f31, f30, f29, f28, tmp;
+    f32 startX, startY, deltaX, deltaY, rate;
     bool ret = false;
     mTimer++;
     if (mTimer >= 13) {
@@ -1372,22 +1370,20 @@ bool dMesg_screenDataTalk_c::openAnime() {
         ret = true;
     } else {
         if (mTimer < 10) {
-            f31 = 100.0f;
-            f30 = (f31 * field_0x168.mSizeOrig.y) / field_0x168.mSizeOrig.x;
-            f29 = field_0x168.mSizeOrig.x - f31;
-            f28 = field_0x168.mSizeOrig.y - f30;
-            tmp = fopMsgM_valueIncrease(10, mTimer, 0);
+            startX = 100.0f;
+            startY = (startX * field_0x168.mSizeOrig.y) / field_0x168.mSizeOrig.x;
+            deltaX = field_0x168.mSizeOrig.x - startX;
+            deltaY = field_0x168.mSizeOrig.y - startY;
+            rate = fopMsgM_valueIncrease(10, mTimer, 0);
         } else {
-            f32 tmp2 = field_0x168.mSizeOrig.x;
-            f31 = tmp2;
-            f32 tmp3 = field_0x168.mSizeOrig.y;
-            f30 = tmp3;
-            f29 = 580.0f - f31;
-            f28 = (f30 * 580.0f) / f31 - f30;
-            tmp = JMASSin((mTimer - 10) * (0x10000 / 6.0f));
+            startX = field_0x168.mSizeOrig.x;
+            startY = field_0x168.mSizeOrig.y;
+            deltaX = 580.0f - field_0x168.mSizeOrig.x;
+            deltaY = (field_0x168.mSizeOrig.y * 580.0f) / field_0x168.mSizeOrig.x - field_0x168.mSizeOrig.y;
+            rate = JMASSin((mTimer - 10) * (0x10000 / 6.0f));
         }
-        field_0x168.mSize.x = f31 + f29 * tmp;
-        field_0x168.mSize.y = f30 + f28 * tmp;
+        field_0x168.mSize.x = startX + deltaX * rate;
+        field_0x168.mSize.y = startY + deltaY * rate;
         fopMsgM_cposMove(&field_0x168);
         field_0x1b4 = fopMsgM_valueIncrease(13, mTimer, 0);
         fopMsgM_setNowAlpha(&field_0x168, field_0x1b4);
@@ -1397,7 +1393,6 @@ bool dMesg_screenDataTalk_c::openAnime() {
 
 /* 801E3BBC-801E3CE0       .text closeAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::closeAnime() {
-    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
@@ -1409,14 +1404,14 @@ bool dMesg_screenDataTalk_c::closeAnime() {
         fopMsgM_setNowAlphaZero(&field_0x168);
         ret = true;
     } else {
-        f32 f31 = field_0x168.mSizeOrig.x;
-        f32 f30 = field_0x168.mSizeOrig.y;
-        f32 tmp2 = 620.0f - f31;
-        f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
-        f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);
-        field_0x168.mSize.x = f31 + tmp2 * f1;
-        field_0x168.mSize.y = f30 + f29 * f1;
-        field_0x1b4 = 1.0f - f1;
+        f32 sizeX = field_0x168.mSizeOrig.x;
+        f32 sizeY = field_0x168.mSizeOrig.y;
+        f32 deltaX = 620.0f - sizeX;
+        f32 deltaY = (field_0x168.mSizeOrig.y / field_0x168.mSizeOrig.x) * 620.0f - sizeY;
+        f32 rate = fopMsgM_valueIncrease(10, mTimer, 0);
+        field_0x168.mSize.x = sizeX + deltaX * rate;
+        field_0x168.mSize.y = sizeY + deltaY * rate;
+        field_0x1b4 = 1.0f - rate;
         fopMsgM_cposMove(&field_0x168);
         fopMsgM_setNowAlpha(&field_0x168, field_0x1b4);
     }
@@ -1610,7 +1605,6 @@ bool dMesg_screenDataItem_c::openAnime() {
 
 /* 801E4AE8-801E4C40       .text closeAnime__22dMesg_screenDataItem_cFv */
 bool dMesg_screenDataItem_c::closeAnime() {
-    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
@@ -1627,14 +1621,14 @@ bool dMesg_screenDataItem_c::closeAnime() {
         fopMsgM_setNowAlphaZero(&field_0x168);
         ret = true;
     } else {
-        f32 f31 = field_0x168.mSizeOrig.x;
-        f32 f30 = field_0x168.mSizeOrig.y;
-        f32 tmp2 = 620.0f - f31;
-        f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
-        f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);
-        field_0x168.mSize.x = f31 + tmp2 * f1;
-        field_0x168.mSize.y = f30 + f29 * f1;
-        field_0x3e8 = 1.0f - f1;
+        f32 sizeX = field_0x168.mSizeOrig.x;
+        f32 sizeY = field_0x168.mSizeOrig.y;
+        f32 deltaX = 620.0f - sizeX;
+        f32 deltaY = (field_0x168.mSizeOrig.y / field_0x168.mSizeOrig.x) * 620.0f - sizeY;
+        f32 rate = fopMsgM_valueIncrease(10, mTimer, 0);
+        field_0x168.mSize.x = sizeX + deltaX * rate;
+        field_0x168.mSize.y = sizeY + deltaY * rate;
+        field_0x3e8 = 1.0f - rate;
         fopMsgM_cposMove(&field_0x168);
         fopMsgM_setNowAlpha(&field_0x168, field_0x3e8);
     }
