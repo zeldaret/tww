@@ -360,7 +360,19 @@ void dScnName_c::langTexChg() {
 
 #if VERSION == VERSION_PAL
 void dScnName_c::langTexChgFast() {
-    /* Nonmatching */
+    field_0x1c5a = 0;
+
+    fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58 ^ 1], 1.0f);
+    fopMsgM_setNowAlpha(&field_0x554[field_0x1c58 ^ 1], 1.0f);
+    fopMsgM_setAlpha(&field_0x4e4[field_0x1c58 ^ 1]);
+    fopMsgM_setAlpha(&field_0x554[field_0x1c58 ^ 1]);
+
+    fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58], 0.0f);
+    fopMsgM_setNowAlpha(&field_0x554[field_0x1c58], 0.0f);
+    fopMsgM_setAlpha(&field_0x4e4[field_0x1c58]);
+    fopMsgM_setAlpha(&field_0x554[field_0x1c58]);
+
+    field_0x1c58 ^= 1;
 }
 #endif
 
