@@ -253,7 +253,7 @@ f32 JASystem::DSP_LIMIT_RATIO = 1.1f;
 
 /* 80289E68-8028A04C       .text updateAll__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::updateAll() {
-    /* Nonmatching - instruction ordering, maybe inline related */
+    TDSPChannel* dspChannel;
     DSPInterface::DSPBuffer* dspBuffer;
     if (Kernel::getSubFrames() <= 10) {
         OSTick time = OSGetTick();
@@ -273,9 +273,10 @@ void JASystem::TDSPChannel::updateAll() {
         if ((i & 0x0f) == 0 && i != 0) {
             DSPReleaseHalt2((i - 1) >> 4);
         }
-        dspBuffer = DSPCH[i].field_0xc;
-        TDSPChannel* dspChannel = &DSPCH[i];
-        if (dspChannel->isFree()) {
+        dspChannel = &DSPCH[i];
+        u8 status = dspChannel->getStatus();
+        dspBuffer = dspChannel->field_0xc;
+        if (status == 1) {
             continue;
         }
         if (dspBuffer->field_0x2 != 0) {
