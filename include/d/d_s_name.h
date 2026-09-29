@@ -86,7 +86,7 @@ public:
     void buttonIconCreate();
 #if VERSION == VERSION_PAL
     void buttonIconTexChange(u8, u8);
-    int PaneAlphaLangTxt(s16, u8);
+    int PaneAlphaLangTxt(s16 i_value, u8 i_max);
     void languageTexChange();
     void langTexChg();
     void langTexChgFast();
@@ -169,11 +169,9 @@ public:
     /* 0x043C */ fopMsgM_pane_class field_0x43c;
     /* 0x0474 */ fopMsgM_pane_class field_0x474;
     /* 0x04AC */ fopMsgM_pane_class field_0x4ac;
-    /* 0x04E4 */ fopMsgM_pane_class field_0x4e4;
-    /* 0x051C */ fopMsgM_pane_class field_0x51c;
+    /* 0x04E4 */ fopMsgM_pane_class field_0x4e4[2];
 #if VERSION == VERSION_PAL
-    /* 0x0554 */ fopMsgM_pane_class field_0x554;
-    /* 0x058C */ fopMsgM_pane_class field_0x58C;
+    /* 0x0554 */ fopMsgM_pane_class field_0x554[2];
 #endif
     /* 0x0554 */ u8 mMainProc;
     /* 0x0555 */ u8 mOpenProc;

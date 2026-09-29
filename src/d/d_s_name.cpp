@@ -299,8 +299,8 @@ void dScnName_c::buttonIconCreate() {
     fopMsgM_setPaneData(&field_0x43c, btnIcon.scr->search('cent'));
     fopMsgM_setPaneData(&field_0x474, btnIcon.scr->search('bab'));
     fopMsgM_setPaneData(&field_0x4ac, btnIcon.scr->search('baat'));
-    fopMsgM_setPaneData(&field_0x4e4, btnIcon.scr->search('bawp'));
-    fopMsgM_setPaneData(&field_0x51c, btnIcon.scr->search('bawd'));
+    fopMsgM_setPaneData(&field_0x4e4[0], btnIcon.scr->search('bawp'));
+    fopMsgM_setPaneData(&field_0x4e4[1], btnIcon.scr->search('bawd'));
     field_0x1bb4 = 0;
     paneTransButtonIcon(field_0x1bb4, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 0);
     field_0x1bb6 = 6;
@@ -313,8 +313,28 @@ void dScnName_c::buttonIconTexChange(u8, u8) {
 #endif
 
 #if VERSION == VERSION_PAL
-int dScnName_c::PaneAlphaLangTxt(s16, u8) {
-    /* Nonmatching */
+int dScnName_c::PaneAlphaLangTxt(s16 i_value, u8 i_max) {
+    if (i_value < 0) {
+        return 0;
+    }
+    if (i_value > i_max) {
+        return 1;
+    }
+
+    f32 alpha_in = fopMsgM_valueIncrease(i_max, i_value, 0);
+    f32 alpha_out = 1.0f - alpha_in;
+
+    fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58], alpha_out);
+    fopMsgM_setNowAlpha(&field_0x554[field_0x1c58], alpha_out);
+    fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58 ^ 1], alpha_in);
+    fopMsgM_setNowAlpha(&field_0x554[field_0x1c58 ^ 1], alpha_in);
+
+    fopMsgM_setAlpha(&field_0x4e4[field_0x1c58]);
+    fopMsgM_setAlpha(&field_0x554[field_0x1c58]);
+    fopMsgM_setAlpha(&field_0x4e4[field_0x1c58 ^ 1]);
+    fopMsgM_setAlpha(&field_0x554[field_0x1c58 ^ 1]);
+
+    return 0;
 }
 #endif
 
@@ -357,8 +377,8 @@ BOOL dScnName_c::paneTransButtonIcon(s16 param_1, u8 param_2, f32 param_3, f32 p
     fopMsgM_paneTrans(&field_0x43c, 0.0f, param_3 + tmp);
     fopMsgM_paneTrans(&field_0x474, 0.0f, param_3 + tmp);
     fopMsgM_paneTrans(&field_0x4ac, 0.0f, param_3 + tmp);
-    fopMsgM_paneTrans(&field_0x4e4, 0.0f, param_3 + tmp);
-    fopMsgM_paneTrans(&field_0x51c, 0.0f, param_3 + tmp);
+    fopMsgM_paneTrans(&field_0x4e4[0], 0.0f, param_3 + tmp);
+    fopMsgM_paneTrans(&field_0x4e4[1], 0.0f, param_3 + tmp);
     return false;
 }
 
@@ -867,8 +887,8 @@ void dScnName_c::buttonIconProc() {
         break;
     case 1:
         {
-            if (field_0x51c.pane->isVisible()) {
-                field_0x51c.pane->hide();
+            if (field_0x4e4[1].pane->isVisible()) {
+                field_0x4e4[1].pane->hide();
                 field_0x474.pane->hide();
                 field_0x4ac.pane->hide();
             }
@@ -883,8 +903,8 @@ void dScnName_c::buttonIconProc() {
         break;
     case 2:
         {
-            if (!field_0x51c.pane->isVisible()) {
-                field_0x51c.pane->show();
+            if (!field_0x4e4[1].pane->isVisible()) {
+                field_0x4e4[1].pane->show();
                 field_0x474.pane->show();
                 field_0x4ac.pane->show();
             }
@@ -914,8 +934,8 @@ void dScnName_c::buttonIconProc() {
             field_0x1bb4++;
             if (ret == 1) {
                 field_0x1bb4 = 0;
-                if (!field_0x51c.pane->isVisible()) {
-                    field_0x51c.pane->show();
+                if (!field_0x4e4[1].pane->isVisible()) {
+                    field_0x4e4[1].pane->show();
                     field_0x474.pane->show();
                     field_0x4ac.pane->show();
                 }
@@ -930,8 +950,8 @@ void dScnName_c::buttonIconProc() {
             field_0x1bb4++;
             if (ret == 1) {
                 field_0x1bb4 = 0;
-                if (field_0x51c.pane->isVisible()) {
-                    field_0x51c.pane->hide();
+                if (field_0x4e4[1].pane->isVisible()) {
+                    field_0x4e4[1].pane->hide();
                     field_0x474.pane->hide();
                     field_0x4ac.pane->hide();
                 }
