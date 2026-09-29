@@ -27,7 +27,6 @@ static s16 dMinigame_Starter_tex_number = 3;
 #endif
 
 /* 80205FE8-80206124       .text _create__19dMinigame_Starter_cFv */
-// NONMATCHING - missing b
 cPhs_State dMinigame_Starter_c::_create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Mgst");
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -50,15 +49,15 @@ cPhs_State dMinigame_Starter_c::_create() {
         } else {
             return cPhs_ERROR_e;
         }
-
-        mStatus = 0;
-        mTimer = 0;
-        field_0x10e = 3;
-
-        return cPhs_COMPLEATE_e;
+    } else {
+        return phase_state;
     }
 
-    return phase_state;
+    mStatus = 0;
+    mTimer = 0;
+    field_0x10e = 3;
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 80206124-8020629C       .text _execute__19dMinigame_Starter_cFv */
@@ -218,34 +217,32 @@ BOOL dDlst_StarterScrnDraw_c::anime1(int i_no) {
 
     field_0x1c8[i_no].mUserArea++;
 
+    s16 temp_r0 = field_0x1c8[i_no].mUserArea;
     f32 temp;
     f32 var_f2;
 
-    s16 temp_r0 = field_0x1c8[i_no].mUserArea;
     if (temp_r0 <= var_r30) {
-        temp = SQUARE((f32)field_0x1c8[i_no].mUserArea);
-        temp /= SQUARE((f32)var_r31);
+        temp = acc(var_r31, temp_r0, 0);
         fopMsgM_paneScaleXY(&field_0x270[i_no], temp * 0.3f + 0.7f);
 
-        temp = SQUARE((f32)field_0x1c8[i_no].mUserArea) / SQUARE((f32)var_r30);
+        temp = acc(var_r30, field_0x1c8[i_no].mUserArea, 0);
         fopMsgM_setNowAlpha(&field_0x270[i_no], temp);
     } else if (temp_r0 <= var_r31) {
         var_f2 = acc(var_r31, temp_r0, var_r30);
         fopMsgM_paneScaleXY(&field_0x1c8[i_no], var_f2 * 0.3f + 0.7f);
         fopMsgM_setNowAlpha(&field_0x1c8[i_no], var_f2);
 
-        temp = SQUARE((f32)field_0x1c8[i_no].mUserArea);
-        temp /= SQUARE((f32)var_r31);
+        temp = acc(var_r31, field_0x1c8[i_no].mUserArea, 0);
         fopMsgM_paneScaleXY(&field_0x270[i_no], temp * 0.3f + 0.7f);
         fopMsgM_setNowAlpha(&field_0x270[i_no], 1.0f - var_f2);
 
         if (field_0x1c8[i_no].mUserArea == var_r31) {
             mDoAud_seStart(JA_SE_SGAME_COUNTDOWN, NULL);
         }
-    } else if (temp_r6 > temp_r0) {
+    } else if (temp_r0 > temp_r6) {
         if (temp_r0 <= var_r27) {
-            int r7 = ((var_r27 - temp_r0) / 4);
-            if (((temp_r6 - temp_r0) / r7) % 2)
+            int period = (var_r27 - temp_r6) / 4;
+            if (((temp_r0 - temp_r6) / period) % 2)
                 angle *= -1.0f;
             setRotate(&field_0x1c8[i_no], angle);
         } else if (temp_r0 < temp_r7) {
@@ -277,20 +274,18 @@ BOOL dDlst_StarterScrnDraw_c::anime2() {
 
     field_0x008[0].mUserArea++;
 
-    f32 alpha;
     f32 var_f31;
     f32 scaleAdj;
     f32 angle;
 
     s16 temp_r0 = field_0x008[0].mUserArea;
     if (temp_r0 <= var_r30) {
-        var_f31 = SQUARE((f32)temp_r0) / SQUARE((f32)var_r30);
-        alpha = var_f31;
+        var_f31 = acc(var_r30, temp_r0, 0);
         scaleAdj = 3.0f - var_f31 * 2.2f;
         angle = 90.0f - var_f31 * 65.0f;
         scaleAnime(scaleAdj * g_menuHIO.field_0x14);
         setRotate(&field_0x190, angle);
-        fopMsgM_setNowAlpha(&field_0x008[0], alpha);
+        fopMsgM_setNowAlpha(&field_0x008[0], var_f31);
     } else if (temp_r0 <= var_r31) {
         var_f31 = acc(var_r31, temp_r0, var_r30);
         scaleAdj = 0.8f - var_f31 * -0.19999999f;
