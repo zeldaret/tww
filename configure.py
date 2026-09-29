@@ -765,7 +765,7 @@ config.libs = [
             Object(Matching,    "JSystem/JParticle/JPAResourceManager.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAEmitterLoader.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAMath.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAField.cpp"),
+            Object(MatchingFor("GZLE01"), "JSystem/JParticle/JPAField.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAEmitter.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAParticle.cpp"),
             Object(Matching,    "JSystem/JParticle/JPAEmitterManager.cpp"),
