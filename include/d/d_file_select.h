@@ -6,6 +6,7 @@
 #include "m_Do/m_Do_hostIO.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 
+class JKRArchive;
 class JKRMemArchive;
 class STControl;
 
@@ -127,9 +128,9 @@ public:
     BOOL isDataExtra(u8 idx) { return dataExtra[idx]; }
     BOOL isDataNew(u8 idx) { return dataNew[idx]; }
     u8 isSelectEnd() { return selectEnd; } // ?
-    #if VERSION == VERSION_PAL
+#if VERSION == VERSION_PAL
     u8 getField_0x3cc6() { return field_0x3cc6; }
-    #endif
+#endif
 
     dFile_select_c() {}
     void _create();
@@ -343,8 +344,12 @@ private:
     /* 0x3942 */ u8 field_0x3942[0x3944 - 0x3942];
     /* 0x3944 */ f32 field_0x3944;
     /* 0x3948 */ f32 field_0x3948;
+#if VERSION == VERSION_PAL
 public:
     u8 pad_0x394c[0x32];
     /* 0x3CC6 */ u8 field_0x3cc6;
+    /* 0x3CC7 */ u8 field_0x3cc7[0x3CD4 - 0x3CC7];
+    /* 0x3CD4 */ JKRArchive* field_0x3cd4[5];
+#endif
 };
 #endif

@@ -37,6 +37,8 @@
 
 dSn_HIO_c g_snHIO;
 
+static int mBmgStatus;
+
 /* 8022F86C-8022F8F0       .text __ct__9dSn_HIO_cFv */
 dSn_HIO_c::dSn_HIO_c() {
     field_0x5 = 20;
@@ -110,7 +112,14 @@ cPhs_State dScnName_c::create() {
 #endif
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
     dComIfGp_offEnableNextStage();
-
+#if VERSION == VERSION_PAL
+    if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
+        bmg_data_read_all();
+        if (mBmgStatus < 3) {
+            return cPhs_INIT_e;
+        }
+    }
+#endif
     cPhs_State rt = resLoad(&mPhs, "Stage");
     if (rt == cPhs_COMPLEATE_e) {
 #if VERSION == VERSION_DEMO
@@ -132,6 +141,12 @@ cPhs_State dScnName_c::create() {
         dFs_c = new dFile_select_c();
         JUT_ASSERT(VERSION_SELECT(316, 319, 470, 473), dFs_c != NULL);
         dFs_c->archive = mArchive;
+#if VERSION == VERSION_PAL
+        dFile_select_c* file_select = dFs_c;
+        for (int i = 0; i < 5; i++) {
+            file_select->field_0x3cd4[i] = field_0x1d8[i];
+        }
+#endif
         savePicDatabuf = new (0x20) card_pictdata[3 * 3];
         JUT_ASSERT(VERSION_SELECT(322, 325, 476, 483), savePicDatabuf != NULL);
 
@@ -233,11 +248,12 @@ cPhs_State dScnName_c::create() {
 #endif
 
         JFWDisplay::getManager()->setTickRate(OS_TIMER_CLOCK / 30);
+#if VERSION == VERSION_PAL
+        mBmgStatus = 0;
+#endif
     }
     return rt;
 }
-
-static int mBmgStatus;
 
 #if VERSION == VERSION_PAL
 void dScnName_c::bmg_data_read_all() {
