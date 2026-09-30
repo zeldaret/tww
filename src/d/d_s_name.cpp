@@ -431,7 +431,12 @@ int dScnName_c::PaneAlphaLangTxt(s16 i_value, u8 i_max) {
 
 #if VERSION == VERSION_PAL
 void dScnName_c::languageTexChange() {
-    /* Nonmatching */
+    if (field_0x1c59 == 1) {
+        langTexChgFast();
+    } else {
+        field_0x1c59 = 1;
+    }
+    buttonIconTexChange(dFs_c->getField_0x3cc6(), field_0x1c58 ^ 1);
 }
 #endif
 
