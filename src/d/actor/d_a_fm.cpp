@@ -1798,7 +1798,7 @@ void daFm_c::modeGrabFootDemo() {
                 }
             }
         } else {
-            fopAcM_orderOtherEvent2(this,"DEFAULT_FM_GRAB_FOOT", dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, "DEFAULT_FM_GRAB_FOOT");
         }
     }
 }
@@ -2066,7 +2066,7 @@ void daFm_c::modeGrabDemo() {
         }
     } else {
         if (isLink(mpActorTarget)) {
-            fopAcM_orderOtherEvent2(this, "DEFAULT_FM_GRAB", dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, "DEFAULT_FM_GRAB");
         }
         else {
             if (isNpc(mpActorTarget)) {
@@ -2074,10 +2074,10 @@ void daFm_c::modeGrabDemo() {
                 if (field_0x2E4 != 0) {
                     fopAcM_orderChangeEvent(this, "DEFAULT_FM_SUIKOMI_NPC", 0, 0xFFFF);
                 } else {
-                    fopAcM_orderOtherEvent2(this, "DEFAULT_FM_SUIKOMI_NPC", dEvtFlag_NOPARTNER_e);
+                    fopAcM_orderOtherEvent(this, "DEFAULT_FM_SUIKOMI_NPC");
                 }
 #else
-                fopAcM_orderOtherEvent2(this, "DEFAULT_FM_SUIKOMI_NPC", dEvtFlag_NOPARTNER_e);
+                fopAcM_orderOtherEvent(this, "DEFAULT_FM_SUIKOMI_NPC");
 #endif
             }
         }
@@ -2180,7 +2180,7 @@ void daFm_c::modeGrabNpcDemo() {
     }
 #endif
     else {
-        fopAcM_orderOtherEvent2(this, "DEFAULT_FM_NPC_GRAB", dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "DEFAULT_FM_NPC_GRAB");
     }
 }
 

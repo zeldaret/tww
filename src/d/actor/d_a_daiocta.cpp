@@ -1210,7 +1210,7 @@ void daDaiocta_c::modeDemo() {
             }
         }
     } else {
-        fopAcM_orderOtherEvent2(this, "DAIOCTA_SUIKOMI", dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "DAIOCTA_SUIKOMI");
     }
 }
 
@@ -1276,9 +1276,9 @@ void daDaiocta_c::modeDelete() {
             fopAcM_delete(this);
         }
     } else if (m057C == 1) {
-        fopAcM_orderOtherEvent2(this, "DAIOCTA_DEAD_ELF", dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "DAIOCTA_DEAD_ELF");
     } else {
-        fopAcM_orderOtherEvent2(this, "DAIOCTA_DEAD", dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "DAIOCTA_DEAD");
     }
 }
 

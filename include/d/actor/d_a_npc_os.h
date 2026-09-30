@@ -42,12 +42,12 @@ public:
     }
     void clearStatus() { field_0x784 = 0; }
     cXyz& getAttentionBasePos() { return field_0x754; }
-    s16 getBackbone_x() { return mJntCtrl.getBackbone_x(); }
-    s16 getBackbone_y() { return mJntCtrl.getBackbone_y(); }
+    s16 getHead_x() { return mJntCtrl.mAngles[0][0]; }
+    s16 getHead_y() { return mJntCtrl.mAngles[0][1]; }
+    s16 getBackbone_x() { return mJntCtrl.mAngles[1][0]; }
+    s16 getBackbone_y() { return mJntCtrl.mAngles[1][1]; }
     cXyz& getEyePos() { return field_0x748; }
     virtual f32 getGroundY() { return mAcch.GetGroundH(); }
-    s16 getHead_x() { return mJntCtrl.getHead_x(); }
-    s16 getHead_y() { return mJntCtrl.getHead_y(); }
     virtual MtxP getLeftHandMatrix() { return cullMtx; }
     virtual MtxP getRightHandMatrix() { return cullMtx; }
     virtual f32 getBaseAnimeFrameRate() { return 1.0f; }

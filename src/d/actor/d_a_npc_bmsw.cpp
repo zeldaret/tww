@@ -322,7 +322,7 @@ bool daNpc_Bmsw_c::chkAttention(cXyz pos, s16 angle) {
     s16 targetAngleY = cM_atan2s(delta.x, delta.z);
     if (mHasAttention) {
         maxAttnDistXZ += 40.0f;
-        maxAttnAngleY += cAngle::d2s(10.0f);
+        maxAttnAngleY += cM_deg2s(10.0f);
     }
     targetAngleY -= angle;
     return maxAttnAngleY > abs(targetAngleY) && maxAttnDistXZ > distXZ;
@@ -576,7 +576,7 @@ void daNpc_Bmsw_c::anmAtr(u16 i_msgStatus) {
             break;
     }
 
-    dComIfGp_clearMesgAnimeAttrInfo();
+    dComIfGp_setMesgAnimeAttrInfo(0xFF);
 }
 
 /* 000010C0-00001340       .text CreateInit__12daNpc_Bmsw_cFv */
@@ -631,7 +631,7 @@ BOOL daNpc_Bmsw_c::CreateInit() {
 void daNpc_Bmsw_c::set_mtx() {
     J3DModel* model = mpMorf->getModel();
 
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
 
     model->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -639,14 +639,14 @@ void daNpc_Bmsw_c::set_mtx() {
     field_0x6D8->setBaseTRMtx(model->getAnmMtx(m_jnt.getBackboneJntNum()));
 
     if (field_0x9D5 == 6 || field_0x9D5 == 5) {
-        if ((field_0x9D5 == 5 && mpMorfHand->getFrame() < DEMO_SELECT(18.0f + REG10_F(5), 18.0f)) || (field_0x9D5 == 6 && mpMorfHand->getFrame() < 18.0f)) {
+        if ((field_0x9D5 == 5 && mpMorfHand->getFrame() < 18.0f + DEMO_SELECT(REG10_F(5), 0.0f)) || (field_0x9D5 == 6 && mpMorfHand->getFrame() < 18.0f)) {
             mDoMtx_stack_c::copy(mpMorfHand->getModel()->getAnmMtx(m_handR));
             mDoMtx_stack_c::transM(24.77f, -3.73f, 22.69f);
-            mDoMtx_stack_c::XYZrotM(0x45B4, -0x2BE7, 0xE6C);
+            mDoMtx_stack_c::XYZrotM(cM_deg2s(98.02001654f), cM_deg2s(-61.737669014f), cM_deg2s(20.2807611f));
         } else {
             mDoMtx_stack_c::copy(mpMorfHand->getModel()->getAnmMtx(m_handL));
             mDoMtx_stack_c::transM(26.18f, 8.72f, 18.55f);
-            mDoMtx_stack_c::XYZrotM(0x5065, 0x28A0, -0x7F80);
+            mDoMtx_stack_c::XYZrotM(cM_deg2s(113.05480612f), cM_deg2s(57.128904507f), cM_deg2s(-179.296869528f));
         }
         field_0x6DC->setBaseTRMtx(mDoMtx_stack_c::get());
     }
@@ -1271,15 +1271,15 @@ BOOL daNpc_Bmsw_c::CreateHeap() {
     field_0x930[2] = &mSwMail2;
     field_0x93C = 0;
 
-    cXyz* eyeP = mSwCam.getEyeP();
     cXyz* cameraCenter = mSwCam.getCenterP();
-    if (field_0x930[0]->MailCreateInit(eyeP, cameraCenter) == FALSE) {
+    cXyz* eyeP = mSwCam.getEyeP();
+    if (field_0x930[0]->MailCreateInit(cameraCenter, eyeP) == FALSE) {
         return FALSE;
     }
-    if (field_0x930[1]->MailCreateInit(eyeP, cameraCenter) == FALSE) {
+    if (field_0x930[1]->MailCreateInit(cameraCenter, eyeP) == FALSE) {
         return FALSE;
     }
-    if (field_0x930[2]->MailCreateInit(eyeP, cameraCenter) == FALSE) {
+    if (field_0x930[2]->MailCreateInit(cameraCenter, eyeP) == FALSE) {
         return FALSE;
     }
 
@@ -1493,7 +1493,7 @@ void SwMail_c::Appear() {
     field_0x48.y = field_0x4E.y + new_y + DEMO_SELECT(REG10_S(1), 0);
     cLib_addCalcAngleS2(&field_0x48.z, field_0x4E.z, 4, 0x1000);
 
-    if (std::abs(cLib_addCalcPos(&field_0x24, vec, 0.25f, 30.0f, 2.5f)) < 2.5f) {
+    if (std::fabsf(cLib_addCalcPos(&field_0x24, vec, 0.25f, 30.0f, 2.5f)) < 2.5f) {
         WaitInit();
     }
     set_mtx();
@@ -1624,10 +1624,12 @@ void SwMail_c::End() {
     set_mtx_throw();
 }
 
+#if VERSION > VERSION_DEMO
 /* 00004B34-00004B68       .text SeDelete__8SwMail_cFv */
 void SwMail_c::SeDelete() {
     mDoAud_seDeleteObject((Vec*) &field_0x24);
 }
+#endif
 
 /* 00004B68-00004B90       .text move__8SwMail_cFv */
 void SwMail_c::move() {
@@ -1645,14 +1647,14 @@ void SwMail_c::draw(dKy_tevstr_c* tevStr) {
 
 /* 00004C04-00004D0C       .text Move__7SwCam_cFv */
 void SwCam_c::Move() {
-    if (field_0x1E != 0) {
+    if (mActive) {
         camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         
         cXyz center = camera_center_data[field_0x1D][field_0x1C + 1];
-        cLib_addCalcPos(&field_0x00, center, 0.25f, 10.0f, 1.0f);
+        cLib_addCalcPos(&mCenter, center, 0.25f, 10.0f, 1.0f);
 
         camera->mCamera.Stay();
-        camera->mCamera.Set(*getEyeP(), *getCenterP(), field_0x18, 0);
+        camera->mCamera.Set(mCenter, mEye, mFovY, 0);
     }
 }
 

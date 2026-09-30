@@ -4897,7 +4897,6 @@ bool dCamera_c::letCamera(s32) {
 /* 8017B154-8017B18C       .text Set__9dCamera_cF4cXyz4cXyz */
 bool dCamera_c::Set(cXyz center, cXyz eye) {
     mCenter = center;
-
     mEye = eye;
 
     return TRUE;
@@ -4906,11 +4905,8 @@ bool dCamera_c::Set(cXyz center, cXyz eye) {
 /* 8017B18C-8017B1EC       .text Set__9dCamera_cF4cXyz4cXyzfs */
 bool dCamera_c::Set(cXyz center, cXyz eye, f32 fovY, s16 bank) {
     mCenter = center;
-
     mEye = eye;
-
     mFovy = fovY;
-
     mBank.Val(bank);
 
     return TRUE;
@@ -4919,11 +4915,8 @@ bool dCamera_c::Set(cXyz center, cXyz eye, f32 fovY, s16 bank) {
 /* 8017B1EC-8017B24C       .text Set__9dCamera_cF4cXyz4cXyzsf */
 bool dCamera_c::Set(cXyz center, cXyz eye, s16 bank, f32 fovY) {
     mCenter = center;
-
     mEye = eye;
-
     mFovy = fovY;
-
     mBank.Val(bank);
 
     return TRUE;
@@ -4932,14 +4925,10 @@ bool dCamera_c::Set(cXyz center, cXyz eye, s16 bank, f32 fovY) {
 /* 8017B24C-8017B31C       .text Reset__9dCamera_cF4cXyz4cXyzfs */
 bool dCamera_c::Reset(cXyz center, cXyz eye, f32 fovY, s16 bank) {
     mViewCache.mCenter = mCenter = center;
-
     mViewCache.mEye = mEye = eye;
-
     mViewCache.mFovy = mFovy = fovY;
-
     mBank = cSAngle(bank);
     mViewCache.mBank = mBank;
-
     mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
 
     return Reset();
@@ -4948,13 +4937,9 @@ bool dCamera_c::Reset(cXyz center, cXyz eye, f32 fovY, s16 bank) {
 /* 8017B31C-8017B3D8       .text Reset__9dCamera_cF4cXyz4cXyz */
 bool dCamera_c::Reset(cXyz center, cXyz eye) {
     mViewCache.mCenter = mCenter = center;
-
     mViewCache.mEye = mEye = eye;
-
     mViewCache.mFovy = mFovy;
-
     mViewCache.mBank = mBank;
-
     mViewCache.mDirection.Val(mViewCache.mEye - mViewCache.mCenter);
 
     return Reset();

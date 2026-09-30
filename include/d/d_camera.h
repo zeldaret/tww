@@ -537,11 +537,11 @@ public:
     bool eventCamera(s32);
     bool demoCamera(s32);
     bool letCamera(s32);
-    bool Set(cXyz, cXyz);
-    bool Set(cXyz, cXyz, f32, s16);
-    bool Set(cXyz, cXyz, s16, f32);
-    bool Reset(cXyz, cXyz, f32, s16);
-    bool Reset(cXyz, cXyz);
+    bool Set(cXyz center, cXyz eye);
+    bool Set(cXyz center, cXyz eye, f32 fovY, s16 bank);
+    bool Set(cXyz center, cXyz eye, s16 bank, f32 fovY);
+    bool Reset(cXyz center, cXyz eye, f32 fovY, s16 bank);
+    bool Reset(cXyz center, cXyz eye);
     bool Reset();
     void ResetView();
     bool Chtyp(s32);

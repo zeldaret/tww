@@ -735,7 +735,7 @@ void daOship_c::modeDelete() {
                 fopAcM_delete(this);
             }
         } else {
-            fopAcM_orderOtherEvent2(this, "GOLD_SHIP_DELETE", dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, "GOLD_SHIP_DELETE");
         }        
     } else {
         s16 temp = cLib_addCalcAngleS(&shape_angle.x, -15000, 0x14, 0x1000, 0x100);

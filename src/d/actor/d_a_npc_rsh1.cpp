@@ -464,7 +464,7 @@ void daNpc_Rsh1_c::eventOrder() {
     if (m95B == 5) {
         fopAcM_orderOtherEventId(this, mShopOutEventIdx);
     } else if (m95B == 4) {
-        fopAcM_orderOtherEvent2(this, "RSH_GET_DEMO", dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "RSH_GET_DEMO");
     } else if (m95B == 1 || m95B == 2 || m95B == 3) {
         if (m95B != 3 || mShopIdx != -1 || daNpc_Rsh1_checkRotenBaseTalkArea()) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e);

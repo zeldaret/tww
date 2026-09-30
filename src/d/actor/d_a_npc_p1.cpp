@@ -590,7 +590,7 @@ BOOL daNpc_P1_c::speakAction(void*) {
                 setAction(&daNpc_P1_c::normalAction, NULL, 0);
                 if (mPrevMesg == 0xFA4) {
                     dComIfGp_event_reset();
-                    fopAcM_orderOtherEvent2(this, "sea_exp_cam", dEvtFlag_NOPARTNER_e);
+                    fopAcM_orderOtherEvent(this, "sea_exp_cam");
                     eventInfo.onCondition(dEvtCnd_UNK2_e);
                     setAction(&daNpc_P1_c::explainAction, NULL, 0);
                 } else {

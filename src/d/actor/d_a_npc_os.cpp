@@ -1117,7 +1117,7 @@ BOOL daNpc_Os_c::searchNpcAction(void*) {
     }
     else if(field_0x7A9 != -1) {
         field_0x7A4 = 1;
-        daPy_py_c* player = daPy_getPlayerActorClass();
+        daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
 
         BOOL door = player->eventInfo.checkCommandDoor();
         f32 dist_sq = fopAcM_searchPlayerDistanceXZ2(this);
@@ -1997,16 +1997,16 @@ void daNpc_Os_c::lookBack(int param_1, int param_2, int param_3) {
 void daNpc_Os_c::setBaseMtx() {
     J3DModel* pModel = mpMorf->getModel();
     if(fopAcM_checkCarryNow(this)) {
-        mDoMtx_stack_c::transS(current.pos);
+        mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
         mDoMtx_stack_c::YrotM(shape_angle.y);
-        mDoMtx_stack_c::transM(field_0x7E4);
+        mDoMtx_stack_c::transM(field_0x7E4.x, field_0x7E4.y, field_0x7E4.z);
         mDoMtx_stack_c::XrotM(shape_angle.x);
         mDoMtx_stack_c::ZrotM(shape_angle.z);
     }
     else {
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 95.0f, current.pos.z);
         mDoMtx_stack_c::YrotM(shape_angle.y);
-        mDoMtx_stack_c::transM(field_0x7E4);
+        mDoMtx_stack_c::transM(field_0x7E4.x, field_0x7E4.y, field_0x7E4.z);
         mDoMtx_stack_c::XrotM(shape_angle.x);
         mDoMtx_stack_c::ZrotM(shape_angle.z);
         mDoMtx_stack_c::transM(0.0f, -95.0f, 0.0f);

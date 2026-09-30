@@ -81,7 +81,7 @@ void daObjHami4_c::set_mtx() {
 void daObjHami4_c::daObjHami4_close_stop() {
     int switchIndex = prm_get_swSave();
     if (fopAcM_isSwitch(this, switchIndex)) {
-        fopAcM_orderOtherEvent2(this,"AMI4_OPEN",dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "AMI4_OPEN");
         field_0x378 = 1;
     }
 }
@@ -93,7 +93,7 @@ void daObjHami4_c::daObjHami4_open_demo_wait() {
         mDoAud_seStart(JA_SE_READ_RIDDLE_1);
         fopAcM_seStartCurrent(this, JA_SE_OBJ_SLIDE_AMI_OPEN, 0);
     } else {
-        fopAcM_orderOtherEvent2(this,"AMI4_OPEN",dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "AMI4_OPEN");
     }
 }
 

@@ -169,7 +169,7 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
 }
 
 /* 00000430-0000046C       .text daNpc_Btsw_getGameEndMsg__Fs */
-u32 daNpc_Btsw_getGameEndMsg(s16 rupees) {
+static u32 daNpc_Btsw_getGameEndMsg(s16 rupees) {
     u32 msgNo;
     if (rupees == 0) {
         msgNo = 0x1A9D;
@@ -269,7 +269,7 @@ bool daNpc_Btsw_c::chkAttention(cXyz pos, s16 angle) {
     s16 targetAngleY = cM_atan2s(delta.x, delta.z);
     if (mHasAttention) {
         maxAttnDistXZ += 40.0f;
-        maxAttnAngleY += cAngle::d2s(10.0f);
+        maxAttnAngleY += cM_deg2s(10.0f);
     }
     targetAngleY -= angle;
     return maxAttnAngleY > abs(targetAngleY) && maxAttnDistXZ > distXZ;
@@ -278,7 +278,7 @@ bool daNpc_Btsw_c::chkAttention(cXyz pos, s16 angle) {
 /* 0000085C-00000908       .text eventOrder__12daNpc_Btsw_cFv */
 void daNpc_Btsw_c::eventOrder() {
     if (field_0x9C7 == 3) {
-        fopAcM_orderOtherEvent2(this, "GETMOTHERLETTER", dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "GETMOTHERLETTER");
     } else if (field_0x9C7 == 4) {
         fopAcM_orderOtherEventId(this, field_0x9C8);
     } else if (field_0x9C7 == 1 || field_0x9C7 == 2) {
@@ -449,7 +449,7 @@ void daNpc_Btsw_c::anmAtr(u16 i_msgStatus) {
         setAnm(1);
     }
 
-    dComIfGp_clearMesgAnimeAttrInfo();
+    dComIfGp_setMesgAnimeAttrInfo(0xFF);
 }
 
 /* 00000F0C-00000F30       .text daNpc_Btsw_XyCheckCB__FPvi */
@@ -529,7 +529,7 @@ void daNpc_Btsw_c::set_mtx() {
         }
 
         mDoMtx_stack_c::transM(vec);
-        mDoMtx_stack_c::XYZrotM(angle);
+        mDoMtx_stack_c::XYZrotM(angle.x, angle.y, angle.z);
         field_0x6D0->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 }
@@ -736,7 +736,7 @@ BOOL daNpc_Btsw_c::shiwake_game_action(void*) {
         field_0x9A1 = 0;
 
         if (!eventInfo.checkCommandDemoAccrpt()) {
-            fopAcM_orderOtherEvent2(this, "SHIWAKEGAME", dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, "SHIWAKEGAME");
             eventInfo.onCondition(dEvtCnd_UNK2_e);
             return FALSE;
         }
@@ -956,6 +956,8 @@ BOOL daNpc_Btsw_c::_execute() {
 
 /* 00002AF4-00002B90       .text _delete__12daNpc_Btsw_cFv */
 BOOL daNpc_Btsw_c::_delete() {
+    fopAcM_RegisterDeleteID(this);
+
     dComIfG_resDeleteDemo(&mPhs, "Btsw");
 
     if (
@@ -985,6 +987,8 @@ static BOOL CallbackCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002BB0-00002CAC       .text _create__12daNpc_Btsw_cFv */
 cPhs_State daNpc_Btsw_c::_create() {
+    fopAcM_RegisterCreateID(this);
+
     fopAcM_ct(this, daNpc_Btsw_c);
 
     cPhs_State res = dComIfG_resLoad(&mPhs, "Btsw");
@@ -1282,7 +1286,7 @@ void SwMail2_c::Appear() {
     field_0x48.y = field_0x4E.y + new_y + DEMO_SELECT(REG10_S(1), 0);
     cLib_addCalcAngleS2(&field_0x48.z, field_0x4E.z, 4, 0x1000);
 
-    if (std::abs(cLib_addCalcPos(&field_0x24, vec, 0.25f, 30.0f, 2.5f)) < 2.5f) {
+    if (std::fabsf(cLib_addCalcPos(&field_0x24, vec, 0.25f, 30.0f, 2.5f)) < 2.5f) {
         WaitInit();
     }
     set_mtx();
@@ -1412,10 +1416,12 @@ void SwMail2_c::End() {
     set_mtx_throw();
 }
 
+#if VERSION > VERSION_DEMO
 /* 000045B0-000045E4       .text SeDelete__9SwMail2_cFv */
 void SwMail2_c::SeDelete() {
     mDoAud_seDeleteObject((Vec*) &field_0x24);
 }
+#endif
 
 /* 000045E4-0000460C       .text move__9SwMail2_cFv */
 void SwMail2_c::move() {

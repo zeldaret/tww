@@ -33,7 +33,9 @@ public:
     void Throw();
     void EndInit();
     void End();
+#if VERSION > VERSION_DEMO
     void SeDelete();
+#endif
     void move();
     void draw(dKy_tevstr_c*);
 

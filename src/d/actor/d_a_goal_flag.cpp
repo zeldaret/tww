@@ -857,7 +857,7 @@ BOOL daGoal_Flag_c::TimerExecute() {
                 "race_fail_cam",
             };
             char* event_name = event_name_tbl[mRaceEndState != 3 ? 1 : 0];
-            fopAcM_orderOtherEvent2(this, event_name, dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, event_name);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
     }
