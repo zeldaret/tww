@@ -402,7 +402,10 @@ def print_diff_debug_map(target_object_name: str, call_ninja: bool, print_size_d
       continue
     if symbol_name not in base_symbols:
       missing_target_symbols.add(symbol_name)
-      print("MISSING: " + symbol_name, "0x%X" % target_symbol.size)
+      suffix = ""
+      if target_symbol.stripped:
+        suffix = "(UNUSED)"
+      print("MISSING: " + symbol_name, "0x%X" % target_symbol.size, suffix)
   
   print("==================================================")
   print(f"=== Summary for object: {target_object_name}")
