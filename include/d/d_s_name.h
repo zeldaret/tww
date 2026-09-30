@@ -142,12 +142,8 @@ public:
     void changeGameScene();
 
 #if VERSION == VERSION_PAL
-    /* 0x01C4 */ mDoDvdThd_mountXArchive_c* field_0x1c4;
-    /* 0x01C8 */ mDoDvdThd_mountXArchive_c* field_0x1c8;
-    /* 0x01CC */ mDoDvdThd_mountXArchive_c* field_0x1cc;
-    /* 0x01D0 */ mDoDvdThd_mountXArchive_c* field_0x1d0;
-    /* 0x01D4 */ mDoDvdThd_mountXArchive_c* field_0x1d4;
-    u8 pad[0x14];
+    /* 0x01C4 */ mDoDvdThd_mountXArchive_c* field_0x1c4[5];
+    /* 0x01D8 */ JKRArchive* field_0x1d8[5];
 #endif
     /* 0x01C4 */ request_of_phase_process_class mPhs;
 #if VERSION == VERSION_DEMO
@@ -195,9 +191,9 @@ public:
     /* 0x1BBA */ u8 field_0x1bba[0x1BBC - 0x1BBA];
     /* 0x1BBC */ int field_0x1bbc;
 #if VERSION == VERSION_PAL
-    /* 0x1C58 */ u8 field_0x1c58;   // current language flag (to be confirmed)
-    /* 0x1C59 */ u8 field_0x1c59;   // transition in progress
-    /* 0x1C5A */ u8 field_0x1c5a;   // fade frame counter
+    /* 0x1C58 */ u8 field_0x1c58;
+    /* 0x1C59 */ u8 field_0x1c59;
+    /* 0x1C5A */ u8 field_0x1c5a;
 #endif
 };
 

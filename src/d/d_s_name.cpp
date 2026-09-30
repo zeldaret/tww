@@ -18,6 +18,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene_mng.h"
+#include "f_pc/f_pc_node.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_dvd_thread.h"
@@ -236,29 +237,98 @@ cPhs_State dScnName_c::create() {
     return rt;
 }
 
+static int mBmgStatus;
+
 #if VERSION == VERSION_PAL
 void dScnName_c::bmg_data_read_all() {
-    /* Nonmatching */
-    dComIfGp_getMsgDtArchive()->unmount();
-    field_0x1c4 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data0/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-    field_0x1c8 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data1/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-    field_0x1cc = mDoDvdThd_mountXArchive_c::create("/res/Msg/data2/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-    field_0x1d0 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data3/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-    field_0x1d4 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data4/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-}
+    if (mBmgStatus == 0) {
+        g_dComIfG_gameInfo.play.mpEnglishTextArchive->unmount();
 
+        field_0x1c4[0] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data0/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+        field_0x1c4[1] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data1/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+        field_0x1c4[2] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data2/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+        field_0x1c4[3] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data3/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+        field_0x1c4[4] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data4/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+
+        mBmgStatus = 1;
+    }
+
+    if (mBmgStatus == 1) {
+        if (field_0x1c4[0]->sync() && field_0x1c4[1]->sync() && field_0x1c4[2]->sync() &&
+            field_0x1c4[3]->sync() && field_0x1c4[4]->sync()) {
+            mBmgStatus = 2;
+            }
+    }
+
+    if (mBmgStatus == 2) {
+        u8 lang = g_dComIfG_gameInfo.play.mPalLanguage;
+        g_dComIfG_gameInfo.play.mpEnglishTextArchive = field_0x1c4[lang]->getArchive();
+
+        for (int i = 0; i < 5; i++) {
+            field_0x1d8[i] = field_0x1c4[i]->getArchive();
+            delete field_0x1c4[i];
+        }
+
+        mBmgStatus = 3;
+    }
+}
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::bmg_data_set() {
-    /* Nonmatching */
-}
+    if (base.base.mProcName == 13) {
+        mBmgStatus = 10;
+    }
 
+    if (mBmgStatus == 0) {
+        for (int i = 0; i < 5; i++) {
+            field_0x1d8[i]->unmount();
+        }
+
+        char path[32];
+        sprintf(path, "/res/Msg/data%d/bmgres.arc", g_dComIfG_gameInfo.play.mPalLanguage);
+        field_0x1c4[0] = mDoDvdThd_mountXArchive_c::create(path, 0, JKRArchive::MOUNT_MEM);
+
+        mBmgStatus = 1;
+    }
+
+    if (mBmgStatus == 1) {
+        if (field_0x1c4[0]->sync()) {
+            mBmgStatus = 2;
+        }
+    }
+
+    if (mBmgStatus == 2) {
+        g_dComIfG_gameInfo.play.mpEnglishTextArchive = field_0x1c4[0]->getArchive();
+        delete field_0x1c4[0];
+        mBmgStatus = 3;
+    }
+}
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::tex_data_set() {
-    /* Nonmatching */
+    if (mBmgStatus == 3) {
+        g_dComIfG_gameInfo.play.mpActionIconArchive->unmount();
+
+        char path[32];
+        sprintf(path, "/res/Msg/data%d/acticon.arc", g_dComIfG_gameInfo.play.mPalLanguage);
+        field_0x1c4[1] = mDoDvdThd_mountXArchive_c::create(path, 0, JKRArchive::MOUNT_ARAM);
+
+        mBmgStatus = 4;
+    }
+
+    if (mBmgStatus == 4) {
+        if (field_0x1c4[1]->sync()) {
+            mBmgStatus = 5;
+        }
+    }
+
+    if (mBmgStatus == 5) {
+        g_dComIfG_gameInfo.play.mpActionIconArchive = field_0x1c4[1]->getArchive();
+        delete field_0x1c4[1];
+        mBmgStatus = 6;
+    }
 }
 #endif
 
@@ -307,8 +377,29 @@ void dScnName_c::buttonIconCreate() {
 }
 
 #if VERSION == VERSION_PAL
-void dScnName_c::buttonIconTexChange(u8, u8) {
-    /* Nonmatching */
+void dScnName_c::buttonIconTexChange(u8 i_type, u8 i_index) {
+    switch (i_type) {
+        case 0:
+            ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei.bti", 0);
+            ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru.bti", 0);
+            break;
+        case 1:
+            ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei_gm.bti", 0);
+            ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru_gm.bti", 0);
+            break;
+        case 2:
+            ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei_fr.bti", 0);
+            ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru_fr.bti", 0);
+            break;
+        case 3:
+            ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei_sp.bti", 0);
+            ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru_sp.bti", 0);
+            break;
+        case 4:
+            ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei_it.bti", 0);
+            ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru_it.bti", 0);
+            break;
+    }
 }
 #endif
 
