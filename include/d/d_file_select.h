@@ -130,6 +130,11 @@ public:
     u8 isSelectEnd() { return selectEnd; } // ?
 #if VERSION == VERSION_PAL
     u8 getField_0x3cc6() { return field_0x3cc6; }
+    void setField_0x3cd4(JKRArchive** i_archives) {
+        for (int i = 0; i < 5; i++) {
+            field_0x3cd4[i] = i_archives[i];
+        }
+    }
 #endif
 
     dFile_select_c() {}

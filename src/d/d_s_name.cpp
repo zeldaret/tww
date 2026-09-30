@@ -142,10 +142,7 @@ cPhs_State dScnName_c::create() {
         JUT_ASSERT(VERSION_SELECT(316, 319, 470, 473), dFs_c != NULL);
         dFs_c->archive = mArchive;
 #if VERSION == VERSION_PAL
-        dFile_select_c* file_select = dFs_c;
-        for (int i = 0; i < 5; i++) {
-            file_select->field_0x3cd4[i] = field_0x1d8[i];
-        }
+        dFs_c->setField_0x3cd4(field_0x1d8);
 #endif
         savePicDatabuf = new (0x20) card_pictdata[3 * 3];
         JUT_ASSERT(VERSION_SELECT(322, 325, 476, 483), savePicDatabuf != NULL);
@@ -978,12 +975,31 @@ void dScnName_c::NoteOpenWait() {
         if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             dFs_c->setSaveDataPtr(saveMemory);
             dFs_c->setSavePicDataPtr((u8*)savePicDatabuf);
+            #if VERSION == VERSION_PAL
+            dFs_c->setField_0x3cd4(field_0x1d8);
+            #endif
         }
         if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
             dFs_c->setSaveDataPtr(dMs_c->getDataBufPtr());
             dFs_c->setSavePicDataPtr((u8*)savePicDatabuf);
         }
         dFs_c->initial();
+        #if VERSION == VERSION_PAL
+        field_0x1c58 = 0;
+        buttonIconTexChange(g_dComIfG_gameInfo.play.mPalLanguage, field_0x1c58);
+
+        fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58 ^ 1], 0.0f);
+        fopMsgM_setNowAlpha(&field_0x554[field_0x1c58 ^ 1], 0.0f);
+        fopMsgM_setAlpha(&field_0x4e4[field_0x1c58 ^ 1]);
+        fopMsgM_setAlpha(&field_0x554[field_0x1c58 ^ 1]);
+
+        fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58], 1.0f);
+        fopMsgM_setNowAlpha(&field_0x554[field_0x1c58], 1.0f);
+        fopMsgM_setAlpha(&field_0x4e4[field_0x1c58]);
+        fopMsgM_setAlpha(&field_0x554[field_0x1c58]);
+
+        field_0x1c58 ^= 1;
+        #endif
         mMainProc = 3;
         mOpenProc = 0;
         mDrawProc = 1;
