@@ -79,7 +79,6 @@ JMessage::TParse::~TParse() {
 
 /* 8029FEF0-802A0024       .text parseHeader_next__Q28JMessage6TParseFPPCvPUlUl */
 bool JMessage::TParse::parseHeader_next(const void** ppData, u32* pOutSize, u32 flag) {
-    /* Nonmatching */
     const void* pData = *ppData;
     data::TParse_THeader header(pData);
     *ppData = header.getContent();
@@ -91,7 +90,7 @@ bool JMessage::TParse::parseHeader_next(const void** ppData, u32* pOutSize, u32 
     if (header.get_type() != 'bmg1')
         return false;
 
-    u8 encoding = header.get_encoding();
+    const u8 encoding = header.get_encoding();
     if (encoding != 0) {
         if (!mResourceContainer->IsEncodingSettable(encoding))
             return false;
@@ -113,17 +112,17 @@ bool JMessage::TParse::parseHeader_next(const void** ppData, u32* pOutSize, u32 
 
 /* 802A0024-802A0170       .text parseBlock_next__Q28JMessage6TParseFPPCvPUlUl */
 bool JMessage::TParse::parseBlock_next(const void** ppData, u32* pOutSize, u32 flag) {
-    /* Nonmatching */
-    JUTDataBlockHeader* pHeader = *(JUTDataBlockHeader**)ppData;
-    *(char**)ppData += pHeader->mSize;
-    *pOutSize = pHeader->mSize;
+    const void* pData = *ppData;
+    data::TParse_TBlock block(pData);
+    *ppData = block.getNext();
+    *pOutSize = block.get_size();
 
-    switch (pHeader->mType) {
+    switch (block.get_type()) {
     case 'INF1':
-        mResource->setData_block_info(pHeader);
+        mResource->setData_block_info(pData);
         break;
     case 'DAT1': {
-        mResource->setData_block_messageData((char*)&pHeader[1]);
+        mResource->setData_block_messageData(pData);
         TResource* res = mResourceContainer->Get_groupID(mResource->mInfo.get_groupID());
         if (res != mResource && !!(flag & 0x80)) {
             mResourceContainer->Erase_destroy(res);
@@ -131,10 +130,10 @@ bool JMessage::TParse::parseBlock_next(const void** ppData, u32* pOutSize, u32 f
         break;
     }
     case 'STR1':
-        mResource->setData_block_stringAttribute((char*)&pHeader[1]);
+        mResource->setData_block_stringAttribute(pData);
         break;
     case 'MID1':
-        mResource->setData_block_messageID(pHeader);
+        mResource->setData_block_messageID(pData);
         break;
     default:
         if (!(flag & 0x40))

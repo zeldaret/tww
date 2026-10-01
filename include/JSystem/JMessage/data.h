@@ -18,11 +18,29 @@ struct TParse_THeader : public JGadget::binary::TParseData_aligned<4> {
     u32* get_signature() const { return (u32*)(get() + 0x0); }
     u32 get_type() const { return *(u32*)(get() + 0x4); }
     u32 get_blockNumber() const { return *(u32*)(get() + 0xC); }
-    u8 get_encoding() const { return *(u8*)(get() + 0x10); }
+    u8 get_encoding() const { return JGadget::binary::TParseValue<JGadget::binary::TParseValue_raw<u8> >::parse(get() + 0x10); }
 };
 
 struct TParse_TBlock : public JGadget::binary::TParseData_aligned<4> {
     TParse_TBlock(const void* data) : TParseData_aligned(data) {}
+
+    const JUTDataBlockHeader* get() const { return (const JUTDataBlockHeader*)getRaw(); }
+    const void* getNext() const { return (const char*)getRaw() + get_size(); }
+
+    u32 get_type() const { return get()->mType; }
+    u32 get_size() const { return get()->mSize; }
+};
+
+struct TParse_TBlock_messageData : public TParse_TBlock {
+    TParse_TBlock_messageData(const void* data) : TParse_TBlock(data) {}
+
+    const char* getContent() const { return (const char*)getRaw() + 8; }
+};
+
+struct TParse_TBlock_stringAttribute : public TParse_TBlock {
+    TParse_TBlock_stringAttribute(const void* data) : TParse_TBlock(data) {}
+
+    const char* getContent() const { return (const char*)getRaw() + 8; }
 };
 
 // INF1

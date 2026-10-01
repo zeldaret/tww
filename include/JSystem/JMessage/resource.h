@@ -21,8 +21,8 @@ namespace JMessage {
 
         void setData_header(const void* p) { mHeader.setRaw(p); }
         void setData_block_info(const void* p) { mInfo.setRaw(p); }
-        void setData_block_messageData(const void* p) { mMessageData = (const char*)p; }
-        void setData_block_stringAttribute(const void* p) { mStringAttribute = (const char*)p; }
+        void setData_block_messageData(const void* p) { mMessageData = data::TParse_TBlock_messageData(p).getContent(); }
+        void setData_block_stringAttribute(const void* p) { mStringAttribute = data::TParse_TBlock_stringAttribute(p).getContent(); }
         void setData_block_messageID(const void* p) { mMessageID = (data::JUTMesgIDData*)p; }
 
         u32 getMessageEntryNumber() const { return mInfo.get_messageEntryNumber(); }
