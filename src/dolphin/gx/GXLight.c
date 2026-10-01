@@ -176,28 +176,30 @@ void GXLoadLightObjImm(GXLightObj* obj, GXLightID light) {
 
 void GXSetChanAmbColor(GXChannelID channel, GXColor color) {
     u32 reg;
+    u32 rgb;
     u32 colorID;
-    u8 alpha;
 
     switch (channel) {
     case GX_COLOR0:
         reg = gx->ambColor[GX_COLOR0];
-        reg = GX_SET_TRUNC(reg, GXCOLOR_AS_U32(color), 0, 23);
+        rgb = GXCOLOR_AS_U32(color) >> 8;
+        SET_REG_FIELD(reg, 24, 8, rgb);
         colorID = GX_COLOR0;
         break;
     case GX_COLOR1:
         reg = gx->ambColor[GX_COLOR1];
-        reg = GX_SET_TRUNC(reg, GXCOLOR_AS_U32(color), 0, 23);
+        rgb = GXCOLOR_AS_U32(color) >> 8;
+        SET_REG_FIELD(reg, 24, 8, rgb);
         colorID = GX_COLOR1;
         break;
     case GX_ALPHA0:
         reg = gx->ambColor[GX_COLOR0];
-        reg = GX_SET_TRUNC(reg, color.a, 24, 31);
+        SET_REG_FIELD(reg, 8, 0, color.a);
         colorID = GX_COLOR0;
         break;
     case GX_ALPHA1:
         reg = gx->ambColor[GX_COLOR1];
-        reg = GX_SET_TRUNC(reg, color.a, 24, 31);
+        SET_REG_FIELD(reg, 8, 0, color.a);
         colorID = GX_COLOR1;
         break;
     case GX_COLOR0A0:
@@ -219,27 +221,30 @@ void GXSetChanAmbColor(GXChannelID channel, GXColor color) {
 
 void GXSetChanMatColor(GXChannelID channel, GXColor color) {
     u32 reg = 0;
-    GXChannelID colorID;
+    u32 rgb;
+    u32 colorID;
 
     switch (channel) {
     case GX_COLOR0:
         reg = gx->matColor[GX_COLOR0];
-        reg = GX_SET_TRUNC(reg, GXCOLOR_AS_U32(color), 0, 23);
+        rgb = GXCOLOR_AS_U32(color) >> 8;
+        SET_REG_FIELD(reg, 24, 8, rgb);
         colorID = GX_COLOR0;
         break;
     case GX_COLOR1:
         reg = gx->matColor[GX_COLOR1];
-        reg = GX_SET_TRUNC(reg, GXCOLOR_AS_U32(color), 0, 23);
+        rgb = GXCOLOR_AS_U32(color) >> 8;
+        SET_REG_FIELD(reg, 24, 8, rgb);
         colorID = GX_COLOR1;
         break;
     case GX_ALPHA0:
         reg = gx->matColor[GX_COLOR0];
-        reg = GX_SET_TRUNC(reg, color.a, 24, 31);
+        SET_REG_FIELD(reg, 8, 0, color.a);
         colorID = GX_COLOR0;
         break;
     case GX_ALPHA1:
         reg = gx->matColor[GX_COLOR1];
-        reg = GX_SET_TRUNC(reg, color.a, 24, 31);
+        SET_REG_FIELD(reg, 8, 0, color.a);
         colorID = GX_COLOR1;
         break;
     case GX_COLOR0A0:
@@ -260,27 +265,26 @@ void GXSetChanMatColor(GXChannelID channel, GXColor color) {
 }
 
 void GXSetNumChans(u8 count) {
-    GX_SET_REG(gx->genMode, count, 25, 27);
-    GX_XF_LOAD_REG(GX_XF_REG_NUMCOLORS, count);
+    SET_REG_FIELD(gx->genMode, 3, 4, count);
+    GX_WRITE_XF_REG(9, count);
     gx->dirtyState |= GX_DIRTY_GEN_MODE;
 }
 
 void GXSetChanCtrl(GXChannelID channel, GXBool doEnable, GXColorSrc ambSrc, GXColorSrc matSrc,
                    u32 mask, GXDiffuseFn diffFunc, GXAttnFn attnFunc) {
-    const u32 colorID = (u32)channel & 0x3;
-    u32 reg = 0;
+    u32 reg;
+    u32 colorID;
 
-    GX_SET_REG(reg, doEnable, GX_XF_CLR0CTRL_LIGHT_ST, GX_XF_CLR0CTRL_LIGHT_END);
-    GX_SET_REG(reg, matSrc, GX_XF_CLR0CTRL_MTXSRC_ST, GX_XF_CLR0CTRL_MTXSRC_END);
-    GX_SET_REG(reg, ambSrc, GX_XF_CLR0CTRL_AMBSRC_ST, GX_XF_CLR0CTRL_AMBSRC_END);
-    GX_SET_REG(reg, (attnFunc == GX_AF_SPEC ? GX_DF_NONE : diffFunc), GX_XF_CLR0CTRL_DIFATTN_ST,
-               GX_XF_CLR0CTRL_DIFATTN_END);
-    GX_SET_REG(reg, (attnFunc != GX_AF_NONE), GX_XF_CLR0CTRL_ATTNENABLE_ST,
-               GX_XF_CLR0CTRL_ATTNENABLE_END);
-    GX_SET_REG(reg, (attnFunc != GX_AF_SPEC), GX_XF_CLR0CTRL_ATTNSEL_ST,
-               GX_XF_CLR0CTRL_ATTNSEL_END);
-    GX_BITFIELD_SET(reg, 26, 4, (u32)mask);
-    reg = __rlwimi(reg, (u32)mask, 7, 0x11, 0x14);
+    colorID = channel & 0x3;
+    reg = 0;
+    SET_REG_FIELD(reg, 1, 1, doEnable);
+    SET_REG_FIELD(reg, 1, 0, matSrc);
+    SET_REG_FIELD(reg, 1, 6, ambSrc);
+    SET_REG_FIELD(reg, 2, 7, attnFunc == GX_AF_SPEC ? GX_DF_NONE : diffFunc);
+    SET_REG_FIELD(reg, 1, 9, attnFunc != GX_AF_NONE);
+    SET_REG_FIELD(reg, 1, 10, attnFunc != GX_AF_SPEC);
+    SET_REG_FIELD(reg, 4, 2, mask & 0xF);
+    SET_REG_FIELD(reg, 4, 11, (mask >> 4) & 0xF);
 
     GX_XF_LOAD_REG(GX_XF_REG_COLOR0CNTRL + colorID, reg);
 
