@@ -6,8 +6,8 @@
 namespace daObjMsdanSub2 {
     class Act_c : public dBgS_MoveBgActor {
     public:
-        s32 prm_get_objNo() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
-        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SIZE_W, PRM_SIZE_H); }
+        s32 prm_get_objNo() const { return daObj::PrmAbstract(this, PRM_OBJNO_W, PRM_OBJNO_S); }
+        s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
     
         virtual BOOL CreateHeap();
         virtual BOOL Create();
@@ -20,11 +20,11 @@ namespace daObjMsdanSub2 {
         virtual BOOL Draw();
 
         enum Prm_e {
-            PRM_SIZE_W = 8,
-            PRM_SIZE_H = 0,
-
             PRM_SWSAVE_W = 8,
-            PRM_SWSAVE_S = 8,
+            PRM_SWSAVE_S = 0,
+
+            PRM_OBJNO_W = 8,
+            PRM_OBJNO_S = 8,
         };
 
         static const char M_arcname[];
