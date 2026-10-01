@@ -1,54 +1,104 @@
 #ifndef D_A_NPC_SARACE_H
 #define D_A_NPC_SARACE_H
 
+#include "d/actor/d_a_obj_barrel2.h"
+#include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
-class daNpc_Sarace_c : public fopAc_ac_c {
+class daNpc_Sarace_c : public fopNpc_npc_c {
 public:
-    void getAttentionBasePos() {}
-    void getEyePos() {}
-    void getHBarrelP() {}
-    void getVBarrelP() {}
-    void init() {}
-    void setAction(int (daNpc_Sarace_c::*)(void*), void*) {}
 
-    void initTexPatternAnm(bool);
+    typedef BOOL (daNpc_Sarace_c::*ProcFunc)(void*);
+
+    enum ActionStatus {
+        ACTION_STARTING = 0,
+        ACTION_ONGOING  = 1,
+        ACTION_ENDING   = -1,
+    };
+
+    cXyz& getAttentionBasePos() { return mAttPos; }
+    cXyz& getEyePos() { return mEyePos; }
+    daObjBarrel2::Act_c * getHBarrelP() {
+        return (daObjBarrel2::Act_c* )fopAcM_SearchByID(mHBarrelId);
+    }
+    daObjBarrel2::Act_c * getVBarrelP() {
+        return (daObjBarrel2::Act_c* )fopAcM_SearchByID(mVBarrelId);
+    }
+    void init() {}
+    void setAction(ProcFunc func, void* arg) {
+        if (mCurrActionFunc != func) {
+            if (mCurrActionFunc) {
+                mActionStatus = ACTION_ENDING;
+                (this->*mCurrActionFunc)(NULL);
+            }
+            mCurrActionFunc = func;
+            mActionStatus = ACTION_STARTING;
+            (this->*mCurrActionFunc)(arg);
+        }
+    }
+
+    BOOL initTexPatternAnm(bool);
     void playTexPatternAnm();
     void setAnm(s8, f32);
-    void chkAttention(cXyz, s16);
+    bool chkAttention(cXyz, s16);
     void eventOrder();
     void checkOrder();
-    void next_msgStatus(u32*);
-    void getMsg();
+    u16 next_msgStatus(u32*);
+    u32 getMsg();
     void anmAtr(u16);
-    void CreateInit();
+    BOOL CreateInit();
     void setAttention();
     void lookBack();
     void wait01();
     void talk01();
-    void dummy_action(void*);
-    void wait_action(void*);
-    void event_endCheck_action(void*);
+    BOOL dummy_action(void*);
+    BOOL wait_action(void*);
+    BOOL event_endCheck_action(void*);
     void set_mtx();
     BOOL _draw();
     BOOL _execute();
     BOOL _delete();
     cPhs_State _create();
-    void CreateHeap();
+    BOOL CreateHeap();
     
     static s32 ship_race_rupee;
     static s32 ship_race_result;
 
 public:
-    /* Place member variables here */
-};
 
-class daNpc_Sarace_HIO_c {
-public:
-    daNpc_Sarace_HIO_c();
 
-public:
-    /* Place member variables here */
-};
+    /* 0x6C4 */ request_of_phase_process_class mPhs;
+    /* 0x6CC */ mDoExt_McaMorf* mpHeadMorf;
+    /* 0x6D0 */ u32 mShadowID;
+    /* 0x6D4 */ u8 field_0x6D4[0x6D8 - 0x6D4];
+    /* 0x6D8 */ fpc_ProcID mHBarrelId;
+    /* 0x6DC */ fpc_ProcID mVBarrelId;
+    /* 0x6E0 */ J3DAnmTexPattern* m_btp;
+    /* 0x6E4 */ mDoExt_btpAnm mBtpAnm;
+    /* 0x6F8 */ u8 mBlinkFrame;
+    /* 0x6FA */ s16 mBlinkTimer;
+    /* 0x6FC */ cXyz mEyePos;
+    /* 0x708 */ cXyz mAttPos;
+    /* 0x714 */ s16 mLookAtMaxVel;
+    /* 0x716 */ u8 field_0x716[0x718 - 0x716];
+    /* 0x718 */ csXyz m718;
+    /* 0x71E */ u8 field_0x71E[0x724 - 0x71E];
+    /* 0x724 */ u32 mMiniGameMessage;
+    /* 0x728 */ u8 mHasAttention;
+    /* 0x729 */ u8 m729;
+    /* 0x72A */ u8 field_0x72A[0x730 - 0x72A];
+    /* 0x730 */ s8 m730;
+    /* 0x734 */ ProcFunc mCurrActionFunc;
+    /* 0x740 */ s8 mTexPatternNum;
+    /* 0x741 */ s8 mCurrentAnm;
+    /* 0x742 */ s8 mEventState;
+    /* 0x743 */ s8 mLookBackState;
+    /* 0x744 */ u8 field_0x744[0x746 - 0x744];
+    /* 0x746 */ s8 mActionStatus;
+    /* 0x747 */ //u8 field_0x747[0x748 - 0x747];
+};  // Size: 0x748
+
 
 #endif /* D_A_NPC_SARACE_H */
