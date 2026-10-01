@@ -130,6 +130,8 @@ public:
     u8 isSelectEnd() { return selectEnd; } // ?
 #if VERSION == VERSION_PAL
     u8 getField_0x3cc6() { return field_0x3cc6; }
+    u8 getField_0x3cd3() { return field_0x3cd3; }
+    void setField_0x3cd3(u8 i_value) { field_0x3cd3 = i_value; }
     void setField_0x3cd4(JKRArchive** i_archives) {
         for (int i = 0; i < 5; i++) {
             field_0x3cd4[i] = i_archives[i];
@@ -353,7 +355,8 @@ private:
 public:
     u8 pad_0x394c[0x32];
     /* 0x3CC6 */ u8 field_0x3cc6;
-    /* 0x3CC7 */ u8 field_0x3cc7[0x3CD4 - 0x3CC7];
+    /* 0x3CC7 */ u8 field_0x3cc7[0x3CD3 - 0x3CC7];
+    /* 0x3CD3 */ u8 field_0x3cd3;
     /* 0x3CD4 */ JKRArchive* field_0x3cd4[5];
 #endif
 };

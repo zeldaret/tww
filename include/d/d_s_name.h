@@ -9,6 +9,7 @@
 #include "m_Do/m_Do_hostIO.h"
 
 class J2DScreen;
+class JKRArchive;
 class JKRMemArchive;
 class dFile_error_c;
 class dFile_select_c;
@@ -86,7 +87,7 @@ public:
     void buttonIconCreate();
 #if VERSION == VERSION_PAL
     void buttonIconTexChange(u8, u8);
-    int PaneAlphaLangTxt(s16 i_value, u8 i_max);
+    int PaneAlphaLangTxt(s16, u8);
     void languageTexChange();
     void langTexChg();
     void langTexChgFast();
