@@ -215,21 +215,22 @@ void daObjMagmarock::ride_call_back(dBgW* i_dbgw, fopAc_ac_c* i_this, fopAc_ac_c
     /* Nonmatching */
     Act_c *p_this = (Act_c*)i_this;
     cXyz temp = p_this->current.pos - i_other->current.pos;
-    cXyz vertical(0.0f, 1.0f, 0.0f);
-    cXyz vec = temp.outprod(vertical);
+    cXyz vec = temp.outprod(cXyz(0.0f, 1.0f, 0.0f));
     f32 len = vec.abs();
-    if (vec.normalizeRS()) {
-        f32 inter1 = (p_this->current.pos.y - p_this->home.pos.y) * 0.001f * 4.0f + 2.0f;
-        s16 unk = -len * inter1;
-        cLib_addCalcAngleS2(&p_this->m298, unk, 8, 0x200);
-        p_this->m29c = 1;
-        p_this->m29e = 1;
-        f32 sin = cM_ssin(p_this->m298);
-        p_this->m2c0.x = vec.x * sin;
-        p_this->m2c0.y = vec.y * sin;
-        p_this->m2c0.z = vec.z * sin;
-        p_this->m2c0.w = cM_scos(p_this->m298);
+    if (!vec.normalizeRS()) {
+        return;
     }
+
+    f32 intermediete = (p_this->current.pos.y - p_this->home.pos.y) * 0.001f * 4.0f + 2.0f;
+    s16 target = -len * intermediete;
+    cLib_addCalcAngleS2(&p_this->m298, target, 8, 0x200);
+    p_this->m29c = 1;
+    p_this->m29e = 1;
+    f32 sin = cM_ssin(p_this->m298);
+    p_this->m2c0.x = vec.x * sin;
+    p_this->m2c0.y = vec.y * sin;
+    p_this->m2c0.z = vec.z * sin;
+    p_this->m2c0.w = cM_scos(p_this->m298);
 }
 
 /* 00000AEC-00000B0C       .text CheckCreateHeap__14daObjMagmarockFP10fopAc_ac_c */
@@ -421,34 +422,41 @@ void daObjMagmarock::Act_c::calc_ground_quat() {
     dLib_calc_QuatFromTriangle(&m2d0, 0.25, m40c, &m40c[1], &m40c[2]);
 }
 
-/* 000017DC-0000198C       .text Create__Q214daObjMagmarock6MethodFPv */
-cPhs_State daObjMagmarock::Method::Create(void *i_this) {
-    daObjMagmarock::Act_c* pthis = (Act_c*)i_this;
-    fopAcM_ct(pthis, Act_c);
-    cPhs_State ret = dComIfG_resLoad(&pthis->mPhase, daObjMagmarock::Act_c::M_arcname);
+inline cPhs_State daObjMagmarock::Act_c::_create() {
+    fopAcM_ct(this, Act_c);
+    cPhs_State ret = dComIfG_resLoad(&mPhase, daObjMagmarock::Act_c::M_arcname);
     if (ret == cPhs_COMPLEATE_e) {
         if (g_dComIfG_gameInfo.play.getMagma() == NULL){
             ret = cPhs_INIT_e;
-        } else if(!fopAcM_entrySolidHeap(pthis, daObjMagmarock::CheckCreateHeap, 0x5d40)) {
+        } else if(!fopAcM_entrySolidHeap(this, daObjMagmarock::CheckCreateHeap, 0x5d40)) {
             ret = cPhs_ERROR_e;
         } else {
-            pthis->CreateInit();
+            CreateInit();
         }
     }
     return ret;
 }
 
-/* 00001A90-00001B14       .text Delete__Q214daObjMagmarock6MethodFPv */
-BOOL daObjMagmarock::Method::Delete(void *i_this) {
-    daObjMagmarock::Act_c* pthis = (Act_c*)i_this;
+/* 000017DC-0000198C       .text Create__Q214daObjMagmarock6MethodFPv */
+cPhs_State daObjMagmarock::Method::Create(void *i_this) {
+    Act_c* pthis = (Act_c*)i_this;
+    return pthis->_create();
+}
 
-    dComIfG_resDelete(&pthis->mPhase, Act_c::M_arcname);
-    if (pthis->heap != NULL) {
-        if (pthis->mpBgW->ChkUsed()) {
-            dComIfG_Bgsp()->Release(pthis->mpBgW);
+inline bool daObjMagmarock::Act_c::_delete() {
+    dComIfG_resDelete(&mPhase, Act_c::M_arcname);
+    if (heap != NULL) {
+        if (mpBgW->ChkUsed()) {
+            dComIfG_Bgsp()->Release(mpBgW);
         }
     }
     return TRUE;
+}
+
+/* 00001A90-00001B14       .text Delete__Q214daObjMagmarock6MethodFPv */
+BOOL daObjMagmarock::Method::Delete(void *i_this) {
+    Act_c* pthis = (Act_c*)i_this;
+    return pthis->_delete();
 }
 
 /* 00001B14-00001B38       .text Execute__Q214daObjMagmarock6MethodFPv */
@@ -459,18 +467,12 @@ BOOL daObjMagmarock::Method::Execute(void *i_this) {
 
 /* 00001B38-00001EC0       .text _execute__Q214daObjMagmarock5Act_cFv */
 bool daObjMagmarock::Act_c::_execute() {
-    /* Nonmatching */
+    /* Regswap */
     calc_ground_quat();
     if (m45c == 0) {
-        Process ptmf = &Act_c::quake_proc;
-        BOOL thing = m2e0 == ptmf;
-        if (!thing) {
-            ptmf = &Act_c::vanish_proc;
-            BOOL thing = m2e0 == ptmf;
-            if (!thing) {
-                cLib_addCalc2(&m430, 0.0f, 0.2f, 20.0f);
-                cLib_addCalcAngleS2(&m456, 0, 4, 0x100);
-            }
+        if (checkProcess(&Act_c::quake_proc) == 0 && checkProcess(&Act_c::vanish_proc) == 0) {
+            cLib_addCalc2(&m430, 0.0f, 0.2f, 20.0f);
+            cLib_addCalcAngleS2(&m456, 0, 4, 0x100);
         }
         current.pos.y = current.pos.y + speed.y;
         speed.y = speed.y + gravity;
@@ -478,27 +480,24 @@ bool daObjMagmarock::Act_c::_execute() {
         speed.y = 0.0f;
     }
     if (current.pos.y < home.pos.y + 100.0f) {
-        if (home.pos.y + 100.0f <= old.pos.y) {
+        if (old.pos.y >= home.pos.y + 100.0f) {
             dComIfGp_getVibration().StartShock(4, 1, cXyz(0.0f, 1.0f, 0.0f));
         }
-        f32 cy = current.pos.y;
-        f32 hy = home.pos.y;
+        f32 hy, cy;
+        cy = current.pos.y;
+        hy = home.pos.y;
         if (cy < hy) {
             hy -= 30.0f;
-            if (cy < hy) {
+            if (hy < cy) {
                 current.pos.y = hy;
             }
             speed.y = speed.y - (REG10_F(26) + 0.4f)*(current.pos.y-home.pos.y);
         }
         speed.y = speed.y * (0.65f - REG10_F(25));
     }
-    if (m45c == 0) {
-        Process ptmf = &Act_c::stay_proc;
-        BOOL thing = m2e0 == ptmf;
-        if (!thing) {
-            m448 -= 1;
-            m44c += 1;
-        }
+    if (m45c == 0 && checkProcess(&Act_c::stay_proc) == 0) {
+        m448 -= 1;
+        m44c += 1;
     }
     set_mtx();
     demo_move();
@@ -526,25 +525,29 @@ bool daObjMagmarock::Act_c::_execute() {
     return FALSE;
 }
 
+inline bool daObjMagmarock::Act_c::_draw() {
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &m35c);
+    const f32 f1 = 0.12f;
+    m35c.mColorC0.r = m35c.mColorC0.r + (s32)((0xff-m35c.mColorC0.r)*f1)&0xff;
+    m35c.mColorC0.g = m35c.mColorC0.g + (s32)((0xff-m35c.mColorC0.g)*f1)&0xff;
+    m35c.mColorC0.b = m35c.mColorC0.b + (s32)((0xff-m35c.mColorC0.b)*f1)&0xff;
+
+    m35c.mColorK0.r = m35c.mColorK0.r + (s32)((0xff-m35c.mColorK0.r)*0.12f);
+    m35c.mColorK0.g = m35c.mColorK0.g + (s32)((0xff-m35c.mColorK0.g)*0.12f);
+    m35c.mColorK0.b = m35c.mColorK0.b + (s32)((0xff-m35c.mColorK0.b)*0.12f);
+    g_env_light.setLightTevColorType(this->mpModel, &tevStr);
+    mBrkAnm.entry(mpModel->getModelData(), (s16)m438);
+    mBckAnm.entry(mpModel->getModelData(), (s16)m434);
+    mDoExt_modelUpdateDL(mpModel);
+    return true;
+}
+
 /* 00001EC0-00002128       .text Draw__Q214daObjMagmarock6MethodFPv */
 BOOL daObjMagmarock::Method::Draw(void *i_this) {
     /* Nonmatching */
     Act_c *p_this = static_cast<Act_c*>(i_this);
-    actor_place* pcurrent = &p_this->current;
-    g_env_light.settingTevStruct(TEV_TYPE_BG0, &pcurrent->pos, &p_this->tevStr);
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &pcurrent->pos, &p_this->m35c);
-    p_this->m35c.mColorC0.r = p_this->m35c.mColorC0.r + (s32)((0xff-p_this->m35c.mColorC0.r)*0.12f)&0xff;
-    p_this->m35c.mColorC0.g = p_this->m35c.mColorC0.g + (s32)((0xff-p_this->m35c.mColorC0.g)*0.12f)&0xff;
-    p_this->m35c.mColorC0.b = p_this->m35c.mColorC0.b + (s32)((0xff-p_this->m35c.mColorC0.b)*0.12f)&0xff;
-
-    p_this->m35c.mColorK0.r = p_this->m35c.mColorK0.r + (s32)((0xff-p_this->m35c.mColorK0.r)*0.12f);
-    p_this->m35c.mColorK0.g = p_this->m35c.mColorK0.g + (s32)((0xff-p_this->m35c.mColorK0.g)*0.12f);
-    p_this->m35c.mColorK0.b = p_this->m35c.mColorK0.b + (s32)((0xff-p_this->m35c.mColorK0.b)*0.12f);
-    g_env_light.setLightTevColorType(p_this->mpModel, &p_this->tevStr);
-    p_this->mBrkAnm.entry(p_this->mpModel->getModelData(), (s16)p_this->m438);
-    p_this->mBckAnm.entry(p_this->mpModel->getModelData(), (s16)p_this->m434);
-    mDoExt_modelUpdateDL(p_this->mpModel);
-    return TRUE;
+    return p_this->_draw();
 }
 
 /* 00002128-00002130       .text IsDelete__Q214daObjMagmarock6MethodFPv */
