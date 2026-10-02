@@ -408,7 +408,7 @@ int daPy_lk_c::changeCutProc() {
     }
     m34C4++;
     int direction = getCutDirection() - 1;
-    short sVar2;
+    s16 sVar2;
     if (checkAttentionLock() || mStickDistance <= 0.05f) {
         sVar2 = shape_angle.y;
     } else {

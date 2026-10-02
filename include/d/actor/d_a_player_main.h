@@ -1105,7 +1105,7 @@ public:
     BOOL commonProcInit(daPy_PROC proc);
     BOOL procScope_init(int);
     BOOL procScope();
-    BOOL procSubjectivity_init(BOOL);
+    BOOL procSubjectivity_init(BOOL i_crouch);
     BOOL procSubjectivity();
     BOOL procCall_init();
     BOOL procCall();
@@ -1123,7 +1123,7 @@ public:
     BOOL procAtnActorWait();
     BOOL procAtnActorMove_init();
     BOOL procAtnActorMove();
-    BOOL procSideStep_init(int);
+    BOOL procSideStep_init(int i_direction);
     BOOL procSideStep();
     BOOL procSideStepLand_init();
     BOOL procSideStepLand();
@@ -1412,18 +1412,18 @@ public:
     BOOL procLadderMove();
     f32 getHangMoveAnmSpeed();
     int getHangDirectionFromAngle();
-    BOOL changeHangMoveProc(int);
-    int changeHangEndProc(int);
+    BOOL changeHangMoveProc(int i_direction);
+    BOOL changeHangEndProc(BOOL i_canLetGo);
     void setHangShapeOffset();
     BOOL procHangStart_init();
     BOOL procHangStart();
     BOOL procHangFallStart_init(cM3dGPla*);
     BOOL procHangFallStart();
-    BOOL procHangUp_init(int);
+    BOOL procHangUp_init(int i_direction);
     BOOL procHangUp();
     BOOL procHangWait_init();
     BOOL procHangWait();
-    BOOL procHangMove_init(int);
+    BOOL procHangMove_init(int i_direction);
     BOOL procHangMove();
     BOOL procHangClimb_init(f32);
     BOOL procHangClimb();
@@ -1446,7 +1446,7 @@ public:
     BOOL procClimbMoveSide_init(int);
     BOOL procClimbMoveSide();
     void setBlendWHideMoveAnime(f32);
-    cM3dGPla* getWHideModePolygon(cXyz*, cXyz*, cXyz*, int);
+    cM3dGPla* getWHideModePolygon(cXyz* i_start, cXyz* i_end, cXyz*, int i_direction);
     void getWHideBasePos(cXyz*);
     void getWHideNextPos(cXyz*, cXyz*);
     BOOL checkWHideBackWall(cXyz*);
@@ -2253,6 +2253,7 @@ private:
         s32 mTactPlayMelodyNum;
         daPy_ANM mDamageAnm;
         int mBottleItem;
+        int mHangUpDirection;
     } mProcVar6;
     /* 0x3574 */ union {
         s32 m3574;

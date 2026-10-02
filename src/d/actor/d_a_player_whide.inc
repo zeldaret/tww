@@ -73,7 +73,7 @@ void daPy_lk_c::setBlendWHideMoveAnime(f32 param_0) {
 }
 
 /* 801371E0-80137608       .text getWHideModePolygon__9daPy_lk_cFP4cXyzP4cXyzP4cXyzi */
-cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* i_start, cXyz* i_end, cXyz* param_2, int direction) {
+cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* i_start, cXyz* i_end, cXyz* param_2, int i_direction) {
     if (i_start != NULL) {
         mLinkLinChk.Set(i_start, i_end, this);
         if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) {
@@ -102,13 +102,13 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* i_start, cXyz* i_end, cXyz* param
         return NULL;
     }
 
-    if (direction == DIR_NONE) {
+    if (i_direction == DIR_NONE) {
         f31 = 49.9f;
     } else {
         f31 = 99.8f;
     }
     cXyz local_48;
-    if (direction != DIR_RIGHT) {
+    if (i_direction != DIR_RIGHT) {
         local_3c.set(
             param_2->x + (f31 * triPla->GetNP()->z) + (triPla->GetNP()->x * 1.25f),
             param_2->y,
@@ -126,7 +126,7 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* i_start, cXyz* i_end, cXyz* param
         }
     }
 
-    if (direction != DIR_LEFT) {
+    if (i_direction != DIR_LEFT) {
         local_3c.set(
             param_2->x - (f31 * triPla->GetNP()->z) + (triPla->GetNP()->x * 1.25f),
             param_2->y,
@@ -145,8 +145,8 @@ cM3dGPla* daPy_lk_c::getWHideModePolygon(cXyz* i_start, cXyz* i_end, cXyz* param
         }
     }
 
-    if (direction != DIR_NONE) {
-        if (direction == DIR_LEFT) {
+    if (i_direction != DIR_NONE) {
+        if (i_direction == DIR_LEFT) {
             sVar7 = sVar7 - shape_angle.y;
             param_2->x += m_HIO->mWall.m.field_0x54 * triPla->GetNP()->z;
             param_2->z -= m_HIO->mWall.m.field_0x54 * triPla->GetNP()->x;
