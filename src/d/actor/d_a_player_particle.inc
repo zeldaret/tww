@@ -1071,7 +1071,7 @@ void daPy_lk_c::setFootEffect() {
 /* 8012C128-8012C1A8       .text resetFootEffect__9daPy_lk_cFv */
 void daPy_lk_c::resetFootEffect() {
     daPy_footEffect_c* pFootEffect = mFootEffect;
-    for (int idx = 0; idx < (s32)ARRAY_SIZE(mFootEffect); idx++, pFootEffect++) {
+    for (int idx = 0; idx < ARRAY_SSIZE(mFootEffect); idx++, pFootEffect++) {
         pFootEffect->getSmokeCallBack()->remove();
         pFootEffect->getOtherCallBack()->remove();
         pFootEffect->setID(-1);
@@ -1190,7 +1190,7 @@ void daPy_lk_c::setDamageFlameEmitter() {
 
         const u16* jointNoP = flame_joint;
         daPy_dmEcallBack_c* dmECB = mDmEcallBack;
-        for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++, jointNoP++, dmECB++) {
+        for (int i = 0; i < ARRAY_SSIZE(mDmEcallBack); i++, jointNoP++, dmECB++) {
             cXyz jointPos;
             mDoMtx_multVecZero(mpCLModel->getAnmMtx(*jointNoP), &jointPos);
             dmECB->makeEmitter(dPa_name::ID_AK_JN_BODYABLAZE00, mpCLModel->getAnmMtx(*jointNoP), &jointPos, NULL);
@@ -1254,7 +1254,7 @@ void daPy_lk_c::endFlameDamageEmitter() {
     if (!daPy_dmEcallBack_c::checkFlame()) return;
 
     if (current.pos.y < mWaterY - 10.0f) {
-        for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++) {
+        for (int i = 0; i < ARRAY_SSIZE(mDmEcallBack); i++) {
             cXyz pos;
             mDoMtx_multVecZero(mDmEcallBack[i].getMtx(), &pos);
             pos.y = mWaterY;

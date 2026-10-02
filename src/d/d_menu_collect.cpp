@@ -664,8 +664,8 @@ void dMenu_Collect_c::cursorAnime() {
 }
 
 /* 8019D540-8019D5A8       .text stickDirection__15dMenu_Collect_cFUc */
-int dMenu_Collect_c::stickDirection(unsigned char param_1) {
-    int ret = 0xFF;
+u8 dMenu_Collect_c::stickDirection(u8 param_1) {
+    u8 ret = 0xFF;
     switch (param_1) {
     case 5:
         return 0;
@@ -690,12 +690,6 @@ int dMenu_Collect_c::stickDirection(unsigned char param_1) {
 
 /* 8019D5A8-8019E570       .text cursorMainMove__15dMenu_Collect_cFv */
 u8 dMenu_Collect_c::cursorMainMove() {
-    int direction;
-    bool found;
-    u8 old_item;
-    f32 trans;
-    u8 tact_no[6];
-
     static const u8 item[][8] = {
         {0x0E, 0x0F, 0x06, 0x06, 0x06, 0x01, 0xFF, 0xFF},
         {0xFF, 0x00, 0x06, 0x06, 0x06, 0x02, 0xFF, 0xFF},
@@ -720,13 +714,18 @@ u8 dMenu_Collect_c::cursorMainMove() {
         {0x05, 0x09, 0x09, 0xFF, 0x11, 0x10, 0x0F, 0x0A},
     };
 
-    direction = 0xFF;
+    u8 direction = 0xFF;
 
     u8 trigger = stick->checkTrigger();
     u8 previous_item = mNowItem;
 
     u8 moved;
     u8 next_item;
+
+    bool found;
+    u8 old_item;
+    f32 trans;
+    u8 tact_no[6];
 
     next_item = 0xFF;
     moved = false;
@@ -747,21 +746,21 @@ u8 dMenu_Collect_c::cursorMainMove() {
         direction = stickDirection(trigger);
     }
 
-    if ((u8)direction != 0xFF) {
+    if (direction != 0xFF) {
         found = false;
         old_item = mNowItem;
 
-        next_item = item[mNowItem][(u8)direction];
+        next_item = item[mNowItem][direction];
 
         switch (next_item) {
         case 0:
             if (old_item > 5) {
-                tact_no[0] = 0;
-                tact_no[1] = 1;
-                tact_no[2] = 2;
-                tact_no[3] = 3;
-                tact_no[4] = 4;
-                tact_no[5] = 5;
+                tact_no[0] = mDoAud_MELODY_WINDS_REQUIEM_e;
+                tact_no[1] = mDoAud_MELODY_BALLAD_OF_GALES_e;
+                tact_no[2] = mDoAud_MELODY_COMMAND_MELODY_e;
+                tact_no[3] = mDoAud_MELODY_EARTH_GODS_LYRIC_e;
+                tact_no[4] = mDoAud_MELODY_WIND_GODS_ARIA_e;
+                tact_no[5] = mDoAud_MELODY_SONG_OF_PASSING_e;
 
                 for (int i = 0; i < 6; i++) {
                     if (dComIfGs_isTact(tact_no[i])) {
@@ -775,9 +774,9 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     next_item = 0x13;
                 }
             } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
-                if ((u8)direction == 0 || (u8)direction == 1) {
+                if (direction == 0 || direction == 1) {
                     next_item = 0x0E;
-                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                } else if (direction == 5 || direction == 6) {
                     tact_no[0] = 1;
                     tact_no[1] = 2;
                     tact_no[2] = 3;
@@ -820,15 +819,15 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     next_item = 0x13;
                 }
             } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
-                if ((u8)direction == 0 || (u8)direction == 1) {
+                if (direction == 0 || direction == 1) {
                     tact_no[0] = 0;
 
-                    if (dComIfGs_isTact(0)) {
+                    if (dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e)) {
                         next_item = tact_no[0];
                     } else {
                         next_item = 0x0E;
                     }
-                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                } else if (direction == 5 || direction == 6) {
                     tact_no[0] = 2;
                     tact_no[1] = 3;
                     tact_no[2] = 4;
@@ -870,7 +869,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     next_item = 0x13;
                 }
             } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
-                if ((u8)direction == 0 || (u8)direction == 1) {
+                if (direction == 0 || direction == 1) {
                     tact_no[0] = 1;
                     tact_no[1] = 0;
 
@@ -885,7 +884,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     if (!found) {
                         next_item = 0x0E;
                     }
-                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                } else if (direction == 5 || direction == 6) {
                     tact_no[0] = 3;
                     tact_no[1] = 4;
                     tact_no[2] = 5;
@@ -926,7 +925,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     next_item = 0x13;
                 }
             } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
-                if ((u8)direction == 0 || (u8)direction == 1) {
+                if (direction == 0 || direction == 1) {
                     tact_no[0] = 2;
                     tact_no[1] = 1;
                     tact_no[2] = 0;
@@ -942,7 +941,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     if (!found) {
                         next_item = 0x0E;
                     }
-                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                } else if (direction == 5 || direction == 6) {
                     tact_no[0] = 4;
                     tact_no[1] = 5;
 
@@ -982,7 +981,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     next_item = 0x13;
                 }
             } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
-                if ((u8)direction == 0 || (u8)direction == 1) {
+                if (direction == 0 || direction == 1) {
                     tact_no[0] = 3;
                     tact_no[1] = 2;
                     tact_no[2] = 1;
@@ -999,10 +998,10 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     if (!found) {
                         next_item = 0x0E;
                     }
-                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                } else if (direction == 5 || direction == 6) {
                     tact_no[0] = 5;
 
-                    if (dComIfGs_isTact(5)) {
+                    if (dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e)) {
                         next_item = tact_no[0];
                         found = true;
                     }
@@ -1035,7 +1034,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     next_item = 0x13;
                 }
             } else if (old_item == next_item || !dComIfGs_isTact(next_item)) {
-                if ((u8)direction == 0 || (u8)direction == 1) {
+                if (direction == 0 || direction == 1) {
                     tact_no[0] = 4;
                     tact_no[1] = 3;
                     tact_no[2] = 2;
@@ -1053,7 +1052,7 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     if (!found) {
                         next_item = 0x0E;
                     }
-                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                } else if (direction == 5 || direction == 6) {
                     next_item = 10;
                 }
             }
@@ -1077,11 +1076,11 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     next_item = 0x14;
                 }
             } else if (old_item == next_item || !dComIfGs_isSymbol(next_item - 0x0B)) {
-                if ((u8)direction == 1) {
+                if (direction == 1) {
                     next_item = 9;
-                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                } else if (direction == 5 || direction == 6) {
                     next_item = 0x11;
-                } else if ((u8)direction == 0 || (u8)direction == 7) {
+                } else if (direction == 0 || direction == 7) {
                     next_item = 10;
                 }
             }
@@ -1105,15 +1104,15 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     next_item = 0x14;
                 }
             } else if (old_item == next_item || !dComIfGs_isSymbol(next_item - 0x0B)) {
-                if ((u8)direction == 1) {
+                if (direction == 1) {
                     next_item = 9;
-                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                } else if (direction == 5 || direction == 6) {
                     next_item = 0x0B;
 
                     if (!dComIfGs_isSymbol(0)) {
                         next_item = 0x11;
                     }
-                } else if ((u8)direction == 0 || (u8)direction == 7) {
+                } else if (direction == 0 || direction == 7) {
                     next_item = 0x0B;
 
                     if (!dComIfGs_isSymbol(0)) {
@@ -1141,15 +1140,15 @@ u8 dMenu_Collect_c::cursorMainMove() {
                     next_item = 0x14;
                 }
             } else if (old_item == next_item || !dComIfGs_isSymbol(next_item - 0x0B)) {
-                if ((u8)direction == 1) {
+                if (direction == 1) {
                     next_item = 0x0C;
 
                     if (!dComIfGs_isSymbol(1)) {
                         next_item = 9;
                     }
-                } else if ((u8)direction == 5 || (u8)direction == 6) {
+                } else if (direction == 5 || direction == 6) {
                     next_item = 0x11;
-                } else if ((u8)direction == 0 || (u8)direction == 7) {
+                } else if (direction == 0 || direction == 7) {
                     next_item = 0x0B;
 
                     if (!dComIfGs_isSymbol(0)) {
@@ -2719,7 +2718,7 @@ void dMenu_Collect_c::itemnameSet() {
     if (mCollectMode != 5) {
         switch (mNowItem) {
         case 0:
-            if (dComIfGs_isTact(0)) {
+            if (dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e)) {
                 msgNo = dItem_data::getItemMesgNum(109);
 
                 outFont->messageSet(0x1FA);
@@ -2731,7 +2730,7 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 1:
-            if (dComIfGs_isTact(1)) {
+            if (dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e)) {
                 msgNo = dItem_data::getItemMesgNum(110);
 
                 outFont->messageSet(0x1FA);
@@ -2743,7 +2742,7 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 2:
-            if (dComIfGs_isTact(2)) {
+            if (dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e)) {
                 msgNo = dItem_data::getItemMesgNum(112);
 
                 outFont->messageSet(0x1FA);
@@ -2755,7 +2754,7 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 3:
-            if (dComIfGs_isTact(3)) {
+            if (dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e)) {
                 msgNo = dItem_data::getItemMesgNum(113);
 
                 outFont->messageSet(0x1FA);
@@ -2767,7 +2766,7 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 4:
-            if (dComIfGs_isTact(4)) {
+            if (dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e)) {
                 msgNo = dItem_data::getItemMesgNum(114);
 
                 outFont->messageSet(0x1FA);
@@ -2779,7 +2778,7 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 5:
-            if (dComIfGs_isTact(5)) {
+            if (dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e)) {
                 msgNo = dItem_data::getItemMesgNum(111);
 
                 outFont->messageSet(0x1FA);
@@ -2903,12 +2902,12 @@ void dMenu_Collect_c::itemnameSet() {
             break;
 
         case 0x13:
-            if (!dComIfGs_isTact(0) &&
-                !dComIfGs_isTact(1) &&
-                !dComIfGs_isTact(2) &&
-                !dComIfGs_isTact(3) &&
-                !dComIfGs_isTact(4) &&
-                !dComIfGs_isTact(5)) {
+            if (!dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e) &&
+                !dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e) &&
+                !dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e) &&
+                !dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e) &&
+                !dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e) &&
+                !dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e)) {
                 msgNo = 0;
             } else {
                 msgNo = 0;
@@ -3058,37 +3057,37 @@ void dMenu_Collect_c::itemnoteSet() {
 
     switch (mNowItem) {
     case 0:
-        if (dComIfGs_isTact(0)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e)) {
             msgNo = dItem_data::getItemMesgNum(109) + 200;
         }
         break;
 
     case 1:
-        if (dComIfGs_isTact(1)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e)) {
             msgNo = dItem_data::getItemMesgNum(110) + 200;
         }
         break;
 
     case 2:
-        if (dComIfGs_isTact(2)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e)) {
             msgNo = dItem_data::getItemMesgNum(111) + 200;
         }
         break;
 
     case 3:
-        if (dComIfGs_isTact(3)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e)) {
             msgNo = dItem_data::getItemMesgNum(112) + 200;
         }
         break;
 
     case 4:
-        if (dComIfGs_isTact(4)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e)) {
             msgNo = dItem_data::getItemMesgNum(113) + 200;
         }
         break;
 
     case 5:
-        if (dComIfGs_isTact(5)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e)) {
             msgNo = dItem_data::getItemMesgNum(114) + 200;
         }
         break;
@@ -3197,12 +3196,12 @@ void dMenu_Collect_c::itemnoteSet() {
         break;
 
     case 0x13:
-        if (!dComIfGs_isTact(0) &&
-            !dComIfGs_isTact(1) &&
-            !dComIfGs_isTact(2) &&
-            !dComIfGs_isTact(3) &&
-            !dComIfGs_isTact(4) &&
-            !dComIfGs_isTact(5)) {
+        if (!dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e) &&
+            !dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e) &&
+            !dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e) &&
+            !dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e) &&
+            !dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e) &&
+            !dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e)) {
             msgNo = 0;
         } else {
             msgNo = 0x25C;
@@ -3506,7 +3505,7 @@ void dMenu_Collect_c::outFontDraw() {
 }
 
 /* 801A48AC-801A4A28       .text collectItemGetCheck__15dMenu_Collect_cFUc */
-bool dMenu_Collect_c::collectItemGetCheck(unsigned char param_1) {    
+bool dMenu_Collect_c::collectItemGetCheck(u8 param_1) {    
     switch(param_1) {
         case 0:
         case 1:

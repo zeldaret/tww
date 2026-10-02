@@ -16,58 +16,57 @@
 
 /* 8013707C-801371E0       .text setBlendWHideMoveAnime__9daPy_lk_cFf */
 void daPy_lk_c::setBlendWHideMoveAnime(f32 param_0) {
-    f32 fVar1;
-    f32 fVar5;
-    daPy_ANM dVar6;
-    s16 sVar1;
+    f32 anm_speed_0;
+    f32 morf;
+    daPy_ANM anm1;
+    s16 end;
     f32 fVar6;
     f32 fVar3;
-    daPy_ANM dVar5;
-
+    daPy_ANM anm0;
     if (!checkNoResetFlg0(daPyFlg0_UNK10000)) {
-        fVar1 = m_HIO->mWall.m.field_0x14;
-        fVar5 = m_HIO->mWall.m.field_0x40;
-        dVar6 = ANM_WALL;
-        sVar1 = m_HIO->mWall.m.field_0x8;
+        anm_speed_0 = m_HIO->mWall.m.field_0x14;
+        morf = m_HIO->mWall.m.field_0x40;
+        anm1 = ANM_WALL;
+        end = m_HIO->mWall.m.field_0x8;
         fVar6 = m_HIO->mWall.m.field_0x60;
         fVar3 = m_HIO->mWall.m.field_0x58;
         if (mDirection == DIR_LEFT) {
-            dVar5 = ANM_WALLWR;
+            anm0 = ANM_WALLWR;
         } else {
-            dVar5 = ANM_WALLWL;
+            anm0 = ANM_WALLWL;
         }
     } else {
-        fVar1 = m_HIO->mWall.m.field_0x18;
-        fVar5 = m_HIO->mWall.m.field_0x44;
-        dVar6 = ANM_WALLDW;
-        sVar1 = m_HIO->mWall.m.field_0xA;
+        anm_speed_0 = m_HIO->mWall.m.field_0x18;
+        morf = m_HIO->mWall.m.field_0x44;
+        anm1 = ANM_WALLDW;
+        end = m_HIO->mWall.m.field_0xA;
         fVar6 = m_HIO->mWall.m.field_0x64;
         fVar3 = m_HIO->mWall.m.field_0x5C;
         if (mDirection == DIR_LEFT) {
-            dVar5 = ANM_WALLWRDW;
+            anm0 = ANM_WALLWRDW;
         } else {
-            dVar5 = ANM_WALLWLDW;
+            anm0 = ANM_WALLWLDW;
         }
     }
-    fVar5 *= param_0;
+    morf *= param_0;
     
     f32 fVar7;
     fVar7 = mNormalSpeed / mMaxNormalSpeed;
     if (fVar7 < 0.0f) {
         fVar7 = 0.0f;
     }
-    f32 fVar4;
+    f32 ratio;
     if (fVar7 < fVar3) {
-        fVar4 = 1.0f - fVar7 / fVar3;
+        ratio = 1.0f - fVar7 / fVar3;
         m3598 = 1.0f;
     } else {
-        fVar4 = 0.0f;
+        ratio = 0.0f;
         m3598 = (1.0f - ((1.0f - fVar6) * (fVar7 - fVar3)) / (1.0f - fVar3));
     }
     
-    setMoveAnime(fVar4, fVar1, 0.0f, dVar5, dVar6, 5, fVar5);
+    setMoveAnime(ratio, anm_speed_0, 0.0f, anm0, anm1, 5, morf);
     
-    mFrameCtrlUnder[UNDER_MOVE0_e].setEnd(sVar1);
+    mFrameCtrlUnder[UNDER_MOVE0_e].setEnd(end);
     mFrameCtrlUnder[UNDER_MOVE1_e].setFrame(mFrameCtrlUnder[UNDER_MOVE1_e].getEnd() - 0.001f);
     mFrameCtrlUnder[UNDER_MOVE1_e].setRate(0.0f);
     mAnmRatioUnder[UNDER_MOVE1_e].getAnmTransform()->setFrame(mFrameCtrlUnder[UNDER_MOVE1_e].getFrame());
@@ -273,11 +272,11 @@ BOOL daPy_lk_c::procWHideReady_init(cM3dGPla* param_0, cXyz* param_1) {
     m370C.y = param_1->y;
     m370C.z = param_1->z;
     if (param_0 != NULL) {
-        mProcVar2.m34D4 = cM_atan2s(param_0->mNormal.x, param_0->mNormal.z);
+        mProcVar2.mTargetAngle = cM_atan2s(param_0->mNormal.x, param_0->mNormal.z);
         m370C.x += param_0->mNormal.x * m_HIO->mWall.m.field_0x50;
         m370C.z += param_0->mNormal.z * m_HIO->mWall.m.field_0x50;
     } else {
-        mProcVar2.m34D4 = m352C;
+        mProcVar2.mTargetAngle = m352C;
         m370C.x += cM_ssin(m352C) * m_HIO->mWall.m.field_0x50;
         m370C.z += cM_scos(m352C) * m_HIO->mWall.m.field_0x50;
     }
@@ -312,7 +311,7 @@ BOOL daPy_lk_c::procWHideReady() {
     }
     cLib_addCalc(&current.pos.x, m370C.x, 0.25f, 10.0f, 4.0f);
     cLib_addCalc(&current.pos.z, m370C.z, 0.25f, 10.0f, 4.0f);
-    if (!cLib_addCalcAngleS(&shape_angle.y, mProcVar2.m34D4, 2, 0x2000, 0x800)) {
+    if (!cLib_addCalcAngleS(&shape_angle.y, mProcVar2.mTargetAngle, 2, 0x2000, 0x800)) {
         daPy_matAnm_c::offMabaFlg();
         procWHideWait_init();
     }
@@ -321,30 +320,27 @@ BOOL daPy_lk_c::procWHideReady() {
 
 /* 80137CD0-80137DF0       .text procWHideWait_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::procWHideWait_init() {
-    f32 fVar1;
-    daPy_ANM dVar3;
-    f32 dVar4;
-    f32 dVar5;
-    s16 sVar2;
-
+    daPy_ANM anm;
+    f32 start;
+    s16 end;
+    f32 morf;
     if (!checkNoResetFlg0(daPyFlg0_UNK10000)) {
-        dVar3 = ANM_WALL;
-        sVar2 = m_HIO->mWall.m.field_0x0;
-        dVar4 = m_HIO->mWall.m.field_0x38;
+        anm = ANM_WALL;
+        end = m_HIO->mWall.m.field_0x0;
+        morf = m_HIO->mWall.m.field_0x38;
     } else {
-        dVar3 = ANM_WALLDW;
-        sVar2 = m_HIO->mWall.m.field_0x2;
-        dVar4 = m_HIO->mWall.m.field_0x3C;
+        anm = ANM_WALLDW;
+        end = m_HIO->mWall.m.field_0x2;
+        morf = m_HIO->mWall.m.field_0x3C;
     }
     if (mCurProc == daPyProc_WHIDE_READY_e) {
-        fVar1 = m_HIO->mWall.m.field_0x24;
+        start = m_HIO->mWall.m.field_0x24;
     } else {
-        fVar1 = sVar2 - 0.001f;
+        start = end - 0.001f;
     }
-    dVar5 = fVar1;
     commonProcInit(daPyProc_WHIDE_WAIT_e);
     mNormalSpeed = 0.0f;
-    setSingleMoveAnime(dVar3, m_HIO->mWall.m.field_0xC, dVar5, sVar2, dVar4);
+    setSingleMoveAnime(anm, m_HIO->mWall.m.field_0xC, start, end, morf);
     current.angle.y = shape_angle.y;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK1_e);
     return true;
@@ -521,33 +517,33 @@ BOOL daPy_lk_c::procWHideMove() {
 BOOL daPy_lk_c::procWHidePeep_init() {
     commonProcInit(daPyProc_WHIDE_PEEP_e);
     
-    f32 fVar1;
-    f32 fVar3;
-    f32 fVar2;
-    s16 sVar4;
     daPy_ANM anm;
+    f32 anm_speed;
+    f32 start;
+    f32 end;
+    s16 morf;
     if (!checkNoResetFlg0(daPyFlg0_UNK10000)) {
-        fVar1 = m_HIO->mWall.m.field_0x1C;
-        fVar3 = m_HIO->mWall.m.field_0x48;
-        fVar2 = m_HIO->mWall.m.field_0x2C;
-        sVar4 = m_HIO->mWall.m.field_0x4;
+        anm_speed = m_HIO->mWall.m.field_0x1C;
+        start = m_HIO->mWall.m.field_0x48;
+        end = m_HIO->mWall.m.field_0x2C;
+        morf = m_HIO->mWall.m.field_0x4;
         if (mDirection == DIR_LEFT) {
             anm = ANM_WALLPR;
         } else {
             anm = ANM_WALLPL;
         }
     } else {
-        fVar1 = m_HIO->mWall.m.field_0x20;
-        fVar3 = m_HIO->mWall.m.field_0x4C;
-        fVar2 = m_HIO->mWall.m.field_0x30;
-        sVar4 = m_HIO->mWall.m.field_0x6;
+        anm_speed = m_HIO->mWall.m.field_0x20;
+        start = m_HIO->mWall.m.field_0x4C;
+        end = m_HIO->mWall.m.field_0x30;
+        morf = m_HIO->mWall.m.field_0x6;
         if (mDirection == DIR_LEFT) {
             anm = ANM_WALLPRDW;
         } else {
             anm = ANM_WALLPLDW;
         }
     }
-    setSingleMoveAnime(anm, fVar1, fVar2, sVar4, fVar3);
+    setSingleMoveAnime(anm, anm_speed, end, morf, start);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK1_e);
     return true;
 }

@@ -31,12 +31,12 @@ BOOL daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel pp_label) {
     }
 
     if (pp_label != dBgW::PPLABEL_NONE) {
-        if (pp_actor->shape_angle.y != mProcVar2.m34D4) {
+        if (pp_actor->shape_angle.y != mProcVar2.mPushPullPrevAngleY) {
             cXyz local_28 = current.pos - m370C;
             mDoMtx_stack_c::transS(m370C);
-            mDoMtx_stack_c::YrotM(pp_actor->shape_angle.y - mProcVar2.m34D4);
+            mDoMtx_stack_c::YrotM(pp_actor->shape_angle.y - mProcVar2.mPushPullPrevAngleY);
             mDoMtx_stack_c::multVec(&local_28, &current.pos);
-            s16 var_r28 = pp_actor->shape_angle.y - mProcVar2.m34D4;
+            s16 var_r28 = pp_actor->shape_angle.y - mProcVar2.mPushPullPrevAngleY;
             shape_angle.y += var_r28;
             current.angle.y += var_r28;
         }
@@ -44,7 +44,7 @@ BOOL daPy_lk_c::setPushPullKeepData(dBgW::PushPullLabel pp_label) {
         current.pos.z += pp_actor->current.pos.z - m370C.z;
     }
     m370C = pp_actor->current.pos;
-    mProcVar2.m34D4 = pp_actor->shape_angle.y;
+    mProcVar2.mPushPullPrevAngleY = pp_actor->shape_angle.y;
     return TRUE;
 }
 
@@ -69,7 +69,7 @@ BOOL daPy_lk_c::procPushPullWait_init(int param_0) {
         mProcVar3.m34D6 = 1;
     }
     if (param_0 != 0) {
-        mProcVar2.m34D4 = m352C + 0x8000;
+        mProcVar2.mTargetAngle = m352C + 0x8000;
         m370C.x = m3724.x + 40.0f * cM_ssin(m352C);
         m370C.y = current.pos.y;
         m370C.z = m3724.z + 40.0f * cM_scos(m352C);
@@ -91,7 +91,7 @@ BOOL daPy_lk_c::procPushPullWait() {
         }
     } else if (spActionButton() && checkResetFlg0(daPyRFlg0_UNK8)) {
         if (mProcVar6.m3570 != 0) {
-            s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, mProcVar2.m34D4, 3, 0x800, 0x100);
+            s16 sVar1 = cLib_addCalcAngleS(&shape_angle.y, mProcVar2.mTargetAngle, 3, 0x800, 0x100);
             current.angle.y = shape_angle.y;
             f32 dVar2 = cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 10.0f, 1.0f);
             dVar2 += cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 10.0f, 1.0f);

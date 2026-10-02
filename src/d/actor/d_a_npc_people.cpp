@@ -4433,7 +4433,7 @@ static s16 daNpcPeople_XyEventCB(void* i_this, int i_itemBtn) {
 }
 
 /* 00000E4C-00000E6C       .text daNpcPeople_photoCB__FPvi */
-s16 daNpcPeople_photoCB(void* i_this, int param_1) {
+static s16 daNpcPeople_photoCB(void* i_this, int param_1) {
     return static_cast<daNpcPeople_c*>(i_this)->photoCB(param_1);
 }
 

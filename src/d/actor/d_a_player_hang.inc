@@ -119,7 +119,7 @@ int daPy_lk_c::changeHangEndProc(int param_0) {
         m3588 = dBgS_Attr_UNK1B_e;
     }
     if (mHangGroundH > mFootData[1].field_0x018.y + current.pos.y) {
-        return procLand_init(m_HIO->mAutoJump.m.field_0x24, 0);
+        return procLand_init(m_HIO->mAutoJump.m.field_0x24, FALSE);
     }
     if (param_0 != 0) {
         dComIfGp_setDoStatus(dActStts_LET_GO_e);

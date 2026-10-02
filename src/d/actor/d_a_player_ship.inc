@@ -338,66 +338,66 @@ BOOL daPy_lk_c::changeShipEndProc() {
                 dComIfGp_setDoStatus(dActStts_PUT_AWAY_e);
             }
         }
-        if (checkSetItemTrigger(dItemNo_SAIL_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_SAIL_e, TRUE)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipSteer_init();
         }
-        if (checkSetItemTrigger(dItemNo_BOMB_BAG_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_BOMB_BAG_e, TRUE)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipCannon_init();
         }
-        if (checkSetItemTrigger(dItemNo_GRAPPLING_HOOK_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_GRAPPLING_HOOK_e, TRUE)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipCrane_init();
         }
-        if (checkSetItemTrigger(dItemNo_TELESCOPE_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_TELESCOPE_e, TRUE)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipScope_init(1);
         }
-        if (checkSetItemTrigger(daPyItem_PHOTOBOX_e, 1)) {
+        if (checkSetItemTrigger(daPyItem_PHOTOBOX_e, TRUE)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipScope_init(0);
         }
-        if (checkSetItemTrigger(daPyItem_BOW_e, 1)) {
+        if (checkSetItemTrigger(daPyItem_BOW_e, TRUE)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipBow_init();
         }
-        if (checkSetItemTrigger(dItemNo_BOOMERANG_e, 1) && mActorKeepThrow.getActor() == NULL) {
+        if (checkSetItemTrigger(dItemNo_BOOMERANG_e, TRUE) && mActorKeepThrow.getActor() == NULL) {
             return procShipBoomerang_init();
         }
-        if (checkSetItemTrigger(dItemNo_HOOKSHOT_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_HOOKSHOT_e, TRUE)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procShipHookshot_init();
         }
-        if (checkSetItemTrigger(dItemNo_WIND_WAKER_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_WIND_WAKER_e, TRUE)) {
             daBoomerang_c* boomerang = (daBoomerang_c*)mActorKeepThrow.getActor();
             if (boomerang != NULL) {
                 boomerang->onCancelFlg();
             }
             return procTactWait_init(-1);
         }
-        if (checkSetItemTrigger(dItemNo_TINGLE_TUNER_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_TINGLE_TUNER_e, TRUE)) {
             fopAcM_orderTalkEvent(this, (fopAc_ac_c*)dComIfGp_getAgb());
 #if VERSION > VERSION_DEMO
             if (checkShipNotNormalMode()) {
@@ -408,7 +408,7 @@ BOOL daPy_lk_c::changeShipEndProc() {
 #endif
             return true;
         }
-        if (checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, TRUE)) {
 #if VERSION > VERSION_DEMO
             if (checkShipNotNormalMode()) {
                 setShipRidePos(0);
@@ -418,22 +418,22 @@ BOOL daPy_lk_c::changeShipEndProc() {
 #endif
             return changeDragonShield(1);
         }
-        if (checkSetItemTrigger(daPyItem_DRINK_BOTTLE_e, 0)) {
+        if (checkSetItemTrigger(daPyItem_DRINK_BOTTLE_e, FALSE)) {
             return procBottleDrink_init(dComIfGp_getSelectItem(mReadyItemBtn));
         }
-        if (checkSetItemTrigger(dItemNo_FAIRY_BOTTLE_e, 0)) {
+        if (checkSetItemTrigger(dItemNo_FAIRY_BOTTLE_e, FALSE)) {
             return procBottleOpen_init(0x57);
         }
-        if (checkSetItemTrigger(daPyItem_OPEN_BOTTLE_e, 1)) {
+        if (checkSetItemTrigger(daPyItem_OPEN_BOTTLE_e, TRUE)) {
             return procBottleOpen_init(dComIfGp_getSelectItem(mReadyItemBtn));
         }
-        if (checkSetItemTrigger(dItemNo_EMPTY_BOTTLE_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_EMPTY_BOTTLE_e, TRUE)) {
             return procBottleSwing_init(1);
         }
-        if (checkSetItemTrigger(dItemNo_HYOI_PEAR_e, 1)) {
+        if (checkSetItemTrigger(dItemNo_HYOI_PEAR_e, TRUE)) {
             return procFoodSet_init();
         }
-        if (checkSetItemTrigger(daPyItem_ESA_e, 1)) {
+        if (checkSetItemTrigger(daPyItem_ESA_e, TRUE)) {
             return procFoodThrow_init();
         }
         if (doTrigger() && dComIfGp_getDoStatus() == dActStts_PUT_AWAY_e) {
@@ -454,19 +454,18 @@ void daPy_lk_c::initShipBaseAnime() {
 
 /* 80140D04-80140D80       .text initShipCraneAnime__9daPy_lk_cFv */
 void daPy_lk_c::initShipCraneAnime() {
-    daPy_ANM dVar1;
-
+    daPy_ANM anm;
     if (dComIfGp_getShipActor()->getCraneBaseAngle() > 0) {
-        dVar1 = ANM_SALVRWAIT;
+        anm = ANM_SALVRWAIT;
         mProcVar6.m3570 = 3;
         mProcVar7.m3574 = 3;
     } else {
-        dVar1 = ANM_SALVLWAIT;
+        anm = ANM_SALVLWAIT;
         mProcVar6.m3570 = 2;
         mProcVar7.m3574 = 2;
     }
     daPy_matAnm_c::offMabaFlg();
-    setSingleMoveAnime(dVar1, 1.0f, 0.0f, -1, 10.0f);
+    setSingleMoveAnime(anm, 1.0f, 0.0f, -1, 10.0f);
 }
 
 /* 80140D80-80140EF0       .text procShipReady_init__9daPy_lk_cFv */
@@ -639,9 +638,6 @@ BOOL daPy_lk_c::procShipPaddle_init() {
 
 /* 801413A4-801416BC       .text procShipPaddle__9daPy_lk_cFv */
 BOOL daPy_lk_c::procShipPaddle() {
-    daPy_ANM dVar5;
-    float dVar6;
-
     if (changeShipEndProc()) {
         return true;
     }
@@ -681,17 +677,18 @@ BOOL daPy_lk_c::procShipPaddle() {
     {
         mProcVar0.m34D0--;
         if (mProcVar0.m34D0 == 0) {
-            dVar6 = cM_rnd();
+            f32 rand = cM_rnd();
             mProcVar0.m34D0 = -1;
-            if (dVar6 < 0.3333f) {
-                dVar5 = ANM_FREEA;
-            } else if (dVar6 < 0.6666f) {
-                dVar5 = ANM_FREEB;
+            daPy_ANM anm;
+            if (rand < 0.3333f) {
+                anm = ANM_FREEA;
+            } else if (rand < 0.6666f) {
+                anm = ANM_FREEB;
                 mProcVar0.m34D0 = -2;
             } else {
-                dVar5 = ANM_FREED;
+                anm = ANM_FREED;
             }
-            setSingleMoveAnime(dVar5, 1.0f, 0.0f, -1, 5.0f);
+            setSingleMoveAnime(anm, 1.0f, 0.0f, -1, 5.0f);
         }
     } else {
         mProcVar0.m34D0 = cM_rndF(150.0f) + 300.0f;

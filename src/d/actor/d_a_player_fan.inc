@@ -107,7 +107,7 @@ int daPy_lk_c::setShapeFanLeaf() {
 
 /* 8014BE50-8014BEEC       .text checkFanGlideProc__9daPy_lk_cFi */
 BOOL daPy_lk_c::checkFanGlideProc(int param_0) {
-    if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, 1)) {
+    if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, TRUE)) {
         if (dComIfGs_getMagic() >= 1) {
             return procFanGlide_init(param_0);
         }
@@ -383,7 +383,7 @@ BOOL daPy_lk_c::procFanGlide() {
         if (mAcch.ChkGroundHit()) {
 #if VERSION == VERSION_DEMO
             if (!checkHeavyStateOn()) {
-                return procLand_init(m_HIO->mItem.mFan.m.field_0x50, 1);
+                return procLand_init(m_HIO->mItem.mFan.m.field_0x50, TRUE);
             } else {
                 return changeLandProc(m_HIO->mItem.mFan.m.field_0x50);
             }
@@ -437,7 +437,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 m35F0 = m3688.y;
                 seStartOnlyReverb(JA_SE_LK_FAN_CHUTE_CLOSE);
                 if (swordTrigger()) {
-                    setAnimeEquipSword(0);
+                    setAnimeEquipSword(FALSE);
                 }
                 return procFall_init(2, m_HIO->mWallCatch.m.field_0x54);
             }
@@ -445,7 +445,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 gravity = m_HIO->mItem.mFan.m.field_0x3C;
                 maxFallSpeed = m_HIO->mItem.mFan.m.field_0x38;
             }
-            if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, 1) && frameCtrl.getRate() < 0.01f && mProcVar6.m3570 == 0) {
+            if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, TRUE) && frameCtrl.getRate() < 0.01f && mProcVar6.m3570 == 0) {
                 // Using the Deku Leaf while gliding to create a burst of air around you.
                 setSingleMoveAnime(
                     ANM_USEFANB,
@@ -505,11 +505,11 @@ BOOL daPy_lk_c::procFanGlide() {
                     local_54 *= (50.0f / dVar13);
                 }
                 dVar13 = 20.0f;
-                f32 fVar1 = 1.0f;
+                f32 anm_speed = 1.0f;
                 local_64 = 1.0f;
                 if (mProcVar6.m3570 == 0) {
                     mProcVar6.m3570 = 1;
-                    setSingleMoveAnime(ANM_USEFANB2, fVar1, 0.0f, -1, m_HIO->mItem.mFan.m.field_0x30);
+                    setSingleMoveAnime(ANM_USEFANB2, anm_speed, 0.0f, -1, m_HIO->mItem.mFan.m.field_0x30);
                     mpParachuteFanMorf->setAnm(
                         getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANB2A_e),
                         0,

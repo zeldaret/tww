@@ -237,17 +237,17 @@ BOOL daPy_lk_c::checkNextActionGrab() {
         return true;
     }
 #if VERSION > VERSION_JPN
-    if (checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, 1) ||
-        (checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD) && checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, 0)))
+    if (checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, TRUE) ||
+        (checkNoResetFlg1(daPyFlg1_EQUIP_DRAGON_SHIELD) && checkSetItemTrigger(dItemNo_MAGIC_ARMOR_e, FALSE)))
     {
         changeDragonShield(1);
         return true;
     }
-    if (checkSetItemTrigger(dItemNo_IRON_BOOTS_e, 1) ||
-        (checkEquipHeavyBoots() && checkSetItemTrigger(dItemNo_IRON_BOOTS_e, 0)))
+    if (checkSetItemTrigger(dItemNo_IRON_BOOTS_e, TRUE) ||
+        (checkEquipHeavyBoots() && checkSetItemTrigger(dItemNo_IRON_BOOTS_e, FALSE)))
     {
         return procBootsEquip_init(dItemNo_IRON_BOOTS_e);
-    } else if (fopAcM_GetName(grab_actor) == fpcNm_BOMB_e && checkSetItemTrigger(dItemNo_BOMB_BAG_e, 0)) {
+    } else if (fopAcM_GetName(grab_actor) == fpcNm_BOMB_e && checkSetItemTrigger(dItemNo_BOMB_BAG_e, FALSE)) {
         return procGrabThrow_init(0);
     }
 #endif
@@ -256,7 +256,7 @@ BOOL daPy_lk_c::checkNextActionGrab() {
             return procGrabThrow_init(1);
         }
         freeGrabItem();
-        setAnimeEquipSword(0);
+        setAnimeEquipSword(FALSE);
         return true;
     }
     if (doTrigger() && !checkNoResetFlg0(daPy_FLG0(daPyFlg0_UNK20000000 | daPyFlg0_UNK80000000)) &&
@@ -585,13 +585,13 @@ BOOL daPy_lk_c::procGrabThrow() {
     if (frameCtrl.getRate() < 0.01f) {
         if (mProcVar6.m3570 != 0) {
             mProcVar6.m3570 = 0;
-            setAnimeEquipSword(0);
+            setAnimeEquipSword(FALSE);
         }
         checkNextMode(0);
     } else if (frameCtrl.getFrame() > m_HIO->mGrab.m.field_0x60) {
         if (mProcVar6.m3570 != 0) {
             mProcVar6.m3570 = 0;
-            setAnimeEquipSword(0);
+            setAnimeEquipSword(FALSE);
         }
         checkNextMode(1);
     }
@@ -761,13 +761,13 @@ BOOL daPy_lk_c::procGrabWait() {
             m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
         }
     } else if (shape_angle.y != m34DE && !checkAttentionLock()) {
-        float fVar2;
+        f32 morf;
         if (checkNoResetFlg1(daPyFlg1_UNK800000)) {
-            fVar2 = -1.0f;
+            morf = -1.0f;
         } else {
-            fVar2 = m_HIO->mBasic.m.field_0xC;
+            morf = m_HIO->mBasic.m.field_0xC;
         }
-        setBlendMoveAnime(fVar2);
+        setBlendMoveAnime(morf);
         m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
         m35A0 = 0.005f * (short)(shape_angle.y - m34DE);
         onNoResetFlg1(daPyFlg1_UNK800000);
@@ -815,13 +815,13 @@ BOOL daPy_lk_c::procGrabHeavyWait() {
         );
         m35A0 = (s16)(shape_angle.y - current.angle.y) / (f32)m_HIO->mGrab.m.field_0x18;
         current.angle.y = shape_angle.y;
-        f32 fVar1;
+        f32 morf;
         if (!checkNoResetFlg1(daPyFlg1_UNK800000)) {
-            fVar1 = m_HIO->mBasic.m.field_0xC;
+            morf = m_HIO->mBasic.m.field_0xC;
         } else {
-            fVar1 = -1.0f;
+            morf = -1.0f;
         }
-        setBlendMoveAnime(fVar1);
+        setBlendMoveAnime(morf);
         m_pbCalc[PART_UPPER_e]->setRatio(2, 1.0f);
         onNoResetFlg1(daPyFlg1_UNK800000);
     } else {

@@ -153,14 +153,14 @@ BOOL daPy_lk_c::procVomitWait() {
 BOOL daPy_lk_c::procVomitJump_init(int param_0) {
     commonProcInit(daPyProc_VOMIT_JUMP_e);
     m35C4 = 40.0f;
-    f32 fVar1;
+    f32 morf;
     if (param_0 == 2 || param_0 == 3) {
-        fVar1 = 3.0f;
+        morf = 3.0f;
     } else {
-        fVar1 = -1.0f;
+        morf = -1.0f;
     }
     mProcVar6.m3570 = param_0;
-    setSingleMoveAnime(ANM_VOMITJMP, 1.0f, 0.0f, -1, fVar1);
+    setSingleMoveAnime(ANM_VOMITJMP, 1.0f, 0.0f, -1, morf);
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK80000000_e);
     mStts.ClrCcMove();
     mProcVar2.m34D4 = 0;

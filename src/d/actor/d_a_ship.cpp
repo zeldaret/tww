@@ -447,7 +447,7 @@ void daShip_c::setInitMessage() {
         mNextMessageNo = 0xd6f;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3A02)) {
-        if (dComIfGs_isTact(4)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e)) {
             mNextMessageNo = 0xd6e;
         }
         else {
@@ -460,7 +460,7 @@ void daShip_c::setInitMessage() {
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1620)) {
         mNextMessageNo = 0xd6b;
     }
-    else if (dComIfGs_isTact(3) || dComIfGs_isTact(4)) {
+    else if (dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e) || dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e)) {
         mNextMessageNo = 0xd6a;
     }
     else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_3910)) {

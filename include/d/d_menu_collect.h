@@ -58,7 +58,7 @@ public:
     void screenSet();
     void initialize();
     void cursorAnime();
-    int stickDirection(unsigned char);
+    u8 stickDirection(u8);
     u8 cursorMainMove();
     u8 noteCheck();
     void noteInit();
@@ -79,13 +79,13 @@ public:
     void itemScale();
     void collectPriority();
     void weponPriority();
-    void tactGuideShow(unsigned char, bool);
-    void tactDemoMode(unsigned char);
-    void tactPlayMode(unsigned char);
-    void tactTrans(unsigned char, float, float);
+    void tactGuideShow(u8, bool);
+    void tactDemoMode(u8);
+    void tactPlayMode(u8);
+    void tactTrans(u8, float, float);
     void tactBaseShow();
     void cornerMove();
-    void triforceAnime(unsigned char);
+    void triforceAnime(u8);
     void tactGuideHide();
     void itemnameMove();
     void itemnameSet();
@@ -94,7 +94,7 @@ public:
     void outFontInit();
     void outFontMove();
     void outFontDraw();
-    bool collectItemGetCheck(unsigned char);
+    bool collectItemGetCheck(u8);
     virtual void _create();
     void _create3();
     virtual void _delete();

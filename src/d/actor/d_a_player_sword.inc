@@ -1744,19 +1744,19 @@ BOOL daPy_lk_c::procCutTurnMove() {
         f32 dVar8 = 0.0f;
         if (mStickDistance > 0.05f) {
             int direction = getDirectionFromAngle(m34E8 - m34E6);
-            daPy_ANM dVar6 = (daPy_ANM)0xffff;
+            daPy_ANM anm = (daPy_ANM)0xFFFF;
             cLib_addCalcAngleS(&current.angle.y, m34E8, 4, 12000, 0x2000);
             f32 in_f30;
             if (mDirection == DIR_FORWARD || mDirection == DIR_BACKWARD) {
                 if (direction == DIR_LEFT || direction == DIR_RIGHT) {
-                    dVar6 = ANM_CUTTURNPWLR;
+                    anm = ANM_CUTTURNPWLR;
                     in_f30 = m_HIO->mCut.mCutTurnR.m.field_0x24;
                     mNormalSpeed *= 0.5f;
                 } else if (mDirection != direction) {
                     mNormalSpeed *= 0.5f;
                 }
             } else if (direction == DIR_FORWARD || direction == DIR_BACKWARD) {
-                dVar6 = ANM_CUTTURNPWFB;
+                anm = ANM_CUTTURNPWFB;
                 in_f30 = m_HIO->mCut.mCutTurnR.m.field_0x1C;
                 mNormalSpeed *= 0.5f;
             } else if (mDirection != direction) {
@@ -1767,8 +1767,8 @@ BOOL daPy_lk_c::procCutTurnMove() {
             } else {
                 mDirection = direction;
             }
-            if (dVar6 != (daPy_ANM)0xffff) {
-                setSingleMoveAnime(dVar6, 0.0f, 0.0f, -1, in_f30);
+            if (anm != (daPy_ANM)0xFFFF) {
+                setSingleMoveAnime(anm, 0.0f, 0.0f, -1, in_f30);
             }
         }
         setNormalSpeedF(dVar8, 0.5f, 2.0f, 0.25f);
@@ -2032,22 +2032,22 @@ BOOL daPy_lk_c::procJumpCutLand() {
 
 /* 80159998-80159B80       .text procCutExMJ_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procCutExMJ_init(int param_0) {
-    daPy_ANM dVar3;
-
     commonProcInit(daPyProc_CUT_EX_MJ_e);
+    
+    daPy_ANM anm;
     if (param_0 != 0) {
-        dVar3 = ANM_MROLLRC;
+        anm = ANM_MROLLRC;
         mProcVar3.m34D6 = 0x71;
         setBlurPosResource(dRes_INDEX_LKANM__BTROTATECUTR_POS_e);
         m35A0 = m_HIO->mCut.mCutExMJ.m.field_0x20;
     } else {
-        dVar3 = ANM_MROLLLC;
+        anm = ANM_MROLLLC;
         mProcVar3.m34D6 = 0x70;
         setBlurPosResource(dRes_INDEX_LKANM__BTROTATECUTL_POS_e);
         m35A0 = m_HIO->mCut.mCutExMJ.m.field_0x24;
     }
     setSingleMoveAnime(
-        dVar3,
+        anm,
         m_HIO->mCut.mCutExMJ.m.field_0x4,
         m_HIO->mCut.mCutExMJ.m.field_0x8,
         m_HIO->mCut.mCutExMJ.m.field_0x0,

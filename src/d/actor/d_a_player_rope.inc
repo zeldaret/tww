@@ -75,7 +75,7 @@ int daPy_lk_c::changeRopeEndProc(int param_0) {
         freeRopeItem();
         voiceStart(6);
         if (cancelTrigger() && !checkBossGomaStage()) {
-            setAnimeEquipSword(0);
+            setAnimeEquipSword(FALSE);
         }
         if (param_0 != 0) {
             procFall_init(1, m_HIO->mWallCatch.m.field_0x54);

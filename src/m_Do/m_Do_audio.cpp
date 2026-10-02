@@ -201,11 +201,11 @@ void mDoAud_Execute() {
 }
 
 /* 80007268-800073D8       .text mDoAud_getTactDirection__Fii */
-int mDoAud_getTactDirection(int stick, int ret) {
+int mDoAud_getTactDirection(int stick, int oldDir) {
     f32 val;
     s16 ang;
 
-    if (stick != 0) {
+    if (stick != mDoAud_C_STICK_e) {
         val = CPad_GET_STICK_VALUE(0);
         ang = CPad_GET_STICK_ANGLE(0);
     } else {
@@ -214,41 +214,42 @@ int mDoAud_getTactDirection(int stick, int ret) {
     }
 
     if (val < 0.9f) {
-        if (stick != 0) {
+        if (stick != mDoAud_C_STICK_e) {
             return
-                CPad_CHECK_HOLD_DOWN(0) ? 3 :
-                CPad_CHECK_HOLD_RIGHT(0) ? 2 :
-                CPad_CHECK_HOLD_LEFT(0) ? 4 :
-                CPad_CHECK_HOLD_UP(0) ? 1 : 0;
+                CPad_CHECK_HOLD_DOWN(0) ? mDoAud_ARM_DOWN_e :
+                CPad_CHECK_HOLD_RIGHT(0) ? mDoAud_ARM_RIGHT_e :
+                CPad_CHECK_HOLD_LEFT(0) ? mDoAud_ARM_LEFT_e :
+                CPad_CHECK_HOLD_UP(0) ? mDoAud_ARM_UP_e :
+                    mDoAud_ARM_CENTER_e;
         } else {
-            return 0;
+            return mDoAud_ARM_CENTER_e;
         }
     } else {
         s32 angi = abs(ang);
-        if (ret == 0) {
+        if (oldDir == mDoAud_ARM_CENTER_e) {
             if (angi > 0x6000) {
-                return 1;
+                return mDoAud_ARM_UP_e;
             } else if (ang >= 0x2000) {
-                return 2;
+                return mDoAud_ARM_RIGHT_e;
             } else if (ang <= -0x2000) {
-                return 4;
+                return mDoAud_ARM_LEFT_e;
             } else {
-                return 3;
+                return mDoAud_ARM_DOWN_e;
             }
         } else {
             if (angi > 0x7000) {
-                return 1;
+                return mDoAud_ARM_UP_e;
             } else if (ang >= 0x3000 && ang <= 0x5000) {
-                return 2;
+                return mDoAud_ARM_RIGHT_e;
             } else if (ang <= -0x3000 && ang >= -0x5000) {
-                return 4;
+                return mDoAud_ARM_LEFT_e;
             } else if (angi < 0x1000) {
-                return 3;
+                return mDoAud_ARM_DOWN_e;
             }
         }
     }
 
-    return ret;
+    return oldDir;
 }
 
 /* 800073D8-80007424       .text mDoAud_setSceneName__FPCcll */
