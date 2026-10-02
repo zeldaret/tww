@@ -212,10 +212,10 @@ void daObjMagmarock::Act_c::vanish_proc() {
 
 /* 000008F8-00000AEC       .text ride_call_back__14daObjMagmarockFP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
 void daObjMagmarock::ride_call_back(dBgW* i_dbgw, fopAc_ac_c* i_this, fopAc_ac_c* i_other) {
-    /* Nonmatching */
     Act_c *p_this = (Act_c*)i_this;
-    cXyz temp = p_this->current.pos - i_other->current.pos;
-    cXyz vec = temp.outprod(cXyz(0.0f, 1.0f, 0.0f));
+    cXyz vec = i_other->current.pos -  p_this->current.pos;
+    cXyz vertical(0.0f, 1.0f, 0.0f);
+    vec = vec.outprod(vertical);
     f32 len = vec.abs();
     if (!vec.normalizeRS()) {
         return;
@@ -487,9 +487,8 @@ bool daObjMagmarock::Act_c::_execute() {
         cy = current.pos.y;
         hy = home.pos.y;
         if (cy < hy) {
-            hy -= 30.0f;
-            if (hy < cy) {
-                current.pos.y = hy;
+            if (cy < hy - 30.0f) {
+                current.pos.y = hy-30.0f;
             }
             speed.y = speed.y - (REG10_F(26) + 0.4f)*(current.pos.y-home.pos.y);
         }
