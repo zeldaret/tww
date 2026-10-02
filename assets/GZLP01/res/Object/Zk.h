@@ -60,6 +60,7 @@ enum ZK_JNT {
     ZK_JNT_SKIRTFR2_e=0x1A,
     ZK_JNT_SKIRTR1_e=0x1B,
     ZK_JNT_SKIRTR2_e=0x1C,
+    ZK_NUM_JNTS_e=0x1D,
 };
 
 #endif /* RES_ZK_H */

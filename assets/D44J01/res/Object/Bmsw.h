@@ -80,10 +80,12 @@ enum dRes_ID_BMSW {
 
 enum BM_BAG_JNT {
     BM_BAG_JNT_BAG_e=0x0,
+    BM_BAG_NUM_JNTS_e=0x1,
 };
 
 enum BM_LETTER_JNT {
     BM_LETTER_JNT_BM_LETTER_e=0x0,
+    BM_LETTER_NUM_JNTS_e=0x1,
 };
 
 enum BM_JNT {
@@ -102,6 +104,7 @@ enum BM_JNT {
     BM_JNT_LEGR2_e=0xC,
     BM_JNT_FOOTR_e=0xD,
     BM_JNT_FOOTREND_e=0xE,
+    BM_NUM_JNTS_e=0xF,
 };
 
 enum BMARM_JNT {
@@ -118,18 +121,22 @@ enum BMARM_JNT {
     BMARM_JNT_HANDR_e=0xA,
     BMARM_JNT_SLEEVER1_e=0xB,
     BMARM_JNT_SLEEVER2_e=0xC,
+    BMARM_NUM_JNTS_e=0xD,
 };
 
 enum QMAIL_JNT {
     QMAIL_JNT_MAIL_e=0x0,
+    QMAIL_NUM_JNTS_e=0x1,
 };
 
 enum BMHEAD11_JNT {
     BMHEAD11_JNT_BMHEAD11_e=0x0,
+    BMHEAD11_NUM_JNTS_e=0x1,
 };
 
 enum SHOP_CURSOR01_JNT {
     SHOP_CURSOR01_JNT_CURSOR01_e=0x0,
+    SHOP_CURSOR01_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BMSW_H */

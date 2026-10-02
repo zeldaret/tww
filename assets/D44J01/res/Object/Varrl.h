@@ -23,6 +23,7 @@ enum dRes_ID_VARRL {
 enum VARRL_JNT {
     VARRL_JNT_VARRL_e=0x0,
     VARRL_JNT_ARRL_MODEL_e=0x1,
+    VARRL_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VARRL_H */

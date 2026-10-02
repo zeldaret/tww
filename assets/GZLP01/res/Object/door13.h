@@ -34,26 +34,32 @@ enum dRes_ID_DOOR13 {
 
 enum DOOR13_L_JNT {
     DOOR13_L_JNT_DOOR13_L_e=0x0,
+    DOOR13_L_NUM_JNTS_e=0x1,
 };
 
 enum DOOR13_R_JNT {
     DOOR13_R_JNT_DOOR13_R_e=0x0,
+    DOOR13_R_NUM_JNTS_e=0x1,
 };
 
 enum DOOR13B_L_JNT {
     DOOR13B_L_JNT_DOOR13B_L_e=0x0,
+    DOOR13B_L_NUM_JNTS_e=0x1,
 };
 
 enum DOOR13B_R_JNT {
     DOOR13B_R_JNT_DOOR13B_R_e=0x0,
+    DOOR13B_R_NUM_JNTS_e=0x1,
 };
 
 enum DOOR13M_L_JNT {
     DOOR13M_L_JNT_DOOR13M_L_e=0x0,
+    DOOR13M_L_NUM_JNTS_e=0x1,
 };
 
 enum DOOR13M_R_JNT {
     DOOR13M_R_JNT_DOOR13M_R_e=0x0,
+    DOOR13M_R_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_DOOR13_H */

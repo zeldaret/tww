@@ -26,6 +26,7 @@ enum K_GBED_JNT {
     K_GBED_JNT_K_GBED_e=0x0,
     K_GBED_JNT_K_GBED_1_e=0x1,
     K_GBED_JNT_K_GS_e=0x2,
+    K_GBED_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_GBED_H */

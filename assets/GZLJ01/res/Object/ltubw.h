@@ -36,16 +36,19 @@ enum dRes_ID_LTUBW {
 
 enum ITUBW_JNT {
     ITUBW_JNT_ITUBW_e=0x0,
+    ITUBW_NUM_JNTS_e=0x1,
 };
 
 enum ITUHU_JNT {
     ITUHU_JNT_ITUHU_e=0x0,
+    ITUHU_NUM_JNTS_e=0x1,
 };
 
 enum YWPFM00_JNT {
     YWPFM00_JNT_YWPMF00_e=0x0,
     YWPFM00_JNT_A00_e=0x1,
     YWPFM00_JNT_MOEFUTA_e=0x2,
+    YWPFM00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_LTUBW_H */

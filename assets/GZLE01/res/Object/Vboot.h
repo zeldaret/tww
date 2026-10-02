@@ -23,6 +23,7 @@ enum dRes_ID_VBOOT {
 enum VBOOT_JNT {
     VBOOT_JNT_ROOT_VBOOT_e=0x0,
     VBOOT_JNT_VBOOT_MODEL_e=0x1,
+    VBOOT_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VBOOT_H */

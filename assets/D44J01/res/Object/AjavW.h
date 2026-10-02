@@ -26,6 +26,7 @@ enum dRes_ID_AJAVW {
 
 enum AJAVW_JNT {
     AJAVW_JNT_AJAVW_e=0x0,
+    AJAVW_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_AJAVW_H */

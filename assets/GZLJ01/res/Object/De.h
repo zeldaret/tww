@@ -71,6 +71,7 @@ enum DE_JNT {
     DE_JNT_TRUNK3_e=0x1F,
     DE_JNT_BRANCHR_e=0x20,
     DE_JNT_LEAF_e=0x21,
+    DE_NUM_JNTS_e=0x22,
 };
 
 #endif /* RES_DE_H */

@@ -314,12 +314,14 @@ enum MO_JNT {
     MO_JNT_OA_J_e=0x30,
     MO_JNT_OB_J_e=0x31,
     MO_JNT_OC_J_e=0x32,
+    MO_NUM_JNTS_e=0x33,
 };
 
 enum KB_JNT {
     KB_JNT_BLURS_e=0x0,
     KB_JNT_BLURA_e=0x1,
     KB_JNT_BLURB_e=0x2,
+    KB_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_MO2_H */

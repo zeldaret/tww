@@ -52,6 +52,7 @@ enum GY_JNT {
     GY_JNT_J_GY_TE_L2_e=0xC,
     GY_JNT_J_GY_TE_R1_e=0xD,
     GY_JNT_J_GY_TE_R2_e=0xE,
+    GY_NUM_JNTS_e=0xF,
 };
 
 #endif /* RES_GY_H */

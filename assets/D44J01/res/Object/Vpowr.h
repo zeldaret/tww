@@ -23,6 +23,7 @@ enum dRes_ID_VPOWR {
 enum VPOWR_JNT {
     VPOWR_JNT_ROOT_VPOWR_e=0x0,
     VPOWR_JNT_VPOWR_MODEL_e=0x1,
+    VPOWR_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VPOWR_H */

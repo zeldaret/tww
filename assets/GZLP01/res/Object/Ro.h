@@ -84,21 +84,25 @@ enum RO_JNT {
     RO_JNT_LEGR1_e=0x12,
     RO_JNT_LEGR2_e=0x13,
     RO_JNT_FOOTR_e=0x14,
+    RO_NUM_JNTS_e=0x15,
 };
 
 enum RO_HAT_JNT {
     RO_HAT_JNT_HAT_LOC_e=0x0,
     RO_HAT_JNT_RO_HAT_e=0x1,
+    RO_HAT_NUM_JNTS_e=0x2,
 };
 
 enum RO_HAT2_JNT {
     RO_HAT2_JNT_HAT2_LOC_e=0x0,
     RO_HAT2_JNT_RO_HAT02_e=0x1,
+    RO_HAT2_NUM_JNTS_e=0x2,
 };
 
 enum RO_HAT3_JNT {
     RO_HAT3_JNT_HAT3_LOC_e=0x0,
     RO_HAT3_JNT_RO_HAT3_e=0x1,
+    RO_HAT3_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_RO_H */

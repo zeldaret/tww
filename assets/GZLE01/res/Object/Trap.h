@@ -28,6 +28,7 @@ enum HTORA1_JNT {
     HTORA1_JNT_HTORA1_00_e=0x0,
     HTORA1_JNT_A00_e=0x1,
     HTORA1_JNT_POLYSURFACE1_e=0x2,
+    HTORA1_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_TRAP_H */

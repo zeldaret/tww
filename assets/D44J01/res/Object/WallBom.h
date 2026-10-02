@@ -21,6 +21,7 @@ enum WALLBOM_JNT {
     WALLBOM_JNT_S_WALLBOM_e=0x1,
     WALLBOM_JNT_BODY_e=0x2,
     WALLBOM_JNT_SHOT_e=0x3,
+    WALLBOM_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_WALLBOM_H */

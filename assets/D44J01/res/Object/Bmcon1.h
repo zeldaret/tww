@@ -74,6 +74,7 @@ enum BM_JNT {
     BM_JNT_LEGR2_e=0xC,
     BM_JNT_FOOTR_e=0xD,
     BM_JNT_FOOTREND_e=0xE,
+    BM_NUM_JNTS_e=0xF,
 };
 
 enum BMARM_JNT {
@@ -90,14 +91,17 @@ enum BMARM_JNT {
     BMARM_JNT_HANDR_e=0xA,
     BMARM_JNT_SLEEVER1_e=0xB,
     BMARM_JNT_SLEEVER2_e=0xC,
+    BMARM_NUM_JNTS_e=0xD,
 };
 
 enum BMHEAD08_JNT {
     BMHEAD08_JNT_BMHEAD08_e=0x0,
+    BMHEAD08_NUM_JNTS_e=0x1,
 };
 
 enum BMHEAD10_JNT {
     BMHEAD10_JNT_BMHEAD10_e=0x0,
+    BMHEAD10_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BMCON1_H */

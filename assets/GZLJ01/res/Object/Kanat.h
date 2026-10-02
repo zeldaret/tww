@@ -22,6 +22,7 @@ enum dRes_ID_KANAT {
 
 enum KANAT_JNT {
     KANAT_JNT_KANAT_e=0x0,
+    KANAT_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KANAT_H */

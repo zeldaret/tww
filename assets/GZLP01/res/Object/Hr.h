@@ -64,10 +64,12 @@ enum H_ANT_JNT {
     H_ANT_JNT_H_ANT3_e=0x2,
     H_ANT_JNT_H_ANT4_e=0x3,
     H_ANT_JNT_H_ANT5_e=0x4,
+    H_ANT_NUM_JNTS_e=0x5,
 };
 
 enum H_BROW_JNT {
     H_BROW_JNT_H_BROWS_e=0x0,
+    H_BROW_NUM_JNTS_e=0x1,
 };
 
 enum HR_JNT {
@@ -89,6 +91,7 @@ enum HR_JNT {
     HR_JNT_ARMR2_e=0xF,
     HR_JNT_HANDR1_e=0x10,
     HR_JNT_HANDR2_e=0x11,
+    HR_NUM_JNTS_e=0x12,
 };
 
 enum R_ANT_JNT {
@@ -101,10 +104,12 @@ enum R_ANT_JNT {
     R_ANT_JNT_R_ANTR3_e=0x6,
     R_ANT_JNT_R_ANTR4_e=0x7,
     R_ANT_JNT_R_ANTR5_e=0x8,
+    R_ANT_NUM_JNTS_e=0x9,
 };
 
 enum R_BROW_JNT {
     R_BROW_JNT_R_BROWS_e=0x0,
+    R_BROW_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HR_H */

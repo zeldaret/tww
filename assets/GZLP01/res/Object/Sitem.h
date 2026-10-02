@@ -26,14 +26,17 @@ enum dRes_ID_SITEM {
 
 enum KMI_00_JNT {
     KMI_00_JNT_KMI_00_e=0x0,
+    KMI_00_NUM_JNTS_e=0x1,
 };
 
 enum KMI_01_JNT {
     KMI_01_JNT_KMI_01_e=0x0,
+    KMI_01_NUM_JNTS_e=0x1,
 };
 
 enum KMI_02_JNT {
     KMI_02_JNT_KMI_02_e=0x0,
+    KMI_02_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_SITEM_H */

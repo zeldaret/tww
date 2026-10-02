@@ -38,10 +38,12 @@ enum dRes_ID_WFALL {
 
 enum HSUI1_JNT {
     HSUI1_JNT_PCUBE8_e=0x0,
+    HSUI1_NUM_JNTS_e=0x1,
 };
 
 enum YSMNM00_JNT {
     YSMNM00_JNT_UMI4_e=0x0,
+    YSMNM00_NUM_JNTS_e=0x1,
 };
 
 enum YSWTR00_JNT {
@@ -49,6 +51,7 @@ enum YSWTR00_JNT {
     YSWTR00_JNT_A00_e=0x1,
     YSWTR00_JNT_SOKUMEN_e=0x2,
     YSWTR00_JNT_SUIRYU_e=0x3,
+    YSWTR00_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_WFALL_H */

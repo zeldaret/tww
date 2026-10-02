@@ -67,6 +67,7 @@ enum MK_JNT {
     MK_JNT_LEGR1_e=0x11,
     MK_JNT_LEGR2_e=0x12,
     MK_JNT_FOOTR_e=0x13,
+    MK_NUM_JNTS_e=0x14,
 };
 
 #endif /* RES_MK_H */

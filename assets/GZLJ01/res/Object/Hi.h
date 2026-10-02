@@ -73,6 +73,7 @@ enum HI_JNT {
     HI_JNT_FOOTR_e=0x27,
     HI_JNT_SKIRTL_e=0x28,
     HI_JNT_SKIRTR_e=0x29,
+    HI_NUM_JNTS_e=0x2A,
 };
 
 #endif /* RES_HI_H */

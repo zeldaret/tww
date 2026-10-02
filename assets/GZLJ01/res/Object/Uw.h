@@ -72,14 +72,17 @@ enum UW_JNT {
     UW_JNT_LEGR1_e=0x10,
     UW_JNT_LEGR2_e=0x11,
     UW_JNT_FOOTR_e=0x12,
+    UW_NUM_JNTS_e=0x13,
 };
 
 enum UW01_HEAD_JNT {
     UW01_HEAD_JNT_UW01_HEAD_e=0x0,
+    UW01_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UW02_HEAD_JNT {
     UW02_HEAD_JNT_UW02_HEAD_e=0x0,
+    UW02_HEAD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_UW_H */

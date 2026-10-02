@@ -32,6 +32,7 @@ enum YSBWP00_JNT {
     YSBWP00_JNT_YSBWP00_e=0x0,
     YSBWP00_JNT_A00_e=0x1,
     YSBWP00_JNT_SHAFT_e=0x2,
+    YSBWP00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_YSBWP00_H */

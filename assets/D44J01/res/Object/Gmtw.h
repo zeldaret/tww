@@ -32,6 +32,7 @@ enum GMTW00_JNT {
     GMTW00_JNT_ROOT_e=0x0,
     GMTW00_JNT_GMTW00_e=0x1,
     GMTW00_JNT_UE_e=0x2,
+    GMTW00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_GMTW_H */

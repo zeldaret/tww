@@ -22,6 +22,7 @@ enum dRes_ID_VAMUY {
 
 enum VAMUY_JNT {
     VAMUY_JNT_VAMUY_MODEL_e=0x0,
+    VAMUY_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VAMUY_H */

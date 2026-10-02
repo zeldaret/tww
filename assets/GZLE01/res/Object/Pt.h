@@ -57,6 +57,7 @@ enum PT_JNT {
     PT_JNT_UDERA_e=0xD,
     PT_JNT_UDERB_e=0xE,
     PT_JNT_FORK_e=0xF,
+    PT_NUM_JNTS_e=0x10,
 };
 
 #endif /* RES_PT_H */

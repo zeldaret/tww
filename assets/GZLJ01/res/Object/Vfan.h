@@ -22,6 +22,7 @@ enum dRes_ID_VFAN {
 
 enum V_FAN_00_JNT {
     V_FAN_00_JNT_V_FAN_00_e=0x0,
+    V_FAN_00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VFAN_H */

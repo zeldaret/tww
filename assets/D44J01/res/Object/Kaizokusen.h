@@ -32,10 +32,12 @@ enum dRes_ID_KAIZOKUSEN {
 
 enum AMAST_JNT {
     AMAST_JNT_AMAST_e=0x0,
+    AMAST_NUM_JNTS_e=0x1,
 };
 
 enum OBA_KAIZOKU_A_JNT {
     OBA_KAIZOKU_A_JNT_AKIZK_e=0x0,
+    OBA_KAIZOKU_A_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KAIZOKUSEN_H */

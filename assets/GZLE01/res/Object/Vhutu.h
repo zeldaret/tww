@@ -24,6 +24,7 @@ enum VHUTU_JNT {
     VHUTU_JNT_ROOT_VHUTU_e=0x0,
     VHUTU_JNT_UTUWA_0_e=0x1,
     VHUTU_JNT_UTUWA_1_e=0x2,
+    VHUTU_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_VHUTU_H */

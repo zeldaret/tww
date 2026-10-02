@@ -18,6 +18,7 @@ enum dRes_ID_VMAPR {
 
 enum VMAPL_JNT {
     VMAPL_JNT_LMAP_e=0x0,
+    VMAPL_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VMAPR_H */

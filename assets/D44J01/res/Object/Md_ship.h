@@ -125,10 +125,12 @@ enum MD_JNT {
     MD_JNT_FOOTR_e=0x19,
     MD_JNT_SKIRTF_e=0x1A,
     MD_JNT_SKIRTR_e=0x1B,
+    MD_NUM_JNTS_e=0x1C,
 };
 
 enum MD_HARP_JNT {
     MD_HARP_JNT_MD_HARP_e=0x0,
+    MD_HARP_NUM_JNTS_e=0x1,
 };
 
 enum MDARM_JNT {
@@ -141,12 +143,14 @@ enum MDARM_JNT {
     MDARM_JNT_ARMR1_e=0x6,
     MDARM_JNT_ARMR2_e=0x7,
     MDARM_JNT_HANDR_e=0x8,
+    MDARM_NUM_JNTS_e=0x9,
 };
 
 enum YMDHP00_JNT {
     YMDHP00_JNT_YMDHP00_e=0x0,
     YMDHP00_JNT_A00_e=0x1,
     YMDHP00_JNT_SHAFT_e=0x2,
+    YMDHP00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_MD_SHIP_H */

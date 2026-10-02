@@ -32,12 +32,14 @@ enum dRes_ID_MTRYB {
 
 enum MTRYB_JNT {
     MTRYB_JNT_MTRYB_e=0x0,
+    MTRYB_NUM_JNTS_e=0x1,
 };
 
 enum YTFBL00_JNT {
     YTFBL00_JNT_YTFBL00_e=0x0,
     YTFBL00_JNT_A00_e=0x1,
     YTFBL00_JNT_TRIFORCEBLOCKLIGHT_e=0x2,
+    YTFBL00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_MTRYB_H */

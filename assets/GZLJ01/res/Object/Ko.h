@@ -102,11 +102,13 @@ enum dRes_ID_KO {
 
 enum KOEDA_JNT {
     KOEDA_JNT_KO_EDA_e=0x0,
+    KOEDA_NUM_JNTS_e=0x1,
 };
 
 enum KO_BALLOON_JNT {
     KO_BALLOON_JNT_BALLOON_LOC_e=0x0,
     KO_BALLOON_JNT_KO_BALLOON_e=0x1,
+    KO_BALLOON_NUM_JNTS_e=0x2,
 };
 
 enum KO_JNT {
@@ -125,6 +127,7 @@ enum KO_JNT {
     KO_JNT_LEGL2_e=0xC,
     KO_JNT_LEGR1_e=0xD,
     KO_JNT_LEGR2_e=0xE,
+    KO_NUM_JNTS_e=0xF,
 };
 
 enum KOHEAD01_JNT {
@@ -132,10 +135,12 @@ enum KOHEAD01_JNT {
     KOHEAD01_JNT_HANAMIZU1_e=0x1,
     KOHEAD01_JNT_HANAMIZU2_e=0x2,
     KOHEAD01_JNT_HANAMIZU3_e=0x3,
+    KOHEAD01_NUM_JNTS_e=0x4,
 };
 
 enum KOHEAD02_JNT {
     KOHEAD02_JNT_KOHEAD02_e=0x0,
+    KOHEAD02_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KO_H */

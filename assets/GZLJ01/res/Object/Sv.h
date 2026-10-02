@@ -63,6 +63,7 @@ enum SV_JNT {
     SV_JNT_LEGR1_e=0x11,
     SV_JNT_LEGR2_e=0x12,
     SV_JNT_FOOTR_e=0x13,
+    SV_NUM_JNTS_e=0x14,
 };
 
 #endif /* RES_SV_H */

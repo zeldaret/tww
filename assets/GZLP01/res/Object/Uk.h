@@ -62,10 +62,12 @@ enum dRes_ID_UK {
 
 enum UKHEAD_B_JNT {
     UKHEAD_B_JNT_UK_HEAD_B_e=0x0,
+    UKHEAD_B_NUM_JNTS_e=0x1,
 };
 
 enum UKHEAD_D_JNT {
     UKHEAD_D_JNT_UK_HEAD_D_e=0x0,
+    UKHEAD_D_NUM_JNTS_e=0x1,
 };
 
 enum UK_JNT {
@@ -88,10 +90,12 @@ enum UK_JNT {
     UK_JNT_LEGR1_e=0x10,
     UK_JNT_LEGR2_e=0x11,
     UK_JNT_FOOTR_e=0x12,
+    UK_NUM_JNTS_e=0x13,
 };
 
 enum UKHEAD_C_JNT {
     UKHEAD_C_JNT_UK_HEAD_C_e=0x0,
+    UKHEAD_C_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_UK_H */

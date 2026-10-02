@@ -30,24 +30,28 @@ enum V_GBD_L_JNT {
     V_GBD_L_JNT_V_GBD_L_e=0x0,
     V_GBD_L_JNT_HIDARI_e=0x1,
     V_GBD_L_JNT_DOOR_HIDARI_e=0x2,
+    V_GBD_L_NUM_JNTS_e=0x3,
 };
 
 enum V_GBD_R_JNT {
     V_GBD_R_JNT_V_GBD_R_e=0x0,
     V_GBD_R_JNT_MIGI_e=0x1,
     V_GBD_R_JNT_DOOR_MIGI_e=0x2,
+    V_GBD_R_NUM_JNTS_e=0x3,
 };
 
 enum V_GBDFU_JNT {
     V_GBDFU_JNT_V_GBDFU_e=0x0,
     V_GBDFU_JNT_FUTI_e=0x1,
     V_GBDFU_JNT_DOOR_FUTI_e=0x2,
+    V_GBDFU_NUM_JNTS_e=0x3,
 };
 
 enum V_GBDTO_JNT {
     V_GBDTO_JNT_V_GBDTO_e=0x0,
     V_GBDTO_JNT_TOME_e=0x1,
     V_GBDTO_JNT_DOOR_TOME_e=0x2,
+    V_GBDTO_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_GBDOOR_H */

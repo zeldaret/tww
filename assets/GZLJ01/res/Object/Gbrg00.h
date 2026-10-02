@@ -37,6 +37,7 @@ enum GBRG00_JNT {
     GBRG00_JNT_OMOTE_e=0x1,
     GBRG00_JNT_URA_e=0x2,
     GBRG00_JNT_V_MOYOU_e=0x3,
+    GBRG00_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_GBRG00_H */

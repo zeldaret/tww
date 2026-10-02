@@ -38,26 +38,32 @@ enum dRes_ID_HMOS {
 
 enum HMOS1_JNT {
     HMOS1_JNT_SITA_e=0x0,
+    HMOS1_NUM_JNTS_e=0x1,
 };
 
 enum HMOS2_JNT {
     HMOS2_JNT_SITA_e=0x0,
+    HMOS2_NUM_JNTS_e=0x1,
 };
 
 enum HMOS3_JNT {
     HMOS3_JNT_MONO_e=0x0,
+    HMOS3_NUM_JNTS_e=0x1,
 };
 
 enum HMOSUP1_JNT {
     HMOSUP1_JNT_UE_e=0x0,
+    HMOSUP1_NUM_JNTS_e=0x1,
 };
 
 enum HMOSUP2_JNT {
     HMOSUP2_JNT_UE_e=0x0,
+    HMOSUP2_NUM_JNTS_e=0x1,
 };
 
 enum HMOS2T_JNT {
     HMOS2T_JNT_PCYLINDER30_e=0x0,
+    HMOS2T_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HMOS_H */

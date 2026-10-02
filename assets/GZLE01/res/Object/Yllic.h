@@ -22,6 +22,7 @@ enum dRes_ID_YLLIC {
 
 enum YLLIC_JNT {
     YLLIC_JNT_YLLIC_e=0x0,
+    YLLIC_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_YLLIC_H */

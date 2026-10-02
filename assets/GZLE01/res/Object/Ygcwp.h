@@ -26,6 +26,7 @@ enum YGCWP00_JNT {
     YGCWP00_JNT_YGCWP00_e=0x0,
     YGCWP00_JNT_A00_e=0x1,
     YGCWP00_JNT_MARK_e=0x2,
+    YGCWP00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_YGCWP_H */

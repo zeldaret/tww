@@ -24,10 +24,12 @@ enum dRes_ID_PBCO {
 
 enum PBCO_JNT {
     PBCO_JNT_COUNTER_HUTA_e=0x0,
+    PBCO_NUM_JNTS_e=0x1,
 };
 
 enum PBC2_JNT {
     PBC2_JNT_PBC2_e=0x0,
+    PBC2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_PBCO_H */

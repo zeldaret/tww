@@ -22,6 +22,7 @@ enum dRes_ID_MKDAN {
 
 enum MKDAN1_JNT {
     MKDAN1_JNT_MKDAN1_e=0x0,
+    MKDAN1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MKDAN_H */

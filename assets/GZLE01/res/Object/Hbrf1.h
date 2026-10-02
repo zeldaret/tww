@@ -22,6 +22,7 @@ enum dRes_ID_HBRF1 {
 
 enum HBRF1_JNT {
     HBRF1_JNT_MONO_e=0x0,
+    HBRF1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HBRF1_H */

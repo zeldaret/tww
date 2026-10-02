@@ -24,6 +24,7 @@ enum QTKHD_JNT {
     QTKHD_JNT_R11_HEAD_DISP_e=0x0,
     QTKHD_JNT_A00_e=0x1,
     QTKHD_JNT_POLYSURFACE11_e=0x2,
+    QTKHD_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_QTKHD_H */

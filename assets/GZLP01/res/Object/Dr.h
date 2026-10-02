@@ -104,6 +104,7 @@ enum DR1_JNT {
     DR1_JNT_J_DR_SIPPO2_e=0x3C,
     DR1_JNT_J_DR_SIPPO3_e=0x3D,
     DR1_JNT_J_DR_SIPPO4_e=0x3E,
+    DR1_NUM_JNTS_e=0x3F,
 };
 
 #endif /* RES_DR_H */

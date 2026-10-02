@@ -25,6 +25,7 @@ enum FA_JNT {
     FA_JNT_NECK_e=0x1,
     FA_JNT_WINGL1_e=0x2,
     FA_JNT_WINGR_e=0x3,
+    FA_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_FA_H */

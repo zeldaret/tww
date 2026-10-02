@@ -52,6 +52,7 @@ enum VTENG_JNT {
     VTENG_JNT_CURT_SUSO_R1_e=0x18,
     VTENG_JNT_CURT_SUSO_R2_e=0x19,
     VTENG_JNT_TENGAI_e=0x1A,
+    VTENG_NUM_JNTS_e=0x1B,
 };
 
 #endif /* RES_VTENG_H */

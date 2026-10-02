@@ -24,6 +24,7 @@ enum VTRI8_JNT {
     VTRI8_JNT_VTRI8_e=0x0,
     VTRI8_JNT_VTRI8_MODEL1_e=0x1,
     VTRI8_JNT_VTRI8_MODEL2_e=0x2,
+    VTRI8_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_VTRI8_H */

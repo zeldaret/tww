@@ -23,6 +23,7 @@ enum dRes_ID_SHINJU_F {
 enum VPEAF_JNT {
     VPEAF_JNT_ROOT_VPEAF_e=0x0,
     VPEAF_JNT_V_MARK_F_e=0x1,
+    VPEAF_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_SHINJU_F_H */

@@ -22,6 +22,7 @@ enum dRes_ID_VBOML {
 
 enum VBOML_JNT {
     VBOML_JNT_VBOML_MODEL_e=0x0,
+    VBOML_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VBOML_H */

@@ -20,12 +20,14 @@ enum dRes_ID_HIMO3 {
 
 enum H3_GA_JNT {
     H3_GA_JNT_BODY_e=0x0,
+    H3_GA_NUM_JNTS_e=0x1,
 };
 
 enum SLAMP_00_JNT {
     SLAMP_00_JNT_SLAMP_00_e=0x0,
     SLAMP_00_JNT_S00_e=0x1,
     SLAMP_00_JNT_LAMP_e=0x2,
+    SLAMP_00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_HIMO3_H */

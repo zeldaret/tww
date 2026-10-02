@@ -22,6 +22,7 @@ enum dRes_ID_HBOX2 {
 
 enum HBOX2_JNT {
     HBOX2_JNT_MONO_e=0x0,
+    HBOX2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HBOX2_H */

@@ -28,6 +28,7 @@ enum YWARP00_JNT {
     YWARP00_JNT_YWARP00_e=0x0,
     YWARP00_JNT_A00_e=0x1,
     YWARP00_JNT_SHAFT_e=0x2,
+    YWARP00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_YWARP00_H */

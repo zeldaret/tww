@@ -34,6 +34,7 @@ enum dRes_ID_VMC {
 
 enum VMCBS_JNT {
     VMCBS_JNT_MC_BASE_MODEL_e=0x0,
+    VMCBS_NUM_JNTS_e=0x1,
 };
 
 enum VMCWD_JNT {
@@ -43,6 +44,7 @@ enum VMCWD_JNT {
     VMCWD_JNT_LEAFL_e=0x3,
     VMCWD_JNT_LEAFR_e=0x4,
     VMCWD_JNT_BRANCH_e=0x5,
+    VMCWD_NUM_JNTS_e=0x6,
 };
 
 #endif /* RES_VMC_H */

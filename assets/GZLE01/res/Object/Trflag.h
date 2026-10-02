@@ -22,6 +22,7 @@ enum dRes_ID_TRFLAG {
 
 enum ETHATA_JNT {
     ETHATA_JNT_ETHATA_e=0x0,
+    ETHATA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_TRFLAG_H */

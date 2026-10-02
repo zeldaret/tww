@@ -44,6 +44,7 @@ enum dRes_ID_MN {
 
 enum MN_BAG_JNT {
     MN_BAG_JNT_MN_BAG_e=0x0,
+    MN_BAG_NUM_JNTS_e=0x1,
 };
 
 enum MN_JNT {
@@ -66,6 +67,7 @@ enum MN_JNT {
     MN_JNT_LEGR1_e=0x10,
     MN_JNT_LEGR2_e=0x11,
     MN_JNT_FOOTR_e=0x12,
+    MN_NUM_JNTS_e=0x13,
 };
 
 #endif /* RES_MN_H */

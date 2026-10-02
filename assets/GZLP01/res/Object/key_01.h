@@ -22,6 +22,7 @@ enum dRes_ID_KEY_01 {
 
 enum VKEYB_JNT {
     VKEYB_JNT_BOSS_KEY_e=0x0,
+    VKEYB_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KEY_01_H */

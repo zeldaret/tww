@@ -71,6 +71,7 @@ enum ASI_JNT {
     ASI_JNT_ASI16_e=0xF,
     ASI_JNT_ASI17_e=0x10,
     ASI_JNT_ASI18_e=0x11,
+    ASI_NUM_JNTS_e=0x12,
 };
 
 #endif /* RES_BMDFOOT_H */

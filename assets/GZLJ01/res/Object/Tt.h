@@ -80,6 +80,7 @@ enum TT_JNT {
     TT_JNT_LEGR1_e=0x10,
     TT_JNT_LEGR2_e=0x11,
     TT_JNT_FOOTR_e=0x12,
+    TT_NUM_JNTS_e=0x13,
 };
 
 #endif /* RES_TT_H */

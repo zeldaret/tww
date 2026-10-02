@@ -40,10 +40,12 @@ enum dRes_ID_IKADAH {
 
 enum VIKAE_JNT {
     VIKAE_JNT_VIKAE_e=0x0,
+    VIKAE_NUM_JNTS_e=0x1,
 };
 
 enum VIKAH_JNT {
     VIKAH_JNT_V_IKADAHOUSE_e=0x0,
+    VIKAH_NUM_JNTS_e=0x1,
 };
 
 enum VSVSP_JNT {
@@ -51,14 +53,17 @@ enum VSVSP_JNT {
     VSVSP_JNT_SV_CREAN_e=0x1,
     VSVSP_JNT_SV_REEL_e=0x2,
     VSVSP_JNT_SV_HANDLE_1_e=0x3,
+    VSVSP_NUM_JNTS_e=0x4,
 };
 
 enum VTSP_JNT {
     VTSP_JNT_VTSP_e=0x0,
+    VTSP_NUM_JNTS_e=0x1,
 };
 
 enum VTSP2_JNT {
     VTSP2_JNT_VTSP2_e=0x0,
+    VTSP2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_IKADAH_H */

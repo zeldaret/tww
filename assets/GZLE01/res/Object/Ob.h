@@ -62,10 +62,12 @@ enum OB_JNT {
     OB_JNT_LEGR1_e=0x10,
     OB_JNT_LEGR2_e=0x11,
     OB_JNT_FOOTR_e=0x12,
+    OB_NUM_JNTS_e=0x13,
 };
 
 enum OBA_HEAD_JNT {
     OBA_HEAD_JNT_HEAD_e=0x0,
+    OBA_HEAD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_OB_H */

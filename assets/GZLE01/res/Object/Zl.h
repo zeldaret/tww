@@ -114,6 +114,7 @@ enum dRes_ID_ZL {
 
 enum CLOTH_JNT {
     CLOTH_JNT_ZL_CLOTH_e=0x0,
+    CLOTH_NUM_JNTS_e=0x1,
 };
 
 enum ZL_JNT {
@@ -151,6 +152,7 @@ enum ZL_JNT {
     ZL_JNT_ZL_GRIP_e=0x1F,
     ZL_JNT_ZL_POD_e=0x20,
     ZL_JNT_ZL_SACK_e=0x21,
+    ZL_NUM_JNTS_e=0x22,
 };
 
 #endif /* RES_ZL_H */
