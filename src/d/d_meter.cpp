@@ -39,7 +39,7 @@ dMeter_menuHIO_c g_menuHIO;
 dMeter_msg_HIO_c g_msgHIO;
 dMeter_message_HIO_c g_messageHIO;
 dMetronome_c* dMn_c;
-J2DScreen* sMainParts1;
+MyScreen* sMainParts1;
 J2DScreen* sMainParts2;
 J2DScreen* sMainParts3;
 J2DScreen* sScrTimer1;
@@ -5840,9 +5840,9 @@ void dMeter_clockMultiInit(sub_meter_class* i_Meter) {
     static f32 scaleY[] = {0.667f, 0.583f, 0.604f};
 
     JKRArchive* pArchive = dComIfGp_getSwimResArchive();
-    ResTIMG* texture1 = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "swimtime_meter_mask.bti", pArchive);
+    ResTIMG* texture1 = (ResTIMG*)JKRGetResource('TIMG', "swimtime_meter_mask.bti", pArchive);
     JKRArchive* pArchive2 = dComIfGp_getMenuArchive();
-    ResTIMG* texture2 = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "screw_01.bti", pArchive2);
+    ResTIMG* texture2 = (ResTIMG*)JKRGetResource('TIMG', "screw_01.bti", pArchive2);
     JUT_ASSERT(10626, texture1 != NULL && texture2 != NULL);
     for (s32 i = 0; i < 3; i++) {
         clock[i].init(texture1, texture2, 1.0f / scaleX[i], 1.0f / scaleY[i]);
@@ -6345,9 +6345,9 @@ void dMeter_swimInit(sub_meter_class* i_Meter) {
     i_Meter->field_0x2c88.mUserArea = 0;
     i_Meter->field_0x2dd8.mUserArea = 0;
     JKRArchive* pArchive = dComIfGp_getSwimResArchive();
-    texture1 = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "swimtime_meter_mask.bti", pArchive);
+    texture1 = (ResTIMG*)JKRGetResource('TIMG', "swimtime_meter_mask.bti", pArchive);
     JKRArchive* pArchive2 = dComIfGp_getSwimResArchive();
-    texture2 = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "tekari.bti", pArchive2);
+    texture2 = (ResTIMG*)JKRGetResource('TIMG', "tekari.bti", pArchive2);
     JUT_ASSERT(11498, texture1 != NULL && texture2 != NULL);
     tekari.init(texture1, texture2, 1.0f, 1.0f);
 }

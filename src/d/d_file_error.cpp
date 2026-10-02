@@ -75,9 +75,6 @@ void dFile_error_c::_delete() {
     mDoHIO_deleteChild(g_feHIO.mNo);
 }
 
-MyScreen::~MyScreen() {
-}
-
 #if VERSION == VERSION_DEMO
 void dFile_error_c::_deleteSp() {
     mDoHIO_deleteChild(g_feHIO.mNo);

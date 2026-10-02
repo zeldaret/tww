@@ -187,8 +187,7 @@ void dMenu_Collect_c::screenSet() {
         "amulet_01.bti",
     };
 
-    J2DPane* mPane = scrn->search('ROOT');
-    m2478 = mPane;
+    m2478 = scrn->search('ROOT');
 
     fopMsgM_setPaneData(&m008, scrn, 'ft15');
     fopMsgM_setPaneData(&m040, scrn, 'ft16');
@@ -493,9 +492,6 @@ void dMenu_Collect_c::initialize() {
 
 /* 8019CD40-8019D540       .text cursorAnime__15dMenu_Collect_cFv */
 void dMenu_Collect_c::cursorAnime() {
-    short x_trans;
-    short y_trans;
-    
     switch(mNowItem) {
     case 0:
     case 1:
@@ -593,10 +589,10 @@ void dMenu_Collect_c::cursorAnime() {
         }
         break;
     case 19: {
-        float x1 = (m1498[2].mPosCenter.x + m1498[3].mPosCenter.x) / 2.0f;
-        float y1 = m1498[0].mPosCenter.y;
-        float x2 = ((m1498[5].mPosTopLeft.x + m1498[5].mSize.x) - m1498[0].mPosTopLeft.x) / 2.0f;
-        float y2 = m1498[0].mSize.y / 2.0f;
+        f32 x1 = (m1498[2].mPosCenter.x + m1498[3].mPosCenter.x) / 2.0f;
+        f32 y1 = m1498[0].mPosCenter.y;
+        f32 x2 = ((m1498[5].mPosTopLeft.x + m1498[5].mSize.x) - m1498[0].mPosTopLeft.x) / 2.0f;
+        f32 y2 = m1498[0].mSize.y / 2.0f;
 
         mA18[0].mPosCenterOrig.x = x1 - x2;
         mA18[0].mPosCenterOrig.y = y1 + y2;
@@ -630,11 +626,11 @@ void dMenu_Collect_c::cursorAnime() {
         return FALSE leading to possible unsafe behavior (not sure if
         `mUserArea` can be >= 20)?
     */ 
+    s16 x_trans;
+    s16 y_trans;
     if (mA18[0].mUserArea < 10) {
         for (int i = 0; i < 4; i++) {
-            J2DPicture* picture = (J2DPicture*)mA18[i].pane;
-            picture->setBlendColorRatio(1.0f, 0.0f, 1.0f, 1.0f);
-            picture->setBlendAlphaRatio(1.0f, 0.0f, 1.0f, 1.0f);
+            ((J2DPicture*)mA18[i].pane)->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
         }
 
         x_trans = 7;
@@ -642,9 +638,7 @@ void dMenu_Collect_c::cursorAnime() {
     }
     else if (mA18[0].mUserArea < 20) {
         for (int i = 0; i < 4; i++) {
-            J2DPicture* picture = (J2DPicture*)mA18[i].pane;
-            picture->setBlendColorRatio(0.0f, 1.0f, 1.0f, 1.0f);
-            picture->setBlendAlphaRatio(0.0f, 1.0f, 1.0f, 1.0f);
+            ((J2DPicture*)mA18[i].pane)->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
         }
 
         x_trans = 14;
@@ -1226,7 +1220,8 @@ u8 dMenu_Collect_c::cursorMainMove() {
         mainTrans(-trans, 0.0f);
         subTrans(trans, 0.0f);
 
-        if (mA18[1].mUserArea == 5) {
+        s16 r0 = 5;
+        if (mA18[1].mUserArea == r0) {
             if (mNowItem <= 0x0D || mNowItem >= 0x13) {
                 collectPriority();
             } else {
@@ -1255,12 +1250,13 @@ void dMenu_Collect_c::noteInit() {
 
 /* 8019E624-8019E898       .text noteAppear__15dMenu_Collect_cFv */
 void dMenu_Collect_c::noteAppear() {
-    float fVar1;
+    f32 fVar1;
 
     if (m7E8.mUserArea == 1) {
-        if (m7B0.mUserArea <= 0x11) {
+        s16 r0 = 0x11;
+        if (m7B0.mUserArea <= r0) {
             noteOpen();
-        } else if (m7B0.mUserArea > 0x12) {
+        } else if (m7B0.mUserArea > r0 + 1) {
             noteClose();
         } else {
             m970.mNowAlpha = 0x82;
@@ -1309,11 +1305,14 @@ void dMenu_Collect_c::noteAppear() {
 
 /* 8019E898-8019EA98       .text noteOpen__15dMenu_Collect_cFv */
 void dMenu_Collect_c::noteOpen() {
-    float fVar2 = 320.0f - m820.mPosCenterOrig.x;
-    float fVar3 = 240.0f - m820.mPosCenterOrig.y;
-    float fVar1 = 1.0f - fopMsgM_valueIncrease(0x11, 0x11 - m7B0.mUserArea, 0);
-    
-    if (m7B0.mUserArea >= 0x11) {
+    f32 f1 = 320.0f;
+    f32 f2 = 240.0f;
+    f32 fVar2 = f1 - m820.mPosCenterOrig.x;
+    f32 fVar3 = f2 - m820.mPosCenterOrig.y;
+    f32 fVar1 = 1.0f - fopMsgM_valueIncrease(0x11, 0x11 - m7B0.mUserArea, 0);
+
+    s16 r0 = 0x11;
+    if (m7B0.mUserArea >= r0) {
         fopMsgM_setInitAlpha(&m970);
         fopMsgM_setInitAlpha(&m740);
         fopMsgM_setInitAlpha(&m778);
@@ -1325,13 +1324,14 @@ void dMenu_Collect_c::noteOpen() {
         fopMsgM_setNowAlpha(&m778, fVar1);
     }
     
-    m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, m820.mUserArea + fVar1 * (float)(-3 - m820.mUserArea));
+    m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, m820.mUserArea + fVar1 * (f32)(-3 - m820.mUserArea));
 
     if (m7B0.mUserArea < 5) {
         fVar1 = (m7B0.mUserArea * 0.8f) / 5.0f;
     }
     else {
-        fVar1 = (1.0f - fopMsgM_valueIncrease(0xc, 0x11 - m7B0.mUserArea, 0)) * 0.19999999f + 0.8f;
+        f32 f29 = 0.19999999f;
+        fVar1 = (1.0f - fopMsgM_valueIncrease(0xc, 0x11 - m7B0.mUserArea, 0)) * f29 + 0.8f;
     }
 
     fopMsgM_paneTrans(&m820, fVar2 * fVar1, fVar3 * fVar1);
@@ -1340,20 +1340,27 @@ void dMenu_Collect_c::noteOpen() {
 
 /* 8019EA98-8019ECC8       .text noteClose__15dMenu_Collect_cFv */
 void dMenu_Collect_c::noteClose() {
-    float fVar2 = (640.0f - m820.mPosCenterOrig.x) - 320.0f;
-    float fVar3 = (480.0f - m820.mPosCenterOrig.y) - 240.0f;
-    float fVar4 = 320.0f - m820.mPosCenterOrig.x;
-    float fVar5 = 240.0f - m820.mPosCenterOrig.y;
+    f32 f3 = 320.0f;
+    f32 f4 = 240.0f;
+    f32 temp1 = (f3 * 2.0f) - m820.mPosCenterOrig.x;
+    f32 temp2 = (f4 * 2.0f) - m820.mPosCenterOrig.y;
+    f32 fVar2 = temp1 - f3;
+    f32 fVar3 = temp2 - f4;
+    f32 fVar4 = 320.0f - m820.mPosCenterOrig.x;
+    f32 fVar5 = 240.0f - m820.mPosCenterOrig.y;
     
-    float fVar1 = fopMsgM_valueIncrease(10, m7B0.mUserArea + -0x12, 0);
+    f32 fVar1 = fopMsgM_valueIncrease(10, m7B0.mUserArea + -0x12, 0);
+
+    f32 angle = (fVar1 * 123.0f) + -3.0f;
 
     fopMsgM_paneTrans(&m820, (fVar2 * fVar1) + fVar4, (fVar3 * fVar1) + fVar5);
 
-    m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, (fVar1 * 123.0f) + -3.0f);
+    m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, angle);
 
     m7B0.mUserArea++;
 
-    if (m7B0.mUserArea > 0x1c) {
+    s16 r0 = 0x1c;
+    if (m7B0.mUserArea > r0) {
         fopMsgM_setInitAlpha(&m7B0);
         fopMsgM_setInitAlpha(&m7E8);
         fopMsgM_setInitAlpha(&m820);
@@ -1378,7 +1385,7 @@ void dMenu_Collect_c::noteClose() {
 }
 
 /* 8019ECC8-8019EFE0       .text mainTrans__15dMenu_Collect_cFff */
-void dMenu_Collect_c::mainTrans(float i_transX, float i_transY) {
+void dMenu_Collect_c::mainTrans(f32 i_transX, f32 i_transY) {
     for (int i = 0; i < 4; i++) {
         fopMsgM_paneTrans(&mA18[i], i_transX, i_transY);
     }
@@ -1440,7 +1447,7 @@ void dMenu_Collect_c::mainTrans(float i_transX, float i_transY) {
 }
 
 /* 8019EFE0-8019F094       .text subTrans__15dMenu_Collect_cFff */
-void dMenu_Collect_c::subTrans(float i_transX, float i_transY) {
+void dMenu_Collect_c::subTrans(f32 i_transX, f32 i_transY) {
     for (int i = 0; i < 5; i++) {
         fopMsgM_paneTrans(&m2030[i], i_transX, i_transY);
         fopMsgM_paneTrans(&m2148[i], i_transX, i_transY);
@@ -1452,18 +1459,18 @@ void dMenu_Collect_c::subTrans(float i_transX, float i_transY) {
 }
 
 /* 8019F094-8019F0B8       .text titleTrans__15dMenu_Collect_cFff */
-void dMenu_Collect_c::titleTrans(float i_transX, float i_transY) {
+void dMenu_Collect_c::titleTrans(f32 i_transX, f32 i_transY) {
     fopMsgM_paneTrans(&m9E0, i_transX, i_transY);
 }
 
 /* 8019F0B8-8019F144       .text noteRotate__15dMenu_Collect_cFff */
-void dMenu_Collect_c::noteRotate(float i_transY, float i_angle) {
+void dMenu_Collect_c::noteRotate(f32 i_transY, f32 i_angle) {
     fopMsgM_paneTrans(&m820, 0.0f, i_transY);
     m820.pane->rotate(m820.mSize.x / 2.0f, m820.mSize.y / 2.0f, ROTATE_Z, i_angle);
 }
 
 /* 8019F144-8019F1C8       .text nameTrans__15dMenu_Collect_cFff */
-void dMenu_Collect_c::nameTrans(float i_transX, float i_transY) {
+void dMenu_Collect_c::nameTrans(f32 i_transX, f32 i_transY) {
     fopMsgM_paneTrans(&m858, i_transX, i_transY);
 
     outFont->setLeftUpPos(m858.mPosTopLeft.x, m858.mPosTopLeft.y);
@@ -1473,9 +1480,9 @@ void dMenu_Collect_c::nameTrans(float i_transX, float i_transY) {
 }
 
 /* 8019F1C8-8019F49C       .text mainOpenProc__15dMenu_Collect_cFsss */
-void dMenu_Collect_c::mainOpenProc(short i_step, short i_max, short i_offset) {
+void dMenu_Collect_c::mainOpenProc(s16 i_step, s16 i_max, s16 i_offset) {
     if (i_max >= i_step) {
-        float open_t = fopMsgM_valueIncrease(i_max, i_step, 0);
+        f32 open_t = fopMsgM_valueIncrease(i_max, i_step, 0);
 
         mainTrans(i_offset * fopMsgM_valueIncrease(i_max, i_max - i_step, 0), 0.0f);
 
@@ -1538,9 +1545,9 @@ void dMenu_Collect_c::mainOpenProc(short i_step, short i_max, short i_offset) {
 }
 
 /* 8019F49C-8019F5B4       .text subOpenProc__15dMenu_Collect_cFsss */
-void dMenu_Collect_c::subOpenProc(short i_step, short i_max, short i_offset) {
+void dMenu_Collect_c::subOpenProc(s16 i_step, s16 i_max, s16 i_offset) {
     if (i_max >= i_step) {
-        float open_t = fopMsgM_valueIncrease(i_max, i_step, 0);
+        f32 open_t = fopMsgM_valueIncrease(i_max, i_step, 0);
 
         subTrans(i_offset * fopMsgM_valueIncrease(i_max, i_max - i_step, 0), 0.0f);
 
@@ -1558,7 +1565,7 @@ void dMenu_Collect_c::subOpenProc(short i_step, short i_max, short i_offset) {
 }
 
 /* 8019F5B4-8019F674       .text titleOpenProc__15dMenu_Collect_cFss */
-void dMenu_Collect_c::titleOpenProc(short i_step, short i_max) {
+void dMenu_Collect_c::titleOpenProc(s16 i_step, s16 i_max) {
     if (i_max >= i_step) {
         fopMsgM_valueIncrease(i_max, i_step, 0);
 
@@ -1574,7 +1581,7 @@ void dMenu_Collect_c::titleOpenProc(short i_step, short i_max) {
 }
 
 /* 8019F674-8019F738       .text noteOpenProc__15dMenu_Collect_cFss */
-void dMenu_Collect_c::noteOpenProc(short i_step, short i_max) {
+void dMenu_Collect_c::noteOpenProc(s16 i_step, s16 i_max) {
     if (i_max >= i_step) {
         fopMsgM_valueIncrease(i_max, i_step, 0);
         f32 t = fopMsgM_valueIncrease(i_max, i_max - i_step, 0);
@@ -1589,7 +1596,7 @@ void dMenu_Collect_c::noteOpenProc(short i_step, short i_max) {
 }
 
 /* 8019F738-8019F7C4       .text nameOpenProc__15dMenu_Collect_cFss */
-void dMenu_Collect_c::nameOpenProc(short i_step, short i_max) {
+void dMenu_Collect_c::nameOpenProc(s16 i_step, s16 i_max) {
     if (i_max >= i_step) {
         fopMsgM_valueIncrease(i_max, i_step, 0);
         nameTrans(0.0f, fopMsgM_valueIncrease(i_max, i_max - i_step, 0) * 50.0f);
@@ -1681,7 +1688,7 @@ void dMenu_Collect_c::itemBitCheck() {
             ((J2DPicture*)mE08[4].pane)->changeTexture("triforce.bti", 0);
 
             JKRArchive* r5 = mpArc;
-            ResTIMG* timg = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "triforce.bti", r5);
+            ResTIMG* timg = (ResTIMG*)JKRGetResource('TIMG', "triforce.bti", r5);
 
             mE08[4].mPosCenterOrig = mFC8.mPosCenterOrig;
             mE08[4].mPosCenter = mFC8.mPosCenter;
@@ -1995,8 +2002,8 @@ void dMenu_Collect_c::tactGuideShow(u8 i_song, bool i_fadeIn) {
         315,
     };
 
-    float rightOffset;
-    float xOffset = 0.0f;
+    f32 rightOffset;
+    f32 xOffset = 0.0f;
 
     if (tact_beat[i_song] == 3) {
         xOffset = (m17A8[1].mPosCenterOrig.x - m17A8[0].mPosCenterOrig.x) * 1.5f;
@@ -2090,7 +2097,7 @@ void dMenu_Collect_c::tactDemoMode(u8) {
     s16 stepMark[8];
 
     stepMark[0] = 0;
-    stepMark[1] = m1498[0].mUserArea;
+    stepMark[1] = stepMark[0] + m1498[0].mUserArea;
     stepMark[2] = stepMark[1] + m1498[1].mUserArea;
     stepMark[3] = stepMark[2] + m1498[2].mUserArea;
     stepMark[4] = stepMark[3] + m1498[3].mUserArea;
@@ -2407,8 +2414,8 @@ void dMenu_Collect_c::tactPlayMode(u8 i_song) {
 
 /* 801A1344-801A1598       .text tactTrans__15dMenu_Collect_cFUcff */
 void dMenu_Collect_c::tactTrans(u8 i_song, f32 i_transX, f32 i_transY) {
-    f32 y = i_transY;
     f32 x = i_transX;
+    f32 y = i_transY;
 
     if (tact_beat[i_song] == 3) {
         x += (m17A8[1].mPosCenterOrig.x - m17A8[0].mPosCenterOrig.x) * 1.5f;
@@ -2633,7 +2640,7 @@ void dMenu_Collect_c::itemnameMove() {
             int temp;
             
             if (timer <= 10) {
-                float t = fopMsgM_valueIncrease(10, timer, 0);
+                f32 t = fopMsgM_valueIncrease(10, timer, 0);
                 fopMsgM_setNowAlpha(&m890[0], t);
                 fopMsgM_setNowAlpha(&m890[1], 1.0f - t);
                 fopMsgM_setNowAlphaZero(&m858);
@@ -2642,7 +2649,7 @@ void dMenu_Collect_c::itemnameMove() {
                 fopMsgM_setNowAlphaZero(&m858);
             } else if (timer <= 70) {
                 temp = timer - 60;
-                float t = fopMsgM_valueIncrease( 10, temp, 0);
+                f32 t = fopMsgM_valueIncrease( 10, temp, 0);
                 fopMsgM_setNowAlpha(&m890[0], 1.0f - t);
                 fopMsgM_setNowAlpha(&m858, t);
             } else if (timer <= 120) {
@@ -2650,7 +2657,7 @@ void dMenu_Collect_c::itemnameMove() {
                 fopMsgM_setInitAlpha(&m858);
             } else if (timer <= 130) {
                 temp = timer - 120;
-                float t = fopMsgM_valueIncrease(10, temp, 0);
+                f32 t = fopMsgM_valueIncrease(10, temp, 0);
                 fopMsgM_setNowAlpha(&m890[0], t);
                 fopMsgM_setNowAlpha(&m858, 1.0f - t);
             }
@@ -2668,7 +2675,7 @@ void dMenu_Collect_c::itemnameMove() {
             int alpha_timer = m858.mUserArea;
 
             if (alpha_timer <= 10) {
-                float t = fopMsgM_valueIncrease(10, alpha_timer, 0);
+                f32 t = fopMsgM_valueIncrease(10, alpha_timer, 0);
                 fopMsgM_setNowAlpha(&m890[0], t);
                 fopMsgM_setNowAlpha(&m890[1], 1.0f - t);
                 fopMsgM_setNowAlphaZero(&m858);
@@ -2683,7 +2690,6 @@ void dMenu_Collect_c::itemnameMove() {
 
 /* 801A2CA4-801A36AC       .text itemnameSet__15dMenu_Collect_cFv */
 void dMenu_Collect_c::itemnameSet() {
-    /* Nonmatching */
     fopMsgM_itemMsgGet_c msgGet;
     u32 msgNo = 0;
     int r30 = 0;
@@ -2691,12 +2697,11 @@ void dMenu_Collect_c::itemnameSet() {
 
     J2DTextBox::TFontSize copiedFontSize;
     J2DTextBox::TFontSize nameFontSize;
-    J2DTextBox::TFontSize initialFontSize;
 
+#if VERSION > VERSION_JPN
+    J2DTextBox::TFontSize initialFontSize;
     initialFontSize.mSizeY = 29.0f;
     initialFontSize.mSizeX = 29.0f;
-
-#if VERSION > VERSION_DEMO
     ((J2DTextBox*)m858.pane)->setFontSize(initialFontSize);
 #endif
 
@@ -2933,10 +2938,6 @@ void dMenu_Collect_c::itemnameSet() {
         return;
     }
 
-    JUTFont::TWidth width;
-    JUTFont::TWidth firstWidth;
-    u8 characterWidth;
-
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
     JUT_ASSERT(VERSION_SELECT(2992, 2992, 3025, 3025), head_p);
 
@@ -2985,27 +2986,24 @@ void dMenu_Collect_c::itemnameSet() {
             appendBuf[1] = '\0';
         }
 
-        mpFont->getWidthEntry(c, &width);
-
-        characterWidth = width.field_0x1;
+        int characterWidth = mpFont->getWidth(c);
 
         strcat(name[0], appendBuf);
 
         if (!firstCharacter) {
-            mpFont->getWidthEntry(c, &firstWidth);
-
-            measuredWidth = fontScale * (characterWidth + firstWidth.field_0x0);
+            measuredWidth = fontScale * (characterWidth + mpFont->getOffset(c));
 
             firstCharacter = true;
         } else {
-            measuredWidth += (s16)characterWidth * fontScale;
+            measuredWidth += characterWidth * fontScale;
         }
     }
 
     f32 paneWidth = ((J2DTextBox*)m890[0].pane)->getBounds().f.x - ((J2DTextBox*)m890[0].pane)->getBounds().i.x;
 
     if (paneWidth < measuredWidth) {
-        nameFontSize.mSizeX = (s32)((nameFontSize.mSizeX * paneWidth) / measuredWidth);
+        s32 sizeX = (nameFontSize.mSizeX * paneWidth) / measuredWidth;
+        nameFontSize.mSizeX = sizeX;
     }
 
     ((J2DTextBox*)m890[0].pane)->setFontSize(nameFontSize);
@@ -3015,7 +3013,6 @@ void dMenu_Collect_c::itemnameSet() {
 
 /* 801A36AC-801A42D0       .text itemnoteSet__15dMenu_Collect_cFv */
 void dMenu_Collect_c::itemnoteSet() {
-    /* Nonmatching - regswap */
     fopMsgM_itemMsgGet_c msgGet;
     int triforceCount;
     u32 msgNo;
@@ -3044,7 +3041,7 @@ void dMenu_Collect_c::itemnoteSet() {
 
     f32 rubyFontSize = ((J2DTextBox*)m740.pane)->mFontSizeX;
 
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     f32 f30 = ((J2DTextBox*)m778.pane)->mFontSizeX;
 #else
     J2DTextBox::TFontSize msgFontSize;
@@ -3224,7 +3221,7 @@ void dMenu_Collect_c::itemnoteSet() {
     }
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(VERSION_SELECT(0xCD3, 0xCD3, 0xCD3, 0xCD3), head_p);
+    JUT_ASSERT(VERSION_SELECT(3243, 3243, 3283, 3283), head_p);
 
     const char* bmgData = msgGet.getMessage(head_p);
 
@@ -3240,7 +3237,7 @@ void dMenu_Collect_c::itemnoteSet() {
     mMsgProc.setRubyCharSpace(((J2DTextBox*)m740.pane)->getCharSpace());
     mMsgProc.setLineSpace(((J2DTextBox*)m778.pane)->getLineSpace());
     mMsgProc.setMesgEntry(&mesgEntry);
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
     mMsgProc.setFontSize(f30);
 #else
     mMsgProc.setFontSize(msgFontSize.mSizeX);
@@ -3261,7 +3258,7 @@ void dMenu_Collect_c::itemnoteSet() {
 
     f32 lineSpace = ((J2DTextBox*)m778.pane)->getLineSpace();
 
-    int lineAdjust = 3 - lineCount;
+    int lineAdjust = VERSION_SELECT(2, 2, 3, 3) - lineCount;
     f32 yShift = lineAdjust * (lineSpace / 2.0f);
 
     ((J2DTextBox*)m740.pane)->shiftSet(0.0f, yShift);
@@ -3276,11 +3273,13 @@ void dMenu_Collect_c::itemnoteSet() {
 
     for (int i = 0; i < 15; i++) {
         u8 iconNo = mMsgProc.getIconNum(i);
+#if VERSION > VERSION_DEMO
         u32 iconColor = mMsgProc.getIconColor(i);
 
         if (iconColor == 0xFFFFFFFF) {
-            iconColor = 0xFF;
+            iconColor = 0x000000FF;
         }
+#endif
 
         if (iconNo != 0xFF && m0B0[i].mUserArea == -1) {
             if (iconNo == 0x14) {
@@ -3309,21 +3308,7 @@ void dMenu_Collect_c::itemnoteSet() {
 
                 fopMsgM_blendDraw(&m0B0[m27E0], "font_10.bti");
 
-                J2DPicture* pic = (J2DPicture*)m0B0[m27E0].pane;
-
-                pic->setBlendColorRatio(
-                    0.0f,
-                    1.0f,
-                    1.0f,
-                    1.0f
-                );
-
-                pic->setBlendAlphaRatio(
-                    0.0f,
-                    1.0f,
-                    1.0f,
-                    1.0f
-                );
+                ((J2DPicture*)m0B0[m27E0].pane)->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
 
                 if (mNowItem == 0x12) {
                     if (dComIfGs_isCollect(4, 1)) {
@@ -3345,7 +3330,7 @@ void dMenu_Collect_c::itemnoteSet() {
                 fopMsgM_outFontSet(
                     (J2DPicture*)m0B0[i].pane,
                     &m0B0[i].mUserArea,
-                    iconColor,
+                    DEMO_SELECT(mMsgProc.getIconColor(i), iconColor),
                     iconNo
                 );
             }
@@ -3479,7 +3464,11 @@ void dMenu_Collect_c::outFontDraw() {
             m0B0[i].mNowAlpha = m778.pane->getAlpha();
 
             if (i == m27E0) {
-                mMsgProc.selectArrow((J2DPicture*)m0B0[i].pane, g_msgHIO.field_0x70, g_msgHIO.field_0x70);
+                mMsgProc.selectArrow(
+                    (J2DPicture*)m0B0[i].pane,
+                    VERSION_SELECT(29, 29, g_msgHIO.field_0x70, g_msgHIO.field_0x70),
+                    VERSION_SELECT(29, 29, g_msgHIO.field_0x70, g_msgHIO.field_0x70)
+                );
 
                 m3F8[i].pane->move(m3F8[i].mPosTopLeft.x, m3F8[i].mPosTopLeft.y);
 
@@ -3490,8 +3479,8 @@ void dMenu_Collect_c::outFontDraw() {
                     (J2DPicture*)m3F8[i].pane,
                     (int)m3F8[i].mPosTopLeft.x,
                     (int)m3F8[i].mPosTopLeft.y,
-                    g_msgHIO.field_0x70,
-                    g_msgHIO.field_0x70,
+                    VERSION_SELECT(29, 29, g_msgHIO.field_0x70, g_msgHIO.field_0x70),
+                    VERSION_SELECT(29, 29, g_msgHIO.field_0x70, g_msgHIO.field_0x70),
                     &m0B0[i].mUserArea,
                     m0B0[i].mNowAlpha,
                     m0B0[i].mPosTopLeftOrig.y
@@ -3559,26 +3548,26 @@ bool dMenu_Collect_c::collectItemGetCheck(u8 param_1) {
 /* 801A4A28-801A4F18       .text _create__15dMenu_Collect_cFv */
 void dMenu_Collect_c::_create() {
     scrn = new MyScreen();
-    JUT_ASSERT(VERSION_SELECT(0xe4a, 0xe4a, 0xe4a, 0xe4a), scrn != NULL); 
+    JUT_ASSERT(VERSION_SELECT(3570, 3583, 3658, 3658), scrn != NULL); 
     scrn->set("menu_collect_01.blo", mpArc);
 
     stick = new STControl(5, 2, 3, 2);
-    JUT_ASSERT(VERSION_SELECT(0xe4e, 0xe4e, 0xe4e, 0xe4e), stick != NULL);
+    JUT_ASSERT(VERSION_SELECT(3574, 3587, 3662, 3662), stick != NULL);
 
     cstick = new CSTControl(5, 2, 3, 2);
-    JUT_ASSERT(VERSION_SELECT(0xe51, 0xe51, 0xe51, 0xe51), cstick != NULL);
+    JUT_ASSERT(VERSION_SELECT(3577, 3590, 3665, 3665), cstick != NULL);
 
     stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x800);
 
     outFont = new dDlst_2DOutFont_c();
-    JUT_ASSERT(VERSION_SELECT(0xe55, 0xe55, 0xe55, 0xe55), outFont != NULL);
+    JUT_ASSERT(VERSION_SELECT(3581, 3594, 3669, 3669), outFont != NULL);
 
 #if VERSION > VERSION_JPN
     outFont->m74 = 1;
 #endif
 
     dMo_c = new dMenu_Option_c();
-    JUT_ASSERT(VERSION_SELECT(0xe59, 0xe59, 0xe59, 0xe59), dMo_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(3584, 3597, 3673, 3673), dMo_c != NULL);
 
     dMo_c->setArchive(mpOptArc);
     dMo_c->setFont(mpFont, mpRubyFont);
@@ -3586,7 +3575,7 @@ void dMenu_Collect_c::_create() {
     dMo_c->_create();
 
     dMs_c = new dMenu_save_c();
-    JUT_ASSERT(VERSION_SELECT(0xe63, 0xe63, 0xe63, 0xe63), dMs_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(3594, 3607, 3683, 3683), dMs_c != NULL);
 
     dMs_c->setUseType(1);
     dMs_c->_create();
@@ -3630,10 +3619,10 @@ void dMenu_Collect_c::_create3() {
     stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x800);
 
     outFont = new dDlst_2DOutFont_c();
-    JUT_ASSERT(VERSION_SELECT(0xE9A, 0xE9A, 0xE9A, 0xE9A), outFont != NULL);
+    JUT_ASSERT(VERSION_SELECT(3649, 3662, 3738, 3738), outFont != NULL);
 
     dMo_c = new dMenu_Option_c();
-    JUT_ASSERT(VERSION_SELECT(0xE9D, 0xE9D, 0xE9D, 0xE9D), dMo_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(3652, 3665, 3741, 3741), dMo_c != NULL);
 
     dMo_c->setArchive(mpOptArc);
     dMo_c->setFont(mpFont, mpRubyFont);
@@ -3641,7 +3630,7 @@ void dMenu_Collect_c::_create3() {
     dMo_c->_create();
 
     dMs_c = new dMenu_save_c();
-    JUT_ASSERT(VERSION_SELECT(0xEA6, 0xEA6, 0xEA6, 0xEA6), dMs_c != NULL);
+    JUT_ASSERT(VERSION_SELECT(3661, 3674, 3750, 3750), dMs_c != NULL);
 
     dMs_c->setUseType(1);
     dMs_c->_create();
@@ -3692,9 +3681,7 @@ void dMenu_Collect_c::_delete() {
     delete stick;
     delete cstick;
 
-    if (outFont != NULL) {
-        delete outFont;
-    }
+    delete outFont;
 
     dMo_c->_delete();
     delete dMo_c;
@@ -3962,7 +3949,7 @@ void dMenu_Collect_c::_draw() {
         fopMsgM_setAlpha(&m23E8);
         fopMsgM_setAlpha(&m2420);
     } else {
-        float alpha_scale = fopMsgM_valueIncrease(10, mTimer, 0);
+        f32 alpha_scale = fopMsgM_valueIncrease(10, mTimer, 0);
 
         if (mTriggerInfo != 1 && mTriggerInfo != 2) {
             // Fade the top-level panes with the transition factor.
@@ -4181,11 +4168,11 @@ bool dMenu_Collect_c::_close() {
 
     mTimer--;
 
-    float main = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
-    float sub = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
-    float title = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
-    float name = 50.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
-    float note = fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 main = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 sub = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 title = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 name = 50.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 note = fopMsgM_valueIncrease(10, 10 - mTimer, 0);
 
     f32 angle;
     f32 rotation;
@@ -4316,11 +4303,11 @@ bool dMenu_Collect_c::_close3() {
 
     mTimer--;
 
-    float main = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
-    float sub = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
-    float title = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
-    float name = 50.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
-    float note = fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 main = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 sub = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 title = -100.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 name = 50.0f * fopMsgM_valueIncrease(10, 10 - mTimer, 0);
+    f32 note = fopMsgM_valueIncrease(10, 10 - mTimer, 0);
 
     f32 angle;
     f32 rotation;
@@ -4447,11 +4434,11 @@ bool dMenu_Collect_c::_close3() {
 }
 
 /* 801A7710-801A7A5C       .text animeStep1__15dMenu_Collect_cFss */
-void dMenu_Collect_c::animeStep1(short param_1, short param_2) {
-    short step = param_2;
-    short step_max = param_1;
+void dMenu_Collect_c::animeStep1(s16 param_1, s16 param_2) {
+    s16 step = param_2;
+    s16 step_max = param_1;
 
-    float alpha_scale = fopMsgM_valueIncrease(step_max, step, 0);
+    f32 alpha_scale = fopMsgM_valueIncrease(step_max, step, 0);
     mDD0.mNowAlpha = alpha_scale * 255.0f;
     mD98.mNowAlpha = g_mcHIO.m5C * alpha_scale;
 
@@ -4489,7 +4476,7 @@ void dMenu_Collect_c::animeStep1(short param_1, short param_2) {
         }
 
         ((J2DPicture*)mE08[4].pane)->changeTexture("triforce.bti", 0);
-        ResTIMG* timg = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "triforce.bti", mpArc);
+        ResTIMG* timg = (ResTIMG*)JKRGetResource('TIMG', "triforce.bti", mpArc);
 
         mE08[4].mPosCenterOrig.x = mFC8.mPosCenterOrig.x;
         mE08[4].mPosCenterOrig.y = mFC8.mPosCenterOrig.y;
@@ -4511,9 +4498,9 @@ void dMenu_Collect_c::animeStep1(short param_1, short param_2) {
 }
 
 /* 801A7A5C-801A7B70       .text animeStep2__15dMenu_Collect_cFss */
-void dMenu_Collect_c::animeStep2(short param_1, short param_2) {
-    float t_in = fopMsgM_valueIncrease(param_1, param_2, 0);
-    float t_out = fopMsgM_valueIncrease(param_1, param_1 - param_2, 2);
+void dMenu_Collect_c::animeStep2(s16 param_1, s16 param_2) {
+    f32 t_in = fopMsgM_valueIncrease(param_1, param_2, 0);
+    f32 t_out = fopMsgM_valueIncrease(param_1, param_1 - param_2, 2);
 
     fopMsgM_paneScaleXY(&mD98, (g_mcHIO.m54 - 1.0f) * t_in + 1.0f);
     mD98.mNowAlpha = (u8)(g_mcHIO.m5C * t_out);
@@ -4528,9 +4515,9 @@ void dMenu_Collect_c::animeStep2(short param_1, short param_2) {
 }
 
 /* 801A7B70-801A7CBC       .text animeStep3__15dMenu_Collect_cFss */
-void dMenu_Collect_c::animeStep3(short param_1, short param_2) {
-    float alpha_t = fopMsgM_valueIncrease(param_1, param_1 - param_2, 1);
-    float name_t = fopMsgM_valueIncrease(param_1, param_2, 2);
+void dMenu_Collect_c::animeStep3(s16 param_1, s16 param_2) {
+    f32 alpha_t = fopMsgM_valueIncrease(param_1, param_1 - param_2, 1);
+    f32 name_t = fopMsgM_valueIncrease(param_1, param_2, 2);
 
     mDD0.mNowAlpha = alpha_t * 255.0f;
 
@@ -4560,7 +4547,7 @@ void dMenu_Collect_c::animeStep3(short param_1, short param_2) {
 }
 
 /* 801A7CBC-801A7D60       .text animeStep4__15dMenu_Collect_cFss */
-void dMenu_Collect_c::animeStep4(short param_1, short param_2) {
+void dMenu_Collect_c::animeStep4(s16 param_1, s16 param_2) {
     s16 quarter = param_1 / 4;
     s16 step = param_2;
 
@@ -4654,10 +4641,10 @@ bool dMenu_Collect_c::_close2() {
     mTimer--;
 
     f32 main = -100.0f * fopMsgM_valueIncrease(g_menuHIO.field_0x92, g_menuHIO.field_0x92 - mTimer, 0);
-    float sub = -100.0f * fopMsgM_valueIncrease(g_menuHIO.field_0x92, g_menuHIO.field_0x92 - mTimer, 0);
-    float title = -100.0f * fopMsgM_valueIncrease(g_menuHIO.field_0x92, g_menuHIO.field_0x92 - mTimer, 0);
-    float name = 50.0f * fopMsgM_valueIncrease(g_menuHIO.field_0x92, g_menuHIO.field_0x92 - mTimer, 0);
-    float note = fopMsgM_valueIncrease(g_menuHIO.field_0x92, g_menuHIO.field_0x92 - mTimer, 0);
+    f32 sub = -100.0f * fopMsgM_valueIncrease(g_menuHIO.field_0x92, g_menuHIO.field_0x92 - mTimer, 0);
+    f32 title = -100.0f * fopMsgM_valueIncrease(g_menuHIO.field_0x92, g_menuHIO.field_0x92 - mTimer, 0);
+    f32 name = 50.0f * fopMsgM_valueIncrease(g_menuHIO.field_0x92, g_menuHIO.field_0x92 - mTimer, 0);
+    f32 note = fopMsgM_valueIncrease(g_menuHIO.field_0x92, g_menuHIO.field_0x92 - mTimer, 0);
 
     f32 angle;
     f32 rotation;

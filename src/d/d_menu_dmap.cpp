@@ -1586,7 +1586,7 @@ void dMenu_Dmap_c::itemnoteSet() {
 #if VERSION > VERSION_DEMO
         u32 color = mMsgProc.getIconColor(i);
         if (color == 0xFFFFFFFF) {
-            color = 0xFF;
+            color = 0x000000FF;
         }
 #endif
         if (iconNo == 0xFF) {

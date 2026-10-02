@@ -250,7 +250,7 @@ static void dummy1() {
 void dMCloth_c::init() {
     cloth_init();
 
-    ResTIMG* image = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "cloth_piece01.bti", mpArc);
+    ResTIMG* image = (ResTIMG*)JKRGetResource('TIMG', "cloth_piece01.bti", mpArc);
     JUT_ASSERT(VERSION_SELECT(528, 526, 530, 530), image != NULL);
 
 #if VERSION == VERSION_DEMO

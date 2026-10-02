@@ -2,6 +2,7 @@
 #define F_OP_MSG_MNG_H
 
 #include "JSystem/J2DGraph/J2DPicture.h"
+#include "JSystem/J2DGraph/J2DScreen.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "f_pc/f_pc_leaf.h"
 #include "f_op/f_op_msg.h"
@@ -163,6 +164,24 @@ public:
     /* 0x12C */ f32 m12C;
     /* 0x130 */ f32 m130;
     /* 0x134 */ u8 m134;
+};
+
+class MyScreen : public J2DScreen {
+public:
+    J2DPane* createPane(const J2DPane::J2DScrnBlockHeader& pHeader, JSURandomInputStream* pStream, J2DPane* pParent) {
+        J2DPane* pane;
+
+        switch (pHeader.mMagic) {
+            case 'PIC1':
+                pane = new MyPicture(pParent, pStream);
+                break;
+            default:
+                pane = J2DScreen::createPane(pHeader, pStream, pParent);
+                break;
+        }
+
+        return pane;
+    }
 };
 
 enum {
@@ -466,7 +485,7 @@ public:
     void setRubyFontSize(int i_size) { rubyFontSize = i_size; }
     void setLineCount(int i_count) { lineCount = i_count; }
     void setLineWidth(int i_width) { lineWidth = i_width; }
-    void setSelectNum(u8) {}
+    void setSelectNum(u8) {} // TODO used in dMenu_Collect_c::itemnoteSet
     void setSendSpeed(int i_speed) { sendSpeed = i_speed; }
     void setSpaceFlagOff() { spaceFlag = 0; }
     void setSpaceFlagOn() { spaceFlag = 1; }

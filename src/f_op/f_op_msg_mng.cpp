@@ -9957,15 +9957,13 @@ f32 fopMsgM_valueIncrease(int i_max, int i_value, u8 i_mode) {
 void fopMsgM_blendInit(fopMsgM_pane_class* i_pane, const char* data) {
     ((J2DPicture*)i_pane->pane)->append(data, 1.0f);
     J2DPicture* pic = (J2DPicture*)i_pane->pane;
-    pic->setBlendColorRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    pic->setBlendAlphaRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    pic->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /* 8003C0F8-8003C16C       .text fopMsgM_blendInit__FP10J2DPicturePCc */
 void fopMsgM_blendInit(J2DPicture* pic, const char* data) {
     pic->append(data, 1.0f);
-    pic->setBlendColorRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    pic->setBlendAlphaRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    pic->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /* 8003C16C-8003C1D4       .text fopMsgM_blendDraw__FP18fopMsgM_pane_classPCc */
