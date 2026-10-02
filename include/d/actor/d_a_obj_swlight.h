@@ -37,7 +37,9 @@ namespace daObjSwlight {
             PRM_TYPE_S = 0x10,
         };
    
-        void get_power() const {}
+        f32 get_power() const {
+            return this->mF30;
+        }
         bool is_switch() const {
             return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave());
         }
