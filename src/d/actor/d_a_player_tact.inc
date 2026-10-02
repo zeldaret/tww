@@ -393,7 +393,7 @@ BOOL daPy_lk_c::procTactWait() {
                 mDoAud_tact_setBeat(rightDir);
                 m35A0 = 0.0f;
                 mProcVar5.mTactWaitNowBeat = 0;
-                m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
+                m_old_fdata->initOldFrameMorf(5.0f, 0, CL_NUM_JNTS_e);
                 m3624 = 0;
                 mProcVar0.m34D0 = -1;
             }

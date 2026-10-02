@@ -3538,7 +3538,7 @@ void daPy_lk_c::setAnimeUnequip() {
         setAnimeUnequipSword();
     } else if (mEquipItem == daPyItem_BOKO_e) {
         deleteEquipItem(FALSE);
-        m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
+        m_old_fdata->initOldFrameMorf(5.0f, 0, CL_NUM_JNTS_e);
     } else {
         setAnimeUnequipItem(mEquipItem);
     }
@@ -4273,7 +4273,7 @@ BOOL daPy_lk_c::checkNextActionFromButton() {
                 dComIfGp_setRStatus(dActStts_DROP_e);
                 if (spActionTrigger()) {
                     deleteEquipItem(FALSE);
-                    m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
+                    m_old_fdata->initOldFrameMorf(5.0f, 0, CL_NUM_JNTS_e);
                     return true;
                 }
             } else if (dComIfGs_getSelectEquip(1) == dItemNo_NONE_e ||
@@ -4782,7 +4782,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
                 shape_angle.y = m352C + 0x8000;
                 procClimbMoveUpDown_init(1);
                 m35E0 = 43.67353f;
-                m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
+                m_old_fdata->initOldFrameMorf(5.0f, 0, CL_NUM_JNTS_e);
                 mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
                 return true;
             }
@@ -4808,7 +4808,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
                     procLadderMove_init(TRUE, DIR_FORWARD, &current.pos);
                     mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
                 }
-                m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
+                m_old_fdata->initOldFrameMorf(5.0f, 0, CL_NUM_JNTS_e);
                 return true;
             }
         }
@@ -4822,7 +4822,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
                 current.pos.y = current.pos.y - 60.0f;
                 procClimbMoveUpDown_init(1);
                 m35E0 = 43.67353f;
-                m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
+                m_old_fdata->initOldFrameMorf(5.0f, 0, CL_NUM_JNTS_e);
                 mFrameCtrlUnder[UNDER_MOVE0_e].setRate(0.0f);
                 return true;
             }
@@ -4846,7 +4846,7 @@ BOOL daPy_lk_c::changeFrontWallTypeProc() {
                 }
                 procLadderMove_init(TRUE, DIR_FORWARD, &current.pos);
                 m35E0 = 43.67353f;
-                m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
+                m_old_fdata->initOldFrameMorf(5.0f, 0, CL_NUM_JNTS_e);
                 return true;
             }
             return procLadderUpStart_init();
@@ -5418,7 +5418,7 @@ BOOL daPy_lk_c::changeDemoProc() {
         }
         var_r28 = procWait_init();
         if (var_r28 != 0) {
-            m_old_fdata->initOldFrameMorf(0.0f, 0, 0x2A);
+            m_old_fdata->initOldFrameMorf(0.0f, 0, CL_NUM_JNTS_e);
         }
         return var_r28;
     }
@@ -11996,8 +11996,7 @@ BOOL daPy_lk_c::createHeap() {
     JUT_ASSERT(VERSION_SELECT(21018, 21125, 21205, 21205), tmp_modelData != NULL);
     mpGicer01Btk = entryBtk(tmp_modelData, dRes_INDEX_LINK_BTK_GICER01_e);
     
-    const int numCLJoints = 0x2A;
-    m_old_fdata = new mDoExt_MtxCalcOldFrame(new J3DTransformInfo[numCLJoints], new Quaternion[numCLJoints]);
+    m_old_fdata = new mDoExt_MtxCalcOldFrame(new J3DTransformInfo[CL_NUM_JNTS_e], new Quaternion[CL_NUM_JNTS_e]);
     JUT_ASSERT(VERSION_SELECT(21046, 21153, 21233, 21233), m_old_fdata != NULL);
     
     m_pbCalc[PART_UNDER_e] = new mDoExt_MtxCalcAnmBlendTblOld(m_old_fdata, ARRAY_SIZE(mAnmRatioUnder), mAnmRatioUnder);
@@ -12581,7 +12580,7 @@ cPhs_State daPy_lk_c::makeBgWait() {
     } else {
         procWait_init();
     }
-    m_old_fdata->initOldFrameMorf(0.0f, 0, 0x2A);
+    m_old_fdata->initOldFrameMorf(0.0f, 0, CL_NUM_JNTS_e);
     setWorldMatrix();
     mpCLModelData->getJointNodePointer(CL_JNT_LINK_ROOT_e)->setMtxCalc(m_pbCalc[PART_UNDER_e]);
     mpCLModelData->getJointNodePointer(CL_JNT_BODY_CHN_e)->setMtxCalc(m_pbCalc[PART_UPPER_e]);
@@ -12753,7 +12752,7 @@ BOOL daPy_lk_c::setMoveAnime(f32 i_blendRatio, f32 i_anmSpeed0, f32 i_anmSpeed1,
     }
 
     if (i_morf >= 0.0f) {
-        m_old_fdata->initOldFrameMorf(i_morf, 0, 0x2A);
+        m_old_fdata->initOldFrameMorf(i_morf, 0, CL_NUM_JNTS_e);
     }
 
     if (mDirection == DIR_BACKWARD || (mCurProc == daPyProc_ROPE_SWING_e && !checkModeFlg(ModeFlg_00000400)))
@@ -12818,7 +12817,7 @@ BOOL daPy_lk_c::setSingleMoveAnime(daPy_ANM i_anmID, f32 i_rate, f32 i_start, s1
     mAnmRatioUpper[UPPER_MOVE1_e].setAnmTransform(NULL);
     
     if (i_morf >= 0.0f) {
-        m_old_fdata->initOldFrameMorf(i_morf, 0, 0x2A);
+        m_old_fdata->initOldFrameMorf(i_morf, 0, CL_NUM_JNTS_e);
     }
     
     setTextureAnime(mAnmDataTable[i_anmID].mTexAnmIdx, 0);

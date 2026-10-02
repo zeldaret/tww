@@ -323,7 +323,7 @@ BOOL daPy_lk_c::dProcTool() {
             mAnmRatioUpper[UPPER_MOVE0_e].setAnmTransform(r26);
             m34C3 = 0;
             if (morf >= 0.0f) {
-                m_old_fdata->initOldFrameMorf(morf, 0, 0x2A);
+                m_old_fdata->initOldFrameMorf(morf, 0, CL_NUM_JNTS_e);
             }
             demo_actor->setAnmFrameMax(r26->getFrameMax());
             setSeAnime(anm_heap_under, &mFrameCtrlUnder[UNDER_MOVE0_e]);
