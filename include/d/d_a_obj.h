@@ -9,9 +9,9 @@ class cBgS_PolyInfo;
 
 namespace daObj {
     template <typename T>
-    int PrmAbstract(const fopAc_ac_c* actor, T width, T shift) {
+    T PrmAbstract(const fopAc_ac_c* actor, T width, T shift) {
         u32 param = fopAcM_GetParam((fopAc_ac_c*)actor);
-        return ((1 << width) - 1) & (param >> shift);
+        return T((param >> shift) & ((1 << width) - 1));
     }
     
     void make_land_effect(fopAc_ac_c*, dBgS_GndChk*, f32);

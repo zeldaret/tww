@@ -23,8 +23,7 @@ BOOL daObjMsdanSub2::Act_c::Create() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -1500.0f, -1000.0f, -1500.0f, 1500.0f, 1000.0f, 1500.0f);
 
-    s32 val = prm_get_swSave();
-    BOOL isSwitch = dComIfGs_isSwitch(val, fopAcM_GetHomeRoomNo(this));
+    BOOL isSwitch = fopAcM_isSwitch(this, prm_get_swSave());
 
     if (isSwitch) {
         if (!(prm_get_objNo() & 1)) {
@@ -60,9 +59,7 @@ cPhs_State daObjMsdanSub2::Act_c::Mthd_Create() {
             JUT_ASSERT(0x91, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
         }
 
-        u32 val = prm_get_swSave();
-
-        if (dComIfGs_isSwitch(val, fopAcM_GetHomeRoomNo(this)) && mpBgW != NULL) {
+        if (fopAcM_isSwitch(this, prm_get_swSave()) && mpBgW != NULL) {
             if (mpBgW->ChkUsed()) {
                 dComIfG_Bgsp()->Release(mpBgW);
             }
@@ -87,11 +84,11 @@ BOOL daObjMsdanSub2::Act_c::Mthd_Delete() {
 
 /* 000004A8-00000528       .text set_mtx__Q214daObjMsdanSub25Act_cFv */
 void daObjMsdanSub2::Act_c::set_mtx() {
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
 
     mModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    MTXCopy(mDoMtx_stack_c::get(), M_tmp_mtx);
+    cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
 
     return;
 }
@@ -100,15 +97,14 @@ void daObjMsdanSub2::Act_c::set_mtx() {
 void daObjMsdanSub2::Act_c::init_mtx() {
     scale *= 1.01;
     mModel->setBaseScale(scale);
-    MTXCopy(M_tmp_mtx, mBgMtx);
+    cMtx_copy(M_tmp_mtx, mBgMtx);
     set_mtx();
     return;
 }
 
 /* 00000598-0000090C       .text Execute__Q214daObjMsdanSub25Act_cFPPA3_A4_f */
 BOOL daObjMsdanSub2::Act_c::Execute(Mtx** i_mtx) {
-    s32 var = prm_get_swSave();
-    BOOL isSwitch = dComIfGs_isSwitch(var, fopAcM_GetHomeRoomNo(this));
+    BOOL isSwitch = fopAcM_isSwitch(this, prm_get_swSave());
 
     if (isSwitch) {
         if (field_0x2DC < 0.0f) {
@@ -192,12 +188,12 @@ BOOL Mthd_Execute(void* i_this) {
 
 /* 00000A0C-00000A38       .text Mthd_Draw__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
-    return ((daObjMsdanSub2::Act_c*)i_this)->Draw();
+    return ((daObjMsdanSub2::Act_c*)i_this)->MoveBGDraw();
 }
 
 /* 00000A38-00000A64       .text Mthd_IsDelete__Q214daObjMsdanSub232@unnamed@d_a_obj_msdan_sub2_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
-    return ((daObjMsdanSub2::Act_c*)i_this)->IsDelete();
+    return ((daObjMsdanSub2::Act_c*)i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_MsdanSub2 = {
