@@ -61,28 +61,28 @@ BOOL daPy_lk_c::checkNpcStatus() {
 }
 
 /* 8014D8F4-8014D938       .text getTactPlayRightArmAnm__9daPy_lk_cFl */
-u16 daPy_lk_c::getTactPlayRightArmAnm(s32 r4) {
-    if (r4 == 1)
+u16 daPy_lk_c::getTactPlayRightArmAnm(s32 i_armDir) {
+    if (i_armDir == mDoAud_ARM_UP_e)
         return dRes_INDEX_LKANM_BCK_ACTIONTAKTRUP_e;
-    else if (r4 == 3)
+    else if (i_armDir == mDoAud_ARM_DOWN_e)
         return dRes_INDEX_LKANM_BCK_ACTIONTAKTRDW_e;
-    else if (r4 == 2)
+    else if (i_armDir == mDoAud_ARM_RIGHT_e)
         return dRes_INDEX_LKANM_BCK_WAITTAKTRHANDL_e;
-    else if (r4 == 4)
+    else if (i_armDir == mDoAud_ARM_LEFT_e)
         return dRes_INDEX_LKANM_BCK_WAITTAKTRHANDR_e;
     else
         return dRes_INDEX_LKANM_BCK_WAITTAKT_e;
 }
 
 /* 8014D938-8014D97C       .text getTactPlayLeftArmAnm__9daPy_lk_cFl */
-u16 daPy_lk_c::getTactPlayLeftArmAnm(s32 r4) {
-    if (r4 == 1)
+u16 daPy_lk_c::getTactPlayLeftArmAnm(s32 i_armDir) {
+    if (i_armDir == mDoAud_ARM_UP_e)
         return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDU_e;
-    else if (r4 == 3)
+    else if (i_armDir == mDoAud_ARM_DOWN_e)
         return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDD_e;
-    else if (r4 == 2)
+    else if (i_armDir == mDoAud_ARM_RIGHT_e)
         return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDL_e;
-    else if (r4 == 4)
+    else if (i_armDir == mDoAud_ARM_LEFT_e)
         return dRes_INDEX_LKANM_BCK_WAITTAKTLHANDR_e;
     else
         return dRes_INDEX_LKANM_BCK_WAITTAKT_e;
@@ -114,18 +114,18 @@ BOOL daPy_lk_c::checkTactLastInput() {
 }
 
 /* 8014D9F8-8014DA78       .text setTactZev__9daPy_lk_cFUiiPc */
-void daPy_lk_c::setTactZev(fpc_ProcID tactZevPartnerId, int r30, char* r31) {
+void daPy_lk_c::setTactZev(fpc_ProcID i_partnerId, int i_melodyNum, char* i_eventName) {
 #if VERSION <= VERSION_JPN
-    if (r31)
+    if (i_eventName)
 #else
-    if (tactZevPartnerId != fpcM_ERROR_PROCESS_ID_e)
+    if (i_partnerId != fpcM_ERROR_PROCESS_ID_e)
 #endif
     {
         seStartSystem(JA_SE_PRE_TAKT);
     }
-    mTactZevPartnerId = tactZevPartnerId;
-    m34CC = r30;
-    m3494 = r31;
+    mTactZevPartnerId = i_partnerId;
+    mTactZevMelodyNum = i_melodyNum;
+    mTactZevEventName = i_eventName;
 }
 
 /* 8014DA78-8014DACC       .text getTactTopPos__9daPy_lk_cFP4cXyz */
@@ -149,9 +149,9 @@ BOOL daPy_lk_c::getTactNormalWait() const {
 /* 8014DB00-8014DB2C       .text getTactMusic__9daPy_lk_cCFv */
 s32 daPy_lk_c::getTactMusic() const {
     if (mCurProc == daPyProc_TACT_PLAY_e)
-        return mProcVar6.m3570;
+        return mProcVar6.mTactPlayMelodyNum;
     if (mCurProc == daPyProc_TACT_WAIT_e)
-        return mProcVar7.m3574;
+        return mProcVar7.mTactWaitMelodyNum;
     return -1;
 }
 
@@ -169,7 +169,7 @@ int daPy_lk_c::getTactTimerCancel() const {
 
 /* 8014DB74-8014DB9C       .text checkTactPlayMelody__9daPy_lk_cFv */
 BOOL daPy_lk_c::checkTactPlayMelody() {
-    if (mCurProc == daPyProc_TACT_PLAY_e && mProcVar5.m34DA == 0) {
+    if (mCurProc == daPyProc_TACT_PLAY_e && mProcVar5.mTactPlayTimer == 0) {
         return TRUE;
     }
     return FALSE;
@@ -180,7 +180,7 @@ void daPy_lk_c::resetTactCount() {
     if (mCurProc == daPyProc_TACT_WAIT_e) {
         mProcVar4.m34D8 = 0;
         m35A0 = 0.0f;
-        mProcVar5.m34DA = 0;
+        mProcVar5.mTactWaitNowBeat = 0;
         mProcVar0.m34D0 = -1;
         mDoAud_tact_reset();
     }
@@ -191,7 +191,7 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     if (mCurProc == daPyProc_TACT_WAIT_e) {
         if (mProcVar6.m3570 != r30) {
             mProcVar4.m34D8 = 0;
-            mProcVar5.m34DA = 0;
+            mProcVar5.mTactWaitNowBeat = 0;
             mProcVar1.m34D2 = -1;
         }
         mProcVar6.m3570 = r30;
@@ -254,8 +254,8 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     setActAnimeUpper(dRes_INDEX_LKANM_BCK_WAITTAKT_e, UPPER_MOVE2_e, m_HIO->mItem.mTact.m.mAnmRate, 0.0f, -1, -1.0f);
     mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
     mNormalSpeed = 0.0f;
-    mProcVar2.m34D4 = 0;
-    mProcVar3.m34D6 = 0;
+    mProcVar2.mTactWaitRightHandPos = 0;
+    mProcVar3.mTactWaitLeftHandPos = 0;
     dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
 
     if (r30 == -1) {
@@ -264,7 +264,7 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     }
 
     mDoAud_tact_reset();
-    mDoAud_tact_setBeat(0);
+    mDoAud_tact_setBeat(mDoAud_ARM_CENTER_e);
     mDoAud_tact_setVolume(0.0f);
     mDoAud_tact_ambientPlay();
 
@@ -275,9 +275,9 @@ BOOL daPy_lk_c::procTactWait_init(int r30) {
     m32E4.makeEmitter(dPa_name::ID_AK_JN_TAKT00, mpEquipItemModel->getBaseTRMtx(), &current.pos, NULL);
     mProcVar6.m3570 = r30;
     mProcVar4.m34D8 = 0;
-    mProcVar7.m3574 = -1;
+    mProcVar7.mTactWaitMelodyNum = -1;
     m35A0 = 0.0f;
-    mProcVar5.m34DA = 0;
+    mProcVar5.mTactWaitNowBeat = 0;
     m3624 = 0;
     m35A4 = 0.0f;
     m35A8 = 0.0f;
@@ -316,7 +316,7 @@ BOOL daPy_lk_c::procTactWait() {
                 dComIfGp_evmng_cutEnd(mStaffIdx);
                 dComIfGp_setMetronomeOff();
             } else if (mProcVar6.m3570 == -1 || mProcVar6.m3570 == -3 || mProcVar6.m3570 >= 0) {
-                procTactPlay_init(mProcVar7.m3574, mProcVar6.m3570 == -1, mProcVar6.m3570 >= 0);
+                procTactPlay_init(mProcVar7.mTactWaitMelodyNum, mProcVar6.m3570 == -1, mProcVar6.m3570 >= 0);
             }
         }
         return TRUE;
@@ -359,18 +359,18 @@ BOOL daPy_lk_c::procTactWait() {
 
     int rightDir, leftDir;
     if (mProcVar6.m3570 != -5) {
-        rightDir = mDoAud_getTactDirection(1, mProcVar2.m34D4);
-        leftDir = mDoAud_getTactDirection(0, mProcVar3.m34D6);
+        rightDir = mDoAud_getTactDirection(mDoAud_MAIN_STICK_e, mProcVar2.mTactWaitRightHandPos);
+        leftDir = mDoAud_getTactDirection(mDoAud_C_STICK_e, mProcVar3.mTactWaitLeftHandPos);
         mDoAud_tact_setVolume(mStickDistance * cM_scos(m34DC));
     } else {
-        rightDir = mProcVar2.m34D4;
-        leftDir = mProcVar3.m34D6;
+        rightDir = mProcVar2.mTactWaitRightHandPos;
+        leftDir = mProcVar3.mTactWaitLeftHandPos;
     }
 
     m35A0 += 1.0f;
 
-    if (rightDir != mProcVar2.m34D4) {
-        if (m35A4 <= 0.0f || rightDir != 0) {
+    if (rightDir != mProcVar2.mTactWaitRightHandPos) {
+        if (m35A4 <= 0.0f || rightDir != mDoAud_ARM_CENTER_e) {
             setActAnimeUpper(
                 getTactPlayRightArmAnm(rightDir),
                 UPPER_MOVE1_e,
@@ -380,39 +380,42 @@ BOOL daPy_lk_c::procTactWait() {
                 m_HIO->mItem.mTact.m.field_0xC
             );
 
-            if (rightDir == 0 || rightDir == 2 || rightDir == 4) {
+            if (rightDir == mDoAud_ARM_CENTER_e || rightDir == mDoAud_ARM_RIGHT_e || rightDir == mDoAud_ARM_LEFT_e) {
                 mFrameCtrlUpper[UPPER_MOVE1_e].setRate(m_HIO->mItem.mTact.m.mAnmRate);
                 mFrameCtrlUpper[UPPER_MOVE1_e].setFrame(mFrameCtrlUnder[UNDER_MOVE0_e].getFrame());
             }
 
-            if (mProcVar2.m34D4 == 4 || mProcVar2.m34D4 == 2 || rightDir == 4 || rightDir == 2) {
+            if (
+                mProcVar2.mTactWaitRightHandPos == mDoAud_ARM_LEFT_e || mProcVar2.mTactWaitRightHandPos == mDoAud_ARM_RIGHT_e ||
+                rightDir == mDoAud_ARM_LEFT_e || rightDir == mDoAud_ARM_RIGHT_e
+            ) {
                 mDoAud_tact_reset();
                 mDoAud_tact_setBeat(rightDir);
                 m35A0 = 0.0f;
-                mProcVar5.m34DA = 0;
-                m_old_fdata->initOldFrameMorf(5.0f, 0, 0x2A);
+                mProcVar5.mTactWaitNowBeat = 0;
+                m_old_fdata->initOldFrameMorf(5.0f, 0, CL_NUM_JNTS_e);
                 m3624 = 0;
                 mProcVar0.m34D0 = -1;
             }
-            mProcVar2.m34D4 = rightDir;
+            mProcVar2.mTactWaitRightHandPos = rightDir;
             mAnmRatioUpper[UPPER_MOVE1_e].setRatio(0.0f);
 
-            if (mProcVar2.m34D4 != 0) {
+            if (mProcVar2.mTactWaitRightHandPos != 0) {
                 m35A4 = 2.0f;
             }
         } else {
             m35A4 -= 1.0f;
         }
-    } else if (mProcVar2.m34D4 != 0) {
+    } else if (mProcVar2.mTactWaitRightHandPos != 0) {
         m35A4 = 2.0f;
     }
 
-    if (leftDir != mProcVar3.m34D6) {
+    if (leftDir != mProcVar3.mTactWaitLeftHandPos) {
         if (m35A8 <= 0.0f || leftDir != 0) {
             f32 rate;
-            if (mProcVar2.m34D4 == 4) {
+            if (mProcVar2.mTactWaitRightHandPos == 4) {
                 rate = m_HIO->mItem.mTact.m.field_0x14;
-            } else if (mProcVar2.m34D4 == 2) {
+            } else if (mProcVar2.mTactWaitRightHandPos == 2) {
                 rate = m_HIO->mItem.mTact.m.field_0x18;
             } else {
                 rate = m_HIO->mItem.mTact.m.field_0x10;
@@ -420,21 +423,21 @@ BOOL daPy_lk_c::procTactWait() {
             setActAnimeUpper(
                 getTactPlayLeftArmAnm(leftDir), UPPER_MOVE2_e, rate, 0.0f, -1, m_HIO->mItem.mTact.m.field_0xC
             );
-            mProcVar3.m34D6 = leftDir;
+            mProcVar3.mTactWaitLeftHandPos = leftDir;
             mAnmRatioUpper[UPPER_MOVE2_e].setRatio(0.0f);
             mDoAud_tact_armSoundPlay(leftDir);
-            if (mProcVar3.m34D6 != 0) {
+            if (mProcVar3.mTactWaitLeftHandPos != 0) {
                 m35A8 = 2.0f;
             }
         } else {
             m35A8 -= 1.0f;
         }
-    } else if (mProcVar3.m34D6 != 0) {
+    } else if (mProcVar3.mTactWaitLeftHandPos != 0) {
         m35A8 = 2.0f;
     }
 
     if (m35A0 >= mDoAud_tact_getBeatFrames()) {
-        mDoAud_tact_metronomePlay(mProcVar5.m34DA, mProcVar3.m34D6);
+        mDoAud_tact_metronomePlay(mProcVar5.mTactWaitNowBeat, mProcVar3.mTactWaitLeftHandPos);
         mpEquipItemBrk->setFrame(mpEquipItemBrk->getFrameMax() - 0.001f);
         mProcVar0.m34D0 = 3;
         m35A0 -= mDoAud_tact_getBeatFrames();
@@ -451,24 +454,32 @@ BOOL daPy_lk_c::procTactWait() {
     }
 
     if (mProcVar0.m34D0 == 0) {
-        mProcVar7.m3574 = mDoAud_tact_judge(mProcVar5.m34DA, mProcVar3.m34D6);
-        mProcVar5.m34DA++;
+        mProcVar7.mTactWaitMelodyNum = mDoAud_tact_judge(mProcVar5.mTactWaitNowBeat, mProcVar3.mTactWaitLeftHandPos);
+        mProcVar5.mTactWaitNowBeat++;
 
-        if (mProcVar5.m34DA >= mDoAud_tact_getBeat()) {
-            mProcVar5.m34DA = 0;
+        if (mProcVar5.mTactWaitNowBeat >= mDoAud_tact_getBeat()) {
+            mProcVar5.mTactWaitNowBeat = 0;
         }
 
         onResetFlg0(daPyRFlg0_TACT_INPUT);
         mProcVar0.m34D0 = -1;
 
-        if ((mProcVar6.m3570 >= 0 && mProcVar6.m3570 == mProcVar7.m3574) ||
-            ((mProcVar6.m3570 == -1 || mProcVar6.m3570 == -3) && (mProcVar7.m3574 >= 0 && mProcVar7.m3574 != 6 && mProcVar7.m3574 != 7 && dComIfGs_isTact(mProcVar7.m3574))))
+        if ((mProcVar6.m3570 >= 0 && mProcVar6.m3570 == mProcVar7.mTactWaitMelodyNum) ||
+            (
+                (mProcVar6.m3570 == -1 || mProcVar6.m3570 == -3) &&
+                (
+                    mProcVar7.mTactWaitMelodyNum >= 0 &&
+                    mProcVar7.mTactWaitMelodyNum != mDoAud_MELODY_UNK6_e &&
+                    mProcVar7.mTactWaitMelodyNum != mDoAud_MELODY_UNK7_e &&
+                    dComIfGs_isTact(mProcVar7.mTactWaitMelodyNum)
+                )
+            ))
         {
             mProcVar1.m34D2 = 30;
             seStartSystem(JA_SE_WTAKT_MATCH_SIGNAL);
             m35A0 = 0.0f;
         } else {
-            mProcVar7.m3574 = -1;
+            mProcVar7.mTactWaitMelodyNum = -1;
             if (mProcVar6.m3570 == -5) {
                 mProcVar4.m34D8++;
                 if (mProcVar4.m34D8 == 6) {
@@ -485,9 +496,9 @@ BOOL daPy_lk_c::procTactWait() {
     }
 
     f32 f0;
-    if (mProcVar2.m34D4 == 4) {
+    if (mProcVar2.mTactWaitRightHandPos == 4) {
         f0 = m_HIO->mItem.mTact.m.field_0x14;
-    } else if (mProcVar2.m34D4 == 2) {
+    } else if (mProcVar2.mTactWaitRightHandPos == 2) {
         f0 = m_HIO->mItem.mTact.m.field_0x18;
     } else {
         f0 = m_HIO->mItem.mTact.m.field_0x10;
@@ -508,42 +519,42 @@ BOOL daPy_lk_c::procTactWait() {
 }
 
 /* 8014E9A4-8014EBA0       .text procTactPlay_init__9daPy_lk_cFlii */
-BOOL daPy_lk_c::procTactPlay_init(s32 r27, int r30, int r31) {
+BOOL daPy_lk_c::procTactPlay_init(s32 i_melodyNum, BOOL r30, BOOL r31) {
     int r28 = checkShipRideUseItem(0);
     commonProcInit(daPyProc_TACT_PLAY_e);
     dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
-    mProcVar6.m3570 = r27;
-    if (r31 == 0) {
-        mGameOverId = fopMsgM_messageSet(0x5AD + r27);
+    mProcVar6.mTactPlayMelodyNum = i_melodyNum;
+    if (!r31) {
+        mGameOverId = fopMsgM_messageSet(0x5AD + i_melodyNum);
     } else {
         mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     }
     mDoAud_tact_setVolume(0.0f);
     resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
     resetActAnimeUpper(UPPER_MOVE1_e, -1.0f);
-    mProcVar5.m34DA = 0xA;
+    mProcVar5.mTactPlayTimer = 10;
 
     daPy_ANM anm;
-    if (r27 == 0) {
+    if (i_melodyNum == mDoAud_MELODY_WINDS_REQUIEM_e) {
         anm = ANM_TAKTKAZE;
-    } else if (r27 == 1) {
+    } else if (i_melodyNum == mDoAud_MELODY_BALLAD_OF_GALES_e) {
         anm = ANM_TAKTSIPPU;
-    } else if (r27 == 5) {
+    } else if (i_melodyNum == mDoAud_MELODY_SONG_OF_PASSING_e) {
         anm = ANM_TAKTCHUYA;
-    } else if (r27 == 4) {
+    } else if (i_melodyNum == mDoAud_MELODY_WIND_GODS_ARIA_e) {
         anm = ANM_TAKTFUJIN;
-    } else if (r27 == 2) {
+    } else if (i_melodyNum == mDoAud_MELODY_COMMAND_MELODY_e) {
         anm = ANM_TAKTAYATSURI;
-    } else {
+    } else { // mDoAud_MELODY_EARTH_GODS_LYRIC_e
         anm = ANM_TAKTCHISIN;
     }
     setSingleMoveAnime(anm, 1.0f, 0.0f, -1, 3.0f);
 
     initShipRideUseItem(r28, 2);
 
-    if (r28 != 0 && mProcVar6.m3570 == 1) {
+    if (r28 != 0 && mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_BALLAD_OF_GALES_e) {
         stage_stag_info_class* stag_info = dComIfGp_getStageStagInfo();
-        if (dStage_stagInfo_GetSTType(stag_info) == dStageType_SEA_e && m34CC != 1 && r30 != 0) {
+        if (dStage_stagInfo_GetSTType(stag_info) == dStageType_SEA_e && mTactZevMelodyNum != mDoAud_MELODY_BALLAD_OF_GALES_e && r30) {
             daShip_c* ship = dComIfGp_getShipActor();
             fpc_ProcID warpID = fopAcM_create(fpcNm_TORNADO_e, 1, &current.pos, fopAcM_GetRoomNo(this));
             ship->setTactWarpID(warpID);
@@ -576,10 +587,10 @@ BOOL daPy_lk_c::procTactPlay() {
             endDemoMode();
         }
         return TRUE;
-    } else if (mProcVar5.m34DA > 0) {
-        mProcVar5.m34DA--;
-        if (mProcVar5.m34DA == 0) {
-            mDoAud_tact_melodyPlay(mProcVar6.m3570);
+    } else if (mProcVar5.mTactPlayTimer > 0) {
+        mProcVar5.mTactPlayTimer--;
+        if (mProcVar5.mTactPlayTimer == 0) {
+            mDoAud_tact_melodyPlay(mProcVar6.mTactPlayMelodyNum);
         }
     }
 
@@ -600,7 +611,7 @@ BOOL daPy_lk_c::procTactPlay() {
                 mGameOverId = fpcM_ERROR_PROCESS_ID_e;
             }
 
-            if (mTactZevPartnerId != fpcM_ERROR_PROCESS_ID_e && m34CC == mProcVar6.m3570) {
+            if (mTactZevPartnerId != fpcM_ERROR_PROCESS_ID_e && mTactZevMelodyNum == mProcVar6.mTactPlayMelodyNum) {
                 tactZevPartner = fopAcM_SearchByID(mTactZevPartnerId);
             }
 
@@ -610,7 +621,7 @@ BOOL daPy_lk_c::procTactPlay() {
             }
 
             if (tactZevPartner != NULL) {
-                if (m3494 == 0) {
+                if (mTactZevEventName == NULL) {
                     resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
                     dComIfGp_event_reset();
                     dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
@@ -621,23 +632,23 @@ BOOL daPy_lk_c::procTactPlay() {
                 }
             }
 
-            if (mProcVar6.m3570 == 0) {
+            if (mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_WINDS_REQUIEM_e) {
                 if (dKyw_gbwind_use_check()) {
-                    return procTactPlayEnd_init(mProcVar6.m3570);
+                    return procTactPlayEnd_init(mProcVar6.mTactPlayMelodyNum);
                 }
                 m3624 = 0x14A5;
-            } else if (mProcVar6.m3570 == 1) {
+            } else if (mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_BALLAD_OF_GALES_e) {
                 daShip_c* ship = dComIfGp_getShipActor();
                 if (ship != NULL && ship->getTactWarpID() != fpcM_ERROR_PROCESS_ID_e) {
-                    return procTactPlayEnd_init(mProcVar6.m3570);
+                    return procTactPlayEnd_init(mProcVar6.mTactPlayMelodyNum);
                 }
                 m3624 = 0x14A6;
-            } else if (mProcVar6.m3570 == 2) {
+            } else if (mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_COMMAND_MELODY_e) {
                 if (checkNpcStatus() && !dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
-                    return procTactPlayEnd_init(mProcVar6.m3570);
+                    return procTactPlayEnd_init(mProcVar6.mTactPlayMelodyNum);
                 }
                 m3624 = 0x14A8;
-            } else if (mProcVar6.m3570 == 5) {
+            } else if (mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_SONG_OF_PASSING_e) {
                 if (dKy_daynighttact_stop_chk()) {
                     m3624 = 0x14A7;
                 } else {
@@ -645,7 +656,7 @@ BOOL daPy_lk_c::procTactPlay() {
                     if (dStage_FileList_dt_GetSongOk(fili_p)) {
                         m3624 = 0x14AA;
                     } else {
-                        return procTactPlayEnd_init(mProcVar6.m3570);
+                        return procTactPlayEnd_init(mProcVar6.mTactPlayMelodyNum);
                     }
                 }
             } else {
@@ -668,28 +679,28 @@ BOOL daPy_lk_c::procTactPlay() {
 }
 
 /* 8014EFD4-8014F210       .text procTactPlayEnd_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
+BOOL daPy_lk_c::procTactPlayEnd_init(int i_melodyNum) {
     int r28 = checkShipRideUseItem(0);
     commonProcInit(daPyProc_TACT_PLAY_END_e);
     dComIfGp_setPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e);
     initShipRideUseItem(r28, 2);
-    mProcVar6.m3570 = r30;
+    mProcVar6.mTactPlayMelodyNum = i_melodyNum;
     mNormalSpeed = 0.0f;
     setBlendMoveAnime(m_HIO->mBasic.m.field_0xC);
 
-    if (r30 == -1) {
+    if (i_melodyNum == -1) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
-        fopAcM_orderChangeEvent(this, fopAcM_SearchByID(mTactZevPartnerId), m3494, 0, -1);
+        fopAcM_orderChangeEvent(this, fopAcM_SearchByID(mTactZevPartnerId), mTactZevEventName, 0, -1);
         mDemo.setSystemDemoType();
-    } else if (r30 == 0) {
+    } else if (i_melodyNum == mDoAud_MELODY_WINDS_REQUIEM_e) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         fopAcM_create(fpcNm_WBIRD_e, NULL, &current.pos, dComIfGp_roomControl_getStayNo());
-    } else if (r30 == 2) {
+    } else if (i_melodyNum == mDoAud_MELODY_COMMAND_MELODY_e) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         dComIfGp_event_setTalkPartner(dComIfGp_getCb1Player());
         fopAcM_orderChangeEvent(this, dComIfGp_getCb1Player(), l_tact_event_label, 0, -1);
         seStartSystem(JA_SE_CTRL_LINK_TO_NPC);
-    } else if (r30 == 5) {
+    } else if (i_melodyNum == mDoAud_MELODY_SONG_OF_PASSING_e) {
         dCam_getBody()->EndEventCamera(fopAcM_GetID(this));
         fopAcM_orderChangeEvent(this, l_tact_night_event_label, 0, -1);
     }
@@ -704,16 +715,17 @@ BOOL daPy_lk_c::procTactPlayEnd_init(int r30) {
 BOOL daPy_lk_c::procTactPlayEnd() {
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         setShipRidePos(0);
-        if (mProcVar6.m3570 == 0 && !dComIfGp_evmng_startCheck(l_tact_wind_change_event_label) &&
+        if (mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_WINDS_REQUIEM_e &&
+            !dComIfGp_evmng_startCheck(l_tact_wind_change_event_label) &&
             !dComIfGp_evmng_startCheck(l_tact_wind_change_event_label2))
         {
             cLib_addCalcAngleS(&shape_angle.y, mProcVar3.m34D6, 5, 0x1000, 0x100);
         }
     }
 
-    if (mProcVar6.m3570 == 0) {
+    if (mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_WINDS_REQUIEM_e) {
         dComIfGp_setAStatus(dActStts_RETURN_e);
-    } else if (mProcVar6.m3570 == 5) {
+    } else if (mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_SONG_OF_PASSING_e) {
         if (dComIfGp_evmng_endCheck(l_tact_night_event_label) && !checkNoResetFlg0(daPyFlg0_UNK4000)) {
             onNoResetFlg0(daPyFlg0_UNK4000);
             fopAc_ac_c* ship;
@@ -742,13 +754,13 @@ BOOL daPy_lk_c::procTactPlayEnd() {
             dStage_turnRestart();
             mDoAud_taktModeMuteOff();
         }
-    } else if (mProcVar6.m3570 == 2) {
+    } else if (mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_COMMAND_MELODY_e) {
         if (dComIfGp_evmng_endCheck(l_tact_event_label)) {
             dComIfGp_event_reset();
             changePlayer(dComIfGp_getCb1Player());
             endDemoMode();
         }
-    } else if (mProcVar6.m3570 == 1) {
+    } else if (mProcVar6.mTactPlayMelodyNum == mDoAud_MELODY_BALLAD_OF_GALES_e) {
         if (mProcVar7.m3574 == 0) {
             if (dComIfGp_getMesgStatus() == 0) {
                 dComIfGp_fmapOpenOn();

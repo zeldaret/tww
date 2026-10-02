@@ -256,7 +256,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[5]);
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
-        mMelodyNum = 4;
+        mMelodyNum = mDoAud_MELODY_WIND_GODS_ARIA_e;
         mGiveItemNo = dItemNo_WIND_GODS_ARIA_e;
         eventInfo.setEventName("MKNJD_K_TALK");
         m0430 = dSv_event_flag_c::UNK_2910;
@@ -267,7 +267,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[4]);
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
-        mMelodyNum = 3;
+        mMelodyNum = mDoAud_MELODY_EARTH_GODS_LYRIC_e;
         mGiveItemNo = dItemNo_EARTH_GODS_LYRIC_e;
         eventInfo.setEventName("MKNJD_D_TALK");
         m0430 = dSv_event_flag_c::UNK_2920;
@@ -747,10 +747,10 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             break;
         case 1:
             if (m043E == 1) {
-                player->setTactZev(fopAcM_GetID(this), 4, daObjMknjD_EventName[3]);
+                player->setTactZev(fopAcM_GetID(this), mDoAud_MELODY_WIND_GODS_ARIA_e, daObjMknjD_EventName[3]);
             }
             else {
-                player->setTactZev(fopAcM_GetID(this), 3, daObjMknjD_EventName[2]);
+                player->setTactZev(fopAcM_GetID(this), mDoAud_MELODY_EARTH_GODS_LYRIC_e, daObjMknjD_EventName[2]);
             }
 
             m043F = 2;

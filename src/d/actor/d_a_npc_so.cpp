@@ -332,14 +332,14 @@ BOOL daNpc_So_c::_createHeap() {
     }
 #endif
 
-    m_jnt.setHeadJntNum(11);
+    m_jnt.setHeadJntNum(SO_JNT_HEAD_e);
     JUT_ASSERT(DEMO_SELECT(556, 533), m_jnt.getHeadJntNum() >= 0);
 
-    m_jnt.setBackboneJntNum(1);
+    m_jnt.setBackboneJntNum(SO_JNT_BACKBONE_e);
     JUT_ASSERT(DEMO_SELECT(558, 535), m_jnt.getBackboneJntNum() >= 0);
 
-    modelData->getJointNodePointer(11)->setCallBack(nodeControl_CB);
-    modelData->getJointNodePointer(1)->setCallBack(nodeControl_CB);
+    modelData->getJointNodePointer(SO_JNT_HEAD_e)->setCallBack(nodeControl_CB);
+    modelData->getJointNodePointer(SO_JNT_BACKBONE_e)->setCallBack(nodeControl_CB);
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BDL_SO_FUDE_e);
     JUT_ASSERT(DEMO_SELECT(568, 545), modelData != NULL);

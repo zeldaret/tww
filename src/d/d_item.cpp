@@ -2448,32 +2448,32 @@ int item_getcheck_func_pearl3() {
 
 /* 800C70A0-800C70D0       .text item_getcheck_func_tact_song1__Fv */
 int item_getcheck_func_tact_song1() {
-    return dComIfGs_isTact(0);
+    return dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e);
 }
 
 /* 800C70D0-800C7100       .text item_getcheck_func_tact_song2__Fv */
 int item_getcheck_func_tact_song2() {
-    return dComIfGs_isTact(1);
+    return dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e);
 }
 
 /* 800C7100-800C7130       .text item_getcheck_func_tact_song3__Fv */
 int item_getcheck_func_tact_song3() {
-    return dComIfGs_isTact(2);
+    return dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e);
 }
 
 /* 800C7130-800C7160       .text item_getcheck_func_tact_song4__Fv */
 int item_getcheck_func_tact_song4() {
-    return dComIfGs_isTact(3);
+    return dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e);
 }
 
 /* 800C7160-800C7190       .text item_getcheck_func_tact_song5__Fv */
 int item_getcheck_func_tact_song5() {
-    return dComIfGs_isTact(4);
+    return dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e);
 }
 
 /* 800C7190-800C71C0       .text item_getcheck_func_tact_song6__Fv */
 int item_getcheck_func_tact_song6() {
-    return dComIfGs_isTact(5);
+    return dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e);
 }
 
 /* 800C71C0-800C71F4       .text item_getcheck_func_normal_sail__Fv */

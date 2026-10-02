@@ -174,7 +174,7 @@ u32 daNpc_Tt_c::getMsg() {
             msgNo = mMsgNo;
             switch(msgNo) {
                 case 0x5B3:
-                    dComIfGp_setMelodyNum(5);
+                    dComIfGp_setMelodyNum(mDoAud_MELODY_SONG_OF_PASSING_e);
                     break;
             }
     }

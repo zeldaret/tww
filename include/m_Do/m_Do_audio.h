@@ -44,10 +44,35 @@ public:
 
 extern mDoAud_zelAudio_c g_mDoAud_zelAudio;
 
+enum {
+    /* 0 */ mDoAud_C_STICK_e,
+    /* 1 */ mDoAud_MAIN_STICK_e,
+};
+
+enum {
+    /* 0 */ mDoAud_ARM_CENTER_e,
+    /* 1 */ mDoAud_ARM_UP_e,
+    /* 2 */ mDoAud_ARM_RIGHT_e, // Player's right, Link's left
+    /* 3 */ mDoAud_ARM_DOWN_e,
+    /* 4 */ mDoAud_ARM_LEFT_e, // Player's left, Link's right
+};
+
+enum {
+    /* 0 */ mDoAud_MELODY_WINDS_REQUIEM_e,
+    /* 1 */ mDoAud_MELODY_BALLAD_OF_GALES_e,
+    /* 2 */ mDoAud_MELODY_COMMAND_MELODY_e,
+    /* 3 */ mDoAud_MELODY_EARTH_GODS_LYRIC_e,
+    /* 4 */ mDoAud_MELODY_WIND_GODS_ARIA_e,
+    /* 5 */ mDoAud_MELODY_SONG_OF_PASSING_e,
+    /* 6 */ mDoAud_MELODY_UNK6_e,
+    /* 7 */ mDoAud_MELODY_UNK7_e,
+    /* 8 */ mDoAud_MELODY_COUNT_e,
+};
+
 void mDoAud_setSceneName(const char*, s32, s32);
 void mDoAud_Execute();
 BOOL mDoAud_isUsedHeapForStreamBuffer();
-int mDoAud_getTactDirection(int stick, int ret);
+int mDoAud_getTactDirection(int stick, int oldDir);
 
 extern JKRSolidHeap* g_mDoAud_audioHeap;
 
@@ -190,12 +215,12 @@ inline void mDoAud_seDeleteObject(Vec* i_sePos) {
     mDoAud_zelAudio_c::getInterface()->seDeleteObject(i_sePos);
 }
 
-inline u8 mDoAud_getLinkVoiceVowel(u32 param_1) {
-    return mDoAud_zelAudio_c::getInterface()->getLinkVoiceVowel(param_1);
+inline u8 mDoAud_getLinkVoiceVowel(u32 i_soundID) {
+    return mDoAud_zelAudio_c::getInterface()->getLinkVoiceVowel(i_soundID);
 }
 
-inline void mDoAud_linkVoiceStart(u32 param_0, Vec* i_sePos, u8 param_3, s8 param_4) {
-    mDoAud_zelAudio_c::getInterface()->linkVoiceStart(param_0, i_sePos, param_3, param_4);
+inline void mDoAud_linkVoiceStart(u32 i_soundID, Vec* i_sePos, u8 param_3, s8 param_4) {
+    mDoAud_zelAudio_c::getInterface()->linkVoiceStart(i_soundID, i_sePos, param_3, param_4);
 }
 
 inline void mDoAud_setLinkSwordType(s32 param_0, s32 param_1) {
@@ -295,7 +320,7 @@ inline void mDoAud_rainPlay(s32 param_0) {
 }
 
 inline f32 mDoAud_tact_getMelodyPattern(s32 melody_no, s32 note_no, s32* pattern) {
-    return mDoAud_zelAudio_c::mTact.getMelodyPattern(melody_no, note_no, pattern);
+    return mDoAud_zelAudio_c::getTact().getMelodyPattern(melody_no, note_no, pattern);
 }
 
 inline void mDoAud_tact_reset() {
@@ -306,8 +331,8 @@ inline u8 mDoAud_tact_getBeat() {
     return mDoAud_zelAudio_c::getTact().getBeat();
 }
 
-inline void mDoAud_tact_setBeat(s32 beat) {
-    mDoAud_zelAudio_c::getTact().setBeat(beat);
+inline void mDoAud_tact_setBeat(s32 i_armDir) {
+    mDoAud_zelAudio_c::getTact().setBeat(i_armDir);
 }
 
 inline f32 mDoAud_tact_getBeatFrames() {
@@ -338,8 +363,8 @@ inline void mDoAud_tact_stopArmSwing() {
     mDoAud_zelAudio_c::getTact().stopArmSwing();
 }
 
-inline s32 mDoAud_tact_judge(s32 param_1, s32 param_2) {
-    return mDoAud_zelAudio_c::getTact().judge(param_1, param_2);
+inline s32 mDoAud_tact_judge(s32 now_beat, s32 c_pos) {
+    return mDoAud_zelAudio_c::getTact().judge(now_beat, c_pos);
 }
 
 inline void mDoAud_tact_armSoundPlay(s32 param_1) {
@@ -350,8 +375,8 @@ inline s32 mDoAud_tact_metronomePlay(s32 now_beat, s32 c_pos) {
     return mDoAud_zelAudio_c::getTact().metronomePlay(now_beat, c_pos);
 }
 
-inline void mDoAud_tact_melodyPlay(s32 param_1) {
-    mDoAud_zelAudio_c::getTact().melodyPlay(param_1);
+inline void mDoAud_tact_melodyPlay(s32 melody_num) {
+    mDoAud_zelAudio_c::getTact().melodyPlay(melody_num);
 }
 
 inline void mDoAud_tact_melodyStop() {

@@ -56,7 +56,16 @@ const char* mLayout[] = {
     "hukidashi_14_0_2.blo"
 };
 
-const u8 mBeatNum[] = {0x03, 0x04, 0x04, 0x06, 0x06, 0x03, 0x03, 0x04};
+const u8 mBeatNum[] = {
+    0x03, // Wind's Requiem
+    0x04, // Ballad of Gales
+    0x04, // Command Melody
+    0x06, // Earth God's Lyric
+    0x06, // Wind God's Aria
+    0x03, // Song of Passing
+    0x03, // ? TODO
+    0x04, // ? TODO
+};
 
 void dMsg_textPosition(sub_msg_class*);
 void dMsg_mesgOutPos(sub_msg_class*);
@@ -581,7 +590,7 @@ void dMsg_screenDataSetTact(sub_msg_class* i_Msg) {
             fopMsgM_setPaneData(&i_Msg->m08C4[i], sScreen2, ar_t[i]);
             fopMsgM_setPaneData(&i_Msg->m0A14[i], sScreen2, wn_t[i]);
             fopMsgM_setPaneData(&i_Msg->m0B64[i], sScreen2, bs_t[i]);
-            if (dComIfGp_getMelodyNum() >= 5) {
+            if (dComIfGp_getMelodyNum() >= mDoAud_MELODY_SONG_OF_PASSING_e) {
                 fopMsgM_setPaneData(&i_Msg->m0CB4[i], sScreen2, i0_t[i]);
             }
         }
@@ -698,7 +707,7 @@ void dMsg_messagePaneHide(sub_msg_class* i_Msg) {
             fopMsgM_setNowAlphaZero(&i_Msg->m08C4[i]);
             fopMsgM_setNowAlphaZero(&i_Msg->m0A14[i]);
             fopMsgM_setNowAlphaZero(&i_Msg->m0B64[i]);
-            if (dComIfGp_getMelodyNum() >= 5) {
+            if (dComIfGp_getMelodyNum() >= mDoAud_MELODY_SONG_OF_PASSING_e) {
                 fopMsgM_setNowAlphaZero(&i_Msg->m0CB4[i]);
             }
         }
@@ -1456,7 +1465,7 @@ void dMsg_cornerMove(sub_msg_class* param_1) {
 void dMsg_tactGuideShow(sub_msg_class* i_Msg, u8 param_2) {
     for (s32 i = 0; i < mBeatNum[dComIfGp_getMelodyNum()]; i++) {
         if (i < param_2) {
-            if (dComIfGp_getMelodyNum() < 5) {
+            if (dComIfGp_getMelodyNum() < mDoAud_MELODY_SONG_OF_PASSING_e) {
                 fopMsgM_setInitAlpha(&i_Msg->m08C4[i]);
                 fopMsgM_setNowAlpha(&i_Msg->m0A14[i], 0.5f);
                 fopMsgM_setNowAlphaZero(&i_Msg->m0B64[i]);
@@ -1470,7 +1479,7 @@ void dMsg_tactGuideShow(sub_msg_class* i_Msg, u8 param_2) {
             i_Msg->m08C4[i].pane->hide();
             i_Msg->m0A14[i].pane->hide();
             i_Msg->m0B64[i].pane->hide();
-            if (dComIfGp_getMelodyNum() >= 5) {
+            if (dComIfGp_getMelodyNum() >= mDoAud_MELODY_SONG_OF_PASSING_e) {
                 i_Msg->m0CB4[i].pane->hide();
             }
         }
@@ -1537,7 +1546,13 @@ void dMsg_tactInput(sub_msg_class* i_Msg) {
                 dMsg_tactGuideShow(i_Msg, mBeatNum[melody_no]);
             }
         } else {
-            if (((((melody_no != 1) && (melody_no != 5)) && (melody_no != 6)) && (melody_no != 7)) && (CPad_CHECK_TRIG_B(0) || (fopMsgM_checkMessageSend()))) {
+            if (
+                melody_no != mDoAud_MELODY_BALLAD_OF_GALES_e &&
+                melody_no != mDoAud_MELODY_SONG_OF_PASSING_e &&
+                melody_no != mDoAud_MELODY_UNK6_e &&
+                melody_no != mDoAud_MELODY_UNK7_e &&
+                (CPad_CHECK_TRIG_B(0) || fopMsgM_checkMessageSend())
+            ) {
                 dMsg_setCancelMode(i_Msg);
             }
         }
@@ -1545,9 +1560,9 @@ void dMsg_tactInput(sub_msg_class* i_Msg) {
     
     for (int i = 0; i < mBeatNum[melody_no]; i++) {
         s16 sVar1 = i_Msg->m0B64[i].mUserArea;
-        if ((sVar1 > 0) && (sVar1 <= 5)) {
+        if (sVar1 > 0 && sVar1 <= 5) {
             f32 alpha = (fopMsgM_valueIncrease(5, (int)sVar1, 0) * 0.5f) + 0.5f;
-            if (dComIfGp_getMelodyNum() < 5) {
+            if (dComIfGp_getMelodyNum() < mDoAud_MELODY_SONG_OF_PASSING_e) {
                 fopMsgM_setNowAlpha(&i_Msg->m0A14[i], alpha);
                 fopMsgM_setNowAlpha(&i_Msg->m0B64[i], alpha);
             } else {
@@ -1843,7 +1858,7 @@ void dMsg_messageShow(sub_msg_class* i_Msg) {
     i_Msg->m1100 = 0;
     for (s32 i = 0; i < mBeatNum[dComIfGp_getMelodyNum()]; i++) {
         i_Msg->m0B64[i].mUserArea = 0;
-        if (dComIfGp_getMelodyNum() < 5) {
+        if (dComIfGp_getMelodyNum() < mDoAud_MELODY_SONG_OF_PASSING_e) {
             fopMsgM_setNowAlpha(&i_Msg->m0A14[i], 0.5f);
             fopMsgM_setNowAlphaZero(&i_Msg->m0B64[i]);
         } else {
@@ -2129,7 +2144,7 @@ s32 dMsg_demoProc(sub_msg_class* i_Msg) {
             if ((i_Msg->m0B64[i].mUserArea > 0) && (i_Msg->m0B64[i].mUserArea <= 0x23)) {
                 if (i_Msg->m0B64[i].mUserArea < 5) {
                     f32 fVar10 = (fopMsgM_valueIncrease(5, i_Msg->m0B64[i].mUserArea, 0) * 0.5f) + 0.5f;
-                    if (dComIfGp_getMelodyNum() < 5) {
+                    if (dComIfGp_getMelodyNum() < mDoAud_MELODY_SONG_OF_PASSING_e) {
                         fopMsgM_setNowAlpha(&i_Msg->m0A14[i], fVar10);
                         fopMsgM_setNowAlpha(&i_Msg->m0B64[i], fVar10);
                     } else {
@@ -2140,7 +2155,7 @@ s32 dMsg_demoProc(sub_msg_class* i_Msg) {
                 } else {
                     fopMsgM_setInitAlpha(&i_Msg->m0A14[i]);
                     fopMsgM_setInitAlpha(&i_Msg->m0B64[i]);
-                    if (dComIfGp_getMelodyNum() >= 5) {
+                    if (dComIfGp_getMelodyNum() >= mDoAud_MELODY_SONG_OF_PASSING_e) {
                         fopMsgM_setInitAlpha(&i_Msg->m0CB4[i]);
                     }
                 }
@@ -2192,7 +2207,7 @@ s32 dMsg_demoProc(sub_msg_class* i_Msg) {
                     i_Msg->m1100 = 0;
                     for (int j = 0; j < mBeatNum[melody_no]; j++) {
                         i_Msg->m0B64[j].mUserArea = 0;
-                        if (dComIfGp_getMelodyNum() < 5) {
+                        if (dComIfGp_getMelodyNum() < mDoAud_MELODY_SONG_OF_PASSING_e) {
                             fopMsgM_setNowAlpha(&i_Msg->m0A14[j], 0.5f);
                             fopMsgM_setNowAlphaZero(&i_Msg->m0B64[j]);
                         } else {
@@ -2750,7 +2765,7 @@ static BOOL dMsg_Draw(sub_msg_class* i_Msg) {
                 fopMsgM_setAlpha(&i_Msg->m08C4[i]);
                 fopMsgM_setAlpha(&i_Msg->m0A14[i]);
                 fopMsgM_setAlpha(&i_Msg->m0B64[i]);
-                if (dComIfGp_getMelodyNum() >= 5) {
+                if (dComIfGp_getMelodyNum() >= mDoAud_MELODY_SONG_OF_PASSING_e) {
                     fopMsgM_setAlpha(&i_Msg->m0CB4[i]);
                 }
             }

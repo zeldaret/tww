@@ -1311,7 +1311,7 @@ void dMeter_lifeChange(sub_meter_class* i_Meter, bool* param_2) {
         i_Meter->mAdjustHp++;
     }
     i_Meter->field_0x0f00.mUserArea = 0;
-    g_dComIfG_gameInfo.play.mItemNowLife = i_Meter->mCurrHP;
+    dComIfGp_setItemNowLife(i_Meter->mCurrHP);
 }
 
 /* 801F11F8-801F13A4       .text dMeter_heartLightMove__FP15sub_meter_class */
@@ -2875,10 +2875,10 @@ void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
     }
     if ((dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && dComIfGp_getItemBombNumCount() != 0) || bombMax != dComIfGs_getBombMax()) {
         if (g_meterHIO.field_0x63 != 0) {
-            g_dComIfG_gameInfo.play.mItemBombNumCount = 0;
+            dComIfGp_clearItemBombNumCount();
         }
         s16 uVar5_2 = dComIfGs_getBombNum() + dComIfGp_getItemBombNumCount();
-        g_dComIfG_gameInfo.play.mItemBombNumCount = 0;
+        dComIfGp_clearItemBombNumCount();
         if (uVar5_2 < 0) {
             uVar5_2 = 0;
         }
@@ -4048,7 +4048,7 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
             sVar4 = 0x20;
         }
         dComIfGs_setMaxMagic(sVar4);
-        g_dComIfG_gameInfo.play.mItemMaxMagicCount = 0;
+        dComIfGp_clearItemMaxMagicCount();
     }
 #if VERSION > VERSION_DEMO
     if (i_Meter->field_0x3018 != dComIfGs_getMaxMagic() || i_Meter->field_0x0f38[2].mUserArea == 0) {
@@ -4075,7 +4075,7 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
                 sVar4 = 0;
             }
             dComIfGs_setMagic(sVar4);
-            g_dComIfG_gameInfo.play.mItemMagicCount = 0;
+            dComIfGp_clearItemMagicCount();
         }
     }
     if (dComIfGs_getMagic() > dComIfGs_getMaxMagic()) {
@@ -5029,7 +5029,7 @@ void dMeter_rupyMove(sub_meter_class* i_Meter) {
         }
         i_Meter->mAdjustRupy = targetRupees - i_Meter->mRupyCount;
         dComIfGs_setRupee(targetRupees);
-        g_dComIfG_gameInfo.play.mItemRupeeCount = 0;
+        dComIfGp_clearItemRupeeCount();
         if (labs(i_Meter->mAdjustRupy) >= 5) {
             rupy_soundOnFlag = 1;
         }
@@ -5232,7 +5232,7 @@ void dMeter_keyMove(sub_meter_class* i_Meter) {
             }
             i_Meter->field_0x300e = sVar1 - (u16)i_Meter->field_0x301d;
             dComIfGs_setKeyNum((u8)sVar1);
-            g_dComIfG_gameInfo.play.mItemKeyNumCount = 0;
+            dComIfGp_clearItemKeyNumCount();
         }
         sVar1 = i_Meter->field_0x300e;
         if (sVar1 != 0) {
@@ -6658,7 +6658,7 @@ void dMeter_swimMainDown(sub_meter_class* i_Meter) {
     fopMsgM_cposMove(&i_Meter->field_0x2cf8);
     if (sVar1 > 0) {
         if (!dComIfGp_event_runCheck() && dComIfGp_getItemSwimTimerStatus() != false) {
-            g_dComIfG_gameInfo.play.mAirMeter--;
+            dComIfGp_addItemTimeCount(-1);
         }
         if (dComIfGp_getItemTimeCount() == 0) {
             i_Meter->field_0x2da0.mUserArea = 3;
@@ -6812,7 +6812,7 @@ void dMeter_arrowInit(sub_meter_class* i_Meter) {
 
 /* 80202438-80202580       .text dMeter_arrowCheckStatus__FP15sub_meter_class */
 void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
-    if ((g_dComIfG_gameInfo.play.getDirection() & 1) != 0) {
+    if ((dComIfGp_getAdvanceDirection() & 1) != 0) {
         if (i_Meter->field_0x2e10[0].mUserArea == 0) {
             if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[0].mUserArea = 1;
@@ -6821,7 +6821,7 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     } else {
         dMeter_arrowErase(&i_Meter->field_0x2e10[0]);
     }
-    if ((g_dComIfG_gameInfo.play.getDirection() & 2) != 0) {
+    if ((dComIfGp_getAdvanceDirection() & 2) != 0) {
         if (i_Meter->field_0x2e10[1].mUserArea == 0) {
             if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[1].mUserArea = 1;
@@ -6830,7 +6830,7 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     } else {
         dMeter_arrowErase(&i_Meter->field_0x2e10[1]);
     }
-    if ((g_dComIfG_gameInfo.play.getDirection() & 4) != 0) {
+    if ((dComIfGp_getAdvanceDirection() & 4) != 0) {
         if (i_Meter->field_0x2e10[2].mUserArea == 0) {
             if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[2].mUserArea = 1;
@@ -6839,7 +6839,7 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     } else {
         dMeter_arrowErase(&i_Meter->field_0x2e10[2]);
     }
-    if ((g_dComIfG_gameInfo.play.getDirection() & 8) != 0) {
+    if ((dComIfGp_getAdvanceDirection() & 8) != 0) {
         if (i_Meter->field_0x2e10[3].mUserArea == 0) {
             if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[3].mUserArea = 1;

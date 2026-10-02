@@ -1216,9 +1216,9 @@ u32 daNpc_Hr_c::getMsg() {
                 case 0x5B3:
                     if (mType == 0) {
                         dComIfGs_onSwitch(getSwbit(), fopAcM_GetRoomNo(this));
-                        dComIfGp_setMelodyNum(0);
+                        dComIfGp_setMelodyNum(mDoAud_MELODY_WINDS_REQUIEM_e);
                     } else {
-                        dComIfGp_setMelodyNum(1);
+                        dComIfGp_setMelodyNum(mDoAud_MELODY_BALLAD_OF_GALES_e);
                     }
                     break;
             }

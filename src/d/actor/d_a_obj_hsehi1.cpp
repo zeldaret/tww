@@ -214,7 +214,7 @@ cPhs_State daObj_hsh_c::create() {
     fopAcM_ct_Retail(this, daObj_hsh_c);
 
 #if VERSION <= VERSION_JPN
-    if (argument == 0 && dComIfGs_isTact(2)) {
+    if (argument == 0 && dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e)) {
         return cPhs_ERROR_e;
     }
 #else
@@ -321,7 +321,7 @@ BOOL daObj_hsh_c::setAction(ActionFunc i_action, void* fnArg) {
 
         (this->*mAction)(fnArg);
     }
-    return 1;
+    return TRUE;
 }
 
 /* 00000FBC-000010E8       .text waitAction__11daObj_hsh_cFPv */
@@ -350,7 +350,7 @@ BOOL daObj_hsh_c::waitAction(void*) {
         }
         setAttention(TRUE);
     }
-    return 1;
+    return TRUE;
 }
 
 /* 000010E8-00001214       .text talkAction__11daObj_hsh_cFPv */
@@ -364,13 +364,11 @@ BOOL daObj_hsh_c::talkAction(void*) {
         }
     } else if (mActionMode != -1) {
         if (mActionMode == 1) {
-            BOOL success = talk_init();
-            if (success) {
+            if (talk_init()) {
                 mActionMode++;
             }
         } else {
-            BOOL success = talk(0);
-            if (success) {
+            if (talk(0)) {
                 setAction(&daObj_hsh_c::waitAction, NULL);
                 dComIfGp_event_reset();
                 if (argument == 0) {
@@ -520,7 +518,7 @@ BOOL daObj_hsh_c::eventProc() {
                     (this->*event_init_tbl[actIdx])(staffIdx);
                 }
                 BOOL res = (this->*event_action_tbl[actIdx])(staffIdx);
-                if (res != 0) {
+                if (res) {
                     dComIfGp_evmng_cutEnd(staffIdx);
                 }
             }
@@ -557,22 +555,23 @@ BOOL daObj_hsh_c::actionDefault(int) {
 /* 000017BC-00001938       .text initialLinkDispEvent__11daObj_hsh_cFi */
 void daObj_hsh_c::initialLinkDispEvent(int i_staffId) {
     char buf[10];
-    char* p = dComIfGp_evmng_getMyStringP(i_staffId, "target");
+
+    char* p_target = dComIfGp_evmng_getMyStringP(i_staffId, "target");
 
     BOOL isPlayer = FALSE;
 
-    if (p != NULL) {
-        strcpy(buf, p);
+    if (p_target != NULL) {
+        strcpy(buf, p_target);
         if (strcmp(buf, "@PLAYER") == 0) {
             isPlayer = TRUE;
         }
     }
 
-    p = dComIfGp_evmng_getMyStringP(i_staffId, "disp");
+    char* p_disp = dComIfGp_evmng_getMyStringP(i_staffId, "disp");
 
     if (isPlayer == TRUE) {
-        if (p != NULL) {
-            strcpy(buf, p);
+        if (p_disp != NULL) {
+            strcpy(buf, p_disp);
             daPy_py_c* player = (daPy_py_c*)dComIfGp_getLinkPlayer();
             if (strcmp(buf, "on") == 0)
                 player->offPlayerNoDraw();
@@ -580,8 +579,8 @@ void daObj_hsh_c::initialLinkDispEvent(int i_staffId) {
                 player->onPlayerNoDraw();
         }
     } else {
-        if (p != NULL) {
-            strcpy(buf, p);
+        if (p_disp != NULL) {
+            strcpy(buf, p_disp);
             if (strcmp(buf, "on") == 0)
                 drawStart();
             if (strcmp(buf, "off") == 0)
@@ -599,7 +598,7 @@ void daObj_hsh_c::initialMsgSetEvent(int staffIdx) {
     if (pMsgNo != NULL) {
         mMsgNo = *pMsgNo;
         if (mMsgNo == 0x5b3) {
-            dComIfGp_setMelodyNum(2); // Command melody
+            dComIfGp_setMelodyNum(mDoAud_MELODY_COMMAND_MELODY_e);
         }
     }
 }
@@ -612,24 +611,24 @@ BOOL daObj_hsh_c::actionMsgSetEvent(int) {
 /* 000019E0-00001A40       .text actionMessageEvent__11daObj_hsh_cFi */
 BOOL daObj_hsh_c::actionMessageEvent(int staffIdx) {
     int* p_talkMode = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm0");
-    int i_talkMode = 0;
+    int talkMode = 0;
     if (p_talkMode != NULL) {
-        i_talkMode = *p_talkMode;
+        talkMode = *p_talkMode;
     }
-    return talk(i_talkMode);
+    return talk(talkMode);
 }
 
 /* 00001A40-00001ADC       .text actionTactEvent__11daObj_hsh_cFi */
 BOOL daObj_hsh_c::actionTactEvent(int staffIdx) {
-    int* p_talkMode = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm0");
-    int i_talkMode = 0;
-    if (p_talkMode != NULL) {
-        i_talkMode = *p_talkMode;
+    int* p_melodyNo = dComIfGp_evmng_getMyIntegerP(staffIdx, "prm0");
+    int melodyNo = mDoAud_MELODY_WINDS_REQUIEM_e;
+    if (p_melodyNo != NULL) {
+        melodyNo = *p_melodyNo;
     }
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
     int music = player->getTactMusic();
 
-    if (music == i_talkMode) {
+    if (music == melodyNo) {
         onTactCorrect();
     }
     return talk(1);
@@ -698,10 +697,10 @@ BOOL daObj_hsh_c::talk_init() {
     } else {
         l_msg = fopMsgM_SearchByID(l_msgId);
         if (l_msg != NULL) {
-            return 1;
+            return TRUE;
         }
     }
-    return 0;
+    return FALSE;
 }
 
 /* 00001DF4-00001F1C       .text talk__11daObj_hsh_cFi */
@@ -730,16 +729,16 @@ BOOL daObj_hsh_c::talk(int i_mode) {
         }
     } else if (status == fopMsgStts_INPUT_e) {
         if (i_mode == 2) {
-            return 1;
+            return TRUE;
         }
     }
 
     else if ((status != fopMsgStts_MSG_TYPING_e) && (status == fopMsgStts_BOX_CLOSED_e))
     {
         l_msg->mStatus = fopMsgStts_MSG_DESTROYED_e;
-        return 1;
+        return TRUE;
     }
-    return 0;
+    return FALSE;
 }
 
 /* 00001F1C-00001F38       .text getMsg__11daObj_hsh_cFv */
