@@ -29,6 +29,8 @@
 #include "d/d_bg_s_movebg_actor.h"
 #include "m_Do/m_Do_mtx.h"
 
+const char daObjMagmarock::Act_c::M_arcname[] = "Kyjim";
+
 /* 00000078-00000128       .text set_mtx__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::set_mtx() {
     Quaternion temp;
@@ -178,10 +180,12 @@ void daObjMagmarock::Act_c::quake_proc_init() {
 
 /* 000007B8-0000084C       .text quake_proc__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::quake_proc() {
-    /* Nonmatching: floating point constants irder */
     m454 = m454 + m456;
     cLib_addCalcAngleS2(&m456, 0x1000, 2, 0x100);
-    cLib_addCalc2(&m430, REG10_F(10) + 750.0f, 0.25f, 50.0f);
+    const float f1 = 750.0f;
+    const float f3 = 50.0f;
+    const float f2 = 0.25f;
+    cLib_addCalc2(&m430, REG10_F(10) + f1, f2, f3);
     if (!m448) {
         vanish_proc_init();
     }
@@ -233,9 +237,6 @@ BOOL daObjMagmarock::CheckCreateHeap(fopAc_ac_c* i_this) {
     return ((Act_c*)i_this)->CreateHeap();
 }
 
-const char daObjMagmarock::Act_c::M_arcname[] = "Kyjim";
-const GXColor daObjMagmarock::Act_c::default_color = {0xFF, 0xFF, 0xFF};
-
 /* 00000B0C-00000DA0       .text CreateHeap__Q214daObjMagmarock5Act_cFv */
 BOOL daObjMagmarock::Act_c::CreateHeap() {
     J3DModelData *modelData = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, 9));
@@ -262,6 +263,7 @@ BOOL daObjMagmarock::Act_c::CreateHeap() {
     }
     return mpModel != NULL && brkAnmRes != 0 && bckAnmRes != 0;
 }
+
 
 /* 00000DA0-000013B4       .text CreateInit__Q214daObjMagmarock5Act_cFv */
 BOOL daObjMagmarock::Act_c::CreateInit() {
@@ -332,10 +334,10 @@ BOOL daObjMagmarock::Act_c::CreateInit() {
     }
     return TRUE;
 }
+const GXColor daObjMagmarock::Act_c::default_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 /* 000013B4-00001560       .text LiftUpRequest__Q214daObjMagmarock5Act_cFR4cXyz */
 BOOL daObjMagmarock::Act_c::LiftUpRequest(cXyz &param_1) {
-    /* Nonmatching: 99% */
     m43c = param_1;
     if (checkProcess(&Act_c::appear_proc) == 0) {
         if (checkProcess(&Act_c::wait_proc) != 0) {
@@ -348,8 +350,8 @@ BOOL daObjMagmarock::Act_c::LiftUpRequest(cXyz &param_1) {
             }
             temp *= 10.0f;
             current.pos += temp;
-            return FALSE;
         }
+        return FALSE;
     }
     cLib_addCalcPos2(&current.pos, param_1, 0.05f, 5.0f);
     cLib_addCalc2(&m430, 750.0f, 0.5f, 40.0f);
@@ -383,16 +385,14 @@ bool daObjMagmarock::Act_c::BeforeLiftRequest(cXyz &param_1) {
 
 /* 0000167C-000017DC       .text calc_ground_quat__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::calc_ground_quat() {
-    /* Nonmatching */
-    f32 y;
-    if (g_dComIfG_gameInfo.play.getMagma() != NULL){
-        y = g_dComIfG_gameInfo.play.getMagma()->checkYpos(current.pos);
-    } else {
-        y = current.pos.y - 10.0f;
-    }
-    if (y > -99999990.0) {
+    const f32 LIMIT = -99999990.0;
+    f32 y = dComIfGp_getMagma() != NULL
+        ? dComIfGp_getMagma()->checkYpos(current.pos)
+        : (current.pos.y - 10.0f);
+    if (y > LIMIT) {
         home.pos.y = y + 10.0f + 15.0f;
     }
+
     home.pos.x = current.pos.x;
     home.pos.z = current.pos.z;
 
@@ -404,20 +404,15 @@ void daObjMagmarock::Act_c::calc_ground_quat() {
     m40c[1].y = 0.0f;
     m40c[1].z = -60.0f;
 
-    m40c[1].x = -103.9f;
-    m40c[1].y = 0.0f;
-    m40c[1].z = -60.0f;
+    m40c[2].x = -103.9f;
+    m40c[2].y = 0.0f;
+    m40c[2].z = -60.0f;
 
     for(int i = 0; i < 3; i++) {
-        cXyz *pPos = &m40c[i];
-        *pPos += home.pos;
-        float y;
-        if (g_dComIfG_gameInfo.play.getMagma() != NULL) {
-            y = g_dComIfG_gameInfo.play.getMagma()->checkYpos(*pPos);
-        } else {
-            y = current.pos.y - 10.0f;
-        }
-
+        m40c[i] += home.pos;
+        f32 y = dComIfGp_getMagma() != NULL
+            ? dComIfGp_getMagma()->checkYpos(m40c[i])
+            : (current.pos.y - 10.0f);
         if (y > -99999990.0f) {
             m40c[i].y = y+15.0f;
         }
