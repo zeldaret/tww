@@ -373,6 +373,10 @@ static void dummy() {
     DEAD_STRING("baseMdl->getModel() != 0");
     DEAD_STRING("brkAnm != 0");
     DEAD_STRING("res != 0");
+    // Need 0x18 bytes of stripped vtable padding to match.
+    // Unclear what the original classes in the unused function were, but this works.
+    dFe_HIO_c temp1;
+    dNm_HIO_c temp2;
 }
 
 /* 802302F8-80230500       .text buttonIconCreate__10dScnName_cFv */
