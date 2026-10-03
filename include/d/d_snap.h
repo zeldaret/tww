@@ -98,7 +98,7 @@ enum {
     /* 0x5A */ DSNAP_TYPE_UNK5A,
     /* 0x5B */ DSNAP_TYPE_UNK5B,
     /* 0x5C */ DSNAP_TYPE_UNK5C,
-    /* 0x5D */ DSNAP_TYPE_UNK5D,
+    /* 0x5D */ DSNAP_TYPE_DS1,
     /* 0x5E */ DSNAP_TYPE_NPC_PHOTO,
     /* 0x5F */ DSNAP_TYPE_NPC_RSH1,
     /* 0x60 */ DSNAP_TYPE_NPC_HO,

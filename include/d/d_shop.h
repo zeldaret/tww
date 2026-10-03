@@ -56,14 +56,14 @@ public:
     ShopCam_action_c() {
         m50 = 0;
         m52 = 0;
-        m54 = -1;
+        mSelectIdx = -1;
         setCamDataIdx(0);
         m18.setall(0.0f);
         m24.set(0.0f, 0.0f, 100.0f);
         m30 = 60.0f;
     }
     
-    void SetSelectIdx(s16) {}
+    void SetSelectIdx(s16 idx) { mSelectIdx = idx; }
     void setCamAction(ActionFunc func) { mCurrActionFunc = func; }
     BOOL checkCamAction(ActionFunc func) { return mCurrActionFunc == func; }
     cXyz getItemZoomPos(f32 f31) {
@@ -97,7 +97,7 @@ public:
     /* 0x4C */ f32 mOrigFovy;
     /* 0x50 */ u16 m50;
     /* 0x52 */ u16 m52;
-    /* 0x54 */ s16 m54;
+    /* 0x54 */ s16 mSelectIdx;
     /* 0x56 */ s16 mCamDataIdx;
 };
 
