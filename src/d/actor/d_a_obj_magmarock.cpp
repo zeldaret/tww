@@ -523,10 +523,10 @@ bool daObjMagmarock::Act_c::_execute() {
 inline bool daObjMagmarock::Act_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &m35c);
-    const f32 f1 = 0.12f;
-    m35c.mColorC0.r = m35c.mColorC0.r + (s32)((0xff-m35c.mColorC0.r)*f1)&0xff;
-    m35c.mColorC0.g = m35c.mColorC0.g + (s32)((0xff-m35c.mColorC0.g)*f1)&0xff;
-    m35c.mColorC0.b = m35c.mColorC0.b + (s32)((0xff-m35c.mColorC0.b)*f1)&0xff;
+    m35c.mColorC0.r = m35c.mColorC0.r + (s32)((0xff-m35c.mColorC0.r)*0.12f)&0xff;
+    m35c.mColorC0.g = m35c.mColorC0.g + (s32)((0xff-m35c.mColorC0.g)*0.12f)&0xff;
+    m35c.mColorC0.b = m35c.mColorC0.b + (s32)((0xff-m35c.mColorC0.b)*0.12f)&0xff;
+
 
     m35c.mColorK0.r = m35c.mColorK0.r + (s32)((0xff-m35c.mColorK0.r)*0.12f);
     m35c.mColorK0.g = m35c.mColorK0.g + (s32)((0xff-m35c.mColorK0.g)*0.12f);
@@ -541,8 +541,7 @@ inline bool daObjMagmarock::Act_c::_draw() {
 /* 00001EC0-00002128       .text Draw__Q214daObjMagmarock6MethodFPv */
 BOOL daObjMagmarock::Method::Draw(void *i_this) {
     /* Nonmatching */
-    Act_c *p_this = static_cast<Act_c*>(i_this);
-    return p_this->_draw();
+    return static_cast<Act_c*>(i_this)->_draw();
 }
 
 /* 00002128-00002130       .text IsDelete__Q214daObjMagmarock6MethodFPv */
