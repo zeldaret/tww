@@ -1336,7 +1336,7 @@ void dMeter_heartLightMove(sub_meter_class* i_Meter) {
     uVar2 = (int)(dVar3 * 255.0f);
     dVar4 = (g_meterHIO.field_0x3c * dVar3) + 1.0f;
     fopMsgM_setNowAlpha(&i_Meter->field_0x0f00, 1.0f - dVar3);
-    ((J2DPicture*)i_Meter->field_0x0f00.pane)->setBlack((GXColor){uVar2, uVar2, uVar2, 0});
+    ((J2DPicture*)i_Meter->field_0x0f00.pane)->setBlack(COMPOUND_LITERAL(GXColor){uVar2, uVar2, uVar2, 0});
     dVar3 = i_Meter->field_0x0f00.mSize.x * dVar4;
     dVar5 = i_Meter->field_0x0f00.mSize.y * dVar4;
     i_Meter->field_0x0f00.mPosTopLeft.x = i_Meter->field_0x0f00.mPosCenter.x - (dVar3 / 2.0f);

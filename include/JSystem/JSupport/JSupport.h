@@ -3,7 +3,7 @@
 
 template <typename T>
 T* JSUConvertOffsetToPtr(const void* ptr, u32 offset) {
-    if (offset == NULL) {
+    if (offset == 0) {
         return NULL;
     } else {
         return (T*)((s32)ptr + offset);

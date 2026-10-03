@@ -146,7 +146,7 @@ void dMCloth_c::lightSet1(cXyz) {
         -lightDistance * cM_ssin(HIO_CHILD.lightPitch),
         -lightDistance * cM_scos(HIO_CHILD.lightYaw) * cM_scos(HIO_CHILD.lightPitch)
     );
-    GXInitLightColor(&light, (GXColor){0xFF, 0xFF, 0xFF, 0x00});
+    GXInitLightColor(&light, COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0x00});
     GXLoadLightObjImm(&light, GX_LIGHT0);
 }
 
@@ -702,8 +702,8 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-        GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0x00});
-        GXSetChanMatColor(GX_COLOR0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        GXSetChanAmbColor(GX_COLOR0, COMPOUND_LITERAL(GXColor){0x00, 0x00, 0x00, 0x00});
+        GXSetChanMatColor(GX_COLOR0, COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     } break;
     case MENU_CLOTH_TYPE_FILE_SELECT: {
         GXClearVtxDesc();
@@ -715,8 +715,8 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-        GXSetChanAmbColor(GX_COLOR0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-        GXSetChanMatColor(GX_COLOR0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        GXSetChanAmbColor(GX_COLOR0, COMPOUND_LITERAL(GXColor){0x00, 0x00, 0x00, 0xFF});
+        GXSetChanMatColor(GX_COLOR0, COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     } break;
     }
 

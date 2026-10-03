@@ -19,7 +19,7 @@ namespace JASystem {
                 JUT_ASSERT(77, mHeap);
                 void* base = mHeap->getBase();
                 if (base == NULL) {
-                    return NULL;
+                    return 0;
                 }
                 return (intptr_t)base + mWaveInfo.mWavePtrOffs;
             }

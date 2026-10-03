@@ -37,7 +37,7 @@ void daTag_So_c::debugDraw() {
     cXyz actorPos = current.pos;
     actorPos.y += 20.0f;
     if (mType == 1)
-        dLib_debugDrawFan(actorPos, shape_angle.y, 0x3500, mJumpRange, (GXColor){0xFF, 0x00, 0x00, 0x80});
+        dLib_debugDrawFan(actorPos, shape_angle.y, 0x3500, mJumpRange, COMPOUND_LITERAL(GXColor){0xFF, 0x00, 0x00, 0x80});
 }
 
 /* 0000018C-000001C4       .text _draw__10daTag_So_cFv */

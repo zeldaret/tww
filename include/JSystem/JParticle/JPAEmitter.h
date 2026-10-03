@@ -32,8 +32,8 @@ public:
         keyBlocks = NULL;
         fldBlocks = NULL;
         texDataBase = NULL;
-        fldNum = NULL;
-        mTextureNum = NULL;
+        fldNum = 0;
+        mTextureNum = 0;
         keyNum = 0;
     }
 

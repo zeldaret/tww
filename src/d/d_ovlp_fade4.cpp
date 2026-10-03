@@ -209,12 +209,12 @@ dOvlpFd4_c::dOvlpFd4_c() {
     setDraw(&dOvlpFd4_c::drawFadeOut);
     if (fopOvlpM_GetName(this) == fpcNm_OVERLAP4_e) {
 #if VERSION <= VERSION_JPN
-        fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, COMPOUND_LITERAL(GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
         fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_saftyWhiteColor);
 #endif
     } else {
-        fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, (GXColor){ 0x00, 0x00, 0x00, 0x00 });
+        fadeOutComposite_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, COMPOUND_LITERAL(GXColor){ 0x00, 0x00, 0x00, 0x00 });
     }
     fadeOutBlur1_dlst.init(mDoGph_gInf_c::getFrameBufferTimg(), 0.0f, 0.0f, 640.0f, 480.0f, g_whiteColor);
     fadeOutBlur0_dlst.init(mDoGph_gInf_c::getFrameBufferTex(), 640, 480);
