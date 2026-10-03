@@ -3871,9 +3871,9 @@ struct PsoData {
     /* 0x0C */ f32 field_0x0C;
     /* 0x10 */ f32 field_0x10;
     /* 0x14 */ s16 field_0x14;
-    /* 0x16 */ u8 field_0x16;
-    /* 0x17 */ u8 field_0x17;
-    /* 0x18 */ u8 photoNo;
+    /* 0x16 */ s8 field_0x16;
+    /* 0x17 */ s8 field_0x17;
+    /* 0x18 */ s8 photoNo;
 }; // Size: 0x19
 
 static PsoData l_pso_uo2 = {
@@ -4651,8 +4651,8 @@ bool daNpcPeople_c::_draw() {
     else {
         headModel = mpHeadMorf->getModel();
     }
-
     J3DModelData* headModelData = headModel->getModelData();
+
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
     g_env_light.setLightTevColorType(headModel, &tevStr);
@@ -4907,7 +4907,7 @@ bool daNpcPeople_c::_execute() {
     setCollision(&mCyl, current.pos, m74C, mpNpcDat->field_0x40);
     cXyz temp(mpNpcDat->field_0x18, mpNpcDat->field_0x1C, mpNpcDat->field_0x20);
     mDoMtx_stack_c::YrotS(current.angle.y);
-    mDoMtx_stack_c::multVec(&temp, &temp);
+    cMtx_multVec(mDoMtx_stack_c::get(), &temp, &temp);
     temp += current.pos;
     attention_info.position = temp;
     eyePos.set(current.pos.x, current.pos.y + mpNpcDat->field_0x24, current.pos.z);
@@ -7625,7 +7625,7 @@ u8 daNpcPeople_c::getPrmArg0() {
 /* 00007BA0-00007C28       .text setMtx__13daNpcPeople_cFv */
 void daNpcPeople_c::setMtx() {
     mpMorf->getModel()->setBaseScale(scale);
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 }
