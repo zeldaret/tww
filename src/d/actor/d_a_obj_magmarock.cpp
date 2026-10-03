@@ -193,7 +193,6 @@ void daObjMagmarock::Act_c::quake_proc() {
 
 /* 0000084C-00000878       .text vanish_proc_init__Q214daObjMagmarock5Act_cFv */
 void daObjMagmarock::Act_c::vanish_proc_init() {
-    /* Nonmatching */
     m448 = 0x5a;
     m2e0 = &Act_c::vanish_proc;
 }
@@ -366,7 +365,6 @@ BOOL daObjMagmarock::Act_c::LiftUpRequest(cXyz &param_1) {
 
 /* 00001560-0000167C       .text BeforeLiftRequest__Q214daObjMagmarock5Act_cFR4cXyz */
 bool daObjMagmarock::Act_c::BeforeLiftRequest(cXyz &param_1) {
-    /* Nonmatching: floating point constants order */
     m43c = param_1;
     if (m43c.y < home.pos.y + 25.0f) {
         m43c.y = home.pos.y + 25.0f;
