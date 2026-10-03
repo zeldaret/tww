@@ -257,7 +257,7 @@ cPhs_State dScnName_c::create() {
 #if VERSION == VERSION_PAL
 void dScnName_c::bmg_data_read_all() {
     if (mBmgStatus == 0) {
-        g_dComIfG_gameInfo.play.mpEnglishTextArchive->unmount();
+        dComIfGp_getMsgDtArchive()->unmount();
 
         field_0x1c4[0] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data0/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
         field_0x1c4[1] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data1/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
@@ -276,8 +276,7 @@ void dScnName_c::bmg_data_read_all() {
     }
 
     if (mBmgStatus == 2) {
-        u8 lang = g_dComIfG_gameInfo.play.mPalLanguage;
-        g_dComIfG_gameInfo.play.mpEnglishTextArchive = field_0x1c4[lang]->getArchive();
+        dComIfGp_setMsgDtArchive(field_0x1c4[dComIfGs_getPalLanguage()]->getArchive());
 
         for (int i = 0; i < 5; i++) {
             field_0x1d8[i] = field_0x1c4[i]->getArchive();
@@ -301,7 +300,7 @@ void dScnName_c::bmg_data_set() {
         }
 
         char path[32];
-        sprintf(path, "/res/Msg/data%d/bmgres.arc", g_dComIfG_gameInfo.play.mPalLanguage);
+        sprintf(path, "/res/Msg/data%d/bmgres.arc", dComIfGs_getPalLanguage());
         field_0x1c4[0] = mDoDvdThd_mountXArchive_c::create(path, 0, JKRArchive::MOUNT_MEM);
 
         mBmgStatus = 1;
@@ -314,7 +313,7 @@ void dScnName_c::bmg_data_set() {
     }
 
     if (mBmgStatus == 2) {
-        g_dComIfG_gameInfo.play.mpEnglishTextArchive = field_0x1c4[0]->getArchive();
+        dComIfGp_setMsgDtArchive(field_0x1c4[0]->getArchive());
         delete field_0x1c4[0];
         mBmgStatus = 3;
     }
@@ -324,10 +323,10 @@ void dScnName_c::bmg_data_set() {
 #if VERSION == VERSION_PAL
 void dScnName_c::tex_data_set() {
     if (mBmgStatus == 3) {
-        g_dComIfG_gameInfo.play.mpActionIconArchive->unmount();
+        dComIfGp_getActionIconArchive()->unmount();
 
         char path[32];
-        sprintf(path, "/res/Msg/data%d/acticon.arc", g_dComIfG_gameInfo.play.mPalLanguage);
+        sprintf(path, "/res/Msg/data%d/acticon.arc", dComIfGs_getPalLanguage());
         field_0x1c4[1] = mDoDvdThd_mountXArchive_c::create(path, 0, JKRArchive::MOUNT_ARAM);
 
         mBmgStatus = 4;
@@ -340,7 +339,7 @@ void dScnName_c::tex_data_set() {
     }
 
     if (mBmgStatus == 5) {
-        g_dComIfG_gameInfo.play.mpActionIconArchive = field_0x1c4[1]->getArchive();
+        dComIfGp_setActionIconArchive(field_0x1c4[1]->getArchive());
         delete field_0x1c4[1];
         mBmgStatus = 6;
     }
@@ -398,7 +397,7 @@ void dScnName_c::buttonIconCreate() {
     field_0x1c58 = 0;
     field_0x1c5a = 0;
     field_0x1c59 = 0;
-    buttonIconTexChange(g_dComIfG_gameInfo.play.mPalLanguage, field_0x1c58);
+    buttonIconTexChange(dComIfGs_getPalLanguage(), field_0x1c58);
 #else
     fopMsgM_setPaneData(&field_0x4e4[1], btnIcon.scr->search('bawd'));
 #endif
@@ -1009,7 +1008,7 @@ void dScnName_c::NoteOpenWait() {
         dFs_c->initial();
 #if VERSION == VERSION_PAL
         field_0x1c58 = 0;
-        buttonIconTexChange(g_dComIfG_gameInfo.play.mPalLanguage, field_0x1c58);
+        buttonIconTexChange(dComIfGs_getPalLanguage(), field_0x1c58);
 
         fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58 ^ 1], 0.0f);
         fopMsgM_setNowAlpha(&field_0x554[field_0x1c58 ^ 1], 0.0f);
@@ -1386,7 +1385,7 @@ void dScnName_c::NameInClose() {
         dFs_c->initial();
 #if VERSION == VERSION_PAL
         field_0x1c58 = 0;
-        buttonIconTexChange(g_dComIfG_gameInfo.play.mPalLanguage, field_0x1c58);
+        buttonIconTexChange(dComIfGs_getPalLanguage(), field_0x1c58);
 
         fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58 ^ 1], 0.0f);
         fopMsgM_setNowAlpha(&field_0x554[field_0x1c58 ^ 1], 0.0f);
