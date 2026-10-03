@@ -19,7 +19,7 @@ public:
 public:
     /* 0x290 */ J3DModel* mpModel;
     /* 0x294 */ request_of_phase_process_class mPhs;
-    /* 0x29C */ mDoExt_btkAnm mpBtkAnm;
+    /* 0x29C */ mDoExt_btkAnm mBtkAnm;
     /* 0x2B0 */ BOOL m2B0;
 };  // Size: 0x2B4
 

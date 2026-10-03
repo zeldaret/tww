@@ -98,7 +98,7 @@ public:
     J3DPacket() {
         mpNextPacket = NULL;
         mpFirstChild = NULL;
-        mpUserData = 0;
+        mUserData = 0;
     }
 
     void addChildPacket(J3DPacket*);
@@ -111,8 +111,8 @@ public:
         mpFirstChild = NULL;
     }
 
-    void setUserArea(uintptr_t area) { mpUserData = area; }
-    uintptr_t getUserArea() const { return mpUserData; }
+    void setUserArea(uintptr_t area) { mUserData = area; }
+    uintptr_t getUserArea() const { return mUserData; }
 
     virtual bool isSame(J3DMatPacket*) const;
     virtual int entry(J3DDrawBuffer*);
@@ -122,7 +122,7 @@ public:
 public:
     /* 0x04 */ J3DPacket* mpNextPacket;
     /* 0x08 */ J3DPacket* mpFirstChild;
-    /* 0x0C */ uintptr_t mpUserData;
+    /* 0x0C */ uintptr_t mUserData;
 };  // Size: 0x10
 
 class J3DDrawPacket : public J3DPacket {
