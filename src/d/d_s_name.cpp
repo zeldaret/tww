@@ -18,6 +18,7 @@
 #include "f_op/f_op_kankyo_mng.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "f_op/f_op_scene_mng.h"
+#include "f_pc/f_pc_node.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "m_Do/m_Do_dvd_thread.h"
@@ -35,6 +36,8 @@
 #include "JSystem/JKernel/JKRMemArchive.h"
 
 dSn_HIO_c g_snHIO;
+
+static int mBmgStatus;
 
 /* 8022F86C-8022F8F0       .text __ct__9dSn_HIO_cFv */
 dSn_HIO_c::dSn_HIO_c() {
@@ -110,6 +113,15 @@ cPhs_State dScnName_c::create() {
     dComIfGp_setStartStage(dComIfGp_getNextStartStage());
     dComIfGp_offEnableNextStage();
 
+#if VERSION == VERSION_PAL
+    if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
+        bmg_data_read_all();
+        if (mBmgStatus < 3) {
+            return cPhs_INIT_e;
+        }
+    }
+#endif
+
     cPhs_State rt = resLoad(&mPhs, "Stage");
     if (rt == cPhs_COMPLEATE_e) {
 #if VERSION == VERSION_DEMO
@@ -131,6 +143,9 @@ cPhs_State dScnName_c::create() {
         dFs_c = new dFile_select_c();
         JUT_ASSERT(VERSION_SELECT(316, 319, 470, 473), dFs_c != NULL);
         dFs_c->archive = mArchive;
+#if VERSION == VERSION_PAL
+        dFs_c->setField_0x3cd4(field_0x1d8);
+#endif
         savePicDatabuf = new (0x20) card_pictdata[3 * 3];
         JUT_ASSERT(VERSION_SELECT(322, 325, 476, 483), savePicDatabuf != NULL);
 
@@ -232,33 +247,102 @@ cPhs_State dScnName_c::create() {
 #endif
 
         JFWDisplay::getManager()->setTickRate(OS_TIMER_CLOCK / 30);
+#if VERSION == VERSION_PAL
+        mBmgStatus = 0;
+#endif
     }
     return rt;
 }
 
 #if VERSION == VERSION_PAL
 void dScnName_c::bmg_data_read_all() {
-    /* Nonmatching */
-    dComIfGp_getMsgDtArchive()->unmount();
-    field_0x1c4 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data0/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-    field_0x1c8 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data1/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-    field_0x1cc = mDoDvdThd_mountXArchive_c::create("/res/Msg/data2/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-    field_0x1d0 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data3/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-    field_0x1d4 = mDoDvdThd_mountXArchive_c::create("/res/Msg/data4/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
-}
+    if (mBmgStatus == 0) {
+        dComIfGp_getMsgDtArchive()->unmount();
 
+        field_0x1c4[0] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data0/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+        field_0x1c4[1] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data1/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+        field_0x1c4[2] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data2/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+        field_0x1c4[3] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data3/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+        field_0x1c4[4] = mDoDvdThd_mountXArchive_c::create("/res/Msg/data4/bmgres.arc", 0, JKRArchive::MOUNT_MEM);
+
+        mBmgStatus = 1;
+    }
+
+    if (mBmgStatus == 1) {
+        if (field_0x1c4[0]->sync() && field_0x1c4[1]->sync() && field_0x1c4[2]->sync() &&
+            field_0x1c4[3]->sync() && field_0x1c4[4]->sync()) {
+            mBmgStatus = 2;
+        }
+    }
+
+    if (mBmgStatus == 2) {
+        dComIfGp_setMsgDtArchive(field_0x1c4[dComIfGs_getPalLanguage()]->getArchive());
+
+        for (int i = 0; i < 5; i++) {
+            field_0x1d8[i] = field_0x1c4[i]->getArchive();
+            delete field_0x1c4[i];
+        }
+
+        mBmgStatus = 3;
+    }
+}
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::bmg_data_set() {
-    /* Nonmatching */
-}
+    if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
+        mBmgStatus = 10;
+    }
 
+    if (mBmgStatus == 0) {
+        for (int i = 0; i < 5; i++) {
+            field_0x1d8[i]->unmount();
+        }
+
+        char path[32];
+        sprintf(path, "/res/Msg/data%d/bmgres.arc", dComIfGs_getPalLanguage());
+        field_0x1c4[0] = mDoDvdThd_mountXArchive_c::create(path, 0, JKRArchive::MOUNT_MEM);
+
+        mBmgStatus = 1;
+    }
+
+    if (mBmgStatus == 1) {
+        if (field_0x1c4[0]->sync()) {
+            mBmgStatus = 2;
+        }
+    }
+
+    if (mBmgStatus == 2) {
+        dComIfGp_setMsgDtArchive(field_0x1c4[0]->getArchive());
+        delete field_0x1c4[0];
+        mBmgStatus = 3;
+    }
+}
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::tex_data_set() {
-    /* Nonmatching */
+    if (mBmgStatus == 3) {
+        dComIfGp_getActionIconArchive()->unmount();
+
+        char path[32];
+        sprintf(path, "/res/Msg/data%d/acticon.arc", dComIfGs_getPalLanguage());
+        field_0x1c4[1] = mDoDvdThd_mountXArchive_c::create(path, 0, JKRArchive::MOUNT_ARAM);
+
+        mBmgStatus = 4;
+    }
+
+    if (mBmgStatus == 4) {
+        if (field_0x1c4[1]->sync()) {
+            mBmgStatus = 5;
+        }
+    }
+
+    if (mBmgStatus == 5) {
+        dComIfGp_setActionIconArchive(field_0x1c4[1]->getArchive());
+        delete field_0x1c4[1];
+        mBmgStatus = 6;
+    }
 }
 #endif
 
@@ -299,40 +383,123 @@ void dScnName_c::buttonIconCreate() {
     fopMsgM_setPaneData(&field_0x43c, btnIcon.scr->search('cent'));
     fopMsgM_setPaneData(&field_0x474, btnIcon.scr->search('bab'));
     fopMsgM_setPaneData(&field_0x4ac, btnIcon.scr->search('baat'));
-    fopMsgM_setPaneData(&field_0x4e4, btnIcon.scr->search('bawp'));
-    fopMsgM_setPaneData(&field_0x51c, btnIcon.scr->search('bawd'));
+    fopMsgM_setPaneData(&field_0x4e4[0], btnIcon.scr->search('bawp'));
+#if VERSION == VERSION_PAL
+    fopMsgM_setPaneData(&field_0x4e4[1], btnIcon.scr->search('bap2'));
+    fopMsgM_setPaneData(&field_0x554[0], btnIcon.scr->search('bawd'));
+    fopMsgM_setPaneData(&field_0x554[1], btnIcon.scr->search('bad2'));
+
+    fopMsgM_setNowAlpha(&field_0x4e4[1], 0.0f);
+    fopMsgM_setNowAlpha(&field_0x554[1], 0.0f);
+    fopMsgM_setAlpha(&field_0x4e4[1]);
+    fopMsgM_setAlpha(&field_0x554[1]);
+
+    field_0x1c58 = 0;
+    field_0x1c5a = 0;
+    field_0x1c59 = 0;
+    buttonIconTexChange(dComIfGs_getPalLanguage(), field_0x1c58);
+#else
+    fopMsgM_setPaneData(&field_0x4e4[1], btnIcon.scr->search('bawd'));
+#endif
     field_0x1bb4 = 0;
     paneTransButtonIcon(field_0x1bb4, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 0);
     field_0x1bb6 = 6;
 }
 
 #if VERSION == VERSION_PAL
-void dScnName_c::buttonIconTexChange(u8, u8) {
-    /* Nonmatching */
+void dScnName_c::buttonIconTexChange(u8 i_type, u8 i_index) {
+    switch (i_type) {
+    case 0:
+        ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei.bti", 0);
+        ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru.bti", 0);
+        break;
+    case 1:
+        ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei_gm.bti", 0);
+        ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru_gm.bti", 0);
+        break;
+    case 2:
+        ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei_fr.bti", 0);
+        ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru_fr.bti", 0);
+        break;
+    case 3:
+        ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei_sp.bti", 0);
+        ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru_sp.bti", 0);
+        break;
+    case 4:
+        ((J2DPicture*)field_0x4e4[i_index].pane)->changeTexture("ba_kettei_it.bti", 0);
+        ((J2DPicture*)field_0x554[i_index].pane)->changeTexture("ba_modoru_it.bti", 0);
+        break;
+    }
 }
 #endif
 
 #if VERSION == VERSION_PAL
-void dScnName_c::PaneAlphaLangTxt(s16, u8) {
-    /* Nonmatching */
+int dScnName_c::PaneAlphaLangTxt(s16 i_value, u8 i_max) {
+    if (i_value < 0) {
+        return 0;
+    }
+    if (i_value > i_max) {
+        return 1;
+    }
+
+    f32 alpha_in = fopMsgM_valueIncrease(i_max, i_value, 0);
+    f32 alpha_out = 1.0f - alpha_in;
+
+    fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58], alpha_out);
+    fopMsgM_setNowAlpha(&field_0x554[field_0x1c58], alpha_out);
+    fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58 ^ 1], alpha_in);
+    fopMsgM_setNowAlpha(&field_0x554[field_0x1c58 ^ 1], alpha_in);
+
+    fopMsgM_setAlpha(&field_0x4e4[field_0x1c58]);
+    fopMsgM_setAlpha(&field_0x554[field_0x1c58]);
+    fopMsgM_setAlpha(&field_0x4e4[field_0x1c58 ^ 1]);
+    fopMsgM_setAlpha(&field_0x554[field_0x1c58 ^ 1]);
+
+    return 0;
 }
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::languageTexChange() {
-    /* Nonmatching */
+    if (field_0x1c59 == 1) {
+        langTexChgFast();
+    } else {
+        field_0x1c59 = 1;
+    }
+
+    buttonIconTexChange(dFs_c->getField_0x3cc6(), field_0x1c58 ^ 1);
 }
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::langTexChg() {
-    /* Nonmatching */
+    if (field_0x1c59 != 0) {
+        int result = PaneAlphaLangTxt(field_0x1c5a, 10);
+        field_0x1c5a++;
+        if (result == 1) {
+            field_0x1c58 ^= 1;
+            field_0x1c5a = 0;
+            field_0x1c59 = 0;
+        }
+    }
 }
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::langTexChgFast() {
-    /* Nonmatching */
+    field_0x1c5a = 0;
+
+    fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58 ^ 1], 1.0f);
+    fopMsgM_setNowAlpha(&field_0x554[field_0x1c58 ^ 1], 1.0f);
+    fopMsgM_setAlpha(&field_0x4e4[field_0x1c58 ^ 1]);
+    fopMsgM_setAlpha(&field_0x554[field_0x1c58 ^ 1]);
+
+    fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58], 0.0f);
+    fopMsgM_setNowAlpha(&field_0x554[field_0x1c58], 0.0f);
+    fopMsgM_setAlpha(&field_0x4e4[field_0x1c58]);
+    fopMsgM_setAlpha(&field_0x554[field_0x1c58]);
+
+    field_0x1c58 ^= 1;
 }
 #endif
 
@@ -349,8 +516,12 @@ BOOL dScnName_c::paneTransButtonIcon(s16 param_1, u8 param_2, f32 param_3, f32 p
     fopMsgM_paneTrans(&field_0x43c, 0.0f, param_3 + tmp);
     fopMsgM_paneTrans(&field_0x474, 0.0f, param_3 + tmp);
     fopMsgM_paneTrans(&field_0x4ac, 0.0f, param_3 + tmp);
-    fopMsgM_paneTrans(&field_0x4e4, 0.0f, param_3 + tmp);
-    fopMsgM_paneTrans(&field_0x51c, 0.0f, param_3 + tmp);
+    fopMsgM_paneTrans(&field_0x4e4[0], 0.0f, param_3 + tmp);
+    fopMsgM_paneTrans(&field_0x4e4[1], 0.0f, param_3 + tmp);
+#if VERSION == VERSION_PAL
+    fopMsgM_paneTrans(&field_0x554[0], 0.0f, param_3 + tmp);
+    fopMsgM_paneTrans(&field_0x554[1], 0.0f, param_3 + tmp);
+#endif
     return false;
 }
 
@@ -826,12 +997,31 @@ void dScnName_c::NoteOpenWait() {
         if (fpcM_GetName(this) == fpcNm_NAME_SCENE_e) {
             dFs_c->setSaveDataPtr(saveMemory);
             dFs_c->setSavePicDataPtr((u8*)savePicDatabuf);
+#if VERSION == VERSION_PAL
+            dFs_c->setField_0x3cd4(field_0x1d8);
+#endif
         }
         if (fpcM_GetName(this) == fpcNm_NAMEEX_SCENE_e) {
             dFs_c->setSaveDataPtr(dMs_c->getDataBufPtr());
             dFs_c->setSavePicDataPtr((u8*)savePicDatabuf);
         }
         dFs_c->initial();
+#if VERSION == VERSION_PAL
+        field_0x1c58 = 0;
+        buttonIconTexChange(dComIfGs_getPalLanguage(), field_0x1c58);
+
+        fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58 ^ 1], 0.0f);
+        fopMsgM_setNowAlpha(&field_0x554[field_0x1c58 ^ 1], 0.0f);
+        fopMsgM_setAlpha(&field_0x4e4[field_0x1c58 ^ 1]);
+        fopMsgM_setAlpha(&field_0x554[field_0x1c58 ^ 1]);
+
+        fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58], 1.0f);
+        fopMsgM_setNowAlpha(&field_0x554[field_0x1c58], 1.0f);
+        fopMsgM_setAlpha(&field_0x4e4[field_0x1c58]);
+        fopMsgM_setAlpha(&field_0x554[field_0x1c58]);
+
+        field_0x1c58 ^= 1;
+#endif
         mMainProc = 3;
         mOpenProc = 0;
         mDrawProc = 1;
@@ -859,11 +1049,20 @@ void dScnName_c::buttonIconProc() {
         break;
     case 1:
         {
-            if (field_0x51c.pane->isVisible()) {
-                field_0x51c.pane->hide();
+#if VERSION == VERSION_PAL
+            if (field_0x554[field_0x1c58].pane->isVisible()) {
+                field_0x554[0].pane->hide();
+                field_0x554[1].pane->hide();
                 field_0x474.pane->hide();
                 field_0x4ac.pane->hide();
             }
+#else
+            if (field_0x4e4[1].pane->isVisible()) {
+                field_0x4e4[1].pane->hide();
+                field_0x474.pane->hide();
+                field_0x4ac.pane->hide();
+            }
+#endif
             s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 1);
             field_0x1bb4++;
             if (ret == 1) {
@@ -875,11 +1074,20 @@ void dScnName_c::buttonIconProc() {
         break;
     case 2:
         {
-            if (!field_0x51c.pane->isVisible()) {
-                field_0x51c.pane->show();
+#if VERSION == VERSION_PAL
+            if (!field_0x554[field_0x1c58].pane->isVisible()) {
+                field_0x554[0].pane->show();
+                field_0x554[1].pane->show();
                 field_0x474.pane->show();
                 field_0x4ac.pane->show();
             }
+#else
+            if (!field_0x4e4[1].pane->isVisible()) {
+                field_0x4e4[1].pane->show();
+                field_0x474.pane->show();
+                field_0x4ac.pane->show();
+            }
+#endif
             s32 ret = paneTransButtonIcon(field_0x1bb4 - g_snHIO.field_0xf, g_snHIO.field_0xe, g_snHIO.field_0xc, 0.0f, 1);
             field_0x1bb4++;
             if (ret == 1) {
@@ -906,11 +1114,20 @@ void dScnName_c::buttonIconProc() {
             field_0x1bb4++;
             if (ret == 1) {
                 field_0x1bb4 = 0;
-                if (!field_0x51c.pane->isVisible()) {
-                    field_0x51c.pane->show();
+#if VERSION == VERSION_PAL
+                if (!field_0x554[field_0x1c58].pane->isVisible()) {
+                    field_0x554[0].pane->show();
+                    field_0x554[1].pane->show();
                     field_0x474.pane->show();
                     field_0x4ac.pane->show();
                 }
+#else
+                if (!field_0x4e4[1].pane->isVisible()) {
+                    field_0x4e4[1].pane->show();
+                    field_0x474.pane->show();
+                    field_0x4ac.pane->show();
+                }
+#endif
                 field_0x1bb6 = 0;
                 dFs_c->setIconMode(field_0x1bb6);
             }
@@ -922,11 +1139,20 @@ void dScnName_c::buttonIconProc() {
             field_0x1bb4++;
             if (ret == 1) {
                 field_0x1bb4 = 0;
-                if (field_0x51c.pane->isVisible()) {
-                    field_0x51c.pane->hide();
+#if VERSION == VERSION_PAL
+                if (field_0x554[field_0x1c58].pane->isVisible()) {
+                    field_0x554[0].pane->hide();
+                    field_0x554[1].pane->hide();
                     field_0x474.pane->hide();
                     field_0x4ac.pane->hide();
                 }
+#else
+                if (field_0x4e4[1].pane->isVisible()) {
+                    field_0x4e4[1].pane->hide();
+                    field_0x474.pane->hide();
+                    field_0x4ac.pane->hide();
+                }
+#endif
                 field_0x1bb6 = 0;
                 dFs_c->setIconMode(field_0x1bb6);
             }
@@ -966,6 +1192,13 @@ void dScnName_c::FileSelectMain() {
 
 /* 80231A8C-80231CB8       .text FileSelectMainNormal__10dScnName_cFv */
 void dScnName_c::FileSelectMainNormal() {
+#if VERSION == VERSION_PAL
+    if (dFs_c->getField_0x3cd3() != 0) {
+        languageTexChange();
+        dFs_c->setField_0x3cd3(0);
+    }
+    langTexChg();
+#endif
     switch (dFs_c->isSelectEnd()) {
     case 1:
         field_0x1bb9 = 0;
@@ -1150,6 +1383,22 @@ void dScnName_c::NameInMain() {
 void dScnName_c::NameInClose() {
     if ((BOOL)dNm_c->_close() == TRUE) {
         dFs_c->initial();
+#if VERSION == VERSION_PAL
+        field_0x1c58 = 0;
+        buttonIconTexChange(dComIfGs_getPalLanguage(), field_0x1c58);
+
+        fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58 ^ 1], 0.0f);
+        fopMsgM_setNowAlpha(&field_0x554[field_0x1c58 ^ 1], 0.0f);
+        fopMsgM_setAlpha(&field_0x4e4[field_0x1c58 ^ 1]);
+        fopMsgM_setAlpha(&field_0x554[field_0x1c58 ^ 1]);
+
+        fopMsgM_setNowAlpha(&field_0x4e4[field_0x1c58], 1.0f);
+        fopMsgM_setNowAlpha(&field_0x554[field_0x1c58], 1.0f);
+        fopMsgM_setAlpha(&field_0x4e4[field_0x1c58]);
+        fopMsgM_setAlpha(&field_0x554[field_0x1c58]);
+
+        field_0x1c58 ^= 1;
+#endif
         mMainProc = 3;
         mOpenProc = 0;
         mDrawProc = 1;
@@ -1257,6 +1506,14 @@ static BOOL dScnName_IsDelete(dScnName_c*) {
 
 /* 80232380-802323A8       .text dScnName_Delete__FP10dScnName_c */
 static BOOL dScnName_Delete(dScnName_c* i_this) {
+#if VERSION == VERSION_PAL
+    i_this->bmg_data_set();
+    i_this->tex_data_set();
+    if (mBmgStatus < 6) {
+        return FALSE;
+    }
+    mBmgStatus = 0;
+#endif
     i_this->~dScnName_c();
     return TRUE;
 }
