@@ -321,20 +321,18 @@ BOOL daObjMagmarock::Act_c::CreateInit() {
             m2a4 = dComIfGp_particle_setToon(0x8073, &current.pos, NULL, NULL, (u8)(REG10_F(26)*102.f+153.0f));
 
             if (m2a0 != NULL) {
-                const GXColor *temp = &Act_c::default_color;
-                m2a0->setGlobalPrmColor(temp->r, temp->g, temp->b);
-                m2a0->setGlobalEnvColor(temp->r, temp->g, temp->b);
+                m2a0->setGlobalPrmColor(default_color.r, default_color.g, default_color.b);
+                m2a0->setGlobalEnvColor(default_color.r, default_color.g, default_color.b);
             }
             if (m2a4 != NULL) {
-                const GXColor *temp = &Act_c::default_color;
-                m2a4->setGlobalPrmColor(temp->r, temp->g, temp->b);
-                m2a4->setGlobalEnvColor(temp->r, temp->g, temp->b);
+                m2a4->setGlobalPrmColor(default_color.r, default_color.g, default_color.b);
+                m2a4->setGlobalEnvColor(default_color.r, default_color.g, default_color.b);
             }
         }
     }
     return TRUE;
 }
-const GXColor daObjMagmarock::Act_c::default_color = {0xFF, 0xFF, 0xFF, 0xFF};
+GXColor daObjMagmarock::Act_c::default_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 /* 000013B4-00001560       .text LiftUpRequest__Q214daObjMagmarock5Act_cFR4cXyz */
 BOOL daObjMagmarock::Act_c::LiftUpRequest(cXyz &param_1) {

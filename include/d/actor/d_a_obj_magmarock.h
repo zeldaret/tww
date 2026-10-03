@@ -94,7 +94,7 @@ namespace daObjMagmarock {
         /* 045e */ s16 m45e;
 
         static const char M_arcname[];
-        static const GXColor default_color;
+        static GXColor default_color;
     }; // size 0x460
 
     namespace Method {
