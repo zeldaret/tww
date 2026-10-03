@@ -286,7 +286,7 @@ struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
         mOldFrame = oldFrame;
         mBeforeCallback = NULL;
         mAfterCallback = NULL;
-        mUserArea = NULL;
+        mUserArea = 0;
     }
     virtual void calc(u16);
 

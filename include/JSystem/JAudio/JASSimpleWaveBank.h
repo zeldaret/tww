@@ -16,7 +16,7 @@ namespace JASystem {
             intptr_t getWavePtr() const {
                 void* base = mHeap->getBase();
                 if (base == NULL) {
-                    return NULL;
+                    return 0;
                 }
                 return (intptr_t)base + mWaveInfo.mWavePtrOffs;
             }

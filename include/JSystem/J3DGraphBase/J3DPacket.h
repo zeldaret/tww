@@ -98,7 +98,7 @@ public:
     J3DPacket() {
         mpNextPacket = NULL;
         mpFirstChild = NULL;
-        mpUserData = NULL;
+        mpUserData = 0;
     }
 
     void addChildPacket(J3DPacket*);
