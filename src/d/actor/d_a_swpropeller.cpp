@@ -100,13 +100,37 @@ void daSwProp_c::CreateInit() {
 }
 
 /* 00000350-00000404       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)i_node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daSwProp_c* i_this = (daSwProp_c*)model->getUserArea();
+        if (i_this != NULL) {
+            i_this->mRotY += i_this->mRotYVel;
+
+            mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+            mDoMtx_stack_c::YrotM(i_this->mRotY);
+            model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+            MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000404-00000590       .text _create__10daSwProp_cFv */
 cPhs_State daSwProp_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daSwProp_c);
+    field_0x64D = fpcM_GetParam(this) >> 8 & 0xF;
+    cPhs_State res = dComIfG_resLoad(&field_0x290, m_arcname[field_0x64D]);
+    if (res == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[field_0x64D])) {
+            return cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+    return res;
 }
 
 /* 000007B8-00000838       .text set_mtx__10daSwProp_cFv */
