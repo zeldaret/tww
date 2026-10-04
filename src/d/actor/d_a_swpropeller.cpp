@@ -135,7 +135,10 @@ cPhs_State daSwProp_c::_create() {
 
 /* 000007B8-00000838       .text set_mtx__10daSwProp_cFv */
 void daSwProp_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000838-00000B60       .text _execute__10daSwProp_cFv */
@@ -145,7 +148,14 @@ bool daSwProp_c::_execute() {
 
 /* 00000B60-00000C00       .text _draw__10daSwProp_cFv */
 bool daSwProp_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    f32 groundH = mAcch.GetGroundH();
+    if (groundH != -G_CM3D_F_INF) {
+        dComIfGd_setSimpleShadow2(&current.pos, groundH, 65.0f, mAcch.m_gnd, 0, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
+    }
+    return true;
 }
 
 /* 00000C00-00000C20       .text daSwProp_Create__FPv */
