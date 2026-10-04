@@ -5,14 +5,14 @@
 
 namespace std {
     using ::sqrt;
-    using ::fabsf;
+    inline float fabsf(float f) { return ::fabsf(f); }
     using ::abs;
     using ::fmodf;
     using ::atan2f;
     inline float sinf(float x) { return sin(x); }
     inline float cosf(float x) { return cos(x); }
     inline float tanf(float x) { return tan(x); }
-    using ::sqrtf;
+    inline float sqrtf(float x) { return ::sqrtf(x); }
     using ::abs;
     using ::labs;
     using ::acos;
