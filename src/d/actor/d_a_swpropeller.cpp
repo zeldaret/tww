@@ -5,8 +5,13 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swpropeller.h"
-#include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
+#include "res/Object/Hpbot1.h"
+#include "res/Object/Vpbot_00.h"
+
+const s16 daSwProp_c::m_bdlidx[2] = { dRes_INDEX_HPBOT1_BDL_HPBOT1_e, dRes_INDEX_VPBOT_00_BDL_VPBOT_00_e };
+const u32 daSwProp_c::m_heapsize[2] = { 2176, 2240 };
+const char* daSwProp_c::m_arcname[2] = { "Hpbot1", "Vpbot_00" };
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -41,22 +46,57 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
 bool daSwProp_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDelete(&field_0x290, m_arcname[field_0x64D]);
+    return true;
 }
 
 /* 000000B8-000000D8       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daSwProp_c*)i_this)->CreateHeap();
 }
 
 /* 000000D8-000001B8       .text CreateHeap__10daSwProp_cFv */
-void daSwProp_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSwProp_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[field_0x64D], m_bdlidx[field_0x64D]);
+    JUT_ASSERT(257, modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
+        return false;
+    }
+    mpModel->setUserArea((uintptr_t)this);
+    return true;
 }
+
+static BOOL nodeCallBack(J3DNode*, int);
 
 /* 000001B8-00000350       .text CreateInit__10daSwProp_cFv */
 void daSwProp_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -150.0f, -100.0f, -150.0f, 150.0f, 150.0f, 150.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
+
+    mAcch.SetWallNone();
+    mAcch.SetWaterNone();
+    mAcch.SetRoofNone();
+
+    mStts.Init(255, 255, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    field_0x648 = fpcM_GetParam(this) & 0xFF;
+
+    set_mtx();
+
+    JUTNameTab* jointName = mpModel->getModelData()->getJointName();
+    for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+        if (strcmp("kaiten", jointName->getName(i)) == 0) {
+            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+            break;
+        }
+    }
+    mpModel->calc();
 }
 
 /* 00000350-00000404       .text nodeCallBack__FP7J3DNodei */
