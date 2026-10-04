@@ -14,11 +14,12 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JSupport/JSUFileStream.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "string.h"
 #include "dolphin/os/OSCache.h"
 #include "dolphin/os/OSInterrupt.h"
 #include "dolphin/vi/vi.h"
 #include "global.h"
+
+#include <cstring>
 
 static int JKRDecompressFromDVDToAram(JKRDvdFile*, u32, u32, u32, u32, u32);
 static int decompSZS_subroutine(u8*, u32);

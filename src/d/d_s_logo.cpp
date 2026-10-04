@@ -30,8 +30,10 @@
 #include "JSystem/JKernel/JKRAramBlock.h"
 #include "JSystem/JKernel/JKRAramHeap.h"
 #include "dolphin/os/OS.h"
-#include "string.h"
-#include "stdio.h"
+
+#include <cstring>
+#include <stdio.h>
+
 
 mDoDvdThd_mountXArchive_c * l_anmCommand;
 mDoDvdThd_mountXArchive_c * l_fmapCommand;

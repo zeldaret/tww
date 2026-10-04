@@ -1,10 +1,5 @@
-#ifndef MSL_CSTDINT_H_
-#define MSL_CSTDINT_H_
-
-#ifdef __cplusplus
-namespace std {
-extern "C" {
-#endif
+#ifndef MSL_STDINT_H_
+#define MSL_STDINT_H_
 
 typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
@@ -22,9 +17,4 @@ typedef int32_t  intptr_t;
 
 typedef long long intmax_t;
 
-#ifdef __cplusplus
-};
-}
-#endif
-
-#endif
+#endif /* MSL_STDINT_H_ */

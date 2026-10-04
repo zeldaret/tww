@@ -52,7 +52,7 @@ float sinf(float);
 double tan(double);
 float tanf(float);
 
-extern inline double sqrt(double x) {
+inline double sqrt(double x) {
     if(x > 0.0)
     {
         double guess = __frsqrte(x);                   /* returns an approximation to    */
@@ -70,25 +70,10 @@ extern inline double sqrt(double x) {
     return HUGE_VALF;
 }
 
-#ifdef __cplusplus
-};
-
-
-namespace std {
 inline float fabsf(float f) { return fabs(f); }
-inline float abs(float f) { return fabsf(f); }
 inline float fmodf(float x, float y) { return fmod(x, y); }
 inline float atan2f(float y, float x) { return (float)atan2(y, x); }
-inline float sinf(float x) { return sin(x); }
-inline float cosf(float x) { return cos(x); }
-inline float tanf(float x) { return tan(x); }
-}; // namespace std
-#endif
-
-#ifdef __cplusplus
-namespace std {
-#endif
-extern inline float sqrtf(float x) {
+inline float sqrtf(float x) {
 #ifdef DECOMPCTX // Hack, see comment in dolzel.pch for details
     const double _half = .5;
     const double _three = 3.0;
@@ -108,7 +93,7 @@ extern inline float sqrtf(float x) {
     return x;
 }
 #ifdef __cplusplus
-}; // namespace std
+}
 #endif
 
 #endif

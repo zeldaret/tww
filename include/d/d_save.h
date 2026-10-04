@@ -3,7 +3,8 @@
 
 #include "global.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "string.h"
+
+#include <cstring>
 
 class dSv_player_status_a_c {
 public:
@@ -443,7 +444,7 @@ public:
     void init();
 
     const char* getPlayerName() const { return mPlayerName; }
-    void setPlayerName(const char* name) { strcpy(mPlayerName, name); }
+    void setPlayerName(const char* name) { std::strcpy(mPlayerName, name); }
     u8 getClearCount() { return mClearCount; }
     void setClearCount(u8 count) { mClearCount = count; }
     void clearCountUp() {}

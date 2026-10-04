@@ -14,7 +14,8 @@
 #include "dolphin/gd/GDBase.h"
 #include "dolphin/os/OS.h"
 #include "dolphin/types.h"
-#include "string.h"
+
+#include <cstring>
 
 int SizeOfLoadMatColors = 13;
 int SizeOfLoadAmbColors = 13;

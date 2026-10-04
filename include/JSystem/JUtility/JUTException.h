@@ -3,10 +3,11 @@
 
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTGamePad.h"
-#include "stdarg.h"
 #include "dolphin/gx/GXEnum.h"
 #include "dolphin/os/OSError.h"
 #include "global.h"
+
+#include <cstdarg>
 
 class JUTDirectPrint;
 

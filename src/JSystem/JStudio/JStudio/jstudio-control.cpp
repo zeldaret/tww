@@ -9,7 +9,8 @@
 #include "JSystem/JStudio/JStudio/jstudio-math.h"
 #include "JSystem/JStudio/JStudio/jstudio-data.h"
 #include "dolphin/types.h"
-#include "string.h"
+
+#include <cstring>
 
 /* 8026E080-8026E110       .text __ct__Q27JStudio8TControlFv */
 JStudio::TControl::TControl() {

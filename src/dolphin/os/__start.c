@@ -1,8 +1,9 @@
 #include "stdlib.h"
 #include "global.h"
 #include "dolphin/os/OS.h"
-#include <string.h>
 #include "dolphin/os/__start.h"
+
+#include <string.h>
 
 void DBInit();
 static void __init_registers(void);

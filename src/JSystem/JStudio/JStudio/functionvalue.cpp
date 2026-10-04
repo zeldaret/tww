@@ -9,8 +9,9 @@
 #include "JSystem/JUtility/JUTException.h"
 #include "JSystem/JGadget/linklist.h"
 #include "dolphin/types.h"
-#include "math.h"
 #include "stdlib.h"
+
+#include <cmath>
 
 namespace JStudio {
 

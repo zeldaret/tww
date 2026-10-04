@@ -7,9 +7,10 @@
 
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include "ctype.h"
-#include "string.h"
 #include "dolphin/types.h"
+
+#include <cctype>
+#include <cstring>
 
 u32 JKRArchive::sCurrentDirID;
 
@@ -46,7 +47,7 @@ bool JKRArchive::isSameName(JKRArchive::CArcName& name, u32 nameOffset, u16 name
     u16 hash = name.getHash();
     if (hash != nameHash)
         return false;
-    return strcmp(mStringTable + nameOffset, name.getString()) == 0;
+    return std::strcmp(mStringTable + nameOffset, name.getString()) == 0;
 }
 
 /* 802B8F94-802B8FD0       .text findResType__10JKRArchiveCFUl */

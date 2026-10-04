@@ -10,9 +10,10 @@
 #include "JSystem/JKernel/JKRFileFinder.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "ctype.h"
-#include "string.h"
 #include "global.h"
+
+#include <cctype>
+#include <cstring>
 
 /* 802B6FEC-802B70EC       .text mount__12JKRFileCacheFPCcP7JKRHeapPCc */
 JKRFileCache* JKRFileCache::mount(const char* path, JKRHeap* heap, const char* param_3) {
@@ -20,7 +21,7 @@ JKRFileCache* JKRFileCache::mount(const char* path, JKRHeap* heap, const char* p
         return NULL;
     }
 
-    u32 pathLength = strlen(path);
+    u32 pathLength = std::strlen(path);
     if (pathLength != 1 && path[pathLength - 1] == '/') {
         return NULL;
     }
@@ -31,7 +32,7 @@ JKRFileCache* JKRFileCache::mount(const char* path, JKRHeap* heap, const char* p
         if (iterator->getVolumeType() == 'CASH') {
             JKRFileCache* fileCache = (JKRFileCache*)iterator.getObject();
             if (fileCache->mRootPath) {
-                if (strcmp(fileCache->mRootPath, path) == 0) {
+                if (std::strcmp(fileCache->mRootPath, path) == 0) {
                     fileCache->mMountCount++;
                     return fileCache;
                 }
@@ -48,11 +49,11 @@ JKRFileCache::JKRFileCache(const char* path, const char* volume) {
     mMountCount = 1;
     mVolumeType = 'CASH';
 
-    u32 pathLength = strlen(path);
+    u32 pathLength = std::strlen(path);
     mRootPath = (char*)JKRAllocFromHeap(mParentHeap, pathLength + 1, 1);
     mCurrentPath = (char*)JKRAllocFromSysHeap(pathLength + 2, 1);
-    strcpy(mRootPath, path);
-    strcpy(mCurrentPath, path);
+    std::strcpy(mRootPath, path);
+    std::strcpy(mCurrentPath, path);
 
     if (path[1] != '\0') {
         convStrLower(mRootPath);
@@ -65,9 +66,9 @@ JKRFileCache::JKRFileCache(const char* path, const char* volume) {
             volumePath++;
         }
 
-        u32 volumeLength = strlen(volumePath) + 1;
+        u32 volumeLength = std::strlen(volumePath) + 1;
         mVolumePath = (char*)JKRAllocFromSysHeap(volumeLength, 0);
-        strcpy(mVolumePath, volumePath);
+        std::strcpy(mVolumePath, volumePath);
         convStrLower(mVolumePath);
         mVolumeName = mVolumePath;
     } else {
@@ -76,9 +77,9 @@ JKRFileCache::JKRFileCache(const char* path, const char* volume) {
             volumePath = "dvd";
         }
 
-        u32 volumeLength = strlen(volumePath) + 1;
+        u32 volumeLength = std::strlen(volumePath) + 1;
         mVolumePath = (char*)JKRAllocFromSysHeap(volumeLength, 0);
-        strcpy(mVolumePath, volumePath);
+        std::strcpy(mVolumePath, volumePath);
         convStrLower(mVolumePath);
         mVolumeName = mVolumePath;
     }
@@ -110,7 +111,7 @@ bool JKRFileCache::becomeCurrent(const char* path) {
         JKRHeap::sSystemHeap->free(mCurrentPath);
         mCurrentPath = dvdPathName;
         if (mCurrentPath[1] != '\0') {
-            strcat(mCurrentPath, "/");
+            std::strcat(mCurrentPath, "/");
         }
     } else {
         JKRHeap::sSystemHeap->free(dvdPathName);
@@ -155,9 +156,9 @@ void* JKRFileCache::getResource(u32, const char* path) {
     JUT_ASSERT(303, isMounted());
 
     char finalPath[256];
-    u32 rootLength = strlen(mRootPath);
+    u32 rootLength = std::strlen(mRootPath);
     char* filePath = finalPath + rootLength;
-    strcpy(finalPath, mRootPath);
+    std::strcpy(finalPath, mRootPath);
 
     bool found = findFile(finalPath, path);
     if (found) {
@@ -191,7 +192,7 @@ u32 JKRFileCache::readResource(void* dst, u32 dstLength, const char* path) {
         if (!cacheBlock) {
             dvdFile.read(dst, resourceSize, 0);
         } else {
-            memcpy(dst, cacheBlock->mMemoryPtr, resourceSize);
+            std::memcpy(dst, cacheBlock->mMemoryPtr, resourceSize);
         }
     }
 
@@ -204,9 +205,9 @@ u32 JKRFileCache::readResource(void* dst, u32 dstLength, u32, const char* path) 
     JUT_ASSERT(412, isMounted());
 
     char finalPath[256];
-    u32 rootLength = strlen(mRootPath);
+    u32 rootLength = std::strlen(mRootPath);
     char* filePath = finalPath + rootLength;
-    strcpy(finalPath, mRootPath);
+    std::strcpy(finalPath, mRootPath);
 
     bool found = findFile(finalPath, path);
     if (found)
@@ -336,22 +337,22 @@ bool JKRFileCache::findFile(char* path, const char* fileName) const {
     DVDDirectoryEntry dirEntry;
 
     bool result = false;
-    u32 pathLength = strlen(path);
+    u32 pathLength = std::strlen(path);
     if (DVDOpenDir(path, &dir)) {
         while (DVDReadDir(&dir, &dirEntry)) {
             if (dirEntry.is_directory) {
                 char* endOfPath = path + pathLength;
                 *endOfPath = '/';
-                strcpy(path + pathLength + 1, dirEntry.name);
+                std::strcpy(path + pathLength + 1, dirEntry.name);
                 result = findFile(path, fileName);
                 if (result)
                     break;
                 *endOfPath = '\0';
             } else {
-                result = (strcmp(fileName, dirEntry.name) == 0);
+                result = (std::strcmp(fileName, dirEntry.name) == 0);
                 if (result) {
-                    strcat(path, "/");
-                    strcat(path, fileName);
+                    std::strcat(path, "/");
+                    std::strcat(path, fileName);
                     break;
                 }
             }
@@ -367,21 +368,21 @@ bool JKRFileCache::findFile(char* path, const char* fileName) const {
 char* JKRFileCache::getDvdPathName(const char* path) const {
     char* newPath;
     if (path[0] == '/') {
-        u32 length = strlen(mRootPath) + strlen(path) + 2;
+        u32 length = std::strlen(mRootPath) + std::strlen(path) + 2;
         newPath = (char*)JKRAllocFromSysHeap(length, 1);
-        strcpy(newPath, mRootPath);
+        std::strcpy(newPath, mRootPath);
         if (path[1]) {
             if (mRootPath[1] == 0) {
-                strcat(newPath, path + 1);
+                std::strcat(newPath, path + 1);
             } else {
-                strcat(newPath, path);
+                std::strcat(newPath, path);
             }
         }
     } else {
-        u32 length = strlen(mCurrentPath) + strlen(path) + 2;
+        u32 length = std::strlen(mCurrentPath) + std::strlen(path) + 2;
         newPath = (char*)JKRAllocFromSysHeap(length, 1);
-        strcpy(newPath, mCurrentPath);
-        strcat(newPath, path);
+        std::strcpy(newPath, mCurrentPath);
+        std::strcat(newPath, path);
     }
 
     convStrLower(newPath);

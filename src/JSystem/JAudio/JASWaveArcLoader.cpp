@@ -10,7 +10,7 @@
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JKernel/JKRDvdAramRipper.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "string.h"
+#include <cstring>
 
 const u32 DIR_MAX = 64;
 

@@ -25,8 +25,9 @@
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "stdio.h"
-#include "string.h"
+
+#include <cstring>
+#include <stdio.h>
 
 namespace JAIInitData = JAInter::InitData;
 namespace JAISequenceMgr = JAInter::SequenceMgr;

@@ -1,0 +1,24 @@
+#ifndef _MSL_COMMON_CSTRING_H
+#define _MSL_COMMON_CSTRING_H
+
+#include "string.h"
+
+namespace std {
+    using ::memcpy;
+    using ::__fill_mem;
+    using ::memset;
+    using ::memcmp;
+    using ::__memrchr;
+    using ::memchr;
+    using ::memmove;
+    using ::strrchr;
+    using ::strchr;
+    using ::strncmp;
+    using ::strcmp;
+    using ::strcat;
+    using ::strncpy;
+    using ::strcpy;
+    using ::strlen;
+}; // namespace std
+
+#endif /* _MSL_COMMON_CSTRING_H */
