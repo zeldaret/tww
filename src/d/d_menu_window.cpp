@@ -864,140 +864,130 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
 #define CAN_PROCEED() (dMenu_flag() == 0 && dComIfGp_isEnableNextStage() == 0 && !fopOvlpM_IsDoingReq())
 
     if (i_Ms->mMenuProc == MENU_STATE_NO_MENU && !dComIfGp_isHeapLockFlag() && dComIfGp_getMesgStatus() == 0) {
-        {
-            if (CAN_PROCEED() && dComIfGp_fmapOpenCheck() == 1) {
-                timer = 0;
-                i_Ms->mMenuProc = MENU_STATE_FMAP_OPEN_WARP_MODE;
-                dMs_fmap_create(i_Ms);
-                dMenu_flagSet(1);
-                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                dMenu_setMenuStatus(MENU_STATUS_MAP);
-                dComIfGp_fmapOpenOff();
-                mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
+        if (CAN_PROCEED() && dComIfGp_fmapOpenCheck() == 1) {
+            timer = 0;
+            i_Ms->mMenuProc = MENU_STATE_FMAP_OPEN_WARP_MODE;
+            dMs_fmap_create(i_Ms);
+            dMenu_flagSet(1);
+            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+            dMenu_setMenuStatus(MENU_STATUS_MAP);
+            dComIfGp_fmapOpenOff();
+            mDoAud_seStart(JA_SE_SHIPPU_CHART_OPEN);
 
-            } else if (CAN_PROCEED() && dComIfGp_InputPasswordOpenCheck() == 2) {
-                timer = 0;
-                i_Ms->mMenuProc = MENU_STATE_NAME_OPEN;
-                dMs_name_create(i_Ms);
-                dMenu_flagSet(1);
-                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                dMenu_setMenuStatus(MENU_STATUS_NAME);
+        } else if (CAN_PROCEED() && dComIfGp_InputPasswordOpenCheck() == 2) {
+            timer = 0;
+            i_Ms->mMenuProc = MENU_STATE_NAME_OPEN;
+            dMs_name_create(i_Ms);
+            dMenu_flagSet(1);
+            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+            dMenu_setMenuStatus(MENU_STATUS_NAME);
 
-            } else if (CAN_PROCEED() && dComIfGp_isMenuCollect()) {
-                dMs_cloth_create(i_Ms);
-                timer = 0;
-                dMenu_flagSet(1);
-                i_Ms->mMenuProc = MENU_STATE_COLLECT_OPEN_ALT;
-                mDoExt_setCurrentHeap(i_Ms->childHeap);
-                dMs_collect_create2(i_Ms);
-                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                dMenu_setMenuStatus(MENU_STATUS_COLLECT);
-                mDoAud_seStart(JA_SE_ITM_MENU_IN);
-                mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
-                dComIfGp_offMenuCollect();
+        } else if (CAN_PROCEED() && dComIfGp_isMenuCollect()) {
+            dMs_cloth_create(i_Ms);
+            timer = 0;
+            dMenu_flagSet(1);
+            i_Ms->mMenuProc = MENU_STATE_COLLECT_OPEN_ALT;
+            mDoExt_setCurrentHeap(i_Ms->childHeap);
+            dMs_collect_create2(i_Ms);
+            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+            dMenu_setMenuStatus(MENU_STATUS_COLLECT);
+            mDoAud_seStart(JA_SE_ITM_MENU_IN);
+            mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
+            dComIfGp_offMenuCollect();
 
-            } else if (CAN_PROCEED() && dComIfGp_fmapOpenCheck() == 2) {
-                timer = 0;
-                i_Ms->mMenuProc = MENU_STATE_FMAP_OPEN_FISHMAN_MODE;
-                dMs_fmap_create(i_Ms);
-                dMenu_flagSet(1);
-                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                dMenu_setMenuStatus(MENU_STATUS_MAP);
-                dComIfGp_fmapOpenOff();
-                mDoAud_seStart(JA_SE_ITM_MENU_IN);
-                mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
+        } else if (CAN_PROCEED() && dComIfGp_fmapOpenCheck() == 2) {
+            timer = 0;
+            i_Ms->mMenuProc = MENU_STATE_FMAP_OPEN_FISHMAN_MODE;
+            dMs_fmap_create(i_Ms);
+            dMenu_flagSet(1);
+            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+            dMenu_setMenuStatus(MENU_STATUS_MAP);
+            dComIfGp_fmapOpenOff();
+            mDoAud_seStart(JA_SE_ITM_MENU_IN);
+            mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
 
-            } else if (dMenu_flag() == 0 && !fopOvlpM_IsDoingReq() && !(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_Z(0))) {
+        } else if (dMenu_flag() == 0 && !fopOvlpM_IsDoingReq() && !(CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_Z(0))) {
 
-                if (event_wait_frame == 0 || (daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0)) ||
-                    (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
-                        dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)))
-                {
+            if (event_wait_frame == 0 || (daPy_getPlayerLinkActorClass()->getTactNormalWait() && CPad_CHECK_TRIG_START(0)) ||
+                (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                    dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)))
+            {
 
-                    if (dComIfGp_getMesgStatus() == 0 && dComIfGp_getScopeMesgStatus() == 0) {
-                        if (!dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_TELESCOPE_LOOK_e) && !dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e) &&
-                            !dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e))
+                if (dComIfGp_getMesgStatus() == 0 && dComIfGp_getScopeMesgStatus() == 0) {
+                    if (!dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_TELESCOPE_LOOK_e) && !dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e) &&
+                        !dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK800000_e))
+                    {
+                        if (dComIfGp_getOperateWind() != 2 ||
+                            (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                                dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)))
                         {
 
+                            if (CPad_CHECK_TRIG_START(0) && dComIfGp_isEnableNextStage() == 0 &&
+                                daPy_getPlayerActorClass() == daPy_getPlayerLinkActorClass())
                             {
-                                if (dComIfGp_getOperateWind() != 2 ||
-                                    (dComIfGp_getOperateWind() == 2 && CPad_CHECK_TRIG_UP(0) && dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
-                                     dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908)))
+                                dMs_cloth_create(i_Ms);
+                                timer = 0;
+                                dMenu_flagSet(1);
+
+                                if (dMenu_getMenuStatus() == MENU_STATUS_COLLECT || daPy_getPlayerLinkActorClass()->getTactNormalWait()) {
+
+                                    mDoExt_setCurrentHeap(i_Ms->childHeap);
+                                    dMs_collect_create(i_Ms);
+                                    dMc_c->setTriggerInfo(2);
+
+                                    if (daPy_getPlayerLinkActorClass()->getTactNormalWait()) {
+                                        i_Ms->mMenuProc = MENU_STATE_COLLECT_OPEN_TACT;
+                                    } else {
+                                        i_Ms->mMenuProc = MENU_STATE_COLLECT_OPEN;
+                                    }
+
+                                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                                    dMenu_setMenuStatus(MENU_STATUS_COLLECT);
+                                    dMenu_setPushMenuButton(2);
+                                    mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                                    mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
+
+                                } else {
+                                    mDoExt_setCurrentHeap(i_Ms->childHeap);
+                                    dMs_item_create(i_Ms);
+                                    dMi_c->setTriggerInfo(2);
+                                    i_Ms->mMenuProc = MENU_STATE_ITEM_OPEN;
+                                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                                    dMenu_setMenuStatus(MENU_STATUS_ITEM);
+                                    dMenu_setPushMenuButton(1);
+                                    mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                                    mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
+                                }
+                            } else if (CAN_PROCEED() && CPad_CHECK_TRIG_UP(0)) {
+                                timer = 0;
+
+                                if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) {
+                                    i_Ms->mMenuProc = MENU_STATE_DMAP_OPEN;
+                                    dMs_dmap_create(i_Ms);
+                                    dMenu_flagSet(1);
+                                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                                    dMenu_setMenuStatus(MENU_STATUS_MAP);
+                                    mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                                    mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
+
+                                } else if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
+                                            dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && dComIfGp_getMiniGameType() != 1 &&
+                                            dComIfGp_getMiniGameType() != 6)
                                 {
 
-                                    if (CPad_CHECK_TRIG_START(0) && dComIfGp_isEnableNextStage() == 0 &&
-                                        daPy_getPlayerActorClass() == daPy_getPlayerLinkActorClass())
-                                    {
-
-                                        dMs_cloth_create(i_Ms);
-                                        timer = 0;
+                                    if (dComIfGp_getOperateWind() == 2) {
+                                        i_Ms->mMenuProc = MENU_STATE_FMAP_OPEN_WALLPAPER;
+                                    } else {
+                                        i_Ms->mMenuProc = MENU_STATE_FMAP_OPEN;
+                                        dMs_clothOnly_create(i_Ms);
                                         dMenu_flagSet(1);
-
-                                        if (dMenu_getMenuStatus() == 2 || daPy_getPlayerLinkActorClass()->getTactNormalWait()) {
-
-                                            mDoExt_setCurrentHeap(i_Ms->childHeap);
-                                            dMs_collect_create(i_Ms);
-                                            dMc_c->setTriggerInfo(2);
-
-                                            if (daPy_getPlayerLinkActorClass()->getTactNormalWait()) {
-                                                i_Ms->mMenuProc = MENU_STATE_COLLECT_OPEN_TACT;
-                                            } else {
-                                                i_Ms->mMenuProc = MENU_STATE_COLLECT_OPEN;
-                                            }
-
-                                            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                                            dMenu_setMenuStatus(MENU_STATUS_COLLECT);
-                                            dMenu_setPushMenuButton(2);
-                                            mDoAud_seStart(JA_SE_ITM_MENU_IN);
-                                            mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
-
-                                        } else {
-                                            mDoExt_setCurrentHeap(i_Ms->childHeap);
-                                            dMs_item_create(i_Ms);
-                                            dMi_c->setTriggerInfo(2);
-                                            i_Ms->mMenuProc = MENU_STATE_ITEM_OPEN;
-                                            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                                            dMenu_setMenuStatus(MENU_STATUS_ITEM);
-                                            dMenu_setPushMenuButton(1);
-                                            mDoAud_seStart(JA_SE_ITM_MENU_IN);
-                                            mDoAud_seStart(JA_SE_ITM_MENU_PAGE);
-                                        }
-
-                                    } else if (CAN_PROCEED() && CPad_CHECK_TRIG_UP(0)) {
-
-                                        timer = 0;
-
-                                        if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1) {
-                                            i_Ms->mMenuProc = MENU_STATE_DMAP_OPEN;
-                                            dMs_dmap_create(i_Ms);
-                                            dMenu_flagSet(1);
-                                            dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                                            dMenu_setMenuStatus(MENU_STATUS_MAP);
-                                            mDoAud_seStart(JA_SE_ITM_MENU_IN);
-                                            mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
-
-                                        } else {
-                                            if (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0 &&
-                                                dComIfGs_isEventBit(dSv_event_flag_c::UNK_0908) && dComIfGp_getMiniGameType() != 1 &&
-                                                dComIfGp_getMiniGameType() != 6)
-                                            {
-
-                                                if (dComIfGp_getOperateWind() == 2) {
-                                                    i_Ms->mMenuProc = MENU_STATE_FMAP_OPEN_WALLPAPER;
-                                                } else {
-                                                    i_Ms->mMenuProc = MENU_STATE_FMAP_OPEN;
-                                                    dMs_clothOnly_create(i_Ms);
-                                                    dMenu_flagSet(1);
-                                                }
-
-                                                dMs_fmap_create(i_Ms);
-                                                dMenu_setMenuStatusOld(dMenu_getMenuStatus());
-                                                dMenu_setMenuStatus(MENU_STATUS_MAP);
-                                                mDoAud_seStart(JA_SE_ITM_MENU_IN);
-                                                mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
-                                            }
-                                        }
                                     }
+
+                                    dMs_fmap_create(i_Ms);
+                                    dMenu_setMenuStatusOld(dMenu_getMenuStatus());
+                                    dMenu_setMenuStatus(MENU_STATUS_MAP);
+                                    mDoAud_seStart(JA_SE_ITM_MENU_IN);
+                                    mDoAud_seStart(JA_SE_ITM_MENU_MAP_IN);
                                 }
                             }
                         }
@@ -1005,7 +995,6 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
                 }
             }
         }
-
     } else if (i_Ms->mMenuProc == MENU_STATE_ITEM_OPEN) {
         timer++;
         cloth_c->cloth_move();

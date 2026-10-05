@@ -736,13 +736,13 @@ void dMeter_alphaControl(sub_meter_class* i_Meter) {
     } else if (dMenu_flag()) {
         if (dMenu_timer() <= 5) {
             f32 dVar3 = fopMsgM_valueIncrease(5, dMenu_timer(), 0);
-            if (dMenu_getMenuStatus() != 3) {
+            if (dMenu_getMenuStatus() != MENU_STATUS_MAP) {
                 dVar3 = ((1.0f - dVar3) * 0.5f + 0.5f);
             }
             if (i_Meter->field_0x2f6c > dVar3) {
                 i_Meter->field_0x2f6c = dVar3;
             }
-        } else if (dMenu_getMenuStatus() == 3) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_MAP) {
             i_Meter->field_0x2f6c = 0.0f;
         } else {
             i_Meter->field_0x2f6c = 0.5f;
@@ -781,7 +781,7 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
         i_Meter->mStatusFlags |= dMtrStts_UNK80000_e;
     } else if (dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e) && dComIfGp_getAStatus() == dActStts_RETURN_e) {
         i_Meter->mStatusFlags |= dMtrStts_UNK200000_e;
-    } else if (dComIfGp_event_runCheck() && dMenu_getMenuStatus() != 4) {
+    } else if (dComIfGp_event_runCheck() && dMenu_getMenuStatus() != MENU_STATUS_NAME) {
         if (dComIfGp_demo_mode() != 1 && dComIfGp_getMesgStatus() != 0 && !dComIfGp_getMetronome()) {
             i_Meter->mStatusFlags |= dMtrStts_UNK100_e;
 #if VERSION > VERSION_DEMO
@@ -803,11 +803,11 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
             dComIfGp_setDoStatus(dActStts_BLANK_e);
             dComIfGp_setRStatus(dActStts_BLANK_e);
 #endif
-        } else if (dMenu_getMenuStatus() == 1) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_ITEM) {
             i_Meter->mStatusFlags |= dMtrStts_UNK8_e;
-        } else if (dMenu_getMenuStatus() == 2) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_COLLECT) {
             i_Meter->mStatusFlags |= dMtrStts_UNK10_e;
-        } else if (dMenu_getMenuStatus() == 4) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_NAME) {
             i_Meter->mStatusFlags |= dMtrStts_UNK800000_e;
         } else {
             i_Meter->mStatusFlags |= dMtrStts_UNK20_e;
@@ -1879,7 +1879,7 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
             dMeter_offBit8(&i_Meter->field_0x3026, 2);
         }
         moveStatus = 3;
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == MENU_STATUS_ITEM && dMenu_getPushMenuButton() == 0))) {
 #if VERSION == VERSION_DEMO
         if (moveStatus != 4) {
             moveFlag = 1;
@@ -1901,7 +1901,7 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
             moveStatus = 5;
         }
 #endif
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == MENU_STATUS_COLLECT && dMenu_getPushMenuButton() == 0))) {
         if (moveStatus != 5) {
             moveFlag = 1;
             dMeter_offBit8(&i_Meter->field_0x3026, 2);
@@ -2338,7 +2338,7 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
             dMeter_offBit8(&i_Meter->field_0x3026, 1);
         }
         moveStatus = 2;
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == MENU_STATUS_ITEM && dMenu_getPushMenuButton() == 0))) {
 #if VERSION == VERSION_DEMO
         if (moveStatus != 3) {
             moveFlag = 1;
@@ -2360,7 +2360,7 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
             moveStatus = 4;
         }
 #endif
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == MENU_STATUS_COLLECT && dMenu_getPushMenuButton() == 0))) {
         if (moveStatus != 4) {
             moveFlag = 1;
             dMeter_offBit8(&i_Meter->field_0x3026, 1);
@@ -3270,7 +3270,7 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
     static f32 nowY = 0.0f;
     if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(1)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK100_e) ||
-        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) ||
+        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == MENU_STATUS_COLLECT && dMenu_getPushMenuButton() == 0))) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
         ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) ||
@@ -3282,7 +3282,7 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
             dMeter_offBit8(&i_Meter->field_0x3026, 4);
         }
         moveStatus = 1;
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == MENU_STATUS_ITEM && dMenu_getPushMenuButton() == 0))) {
 #if VERSION == VERSION_DEMO
         if (moveStatus != 2) {
             moveFlag = 1;
@@ -3552,9 +3552,9 @@ void dMeter_rTrans(sub_meter_class* i_Meter) {
     } else if (
         (
             dMenu_flag() && dComIfGp_getPictureStatus() != 2 &&
-            (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))
+            (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == MENU_STATUS_ITEM && dMenu_getPushMenuButton() == 0))
         ) ||
-        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) ||
+        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == MENU_STATUS_COLLECT && dMenu_getPushMenuButton() == 0))) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
         ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
