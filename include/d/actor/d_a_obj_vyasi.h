@@ -14,6 +14,9 @@ namespace daObjVyasi {
 
     class Act_c : public fopAc_ac_c {
     public:
+        virtual ~Act_c() {
+        }
+
         void is_switch() const {}
 
         void SetStopJointAnimation(J3DAnmTransformKey*, float, float);
@@ -32,7 +35,7 @@ namespace daObjVyasi {
         void process_normal_main();
         void process_init(int);
         void process_main();
-        void solidHeapCB(fopAc_ac_c*);
+        static BOOL solidHeapCB(fopAc_ac_c*);
         void create_heap();
         cPhs_State _create();
         bool _delete();
@@ -43,8 +46,9 @@ namespace daObjVyasi {
         bool _execute();
         bool _draw();
 
+        static char const M_arcname[];
+
     public:
-        /* 0x0290 */ u32 field_0x290;
         /* 0x0294 */ s16 field_0x294[14];
         /* 0x02B0 */ s16 field_0x2B0[14];
         /* 0x02CC */ Quaternion mJointQuat[14];

@@ -6,8 +6,37 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vyasi.h"
 #include "d/d_cc_d.h"
+#include "d/d_a_obj.h"
+#include "d/d_lib.h"
 
 namespace daObjVyasi {
+
+namespace {
+struct Attr_c {
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ s16 field_0x20;
+    /* 0x22 */ s16 field_0x22;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2C;
+    /* 0x30 */ u8 pad[0x84 - 0x30];
+}; // Size: 0x84
+
+static Attr_c const L_attr = {
+    1.0f, 79.0f, 250.0f, 0.0f, 0.0f, 0.0f, 0.4f, 1.5f, 2, 0, 700.0f, 1700.0f, 1700.0f, {},
+};
+
+inline Attr_c const& attr() {
+    return L_attr;
+}
+} // namespace
 
 static const dCcD_SrcCyl M_cyl_src = {
     // dCcD_SrcGObjInf
@@ -100,8 +129,11 @@ static const dCcD_SrcSph M_sph_src = {
     }},
 };
 
+static u8 joint_kind_table[14] = { 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+
 }; // namespace daObjVyasi
 
+char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
 
 /* 000000EC-0000015C       .text SetStopJointAnimation__Q210daObjVyasi5Act_cFP18J3DAnmTransformKeyff */
 void daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey*, float, float) {
@@ -189,8 +221,9 @@ void daObjVyasi::Act_c::process_main() {
 }
 
 /* 000010C8-000010EC       .text solidHeapCB__Q210daObjVyasi5Act_cFP10fopAc_ac_c */
-void daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c*) {
+BOOL daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c*) {
     /* Nonmatching */
+    return TRUE;
 }
 
 /* 000010EC-00001290       .text create_heap__Q210daObjVyasi5Act_cFv */
@@ -200,7 +233,58 @@ void daObjVyasi::Act_c::create_heap() {
 
 /* 00001290-000016E0       .text _create__Q210daObjVyasi5Act_cFv */
 cPhs_State daObjVyasi::Act_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daObjVyasi::Act_c);
+
+    cPhs_State res = dComIfG_resLoad(&mPhs, M_arcname);
+    if (res == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
+            set_first_process();
+            set_mtx();
+            fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+            fopAcM_setCullSizeBox(this, -2000.0f, 0.0f, -2000.0f, 2000.0f, 2000.0f, 2000.0f);
+            fopAcM_setCullSizeFar(this, 2.0f);
+            field_0x548.Init(0xFF, 0xFF, this);
+            mCyl.Set(M_cyl_src);
+            mCyl.SetStts(&field_0x548);
+            mCyl.SetTgVec((cXyz&)cXyz::Zero);
+            mCyl.OnTgNoHitMark();
+
+            for (int i = 0; i < 5; i++) {
+                field_0x6B4[i].Init(100, 0xFF, this);
+                field_0x7E0[i].Set(M_cps_src);
+                field_0x7E0[i].SetStts(&field_0x6B4[i]);
+                field_0xDF8[i].mStart = current.pos;
+                field_0xDF8[i].mEnd = current.pos;
+                field_0xDF8[i].mRadius = 100.0f;
+            }
+
+            for (int i = 0; i < 8; i++) {
+                field_0xE84[i].Init(100, 0xFF, this);
+                field_0x1064[i].Set(M_sph_src);
+                field_0x1064[i].SetStts(&field_0xE84[i]);
+                mCyl.SetTgVec((cXyz&)cXyz::Zero);
+                mCyl.OnTgNoHitMark();
+            }
+
+            J3DModel* model = mpMorf->getModel();
+            J3DModelData* modelData = model->getModelData();
+            model->setUserArea((uintptr_t)this);
+            for (u16 i = 0; i < model->getModelData()->getJointNum(); i++) {
+                modelData->getJointNodePointer(i)->setCallBack(JointNodeCallBack);
+            }
+
+            for (u16 i = 0; i < 14; i++) {
+                mJointQuat[i] = ZeroQuat;
+            }
+
+            field_0x4A8 = 1.0f;
+            field_0x4AC = 1.0f;
+            field_0x4B0 = 1.0f;
+        } else {
+            res = cPhs_ERROR_e;
+        }
+    }
+    return res;
 }
 
 /* 00001D8C-00001DBC       .text _delete__Q210daObjVyasi5Act_cFv */
