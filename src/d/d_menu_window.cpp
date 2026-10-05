@@ -1401,11 +1401,13 @@ static BOOL dMs_Execute(sub_ms_screen_class* i_Ms) {
         dMs_offButtonBit(i_Ms, 1);
     }
 
+#if VERSION > VERSION_DEMO
     if (dMi_c) {
         dMenu_setItemMode(dMi_c->getItemMode());
     } else {
         dMenu_setItemMode(0);
     }
+#endif
 
     if (dMc_c) {
         dMenu_setCollectMode(dMc_c->getCollectMode());

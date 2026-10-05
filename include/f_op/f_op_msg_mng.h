@@ -599,20 +599,24 @@ inline fpc_ProcID fopMsgM_MiniGameTerminater_create(s16 i_procName, s16 param_1,
     return fop_MGameTerm_create(i_procName, param_1, param_2, param_3, param_4, i_createFunc);
 }
 
-void fopMsgM_Delete(void* i_proc);
-fopMsg_prm_class* fopMsgM_GetAppend(void* i_proc);
 void fopMsgM_destroyExpHeap(JKRExpHeap* i_heap);
 f32 fopMsgM_valueIncrease(int i_max, int i_value, u8 i_mode);
 #if VERSION >= VERSION_USA
 bool fopMsgM_hyrule_language_check(u32 i_msgNo);
 #endif
+
 s32 fopMsgM_setStageLayer(void* i_proc);
+msg_class* fopMsgM_SearchByID(fpc_ProcID i_pid);
+msg_class* fopMsgM_SearchByName(s16 i_name);
+BOOL fopMsgM_IsExecuting(fpc_ProcID i_pid);
+fopMsg_prm_class* fopMsgM_GetAppend(void* i_proc);
+void fopMsgM_Delete(void* i_proc);
+
 fpc_ProcID fopMsgM_messageSet(u32 i_msgNo, fopAc_ac_c* i_actor);
 fpc_ProcID fopMsgM_messageSet(u32 i_msgNo, cXyz*);
 fpc_ProcID fopMsgM_messageSet(u32 i_msgNo);
 fpc_ProcID fopMsgM_scopeMessageSet(u32 i_msgNo);
 int fopMsgM_messageSetDemo(u32 i_msgNo);
-msg_class* fopMsgM_SearchByID(fpc_ProcID i_pid);
 char* fopMsgM_messageGet(char* i_dest, u32 i_msgNo);
 char* fopMsgM_passwordGet(char* i_dest, u32 i_msgNo);
 fpc_ProcID fop_Timer_create(s16 i_procName, u8 i_mode, u16 i_limitTimeMs, u8 i_showType, u8 i_iconType, f32 i_posX, f32 i_posY, f32 i_rupeePosX, f32 i_rupeePosY, fopMsgCreateFunc i_createFunc);

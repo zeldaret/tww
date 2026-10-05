@@ -632,9 +632,7 @@ public:
     /* 0x2278 */ fopMsgM_pane_class field_0x2278;
     /* 0x22B0 */ fopMsgM_pane_class field_0x22b0;
     /* 0x22E8 */ fopMsgM_pane_class field_0x22e8;
-    /* 0x2320 */ fopMsgM_pane_class field_0x2320[dItemBtn_COUNT_e];
-    /* 0x23C8 */ fopMsgM_pane_class field_0x23c8[dItemBtn_COUNT_e];
-    /* 0x2470 */ fopMsgM_pane_class field_0x2470[dItemBtn_COUNT_e];
+    /* 0x2320 */ fopMsgM_pane_class field_0x2320[3][dItemBtn_COUNT_e];
     /* 0x2518 */ fopMsgM_pane_class field_0x2518;
     /* 0x2550 */ fopMsgM_pane_class field_0x2550[2];
     /* 0x25C0 */ fopMsgM_pane_class field_0x25c0[2];
@@ -769,8 +767,10 @@ void dMenu_setPushMenuButton(u8);
 u8 dMenu_getCollectMode();
 void dMenu_setCollectMode(u8);
 
+#if VERSION > VERSION_DEMO
 u8 dMenu_getItemMode();
 void dMenu_setItemMode(u8);
+#endif
 
 void dMeter_weponChange(sub_meter_class* i_Meter);
 void dMeter_weponAnime(sub_meter_class* i_Meter);
