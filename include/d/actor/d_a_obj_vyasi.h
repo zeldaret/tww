@@ -19,8 +19,8 @@ namespace daObjVyasi {
 
         void is_switch() const {}
 
-        void SetStopJointAnimation(J3DAnmTransformKey*, float, float);
-        void PlayStopJointAnimation();
+        bool SetStopJointAnimation(J3DAnmTransformKey*, float, float);
+        BOOL PlayStopJointAnimation();
         void set_first_process();
         void set_collision();
         void process_none_init();

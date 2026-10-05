@@ -136,13 +136,21 @@ static u8 joint_kind_table[14] = { 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
 
 /* 000000EC-0000015C       .text SetStopJointAnimation__Q210daObjVyasi5Act_cFP18J3DAnmTransformKeyff */
-void daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey*, float, float) {
-    /* Nonmatching */
+bool daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey* i_key, float i_speed, float i_morf) {
+    if (i_key != NULL) {
+        mpMorf->setAnm(i_key, 0, i_morf, i_speed, 0.0f, -1.0f, NULL);
+        field_0x19C4 = 1;
+        return true;
+    }
+    return false;
 }
 
 /* 0000015C-00000194       .text PlayStopJointAnimation__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::PlayStopJointAnimation() {
-    /* Nonmatching */
+BOOL daObjVyasi::Act_c::PlayStopJointAnimation() {
+    if (mpMorf->play(NULL, 0, 0) == 0) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000194-0000021C       .text set_first_process__Q210daObjVyasi5Act_cFv */
