@@ -2,6 +2,7 @@
 #define D_A_OBJ_VYASI_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
 #include "SSystem/SComponent/c_phase.h"
 
@@ -17,15 +18,17 @@ namespace daObjVyasi {
         virtual ~Act_c() {
         }
 
-        void is_switch() const {}
+        BOOL is_switch() const {
+            return fopAcM_isSwitch((fopAc_ac_c*)this, daObj::PrmAbstract(this, 8, 0));
+        }
 
-        bool SetStopJointAnimation(J3DAnmTransformKey*, float, float);
+        BOOL SetStopJointAnimation(J3DAnmTransformKey*, float, float);
         BOOL PlayStopJointAnimation();
         void set_first_process();
         void set_collision();
-        void process_none_init();
+        BOOL process_none_init();
         void process_none_main();
-        void process_sag_init();
+        BOOL process_sag_init();
         void process_sag_main();
         void process_sagWind_init();
         void process_sagWind_main();
@@ -36,7 +39,7 @@ namespace daObjVyasi {
         void process_init(int);
         void process_main();
         static BOOL solidHeapCB(fopAc_ac_c*);
-        void create_heap();
+        bool create_heap();
         cPhs_State _create();
         bool _delete();
         void set_mtx();

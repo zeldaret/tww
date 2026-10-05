@@ -136,7 +136,7 @@ static u8 joint_kind_table[14] = { 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
 
 /* 000000EC-0000015C       .text SetStopJointAnimation__Q210daObjVyasi5Act_cFP18J3DAnmTransformKeyff */
-bool daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey* i_key, float i_speed, float i_morf) {
+BOOL daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey* i_key, float i_speed, float i_morf) {
     if (i_key != NULL) {
         mpMorf->setAnm(i_key, 0, i_morf, i_speed, 0.0f, -1.0f, NULL);
         field_0x19C4 = 1;
@@ -155,7 +155,10 @@ BOOL daObjVyasi::Act_c::PlayStopJointAnimation() {
 
 /* 00000194-0000021C       .text set_first_process__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::set_first_process() {
-    /* Nonmatching */
+    process_init(is_switch() ? 4 : 1);
+    mNormalCounter = 0;
+    field_0x19D4 = 1.0f;
+    shape_angle.y += 0x8000;
 }
 
 /* 0000021C-000005B8       .text set_collision__Q210daObjVyasi5Act_cFv */
@@ -169,8 +172,8 @@ BOOL daObjVyasi::JointNodeCallBack(J3DNode*, int) {
 }
 
 /* 000009F4-000009FC       .text process_none_init__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::process_none_init() {
-    /* Nonmatching */
+BOOL daObjVyasi::Act_c::process_none_init() {
+    return TRUE;
 }
 
 /* 000009FC-00000A00       .text process_none_main__Q210daObjVyasi5Act_cFv */
@@ -179,8 +182,12 @@ void daObjVyasi::Act_c::process_none_main() {
 }
 
 /* 00000A00-00000A64       .text process_sag_init__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::process_sag_init() {
-    /* Nonmatching */
+BOOL daObjVyasi::Act_c::process_sag_init() {
+    if (SetStopJointAnimation(mpBckData, 1.0f, 0.0f) != 0) {
+        mpMorf->setPlaySpeed(0.0f);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000A64-00000AD8       .text process_sag_main__Q210daObjVyasi5Act_cFv */
@@ -229,14 +236,14 @@ void daObjVyasi::Act_c::process_main() {
 }
 
 /* 000010C8-000010EC       .text solidHeapCB__Q210daObjVyasi5Act_cFP10fopAc_ac_c */
-BOOL daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c*) {
-    /* Nonmatching */
-    return TRUE;
+BOOL daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
+    return ((daObjVyasi::Act_c*)i_this)->create_heap();
 }
 
 /* 000010EC-00001290       .text create_heap__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::create_heap() {
+bool daObjVyasi::Act_c::create_heap() {
     /* Nonmatching */
+    return true;
 }
 
 /* 00001290-000016E0       .text _create__Q210daObjVyasi5Act_cFv */
