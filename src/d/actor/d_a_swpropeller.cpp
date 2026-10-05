@@ -48,7 +48,7 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
 bool daSwProp_c::_delete() {
-    dComIfG_resDelete(&field_0x290, m_arcname[field_0x64D]);
+    dComIfG_resDelete(&mPhs, m_arcname[mType]);
     return true;
 }
 
@@ -59,7 +59,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000000D8-000001B8       .text CreateHeap__10daSwProp_cFv */
 BOOL daSwProp_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[field_0x64D], m_bdlidx[field_0x64D]);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
     JUT_ASSERT(257, modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mpModel == NULL) {
@@ -87,7 +87,7 @@ void daSwProp_c::CreateInit() {
     mStts.Init(255, 255, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
-    field_0x648 = fpcM_GetParam(this) & 0xFF;
+    mSwitchNo = fpcM_GetParam(this) & 0xFF;
 
     set_mtx();
 
@@ -123,10 +123,10 @@ static BOOL nodeCallBack(J3DNode* i_node, int i_calcTiming) {
 /* 00000404-00000590       .text _create__10daSwProp_cFv */
 cPhs_State daSwProp_c::_create() {
     fopAcM_ct(this, daSwProp_c);
-    field_0x64D = fpcM_GetParam(this) >> 8 & 0xF;
-    cPhs_State res = dComIfG_resLoad(&field_0x290, m_arcname[field_0x64D]);
+    mType = fpcM_GetParam(this) >> 8 & 0xF;
+    cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (res == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[field_0x64D])) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
             return cPhs_ERROR_e;
         } else {
             CreateInit();
@@ -152,19 +152,19 @@ bool daSwProp_c::_execute() {
         if (hitObj != NULL) {
             if (hitObj->ChkAtType(AT_TYPE_WIND)) {
                 windHit = 1;
-                field_0x64E = 0;
+                mSpinDecay = 0;
                 s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
                 mDoAud_seStart(JA_SE_OBJ_PROP_SW_ON, &eyePos, 0, reverb);
             } else if (hitObj->GetAtType() & ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT)) {
                 mRotYVel = 0x300;
-                field_0x644 = mRotYVel * -0.45f;
-                field_0x64E = 1;
+                mRotYVelTarget = mRotYVel * -0.45f;
+                mSpinDecay = 1;
                 if (hitObj->ChkAtType(AT_TYPE_SWORD) || hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) || hitObj->ChkAtType(AT_TYPE_MOBLIN_SPEAR) ||
                     hitObj->ChkAtType(AT_TYPE_MACHETE))
                 {
-                    if (field_0x64D == 1) {
+                    if (mType == 1) {
                         daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 11);
-                    } else if (field_0x64D == 0) {
+                    } else if (mType == 0) {
                         daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 17);
                     }
                 }
@@ -173,25 +173,25 @@ bool daSwProp_c::_execute() {
     }
     if (windHit) {
         mRotYVel = 0x1000;
-        field_0x644 = 0;
+        mRotYVelTarget = 0;
     } else if (windHit != mPrevWindHit) {
-        fopAcM_revSwitch(this, field_0x648);
+        fopAcM_revSwitch(this, mSwitchNo);
     }
 
     s16 angle = 30;
-    if (field_0x64E != 0) {
+    if (mSpinDecay != 0) {
         angle = 10;
     }
-    angle = cLib_addCalcAngleS(&mRotYVel, field_0x644, angle, 100, 10);
-    if (field_0x64E != 0 && angle == 0) {
-        field_0x644 = field_0x644 * -0.6f;
-        if (abs(field_0x644) < 32) {
-            field_0x644 = 0;
-            field_0x64E = 0;
+    angle = cLib_addCalcAngleS(&mRotYVel, mRotYVelTarget, angle, 100, 10);
+    if (mSpinDecay != 0 && angle == 0) {
+        mRotYVelTarget = mRotYVelTarget * -0.6f;
+        if (abs(mRotYVelTarget) < 32) {
+            mRotYVelTarget = 0;
+            mSpinDecay = 0;
         }
     }
 
-    if (field_0x64D == 1) {
+    if (mType == 1) {
         f32 vel = mRotYVel / 4096.0f * 100.0f;
         mDoAud_seStart(JA_SE_OBJ_KM_WINDMILL, &current.pos, vel, 0);
     }

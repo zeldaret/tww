@@ -20,7 +20,7 @@ public:
     static const char* m_arcname[2];
 
 public:
-    /* 0x290 */ request_of_phase_process_class field_0x290;
+    /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ J3DModel* mpModel;
     /* 0x29C */ dCcD_Stts mStts;
     /* 0x2D8 */ dCcD_Cyl mCyl;
@@ -29,12 +29,12 @@ public:
     /* 0x600 */ dBgS_AcchCir mAcchCir;
     /* 0x640 */ s16 mRotY;
     /* 0x642 */ s16 mRotYVel;
-    /* 0x644 */ s16 field_0x644;
+    /* 0x644 */ s16 mRotYVelTarget;
     /* 0x646 */ u8 pad_0x646[0x648 - 0x646];
-    /* 0x648 */ u32 field_0x648;
+    /* 0x648 */ u32 mSwitchNo;
     /* 0x64C */ u8 mPrevWindHit;
-    /* 0x64D */ u8 field_0x64D;
-    /* 0x64E */ u8 field_0x64E;
+    /* 0x64D */ u8 mType;
+    /* 0x64E */ u8 mSpinDecay;
     /* 0x64F */ u8 pad_0x64F[0x650 - 0x64F];
 }; // Size: 0x650
 
