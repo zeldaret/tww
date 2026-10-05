@@ -7,6 +7,7 @@
 #include "d/actor/d_a_npc_ls1.h"
 #include "d/actor/d_a_npc_bm1.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/d_scope.h"
 #if VERSION > VERSION_DEMO
 #include "d/d_bg_s_func.h"
 #endif
@@ -1803,7 +1804,7 @@ bool daNpc_Ls1_c::telescope_proc() {
             if (g_dComIfG_gameInfo.play.mScopeWipeFlag) {
                 daPy_getPlayerLinkActorClass()->setPlayerPosAndAngle(&m7CC[1], 0xCC70);
             }
-            dComIfGp_setScopeType(1);
+            dComIfGp_setScopeType(dScpTyp_UNK1_e);
             return true;
         }
         return false;

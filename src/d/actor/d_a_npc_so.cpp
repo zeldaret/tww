@@ -1060,7 +1060,7 @@ void daNpc_So_c::modeEventFirst() {
         }
 
         if (dComIfGp_evmng_endCheck("SO_1ST_MEET")) {
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
             mB70 = 1;
             modeProcInit(daNpc_So_c::MODE_TALK_e);
             attention_info.flags = fopAc_Attn_TALKFLAG_NOTALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
@@ -1086,7 +1086,7 @@ void daNpc_So_c::modeEventFirstEnd() {
         }
 
         if (dComIfGp_evmng_endCheck("SO_1ST_MEET_END")) {
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
             modeProcInit(daNpc_So_c::MODE_DISAPPEAR_e);
         }
     } else if (talk(1) == fopMsgStts_BOX_CLOSED_e) {
@@ -1109,7 +1109,7 @@ void daNpc_So_c::modeEventEsa() {
     }
 
     if (dComIfGp_evmng_endCheck(mBDC)) {
-        dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+        dComIfGp_event_reset();
         mBDC = -1;
         mB70 = 1;
         modeProcInit(daNpc_So_c::MODE_TALK_e);
@@ -1131,7 +1131,7 @@ void daNpc_So_c::modeEventMapopen() {
         }
 
         if (dComIfGp_evmng_endCheck("SO_MAPOPEN")) {
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
             mB70 = 1;
             mBD8 = true;
             modeProcInit(daNpc_So_c::MODE_TALK_e);
@@ -1158,7 +1158,7 @@ void daNpc_So_c::modeEventBow() {
 
         if (dComIfGp_evmng_endCheck("SO_BOW")) {
             mB0C = true;
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
             mBDB = 0;
 
 #if VERSION > VERSION_DEMO
@@ -1189,14 +1189,14 @@ void daNpc_So_c::modeTalk() {
     if (talk(1) == fopMsgStts_BOX_CLOSED_e) {
 #if VERSION == VERSION_DEMO
         if (mBD8 || mB0C || dComIfGs_isSaveArriveGrid(fopAcM_GetRoomNo(this) - 1)) {
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
             modeProcInit(daNpc_So_c::MODE_DISAPPEAR_e);
         } else {
             modeProcInit(DEMO_SELECT(daNpc_So_c::MODE_WAIT_e, daNpc_So_c::MODE_DISAPPEAR_e));
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
         }
 #else
-        dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+        dComIfGp_event_reset();
         modeProcInit(DEMO_SELECT(daNpc_So_c::MODE_WAIT_e, daNpc_So_c::MODE_DISAPPEAR_e));
 #endif
     }
@@ -1287,7 +1287,7 @@ void daNpc_So_c::modeGetRupee() {
         }
 
         if (dComIfGp_evmng_endCheck("SO_GET_RUPEE")) {
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
             mB70 = 1;
             mBD9 = true;
             modeProcInit(daNpc_So_c::MODE_TALK_e);
@@ -1295,7 +1295,7 @@ void daNpc_So_c::modeGetRupee() {
     } else if (talk(1) == fopMsgStts_BOX_CLOSED_e) {
 #if VERSION > VERSION_DEMO
         if (REG12_S(9) != 0) {
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
         }
 
         daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
@@ -1323,7 +1323,7 @@ void daNpc_So_c::modeEventTriForce() {
 
         if (dComIfGp_evmng_endCheck("SO_TRIFORCE_CHECK")) {
             attention_info.flags = fopAc_Attn_TALKFLAG_NOTALK_e | fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
-            dComIfGp_event_onEventFlag(dSv_event_flag_c::UNK_0008);
+            dComIfGp_event_reset();
             modeProcInit(daNpc_So_c::MODE_DISAPPEAR_e);
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_3A20);
         }

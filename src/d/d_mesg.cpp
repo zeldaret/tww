@@ -1199,9 +1199,7 @@ void dMesg_screenData_c::setString(char* param_1, int param_2) {
 /* 801E2CE0-801E2D40       .text shiftSet__18dMesg_screenData_cFii */
 void dMesg_screenData_c::shiftSet(int param_1, int param_2) {
     for (int i = 0; i < 4; i++) {
-        J2DTextBox* textBox = (J2DTextBox*)field_0x88[i].pane;
-        textBox->field_0xd8 = param_1;
-        textBox->field_0xdc = param_2;
+        ((J2DTextBox*)field_0x88[i].pane)->shiftSet(param_1, param_2);
     }
 }
 

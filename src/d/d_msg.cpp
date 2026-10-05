@@ -1117,18 +1117,10 @@ void dMsg_textPosition(sub_msg_class* i_Msg) {
         uVar2 = i_Msg->m1104 * (3 - i_Msg->m1108);
         break;
     }
-    pJVar3 = (J2DTextBox*)i_Msg->m0544[0].pane;
-    pJVar3->field_0xd8 = 0.0f;
-    pJVar3->field_0xdc = uVar2;
-    pJVar4 = (J2DTextBox*)i_Msg->m0544[1].pane;
-    pJVar4->field_0xd8 = 0.0f;
-    pJVar4->field_0xdc = uVar2;
-    pJVar5 = (J2DTextBox*)i_Msg->m0544[2].pane;
-    pJVar5->field_0xd8 = 0.0f;
-    pJVar5->field_0xdc = uVar2;
-    pJVar6 = (J2DTextBox*)i_Msg->m0544[3].pane;
-    pJVar6->field_0xd8 = 0.0f;
-    pJVar6->field_0xdc = uVar2;
+    ((J2DTextBox*)i_Msg->m0544[0].pane)->shiftSet(0.0f, uVar2);
+    ((J2DTextBox*)i_Msg->m0544[1].pane)->shiftSet(0.0f, uVar2);
+    ((J2DTextBox*)i_Msg->m0544[2].pane)->shiftSet(0.0f, uVar2);
+    ((J2DTextBox*)i_Msg->m0544[3].pane)->shiftSet(0.0f, uVar2);
 }
 
 /* 8020F3F8-8020F4E0       .text dMsg_rubySet__FP13sub_msg_class */
@@ -2966,7 +2958,7 @@ static BOOL dMsg_Delete(sub_msg_class* i_Msg) {
     i_Msg->m116A = 0;
     dComIfGp_setMesgSendButton(i_Msg->m116A);
     dComIfGp_setMesgCancelButton(0);
-    dComIfGp_setMesgStatus(0);
+    dComIfGp_setMesgStatus(fopMsgStts_MSG_UNK0_e);
     if (dComIfGp_checkMesgBgm()) {
         dComIfGp_setMesgBgmOff();
     }

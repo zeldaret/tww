@@ -25,6 +25,7 @@
 #include "d/actor/d_a_itembase.h"
 #include "d/d_item_data.h"
 #include "d/d_item.h"
+#include "d/d_scope.h"
 #include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_audio.h"
@@ -5910,7 +5911,7 @@ BOOL daPy_lk_c::procScope_init(int param_1) {
     current.angle.y = shape_angle.y;
     seStartSystem(JA_SE_ITM_SUBMENU_IN_1);
     offNoResetFlg0(daPyFlg0_SCOPE_CANCEL);
-    if (param_1 == 0x20) {
+    if (param_1 == dItemNo_TELESCOPE_e) {
         dComIfGp_setPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e);
     } else {
         dComIfGp_setPlayerStatus1(0, daPyStts1_PICTO_BOX_AIM_e);
@@ -13004,7 +13005,7 @@ BOOL daPy_lk_c::setThrowDamage(cXyz* r4, s16 r5, f32 f30, f32 f31, int r6) {
 
 /* 80128B50-80128C10       .text setPlayerPosAndAngle__9daPy_lk_cFP4cXyzs */
 void daPy_lk_c::setPlayerPosAndAngle(cXyz* param_1, s16 param_2) {
-    if (!dComIfGp_event_runCheck() && dComIfGp_getScopeType() != 1) {
+    if (!dComIfGp_event_runCheck() && dComIfGp_getScopeType() != dScpTyp_UNK1_e) {
         return;
     }
     if (param_1 != NULL) {
@@ -13088,7 +13089,7 @@ void daPy_lk_c::endDemoMode() {
         mCurProc != daPyProc_DEMO_LAVA_DAMAGE_e)
     {
         if (dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
-            procScope_init(0x20);
+            procScope_init(dItemNo_TELESCOPE_e);
             return;
         }
         changeWaitProc();

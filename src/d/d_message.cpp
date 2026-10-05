@@ -1128,7 +1128,7 @@ static BOOL dMsg2_IsDelete(sub_msg2_class* i_Msg) {
 
 /* 801EA7CC-801EA97C       .text dMsg2_Delete__FP14sub_msg2_class */
 static BOOL dMsg2_Delete(sub_msg2_class* i_Msg) {
-    dComIfGp_setMesgStatus(0);
+    dComIfGp_setMesgStatus(fopMsgStts_MSG_UNK0_e);
     dComIfG_setBrightness(0xFF);
 
     JKRHeap* heap = mDoExt_setCurrentHeap(i_Msg->Heap);

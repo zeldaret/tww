@@ -94,6 +94,6 @@ public:
     /* 0xFC */ u8 mBindingH;
     /* 0xFD */ u8 mBindingV;
     /* 0xFE */ bool mTextFontOwned;
-};     // Size: 0x100
+};  // Size: 0x100
 
 #endif /* J2DTEXTBOX_H */

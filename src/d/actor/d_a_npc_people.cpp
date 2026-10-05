@@ -13,6 +13,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_camera.h"
 #include "d/d_a_obj.h"
+#include "d/d_scope.h"
 #include "d/d_snap.h"
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_actor_mng.h"
@@ -5026,13 +5027,13 @@ void daNpcPeople_c::executeWait() {
                         else if(dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
 #if VERSION == VERSION_PAL
                             if (dComIfGp_getMesgStatus() == 0) {
-                                dComIfGp_setScopeType(1);
+                                dComIfGp_setScopeType(dScpTyp_UNK1_e);
                             }
-                            if (dComIfGp_getScopeType() != 1) {
+                            if (dComIfGp_getScopeType() != dScpTyp_UNK1_e) {
                                 break;
                             }
 #else
-                            dComIfGp_setScopeType(1);
+                            dComIfGp_setScopeType(dScpTyp_UNK1_e);
 #endif
                             if(dKy_moon_look_chk() && !(mEtcFlag & 0x100)) {
                                 dComIfGs_onEventBit(dSv_event_flag_c::UNK_2308);
@@ -6019,7 +6020,7 @@ bool daNpcPeople_c::eventMesSet() {
 /* 000049C4-000049F8       .text eventMesSet2__13daNpcPeople_cFv */
 bool daNpcPeople_c::eventMesSet2() {
 #if VERSION == VERSION_PAL
-    if (dComIfGp_getScopeType() == 0) {
+    if (dComIfGp_getScopeType() == dScpTyp_UNK0_e) {
         return true;
     }
 #endif

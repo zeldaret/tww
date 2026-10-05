@@ -7,6 +7,7 @@
 #include "d/d_menu_window.h"
 
 #include "JSystem/JKernel/JKRExpHeap.h"
+#include "d/d_scope.h"
 #include "f_op/f_op_msg.h"
 #include "d/d_menu_cloth.h"
 #include "d/d_menu_capture.h"
@@ -717,7 +718,7 @@ void dMs_telescopeMove(sub_ms_screen_class* i_Ms) {
             i_Ms->field_0x1B0 = 99;
         } else if (dComIfGp_checkCameraAttentionStatus(0, dCamAttnStts_PICTO_BOX_AIM_e)) {
             i_Ms->field_0x1B0 = 89;
-        } else if (dComIfGp_getScopeType() == 2) {
+        } else if (dComIfGp_getScopeType() == dScpTyp_UNK2_e) {
             i_Ms->field_0x1B0 = 98;
         } else if (dComIfGp_getPictureStatus() == 2 || dComIfGp_getPictureStatus() == 3) {
             i_Ms->field_0x1B0 = 89;
