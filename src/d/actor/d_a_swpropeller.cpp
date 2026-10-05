@@ -5,8 +5,15 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swpropeller.h"
-#include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
+#include "d/d_a_obj.h"
+#include "m_Do/m_Do_audio.h"
+#include "res/Object/Hpbot1.h"
+#include "res/Object/Vpbot_00.h"
+
+const s16 daSwProp_c::m_bdlidx[2] = { dRes_INDEX_HPBOT1_BDL_HPBOT1_e, dRes_INDEX_VPBOT_00_BDL_VPBOT_00_e };
+const u32 daSwProp_c::m_heapsize[2] = { 2176, 2240 };
+const char* daSwProp_c::m_arcname[2] = { "Hpbot1", "Vpbot_00" };
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -41,47 +48,173 @@ static dCcD_SrcCyl l_cyl_src = {
 
 /* 00000078-000000B8       .text _delete__10daSwProp_cFv */
 bool daSwProp_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDeleteDemo(&mPhs, m_arcname[mType]);
+    return true;
 }
 
 /* 000000B8-000000D8       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daSwProp_c*)i_this)->CreateHeap();
 }
 
 /* 000000D8-000001B8       .text CreateHeap__10daSwProp_cFv */
-void daSwProp_c::CreateHeap() {
-    /* Nonmatching */
+BOOL daSwProp_c::CreateHeap() {
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
+    JUT_ASSERT(DEMO_SELECT(255, 257), modelData != NULL);
+    mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
+    if (mpModel == NULL) {
+        return false;
+    }
+    mpModel->setUserArea((uintptr_t)this);
+    return true;
 }
+
+static BOOL nodeCallBack(J3DNode*, int);
 
 /* 000001B8-00000350       .text CreateInit__10daSwProp_cFv */
 void daSwProp_c::CreateInit() {
-    /* Nonmatching */
+    fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -150.0f, -100.0f, -150.0f, 150.0f, 150.0f, 150.0f);
+    fopAcM_setCullSizeFar(this, 1.0f);
+
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
+
+    mAcch.SetWallNone();
+    mAcch.SetWaterNone();
+    mAcch.SetRoofNone();
+
+    mStts.Init(255, 255, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+    mSwitchNo = fpcM_GetParam(this) & 0xFF;
+
+    set_mtx();
+
+    JUTNameTab* jointName = mpModel->getModelData()->getJointName();
+    for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
+        if (strcmp("kaiten", jointName->getName(i)) == 0) {
+            mpModel->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
+            break;
+        }
+    }
+    mpModel->calc();
 }
 
 /* 00000350-00000404       .text nodeCallBack__FP7J3DNodei */
-static BOOL nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)i_node;
+        s32 jntNo = joint->getJntNo();
+        J3DModel* model = j3dSys.getModel();
+        daSwProp_c* i_this = (daSwProp_c*)model->getUserArea();
+        if (i_this != NULL) {
+            i_this->mRotY += i_this->mRotYVel;
+
+            mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+            mDoMtx_stack_c::YrotM(i_this->mRotY);
+            model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+            MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        }
+    }
+    return TRUE;
 }
 
 /* 00000404-00000590       .text _create__10daSwProp_cFv */
 cPhs_State daSwProp_c::_create() {
-    /* Nonmatching */
+    fopAcM_ct(this, daSwProp_c);
+    mType = fpcM_GetParam(this) >> 8 & 0xF;
+    cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
+    if (res == cPhs_COMPLEATE_e) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
+            return cPhs_ERROR_e;
+        } else {
+            CreateInit();
+        }
+    }
+    return res;
 }
 
 /* 000007B8-00000838       .text set_mtx__10daSwProp_cFv */
 void daSwProp_c::set_mtx() {
-    /* Nonmatching */
+    mpModel->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 00000838-00000B60       .text _execute__10daSwProp_cFv */
 bool daSwProp_c::_execute() {
-    /* Nonmatching */
+    u8 windHit = 0;
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    if (mCyl.ChkTgHit()) {
+        cCcD_Obj* hitObj = mCyl.GetTgHitObj();
+        if (hitObj != NULL) {
+            if (hitObj->ChkAtType(AT_TYPE_WIND)) {
+                windHit = 1;
+                mSpinDecay = 0;
+                s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
+                mDoAud_seStart(JA_SE_OBJ_PROP_SW_ON, &eyePos, 0, reverb);
+            } else if (hitObj->GetAtType() & ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT)) {
+                mRotYVel = 0x300;
+                mRotYVelTarget = mRotYVel * -0.45f;
+                mSpinDecay = 1;
+                if (hitObj->ChkAtType(AT_TYPE_SWORD) || hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) || hitObj->ChkAtType(AT_TYPE_MOBLIN_SPEAR) ||
+                    hitObj->ChkAtType(AT_TYPE_MACHETE))
+                {
+                    if (mType == 1) {
+                        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 11);
+                    } else if (mType == 0) {
+                        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 17);
+                    }
+                }
+            }
+        }
+    }
+    if (windHit) {
+        mRotYVel = 0x1000;
+        mRotYVelTarget = 0;
+    } else if (windHit != mPrevWindHit) {
+        fopAcM_revSwitch(this, mSwitchNo);
+    }
+
+    s16 angle = 30;
+    if (mSpinDecay != 0) {
+        angle = 10;
+    }
+    angle = cLib_addCalcAngleS(&mRotYVel, mRotYVelTarget, angle, 100, 10);
+    if (mSpinDecay != 0 && angle == 0) {
+        mRotYVelTarget = mRotYVelTarget * -0.6f;
+        if (abs(mRotYVelTarget) < 32) {
+            mRotYVelTarget = 0;
+            mSpinDecay = 0;
+        }
+    }
+
+    if (mType == 1) {
+        f32 vel = mRotYVel / 4096.0f * 100.0f;
+        mDoAud_seStart(JA_SE_OBJ_KM_WINDMILL, &current.pos, vel, 0);
+    }
+
+    mPrevWindHit = windHit;
+    set_mtx();
+    cXyz pos = current.pos;
+    pos.y += 50.0f;
+    mCyl.SetC(pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+    return true;
 }
 
 /* 00000B60-00000C00       .text _draw__10daSwProp_cFv */
 bool daSwProp_c::_draw() {
-    /* Nonmatching */
+    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(mpModel, &tevStr);
+    mDoExt_modelUpdateDL(mpModel);
+    f32 groundH = mAcch.GetGroundH();
+    if (groundH != -G_CM3D_F_INF) {
+        dComIfGd_setSimpleShadow2(&current.pos, groundH, 65.0f, mAcch.m_gnd, 0, 1.0f, &dDlst_shadowControl_c::mSimpleTexObj);
+    }
+    return true;
 }
 
 /* 00000C00-00000C20       .text daSwProp_Create__FPv */
