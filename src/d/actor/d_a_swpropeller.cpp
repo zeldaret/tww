@@ -6,6 +6,8 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_swpropeller.h"
 #include "d/d_cc_d.h"
+#include "d/d_a_obj.h"
+#include "m_Do/m_Do_audio.h"
 #include "res/Object/Hpbot1.h"
 #include "res/Object/Vpbot_00.h"
 
@@ -143,7 +145,64 @@ void daSwProp_c::set_mtx() {
 
 /* 00000838-00000B60       .text _execute__10daSwProp_cFv */
 bool daSwProp_c::_execute() {
-    /* Nonmatching */
+    u8 windHit = 0;
+    mAcch.CrrPos(*dComIfG_Bgsp());
+    if (mCyl.ChkTgHit()) {
+        cCcD_Obj* hitObj = mCyl.GetTgHitObj();
+        if (hitObj != NULL) {
+            if (hitObj->ChkAtType(AT_TYPE_WIND)) {
+                windHit = 1;
+                field_0x64E = 0;
+                s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
+                mDoAud_seStart(JA_SE_OBJ_PROP_SW_ON, &eyePos, 0, reverb);
+            } else if (hitObj->GetAtType() & ~(AT_TYPE_WATER | AT_TYPE_UNK20000 | AT_TYPE_WIND | AT_TYPE_UNK400000 | AT_TYPE_LIGHT)) {
+                mRotYVel = 0x300;
+                field_0x644 = mRotYVel * -0.45f;
+                field_0x64E = 1;
+                if (hitObj->ChkAtType(AT_TYPE_SWORD) || hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER) || hitObj->ChkAtType(AT_TYPE_MOBLIN_SPEAR) ||
+                    hitObj->ChkAtType(AT_TYPE_MACHETE))
+                {
+                    if (field_0x64D == 1) {
+                        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 11);
+                    } else if (field_0x64D == 0) {
+                        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 17);
+                    }
+                }
+            }
+        }
+    }
+    if (windHit) {
+        mRotYVel = 0x1000;
+        field_0x644 = 0;
+    } else if (windHit != mPrevWindHit) {
+        fopAcM_revSwitch(this, field_0x648);
+    }
+
+    s16 angle = 30;
+    if (field_0x64E != 0) {
+        angle = 10;
+    }
+    angle = cLib_addCalcAngleS(&mRotYVel, field_0x644, angle, 100, 10);
+    if (field_0x64E != 0 && angle == 0) {
+        field_0x644 = field_0x644 * -0.6f;
+        if (abs(field_0x644) < 32) {
+            field_0x644 = 0;
+            field_0x64E = 0;
+        }
+    }
+
+    if (field_0x64D == 1) {
+        f32 vel = mRotYVel / 4096.0f * 100.0f;
+        mDoAud_seStart(JA_SE_OBJ_KM_WINDMILL, &current.pos, vel, 0);
+    }
+
+    mPrevWindHit = windHit;
+    set_mtx();
+    cXyz pos = current.pos;
+    pos.y += 50.0f;
+    mCyl.SetC(pos);
+    dComIfG_Ccsp()->Set(&mCyl);
+    return true;
 }
 
 /* 00000B60-00000C00       .text _draw__10daSwProp_cFv */
