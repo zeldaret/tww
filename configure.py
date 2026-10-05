@@ -1823,7 +1823,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_steam_tag"),
     ActorRel(Matching,    "d_a_swattack"),
     ActorRel(Matching,    "d_a_switem"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_swpropeller"),
+    ActorRel(Matching,    "d_a_swpropeller"),
     ActorRel(Matching,    "d_a_swtact"),
     ActorRel(Matching,    "d_a_tag_etc"),
     ActorRel(Matching,    "d_a_tag_island"),

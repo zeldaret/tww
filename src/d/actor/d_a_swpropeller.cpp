@@ -11,6 +11,11 @@
 #include "res/Object/Hpbot1.h"
 #include "res/Object/Vpbot_00.h"
 
+namespace daSwProp_prm {
+    inline u8 getSwitchNo(daSwProp_c* i_this) { return (fopAcM_GetParam(i_this) >> 0) & 0xFF; }
+    inline u8 getType(daSwProp_c* i_this) { return (fopAcM_GetParam(i_this) >> 8) & 0x0F; }
+};
+
 const s16 daSwProp_c::m_bdlidx[2] = { dRes_INDEX_HPBOT1_BDL_HPBOT1_e, dRes_INDEX_VPBOT_00_BDL_VPBOT_00_e };
 const u32 daSwProp_c::m_heapsize[2] = { 2176, 2240 };
 const char* daSwProp_c::m_arcname[2] = { "Hpbot1", "Vpbot_00" };
@@ -87,7 +92,7 @@ void daSwProp_c::CreateInit() {
     mStts.Init(255, 255, this);
     mCyl.Set(l_cyl_src);
     mCyl.SetStts(&mStts);
-    mSwitchNo = fpcM_GetParam(this) & 0xFF;
+    mSwitchNo = daSwProp_prm::getSwitchNo(this);
 
     set_mtx();
 
@@ -123,7 +128,7 @@ static BOOL nodeCallBack(J3DNode* i_node, int i_calcTiming) {
 /* 00000404-00000590       .text _create__10daSwProp_cFv */
 cPhs_State daSwProp_c::_create() {
     fopAcM_ct(this, daSwProp_c);
-    mType = fpcM_GetParam(this) >> 8 & 0xF;
+    mType = daSwProp_prm::getType(this);
     cPhs_State res = dComIfG_resLoad(&mPhs, m_arcname[mType]);
     if (res == cPhs_COMPLEATE_e) {
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
@@ -145,6 +150,7 @@ void daSwProp_c::set_mtx() {
 
 /* 00000838-00000B60       .text _execute__10daSwProp_cFv */
 bool daSwProp_c::_execute() {
+    s16 r30 = 0x1000;
     u8 windHit = 0;
     mAcch.CrrPos(*dComIfG_Bgsp());
     if (mCyl.ChkTgHit()) {
@@ -172,7 +178,7 @@ bool daSwProp_c::_execute() {
         }
     }
     if (windHit) {
-        mRotYVel = 0x1000;
+        mRotYVel = r30;
         mRotYVelTarget = 0;
     } else if (windHit != mPrevWindHit) {
         fopAcM_revSwitch(this, mSwitchNo);
@@ -192,8 +198,7 @@ bool daSwProp_c::_execute() {
     }
 
     if (mType == 1) {
-        f32 vel = mRotYVel / 4096.0f * 100.0f;
-        mDoAud_seStart(JA_SE_OBJ_KM_WINDMILL, &current.pos, vel, 0);
+        mDoAud_seStart(JA_SE_OBJ_KM_WINDMILL, &current.pos, mRotYVel / (f32)r30 * 100.0f, 0);
     }
 
     mPrevWindHit = windHit;
