@@ -317,23 +317,41 @@ BOOL daObjVyasi::Act_c::process_normal_init() {
 }
 
 /* 00000E74-00000ED0       .text process_normal_main__Q210daObjVyasi5Act_cFv */
-f32 daObjVyasi::Act_c::process_normal_main() {
+void daObjVyasi::Act_c::process_normal_main() {
     if (mNormalCounter == 0 || mNormalCounter == 1) {
         mNormalCounter++;
     }
-    return cLib_addCalc(&field_0x19D4, 1.0f, 0.01f, 1.0f, 0.007f);
+    cLib_addCalc(&field_0x19D4, 1.0f, 0.01f, 1.0f, 0.007f);
 }
 
 char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
 
 /* 00000ED0-00000FE4       .text process_init__Q210daObjVyasi5Act_cFi */
-BOOL daObjVyasi::Act_c::process_init(int) {
-    /* Nonmatching */
+BOOL daObjVyasi::Act_c::process_init(int i_idx) {
+    typedef BOOL (daObjVyasi::Act_c::*initProc)();
+    static initProc init_table[] = {
+        &daObjVyasi::Act_c::process_none_init,     &daObjVyasi::Act_c::process_sag_init,    &daObjVyasi::Act_c::process_sagWind_init,
+        &daObjVyasi::Act_c::process_toNormal_init, &daObjVyasi::Act_c::process_normal_init,
+    };
+
+    if (i_idx >= 0 && i_idx < 5 && (this->*init_table[i_idx])()) {
+        mState = i_idx;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000FE4-000010C8       .text process_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::process_main() {
-    /* Nonmatching */
+    typedef void (daObjVyasi::Act_c::*mainProc)();
+    static mainProc main_table[] = {
+        &daObjVyasi::Act_c::process_none_main,     &daObjVyasi::Act_c::process_sag_main,    &daObjVyasi::Act_c::process_sagWind_main,
+        &daObjVyasi::Act_c::process_toNormal_main, &daObjVyasi::Act_c::process_normal_main,
+    };
+
+    if (mState >= 0 && mState < 5) {
+        (this->*main_table[mState])();
+    }
 }
 
 /* 000010C8-000010EC       .text solidHeapCB__Q210daObjVyasi5Act_cFP10fopAc_ac_c */
