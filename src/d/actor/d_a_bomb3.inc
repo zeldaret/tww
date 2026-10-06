@@ -11,6 +11,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_camera.h"
+#include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
@@ -682,8 +683,8 @@ void daBomb_c::makeFireEffect(cXyz& pos, csXyz& rotation) {
     cXyz scale;
     scale.setall(0.3f);
     csXyz rot;
-    rot.x = -cam->mAngle.x;
-    rot.y = cam->mAngle.y + 0x8000;
+    rot.x = -fopCamM_GetAngleX(cam);
+    rot.y = fopCamM_GetAngleY(cam) + 0x8000;
     rot.z = 0;
 
     rotation.x = rotation.x + 0x4000;
@@ -767,8 +768,8 @@ void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
 void daBomb_c::eff_explode() {
     camera_process_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     csXyz rot;
-    rot.x = -cam->mAngle.x;
-    rot.y = cam->mAngle.y + 0x8000;
+    rot.x = -fopCamM_GetAngleX(cam);
+    rot.y = fopCamM_GetAngleY(cam) + 0x8000;
     rot.z = 0;
 
     if(prm_get_cheapEff()) {

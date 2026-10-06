@@ -10,6 +10,7 @@
 #include "d/d_a_obj.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
+#include "f_op/f_op_camera_mng.h"
 #include "res/Object/VbakH.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -712,8 +713,8 @@ void Act_c::eff_explode() {
 
         camera_process_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         csXyz rot;
-        rot.x = -cam->mAngle.x;
-        rot.y = cam->mAngle.y + 0x8000;
+        rot.x = -fopCamM_GetAngleX(cam);
+        rot.y = fopCamM_GetAngleY(cam) + 0x8000;
         rot.z = 0;
 
         eff_explode_normal(&rot);

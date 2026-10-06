@@ -2712,9 +2712,9 @@ BOOL daPy_lk_c::setBodyAngleToCamera() {
 #endif
         } else {
             camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
-            shape_angle.y = cam->mAngle.y;
+            shape_angle.y = fopCamM_GetAngleY(cam);
             current.angle.y = shape_angle.y;
-            mBodyAngle.x = cam->mAngle.x;
+            mBodyAngle.x = fopCamM_GetAngleX(cam);
         }
         return bVar1;
     }
