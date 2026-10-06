@@ -218,8 +218,6 @@ void daObjVyasi::Act_c::set_collision() {
     }
 }
 
-char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
-
 /* 000005F4-000009B8       .text JointNodeCallBack__10daObjVyasiFP7J3DNodei */
 BOOL daObjVyasi::JointNodeCallBack(J3DNode*, int) {
     /* Nonmatching */
@@ -232,7 +230,7 @@ BOOL daObjVyasi::Act_c::process_none_init() {
 
 /* 000009FC-00000A00       .text process_none_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::process_none_main() {
-    /* Nonmatching */
+    return;
 }
 
 /* 00000A00-00000A64       .text process_sag_init__Q210daObjVyasi5Act_cFv */
@@ -246,13 +244,42 @@ BOOL daObjVyasi::Act_c::process_sag_init() {
 
 /* 00000A64-00000AD8       .text process_sag_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::process_sag_main() {
-    /* Nonmatching */
+    fopAc_ac_c* actor = fopAcM_SearchByName(fpcNm_Obj_Ekskz_e);
+    if (actor != NULL) {
+        mEkszsPos = actor->current.pos;
+        mEkszsRotY = actor->shape_angle.y;
+        process_init(2);
+    }
 }
 
 /* 00000AD8-00000CC0       .text process_sagWind_init__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::process_sagWind_init() {
-    /* Nonmatching */
+BOOL daObjVyasi::Act_c::process_sagWind_init() {
+    if (SetStopJointAnimation(mpBckData, 1.0f, 3.0f)) {
+        f32 dist = mEkszsPos.abs(current.pos);
+        dist = cLib_maxLimit(dist, 2800.0f);
+        dist = cLib_minLimit(dist, 1000.0f);
+
+        field_0x504 = (dist - 2800.0f) / -1800.0f;
+        f32 amp = 5000.0f + 7000.0f * field_0x504;
+
+        for (int i = 0; i < 14; i++) {
+            if (joint_kind_table[i] == 0) {
+                if (!(i & 1)) {
+                    field_0x524[i] = amp + cM_rndF(2000.0f);
+                } else {
+                    field_0x524[i] = -(amp + cM_rndF(2000.0f));
+                }
+            } else {
+                field_0x524[i] = 0.5f * amp;
+            }
+        }
+        mpMorf->setPlaySpeed(0.0f);
+        return TRUE;
+    }
+    return FALSE;
 }
+
+char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
 
 /* 00000CC0-00000D20       .text process_sagWind_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::process_sagWind_main() {
@@ -260,7 +287,7 @@ void daObjVyasi::Act_c::process_sagWind_main() {
 }
 
 /* 00000D20-00000D54       .text process_toNormal_init__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::process_toNormal_init() {
+BOOL daObjVyasi::Act_c::process_toNormal_init() {
     /* Nonmatching */
 }
 
@@ -270,7 +297,7 @@ void daObjVyasi::Act_c::process_toNormal_main() {
 }
 
 /* 00000E10-00000E74       .text process_normal_init__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::process_normal_init() {
+BOOL daObjVyasi::Act_c::process_normal_init() {
     /* Nonmatching */
 }
 

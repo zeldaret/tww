@@ -30,11 +30,11 @@ namespace daObjVyasi {
         void process_none_main();
         BOOL process_sag_init();
         void process_sag_main();
-        void process_sagWind_init();
+        BOOL process_sagWind_init();
         void process_sagWind_main();
-        void process_toNormal_init();
+        BOOL process_toNormal_init();
         void process_toNormal_main();
-        void process_normal_init();
+        BOOL process_normal_init();
         void process_normal_main();
         void process_init(int);
         void process_main();
