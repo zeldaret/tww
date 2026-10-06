@@ -35,8 +35,8 @@ namespace daObjVyasi {
         BOOL process_toNormal_init();
         void process_toNormal_main();
         BOOL process_normal_init();
-        void process_normal_main();
-        void process_init(int);
+        f32 process_normal_main();
+        BOOL process_init(int);
         void process_main();
         static BOOL solidHeapCB(fopAc_ac_c*);
         bool create_heap();

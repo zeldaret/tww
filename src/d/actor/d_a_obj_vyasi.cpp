@@ -279,35 +279,55 @@ BOOL daObjVyasi::Act_c::process_sagWind_init() {
     return FALSE;
 }
 
-char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
-
 /* 00000CC0-00000D20       .text process_sagWind_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::process_sagWind_main() {
-    /* Nonmatching */
+    if (is_switch()) {
+        process_init(3);
+    }
 }
 
 /* 00000D20-00000D54       .text process_toNormal_init__Q210daObjVyasi5Act_cFv */
 BOOL daObjVyasi::Act_c::process_toNormal_init() {
-    /* Nonmatching */
+    return SetStopJointAnimation(mpBckData, 1.0f, 0.0f);
 }
 
 /* 00000D54-00000E10       .text process_toNormal_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::process_toNormal_main() {
-    /* Nonmatching */
+    if (field_0x19C4 == 0) {
+        if (std::fabsf(field_0x19CC) <= 0.1f && process_init(4)) {
+            field_0x19CC = 0.0f;
+            field_0x19D4 = 0.0f;
+            mNormalCounter = 2;
+        }
+        field_0x19CC *= 0.85f;
+        field_0x19D0 += 0x3000;
+    } else {
+        field_0x19CC = -1792.0f * field_0x504;
+        field_0x19D0 = 0;
+    }
 }
 
 /* 00000E10-00000E74       .text process_normal_init__Q210daObjVyasi5Act_cFv */
 BOOL daObjVyasi::Act_c::process_normal_init() {
-    /* Nonmatching */
+    if (SetStopJointAnimation(mpBckData, -1.0f, 0.0f)) {
+        mpMorf->setPlaySpeed(0.0f);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 00000E74-00000ED0       .text process_normal_main__Q210daObjVyasi5Act_cFv */
-void daObjVyasi::Act_c::process_normal_main() {
-    /* Nonmatching */
+f32 daObjVyasi::Act_c::process_normal_main() {
+    if (mNormalCounter == 0 || mNormalCounter == 1) {
+        mNormalCounter++;
+    }
+    return cLib_addCalc(&field_0x19D4, 1.0f, 0.01f, 1.0f, 0.007f);
 }
 
+char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
+
 /* 00000ED0-00000FE4       .text process_init__Q210daObjVyasi5Act_cFi */
-void daObjVyasi::Act_c::process_init(int) {
+BOOL daObjVyasi::Act_c::process_init(int) {
     /* Nonmatching */
 }
 
