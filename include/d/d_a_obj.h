@@ -18,7 +18,8 @@ namespace daObj {
     cXyz& get_wind_spd(fopAc_ac_c*, f32);
     cXyz& get_path_spd(cBgS_PolyInfo&, f32);
     void posMoveF_stream(fopAc_ac_c*, const cXyz*, const cXyz*, f32, f32);
-    void posMoveF_grade(fopAc_ac_c*, const cXyz*, const cXyz*, f32, f32, const cXyz*, f32, f32, const cXyz*);
+    void posMoveF_grade(fopAc_ac_c* i_actor, const cXyz* p_add_vel, const cXyz* stream_spd, f32 param_4,
+                        f32 param_5, const cXyz* pNorm, f32 friction, f32 no_grade_cos, const cXyz* p_add_accel);
     void quat_rotBaseY(Quaternion*, const cXyz&);
     void quat_rotBaseY2(Quaternion*, const cXyz&);
     void quat_rotBaseZ(Quaternion*, const cXyz&);

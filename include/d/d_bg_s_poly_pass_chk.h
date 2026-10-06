@@ -7,6 +7,7 @@ class cBgS_PolyPassChk {
 public:
     virtual ~cBgS_PolyPassChk() {}
 
+protected:
     /* 0x4 */ bool mbObjThrough;
     /* 0x5 */ bool mbCamThrough;
     /* 0x6 */ bool mbLinkThrough;

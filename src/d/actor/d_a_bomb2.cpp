@@ -364,7 +364,7 @@ void Act_c::start_proc_call() {
         &Act_c::start_carry
     };
 
-    int proc = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
+    int proc = prm_get_start();
     return (this->*start_proc[proc])();
 }
 
@@ -378,7 +378,7 @@ void Act_c::create_init() {
     fopAcM_setCullSizeBox(this, -36.0f, 0.0f, -36.0f, 36.0f, 66.0f, 36.0f);
     fopAcM_setCullSizeFar(this, 10.0f);
 
-    if(daObj::PrmAbstract(this, PRM_1_W, PRM_1_S)) {
+    if(prm_get_stick()) {
         off_carry();
     }
     else {
@@ -967,7 +967,7 @@ void Act_c::set_real_shadow_flag() {
             }
         }
     }
-    model = r30 ? mpModel : NULL;
+    fopAcM_SetModel(this, r30 ? mpModel : NULL);
 }
 
 /* 800DFD0C-800DFDB0       .text carry_fuse_start__Q27daBomb25Act_cFv */
@@ -1013,7 +1013,7 @@ void Act_c::mode_wait() {
             mode_carry();
         }
         else {
-            bool temp = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
+            bool temp = prm_get_stick();
             f32 yVel = 0.0f;
             if(!temp) {
                 if(!field_0x745) {
@@ -1057,7 +1057,7 @@ void Act_c::mode_carry_init() {
     speedF = 0.0f;
     speed = cXyz::Zero;
     off_carry();
-    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OffCoSetBit();
 }
 
 void Act_c::mode_carry() {
@@ -1093,9 +1093,9 @@ void Act_c::mode_explode_init() {
     speed = cXyz::Zero;
     gravity = 0.0f;
     off_carry();
-    mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
-    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
-    mSph.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
+    mSph.OffTgSetBit();
+    mSph.OffCoSetBit();
+    mSph.OnAtSetBit();
     fopAcM_cancelCarryNow(this);
     mBombTimer = 0;
     field_0x73C = 4;
@@ -1113,9 +1113,9 @@ void Act_c::mode_sink_init() {
     mState = 3;
     speed.y *= 0.8f;
     speedF *= 0.8f;
-    mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
-    mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
-    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OffAtSetBit();
+    mSph.OffTgSetBit();
+    mSph.OffCoSetBit();
     off_carry();
     fopAcM_cancelCarryNow(this);
     field_0x698 = 4;
@@ -1260,7 +1260,7 @@ void Act_c::tensor_proc_call() {
         &Act_c::tensor_sink,
     };
 
-    if(!daObj::PrmAbstract(this, PRM_1_W, PRM_1_S)) {
+    if(!prm_get_stick()) {
         (this->*tensor_proc[mState])();
         vib_proc();
         set_vib_tensor();
