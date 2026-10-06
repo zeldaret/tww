@@ -133,8 +133,6 @@ static u8 joint_kind_table[14] = { 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 }; // namespace daObjVyasi
 
-char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
-
 /* 000000EC-0000015C       .text SetStopJointAnimation__Q210daObjVyasi5Act_cFP18J3DAnmTransformKeyff */
 BOOL daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey* i_key, float i_speed, float i_morf) {
     if (i_key != NULL) {
@@ -163,8 +161,64 @@ void daObjVyasi::Act_c::set_first_process() {
 
 /* 0000021C-000005B8       .text set_collision__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::set_collision() {
-    /* Nonmatching */
+    if (mCyl.ChkTgHit()) {
+        mCyl.GetTgHitObj();
+        daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCyl, 7);
+        daObj::HitEff_kikuzu(this, &mCyl);
+        dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
+        mCyl.ClrTgHit();
+    } else {
+        mCyl.SetR(79.0f);
+        mCyl.SetH(250.0f);
+        mCyl.SetC(current.pos);
+        dComIfG_Ccsp()->Set(&mCyl);
+    }
+
+    for (int i = 0; i < 5; i++) {
+        if (field_0x7E0[i].ChkTgHit()) {
+            field_0x7E0[i].GetTgHitObj();
+            daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &field_0x7E0[i], 7);
+            dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
+            field_0x7E0[i].ClrTgHit();
+        } else {
+            int k = i + 1;
+            field_0xDF8[i].mStart = field_0x400[i];
+            field_0xDF8[i].mEnd = field_0x400[k];
+            field_0xDF8[i].mRadius = 47.4f;
+            field_0x7E0[i].cM3dGCps::Set(field_0xDF8[i]);
+            dComIfG_Ccsp()->Set(&field_0x7E0[i]);
+        }
+    }
+
+    for (int i = 0; i < 8; i += 2) {
+        int idx = i >> 1;
+        int j = idx + 1;
+        int k = idx + 2;
+
+        cXyz delta(
+            (field_0x400[k].x - field_0x400[j].x) * 0.33333f,
+            (field_0x400[k].y - field_0x400[j].y) * 0.33333f,
+            (field_0x400[k].z - field_0x400[j].z) * 0.33333f
+        );
+
+        cXyz pos;
+        pos.x = field_0x400[j].x + delta.x;
+        pos.y = field_0x400[j].y + delta.y;
+        pos.z = field_0x400[j].z + delta.z;
+        field_0x1064[i].SetC(pos);
+        field_0x1064[i].SetR(47.4f);
+        dComIfG_Ccsp()->Set(&field_0x1064[i]);
+
+        pos.x = field_0x400[j].x + delta.x * 2.0f;
+        pos.y = field_0x400[j].y + delta.y * 2.0f;
+        pos.z = field_0x400[j].z + delta.z * 2.0f;
+        field_0x1064[i + 1].SetC(pos);
+        field_0x1064[i + 1].SetR(47.4f);
+        dComIfG_Ccsp()->Set(&field_0x1064[i + 1]);
+    }
 }
+
+char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
 
 /* 000005F4-000009B8       .text JointNodeCallBack__10daObjVyasiFP7J3DNodei */
 BOOL daObjVyasi::JointNodeCallBack(J3DNode*, int) {
