@@ -165,7 +165,8 @@ BOOL daObjVyasi::Act_c::PlayStopJointAnimation() {
 
 /* 00000194-0000021C       .text set_first_process__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::set_first_process() {
-    process_init(is_switch() ? STATE_NORMAL : STATE_SAG);
+    int state = is_switch() ? STATE_NORMAL : STATE_SAG;
+    process_init(state);
     mNormalCounter = 0;
     mWindScale = 1.0f;
     shape_angle.y += 0x8000;
@@ -410,7 +411,10 @@ bool daObjVyasi::Act_c::create_heap() {
     M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VYASI_BCK_VYASI_e);
     JUT_ASSERT(1151, M_bck_data != NULL);
 
-    if (M_bck_data != NULL && mdl_data != NULL) {
+#if VERSION > VERSION_DEMO
+    if (M_bck_data != NULL && mdl_data != NULL)
+#endif
+    {
         mpMorf = new mDoExt_McaMorf(mdl_data, NULL, NULL, M_bck_data, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0, 0x11000002);
     }
     return M_bck_data != NULL && mpMorf != NULL && mpMorf->getModel() != NULL;
@@ -472,7 +476,7 @@ cPhs_State daObjVyasi::Act_c::_create() {
 
 /* 00001D8C-00001DBC       .text _delete__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::_delete() {
-    dComIfG_resDeleteDemo(&mPhs, M_arcname);
+    dComIfG_resDelete(&mPhs, M_arcname);
     return true;
 }
 

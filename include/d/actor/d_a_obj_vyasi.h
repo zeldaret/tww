@@ -18,7 +18,7 @@ namespace daObjVyasi {
         virtual ~Act_c() {
         }
 
-        BOOL is_switch() const {
+        bool is_switch() const {
             return fopAcM_isSwitch(const_cast<Act_c*>(this), daObj::PrmAbstract(this, 8, 0));
         }
 
