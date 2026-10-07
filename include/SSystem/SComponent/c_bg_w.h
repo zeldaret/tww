@@ -31,13 +31,13 @@ public:
         }
         return false;
     }
-};
+}; // Size: 0x08
 
 struct cBgD_Vtx_t : public Vec {};
 
 struct cBgD_Blk_t {
     /* 0x00 */ u16 startTri;
-};
+}; // Size: 0x02
 
 struct cBgD_Ti_t {
 public:
@@ -45,7 +45,7 @@ public:
     /* 0x04 */ u32 m_info1;
     /* 0x08 */ u32 m_info2;
     /* 0x0C */ u32 m_info3;
-};
+}; // Size: 0x10
 
 struct cBgD_Tri_t {
 public:
@@ -54,7 +54,7 @@ public:
     /* 0x04 */ u16 vtx2;
     /* 0x06 */ u16 id;
     /* 0x08 */ u16 grp;
-};
+}; // Size: 0x0A
 
 struct cBgD_Grp_t {
     /* 0x00 */ char* m_name;
@@ -82,7 +82,7 @@ struct cBgD_Tree_t {
 class cBgW_NodeTree : public cM3dGAab {
 public:
     virtual ~cBgW_NodeTree() {}
-};
+}; // Size: 0x1C
 
 class cBgD_t {
 public:
@@ -99,7 +99,7 @@ public:
     /* 0x28 */ s32 m_ti_num;
     /* 0x2C */ cBgD_Ti_t* m_ti_tbl;
     /* 0x30 */ u32 flag;
-};
+}; // Size: 0x34
 
 class cBgS_LinChk;
 class cBgS_GndChk;
@@ -113,22 +113,22 @@ public:
 
 public:
     virtual ~cBgW_RwgElm() {}
-};
+}; // Size: 0x8
 
 class cBgW_BlkElm {
 public:
     /* 0x00 */ u16 roof;
     /* 0x02 */ u16 wall;
     /* 0x04 */ u16 ground;
-};
+}; // Size: 0x6
 
 class cBgW_GrpElm {
 public:
     virtual ~cBgW_GrpElm() {}
 
 public:
-    /* 0x00 */ cM3dGAab aab;
-};
+    /* 0x04 */ cM3dGAab aab;
+}; // Size: 0x20
 
 class cBgW : public cBgW_BgId {
 public:
@@ -272,7 +272,7 @@ public:
     /* 0x9C */ cBgW_GrpElm* pm_grp;
     /* 0xA0 */ cBgW_NodeTree* m_nt_tbl;
     /* 0xA4 */ int m_rootGrpIdx;
-}; // size = 0xA8
+}; // Size: 0xA8
 
 inline bool cBgW_CheckBGround(f32 ny) {
     return ny >= 0.5f;
