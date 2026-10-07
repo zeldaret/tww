@@ -1770,17 +1770,29 @@ void dMenu_Fmap2_c::cCursorAnimeInit() {
 
 /* 801C3D9C-801C3E2C       .text cCursorAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cCursorAnime() {
-    /* Nonmatching */
+    if (mCcxxPanes[0].mUserArea == 0) {
+        for (int i = 0; i < 4; i++) {
+            mCcxxPanes[i + (field_0x27A6 ^ 1) * 4].pane->show();
+            mCcxxPanes[i + field_0x27A6 * 4].pane->hide();
+        }
+        field_0x27A6 ^= 1;
+        mCcxxPanes[0].mUserArea = g_mf2HIO.field_0x49;
+    } else {
+        mCcxxPanes[0].mUserArea--;
+    }
 }
 
 /* 801C3E2C-801C3E54       .text cCursorHide__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cCursorHide() {
-    /* Nonmatching */
+    for (int i = 0; i < 8; i++) {
+        mCcxxPanes[i].pane->hide();
+    }
 }
 
 /* 801C3E54-801C3E6C       .text cSelCursorInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cSelCursorInit() {
-    /* Nonmatching */
+    mCmyuPane.pane->show();
+    mCmydPane.pane->show();
 }
 
 /* 801C3E6C-801C3E88       .text cSelCursorAnimeInit__13dMenu_Fmap2_cFv */
