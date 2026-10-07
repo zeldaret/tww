@@ -1729,7 +1729,15 @@ void dMenu_Fmap2_c::ChangeProcMode() {
 
 /* 801C36C8-801C376C       .text _open__13dMenu_Fmap2_cFv */
 bool dMenu_Fmap2_c::_open() {
-    /* Nonmatching */
+    BOOL ret = paneTransBase(field_0x27AC, g_mf2HIO.field_0x38, g_mf2HIO.field_0x3A, 0.0f, 0, field_0x2815, 0);
+    field_0x27AC++;
+    if (ret == TRUE) {
+        field_0x27AC = 0;
+        field_0x2848[0] = 0xFFFF;
+        field_0x2848[1] = 0xFFFF;
+        return true;
+    }
+    return false;
 }
 
 /* 801C376C-801C3858       .text _close__13dMenu_Fmap2_cFv */
@@ -1739,7 +1747,14 @@ bool dMenu_Fmap2_c::_close() {
 
 /* 801C3858-801C38E0       .text _draw__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::_draw() {
-    /* Nonmatching */
+    dComIfGd_set2DOpa(&fmap2Dl);
+    switch (field_0x27FB) {
+        case 2:
+            break;
+        case 1:
+            dComIfGd_set2DOpa(&fmap2GsDl);
+            break;
+    }
 }
 
 /* 801C38E0-801C39A4       .text _delete__13dMenu_Fmap2_cFv */
