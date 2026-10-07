@@ -9,6 +9,7 @@
 #include "d/d_a_obj.h"
 #include "d/d_lib.h"
 #include "res/Object/Vyasi.h"
+#include "SSystem/SComponent/c_lib.h"
 
 namespace daObjVyasi {
 
@@ -467,12 +468,17 @@ cPhs_State daObjVyasi::Act_c::_create() {
 
 /* 00001D8C-00001DBC       .text _delete__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::_delete() {
-    /* Nonmatching */
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
+    return true;
 }
 
 /* 00001DBC-00001E5C       .text set_mtx__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::set_mtx() {
-    /* Nonmatching */
+    mpMorf->getModel()->setBaseScale(scale);
+    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    MTXCopy(mDoMtx_stack_c::get(), field_0x4BC);
 }
 
 /* 00001E5C-000025A8       .text calc_dif_angle__Q210daObjVyasi5Act_cFv */
@@ -487,7 +493,15 @@ void daObjVyasi::Act_c::quaternion_main() {
 
 /* 00002880-00002938       .text leaf_scale_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::leaf_scale_main() {
-    /* Nonmatching */
+    cXyz scale(1.0f, 1.0f, 1.0f);
+    if (mState == 2) {
+        scale.x = 0.35000002f * field_0x504 + 1.0f;
+        scale.y = -0.5f * field_0x504 + 1.0f;
+        scale.z = scale.y;
+    }
+    cLib_addCalc2(&field_0x4A8, scale.x, 0.5f, 0.5f);
+    cLib_addCalc2(&field_0x4AC, scale.y, 0.5f, 0.5f);
+    cLib_addCalc2(&field_0x4B0, scale.z, 0.5f, 0.5f);
 }
 
 /* 00002938-000029BC       .text _execute__Q210daObjVyasi5Act_cFv */
