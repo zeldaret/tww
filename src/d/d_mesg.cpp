@@ -1358,7 +1358,6 @@ void dMesg_screenDataTalk_c::changeFont(JUTFont* font) {
 
 /* 801E39F8-801E3BBC       .text openAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::openAnime() {
-    /* Nonmatching - fpr regswap */
     f32 f31, f30, f29, f28, tmp;
     bool ret = false;
     mTimer++;
@@ -1376,7 +1375,8 @@ bool dMesg_screenDataTalk_c::openAnime() {
             f30 = (f31 * field_0x168.mSizeOrig.y) / field_0x168.mSizeOrig.x;
             f29 = field_0x168.mSizeOrig.x - f31;
             f28 = field_0x168.mSizeOrig.y - f30;
-            tmp = fopMsgM_valueIncrease(10, mTimer, 0);
+            f32 tmp28 = fopMsgM_valueIncrease(10, mTimer, 0);
+            tmp = tmp28;
         } else {
             f32 tmp2 = field_0x168.mSizeOrig.x;
             f31 = tmp2;
@@ -1397,7 +1397,6 @@ bool dMesg_screenDataTalk_c::openAnime() {
 
 /* 801E3BBC-801E3CE0       .text closeAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::closeAnime() {
-    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
@@ -1410,7 +1409,8 @@ bool dMesg_screenDataTalk_c::closeAnime() {
         ret = true;
     } else {
         f32 f31 = field_0x168.mSizeOrig.x;
-        f32 f30 = field_0x168.mSizeOrig.y;
+        fopMsgM_f2d_class& tmp12 = field_0x168.mSizeOrig;
+        f32 f30 = tmp12.y;
         f32 tmp2 = 620.0f - f31;
         f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
         f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);
@@ -1610,7 +1610,6 @@ bool dMesg_screenDataItem_c::openAnime() {
 
 /* 801E4AE8-801E4C40       .text closeAnime__22dMesg_screenDataItem_cFv */
 bool dMesg_screenDataItem_c::closeAnime() {
-    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
@@ -1628,7 +1627,8 @@ bool dMesg_screenDataItem_c::closeAnime() {
         ret = true;
     } else {
         f32 f31 = field_0x168.mSizeOrig.x;
-        f32 f30 = field_0x168.mSizeOrig.y;
+        fopMsgM_pane_class& tmp17 = field_0x168;
+        f32 f30 = tmp17.mSizeOrig.y;
         f32 tmp2 = 620.0f - f31;
         f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
         f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);

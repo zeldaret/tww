@@ -2068,7 +2068,6 @@ void dJle_Pb_c::_gmove() {
 
 /* 8022B320-8022B9E8       .text draw__9dJle_Pb_cFv */
 void dJle_Pb_c::draw() {
-    /* Nonmatching - retail-only regalloc */
     if (mExecState != PB_EXEC_CLOSE_e && mExecState != PB_EXEC_CLOSED_e) {
         for (int i = 0; i < 12; i++) {
             fopMsgM_setAlpha(&pane_sb[i]);
@@ -2171,7 +2170,7 @@ void dJle_Pb_c::draw() {
                     int posY = mMsgDataProc.getIconPosY(idx);
                     int scale = mMsgDataProc.getIconScale(idx);
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
-                    f32 lineSpace = base->getLineSpace();
+                    f32 lineSpace = ((J2DTextBox*)pane_tx[0].pane)->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
                     int r5 = posX + base->getBounds().i.x;
                     f32 f1 = r9 * ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) + posY * 2);
@@ -2233,7 +2232,7 @@ void dJle_Pb_c::draw() {
                     int posY = mMsgDataProc.getIconPosY(idx);
                     int scale = mMsgDataProc.getIconScale(idx);
                     J2DTextBox* base = (J2DTextBox*)pane_tx[0].pane;
-                    f32 lineSpace = base->getLineSpace();
+                    f32 lineSpace = ((J2DTextBox*)pane_tx[0].pane)->getLineSpace();
                     int r9 = (int)(lineSpace / 2.0f);
                     int r5 = posX + base->getBounds().i.x;
                     f32 f1 = r9 * ((VERSION_SELECT(1, 1, 2, 2) - mMsgLineCount) + posY * 2);

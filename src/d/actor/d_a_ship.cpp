@@ -262,14 +262,9 @@ BOOL daShip_c::draw() {
         
         cXyz local_5c(current.pos.x, current.pos.y + m03D8 + 5.0f, current.pos.z);
         
-        // Fakematch, causes regalloc for demo
-        f32 x = local_5c.x;
-        f32 y = local_5c.y;
-        f32 z = local_5c.z;
-        z += cM_scos(m037C) * 10000.0f * cM_scos(shape_angle.y);
-        y -= cM_ssin(m037C) * 10000.0f;
-        x += cM_scos(m037C) * 10000.0f * cM_ssin(shape_angle.y);
-        cXyz local_68(x, y, z);
+        cXyz local_68(current.pos.x + cM_scos(m037C) * 10000.0f * cM_ssin(shape_angle.y),
+                      current.pos.y + m03D8 + 5.0f - cM_ssin(m037C) * 10000.0f,
+                      current.pos.z + cM_scos(m037C) * 10000.0f * cM_scos(shape_angle.y));
         Mtx MStack_50;
         cMtx_lookAt(MStack_50, &local_5c, &local_68, m037E);
         mDoMtx_stack_c::YrotS(0xC000);

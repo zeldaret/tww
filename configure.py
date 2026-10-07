@@ -663,7 +663,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_ovlp_fade2.cpp"),
             Object(Matching,    "d/d_ovlp_fade3.cpp"),
             Object(Matching,    "d/d_ovlp_fade4.cpp"),
-            Object(NonMatching, "d/d_picture_box.cpp"),
+            Object(Equivalent, "d/d_picture_box.cpp"),
             Object(Matching,    "d/d_s_logo.cpp"),
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d/d_s_menu.cpp"),
             Object(EquivalentFor("D44J01", "GZLJ01", "GZLE01"),    "d/d_s_name.cpp"), # stripped vtable padding
@@ -1624,7 +1624,7 @@ config.libs = [
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_bk"),
     ActorRel(NonMatching, "d_a_bl"),
     ActorRel(Matching,    "d_a_bmd"),
-    ActorRel(NonMatching, "d_a_bmdfoot"),
+    ActorRel(Matching, "d_a_bmdfoot"),
     ActorRel(Matching,    "d_a_bmdhand"),
     ActorRel(NonMatching, "d_a_bo"),
     ActorRel(Matching,    "d_a_boss_item"),
