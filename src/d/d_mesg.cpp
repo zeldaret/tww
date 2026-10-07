@@ -1356,8 +1356,6 @@ void dMesg_screenDataTalk_c::changeFont(JUTFont* font) {
 
 /* 801E39F8-801E3BBC       .text openAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::openAnime() {
-    /* Nonmatching - fpr regswap */
-    f32 f31, f30, f29, f28, tmp;
     bool ret = false;
     mTimer++;
     if (mTimer >= 13) {
@@ -1369,23 +1367,26 @@ bool dMesg_screenDataTalk_c::openAnime() {
         }
         ret = true;
     } else {
+        fopMsgM_f2d_class f31_f30;
+        f32 f29, f28;
+        f32 f1;
         if (mTimer < 10) {
-            f31 = 100.0f;
-            f30 = (f31 * field_0x168.mSizeOrig.y) / field_0x168.mSizeOrig.x;
-            f29 = field_0x168.mSizeOrig.x - f31;
-            f28 = field_0x168.mSizeOrig.y - f30;
-            tmp = fopMsgM_valueIncrease(10, mTimer, 0);
+            f31_f30.x = 100.0f;
+            f31_f30.y = (f31_f30.x * field_0x168.mSizeOrig.y) / field_0x168.mSizeOrig.x;
+            f29 = field_0x168.mSizeOrig.x - f31_f30.x;
+            f28 = field_0x168.mSizeOrig.y - f31_f30.y;
+            f1 = fopMsgM_valueIncrease(10, mTimer, 0);
         } else {
             f32 tmp2 = field_0x168.mSizeOrig.x;
-            f31 = tmp2;
+            f31_f30.x = tmp2;
             f32 tmp3 = field_0x168.mSizeOrig.y;
-            f30 = tmp3;
-            f29 = 580.0f - f31;
-            f28 = (f30 * 580.0f) / f31 - f30;
-            tmp = JMASSin((mTimer - 10) * (0x10000 / 6.0f));
+            f31_f30.y = tmp3;
+            f29 = 580.0f - f31_f30.x;
+            f28 = (f31_f30.y * 580.0f) / f31_f30.x - f31_f30.y;
+            f1 = JMASSin((mTimer - 10) * (0x10000 / 6.0f));
         }
-        field_0x168.mSize.x = f31 + f29 * tmp;
-        field_0x168.mSize.y = f30 + f28 * tmp;
+        field_0x168.mSize.x = f31_f30.x + f29 * f1;
+        field_0x168.mSize.y = f31_f30.y + f28 * f1;
         fopMsgM_cposMove(&field_0x168);
         field_0x1b4 = fopMsgM_valueIncrease(13, mTimer, 0);
         fopMsgM_setNowAlpha(&field_0x168, field_0x1b4);
@@ -1395,7 +1396,6 @@ bool dMesg_screenDataTalk_c::openAnime() {
 
 /* 801E3BBC-801E3CE0       .text closeAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::closeAnime() {
-    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
@@ -1407,13 +1407,14 @@ bool dMesg_screenDataTalk_c::closeAnime() {
         fopMsgM_setNowAlphaZero(&field_0x168);
         ret = true;
     } else {
-        f32 f31 = field_0x168.mSizeOrig.x;
-        f32 f30 = field_0x168.mSizeOrig.y;
-        f32 tmp2 = 620.0f - f31;
-        f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
+        fopMsgM_f2d_class f31_f30;
+        f31_f30.x = field_0x168.mSizeOrig.x;
+        f31_f30.y = field_0x168.mSizeOrig.y;
+        f32 tmp2 = 620.0f - f31_f30.x;
+        f32 f29 = (f31_f30.y / f31_f30.x) * 620.0f - field_0x168.mSizeOrig.y;
         f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);
-        field_0x168.mSize.x = f31 + tmp2 * f1;
-        field_0x168.mSize.y = f30 + f29 * f1;
+        field_0x168.mSize.x = f31_f30.x + tmp2 * f1;
+        field_0x168.mSize.y = f31_f30.y + f29 * f1;
         field_0x1b4 = 1.0f - f1;
         fopMsgM_cposMove(&field_0x168);
         fopMsgM_setNowAlpha(&field_0x168, field_0x1b4);
@@ -1608,7 +1609,6 @@ bool dMesg_screenDataItem_c::openAnime() {
 
 /* 801E4AE8-801E4C40       .text closeAnime__22dMesg_screenDataItem_cFv */
 bool dMesg_screenDataItem_c::closeAnime() {
-    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
@@ -1625,13 +1625,14 @@ bool dMesg_screenDataItem_c::closeAnime() {
         fopMsgM_setNowAlphaZero(&field_0x168);
         ret = true;
     } else {
-        f32 f31 = field_0x168.mSizeOrig.x;
-        f32 f30 = field_0x168.mSizeOrig.y;
-        f32 tmp2 = 620.0f - f31;
-        f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
+        fopMsgM_f2d_class f31_f30;
+        f31_f30.x = field_0x168.mSizeOrig.x;
+        f31_f30.y = field_0x168.mSizeOrig.y;
+        f32 tmp2 = 620.0f - f31_f30.x;
+        f32 f29 = (f31_f30.y / f31_f30.x) * 620.0f - field_0x168.mSizeOrig.y;
         f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);
-        field_0x168.mSize.x = f31 + tmp2 * f1;
-        field_0x168.mSize.y = f30 + f29 * f1;
+        field_0x168.mSize.x = f31_f30.x + tmp2 * f1;
+        field_0x168.mSize.y = f31_f30.y + f29 * f1;
         field_0x3e8 = 1.0f - f1;
         fopMsgM_cposMove(&field_0x168);
         fopMsgM_setNowAlpha(&field_0x168, field_0x3e8);
