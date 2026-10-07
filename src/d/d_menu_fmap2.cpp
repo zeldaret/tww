@@ -44,9 +44,9 @@ dMf2_HIO_c::dMf2_HIO_c() {
     field_0x76 = 0;
     field_0x16 = 25;
     field_0x9 = 255;
-    field_0xa = 0;
-    field_0xb = 0;
-    field_0xc = 255;
+    field_0xA = 0;
+    field_0xB = 0;
+    field_0xC = 255;
     field_0x5 = 255;
     field_0x6 = 255;
     field_0x7 = 0;
@@ -55,13 +55,13 @@ dMf2_HIO_c::dMf2_HIO_c() {
     field_0x12 = 0x8e;
     field_0x13 = 0;
     field_0x14 = 255;
-    field_0xd = 255;
-    field_0xe = 255;
-    field_0xf = 130;
+    field_0xD = 255;
+    field_0xE = 255;
+    field_0xF = 130;
     field_0x10 = 155;
-    field_0x1e = 0;
+    field_0x1E = 0;
     field_0x20 = 0;
-    field_0x1f = 0;
+    field_0x1F = 0;
     field_0x22 = 50;
     field_0x28 = 30;
     field_0x24 = 5.0;
@@ -69,11 +69,11 @@ dMf2_HIO_c::dMf2_HIO_c() {
     field_0x31 = 11;
     field_0x34 = 10.0;
     field_0x38 = 8;
-    field_0x3a = 0;
-    field_0x3c = 0;
-    field_0x3e = 8;
+    field_0x3A = 0;
+    field_0x3C = 0;
+    field_0x3E = 8;
     field_0x48 = 8;
-    field_0x3f = 10;
+    field_0x3F = 10;
     field_0x40 = 10;
     field_0x44 = 0.05;
     field_0x58 = 80.0;
@@ -81,24 +81,24 @@ dMf2_HIO_c::dMf2_HIO_c() {
     field_0x60 = 0.5;
     field_0x64 = 4;
     field_0x68 = 0.0;
-    field_0x6c = 0.0;
+    field_0x6C = 0.0;
     field_0x70 = 1.0;
     field_0x74 = 0;
     field_0x75 = 45;
     field_0x49 = 8;
-    field_0x4a = 2;
-    field_0x4b = 12;
-    field_0x4c = 0;
-    field_0x4d = 0;
-    field_0x4e = 0;
+    field_0x4A = 2;
+    field_0x4B = 12;
+    field_0x4C = 0;
+    field_0x4D = 0;
+    field_0x4E = 0;
     field_0x50 = 30.0;
     field_0x54 = 30.0;
-    field_0x7a = 30;
-    field_0x7b = 6;
-    field_0x7c = DEMO_SELECT(0, 255);
-    field_0x7c = DEMO_SELECT(0, 255);
-    field_0x7c = DEMO_SELECT(128, 255);
-    field_0x7f = 255;
+    field_0x7A = 30;
+    field_0x7B = 6;
+    field_0x7C = DEMO_SELECT(0, 255);
+    field_0x7C = DEMO_SELECT(0, 255);
+    field_0x7C = DEMO_SELECT(128, 255);
+    field_0x7F = 255;
     field_0x80 = 0;
     field_0x81 = 0;
     field_0x82 = DEMO_SELECT(0, 168);
@@ -109,13 +109,13 @@ dMf2_HIO_c::dMf2_HIO_c() {
     field_0x87 = 255;
     field_0x88 = 255;
     field_0x89 = 255;
-    field_0x8a = 0;
-    field_0x8b = 0;
-    field_0x8c = 0;
-    field_0x8d = 0;
+    field_0x8A = 0;
+    field_0x8B = 0;
+    field_0x8C = 0;
+    field_0x8D = 0;
 #if VERSION > VERSION_JPN
-    field_0x8e = 30;
-    field_0x8f = 0;
+    field_0x8E = 30;
+    field_0x8F = 0;
     field_0x90 = 255;
     field_0x91 = 32;
     field_0x92 = 15;
@@ -148,7 +148,7 @@ void dMenu_Fmap2_c::_create() {
     mCmapTxtMain_p[1] = (ResTIMG*)operator new(0x2c00, 0x20);
     JUT_ASSERT(VERSION_SELECT(323, 323, 346, 346), mCmapTxtMain_p[1] != NULL);
     screenSet();
-    field_0x27fb = 0;
+    field_0x27FB = 0;
     g_mf2HIO.mNo = mDoHIO_root.m_subroot.createChild("フィールドマップ画面2", &g_mf2HIO);
 }
 
@@ -170,26 +170,26 @@ void dMenu_Fmap2_c::screenSet() {
     fopMsgM_setPaneData(&mNcddPane, fmap2Dl.scrn->search('ncdd'));
     fopMsgM_setPaneData(&mMkcdPane, fmap2Dl.scrn->search('mkCD'));
     fopMsgM_setPaneData(&mMkm0Pane, fmap2Dl.scrn->search('mkm0'));
-    fopMsgM_setPaneData(&field_0x43c[0], fmap2Dl.scrn->search('msw'));
-    fopMsgM_setPaneData(&field_0x43c[1], fmap2Dl.scrn->search('msT'));
-    fopMsgM_setPaneData(&field_0x43c[2], fmap2Dl.scrn->search('msT2'));
-    fopMsgM_setPaneData(&field_0x43c[3], fmap2Dl.scrn->search('msR1'));
-    fopMsgM_setPaneData(&field_0x43c[4], fmap2Dl.scrn->search('msR2'));
-    ((J2DTextBox*)field_0x43c[1].pane)->setFont(field_0x34);
-    ((J2DTextBox*)field_0x43c[2].pane)->setFont(field_0x34);
-    ((J2DTextBox*)field_0x43c[3].pane)->setFont(field_0x38);
-    ((J2DTextBox*)field_0x43c[4].pane)->setFont(field_0x38);
+    fopMsgM_setPaneData(&field_0x43C[0], fmap2Dl.scrn->search('msw'));
+    fopMsgM_setPaneData(&field_0x43C[1], fmap2Dl.scrn->search('msT'));
+    fopMsgM_setPaneData(&field_0x43C[2], fmap2Dl.scrn->search('msT2'));
+    fopMsgM_setPaneData(&field_0x43C[3], fmap2Dl.scrn->search('msR1'));
+    fopMsgM_setPaneData(&field_0x43C[4], fmap2Dl.scrn->search('msR2'));
+    ((J2DTextBox*)field_0x43C[1].pane)->setFont(field_0x34);
+    ((J2DTextBox*)field_0x43C[2].pane)->setFont(field_0x34);
+    ((J2DTextBox*)field_0x43C[3].pane)->setFont(field_0x38);
+    ((J2DTextBox*)field_0x43C[4].pane)->setFont(field_0x38);
 
     dDlst_2DOutFont_c outFont1;
     dDlst_2DOutFont_c outFont2;
-    outFont1.setPaneEx(field_0x34, &field_0x43c[1], NULL, NULL, NULL, NULL);
-    outFont2.setPaneEx(field_0x34, &field_0x43c[2], NULL, NULL, NULL, NULL);
-    outFont1.setRuby(field_0x38, &field_0x43c[3]);
-    outFont2.setRuby(field_0x38, &field_0x43c[4]);
+    outFont1.setPaneEx(field_0x34, &field_0x43C[1], NULL, NULL, NULL, NULL);
+    outFont2.setPaneEx(field_0x34, &field_0x43C[2], NULL, NULL, NULL, NULL);
+    outFont1.setRuby(field_0x38, &field_0x43C[3]);
+    outFont2.setRuby(field_0x38, &field_0x43C[4]);
     outFont1.messageSet(0x319f);
     outFont2.messageSet(0x319f);
-    outFont1.setLeftUpPos(field_0x43c[1].mPosTopLeft.x, field_0x43c[1].mPosTopLeft.y);
-    outFont2.setLeftUpPos(field_0x43c[2].mPosTopLeft.x, field_0x43c[2].mPosTopLeft.y);
+    outFont1.setLeftUpPos(field_0x43C[1].mPosTopLeft.x, field_0x43C[1].mPosTopLeft.y);
+    outFont2.setLeftUpPos(field_0x43C[2].mPosTopLeft.x, field_0x43C[2].mPosTopLeft.y);
     outFont1.move();
     outFont2.move();
 
@@ -214,7 +214,7 @@ void dMenu_Fmap2_c::screenSet() {
     };
     for (i = 0; i < 17; i++) {
         fopMsgM_setPaneData(&field_0x554[i], fmap2Dl.scrn->search(l_tagNm01[i]));
-        fopMsgM_setPaneData(&field_0x90c[i], fmap2Dl.scrn->search(l_tagNm02[i]));
+        fopMsgM_setPaneData(&field_0x90C[i], fmap2Dl.scrn->search(l_tagNm02[i]));
     }
     ((J2DTextBox*)field_0x554[1].pane)->getFontSize(field_0x2830);
     ((J2DTextBox*)field_0x554[3].pane)->getFontSize(field_0x2838);
@@ -228,41 +228,41 @@ void dMenu_Fmap2_c::screenSet() {
     ((J2DTextBox*)field_0x554[2].pane)->setString(dummyStr);
     ((J2DTextBox*)field_0x554[3].pane)->setString(dummyStr);
     ((J2DTextBox*)field_0x554[4].pane)->setString(dummyStr);
-    field_0x27d8 = ((J2DTextBox*)field_0x554[1].pane)->getStringPtr();
-    field_0x27dc = ((J2DTextBox*)field_0x554[2].pane)->getStringPtr();
-    field_0x27e8 = ((J2DTextBox*)field_0x554[3].pane)->getStringPtr();
-    field_0x27ec = ((J2DTextBox*)field_0x554[4].pane)->getStringPtr();
-    field_0x27d8[0] = 0;
-    field_0x27dc[0] = 0;
-    field_0x27e8[0] = 0;
-    field_0x27ec[0] = 0;
-    outFont[0]->setPaneEx(field_0x34, &field_0x554[1], &field_0x554[15], NULL, NULL, field_0x27d8);
-    outFont[0]->setRubyEx(field_0x38, &field_0x554[3], field_0x27e8);
-    outFontS[0]->setPaneEx(field_0x34, &field_0x554[2], &field_0x554[16], NULL, NULL, field_0x27dc);
-    outFontS[0]->setRubyEx(field_0x38, &field_0x554[4], field_0x27ec);
-    ((J2DTextBox*)field_0x90c[1].pane)->setFont(field_0x34);
-    ((J2DTextBox*)field_0x90c[2].pane)->setFont(field_0x34);
-    ((J2DTextBox*)field_0x90c[3].pane)->setFont(field_0x38);
-    ((J2DTextBox*)field_0x90c[4].pane)->setFont(field_0x38);
-    ((J2DTextBox*)field_0x90c[1].pane)->setString(dummyStr);
-    ((J2DTextBox*)field_0x90c[2].pane)->setString(dummyStr);
-    ((J2DTextBox*)field_0x90c[3].pane)->setString(dummyStr);
-    ((J2DTextBox*)field_0x90c[4].pane)->setString(dummyStr);
-    field_0x27e0 = ((J2DTextBox*)field_0x90c[1].pane)->getStringPtr();
-    field_0x27e4 = ((J2DTextBox*)field_0x90c[2].pane)->getStringPtr();
-    field_0x27f0 = ((J2DTextBox*)field_0x90c[3].pane)->getStringPtr();
-    field_0x27f4 = ((J2DTextBox*)field_0x90c[4].pane)->getStringPtr();
-    field_0x27e0[0] = 0;
-    field_0x27e4[0] = 0;
-    field_0x27f0[0] = 0;
-    field_0x27f4[0] = 0;
-    field_0xcc4[0] = field_0x554;
-    field_0xcc4[1] = field_0x90c;
+    field_0x27D8 = ((J2DTextBox*)field_0x554[1].pane)->getStringPtr();
+    field_0x27DC = ((J2DTextBox*)field_0x554[2].pane)->getStringPtr();
+    field_0x27E8 = ((J2DTextBox*)field_0x554[3].pane)->getStringPtr();
+    field_0x27EC = ((J2DTextBox*)field_0x554[4].pane)->getStringPtr();
+    field_0x27D8[0] = 0;
+    field_0x27DC[0] = 0;
+    field_0x27E8[0] = 0;
+    field_0x27EC[0] = 0;
+    outFont[0]->setPaneEx(field_0x34, &field_0x554[1], &field_0x554[15], NULL, NULL, field_0x27D8);
+    outFont[0]->setRubyEx(field_0x38, &field_0x554[3], field_0x27E8);
+    outFontS[0]->setPaneEx(field_0x34, &field_0x554[2], &field_0x554[16], NULL, NULL, field_0x27DC);
+    outFontS[0]->setRubyEx(field_0x38, &field_0x554[4], field_0x27EC);
+    ((J2DTextBox*)field_0x90C[1].pane)->setFont(field_0x34);
+    ((J2DTextBox*)field_0x90C[2].pane)->setFont(field_0x34);
+    ((J2DTextBox*)field_0x90C[3].pane)->setFont(field_0x38);
+    ((J2DTextBox*)field_0x90C[4].pane)->setFont(field_0x38);
+    ((J2DTextBox*)field_0x90C[1].pane)->setString(dummyStr);
+    ((J2DTextBox*)field_0x90C[2].pane)->setString(dummyStr);
+    ((J2DTextBox*)field_0x90C[3].pane)->setString(dummyStr);
+    ((J2DTextBox*)field_0x90C[4].pane)->setString(dummyStr);
+    field_0x27E0 = ((J2DTextBox*)field_0x90C[1].pane)->getStringPtr();
+    field_0x27E4 = ((J2DTextBox*)field_0x90C[2].pane)->getStringPtr();
+    field_0x27F0 = ((J2DTextBox*)field_0x90C[3].pane)->getStringPtr();
+    field_0x27F4 = ((J2DTextBox*)field_0x90C[4].pane)->getStringPtr();
+    field_0x27E0[0] = 0;
+    field_0x27E4[0] = 0;
+    field_0x27F0[0] = 0;
+    field_0x27F4[0] = 0;
+    field_0xCC4[0] = field_0x554;
+    field_0xCC4[1] = field_0x90C;
     field_0x2816 = 0;
-    outFont[1]->setPaneEx(field_0x34, &field_0x90c[1], &field_0x90c[15], NULL, NULL, field_0x27e0);
-    outFont[1]->setRubyEx(field_0x38, &field_0x90c[3], field_0x27f0);
-    outFontS[1]->setPaneEx(field_0x34, &field_0x90c[2], &field_0x90c[16], NULL, NULL, field_0x27e4);
-    outFontS[1]->setRubyEx(field_0x38, &field_0x90c[4], field_0x27f4);
+    outFont[1]->setPaneEx(field_0x34, &field_0x90C[1], &field_0x90C[15], NULL, NULL, field_0x27E0);
+    outFont[1]->setRubyEx(field_0x38, &field_0x90C[3], field_0x27F0);
+    outFontS[1]->setPaneEx(field_0x34, &field_0x90C[2], &field_0x90C[16], NULL, NULL, field_0x27E4);
+    outFontS[1]->setRubyEx(field_0x38, &field_0x90C[4], field_0x27F4);
     fopMsgM_setPaneData(&mCi22Pane, fmap2Dl.scrn->search('ci22'));
     fopMsgM_setPaneData(&mCi21Pane, fmap2Dl.scrn->search('ci21'));
     fopMsgM_setPaneData(&mCi12Pane, fmap2Dl.scrn->search('ci12'));
@@ -285,16 +285,16 @@ void dMenu_Fmap2_c::screenSet() {
     field_0x1014[0].mUserArea = field_0x1014[0].mInitAlpha;
     field_0x1014[1].mUserArea = field_0x1014[1].mInitAlpha;
     field_0x1014[2].mUserArea = field_0x1014[2].mInitAlpha;
-    fopMsgM_setPaneData(&field_0x112c[0], fmap2Dl.scrn->search('clS2'));
-    fopMsgM_setPaneData(&field_0x112c[1], fmap2Dl.scrn->search('cm02'));
-    fopMsgM_setPaneData(&field_0x112c[2], fmap2Dl.scrn->search('cms2'));
-    fopMsgM_setPaneData(&field_0x112c[3], fmap2Dl.scrn->search('NZ02'));
-    fopMsgM_setPaneData(&field_0x112c[4], fmap2Dl.scrn->search('cck2'));
-    field_0x112c[0].mUserArea = field_0x112c[0].mInitAlpha;
-    field_0x112c[1].mUserArea = field_0x112c[1].mInitAlpha;
-    field_0x112c[2].mUserArea = field_0x112c[2].mInitAlpha;
-    field_0x124c[0] = field_0x1014;
-    field_0x124c[1] = field_0x112c;
+    fopMsgM_setPaneData(&field_0x112C[0], fmap2Dl.scrn->search('clS2'));
+    fopMsgM_setPaneData(&field_0x112C[1], fmap2Dl.scrn->search('cm02'));
+    fopMsgM_setPaneData(&field_0x112C[2], fmap2Dl.scrn->search('cms2'));
+    fopMsgM_setPaneData(&field_0x112C[3], fmap2Dl.scrn->search('NZ02'));
+    fopMsgM_setPaneData(&field_0x112C[4], fmap2Dl.scrn->search('cck2'));
+    field_0x112C[0].mUserArea = field_0x112C[0].mInitAlpha;
+    field_0x112C[1].mUserArea = field_0x112C[1].mInitAlpha;
+    field_0x112C[2].mUserArea = field_0x112C[2].mInitAlpha;
+    field_0x124C[0] = field_0x1014;
+    field_0x124C[1] = field_0x112C;
     field_0x2813 = 0;
     fopMsgM_setPaneData(&field_0x1644[0], fmap2Dl.scrn->search('cdd1'));
     fopMsgM_setPaneData(&field_0x1644[1], fmap2Dl.scrn->search('clc1'));
@@ -326,8 +326,8 @@ void dMenu_Fmap2_c::screenSet() {
     field_0x1874[2].mUserArea = field_0x1874[2].mInitAlpha;
     field_0x1874[3].mUserArea = field_0x1874[3].mInitAlpha;
     field_0x1874[9].mUserArea = field_0x1874[9].mInitAlpha;
-    field_0x1aa4[0] = field_0x1644;
-    field_0x1aa4[1] = field_0x1874;
+    field_0x1AA4[0] = field_0x1644;
+    field_0x1AA4[1] = field_0x1874;
     field_0x2815 = 0;
     fopMsgM_setPaneData(&field_0x1484[0], fmap2Dl.scrn->search('cmt1'));
     fopMsgM_setPaneData(&field_0x1484[1], fmap2Dl.scrn->search('cmt2'));
@@ -345,8 +345,8 @@ void dMenu_Fmap2_c::screenSet() {
     for (i = 0; i < 4; i++) {
         ((J2DTextBox*)field_0x1484[i].pane)->setFont(field_0x34);
         ((J2DTextBox*)field_0x1484[i].pane)->setString(buf);
-        field_0x27c8[i] = ((J2DTextBox*)field_0x1484[i].pane)->getStringPtr();
-        field_0x27c8[i][0] = 0;
+        field_0x27C8[i] = ((J2DTextBox*)field_0x1484[i].pane)->getStringPtr();
+        field_0x27C8[i][0] = 0;
     }
     fopMsgM_setPaneData(&mNfkdPane, fmap2Dl.scrn->search('nfkd'));
     fopMsgM_setPaneData(&mMkfdPane, fmap2Dl.scrn->search('mkFD'));
@@ -361,77 +361,77 @@ void dMenu_Fmap2_c::screenSet() {
     fopMsgM_setPaneData(&mAreaPane, fmap2Dl.scrn->search('area'));
     white = (u32)((J2DPicture*)mAreaPane.pane)->getWhite();
     black = (u32)((J2DPicture*)mAreaPane.pane)->getBlack();
-    field_0x27f8 = black.a;
-    field_0x27f9 = white.a;
-    fopMsgM_setPaneData(&field_0xe1c[0], fmap2Dl.scrn->search('fdt1'));
-    fopMsgM_setPaneData(&field_0xe1c[1], fmap2Dl.scrn->search('fts1'));
+    field_0x27F8 = black.a;
+    field_0x27F9 = white.a;
+    fopMsgM_setPaneData(&field_0xE1C[0], fmap2Dl.scrn->search('fdt1'));
+    fopMsgM_setPaneData(&field_0xE1C[1], fmap2Dl.scrn->search('fts1'));
     for (i = 0; i < 2; i++) {
-        ((J2DTextBox*)field_0xe1c[i].pane)->setFont(field_0x34);
-        ((J2DTextBox*)field_0xe1c[i].pane)->setString(buf);
-        field_0x27c0[i] = ((J2DTextBox*)field_0xe1c[i].pane)->getStringPtr();
-        field_0x27c0[i][0] = 0;
+        ((J2DTextBox*)field_0xE1C[i].pane)->setFont(field_0x34);
+        ((J2DTextBox*)field_0xE1C[i].pane)->setString(buf);
+        field_0x27C0[i] = ((J2DTextBox*)field_0xE1C[i].pane)->getStringPtr();
+        field_0x27C0[i][0] = 0;
     }
 }
 
 /* 801BCC74-801BD258       .text initialize__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::initialize() {
-    field_0x27ac = 0;
-    field_0x280d = 0;
-    field_0x280e = 0;
+    field_0x27AC = 0;
+    field_0x280D = 0;
+    field_0x280E = 0;
     field_0x2848[0] = -1;
     field_0x2848[1] = -1;
-    field_0x27fc = 0;
+    field_0x27FC = 0;
     field_0x2810 = 1;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
-    field_0x27b0 = player->current.pos.x;
-    field_0x27b4 = player->current.pos.z;
-    field_0x27b8 = ((s16)(player->shape_angle.y + 0x8000) * 180.0f) / 32768.0f;
+    field_0x27B0 = player->current.pos.x;
+    field_0x27B4 = player->current.pos.z;
+    field_0x27B8 = ((s16)(player->shape_angle.y + 0x8000) * 180.0f) / 32768.0f;
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
         s8 gridX;
         s8 gridY;
-        dMap_point2Grid(field_0x27b0, field_0x27b4, &gridX, &gridY);
-        field_0x27bc = gridX;
-        field_0x27bd = gridY;
+        dMap_point2Grid(field_0x27B0, field_0x27B4, &gridX, &gridY);
+        field_0x27BC = gridX;
+        field_0x27BD = gridY;
     } else {
         field_0x2810 = 0;
         if (strcmp(dComIfGp_getStartStageName(), "Obshop") == 0 || strcmp(dComIfGp_getStartStageName(), "Abship") == 0 || strcmp(dComIfGp_getStartStageName(), "PShip") == 0) {
             u8 tmp = dComIfGp_getIkadaShipBeforeRoomId();
-            field_0x27bc = tmp % 7 - 3;
-            field_0x27bd = tmp / 7 - 3;
+            field_0x27BC = tmp % 7 - 3;
+            field_0x27BD = tmp / 7 - 3;
         } else {
             stage_map_info_class* mapInfo = dComIfGp_getStage().getMapInfo();
             if (mapInfo) {
-                field_0x27bc = dStage_mapInfo_GetOceanX(mapInfo);
-                if (field_0x27bc == 4) {
-                    field_0x27bc = 0;
+                field_0x27BC = dStage_mapInfo_GetOceanX(mapInfo);
+                if (field_0x27BC == 4) {
+                    field_0x27BC = 0;
                 }
-                field_0x27bd = dStage_mapInfo_GetOceanZ(mapInfo);
-                if (field_0x27bd == 4) {
-                    field_0x27bd = 0;
+                field_0x27BD = dStage_mapInfo_GetOceanZ(mapInfo);
+                if (field_0x27BD == 4) {
+                    field_0x27BD = 0;
                 }
             } else {
-                field_0x27bc = 0;
-                field_0x27bd = 0;
+                field_0x27BC = 0;
+                field_0x27BD = 0;
             }
         }
     }
     if (getCtCurHX() < -3 || getCtCurHY() < -3) {
-        setCtCurHX(field_0x27bc);
-        setCtCurHY(field_0x27bd);
+        setCtCurHX(field_0x27BC);
+        setCtCurHY(field_0x27BD);
     } else if (getCtDispMode() == 0) {
         setCtCurHX(getCtCurX());
         setCtCurHY(getCtCurY());
     }
     playerPointGridAnimeInit();
-    mCmyuPane.mUserArea = g_mf2HIO.field_0x4a + 1;
-    field_0x27a8 = calcGetCollectMap();
+    mCmyuPane.mUserArea = g_mf2HIO.field_0x4A + 1;
+    field_0x27A8 = calcGetCollectMap();
     if (getCtCmapSelNo() == -1) {
-        field_0x27a9 = getNowCmapFirstNum();
+        field_0x27A9 = getNowCmapFirstNum();
 #if VERSION > VERSION_DEMO
-        setCtCmapSelNo(field_0x27a9);
+        setCtCmapSelNo(field_0x27A9);
 #endif
     } else {
-        field_0x27a9 = getCtCmapSelNo();
+        field_0x27A9 = getCtCmapSelNo();
     }
 }
 
@@ -451,31 +451,31 @@ void dMenu_Fmap2_c::displayInit() {
     for (i = 0; i < 49; i++) {
         setPaneOnOff(fmap2Dl.scrn, hist[i], dComIfGs_isSaveArriveGrid(i) == 0);
     }
-    fopMsgM_paneTrans(&mAreaPane, field_0x27bc * 16.0f, field_0x27bd * 16.0f);
+    fopMsgM_paneTrans(&mAreaPane, field_0x27BC * 16.0f, field_0x27BD * 16.0f);
     fCursorMove();
     getCollectMapTexChange();
     finCollectMapTexChange();
-    field_0xcc4[field_0x2816][0].pane->hide();
-    field_0xcc4[field_0x2816 ^ 1][0].pane->hide();
+    field_0xCC4[field_0x2816][0].pane->hide();
+    field_0xCC4[field_0x2816 ^ 1][0].pane->hide();
     if (dComIfGs_getOptRuby()) {
         for (i = 3; i < 5; i++) {
-            field_0x43c[i].pane->hide();
+            field_0x43C[i].pane->hide();
             field_0x554[i].pane->hide();
-            field_0x90c[i].pane->hide();
+            field_0x90C[i].pane->hide();
         }
         for (i = 1; i < 3; i++) {
-            field_0x43c[i].mPosCenterOrig.y -= 4.0f;
-            field_0x43c[i].mPosCenter.y = field_0x43c[i].mPosCenterOrig.y;
+            field_0x43C[i].mPosCenterOrig.y -= 4.0f;
+            field_0x43C[i].mPosCenter.y = field_0x43C[i].mPosCenterOrig.y;
             field_0x554[i].mPosCenterOrig.y -= 4.0f;
             field_0x554[i].mPosCenter.y = field_0x554[i].mPosCenterOrig.y;
-            field_0x90c[i].mPosCenterOrig.y -= 4.0f;
-            field_0x90c[i].mPosCenter.y = field_0x90c[i].mPosCenterOrig.y;
-            fopMsgM_cposMove(&field_0x43c[i]);
+            field_0x90C[i].mPosCenterOrig.y -= 4.0f;
+            field_0x90C[i].mPosCenter.y = field_0x90C[i].mPosCenterOrig.y;
+            fopMsgM_cposMove(&field_0x43C[i]);
             fopMsgM_cposMove(&field_0x554[i]);
-            fopMsgM_cposMove(&field_0x90c[i]);
-            field_0x43c[i].mPosTopLeftOrig.y = field_0x43c[i].mPosTopLeft.y;
+            fopMsgM_cposMove(&field_0x90C[i]);
+            field_0x43C[i].mPosTopLeftOrig.y = field_0x43C[i].mPosTopLeft.y;
             field_0x554[i].mPosTopLeftOrig.y = field_0x554[i].mPosTopLeft.y;
-            field_0x90c[i].mPosTopLeftOrig.y = field_0x90c[i].mPosTopLeft.y;
+            field_0x90C[i].mPosTopLeftOrig.y = field_0x90C[i].mPosTopLeft.y;
         }
     }
     collectMapCheck();
@@ -483,28 +483,28 @@ void dMenu_Fmap2_c::displayInit() {
     case 0:
         fmapPaneInit();
         stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 2048);
-        field_0x27a1 = 0;
+        field_0x27A1 = 0;
         break;
     case 1:
         cmapPaneInit();
         stick->setWaitParm(0, 0, 0, 0, 0.9f, 0.5f, 0, 2048);
-        field_0x27a1 = 2;
+        field_0x27A1 = 2;
         break;
     }
-    paneTransBase(0, g_mf2HIO.field_0x38, g_mf2HIO.field_0x3a, 0.0f, 0, field_0x2815, 0);
+    paneTransBase(0, g_mf2HIO.field_0x38, g_mf2HIO.field_0x3A, 0.0f, 0, field_0x2815, 0);
 }
 
 /* 801BD588-801BD6B4       .text fmapPaneInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::fmapPaneInit() {
     mMkcdPane.pane->show();
     mMkfdPane.pane->hide();
-    if (field_0x43c[0].pane->isVisible()) {
-        paneAlphaMessage2(field_0x27ac, g_mf2HIO.field_0x3e, 0, 0);
+    if (field_0x43C[0].pane->isVisible()) {
+        paneAlphaMessage2(field_0x27AC, g_mf2HIO.field_0x3E, 0, 0);
     }
-    if (field_0xcc4[field_0x2816][0].pane->isVisible()) {
-        paneTranceMessage(field_0x27ac, g_mf2HIO.field_0x3e, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
+    if (field_0xCC4[field_0x2816][0].pane->isVisible()) {
+        paneTranceMessage(field_0x27AC, g_mf2HIO.field_0x3E, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
     }
-    if (field_0x1aa4[field_0x2815][0].pane->isVisible()) {
+    if (field_0x1AA4[field_0x2815][0].pane->isVisible()) {
         mMkm0Pane.mNowAlpha = 64;
         mMkm0Pane.mInitAlpha = 64;
     } else {
@@ -532,8 +532,8 @@ void dMenu_Fmap2_c::cmapPaneInit() {
 
 /* 801BD710-801BDB38       .text collectMapCheck__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::collectMapCheck() {
-    if (field_0x27a8 == 0) {
-        field_0x43c[0].pane->show();
+    if (field_0x27A8 == 0) {
+        field_0x43C[0].pane->show();
         cSelCursorHide();
         cCursorHide();
         mCnd0Pane.pane->hide();
@@ -542,28 +542,28 @@ void dMenu_Fmap2_c::collectMapCheck() {
             field_0x1484[i].pane->hide();
         }
         for (i = 0; i < 5; i++) {
-            field_0x124c[field_0x2813][i].pane->hide();
+            field_0x124C[field_0x2813][i].pane->hide();
         }
         for (i = 0; i < 2; i++) {
             field_0x1244[field_0x2814][i].pane->hide();
         }
-        field_0x1aa4[field_0x2815][0].pane->hide();
+        field_0x1AA4[field_0x2815][0].pane->hide();
     } else {
         cCursorAnimeInit();
-        if (field_0x27a8 > 1) {
+        if (field_0x27A8 > 1) {
             cSelCursorInit();
         } else {
             cSelCursorHide();
         }
 #if VERSION > VERSION_DEMO
-        field_0x1aa4[field_0x2815 ^ 1][0].pane->hide();
-        field_0xcc4[field_0x2816 ^ 1][0].pane->hide();
+        field_0x1AA4[field_0x2815 ^ 1][0].pane->hide();
+        field_0xCC4[field_0x2816 ^ 1][0].pane->hide();
         int i;
         for (i = 0; i < 2; i++) {
             field_0x1244[field_0x2814 ^ 1][i].pane->hide();
         }
         for (i = 0; i < 5; i++) {
-            field_0x124c[field_0x2813 ^ 1][i].pane->hide();
+            field_0x124C[field_0x2813 ^ 1][i].pane->hide();
         }
 #endif
         paneTransSelCmapCle(0, g_mf2HIO.field_0x64, g_mf2HIO.field_0x60, 1.0f, 0.0f, 0.0f, 4, field_0x2814 ^ 1, 0);
@@ -580,12 +580,12 @@ void dMenu_Fmap2_c::collectMapCheck() {
         field_0x2814 ^= 1;
         field_0x2815 ^= 1;
         field_0x2816 ^= 1;
-        outFont[field_0x2816]->setLeftUpPos(field_0xcc4[field_0x2816][1].mPosTopLeft.x, field_0xcc4[field_0x2816][1].mPosTopLeft.y);
-        outFontS[field_0x2816]->setLeftUpPos(field_0xcc4[field_0x2816][2].mPosTopLeft.x, field_0xcc4[field_0x2816][2].mPosTopLeft.y);
+        outFont[field_0x2816]->setLeftUpPos(field_0xCC4[field_0x2816][1].mPosTopLeft.x, field_0xCC4[field_0x2816][1].mPosTopLeft.y);
+        outFontS[field_0x2816]->setLeftUpPos(field_0xCC4[field_0x2816][2].mPosTopLeft.x, field_0xCC4[field_0x2816][2].mPosTopLeft.y);
         outFont[field_0x2816]->move();
         outFontS[field_0x2816]->move();
-        ((J2DPicture*)field_0xcc4[field_0x2816][16].pane)->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 255));
-        field_0xcc4[field_0x2816][16].pane->setAlpha(64);
+        ((J2DPicture*)field_0xCC4[field_0x2816][16].pane)->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 255));
+        field_0xCC4[field_0x2816][16].pane->setAlpha(64);
     }
 }
 
@@ -607,7 +607,7 @@ static mainProcFunc mainProc[] = {
 /* 801BDB38-801BE0D8       .text _move__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::_move() {
     stick->checkTrigger();
-    if (field_0x27a1 == 0 || field_0x27a1 == 2) {
+    if (field_0x27A1 == 0 || field_0x27A1 == 2) {
         if (mDoCPd_R_LOCK_BUTTON(0)) {
             if (getCtActive() == 0) {
                 mDoAud_seStart(JA_SE_CHART_COMP_LR);
@@ -617,14 +617,14 @@ void dMenu_Fmap2_c::_move() {
                 playerPointGridAnime(&mAreaPane);
                 stick->setWaitParm(0, 0, 0, 0, 0.9f, 0.5f, 0, 2048);
                 mMkfdPane.pane->show();
-                paneAlphaCmapBase(field_0x27ac, g_mf2HIO.field_0x3e, 0, 0);
-                field_0x27a1 = 9;
+                paneAlphaCmapBase(field_0x27AC, g_mf2HIO.field_0x3E, 0, 0);
+                field_0x27A1 = 9;
             }
         } else if (mDoCPd_L_LOCK_BUTTON(0)) {
             if (getCtActive() == 1) {
                 mDoAud_seStart(JA_SE_CHART_COMP_LR);
                 setCtActive(0);
-                if (field_0x1aa4[field_0x2815][0].pane->isVisible()) {
+                if (field_0x1AA4[field_0x2815][0].pane->isVisible()) {
                     mMkm0Pane.mNowAlpha = 64;
                     mMkm0Pane.mInitAlpha = 64;
                 } else {
@@ -637,52 +637,52 @@ void dMenu_Fmap2_c::_move() {
                 playerPointGridAnimeInit();
                 stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 2048);
                 mMkcdPane.pane->show();
-                paneAlphaFmapBase(field_0x27ac, g_mf2HIO.field_0x3e, 0, 0);
-                field_0x27a1 = 9;
+                paneAlphaFmapBase(field_0x27AC, g_mf2HIO.field_0x3E, 0, 0);
+                field_0x27A1 = 9;
             }
         }
     }
 #if VERSION > VERSION_DEMO
-    if (field_0x27a1 >= 2) {
+    if (field_0x27A1 >= 2) {
 #endif
         if (stick->checkLeftTrigger()) {
-            if (field_0x280d < g_mf2HIO.field_0x75) {
-                field_0x280d++;
+            if (field_0x280D < g_mf2HIO.field_0x75) {
+                field_0x280D++;
             }
         } else {
-            field_0x280d = 0;
+            field_0x280D = 0;
         }
         if (stick->checkRightTrigger()) {
-            if (field_0x280e < g_mf2HIO.field_0x75) {
-                field_0x280e++;
+            if (field_0x280E < g_mf2HIO.field_0x75) {
+                field_0x280E++;
             }
         } else {
-            field_0x280e = 0;
+            field_0x280E = 0;
         }
 #if VERSION > VERSION_DEMO
     }
 #endif
-    (this->*mainProc[field_0x27a1])();
+    (this->*mainProc[field_0x27A1])();
     if (getCtActive() == 1) {
         cSelCursorAnime();
         if (field_0x2848[0] != 0xFFFF) {
             outFont[0]->messageSet(field_0x2848[0]);
             outFontS[0]->messageSet(field_0x2848[0]);
         }
-        outFont[0]->setLeftUpPos(field_0xcc4[0][1].mPosTopLeft.x, field_0xcc4[0][1].mPosTopLeft.y);
-        outFontS[0]->setLeftUpPos(field_0xcc4[0][2].mPosTopLeft.x, field_0xcc4[0][2].mPosTopLeft.y);
+        outFont[0]->setLeftUpPos(field_0xCC4[0][1].mPosTopLeft.x, field_0xCC4[0][1].mPosTopLeft.y);
+        outFontS[0]->setLeftUpPos(field_0xCC4[0][2].mPosTopLeft.x, field_0xCC4[0][2].mPosTopLeft.y);
         outFont[0]->move();
         outFontS[0]->move();
         if (field_0x2848[1] != 0xFFFF) {
             outFont[1]->messageSet(field_0x2848[1]);
             outFontS[1]->messageSet(field_0x2848[1]);
         }
-        outFont[1]->setLeftUpPos(field_0xcc4[1][1].mPosTopLeft.x, field_0xcc4[1][1].mPosTopLeft.y);
-        outFontS[1]->setLeftUpPos(field_0xcc4[1][2].mPosTopLeft.x, field_0xcc4[1][2].mPosTopLeft.y);
+        outFont[1]->setLeftUpPos(field_0xCC4[1][1].mPosTopLeft.x, field_0xCC4[1][1].mPosTopLeft.y);
+        outFontS[1]->setLeftUpPos(field_0xCC4[1][2].mPosTopLeft.x, field_0xCC4[1][2].mPosTopLeft.y);
         outFont[1]->move();
         outFontS[1]->move();
-        ((J2DPicture*)field_0xcc4[field_0x2816][16].pane)->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 255));
-        field_0xcc4[field_0x2816][16].pane->setAlpha(64);
+        ((J2DPicture*)field_0xCC4[field_0x2816][16].pane)->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 255));
+        field_0xCC4[field_0x2816][16].pane->setAlpha(64);
     }
 }
 
@@ -693,28 +693,28 @@ void dMenu_Fmap2_c::FmapProcMain() {
             setCtCurHX(getCtCurHX() - 1);
             mDoAud_seStart(JA_SE_CHART_CURSOR);
             mR01gPane.pane->hide();
-            field_0x27a1 = 1;
+            field_0x27A1 = 1;
         }
     } else if (stick->checkRightTrigger()) {
         if (getCtCurHX() < 3) {
             setCtCurHX(getCtCurHX() + 1);
             mDoAud_seStart(JA_SE_CHART_CURSOR);
             mR01gPane.pane->hide();
-            field_0x27a1 = 1;
+            field_0x27A1 = 1;
         }
     } else if (stick->checkUpTrigger()) {
         if (getCtCurHY() > -3) {
             setCtCurHY(getCtCurHY() - 1);
             mDoAud_seStart(JA_SE_CHART_CURSOR);
             mR01gPane.pane->hide();
-            field_0x27a1 = 1;
+            field_0x27A1 = 1;
         }
     } else if (stick->checkDownTrigger()) {
         if (getCtCurHY() < 3) {
             setCtCurHY(getCtCurHY() + 1);
             mDoAud_seStart(JA_SE_CHART_CURSOR);
             mR01gPane.pane->hide();
-            field_0x27a1 = 1;
+            field_0x27A1 = 1;
         }
     }
     fCursorAnime();
@@ -725,67 +725,67 @@ void dMenu_Fmap2_c::FmapProcMain() {
 void dMenu_Fmap2_c::FmapChange() {
     fCursorMove();
     mR01gPane.pane->show();
-    field_0x27a1 = 0;
+    field_0x27A1 = 0;
 }
 
 /* 801BE668-801BEA58       .text CmapProcMain__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapProcMain() {
-    if (field_0x27a8 == 0) {
+    if (field_0x27A8 == 0) {
         return;
     }
-    int nextCmap = field_0x27a9;
+    int nextCmap = field_0x27A9;
     if (CPad_CHECK_TRIG_A(0)) {
-        int mapKind = getCollectMapKind(field_0x27a9);
+        int mapKind = getCollectMapKind(field_0x27A9);
 #if VERSION > VERSION_DEMO
-        field_0x27ac = 0;
+        field_0x27AC = 0;
 #endif
         if (isSpMap(mapKind)) {
-            if (isOpenCollectMap(field_0x27a9)) {
+            if (isOpenCollectMap(field_0x27A9)) {
                 field_0x2848[field_0x2816] = 0x319c;
             } else {
                 field_0x2848[field_0x2816] = 0x319e;
             }
-            field_0x27fc = 1;
+            field_0x27FC = 1;
             mDoAud_seStart(JA_SE_CHART_OPEN_MAP);
-            field_0x280f = mapKind;
-            spMapLoadForDVD(field_0x280f);
-            field_0x27a1 = 5;
+            field_0x280F = mapKind;
+            spMapLoadForDVD(field_0x280F);
+            field_0x27A1 = 5;
         } else if (cmapOpenCheck() == true) {
             mDoAud_seStart(JA_SE_CHART_OPEN_MAP);
-            field_0x27fc = 1;
+            field_0x27FC = 1;
             for (int i = 0; i < 3; i++) {
-                field_0x124c[field_0x2813][i].mInitAlpha = field_0x124c[field_0x2813][i].mUserArea;
+                field_0x124C[field_0x2813][i].mInitAlpha = field_0x124C[field_0x2813][i].mUserArea;
             }
             for (int i = 0; i < 4; i++) {
-                field_0x1aa4[field_0x2815][i].mInitAlpha = field_0x1aa4[field_0x2815][i].mUserArea;
+                field_0x1AA4[field_0x2815][i].mInitAlpha = field_0x1AA4[field_0x2815][i].mUserArea;
             }
-            field_0x1aa4[field_0x2815][9].mInitAlpha = field_0x1aa4[field_0x2815][9].mUserArea;
-            field_0x27a1 = 4;
+            field_0x1AA4[field_0x2815][9].mInitAlpha = field_0x1AA4[field_0x2815][9].mUserArea;
+            field_0x27A1 = 4;
         }
     } else if (stick->checkLeftTrigger()) {
-        field_0x27ab = -1;
-        nextCmap = getNowCmapNextNum(field_0x27a9, field_0x27ab);
+        field_0x27AB = -1;
+        nextCmap = getNowCmapNextNum(field_0x27A9, field_0x27AB);
     } else if (stick->checkRightTrigger()) {
-        field_0x27ab = 1;
-        nextCmap = getNowCmapNextNum(field_0x27a9, field_0x27ab);
+        field_0x27AB = 1;
+        nextCmap = getNowCmapNextNum(field_0x27A9, field_0x27AB);
     }
-    if (nextCmap != field_0x27a9) {
+    if (nextCmap != field_0x27A9) {
         mDoAud_seStart(JA_SE_CHART_SEL_MAP);
-        field_0x27fc = 1;
-        field_0x27aa = field_0x27a9;
-        field_0x27a9 = nextCmap;
+        field_0x27FC = 1;
+        field_0x27AA = field_0x27A9;
+        field_0x27A9 = nextCmap;
         cCursorHide();
         cSelCursorAnimeInit();
-        if (field_0x280d == g_mf2HIO.field_0x75 || field_0x280e == g_mf2HIO.field_0x75) {
+        if (field_0x280D == g_mf2HIO.field_0x75 || field_0x280E == g_mf2HIO.field_0x75) {
             field_0x2800 = g_mf2HIO.field_0x68;
-            field_0x2804 = g_mf2HIO.field_0x6c;
+            field_0x2804 = g_mf2HIO.field_0x6C;
             field_0x2808 = g_mf2HIO.field_0x70;
-            field_0x280c = g_mf2HIO.field_0x74;
+            field_0x280C = g_mf2HIO.field_0x74;
         } else {
             field_0x2800 = g_mf2HIO.field_0x58;
             field_0x2804 = g_mf2HIO.field_0x5c;
             field_0x2808 = g_mf2HIO.field_0x60;
-            field_0x280c = g_mf2HIO.field_0x64;
+            field_0x280C = g_mf2HIO.field_0x64;
         }
 #if VERSION > VERSION_DEMO
         paneTransSelCmapCle(0, g_mf2HIO.field_0x64, g_mf2HIO.field_0x60, 1.0f, 0.0f, 0.0f, 4, field_0x2814 ^ 1, 0);
@@ -794,14 +794,14 @@ void dMenu_Fmap2_c::CmapProcMain() {
         paneTranceMessage(0, g_mf2HIO.field_0x64, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2816 ^ 1, 0);
 #endif
         cmapMove();
-        field_0x27a1 = 7;
+        field_0x27A1 = 7;
     }
     cCursorAnime();
 }
 
 /* 801BEA58-801BEC40       .text spMapLoadForDVD__13dMenu_Fmap2_cFUc */
 void dMenu_Fmap2_c::spMapLoadForDVD(u8 i_kind) {
-    field_0x124c[field_0x2813]->pane->hide();
+    field_0x124C[field_0x2813]->pane->hide();
     switch (i_kind) {
         case FMAP_MAPTYPE_TINGLE:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/tnmapres.arc", 0, NULL);
@@ -844,34 +844,34 @@ void dMenu_Fmap2_c::spMapLoadForDVD(u8 i_kind) {
 
 /* 801BEC40-801BEDFC       .text cmapOpenCheck__13dMenu_Fmap2_cFv */
 BOOL dMenu_Fmap2_c::cmapOpenCheck() {
-    if (isOpenCollectMap(field_0x27a9)) {
+    if (isOpenCollectMap(field_0x27A9)) {
         return false;
     }
     for (int i = 0; i < 5; i++) {
-        field_0x124c[field_0x2813][i].pane->show();
+        field_0x124C[field_0x2813][i].pane->show();
     }
-    field_0x124c[field_0x2813][4].pane->hide();
-    field_0x1aa4[field_0x2815][0].pane->show();
+    field_0x124C[field_0x2813][4].pane->hide();
+    field_0x1AA4[field_0x2815][0].pane->show();
     field_0x2848[field_0x2816] = 0x319e;
-    if (getCollectMapKind(field_0x27a9) == FMAP_MAPTYPE_TRI) {
-        if (isOpenCollectMapTriforce(field_0x27a9)) {
-            field_0x124c[field_0x2813][3].pane->hide();
+    if (getCollectMapKind(field_0x27A9) == FMAP_MAPTYPE_TRI) {
+        if (isOpenCollectMapTriforce(field_0x27A9)) {
+            field_0x124C[field_0x2813][3].pane->hide();
         } else {
-            field_0x124c[field_0x2813][0].pane->hide();
-            field_0x1aa4[field_0x2815][0].pane->hide();
+            field_0x124C[field_0x2813][0].pane->hide();
+            field_0x1AA4[field_0x2815][0].pane->hide();
         }
     } else {
-        field_0x124c[field_0x2813][3].pane->hide();
+        field_0x124C[field_0x2813][3].pane->hide();
     }
-    paneTransSelCmapOpn(field_0x27ac, g_mf2HIO.field_0x3f, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 0);
-    paneAlphaZoomCmapBase(field_0x27ac, g_mf2HIO.field_0x3f, 0.0f, 0.0f, 0, field_0x2815, 0);
+    paneTransSelCmapOpn(field_0x27AC, g_mf2HIO.field_0x3F, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 0);
+    paneAlphaZoomCmapBase(field_0x27AC, g_mf2HIO.field_0x3F, 0.0f, 0.0f, 0, field_0x2815, 0);
     return true;
 }
 
 /* 801BEDFC-801BF2B0       .text CmapScroll__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapScroll() {
     f32 selOffset, msgOffset;
-    if (field_0x27ab < 0) {
+    if (field_0x27AB < 0) {
         selOffset = field_0x2800;
         msgOffset = field_0x2804;
     } else {
@@ -879,55 +879,55 @@ void dMenu_Fmap2_c::CmapScroll() {
         msgOffset = -field_0x2804;
     }
     int r28, r27, r29, r30, r25, r26;
-    if (isOpenCollectMap(field_0x27aa)) {
-        if (isSpMap(getCollectMapKind(field_0x27aa))) {
-            r28 = paneTransSelCmapCle(field_0x27ac, field_0x280c, 1.0f, field_0x2808, 0.0f, selOffset, 4, field_0x2814, 1);
+    if (isOpenCollectMap(field_0x27AA)) {
+        if (isSpMap(getCollectMapKind(field_0x27AA))) {
+            r28 = paneTransSelCmapCle(field_0x27AC, field_0x280C, 1.0f, field_0x2808, 0.0f, selOffset, 4, field_0x2814, 1);
         } else {
-            r28 = paneTransSelCmapOpn(field_0x27ac, field_0x280c, 1.0f, field_0x2808, 0.0f, selOffset, 4, field_0x2813, 1);
+            r28 = paneTransSelCmapOpn(field_0x27AC, field_0x280C, 1.0f, field_0x2808, 0.0f, selOffset, 4, field_0x2813, 1);
         }
     } else {
-        r28 = paneTransSelCmapCle(field_0x27ac, field_0x280c, 1.0f, field_0x2808, 0.0f, selOffset, 4, field_0x2814, 1);
+        r28 = paneTransSelCmapCle(field_0x27AC, field_0x280C, 1.0f, field_0x2808, 0.0f, selOffset, 4, field_0x2814, 1);
     }
-    if (isOpenCollectMap(field_0x27a9)) {
-        if (isSpMap(getCollectMapKind(field_0x27a9))) {
-            r27 = paneTransSelCmapCle(field_0x27ac, field_0x280c, field_0x2808, 1.0f, -selOffset, 0.0f, 4, field_0x2814 ^ 1, 0);
+    if (isOpenCollectMap(field_0x27A9)) {
+        if (isSpMap(getCollectMapKind(field_0x27A9))) {
+            r27 = paneTransSelCmapCle(field_0x27AC, field_0x280C, field_0x2808, 1.0f, -selOffset, 0.0f, 4, field_0x2814 ^ 1, 0);
         } else {
-            r27 = paneTransSelCmapOpn(field_0x27ac, field_0x280c, field_0x2808, 1.0f, -selOffset, 0.0f, 4, field_0x2813 ^ 1, 0);
+            r27 = paneTransSelCmapOpn(field_0x27AC, field_0x280C, field_0x2808, 1.0f, -selOffset, 0.0f, 4, field_0x2813 ^ 1, 0);
         }
     } else {
-        r27 = paneTransSelCmapCle(field_0x27ac, field_0x280c, field_0x2808, 1.0f, -selOffset, 0.0f, 4, field_0x2814 ^ 1, 0);
+        r27 = paneTransSelCmapCle(field_0x27AC, field_0x280C, field_0x2808, 1.0f, -selOffset, 0.0f, 4, field_0x2814 ^ 1, 0);
     }
-    if (field_0x1aa4[field_0x2815][0].pane->isVisible()) {
-        r29 = paneAlphaZoomCmapBase(field_0x27ac, field_0x280c, 0.0f, msgOffset, 0, field_0x2815, 1);
+    if (field_0x1AA4[field_0x2815][0].pane->isVisible()) {
+        r29 = paneAlphaZoomCmapBase(field_0x27AC, field_0x280C, 0.0f, msgOffset, 0, field_0x2815, 1);
     } else {
         r29 = 1;
     }
-    if (field_0x1aa4[field_0x2815 ^ 1][0].pane->isVisible()) {
-        r30 = paneAlphaZoomCmapBase(field_0x27ac, field_0x280c, -msgOffset, 0.0f, 0, field_0x2815 ^ 1, 0);
+    if (field_0x1AA4[field_0x2815 ^ 1][0].pane->isVisible()) {
+        r30 = paneAlphaZoomCmapBase(field_0x27AC, field_0x280C, -msgOffset, 0.0f, 0, field_0x2815 ^ 1, 0);
     } else {
         r30 = 1;
     }
-    if (field_0xcc4[field_0x2816][0].pane->isVisible()) {
-        r25 = paneTranceMessage(field_0x27ac, field_0x280c, 1.0f, 1.0f, 0.0f, msgOffset, 0, field_0x2816, 1);
+    if (field_0xCC4[field_0x2816][0].pane->isVisible()) {
+        r25 = paneTranceMessage(field_0x27AC, field_0x280C, 1.0f, 1.0f, 0.0f, msgOffset, 0, field_0x2816, 1);
     } else {
         r25 = 1;
     }
-    if (field_0xcc4[field_0x2816 ^ 1][0].pane->isVisible()) {
-        r26 = paneTranceMessage(field_0x27ac, field_0x280c, 1.0f, 1.0f, -msgOffset, 0.0f, 0, field_0x2816 ^ 1, 0);
+    if (field_0xCC4[field_0x2816 ^ 1][0].pane->isVisible()) {
+        r26 = paneTranceMessage(field_0x27AC, field_0x280C, 1.0f, 1.0f, -msgOffset, 0.0f, 0, field_0x2816 ^ 1, 0);
     } else {
         r26 = 1;
     }
-    int tmp = paneAlphaCmapName(field_0x27ac, field_0x280c, 0);
-    field_0x27ac++;
+    int tmp = paneAlphaCmapName(field_0x27AC, field_0x280C, 0);
+    field_0x27AC++;
     if (r28 == 1 && r27 == 1 && r29 == 1 && r30 == 1 && r25 == 1 && r26 == 1 && tmp == 1) {
-        field_0x27ac = 0;
-        field_0x1aa4[field_0x2815][0].pane->hide();
-        field_0xcc4[field_0x2816][0].pane->hide();
+        field_0x27AC = 0;
+        field_0x1AA4[field_0x2815][0].pane->hide();
+        field_0xCC4[field_0x2816][0].pane->hide();
         for (int i = 0; i < 2; i++) {
             field_0x1244[field_0x2814][i].pane->hide();
         }
         for (int i = 0; i < 5; i++) {
-            field_0x124c[field_0x2813][i].pane->hide();
+            field_0x124C[field_0x2813][i].pane->hide();
         }
         field_0x2815 ^= 1;
         field_0x2813 ^= 1;
@@ -935,8 +935,8 @@ void dMenu_Fmap2_c::CmapScroll() {
         field_0x2816 ^= 1;
         cCursorAnimeInit();
         cSelCursorInit();
-        field_0x27fc = 0;
-        field_0x27a1 = 2;
+        field_0x27FC = 0;
+        field_0x27A1 = 2;
     }
 }
 
@@ -950,38 +950,38 @@ BOOL dMenu_Fmap2_c::isSpMap(int i_kind) {
 
 /* 801BF2E8-801BF5A0       .text CmapOpen__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapOpen() {
-    int msgDone = paneTranceMessage(field_0x27ac, g_mf2HIO.field_0x3f, 1.0f, g_mf2HIO.field_0x44, 0.0f, 0.0f, 0, field_0x2816, 1);
+    int msgDone = paneTranceMessage(field_0x27AC, g_mf2HIO.field_0x3F, 1.0f, g_mf2HIO.field_0x44, 0.0f, 0.0f, 0, field_0x2816, 1);
     int baseOrMsgDone;
-    if (getCollectMapKind(field_0x27a9) == FMAP_MAPTYPE_TRI && !isOpenCollectMapTriforce(field_0x27a9)) {
-        if (field_0x27ac == g_mf2HIO.field_0x3f) {
+    if (getCollectMapKind(field_0x27A9) == FMAP_MAPTYPE_TRI && !isOpenCollectMapTriforce(field_0x27A9)) {
+        if (field_0x27AC == g_mf2HIO.field_0x3F) {
             field_0x2848[field_0x2816] = 0x319d;
         }
-        baseOrMsgDone = paneTranceMessage(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, g_mf2HIO.field_0x44, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
+        baseOrMsgDone = paneTranceMessage(field_0x27AC - g_mf2HIO.field_0x3F, g_mf2HIO.field_0x3F, g_mf2HIO.field_0x44, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
     } else {
-        baseOrMsgDone = paneAlphaZoomCmapBase(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, 0.0f, 0.0f, 0, field_0x2815, 0);
+        baseOrMsgDone = paneAlphaZoomCmapBase(field_0x27AC - g_mf2HIO.field_0x3F, g_mf2HIO.field_0x3F, 0.0f, 0.0f, 0, field_0x2815, 0);
     }
-    int cleDone = paneTransSelCmapCle(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2814, 1);
-    int opnDone = paneTransSelCmapOpn(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 0);
-    field_0x27ac++;
+    int cleDone = paneTransSelCmapCle(field_0x27AC - g_mf2HIO.field_0x3F, g_mf2HIO.field_0x3F, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2814, 1);
+    int opnDone = paneTransSelCmapOpn(field_0x27AC - g_mf2HIO.field_0x3F, g_mf2HIO.field_0x3F, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 0);
+    field_0x27AC++;
     if (msgDone == 1 && baseOrMsgDone == 1 && cleDone == 1 && opnDone == 1) {
-        field_0x27ac = 0;
+        field_0x27AC = 0;
         field_0x2812 = 2;
-        if (getCollectMapKind(field_0x27a9) != FMAP_MAPTYPE_TRI || isOpenCollectMapTriforce(field_0x27a9)) {
+        if (getCollectMapKind(field_0x27A9) != FMAP_MAPTYPE_TRI || isOpenCollectMapTriforce(field_0x27A9)) {
 #if VERSION == VERSION_DEMO
             field_0xcc4[field_0x2816][0].pane->hide();
 #endif
-            paneTranceMessage(0, g_mf2HIO.field_0x3f, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
+            paneTranceMessage(0, g_mf2HIO.field_0x3F, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
 #if VERSION > VERSION_DEMO
-            field_0xcc4[field_0x2816][0].pane->hide();
+            field_0xCC4[field_0x2816][0].pane->hide();
 #endif
         }
         field_0x2848[field_0x2816] = 0xffff;
         for (int i = 0; i < 2; i++) {
             field_0x1244[field_0x2814][i].pane->hide();
         }
-        dComIfGs_onOpenCollectMap(getCmapDatPnt4(field_0x27a9)->collectMapNo);
-        field_0x27fc = 0;
-        field_0x27a1 = 2;
+        dComIfGs_onOpenCollectMap(getCmapDatPnt4(field_0x27A9)->collectMapNo);
+        field_0x27FC = 0;
+        field_0x27A1 = 2;
     }
 }
 
@@ -990,59 +990,59 @@ void dMenu_Fmap2_c::CmapSpLoadWait() {
     if (!field_0x18->sync()) {
         return;
     }
-    field_0x279c = NULL;
-    switch (field_0x280f) {
-    case FMAP_MAPTYPE_TINGLE:
-        screenSetTn();
-        paneAlphaTingleMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_GHOST:
-        screenSetGs();
-        paneAlphaGostShipMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_TREASURE:
-        screenSetTr();
-        paneAlphaTreasureMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_DOCTA:
-        screenSetIk();
-        paneAlphaDoctaMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_DFALIY:
-        screenSetDfaliy();
-        paneAlphaDfaliyMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_HEART_P:
-        screenSetHeartP();
-        paneAlphaHeartPMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_HEART_M:
-        screenSetHeartM();
-        paneAlphaHeartMMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_SUBDAN:
-        screenSetSubdan();
-        paneAlphaSubdanMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_MOON:
-        screenSetMoon();
-        paneAlphaMoonMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_YAGURA:
-        screenSetYagura();
-        paneAlphaYaguraMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_TERRY:
-        screenSetTerry();
-        paneAlphaTerryMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
-    case FMAP_MAPTYPE_SUBMA:
-        screenSetSubMa();
-        paneAlphaSubMaMap(0, g_mf2HIO.field_0x3f, 0, 0);
-        break;
+    field_0x279C = NULL;
+    switch (field_0x280F) {
+        case FMAP_MAPTYPE_TINGLE:
+            screenSetTn();
+            paneAlphaTingleMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_GHOST:
+            screenSetGs();
+            paneAlphaGostShipMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_TREASURE:
+            screenSetTr();
+            paneAlphaTreasureMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_DOCTA:
+            screenSetIk();
+            paneAlphaDoctaMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_DFALIY:
+            screenSetDfaliy();
+            paneAlphaDfaliyMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_HEART_P:
+            screenSetHeartP();
+            paneAlphaHeartPMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_HEART_M:
+            screenSetHeartM();
+            paneAlphaHeartMMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_SUBDAN:
+            screenSetSubdan();
+            paneAlphaSubdanMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_MOON:
+            screenSetMoon();
+            paneAlphaMoonMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_YAGURA:
+            screenSetYagura();
+            paneAlphaYaguraMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_TERRY:
+            screenSetTerry();
+            paneAlphaTerryMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
+        case FMAP_MAPTYPE_SUBMA:
+            screenSetSubMa();
+            paneAlphaSubMaMap(0, g_mf2HIO.field_0x3F, 0, 0);
+            break;
     }
-    field_0x27fb = 1;
-    field_0x27a1 = 6;
+    field_0x27FB = 1;
+    field_0x27A1 = 6;
 }
 
 /* 801BF7F4-801BFCB8       .text screenSetGs__13dMenu_Fmap2_cFv */
@@ -1124,11 +1124,11 @@ void dMenu_Fmap2_c::screenSetGs() {
 
 /* 801BFCB8-801BFCEC       .text gsMoonAnimeInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::gsMoonAnimeInit() {
-    field_0x2818 = g_mf2HIO.field_0x7a;
-    field_0x2819 = g_mf2HIO.field_0x7b;
-    field_0x281a = 1;
-    field_0x281b = g_mf2HIO.field_0x84;
-    field_0x281c = g_mf2HIO.field_0x85;
+    field_0x2818 = g_mf2HIO.field_0x7A;
+    field_0x2819 = g_mf2HIO.field_0x7B;
+    field_0x281A = 1;
+    field_0x281B = g_mf2HIO.field_0x84;
+    field_0x281C = g_mf2HIO.field_0x85;
 }
 
 /* 801BFCEC-801C002C       .text gsMoonAnime__13dMenu_Fmap2_cFv */
@@ -1144,14 +1144,40 @@ void dMenu_Fmap2_c::gsShipAnime() {
 #if VERSION > VERSION_JPN
 /* 801C0378-801C039C       .text gsIconAnimeInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::gsIconAnimeInit() {
-    field_0x284c = g_mf2HIO.field_0x8e;
-    field_0x284d = g_mf2HIO.field_0x8f;
-    field_0x284e = 1;
+    field_0x284C = g_mf2HIO.field_0x8E;
+    field_0x284D = g_mf2HIO.field_0x8F;
+    field_0x284E = 1;
 }
 
 /* 801C039C-801C04CC       .text gsIconAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::gsIconAnime() {
-    /* Nonmatching */
+    JUtility::TColor black;
+    JUtility::TColor white;
+
+    if (field_0x2811 == 0 && field_0x2817 != 0) {
+        int moonType = dKy_moon_type_chk();
+        f32 alpha = fopMsgM_valueIncrease(g_mf2HIO.field_0x8E, field_0x284C, 2);
+
+        if (field_0x284E == 0) {
+            alpha = 1.0f - alpha;
+        }
+
+        f32 range = g_mf2HIO.field_0x90 - g_mf2HIO.field_0x91;
+        mGsGsixPaneAlpha[moonType].mNowAlpha = g_mf2HIO.field_0x91 + (u32)(range * alpha);
+        fopMsgM_setAlpha(&mGsGsixPaneAlpha[moonType]);
+
+        if (field_0x284C == 0) {
+            if (field_0x284D == 0) {
+                field_0x284C = g_mf2HIO.field_0x8E;
+                field_0x284D = g_mf2HIO.field_0x8F;
+                field_0x284E ^= 1;
+            } else {
+                field_0x284D--;
+            }
+        } else {
+            field_0x284C--;
+        }
+    }
 }
 #endif
 
@@ -1186,7 +1212,7 @@ void dMenu_Fmap2_c::screenSetTn() {
 #endif
     // BUG: Demo and Japan only have 17 entries in the array, but iterate over 21
     for (int i = 0; i < ARRAY_SSIZE(b1Tag); i++) {
-        fopMsgM_setPaneData(&field_0x1bcc[i], fmap2GsDl.scrn->search(b1Tag[i]));
+        fopMsgM_setPaneData(&field_0x1BCC[i], fmap2GsDl.scrn->search(b1Tag[i]));
     }
 #if VERSION > VERSION_JPN
     setPlayerPos(&mTnLnkPane, &mTnGdgtPane, &mTnGddmPane);
@@ -1213,17 +1239,17 @@ void dMenu_Fmap2_c::screenSetTr() {
     u32 tgTag = 'tg1';
     u32 mgTag = 'mg1';
     for (i = 0; i < 8; mgTag++, tfTag++, tgTag++, i++) {
-        fopMsgM_setPaneData(&field_0x1dc4[i], fmap2GsDl.scrn->search(mgTag));
-        fopMsgM_setPaneData(&field_0x1e04[i], fmap2GsDl.scrn->search(tfTag));
-        fopMsgM_setPaneData(&field_0x1e44[i], fmap2GsDl.scrn->search(tgTag));
+        fopMsgM_setPaneData(&field_0x1DC4[i], fmap2GsDl.scrn->search(mgTag));
+        fopMsgM_setPaneData(&field_0x1E04[i], fmap2GsDl.scrn->search(tfTag));
+        fopMsgM_setPaneData(&field_0x1E44[i], fmap2GsDl.scrn->search(tgTag));
     }
     for (i = 0; i < 8; i++) {
         if (isGetCollectMap(i + 1)) {
-            field_0x1dc4[i].pane->show();
+            field_0x1DC4[i].pane->show();
             if (isOpenCollectMapTriforce(i)) {
-                field_0x1e04[i].pane->show();
+                field_0x1E04[i].pane->show();
                 if (isCompleteCollectMap(i)) {
-                    field_0x1e44[i].pane->show();
+                    field_0x1E44[i].pane->show();
                 }
             }
         }
@@ -1236,7 +1262,7 @@ void dMenu_Fmap2_c::screenSetTr() {
 #if VERSION > VERSION_JPN
 /* 801C0ADC-801C0AF8       .text trTrifAnimeInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::trTrifAnimeInit() {
-    field_0x284f = g_mf2HIO.field_0x92;
+    field_0x284F = g_mf2HIO.field_0x92;
     field_0x2850 = 1;
 }
 
@@ -1338,7 +1364,7 @@ void dMenu_Fmap2_c::screenSetMoon() {
     fopMsgM_setPaneData(&mMoonLnkPane, fmap2GsDl.scrn->search('lnk'));
     fopMsgM_setPaneData(&mMoonGdgtPane, fmap2GsDl.scrn->search('gdgt'));
     for (int i = 0; i < 38; i++) {
-        fopMsgM_setPaneData(&field_0x222c[i], fmap2GsDl.scrn->search(tag[i]));
+        fopMsgM_setPaneData(&field_0x222C[i], fmap2GsDl.scrn->search(tag[i]));
     }
     setPlayerPos(&mMoonLnkPane, &mMoonGdgtPane, &mMoonGddmPane);
 }
@@ -1450,95 +1476,95 @@ void dMenu_Fmap2_c::screenSetSubdan() {
 /* 801C21F8-801C2350       .text setPlayerPos__13dMenu_Fmap2_cFP18fopMsgM_pane_classP18fopMsgM_pane_classP18fopMsgM_pane_class */
 void dMenu_Fmap2_c::setPlayerPos(fopMsgM_pane_class* i_lnkPane, fopMsgM_pane_class* i_gdgtPane, fopMsgM_pane_class* i_gddmPane) {
     if (field_0x2810) {
-        i_lnkPane->mPosCenterOrig.x = i_gddmPane->mPosCenterOrig.x + field_0x27b0 * i_gddmPane->mSizeOrig.x / 700000.0f;
-        i_lnkPane->mPosCenterOrig.y = i_gddmPane->mPosCenterOrig.y + field_0x27b4 * i_gddmPane->mSizeOrig.y / 700000.0f;
+        i_lnkPane->mPosCenterOrig.x = i_gddmPane->mPosCenterOrig.x + field_0x27B0 * i_gddmPane->mSizeOrig.x / 700000.0f;
+        i_lnkPane->mPosCenterOrig.y = i_gddmPane->mPosCenterOrig.y + field_0x27B4 * i_gddmPane->mSizeOrig.y / 700000.0f;
         i_lnkPane->mPosCenter.x = i_lnkPane->mPosCenterOrig.x;
         i_lnkPane->mPosCenter.y = i_lnkPane->mPosCenterOrig.y;
         fopMsgM_cposMove(i_lnkPane);
-        i_lnkPane->pane->rotate(i_lnkPane->mSizeOrig.x * 0.5f, i_lnkPane->mSizeOrig.y * 0.5f, ROTATE_Z, field_0x27b8);
+        i_lnkPane->pane->rotate(i_lnkPane->mSizeOrig.x * 0.5f, i_lnkPane->mSizeOrig.y * 0.5f, ROTATE_Z, field_0x27B8);
     } else {
         i_lnkPane->pane->hide();
     }
-    fopMsgM_paneTrans(i_gdgtPane, field_0x27bc * i_gdgtPane->mSizeOrig.x, field_0x27bd * i_gdgtPane->mSizeOrig.y);
-    field_0x279c = i_gdgtPane;
+    fopMsgM_paneTrans(i_gdgtPane, field_0x27BC * i_gdgtPane->mSizeOrig.x, field_0x27BD * i_gdgtPane->mSizeOrig.y);
+    field_0x279C = i_gdgtPane;
     playerPointGridAnimeInit();
     playerPointGridAnime(i_gdgtPane);
 }
 
 /* 801C2350-801C26B0       .text CmapOpenSp__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapOpenSp() {
-    BOOL r28 = paneTranceMessage(field_0x27ac, g_mf2HIO.field_0x40, 1.0f, g_mf2HIO.field_0x44, 0.0f, 0.0f, 0, field_0x2816, 1);
-    BOOL r29 = paneTransSelCmapCle(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2814, 1);
-    BOOL r30 = paneTransSelCmapOpn(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 0);
+    BOOL r28 = paneTranceMessage(field_0x27AC, g_mf2HIO.field_0x40, 1.0f, g_mf2HIO.field_0x44, 0.0f, 0.0f, 0, field_0x2816, 1);
+    BOOL r29 = paneTransSelCmapCle(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2814, 1);
+    BOOL r30 = paneTransSelCmapOpn(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 0);
     BOOL r27;
-    switch (field_0x280f) {
-    case FMAP_MAPTYPE_TINGLE:
-        r27 = paneAlphaTingleMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_GHOST:
-        r27 = paneAlphaGostShipMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_TREASURE:
-        r27 = paneAlphaTreasureMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_DOCTA:
-        r27 = paneAlphaDoctaMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_DFALIY:
-        r27 = paneAlphaDfaliyMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_HEART_P:
-        r27 = paneAlphaHeartPMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_HEART_M:
-        r27 = paneAlphaHeartMMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_SUBDAN:
-        r27 = paneAlphaSubdanMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_MOON:
-        r27 = paneAlphaMoonMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_YAGURA:
-        r27 = paneAlphaYaguraMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_TERRY:
-        r27 = paneAlphaTerryMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
-    case FMAP_MAPTYPE_SUBMA:
-        r27 = paneAlphaSubMaMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
-        break;
+    switch (field_0x280F) {
+        case FMAP_MAPTYPE_TINGLE:
+            r27 = paneAlphaTingleMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_GHOST:
+            r27 = paneAlphaGostShipMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_TREASURE:
+            r27 = paneAlphaTreasureMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_DOCTA:
+            r27 = paneAlphaDoctaMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_DFALIY:
+            r27 = paneAlphaDfaliyMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_HEART_P:
+            r27 = paneAlphaHeartPMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_HEART_M:
+            r27 = paneAlphaHeartMMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_SUBDAN:
+            r27 = paneAlphaSubdanMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_MOON:
+            r27 = paneAlphaMoonMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_YAGURA:
+            r27 = paneAlphaYaguraMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_TERRY:
+            r27 = paneAlphaTerryMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
+        case FMAP_MAPTYPE_SUBMA:
+            r27 = paneAlphaSubMaMap(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
+            break;
     }
-    field_0x27ac++;
+    field_0x27AC++;
     if (r28 == true && r29 == true && r30 == true && r27 == true) {
-        field_0x27ac = 0;
+        field_0x27AC = 0;
         field_0x2812 = 4;
         field_0x2848[field_0x2816] = 0xffff;
-        dComIfGs_onOpenCollectMap(getCmapDatPnt4(field_0x27a9)->collectMapNo);
-        field_0x27a1 = 3;
+        dComIfGs_onOpenCollectMap(getCmapDatPnt4(field_0x27A9)->collectMapNo);
+        field_0x27A1 = 3;
     }
 }
 
 /* 801C26B0-801C27CC       .text CmapProc2__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapProc2() {
     if (CPad_CHECK_TRIG_B(0)) {
-        if (field_0x280f == FMAP_MAPTYPE_GHOST) {
+        if (field_0x280F == FMAP_MAPTYPE_GHOST) {
             gsMoonAnimeInit();
 #if VERSION > VERSION_JPN
             gsIconAnimeInit();
 #endif
         }
         field_0x2848[field_0x2816] = 0x319c;
-        field_0x27a1 = 8;
+        field_0x27A1 = 8;
 #if VERSION > VERSION_JPN
-        if (field_0x280f == FMAP_MAPTYPE_TINGLE) {
+        if (field_0x280F == FMAP_MAPTYPE_TINGLE) {
             mDoAud_seStart(JA_SE_TC_MAP_RETURN);
         } else {
             mDoAud_seStart(JA_SE_KAIZU_RETURN);
         }
 #endif
     }
-    if (field_0x280f == FMAP_MAPTYPE_GHOST) {
+    if (field_0x280F == FMAP_MAPTYPE_GHOST) {
         gsShipAnime();
         gsMoonAnime();
 #if VERSION > VERSION_JPN
@@ -1546,78 +1572,78 @@ void dMenu_Fmap2_c::CmapProc2() {
 #endif
     }
 #if VERSION > VERSION_JPN
-    if (field_0x280f == FMAP_MAPTYPE_TREASURE) {
+    if (field_0x280F == FMAP_MAPTYPE_TREASURE) {
         trTrifAnime();
     }
 #endif
-    playerPointGridAnime(field_0x279c);
+    playerPointGridAnime(field_0x279C);
 }
 
 /* 801C27CC-801C2B14       .text CmapClose__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapClose() {
-    BOOL r28 = paneTranceMessage(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, g_mf2HIO.field_0x44, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
-    BOOL r29 = paneTransSelCmapCle(field_0x27ac, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2814, 0);
-    BOOL r30 = paneTransSelCmapOpn(field_0x27ac, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 1);
+    BOOL r28 = paneTranceMessage(field_0x27AC - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, g_mf2HIO.field_0x44, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
+    BOOL r29 = paneTransSelCmapCle(field_0x27AC, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2814, 0);
+    BOOL r30 = paneTransSelCmapOpn(field_0x27AC, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 1);
     BOOL r26;
-    switch(field_0x280f) {
-    case FMAP_MAPTYPE_TINGLE:
-        r26 = paneAlphaTingleMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_GHOST:
-        r26 = paneAlphaGostShipMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_TREASURE:
-        r26 = paneAlphaTreasureMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_DOCTA:
-        r26 = paneAlphaDoctaMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_DFALIY:
-        r26 = paneAlphaDfaliyMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_HEART_P:
-        r26 = paneAlphaHeartPMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_HEART_M:
-        r26 = paneAlphaHeartMMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_SUBDAN:
-        r26 = paneAlphaSubdanMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_MOON:
-        r26 = paneAlphaMoonMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_YAGURA:
-        r26 = paneAlphaYaguraMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_TERRY:
-        r26 = paneAlphaTerryMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
-    case FMAP_MAPTYPE_SUBMA:
-        r26 = paneAlphaSubMaMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
-        break;
+    switch (field_0x280F) {
+        case FMAP_MAPTYPE_TINGLE:
+            r26 = paneAlphaTingleMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_GHOST:
+            r26 = paneAlphaGostShipMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_TREASURE:
+            r26 = paneAlphaTreasureMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_DOCTA:
+            r26 = paneAlphaDoctaMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_DFALIY:
+            r26 = paneAlphaDfaliyMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_HEART_P:
+            r26 = paneAlphaHeartPMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_HEART_M:
+            r26 = paneAlphaHeartMMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_SUBDAN:
+            r26 = paneAlphaSubdanMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_MOON:
+            r26 = paneAlphaMoonMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_YAGURA:
+            r26 = paneAlphaYaguraMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_TERRY:
+            r26 = paneAlphaTerryMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
+        case FMAP_MAPTYPE_SUBMA:
+            r26 = paneAlphaSubMaMap(field_0x27AC, g_mf2HIO.field_0x40, 0, 1);
+            break;
     }
-    field_0x27ac++;
+    field_0x27AC++;
     if (r28 == true && r29 == true && r30 == true && r26 == true) {
-        field_0x27ac = 0;
+        field_0x27AC = 0;
         field_0x2812 = 3;
         field_0x2848[field_0x2816] = 0xffff;
         delete fmap2GsDl.scrn;
         field_0x18->getArchive()->removeResourceAll();
         field_0x18->getArchive()->unmount();
         delete field_0x18;
-        field_0x27fb = 0;
-        field_0x27fc = 0;
-        field_0x27a1 = 2;
+        field_0x27FB = 0;
+        field_0x27FC = 0;
+        field_0x27A1 = 2;
     }
 }
 
 /* 801C2B14-801C2BA0       .text cmapMove__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cmapMove() {
-    if (isSpMap(getCollectMapKind(field_0x27a9))) {
+    if (isSpMap(getCollectMapKind(field_0x27A9))) {
         changeSelCmap2();
     } else {
-        readPaneCmapTexture(mCmapTxtMain_p[field_0x2815 ^ 1], field_0x27a9);
+        readPaneCmapTexture(mCmapTxtMain_p[field_0x2815 ^ 1], field_0x27A9);
         changeSelCmap();
         changeZoomCmap();
     }
@@ -1627,57 +1653,57 @@ void dMenu_Fmap2_c::cmapMove() {
 /* 801C2BA0-801C3070       .text changeSelCmap__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeSelCmap() {
     int i;
-    int r30 = getCollectMapKind(field_0x27a9);
-    ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][0].pane)->changeTexture(mCmapTxtMain_p[field_0x2815 ^ 1], 0);
-    if (isOpenCollectMap(field_0x27a9)) {
+    int r30 = getCollectMapKind(field_0x27A9);
+    ((J2DPicture*)field_0x124C[field_0x2813 ^ 1][0].pane)->changeTexture(mCmapTxtMain_p[field_0x2815 ^ 1], 0);
+    if (isOpenCollectMap(field_0x27A9)) {
         field_0x2812 = 2;
-        field_0x1aa4[field_0x2815 ^ 1][0].pane->show();
+        field_0x1AA4[field_0x2815 ^ 1][0].pane->show();
         for (i = 0; i < 2; i++) {
             field_0x1244[field_0x2814 ^ 1][i].pane->hide();
         }
         for (i = 0; i < 5; i++) {
-            field_0x124c[field_0x2813 ^ 1][i].pane->show();
+            field_0x124C[field_0x2813 ^ 1][i].pane->show();
         }
         if (r30 == FMAP_MAPTYPE_TRI) {
-            ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_t.bti", 0);
-            ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_t.bti", 0);
-            if (isOpenCollectMapTriforce(field_0x27a9)) {
-                field_0x124c[field_0x2813 ^ 1][3].pane->hide();
+            ((J2DPicture*)field_0x124C[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_t.bti", 0);
+            ((J2DPicture*)field_0x124C[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_t.bti", 0);
+            if (isOpenCollectMapTriforce(field_0x27A9)) {
+                field_0x124C[field_0x2813 ^ 1][3].pane->hide();
             } else {
-                field_0x124c[field_0x2813 ^ 1][0].pane->hide();
-                field_0x1aa4[field_0x2815 ^ 1][0].pane->hide();
-                field_0xcc4[field_0x2816 ^ 1][0].pane->show();
+                field_0x124C[field_0x2813 ^ 1][0].pane->hide();
+                field_0x1AA4[field_0x2815 ^ 1][0].pane->hide();
+                field_0xCC4[field_0x2816 ^ 1][0].pane->show();
                 outFont[field_0x2816 ^ 1]->messageSet(0x319d);
                 outFontS[field_0x2816 ^ 1]->messageSet(0x319d);
             }
         } else {
-            ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_normal.bti", 0);
-            ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_normal.bti", 0);
-            field_0x124c[field_0x2813 ^ 1][3].pane->hide();
+            ((J2DPicture*)field_0x124C[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_normal.bti", 0);
+            ((J2DPicture*)field_0x124C[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_normal.bti", 0);
+            field_0x124C[field_0x2813 ^ 1][3].pane->hide();
         }
-        if (!isCompleteCollectMap(field_0x27a9)) {
-            field_0x124c[field_0x2813 ^ 1][4].pane->hide();
+        if (!isCompleteCollectMap(field_0x27A9)) {
+            field_0x124C[field_0x2813 ^ 1][4].pane->hide();
         }
         cmapAlphaSet();
     } else {
         field_0x2812 = 3;
-        field_0x1aa4[field_0x2815 ^ 1][0].pane->hide();
+        field_0x1AA4[field_0x2815 ^ 1][0].pane->hide();
         for (i = 0; i < 2; i++) {
             field_0x1244[field_0x2814 ^ 1][i].pane->show();
             ((J2DPicture *)field_0x1244[field_0x2814 ^ 1][i].pane)->changeTexture(rollmapTex[r30], 0);
         }
-        field_0xcc4[field_0x2816 ^ 1][0].pane->show();
+        field_0xCC4[field_0x2816 ^ 1][0].pane->show();
         outFont[field_0x2816 ^ 1]->messageSet(0x319e);
         outFontS[field_0x2816 ^ 1]->messageSet(0x319e);
         if (r30 == FMAP_MAPTYPE_TRI) {
-            ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_t.bti", 0);
-            ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_t.bti", 0);
+            ((J2DPicture*)field_0x124C[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_t.bti", 0);
+            ((J2DPicture*)field_0x124C[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_t.bti", 0);
         } else {
-            ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_normal.bti", 0);
-            ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_normal.bti", 0);
+            ((J2DPicture*)field_0x124C[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_normal.bti", 0);
+            ((J2DPicture*)field_0x124C[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_normal.bti", 0);
         }
         for (i = 0; i < 5; i++) {
-            field_0x124c[field_0x2813 ^ 1][i].pane->hide();
+            field_0x124C[field_0x2813 ^ 1][i].pane->hide();
         }
     }
 }
@@ -1844,17 +1870,17 @@ BOOL dMenu_Fmap2_c::paneTransBase(s16 i_frame, u8 i_max, f32 i_transStartY, f32 
         if (i_flag == 1) {
             alpha = 1.0f - alpha;
         }
-        if (field_0x27a8) {
-            if (getCtCmapSelNo() != -1 && field_0x1aa4[i_idx][0].pane->isVisible()) {
+        if (field_0x27A8) {
+            if (getCtCmapSelNo() != -1 && field_0x1AA4[i_idx][0].pane->isVisible()) {
                 for (i = 0; i < 10; i++) {
-                    fopMsgM_setNowAlpha(&field_0x1aa4[i_idx][i], alpha);
-                    fopMsgM_setAlpha(&field_0x1aa4[i_idx][i]);
+                    fopMsgM_setNowAlpha(&field_0x1AA4[i_idx][i], alpha);
+                    fopMsgM_setAlpha(&field_0x1AA4[i_idx][i]);
                 }
             }
         }
         for (i = 0; i < 5; i++) {
-            fopMsgM_setNowAlpha(&field_0x124c[field_0x2813][i], alpha);
-            fopMsgM_setAlpha(&field_0x124c[field_0x2813][i]);
+            fopMsgM_setNowAlpha(&field_0x124C[field_0x2813][i], alpha);
+            fopMsgM_setAlpha(&field_0x124C[field_0x2813][i]);
         }
         fopMsgM_setNowAlpha(&mNfkdPane, alpha);
         fopMsgM_setNowAlpha(&mMkfdPane, alpha);
@@ -1923,14 +1949,14 @@ BOOL dMenu_Fmap2_c::paneAlphaZoomCmapBase(s16 i_frame, u8 i_max, f32 i_transStar
     }
     f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
     f32 f0 = alpha * (i_transEndX - i_transStartX);
-    fopMsgM_paneTrans(&field_0x1aa4[i_idx][0], i_transStartX + f0, 0.0f);
+    fopMsgM_paneTrans(&field_0x1AA4[i_idx][0], i_transStartX + f0, 0.0f);
     if (i_flag != 2) {
         if (i_flag == 1) {
             alpha = 1.0f - alpha;
         }
         for (int i = 0; i < 10; i++) {
-            fopMsgM_setNowAlpha(&field_0x1aa4[i_idx][i], alpha);
-            fopMsgM_setAlpha(&field_0x1aa4[i_idx][i]);
+            fopMsgM_setNowAlpha(&field_0x1AA4[i_idx][i], alpha);
+            fopMsgM_setAlpha(&field_0x1AA4[i_idx][i]);
         }
     }
     return false;
@@ -1970,8 +1996,8 @@ BOOL dMenu_Fmap2_c::paneAlphaMessage2(s16 i_frame, u8 i_max, u8 i_mode, int i_fl
         if (i_flag == 1) {
             alpha = 1.0f - alpha;
         }
-        fopMsgM_setNowAlpha(&field_0x43c[0], alpha);
-        fopMsgM_setAlpha(&field_0x43c[0]);
+        fopMsgM_setNowAlpha(&field_0x43C[0], alpha);
+        fopMsgM_setAlpha(&field_0x43C[0]);
     }
     return false;
 }
@@ -2051,16 +2077,16 @@ BOOL dMenu_Fmap2_c::paneTransSelCmapOpn(
     f32 transAdj = alpha * (transEndX - transStartX);
     f32 scaleAdj = alpha * (scaleEnd - scaleStart);
     for (i = 0; i < 5; i++) {
-        fopMsgM_paneScaleXY(&field_0x124c[i_idx][i], scaleStart + scaleAdj);
-        fopMsgM_paneTrans(&field_0x124c[i_idx][i], transStartX + transAdj, 0.0f);
+        fopMsgM_paneScaleXY(&field_0x124C[i_idx][i], scaleStart + scaleAdj);
+        fopMsgM_paneTrans(&field_0x124C[i_idx][i], transStartX + transAdj, 0.0f);
     }
     if (i_flag != 2) {
         if (i_flag == 1) {
             alpha = 1.0f - alpha;
         }
         for (i = 0; i < 5; i++) {
-            fopMsgM_setNowAlpha(&field_0x124c[i_idx][i], alpha);
-            fopMsgM_setAlpha(&field_0x124c[i_idx][i]);
+            fopMsgM_setNowAlpha(&field_0x124C[i_idx][i], alpha);
+            fopMsgM_setAlpha(&field_0x124C[i_idx][i]);
         }
     }
     return false;
@@ -2209,7 +2235,7 @@ int dMenu_Fmap2_c::calcFinCollectMap() {
 
 /* 801C724C-801C72D8       .text getNowCmapFirstNum__13dMenu_Fmap2_cFv */
 int dMenu_Fmap2_c::getNowCmapFirstNum() {
-    if (field_0x27a8 == 0) {
+    if (field_0x27A8 == 0) {
         return -1;
     }
     int i;
@@ -2227,7 +2253,7 @@ int dMenu_Fmap2_c::getNowCmapFirstNum() {
 
 /* 801C72D8-801C7364       .text getNowCmapNextNum__13dMenu_Fmap2_cFSci */
 int dMenu_Fmap2_c::getNowCmapNextNum(s8 i_cmapIdx, int i_dir) {
-    if (field_0x27a8 == 1) {
+    if (field_0x27A8 == 1) {
         return i_cmapIdx;
     }
     int r31 = i_cmapIdx;
@@ -2270,7 +2296,7 @@ int dMenu_Fmap2_c::getButtonIconMode() {
         ret = 0;
         break;
     case 1:
-        if (field_0x27a8 == 0) {
+        if (field_0x27A8 == 0) {
             ret = 1;
         } else {
             ret = field_0x2812;
@@ -2282,7 +2308,7 @@ int dMenu_Fmap2_c::getButtonIconMode() {
 
 /* 801C756C-801C7574       .text isLockBbutton__13dMenu_Fmap2_cFv */
 BOOL dMenu_Fmap2_c::isLockBbutton() {
-    return field_0x27fc;
+    return field_0x27FC;
 }
 
 /* 801C7574-801C75A8       .text isGetCollectMap__13dMenu_Fmap2_cFSc */
