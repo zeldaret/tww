@@ -1132,12 +1132,77 @@ void dMenu_Fmap2_c::gsMoonAnimeInit() {
 
 /* 801BFCEC-801C002C       .text gsMoonAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::gsMoonAnime() {
-    /* Nonmatching */
+    JUtility::TColor white;
+    JUtility::TColor black;
+
+    if (field_0x2811 == 0 && field_0x2817 != 0) {
+        f32 alpha = fopMsgM_valueIncrease(g_mf2HIO.field_0x7A, field_0x2818, 2);
+        if (field_0x281A == 0) {
+            alpha = 1.0f - alpha;
+        }
+
+        white.r = lineInter0to1ForU8(g_mf2HIO.field_0x7C, color_0x2824.r, alpha);
+        white.g = lineInter0to1ForU8(g_mf2HIO.field_0x7D, color_0x2824.g, alpha);
+        white.b = lineInter0to1ForU8(g_mf2HIO.field_0x7E, color_0x2824.b, alpha);
+        white.a = color_0x2824.a;
+
+        black.r = lineInter0to1ForU8(g_mf2HIO.field_0x80, color_0x2820.r, alpha);
+        black.g = lineInter0to1ForU8(g_mf2HIO.field_0x81, color_0x2820.g, alpha);
+        black.b = lineInter0to1ForU8(g_mf2HIO.field_0x82, color_0x2820.b, alpha);
+        black.a = color_0x2820.a;
+
+        if (field_0x2818 == 0) {
+            if (field_0x2819 == 0) {
+                if (field_0x281A != 0) {
+                    mDoAud_seStart(JA_SE_G_SHIP_MAP_BLINK);
+                }
+                field_0x2818 = g_mf2HIO.field_0x7A;
+                field_0x2819 = g_mf2HIO.field_0x7B;
+                field_0x281A ^= 1;
+            } else {
+                field_0x2819--;
+            }
+        } else {
+            field_0x2818--;
+        }
+
+        int moonType = dKy_moon_type_chk();
+        ((J2DPicture*)mGsTk0xPaneAlpha[moonType].pane)->setBlackWhite(black, white);
+    }
 }
 
 /* 801C002C-801C0378       .text gsShipAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::gsShipAnime() {
-    /* Nonmatching */
+    JUtility::TColor white;
+    JUtility::TColor black;
+
+    if (field_0x2811 == 0 && field_0x2817 != 0) {
+        if (field_0x281B != 0) {
+            field_0x281B--;
+        } else {
+            if (field_0x281C != 0xFF) {
+                f32 alpha = fopMsgM_valueIncrease(g_mf2HIO.field_0x85, field_0x281C, 2);
+
+                white.r = lineInter0to1ForU8(g_mf2HIO.field_0x86, color_0x282C.r, alpha);
+                white.g = lineInter0to1ForU8(g_mf2HIO.field_0x87, color_0x282C.g, alpha);
+                white.b = lineInter0to1ForU8(g_mf2HIO.field_0x88, color_0x282C.b, alpha);
+                white.a = lineInter0to1ForU8(g_mf2HIO.field_0x89, color_0x282C.a, alpha);
+
+                black.r = lineInter0to1ForU8(g_mf2HIO.field_0x8A, color_0x2828.r, alpha);
+                black.g = lineInter0to1ForU8(g_mf2HIO.field_0x8B, color_0x2828.g, alpha);
+                black.b = lineInter0to1ForU8(g_mf2HIO.field_0x8C, color_0x2828.b, alpha);
+                black.a = lineInter0to1ForU8(g_mf2HIO.field_0x8D, color_0x2828.a, alpha);
+
+                ((J2DPicture*)mGsKz01PaneAlpha.pane)->setBlackWhite(black, white);
+
+                if (field_0x281C == 0) {
+                    field_0x281C = 0xFF;
+                } else {
+                    field_0x281C--;
+                }
+            }
+        }
+    }
 }
 
 #if VERSION > VERSION_JPN

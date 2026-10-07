@@ -37,7 +37,9 @@ public:
 
     void getCmapDatPnt(int) {}
     void getCmapDatValue() {}
-    void lineInter0to1ForU8(u8, u8, f32) {}
+    u8 lineInter0to1ForU8(u8 a, u8 b, f32 c) {
+        return a + (b - a) * c;
+    }
     void setAramCmapDat(aramCmapDat_c* i_ptr) { mpFmapDatPnt = i_ptr; }
     void setSvPtr(dMenu_FmapSv_c* i_ptr) { fmapSv = i_ptr; }
 
