@@ -901,32 +901,32 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
 
     switch (i_itemNo) {
     case dItemNo_WINDS_REQUIEM_e:
-        if (dComIfGs_isTact(0)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_BALLAD_OF_GALES_e:
-        if (dComIfGs_isTact(1)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_COMMAND_MELODY_e:
-        if (dComIfGs_isTact(2)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_EARTH_GODS_LYRIC_e:
-        if (dComIfGs_isTact(3)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_WIND_GODS_ARIA_e:
-        if (dComIfGs_isTact(4)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_SONG_OF_PASSING_e:
-        if (dComIfGs_isTact(5)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e)) {
             get_item = 1;
         }
         break;
@@ -1025,32 +1025,32 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
 
     switch (i_itemNo) {
     case dItemNo_WINDS_REQUIEM_e:
-        if (dComIfGs_isTact(0)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_BALLAD_OF_GALES_e:
-        if (dComIfGs_isTact(1)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_COMMAND_MELODY_e:
-        if (dComIfGs_isTact(2)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_EARTH_GODS_LYRIC_e:
-        if (dComIfGs_isTact(3)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_WIND_GODS_ARIA_e:
-        if (dComIfGs_isTact(4)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_SONG_OF_PASSING_e:
-        if (dComIfGs_isTact(5)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e)) {
             get_item = 1;
         }
         break;

@@ -604,7 +604,7 @@ dMap_RoomInfo_c* dMap_RoomInfo_c::roomEntryRoom(int i_roomNo, u8 param_2, int pa
             }
             field_0x1 = local_60;
             if ((local_60 & 2)) {
-                field_0x44[0].init(local_4c, 0, (GXColor){255, 255, 255, 128});
+                field_0x44[0].init(local_4c, 0, COMPOUND_LITERAL(GXColor){255, 255, 255, 128});
                 field_0x44[0].setScroll(0.0f, 0.0f, 1.0f, 1.0f);
                 field_0x44[0].field_0x0 = 1;
                 if (l_mapInfoP) {
@@ -692,7 +692,7 @@ BOOL dMap_RoomInfo_c::Changeimage(u8 param_1, u8 param_2, int param_3, s16 param
         mStageMapInfoP = local_6c;
     }
     if (field_0x1 & 2) {
-        field_0x44[0].init(local_60, 0, (GXColor){255, 255, 255, 128});
+        field_0x44[0].init(local_60, 0, COMPOUND_LITERAL(GXColor){255, 255, 255, 128});
         field_0x44[0].setScroll(0.0f, 0.0f, 1.0f, 1.0f);
         field_0x44[0].field_0x0 = 1;
         if (local_6c) {
@@ -1074,20 +1074,20 @@ void dMap_c::create() {
     for (int i = 0; i < 8; i++) {
         timg = (ResTIMG*)dComIfG_getObjectRes("Always", frameArcIdx[i]);
         JUT_ASSERT(VERSION_SELECT(3450, 3450, 3450, 3450), timg != NULL);
-        mFrameTexture[i].init(timg, i + 2, (GXColor){255, 255, 255, 255});
+        mFrameTexture[i].init(timg, i + 2, COMPOUND_LITERAL(GXColor){255, 255, 255, 255});
         mFrameTexture[i].field_0x0 = 1;
         mFrameTexture[i].setScroll(cord[i][0], cord[i][1], cord[i][2], cord[i][3]);
         mFrameTex[i].init(1, &mFrameTexture[i]);
     }
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_CAMERA_FREE_e);
     JUT_ASSERT(VERSION_SELECT(3476, 3476, 3476, 3476), timg != NULL);
-    mIconFreeTexture.init(timg, 10, (GXColor){255, 210, 0, 255});
+    mIconFreeTexture.init(timg, 10, COMPOUND_LITERAL(GXColor){255, 210, 0, 255});
     mIconFreeTexture.field_0x0 = 1;
     mIconFreeTexture.setScroll(0.0f, 0.0f, 1.0f, 1.0f);
     mIconFreeTex.init(1, &mIconFreeTexture);
     timg = (ResTIMG*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTI_CAMERA_SELF_e);
     JUT_ASSERT(VERSION_SELECT(3489, 3489, 3489, 3489), timg != NULL);
-    mIconSelfTexture.init(timg, 10, (GXColor){255, 222, 255, 255});
+    mIconSelfTexture.init(timg, 10, COMPOUND_LITERAL(GXColor){255, 222, 255, 255});
     mIconSelfTexture.field_0x0 = 1;
     mIconSelfTexture.setScroll(0.0f, 0.0f, 1.0f, 1.0f);
     mIconSelfTex.init(1, &mIconSelfTexture);
@@ -2705,8 +2705,8 @@ void dMap_2DT2_c::init(ResTIMG* param_1, f32 param_2, f32 param_3, f32 param_4, 
     mScaleX = param_9;
     mScaleY = param_10;
     mRotZ = param_11;
-    mColorW = (GXColor){0, 0, 0, 255};
-    mColorB = (GXColor){0, 0, 0, 255};
+    mColorW = COMPOUND_LITERAL(GXColor){0, 0, 0, 255};
+    mColorB = COMPOUND_LITERAL(GXColor){0, 0, 0, 255};
     field_0x56 = param_7;
     if (field_0x56 && GXGetTexObjWrapS(&field_0x4) == GX_MIRROR) {
         field_0x56 = 0;

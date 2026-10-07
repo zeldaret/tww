@@ -28,12 +28,14 @@ enum YTBLE_JNT {
     YTBLE_JNT_Y_TUKUE_DISP_e=0x0,
     YTBLE_JNT_A00_e=0x1,
     YTBLE_JNT_TUKUE00_e=0x2,
+    YTBLE_NUM_JNTS_e=0x3,
 };
 
 enum QCFIS_JNT {
     QCFIS_JNT_Y_ISU_DISP_e=0x0,
     QCFIS_JNT_A00_e=0x1,
     QCFIS_JNT_ISU_e=0x2,
+    QCFIS_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_TABLE_H */

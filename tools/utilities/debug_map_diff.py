@@ -236,6 +236,23 @@ def should_ignore_missing_symbol(symbol_name: str):
     return True
   return False
 
+class MapDiffResult:
+  def __init__(
+      self,
+      target_symbols: dict[str, Symbol],
+      base_symbols: dict[str, Symbol],
+      all_target_symbols: dict[str, dict[str, Symbol]],
+      all_base_symbols: dict[str, dict[str, Symbol]],
+      target_missing_tree_and_stripped: bool,
+      target_symbol_names_in_previous_objects: set[str],
+  ):
+    self.target_symbols = target_symbols
+    self.base_symbols = base_symbols
+    self.all_target_symbols = all_target_symbols
+    self.all_base_symbols = all_base_symbols
+    self.target_missing_tree_and_stripped = target_missing_tree_and_stripped
+    self.target_symbol_names_in_previous_objects = target_symbol_names_in_previous_objects
+
 def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: bool, print_maybe_fake: bool, all_ninja_outputs: list[str]):
   target_map_path_dol = DEBUG_MAPS_ROOT_PATH / "frameworkD.map"
   target_map_path_rel = DEBUG_MAPS_ROOT_PATH / f"{target_object_name}D.map"
@@ -278,12 +295,7 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
   
   # print(len(target_symbols), len(base_symbols))
   
-  return target_symbols, base_symbols, all_target_symbols, all_base_symbols, target_missing_tree_and_stripped
-
-def print_diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: bool, print_maybe_fake: bool, all_ninja_outputs: list[str]):
-  target_symbols, base_symbols, all_target_symbols, all_base_symbols, target_missing_tree_and_stripped = diff_debug_map(target_object_name, call_ninja, print_size_diffs, print_maybe_fake, all_ninja_outputs)
-  
-  target_symbol_names_in_previous_objects = set()
+  target_symbol_names_in_previous_objects: set[str] = set()
   if target_missing_tree_and_stripped:
     # This handles the logic for checking if a symbol already appeared earlier on in framework.map.
     # Note: I'm not sure if the logic here is 100% accurate for edge cases since it just relies on dict insertion order.
@@ -293,6 +305,19 @@ def print_diff_debug_map(target_object_name: str, call_ninja: bool, print_size_d
         break
       for symbol_name, symbol in symbols.items():
         target_symbol_names_in_previous_objects.add(symbol.name)
+  
+  map_diff = MapDiffResult(
+    target_symbols=target_symbols,
+    base_symbols=base_symbols,
+    all_target_symbols=all_target_symbols,
+    all_base_symbols=all_base_symbols,
+    target_missing_tree_and_stripped=target_missing_tree_and_stripped,
+    target_symbol_names_in_previous_objects=target_symbol_names_in_previous_objects,
+  )
+  return map_diff
+
+def print_diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: bool, print_maybe_fake: bool, all_ninja_outputs: list[str]):
+  map_diff = diff_debug_map(target_object_name, call_ninja, print_size_diffs, print_maybe_fake, all_ninja_outputs)
   
   print("==================================================")
   print(f"=== Diff for object: {target_object_name}")
@@ -310,16 +335,16 @@ def print_diff_debug_map(target_object_name: str, call_ninja: bool, print_size_d
   wrong_align_symbols: set[str] = set()
   
   if print_size_diffs:
-    for symbol_name, target_symbol in target_symbols.items():
+    for symbol_name, target_symbol in map_diff.target_symbols.items():
       if target_symbol.size == 0:
         continue
-      if symbol_name not in base_symbols:
+      if symbol_name not in map_diff.base_symbols:
         base_size = 0
       else:
-        base_size = base_symbols[symbol_name].size
+        base_size = map_diff.base_symbols[symbol_name].size
       size_diff = abs(target_symbol.size - base_size)
       ratio = size_diff / target_symbol.size
-      if symbol_name in base_symbols and size_diff != 0:
+      if symbol_name in map_diff.base_symbols and size_diff != 0:
         total_wrong_size += 1
       symbol_size_diffs.append((symbol_name, target_symbol.size, base_size, ratio))
     
@@ -340,12 +365,12 @@ def print_diff_debug_map(target_object_name: str, call_ninja: bool, print_size_d
         prefix = "WRONG: "
       print(prefix + symbol_name, "0x%X" % target_size, "0x%X" % base_size, ratio)
   
-  for symbol_name, target_symbol in target_symbols.items():
+  for symbol_name, target_symbol in map_diff.target_symbols.items():
     if target_symbol.size == 0:
       continue
-    if symbol_name not in base_symbols:
+    if symbol_name not in map_diff.base_symbols:
       continue
-    base_symbol = base_symbols[symbol_name]
+    base_symbol = map_diff.base_symbols[symbol_name]
     is_wrong_linkage = False
     if target_symbol.linkage is None and base_symbol.sym_type == "object":
       # The official framework.map for main.dol doesn't include linkage, but we can guess it based off of certain symbol name prefixes.
@@ -362,22 +387,22 @@ def print_diff_debug_map(target_object_name: str, call_ninja: bool, print_size_d
       wrong_linkage_symbols.add(symbol_name)
       print(f"LINKAGE: {symbol_name} (should be {target_linkage}, is {base_symbol.linkage})")
   
-  for symbol_name, target_symbol in target_symbols.items():
+  for symbol_name, target_symbol in map_diff.target_symbols.items():
     if target_symbol.align is None:
       continue
-    if symbol_name not in base_symbols:
+    if symbol_name not in map_diff.base_symbols:
       continue
-    base_symbol = base_symbols[symbol_name]
+    base_symbol = map_diff.base_symbols[symbol_name]
     if target_symbol.align != base_symbol.align:
       wrong_align_symbols.add(symbol_name)
       print(f"ALIGN: {symbol_name} (should be {target_symbol.align}, is {base_symbol.align})")
   
   maybe_fake_symbols: list[Symbol] = []
   fake_symbols: list[Symbol] = []
-  for symbol_name, base_symbol in base_symbols.items():
-    if symbol_name in target_symbols:
+  for symbol_name, base_symbol in map_diff.base_symbols.items():
+    if symbol_name in map_diff.target_symbols:
       continue
-    if target_missing_tree_and_stripped and (base_symbol.stripped or symbol_name in target_symbol_names_in_previous_objects):
+    if map_diff.target_missing_tree_and_stripped and (base_symbol.stripped or symbol_name in map_diff.target_symbol_names_in_previous_objects):
       maybe_fake_symbols.append(base_symbol)
     else:
       fake_symbols.append(base_symbol)
@@ -395,12 +420,12 @@ def print_diff_debug_map(target_object_name: str, call_ninja: bool, print_size_d
     print("FAKE:", base_symbol.name, "0x%X" % base_symbol.size)
     fake_base_symbols.add(base_symbol.name)
   
-  for symbol_name, target_symbol in target_symbols.items():
+  for symbol_name, target_symbol in map_diff.target_symbols.items():
     if target_symbol.size == 0:
       continue
     if should_ignore_missing_symbol(symbol_name):
       continue
-    if symbol_name not in base_symbols:
+    if symbol_name not in map_diff.base_symbols:
       missing_target_symbols.add(symbol_name)
       suffix = ""
       if target_symbol.stripped:

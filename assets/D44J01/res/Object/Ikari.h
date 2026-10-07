@@ -25,6 +25,7 @@ enum S_IKARI2_JNT {
     S_IKARI2_JNT_IKARI2_OBJ_e=0x1,
     S_IKARI2_JNT_IKARI2_e=0x2,
     S_IKARI2_JNT_KUI2_e=0x3,
+    S_IKARI2_NUM_JNTS_e=0x4,
 };
 
 enum S_IKARI3_JNT {
@@ -32,6 +33,7 @@ enum S_IKARI3_JNT {
     S_IKARI3_JNT_IKARI3_OBJ_e=0x1,
     S_IKARI3_JNT_IKARI3_e=0x2,
     S_IKARI3_JNT_KUI3_e=0x3,
+    S_IKARI3_NUM_JNTS_e=0x4,
 };
 
 enum S_IKARI4_JNT {
@@ -39,6 +41,7 @@ enum S_IKARI4_JNT {
     S_IKARI4_JNT_IKARI4_OBJ_e=0x1,
     S_IKARI4_JNT_IKARI4_e=0x2,
     S_IKARI4_JNT_KUI4_e=0x3,
+    S_IKARI4_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_IKARI_H */

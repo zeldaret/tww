@@ -48,6 +48,7 @@ enum AH_JNT {
     AH_JNT_LEGR1_e=0x10,
     AH_JNT_LEGR2_e=0x11,
     AH_JNT_FOOTR_e=0x12,
+    AH_NUM_JNTS_e=0x13,
 };
 
 #endif /* RES_AH_H */

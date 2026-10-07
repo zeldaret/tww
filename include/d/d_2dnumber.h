@@ -93,6 +93,7 @@ public:
         m74 = 0;
 #endif
     }
+    ~dDlst_2DOutFont_c() {}
 
     void setLeftUpPos(f32 x, f32 y) {
         mPosTopLeftX = x;

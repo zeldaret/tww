@@ -71,7 +71,7 @@ bool JKRDvdArchive::open(s32 entryNum) {
     SDIFileEntry* fileEntry;
     
     mArcInfoBlock = NULL;
-    mDataOffset = NULL;
+    mDataOffset = 0;
     mNodes = NULL;
     mFiles = NULL;
     mStringTable = NULL;

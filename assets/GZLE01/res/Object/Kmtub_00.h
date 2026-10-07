@@ -18,6 +18,7 @@ enum dRes_ID_KMTUB_00 {
 
 enum KMTUB_00_JNT {
     KMTUB_00_JNT_KMTUB_00_e=0x0,
+    KMTUB_00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KMTUB_00_H */

@@ -28,6 +28,7 @@ enum GTAKI_JNT {
     GTAKI_JNT_LOCATOR1_e=0x0,
     GTAKI_JNT_TAKI_W_e=0x1,
     GTAKI_JNT_INDIRECT_e=0x2,
+    GTAKI_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_GTAKI_H */

@@ -37,11 +37,13 @@ enum dRes_ID_KWOOD_00 {
 enum WB_JNT {
     WB_JNT_JOINT1_e=0x0,
     WB_JNT_JOINT2_e=0x1,
+    WB_NUM_JNTS_e=0x2,
 };
 
 enum WS_JNT {
     WS_JNT_WOOD1_e=0x0,
     WS_JNT_WOOD2_e=0x1,
+    WS_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_KWOOD_00_H */

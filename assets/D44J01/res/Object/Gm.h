@@ -113,14 +113,17 @@ enum GM_JNT {
     GM_JNT_UDERBA_e=0x1D,
     GM_JNT_UDERBB_e=0x1E,
     GM_JNT_TERB_e=0x1F,
+    GM_NUM_JNTS_e=0x20,
 };
 
 enum HANESL_JNT {
     HANESL_JNT_HANESL_e=0x0,
+    HANESL_NUM_JNTS_e=0x1,
 };
 
 enum HANEUL_JNT {
     HANEUL_JNT_GM_HANEUL_e=0x0,
+    HANEUL_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_GM_H */

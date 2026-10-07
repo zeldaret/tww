@@ -37,7 +37,7 @@ create_tag_class* fopDwIt_Begin() {
 
 /* 8003C6C0-8003C6EC       .text fopDwIt_Next__FP16create_tag_class */
 create_tag_class* fopDwIt_Next(create_tag_class *i_createTag) {
-    create_tag_class* createTagClass = (create_tag_class*)i_createTag->mpNode.mpNextNode;
+    create_tag_class* createTagClass = (create_tag_class*)i_createTag->mNode.mpNextNode;
     if (!createTagClass) {
         createTagClass = fopDwIt_GetTag();
     }

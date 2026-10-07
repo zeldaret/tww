@@ -162,7 +162,7 @@ void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
             do {
                 linePtr = (char*)getLinePtr(curLine);
 
-                if ((u8)linePtr[-1] != NULL) {
+                if ((u8)linePtr[-1] != 0) {
                     if (consoleType != CONSOLE_TYPE_2) {
                         mFont->drawString_scale(mPositionX, ((y * font_yOffset) + mPositionY), mFontSizeX, mFontSizeY, linePtr, true);
                     } else {

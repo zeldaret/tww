@@ -44,18 +44,21 @@ enum HHA1_JNT {
     HHA1_JNT_HHA1_00_e=0x0,
     HHA1_JNT_LOCATOR2_e=0x1,
     HHA1_JNT_OS_BODY4_e=0x2,
+    HHA1_NUM_JNTS_e=0x3,
 };
 
 enum HHA2_JNT {
     HHA2_JNT_HHA2_00_e=0x0,
     HHA2_JNT_LOCATOR2_e=0x1,
     HHA2_JNT_OS_BODY5_e=0x2,
+    HHA2_NUM_JNTS_e=0x3,
 };
 
 enum YGSTP00_JNT {
     YGSTP00_JNT_YGUSH00_e=0x0,
     YGSTP00_JNT_A00_e=0x1,
     YGSTP00_JNT_WATER_e=0x2,
+    YGSTP00_NUM_JNTS_e=0x3,
 };
 
 enum YSWTR00_JNT {
@@ -63,6 +66,7 @@ enum YSWTR00_JNT {
     YSWTR00_JNT_A00_e=0x1,
     YSWTR00_JNT_SOKUMEN_e=0x2,
     YSWTR00_JNT_SUIRYU_e=0x3,
+    YSWTR00_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_HHA_H */

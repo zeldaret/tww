@@ -28,6 +28,7 @@ enum dRes_ID_SEARCH {
 
 enum S_BEAM_JNT {
     S_BEAM_JNT_ON_OFF_LIGHT_A1_e=0x0,
+    S_BEAM_NUM_JNTS_e=0x1,
 };
 
 enum S_SEARCH_JNT {
@@ -39,6 +40,7 @@ enum S_SEARCH_JNT {
     S_SEARCH_JNT_LIGHTA_e=0x5,
     S_SEARCH_JNT_LIGHTB_e=0x6,
     S_SEARCH_JNT_SHAFT_e=0x7,
+    S_SEARCH_NUM_JNTS_e=0x8,
 };
 
 #endif /* RES_SEARCH_H */

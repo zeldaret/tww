@@ -239,20 +239,24 @@ enum BK_JNT {
     BK_JNT_UDERSAKI_e=0x2D,
     BK_JNT_YUBIR1_e=0x2E,
     BK_JNT_YUBIR2_e=0x2F,
+    BK_NUM_JNTS_e=0x30,
 };
 
 enum BOUEN_JNT {
     BOUEN_JNT_PCUBE1_e=0x0,
+    BOUEN_NUM_JNTS_e=0x1,
 };
 
 enum BK_KB_JNT {
     BK_KB_JNT_BLURS_e=0x0,
     BK_KB_JNT_BLURA_e=0x1,
     BK_KB_JNT_BLURB_e=0x2,
+    BK_KB_NUM_JNTS_e=0x3,
 };
 
 enum BK_TATE_JNT {
     BK_TATE_JNT_BOKOTATE_e=0x0,
+    BK_TATE_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BK_H */

@@ -59,6 +59,7 @@ enum PF_JNT {
     PF_JNT_LEGR1_e=0x11,
     PF_JNT_LEGR2_e=0x12,
     PF_JNT_FOOTR_e=0x13,
+    PF_NUM_JNTS_e=0x14,
 };
 
 #endif /* RES_PF_H */

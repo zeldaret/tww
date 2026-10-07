@@ -1259,7 +1259,7 @@ void daAgb_c::FlagsSend(u32 stage_type) {
     } else {
         mFlags.field_0x8_0 = 0;
     }
-    mFlags.field_0x3_7 = dComIfGs_isTact(0);
+    mFlags.field_0x3_7 = dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e);
     
     if (*(u16*)&g_mDoCPd_cpadInfo[0].mButtonHold || // fakematch? is controller_pad_buttons supposed to be a u16?
         CPad_GET_STICK_VALUE(0) ||

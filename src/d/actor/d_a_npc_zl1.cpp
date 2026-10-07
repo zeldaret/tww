@@ -2659,64 +2659,65 @@ BOOL daNpc_Zl1_c::_draw() {
     mpMorf->calc();
     pModel->unlock();
     dComIfGd_setListP0();
-    J3DMaterialAnm* pMatAnm = field_0x860[2]->getMaterialAnm();
 
-    field_0x860[1]->setMaterialAnm(pMatAnm);
-    field_0x860[0]->setMaterialAnm(pMatAnm);
+    J3DMaterialAnm* pMatAnm = mpEyeMats[EYE_L_DAM_B_e]->getMaterialAnm();
 
-    pMatAnm = field_0x860[5]->getMaterialAnm();
+    mpEyeMats[EYE_L_DAM_A_e]->setMaterialAnm(pMatAnm);
+    mpEyeMats[EYE_L_e]->setMaterialAnm(pMatAnm);
 
-    field_0x860[4]->setMaterialAnm(pMatAnm);
-    field_0x860[3]->setMaterialAnm(pMatAnm);
+    pMatAnm = mpEyeMats[EYE_R_DAM_B_e]->getMaterialAnm();
 
-    pMatAnm = field_0x878[2]->getMaterialAnm();
+    mpEyeMats[EYE_R_DAM_A_e]->setMaterialAnm(pMatAnm);
+    mpEyeMats[EYE_R_e]->setMaterialAnm(pMatAnm);
 
-    field_0x878[1]->setMaterialAnm(pMatAnm);
-    field_0x878[0]->setMaterialAnm(pMatAnm);
+    pMatAnm = mpEyebrowMats[EYEBLOW_L_DAM_B_e]->getMaterialAnm();
 
-    pMatAnm = field_0x878[5]->getMaterialAnm();
+    mpEyebrowMats[EYEBLOW_L_DAM_A_e]->setMaterialAnm(pMatAnm);
+    mpEyebrowMats[EYEBLOW_L_e]->setMaterialAnm(pMatAnm);
 
-    field_0x878[4]->setMaterialAnm(pMatAnm);
-    field_0x878[3]->setMaterialAnm(pMatAnm);
+    pMatAnm = mpEyebrowMats[EYEBLOW_R_DAM_B_e]->getMaterialAnm();
+
+    mpEyebrowMats[EYEBLOW_R_DAM_A_e]->setMaterialAnm(pMatAnm);
+    mpEyebrowMats[EYEBLOW_R_e]->setMaterialAnm(pMatAnm);
 
     mBtpAnm.entry(modelData, mBtpAnmFrame);
 
     mOnCupOffAupPacket2.entryOpa();
     
-    field_0x890[2]->hide();
-    field_0x890[5]->hide();
-    field_0x890[1]->hide();
-    field_0x890[4]->hide();
-    field_0x890[0]->show();
-    field_0x890[3]->show();
-    mJoint2->entryIn();
+    mpEyeShapes[EYE_L_DAM_B_e]->hide();
+    mpEyeShapes[EYE_R_DAM_B_e]->hide();
+    mpEyeShapes[EYE_L_DAM_A_e]->hide();
+    mpEyeShapes[EYE_R_DAM_A_e]->hide();
+    mpEyeShapes[EYE_L_e]->show();
+    mpEyeShapes[EYE_R_e]->show();
+    mpEyeJoint->entryIn();
 
-    field_0x8A8[2]->hide();
-    field_0x8A8[5]->hide();
-    field_0x8A8[1]->hide();
-    field_0x8A8[4]->hide();
-    field_0x8A8[0]->show();
-    field_0x8A8[3]->show();
-    mJoint3->entryIn();
+    mpEyebrowShapes[EYEBLOW_L_DAM_B_e]->hide();
+    mpEyebrowShapes[EYEBLOW_R_DAM_B_e]->hide();
+    mpEyebrowShapes[EYEBLOW_L_DAM_A_e]->hide();
+    mpEyebrowShapes[EYEBLOW_R_DAM_A_e]->hide();
+    mpEyebrowShapes[EYEBLOW_L_e]->show();
+    mpEyebrowShapes[EYEBLOW_R_e]->show();
+    mpEyebrowJoint->entryIn();
 
     mOffCupOnAupPacket2.entryOpa();
 
     mBtkAnm.entry(modelData, mBtkAnmFrame);
 
-    field_0x890[0]->hide();
-    field_0x890[3]->hide();
-    field_0x890[2]->show();
-    field_0x890[5]->show();
-    mJoint2->entryIn();
+    mpEyeShapes[EYE_L_e]->hide();
+    mpEyeShapes[EYE_R_e]->hide();
+    mpEyeShapes[EYE_L_DAM_B_e]->show();
+    mpEyeShapes[EYE_R_DAM_B_e]->show();
+    mpEyeJoint->entryIn();
 
-    field_0x8A8[0]->hide();
-    field_0x8A8[3]->hide();
-    field_0x8A8[2]->show();
-    field_0x8A8[5]->show();
-    mJoint3->entryIn();
+    mpEyebrowShapes[EYEBLOW_L_e]->hide();
+    mpEyebrowShapes[EYEBLOW_R_e]->hide();
+    mpEyebrowShapes[EYEBLOW_L_DAM_B_e]->show();
+    mpEyebrowShapes[EYEBLOW_R_DAM_B_e]->show();
+    mpEyebrowJoint->entryIn();
     mBtkAnm.remove(modelData);
     
-    J3DMaterial* pMat = mJoint1->getMesh();
+    J3DMaterial* pMat = mpRootJoint->getMesh();
     for (int no = 0; pMat != NULL; no++) {
         if(no == 0 || no == 1) {
             pMat->getShape()->show();
@@ -2726,9 +2727,9 @@ BOOL daNpc_Zl1_c::_draw() {
         pMat = pMat->getNext();
     }
 
-    mJoint1->entryIn();
+    mpRootJoint->entryIn();
 
-    pMat = mJoint1->getMesh();
+    pMat = mpRootJoint->getMesh();
     for (int no = 0; pMat != NULL; no++) {
         if(no == 0 || no == 1) {
             pMat->getShape()->hide();
@@ -2740,23 +2741,23 @@ BOOL daNpc_Zl1_c::_draw() {
 
     mOnCupOffAupPacket1.entryOpa();
 
-    field_0x890[1]->show();
-    field_0x890[4]->show();
-    field_0x890[2]->hide();
-    field_0x890[5]->hide();
-    mJoint2->entryIn();
+    mpEyeShapes[EYE_L_DAM_A_e]->show();
+    mpEyeShapes[EYE_R_DAM_A_e]->show();
+    mpEyeShapes[EYE_L_DAM_B_e]->hide();
+    mpEyeShapes[EYE_R_DAM_B_e]->hide();
+    mpEyeJoint->entryIn();
 
-    field_0x8A8[1]->show();
-    field_0x8A8[4]->show();
-    field_0x8A8[2]->hide();
-    field_0x8A8[5]->hide();
-    mJoint3->entryIn();
+    mpEyebrowShapes[EYEBLOW_L_DAM_A_e]->show();
+    mpEyebrowShapes[EYEBLOW_R_DAM_A_e]->show();
+    mpEyebrowShapes[EYEBLOW_L_DAM_B_e]->hide();
+    mpEyebrowShapes[EYEBLOW_R_DAM_B_e]->hide();
+    mpEyebrowJoint->entryIn();
     mOffCupOnAupPacket1.entryOpa();
 
-    field_0x890[1]->hide();
-    field_0x890[4]->hide();
-    field_0x8A8[1]->hide();
-    field_0x8A8[4]->hide();
+    mpEyeShapes[EYE_L_DAM_A_e]->hide();
+    mpEyeShapes[EYE_R_DAM_A_e]->hide();
+    mpEyebrowShapes[EYEBLOW_L_DAM_A_e]->hide();
+    mpEyebrowShapes[EYEBLOW_R_DAM_A_e]->hide();
 
     dComIfGd_setListP1();
     mpMorf->entry();
@@ -2912,19 +2913,10 @@ cPhs_State daNpc_Zl1_c::_create() {
 
 /* 000073EC-000077C8       .text bodyCreateHeap__11daNpc_Zl1_cFv */
 BOOL daNpc_Zl1_c::bodyCreateHeap() {
-    enum { 
-        EYE_MAX = 6,
-    };
-    enum {
-        EYEBLOW_MAX = 6 
-
-    };
-
     J3DModelData* a_mdl_dat = (J3DModelData*)dComIfG_getObjectRes(mArcName, "zl.bdl");
     JUT_ASSERT(VERSION_SELECT(0xED4, 0xF16, 0xF1A, 0xF1A), a_mdl_dat != NULL);
 
-    J3DMaterial * pMat1;
-
+    J3DMaterial* pMat1;
     for (u16 i = 0; i < a_mdl_dat->getMaterialNum(); i++) {
         pMat1 = a_mdl_dat->getMaterialNodePointer(i);
         daNpc_Zl1_matAnm_c * pMatAnm = new daNpc_Zl1_matAnm_c();
@@ -2950,24 +2942,24 @@ BOOL daNpc_Zl1_c::bodyCreateHeap() {
         mpMorf = NULL;
         return FALSE;
     }
-    mJoint1 = a_mdl_dat->getJointNodePointer(0);
-    mJoint2 = a_mdl_dat->getJointNodePointer(0xb);
-    mJoint3 = a_mdl_dat->getJointNodePointer(0xc);
-    J3DMaterial* pMat = mJoint2->getMesh();
 
+    mpRootJoint = a_mdl_dat->getJointNodePointer(ZL_JNT_WORLD_ROOT_e);
+    mpEyeJoint = a_mdl_dat->getJointNodePointer(ZL_JNT_ZL_EYE_e);
+    mpEyebrowJoint = a_mdl_dat->getJointNodePointer(ZL_JNT_ZL_MAYU_e);
+
+    J3DMaterial* pMat = mpEyeJoint->getMesh();
     int no;
     for (no = 0; pMat != NULL; pMat = pMat->getNext()) {
         JUT_ASSERT(VERSION_SELECT(0xEFC, 0xF3E, 0xF42, 0xF42), no < EYE_MAX);
-        field_0x860[no] = pMat;  
-        field_0x890[no++] = pMat->getShape();
+        mpEyeMats[no] = pMat;  
+        mpEyeShapes[no++] = pMat->getShape();
     } 
 
-
-    pMat = mJoint3->getMesh();
+    pMat = mpEyebrowJoint->getMesh();
     for (no = 0; pMat != NULL; pMat = pMat->getNext()) {
         JUT_ASSERT(VERSION_SELECT(0xF05, 0xF47, 0xF4B, 0xF4B), no < EYEBLOW_MAX);
-        field_0x878[no] = pMat;
-        field_0x8A8[no++] = pMat->getShape();
+        mpEyebrowMats[no] = pMat;
+        mpEyebrowShapes[no++] = pMat->getShape();
     }
 
     m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
@@ -2976,8 +2968,8 @@ BOOL daNpc_Zl1_c::bodyCreateHeap() {
     m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("chest");
     JUT_ASSERT(VERSION_SELECT(0xF10, 0xF52, 0xF56, 0xF56), m_bbone_jnt_num >= 0);
 
-    mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num & 0xffff)->setCallBack(nodeCB_Head);
-    mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num & 0xffff)->setCallBack(nodeCB_BackBone);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num)->setCallBack(nodeCB_Head);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
     mpMorf->getModel()->setUserArea((uintptr_t)(this));
     return TRUE;
 }

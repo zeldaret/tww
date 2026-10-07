@@ -24,6 +24,7 @@ enum VHKAK_JNT {
     VHKAK_JNT_ROOT_VHKAK_e=0x0,
     VHKAK_JNT_KAKERA_0_e=0x1,
     VHKAK_JNT_KAKERA_1_e=0x2,
+    VHKAK_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_VHKAK_H */

@@ -18,6 +18,7 @@ enum dRes_ID_NATA {
 
 enum BK_NATA_JNT {
     BK_NATA_JNT_NATA_e=0x0,
+    BK_NATA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_NATA_H */

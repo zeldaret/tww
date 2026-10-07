@@ -70,10 +70,12 @@ enum DY_JNT {
     DY_JNT_HANDRB_e=0x1E,
     DY_JNT_WAIST1_e=0x1F,
     DY_JNT_WAIST2_e=0x20,
+    DY_NUM_JNTS_e=0x21,
 };
 
 enum DY_FL_JNT {
     DY_FL_JNT_DY_FLOWER_e=0x0,
+    DY_FL_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BIGELF_H */

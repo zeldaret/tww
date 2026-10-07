@@ -39,7 +39,7 @@ public:
         MODE_WATER = 0x2,
     };
     
-    float getYOffset();
+    f32 getYOffset();
     void set_mtx();
     void set_mtx_base(J3DModel*, cXyz, csXyz);
     void CreateInit();
@@ -140,8 +140,8 @@ namespace daItem_prm {
     inline u32 getAction(daItem_c* i_this) { return (fopAcM_GetParam(i_this) & 0xFC000000) >> 0x1A; }
     inline u32 getItemNo(daItem_c* i_this) { return (fopAcM_GetParam(i_this) & 0x000000FF) >> 0x00; }
     inline u32 getItemBitNo(daItem_c* i_this) { return (fopAcM_GetParam(i_this) & 0x0000FF00) >> 0x08; }
-    inline u32 getSwitchNo(daItem_c* i_this) { return (i_this->home.angle.z & 0x00FF) >> 0; }
-    inline u32 getSwitchNo2(daItem_c* i_this) { return (fopAcM_GetParam(i_this) & 0x00FF0000) >> 0x10; }
+    inline u32 getSwitchNo(daItem_c* i_this) { return (fopAcM_GetParam(i_this) & 0x00FF0000) >> 0x10; }
+    inline u32 getSwitchNo2(daItem_c* i_this) { return (i_this->home.angle.z & 0x00FF) >> 0; }
 };
 
 #endif /* D_A_ITEM_H */

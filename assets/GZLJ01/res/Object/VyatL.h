@@ -22,6 +22,7 @@ enum dRes_ID_VYATL {
 
 enum VYATL_JNT {
     VYATL_JNT_VYATL_e=0x0,
+    VYATL_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VYATL_H */

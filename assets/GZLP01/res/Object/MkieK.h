@@ -30,10 +30,12 @@ enum dRes_ID_MKIEK {
 
 enum MKIEK_JNT {
     MKIEK_JNT_MKIEK_e=0x0,
+    MKIEK_NUM_JNTS_e=0x1,
 };
 
 enum YLSMK00_JNT {
     YLSMK00_JNT_YLSMK00_e=0x0,
+    YLSMK00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MKIEK_H */

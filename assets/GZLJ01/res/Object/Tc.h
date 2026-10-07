@@ -83,6 +83,7 @@ enum TC_JNT {
     TC_JNT_LEGR1_e=0xF,
     TC_JNT_LEGR2_e=0x10,
     TC_JNT_FOOTR_e=0x11,
+    TC_NUM_JNTS_e=0x12,
 };
 
 #endif /* RES_TC_H */

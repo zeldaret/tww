@@ -26,6 +26,7 @@ enum dRes_ID_HYS {
 
 enum HYS_JNT {
     HYS_JNT_MONO_e=0x0,
+    HYS_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HYS_H */

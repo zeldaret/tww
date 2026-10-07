@@ -189,11 +189,11 @@ int dRes_info_c::loadResource() {
 
     u32 *pResType = &l_readResType[0];
     for (i = 0; i < ARRAY_SIZE(l_readResType); i++, pResType++) {
-        JKRFileFinder * pArcFinder = mpArchive->getFirstResource(*pResType);
+        JKRFileFinder * pArcFinder = JKRGetFirstResource(*pResType, mpArchive);
 
         for (; JKRIsFileFinderAvailable(pArcFinder); pArcFinder->findNextFile()) {
             u32 resType;
-            void * pRes = JKRArchive::getGlbResource(*pResType, pArcFinder->mEntryName, mpArchive);
+            void * pRes = JKRGetResource(*pResType, pArcFinder->mEntryName, mpArchive);
             if (pRes == NULL) {
                 OSReport_Error("<%s> res == NULL !!\n", pArcFinder->mEntryName);
                 goto next;

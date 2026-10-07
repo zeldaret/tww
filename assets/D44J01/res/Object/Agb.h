@@ -22,6 +22,7 @@ enum dRes_ID_AGB {
 
 enum AGBCURSOR_JNT {
     AGBCURSOR_JNT_PPLANE2_e=0x0,
+    AGBCURSOR_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_AGB_H */

@@ -75,7 +75,7 @@ int daPy_lk_c::changeRopeEndProc(int param_0) {
         freeRopeItem();
         voiceStart(6);
         if (cancelTrigger() && !checkBossGomaStage()) {
-            setAnimeEquipSword(0);
+            setAnimeEquipSword(FALSE);
         }
         if (param_0 != 0) {
             procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
@@ -606,7 +606,7 @@ BOOL daPy_lk_c::procRopeSwing_init(fopAc_ac_c* rope_actor, s16 param_1) {
         setBlendRopeMoveAnime(1);
     }
     if (i_rope_actor == NULL) {
-        m_old_fdata->initOldFrameMorf(15.0f, 0, 0x2A);
+        m_old_fdata->initOldFrameMorf(15.0f, 0, CL_NUM_JNTS_e);
     }
     mFrameCtrlUnder[UNDER_MOVE0_e].setStart(m_HIO->mItem.mRope.m.field_0x1C);
     mFrameCtrlUnder[UNDER_MOVE0_e].setEnd(m_HIO->mItem.mRope.m.field_0x4);

@@ -37,7 +37,7 @@ JKRThread::JKRThread(u32 stack_size, int message_count, int param_3) : mThreadLi
     getList().append(&mThreadListLink);
 
     mCurrentHeap = NULL;
-    mCurrentHeapError = NULL;
+    mCurrentHeapError = 0;
 }
 
 /* 802B3E38-802B3EFC       .text __ct__9JKRThreadFP8OSThreadi */
@@ -54,7 +54,7 @@ JKRThread::JKRThread(OSThread* thread, int message_count) : mThreadListLink(this
     getList().append(&mThreadListLink);
 
     mCurrentHeap = NULL;
-    mCurrentHeapError = NULL;
+    mCurrentHeapError = 0;
 }
 
 /* 802B3EFC-802B3FD4       .text __dt__9JKRThreadFv */

@@ -18,6 +18,7 @@ enum dRes_ID_VOBJ02 {
 
 enum VOBJ02_JNT {
     VOBJ02_JNT_VOBJ02_MODEL_e=0x0,
+    VOBJ02_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VOBJ02_H */

@@ -22,6 +22,7 @@ enum dRes_ID_OTANA {
 
 enum OTANA_JNT {
     OTANA_JNT_OTANA_e=0x0,
+    OTANA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_OTANA_H */

@@ -22,6 +22,7 @@ enum dRes_ID_HTOBI3 {
 
 enum HTOBI3_JNT {
     HTOBI3_JNT_POLYSURFACE1928_e=0x0,
+    HTOBI3_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HTOBI3_H */

@@ -290,7 +290,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 static cPhs_State phase_1(daNpcMn_c* i_this) {
     fopAcM_ct(i_this, daNpcMn_c);
 
-    switch (i_this->mPosFlag) {
+    switch (i_this->getPosFlag()) {
         case 0:
             dComIfGs_setEventReg(dSv_event_flag_c::UNK_870F, 0);
             if (fopAcM_isSwitch(i_this, i_this->getPrmSwitchBit())) {
@@ -307,8 +307,7 @@ static cPhs_State phase_1(daNpcMn_c* i_this) {
                 }
                 dComIfGs_setEventReg(dSv_event_flag_c::UNK_870F, eventReg);
             }
-            u8 posFlag = i_this->mPosFlag;
-            if (eventReg != posFlag) {
+            if (eventReg != i_this->getPosFlag()) {
                 return cPhs_STOP_e;
             }
     }
@@ -341,7 +340,7 @@ cPhs_State daNpcMn_c::_create() {
         (cPhs__Handler) NULL
     };
 
-    return dComLbG_PhaseHandler(&mPhsMethod, l_method, this);
+    return dComLbG_PhaseHandler(&mPhaseCreate, l_method, this);
 }
 
 /* 00000904-00000BE0       .text createHeap__9daNpcMn_cFv */
@@ -491,13 +490,13 @@ cPhs_State daNpcMn_c::createInit() {
 bool daNpcMn_c::_delete() {
 #if VERSION == VERSION_DEMO
     if (mResFlag != 0) {
-        dComIfG_resDeleteDemo(&mPhs, l_arcname_tbl[0]);
+        dComIfG_resDeleteDemo(&mPhase, l_arcname_tbl[0]);
     }
     if (mpMorf != NULL) {
         mpMorf->stopZelAnime();
     }
 #else
-    dComIfG_resDeleteDemo(&mPhs, l_arcname_tbl[0]);
+    dComIfG_resDeleteDemo(&mPhase, l_arcname_tbl[0]);
     if (heap != NULL && mpMorf != NULL) {
         mpMorf->stopZelAnime();
     }
@@ -650,7 +649,7 @@ void daNpcMn_c::executeWait() {
                 mEtcFlag &= 0xFFFE;
             }
             if (mbPlayerAttention && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F08) && dComIfGp_checkPlayerStatus0(0, daPyStts0_TELESCOPE_LOOK_e)) {
-                dComIfGp_setScopeType(dScpTyp_PICTO_BOX_e);
+                dComIfGp_setScopeType(dScpTyp_UNK1_e);
                 if (dComIfGp_getMesgStatus() == fopMsgStts_SCOPE_ACTIVE_e && !(mEtcFlag & 1)) {
                     mEtcFlag |= 1;
                     executeSetMode(MOVE_PROC_TALK3);
@@ -698,10 +697,10 @@ int daNpcMn_c::executeTalkInit() {
 /* 000017D4-0000184C       .text executeTalk__9daNpcMn_cFv */
 void daNpcMn_c::executeTalk() {
     executeCommon();
-    if (talk2(1) == 0x12) {
+    if (talk2(1) == fopMsgStts_BOX_CLOSED_e) {
         mTalkOrder = 0;
         executeSetMode(MOVE_PROC_WAIT);
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
     } else {
         setAnmFromMsgTag();
     }
@@ -727,10 +726,10 @@ void daNpcMn_c::executeTalk3() {
             }
             break;
         case TALK3_TALK:
-            if (talk3(1) == 0x12) {
+            if (talk3(1) == fopMsgStts_BOX_CLOSED_e) {
                 mTalk3State = TALK3_INIT;
                 executeSetMode(MOVE_PROC_WAIT);
-                dComIfGp_event_onEventFlag(8);
+                dComIfGp_event_reset();
             }
             break;
     }
@@ -1609,7 +1608,7 @@ void daNpcMn_c::setCollision(dCcD_Cyl* i_cyl, cXyz i_center, float i_radius, flo
 /* 00003A58-00003AC4       .text chkEndEvent__9daNpcMn_cFv */
 BOOL daNpcMn_c::chkEndEvent() {
     if (dComIfGp_evmng_endCheck(mHatchEventIdx)) {
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         fopAcM_delete(this);
         return TRUE;
     }
@@ -1619,7 +1618,7 @@ BOOL daNpcMn_c::chkEndEvent() {
 /* 00003AC4-00003B38       .text chkPosNo__9daNpcMn_cFv */
 u8 daNpcMn_c::chkPosNo() {
     u8 posNo = 0;
-    while (posNo < 10) {
+    while (posNo < ARRAY_SIZE(l_room_name)) {
         if (strcmp(dComIfGp_getNextStageName(), l_room_name[posNo]) != 0) {
             posNo++;
         } else {

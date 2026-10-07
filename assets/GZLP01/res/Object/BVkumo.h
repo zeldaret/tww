@@ -22,6 +22,7 @@ enum dRes_ID_BVKUMO {
 
 enum BVKUMO_JNT {
     BVKUMO_JNT_AKUMO_e=0x0,
+    BVKUMO_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BVKUMO_H */

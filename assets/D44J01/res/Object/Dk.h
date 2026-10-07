@@ -92,14 +92,17 @@ enum DK_JNT {
     DK_JNT_J_DK_O_RA2_e=0x3E,
     DK_JNT_J_DK_O_RB1_e=0x3F,
     DK_JNT_J_DK_O_RB2_e=0x40,
+    DK_NUM_JNTS_e=0x41,
 };
 
 enum DK_KAMEN_JNT {
     DK_KAMEN_JNT_TEKKAMEN_e=0x0,
+    DK_KAMEN_NUM_JNTS_e=0x1,
 };
 
 enum DK_TAIL_JNT {
     DK_TAIL_JNT_DK_TAIL_e=0x0,
+    DK_TAIL_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_DK_H */

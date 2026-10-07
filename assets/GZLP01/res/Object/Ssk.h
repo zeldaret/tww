@@ -20,6 +20,7 @@ enum dRes_ID_SSK {
 
 enum KTANA_00_JNT {
     KTANA_00_JNT_PCUBE2_e=0x0,
+    KTANA_00_NUM_JNTS_e=0x1,
 };
 
 enum TURU_02_JNT {
@@ -28,6 +29,7 @@ enum TURU_02_JNT {
     TURU_02_JNT_B2_e=0x2,
     TURU_02_JNT_B1_e=0x3,
     TURU_02_JNT_B0_e=0x4,
+    TURU_02_NUM_JNTS_e=0x5,
 };
 
 #endif /* RES_SSK_H */

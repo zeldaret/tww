@@ -33,18 +33,18 @@ SKIP_FILES_WITH_AT_SIGN = True
 THIS_MTIME = Path(__file__).stat().st_mtime
 
 AMBIGUOUS_JOINT_ENUM_NAMES = [
-    "BOW_JNT",
-    "NZ_JNT",
+    "BOW",
+    "NZ",
 ]
 
 # Keep one arcname's version of the duplicate enum unqualified, but qualify the other arcnames.
 AMBIGUOUS_JOINT_ENUM_NAMES_KEEP_UNQUALIFIED = {
-    "VF_061_JNT": "Figure2",
-    "VF_062_JNT": "Figure2",
-    "VF_063_JNT": "Figure2",
-    "VF_064_JNT": "Figure2",
-    "VF_064L_JNT": "Figure2",
-    "VF_064S_JNT": "Figure2",
+    "VF_061": "Figure2",
+    "VF_062": "Figure2",
+    "VF_063": "Figure2",
+    "VF_064": "Figure2",
+    "VF_064L": "Figure2",
+    "VF_064S": "Figure2",
 }
 
 class ArcFile(NamedTuple):
@@ -117,27 +117,31 @@ def parse_bmd(src_path:Path, arc_name: str):
                 skip_bytes(binf, 12)
                 name_table = read_u32(binf) + chunk_begin
                 binf.seek(name_table)
-                num_strings = read_u16(binf)
+                num_joints = read_u16(binf)
                 found_enums = []
                 if ADD_EXT_TO_ENUM:
-                    out_enum_name = sanitize_string(src_path.name.replace(".", "_")).upper() + "_JNT"
+                    out_enum_name = sanitize_string(src_path.name.replace(".", "_")).upper()
                 else:
-                    out_enum_name = sanitize_string(src_path.name.split(".")[0]).upper() + "_JNT"
+                    out_enum_name = sanitize_string(src_path.name.split(".")[0]).upper()
 
                 if out_enum_name in AMBIGUOUS_JOINT_ENUM_NAMES:
                     out_enum_name = arc_name + "_" + out_enum_name
                 elif out_enum_name in AMBIGUOUS_JOINT_ENUM_NAMES_KEEP_UNQUALIFIED and AMBIGUOUS_JOINT_ENUM_NAMES_KEEP_UNQUALIFIED[out_enum_name].upper() != arc_name:
                     out_enum_name = arc_name + "_" + out_enum_name
 
-                for i in range(num_strings):
+                for i in range(num_joints):
                     binf.seek(name_table + 6 + i * 4)
                     string_offset = read_u16(binf)
                     binf.seek(name_table + string_offset)
 
-                    joint_name = f"{out_enum_name}_{read_str(binf).upper()}_e"
-                    found_enums.append(ArcEnumValue(joint_name, i))
+                    joint_name = read_str(binf).upper()
+                    enum_entry_name = f"{out_enum_name}_JNT_{joint_name}_e"
+                    found_enums.append(ArcEnumValue(enum_entry_name, i))
                     # print(joint_name)
-                return ArcEnum(out_enum_name, found_enums)
+                enum_entry_name = f"{out_enum_name}_NUM_JNTS_e"
+                found_enums.append(ArcEnumValue(enum_entry_name, num_joints))
+                
+                return ArcEnum(out_enum_name + "_JNT", found_enums)
             binf.seek(next_chunk)
     return None
 

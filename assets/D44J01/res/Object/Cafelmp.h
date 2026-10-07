@@ -18,6 +18,7 @@ enum dRes_ID_CAFELMP {
 
 enum YLAMP_JNT {
     YLAMP_JNT_LAMP_e=0x0,
+    YLAMP_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_CAFELMP_H */

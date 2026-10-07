@@ -356,8 +356,6 @@ public:
     void setAuctionGauge(s16 gauge) { mAuctionGauge = gauge; }
     s16 getAuctionGauge() { return mAuctionGauge; }
 
-    s32 getItemRupeeCount() { return mItemRupeeCount; }
-    void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
     void setMessageCountNumber(s16 num) { mMsgCountNumber = num; }
     s16 getMessageCountNumber() { return mMsgCountNumber; }
 
@@ -417,13 +415,21 @@ public:
     void fmapOpenFishOn() { mFmapOpen = 2; }
     void fmapOpenOff() { mFmapOpen = 0; }
 
+    s32 getItemRupeeCount() { return mItemRupeeCount; }
+    void setItemRupeeCount(s32 count) { mItemRupeeCount += count; }
+    void clearItemRupeeCount() { mItemRupeeCount = 0; }
+
     s16 getItemMagicCount() { return mItemMagicCount; }
     void setItemMagicCount(s16 magic) { mItemMagicCount += magic; }
+    void clearItemMagicCount() { mItemMagicCount = 0; }
+
     s16 getItemMaxMagicCount() { return mItemMaxMagicCount; }
     void setItemMaxMagicCount(s16 magic) { mItemMaxMagicCount += magic; }
+    void clearItemMaxMagicCount() { mItemMaxMagicCount = 0; }
 
     s32 getItemBombNumCount() { return mItemBombNumCount; }
     void setItemBombNumCount(s16 num) { mItemBombNumCount += num; }
+    void clearItemBombNumCount() { mItemBombNumCount = 0; }
 
     u16 getItemNowLife() { return mItemNowLife; }
     void setItemNowLife(u16 life) { mItemNowLife = life; }
@@ -452,6 +458,7 @@ public:
 
     s16 getItemKeyNumCount() { return mItemKeyNumCount; }
     void setItemKeyNumCount(s16 num) { mItemKeyNumCount += num; }
+    void clearItemKeyNumCount() { mItemKeyNumCount = 0; }
 
     s16 getItemBeastNumCount(int i_idx) { return mItemBeastNumCounts[i_idx]; }
     void setItemBeastNumCount(int i_idx, s16 num) { mItemBeastNumCounts[i_idx] += num; }
@@ -465,6 +472,9 @@ public:
     void clearItemTimeCount() {
         mAirMeter = 0;
         mItemSwimTimerStatus = false;
+    }
+    void addItemTimeCount(s32 time) {
+        mAirMeter += time;
     }
 
     s32 getItemTimeMax() { return mItemTimeMax; }
@@ -2610,14 +2620,6 @@ inline void dComIfGp_loadCameraPosition(int i, cXyz* o_pos, cXyz* o_target, f32*
     g_dComIfG_gameInfo.play.loadCameraPosition(i, o_pos, o_target, o_fovy, o_bank);
 }
 
-inline s32 dComIfGp_getItemRupeeCount() {
-    return g_dComIfG_gameInfo.play.getItemRupeeCount();
-}
-
-inline void dComIfGp_setItemRupeeCount(s32 count) {
-    g_dComIfG_gameInfo.play.setItemRupeeCount(count);
-}
-
 inline s16 dComIfGp_getMessageSetNumber() {
     return g_dComIfG_gameInfo.play.getMessageSetNumber();
 }
@@ -2674,6 +2676,10 @@ inline void dComIfGp_setItemKeyNumCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemKeyNumCount(num);
 }
 
+inline void dComIfGp_clearItemKeyNumCount() {
+    g_dComIfG_gameInfo.play.clearItemKeyNumCount();
+}
+
 inline s32 dComIfGp_getItemTimeCount() {
     return g_dComIfG_gameInfo.play.getItemTimeCount();
 }
@@ -2684,6 +2690,10 @@ inline void dComIfGp_setItemTimeCount(s32 time) {
 
 inline void dComIfGp_clearItemTimeCount() {
     g_dComIfG_gameInfo.play.clearItemTimeCount();
+}
+
+inline void dComIfGp_addItemTimeCount(s32 time) {
+    g_dComIfG_gameInfo.play.addItemTimeCount(time);
 }
 
 inline s32 dComIfGp_getItemTimeMax() {
@@ -2718,12 +2728,28 @@ inline s32 dComIfGp_checkStatus(u16 flags) {
     return g_dComIfG_gameInfo.play.checkStatus(flags);
 }
 
+inline s32 dComIfGp_getItemRupeeCount() {
+    return g_dComIfG_gameInfo.play.getItemRupeeCount();
+}
+
+inline void dComIfGp_setItemRupeeCount(s32 count) {
+    g_dComIfG_gameInfo.play.setItemRupeeCount(count);
+}
+
+inline void dComIfGp_clearItemRupeeCount() {
+    g_dComIfG_gameInfo.play.clearItemRupeeCount();
+}
+
 inline s16 dComIfGp_getItemMagicCount() {
     return g_dComIfG_gameInfo.play.getItemMagicCount();
 }
 
 inline void dComIfGp_setItemMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMagicCount(magic);
+}
+
+inline void dComIfGp_clearItemMagicCount() {
+    g_dComIfG_gameInfo.play.clearItemMagicCount();
 }
 
 inline s16 dComIfGp_getItemMaxMagicCount() {
@@ -2734,12 +2760,20 @@ inline void dComIfGp_setItemMaxMagicCount(s16 magic) {
     g_dComIfG_gameInfo.play.setItemMaxMagicCount(magic);
 }
 
+inline void dComIfGp_clearItemMaxMagicCount() {
+    g_dComIfG_gameInfo.play.clearItemMaxMagicCount();
+}
+
 inline s32 dComIfGp_getItemBombNumCount() {
     return g_dComIfG_gameInfo.play.getItemBombNumCount();
 }
 
 inline void dComIfGp_setItemBombNumCount(s16 num) {
     g_dComIfG_gameInfo.play.setItemBombNumCount(num);
+}
+
+inline void dComIfGp_clearItemBombNumCount() {
+    g_dComIfG_gameInfo.play.clearItemBombNumCount();
 }
 
 inline s16 dComIfGp_getItemPictureNumCount() {

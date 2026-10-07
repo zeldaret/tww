@@ -87,6 +87,7 @@ enum JB_JNT {
     JB_JNT_WAIST1_e=0x29,
     JB_JNT_BFIN_e=0x2A,
     JB_JNT_WAIST2_e=0x2B,
+    JB_NUM_JNTS_e=0x2C,
 };
 
 enum YJBSM00_JNT {
@@ -94,10 +95,12 @@ enum YJBSM00_JNT {
     YJBSM00_JNT_A00_e=0x1,
     YJBSM00_JNT_JABUSUIMEN_e=0x2,
     YJBSM00_JNT_SPLASH_e=0x3,
+    YJBSM00_NUM_JNTS_e=0x4,
 };
 
 enum LF_JNT {
     LF_JNT_HIKARI_e=0x0,
+    LF_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_JB_H */

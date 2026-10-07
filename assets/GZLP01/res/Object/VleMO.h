@@ -18,6 +18,7 @@ enum dRes_ID_VLEMO {
 
 enum VLEMO_JNT {
     VLEMO_JNT_VLEMO_MODEL_e=0x0,
+    VLEMO_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VLEMO_H */

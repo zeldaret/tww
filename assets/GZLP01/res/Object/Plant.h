@@ -22,6 +22,7 @@ enum YRMWD_JNT {
     YRMWD_JNT_JOINT1_e=0x2,
     YRMWD_JNT_JOINT2_e=0x3,
     YRMWD_JNT_JOINT3_e=0x4,
+    YRMWD_NUM_JNTS_e=0x5,
 };
 
 #endif /* RES_PLANT_H */

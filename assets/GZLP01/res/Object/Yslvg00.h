@@ -26,6 +26,7 @@ enum dRes_ID_YSLVG00 {
 
 enum YSLVG00_JNT {
     YSLVG00_JNT_SALVAGE_e=0x0,
+    YSLVG00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_YSLVG00_H */

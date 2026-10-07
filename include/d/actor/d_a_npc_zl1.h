@@ -36,6 +36,25 @@ public:
         int mLoopMode;
     };
 
+    enum {
+        EYE_L_e = 0,
+        EYE_L_DAM_A_e = 1,
+        EYE_L_DAM_B_e = 2,
+        EYE_R_e = 3,
+        EYE_R_DAM_A_e = 4,
+        EYE_R_DAM_B_e = 5,
+        EYE_MAX = 6,
+    };
+    enum {
+        EYEBLOW_L_e = 0,
+        EYEBLOW_L_DAM_A_e = 1,
+        EYEBLOW_L_DAM_B_e = 2,
+        EYEBLOW_R_e = 3,
+        EYEBLOW_R_DAM_A_e = 4,
+        EYEBLOW_R_DAM_B_e = 5,
+        EYEBLOW_MAX = 6 
+    };
+
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
     BOOL set_startPos(int);
@@ -256,13 +275,13 @@ public:
     /* 0x84F */ s8 field_0x84F;
     /* 0x850 */ s8 field_0x850;
     /* 0x851 */ s8 field_0x851;
-    /* 0x854 */ J3DJoint* mJoint1;
-    /* 0x858 */ J3DJoint* mJoint2;
-    /* 0x85C */ J3DJoint* mJoint3;
-    /* 0x860 */ J3DMaterial* field_0x860[6];
-    /* 0x878 */ J3DMaterial* field_0x878[6];
-    /* 0x890 */ J3DShape* field_0x890[6];
-    /* 0x8A8 */ J3DShape* field_0x8A8[6];
+    /* 0x854 */ J3DJoint* mpRootJoint;
+    /* 0x858 */ J3DJoint* mpEyeJoint;
+    /* 0x85C */ J3DJoint* mpEyebrowJoint;
+    /* 0x860 */ J3DMaterial* mpEyeMats[EYE_MAX];
+    /* 0x878 */ J3DMaterial* mpEyebrowMats[EYEBLOW_MAX];
+    /* 0x890 */ J3DShape* mpEyeShapes[EYE_MAX];
+    /* 0x8A8 */ J3DShape* mpEyebrowShapes[EYEBLOW_MAX];
     /* 0x8C0 */ mDoExt_offCupOnAupPacket mOffCupOnAupPacket1;
     /* 0x8D0 */ mDoExt_offCupOnAupPacket mOffCupOnAupPacket2;
     /* 0x8E0 */ mDoExt_onCupOffAupPacket mOnCupOffAupPacket1;

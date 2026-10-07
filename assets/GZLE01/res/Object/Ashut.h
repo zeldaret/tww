@@ -22,6 +22,7 @@ enum dRes_ID_ASHUT {
 
 enum ASHUT_JNT {
     ASHUT_JNT_ASHUT_e=0x0,
+    ASHUT_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ASHUT_H */

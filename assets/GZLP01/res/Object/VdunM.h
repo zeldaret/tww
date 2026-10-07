@@ -18,6 +18,7 @@ enum dRes_ID_VDUNM {
 
 enum VDUNM_JNT {
     VDUNM_JNT_VDUNM_MODEL_e=0x0,
+    VDUNM_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VDUNM_H */

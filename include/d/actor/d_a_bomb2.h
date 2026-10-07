@@ -1,6 +1,7 @@
 #ifndef D_A_BOMB_2_H
 #define D_A_BOMB_2_H
 
+#include "d/d_a_obj.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
 #include "d/d_bg_s_acch.h"
@@ -15,7 +16,6 @@ namespace daBomb2 {
         FuseSmokeCB_c() {}
         virtual ~FuseSmokeCB_c() {}
 
-        
         void setOldPosP(const cXyz*, const cXyz*);
         void deleteCallBack();
 
@@ -63,19 +63,27 @@ namespace daBomb2 {
     }; // Size 0x54
 
     enum Start_e {
-        Start_UNK0_e,
-        Start_UNK1_e,
-        Start_UNK2_e,
+        /* 0x0 */ Start_EXPLODE_INSTANT_e,
+        /* 0x1 */ Start_EXPLODE_INTERVAL_e,
+        /* 0x2 */ Start_CARRY_e,
     };
 
     class Act_c : public fopAc_ac_c {
     public:
-        void prm_get_start() const {}
-        void prm_get_stick() const {}
-        static u32 prm_make(Start_e p0, bool p1) { // Might be wrong
+        enum Prm_e {
+            PRM_STICK_W = 0x01,
+            PRM_STICK_S = 0x08,
+
+            PRM_START_W = 0x02,
+            PRM_START_S = 0x00,
+        };
+
+        int prm_get_start() const { return daObj::PrmAbstract(this, PRM_START_W, PRM_START_S); }
+        bool prm_get_stick() const { return daObj::PrmAbstract(this, PRM_STICK_W, PRM_STICK_S); }
+        static u32 prm_make(Start_e i_start, bool i_stick) { // Might be wrong
             u32 prm = 0;
-            prm |= (p1 ? 1 : 0) << 8;
-            return prm | p0;
+            prm |= (i_stick ? 1 : 0) << 8;
+            return prm | i_start;
         }
 
         Act_c();
@@ -170,14 +178,6 @@ namespace daBomb2 {
         void draw_nut();
         void draw_shadow();
         bool _draw();
-
-        enum Prm_e {
-            PRM_1_W = 1,
-            PRM_1_S = 0x08,
-
-            PRM_2_W = 2,
-            PRM_2_S = 0x00,
-        };
 
     private:
         /* 0x290 */ request_of_phase_process_class mPhase;

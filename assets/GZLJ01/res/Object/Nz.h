@@ -109,6 +109,7 @@ enum NZ_NZ_JNT {
     NZ_NZ_JNT_UDER_e=0x13,
     NZ_NZ_JNT_UDER2_e=0x14,
     NZ_NZ_JNT_UDER3_e=0x15,
+    NZ_NZ_NUM_JNTS_e=0x16,
 };
 
 #endif /* RES_NZ_H */

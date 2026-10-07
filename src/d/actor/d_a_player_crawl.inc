@@ -325,34 +325,25 @@ BOOL daPy_lk_c::checkNotCrawlStand(cXyz* param_0, cXyz* param_1) {
 }
 
 /* 80139760-80139878       .text procCrawlMove_init__9daPy_lk_cFss */
-BOOL daPy_lk_c::procCrawlMove_init(s16 param_0, s16 param_1) {
-    BOOL var_r29;
-    if (mCurProc == daPyProc_CRAWL_AUTO_MOVE_e) {
-        var_r29 = 0;
-    } else {
-        var_r29 = 1;
-    }
-    BOOL var_r27;
-    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e)) {
-        var_r27 = 1;
-    } else {
-        var_r27 = 0;
-    }
+BOOL daPy_lk_c::procCrawlMove_init(s16 i_angleX, s16 i_angleZ) {
+    BOOL var_r29 = mCurProc == daPyProc_CRAWL_AUTO_MOVE_e ? FALSE : TRUE;
+    BOOL var_r27 = dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e) ? TRUE : FALSE;
     commonProcInit(daPyProc_CRAWL_MOVE_e);
+
     if (var_r29 != 0) {
-        f32 dVar4 = getCrawlMoveAnmSpeed();
+        f32 anm_speed = getCrawlMoveAnmSpeed();
         if (getDirectionFromShapeAngle() == DIR_BACKWARD) {
-            dVar4 *= -1.0f;
+            anm_speed *= -1.0f;
         }
         current.angle.y = shape_angle.y;
-        setSingleMoveAnime(ANM_LIEFORWARD, dVar4, 0.0f, -1, m_HIO->mCrouch.m.field_0x38);
+        setSingleMoveAnime(ANM_LIEFORWARD, anm_speed, 0.0f, -1, m_HIO->mCrouch.m.field_0x38);
     } else {
         onResetFlg0(daPyRFlg0_CRAWL_AUTO_MOVE);
     }
     m35A0 = -1.0f;
     mProcVar6.m3570 = var_r29 ^ 1;
-    shape_angle.x = param_0;
-    shape_angle.z = param_1;
+    shape_angle.x = i_angleX;
+    shape_angle.z = i_angleZ;
     m35E4 = 1.0f;
     dComIfGp_setPlayerStatus0(0, daPyStts0_CRAWL_e);
     if (var_r27 != 0) {

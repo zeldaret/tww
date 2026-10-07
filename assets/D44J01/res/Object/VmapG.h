@@ -18,6 +18,7 @@ enum dRes_ID_VMAPG {
 
 enum VMAPG_JNT {
     VMAPG_JNT_VMAPG_MODEL_e=0x0,
+    VMAPG_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VMAPG_H */

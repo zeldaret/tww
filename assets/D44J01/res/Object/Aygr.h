@@ -26,10 +26,12 @@ enum dRes_ID_AYGR {
 
 enum AYGR_JNT {
     AYGR_JNT_AYGR_e=0x0,
+    AYGR_NUM_JNTS_e=0x1,
 };
 
 enum AYGRH_JNT {
     AYGRH_JNT_AYGRH_e=0x0,
+    AYGRH_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_AYGR_H */

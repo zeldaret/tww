@@ -24,6 +24,7 @@ enum VAMUK_JNT {
     VAMUK_JNT_ROOT_VAMUK_e=0x0,
     VAMUK_JNT_SC_AMUK_OUTSIDE_e=0x1,
     VAMUK_JNT_ZAMUK_INSIDE_e=0x2,
+    VAMUK_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_VAMUK_H */

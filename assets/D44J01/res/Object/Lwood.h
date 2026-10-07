@@ -26,6 +26,7 @@ enum ALWD_JNT {
     ALWD_JNT_J_ALWD_MIKI_e=0x2,
     ALWD_JNT_J_ALWD_HA_e=0x3,
     ALWD_JNT_JOINT3_e=0x4,
+    ALWD_NUM_JNTS_e=0x5,
 };
 
 #endif /* RES_LWOOD_H */

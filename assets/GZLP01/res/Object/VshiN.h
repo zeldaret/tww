@@ -18,6 +18,7 @@ enum dRes_ID_VSHIN {
 
 enum VSHIN_JNT {
     VSHIN_JNT_VSHIN__MODEL_e=0x0,
+    VSHIN_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VSHIN_H */

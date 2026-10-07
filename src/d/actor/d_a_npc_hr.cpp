@@ -28,7 +28,7 @@ void daNpc_Wind_Eff::init() {
 /* 000000A0-000000EC       .text remove__14daNpc_Wind_EffFv */
 void daNpc_Wind_Eff::remove() {
     if (mWindEffState != WIND_EFF_INACTIVE) {
-        mpFollowECallBack.end();
+        mPtclFollowCb.end();
         init();
     }
 }
@@ -40,7 +40,7 @@ BOOL daNpc_Wind_Eff::create(cXyz* squallPos) {
 
         mAlphaFactor = 1.0f;
         mpSquallPos = squallPos;
-        JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_WINDLINE00, &mPos, NULL, NULL, 0xFF, &mpFollowECallBack);
+        JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_WINDLINE00, &mPos, NULL, NULL, 0xFF, &mPtclFollowCb);
         
         if (pEmitter == NULL) {
             return FALSE;
@@ -67,7 +67,7 @@ void daNpc_Wind_Eff::proc() {
     JPABaseEmitter* pEmitter;
     switch(mWindEffState) {
         case WIND_EFF_FADE_IN:
-            pEmitter = mpFollowECallBack.getEmitter();
+            pEmitter = mPtclFollowCb.getEmitter();
             if (mAlphaFactor < 0.9f) {
                 mAlphaFactor += 0.1f;
                 
@@ -91,7 +91,7 @@ void daNpc_Wind_Eff::proc() {
             move();
             break;
         case WIND_EFF_FADE_OUT:
-            pEmitter = mpFollowECallBack.getEmitter();
+            pEmitter = mPtclFollowCb.getEmitter();
 
             if (mAlphaFactor > 0.1f) {
                 mAlphaFactor -= 0.1f;
@@ -1216,9 +1216,9 @@ u32 daNpc_Hr_c::getMsg() {
                 case 0x5B3:
                     if (mType == 0) {
                         dComIfGs_onSwitch(getSwbit(), fopAcM_GetRoomNo(this));
-                        dComIfGp_setMelodyNum(0);
+                        dComIfGp_setMelodyNum(mDoAud_MELODY_WINDS_REQUIEM_e);
                     } else {
-                        dComIfGp_setMelodyNum(1);
+                        dComIfGp_setMelodyNum(mDoAud_MELODY_BALLAD_OF_GALES_e);
                     }
                     break;
             }

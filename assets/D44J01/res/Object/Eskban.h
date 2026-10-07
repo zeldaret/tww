@@ -22,6 +22,7 @@ enum dRes_ID_ESKBAN {
 
 enum ESKBAN_JNT {
     ESKBAN_JNT_ESKBAN_e=0x0,
+    ESKBAN_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ESKBAN_H */

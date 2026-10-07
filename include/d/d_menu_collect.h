@@ -20,10 +20,10 @@ class JUTFont;
 
 class dMenu_Collect_c : public dMenu_base_c {
 public:
-    ~dMenu_Collect_c() {}
+    virtual ~dMenu_Collect_c() {}
     virtual void draw() { _draw(); }
 
-    void alphaChange(fopMsgM_pane_class* pane, float alpha) { pane->mInitAlpha *= alpha; }
+    void alphaChange(fopMsgM_pane_class* pane, f32 alpha) { pane->mInitAlpha *= alpha; }
     u8 getCollectMode() { return mCollectMode; }
     u8 getNowItem() { return mNowItem; }
     void setNowItem(u8 val) { mNowItem = val; }
@@ -58,34 +58,34 @@ public:
     void screenSet();
     void initialize();
     void cursorAnime();
-    int stickDirection(unsigned char);
+    u8 stickDirection(u8);
     u8 cursorMainMove();
     u8 noteCheck();
     void noteInit();
     void noteAppear();
     void noteOpen();
     void noteClose();
-    void mainTrans(float, float);
-    void subTrans(float, float);
-    void titleTrans(float, float);
-    void noteRotate(float, float);
-    void nameTrans(float, float);
-    void mainOpenProc(short, short, short);
-    void subOpenProc(short, short, short);
-    void titleOpenProc(short, short);
-    void noteOpenProc(short, short);
-    void nameOpenProc(short, short);
+    void mainTrans(f32, f32);
+    void subTrans(f32, f32);
+    void titleTrans(f32, f32);
+    void noteRotate(f32, f32);
+    void nameTrans(f32, f32);
+    void mainOpenProc(s16, s16, s16);
+    void subOpenProc(s16, s16, s16);
+    void titleOpenProc(s16, s16);
+    void noteOpenProc(s16, s16);
+    void nameOpenProc(s16, s16);
     void itemBitCheck();
     void itemScale();
     void collectPriority();
     void weponPriority();
-    void tactGuideShow(unsigned char, bool);
-    void tactDemoMode(unsigned char);
-    void tactPlayMode(unsigned char);
-    void tactTrans(unsigned char, float, float);
+    void tactGuideShow(u8, bool);
+    void tactDemoMode(u8);
+    void tactPlayMode(u8);
+    void tactTrans(u8, f32, f32);
     void tactBaseShow();
     void cornerMove();
-    void triforceAnime(unsigned char);
+    void triforceAnime(u8);
     void tactGuideHide();
     void itemnameMove();
     void itemnameSet();
@@ -94,21 +94,21 @@ public:
     void outFontInit();
     void outFontMove();
     void outFontDraw();
-    bool collectItemGetCheck(unsigned char);
+    bool collectItemGetCheck(u8);
     virtual void _create();
     void _create3();
     virtual void _delete();
     virtual void _move();
     void _move3();
     virtual void _draw();
-    bool _open();
+    virtual bool _open();
     bool _open3();
-    bool _close();
+    virtual bool _close();
     bool _close3();
-    void animeStep1(short, short);
-    void animeStep2(short, short);
-    void animeStep3(short, short);
-    void animeStep4(short, short);
+    void animeStep1(s16, s16);
+    void animeStep2(s16, s16);
+    void animeStep3(s16, s16);
+    void animeStep4(s16, s16);
     bool _open2();
     bool _close2();
 

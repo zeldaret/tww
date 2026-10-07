@@ -17,9 +17,9 @@ void J3DJointTree::clear() {
     mModelDataType = 0;
     mRootNode = NULL;
     mBasicMtxCalc = NULL;
-    mJointNum = NULL;
+    mJointNum = 0;
     mJointNodePointer = NULL;
-    field_0x40 = NULL;
+    field_0x40 = 0;
     mWEvlpMtxNum = 0;
     mWEvlpMixMtxNum = NULL;
     mWEvlpMixMtxIndex = NULL;

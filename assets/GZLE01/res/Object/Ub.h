@@ -78,22 +78,27 @@ enum UB_JNT {
     UB_JNT_LEGR1_e=0x10,
     UB_JNT_LEGR2_e=0x11,
     UB_JNT_FOOTR_e=0x12,
+    UB_NUM_JNTS_e=0x13,
 };
 
 enum UB01_HEAD_JNT {
     UB01_HEAD_JNT_UB01_HEAD_e=0x0,
+    UB01_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UB02_HEAD_JNT {
     UB02_HEAD_JNT_UB02_HEAD_e=0x0,
+    UB02_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UB03_HEAD_JNT {
     UB03_HEAD_JNT_UB03_HEAD_e=0x0,
+    UB03_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UB04_HEAD_JNT {
     UB04_HEAD_JNT_UB04_HEAD_e=0x0,
+    UB04_HEAD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_UB_H */

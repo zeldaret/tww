@@ -52,6 +52,7 @@ enum dRes_ID_ADNNO {
 
 enum ADNNO_JNT {
     ADNNO_JNT_ADNNO_e=0x0,
+    ADNNO_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ADNNO_H */

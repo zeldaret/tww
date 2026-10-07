@@ -632,9 +632,7 @@ public:
     /* 0x2278 */ fopMsgM_pane_class field_0x2278;
     /* 0x22B0 */ fopMsgM_pane_class field_0x22b0;
     /* 0x22E8 */ fopMsgM_pane_class field_0x22e8;
-    /* 0x2320 */ fopMsgM_pane_class field_0x2320[dItemBtn_COUNT_e];
-    /* 0x23C8 */ fopMsgM_pane_class field_0x23c8[dItemBtn_COUNT_e];
-    /* 0x2470 */ fopMsgM_pane_class field_0x2470[dItemBtn_COUNT_e];
+    /* 0x2320 */ fopMsgM_pane_class field_0x2320[3][dItemBtn_COUNT_e];
     /* 0x2518 */ fopMsgM_pane_class field_0x2518;
     /* 0x2550 */ fopMsgM_pane_class field_0x2550[2];
     /* 0x25C0 */ fopMsgM_pane_class field_0x25c0[2];
@@ -739,15 +737,6 @@ public:
     /* 0x302B */ u8 field_0x302b[0x302C - 0x302B];
 };
 
-enum MenuStatus {
-    MENU_STATUS_NONE = 0,
-    MENU_STATUS_ITEM = 1,
-    MENU_STATUS_COLLECT = 2,
-    MENU_STATUS_MAP = 3,
-    MENU_STATUS_NAME = 4,
-    MENU_STATUS_SAVE = 5,
-};
-
 extern dMeter_map_HIO_c g_meter_mapHIO;
 extern dMeter_HIO_c g_meterHIO;
 extern dMeter_menuHIO_c g_menuHIO;
@@ -760,17 +749,28 @@ void dMenu_flagSet(u8);
 void dMeter_mtrShow();
 void dMeter_mtrHide();
 
-// Use enum MenuStatus.
+enum MenuStatus {
+    MENU_STATUS_NONE = 0,
+    MENU_STATUS_ITEM = 1,
+    MENU_STATUS_COLLECT = 2,
+    MENU_STATUS_MAP = 3,
+    MENU_STATUS_NAME = 4,
+    MENU_STATUS_SAVE = 5,
+};
 u8 dMenu_getMenuStatus();
 void dMenu_setMenuStatus(u8);
 void dMenu_setMenuStatusOld(u8);
+
+u8 dMenu_getPushMenuButton();
 void dMenu_setPushMenuButton(u8);
 
 u8 dMenu_getCollectMode();
 void dMenu_setCollectMode(u8);
 
+#if VERSION > VERSION_DEMO
 u8 dMenu_getItemMode();
 void dMenu_setItemMode(u8);
+#endif
 
 void dMeter_weponChange(sub_meter_class* i_Meter);
 void dMeter_weponAnime(sub_meter_class* i_Meter);

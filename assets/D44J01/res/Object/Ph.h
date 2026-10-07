@@ -77,6 +77,7 @@ enum PHB_JNT {
     PHB_JNT_CONNECTA_e=0x1,
     PHB_JNT_HIGEA_e=0x2,
     PHB_JNT_HIGEB_e=0x3,
+    PHB_NUM_JNTS_e=0x4,
 };
 
 enum PHP_JNT {
@@ -93,6 +94,7 @@ enum PHP_JNT {
     PHP_JNT_HANEC02_e=0xA,
     PHP_JNT_HANEC03_e=0xB,
     PHP_JNT_HANEC04_e=0xC,
+    PHP_NUM_JNTS_e=0xD,
 };
 
 #endif /* RES_PH_H */

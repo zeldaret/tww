@@ -23,6 +23,7 @@ enum dRes_ID_VDOKU {
 enum VDOKU_JNT {
     VDOKU_JNT_ROOT_VDOKU_e=0x0,
     VDOKU_JNT_VDOKU_MODEL_e=0x1,
+    VDOKU_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VDOKU_H */

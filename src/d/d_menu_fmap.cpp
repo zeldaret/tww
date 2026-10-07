@@ -1459,7 +1459,7 @@ u32 dMenu_Fmap_c::readFmapTexture(const char* i_filename) {
 /* 801B3698-801B36F0       .text aramCmapDatRead__12dMenu_Fmap_cFv */
 void dMenu_Fmap_c::aramCmapDatRead() {
     JKRArchive* archive = dComIfGp_getFmapResArchive();
-    aramCmapDatPat_t* pat = (aramCmapDatPat_t*)JKRArchive::getGlbResource('DATA', "CmapDat.bin", archive);
+    aramCmapDatPat_t* pat = (aramCmapDatPat_t*)JKRGetResource('DATA', "CmapDat.bin", archive);
     initCmapDatPnt(pat);
 }
 
@@ -1874,12 +1874,8 @@ void dMenu_Fmap_c::_delete() {
     delete fmapDl.scrn;
     delete stick;
     delete mChkPntTxt_p;
-    if (outFont != NULL) {
-        delete outFont;
-    }
-    if (outFont2 != NULL) {
-        delete outFont2;
-    }
+    delete outFont;
+    delete outFont2;
     dComIfGp_getFmapResArchive()->removeResourceAll();
 #if VERSION > VERSION_DEMO
     dComIfGp_getFmapArchive()->removeResourceAll();

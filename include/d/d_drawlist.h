@@ -470,6 +470,7 @@ public:
     };
 
     dDlst_alphaModel_c();
+    ~dDlst_alphaModel_c() {}
     static dDlst_alphaModel_c * create(int);
     BOOL set(u8 type, Mtx mtx, u8 alpha);
     BOOL draw(Mtx);

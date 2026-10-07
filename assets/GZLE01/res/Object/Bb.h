@@ -122,10 +122,12 @@ enum BB_JNT {
     BB_JNT_TUNOBR_e=0x1C,
     BB_JNT_OA_e=0x1D,
     BB_JNT_OB_e=0x1E,
+    BB_NUM_JNTS_e=0x1F,
 };
 
 enum BB_TAIL_JNT {
     BB_TAIL_JNT_POLYSURFACE18_e=0x0,
+    BB_TAIL_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BB_H */

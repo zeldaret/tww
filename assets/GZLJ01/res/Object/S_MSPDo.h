@@ -24,6 +24,7 @@ enum S_MSPDO_JNT {
     S_MSPDO_JNT_S_SPDOOR_e=0x0,
     S_MSPDO_JNT_SPDOOR_e=0x1,
     S_MSPDO_JNT_OUT_WOOD1_e=0x2,
+    S_MSPDO_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_S_MSPDO_H */

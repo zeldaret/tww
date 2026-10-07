@@ -22,6 +22,7 @@ enum dRes_ID_EKAO {
 
 enum EKAO_JNT {
     EKAO_JNT_EKAO_e=0x0,
+    EKAO_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_EKAO_H */

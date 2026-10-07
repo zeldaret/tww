@@ -22,6 +22,7 @@ enum dRes_ID_KOKIIE {
 
 enum KOKI_00_JNT {
     KOKI_00_JNT_KOKI_00_e=0x0,
+    KOKI_00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KOKIIE_H */

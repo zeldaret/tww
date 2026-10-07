@@ -30,6 +30,12 @@
 
 #define SQUARE(x) ((x) * (x))
 
+#if defined(__cplusplus) && __cplusplus >= 201103L
+#define COMPOUND_LITERAL(x)
+#else
+#define COMPOUND_LITERAL(x) (x)
+#endif
+
 #ifdef __MWERKS__
 #define GLUE(a, b) a##b
 #define GLUE2(a, b) GLUE(a, b)

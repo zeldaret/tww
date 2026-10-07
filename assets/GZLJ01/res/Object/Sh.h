@@ -76,6 +76,7 @@ enum SHB_JNT {
     SHB_JNT_HARA_e=0x0,
     SHB_JNT_CONNECTA_e=0x1,
     SHB_JNT_KUCHI_1_e=0x2,
+    SHB_NUM_JNTS_e=0x3,
 };
 
 enum SHP_JNT {
@@ -92,6 +93,7 @@ enum SHP_JNT {
     SHP_JNT_HANEC02_e=0xA,
     SHP_JNT_HANEC03_e=0xB,
     SHP_JNT_HANEC04_e=0xC,
+    SHP_NUM_JNTS_e=0xD,
 };
 
 #endif /* RES_SH_H */

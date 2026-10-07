@@ -11,6 +11,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_camera.h"
+#include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_controller_pad.h"
 
@@ -30,7 +31,7 @@ cXyz setArrowTrans(s16 yRot, cXyz offset) {
 }
 
 /* 800F4C4C-800F4CD8       .text getYOffset__8daItem_cFv */
-float daItem_c::getYOffset() {
+f32 daItem_c::getYOffset() {
     switch (m_itemNo) {
     case dItemNo_KNIGHTS_CREST_e:
         return 0.0f;
@@ -183,12 +184,12 @@ void daItem_c::CreateInit() {
         break;
     }
     
-    mSpawnSwitchNo = daItem_prm::getSwitchNo2(this);
+    mSpawnSwitchNo = daItem_prm::getSwitchNo(this);
     if (mSpawnSwitchNo != 0xFF && !fopAcM_isSwitch(this, mSpawnSwitchNo)) {
         hide();
         setFlag(0x02);
     }
-    mCollideSwitchNo = daItem_prm::getSwitchNo(this);
+    mCollideSwitchNo = daItem_prm::getSwitchNo2(this);
     
     current.angle.z = 0;
     home.angle.z = 0;
@@ -387,7 +388,10 @@ void daItem_c::execMainNormalDirection() {
         current.pos.y = headPos.y;
     }
     
-    current.angle = dComIfGp_getCamera(0)->mAngle;
+    camera_process_class* camera = dComIfGp_getCamera(0);
+    current.angle.x = fopCamM_GetAngleX(camera);
+    current.angle.y = fopCamM_GetAngleY(camera);
+    current.angle.z = fopCamM_GetAngleZ(camera);
     
     mSimpleExistTimer--;
     if (mSimpleExistTimer < 0) {
@@ -976,7 +980,6 @@ BOOL daItem_c::itemActionForEmono() {
 
 /* 800F73A4-800F7898       .text itemActionForSword__8daItem_cFv */
 BOOL daItem_c::itemActionForSword() {
-    /* Nonmatching - retail-only regalloc */
     mAcch.CrrPos(*dComIfG_Bgsp());
     
     bool isQuake = dComIfGp_getDetect().chk_quake(&current.pos);
@@ -1003,8 +1006,8 @@ BOOL daItem_c::itemActionForSword() {
     dBgS_ObjGndChk gndChk;
     cXyz bottomPos(0.0f, 0.0f, 0.0f);
     cXyz topPos(0.0f, 50.0f, 0.0f);
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(current.angle);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(current.angle.x, current.angle.y, current.angle.z);
     mDoMtx_stack_c::multVec(&bottomPos, &bottomPos);
     mDoMtx_stack_c::multVec(&topPos, &topPos);
     gndChk.SetPos(&bottomPos);
@@ -1335,8 +1338,7 @@ void daItem_c::mode_water() {
         current.pos.y = mAcch.m_wtr.GetHeight();
     }
     
-    s16 rotationSpeed = 0xFFFF / daItemBase_c::m_data.mRotateYSpeed;
-    fopAcM_addAngleY(this, current.angle.y + rotationSpeed, rotationSpeed);
+    RotateBase();
 }
 
 /* 800F8528-800F8950       .text initAction__8daItem_cFv */

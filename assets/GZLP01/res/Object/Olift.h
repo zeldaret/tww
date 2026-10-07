@@ -24,6 +24,7 @@ enum OLIFT_JNT {
     OLIFT_JNT_OLIFT_e=0x0,
     OLIFT_JNT_J_NE1_e=0x1,
     OLIFT_JNT_J_HAPPA_e=0x2,
+    OLIFT_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_OLIFT_H */

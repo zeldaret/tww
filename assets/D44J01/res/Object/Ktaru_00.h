@@ -26,10 +26,12 @@ enum dRes_ID_KTARU_00 {
 
 enum KTARU03_JNT {
     KTARU03_JNT_KTARU_03_e=0x0,
+    KTARU03_NUM_JNTS_e=0x1,
 };
 
 enum KTARU_00_JNT {
     KTARU_00_JNT_KTARU_00_e=0x0,
+    KTARU_00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KTARU_00_H */

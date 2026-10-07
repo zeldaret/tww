@@ -22,6 +22,7 @@ enum dRes_ID_HAMI3 {
 
 enum HAMI3_JNT {
     HAMI3_JNT_MONO_e=0x0,
+    HAMI3_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HAMI3_H */

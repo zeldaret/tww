@@ -22,6 +22,7 @@ enum dRes_ID_OSPBOX {
 
 enum OSPBOX_JNT {
     OSPBOX_JNT_OSPBOX_e=0x0,
+    OSPBOX_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_OSPBOX_H */

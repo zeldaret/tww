@@ -758,12 +758,12 @@ void JAIZelBasic::seDeleteObject(Vec* param_1) {
 }
 
 /* 802A86A8-802A8748       .text getLinkVoiceVowel__11JAIZelBasicFUl */
-u8 JAIZelBasic::getLinkVoiceVowel(u32) {
+u8 JAIZelBasic::getLinkVoiceVowel(u32 i_soundID) {
     /* Nonmatching */
 }
 
 /* 802A8748-802A892C       .text linkVoiceStart__11JAIZelBasicFUlP3VecUcSc */
-void JAIZelBasic::linkVoiceStart(u32, Vec*, u8, s8) {
+void JAIZelBasic::linkVoiceStart(u32 i_soundID, Vec* i_sePos, u8, s8) {
     /* Nonmatching */
 }
 

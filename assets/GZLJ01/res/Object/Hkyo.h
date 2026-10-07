@@ -26,6 +26,7 @@ enum dRes_ID_HKYO {
 
 enum HKYO1_JNT {
     HKYO1_JNT_DOOR10_ST_0_e=0x0,
+    HKYO1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HKYO_H */

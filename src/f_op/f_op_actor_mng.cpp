@@ -689,22 +689,22 @@ s32 fopAcM_orderCatchEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner) {
 }
 
 /* 80025C34-80025CC8       .text fopAcM_orderOtherEvent2__FP10fopAc_ac_cPcUsUs */
-s32 fopAcM_orderOtherEvent2(fopAc_ac_c* i_this, char* pEventName, u16 flag, u16 hind) {
-    u16 prio = dComIfGp_evmng_getEventPrio(dComIfGp_evmng_getEventIdx(pEventName));
+s32 fopAcM_orderOtherEvent2(fopAc_ac_c* i_this, char* i_eventName, u16 flag, u16 hind) {
+    u16 prio = dComIfGp_evmng_getEventPrio(dComIfGp_evmng_getEventIdx(i_eventName));
     if (prio == 0)
         prio = 0xFF;
 
-    return dComIfGp_event_orderOld(dEvtType_OTHER_e, prio, flag, hind, i_this, dComIfGp_getPlayer(0), pEventName);
+    return dComIfGp_event_orderOld(dEvtType_OTHER_e, prio, flag, hind, i_this, dComIfGp_getPlayer(0), i_eventName);
 }
 
 /* 80025CC8-80025D28       .text fopAcM_orderChangeEvent__FP10fopAc_ac_cPcUsUs */
-s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, char* pEventName, u16 flag, u16 hind) {
-    return fopAcM_orderChangeEventId(i_this, dComIfGp_evmng_getEventIdx(pEventName), flag, hind);
+s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, char* i_eventName, u16 flag, u16 hind) {
+    return fopAcM_orderChangeEventId(i_this, dComIfGp_evmng_getEventIdx(i_eventName), flag, hind);
 }
 
 /* 80025D28-80025D94       .text fopAcM_orderChangeEvent__FP10fopAc_ac_cP10fopAc_ac_cPcUsUs */
-s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, char* pEventName, u16 flag, u16 hind) {
-    return fopAcM_orderChangeEventId(i_this, i_partner, dComIfGp_evmng_getEventIdx(pEventName), flag, hind);
+s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, char* i_eventName, u16 flag, u16 hind) {
+    return fopAcM_orderChangeEventId(i_this, i_partner, dComIfGp_evmng_getEventIdx(i_eventName), flag, hind);
 }
 
 /* 80025D94-80025E1C       .text fopAcM_orderChangeEventId__FP10fopAc_ac_csUsUs */

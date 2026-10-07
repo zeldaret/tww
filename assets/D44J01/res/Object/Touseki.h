@@ -31,6 +31,7 @@ enum ATOSK_A_JNT {
     ATOSK_A_JNT_J3_HANDLE_e=0x5,
     ATOSK_A_JNT_JOINT6_e=0x6,
     ATOSK_A_JNT_JOINT2_e=0x7,
+    ATOSK_A_NUM_JNTS_e=0x8,
 };
 
 #endif /* RES_TOUSEKI_H */

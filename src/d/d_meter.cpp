@@ -39,14 +39,16 @@ dMeter_menuHIO_c g_menuHIO;
 dMeter_msg_HIO_c g_msgHIO;
 dMeter_message_HIO_c g_messageHIO;
 dMetronome_c* dMn_c;
-J2DScreen* sMainParts1;
+MyScreen* sMainParts1;
 J2DScreen* sMainParts2;
 J2DScreen* sMainParts3;
 J2DScreen* sScrTimer1;
 J2DScreen* sScrTimer2;
 J2DScreen* sChoiceRoad;
 J2DPicture* moveItemPane;
+#if VERSION > VERSION_DEMO
 u8 mapAlpha;
+#endif
 u8 menu_status;
 u8 menu_status_old;
 u8 dMenu_pause;
@@ -62,22 +64,30 @@ f32 texRateX;
 f32 texRateY;
 f32 texScaleX;
 f32 texScaleY;
+#if VERSION > VERSION_DEMO
 u8 dMenu_menuFlag;
+#endif
 u8 dMenu_baitNum[8];
 u8 dMeter_place_name;
+#if VERSION > VERSION_DEMO
 u8 dMeter_itemMode;
+#endif
 u8 dMeter_collectMode;
 fpc_ProcID dMeter_windID = fpcM_ERROR_PROCESS_ID_e;
 u8 dMeter_windStatus;
+
+#if VERSION > VERSION_DEMO
 u8 rupy_soundSetFlag;
 u8 rupy_soundOnFlag;
+#endif
+
 mapCtrlDisp_c dMeter_mMapCtrlDisp;
 dDlst_2DMETER1_c meter1;
 dDlst_2DMETER2_c meter2;
 dDlst_2Dm_c tekari;
 dDlst_2Dm_c clock[3];
 
-static void dummy(f32* m, u32 p2, s32 p3) {
+static void dummy(f32* m, u32 p2, int p3) {
     DEAD_STRING("cmap_tri.bti");
     DEAD_STRING("cmap_treasure.bti");
     DEAD_STRING("cmap_tingle.bti");
@@ -425,7 +435,11 @@ dMeter_msg_HIO_c::dMeter_msg_HIO_c() {
     field_0x64 = 0;
     field_0x82 = 2;
     field_0x58 = 0x1d;
-    field_0x70 = DEMO_SELECT(0x19, 0x17);
+#if VERSION <= VERSION_JPN
+    field_0x70 = 0x19;
+#else
+    field_0x70 = 0x17;
+#endif
     field_0x62 = 0;
     field_0x60 = 0xd;
     field_0x6e = 0xf0;
@@ -598,6 +612,7 @@ void dMenu_setCollectMode(u8 param_1) {
     dMeter_collectMode = param_1;
 }
 
+#if VERSION > VERSION_DEMO
 /* 801EF974-801EF97C       .text dMenu_getItemMode__Fv */
 u8 dMenu_getItemMode() {
     return dMeter_itemMode;
@@ -607,6 +622,7 @@ u8 dMenu_getItemMode() {
 void dMenu_setItemMode(u8 param_1) {
     dMeter_itemMode = param_1;
 }
+#endif
 
 /* 801EF984-801EF98C       .text dMeter_subWinFlag__Fv */
 bool dMeter_subWinFlag() {
@@ -711,7 +727,7 @@ void dMeter_PaneShow(fopMsgM_pane_class* pane) {
 void dMeter_alphaControl(sub_meter_class* i_Meter) {
     if (!dComIfGp_2dShowCheck()) {
         if (i_Meter->field_0x2f6c > 0.0f) {
-            i_Meter->field_0x2f6c = fopMsgM_valueIncrease(g_meterHIO.field_0x6, (int)i_Meter->field_0x2fd8, 0);
+            i_Meter->field_0x2f6c = fopMsgM_valueIncrease(g_meterHIO.field_0x6, i_Meter->field_0x2fd8, 0);
             i_Meter->field_0x2fd8--;
         } else {
             i_Meter->field_0x2f6c = 0.0f;
@@ -720,19 +736,19 @@ void dMeter_alphaControl(sub_meter_class* i_Meter) {
     } else if (dMenu_flag()) {
         if (dMenu_timer() <= 5) {
             f32 dVar3 = fopMsgM_valueIncrease(5, dMenu_timer(), 0);
-            if (dMenu_getMenuStatus() != 3) {
+            if (dMenu_getMenuStatus() != MENU_STATUS_MAP) {
                 dVar3 = ((1.0f - dVar3) * 0.5f + 0.5f);
             }
             if (i_Meter->field_0x2f6c > dVar3) {
                 i_Meter->field_0x2f6c = dVar3;
             }
-        } else if (dMenu_getMenuStatus() == 3) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_MAP) {
             i_Meter->field_0x2f6c = 0.0f;
         } else {
             i_Meter->field_0x2f6c = 0.5f;
         }
     } else if (i_Meter->field_0x2f6c < 1.0f) {
-        i_Meter->field_0x2f6c = fopMsgM_valueIncrease(g_meterHIO.field_0x6, (int)i_Meter->field_0x2fd8, 0);
+        i_Meter->field_0x2f6c = fopMsgM_valueIncrease(g_meterHIO.field_0x6, i_Meter->field_0x2fd8, 0);
         i_Meter->field_0x2fd8++;
     } else {
         i_Meter->field_0x2f6c = 1.0f;
@@ -742,6 +758,7 @@ void dMeter_alphaControl(sub_meter_class* i_Meter) {
 
 /* 801EFC40-801F01C0       .text dMeter_statusCheck__FP15sub_meter_class */
 void dMeter_statusCheck(sub_meter_class* i_Meter) {
+    fopAc_ac_c* player = daPy_getPlayerActorClass();
     i_Meter->mStatusFlags = 0;
     if (!dComIfGp_2dShowCheck() || (dCam_getBody()->chkFlag(0x2000000))) {
         i_Meter->mStatusFlags |= dMtrStts_UNK4000_e;
@@ -764,7 +781,7 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
         i_Meter->mStatusFlags |= dMtrStts_UNK80000_e;
     } else if (dComIfGp_checkPlayerStatus1(0, daPyStts1_WIND_WAKER_CONDUCT_e) && dComIfGp_getAStatus() == dActStts_RETURN_e) {
         i_Meter->mStatusFlags |= dMtrStts_UNK200000_e;
-    } else if (dComIfGp_event_runCheck() && dMenu_getMenuStatus() != 4) {
+    } else if (dComIfGp_event_runCheck() && dMenu_getMenuStatus() != MENU_STATUS_NAME) {
         if (dComIfGp_demo_mode() != 1 && dComIfGp_getMesgStatus() != 0 && !dComIfGp_getMetronome()) {
             i_Meter->mStatusFlags |= dMtrStts_UNK100_e;
 #if VERSION > VERSION_DEMO
@@ -786,11 +803,11 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
             dComIfGp_setDoStatus(dActStts_BLANK_e);
             dComIfGp_setRStatus(dActStts_BLANK_e);
 #endif
-        } else if (dMenu_getMenuStatus() == 1) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_ITEM) {
             i_Meter->mStatusFlags |= dMtrStts_UNK8_e;
-        } else if (dMenu_getMenuStatus() == 2) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_COLLECT) {
             i_Meter->mStatusFlags |= dMtrStts_UNK10_e;
-        } else if (dMenu_getMenuStatus() == 4) {
+        } else if (dMenu_getMenuStatus() == MENU_STATUS_NAME) {
             i_Meter->mStatusFlags |= dMtrStts_UNK800000_e;
         } else {
             i_Meter->mStatusFlags |= dMtrStts_UNK20_e;
@@ -860,20 +877,20 @@ void dMeter_statusCheck(sub_meter_class* i_Meter) {
 }
 
 /* 801F01C0-801F0258       .text dMeter_alphaClose__FPsPs */
-f32 dMeter_alphaClose(s16* timer, s16* value) {
+f32 dMeter_alphaClose(s16* param_0, s16* param_1) {
     f32 ret;
     int r5 = 6;
-    if (*timer == 8) {
-        *timer = 9;
+    if (*param_0 == 8) {
+        *param_0 = 9;
         ret = 1.0f;
-        *value = 1;
-    } else if (*timer == 9) {
-        if (*value < r5) {
-            ret = 1.0f - fopMsgM_valueIncrease(6, *value, 1);
-            (*value)++;
+        *param_1 = 1;
+    } else if (*param_0 == 9) {
+        if (*param_1 < r5) {
+            ret = 1.0f - fopMsgM_valueIncrease(6, *param_1, 1);
+            (*param_1)++;
         } else {
             ret = 0.0f;
-            *timer = 0;
+            *param_0 = 0;
         }
     } else {
         ret = 0.0f;
@@ -882,19 +899,20 @@ f32 dMeter_alphaClose(s16* timer, s16* value) {
 }
 
 /* 801F0258-801F02E8       .text dMeter_alphaOpen__FPsPs */
-f32 dMeter_alphaOpen(s16* timer, s16* value) {
+f32 dMeter_alphaOpen(s16* param_0, s16* param_1) {
     f32 ret;
-    if (*timer == 0) {
-        *timer = 7;
+    int r5 = 6;
+    if (*param_0 == 0) {
+        *param_0 = 7;
         ret = 0.0f;
-        *value = 0;
-    } else if (*timer == 7) {
-        if (*value < 6) {
-            ret = fopMsgM_valueIncrease(6, *value, 1);
-            (*value)++;
+        *param_1 = 0;
+    } else if (*param_0 == 7) {
+        if (*param_1 < r5) {
+            ret = fopMsgM_valueIncrease(6, *param_1, 1);
+            (*param_1)++;
         } else {
             ret = 1.0f;
-            *timer = 8;
+            *param_0 = 8;
         }
     } else {
         ret = 1.0f;
@@ -1237,7 +1255,7 @@ void dMeter_heartScaleInit(sub_meter_class* i_Meter) {
     uVar1 = i_Meter->mMaxHP / 4;
     uVar2 = i_Meter->mCurrHP - 1;
     iVar9 = uVar2 / 4;
-    for (s32 i = 0; i < 20; i++) {
+    for (int i = 0; i < 20; i++) {
         if (uVar1 == 0) {
             i_Meter->mHeart[i].mUserArea = 5;
         } else if (i_Meter->mCurrHP == 0) {
@@ -1311,18 +1329,13 @@ void dMeter_lifeChange(sub_meter_class* i_Meter, bool* param_2) {
         i_Meter->mAdjustHp++;
     }
     i_Meter->field_0x0f00.mUserArea = 0;
-    g_dComIfG_gameInfo.play.mItemNowLife = i_Meter->mCurrHP;
+    dComIfGp_setItemNowLife(i_Meter->mCurrHP);
 }
 
 /* 801F11F8-801F13A4       .text dMeter_heartLightMove__FP15sub_meter_class */
 void dMeter_heartLightMove(sub_meter_class* i_Meter) {
-    int iVar1;
-    u32 uVar2;
-    f32 dVar3;
-    f32 dVar4;
-    f32 dVar5;
-
     int hp = dComIfGs_getLife() - 1;
+    int iVar1;
     if ((hp / 4) != 0) {
         iVar1 = 22;
     } else {
@@ -1332,17 +1345,19 @@ void dMeter_heartLightMove(sub_meter_class* i_Meter) {
     if (iVar1 < i_Meter->field_0x0f00.mUserArea) {
         i_Meter->field_0x0f00.mUserArea = 0;
     }
-    dVar3 = fopMsgM_valueIncrease(iVar1, (int)i_Meter->field_0x0f00.mUserArea, 0);
-    uVar2 = (int)(dVar3 * 255.0f);
-    dVar4 = (g_meterHIO.field_0x3c * dVar3) + 1.0f;
+    f32 dVar3_2;
+    f32 dVar5;
+    f32 dVar3 = fopMsgM_valueIncrease(iVar1, i_Meter->field_0x0f00.mUserArea, 0);
+    u8 uVar2 = (dVar3 * 255.0f);
+    f32 dVar4 = (g_meterHIO.field_0x3c * dVar3) + 1.0f;
     fopMsgM_setNowAlpha(&i_Meter->field_0x0f00, 1.0f - dVar3);
-    ((J2DPicture*)i_Meter->field_0x0f00.pane)->setBlack((GXColor){uVar2, uVar2, uVar2, 0});
-    dVar3 = i_Meter->field_0x0f00.mSize.x * dVar4;
+    ((J2DPicture*)i_Meter->field_0x0f00.pane)->setBlack(COMPOUND_LITERAL(GXColor){uVar2, uVar2, uVar2, 0});
+    dVar3_2 = i_Meter->field_0x0f00.mSize.x * dVar4;
     dVar5 = i_Meter->field_0x0f00.mSize.y * dVar4;
-    i_Meter->field_0x0f00.mPosTopLeft.x = i_Meter->field_0x0f00.mPosCenter.x - (dVar3 / 2.0f);
+    i_Meter->field_0x0f00.mPosTopLeft.x = i_Meter->field_0x0f00.mPosCenter.x - (dVar3_2 / 2.0f);
     i_Meter->field_0x0f00.mPosTopLeft.y = i_Meter->field_0x0f00.mPosCenter.y - (dVar5 / 2.0f);
     i_Meter->field_0x0f00.pane->move(i_Meter->field_0x0f00.mPosTopLeft.x, i_Meter->field_0x0f00.mPosTopLeft.y);
-    i_Meter->field_0x0f00.pane->resize(dVar3, dVar5);
+    i_Meter->field_0x0f00.pane->resize(dVar3_2, dVar5);
 }
 
 /* 801F13A4-801F153C       .text dMeter_heartAlpha__FP15sub_meter_class */
@@ -1409,12 +1424,12 @@ void dMeter_LifeMove(sub_meter_class* i_Meter, bool bForce) {
         s16 maxHP = dComIfGs_getMaxLife() + dComIfGp_getItemMaxLifeCount();
         s16 newHP;
         if (dComIfGp_getItemMaxLifeCount() > 0) {
-            newHP = ((int)maxHP / 4) * 4;
+            newHP = (maxHP / 4) * 4;
         } else {
             newHP = dComIfGs_getLife() + (int)dComIfGp_getItemLifeCount();
         }
         if (dComIfGp_getItemMaxLifeCount() != 0) {
-            if ((int)maxHP > 0x50) {
+            if (maxHP > 0x50) {
                 maxHP = 0x50;
             } else if (maxHP < 0) {
                 maxHP = 0;
@@ -1428,8 +1443,8 @@ void dMeter_LifeMove(sub_meter_class* i_Meter, bool bForce) {
             i_Meter->field_0x0f38[5].mUserArea = 1;
 #endif
         }
-        if (newHP > ((int)maxHP / 4) * 4) {
-            newHP = ((int)maxHP / 4) * 4;
+        if (newHP > (maxHP / 4) * 4) {
+            newHP = (maxHP / 4) * 4;
         } else if (newHP < 0) {
             newHP = 0;
         }
@@ -1463,7 +1478,7 @@ void dMeter_BattleLifeMove(sub_meter_class* i_Meter, bool param_2) {
     static u8 point = 0;
     f32 dVar4 = (i_Meter->mHeart[1].mPosCenterOrig.x - i_Meter->mHeart[0].mPosCenterOrig.x);
     if (point != daNpc_Ji1_c::game_life_point || !param_2) {
-        for (s32 i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {
             point = daNpc_Ji1_c::game_life_point;
             if (i == 1 || i == 2) {
                 i_Meter->mHeart[i].mPosCenter.x = (g_meterHIO.field_0x58 * dVar4 * (f32)i) + i_Meter->mHeart[0].mPosCenterOrig.x + g_meterHIO.field_0x4c;
@@ -1527,13 +1542,13 @@ void dMeter_heartColor(sub_meter_class* i_Meter) {
         black2.g = ((f32)black.g - (((f32)black.g - 255.0f) * dVar8));
         black2.b = ((f32)black.b - (((f32)black.b - 255.0f) * dVar8));
         black2.a = 0x00;
-        for (s32 i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {
             ((J2DPicture*)i_Meter->mHeart[i].pane)->setWhite(white2);
             ((J2DPicture*)i_Meter->mHeart[i].pane)->setBlack(black2);
         }
     } else {
         if (i_Meter->mHeartShadow[0].mUserArea == 1) {
-            for (s32 i = 0; i < 20; i++) {
+            for (int i = 0; i < 20; i++) {
                 ((J2DPicture*)i_Meter->mHeart[i].pane)->setWhite(white);
                 ((J2DPicture*)i_Meter->mHeart[i].pane)->setBlack(black);
             }
@@ -1612,7 +1627,7 @@ void dMeter_weponMove(sub_meter_class* i_Meter) {
         if (i_Meter->field_0x1d38.mUserArea >= 0x14) {
             i_Meter->field_0x1d38.mUserArea = 0;
         }
-        iVar3 = (int)i_Meter->field_0x1d38.mUserArea;
+        iVar3 = i_Meter->field_0x1d38.mUserArea;
         if (iVar3 < 10) {
             dVar5 = fopMsgM_valueIncrease(10, iVar3, 0);
         } else {
@@ -1648,7 +1663,7 @@ void dMeter_weponMove(sub_meter_class* i_Meter) {
                 mDoAud_seStart(JA_SE_ITM_OMAMORI_BLINK);
             }
         }
-        iVar3 = (int)i_Meter->field_0x1e18[1].mUserArea;
+        iVar3 = i_Meter->field_0x1e18[1].mUserArea;
         if (iVar3 < 10) {
             dVar5 = fopMsgM_valueIncrease(10, iVar3, 0);
         } else {
@@ -1773,7 +1788,7 @@ void dMeter_weponChange(sub_meter_class* i_Meter) {
 
 /* 801F2688-801F2818       .text dMeter_weponAnime__FP15sub_meter_class */
 void dMeter_weponAnime(sub_meter_class* i_Meter) {
-    s32 uVar1;
+    int uVar1;
     f32 dVar2;
 
     uVar1 = i_Meter->field_0x28d0.mUserArea;
@@ -1864,7 +1879,14 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
             dMeter_offBit8(&i_Meter->field_0x3026, 2);
         }
         moveStatus = 3;
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == MENU_STATUS_ITEM && dMenu_getPushMenuButton() == 0))) {
+#if VERSION == VERSION_DEMO
+        if (moveStatus != 4) {
+            moveFlag = 1;
+            dMeter_offBit8(&i_Meter->field_0x3026, 2);
+        }
+        moveStatus = 4;
+#else
         if (dMenu_getItemMode() == 0) {
             if (moveStatus != 4) {
                 moveFlag = 1;
@@ -1878,7 +1900,8 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
             }
             moveStatus = 5;
         }
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) {
+#endif
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == MENU_STATUS_COLLECT && dMenu_getPushMenuButton() == 0))) {
         if (moveStatus != 5) {
             moveFlag = 1;
             dMeter_offBit8(&i_Meter->field_0x3026, 2);
@@ -1981,7 +2004,7 @@ void dMeter_weponTrans(sub_meter_class* i_Meter) {
             }
         }
     } else {
-        if ((s32)moveNowFrame <= 0) {
+        if (moveNowFrame <= 0) {
             moveNowFrame = 0;
         } else {
             moveNowFrame--;
@@ -2116,7 +2139,7 @@ void dMeter_actionMove(sub_meter_class* i_Meter) {
 /* 801F37E0-801F386C       .text dMeter_actionDraw__FP15sub_meter_class */
 void dMeter_actionDraw(sub_meter_class* i_Meter) {
     fopMsgM_setAlpha(&i_Meter->field_0x1d38);
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x1e18[i]);
         fopMsgM_setAlpha(&i_Meter->field_0x1da8[i]);
     }
@@ -2315,7 +2338,7 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
             dMeter_offBit8(&i_Meter->field_0x3026, 1);
         }
         moveStatus = 2;
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == MENU_STATUS_ITEM && dMenu_getPushMenuButton() == 0))) {
 #if VERSION == VERSION_DEMO
         if (moveStatus != 3) {
             moveFlag = 1;
@@ -2337,7 +2360,7 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
             moveStatus = 4;
         }
 #endif
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == MENU_STATUS_COLLECT && dMenu_getPushMenuButton() == 0))) {
         if (moveStatus != 4) {
             moveFlag = 1;
             dMeter_offBit8(&i_Meter->field_0x3026, 1);
@@ -2455,7 +2478,7 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
             }
         }
     } else {
-        if ((s32)moveNowFrame <= 0) {
+        if (moveNowFrame <= 0) {
             moveNowFrame = 0;
         } else {
             moveNowFrame--;
@@ -2469,7 +2492,7 @@ void dMeter_actionTrans(sub_meter_class* i_Meter) {
     } else {
         fopMsgM_paneTrans(&i_Meter->field_0x1d38, x, dVar8);
     }
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         fopMsgM_paneTrans(&i_Meter->field_0x1e18[i], x, dVar8);
         fopMsgM_paneTrans(&i_Meter->field_0x1da8[i], x, dVar8);
     }
@@ -2511,7 +2534,7 @@ void dMeter_actionAlpha(sub_meter_class* i_Meter) {
             alphaNowFrame = 5;
         }
     }
-    dVar2 = fopMsgM_valueIncrease(5, (int)alphaNowFrame, 0);
+    dVar2 = fopMsgM_valueIncrease(5, alphaNowFrame, 0);
     if (dComIfGp_getMiniGameType() == 8) {
         pfVar2 = (daNpc_So_c*)fopAcM_SearchByName(fpcNm_NPC_SO_e);
         if (pfVar2 != NULL) {
@@ -2626,7 +2649,7 @@ void dMeter_xyInit(sub_meter_class* i_Meter) {
     i_Meter->field_0x2550[0].mUserArea = 0;
     i_Meter->field_0x2f2c[0] = NULL;
     i_Meter->field_0x2f2c[1] = NULL;
-    for (s32 i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         dMenu_baitNum[i] = dComIfGs_getBaitNum(i);
     }
     for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
@@ -2648,16 +2671,16 @@ void dMeter_xyMove(sub_meter_class* i_Meter) {
         if (i_Meter->field_0x3021[itemBtn] != dComIfGp_getSelectItem(itemBtn)) {
             dMeter_xyItemChange(i_Meter, itemBtn);
             bVar2 = false;
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
             if (i_Meter->field_0x3021[itemBtn] == dItemNo_MAGIC_ARROW_e || i_Meter->field_0x3021[itemBtn] == dItemNo_LIGHT_ARROW_e)
 #else
             if (dComIfGp_getSelectItem(itemBtn) != dItemNo_MAGIC_ARROW_e && dComIfGp_getSelectItem(itemBtn) != dItemNo_LIGHT_ARROW_e)
 #endif
             {
-                i_Meter->field_0x2320[itemBtn].pane->hide();
-                i_Meter->field_0x23c8[itemBtn].pane->hide();
-                i_Meter->field_0x2470[itemBtn].pane->hide();
-                i_Meter->field_0x2320[itemBtn].mUserArea = 0;
+                i_Meter->field_0x2320[0][itemBtn].pane->hide();
+                i_Meter->field_0x2320[1][itemBtn].pane->hide();
+                i_Meter->field_0x2320[2][itemBtn].pane->hide();
+                i_Meter->field_0x2320[0][itemBtn].mUserArea = 0;
             }
             i_Meter->field_0x3021[itemBtn] = dComIfGp_getSelectItem(itemBtn);
         }
@@ -2672,7 +2695,7 @@ void dMeter_xyMove(sub_meter_class* i_Meter) {
         } else if (dComIfGp_getSelectItem(itemBtn) == dItemNo_FOREST_WATER_e) {
             bVar3 = true;
             local_38.set(i_Meter->field_0x2080[itemBtn].mPosCenter.x - 320.0f, i_Meter->field_0x2080[itemBtn].mPosCenter.y - 240.0f, 0.0f);
-            for (s32 j = 0; j < 2; j++) {
+            for (int j = 0; j < 2; j++) {
                 if (i_Meter->field_0x2f2c[j] != NULL) {
                     i_Meter->field_0x2f2c[j]->setGlobalTranslation(local_38.x, local_38.y, local_38.z);
                     i_Meter->field_0x2f2c[j]->playDrawParticle();
@@ -2684,7 +2707,7 @@ void dMeter_xyMove(sub_meter_class* i_Meter) {
         }
     }
     if (!bVar3) {
-        for (s32 i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             if (i_Meter->field_0x2f2c[i] != NULL) {
                 i_Meter->field_0x2f2c[i]->becomeInvalidEmitter();
                 i_Meter->field_0x2f2c[i]->quitImmortalEmitter();
@@ -2697,17 +2720,17 @@ void dMeter_xyMove(sub_meter_class* i_Meter) {
 
 /* 801F5248-801F5308       .text dMeter_xyDraw__FP15sub_meter_class */
 void dMeter_xyDraw(sub_meter_class* i_Meter) {
-    for (s32 i = 0; i < 3; i++) {
-        fopMsgM_setAlpha(&i_Meter->field_0x1fd8[i]);
-        fopMsgM_setAlpha(&i_Meter->field_0x1f30[i]);
-        fopMsgM_setAlpha(&i_Meter->field_0x2080[i]);
-        fopMsgM_setAlpha(&i_Meter->field_0x2128[i]);
-        fopMsgM_setAlpha(&i_Meter->field_0x2320[i]);
-        fopMsgM_setAlpha(&i_Meter->field_0x23c8[i]);
-        fopMsgM_setAlpha(&i_Meter->field_0x2470[i]);
+    for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+        fopMsgM_setAlpha(&i_Meter->field_0x1fd8[itemBtn]);
+        fopMsgM_setAlpha(&i_Meter->field_0x1f30[itemBtn]);
+        fopMsgM_setAlpha(&i_Meter->field_0x2080[itemBtn]);
+        fopMsgM_setAlpha(&i_Meter->field_0x2128[itemBtn]);
+        fopMsgM_setAlpha(&i_Meter->field_0x2320[0][itemBtn]);
+        fopMsgM_setAlpha(&i_Meter->field_0x2320[1][itemBtn]);
+        fopMsgM_setAlpha(&i_Meter->field_0x2320[2][itemBtn]);
     }
     fopMsgM_setAlpha(&i_Meter->field_0x2518);
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x2550[i]);
         fopMsgM_setAlpha(&i_Meter->field_0x25c0[i]);
         fopMsgM_setAlpha(&i_Meter->field_0x2630[i]);
@@ -2810,35 +2833,28 @@ void dMeter_xyItemNumberSet(sub_meter_class* i_Meter, int i_itemBtn) {
 }
 
 /* 801F57B0-801F58E4       .text dMeter_xyBowLightAnime__FP15sub_meter_classi */
-void dMeter_xyBowLightAnime(sub_meter_class* i_Meter, int param_2) {
-    /* Nonmatching */
-    int iVar2;
+void dMeter_xyBowLightAnime(sub_meter_class* i_Meter, int i_itemBtn) {
+    i_Meter->field_0x2320[0][dItemBtn_X_e].mUserArea++;
+    if (i_Meter->field_0x2320[0][i_itemBtn].mUserArea >= 120) {
+        i_Meter->field_0x2320[0][i_itemBtn].mUserArea = 0;
+    }
+    int iVar2 = i_Meter->field_0x2320[0][i_itemBtn].mUserArea;
     f32 dVar4;
-    f32 dVar5;
-    f32 lVar6;
-
-    i_Meter->field_0x2320[0].mUserArea++;
-    if (i_Meter->field_0x2320[param_2].mUserArea >= 0x78) {
-        i_Meter->field_0x2320[param_2].mUserArea = 0;
-    }
-    iVar2 = (int)i_Meter->field_0x2320[param_2].mUserArea;
-    if (iVar2 < 0x3c) {
-        dVar4 = fopMsgM_valueIncrease(0x3c, iVar2, 0);
+    if (iVar2 < 60) {
+        dVar4 = fopMsgM_valueIncrease(60, iVar2, 0);
     } else {
-        dVar4 = fopMsgM_valueIncrease(0x3c, 0x78 - iVar2, 0);
+        dVar4 = fopMsgM_valueIncrease(60, 120 - iVar2, 0);
     }
-    dVar5 = (1.0f - (dVar4 * 0.39999998f));
-    lVar6 = (i_Meter->field_0x2320[0].mInitAlpha - ((i_Meter->field_0x2320[0].mInitAlpha - 50.0f) * dVar4));
-    for (s32 i = 0; i < 3; i++) {
-        // TODO: this indexing seems wrong. field_0x2320 may be a 2D array of 3x3
-        fopMsgM_paneScaleXY(&(&i_Meter->field_0x2320[param_2])[i*3], dVar5);
-        (&i_Meter->field_0x2320[param_2].mNowAlpha)[i] = lVar6;
+    f32 dVar5 = (1.0f - (dVar4 * 0.39999998f));
+    f32 lVar6 = (i_Meter->field_0x2320[0][dItemBtn_X_e].mInitAlpha - (i_Meter->field_0x2320[0][dItemBtn_X_e].mInitAlpha - 50.0f) * dVar4);
+    for (int i = 0; i < 3; i++) {
+        fopMsgM_paneScaleXY(&i_Meter->field_0x2320[i][i_itemBtn], dVar5);
+        i_Meter->field_0x2320[i][i_itemBtn].mNowAlpha = lVar6;
     }
 }
 
 /* 801F58E4-801F5C98       .text dMeter_xyItemCountUp__FP15sub_meter_class */
 void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     bool bVar3 = false;
     static u8 arrowMax = dComIfGs_getArrowMax();
     static u8 bombMax = dComIfGs_getBombMax();
@@ -2875,10 +2891,10 @@ void dMeter_xyItemCountUp(sub_meter_class* i_Meter) {
     }
     if ((dComIfGs_checkGetItem(dItemNo_BOMB_BAG_e) && dComIfGp_getItemBombNumCount() != 0) || bombMax != dComIfGs_getBombMax()) {
         if (g_meterHIO.field_0x63 != 0) {
-            g_dComIfG_gameInfo.play.mItemBombNumCount = 0;
+            dComIfGp_clearItemBombNumCount();
         }
         s16 uVar5_2 = dComIfGs_getBombNum() + dComIfGp_getItemBombNumCount();
-        g_dComIfG_gameInfo.play.mItemBombNumCount = 0;
+        dComIfGp_clearItemBombNumCount();
         if (uVar5_2 < 0) {
             uVar5_2 = 0;
         }
@@ -2970,14 +2986,14 @@ void dMeter_xyItemChange(sub_meter_class* i_Meter, int i_itemBtn) {
             dMeter_PaneShow(&i_Meter->field_0x2128[i_itemBtn]);
             u8 itemNo = dComIfGp_getSelectItem(i_itemBtn);
             if (itemNo == dItemNo_MAGIC_ARROW_e) {
-                i_Meter->field_0x2320[i_itemBtn].pane->show();
-                i_Meter->field_0x23c8[i_itemBtn].pane->show();
-                i_Meter->field_0x2470[i_itemBtn].pane->hide();
+                i_Meter->field_0x2320[0][i_itemBtn].pane->show();
+                i_Meter->field_0x2320[1][i_itemBtn].pane->show();
+                i_Meter->field_0x2320[2][i_itemBtn].pane->hide();
                 itemNo = dItemNo_BOW_e;
             } else if (itemNo == dItemNo_LIGHT_ARROW_e) {
-                i_Meter->field_0x2320[i_itemBtn].pane->show();
-                i_Meter->field_0x23c8[i_itemBtn].pane->show();
-                i_Meter->field_0x2470[i_itemBtn].pane->show();
+                i_Meter->field_0x2320[0][i_itemBtn].pane->show();
+                i_Meter->field_0x2320[1][i_itemBtn].pane->show();
+                i_Meter->field_0x2320[2][i_itemBtn].pane->show();
                 itemNo = dItemNo_BOW_e;
             }
             if (itemNo == dItemNo_MAGIC_ARROW_e || itemNo == dItemNo_LIGHT_ARROW_e) {
@@ -2999,8 +3015,8 @@ void dMeter_xyItemChange(sub_meter_class* i_Meter, int i_itemBtn) {
 
 /* 801F5FDC-801F6084       .text dMeter_xyRotateZ__FP18fopMsgM_pane_classff */
 void dMeter_xyRotateZ(fopMsgM_pane_class* param_1, f32 param_2, f32 param_3) {
-    s32 x = param_1->mSize.x * 0.5f;
-    s32 y = param_1->mSize.y * 0.5f;
+    int x = param_1->mSize.x * 0.5f;
+    int y = param_1->mSize.y * 0.5f;
     param_1->pane->rotate(x, y, ROTATE_Z, param_2 + param_3);
 }
 
@@ -3029,7 +3045,7 @@ void dMeter_xyAlpha(sub_meter_class* i_Meter) {
     )
     {
         if (i_Meter->mStatusFlags & dMtrStts_UNK8_e) {
-            for (s32 i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 if (alphaNowFrame[i] < 5) {
                     alphaNowFrame[i]++;
                 } else {
@@ -3041,7 +3057,7 @@ void dMeter_xyAlpha(sub_meter_class* i_Meter) {
                     ((i_Meter->mStatusFlags & dMtrStts_UNK8000_e) ||
                         ((i_Meter->mStatusFlags & dMtrStts_UNK200_e) || (i_Meter->mStatusFlags & dMtrStts_UNK10000_e)))))
         {
-            for (s32 i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 if (alphaNowFrame[i] > 3) {
                     alphaNowFrame[i]--;
                 } else {
@@ -3053,14 +3069,14 @@ void dMeter_xyAlpha(sub_meter_class* i_Meter) {
                 }
             }
         } else if ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) {
-            for (s32 i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 if (i == 1) {
                     if (alphaNowFrame[i] < 5) {
                         alphaNowFrame[i]++;
                     } else {
                         alphaNowFrame[i] = 5;
                     }
-                } else if ((s32)alphaNowFrame[i] > 0) {
+                } else if ((int)alphaNowFrame[i] > 0) {
                     alphaNowFrame[i] = alphaNowFrame[i] - 1;
                 } else {
                     alphaNowFrame[i] = 0;
@@ -3212,36 +3228,36 @@ void dMeter_xyAlpha(sub_meter_class* i_Meter) {
     dVar10 = fopMsgM_valueIncrease(5, alphaNowFrame[0], 0);
     dVar11 = fopMsgM_valueIncrease(5, alphaNowFrame[1], 0);
     dVar12 = fopMsgM_valueIncrease(5, alphaNowFrame[2], 0);
-    fopMsgM_setNowAlpha(&i_Meter->field_0x1fd8[0], dVar10);
-    fopMsgM_setNowAlpha(&i_Meter->field_0x1f30[0], dVar10);
-    fopMsgM_setNowAlpha(&i_Meter->field_0x2080[0], dVar10);
-    fopMsgM_setNowAlpha(&i_Meter->field_0x2128[0], dVar10);
+    fopMsgM_setNowAlpha(&i_Meter->field_0x1fd8[dItemBtn_X_e], dVar10);
+    fopMsgM_setNowAlpha(&i_Meter->field_0x1f30[dItemBtn_X_e], dVar10);
+    fopMsgM_setNowAlpha(&i_Meter->field_0x2080[dItemBtn_X_e], dVar10);
+    fopMsgM_setNowAlpha(&i_Meter->field_0x2128[dItemBtn_X_e], dVar10);
     fopMsgM_setNowAlpha(&i_Meter->field_0x2550[0], dVar10);
     fopMsgM_setNowAlpha(&i_Meter->field_0x25c0[0], dVar10);
     fopMsgM_setNowAlpha(&i_Meter->field_0x2630[0], dVar10);
     fopMsgM_setNowAlpha(&i_Meter->field_0x2550[1], dVar11);
     fopMsgM_setNowAlpha(&i_Meter->field_0x25c0[1], dVar11);
     fopMsgM_setNowAlpha(&i_Meter->field_0x2630[1], dVar11);
-    fopMsgM_setNowAlpha(&i_Meter->field_0x1fd8[2], dVar12);
-    fopMsgM_setNowAlpha(&i_Meter->field_0x1f30[2], dVar12);
-    fopMsgM_setNowAlpha(&i_Meter->field_0x2080[2], dVar12);
-    fopMsgM_setNowAlpha(&i_Meter->field_0x2128[2], dVar12);
+    fopMsgM_setNowAlpha(&i_Meter->field_0x1fd8[dItemBtn_Z_e], dVar12);
+    fopMsgM_setNowAlpha(&i_Meter->field_0x1f30[dItemBtn_Z_e], dVar12);
+    fopMsgM_setNowAlpha(&i_Meter->field_0x2080[dItemBtn_Z_e], dVar12);
+    fopMsgM_setNowAlpha(&i_Meter->field_0x2128[dItemBtn_Z_e], dVar12);
     fopMsgM_setNowAlpha(&i_Meter->field_0x2518, dVar12);
     if ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 0)) {
-        fopMsgM_setNowAlpha(&i_Meter->field_0x1fd8[1], dVar10);
-        fopMsgM_setNowAlpha(&i_Meter->field_0x1f30[1], dVar10);
-        fopMsgM_setNowAlpha(&i_Meter->field_0x2080[1], dVar10);
-        fopMsgM_setNowAlpha(&i_Meter->field_0x2128[1], dVar10);
-        for (s32 i = 0; i < 3; i++) {
-            fopMsgM_setNowAlphaZero(&i_Meter->field_0x2320[i]);
-            fopMsgM_setNowAlphaZero(&i_Meter->field_0x23c8[i]);
-            fopMsgM_setNowAlphaZero(&i_Meter->field_0x2470[i]);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x1fd8[dItemBtn_Y_e], dVar10);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x1f30[dItemBtn_Y_e], dVar10);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x2080[dItemBtn_Y_e], dVar10);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x2128[dItemBtn_Y_e], dVar10);
+        for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+            fopMsgM_setNowAlphaZero(&i_Meter->field_0x2320[0][itemBtn]);
+            fopMsgM_setNowAlphaZero(&i_Meter->field_0x2320[1][itemBtn]);
+            fopMsgM_setNowAlphaZero(&i_Meter->field_0x2320[2][itemBtn]);
         }
     } else {
-        fopMsgM_setNowAlpha(&i_Meter->field_0x1fd8[1], dVar11);
-        fopMsgM_setNowAlpha(&i_Meter->field_0x1f30[1], dVar11);
-        fopMsgM_setNowAlpha(&i_Meter->field_0x2080[1], dVar11);
-        fopMsgM_setNowAlpha(&i_Meter->field_0x2128[1], dVar11);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x1fd8[dItemBtn_Y_e], dVar11);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x1f30[dItemBtn_Y_e], dVar11);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x2080[dItemBtn_Y_e], dVar11);
+        fopMsgM_setNowAlpha(&i_Meter->field_0x2128[dItemBtn_Y_e], dVar11);
     }
 }
 
@@ -3254,7 +3270,7 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
     static f32 nowY = 0.0f;
     if ((i_Meter->mStatusFlags & dMtrStts_UNK4000_e) || ((i_Meter->mStatusFlags & dMtrStts_UNK40_e) && dComIfGp_event_checkHind(1)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK100_e) ||
-        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) ||
+        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == MENU_STATUS_COLLECT && dMenu_getPushMenuButton() == 0))) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
         ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK80_e) || (i_Meter->mStatusFlags & dMtrStts_UNK100000_e) || (i_Meter->mStatusFlags & dMtrStts_UNK200000_e) ||
@@ -3266,7 +3282,14 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
             dMeter_offBit8(&i_Meter->field_0x3026, 4);
         }
         moveStatus = 1;
-    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))) {
+    } else if (dMenu_flag() && (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == MENU_STATUS_ITEM && dMenu_getPushMenuButton() == 0))) {
+#if VERSION == VERSION_DEMO
+        if (moveStatus != 2) {
+            moveFlag = 1;
+            dMeter_offBit8(&i_Meter->field_0x3026, 4);
+        }
+        moveStatus = 2;
+#else
         if (dMenu_getItemMode() == 0) {
             if (moveStatus != 2) {
                 moveFlag = 1;
@@ -3280,6 +3303,7 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
             }
             moveStatus = 1;
         }
+#endif
     } else {
         if (i_Meter->mStatusFlags & dMtrStts_UNK20_e) {
             if (dMeter_Info.mButtonIconMode == 0 || dMeter_Info.mButtonIconMode == 1 || dMeter_Info.mButtonIconMode == 2 || dMeter_Info.mButtonIconMode == 3) {
@@ -3342,7 +3366,7 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
             }
         }
     } else {
-        if ((s32)moveNowFrame <= 0) {
+        if (moveNowFrame <= 0) {
             moveNowFrame = 0;
         } else {
             moveNowFrame--;
@@ -3351,17 +3375,17 @@ void dMeter_xyTrans(sub_meter_class* i_Meter) {
     f32 dVar7 = fopMsgM_valueIncrease(5, moveNowFrame, 0);
     f32 x = nowX;
     f32 dVar8 = (nowY + (dVar7 * (-200.0f - nowY)));
-    for (s32 i = 0; i < 3; i++) {
-        fopMsgM_paneTrans(&i_Meter->field_0x1fd8[i], x, dVar8);
-        fopMsgM_paneTrans(&i_Meter->field_0x1f30[i], x, dVar8);
-        fopMsgM_paneTrans(&i_Meter->field_0x2080[i], x, dVar8);
-        fopMsgM_paneTrans(&i_Meter->field_0x2128[i], x, dVar8);
-        fopMsgM_paneTrans(&i_Meter->field_0x2320[i], x, dVar8);
-        fopMsgM_paneTrans(&i_Meter->field_0x23c8[i], x, dVar8);
-        fopMsgM_paneTrans(&i_Meter->field_0x2470[i], x, dVar8);
+    for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+        fopMsgM_paneTrans(&i_Meter->field_0x1fd8[itemBtn], x, dVar8);
+        fopMsgM_paneTrans(&i_Meter->field_0x1f30[itemBtn], x, dVar8);
+        fopMsgM_paneTrans(&i_Meter->field_0x2080[itemBtn], x, dVar8);
+        fopMsgM_paneTrans(&i_Meter->field_0x2128[itemBtn], x, dVar8);
+        fopMsgM_paneTrans(&i_Meter->field_0x2320[0][itemBtn], x, dVar8);
+        fopMsgM_paneTrans(&i_Meter->field_0x2320[1][itemBtn], x, dVar8);
+        fopMsgM_paneTrans(&i_Meter->field_0x2320[2][itemBtn], x, dVar8);
     }
     fopMsgM_paneTrans(&i_Meter->field_0x2518, x, dVar8);
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         fopMsgM_paneTrans(&i_Meter->field_0x2550[i], x, dVar8);
         fopMsgM_paneTrans(&i_Meter->field_0x25c0[i], x, dVar8);
         fopMsgM_paneTrans(&i_Meter->field_0x2630[i], x, dVar8);
@@ -3528,9 +3552,9 @@ void dMeter_rTrans(sub_meter_class* i_Meter) {
     } else if (
         (
             dMenu_flag() && dComIfGp_getPictureStatus() != 2 &&
-            (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == 1 && dMenu_getPushMenuButton() == 0))
+            (dMenu_getPushMenuButton() == 1 || (dMenu_getMenuStatus() == MENU_STATUS_ITEM && dMenu_getPushMenuButton() == 0))
         ) ||
-        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == 2 && dMenu_getPushMenuButton() == 0))) ||
+        (dMenu_flag() && (dMenu_getPushMenuButton() == 2 || (dMenu_getMenuStatus() == MENU_STATUS_COLLECT && dMenu_getPushMenuButton() == 0))) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK800000_e) ||
         ((i_Meter->mStatusFlags & dMtrStts_UNK20_e) && (dStage_stagInfo_GetUpButton(dComIfGp_getStageStagInfo()) == 1)) ||
         (i_Meter->mStatusFlags & dMtrStts_UNK80_e) ||
@@ -3611,7 +3635,7 @@ void dMeter_rTrans(sub_meter_class* i_Meter) {
             }
         }
     } else {
-        if ((s32)moveNowFrame <= 0) {
+        if (moveNowFrame <= 0) {
             moveNowFrame = 0;
         } else {
             moveNowFrame--;
@@ -3639,7 +3663,7 @@ void dMeter_enemyInit(sub_meter_class* i_Meter) {
 void dMeter_enemyMove(sub_meter_class* i_Meter) {
     dAttention_c* attention = &dComIfGp_getAttention();
     stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
-    JUT_ASSERT(7176, stage_info != NULL);
+    JUT_ASSERT(VERSION_SELECT(6950, 7055, 7176, 7175), stage_info != NULL);
     if (attention != NULL) {
         if (!dMenu_flag() && !dComIfGp_event_runCheck() && attention->LockonTarget(0) != NULL && attention->LockonTarget(0)->max_health > 0.0f &&
             dComIfGs_isCollect(4, 1) != 0 && (attention->LockonTruth() & 0xFF) != 0 && attention->LockonTarget(0)->group == fopAc_ENEMY_e &&
@@ -3778,7 +3802,7 @@ void dMeter_bossEnemyMove(sub_meter_class* i_Meter, fopAc_ac_c* param_2) {
             fopMsgM_paneTrans(&i_Meter->field_0x03a0, 0.0f, fVar2);
             fopMsgM_paneTrans(&i_Meter->field_0x03d8, 0.0f, fVar2);
             fopMsgM_paneTrans(&i_Meter->field_0x0410, 0.0f, fVar2);
-            for (s32 i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 fopMsgM_paneTrans(&i_Meter->field_0x0448[i], 0.0f, fVar2);
             }
         } else {
@@ -3805,14 +3829,14 @@ void dMeter_bossEnemyMove(sub_meter_class* i_Meter, fopAc_ac_c* param_2) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x03a0, fVar2);
         fopMsgM_setNowAlpha(&i_Meter->field_0x03d8, fVar2);
         fopMsgM_setNowAlpha(&i_Meter->field_0x0410, fVar2);
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             fopMsgM_setNowAlpha(&i_Meter->field_0x0448[i], fVar2);
         }
     } else {
         dMeter_bossAnime(i_Meter);
         fopMsgM_setInitAlpha(&i_Meter->field_0x03d8);
         fopMsgM_setInitAlpha(&i_Meter->field_0x0410);
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             fopMsgM_setInitAlpha(&i_Meter->field_0x0448[i]);
         }
     }
@@ -3844,7 +3868,7 @@ void dMeter_bossEnemyHide(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x03a0, dVar4);
         fopMsgM_setNowAlpha(&i_Meter->field_0x03d8, dVar4);
         fopMsgM_setNowAlpha(&i_Meter->field_0x0410, dVar4);
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             fopMsgM_setNowAlpha(&i_Meter->field_0x0448[i], dVar4);
         }
     } else {
@@ -3852,7 +3876,7 @@ void dMeter_bossEnemyHide(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x03a0);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x03d8);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x0410);
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             fopMsgM_setNowAlphaZero(&i_Meter->field_0x0448[i]);
         }
     }
@@ -3864,7 +3888,7 @@ void dMeter_bossAnime(sub_meter_class* i_Meter) {
     s16 unk_9010[] = {0x04, 0x0A, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02};
     s16 unk_array[15];
     unk_array[0] = unk_9010[0];
-    for (s32 i = 1; i < 15; i++) {
+    for (int i = 1; i < 15; i++) {
         unk_array[i] = unk_array[i - 1] + unk_9010[i];
     };
     i_Meter->field_0x03d8.mUserArea++;
@@ -4029,7 +4053,7 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
         ((J2DPicture*)i_Meter->field_0x11a0.pane)->setBlack(i_Meter->field_0x2f0c);
         ((J2DPicture*)i_Meter->field_0x1130.pane)->setWhite(i_Meter->field_0x2f08);
         ((J2DPicture*)i_Meter->field_0x1130.pane)->setBlack(i_Meter->field_0x2f0c);
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             ((J2DPicture*)i_Meter->field_0x0f38[0 + i * 2].pane)->setWhite(i_Meter->field_0x2f10);
             ((J2DPicture*)i_Meter->field_0x0f38[0 + i * 2].pane)->setBlack(i_Meter->field_0x2f14);
             ((J2DPicture*)i_Meter->field_0x0f38[1 + i * 2].pane)->setWhite(i_Meter->field_0x2f18);
@@ -4048,7 +4072,7 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
             sVar4 = 0x20;
         }
         dComIfGs_setMaxMagic(sVar4);
-        g_dComIfG_gameInfo.play.mItemMaxMagicCount = 0;
+        dComIfGp_clearItemMaxMagicCount();
     }
 #if VERSION > VERSION_DEMO
     if (i_Meter->field_0x3018 != dComIfGs_getMaxMagic() || i_Meter->field_0x0f38[2].mUserArea == 0) {
@@ -4075,7 +4099,7 @@ void dMeter_magicGaugeMove(sub_meter_class* i_Meter) {
                 sVar4 = 0;
             }
             dComIfGs_setMagic(sVar4);
-            g_dComIfG_gameInfo.play.mItemMagicCount = 0;
+            dComIfGp_clearItemMagicCount();
         }
     }
     if (dComIfGs_getMagic() > dComIfGs_getMaxMagic()) {
@@ -4151,7 +4175,7 @@ void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 
             ((J2DPicture*)i_Meter->field_0x11a0.pane)->setBlack(color2);
             ((J2DPicture*)i_Meter->field_0x1130.pane)->setWhite(color1);
             ((J2DPicture*)i_Meter->field_0x1130.pane)->setBlack(color2);
-            for (s32 i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 ((J2DPicture*)i_Meter->field_0x0f38[0 + i * 2].pane)->setWhite(color3);
                 ((J2DPicture*)i_Meter->field_0x0f38[0 + i * 2].pane)->setBlack(color4);
                 ((J2DPicture*)i_Meter->field_0x0f38[1 + i * 2].pane)->setWhite(color5);
@@ -4163,7 +4187,7 @@ void dMeter_flyGaugeMove(sub_meter_class* i_Meter, u8 param_2, s16 param_3, s16 
         }
         if (i_Meter->field_0x11a0.mUserArea < 5) {
             i_Meter->field_0x11a0.mUserArea++;
-            dVar8 = fopMsgM_valueIncrease(5, (int)i_Meter->field_0x11a0.mUserArea, 0);
+            dVar8 = fopMsgM_valueIncrease(5, i_Meter->field_0x11a0.mUserArea, 0);
         } else {
             dVar8 = 1.0f;
         }
@@ -4211,7 +4235,7 @@ void dMeter_magicChange(sub_meter_class* i_Meter, f32 param_2) {
 #else
     dMeter_magicTransNowInit(i_Meter);
 #endif
-    for (s32 i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         if (param_2 >= i_Meter->field_0x0f38[i].mSizeOrig.x) {
             fopMsgM_paneScaleXY(&i_Meter->field_0x0f38[i], 1.0f);
             i_Meter->field_0x0f38[i].pane->show();
@@ -4241,7 +4265,7 @@ void dMeter_magicTrans(sub_meter_class* i_Meter, f32 param_1, f32 param_2) {
     fopMsgM_paneTrans(&i_Meter->field_0x11a0, fVar2, y);
     fVar2 = param_1 + (i_Meter->field_0x11d8.mPosCenter.x - i_Meter->field_0x11d8.mPosCenterOrig.x);
     fopMsgM_paneTrans(&i_Meter->field_0x11d8, fVar2, y);
-    for (s32 i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         fVar2 = param_1 + (i_Meter->field_0x0f38[i].mPosCenter.x - i_Meter->field_0x0f38[i].mPosCenterOrig.x);
         fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], fVar2, y);
     }
@@ -4261,7 +4285,7 @@ void dMeter_magicTransNowInit(sub_meter_class* i_Meter) {
     fopMsgM_paneTrans(&i_Meter->field_0x11a0, fVar2, y);
     fVar2 = i_Meter->field_0x11d8.mPosCenter.x - i_Meter->field_0x11d8.mPosCenterOrig.x;
     fopMsgM_paneTrans(&i_Meter->field_0x11d8, fVar2, y);
-    for (s32 i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         fVar2 = i_Meter->field_0x0f38[i].mPosCenter.x - i_Meter->field_0x0f38[i].mPosCenterOrig.x;
         fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], fVar2, y);
     }
@@ -4280,7 +4304,7 @@ void dMeter_magicInitTrans(sub_meter_class* i_Meter, f32 param_1, f32 param_2) {
     fopMsgM_paneTrans(&i_Meter->field_0x10f8, param_1, y);
     fopMsgM_paneTrans(&i_Meter->field_0x11a0, param_1, y);
     fopMsgM_paneTrans(&i_Meter->field_0x11d8, param_1, y);
-    for (s32 i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], param_1, y);
     }
 }
@@ -4296,7 +4320,7 @@ void dMeter_magicInitTrans(sub_meter_class* i_Meter) {
     fopMsgM_paneTrans(&i_Meter->field_0x10f8, 0.0f, y);
     fopMsgM_paneTrans(&i_Meter->field_0x11a0, 0.0f, y);
     fopMsgM_paneTrans(&i_Meter->field_0x11d8, 0.0f, y);
-    for (s32 i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         fopMsgM_paneTrans(&i_Meter->field_0x0f38[i], 0.0f, y);
     }
 }
@@ -4304,9 +4328,7 @@ void dMeter_magicInitTrans(sub_meter_class* i_Meter) {
 
 /* 801F9CCC-801F9F18       .text dMeter_magicTransScale__FP15sub_meter_classfff */
 void dMeter_magicTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, f32 param_4) {
-    /* Nonmatching */
     f32 fVar1;
-    f32 dVar5;
 
     if (dComIfGs_getMaxLife() <= 0x2b) {
         param_3 += -22.0f;
@@ -4329,13 +4351,11 @@ void dMeter_magicTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, 
     i_Meter->field_0x1168.mPosCenter.x = (i_Meter->field_0x1168.mPosCenterOrig.x * param_4);
     i_Meter->field_0x1168.mPosCenter.y = (i_Meter->field_0x1168.mPosCenterOrig.y * param_4);
     fopMsgM_paneScaleXY(&i_Meter->field_0x1168, param_4);
-    for (s32 i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         i_Meter->field_0x0f38[i].mPosCenter.x =
-            (param_2 +
-             (i_Meter->field_0x11a0.mPosCenterOrig.x + (param_4 * (i_Meter->field_0x0f38[i].mPosCenterOrig.x - i_Meter->field_0x11a0.mPosCenterOrig.x))));
+            (param_2 + (i_Meter->field_0x11a0.mPosCenterOrig.x + (param_4 * (i_Meter->field_0x0f38[i].mPosCenterOrig.x - i_Meter->field_0x11a0.mPosCenterOrig.x))));
         i_Meter->field_0x0f38[i].mPosCenter.y =
-            (param_3 +
-             (i_Meter->field_0x11a0.mPosCenterOrig.y + (param_4 * (i_Meter->field_0x0f38[i].mPosCenterOrig.y - i_Meter->field_0x11a0.mPosCenterOrig.y))));
+            (param_3 + (i_Meter->field_0x11a0.mPosCenterOrig.y + (param_4 * (i_Meter->field_0x0f38[i].mPosCenterOrig.y - i_Meter->field_0x11a0.mPosCenterOrig.y))));
         i_Meter->field_0x0f38[i].mPosCenter.x -= ((i_Meter->field_0x0f38[i].mSizeOrig.x * param_4) / 2.0f);
         i_Meter->field_0x0f38[i].mSize.x = param_4 * i_Meter->field_0x0f38[i].pane->getWidth();
         i_Meter->field_0x0f38[i].mSize.y = param_4 * i_Meter->field_0x0f38[i].pane->getHeight();
@@ -4437,13 +4457,13 @@ void dMeter_magicAlpha(sub_meter_class* i_Meter) {
 void dMeter_gaugeAlpha(sub_meter_class* i_Meter) {
     f32 dVar4 = i_Meter->field_0x2fbc;
     f32 dVar3 = i_Meter->field_0x2fc0;
-    for (s32 i = 0; i < 20; i++) {
+    for (int i = 0; i < 20; i++) {
         fopMsgM_setNowAlpha(&i_Meter->mHeart[i], dVar4);
         fopMsgM_setNowAlpha(&i_Meter->mHeartShadow[i], dVar4);
     }
     i_Meter->field_0x0f00.mNowAlpha = i_Meter->field_0x0f00.mNowAlpha * dVar4;
     i_Meter->field_0x0f00.pane->setAlpha(i_Meter->field_0x0f00.mNowAlpha * dVar4);
-    for (s32 i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x0f38[i], dVar3);
     }
     fopMsgM_setNowAlpha(&i_Meter->field_0x10f8, dVar3);
@@ -4467,18 +4487,12 @@ void dMeter_menuMove(sub_meter_class* i_Meter) {
 
 /* 801FA6F8-801FA918       .text dMeter_menuLRMove__FP15sub_meter_class */
 void dMeter_menuLRMove(sub_meter_class* i_Meter) {
-    s16 iVar3;
-    s16 sVar5;
-    f32 dVar6;
-    f32 dVar7;
-
     static u8 frame = dMenu_getPushMenuButton();
     if ((i_Meter->mStatusFlags & dMtrStts_UNK200000_e) || dMenu_getCollectMode() == 5) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x0250);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x0288);
     } else {
-        s16 iVar4;
-        sVar5 = 0x14;
+        s16 sVar5 = 0x14;
         if (frame != dMenu_getPushMenuButton()) {
             if (frame != 0 && dMenu_getPushMenuButton() != 0) {
                 sVar5 = g_menuHIO.field_0x92 * 2;
@@ -4489,7 +4503,7 @@ void dMeter_menuLRMove(sub_meter_class* i_Meter) {
             }
             frame = dMenu_getPushMenuButton();
         }
-        iVar4 = sVar5 / 2;
+        s16 iVar4 = sVar5 / 2;
         if (dMenu_getPushMenuButton() != 0) {
             if (i_Meter->field_0x0250.mUserArea != 0) {
                 i_Meter->field_0x0250.mUserArea--;
@@ -4501,21 +4515,21 @@ void dMeter_menuLRMove(sub_meter_class* i_Meter) {
                 i_Meter->field_0x0250.mUserArea--;
             }
         }
-        iVar3 = (int)i_Meter->field_0x0250.mUserArea;
-        int iVar4_2 = iVar4;
-        if (iVar3 > iVar4_2) {
-            dVar6 = fopMsgM_valueIncrease(iVar4_2, sVar5 - iVar3, 0);
+        f32 dVar6;
+        f32 dVar7;
+        if (i_Meter->field_0x0250.mUserArea > iVar4) {
+            dVar6 = fopMsgM_valueIncrease(iVar4, sVar5 - i_Meter->field_0x0250.mUserArea, 0);
             if (i_Meter->field_0x0288.mUserArea != 0) {
                 dVar7 = 1.0f;
             } else {
-                dVar7 = fopMsgM_valueIncrease(iVar4_2, i_Meter->field_0x0250.mUserArea - iVar4_2, 0);
+                dVar7 = fopMsgM_valueIncrease(iVar4, i_Meter->field_0x0250.mUserArea - iVar4, 0);
             }
         } else {
-            dVar6 = fopMsgM_valueIncrease(iVar4_2, iVar3, 0);
+            dVar6 = fopMsgM_valueIncrease(iVar4, i_Meter->field_0x0250.mUserArea, 0);
             if (i_Meter->field_0x0288.mUserArea != 0) {
                 dVar7 = 1.0f;
             } else {
-                dVar7 = fopMsgM_valueIncrease(iVar4_2, iVar4_2 - i_Meter->field_0x0250.mUserArea, 0);
+                dVar7 = fopMsgM_valueIncrease(iVar4, iVar4 - i_Meter->field_0x0250.mUserArea, 0);
             }
         }
         fopMsgM_paneTrans(&i_Meter->field_0x0250, dVar6 * 20.0f, 0.0f);
@@ -4539,7 +4553,7 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
     f32 local_98_x[] = {0.0f, 0.0f, 0.0f};
     f32 local_98_y[] = {0.0f, 0.0f, 0.0f};
     if (i_Meter->field_0x0100[0].mUserArea != (s16)dComIfGs_isDungeonItemCompass()) {
-        if ((s32)dMeter_mMapCtrlDisp.field_0x0 == 0x0) {
+        if ((int)dMeter_mMapCtrlDisp.field_0x0 == 0x0) {
             if (dMap_isEnableDispMap()) {
                 dMeter_mMapCtrlDisp.field_0x0 = 0x1;
                 dMeter_mMapCtrlDisp.field_0x1 = 0;
@@ -4586,7 +4600,7 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
         }
         moveStatus = 1;
     } else if (i_Meter->field_0x3020 == 1 || i_Meter->field_0x3020 == 2) {
-        if (((s32)dMeter_mMapCtrlDisp.field_0x0 != 0x0) && dMap_isEnableDispMap()) {
+        if (((int)dMeter_mMapCtrlDisp.field_0x0 != 0x0) && dMap_isEnableDispMap()) {
             if (moveStatus != 2) {
                 moveFlag = 1;
             }
@@ -4797,7 +4811,7 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
     );
     fopMsgM_paneTrans(&i_Meter->field_0x02c0, x, y);
     fopMsgM_paneTrans(&i_Meter->field_0x02f8, (dVar13 - 7.0f) + g_meterHIO.field_0x64, (dVar12 + 9.0f) + g_meterHIO.field_0x66);
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         fopMsgM_paneTrans(&i_Meter->field_0x0100[i], x + local_98_x[i], y + local_98_y[i]);
     }
     dVar13 = fopMsgM_valueIncrease(5, 5 - i_Meter->field_0x02c0.mUserArea, 0);
@@ -4809,7 +4823,7 @@ void dMeter_menuPlusMove(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x02f8, dVar13);
     }
 
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         if (!dMenu_flag()) {
             fopMsgM_setNowAlpha(&i_Meter->field_0x0100[i], dVar13);
         } else {
@@ -4846,7 +4860,9 @@ void dMeter_magicLength(sub_meter_class* i_Meter, f32 param_2) {
 void dMeter_windInit(sub_meter_class* i_Meter) {
     dMeter_windID = fpcM_ERROR_PROCESS_ID_e;
     dMeter_windStatus = 0;
+#if VERSION > VERSION_DEMO
     dComIfGp_setOperateWindCancelOff();
+#endif
 }
 
 /* 801FBC90-801FBCEC       .text dMeter_metronomeInit__FP15sub_meter_class */
@@ -4970,7 +4986,7 @@ void dMeter_rupyAlpha(sub_meter_class* i_Meter) {
             i_Meter->mpRupyParticle = dComIfGp_particle_set2Dfore(dPa_name::ID_HM_J2_RUPYLIGHT, &local_38);
         }
     }
-    for (s32 i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x19f0[i], dVar7);
         fopMsgM_setNowAlpha(&i_Meter->field_0x1b40[i], dVar7);
     }
@@ -4992,7 +5008,7 @@ void dMeter_rupyInit(sub_meter_class* i_Meter) {
     local_2c[1] = (i_Meter->mRupyCount % 1000) / 100;
     local_2c[2] = (i_Meter->mRupyCount % 100) / 10;
     local_2c[3] = i_Meter->mRupyCount % 10;
-    for (s32 i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         dMeter_rupy_num(acStack_3c, local_2c[i]);
         ((J2DPicture*)i_Meter->field_0x19f0[i].pane)->changeTexture(acStack_3c, 0);
         ((J2DPicture*)i_Meter->field_0x1b40[i].pane)->changeTexture(acStack_3c, 0);
@@ -5004,6 +5020,13 @@ void dMeter_rupyInit(sub_meter_class* i_Meter) {
 
 /* 801FC2FC-801FC624       .text dMeter_rupyMove__FP15sub_meter_class */
 void dMeter_rupyMove(sub_meter_class* i_Meter) {
+#if VERSION == VERSION_DEMO
+    static bool soundSetFlag = false;
+    static bool soundOnFlag = false;
+    #define rupy_soundSetFlag soundSetFlag
+    #define rupy_soundOnFlag soundOnFlag
+#endif
+
     int local_28[4];
     char acStack_38[16];
 
@@ -5028,7 +5051,7 @@ void dMeter_rupyMove(sub_meter_class* i_Meter) {
         }
         i_Meter->mAdjustRupy = targetRupees - i_Meter->mRupyCount;
         dComIfGs_setRupee(targetRupees);
-        g_dComIfG_gameInfo.play.mItemRupeeCount = 0;
+        dComIfGp_clearItemRupeeCount();
         if (labs(i_Meter->mAdjustRupy) >= 5) {
             rupy_soundOnFlag = 1;
         }
@@ -5074,7 +5097,7 @@ void dMeter_rupyMove(sub_meter_class* i_Meter) {
         local_28[1] = (uVar3 % 1000) / 100;
         local_28[2] = (uVar3 % 100) / 10;
         local_28[3] = uVar3 % 10;
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             dMeter_rupy_num(acStack_38, local_28[i]);
             ((J2DPicture*)i_Meter->field_0x19f0[i].pane)->changeTexture(acStack_38, 0);
             ((J2DPicture*)i_Meter->field_0x1b40[i].pane)->changeTexture(acStack_38, 0);
@@ -5184,7 +5207,7 @@ void dMeter_keyAlpha(sub_meter_class* i_Meter) {
     } else {
         dVar5 = dMeter_alphaClose(&i_Meter->field_0x1c90.mUserArea, &i_Meter->field_0x1ad0[0].mUserArea);
     }
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x1ad0[i], dVar5);
         fopMsgM_setNowAlpha(&i_Meter->field_0x1c20[i], dVar5);
     }
@@ -5208,7 +5231,7 @@ void dMeter_keyInit(sub_meter_class* i_Meter) {
     i_Meter->field_0x301d = dComIfGs_getKeyNum();
     local_38[0] = i_Meter->field_0x301d / 10;
     local_38[1] = i_Meter->field_0x301d % 10;
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         dMeter_rupy_num(acStack_30, local_38[i]);
         fopMsgM_blendInit(&i_Meter->field_0x1ad0[i], acStack_30);
         fopMsgM_blendInit(&i_Meter->field_0x1c20[i], acStack_30);
@@ -5231,7 +5254,7 @@ void dMeter_keyMove(sub_meter_class* i_Meter) {
             }
             i_Meter->field_0x300e = sVar1 - (u16)i_Meter->field_0x301d;
             dComIfGs_setKeyNum((u8)sVar1);
-            g_dComIfG_gameInfo.play.mItemKeyNumCount = 0;
+            dComIfGp_clearItemKeyNumCount();
         }
         sVar1 = i_Meter->field_0x300e;
         if (sVar1 != 0) {
@@ -5244,7 +5267,7 @@ void dMeter_keyMove(sub_meter_class* i_Meter) {
             }
             local_38[0] = i_Meter->field_0x301d / 10;
             local_38[1] = i_Meter->field_0x301d % 10;
-            for (s32 i = 0; i < 2; i++) {
+            for (int i = 0; i < 2; i++) {
                 dMeter_rupy_num(acStack_30, local_38[i]);
                 fopMsgM_blendDraw(&i_Meter->field_0x1ad0[i], acStack_30);
                 fopMsgM_blendDraw(&i_Meter->field_0x1c20[i], acStack_30);
@@ -5267,7 +5290,7 @@ void dMeter_compassRotate(fopMsgM_pane_class* param_1, fopMsgM_pane_class* param
 void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
     switch (i_Meter->field_0x3020) {
     case 1:
-        if (((s32)dMeter_mMapCtrlDisp.field_0x0 != 0) &&
+        if (((int)dMeter_mMapCtrlDisp.field_0x0 != 0) &&
             (!(i_Meter->mStatusFlags & dMtrStts_UNK400_e) || dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_TOTG))
         {
             i_Meter->field_0x3020 = 2;
@@ -5281,7 +5304,7 @@ void dMeter_compassGetOnProc(sub_meter_class* i_Meter) {
         }
         break;
     case 2:
-        if ((s32)dMeter_mMapCtrlDisp.field_0x0 == 0) {
+        if ((int)dMeter_mMapCtrlDisp.field_0x0 == 0) {
             i_Meter->field_0x12f0.pane->show();
             dMeter_clockShow(i_Meter);
             i_Meter->field_0x3020 = 5;
@@ -5416,7 +5439,6 @@ void dMeter_compassWindOpen(sub_meter_class* i_Meter) {
 
 /* 801FD8C0-801FDB64       .text dMeter_compassWindClose__FP15sub_meter_class */
 void dMeter_compassWindClose(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     f32 dVar11 = i_Meter->field_0x1948.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
     f32 dVar10 = i_Meter->field_0x1948.pane->getHeight() / 2.0f;
     f32 dVar9 = i_Meter->field_0x16a8.pane->getWidth() / 2.0f - (i_Meter->field_0x13d0.pane->getWidth() / 2.0f);
@@ -5555,13 +5577,13 @@ void dMeter_compassAlpha(sub_meter_class* i_Meter) {
     fopMsgM_setNowAlpha(&i_Meter->field_0x13d0, dVar3);
     fopMsgM_setNowAlpha(&i_Meter->field_0x1408, dVar3);
     fopMsgM_setNowAlpha(&i_Meter->field_0x1440, dVar3);
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x1478[i], dVar3);
         fopMsgM_setNowAlpha(&i_Meter->field_0x1868[0], dVar3);
     }
     fopMsgM_setNowAlpha(&i_Meter->field_0x1520, dVar3);
     fopMsgM_setNowAlpha(&i_Meter->field_0x1558, dVar3);
-    for (s32 i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         fopMsgM_setNowAlpha(&i_Meter->field_0x1590[i], dVar3);
         fopMsgM_setNowAlpha(&i_Meter->field_0x1718[0], dVar3);
     }
@@ -5586,7 +5608,7 @@ void dMeter_compassInit(sub_meter_class* i_Meter) {
     ((MyPicture*)i_Meter->field_0x1280.pane)->m128 = 0.0f;
     ((MyPicture*)i_Meter->field_0x1280.pane)->m12C = 1.0f;
     ((MyPicture*)i_Meter->field_0x1280.pane)->m130 = 1.0f;
-    if ((s32)dMeter_mMapCtrlDisp.field_0x0 != 0) {
+    if ((int)dMeter_mMapCtrlDisp.field_0x0 != 0) {
         i_Meter->field_0x3029 = 1;
     } else {
         i_Meter->field_0x3029 = 0;
@@ -5641,12 +5663,12 @@ void dMeter_clockShow(sub_meter_class* i_Meter) {
         i_Meter->field_0x13d0.pane->show();
         i_Meter->field_0x1408.pane->show();
         i_Meter->field_0x1440.pane->show();
-        for (s32 i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             i_Meter->field_0x1478[i].pane->show();
         }
         i_Meter->field_0x1520.pane->show();
         i_Meter->field_0x1558.pane->show();
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             i_Meter->field_0x1590[i].pane->show();
         }
         i_Meter->field_0x1670.pane->show();
@@ -5656,10 +5678,10 @@ void dMeter_clockShow(sub_meter_class* i_Meter) {
         i_Meter->field_0x1830.pane->hide();
         i_Meter->field_0x1910.pane->hide();
         i_Meter->field_0x1948.pane->hide();
-        for (s32 i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             i_Meter->field_0x1868[i].pane->hide();
         }
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             i_Meter->field_0x1718[i].pane->hide();
         }
     } else {
@@ -5667,12 +5689,12 @@ void dMeter_clockShow(sub_meter_class* i_Meter) {
         i_Meter->field_0x13d0.pane->hide();
         i_Meter->field_0x1408.pane->hide();
         i_Meter->field_0x1440.pane->hide();
-        for (s32 i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             i_Meter->field_0x1478[i].pane->hide();
         }
         i_Meter->field_0x1520.pane->hide();
         i_Meter->field_0x1558.pane->hide();
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             i_Meter->field_0x1590[i].pane->hide();
         }
         i_Meter->field_0x1670.pane->hide();
@@ -5683,10 +5705,10 @@ void dMeter_clockShow(sub_meter_class* i_Meter) {
             i_Meter->field_0x1830.pane->show();
             i_Meter->field_0x1910.pane->show();
             i_Meter->field_0x1948.pane->show();
-            for (s32 i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 i_Meter->field_0x1868[i].pane->hide();
             }
-            for (s32 i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 i_Meter->field_0x1718[i].pane->hide();
             }
             ((J2DPicture*)i_Meter->field_0x1948.pane)->setCornerColor(0xFFFF00FF, 0xFFFF00FF, 0xFFFF00FF, 0x0000FFFF);
@@ -5696,10 +5718,10 @@ void dMeter_clockShow(sub_meter_class* i_Meter) {
             i_Meter->field_0x1830.pane->hide();
             i_Meter->field_0x1910.pane->hide();
             i_Meter->field_0x1948.pane->show();
-            for (s32 i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 i_Meter->field_0x1868[i].pane->hide();
             }
-            for (s32 i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 i_Meter->field_0x1718[i].pane->show();
             }
             ((J2DPicture*)i_Meter->field_0x1948.pane)->setCornerColor(0x0000FFFF, 0x000000FF, 0x000000FF, 0x000000FF);
@@ -5713,13 +5735,13 @@ void dMeter_clockHide(sub_meter_class* i_Meter) {
     i_Meter->field_0x13d0.pane->hide();
     i_Meter->field_0x1408.pane->hide();
     i_Meter->field_0x1440.pane->hide();
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         i_Meter->field_0x1478[i].pane->hide();
         i_Meter->field_0x1868[i].pane->hide();
     }
     i_Meter->field_0x1520.pane->hide();
     i_Meter->field_0x1558.pane->hide();
-    for (s32 i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         i_Meter->field_0x1590[i].pane->hide();
         i_Meter->field_0x1718[i].pane->hide();
     }
@@ -5741,7 +5763,7 @@ void dMeter_clockInit(sub_meter_class* i_Meter) {
 
     fVar1 = i_Meter->field_0x1948.mPosTopLeftOrig.x + i_Meter->field_0x1830.mPosTopLeftOrig.x;
     fVar2 = i_Meter->field_0x1948.mPosTopLeftOrig.y + i_Meter->field_0x1830.mPosTopLeftOrig.y;
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         i_Meter->field_0x1718[i].mUserArea = 1;
         i_Meter->field_0x1478[i].mUserArea = 1;
         i_Meter->field_0x1868[i].mPosCenter.x = fVar1 - initPosX[i];
@@ -5766,7 +5788,7 @@ void dMeter_clockMove(sub_meter_class* i_Meter) {
     } else {
         i_Meter->field_0x1910.mUserArea = 0;
     }
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         i_Meter->field_0x1868[i].mPosCenter.x = g_meterHIO.field_0x6c[i];
         i_Meter->field_0x1868[i].mPosCenter.y = g_meterHIO.field_0x72[i];
     }
@@ -5839,31 +5861,28 @@ void dMeter_clockMultiInit(sub_meter_class* i_Meter) {
     static f32 scaleY[] = {0.667f, 0.583f, 0.604f};
 
     JKRArchive* pArchive = dComIfGp_getSwimResArchive();
-    ResTIMG* texture1 = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "swimtime_meter_mask.bti", pArchive);
+    ResTIMG* texture1 = (ResTIMG*)JKRGetResource('TIMG', "swimtime_meter_mask.bti", pArchive);
     JKRArchive* pArchive2 = dComIfGp_getMenuArchive();
-    ResTIMG* texture2 = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "screw_01.bti", pArchive2);
-    JUT_ASSERT(10626, texture1 != NULL && texture2 != NULL);
-    for (s32 i = 0; i < 3; i++) {
+    ResTIMG* texture2 = (ResTIMG*)JKRGetResource('TIMG', "screw_01.bti", pArchive2);
+    JUT_ASSERT(VERSION_SELECT(10626, 10626, 10626, 10625), texture1 != NULL && texture2 != NULL);
+    for (int i = 0; i < 3; i++) {
         clock[i].init(texture1, texture2, 1.0f / scaleX[i], 1.0f / scaleY[i]);
     }
 }
 
 /* 801FEF40-801FF184       .text dMeter_clockMultiMove__FP15sub_meter_class */
 void dMeter_clockMultiMove(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     static f32 scaleX[] = {0.813f, 0.75f, 0.5f};
     static f32 scaleY[] = {0.667f, 0.583f, 0.604f};
-    s16 sVar5;
-    s16 sVar4;
-    s16 fVar2;
-    s16 fVar1;
 
-    for (s32 i = 0; i < 3; i++) {
-        sVar4 = i_Meter->field_0x1948.mPosTopLeftOrig.x + i_Meter->field_0x1830.mPosTopLeftOrig.x;
-        sVar5 = i_Meter->field_0x1948.mPosTopLeftOrig.y + i_Meter->field_0x1830.mPosTopLeftOrig.y;
-        fVar1 = i_Meter->field_0x1868[i].mPosCenter.x;
-        fVar2 = i_Meter->field_0x1868[i].mPosCenter.y;
-        clock[i].setPos(sVar4, sVar5, sVar4 + i_Meter->field_0x1830.mSizeOrig.x, sVar5 + i_Meter->field_0x1830.mSizeOrig.y);
+    for (int i = 0; i < 3; i++) {
+        s16 x0 = i_Meter->field_0x1948.mPosTopLeftOrig.x + i_Meter->field_0x1830.mPosTopLeftOrig.x;
+        s16 y0 = i_Meter->field_0x1948.mPosTopLeftOrig.y + i_Meter->field_0x1830.mPosTopLeftOrig.y;
+        s16 x1 = x0 + i_Meter->field_0x1830.mSizeOrig.x;
+        s16 y1 = y0 + i_Meter->field_0x1830.mSizeOrig.y;
+        s16 scroll_x = i_Meter->field_0x1868[i].mPosCenter.x;
+        s16 scroll_y = i_Meter->field_0x1868[i].mPosCenter.y;
+        clock[i].setPos(x0, y0, x1, y1);
         GXColor color1 = {0xFF, 0XFF, 0XFF, 0XFF};
         clock[i].mBlack.r = color1.r;
         clock[i].mBlack.g = color1.g;
@@ -5875,7 +5894,7 @@ void dMeter_clockMultiMove(sub_meter_class* i_Meter) {
         clock[i].mWhite.b = color2.b;
         clock[i].mWhite.a = color2.a;
         clock[i].setScroll(0, 0, 0);
-        clock[i].setScroll(1, fVar1, fVar2);
+        clock[i].setScroll(1, scroll_x, scroll_y);
         clock[i].setScale((100.0f * (1.0f / scaleX[i]) / g_meterHIO.field_0x78[i]), (100.0f * (1.0f / scaleY[i])) / g_meterHIO.field_0x78[i]);
     }
 }
@@ -5893,7 +5912,7 @@ void dMeter_mapInit(sub_meter_class* i_Meter) {
 void dMeter_mapMove(sub_meter_class* i_Meter) {
     static s16 mapTimer = 0;
     static u8 stageFlag = false;
-    static s32 stayNo = dComIfGp_roomControl_getStayNo();
+    static int stayNo = dComIfGp_roomControl_getStayNo();
     if (fopOvlpM_IsDoingReq() == 0) {
         if (i_Meter->field_0x3027 == 0xFF) {
             stageFlag = 1;
@@ -5909,7 +5928,7 @@ void dMeter_mapMove(sub_meter_class* i_Meter) {
         ((strcmp(dComIfGp_getNextStageName(), "MajyuE") != 0) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_0801)))
     {
         if ((i_Meter->mStatusFlags & dMtrStts_UNK400_e) && (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) != dSv_save_c::STAGE_TOTG)) {
-            if (((s32)dMeter_mMapCtrlDisp.field_0x0 != 0) && dMap_isEnableDispMap()) {
+            if (((int)dMeter_mMapCtrlDisp.field_0x0 != 0) && dMap_isEnableDispMap()) {
                 dMeter_mMapCtrlDisp.field_0x0 = 0;
                 dMeter_mMapCtrlDisp.field_0x1 = 7;
             }
@@ -5918,7 +5937,7 @@ void dMeter_mapMove(sub_meter_class* i_Meter) {
                 (CPad_CHECK_TRIG_LEFT(0) != 0 || CPad_CHECK_TRIG_RIGHT(0)))
             {
                 if (CPad_CHECK_TRIG_LEFT(0) != 0) {
-                    if (dMap_c::getMapAlpha() != 0 && ((s32)dMeter_mMapCtrlDisp.field_0x0 != 0)) {
+                    if (dMap_c::getMapAlpha() != 0 && ((int)dMeter_mMapCtrlDisp.field_0x0 != 0)) {
                         if (dMap_isEnableDispMap()) {
                             dMeter_mMapCtrlDisp.field_0x0 = 0;
                             dMeter_mMapCtrlDisp.field_0x1 = 0;
@@ -5927,7 +5946,7 @@ void dMeter_mapMove(sub_meter_class* i_Meter) {
                         mDoAud_seStart(JA_SE_MAP_CANCEL);
                     }
                 } else if (CPad_CHECK_TRIG_RIGHT(0) != 0 && dMap_c::getMapAlpha() != 0) {
-                    if ((s32)dMeter_mMapCtrlDisp.field_0x0 == 0) {
+                    if ((int)dMeter_mMapCtrlDisp.field_0x0 == 0) {
                         if (dMap_isEnableDispMap()) {
                             dMeter_mMapCtrlDisp.field_0x0 = 1;
                             dMeter_mMapCtrlDisp.field_0x1 = 0;
@@ -5942,14 +5961,14 @@ void dMeter_mapMove(sub_meter_class* i_Meter) {
                         mDoAud_seStart(JA_SE_MAP_ZOOM);
                     }
                 }
-            } else if (i_Meter->field_0x3029 != 0 && i_Meter->field_0x3020 == 1 && (s32)dMeter_mMapCtrlDisp.field_0x0 == 0 && dMap_isEnableDispMap())
+            } else if (i_Meter->field_0x3029 != 0 && i_Meter->field_0x3020 == 1 && (int)dMeter_mMapCtrlDisp.field_0x0 == 0 && dMap_isEnableDispMap())
             {
                 dMeter_mMapCtrlDisp.field_0x0 = 1;
                 dMeter_mMapCtrlDisp.field_0x1 = 7;
             }
             if (stageFlag == 1) {
                 stageFlag = 0;
-                if ((s32)dMeter_mMapCtrlDisp.field_0x0 == 0) {
+                if ((int)dMeter_mMapCtrlDisp.field_0x0 == 0) {
                     if (dMap_isEnableDispMap()) {
                         dMeter_mMapCtrlDisp.field_0x0 = 1;
                         dMeter_mMapCtrlDisp.field_0x1 = 0;
@@ -5966,7 +5985,7 @@ void dMeter_mapMove(sub_meter_class* i_Meter) {
             } else {
                 dMap_c::setMapDispMode(0);
             }
-            if ((s32)dMeter_mMapCtrlDisp.field_0x0 != 0 && mapTimer != 6) {
+            if ((int)dMeter_mMapCtrlDisp.field_0x0 != 0 && mapTimer != 6) {
                 mapTimer = 6;
             }
         }
@@ -5985,7 +6004,7 @@ void dMeter_arwInit(sub_meter_class* i_Meter) {
     if (bVar2 > 3) {
         uVar1 = 0;
     }
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
         JKRReadTypeResource(i_Meter->arrowTex[i], 0xc00, 'TIMG', arrowTexImage[uVar1], archive);
         DCStoreRangeNoSync(i_Meter->arrowTex[i], 0xc00);
@@ -6045,7 +6064,7 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
             if (i_Meter->field_0x29b0[1].mUserArea < 2) {
                 i_Meter->field_0x29b0[1].mUserArea++;
             }
-            for (s32 i = 0; i < 2; i++) {
+            for (int i = 0; i < 2; i++) {
                 if (i_Meter->field_0x2f24[i] != NULL) {
                     i_Meter->field_0x2f24[i]->becomeInvalidEmitter();
                     i_Meter->field_0x2f24[i]->stopDrawParticle();
@@ -6090,14 +6109,14 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
                 fopMsgM_setNowAlphaZero(&i_Meter->field_0x29b0[0]);
                 fopMsgM_setInitAlpha(&i_Meter->field_0x2940[1]);
                 fopMsgM_setInitAlpha(&i_Meter->field_0x29b0[1]);
-                for (s32 i = 0; i < 2; i++) {
+                for (int i = 0; i < 2; i++) {
                     fopMsgM_paneTrans(&i_Meter->field_0x2940[i], dVar16, 0.0f);
                     fopMsgM_paneTrans(&i_Meter->field_0x29b0[i], dVar16, 0.0f);
                 }
             } else {
                 dVar15 = fopMsgM_valueIncrease(10, i_Meter->field_0x29b0[0].mUserArea, 0);
                 dVar16 = (f32)(dVar16 * dVar15);
-                for (s32 i = 0; i < 2; i++) {
+                for (int i = 0; i < 2; i++) {
                     fopMsgM_paneTrans(&i_Meter->field_0x2940[i], dVar16, 0.0f);
                     fopMsgM_paneTrans(&i_Meter->field_0x29b0[i], dVar16, 0.0f);
                 }
@@ -6113,7 +6132,7 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
                 }
             }
         }
-        for (s32 i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             fopMsgM_setAlpha(&i_Meter->field_0x2940[i]);
             fopMsgM_setAlpha(&i_Meter->field_0x29b0[i]);
         }
@@ -6124,7 +6143,7 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
         if (i_Meter->field_0x29b0[0].mUserArea > 0) {
             i_Meter->field_0x29b0[0].mUserArea--;
             if (i_Meter->field_0x29b0[0].mUserArea == 0) {
-                for (s32 i = 0; i < 2; i++) {
+                for (int i = 0; i < 2; i++) {
                     fopMsgM_setNowAlphaZero(&i_Meter->field_0x2940[i]);
                     fopMsgM_setNowAlphaZero(&i_Meter->field_0x29b0[i]);
                     fopMsgM_setAlpha(&i_Meter->field_0x2940[i]);
@@ -6138,14 +6157,14 @@ void dMeter_arwMove(sub_meter_class* i_Meter) {
                 }
             } else {
                 dVar16 = fopMsgM_valueIncrease(10, i_Meter->field_0x29b0[0].mUserArea, 0);
-                for (s32 i = 0; i < 2; i++) {
+                for (int i = 0; i < 2; i++) {
                     i_Meter->field_0x2940[i].pane->setAlpha(i_Meter->field_0x2940[i].mNowAlpha * dVar16);
                     i_Meter->field_0x29b0[i].pane->setAlpha(i_Meter->field_0x29b0[i].mNowAlpha * dVar16);
                 }
             }
         }
     }
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         if (i_Meter->field_0x2f24[i] != NULL) {
             i_Meter->field_0x2f24[i]->playDrawParticle();
             f32 x = i_Meter->field_0x29b0[1].mPosCenter.x - 320.0f;
@@ -6272,7 +6291,7 @@ void dMeter_moveItemDraw(sub_meter_class* i_Meter) {
 
 /* 8020042C-8020054C       .text dMeter_swimTransY__FP15sub_meter_classf */
 void dMeter_swimTransY(sub_meter_class* i_Meter, f32 param_2) {
-    for (s32 i = 0; i < 9; i++) {
+    for (int i = 0; i < 9; i++) {
         i_Meter->field_0x2a90[i].mPosCenterOrig.y = param_2 + (i_Meter->field_0x2a90[i].mPosTopLeftOrig.y + i_Meter->field_0x2a90[i].mSizeOrig.y / 2.0f);
     }
     i_Meter->field_0x2c88.mPosCenterOrig.y = param_2 + (i_Meter->field_0x2c88.mPosTopLeftOrig.y + i_Meter->field_0x2c88.mSizeOrig.y / 2.0f);
@@ -6296,7 +6315,7 @@ void dMeter_swimPaneShow(sub_meter_class* i_Meter) {
 
 /* 8020059C-80200630       .text dMeter_swimPaneHide__FP15sub_meter_class */
 void dMeter_swimPaneHide(sub_meter_class* i_Meter) {
-    for (s32 i = 0; i < 9; i++) {
+    for (int i = 0; i < 9; i++) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x2a90[i]);
     }
     fopMsgM_setNowAlphaZero(&i_Meter->field_0x2c88);
@@ -6344,10 +6363,10 @@ void dMeter_swimInit(sub_meter_class* i_Meter) {
     i_Meter->field_0x2c88.mUserArea = 0;
     i_Meter->field_0x2dd8.mUserArea = 0;
     JKRArchive* pArchive = dComIfGp_getSwimResArchive();
-    texture1 = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "swimtime_meter_mask.bti", pArchive);
+    texture1 = (ResTIMG*)JKRGetResource('TIMG', "swimtime_meter_mask.bti", pArchive);
     JKRArchive* pArchive2 = dComIfGp_getSwimResArchive();
-    texture2 = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "tekari.bti", pArchive2);
-    JUT_ASSERT(11498, texture1 != NULL && texture2 != NULL);
+    texture2 = (ResTIMG*)JKRGetResource('TIMG', "tekari.bti", pArchive2);
+    JUT_ASSERT(VERSION_SELECT(11498, 11498, 11498, 11497), texture1 != NULL && texture2 != NULL);
     tekari.init(texture1, texture2, 1.0f, 1.0f);
 }
 
@@ -6384,7 +6403,7 @@ void dMeter_swimMove(sub_meter_class* i_Meter) {
             i_Meter->field_0x2ef8 = i_Meter->field_0x2ef0;
             i_Meter->field_0x2efc = i_Meter->field_0x2ef4;
             i_Meter->field_0x3000 = g_meterHIO.field_0x130;
-            for (s32 i = 0; i < 9; i++) {
+            for (int i = 0; i < 9; i++) {
                 i_Meter->field_0x2a90[i].mUserArea = 0;
             }
             mDoAud_seStart(JA_SE_SWIM_TIMER_ON);
@@ -6437,7 +6456,7 @@ void dMeter_swimMove(sub_meter_class* i_Meter) {
 /* 80200D7C-80200E18       .text dMeter_swimDraw__FP15sub_meter_class */
 void dMeter_swimDraw(sub_meter_class* i_Meter) {
     if (sScrTimer2 != NULL) {
-        for (s32 i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             fopMsgM_setAlpha(&i_Meter->field_0x2a90[i]);
         }
         fopMsgM_setAlpha(&i_Meter->field_0x2c88);
@@ -6657,7 +6676,7 @@ void dMeter_swimMainDown(sub_meter_class* i_Meter) {
     fopMsgM_cposMove(&i_Meter->field_0x2cf8);
     if (sVar1 > 0) {
         if (!dComIfGp_event_runCheck() && dComIfGp_getItemSwimTimerStatus() != false) {
-            g_dComIfG_gameInfo.play.mAirMeter--;
+            dComIfGp_addItemTimeCount(-1);
         }
         if (dComIfGp_getItemTimeCount() == 0) {
             i_Meter->field_0x2da0.mUserArea = 3;
@@ -6811,7 +6830,7 @@ void dMeter_arrowInit(sub_meter_class* i_Meter) {
 
 /* 80202438-80202580       .text dMeter_arrowCheckStatus__FP15sub_meter_class */
 void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
-    if ((g_dComIfG_gameInfo.play.getDirection() & 1) != 0) {
+    if ((dComIfGp_getAdvanceDirection() & 1) != 0) {
         if (i_Meter->field_0x2e10[0].mUserArea == 0) {
             if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[0].mUserArea = 1;
@@ -6820,7 +6839,7 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     } else {
         dMeter_arrowErase(&i_Meter->field_0x2e10[0]);
     }
-    if ((g_dComIfG_gameInfo.play.getDirection() & 2) != 0) {
+    if ((dComIfGp_getAdvanceDirection() & 2) != 0) {
         if (i_Meter->field_0x2e10[1].mUserArea == 0) {
             if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[1].mUserArea = 1;
@@ -6829,7 +6848,7 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     } else {
         dMeter_arrowErase(&i_Meter->field_0x2e10[1]);
     }
-    if ((g_dComIfG_gameInfo.play.getDirection() & 4) != 0) {
+    if ((dComIfGp_getAdvanceDirection() & 4) != 0) {
         if (i_Meter->field_0x2e10[2].mUserArea == 0) {
             if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[2].mUserArea = 1;
@@ -6838,7 +6857,7 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
     } else {
         dMeter_arrowErase(&i_Meter->field_0x2e10[2]);
     }
-    if ((g_dComIfG_gameInfo.play.getDirection() & 8) != 0) {
+    if ((dComIfGp_getAdvanceDirection() & 8) != 0) {
         if (i_Meter->field_0x2e10[3].mUserArea == 0) {
             if (i_Meter->field_0x3025 == 0 || i_Meter->field_0x3025 == 0x14) {
                 i_Meter->field_0x2e10[3].mUserArea = 1;
@@ -6853,8 +6872,6 @@ void dMeter_arrowCheckStatus(sub_meter_class* i_Meter) {
 void dMeter_arrowTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, int param_4) {
     f32 fVar1;
     f32 fVar2;
-    f32 fVar3;
-    f32 dVar4;
 
     switch (param_4) {
     case 0:
@@ -6862,7 +6879,7 @@ void dMeter_arrowTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, 
         fVar2 = i_Meter->field_0x2e10[0].mPosTopLeftOrig.y;
         i_Meter->field_0x2e10[0].mSize.x = i_Meter->field_0x2e10[0].mSizeOrig.x * param_3;
         i_Meter->field_0x2e10[0].mSize.y = i_Meter->field_0x2e10[0].mSizeOrig.y;
-        i_Meter->field_0x2e10[0].mPosTopLeft.x =fVar1 - param_2 - i_Meter->field_0x2e10[0].mSize.x;
+        i_Meter->field_0x2e10[0].mPosTopLeft.x = fVar1 - param_2 - i_Meter->field_0x2e10[0].mSize.x;
         i_Meter->field_0x2e10[0].mPosTopLeft.y = fVar2;
         break;
     case 1:
@@ -6896,69 +6913,75 @@ void dMeter_arrowTransScale(sub_meter_class* i_Meter, f32 param_2, f32 param_3, 
 
 /* 80202770-80203298       .text dMeter_arrowAnime__FP15sub_meter_class */
 void dMeter_arrowAnime(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     static const f32 scale[] = {1.0f, 1.9f, 1.0f, 1.9f};
-    static const s32 trans[] = {0, 30, 0, 30};
+    static const int trans[] = {0, 30, 0, 30};
     static const u8 white[] = {0xFF, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0xFF, 0xFF};
     static const u8 black[] = {0xFF, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0xFF, 0x00};
-    s16 iVar6;
-    f32 dVar7;
 
-    for (s32 i = 0; i < 4; i++) {
+    GXColor col_white;
+    GXColor col_black;
+    s16 iVar6;
+    f32 f1;
+    f32 f2;
+
+    for (int i = 0; i < ARRAY_SSIZE(i_Meter->field_0x2e10); i++) {
         if (i_Meter->field_0x2e10[i].mUserArea == 1) {
-            iVar6 = i_Meter->field_0x3025;
-            if (iVar6 > 0x14) {
-                iVar6 = (s16)(i_Meter->field_0x3025 - 0x14);
+            if (i_Meter->field_0x3025 > 20) {
+                iVar6 = i_Meter->field_0x3025 - 20;
+            } else {
+                iVar6 = i_Meter->field_0x3025;
             }
-            dVar7 = fopMsgM_valueIncrease(10, iVar6, 0);
-            dMeter_arrowTransScale(i_Meter, (dVar7 * (trans[1] - trans[0])) + trans[0], (dVar7 * (scale[1] - scale[0])) + scale[0], i);
+            f32 dVar7 = fopMsgM_valueIncrease(10, iVar6, 0);
+            f1 = (dVar7 * (trans[1] - trans[0])) + trans[0];
+            f2 = (dVar7 * (scale[1] - scale[0])) + scale[0];
+            dMeter_arrowTransScale(i_Meter, f1, f2, i);
             fopMsgM_setNowAlpha(&i_Meter->field_0x2e10[i], dVar7 * 0.8627451f);
-            GXColor color1;
-            color1.r = (dVar7 * (black[4] - black[0])) + black[0];
-            color1.g = (dVar7 * (black[5] - black[1])) + black[1];
-            color1.b = (dVar7 * (black[6] - black[2])) + black[2];
-            color1.a = (dVar7 * (black[7] - black[3])) + black[3];
-            GXColor color2;
-            color2.r = (dVar7 * (white[4] - white[0])) + white[0];
-            color2.g = (dVar7 * (white[5] - white[1])) + white[1];
-            color2.b = (dVar7 * (white[6] - white[2])) + white[2];
-            color2.a = (dVar7 * (white[7] - white[3])) + white[3];
-            ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setBlack(color1);
-            ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setWhite(color2);
+            col_black.r = (dVar7 * (black[4] - black[0])) + black[0];
+            col_black.g = (dVar7 * (black[5] - black[1])) + black[1];
+            col_black.b = (dVar7 * (black[6] - black[2])) + black[2];
+            col_black.a = (dVar7 * (black[7] - black[3])) + black[3];
+            col_white.r = (dVar7 * (white[4] - white[0])) + white[0];
+            col_white.g = (dVar7 * (white[5] - white[1])) + white[1];
+            col_white.b = (dVar7 * (white[6] - white[2])) + white[2];
+            col_white.a = (dVar7 * (white[7] - white[3])) + white[3];
+            ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setBlack(col_black);
+            ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setWhite(col_white);
             if (iVar6 == 10) {
                 i_Meter->field_0x2e10[i].mUserArea = 2;
             }
         } else if (i_Meter->field_0x2e10[i].mUserArea == 2) {
-            if (i_Meter->field_0x3025 <= 0x14) {
-                dVar7 = fopMsgM_valueIncrease(10, (i_Meter->field_0x3025 - 10), 0);
-                dMeter_arrowTransScale(i_Meter, (dVar7 * (trans[2] - trans[1])) + trans[1], (dVar7 * (scale[2] - scale[1])) + scale[1], i);
-                GXColor color1;
-                color1.r = (dVar7 * (black[8] - black[4])) + black[4];
-                color1.g = (dVar7 * (black[9] - black[5])) + black[5];
-                color1.b = (dVar7 * (black[10] - black[6])) + black[6];
-                color1.a = (dVar7 * (black[11] - black[7])) + black[7];
-                GXColor color2;
-                color2.r = (dVar7 * (white[8] - white[4])) + white[4];
-                color2.g = (dVar7 * (white[9] - white[5])) + white[5];
-                color2.b = (dVar7 * (white[10] - white[6])) + white[6];
-                color2.a = (dVar7 * (white[11] - white[7])) + white[7];
-                ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setBlack(color1);
-                ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setWhite(color2);
+            if (i_Meter->field_0x3025 <= 20) {
+                iVar6 = i_Meter->field_0x3025 - 10;
+                f32 dVar7 = fopMsgM_valueIncrease(10, iVar6, 0);
+                f1 = (dVar7 * (trans[2] - trans[1])) + trans[1];
+                f2 = (dVar7 * (scale[2] - scale[1])) + scale[1];
+                dMeter_arrowTransScale(i_Meter, f1, f2, i);
+                col_black.r = (dVar7 * (black[8] - black[4])) + black[4];
+                col_black.g = (dVar7 * (black[9] - black[5])) + black[5];
+                col_black.b = (dVar7 * (black[10] - black[6])) + black[6];
+                col_black.a = (dVar7 * (black[11] - black[7])) + black[7];
+                col_white.r = (dVar7 * (white[8] - white[4])) + white[4];
+                col_white.g = (dVar7 * (white[9] - white[5])) + white[5];
+                col_white.b = (dVar7 * (white[10] - white[6])) + white[6];
+                col_white.a = (dVar7 * (white[11] - white[7])) + white[7];
+                ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setBlack(col_black);
+                ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setWhite(col_white);
             } else {
-                dVar7 = fopMsgM_valueIncrease(10, (i_Meter->field_0x3025 - 0x14), 0);
-                dMeter_arrowTransScale(i_Meter, (dVar7 * (trans[3] - trans[2])) + trans[2], (dVar7 * (scale[3] - scale[2])) + scale[2], i);
-                GXColor color1;
-                color1.r = (dVar7 * (black[12] - black[8])) + black[8];
-                color1.g = (dVar7 * (black[13] - black[9])) + black[9];
-                color1.b = (dVar7 * (black[14] - black[10])) + black[10];
-                color1.a = (dVar7 * (black[15] - black[11])) + black[11];
-                GXColor color2;
-                color2.r = (dVar7 * (white[12] - white[8])) + white[8];
-                color2.g = (dVar7 * (white[13] - white[9])) + white[9];
-                color2.b = (dVar7 * (white[14] - white[10])) + white[10];
-                color2.a = (dVar7 * (white[15] - white[11])) + white[11];
-                ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setBlack(color1);
-                ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setWhite(color2);
+                iVar6 = i_Meter->field_0x3025 - 20;
+                f32 dVar7 = fopMsgM_valueIncrease(10, iVar6, 0);
+                f1 = (dVar7 * (trans[3] - trans[2])) + trans[2];
+                f2 = (dVar7 * (scale[3] - scale[2])) + scale[2];
+                dMeter_arrowTransScale(i_Meter, f1, f2, i);
+                col_black.r = (dVar7 * (black[12] - black[8])) + black[8];
+                col_black.g = (dVar7 * (black[13] - black[9])) + black[9];
+                col_black.b = (dVar7 * (black[14] - black[10])) + black[10];
+                col_black.a = (dVar7 * (black[15] - black[11])) + black[11];
+                col_white.r = (dVar7 * (white[12] - white[8])) + white[8];
+                col_white.g = (dVar7 * (white[13] - white[9])) + white[9];
+                col_white.b = (dVar7 * (white[14] - white[10])) + white[10];
+                col_white.a = (dVar7 * (white[15] - white[11])) + white[11];
+                ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setBlack(col_black);
+                ((J2DPicture*)i_Meter->field_0x2e10[i].pane)->setWhite(col_white);
             }
         }
     }
@@ -6990,7 +7013,7 @@ void dMeter_arrowMove(sub_meter_class* i_Meter) {
     }
     if (i_Meter->field_0x3025 != 0) {
         i_Meter->field_0x3025 = 0;
-        for (s32 i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             dMeter_arrowErase(&i_Meter->field_0x2e10[i]);
         }
     }
@@ -6998,7 +7021,7 @@ void dMeter_arrowMove(sub_meter_class* i_Meter) {
 
 /* 80203410-80203464       .text dMeter_arrowDraw__FP15sub_meter_class */
 void dMeter_arrowDraw(sub_meter_class* i_Meter) {
-    for (s32 i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x2e10[i]);
     }
 }
@@ -7028,13 +7051,13 @@ void dMeter_screenDataSet(sub_meter_class* i_Meter) {
     fopMsgM_setPaneData(&i_Meter->field_0x0598, sMainParts1, 'ene1');
     fopMsgM_setPaneData(&i_Meter->field_0x05d0, sMainParts1, 'enk2');
     fopMsgM_setPaneData(&i_Meter->field_0x0608, sMainParts1, 'enek');
-    s32 unk_13361[] = {'ht00', 'ht01', 'ht02', 'ht03', 'ht04', 'ht05', 'ht06', 'ht07', 'ht08', 'ht09',
-                       'ht10', 'ht11', 'ht12', 'ht13', 'ht14', 'ht15', 'ht16', 'ht17', 'ht18', 'ht19'};
-    s32 unk_13362[] = {'hk00', 'hk01', 'hk02', 'hk03', 'hk04', 'hk05', 'hk06', 'hk07', 'hk08', 'hk09',
-                       'hk10', 'hk11', 'hk12', 'hk13', 'hk14', 'hk15', 'hk16', 'hk17', 'hk18', 'hk19'};
-    for (s32 i = 0; i < 20; i++) {
-        fopMsgM_setPaneData(&i_Meter->mHeart[i], sMainParts1, unk_13361[i]);
-        fopMsgM_setPaneData(&i_Meter->mHeartShadow[i], sMainParts1, unk_13362[i]);
+    u32 ht_tags[] = {'ht00', 'ht01', 'ht02', 'ht03', 'ht04', 'ht05', 'ht06', 'ht07', 'ht08', 'ht09',
+                     'ht10', 'ht11', 'ht12', 'ht13', 'ht14', 'ht15', 'ht16', 'ht17', 'ht18', 'ht19'};
+    u32 hk_tags[] = {'hk00', 'hk01', 'hk02', 'hk03', 'hk04', 'hk05', 'hk06', 'hk07', 'hk08', 'hk09',
+                     'hk10', 'hk11', 'hk12', 'hk13', 'hk14', 'hk15', 'hk16', 'hk17', 'hk18', 'hk19'};
+    for (int i = 0; i < 20; i++) {
+        fopMsgM_setPaneData(&i_Meter->mHeart[i], sMainParts1, ht_tags[i]);
+        fopMsgM_setPaneData(&i_Meter->mHeartShadow[i], sMainParts1, hk_tags[i]);
     }
     fopMsgM_setPaneData(&i_Meter->field_0x0f00, sMainParts1, 'htfl');
     fopMsgM_setPaneData(&i_Meter->field_0x0f38[0], sMainParts1, 'mbr1');
@@ -7096,36 +7119,40 @@ void dMeter_screenDataSet(sub_meter_class* i_Meter) {
     fopMsgM_setPaneData(&i_Meter->field_0x1d38, sMainParts1, 'bawp');
     fopMsgM_setPaneData(&i_Meter->field_0x1da8[1], sMainParts1, 'baa2');
     fopMsgM_setPaneData(&i_Meter->field_0x1e18[1], sMainParts1, 'bat2');
-    fopMsgM_setPaneData(&i_Meter->field_0x1fd8[1], sMainParts1, 'y01');
-    fopMsgM_setPaneData(&i_Meter->field_0x1f30[1], sMainParts1, 'y10');
-    fopMsgM_setPaneData(&i_Meter->field_0x2080[1], sMainParts1, 'yitm');
-    fopMsgM_setPaneData(&i_Meter->field_0x2128[1], sMainParts1, 'yitk');
-    fopMsgM_setPaneData(&i_Meter->field_0x2320[1], sMainParts1, 'bly1');
-    fopMsgM_setPaneData(&i_Meter->field_0x23c8[1], sMainParts1, 'bly2');
-    fopMsgM_setPaneData(&i_Meter->field_0x2470[1], sMainParts1, 'bly3');
-    i_Meter->field_0x2320[1].pane->hide();
-    i_Meter->field_0x23c8[1].pane->hide();
-    i_Meter->field_0x2470[1].pane->hide();
-    fopMsgM_setPaneData(&i_Meter->field_0x1fd8[0], sMainParts1, 'x01');
-    fopMsgM_setPaneData(&i_Meter->field_0x1f30[0], sMainParts1, 'x10');
-    fopMsgM_setPaneData(&i_Meter->field_0x2080[0], sMainParts1, 'xitm');
-    fopMsgM_setPaneData(&i_Meter->field_0x2128[0], sMainParts1, 'xitk');
-    fopMsgM_setPaneData(&i_Meter->field_0x2320[0], sMainParts1, 'blx1');
-    fopMsgM_setPaneData(&i_Meter->field_0x23c8[0], sMainParts1, 'blx2');
-    fopMsgM_setPaneData(&i_Meter->field_0x2470[0], sMainParts1, 'blx3');
-    i_Meter->field_0x2320[0].pane->hide();
-    i_Meter->field_0x23c8[0].pane->hide();
-    i_Meter->field_0x2470[0].pane->hide();
-    fopMsgM_setPaneData(&i_Meter->field_0x1fd8[2], sMainParts1, 'z01');
-    fopMsgM_setPaneData(&i_Meter->field_0x1f30[2], sMainParts1, 'z10');
-    fopMsgM_setPaneData(&i_Meter->field_0x2080[2], sMainParts1, 'zitm');
-    fopMsgM_setPaneData(&i_Meter->field_0x2128[2], sMainParts1, 'zitk');
-    fopMsgM_setPaneData(&i_Meter->field_0x2320[2], sMainParts1, 'blz1');
-    fopMsgM_setPaneData(&i_Meter->field_0x23c8[2], sMainParts1, 'blz2');
-    fopMsgM_setPaneData(&i_Meter->field_0x2470[2], sMainParts1, 'blz3');
-    i_Meter->field_0x2320[2].pane->hide();
-    i_Meter->field_0x23c8[2].pane->hide();
-    i_Meter->field_0x2470[2].pane->hide();
+
+    fopMsgM_setPaneData(&i_Meter->field_0x1fd8[dItemBtn_Y_e], sMainParts1, 'y01');
+    fopMsgM_setPaneData(&i_Meter->field_0x1f30[dItemBtn_Y_e], sMainParts1, 'y10');
+    fopMsgM_setPaneData(&i_Meter->field_0x2080[dItemBtn_Y_e], sMainParts1, 'yitm');
+    fopMsgM_setPaneData(&i_Meter->field_0x2128[dItemBtn_Y_e], sMainParts1, 'yitk');
+    fopMsgM_setPaneData(&i_Meter->field_0x2320[0][dItemBtn_Y_e], sMainParts1, 'bly1');
+    fopMsgM_setPaneData(&i_Meter->field_0x2320[1][dItemBtn_Y_e], sMainParts1, 'bly2');
+    fopMsgM_setPaneData(&i_Meter->field_0x2320[2][dItemBtn_Y_e], sMainParts1, 'bly3');
+    i_Meter->field_0x2320[0][dItemBtn_Y_e].pane->hide();
+    i_Meter->field_0x2320[1][dItemBtn_Y_e].pane->hide();
+    i_Meter->field_0x2320[2][dItemBtn_Y_e].pane->hide();
+
+    fopMsgM_setPaneData(&i_Meter->field_0x1fd8[dItemBtn_X_e], sMainParts1, 'x01');
+    fopMsgM_setPaneData(&i_Meter->field_0x1f30[dItemBtn_X_e], sMainParts1, 'x10');
+    fopMsgM_setPaneData(&i_Meter->field_0x2080[dItemBtn_X_e], sMainParts1, 'xitm');
+    fopMsgM_setPaneData(&i_Meter->field_0x2128[dItemBtn_X_e], sMainParts1, 'xitk');
+    fopMsgM_setPaneData(&i_Meter->field_0x2320[0][dItemBtn_X_e], sMainParts1, 'blx1');
+    fopMsgM_setPaneData(&i_Meter->field_0x2320[1][dItemBtn_X_e], sMainParts1, 'blx2');
+    fopMsgM_setPaneData(&i_Meter->field_0x2320[2][dItemBtn_X_e], sMainParts1, 'blx3');
+    i_Meter->field_0x2320[0][dItemBtn_X_e].pane->hide();
+    i_Meter->field_0x2320[1][dItemBtn_X_e].pane->hide();
+    i_Meter->field_0x2320[2][dItemBtn_X_e].pane->hide();
+
+    fopMsgM_setPaneData(&i_Meter->field_0x1fd8[dItemBtn_Z_e], sMainParts1, 'z01');
+    fopMsgM_setPaneData(&i_Meter->field_0x1f30[dItemBtn_Z_e], sMainParts1, 'z10');
+    fopMsgM_setPaneData(&i_Meter->field_0x2080[dItemBtn_Z_e], sMainParts1, 'zitm');
+    fopMsgM_setPaneData(&i_Meter->field_0x2128[dItemBtn_Z_e], sMainParts1, 'zitk');
+    fopMsgM_setPaneData(&i_Meter->field_0x2320[0][dItemBtn_Z_e], sMainParts1, 'blz1');
+    fopMsgM_setPaneData(&i_Meter->field_0x2320[1][dItemBtn_Z_e], sMainParts1, 'blz2');
+    fopMsgM_setPaneData(&i_Meter->field_0x2320[2][dItemBtn_Z_e], sMainParts1, 'blz3');
+    i_Meter->field_0x2320[0][dItemBtn_Z_e].pane->hide();
+    i_Meter->field_0x2320[1][dItemBtn_Z_e].pane->hide();
+    i_Meter->field_0x2320[2][dItemBtn_Z_e].pane->hide();
+
     fopMsgM_setPaneData(&i_Meter->field_0x2518, sMainParts1, 'baz');
     fopMsgM_setPaneData(&i_Meter->field_0x2550[1], sMainParts1, 'bay');
     fopMsgM_setPaneData(&i_Meter->field_0x25c0[1], sMainParts1, 'b002');
@@ -7167,9 +7194,9 @@ void dMeter_screenDataSet(sub_meter_class* i_Meter) {
 /* 8020408C-8020438C       .text dMeter_screenDataTimeSet__FP15sub_meter_class */
 void dMeter_screenDataTimeSet(sub_meter_class* i_Meter) {
     sScrTimer1 = new J2DScreen();
-    JUT_ASSERT(12863, sScrTimer1 != NULL);
+    JUT_ASSERT(VERSION_SELECT(12863, 12863, 12863, 12862), sScrTimer1 != NULL);
     sScrTimer2 = new J2DScreen();
-    JUT_ASSERT(12865, sScrTimer2 != NULL);
+    JUT_ASSERT(VERSION_SELECT(12865, 12865, 12865, 12864), sScrTimer2 != NULL);
     sScrTimer1->set("time_swim_1.blo", dComIfGp_getSwimResArchive());
     sScrTimer2->set("time_swim_2.blo", dComIfGp_getSwimResArchive());
     fopMsgM_setPaneData(&i_Meter->field_0x2a90[8], sScrTimer2, 'hk33');
@@ -7201,7 +7228,7 @@ void dMeter_screenDataArrowSet(sub_meter_class* i_Meter) {
 /* 80204404-80204820       .text dMeter_Draw__FP15sub_meter_class */
 static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
     fopMsgM_setAlpha(&i_Meter->field_0x02f8);
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x0100[i]);
     }
     fopMsgM_setAlpha(&i_Meter->field_0x0250);
@@ -7211,7 +7238,7 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
     fopMsgM_setAlpha(&i_Meter->field_0x03a0);
     fopMsgM_setAlpha(&i_Meter->field_0x03d8);
     fopMsgM_setAlpha(&i_Meter->field_0x0410);
-    for (s32 i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x0448[i]);
     }
     fopMsgM_setAlpha(&i_Meter->field_0x0528);
@@ -7219,7 +7246,7 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
     fopMsgM_setAlpha(&i_Meter->field_0x0598);
     fopMsgM_setAlpha(&i_Meter->field_0x0608);
     dMeter_heartDraw(i_Meter);
-    for (s32 i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x0f38[i]);
     }
     fopMsgM_setAlpha(&i_Meter->field_0x10f8);
@@ -7231,13 +7258,13 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
     fopMsgM_setAlpha(&i_Meter->field_0x13d0);
     fopMsgM_setAlpha(&i_Meter->field_0x1408);
     fopMsgM_setAlpha(&i_Meter->field_0x1440);
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x1478[i]);
         fopMsgM_setAlpha(i_Meter->field_0x1868);
     }
     fopMsgM_setAlpha(&i_Meter->field_0x1520);
     fopMsgM_setAlpha(&i_Meter->field_0x1558);
-    for (s32 i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x1590[i]);
         fopMsgM_setAlpha(i_Meter->field_0x1718);
     }
@@ -7249,17 +7276,17 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
     fopMsgM_setAlpha(&i_Meter->field_0x1910);
     fopMsgM_setAlpha(&i_Meter->field_0x1948);
     if (i_Meter->field_0x1830.pane->isVisible() && i_Meter->field_0x3020 == 7) {
-        for (s32 i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             clock[i].mBlack.a = i_Meter->field_0x1830.mNowAlpha;
         }
     } else {
-        for (s32 i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             clock[i].mBlack.a = 0;
         }
     }
     fopMsgM_setAlpha(&i_Meter->field_0x1980);
     fopMsgM_setAlpha(&i_Meter->field_0x19b8);
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x1ad0[i]);
         fopMsgM_setAlpha(&i_Meter->field_0x1c20[i]);
     }
@@ -7268,7 +7295,7 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
     dMeter_actionDraw(i_Meter);
     dMeter_xyDraw(i_Meter);
     dMeter_rDraw(i_Meter);
-    for (s32 i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         fopMsgM_setAlpha(&i_Meter->field_0x19f0[i]);
         fopMsgM_setAlpha(&i_Meter->field_0x1b40[i]);
     }
@@ -7278,7 +7305,7 @@ static BOOL dMeter_Draw(sub_meter_class* i_Meter) {
     dMeter_arrowDraw(i_Meter);
     if (!fopOvlpM_IsDoingReq()) {
         dComIfGd_set2DOpa(&meter1);
-        for (s32 i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             dComIfGd_set2DOpa(&clock[i]);
         }
         if (sScrTimer1 != NULL && sScrTimer2 != NULL) {
@@ -7338,14 +7365,14 @@ static BOOL dMeter_Execute(sub_meter_class* i_Meter) {
     dMeter_childPaneTrans(&i_Meter->field_0x27b8, &i_Meter->field_0x2908, f31);
     dMeter_childPaneTrans(&i_Meter->field_0x27f0, &i_Meter->field_0x2908, f31);
 
-    for (int i = 0; i < 3; i++) {
-        dMeter_childPaneTransOnly(&i_Meter->field_0x2080[i], &i_Meter->field_0x2908, f31, f29);
-        dMeter_childPaneTransChildTransOnly(&i_Meter->field_0x1fd8[i], &i_Meter->field_0x2908, &i_Meter->field_0x2080[i], f31, f29);
-        dMeter_childPaneTransChildTransOnly(&i_Meter->field_0x1f30[i], &i_Meter->field_0x2908, &i_Meter->field_0x2080[i], f31, f29);
-        dMeter_childPaneTransChildTrans(&i_Meter->field_0x2128[i], &i_Meter->field_0x2908, &i_Meter->field_0x2080[i], f31, f29);
-        dMeter_childPaneTransChildTrans(&i_Meter->field_0x2320[i], &i_Meter->field_0x2908, &i_Meter->field_0x2080[i], f31, f29);
-        dMeter_childPaneTransChildTrans(&i_Meter->field_0x23c8[i], &i_Meter->field_0x2908, &i_Meter->field_0x2080[i], f31, f29);
-        dMeter_childPaneTransChildTrans(&i_Meter->field_0x2470[i], &i_Meter->field_0x2908, &i_Meter->field_0x2080[i], f31, f29);
+    for (int itemBtn = 0; itemBtn < dItemBtn_COUNT_e; itemBtn++) {
+        dMeter_childPaneTransOnly(&i_Meter->field_0x2080[itemBtn], &i_Meter->field_0x2908, f31, f29);
+        dMeter_childPaneTransChildTransOnly(&i_Meter->field_0x1fd8[itemBtn], &i_Meter->field_0x2908, &i_Meter->field_0x2080[itemBtn], f31, f29);
+        dMeter_childPaneTransChildTransOnly(&i_Meter->field_0x1f30[itemBtn], &i_Meter->field_0x2908, &i_Meter->field_0x2080[itemBtn], f31, f29);
+        dMeter_childPaneTransChildTrans(&i_Meter->field_0x2128[itemBtn], &i_Meter->field_0x2908, &i_Meter->field_0x2080[itemBtn], f31, f29);
+        dMeter_childPaneTransChildTrans(&i_Meter->field_0x2320[0][itemBtn], &i_Meter->field_0x2908, &i_Meter->field_0x2080[itemBtn], f31, f29);
+        dMeter_childPaneTransChildTrans(&i_Meter->field_0x2320[1][itemBtn], &i_Meter->field_0x2908, &i_Meter->field_0x2080[itemBtn], f31, f29);
+        dMeter_childPaneTransChildTrans(&i_Meter->field_0x2320[2][itemBtn], &i_Meter->field_0x2908, &i_Meter->field_0x2080[itemBtn], f31, f29);
     }
 
     dMeter_childPaneTrans(&i_Meter->field_0x2518, &i_Meter->field_0x2908, f31);
@@ -7392,16 +7419,28 @@ static BOOL dMeter_IsDelete(sub_meter_class* i_Meter) {
 /* 80204C28-80205034       .text dMeter_Delete__FP15sub_meter_class */
 static BOOL dMeter_Delete(sub_meter_class* i_Meter) {
     JKRHeap* pJVar1 = mDoExt_setCurrentHeap(i_Meter->heap);
-    if ((s32)dMeter_mMapCtrlDisp.field_0x0 != 0) {
+    if ((int)dMeter_mMapCtrlDisp.field_0x0 != 0) {
         g_dComIfG_gameInfo.play.field_0x497a = 0;
     } else {
         g_dComIfG_gameInfo.play.field_0x497a = 1;
     }
+
+#if VERSION > VERSION_DEMO
     if (rupy_soundOnFlag != 0) {
         mDoAud_seStart(JA_SE_LUPY_INC_CNT_2);
         rupy_soundSetFlag = 0;
         rupy_soundOnFlag = 0;
     }
+#endif
+
+#if VERSION == VERSION_DEMO
+    if (fopMsgM_IsExecuting(dMeter_windID)) {
+        msg_class* pmVar2 = fopMsgM_SearchByID(dMeter_windID);
+        fopMsgM_Delete(pmVar2);
+        dMeter_windID = fpcM_ERROR_PROCESS_ID_e;
+        dMeter_windStatus = 0;
+    }
+#else
     if (dMeter_windID != fpcM_ERROR_PROCESS_ID_e) {
         if (fopMsgM_SearchByID(dMeter_windID) != NULL) {
             msg_class* pmVar2 = fopMsgM_SearchByID(dMeter_windID);
@@ -7413,17 +7452,19 @@ static BOOL dMeter_Delete(sub_meter_class* i_Meter) {
             dMeter_windStatus = 0;
         }
     }
+#endif
+
     if (i_Meter->mpRupyParticle != NULL) {
         i_Meter->mpRupyParticle->becomeInvalidEmitter();
         i_Meter->mpRupyParticle->quitImmortalEmitter();
     }
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         if (i_Meter->field_0x2f24[i] != NULL) {
             i_Meter->field_0x2f24[i]->becomeInvalidEmitter();
             i_Meter->field_0x2f24[i]->quitImmortalEmitter();
         }
     }
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         if (i_Meter->field_0x2f2c[i] != NULL) {
             i_Meter->field_0x2f2c[i]->becomeInvalidEmitter();
             i_Meter->field_0x2f2c[i]->quitImmortalEmitter();
@@ -7434,11 +7475,11 @@ static BOOL dMeter_Delete(sub_meter_class* i_Meter) {
         delete dMn_c;
         dMn_c = NULL;
     }
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         i_Meter->heap->free(i_Meter->actionTex[i]);
         i_Meter->heap->free(i_Meter->xyIconTex[i]);
     }
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         i_Meter->heap->free(i_Meter->arrowTex[i]);
         if (i == 0) {
             i_Meter->heap->free(i_Meter->moveIconTex[i]);
@@ -7455,9 +7496,13 @@ static BOOL dMeter_Delete(sub_meter_class* i_Meter) {
         sScrTimer2 = NULL;
     }
     delete sChoiceRoad;
+#if VERSION > VERSION_DEMO
     sChoiceRoad = NULL;
+#endif
     delete moveItemPane;
+#if VERSION > VERSION_DEMO
     moveItemPane = NULL;
+#endif
     mDoExt_setCurrentHeap(pJVar1);
     fopMsgM_destroyExpHeap(i_Meter->heap);
     mDoHIO_deleteChild(g_meterHIO.mNo);
@@ -7517,7 +7562,7 @@ static cPhs_State dMeter_Create(msg_class* i_this) {
     JUT_ASSERT(VERSION_SELECT(13189, 13371, 13492, 13491), sChoiceRoad != NULL);
     sChoiceRoad->set("choice_road.blo", dComIfGp_getMenuArchive());
 
-    for (s32 i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         i_Meter->actionTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
         JUT_ASSERT(VERSION_SELECT(13194, 13376, 13497, 13496), i_Meter->actionTex[i] != NULL);
 
@@ -7525,7 +7570,7 @@ static cPhs_State dMeter_Create(msg_class* i_this) {
         JUT_ASSERT(VERSION_SELECT(13196, 13378, 13499, 13498), i_Meter->xyIconTex[i] != NULL);
     }
 
-    for (s32 i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         if (i == 0) {
             i_Meter->moveIconTex[i] = (ResTIMG*)i_Meter->heap->alloc(0xc00, 0x20);
             JUT_ASSERT(VERSION_SELECT(13203, 13385, 13506, 13505), i_Meter->moveIconTex[i] != NULL);

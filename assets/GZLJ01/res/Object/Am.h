@@ -80,6 +80,7 @@ enum AM_JNT {
     AM_JNT_MABUTA1_e=0x6,
     AM_JNT_MABUTA2_e=0x7,
     AM_JNT_TOGE1_e=0x8,
+    AM_NUM_JNTS_e=0x9,
 };
 
 #endif /* RES_AM_H */

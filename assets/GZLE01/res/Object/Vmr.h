@@ -31,6 +31,7 @@ enum dRes_ID_VMR {
 enum VMRTO_JNT {
     VMRTO_JNT_ROOT_e=0x0,
     VMRTO_JNT_HEAD_e=0x1,
+    VMRTO_NUM_JNTS_e=0x2,
 };
 
 enum VMRTY_JNT {
@@ -41,6 +42,7 @@ enum VMRTY_JNT {
     VMRTY_JNT_ARMR_e=0x4,
     VMRTY_JNT_NECK_e=0x5,
     VMRTY_JNT_HEAD_e=0x6,
+    VMRTY_NUM_JNTS_e=0x7,
 };
 
 #endif /* RES_VMR_H */

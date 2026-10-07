@@ -12,7 +12,7 @@ class dKy_tevstr_c;
 class dCloth_packet_c : public J3DPacket {
 public:
     typedef dCloth_packet_c* (*CreateFunc)(ResTIMG*, ResTIMG*, dKy_tevstr_c*, cXyz**);
-    typedef int (*FactorCheck)(dCloth_packet_c*, int, int);
+    typedef int (*FactorCheckCallback)(dCloth_packet_c*, int, int);
 
     dCloth_packet_c(ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr);
     ~dCloth_packet_c();
@@ -31,7 +31,7 @@ public:
 
     void setScale(cXyz scale) { mScale = scale; }
     void setMtx(Mtx mtx);
-    void setFactorCheckCB(FactorCheck cb) { mpFactorCheckCB = cb; }
+    void setFactorCheckCB(FactorCheckCallback cb) { mpFactorCheckCB = cb; }
     void setWindPower(f32 wind, f32 windWave) {
         mWindSpeed = wind;
         mWindSpeedWave = windWave;
@@ -75,7 +75,7 @@ protected:
     /* 0x18 */ f32 mFlyLength;
     /* 0x1C */ f32 mHoistLength;
     /* 0x20 */ dKy_tevstr_c* mpTevstr;
-    /* 0x24 */ FactorCheck mpFactorCheckCB;
+    /* 0x24 */ FactorCheckCallback mpFactorCheckCB;
     /* 0x28 */ cXyz* mpPosArr[2];
     /* 0x30 */ cXyz* mpNrmArr[2];
     /* 0x38 */ cXyz* mpNrmArrBack[2];

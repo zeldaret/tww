@@ -91,13 +91,9 @@ public:
     };
 
     u8 getNpcNo() { return mNpcNo; }
-    request_of_phase_process_class* getPhaseP() { return &mPhs; }
-    u8 getPosFlag() {
-        return mPosFlag;
-    }
-    void setResFlag(u8 flag) {
-        mResFlag = flag;
-    }
+    u8 getPosFlag() { return mPosFlag; }
+    void setResFlag(u8 flag) { mResFlag = flag; }
+    request_of_phase_process_class* getPhaseP() { return &mPhase; }
 
     daNpcMn_c();
     cPhs_State _create();
@@ -171,10 +167,10 @@ public:
 
     static const char m_arcname[];
 
-public:
+private:
     /* 0x6C4 */ u8 field_0x6C4[0x60];
-    /* 0x724 */ request_of_phase_process_class mPhs;
-    /* 0x72C */ request_of_phase_process_class mPhsMethod;
+    /* 0x724 */ request_of_phase_process_class mPhase;
+    /* 0x72C */ request_of_phase_process_class mPhaseCreate;
     /* 0x734 */ J3DModel* mpModel;
     /* 0x738 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x73C */ mDoExt_btpAnm mBtpAnm;

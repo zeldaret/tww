@@ -1018,8 +1018,11 @@ u32 daAgbsw0_c::TriforceCheck(daAgb_c* agb)
         if(dComIfGs_checkGetItem(dItemNo_MAGIC_ARROW_e)) {
             return 0x328;
         }
+        else if (dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e)) {
+            return 0x32A;
+        }
         else {
-            return dComIfGs_isTact(1) ? 0x32A : 0x329;
+            return 0x329;
         }
     }
 
@@ -2012,13 +2015,13 @@ BOOL daAgbsw0_c::MoveCheck(s16 conditionNo) {
 
             break;
         case 0x32:
-            if(dComIfGs_isTact(0)) {
+            if(dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e)) {
                 return FALSE;
             }
 
             break;
         case 0x33:
-            if(!dComIfGs_isTact(0)) {
+            if(!dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e)) {
                 return FALSE;
             }
 

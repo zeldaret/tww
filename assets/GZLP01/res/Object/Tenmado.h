@@ -24,10 +24,12 @@ enum dRes_ID_TENMADO {
 
 enum MMADOL_JNT {
     MMADOL_JNT_MMADOL_e=0x0,
+    MMADOL_NUM_JNTS_e=0x1,
 };
 
 enum MMADOR_JNT {
     MMADOR_JNT_MMADOR_e=0x0,
+    MMADOR_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_TENMADO_H */

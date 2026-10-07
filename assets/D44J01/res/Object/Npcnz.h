@@ -39,6 +39,7 @@ enum NPCNZ_NZ_JNT {
     NPCNZ_NZ_JNT_UDER_e=0x13,
     NPCNZ_NZ_JNT_UDER2_e=0x14,
     NPCNZ_NZ_JNT_UDER3_e=0x15,
+    NPCNZ_NZ_NUM_JNTS_e=0x16,
 };
 
 #endif /* RES_NPCNZ_H */

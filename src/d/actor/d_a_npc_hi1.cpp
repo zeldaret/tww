@@ -974,13 +974,14 @@ BOOL daNpc_Hi1_c::bodyCreateHeap() {
         mpMorf = NULL;
         return FALSE;
     }
+
     m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
     JUT_ASSERT(DEMO_SELECT(1489, 1487), m_hed_jnt_num >= 0);
     m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone1");
     JUT_ASSERT(DEMO_SELECT(1491, 1489), m_bbone_jnt_num >= 0);
 
-    mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num & 0xffff)->setCallBack(nodeCB_Head);
-    mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num & 0xffff)->setCallBack(nodeCB_BackBone);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num)->setCallBack(nodeCB_Head);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
     mpMorf->getModel()->setUserArea((uintptr_t)this);
 
     return TRUE;

@@ -77,6 +77,7 @@ enum FK_JNT {
     FK_JNT_J_KI_FOOT_R_e=0xD,
     FK_JNT_J_KI_HEAD_e=0xE,
     FK_JNT_J_KI_JAW_e=0xF,
+    FK_NUM_JNTS_e=0x10,
 };
 
 enum KI_JNT {
@@ -96,6 +97,7 @@ enum KI_JNT {
     KI_JNT_J_KI_FOOT_R_e=0xD,
     KI_JNT_J_KI_HEAD_e=0xE,
     KI_JNT_J_KI_JAW_e=0xF,
+    KI_NUM_JNTS_e=0x10,
 };
 
 #endif /* RES_KI_H */

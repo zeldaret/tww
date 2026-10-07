@@ -47,60 +47,74 @@ enum VF_083_JNT {
     VF_083_JNT_BODY1_e=0x1,
     VF_083_JNT_FACE1_e=0x2,
     VF_083_JNT_POLYSURFACE1_e=0x3,
+    VF_083_NUM_JNTS_e=0x4,
 };
 
 enum VF_093_JNT {
     VF_093_JNT_DK1_e=0x0,
+    VF_093_NUM_JNTS_e=0x1,
 };
 
 enum VF_094_JNT {
     VF_094_JNT_MT1_e=0x0,
+    VF_094_NUM_JNTS_e=0x1,
 };
 
 enum VF_095_JNT {
     VF_095_JNT_ROOT_VF_095_e=0x0,
     VF_095_JNT_MN_BAG1_e=0x1,
     VF_095_JNT_MN_BODY1_e=0x2,
+    VF_095_NUM_JNTS_e=0x3,
 };
 
 enum VF_096_JNT {
     VF_096_JNT_FD_BODY1_e=0x0,
+    VF_096_NUM_JNTS_e=0x1,
 };
 
 enum VF_084_JNT {
     VF_084_JNT_SERUCHI_e=0x0,
+    VF_084_NUM_JNTS_e=0x1,
 };
 
 enum VF_085_JNT {
     VF_085_JNT_ALDER_e=0x0,
+    VF_085_NUM_JNTS_e=0x1,
 };
 
 enum VF_086_JNT {
     VF_086_JNT_OAK_e=0x0,
+    VF_086_NUM_JNTS_e=0x1,
 };
 
 enum VF_087_JNT {
     VF_087_JNT_WALNA_e=0x0,
+    VF_087_NUM_JNTS_e=0x1,
 };
 
 enum VF_088_JNT {
     VF_088_JNT_BARCH_e=0x0,
+    VF_088_NUM_JNTS_e=0x1,
 };
 
 enum VF_089_JNT {
     VF_089_JNT_RAMIN_e=0x0,
+    VF_089_NUM_JNTS_e=0x1,
 };
 
 enum VF_090_JNT {
     VF_090_JNT_NIYATO_e=0x0,
+    VF_090_NUM_JNTS_e=0x1,
 };
 
 enum VF_091_JNT {
     VF_091_JNT_ELUM_e=0x0,
+    VF_091_NUM_JNTS_e=0x1,
 };
 
 enum VF_092_JNT {
     VF_092_JNT_RABRA_e=0x0,
+    VF_092_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_FIGURE4_H */

@@ -46,7 +46,7 @@ void JStage::TFog::JSGSetEndZ(f32) {
 
 /* 8026DE7C-8026DE90       .text JSGGetColor__Q26JStage4TFogCFv */
 GXColor JStage::TFog::JSGGetColor() const {
-    return (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+    return COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0xFF};
 }
 
 /* 8026DE90-8026DE94       .text JSGSetColor__Q26JStage4TFogF8_GXColor */

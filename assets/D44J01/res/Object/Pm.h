@@ -63,6 +63,7 @@ enum PM_JNT {
     PM_JNT_LEGR2_e=0x17,
     PM_JNT_FOOTR_e=0x18,
     PM_JNT_WAISTEND_e=0x19,
+    PM_NUM_JNTS_e=0x1A,
 };
 
 #endif /* RES_PM_H */

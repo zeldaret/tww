@@ -22,6 +22,7 @@ enum dRes_ID_KRYU {
 
 enum RYU_00_JNT {
     RYU_00_JNT_RYU_00_e=0x0,
+    RYU_00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KRYU_H */
