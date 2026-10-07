@@ -4467,9 +4467,7 @@ void dMeter_menuMove(sub_meter_class* i_Meter) {
 
 /* 801FA6F8-801FA918       .text dMeter_menuLRMove__FP15sub_meter_class */
 void dMeter_menuLRMove(sub_meter_class* i_Meter) {
-    /* Nonmatching */
     s16 iVar3;
-    s16 iVar4;
     s16 sVar5;
     f32 dVar6;
     f32 dVar7;
@@ -4479,6 +4477,7 @@ void dMeter_menuLRMove(sub_meter_class* i_Meter) {
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x0250);
         fopMsgM_setNowAlphaZero(&i_Meter->field_0x0288);
     } else {
+        s16 iVar4;
         sVar5 = 0x14;
         if (frame != dMenu_getPushMenuButton()) {
             if (frame != 0 && dMenu_getPushMenuButton() != 0) {
