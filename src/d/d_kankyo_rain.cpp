@@ -755,7 +755,8 @@ BOOL overhead_bg_chk() {
     pos.y += 50.0f;
     roofChk.SetPos(pos);
 
-    if (dComIfG_Bgsp()->RoofChk(&roofChk) != G_CM3D_F_INF)
+    f32 tmp7 = dComIfG_Bgsp()->RoofChk(&roofChk);
+    if (tmp7 != G_CM3D_F_INF)
         ret = TRUE;
     pos.y += 10000.0f;
     gndChk.SetPos(&pos);
@@ -784,7 +785,8 @@ BOOL forward_overhead_bg_chk(cXyz* pPos, f32 dist) {
     *pPos = pos;
     roofChk.SetPos(pos);
 
-    if (dComIfG_Bgsp()->RoofChk(&roofChk) != G_CM3D_F_INF)
+    f32 tmp37 = dComIfG_Bgsp()->RoofChk(&roofChk);
+    if (tmp37 != G_CM3D_F_INF)
         ret = TRUE;
     pos.y += 10000.0f;
     gndChk.SetPos(&pos);
