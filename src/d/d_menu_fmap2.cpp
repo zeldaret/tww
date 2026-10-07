@@ -149,7 +149,7 @@ void dMenu_Fmap2_c::_create() {
     JUT_ASSERT(VERSION_SELECT(323, 323, 346, 346), mCmapTxtMain_p[1] != NULL);
     screenSet();
     field_0x27fb = 0;
-    g_mf2HIO.mNo = mDoHIO_root.m_subroot.createChild("フィールドマップ画面2", &g_mf2HIO);
+    g_mf2HIO.mNo = mDoHIO_createChild("フィールドマップ画面2", &g_mf2HIO);
 }
 
 /* 801BBA2C-801BCC74       .text screenSet__13dMenu_Fmap2_cFv */
