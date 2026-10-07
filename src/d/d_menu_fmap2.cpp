@@ -1332,7 +1332,25 @@ void dMenu_Fmap2_c::trTrifAnimeInit() {
 
 /* 801C0AF8-801C0C0C       .text trTrifAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::trTrifAnime() {
-    /* Nonmatching */
+    f32 alpha = fopMsgM_valueIncrease(g_mf2HIO.field_0x92, field_0x284F, 2);
+    if (field_0x2850 == 0) {
+        alpha = 1.0f - alpha;
+    }
+
+    s32 range = g_mf2HIO.field_0x93 - g_mf2HIO.field_0x94;
+    for (int i = 0; i < 8; i++) {
+        if (field_0x1E04[i].pane->isVisible() && !field_0x1E44[i].pane->isVisible()) {
+            field_0x1E04[i].mNowAlpha = g_mf2HIO.field_0x94 + (u32)(range * alpha);
+            fopMsgM_setAlpha(&field_0x1E04[i]);
+        }
+    }
+
+    if (field_0x284F == 0) {
+        field_0x284F = g_mf2HIO.field_0x92;
+        field_0x2850 ^= 1;
+    } else {
+        field_0x284F--;
+    }
 }
 #endif
 
