@@ -506,12 +506,29 @@ void daObjVyasi::Act_c::leaf_scale_main() {
 
 /* 00002938-000029BC       .text _execute__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::_execute() {
-    /* Nonmatching */
+    if (mState != 0) {
+        field_0x19C4 = PlayStopJointAnimation();
+        process_main();
+        set_collision();
+        quaternion_main();
+        calc_dif_angle();
+        leaf_scale_main();
+        set_mtx();
+        fopAcM_rollPlayerCrash(this, 79.0f, 7);
+    }
+    return true;
 }
 
 /* 000029BC-00002A6C       .text _draw__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::_draw() {
-    /* Nonmatching */
+    if (mState != 0) {
+        g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
+        g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
+        dComIfGd_setListBG();
+        mpMorf->updateDL();
+        dComIfGd_setList();
+    }
+    return true;
 }
 
 namespace daObjVyasi {
