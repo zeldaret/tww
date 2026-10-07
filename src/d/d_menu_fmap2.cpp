@@ -530,19 +530,19 @@ void dMenu_Fmap2_c::cmapPaneInit() {
 
 /* 801BD710-801BDB38       .text collectMapCheck__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::collectMapCheck() {
-    /* Nonmatching */
     if (field_0x27a8 == 0) {
         field_0x43c[0].pane->show();
         cSelCursorHide();
         cCursorHide();
         mCnd0Pane.pane->hide();
-        for (int i = 0; i < 8; i++) {
+        int i;
+        for (i = 0; i < 8; i++) {
             field_0x1484[i].pane->hide();
         }
-        for (int i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             field_0x124c[field_0x2813][i].pane->hide();
         }
-        for (int i = 0; i < 2; i++) {
+        for (i = 0; i < 2; i++) {
             field_0x1244[field_0x2814][i].pane->hide();
         }
         field_0x1aa4[field_0x2815][0].pane->hide();
@@ -556,10 +556,11 @@ void dMenu_Fmap2_c::collectMapCheck() {
 #if VERSION > VERSION_DEMO
         field_0x1aa4[field_0x2815 ^ 1][0].pane->hide();
         field_0xcc4[field_0x2816 ^ 1][0].pane->hide();
-        for (int i = 0; i < 2; i++) {
+        int i;
+        for (i = 0; i < 2; i++) {
             field_0x1244[field_0x2814 ^ 1][i].pane->hide();
         }
-        for (int i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             field_0x124c[field_0x2813 ^ 1][i].pane->hide();
         }
 #endif
@@ -603,7 +604,6 @@ static mainProcFunc mainProc[] = {
 
 /* 801BDB38-801BE0D8       .text _move__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::_move() {
-    /* Nonmatching */
     stick->checkTrigger();
     if (field_0x27a1 == 0 || field_0x27a1 == 2) {
         if (mDoCPd_R_LOCK_BUTTON(0)) {
@@ -640,7 +640,9 @@ void dMenu_Fmap2_c::_move() {
             }
         }
     }
+#if VERSION > VERSION_DEMO
     if (field_0x27a1 >= 2) {
+#endif
         if (stick->checkLeftTrigger()) {
             if (field_0x280d < g_mf2HIO.field_0x75) {
                 field_0x280d++;
@@ -655,7 +657,9 @@ void dMenu_Fmap2_c::_move() {
         } else {
             field_0x280e = 0;
         }
+#if VERSION > VERSION_DEMO
     }
+#endif
     (this->*mainProc[field_0x27a1])();
     if (getCtActive() == 1) {
         cSelCursorAnime();
@@ -724,7 +728,6 @@ void dMenu_Fmap2_c::FmapChange() {
 
 /* 801BE668-801BEA58       .text CmapProcMain__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapProcMain() {
-    /* Nonmatching */
     if (field_0x27a8 == 0) {
         return;
     }
@@ -796,7 +799,6 @@ void dMenu_Fmap2_c::CmapProcMain() {
 
 /* 801BEA58-801BEC40       .text spMapLoadForDVD__13dMenu_Fmap2_cFUc */
 void dMenu_Fmap2_c::spMapLoadForDVD(u8 param_1) {
-    /* Nonmatching */
     field_0x124c[field_0x2813]->pane->hide();
     switch (param_1) {
     case 3:
@@ -1043,7 +1045,6 @@ void dMenu_Fmap2_c::CmapSpLoadWait() {
 
 /* 801BF7F4-801BFCB8       .text screenSetGs__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::screenSetGs() {
-    /* Nonmatching */
     static u32 moon[] = {
         'tk01', 'tk02', 'tk03', 'tk04',
         'tk05', 'tk06', 'tk07',
@@ -1079,7 +1080,8 @@ void dMenu_Fmap2_c::screenSetGs() {
     fopMsgM_setPaneData(&mGsBt2PaneAlpha, fmap2GsDl.scrn->search('BT2'));
     fopMsgM_setPaneData(&mGsBt3PaneAlpha, fmap2GsDl.scrn->search('BT3'));
 #endif
-    for (int i = 0; i < 7; i++) {
+    int i;
+    for (i = 0; i < 7; i++) {
         fopMsgM_setPaneData(&mGsTk0xPaneAlpha[i], fmap2GsDl.scrn->search(moon[i]));
 #if VERSION > VERSION_JPN
         fopMsgM_setPaneData(&mGsGsixPaneAlpha[i], fmap2GsDl.scrn->search(shipicon[i]));
@@ -1089,13 +1091,13 @@ void dMenu_Fmap2_c::screenSetGs() {
     color_0x2824 = (u32)((J2DPicture*)mGsTk0xPaneAlpha[0].pane)->getWhite();
     int r0 = dComIfGs_getEventReg(0x8803);
 #if VERSION == VERSION_DEMO
-    for (int i = 0; i < r0; i++) {
+    for (i = 0; i < r0; i++) {
         mGsTk0xPaneAlpha[i].pane->show();
     }
 #endif
     if (r0 == 3) {
         field_0x2811 = 1;
-        for (int i = 0; i < 7; i++) {
+        for (i = 0; i < 7; i++) {
             mGsTk0xPaneAlpha[i].pane->hide();
         }
         mGsKz01PaneAlpha.pane->hide();
@@ -1191,7 +1193,6 @@ void dMenu_Fmap2_c::screenSetTn() {
 
 /* 801C073C-801C0ADC       .text screenSetTr__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::screenSetTr() {
-    /* Nonmatching */
     fmap2GsDl.scrn = new J2DScreen();
     JUT_ASSERT(VERSION_SELECT(1954, 1965, 2098, 2111), fmap2GsDl.scrn != NULL);
     fmap2GsDl.scrn->set("TR_map_1.blo", field_0x18->getArchive());
@@ -1205,15 +1206,16 @@ void dMenu_Fmap2_c::screenSetTr() {
     fopMsgM_setPaneData(&mTrLnkPane, fmap2GsDl.scrn->search('lnk'));
     fopMsgM_setPaneData(&mTrGdgtPane, fmap2GsDl.scrn->search('gdgt'));
 #if VERSION > VERSION_JPN
+    int i;
     u32 r27 = 'tf1';
     u32 r26 = 'tg1';
     u32 r25 = 'mg1';
-    for (int i = 0; i < 8; r25++, r27++, r26++, i++) {
+    for (i = 0; i < 8; r25++, r27++, r26++, i++) {
         fopMsgM_setPaneData(&field_0x1dc4[i], fmap2GsDl.scrn->search(r25));
         fopMsgM_setPaneData(&field_0x1e04[i], fmap2GsDl.scrn->search(r27));
         fopMsgM_setPaneData(&field_0x1e44[i], fmap2GsDl.scrn->search(r26));
     }
-    for (int i = 0; i < 8; i++) {
+    for (i = 0; i < 8; i++) {
         if (isGetCollectMap(i + 1)) {
             field_0x1dc4[i].pane->show();
             if (isOpenCollectMapTriforce(i)) {
@@ -1622,16 +1624,16 @@ void dMenu_Fmap2_c::cmapMove() {
 
 /* 801C2BA0-801C3070       .text changeSelCmap__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeSelCmap() {
-    /* Nonmatching */
+    int i;
     int r30 = getCollectMapKind(field_0x27a9);
     ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][0].pane)->changeTexture(mCmapTxtMain_p[field_0x2815 ^ 1], 0);
     if (isOpenCollectMap(field_0x27a9)) {
         field_0x2812 = 2;
         field_0x1aa4[field_0x2815 ^ 1][0].pane->show();
-        for (int i = 0; i < 2; i++) {
+        for (i = 0; i < 2; i++) {
             field_0x1244[field_0x2814 ^ 1][i].pane->hide();
         }
-        for (int i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             field_0x124c[field_0x2813 ^ 1][i].pane->show();
         }
         if (r30 == 0) {
@@ -1658,7 +1660,7 @@ void dMenu_Fmap2_c::changeSelCmap() {
     } else {
         field_0x2812 = 3;
         field_0x1aa4[field_0x2815 ^ 1][0].pane->hide();
-        for (int i = 0; i < 2; i++) {
+        for (i = 0; i < 2; i++) {
             field_0x1244[field_0x2814 ^ 1][i].pane->show();
             ((J2DPicture *)field_0x1244[field_0x2814 ^ 1][i].pane)->changeTexture(rollmapTex[r30], 0);
         }
@@ -1672,7 +1674,7 @@ void dMenu_Fmap2_c::changeSelCmap() {
             ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_normal.bti", 0);
             ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_normal.bti", 0);
         }
-        for (int i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             field_0x124c[field_0x2813 ^ 1][i].pane->hide();
         }
     }
@@ -1837,18 +1839,19 @@ BOOL dMenu_Fmap2_c::paneTransBase(s16 param_1, u8 param_2, f32 param_3, f32 para
     f32 f31 = fopMsgM_valueIncrease(param_2, param_1, param_5);
     fopMsgM_paneTrans(&mClPane, 0.0f, param_3 + f31 * (param_4 - param_3));
     if (param_7 != 2) {
+        int i;
         if (param_7 == 1) {
             f31 = 1.0f - f31;
         }
         if (field_0x27a8) {
             if (getCtCmapSelNo() != -1 && field_0x1aa4[param_6][0].pane->isVisible()) {
-                for (int i = 0; i < 10; i++) {
+                for (i = 0; i < 10; i++) {
                     fopMsgM_setNowAlpha(&field_0x1aa4[param_6][i], f31);
                     fopMsgM_setAlpha(&field_0x1aa4[param_6][i]);
                 }
             }
         }
-        for (int i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             fopMsgM_setNowAlpha(&field_0x124c[field_0x2813][i], f31);
             fopMsgM_setAlpha(&field_0x124c[field_0x2813][i]);
         }
@@ -1978,49 +1981,88 @@ BOOL dMenu_Fmap2_c::paneTranceMessage(s16, u8, f32, f32, f32, f32, u8, u8, int) 
 }
 
 /* 801C5AEC-801C5BF4       .text paneScaleXYChild__13dMenu_Fmap2_cFP18fopMsgM_pane_classf */
-void dMenu_Fmap2_c::paneScaleXYChild(fopMsgM_pane_class* pane, f32 scale) {
-    pane->mSize.x = pane->mSizeOrig.x * scale;
-    pane->mSize.y = pane->mSizeOrig.y * scale;
-    pane->mPosTopLeft.x = pane->mPosTopLeftOrig.x * scale;
-    pane->mPosTopLeft.y = pane->mPosTopLeftOrig.y * scale;
-    pane->mPosCenter.x = pane->mPosTopLeft.x + pane->mSize.x / 2.0f;
-    pane->mPosCenter.y = pane->mPosTopLeft.y + pane->mSize.y / 2.0f;
-    pane->pane->resize(pane->mSize.x, pane->mSize.y);
-    pane->pane->move(pane->mPosTopLeft.x, pane->mPosTopLeft.y);
-    if (pane->pane->getRotate() != 0.0f) {
-        pane->pane->rotate(pane->mSize.x * 0.5f, pane->mSize.y * 0.5f, ROTATE_Z, pane->pane->getRotate());
+void dMenu_Fmap2_c::paneScaleXYChild(fopMsgM_pane_class* i_pane, f32 i_scale) {
+    i_pane->mSize.x = i_pane->mSizeOrig.x * i_scale;
+    i_pane->mSize.y = i_pane->mSizeOrig.y * i_scale;
+    i_pane->mPosTopLeft.x = i_pane->mPosTopLeftOrig.x * i_scale;
+    i_pane->mPosTopLeft.y = i_pane->mPosTopLeftOrig.y * i_scale;
+    i_pane->mPosCenter.x = i_pane->mPosTopLeft.x + i_pane->mSize.x / 2.0f;
+    i_pane->mPosCenter.y = i_pane->mPosTopLeft.y + i_pane->mSize.y / 2.0f;
+    i_pane->pane->resize(i_pane->mSize.x, i_pane->mSize.y);
+    i_pane->pane->move(i_pane->mPosTopLeft.x, i_pane->mPosTopLeft.y);
+    if (i_pane->pane->getRotate() != 0.0f) {
+        i_pane->pane->rotate(i_pane->mSize.x * 0.5f, i_pane->mSize.y * 0.5f, ROTATE_Z, i_pane->pane->getRotate());
     }
 }
 
 /* 801C5BF4-801C5D6C       .text paneTransSelCmapCle__13dMenu_Fmap2_cFsUcffffUcUci */
-BOOL dMenu_Fmap2_c::paneTransSelCmapCle(s16 param_1, u8 param_2, f32 param_3, f32 param_4, f32 param_5, f32 param_6, u8 param_7, u8 param_8, int param_9) {
-    /* Nonmatching */
-    if (param_1 < 0) {
+BOOL dMenu_Fmap2_c::paneTransSelCmapCle(
+    s16 i_frame, u8 i_max, f32 i_scaleStart, f32 i_scaleEnd, f32 i_transStartX, f32 i_transEndX, u8 i_mode, u8 i_idx, int i_flag
+) {
+    int i;
+
+    f32 f27 = i_scaleStart;
+    f32 f31 = i_scaleEnd;
+    f32 f28 = i_transStartX;
+    f32 f30 = i_transEndX;
+    if (i_frame < 0) {
         return false;
     }
-    if (param_1 > param_2) {
+    if (i_frame > i_max) {
         return true;
     }
-    f32 f29 = fopMsgM_valueIncrease(param_2, param_1, param_7);
-    for (int i = 0; i < 2; i++) {
-        fopMsgM_paneScaleXY(&field_0x1244[param_8][i], param_3 + f29 * (param_3 - param_4));
-        fopMsgM_paneTrans(&field_0x1244[param_8][i], param_5 + f29 * (param_5 - param_6), 0.0f);
+    f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
+    f32 transAdj = alpha * (f30 - f28);
+    f32 scaleAdj = alpha * (f31 - f27);
+    for (i = 0; i < 2; i++) {
+        fopMsgM_paneScaleXY(&field_0x1244[i_idx][i], f27 + scaleAdj);
+        fopMsgM_paneTrans(&field_0x1244[i_idx][i], f28 + transAdj, 0.0f);
     }
-    if (param_9 != 2) {
-        if (param_9 == 1) {
-            f29 = 1.0f - f29;
+    if (i_flag != 2) {
+        if (i_flag == 1) {
+            alpha = 1.0f - alpha;
         }
-        for (int i = 0; i < 2; i++) {
-            fopMsgM_setNowAlpha(&field_0x1244[param_8][i], f29);
-            fopMsgM_setAlpha(&field_0x1244[param_8][i]);
+        for (i = 0; i < 2; i++) {
+            fopMsgM_setNowAlpha(&field_0x1244[i_idx][i], alpha);
+            fopMsgM_setAlpha(&field_0x1244[i_idx][i]);
         }
     }
     return false;
 }
 
 /* 801C5D6C-801C5EE4       .text paneTransSelCmapOpn__13dMenu_Fmap2_cFsUcffffUcUci */
-BOOL dMenu_Fmap2_c::paneTransSelCmapOpn(s16, u8, f32, f32, f32, f32, u8, u8, int) {
-    /* Nonmatching */
+BOOL dMenu_Fmap2_c::paneTransSelCmapOpn(
+    s16 i_frame, u8 i_max, f32 i_scaleStart, f32 i_scaleEnd, f32 i_transStartX, f32 i_transEndX, u8 i_mode, u8 i_idx, int i_flag
+) {
+    int i;
+
+    f32 f27 = i_scaleStart;
+    f32 f31 = i_scaleEnd;
+    f32 f28 = i_transStartX;
+    f32 f30 = i_transEndX;
+    if (i_frame < 0) {
+        return false;
+    }
+    if (i_frame > i_max) {
+        return true;
+    }
+    f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
+    f32 transAdj = alpha * (f30 - f28);
+    f32 scaleAdj = alpha * (f31 - f27);
+    for (i = 0; i < 5; i++) {
+        fopMsgM_paneScaleXY(&field_0x124c[i_idx][i], f27 + scaleAdj);
+        fopMsgM_paneTrans(&field_0x124c[i_idx][i], f28 + transAdj, 0.0f);
+    }
+    if (i_flag != 2) {
+        if (i_flag == 1) {
+            alpha = 1.0f - alpha;
+        }
+        for (i = 0; i < 5; i++) {
+            fopMsgM_setNowAlpha(&field_0x124c[i_idx][i], alpha);
+            fopMsgM_setAlpha(&field_0x124c[i_idx][i]);
+        }
+    }
+    return false;
 }
 
 /* 801C5EE4-801C609C       .text paneAlphaGostShipMap__13dMenu_Fmap2_cFsUcUci */
@@ -2118,9 +2160,9 @@ void dMenu_Fmap2_c::finCollectMapTexChange() {
 
 /* 801C70A0-801C7164       .text calcGetCollectMap__13dMenu_Fmap2_cFv */
 int dMenu_Fmap2_c::calcGetCollectMap() {
-    /* Nonmatching */
+    int i;
     int result = 0;
-    for (int i = 0; i < 61; i++) {
+    for (i = 0; i < 61; i++) {
         int r28 = getCmapDatPnt4(i)->collectMapNo;
         if (isGetCollectMap(r28)) {
             result++;
