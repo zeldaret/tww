@@ -8,6 +8,7 @@
 #include "d/d_cc_d.h"
 #include "d/d_a_obj.h"
 #include "d/d_lib.h"
+#include "res/Object/Vyasi.h"
 
 namespace daObjVyasi {
 
@@ -270,7 +271,7 @@ void daObjVyasi::Act_c::process_none_main() {
 
 /* 00000A00-00000A64       .text process_sag_init__Q210daObjVyasi5Act_cFv */
 BOOL daObjVyasi::Act_c::process_sag_init() {
-    if (SetStopJointAnimation(mpBckData, 1.0f, 0.0f) != 0) {
+    if (SetStopJointAnimation(M_bck_data, 1.0f, 0.0f) != 0) {
         mpMorf->setPlaySpeed(0.0f);
         return TRUE;
     }
@@ -289,7 +290,7 @@ void daObjVyasi::Act_c::process_sag_main() {
 
 /* 00000AD8-00000CC0       .text process_sagWind_init__Q210daObjVyasi5Act_cFv */
 BOOL daObjVyasi::Act_c::process_sagWind_init() {
-    if (SetStopJointAnimation(mpBckData, 1.0f, 3.0f)) {
+    if (SetStopJointAnimation(M_bck_data, 1.0f, 3.0f)) {
         f32 dist = mEkszsPos.abs(current.pos);
         dist = cLib_maxLimit(dist, 2800.0f);
         dist = cLib_minLimit(dist, 1000.0f);
@@ -323,7 +324,7 @@ void daObjVyasi::Act_c::process_sagWind_main() {
 
 /* 00000D20-00000D54       .text process_toNormal_init__Q210daObjVyasi5Act_cFv */
 BOOL daObjVyasi::Act_c::process_toNormal_init() {
-    return SetStopJointAnimation(mpBckData, 1.0f, 0.0f);
+    return SetStopJointAnimation(M_bck_data, 1.0f, 0.0f);
 }
 
 /* 00000D54-00000E10       .text process_toNormal_main__Q210daObjVyasi5Act_cFv */
@@ -344,7 +345,7 @@ void daObjVyasi::Act_c::process_toNormal_main() {
 
 /* 00000E10-00000E74       .text process_normal_init__Q210daObjVyasi5Act_cFv */
 BOOL daObjVyasi::Act_c::process_normal_init() {
-    if (SetStopJointAnimation(mpBckData, -1.0f, 0.0f)) {
+    if (SetStopJointAnimation(M_bck_data, -1.0f, 0.0f)) {
         mpMorf->setPlaySpeed(0.0f);
         return TRUE;
     }
@@ -396,8 +397,16 @@ BOOL daObjVyasi::Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 000010EC-00001290       .text create_heap__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::create_heap() {
-    /* Nonmatching */
-    return true;
+    J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VYASI_BDL_VYASI_e);
+    JUT_ASSERT(1146, mdl_data != NULL);
+
+    M_bck_data = (J3DAnmTransformKey*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VYASI_BCK_VYASI_e);
+    JUT_ASSERT(1151, M_bck_data != NULL);
+
+    if (M_bck_data != NULL && mdl_data != NULL) {
+        mpMorf = new mDoExt_McaMorf(mdl_data, NULL, NULL, M_bck_data, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, 1, NULL, 0, 0x11000002);
+    }
+    return M_bck_data != NULL && mpMorf != NULL && mpMorf->getModel() != NULL;
 }
 
 /* 00001290-000016E0       .text _create__Q210daObjVyasi5Act_cFv */
