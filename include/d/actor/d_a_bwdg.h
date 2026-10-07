@@ -16,8 +16,8 @@ public:
 
     MtxP getMtx() { return mMtx; }
     void setTevStr(dKy_tevstr_c* tevstr) { mpTevStr = tevstr; }
-    cXyz* getPos() { return &mPos[m00010 * 0x1081]; }
-    cXyz* getNrm() { return &mNrm[m00010 * 0x1081]; }
+    cXyz* getPos() { return mPos[m00010]; }
+    cXyz* getNrm() { return mNrm[m00010]; }
 
     void draw();
 
@@ -25,8 +25,8 @@ public:
     /* 0x00010 */ u8 m00010;
     /* 0x00014 */ Mtx mMtx;
     /* 0x00044 */ dKy_tevstr_c* mpTevStr;
-    /* 0x00048 */ cXyz mPos[0x1081 * 2];
-    /* 0x18C60 */ cXyz mNrm[0x1081 * 2];
+    /* 0x00048 */ cXyz mPos[2][0x1081];
+    /* 0x18C60 */ cXyz mNrm[2][0x1081];
 };  // Size: 0x31878
 
 class bwdg_class : public fopAc_ac_c {
