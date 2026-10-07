@@ -19,7 +19,7 @@ namespace daObjVyasi {
         }
 
         BOOL is_switch() const {
-            return fopAcM_isSwitch((fopAc_ac_c*)this, daObj::PrmAbstract(this, 8, 0));
+            return fopAcM_isSwitch(const_cast<Act_c*>(this), daObj::PrmAbstract(this, 8, 0));
         }
 
         BOOL SetStopJointAnimation(J3DAnmTransformKey*, float, float);
