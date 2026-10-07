@@ -543,15 +543,15 @@ u8 dMap_RoomInfo_c::getRoomImage(int i_roomNo, u8 param_2, int param_3, ResTIMG*
 
 /* 80046314-80046470       .text makeRoomDspFloorNoTbl__15dMap_RoomInfo_cFi */
 BOOL dMap_RoomInfo_c::makeRoomDspFloorNoTbl(int i_roomNo) {
-    /* Nonmatching */
     dStage_FloorInfo_c* floor = getFloorInfo_WithRoom(i_roomNo);
     for (int i = 0; i < ARRAY_SIZE(field_0x2); i++) {
         field_0x2[i] = -1;
     }
     if (floor) {
+        u8 floorNo;
         dStage_FloorInfo_dt_c* floorData = floor->m_entries;
         for (int i = 0; i < floor->num; i++, floorData++) {
-            u8 floorNo = floorData->floorNo;
+            floorNo = floorData->floorNo;
             if (IsFloorNo(floorNo)) {
                 for (int j = 0; j < int(ARRAY_SIZE(floorData->field_0x05)); j++) {
                     if (i_roomNo == floorData->field_0x05[j]) {
@@ -1329,9 +1329,10 @@ void dMap_c::mapDrawRealSize(f32 param_1, f32 param_2, u8 i_alpha) {
         m2DSQdraw.setAlpha(i_alpha);
         m2DSQdraw.setMode(0);
         dComIfGd_set2DOpa(&m2DSQdraw);
+        f32 f30;
         if (mNowRoomInfoP->getEnableFlg() & 1) {
             f32 f31 = mNowRoomInfoP->getStageMapInfoP()->field_0x30;
-            f32 f30 = mNowRoomInfoP->getStageMapInfoP()->field_0x30;
+            f30 = mNowRoomInfoP->getStageMapInfoP()->field_0x30;
             mRoomInfoCtrl.ctrlDrawRoomRealSize(
                 mNowRoomInfoP->getRoomNo(),
                 mDispPosLeftUpX, mDispPosLeftUpY, mDispSizeX, mDispSizeY,
@@ -2553,10 +2554,10 @@ void dMap_2DAGBScrDsp_c::init(map_dt_c* param_1, ResTIMG* param_2, f32 param_3, 
 
 /* 8004E264-8004E384       .text getScrnPrm__18dMap_2DAGBScrDsp_cFffifPiPfPf */
 void dMap_2DAGBScrDsp_c::getScrnPrm(f32 param_1, f32 param_2, int param_3, f32 param_4, int* param_5, f32* param_6, f32* param_7) {
-    /* Nonmatching */
+    f32 f31;
     if (param_4 != 0.0) {
         f32 f30 = param_3;
-        f32 f31 = param_1 + param_2 * (1.0f / param_4);
+        f31 = param_1 + param_2 * (1.0f / param_4);
         int tmp1 = floor(f31 / f30);
         if (param_5) {
             *param_5 = tmp1;
