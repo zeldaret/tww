@@ -219,8 +219,43 @@ void daObjVyasi::Act_c::set_collision() {
 }
 
 /* 000005F4-000009B8       .text JointNodeCallBack__10daObjVyasiFP7J3DNodei */
-BOOL daObjVyasi::JointNodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+BOOL daObjVyasi::JointNodeCallBack(J3DNode* i_node, int i_calcTiming) {
+    J3DModel* model = j3dSys.getModel();
+    s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
+    Act_c* i_this = (Act_c*)model->getUserArea();
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+        Mtx mtx;
+        MTXCopy(model->getAnmMtx(jntNo), mtx);
+        cXyz trans(mtx[0][3], mtx[1][3], mtx[2][3]);
+        mtx[0][3] = mtx[1][3] = mtx[2][3] = 0.0f;
+
+        mDoMtx_stack_c::transS(trans);
+        mDoMtx_stack_c::quatM(&i_this->mJointQuat[jntNo]);
+        mDoMtx_stack_c::concat(mtx);
+        model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+        MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+
+        csXyz angles_table[14] = {
+            csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),
+            csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),
+        };
+
+        csXyz angle = angles_table[jntNo];
+        angle += i_this->field_0x3AC[jntNo];
+        mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+        mDoMtx_stack_c::ZXYrotM(angle);
+
+        if (joint_kind_table[jntNo] == 0) {
+            mDoMtx_stack_c::scaleM(i_this->field_0x4A8, i_this->field_0x4AC, i_this->field_0x4B0);
+        }
+
+        model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+        MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        cXyz src(0.0f, 0.0f, 0.0f);
+        cMtx_multVec(mDoMtx_stack_c::get(), &src, &i_this->field_0x400[jntNo]);
+    }
+    return TRUE;
 }
 
 /* 000009F4-000009FC       .text process_none_init__Q210daObjVyasi5Act_cFv */
