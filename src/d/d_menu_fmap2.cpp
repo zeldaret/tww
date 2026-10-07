@@ -1719,7 +1719,9 @@ void dMenu_Fmap2_c::cmapAlphaSet() {
 
 /* 801C3354-801C33B0       .text changeZoomCmap__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeZoomCmap() {
-    /* Nonmatching */
+    ((J2DPicture*)field_0x1AA4[field_0x2815 ^ 1][3].pane)->changeTexture(mCmapTxtMain_p[field_0x2815 ^ 1], 0);
+    cmapPlayerPosDisp();
+    cmapSalvagePosDisp();
 }
 
 /* 801C33B0-801C36C8       .text ChangeProcMode__13dMenu_Fmap2_cFv */
@@ -1742,7 +1744,14 @@ bool dMenu_Fmap2_c::_open() {
 
 /* 801C376C-801C3858       .text _close__13dMenu_Fmap2_cFv */
 bool dMenu_Fmap2_c::_close() {
-    /* Nonmatching */
+    BOOL ret = paneTransBase(field_0x27AC, g_mf2HIO.field_0x38, 0.0f, g_mf2HIO.field_0x3C, 0, field_0x2815, 1);
+    field_0x27AC++;
+    if (ret == TRUE) {
+        field_0x27AC = 0;
+        setCtCmapSelNo(field_0x27A9);
+        return true;
+    }
+    return false;
 }
 
 /* 801C3858-801C38E0       .text _draw__13dMenu_Fmap2_cFv */
