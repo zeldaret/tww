@@ -2712,9 +2712,9 @@ BOOL daPy_lk_c::setBodyAngleToCamera() {
 #endif
         } else {
             camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
-            shape_angle.y = cam->mAngle.y;
+            shape_angle.y = fopCamM_GetAngleY(cam);
             current.angle.y = shape_angle.y;
-            mBodyAngle.x = cam->mAngle.x;
+            mBodyAngle.x = fopCamM_GetAngleX(cam);
         }
         return bVar1;
     }
@@ -10210,19 +10210,15 @@ void daPy_lk_c::setAttentionPos() {
     attention_info.position.z = current.pos.z;
     daShip_c* ship = (daShip_c*)dComIfGp_getShipActor();
     if (checkModeFlg(ModeFlg_CRAWL)) {
-        {
-            static const Vec offset = {0.0f, 30.0f, 20.0f};
-            mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &offset, &attention_info.position);
-        }
+        static const Vec offset = {0.0f, 30.0f, 20.0f};
+        mDoMtx_multVec(mpCLModel->getBaseTRMtx(), &offset, &attention_info.position);
     } else if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SUBJECT_e)) {
-        {
-            static const Vec offset = {0.0f, 70.0f, 0.0f};
-            mDoMtx_stack_c::ZXYrotS(mBodyAngle.x, shape_angle.y, 0);
-            mDoMtx_stack_c::multVec(&offset, &afStack_18);
-            attention_info.position.y = 26.3f + current.pos.y;
-            pcVar3 = &attention_info.position;
-            *pcVar3 += afStack_18;
-        }
+        static const Vec offset = {0.0f, 70.0f, 0.0f};
+        mDoMtx_stack_c::ZXYrotS(mBodyAngle.x, shape_angle.y, 0);
+        mDoMtx_stack_c::multVec(&offset, &afStack_18);
+        attention_info.position.y = 26.3f + current.pos.y;
+        pcVar3 = &attention_info.position;
+        *pcVar3 += afStack_18;
     } else if (checkModeFlg(ModeFlg_CROUCH)) {
         attention_info.position.x += 20.0f * cM_ssin(shape_angle.y);
         attention_info.position.y = 46.25f + current.pos.y;

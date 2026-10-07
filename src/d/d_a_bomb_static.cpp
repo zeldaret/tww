@@ -55,31 +55,22 @@ void daBomb_c::setBombNoHit() {
 void daBomb_c::setBombOffCoSet() {
     _prm_chk_version();
 
-    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OffCoSetBit();
 }
 
 /* 80068104-8006813C       .text setBombOnCoSet__8daBomb_cFv */
 void daBomb_c::setBombOnCoSet() {
     _prm_chk_version();
 
-    mSph.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OnCoSetBit();
 }
 
 /* 8006813C-800681CC       .text setBombNoEff__8daBomb_cFv */
 void daBomb_c::setBombNoEff() {
     _prm_chk_version();
 
-    if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
-        mSmoke.mpEmitter->becomeInvalidEmitter();
-    }
-    mSmoke.mpEmitter = NULL;
-
-    if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
-        mSparks.mpEmitter->becomeInvalidEmitter();
-    }
-    mSparks.mpEmitter = NULL;
+    mSmoke.deleteCallBack();
+    mSparks.deleteCallBack();
 }
 
 /* 800681CC-80068208       .text setBombRestTime__8daBomb_cFs */
