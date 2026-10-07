@@ -2219,6 +2219,8 @@ void poison_init() {
 /* 8009258C-800937BC       .text poison_move__Fv */
 // NONMATCHING - reg alloc
 void poison_move() {
+    f32 var_f18_3;
+    f32 var_f31;
     dKankyo_poison_Packet* poison_packet = g_env_light.mpPoisonPacket;
     camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
     fopAc_ac_c * tmp5 = dComIfGp_getPlayer(0);
@@ -2408,7 +2410,7 @@ void poison_move() {
     poison_packet->mBasePos = spD0;
     poison_packet->mBasePos.y += var_f17;
 
-    f32 var_f31 = G_CM3D_F_INF;
+    var_f31 = G_CM3D_F_INF;
     for (int i = 0; i < g_env_light.mPoisonCount; i++) {
         spAC = spA0;
 
@@ -2671,7 +2673,6 @@ void poison_move() {
             var_f14 = 1.0f;
         }
 
-        f32 var_f18_3;
         if (pattern == 2) {
             sp40 = sp94;
             sp40.y = poison_packet->mBasePos.y;
