@@ -3475,7 +3475,7 @@ static BOOL daMP_THPPlayerOpen(const char* filename, BOOL onMemory) {
     }
 
     memcpy(&daMP_ActivePlayer.compInfo, daMP_WorkBuffer, sizeof(THPFrameCompInfo));
-    offset += sizeof(THPFrameCompInfo);
+    offset = offset + sizeof(THPFrameCompInfo);
 
     daMP_ActivePlayer.audioExist = 0;
 
