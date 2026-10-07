@@ -10,13 +10,35 @@
 
 mDoHIO_root_c mDoHIO_root;
 
+#if DEBUG
+void mDoHIO_root_c::genMessage(JORMContext* i_context) {
+    i_context->genNode("Node", &mSub, 0, 0);
+}
+
+void mDoHIO_subRoot_c::genMessage(JORMContext* i_context) {
+    for (int i = 0; i < 80; i++) {
+        JORReflexible* node = mChildren[i].getPt();
+
+        if (node != NULL) {
+            i_context->genNode(mChildren[i].getName(), node, 0, 0);
+        }
+    }
+}
+#endif
+
 /* 80017A4C-80017A50       .text update__13mDoHIO_root_cFv */
-void mDoHIO_root_c::update() {}
+void mDoHIO_root_c::update() {
+#if DEBUG
+    JORMContext* context = attachJORMContext(5);
+    context->invalidNode(this, 3);
+    releaseJORMContext(context);
+#endif
+}
 
 /* 80017A50-80017B20       .text createChild__16mDoHIO_subRoot_cFPCcP13JORReflexible */
-s8 mDoHIO_subRoot_c::createChild(const char* i_name, JORReflexible* i_reflexible) {
+s8 mDoHIO_subRoot_c::createChild(const char* i_name, JORReflexible* i_node) {
     for (int i = 0; i < 64; i++) {
-        if (mChild[i].getPt() == i_reflexible) {
+        if (mChildren[i].getPt() == i_node) {
             // "Danger: Trying to register an already registered HostIO<%s>\n"
             OSReport_Error("危険：既に登録されているホストIOをふたたび登録しようとしています<%s>\n", i_name);
             return -1;
@@ -24,9 +46,9 @@ s8 mDoHIO_subRoot_c::createChild(const char* i_name, JORReflexible* i_reflexible
     }
 
     for (int i = 0; i < 64; i++) {
-        if (mChild[i].getPt() == NULL) {
-            mChild[i].setName(i_name);
-            mChild[i].setPt(i_reflexible);
+        if (mChildren[i].getPt() == NULL) {
+            mChildren[i].setName(i_name);
+            mChildren[i].setPt(i_node);
             return i;
         }
     }
@@ -39,16 +61,26 @@ s8 mDoHIO_subRoot_c::createChild(const char* i_name, JORReflexible* i_reflexible
 /* 80017B20-80017B88       .text deleteChild__16mDoHIO_subRoot_cFSc */
 void mDoHIO_subRoot_c::deleteChild(s8 i_childID) {
     if (i_childID >= 0) {
-        if (mChild[i_childID].getPt() == NULL) {
+        if (mChildren[i_childID].getPt() == NULL) {
             // "Danger: Trying to delete HostIO that has already been deleted<%s>\n"
-            OSReport_Error("危険：すでに削除されているホストIOをさらに削除しようとしています<%s>\n", mChild[i_childID].getName());
+            OSReport_Error("危険：すでに削除されているホストIOをさらに削除しようとしています<%s>\n", mChildren[i_childID].getName());
         } else {
-            mChild[i_childID].setPt(NULL);
+            mChildren[i_childID].setPt(NULL);
         }
     }
 }
 
 #if VERSION == VERSION_DEMO
+void mDoHIO_subRoot_c::updateChild(s8 i_no) {
+    i_no--;
+    
+    if (i_no >= 0) {
+        JORMContext* context = attachJORMContext(5);
+        context->invalidNode(mChildren[i_no].getPt(), 3);
+        releaseJORMContext(context);
+    }
+}
+
 mDoHIO_entry_c::mDoHIO_entry_c() {
     mNo = 0;
     mCount = 0;
@@ -74,5 +106,13 @@ void mDoHIO_entry_c::removeHIO() {
     if (mCount == 0) {
         mDoHIO_deleteChild(mNo);
     }
+}
+
+void mDoHIO_updateChild(s8 i_no) {
+    mDoHIO_root.updateChild(i_no);
+}
+
+void mDoHIO_root_c::updateChild(s8 i_no) {
+    mSub.updateChild(i_no);
 }
 #endif

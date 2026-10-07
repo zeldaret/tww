@@ -999,6 +999,7 @@ config.libs = [
         [
             Object(Matching,    "JSystem/JSupport/JSUList.cpp"),
             Object(Matching,    "JSystem/JSupport/JSUInputStream.cpp"),
+            Object(DEBUG_ONLY,  "JSystem/JSupport/JSUOutputStream.cpp"),
             Object(Matching,    "JSystem/JSupport/JSUMemoryStream.cpp"),
             Object(Matching,    "JSystem/JSupport/JSUFileStream.cpp"),
         ],
@@ -1105,6 +1106,23 @@ config.libs = [
         [
             Object(Matching,    "JSystem/JMath/JMath.cpp"),
             Object(Matching,    "JSystem/JMath/random.cpp"),
+        ],
+    ),
+    JSystemLib(
+        "JHostIO",
+        [
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIComm.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHICommonMem.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORServer.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JOREntry.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORFile.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORMessageBox.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORHostInfo.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JORShellExecute.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIMemBuf.cpp"),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIhioASync.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIMccBuf.cpp", extra_cflags=["-sym off"]),
+            Object(DEBUG_ONLY, "JSystem/JHostIO/JHIRMcc.cpp"),
         ],
     ),
     DolphinLib(
@@ -1242,6 +1260,12 @@ config.libs = [
             Object(Matching, "dolphin/card/CARDWrite.c"),
             Object(Matching, "dolphin/card/CARDStat.c"),
             Object(Matching, "dolphin/card/CARDNet.c"),
+        ],
+    ),
+    DolphinLib(
+        "hio",
+        [
+            Object(Matching, "dolphin/hio/hio.c"),
         ],
     ),
     DolphinLib(
@@ -1937,10 +1961,24 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_debug_camera.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_event_debug.cpp")
         # objects.insert(objects.index("d/actor/d_a_agb.cpp"), "d/d_kankyo_debug.cpp")
+        objects.insert(objects.index("JSystem/JSupport/JSUMemoryStream.cpp"), "JSystem/JSupport/JSUOutputStream.cpp")
         objects.insert(objects.index("JSystem/JGadget/binary.cpp"), "JSystem/JGadget/define.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIComm.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHICommonMem.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORServer.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JOREntry.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORFile.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORMessageBox.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORHostInfo.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JORShellExecute.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIMemBuf.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIhioASync.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIMccBuf.cpp")
+        objects.insert(objects.index("dolphin/base/PPCArch.c"), "JSystem/JHostIO/JHIRMcc.cpp")
         objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/i2c.c")
         objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/initphilips.c")
         objects.insert(objects.index("dolphin/pad/Padclamp.c"), "dolphin/vi/gpioexi.c")
+        objects.insert(objects.index("dolphin/gx/GXInit.c"), "dolphin/hio/hio.c")
         objects.insert(objects.index("dolphin/gx/GXPixel.c"), "dolphin/gx/GXDraw.c")
 
     # Example of adding new files for modding:

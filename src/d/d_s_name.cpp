@@ -181,7 +181,7 @@ cPhs_State dScnName_c::create() {
 
         dFs_c->_create();
 
-        g_snHIO.mNo = mDoHIO_root.m_subroot.createChild("名前登録シーン", &g_snHIO);
+        g_snHIO.mNo = mDoHIO_createChild("名前登録シーン", &g_snHIO);
 
 #if VERSION == VERSION_DEMO
         mDoExt_restoreCurrentHeap();
@@ -648,7 +648,7 @@ dScnName_c::~dScnName_c() {
         dFe_c->_deleteSp();
     }
     s8 no = g_snHIO.mNo;
-    mDoHIO_root.m_subroot.deleteChild(no);
+    mDoHIO_deleteChild(no);
     mDoExt_destroySolidHeap(heap);
     dComIfG_deleteStageRes("Stage");
     dComIfGp_setWindowNum(0);
@@ -673,7 +673,7 @@ dScnName_c::~dScnName_c() {
     mArchive->unmountFixed();
     delete cloth.cloth_c;
     s8 no = g_snHIO.mNo;
-    mDoHIO_root.m_subroot.deleteChild(no);
+    mDoHIO_deleteChild(no);
     JKRSetCurrentHeap(oldHeap);
     heap->destroy();
     dComIfG_deleteStageRes("Stage");
