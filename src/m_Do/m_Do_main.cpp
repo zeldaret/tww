@@ -426,7 +426,6 @@ void main01() {
     JOR_SETROOTNODE("root", &mDoHIO_root, 4, 3);
     mDoExt_setCurrentHeap(sp10);
 
-    var_r28->dump_sort();
     s32 local_34 = var_r28->getTotalFreeSize();
     OSReport("\x1b[36mHOSTIOヒープ残り %u Bytes\n\x1b[m", local_34);
     #endif
