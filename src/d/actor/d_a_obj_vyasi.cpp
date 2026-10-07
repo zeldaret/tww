@@ -5,8 +5,9 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_vyasi.h"
-#include "d/d_cc_d.h"
 #include "d/d_a_obj.h"
+#include "d/d_cc_d.h"
+#include "d/d_kankyo_wether.h"
 #include "d/d_lib.h"
 #include "res/Object/Vyasi.h"
 #include "SSystem/SComponent/c_lib.h"
@@ -483,12 +484,96 @@ void daObjVyasi::Act_c::set_mtx() {
 
 /* 00001E5C-000025A8       .text calc_dif_angle__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::calc_dif_angle() {
-    /* Nonmatching */
+    for (int i = 0; i < 14; i++) {
+        csXyz target(0, 0, 0);
+        s16 step = 2;
+        if (mState == 2) {
+            if (joint_kind_table[i] == 2) {
+                f32 ratio = field_0x504 * cM_ssin(field_0x508[i]);
+                target.set(20.0f * ratio, 40.0f * ratio, 40.0f * ratio);
+            } else if (joint_kind_table[i] == 1) {
+                f32 ratio = field_0x504 * cM_ssin(field_0x508[i]);
+                target.set(120.0f * ratio, 180.0f * ratio, 220.0f * ratio);
+
+                if (i == 1) {
+                    target.z += (s16)(-3200.0f + 3200.0f * field_0x504);
+                }
+            } else if (joint_kind_table[i] == 0) {
+                static csXyz sag_offset_angle[14] = {
+                    csXyz(0, 0, 0), csXyz(0, 0, 0),    csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),     csXyz(0, 0, 0),     csXyz(0, 0, 0),
+                    csXyz(0, 0, 0), csXyz(0, 0, 5000), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, -5000), csXyz(0, 0, -7000), csXyz(0, 0, -2700),
+                };
+                f32 ratio = field_0x504 * cM_ssin(field_0x508[i]);
+                target.set(700.0f * ratio, 1700.0f * ratio, 1700.0f * ratio);
+
+                target.x += sag_offset_angle[i].x;
+                target.y += sag_offset_angle[i].y;
+                target.z += sag_offset_angle[i].z;
+                step = 1;
+            }
+        } else if (mState == 3) {
+            if (field_0x19C4 == 0 && (i == 0 || i == 1 || i == 6)) {
+                target.z = field_0x19CC * cM_ssin(field_0x19D0);
+            }
+        }
+
+        cLib_addCalcAngleS2(&field_0x3AC[i].x, target.x, step, 0x4000);
+        cLib_addCalcAngleS2(&field_0x3AC[i].y, target.y, step, 0x4000);
+        cLib_addCalcAngleS2(&field_0x3AC[i].z, target.z, step, 0x4000);
+
+        if (joint_kind_table[i] == 0) {
+            field_0x508[i] += (s16)(1.5f * field_0x524[i]);
+        } else {
+            field_0x508[i] += field_0x524[i];
+        }
+    }
 }
 
 /* 000025A8-00002880       .text quaternion_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::quaternion_main() {
-    /* Nonmatching */
+    for (int i = 0; i < 14; i++) {
+        Quaternion quat;
+        quat = ZeroQuat;
+
+        if (mState == 4 && joint_kind_table[i] == 0) {
+            cXyz up(0.0f, 1.0f, 0.0f);
+            cMtx_YrotS(*calc_mtx, -current.angle.y);
+
+            cXyz windDir;
+            MtxPosition(dKyw_get_wind_vec(), &windDir);
+
+            f32 windPow = dKyw_get_wind_pow();
+            cXyz dir = up.outprod(windDir);
+            s16 angle = 1400.0f * windPow * field_0x19D4;
+            f32 sin = cM_ssin(angle);
+
+            Quaternion windQuat;
+            windQuat.x = sin * dir.x;
+            windQuat.y = sin * dir.y;
+            windQuat.z = sin * dir.z;
+            windQuat.w = cM_scos(angle);
+
+            s16 target = 360.0f * windPow * field_0x19D4;
+            target = target > 0xDC ? 0xDC : target;
+            cLib_addCalcAngleS2(&field_0x2B0[i], target, 4, 0x20);
+            s32 add = (2048.0f * windPow * field_0x19D4) + cM_rndFX(256.0f);
+            field_0x294[i] += add;
+            f32 w = cM_ssin(field_0x2B0[i]);
+
+            Quaternion animQuat;
+            animQuat.x = w * cM_ssin(field_0x294[i]);
+            animQuat.y = 0.0f;
+            animQuat.z = w * cM_ssin(field_0x294[i]);
+            animQuat.w = cM_scos(field_0x2B0[i]);
+            mDoMtx_quatMultiply(&windQuat, &animQuat, &quat);
+        }
+
+        if (mNormalCounter == 1) {
+            mJointQuat[i] = quat;
+        } else {
+            mDoMtx_quatSlerp(&mJointQuat[i], &quat, &mJointQuat[i], 0.4f);
+        }
+    }
 }
 
 /* 00002880-00002938       .text leaf_scale_main__Q210daObjVyasi5Act_cFv */
