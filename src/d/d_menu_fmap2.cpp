@@ -801,40 +801,40 @@ void dMenu_Fmap2_c::CmapProcMain() {
 void dMenu_Fmap2_c::spMapLoadForDVD(u8 i_kind) {
     field_0x124c[field_0x2813]->pane->hide();
     switch (i_kind) {
-        case 3:
+        case FMAP_MAPTYPE_TINGLE:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/tnmapres.arc", 0, NULL);
             break;
-        case 4:
+        case FMAP_MAPTYPE_GHOST:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/gsmapres.arc", 0, NULL);
             break;
-        case 7:
+        case FMAP_MAPTYPE_TREASURE:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/trmapres.arc", 0, NULL);
             break;
-        case 9:
+        case FMAP_MAPTYPE_DOCTA:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/docmapres.arc", 0, NULL);
             break;
-        case 10:
+        case FMAP_MAPTYPE_DFALIY:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/ysmapres.arc", 0, NULL);
             break;
-        case 11:
+        case FMAP_MAPTYPE_HEART_P:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/heartmapres.arc", 0, NULL);
             break;
-        case 12:
+        case FMAP_MAPTYPE_HEART_M:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/htmmapres.arc", 0, NULL);
             break;
-        case 13:
+        case FMAP_MAPTYPE_SUBDAN:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/irmapres.arc", 0, NULL);
             break;
-        case 14:
+        case FMAP_MAPTYPE_MOON:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/moonmapres.arc", 0, NULL);
             break;
-        case 15:
+        case FMAP_MAPTYPE_YAGURA:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/ygmapres.arc", 0, NULL);
             break;
-        case 16:
+        case FMAP_MAPTYPE_TERRY:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/terrymapres.arc", 0, NULL);
             break;
-        case 17:
+        case FMAP_MAPTYPE_SUBMA:
             field_0x18 = mDoDvdThd_mountArchive_c::create("/res/Msg/submamapres.arc", 0, NULL);
             break;
     }
@@ -851,7 +851,7 @@ BOOL dMenu_Fmap2_c::cmapOpenCheck() {
     field_0x124c[field_0x2813][4].pane->hide();
     field_0x1aa4[field_0x2815][0].pane->show();
     field_0x2848[field_0x2816] = 0x319e;
-    if (getCollectMapKind(field_0x27a9) == 0) {
+    if (getCollectMapKind(field_0x27a9) == FMAP_MAPTYPE_TRI) {
         if (isOpenCollectMapTriforce(field_0x27a9)) {
             field_0x124c[field_0x2813][3].pane->hide();
         } else {
@@ -940,7 +940,7 @@ void dMenu_Fmap2_c::CmapScroll() {
 
 /* 801BF2B0-801BF2E8       .text isSpMap__13dMenu_Fmap2_cFi */
 BOOL dMenu_Fmap2_c::isSpMap(int i_kind) {
-    if (i_kind - 3 <= 1u || i_kind == 7 || i_kind - 9 <= 7u || i_kind == 17) {
+    if (i_kind - FMAP_MAPTYPE_TINGLE <= 1u || i_kind == FMAP_MAPTYPE_TREASURE || i_kind - FMAP_MAPTYPE_DOCTA <= 7u || i_kind == FMAP_MAPTYPE_SUBMA) {
         return true;
     }
     return false;
@@ -950,7 +950,7 @@ BOOL dMenu_Fmap2_c::isSpMap(int i_kind) {
 void dMenu_Fmap2_c::CmapOpen() {
     int r31 = paneTranceMessage(field_0x27ac, g_mf2HIO.field_0x3f, 1.0f, g_mf2HIO.field_0x44, 0.0f, 0.0f, 0, field_0x2816, 1);
     int r27;
-    if (getCollectMapKind(field_0x27a9) == 0 && !isOpenCollectMapTriforce(field_0x27a9)) {
+    if (getCollectMapKind(field_0x27a9) == FMAP_MAPTYPE_TRI && !isOpenCollectMapTriforce(field_0x27a9)) {
         if (field_0x27ac == g_mf2HIO.field_0x3f) {
             field_0x2848[field_0x2816] = 0x319d;
         }
@@ -964,7 +964,7 @@ void dMenu_Fmap2_c::CmapOpen() {
     if (r31 == 1 && r27 == 1 && r28 == 1 && tmp == 1) {
         field_0x27ac = 0;
         field_0x2812 = 2;
-        if (getCollectMapKind(field_0x27a9) || isOpenCollectMapTriforce(field_0x27a9)) {
+        if (getCollectMapKind(field_0x27a9) != FMAP_MAPTYPE_TRI || isOpenCollectMapTriforce(field_0x27a9)) {
 #if VERSION == VERSION_DEMO
             field_0xcc4[field_0x2816][0].pane->hide();
 #endif
@@ -990,51 +990,51 @@ void dMenu_Fmap2_c::CmapSpLoadWait() {
     }
     field_0x279c = NULL;
     switch (field_0x280f) {
-    case 3:
+    case FMAP_MAPTYPE_TINGLE:
         screenSetTn();
         paneAlphaTingleMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 4:
+    case FMAP_MAPTYPE_GHOST:
         screenSetGs();
         paneAlphaGostShipMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 7:
+    case FMAP_MAPTYPE_TREASURE:
         screenSetTr();
         paneAlphaTreasureMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 9:
+    case FMAP_MAPTYPE_DOCTA:
         screenSetIk();
         paneAlphaDoctaMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 10:
+    case FMAP_MAPTYPE_DFALIY:
         screenSetDfaliy();
         paneAlphaDfaliyMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 11:
+    case FMAP_MAPTYPE_HEART_P:
         screenSetHeartP();
         paneAlphaHeartPMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 12:
+    case FMAP_MAPTYPE_HEART_M:
         screenSetHeartM();
         paneAlphaHeartMMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 13:
+    case FMAP_MAPTYPE_SUBDAN:
         screenSetSubdan();
         paneAlphaSubdanMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 14:
+    case FMAP_MAPTYPE_MOON:
         screenSetMoon();
         paneAlphaMoonMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 15:
+    case FMAP_MAPTYPE_YAGURA:
         screenSetYagura();
         paneAlphaYaguraMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 16:
+    case FMAP_MAPTYPE_TERRY:
         screenSetTerry();
         paneAlphaTerryMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
-    case 17:
+    case FMAP_MAPTYPE_SUBMA:
         screenSetSubMa();
         paneAlphaSubMaMap(0, g_mf2HIO.field_0x3f, 0, 0);
         break;
@@ -1470,40 +1470,40 @@ void dMenu_Fmap2_c::CmapOpenSp() {
     BOOL r30 = paneTransSelCmapOpn(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 0);
     BOOL r27;
     switch (field_0x280f) {
-    case 3:
+    case FMAP_MAPTYPE_TINGLE:
         r27 = paneAlphaTingleMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 4:
+    case FMAP_MAPTYPE_GHOST:
         r27 = paneAlphaGostShipMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 7:
+    case FMAP_MAPTYPE_TREASURE:
         r27 = paneAlphaTreasureMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 9:
+    case FMAP_MAPTYPE_DOCTA:
         r27 = paneAlphaDoctaMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 10:
+    case FMAP_MAPTYPE_DFALIY:
         r27 = paneAlphaDfaliyMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 11:
+    case FMAP_MAPTYPE_HEART_P:
         r27 = paneAlphaHeartPMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 12:
+    case FMAP_MAPTYPE_HEART_M:
         r27 = paneAlphaHeartMMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 13:
+    case FMAP_MAPTYPE_SUBDAN:
         r27 = paneAlphaSubdanMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 14:
+    case FMAP_MAPTYPE_MOON:
         r27 = paneAlphaMoonMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 15:
+    case FMAP_MAPTYPE_YAGURA:
         r27 = paneAlphaYaguraMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 16:
+    case FMAP_MAPTYPE_TERRY:
         r27 = paneAlphaTerryMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
-    case 17:
+    case FMAP_MAPTYPE_SUBMA:
         r27 = paneAlphaSubMaMap(field_0x27ac - g_mf2HIO.field_0x40, g_mf2HIO.field_0x40, 0, 0);
         break;
     }
@@ -1520,7 +1520,7 @@ void dMenu_Fmap2_c::CmapOpenSp() {
 /* 801C26B0-801C27CC       .text CmapProc2__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapProc2() {
     if (CPad_CHECK_TRIG_B(0)) {
-        if (field_0x280f == 4) {
+        if (field_0x280f == FMAP_MAPTYPE_GHOST) {
             gsMoonAnimeInit();
 #if VERSION > VERSION_JPN
             gsIconAnimeInit();
@@ -1529,14 +1529,14 @@ void dMenu_Fmap2_c::CmapProc2() {
         field_0x2848[field_0x2816] = 0x319c;
         field_0x27a1 = 8;
 #if VERSION > VERSION_JPN
-        if (field_0x280f == 3) {
+        if (field_0x280f == FMAP_MAPTYPE_TINGLE) {
             mDoAud_seStart(JA_SE_TC_MAP_RETURN);
         } else {
             mDoAud_seStart(JA_SE_KAIZU_RETURN);
         }
 #endif
     }
-    if (field_0x280f == 4) {
+    if (field_0x280f == FMAP_MAPTYPE_GHOST) {
         gsShipAnime();
         gsMoonAnime();
 #if VERSION > VERSION_JPN
@@ -1544,7 +1544,7 @@ void dMenu_Fmap2_c::CmapProc2() {
 #endif
     }
 #if VERSION > VERSION_JPN
-    if (field_0x280f == 7) {
+    if (field_0x280f == FMAP_MAPTYPE_TREASURE) {
         trTrifAnime();
     }
 #endif
@@ -1558,40 +1558,40 @@ void dMenu_Fmap2_c::CmapClose() {
     BOOL r30 = paneTransSelCmapOpn(field_0x27ac, g_mf2HIO.field_0x40, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 1);
     BOOL r26;
     switch(field_0x280f) {
-    case 3:
+    case FMAP_MAPTYPE_TINGLE:
         r26 = paneAlphaTingleMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 4:
+    case FMAP_MAPTYPE_GHOST:
         r26 = paneAlphaGostShipMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 7:
+    case FMAP_MAPTYPE_TREASURE:
         r26 = paneAlphaTreasureMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 9:
+    case FMAP_MAPTYPE_DOCTA:
         r26 = paneAlphaDoctaMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 10:
+    case FMAP_MAPTYPE_DFALIY:
         r26 = paneAlphaDfaliyMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 11:
+    case FMAP_MAPTYPE_HEART_P:
         r26 = paneAlphaHeartPMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 12:
+    case FMAP_MAPTYPE_HEART_M:
         r26 = paneAlphaHeartMMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 13:
+    case FMAP_MAPTYPE_SUBDAN:
         r26 = paneAlphaSubdanMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 14:
+    case FMAP_MAPTYPE_MOON:
         r26 = paneAlphaMoonMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 15:
+    case FMAP_MAPTYPE_YAGURA:
         r26 = paneAlphaYaguraMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 16:
+    case FMAP_MAPTYPE_TERRY:
         r26 = paneAlphaTerryMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
-    case 17:
+    case FMAP_MAPTYPE_SUBMA:
         r26 = paneAlphaSubMaMap(field_0x27ac, g_mf2HIO.field_0x40, 0, 1);
         break;
     }
@@ -1636,7 +1636,7 @@ void dMenu_Fmap2_c::changeSelCmap() {
         for (i = 0; i < 5; i++) {
             field_0x124c[field_0x2813 ^ 1][i].pane->show();
         }
-        if (r30 == 0) {
+        if (r30 == FMAP_MAPTYPE_TRI) {
             ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_t.bti", 0);
             ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_t.bti", 0);
             if (isOpenCollectMapTriforce(field_0x27a9)) {
@@ -1667,7 +1667,7 @@ void dMenu_Fmap2_c::changeSelCmap() {
         field_0xcc4[field_0x2816 ^ 1][0].pane->show();
         outFont[field_0x2816 ^ 1]->messageSet(0x319e);
         outFontS[field_0x2816 ^ 1]->messageSet(0x319e);
-        if (r30 == 0) {
+        if (r30 == FMAP_MAPTYPE_TRI) {
             ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][1].pane)->changeTexture("f_cmap_t.bti", 0);
             ((J2DPicture *)field_0x124c[field_0x2813 ^ 1][2].pane)->changeTexture("f_cmap_t.bti", 0);
         } else {
