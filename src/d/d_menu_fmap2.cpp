@@ -157,15 +157,15 @@ void dMenu_Fmap2_c::screenSet() {
     int i;
     fopMsgM_setPaneData(&mClPane, fmap2Dl.scrn->search('cl'));
     fopMsgM_setPaneData(&mKdmPane, fmap2Dl.scrn->search('Kdm'));
-    u32 r26 = 'Fc01';
-    u32 r30 = 'Fc11';
-    u32 r24 = 'cc01';
-    u32 r23 = 'cc11';
-    for (i = 0; i < 4; r26++, r30++, r24++, r23++, i++) {
-        fopMsgM_setPaneData(&mFcxxPanes[i+0], fmap2Dl.scrn->search(r26));
-        fopMsgM_setPaneData(&mFcxxPanes[i+4], fmap2Dl.scrn->search(r30));
-        fopMsgM_setPaneData(&mCcxxPanes[i+0], fmap2Dl.scrn->search(r24));
-        fopMsgM_setPaneData(&mCcxxPanes[i+4], fmap2Dl.scrn->search(r23));
+    u32 fc0Tag = 'Fc01';
+    u32 fc1Tag = 'Fc11';
+    u32 cc0Tag = 'cc01';
+    u32 cc1Tag = 'cc11';
+    for (i = 0; i < 4; fc0Tag++, fc1Tag++, cc0Tag++, cc1Tag++, i++) {
+        fopMsgM_setPaneData(&mFcxxPanes[i + 0], fmap2Dl.scrn->search(fc0Tag));
+        fopMsgM_setPaneData(&mFcxxPanes[i + 4], fmap2Dl.scrn->search(fc1Tag));
+        fopMsgM_setPaneData(&mCcxxPanes[i + 0], fmap2Dl.scrn->search(cc0Tag));
+        fopMsgM_setPaneData(&mCcxxPanes[i + 4], fmap2Dl.scrn->search(cc1Tag));
     }
     fopMsgM_setPaneData(&mNcddPane, fmap2Dl.scrn->search('ncdd'));
     fopMsgM_setPaneData(&mMkcdPane, fmap2Dl.scrn->search('mkCD'));
@@ -179,23 +179,25 @@ void dMenu_Fmap2_c::screenSet() {
     ((J2DTextBox*)field_0x43c[2].pane)->setFont(field_0x34);
     ((J2DTextBox*)field_0x43c[3].pane)->setFont(field_0x38);
     ((J2DTextBox*)field_0x43c[4].pane)->setFont(field_0x38);
-    dDlst_2DOutFont_c local_178;
-    dDlst_2DOutFont_c local_2c8;
-    local_178.setPaneEx(field_0x34, &field_0x43c[1], NULL, NULL, NULL, NULL);
-    local_2c8.setPaneEx(field_0x34, &field_0x43c[2], NULL, NULL, NULL, NULL);
-    local_178.setRuby(field_0x38, &field_0x43c[3]);
-    local_2c8.setRuby(field_0x38, &field_0x43c[4]);
-    local_178.messageSet(0x319f);
-    local_2c8.messageSet(0x319f);
-    local_178.setLeftUpPos(field_0x43c[1].mPosTopLeft.x, field_0x43c[1].mPosTopLeft.y);
-    local_2c8.setLeftUpPos(field_0x43c[2].mPosTopLeft.x, field_0x43c[2].mPosTopLeft.y);
-    local_178.move();
-    local_2c8.move();
-    char local_3c8[256];
+
+    dDlst_2DOutFont_c outFont1;
+    dDlst_2DOutFont_c outFont2;
+    outFont1.setPaneEx(field_0x34, &field_0x43c[1], NULL, NULL, NULL, NULL);
+    outFont2.setPaneEx(field_0x34, &field_0x43c[2], NULL, NULL, NULL, NULL);
+    outFont1.setRuby(field_0x38, &field_0x43c[3]);
+    outFont2.setRuby(field_0x38, &field_0x43c[4]);
+    outFont1.messageSet(0x319f);
+    outFont2.messageSet(0x319f);
+    outFont1.setLeftUpPos(field_0x43c[1].mPosTopLeft.x, field_0x43c[1].mPosTopLeft.y);
+    outFont2.setLeftUpPos(field_0x43c[2].mPosTopLeft.x, field_0x43c[2].mPosTopLeft.y);
+    outFont1.move();
+    outFont2.move();
+
+    char dummyStr[256];
     for (i = 0; i < 256; i++) {
-        local_3c8[i] = 'A';
+        dummyStr[i] = 'A';
     }
-    local_3c8[255] = 0;
+    dummyStr[255] = 0;
     static const u32 l_tagNm01[] = {
         'ck',   'ckT0', 'ckT1', 'cTR0',
         'cTR1', 'ck01', 'ck02', 'ck03',
@@ -222,10 +224,10 @@ void dMenu_Fmap2_c::screenSet() {
     ((J2DTextBox*)field_0x554[2].pane)->setFont(field_0x34);
     ((J2DTextBox*)field_0x554[3].pane)->setFont(field_0x38);
     ((J2DTextBox*)field_0x554[4].pane)->setFont(field_0x38);
-    ((J2DTextBox*)field_0x554[1].pane)->setString(local_3c8);
-    ((J2DTextBox*)field_0x554[2].pane)->setString(local_3c8);
-    ((J2DTextBox*)field_0x554[3].pane)->setString(local_3c8);
-    ((J2DTextBox*)field_0x554[4].pane)->setString(local_3c8);
+    ((J2DTextBox*)field_0x554[1].pane)->setString(dummyStr);
+    ((J2DTextBox*)field_0x554[2].pane)->setString(dummyStr);
+    ((J2DTextBox*)field_0x554[3].pane)->setString(dummyStr);
+    ((J2DTextBox*)field_0x554[4].pane)->setString(dummyStr);
     field_0x27d8 = ((J2DTextBox*)field_0x554[1].pane)->getStringPtr();
     field_0x27dc = ((J2DTextBox*)field_0x554[2].pane)->getStringPtr();
     field_0x27e8 = ((J2DTextBox*)field_0x554[3].pane)->getStringPtr();
@@ -242,10 +244,10 @@ void dMenu_Fmap2_c::screenSet() {
     ((J2DTextBox*)field_0x90c[2].pane)->setFont(field_0x34);
     ((J2DTextBox*)field_0x90c[3].pane)->setFont(field_0x38);
     ((J2DTextBox*)field_0x90c[4].pane)->setFont(field_0x38);
-    ((J2DTextBox*)field_0x90c[1].pane)->setString(local_3c8);
-    ((J2DTextBox*)field_0x90c[2].pane)->setString(local_3c8);
-    ((J2DTextBox*)field_0x90c[3].pane)->setString(local_3c8);
-    ((J2DTextBox*)field_0x90c[4].pane)->setString(local_3c8);
+    ((J2DTextBox*)field_0x90c[1].pane)->setString(dummyStr);
+    ((J2DTextBox*)field_0x90c[2].pane)->setString(dummyStr);
+    ((J2DTextBox*)field_0x90c[3].pane)->setString(dummyStr);
+    ((J2DTextBox*)field_0x90c[4].pane)->setString(dummyStr);
     field_0x27e0 = ((J2DTextBox*)field_0x90c[1].pane)->getStringPtr();
     field_0x27e4 = ((J2DTextBox*)field_0x90c[2].pane)->getStringPtr();
     field_0x27f0 = ((J2DTextBox*)field_0x90c[3].pane)->getStringPtr();
@@ -335,14 +337,14 @@ void dMenu_Fmap2_c::screenSet() {
     fopMsgM_setPaneData(&field_0x1484[5], fmap2Dl.scrn->search('cmt4'));
     fopMsgM_setPaneData(&field_0x1484[6], fmap2Dl.scrn->search('cmk1'));
     fopMsgM_setPaneData(&field_0x1484[7], fmap2Dl.scrn->search('cmk2'));
-    char local_448[128];
+    char buf[128];
     for (i = 0; i < 128; i++) {
-        local_448[i] = 'A';
+        buf[i] = 'A';
     }
-    local_448[127] = 0;
+    buf[127] = 0;
     for (i = 0; i < 4; i++) {
         ((J2DTextBox*)field_0x1484[i].pane)->setFont(field_0x34);
-        ((J2DTextBox*)field_0x1484[i].pane)->setString(local_448);
+        ((J2DTextBox*)field_0x1484[i].pane)->setString(buf);
         field_0x27c8[i] = ((J2DTextBox*)field_0x1484[i].pane)->getStringPtr();
         field_0x27c8[i][0] = 0;
     }
@@ -365,7 +367,7 @@ void dMenu_Fmap2_c::screenSet() {
     fopMsgM_setPaneData(&field_0xe1c[1], fmap2Dl.scrn->search('fts1'));
     for (i = 0; i < 2; i++) {
         ((J2DTextBox*)field_0xe1c[i].pane)->setFont(field_0x34);
-        ((J2DTextBox*)field_0xe1c[i].pane)->setString(local_448);
+        ((J2DTextBox*)field_0xe1c[i].pane)->setString(buf);
         field_0x27c0[i] = ((J2DTextBox*)field_0xe1c[i].pane)->getStringPtr();
         field_0x27c0[i][0] = 0;
     }
@@ -385,11 +387,11 @@ void dMenu_Fmap2_c::initialize() {
     field_0x27b4 = player->current.pos.z;
     field_0x27b8 = ((s16)(player->shape_angle.y + 0x8000) * 180.0f) / 32768.0f;
     if (strcmp(dComIfGp_getStartStageName(), "sea") == 0) {
-        s8 local_27;
-        s8 local_28;
-        dMap_point2Grid(field_0x27b0, field_0x27b4, &local_27, &local_28);
-        field_0x27bc = local_27;
-        field_0x27bd = local_28;
+        s8 gridX;
+        s8 gridY;
+        dMap_point2Grid(field_0x27b0, field_0x27b4, &gridX, &gridY);
+        field_0x27bc = gridX;
+        field_0x27bd = gridY;
     } else {
         field_0x2810 = 0;
         if (strcmp(dComIfGp_getStartStageName(), "Obshop") == 0 || strcmp(dComIfGp_getStartStageName(), "Abship") == 0 || strcmp(dComIfGp_getStartStageName(), "PShip") == 0) {
@@ -731,13 +733,13 @@ void dMenu_Fmap2_c::CmapProcMain() {
     if (field_0x27a8 == 0) {
         return;
     }
-    int r31 = field_0x27a9;
+    int nextCmap = field_0x27a9;
     if (CPad_CHECK_TRIG_A(0)) {
-        int r29 = getCollectMapKind(field_0x27a9);
+        int mapKind = getCollectMapKind(field_0x27a9);
 #if VERSION > VERSION_DEMO
         field_0x27ac = 0;
 #endif
-        if (isSpMap(r29)) {
+        if (isSpMap(mapKind)) {
             if (isOpenCollectMap(field_0x27a9)) {
                 field_0x2848[field_0x2816] = 0x319c;
             } else {
@@ -745,7 +747,7 @@ void dMenu_Fmap2_c::CmapProcMain() {
             }
             field_0x27fc = 1;
             mDoAud_seStart(JA_SE_CHART_OPEN_MAP);
-            field_0x280f = r29;
+            field_0x280f = mapKind;
             spMapLoadForDVD(field_0x280f);
             field_0x27a1 = 5;
         } else if (cmapOpenCheck() == true) {
@@ -762,16 +764,16 @@ void dMenu_Fmap2_c::CmapProcMain() {
         }
     } else if (stick->checkLeftTrigger()) {
         field_0x27ab = -1;
-        r31 = getNowCmapNextNum(field_0x27a9, field_0x27ab);
+        nextCmap = getNowCmapNextNum(field_0x27a9, field_0x27ab);
     } else if (stick->checkRightTrigger()) {
         field_0x27ab = 1;
-        r31 = getNowCmapNextNum(field_0x27a9, field_0x27ab);
+        nextCmap = getNowCmapNextNum(field_0x27a9, field_0x27ab);
     }
-    if (r31 != field_0x27a9) {
+    if (nextCmap != field_0x27a9) {
         mDoAud_seStart(JA_SE_CHART_SEL_MAP);
         field_0x27fc = 1;
         field_0x27aa = field_0x27a9;
-        field_0x27a9 = r31;
+        field_0x27a9 = nextCmap;
         cCursorHide();
         cSelCursorAnimeInit();
         if (field_0x280d == g_mf2HIO.field_0x75 || field_0x280e == g_mf2HIO.field_0x75) {
@@ -868,50 +870,50 @@ BOOL dMenu_Fmap2_c::cmapOpenCheck() {
 
 /* 801BEDFC-801BF2B0       .text CmapScroll__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapScroll() {
-    f32 f31, f30;
+    f32 selOffset, msgOffset;
     if (field_0x27ab < 0) {
-        f31 = field_0x2800;
-        f30 = field_0x2804;
+        selOffset = field_0x2800;
+        msgOffset = field_0x2804;
     } else {
-        f31 = -field_0x2800;
-        f30 = -field_0x2804;
+        selOffset = -field_0x2800;
+        msgOffset = -field_0x2804;
     }
     int r28, r27, r29, r30, r25, r26;
     if (isOpenCollectMap(field_0x27aa)) {
         if (isSpMap(getCollectMapKind(field_0x27aa))) {
-            r28 = paneTransSelCmapCle(field_0x27ac, field_0x280c, 1.0f, field_0x2808, 0.0f, f31, 4, field_0x2814, 1);
+            r28 = paneTransSelCmapCle(field_0x27ac, field_0x280c, 1.0f, field_0x2808, 0.0f, selOffset, 4, field_0x2814, 1);
         } else {
-            r28 = paneTransSelCmapOpn(field_0x27ac, field_0x280c, 1.0f, field_0x2808, 0.0f, f31, 4, field_0x2813, 1);
+            r28 = paneTransSelCmapOpn(field_0x27ac, field_0x280c, 1.0f, field_0x2808, 0.0f, selOffset, 4, field_0x2813, 1);
         }
     } else {
-        r28 = paneTransSelCmapCle(field_0x27ac, field_0x280c, 1.0f, field_0x2808, 0.0f, f31, 4, field_0x2814, 1);
+        r28 = paneTransSelCmapCle(field_0x27ac, field_0x280c, 1.0f, field_0x2808, 0.0f, selOffset, 4, field_0x2814, 1);
     }
     if (isOpenCollectMap(field_0x27a9)) {
         if (isSpMap(getCollectMapKind(field_0x27a9))) {
-            r27 = paneTransSelCmapCle(field_0x27ac, field_0x280c, field_0x2808, 1.0f, -f31, 0.0f, 4, field_0x2814 ^ 1, 0);
+            r27 = paneTransSelCmapCle(field_0x27ac, field_0x280c, field_0x2808, 1.0f, -selOffset, 0.0f, 4, field_0x2814 ^ 1, 0);
         } else {
-            r27 = paneTransSelCmapOpn(field_0x27ac, field_0x280c, field_0x2808, 1.0f, -f31, 0.0f, 4, field_0x2813 ^ 1, 0);
+            r27 = paneTransSelCmapOpn(field_0x27ac, field_0x280c, field_0x2808, 1.0f, -selOffset, 0.0f, 4, field_0x2813 ^ 1, 0);
         }
     } else {
-        r27 = paneTransSelCmapCle(field_0x27ac, field_0x280c, field_0x2808, 1.0f, -f31, 0.0f, 4, field_0x2814 ^ 1, 0);
+        r27 = paneTransSelCmapCle(field_0x27ac, field_0x280c, field_0x2808, 1.0f, -selOffset, 0.0f, 4, field_0x2814 ^ 1, 0);
     }
     if (field_0x1aa4[field_0x2815][0].pane->isVisible()) {
-        r29 = paneAlphaZoomCmapBase(field_0x27ac, field_0x280c, 0.0f, f30, 0, field_0x2815, 1);
+        r29 = paneAlphaZoomCmapBase(field_0x27ac, field_0x280c, 0.0f, msgOffset, 0, field_0x2815, 1);
     } else {
         r29 = 1;
     }
     if (field_0x1aa4[field_0x2815 ^ 1][0].pane->isVisible()) {
-        r30 = paneAlphaZoomCmapBase(field_0x27ac, field_0x280c, -f30, 0.0f, 0, field_0x2815 ^ 1, 0);
+        r30 = paneAlphaZoomCmapBase(field_0x27ac, field_0x280c, -msgOffset, 0.0f, 0, field_0x2815 ^ 1, 0);
     } else {
         r30 = 1;
     }
     if (field_0xcc4[field_0x2816][0].pane->isVisible()) {
-        r25 = paneTranceMessage(field_0x27ac, field_0x280c, 1.0f, 1.0f, 0.0f, f30, 0, field_0x2816, 1);
+        r25 = paneTranceMessage(field_0x27ac, field_0x280c, 1.0f, 1.0f, 0.0f, msgOffset, 0, field_0x2816, 1);
     } else {
         r25 = 1;
     }
     if (field_0xcc4[field_0x2816 ^ 1][0].pane->isVisible()) {
-        r26 = paneTranceMessage(field_0x27ac, field_0x280c, 1.0f, 1.0f, -f30, 0.0f, 0, field_0x2816 ^ 1, 0);
+        r26 = paneTranceMessage(field_0x27ac, field_0x280c, 1.0f, 1.0f, -msgOffset, 0.0f, 0, field_0x2816 ^ 1, 0);
     } else {
         r26 = 1;
     }
@@ -948,20 +950,20 @@ BOOL dMenu_Fmap2_c::isSpMap(int i_kind) {
 
 /* 801BF2E8-801BF5A0       .text CmapOpen__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::CmapOpen() {
-    int r31 = paneTranceMessage(field_0x27ac, g_mf2HIO.field_0x3f, 1.0f, g_mf2HIO.field_0x44, 0.0f, 0.0f, 0, field_0x2816, 1);
-    int r27;
+    int msgDone = paneTranceMessage(field_0x27ac, g_mf2HIO.field_0x3f, 1.0f, g_mf2HIO.field_0x44, 0.0f, 0.0f, 0, field_0x2816, 1);
+    int baseOrMsgDone;
     if (getCollectMapKind(field_0x27a9) == FMAP_MAPTYPE_TRI && !isOpenCollectMapTriforce(field_0x27a9)) {
         if (field_0x27ac == g_mf2HIO.field_0x3f) {
             field_0x2848[field_0x2816] = 0x319d;
         }
-        r27 = paneTranceMessage(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, g_mf2HIO.field_0x44, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
+        baseOrMsgDone = paneTranceMessage(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, g_mf2HIO.field_0x44, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
     } else {
-        r27 = paneAlphaZoomCmapBase(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, 0.0f, 0.0f, 0, field_0x2815, 0);
+        baseOrMsgDone = paneAlphaZoomCmapBase(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, 0.0f, 0.0f, 0, field_0x2815, 0);
     }
-    int r28 = paneTransSelCmapCle(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2814, 1);
-    int tmp = paneTransSelCmapOpn(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 0);
+    int cleDone = paneTransSelCmapCle(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2814, 1);
+    int opnDone = paneTransSelCmapOpn(field_0x27ac - g_mf2HIO.field_0x3f, g_mf2HIO.field_0x3f, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2813, 0);
     field_0x27ac++;
-    if (r31 == 1 && r27 == 1 && r28 == 1 && tmp == 1) {
+    if (msgDone == 1 && baseOrMsgDone == 1 && cleDone == 1 && opnDone == 1) {
         field_0x27ac = 0;
         field_0x2812 = 2;
         if (getCollectMapKind(field_0x27a9) != FMAP_MAPTYPE_TRI || isOpenCollectMapTriforce(field_0x27a9)) {
@@ -1089,13 +1091,13 @@ void dMenu_Fmap2_c::screenSetGs() {
     }
     color_0x2820 = (u32)((J2DPicture*)mGsTk0xPaneAlpha[0].pane)->getBlack();
     color_0x2824 = (u32)((J2DPicture*)mGsTk0xPaneAlpha[0].pane)->getWhite();
-    int r0 = dComIfGs_getEventReg(0x8803);
+    int eventReg = dComIfGs_getEventReg(0x8803);
 #if VERSION == VERSION_DEMO
     for (i = 0; i < r0; i++) {
         mGsTk0xPaneAlpha[i].pane->show();
     }
 #endif
-    if (r0 == 3) {
+    if (eventReg == 3) {
         field_0x2811 = 1;
         for (i = 0; i < 7; i++) {
             mGsTk0xPaneAlpha[i].pane->hide();
@@ -1207,13 +1209,13 @@ void dMenu_Fmap2_c::screenSetTr() {
     fopMsgM_setPaneData(&mTrGdgtPane, fmap2GsDl.scrn->search('gdgt'));
 #if VERSION > VERSION_JPN
     int i;
-    u32 r27 = 'tf1';
-    u32 r26 = 'tg1';
-    u32 r25 = 'mg1';
-    for (i = 0; i < 8; r25++, r27++, r26++, i++) {
-        fopMsgM_setPaneData(&field_0x1dc4[i], fmap2GsDl.scrn->search(r25));
-        fopMsgM_setPaneData(&field_0x1e04[i], fmap2GsDl.scrn->search(r27));
-        fopMsgM_setPaneData(&field_0x1e44[i], fmap2GsDl.scrn->search(r26));
+    u32 tfTag = 'tf1';
+    u32 tgTag = 'tg1';
+    u32 mgTag = 'mg1';
+    for (i = 0; i < 8; mgTag++, tfTag++, tgTag++, i++) {
+        fopMsgM_setPaneData(&field_0x1dc4[i], fmap2GsDl.scrn->search(mgTag));
+        fopMsgM_setPaneData(&field_0x1e04[i], fmap2GsDl.scrn->search(tfTag));
+        fopMsgM_setPaneData(&field_0x1e44[i], fmap2GsDl.scrn->search(tgTag));
     }
     for (i = 0; i < 8; i++) {
         if (isGetCollectMap(i + 1)) {
@@ -1402,10 +1404,10 @@ void dMenu_Fmap2_c::screenSetHeartM() {
     fopMsgM_setPaneData(&mHeartMLnkPane, fmap2GsDl.scrn->search('lnk'));
     fopMsgM_setPaneData(&mHeartMGdgtPane, fmap2GsDl.scrn->search('gdgt'));
 #if VERSION == VERSION_DEMO
-    u32 r27 = 'nh1';
+    u32 nhTag = 'nh1';
     for (int i = 0; i < ARRAY_SSIZE(mHeartMNhxPaneAlpha); i++) {
-        fopMsgM_setPaneData(&mHeartMNhxPaneAlpha[i], fmap2GsDl.scrn->search(r27));
-        r27++;
+        fopMsgM_setPaneData(&mHeartMNhxPaneAlpha[i], fmap2GsDl.scrn->search(nhTag));
+        nhTag++;
     }
 #else
     for (int i = 0; i < ARRAY_SSIZE(mHeartMNhxPaneAlpha); i++) {
