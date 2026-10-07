@@ -41,6 +41,15 @@ inline Attr_c const& attr() {
 }
 } // namespace
 
+enum {
+    STATE_NONE = 0,
+    STATE_SAG,
+    STATE_SAG_WIND,
+    STATE_TO_NORMAL,
+    STATE_NORMAL,
+    STATE_MAX,
+};
+
 static const dCcD_SrcCyl M_cyl_src = {
     // dCcD_SrcGObjInf
     {
@@ -140,10 +149,10 @@ static u8 joint_kind_table[14] = { 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 BOOL daObjVyasi::Act_c::SetStopJointAnimation(J3DAnmTransformKey* i_key, float i_speed, float i_morf) {
     if (i_key != NULL) {
         mpMorf->setAnm(i_key, 0, i_morf, i_speed, 0.0f, -1.0f, NULL);
-        field_0x19C4 = 1;
-        return true;
+        mAnmPlaying = 1;
+        return TRUE;
     }
-    return false;
+    return FALSE;
 }
 
 /* 0000015C-00000194       .text PlayStopJointAnimation__Q210daObjVyasi5Act_cFv */
@@ -156,9 +165,9 @@ BOOL daObjVyasi::Act_c::PlayStopJointAnimation() {
 
 /* 00000194-0000021C       .text set_first_process__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::set_first_process() {
-    process_init(is_switch() ? 4 : 1);
+    process_init(is_switch() ? STATE_NORMAL : STATE_SAG);
     mNormalCounter = 0;
-    field_0x19D4 = 1.0f;
+    mWindScale = 1.0f;
     shape_angle.y += 0x8000;
 }
 
@@ -178,18 +187,18 @@ void daObjVyasi::Act_c::set_collision() {
     }
 
     for (int i = 0; i < 5; i++) {
-        if (field_0x7E0[i].ChkTgHit()) {
-            field_0x7E0[i].GetTgHitObj();
-            daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &field_0x7E0[i], 7);
+        if (mCps[i].ChkTgHit()) {
+            mCps[i].GetTgHitObj();
+            daObj::HitSeStart(&current.pos, fopAcM_GetRoomNo(this), &mCps[i], 7);
             dKy_Sound_set(current.pos, 4, fopAcM_GetID(this), 100);
-            field_0x7E0[i].ClrTgHit();
+            mCps[i].ClrTgHit();
         } else {
             int k = i + 1;
-            field_0xDF8[i].mStart = field_0x400[i];
-            field_0xDF8[i].mEnd = field_0x400[k];
+            field_0xDF8[i].mStart = mJointPos[i];
+            field_0xDF8[i].mEnd = mJointPos[k];
             field_0xDF8[i].mRadius = 47.4f;
-            field_0x7E0[i].cM3dGCps::Set(field_0xDF8[i]);
-            dComIfG_Ccsp()->Set(&field_0x7E0[i]);
+            mCps[i].cM3dGCps::Set(field_0xDF8[i]);
+            dComIfG_Ccsp()->Set(&mCps[i]);
         }
     }
 
@@ -198,23 +207,19 @@ void daObjVyasi::Act_c::set_collision() {
         int j = idx + 1;
         int k = idx + 2;
 
-        cXyz delta(
-            (field_0x400[k].x - field_0x400[j].x) * 0.33333f,
-            (field_0x400[k].y - field_0x400[j].y) * 0.33333f,
-            (field_0x400[k].z - field_0x400[j].z) * 0.33333f
-        );
+        cXyz delta((mJointPos[k].x - mJointPos[j].x) * 0.33333f, (mJointPos[k].y - mJointPos[j].y) * 0.33333f, (mJointPos[k].z - mJointPos[j].z) * 0.33333f);
 
         cXyz pos;
-        pos.x = field_0x400[j].x + delta.x;
-        pos.y = field_0x400[j].y + delta.y;
-        pos.z = field_0x400[j].z + delta.z;
+        pos.x = mJointPos[j].x + delta.x;
+        pos.y = mJointPos[j].y + delta.y;
+        pos.z = mJointPos[j].z + delta.z;
         field_0x1064[i].SetC(pos);
         field_0x1064[i].SetR(47.4f);
         dComIfG_Ccsp()->Set(&field_0x1064[i]);
 
-        pos.x = field_0x400[j].x + delta.x * 2.0f;
-        pos.y = field_0x400[j].y + delta.y * 2.0f;
-        pos.z = field_0x400[j].z + delta.z * 2.0f;
+        pos.x = mJointPos[j].x + delta.x * 2.0f;
+        pos.y = mJointPos[j].y + delta.y * 2.0f;
+        pos.z = mJointPos[j].z + delta.z * 2.0f;
         field_0x1064[i + 1].SetC(pos);
         field_0x1064[i + 1].SetR(47.4f);
         dComIfG_Ccsp()->Set(&field_0x1064[i + 1]);
@@ -245,18 +250,18 @@ BOOL daObjVyasi::JointNodeCallBack(J3DNode* i_node, int i_calcTiming) {
         };
 
         csXyz angle = angles_table[jntNo];
-        angle += i_this->field_0x3AC[jntNo];
+        angle += i_this->mJointAngle[jntNo];
         mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
         mDoMtx_stack_c::ZXYrotM(angle);
 
         if (joint_kind_table[jntNo] == 0) {
-            mDoMtx_stack_c::scaleM(i_this->field_0x4A8, i_this->field_0x4AC, i_this->field_0x4B0);
+            mDoMtx_stack_c::scaleM(i_this->mLeafScale.x, i_this->mLeafScale.y, i_this->mLeafScale.z);
         }
 
         model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
         MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
         cXyz src(0.0f, 0.0f, 0.0f);
-        cMtx_multVec(mDoMtx_stack_c::get(), &src, &i_this->field_0x400[jntNo]);
+        cMtx_multVec(mDoMtx_stack_c::get(), &src, &i_this->mJointPos[jntNo]);
     }
     return TRUE;
 }
@@ -286,7 +291,7 @@ void daObjVyasi::Act_c::process_sag_main() {
     if (actor != NULL) {
         mEkszsPos = actor->current.pos;
         mEkszsRotY = actor->shape_angle.y;
-        process_init(2);
+        process_init(STATE_SAG_WIND);
     }
 }
 
@@ -297,18 +302,18 @@ BOOL daObjVyasi::Act_c::process_sagWind_init() {
         dist = cLib_maxLimit(dist, 2800.0f);
         dist = cLib_minLimit(dist, 1000.0f);
 
-        field_0x504 = (dist - 2800.0f) / -1800.0f;
-        f32 amp = 5000.0f + 7000.0f * field_0x504;
+        mSagRatio = (dist - 2800.0f) / -1800.0f;
+        f32 amp = 5000.0f + 7000.0f * mSagRatio;
 
         for (int i = 0; i < 14; i++) {
             if (joint_kind_table[i] == 0) {
                 if (!(i & 1)) {
-                    field_0x524[i] = amp + cM_rndF(2000.0f);
+                    mWaveSpeed[i] = amp + cM_rndF(2000.0f);
                 } else {
-                    field_0x524[i] = -(amp + cM_rndF(2000.0f));
+                    mWaveSpeed[i] = -(amp + cM_rndF(2000.0f));
                 }
             } else {
-                field_0x524[i] = 0.5f * amp;
+                mWaveSpeed[i] = 0.5f * amp;
             }
         }
         mpMorf->setPlaySpeed(0.0f);
@@ -320,7 +325,7 @@ BOOL daObjVyasi::Act_c::process_sagWind_init() {
 /* 00000CC0-00000D20       .text process_sagWind_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::process_sagWind_main() {
     if (is_switch()) {
-        process_init(3);
+        process_init(STATE_TO_NORMAL);
     }
 }
 
@@ -331,16 +336,16 @@ BOOL daObjVyasi::Act_c::process_toNormal_init() {
 
 /* 00000D54-00000E10       .text process_toNormal_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::process_toNormal_main() {
-    if (field_0x19C4 == 0) {
-        if (std::fabsf(field_0x19CC) <= 0.1f && process_init(4)) {
+    if (mAnmPlaying == 0) {
+        if (std::fabsf(field_0x19CC) <= 0.1f && process_init(STATE_NORMAL)) {
             field_0x19CC = 0.0f;
-            field_0x19D4 = 0.0f;
+            mWindScale = 0.0f;
             mNormalCounter = 2;
         }
         field_0x19CC *= 0.85f;
         field_0x19D0 += 0x3000;
     } else {
-        field_0x19CC = -1792.0f * field_0x504;
+        field_0x19CC = -1792.0f * mSagRatio;
         field_0x19D0 = 0;
     }
 }
@@ -359,7 +364,7 @@ void daObjVyasi::Act_c::process_normal_main() {
     if (mNormalCounter == 0 || mNormalCounter == 1) {
         mNormalCounter++;
     }
-    cLib_addCalc(&field_0x19D4, 1.0f, 0.01f, 1.0f, 0.007f);
+    cLib_addCalc(&mWindScale, 1.0f, 0.01f, 1.0f, 0.007f);
 }
 
 char const daObjVyasi::Act_c::M_arcname[] = "Vyasi";
@@ -372,7 +377,7 @@ BOOL daObjVyasi::Act_c::process_init(int i_idx) {
         &daObjVyasi::Act_c::process_toNormal_init, &daObjVyasi::Act_c::process_normal_init,
     };
 
-    if (i_idx >= 0 && i_idx < 5 && (this->*init_table[i_idx])()) {
+    if (i_idx >= 0 && i_idx < STATE_MAX && (this->*init_table[i_idx])()) {
         mState = i_idx;
         return TRUE;
     }
@@ -387,7 +392,7 @@ void daObjVyasi::Act_c::process_main() {
         &daObjVyasi::Act_c::process_toNormal_main, &daObjVyasi::Act_c::process_normal_main,
     };
 
-    if (mState >= 0 && mState < 5) {
+    if (mState >= 0 && mState < STATE_MAX) {
         (this->*main_table[mState])();
     }
 }
@@ -423,16 +428,16 @@ cPhs_State daObjVyasi::Act_c::_create() {
             fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
             fopAcM_setCullSizeBox(this, -2000.0f, 0.0f, -2000.0f, 2000.0f, 2000.0f, 2000.0f);
             fopAcM_setCullSizeFar(this, 2.0f);
-            field_0x548.Init(0xFF, 0xFF, this);
+            mStts.Init(0xFF, 0xFF, this);
             mCyl.Set(M_cyl_src);
-            mCyl.SetStts(&field_0x548);
+            mCyl.SetStts(&mStts);
             mCyl.SetTgVec((cXyz&)cXyz::Zero);
             mCyl.OnTgNoHitMark();
 
             for (int i = 0; i < 5; i++) {
-                field_0x6B4[i].Init(100, 0xFF, this);
-                field_0x7E0[i].Set(M_cps_src);
-                field_0x7E0[i].SetStts(&field_0x6B4[i]);
+                mCpsStts[i].Init(100, 0xFF, this);
+                mCps[i].Set(M_cps_src);
+                mCps[i].SetStts(&mCpsStts[i]);
                 field_0xDF8[i].mStart = current.pos;
                 field_0xDF8[i].mEnd = current.pos;
                 field_0xDF8[i].mRadius = 100.0f;
@@ -457,9 +462,7 @@ cPhs_State daObjVyasi::Act_c::_create() {
                 mJointQuat[i] = ZeroQuat;
             }
 
-            field_0x4A8 = 1.0f;
-            field_0x4AC = 1.0f;
-            field_0x4B0 = 1.0f;
+            mLeafScale.set(1.0f, 1.0f, 1.0f);
         } else {
             res = cPhs_ERROR_e;
         }
@@ -479,7 +482,7 @@ void daObjVyasi::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
-    MTXCopy(mDoMtx_stack_c::get(), field_0x4BC);
+    MTXCopy(mDoMtx_stack_c::get(), mMtx);
 }
 
 /* 00001E5C-000025A8       .text calc_dif_angle__Q210daObjVyasi5Act_cFv */
@@ -487,23 +490,23 @@ void daObjVyasi::Act_c::calc_dif_angle() {
     for (int i = 0; i < 14; i++) {
         csXyz target(0, 0, 0);
         s16 step = 2;
-        if (mState == 2) {
+        if (mState == STATE_SAG_WIND) {
             if (joint_kind_table[i] == 2) {
-                f32 ratio = field_0x504 * cM_ssin(field_0x508[i]);
+                f32 ratio = mSagRatio * cM_ssin(mWavePhase[i]);
                 target.set(20.0f * ratio, 40.0f * ratio, 40.0f * ratio);
             } else if (joint_kind_table[i] == 1) {
-                f32 ratio = field_0x504 * cM_ssin(field_0x508[i]);
+                f32 ratio = mSagRatio * cM_ssin(mWavePhase[i]);
                 target.set(120.0f * ratio, 180.0f * ratio, 220.0f * ratio);
 
                 if (i == 1) {
-                    target.z += (s16)(-3200.0f + 3200.0f * field_0x504);
+                    target.z += (s16)(-3200.0f + 3200.0f * mSagRatio);
                 }
             } else if (joint_kind_table[i] == 0) {
                 static csXyz sag_offset_angle[14] = {
                     csXyz(0, 0, 0), csXyz(0, 0, 0),    csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, 0),     csXyz(0, 0, 0),     csXyz(0, 0, 0),
                     csXyz(0, 0, 0), csXyz(0, 0, 5000), csXyz(0, 0, 0), csXyz(0, 0, 0), csXyz(0, 0, -5000), csXyz(0, 0, -7000), csXyz(0, 0, -2700),
                 };
-                f32 ratio = field_0x504 * cM_ssin(field_0x508[i]);
+                f32 ratio = mSagRatio * cM_ssin(mWavePhase[i]);
                 target.set(700.0f * ratio, 1700.0f * ratio, 1700.0f * ratio);
 
                 target.x += sag_offset_angle[i].x;
@@ -511,20 +514,20 @@ void daObjVyasi::Act_c::calc_dif_angle() {
                 target.z += sag_offset_angle[i].z;
                 step = 1;
             }
-        } else if (mState == 3) {
-            if (field_0x19C4 == 0 && (i == 0 || i == 1 || i == 6)) {
+        } else if (mState == STATE_TO_NORMAL) {
+            if (mAnmPlaying == 0 && (i == 0 || i == 1 || i == 6)) {
                 target.z = field_0x19CC * cM_ssin(field_0x19D0);
             }
         }
 
-        cLib_addCalcAngleS2(&field_0x3AC[i].x, target.x, step, 0x4000);
-        cLib_addCalcAngleS2(&field_0x3AC[i].y, target.y, step, 0x4000);
-        cLib_addCalcAngleS2(&field_0x3AC[i].z, target.z, step, 0x4000);
+        cLib_addCalcAngleS2(&mJointAngle[i].x, target.x, step, 0x4000);
+        cLib_addCalcAngleS2(&mJointAngle[i].y, target.y, step, 0x4000);
+        cLib_addCalcAngleS2(&mJointAngle[i].z, target.z, step, 0x4000);
 
         if (joint_kind_table[i] == 0) {
-            field_0x508[i] += (s16)(1.5f * field_0x524[i]);
+            mWavePhase[i] += (s16)(1.5f * mWaveSpeed[i]);
         } else {
-            field_0x508[i] += field_0x524[i];
+            mWavePhase[i] += mWaveSpeed[i];
         }
     }
 }
@@ -535,7 +538,7 @@ void daObjVyasi::Act_c::quaternion_main() {
         Quaternion quat;
         quat = ZeroQuat;
 
-        if (mState == 4 && joint_kind_table[i] == 0) {
+        if (mState == STATE_NORMAL && joint_kind_table[i] == 0) {
             cXyz up(0.0f, 1.0f, 0.0f);
             cMtx_YrotS(*calc_mtx, -current.angle.y);
 
@@ -544,7 +547,7 @@ void daObjVyasi::Act_c::quaternion_main() {
 
             f32 windPow = dKyw_get_wind_pow();
             cXyz dir = up.outprod(windDir);
-            s16 angle = 1400.0f * windPow * field_0x19D4;
+            s16 angle = 1400.0f * windPow * mWindScale;
             f32 sin = cM_ssin(angle);
 
             Quaternion windQuat;
@@ -553,18 +556,18 @@ void daObjVyasi::Act_c::quaternion_main() {
             windQuat.z = sin * dir.z;
             windQuat.w = cM_scos(angle);
 
-            s16 target = 360.0f * windPow * field_0x19D4;
+            s16 target = 360.0f * windPow * mWindScale;
             target = target > 0xDC ? 0xDC : target;
-            cLib_addCalcAngleS2(&field_0x2B0[i], target, 4, 0x20);
-            s32 add = (2048.0f * windPow * field_0x19D4) + cM_rndFX(256.0f);
-            field_0x294[i] += add;
-            f32 w = cM_ssin(field_0x2B0[i]);
+            cLib_addCalcAngleS2(&mAnimDir[i], target, 4, 0x20);
+            s32 add = (2048.0f * windPow * mWindScale) + cM_rndFX(256.0f);
+            mAnimWave[i] += add;
+            f32 w = cM_ssin(mAnimDir[i]);
 
             Quaternion animQuat;
-            animQuat.x = w * cM_ssin(field_0x294[i]);
+            animQuat.x = w * cM_ssin(mAnimWave[i]);
             animQuat.y = 0.0f;
-            animQuat.z = w * cM_ssin(field_0x294[i]);
-            animQuat.w = cM_scos(field_0x2B0[i]);
+            animQuat.z = w * cM_ssin(mAnimWave[i]);
+            animQuat.w = cM_scos(mAnimDir[i]);
             mDoMtx_quatMultiply(&windQuat, &animQuat, &quat);
         }
 
@@ -579,20 +582,20 @@ void daObjVyasi::Act_c::quaternion_main() {
 /* 00002880-00002938       .text leaf_scale_main__Q210daObjVyasi5Act_cFv */
 void daObjVyasi::Act_c::leaf_scale_main() {
     cXyz scale(1.0f, 1.0f, 1.0f);
-    if (mState == 2) {
-        scale.x = 0.35000002f * field_0x504 + 1.0f;
-        scale.y = -0.5f * field_0x504 + 1.0f;
+    if (mState == STATE_SAG_WIND) {
+        scale.x = 0.35000002f * mSagRatio + 1.0f;
+        scale.y = -0.5f * mSagRatio + 1.0f;
         scale.z = scale.y;
     }
-    cLib_addCalc2(&field_0x4A8, scale.x, 0.5f, 0.5f);
-    cLib_addCalc2(&field_0x4AC, scale.y, 0.5f, 0.5f);
-    cLib_addCalc2(&field_0x4B0, scale.z, 0.5f, 0.5f);
+    cLib_addCalc2(&mLeafScale.x, scale.x, 0.5f, 0.5f);
+    cLib_addCalc2(&mLeafScale.y, scale.y, 0.5f, 0.5f);
+    cLib_addCalc2(&mLeafScale.z, scale.z, 0.5f, 0.5f);
 }
 
 /* 00002938-000029BC       .text _execute__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::_execute() {
-    if (mState != 0) {
-        field_0x19C4 = PlayStopJointAnimation();
+    if (mState != STATE_NONE) {
+        mAnmPlaying = PlayStopJointAnimation();
         process_main();
         set_collision();
         quaternion_main();
@@ -606,7 +609,7 @@ bool daObjVyasi::Act_c::_execute() {
 
 /* 000029BC-00002A6C       .text _draw__Q210daObjVyasi5Act_cFv */
 bool daObjVyasi::Act_c::_draw() {
-    if (mState != 0) {
+    if (mState != STATE_NONE) {
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
         dComIfGd_setListBG();
