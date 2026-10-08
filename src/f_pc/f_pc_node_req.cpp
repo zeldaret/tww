@@ -174,8 +174,8 @@ s32 fpcNdRq_IsPossibleTarget(process_node_class* i_procNode) {
 /* 8003F728-8003F774       .text fpcNdRq_IsIng__FP18process_node_class */
 s32 fpcNdRq_IsIng(process_node_class* i_procNode) {
     request_node_class* currentNode;
-    node_create_request* currentNodeReq;
     fpc_ProcID bsPcId = i_procNode->base.mBsPcId;
+    node_create_request* currentNodeReq;
     currentNode = (request_node_class*)l_fpcNdRq_Queue.mpHead;
     while (currentNode != NULL) {
         currentNodeReq = currentNode->mNodeCrReq;
