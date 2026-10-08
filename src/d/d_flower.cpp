@@ -345,7 +345,8 @@ void dFlower_packet_c::draw() {
             if(!cLib_checkBit<u8>(pNext->field_0x00, 0x4) && !cLib_checkBit<u8>(pNext->field_0x00, 0x20)) {
                 GXLoadPosMtxImm(pNext->field_0x10, 0);
 
-                if(!cLib_checkBit<u8>(pNext->field_0x00, 0x8)) {
+                bool tmp14 = !cLib_checkBit<u8>(pNext->field_0x00, 0x8);
+                if(tmp14) {
                     GXCallDisplayList(l_OhanaDL, 0x100);
                 }
                 else {
