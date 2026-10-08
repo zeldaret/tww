@@ -60,7 +60,8 @@ int daSaku_c::saku_draw_sub(int i_sakuId) {
 
         matAlphaAnim(mModels[i_sakuId][0]->getModelData(), field_0xEDC[i_sakuId][0], flag);
         dComIfGd_setListBG();
-        mDoExt_modelUpdateDL(mModels[i_sakuId][0]);
+        J3DModel * tmp7 = mModels[i_sakuId][0];
+        mDoExt_modelUpdateDL(tmp7);
         dComIfGd_setList();
         matAlphaAnim(mModels[i_sakuId][0]->getModelData(), 0xff, true);
     }
@@ -287,9 +288,8 @@ BOOL daSaku_c::loadMoveBG(int i_index0, int i_index1, int i_sakuId) {
     field_0xE34[i_sakuId][i_index1] = new dBgW();
 
     if (field_0xE34[i_sakuId][i_index1] != NULL) {
-        cBgD_t* bgd = (cBgD_t*)dComIfG_getObjectRes(m_arcname[0], dzb_idx[i_index0]);
 
-        if (field_0xE34[i_sakuId][i_index1]->Set(bgd, dBgW::MOVE_BG_e, &mMtx[i_sakuId]) != true) {
+        if (field_0xE34[i_sakuId][i_index1]->Set(((cBgD_t*)dComIfG_getObjectRes(m_arcname[0], dzb_idx[i_index0])), dBgW::MOVE_BG_e, &mMtx[i_sakuId]) != true) {
             return TRUE;
         }
         return FALSE;
