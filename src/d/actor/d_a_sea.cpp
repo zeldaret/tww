@@ -407,7 +407,7 @@ f32 daSea_calcWave(f32 x, f32 z) {
 void daSea_GetPoly(void* pUserData, void (*callback)(void*, cXyz&, cXyz&, cXyz&), const cXyz& minPt, const cXyz& maxPt) {
     if (!daSea_ChkArea(minPt.x, minPt.z) || !daSea_ChkArea(maxPt.x, maxPt.z)) return;
 
-    f32 frac = 1.0f / GRID_SIZE;
+    const f32 frac = 1.0f / GRID_SIZE;
     int x0 = (minPt.x - l_cloth.getMinX()) * frac;
     int z0 = (minPt.z - l_cloth.getMinZ()) * frac;
     int x1 = (maxPt.x - l_cloth.getMinX()) * frac;
@@ -419,7 +419,8 @@ void daSea_GetPoly(void* pUserData, void (*callback)(void*, cXyz&, cXyz&, cXyz&)
 
     for (int z = z0; z < z1 + 1; z++) {
         for (int x = x0; x < x1 + 1; x++) {
-            f32* pY = l_cloth.mpHeightTable;
+            f32 * tmp24 = l_cloth.mpHeightTable;
+            f32* pY = tmp24;
             pY += x;
             pY += z * GRID_CELLS;
             cXyz v00, v01, v10, v11;
