@@ -1618,8 +1618,7 @@ void daDaiocta_c::createInit() {
     mAnmMtxIndices[10] = DO_MAIN1_JNT_J_DO_ME11_e;
     mAnmMtxIndices[11] = DO_MAIN1_JNT_J_DO_ME12_e;
 
-    static const int NUM_JOINT_NODES = 37;
-    for (int i = 0; i < NUM_JOINT_NODES; i++) {
+    for (int i = 0; i < DO_MAIN1_NUM_JNTS_e; i++) {
         mpMorf->getModel()
             ->getModelData()
             ->getJointNodePointer(i)

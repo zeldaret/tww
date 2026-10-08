@@ -2378,7 +2378,7 @@ inline stage_envr_info_class* dComIfGp_getStageEnvrInfo() {
     return g_dComIfG_gameInfo.play.getStage().getEnvrInfo();
 }
 
-inline stage_palet_info_class* dComIfGp_getStagePaletteInfo() {
+inline stage_palet_info_class* dComIfGp_getStagePaletInfo() {
     return g_dComIfG_gameInfo.play.getStage().getPaletInfo();
 }
 

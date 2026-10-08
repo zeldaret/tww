@@ -24,7 +24,7 @@
 
 #include "d/d_kankyo_dayproc.inc"
 
-struct dKy_setLight__Status {
+struct LightStatus {
     /* 0x00 */ Vec mPos;
     /* 0x0C */ Vec mPos2;
     /* 0x18 */ GXColor mColor;
@@ -53,7 +53,7 @@ struct dKy_setLight__Status {
     /* 0xE4 */ f32 field_0xe4;
 };
 
-dKy_setLight__Status lightStatusBase = {
+LightStatus lightStatusBase = {
     {-36384.5f, 29096.7f, 17422.2f},
     {377.0f, 5207.4f, 1220.4f},
     {255, 255, 255, 255},
@@ -339,7 +339,7 @@ void plight_set() {
 
 /* 801902F8-80190750       .text envcolor_init__Fv */
 void envcolor_init() {
-    stage_palet_info_class* palette = dComIfGp_getStagePaletteInfo();
+    stage_palet_info_class* palette = dComIfGp_getStagePaletInfo();
     stage_pselect_info_class* pselect = dComIfGp_getStagePselectInfo();
     stage_envr_info_class* envr = dComIfGp_getStageEnvrInfo();
     stage_vrbox_info_class* vrbox = dComIfGp_getStageVrboxInfo();
@@ -1587,7 +1587,7 @@ void dScnKy_env_light_c::settingTevStruct_eflightcol_plus(cXyz* i_pos, dKy_tevst
     }
 }
 
-dKy_setLight__Status lightStatusData[8];
+LightStatus lightStatusData[8];
 
 /* 80193028-80193650       .text settingTevStruct__18dScnKy_env_light_cFiP4cXyzP12dKy_tevstr_c */
 void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* i_pos, dKy_tevstr_c* i_tevstr) {
@@ -1763,25 +1763,25 @@ void dScnKy_env_light_c::settingTevStruct(int i_lightType, cXyz* i_pos, dKy_tevs
 /* 80193650-80193A30       .text setLightTevColorType_sub__FP11J3DMaterialP12dKy_tevstr_c */
 void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
     if (i_tevstr->mLightMode != 0) {
-        J3DColorChan* colorchan_p = i_material->getColorBlock()->getColorChan(0);
+        J3DColorChan* colorchan_p = i_material->getColorChan(0);
         colorchan_p->setLightMask(1);
         int var_r28;
         int prev_a = i_material->getTevColor(3)->mColor.a;
 
         var_r28 = 0xFF;
-        if (prev_a > 0 && i_material->getTevBlock()->getTevKColorSel(prev_a - 1) == 13) {
+        if (prev_a > 0 && i_material->getTevKColorSel(prev_a - 1) == 13) {
             var_r28 = prev_a - 1;
         }
 
         if (var_r28 != 0xFF) {
             if (i_tevstr->mColorK1.a != 0) {
-                i_material->getTevBlock()->setTevStageNum(var_r28 + 1);
+                i_material->setTevStageNum(var_r28 + 1);
                 if (i_material->getTevKColor(1) != NULL) {
                     i_material->setTevKColor(1, (J3DGXColor*)&i_tevstr->mColorK1);
                     colorchan_p->setLightMask(3);
                 }
             } else {
-                i_material->getTevBlock()->setTevStageNum(var_r28);
+                i_material->setTevStageNum(var_r28);
             }
         }
     }
@@ -1792,7 +1792,7 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
         i_tevstr->mLightObj.getLightInfo().mLightPosition = sp14;
     }
 
-    i_material->getColorBlock()->setLight(0, &i_tevstr->mLightObj);
+    i_material->setLight(0, &i_tevstr->mLightObj);
 
     if (toon_proc_check() && i_tevstr->mLightMode != 0) {
         GXColor* kcol_p = &i_material->getTevKColor(0)->mColor;
@@ -2132,7 +2132,7 @@ void dice_rain_minus() {
 }
 
 u16 lightMask = 1;
-dKy_setLight__Status* lightStatusPt = lightStatusData;
+LightStatus* lightStatusPt = lightStatusData;
 
 /* 801941D4-801942E0       .text phantomship_wether__Fv */
 BOOL phantomship_wether() {
@@ -2478,7 +2478,7 @@ void dKy_setLight() {
 
     // light
     {
-        dKy_setLight__Status& stts = lightStatusPt[0];
+        LightStatus& stts = lightStatusPt[0];
         stts.mPos2 = pCamera->view.mLookat.mEye;
         if (pPlayer != NULL) {
             dKy_light_influence_id(pPlayer->current.pos, 0);
@@ -2565,7 +2565,7 @@ void dKy_setLight() {
 
     for (s32 i = 0; i < 8; i++) {
         if (lightMask & lightMaskData[i]) {
-            dKy_setLight__Status *pStts = &lightStatusData[i];
+            LightStatus *pStts = &lightStatusData[i];
             GXLightObj lightObj;
             cXyz tmp;
 
@@ -2604,7 +2604,7 @@ void dKy_setLight_again() {
     MtxP viewMtx; // fakematch
     mDoMtx_inverseTranspose(viewMtx = j3dSys.getViewMtx(), invView);
 
-    dKy_setLight__Status *pStts = &lightStatusData[0];
+    LightStatus *pStts = &lightStatusData[0];
     mDoMtx_multVec(viewMtx, &pStts->mPos, &tmp);
     GXInitLightPos(&lightObj, tmp.x, tmp.y, tmp.z);
 

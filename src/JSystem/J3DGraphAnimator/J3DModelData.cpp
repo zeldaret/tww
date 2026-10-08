@@ -6,9 +6,17 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
 #include "JSystem/JUtility/JUTNameTab.h"
 #include "dolphin/types.h"
+
+enum {
+    kTypeEnd        = 0x00,
+    kTypeBeginChild = 0x01,
+    kTypeEndChild   = 0x02,
+    kTypeJoint      = 0x10,
+    kTypeMaterial   = 0x11,
+    kTypeShape      = 0x12,
+};
 
 /* 802ECF30-802ECF70       .text clear__12J3DJointTreeFv */
 void J3DJointTree::clear() {
@@ -29,66 +37,48 @@ void J3DJointTree::clear() {
 }
 
 /* 802ECF70-802ED108       .text makeHierarchy__12J3DJointTreeFP7J3DNodePPC17J3DModelHierarchyP16J3DMaterialTablePP8J3DShape */
-void J3DJointTree::makeHierarchy(J3DNode* pRootNode, const J3DModelHierarchy** pHierarchy, J3DMaterialTable* pMaterialTable, J3DShape** pShapeTable) {
-    enum {
-        kTypeEnd        = 0x00,
-        kTypeBeginChild = 0x01,
-        kTypeEndChild   = 0x02,
-        kTypeJoint      = 0x10,
-        kTypeMaterial   = 0x11,
-        kTypeShape      = 0x12,
-    };
-
-    J3DNode * pCurNode = pRootNode;
+void J3DJointTree::makeHierarchy(J3DNode* pJoint, const J3DModelHierarchy** pHierarchy, J3DMaterialTable* pMaterialTable, J3DShape** pShapeTable) {
+    J3DNode* curJoint = pJoint;
 
     while (true) {
-        J3DNode * pNewNode = NULL;
-        J3DMaterial * pNewMaterial = NULL;
-        J3DShape * pNewShape = NULL;
-        const J3DModelHierarchy * inf = *pHierarchy;
+        J3DJoint* newJoint = NULL;
+        J3DMaterial* newMaterial = NULL;
+        J3DShape* newShape = NULL;
 
-        switch (inf->mType) {
+        switch ((*pHierarchy)->mType) {
         case kTypeBeginChild:
-            *pHierarchy = inf + 1;
-            makeHierarchy(pCurNode, pHierarchy, pMaterialTable, pShapeTable);
+            (*pHierarchy)++;
+            makeHierarchy(curJoint, pHierarchy, pMaterialTable, pShapeTable);
             break;
         case kTypeEndChild:
-            *pHierarchy = inf + 1; 
+            (*pHierarchy)++;
             return;
         case kTypeEnd:
             return;
         case kTypeJoint:
-            {
-                J3DJoint ** pJoints = mJointNodePointer;
-                *pHierarchy = inf + 1;
-                pNewNode = pJoints[inf->mValue];
-            }
+            newJoint = mJointNodePointer[((*pHierarchy)++)->mValue];
             break;
         case kTypeMaterial:
-            {
-                *pHierarchy = inf + 1;
-                pNewMaterial = pMaterialTable->getMaterialNodePointer(inf->getValue());
-            }
+            newMaterial = pMaterialTable->getMaterialNodePointer(((*pHierarchy)++)->mValue);
             break;
         case kTypeShape:
-            *pHierarchy = inf + 1;
-            pNewShape = pShapeTable[inf->mValue];
+            newShape = pShapeTable[((*pHierarchy)++)->mValue];
             break;
         }
 
-        if (pNewNode != NULL) {
-            pCurNode = pNewNode;
-            if (pRootNode == NULL)
-                mRootNode = (J3DJoint*)pNewNode;
+        if (newJoint != NULL) {
+            curJoint = newJoint;
+            if (pJoint == NULL)
+                mRootNode = newJoint;
             else
-                pRootNode->appendChild(pNewNode);
-        } else if (pNewMaterial != NULL && pRootNode->getType() == 'NJNT') {
-            ((J3DJoint*)pRootNode)->addMesh(pNewMaterial);
-            pNewMaterial->mJoint = ((J3DJoint*)pRootNode);
-        } else if (pNewShape != NULL && pRootNode->getType() == 'NJNT') {
-            pNewMaterial = ((J3DJoint*)pRootNode)->getMesh();
-            pNewMaterial->mShape = pNewShape;
-            pNewShape->mMaterial = pNewMaterial;
+                pJoint->appendChild(newJoint);
+        } else if (newMaterial != NULL && pJoint->getType() == 'NJNT') {
+            ((J3DJoint*)pJoint)->addMesh(newMaterial);
+            newMaterial->setJoint((J3DJoint*)pJoint);
+        } else if (newShape != NULL && pJoint->getType() == 'NJNT') {
+            J3DMaterial* newMaterial = ((J3DJoint*)pJoint)->getMesh();
+            newMaterial->addShape(newShape);
+            newShape->setMaterial(newMaterial);
         }
     }
 }
@@ -99,9 +89,10 @@ void J3DModelData::clear() {
     mFlags = 0;
     mbHasBumpArray = 0;
     mbHasBillboard = 0;
-    mShapeTable.clear();
+    mShapeNum = 0;
+    mShapeNodePointer = NULL;
     mName = NULL;
-    mVertexData.clear();
+    mVertexData.mPacketNum = 0;
 }
 
 /* 802ED130-802ED1A8       .text __ct__12J3DModelDataFv */

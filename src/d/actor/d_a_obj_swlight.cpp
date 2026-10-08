@@ -427,8 +427,8 @@ void setMaterial_Before_mirror(J3DMaterial* material, u8 arg2) {
         } else {
             material->getShape()->show();
             material->setMaterialMode(4);
-            material->mPEBlock->getZMode()->setUpdateEnable(0);
-            material->mPEBlock->getBlend()->setType(GX_BM_BLEND);
+            material->getZMode()->setUpdateEnable(0);
+            material->getBlend()->setType(GX_BM_BLEND);
             material->getTevKColor(3)->mColor.a = arg2;
         }
 

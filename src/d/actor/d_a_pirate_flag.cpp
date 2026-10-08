@@ -242,8 +242,8 @@ void daPirate_Flag_packet_c::draw() {
     GXSetTevColor(GX_TEVREG2, mTevStr->mColorK1);
     GXCallDisplayList(l_pirate_flag_matDL, sizeof(l_pirate_flag_matDL) - 0x14);
 
-    GXLoadPosMtxImm(getMtx(), GX_PNMTX0);
-    GXLoadNrmMtxImm(getMtx(), GX_PNMTX0);
+    GXLoadPosMtxImm(mMtx, GX_PNMTX0);
+    GXLoadNrmMtxImm(mMtx, GX_PNMTX0);
     GXSetCullMode(GX_CULL_BACK);
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
