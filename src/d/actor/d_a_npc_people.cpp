@@ -4655,7 +4655,9 @@ bool daNpcPeople_c::_draw() {
     J3DModelData* headModelData = headModel->getModelData();
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-    g_env_light.setLightTevColorType(mpMorf->getModel(), &tevStr);
+    mDoExt_McaMorf * tmp11 = mpMorf;
+    mDoExt_McaMorf * tmp12 = tmp11;
+    g_env_light.setLightTevColorType(tmp12->getModel(), &tevStr);
     g_env_light.setLightTevColorType(headModel, &tevStr);
 
     if(l_btp_ix_tbl[mNpcNo] >= 0) {
