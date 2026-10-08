@@ -1219,8 +1219,7 @@ void dKyw_pntwind_get_info(cXyz* param_0, cXyz* i_dir, f32* i_power) {
     *i_power = 0.0f;
 
     WIND_INFLUENCE* influence;
-    s32 influence_count = ARRAY_SIZE(g_env_light.mpWindInfluence);
-    for (int i = 0; i < influence_count; i++) {
+    for (int i = 0; i < ARRAY_SSIZE(g_env_light.mpWindInfluence); i++) {
         influence = g_env_light.mpWindInfluence[i];
         if (influence != NULL) {
             f32 dist = param_0->abs(influence->mPos);

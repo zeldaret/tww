@@ -766,9 +766,8 @@ void dWood::Packet_c::delete_room(int room_no) {
 s32 dWood::Packet_c::put_unit(const cXyz &pos, int room_no) {
     JUT_ASSERT(1760, (room_no >= 0) && (room_no < L_Room_Max));
 
-    const s32 unitCount = ARRAY_SIZE(mUnit);
     s32 unitIdx = search_empty_UnitID();
-    if (unitIdx != unitCount) {
+    if (unitIdx != ARRAY_SSIZE(mUnit)) {
         Unit_c *unit = &mUnit[unitIdx];
         cLib_setBit(unit->mFlags, Unit_c::STATE_ACTIVE);
         unit->mPos.x = pos.x;
