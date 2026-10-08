@@ -947,7 +947,6 @@ void dDlst_2DMSG2_c::draw() {
 }
 
 /* 801E9CDC-801E9FC4       .text outFontDraw__14dDlst_2DMSG2_cFv */
-// NONMATCHING - regswap
 void dDlst_2DMSG2_c::outFontDraw() {
     J2DPane* ppane = ((sub_msg2_class*)actorP)->field_0xd00[0].pane;
     f32 var_f31 = ppane->getGlbBounds().i.y;
@@ -962,21 +961,20 @@ void dDlst_2DMSG2_c::outFontDraw() {
 
             if (iconNum != fopMsgM_Icon_NONE_e) {
                 u8 r14;
-                J2DTextBox* scrn = (J2DTextBox*)actorP->text_pane[i].pane;
-                int r18 = (f32)posX + scrn->getGlbBounds().i.x;
+                int r18 = (f32)posX + ((J2DTextBox*)actorP->text_pane[i].pane)->getGlbBounds().i.x;
 
                 int r17;
                 if (scale > actorP->field_0xeb4) {
                     if (actorP->field_0xecc[i] > 1) {
                         f32 temp = (actorP->field_0xeb0 * (DEMO_SELECT(2, 3) - posY));
-                        r17 = temp + scrn->getGlbBounds().i.y - (f32)(int)(scale / 2);
+                        r17 = temp + ((J2DTextBox*)actorP->text_pane[i].pane)->getGlbBounds().i.y - (f32)(int)(scale / 2);
                     } else {
                         f32 temp = actorP->field_0xeb0 * DEMO_SELECT(3, 4);
-                        r17 = (temp + scrn->getGlbBounds().i.y - (f32)(int)(scale / 2));
+                        r17 = (temp + ((J2DTextBox*)actorP->text_pane[i].pane)->getGlbBounds().i.y - (f32)(int)(scale / 2));
                     }
                 } else {
                     f32 temp = (actorP->field_0xeb0 * (DEMO_SELECT(2, 3) - actorP->field_0xecc[i] + (posY * 2)));
-                    r17 = (temp + scrn->getGlbBounds().i.y);
+                    r17 = (temp + ((J2DTextBox*)actorP->text_pane[i].pane)->getGlbBounds().i.y);
                 }
 
                 r14 = actorP->field_0xeac;
