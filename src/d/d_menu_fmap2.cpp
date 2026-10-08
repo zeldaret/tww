@@ -1967,7 +1967,38 @@ void dMenu_Fmap2_c::fCursorInit() {
 
 /* 801C39EC-801C3CCC       .text fCursorMove__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::fCursorMove() {
-    /* Nonmatching */
+    f32 x = getCtCurHX() * 16.0f;
+    f32 y = getCtCurHY() * 16.0f;
+    for (int i = 0; i < 8; i++) {
+        fopMsgM_paneTrans(&mFcxxPanes[i], x, y);
+    }
+
+    int gridNo = getCtCurHX() + (getCtCurHY() + 3) * 7 + 3;
+    if (dComIfGs_isSaveArriveGrid(gridNo)) {
+        changeIslandName();
+        mClgPane.pane->show();
+        mFmk1Pane.pane->hide();
+        mRkjnPane.pane->hide();
+        mClg2Pane.pane->hide();
+        changeFmapTexture();
+        mR01gPane.mInitAlpha = 0xFF;
+        mR01gPane.mNowAlpha = 0xFF;
+        fopMsgM_setNowAlpha(&mR01gPane, 1.0f);
+        fopMsgM_setAlpha(&mR01gPane);
+        fmapPlayerPosDisp();
+    } else {
+        field_0x27C0[0][0] = 0;
+        field_0x27C0[1][0] = 0;
+        mClgPane.pane->hide();
+        mFmk1Pane.pane->show();
+        mRkjnPane.pane->show();
+        mClg2Pane.pane->show();
+        mLnk3Pane.pane->hide();
+    }
+
+    if (!field_0x2810) {
+        mLnk3Pane.pane->hide();
+    }
 }
 
 /* 801C3CCC-801C3D5C       .text fCursorAnime__13dMenu_Fmap2_cFv */
