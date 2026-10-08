@@ -139,8 +139,7 @@ cPhs_State dWpillar_c::create() {
             JUT_ASSERT(293, modelData != NULL);
             mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000202);
 
-            J3DAnmTransform* bck = (J3DAnmTransform*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BCK_W_PILLAR_A_e);
-            is_anm_init = mBck.init(modelData, bck, TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
+            is_anm_init = mBck.init(modelData, ((J3DAnmTransform*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BCK_W_PILLAR_A_e)), TRUE, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false);
 
             J3DAnmTextureSRTKey* btk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes("Always", dRes_INDEX_ALWAYS_BTK_W_PILLAR_A_e);
             is_anm_init &= mBtk.init(modelData, btk, FALSE, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1);
