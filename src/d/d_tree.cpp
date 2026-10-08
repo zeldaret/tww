@@ -508,7 +508,7 @@ f32 checkGroundY(dTree_data_c* i_data, cXyz& i_pos) {
         y = i_pos.y;
         norm.set(0.0f, 1.0f, 0.0f);
     } else {
-        norm = *dComIfG_Bgsp()->GetTriPla(chk)->GetNP();
+        norm = dComIfG_Bgsp()->GetTriPla(chk)->mNormal;
     }
 
     f32 var_f4 = std::sqrtf(1.0f - (norm.x * norm.x));
