@@ -388,7 +388,7 @@ bool daGhostship_c::_execute() {
 #endif
         ) {
             mDoAud_seStart(JA_SE_LK_WARP_TO_G_SHIP);
-            stage_scls_info_class* scls_data = dComIfGd_getMeshSceneList(current.pos);
+            const stage_scls_info_class* scls_data = dComIfGd_getMeshSceneList(current.pos);
             JUT_ASSERT(DEMO_SELECT(457, 463), scls_data != NULL)
 
             u8 startCode = scls_data->mStart;
