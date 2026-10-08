@@ -623,7 +623,8 @@ static BOOL daBmdfoot_Execute(bmdfoot_class* i_this) {
     i_this->mpBodyVineMorf->calc();
     if (i_this->mBD0 != 0) {
         if (i_this->mBD0 == 0x1e) {
-            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_MOVE_2, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            int tmp13 = fopAcM_GetRoomNo(actor);
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_MOVE_2, &i_this->mAE8, 0, dComIfGp_getReverb(tmp13));
         }
         i_this->mBD0 = i_this->mBD0 + -1;
     }
