@@ -1846,7 +1846,62 @@ void dMenu_Fmap2_c::changeZoomCmap() {
 
 /* 801C33B0-801C36C8       .text ChangeProcMode__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::ChangeProcMode() {
-    /* Nonmatching */
+    BOOL fmapBase, cmapBase, msg2, msg;
+    switch (getCtActive()) {
+        case 0:
+            fmapBase = paneAlphaFmapBase(field_0x27AC, g_mf2HIO.field_0x3E, 0, 1);
+            cmapBase = paneAlphaCmapBase(field_0x27AC, g_mf2HIO.field_0x3E, 0, 0);
+            if (!field_0x43C[0].pane->isVisible()) {
+                msg2 = 1;
+            } else {
+                msg2 = paneAlphaMessage2(field_0x27AC, g_mf2HIO.field_0x3E, 0, 1);
+            }
+
+            if (field_0xCC4[field_0x2816]->pane->isVisible()) {
+                msg = paneTranceMessage(field_0x27AC, g_mf2HIO.field_0x3E, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 1);
+            } else {
+                msg = 1;
+            }
+            break;
+        case 1:
+            fmapBase = paneAlphaFmapBase(field_0x27AC, g_mf2HIO.field_0x3E, 0, 0);
+            cmapBase = paneAlphaCmapBase(field_0x27AC, g_mf2HIO.field_0x3E, 0, 1);
+
+            if (!field_0x43C[0].pane->isVisible()) {
+                msg2 = 1;
+            } else {
+                msg2 = paneAlphaMessage2(field_0x27AC, g_mf2HIO.field_0x3E, 0, 0);
+            }
+
+            if (field_0xCC4[field_0x2816]->pane->isVisible()) {
+                msg = paneTranceMessage(field_0x27AC, g_mf2HIO.field_0x3E, 1.0f, 1.0f, 0.0f, 0.0f, 0, field_0x2816, 0);
+            } else {
+                msg = 1;
+            }
+            break;
+    }
+
+    field_0x27AC++;
+    if (fmapBase == TRUE && cmapBase == TRUE && msg2 == TRUE && msg == TRUE) {
+        field_0x27AC = 0;
+        switch (getCtActive()) {
+            case 0:
+                fCursorInit();
+                mMkfdPane.pane->hide();
+                field_0x27A1 = 0;
+                break;
+            case 1:
+                if (field_0x27A8 > 1) {
+                    cCursorAnimeInit();
+                    cSelCursorInit();
+                } else {
+                    cSelCursorHide();
+                }
+                mMkcdPane.pane->hide();
+                field_0x27A1 = 2;
+                break;
+        }
+    }
 }
 
 /* 801C36C8-801C376C       .text _open__13dMenu_Fmap2_cFv */
