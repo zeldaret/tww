@@ -1792,7 +1792,28 @@ void dMenu_Fmap2_c::changeSelCmap() {
 
 /* 801C3070-801C3210       .text changeSelCmap2__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeSelCmap2() {
-    /* Nonmatching */
+    field_0x2812 = 3;
+    int mapKind = getCollectMapKind(field_0x27A9);
+    field_0x1AA4[field_0x2815 ^ 1][0].pane->hide();
+
+    int i;
+    for (i = 0; i < 2; i++) {
+        field_0x1244[field_0x2814 ^ 1][i].pane->show();
+        ((J2DPicture*)field_0x1244[field_0x2814 ^ 1][i].pane)->changeTexture(rollmapTex[mapKind], 0);
+    }
+
+    field_0xCC4[field_0x2816 ^ 1][0].pane->show();
+    if (isOpenCollectMap(field_0x27A9)) {
+        outFont[field_0x2816 ^ 1]->messageSet(0x319C);
+        outFontS[field_0x2816 ^ 1]->messageSet(0x319C);
+    } else {
+        outFont[field_0x2816 ^ 1]->messageSet(0x319E);
+        outFontS[field_0x2816 ^ 1]->messageSet(0x319E);
+    }
+
+    for (i = 0; i < 5; i++) {
+        field_0x124C[field_0x2813 ^ 1][i].pane->hide();
+    }
 }
 
 /* 801C3210-801C3354       .text cmapAlphaSet__13dMenu_Fmap2_cFv */
