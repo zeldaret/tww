@@ -734,7 +734,7 @@ bool dBgW::RwgWallCrrPos(u16 i_poly_index, dBgS_CrrPos* crr) {
             );
             
             f32 dist = tri.getSignedLenPos(&wall_top_pos);
-            if (std::fabsf(dist) > crr->GetWallR()) {
+            if (std::fabsf(dist) > crr->mWallRadius) {
                 if (rwg_elm->next == 0xFFFF) {
                     break;
                 }
@@ -819,7 +819,7 @@ bool dBgW::RwgWallCrrPos(u16 i_poly_index, dBgS_CrrPos* crr) {
             );
             
             f32 dist = tri.getSignedLenPos(&wall_top_pos);
-            if (std::fabsf(dist) > crr->GetWallR()) {
+            if (std::fabsf(dist) > crr->mWallRadius) {
                 if (rwg_elm->next == 0xFFFF) {
                     break;
                 }
