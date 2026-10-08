@@ -506,8 +506,7 @@ void daObjIce_c::setEffectMtx() {
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         J3DMaterial* material = modelData->getMaterialNodePointer(i);
         for (u32 j = 0; j < 8; j++) {
-            J3DTexGenBlock* genBlock = material->getTexGenBlock();
-            J3DTexMtx* mtx = genBlock->getTexMtx(j);
+            J3DTexMtx* mtx = material->getTexMtx(j);
             if (mtx != NULL) {
                 J3DTexMtxInfo& mtxInfo = mtx->getTexMtxInfo();
                 switch (mtxInfo.mInfo) {

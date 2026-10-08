@@ -43,14 +43,14 @@ void J3DShape::initialize() {
 /* 802DD1FC-802DD27C       .text calcNBTScale__8J3DShapeFRC3VecPA3_A3_fPA3_A3_f */
 void J3DShape::calcNBTScale(Vec const& scale, Mtx33* pSrc, Mtx33* pDst) {
     for (u16 i = 0; i < getMtxGroupNum(); i++)
-        getShapeMtx(i)->calcNBTScale(scale, pSrc, pDst);
+        mShapeMtx[i]->calcNBTScale(scale, pSrc, pDst);
 }
 
 /* 802DD27C-802DD2F0       .text countBumpMtxNum__8J3DShapeCFv */
 u32 J3DShape::countBumpMtxNum() const {
     u32 num = 0;
     for (u16 i = 0; i < getMtxGroupNum(); i++)
-        num += getShapeMtx(i)->getUseMtxNum();
+        num += mShapeMtx[i]->getUseMtxNum();
     return num;
 }
 
@@ -78,7 +78,7 @@ void J3DShape::loadVtxArray() const {
 
 /* 802DD3B4-802DD3F0       .text isSameVcdVatCmd__8J3DShapeFP8J3DShape */
 bool J3DShape::isSameVcdVatCmd(J3DShape* other) {
-    u8* a = other->mVcdVatCmd;
+    u8* a = (u8*)other->getVcdVatCmd();
     u8* b = mVcdVatCmd;
     for (u32 i = 0; i < kVcdVatDLSize; i++)
         if (a[i] != b[i])
@@ -193,7 +193,7 @@ u8 J3DShape::sEnvelopeFlag;
 
 /* 802DD7CC-802DD874       .text setArrayAndBindPipeline__8J3DShapeCFv */
 void J3DShape::setArrayAndBindPipeline() const {
-    J3DShapeMtx::setCurrentPipeline(getPipeline());
+    J3DShapeMtx::setCurrentPipeline((mFlags >> 2) & 0x07);
     loadVtxArray();
     j3dSys.setModelDrawMtx(mDrawMtx[*mCurrentViewNo]);
     j3dSys.setModelNrmMtx(mNrmMtx[*mCurrentViewNo]);
@@ -215,17 +215,17 @@ void J3DShape::drawFast() const {
     setArrayAndBindPipeline();
     if (!checkFlag(J3DShpFlag_NoMtx)) {
         for (u16 i = 0; i < getMtxGroupNum(); i++) {
-            if (getShapeMtx(i) != NULL)
-                getShapeMtx(i)->load();
-            if (getShapeDraw(i) != NULL)
-                getShapeDraw(i)->draw();
+            if (mShapeMtx[i] != NULL)
+                mShapeMtx[i]->load();
+            if (mShapeDraw[i] != NULL)
+                mShapeDraw[i]->draw();
         }
     } else {
         J3DFifoLoadPosMtxImm(*j3dSys.getShapePacket()->getBaseMtxPtr(), GX_PNMTX0);
         J3DFifoLoadNrmMtxImm(*j3dSys.getShapePacket()->getBaseMtxPtr(), GX_PNMTX0);
         for (u16 i = 0; i < getMtxGroupNum(); i++)
-            if (getShapeDraw(i) != NULL)
-                getShapeDraw(i)->draw();
+            if (mShapeDraw[i] != NULL)
+                mShapeDraw[i]->draw();
     }
 }
 
@@ -240,11 +240,11 @@ void J3DShape::draw() const {
 void J3DShape::simpleDraw() const {
     resetVcdVatCache();
     loadPreDrawSetting();
-    J3DShapeMtx::setCurrentPipeline(getPipeline());
+    J3DShapeMtx::setCurrentPipeline((mFlags >> 2) & 0x07);
     loadVtxArray();
     for (u16 i = 0; i < getMtxGroupNum(); i++) {
-        if (getShapeDraw(i) != NULL) {
-            getShapeDraw(i)->draw();
+        if (mShapeDraw[i] != NULL) {
+            mShapeDraw[i]->draw();
         }
     }
 }
@@ -261,6 +261,6 @@ void J3DShape::simpleDrawCache() const {
 
     loadVtxArray();
     for (u16 i = 0; i < getMtxGroupNum(); i++)
-        if (getShapeDraw(i) != NULL)
-            getShapeDraw(i)->draw();
+        if (mShapeDraw[i] != NULL)
+            mShapeDraw[i]->draw();
 }
