@@ -1917,7 +1917,16 @@ void dMenu_Fmap2_c::fCursorMove() {
 
 /* 801C3CCC-801C3D5C       .text fCursorAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::fCursorAnime() {
-    /* Nonmatching */
+    if (mFcxxPanes[0].mUserArea == 0) {
+        for (int i = 0; i < 4; i++) {
+            mFcxxPanes[i + (field_0x27A5 ^ 1) * 4].pane->show();
+            mFcxxPanes[i + field_0x27A5 * 4].pane->hide();
+        }
+        field_0x27A5 ^= 1;
+        mFcxxPanes[0].mUserArea = g_mf2HIO.field_0x48;
+    } else {
+        mFcxxPanes[0].mUserArea--;
+    }
 }
 
 /* 801C3D5C-801C3D9C       .text cCursorAnimeInit__13dMenu_Fmap2_cFv */
@@ -1969,7 +1978,8 @@ void dMenu_Fmap2_c::cSelCursorAnime() {
 
 /* 801C3F90-801C3FA8       .text cSelCursorHide__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cSelCursorHide() {
-    /* Nonmatching */
+    mCmyuPane.pane->hide();
+    mCmydPane.pane->hide();
 }
 
 /* 801C3FA8-801C3FC4       .text playerPointGridAnimeInit__13dMenu_Fmap2_cFv */
