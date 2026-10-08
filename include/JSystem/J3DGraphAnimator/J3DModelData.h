@@ -3,7 +3,6 @@
 
 #include "JSystem/J3DGraphAnimator/J3DJointTree.h"
 #include "JSystem/J3DGraphAnimator/J3DMaterialAttach.h"
-#include "JSystem/J3DGraphAnimator/J3DShapeTable.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "JSystem/J3DGraphBase/J3DMaterial.h"
@@ -40,7 +39,7 @@ public:
     JUTNameTab* getMaterialName() const { return mMaterialTable.getMaterialName(); }
     J3DVertexData& getVertexData() { return mVertexData; }
     GXVtxAttrFmtList* getVtxAttrFmtList() const { return ((J3DVertexData*)&mVertexData)->getVtxAttrFmtList(); }
-    u16 getShapeNum() const { return mShapeTable.getShapeNum(); }
+    u16 getShapeNum() const { return mShapeNum; }
     u16 getMaterialNum() const { return mMaterialTable.getMaterialNum(); }
     u16 getJointNum() const { return mJointTree.getJointNum(); }
     u16 getDrawMtxNum() const { return mJointTree.getDrawMtxNum(); }
@@ -52,7 +51,7 @@ public:
     J3DDrawMtxData * getDrawMtxData() { return mJointTree.getDrawMtxData(); }
     u8 getDrawMtxFlag(u16 idx) const { return mJointTree.getDrawMtxFlag(idx); }
     u16 getDrawMtxIndex(u16 idx) const { return mJointTree.getDrawMtxIndex(idx); }
-    J3DShape* getShapeNodePointer(u16 idx) const { return mShapeTable.getShapeNodePointer(idx); }
+    J3DShape* getShapeNodePointer(u16 idx) const { return mShapeNodePointer[idx]; }
     J3DJoint* getJointNodePointer(u16 idx) const { return mJointTree.getJointNodePointer(idx); }
     J3DJointTree& getJointTree() { return mJointTree; }
     JUTNameTab* getJointName() const { return mJointTree.getJointName(); }
@@ -74,7 +73,6 @@ public:
     void setBasicMtxCalc(J3DMtxCalc* calc) { mJointTree.setBasicMtxCalc(calc); }
     void setModelDataType(u32 type) { mJointTree.setModelDataType(type); }
     J3DJoint* getRootNode() { return mJointTree.getRootNode(); }
-    GXColor* getVtxColorArray(u8 idx) const { return mVertexData.getVtxColorArray(idx); }
     bool checkFlag(u32 flag) const { return (mFlags & flag) ? true : false; }
     u32 getFlag() const { return mFlags; }
     u16 checkBumpFlag() const { return mbHasBumpArray; }
@@ -105,7 +103,7 @@ public:
         return mMaterialTable.removeMatColorAnimator(anm);
     }
     void makeHierarchy(J3DNode* joint, const J3DModelHierarchy** hierarchy) {
-        mJointTree.makeHierarchy(joint, hierarchy, &mMaterialTable, mShapeTable.mShapeNodePointer);
+        mJointTree.makeHierarchy(joint, hierarchy, &mMaterialTable, mShapeNodePointer);
         initShapeNodes();
     }
     const void* getBinary() { return mBinary; }
@@ -119,7 +117,8 @@ private:
     /* 0x0E */ u16 mbHasBillboard;
     /* 0x10 */ J3DJointTree mJointTree;
     /* 0x58 */ J3DMaterialTable mMaterialTable;
-    /* 0x7C */ J3DShapeTable mShapeTable;
+    /* 0x7C */ u16 mShapeNum;
+    /* 0x80 */ J3DShape** mShapeNodePointer;
     /* 0x84 */ J3DVertexData mVertexData;
     /* 0xE0 */ JUTNameTab * mName;
 };  // Size: 0xE4

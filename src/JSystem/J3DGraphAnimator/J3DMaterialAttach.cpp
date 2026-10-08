@@ -74,9 +74,9 @@ s32 J3DMaterialTable::entryTexMtxAnimator(J3DAnmTextureSRTKey* btk) {
             }
 
             if (texMtxID != 0xFF) {
-                if (pMaterial->getTexGenBlock()->getTexMtx(texMtxID) == NULL) {
+                if (pMaterial->getTexMtx(texMtxID) == NULL) {
                     J3DTexMtx* pMtx = new J3DTexMtx;
-                    pMaterial->getTexGenBlock()->setTexMtx(texMtxID, pMtx);
+                    pMaterial->setTexMtx(texMtxID, pMtx);
                 }
 
                 if (pMaterial->getTexCoord(texMtxID) != NULL)

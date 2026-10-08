@@ -469,19 +469,19 @@ void J3DModelLoader_v21::readMaterial_v21(const J3DMaterialBlock_v21* i_block, u
 void J3DModelLoader::readShape(const J3DShapeBlock* i_block, u32 i_flags) {
     mpShapeBlock = i_block;
     J3DShapeFactory factory(*i_block);
-    mpModelData->mShapeTable.mShapeNum = i_block->mShapeNum;
+    mpModelData->mShapeNum = i_block->mShapeNum;
     if (i_block->mpNameTable != NULL) {
         mpModelData->mName = new JUTNameTab(JSUConvertOffsetToPtr<ResNTAB>(i_block, i_block->mpNameTable));
     } else {
         mpModelData->mName = NULL;
     }
-    mpModelData->mShapeTable.mShapeNodePointer = new J3DShape*[mpModelData->mShapeTable.mShapeNum];
-    factory.allocVcdVatCmdBuffer(mpModelData->mShapeTable.mShapeNum);
+    mpModelData->mShapeNodePointer = new J3DShape*[mpModelData->mShapeNum];
+    factory.allocVcdVatCmdBuffer(mpModelData->mShapeNum);
     J3DModelHierarchy const* hierarchy_entry = mpModelData->getHierarchy();
     GXVtxDescList* vtx_desc_list = NULL;
     for (; hierarchy_entry->mType != 0; hierarchy_entry++) {
         if (hierarchy_entry->mType == 0x12) {
-            mpModelData->mShapeTable.mShapeNodePointer[hierarchy_entry->mValue] =
+            mpModelData->mShapeNodePointer[hierarchy_entry->mValue] =
                 factory.create(hierarchy_entry->mValue, i_flags, vtx_desc_list);
             vtx_desc_list = factory.getVtxDescList(hierarchy_entry->mValue);
         }
