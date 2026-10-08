@@ -1818,7 +1818,23 @@ void dMenu_Fmap2_c::changeSelCmap2() {
 
 /* 801C3210-801C3354       .text cmapAlphaSet__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cmapAlphaSet() {
-    /* Nonmatching */
+    if (isCompleteCollectMap(field_0x27A9)) {
+        for (int i = 0; i < 3; i++) {
+            field_0x124C[field_0x2813 ^ 1][i].mInitAlpha = 0x50;
+        }
+        for (int i = 0; i < 4; i++) {
+            field_0x1AA4[field_0x2815 ^ 1][i].mInitAlpha = 0x50;
+        }
+        field_0x1AA4[field_0x2815 ^ 1][9].mInitAlpha = 0x50;
+    } else {
+        for (int i = 0; i < 3; i++) {
+            field_0x124C[field_0x2813 ^ 1][i].mInitAlpha = field_0x124C[field_0x2813 ^ 1][i].mUserArea;
+        }
+        for (int i = 0; i < 4; i++) {
+            field_0x1AA4[field_0x2815 ^ 1][i].mInitAlpha = field_0x1AA4[field_0x2815 ^ 1][i].mUserArea;
+        }
+        field_0x1AA4[field_0x2815 ^ 1][9].mInitAlpha = field_0x1AA4[field_0x2815 ^ 1][9].mUserArea;
+    }
 }
 
 /* 801C3354-801C33B0       .text changeZoomCmap__13dMenu_Fmap2_cFv */
