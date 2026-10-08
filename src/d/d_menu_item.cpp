@@ -802,8 +802,7 @@ void dMenu_Item_c::itemScale() {
 /* 801CA3F4-801CAA04       .text subWindowInit__12dMenu_Item_cFv */
 void dMenu_Item_c::subWindowInit() {
     dMeter_subWinFlagOn();
-    int var_r29 = 0;
-    field_0x858.mUserArea = var_r29;
+    field_0x858.mUserArea = 0;
 
     if (field_0x2405 == 0) {
         subMenuItemBase = dInvSlot_BeastFirst_e;
