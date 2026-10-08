@@ -1775,7 +1775,7 @@ void setLightTevColorType_sub(J3DMaterial* i_material, dKy_tevstr_c* i_tevstr) {
 
         if (var_r28 != 0xFF) {
             if (i_tevstr->mColorK1.a != 0) {
-                i_material->getTevBlock()->setTevStageNum(var_r28 + 1);
+                i_material->mTevBlock->setTevStageNum(var_r28 + 1);
                 if (i_material->getTevKColor(1) != NULL) {
                     i_material->setTevKColor(1, (J3DGXColor*)&i_tevstr->mColorK1);
                     colorchan_p->setLightMask(3);
