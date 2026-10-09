@@ -2173,8 +2173,26 @@ void dMenu_Fmap2_c::fmapPlayerPosDisp() {
 }
 
 /* 801C4634-801C4834       .text fmapPlayerPosDispCheck__13dMenu_Fmap2_cFPfPf */
-BOOL dMenu_Fmap2_c::fmapPlayerPosDispCheck(f32*, f32*) {
-    /* Nonmatching */
+BOOL dMenu_Fmap2_c::fmapPlayerPosDispCheck(f32* i_x, f32* i_y) {
+    int chkPnt = dMap_getCheckPointUseGrid(field_0x27BC, field_0x27BD);
+    int curChkPnt = dMap_getCheckPointUseGrid(getCtCurHX(), getCtCurHY());
+    if (chkPnt == -1 || chkPnt != curChkPnt) {
+        return FALSE;
+    }
+
+    s8 gx, gy;
+    s16 a, b;
+    dMap_getFmapChkPntPrm(chkPnt, &gx, &gy, &a, &b, NULL);
+
+    f32 islandY = b + 100000.0f * gy;
+    f32 islandX = a + 100000.0f * gx;
+    *i_x = field_0x27B0 - islandX;
+    *i_y = field_0x27B4 - islandY;
+
+    if (*i_x >= -10000.0f && *i_x <= 10000.0f && *i_y >= -10000.0f && *i_y <= 10000.0f) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 801C4834-801C4B1C       .text changeCmapName__13dMenu_Fmap2_cFv */
