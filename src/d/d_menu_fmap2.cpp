@@ -2098,8 +2098,34 @@ void dMenu_Fmap2_c::playerPointGridAnimeInit() {
 }
 
 /* 801C3FC4-801C4290       .text playerPointGridAnime__13dMenu_Fmap2_cFP18fopMsgM_pane_class */
-void dMenu_Fmap2_c::playerPointGridAnime(fopMsgM_pane_class*) {
-    /* Nonmatching */
+void dMenu_Fmap2_c::playerPointGridAnime(fopMsgM_pane_class* i_pane) {
+    JUtility::TColor black;
+    JUtility::TColor white;
+    if (i_pane != NULL) {
+        f32 alpha = fopMsgM_valueIncrease(g_mf2HIO.field_0x16, field_0x27BE, 2);
+        if (field_0x27BF == 0) {
+            alpha = 1.0f - alpha;
+        }
+
+        black.r = lineInter0to1ForU8(g_mf2HIO.field_0x9, g_mf2HIO.field_0x11, alpha);
+        black.g = lineInter0to1ForU8(g_mf2HIO.field_0xA, g_mf2HIO.field_0x12, alpha);
+        black.b = lineInter0to1ForU8(g_mf2HIO.field_0xB, g_mf2HIO.field_0x13, alpha);
+        black.a = field_0x27F8;
+        white.r = lineInter0to1ForU8(g_mf2HIO.field_0x5, g_mf2HIO.field_0xD, alpha);
+        white.g = lineInter0to1ForU8(g_mf2HIO.field_0x6, g_mf2HIO.field_0xE, alpha);
+        white.b = lineInter0to1ForU8(g_mf2HIO.field_0x7, g_mf2HIO.field_0xF, alpha);
+        white.a = field_0x27F9;
+
+        ((J2DPicture*)i_pane->pane)->setWhite(white);
+        ((J2DPicture*)i_pane->pane)->setBlack(black);
+
+        if (field_0x27BE == 0) {
+            field_0x27BE = g_mf2HIO.field_0x16;
+            field_0x27BF ^= 1;
+        } else {
+            field_0x27BE--;
+        }
+    }
 }
 
 /* 801C4290-801C43C4       .text changeFmapTexture__13dMenu_Fmap2_cFv */
