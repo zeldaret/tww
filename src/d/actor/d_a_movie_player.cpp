@@ -4275,7 +4275,7 @@ BOOL daMP_c::daMP_c_Draw() {
 }
 
 /* 000066C4-00006728       .text daMP_c_Callback_Init__6daMP_cFP10fopAc_ac_c */
-int daMP_c::daMP_c_Callback_Init(fopAc_ac_c* i_this) {
+cPhs_State daMP_c::daMP_c_Callback_Init(fopAc_ac_c* i_this) {
     fopAcM_ct(i_this, daMP_c);
     daMP_c* a_this = (daMP_c*)i_this;
     return a_this->daMP_c_Init();

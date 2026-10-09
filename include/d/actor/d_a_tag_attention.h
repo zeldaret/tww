@@ -63,7 +63,7 @@ namespace daTagAttention {
         }
     
         cPhs_State _create();
-        bool _execute();
+        BOOL _execute();
 
         enum Prm_e {
             PRM_TYPE_W = 0x02,
