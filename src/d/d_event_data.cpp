@@ -12,8 +12,8 @@
 
 /* 80071778-8007195C       .text dEvDt_Next_Stage__Fii */
 BOOL dEvDt_Next_Stage(int staffIdx, int wipePrm) {
-    u32 roomNo;
     const char * pStageName;
+    u32 roomNo;
     u32 layerNo;
     u32 mode;
     u32 wipe;
