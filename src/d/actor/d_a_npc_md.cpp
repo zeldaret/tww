@@ -2423,7 +2423,8 @@ BOOL daNpc_Md_c::wallHitNpcAction(void* param_1) {
 /* 000071E4-000073BC       .text land01NpcAction__10daNpc_Md_cFPv */
 BOOL daNpc_Md_c::land01NpcAction(void* param_1) {
     if (mActionStatus == ACTION_STARTING) {
-        fopAcM_monsSeStart(this, JA_SE_CV_MD_LANDING, &current.pos, dComIfGp_getReverb(fopAcM_GetRoomNo(this)));
+        int tmp4 = fopAcM_GetRoomNo(this);
+        fopAcM_monsSeStart(this, JA_SE_CV_MD_LANDING, &current.pos, dComIfGp_getReverb(tmp4));
         if (checkStatus(daMdStts_UNK1)) {
             setBitEffectStatus(1);
         }

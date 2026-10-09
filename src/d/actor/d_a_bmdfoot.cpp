@@ -171,7 +171,6 @@ static void wait(bmdfoot_class* i_this) {
 
 /* 0000087C-00000D8C       .text attack_1__FP13bmdfoot_class */
 static void attack_1(bmdfoot_class* i_this) {
-    /* Nonmatching - retail-only regalloc */
     fopAc_ac_c* actor = (fopAc_ac_c*)&i_this->actor;
     cXyz local_5c;
     cXyz cStack_68;
@@ -252,7 +251,8 @@ static void attack_1(bmdfoot_class* i_this) {
     if (bVar2) {
         J3DModel* model = i_this->mpBodyVineMorf->getModel();
         for (int i = 0; i < ARRAY_SSIZE(i_this->mSph); i++) {
-            MTXCopy(model->getAnmMtx((i_this->m2B8 & 7U) + col_joint[i]), *calc_mtx);
+            int tmp25 = (i_this->m2B8 & 7U) + col_joint[i];
+            MTXCopy(model->getAnmMtx(tmp25), *calc_mtx);
             MtxPosition(&local_5c, &cStack_68);
             i_this->mSph[i].SetC(cStack_68);
             i_this->mSph[i].SetR(40.0f);
@@ -623,7 +623,8 @@ static BOOL daBmdfoot_Execute(bmdfoot_class* i_this) {
     i_this->mpBodyVineMorf->calc();
     if (i_this->mBD0 != 0) {
         if (i_this->mBD0 == 0x1e) {
-            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_MOVE_2, &i_this->mAE8, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+            int tmp13 = fopAcM_GetRoomNo(actor);
+            mDoAud_seStart(JA_SE_CM_BKM_ATKVINE_MOVE_2, &i_this->mAE8, 0, dComIfGp_getReverb(tmp13));
         }
         i_this->mBD0 = i_this->mBD0 + -1;
     }

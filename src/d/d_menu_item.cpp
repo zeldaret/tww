@@ -738,7 +738,6 @@ void dMenu_Item_c::itemMove() {
 }
 
 /* 801CA18C-801CA3F4       .text itemScale__12dMenu_Item_cFv */
-// NONMATCHING - regalloc
 void dMenu_Item_c::itemScale() {
     if (nowItem == dInvSlot_ItemLast_e) {
         for (int i = 0; i < 21; i++) {
@@ -785,7 +784,7 @@ void dMenu_Item_c::itemScale() {
                 fopMsgM_paneScaleXY(&field_0x1070[i], 1.0f);
             }
         } else if (nowItem >= dInvSlot_ItemLast_e) {
-            int var_r27 = nowItem - subMenuItemBase;
+            var_r27 = nowItem - subMenuItemBase;
 
             for (int i = 0; i < 8; i++) {
                 if (i == var_r27 && selectItemBtn == dItemBtn_NONE_e) {
@@ -803,8 +802,7 @@ void dMenu_Item_c::itemScale() {
 /* 801CA3F4-801CAA04       .text subWindowInit__12dMenu_Item_cFv */
 void dMenu_Item_c::subWindowInit() {
     dMeter_subWinFlagOn();
-    int var_r29 = 0;
-    field_0x858.mUserArea = var_r29;
+    field_0x858.mUserArea = 0;
 
     if (field_0x2405 == 0) {
         subMenuItemBase = dInvSlot_BeastFirst_e;
@@ -1237,18 +1235,18 @@ void dMenu_Item_c::itemnoteSet() {
 #endif
 
     if (dComIfGs_getItem(nowItem) != dItemNo_NONE_e) {
-        msgNo = dItem_data::getItemMesgNum(dComIfGs_getItem(nowItem));
-        if (msgNo == 0) {
+        u32 num = dItem_data::getItemMesgNum(dComIfGs_getItem(nowItem));
+        if (num == 0) {
             msgNo = 0x264;
         } else {
-            msgNo += 200;
+            msgNo = num + 200;
         }
     } else {
         return;
     }
 
     mesg_header* head_p = msgGet.getMesgHeader(msgNo);
-    JUT_ASSERT(VERSION_SELECT(1737, 1808, 1521, 1521), head_p);
+    JUT_ASSERT(VERSION_SELECT(1468, 1468, 1521, 1521), head_p);
 
     const char* mesg = msgGet.getMessage(head_p);
     JMSMesgEntry_c msg_entry;

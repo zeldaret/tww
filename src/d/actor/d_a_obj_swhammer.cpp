@@ -149,7 +149,7 @@ BOOL daObjSwhammer::Act_c::Create() {
     mVSpeed = 0.0f;
     mTargetHFrac = 0.0f;
 
-    if (is_switch()) {
+    if ((is_switch() != 0)) {
         mCurHFrac = 0.0f;
         mTopPos = -60.0f;
         mode_lower_init();

@@ -231,7 +231,8 @@ void daWindMill_c::CreateInit() {
 static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
     if (calcTiming == J3DNodeCBCalcTiming_In) {
         J3DJoint* joint = (J3DJoint*)node;
-        s32 jntNo = joint->getJntNo();
+        u16 tmp3 = joint->getJntNo();
+        s32 jntNo = tmp3;
         J3DModel* model = j3dSys.getModel();
         daWindMill_c* i_this = (daWindMill_c*) model->getUserArea();
 

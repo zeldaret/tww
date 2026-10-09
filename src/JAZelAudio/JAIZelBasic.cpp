@@ -1380,16 +1380,15 @@ void JAIZelBasic::setScene(s32 sceneNum, s32 roomNo, s32 param_3, s32 layerNo) {
 
 /* 802AACE8-802AAD0C       .text expandSceneBgmNum__11JAIZelBasicFUl */
 u32 JAIZelBasic::expandSceneBgmNum(u32 bgmNum) {
-    /* Nonmatching - retail-only regalloc */
+    u32 temp;
     if ((bgmNum & 0xF000) == 0x8000) {
-        u32 temp = bgmNum & 0x7FFF;
+        temp = bgmNum & 0x7FFF;
         temp |= JAISoundID_Type_Stream;
-        return temp;
     } else {
-        u32 temp = bgmNum & 0x7FFF;
+        temp = bgmNum & 0x7FFF;
         temp |= JAISoundID_Type_Sequence;
-        return temp;
     }
+    return temp;
 }
 
 /* 802AAD0C-802AAD48       .text checkLinkOnSea__11JAIZelBasicFv */

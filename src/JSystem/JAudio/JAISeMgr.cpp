@@ -300,7 +300,8 @@ void JAInter::SeMgr::sendSeAllParameter(JAISound* sound) {
     checkPlayingSeUpdateAddition(sound, seqData, param->field_0x438, param->mDolbys, 6, &trackData->mPlayingDolby, JAIGlobalParameter::getParamSeDolbyCenterValue() / 127.0f);
 
     if (seqData->trackupdate[sound->field_0x4]) {
-        SystemInterface::setSeqPortargsU32(SequenceMgr::getPlayTrackInfo(seHandle->field_0x4), sound->field_0x4, 1, seqData->trackupdate[sound->field_0x4]);
+        JAInter::SeqUpdateData * tmp19 = SequenceMgr::getPlayTrackInfo(seHandle->field_0x4);
+        SystemInterface::setSeqPortargsU32(tmp19, sound->field_0x4, 1, seqData->trackupdate[sound->field_0x4]);
         seqData->systemTrackParameter[sound->field_0x4].mCommand.addPortCmdOnce();
     }
 }

@@ -231,7 +231,8 @@ void daLStair_c::checkAppear() {
 /* 00000C88-00000D78       .text moveBG__10daLStair_cFv */
 void daLStair_c::moveBG() {
     bool switch_status = fopAcM_isSwitch(this, mSwitchNo);
-    bool enemy_gone = fopAcM_myRoomSearchEnemy(current.roomNo) == NULL;
+    s8 tmp3 = current.roomNo;
+    bool enemy_gone = fopAcM_myRoomSearchEnemy(tmp3) == NULL;
 
     f32 maxStep = 10.0f;
     f32 minStep = 5.0f;

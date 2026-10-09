@@ -755,7 +755,8 @@ BOOL overhead_bg_chk() {
     pos.y += 50.0f;
     roofChk.SetPos(pos);
 
-    if (dComIfG_Bgsp()->RoofChk(&roofChk) != G_CM3D_F_INF)
+    f32 tmp7 = dComIfG_Bgsp()->RoofChk(&roofChk);
+    if (tmp7 != G_CM3D_F_INF)
         ret = TRUE;
     pos.y += 10000.0f;
     gndChk.SetPos(&pos);
@@ -784,7 +785,8 @@ BOOL forward_overhead_bg_chk(cXyz* pPos, f32 dist) {
     *pPos = pos;
     roofChk.SetPos(pos);
 
-    if (dComIfG_Bgsp()->RoofChk(&roofChk) != G_CM3D_F_INF)
+    f32 tmp37 = dComIfG_Bgsp()->RoofChk(&roofChk);
+    if (tmp37 != G_CM3D_F_INF)
         ret = TRUE;
     pos.y += 10000.0f;
     gndChk.SetPos(&pos);
@@ -2219,9 +2221,12 @@ void poison_init() {
 /* 8009258C-800937BC       .text poison_move__Fv */
 // NONMATCHING - reg alloc
 void poison_move() {
+    f32 var_f18_3;
+    f32 var_f31;
     dKankyo_poison_Packet* poison_packet = g_env_light.mpPoisonPacket;
     camera_process_class* camera = (camera_process_class*)dComIfGp_getCamera(0);
-    daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
+    fopAc_ac_c * tmp5 = dComIfGp_getPlayer(0);
+    daPy_py_c* player = (daPy_py_c*)tmp5;
 
     cXyz spD0;
     cXyz spC4;
@@ -2407,7 +2412,7 @@ void poison_move() {
     poison_packet->mBasePos = spD0;
     poison_packet->mBasePos.y += var_f17;
 
-    f32 var_f31 = G_CM3D_F_INF;
+    var_f31 = G_CM3D_F_INF;
     for (int i = 0; i < g_env_light.mPoisonCount; i++) {
         spAC = spA0;
 
@@ -2416,7 +2421,8 @@ void poison_move() {
             poison_packet->mEff[i].mSize = 0.0f;
 
             if (pattern == 2) {
-                int x = cM_rndFX(0x7FFF);
+                float tmp86 = cM_rndFX(0x7FFF);
+                int x = tmp86;
                 int z = cM_rndFX(0x7FFF);
 
                 poison_packet->mEff[i].mPos.x = spA0.x * cM_ssin(x);
@@ -2669,7 +2675,6 @@ void poison_move() {
             var_f14 = 1.0f;
         }
 
-        f32 var_f18_3;
         if (pattern == 2) {
             sp40 = sp94;
             sp40.y = poison_packet->mBasePos.y;
@@ -2751,7 +2756,6 @@ void poison_move() {
 }
 
 /* 800937BC-800940D4       .text vrkumo_move__Fv */
-// NONMATCHING - float literal load order
 void vrkumo_move() {
     cXyz wind_vecpow = dKyw_get_wind_vecpow();
     dKankyo_vrkumo_Packet* vrkumo_packet = g_env_light.mpVrkumoPacket;
@@ -2824,7 +2828,7 @@ void vrkumo_move() {
     }
 
     if (dComIfGd_getView() != NULL) {
-        f32 sp2C = 0.0f;
+        _8_3 = 0.0f;
 
         dStage_FileList_dt_c* filelist = NULL;
         if (dComIfGp_roomControl_getStayNo() >= 0) {
@@ -2832,16 +2836,16 @@ void vrkumo_move() {
         }
 
         if (filelist != NULL) {
-            sp2C = dStage_FileList_dt_SeaLevel(filelist);
+            _8_3 = dStage_FileList_dt_SeaLevel(filelist);
         }
 
 #if VERSION > VERSION_DEMO
         if (strcmp(dComIfGp_getStartStageName(), "Siren") == 0 && dComIfGp_roomControl_getStayNo() == 17) {
-            sp2C = -14101.0f;
+            _8_3 = -14101.0f;
         }
 #endif
 
-        var_f30 -= 0.09f * (camera->view.mLookat.mEye.y - sp2C);
+        var_f30 -= 0.09f * (camera->view.mLookat.mEye.y - _8_3);
     }
 
     for (int i = 0; i < 100; i++) {
@@ -2895,12 +2899,12 @@ void vrkumo_move() {
         sp74.y = 0.0f;
 
         f32 sp24 = sp74.abs();
-        f32 f2 = sp24 / 15000.0f;
-        f32 sp20 = 1.0f - f2;
+        f32 sp20 = 1.0f - sp24 / 15000.0f;
         if (sp20 < 0.0f) {
             sp20 = 0.0f;
         }
 
+        f32 f2 = sp24 / 15000.0f;
         f32 sp1C = i / 100.0f;
         f32 sp44 = 1.0f - sp20;
         sp44 = 1.0f - (sp44 * sp44 * sp44);

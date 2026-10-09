@@ -1039,13 +1039,12 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
 
 /* 801E27BC-801E28A8       .text do_systemTagCode__23dMesg_tMeasureProcessorFUsPCvUl */
 bool dMesg_tMeasureProcessor::do_systemTagCode(u16 param_1, const void* param_2, u32 param_3) {
-    /* Nonmatching */
     dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     int var2 = field_0x50 - field_0x4c;
     switch (param_1) {
     case 1:
         if (param_3 == 2) {
-            u16 var1 = *(u16*)param_2;
+            const u16 var1 = *(u16*)param_2;
             mesgControl->setNowFontSize((var1 * mesgControl->getInitFontSize()) / 100.0f + 0.5f);
             if (var2 >= 1 && var2 <= 2 && var1 > 100 && m_strSizeFlag == 0) {
                 linemax--;
