@@ -314,7 +314,9 @@ void daObjSwpush::Act_c::init_mtx() {
 /* 00000AA0-00000B34       .text set_btp_frame__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::set_btp_frame() {
     if (attr().mBtpArcName != NULL) {
-        mBtpAnm.setFrame(is_switch() ? 1.0f : 0.0f);
+        bool tmp4 = is_switch();
+        f32 tmp1 = tmp4 ? 1.0f : 0.0f;
+        mBtpAnm.setFrame(tmp1);
     }
 }
 
