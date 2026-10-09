@@ -1,0 +1,16 @@
+#ifndef _MSL_COMMON_CCTYPE_H
+#define _MSL_COMMON_CCTYPE_H
+
+#include "ctype.h"
+
+namespace std {
+    using ::isalpha;
+    using ::isdigit;
+    using ::isspace;
+    using ::isupper;
+    using ::isxdigit;
+    inline int tolower(int c) { return (c == -1 ? -1 : (int)__lower_map[(unsigned char)c]); }
+    using ::toupper;
+}; // namespace std
+
+#endif /* _MSL_COMMON_CCTYPE_H */

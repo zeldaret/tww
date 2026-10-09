@@ -3,7 +3,7 @@
 
 #include "JSystem/JHostIO/JORReflexible.h"
 #include "dolphin/types.h"
-#include <string.h>
+#include <cstring>
 
 #if VERSION == VERSION_DEMO
 #define HIO(name) l_HIO.name
@@ -20,7 +20,7 @@ public:
     ~mDoHIO_child_c() {}
 
     const char* getName() { return mName; }
-    void setName(const char* i_name) { strncpy(mName, i_name, sizeof(mName)); }
+    void setName(const char* i_name) { std::strncpy(mName, i_name, sizeof(mName)); }
     JORReflexible* getPt() { return mPt; }
     void setPt(JORReflexible* i_pt) { mPt = i_pt; }
 

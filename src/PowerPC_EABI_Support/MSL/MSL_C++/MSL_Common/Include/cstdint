@@ -1,0 +1,20 @@
+#ifndef MSL_CSTDINT_H_
+#define MSL_CSTDINT_H_
+
+#include <stdint.h>
+
+namespace std {
+    using ::uint8_t;
+    using ::uint16_t;
+    using ::uint32_t;
+    using ::int8_t;
+    using ::int16_t;
+    using ::int32_t;
+    using ::uint64_t;
+    using ::int64_t;
+    using ::uintptr_t;
+    using ::intptr_t;
+    using ::intmax_t;
+};
+
+#endif /* MSL_CSTDINT_H_ */

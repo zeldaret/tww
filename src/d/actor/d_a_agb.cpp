@@ -24,7 +24,11 @@
 #include "d/actor/d_a_npc_md.h"
 #include "d/actor/d_a_npc_cb1.h"
 #include "d/actor/d_a_bomb.h"
-#include "stdio.h"
+
+#if VERSION == VERSION_PAL
+    #include <stdio.h>
+#endif
+
 
 class daAgb_HIO_c : public mDoHIO_entry_c {
 public:

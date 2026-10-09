@@ -5,6 +5,8 @@
 
 #include "JSystem/JGadget/define.h"
 
+#include <stdio.h>
+
 JGadget_outMessage::JGadget_outMessage(MessageFunc fn, const char* file, int line) {
     mMsgFunc = fn;
     mFile = file;

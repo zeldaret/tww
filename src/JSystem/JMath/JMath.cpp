@@ -7,8 +7,9 @@
 
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "math.h"
 #include "dolphin/types.h"
+
+#include <cmath>
 
 u16 jmaSinTableSize;
 u32 jmaSinShift;

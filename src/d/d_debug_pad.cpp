@@ -6,8 +6,9 @@
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTReport.h"
 #include "f_ap/f_ap_game.h"
-#include "stdio.h"
-#include "stdarg.h"
+
+#include <stdio.h>
+#include <cstdarg>
 
 dDebugPad_c::dDebugPad_c() {
     mIsActive = false;

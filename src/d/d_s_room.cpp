@@ -19,7 +19,9 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
-#include "stdio.h"
+
+#include <stdio.h>
+
 
 // Fake inline: An inline like this seems necessary for setMapImage to match, but it isn't in the debug maps.
 // TODO: Try to find a way to match setMapImage with real inlines.

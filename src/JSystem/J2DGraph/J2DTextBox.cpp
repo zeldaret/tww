@@ -11,7 +11,8 @@
 #include "JSystem/JUtility/JUTResource.h"
 #include "JSystem/J2DGraph/J2DPrint.h"
 #include "dolphin/gx/GXTransform.h"
-#include "stdarg.h"
+
+#include <cstdarg>
 
 /* 802D51D8-802D5268       .text __ct__10J2DTextBoxFPCcPCc */
 J2DTextBox::J2DTextBox(const char* font, const char* str) : mpFont(NULL), mStringPtr(NULL) {

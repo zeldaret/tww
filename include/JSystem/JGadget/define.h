@@ -2,7 +2,6 @@
 #define DEFINE_H
 
 #include "dolphin/types.h"
-#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {

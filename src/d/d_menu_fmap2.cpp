@@ -13,6 +13,8 @@
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_controller_pad.h"
 
+#include <stdio.h>
+
 dMf2_HIO_c g_mf2HIO;
 
 const char* rollmapTex[] = {

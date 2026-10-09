@@ -12,7 +12,9 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/J3DAssert.h"
 #include "dolphin/os/OS.h"
-#include "string.h"
+
+#include <cstring>
+#include <cmath>
 
 /* 802F37C4-802F37E4       .text clear__13J3DDeformDataFv */
 void J3DDeformData::clear() {
@@ -385,7 +387,7 @@ void J3DSkinDeform::changeFastSkinDL(J3DModelData* pModelData) {
 
                     for (int k = 0; k < vtxCount; k++) {
                         u8* src = &dl[vtxSize * k];
-                        memcpy(dst, src + 1, (int)(vtxSize - 1)); // The -1 is to remove GX_VA_PNMTXIDX
+                        std::memcpy(dst, src + 1, (int)(vtxSize - 1)); // The -1 is to remove GX_VA_PNMTXIDX
                         dst += (int)(vtxSize - 1);
                     }
                     dl = (u8*)dl + vtxSize * vtxCount;

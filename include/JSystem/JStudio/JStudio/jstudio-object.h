@@ -2,7 +2,8 @@
 #define JSTUDIO_OBJECT_H
 
 #include "JSystem/JStudio/JStudio/jstudio-control.h"
-#include "limits.h"
+
+#include <limits>
 
 namespace JStudio {
 namespace data {

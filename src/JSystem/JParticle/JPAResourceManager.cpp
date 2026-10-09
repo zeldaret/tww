@@ -10,7 +10,8 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTTexture.h"
-#include "string.h"
+
+#include <cstring>
 
 /* 80258CAC-80258D54       .text __ct__18JPATextureResourceFUlP7JKRHeap */
 JPATextureResource::JPATextureResource(u32 num, JKRHeap* heap) {
