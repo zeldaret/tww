@@ -108,7 +108,7 @@ public:
     void changeFmapTexture();
     void changeIslandName();
     void fmapPlayerPosDisp();
-    void fmapPlayerPosDispCheck(f32*, f32*);
+    BOOL fmapPlayerPosDispCheck(f32*, f32*);
     void changeCmapName();
     void cmapPlayerPosDisp();
     void cmapSalvagePosDisp();

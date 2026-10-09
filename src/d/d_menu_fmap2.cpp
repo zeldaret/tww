@@ -2142,16 +2142,38 @@ void dMenu_Fmap2_c::changeFmapTexture() {
 
 /* 801C43C4-801C44E8       .text changeIslandName__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeIslandName() {
-    /* Nonmatching */
+    u32 msgNo;
+    int grid = getCtCurHX() + (getCtCurHY() + 3) * 7 + 3;
+    if (grid == dIsleIdx_PrivateOasis_e && dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D80)) {
+        msgNo = 0x31D7;
+    } else {
+        msgNo = grid + 0x31A6;
+    }
+    fopMsgM_messageGet(field_0x27C0[0], msgNo);
+    fopMsgM_messageGet(field_0x27C0[1], msgNo);
 }
 
 /* 801C44E8-801C4634       .text fmapPlayerPosDisp__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::fmapPlayerPosDisp() {
-    /* Nonmatching */
+    f32 x, y;
+    if (fmapPlayerPosDispCheck(&x, &y) == TRUE) {
+        f32 baseY = mR01gPane.mPosTopLeftOrig.y + mR01gPane.mSizeOrig.y / 2.0f;
+        f32 baseX = mR01gPane.mPosTopLeftOrig.x + mR01gPane.mSizeOrig.x / 2.0f;
+        mLnk3Pane.mPosCenterOrig.x = baseX + x * (mR01gPane.mSizeOrig.x / 20000.0f);
+        mLnk3Pane.mPosCenterOrig.y = baseY + y * (mR01gPane.mSizeOrig.y / 20000.0f);
+        mLnk3Pane.mPosCenter.x = mLnk3Pane.mPosCenterOrig.x;
+        mLnk3Pane.mPosCenter.y = mLnk3Pane.mPosCenterOrig.y;
+        fopMsgM_cposMove(&mLnk3Pane);
+
+        mLnk3Pane.pane->rotate((s32)(mLnk3Pane.mSizeOrig.x * 0.5f), (s32)(mLnk3Pane.mSizeOrig.y * 0.5f), ROTATE_Z, field_0x27B8);
+        mLnk3Pane.pane->show();
+    } else {
+        mLnk3Pane.pane->hide();
+    }
 }
 
 /* 801C4634-801C4834       .text fmapPlayerPosDispCheck__13dMenu_Fmap2_cFPfPf */
-void dMenu_Fmap2_c::fmapPlayerPosDispCheck(f32*, f32*) {
+BOOL dMenu_Fmap2_c::fmapPlayerPosDispCheck(f32*, f32*) {
     /* Nonmatching */
 }
 
