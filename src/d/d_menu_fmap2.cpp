@@ -15,6 +15,33 @@
 
 dMf2_HIO_c g_mf2HIO;
 
+enum MainProcIdx {
+    MAIN_PROC_FMAP,
+    MAIN_PROC_FMAP_CHANGE,
+    MAIN_PROC_CMAP,
+    MAIN_PROC_CMAP2,
+    MAIN_PROC_CMAP_OPEN,
+    MAIN_PROC_CMAP_SP_LOAD_WAIT,
+    MAIN_PROC_CMAP_OPEN_SP,
+    MAIN_PROC_CMAP_SCROLL,
+    MAIN_PROC_CMAP_CLOSE,
+    MAIN_PROC_CHANGE_MODE,
+};
+
+enum SpMapDrawMode {
+    SP_MAP_DRAW_OFF,
+    SP_MAP_DRAW_ON,
+    SP_MAP_DRAW_UNK_2,
+};
+
+enum Fmap2ButtonIconMode {
+    FMAP2_BTN_ICON_FMAP,
+    FMAP2_BTN_ICON_NO_MAP,
+    FMAP2_BTN_ICON_CMAP,
+    FMAP2_BTN_ICON_LOCKED,
+    FMAP2_BTN_ICON_SP_MAP,
+};
+
 const char* rollmapTex[] = {
     "cmap_tri.bti",
     "cmap_treasure.bti",
@@ -148,7 +175,7 @@ void dMenu_Fmap2_c::_create() {
     mCmapTxtMain_p[1] = (ResTIMG*)operator new(0x2c00, 0x20);
     JUT_ASSERT(VERSION_SELECT(323, 323, 346, 346), mCmapTxtMain_p[1] != NULL);
     screenSet();
-    mSpMapDrawMode = 0;
+    mSpMapDrawMode = SP_MAP_DRAW_OFF;
     g_mf2HIO.mNo = mDoHIO_root.m_subroot.createChild("フィールドマップ画面2", &g_mf2HIO);
 }
 
@@ -418,7 +445,7 @@ void dMenu_Fmap2_c::initialize() {
     if (getCtCurHX() < -3 || getCtCurHY() < -3) {
         setCtCurHX(mGridX);
         setCtCurHY(mGridY);
-    } else if (getCtDispMode() == 0) {
+    } else if (getCtDispMode() == FMAP_DISP_NORMAL) {
         setCtCurHX(getCtCurX());
         setCtCurHY(getCtCurY());
     }
@@ -483,12 +510,12 @@ void dMenu_Fmap2_c::displayInit() {
     case 0:
         fmapPaneInit();
         stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 2048);
-        mMainProcIdx = 0;
+        mMainProcIdx = MAIN_PROC_FMAP;
         break;
     case 1:
         cmapPaneInit();
         stick->setWaitParm(0, 0, 0, 0, 0.9f, 0.5f, 0, 2048);
-        mMainProcIdx = 2;
+        mMainProcIdx = MAIN_PROC_CMAP;
         break;
     }
     paneTransBase(0, g_mf2HIO.field_0x38, g_mf2HIO.field_0x3A, 0.0f, 0, mCddBufIdx, 0);
@@ -607,7 +634,7 @@ static mainProcFunc mainProc[] = {
 /* 801BDB38-801BE0D8       .text _move__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::_move() {
     stick->checkTrigger();
-    if (mMainProcIdx == 0 || mMainProcIdx == 2) {
+    if (mMainProcIdx == MAIN_PROC_FMAP || mMainProcIdx == MAIN_PROC_CMAP) {
         if (mDoCPd_R_LOCK_BUTTON(0)) {
             if (getCtActive() == 0) {
                 mDoAud_seStart(JA_SE_CHART_COMP_LR);
@@ -618,7 +645,7 @@ void dMenu_Fmap2_c::_move() {
                 stick->setWaitParm(0, 0, 0, 0, 0.9f, 0.5f, 0, 2048);
                 mMkfdPane.pane->show();
                 paneAlphaCmapBase(mFrameTimer, g_mf2HIO.field_0x3E, 0, 0);
-                mMainProcIdx = 9;
+                mMainProcIdx = MAIN_PROC_CHANGE_MODE;
             }
         } else if (mDoCPd_L_LOCK_BUTTON(0)) {
             if (getCtActive() == 1) {
@@ -638,12 +665,12 @@ void dMenu_Fmap2_c::_move() {
                 stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 2048);
                 mMkcdPane.pane->show();
                 paneAlphaFmapBase(mFrameTimer, g_mf2HIO.field_0x3E, 0, 0);
-                mMainProcIdx = 9;
+                mMainProcIdx = MAIN_PROC_CHANGE_MODE;
             }
         }
     }
 #if VERSION > VERSION_DEMO
-    if (mMainProcIdx >= 2)
+    if (mMainProcIdx >= MAIN_PROC_CMAP)
 #endif
     {
         if (stick->checkLeftTrigger()) {
@@ -692,28 +719,28 @@ void dMenu_Fmap2_c::FmapProcMain() {
             setCtCurHX(getCtCurHX() - 1);
             mDoAud_seStart(JA_SE_CHART_CURSOR);
             mR01gPane.pane->hide();
-            mMainProcIdx = 1;
+            mMainProcIdx = MAIN_PROC_FMAP_CHANGE;
         }
     } else if (stick->checkRightTrigger()) {
         if (getCtCurHX() < 3) {
             setCtCurHX(getCtCurHX() + 1);
             mDoAud_seStart(JA_SE_CHART_CURSOR);
             mR01gPane.pane->hide();
-            mMainProcIdx = 1;
+            mMainProcIdx = MAIN_PROC_FMAP_CHANGE;
         }
     } else if (stick->checkUpTrigger()) {
         if (getCtCurHY() > -3) {
             setCtCurHY(getCtCurHY() - 1);
             mDoAud_seStart(JA_SE_CHART_CURSOR);
             mR01gPane.pane->hide();
-            mMainProcIdx = 1;
+            mMainProcIdx = MAIN_PROC_FMAP_CHANGE;
         }
     } else if (stick->checkDownTrigger()) {
         if (getCtCurHY() < 3) {
             setCtCurHY(getCtCurHY() + 1);
             mDoAud_seStart(JA_SE_CHART_CURSOR);
             mR01gPane.pane->hide();
-            mMainProcIdx = 1;
+            mMainProcIdx = MAIN_PROC_FMAP_CHANGE;
         }
     }
     fCursorAnime();
@@ -724,7 +751,7 @@ void dMenu_Fmap2_c::FmapProcMain() {
 void dMenu_Fmap2_c::FmapChange() {
     fCursorMove();
     mR01gPane.pane->show();
-    mMainProcIdx = 0;
+    mMainProcIdx = MAIN_PROC_FMAP;
 }
 
 /* 801BE668-801BEA58       .text CmapProcMain__13dMenu_Fmap2_cFv */
@@ -748,7 +775,7 @@ void dMenu_Fmap2_c::CmapProcMain() {
             mDoAud_seStart(JA_SE_CHART_OPEN_MAP);
             mSpMapKind = mapKind;
             spMapLoadForDVD(mSpMapKind);
-            mMainProcIdx = 5;
+            mMainProcIdx = MAIN_PROC_CMAP_SP_LOAD_WAIT;
         } else if (cmapOpenCheck() == true) {
             mDoAud_seStart(JA_SE_CHART_OPEN_MAP);
             mLockBbutton = 1;
@@ -759,7 +786,7 @@ void dMenu_Fmap2_c::CmapProcMain() {
                 mCddPanes[mCddBufIdx][i].mInitAlpha = mCddPanes[mCddBufIdx][i].mUserArea;
             }
             mCddPanes[mCddBufIdx][9].mInitAlpha = mCddPanes[mCddBufIdx][9].mUserArea;
-            mMainProcIdx = 4;
+            mMainProcIdx = MAIN_PROC_CMAP_OPEN;
         }
     } else if (stick->checkLeftTrigger()) {
         mCmapScrollDir = -1;
@@ -793,7 +820,7 @@ void dMenu_Fmap2_c::CmapProcMain() {
         paneTranceMessage(0, g_mf2HIO.field_0x64, 1.0f, 1.0f, 0.0f, 0.0f, 0, mCkBufIdx ^ 1, 0);
 #endif
         cmapMove();
-        mMainProcIdx = 7;
+        mMainProcIdx = MAIN_PROC_CMAP_SCROLL;
     }
     cCursorAnime();
 }
@@ -935,7 +962,7 @@ void dMenu_Fmap2_c::CmapScroll() {
         cCursorAnimeInit();
         cSelCursorInit();
         mLockBbutton = 0;
-        mMainProcIdx = 2;
+        mMainProcIdx = MAIN_PROC_CMAP;
     }
 }
 
@@ -964,7 +991,7 @@ void dMenu_Fmap2_c::CmapOpen() {
     mFrameTimer++;
     if (msgDone == 1 && baseOrMsgDone == 1 && cleDone == 1 && opnDone == 1) {
         mFrameTimer = 0;
-        mButtonIconMode = 2;
+        mButtonIconMode = FMAP2_BTN_ICON_CMAP;
         if (getCollectMapKind(mCmapSelNo) != FMAP_MAPTYPE_TRI || isOpenCollectMapTriforce(mCmapSelNo)) {
 #if VERSION == VERSION_DEMO
             field_0xcc4[field_0x2816][0].pane->hide();
@@ -980,7 +1007,7 @@ void dMenu_Fmap2_c::CmapOpen() {
         }
         dComIfGs_onOpenCollectMap(getCmapDatPnt4(mCmapSelNo)->collectMapNo);
         mLockBbutton = 0;
-        mMainProcIdx = 2;
+        mMainProcIdx = MAIN_PROC_CMAP;
     }
 }
 
@@ -1040,8 +1067,8 @@ void dMenu_Fmap2_c::CmapSpLoadWait() {
             paneAlphaSubMaMap(0, g_mf2HIO.field_0x3F, 0, 0);
             break;
     }
-    mSpMapDrawMode = 1;
-    mMainProcIdx = 6;
+    mSpMapDrawMode = SP_MAP_DRAW_ON;
+    mMainProcIdx = MAIN_PROC_CMAP_OPEN_SP;
 }
 
 /* 801BF7F4-801BFCB8       .text screenSetGs__13dMenu_Fmap2_cFv */
@@ -1620,10 +1647,10 @@ void dMenu_Fmap2_c::CmapOpenSp() {
     mFrameTimer++;
     if (r28 == true && r29 == true && r30 == true && r27 == true) {
         mFrameTimer = 0;
-        mButtonIconMode = 4;
+        mButtonIconMode = FMAP2_BTN_ICON_SP_MAP;
         mCkMsgNo[mCkBufIdx] = 0xffff;
         dComIfGs_onOpenCollectMap(getCmapDatPnt4(mCmapSelNo)->collectMapNo);
-        mMainProcIdx = 3;
+        mMainProcIdx = MAIN_PROC_CMAP2;
     }
 }
 
@@ -1637,7 +1664,7 @@ void dMenu_Fmap2_c::CmapProc2() {
 #endif
         }
         mCkMsgNo[mCkBufIdx] = 0x319c;
-        mMainProcIdx = 8;
+        mMainProcIdx = MAIN_PROC_CMAP_CLOSE;
 #if VERSION > VERSION_JPN
         if (mSpMapKind == FMAP_MAPTYPE_TINGLE) {
             mDoAud_seStart(JA_SE_TC_MAP_RETURN);
@@ -1708,15 +1735,15 @@ void dMenu_Fmap2_c::CmapClose() {
     mFrameTimer++;
     if (r28 == true && r29 == true && r30 == true && r26 == true) {
         mFrameTimer = 0;
-        mButtonIconMode = 3;
+        mButtonIconMode = FMAP2_BTN_ICON_LOCKED;
         mCkMsgNo[mCkBufIdx] = 0xffff;
         delete fmap2GsDl.scrn;
         mpMount->getArchive()->removeResourceAll();
         mpMount->getArchive()->unmount();
         delete mpMount;
-        mSpMapDrawMode = 0;
+        mSpMapDrawMode = SP_MAP_DRAW_OFF;
         mLockBbutton = 0;
-        mMainProcIdx = 2;
+        mMainProcIdx = MAIN_PROC_CMAP;
     }
 }
 
@@ -1738,7 +1765,7 @@ void dMenu_Fmap2_c::changeSelCmap() {
     int r30 = getCollectMapKind(mCmapSelNo);
     ((J2DPicture*)mClSPanes[mClSBufIdx ^ 1][0].pane)->changeTexture(mCmapTxtMain_p[mCddBufIdx ^ 1], 0);
     if (isOpenCollectMap(mCmapSelNo)) {
-        mButtonIconMode = 2;
+        mButtonIconMode = FMAP2_BTN_ICON_CMAP;
         mCddPanes[mCddBufIdx ^ 1][0].pane->show();
         for (i = 0; i < 2; i++) {
             mCmxxPanes[mCmxxBufIdx ^ 1][i].pane->hide();
@@ -1768,7 +1795,7 @@ void dMenu_Fmap2_c::changeSelCmap() {
         }
         cmapAlphaSet();
     } else {
-        mButtonIconMode = 3;
+        mButtonIconMode = FMAP2_BTN_ICON_LOCKED;
         mCddPanes[mCddBufIdx ^ 1][0].pane->hide();
         for (i = 0; i < 2; i++) {
             mCmxxPanes[mCmxxBufIdx ^ 1][i].pane->show();
@@ -1792,7 +1819,7 @@ void dMenu_Fmap2_c::changeSelCmap() {
 
 /* 801C3070-801C3210       .text changeSelCmap2__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeSelCmap2() {
-    mButtonIconMode = 3;
+    mButtonIconMode = FMAP2_BTN_ICON_LOCKED;
     int mapKind = getCollectMapKind(mCmapSelNo);
     mCddPanes[mCddBufIdx ^ 1][0].pane->hide();
 
@@ -1888,7 +1915,7 @@ void dMenu_Fmap2_c::ChangeProcMode() {
             case 0:
                 fCursorInit();
                 mMkfdPane.pane->hide();
-                mMainProcIdx = 0;
+                mMainProcIdx = MAIN_PROC_FMAP;
                 break;
             case 1:
                 if (mCollectMapNum > 1) {
@@ -1898,7 +1925,7 @@ void dMenu_Fmap2_c::ChangeProcMode() {
                     cSelCursorHide();
                 }
                 mMkcdPane.pane->hide();
-                mMainProcIdx = 2;
+                mMainProcIdx = MAIN_PROC_CMAP;
                 break;
         }
     }
@@ -1933,9 +1960,9 @@ bool dMenu_Fmap2_c::_close() {
 void dMenu_Fmap2_c::_draw() {
     dComIfGd_set2DOpa(&fmap2Dl);
     switch (mSpMapDrawMode) {
-        case 2:
+        case SP_MAP_DRAW_UNK_2:
             break;
-        case 1:
+        case SP_MAP_DRAW_ON:
             dComIfGd_set2DOpa(&fmap2GsDl);
             break;
     }
@@ -3166,11 +3193,11 @@ int dMenu_Fmap2_c::getButtonIconMode() {
     int ret;
     switch (getCtActive()) {
     case 0:
-        ret = 0;
+        ret = FMAP2_BTN_ICON_FMAP;
         break;
     case 1:
         if (mCollectMapNum == 0) {
-            ret = 1;
+            ret = FMAP2_BTN_ICON_NO_MAP;
         } else {
             ret = mButtonIconMode;
         }
