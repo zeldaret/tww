@@ -747,6 +747,9 @@ void dMenu_Fmap2_c::_move() {
 
 /* 801BE0D8-801BE628       .text FmapProcMain__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::FmapProcMain() {
+#if VERSION == VERSION_DEMO
+    stick->checkTrigger();
+#endif
     if (stick->checkLeftTrigger()) {
         if (getCtCurHX() > -3) {
             setCtCurHX(getCtCurHX() - 1);
@@ -1028,7 +1031,7 @@ void dMenu_Fmap2_c::CmapOpen() {
         mButtonIconMode = FMAP2_BTN_ICON_CMAP;
         if (getCollectMapKind(mCmapSelNo) != FMAP_MAPTYPE_TRI || isOpenCollectMapTriforce(mCmapSelNo)) {
 #if VERSION == VERSION_DEMO
-            field_0xcc4[field_0x2816][0].pane->hide();
+            mCkPanes[mCkBufIdx][0].pane->hide();
 #endif
             paneTranceMessage(0, g_mf2HIO.mCmapOpenAnimFrame, 1.0f, 1.0f, 0.0f, 0.0f, 0, mCkBufIdx, 0);
 #if VERSION > VERSION_DEMO
@@ -1153,8 +1156,8 @@ void dMenu_Fmap2_c::screenSetGs() {
     color_0x2824 = (u32)((J2DPicture*)mGsTk0xPanesAlpha[0].pane)->getWhite();
     int eventReg = dComIfGs_getEventReg(0x8803);
 #if VERSION == VERSION_DEMO
-    for (i = 0; i < r0; i++) {
-        mGsTk0xPaneAlpha[i].pane->show();
+    for (i = 0; i < eventReg; i++) {
+        (&mGsBt1PaneAlpha)[i].pane->show();
     }
 #endif
     if (eventReg == 3) {
@@ -1574,8 +1577,8 @@ void dMenu_Fmap2_c::screenSetHeartM() {
     fopMsgM_setPaneData(&mHeartMGdgtPane, fmap2GsDl.scrn->search('gdgt'));
 #if VERSION == VERSION_DEMO
     u32 nhTag = 'nh1';
-    for (int i = 0; i < ARRAY_SSIZE(mHeartMNhxPaneAlpha); i++) {
-        fopMsgM_setPaneData(&mHeartMNhxPaneAlpha[i], fmap2GsDl.scrn->search(nhTag));
+    for (int i = 0; i < ARRAY_SSIZE(mHeartMNhxPanesAlpha); i++) {
+        fopMsgM_setPaneData(&mHeartMNhxPanesAlpha[i], fmap2GsDl.scrn->search(nhTag));
         nhTag++;
     }
 #else
@@ -2042,8 +2045,18 @@ void dMenu_Fmap2_c::fCursorMove() {
         mRkjnPane.pane->hide();
         mClg2Pane.pane->hide();
         changeFmapTexture();
+#if VERSION == VERSION_DEMO
+        if (gridNo == 0x19) {
+            mR01gPane.mInitAlpha = 0x1e;
+            mR01gPane.mNowAlpha = 0x1e;
+        } else {
+            mR01gPane.mInitAlpha = 0xFF;
+            mR01gPane.mNowAlpha = 0xFF;
+        }
+#else
         mR01gPane.mInitAlpha = 0xFF;
         mR01gPane.mNowAlpha = 0xFF;
+#endif
         fopMsgM_setNowAlpha(&mR01gPane, 1.0f);
         fopMsgM_setAlpha(&mR01gPane);
         fmapPlayerPosDisp();
@@ -2192,7 +2205,8 @@ void dMenu_Fmap2_c::playerPointGridAnime(fopMsgM_pane_class* i_pane) {
 /* 801C4290-801C43C4       .text changeFmapTexture__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeFmapTexture() {
     char buffer[64];
-    sprintf(buffer, "R%02X_b.bti", getCtCurHX() + (getCtCurHY() + 3) * 7 + 4);
+    int gridNo = getCtCurHX() + (getCtCurHY() + 3) * 7 + 3;
+    sprintf(buffer, "R%02X_b.bti", gridNo + 1);
     if (readFmapTexture(buffer) == 0) {
         mR01gPane.pane->hide();
     } else {
@@ -2669,6 +2683,9 @@ BOOL dMenu_Fmap2_c::paneAlphaGostShipMap(s16 i_frame, u8 i_max, u8 i_mode, int i
         fopMsgM_setNowAlpha(&mGsSd05PaneAlpha, alpha);
         fopMsgM_setNowAlpha(&mGsHs04PaneAlpha, alpha);
         fopMsgM_setNowAlpha(&mGsYg01PaneAlpha, alpha);
+#if VERSION == VERSION_DEMO
+        fopMsgM_setNowAlpha(&mGsWk3PaneAlpha, alpha);
+#endif
         fopMsgM_setNowAlpha(&mGsBsdmPaneAlpha, alpha);
         fopMsgM_setNowAlpha(&mGsTkd2PaneAlpha, alpha);
         fopMsgM_setNowAlpha(&mGsTkd1PaneAlpha, alpha);
@@ -2679,6 +2696,9 @@ BOOL dMenu_Fmap2_c::paneAlphaGostShipMap(s16 i_frame, u8 i_max, u8 i_mode, int i
         fopMsgM_setAlpha(&mGsSd05PaneAlpha);
         fopMsgM_setAlpha(&mGsHs04PaneAlpha);
         fopMsgM_setAlpha(&mGsYg01PaneAlpha);
+#if VERSION == VERSION_DEMO
+        fopMsgM_setAlpha(&mGsWk3PaneAlpha);
+#endif
         fopMsgM_setAlpha(&mGsBsdmPaneAlpha);
         fopMsgM_setAlpha(&mGsTkd2PaneAlpha);
         fopMsgM_setAlpha(&mGsTkd1PaneAlpha);
@@ -2806,7 +2826,7 @@ BOOL dMenu_Fmap2_c::paneAlphaSubdanMap(s16 i_frame, u8 i_max, u8 i_mode, int i_f
         fopMsgM_setAlpha(&mSubdanLnkPane);
         fopMsgM_setAlpha(&mSubdanGdgtPane);
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < ARRAY_SSIZE(mSubdanIgnxPanesAlpha); i++) {
             fopMsgM_setNowAlpha(&mSubdanIgnxPanesAlpha[i], alpha);
             fopMsgM_setAlpha(&mSubdanIgnxPanesAlpha[i]);
         }
@@ -2844,12 +2864,12 @@ BOOL dMenu_Fmap2_c::paneAlphaHeartMMap(s16 i_frame, u8 i_max, u8 i_mode, int i_f
         fopMsgM_setAlpha(&mHeartMLnkPane);
         fopMsgM_setAlpha(&mHeartMGdgtPane);
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < ARRAY_SSIZE(mHeartMNhxPanesAlpha); i++) {
             fopMsgM_setNowAlpha(&mHeartMNhxPanesAlpha[i], alpha);
             fopMsgM_setAlpha(&mHeartMNhxPanesAlpha[i]);
         }
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < ARRAY_SSIZE(mHeartMMkxPanesAlpha); i++) {
             fopMsgM_setNowAlpha(&mHeartMMkxPanesAlpha[i], alpha);
             fopMsgM_setAlpha(&mHeartMMkxPanesAlpha[i]);
         }
