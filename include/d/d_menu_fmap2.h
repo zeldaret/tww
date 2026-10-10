@@ -35,8 +35,11 @@ class dMenu_Fmap2_c {
 public:
     virtual ~dMenu_Fmap2_c() {}
 
-    void getCmapDatPnt(int) {}
-    void getCmapDatValue() {}
+    aramCmapDatPnt_t* getCmapDatPnt(int i_cmapIdx) {
+        return mpFmapDatPnt->getCmapDatPnt4(i_cmapIdx);
+    }
+    void getCmapDatValue() {
+    }
     u8 lineInter0to1ForU8(u8 a, u8 b, f32 c) {
         return a + (b - a) * c;
     }
@@ -214,13 +217,13 @@ private:
     /* 0x0008 */ ResTIMG* mCmapTxtMain_p[2];
     /* 0x0010 */ dMenu_FmapSv_c* fmapSv;
     /* 0x0014 */ u8 padding_0x14[0x18 - 0x14];
-    /* 0x0018 */ mDoDvdThd_mountArchive_c* field_0x18;
+    /* 0x0018 */ mDoDvdThd_mountArchive_c* mpMount;
     /* 0x001C */ aramCmapDat_c* mpFmapDatPnt;
     /* 0x0020 */ dDlst_FMAP2_c fmap2Dl;
     /* 0x0028 */ dDlst_FMAP2GS_c fmap2GsDl;
     /* 0x0030 */ STControl* stick;
-    /* 0x0034 */ JUTFont* field_0x34;
-    /* 0x0038 */ JUTFont* field_0x38;
+    /* 0x0034 */ JUTFont* mFont;
+    /* 0x0038 */ JUTFont* mRFont;
     /* 0x003C */ dDlst_2DOutFont_c* outFont[2];
     /* 0x0044 */ dDlst_2DOutFont_c* outFontS[2];
     /* 0x004C */ fopMsgM_pane_class mClPane;
@@ -388,53 +391,53 @@ private:
     /* 0x2764 */ fopMsgM_pane_class mSubdanGdgtPane;
     /* 0x279C */ fopMsgM_pane_class* mpGdgtPane;
     /* 0x27A0 */ u8 field_0x27A0;
-    /* 0x27A1 */ u8 field_0x27A1;
+    /* 0x27A1 */ u8 mMainProcIdx;
     /* 0x27A2 */ u8 padding_0x27A2[0x27A5 - 0x27A2];
-    /* 0x27A5 */ u8 field_0x27A5;
-    /* 0x27A6 */ u8 field_0x27A6;
-    /* 0x27A7 */ u8 field_0x27A7;
-    /* 0x27A8 */ u8 field_0x27A8;
-    /* 0x27A9 */ s8 field_0x27A9;
-    /* 0x27AA */ s8 field_0x27AA;
-    /* 0x27AB */ s8 field_0x27AB;
-    /* 0x27AC */ s16 field_0x27AC;
+    /* 0x27A5 */ u8 mFCursorBufIdx;
+    /* 0x27A6 */ u8 mCCursorBufIdx;
+    /* 0x27A7 */ u8 mCSelCursorToggle;
+    /* 0x27A8 */ u8 mCollectMapNum;
+    /* 0x27A9 */ s8 mCmapSelNo;
+    /* 0x27AA */ s8 mPrevCmapSelNo;
+    /* 0x27AB */ s8 mCmapScrollDir;
+    /* 0x27AC */ s16 mFrameTimer;
     /* 0x27AE */ u8 padding_0x27AE[0x27B0 - 0x27AE];
-    /* 0x27B0 */ f32 field_0x27B0;
-    /* 0x27B4 */ f32 field_0x27B4;
-    /* 0x27B8 */ f32 field_0x27B8;
-    /* 0x27BC */ s8 field_0x27BC;
-    /* 0x27BD */ s8 field_0x27BD;
-    /* 0x27BE */ s8 field_0x27BE;
-    /* 0x27BF */ s8 field_0x27BF;
-    /* 0x27C0 */ char* field_0x27C0[2];
-    /* 0x27C8 */ char* field_0x27C8[4];
-    /* 0x27D8 */ char* field_0x27D8;
-    /* 0x27DC */ char* field_0x27DC;
-    /* 0x27E0 */ char* field_0x27E0;
-    /* 0x27E4 */ char* field_0x27E4;
-    /* 0x27E8 */ char* field_0x27E8;
-    /* 0x27EC */ char* field_0x27EC;
-    /* 0x27F0 */ char* field_0x27F0;
-    /* 0x27F4 */ char* field_0x27F4;
-    /* 0x27F8 */ u8 field_0x27F8;
-    /* 0x27F9 */ u8 field_0x27F9;
+    /* 0x27B0 */ f32 mPlayerPosX;
+    /* 0x27B4 */ f32 mPlayerPosZ;
+    /* 0x27B8 */ f32 mPlayerAngleDeg;
+    /* 0x27BC */ s8 mGridX;
+    /* 0x27BD */ s8 mGridY;
+    /* 0x27BE */ s8 mPlayerPointTimer;
+    /* 0x27BF */ s8 mPlayerPointToggle;
+    /* 0x27C0 */ char* mTxtIslandName[2];
+    /* 0x27C8 */ char* mTxtCmapName[4];
+    /* 0x27D8 */ char* mTxtCk1;
+    /* 0x27DC */ char* mTxtCk1S;
+    /* 0x27E0 */ char* mTxtCk2;
+    /* 0x27E4 */ char* mTxtCk2S;
+    /* 0x27E8 */ char* mTxtCk1Ruby;
+    /* 0x27EC */ char* mTxtCk1RubyS;
+    /* 0x27F0 */ char* mTxtCk2Ruby;
+    /* 0x27F4 */ char* mTxtCk2RubyS;
+    /* 0x27F8 */ u8 mBlackAlpha;
+    /* 0x27F9 */ u8 mWhiteAlpha;
     /* 0x27FA */ u8 field_0x27FA;
-    /* 0x27FB */ u8 field_0x27FB;
-    /* 0x27FC */ u8 field_0x27FC;
+    /* 0x27FB */ u8 mSpMapDrawMode;
+    /* 0x27FC */ u8 mLockBbutton;
     /* 0x2800 */ f32 field_0x2800;
     /* 0x2804 */ f32 field_0x2804;
     /* 0x2808 */ f32 field_0x2808;
     /* 0x280C */ u8 field_0x280C;
-    /* 0x280D */ u8 field_0x280D;
-    /* 0x280E */ u8 field_0x280E;
-    /* 0x280F */ u8 field_0x280F;
-    /* 0x2810 */ u8 field_0x2810;
+    /* 0x280D */ u8 mLeftTriggerHold;
+    /* 0x280E */ u8 mRightTriggerHold;
+    /* 0x280F */ u8 mSpMapKind;
+    /* 0x2810 */ u8 mOnSea;
     /* 0x2811 */ u8 field_0x2811;
-    /* 0x2812 */ u8 field_0x2812;
-    /* 0x2813 */ u8 field_0x2813;
-    /* 0x2814 */ u8 field_0x2814;
-    /* 0x2815 */ u8 field_0x2815;
-    /* 0x2816 */ u8 field_0x2816;
+    /* 0x2812 */ u8 mButtonIconMode;
+    /* 0x2813 */ u8 mClSBufIdx;
+    /* 0x2814 */ u8 mCmxxBufIdx;
+    /* 0x2815 */ u8 mCddBufIdx;
+    /* 0x2816 */ u8 mCkBufIdx;
     /* 0x2817 */ u8 field_0x2817;
     /* 0x2818 */ u8 field_0x2818;
     /* 0x2819 */ u8 field_0x2819;
@@ -446,11 +449,11 @@ private:
     /* 0x2824 */ JUtility::TColor color_0x2824;
     /* 0x2828 */ JUtility::TColor color_0x2828;
     /* 0x282C */ JUtility::TColor color_0x282C;
-    /* 0x2830 */ J2DTextBox::TFontSize field_0x2830;
-    /* 0x2838 */ J2DTextBox::TFontSize field_0x2838;
-    /* 0x2840 */ f32 field_0x2840;
-    /* 0x2844 */ f32 field_0x2844;
-    /* 0x2848 */ u16 field_0x2848[2];
+    /* 0x2830 */ J2DTextBox::TFontSize mCkTextFontSize;
+    /* 0x2838 */ J2DTextBox::TFontSize mCkRubyFontSize;
+    /* 0x2840 */ f32 mCkTextLineSpace;
+    /* 0x2844 */ f32 mCkRubyLineSpace;
+    /* 0x2848 */ u16 mCkMsgNo[2];
 #if VERSION > VERSION_JPN
     /* 0x284C */ u8 field_0x284C;
     /* 0x284D */ u8 field_0x284D;
