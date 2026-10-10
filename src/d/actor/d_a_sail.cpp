@@ -570,7 +570,7 @@ static BOOL daSail_Delete(sail_class* i_this) {
     dComIfG_resDeleteDemo(&i_this->mKaizokusenPhase, "Kaizokusen");
     
     if (l_HIO.mNo >= 0) {
-        mDoHIO_root.m_subroot.deleteChild(l_HIO.mNo);
+        mDoHIO_deleteChild(l_HIO.mNo);
         l_HIO.mNo = -1;
     }
     
@@ -622,7 +622,7 @@ static cPhs_State daSail_Create(fopAc_ac_c* i_actor) {
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(i_this, daSail_checkCreateHeap, 0x4C0)) {
             if (l_HIO.mNo < 0) {
-                l_HIO.mNo = mDoHIO_root.m_subroot.createChild("海賊船の帆", &l_HIO); // "Pirate Ship's Sail"
+                l_HIO.mNo = mDoHIO_createChild("海賊船の帆", &l_HIO); // "Pirate Ship's Sail"
             }
             
             i_this->mSailPacket.m1C44 = 0.0f;

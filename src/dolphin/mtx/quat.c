@@ -3,6 +3,12 @@
 #include <dolphin/os/OS.h>
 #include <math.h>
 
+#ifdef DEBUG
+// Hack to fix a linker error when compiling in debug mode
+#pragma push
+#pragma force_active on
+#endif
+
 void C_QUATMultiply(const Quaternion* p, const Quaternion* q, Quaternion* pq) {
     Quaternion* r;
     Quaternion pqTmp;
@@ -26,6 +32,10 @@ void C_QUATMultiply(const Quaternion* p, const Quaternion* q, Quaternion* pq) {
         *pq = pqTmp;
     }
 }
+
+#ifdef DEBUG
+#pragma pop
+#endif
 
 #ifdef __MWERKS__
 void PSQUATMultiply(const register Quaternion* p, const register Quaternion* q, register Quaternion* pq) {

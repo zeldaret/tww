@@ -419,6 +419,17 @@ void main01() {
     ArchiveHeapCheck.setHeap(mDoExt_getArchiveHeap());
     CommandHeapCheck.setHeap(mDoExt_getCommandHeap());
 
+    #if DEBUG
+    JKRHeap* var_r28 = JKRGetSystemHeap();
+    JKRHeap* sp10 = mDoExt_setCurrentHeap(var_r28);
+    JOR_INIT();
+    JOR_SETROOTNODE("root", &mDoHIO_root, 4, 3);
+    mDoExt_setCurrentHeap(sp10);
+
+    s32 local_34 = var_r28->getTotalFreeSize();
+    OSReport("\x1b[36mHOSTIOヒープ残り %u Bytes\n\x1b[m", local_34);
+    #endif
+
     JUTConsole* console = JFWSystem::getSystemConsole();
 #if VERSION == VERSION_DEMO
     console->setOutput(JUTConsole::OUTPUT_OSR_AND_CONSOLE);
@@ -493,6 +504,11 @@ void main01() {
 #endif
     } while (true);
 }
+
+#if DEBUG
+template<>
+JHIComPortManager<JHICmnMem>* JHIComPortManager<JHICmnMem>:: instance;
+#endif
 
 #if VERSION == VERSION_DEMO
 void parse_args(int argc, const char* argv[]) {
