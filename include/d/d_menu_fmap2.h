@@ -4,7 +4,6 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_drawlist.h"
 #include "d/d_menu_fmapSv.h"
-#include "dolphin/types.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
