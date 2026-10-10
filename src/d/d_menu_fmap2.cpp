@@ -2247,11 +2247,11 @@ void dMenu_Fmap2_c::cmapPlayerPosDisp() {
 
 /* 801C4CF4-801C4F80       .text cmapSalvagePosDisp__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cmapSalvagePosDisp() {
-    u8 salvagePoint = dComIfGs_getRandomSalvagePoint();
+    u8 salvagePointIdx = dComIfGs_getRandomSalvagePoint();
     aramCmapDatPnt_t* cmapDatPnt = getCmapDatPnt4(field_0x27A9);
 
-    f32 x = (f32)cmapDatPnt->salvagePnt[salvagePoint].x - (f32)cmapDatPnt->salvagePnt[salvagePoint].field_0x0;
-    f32 y = (f32)cmapDatPnt->salvagePnt[salvagePoint].y - (f32)cmapDatPnt->salvagePnt[salvagePoint].field_0x2;
+    f32 x = (f32)cmapDatPnt->salvagePnt[salvagePointIdx].x - (f32)cmapDatPnt->salvagePnt[salvagePointIdx].islandX;
+    f32 y = (f32)cmapDatPnt->salvagePnt[salvagePointIdx].y - (f32)cmapDatPnt->salvagePnt[salvagePointIdx].islandY;
 
     for (int i = 5; i < 9; i++) {
         mCddPanes[field_0x2815 ^ 1][i].mPosCenterOrig.x = mCddPanes[field_0x2815 ^ 1][3].mPosCenterOrig.x + x / 100.0f * 2.0f;
@@ -2276,8 +2276,29 @@ void dMenu_Fmap2_c::cmapSalvagePosDisp() {
 }
 
 /* 801C4F80-801C50FC       .text cmapPlayerPosDispCheck__13dMenu_Fmap2_cFPfPf */
-BOOL dMenu_Fmap2_c::cmapPlayerPosDispCheck(f32*, f32*) {
-    /* Nonmatching */
+BOOL dMenu_Fmap2_c::cmapPlayerPosDispCheck(f32* i_x, f32* i_y) {
+    u8 salvagePointIdx = dComIfGs_getRandomSalvagePoint();
+    aramCmapDatPnt_t* pnt = getCmapDatPnt4(field_0x27A9);
+    s16 a = (s16)pnt->salvagePnt[salvagePointIdx].islandX;
+    s16 b = (s16)pnt->salvagePnt[salvagePointIdx].islandY;
+    s8 gx = (s8)pnt->gridX;
+    s8 gy = (s8)pnt->gridY;
+
+    int playerChkPnt = dMap_getCheckPointUseGrid(field_0x27BC, field_0x27BD);
+    int cmapChkPnt = dMap_getCheckPointUseGrid(gx, gy);
+    if (playerChkPnt == -1 || playerChkPnt != cmapChkPnt) {
+        return FALSE;
+    }
+
+    f32 islandX = a + 100000.0f * gx;
+    f32 islandY = b + 100000.0f * gy;
+    *i_x = field_0x27B0 - islandX;
+    *i_y = field_0x27B4 - islandY;
+
+    if (*i_x >= -5000.0f && *i_x <= 5000.0f && *i_y >= -5000.0f && *i_y <= 5000.0f) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* 801C50FC-801C5350       .text paneTransBase__13dMenu_Fmap2_cFsUcffUcUci */
