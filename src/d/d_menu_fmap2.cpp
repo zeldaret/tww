@@ -2235,7 +2235,12 @@ void dMenu_Fmap2_c::changeCmapName() {
         msgNo = cmapNo + 0x36EB;
     }
 
-    if (cmapNo <= 8) {
+#if VERSION <= VERSION_JPN
+    if ((u32)(cmapNo - 1) <= 7 || cmapNo == 0xb || cmapNo == 0x18 || cmapNo == 0x24 || cmapNo == 0x30)
+#else
+    if (cmapNo <= 8)
+#endif
+    {
         ((J2DTextBox*)mCmtPanes[mCmxxBufIdx ^ 1].pane)->setBlackWhite(JUtility::TColor(0xD6, 0, 0, 0), JUtility::TColor(0xF4, 0x2F, 0, 0xFF));
         ((J2DTextBox*)mCmtPanes[(mCmxxBufIdx ^ 1) + 2].pane)->setBlackWhite(JUtility::TColor(0x65, 0x10, 0, 0), JUtility::TColor(0xAB, 0, 0, 0xFF));
     } else {
@@ -2650,10 +2655,12 @@ BOOL dMenu_Fmap2_c::paneAlphaGostShipMap(s16 i_frame, u8 i_max, u8 i_mode, int i
         for (int i = 0; i < 7; i++) {
             fopMsgM_setNowAlpha(&mGsTk0xPanesAlpha[i], alpha);
             fopMsgM_setAlpha(&mGsTk0xPanesAlpha[i]);
+#if VERSION > VERSION_JPN
             if (mGsGsixPanesAlpha[i].pane->isVisible()) {
                 fopMsgM_setNowAlpha(&mGsGsixPanesAlpha[i], alpha);
                 fopMsgM_setAlpha(&mGsGsixPanesAlpha[i]);
             }
+#endif
         }
     }
     return FALSE;
@@ -2681,6 +2688,7 @@ BOOL dMenu_Fmap2_c::paneAlphaTingleMap(s16 i_frame, u8 i_max, u8 i_mode, int i_f
         fopMsgM_setAlpha(&mTnHn19PaneAlpha);
         fopMsgM_setAlpha(&mTnHk29PaneAlpha);
 
+#if VERSION > VERSION_JPN
         fopMsgM_setNowAlpha(&mTnGddmPane, alpha);
         fopMsgM_setAlpha(&mTnGddmPane);
 
@@ -2689,8 +2697,10 @@ BOOL dMenu_Fmap2_c::paneAlphaTingleMap(s16 i_frame, u8 i_max, u8 i_mode, int i_f
 
         fopMsgM_setNowAlpha(&mTnGdgtPane, alpha);
         fopMsgM_setAlpha(&mTnGdgtPane);
+#endif
 
-        for (int i = 0; i < 22; i++) {
+        // BUG: Demo/JPN array is 17 entries, but this iterates 21 like screenSetTn's b1Tag.
+        for (int i = 0; i < VERSION_SELECT(21, 21, 22, 22); i++) {
             fopMsgM_setNowAlpha(&mTnMiscPanesAlpha[i], alpha);
             fopMsgM_setAlpha(&mTnMiscPanesAlpha[i]);
         }
