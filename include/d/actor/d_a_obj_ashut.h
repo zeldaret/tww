@@ -12,7 +12,7 @@ namespace daObjAshut {
             Mode_L    = 0x02,     // Bars are down
             Mode_L_U  = 0x03,     // Bars are rising up
             Mode_DemoReq  = 0x04,
-            Mode_Initial  = 0x05
+            Mode_UNK5     = 0x05
         };
 
         enum Prm_e {
@@ -66,11 +66,11 @@ namespace daObjAshut {
         /* 0x2C8 */ request_of_phase_process_class mPhase;
         /* 0x2D0 */ J3DModel* mpModel;
         /* 0x2D4 */ Mode_e mMode;
-        /* 0x2D8 */ f32 mCurrentY;
-        /* 0x2DC */ f32 mSpeedY;
-        /* 0x2E0 */ u8  mBounceCount;
-        /* 0x2E2 */ s16 mDelayTimer;
-        /* 0x2E4 */ bool mIsEventReady;
+        /* 0x2D8 */ f32 field_0x2D8;
+        /* 0x2DC */ f32 field_0x2DC;
+        /* 0x2E0 */ u8  field_0x2E0;
+        /* 0x2E2 */ s16 field_0x2E2;
+        /* 0x2E4 */ bool field_0x2E4;
         /* 0x2E6 */ s16 mEventId;
         /* 0x2E8 */ s32 mNextMode;
     };

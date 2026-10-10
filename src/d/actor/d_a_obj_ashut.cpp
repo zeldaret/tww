@@ -10,18 +10,20 @@
 namespace daObjAshut {
 namespace {
 struct Attr_c {
-    f32 open_max_y;           // Max Y offset when the passage is fully open
-    f32 close_accel;          // Downward acceleration when closing
-    f32 close_damping;        // Friction/damping applied while closing
-    u8  close_bounce_count;   // Number of times the metal bars bounce when they hit the floor
-    f32 close_bounce_factor;  // Restitution factor for the closing bounce
-    f32 max_close_bounce_vel; // Maximum velocity allowed during a closing bounce
-    f32 open_accel;           // Upward acceleration when opening
-    f32 open_damping;         // Standard friction applied while opening
-    f32 open_heavy_damping;   // Heavier friction applied during a specific opening phase
-    u8  open_timer_params[3]; // [0]: Delay before opening, [1]: Damping transition threshold, [2]: Open bounce count
-    f32 open_bounce_factor;   // Restitution factor when hitting the ceiling
-    f32 max_open_bounce_vel;  // Maximum velocity allowed during an opening bounce
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ u8  field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ u8  field_0x24;
+    /* 0x25 */ u8  field_0x25;
+    /* 0x26 */ u8  field_0x26;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2C;
 };
 
 const Attr_c L_attr = {
@@ -34,7 +36,9 @@ const Attr_c L_attr = {
     0.8f,
     0.1f,
     0.4f,
-    { 14, 4, 5 },
+    14,
+    4,
+    5,
     -0.6f,
     -4.0f,
 };
@@ -46,11 +50,7 @@ inline static const Attr_c& attr() { return L_attr; }
 const char daObjAshut::Act_c::M_arcname[] = "Ashut";
 Mtx daObjAshut::Act_c::M_tmp_mtx;
 
-static const f32 l_anti_crush_safe_area_y = 100.0f;
-static const f32 l_anti_crush_safe_area_z = 55.0f;
-static const f32 l_anti_crush_safe_area_x = 105.0f;
 
-static const f32 l_bgw_release_height = 150.0f;
 
 /* 00000078-0000012C       .text CreateHeap__Q210daObjAshut5Act_cFv */
 BOOL daObjAshut::Act_c::CreateHeap() {
@@ -66,9 +66,9 @@ BOOL daObjAshut::Act_c::Create() {
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     init_mtx();
     fopAcM_setCullSizeBox(this, -80.0f, -5.0f, -30.0f, 80.0f, 250.0f, 30.0f);
-    mIsEventReady = false;
+    field_0x2E4 = false;
     mEventId = dComIfGp_evmng_getEventIdx(NULL, prm_get_evId());
-    mNextMode = Mode_Initial;
+    mNextMode = Mode_UNK5;
 
     if(is_switch()) {
         mode_upper_init();
@@ -85,8 +85,7 @@ cPhs_State daObjAshut::Act_c::Mthd_Create() {
     if (phase_state == cPhs_COMPLEATE_e) {
         phase_state = (cPhs_State)MoveBGCreate(M_arcname, dRes_INDEX_ASHUT_DZB_ASHUT_e, NULL, DEMO_SELECT(0x8000, 0x760));
         JUT_ASSERT(312, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
-        
-        // If switch is active on load, ensure collision is disabled so player can pass
+
         if (is_switch()) {
             if (mpBgW->ChkUsed()) {
                 dComIfG_Bgsp()->Release(mpBgW);
@@ -113,7 +112,7 @@ void daObjAshut::Act_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos);
     mDoMtx_stack_c::ZXYrotM(shape_angle);
     cMtx_copy(mDoMtx_stack_c::get(), M_tmp_mtx);
-    mDoMtx_stack_c::get()[1][3] += mCurrentY;
+    mDoMtx_stack_c::get()[1][3] += field_0x2D8;
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
@@ -125,8 +124,6 @@ void daObjAshut::Act_c::init_mtx() {
 
 /* 000004A8-000005A4       .text chk_safe_area__Q210daObjAshut5Act_cCFv */
 bool daObjAshut::Act_c::chk_safe_area() const {
-    // Prevents the metal bars from closing and crushing Link if he is standing directly underneath
-
     s16 inv_angle = -shape_angle.y;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz diff = player->current.pos - current.pos;
@@ -136,28 +133,27 @@ bool daObjAshut::Act_c::chk_safe_area() const {
     mDoMtx_stack_c::multVecSR(&diff, &local_pos);
     
     return (
-        std::fabsf(local_pos.y) < l_anti_crush_safe_area_y
-        && std::fabsf(local_pos.z) < l_anti_crush_safe_area_z
-        && std::fabsf(local_pos.x) < l_anti_crush_safe_area_x
+        std::fabsf(local_pos.y) < 100.0f
+        && std::fabsf(local_pos.z) < 55.0f
+        && std::fabsf(local_pos.x) < 105.0f
     );
 }
 
 /* 000005A4-000005BC       .text mode_upper_init__Q210daObjAshut5Act_cFv */
 void daObjAshut::Act_c::mode_upper_init() {
     mMode = Mode_U;
-    mCurrentY = attr().open_max_y;
+    field_0x2D8 = attr().field_0x00;
 }
 
 /* 000005BC-0000066C       .text mode_upper__Q210daObjAshut5Act_cFv */
 void daObjAshut::Act_c::mode_upper() {
     if (is_switch()) {
-        return; // Stay open
+        return;
     }
     if (chk_safe_area()) {
-        return; // Stay open: player is underneath
+        return;
     }
     
-    // Metal bars gonna fall. Re-enable collision
     if (!mpBgW->ChkUsed()) {
         dComIfG_Bgsp()->Regist(mpBgW, this);
     }
@@ -167,26 +163,26 @@ void daObjAshut::Act_c::mode_upper() {
 /* 0000066C-00000700       .text mode_u_l_init__Q210daObjAshut5Act_cFv */
 void daObjAshut::Act_c::mode_u_l_init() {
     mMode = Mode_U_L;
-    mSpeedY = 0.0f;
-    mBounceCount = attr().close_bounce_count;
+    field_0x2DC = 0.0f;
+    field_0x2E0 = attr().field_0x0C;
     fopAcM_seStart(this, JA_SE_OBJ_P_SHIP_SHTR_CL, 0);
 }
 
 /* 00000700-000007C0       .text mode_u_l__Q210daObjAshut5Act_cFv */
 void daObjAshut::Act_c::mode_u_l() {
-    mSpeedY += attr().close_accel;
-    mSpeedY *= (1.0f - attr().close_damping);
-    mCurrentY += mSpeedY;
+    field_0x2DC += attr().field_0x04;
+    field_0x2DC *= (1.0f - attr().field_0x08);
+    field_0x2D8 += field_0x2DC;
     
-    if (mCurrentY <= 0.0f) {
-        if (mBounceCount == 0) {
+    if (field_0x2D8 <= 0.0f) {
+        if (field_0x2E0 == 0) {
             mode_lower_init();
         } else {
-            mBounceCount--;
-            mCurrentY *= attr().close_bounce_factor;
-            mSpeedY *= attr().close_bounce_factor;
-            if (mSpeedY > attr().max_close_bounce_vel) {
-                mSpeedY = attr().max_close_bounce_vel;
+            field_0x2E0--;
+            field_0x2D8 *= attr().field_0x10;
+            field_0x2DC *= attr().field_0x10;
+            if (field_0x2DC > attr().field_0x14) {
+                field_0x2DC = attr().field_0x14;
             }
         }
     }
@@ -195,7 +191,7 @@ void daObjAshut::Act_c::mode_u_l() {
 /* 000007C0-000007D8       .text mode_lower_init__Q210daObjAshut5Act_cFv */
 void daObjAshut::Act_c::mode_lower_init() {
     mMode = Mode_L;
-    mCurrentY = 0.0f;
+    field_0x2D8 = 0.0f;
 }
 
 /* 000007D8-00000838       .text mode_lower__Q210daObjAshut5Act_cFv */
@@ -208,45 +204,44 @@ void daObjAshut::Act_c::mode_lower() {
 /* 00000838-000008D4       .text mode_l_u_init__Q210daObjAshut5Act_cFv */
 void daObjAshut::Act_c::mode_l_u_init() {
     mMode = Mode_L_U;
-    mSpeedY = 0.0f;
-    mBounceCount = attr().open_timer_params[2];
-    mDelayTimer = attr().open_timer_params[0];
+    field_0x2DC = 0.0f;
+    field_0x2E0 = attr().field_0x26;
+    field_0x2E2 = attr().field_0x24;
     fopAcM_seStart(this, JA_SE_OBJ_P_SHIP_SHTR_OP, 0);
 }
 
 /* 000008D4-00000A50       .text mode_l_u__Q210daObjAshut5Act_cFv */
 void daObjAshut::Act_c::mode_l_u() {
-    if (mDelayTimer > 0) {
-        mDelayTimer--;
+    if (field_0x2E2 > 0) {
+        field_0x2E2--;
     }
     
-    mSpeedY += attr().open_accel;
+    field_0x2DC += attr().field_0x18;
     
-    if (mDelayTimer > 0 && mDelayTimer < attr().open_timer_params[1]) {
-        mSpeedY *= (1.0f - attr().open_heavy_damping);
+    if (field_0x2E2 > 0 && field_0x2E2 < attr().field_0x25) {
+        field_0x2DC *= (1.0f - attr().field_0x20);
     } else {
-        mSpeedY *= (1.0f - attr().open_damping);
+        field_0x2DC *= (1.0f - attr().field_0x1C);
     }
-    mCurrentY += mSpeedY;
+    field_0x2D8 += field_0x2DC;
      
-    if (mCurrentY > l_bgw_release_height) {
-        // Disable the collision so the player can pass
+    if (field_0x2D8 > 150.0f) {
         if (mpBgW->ChkUsed()) {
             dComIfG_Bgsp()->Release(mpBgW);
         }
     }
 
-    if (mCurrentY >= attr().open_max_y) {
-        if (mBounceCount == 0) {
+    if (field_0x2D8 >= attr().field_0x00) {
+        if (field_0x2E0 == 0) {
             mode_upper_init();
         } else {
-            mBounceCount--;
-            f32 diff = mCurrentY - attr().open_max_y;
-            mCurrentY = attr().open_max_y + (diff * attr().open_bounce_factor);
-            mSpeedY *= attr().open_bounce_factor;
+            field_0x2E0--;
+            f32 diff = field_0x2D8 - attr().field_0x00;
+            field_0x2D8 = attr().field_0x00 + (diff * attr().field_0x28);
+            field_0x2DC *= attr().field_0x28;
 
-            if (mSpeedY < attr().max_open_bounce_vel) {
-                mSpeedY = attr().max_open_bounce_vel;
+            if (field_0x2DC < attr().field_0x2C) {
+                field_0x2DC = attr().field_0x2C;
             }
         }
     }
@@ -256,7 +251,7 @@ void daObjAshut::Act_c::mode_l_u() {
 void daObjAshut::Act_c::mode_demoreq_init(daObjAshut::Act_c::Mode_e i_demo_next) {
     JUT_ASSERT(DEMO_SELECT(544, 546), (i_demo_next == Mode_U_L) || (i_demo_next == Mode_L_U));
     
-    if (mIsEventReady) {
+    if (field_0x2E4) {
         if (i_demo_next == Mode_U_L) {
             mode_u_l_init();
         } else {
@@ -274,7 +269,7 @@ void daObjAshut::Act_c::mode_demoreq() {
     if (dComIfGp_evmng_existence(mEventId)) {
         if (eventInfo.checkCommandDemoAccrpt()) {
             is_demo_ready = true;
-            mIsEventReady = true;
+            field_0x2E4 = true;
         } else {
             fopAcM_orderOtherEventId(this, mEventId, prm_get_evId(), 0xFFFF, 0, 1);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
@@ -306,7 +301,7 @@ BOOL daObjAshut::Act_c::Execute(Mtx** pMtx) {
     (this->*mode_proc[mMode])();
 
     f32 eyeZ = current.pos.z;
-    f32 eyeY = current.pos.y + mCurrentY;
+    f32 eyeY = current.pos.y + field_0x2D8;
 
     eyePos.set(current.pos.x, eyeY, eyeZ);
     
