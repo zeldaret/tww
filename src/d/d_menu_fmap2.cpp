@@ -2247,7 +2247,32 @@ void dMenu_Fmap2_c::cmapPlayerPosDisp() {
 
 /* 801C4CF4-801C4F80       .text cmapSalvagePosDisp__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cmapSalvagePosDisp() {
-    /* Nonmatching */
+    u8 salvagePoint = dComIfGs_getRandomSalvagePoint();
+    aramCmapDatPnt_t* cmapDatPnt = getCmapDatPnt4(field_0x27A9);
+
+    f32 x = (f32)cmapDatPnt->salvagePnt[salvagePoint].x - (f32)cmapDatPnt->salvagePnt[salvagePoint].field_0x0;
+    f32 y = (f32)cmapDatPnt->salvagePnt[salvagePoint].y - (f32)cmapDatPnt->salvagePnt[salvagePoint].field_0x2;
+
+    for (int i = 5; i < 9; i++) {
+        mCddPanes[field_0x2815 ^ 1][i].mPosCenterOrig.x = mCddPanes[field_0x2815 ^ 1][3].mPosCenterOrig.x + x / 100.0f * 2.0f;
+        mCddPanes[field_0x2815 ^ 1][i].mPosCenterOrig.y = mCddPanes[field_0x2815 ^ 1][3].mPosCenterOrig.y + y / 100.0f * 2.0f;
+        fopMsgM_pane_class* pane = mCddPanes[field_0x2815 ^ 1];
+        pane[i].mPosCenter.x = pane[i].mPosCenterOrig.x;
+        pane[i].mPosCenter.y = pane[i].mPosCenterOrig.y;
+        fopMsgM_cposMove(&mCddPanes[field_0x2815 ^ 1][i]);
+    }
+
+    if (isCompleteCollectMap(field_0x27A9)) {
+        mCddPanes[field_0x2815 ^ 1][6].pane->hide();
+        mCddPanes[field_0x2815 ^ 1][7].pane->show();
+        mCddPanes[field_0x2815 ^ 1][8].pane->show();
+    } else {
+        mCddPanes[field_0x2815 ^ 1][6].pane->show();
+        mCddPanes[field_0x2815 ^ 1][7].pane->hide();
+        mCddPanes[field_0x2815 ^ 1][8].pane->hide();
+    }
+
+    mCddPanes[field_0x2815 ^ 1][5].pane->show();
 }
 
 /* 801C4F80-801C50FC       .text cmapPlayerPosDispCheck__13dMenu_Fmap2_cFPfPf */
