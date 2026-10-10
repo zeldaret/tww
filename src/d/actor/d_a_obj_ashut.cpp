@@ -55,7 +55,7 @@ static const f32 l_bgw_release_height = 150.0f;
 /* 00000078-0000012C       .text CreateHeap__Q210daObjAshut5Act_cFv */
 BOOL daObjAshut::Act_c::CreateHeap() {
     J3DModelData* mdl_data = (J3DModelData*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_ASHUT_BDL_ASHUT_e);
-    JUT_ASSERT(0xf9, mdl_data != NULL);
+    JUT_ASSERT(249, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
     return mpModel != NULL;
 }
@@ -342,9 +342,7 @@ BOOL Mthd_Execute(void* i_this) {
 
 /* 00000DCC-00000DF8       .text Mthd_Draw__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
-    return
-        // static_cast<dBgS_MoveBgActor*> /* casting as dBgS_MoveBgActor* solves weak func order*/
-        ((daObjAshut::Act_c*)i_this)->MoveBGDraw();
+    return ((daObjAshut::Act_c*)i_this)->MoveBGDraw();
 }
 
 /* 00000DF8-00000E24       .text Mthd_IsDelete__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
