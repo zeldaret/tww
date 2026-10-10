@@ -2281,8 +2281,8 @@ void dMenu_Fmap2_c::changeCmapName() {
     } else {
         msgNo = cmapNo + 0x36EB;
     }
-
-#if VERSION <= VERSION_JPN
+#if VERSION > VERSION_DEMO
+#if VERSION == VERSION_JPN
     if ((u32)(cmapNo - 1) <= 7 || cmapNo == 0xb || cmapNo == 0x18 || cmapNo == 0x24 || cmapNo == 0x30)
 #else
     if (cmapNo <= 8)
@@ -2294,6 +2294,7 @@ void dMenu_Fmap2_c::changeCmapName() {
         ((J2DTextBox*)mCmtPanes[mCmxxBufIdx ^ 1].pane)->setBlackWhite(JUtility::TColor(0, 0, 0x4A, 0), JUtility::TColor(0, 0, 0xFF, 0xFF));
         ((J2DTextBox*)mCmtPanes[(mCmxxBufIdx ^ 1) + 2].pane)->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 0xFF));
     }
+#endif
 
     fopMsgM_messageGet(mTxtCmapName[mCmxxBufIdx ^ 1], msgNo);
     fopMsgM_messageGet(mTxtCmapName[(mCmxxBufIdx ^ 1) + 2], msgNo);
