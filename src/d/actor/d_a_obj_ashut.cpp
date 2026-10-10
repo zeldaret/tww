@@ -328,13 +328,13 @@ BOOL Mthd_Execute(void* i_this) {
 /* 00000DCC-00000DF8       .text Mthd_Draw__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
 BOOL Mthd_Draw(void* i_this) {
     return
-        static_cast<dBgS_MoveBgActor*> /* casting as dBgS_MoveBgActor* solves weak func order*/
-        (i_this)->Draw();
+        // static_cast<dBgS_MoveBgActor*> /* casting as dBgS_MoveBgActor* solves weak func order*/
+        ((daObjAshut::Act_c*)i_this)->MoveBGDraw();
 }
 
 /* 00000DF8-00000E24       .text Mthd_IsDelete__Q210daObjAshut27@unnamed@d_a_obj_ashut_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
-    return ((daObjAshut::Act_c*)i_this)->IsDelete();
+    return ((daObjAshut::Act_c*)i_this)->MoveBGIsDelete();
 }
 
 static actor_method_class Mthd_Table = {
