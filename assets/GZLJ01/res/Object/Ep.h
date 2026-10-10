@@ -22,15 +22,18 @@ enum dRes_ID_EP {
 
 enum EP_GA_JNT {
     EP_GA_JNT_BODY_e=0x0,
+    EP_GA_NUM_JNTS_e=0x1,
 };
 
 enum OBM_SHOKUDAI1_JNT {
     OBM_SHOKUDAI1_JNT_OBM_SHOKUDAI1_e=0x0,
     OBM_SHOKUDAI1_JNT_POLYSURFACE3_e=0x1,
+    OBM_SHOKUDAI1_NUM_JNTS_e=0x2,
 };
 
 enum VKTSD_JNT {
     VKTSD_JNT_VKTSD_MODEL_e=0x0,
+    VKTSD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_EP_H */

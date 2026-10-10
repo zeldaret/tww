@@ -64,7 +64,7 @@ void dStage_KeepTresureInfoProc(dStage_dt_c* i_stage, stage_tresure_class* i_tre
         TresureInfo.num = 0;
         return;
     }
-    if (i_tresure->num >= (int)ARRAY_SIZE(TresureInfo.mTresureData) || i_tresure->num < 0) {
+    if (i_tresure->num >= ARRAY_SSIZE(TresureInfo.mTresureData) || i_tresure->num < 0) {
         TresureInfo.num = 0;
         return;
     }
@@ -93,7 +93,7 @@ void dStage_KeepDoorInfoProc(dStage_dt_c* i_stage, stage_tgsc_class* i_drtg) {
         DoorInfo.num = 0;
         return;
     }
-    if (i_drtg->num >= (int)ARRAY_SIZE(DoorInfo.mDrTgData) || i_drtg->num < 0) {
+    if (i_drtg->num >= ARRAY_SSIZE(DoorInfo.mDrTgData) || i_drtg->num < 0) {
         DoorInfo.num = 0;
         return;
     }
@@ -198,7 +198,7 @@ int createRoomScene(int param_0) {
     }
 
     *ptr = param_0;
-    return fopScnM_CreateReq(fpcNm_ROOM_SCENE_e, fpcNm_INVALID_e, 0, (u32)ptr);
+    return fopScnM_CreateReq(fpcNm_ROOM_SCENE_e, fpcNm_INVALID_e, 0, (uintptr_t)ptr);
 }
 
 /* 80040E38-80040E6C       .text checkRoomDisp__20dStage_roomControl_cCFi */
@@ -219,7 +219,7 @@ int dStage_roomControl_c::loadRoom(int roomCount, u8* rooms) {
     }
     
     BOOL r26 = TRUE;
-    for (int roomNo = 0; roomNo < (int)ARRAY_SIZE(mStatus); roomNo++) {
+    for (int roomNo = 0; roomNo < ARRAY_SSIZE(mStatus); roomNo++) {
         if (dStage_roomControl_c::checkStatusFlag(roomNo, 0x01)) {
             if (!stayRoomCheck(roomCount, rooms, roomNo)) {
                 onStatusFlag(roomNo, 0x04);
@@ -340,7 +340,7 @@ dStage_darkStatus_c* dStage_roomControl_c::getDarkStatus() {
 }
 
 /* 80041330-80041370       .text getDarkMode__20dStage_roomControl_cFv */
-s32 dStage_roomControl_c::getDarkMode() {
+int dStage_roomControl_c::getDarkMode() {
     dStage_roomStatus_c * pRoomStatus = &mStatus[mStayNo];
     dStage_FileList_dt_c* plist_p = pRoomStatus->mRoomDt.mpFileList;
 
@@ -1736,8 +1736,8 @@ int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int i_num, void* i_f
     i_stage->setRoom(rtbl);
 
     for (int i = 0; i < rtbl->num; i++) {
-        rtbl_entries[i] = (roomRead_data_class*)((u32)i_file + (u32)rtbl_entries[i]);
-        rtbl_entries[i]->m_rooms = (u8*)((u32)i_file + (u32)rtbl_entries[i]->m_rooms);
+        rtbl_entries[i] = (roomRead_data_class*)((uintptr_t)i_file + (uintptr_t)rtbl_entries[i]);
+        rtbl_entries[i]->m_rooms = (u8*)((uintptr_t)i_file + (uintptr_t)rtbl_entries[i]->m_rooms);
     }
 
     return 1;
@@ -1766,7 +1766,7 @@ int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPathInfo(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
-        pPath->m_points = (dPnt*)((u32)pPath->m_points + i_stage->getPntInf()->m_pnt_offset);
+        pPath->m_points = (dPnt*)((uintptr_t)pPath->m_points + i_stage->getPntInf()->m_pnt_offset);
     return 1;
 }
 
@@ -1784,7 +1784,7 @@ int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPath2Info(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
-        pPath->m_points = (dPnt*)((u32)pPath->m_points + i_stage->getPnt2Inf()->m_pnt_offset);
+        pPath->m_points = (dPnt*)((uintptr_t)pPath->m_points + i_stage->getPnt2Inf()->m_pnt_offset);
     return 1;
 }
 
@@ -2049,7 +2049,7 @@ void dStage_dt_c_offsetToPtr(void* i_data) {
 
     for (int i = 0; i < file->m_chunkCount; i++) {
         if (p_tno->m_offset != 0) {
-            p_tno->m_offset += (u32)i_data;
+            p_tno->m_offset += (uintptr_t)i_data;
         }
         p_tno++;
     }
@@ -2246,7 +2246,7 @@ void dStage_Create() {
 
 /* 80043464-80043514       .text dStage_Delete__Fv */
 void dStage_Delete() {
-    char* demoArcName = dStage_roomControl_c::getDemoArcName();
+    const char* demoArcName = dStage_roomControl_c::getDemoArcName();
     if (*demoArcName != 0) {
         dComIfG_deleteObjectRes(demoArcName);
     }
@@ -2323,7 +2323,7 @@ int dStage_changeSceneExitId(cBgS_PolyInfo& i_poly, f32 i_speed, u32 i_mode, s8 
         if (strcmp(dComIfGp_getStartStageName(), "Asoko") == 0) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0808)) {
                 if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0520)) {
-                    dComIfGp_setNextStage("sea", 5, 11, -1, i_speed, i_mode);
+                    dComIfGp_setNextStage("sea", 5, dIsleRoom_WindfallIsland_e, -1, i_speed, i_mode);
                 } else {
                     dComIfGp_setNextStage("MajyuE", 18, 0, -1, i_speed, i_mode);
                 }
@@ -2392,19 +2392,17 @@ void dStage_turnRestart() {
     dKy_set_nexttime(nextTime);
 }
 
+#if VERSION > VERSION_DEMO
 /* 80043BD0-80043C84       .text dStage_escapeRestart__Fv */
 void dStage_escapeRestart() {
     daPy_lk_c* player_p = daPy_getPlayerLinkActorClass();
-    dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y,
-                            fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
+    dComIfGs_setTurnRestart(player_p->current.pos, player_p->shape_angle.y, fopAcM_GetRoomNo(player_p), player_p->getDayNightParamData());
 
-    if (dComIfG_getTimerMode() == 3) {
-        dComIfG_TimerDeleteRequest();
-    }
+    dComIfG_TimerDeleteRequest(3);
 
-    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1,
-                          0.0f, 0, FALSE, 9);
+    dComIfGp_setNextStage(dComIfGp_getStartStageName(), -3, dComIfGs_getTurnRestartRoomNo(), -1, 0.0f, 0, FALSE, 9);
 }
+#endif
 
 /* 80043C84-80043CD0       .text dStage_checkRestart__Fv */
 BOOL dStage_checkRestart() {
@@ -2441,4 +2439,4 @@ s8 dStage_roomControl_c::mStayNo;
 s8 dStage_roomControl_c::mOldStayNo;
 u8 dStage_roomControl_c::mDarkRatio;
 char dStage_roomControl_c::mDemoArcName[8];
-s8 dStage_roomControl_c::m_time_pass;
+u8 dStage_roomControl_c::m_time_pass;

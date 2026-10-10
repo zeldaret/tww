@@ -18,7 +18,7 @@ public:
 
     virtual ~dFe_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 m5;
@@ -42,29 +42,8 @@ public:
 
     virtual ~dDlst_FileErr_c() {}
 
-    J2DScreen* Scr;
+    MyScreen* Scr;
     JUTFont* font;
-};
-
-class MyScreen : public J2DScreen {
-public:
-    /* 8017F6D8-8017F760       .text createPane__8MyScreenFRCQ27J2DPane18J2DScrnBlockHeaderP20JSURandomInputStreamP7J2DPane */
-    J2DPane* createPane(const J2DPane::J2DScrnBlockHeader& pHeader, JSURandomInputStream* pStream, J2DPane* pParent) {
-        J2DPane* pane;
-
-        switch (pHeader.mMagic) {
-            case 'PIC1':
-                pane = new MyPicture(pParent, pStream);
-                break;
-            default:
-                pane = J2DScreen::createPane(pHeader, pStream, pParent);
-                break;
-        }
-
-        return pane;
-    }
-
-    virtual ~MyScreen();
 };
 
 class dFile_error_c {
@@ -78,6 +57,9 @@ public:
     void _create();
     void initial();
     void _delete();
+#if VERSION == VERSION_DEMO
+    void _deleteSp();
+#endif
     void setErrMessage(u32, int);
     void closeMessage();
     void resizeMsgBoard(int);

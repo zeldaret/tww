@@ -49,6 +49,7 @@ enum KM_JNT {
     KM_JNT_FOOT_e=0x11,
     KM_JNT_TRAIN1_e=0x12,
     KM_JNT_TRAIN2_e=0x13,
+    KM_NUM_JNTS_e=0x14,
 };
 
 #endif /* RES_KM_H */

@@ -113,6 +113,7 @@ enum PW_JNT {
     PW_JNT_J_PW_UDE_R1_e=0x15,
     PW_JNT_J_PW_UDE_R2_e=0x16,
     PW_JNT_J_PW_ITEM_R1_e=0x17,
+    PW_NUM_JNTS_e=0x18,
 };
 
 #endif /* RES_PW_H */

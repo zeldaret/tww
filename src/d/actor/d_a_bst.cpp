@@ -26,7 +26,7 @@ class daBst_HIO_c : public JORReflexible {
 public:
     daBst_HIO_c();
     virtual ~daBst_HIO_c() {}
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x4 */ s8 m4;
@@ -1004,7 +1004,7 @@ static void beam_attack(bst_class* i_this) {
         }
         break;
     }
-    f32 dist = fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0));
+    f32 dist = fopAcM_searchPlayerDistance(actor);
     if (dist < REG0_F(9) + 500.0f || bVar3) {
         i_this->mRoomState = 8;
         i_this->mActionType = bst_class::ACTION_FLY_e;
@@ -1080,7 +1080,6 @@ static void damage(bst_class* i_this) {
 /* 00003DD8-00003EC4       .text bom_eat_check__FP9bst_class */
 static BOOL bom_eat_check(bst_class* i_this) {
     if (i_this->mHandHurtCyl.ChkCoHit()) {
-
         cCcD_Obj* hit_obj = i_this->mHandHurtCyl.GetCoHitObj();
         if (hit_obj != NULL) {
             fopAc_ac_c* hit_actor = (fopAc_ac_c*)hit_obj->GetAc();
@@ -1487,7 +1486,7 @@ static void damage_check(bst_class* i_this) {
                     scale.x = scale.y = scale.z = 2.0f;
                     csXyz angle;
                     angle.x = angle.z = 0;
-                    angle.y = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
+                    angle.y = fopAcM_searchPlayerAngleY(actor);
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, hit_pos, &angle, &scale);
                     dKy_SordFlush_set(*hit_pos, 1);
                 }
@@ -1496,7 +1495,6 @@ static void damage_check(bst_class* i_this) {
             if (i_this->mHandHurtCyl.ChkTgHit()) {
                 i_this->mState = 10;
                 if (player_way_check(i_this)) {
-
                     atInfo.mpObj = i_this->mHandHurtCyl.GetTgHitObj();
                     atInfo.pParticlePos = i_this->mHandHurtCyl.GetTgHitPosP();
                     atInfo.mpActor = cc_at_check(actor, &atInfo);
@@ -1513,12 +1511,10 @@ static void damage_check(bst_class* i_this) {
                     cXyz* hit_pos = i_this->mHandHurtCyl.GetTgHitPosP();
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, hit_pos);
                     cXyz scale;
-                    scale.z = 2.0f;
-                    scale.y = 2.0f;
-                    scale.x = 2.0f;
+                    scale.x = scale.y = scale.z = 2.0f;
                     csXyz angle;
                     angle.x = angle.z = 0;
-                    angle.y = fopAcM_searchActorAngleY(actor, dComIfGp_getPlayer(0));
+                    angle.y = fopAcM_searchPlayerAngleY(actor);
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, hit_pos, &angle, &scale);
                     dKy_SordFlush_set(*hit_pos, 1);
                     i_this->mActionType = bst_class::ACTION_DAMAGE_e;
@@ -1941,7 +1937,7 @@ static BOOL beam_wall_check(cXyz* pos_1, cXyz* pos_2) {
     end.y = start.y;
     gndChk.Set(&start, &end, NULL);
     if (dComIfG_Bgsp()->LineCross(&gndChk)) {
-        *pos_1 = gndChk.mLin.GetEnd();
+        *pos_1 = gndChk.GetCross();
         return TRUE;
     }
     return FALSE;
@@ -2037,7 +2033,7 @@ void demo_camera(bst_class* i_this) {
     cXyz spB0; // offset
     cXyz spA4;
     daPy_py_c* player = daPy_getPlayerActorClass();
-    camera_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     s8 bVar2 = true;
     switch (i_this->m2E9A) {
@@ -2848,7 +2844,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
                 i_this->m02B8->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBackHead);
             }
         }
-        i_this->m02B8->getModel()->setUserArea((u32)i_this);
+        i_this->m02B8->getModel()->setUserArea((uintptr_t)i_this);
     }
     i_this->m0388 = mDoExt_J3DModel__create(i_this->m02B8->getModel()->getModelData(), 0, 0x11020203);
     if (i_this->m0388 == NULL) {
@@ -3179,7 +3175,7 @@ static cPhs_State daBst_Create(fopAc_ac_c* a_this) {
             actor->max_health = 4;
         }
     }
-    i_this->mUpdateLastFacingDirIfMultipleOf32 = cM_rndFX(32768.0f);
+    i_this->mUpdateLastFacingDirIfMultipleOf32 = cM_rndFX(0x8000);
 #if VERSION > VERSION_DEMO
     i_this->mEnvLight = actor->tevStr;
     i_this->m2F20 = actor->tevStr;

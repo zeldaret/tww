@@ -23,6 +23,7 @@ enum dRes_ID_VHOOK {
 enum VHOOK_JNT {
     VHOOK_JNT_ROOT_VHOOK_e=0x0,
     VHOOK_JNT_VHOOK_MODEL_e=0x1,
+    VHOOK_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VHOOK_H */

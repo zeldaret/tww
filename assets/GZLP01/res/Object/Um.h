@@ -88,22 +88,27 @@ enum UM_JNT {
     UM_JNT_LEGR1_e=0x10,
     UM_JNT_LEGR2_e=0x11,
     UM_JNT_FOOTR_e=0x12,
+    UM_NUM_JNTS_e=0x13,
 };
 
 enum UM_SCOPE_JNT {
     UM_SCOPE_JNT_UM_SCOPE_e=0x0,
+    UM_SCOPE_NUM_JNTS_e=0x1,
 };
 
 enum UM01_HEAD_JNT {
     UM01_HEAD_JNT_UM01_HEAD_e=0x0,
+    UM01_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UM02_HEAD_JNT {
     UM02_HEAD_JNT_UM02_HEAD_e=0x0,
+    UM02_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UM03_HEAD_JNT {
     UM03_HEAD_JNT_UM03_HEAD_e=0x0,
+    UM03_HEAD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_UM_H */

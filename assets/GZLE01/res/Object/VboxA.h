@@ -22,6 +22,7 @@ enum dRes_ID_VBOXA {
 
 enum VBOXP_JNT {
     VBOXP_JNT_VBOXP_MODEL_e=0x0,
+    VBOXP_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VBOXA_H */

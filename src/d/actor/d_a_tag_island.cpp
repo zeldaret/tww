@@ -136,7 +136,7 @@ void daTag_Island_c::demoInitProc() {
 }
 
 /* 00000550-00000558       .text next_msgStatus__14daTag_Island_cFPUl */
-int daTag_Island_c::next_msgStatus(unsigned long*) {
+int daTag_Island_c::next_msgStatus(u32*) {
     return fopMsgStts_MSG_ENDS_e;
 }
 
@@ -192,11 +192,11 @@ void daTag_Island_c::demoInitTact_Bf() {
     talkInit();
 
     int* a_intP = dComIfGp_evmng_getMyIntegerP(mStaffId, "prm0");
-    JUT_ASSERT(0x167, a_intP);
+    JUT_ASSERT(359, a_intP);
 
     if (a_intP != NULL) {
         dComIfGp_setMelodyNum(*a_intP);
-        if (*a_intP == 6) {
+        if (*a_intP == mDoAud_MELODY_UNK6_e) {
             m2AC = 0x05B4;
         } else {
             m2AC = 0x05B3;
@@ -247,7 +247,7 @@ BOOL daTag_Island_c::demoProcTact_Af() {
             setFlag(daTagIsl_UNK_02);
             fopAcM_orderChangeEventId(this, daPy_getPlayerLinkActorClass(), mEventId, 0, 0xFFFF);
         } else {
-            JUT_ASSERT(0x1b3, FALSE);
+            JUT_ASSERT(435, FALSE);
             dComIfGp_evmng_cutEnd(mStaffId);
         }
     }
@@ -259,7 +259,7 @@ BOOL daTag_Island_c::demoProcTact_Af() {
 void daTag_Island_c::demoInitSpeak() {
     talkInit();
     int* a_intP = dComIfGp_evmng_getMyIntegerP(mStaffId, "MsgNo");
-    JUT_ASSERT(0x1C2, a_intP);
+    JUT_ASSERT(450, a_intP);
 
     m2AC = *a_intP;
     
@@ -451,7 +451,7 @@ cPhs_State daTag_Island_c::create() {
     s32 swbit = getSwbit();
     makeEvId();
     eventInfo.setEventId(mEventId);
-    eventInfo.mMapToolId = getEventNo();
+    eventInfo.setToolId(getEventNo());
 
     if (mEventId != -1 && swbit != 0xFF && !dComIfGs_isSwitch(swbit, fopAcM_GetRoomNo(this))) {
         setActio(ACT_ARRIVAL);
@@ -505,6 +505,7 @@ static BOOL daTag_Island_Execute(daTag_Island_c* i_this) {
 
 /* 000012C4-000012CC       .text daTag_Island_IsDelete__FP14daTag_Island_c */
 static BOOL daTag_Island_IsDelete(daTag_Island_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

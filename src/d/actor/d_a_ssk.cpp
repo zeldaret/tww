@@ -292,7 +292,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    i_this->mpMorf1->getModel()->setUserArea((u32)i_this);
+    i_this->mpMorf1->getModel()->setUserArea((uintptr_t)i_this);
 
 #if VERSION > VERSION_DEMO
     static Vec sph_offset = {0.0f, 0.0f, 0.0f};
@@ -330,7 +330,6 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 
 /* 00000EB8-00001244       .text daSsk_Create__FP10fopAc_ac_c */
 static cPhs_State daSsk_Create(fopAc_ac_c* a_this) {
-    /* Nonmatching */
     static dCcD_SrcCyl body_co_cyl = {
         // dCcD_SrcGObjInf
         {

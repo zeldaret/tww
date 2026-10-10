@@ -50,6 +50,7 @@ enum dRes_ID_KF {
 
 enum KF_HAIR_JNT {
     KF_HAIR_JNT_KF_HAIR_e=0x0,
+    KF_HAIR_NUM_JNTS_e=0x1,
 };
 
 enum KF_JNT {
@@ -72,6 +73,7 @@ enum KF_JNT {
     KF_JNT_LEGR1_e=0x10,
     KF_JNT_LEGR2_e=0x11,
     KF_JNT_FOOTR_e=0x12,
+    KF_NUM_JNTS_e=0x13,
 };
 
 #endif /* RES_KF_H */

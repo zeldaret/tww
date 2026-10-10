@@ -28,14 +28,17 @@ enum dRes_ID_OKMONO {
 
 enum OSTOOL_JNT {
     OSTOOL_JNT_OSTOOL_e=0x0,
+    OSTOOL_NUM_JNTS_e=0x1,
 };
 
 enum OTABLE_JNT {
     OTABLE_JNT_OTABLE_e=0x0,
+    OTABLE_NUM_JNTS_e=0x1,
 };
 
 enum OTABLEL_JNT {
     OTABLEL_JNT_OTBLE_L_e=0x0,
+    OTABLEL_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_OKMONO_H */

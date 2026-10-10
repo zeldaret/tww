@@ -101,17 +101,17 @@ void messageSet(u32 status) {
     J2DPicture * ppane = new J2DPicture('PIC1', JGeometry::TBox2<f32>(0.0f, 0.0f, 665.0f, 530.0f), (ResTIMG*)black_tex, NULL);
     JUT_ASSERT(VERSION_SELECT(312, 312, 334, 334), ppane != NULL);
 
-    J2DTextBox::TFontSize size;
-    size.mSizeX = 27.0f;
-    size.mSizeY = 27.0f;
-    tpane->setFontSize(size);
+    J2DTextBox::TFontSize fontSize;
+    fontSize.mSizeX = 27.0f;
+    fontSize.mSizeY = 27.0f;
+    tpane->setFontSize(fontSize);
     tpane->setCharColor(JUtility::TColor(0xFF, 0xC8, 0x00, 0xFF));
     tpane->setGradColor(JUtility::TColor(0xFF, 0xB4, 0x00, 0xFF));
     tpane->setCharSpace(0.0f);
     tpane->setLineSpace(27.0f);
     tpane->setBlack(JUtility::TColor(0xFF, 0xFF, 0xFF, 0x00));
 
-    spane->setFontSize(size);
+    spane->setFontSize(fontSize);
     spane->setCharColor(JUtility::TColor(0x00, 0x00, 0x00, 0xC8));
     spane->setGradColor(JUtility::TColor(0x00, 0x00, 0x00, 0xC8));
     spane->setCharSpace(0.0f);

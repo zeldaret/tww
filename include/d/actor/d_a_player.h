@@ -166,7 +166,7 @@ public:
         daPyFlg0_UNK1               = 0x00000001,
         daPyFlg0_UNK2               = 0x00000002,
         daPyFlg0_UNK4               = 0x00000004,
-        daPyFlg0_UNK8               = 0x00000008,
+        daPyFlg0_FROLL_CRASH_FLG    = 0x00000008, // Just bonked during a forward roll
         daPyFlg0_DEKU_SP_RETURN_FLG = 0x00000010,
         daPyFlg0_UNK20              = 0x00000020,
         daPyFlg0_CUT_AT_FLG         = 0x00000040,
@@ -178,7 +178,7 @@ public:
         daPyFlg0_HOVER_BOOTS        = 0x00001000,
         daPyFlg0_UNK4000            = 0x00004000,
         daPyFlg0_UNK10000           = 0x00010000,
-        daPyFlg0_UNK20000           = 0x00020000,
+        daPyFlg0_AUTO_JUMP          = 0x00020000,
         daPyFlg0_NO_FALL_VOICE      = 0x00040000,
         daPyFlg0_SCOPE_CANCEL       = 0x00080000,
         daPyFlg0_PHOTO_BOX_CANCEL   = 0x00080000, // Same as scope cancel
@@ -213,7 +213,7 @@ public:
         daPyFlg1_SOUP_POWER_UP          = 0x00008000,
         daPyFlg1_FORCE_VOMIT_JUMP_SHORT = 0x00010000,
         daPyFlg1_FOREST_WATER_USE       = 0x00020000,
-        daPyFlg1_UNK40000               = 0x00040000,
+        daPyFlg1_FREEZE_FADED_IN        = 0x00040000, // After being frozen, screen starts fading back in from white
         daPyFlg1_WATER_DROP             = 0x00080000,
         daPyFlg1_UNK100000              = 0x00100000,
         daPyFlg1_UNK200000              = 0x00200000,
@@ -624,7 +624,7 @@ public:
     virtual BOOL checkCutCharge() const { return FALSE; }
     virtual BOOL getBokoFlamePos(cXyz*) { return FALSE; }
     virtual BOOL checkTactWait() const { return FALSE; }
-    virtual void setTactZev(fpc_ProcID, int, char*) {}
+    virtual void setTactZev(fpc_ProcID i_partnerId, int i_melodyNum, char* i_eventName) {}
     virtual void onDekuSpReturnFlg(u8) {}
     virtual BOOL checkComboCutTurn() const { return false; }
     virtual f32 getBaseAnimeFrameRate() = 0;
@@ -637,7 +637,7 @@ public:
     virtual BOOL checkRopeTag() { return FALSE; }
     virtual BOOL checkRopeReadyAnime() const { return FALSE; }
     virtual void voiceStart(u32) {}
-    virtual void setOutPower(f32, s16, int) {}
+    virtual void setOutPower(f32, s16 i_targetAngle, int) {}
     virtual void onFrollCrashFlg(u32) {}
     virtual MtxP getModelJointMtx(u16) { return NULL; }
     virtual f32 getOldSpeedY() { return 0.0f; }

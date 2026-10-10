@@ -42,6 +42,7 @@ enum OS_JNT {
     OS_JNT_TUNO2_JOINT_e=0x4,
     OS_JNT_TUNO3_JOINT_e=0x5,
     OS_JNT_TRIFORCE_JOINT_e=0x6,
+    OS_NUM_JNTS_e=0x7,
 };
 
 #endif /* RES_OS_H */

@@ -125,9 +125,9 @@ GXColor* makeColorTable(JPAColorRegAnmKey* pKey, int keyNum, int frmNum, JKRHeap
 }
 
 static void dummy() {
-    OSReport("texTable");
-    OSReport("(*((s16*) (bin + 20))) != 0");
-    OSReport("(*((s16*) (bin + 22))) != 0");
+    DEAD_STRING("texTable");
+    DEAD_STRING("(*((s16*) (bin + 20))) != 0");
+    DEAD_STRING("(*((s16*) (bin + 22))) != 0");
 
     // Fakematch? Fixes weak function order of JPABaseShape::~JPABaseShape()
     JPABaseShape* temp = NULL;

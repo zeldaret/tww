@@ -235,7 +235,7 @@ void TObject::process_paragraph_reserved_(u32 arg1, const void* pContent, u32 uS
         data::TParse_TParagraph_dataID dataID(pContent);
         const void* temp = dataID.getContent();
         on_data(dataID.get_ID(), dataID.get_IDSize(), temp,
-                uSize - ((u32)temp - (u32)dataID.getRaw()));
+                uSize - ((uintptr_t)temp - (uintptr_t)dataID.getRaw()));
         break;
     }
     case 0x82:
@@ -299,7 +299,7 @@ bool TControl::forward(u32 param_0) {
     bool rv = mObject_control.forward(param_0);
     int uVar7 = 0xf;
     int uVar6 = 0;
-    JGadget::TContainerEnumerator<JStudio::stb::TObject, -12> enumerator(&mObjectContainer);
+    JGadget::TContainerEnumerator<JGadget::TLinkList<JStudio::stb::TObject, -12> > enumerator(mObjectContainer);
     while (enumerator) {
         JStudio::stb::TObject& object = *enumerator;
         rv = object.forward(param_0) || rv;

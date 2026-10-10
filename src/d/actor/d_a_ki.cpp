@@ -52,7 +52,7 @@ public:
     }
     virtual ~kiHIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 m05;
@@ -629,7 +629,7 @@ void ki_atack_move(ki_class* i_this) {
             cLib_addCalcAngleS2(&a_this->shape_angle.y, fopAcM_searchPlayerAngleY(a_this), 2, 0x1000);
             if (i_this->mTimers[1] == 0) {
                 i_this->mTimers[1] = cM_rndF(50.0f) + 50.0f;
-                s32 rndFX = cM_rndFX(32768.0f);
+                s32 rndFX = cM_rndFX(0x8000);
                 cMtx_YrotS(*calc_mtx, player->current.angle.y + rndFX);
                 sp24.x = 0.0f;
                 sp24.y = (cM_rndFX(50.0f) + 200.0f) + REG0_F(12);
@@ -922,7 +922,6 @@ void ki_path_move(ki_class* i_this) {
                 }
             }
             break;
-
     }
 
     i_this->mPosMoveTarget = l_kiHIO.m28;
@@ -1275,7 +1274,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     tex_anm_set(i_this, 1);
-    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)i_this);
     return TRUE;
 }
 

@@ -2069,8 +2069,8 @@ void Act_c::mode_afl_init() {
 
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
 
-    m804 = cM_rndFX(32768.0f);
-    m806 = cM_rndFX(32768.0f);
+    m804 = cM_rndFX(0x8000);
+    m806 = cM_rndFX(0x8000);
     m678 = 7;
 }
 
@@ -2281,15 +2281,15 @@ bool Act_c::damage_tg_acc() {
         }
 
         if (fVar1 > 0.0f) {
-            f32 abs = m814.abs();
+            f32 temp1 = m814.abs();
             cXyz sp34 = *mCyl.GetTgRVecP();
-            f32 abs2 = sp34.abs();
+            f32 temp2 = sp34.abs();
 
-            if (fVar1 > abs && abs2 > abs) {
-                if (abs2 < fVar1) {
+            if (fVar1 > temp1 && temp2 > temp1) {
+                if (temp2 < fVar1) {
                     m814 = sp34;
                 } else {
-                    m814 = sp34 * (fVar1 / abs2);
+                    m814 = sp34 * (fVar1 / temp2);
                 }
                 m814.y += fVar2;
                 iVar9 = true;
@@ -2829,7 +2829,7 @@ void Act_c::moment_proc_call() {
     if (m678 == 3) {
         cM3dGPla* pcVar1 = NULL;
         if (mAcch.ChkGroundHit()) {
-            pcVar1 = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
+            pcVar1 = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         }
 
         if (pcVar1 != NULL) {
@@ -2930,7 +2930,7 @@ void Act_c::set_tensor(const cXyz* pos) {
 void Act_c::init_rot_throw() {
     m688.Val(data().m28);
     m688 *= cM_rnd();
-    m68A.Val((s16)cM_rndFX(32768.0f));
+    m68A.Val((s16)cM_rndFX(0x8000));
     m68C.Val(data().m2A);
     m68E.Val(cSAngle::_0);
     m690.Val(data().m2C);

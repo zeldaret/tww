@@ -22,6 +22,7 @@ enum dRes_ID_X_TOWER {
 
 enum X_TOWER_JNT {
     X_TOWER_JNT_WORLD_ROOT_e=0x0,
+    X_TOWER_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_X_TOWER_H */

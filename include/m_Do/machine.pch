@@ -1,0 +1,30 @@
+#ifndef MACHINE_PCH
+#define MACHINE_PCH
+
+#ifdef DECOMPCTX
+// Hack to mitigate fake mismatches when building from decompctx output
+// (which doesn't support precompiled headers).
+// When built without a PCH, these constants would end up .rodata instead of .data
+// which causes a variety of knock-on effects in individual functions' assembly.
+#include "weak_data.h" // IWYU pragma: export
+#endif
+
+// Fixes weak .data
+#include "math.h" // IWYU pragma: export
+#include "JSystem/J3DGraphBase/J3DMatBlock.h" // IWYU pragma: export
+#include "JSystem/J3DGraphAnimator/J3DJoint.h" // IWYU pragma: export
+
+// Fixes weak .bss
+#include "weak_bss_936_to_1036.h" // IWYU pragma: keep
+#include "weak_bss_3569.h" // IWYU pragma: keep
+
+#include "SSystem/SComponent/c_lib.h" // IWYU pragma: export
+#include "JSystem/JKernel/JKRHeap.h" // IWYU pragma: keep
+#include "JSystem/J2DGraph/J2DOrthoGraph.h" // IWYU pragma: export
+#include "m_Do/m_Do_audio.h" // IWYU pragma: export
+#include "m_Do/m_Do_ext.h" // IWYU pragma: export
+#include "m_Do/m_Do_mtx.h" // IWYU pragma: export
+#include "m_Do/m_Do_hostIO.h" // IWYU pragma: export
+#include "d/d_stage.h" // IWYU pragma: export
+
+#endif /* MACHINE_PCH */

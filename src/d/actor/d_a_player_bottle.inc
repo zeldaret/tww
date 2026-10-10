@@ -480,7 +480,7 @@ BOOL daPy_lk_c::procBottleSwing() {
                 if (!strcmp(dComIfGp_getStartStageName(), "Omori")) {
                     bVar5 = dItemNo_FOREST_WATER_e;
                     if (dComIfGs_checkBottle(dItemNo_FOREST_WATER_e)) {
-                        m3628 = fpcM_ERROR_PROCESS_ID_e;
+                        mGameOverId = fpcM_ERROR_PROCESS_ID_e;
                         mProcVar7.m3574 = 1;
                     } else {
                         dComIfGs_getpItemRecord()->resetTimer(36000);
@@ -545,7 +545,7 @@ BOOL daPy_lk_c::procBottleGet_init() {
         m_HIO->mItem.mBottle.m.field_0x38
     );
     dComIfGp_setPlayerStatus1(0, daPyStts1_UNK1000_e);
-    m3628 = fpcM_ERROR_PROCESS_ID_e;
+    mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     mProcVar6.m3570 = 0;
     dCam_getBody()->StartEventCamera(0x12, fopAcM_GetID(this), "Type", &mProcVar6.m3570, 0);
     if (mEquipItem == dItemNo_FOREST_WATER_e) {

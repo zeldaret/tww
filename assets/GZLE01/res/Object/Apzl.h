@@ -542,14 +542,17 @@ enum dRes_ID_APZL {
 
 enum APZLP_JNT {
     APZLP_JNT_APZLP_e=0x0,
+    APZLP_NUM_JNTS_e=0x1,
 };
 
 enum APZLY_JNT {
     APZLY_JNT_APZLY_e=0x0,
+    APZLY_NUM_JNTS_e=0x1,
 };
 
 enum VBSRP_JNT {
     VBSRP_JNT_VBESO_RAMP_MODEL_e=0x0,
+    VBSRP_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_APZL_H */

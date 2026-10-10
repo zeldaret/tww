@@ -178,6 +178,7 @@ enum UB_JNT {
     UB_JNT_LEGR1_e=0x10,
     UB_JNT_LEGR2_e=0x11,
     UB_JNT_FOOTR_e=0x12,
+    UB_NUM_JNTS_e=0x13,
 };
 
 enum UO_JNT {
@@ -200,6 +201,7 @@ enum UO_JNT {
     UO_JNT_LEGR1_e=0x10,
     UO_JNT_LEGR2_e=0x11,
     UO_JNT_FOOTR_e=0x12,
+    UO_NUM_JNTS_e=0x13,
 };
 
 enum UW_JNT {
@@ -222,6 +224,7 @@ enum UW_JNT {
     UW_JNT_LEGR1_e=0x10,
     UW_JNT_LEGR2_e=0x11,
     UW_JNT_FOOTR_e=0x12,
+    UW_NUM_JNTS_e=0x13,
 };
 
 enum SA_JNT {
@@ -244,6 +247,7 @@ enum SA_JNT {
     SA_JNT_LEGR1_e=0x10,
     SA_JNT_LEGR2_e=0x11,
     SA_JNT_FOOTR_e=0x12,
+    SA_NUM_JNTS_e=0x13,
 };
 
 enum UM_JNT {
@@ -266,46 +270,57 @@ enum UM_JNT {
     UM_JNT_LEGR1_e=0x10,
     UM_JNT_LEGR2_e=0x11,
     UM_JNT_FOOTR_e=0x12,
+    UM_NUM_JNTS_e=0x13,
 };
 
 enum UB01_HEAD_JNT {
     UB01_HEAD_JNT_UB01_HEAD_e=0x0,
+    UB01_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UB02_HEAD_JNT {
     UB02_HEAD_JNT_UB02_HEAD_e=0x0,
+    UB02_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UB03_HEAD_JNT {
     UB03_HEAD_JNT_UB03_HEAD_e=0x0,
+    UB03_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UB04_HEAD_JNT {
     UB04_HEAD_JNT_UB04_HEAD_e=0x0,
+    UB04_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UO01_HEAD_JNT {
     UO01_HEAD_JNT_UO01_HEAD_e=0x0,
+    UO01_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UO02_HEAD_JNT {
     UO02_HEAD_JNT_UO02_HEAD_e=0x0,
+    UO02_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UO03_HEAD_JNT {
     UO03_HEAD_JNT_UO03_HEAD_e=0x0,
+    UO03_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UW02_HEAD_JNT {
     UW02_HEAD_JNT_UW02_HEAD_e=0x0,
+    UW02_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UM01_HEAD_JNT {
     UM01_HEAD_JNT_UM01_HEAD_e=0x0,
+    UM01_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum SA02_HEAD_JNT {
     SA02_HEAD_JNT_SA02_HEAD_e=0x0,
+    SA02_HEAD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_AUC_H */

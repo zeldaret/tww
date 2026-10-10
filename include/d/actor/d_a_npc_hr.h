@@ -25,7 +25,7 @@ public:
     void move();
 
 public:
-    /* 0x00 */ dPa_followEcallBack mpFollowECallBack;
+    /* 0x00 */ dPa_followEcallBack mPtclFollowCb;
     /* 0x14 */ cXyz mPos;
     /* 0x20 */ cXyz mSpeed;
     /* 0x2C */ cXyz* mpSquallPos;

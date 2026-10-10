@@ -23,6 +23,7 @@ enum dRes_ID_VBELT {
 enum VBELT_JNT {
     VBELT_JNT_ROOT_VBELT_e=0x0,
     VBELT_JNT_VBELT_MODEL_e=0x1,
+    VBELT_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VBELT_H */

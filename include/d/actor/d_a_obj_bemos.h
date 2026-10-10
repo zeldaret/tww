@@ -119,7 +119,7 @@ public:
     daBemos_HIO_c();
     virtual ~daBemos_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;

@@ -286,8 +286,10 @@ struct J3DAnmTransformKeyData {
     /* 0x08 */ u8 mAttribute;
     /* 0x09 */ u8 mDecShift;
     /* 0x0A */ s16 mFrameMax;
-    /* 0x0C */ u16 field_0xc;
-    /* 0x10 */ int field_0x10;
+    /* 0x0C */ u16 mTableCount;
+    /* 0x0E */ u16 mScaleCount;
+    /* 0x10 */ u16 mRotCount;
+    /* 0x12 */ u16 mTransCount;
     /* 0x14 */ s32 mTableOffset;
     /* 0x18 */ s32 mScaleOffset;
     /* 0x1c */ s32 mRotOffset;
@@ -305,6 +307,10 @@ struct J3DAnmClusterKeyData {
 
 class J3DAnmBase {
 public:
+    J3DAnmBase() {
+        mFrame = 0.0f;
+        mFrameMax = 0;
+    }
     J3DAnmBase(s16 i_frameMax) {
         mFrame = 0.0f;
         mFrameMax = i_frameMax;
@@ -393,7 +399,7 @@ class J3DAnmTextureSRTKey : public J3DAnmBase {
 public:
     friend class J3DAnmKeyLoader_v15;
 
-    J3DAnmTextureSRTKey() : J3DAnmBase(0) {
+    J3DAnmTextureSRTKey() {
         mDecShift = 0;
         mTransNum = 0;
         mRotNum = 0;
@@ -425,13 +431,13 @@ public:
     }
 
     u16 getUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(1029, idx < mTrackNum / 3, "Error : range over.");
+        J3D_ASSERT_RANGE(1029, idx < mTrackNum / 3);
         return mUpdateMaterialID[idx];
     }
     u16 getUpdateMaterialNum() const { return mTrackNum / 3; }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
-    u16 getUpdateTexMtxID(u16 idx) const {
-        J3D_ASSERT(1017, idx < (mTrackNum / 3), "Error : range over.");
+    int getUpdateTexMtxID(u16 idx) const {
+        J3D_ASSERT_RANGE(1017, idx < (mTrackNum / 3));
         return mUpdateTexMtxID[idx];
     }
 
@@ -442,7 +448,7 @@ public:
 
     u32 getTexMtxCalcType() { return mTexMtxCalcType; }
     Vec& getSRTCenter(u16 idx) {
-        J3D_ASSERT(1047, idx < mTrackNum / 3, "Error : range over.");
+        J3D_ASSERT_RANGE(1047, idx < mTrackNum / 3);
         return mSRTCenter[idx];
     }
 
@@ -482,7 +488,7 @@ class J3DAnmVisibilityFull : public J3DAnmBase {
 public:
     friend class J3DAnmFullLoader_v15;
 
-    J3DAnmVisibilityFull() : J3DAnmBase(0) {
+    J3DAnmVisibilityFull() {
         mUpdateMaterialNum = 0;
         mAnmTable = NULL;
         field_0x12 = 0;
@@ -507,7 +513,7 @@ class J3DAnmTexPattern : public J3DAnmBase {
 public:
     friend class J3DAnmFullLoader_v15;
 
-    J3DAnmTexPattern() : J3DAnmBase(0) {
+    J3DAnmTexPattern() {
         mTextureIndex = NULL;
         mAnmTable = NULL;
         mKind = 2;
@@ -519,7 +525,7 @@ public:
     void searchUpdateMaterialID(J3DModelData*);
 
     u16 getUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(2288, idx < mUpdateMaterialNum, "Error : range over.");
+        J3D_ASSERT_RANGE(2288, idx < mUpdateMaterialNum);
         return mUpdateMaterialID[idx];
     }
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
@@ -543,7 +549,7 @@ class J3DAnmTevRegKey : public J3DAnmBase {
 public:
     friend class J3DAnmKeyLoader_v15;
 
-    J3DAnmTevRegKey() : J3DAnmBase(0) {
+    J3DAnmTevRegKey() {
         mKRegUpdateMaterialNum = 0;
         mCRegUpdateMaterialNum = 0;
         mCRegDataCountA = 0;
@@ -577,11 +583,11 @@ public:
     u16 getKRegUpdateMaterialNum() const { return mKRegUpdateMaterialNum; }
 
     u16 getCRegUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(2100, idx < mCRegUpdateMaterialNum, "Error : range over.");
+        J3D_ASSERT_RANGE(2100, idx < mCRegUpdateMaterialNum);
         return mCRegUpdateMaterialID[idx];
     }
     u16 getKRegUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(2140, idx < mKRegUpdateMaterialNum, "Error : range over.");
+        J3D_ASSERT_RANGE(2140, idx < mKRegUpdateMaterialNum);
         return mKRegUpdateMaterialID[idx];
     }
 
@@ -621,7 +627,7 @@ private:
 // BPK
 class J3DAnmColor : public J3DAnmBase {
 public:
-    J3DAnmColor() : J3DAnmBase(0) {
+    J3DAnmColor() {
         field_0x16 = 0;
         field_0x14 = 0;
         field_0x12 = 0;
@@ -639,7 +645,7 @@ public:
     u16 getUpdateMaterialNum() const { return mUpdateMaterialNum; }
     bool isValidUpdateMaterialID(u16 id) const { return mUpdateMaterialID[id] != 0xFFFF; }
     u16 getUpdateMaterialID(u16 idx) const {
-        J3D_ASSERT(1578, idx < mUpdateMaterialNum, "Error : range over.");
+        J3D_ASSERT_RANGE(1578, idx < mUpdateMaterialNum);
         return mUpdateMaterialID[idx];
     }
     JUTNameTab * getUpdateMaterialName() { return &mUpdateMaterialName; }
@@ -710,7 +716,7 @@ public:
 
 class J3DAnmVtxColor : public J3DAnmBase {
 public:
-    J3DAnmVtxColor() : J3DAnmBase(0) {
+    J3DAnmVtxColor() {
         mKind = 7;
         for (int i = 0; i < 2; i++) {
             mAnmTableNum[i] = 0;
@@ -776,7 +782,7 @@ protected:
 
 class J3DAnmCluster : public J3DAnmBase {
 public:
-    J3DAnmCluster(s16 param_1, f32* param_2) : J3DAnmBase(0) {
+    J3DAnmCluster(s16 param_1, f32* param_2) {
         mWeight = param_2;
         mKind = param_1;
     }

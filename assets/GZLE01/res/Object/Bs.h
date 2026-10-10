@@ -81,18 +81,22 @@ enum BS_JNT {
     BS_JNT_LEGR1_e=0x11,
     BS_JNT_LEGR2_e=0x12,
     BS_JNT_FOOTR_e=0x13,
+    BS_NUM_JNTS_e=0x14,
 };
 
 enum BS_MET_JNT {
     BS_MET_JNT_BS_MET_e=0x0,
+    BS_MET_NUM_JNTS_e=0x1,
 };
 
 enum SHOP_CURSOR01_JNT {
     SHOP_CURSOR01_JNT_CURSOR01_e=0x0,
+    SHOP_CURSOR01_NUM_JNTS_e=0x1,
 };
 
 enum VSOLD_JNT {
     VSOLD_JNT_VSOLD_MODEL_e=0x0,
+    VSOLD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BS_H */

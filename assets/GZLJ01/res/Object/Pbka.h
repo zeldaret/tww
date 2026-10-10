@@ -18,6 +18,7 @@ enum dRes_ID_PBKA {
 
 enum PBKA_JNT {
     PBKA_JNT_PBKA_e=0x0,
+    PBKA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_PBKA_H */

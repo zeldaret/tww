@@ -1,6 +1,7 @@
 #ifndef J3DSHAPE_H
 #define J3DSHAPE_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DShapeDraw.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/gx/GX.h"
@@ -15,15 +16,15 @@ public:
 };
 
 static inline void JRNLoadCPCmd(u8 cmd, u32 param) {
-    GXFIFO.u8 = GX_CMD_LOAD_CP_REG;
-    GXFIFO.u8 = cmd;
-    GXFIFO.u32 = param;
+    GXCmd1u8(GX_CMD_LOAD_CP_REG);
+    GXCmd1u8(cmd);
+    GXCmd1u32(param);
 }
 
 inline void JRNLoadXFCmdHdr(u16 cmd, u8 len) {
-    GXFIFO.u8 = GX_CMD_LOAD_XF_REG;
-    GXFIFO.u16 = len - 1;
-    GXFIFO.u16 = cmd;
+    GXCmd1u8(GX_CMD_LOAD_XF_REG);
+    GXCmd1u16(len - 1);
+    GXCmd1u16(cmd);
 }
 
 class J3DCurrentMtx : public J3DCurrentMtxInfo {
@@ -45,8 +46,8 @@ public:
         JRNLoadCPCmd(0x30, getMtxIdxRegA());  // CP_MATINDEX_A
         JRNLoadCPCmd(0x40, getMtxIdxRegB());  // CP_MATINDEX_B
         JRNLoadXFCmdHdr(0x1018, 2);
-        GXFIFO.u32 = getMtxIdxRegA();
-        GXFIFO.u32 = getMtxIdxRegB();
+        GXCmd1u32(getMtxIdxRegA());
+        GXCmd1u32(getMtxIdxRegB());
     }
 
     void setCurrentTexMtx(u8 t0, u8 t1, u8 t2, u8 t3, u8 t4, u8 t5, u8 t6, u8 t7) {
@@ -181,7 +182,7 @@ public:
     static u8 sNBTFlag;
 
     static void setCurrentPipeline(u32 pipeline) {
-        J3D_ASSERT(91, pipeline < 4, "Error : range over.");
+        J3D_ASSERT_RANGE(91, pipeline < 4);
         sCurrentPipeline = pipeline;
     }
 

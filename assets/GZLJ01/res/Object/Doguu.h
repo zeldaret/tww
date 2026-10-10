@@ -80,6 +80,7 @@ enum VGSBA_JNT {
     VGSBA_JNT_ARNR2_e=0xA,
     VGSBA_JNT_HANDR_e=0xB,
     VGSBA_JNT_WAIST_e=0xC,
+    VGSBA_NUM_JNTS_e=0xD,
 };
 
 enum VGSHD_JNT {
@@ -88,12 +89,14 @@ enum VGSHD_JNT {
     VGSHD_JNT_BACKHAIR2_e=0x2,
     VGSHD_JNT_SIDEHAIRL_e=0x3,
     VGSHD_JNT_SIDEHAIRR_e=0x4,
+    VGSHD_NUM_JNTS_e=0x5,
 };
 
 enum VGSHF_JNT {
     VGSHF_JNT_HEAD2_e=0x0,
     VGSHF_JNT_SIDEHAIRL_e=0x1,
     VGSHF_JNT_SIDEHAIRR_e=0x2,
+    VGSHF_NUM_JNTS_e=0x3,
 };
 
 enum VGSHN_JNT {
@@ -102,26 +105,31 @@ enum VGSHN_JNT {
     VGSHN_JNT_BACKHAIR2_e=0x2,
     VGSHN_JNT_SIDEHAIRL_e=0x3,
     VGSHN_JNT_SIDEHAIRR_e=0x4,
+    VGSHN_NUM_JNTS_e=0x5,
 };
 
 enum VGSMA_JNT {
     VGSMA_JNT_MUDDOLL_e=0x0,
     VGSMA_JNT_MUD_EYE_e=0x1,
+    VGSMA_NUM_JNTS_e=0x2,
 };
 
 enum VGSPD_JNT {
     VGSPD_JNT_GS_PEARL_e=0x0,
     VGSPD_JNT_GS_P_MARK_e=0x1,
+    VGSPD_NUM_JNTS_e=0x2,
 };
 
 enum VGSPF_JNT {
     VGSPF_JNT_GS_PEARL_e=0x0,
     VGSPF_JNT_GS_P_MARK_e=0x1,
+    VGSPF_NUM_JNTS_e=0x2,
 };
 
 enum VGSPN_JNT {
     VGSPN_JNT_GS_PEARL_e=0x0,
     VGSPN_JNT_GS_P_MARK_e=0x1,
+    VGSPN_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_DOGUU_H */

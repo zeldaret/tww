@@ -10,7 +10,7 @@ class J2DPane;
 class JPABaseEmitter;
 class fopAc_ac_c;
 struct fopMsgM_pane_class;
-class msg_class;
+struct msg_class;
 class sub_meter_class;
 
 class dMeter_HIO_c : public JORReflexible {
@@ -18,7 +18,7 @@ public:
     dMeter_HIO_c();
     virtual ~dMeter_HIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x004 */ s8 mNo;
     /* 0x005 */ u8 field_0x5[0x006 - 0x005];
@@ -31,8 +31,8 @@ public:
     /* 0x01C */ f32 field_0x1c;
     /* 0x020 */ f32 field_0x20;
     /* 0x024 */ f32 field_0x24;
-    /* 0x028 */ f32 field_0x28;
-    /* 0x02C */ u8 field_0x2c;
+    /* 0x028 */ f32 mScopeWipeMaxScale;
+    /* 0x02C */ u8 mScopeWipeAlpha;
     /* 0x02D */ u8 field_0x2d;
     /* 0x02E */ s16 field_0x2e;
     /* 0x030 */ s16 field_0x30;
@@ -185,7 +185,7 @@ public:
     dMeter_menuHIO_c();
     virtual ~dMeter_menuHIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x5[0x08 - 0x05];
@@ -288,7 +288,7 @@ public:
     dMeter_msg_HIO_c();
     virtual ~dMeter_msg_HIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ GXColor field_0x5;
@@ -383,7 +383,7 @@ public:
     dMeter_message_HIO_c();
     virtual ~dMeter_message_HIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ GXColor field_0x5;
@@ -475,7 +475,7 @@ public:
     dMeter_map_HIO_c();
     virtual ~dMeter_map_HIO_c();
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x5;
@@ -632,9 +632,7 @@ public:
     /* 0x2278 */ fopMsgM_pane_class field_0x2278;
     /* 0x22B0 */ fopMsgM_pane_class field_0x22b0;
     /* 0x22E8 */ fopMsgM_pane_class field_0x22e8;
-    /* 0x2320 */ fopMsgM_pane_class field_0x2320[dItemBtn_COUNT_e];
-    /* 0x23C8 */ fopMsgM_pane_class field_0x23c8[dItemBtn_COUNT_e];
-    /* 0x2470 */ fopMsgM_pane_class field_0x2470[dItemBtn_COUNT_e];
+    /* 0x2320 */ fopMsgM_pane_class field_0x2320[3][dItemBtn_COUNT_e];
     /* 0x2518 */ fopMsgM_pane_class field_0x2518;
     /* 0x2550 */ fopMsgM_pane_class field_0x2550[2];
     /* 0x25C0 */ fopMsgM_pane_class field_0x25c0[2];
@@ -731,19 +729,12 @@ public:
     /* 0x3025 */ s8 field_0x3025;
     /* 0x3026 */ u8 field_0x3026;
     /* 0x3027 */ u8 field_0x3027;
+#if VERSION > VERSION_DEMO
     /* 0x3028 */ u8 field_0x3028;
+#endif
     /* 0x3029 */ u8 field_0x3029;
     /* 0x302A */ u8 field_0x302a;
     /* 0x302B */ u8 field_0x302b[0x302C - 0x302B];
-};
-
-enum MenuStatus {
-    MENU_STATUS_NONE = 0,
-    MENU_STATUS_ITEM = 1,
-    MENU_STATUS_COLLECT = 2,
-    MENU_STATUS_MAP = 3,
-    MENU_STATUS_NAME = 4,
-    MENU_STATUS_SAVE = 5,
 };
 
 extern dMeter_map_HIO_c g_meter_mapHIO;
@@ -758,17 +749,28 @@ void dMenu_flagSet(u8);
 void dMeter_mtrShow();
 void dMeter_mtrHide();
 
-// Use enum MenuStatus.
+enum MenuStatus {
+    MENU_STATUS_NONE = 0,
+    MENU_STATUS_ITEM = 1,
+    MENU_STATUS_COLLECT = 2,
+    MENU_STATUS_MAP = 3,
+    MENU_STATUS_NAME = 4,
+    MENU_STATUS_SAVE = 5,
+};
 u8 dMenu_getMenuStatus();
 void dMenu_setMenuStatus(u8);
 void dMenu_setMenuStatusOld(u8);
+
+u8 dMenu_getPushMenuButton();
 void dMenu_setPushMenuButton(u8);
 
 u8 dMenu_getCollectMode();
 void dMenu_setCollectMode(u8);
 
+#if VERSION > VERSION_DEMO
 u8 dMenu_getItemMode();
 void dMenu_setItemMode(u8);
+#endif
 
 void dMeter_weponChange(sub_meter_class* i_Meter);
 void dMeter_weponAnime(sub_meter_class* i_Meter);
@@ -852,5 +854,11 @@ void dMeter_screenDataTimeSet(sub_meter_class* i_Meter);
 bool dMeter_isAuctionFlag();
 void dMeter_onAuctionFlag();
 void dMeter_offAuctionFlag();
+
+void dMeter_itemMoveSet(fopMsgM_pane_class* pane, u8 btn, u8 item);
+u8 dMeter_itemMoveFlagCheck();
+
+void dMeter_subWinFlagOn();
+void dMeter_subWinFlagOff();
 
 #endif /* D_METER_H */

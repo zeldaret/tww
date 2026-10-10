@@ -73,7 +73,7 @@ JUTConsole::JUTConsole(uint param_0, uint maxLines, bool param_2) {
 }
 
 static void dummy1() {
-    OSReport("console != 0");
+    DEAD_STRING("console != 0");
 }
 
 /* 802CA5AC-802CA658       .text __dt__10JUTConsoleFv */
@@ -162,7 +162,7 @@ void JUTConsole::doDraw(JUTConsole::EConsoleType consoleType) const {
             do {
                 linePtr = (char*)getLinePtr(curLine);
 
-                if ((u8)linePtr[-1] != NULL) {
+                if ((u8)linePtr[-1] != 0) {
                     if (consoleType != CONSOLE_TYPE_2) {
                         mFont->drawString_scale(mPositionX, ((y * font_yOffset) + mPositionY), mFontSizeX, mFontSizeY, linePtr, true);
                     } else {
@@ -348,9 +348,9 @@ JUTConsoleManager::JUTConsoleManager() {
 }
 
 static void dummy2() {
-    OSReport("console != this && console != 0");
-    OSReport("\n:::dump of console[%x]----------------\n");
-    OSReport(":::dump of console[%x] END------------\n");
+    DEAD_STRING("console != this && console != 0");
+    DEAD_STRING("\n:::dump of console[%x]----------------\n");
+    DEAD_STRING(":::dump of console[%x] END------------\n");
 }
 
 /* 802CB2E8-802CB380       .text createManager__17JUTConsoleManagerFP7JKRHeap */
@@ -366,7 +366,7 @@ JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
 }
 
 static void dummy3() {
-    OSReport("consoleManager != 0 && sManager == consoleManager");
+    DEAD_STRING("consoleManager != 0 && sManager == consoleManager");
 }
 
 /* 802CB380-802CB4C4       .text appendConsole__17JUTConsoleManagerFP10JUTConsole */

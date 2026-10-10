@@ -116,7 +116,7 @@ void dBgWHf::ClassifyPlane() {
 
 /* 800A9E70-800A9EDC       .text MoveHf__6dBgWHfFv */
 void dBgWHf::MoveHf() {
-    mFlag |= 0x01;
+    OnMoveFlag();
     if (ChkLock()) {
         return;
     }

@@ -212,7 +212,7 @@ cPhs_State daMozo_c::CreateInit() {
     }
     field_0x376 = cLib_minMaxLimit<u8>(temp, 0, 2);
 
-    mAnimMorf->getModel()->setUserArea((u32)this);
+    mAnimMorf->getModel()->setUserArea((uintptr_t)this);
     for (u16 i = 0; i < mdlData->getJointNum(); i++) {
         if (i == MOZ_JNT_ATAMA_J_e) {
             mdlData->getJointNodePointer(i)->setCallBack(daMozo_nodeCallBack);
@@ -265,7 +265,7 @@ fopAc_ac_c* daMozo_c::getBeamActor(fpc_ProcID apid) {
     fopAc_ac_c* ac = fopAcM_SearchByID(apid);
     if (ac == NULL)
         return NULL;
-    if (fopAc_IsActor(ac) && fopAcM_GetProfName(ac) == fpcNm_Beam_e)
+    if (fopAcM_IsActor(ac) && fopAcM_GetProfName(ac) == fpcNm_Beam_e)
         return ac;
     return NULL;
 }

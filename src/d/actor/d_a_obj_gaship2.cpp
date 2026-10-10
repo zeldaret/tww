@@ -52,7 +52,7 @@ bool daObjGaship2::Act_c::create_heap() {
 /* 00000220-000002F8       .text _create__Q212daObjGaship25Act_cFv */
 cPhs_State daObjGaship2::Act_c::_create() {
     fopAcM_ct(this, Act_c);
-    cPhs_State phase_state = dComIfG_resLoad(&mphs, M_arcname);
+    cPhs_State phase_state = dComIfG_resLoad(&mPhase, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
@@ -76,7 +76,7 @@ bool daObjGaship2::Act_c::_delete() {
         }
     }
 
-    dComIfG_resDelete(&mphs, M_arcname);
+    dComIfG_resDelete(&mPhase, M_arcname);
     return true;
 }
 

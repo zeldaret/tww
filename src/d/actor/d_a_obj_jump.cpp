@@ -81,8 +81,8 @@ BOOL daObjJump::Act_c::CreateHeap() {
     
     mModel = mDoExt_J3DModel__create(model_data, 0x80000, 0x11000022);
     if (mModel != NULL) {
-        model_data->getJointTree().getJointNodePointer(attr().springJntNum)->setCallBack(jnodeCB_lower);
-        mModel->setUserArea((u32)this);
+        model_data->getJointNodePointer(attr().springJntNum)->setCallBack(jnodeCB_lower);
+        mModel->setUserArea((uintptr_t)this);
     }
     return mModel != NULL;
 }
@@ -110,7 +110,7 @@ BOOL daObjJump::Act_c::Create() {
     }
 #if VERSION > VERSION_DEMO
     if (mType == Type_SPRING_ON_BOX_e) {
-        actor_status &= ~0x3F;
+        fopAcM_ClearStatusMap(this);
         gbaName = 0;
     }
 #endif

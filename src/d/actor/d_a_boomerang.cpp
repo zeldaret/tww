@@ -99,13 +99,13 @@ void daBoomerang_blur_c::copyBlur(MtxP mtx, s16 yRot) {
 void daBoomerang_blur_c::draw() {
 #include "assets/l_matDL__draw__18daBoomerang_blur_cFv.h"
 
-    static GXVtxDescList l_vtxDescList[] ALIGN_DECL(32) = {
+    ALIGN_DECL(32, static GXVtxDescList l_vtxDescList[]) = {
         {GX_VA_POS, GX_DIRECT},
         {GX_VA_TEX0, GX_DIRECT},
         {GX_VA_NULL, GX_NONE},
     };
 
-    static GXVtxAttrFmtList l_vtxAttrFmtList[] ALIGN_DECL(32) = {
+    ALIGN_DECL(32, static GXVtxAttrFmtList l_vtxAttrFmtList[]) = {
         {GX_VA_POS, GX_POS_XYZ, GX_F32, 0x00},
         {GX_VA_TEX0, GX_TEX_ST, GX_S16, 0x08},
         {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
@@ -186,13 +186,13 @@ void daBoomerang_blur_c::draw() {
 
 /* 800E13A4-800E14F0       .text draw__25daBoomerang_sightPacket_cFv */
 void daBoomerang_sightPacket_c::draw() {
-    static GXVtxDescList l_vtxDescList[] ALIGN_DECL(32) = {
+    ALIGN_DECL(32, static GXVtxDescList l_vtxDescList[]) = {
         {GX_VA_POS, GX_DIRECT},
         {GX_VA_TEX0, GX_DIRECT},
         {GX_VA_NULL, GX_NONE},
     };
 
-    static GXVtxAttrFmtList l_vtxAttrFmtList[] ALIGN_DECL(32) = {
+    ALIGN_DECL(32, static GXVtxAttrFmtList l_vtxAttrFmtList[]) = {
         {GX_VA_POS, GX_POS_XYZ, GX_S8, 0x00},
         {GX_VA_TEX0, GX_TEX_ST, GX_U8, 0x00},
         {GX_VA_NULL, GX_POS_XYZ, GX_F32, 0x00},
@@ -248,7 +248,7 @@ void daBoomerang_sightPacket_c::setSight(cXyz* pPos, int n) {
         mDoMtx_stack_c::transS(proj);
         mDoMtx_stack_c::scaleM(scaleX, scaleY, scale);
 
-        mDoMtx_stack_c::ZrotM(cM_ssin(imageRot * 16384.0f) * 32768.0f);
+        mDoMtx_stack_c::ZrotM(cM_ssin(imageRot * 0x4000) * 0x8000);
         MTXCopy(mDoMtx_stack_c::get(), mMtxArr[n]);
 
         mSightOnFlg |= 1 << n;
@@ -542,11 +542,11 @@ BOOL daBoomerang_c::procWait() {
 
         procMove();
     } else {
-        if (dCam_getBody()->mCurMode != 0xB) {
+        if (dCam_getBody()->Mode() != 0xB) {
             resetLockActor();
         } else {
             if (pPlayer->checkBoomerangRock()) {
-                camera_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+                camera_process_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
                 cXyz eyePos = *fopCamM_GetEye_p(pCamera);
                 cXyz topPos = pPlayer->getLineTopPos();
                 mCps.OnAtNoTgHitInfSet();
@@ -646,7 +646,7 @@ BOOL daBoomerang_c::procMove() {
                 } else if (a > 18.0f) {
                     a = 20.0f + 40.0f * (a - 18.0f);
                 }
-                newAngle = a * 256.0f + 1024.0f;
+                newAngle = a * 0x100 + 0x400;
             } else {
                 newAngle = 0x4000;
             }

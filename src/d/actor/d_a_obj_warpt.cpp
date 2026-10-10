@@ -129,8 +129,8 @@ daObj_Warpt_HIO_c::daObj_Warpt_HIO_c() {
     m08 = 150.0f;
     m0C = 30.0f;
     m10 = -2.5f;
-    m14 = (GXColor){0, 0, 0, 128};
-    m18 = (GXColor){0, 0, 0, 128};
+    m14 = COMPOUND_LITERAL(GXColor){0, 0, 0, 128};
+    m18 = COMPOUND_LITERAL(GXColor){0, 0, 0, 128};
 }
 
 /* 000001D8-000001F8       .text createHeap_CB__FP10fopAc_ac_c */
@@ -226,7 +226,7 @@ bool daObj_Warpt_c::createBodyHeap() {
 }
 
 /* 00000620-00000648       .text ride_CB__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_CB(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* arg2) {
+static void ride_CB(dBgW*, fopAc_ac_c* a_this, fopAc_ac_c* arg2) {
     ((daObj_Warpt_c*)a_this)->_ride(arg2);
 }
 
@@ -235,7 +235,7 @@ void daObj_Warpt_c::_ride(fopAc_ac_c* arg1) {
     if (fpcM_GetName(arg1) == fpcNm_PLAYER_e) {
         daPy_py_c* player = (daPy_py_c*)arg1;
 
-        fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+        fopAcM_searchPlayerAngleY(this);
         dLib_checkPlayerInCircle(m830, 1.0f, 20.0f);
 
         if (l_HIO.m06 == 0) {
@@ -512,7 +512,7 @@ void daObj_Warpt_c::modeEventWarp() {
         }
         player->onNoResetFlg0(daPy_py_c::daPyFlg0_NO_FALL_VOICE);
         int staffIdx = dComIfGp_evmng_getMyStaffId("Warpt");
-        char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+        const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
 
         bool cVar3 = true;
         if (strcmp(cutName, "WARP") == 0) {
@@ -599,7 +599,7 @@ void daObj_Warpt_c::modeProc(daObj_Warpt_c::Proc_e proc, int index) {
     struct mode_entry_t {
         /* 0x00 */ ModeProcFunc init;
         /* 0x04 */ ModeProcFunc run;
-        /* 0x08 */ char* name;
+        /* 0x08 */ const char* name;
     }; // size = 0x8
 
     static mode_entry_t mode_tbl[] = {

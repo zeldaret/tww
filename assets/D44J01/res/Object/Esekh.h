@@ -26,10 +26,12 @@ enum dRes_ID_ESEKH {
 
 enum ESEKH_JNT {
     ESEKH_JNT_ESEKH_e=0x0,
+    ESEKH_NUM_JNTS_e=0x1,
 };
 
 enum ESEKH2_JNT {
     ESEKH2_JNT_ESEKH2_e=0x0,
+    ESEKH2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ESEKH_H */

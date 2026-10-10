@@ -28,26 +28,32 @@ enum dRes_ID_KSAKU_00 {
 
 enum KSAKU_00_JNT {
     KSAKU_00_JNT_KSAKU_00_e=0x0,
+    KSAKU_00_NUM_JNTS_e=0x1,
 };
 
 enum KSAKU_01_JNT {
     KSAKU_01_JNT_KSAKU_01_e=0x0,
+    KSAKU_01_NUM_JNTS_e=0x1,
 };
 
 enum KSAKU_02_JNT {
     KSAKU_02_JNT_KSAKU_02_e=0x0,
+    KSAKU_02_NUM_JNTS_e=0x1,
 };
 
 enum KSAKU_03_JNT {
     KSAKU_03_JNT_KSAKU_03_e=0x0,
+    KSAKU_03_NUM_JNTS_e=0x1,
 };
 
 enum KSAKU_04_JNT {
     KSAKU_04_JNT_KSAKU_04_e=0x0,
+    KSAKU_04_NUM_JNTS_e=0x1,
 };
 
 enum KSAKU_05_JNT {
     KSAKU_05_JNT_KSAKU_05_e=0x0,
+    KSAKU_05_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KSAKU_00_H */

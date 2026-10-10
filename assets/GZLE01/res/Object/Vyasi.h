@@ -35,6 +35,7 @@ enum VYASI_JNT {
     VYASI_JNT_HA_C3_e=0xB,
     VYASI_JNT_HA_D1_e=0xC,
     VYASI_JNT_HA_D3_e=0xD,
+    VYASI_NUM_JNTS_e=0xE,
 };
 
 #endif /* RES_VYASI_H */

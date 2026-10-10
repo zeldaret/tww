@@ -28,7 +28,7 @@ public:
         mNo = -1;
     }
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -43,69 +43,8 @@ public:
     /* 0x1C */ f32 m1C;
 };
 
-static Vec l_pos[25] = {
-    {0.0f, 2200.0f, 0.0f},
-    {0.0f, 2200.0f, 200.0f},
-    {0.0f, 2200.0f, 400.0f},
-    {0.0f, 2200.0f, 600.0f},
-    {0.0f, 2200.0f, 800.0f},
-
-    {0.0f, 2100.0f, 0.0f},
-    {0.0f, 2100.0f, 200.0f},
-    {0.0f, 2100.0f, 400.0f},
-    {0.0f, 2100.0f, 600.0f},
-    {0.0f, 2100.0f, 800.0f},
-
-    {0.0f, 2000.0f, 0.0f},
-    {0.0f, 2000.0f, 200.0f},
-    {0.0f, 2000.0f, 400.0f},
-    {0.0f, 2000.0f, 600.0f},
-    {0.0f, 2000.0f, 800.0f},
-
-    {0.0f, 1900.0f, 0.0f},
-    {0.0f, 1900.0f, 200.0f},
-    {0.0f, 1900.0f, 400.0f},
-    {0.0f, 1900.0f, 600.0f},
-    {0.0f, 1900.0f, 800.0f},
-
-    {0.0f, 1800.0f, 0.0f},
-    {0.0f, 1800.0f, 200.0f},
-    {0.0f, 1800.0f, 400.0f},
-    {0.0f, 1800.0f, 600.0f},
-    {0.0f, 1800.0f, 800.0f},
-};
-
-static cXy l_texCoord[] = {
-    {0.0f,  0.0f},
-    {0.25f, 0.0f},
-    {0.5f,  0.0f},
-    {0.75f, 0.0f},
-    {1.0f,  0.0f},
-
-    {0.0f,  0.25f},
-    {0.25f, 0.25f},
-    {0.5f,  0.25f},
-    {0.75f, 0.25f},
-    {1.0f,  0.25f},
-
-    {0.0f,  0.5f},
-    {0.25f, 0.5f},
-    {0.5f,  0.5f},
-    {0.75f, 0.5f},
-    {1.0f,  0.5f},
-
-    {0.0f,  0.75f},
-    {0.25f, 0.75f},
-    {0.5f,  0.75f},
-    {0.75f, 0.75f},
-    {1.0f,  0.75f},
-
-    {0.0f,  1.0f},
-    {0.25f, 1.0f},
-    {0.5f,  1.0f},
-    {0.75f, 1.0f},
-    {1.0f,  1.0f},
-};
+#include "assets/l_pos__d_a_pirate_flag.h"
+#include "assets/l_texCoord__d_a_pirate_flag.h"
 
 #include "assets/l_pirate_flag_DL.h"
 #include "assets/l_pirate_flag_matDL.h"
@@ -338,7 +277,7 @@ static BOOL daPirate_Flag_Draw(pirate_flag_class* i_this) {
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mPacket.getMtx());
     i_this->mPacket.setTevStr(&i_this->tevStr);
 
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&i_this->mPacket, 0);
     if (l_HIO.m05 != 0) {
         s16 tmp_r29 = i_this->current.angle.y;
 

@@ -22,6 +22,7 @@ enum dRes_ID_VCHUJ {
 
 enum VCHUJ_JNT {
     VCHUJ_JNT_VCHUH_MODEL_e=0x0,
+    VCHUJ_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VCHUJ_H */

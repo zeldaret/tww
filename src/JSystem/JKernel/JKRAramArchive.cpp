@@ -67,10 +67,10 @@ JKRAramArchive::~JKRAramArchive() {
 }
 
 static void dummy() {
-    OSReport(__FILE__);
-    OSReport("isMounted()");
-    OSReport("Halt");
-    OSReport("mMountCount == 1");
+    DEAD_STRING(__FILE__);
+    DEAD_STRING("isMounted()");
+    DEAD_STRING("Halt");
+    DEAD_STRING("mMountCount == 1");
 }
 
 /* 802BA1C8-802BA4EC       .text open__14JKRAramArchiveFl */
@@ -174,7 +174,7 @@ void* JKRAramArchive::fetchResource(SDIFileEntry* pEntry, u32* pOutSize) {
             &outBuf);
 
         *pOutSize = size;
-        if (size == NULL) {
+        if (size == 0) {
             return NULL;
         }
 
@@ -208,7 +208,7 @@ void* JKRAramArchive::fetchResource(void* buffer, u32 bufferSize, SDIFileEntry* 
     } else {
         if (compression == COMPRESSION_YAZ0) {
             u32 expandSize = this->getExpandSize(pEntry);
-            if (expandSize != NULL) {
+            if (expandSize != 0) {
                 size = expandSize;
             }
         }

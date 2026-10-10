@@ -30,6 +30,7 @@ enum dRes_ID_TITLE {
 
 enum VRBOX_JNT {
     VRBOX_JNT_ALL_e=0x0,
+    VRBOX_NUM_JNTS_e=0x1,
 };
 
 enum MODEL_JNT {
@@ -46,6 +47,7 @@ enum MODEL_JNT {
     MODEL_JNT_UMI50_SUNATI_e=0xA,
     MODEL_JNT_UMI60_ASASE_e=0xB,
     MODEL_JNT_UMI70_OKI_e=0xC,
+    MODEL_NUM_JNTS_e=0xD,
 };
 
 #endif /* RES_TITLE_H */

@@ -20,6 +20,8 @@ public:
 #if VERSION > VERSION_JPN
     static void set3ButtonResetPort(int port) { mResetData->m3ButtonResetPort = port; }
     static void off3ButtonReset() { mResetData->m3ButtonReset = 0; }
+    static int isResetPrepare() { return mResetData->mResetPrepare; }
+    static void onResetPrepare() { mResetData->mResetPrepare = 1; }
     static void offResetPrepare() { mResetData->mResetPrepare = 0; }
     static void offReset() {
         mResetData->mReset = 0;
@@ -38,6 +40,8 @@ public:
 #else
     static void set3ButtonResetPort(int port) { m3ButtonResetPort = port; }
     static void off3ButtonReset() { m3ButtonResetFlag = 0; }
+    static int isResetPrepare() { return mResetPrepare; }
+    static void onResetPrepare() { mResetPrepare = 1;}
     static void offResetPrepare() { mResetPrepare = 0; }
     static void offReset() {
         mResetFlag = 0;

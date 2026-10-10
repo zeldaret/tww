@@ -107,7 +107,7 @@ daBgn3_HIO_c::daBgn3_HIO_c() {
 #if VERSION > VERSION_DEMO
 /* 000001F4-00000240       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -220,7 +220,7 @@ static void drop_eff_set(bgn3_class* i_this) {
 
 /* 0000101C-00001068       .text esa_s_sub__FPvPv */
 static void* esa_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_ESA_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_ESA_e)) {
         return param_1;
     } else {
         return NULL;
@@ -472,7 +472,7 @@ static void damage(bgn3_class* i_this) {
             if (checkGround(i_this)) {
                 actor->speed.y = 50.0f;
                 i_this->m0FD8C = 2;
-                actor->current.angle.y = cM_rndF(65536.0f);
+                actor->current.angle.y = cM_rndF(0x10000);
                 i_this->m0FDB8 = 1.0f;
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 drop_eff_set(i_this);
@@ -527,13 +527,13 @@ static void end(bgn3_class* i_this) {
             }
             if (checkGround(i_this)) {
                 i_this->m0FD8C++;
-                actor->current.angle.y = cM_rndF(65536.0f);
+                actor->current.angle.y = cM_rndF(0x10000);
                 i_this->m0FDB8 = 1.0f;
                 dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
                 drop_eff_set(i_this);
                 actor->speed.y = REG0_F(11) + 130.0f;
                 actor->speedF = 0.0f;
-                actor->current.angle.y = cM_rndF(65536.0f);
+                actor->current.angle.y = cM_rndF(0x10000);
                 fopAcM_monsSeStart(actor, JA_SE_CV_BGN_HIT_1, 0);
             }
             if ((i_this->m0FD8C == 4) && (actor->speed.y <= -30.0f)) {
@@ -635,9 +635,7 @@ static void damage_check(bgn3_class* i_this) {
                 i_this->m0FDB4 = 0x14;
                 if (bVar10 >= 4) {
                     dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, i_this->m0FDFC.GetTgHitPosP());
-                    local_58.z = 2.0f;
-                    local_58.y = 2.0f;
-                    local_58.x = 2.0f;
+                    local_58.x = local_58.y = local_58.z = 2.0f;
                     local_78.z = 0;
                     local_78.x = 0;
                     local_78.y = fopAcM_searchPlayerAngleY(actor);
@@ -1029,8 +1027,8 @@ static void move(bgn3_class* i_this) {
     cXyz* pcVar13 = i_this->mRedRopeMat.getPos(0);
     u8* pcVar14 = i_this->mRedRopeMat.getSize(0);
     for (s32 i = 0; i < 60; i++, pcVar13++, pcVar14++) {
-        fVar1 = i_this->m100A0 * cM_ssin(cM_rad2s(0.053247336f * (f32)(i)));
-        fVar1 *= (0.01666667f * (f32)(0x3B - i));
+        fVar1 = i_this->m100A0 * cM_fsin(0.053247336f * (f32)(i));
+        fVar1 *= (0.01666667f * (f32)(59 - i));
         local_d8.x = fVar1 * cM_ssin(i_this->m0FD88 * (REG0_S(3) + 300) + i * (REG0_S(4) + 2000));
         local_d8.y = 0.0f;
         local_d8.z = fVar1 * cM_ssin(i_this->m0FD88 * (REG0_S(5) + 0xfa) + i * (REG0_S(6) + 2000));
@@ -1043,7 +1041,7 @@ static void move(bgn3_class* i_this) {
 #if VERSION == VERSION_DEMO
 /* 000001F4-00000240       .text bgn_s_sub__FPvPv */
 static void* bgn_s_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_BGN_e)) {
         return param_1;
     } else {
         return NULL;
@@ -1053,7 +1051,7 @@ static void* bgn_s_sub(void* param_1, void*) {
 
 /* 00004058-000040B0       .text ki_c_sub__FPvPv */
 static void* ki_c_sub(void* param_1, void*) {
-    if ((fopAc_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KS_e)) {
+    if ((fopAcM_IsActor(param_1)) && (fopAcM_GetName(param_1) == fpcNm_KS_e)) {
         ki_all_count++;
     }
     return NULL;
@@ -1078,7 +1076,7 @@ static BOOL daBgn3_Execute(bgn3_class* i_this) {
     if (l_HIO.m06 != 0) {
         actor->health = l_HIO.m06;
     }
-    esa = (esa_class*)fpcEx_Search(esa_s_sub, i_this);
+    esa = (esa_class*)fpcM_Search(esa_s_sub, i_this);
     if (bgn->m02B5 != 2) {
         i_this->m0FD8A = 10;
         actor->current.pos.x = 0.0f;
@@ -1288,15 +1286,11 @@ static cPhs_State daBgn3_Create(fopAc_ac_c* a_this) {
         }},
     };
 
-#if VERSION > VERSION_DEMO
-    fopAcM_SetupActor(a_this, bgn3_class);
-#endif
+    fopAcM_ct_Retail(a_this, bgn3_class);
     bgn3_class* i_this = (bgn3_class*)a_this;
     cPhs_State res = dComIfG_resLoad(&i_this->mPhase, "Bgn");
     if (res == cPhs_COMPLEATE_e) {
-#if VERSION == VERSION_DEMO
-        fopAcM_SetupActor(a_this, bgn3_class);
-#endif
+        fopAcM_ct_Demo(a_this, bgn3_class);
         if (!fopAcM_entrySolidHeap(a_this, useHeapInit, 0x96000)) {
             return cPhs_ERROR_e;
         }

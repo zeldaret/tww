@@ -64,18 +64,22 @@ enum dRes_ID_BTSW {
 
 enum BN_KABAN_JNT {
     BN_KABAN_JNT_KABAN_e=0x0,
+    BN_KABAN_NUM_JNTS_e=0x1,
 };
 
 enum BM_LETTER_JNT {
     BM_LETTER_JNT_BM_LETTER_e=0x0,
+    BM_LETTER_NUM_JNTS_e=0x1,
 };
 
 enum BN_TIRASI_JNT {
     BN_TIRASI_JNT_BN_TIRASI_e=0x0,
+    BN_TIRASI_NUM_JNTS_e=0x1,
 };
 
 enum QMAIL_JNT {
     QMAIL_JNT_MAIL_e=0x0,
+    QMAIL_NUM_JNTS_e=0x1,
 };
 
 enum BN_JNT {
@@ -98,10 +102,12 @@ enum BN_JNT {
     BN_JNT_LEGR1_e=0x10,
     BN_JNT_LEGR2_e=0x11,
     BN_JNT_FOOTR_e=0x12,
+    BN_NUM_JNTS_e=0x13,
 };
 
 enum SHOP_CURSOR01_JNT {
     SHOP_CURSOR01_JNT_CURSOR01_e=0x0,
+    SHOP_CURSOR01_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BTSW_H */

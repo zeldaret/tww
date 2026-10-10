@@ -43,7 +43,7 @@ public:
     daNpc_Bs1_HIO_c();
     virtual ~daNpc_Bs1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x000 */ // this.__vt
@@ -192,8 +192,8 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             if (jntNo == i_this->getHeadJntNum()) {
                 cXyz offset(0.0f, 0.0f, 0.0f);
-                mDoMtx_XrotM(*calc_mtx, i_this->getHead_y());
-                cMtx_ZrotM(*calc_mtx, -i_this->getHead_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getHead_y());
+                cMtx_ZrotM(*calc_mtx, (s16)-i_this->getHead_x());
                 cXyz pos;
                 MtxPosition(&offset, &pos);
                 i_this->setAttentionBasePos(pos);
@@ -204,8 +204,8 @@ static BOOL nodeCallBack_Bs(J3DNode* node, int calcTiming) {
                 i_this->setEyePos(pos);
                 i_this->incAttnSetCount();
             } else if (jntNo == i_this->getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                cMtx_ZrotM(*calc_mtx, -i_this->getBackbone_x());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
+                cMtx_ZrotM(*calc_mtx, (s16)-i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -442,7 +442,6 @@ static void daNpc_Bs1_setPayRupee(int unknownParam1, int unknownParam2) {
 
 /* 000010EC-00001F7C       .text next_msgStatus__11daNpc_Bs1_cFPUl */
 u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
-    /* Nonmatching - retail-only regalloc */
     u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
 
     switch(*pMsgNo) {
@@ -584,10 +583,10 @@ u16 daNpc_Bs1_c::next_msgStatus(u32* pMsgNo) {
                 if(*pMsgNo == 0xFD3) {
                     u8 r3 = dComIfGs_getEventReg(dSv_event_flag_c::UNK_7F0F);
                     r3 += getBuyItem();
-                    u8 temp = cLib_maxLimit<u8>(r3, 0xF);
-                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_7F0F, temp);
+                    r3 = cLib_maxLimit<u8>(r3, 0xF);
+                    dComIfGs_setEventReg(dSv_event_flag_c::UNK_7F0F, r3);
 
-                    if(temp < 0xA) {
+                    if(r3 < 0xA) {
                         *pMsgNo = 0xFD5;
                         break;
                     }
@@ -1208,12 +1207,12 @@ void daNpc_Bs1_c::talkInit() {
 BOOL daNpc_Bs1_c::shopMsgCheck(u32 msgNo) {
     if(mType == 0) {
         if((0xF42 <= msgNo && msgNo <= 0xF54) || (0xF67 <= msgNo && msgNo <= 0xF6E) || (0xF63 <= msgNo && msgNo <= 0xF66) || msgNo == 0xF3E) {
-                return true;
+            return true;
         }
     }
     else {
         if((0x2F4A <= msgNo && msgNo <= 0x2F53) || (0x2F6B <= msgNo && msgNo <= 0x2F78) || msgNo == 0x2F47) {
-                return true;
+            return true;
         }
     }
 
@@ -1267,7 +1266,7 @@ BOOL daNpc_Bs1_c::shopStickMoveMsgCheck(u32 msgNo) {
     }
     else {
         if((0x2F4A <= msgNo && msgNo <= 0x2F4C) || ((0x2F72 <= msgNo && msgNo <= 0x2F76) && !(msgNo & 1)) || msgNo == 0x2F78 || msgNo == 0x2F6B || msgNo == 0x2F47) {
-                return true;
+            return true;
         }
     }
 
@@ -2065,7 +2064,7 @@ BOOL daNpc_Bs1_c::_draw() {
         }
     }
     
-    dSnap_RegistFig(DSNAP_TYPE_BS, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_BS1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
     
     return TRUE;
 }
@@ -2222,7 +2221,7 @@ BOOL daNpc_Bs1_c::CreateHeap() {
             mpMorf->getModel()->getModelData()->getJointNodePointer(jntNo)->setCallBack(nodeCallBack_Bs);
         }
     }
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this),  this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     J3DAnmTevRegKey* brk = (J3DAnmTevRegKey*)dComIfG_getObjectRes("Bs", dRes_INDEX_BS_BRK_SHOP_CURSOR01_e);

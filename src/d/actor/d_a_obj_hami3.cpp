@@ -51,7 +51,7 @@ BOOL daObjHami3::Act_c::CreateHeap() {
                 break;
             }
         }
-        field_0x2D4->setUserArea((u32)this);
+        field_0x2D4->setUserArea((uintptr_t)this);
     } else {
         return FALSE;
     }

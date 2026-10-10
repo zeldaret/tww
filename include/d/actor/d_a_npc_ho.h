@@ -44,16 +44,15 @@ public:
     
     typedef int (daNpc_Ho_c::*ActionFunc)(void*);
 
-
-    bool ChkOrder(u8 temp) { return mOrderFlags & temp; }
+    BOOL ChkOrder(u8 flag) { return mOrderFlags & flag; }
     void ClrOrder() { mOrderFlags = 0; }
     void SetOrder(u8 temp) { mOrderFlags |= temp; }
     bool chkFlag(u16 flag) { return (mFlags & flag) == flag; }
     void clrFlag(u16 flag) { mFlags &= ~flag; }
 
     s8 getBackboneJntNum() { return m_jnt.getBackboneJntNum(); }
-    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
     s8 getHeadJntNum() { return m_jnt.getHeadJntNum(); }
+    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
     s16 getHead_x() { return m_jnt.getHead_x(); }
     s16 getHead_y() { return m_jnt.getHead_y(); }
 
@@ -115,7 +114,7 @@ public:
     cPhs_State _create();
     BOOL CreateHeap();
 
-public:
+private:
     /* 0x290 */ request_of_phase_process_class mPhs;
     /* 0x298 */ mDoExt_McaMorf* mpMorf;
     /* 0x29C */ J3DModel* mpJoyPendentModel;
@@ -123,7 +122,6 @@ public:
     /* 0x2A4 */ J3DAnmTexPattern* m_head_tex_pattern;
     /* 0x2A8 */ mDoExt_btpAnm mBtpAnm;
     /* 0x2BC */ u8 mBlinkFrame;
-    /* 0x2BD */ u8 field_0x2BD[0x2BE - 0x2BD];
     /* 0x2BE */ s16 mBlinkTimer;
     /* 0x2C0 */ dBgS_ObjAcch mObjAcch;
     /* 0x484 */ dBgS_AcchCir mAcchCir;
@@ -143,7 +141,6 @@ public:
     /* 0x68C */ u8 mMsgAnmIdx;
     /* 0x68D */ u8 mAnmLoopCount;
     /* 0x68E */ u8 mItemNum;
-    /* 0x68F */ u8 field_0x68F[0x690 - 0x68F];
     /* 0x690 */ int mNextMessageId;
     /* 0x694 */ f32 mCylCollisionRadius;
     /* 0x698 */ ActionFunc mCurrActionFunc;
@@ -157,7 +154,6 @@ public:
     /* 0x6AB */ s8 mTalkState;
     /* 0x6AC */ u32 mtrlSndId;
     /* 0x6B0 */ s8 mReverb;
-    /* 0x6B1 */ u8 field_0x6B1[0x6B4 - 0x6B1];
 };  // Size: 0x6B4
 
 #endif /* D_A_NPC_HO_H */

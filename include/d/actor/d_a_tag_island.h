@@ -3,7 +3,7 @@
 
 #include "f_op/f_op_actor.h"
 
-class msg_class;
+struct msg_class;
 
 class daTag_Island_c : public fopAc_ac_c {
 public:
@@ -31,7 +31,7 @@ public:
     BOOL otherCheck();
     BOOL arrivalTerms();
     void demoInitProc();
-    int next_msgStatus(unsigned long*);
+    int next_msgStatus(u32*);
     u32 getMsg();
     void talkInit();
     u16 talk();

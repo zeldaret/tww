@@ -624,6 +624,7 @@ static BOOL daObjBarrier_Draw(daObjBarrier_c* i_this) {
 
 /* 00001CA8-00001CB0       .text daObjBarrier_IsDelete__FP14daObjBarrier_c */
 static BOOL daObjBarrier_IsDelete(daObjBarrier_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

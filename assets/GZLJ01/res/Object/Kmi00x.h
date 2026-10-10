@@ -22,6 +22,7 @@ enum dRes_ID_KMI00X {
 
 enum KMI_00X_JNT {
     KMI_00X_JNT_KMI_00_e=0x0,
+    KMI_00X_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KMI00X_H */

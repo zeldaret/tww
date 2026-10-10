@@ -300,9 +300,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
                     pfVar4->base.position.x = a_this->current.pos.x + cM_rndFX(500.0f);
                     pfVar4->base.position.y = a_this->current.pos.y;
                     pfVar4->base.position.z = a_this->current.pos.z + cM_rndFX(500.0f);
-                    pfVar4->base.angle.z = 0;
-                    pfVar4->base.angle.y = 0;
-                    pfVar4->base.angle.x = 0;
+                    pfVar4->base.angle.x = pfVar4->base.angle.y = pfVar4->base.angle.z = 0;
                     pfVar4->base.parameters = fopAcM_GetParam(a_this);
                     fopAcM_Create(fpcNm_FF_e, NULL, pfVar4);
                 }
@@ -312,7 +310,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
             a_this->cullMtx = a_this->mpModel[0]->getBaseTRMtx();
             a_this->mHomePos = a_this->current.pos;
             a_this->m2EC = a_this->mHomePos;
-            a_this->mLiveTimer = cM_rndF(32768.0f);
+            a_this->mLiveTimer = cM_rndF(0x8000);
             a_this->mTimers[2] = cM_rndF(100.0f);
             static dCcD_SrcSph cc_sph_src = {
                 // dCcD_SrcGObjInf
@@ -346,7 +344,7 @@ static cPhs_State daFf_Create(fopAc_ac_c* i_this) {
             a_this->mSph.Set(cc_sph_src);
             a_this->mSph.SetStts(&a_this->mStts);
         } else {
-            return phase_state = cPhs_ERROR_e;
+            return cPhs_ERROR_e;
         }
     }
     return phase_state;

@@ -18,6 +18,7 @@ enum dRes_ID_OPAPER {
 
 enum OPAPER_JNT {
     OPAPER_JNT_OPAPER_e=0x0,
+    OPAPER_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_OPAPER_H */

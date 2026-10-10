@@ -13,7 +13,11 @@ public:
     bool resetGame();
     void offReset();
 
-    static bool isPause() { return pauseTimer != 0; }
+#ifdef DEBUG
+    static s8 isPause() { return pauseTimer | nextPauseTimer; }
+#else
+    static s8 isPause() { return pauseTimer; }
+#endif
     static void setPauseTimer(s8 time) { nextPauseTimer = time; }
 
     static void onDebugPause() {}
@@ -31,7 +35,7 @@ public:
     dScnPly_dark_HIO_c();
     virtual ~dScnPly_dark_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -46,7 +50,7 @@ public:
     dScnPly_reg_childHIO_c();
     virtual ~dScnPly_reg_childHIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 mFloatRegs[30];
@@ -58,7 +62,7 @@ public:
     dScnPly_env_otherHIO_c();
     virtual ~dScnPly_env_otherHIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -91,7 +95,7 @@ public:
     dScnPly_env_debugHIO_c();
     virtual ~dScnPly_env_debugHIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -118,7 +122,7 @@ public:
 
     virtual ~dScnPly_msg_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -136,14 +140,14 @@ class dScnPly_preLoad_HIO_c : public mDoHIO_entry_c {
 public:
     virtual ~dScnPly_preLoad_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 };
 
 class dScnPly_env_HIO_c : public JORReflexible {
 public:
     virtual ~dScnPly_env_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;

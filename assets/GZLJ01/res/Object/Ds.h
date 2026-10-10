@@ -62,6 +62,7 @@ enum dRes_ID_DS {
 
 enum SHOP_CURSOR01_JNT {
     SHOP_CURSOR01_JNT_CURSOR01_e=0x0,
+    SHOP_CURSOR01_NUM_JNTS_e=0x1,
 };
 
 enum CK_JNT {
@@ -84,6 +85,7 @@ enum CK_JNT {
     CK_JNT_LEGR1_e=0x10,
     CK_JNT_LEGR2_e=0x11,
     CK_JNT_FOOTR_e=0x12,
+    CK_NUM_JNTS_e=0x13,
 };
 
 enum GTYDS00_JNT {
@@ -91,14 +93,17 @@ enum GTYDS00_JNT {
     GTYDS00_JNT_A00_e=0x1,
     GTYDS00_JNT_SMOKE1_e=0x2,
     GTYDS00_JNT_SMOKE2_e=0x3,
+    GTYDS00_NUM_JNTS_e=0x4,
 };
 
 enum CK_FLASCO_JNT {
     CK_FLASCO_JNT_FLASCO_e=0x0,
+    CK_FLASCO_NUM_JNTS_e=0x1,
 };
 
 enum CK_JAR_JNT {
     CK_JAR_JNT_JAR_e=0x0,
+    CK_JAR_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_DS_H */

@@ -35,7 +35,7 @@ public:
     }
     virtual ~daObjPirateShipHIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -145,7 +145,7 @@ static int create_idx_tbl_Yuukaigo[] = {0, 1, 5, -1};
 } // namespace daObjPirateship
 
 /* 000000EC-000000FC       .text ride_call_back__FP4dBgWP10fopAc_ac_cP10fopAc_ac_c */
-void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c* arg2) {
+static void ride_call_back(dBgW*, fopAc_ac_c*, fopAc_ac_c* arg2) {
     fopAcM_OffStatus(arg2, fopAcStts_NOCULLEXEC_e);
 }
 
@@ -291,7 +291,7 @@ void daObjPirateship::Act_c::CreateWave() {
         dComIfGp_particle_setShipTail(dPa_name::ID_AK_SN_PIRATESHIPTAIL00, &m6C8, &current.angle, NULL, 0, &m4AC);
         JPABaseEmitter* emitter = m4AC.getEmitter();
         if (emitter != NULL) {
-            const JGeometry::TVec3<f32> scale = (Vec){20.0f, 20.0f, 20.0f};
+            const JGeometry::TVec3<f32> scale = COMPOUND_LITERAL(Vec){20.0f, 20.0f, 20.0f};
 
             emitter->setGlobalDynamicsScale(scale);
             emitter->setGlobalParticleScale(scale);
@@ -415,7 +415,7 @@ bool daObjPirateship::Act_c::_execute() {
 
     if (!demo_move()) {
         if (l_HIO.m05 == 0 && m4A8 != NULL) {
-            dLib_pathMove(&current.pos, &m4A4, m4A8, 3.0f, path_move_call_back, (void*)this);
+            dLib_pathMove(&current.pos, &m4A4, m4A8, 3.0f, path_move_call_back, this);
             if (m32E > 0x4000 || m32E < -0x4000) {
                 cLib_addCalcAngleS2(&m330, l_HIO.m12, 0x10, 0x300);
             } else {

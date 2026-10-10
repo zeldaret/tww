@@ -487,7 +487,7 @@ BOOL daNpc_Cb1_c::createHeap() {
 
     modelData->getJointNodePointer(m_backbone_jnt_num)->setCallBack(nodeCallBack);
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
 
     mpFaceModel = mDoExt_J3DModel__create((J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_FACE_e), 0x00080000, 0x11000022);
     if(mpFaceModel == NULL) {
@@ -506,7 +506,7 @@ BOOL daNpc_Cb1_c::createHeap() {
         JUT_ASSERT(DEMO_SELECT(983, 982), m_nut_jnt_num >= 0);
         modelData->getJointNodePointer(m_nut_jnt_num)->setCallBack(nutNodeCallBack);
 
-        mpStickModel->setUserArea((u32)this);
+        mpStickModel->setUserArea((uintptr_t)this);
 
         modelData = (J3DModelData*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BDL_CB_CELLO_e);
         JUT_ASSERT(DEMO_SELECT(990, 989), modelData != NULL);
@@ -526,7 +526,7 @@ BOOL daNpc_Cb1_c::createHeap() {
     m_center_jnt_num = modelData->getJointName()->getIndex("center");
     modelData->getJointNodePointer(m_center_jnt_num)->setCallBack(ppNodeCallBack);
 
-    mpPropellerModel->setUserArea((u32)this);
+    mpPropellerModel->setUserArea((uintptr_t)this);
 
     if(!mPropellerBckAnim.init(modelData, (J3DAnmTransform*)dComIfG_getObjectRes("Cb", dRes_INDEX_CB_BCK_M_OPEN_e), FALSE, J3DFrameCtrl::EMode_NONE)) {
         return FALSE;
@@ -639,7 +639,7 @@ void daNpc_Cb1_c::setPlayerAction(daNpc_Cb1_c::ActionFunc_t param_1, void* param
 
 /* 00001810-00001858       .text getStickAngY__11daNpc_Cb1_cFv */
 s16 daNpc_Cb1_c::getStickAngY() {
-    return 0x8000 + g_mDoCPd_cpadInfo[0].mMainStickAngle + dCam_getControledAngleY(dComIfGp_getCamera(0));
+    return 0x8000 + CPad_GET_STICK_ANGLE(0) + dCam_getControledAngleY(dComIfGp_getCamera(0));
 }
 
 /* 00001858-000019B0       .text calcStickPos__11daNpc_Cb1_cFsP4cXyz */
@@ -854,7 +854,7 @@ BOOL daNpc_Cb1_c::flyAction(BOOL param_1, f32 param_2, s16 param_3, BOOL param_4
         fopAcM_seStart(this, JA_SE_CM_PRAPELLO_ROLLING, m8F8 * (100.0f / l_HIO.field_0xD0));
 
         if(param_4 || (!isMakarPlayer && mAcch.ChkWallHit()) || (!mAcch.ChkGroundHit() && m8F8 == 0) ||
-            (mAcch.ChkGroundHit() && m8F8 <= l_HIO.field_0xD2 && (g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x80 || ++m8F6 > l_HIO.field_0xCC))
+            (mAcch.ChkGroundHit() && m8F8 <= l_HIO.field_0xD2 && (CPad_GET_STICK_VALUE(0) >= l_HIO.field_0x80 || ++m8F6 > l_HIO.field_0xCC))
         ) {
             setAnm(ANM_06);
             mpMorf->setFrame(8.0f);
@@ -1231,9 +1231,9 @@ void daNpc_Cb1_c::evInitMovePos(int staffIdx) {
         shape_angle.y = angle;
     }
 
-    cXyz* pPos = dComIfGp_evmng_getMyXyzP(staffIdx, "Pos");
+    Vec* pPos = dComIfGp_evmng_getMyVec3dP(staffIdx, "Pos");
     if(pPos) {
-        current.pos = *pPos;
+        current.pos.set(*pPos);
     }
 
     const char* pShipRide = dComIfGp_evmng_getMyStringP(staffIdx, "ShipRide");
@@ -1256,20 +1256,20 @@ BOOL daNpc_Cb1_c::evActMovePos(int) {
 void daNpc_Cb1_c::evInitOffsetLink(int staffIdx) {
     daPy_lk_c* pLink = daPy_getPlayerLinkActorClass();
 
-    cXyz* pTo = dComIfGp_evmng_getMyXyzP(staffIdx, "To");
+    Vec* pTo = dComIfGp_evmng_getMyVec3dP(staffIdx, "To");
     if(pTo) {
         cXyz dest;
-        cLib_offsetPos(&dest, &current.pos, shape_angle.y, pTo);
+        cLib_offsetPos(&dest, &current.pos, shape_angle.y, (cXyz*)pTo);
         pLink->setPlayerPosAndAngle(&dest, cLib_targetAngleY(&dest, &current.pos));
     }
 
-    cXyz* pFrom = dComIfGp_evmng_getMyXyzP(staffIdx, "From");
+    Vec* pFrom = dComIfGp_evmng_getMyVec3dP(staffIdx, "From");
     if(pFrom) {
         fopAc_ac_c* pPlayer = dComIfGp_getPlayer(0);
-        cLib_offsetPos(&current.pos, &pLink->current.pos, pPlayer->shape_angle.y, pFrom);
+        cLib_offsetPos(&current.pos, &pLink->current.pos, pPlayer->shape_angle.y, (cXyz*)pFrom);
     }
 
-    current.angle.y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    current.angle.y = fopAcM_searchPlayerAngleY(this);
     shape_angle.y = current.angle.y;
 }
 
@@ -1291,21 +1291,21 @@ BOOL daNpc_Cb1_c::evActWalk(int staffIdx) {
 
     JUT_ASSERT(VERSION_SELECT(2042, 2055, 2060, 2060), speed_p != NULL);
 
-    cXyz* pPos = dComIfGp_evmng_getMyXyzP(staffIdx, "Pos");
+    Vec* pPos = dComIfGp_evmng_getMyVec3dP(staffIdx, "Pos");
     cXyz temp;
     cXyz temp2;
     cXyz temp4;
     if(pPos) {
-        temp = *pPos;
-        temp4 = *pPos;
+        temp.set(*pPos);
+        temp4.set(*pPos);
     }
     else {
-        cXyz* pOffset = dComIfGp_evmng_getMyXyzP(staffIdx, "Offset");
+        Vec* pOffset = dComIfGp_evmng_getMyVec3dP(staffIdx, "Offset");
         if(pOffset) {
             fopAc_ac_c* target = dComIfGp_event_getTalkPartner();
             JUT_ASSERT(VERSION_SELECT(2059, 2072, 2077, 2077), target != NULL);
 
-            cLib_offsetPos(&temp, &target->current.pos, fopAcM_searchActorAngleY(this, target), pOffset);
+            cLib_offsetPos(&temp, &target->current.pos, fopAcM_searchActorAngleY(this, target), (cXyz*)pOffset);
             temp4 = target->current.pos;
         }
         else {
@@ -1355,7 +1355,7 @@ BOOL daNpc_Cb1_c::evActWalk(int staffIdx) {
 void daNpc_Cb1_c::evInitToLink(int) {
     setAnm(ANM_01);
     speedF = 0.0f;
-    current.angle.y = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    current.angle.y = fopAcM_searchPlayerAngleY(this);
     shape_angle.y = current.angle.y;
 }
 
@@ -1366,14 +1366,14 @@ BOOL daNpc_Cb1_c::evActToLink(int staffIdx) {
 
     JUT_ASSERT(VERSION_SELECT(2131, 2144, 2149, 2149), speed_p != NULL && dist_p != NULL);
 
-    if(fopAcM_searchActorDistanceXZ(this, dComIfGp_getPlayer(0)) < *dist_p) {
+    if(fopAcM_searchPlayerDistanceXZ(this) < *dist_p) {
         setAnm(ANM_00);
         speedF = 0.0f;
 
         return TRUE;
     }
     else {
-        walkAction(*speed_p, l_HIO.mForwardAccel, fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0)));
+        walkAction(*speed_p, l_HIO.mForwardAccel, fopAcM_searchPlayerAngleY(this));
     }
 
     return FALSE;
@@ -1393,7 +1393,7 @@ BOOL daNpc_Cb1_c::evActTact(int staffIdx) {
         prm = *pPrm0;
     }
 
-    s32 song = daPy_getPlayerActorClass()->getTactMusic();
+    s32 song = ((daPy_py_c*)dComIfGp_getPlayer(0))->getTactMusic();
     if(song >= 0) {
         onTactCorrect();
     }
@@ -1527,9 +1527,9 @@ BOOL daNpc_Cb1_c::evActSetAnm(int) {
 
 /* 00003E00-00003E74       .text evInitSetGoal__11daNpc_Cb1_cFi */
 void daNpc_Cb1_c::evInitSetGoal(int staffIdx) {
-    cXyz* pOffset = dComIfGp_evmng_getMyXyzP(staffIdx, "Offset");
+    Vec* pOffset = dComIfGp_evmng_getMyVec3dP(staffIdx, "Offset");
     if(pOffset) {
-        cLib_offsetPos(dComIfGp_evmng_getGoal(), &current.pos, shape_angle.y, pOffset);
+        cLib_offsetPos(dComIfGp_evmng_getGoal(), &current.pos, shape_angle.y, (cXyz*)pOffset);
     }
 }
 
@@ -1729,7 +1729,7 @@ BOOL daNpc_Cb1_c::waitNpcAction(void* param_1) {
                 cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e);
             }
 
-            f32 dist_sq = fopAcM_searchActorDistance2(this, dComIfGp_getPlayer(0));
+            f32 dist_sq = fopAcM_searchPlayerDistance2(this);
 
             if(!checkNpcCallCommand()) {
                 if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_1610) && dist_sq < SQUARE(l_HIO.field_0xC0)) {
@@ -2247,7 +2247,7 @@ BOOL daNpc_Cb1_c::waitPlayerAction(void*) {
     else if(m8F0 != -1 && !sowCheck()) {
         dAttention_c& attention = dComIfGp_getAttention();
 
-        if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x80 || attention.Lockon()) {
+        if(CPad_GET_STICK_VALUE(0) >= l_HIO.field_0x80 || attention.Lockon()) {
             s16 target = getStickAngY();
             cLib_addCalcAngleS(&current.angle.y, target, 0x19, 0x7FFF, 1);
 
@@ -2256,7 +2256,7 @@ BOOL daNpc_Cb1_c::waitPlayerAction(void*) {
             if(stickPos == 0) {
                 shape_angle.y = current.angle.y;
             }
-            else if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x84) {
+            else if(CPad_GET_STICK_VALUE(0) >= l_HIO.field_0x84) {
                 shape_angle.y = current.angle.y;
             }
 
@@ -2269,7 +2269,7 @@ BOOL daNpc_Cb1_c::waitPlayerAction(void*) {
 
             current.angle.y = shape_angle.y;
 
-            if(g_mDoCPd_cpadInfo[0].mMainStickValue >= l_HIO.field_0x84 && stickPos == 0) {
+            if(CPad_GET_STICK_VALUE(0) >= l_HIO.field_0x84 && stickPos == 0) {
                 current.angle.y = target;
                 setPlayerAction(&daNpc_Cb1_c::walkPlayerAction, NULL);
             }
@@ -2292,7 +2292,7 @@ BOOL daNpc_Cb1_c::walkPlayerAction(void*) {
         cLib_onBit<u32>(attention_info.flags, ~0);
     }
     else if(m8F0 != -1 && !sowCheck()) {
-        f32 temp = g_mDoCPd_cpadInfo[0].mMainStickValue * l_HIO.mStickWalkSpeedScale;
+        f32 temp = CPad_GET_STICK_VALUE(0) * l_HIO.mStickWalkSpeedScale;
         s16 temp7 = getStickAngY();
         s32 temp2 = cLib_distanceAngleS(temp7, current.angle.y);
         f32 temp6 = l_HIO.mForwardAccel;
@@ -2410,7 +2410,7 @@ BOOL daNpc_Cb1_c::flyPlayerAction(void*) {
     }
     else if(m8F0 != -1) {
         dComIfGp_setAStatus(dActStts_LET_GO_e);
-        flyAction(CPad_CHECK_TRIG_A(0), g_mDoCPd_cpadInfo[0].mMainStickValue * l_HIO.mStickFlySpeedScale, getStickAngY(), CPad_CHECK_TRIG_B(0));
+        flyAction(CPad_CHECK_TRIG_A(0), CPad_GET_STICK_VALUE(0) * l_HIO.mStickFlySpeedScale, getStickAngY(), CPad_CHECK_TRIG_B(0));
     }
 
     return TRUE;
@@ -2469,6 +2469,7 @@ void daNpc_Cb1_c::initAnm(s8 param_1, BOOL param_2) {
     }
 }
 
+#if VERSION > VERSION_DEMO
 /* 00007250-000072B4       .text musicPlay__11daNpc_Cb1_cFv */
 void daNpc_Cb1_c::musicPlay() {
     if(!isTypeKazeBoss()) {
@@ -2478,13 +2479,16 @@ void daNpc_Cb1_c::musicPlay() {
         mDoAud_bgmStart(JA_BGM_MAKORE_TAKT_8);
     }
 }
+#endif
 
+#if VERSION > VERSION_DEMO
 /* 000072B4-000072EC       .text musicStop__11daNpc_Cb1_cFv */
 void daNpc_Cb1_c::musicStop() {
     if(!isTypeKazeBoss()) {
         mDoAud_cbPracticeStop();
     }
 }
+#endif
 
 daNpc_Cb1_c::AnmData daNpc_Cb1_c::anmTblData[] = {
     {0x17, 0x02, 0x08, 0x01, -1, -1},
@@ -2541,7 +2545,8 @@ BOOL daNpc_Cb1_c::setAnm(u8 param_1) {
         fopAcM_OffStatus(this, fopAcStts_NOPAUSE_e);
     }
 
-    initAnm(anmPrmData[m8DB], 1);
+    s8* prmData = &anmPrmData[m8DB];
+    initAnm(*prmData, 1);
 
     return TRUE;
 }
@@ -2816,7 +2821,7 @@ void daNpc_Cb1_c::setBaseMtx() {
 
         mDoMtx_stack_c::transS(current.pos.x, current.pos.y + 25.0f, current.pos.z);
         mDoMtx_stack_c::YrotM(shape_angle.y);
-        mDoMtx_stack_c::transM(m904);
+        mDoMtx_stack_c::transM(m904.x, m904.y, m904.z);
         mDoMtx_stack_c::XrotM(shape_angle.x);
         mDoMtx_stack_c::transM(0.0f, -25.0f, 0.0f);
         mDoMtx_stack_c::ZrotM(shape_angle.z);
@@ -3081,7 +3086,7 @@ BOOL daNpc_Cb1_c::draw() {
         }
     }
 
-    dSnap_RegistFig(DSNAP_TYPE_CB1, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_CB1, this, 1.0f, 1.0f, 1.0f);
 
     return TRUE;
 }
@@ -3225,7 +3230,7 @@ BOOL daNpc_Cb1_c::execute() {
             tevStr.mRoomNo = roomNo;
             tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mAcch.m_gnd);
             mStts.SetRoomId(roomNo);
-            mPolyInfo = mAcch.m_gnd;
+            mPolyInfo.SetPolyInfo(mAcch.m_gnd);
         }
 
         setCollision();
@@ -3271,13 +3276,9 @@ BOOL daNpc_Cb1_c::execute() {
         cLib_addCalcPosXZ(&m88C, temp2, 0.5f, temp3, 0.5f);
         if(dComIfGp_getPlayer(0) == this) {
 #if VERSION <= VERSION_JPN
-            int r4 = dActStts_BLANK_e;
-            dComIfGp_setDoStatus(r4);
+            dComIfGp_setDoStatus(dActStts_BLANK_e);
             dComIfGp_setAStatus(dActStts_HIDDEN_e);
-            if(mAcch.ChkGroundHit() != false) {
-                r4 = dActStts_RETURN_e;
-            }
-            dComIfGp_setRStatusForce(r4);
+            dComIfGp_setRStatusForce(mAcch.ChkGroundHit() != false ? dActStts_RETURN_e : dActStts_BLANK_e);
 #else
             if(mAcch.ChkGroundHit()) {
                 dComIfGp_setRStatusForce(dActStts_RETURN_e);

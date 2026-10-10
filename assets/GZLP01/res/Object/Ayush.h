@@ -28,6 +28,7 @@ enum dRes_ID_AYUSH {
 
 enum AYUSH_JNT {
     AYUSH_JNT_POLYSURFACE4074_e=0x0,
+    AYUSH_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_AYUSH_H */

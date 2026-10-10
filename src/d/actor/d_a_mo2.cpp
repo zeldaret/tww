@@ -594,12 +594,7 @@ static void ke_disp(mo2_class* i_this) {
         ke_control(i_this, pkVar2, i);
         ke_draw(i_this, pkVar2, i);
     }
-#ifdef __MWERKS__
-    i_this->m3Dline.update(10, 1.25f, (GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
-#else
-    GXColor local_18 = (GXColor){0xFF, 0x64, 0, 0xFF};
-    i_this->m3Dline.update(10, 1.25f, local_18, 2, &actor->tevStr);
-#endif
+    i_this->m3Dline.update(10, 1.25f, COMPOUND_LITERAL(GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
     dComIfGd_set3DlineMat(&i_this->m3Dline);
 }
 
@@ -659,7 +654,6 @@ static void daMo2_shadowDraw(mo2_class* i_this) {
             i_this->mDamageReaction.mAcch.m_gnd,
             &actor->tevStr
         );
-        ;
     }
 }
 
@@ -1504,7 +1498,7 @@ static void fight_run(mo2_class* i_this) {
     f32 dVar9;
     f32 fVar10;
 
-    dVar9 = g_mDoCPd_cpadInfo[0].mMainStickPosX;
+    dVar9 = CPad_GET_STICK_POS_X(0);
     i_this->mDamageReaction.m4D0 = i_this->m05D6;
     if (i_this->m05B0 == 0 && i_this->mDamageReaction.mMode != 0) {
         maxSpeed = 0x400;
@@ -1868,7 +1862,7 @@ static void fight(mo2_class* i_this) {
                             i_this->m0598 = 1;
                         }
                         iVar6 = (int)i_this->m2068 - l_mo2HIO.m0D8;
-                        if (iVar6 < (int)ARRAY_SIZE(l_mo2HIO.m0E0)) {
+                        if (iVar6 < ARRAY_SSIZE(l_mo2HIO.m0E0)) {
                             i_this->m0590 = l_mo2HIO.m0E0[iVar6];
                         }
                     }
@@ -1880,7 +1874,7 @@ static void fight(mo2_class* i_this) {
                             i_this->m0598 = 1;
                         }
                         iVar6 = (int)i_this->m2068 - l_mo2HIO.m108;
-                        if (iVar6 < (int)ARRAY_SIZE(l_mo2HIO.m110)) {
+                        if (iVar6 < ARRAY_SSIZE(l_mo2HIO.m110)) {
                             i_this->m0590 = l_mo2HIO.m110[iVar6];
                         }
                     }
@@ -2446,7 +2440,7 @@ static void yogan_fail(mo2_class* i_this) {
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_FIREK_KASU, &actor->current.pos);
             dComIfGp_particle_setSimple(dPa_name::ID_IT_SN_O_MAGT_FCHIP, &actor->current.pos);
             if ((i_this->m059C & 3U) == 0) {
-                i_this->m05E8.y = cM_rndF(65536.0f);
+                i_this->m05E8.y = cM_rndF(0x10000);
                 i_this->m05E8.x = -0x2000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m28C8, &i_this->m05E8);
             }
@@ -2624,7 +2618,7 @@ static void hip_damage(mo2_class* i_this) {
             break;
         case 2:
             if ((i_this->m059C & 7) == 0) {
-                i_this->m05E8.y = cM_rndF(65536.0f);
+                i_this->m05E8.y = cM_rndF(0x10000);
                 i_this->m05E8.x = -0x2000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_TUBA00, &i_this->m28C8, &i_this->m05E8);
             }
@@ -2781,7 +2775,7 @@ static void carry_drop(mo2_class* i_this) {
 static void e3_demo(mo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
     daPy_py_c* player = (daPy_py_c*)dComIfGp_getPlayer(0);
-    camera_class* camera = (camera_class*)dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+    camera_process_class* camera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
 
     i_this->m05B4 = 5;
     i_this->mDamageReaction.m4D0 = fopAcM_searchPlayerAngleY(actor);
@@ -3238,6 +3232,7 @@ static u8 damage_check(mo2_class* i_this) {
                 tex_anm_set(i_this, 4);
                 i_this->mDamageReaction.m424 |= 0x10;
                 i_this->mDamageReaction.m428 = 26.0f;
+                break;
         }
         if (i_this->mDamageReaction.m424 != 0) {
             local_54.x = 0.0f;
@@ -3269,7 +3264,7 @@ static u8 damage_check(mo2_class* i_this) {
 /* 0000A3FC-0000A788       .text mo2_demo_camera__FP9mo2_class */
 static void mo2_demo_camera(mo2_class* i_this) {
     fopAc_ac_c* actor = &i_this->actor;
-    camera_class* camera2;
+    camera_process_class* camera2;
 
     dCam_getCamera();
     dCamera_c* camera = dCam_getBody();
@@ -3313,8 +3308,8 @@ static void mo2_demo_camera(mo2_class* i_this) {
             camera->SetTrimSize(1);
             i_this->m2A1D = 0x33;
             camera2 = dComIfGp_getCamera(0);
-            i_this->m2A20 = camera2->mLookat.mEye;
-            i_this->m2A2C = camera2->mLookat.mCenter;
+            i_this->m2A20 = camera2->view.mLookat.mEye;
+            i_this->m2A2C = camera2->view.mLookat.mCenter;
             i_this->m2A44 = 55.0f;
             i_this->m2A1E = 0;
             // Fall-through
@@ -4129,7 +4124,7 @@ static cPhs_State daMo2_Create(fopAc_ac_c* a_this) {
     fopAcM_SetMin(a_this, -200.0f, -50.0f, -100.0f);
     fopAcM_SetMax(a_this, 125.0f, 250.0f, 250.0f);
     fopAcM_SetMtx(a_this, i_this->mpMorf->getModel()->getBaseTRMtx());
-    i_this->mpMorf->getModel()->setUserArea((u32)a_this);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)a_this);
     i_this->actor.initBt(162.5f, 125.0f);
     i_this->mDamageReaction.m70C = 1;
     i_this->mDamageReaction.mSpawnY = a_this->current.pos.y;

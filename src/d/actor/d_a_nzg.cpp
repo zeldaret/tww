@@ -68,12 +68,12 @@ void nzg_00_move(nzg_class* i_this) {
         parameters |= 0x100;
     }
 
-    if (parameters & 0x100 || fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0)) < i_this->m2CC * 0.5f) {
-        if (fopAcM_searchActorDistance(actor, dComIfGp_getPlayer(0)) > i_this->m2D0 * 0.5f) {
+    if (parameters & 0x100 || fopAcM_searchPlayerDistance(actor) < i_this->m2CC * 0.5f) {
+        if (fopAcM_searchPlayerDistance(actor) > i_this->m2D0 * 0.5f) {
             parameters |= 1;
             csXyz child_angle = actor->current.angle;
 
-            child_angle.y += cM_rndFX(8192.0f);
+            child_angle.y += cM_rndFX(0x2000);
             fpc_ProcID childProcID = fopAcM_createChild(fpcNm_NZ_e, fopAcM_GetID(actor), parameters, &actor->current.pos, fopAcM_GetRoomNo(actor), &child_angle, &actor->scale, NULL);
 
             if (childProcID != fpcM_ERROR_PROCESS_ID_e) {

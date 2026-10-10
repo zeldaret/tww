@@ -34,11 +34,7 @@ void daPy_lk_c::setLadderFootSe() {
 }
 
 /* 80133058-80133240       .text changeLadderMoveProc__9daPy_lk_cFi */
-int daPy_lk_c::changeLadderMoveProc(int param_0) {
-    cXyz local_2c;
-    cXyz local_38;
-    int direction;
-
+BOOL daPy_lk_c::changeLadderMoveProc(BOOL param_0) {
     cLib_addCalc(&current.pos.x, m370C.x, 0.5f, 0.5f, 0.05f);
     cLib_addCalc(&current.pos.y, m370C.y, 0.5f, 0.5f, 0.05f);
     cLib_addCalc(&current.pos.z, m370C.z, 0.5f, 0.5f, 0.05f);
@@ -47,8 +43,10 @@ int daPy_lk_c::changeLadderMoveProc(int param_0) {
         if (iVar2 > 0x3c72 && iVar2 < 0x438e) {
             return false;
         }
+        cXyz local_2c;
         local_2c.x = current.pos.x;
         local_2c.z = current.pos.z;
+        int direction;
         if (iVar2 < 0x4000) {
             local_2c.y = 50.0f + (125.0f + current.pos.y);
             direction = DIR_FORWARD;
@@ -56,6 +54,7 @@ int daPy_lk_c::changeLadderMoveProc(int param_0) {
             local_2c.y = current.pos.y - 50.0f;
             direction = DIR_BACKWARD;
         }
+        cXyz local_38;
         local_38.x = local_2c.x + cM_ssin(shape_angle.y) * 50.0f;
         local_38.z = local_2c.z + cM_scos(shape_angle.y) * 50.0f;
         local_38.y = local_2c.y;
@@ -75,15 +74,13 @@ int daPy_lk_c::changeLadderMoveProc(int param_0) {
 
 /* 80133240-801333A8       .text setMoveBGLadderCorrect__9daPy_lk_cFv */
 int daPy_lk_c::setMoveBGLadderCorrect() {
-    if (dComIfG_Bgsp()->ChkPolySafe(mPolyInfo)) {
-        if (dComIfG_Bgsp()->ChkMoveBG(mPolyInfo)) {
-            dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &current.pos, &current.angle, &shape_angle);
-            dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &m370C, NULL, NULL);
-        }
+    if (dComIfG_Bgsp()->ChkPolySafe(mPolyInfo) && dComIfG_Bgsp()->ChkMoveBG(mPolyInfo)) {
+        dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &current.pos, &current.angle, &shape_angle);
+        dComIfG_Bgsp()->MoveBgTransPos(mPolyInfo, true, &m370C, NULL, NULL);
     }
     cXyz local_18(m370C.x + cM_ssin(current.angle.y) * 50.0f, m370C.y, m370C.z + cM_scos(current.angle.y) * 50.0f);
     mLinkLinChk.Set(&m370C, &local_18, this);
-    if ((!dComIfG_Bgsp()->LineCross(&mLinkLinChk)) || (dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 4)) {
+    if (!dComIfG_Bgsp()->LineCross(&mLinkLinChk) || dComIfG_Bgsp()->GetWallCode(mLinkLinChk) != 4) {
         return procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
     } else {
         mPolyInfo = mLinkLinChk;
@@ -154,7 +151,7 @@ BOOL daPy_lk_c::procLadderUpStart() {
                 m34C2 = 0;
                 procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
             } else {
-                changeLadderMoveProc(1);
+                changeLadderMoveProc(TRUE);
             }
         } else {
             if (frameCtrl.checkPass(9.0f)) {
@@ -166,16 +163,16 @@ BOOL daPy_lk_c::procLadderUpStart() {
 }
 
 /* 80133670-80133710       .text procLadderUpEnd_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procLadderUpEnd_init(int param_0) {
-    daPy_ANM dVar2;
-
+BOOL daPy_lk_c::procLadderUpEnd_init(BOOL param_0) {
     commonProcInit(daPyProc_LADDER_UP_END_e);
-    if (param_0 != 0) {
-        dVar2 = ANM_LADDERUPEDL;
+
+    daPy_ANM anm;
+    if (param_0) {
+        anm = ANM_LADDERUPEDL;
     } else {
-        dVar2 = ANM_LADDERUPEDR;
+        anm = ANM_LADDERUPEDR;
     }
-    setSingleMoveAnime(dVar2, m_HIO->mLadder.m.field_0xC, 0.0f, -1, m_HIO->mLadder.m.field_0x10);
+    setSingleMoveAnime(anm, m_HIO->mLadder.m.field_0xC, 0.0f, -1, m_HIO->mLadder.m.field_0x10);
     m34C2 = 7;
     gravity = 0.0f;
     speed.y = 0.0f;
@@ -265,7 +262,7 @@ BOOL daPy_lk_c::procLadderDownStart() {
                 m34C2 = 0;
                 procFall_init(1, m_HIO->mWallCatch.m.field_0x54);
             } else {
-                changeLadderMoveProc(1);
+                changeLadderMoveProc(TRUE);
             }
         } else {
             if (frameCtrl.checkPass(26.0f) || frameCtrl.checkPass(36.0f) || frameCtrl.checkPass(43.0f)) {
@@ -277,10 +274,11 @@ BOOL daPy_lk_c::procLadderDownStart() {
 }
 
 /* 80133AB8-80133B4C       .text procLadderDownEnd_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procLadderDownEnd_init(int param_0) {
+BOOL daPy_lk_c::procLadderDownEnd_init(BOOL param_0) {
     commonProcInit(daPyProc_LADDER_DOWN_END_e);
+
     daPy_ANM anm;
-    if (param_0 != 0) {
+    if (param_0) {
         anm = ANM_LADDERDWEDL;
     } else {
         anm = ANM_LADDERDWEDR;
@@ -307,16 +305,17 @@ BOOL daPy_lk_c::procLadderDownEnd() {
 }
 
 /* 80133BB4-80133E28       .text procLadderMove_init__9daPy_lk_cFiiP4cXyz */
-BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
+BOOL daPy_lk_c::procLadderMove_init(BOOL param_0, int direction, cXyz* param_2) {
     int uVar3 = checkModeFlg(ModeFlg_MIDAIR) ? true : false;
-    float dVar4 = getLadderMoveAnmSpeed();
+    f32 anm_speed = getLadderMoveAnmSpeed();
 
     commonProcInit(daPyProc_LADDER_MOVE_e);
+
     if (uVar3 == 0) {
         if (direction == DIR_FORWARD) {
             m370C.y = param_2->y + 37.5f;
         } else {
-            dVar4 *= -1.0f;
+            anm_speed *= -1.0f;
             m370C.y = param_2->y - 37.5f;
         }
     } else {
@@ -326,22 +325,22 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
     m370C.z = param_2->z;
 
     daPy_ANM anm;
-    if (param_0 != 0) {
+    if (param_0) {
         if (uVar3 != 0) {
-            mProcVar6.m3570 = 1;
+            mProcVar6.m3570 = TRUE;
         } else {
-            mProcVar6.m3570 = 0;
+            mProcVar6.m3570 = FALSE;
             m370C.x = m370C.x - 2.0f * cM_scos(shape_angle.y);
             m370C.z = m370C.z - -2.0f * cM_ssin(shape_angle.y);
         }
-        if (dVar4 >= 0.0f) {
+        if (anm_speed >= 0.0f) {
             anm = ANM_LADDERLTOR;
         } else {
             anm = ANM_LADDERRTOL;
         }
     } else {
-        mProcVar6.m3570 = 1;
-        if (dVar4 >= 0.0f) {
+        mProcVar6.m3570 = TRUE;
+        if (anm_speed >= 0.0f) {
             anm = ANM_LADDERRTOL;
         } else {
             anm = ANM_LADDERLTOR;
@@ -350,7 +349,7 @@ BOOL daPy_lk_c::procLadderMove_init(int param_0, int direction, cXyz* param_2) {
         m370C.z = m370C.z + -2.0f * cM_ssin(shape_angle.y);
     }
 
-    setSingleMoveAnime(anm, dVar4, 0.0f, -1, m_HIO->mLadder.m.field_0x2C);
+    setSingleMoveAnime(anm, anm_speed, 0.0f, -1, m_HIO->mLadder.m.field_0x2C);
     mDirection = direction;
     if (direction == DIR_FORWARD) {
         setTextureAnime(10, 0);

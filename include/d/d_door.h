@@ -5,7 +5,7 @@
 #include "d/d_particle.h"
 #include "SSystem/SComponent/c_phase.h"
 
-class msg_class;
+struct msg_class;
 
 class dDoor_info_c : public fopAc_ac_c {
 public:

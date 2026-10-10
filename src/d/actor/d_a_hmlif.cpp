@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-char* daHmlif_c::m_arcname[] = {"Hmlif", "Hyuf1", "Hyuf2"};
+const char* daHmlif_c::m_arcname[] = {"Hmlif", "Hyuf1", "Hyuf2"};
 const f32 daHmlif_c::m_speed[] = {
     1.6666666f,
     3.3333333f,
@@ -416,7 +416,9 @@ void daHmlif_c::lift_normal_move() {
     cLib_addCalcPos2(&current.pos, m450, 1.0f, fopAcM_GetSpeedF(this));
 }
 
-BOOL daHmlif_c::check_path_point(cXyz, cXyz, cXyz, s8) {
+BOOL daHmlif_c::check_path_point(cXyz, cXyz, s8) {
+    // Unused stripped function
+    return FALSE;
 }
 
 /* 00001270-00001410       .text set_next_pnt__9daHmlif_cFv */

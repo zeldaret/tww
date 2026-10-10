@@ -3,6 +3,7 @@
  * Exception Print Functions
  */
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_machine_exception.h"
 #include "DynamicLink.h"
 #include "JSystem/JFramework/JFWSystem.h"
@@ -16,10 +17,10 @@ static JUTConsole* sConsole;
 
 /* 8001BADC-8001BB68       .text print_f__FPCce */
 void print_f(const char* fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    JUTConsole_print_f_va_(sConsole, fmt, args);
-    va_end(args);
+    std::__tag_va_List args;
+    va_start(args.list, fmt);
+    sConsole->print_f_va(fmt, &args);
+    va_end(args.list);
 }
 
 /* 8001BB68-8001BB90       .text print__FPCc */
@@ -28,7 +29,7 @@ void print(const char* string) {
 }
 
 static void dummy() {
-    OSReport("--------------------------------------\n");
+    DEAD_STRING("--------------------------------------\n");
 }
 
 #if VERSION == VERSION_DEMO

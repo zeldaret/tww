@@ -190,8 +190,8 @@ void J3DJoint::initialize() {
     mScaleCompensate = 0;
     mTransformInfo = j3dDefaultTransformInfo;
     mRadius = 0.0f;
-    mMin = (Vec){0.0f, 0.0f, 0.0f};
-    mMax = (Vec){0.0f, 0.0f, 0.0f};
+    mMin = COMPOUND_LITERAL(Vec){0.0f, 0.0f, 0.0f};
+    mMax = COMPOUND_LITERAL(Vec){0.0f, 0.0f, 0.0f};
     mMtxCalc = NULL;
     mOldMtxCalc = NULL;
     mMesh = NULL;
@@ -229,8 +229,8 @@ void J3DJoint::calcOut() {
 /* 802F58D8-802F5A78       .text entryIn__8J3DJointFv */
 void J3DJoint::entryIn() {
     MtxP anmMtx = j3dSys.getModel()->getAnmMtx(mJntNo);
-    j3dSys.getDrawBuffer(0)->setZMtx(anmMtx);
-    j3dSys.getDrawBuffer(1)->setZMtx(anmMtx);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->setZMtx(anmMtx);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu)->setZMtx(anmMtx);
     for (J3DMaterial* mesh = mMesh; mesh != NULL; ) {
         if (mesh->getShape()->checkFlag(J3DShpFlag_Hide)) {
             mesh = mesh->getNext();
@@ -245,7 +245,7 @@ void J3DJoint::entryIn() {
                 mesh->calc(anmMtx);
             }
             mesh->setCurrentMtx();
-            matPacket->setMaterialAnmID(mesh->getMaterialAnm());
+            matPacket->setMaterialAnmID((uintptr_t)mesh->getMaterialAnm());
             matPacket->setShapePacket(shapePacket);
             J3DDrawBuffer* drawBuffer = j3dSys.getDrawBuffer(mesh->isDrawModeOpaTexEdge());
             if ((u8)matPacket->entry(drawBuffer)) {

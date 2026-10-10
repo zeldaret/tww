@@ -22,6 +22,7 @@ enum TURU_00_JNT {
     TURU_00_JNT_BO02_e=0x2,
     TURU_00_JNT_BO01_e=0x3,
     TURU_00_JNT_BO00_e=0x4,
+    TURU_00_NUM_JNTS_e=0x5,
 };
 
 #endif /* RES_SK_H */

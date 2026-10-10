@@ -138,7 +138,7 @@ inline void J3DGDSetZCompLoc(u32 compLocEnable) {
 }
 
 inline void J3DGDSetTevKonstantSel_SwapModeTable(GXTevStageID stage, GXTevKColorSel colorSel1, GXTevKAlphaSel alphaSel1, GXTevKColorSel colorSel2, GXTevKAlphaSel alphaSel2, GXTevColorChan chan1, GXTevColorChan chan2) {
-    J3DGDWriteBPCmd((stage / 2 + 0xF6) << 24 | (chan1 | chan2 << 2 | colorSel1 << 4 | alphaSel1 << 9 | colorSel2 << 14 | alphaSel2 << 19) & 0x00FFFFFF);
+    J3DGDWriteBPCmd((stage / 2 + 0xF6) << 24 | ((chan1 | chan2 << 2 | colorSel1 << 4 | alphaSel1 << 9 | colorSel2 << 14 | alphaSel2 << 19) & 0x00FFFFFF));
 }
 
 #endif /* J3DGD_H */

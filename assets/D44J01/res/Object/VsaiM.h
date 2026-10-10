@@ -25,6 +25,7 @@ enum VSAIM_JNT {
     VSAIM_JNT_VSAIM_BODY_e=0x1,
     VSAIM_JNT_VUPY1_OUTSIDE_e=0x2,
     VSAIM_JNT_VUPY2_INSIDE_e=0x3,
+    VSAIM_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_VSAIM_H */

@@ -20,7 +20,7 @@ public:
     daNpc_Rsh1_HIO_c();
     virtual ~daNpc_Rsh1_HIO_c() {};
 
-    void genMessage(JORMContext* ctx) {};
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); };
 public:
     /* 0x04 */ s8 mNo;
     /* 0x05 */ u8 field_0x05[0x08 - 0x05];
@@ -168,7 +168,7 @@ BOOL daNpc_Rsh1_c::checkCreateInShopPlayer() {
             cXyz t2_cross_t3 = temp2.outprod(temp3);
             cXyz base_y = cXyz::BaseY;
             
-            if (base_y.getDotProduct(t2_cross_t3) > 0.0f) {
+            if (base_y.inprod(t2_cross_t3) > 0.0f) {
                 l++;
             }
 
@@ -177,7 +177,7 @@ BOOL daNpc_Rsh1_c::checkCreateInShopPlayer() {
         }
 
         if ((l == 4 || l == 0) && 
-            diff.getDotProduct(dir) > 0.0f && 
+            diff.inprod(dir) > 0.0f && 
             std::fabsf(diff.y) < 25.0f) {
             return TRUE;
         }
@@ -206,7 +206,7 @@ static BOOL daNpc_Rsh1_checkRotenBaseTalkArea() {
         cXyz t2_cross_t3 = temp2.outprod(temp3);
         cXyz base_y = cXyz::BaseY;
         
-        if (base_y.getDotProduct(t2_cross_t3) > 0.0f) {
+        if (base_y.inprod(t2_cross_t3) > 0.0f) {
             l++;
         }
 
@@ -363,8 +363,8 @@ void daNpc_Rsh1_c::playTexPatternAnm() {
 /* 00000BDC-00000C64       .text setAnm__12daNpc_Rsh1_cFSc */
 void daNpc_Rsh1_c::setAnm(s8 i_index) {
     static int play_mode_tbl[7] = {
-        2, 2, 2, 2,
-        2, 2, 2
+        J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP,
+        J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP, J3DFrameCtrl::EMode_LOOP
     };
 
     static float morf_frame_tbl[7] = {
@@ -464,7 +464,7 @@ void daNpc_Rsh1_c::eventOrder() {
     if (m95B == 5) {
         fopAcM_orderOtherEventId(this, mShopOutEventIdx);
     } else if (m95B == 4) {
-        fopAcM_orderOtherEvent2(this, "RSH_GET_DEMO", dEvtFlag_NOPARTNER_e);
+        fopAcM_orderOtherEvent(this, "RSH_GET_DEMO");
     } else if (m95B == 1 || m95B == 2 || m95B == 3) {
         if (m95B != 3 || mShopIdx != -1 || daNpc_Rsh1_checkRotenBaseTalkArea()) {
             eventInfo.onCondition(dEvtCnd_CANTALK_e);
@@ -506,9 +506,9 @@ void daNpc_Rsh1_c::checkOrder() {
 
 /* 0000126C-00001650       .text next_msgStatus__12daNpc_Rsh1_cFPUl */
 u16 daNpc_Rsh1_c::next_msgStatus(u32* o_pMsgNo) {
-    u16 msg_status;    
+    u16 msg_status = fopMsgStts_MSG_CONTINUES_e;
     s32 msg_rupee;
-    msg_status = fopMsgStts_MSG_CONTINUES_e;
+
     switch (*o_pMsgNo) {
     case 0x2845:
     case 0x2846:
@@ -940,7 +940,7 @@ BOOL daNpc_Rsh1_c::CreateInit() {
     mActorAngle = current.angle;
     attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
     attention_info.distances[fopAc_Attn_TYPE_BATTLE_e] = 173;
-    attention_info.distances[8] = 173; // Bug?
+    attention_info.distances[8] = 173; // !@bug: There is no distances[8], this overwrites the first byte of position.x
     gravity = -30.0f;
     
     switch (m95E) {
@@ -1176,10 +1176,10 @@ int daNpc_Rsh1_c::getAimShopPosIdx() {
     for (int i = 0; i <= condition; i++) {
         cXyz temp = link_pos;
         temp -= mPathPointPos[i];
-        f32 mag = std::sqrtf(temp.abs2XZ());
+        f32 mag = temp.absXZ();
         
         if (mag < fcond) {
-            fcond = std::sqrtf(temp.abs2XZ());
+            fcond = temp.absXZ();
             result_index = i;
         }
     }
@@ -1668,12 +1668,11 @@ BOOL daNpc_Rsh1_c::_draw() {
         current.pos.z
     );
 
-    f32 ground_y = mAcch.m_ground_h;
     mShadowID = dComIfGd_setShadow(
         mShadowID, 
         1, mpMorf->getModel(), 
         &shadow_pos, 800.0f, 20.0f, 
-        current.pos.y, ground_y, 
+        current.pos.y, mAcch.GetGroundH(), 
         mAcch.m_gnd, &tevStr
     );  
     
@@ -1681,7 +1680,7 @@ BOOL daNpc_Rsh1_c::_draw() {
         mpShopCursor->draw();
     }
 
-    dSnap_RegistFig(DSNAP_TYPE_RSH1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_RSH1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
 
     return TRUE;
 }
@@ -1718,7 +1717,7 @@ BOOL daNpc_Rsh1_c::_execute() {
     }
 #endif
 
-    cXyz center = dComIfGp_getCamera(0)->mLookat.mCenter;
+    cXyz center = dComIfGp_getCamera(0)->view.mLookat.mCenter;
     cXyz lookat_diff = center - current.pos;
     f32 lookat_dist = lookat_diff.abs();
 
@@ -1876,7 +1875,7 @@ BOOL daNpc_Rsh1_c::CreateHeap() {
         }
     }
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     cXyz* speed_p = &speed;
     cXyz* old_pos_p = &old.pos;

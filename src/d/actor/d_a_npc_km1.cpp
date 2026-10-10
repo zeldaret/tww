@@ -30,7 +30,7 @@ public:
     daNpc_Km1_HIO_c();
     virtual ~daNpc_Km1_HIO_c() {};
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -74,12 +74,12 @@ static BOOL nodeCallBack_Km(J3DNode* i_node, int i_calcTiming) {
             static cXyz a_eye_pos_offst(20.0f,20.0f,0.0f);
             u16 jointIdx = ((J3DJoint*)(i_node))->getJntNo();
             mDoMtx_stack_c::copy(model->getAnmMtx(jointIdx));
-            if(jointIdx == km1Actor->getHeadJntNum()){
-                MTXMultVec(mDoMtx_stack_c::get(),&a_att_pos_offst,km1Actor->getAttPos());
+            if (jointIdx == km1Actor->getHeadJntNum()){
+                mDoMtx_stack_c::multVec(&a_att_pos_offst, km1Actor->getAttPos());
                 mDoMtx_stack_c::XrotM(km1Actor->getHead_y());
                 mDoMtx_stack_c::ZrotM(km1Actor->getHead_x()); 
-                MTXMultVec(mDoMtx_stack_c::get(),&a_eye_pos_offst,km1Actor->getEyePos());
-            }else if(jointIdx == km1Actor->getBackboneJntNum()){
+                mDoMtx_stack_c::multVec(&a_eye_pos_offst, km1Actor->getEyePos());
+            } else if(jointIdx == km1Actor->getBackboneJntNum()){
                 mDoMtx_stack_c::XrotM(km1Actor->getBackbone_y());
                 mDoMtx_stack_c::ZrotM(km1Actor->getBackbone_x());  
             }
@@ -107,7 +107,6 @@ bool daNpc_Km1_c::createInit() {
     field_0x7BC = 1;
     setMtx();
     return true;
-
 }
 
 /* 0000043C-0000054C       .text setMtx__11daNpc_Km1_cFv */
@@ -124,7 +123,7 @@ void daNpc_Km1_c::setMtx() {
 
     tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
     tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
     mpMorf->calc();
@@ -152,7 +151,7 @@ void daNpc_Km1_c::BtpNum2ResID(int i_num, int* o_btp_num){
 }
 
 /* 000006F0-00000734       .text setAnm_tex__11daNpc_Km1_cFSc */
-void daNpc_Km1_c::setAnm_tex(signed char i_param_1) {
+void daNpc_Km1_c::setAnm_tex(s8 i_param_1) {
     if(i_param_1 >= 0 && i_param_1 != field_0x7CD){
         field_0x7CD = i_param_1;
         initTexPatternAnm(true);
@@ -184,13 +183,11 @@ bool daNpc_Km1_c::init_btp(bool param_1, int param_2) {
 
 /* 00000850-00000894       .text initTexPatternAnm__11daNpc_Km1_cFb */
 bool daNpc_Km1_c::initTexPatternAnm(bool param_1) {
-    
     bool var_31 = false;
     if(init_btp(param_1,field_0x7CD)){
         var_31 = true;
     }
     return var_31;
-
 }
 
 /* 00000894-00000958       .text playTexPatternAnm__11daNpc_Km1_cFv */
@@ -211,7 +208,6 @@ void daNpc_Km1_c::playTexPatternAnm() {
     if(field_0x7CD){
         mBtpFrame = m_head_tex_pattern->getFrameMax();
         return;
-
     }else{
         mBtpFrame = 0;
         field_0x6F2 = cM_rndF(60.0) + 30.0f;
@@ -270,7 +266,7 @@ void daNpc_Km1_c::ctrlAnmTag() {
 }
 
 /* 00000AA4-00000AE4       .text chngAnmAtr__11daNpc_Km1_cFUc */
-void daNpc_Km1_c::chngAnmAtr(unsigned char param_1) {
+void daNpc_Km1_c::chngAnmAtr(u8 param_1) {
     if(param_1 < 1 && param_1 != field_0x7CB){
         field_0x7CB = param_1;
         setAnm_ATR(1);
@@ -290,7 +286,6 @@ void daNpc_Km1_c::setAnm_ATR(int param_1) {
         setAnm_tex(a_anm_prm_tbl[field_0x7CB].field_0x1);
     }
     setAnm_anm((&a_anm_prm_tbl[field_0x7CB]));
-
 }
 
 /* 00000B50-00000C0C       .text anmAtr__11daNpc_Km1_cFUs */
@@ -315,7 +310,7 @@ void daNpc_Km1_c::anmAtr(u16 i_msgStatus) {
 }
 
 /* 00000C0C-00000C64       .text setStt__11daNpc_Km1_cFSc */
-void daNpc_Km1_c::setStt(signed char param_1) {
+void daNpc_Km1_c::setStt(s8 param_1) {
     s8 uVar1 = field_0x7D0;
     field_0x7D0 = param_1;
     switch((s8)field_0x7D0) {
@@ -332,7 +327,7 @@ void daNpc_Km1_c::setStt(signed char param_1) {
 }
 
 /* 00000C64-00000C6C       .text next_msgStatus__11daNpc_Km1_cFPUl */
-u16 daNpc_Km1_c::next_msgStatus(unsigned long*) {
+u16 daNpc_Km1_c::next_msgStatus(u32*) {
     return fopMsgStts_MSG_ENDS_e;
 }
 
@@ -357,7 +352,7 @@ void daNpc_Km1_c::checkOrder() {
     if(eventInfo.checkCommandDemoAccrpt()){
         return;
     }
-    if(!eventInfo.checkCommandTalk()){
+    if(eventInfo.getCommand()!= dEvtCmd_INTALK_e){
         return;
     }
     if(field_0x7CF != 1 && field_0x7CF != 2){
@@ -374,7 +369,7 @@ void daNpc_Km1_c::lookBack() {
     cXyz vec2 = current.pos;
     vec2.y = eyePos.y;
     
-    vec1.setall(0.0);
+    vec1.set(0.0f, 0.0f, 0.0f);
 
     cXyz* dstPos = NULL;
     s16 targetY = current.angle.y;
@@ -478,6 +473,7 @@ void daNpc_Km1_c::privateCut() {
             switch(field_0x7C9){
                 case 0:
                     event_actionInit(staffIdx);
+                    break;
             }
         }
         bool bVar1;
@@ -493,7 +489,6 @@ void daNpc_Km1_c::privateCut() {
         if(bVar1){
             dComIfGp_evmng_cutEnd(staffIdx);
         }
-
     }
 }
 
@@ -501,7 +496,6 @@ void daNpc_Km1_c::privateCut() {
 void daNpc_Km1_c::endEvent() {
     dComIfGp_event_reset();
     field_0x7CB = 0xFF;
-
 }
 
 /* 00001164-000011C4       .text event_proc__11daNpc_Km1_cFv */
@@ -636,10 +630,10 @@ BOOL daNpc_Km1_c::_draw() {
             &current.pos,
             mObjAcch.GetGroundH(),
             40.0f,
-            dComIfG_Bgsp()->GetTriPla(mObjAcch.m_gnd)->GetNP()
+            &dComIfG_Bgsp()->GetTriPla(mObjAcch.m_gnd)->mNormal
         );
     }
-    dSnap_RegistFig(DSNAP_TYPE_KM1,this,1.0f,1.0f,1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_KM1_KK1,this,1.0f,1.0f,1.0f);
 
     // Color literals for debug drawing. Unused in non-debug builds.
     (GXColor){0xFF,0x00, 0x00, 0x80};
@@ -694,7 +688,6 @@ BOOL daNpc_Km1_c::_delete() {
         }
     }
     return true;
-    
 }
 
 /* 0000188C-000018AC       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -739,7 +732,6 @@ cPhs_State daNpc_Km1_c::_create() {
         resLoadResult = cPhs_ERROR_e;
     }
     return resLoadResult; 
-    
 }
 
 /* 00001E4C-00002158       .text CreateHeap__11daNpc_Km1_cFv */
@@ -772,7 +764,7 @@ BOOL daNpc_Km1_c::CreateHeap() {
                             mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Km);
                         }
                     }
-                    mpMorf->getModel()->setUserArea((u32)this);
+                    mpMorf->getModel()->setUserArea((uintptr_t)this);
                     mAcchCir.SetWall(30.0f,60.0f);
                     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
                     return TRUE;

@@ -19,21 +19,21 @@ const s32 daShutter2_c::m_heapsize[1] = {0x0C00};
 const Vec daShutter2_c::m_cull_min[1] = {{-300.0f, -10.0f, -40.0f}};
 const Vec daShutter2_c::m_cull_max[1] = {{300.0f, 400.0f, 40.0f}};
 
-char* daShutter2_c::m_arcname[1] = {"Htobi3"};
-char* daShutter2_c::m_open_ev_name[1] = {"R04DOOROPEN"};
-char* daShutter2_c::m_close_ev_name[1] = {"R04DOORCLOSE"};
-char* daShutter2_c::m_staff_name[1] = {"Htobi3"};
+const char* daShutter2_c::m_arcname[1] = {"Htobi3"};
+const char* daShutter2_c::m_open_ev_name[1] = {"R04DOOROPEN"};
+const char* daShutter2_c::m_close_ev_name[1] = {"R04DOORCLOSE"};
+const char* daShutter2_c::m_staff_name[1] = {"Htobi3"};
 
 /* 00000078-000000B8       .text Delete__12daShutter2_cFv */
 BOOL daShutter2_c::Delete() {
-    dComIfG_resDelete(&mPhs, m_arcname[mType]);
+    dComIfG_resDeleteDemo(&mPhs, m_arcname[mType]);
     return TRUE;
 }
 
 /* 000000B8-00000194       .text CreateHeap__12daShutter2_cFv */
 int daShutter2_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
-    JUT_ASSERT(0xe0, modelData != NULL);
+    JUT_ASSERT(DEMO_SELECT(223, 224), modelData != NULL);
     mpModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (!mpModel) {
         return FALSE;

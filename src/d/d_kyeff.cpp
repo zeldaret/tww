@@ -27,7 +27,8 @@ static f32 get_parcent(f32 param_0, f32 param_1, f32 param_2) {
     f32 temp_f4 = param_0 - param_1;
 
     if (0.0f != temp_f4) {
-        temp_f1 = 1.0f - (param_0 - param_2) / temp_f4;
+        f32 temp = param_0 - param_2;
+        temp_f1 = 1.0f - temp / temp_f4;
         if (!(temp_f1 >= 1.0f)) {
             return temp_f1;
         }
@@ -48,19 +49,20 @@ void menu_vrbox_set() {
     stage_vrbox_info_class* vrbox0;
     stage_vrbox_info_class* vrbox1;
 
-    camera_class * pCamera = dComIfGp_getCamera(0);
+    camera_process_class * pCamera = dComIfGp_getCamera(0);
 
-    pCamera->mLookat.mEye.x = 9377.0f;
-    pCamera->mLookat.mEye.y = 0.0f;
-    pCamera->mLookat.mEye.z = 7644.0f;
-    pCamera->mLookat.mCenter.x = 4300.0f;
-    pCamera->mLookat.mCenter.y = 4200.0f;
-    pCamera->mLookat.mCenter.z = 1000.0f;
+    pCamera->view.mLookat.mEye.x = 9377.0f;
+    pCamera->view.mLookat.mEye.y = 0.0f;
+    pCamera->view.mLookat.mEye.z = 7644.0f;
+    pCamera->view.mLookat.mCenter.x = 4300.0f;
+    pCamera->view.mLookat.mCenter.y = 4200.0f;
+    pCamera->view.mLookat.mCenter.z = 1000.0f;
 
     g_env_light.mWind.mWindPower = 0.7f;
-    curTime = g_env_light.mCurTime;
 
-    g_env_light.mCurTime += 0.03f;
+    f32 temp = 0.03f;
+    curTime = g_env_light.mCurTime;
+    g_env_light.mCurTime += temp;
     if ((u32)g_env_light.mCurTime >= 360.0f)
         g_env_light.mCurTime = 0.0f;
 
@@ -120,6 +122,7 @@ static BOOL dKyeff_Execute(dKyeff_c* i_this) {
 
 /* 801984EC-801984F4       .text dKyeff_IsDelete__FP8dKyeff_c */
 static BOOL dKyeff_IsDelete(dKyeff_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -148,11 +151,21 @@ static cPhs_State dKyeff_Create(kankyo_class* i_ky) {
             dKyw_rain_set(250);
             g_env_light.mThunderEff.mMode = 1;
         } else if (stType == dStageType_MISC_e) {
-            if (strcmp(dComIfGp_getStartStageName(), "Ocrogh") == 0 || strcmp(dComIfGp_getStartStageName(), "Omori") == 0 ||
-                strcmp(dComIfGp_getStartStageName(), "Orichh") == 0 || strcmp(dComIfGp_getStartStageName(), "Atorizk") == 0 ||
-                strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0 || strcmp(dComIfGp_getStartStageName(), "Ojhous2") == 0 ||
-                strcmp(dComIfGp_getStartStageName(), "Onobuta") == 0 || strcmp(dComIfGp_getStartStageName(), "Omasao") == 0 ||
-                strcmp(dComIfGp_getStartStageName(), "Obombh") == 0 || strcmp(dComIfGp_getStartStageName(), "Opub") == 0) {
+            if (
+                strcmp(dComIfGp_getStartStageName(), "Ocrogh") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Omori") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Orichh") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Atorizk") == 0 ||
+#if VERSION == VERSION_DEMO
+                strcmp(dComIfGp_getStartStageName(), "Atorizk") == 0 || // duplicate check
+#endif
+                strcmp(dComIfGp_getStartStageName(), "LinkRM") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Ojhous2") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Onobuta") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Omasao") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Obombh") == 0 ||
+                strcmp(dComIfGp_getStartStageName(), "Opub") == 0
+            ) {
                 dKyw_rain_set(250);
                 g_env_light.mThunderEff.mMode = 10;
             }

@@ -20,6 +20,7 @@ enum HPBOT1_JNT {
     HPBOT1_JNT_HPBOT1_00_e=0x0,
     HPBOT1_JNT_DAI_e=0x1,
     HPBOT1_JNT_KAITEN_e=0x2,
+    HPBOT1_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_HPBOT1_H */

@@ -18,6 +18,7 @@ enum dRes_ID_ITACT {
 
 enum ITACT_JNT {
     ITACT_JNT_ITACT_e=0x0,
+    ITACT_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ITACT_H */

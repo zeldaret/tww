@@ -69,12 +69,14 @@ enum FM_JNT {
     FM_JNT_NYUBIB_e=0xD,
     FM_JNT_OYUBIA_e=0xE,
     FM_JNT_OYUBIB_e=0xF,
+    FM_NUM_JNTS_e=0x10,
 };
 
 enum YPIT00_JNT {
     YPIT00_JNT_YPIT00_e=0x0,
     YPIT00_JNT_A00_e=0x1,
     YPIT00_JNT_PITFALL1_e=0x2,
+    YPIT00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_FM_H */

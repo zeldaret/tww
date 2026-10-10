@@ -20,6 +20,7 @@ static BOOL daRct_Execute(RECTANGLE_class* i_this) {
 
 /* 00000088-00000090       .text daRct_IsDelete__FP15RECTANGLE_class */
 static BOOL daRct_IsDelete(RECTANGLE_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

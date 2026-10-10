@@ -23,13 +23,13 @@ public:
     void check_col();
     void lift_smooth_move();
     void lift_normal_move();
-    BOOL check_path_point(cXyz, cXyz, cXyz, s8);
+    BOOL check_path_point(cXyz, cXyz, s8);
     void set_next_pnt();
     BOOL setNextPath();
     bool chkSwitchPathType();
     virtual BOOL Draw();
 
-    static char* m_arcname[];
+    static const char* m_arcname[];
     static const f32 m_speed[];
     static const s16 m_bmdidx[];
     static const s16 m_dzbidx[];

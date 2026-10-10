@@ -170,24 +170,24 @@ bool cM3d_Cross_AabCyl(const cM3dGAab* aab, const cM3dGCyl* cyl) {
 bool cM3d_Cross_AabSph(const cM3dGAab* aab, const cM3dGSph* sph) {
     f32 radius = sph->GetR();
     f32 cx = sph->GetC().x;
-    if (aab->GetMinX() > cx + radius) {
+    if (aab->GetMinP()->x > cx + radius) {
         return false;
     }
-    else if (aab->GetMaxX() < cx - radius) {
+    else if (aab->GetMaxP()->x < cx - radius) {
         return false;
     }
 
     f32 cz = sph->GetC().z;
-    if (aab->GetMinZ() > cz + radius) {
+    if (aab->GetMinP()->z > cz + radius) {
         return false;
-    } else if (aab->GetMaxZ() < cz - radius) {
+    } else if (aab->GetMaxP()->z < cz - radius) {
         return false;
     }
     
     f32 cy = sph->GetC().y;
-    if (aab->GetMinY() > cy + radius) {
+    if (aab->GetMinP()->y > cy + radius) {
         return false;
-    } else if (aab->GetMaxY() < cy - radius) {
+    } else if (aab->GetMaxP()->y < cy - radius) {
         return false;
     }
     return true;
@@ -2283,6 +2283,14 @@ int cM3d_UpMtx_Base(const Vec& param_0, const Vec& param_1, Mtx m) {
     C_MTXRotAxisRad(m, &sp3C, var_f30);
     return 1;
 }
+
+#ifdef DEBUG
+static Vec base_y = {0.0f, 1.0f, 0.0f};
+
+bool cM3d_UpMtx(const Vec& param_1, Mtx param_2) {
+    return cM3d_UpMtx_Base(base_y, param_1, param_2);
+}
+#endif
 
 /* 8025172C-80251758       .text cM3d_PlaneCrossLineProcWork__FfffffffPfPf */
 void cM3d_PlaneCrossLineProcWork(f32 v0, f32 v1, f32 v2, f32 v3, f32 v4, f32 v5, f32 v6, f32* p0, f32* p1) {

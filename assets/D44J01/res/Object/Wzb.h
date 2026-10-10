@@ -26,6 +26,7 @@ enum dRes_ID_WZB {
 
 enum YSUMN00_JNT {
     YSUMN00_JNT_GATE_e=0x0,
+    YSUMN00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_WZB_H */

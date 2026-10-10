@@ -25,7 +25,7 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
 
             if (dropType != daDisItem_NONE1_e && dropType != daDisItem_NONE3_e) {
                 if (dropType == daDisItem_HEART_CONTAINER_e) {
-                    fopAcM_createItemForBoss(&i_this->current.pos, 0, i_this->current.roomNo, &i_this->current.angle, NULL, 0);
+                    fopAcM_createItemForBoss(&i_this->current.pos, 0, fopAcM_GetRoomNo(i_this), &i_this->current.angle, NULL, 0);
                 }
                 else if (dropType >= daDisItem_HEART_e && dropType <= daDisItem_NONE13_e) {
                     // Special type for Keese (ki) spawned in the Puppet Ganon fight.
@@ -35,12 +35,12 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                         dItemNo_LARGE_MAGIC_e,
                         dItemNo_ARROW_10_e,
                     };
-                    if (dropType < daDisItem_HEART_e + (int)ARRAY_SIZE(ki_item_d)) {
+                    if (dropType < daDisItem_HEART_e + ARRAY_SSIZE(ki_item_d)) {
                         fopAcM_createItem(&i_this->current.pos, ki_item_d[dropType - daDisItem_HEART_e], -1, -1, daItemType_0_e, NULL, daItemAct_4_e);
                     }
                 }
                 else {
-                    fopAcM_createIball(&i_this->current.pos, i_this->itemTableIdx, i_this->current.roomNo, &i_this->current.angle, i_this->mItemBitNo);
+                    fopAcM_createIball(&i_this->current.pos, i_this->itemTableIdx, fopAcM_GetRoomNo(i_this), &i_this->current.angle, i_this->mItemBitNo);
                 }
             }
         }

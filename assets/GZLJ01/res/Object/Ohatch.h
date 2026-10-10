@@ -24,6 +24,7 @@ enum dRes_ID_OHATCH {
 
 enum OHATCH_JNT {
     OHATCH_JNT_HATCH_UP_e=0x0,
+    OHATCH_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_OHATCH_H */

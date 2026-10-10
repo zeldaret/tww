@@ -95,6 +95,10 @@ inline void cMtx_copy(CMtxP src, MtxP dst) {
     mDoMtx_copy(src, dst);
 }
 
+inline void cMtx_trans(Mtx dst, f32 x, f32 y, f32 z) {
+    mDoMtx_trans(dst, x, y, z);
+}
+
 inline void cMtx_multVecArray(Mtx mtx, const Vec* src, Vec* dst, u32 count) {
     mDoMtx_multVecArray(mtx, src, dst, count);
 }
@@ -110,11 +114,11 @@ inline void cMtx_multVecSR(const Mtx m, const Vec* src, Vec* dst) {
 }
 
 inline void mDoMtx_quatMultiply(const Quaternion* a, const Quaternion* b, Quaternion* ab) {
-    QUATMultiply(a,b,ab);
+    QUATMultiply(a, b, ab);
 }
 
 inline void mDoMtx_quatSlerp(const Quaternion* a, const Quaternion* b, Quaternion* ab, f32 param_4) {
-    C_QUATSlerp(a,b,ab,param_4);
+    C_QUATSlerp(a, b, ab, param_4);
 }
 
 inline void mDoMtx_quatRotAxisRad(Quaternion* q, const Vec* axis, f32 rad) {
@@ -139,6 +143,10 @@ inline void mDoMtx_scale(Mtx m, f32 x, f32 y, f32 z) {
 
 inline void mDoMtx_quat(Mtx m, const Quaternion* q) {
     MTXQuat(m, q);
+}
+
+inline void cMtx_identity(Mtx mtx) {
+    mDoMtx_identity(mtx);
 }
 
 inline void cMtx_inverse(const Mtx a, Mtx b) {

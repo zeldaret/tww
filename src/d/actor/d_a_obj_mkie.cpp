@@ -185,7 +185,7 @@ BOOL daObjMkie::Act_c::Create() {
 
 #if VERSION > VERSION_DEMO
     if (daObj::PrmAbstract<Prm_e>(this, PRM_FLAG_W, PRM_FLAG_S) != 0) {
-        actor_status &= ~0x3F;
+        fopAcM_ClearStatusMap(this);
         gbaName = 0;
     }
 #endif
@@ -267,7 +267,7 @@ BOOL daObjMkie::Act_c::chk_light() {
 
 /* 00000DF4-00000E84       .text eff_break__Q29daObjMkie5Act_cFv */
 void daObjMkie::Act_c::eff_break() {
-    _GXColor envColor;
+    GXColor envColor;
     envColor.r = (u8)tevStr.mColorC0.r;
     envColor.g = (u8)tevStr.mColorC0.g;
     envColor.b = (u8)tevStr.mColorC0.b;

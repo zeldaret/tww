@@ -26,7 +26,7 @@ BOOL daLwood_c::CreateHeap() {
     if (mModel == NULL)
         return FALSE;
 
-    mModel->setUserArea((u32)this);
+    mModel->setUserArea((uintptr_t)this);
     setMoveBGMtx();
     cBgD_t* bgp = (cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_LWOOD_DZB_ALWD_e);
     mpBgW = dBgW_NewSet(bgp, dBgW::MOVE_BG_e, &mtx);
@@ -43,7 +43,7 @@ void daLwood_c::CreateInit() {
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f, 600.0f, 900.0f, 600.0f);
     fopAcM_setCullSizeFar(this, 2.37f);
-    mTimer = cM_rndF(32768.0f);
+    mTimer = cM_rndF(0x8000);
     mScale = cM_rndF(0.4f) + 0.8f;
     JUTNameTab* jointName = mModel->getModelData()->getJointName();
     for (u16 i = 0; i < mModel->getModelData()->getJointNum(); i++) {
@@ -170,6 +170,7 @@ static BOOL daLwood_Execute(void* i_this) {
 
 /* 0000078C-00000794       .text daLwood_IsDelete__FPv */
 static BOOL daLwood_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

@@ -30,6 +30,7 @@ enum dRes_ID_YSWDR00 {
 
 enum YSWDR00_JNT {
     YSWDR00_JNT_YSWDR00_e=0x0,
+    YSWDR00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_YSWDR00_H */

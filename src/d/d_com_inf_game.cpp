@@ -70,7 +70,7 @@ void dComIfG_play_c::init() {
 
 /* 800521D4-80052400       .text itemInit__14dComIfG_play_cFv */
 void dComIfG_play_c::itemInit() {
-    field_0x48b8 = 0.0f;
+    mItemScopeWipeScale = 0.0f;
     mItemLifeCount = 0.0f;
     mItemRupeeCount = 0;
     mAirMeter = 0;
@@ -100,7 +100,7 @@ void dComIfG_play_c::itemInit() {
     mItemNowLife = 0;
     mItemNowRupee = 0;
     mItemSwimTimerStatus = 0;
-    field_0x4929 = 0;
+    mItemScopeWipeTimer = 0;
     mMesgStatus = 0;
     mScopeMesgStatus = 0;
     field_0x492c = 0;
@@ -143,7 +143,7 @@ void dComIfG_play_c::itemInit() {
     }
 
     mMelodyNum = 0;
-    mFmapOpen = false;
+    mFmapOpen = 0;
     mNameOpen = 0;
     field_0x4953 = 0;
     field_0x4954 = 0;
@@ -157,7 +157,7 @@ void dComIfG_play_c::itemInit() {
     mPictureResult = 0;
     mPictureResultDetail = 0;
     mPictureStatus = 0;
-    field_0x495f = 0;
+    mGetPictureNum = 0;
     mPictureFormat = 0;
     mSelectPicture = 0;
     mHeapLockFlag = 0;
@@ -166,7 +166,7 @@ void dComIfG_play_c::itemInit() {
     strcpy(mInputPassword, "\0");
 
     mMesgBgm = 0;
-    field_0x4978 = 0;
+    mScopeWipeFlag = 0;
     m2dShow = 0;
     field_0x497a = 0;
 #if VERSION > VERSION_DEMO
@@ -586,7 +586,7 @@ int dComIfGd_setSimpleShadow2(cXyz* i_pos, f32 groundY, f32 scaleXZ, cBgS_PolyIn
         cM3dGPla* plane_p =
             dComIfG_Bgsp()->GetTriPla(i_floorPoly);
 
-        return dComIfGd_setSimpleShadow(i_pos, groundY, scaleXZ, plane_p->GetNP(), i_angle, scaleZ, i_tex);
+        return dComIfGd_setSimpleShadow(i_pos, groundY, scaleXZ, &plane_p->mNormal, i_angle, scaleZ, i_tex);
     } else {
         return 0;
     }
@@ -901,32 +901,32 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
 
     switch (i_itemNo) {
     case dItemNo_WINDS_REQUIEM_e:
-        if (dComIfGs_isTact(0)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_BALLAD_OF_GALES_e:
-        if (dComIfGs_isTact(1)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_COMMAND_MELODY_e:
-        if (dComIfGs_isTact(2)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_EARTH_GODS_LYRIC_e:
-        if (dComIfGs_isTact(3)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_WIND_GODS_ARIA_e:
-        if (dComIfGs_isTact(4)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_SONG_OF_PASSING_e:
-        if (dComIfGs_isTact(5)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e)) {
             get_item = 1;
         }
         break;
@@ -971,17 +971,17 @@ u8 dComIfGs_checkGetItem(u8 i_itemNo) {
         }
         break;
     case dItemNo_PEARL_NAYRU_e:
-        if (dComIfGs_isSymbol(0)) {
+        if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_DIN_e:
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_FARORE_e:
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             get_item = 1;
         }
         break;
@@ -1025,32 +1025,32 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
 
     switch (i_itemNo) {
     case dItemNo_WINDS_REQUIEM_e:
-        if (dComIfGs_isTact(0)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_BALLAD_OF_GALES_e:
-        if (dComIfGs_isTact(1)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_COMMAND_MELODY_e:
-        if (dComIfGs_isTact(2)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_EARTH_GODS_LYRIC_e:
-        if (dComIfGs_isTact(3)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_WIND_GODS_ARIA_e:
-        if (dComIfGs_isTact(4)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_SONG_OF_PASSING_e:
-        if (dComIfGs_isTact(5)) {
+        if (dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e)) {
             get_item = 1;
         }
         break;
@@ -1095,17 +1095,17 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
         }
         break;
     case dItemNo_PEARL_NAYRU_e:
-        if (dComIfGs_isSymbol(0)) {
+        if (dComIfGs_isSymbol(dSymbol_NAYRU_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_DIN_e:
-        if (dComIfGs_isSymbol(1)) {
+        if (dComIfGs_isSymbol(dSymbol_DIN_e)) {
             get_item = 1;
         }
         break;
     case dItemNo_PEARL_FARORE_e:
-        if (dComIfGs_isSymbol(2)) {
+        if (dComIfGs_isSymbol(dSymbol_FARORE_e)) {
             get_item = 1;
         }
         break;
@@ -1131,56 +1131,56 @@ u8 dComIfGs_checkGetItemNum(u8 i_itemNo) {
         break;
     case dItemNo_SKULL_NECKLACE_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_SKULL_NECKLACE_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_SKULL_NECKLACE_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_SKULL_NECKLACE_e);
             }
         }
         break;
     case dItemNo_BOKOBABA_SEED_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_BOKOBABA_SEED_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_BOKOBABA_SEED_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_BOKOBABA_SEED_e);
             }
         }
         break;
     case dItemNo_GOLDEN_FEATHER_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_GOLDEN_FEATHER_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_GOLDEN_FEATHER_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_GOLDEN_FEATHER_e);
             }
         }
         break;
     case dItemNo_KNIGHTS_CREST_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_KNIGHTS_CREST_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_KNIGHTS_CREST_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_KNIGHTS_CREST_e);
             }
         }
         break;
     case dItemNo_RED_JELLY_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_RED_JELLY_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_RED_JELLY_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_RED_JELLY_e);
             }
         }
         break;
     case dItemNo_GREEN_JELLY_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_GREEN_JELLY_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_GREEN_JELLY_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_GREEN_JELLY_e);
             }
         }
         break;
     case dItemNo_BLUE_JELLY_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_BLUE_JELLY_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_BLUE_JELLY_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_BLUE_JELLY_e);
             }
         }
         break;
     case dItemNo_JOY_PENDANT_e:
         for (int beastIdx = 0; beastIdx < dBeastIdx_COUNT_e; beastIdx++) {
-            if (dComIfGs_getBeast(beastIdx) == dItemNo_JOY_PENDANT_e) {
+            if (dComIfGs_getItemBeast(beastIdx) == dItemNo_JOY_PENDANT_e) {
                 get_item = dComIfGs_getBeastNum(dBeastIdx_JOY_PENDANT_e);
             }
         }
@@ -1226,10 +1226,10 @@ int dComIfGd_setShadow(u32 id, s8 shouldFade, J3DModel* pModel, cXyz* pPos, f32 
 }
 
 static void dummy() {
-    OSReport("0 <= cam_id && cam_id < mapc->num");
-    OSReport("0 <= arrow_id && arrow_id < mapa->num");
-    OSReport("0 <= room_cam_id && room_cam_id < pcam->num");
-    OSReport("0 <= arrow_id && arrow_id < parr->num");
+    DEAD_STRING("0 <= cam_id && cam_id < mapc->num");
+    DEAD_STRING("0 <= arrow_id && arrow_id < mapa->num");
+    DEAD_STRING("0 <= room_cam_id && room_cam_id < pcam->num");
+    DEAD_STRING("0 <= arrow_id && arrow_id < parr->num");
 }
 
 /* 8005468C-800547BC       .text getSceneList__Fi */
@@ -1510,7 +1510,7 @@ void dComIfGs_setPlayerRecollectionData() {
 
     // TODO: This matches but could probably be cleaned up somehow.
     dSv_player_status_c_c* stts = dComIfGs_getpPlayerStatusC(tbl);
-    u32 buffer = (u32)dComIfGp_getPlayerInfoBuffer();
+    uintptr_t buffer = (uintptr_t)dComIfGp_getPlayerInfoBuffer();
     memcpy((void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectStatusA)),       dComIfGs_getpPlayerStatusA(),             sizeof(stts->mRecollectStatusA));
     memcpy((void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectItem)),          dComIfGs_getpItem(),                      sizeof(stts->mRecollectItem));
     memcpy((void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectItemRecord)),    &dComIfGs_getpItemRecord()->mItemRecord2, sizeof(stts->mRecollectItemRecord));
@@ -1619,7 +1619,7 @@ void dComIfGs_revPlayerRecollectionData() {
     tmp_item.mItems[dInvSlot_CAMERA_e]  = dComIfGs_getItem(dInvSlot_CAMERA_e);
 
     // TODO: This matches but could probably be cleaned up somehow.
-    u32 buffer = (u32)dComIfGp_getPlayerInfoBuffer();
+    uintptr_t buffer = (uintptr_t)dComIfGp_getPlayerInfoBuffer();
     memcpy(dComIfGs_getpPlayerStatusA(),             (void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectStatusA)),       sizeof(dSv_player_status_c_c().mRecollectStatusA));
     memcpy(dComIfGs_getpItem(),                      (void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectItem)),          sizeof(dSv_player_status_c_c().mRecollectItem));
     memcpy(&dComIfGs_getpItemRecord()->mItemRecord2, (void*)(buffer + offsetof(dSv_player_status_c_c, mRecollectItemRecord)),    sizeof(dSv_player_status_c_c().mRecollectItemRecord));

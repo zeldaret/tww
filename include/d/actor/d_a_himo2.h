@@ -64,7 +64,7 @@ struct himo2_class {
     /* 0x2188 */ f32 m2188;
     /* 0x218C */ fopAc_ac_c* m218C[200];
     /* 0x24AC */ u8 m24AC;
-    /* 0x24B0 */ J3DModel* m24B0;
+    /* 0x24B0 */ J3DModel* mpHookModel;
     /* 0x24B4 */ f32 m24B4;
     /* 0x24B8 */ f32 m24B8;
     /* 0x24BC */ int m24BC;

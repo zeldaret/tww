@@ -1389,7 +1389,7 @@ u16 daAuction_c::next_msgStatus(u32* pMsgNo) {
         break;
 
     case 0x1D1F:
-        dComIfGp_setNextStage("sea", 3, 11);
+        dComIfGp_setNextStage("sea", 3, dIsleRoom_WindfallIsland_e);
     case 0x1D24:
         m82B = 1;
         msgStatus = fopMsgStts_MSG_ENDS_e;

@@ -22,6 +22,7 @@ enum dRes_ID_ECUBE {
 
 enum ECUBE_JNT {
     ECUBE_JNT_ECUBE_e=0x0,
+    ECUBE_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ECUBE_H */

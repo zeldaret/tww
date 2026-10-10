@@ -18,6 +18,7 @@ enum dRes_ID_ESA {
 
 enum ESA_JNT {
     ESA_JNT_ESA_e=0x0,
+    ESA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ESA_H */

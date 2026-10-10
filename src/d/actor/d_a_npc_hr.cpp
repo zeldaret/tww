@@ -28,7 +28,7 @@ void daNpc_Wind_Eff::init() {
 /* 000000A0-000000EC       .text remove__14daNpc_Wind_EffFv */
 void daNpc_Wind_Eff::remove() {
     if (mWindEffState != WIND_EFF_INACTIVE) {
-        mpFollowECallBack.end();
+        mPtclFollowCb.end();
         init();
     }
 }
@@ -40,7 +40,7 @@ BOOL daNpc_Wind_Eff::create(cXyz* squallPos) {
 
         mAlphaFactor = 1.0f;
         mpSquallPos = squallPos;
-        JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_WINDLINE00, &mPos, NULL, NULL, 0xFF, &mpFollowECallBack);
+        JPABaseEmitter* pEmitter = dComIfGp_particle_set(dPa_name::ID_AK_JN_WINDLINE00, &mPos, NULL, NULL, 0xFF, &mPtclFollowCb);
         
         if (pEmitter == NULL) {
             return FALSE;
@@ -67,7 +67,7 @@ void daNpc_Wind_Eff::proc() {
     JPABaseEmitter* pEmitter;
     switch(mWindEffState) {
         case WIND_EFF_FADE_IN:
-            pEmitter = mpFollowECallBack.getEmitter();
+            pEmitter = mPtclFollowCb.getEmitter();
             if (mAlphaFactor < 0.9f) {
                 mAlphaFactor += 0.1f;
                 
@@ -91,7 +91,7 @@ void daNpc_Wind_Eff::proc() {
             move();
             break;
         case WIND_EFF_FADE_OUT:
-            pEmitter = mpFollowECallBack.getEmitter();
+            pEmitter = mPtclFollowCb.getEmitter();
 
             if (mAlphaFactor > 0.1f) {
                 mAlphaFactor -= 0.1f;
@@ -986,7 +986,7 @@ static BOOL nodeCallBack_Hr(J3DNode* node, int calcTiming) {
                 i_this->setEyePos(temp2);
                 i_this->incAttnSetCount();
             } else if (jntNo == i_this->getBackboneJntNum()) {
-                mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
             } else if (jntNo == i_this->m_waist_jnt_num) {
                 temp.set(0.0f, 0.0f, 0.0f);
                 MtxPosition(&temp, &i_this->mCloudPos);
@@ -1171,8 +1171,8 @@ void daNpc_Hr_c::eventOrder() {
 
 /* 00002C94-00002D3C       .text checkOrder__10daNpc_Hr_cFv */
 void daNpc_Hr_c::checkOrder() {
-    if (eventInfo.mCommand != dEvtCmd_INDEMO_e) {
-        if (eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(7)) {
+    if (!eventInfo.checkCommandDemoAccrpt()) {
+        if (eventInfo.checkCommandTalk() && ChkOrder(7)) {
             if (dComIfGp_event_chkTalkXY()) {
                 setFlag(HR_FLAG_00000008);
             } else {
@@ -1216,9 +1216,9 @@ u32 daNpc_Hr_c::getMsg() {
                 case 0x5B3:
                     if (mType == 0) {
                         dComIfGs_onSwitch(getSwbit(), fopAcM_GetRoomNo(this));
-                        dComIfGp_setMelodyNum(0);
+                        dComIfGp_setMelodyNum(mDoAud_MELODY_WINDS_REQUIEM_e);
                     } else {
-                        dComIfGp_setMelodyNum(1);
+                        dComIfGp_setMelodyNum(mDoAud_MELODY_BALLAD_OF_GALES_e);
                     }
                     break;
             }
@@ -1418,19 +1418,19 @@ void daNpc_Hr_c::getTornadoPos(int jointY, cXyz* tornadoPos) {
             f32 temp = current.pos.y + speed.y;
             tornadoPos->y = temp;
             if (jointY == 10) {
-                tornadoPos->x = tornadoActor->mpModel != NULL ? tornadoActor->mpModel->getAnmMtx(10)[0][3] : tornadoActor->current.pos.x;
-                tornadoPos->z = tornadoActor->mpModel != NULL ? tornadoActor->mpModel->getAnmMtx(10)[2][3] : tornadoActor->current.pos.z;
+                tornadoPos->x = tornadoActor->getJointXPos(10);
+                tornadoPos->z = tornadoActor->getJointZPos(10);
             } else {
                 pos1.set(
-                    tornadoActor->mpModel != NULL ? tornadoActor->mpModel->getAnmMtx(jointY -1)[0][3] : tornadoActor->current.pos.x,
-                    tornadoActor->mpModel != NULL ? tornadoActor->mpModel->getAnmMtx(jointY -1)[1][3] : tornadoActor->current.pos.y,
-                    tornadoActor->mpModel != NULL ? tornadoActor->mpModel->getAnmMtx(jointY -1)[2][3] : tornadoActor->current.pos.z
+                    tornadoActor->getJointXPos(jointY -1),
+                    tornadoActor->getJointYPos(jointY -1),
+                    tornadoActor->getJointZPos(jointY -1)
                 );
 
                 pos2.set(
-                    tornadoActor->mpModel != NULL ? tornadoActor->mpModel->getAnmMtx(jointY)[0][3] : tornadoActor->current.pos.x,
-                    tornadoActor->mpModel != NULL ? tornadoActor->mpModel->getAnmMtx(jointY)[1][3] : tornadoActor->current.pos.y,
-                    tornadoActor->mpModel != NULL ? tornadoActor->mpModel->getAnmMtx(jointY)[2][3] : tornadoActor->current.pos.z
+                    tornadoActor->getJointXPos(jointY),
+                    tornadoActor->getJointYPos(jointY),
+                    tornadoActor->getJointZPos(jointY)
                 );
 
                 f32 ratio = (temp - pos1.y) / (pos2.y - pos1.y);
@@ -1549,7 +1549,7 @@ bool daNpc_Hr_c::rt_hide() {
     getTornadoPos(0, &tornadoPos);
     current.pos = tornadoPos;
     current.pos.y -= 1500.0f;
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if(eventInfo.checkCommandDemoAccrpt()) {
         mReturnState = 8;
         mState = HR_STATE_RT_INTRO;
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Hr2");
@@ -1571,7 +1571,7 @@ bool daNpc_Hr_c::rt_hide() {
 
 /* 00003CEC-00003D0C       .text rt_intro__10daNpc_Hr_cFv */
 bool daNpc_Hr_c::rt_intro() {
-    rt_hit1();
+    return rt_hit1();
 }
 
 /* 00003D0C-00003DD8       .text to_rt_hit__10daNpc_Hr_cFv */
@@ -1645,7 +1645,7 @@ bool daNpc_Hr_c::rt_angry() {
             setTexPtn(2);
         }
 
-        if (hitObj != NULL && ((hitObj->GetAtType() & AT_TYPE_NORMAL_ARROW) != 0 || (hitObj->GetAtType() & AT_TYPE_FIRE_ARROW) != 0 || (hitObj->GetAtType() & AT_TYPE_ICE_ARROW) != 0 || (hitObj->GetAtType() & AT_TYPE_LIGHT_ARROW) != 0)) {
+        if (hitObj != NULL && ((hitObj->ChkAtType(AT_TYPE_NORMAL_ARROW)) || (hitObj->ChkAtType(AT_TYPE_FIRE_ARROW)) || (hitObj->ChkAtType(AT_TYPE_ICE_ARROW)) || (hitObj->ChkAtType(AT_TYPE_LIGHT_ARROW)))) {
             cXyz scale(11.0f, 11.0f, 11.0f);
             cXyz temp = *hitPos - pLink->eyePos;
             if(!temp.isZero()) {
@@ -1677,7 +1677,7 @@ bool daNpc_Hr_c::rt_win() {
 bool daNpc_Hr_c::rt_hit0() {
     daShip_c* pShip = dComIfGp_getShipActor();
 
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e) {
+    if(eventInfo.checkCommandDemoAccrpt()) {
         mState = HR_STATE_RT_HIT_1;
         mStaffIdx = dComIfGp_evmng_getMyStaffId("Hr2");
         setEvFlag(EVFLAG_TORNADO_ACTIVE);
@@ -1976,7 +1976,7 @@ BOOL daNpc_Hr_c::_draw() {
     mpAntennaMorf->updateDL();
     mBtpAnm.remove(modelData);
     if (getShapeType() == 1 && mState == HR_STATE_RT_ANGRY) {
-        dSnap_RegistFig(DSNAP_TYPE_HR, this, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_NPC_HR, this, 1.0f, 1.0f, 1.0f);
     }
 
     return TRUE;
@@ -2046,7 +2046,7 @@ BOOL daNpc_Hr_c::_execute() {
     hrModel->setBaseTRMtx(mDoMtx_stack_c::get());
     mpHrMorf->calc();
     if(chkFlag(HR_FLAG_00000010)) {
-        mCyl.ClrCoSet();
+        mCyl.OffCoSetBit();
     } else {
         if(mType != 1) {
             mCyl.OnCoSetBit();
@@ -2210,12 +2210,12 @@ BOOL daNpc_Hr_c::CreateHeap() {
         }
     }
 
-    mpHrMorf->getModel()->setUserArea((u32)this);
+    mpHrMorf->getModel()->setUserArea((uintptr_t)this);
 
     for(u16 i = 0; i < antModelData->getJointNum(); i++) {
         mpAntennaMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Ht_ant);
     }
-    mpAntennaMorf->getModel()->setUserArea((u32)this);
+    mpAntennaMorf->getModel()->setUserArea((uintptr_t)this);
     
     return TRUE;
 }

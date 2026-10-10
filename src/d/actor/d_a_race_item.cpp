@@ -127,6 +127,8 @@ static BOOL daRaceItem_Execute(daRaceItem_c* i_this) {
 
 /* 0000073C-00000C44       .text execute__12daRaceItem_cFv */
 BOOL daRaceItem_c::execute() {
+    daPy_getPlayerActorClass();
+
     m_timer++;
     animPlay(1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     eyePos = current.pos;
@@ -138,8 +140,7 @@ BOOL daRaceItem_c::execute() {
         case 0: {
             checkGet();
 
-            s16 spin = 0xFFFF / daItemBase_c::m_data.mRotateYSpeed;
-            fopAcM_addAngleY(this, current.angle.y + spin, spin);
+            RotateBase();
             mCyl.SetC(current.pos);
             dComIfG_Ccsp()->Set(&mCyl);
 

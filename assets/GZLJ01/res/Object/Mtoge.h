@@ -24,6 +24,7 @@ enum S_MTOGE_JNT {
     S_MTOGE_JNT_STT_e=0x0,
     S_MTOGE_JNT_S_TTOGE_e=0x1,
     S_MTOGE_JNT_TOGE_02_e=0x2,
+    S_MTOGE_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_MTOGE_H */

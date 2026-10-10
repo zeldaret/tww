@@ -20,10 +20,10 @@ const s32 daShutter_c::m_heapsize[2] = {0x1140, 0x3000};
 const Vec daShutter_c::m_cull_min[2] = {{-500.0f, -100.0f, -50.0f}, {-150.0f, -100.0f, -50.0f}};
 const Vec daShutter_c::m_cull_max[2] = {{500.0f, 250.0f, 50.0f}, {150.0f, 250.0f, 50.0f}};
 
-char* daShutter_c::m_arcname[2] = {"Htobi1", "Htobi2"};
-char* daShutter_c::m_open_ev_name[2] = {"HYSDOOROPEN", "R03DOOROPEN"};
-char* daShutter_c::m_close_ev_name[2] = {NULL, "R03DOORCLOSE"};
-char* daShutter_c::m_staff_name[2] = {"Htobi1", "Htobi2"};
+const char* daShutter_c::m_arcname[2] = {"Htobi1", "Htobi2"};
+const char* daShutter_c::m_open_ev_name[2] = {"HYSDOOROPEN", "R03DOOROPEN"};
+const char* daShutter_c::m_close_ev_name[2] = {NULL, "R03DOORCLOSE"};
+const char* daShutter_c::m_staff_name[2] = {"Htobi1", "Htobi2"};
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */
 bool daShutter_c::_delete() {
@@ -32,7 +32,7 @@ bool daShutter_c::_delete() {
     if (heap != NULL)
 #endif
     {
-        for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+        for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
             dComIfG_Bgsp()->Release(mdBgW[i]);
         };
     }
@@ -47,16 +47,16 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 /* 00000128-000002B8       .text CreateHeap__11daShutter_cFv */
 BOOL daShutter_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData *)dComIfG_getObjectRes(m_arcname[mType], m_bdlidx[mType]);
-    JUT_ASSERT(0x121, modelData != NULL);
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+    JUT_ASSERT(DEMO_SELECT(286, 289), modelData != NULL);
+
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         mpModel[i] = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
         if (!mpModel[i]) {
             return FALSE;
         }
         mdBgW[i] = new dBgW();
         if (mdBgW[i]) {
-            cBgD_t* pData = (cBgD_t *)dComIfG_getObjectRes(m_arcname[mType], m_dzbidx[mType]);
-            if (mdBgW[i]->Set(pData, cBgW::MOVE_BG_e, &mMtx[i]) == true) {
+            if (mdBgW[i]->Set((cBgD_t *)dComIfG_getObjectRes(m_arcname[mType], m_dzbidx[mType]), cBgW::MOVE_BG_e, &mMtx[i]) == true) {
                 return FALSE;
             }
         }
@@ -86,7 +86,7 @@ BOOL daShutter_c::Create() {
     }
     mFrameTimer = 30;
     set_mtx();
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         dComIfG_Bgsp()->Regist(mdBgW[i], this);
         mdBgW[i]->Move();
     }
@@ -118,7 +118,7 @@ cPhs_State daShutter_c::_create() {
 /* 000005E0-000006F0       .text set_mtx__11daShutter_cFv */
 void daShutter_c::set_mtx() {
     cXyz local_48;
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         mDoMtx_stack_c::YrotS(current.angle.y);
         mDoMtx_stack_c::multVec(&mcXyz[i], &local_48);
         mpModel[i]->setBaseScale(scale);
@@ -136,7 +136,7 @@ bool daShutter_c::_execute() {
     }
     demo();
     set_mtx();
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         mdBgW[i]->Move();
     }
     mbIsSwitch = fopAcM_isSwitch(this, mSwitchNo);
@@ -186,13 +186,13 @@ void daShutter_c::shutter_move() {
             field_0x33A++;
             if (field_0x339 == 0) {
                 field_0x339 = 1;
-                if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStage().getStagInfo()) == 5) {
+                if (dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_TOTG) {
                     fopAcM_seStart(this, JA_SE_OBJ_B_SHUTTER_OPEN, 0);
                 }
             }
             fVar4 = cLib_addCalc(&mcXyz[0].x, -m_move_len[mType] - m_width[mType] / 2.0f, 0.1f, maxVel, minVel);
             fVar5 = cLib_addCalc(&mcXyz[1].x, m_move_len[mType] + m_width[mType] / 2.0f, 0.1f, maxVel, minVel);
-            if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStage().getStagInfo()) == 5) && (field_0x33A == 75)) {
+            if ((dStage_stagInfo_GetSaveTbl(dComIfGp_getStageStagInfo()) == dSv_save_c::STAGE_TOTG) && (field_0x33A == 75)) {
                 fopAcM_seStart(this, JA_SE_OBJ_B_SHUTTER_STOP, 0);
                 dComIfGp_getVibration().StartShock(4, -0x21, cXyz(0.0f, 1.0f, 0.0f));
             }
@@ -267,9 +267,8 @@ void daShutter_c::demo() {
 
 /* 00000CF0-00000DD8       .text _draw__11daShutter_cFv */
 bool daShutter_c::_draw() {
-    cXyz actorPos;
-    for (int i = 0; i < (int)ARRAY_SIZE(mMtx); i++) {
-        actorPos = current.pos;
+    for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
+        cXyz actorPos = current.pos;
         actorPos += mcXyz[i];
         g_env_light.settingTevStruct(TEV_TYPE_BG0, &actorPos, &tevStr);
         g_env_light.setLightTevColorType(mpModel[i], &tevStr);

@@ -7,6 +7,18 @@
 #include "d/actor/d_a_tag_so.h"
 #include "d/d_lib.h"
 
+class daTag_So_HIO_c {
+public:
+    daTag_So_HIO_c();
+    virtual ~daTag_So_HIO_c() {}
+
+public:
+    /* 0x00 */ //vtable
+    /* 0x04 */ s8 mNo;
+    /* 0x05 */ u8 m05;
+    /* 0x06 */ u8 m06[0x0F-0x06];
+};
+
 /* 000000EC-0000010C       .text __ct__14daTag_So_HIO_cFv */
 daTag_So_HIO_c::daTag_So_HIO_c() {
     mNo = -1;
@@ -24,8 +36,8 @@ bool daTag_So_c::_execute() {
 void daTag_So_c::debugDraw() {  
     cXyz actorPos = current.pos;
     actorPos.y += 20.0f;
-    if (m298 == 1)
-        dLib_debugDrawFan(actorPos, shape_angle.y, 0x3500, mRadius, (GXColor){0xFF, 0x00, 0x00, 0x80});
+    if (mType == 1)
+        dLib_debugDrawFan(actorPos, shape_angle.y, 0x3500, mJumpRange, COMPOUND_LITERAL(GXColor){0xFF, 0x00, 0x00, 0x80});
 }
 
 /* 0000018C-000001C4       .text _draw__10daTag_So_cFv */
@@ -41,14 +53,14 @@ void daTag_So_c::getArg() {
     s32 paramRadius;
     
     param = fopAcM_GetParam(this);
-    m290 = fopAcM_GetParamBit(param, 0, 8);
+    mRndNum = fopAcM_GetParamBit(param, 0, 8);
     paramRadius = fopAcM_GetParamBit(param, 8, 8);
-    m298 = fopAcM_GetParamBit(param, 16, 8);
+    mType = fopAcM_GetParamBit(param, 16, 8);
     if (paramRadius == 0xff) {
-        mRadius = 1600.0f;
+        mJumpRange = 1600.0f;
     }
     else {
-        mRadius = paramRadius * 100;
+        mJumpRange = paramRadius * 100;
     }
 }
 

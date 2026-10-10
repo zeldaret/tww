@@ -212,7 +212,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
         return FALSE;
     }
 
-    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)i_this);
 
     for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
         i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
@@ -254,7 +254,6 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
 
 /* 00000A6C-00000E30       .text daSk_Create__FP10fopAc_ac_c */
 static cPhs_State daSk_Create(fopAc_ac_c* a_this) {
-    /* Nonmatching */
     static dCcD_SrcSph body_co_sph_src = {
         // dCcD_SrcGObjInf
         {

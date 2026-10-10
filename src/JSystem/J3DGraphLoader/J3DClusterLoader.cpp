@@ -45,7 +45,7 @@ void* J3DClusterLoader_v15::load(const void* i_data) {
             OSReport("Unknown data block\n");
             break;
         }
-        block = block->getNext();
+        block = (JUTDataBlockHeader*)((u8*)block + block->mSize);
     }
 
     return mpDeformData;

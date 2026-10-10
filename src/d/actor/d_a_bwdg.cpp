@@ -17,7 +17,7 @@ static bwd_class* boss;
 #include "assets/l_B_sand2TEX.h"
 const u16 l_B_sand2TEX__width = 512;
 const u16 l_B_sand2TEX__height = 256;
-#include "assets/l_texCoord.h"
+#include "assets/l_texCoord__d_a_bwdg.h"
 #include "assets/l_Hsand1DL.h"
 #include "assets/l_matDL__d_a_bwdg.h"
 l_matDL__d_a_bwdg(l_B_sand2TEX);
@@ -69,7 +69,7 @@ static BOOL daBwdg_Draw(bwdg_class* i_this) {
     MtxTrans(0.0f, 10.0f + f1, 0.0f, 0);
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mBwdgPacket.getMtx());
     i_this->mBwdgPacket.setTevStr(&i_this->tevStr);
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mBwdgPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&i_this->mBwdgPacket, 0);
     return TRUE;
 }
 
@@ -182,6 +182,7 @@ static BOOL daBwdg_Execute(bwdg_class* i_this) {
 
 /* 0000084C-00000854       .text daBwdg_IsDelete__FP10bwdg_class */
 static BOOL daBwdg_IsDelete(bwdg_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

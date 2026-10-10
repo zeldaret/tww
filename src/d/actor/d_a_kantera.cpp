@@ -403,7 +403,7 @@ static cPhs_State daKantera_Create(fopAc_ac_c* a_this) {
 
         fopAcM_SetMtx(a_this, i_this->mpModel1->getBaseTRMtx());
         fopAcM_setCullSizeBox(a_this, -60.0f, -100.0f, -60.0f, 60.0f, 50.0f, 60.0f);
-        model->setUserArea((u32)a_this);
+        model->setUserArea((uintptr_t)a_this);
         i_this->m2B0 = (s16)cM_rndF(100.0f);
         i_this->m2B4 = (s16)cM_rndF(100.0f);
         dKy_plight_set(&i_this->mPlight);

@@ -85,7 +85,7 @@ public:
     daNpc_Fa1_HIO_c();
     virtual ~daNpc_Fa1_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ s8 mNo;
@@ -308,7 +308,7 @@ BOOL daNpc_Fa1_c::_draw() {
         dComIfGd_setSimpleShadow(&current.pos, ground_y, 10.0f, &m774, 0, 1.0f,
                                  dDlst_shadowControl_c::getSimpleTex());
     }
-    dSnap_RegistFig(DSNAP_TYPE_FA, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_FA1, this, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
@@ -604,7 +604,7 @@ void daNpc_Fa1_c::init_hover_move() {
 void daNpc_Fa1_c::hover_move() {
     position_move(l_HIO.m78.prm.m10, l_HIO.m78.prm.m08);
     BGCheck();
-    s16 target = fopAcM_searchActorAngleY(this, dComIfGp_getPlayer(0));
+    s16 target = fopAcM_searchPlayerAngleY(this);
     cLib_addCalcAngleS(&current.angle.y, target, 8, 0x2000, 0x400);
 }
 
@@ -770,7 +770,7 @@ void daNpc_Fa1_c::bottle_baba_move() {
         BGCheck();
         u8 dVar1 = getSubMode();
         (this->*bottleBabaSubProc[dVar1])();
-        if ((dVar1 == 1) && (current.pos.y > m764->current.pos.y + 150.0f)) {
+        if (dVar1 == 1 && current.pos.y > m764->current.pos.y + 150.0f) {
             fopAcM_delete(this);
         }
     }
@@ -813,7 +813,7 @@ void daNpc_Fa1_c::bottle_baba_move2() {
         current.pos += speed;
         BGCheck();
         (this->*bottleBabaSubProc[getSubMode()])();
-        if ((current.pos.y > m764->current.pos.y + 180.0f)) {
+        if (current.pos.y > m764->current.pos.y + 180.0f) {
             init_bottle_baba_move();
         }
     }
@@ -911,7 +911,7 @@ BOOL daNpc_Fa1_c::_delete() {
     if (l_hio_counter != 0) {
         l_hio_counter--;
     }
-    if ((l_hio_counter <= 0) && (l_HIO.mNo >= 0)) {
+    if (l_hio_counter <= 0 && l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
         l_HIO.mNo = -1;
     }

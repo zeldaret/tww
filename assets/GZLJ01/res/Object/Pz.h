@@ -95,6 +95,7 @@ enum PZ_BOW_JNT {
     PZ_BOW_JNT_BC_JNT_e=0x9,
     PZ_BOW_JNT_LINEBA_JNT_e=0xA,
     PZ_BOW_JNT_LINEBB_JNT_e=0xB,
+    PZ_BOW_NUM_JNTS_e=0xC,
 };
 
 enum PZ_JNT {
@@ -125,6 +126,7 @@ enum PZ_JNT {
     PZ_JNT_SKIRT_1_e=0x18,
     PZ_JNT_SKIRT_2_e=0x19,
     PZ_JNT_SKIRT_3_e=0x1A,
+    PZ_NUM_JNTS_e=0x1B,
 };
 
 #endif /* RES_PZ_H */

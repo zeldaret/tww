@@ -94,6 +94,7 @@ static BOOL dScnTitle_Execute(title_of_scene_class* i_this) {
 
 /* 802374C8-802374D0       .text dScnTitle_IsDelete__FP20title_of_scene_class */
 static BOOL dScnTitle_IsDelete(title_of_scene_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
@@ -123,7 +124,7 @@ static cPhs_State dScnTitle_Create(scene_class* i_scn) {
 #if VERSION == VERSION_PAL
     dScnTitle_c::mMp = NULL;
     if (fpcM_GetName(i_this) == fpcNm_ENDING_SCENE_e) {
-        fopMsgM_Create(fpcNm_MESG_e, NULL, NULL);
+        fopMsgM_Create(fpcNm_MSG3_e, NULL, NULL);
     }
 #endif
 

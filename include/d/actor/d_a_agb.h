@@ -128,13 +128,13 @@ public:
     struct daAgb_Item {
         /* 0x0 */ u8 field_0x0;
         /* 0x1 */ u8 field_0x1;
-    } ALIGN_DECL(4);
+    } ATTRIBUTE_ALIGN(4);
 
     struct daAgb_Shop {
         /* 0x0 */ u8 field_0x0;
         /* 0x1 */ u8 field_0x1;
         /* 0x2 */ u8 field_0x2;
-    } ALIGN_DECL(4);
+    } ATTRIBUTE_ALIGN(4);
 
     static int mEffect;
     static daAgb_ItemBuy mItemBuy;
@@ -257,7 +257,9 @@ public:
     /* 0x67D */ bool field_0x67d;
     /* 0x67E */ bool field_0x67e;
     /* 0x67F */ bool field_0x67f;
+#if VERSION > VERSION_DEMO
     /* 0x680 */ bool field_0x680;
+#endif
     /* 0x684 */ dPa_followEcallBack field_0x684;
 };
 

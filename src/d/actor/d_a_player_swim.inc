@@ -419,7 +419,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     }
 
     gravity = 0.0f;
-    setSingleMoveAnime(ANM_SWIMWAIT, (f32)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x70) + m_HIO->mSwim.m.field_0x40, 0.0f, -1, m_HIO->mSwim.m.field_0x44);
+    setSingleMoveAnime(ANM_SWIMWAIT, getSwimTimerRate() * m_HIO->mSwim.m.field_0x70 + m_HIO->mSwim.m.field_0x40, 0.0f, -1, m_HIO->mSwim.m.field_0x44);
     frameCtrl.setFrame(fVar2 * frameCtrl.getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(frameCtrl.getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
@@ -609,7 +609,7 @@ BOOL daPy_lk_c::procSwimMove() {
         procSwimWait_init(TRUE);
     }
     else if ((mDirection == DIR_FORWARD && frameCtrl.checkPass(20.0f)) || (mDirection != DIR_FORWARD && frameCtrl.checkPass(0.0f))) {
-            seStartOnlyReverb(JA_SE_LK_SWIM);
+        seStartOnlyReverb(JA_SE_LK_SWIM);
     }
 
     setSwimTimerStartStop();

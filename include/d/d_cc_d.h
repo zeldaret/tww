@@ -448,8 +448,8 @@ public:
     void OnAtStopNoConHit() { mGObjAt.OnSPrm(dCcG_AtSPrm_StopNoConHit_e); }
     void OffAtStopNoConHit() { mGObjAt.OffSPrm(dCcG_AtSPrm_StopNoConHit_e); }
     s16* GetTgShieldFrontRangeYAngle() { return mGObjTg.GetShieldFrontRangeYAngle(); }
-    bool ChkCoAtLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_AtLasso_e); }
-    bool ChkCoTgLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_TgLasso_e); }
+    u32 ChkCoAtLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_AtLasso_e); }
+    u32 ChkCoTgLasso() { return mGObjCo.ChkSPrm(dCcG_CoSPrm_TgLasso_e); }
     dCcD_HitCallback GetCoHitCallback() { return mGObjCo.GetHitCallback(); }
     dCcD_HitCallback GetAtHitCallback() { return mGObjAt.GetHitCallback(); }
     dCcD_HitCallback GetTgHitCallback() { return mGObjTg.GetHitCallback(); }
@@ -513,6 +513,9 @@ public:
     void MoveCTg(cXyz&);
     virtual ~dCcD_Cyl() {}
     dCcD_Cyl() {}
+#ifdef DEBUG
+    virtual void Draw(GXColor const&);
+#endif
 };  // Size = 0x130
 
 STATIC_ASSERT(sizeof(dCcD_Cyl) == 0x130);
@@ -525,6 +528,9 @@ public:
 
     dCcD_Sph() {}
     void Set(dCcD_SrcSph const&);
+#ifdef DEBUG
+    virtual void Draw(GXColor const&);
+#endif
     void StartCAt(cXyz&);
     void MoveCAt(cXyz&);
     virtual cCcD_ShapeAttr* GetShapeAttr() { return (cCcD_ShapeAttr*)this; }
@@ -546,6 +552,9 @@ public:
     void CalcTgVec();
     virtual ~dCcD_Cps() {}
     dCcD_Cps() {}
+#ifdef DEBUG
+    virtual void Draw(GXColor const&);
+#endif
 };  // Size = 0x138
 
 // Triangle
@@ -558,6 +567,9 @@ public:
     virtual cCcD_ShapeAttr* GetShapeAttr() { return this; }
     virtual ~dCcD_Tri() {}
     dCcD_Tri() {}
+#ifdef DEBUG
+    virtual void Draw(GXColor const&);
+#endif
 };  // Size: 0x150
 
 dCcD_GObjInf* dCcD_GetGObjInf(cCcD_Obj* param_0);

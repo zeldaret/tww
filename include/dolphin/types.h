@@ -85,6 +85,7 @@ typedef unsigned int uint;
 #endif
 
 #include "stddef.h" // IWYU pragma: export
+#include "stdint.h" // IWYU pragma: export
 
 #define INT32_MAX (0x7fffffff)
 #define UINT32_MAX (0xffffffff)

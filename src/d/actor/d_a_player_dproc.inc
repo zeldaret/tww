@@ -107,10 +107,10 @@ void daPy_lk_c::setShapeAngleToTalkActor() {
 
 /* 8012D08C-8012D134       .text checkEndMessage__9daPy_lk_cFUl */
 BOOL daPy_lk_c::checkEndMessage(u32 i_msgNo) {
-    if (m3628 == fpcM_ERROR_PROCESS_ID_e) {
-        m3628 = fopMsgM_messageSet(i_msgNo);
+    if (mGameOverId == fpcM_ERROR_PROCESS_ID_e) {
+        mGameOverId = fopMsgM_messageSet(i_msgNo);
     } else {
-        msg_class* msg_p = fopMsgM_SearchByID(m3628);
+        msg_class* msg_p = fopMsgM_SearchByID(mGameOverId);
         if (msg_p != NULL) {
             if (msg_p->mStatus == fopMsgStts_MSG_DISPLAYED_e) {
                 msg_p->mStatus = fopMsgStts_MSG_ENDS_e;
@@ -323,7 +323,7 @@ BOOL daPy_lk_c::dProcTool() {
             mAnmRatioUpper[UPPER_MOVE0_e].setAnmTransform(r26);
             m34C3 = 0;
             if (morf >= 0.0f) {
-                m_old_fdata->initOldFrameMorf(morf, 0, 0x2A);
+                m_old_fdata->initOldFrameMorf(morf, 0, CL_NUM_JNTS_e);
             }
             demo_actor->setAnmFrameMax(r26->getFrameMax());
             setSeAnime(anm_heap_under, &mFrameCtrlUnder[UNDER_MOVE0_e]);
@@ -457,42 +457,42 @@ BOOL daPy_lk_c::dProcDamage() {
 
 /* 8012DF24-8012E054       .text dProcHoldup_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcHoldup_init() {
-    daPy_ANM dVar3;
-    short sVar2;
-    f32 dVar6;
-    f32 dVar5;
-    f32 dVar4;
-
     if (mCurProc == daPyProc_DEMO_HOLDUP_e) {
         return false;
     }
 
     BOOL uVar1 = checkModeFlg(ModeFlg_WHIDE) != 0;
     commonProcInit(daPyProc_DEMO_HOLDUP_e);
+
+    daPy_ANM anm;
+    f32 anm_speed;
+    f32 start;
+    s16 end;
+    f32 morf;
     if (uVar1) {
         if (checkNoResetFlg0(daPyFlg0_UNK10000)) {
-            dVar3 = ANM_WALLHOLDUPDW;
-            dVar6 = m_HIO->mHoldup.m.field_0x30;
-            dVar5 = m_HIO->mHoldup.m.field_0x34;
-            sVar2 = m_HIO->mHoldup.m.field_0x6;
-            dVar4 = m_HIO->mHoldup.m.field_0x38;
+            anm = ANM_WALLHOLDUPDW;
+            anm_speed = m_HIO->mHoldup.m.field_0x30;
+            start = m_HIO->mHoldup.m.field_0x34;
+            end = m_HIO->mHoldup.m.field_0x6;
+            morf = m_HIO->mHoldup.m.field_0x38;
         } else {
-            dVar3 = ANM_WALLHOLDUP;
-            dVar6 = m_HIO->mHoldup.m.field_0x24;
-            dVar5 = m_HIO->mHoldup.m.field_0x28;
-            sVar2 = m_HIO->mHoldup.m.field_0x4;
-            dVar4 = m_HIO->mHoldup.m.field_0x2C;
+            anm = ANM_WALLHOLDUP;
+            anm_speed = m_HIO->mHoldup.m.field_0x24;
+            start = m_HIO->mHoldup.m.field_0x28;
+            end = m_HIO->mHoldup.m.field_0x4;
+            morf = m_HIO->mHoldup.m.field_0x2C;
         }
         onModeFlg(ModeFlg_WHIDE);
         setBgCheckParam();
     } else {
-        dVar3 = ANM_HOLDUP;
-        dVar6 = m_HIO->mHoldup.m.field_0x18;
-        dVar5 = m_HIO->mHoldup.m.field_0x1C;
-        sVar2 = m_HIO->mHoldup.m.field_0x2;
-        dVar4 = m_HIO->mHoldup.m.field_0x20;
+        anm = ANM_HOLDUP;
+        anm_speed = m_HIO->mHoldup.m.field_0x18;
+        start = m_HIO->mHoldup.m.field_0x1C;
+        end = m_HIO->mHoldup.m.field_0x2;
+        morf = m_HIO->mHoldup.m.field_0x20;
     }
-    setSingleMoveAnime(dVar3, dVar6, dVar5, sVar2, dVar4);
+    setSingleMoveAnime(anm, anm_speed, start, end, morf);
     mNormalSpeed = 0.0f;
     return true;
 }
@@ -507,21 +507,21 @@ BOOL daPy_lk_c::dProcHoldup() {
 
 /* 8012E09C-8012E244       .text dProcOpenTreasure_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcOpenTreasure_init() {
-    float fVar1;
-    daPy_ANM dVar2;
 
     if (mCurProc == daPyProc_DEMO_OPEN_TREASURE_e) {
         return true;
     }
     commonProcInit(daPyProc_DEMO_OPEN_TREASURE_e);
+    daPy_ANM anm;
+    f32 fVar1;
     if (mDemo.getParam0() == 1) {
-        dVar2 = ANM_BOXOPENSHORTLINK;
+        anm = ANM_BOXOPENSHORTLINK;
         fVar1 = 75.0f;
     } else {
-        dVar2 = ANM_BOXOPENLINK;
+        anm = ANM_BOXOPENLINK;
         fVar1 = 55.0f;
     }
-    setSingleMoveAnime(dVar2, 1.0f, 0.0f, -1, 3.0f);
+    setSingleMoveAnime(anm, 1.0f, 0.0f, -1, 3.0f);
     mNormalSpeed = 0.0f;
     if (mEquipItem == daPyItem_BOKO_e) {
         daBoko_c* boko = (daBoko_c*)mActorKeepEquip.getActor();
@@ -598,7 +598,7 @@ BOOL daPy_lk_c::setGetDemo() {
                 mMsgId = fpcM_ERROR_PROCESS_ID_e;
             }
             m34CE |= 0x01;
-            char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
+            const char* cutName = dComIfGp_getPEvtManager()->getMyNowCutName(staffIdx);
             if (cutName != NULL) {
                 // TODO: is there an inline for parsing link's cut name -> cut
                 // index?
@@ -700,10 +700,10 @@ BOOL daPy_lk_c::dProcGetItem_init() {
     } else {
         mProcVar2.m34D4 = -1;
     }
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     mProcVar3.m34D6 = shape_angle.y - fopCamM_GetAngleY(cam);
     current.angle.y = shape_angle.y;
-    m3628 = fpcM_ERROR_PROCESS_ID_e;
+    mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     mProcVar0.m34D0 = 0;
     mProcVar4.m34D8 = sVar6;
     initShipRideUseItem(iVar2, 0);
@@ -724,12 +724,12 @@ BOOL daPy_lk_c::dProcGetItem() {
         return true;
     }
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() < 10.0f) {
-        camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+        camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
         mProcVar3.m34D6 = shape_angle.y - fopCamM_GetAngleY(cam);
     }
     daItemBase_c* item = (daItemBase_c*)fopAcM_getItemEventPartner(this);
     if (mProcVar2.m34D4 == -1 && item != NULL) {
-        mProcVar2.m34D4 = item->getItemNo() & 0xff;
+        mProcVar2.m34D4 = item->getItemNo();
     }
     if (mProcVar6.m3570 == 0 && (mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() >= 11.0f)) {
         if (mProcVar0.m34D0 == 0 && mProcVar2.m34D4 != -1) {
@@ -900,12 +900,11 @@ void daPy_lk_c::dProcFreezeDamage_init_sub(int param_0) {
     }
     endDamageEmitter();
     onNoResetFlg1(daPyFlg1_FREEZE_STATE);
-    offNoResetFlg1(daPyFlg1_UNK40000);
+    offNoResetFlg1(daPyFlg1_FREEZE_FADED_IN);
     mDoGph_gInf_c::fadeOut(1.0f, l_freeze_fade_color);
     seStartMapInfo(JA_SE_LK_FREEZE);
     for (int i = 0; i < 5; i++) {
-        const u16* uVar1 = eff_joint;
-        MtxP pMVar2 = mpCLModel->getAnmMtx(uVar1[i]);
+        MtxP pMVar2 = mpCLModel->getAnmMtx(eff_joint[i]);
         cXyz local_28;
         mDoMtx_multVecZero(pMVar2, &local_28);
         dComIfGp_particle_setP1(dPa_name::ID_IT_SN_LK_FREEZSMOKE00, &local_28);
@@ -950,7 +949,7 @@ BOOL daPy_lk_c::dProcFreezeDamage() {
 void daPy_lk_c::dProcDead_init_sub() {
     mProcVar6.m3570 = 0;
     dComIfGp_setPlayerStatus0(0, daPyStts0_UNK20000000_e);
-    m3628 = fopMsgM_create(fpcNm_GAMEOVER_e);
+    mGameOverId = d_GameOver_Create();
     mDemo.setSpecialDemoType();
     daPy_py_c::changePlayer(this);
 }
@@ -988,9 +987,6 @@ BOOL daPy_lk_c::checkGameOverStart() {
 
 /* 8012F3B8-8012F5A8       .text dProcDead_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcDead_init() {
-    daPy_ANM dVar6;
-    float dVar8;
-
     if (mCurProc == daPyProc_DEMO_DEAD_e) {
         return true;
     }
@@ -1001,35 +997,37 @@ BOOL daPy_lk_c::dProcDead_init() {
         swimOutAfter(FALSE);
     }
     commonProcInit(daPyProc_DEMO_DEAD_e);
+    f32 anm_speed;
     if (dComIfGp_event_compulsory(this)) {
         dProcDead_init_sub();
-        dVar8 = m_HIO->mRestart.m.field_0xC;
+        anm_speed = m_HIO->mRestart.m.field_0xC;
     } else {
-        dVar8 = 0.0f;
+        anm_speed = 0.0f;
         mProcVar6.m3570 = 1;
     }
     mNormalSpeed = 0.0f;
     mProcVar2.m34D4 = 0;
 
+    daPy_ANM anm;
     if (iVar4 != 0) {
-        dVar6 = ANM_SHIPDIE;
+        anm = ANM_SHIPDIE;
     } else if (uVar2 != 0) {
-        dVar6 = ANM_SWIMDIE;
+        anm = ANM_SWIMDIE;
         onModeFlg(ModeFlg_SWIM);
         dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);
         if (uVar3 == 0) {
             offNoResetFlg0(daPyFlg0_UNK100);
-            dVar8 = 0.0f;
+            anm_speed = 0.0f;
             mProcVar2.m34D4 = 1;
         } else {
             m34C2 = 0;
         }
     } else {
-        dVar6 = ANM_DIELONG;
+        anm = ANM_DIELONG;
         onModeFlg(ModeFlg_02000000);
     }
 
-    setSingleMoveAnime(dVar6, dVar8, m_HIO->mRestart.m.field_0x10, -1, m_HIO->mRestart.m.field_0x14);
+    setSingleMoveAnime(anm, anm_speed, m_HIO->mRestart.m.field_0x10, -1, m_HIO->mRestart.m.field_0x14);
     mDamageWaitTimer = 0;
     m35E4 = 0.0f;
     m35A0 = 1.0f;
@@ -1040,7 +1038,7 @@ BOOL daPy_lk_c::dProcDead_init() {
     mProcVar7.m3574 = 0;
     initShipRideUseItem(iVar4, 1);
     mProcVar3.m34D6 = 0;
-    if (dVar8 > 0.0f) {
+    if (anm_speed > 0.0f) {
         dProcDead_init_sub2();
     }
     cancelNoDamageMode();
@@ -1072,32 +1070,21 @@ BOOL daPy_lk_c::dProcDead() {
         }
         if (frameCtrl.getRate() < 0.01f) {
             cLib_chaseF(&m35A0, 0.0f, 0.01f);
-            f32 dVar3 = 1.0f - m35A0;
-            if (m3628 != fpcM_ERROR_PROCESS_ID_e) {
-                dGameover_c* gameover = (dGameover_c*)fopMsgM_SearchByID(m3628);
-                if (gameover) {
-                    gameover->setBackAlpha(dVar3);
-                }
+            f32 alpha = 1.0f - m35A0;
+            if (mGameOverId != fpcM_ERROR_PROCESS_ID_e) {
+                d_GameOver_setBackAlpha(mGameOverId, alpha);
             }
-            if (m35A0 < 0.38f && m3628 != fpcM_ERROR_PROCESS_ID_e) {
-                dGameover_c* gameover = (dGameover_c*)fopMsgM_SearchByID(m3628);
-                if (gameover) {
-                    gameover->animeStart();
-                }
+            if (m35A0 < 0.38f && mGameOverId != fpcM_ERROR_PROCESS_ID_e) {
+                d_GameOver_animeStart(mGameOverId);
             }
             if (mProcVar7.m3574 == 0) {
-                int iVar1;
-                if (m3628 != fpcM_ERROR_PROCESS_ID_e) {
-                    dGameover_c* gameover = (dGameover_c*)fopMsgM_SearchByID(m3628);
-                    if (gameover != NULL) {
-                        iVar1 = gameover->deleteCheck();
-                    } else {
-                        iVar1 = 0;
-                    }
+                BOOL iVar1;
+                if (mGameOverId != fpcM_ERROR_PROCESS_ID_e) {
+                    iVar1 = d_GameOver_CheckDelete(mGameOverId);
                 } else {
-                    iVar1 = 0;
+                    iVar1 = FALSE;
                 }
-                if (iVar1 != 0) {
+                if (iVar1) {
                     mProcVar7.m3574 = 1;
                 }
             }
@@ -1420,20 +1407,20 @@ BOOL daPy_lk_c::dProcDance() {
 
 /* 801304D8-80130570       .text dProcCaught_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcCaught_init() {
-    daPy_ANM dVar2;
-
     if (mCurProc == daPyProc_DEMO_CAUGHT_e) {
         return true;
     }
     commonProcInit(daPyProc_DEMO_CAUGHT_e);
+
+    daPy_ANM anm;
     if (mDemo.getParam0() == 0) {
-        dVar2 = ANM_MOGAKU1;
+        anm = ANM_MOGAKU1;
         mProcVar6.m3570 = 1;
     } else {
-        dVar2 = ANM_FM_BATA;
+        anm = ANM_FM_BATA;
         mProcVar6.m3570 = 0;
     }
-    setSingleMoveAnime(dVar2, 1.0f, 0.0f, -1, 3.0f);
+    setSingleMoveAnime(anm, 1.0f, 0.0f, -1, 3.0f);
     speed.y = gravity = mNormalSpeed = 0.0f;
     return true;
 }
@@ -1526,24 +1513,24 @@ BOOL daPy_lk_c::dProcPushMove() {
 
 /* 801308BC-8013098C       .text dProcDoorOpen_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcDoorOpen_init() {
-    float fVar1;
-    daPy_ANM dVar2;
-
     if (mCurProc == daPyProc_DEMO_DOOR_OPEN_e) {
         return true;
     }
     commonProcInit(daPyProc_DEMO_DOOR_OPEN_e);
+
+    daPy_ANM anm;
     if ((mDemo.getParam0() & 1) != 0) {
-        dVar2 = ANM_DOOROPENBLINK;
+        anm = ANM_DOOROPENBLINK;
     } else {
-        dVar2 = ANM_DOOROPENALINK;
+        anm = ANM_DOOROPENALINK;
     }
+    f32 start;
     if ((mDemo.getParam0() & 2) != 0) {
-        fVar1 = 35.0f;
+        start = 35.0f;
     } else {
-        fVar1 = 0.0f;
+        start = 0.0f;
     }
-    setSingleMoveAnime(dVar2, 1.0f, fVar1, -1, 0.0f);
+    setSingleMoveAnime(anm, 1.0f, start, -1, 0.0f);
     mNormalSpeed = 0.0f;
     mAcch.SetWallNone();
     mAcch.OnLineCheckNone();
@@ -1683,20 +1670,19 @@ BOOL daPy_lk_c::dProcPresent() {
 
 /* 80130E88-80130F2C       .text dProcWindChange_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcWindChange_init() {
-    daPy_ANM dVar4;
-
     int iVar1 = checkShipRideUseItem(0);
     if (mCurProc == daPyProc_DEMO_WIND_CHANGE_e) {
         return false;
     }
     commonProcInit(daPyProc_DEMO_WIND_CHANGE_e);
     mNormalSpeed = 0.0f;
+    daPy_ANM anm;
     if (dKyw_get_tactwind_dir()) {
-        dVar4 = ANM_WINDL;
+        anm = ANM_WINDL;
     } else {
-        dVar4 = ANM_WINDR;
+        anm = ANM_WINDR;
     }
-    setSingleMoveAnime(dVar4, 1.0f, 0.0f, -1, 5.0f);
+    setSingleMoveAnime(anm, 1.0f, 0.0f, -1, 5.0f);
     initShipRideUseItem(iVar1, 0);
     return true;
 }
@@ -1714,12 +1700,6 @@ BOOL daPy_lk_c::dProcWindChange() {
 
 /* 80130F98-8013116C       .text dProcStandItemPut_init__9daPy_lk_cFv */
 BOOL daPy_lk_c::dProcStandItemPut_init() {
-    daPy_py_c* pdVar1;
-    fopAc_ac_c* pfVar2;
-    f32 dVar5;
-    double in_f4;
-    csXyz* angle;
-
     if (mCurProc == daPyProc_DEMO_STAND_ITEM_PUT_e) {
         return true;
     }
@@ -1727,27 +1707,24 @@ BOOL daPy_lk_c::dProcStandItemPut_init() {
     mNormalSpeed = 0.0f;
     keepItemData();
     mProcVar6.m3570 = 0;
-    pdVar1 = (daPy_py_c*)fopAcM_getEventPartner(this);
-    if (pdVar1 != NULL) {
-        cXyz local_20 = pdVar1->current.pos - current.pos;
+    fopAc_ac_c* event_partner = fopAcM_getEventPartner(this);
+    csXyz* angle;
+    if (event_partner != NULL) {
+        cXyz local_20 = event_partner->current.pos - current.pos;
         angle = fopAcM_GetShapeAngle_p(this);
-        angle->y = fopAcM_searchActorAngleY(this, pdVar1);
-        dVar5 = local_20.absXZ();
-        if (0.0f < dVar5) {
-            in_f4 = 0.5;
-        }
-        m35C8 = dVar5 - 47.0f;
-        angle = fopAcM_GetShapeAngle_p(pdVar1);
+        angle->y = fopAcM_searchActorAngleY(this, event_partner);
+        m35C8 = local_20.absXZ() - 47.0f;
+        angle = fopAcM_GetShapeAngle_p(event_partner);
     } else {
         m35C8 = 15.0f;
         angle = fopAcM_GetShapeAngle_p(this);
     }
     mProcVar6.m3570 = 1;
     setSingleMoveAnime(ANM_GRABWAIT, m_HIO->mGrab.m.field_0x78, 0.0f, -1, -1.0f);
-    pfVar2 = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
-    if (pfVar2 != NULL) {
-        mActorKeepGrab.setData(pfVar2);
-        fopAcM_setCarryNow(pfVar2, FALSE);
+    fopAc_ac_c* stand_item = (fopAc_ac_c*)fopAcM_fastCreate(fpcNm_STANDITEM_e, dComIfGp_event_getPreItemNo(), &current.pos, -1, angle);
+    if (stand_item != NULL) {
+        mActorKeepGrab.setData(stand_item);
+        fopAcM_setCarryNow(stand_item, FALSE);
     }
     return true;
 }
@@ -2092,10 +2069,10 @@ BOOL daPy_lk_c::dProcGetDance_init() {
     mNormalSpeed = 0.0f;
     setSingleMoveAnime(ANM_TAKTDGE, 1.0f, 0.0f, -1, 3.0f);
     mProcVar2.m34D4 = 0;
-    camera_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
+    camera_process_class* cam = dComIfGp_getCamera(mCameraInfoIdx);
     mProcVar3.m34D6 = shape_angle.y - fopCamM_GetAngleY(cam);
     current.angle.y = shape_angle.y;
-    m3628 = fpcM_ERROR_PROCESS_ID_e;
+    mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     mProcVar0.m34D0 = 0;
     mProcVar6.m3570 = mDemo.getParam0() + 0xd2;
     dComIfGs_onTact(mDemo.getParam0());
@@ -2328,7 +2305,7 @@ BOOL daPy_lk_c::dProcPowerUp_init() {
         }
     }
     mProcVar7.m3574 = 0;
-    m3628 = fpcM_ERROR_PROCESS_ID_e;
+    mGameOverId = fpcM_ERROR_PROCESS_ID_e;
     initShipRideUseItem(iVar2, 2);
     if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SHIP_RIDE_e)) {
         shape_angle.y -= -0x8000;

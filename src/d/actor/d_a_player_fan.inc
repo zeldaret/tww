@@ -85,9 +85,9 @@ int daPy_lk_c::setShapeFanLeaf() {
     if (mpEquipItemModel != NULL) {
         mtl = mpEquipItemModel->getModelData()->getJointNodePointer(FAN_JNT_CL_FAN_e)->getMesh()->getNext();
     }
-    m355C = m355C + 0x82f;
-    m3558 = 1536.0f * cM_ssin(m355C);
-    m355A = 2048.0f * cM_ssin(m355C - 0xe00U);
+    m355C = m355C + 0x82F;
+    m3558 = 0x600 * cM_ssin(m355C);
+    m355A = 0x800 * cM_ssin(m355C - 0xE00);
     if (dComIfGs_getMagic() >= 1) {
         // Show material:
         // * "leafAMat"
@@ -107,7 +107,7 @@ int daPy_lk_c::setShapeFanLeaf() {
 
 /* 8014BE50-8014BEEC       .text checkFanGlideProc__9daPy_lk_cFi */
 BOOL daPy_lk_c::checkFanGlideProc(int param_0) {
-    if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, 1)) {
+    if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, TRUE)) {
         if (dComIfGs_getMagic() >= 1) {
             return procFanGlide_init(param_0);
         }
@@ -139,7 +139,7 @@ void daPy_lk_c::setSmallFanModel() {
         JUT_ASSERT(275, FALSE);
     }
     mDoExt_setCurrentHeap(oldHeap);
-    mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
+    mpEquipItemModel->setUserArea(reinterpret_cast<uintptr_t>(this));
     tmp_modelData->getJointNodePointer(FANSMALL_JNT_FANSMA_JNT_e)->setCallBack(daPy_fanJointCallback);
     tmp_modelData->getJointNodePointer(FANSMALL_JNT_FANSMB_JNT_e)->setCallBack(daPy_fanJointCallback);
     m355C = 0;
@@ -172,7 +172,7 @@ void daPy_lk_c::setParachuteFanModel(f32 f31) {
 
     mpEquipItemModel = mpParachuteFanMorf->getModel();
     mDoExt_setCurrentHeap(oldHeap);
-    mpEquipItemModel->setUserArea(reinterpret_cast<u32>(this));
+    mpEquipItemModel->setUserArea(reinterpret_cast<uintptr_t>(this));
     modelData->getJointNodePointer(FANB_JNT_LROOT_e)->setCallBack(daPy_parachuteJointCallback);
     modelData->getJointNodePointer(FANB_JNT_RROOT_e)->setCallBack(daPy_parachuteJointCallback);
     modelData->getJointNodePointer(FANB_JNT_LARMB_e)->setCallBack(daPy_parachuteJointCallback);
@@ -383,7 +383,7 @@ BOOL daPy_lk_c::procFanGlide() {
         if (mAcch.ChkGroundHit()) {
 #if VERSION == VERSION_DEMO
             if (!checkHeavyStateOn()) {
-                return procLand_init(m_HIO->mItem.mFan.m.field_0x50, 1);
+                return procLand_init(m_HIO->mItem.mFan.m.field_0x50, TRUE);
             } else {
                 return changeLandProc(m_HIO->mItem.mFan.m.field_0x50);
             }
@@ -437,7 +437,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 m35F0 = m3688.y;
                 seStartOnlyReverb(JA_SE_LK_FAN_CHUTE_CLOSE);
                 if (swordTrigger()) {
-                    setAnimeEquipSword(0);
+                    setAnimeEquipSword(FALSE);
                 }
                 return procFall_init(2, m_HIO->mWallCatch.m.field_0x54);
             }
@@ -445,7 +445,7 @@ BOOL daPy_lk_c::procFanGlide() {
                 gravity = m_HIO->mItem.mFan.m.field_0x3C;
                 maxFallSpeed = m_HIO->mItem.mFan.m.field_0x38;
             }
-            if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, 1) && frameCtrl.getRate() < 0.01f && mProcVar6.m3570 == 0) {
+            if (checkSetItemTrigger(dItemNo_DEKU_LEAF_e, TRUE) && frameCtrl.getRate() < 0.01f && mProcVar6.m3570 == 0) {
                 // Using the Deku Leaf while gliding to create a burst of air around you.
                 setSingleMoveAnime(
                     ANM_USEFANB,
@@ -505,11 +505,11 @@ BOOL daPy_lk_c::procFanGlide() {
                     local_54 *= (50.0f / dVar13);
                 }
                 dVar13 = 20.0f;
-                f32 fVar1 = 1.0f;
+                f32 anm_speed = 1.0f;
                 local_64 = 1.0f;
                 if (mProcVar6.m3570 == 0) {
                     mProcVar6.m3570 = 1;
-                    setSingleMoveAnime(ANM_USEFANB2, fVar1, 0.0f, -1, m_HIO->mItem.mFan.m.field_0x30);
+                    setSingleMoveAnime(ANM_USEFANB2, anm_speed, 0.0f, -1, m_HIO->mItem.mFan.m.field_0x30);
                     mpParachuteFanMorf->setAnm(
                         getItemAnimeResource(dRes_INDEX_LKANM_BCK_FANB2A_e),
                         0,

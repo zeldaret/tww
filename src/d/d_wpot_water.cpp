@@ -51,6 +51,7 @@ static BOOL dWpotWater_Execute(dWpotWater_c* i_this) {
 
 /* 8023F740-8023F748       .text dWpotWater_IsDelete__FP12dWpotWater_c */
 static BOOL dWpotWater_IsDelete(dWpotWater_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

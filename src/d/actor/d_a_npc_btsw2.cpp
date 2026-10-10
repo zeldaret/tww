@@ -391,7 +391,7 @@ BOOL daNpc_Btsw2_c::CreateHeap() {
     modelData = mpMorf->getModel()->getModelData();
     modelData->getJointNodePointer(m_jnt.getHeadJntNum())->setCallBack(nodeCallBack);
     modelData->getJointNodePointer(m_jnt.getBackboneJntNum())->setCallBack(nodeCallBack);
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));
     
@@ -629,7 +629,7 @@ BOOL daNpc_Btsw2_c::_draw() {
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
     
-    dSnap_RegistFig(DSNAP_TYPE_BTSW, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_BTSW, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
     
     return TRUE;
 }
@@ -656,6 +656,7 @@ static BOOL daNpc_Btsw2_Draw(daNpc_Btsw2_c* i_this) {
 
 /* 00001FEC-00001FF4       .text daNpc_Btsw2_IsDelete__FP13daNpc_Btsw2_c */
 static BOOL daNpc_Btsw2_IsDelete(daNpc_Btsw2_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

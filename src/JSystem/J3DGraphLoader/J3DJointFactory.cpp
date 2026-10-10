@@ -11,20 +11,20 @@
 
 /* 802FE1A4-802FE1FC       .text __ct__15J3DJointFactoryFRC13J3DJointBlock */
 J3DJointFactory::J3DJointFactory(const J3DJointBlock& jointBlock) {
-    mJointInitData = JSUConvertOffsetToPtr<J3DJointInitData>(&jointBlock, (u32)jointBlock.mpJointInitData);
-    mIndexTable = JSUConvertOffsetToPtr<u16>(&jointBlock, (u32)jointBlock.mpIndexTable);
+    mJointInitData = JSUConvertOffsetToPtr<J3DJointInitData>(&jointBlock, (uintptr_t)jointBlock.mpJointInitData);
+    mIndexTable = JSUConvertOffsetToPtr<u16>(&jointBlock, (uintptr_t)jointBlock.mpIndexTable);
 }
 
 /* 802FE1FC-802FE390       .text create__15J3DJointFactoryFi */
 J3DJoint* J3DJointFactory::create(int jntNo) {
     J3DJoint* joint = new J3DJoint();
     joint->mJntNo = jntNo;
-    joint->mKind = mJointInitData[mIndexTable[jntNo]].mKind;
-    joint->mScaleCompensate = mJointInitData[mIndexTable[jntNo]].mScaleCompensate;
-    joint->mTransformInfo = mJointInitData[mIndexTable[jntNo]].mTransformInfo;
-    joint->mRadius = mJointInitData[mIndexTable[jntNo]].mRadius;
-    joint->mMin = mJointInitData[mIndexTable[jntNo]].mMin;
-    joint->mMax = mJointInitData[mIndexTable[jntNo]].mMax;
+    joint->mKind = getKind(jntNo);
+    joint->mScaleCompensate = getScaleCompensate(jntNo);
+    joint->mTransformInfo = getTransformInfo(jntNo);
+    joint->mRadius = getRadius(jntNo);
+    joint->mMin = getMin(jntNo);
+    joint->mMax = getMax(jntNo);
     joint->mMtxCalc = NULL;
     joint->mOldMtxCalc = NULL;
     if (joint->mScaleCompensate == 0xFF) {

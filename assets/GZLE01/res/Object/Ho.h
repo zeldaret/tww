@@ -36,6 +36,7 @@ enum dRes_ID_HO {
 
 enum HO_PEND_JNT {
     HO_PEND_JNT_VHAPL_MODEL_e=0x0,
+    HO_PEND_NUM_JNTS_e=0x1,
 };
 
 enum HO_JNT {
@@ -57,6 +58,7 @@ enum HO_JNT {
     HO_JNT_LEGR1_e=0xF,
     HO_JNT_LEGR2_e=0x10,
     HO_JNT_FOOTR_e=0x11,
+    HO_NUM_JNTS_e=0x12,
 };
 
 #endif /* RES_HO_H */

@@ -39,6 +39,7 @@ enum JH_JNT {
     JH_JNT_J_JH_SAKI2_e=0xB,
     JH_JNT_J_JH_SAKI3_e=0xC,
     JH_JNT_J_JH_SAKI4_e=0xD,
+    JH_NUM_JNTS_e=0xE,
 };
 
 #endif /* RES_JBO_H */

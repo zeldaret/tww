@@ -115,17 +115,17 @@ bool JKRArchive::getDirEntry(SDirEntry* dirEntry, u32 index) const {
 }
 
 /* 802B82D0-802B8380       .text getGlbResource__10JKRArchiveFUlPCcP10JKRArchive */
-void* JKRArchive::getGlbResource(u32 param_0, const char* path, JKRArchive* archive) {
+void* JKRArchive::getGlbResource(u32 type, const char* path, JKRArchive* archive) {
     void* resource = NULL;
     if (archive) {
-        return archive->getResource(param_0, path);
+        return archive->getResource(type, path);
     }
 
     JSUList<JKRFileLoader>& volumeList = getVolumeList();
     JSUListIterator<JKRFileLoader> iterator;
     for (iterator = volumeList.getFirst(); iterator != volumeList.getEnd(); ++iterator) {
         if (iterator->getVolumeType() == 'RARC') {
-            resource = iterator->getResource(param_0, path);
+            resource = iterator->getResource(type, path);
             if (resource)
                 break;
         }
@@ -171,7 +171,6 @@ void* JKRArchive::getResource(u32 type, const char* path) {
 }
 
 /* 802B8528-802B85F0       .text readTypeResource__10JKRArchiveFPvUlUlPCcP10JKRArchive */
-// missing instructions
 u32 JKRArchive::readTypeResource(void* buffer, u32 bufferSize, u32 type, const char* path, JKRArchive* archive) {
     u32 ret = 0;
 

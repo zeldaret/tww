@@ -107,7 +107,7 @@ public:
 
 class dNpc_EventCut_c {
 private:
-    /* 0x00 */ char* mpEvtStaffName;
+    /* 0x00 */ const char* mpEvtStaffName;
     /* 0x04 */ int mEvtStaffId;
     /* 0x08 */ fopAc_ac_c* mpActor;
     /* 0x0C */ fopNpc_npc_c* mpTalkActor;
@@ -157,7 +157,7 @@ public:
     void cutContinueTalkStart();
     void cutTalkMsgProc();
 
-    char* getActorName() { return mpEvtStaffName; }
+    const char* getActorName() { return mpEvtStaffName; }
     int getNowCut() { return mCurActIdx; }
     bool getAttnFlag() { return mbAttention; }
     void setAttnFlag(bool flag) { mbAttention = flag; }
@@ -228,17 +228,14 @@ public:
         field_0x1C = 0;
         field_0x1E = 0;
         field_0x20 = 0;
-        field_0x00 = 0;
-        field_0x02 = 0;
-        field_0x04 = 0;
+        field_0x00.setall(0);
     }
+
     void defaultCalcX(s16) {}
     void defaultCalcY(s16) {}
     void setProc(SwingProc proc) { mProc = proc; }
 
-    /* 0x00 */ s16 field_0x00;
-    /* 0x02 */ s16 field_0x02;
-    /* 0x04 */ s16 field_0x04;
+    /* 0x00 */ csXyz field_0x00;
     /* 0x08 */ SwingProc mProc;
     /* 0x14 */ f32 field_0x14;
     /* 0x18 */ f32 field_0x18;
@@ -277,12 +274,12 @@ public:
     u16 talk(int);
 };  // Size: 0x6C4
 
-bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, float morf, float speed, int animResId, int soundResId, const char* arcName);
+bool dNpc_setAnmIDRes(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animResId, int soundResId, const char* arcName);
 bool dNpc_setAnmFNDirect(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, char* animFilename, char* soundFilename, const char* arcName);
 bool dNpc_setAnm(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName);
 void dNpc_setShadowModel(J3DModel*, J3DModelData*, J3DModel*);
 cXyz dNpc_playerEyePos(f32);
-void dNpc_calc_DisXZ_AngY(cXyz, cXyz, float*, short*);
+void dNpc_calc_DisXZ_AngY(cXyz, cXyz, f32*, s16*);
 bool dNpc_chkArasoi();
 bool dNpc_chkLetterPassed();
 bool dNpc_setAnm_2(mDoExt_McaMorf* pMorf, int loopMode, f32 morf, f32 speed, int animFileIdx, int soundFileIdx, const char* arcName);

@@ -22,14 +22,17 @@ enum dRes_ID_MSHOKKI {
 
 enum KOPPU_JNT {
     KOPPU_JNT_KOPPU_e=0x0,
+    KOPPU_NUM_JNTS_e=0x1,
 };
 
 enum OSARA_JNT {
     OSARA_JNT_SARA_e=0x0,
+    OSARA_NUM_JNTS_e=0x1,
 };
 
 enum POT_JNT {
     POT_JNT_MIZSASHI_e=0x0,
+    POT_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MSHOKKI_H */

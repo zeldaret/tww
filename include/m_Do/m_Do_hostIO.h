@@ -1,16 +1,9 @@
 #ifndef M_DO_M_DO_HOSTIO_H
 #define M_DO_M_DO_HOSTIO_H
 
+#include "JSystem/JHostIO/JORReflexible.h"
 #include "dolphin/types.h"
 #include <string.h>
-
-// move JOR stuff later
-class JOREventListener;
-class JORPropertyEvent;
-class JORNodeEvent;
-class JORGenEvent;
-class JOREvent;
-class JORServer;
 
 #if VERSION == VERSION_DEMO
 #define HIO(name) l_HIO.name
@@ -18,42 +11,12 @@ class JORServer;
 #define HIO(name) L_HIO::name
 #endif
 
-class JORMContext {
-public:
-    void genCheckBox(const char* param_1, u8* param_2, u8 param_3, u32 param_4, JOREventListener* param_5, u16 param_6, u16 param_7, u16 param_8, u16 param_9) {
-        genCheckBoxSub(0x108, param_1, (u32)param_2, param_4, *param_2, param_3, param_5, param_6, param_7, param_8, param_9);
-    }
-    void genCheckBoxSub(u32, const char*, u32, u32, u16, u16, JOREventListener*, u16, u16, u16, u16);
-};
-
-class JOREventListener {
-public:
-#ifdef DEBUG
-    virtual void listenPropertyEvent(const JORPropertyEvent*) = 0;
-#endif
-};
-
-class JORReflexible : public JOREventListener {
-public:
-#ifdef DEBUG
-    JORReflexible() {}
-    static JORServer* getJORServer();
-
-    virtual void listenPropertyEvent(const JORPropertyEvent*) {}
-    virtual void listen(u32, const JOREvent*) {}
-    virtual void genObjectInfo(const JORGenEvent*) {}
-    virtual void genMessage(JORMContext*) = 0;
-    virtual void listenNodeEvent(const JORNodeEvent*) {}
-#endif
-};
-
 class mDoHIO_child_c {
 public:
     mDoHIO_child_c() {
         field_0x18 = 0;
         mPt = NULL;
     }
-
     ~mDoHIO_child_c() {}
 
     const char* getName() { return mName; }
@@ -66,33 +29,36 @@ public:
     /* 0x1C */ JORReflexible* mPt;
 };
 
-class mDoHIO_subRoot_c {
+class mDoHIO_subRoot_c : public JORReflexible {
 public:
     virtual ~mDoHIO_subRoot_c() {}
 
-    s8 createChild(const char*, JORReflexible*);
+    void updateChild(s8);
     void deleteChild(s8);
+    s8 createChild(const char*, JORReflexible*);
 
-    void updateChild(s8) {}
+    void genMessage(JORMContext*);
 
 private:
-    /* 0x4 */ mDoHIO_child_c mChild[64];
+    /* 0x4 */ mDoHIO_child_c mChildren[64];
 };
 
-class mDoHIO_root_c {
+class mDoHIO_root_c : public JORReflexible {
 public:
+    mDoHIO_root_c() {}
     virtual ~mDoHIO_root_c() {}
 
     void update();
-    
-    s8 createChild(const char* name, JORReflexible* hio) {
-        return m_subroot.createChild(name, hio);
-    }
+    void updateChild(s8);
     void deleteChild(s8 childID) {
-        m_subroot.deleteChild(childID);
+        mSub.deleteChild(childID);
     }
+    s8 createChild(const char* name, JORReflexible* hio) {
+        return mSub.createChild(name, hio);
+    }
+    void genMessage(JORMContext*);
 
-    /* 0x0 */ mDoHIO_subRoot_c m_subroot;
+    /* 0x0 */ mDoHIO_subRoot_c mSub;
 };
 
 class mDoHIO_entry_c : public JORReflexible {

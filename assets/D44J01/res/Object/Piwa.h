@@ -18,6 +18,7 @@ enum dRes_ID_PIWA {
 
 enum PIWA_JNT {
     PIWA_JNT_PIWA_e=0x0,
+    PIWA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_PIWA_H */

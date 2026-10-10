@@ -194,7 +194,7 @@ void dMesg_tSequenceProcessor::initialize(int param_1) {
         }
     }
 
-    mesgControl->setNowFontSize(mesgControl->getInitFontSize()) ;
+    mesgControl->setNowFontSize(mesgControl->getInitFontSize());
     mesgControl->setCharCode(0);
     mesgControl->setHeaderOff();
     mesgControl->setCode16FgOff();
@@ -346,17 +346,15 @@ void dMesg_tSequenceProcessor::do_character(int param_1) {
         }
 #endif
     }
-    JUTFont::TWidth twidth;
+
     f32 f31 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
-    
     int char_code = mesgControl->getCharCode();
-    mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
-    int tmp = twidth.field_0x1;
+    int width = mesgControl->getMainFont()->getWidth(char_code);
     if (!mesgControl->isHeader()) {
-        field_0x44 += tmp * f31;
+        field_0x44 += width * f31;
         mesgControl->setHeaderOn();
     } else {
-        field_0x44 += tmp * f31 + mesgControl->getCharSpace();
+        field_0x44 += width * f31 + mesgControl->getCharSpace();
     }
     if (field_0x74 > 0) {
         field_0x74--;
@@ -487,15 +485,14 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
                     sp14[0] = sp54[r30++];
                     sp14[1] = 0;
                 }
-                JUTFont::TWidth twidth;
+
                 f32 f29 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
-                int temp = twidth.field_0x1;
+                int width = mesgControl->getMainFont()->getWidth(char_code);
                 if (field_0x44 == 0.0f) {
-                    f32 temp2 = temp * f29;
+                    f32 temp2 = width * f29;
                     field_0x44 = temp2;
                 } else {
-                    f32 temp2 = temp * f29;
+                    f32 temp2 = width * f29;
                     field_0x44 += temp2 + mesgControl->getCharSpace();
                 }
                 strcat(mMesg->text[0], sp14);
@@ -595,15 +592,13 @@ bool dMesg_tSequenceProcessor::do_tag(u32 param_1, const void* param_2, u32 para
                     sp10[1] = 0;
                 }
 
-                JUTFont::TWidth twidth;
                 int r25 = mesgControl->getNowFontSize();
                 f32 f29 = f32(r25) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
-                int tmp = twidth.field_0x1;
+                int width = mesgControl->getMainFont()->getWidth(char_code);
                 if (field_0x44 == 0.0f) {
-                    field_0x44 = tmp * f29;
+                    field_0x44 = width * f29;
                 } else {
-                    field_0x44 += tmp * f29 + mesgControl->getCharSpace();
+                    field_0x44 += width * f29 + mesgControl->getCharSpace();
                 }
                 strcat(mMesg->text[0], sp10);
                 strcat(mMesg->text[2], sp10);
@@ -667,9 +662,7 @@ char* dMesg_tSequenceProcessor::ruby_character(char* param_1, int param_2) {
     int char_code = (byte << 8);
     byte = src[1];
     char_code |= byte;
-    JUTFont::TWidth twidth;
-    mesgControl->getRubyFont()->getWidthEntry(char_code, &twidth);
-    f32 tmp = (int)twidth.field_0x1;
+    f32 tmp = (f32)mesgControl->getRubyFont()->getWidth(char_code);
     if (param_2 == 1) {
         if (field_0x50 == 0.0f) {
             field_0x54 = tmp * f31;
@@ -768,7 +761,7 @@ dMesg_tMeasureProcessor::dMesg_tMeasureProcessor(JMessage::TControl* param_1, in
     field_0x54 = 0;
     linemax = 4;
     dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
-    mesgControl->setNowFontSize(mesgControl->getInitFontSize()) ;
+    mesgControl->setNowFontSize(mesgControl->getInitFontSize());
     mesgControl->setLineCount(0);
     mesgControl->setCharCode(0);
     mesgControl->setHeaderOff();
@@ -784,7 +777,6 @@ void dMesg_tMeasureProcessor::do_character(int param_1) {
     dMesg_tControl* mesgControl = (dMesg_tControl*)getControl();
     int r30 = field_0x50 - field_0x4c;
     bool r29 = false;
-    JUTFont::TWidth twidth;
     if (param_1 == 10) {
         if (r30 >= 0 && r30 < linemax - 1) {
             retFlag++;
@@ -810,13 +802,12 @@ void dMesg_tMeasureProcessor::do_character(int param_1) {
     if (r29 && r30 >= 0 && r30 <= linemax) {
         f32 f31 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
         int char_code = mesgControl->getCharCode();
-        mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
-        int tmp = twidth.field_0x1;
+        int width = mesgControl->getMainFont()->getWidth(char_code);
         if (!mesgControl->isHeader()) {
-            field_0x38[r30] += tmp * f31;
+            field_0x38[r30] += width * f31;
             mesgControl->setHeaderOn();
         } else {
-            field_0x38[r30] += mesgControl->getCharSpace() + tmp * f31;
+            field_0x38[r30] += mesgControl->getCharSpace() + width * f31;
         }
     }
 }
@@ -900,16 +891,14 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
                     char_code = byte;
                 }
 
-                JUTFont::TWidth twidth;
                 int r23 = mesgControl->getNowFontSize();
                 f32 f30 = f32(r23) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
-                int tmp = twidth.field_0x1;
+                int width = mesgControl->getMainFont()->getWidth(char_code);
                 if (r27 >= 0 && r27 <= linemax) {
                     if (field_0x38[r27] == 0.0f) {
-                        field_0x38[r27] = tmp * f30;
+                        field_0x38[r27] = width * f30;
                     } else {
-                        field_0x38[r27] += tmp * f30 + mesgControl->getCharSpace();
+                        field_0x38[r27] += width * f30 + mesgControl->getCharSpace();
                     }
                 }
             }
@@ -964,14 +953,13 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
 #else
                 int char_code = 'H';
 #endif
-                JUTFont::TWidth twidth;
+
                 f32 f29 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
-                int tmp = twidth.field_0x1;
+                int width = mesgControl->getMainFont()->getWidth(char_code);
                 if (field_0x48 == 0.0f) {
-                    field_0x48 = tmp * f29;
+                    field_0x48 = width * f29;
                 } else {
-                    field_0x48 += mesgControl->getCharSpace() + tmp * f29;
+                    field_0x48 += mesgControl->getCharSpace() + width * f29;
                 }
             }
             r26 = true;
@@ -985,14 +973,13 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
 #else
                 int char_code = 'H';
 #endif
-                JUTFont::TWidth twidth;
+
                 f32 f29 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
-                int tmp = twidth.field_0x1;
+                int width = mesgControl->getMainFont()->getWidth(char_code);
                 if (field_0x48 == 0.0f) {
-                    field_0x48 = tmp * f29;
+                    field_0x48 = width * f29;
                 } else {
-                    field_0x48 += mesgControl->getCharSpace() + tmp * f29;
+                    field_0x48 += mesgControl->getCharSpace() + width * f29;
                 }
             }
             r26 = true;
@@ -1021,15 +1008,14 @@ bool dMesg_tMeasureProcessor::do_tag(u32 param_1, const void* param_2, u32 param
                     byte = sp18[r25++];
                     char_code = byte;
                 }
-                JUTFont::TWidth twidth;
+
                 f32 f30 = f32(mesgControl->getNowFontSize()) / f32(mesgControl->getMainFont()->getCellWidth());
-                mesgControl->getMainFont()->getWidthEntry(char_code, &twidth);
-                int tmp = twidth.field_0x1;
+                int width = mesgControl->getMainFont()->getWidth(char_code);
                 if (r27 >= 0 && r27 <= linemax) {
                     if (field_0x38[r27] == 0.0f) {
-                        field_0x38[r27] = tmp * f30;
+                        field_0x38[r27] = width * f30;
                     } else {
-                        field_0x38[r27] += tmp * f30 + mesgControl->getCharSpace();
+                        field_0x38[r27] += width * f30 + mesgControl->getCharSpace();
                     }
                 }
             }
@@ -1166,11 +1152,11 @@ void dMesg_screenData_c::setCommonData() {
     ((J2DTextBox*)field_0x88[2].pane)->setFont(field_0x10);
     ((J2DTextBox*)field_0x88[3].pane)->setFont(field_0x14);
 
-    J2DTextBox::TFontSize size;
-    size.mSizeX = g_msgHIO.field_0x70;
-    size.mSizeY = g_msgHIO.field_0x70;
-    ((J2DTextBox*)field_0x88[0].pane)->setFontSize(size);
-    ((J2DTextBox*)field_0x88[2].pane)->setFontSize(size);
+    J2DTextBox::TFontSize fontSize;
+    fontSize.mSizeX = g_msgHIO.field_0x70;
+    fontSize.mSizeY = g_msgHIO.field_0x70;
+    ((J2DTextBox*)field_0x88[0].pane)->setFontSize(fontSize);
+    ((J2DTextBox*)field_0x88[2].pane)->setFontSize(fontSize);
 
     ((J2DTextBox*)field_0x88[0].pane)->setCharSpace(g_msgHIO.field_0x5a);
     ((J2DTextBox*)field_0x88[1].pane)->setCharSpace(g_msgHIO.field_0x5c);
@@ -1213,9 +1199,7 @@ void dMesg_screenData_c::setString(char* param_1, int param_2) {
 /* 801E2CE0-801E2D40       .text shiftSet__18dMesg_screenData_cFii */
 void dMesg_screenData_c::shiftSet(int param_1, int param_2) {
     for (int i = 0; i < 4; i++) {
-        J2DTextBox* textBox = (J2DTextBox*)field_0x88[i].pane;
-        textBox->field_0xd8 = param_1;
-        textBox->field_0xdc = param_2;
+        ((J2DTextBox*)field_0x88[i].pane)->shiftSet(param_1, param_2);
     }
 }
 
@@ -1372,8 +1356,6 @@ void dMesg_screenDataTalk_c::changeFont(JUTFont* font) {
 
 /* 801E39F8-801E3BBC       .text openAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::openAnime() {
-    /* Nonmatching - fpr regswap */
-    f32 f31, f30, f29, f28, tmp;
     bool ret = false;
     mTimer++;
     if (mTimer >= 13) {
@@ -1385,23 +1367,26 @@ bool dMesg_screenDataTalk_c::openAnime() {
         }
         ret = true;
     } else {
+        fopMsgM_f2d_class f31_f30;
+        f32 f29, f28;
+        f32 f1;
         if (mTimer < 10) {
-            f31 = 100.0f;
-            f30 = (f31 * field_0x168.mSizeOrig.y) / field_0x168.mSizeOrig.x;
-            f29 = field_0x168.mSizeOrig.x - f31;
-            f28 = field_0x168.mSizeOrig.y - f30;
-            tmp = fopMsgM_valueIncrease(10, mTimer, 0);
+            f31_f30.x = 100.0f;
+            f31_f30.y = (f31_f30.x * field_0x168.mSizeOrig.y) / field_0x168.mSizeOrig.x;
+            f29 = field_0x168.mSizeOrig.x - f31_f30.x;
+            f28 = field_0x168.mSizeOrig.y - f31_f30.y;
+            f1 = fopMsgM_valueIncrease(10, mTimer, 0);
         } else {
             f32 tmp2 = field_0x168.mSizeOrig.x;
-            f31 = tmp2;
+            f31_f30.x = tmp2;
             f32 tmp3 = field_0x168.mSizeOrig.y;
-            f30 = tmp3;
-            f29 = 580.0f - f31;
-            f28 = (f30 * 580.0f) / f31 - f30;
-            tmp = JMASSin((mTimer - 10) * (0x10000 / 6.0f));
+            f31_f30.y = tmp3;
+            f29 = 580.0f - f31_f30.x;
+            f28 = (f31_f30.y * 580.0f) / f31_f30.x - f31_f30.y;
+            f1 = JMASSin((mTimer - 10) * (0x10000 / 6.0f));
         }
-        field_0x168.mSize.x = f31 + f29 * tmp;
-        field_0x168.mSize.y = f30 + f28 * tmp;
+        field_0x168.mSize.x = f31_f30.x + f29 * f1;
+        field_0x168.mSize.y = f31_f30.y + f28 * f1;
         fopMsgM_cposMove(&field_0x168);
         field_0x1b4 = fopMsgM_valueIncrease(13, mTimer, 0);
         fopMsgM_setNowAlpha(&field_0x168, field_0x1b4);
@@ -1411,7 +1396,6 @@ bool dMesg_screenDataTalk_c::openAnime() {
 
 /* 801E3BBC-801E3CE0       .text closeAnime__22dMesg_screenDataTalk_cFv */
 bool dMesg_screenDataTalk_c::closeAnime() {
-    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
@@ -1423,13 +1407,14 @@ bool dMesg_screenDataTalk_c::closeAnime() {
         fopMsgM_setNowAlphaZero(&field_0x168);
         ret = true;
     } else {
-        f32 f31 = field_0x168.mSizeOrig.x;
-        f32 f30 = field_0x168.mSizeOrig.y;
-        f32 tmp2 = 620.0f - f31;
-        f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
+        fopMsgM_f2d_class f31_f30;
+        f31_f30.x = field_0x168.mSizeOrig.x;
+        f31_f30.y = field_0x168.mSizeOrig.y;
+        f32 tmp2 = 620.0f - f31_f30.x;
+        f32 f29 = (f31_f30.y / f31_f30.x) * 620.0f - field_0x168.mSizeOrig.y;
         f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);
-        field_0x168.mSize.x = f31 + tmp2 * f1;
-        field_0x168.mSize.y = f30 + f29 * f1;
+        field_0x168.mSize.x = f31_f30.x + tmp2 * f1;
+        field_0x168.mSize.y = f31_f30.y + f29 * f1;
         field_0x1b4 = 1.0f - f1;
         fopMsgM_cposMove(&field_0x168);
         fopMsgM_setNowAlpha(&field_0x168, field_0x1b4);
@@ -1537,7 +1522,7 @@ void dMesg_screenDataItem_c::createScreen() {
     JMSMesgEntry_c stack_message = *(JMSMesgEntry_c*)dMesg_gpControl->getMessageEntry(nowMesgCode);
     if (dItem_data::getTexture(stack_message.mMsgNo - 101)) {
         JKRArchive* archive = dComIfGp_getItemIconArchive();
-        JKRArchive::readTypeResource(texBuffer, 0xc00, 'TIMG', dItem_data::getTexture(stack_message.mMsgNo - 101), archive);
+        JKRReadTypeResource(texBuffer, 0xc00, 'TIMG', dItem_data::getTexture(stack_message.mMsgNo - 101), archive);
         ((J2DPicture*)field_0x1b4.pane)->changeTexture(texBuffer, 0);
     }
     field_0x168.mPosTopLeftOrig.y += 1.0f;
@@ -1624,7 +1609,6 @@ bool dMesg_screenDataItem_c::openAnime() {
 
 /* 801E4AE8-801E4C40       .text closeAnime__22dMesg_screenDataItem_cFv */
 bool dMesg_screenDataItem_c::closeAnime() {
-    /* Nonmatching - fpr regswap */
     bool ret = false;
     if (mTimer == 0) {
         for (int i = 0; i < 4; i++) {
@@ -1641,13 +1625,14 @@ bool dMesg_screenDataItem_c::closeAnime() {
         fopMsgM_setNowAlphaZero(&field_0x168);
         ret = true;
     } else {
-        f32 f31 = field_0x168.mSizeOrig.x;
-        f32 f30 = field_0x168.mSizeOrig.y;
-        f32 tmp2 = 620.0f - f31;
-        f32 f29 = (f30 / f31) * 620.0f - field_0x168.mSizeOrig.y;
+        fopMsgM_f2d_class f31_f30;
+        f31_f30.x = field_0x168.mSizeOrig.x;
+        f31_f30.y = field_0x168.mSizeOrig.y;
+        f32 tmp2 = 620.0f - f31_f30.x;
+        f32 f29 = (f31_f30.y / f31_f30.x) * 620.0f - field_0x168.mSizeOrig.y;
         f32 f1 = fopMsgM_valueIncrease(10, mTimer, 0);
-        field_0x168.mSize.x = f31 + tmp2 * f1;
-        field_0x168.mSize.y = f30 + f29 * f1;
+        field_0x168.mSize.x = f31_f30.x + tmp2 * f1;
+        field_0x168.mSize.y = f31_f30.y + f29 * f1;
         field_0x3e8 = 1.0f - f1;
         fopMsgM_cposMove(&field_0x168);
         fopMsgM_setNowAlpha(&field_0x168, field_0x3e8);
@@ -2197,9 +2182,9 @@ static BOOL dMsg_Delete(sub_mesg_class* i_Msg) {
 
     dMesg_finalize();
     if (header) {
-        JKRFileLoader::removeResource(header, NULL);
+        JKRRemoveResource(header, NULL);
     } if (header2) {
-        JKRFileLoader::removeResource(header2, NULL);
+        JKRRemoveResource(header2, NULL);
     }
     if (oParse) {
         delete oParse;

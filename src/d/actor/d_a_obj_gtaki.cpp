@@ -104,7 +104,6 @@ void daObjGtaki_c::set_effect() {
 
 /* 00000484-00000604       .text CreateInit__12daObjGtaki_cFv */
 bool daObjGtaki_c::CreateInit() {
-    /* Nonmatching */
     fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -600.0f, -0.0f, -600.0f,600.0f,10000.0f,600.0f);
     fopAcM_setCullSizeFar(this, 1.0f);

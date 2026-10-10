@@ -31,7 +31,7 @@ namespace JASystem {
             } mParts;
         };
 
-        TChannel() : field_0x4(NULL), field_0x8(NULL), field_0x20(NULL), field_0x24(NULL), field_0xd8(this) {
+        TChannel() : field_0x4(NULL), field_0x8(NULL), field_0x20(NULL), mNext(NULL), field_0xd8(this) {
             for (int i = 0; i < 4; i++) {
                 osc[i] = NULL;
             }
@@ -74,9 +74,7 @@ namespace JASystem {
         u8 getNoteOnPriority() const { return field_0x48; }
         u8 getReleasePriority() const { return field_0x48 >> 8; }
         u8 getLifeTimePriority() const { return field_0x48 >> 0x10; }
-
-        // TODO
-        void setSkipSamples(u32) {}
+        void setSkipSamples(u32 samples) { mSkipSamples = samples; }
 
         /* 0x00 */ u8 field_0x0;
         /* 0x01 */ u8 field_0x1;
@@ -86,11 +84,11 @@ namespace JASystem {
         /* 0x08 */ TChannel** field_0x8;
         /* 0x0C */ u8 field_0xc;
         /* 0x10 */ Driver::Wave_* field_0x10;
-        /* 0x14 */ int field_0x14;
+        /* 0x14 */ u32 field_0x14; // TODO: sometimes used as an intptr, sometimes not...?
         /* 0x18 */ int field_0x18;
         /* 0x1C */ int field_0x1c;
         /* 0x20 */ TDSPChannel* field_0x20;
-        /* 0x24 */ TChannel* field_0x24;
+        /* 0x24 */ TChannel* mNext;
         /* 0x28 */ BOOL (*field_0x28)(TChannel*, u32);
         /* 0x2C */ u32 (*field_0x2c)(TChannel*, u32);
         /* 0x30 */ int field_0x30;
@@ -103,10 +101,7 @@ namespace JASystem {
         /* 0x58 */ f32 field_0x58;
         /* 0x5C */ f32 field_0x5c;
         /* 0x60 */ u8 mCalcTypes[3]; // Pan, FxMix, ?
-        /* 0x64 */ Driver::PanMatrix_ mPanPower;
-        /* 0x70 */ Driver::PanMatrix_ mPanVec;
-        /* 0x7C */ Driver::PanMatrix_ mFxmixVec;
-        /* 0x88 */ Driver::PanMatrix_ mDolbyVec;
+        /* 0x64 */ Driver::PanMatrix_ field_0x6c[4]; // PanPower, PanVec, FxmixVec, DolbyVec?
         /* 0x94 */ f32 field_0x94;
         /* 0x98 */ f32 field_0x98;
         /* 0x9C */ f32 field_0x9c;
@@ -118,11 +113,11 @@ namespace JASystem {
         /* 0xB0 */ MixConfig mMixConfigs[6];
         /* 0xBC */ u16 field_0xbc[6];
         /* 0xC8 */ u16 field_0xc8;
-        /* 0xCC */ int field_0xcc;
+        /* 0xCC */ u32 field_0xcc;
         /* 0xD0 */ int field_0xd0;
         /* 0xD4 */ int field_0xd4;
         /* 0xD8 */ JSULink<TChannel> field_0xd8;
-        /* 0xE8 */ u32 field_0xe8;
+        /* 0xE8 */ u32 mSkipSamples;
     };
 }
 

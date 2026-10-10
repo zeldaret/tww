@@ -25,6 +25,7 @@
 #include "dolphin/os/OSSync.h" // IWYU pragma: export
 #include "dolphin/os/OSThread.h" // IWYU pragma: export
 #include "dolphin/os/OSTime.h" // IWYU pragma: export
+#include "dolphin/os/OSStopwatch.h" // IWYU pragma: export
 #include "dolphin/os/OSUtil.h" // IWYU pragma: export
 
 #ifdef __cplusplus
@@ -116,10 +117,10 @@ u32 __OSGetDIConfig(void);
 void OSRegisterVersion(const char* version);
 void OSSwitchFiberEx(u32, u32, u32, u32, u32, u32);
 
-inline s16 __OSf32tos16(register f32 inF) {
-    register s16 out;
+inline s16 __OSf32tos16(__REGISTER f32 inF) {
+    __REGISTER s16 out;
     u32 tmp;
-    register u32* tmpPtr = &tmp;
+    __REGISTER u32* tmpPtr = &tmp;
     // clang-format off
 #ifdef __MWERKS__
     asm {
@@ -136,10 +137,10 @@ inline void OSf32tos16(f32* f, s16* out) {
     *out = __OSf32tos16(*f);
 }
 
-inline u8 __OSf32tou8(register f32 inF) {
-    register u8 out;
+inline u8 __OSf32tou8(__REGISTER f32 inF) {
+    __REGISTER u8 out;
     u32 tmp;
-    register u32* tmpPtr = &tmp;
+    __REGISTER u32* tmpPtr = &tmp;
     // clang-format off
 #ifdef __MWERKS__
     asm {
@@ -156,10 +157,10 @@ inline void OSf32tou8(f32* f, u8* out) {
     *out = __OSf32tou8(*f);
 }
 
-inline s8 __OSf32tos8(register f32 inF) {
-    register u8 out;
+inline s8 __OSf32tos8(__REGISTER f32 inF) {
+    __REGISTER u8 out;
     u32 tmp;
-    register u32* tmpPtr = &tmp;
+    __REGISTER u32* tmpPtr = &tmp;
     // clang-format off
 #ifdef __MWERKS__
     asm {

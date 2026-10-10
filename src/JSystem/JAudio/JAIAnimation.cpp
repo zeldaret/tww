@@ -64,7 +64,7 @@ void JAIAnimeSound::initActorAnimSound(void* _asdata, u32 direction, f32 loopEnd
         }
         if (sound == NULL) {
             mSlots[i].mbIsPlaying = 0;
-        } else if (!(sound->mSoundID & 0xc00)) {
+        } else if (!(sound->getID() & 0xc00)) {
             sound->stop(0);
             mSlots[i].mbIsPlaying = 0;
         } else {
@@ -75,7 +75,7 @@ void JAIAnimeSound::initActorAnimSound(void* _asdata, u32 direction, f32 loopEnd
 
 /* 8028F268-8028F2A0       .text setAnimSoundVec__13JAIAnimeSoundFP8JAIBasicP3VecffUlUc */
 void JAIAnimeSound::setAnimSoundVec(JAIBasic* basic, Vec* r5, f32 currentFrame, f32 speed, u32 r6, u8 ownerID) {
-    JAInter::Actor actor(r5, r5, (u32)r5, (void*)r6);
+    JAInter::Actor actor(r5, r5, r6, r5);
     setAnimSoundActor(basic, &actor, currentFrame, speed, ownerID);
 }
 
@@ -216,7 +216,7 @@ void JAIAnimeSound::playActorAnimSound(JAIBasic* basic, JAInter::Actor* actor, f
         if (*se) {
             mSlots[i].mpAfsData = _afsdata;
             mSlots[i].mbIsPlaying = 1;
-            (*se)->setVolume(_afsdata->mVolume / 127.0f, 0, SOUNDPARAM_Unk5);
+            (*se)->setVolumeU7(_afsdata->mVolume, 0, SOUNDPARAM_Unk5);
             (*se)->setPitch((_afsdata->mPitchFactor * (pitch - 1.0f)) / 32 + _afsdata->mPitch, 0, SOUNDPARAM_Unk5);
             (*se)->setPan(_afsdata->mPanning / 127.0f, 0, SOUNDPARAM_Unk5);
         }

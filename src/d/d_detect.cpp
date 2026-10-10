@@ -39,11 +39,13 @@ dDetect_c::~dDetect_c() {}
 
 /* 8009C0F8-8009C14C       .text proc__9dDetect_cFv */
 void dDetect_c::proc() {
-    /* Nonmatching - 1 literal load order */
-    if (mPlace[0].mTimer > 0) {
-        mPlace[0].mTimer--;
-    } else if (mPlace[0].mTimer < 0) {
-        mPlace[0].mTimer = 1;
+    dDetectPlace_c* place = mPlace;
+    for (int i = 0; i < ARRAY_SIZE(mPlace); i++, place++) {
+        if (place->mTimer > 0) {
+            place->mTimer--;
+        } else if (place->mTimer < 0) {
+            place->mTimer = 1;
+        }
     }
 
     if (mTimer > 0) {
@@ -78,15 +80,14 @@ bool dDetect_c::chk_quake(const cXyz* pos) const {
 
 /* 8009C1E0-8009C254       .text set_quake__9dDetect_cFPC4cXyz */
 void dDetect_c::set_quake(const cXyz* pos) {
-    /* Nonmatching - regalloc, load order */
     if (pos) {
-        if (!mPlace[0].chk_enable()) {
-            mPlace[0].mTimer = -1;
-            mPlace[0].mPos = *pos;
-        } else {
-            // Possible fakematch: There's a double branch here that probably means something got optimized out, but
-            // it's not clear what it was, or if this is exactly the right spot for it.
-            mPlace[0].mPos.y = mPlace[0].mPos.y;
+        dDetectPlace_c* place = mPlace;
+        for (int i = 0; i < ARRAY_SIZE(mPlace); i++, place++) {
+            if (!place->chk_enable()) {
+                place->mTimer = -1;
+                place->mPos = *pos;
+                break;
+            }
         }
     } else {
         mTimer = -1;
@@ -104,7 +105,7 @@ bool dDetect_c::chk_quake_area(const cXyz* pos) const {
 
 /* 8009C32C-8009C588       .text search_tag_light__9dDetect_cFPvPv */
 void* dDetect_c::search_tag_light(void* i_proc, void* i_pos) {
-    if (fopAc_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_Tag_Light_e) {
+    if (fopAcM_IsActor(i_proc) && fopAcM_GetName(i_proc) == fpcNm_Tag_Light_e) {
         daTagLight::Act_c* light = (daTagLight::Act_c*)i_proc;
         const cXyz* pos = (const cXyz*)i_pos;
         if (light->chk_inside(pos)) {

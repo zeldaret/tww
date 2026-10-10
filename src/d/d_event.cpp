@@ -683,7 +683,7 @@ void dEvt_control_c::remove() {
     mMode = dEvtMode_NONE_e;
     mbEndProc = 0;
     mOrderCount = 0;
-    field_0xdd = 0;
+    mDebugStb = 0;
     mEventEndSound = 0;
     field_0xdb = 0;
     mCullFarClipRatio = 0.0f;

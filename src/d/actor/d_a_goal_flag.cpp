@@ -15,105 +15,12 @@
 #include "res/Object/Gflag.h"
 #include "res/Object/Tgflag.h"
 #include "d/d_path.h"
-
-#include "assets/l_txa_dummy_hataTEX.h"
 #include "m_Do/m_Do_controller_pad.h"
 
-static Vec l_pos[] = {
-    { -1000.0f,    0.0f, 0.0f },
-    {  -750.0f,    0.0f, 0.0f },
-    {  -500.0f,    0.0f, 0.0f },
-    {  -250.0f,    0.0f, 0.0f },
-    {     0.0f,    0.0f, 0.0f },
-    {   250.0f,    0.0f, 0.0f },
-    {   500.0f,    0.0f, 0.0f },
-    {   750.0f,    0.0f, 0.0f },
-    {  1000.0f,    0.0f, 0.0f },
-    { -1000.0f, -100.0f, 0.0f },
-    {  -750.0f, -100.0f, 0.0f },
-    {  -500.0f, -100.0f, 0.0f },
-    {  -250.0f, -100.0f, 0.0f },
-    {     0.0f, -100.0f, 0.0f },
-    {   250.0f, -100.0f, 0.0f },
-    {   500.0f, -100.0f, 0.0f },
-    {   750.0f, -100.0f, 0.0f },
-    {  1000.0f, -100.0f, 0.0f },
-    { -1000.0f, -200.0f, 0.0f },
-    {  -750.0f, -200.0f, 0.0f },
-    {  -500.0f, -200.0f, 0.0f },
-    {  -250.0f, -200.0f, 0.0f },
-    {     0.0f, -200.0f, 0.0f },
-    {   250.0f, -200.0f, 0.0f },
-    {   500.0f, -200.0f, 0.0f },
-    {   750.0f, -200.0f, 0.0f },
-    {  1000.0f, -200.0f, 0.0f },
-    { -1000.0f, -300.0f, 0.0f },
-    {  -750.0f, -300.0f, 0.0f },
-    {  -500.0f, -300.0f, 0.0f },
-    {  -250.0f, -300.0f, 0.0f },
-    {     0.0f, -300.0f, 0.0f },
-    {   250.0f, -300.0f, 0.0f },
-    {   500.0f, -300.0f, 0.0f },
-    {   750.0f, -300.0f, 0.0f },
-    {  1000.0f, -300.0f, 0.0f },
-    { -1000.0f, -400.0f, 0.0f },
-    {  -750.0f, -400.0f, 0.0f },
-    {  -500.0f, -400.0f, 0.0f },
-    {  -250.0f, -400.0f, 0.0f },
-    {     0.0f, -400.0f, 0.0f },
-    {   250.0f, -400.0f, 0.0f },
-    {   500.0f, -400.0f, 0.0f },
-    {   750.0f, -400.0f, 0.0f },
-    {  1000.0f, -400.0f, 0.0f }
-};
+#include "assets/l_txa_dummy_hataTEX.h"
 
-static cXy l_texCoord[] = {
-    {   1.0f,  0.0f },
-    { 0.875f,  0.0f },
-    {  0.75f,  0.0f },
-    { 0.625f,  0.0f },
-    {   0.5f,  0.0f },
-    { 0.375f,  0.0f },
-    {  0.25f,  0.0f },
-    { 0.125f,  0.0f },
-    {   0.0f,  0.0f },
-    {   1.0f, 0.25f },
-    { 0.875f, 0.25f },
-    {  0.75f, 0.25f },
-    { 0.625f, 0.25f },
-    {   0.5f, 0.25f },
-    { 0.375f, 0.25f },
-    {  0.25f, 0.25f },
-    { 0.125f, 0.25f },
-    {   0.0f, 0.25f },
-    {   1.0f,  0.5f },
-    { 0.875f,  0.5f },
-    {  0.75f,  0.5f },
-    { 0.625f,  0.5f },
-    {   0.5f,  0.5f },
-    { 0.375f,  0.5f },
-    {  0.25f,  0.5f },
-    { 0.125f,  0.5f },
-    {   0.0f,  0.5f },
-    {   1.0f, 0.75f },
-    { 0.875f, 0.75f },
-    {  0.75f, 0.75f },
-    { 0.625f, 0.75f },
-    {   0.5f, 0.75f },
-    { 0.375f, 0.75f },
-    {  0.25f, 0.75f },
-    { 0.125f, 0.75f },
-    {   0.0f, 0.75f },
-    {   1.0f,  1.0f },
-    { 0.875f,  1.0f },
-    {  0.75f,  1.0f },
-    { 0.625f,  1.0f },
-    {   0.5f,  1.0f },
-    { 0.375f,  1.0f },
-    {  0.25f,  1.0f },
-    { 0.125f,  1.0f },
-    {   0.0f,  1.0f }
-};
+#include "assets/l_pos__d_a_goal_flag.h"
+#include "assets/l_texCoord__d_a_goal_flag.h"
 
 #include "assets/l_goal_flag_DL.h"
 #include "assets/l_goal_flag_matDL.h"
@@ -464,14 +371,14 @@ int daGoal_Flag_c::goal_check() {
     player_from_line_start.y = 0.0f;
 
     f32 finish_line_len = (mGoalFlagPolePos[1] - mGoalFlagPolePos[0]).absXZ();
-    f32 player_along_line = finish_line_dir.getDotProduct(player_from_line_start);
+    f32 player_along_line = finish_line_dir.inprod(player_from_line_start);
 
     cXyz finish_line_normal;
     finish_line_normal.set(finish_line_dir.z, 0.0f, -finish_line_dir.x);
 
     // Positive values mean the player is behind the finish line
     // Negative values mean the player is in front of it
-    f32 player_finish_side = finish_line_normal.getDotProduct(player_from_line_start);
+    f32 player_finish_side = finish_line_normal.inprod(player_from_line_start);
 
     o_result = 0; // Not yet crossed the finish line
     if (player_along_line > 0.0f && player_along_line < finish_line_len) {
@@ -695,7 +602,7 @@ cPhs_State daGoal_Flag_c::_create() {
         cXyz finish_line_normal;
         finish_line_normal.set(finish_line_dir.z, 0.0f, -finish_line_dir.x);
 
-        mPrevPlayerLineSide = finish_line_normal.getDotProduct(initial_player_from_start);
+        mPrevPlayerLineSide = finish_line_normal.inprod(initial_player_from_start);
         mRaceEndState = 0;
 
         for (int i = 0; i < 20; i++) {
@@ -708,7 +615,7 @@ cPhs_State daGoal_Flag_c::_create() {
 
 
 /* 0000183C-00001970       .text get_cloth_anim_sub_factor__FP4cXyzP4cXyzP4cXyzf */
-void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_idealDist) {
+static void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_idealDist) {
     cXyz vec_to_neighbor = *i_otherP - *i_posP;
     cXyz correction_dir = vec_to_neighbor.normZP();
 
@@ -723,7 +630,7 @@ void get_cloth_anim_sub_factor(cXyz* i_posP, cXyz* i_otherP, cXyz* o_dst, f32 i_
 cXyz daGoal_Flag_c::get_cloth_anim_factor(cXyz* i_posArr, cXyz* i_nrmArr, cXyz* i_windVecP, int i_col, int i_row) {
     int index = (i_row * 9) + i_col;
     cXyz pos = i_posArr[index];
-    f32 dot = i_windVecP->getDotProduct(i_nrmArr[index]);
+    f32 dot = i_windVecP->inprod(i_nrmArr[index]);
     if ((i_row == 0 || i_row == 4) && (i_col == 0 || i_col == 8)) {
         return cXyz::Zero;
     }
@@ -950,7 +857,7 @@ BOOL daGoal_Flag_c::TimerExecute() {
                 "race_fail_cam",
             };
             char* event_name = event_name_tbl[mRaceEndState != 3 ? 1 : 0];
-            fopAcM_orderOtherEvent2(this, event_name, dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, event_name);
             eventInfo.onCondition(dEvtCnd_UNK2_e);
         }
     }
@@ -987,7 +894,7 @@ BOOL daGoal_Flag_c::RaceEnd() {
 
     if (end_chk || (mCamFramesPassed > l_HIO.mEndCamEarlyFrame &&
         (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0)) )) {
-        dComIfGp_setNextStage("sea", 1, 0x30);
+        dComIfGp_setNextStage("sea", 1, dIsleRoom_BoatingCourse_e);
     }
 
     return true;
@@ -1027,7 +934,7 @@ bool daGoal_Flag_c::_draw() {
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, mFlagPacket.getMtx());
 
     mFlagPacket.setTevStr(&tevStr);
-    j3dSys.getDrawBuffer(0)->entryImm(&mFlagPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&mFlagPacket, 0);
 
     for (int i = 0; i < mNumRopes; i++) {
         GXColor rope_color;

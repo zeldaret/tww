@@ -81,6 +81,7 @@ static BOOL dOvlpFd_Execute(overlap1_class* i_this) {
 
 /* 802237D0-802237D8       .text dOvlpFd_IsDelete__FP14overlap1_class */
 static BOOL dOvlpFd_IsDelete(overlap1_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

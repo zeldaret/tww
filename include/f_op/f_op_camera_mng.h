@@ -21,35 +21,35 @@ inline void fopCamM_SetAngleZ(camera_class* i_camera, s16 angleZ) {
 }
 
 inline void fopCamM_SetNear(camera_class* i_this, f32 near) {
-    i_this->mNear = near;
+    i_this->view.mNear = near;
 }
 
 inline void fopCamM_SetFar(camera_class* i_this, f32 far) {
-    i_this->mFar = far;
+    i_this->view.mFar = far;
 }
 
 inline void fopCamM_SetFovy(camera_class* i_this, f32 fovy) {
-    i_this->mFovy = fovy;
+    i_this->view.mFovy = fovy;
 }
 
 inline void fopCamM_SetAspect(camera_class* i_this, f32 aspect) {
-    i_this->mAspect = aspect;
+    i_this->view.mAspect = aspect;
 }
 
 inline void fopCamM_SetEye(camera_class* i_this, f32 x, f32 y, f32 z) {
-    i_this->mLookat.mEye.set(x, y, z);
+    i_this->view.mLookat.mEye.set(x, y, z);
 }
 
 inline void fopCamM_SetCenter(camera_class* i_this, f32 x, f32 y, f32 z) {
-    i_this->mLookat.mCenter.set(x, y, z);
+    i_this->view.mLookat.mCenter.set(x, y, z);
 }
 
 inline void fopCamM_SetUp(camera_class* i_this, f32 x, f32 y, f32 z) {
-    i_this->mLookat.mUp.set(x, y, z);
+    i_this->view.mLookat.mUp.set(x, y, z);
 }
 
 inline void fopCamM_SetBank(camera_class* i_this, s16 bank) {
-    i_this->mBank = bank;
+    i_this->view.mBank = bank;
 }
 
 inline void fopCamM_SetPrm1(camera_class* i_this, int prm1) {
@@ -77,24 +77,24 @@ inline s16 fopCamM_GetAngleZ(camera_class* i_camera) {
 }
 
 inline f32 fopCamM_GetFovy(camera_class* i_camera) {
-    return i_camera->mFovy;
+    return i_camera->view.mFovy;
 }
 
 inline cXyz* fopCamM_GetEye_p(camera_class* i_camera) {
-    return &i_camera->mLookat.mEye;
+    return &i_camera->view.mLookat.mEye;
 }
 
 inline cXyz* fopCamM_GetCenter_p(camera_class* i_camera) {
-    return &i_camera->mLookat.mCenter;
+    return &i_camera->view.mLookat.mCenter;
 }
 
 inline cXyz* fopCamM_GetUp_p(camera_class* i_camera) {
-    return &i_camera->mLookat.mUp;
+    return &i_camera->view.mLookat.mUp;
 }
 
 
 inline s16 fopCamM_GetBank(camera_class* i_camera) {
-    return i_camera->mBank;
+    return i_camera->view.mBank;
 }
 
 fpc_ProcID fopCamM_Create(int i_cameraIdx, s16 pProcName, void* i_append);

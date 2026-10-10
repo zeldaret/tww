@@ -18,6 +18,7 @@ enum dRes_ID_OKIOKE {
 
 enum OKIOKE_JNT {
     OKIOKE_JNT_OKIOKE_e=0x0,
+    OKIOKE_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_OKIOKE_H */

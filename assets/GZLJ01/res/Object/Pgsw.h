@@ -24,6 +24,7 @@ enum BPG_KEN1_JNT {
     BPG_KEN1_JNT_WORLD_ROOT_e=0x0,
     BPG_KEN1_JNT_BPG_KEN1_e=0x1,
     BPG_KEN1_JNT_BPG_KEN2_e=0x2,
+    BPG_KEN1_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_PGSW_H */

@@ -42,10 +42,10 @@ static BOOL nodeCallBack_Tt(J3DNode* node, int calcTiming) {
 
         if(i_this != NULL) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
-            if (jntNo == i_this->m_head_jnt_num) {
+            if (jntNo == i_this->getHeadJntNum()) {
                 temp.setall(0.0f);
                 cMtx_YrotM(*calc_mtx, -i_this->getHead_y());
-                cMtx_ZrotM(*calc_mtx, -i_this->getHead_x() - i_this->mHeadAnm.field_0x00);
+                cMtx_ZrotM(*calc_mtx, -i_this->getHead_x() - i_this->mHeadAnm.field_0x00.x);
                 MtxPosition(&temp, &temp2);
                 i_this->setAttentionBasePos(temp2);
                 temp.set(20.0f, -20.0f, 0.0f);
@@ -54,9 +54,9 @@ static BOOL nodeCallBack_Tt(J3DNode* node, int calcTiming) {
                 i_this->setEyePos(temp2);
                 i_this->incAttnSetCount();
 
-            } else if (jntNo == i_this->m_backbone_jnt_num) {
-                mDoMtx_XrotM(*calc_mtx, i_this->getBackbone_y());
-                mDoMtx_ZrotM(*calc_mtx, i_this->m_jnt.getBackbone_x());
+            } else if (jntNo == i_this->getBackboneJntNum()) {
+                cMtx_XrotM(*calc_mtx, (s16)i_this->getBackbone_y());
+                cMtx_ZrotM(*calc_mtx, (s16)i_this->getBackbone_x());
             }
             cMtx_copy(*calc_mtx, J3DSys::mCurrentMtx);
             model->setAnmMtx(jntNo, *calc_mtx);
@@ -86,10 +86,10 @@ void daNpc_Tt_c::setAnmStatus() {
 
 //probably unused JUT_ASSERT
 static void dummy() {
-    OSReport("Tt");
-    OSReport("d_a_npc_tt.cpp");
-    OSReport("0");
-    OSReport("Halt");
+    DEAD_STRING("Tt");
+    DEAD_STRING("d_a_npc_tt.cpp");
+    DEAD_STRING("0");
+    DEAD_STRING("Halt");
 }
 
 #include "d/actor/d_a_npc_tt_anm.inc"
@@ -110,8 +110,8 @@ void daNpc_Tt_c::eventOrder() {
 
 /* 000003DC-00000484       .text checkOrder__10daNpc_Tt_cFv */
 void daNpc_Tt_c::checkOrder() {
-    if (eventInfo.mCommand != dEvtCmd_INDEMO_e) {
-        if (eventInfo.mCommand == dEvtCmd_INTALK_e && ChkOrder(7)) {
+    if (!eventInfo.checkCommandDemoAccrpt()) {
+        if (eventInfo.checkCommandTalk() && ChkOrder(7)) {
             if (dComIfGp_event_chkTalkXY()) {
                 setFlag(0x4);
             } else {
@@ -174,7 +174,7 @@ u32 daNpc_Tt_c::getMsg() {
             msgNo = mMsgNo;
             switch(msgNo) {
                 case 0x5B3:
-                    dComIfGp_setMelodyNum(5);
+                    dComIfGp_setMelodyNum(mDoAud_MELODY_SONG_OF_PASSING_e);
                     break;
             }
     }
@@ -782,15 +782,10 @@ BOOL daNpc_Tt_c::_draw() {
         current.pos.y, mObjAcch.GetGroundH(), mObjAcch.m_gnd, &tevStr
     );
 
-#ifdef __MWERKS__
-    mLineKe.mLineMat.update(10, 0.8f, (GXColor){0xC9, 0xCA, 0xE4, 0xFF}, 0, &tevStr);
-#else
-    GXColor color = (GXColor){0xC9, 0xCA, 0xE4, 0xFF};
-    mLineKe.mLineMat.update(10, 0.8f, color, 0, &tevStr);
-#endif
+    mLineKe.mLineMat.update(10, 0.8f, COMPOUND_LITERAL(GXColor){0xC9, 0xCA, 0xE4, 0xFF}, 0, &tevStr);
     dComIfGd_set3DlineMat(&mLineKe.mLineMat);
 
-    dSnap_RegistFig(DSNAP_TYPE_TT, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_TT, this, 1.0f, 1.0f, 1.0f);
     return TRUE;
 }
 
@@ -942,7 +937,7 @@ BOOL daNpc_Tt_c::CreateHeap() {
         }
     }
 
-    mpMorf->getModel()->setUserArea((u32)(this));
+    mpMorf->getModel()->setUserArea((uintptr_t)(this));
 
     mAcchCir.SetWall(30.0f, 0.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this));

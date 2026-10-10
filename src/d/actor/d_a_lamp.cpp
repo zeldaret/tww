@@ -45,9 +45,7 @@ static BOOL daLamp_Execute(lamp_class* i_this) {
     MtxTrans(10.0f, -140.0f, -15.0f, 1);
 
     cXyz offset;
-    offset.z = 0.0f;
-    offset.y = 0.0f;
-    offset.x = 0.0f;
+    offset.x = offset.y = offset.z = 0.0f;
     MtxPosition(&offset, &i_this->mPos);
 
     if (!i_this->mParticleInit) {
@@ -185,7 +183,7 @@ static cPhs_State daLamp_Create(fopAc_ac_c* i_ac) {
             i_this->mSph.Set(sph_src);
             i_this->mSph.SetStts(&i_this->mStts);
 
-            i_this->mCycleCtr = cM_rndFX(32768.0f);
+            i_this->mCycleCtr = cM_rndFX(0x8000);
 
             for (int i = 0; i < 2; i++) {
                 daLamp_Execute(i_this);

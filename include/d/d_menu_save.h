@@ -68,8 +68,8 @@ public:
     u8* getDataBufPtr() { return dataBuf; }
     u8 getEndStatus() { return endStatus; }
     u8 getSaveStatus() { return saveStatus; }
-    void setErrorFlag(u8) {}
-    void setErrorType(u8) {}
+    void setErrorFlag(u8 i_errorFlag) { errorFlag = i_errorFlag; }
+    void setErrorType(u8 i_errorType) { errorType = i_errorType; }
     void setUseType(u8 i_useType) { useType = i_useType; }
 
     virtual ~dMenu_save_c() {}
@@ -156,7 +156,7 @@ public:
     BOOL PaneRotate(s16, u8, fopMsgM_pane_class*, f32, f32, f32, u8);
     BOOL PaneTranceMenu(s16, u8, fopMsgM_pane_class*, f32, f32, u8, int);
 
-public:
+private:
     /* 0x0004 */ JKRArchive* archive;
     /* 0x0008 */ dDlst_MenuSave_c MenuSave;
     /* 0x0014 */ fopMsgM_pane_class field_0x14[8];
@@ -193,8 +193,8 @@ public:
     /* 0x0539 */ u8 field_0x539;
     /* 0x053A */ u8 field_0x53a;
     /* 0x053B */ u8 field_0x53b;
-    /* 0x053C */ u8 field_0x53c;
-    /* 0x053D */ u8 field_0x53d;
+    /* 0x053C */ u8 errorFlag;
+    /* 0x053D */ u8 errorType;
     /* 0x0540 */ int field_0x540;
     /* 0x0544 */ s16 field_0x544;
     /* 0x0546 */ u8 field_0x546[0x0554 - 0x0546];
@@ -205,6 +205,8 @@ class dMs_HIO_c : public JORReflexible {
 public:
     dMs_HIO_c();
     virtual ~dMs_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 id;
     /* 0x05 */ u8 field_0x5;

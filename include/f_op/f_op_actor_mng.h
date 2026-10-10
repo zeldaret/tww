@@ -18,9 +18,6 @@
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                                                  \
     }
 
-// Unofficial name, kept to avoid conflicts with open PRs. TODO: Remove later.
-#define fopAcM_SetupActor fopAcM_ct
-
 #if VERSION == VERSION_DEMO
 #define fopAcM_ct_Demo fopAcM_ct
 #define fopAcM_ct_Retail(ptr, ClassName)
@@ -127,22 +124,6 @@ inline MtxP fopAcM_GetMtx(fopAc_ac_c* pActor) {
     return pActor->cullMtx;
 }
 
-inline u32 fopAcM_CheckStatus(fopAc_ac_c* pActor, u32 status) {
-    return pActor->actor_status & status;
-}
-
-inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
-    return pActor->actor_status & fopAcStts_CARRY_e;
-}
-
-inline void fopAcM_ClearStatusMap(fopAc_ac_c* pActor) {
-    pActor->actor_status &= ~0x3F;
-}
-
-inline bool fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
-    return fopAcM_CheckStatus(pActor, fopAcStts_HOOK_CARRY_e);
-}
-
 inline u32 fopAcM_GetParam(void* pActor) {
     return fpcM_GetParam(pActor);
 }
@@ -179,12 +160,24 @@ inline void fopAcM_SetGroup(fopAc_ac_c* pActor, u8 group) {
     pActor->group = group;
 }
 
+inline u32 fopAcM_CheckStatus(fopAc_ac_c* pActor, u32 status) {
+    return pActor->actor_status & status;
+}
+
 inline void fopAcM_OnStatus(fopAc_ac_c* pActor, u32 flag) {
     pActor->actor_status |= flag;
 }
 
 inline void fopAcM_OffStatus(fopAc_ac_c* pActor, u32 flag) {
     pActor->actor_status &= ~flag;
+}
+
+inline u32 fopAcM_checkCarryNow(fopAc_ac_c* pActor) {
+    return pActor->actor_status & fopAcStts_CARRY_e;
+}
+
+inline bool fopAcM_checkHookCarryNow(fopAc_ac_c* pActor) {
+    return fopAcM_CheckStatus(pActor, fopAcStts_HOOK_CARRY_e);
 }
 
 inline BOOL fopAcM_CheckStatusMap(fopAc_ac_c* pActor, u32) {
@@ -194,6 +187,10 @@ inline BOOL fopAcM_CheckStatusMap(fopAc_ac_c* pActor, u32) {
 
 inline void fopAcM_SetStatusMap(fopAc_ac_c* pActor, u32 flag) {
     pActor->actor_status = (pActor->actor_status & ~0x3F) | fopAcStts_SHOWMAP_e | flag;
+}
+
+inline void fopAcM_ClearStatusMap(fopAc_ac_c* pActor) {
+    pActor->actor_status &= ~0x3F;
 }
 
 inline fopAc_ac_c* fopAcM_Search(fopAcIt_JudgeFunc func, void* param) {
@@ -551,9 +548,9 @@ s32 fopAcM_orderZHintEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderSpeakEvent(fopAc_ac_c* i_actor);
 s32 fopAcM_orderDoorEvent(fopAc_ac_c*, fopAc_ac_c*);
 s32 fopAcM_orderCatchEvent(fopAc_ac_c*, fopAc_ac_c*);
-s32 fopAcM_orderOtherEvent2(fopAc_ac_c* i_this, char* pEventName, u16 flag, u16 hind = -1);
-s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, char* pEventName, u16 flag, u16 hind);
-s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, char* pEventName, u16 flag, u16 hind);
+s32 fopAcM_orderOtherEvent2(fopAc_ac_c* i_this, char* i_eventName, u16 flag, u16 hind = -1);
+s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, char* i_eventName, u16 flag, u16 hind);
+s32 fopAcM_orderChangeEvent(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, char* i_eventName, u16 flag, u16 hind);
 s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, s16 eventIdx, u16 flag, u16 hind);
 s32 fopAcM_orderChangeEventId(fopAc_ac_c* i_this, fopAc_ac_c* i_partner, s16 eventIdx, u16 flag, u16 hind);
 s32 fopAcM_orderOtherEventId(fopAc_ac_c* actor, s16 eventIdx, u8 mapToolID = -1, u16 hind = -1,
@@ -684,7 +681,7 @@ inline void fopAcM_seStart(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
 }
 
 inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 i_seNum, u32 param_2) {
-    mDoAud_monsSeStart(i_seNum, &actor->eyePos, fopAcM_GetID(actor), 0, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
+    mDoAud_monsSeStart(i_seNum, &actor->eyePos, fopAcM_GetID(actor), param_2, dComIfGp_getReverb(fopAcM_GetRoomNo(actor)));
 }
 
 inline void fopAcM_monsSeStart(fopAc_ac_c* actor, u32 i_seNum, Vec* i_sePos, u32 param_2) {

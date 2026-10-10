@@ -25,6 +25,7 @@ enum VBINR_JNT {
     VBINR_JNT_BIN_0_OUTSIDE_e=0x1,
     VBINR_JNT_BIN_1_CAP_MODEL_e=0x2,
     VBINR_JNT_BIN_2_INSIDE_e=0x3,
+    VBINR_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_MED_R_H */

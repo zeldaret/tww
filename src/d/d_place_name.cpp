@@ -229,6 +229,7 @@ static BOOL dPn_Execute(dPn_c* i_this) {
 
 /* 801616CC-801616D4       .text dPn_IsDelete__FP5dPn_c */
 static BOOL dPn_IsDelete(dPn_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

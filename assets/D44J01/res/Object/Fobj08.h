@@ -23,6 +23,7 @@ enum dRes_ID_FOBJ08 {
 enum FOBJ08_JNT {
     FOBJ08_JNT_KASEKI_BASE_e=0x0,
     FOBJ08_JNT_KASEKI_TOP_e=0x1,
+    FOBJ08_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_FOBJ08_H */

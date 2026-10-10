@@ -22,6 +22,7 @@ enum dRes_ID_HSEHI1 {
 
 enum HSEHI1_JNT {
     HSEHI1_JNT_POLYSURFACE7_e=0x0,
+    HSEHI1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HSEHI1_H */

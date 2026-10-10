@@ -52,7 +52,7 @@ public:
     virtual void init(const Vec& vec, const Mtx& mtx) {
         J3DSys::mCurrentS = vec;
 #ifndef DECOMPCTX // Hack, see comment in dolzel.pch for details
-        J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+        J3DSys::mParentS = COMPOUND_LITERAL(Vec){1.0f, 1.0f, 1.0f};
 #endif
         J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;
         J3DSys::mCurrentMtx[0][1] = mtx[0][1] * J3DSys::mCurrentS.y;
@@ -96,7 +96,7 @@ public:
     virtual ~J3DMtxCalcMaya() {}
     virtual void init(const Vec& vec, const Mtx& mtx) {
 #ifndef DECOMPCTX // Hack, see comment in dolzel.pch for details
-        J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+        J3DSys::mParentS = COMPOUND_LITERAL(Vec){1.0f, 1.0f, 1.0f};
 #endif
         J3DSys::mCurrentS = vec;
         J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;
@@ -119,7 +119,6 @@ class J3DMtxCalcMayaAnm : public J3DMtxCalcMaya, public J3DMtxCalcAnm {
 public:
     J3DMtxCalcMayaAnm(J3DAnmTransform* pAnmTransform)
         : J3DMtxCalcMaya(), J3DMtxCalcAnm(pAnmTransform) {}
-    virtual ~J3DMtxCalcMayaAnm() {}
     virtual void calc(u16 jnt_no) { J3DMtxCalcAnm::calc(jnt_no); }
 };
 
@@ -134,14 +133,14 @@ class J3DJoint : public J3DNode {
 public:
     void initialize();
     void addMesh(J3DMaterial*);
-    void calcIn();
-    void calcOut();
-    void entryIn();
-    u32 getType() const { return 'NJNT'; }
+    virtual void calcIn();
+    virtual void calcOut();
+    virtual void entryIn();
+    virtual u32 getType() const { return 'NJNT'; }
     void recursiveCalc();
 
     J3DJoint() { initialize(); }
-    ~J3DJoint() {}
+    virtual ~J3DJoint() {}
 
     J3DMaterial* getMesh() { return mMesh; }
     u16 getJntNo() const { return mJntNo; }
@@ -176,5 +175,13 @@ private:
     /* 0x5C */ J3DMtxCalc* mOldMtxCalc;
     /* 0x60 */ J3DMaterial* mMesh;
 };  // Size: 0x64
+
+inline BOOL checkScaleOne(Vec v) {
+    if (v.x == 1.0f && v.y == 1.0f && v.z == 1.0f) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
 
 #endif /* J3DJOINT_H */

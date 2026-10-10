@@ -2,6 +2,7 @@
 #define D_S_OPEN
 
 #include "JSystem/J2DGraph/J2DPane.h"
+#include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_drawlist.h"
 #include "f_op/f_op_msg_mng.h"
 #include "f_op/f_op_scene.h"
@@ -13,34 +14,42 @@ class dScnOpen_message_c {
 public:
     dScnOpen_message_c(JKRExpHeap*);
     virtual ~dScnOpen_message_c();
-    inline void set_pane_pointer(J2DPane* tx1, J2DPane* tx2);
     void set_message(u32, int);
     void exec();
 
-public:
+    f32 getAlpha() { return alpha; }
+    bool isNext() { return mbIsNext; }
+    void set_pane_pointer(J2DPane* tx1, J2DPane* tx2) {
+        tTextBox = (J2DTextBox*)tx1;
+        rTextBox = (J2DTextBox*)tx2;
+        tTextBox->setFont(tFont);
+        rTextBox->setFont(rFont);
+        rTextBox->setLineSpace(tTextBox->getLineSpace());
+    }
+
+private:
     /* 0x0004 */ char msg1[0x800];
     /* 0x0804 */ char msg2[0x800];
     /* 0x1004 */ char msg3[0x800];
     /* 0x1804 */ char msg4[0x800];
-    /* 0x2004 */ fopMsgM_msgDataProc_c mMsgDataProc;
-    /* 0x22A4 */ u8 field_0x22a4[0x22bc - 0x22a4];
-    /* 0x22BC */ u8 field_0x22bc;
+    /* 0x2004 */ fopMsgM_msgDataProc_c msgDataProc;
+    /* 0x22A4 */ JMSMesgEntry_c msgEntry;
+    /* 0x22BC */ u8 mesgStatus;
     /* 0x22BD */ u8 field_0x22bd;
     /* 0x22BE */ u8 field_0x22be;
     /* 0x22BF */ u8 field_0x22bf;
-    /* 0x22C0 */ u32 field_0x22c0;
-    /* 0x22C4 */ J2DTextBox* field_0x22c4;
-    /* 0x22C8 */ J2DTextBox* field_0x22c8;
+    /* 0x22C0 */ u32 msgNo;
+    /* 0x22C4 */ J2DTextBox* tTextBox;
+    /* 0x22C8 */ J2DTextBox* rTextBox;
     /* 0x22CC */ JUTFont* tFont;
     /* 0x22D0 */ JUTFont* rFont;
     /* 0x22D4 */ JKRExpHeap* exp_heap;
-    /* 0x22D8 */ f32 field_0x22d8;
-    /* 0x22DC */ u32 field_0x22dc;
-    /* 0x22E0 */ u32 field_0x22e0;
-    /* 0x22E4 */ u32 field_0x22e4;
-    /* 0x22E8 */ u8 field_0x22e8;
-    /* 0x22EC */ u32 field_0x22ec;
-    /* 0x22F0 */ u32 field_0x22f0;
+    /* 0x22D8 */ f32 alpha;
+    /* 0x22DC */ int mTimer;
+    /* 0x22E0 */ int mTimerMax;
+    /* 0x22E4 */ u32 mProc;
+    /* 0x22E8 */ bool mbIsNext;
+    /* 0x22EC */ int field_0x22ec;
 };
 
 class dScnOpen_proc_c : public dDlst_base_c {
@@ -49,8 +58,11 @@ public:
     virtual ~dScnOpen_proc_c();
     void proc_execute();
     void proc_draw();
-    virtual void draw();
+    virtual void draw() { proc_draw(); }
 
+    bool isEnd() { return mState == 44; }
+
+public:
     /* 0x004 */ JKRExpHeap* exp_heap;
     /* 0x008 */ dScnOpen_message_c* m_message;
     /* 0x00C */ J2DScreen* m_Screen;
@@ -72,10 +84,13 @@ public:
     BOOL draw();
     BOOL execute();
 
+private:
     /* 0x1C4 */ request_of_phase_process_class mPhs;
     /* 0x1CC */ JKRSolidHeap* solid_heap;
     /* 0x1D0 */ dScnOpen_proc_c* mpProc;
+#if VERSION > VERSION_DEMO
     /* 0x1D4 */ u8 field_0x1d4;
+#endif
 };
 
 #endif /* D_S_OPEN */

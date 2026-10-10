@@ -302,6 +302,7 @@ static BOOL daKt_Execute(kt_class* i_this) {
 
 /* 00001240-00001248       .text daKt_IsDelete__FP8kt_class */
 static BOOL daKt_IsDelete(kt_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

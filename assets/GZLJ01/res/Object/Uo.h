@@ -80,22 +80,27 @@ enum UO_JNT {
     UO_JNT_LEGR1_e=0x10,
     UO_JNT_LEGR2_e=0x11,
     UO_JNT_FOOTR_e=0x12,
+    UO_NUM_JNTS_e=0x13,
 };
 
 enum UO_LETTER_JNT {
     UO_LETTER_JNT_UO_LETTER_e=0x0,
+    UO_LETTER_NUM_JNTS_e=0x1,
 };
 
 enum UO01_HEAD_JNT {
     UO01_HEAD_JNT_UO01_HEAD_e=0x0,
+    UO01_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UO02_HEAD_JNT {
     UO02_HEAD_JNT_UO02_HEAD_e=0x0,
+    UO02_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum UO03_HEAD_JNT {
     UO03_HEAD_JNT_UO03_HEAD_e=0x0,
+    UO03_HEAD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_UO_H */

@@ -100,6 +100,7 @@ static BOOL daKytag02_Execute(kytag02_class* i_this) {
 
 /* 00000400-00000408       .text daKytag02_IsDelete__FP13kytag02_class */
 static BOOL daKytag02_IsDelete(kytag02_class* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

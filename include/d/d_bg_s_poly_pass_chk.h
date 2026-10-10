@@ -7,6 +7,7 @@ class cBgS_PolyPassChk {
 public:
     virtual ~cBgS_PolyPassChk() {}
 
+protected:
     /* 0x4 */ bool mbObjThrough;
     /* 0x5 */ bool mbCamThrough;
     /* 0x6 */ bool mbLinkThrough;
@@ -28,6 +29,14 @@ public:
         mbRopeThrough = false;
     }
     virtual ~dBgS_PolyPassChk() {}
+
+    bool ChkObj() { return mbObjThrough; }
+    bool ChkCam() { return mbCamThrough; }
+    bool ChkLink() { return mbLinkThrough; }
+    bool ChkArrow() { return mbArrowThrough; }
+    bool ChkBomb() { return mbBombThrough; }
+    bool ChkBoomerang() { return mbBoomerangThrough; }
+    bool ChkRope() { return mbRopeThrough; }
 
     void SetObj() { mbObjThrough = true; }
     void SetCam() { mbCamThrough = true; }

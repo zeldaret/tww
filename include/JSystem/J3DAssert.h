@@ -3,9 +3,16 @@
 
 #include "JSystem/JUtility/JUTAssert.h"
 
-#define J3D_ASSERT_NULLPTR(LINE, COND) 
-#define J3D_ASSERT_RANGE(LINE, COND) 
-#define J3D_ASSERT_NONZEROARG(LINE, COND) 
-#define J3D_ASSERT_ALLOCMEM(LINE, COND) 
+#ifdef DEBUG
+#define J3D_ASSERT_NULLPTR(LINE, COND) JUT_ASSERT_MSG(LINE, (COND) != 0, "Error : null pointer.")
+#define J3D_ASSERT_RANGE(LINE, COND) JUT_ASSERT_MSG(LINE, (COND) != 0, "Error : range over.")
+#define J3D_ASSERT_NONZEROARG(LINE, COND) JUT_ASSERT_MSG(LINE, (COND) != 0, "Error : non-zero argument is specified 0.")
+#define J3D_ASSERT_ALLOCMEM(LINE, COND) JUT_ASSERT_MSG(LINE, (COND) != 0, "Error : allocate memory.")
+#else
+#define J3D_ASSERT_NULLPTR(LINE, COND) (void)0
+#define J3D_ASSERT_RANGE(LINE, COND) (void)0
+#define J3D_ASSERT_NONZEROARG(LINE, COND) (void)0
+#define J3D_ASSERT_ALLOCMEM(LINE, COND) (void)0
+#endif
 
 #endif /* J3DASSERT_H */

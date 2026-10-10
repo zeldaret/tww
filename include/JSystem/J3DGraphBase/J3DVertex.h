@@ -2,10 +2,10 @@
 #define J3DVERTEX_H
 
 #include "dolphin/gx/GXAttr.h"
+#include "dolphin/gx/GXStruct.h"
 #include "dolphin/mtx/vec.h"
 #include "dolphin/types.h"
 
-typedef struct _GXColor GXColor;
 class J3DModel;
 class J3DAnmVtxColor;
 class J3DVertexBuffer;

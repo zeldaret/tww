@@ -199,6 +199,7 @@ static BOOL daSwItem_Execute(void* i_this) {
 
 /* 00000800-00000808       .text daSwItem_IsDelete__FPv */
 static BOOL daSwItem_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

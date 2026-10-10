@@ -56,7 +56,7 @@ bool JASystem::Kernel::THeap::alloc(THeap* mother, u32 param_2) {
     bool local_43 = false;
     THeap* local_30 = NULL;
     void* local_34;
-    for (JSUTreeIterator<THeap> it = mother->mTree.getFirstChild(); it != mother->mTree.getEndChild(); it++) {
+    for (JSUTreeIterator<THeap> it = mother->mTree.getFirstChild(); it != mother->mTree.getEndChild(); ++it) {
         if (r29 >= mother->mBase + local_2c) {
             break;
         }
@@ -99,7 +99,7 @@ bool JASystem::Kernel::THeap::free() {
     JSUTreeIterator<THeap> stack_20;
     for (JSUTreeIterator<THeap> it(mTree.getFirstChild()); it != mTree.getEndChild(); it = stack_20) {
         stack_20 = it;
-        stack_20++;
+        ++stack_20;
         it->free();
     }
     JSUTree<THeap>* parentTree = mTree.getParent();
@@ -126,9 +126,9 @@ bool JASystem::Kernel::THeap::free() {
 }
 
 static void dummy(JASystem::Kernel::TDisposer* disposer) {
-    OSReport("------------------------------------\n");
-    OSReport("level >= 0 && level < 7");
-    OSReport("%s Heap %08x [Addr %8x , Max %8x] %c\n");
+    DEAD_STRING("------------------------------------\n");
+    DEAD_STRING("level >= 0 && level < 7");
+    DEAD_STRING("%s Heap %08x [Addr %8x , Max %8x] %c\n");
 }
 
 /* 8027D088-8027D1FC       .text insertChild__Q38JASystem6Kernel5THeapFPQ38JASystem6Kernel5THeapPQ38JASystem6Kernel5THeapPvUlb */

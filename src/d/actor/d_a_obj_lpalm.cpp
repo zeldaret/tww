@@ -50,7 +50,7 @@ BOOL daObjLpalm_c::CreateHeap() {
     if (mModel == NULL)
         return false;
 
-    mModel->setUserArea((u32)this);
+    mModel->setUserArea((uintptr_t)this);
     mpBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_OYASHI_DZB_OYASHI_e), dBgW::MOVE_BG_e, &mModel->getBaseTRMtx());
     if (mpBgW == NULL)
         return false;
@@ -67,7 +67,7 @@ void daObjLpalm_c::CreateInit() {
     mAnimDir[0] = 0;
     mAnimDir[1] = 0;
     mAnimWave[0] = 0;
-    mAnimWave[1] = cM_rndFX(32768.0f);
+    mAnimWave[1] = cM_rndFX(0x8000);
     fopAcM_SetMtx(this, mModel->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -350.0f, -50.0f, -350.0f, 350.0f, 1300.0f, 350.0f);
     fopAcM_setCullSizeFar(this, 2.37f);
@@ -122,7 +122,6 @@ static BOOL daObjLpalmExecute(void* i_this) {
 
 /* 0000054C-000008C4       .text _execute__12daObjLpalm_cFv */
 bool daObjLpalm_c::_execute() {
-    /* Nonmatching */
     if (attr().flag0)
         return true;
 
@@ -188,6 +187,7 @@ static BOOL daObjLpalmDraw(void* i_this) {
 
 /* 00000950-00000958       .text daObjLpalmIsDelete__FPv */
 static BOOL daObjLpalmIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

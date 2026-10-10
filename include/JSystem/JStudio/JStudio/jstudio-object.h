@@ -4,8 +4,6 @@
 #include "JSystem/JStudio/JStudio/jstudio-control.h"
 #include "limits.h"
 
-typedef struct _GXColor GXColor;
-
 namespace JStudio {
 namespace data {
     enum TEOperationData {
@@ -135,7 +133,7 @@ public:
     virtual void do_wait(u32);
     virtual void do_data(void const*, u32, void const*, u32);
 
-    TAdaptor* getAdaptor() { return mpAdaptor; }
+    TAdaptor* getAdaptor() const { return mpAdaptor; }
     TControl* getControl() { return (TControl*)stb::TObject::getControl(); }
     const TControl* getControl() const { return (const TControl*)stb::TObject::getControl(); }
 

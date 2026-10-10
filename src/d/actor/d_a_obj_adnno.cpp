@@ -156,6 +156,7 @@ static BOOL daObjAdnno_Execute(void* i_this) {
 
 /* 0000051C-00000524       .text daObjAdnno_IsDelete__FPv */
 static BOOL daObjAdnno_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

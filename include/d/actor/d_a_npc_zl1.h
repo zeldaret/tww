@@ -26,7 +26,6 @@ public:
 
 class daNpc_Zl1_c : public fopNpc_npc_c {
 public:
-
     typedef int (daNpc_Zl1_c::*ActionFunc)(void*);
 
     struct anm_prm_c {
@@ -37,7 +36,25 @@ public:
         int mLoopMode;
     };
 
-    daNpc_Zl1_c();
+    enum {
+        EYE_L_e = 0,
+        EYE_L_DAM_A_e = 1,
+        EYE_L_DAM_B_e = 2,
+        EYE_R_e = 3,
+        EYE_R_DAM_A_e = 4,
+        EYE_R_DAM_B_e = 5,
+        EYE_MAX = 6,
+    };
+    enum {
+        EYEBLOW_L_e = 0,
+        EYEBLOW_L_DAM_A_e = 1,
+        EYEBLOW_L_DAM_B_e = 2,
+        EYEBLOW_R_e = 3,
+        EYEBLOW_R_DAM_A_e = 4,
+        EYEBLOW_R_DAM_B_e = 5,
+        EYEBLOW_MAX = 6 
+    };
+
     void _nodeCB_Head(J3DNode*, J3DModel*);
     void _nodeCB_BackBone(J3DNode*, J3DModel*);
     BOOL set_startPos(int);
@@ -81,8 +98,8 @@ public:
     void checkOrder();
     bool chk_talk();
     bool chk_parts_notMov();
-    fopAc_ac_c* searchByID(fpc_ProcID, int*);
-    bool partner_search_sub(void* (*)(void*, void*));
+    fopAc_ac_c* searchByID(fpc_ProcID, BOOL*);
+    bool partner_search_sub(fpcLyIt_JudgeFunc);
     void partner_search();
     void setEyeCtrl();
     void clrEyeCtrl();
@@ -120,7 +137,9 @@ public:
     BOOL cut_move_JMP_OFF();
     void cut_init_OMAMORI_ONOFF(int);
     BOOL cut_move_OMAMORI_ONOFF();
+#if VERSION > VERSION_DEMO
     void cut_init_SURPRISED(int);
+#endif
     BOOL cut_move_SURPRISED();
     void privateCut(int);
     void endEvent();
@@ -163,6 +182,7 @@ public:
     BOOL bodyCreateHeap();
     BOOL itemCreateHeap();
     BOOL CreateHeap();
+
 public:
     /* 0x6C4 */ request_of_phase_process_class mPhs;
     /* 0x6CC */ s8 m_hed_jnt_num;
@@ -196,8 +216,9 @@ public:
     /* 0x790 */ u8 field_0x790[0x794 - 0x790];
     /* 0x794 */ csXyz field_0x794;
     /* 0x79C */ BOOL field_0x79C;
-    /* 0x7A0 */ s16 mEventIdx[6];
-    /* 0x7AC */ u8 field_0x7AC[0x7AE - 0x7AC];
+    /* 0x7A0 */ s16 mEventIdx[4];
+    /* 0x7A8 */ s16 field_0x7A8;
+    /* 0x7AA */ u8 field_0x7AA[0x7AE - 0x7AA];
     /* 0x7AE */ s16 field_0x7AE;
     /* 0x7B0 */ s16 field_0x7B0;
     /* 0x7B2 */ s16 field_0x7B2;
@@ -254,13 +275,13 @@ public:
     /* 0x84F */ s8 field_0x84F;
     /* 0x850 */ s8 field_0x850;
     /* 0x851 */ s8 field_0x851;
-    /* 0x854 */ J3DJoint* mJoint1;
-    /* 0x858 */ J3DJoint* mJoint2;
-    /* 0x85C */ J3DJoint* mJoint3;
-    /* 0x860 */ J3DMaterial* field_0x860[6];
-    /* 0x878 */ J3DMaterial* field_0x878[6];
-    /* 0x890 */ J3DShape* field_0x890[6];
-    /* 0x8A8 */ J3DShape* field_0x8A8[6];
+    /* 0x854 */ J3DJoint* mpRootJoint;
+    /* 0x858 */ J3DJoint* mpEyeJoint;
+    /* 0x85C */ J3DJoint* mpEyebrowJoint;
+    /* 0x860 */ J3DMaterial* mpEyeMats[EYE_MAX];
+    /* 0x878 */ J3DMaterial* mpEyebrowMats[EYEBLOW_MAX];
+    /* 0x890 */ J3DShape* mpEyeShapes[EYE_MAX];
+    /* 0x8A8 */ J3DShape* mpEyebrowShapes[EYEBLOW_MAX];
     /* 0x8C0 */ mDoExt_offCupOnAupPacket mOffCupOnAupPacket1;
     /* 0x8D0 */ mDoExt_offCupOnAupPacket mOffCupOnAupPacket2;
     /* 0x8E0 */ mDoExt_onCupOffAupPacket mOnCupOffAupPacket1;

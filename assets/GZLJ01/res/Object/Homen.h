@@ -26,10 +26,12 @@ enum dRes_ID_HOMEN {
 
 enum HOMEN1_JNT {
     HOMEN1_JNT_POLYSURFACE1917_e=0x0,
+    HOMEN1_NUM_JNTS_e=0x1,
 };
 
 enum HOMEN2_JNT {
     HOMEN2_JNT_POLYSURFACE1918_e=0x0,
+    HOMEN2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HOMEN_H */

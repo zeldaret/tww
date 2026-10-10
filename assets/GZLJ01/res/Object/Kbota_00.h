@@ -23,6 +23,7 @@ enum dRes_ID_KBOTA_00 {
 enum KBOTA_00_JNT {
     KBOTA_00_JNT_BASE_e=0x0,
     KBOTA_00_JNT_BOTAN_e=0x1,
+    KBOTA_00_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_KBOTA_00_H */

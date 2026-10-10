@@ -25,8 +25,8 @@ bool daSwTact_c::_delete() {
 }
 
 /* 000000AC-000000CC       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c* i_ac) {
-    return ((daSwTact_c *)i_ac)->CreateHeap();
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daSwTact_c *)i_this)->CreateHeap();
 }
 
 /* 000000CC-00000194       .text CreateHeap__10daSwTact_cFv */
@@ -94,17 +94,17 @@ cPhs_State daSwTact_c::_create() {
 s32 daSwTact_c::getAnswer() {
     switch (mAnswer) {
     case 0:
-        return 0;
+        return mDoAud_MELODY_WINDS_REQUIEM_e;
     case 1:
-        return 1;
+        return mDoAud_MELODY_BALLAD_OF_GALES_e;
     case 2:
-        return 5;
+        return mDoAud_MELODY_SONG_OF_PASSING_e;
     case 3:
-        return 2;
+        return mDoAud_MELODY_COMMAND_MELODY_e;
     case 4:
-        return 3;
+        return mDoAud_MELODY_EARTH_GODS_LYRIC_e;
     case 5:
-        return 4;
+        return mDoAud_MELODY_WIND_GODS_ARIA_e;
     case 0xFF:
     default:
         return -1;
@@ -128,32 +128,40 @@ bool daSwTact_c::_execute() {
         s32 tactMusic = player->getTactMusic();
         switch (mAnswer) {
         case 0:
-            if (tactMusic == 0)
+            if (tactMusic == mDoAud_MELODY_WINDS_REQUIEM_e)
                 mTrigger = true;
             break;
         case 1:
-            if (tactMusic == 1)
+            if (tactMusic == mDoAud_MELODY_BALLAD_OF_GALES_e)
                 mTrigger = true;
             break;
         case 2:
-            if (tactMusic == 5)
+            if (tactMusic == mDoAud_MELODY_SONG_OF_PASSING_e)
                 mTrigger = true;
             break;
         case 3:
-            if (tactMusic == 2)
+            if (tactMusic == mDoAud_MELODY_COMMAND_MELODY_e)
                 mTrigger = true;
             break;
         case 4:
-            if (tactMusic == 3)
+            if (tactMusic == mDoAud_MELODY_EARTH_GODS_LYRIC_e)
                 mTrigger = true;
             break;
         case 5:
-            if (tactMusic == 4)
+            if (tactMusic == mDoAud_MELODY_WIND_GODS_ARIA_e)
                 mTrigger = true;
             break;
         case 0xFF:
-            if (tactMusic == 0 || tactMusic == 1 || tactMusic == 2 || tactMusic == 3 || tactMusic == 4 || tactMusic == 5)
+            if (
+                tactMusic == mDoAud_MELODY_WINDS_REQUIEM_e ||
+                tactMusic == mDoAud_MELODY_BALLAD_OF_GALES_e ||
+                tactMusic == mDoAud_MELODY_COMMAND_MELODY_e ||
+                tactMusic == mDoAud_MELODY_EARTH_GODS_LYRIC_e ||
+                tactMusic == mDoAud_MELODY_WIND_GODS_ARIA_e ||
+                tactMusic == mDoAud_MELODY_SONG_OF_PASSING_e
+            ) {
                 mTrigger = true;
+            }
             break;
         }
     }
@@ -181,27 +189,28 @@ bool daSwTact_c::_draw() {
 }
 
 /* 00000720-00000740       .text daSwTact_Create__FPv */
-static cPhs_State daSwTact_Create(void* i_ac) {
-    return ((daSwTact_c *)i_ac)->_create();
+static cPhs_State daSwTact_Create(void* i_this) {
+    return ((daSwTact_c *)i_this)->_create();
 }
 
 /* 00000740-00000764       .text daSwTact_Delete__FPv */
-static BOOL daSwTact_Delete(void* i_ac) {
-    return ((daSwTact_c*)i_ac)->_delete();
+static BOOL daSwTact_Delete(void* i_this) {
+    return ((daSwTact_c*)i_this)->_delete();
 }
 
 /* 00000764-00000788       .text daSwTact_Draw__FPv */
-static BOOL daSwTact_Draw(void* i_ac) {
-    return ((daSwTact_c*)i_ac)->_draw();
+static BOOL daSwTact_Draw(void* i_this) {
+    return ((daSwTact_c*)i_this)->_draw();
 }
 
 /* 00000788-000007AC       .text daSwTact_Execute__FPv */
-static BOOL daSwTact_Execute(void* i_ac) {
-    return ((daSwTact_c*)i_ac)->_execute();
+static BOOL daSwTact_Execute(void* i_this) {
+    return ((daSwTact_c*)i_this)->_execute();
 }
 
 /* 000007AC-000007B4       .text daSwTact_IsDelete__FPv */
-static BOOL daSwTact_IsDelete(void* i_ac) {
+static BOOL daSwTact_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

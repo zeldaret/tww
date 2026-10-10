@@ -12,6 +12,6 @@
 f32 JASystem::TInstRand::getY(int, int) const {
     static JMath::TRandom_fast_ oRandom(0);
     f32 tmp = (oRandom.get_ufloat_1() * 2.0f - 0.9999999f);
-    tmp *= field_0xc;
-    return tmp + field_0x8;
+    tmp *= mWidth;
+    return tmp + mBase;
 }

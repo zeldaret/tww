@@ -27,6 +27,7 @@ enum HAMI2_JNT {
     HAMI2_JNT_MONO1_e=0x1,
     HAMI2_JNT_MONO2_e=0x2,
     HAMI2_JNT_NAKA_e=0x3,
+    HAMI2_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_HAMI2_H */

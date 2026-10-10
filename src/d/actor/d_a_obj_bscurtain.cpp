@@ -115,6 +115,7 @@ static BOOL daObj_BscurtainDraw(void* i_this) {
 
 /* 000004F8-00000500       .text daObj_BscurtainIsDelete__FPv */
 static BOOL daObj_BscurtainIsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

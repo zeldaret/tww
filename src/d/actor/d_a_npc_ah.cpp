@@ -135,12 +135,12 @@ static BOOL da_Npc_Ah_nodeCallBack(J3DNode* node, int calcTiming) {
         MTXCopy(model->getAnmMtx(jointNo), *calc_mtx);
 
         if(jointNo == i_this->m_jnt.getHeadJntNum()){
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getHead_y());
-            cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getHead_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
         }
         else if(jointNo == i_this->m_jnt.getBackboneJntNum()){
-            mDoMtx_XrotM(*calc_mtx, i_this->m_jnt.getBackbone_y());
-            cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getBackbone_x());
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
         }
 #if VERSION > VERSION_DEMO
         MTXCopy(*calc_mtx, model->getAnmMtx(jointNo));
@@ -240,19 +240,19 @@ BOOL daNpcAh_c::createHeap() {
 #if VERSION > VERSION_DEMO
     if(mpMorf == NULL || mpMorf->getModel() == NULL) return FALSE;
 #endif
-    m_jnt.setHeadJntNum(modelData->getJointTree().getJointName()->getIndex("head"));
+    m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
     JUT_ASSERT(DEMO_SELECT(0x2B4, 0x2B8), m_jnt.getHeadJntNum() >= 0);
-    m_jnt.setBackboneJntNum(modelData->getJointTree().getJointName()->getIndex("backbone"));
+    m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
     JUT_ASSERT(DEMO_SELECT(0x2B8, 0x2BC), m_jnt.getBackboneJntNum() >= 0);
 
     if(initTexPatternAnm(false) == FALSE) return FALSE;
 
     for(u16 jntIdx = 0; jntIdx < modelData->getJointNum(); jntIdx++){
         if(jntIdx == m_jnt.getHeadJntNum() || jntIdx == m_jnt.getBackboneJntNum()){
-            modelData->getJointTree().getJointNodePointer(jntIdx)->setCallBack(da_Npc_Ah_nodeCallBack);
+            modelData->getJointNodePointer(jntIdx)->setCallBack(da_Npc_Ah_nodeCallBack);
         }
     }   
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 30.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
     return TRUE;
@@ -339,7 +339,7 @@ bool daNpcAh_c::_draw() {
                                      mObjAcch.GetGroundH(),
                                      mObjAcch.m_gnd, 
                                      &tevStr);
-    dSnap_RegistFig(DSNAP_TYPE_UNK7F, this, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_NPC_AH, this, 1.0f, 1.0f, 1.0f);
     return true;
 }
 
@@ -483,7 +483,7 @@ void daNpcAh_c::privateCut() {
         "MES_SET",
         "GET_ITEM",
     };
-    int staff_idx = dComIfGp_evmng_getMyStaffId(*l_npc_staff_id);
+    int staff_idx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[0]);
     if(staff_idx != -1){
         mActIdx = dComIfGp_evmng_getMyActIdx(staff_idx, cut_name_tbl, 2, 1, 0);
         if(mActIdx == -1){
@@ -571,7 +571,7 @@ void daNpcAh_c::eventGetItemInit() {
 
 /* 00001718-00001860       .text talk2__9daNpcAh_cFi */
 u16 daNpcAh_c::talk2(int i_param) {
-    u16 ret = 0xff;
+    u16 msg_status = 0xff;
     if(mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e){
         if(i_param == 1) mCurrMsgNo = getMsg();
         mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgNo, this);
@@ -580,8 +580,8 @@ u16 daNpcAh_c::talk2(int i_param) {
     }
     else{
         if(mpCurrMsg != NULL) {
-            ret = mpCurrMsg->mStatus;
-            switch(ret){
+            msg_status = mpCurrMsg->mStatus;
+            switch(msg_status){
                 case fopMsgStts_MSG_DISPLAYED_e:
                     mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
                     if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) fopMsgM_messageSet(mCurrMsgNo);
@@ -594,14 +594,14 @@ u16 daNpcAh_c::talk2(int i_param) {
                     mCurrMsgBsPcId = -1;
                     break;
             }
-            field_0x734 = ret;
-            anmAtr(ret);
+            field_0x734 = msg_status;
+            anmAtr(msg_status);
         }
         else{
             mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
         }
     }
-    return ret;
+    return msg_status;
 }
 
 /* 00001860-000018B0       .text next_msgStatus__9daNpcAh_cFPUl */
@@ -646,7 +646,7 @@ void daNpcAh_c::chkMsg() {
 }
 
 /* 0000195C-00001964       .text setMessage__9daNpcAh_cFUl */
-void daNpcAh_c::setMessage(unsigned long msgNo) {
+void daNpcAh_c::setMessage(u32 msgNo) {
     mCurrMsgNo = msgNo;
 }
 
@@ -851,7 +851,7 @@ void daNpcAh_c::playAnm() {
 }
 
 /* 00002148-00002218       .text setAnm__9daNpcAh_cFUcif */
-void daNpcAh_c::setAnm(unsigned char bck_ix, int loopMode, float morf) {
+void daNpcAh_c::setAnm(u8 bck_ix, int loopMode, float morf) {
     f32 tempMorf = field_0x71C;
     if(tempMorf>=0.0f){
         morf = tempMorf;

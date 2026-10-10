@@ -24,6 +24,7 @@ enum HPU2_JNT {
     HPU2_JNT_HPI2_00_e=0x0,
     HPU2_JNT_DAI_e=0x1,
     HPU2_JNT_KAITEN_e=0x2,
+    HPU2_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_HPU2_H */

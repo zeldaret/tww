@@ -22,6 +22,7 @@ enum dRes_ID_USOVMC {
 
 enum VMCBX_JNT {
     VMCBX_JNT_MC_BASE_MODEL_e=0x0,
+    VMCBX_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_USOVMC_H */

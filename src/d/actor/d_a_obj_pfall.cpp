@@ -143,7 +143,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
     if(mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     set_mtx();
     mpMorf->calc();
     mpBgW = new dBgW();
@@ -347,7 +347,7 @@ void daObj_Pfall_c::mode_event() {
             if(l_HIO.field_0x06 != 0) {
                 mode_wait_init();
             } else {
-                dComIfGp_setNextStage("sea", 15, 11);
+                dComIfGp_setNextStage("sea", 15, dIsleRoom_WindfallIsland_e);
             }
         }
     } else {

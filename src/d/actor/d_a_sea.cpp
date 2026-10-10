@@ -256,7 +256,7 @@ f32 daSea_packet_c::CalcFlatInterTarget(cXyz& pos) {
 
     f32 result = 1.0f;
 
-    for (int i = 0; i < (int)ARRAY_SIZE(pos_around); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(pos_around); i++) {
         int ix = mIdxX + pos_around[i][0];
         int iz = mIdxZ + pos_around[i][1];
 
@@ -542,7 +542,7 @@ void daSea_packet_c::execute(cXyz& pos) {
         aThetaXTable[i] = mWaveInfo.GetKm(i) * mWaveInfo.GetVx(i);
         aThetaZTable[i] = mWaveInfo.GetKm(i) * mWaveInfo.GetVz(i);
 
-        aOffsAnimTable[i] = 65536.0f * (mWaveInfo.GetRatio(i) - 0.5f);
+        aOffsAnimTable[i] = 0x10000 * (mWaveInfo.GetRatio(i) - 0.5f);
         aHeightTable[i] = mWaveInfo.GetBaseHeight(i) * scale;
     }
 
@@ -1140,7 +1140,7 @@ void daSea_packet_c::draw() {
 /* 8015D80C-8015D87C       .text daSea_Draw__FP9sea_class */
 static BOOL daSea_Draw(sea_class* i_this) {
     dComIfGd_setListSky();
-    j3dSys.getDrawBuffer(1)->entryImm(&l_cloth, 31);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu)->entryImm(&l_cloth, 31);
     dComIfGd_setList();
     return TRUE;
 }

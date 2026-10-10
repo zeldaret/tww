@@ -330,7 +330,7 @@ void* daObjComing::Act_c::chk_make_pos_act(void* actor, void* data) {
     daObjComing::Act_c* i_this = (daObjComing::Act_c*)actor;
     daObjComing::Act_c::MakeTmp_c* tmp = (daObjComing::Act_c::MakeTmp_c*)data;
 
-    if (fopAc_IsActor(i_this)) {
+    if (fopAcM_IsActor(i_this)) {
         s16 proc = fopAcM_GetName(i_this);
         if (proc != fpcNm_SHIP_e && proc != fpcNm_PLAYER_e && (std::fabsf(i_this->current.pos.y - tmp->m0C.y) < tmp->m1C + 100.0f)) {
             if (i_this->current.pos.absXZ(tmp->m0C) < tmp->m18 + 100.0f) {
@@ -417,7 +417,7 @@ bool daObjComing::Act_c::barrel2_get_param(daObjComing::PrmBarrel2_c* barrel2) {
             barrel2->m14 = barrel2_get_buoy(uVar5);
 
             s16 angle = cLib_targetAngleY(fopAcM_GetPosition_p(ship), (cXyz*)&sp08.m0C);
-            s16 rnd = cM_rndFX(8192.0f);
+            s16 rnd = cM_rndFX(0x2000);
             barrel2->mAngleY = angle + rnd;
             return true;
         }

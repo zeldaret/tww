@@ -87,7 +87,7 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[] = {
         /* m44              */ 2.5f,
         /* mPauseDuration   */ 10
     },
-    {
+    { // Unused type
         /* mHeapSize        */ 0x8000,
         /* mFlags           */ static_cast<AttrFlag_e>(FLAG_REQ_HEAVY | FLAG_STAY_PRESSED | FLAG_OBEY_SAVE),
         /* mScale           */ 1.5f,
@@ -156,8 +156,8 @@ bool daObjSwpush::Act_c::create_heap() {
     }
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, flag);
     if (mpModel) {
-        model_data->getJointNodePointer(1)->setCallBack(jnodeCB);
-        mpModel->setUserArea((u32) this);
+        model_data->getJointNodePointer(KBOTA_00_JNT_BOTAN_e)->setCallBack(jnodeCB);
+        mpModel->setUserArea((uintptr_t) this);
     }
 
     BOOL btp_success = TRUE;
@@ -797,6 +797,7 @@ BOOL Mthd_Draw(void* i_this) {
 
 /* 00002078-00002080       .text Mthd_IsDelete__Q211daObjSwpush28@unnamed@d_a_obj_swpush_cpp@FPv */
 BOOL Mthd_IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

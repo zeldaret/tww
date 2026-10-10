@@ -44,7 +44,7 @@ static const int PRELOAD_RES_MAX = 0x23;
 static const int PRELOAD_DYL_MAX = 0x1B;
 
 struct PreLoadInfoT_s {
-    char* stageName;
+    const char* stageName;
     const s16* dylKeyTbl;
     const char** resName;
     u8 dylKeyTblNum;
@@ -1066,6 +1066,7 @@ static BOOL dScnPly_Execute(dScnPly_ply_c* i_this) {
 
 /* 802350B4-802350BC       .text dScnPly_IsDelete__FP13dScnPly_ply_c */
 static BOOL dScnPly_IsDelete(dScnPly_ply_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

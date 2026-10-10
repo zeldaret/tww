@@ -18,6 +18,7 @@ enum dRes_ID_SPEAR {
 
 enum MO_YARI_JNT {
     MO_YARI_JNT_MO_YARI_e=0x0,
+    MO_YARI_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_SPEAR_H */

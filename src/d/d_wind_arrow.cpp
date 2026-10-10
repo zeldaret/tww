@@ -31,7 +31,7 @@ BOOL dWindArrow_c::createHeap() {
 void dWindArrow_c::adjustHeap() {
     mDoExt_restoreCurrentHeap();
     if (mDoExt_adjustSolidHeap(heap) >= 0)
-        DCStoreRangeNoSync(heap->getStartAddr(), heap->getSize());
+        DCStoreRangeNoSync(heap->getStartAddr(), heap->getHeapSize());
 }
 
 /* 8023E46C-8023E48C       .text dWindArrow_Draw__FP12dWindArrow_c */
@@ -98,6 +98,7 @@ static BOOL dWindArrow_Execute(dWindArrow_c* i_this) {
 
 /* 8023E738-8023E740       .text dWindArrow_IsDelete__FP12dWindArrow_c */
 static BOOL dWindArrow_IsDelete(dWindArrow_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

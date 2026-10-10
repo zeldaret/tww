@@ -51,6 +51,7 @@ BOOL daObjWood::Method::Draw(void* i_this) {
 
 /* 00000388-00000390       .text IsDelete__Q29daObjWood6MethodFPv */
 BOOL daObjWood::Method::IsDelete(void* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

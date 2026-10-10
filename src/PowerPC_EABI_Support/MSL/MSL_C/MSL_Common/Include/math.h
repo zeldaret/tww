@@ -7,7 +7,9 @@
 #define HUGE_VALF (*(float*) __float_huge)
 
 #define M_PI 3.14159265358979323846f
-#define M_SQRT3 1.73205f
+#define M_SQRT2 1.41421356237309504880f
+#define M_SQRT3 1.73205080756887729353f
+#define M_SQRT1_2 0.70710678118654752440f
 
 #define DEG_TO_RAD(degrees) (degrees * (M_PI / 180.0f))
 #define RAD_TO_DEG(radians) (radians * (180.0f / M_PI + 0.000005f)) // the 0.000005f is probably a fakematch

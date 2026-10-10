@@ -26,22 +26,27 @@ enum dRes_ID_VTIL {
 
 enum VTIL1_JNT {
     VTIL1_JNT_VTIL1_MODEL_e=0x0,
+    VTIL1_NUM_JNTS_e=0x1,
 };
 
 enum VTIL2_JNT {
     VTIL2_JNT_VTIL2_MODEL_e=0x0,
+    VTIL2_NUM_JNTS_e=0x1,
 };
 
 enum VTIL3_JNT {
     VTIL3_JNT_VTIL3_MODEL_e=0x0,
+    VTIL3_NUM_JNTS_e=0x1,
 };
 
 enum VTIL4_JNT {
     VTIL4_JNT_VTIL4_MODEL_e=0x0,
+    VTIL4_NUM_JNTS_e=0x1,
 };
 
 enum VTIL5_JNT {
     VTIL5_JNT_VTIL5_MODEL_e=0x0,
+    VTIL5_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VTIL_H */

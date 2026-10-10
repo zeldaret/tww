@@ -357,7 +357,7 @@ void daTitle_proc_c::calc_2d_alpha() {
         pos.set(pane[4].mPosTopLeftOrig.x - 320.0f, pane[4].mPosTopLeftOrig.y - 240.0f, 0.0f);
 
         csXyz angle;
-        angle.x = (s16)cM_rndFX(32768.0f);
+        angle.x = (s16)cM_rndFX(0x8000);
         angle.y = 0;
         angle.z = (s16)cM_rndFX(4000.0f);
 
@@ -558,6 +558,7 @@ static BOOL daTitle_Execute(daTitle_c* i_this) {
 
 /* 00001CF8-00001D00       .text daTitle_IsDelete__FP9daTitle_c */
 static BOOL daTitle_IsDelete(daTitle_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 

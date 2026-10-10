@@ -42,6 +42,7 @@ enum SW_JNT {
     SW_JNT_TUBONILB_e=0x8,
     SW_JNT_TUBOMIRA_e=0x9,
     SW_JNT_TUBONIRB_e=0xA,
+    SW_NUM_JNTS_e=0xB,
 };
 
 #endif /* RES_SS_H */

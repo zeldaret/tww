@@ -38,6 +38,7 @@ enum dRes_ID_EKSKZ {
 
 enum EKSKZ_JNT {
     EKSKZ_JNT_EKSKZ_e=0x0,
+    EKSKZ_NUM_JNTS_e=0x1,
 };
 
 enum YOCWD00_JNT {
@@ -47,6 +48,7 @@ enum YOCWD00_JNT {
     YOCWD00_JNT_BIGOUTER_e=0x3,
     YOCWD00_JNT_INNER_e=0x4,
     YOCWD00_JNT_OUTER_e=0x5,
+    YOCWD00_NUM_JNTS_e=0x6,
 };
 
 #endif /* RES_EKSKZ_H */

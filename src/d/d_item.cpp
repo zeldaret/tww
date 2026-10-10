@@ -1069,17 +1069,17 @@ void item_func_triforce8() {
 
 /* 800C43D8-800C4408       .text item_func_pearl1__Fv */
 void item_func_pearl1() {
-    dComIfGs_onSymbol(0);
+    dComIfGs_onSymbol(dSymbol_NAYRU_e);
 }
 
 /* 800C4408-800C4438       .text item_func_pearl2__Fv */
 void item_func_pearl2() {
-    dComIfGs_onSymbol(1);
+    dComIfGs_onSymbol(dSymbol_DIN_e);
 }
 
 /* 800C4438-800C4468       .text item_func_pearl3__Fv */
 void item_func_pearl3() {
-    dComIfGs_onSymbol(2);
+    dComIfGs_onSymbol(dSymbol_FARORE_e);
 }
 
 /* 800C4468-800C446C       .text item_func_knowledge_tf__Fv */
@@ -2433,47 +2433,47 @@ int item_getcheck_func_triforce8() {
 
 /* 800C7010-800C7040       .text item_getcheck_func_pearl1__Fv */
 int item_getcheck_func_pearl1() {
-    return dComIfGs_isSymbol(0);
+    return dComIfGs_isSymbol(dSymbol_NAYRU_e);
 }
 
 /* 800C7040-800C7070       .text item_getcheck_func_pearl2__Fv */
 int item_getcheck_func_pearl2() {
-    return dComIfGs_isSymbol(1);
+    return dComIfGs_isSymbol(dSymbol_DIN_e);
 }
 
 /* 800C7070-800C70A0       .text item_getcheck_func_pearl3__Fv */
 int item_getcheck_func_pearl3() {
-    return dComIfGs_isSymbol(2);
+    return dComIfGs_isSymbol(dSymbol_FARORE_e);
 }
 
 /* 800C70A0-800C70D0       .text item_getcheck_func_tact_song1__Fv */
 int item_getcheck_func_tact_song1() {
-    return dComIfGs_isTact(0);
+    return dComIfGs_isTact(mDoAud_MELODY_WINDS_REQUIEM_e);
 }
 
 /* 800C70D0-800C7100       .text item_getcheck_func_tact_song2__Fv */
 int item_getcheck_func_tact_song2() {
-    return dComIfGs_isTact(1);
+    return dComIfGs_isTact(mDoAud_MELODY_BALLAD_OF_GALES_e);
 }
 
 /* 800C7100-800C7130       .text item_getcheck_func_tact_song3__Fv */
 int item_getcheck_func_tact_song3() {
-    return dComIfGs_isTact(2);
+    return dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e);
 }
 
 /* 800C7130-800C7160       .text item_getcheck_func_tact_song4__Fv */
 int item_getcheck_func_tact_song4() {
-    return dComIfGs_isTact(3);
+    return dComIfGs_isTact(mDoAud_MELODY_EARTH_GODS_LYRIC_e);
 }
 
 /* 800C7160-800C7190       .text item_getcheck_func_tact_song5__Fv */
 int item_getcheck_func_tact_song5() {
-    return dComIfGs_isTact(4);
+    return dComIfGs_isTact(mDoAud_MELODY_WIND_GODS_ARIA_e);
 }
 
 /* 800C7190-800C71C0       .text item_getcheck_func_tact_song6__Fv */
 int item_getcheck_func_tact_song6() {
-    return dComIfGs_isTact(5);
+    return dComIfGs_isTact(mDoAud_MELODY_SONG_OF_PASSING_e);
 }
 
 /* 800C71C0-800C71F4       .text item_getcheck_func_normal_sail__Fv */
@@ -2951,7 +2951,7 @@ u8 getEmonoItemFromLifeBallTable(u16 itemTableIdx) {
     items[14] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM14(), itemTableIdx);
     items[15] = dComIfGp_CharTbl()->GetInf(dComIfGp_CharTbl()->GetNITEM15(), itemTableIdx);
     
-    for (int i = 0; i < (int)ARRAY_SIZE(items); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(items); i++) {
         if (isEmono(items[i])) {
             return items[i];
         }

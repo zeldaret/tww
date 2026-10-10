@@ -3,7 +3,7 @@
 
 #include "d/d_kankyo.h"
 
-class cXyz;
+struct cXyz;
 
 struct DEMO_PLIGHT {
     /* 0x00 */ int field_0x00;

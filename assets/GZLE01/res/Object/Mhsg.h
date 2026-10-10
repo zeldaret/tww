@@ -38,22 +38,27 @@ enum dRes_ID_MHSG {
 
 enum MHSG12_JNT {
     MHSG12_JNT_MHSG12_e=0x0,
+    MHSG12_NUM_JNTS_e=0x1,
 };
 
 enum MHSG15_JNT {
     MHSG15_JNT_MHSG15_e=0x0,
+    MHSG15_NUM_JNTS_e=0x1,
 };
 
 enum MHSG4H_JNT {
     MHSG4H_JNT_MHSG4H_e=0x0,
+    MHSG4H_NUM_JNTS_e=0x1,
 };
 
 enum MHSG6_JNT {
     MHSG6_JNT_MHSG6_e=0x0,
+    MHSG6_NUM_JNTS_e=0x1,
 };
 
 enum MHSG9_JNT {
     MHSG9_JNT_MHSG9_e=0x0,
+    MHSG9_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MHSG_H */

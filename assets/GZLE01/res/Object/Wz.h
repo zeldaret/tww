@@ -85,16 +85,19 @@ enum WZ_JNT {
     WZ_JNT_WIZ_SHITA_1_e=0x15,
     WZ_JNT_WIZ_ROBE_1_e=0x16,
     WZ_JNT_WIZ_ROBE_2_e=0x17,
+    WZ_NUM_JNTS_e=0x18,
 };
 
 enum WZ_KAMEN_JNT {
     WZ_KAMEN_JNT_KAMEN_e=0x0,
+    WZ_KAMEN_NUM_JNTS_e=0x1,
 };
 
 enum WZ_STICK_JNT {
     WZ_STICK_JNT_LOCATOR2_e=0x0,
     WZ_STICK_JNT_WIZROBE_STICK_e=0x1,
     WZ_STICK_JNT_OHOSISAMA_e=0x2,
+    WZ_STICK_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_WZ_H */

@@ -3,7 +3,7 @@
 
 #include "dolphin/types.h"
 
-class cXyz;
+struct cXyz;
 
 class d2DBSplinePath {
 public:

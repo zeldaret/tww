@@ -22,6 +22,7 @@ enum dRes_ID_HAMI4 {
 
 enum HAMI4_JNT {
     HAMI4_JNT_POLYSURFACE2043_e=0x0,
+    HAMI4_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HAMI4_H */

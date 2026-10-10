@@ -58,10 +58,7 @@ inline void cLib_setBit(T& value, T bit) {
 
 template <typename T>
 inline T cLib_minMaxLimit(T val, T min, T max) {
-    return (T)((T)val < (T)min ? (T)min : ((T)val > (T)max ? (T)max : (T)val));
-    // Might also be one of these? Try them first if having issues getting this inline to match.
-    // return (T)((T)val < min ? min : ((T)val > max ? max : (T)val));
-    // return (T)(val < min ? min : (val > max ? max : val));
+    return (T)((T)val < min ? min : ((T)val > max ? max : (T)val));
 }
 
 template <typename T>
@@ -71,12 +68,12 @@ inline bool cLib_checkMinMaxLimit(T val, T min, T max) {
 
 template <typename T>
 inline T cLib_maxLimit(T val, T max) {
-    return (T)((T)val > (T)max ? (T)max : (T)val);
+    return (T)((T)val > max ? max : (T)val);
 }
 
 template <typename T>
 inline T cLib_minLimit(T val, T min) {
-    return (T)((T)val < (T)min ? (T)min : (T)val);
+    return (T)((T)val < min ? min : (T)val);
 }
 
 template <typename T>

@@ -38,12 +38,14 @@ enum VDSWT0_JNT {
     VDSWT0_JNT_ROOT_VDSWT0_e=0x0,
     VDSWT0_JNT_FACE_L_e=0x1,
     VDSWT0_JNT_AURA_L_e=0x2,
+    VDSWT0_NUM_JNTS_e=0x3,
 };
 
 enum VDSWT1_JNT {
     VDSWT1_JNT_ROOT_VDSWT1_e=0x0,
     VDSWT1_JNT_FACE_R_e=0x1,
     VDSWT1_JNT_AURA_R_e=0x2,
+    VDSWT1_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_VDS_H */

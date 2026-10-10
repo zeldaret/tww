@@ -19,6 +19,7 @@ enum dRes_ID_VSWON {
 enum VSWON_JNT {
     VSWON_JNT_ROOT_VSWON_e=0x0,
     VSWON_JNT_VSWON_MODEL_e=0x1,
+    VSWON_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VSWON_H */

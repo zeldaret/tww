@@ -11,7 +11,7 @@ namespace daObjHlift {
 
 namespace {
     int L_time_lag_num;
-    static const Attr_c L_attr = { 30.0f, 50.0f, 10.0f, 2.0f, 0.3f, 1.2f, 250.0f, 10, 16384, 2.5f, 0x00, 0x02, 0x0a, 0x08, 0x07, 0x00, 0x00, 0x00 };
+    static const Attr_c L_attr = { 30.0f, 50.0f, 10.0f, 2.0f, 0.3f, 1.2f, 250.0f, 10, 0x4000, 2.5f, 0x00, 0x02, 0x0a, 0x08, 0x07, 0x00, 0x00, 0x00 };
 } // namespace
 
 Mtx Act_c::M_tmp_mtx;
@@ -243,14 +243,14 @@ void daObjHlift::Act_c::init_mtx() {
 /* 00000C40-00000C8C       .text rot_set__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::rot_set() {
     f32 fVar1 = current.pos.y - home.pos.y;
-    f32 fVar2 = (65536.0f/L_attr.field_0x18);
+    f32 fVar2 = (0x10000 / L_attr.field_0x18);
     shape_angle.y = -(s16)(int)(fVar1 * fVar2);
 }
 
 /* 00000C8C-00000CA8       .text vib_set__Q210daObjHlift5Act_cFv */
 void daObjHlift::Act_c::vib_set() {
     field_0x2E8 = L_attr.field_0x1C;
-    field_0x2EA = 16384;
+    field_0x2EA = 0x4000;
 }
 
 /* 00000CA8-00000D70       .text vib_proc__Q210daObjHlift5Act_cFv */

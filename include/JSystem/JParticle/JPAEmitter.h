@@ -32,8 +32,8 @@ public:
         keyBlocks = NULL;
         fldBlocks = NULL;
         texDataBase = NULL;
-        fldNum = NULL;
-        mTextureNum = NULL;
+        fldNum = 0;
+        mTextureNum = 0;
         keyNum = 0;
     }
 
@@ -130,8 +130,8 @@ public:
     /* 0x0E0 */ JGeometry::TVec3<f32> mEmitterGlobalCenter;
     /* 0x0EC */ JGeometry::TVec3<f32> mPublicScale;
     /* 0x0F8 */ JGeometry::TVec3<f32> mgReRDir;
-    /* 0x100 */ f32 mFovy;
-    /* 0x104 */ f32 mAspect;
+    /* 0x104 */ f32 mFovy;
+    /* 0x108 */ f32 mAspect;
     /* 0x10C */ JGeometry::TVec3<f32> mVolumePos;
     /* 0x118 */ JGeometry::TVec3<f32> mVelOmni;
     /* 0x124 */ JGeometry::TVec3<f32> mVelAxis;
@@ -212,10 +212,10 @@ public:
 
     u8 getGlobalAlpha() { return mGlobalPrmColor.a; }
     void setGlobalAlpha(u8 alpha) { mGlobalPrmColor.a = alpha; }
-    void setGlobalRTMatrix(MtxP mtx) {
+    void setGlobalRTMatrix(const MtxP mtx) {
         JPASetRMtxTVecfromMtx(mtx, mGlobalRotation, mGlobalTranslation);
     }
-    void setGlobalSRTMatrix(MtxP mtx) {
+    void setGlobalSRTMatrix(const MtxP mtx) {
         JPASetRMtxSTVecfromMtx(mtx, mGlobalRotation, mGlobalDynamicsScale, mGlobalTranslation);
     }
     void setGlobalRotation(const JGeometry::TVec3<s16>& rot) {
@@ -285,6 +285,7 @@ public:
     void quitImmortalEmitter() { clearStatus(JPAEmtrStts_Immortal); }
 
     void becomeContinuousParticle() { mMaxFrame = 0; }
+    bool isContinuousParticle() { return mMaxFrame == 0; }
     void becomeInvalidEmitter() {
         mMaxFrame = -1;
         stopCreateParticle();
@@ -319,12 +320,12 @@ public:
 
     f32 getFrame() { return mTick.getFrame(); }
 
+    void drawEmitterCallBack() { drawCB(); }
+    void drawCB() { if (mpEmitterCallBack != NULL) mpEmitterCallBack->draw(this); }
+
+    void calcEmitterGlobalTranslation(JGeometry::TVec3<f32>& out) { calcEmitterGlobalPosition(out); }
+
     // TODO
-    void calcEmitterGlobalTranslation(JGeometry::TVec3<f32>&) {}
-    void drawCB() {}
-    void drawEmitterCallBack() {}
-    void getgReRDirection(JGeometry::TVec3<f32>&) {}
-    void isContinuousParticle() {}
     void setEmitterRotation(const JGeometry::TVec3<s16>&) {}
 
     static JPAEmitterInfo emtrInfo;
@@ -344,6 +345,9 @@ public:
     s32 getCurrentCreateNumber() const {
         return emtrInfo.mVolumeEmitCount;
     }
+    void getgReRDirection(JGeometry::TVec3<f32>& out) {
+        out.set(emtrInfo.mgReRDir);
+    }
 
     static f32 getAspect() { return emtrInfo.mAspect; }
     static f32 getFovy() { return emtrInfo.mFovy; }
@@ -358,7 +362,10 @@ private:
             mpEmitterCallBack->execute(this);
     }
 
-public:
+private:
+    friend class JPAEmitterManager;
+    friend class JPABaseParticle;
+
     /* 0x000 */ VolumeFunc mVolumeFunc;
     /* 0x00C */ JGeometry::TVec3<f32> mEmitterScale;
     /* 0x018 */ JGeometry::TVec3<f32> mEmitterTranslation;

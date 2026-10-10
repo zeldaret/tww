@@ -35,7 +35,7 @@ public:
         typedef void (daOship_c::*ModeProcFunc)(void);
         ModeProcFunc mInitFunc;
         ModeProcFunc mUpdFunc;
-        char* mModeName;
+        const char* mModeName;
     };
 
     u8 getSw() { return mSwitchA; }
@@ -155,7 +155,7 @@ public:
     daOship_HIO_c();
     virtual ~daOship_HIO_c() {}
 
-    void genMessage(JORMContext* ctx) {}
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ u8 m04;

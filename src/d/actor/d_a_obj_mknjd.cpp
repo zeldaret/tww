@@ -196,7 +196,7 @@ BOOL daObjMknjD::Act_c::CreateHeap() {
             }
         }
 
-        mMainMdl->setUserArea(reinterpret_cast<u32>(this));
+        mMainMdl->setUserArea(reinterpret_cast<uintptr_t>(this));
 
         int curTblIdx = 0;
         nameTable = mBreakMdl->getModelData()->getJointName();
@@ -214,7 +214,7 @@ BOOL daObjMknjD::Act_c::CreateHeap() {
             }
         }
 
-        mBreakMdl->setUserArea(reinterpret_cast<u32>(this));
+        mBreakMdl->setUserArea(reinterpret_cast<uintptr_t>(this));
         mMainMdlAlpha = 0xFF;
 
         return TRUE;
@@ -256,7 +256,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[5]);
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[7]);
 
-        mMelodyNum = 4;
+        mMelodyNum = mDoAud_MELODY_WIND_GODS_ARIA_e;
         mGiveItemNo = dItemNo_WIND_GODS_ARIA_e;
         eventInfo.setEventName("MKNJD_K_TALK");
         m0430 = dSv_event_flag_c::UNK_2910;
@@ -267,7 +267,7 @@ BOOL daObjMknjD::Act_c::Create() {
         mErrorEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[4]);
         mLessonEventIdx = dComIfGp_evmng_getEventIdx(daObjMknjD_EventName[6]);
 
-        mMelodyNum = 3;
+        mMelodyNum = mDoAud_MELODY_EARTH_GODS_LYRIC_e;
         mGiveItemNo = dItemNo_EARTH_GODS_LYRIC_e;
         eventInfo.setEventName("MKNJD_D_TALK");
         m0430 = dSv_event_flag_c::UNK_2920;
@@ -351,8 +351,8 @@ BOOL daObjMknjD::Act_c::Mthd_Delete() {
 
 /* 00000C34-00000CC8       .text set_mtx__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::set_mtx() {
-    mDoMtx_stack_c::transS(current.pos);
-    mDoMtx_stack_c::ZXYrotM(shape_angle);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::ZXYrotM(shape_angle.x, shape_angle.y, shape_angle.z);
 
     mMainMdl->setBaseTRMtx(mDoMtx_stack_c::get());
     mBreakMdl->setBaseTRMtx(mDoMtx_stack_c::get());
@@ -372,12 +372,12 @@ void daObjMknjD::Act_c::init_mtx() {
 void daObjMknjD::Act_c::setGoal(int i_staffIdx) {
     cXyz pos = *dComIfGp_evmng_getMyXyzP(i_staffIdx, "Posion");
 
-    mDoMtx_stack_c::transS(current.pos);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
 
-    mDoMtx_stack_c::transM(pos);
+    mDoMtx_stack_c::transM(pos.x, pos.y, pos.z);
     
-    mDoMtx_multVecZero(mDoMtx_stack_c::get(), &pos);
+    mDoMtx_stack_c::multVecZero(&pos);
     mGoalPos = pos;
 
     dComIfGp_evmng_setGoal(&mGoalPos);
@@ -416,9 +416,11 @@ u16 daObjMknjD::Act_c::talk(int i_param1) {
                     fopMsgM_messageSendOn();
                 }
 
+                anmAtr(fopMsgStts_MSG_ENDS_e);
                 mMsgPtr->mStatus = fopMsgStts_MSG_ENDS_e;
             }
             else if (msgStatus == fopMsgStts_BOX_CLOSED_e) {
+                anmAtr(fopMsgStts_MSG_DESTROYED_e);
                 mMsgPtr->mStatus = fopMsgStts_MSG_DESTROYED_e;
                 mMsgPID = fpcM_ERROR_PROCESS_ID_e;
             }
@@ -433,7 +435,7 @@ u16 daObjMknjD::Act_c::talk(int i_param1) {
 
 /* 00000F88-00001348       .text privateCut__Q210daObjMknjD5Act_cFv */
 void daObjMknjD::Act_c::privateCut() {
-    static char* cut_name_table[] = {
+    static char* cut_name_tbl[] = {
         "SETGOAL",
         "SETANGLE",
         "WAIT",
@@ -449,7 +451,7 @@ void daObjMknjD::Act_c::privateCut() {
 
     int staffIdx = dComIfGp_evmng_getMyStaffId("MknjD");
     if (staffIdx != -1) {
-        mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_table, ARRAY_SIZE(cut_name_table), TRUE, 0);
+        mActionIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, ARRAY_SIZE(cut_name_tbl), TRUE, 0);
 
         if (mActionIdx == -1) {
             dComIfGp_evmng_cutEnd(staffIdx);
@@ -745,10 +747,10 @@ BOOL daObjMknjD::Act_c::Execute(Mtx** i_mtx) {
             break;
         case 1:
             if (m043E == 1) {
-                player->setTactZev(fopAcM_GetID(this), 4, daObjMknjD_EventName[3]);
+                player->setTactZev(fopAcM_GetID(this), mDoAud_MELODY_WIND_GODS_ARIA_e, daObjMknjD_EventName[3]);
             }
             else {
-                player->setTactZev(fopAcM_GetID(this), 3, daObjMknjD_EventName[2]);
+                player->setTactZev(fopAcM_GetID(this), mDoAud_MELODY_EARTH_GODS_LYRIC_e, daObjMknjD_EventName[2]);
             }
 
             m043F = 2;

@@ -388,7 +388,7 @@ void* findObjectCallBack(fopAc_ac_c* actor, void* v_this) {
 
 /* 00000C78-00000CAC       .text moveBoxCheck__12daTag_Hint_cFv */
 BOOL daTag_Hint_c::moveBoxCheck() {
-    if (fopAcM_Search((void* (*)(void*, void*))findObjectCallBack, (void*)this) != NULL) {
+    if (fopAcM_Search((fpcLyIt_JudgeFunc)findObjectCallBack, this) != NULL) {
         return TRUE;
     }
     return FALSE;
@@ -478,8 +478,8 @@ void daTag_Hint_c::startProc() {
 }
 
 /* 000018A4-000018AC       .text next_msgStatus__12daTag_Hint_cFPUl */
-u16 daTag_Hint_c::next_msgStatus(unsigned long*) {
-    return 16;
+u16 daTag_Hint_c::next_msgStatus(u32*) {
+    return fopMsgStts_MSG_ENDS_e;
 }
 
 /* 000018AC-000018B4       .text getMsg__12daTag_Hint_cFv */

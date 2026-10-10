@@ -537,6 +537,7 @@ static BOOL daTag_Event_Execute(daTag_Event_c* i_this) {
 
 /* 000013D4-000013DC       .text daTag_Event_IsDelete__FP13daTag_Event_c */
 static BOOL daTag_Event_IsDelete(daTag_Event_c* i_this) {
+    UNUSED(i_this);
     return TRUE;
 }
 
