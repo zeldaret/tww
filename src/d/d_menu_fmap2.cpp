@@ -398,6 +398,39 @@ void dMenu_Fmap2_c::screenSet() {
         mTxtIslandName[i] = ((J2DTextBox*)mIslandNamePanes[i].pane)->getStringPtr();
         mTxtIslandName[i][0] = 0;
     }
+
+#if VERSION == VERSION_PAL
+    f32 cmapFontSizeX;
+    f32 islandFontSizeX;
+    switch (dComIfGs_getPalLanguage()) {
+        case 0:
+            cmapFontSizeX = 23.0f;
+            islandFontSizeX = 20.0f;
+            break;
+        case 1:
+            cmapFontSizeX = 23.0f;
+            islandFontSizeX = 19.0f;
+            break;
+        case 2:
+            cmapFontSizeX = 18.0f;
+            islandFontSizeX = 18.0f;
+            break;
+        case 3:
+            cmapFontSizeX = 18.0f;
+            islandFontSizeX = 19.0f;
+            break;
+        case 4:
+            cmapFontSizeX = 19.0f;
+            islandFontSizeX = 18.0f;
+            break;
+    }
+    for (i = 0; i < 4; i++) {
+        ((J2DTextBox*)mCmtPanes[i].pane)->setFontSize(cmapFontSizeX, 27.0f);
+    }
+    for (i = 0; i < 2; i++) {
+        ((J2DTextBox*)mIslandNamePanes[i].pane)->setFontSize(islandFontSizeX, 26.0f);
+    }
+#endif
 }
 
 /* 801BCC74-801BD258       .text initialize__13dMenu_Fmap2_cFv */
