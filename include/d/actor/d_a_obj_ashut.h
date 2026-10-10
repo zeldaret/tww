@@ -4,21 +4,6 @@
 #include "d/d_bg_s_movebg_actor.h"
 
 namespace daObjAshut {
-    struct Attr_c {
-        f32 open_max_y;           // Max Y offset when the passage is fully open
-        f32 close_accel;          // Downward acceleration when closing
-        f32 close_damping;        // Friction/damping applied while closing
-        u8  close_bounce_count;   // Number of times the metal bars bounce when they hit the floor
-        f32 close_bounce_factor;  // Restitution factor for the closing bounce
-        f32 max_close_bounce_vel; // Maximum velocity allowed during a closing bounce
-        f32 open_accel;           // Upward acceleration when opening
-        f32 open_damping;         // Standard friction applied while opening
-        f32 open_heavy_damping;   // Heavier friction applied during a specific opening phase
-        u8  open_timer_params[3]; // [0]: Delay before opening, [1]: Damping transition threshold, [2]: Open bounce count
-        f32 open_bounce_factor;   // Restitution factor when hitting the ceiling
-        f32 max_open_bounce_vel;  // Maximum velocity allowed during an opening bounce
-    };
-
     class Act_c : public dBgS_MoveBgActor {
     public:
         enum Mode_e {
