@@ -2197,7 +2197,26 @@ BOOL dMenu_Fmap2_c::fmapPlayerPosDispCheck(f32* i_x, f32* i_y) {
 
 /* 801C4834-801C4B1C       .text changeCmapName__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeCmapName() {
-    /* Nonmatching */
+    int cmapNo = getCmapDatPnt4(field_0x27A9)->cmapNo;
+    int msgNo;
+    if (cmapNo >= 0x34) {
+        msgNo = cmapNo + 0x36EB;
+    } else if (cmapNo < 0x2A) {
+        msgNo = cmapNo + 0x31D7;
+    } else {
+        msgNo = cmapNo + 0x36EB;
+    }
+
+    if (cmapNo <= 8) {
+        ((J2DTextBox*)field_0x1484[field_0x2814 ^ 1].pane)->setBlackWhite(JUtility::TColor(0xD6, 0, 0, 0), JUtility::TColor(0xF4, 0x2F, 0, 0xFF));
+        ((J2DTextBox*)field_0x1484[(field_0x2814 ^ 1) + 2].pane)->setBlackWhite(JUtility::TColor(0x65, 0x10, 0, 0), JUtility::TColor(0xAB, 0, 0, 0xFF));
+    } else {
+        ((J2DTextBox*)field_0x1484[field_0x2814 ^ 1].pane)->setBlackWhite(JUtility::TColor(0, 0, 0x4A, 0), JUtility::TColor(0, 0, 0xFF, 0xFF));
+        ((J2DTextBox*)field_0x1484[(field_0x2814 ^ 1) + 2].pane)->setBlackWhite(JUtility::TColor(0, 0, 0, 0), JUtility::TColor(0, 0, 0, 0xFF));
+    }
+
+    fopMsgM_messageGet(field_0x27C8[field_0x2814 ^ 1], msgNo);
+    fopMsgM_messageGet(field_0x27C8[(field_0x2814 ^ 1) + 2], msgNo);
 }
 
 /* 801C4B1C-801C4CF4       .text cmapPlayerPosDisp__13dMenu_Fmap2_cFv */
