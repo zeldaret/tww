@@ -112,7 +112,7 @@ public:
     void changeCmapName();
     void cmapPlayerPosDisp();
     void cmapSalvagePosDisp();
-    void cmapPlayerPosDispCheck(f32*, f32*);
+    BOOL cmapPlayerPosDispCheck(f32*, f32*);
     BOOL paneTransBase(s16, u8, f32, f32, u8, u8, int);
     BOOL paneAlphaFmapBase(s16, u8, u8, int);
     BOOL paneAlphaCmapBase(s16, u8, u8, int);
