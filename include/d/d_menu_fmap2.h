@@ -4,6 +4,7 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "d/d_drawlist.h"
 #include "d/d_menu_fmapSv.h"
+#include "dolphin/types.h"
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_hostIO.h"
 
@@ -473,24 +474,12 @@ public:
     void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 field_0x5;
-    /* 0x06 */ u8 field_0x6;
-    /* 0x07 */ u8 field_0x7;
-    /* 0x08 */ u8 field_0x8;
-    /* 0x09 */ u8 field_0x9;
-    /* 0x0A */ u8 field_0xA;
-    /* 0x0B */ u8 field_0xB;
-    /* 0x0C */ u8 field_0xC;
-    /* 0x0D */ u8 field_0xD;
-    /* 0x0E */ u8 field_0xE;
-    /* 0x0F */ u8 field_0xF;
-    /* 0x10 */ u8 field_0x10;
-    /* 0x11 */ u8 field_0x11;
-    /* 0x12 */ u8 field_0x12;
-    /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ u8 field_0x14;
-    /* 0x16 */ s16 field_0x16;
-    /* 0x18 */ u8 field_0x18[0x1E - 0x18];
+    /* 0x05 */ GXColor mPlayerPointWhite1;
+    /* 0x09 */ GXColor mPlayerPointWhite2;
+    /* 0x0D */ GXColor mPlayerPointBlack1;
+    /* 0x11 */ GXColor mPlayerPointBlack2;
+    /* 0x16 */ s16 mPlayerPointTimer;
+    /* 0x18 */ u8 padding_0x18[0x1E - 0x18];
     /* 0x1E */ u8 field_0x1E;
     /* 0x1F */ u8 field_0x1F;
     /* 0x20 */ u8 field_0x20;
@@ -498,67 +487,55 @@ public:
     /* 0x22 */ u8 field_0x22;
     /* 0x24 */ f32 field_0x24;
     /* 0x28 */ u8 field_0x28;
-    /* 0x29 */ u8 field_0x29[0x30 - 0x29];
+    /* 0x29 */ u8 padding_0x29[0x30 - 0x29];
     /* 0x30 */ u8 field_0x30;
     /* 0x31 */ u8 field_0x31;
     /* 0x34 */ f32 field_0x34;
-    /* 0x38 */ u8 field_0x38;
-    /* 0x3A */ s16 field_0x3A;
-    /* 0x3C */ s16 field_0x3C;
-    /* 0x3E */ u8 field_0x3E;
-    /* 0x3F */ u8 field_0x3F;
-    /* 0x40 */ u8 field_0x40;
-    /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ u8 field_0x48;
-    /* 0x49 */ u8 field_0x49;
-    /* 0x4A */ u8 field_0x4A;
-    /* 0x4B */ u8 field_0x4B;
+    /* 0x38 */ u8 mBaseAnimFrame;
+    /* 0x3A */ s16 mOpenPosY;
+    /* 0x3C */ s16 mClosePosY;
+    /* 0x3E */ u8 mChangeAnimFrame;
+    /* 0x3F */ u8 mCmapOpenAnimFrame;
+    /* 0x40 */ u8 mSpMapAnimFrame;
+    /* 0x44 */ f32 mMsgScale;
+    /* 0x48 */ u8 mFCursorFlashFrame;
+    /* 0x49 */ u8 mCCursorFlashFrame;
+    /* 0x4A */ u8 mSelCursorAlphaFrame;
+    /* 0x4B */ u8 mSelCursorMove;
     /* 0x4C */ u8 field_0x4C;
     /* 0x4D */ u8 field_0x4D;
     /* 0x4E */ u8 field_0x4E;
     /* 0x50 */ f32 field_0x50;
     /* 0x54 */ f32 field_0x54;
-    /* 0x58 */ f32 field_0x58;
-    /* 0x5C */ f32 field_0x5c;
-    /* 0x60 */ f32 field_0x60;
-    /* 0x64 */ u8 field_0x64;
-    /* 0x68 */ f32 field_0x68;
-    /* 0x6C */ f32 field_0x6C;
-    /* 0x70 */ f32 field_0x70;
-    /* 0x74 */ u8 field_0x74;
-    /* 0x75 */ u8 field_0x75;
+    /* 0x58 */ f32 mScrollSelOffset;
+    /* 0x5C */ f32 mScrollMsgOffset;
+    /* 0x60 */ f32 mScrollScale;
+    /* 0x64 */ u8 mScrollAnimFrame;
+    /* 0x68 */ f32 mScrollHoldSelOffset;
+    /* 0x6C */ f32 mScrollHoldMsgOffset;
+    /* 0x70 */ f32 mScrollHoldScale;
+    /* 0x74 */ u8 mScrollHoldAnimFrame;
+    /* 0x75 */ u8 mScrollHoldFrame;
     /* 0x76 */ u8 field_0x76;
     /* 0x77 */ u8 field_0x77;
     /* 0x78 */ u8 field_0x78;
     /* 0x79 */ u8 field_0x79;
-    /* 0x7A */ u8 field_0x7A;
-    /* 0x7B */ u8 field_0x7B;
-    /* 0x7C */ u8 field_0x7C;
-    /* 0x7D */ u8 field_0x7D;
-    /* 0x7E */ u8 field_0x7E;
-    /* 0x7F */ u8 field_0x7F;
-    /* 0x80 */ u8 field_0x80;
-    /* 0x81 */ u8 field_0x81;
-    /* 0x82 */ u8 field_0x82;
-    /* 0x83 */ u8 field_0x83;
-    /* 0x84 */ u8 field_0x84;
-    /* 0x85 */ u8 field_0x85;
-    /* 0x86 */ u8 field_0x86;
-    /* 0x87 */ u8 field_0x87;
-    /* 0x88 */ u8 field_0x88;
-    /* 0x89 */ u8 field_0x89;
-    /* 0x8A */ u8 field_0x8A;
-    /* 0x8B */ u8 field_0x8B;
-    /* 0x8C */ u8 field_0x8C;
-    /* 0x8D */ u8 field_0x8D;
+    /* 0x7A */ u8 mGsMoonAnimFrame;
+    /* 0x7B */ u8 mGsMoonHoldFrame;
+    /* 0x7C */ GXColor mGsMoonWhite;
+    /* 0x80 */ GXColor mGsMoonBlack;
+    /* 0x84 */ u8 mGsShipDelay;
+    /* 0x85 */ u8 mGsShipAnimFrame;
+    /* 0x86 */ GXColor mGsShipWhite;
+    /* 0x8A */ GXColor mGsShipBlack;
 #if VERSION > VERSION_JPN
-    /* 0x8E */ u8 field_0x8E;
-    /* 0x8F */ u8 field_0x8F;
-    /* 0x90 */ u8 field_0x90;
-    /* 0x91 */ u8 field_0x91;
-    /* 0x92 */ u8 field_0x92;
-    /* 0x93 */ u8 field_0x93;
-    /* 0x94 */ u8 field_0x94;
+    /* 0x8E */ u8 mGsIconAnimFrame;
+    /* 0x8F */ u8 mGsIconHoldFrame;
+    /* 0x90 */ u8 mGsIconAlphaMax;
+    /* 0x91 */ u8 mGsIconAlphaMin;
+    /* 0x92 */ u8 mTriforceAnimFrame;
+    /* 0x93 */ u8 mTriforceAlphaMax;
+    /* 0x94 */ u8 mTriforceAlphaMin;
 #endif
 };
 
