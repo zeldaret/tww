@@ -7,10 +7,10 @@ namespace daObjAshut {
     class Act_c : public dBgS_MoveBgActor {
     public:
         enum Mode_e {
-            Mode_U    = 0x00,     // Bars are up
-            Mode_U_L  = 0x01,     // Bars are falling down
-            Mode_L    = 0x02,     // Bars are down
-            Mode_L_U  = 0x03,     // Bars are rising up
+            Mode_U    = 0x00,
+            Mode_U_L  = 0x01,
+            Mode_L    = 0x02,
+            Mode_L_U  = 0x03,
             Mode_DemoReq  = 0x04,
             Mode_UNK5     = 0x05
         };
