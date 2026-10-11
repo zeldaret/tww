@@ -128,6 +128,7 @@ void dFile_select_c::_create() {
         dataExtra[i] = 0;
         field_0x391D[i] = 0;
     }
+
     selectNum = 0;
 #if VERSION == VERSION_PAL
     u8 lang = g_mDoMemCd_control.field_0x165B;
@@ -820,7 +821,7 @@ void dFile_select_c::menuSelect() {
             field_0x30d8.pane->hide();
             selectEnd = 1;
             g_dComIfG_gameInfo.save.setDataNum(selectNum);
-            field_0x392b = 0x26;
+            field_0x392b = VERSION_SELECT(0x26, 0x26, 0x26, 0x29);
         }
         else if(field_0x3928 == 1) {
             mDoAud_seStart(JA_SE_MSEL_OK_1);
