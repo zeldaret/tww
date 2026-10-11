@@ -128,8 +128,19 @@ void dFile_select_c::_create() {
         dataExtra[i] = 0;
         field_0x391D[i] = 0;
     }
-
     selectNum = 0;
+#if VERSION == VERSION_PAL
+    u8 lang = g_mDoMemCd_control.field_0x165B;
+    if (lang != dComIfGs_getPalLanguage()) {
+        if (mUseType == 1) {
+            g_mDoMemCd_control.field_0x165B = dComIfGs_getPalLanguage();
+        } else {
+            dComIfGs_setPalLanguage(lang);
+            dComIfGp_setMsgDtArchive(field_0x3cd4[lang]);
+        }
+    }
+    field_0x3cc6 = dComIfGs_getPalLanguage();
+#endif
     screenSet();
     displayInit();
     paneTransInit();
