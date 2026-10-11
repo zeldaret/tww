@@ -513,8 +513,7 @@ bool daObjMagmarock::Act_c::_execute() {
 
     m29c = 0;
     if (mpBgW->ChkUsed()) {
-        // inline?
-        mpBgW->mIgnorePlaneType = mpBgW->mIgnorePlaneType | 4 /* Roof */;
+        mpBgW->OffRoofRegist();
         mpBgW->Move();
     }
     return FALSE;
