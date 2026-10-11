@@ -49,7 +49,7 @@ void daObjMagmarock::Act_c::demo_move() {
         return;
     }
     if (m45a == 0) {
-        if (eventInfo.getCommand() == dEvtCmd_INDEMO_e) {
+        if (eventInfo.checkCommandDemoAccrpt()) {
             m45a += 1;
         } else {
             fopAcM_orderOtherEvent2(this, "magma_cam", 1);
