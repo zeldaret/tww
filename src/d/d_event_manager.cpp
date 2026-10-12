@@ -244,8 +244,9 @@ static void* allOffObjectCallBack(fopAc_ac_c* actor, void*) {
 void dEvent_manager_c::startProc(dEvDtEvent_c* event) {
     dEv_seach_prm prm(NULL, 0, 0);
     for (s32 i = 0; i < event->getNStaff(); i++) {
+        dEvDtStaff_c* staff;
         int staffIdx = event->getStaff(i);
-        dEvDtStaff_c* staff = mList.getStaffP(staffIdx);
+        staff = mList.getStaffP(staffIdx);
         if (staff->getType() == dEvDtStaff_c::NORMAL_e) {
             fopAc_ac_c* actor = specialCast(staff->getName(), 1);
             if (actor == NULL) {

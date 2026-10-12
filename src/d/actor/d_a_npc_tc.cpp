@@ -1665,7 +1665,7 @@ BOOL daNpc_Tc_c::_draw() {
             &current.pos,
             mObjAcch.GetGroundH(),
             40.0f,
-            dComIfG_Bgsp()->GetTriPla(mObjAcch.m_gnd)->GetNP()
+            &dComIfG_Bgsp()->GetTriPla(mObjAcch.m_gnd)->mNormal
         );
     }
 #else

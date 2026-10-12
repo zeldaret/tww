@@ -323,9 +323,9 @@ void daObjBarrel::Act_c::mode_walk() {
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         cXyz* norm;
         cXyz addAccel = cXyz::Zero;
-        float cos, friction;
+        f32 cos, friction;
         if (gndPlane) {
-            norm = gndPlane->GetNP();
+            norm = &gndPlane->mNormal;
             friction = l_gnd_fric;
             cos = cM_scos(0xA4F);
             addAccel.set(norm->x, 0.0f, norm->z);
@@ -721,9 +721,9 @@ bool daObjBarrel::Act_c::_draw() {
         g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpModel, &tevStr);
         mDoExt_modelUpdateDL(mpModel);
-        float gndH = mAcch.GetGroundH();
+        f32 gndH = mAcch.GetGroundH();
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-        cXyz *norm = gndPlane->GetNP();
+        cXyz* norm = &gndPlane->mNormal;
         if (norm && gndH != -G_CM3D_F_INF) {
             dComIfGd_setSimpleShadow(&current.pos, gndH, attr().mShadowSize, norm);        
         }

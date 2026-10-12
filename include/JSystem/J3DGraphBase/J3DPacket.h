@@ -82,8 +82,8 @@ public:
     void beginPatch();
     u32 endPatch();
 
-    u8* getDisplayList(int idx) const { return (u8*)mpData[idx]; }
-    u32 getDisplayListSize() const { return mSize; }
+    u8* getDisplayList(int idx) { return (u8*)mpData[idx]; }
+    u32 getDisplayListSize() { return mSize; }
 
     static GDLObj sGDLObj;
     static s32 sInterruptFlag;
@@ -177,9 +177,8 @@ public:
     void setScaleFlagArray(u8* pScaleFlagArray) { mpScaleFlagArray = pScaleFlagArray; }
     void setCurrentViewNoPtr(u32* pCurrentViewNo) { mpCurrentViewNo = pCurrentViewNo; }
 
-    J3DShape* getShape() const { return mpShape; }
-    J3DModel* getModel() const { return mpModel; }
-    Mtx* getBaseMtxPtr() const { return mpBaseMtxPtr; }
+    J3DShape* getShape() { return mpShape; }
+    Mtx* getBaseMtxPtr() { return mpBaseMtxPtr; }
 
 public:
     /* 0x24 */ J3DShape* mpShape;

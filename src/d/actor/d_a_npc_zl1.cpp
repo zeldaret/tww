@@ -2061,7 +2061,7 @@ BOOL daNpc_Zl1_c::setFrontWallType() {
     }
     
     cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(linChk);
-    if(std::fabsf(plane->GetNP()->y) > 0.05f){
+    if(std::fabsf(plane->mNormal.y) > 0.05f){
         return FALSE;
     }
     

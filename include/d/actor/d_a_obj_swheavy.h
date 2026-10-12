@@ -35,7 +35,7 @@ namespace daObjSwheavy {
             PRM_SWSAVE_S = 0x8,
         };
 
-        BOOL is_switch() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
+        bool is_switch() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
         void off_switch() const { fopAcM_offSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
         void on_switch() const { fopAcM_onSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
         s32 prm_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
