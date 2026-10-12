@@ -643,9 +643,9 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
 
     int i;
 
-    dSv_save_c_PACKED* saveData = (dSv_save_c_PACKED*)&mSaveDataPtr[i_dataNo * sizeof(card_gamedata)];
+    card_gamedata* saveData = (card_gamedata*)&mSaveDataPtr[i_dataNo * sizeof(card_gamedata)];
 
-    u16 curHealth = saveData->mPlayer.mPlayerStatusA.mLife;
+    u16 curHealth = saveData->data.mPlayer.mPlayerStatusA.mLife;
 
     int curHearts = curHealth / 4;
     int healthMod4 = curHealth % 4;
@@ -655,7 +655,7 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
 
     // display hearts
     for(i = 0; i < 0x14; i++) {
-        if(i < saveData->mPlayer.mPlayerStatusA.mMaxLife / 4) {
+        if(i < saveData->data.mPlayer.mPlayerStatusA.mMaxLife / 4) {
             field_0x828[i].pane->show();
             field_0xc88[i].pane->show();
 
@@ -681,12 +681,12 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     }
 
     // triforce (shards)
-    int temp = saveData->mPlayer.mCollect.mTriforce; // surely this weirdly used temp is not real
+    int temp = saveData->data.mPlayer.mCollect.mTriforce; // surely this weirdly used temp is not real
     if(temp) {
         field_0x208[2].pane->hide();
         field_0x5f8.pane->show();
 
-        temp = saveData->mPlayer.mCollect.mTriforce;
+        temp = saveData->data.mPlayer.mCollect.mTriforce;
         if(temp == 0xFF) {
             for(i = 0; i < 8; i++) {
                 field_0x630[i].pane->hide();
@@ -697,7 +697,7 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
             field_0x630[8].pane->hide();
             u8 shardBit = 1;
             for(i = 0; i < 8; i++) {
-                if(saveData->mPlayer.mCollect.mTriforce & shardBit) {
+                if(saveData->data.mPlayer.mCollect.mTriforce & shardBit) {
                     field_0x630[i].pane->show();
                 }
                 else {
@@ -719,7 +719,7 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     // display pearls
     u8 pearlBit = 1;
     for(i = 0; i < 3; i++) {
-        if(saveData->mPlayer.mCollect.mSymbol & pearlBit) {
+        if(saveData->data.mPlayer.mCollect.mSymbol & pearlBit) {
             field_0x4a8[i].pane->show();
             field_0x550[i].pane->show();
         }
@@ -3188,7 +3188,7 @@ void dFile_select_c::setSaveData() {
 /* 8018BD24-8018C0C0       .text setSaveData__14dFile_select_cFv */
 void dFile_select_c::setSaveData() {
     int i;
-    u8* data = mSaveDataPtr;
+    card_gamedata* data = (card_gamedata*)mSaveDataPtr;
 
     for(i = 0; i < 3; i++) {
         fopMsgM_pane_class* pane;
@@ -3212,9 +3212,9 @@ void dFile_select_c::setSaveData() {
 
         fopMsgM_paneTrans(pane, 0.0f, 0.0f);
         if(mDoMemCdRWm_TestCheckSumGameData(data)) {
-            if(data[0x19B]) {
+            if(data->data.mPlayer.mInfo.mClearCount) {
                 dataExtra[i] = 1;
-                field_0x391D[i] = ((data[0x64D] / 16) & 1) ^ 1;
+                field_0x391D[i] = ((data->data.mEvent.mFlags[0x35] / 16) & 1) ^ 1;
             }
             else {
                 dataExtra[i] = 0;
@@ -3223,7 +3223,7 @@ void dFile_select_c::setSaveData() {
 
             changeExtraColor(i);
 
-            if(data[0x157] == 0) {
+            if(((u8*)data->data.mPlayer.mInfo.mPlayerName)[0] == 0) {
                 fopMsgM_paneScaleXY(pane, g_fsHIO.field_0x54);
 
                 fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
@@ -3247,9 +3247,9 @@ void dFile_select_c::setSaveData() {
                 dataNew[i] = 1;
             }
             else {
-                strcpy(field_0x38f4[i], (char*)(&data[0x157]));
+                strcpy(field_0x38f4[i], data->data.mPlayer.mInfo.mPlayerName);
                 OSCalendarTime time;
-                OSTicksToCalendarTime(*(u64*)(data + 0x18), &time);
+                OSTicksToCalendarTime(data->data.mPlayer.mPlayerStatusB.mDateIPL, &time);
                 sprintf(
                     field_0x3900[i],
 #if VERSION <= VERSION_JPN
@@ -3294,7 +3294,7 @@ void dFile_select_c::setSaveData() {
             dataNew[i] = 0;
         }
 
-        data += sizeof(card_gamedata);
+        data++;
     }
 }
 #endif
