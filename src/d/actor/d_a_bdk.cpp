@@ -2311,7 +2311,6 @@ static void t_down(bdk_class* i_this) {
 #else
             mDoGph_gInf_c::setBlureRate(REG8_S(4) + 0xb4);
             mDoGph_gInf_c::onBlure();
-
 #endif
 
             // Fall-through

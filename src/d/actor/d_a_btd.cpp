@@ -971,9 +971,7 @@ static void end(btd_class* i_this) {
             dComIfGp_getVibration().StartShock(REG0_S(2) + 5, -0x21, cXyz(0.0f, 1.0f, 0.0f));
 #if VERSION == VERSION_DEMO
             mDoGph_gInf_c::setBlureRate(REG0_S(4) + 180);
-            // Required to match
-            mDoGph_gInf_c::mBlureFlag = true;
-            mDoMtx_copy(cMtx_getIdentity(), mDoGph_gInf_c::mBlureMtx);
+            mDoGph_gInf_c::onBlure();
 #else
             i_this->m6E15 = 0xb4;
 #endif

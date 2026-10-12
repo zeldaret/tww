@@ -19,7 +19,7 @@ BOOL fopMsg_Draw(void* i_this) {
 BOOL fopMsg_Execute(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
-    BOOL stat = 1;
+    BOOL stat = TRUE;
     if (!dScnPly_ply_c::isPause()) {
         stat = fpcMtd_Execute((process_method_class*)_this->sub_method, i_this);
     }
@@ -32,7 +32,7 @@ BOOL fopMsg_IsDelete(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
     BOOL stat = fpcMtd_IsDelete((process_method_class*)_this->sub_method, i_this);
-    if (stat == 1) {
+    if (stat == TRUE) {
         fopDwTg_DrawQTo(&_this->draw_tag);
     }
 

@@ -312,7 +312,7 @@ void daLStair_c::disappear_stair() {
 void daLStair_c::set_on_se() {
     stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
 
-    if ((dStage_stagInfo_GetSaveTbl(stage_info)) == dStageType_FF1_e) {
+    if (dStage_stagInfo_GetSaveTbl(stage_info) == dStageType_FF1_e) {
         fopAcM_seStart(this, JA_SE_OBJ_R_STAIR_APPEAR, 0);
     }
 }

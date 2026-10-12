@@ -244,7 +244,7 @@ void daNpc_Fa1_c::setPointLightParam() {
 }
 
 /* 800FB2B8-800FB514       .text createInit__11daNpc_Fa1_cFv */
-int daNpc_Fa1_c::createInit() {
+BOOL daNpc_Fa1_c::createInit() {
     mType = fopAcM_GetParam(this);
     m764 = NULL;
     m768.setall(0.0f);
