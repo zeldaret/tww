@@ -1188,22 +1188,22 @@ BOOL daTbox_c::execute() {
 }
 
 /* 00002BF0-00002C10       .text daTbox_Draw__FP8daTbox_c */
-static s32 daTbox_Draw(daTbox_c* i_tbox) {
+static BOOL daTbox_Draw(daTbox_c* i_tbox) {
     return i_tbox->draw();
 }
 
 /* 00002FB0-00002FD0       .text daTbox_Execute__FP8daTbox_c */
-static s32 daTbox_Execute(daTbox_c* i_tbox) {
+static BOOL daTbox_Execute(daTbox_c* i_tbox) {
     return i_tbox->execute();
 }
 
 /* 00002FD0-00002FD8       .text daTbox_IsDelete__FP8daTbox_c */
-static s32 daTbox_IsDelete(daTbox_c*) {
+static BOOL daTbox_IsDelete(daTbox_c*) {
     return TRUE;
 }
 
 /* 00002FD8-00003070       .text daTbox_Delete__FP8daTbox_c */
-static s32 daTbox_Delete(daTbox_c* i_tbox) {
+static BOOL daTbox_Delete(daTbox_c* i_tbox) {
     i_tbox->deleteProc();
     dComIfG_resDeleteDemo(i_tbox->getPhase(), "Dalways");
 

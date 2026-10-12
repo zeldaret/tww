@@ -26,7 +26,7 @@ const char* daShutter_c::m_close_ev_name[2] = {NULL, "R03DOORCLOSE"};
 const char* daShutter_c::m_staff_name[2] = {"Htobi1", "Htobi2"};
 
 /* 00000078-00000108       .text _delete__11daShutter_cFv */
-bool daShutter_c::_delete() {
+BOOL daShutter_c::_delete() {
     dComIfG_resDeleteDemo(&mPhs, m_arcname[mType]);
 #if VERSION > VERSION_DEMO
     if (heap != NULL)
@@ -130,7 +130,7 @@ void daShutter_c::set_mtx() {
 }
 
 /* 000006F0-00000788       .text _execute__11daShutter_cFv */
-bool daShutter_c::_execute() {
+BOOL daShutter_c::_execute() {
     if (mFrameTimer >= 0) {
         mFrameTimer--;
     }
@@ -266,7 +266,7 @@ void daShutter_c::demo() {
 }
 
 /* 00000CF0-00000DD8       .text _draw__11daShutter_cFv */
-bool daShutter_c::_draw() {
+BOOL daShutter_c::_draw() {
     for (int i = 0; i < ARRAY_SSIZE(mMtx); i++) {
         cXyz actorPos = current.pos;
         actorPos += mcXyz[i];
@@ -285,17 +285,17 @@ static cPhs_State daShutter_Create(void* i_this) {
 }
 
 /* 00000DF8-00000E18       .text daShutter_Delete__FPv */
-static bool daShutter_Delete(void* i_this) {
+static BOOL daShutter_Delete(void* i_this) {
     return ((daShutter_c*)i_this)->_delete();
 }
 
 /* 00000E18-00000E38       .text daShutter_Draw__FPv */
-static bool daShutter_Draw(void* i_this) {
+static BOOL daShutter_Draw(void* i_this) {
     return ((daShutter_c*)i_this)->_draw();
 }
 
 /* 00000E38-00000E58       .text daShutter_Execute__FPv */
-static bool daShutter_Execute(void* i_this) {
+static BOOL daShutter_Execute(void* i_this) {
     return ((daShutter_c*)i_this)->_execute();
 }
 

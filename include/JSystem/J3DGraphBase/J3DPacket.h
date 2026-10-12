@@ -156,7 +156,7 @@ public:
     /* 0x10 */ u32 mFlags;
     /* 0x14 */ char mPad0[0x0C];  // unk
     /* 0x20 */ J3DDisplayListObj* mpDisplayListObj;
-};  // Size: 0x28
+};  // Size: 0x24
 
 class J3DShapePacket : public J3DDrawPacket {
 public:
@@ -222,13 +222,13 @@ public:
     virtual bool isSame(J3DMatPacket*) const;
 
 public:
-    /* 0x28 */ J3DShapePacket* mpInitShapePacket;
-    /* 0x2C */ J3DShapePacket* mpShapePacket;
-    /* 0x30 */ J3DMaterial* mpMaterial;
-    /* 0x34 */ u32 mDiffFlag;
-    /* 0x38 */ J3DTexture* mpTexture;
-    /* 0x3C */ J3DMaterialAnm* mpMaterialAnm;
-};  // Size: 0x40
+    /* 0x24 */ J3DShapePacket* mpInitShapePacket;
+    /* 0x28 */ J3DShapePacket* mpShapePacket;
+    /* 0x2C */ J3DMaterial* mpMaterial;
+    /* 0x30 */ u32 mDiffFlag;
+    /* 0x34 */ J3DTexture* mpTexture;
+    /* 0x38 */ J3DMaterialAnm* mpMaterialAnm;
+};  // Size: 0x3C
 
 class J3DCallBackPacket : public J3DPacket {
 public:
@@ -239,7 +239,7 @@ public:
 
 public:
     typedef void (*CallBack)(J3DCallBackPacket * pPacket, u32 timing);
-    CallBack mpCallBack;
-};
+    /* 0x10 */ CallBack mpCallBack;
+};  // Size: 0x14
 
 #endif /* J3DPACKET_H */

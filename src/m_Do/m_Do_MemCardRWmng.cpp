@@ -347,12 +347,12 @@ u64 mDoMemCdRWm_CalcCheckSumGameData(void* p, u32 size) {
 /* 8001A408-8001A454       .text mDoMemCdRWm_TestCheckSumGameData__FPv */
 BOOL mDoMemCdRWm_TestCheckSumGameData(void *p) {
     card_gamedata* save = (card_gamedata*)p;
-    u64 csum = mDoMemCdRWm_CalcCheckSumGameData(save->data, sizeof(save->data));
+    u64 csum = mDoMemCdRWm_CalcCheckSumGameData(&save->data, sizeof(save->data));
     return csum == save->csum;
 }
 
 /* 8001A454-8001A498       .text mDoMemCdRWm_SetCheckSumGameData__FPUcUc */
 void mDoMemCdRWm_SetCheckSumGameData(u8* p, u8 slot) {
     card_gamedata* save = &((card_gamedata*)p)[slot];
-    save->csum = mDoMemCdRWm_CalcCheckSumGameData(save->data, sizeof(save->data));
+    save->csum = mDoMemCdRWm_CalcCheckSumGameData(&save->data, sizeof(save->data));
 }

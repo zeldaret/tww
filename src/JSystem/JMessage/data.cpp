@@ -9,6 +9,6 @@
 
 namespace JMessage {
 namespace data {
-const int ga4cSignature       = 'MESG';
+const char ga4cSignature[4] = {'M', 'E', 'S', 'G'};
 } // namespace data
 } // namespace JMessage

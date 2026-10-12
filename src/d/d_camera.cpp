@@ -5423,7 +5423,7 @@ static void store(camera_process_class* i_this) {
 }
 
 /* 8017C29C-8017C350       .text camera_execute__FP20camera_process_class */
-static int camera_execute(camera_process_class* i_this) {
+static BOOL camera_execute(camera_process_class* i_this) {
     preparation(i_this);
 
     if (dComIfGp_demo_getCamera()) {
@@ -5450,7 +5450,7 @@ static int camera_execute(camera_process_class* i_this) {
 }
 
 /* 8017C350-8017C72C       .text camera_draw__FP20camera_process_class */
-static bool camera_draw(camera_process_class* i_this) {
+static BOOL camera_draw(camera_process_class* i_this) {
     camera_class* a_this = (camera_class*)i_this;
     dCamera_c* body = &((camera_process_class*)i_this)->mCamera;
 
