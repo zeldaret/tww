@@ -38,8 +38,7 @@ public:
     aramCmapDatPnt_t* getCmapDatPnt(int i_cmapIdx) {
         return mpFmapDatPnt->getCmapDatPnt4(i_cmapIdx);
     }
-    void getCmapDatValue() {
-    }
+    void getCmapDatValue() {} // TODO
     u8 lineInter0to1ForU8(u8 a, u8 b, f32 c) {
         return a + (b - a) * c;
     }

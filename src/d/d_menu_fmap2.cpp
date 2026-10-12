@@ -1577,16 +1577,18 @@ void dMenu_Fmap2_c::screenSetHeartM() {
     fopMsgM_setPaneData(&mHeartMGdgtPane, fmap2GsDl.scrn->search('gdgt'));
 #if VERSION == VERSION_DEMO
     u32 nhTag = 'nh1';
-    for (int i = 0; i < ARRAY_SSIZE(mHeartMNhxPanesAlpha); i++) {
+    int i;
+    for (i = 0; i < ARRAY_SSIZE(mHeartMNhxPanesAlpha); i++) {
         fopMsgM_setPaneData(&mHeartMNhxPanesAlpha[i], fmap2GsDl.scrn->search(nhTag));
         nhTag++;
     }
 #else
-    for (int i = 0; i < ARRAY_SSIZE(mHeartMNhxPanesAlpha); i++) {
+    int i;
+    for (i = 0; i < ARRAY_SSIZE(mHeartMNhxPanesAlpha); i++) {
         fopMsgM_setPaneData(&mHeartMNhxPanesAlpha[i], fmap2GsDl.scrn->search(tag[i]));
     }
 #endif
-    for (int i = 0; i < ARRAY_SSIZE(mHeartMMkxPanesAlpha); i++) {
+    for (i = 0; i < ARRAY_SSIZE(mHeartMMkxPanesAlpha); i++) {
         fopMsgM_setPaneData(&mHeartMMkxPanesAlpha[i], fmap2GsDl.scrn->search(tag2[i]));
     }
     setPlayerPos(&mHeartMLnkPane, &mHeartMGdgtPane, &mHeartMGddmPane);
@@ -1882,14 +1884,15 @@ void dMenu_Fmap2_c::changeSelCmap2() {
 
 /* 801C3210-801C3354       .text cmapAlphaSet__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cmapAlphaSet() {
+    int alpha = 0x50;
     if (isCompleteCollectMap(mCmapSelNo)) {
         for (int i = 0; i < 3; i++) {
-            mClSPanes[mClSBufIdx ^ 1][i].mInitAlpha = 0x50;
+            mClSPanes[mClSBufIdx ^ 1][i].mInitAlpha = alpha;
         }
         for (int i = 0; i < 4; i++) {
-            mCddPanes[mCddBufIdx ^ 1][i].mInitAlpha = 0x50;
+            mCddPanes[mCddBufIdx ^ 1][i].mInitAlpha = alpha;
         }
-        mCddPanes[mCddBufIdx ^ 1][9].mInitAlpha = 0x50;
+        mCddPanes[mCddBufIdx ^ 1][9].mInitAlpha = alpha;
     } else {
         for (int i = 0; i < 3; i++) {
             mClSPanes[mClSBufIdx ^ 1][i].mInitAlpha = mClSPanes[mClSBufIdx ^ 1][i].mUserArea;
@@ -2232,8 +2235,8 @@ void dMenu_Fmap2_c::changeIslandName() {
 void dMenu_Fmap2_c::fmapPlayerPosDisp() {
     f32 x, y;
     if (fmapPlayerPosDispCheck(&x, &y) == TRUE) {
-        f32 baseY = mR01gPane.mPosTopLeftOrig.y + mR01gPane.mSizeOrig.y / 2.0f;
         f32 baseX = mR01gPane.mPosTopLeftOrig.x + mR01gPane.mSizeOrig.x / 2.0f;
+        f32 baseY = mR01gPane.mPosTopLeftOrig.y + mR01gPane.mSizeOrig.y / 2.0f;
         mLnk3Pane.mPosCenterOrig.x = baseX + x * (mR01gPane.mSizeOrig.x / 20000.0f);
         mLnk3Pane.mPosCenterOrig.y = baseY + y * (mR01gPane.mSizeOrig.y / 20000.0f);
         mLnk3Pane.mPosCenter.x = mLnk3Pane.mPosCenterOrig.x;
@@ -2259,8 +2262,8 @@ BOOL dMenu_Fmap2_c::fmapPlayerPosDispCheck(f32* i_x, f32* i_y) {
     s16 a, b;
     dMap_getFmapChkPntPrm(chkPnt, &gx, &gy, &a, &b, NULL);
 
-    f32 islandY = b + 100000.0f * gy;
     f32 islandX = a + 100000.0f * gx;
+    f32 islandY = b + 100000.0f * gy;
     *i_x = mPlayerPosX - islandX;
     *i_y = mPlayerPosZ - islandY;
 
@@ -2304,8 +2307,8 @@ void dMenu_Fmap2_c::changeCmapName() {
 void dMenu_Fmap2_c::cmapPlayerPosDisp() {
     f32 x, y;
     if (cmapPlayerPosDispCheck(&x, &y) == TRUE) {
-        f32 baseY = mCddPanes[mCddBufIdx ^ 1][3].mPosTopLeftOrig.y + mCddPanes[mCddBufIdx ^ 1][3].mSizeOrig.y / 2.0f;
         f32 baseX = mCddPanes[mCddBufIdx ^ 1][3].mPosTopLeftOrig.x + mCddPanes[mCddBufIdx ^ 1][3].mSizeOrig.x / 2.0f;
+        f32 baseY = mCddPanes[mCddBufIdx ^ 1][3].mPosTopLeftOrig.y + mCddPanes[mCddBufIdx ^ 1][3].mSizeOrig.y / 2.0f;
         mCddPanes[mCddBufIdx ^ 1][4].mPosCenterOrig.x = baseX + x * (mCddPanes[mCddBufIdx ^ 1][3].mSizeOrig.x / 10000.0f);
         mCddPanes[mCddBufIdx ^ 1][4].mPosCenterOrig.y = baseY + y * (mCddPanes[mCddBufIdx ^ 1][3].mSizeOrig.y / 10000.0f);
 
@@ -2331,8 +2334,12 @@ void dMenu_Fmap2_c::cmapSalvagePosDisp() {
     u8 salvagePointIdx = dComIfGs_getRandomSalvagePoint();
     aramCmapDatPnt_t* cmapDatPnt = getCmapDatPnt4(mCmapSelNo);
 
-    f32 x = (f32)cmapDatPnt->salvagePnt[salvagePointIdx].x - (f32)cmapDatPnt->salvagePnt[salvagePointIdx].islandX;
-    f32 y = (f32)cmapDatPnt->salvagePnt[salvagePointIdx].y - (f32)cmapDatPnt->salvagePnt[salvagePointIdx].islandY;
+    f32 islandX = cmapDatPnt->salvagePnt[salvagePointIdx].islandX;
+    f32 islandY = cmapDatPnt->salvagePnt[salvagePointIdx].islandY;
+    f32 temp1 = cmapDatPnt->salvagePnt[salvagePointIdx].x;
+    f32 temp2 = cmapDatPnt->salvagePnt[salvagePointIdx].y;
+    f32 x = temp1 - islandX;
+    f32 y = temp2 - islandY;
 
     for (int i = 5; i < 9; i++) {
         mCddPanes[mCddBufIdx ^ 1][i].mPosCenterOrig.x = mCddPanes[mCddBufIdx ^ 1][3].mPosCenterOrig.x + x / 100.0f * 2.0f;
@@ -2391,14 +2398,25 @@ BOOL dMenu_Fmap2_c::paneTransBase(s16 i_frame, u8 i_max, f32 i_transStartY, f32 
         return TRUE;
     }
     f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
-    fopMsgM_paneTrans(&mClPane, 0.0f, i_transStartY + alpha * (i_transEndY - i_transStartY));
+    f32 transYAdj = alpha * (i_transEndY - i_transStartY);
+    fopMsgM_paneTrans(&mClPane, 0.0f, i_transStartY + transYAdj);
     if (i_flag != 2) {
         int i;
         if (i_flag == 1) {
             alpha = 1.0f - alpha;
         }
         if (mCollectMapNum) {
-            if (getCtCmapSelNo() != -1 && mCddPanes[i_idx][0].pane->isVisible()) {
+            if (
+                getCtCmapSelNo() != -1 &&
+#if VERSION == VERSION_DEMO
+                (
+                    (isOpenCollectMap(mCmapSelNo) && getCollectMapKind(mCmapSelNo) != FMAP_MAPTYPE_TRI) ||
+                    (getCollectMapKind(mCmapSelNo) == FMAP_MAPTYPE_TRI && isOpenCollectMapTriforce(mCmapSelNo))
+                )
+#else
+                mCddPanes[i_idx][0].pane->isVisible()
+#endif
+            ) {
                 for (i = 0; i < 10; i++) {
                     fopMsgM_setNowAlpha(&mCddPanes[i_idx][i], alpha);
                     fopMsgM_setAlpha(&mCddPanes[i_idx][i]);
@@ -2541,10 +2559,8 @@ BOOL dMenu_Fmap2_c::paneTranceMessage(
     }
 
     f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
-    f32 scaleRange = i_scaleEnd - i_scaleStart;
-    f32 transXRange = i_transEndX - i_transStartX;
-    f32 scaleAdj = alpha * scaleRange;
-    f32 transXAdj = alpha * transXRange;
+    f32 scaleAdj = alpha * (i_scaleEnd - i_scaleStart);
+    f32 transXAdj = alpha * (i_transEndX - i_transStartX);
     fopMsgM_paneTrans(mCkPanes[i_idx], i_transStartX + transXAdj, 0.0f);
     fopMsgM_paneScaleXY(mCkPanes[i_idx], i_scaleStart + scaleAdj);
     for (int i = 1; i < 15; i++) {
@@ -2613,8 +2629,10 @@ BOOL dMenu_Fmap2_c::paneTransSelCmapCle(
         return TRUE;
     }
     f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
-    f32 transAdj = alpha * (transEndX - transStartX);
-    f32 scaleAdj = alpha * (scaleEnd - scaleStart);
+    f32 transRange = transEndX - transStartX;
+    f32 scaleRange = scaleEnd - scaleStart;
+    f32 transAdj = alpha * transRange;
+    f32 scaleAdj = alpha * scaleRange;
     for (i = 0; i < 2; i++) {
         fopMsgM_paneScaleXY(&mCmxxPanes[i_idx][i], scaleStart + scaleAdj);
         fopMsgM_paneTrans(&mCmxxPanes[i_idx][i], transStartX + transAdj, 0.0f);
@@ -2648,8 +2666,10 @@ BOOL dMenu_Fmap2_c::paneTransSelCmapOpn(
         return TRUE;
     }
     f32 alpha = fopMsgM_valueIncrease(i_max, i_frame, i_mode);
-    f32 transAdj = alpha * (transEndX - transStartX);
-    f32 scaleAdj = alpha * (scaleEnd - scaleStart);
+    f32 transRange = transEndX - transStartX;
+    f32 scaleRange = scaleEnd - scaleStart;
+    f32 transAdj = alpha * transRange;
+    f32 scaleAdj = alpha * scaleRange;
     for (i = 0; i < 5; i++) {
         fopMsgM_paneScaleXY(&mClSPanes[i_idx][i], scaleStart + scaleAdj);
         fopMsgM_paneTrans(&mClSPanes[i_idx][i], transStartX + transAdj, 0.0f);

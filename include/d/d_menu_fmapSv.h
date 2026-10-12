@@ -64,8 +64,8 @@ public:
             JUT_ASSERT(DEMO_SELECT(246, 252), FALSE);
         }
     }
-    void getAramCmapDatValue() {}
-    void getCmapDatPnt(int) {}
+    void getAramCmapDatValue() {} // TODO
+    void getCmapDatPnt(int) {} // TODO
     aramCmapDatPnt_t* getCmapDatPnt3(int i_gridIdx) {
         aramCmapDatPnt_t* pnt = mpPnt;
         int i;
