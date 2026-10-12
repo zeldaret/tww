@@ -2570,9 +2570,7 @@ static void hensin(bgn_class* i_this) {
 #if VERSION == VERSION_DEMO
                 if (i_this->mC7AC[0] == 1) {
                     mDoGph_gInf_c::setBlureRate(REG0_S(4) + 0xB4);
-                    // Required to match.
-                    mDoGph_gInf_c::mBlureFlag = true;
-                    mDoMtx_copy(cMtx_getIdentity(), mDoGph_gInf_c::mBlureMtx);
+                    mDoGph_gInf_c::onBlure();
                 }
 #endif
                 if (i_this->mC7AC[0] <= 1) {

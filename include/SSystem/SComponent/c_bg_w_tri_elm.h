@@ -8,6 +8,6 @@ public:
     /* 0x00 */ cM3dGPla m_plane;
 
     virtual ~cBgW_TriElm() {}
-};
+}; // Size: 0x18
 
 #endif

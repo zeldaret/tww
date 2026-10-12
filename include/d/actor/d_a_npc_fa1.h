@@ -105,7 +105,7 @@ public:
     void setLocalPos(f32) {}
 
     void setPointLightParam();
-    int createInit();
+    BOOL createInit();
     BOOL _draw();
     BOOL _execute();
     BOOL checkBinCatch();

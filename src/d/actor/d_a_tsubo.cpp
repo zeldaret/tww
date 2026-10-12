@@ -1849,22 +1849,22 @@ void Act_c::mode_walk() {
         speedF *= 0.9f;
     }
 
-    cM3dGPla* pNorm = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
+    cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
     m6F0 += m814;
     f32 fVar2;
     f32 noGradeCos;
-    cM3dGPla* pNorm2;
-    if (pNorm != NULL) {
-        pNorm2 = pNorm;
+    cXyz* pNorm;
+    if (plane != NULL) {
+        pNorm = &plane->mNormal;
         fVar2 = data().m5C;
         noGradeCos = cM_scos(cM_deg2s(data().m56 - 0.5f));
     } else {
-        pNorm2 = NULL;
+        pNorm = NULL;
         fVar2 = 0.0f;
         noGradeCos = fVar2;
     }
 
-    daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &m7F4, sp0C, sp08, pNorm2->GetNP(), fVar2, noGradeCos, &m6F0);
+    daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &m7F4, sp0C, sp08, pNorm, fVar2, noGradeCos, &m6F0);
 
     if (mAcch.ChkGroundHit()) {
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
@@ -2827,13 +2827,13 @@ void Act_c::moment_proc_call() {
     };
 
     if (m678 == 3) {
-        cM3dGPla* pcVar1 = NULL;
+        cM3dGPla* plane = NULL;
         if (mAcch.ChkGroundHit()) {
-            pcVar1 = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
+            plane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         }
 
-        if (pcVar1 != NULL) {
-            (this->*moment_proc[mType])(pcVar1->GetNP());
+        if (plane != NULL) {
+            (this->*moment_proc[mType])(&plane->mNormal);
         } else {
             cLib_addCalc0(&m6EC, 0.4f, data().mAcchRoofHeight * 0.125f);
         }

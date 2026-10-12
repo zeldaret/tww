@@ -111,7 +111,6 @@ void dDlst_2DMSG_c::draw() {
 
 /* 8020A950-8020AC40       .text outFontDraw__13dDlst_2DMSG_cFv */
 void dDlst_2DMSG_c::outFontDraw() {
-    /* Nonmatching - regswap */
     for (int i = 0; i < 8; i++) {
         u8 iconNum = mpMsg->mMsgDataProc.getIconNum(i);
         int posX = mpMsg->mMsgDataProc.getIconPosX(i);
@@ -123,32 +122,31 @@ void dDlst_2DMSG_c::outFontDraw() {
             iconNum != fopMsgM_Icon_SELECT_YOKO_RIGHT_e &&
             iconNum != fopMsgM_Icon_INPUT_e
         ) {
-            J2DScreen* scrn = (J2DScreen*)mpMsg->m0544[0].pane;
-            int r5 = posX + scrn->getBounds().i.x;
+            int r5 = posX + ((J2DScreen*)mpMsg->m0544[0].pane)->getBounds().i.x;
             int r6;
             u8 alpha;
             if (mpMsg->mMesgEntry.mTextboxType == 5) {
                 f32 local_30 = g_msgHIO.field_0x5e * posY;
                 f32 local_38 = mpMsg->m1104 * (2 - mpMsg->m1108);
-                r6 = (int)(local_38 + scrn->getBounds().i.y + local_30);
+                r6 = (int)(local_38 + ((J2DScreen*)mpMsg->m0544[0].pane)->getBounds().i.y + local_30);
                 alpha = mpMsg->m0544[0].mNowAlpha;
             } else if (mpMsg->mMesgEntry.mTextboxType == 0xe) {
                 f32 local_28 = g_msgHIO.field_0x5e * posY;
                 f32 local_30 = mpMsg->m1104;
-                r6 = (int)(local_30 + scrn->getBounds().i.y + local_28);
+                r6 = (int)(local_30 + ((J2DScreen*)mpMsg->m0544[0].pane)->getBounds().i.y + local_28);
                 alpha = mpMsg->m0544[0].mNowAlpha;
             } else {
                 if (scale > mpMsg->m110C) {
                     if (mpMsg->m1108 > 1) {
                         int temp1 = (mpMsg->m1104 * ((3 - posY) - (mpMsg->m1108 + -2)));
-                        r6 = ((scale - mpMsg->m110C) / 2) + (int)((temp1 + scrn->getBounds().i.y) - (f32)(int)(scale / 2));
+                        r6 = ((scale - mpMsg->m110C) / 2) + (int)((temp1 + ((J2DScreen*)mpMsg->m0544[0].pane)->getBounds().i.y) - (f32)(int)(scale / 2));
                     } else {
-                        r6 = (int)(((mpMsg->m1104 << 2) + scrn->getBounds().i.y) - (f32)(int)(scale / 2));
+                        r6 = (int)(((mpMsg->m1104 << 2) + ((J2DScreen*)mpMsg->m0544[0].pane)->getBounds().i.y) - (f32)(int)(scale / 2));
                     }
                 } else {
                     f32 local_28 = g_msgHIO.field_0x5e * posY;
                     f32 local_30 = mpMsg->m1104 * (3 - mpMsg->m1108);
-                    r6 = (int)(local_30 + scrn->getBounds().i.y + local_28);
+                    r6 = (int)(local_30 + ((J2DScreen*)mpMsg->m0544[0].pane)->getBounds().i.y + local_28);
                 }
                 alpha = mpMsg->m0544[0].mNowAlpha;
             }
@@ -1100,33 +1098,26 @@ void dMsg_frame_close(sub_msg_class* i_Msg) {
 
 /* 8020F324-8020F3F8       .text dMsg_textPosition__FP13sub_msg_class */
 void dMsg_textPosition(sub_msg_class* i_Msg) {
-    int uVar2;
-    J2DTextBox* pJVar6;
-    J2DTextBox* pJVar3;
-    J2DTextBox* pJVar4;
-    J2DTextBox* pJVar5;
-
+    int y;
     switch (i_Msg->mMesgEntry.mTextboxType) {
     case 5:
-        uVar2 = i_Msg->m1104 * (2 - i_Msg->m1108);
+        y = i_Msg->m1104 * (2 - i_Msg->m1108);
         break;
     case 0xE:
-        uVar2 = 0;
+        y = 0;
         break;
     default:
-        uVar2 = i_Msg->m1104 * (3 - i_Msg->m1108);
+        y = i_Msg->m1104 * (3 - i_Msg->m1108);
         break;
     }
-    ((J2DTextBox*)i_Msg->m0544[0].pane)->shiftSet(0.0f, uVar2);
-    ((J2DTextBox*)i_Msg->m0544[1].pane)->shiftSet(0.0f, uVar2);
-    ((J2DTextBox*)i_Msg->m0544[2].pane)->shiftSet(0.0f, uVar2);
-    ((J2DTextBox*)i_Msg->m0544[3].pane)->shiftSet(0.0f, uVar2);
+    ((J2DTextBox*)i_Msg->m0544[0].pane)->shiftSet(0.0f, y);
+    ((J2DTextBox*)i_Msg->m0544[1].pane)->shiftSet(0.0f, y);
+    ((J2DTextBox*)i_Msg->m0544[2].pane)->shiftSet(0.0f, y);
+    ((J2DTextBox*)i_Msg->m0544[3].pane)->shiftSet(0.0f, y);
 }
 
 /* 8020F3F8-8020F4E0       .text dMsg_rubySet__FP13sub_msg_class */
 void dMsg_rubySet(sub_msg_class* i_Msg) {
-    J2DScreen* pJVar2;
-
     if (dComIfGs_getOptRuby()) {
         i_Msg->m0544[1].pane->hide();
         i_Msg->m0544[3].pane->hide();
@@ -1145,13 +1136,11 @@ void dMsg_rubySet(sub_msg_class* i_Msg) {
         i_Msg->m011C[1].pane->hide();
         i_Msg->m011C[3].pane->hide();
     } else {
-        pJVar2 = (J2DScreen*)i_Msg->m0544[1].pane;
-        if (pJVar2->isVisible()) {
-            pJVar2->show();
+        if (((J2DScreen*)i_Msg->m0544[1].pane)->isVisible()) {
+            ((J2DScreen*)i_Msg->m0544[1].pane)->show();
         }
-        pJVar2 = (J2DScreen*)i_Msg->m0544[3].pane;
-        if (pJVar2->isVisible()) {
-            pJVar2->show();
+        if (((J2DScreen*)i_Msg->m0544[3].pane)->isVisible()) {
+            ((J2DScreen*)i_Msg->m0544[3].pane)->show();
         }
         if (i_Msg->mMesgEntry.mTextboxType == 9) {
             return;
@@ -1165,22 +1154,18 @@ void dMsg_rubySet(sub_msg_class* i_Msg) {
         if (i_Msg->mMesgEntry.mTextboxType == 5) {
             return;
         }
-        pJVar2 = (J2DScreen*)i_Msg->m011C[1].pane;
-        if (pJVar2->isVisible()) {
-            pJVar2->show();
+        if (((J2DScreen*)i_Msg->m011C[1].pane)->isVisible()) {
+            ((J2DScreen*)i_Msg->m011C[1].pane)->show();
         }
-        pJVar2 = (J2DScreen*)i_Msg->m011C[3].pane;
-        if (!pJVar2->isVisible()) {
-            return;
+        if (((J2DScreen*)i_Msg->m011C[3].pane)->isVisible()) {
+            ((J2DScreen*)i_Msg->m011C[3].pane)->show();
         }
-        pJVar2->show();
     }
 }
 
 /* 8020F4E0-8020F7EC       .text dMsg_mesgOutPos__FP13sub_msg_class */
 void dMsg_mesgOutPos(sub_msg_class* i_Msg) {
     s32 uVar1;
-    u8 bVar2;
     u8 bVar4;
     int iVar3;
     cXyz local_68;
@@ -1200,8 +1185,7 @@ void dMsg_mesgOutPos(sub_msg_class* i_Msg) {
         }
     }
     dMsg_msg_pane_parts_set(&i_Msg->m049C, bVar4);
-    bVar2 = i_Msg->mMesgEntry.mTextboxType;
-    if ((bVar2 != 5) && (bVar2 != 0xe)) {
+    if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
         dMsg_arw_pane_parts_set(&i_Msg->mPane_Arrow, &i_Msg->m049C);
         dMsg_arw_pane_parts_set(&i_Msg->m050C, &i_Msg->m049C);
         i_Msg->m1114 = (int)((i_Msg->mPane_Arrow).mPosTopLeft.y + (i_Msg->mPane_Arrow).mSizeOrig.y);
@@ -1863,7 +1847,6 @@ void dMsg_messageShow(sub_msg_class* i_Msg) {
 
 /* 80211DA0-8021209C       .text dMsg_stopProc__FP13sub_msg_class */
 s32 dMsg_stopProc(sub_msg_class* i_Msg) {
-    u8 bVar1;
     if (i_Msg->mMsgDataProc.autoSendFlag != 0) {
         if (i_Msg->mMsgDataProc.dec_waitTimer() == 0) {
             i_Msg->mMsgDataProc.setAutoSendFlagOff();
@@ -1874,8 +1857,7 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
             dMsg_value_init(i_Msg);
             dMsg_yose_select(i_Msg);
             dMsg_setString(i_Msg);
-            bVar1 = i_Msg->mMesgEntry.mTextboxType;
-            if ((bVar1 != 5) && (bVar1 != 0xe)) {
+            if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
                 dMsg_arrowInit(i_Msg);
             }
             dMeter_Info.field_0x0 = 2;
@@ -1887,8 +1869,7 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
             i_Msg->m116A++;
             dComIfGp_setMesgSendButton(i_Msg->m116A);
         } else {
-            bVar1 = i_Msg->mMesgEntry.mTextboxType;
-            if ((bVar1 != 5) && (bVar1 != 0xe)) {
+            if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
                 dMsg_arrowMove(i_Msg);
             }
             dMeter_Info.field_0x0 = 1;
@@ -1938,16 +1919,13 @@ s32 dMsg_stopProc(sub_msg_class* i_Msg) {
 s32 dMsg_selectProc(sub_msg_class* i_Msg) {
     int uVar1;
     s16 sVar3;
-    J2DTextBox* pJVar8;
     u8 uVar9;
     int iVar10;
     int iVar11;
-    J2DPicture* pJVar14;
 
-    pJVar8 = (J2DTextBox*)i_Msg->m0544[0].pane;
-    iVar10 = (int)pJVar8->getBounds().i.x;
-    iVar11 = (int)pJVar8->getBounds().i.y;
-    uVar1 = pJVar8->getLineSpace();
+    iVar10 = ((J2DTextBox*)i_Msg->m0544[0].pane)->getBounds().i.x;
+    iVar11 = ((J2DTextBox*)i_Msg->m0544[0].pane)->getBounds().i.y;
+    uVar1 = ((J2DTextBox*)i_Msg->m0544[0].pane)->getLineSpace();
     sVar3 = i_Msg->m026C[0].mUserArea;
     if (sVar3 == 0) {
         if ((i_Msg->mStatus == fopMsgStts_SELECT_2_e) || (i_Msg->mStatus == fopMsgStts_SELECT_3_e)) {
@@ -2000,15 +1978,11 @@ s32 dMsg_selectProc(sub_msg_class* i_Msg) {
         }
         sVar3 = i_Msg->m026C[8].mUserArea;
         if (sVar3 < 10) {
-            pJVar14 = (J2DPicture*)i_Msg->m01FC.pane;
-            pJVar14->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
-            pJVar14 = (J2DPicture*)i_Msg->m0234.pane;
-            pJVar14->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+            ((J2DPicture*)i_Msg->m01FC.pane)->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+            ((J2DPicture*)i_Msg->m0234.pane)->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
         } else if (sVar3 < 0x14) {
-            pJVar14 = (J2DPicture*)i_Msg->m01FC.pane;
-            pJVar14->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-            pJVar14 = (J2DPicture*)i_Msg->m0234.pane;
-            pJVar14->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+            ((J2DPicture*)i_Msg->m01FC.pane)->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+            ((J2DPicture*)i_Msg->m0234.pane)->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
         }
         fopMsgM_paneTrans(&i_Msg->m01FC, 0.0f, i_Msg->mSelectNum * uVar1);
         fopMsgM_paneTrans(&i_Msg->m0234, 0.0f, i_Msg->mSelectNum * uVar1);
@@ -2020,15 +1994,11 @@ s32 dMsg_selectProc(sub_msg_class* i_Msg) {
         }
         sVar3 = i_Msg->m026C[8].mUserArea;
         if (sVar3 < 10) {
-            pJVar14 = (J2DPicture*)i_Msg->m01FC.pane;
-            pJVar14->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
-            pJVar14 = (J2DPicture*)i_Msg->m0234.pane;
-            pJVar14->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+            ((J2DPicture*)i_Msg->m01FC.pane)->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+            ((J2DPicture*)i_Msg->m0234.pane)->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
         } else if (sVar3 < 0x14) {
-            pJVar14 = (J2DPicture*)i_Msg->m01FC.pane;
-            pJVar14->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-            pJVar14 = (J2DPicture*)i_Msg->m0234.pane;
-            pJVar14->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+            ((J2DPicture*)i_Msg->m01FC.pane)->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+            ((J2DPicture*)i_Msg->m0234.pane)->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
         }
         fopMsgM_paneTrans(&i_Msg->m01FC, 0.0f, i_Msg->mSelectNum * uVar1);
         fopMsgM_paneTrans(&i_Msg->m0234, 0.0f, i_Msg->mSelectNum * uVar1);
@@ -2383,8 +2353,6 @@ s32 dMsg_continueProc(sub_msg_class* i_Msg) {
 
 /* 80213650-80213830       .text dMsg_closewaitProc__FP13sub_msg_class */
 s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
-    u8 bVar1;
-
     if (i_Msg->mMsgDataProc.autoSendFlag != 0) {
         if ((i_Msg->mMsgDataProc.dec_waitTimer() == 0) || (fopMsgM_checkMessageSend())) {
             i_Msg->mMsgDataProc.setAutoSendFlagOff();
@@ -2403,8 +2371,7 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
                 if ((((CPad_CHECK_TRIG_A(0)) || (CPad_CHECK_TRIG_B(0))) || (fopMsgM_checkMessageSend())) && (!dComIfGp_checkMesgBgm())) {
                     i_Msg->mMsgDataProc.setHandSendFlagOff();
                     i_Msg->mStatus = fopMsgStts_BOX_CLOSING_e;
-                    bVar1 = i_Msg->mMesgEntry.mTextboxType;
-                    if ((bVar1 != 5) && (bVar1 != 0xe)) {
+                    if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
                         fopMsgM_setNowAlphaZero(&i_Msg->m050C);
                     }
                     i_Msg->m1100 = 0;
@@ -2412,8 +2379,7 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
                     i_Msg->m116A++;
                     dComIfGp_setMesgSendButton(i_Msg->m116A);
                 } else {
-                    bVar1 = i_Msg->mMesgEntry.mTextboxType;
-                    if ((bVar1 != 5) && (bVar1 != 0xe)) {
+                    if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
                         dMsg_dotMove(i_Msg);
                     }
                     dMeter_Info.field_0x0 = 4;
@@ -2421,8 +2387,7 @@ s32 dMsg_closewaitProc(sub_msg_class* i_Msg) {
             } else {
                 i_Msg->mMsgDataProc.handSendFlag = 0;
                 i_Msg->mStatus = fopMsgStts_BOX_CLOSING_e;
-                bVar1 = i_Msg->mMesgEntry.mTextboxType;
-                if ((bVar1 != 5) && (bVar1 != 0xe)) {
+                if ((i_Msg->mMesgEntry.mTextboxType != 5) && (i_Msg->mMesgEntry.mTextboxType != 0xe)) {
                     fopMsgM_setNowAlphaZero(&i_Msg->m050C);
                 }
                 i_Msg->m1100 = 0;
@@ -2779,16 +2744,7 @@ static BOOL dMsg_Draw(sub_msg_class* i_Msg) {
 
 /* 80214560-802153B0       .text dMsg_Execute__FP13sub_msg_class */
 static BOOL dMsg_Execute(sub_msg_class* i_Msg) {
-    u8 bVar1;
-    s32 fVar2;
-    s32 fVar3;
-    s32 fVar4;
-    GXColor GVar7;
-    JKRHeap* pJVar8;
-    MyScreen* pJVar12;
-    f32 dVar15;
-
-    pJVar8 = mDoExt_setCurrentHeap(i_Msg->mpHeap);
+    JKRHeap* oldHeap = mDoExt_setCurrentHeap(i_Msg->mpHeap);
     if (dComIfGp_checkMesgSendButton()) {
         dComIfGp_setMesgSendButton(0);
     }
@@ -2856,8 +2812,7 @@ static BOOL dMsg_Execute(sub_msg_class* i_Msg) {
     } else if (i_Msg->mStatus == fopMsgStts_TACT_e) {
         dMsg_tactProc(i_Msg);
     }
-    bVar1 = i_Msg->mMesgEntry.mTextboxType;
-    if ((bVar1 == 9) || (bVar1 == 1)) {
+    if ((i_Msg->mMesgEntry.mTextboxType == 9) || (i_Msg->mMesgEntry.mTextboxType == 1)) {
         if (i_Msg->m0624[8].mNowAlpha == i_Msg->m0624[8].mInitAlpha) {
             dMsg_ringMove(i_Msg);
             dMsg_lightMove(i_Msg);
@@ -2869,35 +2824,32 @@ static BOOL dMsg_Execute(sub_msg_class* i_Msg) {
                 i_Msg->m10B4[i]->setGlobalAlpha(i_Msg->m0624[8].mNowAlpha);
             }
         }
-    } else if (bVar1 == 0xe) {
+    } else if (i_Msg->mMesgEntry.mTextboxType == 0xe) {
         dMsg_cornerMove(i_Msg);
     }
     dMsg_rubySet(i_Msg);
-    f32 fvar2_2;
+    f32 dVar15;
     if (dComIfGs_getOptRuby()) {
-        fvar2_2 = -4.0f;
+        dVar15 = -4.0f;
     } else {
-        fvar2_2 = 0.0f;
+        dVar15 = 0.0f;
     }
-    dVar15 = fvar2_2;
     fopMsgM_messageSendOff();
-    GVar7 = g_msgHIO.field_0x5;
-    bVar1 = i_Msg->mMesgEntry.mTextboxType;
-    if (bVar1 == 5) {
-        static s32 posY0 = (i_Msg->m0544[0].pane)->getBounds().i.y;
-        static s32 posY1 = (i_Msg->m0544[1].pane)->getBounds().i.y;
-        static s32 posY2 = (i_Msg->m0544[2].pane)->getBounds().i.y;
-        static s32 posY3 = (i_Msg->m0544[3].pane)->getBounds().i.y;
-        pJVar12 = (MyScreen*)i_Msg->m0544[0].pane;
-        s32 fVar1 = pJVar12->getBounds().i.x;
-        fVar2 = i_Msg->m0544[1].pane->getBounds().i.x;
-        fVar3 = i_Msg->m0544[2].pane->getBounds().i.x;
-        fVar4 = i_Msg->m0544[3].pane->getBounds().i.x;
-        pJVar12->move(fVar1, posY0);
+    GXColor GVar7 = g_msgHIO.field_0x5;
+    if (i_Msg->mMesgEntry.mTextboxType == 5) {
+        static int posY0 = (i_Msg->m0544[0].pane)->getBounds().i.y;
+        static int posY1 = (i_Msg->m0544[1].pane)->getBounds().i.y;
+        static int posY2 = (i_Msg->m0544[2].pane)->getBounds().i.y;
+        static int posY3 = (i_Msg->m0544[3].pane)->getBounds().i.y;
+        int fVar1 = ((MyScreen*)i_Msg->m0544[0].pane)->getBounds().i.x;
+        int fVar2 = i_Msg->m0544[1].pane->getBounds().i.x;
+        int fVar3 = i_Msg->m0544[2].pane->getBounds().i.x;
+        int fVar4 = i_Msg->m0544[3].pane->getBounds().i.x;
+        ((MyScreen*)i_Msg->m0544[0].pane)->move(fVar1, posY0);
         i_Msg->m0544[1].pane->move(fVar2, posY1);
         i_Msg->m0544[2].pane->move(fVar3, posY2);
         i_Msg->m0544[3].pane->move(fVar4, posY3);
-    } else if ((bVar1 == 9) || (bVar1 == 1)) {
+    } else if ((i_Msg->mMesgEntry.mTextboxType == 9) || (i_Msg->mMesgEntry.mTextboxType == 1)) {
         i_Msg->m049C.pane->move(i_Msg->m049C.mPosTopLeft.x, (i_Msg->m049C.mPosTopLeft.y + (int)g_msgHIO.field_0x66));
         i_Msg->m050C.pane->move(i_Msg->m050C.mPosTopLeft.x, (i_Msg->m050C.mPosTopLeft.y + g_msgHIO.field_0x66));
         i_Msg->m0544[0].pane->move(i_Msg->m10F8, (g_msgHIO.field_0x66 + (dVar15 + ((i_Msg->m10FC - (int)g_msgHIO.field_0x62) - (int)textOffsetY))));
@@ -2908,7 +2860,7 @@ static BOOL dMsg_Execute(sub_msg_class* i_Msg) {
         i_Msg->m0544[3].pane->move(
             i_Msg->m10F8 + 2, ((int)g_msgHIO.field_0x66 + (dVar15 + (((i_Msg->m10FC - (int)g_msgHIO.field_0x60) + 2) - (int)textOffsetY)))
         );
-    } else if (bVar1 == 0xe) {
+    } else if (i_Msg->mMesgEntry.mTextboxType == 0xe) {
         i_Msg->m049C.pane->move(i_Msg->m049C.mPosTopLeft.x, (i_Msg->m049C.mPosTopLeft.y + (int)g_msgHIO.field_0x66));
         i_Msg->m0544[0].pane->move(i_Msg->m10F8, ((int)g_msgHIO.field_0x66 + (dVar15 + ((i_Msg->m10FC - (int)g_msgHIO.field_0x62) - (int)textOffsetY))));
         i_Msg->m0544[1].pane->move(i_Msg->m10F8, ((int)g_msgHIO.field_0x66 + (dVar15 + ((i_Msg->m10FC - (int)g_msgHIO.field_0x60) - (int)textOffsetY))));
@@ -2933,7 +2885,7 @@ static BOOL dMsg_Execute(sub_msg_class* i_Msg) {
         );
     }
     dComIfGp_setMesgStatus(i_Msg->mStatus);
-    mDoExt_setCurrentHeap(pJVar8);
+    mDoExt_setCurrentHeap(oldHeap);
     return TRUE;
 }
 

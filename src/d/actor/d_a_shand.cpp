@@ -88,9 +88,9 @@ void control2(shand_class* i_this) {
     cLib_addCalc2(&i_this->field_2F0, 1.0f, 1.0f, 0.01f);
 
     int i = 18;
-    short Yangle;
+    s16 Yangle;
     int XZangle;
-    shand_s* shand_i = &i_this->field_31C[i];
+    shand_s* shand_i = &i_this->field_31C[18];
     for(i = 18; i >= 1; i--, shand_i--){
         float delta_pos_x = shand_i->mPos.x - shand_i[1].mPos.x;
         float delta_pos_y = shand_i->mPos.y - shand_i[1].mPos.y;

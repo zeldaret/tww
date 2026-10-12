@@ -6,7 +6,7 @@
 
 namespace JMessage {
 namespace data {
-extern const int ga4cSignature;
+extern const char ga4cSignature[4];
 
 struct TParse_THeader : public JGadget::binary::TParseData_aligned<4> {
     TParse_THeader(const void* data) : TParseData_aligned(data) {}
@@ -15,7 +15,7 @@ struct TParse_THeader : public JGadget::binary::TParseData_aligned<4> {
     char* get() const { return (char*)getRaw(); }
     const void* getContent() const { return (char*)getRaw() + 0x20; }
 
-    u32* get_signature() const { return (u32*)(get() + 0x0); }
+    char* get_signature() const { return (char*)(get() + 0x0); }
     u32 get_type() const { return *(u32*)(get() + 0x4); }
     u32 get_blockNumber() const { return *(u32*)(get() + 0xC); }
     u8 get_encoding() const { return *(u8*)(get() + 0x10); }

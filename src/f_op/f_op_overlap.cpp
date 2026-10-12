@@ -8,22 +8,22 @@
 #include "f_op/f_op_overlap_mng.h"
 #include "f_pc/f_pc_manager.h"
 
-static s32 fopOvlp_Draw(void* i_ovlp) {
+static BOOL fopOvlp_Draw(void* i_ovlp) {
     overlap_task_class* i_this = (overlap_task_class*)i_ovlp;
     return fpcLf_DrawMethod((leafdraw_method_class*)i_this->sub_method, i_this);
 }
 
-static s32 fopOvlp_Execute(void* i_ovlp) {
+static BOOL fopOvlp_Execute(void* i_ovlp) {
     overlap_task_class* i_this = (overlap_task_class*)i_ovlp;
     return fpcMtd_Execute((process_method_class*)i_this->sub_method, i_this);
 }
 
-static s32 fopOvlp_IsDelete(void* i_ovlp) {
+static BOOL fopOvlp_IsDelete(void* i_ovlp) {
     overlap_task_class* i_this = (overlap_task_class*)i_ovlp;
     return fpcMtd_IsDelete((process_method_class*)i_this->sub_method, i_this);
 }
 
-static s32 fopOvlp_Delete(void* i_ovlp) {
+static BOOL fopOvlp_Delete(void* i_ovlp) {
     overlap_task_class* i_this = (overlap_task_class*)i_ovlp;
     return fpcMtd_Delete((process_method_class*)i_this->sub_method, i_this);
 }

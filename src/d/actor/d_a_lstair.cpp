@@ -231,7 +231,7 @@ void daLStair_c::checkAppear() {
 /* 00000C88-00000D78       .text moveBG__10daLStair_cFv */
 void daLStair_c::moveBG() {
     bool switch_status = fopAcM_isSwitch(this, mSwitchNo);
-    bool enemy_gone = fopAcM_myRoomSearchEnemy(current.roomNo) == NULL;
+    bool enemy_gone = fopAcM_myRoomSearchEnemy(fopAcM_GetRoomNo(this)) == NULL;
 
     f32 maxStep = 10.0f;
     f32 minStep = 5.0f;
@@ -312,7 +312,7 @@ void daLStair_c::disappear_stair() {
 void daLStair_c::set_on_se() {
     stage_stag_info_class* stage_info = dComIfGp_getStageStagInfo();
 
-    if ((dStage_stagInfo_GetSaveTbl(stage_info)) == dStageType_FF1_e) {
+    if (dStage_stagInfo_GetSaveTbl(stage_info) == dStageType_FF1_e) {
         fopAcM_seStart(this, JA_SE_OBJ_R_STAIR_APPEAR, 0);
     }
 }

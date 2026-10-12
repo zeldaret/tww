@@ -322,8 +322,7 @@ void dMenu_Option_c::cursorMove() {
 
         fopMsgM_cposMove(&mB30[i]);
         
-        J2DPane* pane = mB30[i].pane;
-        pane->rotate(mB30[i].mSize.x / 2.0f, mB30[i].mSize.y / 2.0f, ROTATE_Z, pane->getRotate());
+        mB30[i].pane->rotate(mB30[i].mSize.x / 2.0f, mB30[i].mSize.y / 2.0f, ROTATE_Z, mB30[i].pane->getRotate());
     }
 
     cursorScale();
