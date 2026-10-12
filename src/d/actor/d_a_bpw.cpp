@@ -3760,7 +3760,7 @@ void action_b_fire_1_dousa(bpw_class* i_this) {
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
             cM3dGPla* pla = dComIfG_Bgsp()->GetTriPla(linChk);
             (i_this->m66C) = *linChk.GetCrossP();
-            if (pla->GetNP()->y == 1.0f) {
+            if (pla->mNormal.y == 1.0f) {
                 i_this->m67E = 0;
             } else {
                 fVar1 = i_this->m304[0].x - i_this->m66C.x;
