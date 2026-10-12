@@ -5,14 +5,35 @@
 #include "global.h"
 
 enum dMf_ZoomLevel {
-    FMAP_ZOOM_WORLD  = 0,
-    FMAP_ZOOM_SECTOR = 1,
-    FMAP_ZOOM_DETAIL = 2,
+    FMAP_ZOOM_WORLD,
+    FMAP_ZOOM_SECTOR,
+    FMAP_ZOOM_DETAIL,
+};
+
+enum dMf_MapType {
+    FMAP_MAPTYPE_TRI,
+    FMAP_MAPTYPE_UNK_1,
+    FMAP_MAPTYPE_UNK_2,
+    FMAP_MAPTYPE_TINGLE,
+    FMAP_MAPTYPE_GHOST,
+    FMAP_MAPTYPE_UNK_5,
+    FMAP_MAPTYPE_UNK_6,
+    FMAP_MAPTYPE_TREASURE,
+    FMAP_MAPTYPE_UNK_8,
+    FMAP_MAPTYPE_DOCTA,
+    FMAP_MAPTYPE_DFALIY,
+    FMAP_MAPTYPE_HEART_P,
+    FMAP_MAPTYPE_HEART_M,
+    FMAP_MAPTYPE_SUBDAN,
+    FMAP_MAPTYPE_MOON,
+    FMAP_MAPTYPE_YAGURA,
+    FMAP_MAPTYPE_TERRY,
+    FMAP_MAPTYPE_SUBMA,
 };
 
 struct aramCmapSalvagePnt_t {
-    /* 0x0 */ s16 field_0x0;
-    /* 0x2 */ s16 field_0x2;
+    /* 0x0 */ s16 islandX;
+    /* 0x2 */ s16 islandY;
     /* 0x4 */ s16 x;
     /* 0x6 */ s16 y;
 }; // Size: 0x8
@@ -22,7 +43,8 @@ struct aramCmapDatPnt_t {
     /* 0x01 */ s8 collectMapNo;
     /* 0x02 */ s8 cmapNo;
     /* 0x03 */ s8 mapType;
-    /* 0x04 */ s16 field_0x4;
+    /* 0x04 */ s8 gridX;
+    /* 0x05 */ s8 gridY;
     /* 0x06 */ aramCmapSalvagePnt_t salvagePnt[4];
 }; // Size: 0x26
 STATIC_ASSERT(sizeof(aramCmapDatPnt_t) == 0x26);

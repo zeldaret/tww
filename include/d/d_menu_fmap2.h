@@ -35,9 +35,14 @@ class dMenu_Fmap2_c {
 public:
     virtual ~dMenu_Fmap2_c() {}
 
-    void getCmapDatPnt(int) {}
-    void getCmapDatValue() {}
-    void lineInter0to1ForU8(u8, u8, f32) {}
+    aramCmapDatPnt_t* getCmapDatPnt(int i_cmapIdx) {
+        return mpFmapDatPnt->getCmapDatPnt4(i_cmapIdx);
+    }
+    void getCmapDatValue() {
+    }
+    u8 lineInter0to1ForU8(u8 a, u8 b, f32 c) {
+        return a + (b - a) * c;
+    }
     void setAramCmapDat(aramCmapDat_c* i_ptr) { mpFmapDatPnt = i_ptr; }
     void setSvPtr(dMenu_FmapSv_c* i_ptr) { fmapSv = i_ptr; }
 
@@ -106,11 +111,11 @@ public:
     void changeFmapTexture();
     void changeIslandName();
     void fmapPlayerPosDisp();
-    void fmapPlayerPosDispCheck(f32*, f32*);
+    BOOL fmapPlayerPosDispCheck(f32*, f32*);
     void changeCmapName();
     void cmapPlayerPosDisp();
     void cmapSalvagePosDisp();
-    void cmapPlayerPosDispCheck(f32*, f32*);
+    BOOL cmapPlayerPosDispCheck(f32*, f32*);
     BOOL paneTransBase(s16, u8, f32, f32, u8, u8, int);
     BOOL paneAlphaFmapBase(s16, u8, u8, int);
     BOOL paneAlphaCmapBase(s16, u8, u8, int);
@@ -212,39 +217,39 @@ private:
     /* 0x0008 */ ResTIMG* mCmapTxtMain_p[2];
     /* 0x0010 */ dMenu_FmapSv_c* fmapSv;
     /* 0x0014 */ u8 padding_0x14[0x18 - 0x14];
-    /* 0x0018 */ mDoDvdThd_mountArchive_c* field_0x18;
+    /* 0x0018 */ mDoDvdThd_mountArchive_c* mpMount;
     /* 0x001C */ aramCmapDat_c* mpFmapDatPnt;
     /* 0x0020 */ dDlst_FMAP2_c fmap2Dl;
     /* 0x0028 */ dDlst_FMAP2GS_c fmap2GsDl;
     /* 0x0030 */ STControl* stick;
-    /* 0x0034 */ JUTFont* field_0x34;
-    /* 0x0038 */ JUTFont* field_0x38;
+    /* 0x0034 */ JUTFont* mFont;
+    /* 0x0038 */ JUTFont* mRFont;
     /* 0x003C */ dDlst_2DOutFont_c* outFont[2];
     /* 0x0044 */ dDlst_2DOutFont_c* outFontS[2];
     /* 0x004C */ fopMsgM_pane_class mClPane;
     /* 0x0084 */ fopMsgM_pane_class mFcxxPanes[8];
     /* 0x0244 */ fopMsgM_pane_class mCcxxPanes[8];
     /* 0x0404 */ fopMsgM_pane_class mKdmPane;
-    /* 0x043c */ fopMsgM_pane_class field_0x43c[5];
-    /* 0x0554 */ fopMsgM_pane_class field_0x554[17];
-    /* 0x090C */ fopMsgM_pane_class field_0x90c[17];
-    /* 0x0CC4 */ fopMsgM_pane_class* field_0xcc4[2];
+    /* 0x043c */ fopMsgM_pane_class mMswPanes[5];
+    /* 0x0554 */ fopMsgM_pane_class mCk1Panes[17];
+    /* 0x090C */ fopMsgM_pane_class mCk2Panes[17];
+    /* 0x0CC4 */ fopMsgM_pane_class* mCkPanes[2];
     /* 0x0CCC */ fopMsgM_pane_class mCi22Pane;
     /* 0x0D04 */ fopMsgM_pane_class mCi21Pane;
     /* 0x0D3C */ fopMsgM_pane_class mCi12Pane;
     /* 0x0D74 */ fopMsgM_pane_class mCi11Pane;
     /* 0x0DAC */ fopMsgM_pane_class mLnk3Pane;
     /* 0x0DE4 */ fopMsgM_pane_class mAreaPane;
-    /* 0x0E1C */ fopMsgM_pane_class field_0xe1c[2];
+    /* 0x0E1C */ fopMsgM_pane_class mIslandNamePanes[2];
     /* 0x0E8C */ fopMsgM_pane_class mCmyuPane;
     /* 0x0EC4 */ fopMsgM_pane_class mCmydPane;
     /* 0x0EFC */ fopMsgM_pane_class mCnd0Pane;
     /* 0x0F34 */ fopMsgM_pane_class mCm1xPanes[2];
     /* 0x0FA4 */ fopMsgM_pane_class mCm2xPanes[2];
-    /* 0x1014 */ fopMsgM_pane_class field_0x1014[5];
-    /* 0x112C */ fopMsgM_pane_class field_0x112c[5];
-    /* 0x1244 */ fopMsgM_pane_class* field_0x1244[2];
-    /* 0x124C */ fopMsgM_pane_class* field_0x124c[2];
+    /* 0x1014 */ fopMsgM_pane_class mClS1Panes[5];
+    /* 0x112C */ fopMsgM_pane_class mClS2Panes[5];
+    /* 0x1244 */ fopMsgM_pane_class* mCmxxPanes[2];
+    /* 0x124C */ fopMsgM_pane_class* mClSPanes[2];
     /* 0x1254 */ fopMsgM_pane_class mMkfdPane;
     /* 0x128C */ fopMsgM_pane_class mMkcdPane;
     /* 0x12C4 */ fopMsgM_pane_class mMkm0Pane;
@@ -255,10 +260,10 @@ private:
     /* 0x13DC */ fopMsgM_pane_class mFmk1Pane;
     /* 0x1414 */ fopMsgM_pane_class mRkjnPane;
     /* 0x144C */ fopMsgM_pane_class mClg2Pane;
-    /* 0x1484 */ fopMsgM_pane_class field_0x1484[8];
-    /* 0x1644 */ fopMsgM_pane_class field_0x1644[10];
-    /* 0x1874 */ fopMsgM_pane_class field_0x1874[10];
-    /* 0x1AA4 */ fopMsgM_pane_class* field_0x1aa4[2];
+    /* 0x1484 */ fopMsgM_pane_class mCmtPanes[8];
+    /* 0x1644 */ fopMsgM_pane_class mCdd1Panes[10];
+    /* 0x1874 */ fopMsgM_pane_class mCdd2Panes[10];
+    /* 0x1AA4 */ fopMsgM_pane_class* mCddPanes[2];
     /* 0x1AAC */ fopMsgM_pane_alpha_class mGsMs01PaneAlpha;
     /* 0x1AB4 */ fopMsgM_pane_alpha_class mGsMs02PaneAlpha;
     /* 0x1ABC */ fopMsgM_pane_alpha_class mGsSd05PaneAlpha;
@@ -268,7 +273,7 @@ private:
     /* 0x1AD4 */ fopMsgM_pane_alpha_class mGsWk3PaneAlpha;
 #endif
     /* 0x1AD4 */ fopMsgM_pane_alpha_class mGsBsdmPaneAlpha;
-    /* 0x1ADC */ fopMsgM_pane_alpha_class mGsTk0xPaneAlpha[7];
+    /* 0x1ADC */ fopMsgM_pane_alpha_class mGsTk0xPanesAlpha[7];
     /* 0x1B14 */ fopMsgM_pane_alpha_class mGsTkd2PaneAlpha;
     /* 0x1B1C */ fopMsgM_pane_alpha_class mGsTkd1PaneAlpha;
     /* 0x1B24 */ fopMsgM_pane_alpha_class mGsS02PaneAlpha;
@@ -280,7 +285,7 @@ private:
     /* 0x1B54 */ fopMsgM_pane_alpha_class mGsBt3PaneAlpha;
 #endif
 #if VERSION > VERSION_JPN
-    /* 0x1B3C */ fopMsgM_pane_alpha_class mGsGsixPaneAlpha[7];
+    /* 0x1B3C */ fopMsgM_pane_alpha_class mGsGsixPanesAlpha[7];
 #endif
     /* 0x1B74 */ fopMsgM_pane_alpha_class mTnHk00PaneAlpha;
     /* 0x1B7C */ fopMsgM_pane_alpha_class mTnHk01PaneAlpha;
@@ -289,7 +294,7 @@ private:
 #if VERSION > VERSION_JPN
     /* 0x1B94 */ fopMsgM_pane_class mTnGddmPane;
 #endif
-    /* 0x1BCC */ fopMsgM_pane_alpha_class field_0x1bcc[VERSION_SELECT(17, 17, 22, 22)];
+    /* 0x1BCC */ fopMsgM_pane_alpha_class mTnMiscPanesAlpha[VERSION_SELECT(17, 17, 22, 22)];
 #if VERSION > VERSION_JPN
     /* 0x1C7C */ fopMsgM_pane_class mTnLnkPane;
     /* 0x1CB4 */ fopMsgM_pane_class mTnGdgtPane;
@@ -304,9 +309,9 @@ private:
     /* 0x1D54 */ fopMsgM_pane_class mTrLnkPane;
     /* 0x1D8C */ fopMsgM_pane_class mTrGdgtPane;
 #if VERSION > VERSION_JPN
-    /* 0x1DC4 */ fopMsgM_pane_alpha_class field_0x1dc4[8];
-    /* 0x1E04 */ fopMsgM_pane_alpha_class field_0x1e04[8];
-    /* 0x1E44 */ fopMsgM_pane_alpha_class field_0x1e44[8];
+    /* 0x1DC4 */ fopMsgM_pane_alpha_class mTrMgxPanesAlpha[8];
+    /* 0x1E04 */ fopMsgM_pane_alpha_class mTrTfxPanesAlpha[8];
+    /* 0x1E44 */ fopMsgM_pane_alpha_class mTrTgxPanesAlpha[8];
 #endif
     /* 0x1E84 */ fopMsgM_pane_alpha_class mIkMs01PaneAlpha;
     /* 0x1E8C */ fopMsgM_pane_alpha_class mIkMs02PaneAlpha;
@@ -347,7 +352,7 @@ private:
     /* 0x21E4 */ fopMsgM_pane_alpha_class mMoonSd05PaneAlpha;
     /* 0x21EC */ fopMsgM_pane_alpha_class mMoonHs04PaneAlpha;
     /* 0x21F4 */ fopMsgM_pane_class mMoonGddmPane;
-    /* 0x222C */ fopMsgM_pane_alpha_class field_0x222c[38];
+    /* 0x222C */ fopMsgM_pane_alpha_class mMoonKrxPanesAlpha[38];
     /* 0x235C */ fopMsgM_pane_class mMoonLnkPane;
     /* 0x2394 */ fopMsgM_pane_class mMoonGdgtPane;
     /* 0x23CC */ fopMsgM_pane_alpha_class mDfaliyMs01PaneAlpha;
@@ -371,8 +376,8 @@ private:
     /* 0x2584 */ fopMsgM_pane_alpha_class mHeartMHs04PaneAlpha;
     /* 0x258C */ fopMsgM_pane_class mHeartMGddmPane;
     /* 0x25C4 */ fopMsgM_pane_alpha_class mHeartMSt09PaneAlpha;
-    /* 0x25CC */ fopMsgM_pane_alpha_class mHeartMNhxPaneAlpha[DEMO_SELECT(9, 7)];
-    /* 0x2604 */ fopMsgM_pane_alpha_class field_0x2604[DEMO_SELECT(13, 9)];
+    /* 0x25CC */ fopMsgM_pane_alpha_class mHeartMNhxPanesAlpha[DEMO_SELECT(9, 7)];
+    /* 0x2604 */ fopMsgM_pane_alpha_class mHeartMMkxPanesAlpha[DEMO_SELECT(13, 9)];
     /* 0x264C */ fopMsgM_pane_class mHeartMLnkPane;
     /* 0x2684 */ fopMsgM_pane_class mHeartMGdgtPane;
     /* 0x26BC */ fopMsgM_pane_alpha_class mSubdanMs01PaneAlpha;
@@ -381,74 +386,79 @@ private:
     /* 0x26D4 */ fopMsgM_pane_alpha_class mSubdanHs04PaneAlpha;
     /* 0x26DC */ fopMsgM_pane_class mSubdanGddmPane;
     /* 0x2714 */ fopMsgM_pane_alpha_class mSubdanIg26PaneAlpha;
-    /* 0x271C */ fopMsgM_pane_alpha_class mSubdanIgnxPaneAlpha[DEMO_SELECT(6, 2)];
+    /* 0x271C */ fopMsgM_pane_alpha_class mSubdanIgnxPanesAlpha[DEMO_SELECT(6, 2)];
     /* 0x272C */ fopMsgM_pane_class mSubdanLnkPane;
     /* 0x2764 */ fopMsgM_pane_class mSubdanGdgtPane;
-    /* 0x279C */ fopMsgM_pane_class* field_0x279c;
-    /* 0x27A0 */ u8 field_0x27a0;
-    /* 0x27A1 */ u8 field_0x27a1;
-    /* 0x27A2 */ u8 padding_0x27a2[0x27A8 - 0x27A2];
-    /* 0x27A8 */ u8 field_0x27a8;
-    /* 0x27A9 */ s8 field_0x27a9;
-    /* 0x27AA */ s8 field_0x27aa;
-    /* 0x27AB */ s8 field_0x27ab;
-    /* 0x27AC */ s16 field_0x27ac;
-    /* 0x27AE */ u8 padding_0x27ae[0x27B0 - 0x27AE];
-    /* 0x27B0 */ f32 field_0x27b0;
-    /* 0x27B4 */ f32 field_0x27b4;
-    /* 0x27B8 */ f32 field_0x27b8;
-    /* 0x27BC */ s8 field_0x27bc;
-    /* 0x27BD */ s8 field_0x27bd;
-    /* 0x27C0 */ char* field_0x27c0[2];
-    /* 0x27C8 */ char* field_0x27c8[4];
-    /* 0x27D8 */ char* field_0x27d8;
-    /* 0x27DC */ char* field_0x27dc;
-    /* 0x27E0 */ char* field_0x27e0;
-    /* 0x27E4 */ char* field_0x27e4;
-    /* 0x27E8 */ char* field_0x27e8;
-    /* 0x27EC */ char* field_0x27ec;
-    /* 0x27F0 */ char* field_0x27f0;
-    /* 0x27F4 */ char* field_0x27f4;
-    /* 0x27F8 */ u8 field_0x27f8;
-    /* 0x27F9 */ u8 field_0x27f9;
-    /* 0x27FA */ u8 field_0x27fa;
-    /* 0x27FB */ u8 field_0x27fb;
-    /* 0x27FC */ u8 field_0x27fc;
+    /* 0x279C */ fopMsgM_pane_class* mpGdgtPane;
+    /* 0x27A0 */ u8 field_0x27A0;
+    /* 0x27A1 */ u8 mMainProcIdx;
+    /* 0x27A2 */ u8 padding_0x27A2[0x27A5 - 0x27A2];
+    /* 0x27A5 */ u8 mFCursorBufIdx;
+    /* 0x27A6 */ u8 mCCursorBufIdx;
+    /* 0x27A7 */ u8 mCSelCursorToggle;
+    /* 0x27A8 */ u8 mCollectMapNum;
+    /* 0x27A9 */ s8 mCmapSelNo;
+    /* 0x27AA */ s8 mPrevCmapSelNo;
+    /* 0x27AB */ s8 mCmapScrollDir;
+    /* 0x27AC */ s16 mFrameTimer;
+    /* 0x27AE */ u8 padding_0x27AE[0x27B0 - 0x27AE];
+    /* 0x27B0 */ f32 mPlayerPosX;
+    /* 0x27B4 */ f32 mPlayerPosZ;
+    /* 0x27B8 */ f32 mPlayerAngleDeg;
+    /* 0x27BC */ s8 mGridX;
+    /* 0x27BD */ s8 mGridY;
+    /* 0x27BE */ s8 mPlayerPointTimer;
+    /* 0x27BF */ s8 mPlayerPointToggle;
+    /* 0x27C0 */ char* mTxtIslandName[2];
+    /* 0x27C8 */ char* mTxtCmapName[4];
+    /* 0x27D8 */ char* mTxtCk1;
+    /* 0x27DC */ char* mTxtCk1S;
+    /* 0x27E0 */ char* mTxtCk2;
+    /* 0x27E4 */ char* mTxtCk2S;
+    /* 0x27E8 */ char* mTxtCk1Ruby;
+    /* 0x27EC */ char* mTxtCk1RubyS;
+    /* 0x27F0 */ char* mTxtCk2Ruby;
+    /* 0x27F4 */ char* mTxtCk2RubyS;
+    /* 0x27F8 */ u8 mBlackAlpha;
+    /* 0x27F9 */ u8 mWhiteAlpha;
+    /* 0x27FA */ u8 field_0x27FA;
+    /* 0x27FB */ u8 mSpMapDrawMode;
+    /* 0x27FC */ u8 mLockBbutton;
     /* 0x2800 */ f32 field_0x2800;
     /* 0x2804 */ f32 field_0x2804;
     /* 0x2808 */ f32 field_0x2808;
-    /* 0x280C */ u8 field_0x280c;
-    /* 0x280D */ u8 field_0x280d;
-    /* 0x280E */ u8 field_0x280e;
-    /* 0x280F */ u8 field_0x280f;
-    /* 0x2810 */ u8 field_0x2810;
+    /* 0x280C */ u8 field_0x280C;
+    /* 0x280D */ u8 mLeftTriggerHold;
+    /* 0x280E */ u8 mRightTriggerHold;
+    /* 0x280F */ u8 mSpMapKind;
+    /* 0x2810 */ u8 mOnSea;
     /* 0x2811 */ u8 field_0x2811;
-    /* 0x2812 */ u8 field_0x2812;
-    /* 0x2813 */ u8 field_0x2813;
-    /* 0x2814 */ u8 field_0x2814;
-    /* 0x2815 */ u8 field_0x2815;
-    /* 0x2816 */ u8 field_0x2816;
+    /* 0x2812 */ u8 mButtonIconMode;
+    /* 0x2813 */ u8 mClSBufIdx;
+    /* 0x2814 */ u8 mCmxxBufIdx;
+    /* 0x2815 */ u8 mCddBufIdx;
+    /* 0x2816 */ u8 mCkBufIdx;
     /* 0x2817 */ u8 field_0x2817;
     /* 0x2818 */ u8 field_0x2818;
     /* 0x2819 */ u8 field_0x2819;
-    /* 0x281A */ u8 field_0x281a;
-    /* 0x281B */ u8 field_0x281b;
-    /* 0x281C */ u8 field_0x281c;
-    /* 0x281D */ u8 padding_0x281d[0x2820 - 0x281D];
+    /* 0x281A */ u8 field_0x281A;
+    /* 0x281B */ u8 field_0x281B;
+    /* 0x281C */ u8 field_0x281C;
+    /* 0x281D */ u8 padding_0x281D[0x2820 - 0x281D];
     /* 0x2820 */ JUtility::TColor color_0x2820;
     /* 0x2824 */ JUtility::TColor color_0x2824;
     /* 0x2828 */ JUtility::TColor color_0x2828;
     /* 0x282C */ JUtility::TColor color_0x282C;
-    /* 0x2830 */ J2DTextBox::TFontSize field_0x2830;
-    /* 0x2838 */ J2DTextBox::TFontSize field_0x2838;
-    /* 0x2840 */ f32 field_0x2840;
-    /* 0x2844 */ f32 field_0x2844;
-    /* 0x2848 */ u16 field_0x2848[2];
+    /* 0x2830 */ J2DTextBox::TFontSize mCkTextFontSize;
+    /* 0x2838 */ J2DTextBox::TFontSize mCkRubyFontSize;
+    /* 0x2840 */ f32 mCkTextLineSpace;
+    /* 0x2844 */ f32 mCkRubyLineSpace;
+    /* 0x2848 */ u16 mCkMsgNo[2];
 #if VERSION > VERSION_JPN
-    /* 0x284C */ u8 field_0x284c;
-    /* 0x284D */ u8 field_0x284d;
-    /* 0x284E */ u8 field_0x284e;
-    /* 0x284F */ u8 field_0x284f;
+    /* 0x284C */ u8 field_0x284C;
+    /* 0x284D */ u8 field_0x284D;
+    /* 0x284E */ u8 field_0x284E;
+    /* 0x284F */ u8 field_0x284F;
     /* 0x2850 */ u8 field_0x2850;
 #endif
 }; // Size: 0x2854
@@ -463,92 +473,68 @@ public:
     void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
     /* 0x04 */ s8 mNo;
-    /* 0x05 */ u8 field_0x5;
-    /* 0x06 */ u8 field_0x6;
-    /* 0x07 */ u8 field_0x7;
-    /* 0x08 */ u8 field_0x8;
-    /* 0x09 */ u8 field_0x9;
-    /* 0x0A */ u8 field_0xa;
-    /* 0x0B */ u8 field_0xb;
-    /* 0x0C */ u8 field_0xc;
-    /* 0x0D */ u8 field_0xd;
-    /* 0x0E */ u8 field_0xe;
-    /* 0x0F */ u8 field_0xf;
-    /* 0x10 */ u8 field_0x10;
-    /* 0x11 */ u8 field_0x11;
-    /* 0x12 */ u8 field_0x12;
-    /* 0x13 */ u8 field_0x13;
-    /* 0x14 */ u8 field_0x14;
-    /* 0x16 */ u16 field_0x16;
-    /* 0x18 */ u8 field_0x18[0x1E - 0x18];
-    /* 0x1E */ u8 field_0x1e;
-    /* 0x1F */ u8 field_0x1f;
+    /* 0x05 */ GXColor mPlayerPointWhite1;
+    /* 0x09 */ GXColor mPlayerPointWhite2;
+    /* 0x0D */ GXColor mPlayerPointBlack1;
+    /* 0x11 */ GXColor mPlayerPointBlack2;
+    /* 0x16 */ s16 mPlayerPointTimer;
+    /* 0x18 */ u8 padding_0x18[0x1E - 0x18];
+    /* 0x1E */ u8 field_0x1E;
+    /* 0x1F */ u8 field_0x1F;
     /* 0x20 */ u8 field_0x20;
     /* 0x21 */ u8 field_0x21;
     /* 0x22 */ u8 field_0x22;
     /* 0x24 */ f32 field_0x24;
     /* 0x28 */ u8 field_0x28;
-    /* 0x29 */ u8 field_0x29[0x30 - 0x29];
+    /* 0x29 */ u8 padding_0x29[0x30 - 0x29];
     /* 0x30 */ u8 field_0x30;
     /* 0x31 */ u8 field_0x31;
     /* 0x34 */ f32 field_0x34;
-    /* 0x38 */ u8 field_0x38;
-    /* 0x3A */ s16 field_0x3a;
-    /* 0x3C */ u16 field_0x3c;
-    /* 0x3E */ u8 field_0x3e;
-    /* 0x3F */ u8 field_0x3f;
-    /* 0x40 */ u8 field_0x40;
-    /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ u8 field_0x48;
-    /* 0x49 */ u8 field_0x49;
-    /* 0x4A */ u8 field_0x4a;
-    /* 0x4B */ u8 field_0x4b;
-    /* 0x4C */ u8 field_0x4c;
-    /* 0x4D */ u8 field_0x4d;
-    /* 0x4E */ u8 field_0x4e;
+    /* 0x38 */ u8 mBaseAnimFrame;
+    /* 0x3A */ s16 mOpenPosY;
+    /* 0x3C */ s16 mClosePosY;
+    /* 0x3E */ u8 mChangeAnimFrame;
+    /* 0x3F */ u8 mCmapOpenAnimFrame;
+    /* 0x40 */ u8 mSpMapAnimFrame;
+    /* 0x44 */ f32 mMsgScale;
+    /* 0x48 */ u8 mFCursorFlashFrame;
+    /* 0x49 */ u8 mCCursorFlashFrame;
+    /* 0x4A */ u8 mSelCursorAlphaFrame;
+    /* 0x4B */ u8 mSelCursorMove;
+    /* 0x4C */ u8 field_0x4C;
+    /* 0x4D */ u8 field_0x4D;
+    /* 0x4E */ u8 field_0x4E;
     /* 0x50 */ f32 field_0x50;
     /* 0x54 */ f32 field_0x54;
-    /* 0x58 */ f32 field_0x58;
-    /* 0x5C */ f32 field_0x5c;
-    /* 0x60 */ f32 field_0x60;
-    /* 0x64 */ u8 field_0x64;
-    /* 0x68 */ f32 field_0x68;
-    /* 0x6C */ f32 field_0x6c;
-    /* 0x70 */ f32 field_0x70;
-    /* 0x74 */ u8 field_0x74;
-    /* 0x75 */ u8 field_0x75;
+    /* 0x58 */ f32 mScrollSelOffset;
+    /* 0x5C */ f32 mScrollMsgOffset;
+    /* 0x60 */ f32 mScrollScale;
+    /* 0x64 */ u8 mScrollAnimFrame;
+    /* 0x68 */ f32 mScrollHoldSelOffset;
+    /* 0x6C */ f32 mScrollHoldMsgOffset;
+    /* 0x70 */ f32 mScrollHoldScale;
+    /* 0x74 */ u8 mScrollHoldAnimFrame;
+    /* 0x75 */ u8 mScrollHoldFrame;
     /* 0x76 */ u8 field_0x76;
     /* 0x77 */ u8 field_0x77;
     /* 0x78 */ u8 field_0x78;
     /* 0x79 */ u8 field_0x79;
-    /* 0x7A */ u8 field_0x7a;
-    /* 0x7B */ u8 field_0x7b;
-    /* 0x7C */ u8 field_0x7c;
-    /* 0x7D */ u8 field_0x7d;
-    /* 0x7E */ u8 field_0x7e;
-    /* 0x7F */ u8 field_0x7f;
-    /* 0x80 */ u8 field_0x80;
-    /* 0x81 */ u8 field_0x81;
-    /* 0x82 */ u8 field_0x82;
-    /* 0x83 */ u8 field_0x83;
-    /* 0x84 */ u8 field_0x84;
-    /* 0x85 */ u8 field_0x85;
-    /* 0x86 */ u8 field_0x86;
-    /* 0x87 */ u8 field_0x87;
-    /* 0x88 */ u8 field_0x88;
-    /* 0x89 */ u8 field_0x89;
-    /* 0x8A */ u8 field_0x8a;
-    /* 0x8B */ u8 field_0x8b;
-    /* 0x8C */ u8 field_0x8c;
-    /* 0x8D */ u8 field_0x8d;
+    /* 0x7A */ u8 mGsMoonAnimFrame;
+    /* 0x7B */ u8 mGsMoonHoldFrame;
+    /* 0x7C */ GXColor mGsMoonWhite;
+    /* 0x80 */ GXColor mGsMoonBlack;
+    /* 0x84 */ u8 mGsShipDelay;
+    /* 0x85 */ u8 mGsShipAnimFrame;
+    /* 0x86 */ GXColor mGsShipWhite;
+    /* 0x8A */ GXColor mGsShipBlack;
 #if VERSION > VERSION_JPN
-    /* 0x8E */ u8 field_0x8e;
-    /* 0x8F */ u8 field_0x8f;
-    /* 0x90 */ u8 field_0x90;
-    /* 0x91 */ u8 field_0x91;
-    /* 0x92 */ u8 field_0x92;
-    /* 0x93 */ u8 field_0x93;
-    /* 0x94 */ u8 field_0x94;
+    /* 0x8E */ u8 mGsIconAnimFrame;
+    /* 0x8F */ u8 mGsIconHoldFrame;
+    /* 0x90 */ u8 mGsIconAlphaMax;
+    /* 0x91 */ u8 mGsIconAlphaMin;
+    /* 0x92 */ u8 mTriforceAnimFrame;
+    /* 0x93 */ u8 mTriforceAlphaMax;
+    /* 0x94 */ u8 mTriforceAlphaMin;
 #endif
 };
 
