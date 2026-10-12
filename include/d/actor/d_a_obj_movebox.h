@@ -192,8 +192,8 @@ namespace daObjMovebox {
         int prm_get_dmy() const { return daObj::PrmAbstract(this, PRM_DMY_W, PRM_DMY_S); }
         int prm_get_buoy() const { return daObj::PrmAbstract(this, PRM_BUOY_W, PRM_BUOY_S); }
         
-        BOOL is_switch1() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave1()); };
-        BOOL is_switch2() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prmZ_get_swSave2()); };
+        bool is_switch1() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave1()); };
+        BOOL is_switch2() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prmZ_get_swSave2()) != FALSE; };
         void on_switch1() const { fopAcM_onSwitch(const_cast<Act_c*>(this), prm_get_swSave1()); };
         void on_switch2() const { fopAcM_onSwitch(const_cast<Act_c*>(this), prmZ_get_swSave2()); };
         void off_switch1() const { fopAcM_offSwitch(const_cast<Act_c*>(this), prm_get_swSave1()); };
