@@ -472,7 +472,7 @@ config.libs = [
             Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "f_op/f_op_msg_mng.cpp"),
             Object(Matching,    "f_op/f_op_draw_iter.cpp"),
             Object(Matching,    "f_op/f_op_draw_tag.cpp"),
-            Object(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "f_op/f_op_scene_pause.cpp"),
+            Object(Matching,    "f_op/f_op_scene_pause.cpp"),
 
             # f_pc
             Object(Matching,    "f_pc/f_pc_base.cpp"),
