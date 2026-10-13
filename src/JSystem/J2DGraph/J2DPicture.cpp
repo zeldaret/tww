@@ -441,6 +441,7 @@ void J2DPicture::drawOut(const JGeometry::TBox2<f32>& posBox, const JGeometry::T
     GXColor1u32(color[2]);
     GXTexCoord2f32(s0, t1);
 
+    GXEnd();
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U16, 15);
     GXSetNumTexGens(0);

@@ -2672,6 +2672,7 @@ void dMap_2DPoint_c::draw() {
     GXSetScissor(field_0x4,field_0x8, field_0xc,field_0x10);
     GXBegin(GX_POINTS,GX_VTXFMT0,1);
     GXPosition3s16(field_0x14,field_0x16,0);
+    GXEnd();
     GXSetScissor(0,0,0x280,0x1e0);
     return;
 }

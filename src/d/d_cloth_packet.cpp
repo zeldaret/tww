@@ -457,6 +457,7 @@ void dCloth_packet_c::plot() {
 
             yPos += yStep;
         }
+        GXEnd();
 
         xPos += xStep;
     }
