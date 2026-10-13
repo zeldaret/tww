@@ -292,9 +292,7 @@ void daObjPirateship::Act_c::CreateWave() {
         JPABaseEmitter* emitter = m4AC.getEmitter();
         if (emitter != NULL) {
             const JGeometry::TVec3<f32> scale = COMPOUND_LITERAL(Vec){20.0f, 20.0f, 20.0f};
-
-            emitter->setGlobalDynamicsScale(scale);
-            emitter->setGlobalParticleScale(scale);
+            emitter->setGlobalScale(scale);
         }
     }
 #if VERSION > VERSION_JPN

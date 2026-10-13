@@ -1162,8 +1162,7 @@ bool daObj_Ikada_c::_execute() {
 
         JGeometry::TVec3<f32> scale = COMPOUND_LITERAL(Vec){3.0f, 3.0f, 3.0f};
         JPABaseEmitter* emitter = mBombSmokeEasterEgg.getEmitter();
-        emitter->setGlobalDynamicsScale(scale);
-        emitter->setGlobalParticleScale(scale);
+        emitter->setGlobalScale(scale);
 
         mBombSmokePos = current.pos;
         mBombSmokePos.y = l_HIO.m28;

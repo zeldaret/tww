@@ -353,15 +353,13 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 
         if (emitter) {
             emitter->setRate(15.0f);
-            emitter->setGlobalDynamicsScale(splash_scale);
-            emitter->setGlobalParticleScale(splash_scale);
+            emitter->setGlobalScale(splash_scale);
         }
 
         emitter = dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON01, &current.pos, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
         
         if (emitter) {
-            emitter->setGlobalDynamicsScale(ripple_scale);
-            emitter->setGlobalParticleScale(ripple_scale);
+            emitter->setGlobalScale(ripple_scale);
         }
     }
 

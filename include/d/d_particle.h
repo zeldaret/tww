@@ -385,7 +385,9 @@ public:
 class dPa_modelControl_c : public node_list_class {
 public:
     dPa_modelControl_c(J3DModelData*);
+#if VERSION > VERSION_DEMO
     ~dPa_modelControl_c();
+#endif
 
     static J3DModel * newModel(J3DModelData*);
     void draw();
