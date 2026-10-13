@@ -44,7 +44,7 @@ const char* JMessage::TControl::getMessageData(u16 groupID, u16 messageIndex) co
     if (messageEntry == NULL)
         return NULL;
     u32 offs = *(u32*)messageEntry;
-    return mResource->mMessageData + offs;
+    return mResource->pMessageText_ + offs;
 }
 
 /* 8029EAC8-8029EB1C       .text reset__Q28JMessage8TControlFv */
@@ -105,7 +105,7 @@ bool JMessage::TControl::setMessageCode_flush_() {
         return false;
 
     u32 offs = *(u32*)mMessageEntry;
-    mMessageDataStart = mResource->mMessageData + offs;
+    mMessageDataStart = mResource->pMessageText_ + offs;
     mMessageDataCurrent = mMessageDataStart;
     return true;
 }
