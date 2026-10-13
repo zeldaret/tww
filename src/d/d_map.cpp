@@ -2638,7 +2638,36 @@ void dMap_2DTri_c::init(s16 i_posX, s16 i_posY, const GXColor& i_color, f32 i_sc
 
 /* 8004EE88-8004F080       .text draw__12dMap_2DTri_cFv */
 void dMap_2DTri_c::draw() {
-    /* Nonmatching */
+    f32 f2 = JMASCos(mAngle);
+    f32 f3 = JMASSin(mAngle);
+    s16 r10 = 0;
+    s16 local_2c[3];
+    s16 local_34[3];
+    for (int i = 0; i < 3; i++) {
+        f32 f4 = mScaleX * JMASSin(r10);
+        f32 f5 = mScaleY * JMASCos(r10);
+        local_2c[i] = mPosX + int(f4 * f2 + f5 * f3);
+        local_34[i] = mPosY + int(f5 * f2 - f4 * f3);
+        r10 -= 0x5555;
+    }
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, mColor);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRC_ALPHA, GX_BL_INV_SRC_ALPHA, GX_LO_SET);
+    GXSetZMode(0, GX_LEQUAL, 0);
+    GXSetScissor(mScissorX, mScissorY, mScissorWidth, mScissorHeight);
+    GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
+    GXPosition3s16(local_2c[0], local_34[0], 0);
+    GXPosition3s16(local_2c[1], local_34[1], 0);
+    GXPosition3s16(local_2c[2], local_34[2], 0);
+    GXEnd();
+    GXSetScissor(0, 0, 640, 480);
 }
 
 /* 8004F080-8004F08C       .text setPos__12dMap_2DTri_cFss */
