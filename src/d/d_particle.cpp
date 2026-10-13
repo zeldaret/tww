@@ -1113,7 +1113,7 @@ void dPa_waveEcallBack::remove() {
 
 /* 8007E2BC-8007E484       .text executeAfter__17dPa_waveEcallBackFP14JPABaseEmitter */
 void dPa_waveEcallBack::executeAfter(JPABaseEmitter* emitter) {
-    emitter->getEmitterAxis(reinterpret_cast<JGeometry::TVec3<f32>&>(mRotMtx[0]), reinterpret_cast<JGeometry::TVec3<f32>&>(mRotMtx[1]), reinterpret_cast<JGeometry::TVec3<f32>&>(mRotMtx[2]));
+    emitter->getEmitterAxis(mRotMtx0, mRotMtx1, mRotMtx2);
 
     if (mState != 0) {
         emitter->setDirectionalSpeed(0.0f);
@@ -1174,7 +1174,7 @@ void dPa_waveEcallBack::draw(JPABaseEmitter* emitter) {
     cXyz* collapsePos = mCollapsePos;
     for (int i = 0; i < 2; i++, collapsePos++) {
         f32 f28 = 0.0f;
-        JGeometry::TVec3<f32> local_b8 = (*(JGeometry::TVec3<f32>*)&mRotMtx[0]) * collapsePos->x + (*(JGeometry::TVec3<f32>*)&mRotMtx[1]) * collapsePos->y + (*(JGeometry::TVec3<f32>*)&mRotMtx[2]) * collapsePos->z;
+        JGeometry::TVec3<f32> local_b8 = mRotMtx0 * collapsePos->x + mRotMtx1 * collapsePos->y + mRotMtx2 * collapsePos->z;
 
         GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, r26 + 1);
         GXPosition3f32(globalTranslation.x + local_b8.x, globalTranslation.y + local_b8.y, globalTranslation.z + local_b8.z);
