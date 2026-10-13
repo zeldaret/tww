@@ -151,7 +151,9 @@ public:
     /* 0x1C */ cXyz mCollapsePos[2];
     /* 0x34 */ const cXyz* mpPos;
     /* 0x38 */ const csXyz* mpRot;
-    /* 0x3C */ Vec mRotMtx[3];
+    /* 0x3C */ JGeometry::TVec3<f32> mRotMtx0;
+    /* 0x48 */ JGeometry::TVec3<f32> mRotMtx1;
+    /* 0x54 */ JGeometry::TVec3<f32> mRotMtx2;
     /* 0x60 */ JPABaseEmitter* mpBaseEmitter;
 };
 
