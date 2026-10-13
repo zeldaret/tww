@@ -2,27 +2,31 @@
 #define D_A_OBJ_HCBH_H
 
 #include "d/d_a_obj.h"
+#include "d/d_bg_s_acch.h"
+#include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
+
+class dBgW;
 
 class daObjHcbh_c : public fopAc_ac_c {
 public:
     enum Param_e {
-        PRM_ITEM_W = 0x06,
-        PRM_ITEM_S = 0x00,
+        PRM_ITEMNO_W = 0x06,
+        PRM_ITEMNO_S = 0x00,
         PRM_ITEMBIT_W = 0x07,
         PRM_ITEMBIT_S = 0x06,
         PRM_SWSAVE_W = 0x08,
         PRM_SWSAVE_S = 0x0D,
     };
 
-    Param_e param_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEM_W, PRM_ITEM_S); }
-    Param_e param_get_itemSaveBitNo() const { return daObj::PrmAbstract(this, PRM_ITEMBIT_W, PRM_ITEMBIT_S); }
-    Param_e param_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
+    int param_get_itemNo() const { return daObj::PrmAbstract(this, PRM_ITEMNO_W, PRM_ITEMNO_S); }
+    int param_get_itemSaveBitNo() const { return daObj::PrmAbstract(this, PRM_ITEMBIT_W, PRM_ITEMBIT_S); }
+    int param_get_swSave() const { return daObj::PrmAbstract(this, PRM_SWSAVE_W, PRM_SWSAVE_S); }
     void param_on_swSave() const {
-        Param_e saveParam = param_get_swSave();
+        const int saveParam = param_get_swSave();
         if (saveParam != 0xFF) {
-            dComIfGs_onSwitch(saveParam, fopAcM_GetHomeRoomNo((fopAc_ac_c*)this));
+            fopAcM_onSwitch(const_cast<daObjHcbh_c*>(this), saveParam);
         }
     }
 

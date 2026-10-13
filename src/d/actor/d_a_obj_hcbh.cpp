@@ -5,9 +5,8 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_obj_hcbh.h"
-
-#include "d/d_a_obj.h"
 #include "d/d_cc_d.h"
+#include "res/Object/Hcbh.h"
 
 namespace {
 
@@ -42,7 +41,6 @@ static const dCcD_SrcCyl l_cyl_src = {
         /* Height */ 556.0f,
     }},
 };
-
 
 static const dCcD_SrcSph l_sph_src = {
     // dCcD_SrcGObjInf
@@ -85,9 +83,82 @@ static const Vec l_co_sph_offset[] = {
 }; // namespace
 
 
+#if VERSION == VERSION_DEMO
+class daObjHcbh_HIO_c : public JORReflexible {
+public:
+    daObjHcbh_HIO_c();
+    virtual ~daObjHcbh_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
+
+public:
+    /* 0x04 */ s8 mNo;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2C;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ f32 field_0x38;
+    /* 0x3C */ f32 field_0x3C;
+    /* 0x40 */ u8 field_0x40;
+    /* 0x41 */ u8 field_0x41;
+    /* 0x42 */ u8 field_0x42;
+};
+
+static daObjHcbh_HIO_c l_HIO;
+
+daObjHcbh_HIO_c::daObjHcbh_HIO_c() {
+    mNo = -1;
+    field_0x08 = 70.0f;
+    field_0x0C = 589.0f;
+    field_0x10 = -0.011f;
+    field_0x14 = 4.0f;
+    field_0x18 = 127.0f;
+    field_0x1C = 16384.0f;
+    field_0x20 = -10.0f;
+    field_0x24 = -0.01f;
+    field_0x28 = -100.0f;
+    field_0x2C = 15.0f;
+    field_0x30 = 0.0f;
+    field_0x34 = 4.0f;
+    field_0x38 = 512.0f;
+    field_0x3C = 8.0f;
+    field_0x40 = 0;
+    field_0x41 = 1;
+    field_0x42 = 0;
+}
+#else
+namespace L_HIO {
+static const f32 field_0x08 = 70.0f;
+static const f32 field_0x0C = 589.0f;
+static const f32 field_0x10 = -0.011f;
+static const f32 field_0x14 = 4.0f;
+static const f32 field_0x18 = 127.0f;
+static const f32 field_0x1C = 16384.0f;
+static const f32 field_0x20 = -10.0f;
+static const f32 field_0x24 = -0.01f;
+static const f32 field_0x28 = -100.0f;
+static const f32 field_0x2C = 15.0f;
+static const f32 field_0x30 = 0.0f;
+static const f32 field_0x34 = 4.0f;
+static const f32 field_0x38 = 512.0f;
+static const f32 field_0x3C = 8.0f;
+static const u8 field_0x40 = 0;
+static const u8 field_0x41 = 1;
+static const u8 field_0x42 = 0;
+} // namespace L_HIO
+#endif
+
 /* 00000078-000000D8       .text chk_appear__11daObjHcbh_cFv */
 bool daObjHcbh_c::chk_appear() {
-    s32 switchIndex = param_get_swSave();
+    int switchIndex = param_get_swSave();
     bool ret = true;
     if (switchIndex != 0xff) {
         ret = fopAcM_isSwitch(this, switchIndex) == FALSE;
@@ -140,28 +211,33 @@ BOOL daObjHcbh_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 00000330-00000500       .text create_heap__11daObjHcbh_cFv */
 bool daObjHcbh_c::create_heap() {
-    static s32 bdl_table[4] = {4, 5, 6, 7};
+    static int bdl_table[4] = {
+        dRes_INDEX_HCBH_BDL_HCBH1A_e,
+        dRes_INDEX_HCBH_BDL_HCBH1B_e,
+        dRes_INDEX_HCBH_BDL_HCBH1C_e,
+        dRes_INDEX_HCBH_BDL_HCBH1D_e,
+    };
 
     bool rv = true;
 
-    void* modelData = dComIfG_getObjectRes(l_arcname, 8);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_HCBH_BDL_HCBH2_e);
     if (!modelData) {
-        JUT_ASSERT(0x1f3, FALSE);
+        JUT_ASSERT(DEMO_SELECT(496, 499), FALSE);
         rv = false;
     } else {
-        mModel = mDoExt_J3DModel__create((J3DModelData*)modelData, 0x80000, 0x11000022);
+        mModel = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
 
         for (int i = 0; i < ARRAY_SSIZE(mBdlModels); i++) {
-            void* bdlModelData = dComIfG_getObjectRes(l_arcname, bdl_table[i]);
+            J3DModelData* bdlModelData = (J3DModelData*)dComIfG_getObjectRes(l_arcname, bdl_table[i]);
             if (bdlModelData == NULL) {
                 rv = false;
                 break;
             }
-            mBdlModels[i] = mDoExt_J3DModel__create((J3DModelData*)bdlModelData, 0x80000, 0x11000022);
+            mBdlModels[i] = mDoExt_J3DModel__create(bdlModelData, 0x80000, 0x11000022);
         }
 
-        mBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 12), 1, &mModel->getBaseTRMtx());
-        mBdlBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, 11), 1, &mBdlModels[0]->getBaseTRMtx());
+        mBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_HCBH_DZB_HCBH2_e), 1, &mModel->getBaseTRMtx());
+        mBdlBgW = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(l_arcname, dRes_INDEX_HCBH_DZB_HCBH1_e), 1, &mBdlModels[0]->getBaseTRMtx());
 
         if (mModel == NULL ||
             mBdlModels[0] == NULL || mBdlModels[1] == NULL || mBdlModels[2] == NULL || mBdlModels[3] == NULL ||
@@ -181,11 +257,11 @@ void daObjHcbh_c::setup_break_condition(fopAc_ac_c* i_actor) {
         return;
     }
 
-    mYaw = cM_atan2s(mCyl.mCenter.x - i_actor->current.pos.x, mCyl.mCenter.z - i_actor->current.pos.z);
+    mYaw = cM_atan2s(mCyl.GetC().x - i_actor->current.pos.x, mCyl.GetC().z - i_actor->current.pos.z);
     for (int i = 0; i < 4; i++) {
         mBdlYaw[i] = set_anglY[i];
         mBdlPitch[i] = 0;
-        mFallTimer[i] = std::fabsf(cM_ssin((set_anglY[i] - mYaw) >> 1)) * 15.0f;
+        mFallTimer[i] = std::fabsf(cM_ssin((set_anglY[i] - mYaw) >> 1)) * HIO(field_0x2C) + HIO(field_0x30);
     }
 }
 
@@ -230,7 +306,7 @@ void daObjHcbh_c::checkCollision() {
 
 /* 00000724-0000077C       .text co_hitCallback__11daObjHcbh_cFP10fopAc_ac_cP12dCcD_GObjInfP10fopAc_ac_cP12dCcD_GObjInf */
 void daObjHcbh_c::co_hitCallback(fopAc_ac_c* i_actor1, dCcD_GObjInf* i_gObjInf1, fopAc_ac_c* i_actor2, dCcD_GObjInf* i_gObjInf2) {
-    if (fopAc_IsActor(i_actor2) && fopAcM_GetProfName(i_actor2) == fpcNm_AM_e) {
+    if (fopAcM_IsActor(i_actor2) && fopAcM_GetProfName(i_actor2) == fpcNm_AM_e) {
         ((daObjHcbh_c*)i_actor1)->mBrokenBy = 4;
     }
 }
@@ -243,14 +319,14 @@ void daObjHcbh_c::particle_set() {
     if (mBrokenBy != 3) {
         dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENBREAKSHAFTHIT00, &current.pos, &angle, NULL, 0xFF, NULL, -1, &tevStr.mColorK0);
     }
-    mSmokeCallback.end();
+    mSmokeCallback.remove();
     dComIfGp_particle_setToon(dPa_name::ID_AK_ST_SIRENBREAKSHAFTSMOKE00, &current.pos, &angle, NULL, 0xA0, &mSmokeCallback, -1, &tevStr.mColorK0);
 }
 
 /* 000008F8-000009E4       .text make_item__11daObjHcbh_cFv */
 void daObjHcbh_c::make_item() {
-    Param_e item = param_get_itemNo();
-    Param_e itemSaveBit = param_get_itemSaveBitNo();
+    int item = param_get_itemNo();
+    int itemSaveBit = param_get_itemSaveBitNo();
     cXyz itemPos = current.pos;
     csXyz itemAngle(0.0f, 0.0f, 0.0f);
     itemPos.y -= 30.0f;
@@ -264,14 +340,12 @@ cPhs_State daObjHcbh_c::_create() {
 
     fopAcM_ct(this, daObjHcbh_c);
 
-    if (!base.base.mInitState) {
+    if (fopAcM_IsFirstCreating(this)) {
         mCurY = current.pos.y;
 
         mPitch = 0;
         for (int i = 0; i < ARRAY_SSIZE(mBdlPos); i++) {
-            mBdlPos[i].x = current.pos.x;
-            mBdlPos[i].y = current.pos.y;
-            mBdlPos[i].z = current.pos.z;
+            mBdlPos[i].set(current.pos);
             mBdlPitch[i] = 0;
             mBdlYaw[i] = 0;
         }
@@ -290,7 +364,7 @@ cPhs_State daObjHcbh_c::_create() {
             } else if (dComIfG_Bgsp()->Regist(mBdlBgW, this) != 0) {
                 rv = cPhs_ERROR_e;
             } else {
-                cullMtx = mModel->getBaseTRMtx();
+                fopAcM_SetMtx(this, mModel->getBaseTRMtx());
 
                 init_mtx();
 
@@ -314,7 +388,7 @@ cPhs_State daObjHcbh_c::_create() {
                     mSph[i].Set(l_sph_src);
                     mSph[i].SetStts(&mStts);
                     mSph[i].SetR(70.0f);
-                    mSph[i].SetC(cXyz(current.pos.x, current.pos.y + l_co_sph_offset[i].y, current.pos.z));
+                    mSph[i].SetC(current.pos.x, current.pos.y + l_co_sph_offset[i].y, current.pos.z);
                 }
 
                 mSmokeCallback.setTevStr(&tevStr);
@@ -330,6 +404,12 @@ cPhs_State daObjHcbh_c::_create() {
         }
     }
 
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo < 0) {
+        l_HIO.mNo = mDoHIO_createChild("タートナックの柱", &l_HIO); // "Darknut Pillar"
+    }
+#endif
+
     return rv;
 }
 
@@ -338,37 +418,62 @@ bool daObjHcbh_c::_delete() {
     if (mAppear == 1) {
         dComIfG_resDelete(&mPhase, l_arcname);
 
-        if (heap != NULL) {
+#if VERSION > VERSION_DEMO
+        if (heap != NULL)
+#endif
+        {
             if (mBgW != NULL) {
                 if (mBgW->ChkUsed()) {
                     dComIfG_Bgsp()->Release(mBgW);
                 }
+#if VERSION > VERSION_DEMO
                 mBgW = NULL;
+#endif
             }
 
             if (mBdlBgW != NULL) {
                 if (mBdlBgW->ChkUsed()) {
                     dComIfG_Bgsp()->Release(mBdlBgW);
                 }
+#if VERSION > VERSION_DEMO
                 mBdlBgW = NULL;
+#endif
             }
         }
 
-        mSmokeCallback.end();
+        mSmokeCallback.remove();
     }
+
+#if VERSION == VERSION_DEMO
+    if (l_HIO.mNo >= 0) {
+        mDoHIO_deleteChild(l_HIO.mNo);
+        l_HIO.mNo = -1;
+    }
+#endif
 
     return true;
 }
 
 /* 000012F4-000013BC       .text wait_act_proc__11daObjHcbh_cFv */
 void daObjHcbh_c::wait_act_proc() {
+#if VERSION == VERSION_DEMO
+    mCyl.SetR(l_HIO.field_0x08);
+    mCyl.SetH(l_HIO.field_0x0C);
+#endif
+
     checkCollision();
     if (mBrokenBy == 0) {
         dComIfG_Ccsp()->Set(&mCyl);
         return;
     }
 
-    particle_set();
+#if VERSION == VERSION_DEMO
+    if (l_HIO.field_0x41 == 1)
+#endif
+    {
+        particle_set();
+    }
+
     fopAcM_seStartCurrent(this, JA_SE_OBJ_TN_COLUMN_BREAK, 0);
     mCyl.SetCoHitCallback(NULL);
     mProcFunc = &daObjHcbh_c::fall_act_proc;
@@ -390,7 +495,7 @@ void daObjHcbh_c::fall_act_proc() {
             }
         }
 
-        mPitchStep += (s16)(cM_ssin(mPitch) * 127.0f + 4.0f);
+        mPitchStep += (s16)(cM_ssin(mPitch) * HIO(field_0x18) + HIO(field_0x14));
     }
 
     if (mCurY < home.pos.y + -10.0f) {
@@ -416,7 +521,8 @@ void daObjHcbh_c::fall_act_proc() {
         mDoMtx_stack_c::XYZrotM(shape_angle);
 
         for (int i = 0; i < ARRAY_SSIZE(l_co_sph_offset); i++) {
-            cXyz offset = l_co_sph_offset[i];
+            cXyz offset;
+            offset.set(l_co_sph_offset[i]);
             mDoMtx_stack_c::multVec(&offset, &offset);
             mSph[i].MoveCAt(offset);
             dComIfG_Ccsp()->Set(&mSph[i]);
@@ -429,14 +535,14 @@ void daObjHcbh_c::fall_act_proc() {
             continue;
         }
 
-        mBdlYStep[i] += -0.01f;
+        mBdlYStep[i] += HIO(field_0x24);
         mBdlPos[i].y += mBdlYStep[i];
 
-        if (mBdlPos[i].y < home.pos.y + -100.0f) {
-            mBdlPos[i].y = home.pos.y + -100.0f;
+        if (mBdlPos[i].y < HIO(field_0x28) + home.pos.y) {
+            mBdlPos[i].y = HIO(field_0x28) + home.pos.y;
         }
 
-        mBdlPitchStep[i] += (s16)(cM_ssin(mBdlPitch[i]) * 512.0f + 4.0f);
+        mBdlPitchStep[i] += (s16)(cM_ssin(mBdlPitch[i]) * HIO(field_0x38) + HIO(field_0x34));
         mBdlPitch[i] += mBdlPitchStep[i];
         if (mBdlPitch[i] > 0x4000) {
             mBdlPitch[i] = 0x4000;
@@ -465,8 +571,8 @@ bool daObjHcbh_c::_execute() {
     mCurY += mVertStep;
     mPitch += mPitchStep;
 
-    if (mPitch >= 0x4000) {
-        mPitch = 0x4000;
+    if (mPitch >= (s16)HIO(field_0x1C)) {
+        mPitch = (s16)HIO(field_0x1C);
     }
 
     (this->*mProcFunc)();
@@ -476,7 +582,7 @@ bool daObjHcbh_c::_execute() {
 
 /* 000018D8-0000197C       .text _draw__11daObjHcbh_cFv */
 bool daObjHcbh_c::_draw() {
-    g_env_light.settingTevStruct(1, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mModel, &tevStr);
     mDoExt_modelUpdateDL(mModel);
 

@@ -485,14 +485,9 @@ cPhs_State daObjLeaves_c::_create() {
                 mStts.Init(0xff, 0xff, this);
                 mSph.Set(l_sph_src);
                 mSph.SetStts(&mStts);
-#if VERSION == VERSION_DEMO
                 mSph.SetC(current.pos.x, current.pos.y - 115.0f, current.pos.z);
-#else
-                cXyz sp08(current.pos.x, current.pos.y - 115.0f, current.pos.z);
-                mSph.SetC(sp08);
 #if VERSION >= VERSION_USA
                 mSph.SetR(150.0f);
-#endif
 #endif
 #if VERSION <= VERSION_JPN
                 mCyl.Set(l_fire_cyl_src);

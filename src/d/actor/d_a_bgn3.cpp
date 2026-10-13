@@ -15,7 +15,7 @@
 class daBgn3_HIO_c : public JORReflexible {
 public:
     daBgn3_HIO_c();
-    virtual ~daBgn3_HIO_c() {};
+    virtual ~daBgn3_HIO_c() {}
     void genMessage(JORMContext*) {}
 
 public:

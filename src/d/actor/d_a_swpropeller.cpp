@@ -212,7 +212,7 @@ bool daSwProp_c::_execute() {
 
 /* 00000B60-00000C00       .text _draw__10daSwProp_cFv */
 bool daSwProp_c::_draw() {
-    g_env_light.settingTevStruct(0, &current.pos, &tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
     mDoExt_modelUpdateDL(mpModel);
     f32 groundH = mAcch.GetGroundH();
