@@ -243,7 +243,9 @@ public:
     void ChkRoofRegist() {}
     void ChkThrough() {}
     void ChkWallRegist() {}
-    void OffRoofRegist() {}
+    void OffRoofRegist() {
+        mIgnorePlaneType = mIgnorePlaneType | 4;
+    }
 
     virtual ~cBgW();
     virtual u32 GetGrpToRoomIndex(int) const;
