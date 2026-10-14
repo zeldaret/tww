@@ -904,7 +904,7 @@ BOOL ShopCam_action_c::shop_cam_action_init() {
     m18 = shop_cam_data_tbl[mCamDataIdx][0].m00;
     m24 = shop_cam_data_tbl[mCamDataIdx][0].m0C;
     m30 = shop_cam_data_tbl[mCamDataIdx][0].m18;
-    m54 = -1;
+    mSelectIdx = -1;
     
     return TRUE;
 }
@@ -917,7 +917,7 @@ int ShopCam_action_c::shop_cam_action() {
     cXyz r1_2C;
     cXyz r1_20;
     f32 temp;
-    if (m54 < 0) {
+    if (mSelectIdx < 0) {
         r1_2C = shop_cam_data_tbl[mCamDataIdx][0].m00;
         r1_20 = shop_cam_data_tbl[mCamDataIdx][0].m0C;
         temp = shop_cam_data_tbl[mCamDataIdx][0].m18;
@@ -951,7 +951,7 @@ BOOL ShopCam_action_c::rsh_talk_cam_action_init(fopAc_ac_c* param_1, cXyz param_
     m18 = r1_20;
     m24 = r1_14;
     m30 = param_4;
-    m54 = -1;
+    mSelectIdx = -1;
     
     return TRUE;
 }
@@ -973,7 +973,7 @@ BOOL ShopCam_action_c::ds_normal_cam_action_init() {
     m18.set(-136.0f, 102.0f, -254.0f);
     m24.set(-136.0f, 102.0f, 90.0f);
     m30 = 60.0f;
-    m54 = -1;
+    mSelectIdx = -1;
     
     return TRUE;
 }
