@@ -19,9 +19,10 @@
 #include "JSystem/JKernel/JKRFileFinder.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "stdio.h"
-#include "string.h"
 #include "dolphin/os/OSCache.h"
+
+#include <stdio.h>
+#include <cstring>
 
 /* 8006D804-8006D824       .text __ct__11dRes_info_cFv */
 dRes_info_c::dRes_info_c()

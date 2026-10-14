@@ -10,9 +10,10 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include "string.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/os/OS.h"
+
+#include <cstring>
 
 /* 802DAE1C-802DAE9C       .text newDisplayList__17J3DDisplayListObjFUl */
 J3DError J3DDisplayListObj::newDisplayList(u32 capacity) {

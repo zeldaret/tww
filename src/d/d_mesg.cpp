@@ -21,7 +21,9 @@
 #include "f_op/f_op_msg_mng.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
-#include "stdio.h"
+
+#include <stdio.h>
+
 
 JMessage::TResourceContainer* dMesg_gpResourceContainer;
 dMesg_tControl* dMesg_gpControl;

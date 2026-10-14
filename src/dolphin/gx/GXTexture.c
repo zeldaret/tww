@@ -1,6 +1,7 @@
 #include "dolphin/gx/GXTexture.h"
 #include "dolphin/gx/GX.h"
-#include "string.h"
+
+#include <string.h>
 
 #define GET_TILE_COUNT(a, b) (((a) + (1 << (b)) - 1) >> (b))
 

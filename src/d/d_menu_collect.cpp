@@ -6,11 +6,12 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_menu_collect.h"
 #include "dolphin/types.h"
-#include "stdio.h"
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_controller_pad.h"
 #include "JAZelAudio/JAZelAudio_SE.h"
 #include "d/d_meter.h"
+
+#include <stdio.h>
 
 dMc_HIO_c g_mcHIO;
 

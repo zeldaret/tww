@@ -8,8 +8,9 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "new.h"
 #include "global.h"
+
+#include <new>
 
 /* 802B3290-802B333C       .text create__12JKRSolidHeapFUlP7JKRHeapb */
 JKRSolidHeap* JKRSolidHeap::create(u32 size, JKRHeap* heap, bool useErrorHandler) {

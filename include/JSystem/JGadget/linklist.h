@@ -3,7 +3,8 @@
 
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JGadget/define.h"
-#include <iterator.h>
+
+#include <iterator>
 
 namespace JGadget {
 struct TLinkListNode {

@@ -6,9 +6,10 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JKernel/JKRFileLoader.h"
-#include "string.h"
-#include "ctype.h"
 #include "global.h"
+
+#include <cstring>
+#include <cctype>
 
 JKRFileLoader* JKRFileLoader::sCurrentVolume;
 JSUList<JKRFileLoader> JKRFileLoader::sVolumeList;
@@ -118,7 +119,7 @@ JKRFileLoader* JKRFileLoader::findVolume(const char** volumeName) {
     JSUList<JKRFileLoader>& volumeList = getVolumeList();
     JSUListIterator<JKRFileLoader> iterator;
     for (iterator = volumeList.getFirst(); iterator != volumeList.getEnd(); ++iterator) {
-        if (strcmp(volumeNameBuffer, iterator->mVolumeName) == 0) {
+        if (std::strcmp(volumeNameBuffer, iterator->mVolumeName) == 0) {
             return iterator.getObject();
         }
     }
@@ -130,8 +131,8 @@ static char rootPath[2] = "/";
 
 /* 802B6B44-802B6C20       .text fetchVolumeName__13JKRFileLoaderFPclPCc */
 const char* JKRFileLoader::fetchVolumeName(char* buffer, s32 bufferSize, const char* path) {
-    if (strcmp(path, "/") == 0) {
-        strcpy(buffer, rootPath);
+    if (std::strcmp(path, "/") == 0) {
+        std::strcpy(buffer, rootPath);
         return rootPath;
     }
 

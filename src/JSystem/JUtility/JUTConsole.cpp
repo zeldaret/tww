@@ -11,8 +11,10 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include "JSystem/JUtility/JUTVideo.h"
-#include "new.h"
-#include "stdio.h"
+
+#include <new>
+#include <stdio.h>
+
 #include "dolphin/types.h"
 
 JUTConsoleManager* JUTConsoleManager::sManager;

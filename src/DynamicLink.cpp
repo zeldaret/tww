@@ -9,10 +9,11 @@
 #include "JSystem/JKernel/JKRFileCache.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
-#include "stdio.h"
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_printf.h"
+
+#include <stdio.h>
 
 DynamicModuleControlBase* DynamicModuleControlBase::mFirst;
 DynamicModuleControlBase* DynamicModuleControlBase::mLast;

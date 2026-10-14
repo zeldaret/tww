@@ -12,7 +12,8 @@
 #include "JSystem/JUtility/JUTException.h"
 #include "dolphin/os/OS.h"
 #include "dolphin/types.h"
-#include "new.h"
+
+#include <new>
 
 /* 802B1558-802B15D0       .text createRoot__10JKRExpHeapFib */
 JKRExpHeap* JKRExpHeap::createRoot(int maxHeaps, bool errorFlag) {

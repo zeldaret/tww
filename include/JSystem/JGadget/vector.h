@@ -2,7 +2,7 @@
 #define _JSYSTEM_JGADGET_VECTOR_H
 
 #include "JSystem/JGadget/allocator.h"
-#include "algorithm.h"
+#include <algorithm>
 #include "msl_memory.h"
 
 namespace JGadget {

@@ -17,9 +17,10 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "math.h"
-#include "string.h"
 #include "dolphin/os/OS.h"
+
+#include <cstring>
+#include <cmath>
 
 /* 802BB82C-802BB8D4       .text __ct__14JKRCompArchiveFlQ210JKRArchive15EMountDirection */
 JKRCompArchive::JKRCompArchive(s32 entryNum, JKRArchive::EMountDirection mountDirection) : JKRArchive(entryNum, MOUNT_COMP) {

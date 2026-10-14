@@ -9,10 +9,11 @@
 #include "JSystem/JKernel/JKRDecomp.h"
 #include "JSystem/JKernel/JKRDvdFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "string.h"
 #include "dolphin/os/OS.h"
 #include "dolphin/vi/vi.h"
 #include "global.h"
+
+#include <cstring>
 
 static int JKRDecompressFromDVD(JKRDvdFile*, void*, u32, u32, u32, u32);
 static int decompSZS_subroutine(u8*, u8*);

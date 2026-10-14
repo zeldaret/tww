@@ -3,7 +3,8 @@
 
 #include "JSystem/JUtility/TColor.h"
 #include "JSystem/JUtility/JUTDataHeader.h"
-#include "string.h"
+
+#include <cstring>
 
 struct ResFONT {
     struct INF1 : JUTDataBlockHeader {

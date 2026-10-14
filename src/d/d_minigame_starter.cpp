@@ -9,7 +9,9 @@
 #include "f_op/f_op_msg_mng.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "d/d_meter.h"
-#include "stdio.h"
+
+#include <stdio.h>
+
 
 static s16 cdFrame0 = 7;
 static s16 cdFrame1 = 3;

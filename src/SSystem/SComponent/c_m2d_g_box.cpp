@@ -4,8 +4,9 @@
 //
 
 #include "SSystem/SComponent/c_m2d_g_box.h"
-#include "math.h"
 #include "dolphin/types.h"
+
+#include <cmath>
 
 /* 8024A0E0-8024A104       .text Set__8cM2dGBoxFR3cXyR3cXy */
 void cM2dGBox::Set(cXy& p0, cXy& p1) {
@@ -21,8 +22,8 @@ f32 cM2dGBox::GetLen(const cXy& p) const {
     }
     if (mP0.x < p.x && p.x < mP1.x) {
         // Above or below the box.
-        f32 distY0 = fabs(mP0.y - p.y);
-        f32 distY1 = fabs(mP1.y - p.y);
+        f32 distY0 = std::fabs(mP0.y - p.y);
+        f32 distY1 = std::fabs(mP1.y - p.y);
         f32 minDist = distY0;
         if (distY0 > distY1) {
             minDist = distY1;
@@ -31,8 +32,8 @@ f32 cM2dGBox::GetLen(const cXy& p) const {
     }
     if (mP0.y < p.y && p.y < mP1.y) {
         // Left or right of the box.
-        f32 distX0 = fabs(mP0.x - p.x);
-        f32 distX1 = fabs(mP1.x - p.x);
+        f32 distX0 = std::fabs(mP0.x - p.x);
+        f32 distX1 = std::fabs(mP1.x - p.x);
         f32 minDist = distX0;
         if (distX0 > distX1) {
             minDist = distX1;

@@ -13,7 +13,7 @@
 #include "dolphin/card.h"
 #include "dolphin/os/OS.h"
 
-#include <string.h>
+#include <cstring>
 #include <stdio.h>
 
 #if VERSION <= VERSION_JPN

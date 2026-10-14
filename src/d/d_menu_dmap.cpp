@@ -4,7 +4,7 @@
 //
 
 #include "d/dolzel.h" // IWYU pragma: keep
-#include "stdio.h"
+
 #include "d/d_item_data.h"
 #include "d/d_lib.h"
 #include "d/d_map.h"
@@ -18,6 +18,7 @@
 #include "JSystem/J2DGraph/J2DWindow.h"
 #include "m_Do/m_Do_audio.h"
 #include "m_Do/m_Do_controller_pad.h"
+
 #include <stdio.h>
 
 dMd_HIO_c g_mdHIO;

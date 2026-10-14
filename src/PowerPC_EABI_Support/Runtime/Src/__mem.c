@@ -1,5 +1,6 @@
-#include "dolphin/types.h"
 #include "string.h"
+
+#include "global.h"
 
 SECTION_INIT void* memcpy(void* dst, const void* src, size_t n)
 {

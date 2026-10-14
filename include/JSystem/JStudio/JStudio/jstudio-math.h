@@ -2,7 +2,8 @@
 #define JSTUDIO_MATH_H
 
 #include "dolphin/mtx/mtx.h"
-#include "math.h"
+
+#include <cmath>
 
 namespace JStudio {
 namespace math {

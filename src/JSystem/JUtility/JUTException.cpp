@@ -9,14 +9,15 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDirectFile.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
-#include "math.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "new.h"
 #include "dolphin/base/PPCArch.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/os/OS.h"
 #include "dolphin/vi/vi.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <cmath>
+#include <new>
 
 struct CallbackObject {
     /* 0x00 */ JUTExceptionUserCallback callback;

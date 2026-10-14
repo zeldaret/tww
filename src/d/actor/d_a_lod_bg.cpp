@@ -12,6 +12,7 @@
 #include "m_Do/m_Do_printf.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/J3DGraphLoader/J3DModelLoader.h"
+
 #include <stdio.h>
 
 const char daLodbg_c::LodAllPath[] = "/res/Stage/sea/LODALL.arc";

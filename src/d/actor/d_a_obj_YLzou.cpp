@@ -7,6 +7,8 @@
 #include "d/actor/d_a_obj_YLzou.h"
 #include "res/Object/YLzou.h"
 
+#include <limits.h>
+
 enum YLzouAction {
     /* 0x00 */ ACTION_MOVE_YLZOU_DEMO_START_WAIT = 0x00,
     /* 0x01 */ ACTION_MOVE_YLZOU_DEMO_REGIST_WAIT = 0x01,

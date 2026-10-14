@@ -7,7 +7,6 @@
 #include "d/d_stage.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "string.h"
 #include "SSystem/SComponent/c_malloc.h"
 #include "d/actor/d_a_player_main.h"
 #include "d/actor/d_a_ship.h"
@@ -21,6 +20,8 @@
 #include "f_op/f_op_scene_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "d/actor/d_a_sea.h"
+
+#include <cstring>
 
 /* 80040900-80040938       .text set__18dStage_nextStage_cFPCcScsScSc */
 void dStage_nextStage_c::set(const char* i_stage, s8 i_roomId, s16 i_point, s8 i_layer, s8 i_wipe) {

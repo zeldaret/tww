@@ -16,7 +16,9 @@
 #include "JSystem/JUtility/JUTFont.h"
 #include "SSystem/SComponent/c_malloc.h"
 #include "m_Do/m_Do_controller_pad.h"
+
 #include <stdio.h>
+
 #if VERSION <= VERSION_JPN
 #include "d/d_s_play.h"
 #endif
