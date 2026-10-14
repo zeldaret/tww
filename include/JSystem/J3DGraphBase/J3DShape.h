@@ -132,8 +132,8 @@ public:
     GXVtxDescList* getVtxDesc() { return mVtxDesc; }
 
     J3DMaterial* getMaterial() const { return mMaterial; }
-    u32 getIndex() const { return mIndex; }
-    u32 getMtxGroupNum() const { return mMtxGroupNum; }
+    u16 getIndex() const { return mIndex; }
+    u16 getMtxGroupNum() const { return mMtxGroupNum; }
     J3DShapeDraw* getShapeDraw(u16 idx) { return mShapeDraw[idx]; }
     J3DShapeMtx* getShapeMtx(u16 idx) { return mShapeMtx[idx]; }
 
