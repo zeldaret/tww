@@ -243,6 +243,9 @@ public:
     void ExDataSavePaneMoveOk2();
     void ExErrorMsgPaneMove();
     void ExErrorMsgPaneMove2();
+#if VERSION == VERSION_PAL
+    void langSelCurAnimeInit();
+#endif
 
 public:
     /* 0x0000 */ JKRMemArchive* archive;
