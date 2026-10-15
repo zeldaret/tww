@@ -149,6 +149,18 @@ void dFile_select_c::_create() {
 
 /* 8017FCC0-8017FCF4       .text initial__14dFile_select_cFv */
 void dFile_select_c::initial() {
+#if VERSION == VERSION_PAL
+    u8 lang = g_mDoMemCd_control.field_0x165B;
+    if (lang != dComIfGs_getPalLanguage()) {
+        if (mUseType == 1) {
+            g_mDoMemCd_control.field_0x165B = dComIfGs_getPalLanguage();
+        } else {
+            dComIfGs_setPalLanguage(lang);
+            dComIfGp_setMsgDtArchive(field_0x3cd4[lang]);
+        }
+    }
+    field_0x3cc6 = dComIfGs_getPalLanguage();
+#endif
     displayInit();
     paneTransInit();
 }
@@ -459,12 +471,24 @@ void dFile_select_c::dataSelect() {
         mDoAud_seStart(JA_SE_MSEL_OK_1);
         mIconMode = 4;
         field_0x2fc0[0].pane->hide();
-        if(field_0x3917[selectNum]) {
-            fopMsgM_messageGet(field_0x38e8[field_0x392d ^ 1], 0x1C);
+#if VERSION == VERSION_PAL
+        if(selectNum == 3) {
+            field_0x3930 = 0;
+            pad[4].pane->show();
+            langSelCurAnimeInit();
+            field_0x392b = 0x26;
+            fopMsgM_messageGet(field_0x38e8[field_0x392d ^ 1], 0x38A4);
         }
-        menuColorChange();
-        dataSelMoveSet();
-        field_0x392b = 0x2;
+        else
+#endif
+        {
+            if(field_0x3917[selectNum]) {
+                fopMsgM_messageGet(field_0x38e8[field_0x392d ^ 1], 0x1C);
+            }
+            menuColorChange();
+            dataSelMoveSet();
+            field_0x392b = 0x2;
+        }
     }
     else if(stick2->checkUpTrigger()) {
         if(selectNum != 0) {
@@ -478,7 +502,7 @@ void dFile_select_c::dataSelect() {
         }
     }
     else if(stick2->checkDownTrigger()) {
-        if(selectNum != 2) {
+        if(selectNum != VERSION_SELECT(2, 2, 2, 3)) {
             mDoAud_seStart(JA_SE_MSEL_CURSOR);
             selectNum++;
             field_0x3948 = 0.0f;
