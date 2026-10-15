@@ -27,7 +27,7 @@ void GXPeekZ(u16 x, u16 y, u32* z);
 
 typedef void (*GXDrawSyncCallback)(u16 token);
 GXDrawSyncCallback GXSetDrawSyncCallback(GXDrawSyncCallback callback);
-void GXSetDrawSync(GXBool enable);
+void GXSetDrawSync(u16 token);
 
 typedef void (*GXDrawDoneCallback)(void);
 GXDrawDoneCallback GXSetDrawDoneCallback(GXDrawDoneCallback callback);

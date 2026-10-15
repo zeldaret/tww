@@ -116,27 +116,20 @@ void GXSetFogRangeAdj(GXBool enable, u16 center, GXFogAdjTable* table) {
 void GXSetBlendMode(GXBlendMode type, GXBlendFactor src_factor, GXBlendFactor dst_factor,
                     GXLogicOp op) {
     u32 blendModeReg = gx->cmode0;
-    GX_SET_REG(blendModeReg, type == GX_BM_SUBTRACT, GX_BP_BLENDMODE_SUBTRACT_ST,
-               GX_BP_BLENDMODE_SUBTRACT_END);
-    GX_SET_REG(blendModeReg, type, GX_BP_BLENDMODE_ENABLE_ST, GX_BP_BLENDMODE_ENABLE_END);
-    GX_SET_REG(blendModeReg, type == GX_BM_LOGIC, GX_BP_BLENDMODE_LOGIC_OP_ST,
-               GX_BP_BLENDMODE_LOGIC_OP_END);
-    GX_SET_REG(blendModeReg, op, GX_BP_BLENDMODE_LOGICMODE_ST, GX_BP_BLENDMODE_LOGICMODE_END);
-    GX_SET_REG(blendModeReg, src_factor, GX_BP_BLENDMODE_SRCFACTOR_ST,
-               GX_BP_BLENDMODE_SRCFACTOR_END);
-    GX_SET_REG(blendModeReg, dst_factor, GX_BP_BLENDMODE_DSTFACTOR_ST,
-               GX_BP_BLENDMODE_DSTFACTOR_END);
-
+    GX_SET_REG_RLWIMI(blendModeReg, type == GX_BM_SUBTRACT, GX_BP_BLENDMODE_SUBTRACT_ST, GX_BP_BLENDMODE_SUBTRACT_END);
+    GX_SET_REG_RLWIMI(blendModeReg, type, GX_BP_BLENDMODE_ENABLE_ST, GX_BP_BLENDMODE_ENABLE_END);
+    GX_SET_REG_RLWIMI(blendModeReg, type == GX_BM_LOGIC, GX_BP_BLENDMODE_LOGIC_OP_ST, GX_BP_BLENDMODE_LOGIC_OP_END);
+    GX_SET_REG_RLWIMI(blendModeReg, op, GX_BP_BLENDMODE_LOGICMODE_ST, GX_BP_BLENDMODE_LOGICMODE_END);
+    GX_SET_REG_RLWIMI(blendModeReg, src_factor, GX_BP_BLENDMODE_SRCFACTOR_ST, GX_BP_BLENDMODE_SRCFACTOR_END);
+    GX_SET_REG_RLWIMI(blendModeReg, dst_factor, GX_BP_BLENDMODE_DSTFACTOR_ST, GX_BP_BLENDMODE_DSTFACTOR_END);
     GX_BP_LOAD_REG(blendModeReg);
     gx->cmode0 = blendModeReg;
-
-    gx->bpSentNot = FALSE;
+    gx->bpSentNot = GX_FALSE;
 }
 
 void GXSetColorUpdate(GXBool updateEnable) {
     u32 blendModeReg = gx->cmode0;
-    GX_SET_REG(blendModeReg, updateEnable, GX_BP_BLENDMODE_COLOR_UPDATE_ST,
-               GX_BP_BLENDMODE_COLOR_UPDATE_END);
+    GX_SET_REG_RLWIMI(blendModeReg, updateEnable, GX_BP_BLENDMODE_COLOR_UPDATE_ST, GX_BP_BLENDMODE_COLOR_UPDATE_END);
     GX_BP_LOAD_REG(blendModeReg);
     gx->cmode0 = blendModeReg;
     gx->bpSentNot = GX_FALSE;
@@ -144,8 +137,7 @@ void GXSetColorUpdate(GXBool updateEnable) {
 
 void GXSetAlphaUpdate(GXBool updateEnable) {
     u32 blendModeReg = gx->cmode0;
-    GX_SET_REG(blendModeReg, updateEnable, GX_BP_BLENDMODE_ALPHA_UPDATE_ST,
-               GX_BP_BLENDMODE_ALPHA_UPDATE_END);
+    GX_SET_REG_RLWIMI(blendModeReg, updateEnable, GX_BP_BLENDMODE_ALPHA_UPDATE_ST, GX_BP_BLENDMODE_ALPHA_UPDATE_END);
     GX_BP_LOAD_REG(blendModeReg);
     gx->cmode0 = blendModeReg;
     gx->bpSentNot = GX_FALSE;
@@ -153,9 +145,9 @@ void GXSetAlphaUpdate(GXBool updateEnable) {
 
 void GXSetZMode(GXBool compareEnable, GXCompare func, GXBool updateEnable) {
     u32 zModeReg = gx->zmode;
-    GX_SET_REG(zModeReg, compareEnable, GX_BP_ZMODE_TEST_ENABLE_ST, GX_BP_ZMODE_TEST_ENABLE_END);
-    GX_SET_REG(zModeReg, func, GX_BP_ZMODE_COMPARE_ST, GX_BP_ZMODE_COMPARE_END);
-    GX_SET_REG(zModeReg, updateEnable, GX_BP_ZMODE_UPDATE_ENABLE_ST, GX_BP_ZMODE_UPDATE_ENABLE_END);
+    GX_SET_REG_RLWIMI(zModeReg, compareEnable, GX_BP_ZMODE_TEST_ENABLE_ST, GX_BP_ZMODE_TEST_ENABLE_END);
+    GX_SET_REG_RLWIMI(zModeReg, func, GX_BP_ZMODE_COMPARE_ST, GX_BP_ZMODE_COMPARE_END);
+    GX_SET_REG_RLWIMI(zModeReg, updateEnable, GX_BP_ZMODE_UPDATE_ENABLE_ST, GX_BP_ZMODE_UPDATE_ENABLE_END);
     GX_BP_LOAD_REG(zModeReg);
     gx->zmode = zModeReg;
     gx->bpSentNot = GX_FALSE;
@@ -206,11 +198,11 @@ void GXSetDither(GXBool dither) {
 }
 
 void GXSetDstAlpha(GXBool enable, u8 alpha) {
-    u32 dstAlpha = gx->cmode1;
-    GX_SET_REG(dstAlpha, alpha, GX_BP_DSTALPHA_ALPHA_ST, GX_BP_DSTALPHA_ALPHA_END);
-    GX_SET_REG(dstAlpha, enable, GX_BP_DSTALPHA_ENABLE_ST, GX_BP_DSTALPHA_ENABLE_END);
-    GX_BP_LOAD_REG(dstAlpha);
-    gx->cmode1 = dstAlpha;
+    u32 dstAlphaReg = gx->cmode1;
+    GX_SET_REG_RLWIMI(dstAlphaReg, alpha, GX_BP_DSTALPHA_ALPHA_ST, GX_BP_DSTALPHA_ALPHA_END);
+    GX_SET_REG_RLWIMI(dstAlphaReg, enable, GX_BP_DSTALPHA_ENABLE_ST, GX_BP_DSTALPHA_ENABLE_END);
+    GX_BP_LOAD_REG(dstAlphaReg);
+    gx->cmode1 = dstAlphaReg;
     gx->bpSentNot = GX_FALSE;
 }
 

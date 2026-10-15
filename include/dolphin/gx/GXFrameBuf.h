@@ -16,7 +16,7 @@ extern GXRenderModeObj GXEurgb60Hz480IntDf;
 
 void GXSetDispCopySrc(u16 left, u16 top, u16 width, u16 height);
 void GXSetTexCopySrc(u16 left, u16 top, u16 width, u16 height);
-void GXSetDispCopyDst(u16 arg0, u16 arg1);
+void GXSetDispCopyDst(u16 wd, u16 ht);
 void GXSetTexCopyDst(u16 width, u16 height, GXTexFmt format, GXBool useMIPmap);
 void GXSetDispCopyFrame2Field(GXCopyMode mode);
 void GXSetCopyClamp(GXFBClamp clamp);

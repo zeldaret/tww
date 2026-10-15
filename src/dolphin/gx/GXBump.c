@@ -157,10 +157,20 @@ void GXSetNumIndStages(u8 num) {
     data->dirtyState |= GX_DIRTY_BP_MASK | GX_DIRTY_GEN_MODE;
 }
 
+#pragma dont_inline on
 void GXSetTevDirect(GXTevStageID stage) {
     GXSetTevIndirect(stage, GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_NONE, GX_ITM_OFF, GX_ITW_OFF,
                      GX_ITW_OFF, FALSE, FALSE, GX_ITBA_OFF);
 }
+
+void GXSetTevIndWarp(GXTevStageID tevStage, GXIndTexStageID texStage, GXBool signedOffsets,
+                     GXBool replaceMode, GXIndTexMtxID mtxID) {
+    GXIndTexWrap wrap = replaceMode ? GX_ITW_0 : GX_ITW_OFF;
+
+    GXSetTevIndirect(tevStage, texStage, GX_ITF_8, signedOffsets ? GX_ITB_STU : GX_ITB_NONE,
+                     mtxID, wrap, wrap, FALSE, FALSE, GX_ITBA_OFF);
+}
+#pragma dont_inline reset
 
 void __GXUpdateBPMask(void) {}
 

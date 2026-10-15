@@ -251,6 +251,10 @@ void GXInitTexObjLOD(GXTexObj* obj, GXTexFilter minFilter, GXTexFilter maxFilter
     GX_SET_REG(internal->texture_lod, reg2, 16, 23);
 }
 
+void* GXGetTexObjData(GXTexObj* obj) {
+    return (void*)((obj->texture_address & 0x1fffff) << 5);
+}
+
 u16 GXGetTexObjWidth(const GXTexObj* obj) {
     return (obj->texture_size & 0x3ff) + 1;
 }
@@ -323,7 +327,7 @@ void GXInitTlutObj(GXTlutObj* obj, void* table, GXTlutFmt format, u16 numEntries
     internal->format = 0;
 
     GX_SET_REG(internal->format, format, 20, 21);
-    GX_SET_REG(internal->address, (u32)table >> 5, 11, 31);
+    GX_SET_REG(internal->address, ((u32)table & 0x3FFFFFFF) >> 5, 11, 31);
     GX_SET_REG(internal->address, 100, 0, 7);
 
     internal->numEntries = numEntries;
@@ -427,6 +431,18 @@ GXTlutRegionCallback GXSetTlutRegionCallback(GXTlutRegionCallback callback) {
 
 void GXSetTexCoordScaleManually(GXTexCoordID coord, GXBool enable, u16 s_scale, u16 t_scale) {
     /* Nonmatching */
+}
+
+void GXSetTexCoordBias(GXTexCoordID coord, GXBool s_enable, GXBool t_enable) {
+    GX_BITFIELD_SET(gx->suTs0[coord], 15, 1, s_enable);
+    GX_BITFIELD_SET(gx->suTs1[coord], 15, 1, t_enable);
+    if (gx->tcsManEnab & (1 << coord)) {
+        GXFIFO.u8 = 0x61;
+        GXFIFO.u32 = gx->suTs0[coord];
+        GXFIFO.u8 = 0x61;
+        GXFIFO.u32 = gx->suTs1[coord];
+        gx->bpSentNot = 0;
+    }
 }
 
 void __SetSURegs(u32 texImgIndex, u32 setUpRegIndex) {

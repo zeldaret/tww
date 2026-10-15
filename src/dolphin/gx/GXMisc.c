@@ -67,6 +67,21 @@ void GXAbortFrame(void) {
     __GXCleanGPFifo();
 }
 
+void GXSetDrawSync(u16 token) {
+    BOOL enabled;
+    u32 tokenReg;
+
+    enabled = OSDisableInterrupts();
+    tokenReg = token | 0x48000000;
+    GX_WRITE_RAS_REG(tokenReg);
+    GX_SET_REG(tokenReg, token, 16, 31);
+    GX_SET_REG(tokenReg, 0x47, 0, 7);
+    GX_WRITE_RAS_REG(tokenReg);
+    GXFlush();
+    OSRestoreInterrupts(enabled);
+    gx->bpSentNot = 0;
+}
+
 /* ############################################################################################## */
 static GXDrawSyncCallback TokenCB;
 
@@ -157,6 +172,13 @@ void GXPokeZMode(GXBool enable_compare, GXCompare comp, GXBool update_enable) {
     GX_BITFIELD_SET(val, 0x1c, 3, comp);
     GX_BITFIELD_SET(val, 0x1b, 1, update_enable);
     __peReg[0] = val;
+}
+
+void GXPeekARGB(u16 x, u16 y, u32* color) {
+    u32 addr = 0xc8000000;
+    GX_BITFIELD_SET(addr, 0x14, 10, x);
+    GX_BITFIELD_SET(addr, 0xa, 10, y);
+    *color = *(u32*)(addr & ~0x00C00000);
 }
 
 void GXPeekZ(u16 x, u16 y, u32* z) {

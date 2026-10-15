@@ -111,24 +111,31 @@ void GXSetPointSize(u8 size, GXTexOffset offsets) {
 }
 
 void GXEnableTexOffsets(GXTexCoordID coord, GXBool line, GXBool point) {
-    GXData* data = gx;
-
-    GX_BITFIELD_SET(data->suTs0[coord], 13, 1, line);
-    GX_BITFIELD_SET(data->suTs0[coord], 12, 1, point);
+    GX_BITFIELD_SET(gx->suTs0[coord], 13, 1, line);
+    GX_BITFIELD_SET(gx->suTs0[coord], 12, 1, point);
     GXFIFO.u8 = 0x61;
-    GXFIFO.u32 = data->suTs0[coord];
-    data->bpSentNot = 0;
+    GXFIFO.u32 = gx->suTs0[coord];
+    gx->bpSentNot = 0;
 }
 
 void GXSetCullMode(GXCullMode mode) {
     GXData* data;
-    GXCullMode mode2;
+    GXCullMode hwMode;
+
+    switch (mode) {
+    case GX_CULL_FRONT:
+        hwMode = GX_CULL_BACK;
+        break;
+    case GX_CULL_BACK:
+        hwMode = GX_CULL_FRONT;
+        break;
+    default:
+        hwMode = mode;
+        break;
+    }
+
     data = gx;
-
-    mode2 = (mode >> 1) & 1;
-    GX_BITFIELD_SET(mode2, 30, 1, mode);
-
-    GX_BITFIELD_SET(data->genMode, 16, 2, mode2);
+    GX_BITFIELD_SET(data->genMode, 16, 2, hwMode);
     data->dirtyState |= GX_DIRTY_GEN_MODE;
 }
 

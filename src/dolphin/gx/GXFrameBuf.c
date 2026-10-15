@@ -249,11 +249,11 @@ void GXSetTexCopySrc(u16 left, u16 top, u16 width, u16 height) {
     GX_BITFIELD_SET(gx->cpTexSize, 0, 8, 0x4A);
 }
 
-void GXSetDispCopyDst(u16 arg0, u16 arg1) {
-    s32 val = (s32)((arg0 << 1) & 0xFFFE) >> 5;
+void GXSetDispCopyDst(u16 wd, u16 ht) {
+    u16 stride = wd * 2;
     gx->cpDispStride = 0;
-    GX_BITFIELD_SET(gx->cpDispStride, 22, 10, val);
-    GX_BITFIELD_SET(gx->cpDispStride, 0, 8, 0x4D);
+    GX_SET_REG(gx->cpDispStride, stride >> 5, 22, 31);
+    GX_SET_REG(gx->cpDispStride, 0x4D, 0, 7);
 }
 
 void GXSetTexCopyDst(u16 width, u16 height, GXTexFmt format, GXBool useMIPmap) {
@@ -313,10 +313,10 @@ void GXSetDispCopyFrame2Field(GXCopyMode arg0) {
 void GXSetCopyClamp(GXFBClamp clamp) {
     u8 isTop = (clamp & GX_CLAMP_TOP) == GX_CLAMP_TOP;
     u8 isBottom = (clamp & GX_CLAMP_BOTTOM) == GX_CLAMP_BOTTOM;
-    gx->cpDisp = __rlwimi(gx->cpDisp, isTop, 0, 31, 31);
-    gx->cpDisp = __rlwimi(gx->cpDisp, isBottom, 1, 30, 30);
-    gx->cpTex = __rlwimi(gx->cpTex, isTop, 0, 31, 31);
-    gx->cpTex = __rlwimi(gx->cpTex, isBottom, 1, 30, 30);
+    INSERT_FIELD(gx->cpDisp, isTop, 1, 0);
+    INSERT_FIELD(gx->cpDisp, isBottom, 1, 1);
+    INSERT_FIELD(gx->cpTex, isTop, 1, 0);
+    INSERT_FIELD(gx->cpTex, isBottom, 1, 1);
 }
 
 static u32 __GXGetNumXfbLines(u32 height, u32 scale) {

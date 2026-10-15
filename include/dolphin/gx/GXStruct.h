@@ -52,7 +52,7 @@ typedef struct _GXTexObj {
 typedef struct _GXTlutObj {
     /* 0x0 */ u32 format;
     /* 0x4 */ u32 address;
-    /* 0x8 */ u32 numEntries;
+    /* 0x8 */ u16 numEntries;
 } GXTlutObj;
 
 typedef struct _GXLightObj {

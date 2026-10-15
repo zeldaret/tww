@@ -36,6 +36,8 @@ extern "C" {
 #define GX_GET_REG(reg, st, end)    GX_BITGET(reg, st, (end - st + 1))
 #define GX_SET_REG(reg, x, st, end) GX_BITFIELD_SET(reg, st, (end - st + 1), x)
 #define GX_SET_TRUNC(reg, x, st, end) GX_BITFIELD_TRUNC((reg), (st), ((end) - (st) + 1), (x))
+// Insert x into bits [st-end] (bit 0 = MSB) with a single rlwimi instruction
+#define GX_SET_REG_RLWIMI(reg, x, st, end) ((reg) = __rlwimi((reg), (x), 31 - (end), (st), (end)))
 
 #define GXCOLOR_AS_U32(color) (*((u32*)&(color)))
 

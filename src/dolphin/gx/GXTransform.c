@@ -264,18 +264,16 @@ void __GXSetViewport(void) {
 }
 
 void GXSetViewport(f32 left, f32 top, f32 width, f32 height, f32 nearZ, f32 farZ) {
-    gx->vpLeft = left;
-    gx->vpTop = top;
-    gx->vpWd = width;
-    gx->vpHt = height;
-    gx->vpNearz = nearZ;
-    gx->vpFarz = farZ;
-    __GXSetViewport();
-    gx->bpSentNot = GX_TRUE;
+    GXSetViewportJitter(left, top, width, height, nearZ, farZ, 1);
 }
 
 void GXGetViewportv(f32* p) {
-    Copy6Floats(&gx->vpLeft, p);
+    p[0] = gx->vpLeft;
+    p[1] = gx->vpTop;
+    p[2] = gx->vpWd;
+    p[3] = gx->vpHt;
+    p[4] = gx->vpNearz;
+    p[5] = gx->vpFarz;
 }
 
 void GXSetScissor(u32 left, u32 top, u32 width, u32 height) {

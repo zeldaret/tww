@@ -1649,6 +1649,84 @@ typedef enum _GXBPFogRangeK {
     GX_BP_FOGRANGEK_LO_END = 19,
 } GXBPFogRangeK;
 
+// BP locators for TEV color combiner.
+typedef enum _GXBPTevColorEnv {
+    // Input D [28-31]
+    GX_BP_TEVCOLOR_D_ST = 28,
+    GX_BP_TEVCOLOR_D_END = 31,
+
+    // Input C [24-27]
+    GX_BP_TEVCOLOR_C_ST = 24,
+    GX_BP_TEVCOLOR_C_END = 27,
+
+    // Input B [20-23]
+    GX_BP_TEVCOLOR_B_ST = 20,
+    GX_BP_TEVCOLOR_B_END = 23,
+
+    // Input A [16-19]
+    GX_BP_TEVCOLOR_A_ST = 16,
+    GX_BP_TEVCOLOR_A_END = 19,
+
+    // Scale [10-11]
+    GX_BP_TEVCOLOR_SCALE_ST = 10,
+    GX_BP_TEVCOLOR_SCALE_END = 11,
+
+    // Clamp [12-12]
+    GX_BP_TEVCOLOR_CLAMP_ST = 12,
+    GX_BP_TEVCOLOR_CLAMP_END = 12,
+
+    // Subtract [13-13]
+    GX_BP_TEVCOLOR_OP_ST = 13,
+    GX_BP_TEVCOLOR_OP_END = 13,
+
+    // Bias [14-15]
+    GX_BP_TEVCOLOR_BIAS_ST = 14,
+    GX_BP_TEVCOLOR_BIAS_END = 15,
+
+    // Destination register [8-9]
+    GX_BP_TEVCOLOR_DEST_ST = 8,
+    GX_BP_TEVCOLOR_DEST_END = 9,
+} GXBPTevColorEnv;
+
+// BP locators for TEV alpha combiner.
+typedef enum _GXBPTevAlphaEnv {
+    // Input D [25-27]
+    GX_BP_TEVALPHA_D_ST = 25,
+    GX_BP_TEVALPHA_D_END = 27,
+
+    // Input C [22-24]
+    GX_BP_TEVALPHA_C_ST = 22,
+    GX_BP_TEVALPHA_C_END = 24,
+
+    // Input B [19-21]
+    GX_BP_TEVALPHA_B_ST = 19,
+    GX_BP_TEVALPHA_B_END = 21,
+
+    // Input A [16-18]
+    GX_BP_TEVALPHA_A_ST = 16,
+    GX_BP_TEVALPHA_A_END = 18,
+
+    // Scale [10-11]
+    GX_BP_TEVALPHA_SCALE_ST = 10,
+    GX_BP_TEVALPHA_SCALE_END = 11,
+
+    // Clamp [12-12]
+    GX_BP_TEVALPHA_CLAMP_ST = 12,
+    GX_BP_TEVALPHA_CLAMP_END = 12,
+
+    // Subtract [13-13]
+    GX_BP_TEVALPHA_OP_ST = 13,
+    GX_BP_TEVALPHA_OP_END = 13,
+
+    // Bias [14-15]
+    GX_BP_TEVALPHA_BIAS_ST = 14,
+    GX_BP_TEVALPHA_BIAS_END = 15,
+
+    // Destination register [8-9]
+    GX_BP_TEVALPHA_DEST_ST = 8,
+    GX_BP_TEVALPHA_DEST_END = 9,
+} GXBPTevAlphaEnv;
+
 // BP locators for blend mode.
 typedef enum _GXBPBlendMode {
     // Blend enable [31-31]
