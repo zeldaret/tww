@@ -333,9 +333,9 @@ void cut_control2(sitem_class* i_this) {
     fVar1 = i_this->field_0x300;
 
     for (i = 8; i >= 0; i--, vine_i--) {
-        local_c8.x = fVar1 * JMASSin(i_this->field_0x2BC * (REG0_S(5) + 0x9C4) + i * (REG0_S(6) + 3000));
-        local_c8.y = fVar1 * JMASSin(i_this->field_0x2BC * (REG0_S(5) + 0xB86) + i * (REG0_S(6) + 4000));
-        local_c8.z = fVar1 * JMASCos(i_this->field_0x2BC * (REG0_S(7) + 0xAF0) + i * (REG0_S(8) + 0xDAC));
+        local_c8.x = fVar1 * cM_ssin(i_this->field_0x2BC * (REG0_S(5) + 0x9C4) + i * (REG0_S(6) + 3000));
+        local_c8.y = fVar1 * cM_ssin(i_this->field_0x2BC * (REG0_S(5) + 0xB86) + i * (REG0_S(6) + 4000));
+        local_c8.z = fVar1 * cM_scos(i_this->field_0x2BC * (REG0_S(7) + 0xAF0) + i * (REG0_S(8) + 0xDAC));
 
         fVar3 = local_c8.x + (vine_i->pos.x - vine_i[1].pos.x);
 
