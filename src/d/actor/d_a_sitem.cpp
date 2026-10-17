@@ -33,7 +33,7 @@ void hand_draw(sitem_class* i_this) {
 
 /* 000001FC-00000248       .text daSitem_Draw__FP11sitem_class */
 static BOOL daSitem_Draw(sitem_class* i_this) {
-    g_env_light.settingTevStruct(0 /* TODO: Actor enum */, &i_this->actor.eyePos, &i_this->actor.tevStr);
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->actor.eyePos, &i_this->actor.tevStr);
     hand_draw(i_this);
 
     return TRUE;
@@ -246,9 +246,9 @@ void cut_control1(sitem_class* i_this) {
         i_this->mParticleCallback[0].end();
 
 #if VERSION == VERSION_DEMO
-        i_this->mpParticleEmitter[0] = dComIfGp_particle_set(0x8184, &i_this->mVineStubPoints[4].pos, &i_this->field_0xD40[0], NULL, 0xFF, &i_this->mParticleCallback[0], fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, NULL);;
+        i_this->mpParticleEmitter[0] = dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, &i_this->mVineStubPoints[4].pos, &i_this->field_0xD40[0], NULL, 0xFF, &i_this->mParticleCallback[0], fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, NULL);;
 #else
-        dComIfGp_particle_set(0x8184, &i_this->mVineStubPoints[4].pos, &i_this->field_0xD40[0], NULL, 0xFF, &i_this->mParticleCallback[0], fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, NULL);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, &i_this->mVineStubPoints[4].pos, &i_this->field_0xD40[0], NULL, 0xFF, &i_this->mParticleCallback[0], fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, NULL);
 #endif
 
         i_this->field_0x2C6 = 0x3C;
@@ -285,21 +285,21 @@ void my_break(sitem_class* i_this) {
     fopAcM_createItemFromTable(&i_this->field_0x2C8, i_this->mItemTableNo, i_this->mItemBit & 0x7F, fopAcM_GetHomeRoomNo(&i_this->actor), 0, &acStack_18, 1, NULL);
 
     if (i_this->mPodType <= 1) {
-        dComIfGp_particle_set(0x8168, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_TANE00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
 
-        dComIfGp_particle_set(0x8167, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_HAHEN00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
 
         if (i_this->mPodType == 1) {
-            dComIfGp_particle_set(0x8169, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_TOGE00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
         }
     }
 
     if (i_this->mPodType == 2) {
-        dComIfGp_particle_set(0x816a, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_MATSU00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
     }
 
 #if VERSION > VERSION_DEMO
-    fopAcM_seStart(&i_this->actor, 0x6936, 0);
+    fopAcM_seStart(&i_this->actor, JA_SE_OBJ_BREAK_CHAIR, 0);
 #endif
 
     daObjEff::Act_c::make_pinecone_smoke(&i_this->field_0x2C8);
@@ -385,7 +385,7 @@ void cut_control2(sitem_class* i_this) {
 #if VERSION == VERSION_DEMO
         i_this->mpParticleEmitter[1] =
 #endif
-        dComIfGp_particle_set(0x8184, &i_this->mVinePoints[0].pos, i_this->field_0xD40 + 1, NULL, 0xFF, &i_this->mParticleCallback[1], fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, NULL);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, &i_this->mVinePoints[0].pos, i_this->field_0xD40 + 1, NULL, 0xFF, &i_this->mParticleCallback[1], fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, NULL);
     } else {
         local_b0 = i_this->mVinePoints[0].pos - i_this->mVinePoints[1].pos;
 
@@ -426,23 +426,18 @@ void hand_move(sitem_class* i_this) {
     float fVar14;
     float fVar15;
     u8 *puVar3;
-    cXyz *pcVar4;
     bool bVar6;
     short sVar5;
-    sitem_s *psVar7;
+    sitem_s *vine_i;
     cXyz *pcVar8;
-    int iVar9;
-    int iVar11;
-    int iVar10;
-    int iVar12;
+    u8 iVar11;
     float fVar13;
     cXyz local_120;
     cXyz cStack_12c;
     cXyz local_138;
     cXyz local_144;
     cXyz local_150;
-    cXyz local_174;
-    CcAtInfo local_114;
+    CcAtInfo at_info;
     dBgS_GndChk local_f8;
     long long local_a0;
 
@@ -484,17 +479,14 @@ void hand_move(sitem_class* i_this) {
             fVar1 = 25.0f;
 
             i_this->field_0x2D4 = i_this->field_0x2C8;
-
-            PSVECAdd(&i_this->field_0x2C8, &i_this->actor.speed, &i_this->field_0x2C8);
+            i_this->field_0x2C8 += i_this->actor.speed;
 
             i_this->actor.speed.y -= 3.0f;
-
             if (i_this->actor.speed.y < -90.0f) {
                 i_this->actor.speed.y = -90.0f;
             }
 
-            i_this->mBgAcch.CrrPos(g_dComIfG_gameInfo.play.mBgS);
-
+            i_this->mBgAcch.CrrPos(*dComIfG_Bgsp());
             i_this->field_0x2C6 = 5;
 
             if (i_this->actor.speed.y < 0.0f) {
@@ -504,9 +496,7 @@ void hand_move(sitem_class* i_this) {
 
                 y += 100.0f;
 
-                local_f8.m_pos.x = x;
-                local_f8.m_pos.y = y;
-                local_f8.m_pos.z = z;
+                local_f8.m_pos.set(x, y, z);
 
                 i_this->field_0x304 = dComIfG_Bgsp()->GroundCross(&local_f8);
 
@@ -546,7 +536,8 @@ void hand_move(sitem_class* i_this) {
             local_120.z = i_this->field_0xB0C;
 
             MtxPosition(&local_120, &cStack_12c);
-            PSVECAdd(&local_138, &cStack_12c, &local_138);
+            
+            local_138 += cStack_12c;
 
             fVar17 = 0.1f;
             i_this->actor.speedF = i_this->field_0xB0C * 0.2f;
@@ -579,14 +570,14 @@ void hand_move(sitem_class* i_this) {
     }
 
     control3(i_this);
-    psVar7 = i_this->mVinePoints;
+    vine_i = i_this->mVinePoints;
     pcVar8 = i_this->mVineLineMat.getPos(0);
     puVar3 = i_this->mVineLineMat.getSize(0);
 
-    for (int i = 10; i != 0; i--, psVar7++, pcVar8++, puVar3++) {
-        *pcVar8 = psVar7->pos;
-        local_a0 = psVar7->field_0x18;
-        *puVar3 = psVar7->field_0x18;
+    for (int i = 10; i != 0; i--, vine_i++, pcVar8++, puVar3++) {
+        *pcVar8 = vine_i->pos;
+        local_a0 = vine_i->field_0x18;
+        *puVar3 = vine_i->field_0x18;
     }
     pcVar8 = i_this->mVineLineMat.getPos(0);
 
@@ -603,113 +594,100 @@ void hand_move(sitem_class* i_this) {
 
     iVar11 = 0;
     dComIfG_Ccsp()->Set(&i_this->mBoomerangSph);
-    iVar10 = 0;
-    iVar12 = 0;
 
-    for (; iVar10 < 3; iVar10++) {
-        int index = ((int)i_this->field_0x2BC & 3U) + iVar10 * 2;
-        index = index % 10;
+    for (int i = 0; i < 3; i++) {
+        int index = ((int)i_this->field_0x2BC & 3U) + i * 2;
+        index %= 10;
 
-        pcVar4 = pcVar8 + index;
-        local_144 = *pcVar4;
+        local_144 = pcVar8[index];
 
         if (!bVar6) {
-            i_this->mVinePodSph[iVar10].SetC(local_144);
+            i_this->mVinePodSph[i].SetC(local_144);
         }
         else {
-            i_this->mVinePodSph[iVar10].SetC(non_pos);
+            i_this->mVinePodSph[i].SetC(non_pos);
         }
 
         if (i_this->field_0x2C0 == 3) {
-            i_this->mVinePodSph[iVar10].OffCoSetBit();
+            i_this->mVinePodSph[i].OffCoSetBit();
         } else {
-            i_this->mVinePodSph[iVar10].OnCoSetBit();
+            i_this->mVinePodSph[i].OnCoSetBit();
         }
-        dComIfG_Ccsp()->Set(&i_this->mVinePodSph[iVar10]);
+
+        dComIfG_Ccsp()->Set(&i_this->mVinePodSph[i]);
     }
 
     i_this->mVinePodSph[3].SetR(50.0f);
     i_this->mVinePodSph[3].SetC(i_this->field_0xB00);
-    i_this->mVinePodSph[3].GetObjCo().OnSPrmBit(1); // TODO: add flag
+    i_this->mVinePodSph[3].OnCoSetBit();
 
     dComIfG_Ccsp()->Set(&i_this->mVinePodSph[3]);
 
-    local_114.mpObj = NULL;
+    at_info.mpObj = NULL;
     if (i_this->field_0x2C6 == 0) {
         if (i_this->mVinePodSph[3].ChkTgHit() || (i_this->field_0xB0C > 100.0f && i_this->mVinePodSph[3].ChkCoHit())) {
-            local_114.mpObj = i_this->mVinePodSph[3].GetTgHitObj();
+            at_info.mpObj = i_this->mVinePodSph[3].GetTgHitObj();
 
-            if (local_114.mpObj && local_114.mpObj->ChkAtType(AT_TYPE_GRAPPLING_HOOK)) {
+            if (at_info.mpObj && at_info.mpObj->ChkAtType(AT_TYPE_GRAPPLING_HOOK)) {
                 return;
             }
 
             my_break(i_this);
             iVar11 = 3;
         } else {
-            iVar12 = 0;
-            for (iVar9 = 0; iVar9 < 3; iVar9++) {
-                if (i_this->mVinePodSph[iVar9].ChkTgHit()) {
-                    local_114.mpObj = i_this->mVinePodSph[iVar9].GetTgHitObj();
-                    if (local_114.mpObj && local_114.mpObj->ChkAtType(AT_TYPE_GRAPPLING_HOOK)) {
+            for (int i = 0; i < 3; i++) {
+                if (i_this->mVinePodSph[i].ChkTgHit()) {
+                    at_info.mpObj = i_this->mVinePodSph[i].GetTgHitObj();
+                    if (at_info.mpObj && at_info.mpObj->ChkAtType(AT_TYPE_GRAPPLING_HOOK)) {
                         return;
                     }
 
                     iVar11 = 1;
                     break;
                 }
-                iVar12 = iVar12 + 300;
             }
 
-            if (((iVar11 & 0xFF) || (iVar12 = i_this->mBoomerangSph.ChkTgHit(), (u32) iVar12 != 0))
-                && (i_this->field_0x2C6 == 0)) {
+            if ((iVar11 || i_this->mBoomerangSph.ChkTgHit()) && (i_this->field_0x2C6 == 0)) {
                 i_this->field_0x2C6 = 0x14;
-                if (((u8) iVar11) == 0) {
-                    local_114.mpObj = i_this->mBoomerangSph.GetTgHitObj();
-                    at_power_check(&local_114);
+                if (iVar11 == 0) {
+                    at_info.mpObj = i_this->mBoomerangSph.GetTgHitObj();
+                    at_power_check(&at_info);
 
-                    if (local_114.mResultingAttackType == 8) {
+                    if (at_info.mResultingAttackType == 8) {
                         i_this->field_0xB0C = REG6_F(6) + 300.0f;
                         i_this->field_0xB10 = fopAcM_searchPlayerAngleY(&i_this->actor) + 0x8000;
                         return;
                     }
                 }
                 i_this->field_0x2C0 = 5;
-                fVar14 = cM_rndFX(10.0f);
-                i_this->actor.speed.x = fVar14;
-                fVar14 = cM_rndF(5.0f);
-                i_this->actor.speed.y = fVar14 + 10.0f;
-                fVar14 = cM_rndFX(10.0f);
-                i_this->actor.speed.z = fVar14;
-                local_150.x = 0.3f;
-                local_150.y = 0.3f;
-                local_150.z = 0.3f;
-                dComIfGp_particle_set(0x16, &i_this->actor.eyePos, NULL, &local_150, 0xFF, NULL, -1, NULL, NULL, NULL);
+
+                i_this->actor.speed.x = cM_rndFX(10.0f);
+                i_this->actor.speed.y = cM_rndF(5.0f) + 10.0f;
+                i_this->actor.speed.z = cM_rndFX(10.0f);
+                
+                local_150.set(0.3f, 0.3f, 0.3f);
+                
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &i_this->actor.eyePos, NULL, &local_150);
                 i_this->field_0xD4C = 1;
                 iVar11 = 1;
             }
         }
-        if (iVar11 & 0xFF) {
-            if (local_114.mpObj) {
-                def_se_set(&i_this->actor, local_114.mpObj, 0x21);
+        if (iVar11) {
+            if (at_info.mpObj) {
+                def_se_set(&i_this->actor, at_info.mpObj, 0x21);
             }
-            psVar7 = i_this->mVinePoints;
-            pcVar8 = &i_this->mVineStubPoints[0].pos;
-            iVar12 = 0;
-            do {
-                pcVar8->x = (psVar7->pos).x;
-                pcVar8->y = (psVar7->pos).y;
-                pcVar8->z = (psVar7->pos).z;
-                pcVar8[2].x = psVar7->field_0x18;
-                if (iVar12 == 4) {
-                    local_174 = *pcVar8 - *(cXyz*)((u8*)pcVar8 - 0x1C);
-                    fVar14 = PSVECSquareMag(&local_174);
-                    fVar14 = std::sqrtf(fVar14);
-                    i_this->field_0x308 = (REG0_F(2) + 1.5f) * fVar14;
+            
+            sitem_s* vine_i = vine_i = i_this->mVinePoints;
+            sitem_s* stub_i = i_this->mVineStubPoints;
+            for (int i = 0; i < 5; i++, vine_i++, stub_i++) {
+                stub_i->pos = vine_i->pos;
+                stub_i->field_0x18 = vine_i->field_0x18;
+
+                if (i == 4) {
+                    cXyz diff = stub_i->pos - stub_i[-1].pos;
+                    i_this->field_0x308 = (REG0_F(2) + 1.5f) * diff.abs();
                 }
-                iVar12 = iVar12 + 1;
-                psVar7 = psVar7 + 1;
-                pcVar8 = (cXyz *)&pcVar8[2].y;
-            } while (iVar12 < 5);
+            }
         }
     }
 }
