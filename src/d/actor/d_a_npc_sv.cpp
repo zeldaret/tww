@@ -7,6 +7,18 @@
 #include "d/actor/d_a_npc_sv.h"
 #include "d/d_com_lib_game.h"
 
+typedef int (daNpcSv_c::*ExecuteInit_t)();
+static ExecuteInit_t l_execute_init[] = {
+    &daNpcSv_c::executeWaitInit,
+    &daNpcSv_c::executeTalkInit,
+};
+
+typedef void (daNpcSv_c::*MoveProc_t)();
+static MoveProc_t moveProc[] = {
+    &daNpcSv_c::executeWait,
+    &daNpcSv_c::executeTalk,
+};
+
 /* 00000078-0000021C       .text __ct__9daNpcSv_cFv */
 daNpcSv_c::daNpcSv_c() {
     /* Nonmatching */
@@ -36,7 +48,7 @@ void phase_2(daNpcSv_c*) {
 cPhs_State daNpcSv_c::_create() {
     static cPhs__Handler l_method[] = { (cPhs__Handler)&phase_1, (cPhs__Handler)&phase_2, (cPhs__Handler)NULL };
 
-    return dComLbG_PhaseHandler(&mPhase, l_method, this);
+    return dComLbG_PhaseHandler(&mPhaseCreate, l_method, this);
 }
 
 /* 00000768-00000A04       .text createHeap__9daNpcSv_cFv */
@@ -70,12 +82,12 @@ void daNpcSv_c::executeCommon() {
 }
 
 /* 00000FB8-00001000       .text executeSetMode__9daNpcSv_cFUc */
-void daNpcSv_c::executeSetMode(unsigned char) {
-    /* Nonmatching */
+void daNpcSv_c::executeSetMode(u8 i_initIdx) {
+    mMoveState = (this->*l_execute_init[i_initIdx])();
 }
 
 /* 00001000-00001080       .text executeWaitInit__9daNpcSv_cFv */
-void daNpcSv_c::executeWaitInit() {
+BOOL daNpcSv_c::executeWaitInit() {
     /* Nonmatching */
 }
 
@@ -85,7 +97,7 @@ void daNpcSv_c::executeWait() {
 }
 
 /* 0000131C-00001338       .text executeTalkInit__9daNpcSv_cFv */
-void daNpcSv_c::executeTalkInit() {
+BOOL daNpcSv_c::executeTalkInit() {
     /* Nonmatching */
 }
 
@@ -130,8 +142,8 @@ void daNpcSv_c::eventGetItemInit(int) {
 }
 
 /* 000018F0-000018F8       .text eventGetItem__9daNpcSv_cFv */
-void daNpcSv_c::eventGetItem() {
-    /* Nonmatching */
+bool daNpcSv_c::eventGetItem() {
+    return true;
 }
 
 /* 000018F8-000019E0       .text eventSetAngleInit__9daNpcSv_cFv */
@@ -160,7 +172,7 @@ void daNpcSv_c::talk2(int, fopAc_ac_c*) {
 }
 
 /* 00001CF0-00001DC8       .text next_msgStatus__9daNpcSv_cFPUl */
-u16 daNpcSv_c::next_msgStatus(unsigned long*) {
+u16 daNpcSv_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
@@ -170,8 +182,8 @@ u32 daNpcSv_c::getMsg() {
 }
 
 /* 00001EB4-00001EBC       .text setMessage__9daNpcSv_cFUl */
-void daNpcSv_c::setMessage(unsigned long) {
-    /* Nonmatching */
+void daNpcSv_c::setMessage(u32 i_message) {
+    mCurrMsgNo = i_message;
 }
 
 /* 00001EBC-00001F74       .text setAnmFromMsgTag__9daNpcSv_cFv */
@@ -205,7 +217,7 @@ void daNpcSv_c::playAnm() {
 }
 
 /* 000025E8-000026C8       .text setAnm__9daNpcSv_cFUcif */
-void daNpcSv_c::setAnm(unsigned char, int, float) {
+void daNpcSv_c::setAnm(u8, int, f32) {
     /* Nonmatching */
 }
 
@@ -215,7 +227,7 @@ void daNpcSv_c::setAnmTbl(sSvAnmDat*) {
 }
 
 /* 00002768-000027E0       .text setCollision__9daNpcSv_cFP8dCcD_Cyl4cXyzff */
-void daNpcSv_c::setCollision(dCcD_Cyl*, cXyz, float, float) {
+void daNpcSv_c::setCollision(dCcD_Cyl*, cXyz, f32, f32) {
     /* Nonmatching */
 }
 
