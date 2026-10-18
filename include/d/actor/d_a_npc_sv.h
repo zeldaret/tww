@@ -1,14 +1,12 @@
 #ifndef D_A_NPC_SV_H
 #define D_A_NPC_SV_H
 
-#include "f_op/f_op_actor.h"
 #include "d/d_cc_d.h"
+#include "d/d_npc.h"
 
-struct sSvAnmDat {
-    
-};
+struct sSvAnmDat {};
 
-class daNpcSv_c : public fopAc_ac_c {
+class daNpcSv_c : public fopNpc_npc_c {
 public:
     void getMsgPtn() {}
     void getNpcNo() {}
@@ -41,8 +39,8 @@ public:
     void eventAttention();
     void eventTurnOkInit();
     void talk2(int, fopAc_ac_c*);
-    void next_msgStatus(unsigned long*);
-    void getMsg();
+    virtual u16 next_msgStatus(unsigned long*);
+    virtual u32 getMsg();
     void setMessage(unsigned long);
     void setAnmFromMsgTag();
     void getPrmNpcNo();
@@ -56,8 +54,9 @@ public:
     void getTalkNo();
     void isTalkOK();
 
-public:
-    /* Place member variables here */
+private:
+    /* 0x6C4 */ u8 padding_0x6C4[8];
+    /* 0x6CC */ request_of_phase_process_class mPhase;
 };
 
 #endif /* D_A_NPC_SV_H */

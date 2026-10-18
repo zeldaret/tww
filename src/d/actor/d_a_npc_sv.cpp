@@ -5,8 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_sv.h"
-#include "m_Do/m_Do_ext.h"
-#include "d/actor/d_a_obj_ikada.h"
+#include "d/d_com_lib_game.h"
 
 /* 00000078-0000021C       .text __ct__9daNpcSv_cFv */
 daNpcSv_c::daNpcSv_c() {
@@ -35,7 +34,9 @@ void phase_2(daNpcSv_c*) {
 
 /* 00000738-00000768       .text _create__9daNpcSv_cFv */
 cPhs_State daNpcSv_c::_create() {
-    /* Nonmatching */
+    static cPhs__Handler l_method[] = { (cPhs__Handler)&phase_1, (cPhs__Handler)&phase_2, (cPhs__Handler)NULL };
+
+    return dComLbG_PhaseHandler(&mPhase, l_method, this);
 }
 
 /* 00000768-00000A04       .text createHeap__9daNpcSv_cFv */
@@ -159,12 +160,12 @@ void daNpcSv_c::talk2(int, fopAc_ac_c*) {
 }
 
 /* 00001CF0-00001DC8       .text next_msgStatus__9daNpcSv_cFPUl */
-void daNpcSv_c::next_msgStatus(unsigned long*) {
+u16 daNpcSv_c::next_msgStatus(unsigned long*) {
     /* Nonmatching */
 }
 
 /* 00001DC8-00001EB4       .text getMsg__9daNpcSv_cFv */
-void daNpcSv_c::getMsg() {
+u32 daNpcSv_c::getMsg() {
     /* Nonmatching */
 }
 
