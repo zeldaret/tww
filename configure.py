@@ -1625,7 +1625,7 @@ config.libs = [
     ActorRel(NonMatching, "d_a_ship"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),  "d_a_shop_item"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_sie_flag"),
-    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_sitem"),
+    ActorRel(Matching,    "d_a_sitem"),
     ActorRel(NonMatching, "d_a_ss"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_sss"),
     ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"),    "d_a_syan"),

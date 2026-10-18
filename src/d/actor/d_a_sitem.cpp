@@ -426,16 +426,15 @@ static f32 max_d[4] = {100.0f, 250.0f, 400.0f, 600.0f};
 
 /* 000015C0-00002304       .text hand_move__FP11sitem_class */
 static void hand_move(sitem_class* i_this) {
-    /* Nonmatching - demo only */
     fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
-    f32 fVar17;
-    f32 fVar16;
-    f32 zero;
-    f32 fVar1;
-    f32 fVar14;
-    f32 fVar15;
+    f32 f31;
+    f32 f30;
+    f32 f29;
+    f32 f28;
+    f32 f27;
+    f32 f26;
     u8 *puVar3;
     bool bVar6;
     s16 sVar5;
@@ -453,13 +452,13 @@ static void hand_move(sitem_class* i_this) {
 
     bVar6 = false;
 
-    fVar17 = 0.1f;
-    fVar16 = 8.0f;
-    zero = 0.0f;
-    fVar14 = 1.0f;
-    fVar15 = REG0_F(0xB) + 5.0f;
+    f31 = 0.1f;
+    f30 = 8.0f;
+    f29 = 0.0f;
+    f27 = 1.0f;
+    f26 = REG0_F(0xB) + 5.0f;
 
-    fVar1 = REG0_F(5) + hr_d[i_this->field_0x2B9];
+    f28 = REG0_F(5) + hr_d[i_this->field_0x2B9];
     fVar13 = max_d[i_this->field_0x2B9];
 
     cMtx_YrotS(*calc_mtx, actor->current.angle.y);
@@ -483,10 +482,10 @@ static void hand_move(sitem_class* i_this) {
             }
             break;
         case 5:
-            fVar15 = 50.0f;
+            f26 = 50.0f;
             i_this->field_0x300 = 50.0f;
             bVar6 = true;
-            fVar1 = 25.0f;
+            f28 = 25.0f;
 
             i_this->field_0x2D4 = i_this->field_0x2C8;
             i_this->field_0x2C8 += actor->speed;
@@ -516,11 +515,11 @@ static void hand_move(sitem_class* i_this) {
             break;
         case 6:
             bVar6 = true;
-            fVar15 = zero;
+            f26 = 0.0f;
             i_this->field_0x2C6 = 10;
             if (i_this->field_0x2C2[0] < 0x28) {
-                fVar14 = fVar1 * 0.05f;
-                fVar1 = fVar15;
+                f27 = f28 * 0.05f;
+                f28 = 0.0f;
             }
 
             if (i_this->field_0x2C2[0] == 0) {
@@ -529,12 +528,12 @@ static void hand_move(sitem_class* i_this) {
             break;
     }
         
-    cLib_addCalc2(&i_this->field_0x2F4, fVar1, 0.5f, fVar14);
-    cLib_addCalc2(&i_this->field_0x2FC, zero, 1.0f, 0.2f);
-    cLib_addCalc2(&i_this->field_0x300, fVar15, 1.0f, 1.5f);
+    cLib_addCalc2(&i_this->field_0x2F4, f28, 0.5f, f27);
+    cLib_addCalc2(&i_this->field_0x2FC, f29, 1.0f, 0.2f);
+    cLib_addCalc2(&i_this->field_0x300, f26, 1.0f, 1.5f);
 
     if (!bVar6) {
-        cLib_addCalc2(&actor->speedF, fVar16, 1.0f, fVar17);
+        cLib_addCalc2(&actor->speedF, f30, 1.0f, f31);
         if ((i_this->field_0xB0C > 1.0f) && (i_this->field_0x2C0 != 3)) {
             cMtx_YrotS(*calc_mtx, (s16)i_this->field_0xB10);
 
@@ -546,7 +545,7 @@ static void hand_move(sitem_class* i_this) {
             
             local_138 += cStack_12c;
 
-            fVar17 = 0.1f;
+            f31 = 0.1f;
             actor->speedF = i_this->field_0xB0C * 0.2f;
             if (actor->speedF > REG6_F(8) + 30.0f) {
                 actor->speedF = REG6_F(8) + 30.0f;
@@ -554,9 +553,16 @@ static void hand_move(sitem_class* i_this) {
         }
         cLib_addCalc0(&i_this->field_0xB0C, 1.0f, REG6_F(7) + 5.0f);
 
-        cLib_addCalc2(&i_this->field_0x2C8.x, local_138.x, fVar17, actor->speedF);
-        cLib_addCalc2(&i_this->field_0x2C8.y, local_138.y, fVar17, actor->speedF);
-        cLib_addCalc2(&i_this->field_0x2C8.z, local_138.z, fVar17, actor->speedF);
+        cLib_addCalc2(&i_this->field_0x2C8.x, local_138.x, f31, actor->speedF);
+        cLib_addCalc2(&i_this->field_0x2C8.y, local_138.y, f31, actor->speedF);
+        cLib_addCalc2(&i_this->field_0x2C8.z, local_138.z, f31, actor->speedF);
+
+        // Semi-fake, there was some unknown condition here that always evaluates to false.
+        // For retail this whole block gets optimized out, but for the demo build the inner part remains as unreachable code.
+        BOOL temp = FALSE;
+        if (temp && local_138.x == 0.0f) {
+            cLib_addCalcAngleS2(&i_this->actor.current.angle.y, fopAcM_searchPlayerAngleY(&i_this->actor), 0x10, 0x800);
+        }
 
         control1(i_this);
         control2(i_this);
