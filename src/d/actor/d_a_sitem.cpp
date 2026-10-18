@@ -15,25 +15,29 @@ static cXyz non_pos;
 
 /* 000000EC-000001FC       .text hand_draw__FP11sitem_class */
 static void hand_draw(sitem_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
+
     if (i_this->field_0x2C0 < 6) {
         J3DModel* model = i_this->mpModel;
-        g_env_light.setLightTevColorType(model, &i_this->actor.tevStr);
+        g_env_light.setLightTevColorType(model, &actor->tevStr);
         mDoExt_modelUpdateDL(model);
     }
 
-    i_this->mVineLineMat.update(10, (GXColor){0x00, 0xB4, 0x32, 0xFF}, &i_this->actor.tevStr);
+    i_this->mVineLineMat.update(10, (GXColor){0x00, 0xB4, 0x32, 0xFF}, &actor->tevStr);
 
     dComIfGd_set3DlineMat(&i_this->mVineLineMat);
 
     if (i_this->field_0x308 > 0.1f) {
-        i_this->mVineStubLineMat.update(5, (GXColor){0x00, 0xB4, 0x32, 0xFF}, &i_this->actor.tevStr);
+        i_this->mVineStubLineMat.update(5, (GXColor){0x00, 0xB4, 0x32, 0xFF}, &actor->tevStr);
         dComIfGd_set3DlineMat(&i_this->mVineStubLineMat);
     }
 }
 
 /* 000001FC-00000248       .text daSitem_Draw__FP11sitem_class */
 static BOOL daSitem_Draw(sitem_class* i_this) {
-    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &i_this->actor.eyePos, &i_this->actor.tevStr);
+    fopAc_ac_c* actor = &i_this->actor;
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &actor->eyePos, &actor->tevStr);
     hand_draw(i_this);
 
     return TRUE;
@@ -72,15 +76,17 @@ static void control3(sitem_class* i_this) {
 
 /* 00000410-00000748       .text control1__FP11sitem_class */
 static void control1(sitem_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
+
     static f32 g_d[10] = {50.0f, 50.0f, 35.0f, 25.0f, 15.0f, 9.0f, 6.0f, 6.0f, 6.0f, 6.0f};
 
-    i_this->mVinePoints[0].pos = i_this->actor.current.pos;
+    i_this->mVinePoints[0].pos = actor->current.pos;
 
     int i;
     sitem_s *vine_i = &i_this->mVinePoints[1];
 
-    cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
-    cMtx_XrotM(*calc_mtx, i_this->actor.current.angle.x);
+    cMtx_YrotS(*calc_mtx, actor->current.angle.y);
+    cMtx_XrotM(*calc_mtx, actor->current.angle.x);
 
     cXyz local_a4;
     local_a4.x = 0;
@@ -182,13 +188,15 @@ static void control2(sitem_class* i_this) {
 
 /* 000009E8-00000E2C       .text cut_control1__FP11sitem_class */
 static void cut_control1(sitem_class* i_this) {
-    i_this->mVineStubPoints[0].pos = i_this->actor.current.pos;
+    fopAc_ac_c* actor = &i_this->actor;
+
+    i_this->mVineStubPoints[0].pos = actor->current.pos;
 
     int i;
     sitem_s* stub_i = &i_this->mVineStubPoints[1];
 
-    cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
-    cMtx_XrotM(*calc_mtx, i_this->actor.current.angle.x);
+    cMtx_YrotS(*calc_mtx, actor->current.angle.y);
+    cMtx_XrotM(*calc_mtx, actor->current.angle.x);
 
     cXyz local_a0;
     local_a0.z = i_this->field_0x308;
@@ -239,10 +247,13 @@ static void cut_control1(sitem_class* i_this) {
         i_this->mParticleCallback[0].remove();
 
 #if VERSION == VERSION_DEMO
-        i_this->mpParticleEmitter[0] = dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, &i_this->mVineStubPoints[4].pos, &i_this->field_0xD40[0], NULL, 0xFF, &i_this->mParticleCallback[0], fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, NULL);;
-#else
-        dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, &i_this->mVineStubPoints[4].pos, &i_this->field_0xD40[0], NULL, 0xFF, &i_this->mParticleCallback[0], fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, NULL);
+        i_this->mpParticleEmitter[0] = 
 #endif
+        dComIfGp_particle_set(
+            dPa_name::ID_IT_SN_TSURU_TAIEKI00,
+            &i_this->mVineStubPoints[4].pos, &i_this->field_0xD40[0], NULL,
+            0xFF, &i_this->mParticleCallback[0], fopAcM_GetRoomNo(actor)
+        );
 
         i_this->field_0x2C6 = 0x3C;
     } else {
@@ -271,28 +282,30 @@ static void cut_control1(sitem_class* i_this) {
 
 /* 00000E2C-00001058       .text my_break__FP11sitem_class */
 static void my_break(sitem_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
+
     i_this->field_0x2C2[0] = 0x32;
     i_this->field_0x2C0 = 6;
 
-    csXyz acStack_18(0, i_this->actor.current.angle.y, 0);
-    fopAcM_createItemFromTable(&i_this->field_0x2C8, i_this->mItemTableNo, i_this->mItemBit & 0x7F, fopAcM_GetHomeRoomNo(&i_this->actor), 0, &acStack_18, 1, NULL);
+    csXyz acStack_18(0, actor->current.angle.y, 0);
+    fopAcM_createItemFromTable(&i_this->field_0x2C8, i_this->mItemTableNo, i_this->mItemBit & 0x7F, fopAcM_GetHomeRoomNo(actor), 0, &acStack_18, 1, NULL);
 
     if (i_this->mPodType <= 1) {
-        dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_TANE00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, NULL, NULL, NULL);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_TANE00, &i_this->field_0x2C8);
 
-        dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_HAHEN00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_HAHEN00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &actor->tevStr.mColorK0, &actor->tevStr.mColorK0);
 
         if (i_this->mPodType == 1) {
-            dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_TOGE00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
+            dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_TOGE00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &actor->tevStr.mColorK0, &actor->tevStr.mColorK0);
         }
     }
 
     if (i_this->mPodType == 2) {
-        dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_MATSU00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &i_this->actor.tevStr.mColorK0, &i_this->actor.tevStr.mColorK0, NULL);
+        dComIfGp_particle_set(dPa_name::ID_IT_SN_BOKKURI_MATSU00, &i_this->field_0x2C8, NULL, NULL, 0xFF, NULL, -1, &actor->tevStr.mColorK0, &actor->tevStr.mColorK0);
     }
 
 #if VERSION > VERSION_DEMO
-    fopAcM_seStart(&i_this->actor, JA_SE_OBJ_BREAK_CHAIR, 0);
+    fopAcM_seStart(actor, JA_SE_OBJ_BREAK_CHAIR, 0);
 #endif
 
     daObjEff::Act_c::make_pinecone_smoke(&i_this->field_0x2C8);
@@ -300,6 +313,8 @@ static void my_break(sitem_class* i_this) {
 
 /* 00001094-000015C0       .text cut_control2__FP11sitem_class */
 static void cut_control2(sitem_class* i_this) {
+    fopAc_ac_c* actor = &i_this->actor;
+
     cXyz local_b0;
     cXyz local_ec;
     cXyz local_c8;
@@ -376,7 +391,11 @@ static void cut_control2(sitem_class* i_this) {
 #if VERSION == VERSION_DEMO
         i_this->mpParticleEmitter[1] =
 #endif
-        dComIfGp_particle_set(dPa_name::ID_IT_SN_TSURU_TAIEKI00, &i_this->mVinePoints[0].pos, i_this->field_0xD40 + 1, NULL, 0xFF, &i_this->mParticleCallback[1], fopAcM_GetRoomNo(&i_this->actor), NULL, NULL, NULL);
+        dComIfGp_particle_set(
+            dPa_name::ID_IT_SN_TSURU_TAIEKI00,
+            &i_this->mVinePoints[0].pos, i_this->field_0xD40 + 1, NULL,
+            0xFF, &i_this->mParticleCallback[1], fopAcM_GetRoomNo(actor)
+        );
     } else {
         local_b0 = i_this->mVinePoints[0].pos - i_this->mVinePoints[1].pos;
 
@@ -408,6 +427,7 @@ static f32 max_d[4] = {100.0f, 250.0f, 400.0f, 600.0f};
 /* 000015C0-00002304       .text hand_move__FP11sitem_class */
 static void hand_move(sitem_class* i_this) {
     /* Nonmatching - demo only */
+    fopAc_ac_c* actor = &i_this->actor;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
 
     f32 fVar17;
@@ -442,8 +462,8 @@ static void hand_move(sitem_class* i_this) {
     fVar1 = REG0_F(5) + hr_d[i_this->field_0x2B9];
     fVar13 = max_d[i_this->field_0x2B9];
 
-    cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
-    cMtx_XrotM(*calc_mtx, i_this->actor.current.angle.x);
+    cMtx_YrotS(*calc_mtx, actor->current.angle.y);
+    cMtx_XrotM(*calc_mtx, actor->current.angle.x);
 
     sVar5 = i_this->field_0x2C0;
 
@@ -456,7 +476,7 @@ static void hand_move(sitem_class* i_this) {
 
             MtxPosition(&local_120, &cStack_12c);
 
-            local_138 = i_this->actor.current.pos + cStack_12c;
+            local_138 = actor->current.pos + cStack_12c;
             if (i_this->field_0x2C0 == 0) {
                 i_this->field_0x2C8 = local_138;
                 i_this->field_0x2C0 = 1;
@@ -469,17 +489,17 @@ static void hand_move(sitem_class* i_this) {
             fVar1 = 25.0f;
 
             i_this->field_0x2D4 = i_this->field_0x2C8;
-            i_this->field_0x2C8 += i_this->actor.speed;
+            i_this->field_0x2C8 += actor->speed;
 
-            i_this->actor.speed.y -= 3.0f;
-            if (i_this->actor.speed.y < -90.0f) {
-                i_this->actor.speed.y = -90.0f;
+            actor->speed.y -= 3.0f;
+            if (actor->speed.y < -90.0f) {
+                actor->speed.y = -90.0f;
             }
 
             i_this->mBgAcch.CrrPos(*dComIfG_Bgsp());
             i_this->field_0x2C6 = 5;
 
-            if (i_this->actor.speed.y < 0.0f) {
+            if (actor->speed.y < 0.0f) {
                 Vec vec;
                 vec = i_this->field_0x2C8;
                 vec.y += 100.0f;
@@ -504,7 +524,7 @@ static void hand_move(sitem_class* i_this) {
             }
 
             if (i_this->field_0x2C2[0] == 0) {
-                fopAcM_delete(&i_this->actor);
+                fopAcM_delete(actor);
             }
             break;
     }
@@ -514,7 +534,7 @@ static void hand_move(sitem_class* i_this) {
     cLib_addCalc2(&i_this->field_0x300, fVar15, 1.0f, 1.5f);
 
     if (!bVar6) {
-        cLib_addCalc2(&i_this->actor.speedF, fVar16, 1.0f, fVar17);
+        cLib_addCalc2(&actor->speedF, fVar16, 1.0f, fVar17);
         if ((i_this->field_0xB0C > 1.0f) && (i_this->field_0x2C0 != 3)) {
             cMtx_YrotS(*calc_mtx, (s16)i_this->field_0xB10);
 
@@ -527,16 +547,16 @@ static void hand_move(sitem_class* i_this) {
             local_138 += cStack_12c;
 
             fVar17 = 0.1f;
-            i_this->actor.speedF = i_this->field_0xB0C * 0.2f;
-            if (i_this->actor.speedF > REG6_F(8) + 30.0f) {
-                i_this->actor.speedF = REG6_F(8) + 30.0f;
+            actor->speedF = i_this->field_0xB0C * 0.2f;
+            if (actor->speedF > REG6_F(8) + 30.0f) {
+                actor->speedF = REG6_F(8) + 30.0f;
             }
         }
         cLib_addCalc0(&i_this->field_0xB0C, 1.0f, REG6_F(7) + 5.0f);
 
-        cLib_addCalc2(&i_this->field_0x2C8.x, local_138.x, fVar17, i_this->actor.speedF);
-        cLib_addCalc2(&i_this->field_0x2C8.y, local_138.y, fVar17, i_this->actor.speedF);
-        cLib_addCalc2(&i_this->field_0x2C8.z, local_138.z, fVar17, i_this->actor.speedF);
+        cLib_addCalc2(&i_this->field_0x2C8.x, local_138.x, fVar17, actor->speedF);
+        cLib_addCalc2(&i_this->field_0x2C8.y, local_138.y, fVar17, actor->speedF);
+        cLib_addCalc2(&i_this->field_0x2C8.z, local_138.z, fVar17, actor->speedF);
 
         control1(i_this);
         control2(i_this);
@@ -567,12 +587,12 @@ static void hand_move(sitem_class* i_this) {
     }
     pcVar8 = i_this->mVineLineMat.getPos(0);
 
-    i_this->actor.eyePos = pcVar8[5];
-    i_this->actor.attention_info.position = i_this->actor.eyePos;
+    actor->eyePos = pcVar8[5];
+    actor->attention_info.position = actor->eyePos;
 
     i_this->mCcStts.Move();
     if (!bVar6) {
-        i_this->mBoomerangSph.SetC(i_this->actor.eyePos);
+        i_this->mBoomerangSph.SetC(actor->eyePos);
     }
     else {
         i_this->mBoomerangSph.SetC(non_pos);
@@ -641,28 +661,28 @@ static void hand_move(sitem_class* i_this) {
 
                     if (at_info.mResultingAttackType == 8) {
                         i_this->field_0xB0C = REG6_F(6) + 300.0f;
-                        i_this->field_0xB10 = fopAcM_searchPlayerAngleY(&i_this->actor) + 0x8000;
+                        i_this->field_0xB10 = fopAcM_searchPlayerAngleY(actor) + 0x8000;
                         return;
                     }
                 }
                 i_this->field_0x2C0 = 5;
 
-                i_this->actor.speed.x = cM_rndFX(10.0f);
-                i_this->actor.speed.y = cM_rndF(5.0f) + 10.0f;
-                i_this->actor.speed.z = cM_rndFX(10.0f);
+                actor->speed.x = cM_rndFX(10.0f);
+                actor->speed.y = cM_rndF(5.0f) + 10.0f;
+                actor->speed.z = cM_rndFX(10.0f);
                 
                 local_150.x = 0.3f;
                 local_150.y = 0.3f;
                 local_150.z = 0.3f;
                 
-                dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &i_this->actor.eyePos, NULL, &local_150);
+                dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &actor->eyePos, NULL, &local_150);
                 i_this->field_0xD4C = 1;
                 iVar11 = 1;
             }
         }
         if (iVar11) {
             if (at_info.mpObj) {
-                def_se_set(&i_this->actor, at_info.mpObj, 0x21);
+                def_se_set(actor, at_info.mpObj, 0x21);
             }
             
             sitem_s* vine_i = vine_i = i_this->mVinePoints;
@@ -749,7 +769,7 @@ static BOOL daSitem_solidHeapCB(fopAc_ac_c* i_this) {
 static cPhs_State daSitem_Create(fopAc_ac_c* i_this) {
     fopAcM_RegisterCreateID(i_this);
     sitem_class* a_this = (sitem_class*)i_this;
-    fopAcM_ct(&a_this->actor, sitem_class);
+    fopAcM_ct(i_this, sitem_class);
     
     static dCcD_SrcSph tg_sph_src = {
         // dCcD_SrcGObjInf
