@@ -61,7 +61,7 @@ static f32 size_d[] = {10.0f, 10.0f, 9.5f, 9.0f, 8.5f, 8.0f, 7.5f, 7.0f, 6.5f, 6
 /* 00000388-00000410       .text control3__FP11sitem_class */
 void control3(sitem_class* i_this) {
     sitem_s* cur = i_this->mVinePoints;
-    for (int i = 0; i < 10; i++, cur++) {
+    for (s32 i = 0; i < 10; i++, cur++) {
         f32 fVar1 = cM_ssin(i_this->field_0x2BC * 500 + i * 100);
 
         f32 fVar2 = 0.8f + 0.1f * fVar1;
@@ -75,7 +75,7 @@ void control1(sitem_class* i_this) {
 
     i_this->mVinePoints[0].pos = i_this->actor.current.pos;
 
-    int i;
+    s32 i;
     sitem_s *vine_i = &i_this->mVinePoints[1];
 
     cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
@@ -96,7 +96,7 @@ void control1(sitem_class* i_this) {
     f32 vec_y;
     f32 vec_z;
     f32 scale;
-    float fVar1;
+    f32 fVar1;
 
     s16 iVar9;
     s32 iVar8;
@@ -150,7 +150,7 @@ void control2(sitem_class* i_this) {
     f32 delta_y;
     f32 delta_z;
 
-    int i;
+    s32 i;
     s16 angle_1;
     s32 angle_0;
     sitem_s *vine_i;
@@ -189,7 +189,7 @@ void control2(sitem_class* i_this) {
 void cut_control1(sitem_class* i_this) {
     i_this->mVineStubPoints[0].pos = i_this->actor.current.pos;
 
-    int i;
+    s32 i;
     sitem_s* stub_i = &i_this->mVineStubPoints[1];
 
     cMtx_YrotS(*calc_mtx, i_this->actor.current.angle.y);
@@ -316,7 +316,7 @@ void cut_control2(sitem_class* i_this) {
 
     i_this->mVinePoints[9].pos = i_this->field_0x2C8;
 
-    int i;
+    s32 i;
     sitem_s *vine_i = &i_this->mVinePoints[8];
 
     f32 fVar3;
@@ -422,16 +422,16 @@ void hand_move(sitem_class* i_this) {
     f32 fVar17;
     f32 fVar16;
     f32 zero;
-    float fVar1;
-    float fVar14;
-    float fVar15;
+    f32 fVar1;
+    f32 fVar14;
+    f32 fVar15;
     u8 *puVar3;
     bool bVar6;
-    short sVar5;
+    s16 sVar5;
     sitem_s *vine_i;
     cXyz *pcVar8;
     u8 iVar11;
-    float fVar13;
+    f32 fVar13;
     cXyz local_120;
     cXyz cStack_12c;
     cXyz local_138;
@@ -439,7 +439,7 @@ void hand_move(sitem_class* i_this) {
     cXyz local_150;
     CcAtInfo at_info;
     dBgS_GndChk local_f8;
-    long long local_a0;
+    s32 local_a0;
 
     bVar6 = false;
 
@@ -490,9 +490,9 @@ void hand_move(sitem_class* i_this) {
             i_this->field_0x2C6 = 5;
 
             if (i_this->actor.speed.y < 0.0f) {
-                float x = (i_this->field_0x2C8).x;
-                float y = (i_this->field_0x2C8).y;
-                float z = (i_this->field_0x2C8).z;
+                f32 x = (i_this->field_0x2C8).x;
+                f32 y = (i_this->field_0x2C8).y;
+                f32 z = (i_this->field_0x2C8).z;
 
                 y += 100.0f;
 
@@ -529,7 +529,7 @@ void hand_move(sitem_class* i_this) {
     if (!bVar6) {
         cLib_addCalc2(&i_this->actor.speedF, fVar16, 1.0f, fVar17);
         if ((i_this->field_0xB0C > 1.0f) && (i_this->field_0x2C0 != 3)) {
-            cMtx_YrotS(*calc_mtx, (int)i_this->field_0xB10);
+            cMtx_YrotS(*calc_mtx, (s32)i_this->field_0xB10);
 
             local_120.x = 0.0f;
             local_120.y = REG6_F(9);
@@ -561,7 +561,7 @@ void hand_move(sitem_class* i_this) {
         cXyz* positions = i_this->mVineStubLineMat.getPos(0);
         u8* sizes = i_this->mVineStubLineMat.getSize(0);
 
-        for (int i = 0; i < 5; i++, stub++, positions++, sizes++) {
+        for (s32 i = 0; i < 5; i++, stub++, positions++, sizes++) {
             *positions = stub->pos;
             *sizes = stub->field_0x18;
         }
@@ -574,7 +574,7 @@ void hand_move(sitem_class* i_this) {
     pcVar8 = i_this->mVineLineMat.getPos(0);
     puVar3 = i_this->mVineLineMat.getSize(0);
 
-    for (int i = 10; i != 0; i--, vine_i++, pcVar8++, puVar3++) {
+    for (s32 i = 10; i != 0; i--, vine_i++, pcVar8++, puVar3++) {
         *pcVar8 = vine_i->pos;
         local_a0 = vine_i->field_0x18;
         *puVar3 = vine_i->field_0x18;
@@ -595,8 +595,8 @@ void hand_move(sitem_class* i_this) {
     iVar11 = 0;
     dComIfG_Ccsp()->Set(&i_this->mBoomerangSph);
 
-    for (int i = 0; i < 3; i++) {
-        int index = ((int)i_this->field_0x2BC & 3U) + i * 2;
+    for (s32 i = 0; i < 3; i++) {
+        s32 index = ((s32)i_this->field_0x2BC & 3U) + i * 2;
         index %= 10;
 
         local_144 = pcVar8[index];
@@ -635,7 +635,7 @@ void hand_move(sitem_class* i_this) {
             my_break(i_this);
             iVar11 = 3;
         } else {
-            for (int i = 0; i < 3; i++) {
+            for (s32 i = 0; i < 3; i++) {
                 if (i_this->mVinePodSph[i].ChkTgHit()) {
                     at_info.mpObj = i_this->mVinePodSph[i].GetTgHitObj();
                     if (at_info.mpObj && at_info.mpObj->ChkAtType(AT_TYPE_GRAPPLING_HOOK)) {
@@ -679,7 +679,7 @@ void hand_move(sitem_class* i_this) {
             
             sitem_s* vine_i = vine_i = i_this->mVinePoints;
             sitem_s* stub_i = i_this->mVineStubPoints;
-            for (int i = 0; i < 5; i++, vine_i++, stub_i++) {
+            for (s32 i = 0; i < 5; i++, vine_i++, stub_i++) {
                 stub_i->pos = vine_i->pos;
                 stub_i->field_0x18 = vine_i->field_0x18;
 
@@ -696,7 +696,7 @@ void hand_move(sitem_class* i_this) {
 static BOOL daSitem_Execute(sitem_class* i_this) {
     i_this->field_0x2BC++;
 
-    for (int i = 0; i < 2; i++) {
+    for (s32 i = 0; i < 2; i++) {
         if (i_this->field_0x2C2[i] != 0) {
             i_this->field_0x2C2[i]--;
         }
@@ -869,7 +869,7 @@ static cPhs_State daSitem_Create(fopAc_ac_c* i_this) {
 
             a_this->mCcStts.Init(0xFF, 0xFF, i_this);
 
-            for (int i = 0; i < 4; i++) {
+            for (s32 i = 0; i < 4; i++) {
                 a_this->mVinePodSph[i].Set(tg_sph_src);
                 a_this->mVinePodSph[i].SetStts(&a_this->mCcStts);
 
@@ -885,7 +885,7 @@ static cPhs_State daSitem_Create(fopAc_ac_c* i_this) {
             a_this->mBgAcch.Set(&a_this->field_0x2C8, &a_this->field_0x2D4, i_this, 1, &a_this->mBgAcchCir, fopAcM_GetSpeed_p(&a_this->actor));
             a_this->mBgAcchCir.SetWall(30.0f, 50.0f);
 
-            for (int i = 0; i < 2; i++) {
+            for (s32 i = 0; i < 2; i++) {
                 daSitem_Execute(a_this);
             }
         } else {
