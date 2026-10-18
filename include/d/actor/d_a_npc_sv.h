@@ -4,7 +4,13 @@
 #include "d/d_cc_d.h"
 #include "d/d_npc.h"
 
-struct sSvAnmDat {};
+struct sSvAnmDat {
+    /* 0x00 */ u8 mBckIdx;
+    /* 0x01 */ u8 mMorf;
+    /* 0x02 */ s8 mLoopCount;
+}; // Size: 0x03
+
+struct NpcDatStruct {}; // TODO
 
 class daNpcSv_c : public fopNpc_npc_c {
 public:
@@ -21,7 +27,7 @@ public:
 
     daNpcSv_c();
     cPhs_State _create();
-    void createHeap();
+    BOOL createHeap();
     cPhs_State createInit();
     bool _delete();
     bool _draw();

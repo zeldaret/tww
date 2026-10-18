@@ -7,7 +7,143 @@
 #include "d/actor/d_a_npc_sv.h"
 #include "d/d_com_lib_game.h"
 
+static char* l_npc_staff_id[] = { "Sv0", "Sv1", "Sv2", "Sv3" };
+
 static const char* l_arcname_tbl[] = { "Sv", "Sv", "Sv", "Sv" };
+
+static sSvAnmDat l_npc_anm_wait = { 0, 0x08, 0xFF };
+
+static sSvAnmDat l_npc_anm_talk = {
+    1,
+    0x08,
+    0xFF,
+};
+
+static sSvAnmDat l_npc_anm_talk2 = {
+    2,
+    0x08,
+    0xFF,
+};
+
+static sSvAnmDat l_npc_anm_talk3 = {
+    3,
+    0x08,
+    0xFF,
+};
+
+static sSvAnmDat l_npc_anm_ya1[] = { {
+                                         4,
+                                         0x08,
+                                         1,
+                                     },
+                                     {
+                                         0,
+                                         0x08,
+                                         0xFF,
+                                     } };
+
+static sSvAnmDat l_npc_anm_ya2[] = { {
+                                         4,
+                                         0x08,
+                                         1,
+                                     },
+                                     {
+                                         1,
+                                         0x08,
+                                         0xFF,
+                                     } };
+
+static sSvAnmDat l_npc_anm_mawasi = {
+    5,
+    0x00,
+    0xFF,
+};
+
+static sSvAnmDat l_npc_anm_kyoro = {
+    1,
+    0x08,
+    0xFF,
+};
+
+static sSvAnmDat l_npc_anm_unun[] = { {
+                                          2,
+                                          0x08,
+                                          1,
+                                      },
+                                      {
+                                          0xFF,
+                                          0x08,
+                                          0,
+                                      } };
+
+static sSvAnmDat l_npc_anm_sisi[] = { {
+                                          3,
+                                          0x08,
+                                          1,
+                                      },
+                                      {
+                                          0xFF,
+                                          0x08,
+                                          0,
+                                      } };
+
+static sSvAnmDat l_npc_anm_byebye[] = { {
+                                            4,
+                                            0x08,
+                                            1,
+                                        },
+                                        {
+                                            0xFF,
+                                            0x08,
+                                            0,
+                                        } };
+
+static sSvAnmDat l_npc_anm_shi[] = { {
+                                         5,
+                                         0x08,
+                                         1,
+                                     },
+                                     {
+                                         0xFF,
+                                         0x08,
+                                         0,
+                                     } };
+
+static sSvAnmDat* l_npc_anm_sv1_tbl[] = {
+    &l_npc_anm_wait, &l_npc_anm_kyoro, l_npc_anm_unun, l_npc_anm_sisi, l_npc_anm_byebye, l_npc_anm_shi,
+};
+
+static u32 l_npc_se_sv1_tbl[] = { 0, 0, JA_SE_CV_SALV_CRUE_AGREE, JA_SE_CV_SALV_CRUE_SI, JA_SE_CV_SALV_CRUE_BYE, 0 };
+
+static NpcDatStruct l_npc_dat = {}; // TODO
+
+static u32 l_msg_sv_p1_1st_talk1[] = { 0x34BD, 0x34BE, 0x34BF, 0x34C0, 0x0002, 0x34C1, 0x34C2, 0x34C3, 0x0001, 0x34C4, 0x34E8, 0x0002, 0x34C5, 0x0004, 0x0000 };
+static u32 l_msg_sv_p1_1st_talk2[] = { 0x34BD, 0x34BE, 0x34BF, 0x34C0, 0x0002, 0x34C1, 0x34C2, 0x34C3, 0x0001, 0x34C6, 0x34E9, 0x0002, 0x34C7, 0x0004, 0x0000 };
+
+static u32 l_msg_sv_p1_2nd_talk1[] = { 0x34C8, 0x34C9, 0x34EA, 0x0002, 0x34CA, 0x0004, 0x0000 };
+static u32 l_msg_sv_p1_2nd_talk2[] = { 0x34C8, 0x34CB, 0x0002, 0x34CC, 0x0004, 0x0000 };
+
+static u32 l_msg_sv_p1_3rd_talk1[] = { 0x34CD, 0x34D0, 0x0002, 0x34D1, 0x0003, 0x0000 };
+static u32 l_msg_sv_p1_3rd_talk2[] = { 0x34CD, 0x34CE, 0x0002, 0x34CF, 0x0003, 0x0000 };
+
+static u32 l_msg_sv_p2_1st_talk[] = { 0x34D9, 0x34DA, 0x34DB, 0x0002, 0x34DC, 0x0004, 0x0000 };
+static u32 l_msg_sv_p2_2nd_talk[] = { 0x34DD, 0x34DE, 0x0002, 0x34DF, 0x0003, 0x0000 };
+
+static u32 l_msg_sv_p3_1st_talk[] = { 0x34D2, 0x34D3, 0x34D4, 0x0002, 0x34D5, 0x0004, 0x0000 };
+static u32 l_msg_sv_p3_2nd_talk[] = { 0x34D6, 0x34D7, 0x0002, 0x34D8, 0x0003, 0x0000 };
+
+static u32 l_msg_sv_p4_1st_talk[] = { 0x34E0, 0x34E1, 0x34E2, 0x34E3, 0x34E4, 0x0005, 0x0000 };
+static u32 l_msg_sv_p4_2nd_talk[] = { 0x34E5, 0x34E6, 0x34E7, 0x0005, 0x0000 };
+
+static u32* l_msg_sv_talk_tbl[] = { l_msg_sv_p1_1st_talk1, l_msg_sv_p1_1st_talk2, l_msg_sv_p1_2nd_talk1, l_msg_sv_p1_2nd_talk2,
+                                    l_msg_sv_p1_3rd_talk1, l_msg_sv_p1_3rd_talk2, l_msg_sv_p2_1st_talk,  l_msg_sv_p2_2nd_talk,
+                                    l_msg_sv_p3_1st_talk,  l_msg_sv_p3_2nd_talk,  l_msg_sv_p4_1st_talk,  l_msg_sv_p4_2nd_talk };
+
+static u16 l_msg_sv_flag_tbl[] = { 0x01, 0x01, 0x02, 0x02, 0x00, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00 };
+
+static u16 l_event_id_tbl[] = { 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
+
+static u32 l_get_item_no[] = { 0xE5 };
 
 typedef int (daNpcSv_c::*ExecuteInit_t)();
 static ExecuteInit_t l_execute_init[] = {
@@ -32,8 +168,8 @@ static BOOL daNpc_People_nodeCallBack(J3DNode*, int) {
 }
 
 /* 00000640-00000660       .text CheckCreateHeap__FP10fopAc_ac_c */
-static BOOL CheckCreateHeap(fopAc_ac_c*) {
-    /* Nonmatching */
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
+    return ((daNpcSv_c*)i_this)->createHeap();
 }
 
 /* 00000660-000006B8       .text phase_1__FP9daNpcSv_c */
@@ -68,7 +204,7 @@ cPhs_State daNpcSv_c::_create() {
 }
 
 /* 00000768-00000A04       .text createHeap__9daNpcSv_cFv */
-void daNpcSv_c::createHeap() {
+BOOL daNpcSv_c::createHeap() {
     /* Nonmatching */
 }
 
