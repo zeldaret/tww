@@ -92,9 +92,7 @@ void control1(sitem_class* i_this) {
 
     local_a4.z = i_this->field_0x2F4;
 
-    f32 vec_x;
-    f32 vec_y;
-    f32 vec_z;
+    Vec vec;
     f32 scale;
     f32 fVar1;
 
@@ -111,20 +109,20 @@ void control1(sitem_class* i_this) {
         cXyz local_c8;
         MtxPosition(&local_b0, &local_c8);
 
-        vec_x = local_c8.x * scale +
+        vec.x = local_c8.x * scale +
             ((vine_i->pos.x - vine_i[-1].pos.x) +
              local_bc.x * scale);
 
-        vec_y = local_c8.y * scale +
+        vec.y = local_c8.y * scale +
             ((vine_i->pos.y - vine_i[-1].pos.y) +
              local_bc.y * scale);
 
-        vec_z = local_c8.z * scale +
+        vec.z = local_c8.z * scale +
             ((vine_i->pos.z - vine_i[-1].pos.z) +
              local_bc.z * scale);
 
-        iVar8 = cM_atan2s(vec_x, vec_z);
-        iVar9 = -cM_atan2s(vec_y, std::sqrtf(vec_x * vec_x + vec_z * vec_z));
+        iVar8 = cM_atan2s(vec.x, vec.z);
+        iVar9 = -cM_atan2s(vec.y, std::sqrtf(vec.x * vec.x + vec.z * vec.z));
 
         MtxPush();
         mDoMtx_YrotS(*calc_mtx, (s16) iVar8);
@@ -146,24 +144,20 @@ void control2(sitem_class* i_this) {
 
     i_this->mVinePoints[9].pos = i_this->field_0x2C8;
 
-    f32 delta_x;
-    f32 delta_y;
-    f32 delta_z;
-
     s32 i;
     s16 angle_1;
     s32 angle_0;
-    sitem_s *vine_i;
-
-    vine_i = &i_this->mVinePoints[8];
+    sitem_s *vine_i = &i_this->mVinePoints[8];
+    
     for (i = 8; i >= 1; i--, vine_i--) {
-        delta_x = vine_i->pos.x - vine_i[1].pos.x;
-        delta_y = vine_i->pos.y - vine_i[1].pos.y;
-        delta_z = vine_i->pos.z - vine_i[1].pos.z;
+        Vec delta;
+        delta.x = vine_i->pos.x - vine_i[1].pos.x;
+        delta.y = vine_i->pos.y - vine_i[1].pos.y;
+        delta.z = vine_i->pos.z - vine_i[1].pos.z;
 
-        angle_0 = cM_atan2s(delta_x, delta_z);
+        angle_0 = cM_atan2s(delta.x, delta.z);
         
-        angle_1 = -cM_atan2s(delta_y, std::sqrtf(delta_x * delta_x + delta_z * delta_z));
+        angle_1 = -cM_atan2s(delta.y, std::sqrtf(delta.x * delta.x + delta.z * delta.z));
 
         mDoMtx_YrotS(*calc_mtx, angle_0);
         mDoMtx_XrotM(*calc_mtx, angle_1);
@@ -198,9 +192,7 @@ void cut_control1(sitem_class* i_this) {
     cXyz local_a0;
     local_a0.z = i_this->field_0x308;
 
-    f32 fVar2;
-    f32 fVar3;
-    f32 fVar4;
+    Vec vec;
     f32 fVar1;
 
     s16 iVar6;
@@ -217,14 +209,14 @@ void cut_control1(sitem_class* i_this) {
         cXyz local_b8;
         MtxPosition(&local_ac, &local_b8);
 
-        fVar2 = local_b8.x + (stub_i->pos.x - stub_i[-1].pos.x);
-        fVar3 = local_b8.y + (stub_i->pos.y - stub_i[-1].pos.y);
-        fVar4 = local_b8.z + (stub_i->pos.z - stub_i[-1].pos.z);
+        vec.x = local_b8.x + (stub_i->pos.x - stub_i[-1].pos.x);
+        vec.y = local_b8.y + (stub_i->pos.y - stub_i[-1].pos.y);
+        vec.z = local_b8.z + (stub_i->pos.z - stub_i[-1].pos.z);
 
-        iVar5 = cM_atan2s(fVar2, fVar4);
-        fVar2 = std::sqrtf(fVar2 * fVar2 + fVar4 * fVar4);
+        iVar5 = cM_atan2s(vec.x, vec.z);
+        vec.x = std::sqrtf(vec.x * vec.x + vec.z * vec.z);
 
-        iVar6 = -cM_atan2s(fVar3, fVar2);
+        iVar6 = -cM_atan2s(vec.y, vec.x);
         MtxPush();
 
         cMtx_YrotS(*calc_mtx, iVar5);
@@ -319,11 +311,9 @@ void cut_control2(sitem_class* i_this) {
     s32 i;
     sitem_s *vine_i = &i_this->mVinePoints[8];
 
-    f32 fVar3;
+    Vec vec;
     f32 fVar4;
     f32 fVar2;
-    f32 fVar5;
-    f32 fVar6;
     f32 fVar1;
 
     s16 iVar7;
@@ -337,22 +327,20 @@ void cut_control2(sitem_class* i_this) {
         local_c8.y = fVar1 * cM_ssin(i_this->field_0x2BC * (REG0_S(5) + 0xB86) + i * (REG0_S(6) + 4000));
         local_c8.z = fVar1 * cM_scos(i_this->field_0x2BC * (REG0_S(7) + 0xAF0) + i * (REG0_S(8) + 0xDAC));
 
-        fVar3 = local_c8.x + (vine_i->pos.x - vine_i[1].pos.x);
+        vec.x = local_c8.x + (vine_i->pos.x - vine_i[1].pos.x);
 
         fVar4 = (vine_i->pos.y - 10.0f) + local_c8.y;
         fVar2 = i_this->field_0x304 + 5.0f;
 
-        if (fVar4 < fVar2) {
-            fVar4 = fVar2;
-        }
+        fVar4 = cLib_minLimit(fVar4, fVar2);
 
-        fVar6 = fVar4 - vine_i[1].pos.y;
+        vec.y = fVar4 - vine_i[1].pos.y;
 
-        fVar5 = local_c8.z + ((vine_i->pos).z - vine_i[1].pos.z);
+        vec.z = local_c8.z + ((vine_i->pos).z - vine_i[1].pos.z);
 
-        angle_0 = cM_atan2s(fVar3, fVar5);
+        angle_0 = cM_atan2s(vec.x, vec.z);
 
-        iVar7 = -cM_atan2s(fVar6, std::sqrtf(fVar3 * fVar3 + fVar5 * fVar5));
+        iVar7 = -cM_atan2s(vec.y, std::sqrtf(vec.x * vec.x + vec.z * vec.z));
 
         cMtx_YrotS(*calc_mtx, angle_0);
         cMtx_XrotM(*calc_mtx, iVar7);
@@ -490,13 +478,12 @@ void hand_move(sitem_class* i_this) {
             i_this->field_0x2C6 = 5;
 
             if (i_this->actor.speed.y < 0.0f) {
-                f32 x = (i_this->field_0x2C8).x;
-                f32 y = (i_this->field_0x2C8).y;
-                f32 z = (i_this->field_0x2C8).z;
+                Vec vec;
+                vec = i_this->field_0x2C8;
 
-                y += 100.0f;
+                vec.y += 100.0f;
 
-                local_f8.m_pos.set(x, y, z);
+                local_f8.m_pos = vec;
 
                 i_this->field_0x304 = dComIfG_Bgsp()->GroundCross(&local_f8);
 
@@ -665,7 +652,7 @@ void hand_move(sitem_class* i_this) {
                 i_this->actor.speed.y = cM_rndF(5.0f) + 10.0f;
                 i_this->actor.speed.z = cM_rndFX(10.0f);
                 
-                local_150.set(0.3f, 0.3f, 0.3f);
+                local_150.setall(0.3f);
                 
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_SIBOUFLASH, &i_this->actor.eyePos, NULL, &local_150);
                 i_this->field_0xD4C = 1;
@@ -840,9 +827,7 @@ static cPhs_State daSitem_Create(fopAc_ac_c* i_this) {
         a_this->mItemBit = (fopAcM_GetParam(i_this) >> 16) & 0xFF;
 #endif
         if (fopAcM_entrySolidHeap(i_this, daSitem_solidHeapCB, 0x3040)) {
-            non_pos.x = 0.0f;
-            non_pos.y = 30000.0f;
-            non_pos.z = -20000.0f;
+            non_pos.set(0.0f, 30000.0f, -20000.0f);
 
 #if VERSION == VERSION_DEMO
             a_this->mPodType = fopAcM_GetParam(i_this) & 0xFF;
