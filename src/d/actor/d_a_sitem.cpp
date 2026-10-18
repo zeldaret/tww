@@ -725,11 +725,11 @@ static BOOL daSitem_Delete(sitem_class* i_this) {
     return TRUE;
 }
 
-#if VERSION == VERSION_DEMO
-static u16 bmd_data[3] = {10, 6, 7};
-#else
-static u16 bmd_data[3] = {4, 5, 6};
-#endif
+static u16 bmd_data[3] = {
+    dRes_INDEX_SITEM_BDL_KMI_00_e,
+    dRes_INDEX_SITEM_BDL_KMI_01_e,
+    dRes_INDEX_SITEM_BDL_KMI_02_e,
+};
 
 /* 00002760-00002824       .text useHeapInit__FP11sitem_class */
 BOOL useHeapInit(sitem_class* i_this) {
