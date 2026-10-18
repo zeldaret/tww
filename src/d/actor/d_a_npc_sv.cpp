@@ -7,6 +7,8 @@
 #include "d/actor/d_a_npc_sv.h"
 #include "d/d_com_lib_game.h"
 
+static const char* l_arcname_tbl[] = { "Sv", "Sv", "Sv", "Sv" };
+
 typedef int (daNpcSv_c::*ExecuteInit_t)();
 static ExecuteInit_t l_execute_init[] = {
     &daNpcSv_c::executeWaitInit,
@@ -35,13 +37,27 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 }
 
 /* 00000660-000006B8       .text phase_1__FP9daNpcSv_c */
-void phase_1(daNpcSv_c*) {
-    /* Nonmatching */
+cPhs_State phase_1(daNpcSv_c* i_this) {
+    fopAcM_ct(i_this, daNpcSv_c);
+    i_this->setResFlag(1);
+    return cPhs_NEXT_e;
 }
 
 /* 000006B8-00000738       .text phase_2__FP9daNpcSv_c */
-void phase_2(daNpcSv_c*) {
-    /* Nonmatching */
+cPhs_State phase_2(daNpcSv_c* i_this) {
+    cPhs_State state = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getNpcNo()]);
+
+    if (state == cPhs_COMPLEATE_e) {
+        if (fopAcM_entrySolidHeap(i_this, CheckCreateHeap, 0x3800)) {
+            state = i_this->createInit();
+        } else {
+#if VERSION > VERSION_DEMO
+            i_this->mpMorf = NULL;
+#endif
+            return cPhs_ERROR_e;
+        }
+    }
+    return state;
 }
 
 /* 00000738-00000768       .text _create__9daNpcSv_cFv */
@@ -57,8 +73,9 @@ void daNpcSv_c::createHeap() {
 }
 
 /* 00000A04-00000C74       .text createInit__9daNpcSv_cFv */
-void daNpcSv_c::createInit() {
+cPhs_State daNpcSv_c::createInit() {
     /* Nonmatching */
+    return cPhs_COMPLEATE_e;
 }
 
 /* 00000C74-00000CD8       .text _delete__9daNpcSv_cFv */

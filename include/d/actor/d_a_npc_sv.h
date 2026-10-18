@@ -9,15 +9,20 @@ struct sSvAnmDat {};
 class daNpcSv_c : public fopNpc_npc_c {
 public:
     void getMsgPtn() {}
-    void getNpcNo() {}
-    void getPhaseP() {}
-    void setResFlag(u8) {
+    u8 getNpcNo() {
+        return mNpcNo;
+    }
+    request_of_phase_process_class* getPhaseP() {
+        return &mPhase;
+    }
+    void setResFlag(u8 flag) {
+        mResFlag = flag;
     }
 
     daNpcSv_c();
     cPhs_State _create();
     void createHeap();
-    void createInit();
+    cPhs_State createInit();
     bool _delete();
     bool _draw();
     bool _execute();
@@ -88,8 +93,8 @@ private:
     /* 0x737 */ u8 field_0x737;
     /* 0x738 */ u8 field_0x738;
     /* 0x739 */ u8 mMoveState;
-    /* 0x73A */ u8 field_0x73A;
-    /* 0x73B */ u8 field_0x73B;
+    /* 0x73A */ u8 mResFlag;
+    /* 0x73B */ u8 mNpcNo;
     /* 0x73C */ u8 field_0x73C;
     /* 0x73D */ u8 field_0x73D;
     /* 0x73E */ u8 field_0x73E;
