@@ -742,7 +742,7 @@ static BOOL useHeapInit(sitem_class* i_this) {
 
 /* 00002824-00002844       .text daSitem_solidHeapCB__FP10fopAc_ac_c */
 static BOOL daSitem_solidHeapCB(fopAc_ac_c* i_this) {
-    useHeapInit((sitem_class*) i_this);
+    return useHeapInit((sitem_class*) i_this);
 }
 
 /* 00002844-00002C04       .text daSitem_Create__FP10fopAc_ac_c */
