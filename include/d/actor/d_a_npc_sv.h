@@ -81,7 +81,7 @@ public:
     virtual u32 getMsg();
     void setMessage(u32);
     void setAnmFromMsgTag();
-    void getPrmNpcNo();
+    u8 getPrmNpcNo();
     void setMtx();
     void chkAttention();
     void lookBack();
@@ -90,19 +90,19 @@ public:
     void setAnmTbl(sSvAnmDat*);
     void setCollision(dCcD_Cyl*, cXyz, f32, f32);
     void getTalkNo();
-    void isTalkOK();
+    BOOL isTalkOK();
 
 private:
     /* 0x6C4 */ request_of_phase_process_class mPhase;
     /* 0x6CC */ request_of_phase_process_class mPhaseCreate;
-    /* 0x6D4 */ u32 field_0x6D4;
+    /* 0x6D4 */ u32 mShadowId;
     /* 0x6D8 */ int field_0x6D8;
     /* 0x6DC */ u8 padding_0x6DC[0x6EC - 0x6DC];
     /* 0x6EC */ cXyz field_0x6EC;
     /* 0x6F8 */ u8 padding_0x6F8[0x704 - 0x6F8];
     /* 0x704 */ int field_0x704;
     /* 0x708 */ int field_0x708;
-    /* 0x70C */ u32 field_0x70C;
+    /* 0x70C */ f32 field_0x70C;
     /* 0x710 */ f32 field_0x710;
     /* 0x714 */ s16 field_0x714;
     /* 0x716 */ s16 field_0x716;
@@ -123,7 +123,7 @@ private:
     /* 0x734 */ u16 field_0x734;
     /* 0x736 */ u8 field_0x736;
     /* 0x737 */ u8 field_0x737;
-    /* 0x738 */ u8 field_0x738;
+    /* 0x738 */ u8 mEvtOrderType;
     /* 0x739 */ u8 mMoveState;
     /* 0x73A */ u8 mResFlag;
     /* 0x73B */ u8 mNpcNo;
