@@ -158,7 +158,7 @@ static u32* l_msg_sv_talk_tbl[] = { l_msg_sv_p1_1st_talk1, l_msg_sv_p1_1st_talk2
 
 static u16 l_msg_sv_flag_tbl[] = { 0x01, 0x01, 0x02, 0x02, 0x00, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00 };
 
-static u16 l_event_id_tbl[] = { 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
+static s16 l_event_id_tbl[] = { 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
 
 static u32 l_get_item_no[] = { 0xE5 };
 
@@ -290,8 +290,8 @@ void daNpcSv_c::executeCommon() {
 }
 
 /* 00000FB8-00001000       .text executeSetMode__9daNpcSv_cFUc */
-void daNpcSv_c::executeSetMode(u8 i_initIdx) {
-    mMoveState = (this->*l_execute_init[i_initIdx])();
+void daNpcSv_c::executeSetMode(u8 i_mode) {
+    mMoveState = (this->*l_execute_init[i_mode])();
 }
 
 /* 00001000-00001080       .text executeWaitInit__9daNpcSv_cFv */
@@ -343,7 +343,30 @@ void daNpcSv_c::eventOrder() {
 
 /* 00001458-00001570       .text eventMove__9daNpcSv_cFv */
 void daNpcSv_c::eventMove() {
-    /* Nonmatching */
+    if (dComIfGp_evmng_endCheck(field_0x71E[0]) || dComIfGp_evmng_endCheck(field_0x71E[1]) || dComIfGp_evmng_endCheck(field_0x71E[2])) {
+        eventInfo.setEventId(field_0x71E[l_event_id_tbl[(getTalkNo() & 0xFF)]]);
+        dComIfGp_event_onEventFlag(8);
+        field_0x73C &= ~2;
+        field_0x736 = 0;
+        field_0x749 = 0;
+        executeSetMode(0);
+        return;
+    }
+
+    bool attn = mEventCut.getAttnFlag();
+    if (mEventCut.cutProc()) {
+        if (mEventCut.getAttnFlag()) {
+            return;
+        }
+        mEventCut.setAttnFlag(attn);
+    } else {
+        privateCut();
+        if (getNpcNo()) {
+            return;
+        }
+        setAnmFromMsgTag();
+        return;
+    }
 }
 
 /* 00001570-00001744       .text privateCut__9daNpcSv_cFv */
@@ -463,7 +486,7 @@ void daNpcSv_c::setCollision(dCcD_Cyl*, cXyz, f32, f32) {
 }
 
 /* 000027E0-0000293C       .text getTalkNo__9daNpcSv_cFv */
-void daNpcSv_c::getTalkNo() {
+u32 daNpcSv_c::getTalkNo() {
     /* Nonmatching */
 }
 
