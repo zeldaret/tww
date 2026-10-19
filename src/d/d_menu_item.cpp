@@ -2032,7 +2032,7 @@ void dMenu_Item_c::_create() {
     outFont = new dDlst_2DOutFont_c();
     JUT_ASSERT(VERSION_SELECT(2577, 2582, 2655, 2655), outFont != NULL);
     #if VERSION >= VERSION_USA
-    outFont->m74 = 1;
+    outFont->mFitToBox = 1;
     #endif
 
     dMs_c = new dMenu_save_c();

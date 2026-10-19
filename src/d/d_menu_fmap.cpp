@@ -321,7 +321,7 @@ void dMenu_Fmap_c::_create() {
     outFont = new dDlst_2DOutFont_c();
     JUT_ASSERT(VERSION_SELECT(598, 564, 575, 575), outFont != NULL);
 #if VERSION > VERSION_JPN
-    outFont->m74 = 1;
+    outFont->mFitToBox = 1;
 #endif
 
     outFont2 = new dDlst_2DOutFont_c();

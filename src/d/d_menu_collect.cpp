@@ -3563,7 +3563,7 @@ void dMenu_Collect_c::_create() {
     JUT_ASSERT(VERSION_SELECT(3581, 3594, 3669, 3669), outFont != NULL);
 
 #if VERSION > VERSION_JPN
-    outFont->m74 = 1;
+    outFont->mFitToBox = 1;
 #endif
 
     dMo_c = new dMenu_Option_c();

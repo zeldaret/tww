@@ -231,49 +231,49 @@ void dDlst_2DObject_c::draw() {
 
 /* 800C9520-800C9690       .text initial__17dDlst_2DOutFont_cFv */
 void dDlst_2DOutFont_c::initial() {
-    m68 = 0.0f;
+    mLineWidth = 0.0f;
     mIconNum = 0;
     mPosTopLeftY = 0.0f;
     mPosTopLeftX = 0.0f;
-    m82 = 0;
-    m28 = NULL;
+    mLineCount = 0;
+    mpTextDst = NULL;
 
     if (mpTextBox != NULL) {
         mpTextBox->show();
 #if VERSION >= VERSION_USA
         mpTextBox->getFontSize(mFontSize);
-        m6C = mFontSize.mSizeX;
+        mFontSizeX = mFontSize.mSizeX;
 #else
         J2DTextBox::TFontSize fontSize;
         mpTextBox->getFontSize(fontSize);
-        m6C = fontSize.mSizeX;
+        mFontSizeX = fontSize.mSizeX;
 #endif
         mCharSpace = mpTextBox->getCharSpace();
-        m28 = m24;
+        mpTextDst = mpTextBuf;
     }
 
     for (int i = 0; i < 3; i++) {
         if (mpPic[i] != NULL) {
-            m44[i] = 0.0f;
-            m38[i] = 0.0f;
-            m5C[i] = 0.0f;
-            m50[i] = 0.0f;
+            mIconPosY[i] = 0.0f;
+            mIconPosX[i] = 0.0f;
+            mIconAnmOffsY[i] = 0.0f;
+            mIconAnmOffsX[i] = 0.0f;
             
             mpPic[i]->hide();
             mpPic[i]->rotate(0.0f, 0.0f, ROTATE_Z, 0.0f);
             
             #if VERSION >= VERSION_USA
-            if (m74) {
+            if (mFitToBox) {
                 mpPic[i]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
             } else
             #endif
             {
-                mpPic[i]->resize(m6C, m6C);
+                mpPic[i]->resize(mFontSizeX, mFontSizeX);
             }
 
-            m7C[i] = 0;
+            mIconTimer[i] = 0;
             mIconNo[i] = fopMsgM_Icon_A_BUTTON_e;
-            m76[i] = -1;
+            mIconLine[i] = -1;
         }
     }
 }
@@ -296,7 +296,7 @@ void dDlst_2DOutFont_c::setPane(JUTFont* i_font, fopMsgM_pane_class* i_textPane,
         mpPic[2] = (J2DPicture*)i_pic3->pane;
     }
 
-    m24 = NULL;
+    mpTextBuf = NULL;
     initial();
 
     for (int i = 0; i < 3; i++) {
@@ -308,7 +308,7 @@ void dDlst_2DOutFont_c::setPane(JUTFont* i_font, fopMsgM_pane_class* i_textPane,
 }
 
 /* 800C976C-800C9844       .text setPaneEx__17dDlst_2DOutFont_cFP7JUTFontP18fopMsgM_pane_classP18fopMsgM_pane_classP18fopMsgM_pane_classP18fopMsgM_pane_classPc */
-void dDlst_2DOutFont_c::setPaneEx(JUTFont* i_font, fopMsgM_pane_class* i_textPane, fopMsgM_pane_class* i_pic1, fopMsgM_pane_class* i_pic2, fopMsgM_pane_class* i_pic3, char* param_5) {
+void dDlst_2DOutFont_c::setPaneEx(JUTFont* i_font, fopMsgM_pane_class* i_textPane, fopMsgM_pane_class* i_pic1, fopMsgM_pane_class* i_pic2, fopMsgM_pane_class* i_pic3, char* i_textBuf) {
     mpFont = i_font;
     mpTextBox = (J2DTextBox*)i_textPane->pane;
 
@@ -325,7 +325,7 @@ void dDlst_2DOutFont_c::setPaneEx(JUTFont* i_font, fopMsgM_pane_class* i_textPan
         mpPic[2] = (J2DPicture*)i_pic3->pane;
     }
 
-    m24 = param_5;
+    mpTextBuf = i_textBuf;
     initial();
 
     for (int i = 0; i < 3; i++) {
@@ -349,28 +349,28 @@ void dDlst_2DOutFont_c::setRubyEx(JUTFont* font, fopMsgM_pane_class* pane, char*
 }
 
 /* 800C9864-800C9908       .text charWidth__17dDlst_2DOutFont_cFi */
-f32 dDlst_2DOutFont_c::charWidth(int param_0) {
-    f32 f1 = mpFont->getWidth(param_0);
-    f32 f0 = m6C / mpFont->getCellWidth();
-    return mCharSpace + (f1 * f0);
+f32 dDlst_2DOutFont_c::charWidth(int i_charCode) {
+    f32 width = mpFont->getWidth(i_charCode);
+    f32 scale = mFontSizeX / mpFont->getCellWidth();
+    return mCharSpace + (width * scale);
 }
 
 /* 800C9908-800C99C0       .text rubyCharWidth__17dDlst_2DOutFont_cFi */
-f32 dDlst_2DOutFont_c::rubyCharWidth(int param_0) {
+f32 dDlst_2DOutFont_c::rubyCharWidth(int i_charCode) {
     J2DTextBox::TFontSize fontSize;
     mpRubyTextBox->getFontSize(fontSize);
 
-    f32 f30 = mpRubyFont->getWidth(param_0);
-    f32 f0 = fontSize.mSizeX / mpRubyFont->getCellWidth();
-    return mCharSpace + (f30 * f0);
+    f32 width = mpRubyFont->getWidth(i_charCode);
+    f32 scale = fontSize.mSizeX / mpRubyFont->getCellWidth();
+    return mCharSpace + (width * scale);
 }
 
 /* 800C99C0-800C9D5C       .text iconset__17dDlst_2DOutFont_cFiPPc */
-f32 dDlst_2DOutFont_c::iconset(int i_iconNo, char** param_1) {
-    f32 var_f31 = 0.0f;
+f32 dDlst_2DOutFont_c::iconset(int i_iconNo, char** o_dst) {
+    f32 width = 0.0f;
 
     if (mIconNum < 3) {
-        m38[mIconNum] = m68;
+        mIconPosX[mIconNum] = mLineWidth;
         mpPic[mIconNum]->show();
         mpPic[mIconNum]->remove();
         mpPic[mIconNum]->append(fopMsgM_outFontTex(i_iconNo), 1.0f);
@@ -378,228 +378,239 @@ f32 dDlst_2DOutFont_c::iconset(int i_iconNo, char** param_1) {
         mpPic[mIconNum]->setWhite(fopMsgM_outFontColorWhite(i_iconNo));
         mpPic[mIconNum]->setBlack(0);
         mIconNo[mIconNum] = i_iconNo;
-        m76[mIconNum] = m82;
+        mIconLine[mIconNum] = mLineCount;
 
         switch (i_iconNo) {
         case fopMsgM_Icon_ARROW_LEFT_e:
-            m38[mIconNum] += m6C;
+            mIconPosX[mIconNum] += mFontSizeX;
             mpPic[mIconNum]->rotate(0.0f, 0.0f, ROTATE_Z, 270.0f);
             break;
         case fopMsgM_Icon_ARROW_RIGHT_e:
-            m44[mIconNum] += m6C;
+            mIconPosY[mIconNum] += mFontSizeX;
             mpPic[mIconNum]->rotate(0.0f, 0.0f, ROTATE_Z, 90.0f);
             break;
         case fopMsgM_Icon_ARROW_UP_e:
-            m38[mIconNum] += m6C;
-            m44[mIconNum] += m6C;
+            mIconPosX[mIconNum] += mFontSizeX;
+            mIconPosY[mIconNum] += mFontSizeX;
             mpPic[mIconNum]->rotate(0.0f, 0.0f, ROTATE_Z, 180.0f);
             break;
         }
 
-        var_f31 = m6C + mCharSpace;
+#if VERSION >= VERSION_PAL
+        width = 0.5f + (mFontSizeX + mCharSpace);
 
         char buffer[16];
-        sprintf(buffer, "\x1B""CR[%d]", (int)(var_f31 + 0.5f));
+        sprintf(buffer, "\x1B""CR[%d]", (int)width);
+#else
+        width = mFontSizeX + mCharSpace;
+
+        char buffer[16];
+        sprintf(buffer, "\x1B""CR[%d]", (int)(width + 0.5f));
+#endif
 
         char c;
-        for (char* var_r5 = buffer; c = *var_r5, c != 0; var_r5++) {
-            char* temp_r3 = *param_1;
-            *param_1 = *param_1 + 1;
-            *temp_r3 = c;
+        for (char* p = buffer; c = *p, c != 0; p++) {
+            char* dst = *o_dst;
+            *o_dst = *o_dst + 1;
+            *dst = c;
         }
 
         mIconNum++;
     }
 
-    return var_f31;
+    return width;
 }
 
 /* 800C9D5C-800CA8A8       .text messageSet__17dDlst_2DOutFont_cFUl */
-// NONMATCHING - various wrong instructions, reg alloc, stack issues
 void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
     fopMsgM_itemMsgGet_c msgGet;
     mesg_header* head_p = msgGet.getMesgHeader(i_msgNo);
     JUT_ASSERT(DEMO_SELECT(615, 619), head_p);
     const char* message = msgGet.getMessage(head_p);
 
-    char sp104[100];
-    char spA0[100];
-    char sp6C[52];
-    char* dst = sp104;
+    char lineBuf[100];
+    char rubyLineBuf[100];
+    char rubyStr[52];
+    char* dst = lineBuf;
 
-    f32 var_f31 = 0.0f;
-    f32 var_f30 = 0.0f;
-    f32 var_f29 = 0.0f;
-    int var_r30 = 0;
+    f32 rubyWidth = 0.0f;
+    f32 rubyLinePos = 0.0f;
+    f32 rubyBasePos = 0.0f;
+    int rubyBaseLeft = 0;
 
     initial();
-    m88[0] = 0;
-    spA0[0] = 0;
-    mEC[0] = 0;
+    mText[0] = 0;
+    rubyLineBuf[0] = 0;
+    mRubyText[0] = 0;
 
     while (*message != '\0') {
-        if ((u8)*message == 0x1A) {
-            u32 uvar6 = *(u32*)(++message) & 0xFFFFFF;
-            if (uvar6 == (0xFF0000 | MsgSpclCode_COLOR)) {
-                char sp50[28];
-                sprintf(sp50, "\x1b""CC[%08x]\x1bGM[0]", fopMsgM_getColorTable(message[4]));
+        u8 c = *message;
+        if (c == 0x1A) {
+            u32 code = *(u32*)(++message) & 0xFFFFFF;
+            if (code == (0xFF0000 | MsgSpclCode_COLOR)) {
+                char colorTag[28];
+                sprintf(colorTag, "\x1b""CC[%08x]\x1bGM[0]", fopMsgM_getColorTable(message[4]));
 
-                for (char* p = sp50; *p != '\0'; p++) {
+                for (char* p = colorTag; *p != '\0'; p++) {
                     *(dst++) = *p;
                 }
-            } else if (uvar6 == (0xFF0000 | MsgSpclCode_RUBY)) {
+            } else if (code == (0xFF0000 | MsgSpclCode_RUBY)) {
                 if (mpRubyFont != NULL) {
-                    u8 temp_r3_5 = (u8)message[0];
-                    if (temp_r3_5 != 5) {
-                        int var_r27 = temp_r3_5 - 6;
+                    u8 tagLen = *(u8*)message;
+                    if (tagLen != 5) {
+                        int rubyLen = tagLen - 6;
                         int i = 0;
 
-                        const char* var_r25 = message + 5;
-                        char* var_r24 = sp6C;
-                        *sp6C = 0;
-                        var_f31 = 0.0f;
-                        var_f29 = m68;
-                        var_r30 = (u8)message[4];
+                        const char* rubySrc = message + 5;
+                        char* rubyDst = rubyStr;
+                        *rubyStr = 0;
+                        rubyWidth = 0.0f;
+                        rubyBasePos = mLineWidth;
+                        rubyBaseLeft = (u8)message[4];
 
-                        for (; i < var_r27; i += 2) {
-                            char temp_r0_2 = var_r25[0];
-                            var_r24[0] = temp_r0_2;
+                        for (; i < rubyLen; i += 2) {
+                            int hi = (rubyDst[0] = rubySrc[0]);
+                            int lo = (rubyDst[1] = rubySrc[1]);
 
-                            char temp_r3_6 = var_r25[1];
-                            var_r24[1] = temp_r3_6;
-
-                            var_r25 += 2;
-                            var_r24 += 2;
-                            var_f31 += rubyCharWidth(((u8)temp_r3_6 << 8) | (u8)temp_r0_2);
+                            rubySrc += 2;
+                            rubyDst += 2;
+                            rubyWidth += rubyCharWidth(((u8)hi << 8) | (u8)lo);
                         }
 
-                        *var_r24 = 0;
+                        *rubyDst = 0;
                     }
                 }
-            } else if (uvar6 == MsgCtrlCode_A_BUTTON) {
-                m68 += iconset(fopMsgM_Icon_A_BUTTON_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_B_BUTTON) {
-                m68 += iconset(fopMsgM_Icon_B_BUTTON_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_C_STICK) {
-                m68 += iconset(fopMsgM_Icon_C_STICK_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_L_BUTTON) {
-                m68 += iconset(fopMsgM_Icon_L_BUTTON_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_R_BUTTON) {
-                m68 += iconset(fopMsgM_Icon_R_BUTTON_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_X_BUTTON) {
-                m68 += iconset(fopMsgM_Icon_X_BUTTON_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_Y_BUTTON) {
-                m68 += iconset(fopMsgM_Icon_Y_BUTTON_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_Z_BUTTON) {
-                m68 += iconset(fopMsgM_Icon_Z_BUTTON_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_DPAD) {
-                m68 += iconset(fopMsgM_Icon_DPAD_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_MAIN_STICK) {
-                m68 += iconset(fopMsgM_Icon_MAIN_STICK_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_ARROW_LEFT) {
-                m68 += iconset(fopMsgM_Icon_ARROW_LEFT_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_ARROW_RIGHT) {
-                m68 += iconset(fopMsgM_Icon_ARROW_RIGHT_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_ARROW_UP) {
-                m68 += iconset(fopMsgM_Icon_ARROW_UP_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_ARROW_DOWN) {
-                m68 += iconset(fopMsgM_Icon_ARROW_DOWN_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_UP) {
-                m68 += iconset(fopMsgM_Icon_MAIN_STICK_UP_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_DOWN) {
-                m68 += iconset(fopMsgM_Icon_MAIN_STICK_DOWN_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_LEFT) {
-                m68 += iconset(fopMsgM_Icon_MAIN_STICK_LEFT_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_RIGHT) {
-                m68 += iconset(fopMsgM_Icon_MAIN_STICK_RIGHT_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_UP_DOWN) {
-                m68 += iconset(fopMsgM_Icon_MAIN_STICK_UP_DOWN_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_MAIN_STICK_LEFT_RIGHT) {
-                m68 += iconset(fopMsgM_Icon_MAIN_STICK_LEFT_RIGHT_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_FLASHING_A_BUTTON) {
-                m68 += iconset(fopMsgM_Icon_FLASHING_A_BUTTON_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_HEART) {
-                m68 += iconset(fopMsgM_Icon_HEART_e, &dst);
-            } else if (uvar6 == MsgCtrlCode_MUSIC_NOTE) {
-                m68 += iconset(fopMsgM_Icon_MUSIC_NOTE_e, &dst);
+            } else if (code == MsgCtrlCode_A_BUTTON) {
+                mLineWidth += iconset(fopMsgM_Icon_A_BUTTON_e, &dst);
+            } else if (code == MsgCtrlCode_B_BUTTON) {
+                mLineWidth += iconset(fopMsgM_Icon_B_BUTTON_e, &dst);
+            } else if (code == MsgCtrlCode_C_STICK) {
+                mLineWidth += iconset(fopMsgM_Icon_C_STICK_e, &dst);
+            } else if (code == MsgCtrlCode_L_BUTTON) {
+                mLineWidth += iconset(fopMsgM_Icon_L_BUTTON_e, &dst);
+            } else if (code == MsgCtrlCode_R_BUTTON) {
+                mLineWidth += iconset(fopMsgM_Icon_R_BUTTON_e, &dst);
+            } else if (code == MsgCtrlCode_X_BUTTON) {
+                mLineWidth += iconset(fopMsgM_Icon_X_BUTTON_e, &dst);
+            } else if (code == MsgCtrlCode_Y_BUTTON) {
+                mLineWidth += iconset(fopMsgM_Icon_Y_BUTTON_e, &dst);
+            } else if (code == MsgCtrlCode_Z_BUTTON) {
+                mLineWidth += iconset(fopMsgM_Icon_Z_BUTTON_e, &dst);
+            } else if (code == MsgCtrlCode_DPAD) {
+                mLineWidth += iconset(fopMsgM_Icon_DPAD_e, &dst);
+            } else if (code == MsgCtrlCode_MAIN_STICK) {
+                mLineWidth += iconset(fopMsgM_Icon_MAIN_STICK_e, &dst);
+            } else if (code == MsgCtrlCode_ARROW_LEFT) {
+                mLineWidth += iconset(fopMsgM_Icon_ARROW_LEFT_e, &dst);
+            } else if (code == MsgCtrlCode_ARROW_RIGHT) {
+                mLineWidth += iconset(fopMsgM_Icon_ARROW_RIGHT_e, &dst);
+            } else if (code == MsgCtrlCode_ARROW_UP) {
+                mLineWidth += iconset(fopMsgM_Icon_ARROW_UP_e, &dst);
+            } else if (code == MsgCtrlCode_ARROW_DOWN) {
+                mLineWidth += iconset(fopMsgM_Icon_ARROW_DOWN_e, &dst);
+            } else if (code == MsgCtrlCode_MAIN_STICK_UP) {
+                mLineWidth += iconset(fopMsgM_Icon_MAIN_STICK_UP_e, &dst);
+            } else if (code == MsgCtrlCode_MAIN_STICK_DOWN) {
+                mLineWidth += iconset(fopMsgM_Icon_MAIN_STICK_DOWN_e, &dst);
+            } else if (code == MsgCtrlCode_MAIN_STICK_LEFT) {
+                mLineWidth += iconset(fopMsgM_Icon_MAIN_STICK_LEFT_e, &dst);
+            } else if (code == MsgCtrlCode_MAIN_STICK_RIGHT) {
+                mLineWidth += iconset(fopMsgM_Icon_MAIN_STICK_RIGHT_e, &dst);
+            } else if (code == MsgCtrlCode_MAIN_STICK_UP_DOWN) {
+                mLineWidth += iconset(fopMsgM_Icon_MAIN_STICK_UP_DOWN_e, &dst);
+            } else if (code == MsgCtrlCode_MAIN_STICK_LEFT_RIGHT) {
+                mLineWidth += iconset(fopMsgM_Icon_MAIN_STICK_LEFT_RIGHT_e, &dst);
+            } else if (code == MsgCtrlCode_FLASHING_A_BUTTON) {
+                mLineWidth += iconset(fopMsgM_Icon_FLASHING_A_BUTTON_e, &dst);
+            } else if (code == MsgCtrlCode_HEART) {
+                mLineWidth += iconset(fopMsgM_Icon_HEART_e, &dst);
+            } else if (code == MsgCtrlCode_MUSIC_NOTE) {
+                mLineWidth += iconset(fopMsgM_Icon_MUSIC_NOTE_e, &dst);
             }
 
             message += *message - 1;
         } else {
 #if VERSION < VERSION_PAL
-            int hi_nibble = ((u8)*message >> 4) & 0xF;
+            int hi_nibble = (c >> 4) & 0xF;
             if (hi_nibble == 8 || hi_nibble == 9) {
-                char temp_r4_2 = message[0];
-                *(dst++) = temp_r4_2;
+                int hi = (*(dst++) = *message++);
+                int lo = (*(dst++) = *message++);
 
-                char temp_r5 = message[1];
-                *(dst++) = temp_r5;
+                mLineWidth += charWidth(((u8)hi << 8) | (u8)lo);
 
-                message += 2;
-                m68 += charWidth(((u8)temp_r4_2 << 8) | (u8)temp_r5);
+                if (rubyBaseLeft != 0) {
+                    rubyBaseLeft--;
+                    if (rubyBaseLeft == 0) {
+                        char shiftTag[16];
 
-                if (var_r30 != 0) {
-                    var_r30--;
-                    if (var_r30 == 0) {
-                        char sp34[16];
-
-                        f32 temp_f0 = (var_f29 + ((m68 - var_f29) / 2)) - (var_f31 / 2);
-                        if (var_f30 < temp_f0) {
-                            f32 temp_f28 = temp_f0 - var_f30;
-                            sprintf(sp34, "\x1b""CR[%d]", (int)(temp_f28 + 0.5f));
-                            strcat(spA0, sp34);
-                            var_f30 += temp_f28;
-                        } else if (var_f30 > temp_f0) {
-                            f32 temp_f28 = var_f30 - temp_f0;
-                            sprintf(sp34, "\x1b""CL[%d]", (int)(temp_f28 + 0.5f));
-                            strcat(spA0, sp34);
-                            var_f30 -= temp_f28;
+                        f32 center = rubyBasePos + ((mLineWidth - rubyBasePos) / 2);
+                        f32 rubyPos = center - (rubyWidth / 2);
+                        if (rubyLinePos < rubyPos) {
+                            f32 shift = rubyPos - rubyLinePos;
+                            sprintf(shiftTag, "\x1b""CR[%d]", (int)(shift + 0.5f));
+                            strcat(rubyLineBuf, shiftTag);
+                            rubyLinePos += shift;
+                        } else if (rubyLinePos > rubyPos) {
+                            f32 shift = rubyLinePos - rubyPos;
+                            sprintf(shiftTag, "\x1b""CL[%d]", (int)(shift + 0.5f));
+                            strcat(rubyLineBuf, shiftTag);
+                            rubyLinePos -= shift;
                         }
 
-                        var_f30 += var_f31;
-                        strcat(spA0, sp6C);
+                        rubyLinePos += rubyWidth;
+                        strcat(rubyLineBuf, rubyStr);
                     }
                 }
             } else
 #endif
             {
-                char var_r5_2 = *message;
-                *(dst++) = var_r5_2;
-                message++;
+                char ch = *message++;
+                *(dst++) = ch;
 
-                if (var_r5_2 == '\n') {
-                    char sp24[16];
-                    *dst = 0;
+                if (ch == '\n') {
+#if VERSION >= VERSION_PAL
+                    // PAL: message 0x5F is kept on one line
+                    if (i_msgNo != 0x5F)
+#endif
+                    {
+                        char indentTag[16];
+                        *dst = 0;
 
-                    int temp_r24 = (mpTextBox->getWidth() - m68) / 2;
-                    if (temp_r24 > 0) {
-                        sprintf(sp24, "\x1b""CR[%d]", temp_r24);
+                        int indent = (mpTextBox->getWidth() - mLineWidth) / 2;
+                        if (indent > 0) {
+                            sprintf(indentTag, "\x1b""CR[%d]", indent);
 
-                        for (int i = 0; i < 3; i++) {
-                            if (m82 == m76[i]) {
-                                m38[i] += temp_r24;
+                            for (int i = 0; i < 3; i++) {
+                                if (mLineCount == mIconLine[i]) {
+                                    mIconPosX[i] += indent;
+                                }
                             }
+                        } else {
+                            *indentTag = 0;
                         }
-                    } else {
-                        *sp24 = 0;
+
+                        strcat(mText, indentTag);
+                        strcat(mText, lineBuf);
+                        mLineCount++;
+                        mLineWidth = 0.0f;
+                        rubyLinePos = 0.0f;
+
+                        dst = lineBuf;
+
+                        if (mpRubyFont != NULL) {
+                            strcat(mRubyText, indentTag);
+                            strcat(mRubyText, rubyLineBuf);
+                            strcat(mRubyText, "\n");
+                            *rubyLineBuf = 0;
+                        }
                     }
-
-                    strcat(m88, sp24);
-                    strcat(m88, sp104);
-                    m82++;
-                    m68 = 0.0f;
-                    var_f30 = 0.0f;
-
-                    dst = sp104;
-
-                    if (mpRubyFont != NULL) {
-                        strcat(mEC, sp24);
-                        strcat(mEC, spA0);
-                        strcat(mEC, "\n");
-                        *spA0 = 0;
+#if VERSION >= VERSION_PAL
+                    else {
+                        dst--;
                     }
+#endif
                 } else {
-                    m68 += charWidth(var_r5_2);
+                    mLineWidth += charWidth(ch);
                 }
             }
         }
@@ -607,59 +618,75 @@ void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
 
     *dst = 0;
 
-    #if VERSION >= VERSION_USA
-    var_f29 = 0.0f;
-    if (m74 == 0) {
-        var_f29 = ((mpTextBox->getHeight() - m6C) - m82 * mpTextBox->getLineSpace()) / 2;
+    #if VERSION >= VERSION_PAL
+    f32 offsetY = ((mpTextBox->getHeight() - mFontSize.mSizeY) - mLineCount * mpTextBox->getLineSpace()) / 2;
+    #elif VERSION >= VERSION_USA
+    f32 offsetY = 0.0f;
+    if (mFitToBox == 0) {
+        offsetY = ((mpTextBox->getHeight() - mFontSizeX) - mLineCount * mpTextBox->getLineSpace()) / 2;
     }
     #else
-    var_f29 = ((mpTextBox->getHeight() - m6C) - m82 * mpTextBox->getLineSpace()) / 2;
+    f32 offsetY = ((mpTextBox->getHeight() - mFontSizeX) - mLineCount * mpTextBox->getLineSpace()) / 2;
     #endif
 
-    char sp14[16];
-    int temp_r30 = (mpTextBox->getWidth() - m68) / 2;
-    if (temp_r30 > 0) {
-        sprintf(sp14, "\x1b""CR[%d]", temp_r30);
+    char indentTag[16];
+    int indent = (mpTextBox->getWidth() - mLineWidth) / 2;
+    if (indent > 0) {
+        sprintf(indentTag, "\x1b""CR[%d]", indent);
 
         for (int i = 0; i < 3; i++) {
-            if (m82 == m76[i]) {
-                m38[i] += temp_r30;
+            if (mLineCount == mIconLine[i]) {
+                mIconPosX[i] += indent;
             }
 
-            if (m76[i] != -1) {
-                m44[i] += var_f29 + (m76[i] * mpTextBox->getLineSpace());
+            if (mIconLine[i] != -1) {
+                mIconPosY[i] += offsetY + (mIconLine[i] * mpTextBox->getLineSpace());
             }
         }
     } else {
-        *sp14 = 0;
+        *indentTag = 0;
     }
 
-    strcat(m88, sp14);
-    strcat(m88, sp104);
-    mpTextBox->shiftSet(0.0f, var_f29);
+    strcat(mText, indentTag);
+    strcat(mText, lineBuf);
+    mpTextBox->shiftSet(0.0f, offsetY);
 
-    if (m28 == NULL) {
-        mpTextBox->setString(m88);
+    if (mpTextDst == NULL) {
+        mpTextBox->setString(mText);
     } else {
-        strcpy(m28, m88);
+        strcpy(mpTextDst, mText);
     }
 
     if (mpRubyTextBox != NULL) {
-        mpRubyTextBox->shiftSet(0.0f, var_f29);
-        strcat(mEC, sp14);
-        strcat(mEC, spA0);
+        mpRubyTextBox->shiftSet(0.0f, offsetY);
+        strcat(mRubyText, indentTag);
+        strcat(mRubyText, rubyLineBuf);
 
-        if (m2C == NULL) {
-            mpRubyTextBox->setString(mEC);
+        if (mpRubyTextDst == NULL) {
+            mpRubyTextBox->setString(mRubyText);
         } else {
-            strcpy(m2C, mEC);
+            strcpy(mpRubyTextDst, mRubyText);
         }
     }
 
-    #if VERSION >= VERSION_USA
-    if (m74) {
-        if (mpTextBox->getWidth() < m68) {
-            mFontSize.mSizeX = (int)(mFontSize.mSizeX * (mpTextBox->getWidth() / m68));
+    #if VERSION >= VERSION_PAL
+    if (mFitToBox) {
+        if (mpTextBox->getWidth() - 5.0f < mLineWidth) {
+            f32 ratio = (mpTextBox->getWidth() - 5.0f) / mLineWidth;
+            int sizeX = ratio * mFontSize.mSizeX;
+            mCharSpace = (int)(ratio * mpTextBox->getCharSpace());
+            mpTextBox->setCharSpace(mCharSpace);
+            mFontSize.mSizeX = mFontSizeX = sizeX;
+
+            J2DTextBox::TFontSize fontSize = mFontSize;
+            mpTextBox->setFontSize(fontSize);
+            messageSet(i_msgNo);
+        }
+    }
+    #elif VERSION >= VERSION_USA
+    if (mFitToBox) {
+        if (mpTextBox->getWidth() < mLineWidth) {
+            mFontSize.mSizeX = (int)(mFontSize.mSizeX * (mpTextBox->getWidth() / mLineWidth));
 
             J2DTextBox::TFontSize fontSize = mFontSize;
             mpTextBox->setFontSize(fontSize);
@@ -670,235 +697,235 @@ void dDlst_2DOutFont_c::messageSet(u32 i_msgNo) {
 }
 
 /* 800CA8A8-800CAB5C       .text outFontStickAnime1__17dDlst_2DOutFont_cFUc */
-void dDlst_2DOutFont_c::outFontStickAnime1(u8 param_0) {
-    s16 var_r29 = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
-    if (m7C[param_0] < var_r29) {
-        outFontStickAnimePiece(param_0, 0);
+void dDlst_2DOutFont_c::outFontStickAnime1(u8 i_idx) {
+    s16 cycle = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+    if (mIconTimer[i_idx] < cycle) {
+        outFontStickAnimePiece(i_idx, 0);
         #if VERSION >= VERSION_USA
-        if (m74) {
-            m50[param_0] = 0.0f;
-            m5C[param_0] = 0.0f;
-            mpPic[param_0]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
+        if (mFitToBox) {
+            mIconAnmOffsX[i_idx] = 0.0f;
+            mIconAnmOffsY[i_idx] = 0.0f;
+            mpPic[i_idx]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
         } else
         #endif
         {
-            m50[param_0] = 0.0f;
-            m5C[param_0] = 0.0f;
+            mIconAnmOffsX[i_idx] = 0.0f;
+            mIconAnmOffsY[i_idx] = 0.0f;
         }
-    } else if (m7C[param_0] < var_r29 * 2) {
-        outFontStickAnimePiece(param_0, 1);
+    } else if (mIconTimer[i_idx] < cycle * 2) {
+        outFontStickAnimePiece(i_idx, 1);
         #if VERSION >= VERSION_USA
-        if (m74) {
-            m50[param_0] = mFontSize.mSizeX;
-            m5C[param_0] = 0.0f;
-            mpPic[param_0]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
+        if (mFitToBox) {
+            mIconAnmOffsX[i_idx] = mFontSize.mSizeX;
+            mIconAnmOffsY[i_idx] = 0.0f;
+            mpPic[i_idx]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
         } else
         #endif
         {
-            m50[param_0] = m6C;
-            m5C[param_0] = 0.0f;
+            mIconAnmOffsX[i_idx] = mFontSizeX;
+            mIconAnmOffsY[i_idx] = 0.0f;
         }
-    } else if (m7C[param_0] < var_r29 * 3) {
-        outFontStickAnimePiece(param_0, 2);
+    } else if (mIconTimer[i_idx] < cycle * 3) {
+        outFontStickAnimePiece(i_idx, 2);
         #if VERSION >= VERSION_USA
-        if (m74) {
-            m50[param_0] = mFontSize.mSizeX;
-            m5C[param_0] = mFontSize.mSizeY;
-            mpPic[param_0]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
+        if (mFitToBox) {
+            mIconAnmOffsX[i_idx] = mFontSize.mSizeX;
+            mIconAnmOffsY[i_idx] = mFontSize.mSizeY;
+            mpPic[i_idx]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
         } else
         #endif
         {
-            m50[param_0] = m6C;
-            m5C[param_0] = m6C;
+            mIconAnmOffsX[i_idx] = mFontSizeX;
+            mIconAnmOffsY[i_idx] = mFontSizeX;
         }
-    } else if (m7C[param_0] < var_r29 * 4) {
-        outFontStickAnimePiece(param_0, 3);
+    } else if (mIconTimer[i_idx] < cycle * 4) {
+        outFontStickAnimePiece(i_idx, 3);
         #if VERSION >= VERSION_USA
-        if (m74) {
-            m50[param_0] = 0.0f;
-            m5C[param_0] = mFontSize.mSizeY;
-            mpPic[param_0]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
+        if (mFitToBox) {
+            mIconAnmOffsX[i_idx] = 0.0f;
+            mIconAnmOffsY[i_idx] = mFontSize.mSizeY;
+            mpPic[i_idx]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
         } else
         #endif
         {
-            m50[param_0] = 0.0f;
-            m5C[param_0] = m6C;
+            mIconAnmOffsX[i_idx] = 0.0f;
+            mIconAnmOffsY[i_idx] = mFontSizeX;
         }
     }
 
-    if ((m7C[param_0] % var_r29) == 0) {
-        mpPic[param_0]->rotate(0.0f, 0.0f, ROTATE_Z, (m7C[param_0] / var_r29) * -90.0f);
+    if ((mIconTimer[i_idx] % cycle) == 0) {
+        mpPic[i_idx]->rotate(0.0f, 0.0f, ROTATE_Z, (mIconTimer[i_idx] / cycle) * -90.0f);
     }
 
-    m7C[param_0]++;
-    if (m7C[param_0] >= var_r29 * 4) {
-        m7C[param_0] = 0;
+    mIconTimer[i_idx]++;
+    if (mIconTimer[i_idx] >= cycle * 4) {
+        mIconTimer[i_idx] = 0;
     }
 }
 
 /* 800CAB5C-800CADEC       .text outFontStickAnime2__17dDlst_2DOutFont_cFUcUc */
-void dDlst_2DOutFont_c::outFontStickAnime2(u8 param_0, u8 param_1) {
-    s16 var_r29 = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
-    if (m7C[param_0] < var_r29) {
-        outFontStickAnimePiece(param_0, 0);
+void dDlst_2DOutFont_c::outFontStickAnime2(u8 i_idx, u8 i_dir) {
+    s16 cycle = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+    if (mIconTimer[i_idx] < cycle) {
+        outFontStickAnimePiece(i_idx, 0);
         
-        switch (param_1) {
+        switch (i_dir) {
         case 0:
             #if VERSION >= VERSION_USA
-            if (m74) {
-                m50[param_0] = 0.0f;
-                m5C[param_0] = 0.0f;
-                mpPic[param_0]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
+            if (mFitToBox) {
+                mIconAnmOffsX[i_idx] = 0.0f;
+                mIconAnmOffsY[i_idx] = 0.0f;
+                mpPic[i_idx]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
             } else
             #endif
             {
-                m50[param_0] = 0.0f;
-                m5C[param_0] = 0.0f;
+                mIconAnmOffsX[i_idx] = 0.0f;
+                mIconAnmOffsY[i_idx] = 0.0f;
             }
             break;
         case 1:
             #if VERSION >= VERSION_USA
-            if (m74) {
-                m50[param_0] = mFontSize.mSizeX;
-                m5C[param_0] = 0.0f;
-                mpPic[param_0]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
+            if (mFitToBox) {
+                mIconAnmOffsX[i_idx] = mFontSize.mSizeX;
+                mIconAnmOffsY[i_idx] = 0.0f;
+                mpPic[i_idx]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
             } else
             #endif
             {
-                m50[param_0] = m6C;
-                m5C[param_0] = 0.0f;
+                mIconAnmOffsX[i_idx] = mFontSizeX;
+                mIconAnmOffsY[i_idx] = 0.0f;
             }
             break;
         case 2:
             #if VERSION >= VERSION_USA
-            if (m74) {
-                m50[param_0] = mFontSize.mSizeX;
-                m5C[param_0] = mFontSize.mSizeY;
-                mpPic[param_0]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
+            if (mFitToBox) {
+                mIconAnmOffsX[i_idx] = mFontSize.mSizeX;
+                mIconAnmOffsY[i_idx] = mFontSize.mSizeY;
+                mpPic[i_idx]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
             } else
             #endif
             {
-                m50[param_0] = m6C;
-                m5C[param_0] = m6C;
+                mIconAnmOffsX[i_idx] = mFontSizeX;
+                mIconAnmOffsY[i_idx] = mFontSizeX;
             }
             break;
         case 3:
             #if VERSION >= VERSION_USA
-            if (m74) {
-                m50[param_0] = 0.0f;
-                m5C[param_0] = mFontSize.mSizeY;
-                mpPic[param_0]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
+            if (mFitToBox) {
+                mIconAnmOffsX[i_idx] = 0.0f;
+                mIconAnmOffsY[i_idx] = mFontSize.mSizeY;
+                mpPic[i_idx]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
             } else
             #endif
             {
-                m50[param_0] = 0.0f;
-                m5C[param_0] = m6C;
+                mIconAnmOffsX[i_idx] = 0.0f;
+                mIconAnmOffsY[i_idx] = mFontSizeX;
             }
             break;
         }
     }
 
-    mpPic[param_0]->rotate(0.0f, 0.0f, ROTATE_Z, param_1 * -90.0f);
+    mpPic[i_idx]->rotate(0.0f, 0.0f, ROTATE_Z, i_dir * -90.0f);
 
-    m7C[param_0]++;
-    if (m7C[param_0] >= var_r29) {
-        m7C[param_0] = 0;
+    mIconTimer[i_idx]++;
+    if (mIconTimer[i_idx] >= cycle) {
+        mIconTimer[i_idx] = 0;
     }
 }
 
 /* 800CADEC-800CB0C0       .text outFontStickAnime3__17dDlst_2DOutFont_cFUcUc */
-void dDlst_2DOutFont_c::outFontStickAnime3(u8 param_0, u8 param_1) {
-    s16 var_r29 = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+void dDlst_2DOutFont_c::outFontStickAnime3(u8 i_idx, u8 i_axis) {
+    s16 cycle = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
 
-    int var_r0;
-    if (param_1 == 0) {
-        if (m7C[param_0] < var_r29) {
-            outFontStickAnimePiece(param_0, 0);
+    int dir;
+    if (i_axis == 0) {
+        if (mIconTimer[i_idx] < cycle) {
+            outFontStickAnimePiece(i_idx, 0);
             #if VERSION >= VERSION_USA
-            if (m74) {
-                m50[param_0] = mFontSize.mSizeX;
-                m5C[param_0] = 0.0f;
-                mpPic[param_0]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
+            if (mFitToBox) {
+                mIconAnmOffsX[i_idx] = mFontSize.mSizeX;
+                mIconAnmOffsY[i_idx] = 0.0f;
+                mpPic[i_idx]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
             } else
             #endif
             {
-                m50[param_0] = m6C;
-                m5C[param_0] = 0.0f;
+                mIconAnmOffsX[i_idx] = mFontSizeX;
+                mIconAnmOffsY[i_idx] = 0.0f;
             }
-            var_r0 = 1;
-        } else if (m7C[param_0] < var_r29 * 2) {
-            outFontStickAnimePiece(param_0, 1);
+            dir = 1;
+        } else if (mIconTimer[i_idx] < cycle * 2) {
+            outFontStickAnimePiece(i_idx, 1);
             #if VERSION >= VERSION_USA
-            if (m74) {
-                m50[param_0] = 0.0f;
-                m5C[param_0] = mFontSize.mSizeY;
-                mpPic[param_0]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
+            if (mFitToBox) {
+                mIconAnmOffsX[i_idx] = 0.0f;
+                mIconAnmOffsY[i_idx] = mFontSize.mSizeY;
+                mpPic[i_idx]->resize(mFontSize.mSizeY, mFontSize.mSizeX);
             } else
             #endif
             {
-                m50[param_0] = 0.0f;
-                m5C[param_0] = m6C;
+                mIconAnmOffsX[i_idx] = 0.0f;
+                mIconAnmOffsY[i_idx] = mFontSizeX;
             }
-            var_r0 = 3;
+            dir = 3;
         }
     } else {
-        if (m7C[param_0] < var_r29) {
-            outFontStickAnimePiece(param_0, 0);
+        if (mIconTimer[i_idx] < cycle) {
+            outFontStickAnimePiece(i_idx, 0);
             #if VERSION >= VERSION_USA
-            if (m74) {
-                m50[param_0] = 0.0f;
-                m5C[param_0] = 0.0f;
-                mpPic[param_0]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
+            if (mFitToBox) {
+                mIconAnmOffsX[i_idx] = 0.0f;
+                mIconAnmOffsY[i_idx] = 0.0f;
+                mpPic[i_idx]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
             } else
             #endif
             {
-                m50[param_0] = 0.0f;
-                m5C[param_0] = 0.0f;
+                mIconAnmOffsX[i_idx] = 0.0f;
+                mIconAnmOffsY[i_idx] = 0.0f;
             }
-            var_r0 = 0;
-        } else if (m7C[param_0] < var_r29 * 2) {
-            outFontStickAnimePiece(param_0, 1);
+            dir = 0;
+        } else if (mIconTimer[i_idx] < cycle * 2) {
+            outFontStickAnimePiece(i_idx, 1);
             #if VERSION >= VERSION_USA
-            if (m74) {
-                m50[param_0] = mFontSize.mSizeX;
-                m5C[param_0] = mFontSize.mSizeY;
-                mpPic[param_0]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
+            if (mFitToBox) {
+                mIconAnmOffsX[i_idx] = mFontSize.mSizeX;
+                mIconAnmOffsY[i_idx] = mFontSize.mSizeY;
+                mpPic[i_idx]->resize(mFontSize.mSizeX, mFontSize.mSizeY);
             } else
             #endif
             {
-                m50[param_0] = m6C;
-                m5C[param_0] = m6C;
+                mIconAnmOffsX[i_idx] = mFontSizeX;
+                mIconAnmOffsY[i_idx] = mFontSizeX;
             }
-            var_r0 = 2;
+            dir = 2;
         }
     }
 
-    mpPic[param_0]->rotate(0.0f, 0.0f, ROTATE_Z, var_r0 * -90.0f);
+    mpPic[i_idx]->rotate(0.0f, 0.0f, ROTATE_Z, dir * -90.0f);
 
-    m7C[param_0]++;
-    if (m7C[param_0] >= var_r29 * 2) {
-        m7C[param_0] = 0;
+    mIconTimer[i_idx]++;
+    if (mIconTimer[i_idx] >= cycle * 2) {
+        mIconTimer[i_idx] = 0;
     }
 }
 
 /* 800CB0C0-800CB2E0       .text outFontStickAnimePiece__17dDlst_2DOutFont_cFUcUc */
-void dDlst_2DOutFont_c::outFontStickAnimePiece(u8 param_0, u8 param_1) {
-    s16 temp_r0 = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
-    s16 temp_r0_2 = g_msgHIO.field_0x88 + (temp_r0 * param_1);
-    s16 temp_r0_3 = g_msgHIO.field_0x87 + temp_r0_2;
-    s16 temp_r0_4 = g_msgHIO.field_0x89 + temp_r0_3;
-    s16 temp_r0_5 = g_msgHIO.field_0x87 + temp_r0_4;
+void dDlst_2DOutFont_c::outFontStickAnimePiece(u8 i_idx, u8 i_step) {
+    s16 cycle = g_msgHIO.field_0x88 + g_msgHIO.field_0x87 + g_msgHIO.field_0x89 + g_msgHIO.field_0x87;
+    s16 fadeInStart = g_msgHIO.field_0x88 + (cycle * i_step);
+    s16 fadeInEnd = g_msgHIO.field_0x87 + fadeInStart;
+    s16 fadeOutStart = g_msgHIO.field_0x89 + fadeInEnd;
+    s16 fadeOutEnd = g_msgHIO.field_0x87 + fadeOutStart;
 
-    if (m7C[param_0] < temp_r0_2) {
-        mpPic[param_0]->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
-    } else if (m7C[param_0] < temp_r0_3) {
-        f32 temp_f1 = fopMsgM_valueIncrease(temp_r0, m7C[param_0] - temp_r0_2, 0);
-        mpPic[param_0]->setBlendRatio(temp_f1, 1.0f - temp_f1, 1.0f, 1.0f);
-    } else if (m7C[param_0] < temp_r0_4) {
-        mpPic[param_0]->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
-    } else if (m7C[param_0] < temp_r0_5) {
-        f32 temp_f1 = fopMsgM_valueIncrease(temp_r0, m7C[param_0] - temp_r0_4, 0);
-        mpPic[param_0]->setBlendRatio(1.0f - temp_f1, temp_f1, 1.0f, 1.0f);
+    if (mIconTimer[i_idx] < fadeInStart) {
+        mpPic[i_idx]->setBlendRatio(0.0f, 1.0f, 1.0f, 1.0f);
+    } else if (mIconTimer[i_idx] < fadeInEnd) {
+        f32 ratio = fopMsgM_valueIncrease(cycle, mIconTimer[i_idx] - fadeInStart, 0);
+        mpPic[i_idx]->setBlendRatio(ratio, 1.0f - ratio, 1.0f, 1.0f);
+    } else if (mIconTimer[i_idx] < fadeOutStart) {
+        mpPic[i_idx]->setBlendRatio(1.0f, 0.0f, 1.0f, 1.0f);
+    } else if (mIconTimer[i_idx] < fadeOutEnd) {
+        f32 ratio = fopMsgM_valueIncrease(cycle, mIconTimer[i_idx] - fadeOutStart, 0);
+        mpPic[i_idx]->setBlendRatio(1.0f - ratio, ratio, 1.0f, 1.0f);
     }
 }
 
@@ -932,7 +959,7 @@ void dDlst_2DOutFont_c::move() {
 
     for (int i = 0; i < 3; i++) {
         if (mpPic[i] != NULL) {
-            mpPic[i]->move(mPosTopLeftX + m38[i] + m50[i], (mPosTopLeftY + m44[i] + m5C[i]) - 1.0f);
+            mpPic[i]->move(mPosTopLeftX + mIconPosX[i] + mIconAnmOffsX[i], (mPosTopLeftY + mIconPosY[i] + mIconAnmOffsY[i]) - 1.0f);
         }
     }
 

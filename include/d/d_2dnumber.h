@@ -88,9 +88,9 @@ public:
     dDlst_2DOutFont_c() {
         mpRubyFont = NULL;
         mpRubyTextBox = NULL;
-        m2C = NULL;
+        mpRubyTextDst = NULL;
 #if VERSION >= VERSION_USA
-        m74 = 0;
+        mFitToBox = 0;
 #endif
     }
     ~dDlst_2DOutFont_c() {}
@@ -124,28 +124,28 @@ public:
     /* 0x18 */ J2DTextBox* mpRubyTextBox;
     /* 0x1C */ JUTFont* mpFont;
     /* 0x20 */ JUTFont* mpRubyFont;
-    /* 0x24 */ char* m24;
-    /* 0x28 */ char* m28;
-    /* 0x2C */ char* m2C;
+    /* 0x24 */ char* mpTextBuf;
+    /* 0x28 */ char* mpTextDst;
+    /* 0x2C */ char* mpRubyTextDst;
     /* 0x30 */ f32 mPosTopLeftX;
     /* 0x34 */ f32 mPosTopLeftY;
-    /* 0x38 */ f32 m38[3];
-    /* 0x44 */ f32 m44[3];
-    /* 0x50 */ f32 m50[3];
-    /* 0x5C */ f32 m5C[3];
-    /* 0x68 */ f32 m68;
-    /* 0x6C */ f32 m6C;
+    /* 0x38 */ f32 mIconPosX[3];
+    /* 0x44 */ f32 mIconPosY[3];
+    /* 0x50 */ f32 mIconAnmOffsX[3];
+    /* 0x5C */ f32 mIconAnmOffsY[3];
+    /* 0x68 */ f32 mLineWidth;
+    /* 0x6C */ f32 mFontSizeX;
     /* 0x70 */ f32 mCharSpace;
 #if VERSION >= VERSION_USA
-    /* 0x74 */ u8 m74;
+    /* 0x74 */ u8 mFitToBox;
 #endif
-    /* 0x76 */ s16 m76[3];
-    /* 0x7C */ s16 m7C[3];
-    /* 0x82 */ s16 m82;
+    /* 0x76 */ s16 mIconLine[3];
+    /* 0x7C */ s16 mIconTimer[3];
+    /* 0x82 */ s16 mLineCount;
     /* 0x84 */ u8 mIconNum;
     /* 0x85 */ u8 mIconNo[3];
-    /* 0x88 */ char m88[100];
-    /* 0xEC */ char mEC[100];
+    /* 0x88 */ char mText[100];
+    /* 0xEC */ char mRubyText[100];
 }; // Size = 0x150
 
 STATIC_ASSERT(sizeof(dDlst_2DOutFont_c) == VERSION_SELECT(0x148, 0x148, 0x150, 0x150));
