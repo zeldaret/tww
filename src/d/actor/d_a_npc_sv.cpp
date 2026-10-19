@@ -6,10 +6,25 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_sv.h"
 #include "d/d_com_lib_game.h"
+#include "res/Object/Sv.h"
 
 static char* l_npc_staff_id[] = { "Sv0", "Sv1", "Sv2", "Sv3" };
 
 static const char* l_arcname_tbl[] = { "Sv", "Sv", "Sv", "Sv" };
+
+static const int l_bmd_ix_tbl[] = {
+    dRes_ID_SV_BDL_SV_e,
+    dRes_ID_SV_BDL_SV_e,
+    dRes_ID_SV_BDL_SV_e,
+    dRes_ID_SV_BDL_SV_e,
+};
+
+static const int l_bck_ix_tbl[] = { dRes_ID_SV_BCK_SV_WAIT01_e,  dRes_ID_SV_BCK_SV_TALK01_e, dRes_ID_SV_BCK_SV_TALK02_e,  dRes_ID_SV_BCK_SV_TALK03_e,
+                                    dRes_ID_SV_BCK_SV_YA_e,      dRes_ID_SV_BCK_SV_MAWASI_e, dRes_ID_SV_BCK_SV_WAIT02_e,  dRes_ID_SV_BCK_SV_KYORO_e,
+                                    dRes_ID_SV_BCK_SV_UNAZUKU_e, dRes_ID_SV_BCK_SV_HARAU_e,  dRes_ID_SV_BCK_SV_BYE_e,     dRes_ID_SV_BCK_SV_SHI_e,
+                                    dRes_ID_SV_BCK_SV_WAIT02_e,  dRes_ID_SV_BCK_SV_KYORO_e,  dRes_ID_SV_BCK_SV_UNAZUKU_e, dRes_ID_SV_BCK_SV_HARAU_e,
+                                    dRes_ID_SV_BCK_SV_BYE_e,     dRes_ID_SV_BCK_SV_SHI_e,    dRes_ID_SV_BCK_SV_WAIT02_e,  dRes_ID_SV_BCK_SV_KYORO_e,
+                                    dRes_ID_SV_BCK_SV_UNAZUKU_e, dRes_ID_SV_BCK_SV_HARAU_e,  dRes_ID_SV_BCK_SV_BYE_e,     dRes_ID_SV_BCK_SV_SHI_e };
 
 static sSvAnmDat l_npc_anm_wait = { 0, 0x08, 0xFF };
 
@@ -194,8 +209,29 @@ daNpcSv_c::daNpcSv_c() {
 }
 
 /* 00000528-00000640       .text daNpc_People_nodeCallBack__FP7J3DNodei */
-static BOOL daNpc_People_nodeCallBack(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL daNpc_People_nodeCallBack(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        J3DJoint* joint = (J3DJoint*)i_node;
+        J3DModel* model = j3dSys.getModel();
+        daNpcSv_c* i_this = (daNpcSv_c*)model->getUserArea();
+
+        s32 jntNo = joint->getJntNo();
+        MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+
+        if (jntNo == i_this->m_jnt.getHeadJntNum()) {
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getHead_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getHead_x());
+        }
+        if (jntNo == i_this->m_jnt.getBackboneJntNum()) {
+            cMtx_XrotM(*calc_mtx, (s16)i_this->m_jnt.getBackbone_y());
+            cMtx_ZrotM(*calc_mtx, (s16)-i_this->m_jnt.getBackbone_x());
+        }
+
+        model->setAnmMtx(jntNo, *calc_mtx);
+        MTXCopy(*calc_mtx, j3dSys.mCurrentMtx);
+    }
+
+    return true;
 }
 
 /* 00000640-00000660       .text CheckCreateHeap__FP10fopAc_ac_c */
@@ -492,7 +528,10 @@ u32 daNpcSv_c::getTalkNo() {
 
 /* 0000293C-00002958       .text isTalkOK__9daNpcSv_cFv */
 BOOL daNpcSv_c::isTalkOK() {
-    /* Nonmatching */
+    if (dComIfGp_checkPlayerStatus0(0, daPyStts0_SWIM_e)) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* 00002958-00002978       .text daNpc_PeopleCreate__FPv */
