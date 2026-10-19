@@ -19,12 +19,30 @@ static const int l_bmd_ix_tbl[] = {
     dRes_ID_SV_BDL_SV_e,
 };
 
-static const int l_bck_ix_tbl[] = { dRes_ID_SV_BCK_SV_WAIT01_e,  dRes_ID_SV_BCK_SV_TALK01_e, dRes_ID_SV_BCK_SV_TALK02_e,  dRes_ID_SV_BCK_SV_TALK03_e,
-                                    dRes_ID_SV_BCK_SV_YA_e,      dRes_ID_SV_BCK_SV_MAWASI_e, dRes_ID_SV_BCK_SV_WAIT02_e,  dRes_ID_SV_BCK_SV_KYORO_e,
-                                    dRes_ID_SV_BCK_SV_UNAZUKU_e, dRes_ID_SV_BCK_SV_HARAU_e,  dRes_ID_SV_BCK_SV_BYE_e,     dRes_ID_SV_BCK_SV_SHI_e,
-                                    dRes_ID_SV_BCK_SV_WAIT02_e,  dRes_ID_SV_BCK_SV_KYORO_e,  dRes_ID_SV_BCK_SV_UNAZUKU_e, dRes_ID_SV_BCK_SV_HARAU_e,
-                                    dRes_ID_SV_BCK_SV_BYE_e,     dRes_ID_SV_BCK_SV_SHI_e,    dRes_ID_SV_BCK_SV_WAIT02_e,  dRes_ID_SV_BCK_SV_KYORO_e,
-                                    dRes_ID_SV_BCK_SV_UNAZUKU_e, dRes_ID_SV_BCK_SV_HARAU_e,  dRes_ID_SV_BCK_SV_BYE_e,     dRes_ID_SV_BCK_SV_SHI_e };
+static const int l_bck_ix_tbl[][6] = { { dRes_ID_SV_BCK_SV_WAIT01_e,
+                                         dRes_ID_SV_BCK_SV_TALK01_e,
+                                         dRes_ID_SV_BCK_SV_TALK02_e,
+                                         dRes_ID_SV_BCK_SV_TALK03_e,
+                                         dRes_ID_SV_BCK_SV_YA_e,
+                                         dRes_ID_SV_BCK_SV_MAWASI_e },
+                                       { dRes_ID_SV_BCK_SV_WAIT02_e,
+                                         dRes_ID_SV_BCK_SV_KYORO_e,
+                                         dRes_ID_SV_BCK_SV_UNAZUKU_e,
+                                         dRes_ID_SV_BCK_SV_HARAU_e,
+                                         dRes_ID_SV_BCK_SV_BYE_e,
+                                         dRes_ID_SV_BCK_SV_SHI_e },
+                                       { dRes_ID_SV_BCK_SV_WAIT02_e,
+                                         dRes_ID_SV_BCK_SV_KYORO_e,
+                                         dRes_ID_SV_BCK_SV_UNAZUKU_e,
+                                         dRes_ID_SV_BCK_SV_HARAU_e,
+                                         dRes_ID_SV_BCK_SV_BYE_e,
+                                         dRes_ID_SV_BCK_SV_SHI_e },
+                                       { dRes_ID_SV_BCK_SV_WAIT02_e,
+                                         dRes_ID_SV_BCK_SV_KYORO_e,
+                                         dRes_ID_SV_BCK_SV_UNAZUKU_e,
+                                         dRes_ID_SV_BCK_SV_HARAU_e,
+                                         dRes_ID_SV_BCK_SV_BYE_e,
+                                         dRes_ID_SV_BCK_SV_SHI_e } };
 
 static sSvAnmDat l_npc_anm_wait = { 0, 0x08, 0xFF };
 
@@ -194,12 +212,12 @@ daNpcSv_c::daNpcSv_c() {
     mNpcNo = getPrmNpcNo();
     mResFlag = 0;
     mMoveState = 0;
-    field_0x70C = -1.0f;
+    mAnmMorfOverride = -1.0f;
     field_0x741 = 0;
     field_0x71C = 1;
     field_0x742 = 1;
     field_0x728 = home.angle.y;
-    field_0x73D = 0;
+    mBckIdx = 0;
     field_0x734 = 0;
     field_0x718 = 0;
 
@@ -507,18 +525,41 @@ void daNpcSv_c::playAnm() {
 }
 
 /* 000025E8-000026C8       .text setAnm__9daNpcSv_cFUcif */
-void daNpcSv_c::setAnm(u8, int, f32) {
-    /* Nonmatching */
+void daNpcSv_c::setAnm(u8 i_bckIdx, int i_loopMode, f32 i_morf) {
+    if (mAnmMorfOverride >= 0.0f) {
+        i_morf = mAnmMorfOverride;
+        mAnmMorfOverride = -1.0f;
+    }
+    J3DAnmTransformKey* pAnm = (J3DAnmTransformKey*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[mNpcNo][i_bckIdx]);
+    mpMorf->setAnm(pAnm, i_loopMode, i_morf, 1.0f, 0.0f, -1.0f, NULL);
+    mBckIdx = i_bckIdx;
 }
 
 /* 000026C8-00002768       .text setAnmTbl__9daNpcSv_cFP9sSvAnmDat */
-void daNpcSv_c::setAnmTbl(sSvAnmDat*) {
-    /* Nonmatching */
+bool daNpcSv_c::setAnmTbl(sSvAnmDat* i_anmDat) {
+    if (i_anmDat->mBckIdx == 0xFF) {
+        mpAnmDat = NULL;
+        return true;
+    }
+    mpAnmDat = i_anmDat;
+    mAnmLoopCnt = mpAnmDat->mLoopCount;
+
+    int loopMode = J3DFrameCtrl::EMode_LOOP;
+    if (mAnmLoopCnt > 0) {
+        loopMode = J3DFrameCtrl::EMode_NONE;
+    }
+    if (mBckIdx != mpAnmDat->mBckIdx || loopMode == J3DFrameCtrl::EMode_NONE) {
+        setAnm(mpAnmDat->mBckIdx, loopMode, mpAnmDat->mMorf);
+    }
+    return false;
 }
 
 /* 00002768-000027E0       .text setCollision__9daNpcSv_cFP8dCcD_Cyl4cXyzff */
-void daNpcSv_c::setCollision(dCcD_Cyl*, cXyz, f32, f32) {
-    /* Nonmatching */
+void daNpcSv_c::setCollision(dCcD_Cyl* i_cyl, cXyz i_center, f32 i_radius, f32 i_height) {
+    i_cyl->SetC(i_center);
+    i_cyl->SetR(i_radius);
+    i_cyl->SetH(i_height);
+    dComIfG_Ccsp()->Set(i_cyl);
 }
 
 /* 000027E0-0000293C       .text getTalkNo__9daNpcSv_cFv */

@@ -87,7 +87,7 @@ public:
     void lookBack();
     void playAnm();
     void setAnm(u8, int, f32);
-    void setAnmTbl(sSvAnmDat*);
+    bool setAnmTbl(sSvAnmDat*);
     void setCollision(dCcD_Cyl*, cXyz, f32, f32);
     u32 getTalkNo();
     BOOL isTalkOK();
@@ -100,9 +100,9 @@ private:
     /* 0x6DC */ u8 padding_0x6DC[0x6EC - 0x6DC];
     /* 0x6EC */ cXyz field_0x6EC;
     /* 0x6F8 */ u8 padding_0x6F8[0x704 - 0x6F8];
-    /* 0x704 */ int field_0x704;
+    /* 0x704 */ sSvAnmDat* mpAnmDat;
     /* 0x708 */ int field_0x708;
-    /* 0x70C */ f32 field_0x70C;
+    /* 0x70C */ f32 mAnmMorfOverride;
     /* 0x710 */ f32 field_0x710;
     /* 0x714 */ s16 field_0x714;
     /* 0x716 */ s16 field_0x716;
@@ -126,9 +126,9 @@ private:
     /* 0x73A */ u8 mResFlag;
     /* 0x73B */ u8 mNpcNo;
     /* 0x73C */ u8 field_0x73C;
-    /* 0x73D */ u8 field_0x73D;
+    /* 0x73D */ u8 mBckIdx;
     /* 0x73E */ u8 field_0x73E;
-    /* 0x73F */ u8 field_0x73F;
+    /* 0x73F */ s8 mAnmLoopCnt;
     /* 0x740 */ u8 field_0x740;
     /* 0x741 */ u8 field_0x741;
     /* 0x742 */ u8 field_0x742;
