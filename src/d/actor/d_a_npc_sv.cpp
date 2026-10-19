@@ -115,7 +115,24 @@ static sSvAnmDat* l_npc_anm_sv1_tbl[] = {
 
 static u32 l_npc_se_sv1_tbl[] = { 0, 0, JA_SE_CV_SALV_CRUE_AGREE, JA_SE_CV_SALV_CRUE_SI, JA_SE_CV_SALV_CRUE_BYE, 0 };
 
-static NpcDatStruct l_npc_dat = {}; // TODO
+static NpcDatStruct l_npc_dat[] = {
+    {
+        0x0FA0, 0x1770, 0x0000, 0x1F40, 0x0000,  0xE890, 0xF448, 0xE0C0, 0x03E8, 0x0000, 0.0f, -5.0f, 0.0f,
+        0.0f,   185.0f, 150.0f, 600.0f, 1500.0f, 0x7FFF, 0x03E8, 60.0f,  150.0f, 0x001E, 0x01, 0x01,
+    },
+    {
+        0x1000, 0x0000, 0x0000, 0x0000, 0xF000, 0x0000, 0x0000, 0x0000, 0x0800, 0x0000, 0.0f, 0.0f, 0.0f,
+        0.0f,   180.0f, 150.0f, 0.0f,   0.0f,   0x7FFF, 0x0800, 60.0f,  150.0f, 0x001E, 0x00, 0x01,
+    },
+    {
+        0x1000, 0x0000, 0x0000, 0x0000, 0xF000, 0x0000, 0x0000, 0x0000, 0x0800, 0x0000, 0.0f, 0.0f, 0.0f,
+        0.0f,   180.0f, 150.0f, 0.0f,   0.0f,   0x7FFF, 0x0800, 60.0f,  150.0f, 0x001E, 0x00, 0x01,
+    },
+    {
+        0x1000, 0x0000, 0x0000, 0x0000, 0xF000, 0x0000, 0x0000, 0x0000, 0x0800, 0x0000, 0.0f, 0.0f, 0.0f,
+        0.0f,   180.0f, 150.0f, 0.0f,   0.0f,   0x4000, 0x0800, 60.0f,  150.0f, 0x001E, 0x00, 0x01,
+    },
+};
 
 static u32 l_msg_sv_p1_1st_talk1[] = { 0x34BD, 0x34BE, 0x34BF, 0x34C0, 0x0002, 0x34C1, 0x34C2, 0x34C3, 0x0001, 0x34C4, 0x34E8, 0x0002, 0x34C5, 0x0004, 0x0000 };
 static u32 l_msg_sv_p1_1st_talk2[] = { 0x34BD, 0x34BE, 0x34BF, 0x34C0, 0x0002, 0x34C1, 0x34C2, 0x34C3, 0x0001, 0x34C6, 0x34E9, 0x0002, 0x34C7, 0x0004, 0x0000 };
@@ -277,6 +294,9 @@ void daNpcSv_c::eventMove() {
 /* 00001570-00001744       .text privateCut__9daNpcSv_cFv */
 void daNpcSv_c::privateCut() {
     /* Nonmatching */
+    static char* cut_name_tbl[] = {
+        "MES_SET", "GET_ITEM", "SET_ANGLE", "ATTENTION", "TURN_OK",
+    };
 }
 
 /* 00001744-00001814       .text eventMesSetInit__9daNpcSv_cFi */
