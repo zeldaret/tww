@@ -448,8 +448,8 @@ void daNpcSv_c::eventMesSetInit(int) {
 }
 
 /* 00001814-0000184C       .text eventMesSet__9daNpcSv_cFv */
-void daNpcSv_c::eventMesSet() {
-    /* Nonmatching */
+BOOL daNpcSv_c::eventMesSet() {
+    return talk2(0, this) == fopMsgStts_BOX_CLOSED_e ? TRUE : FALSE;
 }
 
 /* 0000184C-000018F0       .text eventGetItemInit__9daNpcSv_cFi */
@@ -479,11 +479,11 @@ void daNpcSv_c::eventAttention() {
 
 /* 00001BC8-00001BD4       .text eventTurnOkInit__9daNpcSv_cFv */
 void daNpcSv_c::eventTurnOkInit() {
-    /* Nonmatching */
+    field_0x743 = 1;
 }
 
 /* 00001BD4-00001CF0       .text talk2__9daNpcSv_cFiP10fopAc_ac_c */
-void daNpcSv_c::talk2(int, fopAc_ac_c*) {
+u16 daNpcSv_c::talk2(int, fopAc_ac_c*) {
     /* Nonmatching */
 }
 

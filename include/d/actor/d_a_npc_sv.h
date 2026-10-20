@@ -69,14 +69,14 @@ public:
     void eventMove();
     void privateCut();
     void eventMesSetInit(int);
-    void eventMesSet();
+    BOOL eventMesSet();
     void eventGetItemInit(int);
     bool eventGetItem();
     void eventSetAngleInit();
     void eventAttentionInit(int);
     void eventAttention();
     void eventTurnOkInit();
-    void talk2(int, fopAc_ac_c*);
+    u16 talk2(int, fopAc_ac_c*);
     virtual u16 next_msgStatus(u32*);
     virtual u32 getMsg();
     void setMessage(u32);
