@@ -89,7 +89,7 @@ public:
     void setAnm(u8, int, f32);
     bool setAnmTbl(sSvAnmDat*);
     void setCollision(dCcD_Cyl*, cXyz, f32, f32);
-    u32 getTalkNo();
+    u8 getTalkNo();
     BOOL isTalkOK();
 
 private:
@@ -118,7 +118,7 @@ private:
     /* 0x72E */ u16 field_0x72E;
     /* 0x730 */ s16 field_0x730;
     /* 0x732 */ u16 field_0x732;
-    /* 0x734 */ u16 field_0x734;
+    /* 0x734 */ u16 mTalkFlags;
     /* 0x736 */ u8 field_0x736;
     /* 0x737 */ u8 field_0x737;
     /* 0x738 */ u8 mEvtOrderType;
@@ -135,7 +135,7 @@ private:
     /* 0x743 */ u8 field_0x743;
     /* 0x744 */ u8 field_0x744;
     /* 0x745 */ u8 field_0x745;
-    /* 0x746 */ u8 field_0x746;
+    /* 0x746 */ u8 mTalkNo;
     /* 0x747 */ u8 field_0x747;
     /* 0x748 */ u8 field_0x748;
     /* 0x749 */ u8 field_0x749;

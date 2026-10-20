@@ -8,6 +8,15 @@
 #include "d/d_com_lib_game.h"
 #include "res/Object/Sv.h"
 
+enum {
+    TALK_FLAG_1ST = 0x01,
+    TALK_FLAG_2ND = 0x02,
+    TALK_FLAG_P2 = 0x04,
+    TALK_FLAG_P3 = 0x08,
+    TALK_FLAG_P4 = 0x10,
+    TALK_FLAG_GOT_CHART = 0x20,
+};
+
 static char* l_npc_staff_id[] = { "Sv0", "Sv1", "Sv2", "Sv3" };
 
 static const char* l_arcname_tbl[] = { "Sv", "Sv", "Sv", "Sv" };
@@ -189,11 +198,13 @@ static u32* l_msg_sv_talk_tbl[] = { l_msg_sv_p1_1st_talk1, l_msg_sv_p1_1st_talk2
                                     l_msg_sv_p1_3rd_talk1, l_msg_sv_p1_3rd_talk2, l_msg_sv_p2_1st_talk,  l_msg_sv_p2_2nd_talk,
                                     l_msg_sv_p3_1st_talk,  l_msg_sv_p3_2nd_talk,  l_msg_sv_p4_1st_talk,  l_msg_sv_p4_2nd_talk };
 
-static u16 l_msg_sv_flag_tbl[] = { 0x01, 0x01, 0x02, 0x02, 0x00, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00 };
+static u16 l_msg_sv_flag_tbl[] = {
+    TALK_FLAG_1ST, TALK_FLAG_1ST, TALK_FLAG_2ND, TALK_FLAG_2ND, 0, 0, TALK_FLAG_P2, 0, TALK_FLAG_P3, 0, TALK_FLAG_P4, 0,
+};
 
 static s16 l_event_id_tbl[] = { 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
 
-static u32 l_get_item_no[] = { 0xE5 };
+static u32 l_get_item_no[] = { dItemNo_COLLECT_MAP_26_e };
 
 typedef int (daNpcSv_c::*ExecuteInit_t)();
 static ExecuteInit_t l_execute_init[] = {
@@ -218,11 +229,11 @@ daNpcSv_c::daNpcSv_c() {
     field_0x742 = 1;
     field_0x728 = home.angle.y;
     mBckIdx = 0;
-    field_0x734 = 0;
+    mTalkFlags = 0;
     field_0x718 = 0;
 
-    if (dComIfGs_checkGetItem(dItemNo_TRIFORCE_MAP_8_e | dItemNo_TRIFORCE5_e)) {
-        field_0x734 |= 0x20;
+    if (dComIfGs_checkGetItem(dItemNo_COLLECT_MAP_26_e)) {
+        mTalkFlags |= TALK_FLAG_GOT_CHART;
     }
 }
 
@@ -563,8 +574,53 @@ void daNpcSv_c::setCollision(dCcD_Cyl* i_cyl, cXyz i_center, f32 i_radius, f32 i
 }
 
 /* 000027E0-0000293C       .text getTalkNo__9daNpcSv_cFv */
-u32 daNpcSv_c::getTalkNo() {
-    /* Nonmatching */
+u8 daNpcSv_c::getTalkNo() {
+    int isGrapplingHook;
+    if (dComIfGs_checkGetItem(dItemNo_GRAPPLING_HOOK_e)) {
+        isGrapplingHook = 1;
+    } else {
+        isGrapplingHook = 0;
+    }
+
+    mTalkNo = 0;
+    if (!(mTalkFlags & TALK_FLAG_GOT_CHART)) {
+        if (!(mTalkFlags & TALK_FLAG_1ST)) {
+            if (isGrapplingHook) {
+                mTalkNo = 1;
+            } else {
+                mTalkNo = 0;
+            }
+        } else if (!(mTalkFlags & TALK_FLAG_2ND)) {
+            if (isGrapplingHook) {
+                mTalkNo = 3;
+            } else {
+                mTalkNo = 2;
+            }
+        } else {
+            if (isGrapplingHook) {
+                mTalkNo = 5;
+            } else {
+                mTalkNo = 4;
+            }
+        }
+    } else if (!isGrapplingHook) {
+        if (!(mTalkFlags & TALK_FLAG_P2)) {
+            mTalkNo = 6;
+        } else {
+            mTalkNo = 7;
+        }
+    } else if (!dComIfGs_isCollect(0, 1)) {
+        if (!(mTalkFlags & TALK_FLAG_P3)) {
+            mTalkNo = 8;
+        } else {
+            mTalkNo = 9;
+        }
+    } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_2F80)) {
+        mTalkNo = 10;
+    } else {
+        mTalkNo = 11;
+    }
+    return mTalkNo;
 }
 
 /* 0000293C-00002958       .text isTalkOK__9daNpcSv_cFv */
@@ -601,11 +657,8 @@ static BOOL daNpc_PeopleIsDelete(void*) {
 }
 
 static actor_method_class daNpc_PeopleMethodTable = {
-    (process_method_func)daNpc_PeopleCreate,
-    (process_method_func)daNpc_PeopleDelete,
-    (process_method_func)daNpc_PeopleExecute,
-    (process_method_func)daNpc_PeopleIsDelete,
-    (process_method_func)daNpc_PeopleDraw,
+    (process_method_func)daNpc_PeopleCreate,   (process_method_func)daNpc_PeopleDelete, (process_method_func)daNpc_PeopleExecute,
+    (process_method_func)daNpc_PeopleIsDelete, (process_method_func)daNpc_PeopleDraw,
 };
 
 actor_process_profile_definition g_profile_NPC_SV = {
