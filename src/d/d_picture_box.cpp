@@ -19,7 +19,9 @@
 #include "d/actor/d_a_player.h"
 #include "d/d_meter.h"
 #include "d/d_snap.h"
+
 #include <stdio.h>
+
 
 const static u8 photo_idx[] = {
     0x88,

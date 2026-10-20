@@ -8,8 +8,9 @@
 #include "JSystem/JStudio/JStudio_JAudio/object-sound.h"
 #include "JSystem/JAudio/JAISound.h"
 #include "JSystem/JAudio/JAIBasic.h"
-#include "math.h"
 #include "dolphin/types.h"
+
+#include <cmath>
 
 namespace JStudio_JAudio {
 

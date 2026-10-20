@@ -8,8 +8,9 @@
 #include "JSystem/JStudio/JStudio/stb.h"
 #include "JSystem/JStudio/JStudio/jstudio-object.h"
 #include "dolphin/types.h"
-#include "algorithm.h"
-#include "string.h"
+
+#include <algorithm>
+#include <cstring>
 
 namespace JStudio {
 namespace stb {

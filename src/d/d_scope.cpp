@@ -19,8 +19,9 @@
 #include "d/d_demo.h"
 #include "f_op/f_op_camera.h"
 #include "d/d_meter.h"
-#include <string.h>
+
 #include <stdio.h>
+#include <cstring>
 
 static J2DScreen* dScp_ScpScreen;
 static J2DScreen* dScp_MsgScreen;

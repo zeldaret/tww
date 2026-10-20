@@ -17,7 +17,8 @@
 #include "m_Do/m_Do_gba_com.h"
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_gba_com.h"
-#include "stdio.h"
+
+#include <stdio.h>
 
 
 enum {

@@ -8,7 +8,8 @@
 #include "JSystem/J3DU/J3DUClipper.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "math.h"
+
+#include <cmath>
 
 #include "weak_bss_3569.h" // IWYU pragma: keep
 

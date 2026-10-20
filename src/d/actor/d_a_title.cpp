@@ -13,7 +13,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/J2DGraph/J2DScreen.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
-#include "stdio.h"
+
 
 #if VERSION <= VERSION_JPN
 #include "res/Object/Tlogo.h"
@@ -23,6 +23,7 @@
 #endif
 #if VERSION == VERSION_PAL
 #include "res/Object/TlogoE0.h"
+#include <stdio.h>
 #endif
 
 // Note: For VERSION_PAL the "TlogoE0" string literal is modified at runtime.

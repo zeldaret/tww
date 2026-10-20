@@ -9,6 +9,10 @@
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 
+#if VERSION == VERSION_PAL
+    #include <stdio.h>
+#endif
+
 // These items won't appear in your inventory during the greyscale boss rematches.
 #define IS_RECOLLECT_DISABLED_ITEM(itemNo) (recollectBossCheck() && (itemNo == dItemNo_WATER_BOTTLE_e || itemNo == dItemNo_FIREFLY_BOTTLE_e || itemNo == dItemNo_FOREST_WATER_e))
 

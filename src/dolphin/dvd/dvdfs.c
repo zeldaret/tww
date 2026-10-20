@@ -2,6 +2,8 @@
 #include "dolphin/dvd/dvdlow.h"
 #include "dolphin/os/OS.h"
 
+#include "ctype.h"
+
 struct FSTEntry {
     /* 0x00 */ u32 isDirAndStringOff;
     /* 0x04 */ u32 parentOrPosition;

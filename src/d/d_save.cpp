@@ -18,8 +18,10 @@
 #include "JSystem/JUtility/JUTGamePad.h"
 #include "SSystem/SComponent/c_lib.h"
 #include "SSystem/SComponent/c_math.h"
-#include "string.h"
-#include "stdio.h"
+
+#include <stdio.h>
+#include <cstring>
+
 
 /* 800589A8-80058B54       .text init__21dSv_player_status_a_cFv */
 void dSv_player_status_a_c::init() {

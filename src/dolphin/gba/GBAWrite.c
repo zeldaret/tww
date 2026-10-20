@@ -1,5 +1,6 @@
 #include "dolphin/gba/GBAPriv.h"
-#include "string.h"
+
+#include <string.h>
 
 static void WriteProc(s32 chan) {
     GBAControl* gba;

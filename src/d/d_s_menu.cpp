@@ -22,7 +22,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_main.h"
 #if VERSION == VERSION_PAL
-#include "stdio.h"
+    #include <stdio.h>
 #endif
 
 static s32 l_startID;

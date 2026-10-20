@@ -1,8 +1,9 @@
 #ifndef C_XYZ_H
 #define C_XYZ_H
 
-#include "math.h" // IWYU pragma: keep
 #include "dolphin/mtx/vec.h"
+
+#include <cmath> // IWYU pragma: keep
 
 struct cXy {
     f32 x;

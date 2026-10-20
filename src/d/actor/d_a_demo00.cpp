@@ -21,7 +21,8 @@
 #include "m_Do/m_Do_mtx.h"
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
-#include "string.h"
+
+#include <cstring>
 
 struct light_data_s {
     /* 0x00 */ bool useJoint;

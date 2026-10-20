@@ -4,7 +4,9 @@
 #include "m_Do/m_Do_controller_pad.h"
 #include "JSystem/J2DGraph/J2DTextBox.h"
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
-#include "stdio.h"
+
+#include <stdio.h>
+
 
 /* 80215E38-80215F64       .text __ct__9dNm_HIO_cFv */
 dNm_HIO_c::dNm_HIO_c() {

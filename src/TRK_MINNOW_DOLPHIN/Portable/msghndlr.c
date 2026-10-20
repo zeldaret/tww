@@ -4,6 +4,8 @@
 #include "trk.h"
 #include "string.h"
 
+#include "global.h"
+
 static BOOL IsTRKConnected;
 
 BOOL GetTRKConnected(void) {

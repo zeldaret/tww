@@ -13,7 +13,8 @@
 #include "JSystem/JAudio/JAISoundTable.h"
 #include "JSystem/JAudio/JAISystemInterface.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "math.h"
+
+#include <cmath>
 
 namespace JAISeMgr = JAInter::SeMgr;
 

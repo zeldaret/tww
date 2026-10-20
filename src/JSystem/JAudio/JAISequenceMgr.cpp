@@ -13,7 +13,8 @@
 #include "JSystem/JAudio/JAISystemInterface.h"
 #include "JSystem/JAudio/JASResArcLoader.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "string.h"
+
+#include <cstring>
 
 JAInter::LinkSound JAInter::SequenceMgr::seqControl;
 JAInter::SeqUpdateData* JAInter::SequenceMgr::seqTrackInfo;

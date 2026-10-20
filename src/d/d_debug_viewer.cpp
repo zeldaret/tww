@@ -10,7 +10,8 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTReport.h"
-#include "stdio.h"
+
+#include <stdio.h>
 
 J3DPacket* l_drawPacketList[1000];
 int l_drawPacketListNum;

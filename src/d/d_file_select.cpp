@@ -14,6 +14,7 @@
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_hostIO.h"
 #include "m_Do/m_Do_controller_pad.h"
+
 #include <stdio.h>
 
 dFs_HIO_c g_fsHIO;
