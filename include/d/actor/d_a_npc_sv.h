@@ -127,7 +127,7 @@ private:
     /* 0x73B */ u8 mNpcNo;
     /* 0x73C */ u8 field_0x73C;
     /* 0x73D */ u8 mBckIdx;
-    /* 0x73E */ u8 field_0x73E;
+    /* 0x73E */ u8 mAnmFlag;
     /* 0x73F */ s8 mAnmLoopCnt;
     /* 0x740 */ u8 field_0x740;
     /* 0x741 */ u8 field_0x741;

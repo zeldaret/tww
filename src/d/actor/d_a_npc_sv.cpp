@@ -504,7 +504,27 @@ void daNpcSv_c::setMessage(u32 i_message) {
 
 /* 00001EBC-00001F74       .text setAnmFromMsgTag__9daNpcSv_cFv */
 void daNpcSv_c::setAnmFromMsgTag() {
-    /* Nonmatching */
+    switch (dComIfGp_getMesgAnimeAttrInfo()) {
+        case 0:
+            setAnmTbl(&l_npc_anm_wait);
+            break;
+        case 1:
+            setAnmTbl(l_npc_anm_ya1);
+            break;
+        case 2:
+            setAnmTbl(&l_npc_anm_talk);
+            break;
+        case 3:
+            setAnmTbl(&l_npc_anm_talk2);
+            break;
+        case 4:
+            setAnmTbl(&l_npc_anm_talk3);
+            break;
+        case 5:
+            setAnmTbl(l_npc_anm_ya2);
+            break;
+    }
+    dComIfGp_setMesgAnimeAttrInfo(0xFF);
 }
 
 /* 00001F74-00001F94       .text getPrmNpcNo__9daNpcSv_cFv */
@@ -532,7 +552,18 @@ void daNpcSv_c::lookBack() {
 
 /* 00002520-000025E8       .text playAnm__9daNpcSv_cFv */
 void daNpcSv_c::playAnm() {
-    /* Nonmatching */
+    mAnmFlag &= ~1;
+    if (mpMorf->play(NULL, 0, 0) && mpAnmDat != NULL && mAnmLoopCnt > 0) {
+        mAnmLoopCnt--;
+        if (mAnmLoopCnt == 0) {
+            mpAnmDat++;
+            if (setAnmTbl(mpAnmDat)) {
+                mAnmFlag |= 1;
+            }
+        } else {
+            setAnm(mpAnmDat->mBckIdx, J3DFrameCtrl::EMode_NONE, 0.0f);
+        }
+    }
 }
 
 /* 000025E8-000026C8       .text setAnm__9daNpcSv_cFUcif */
