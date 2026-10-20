@@ -1137,63 +1137,59 @@ bool daNpc_Mk_c::visit01() {
             dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0580);
             fopAcM_OffStatus(this, fopAcStts_UNK4000_e);
         }
+    } else if(checkDemoStart()) {
+        mPrevState = mState;
+        mState = STATE_DEMO01;
+        setAnmStatus();
+        speedF = 0.0f;
+        mVisitMode = VISIT_TALK;
+        demo01();
+        
     } else {
-        if(checkDemoStart()) {
-            mPrevState = mState;
-            mState = STATE_DEMO01;
-            setAnmStatus();
-            speedF = 0.0f;
-            mVisitMode = VISIT_TALK;
-            demo01();
-            
+        u8 nextvisitMode = nextVisitMode();
+        if(nextvisitMode != mVisitMode) {
+            visitInit(nextvisitMode);
+        }
+        visitProc();
+        if (mAnmIdx == 4) {
+            temp = 2.5f;
+        } else if (mAnmIdx == 5) {
+            if (mVisitMode == 5) {
+                temp = 9.0f;
+            } else {
+                temp = 12.0f;
+            }
+        }
+
+        if (speedF > temp) {
+            cLib_chaseF(&speedF, temp, 2.8f);
         } else {
-            u8 nextvisitMode = nextVisitMode();
-            if(nextvisitMode != mVisitMode) {
-                visitInit(nextvisitMode);
-            }
-            visitProc();
-            if (mAnmIdx == 4) {
-                temp = 2.5f;
-            } else if (mAnmIdx == 5) {
-                if (mVisitMode == 5) {
-                    temp = 9.0f;
-                } else {
-                    temp = 12.0f;
-                }
-            }
+            cLib_chaseF(&speedF, temp, 1.1f);
+        }
+        SetOrder(0x1);
+        
+        if (mVisitMode == 4 || mVisitMode == 5) {
+            daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
 
-            if (speedF > temp) {
-                cLib_chaseF(&speedF, temp, 2.8f);
-            } else {
-                cLib_chaseF(&speedF, temp, 1.1f);
+            s16 angle = fopAcM_searchActorAngleY(pLink, this);
+            angle -= pLink->shape_angle.y;
+            if (angle < 0) {
+                angle = -angle;
             }
-            SetOrder(0x1);
-            
-            if (mVisitMode == 4 || mVisitMode == 5) {
-                daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
+            if (angle > 0x1800) {
+                ClrOrder(0x01);
+            }
+        }
 
-                s16 angle = fopAcM_searchActorAngleY(pLink, this);
-                angle -= pLink->shape_angle.y;
-                if (angle < 0) {
-                    angle = -angle;
-                }
-                if (angle > 0x1800) {
-                    mOrderFlags &= ~0x01; // is this an inline?
-                }
-            }
+        if (field_0x6A4 != 0) {
+            ClrOrder(0x01);
+        }
 
-            if (field_0x6A4 != 0) {
-                mOrderFlags &= ~0x01; // is this an inline?
-            }
-
-            if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F80) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E02) && dComIfGs_isTmpBit(dSv_event_flag_c::UNK_0580)) {
-                SetOrder(0x2);
-                eventInfo.setEventName("MK_TALK4");
-            } else {
-                if (ChkOrder(0x1)) {
-                    visitSetEvent();
-                }
-            }
+        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_1F80) && !dComIfGs_isEventBit(dSv_event_flag_c::UNK_1E02) && dComIfGs_isTmpBit(dSv_event_flag_c::UNK_0580)) {
+            SetOrder(0x2);
+            eventInfo.setEventName("MK_TALK4");
+        } else if (ChkOrder(0x1)) {
+            visitSetEvent();
         }
     }
     return true;
@@ -1285,15 +1281,13 @@ bool daNpc_Mk_c::jitanda02() {
     if(chkFlag(0x1)) {
         mPrevState = 9;
         mState = STATE_TALK02;
+    } else if(checkDemoStart()) {
+        mPrevState = mState;
+        mState = STATE_DEMO01;
+        speedF = 0.0f;
+        demo01();
     } else {
-        if(checkDemoStart()) {
-            mPrevState = mState;
-            mState = STATE_DEMO01;
-            speedF = 0.0f;
-            demo01();
-        } else {
-            SetOrder(0x1);
-        }
+        SetOrder(0x1);
     }
     return true;
 }

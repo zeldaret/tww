@@ -2006,14 +2006,12 @@ BOOL daNpc_Ls1_c::wait_2() {
             m853 = 2;
             m838 = true; 
             return TRUE;
+        } else if (mbAttention && mBckNum == BCKNUM_WAIT01_e) {
+            m853 = 1;
+            return TRUE;
         } else {
-            if (mbAttention && mBckNum == BCKNUM_WAIT01_e) {
-                m853 = 1;
-                return TRUE;
-            } else {
-                m853 = 0;
-                return TRUE;
-            }
+            m853 = 0;
+            return TRUE;
         }
     }
 }
@@ -2128,13 +2126,11 @@ BOOL daNpc_Ls1_c::wait_action1(void* param_1) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A80)) {
                 if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
                     setStt(3);
+                } else if (dComIfGs_checkGetItem(dItemNo_TELESCOPE_e)) {
+                    m7A0.y = current.angle.y;
+                    setStt(2);
                 } else {
-                    if (dComIfGs_checkGetItem(dItemNo_TELESCOPE_e)) {
-                        m7A0.y = current.angle.y;
-                        setStt(2);
-                    } else {
-                        setStt(1);
-                    }
+                    setStt(1);
                 }
             } else {
                 setStt(4);

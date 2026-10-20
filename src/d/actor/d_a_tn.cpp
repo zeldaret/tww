@@ -1014,7 +1014,7 @@ static void jyunkai(tn_class* i_this) {
             local_3c.z = i_this->mPathXyz.z - actor->current.pos.z;
             i_this->mDamageReaction.m4D0 = cM_atan2s(local_3c.x, local_3c.z);
             if (i_this->m1424 != 0 && (i_this->m0C34 != 0 || i_this->m13FF != 0)) {
-                if (std::sqrtf(SQUARE(local_3c.x) + SQUARE(local_3c.z)) < (f31 * 0.25f) * 15.0f) {
+                if (std::sqrtf(SQUARE(local_3c.x) + SQUARE(local_3c.z)) < f31 * 0.25f * 15.0f) {
                     dPnt* point = i_this->ppd->m_points;
                     point = &point[i_this->m1425];
                     if (point->mArg3 == 3 || point->mArg3 == 7 || point->mArg3 == 8) {
@@ -1027,14 +1027,15 @@ static void jyunkai(tn_class* i_this) {
                         i_this->mDamageReaction.mMode = -1;
                     }
                 }
-            } else {
-                if ((std::sqrtf(SQUARE(local_3c.x) + SQUARE(local_3c.z)) < (f31 * 0.25f) * 2.0f) ||
-                    (i_this->mCountDownTimers[2] == 0 &&
-                    (i_this->mDamageReaction.mAcch.ChkWallHit() || ground_4_check(i_this, 1, actor->current.angle.y, 200.0f))))
-                {
-                    wait_set(i_this);
-                    i_this->mDamageReaction.mMode = 2;
-                }
+            } else if (
+                std::sqrtf(SQUARE(local_3c.x) + SQUARE(local_3c.z)) < f31 * 0.25f * 2.0f ||
+                (
+                    i_this->mCountDownTimers[2] == 0 &&
+                    (i_this->mDamageReaction.mAcch.ChkWallHit() || ground_4_check(i_this, 1, actor->current.angle.y, 200.0f))
+                )
+            ) {
+                wait_set(i_this);
+                i_this->mDamageReaction.mMode = 2;
             }
             cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mDamageReaction.m4D0, 4, maxSpeed);
             cLib_addCalc2(&actor->speedF, f31, 1.0f, 5.0f);
@@ -1532,20 +1533,18 @@ static void fight(tn_class* i_this) {
                         if (frame == 20) {
                             fopAcM_monsSeStart(actor, JA_SE_CV_TN_ATTACK_S, 0);
                         }
-                    } else {
-                        if (i_this->m0C48 == 1) {
-                            f31 = 0.0f;
-                            f30 = 25.0f;
-                            attackType = fopEn_enemy_c::OPENING_JUMP_PARRY;
-                            if (REG0_S(2) + 0x11 == (int)i_this->mpBodyMorf->getFrame()) {
-                                i_this->m0430 = (REG0_S(3) + 0xE) + l_tnHIO.m020;
-                                i_this->m0432 = 0;
-                                i_this->m042E = (actor->current.angle.y + 0x2000) + REG0_S(8);
-                            }
-                            frame = (int)i_this->mpBodyMorf->getFrame();
-                            if (frame == 20) {
-                                fopAcM_monsSeStart(actor, JA_SE_CV_TN_ATTACK_S, 0);
-                            }
+                    } else if (i_this->m0C48 == 1) {
+                        f31 = 0.0f;
+                        f30 = 25.0f;
+                        attackType = fopEn_enemy_c::OPENING_JUMP_PARRY;
+                        if (REG0_S(2) + 0x11 == (int)i_this->mpBodyMorf->getFrame()) {
+                            i_this->m0430 = (REG0_S(3) + 0xE) + l_tnHIO.m020;
+                            i_this->m0432 = 0;
+                            i_this->m042E = (actor->current.angle.y + 0x2000) + REG0_S(8);
+                        }
+                        frame = (int)i_this->mpBodyMorf->getFrame();
+                        if (frame == 20) {
+                            fopAcM_monsSeStart(actor, JA_SE_CV_TN_ATTACK_S, 0);
                         }
                     }
                     if (i_this->m0C48 == 0 || i_this->m0C48 == 4) {
@@ -2254,7 +2253,7 @@ static void stand(tn_class* i_this) {
         case 52:
             local_30 = actor->home.pos - actor->current.pos;
             i_this->mDamageReaction.m4D0 = cM_atan2s(local_30.x, local_30.z);
-            if (std::sqrtf(SQUARE(local_30.x) + SQUARE(local_30.z)) < (l_tnHIO.m054 * 0.25f) * 5.0f) {
+            if (std::sqrtf(SQUARE(local_30.x) + SQUARE(local_30.z)) < l_tnHIO.m054 * 0.25f * 5.0f) {
                 i_this->mDamageReaction.mMode = 0;
             }
             cLib_addCalcAngleS2(&actor->current.angle.y, i_this->mDamageReaction.m4D0, 4, 0x1000);

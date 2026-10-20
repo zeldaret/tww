@@ -513,28 +513,26 @@ bool Act_c::damage_cc_proc() {
         mCyl.ClrAtHit();
         damaged(3);
         iVar3 = true;
-    } else {
-        if (mCyl.ChkTgHit()) {
-            cCcD_Obj* hitObj = mCyl.GetTgHitObj();
-            if (hitObj != NULL) {
-                if (m670 != 3 && hitObj->ChkAtType(AT_TYPE_BOMB)) {
-                    damaged(7);
-                    iVar3 = true;
-                } else if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER)) {
-                    damaged(7);
-                    iVar3 = true;
-                }
+    } else if (mCyl.ChkTgHit()) {
+        cCcD_Obj* hitObj = mCyl.GetTgHitObj();
+        if (hitObj != NULL) {
+            if (m670 != 3 && hitObj->ChkAtType(AT_TYPE_BOMB)) {
+                damaged(7);
+                iVar3 = true;
+            } else if (hitObj->ChkAtType(AT_TYPE_SKULL_HAMMER)) {
+                damaged(7);
+                iVar3 = true;
             }
-
-            if (!iVar3) {
-                daObj::HitSeStart(&eyePos, current.roomNo, &mCyl, data().m9C);
-                set_senv(data().m6A, data().m6B);
-                daObj::HitEff_hibana(this, &mCyl);
-            }
-            mCyl.ClrTgHit();
-        } else {
-            iVar3 = false;
         }
+
+        if (!iVar3) {
+            daObj::HitSeStart(&eyePos, current.roomNo, &mCyl, data().m9C);
+            set_senv(data().m6A, data().m6B);
+            daObj::HitEff_hibana(this, &mCyl);
+        }
+        mCyl.ClrTgHit();
+    } else {
+        iVar3 = false;
     }
     return iVar3;
 }

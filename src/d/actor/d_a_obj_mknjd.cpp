@@ -406,28 +406,26 @@ u16 daObjMknjD::Act_c::talk(int i_param1) {
         mMsgPID = fopMsgM_messageSet(mMsgNo, this);
         mMsgPtr = NULL;
     }
+    else if (mMsgPtr) {
+        msgStatus = mMsgPtr->mStatus;
+
+        if (msgStatus == fopMsgStts_MSG_DISPLAYED_e) {
+            if (dComIfGp_checkMesgCancelButton() != 0) {
+                m0504 = true;
+                fopMsgM_messageSendOn();
+            }
+
+            anmAtr(fopMsgStts_MSG_ENDS_e);
+            mMsgPtr->mStatus = fopMsgStts_MSG_ENDS_e;
+        }
+        else if (msgStatus == fopMsgStts_BOX_CLOSED_e) {
+            anmAtr(fopMsgStts_MSG_DESTROYED_e);
+            mMsgPtr->mStatus = fopMsgStts_MSG_DESTROYED_e;
+            mMsgPID = fpcM_ERROR_PROCESS_ID_e;
+        }
+    }
     else {
-        if (mMsgPtr) {
-            msgStatus = mMsgPtr->mStatus;
-
-            if (msgStatus == fopMsgStts_MSG_DISPLAYED_e) {
-                if (dComIfGp_checkMesgCancelButton() != 0) {
-                    m0504 = true;
-                    fopMsgM_messageSendOn();
-                }
-
-                anmAtr(fopMsgStts_MSG_ENDS_e);
-                mMsgPtr->mStatus = fopMsgStts_MSG_ENDS_e;
-            }
-            else if (msgStatus == fopMsgStts_BOX_CLOSED_e) {
-                anmAtr(fopMsgStts_MSG_DESTROYED_e);
-                mMsgPtr->mStatus = fopMsgStts_MSG_DESTROYED_e;
-                mMsgPID = fpcM_ERROR_PROCESS_ID_e;
-            }
-        }
-        else {
-            mMsgPtr = fopMsgM_SearchByID(mMsgPID);
-        }
+        mMsgPtr = fopMsgM_SearchByID(mMsgPID);
     }
 
     return msgStatus;

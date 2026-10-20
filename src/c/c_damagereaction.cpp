@@ -1024,25 +1024,23 @@ int dr_damage_set(damagereaction* dr) {
                 dr->mMode = 0;
                 dr->m71E = 2;
             }
-            else {
-                if(dr->m6E8.y - dr->mSpawnY > 300.0f) {
-                    dr->m7A0 = dr->m6E8;
-                    dr->m7AC.y = hang_ang_get(dr);
-                    if(dr->m7AC.y == 0xDCF) {
-                        temp = true;
-                        dr->mpEnemy->health = 0;
-                    }
-                    else {
-                        dr->mAction = 0x13;
-                        dr->mMode = 0;
-                        dr->m71E = 2;
-                        dr->m7B8 = fpcM_ERROR_PROCESS_ID_e;
-                    }
-                }
-                else {
+            else if(dr->m6E8.y - dr->mSpawnY > 300.0f) {
+                dr->m7A0 = dr->m6E8;
+                dr->m7AC.y = hang_ang_get(dr);
+                if(dr->m7AC.y == 0xDCF) {
                     temp = true;
                     dr->mpEnemy->health = 0;
                 }
+                else {
+                    dr->mAction = 0x13;
+                    dr->mMode = 0;
+                    dr->m71E = 2;
+                    dr->m7B8 = fpcM_ERROR_PROCESS_ID_e;
+                }
+            }
+            else {
+                temp = true;
+                dr->mpEnemy->health = 0;
             }
         }
     }

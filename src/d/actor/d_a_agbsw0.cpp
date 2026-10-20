@@ -1436,11 +1436,9 @@ BOOL daAgbsw0_c::ExeSubB() {
                     agb->setDenyMessage(getMsgNo());
                     field_0x298 = 1;
                 }
-                else {
-                    if(field_0x298 == 1) {
-                        agb->offBombDeny();
-                        field_0x298 = 0;
-                    }
+                else if(field_0x298 == 1) {
+                    agb->offBombDeny();
+                    field_0x298 = 0;
                 }
             }
             else {
@@ -1449,11 +1447,9 @@ BOOL daAgbsw0_c::ExeSubB() {
                     agb->field_0x65e = getMsgNo();
                     field_0x298 = 1;
                 }
-                else {
-                    if(field_0x298 == 1) {
-                        agb->field_0x67b = false;
-                        field_0x298 = 0;
-                    }
+                else if(field_0x298 == 1) {
+                    agb->field_0x67b = false;
+                    field_0x298 = 0;
                 }
             }
         }
@@ -1637,11 +1633,9 @@ BOOL daAgbsw0_c::ExeSubFA() {
                     MailSend(BigLittleChange(getMsgNo()) >> 0x10, 0xD, getSw1(), sw0, 0);
                     field_0x298 = 1;
                 }
-                else {
-                    if(field_0x298 == 1) {
-                        MailSend(-1, 0, 0xFF, 0xFF, 0);
-                        field_0x298 = 0;
-                    }
+                else if(field_0x298 == 1) {
+                    MailSend(-1, 0, 0xFF, 0xFF, 0);
+                    field_0x298 = 0;
                 }
             }
         }

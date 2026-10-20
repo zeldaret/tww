@@ -50,7 +50,7 @@ static dCcD_SrcCyl cyl_check_src = {
 BOOL daObjVfan::Act_c::CreateHeap() {
     J3DModelData* model_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_VFAN_BDL_V_FAN_00_e));
 
-    JUT_ASSERT(0x8c, model_data != NULL);
+    JUT_ASSERT(140, model_data != NULL);
 
     mpModel = mDoExt_J3DModel__create(model_data, 0, 0x11020203);
 
@@ -89,13 +89,13 @@ cPhs_State daObjVfan::Act_c::Mthd_Create() {
     cPhs_State phase_state;
     if (fopAcM_isSwitch(this, prm_get_swSave())) {
         return cPhs_STOP_e;
-    } else {
-        phase_state = dComIfG_resLoad(&mPhs, M_arcname);
-        if (phase_state == cPhs_COMPLEATE_e) {
-            phase_state = MoveBGCreate(M_arcname, dRes_INDEX_VFAN_DZB_V_FAN_00_e, NULL, 0xa60);
+    }
 
-            JUT_ASSERT(0xc6, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
-        }
+    phase_state = dComIfG_resLoad(&mPhs, M_arcname);
+    if (phase_state == cPhs_COMPLEATE_e) {
+        phase_state = MoveBGCreate(M_arcname, dRes_INDEX_VFAN_DZB_V_FAN_00_e, NULL, 0xa60);
+
+        JUT_ASSERT(198, (phase_state == cPhs_COMPLEATE_e) || (phase_state == cPhs_ERROR_e));
     }
 
     return phase_state;

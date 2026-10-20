@@ -847,11 +847,9 @@ int daNpc_kam_c::waitPlayerAction(void*) {
         if (mAnmIdx != ANM_WAIT2) {
             if (mFlapTimer != 0) {
                 setAnm(ANM_WAIT2);
-            } else {
-                if (cLib_calcTimer(&mC08) == 0) {
-                    mC08 = cLib_getRndValue(90, 90);
-                    setAnm(ANM_SING);
-                }
+            } else if (cLib_calcTimer(&mC08) == 0) {
+                mC08 = cLib_getRndValue(90, 90);
+                setAnm(ANM_SING);
             }
             
             if (mAnmIdx == ANM_SING) {

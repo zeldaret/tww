@@ -569,10 +569,10 @@ char* fopMsgM_messageGet(char* i_dest, u32 i_msgNo) {
     while (*src != '\0') {
         if ((u8)*src == 0x1A) {
             u32 next_as_int = *(u32*)(++src);
-            if ((next_as_int & 0xFFFFFF) == 0x1E) {
+            if ((next_as_int & 0xFFFFFF) == MsgCtrlCode_SELECT_YOKO_LEFT) {
                 *dst = 0x1A;
                 dst++;
-            } else if ((next_as_int & 0xFFFFFF) == 0) {
+            } else if ((next_as_int & 0xFFFFFF) == MsgCtrlCode_PLAYER_NAME) {
 #if VERSION <= VERSION_JPN
                 for (const char* player_name_p = dComIfGs_getPlayerName(); *player_name_p != '\0'; player_name_p++) {
                     *dst = *player_name_p;
@@ -636,7 +636,7 @@ char* fopMsgM_passwordGet(char* i_dest, u32 i_msgNo) {
     while (*src != '\0') {
         if ((u8)*src == 0x1A) {
             u32 next_as_int = *(u32*)(++src);
-            if ((next_as_int & 0xFFFFFF) == 0) {
+            if ((next_as_int & 0xFFFFFF) == MsgCtrlCode_PLAYER_NAME) {
 #if VERSION <= VERSION_JPN
                 const char* player_name_p = dComIfGs_getPlayerName();
                 for (; *player_name_p != '\0'; player_name_p++) {

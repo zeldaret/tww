@@ -493,11 +493,9 @@ static BOOL daMbdoor_actionCloseWait(daMbdoor_c* i_this) {
         i_this->setAction(5);
         dComIfG_Bgsp()->Release(i_this->mpBgW);
         i_this->field_0x2ac = false;
-    } else {
-        if (i_this->checkArea()) {
-            i_this->eventInfo.setEventName("MBDOOR_OPEN");
-            i_this->eventInfo.onCondition(dEvtCnd_CANDOOR_e);
-        }
+    } else if (i_this->checkArea()) {
+        i_this->eventInfo.setEventName("MBDOOR_OPEN");
+        i_this->eventInfo.onCondition(dEvtCnd_CANDOOR_e);
     }
     return TRUE;
 }

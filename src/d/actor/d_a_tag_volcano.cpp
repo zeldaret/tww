@@ -84,44 +84,42 @@ bool daTagvolcano::Act_c::_execute() {
                 field_0x2a0--;
                 if (field_0x2a0 == 0)
                     fopAcM_offSwitch(this, prm_get_swSave());
-            } else {
-                if (field_0x298 == 1) {
-                    if (dComIfG_getTimerPtr() != NULL) {
-                        if (field_0x299 == 0) {
-                            dComIfG_TimerStart(3, 0);
-                            field_0x299 = 1;
+            } else if (field_0x298 == 1) {
+                if (dComIfG_getTimerPtr() != NULL) {
+                    if (field_0x299 == 0) {
+                        dComIfG_TimerStart(3, 0);
+                        field_0x299 = 1;
+                    } else {
+                        if (dComIfGp_event_runCheck()) {
+                            if (dComIfG_getTimerMode() == 3)
+                                dComIfG_TimerStop(2);
                         } else {
-                            if (dComIfGp_event_runCheck()) {
-                                if (dComIfG_getTimerMode() == 3)
-                                    dComIfG_TimerStop(2);
-                            } else {
-                                if (dComIfG_getTimerMode() == 3)
-                                    dComIfG_TimerReStart(2);
-                            }
+                            if (dComIfG_getTimerMode() == 3)
+                                dComIfG_TimerReStart(2);
+                        }
 
-                            if (dComIfG_getTimerRestTimeMs() <= 0) {
-                                mDoAud_seStart(JA_SE_ISLE_TIMER_0);
-                                dComIfGp_getVibration().StartShock(6, -33, cXyz(0.0f, 1.0f, 0.0f));
-                                fopAcM_offSwitch(this, prm_get_swSave());
-                                dComIfG_TimerDeleteRequest(3);
+                        if (dComIfG_getTimerRestTimeMs() <= 0) {
+                            mDoAud_seStart(JA_SE_ISLE_TIMER_0);
+                            dComIfGp_getVibration().StartShock(6, -33, cXyz(0.0f, 1.0f, 0.0f));
+                            fopAcM_offSwitch(this, prm_get_swSave());
+                            dComIfG_TimerDeleteRequest(3);
 
-                                field_0x298 = 0;
-                                field_0x299 = 0;
-                            }
+                            field_0x298 = 0;
+                            field_0x299 = 0;
                         }
                     }
+                }
+            } else {
+                u16 timer = prm_get_timer() * 10;
+                if (current.roomNo == dIsleRoom_FireMountain_e) {
+                    if (dComIfGp_evmng_endCheck("FREEZE_VOLCANO")) {
+                        dTimer_createTimer(3, timer, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
+                        field_0x298 = 1;
+                    }
                 } else {
-                    u16 timer = prm_get_timer() * 10;
-                    if (current.roomNo == dIsleRoom_FireMountain_e) {
-                        if (dComIfGp_evmng_endCheck("FREEZE_VOLCANO")) {
-                            dTimer_createTimer(3, timer, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
-                            field_0x298 = 1;
-                        }
-                    } else {
-                        if (dComIfGp_evmng_endCheck("MELT_ICE")) {
-                            dTimer_createTimer(3, timer, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
-                            field_0x298 = 1;
-                        }
+                    if (dComIfGp_evmng_endCheck("MELT_ICE")) {
+                        dTimer_createTimer(3, timer, 1, 0, 221.0f, 439.0f, 32.0f, 419.0f);
+                        field_0x298 = 1;
                     }
                 }
             }

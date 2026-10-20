@@ -365,7 +365,7 @@ public:
     /* 0x03D4 */ f32 m03D4;
     /* 0x03D8 */ f32 m03D8;
     /* 0x03DC */ f32 mTillerAngleRate;
-    /* 0x03E0 */ f32 m03E0;
+    /* 0x03E0 */ f32 mTargetSpeed;
     /* 0x03E4 */ f32 mJumpRate;
     /* 0x03E8 */ f32 m03E8;
     /* 0x03EC */ f32 mStickMVal;

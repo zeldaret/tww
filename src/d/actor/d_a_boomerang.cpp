@@ -541,23 +541,19 @@ BOOL daBoomerang_c::procWait() {
         checkBgHit(&bgHitPos, &current.pos);
 
         procMove();
-    } else {
-        if (dCam_getBody()->Mode() != 0xB) {
-            resetLockActor();
-        } else {
-            if (pPlayer->checkBoomerangRock()) {
-                camera_process_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
-                cXyz eyePos = *fopCamM_GetEye_p(pCamera);
-                cXyz topPos = pPlayer->getLineTopPos();
-                mCps.OnAtNoTgHitInfSet();
-                mCps.cM3dGCps::Set(eyePos, topPos, 3.0f);
+    } else if (dCam_getBody()->Mode() != 0xB) {
+        resetLockActor();
+    } else if (pPlayer->checkBoomerangRock()) {
+        camera_process_class* pCamera = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
+        cXyz eyePos = *fopCamM_GetEye_p(pCamera);
+        cXyz topPos = pPlayer->getLineTopPos();
+        mCps.OnAtNoTgHitInfSet();
+        mCps.cM3dGCps::Set(eyePos, topPos, 3.0f);
 
-                mCps.CalcAtVec();
-                mCps.SetAtHitCallback(&daBoomerang_rockLineCallback);
+        mCps.CalcAtVec();
+        mCps.SetAtHitCallback(&daBoomerang_rockLineCallback);
 
-                dComIfG_Ccsp()->Set(&mCps);
-            }
-        }
+        dComIfG_Ccsp()->Set(&mCps);
     }
 
     return TRUE;

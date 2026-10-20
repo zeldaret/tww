@@ -520,39 +520,33 @@ u32 daNpc_Bmsw_c::getMsg() {
 
     if (field_0x9C0 != fpcM_ERROR_PROCESS_ID_e) {
         field_0x9C0 = fpcM_ERROR_PROCESS_ID_e;
-    } else {
-        if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2701)) {
-            if (!dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0320)) {
-                dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0320);
-                msg = 0x1A63;
-            } else {
-                msg = 0x1A66;
-            }
+    } else if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2701)) {
+        if (!dComIfGs_isTmpBit(dSv_event_tmp_flag_c::UNK_0320)) {
+            dComIfGs_onTmpBit(dSv_event_tmp_flag_c::UNK_0320);
+            msg = 0x1A63;
         } else {
-            if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A02)) {
-                dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A02);
-                msg = 0x1A2D;
-            } else {
-                if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A01)) {
-                    msg = 0x1A3D;
-                } else {
-                    u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203);
-                    switch (reg) {
-                        case 0:
-                            msg = 0x1A3F;
-                            break;
-                        case 1:
-                            msg = 0x1A44;
-                            break;
-                        case 2:
-                            msg = 0x1A54;
-                            break;
-                        case 3:
-                        default:
-                            msg = 0x1A62;
-                    }
-                }
-            }
+            msg = 0x1A66;
+        }
+    } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A02)) {
+        dComIfGs_onEventBit(dSv_event_flag_c::UNK_1A02);
+        msg = 0x1A2D;
+    } else if (!dComIfGs_isEventBit(dSv_event_flag_c::UNK_1A01)) {
+        msg = 0x1A3D;
+    } else {
+        u8 reg = dComIfGs_getEventReg(dSv_event_flag_c::UNK_C203);
+        switch (reg) {
+            case 0:
+                msg = 0x1A3F;
+                break;
+            case 1:
+                msg = 0x1A44;
+                break;
+            case 2:
+                msg = 0x1A54;
+                break;
+            case 3:
+            default:
+                msg = 0x1A62;
         }
     }
 

@@ -238,12 +238,10 @@ int daSaku_c::GetDzbId(int i_sakuId) {
     else if (val == 3 || val == 2)
     {
         dzbId = 3;
+    } else if (fopAcM_isSwitch(this, mTopHalfDestroyedSwitch)) {
+        dzbId = 4;
     } else {
-        if (fopAcM_isSwitch(this, mTopHalfDestroyedSwitch)) {
-            dzbId = 4;
-        } else {
-            dzbId = 2;
-        }
+        dzbId = 2;
     }
 
     return dzbId;
@@ -410,18 +408,16 @@ BOOL daSaku_c::changeCollision(int param_1) {
         return FALSE;
     }
 
-    else {
-        if (field_0xEE0[param_1] >= 0) {
-            if (field_0xEE0[param_1] == 0) {
-                dComIfG_Bgsp()->Release(field_0xE44[param_1]);
-                MoveBGResist(1, param_1);
-            }
-
-            field_0xEE0[param_1] -= 1;
+    else if (field_0xEE0[param_1] >= 0) {
+        if (field_0xEE0[param_1] == 0) {
+            dComIfG_Bgsp()->Release(field_0xE44[param_1]);
+            MoveBGResist(1, param_1);
         }
 
-        return TRUE;
+        field_0xEE0[param_1] -= 1;
     }
+
+    return TRUE;
 }
 
 /* 00000FF4-0000113C       .text setMtx__8daSaku_cFv */

@@ -3133,149 +3133,148 @@ BOOL daNpc_Ji1_c::teachSPRollCutAction(void*) {
 
             return true;
         }
-        else {
-            cXyz temp = player->current.pos - current.pos;
-            cM_atan2s(temp.x, temp.z);
-            f32 what = temp.absXZ();
 
-            s32 cutType = player->getCutType();
+        cXyz temp = player->current.pos - current.pos;
+        cM_atan2s(temp.x, temp.z);
+        f32 what = temp.absXZ();
+
+        s32 cutType = player->getCutType();
 #if VERSION == VERSION_DEMO
-            if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL)
+        if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL)
 #else
-            f32 y_diff = std::fabsf(temp.y);
-            if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL && y_diff < 20.0f)
+        f32 y_diff = std::fabsf(temp.y);
+        if(cutType == daPy_py_c::CUT_TYPE_CUT_ROLL && y_diff < 20.0f)
 #endif
-            {
-                dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B20);
-                dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0402);
+        {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_0B20);
+            dComIfGs_offTmpBit(dSv_event_tmp_flag_c::UNK_0402);
 #if VERSION > VERSION_DEMO
-                dComIfGp_setItemBeastNumCount(dBeastIdx_KNIGHTS_CREST_e, -10);
+            dComIfGp_setItemBeastNumCount(dBeastIdx_KNIGHTS_CREST_e, -10);
 #endif
-                field_0x7E0.OffTgShield();
-                field_0xC84 = 10;
+            field_0x7E0.OffTgShield();
+            field_0xC84 = 10;
 
-                setAction(&daNpc_Ji1_c::eventAction, 0);
-                field_0x2C8 = &daNpc_Ji1_c::normalAction;
-                
-                return TRUE;
-            }
+            setAction(&daNpc_Ji1_c::eventAction, 0);
+            field_0x2C8 = &daNpc_Ji1_c::normalAction;
             
-            if(cutType == daPy_py_c::CUT_TYPE_CUT_TURN) {
-                field_0xC84 = 0xB;
+            return TRUE;
+        }
+        
+        if(cutType == daPy_py_c::CUT_TYPE_CUT_TURN) {
+            field_0xC84 = 0xB;
 
-                setAction(&daNpc_Ji1_c::eventAction, 0);
-                field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
+            setAction(&daNpc_Ji1_c::eventAction, 0);
+            field_0x2C8 = &daNpc_Ji1_c::teachSPRollCutAction;
 
-                return TRUE;
-            }
+            return TRUE;
+        }
 
-            field_0x7E0.OnTgShield();
-            if(field_0x7E0.ChkTgHit() && field_0xD6C != 1) {
-                switch(field_0xC24) {
-                    case daPy_py_c::CUT_TYPE_CUT_A:
-                    case daPy_py_c::CUT_TYPE_CUT_EA:
-                    case daPy_py_c::CUT_TYPE_CUT_TURN:
-                        setAnm(8, 0.0f, 1);
-                        break;
-                    case daPy_py_c::CUT_TYPE_CUT_ROLL:
-                        break;
-                    case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
-                        setAnm(10, 0.0f, 1);
-                        field_0xC9C = 0.0f;
-                        field_0xD38 = current.pos;
-                        break;
-                    default:
-                        setAnm(9, 0.0f, 1);
-                        break;
-                }
-
-                if(field_0xC24 == daPy_py_c::CUT_TYPE_CUT_ROLL) {
-                    setHitParticle(0, 0x4833);
+        field_0x7E0.OnTgShield();
+        if(field_0x7E0.ChkTgHit() && field_0xD6C != 1) {
+            switch(field_0xC24) {
+                case daPy_py_c::CUT_TYPE_CUT_A:
+                case daPy_py_c::CUT_TYPE_CUT_EA:
+                case daPy_py_c::CUT_TYPE_CUT_TURN:
+                    setAnm(8, 0.0f, 1);
+                    break;
+                case daPy_py_c::CUT_TYPE_CUT_ROLL:
+                    break;
+                case daPy_py_c::CUT_TYPE_JUMPCUT_SWORD:
+                    setAnm(10, 0.0f, 1);
                     field_0xC9C = 0.0f;
                     field_0xD38 = current.pos;
-                    setParticle(0x10, 1.0f, 0.1f);
-                }
-                else {
-                    setGuardParticle();
-                }
-
-                field_0xD6C = 1;
-                field_0xC8C = field_0xC24;
+                    break;
+                default:
+                    setAnm(9, 0.0f, 1);
+                    break;
             }
 
-            if(field_0xD6C == 1) {
-                if(!player->getCutAtFlg() || mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
-                    if(field_0xC90 == 0) {
-                        if(field_0xC8C == daPy_py_c::CUT_TYPE_CUT_ROLL) {
-                            field_0xC84 = 0xA;
-
-                            setAction(&daNpc_Ji1_c::eventAction, 0);
-
-                            field_0x2C8 = &daNpc_Ji1_c::normalAction;
-
-                            return true;
-                        }
-
-                        fopAcM_orderOtherEventId(this, mEventIdx[3]);
-                        eventInfo.onCondition(dEvtCnd_UNK2_e);
-                        field_0xC90 = 2;
-                    }
-                }
-
-                if(mAnimation == 10 && field_0xC8C == daPy_py_c::CUT_TYPE_CUT_ROLL) {
-                    cLib_addCalc2(&field_0xC9C, l_HIO.field_0x34 * 2.0f, 0.25f, l_HIO.field_0x38);
-                    cXyz temp(field_0xD38);
-                    temp.x -= field_0xC9C * cM_ssin(current.angle.y);
-                    temp.z -= field_0xC9C * cM_scos(current.angle.y);
-
-                    f32 temp2 = 45.0f;
-                    if(mAcch.ChkWallHit()) {
-                        temp2 = 10.0f;
-                    }
-
-                    cLib_addCalcPos2(&current.pos, temp, 0.8f, temp2);
-                    fopAcM_seStart(this, JA_SE_CM_JI_SLIP, 0);
-                }
-
-                if(mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
-                    field_0x6B0.OffTgShield();
-                    field_0x7E0.OnTgShield();
-                    if(field_0xC90 == 2) {
-                        field_0xD6C = 0;
-                        field_0xC9C = 0.0f;
-                        field_0xD38 = current.pos;
-
-                        field_0xC4C = 0.0f;
-                        field_0xC50 = 0.0f;
-                        field_0xC2C = 0.0f;
-
-                        setAction(&daNpc_Ji1_c::speakBadAction, 0);
-                    }
-                    else {
-                        field_0xC90 = 0;
-                        field_0xD6C = 0;
-                        field_0xC9C = 0.0f;
-                        field_0xD38 = current.pos;
-
-                        setAction(&daNpc_Ji1_c::speakAction, 0);
-                    }
-                }
+            if(field_0xC24 == daPy_py_c::CUT_TYPE_CUT_ROLL) {
+                setHitParticle(0, 0x4833);
+                field_0xC9C = 0.0f;
+                field_0xD38 = current.pos;
+                setParticle(0x10, 1.0f, 0.1f);
             }
             else {
-                if(!teachSpRollCutMove(1.0f)) {
-                    if(mpOrcaMorf->checkFrame(mpOrcaMorf->getEndFrame() - 2.0f)) {
-                        setAnm(5, 4.0f, 0);
+                setGuardParticle();
+            }
+
+            field_0xD6C = 1;
+            field_0xC8C = field_0xC24;
+        }
+
+        if(field_0xD6C == 1) {
+            if(!player->getCutAtFlg() || mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
+                if(field_0xC90 == 0) {
+                    if(field_0xC8C == daPy_py_c::CUT_TYPE_CUT_ROLL) {
+                        field_0xC84 = 0xA;
+
+                        setAction(&daNpc_Ji1_c::eventAction, 0);
+
+                        field_0x2C8 = &daNpc_Ji1_c::normalAction;
+
+                        return true;
                     }
+
+                    fopAcM_orderOtherEventId(this, mEventIdx[3]);
+                    eventInfo.onCondition(dEvtCnd_UNK2_e);
+                    field_0xC90 = 2;
                 }
             }
-            
-            if(field_0xD6C != 1) {
-                dtParticle();
+
+            if(mAnimation == 10 && field_0xC8C == daPy_py_c::CUT_TYPE_CUT_ROLL) {
+                cLib_addCalc2(&field_0xC9C, l_HIO.field_0x34 * 2.0f, 0.25f, l_HIO.field_0x38);
+                cXyz temp(field_0xD38);
+                temp.x -= field_0xC9C * cM_ssin(current.angle.y);
+                temp.z -= field_0xC9C * cM_scos(current.angle.y);
+
+                f32 temp2 = 45.0f;
+                if(mAcch.ChkWallHit()) {
+                    temp2 = 10.0f;
+                }
+
+                cLib_addCalcPos2(&current.pos, temp, 0.8f, temp2);
+                fopAcM_seStart(this, JA_SE_CM_JI_SLIP, 0);
             }
-            if(field_0xD6C != 1 && isGuardAnim()) {
-                if(mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
+
+            if(mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
+                field_0x6B0.OffTgShield();
+                field_0x7E0.OnTgShield();
+                if(field_0xC90 == 2) {
+                    field_0xD6C = 0;
+                    field_0xC9C = 0.0f;
+                    field_0xD38 = current.pos;
+
+                    field_0xC4C = 0.0f;
+                    field_0xC50 = 0.0f;
+                    field_0xC2C = 0.0f;
+
+                    setAction(&daNpc_Ji1_c::speakBadAction, 0);
+                }
+                else {
+                    field_0xC90 = 0;
+                    field_0xD6C = 0;
+                    field_0xC9C = 0.0f;
+                    field_0xD38 = current.pos;
+
+                    setAction(&daNpc_Ji1_c::speakAction, 0);
+                }
+            }
+        }
+        else {
+            if(!teachSpRollCutMove(1.0f)) {
+                if(mpOrcaMorf->checkFrame(mpOrcaMorf->getEndFrame() - 2.0f)) {
                     setAnm(5, 4.0f, 0);
                 }
+            }
+        }
+        
+        if(field_0xD6C != 1) {
+            dtParticle();
+        }
+        if(field_0xD6C != 1 && isGuardAnim()) {
+            if(mpOrcaMorf->getFrame() > mpOrcaMorf->getEndFrame() - 2.0f) {
+                setAnm(5, 4.0f, 0);
             }
         }
     }
@@ -4338,204 +4337,203 @@ BOOL daNpc_Ji1_c::setAnm(int param_1, f32 param_2, int param_3) {
     if(param_3 == 0 & mAnimation - param_1 == 0) {
         return false;
     }
-    else {
-        mAnimation = param_1;
 
-        f32 speed = 1.0f;
-        if(param_1 != mAnimation && isGuardAnim()) {
-            fopAcM_seStart(this, JA_SE_CM_JI_DEFENSE, 0);
-        }
+    mAnimation = param_1;
 
-        J3DAnmTransform* bckAnm;
-        s32 loopMode;
-        void* pSoundAnimRes;
-
-        switch(param_1) {
-            case 0:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WAIT01_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WAIT01_e);
-
-                break;
-            case 1:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WAIT02_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WAIT02_e);
-
-                break;
-            case 2:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TALK01_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TALK01_e);
-
-                break;
-            case 3:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TALK02_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TALK02_e);
-
-                break;
-            case 4:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_AKIRE_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_AKIRE_e);
-
-                break;
-            case 5:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_KAMAE_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_KAMAE_e);
-
-                break;
-            case 6:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_KROT_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_KROT_e);
-                speed = l_HIO.field_0x48;
-
-                break;
-            case 7:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_INASI_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_INASI_e);
-                speed = l_HIO.field_0x44;
-
-                break;
-            case 8:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TATEGUARD_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TATEGUARD_e);
-
-                break;
-            case 9:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_YKGUARD_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_YKGUARD_e);
-
-                break;
-            case 10:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_JPGUARD_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_JPGUARD_e);
-
-                break;
-            case 11:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TOKAMAE_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TOKAMAE_e);
-
-                break;
-            case 12:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_REI_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_REI_e);
-
-                break;
-            case 13:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WARAI_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WARAI_e);
-                speed = l_HIO.field_0x4C;
-
-                break;
-            case 14:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_JPGUARD_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_JPGUARD_e);
-                speed = 2.0f;
-
-                break;
-            case 15:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_GUARD_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_GUARD_e);
-                speed = 2.0f;
-
-                break;
-            case 16:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BTKAMASI_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BTKAMASI_e);
-
-                break;
-            case 17:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BTKAMAE_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BTKAMAE_e);
-
-                break;
-            case 18:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_UDEGUMI_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_UDEGUMI_e);
-
-                break;
-            case 19:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TATEATTACK_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TATEATTACK_e);
-
-                break;
-            case 20:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_YOKOATTACK_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_YOKOATTACK_e);
-
-                break;
-            case 21:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_ODOROKU_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_ODOROKU_e);
-
-                break;
-            case 22:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BIBIRI_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BIBIRI_e);
-
-                BackSlideInit();
-                if(field_0xD84 == 1) {
-                    harpoonRelease(0);
-                }
-
-                break;
-            case 23:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_NAKU_e));
-                loopMode = J3DFrameCtrl::EMode_LOOP;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_NAKU_e);
-
-                if(field_0x430 == 0) {
-                    field_0x430 = dComIfGp_particle_set(dPa_name::ID_AK_SN_JITEAR00, &current.pos);
-                    harpoonRelease(0);
-                }
-
-                break;
-            case 24:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_NUGUI_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_NUGUI_e);
-
-                break;
-            case 25:
-                bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_DAMAGE_e));
-                loopMode = J3DFrameCtrl::EMode_NONE;
-                pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_DAMAGE_e);
-
-                break;
-            default:
-                return 0;
-        }
-
-        mpOrcaMorf->setAnm(bckAnm, loopMode, param_2, speed, 0.0f, -1.0f, pSoundAnimRes);
-        if(mAnimation == 0x13) {
-            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_TATEATTACK_e), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
-        }
-        else if(mAnimation == 0x14) {
-            mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_YOKOATTACK_e), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
-        }
-
-        return true;
+    f32 speed = 1.0f;
+    if(param_1 != mAnimation && isGuardAnim()) {
+        fopAcM_seStart(this, JA_SE_CM_JI_DEFENSE, 0);
     }
+
+    J3DAnmTransform* bckAnm;
+    s32 loopMode;
+    void* pSoundAnimRes;
+
+    switch(param_1) {
+        case 0:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WAIT01_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WAIT01_e);
+
+            break;
+        case 1:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WAIT02_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WAIT02_e);
+
+            break;
+        case 2:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TALK01_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TALK01_e);
+
+            break;
+        case 3:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TALK02_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TALK02_e);
+
+            break;
+        case 4:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_AKIRE_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_AKIRE_e);
+
+            break;
+        case 5:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_KAMAE_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_KAMAE_e);
+
+            break;
+        case 6:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_KROT_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_KROT_e);
+            speed = l_HIO.field_0x48;
+
+            break;
+        case 7:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_INASI_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_INASI_e);
+            speed = l_HIO.field_0x44;
+
+            break;
+        case 8:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TATEGUARD_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TATEGUARD_e);
+
+            break;
+        case 9:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_YKGUARD_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_YKGUARD_e);
+
+            break;
+        case 10:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_JPGUARD_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_JPGUARD_e);
+
+            break;
+        case 11:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TOKAMAE_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TOKAMAE_e);
+
+            break;
+        case 12:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_REI_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_REI_e);
+
+            break;
+        case 13:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_WARAI_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_WARAI_e);
+            speed = l_HIO.field_0x4C;
+
+            break;
+        case 14:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_JPGUARD_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_JPGUARD_e);
+            speed = 2.0f;
+
+            break;
+        case 15:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_GUARD_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_GUARD_e);
+            speed = 2.0f;
+
+            break;
+        case 16:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BTKAMASI_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BTKAMASI_e);
+
+            break;
+        case 17:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BTKAMAE_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BTKAMAE_e);
+
+            break;
+        case 18:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_UDEGUMI_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_UDEGUMI_e);
+
+            break;
+        case 19:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_TATEATTACK_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_TATEATTACK_e);
+
+            break;
+        case 20:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_YOKOATTACK_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_YOKOATTACK_e);
+
+            break;
+        case 21:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_ODOROKU_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_ODOROKU_e);
+
+            break;
+        case 22:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_BIBIRI_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_BIBIRI_e);
+
+            BackSlideInit();
+            if(field_0xD84 == 1) {
+                harpoonRelease(0);
+            }
+
+            break;
+        case 23:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_NAKU_e));
+            loopMode = J3DFrameCtrl::EMode_LOOP;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_NAKU_e);
+
+            if(field_0x430 == 0) {
+                field_0x430 = dComIfGp_particle_set(dPa_name::ID_AK_SN_JITEAR00, &current.pos);
+                harpoonRelease(0);
+            }
+
+            break;
+        case 24:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_NUGUI_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_NUGUI_e);
+
+            break;
+        case 25:
+            bckAnm = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JI_DAMAGE_e));
+            loopMode = J3DFrameCtrl::EMode_NONE;
+            pSoundAnimRes = dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BAS_JI_DAMAGE_e);
+
+            break;
+        default:
+            return 0;
+    }
+
+    mpOrcaMorf->setAnm(bckAnm, loopMode, param_2, speed, 0.0f, -1.0f, pSoundAnimRes);
+    if(mAnimation == 0x13) {
+        mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_TATEATTACK_e), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+    }
+    else if(mAnimation == 0x14) {
+        mpSpearMorf->setAnm((J3DAnmTransform*)dComIfG_getObjectRes("Ji", dRes_INDEX_JI_BCK_JIYARI_YOKOATTACK_e), J3DFrameCtrl::EMode_LOOP, 0.0f, 1.0f, 0.0f, -1.0f, NULL);
+    }
+
+    return true;
 }
 
 /* 0000DAB0-0000DC04       .text nodeCallBack1__FP7J3DNodei */
@@ -4605,26 +4603,25 @@ static BOOL nodeCallBack3(J3DNode* node, int calcTiming) {
     if (calcTiming != J3DNodeCBCalcTiming_In) {
         return true;
     }
-    else {
-        J3DModel* model = j3dSys.getModel();
-        J3DJoint* joint = (J3DJoint*)node;
-        daNpc_Ji1_c* i_this = (daNpc_Ji1_c*)model->getUserArea();
 
-        s32 jntNo = joint->getJntNo();
-        mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
-        s16 temp = i_this->field_0xBA2 * cM_ssin(i_this->field_0xBA4);
-        if(jntNo == i_this->armLJointNo) {
-            mDoMtx_stack_c::XrotM(temp);
-        }
-        else if(jntNo == i_this->armRJointNo) {
-            mDoMtx_stack_c::XrotM(temp);
-        }
+    J3DModel* model = j3dSys.getModel();
+    J3DJoint* joint = (J3DJoint*)node;
+    daNpc_Ji1_c* i_this = (daNpc_Ji1_c*)model->getUserArea();
 
-        model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
-        MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
-        
-        return true;
+    s32 jntNo = joint->getJntNo();
+    mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
+    s16 temp = i_this->field_0xBA2 * cM_ssin(i_this->field_0xBA4);
+    if(jntNo == i_this->armLJointNo) {
+        mDoMtx_stack_c::XrotM(temp);
     }
+    else if(jntNo == i_this->armRJointNo) {
+        mDoMtx_stack_c::XrotM(temp);
+    }
+
+    model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+    MTXCopy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+    
+    return true;
 }
 
 /* 0000DE90-0000DEB0       .text daNpc_Ji1_Draw__FP11daNpc_Ji1_c */
@@ -5050,39 +5047,38 @@ BOOL daNpc_Ji1_c::_draw() {
     if(mHide) {
         return true;
     }
-    else {
-        J3DModel* pOrcaModel = mpOrcaMorf->getModel();
-        J3DModelData* pOrcaModelData = pOrcaModel->getModelData();
-        J3DModel* pSpearModel = mpSpearMorf->getModel();
 
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-        g_env_light.setLightTevColorType(pOrcaModel, &tevStr);
-        g_env_light.setLightTevColorType(pSpearModel, &tevStr);
-        mBlinkAnim.entry(pOrcaModelData, mBlinkFrame);
-        mpOrcaMorf->entryDL();
-        if(field_0xD84 == 1) {
-            mpSpearMorf->entryDL();
-        }
-        else if(field_0xD84 == 2) {
-            mpSpearMorf->updateDL();
-        }
+    J3DModel* pOrcaModel = mpOrcaMorf->getModel();
+    J3DModelData* pOrcaModelData = pOrcaModel->getModelData();
+    J3DModel* pSpearModel = mpSpearMorf->getModel();
 
-        mCryBtk.entry(mpTearsModel->getModelData(), (s16)mCryBtkFrame);
-        mCryBrk.entry(mpTearsModel->getModelData(), (s16)mCryBrkFrame);
-        mDoExt_modelUpdateDL(mpTearsModel);
-        cXyz temp(current.pos.x, current.pos.y + 150.0f, current.pos.z);
-        mShadowId = dComIfGd_setShadow(
-            mShadowId, 1, mpOrcaMorf->getModel(), &temp, 800.0f, 20.0f,
-            current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
-        );
-        if(mShadowId != 0 && field_0xD84 != 0) {
-            dComIfGd_addRealShadow(mShadowId, mpSpearMorf->getModel());
-        }
-
-        dSnap_RegistFig(DSNAP_TYPE_NPC_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
-        
-        return true;
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(pOrcaModel, &tevStr);
+    g_env_light.setLightTevColorType(pSpearModel, &tevStr);
+    mBlinkAnim.entry(pOrcaModelData, mBlinkFrame);
+    mpOrcaMorf->entryDL();
+    if(field_0xD84 == 1) {
+        mpSpearMorf->entryDL();
     }
+    else if(field_0xD84 == 2) {
+        mpSpearMorf->updateDL();
+    }
+
+    mCryBtk.entry(mpTearsModel->getModelData(), (s16)mCryBtkFrame);
+    mCryBrk.entry(mpTearsModel->getModelData(), (s16)mCryBrkFrame);
+    mDoExt_modelUpdateDL(mpTearsModel);
+    cXyz temp(current.pos.x, current.pos.y + 150.0f, current.pos.z);
+    mShadowId = dComIfGd_setShadow(
+        mShadowId, 1, mpOrcaMorf->getModel(), &temp, 800.0f, 20.0f,
+        current.pos.y, mAcch.GetGroundH(), mAcch.m_gnd, &tevStr
+    );
+    if(mShadowId != 0 && field_0xD84 != 0) {
+        dComIfGd_addRealShadow(mShadowId, mpSpearMorf->getModel());
+    }
+
+    dSnap_RegistFig(DSNAP_TYPE_NPC_JI1, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    
+    return true;
 }
 
 static cXyz l_head_front(0.0f, 1.0f, 0.0f);

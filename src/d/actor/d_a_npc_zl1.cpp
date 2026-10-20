@@ -2900,7 +2900,6 @@ cPhs_State daNpc_Zl1_c::_create() {
 #endif
         return cPhs_ERROR_e;
     } else {
-
         fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
         fopAcM_setCullSizeBox(this, -50.0f, -20.0f, -50.0f, 50.0f, 140.0f, 50.0f);
 

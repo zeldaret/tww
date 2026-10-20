@@ -282,13 +282,11 @@ f32 daPy_lk_c::getSwimTimerRate() {
     if (dComIfGp_getItemSwimTimerStatus() && !dComIfGp_event_runCheck()) {
         swimTimerRate = (1.0f - dComIfGp_getItemTimeCount() * 0.0011111111f);
     }
+    else if (dComIfGp_getItemTimeCount() <= 0) {
+        swimTimerRate = 1.0f;
+    }
     else {
-        if (dComIfGp_getItemTimeCount() <= 0) {
-            swimTimerRate = 1.0f;
-        }
-        else {
-            swimTimerRate = 0.0f;
-        }
+        swimTimerRate = 0.0f;
     }
     return swimTimerRate;
 }
@@ -377,23 +375,19 @@ BOOL daPy_lk_c::procSwimUp() {
         if (frameCtrl.getRate() < 0.01f) {
             procSwimWait_init(FALSE);
         }
+        else if (frameCtrl.getFrame() > m_HIO->mSwim.m.field_0x34) {
+            if (mStickDistance > 0.05f) {
+                procSwimMove_init(FALSE);
+            }
+        }
+        else if (frameCtrl.checkPass(4.0f)) {
+            voiceStart(0x1A);
+            seStartOnlyReverb(JA_SE_LK_WALK_IN_WATER);
+            seStartOnlyReverb(JA_SE_LK_SWIM);
+        }
         else {
-            if (frameCtrl.getFrame() > m_HIO->mSwim.m.field_0x34) {
-                if (mStickDistance > 0.05f) {
-                    procSwimMove_init(FALSE);
-                }
-            }
-            else {
-                if (frameCtrl.checkPass(4.0f)) {
-                    voiceStart(0x1A);
-                    seStartOnlyReverb(JA_SE_LK_WALK_IN_WATER);
-                    seStartOnlyReverb(JA_SE_LK_SWIM);
-                }
-                else {
-                    m35C4 = m_HIO->mSwim.m.field_0x3C;
-                    current.pos.y = mWaterY;
-                }
-            }
+            m35C4 = m_HIO->mSwim.m.field_0x3C;
+            current.pos.y = mWaterY;
         }
     }
     setSwimTimerStartStop();

@@ -293,12 +293,10 @@ void daArrow_Lighteff_c::brk_play() {
                 field_0x2E0 = 5.0f;
             }
         }
-        else {
-            if(field_0x2E0 < 5.0f) {
-                field_0x2E0 += 1.0f;
-                if(field_0x2E0 > 5.0f) {
-                    field_0x2E0 = 5.0f;
-                }
+        else if(field_0x2E0 < 5.0f) {
+            field_0x2E0 += 1.0f;
+            if(field_0x2E0 > 5.0f) {
+                field_0x2E0 = 5.0f;
             }
         }
     }
@@ -319,41 +317,39 @@ bool daArrow_Lighteff_c::_execute() {
         if(arrow->field_0x6e4 == 1) {
             fopAcM_delete(this);
         }
-        else {
-            if(field_0x2EC != 0) {
-                if(field_0x2EC == 1) {
-                    if(field_0x2F0 != 1) {
-                        if(!arrow->isSetByZelda()) {
-                            link->onUseArrowEffect();
-                        }
-
-                        field_0x2EA = 1;
-                        field_0x2A8.z = 1.0f;
+        else if(field_0x2EC != 0) {
+            if(field_0x2EC == 1) {
+                if(field_0x2F0 != 1) {
+                    if(!arrow->isSetByZelda()) {
+                        link->onUseArrowEffect();
                     }
-                    else {
-                        field_0x2A8.z += 1.0;
-                        if(field_0x2A8.z >= 20.0f) {
-                            field_0x2A8.z = 20.0f;
-                        }
 
-                        field_0x2A8.x -= 0.025;
-                        if(field_0x2A8.x <= 0.5f) {
-                            field_0x2A8.x = 0.5f;
-                        }
-
-                        field_0x2A8.y = field_0x2A8.x;
-                    }
-                }
-                else if(field_0x2EC == 3) {
-                    fopAcM_delete(this);
+                    field_0x2EA = 1;
+                    field_0x2A8.z = 1.0f;
                 }
                 else {
-                    field_0x2E9 = 0;
-                    delete_particle();
-                    field_0x2E4++;
-                    if(0x3C <= field_0x2E4) {
-                        fopAcM_delete(this);
+                    field_0x2A8.z += 1.0;
+                    if(field_0x2A8.z >= 20.0f) {
+                        field_0x2A8.z = 20.0f;
                     }
+
+                    field_0x2A8.x -= 0.025;
+                    if(field_0x2A8.x <= 0.5f) {
+                        field_0x2A8.x = 0.5f;
+                    }
+
+                    field_0x2A8.y = field_0x2A8.x;
+                }
+            }
+            else if(field_0x2EC == 3) {
+                fopAcM_delete(this);
+            }
+            else {
+                field_0x2E9 = 0;
+                delete_particle();
+                field_0x2E4++;
+                if(0x3C <= field_0x2E4) {
+                    fopAcM_delete(this);
                 }
             }
         }

@@ -767,29 +767,25 @@ void daFm_c::setAttention() {
     if(field_0x2E4 != 0) {
         attention_info.position = current.pos;
         eyePos = current.pos;
+    } else if(mMode == 0xe || mMode == 0x10 || mMode == 0xf || (mMode == 0 || mMode == 0x11)) {
+        attention_info.position = current.pos;
+        eyePos = current.pos;
     } else {
-        if(mMode == 0xe || mMode == 0x10 || mMode == 0xf || (mMode == 0 || mMode == 0x11)) {
-            attention_info.position = current.pos;
-            eyePos = current.pos;
-        } else {
-            attention_info.position = field_0x61C;
-            attention_info.position.y += 20.0f;
-            daPy_py_c* pLink = daPy_getPlayerActorClass();
-            f32 abs = (pLink->getHeadTopPos() - field_0x61C).abs();
-            if(dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK400_e | daPyStts0_UNK2_e)) {
+        attention_info.position = field_0x61C;
+        attention_info.position.y += 20.0f;
+        daPy_py_c* pLink = daPy_getPlayerActorClass();
+        f32 abs = (pLink->getHeadTopPos() - field_0x61C).abs();
+        if(dComIfGp_checkPlayerStatus0(0, daPyStts0_UNK400_e | daPyStts0_UNK2_e)) {
+            eyePos = field_0x61C;
+        } else if(mMode == 8) {
+            if(abs > l_HIO.field_0x0EC) {
                 eyePos = field_0x61C;
             } else {
-                if(mMode == 8) {
-                    if(abs > l_HIO.field_0x0EC) {
-                        eyePos = field_0x61C;
-                    } else {
-                        eyePos = current.pos;
-                        eyePos.y += 200.0f;
-                    }
-                } else {
-                    eyePos = field_0x61C;
-                }
+                eyePos = current.pos;
+                eyePos.y += 200.0f;
             }
+        } else {
+            eyePos = field_0x61C;
         }
     }
 }
@@ -1191,11 +1187,9 @@ void daFm_c::modeSwWait() {
             if(field_0x2E4 != 0 && cLib_calcTimer(&field_0x650) != 0) {
                 return;
             }
-        } else {
-            if(dComIfGp_evmng_startCheck("DEFAULT_FM_SW_APEEAR") == 0) {
-                fopAcM_orderOtherEvent(this, "DEFAULT_FM_SW_APEEAR");
-                return;
-            }
+        } else if(dComIfGp_evmng_startCheck("DEFAULT_FM_SW_APEEAR") == 0) {
+            fopAcM_orderOtherEvent(this, "DEFAULT_FM_SW_APEEAR");
+            return;
         }
     } else {
         if(dComIfGp_evmng_startCheck("DEFAULT_FM_SW_APEEAR") != 0) {
@@ -1268,12 +1262,10 @@ void daFm_c::modeUnderFoot() {
             if(cLib_calcTimer(&field_0x650) == 0) {
                 if(isGrabFoot() && !dComIfGp_event_runCheck()) {
                     modeProcInit(0xf);
+                } else if(field_0x9D4 < l_HIO.field_0x0E4 && field_0xAE5 == 0) {
+                    modeProcInit(5);
                 } else {
-                    if(field_0x9D4 < l_HIO.field_0x0E4 && field_0xAE5 == 0) {
-                        modeProcInit(5);
-                    } else {
-                        modeProcInit(1);
-                    }
+                    modeProcInit(1);
                 }
             }
         }
@@ -1321,19 +1313,17 @@ void daFm_c::modeGoalKeeper() {
     turnToBaseTarget();
     if(isGrabFoot() && !dComIfGp_event_runCheck()) {
         modeProc(PROC_INIT_e, 0xf);
+    } else if(field_0x2E4 != 0) {
+        modeProc(PROC_INIT_e, 5);
     } else {
-        if(field_0x2E4 != 0) {
-            modeProc(PROC_INIT_e, 5);
-        } else {
-            f32 temp = std::fabsf(current.pos.y - mBaseTarget->current.pos.y);
-            if(field_0x9D4 < l_HIO.field_0x0E8 && temp < l_HIO.field_0x0A8) {
-                if((mBaseTarget->current.pos - field_0x69C).absXZ() < field_0x2E0 && field_0xAE5 == 0) {
-                    modeProc(PROC_INIT_e,5);
-                }
+        f32 temp = std::fabsf(current.pos.y - mBaseTarget->current.pos.y);
+        if(field_0x9D4 < l_HIO.field_0x0E8 && temp < l_HIO.field_0x0A8) {
+            if((mBaseTarget->current.pos - field_0x69C).absXZ() < field_0x2E0 && field_0xAE5 == 0) {
+                modeProc(PROC_INIT_e,5);
             }
-            field_0x690 = field_0x69C;
-            cLib_addCalcPosXZ2(&current.pos, field_0x690, (l_HIO.field_0x0CC + 1.0f) *0.005f * field_0x394, 40.0f);
         }
+        field_0x690 = field_0x69C;
+        cLib_addCalcPosXZ2(&current.pos, field_0x690, (l_HIO.field_0x0CC + 1.0f) *0.005f * field_0x394, 40.0f);
     }
 }
 
@@ -1567,66 +1557,64 @@ void daFm_c::modeAttack() {
                                 }
                             }
                         }
-                    } else {
-                        if (isNpc(mpActorTarget) == true) { 
-                            if (!fopAcM_checkCarryNow(mpActorTarget)) {
-                                fopAcM_seStart(this, JA_SE_CM_FM_GRAB_HAND, 0);
-                                fopAcM_setCarryNow(mpActorTarget, 0);
-                                field_0x684 = 4;
+                    } else if (isNpc(mpActorTarget) == true) {
+                        if (!fopAcM_checkCarryNow(mpActorTarget)) {
+                            fopAcM_seStart(this, JA_SE_CM_FM_GRAB_HAND, 0);
+                            fopAcM_setCarryNow(mpActorTarget, 0);
+                            field_0x684 = 4;
 
-                                if (fopAcM_GetName(mpActorTarget) == fpcNm_NPC_CB1_e) {
-                                    ((daNpc_Cb1_c*)mpActorTarget)->noCarryAction();
+                            if (fopAcM_GetName(mpActorTarget) == fpcNm_NPC_CB1_e) {
+                                ((daNpc_Cb1_c*)mpActorTarget)->noCarryAction();
+                            }
+
+                            if (fopAcM_GetName(mpActorTarget) == fpcNm_NPC_MD_e) {
+                                ((daNpc_Md_c*)mpActorTarget)->noCarryAction();
+                            }
+
+                            field_0x6B8 = 1;
+                            if(field_0x2E4 != 0) {
+                                if (dComIfGp_evmng_startCheck("DEFAULT_FM_SW_APEEAR")) {
+                                    dComIfGp_event_reset();
                                 }
-
-                                if (fopAcM_GetName(mpActorTarget) == fpcNm_NPC_MD_e) {
-                                    ((daNpc_Md_c*)mpActorTarget)->noCarryAction();
-                                }
-
-                                field_0x6B8 = 1;
-                                if(field_0x2E4 != 0) {
-                                    if (dComIfGp_evmng_startCheck("DEFAULT_FM_SW_APEEAR")) {
-                                        dComIfGp_event_reset();
-                                    }
-                                    modeProcInit(0xD);
-                                } else {
-                                    f32 temp3 = fopAcM_searchPlayerDistanceXZ(this);
-                                    daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
-
-                                    if ((temp3 > l_HIO.field_0x0BC || 
-                                    std::fabsf(pLink->current.pos.y - current.pos.y) > l_HIO.field_0x0A8) && 
-                                    !dComIfGp_event_runCheck()) {
-                                        modeProcInit(0x10);
-                                    } else {
-                                        modeProcInit(0xD);
-                                    }
-                                }
+                                modeProcInit(0xD);
                             } else {
-                                fopAcM_cancelCarryNow(mpActorTarget);
+                                f32 temp3 = fopAcM_searchPlayerDistanceXZ(this);
+                                daPy_lk_c* pLink = (daPy_lk_c*)daPy_getPlayerLinkActorClass();
+
+                                if ((temp3 > l_HIO.field_0x0BC || 
+                                std::fabsf(pLink->current.pos.y - current.pos.y) > l_HIO.field_0x0A8) && 
+                                !dComIfGp_event_runCheck()) {
+                                    modeProcInit(0x10);
+                                } else {
+                                    modeProcInit(0xD);
+                                }
                             }
                         } else {
-                            fopAc_ac_c* actor = mpActorTarget;
-                            s16 procName = fopAcM_GetName(actor);
+                            fopAcM_cancelCarryNow(mpActorTarget);
+                        }
+                    } else {
+                        fopAc_ac_c* actor = mpActorTarget;
+                        s16 procName = fopAcM_GetName(actor);
 
-                            if (procName == fpcNm_BOMB_e) {
-                                if (!fopAcM_checkCarryNow(actor)) {
-                                    fopAcM_setCarryNow(actor, 0);
-                                    field_0x684 = 2;
-                                    fopAcM_seStart(this, JA_SE_CM_FM_GRAB, 0);
+                        if (procName == fpcNm_BOMB_e) {
+                            if (!fopAcM_checkCarryNow(actor)) {
+                                fopAcM_setCarryNow(actor, 0);
+                                field_0x684 = 2;
+                                fopAcM_seStart(this, JA_SE_CM_FM_GRAB, 0);
 
-                                    modeProcInit(0xD);
-                                } else {
-                                    modeProcInit(7);
-                                }
-                            } else if (procName == fpcNm_TSUBO_e) {
-                                if (!fopAcM_checkCarryNow(actor)) {
-                                    fopAcM_setCarryNow(actor, 0);
-                                    field_0x684 = 3;
-                                    fopAcM_seStart(this, JA_SE_CM_FM_GRAB, 0);
+                                modeProcInit(0xD);
+                            } else {
+                                modeProcInit(7);
+                            }
+                        } else if (procName == fpcNm_TSUBO_e) {
+                            if (!fopAcM_checkCarryNow(actor)) {
+                                fopAcM_setCarryNow(actor, 0);
+                                field_0x684 = 3;
+                                fopAcM_seStart(this, JA_SE_CM_FM_GRAB, 0);
 
-                                    modeProcInit(0xD);
-                                } else {
-                                    fopAcM_cancelCarryNow(actor);
-                                }
+                                modeProcInit(0xD);
+                            } else {
+                                fopAcM_cancelCarryNow(actor);
                             }
                         }
                     }
@@ -1692,42 +1680,40 @@ void daFm_c::modeThrow() {
             fopAcM_cancelCarryNow(mpActorTarget);
             field_0x684 = 0;
             mGrabPos = current.pos;
-        } else {
-            if(fopAcM_GetName(mpActorTarget) == fpcNm_BOMB_e || fopAcM_GetName(mpActorTarget) == fpcNm_TSUBO_e) {
-                mpActorTarget->current.angle.y = shape_angle.y;
-                mpActorTarget->shape_angle.y = shape_angle.y;
-                mpActorTarget->speedF = l_HIO.field_0x0F0;
-                
-                f32 temp = field_0x9D4 / (REG12_F(13) + 1000.0f);
-                if (temp <= 0.0f) {
-                    temp = 0.0f;
-                } else if (temp >= 1.0f) {
-                    temp = 1.0f;
-                }
-
-                f32 dropspeed = temp *= l_HIO.field_0x0F4;
-                daTsubo::Act_c* tsubo = (daTsubo::Act_c*)mpActorTarget;
-                
-                if(fopAcM_GetName(mpActorTarget) == fpcNm_TSUBO_e) {
-                    switch(tsubo->prm_get_type()) {
-                        case 0:
-                        case 1:
-                        case 2:
-                        case 4:
-                        case 5:
-                        case 6:
-                            tsubo->set_drop_spd_y0(dropspeed);
-                            tsubo->m810 = 1;
-                            break;
-                    }
-                } else {
-                    tsubo->set_drop_spd_y0(dropspeed);
-                }
-                mpActorTarget->gravity = l_HIO.field_0x0F8;
-                fopAcM_cancelCarryNow(mpActorTarget);
-                field_0x684 = 0;
-                mGrabPos = current.pos;
+        } else if(fopAcM_GetName(mpActorTarget) == fpcNm_BOMB_e || fopAcM_GetName(mpActorTarget) == fpcNm_TSUBO_e) {
+            mpActorTarget->current.angle.y = shape_angle.y;
+            mpActorTarget->shape_angle.y = shape_angle.y;
+            mpActorTarget->speedF = l_HIO.field_0x0F0;
+            
+            f32 temp = field_0x9D4 / (REG12_F(13) + 1000.0f);
+            if (temp <= 0.0f) {
+                temp = 0.0f;
+            } else if (temp >= 1.0f) {
+                temp = 1.0f;
             }
+
+            f32 dropspeed = temp *= l_HIO.field_0x0F4;
+            daTsubo::Act_c* tsubo = (daTsubo::Act_c*)mpActorTarget;
+            
+            if(fopAcM_GetName(mpActorTarget) == fpcNm_TSUBO_e) {
+                switch(tsubo->prm_get_type()) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 4:
+                    case 5:
+                    case 6:
+                        tsubo->set_drop_spd_y0(dropspeed);
+                        tsubo->m810 = 1;
+                        break;
+                }
+            } else {
+                tsubo->set_drop_spd_y0(dropspeed);
+            }
+            mpActorTarget->gravity = l_HIO.field_0x0F8;
+            fopAcM_cancelCarryNow(mpActorTarget);
+            field_0x684 = 0;
+            mGrabPos = current.pos;
         }
     }
 
@@ -2064,23 +2050,18 @@ void daFm_c::modeGrabDemo() {
                 modeProcInit(0x12);
             }
         }
-    } else {
-        if (isLink(mpActorTarget)) {
-            fopAcM_orderOtherEvent(this, "DEFAULT_FM_GRAB");
-        }
-        else {
-            if (isNpc(mpActorTarget)) {
+    } else if (isLink(mpActorTarget)) {
+        fopAcM_orderOtherEvent(this, "DEFAULT_FM_GRAB");
+    } else if (isNpc(mpActorTarget)) {
 #if VERSION > VERSION_JPN
-                if (field_0x2E4 != 0) {
-                    fopAcM_orderChangeEvent(this, "DEFAULT_FM_SUIKOMI_NPC", 0, 0xFFFF);
-                } else {
-                    fopAcM_orderOtherEvent(this, "DEFAULT_FM_SUIKOMI_NPC");
-                }
-#else
-                fopAcM_orderOtherEvent(this, "DEFAULT_FM_SUIKOMI_NPC");
-#endif
-            }
+        if (field_0x2E4 != 0) {
+            fopAcM_orderChangeEvent(this, "DEFAULT_FM_SUIKOMI_NPC", 0, 0xFFFF);
+        } else {
+            fopAcM_orderOtherEvent(this, "DEFAULT_FM_SUIKOMI_NPC");
         }
+#else
+        fopAcM_orderOtherEvent(this, "DEFAULT_FM_SUIKOMI_NPC");
+#endif
     }
 }
 

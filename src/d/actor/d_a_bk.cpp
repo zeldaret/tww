@@ -2792,25 +2792,23 @@ static void wepon_search(bk_class* i_this) {
             i_this->dr.mMode = 2;
             anm_init(i_this, dRes_INDEX_BK_BCK_BK_CATCH_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_CATCH_e);
             i_this->m0300[1] = 29;
-        } else {
-            if (i_this->m030A == 0) {
-                i_this->dr.mAction = 4;
-                i_this->m0300[1] = 0;
-                i_this->m11F3 = 1;
-            } else if (i_this->dr.mAcch.ChkGroundHit() && i_this->dr.mAcch.ChkWallHit()) {
-                if (i_this->m02CE < 2) {
-                    actor->speed.y = 100.0f + REG0_F(16);
-                    anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
-                    fopAcM_monsSeStart(actor, JA_SE_CV_BK_JUMP, 0);
-                    i_this->dr.mMode = 5;
-                    i_this->m02CE++;
-                } else {
-                    i_this->dr.mAction = 0;
-                    path_check(i_this, 0);
-                    wait_set(i_this);
-                    i_this->dr.mMode = 2;
-                    i_this->m02CC = 70;
-                }
+        } else if (i_this->m030A == 0) {
+            i_this->dr.mAction = 4;
+            i_this->m0300[1] = 0;
+            i_this->m11F3 = 1;
+        } else if (i_this->dr.mAcch.ChkGroundHit() && i_this->dr.mAcch.ChkWallHit()) {
+            if (i_this->m02CE < 2) {
+                actor->speed.y = 100.0f + REG0_F(16);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
+                fopAcM_monsSeStart(actor, JA_SE_CV_BK_JUMP, 0);
+                i_this->dr.mMode = 5;
+                i_this->m02CE++;
+            } else {
+                i_this->dr.mAction = 0;
+                path_check(i_this, 0);
+                wait_set(i_this);
+                i_this->dr.mMode = 2;
+                i_this->m02CC = 70;
             }
         }
         break;
@@ -3571,12 +3569,10 @@ static void damage_check(bk_class* i_this) {
             r28 = 1;
             atInfo.mpObj = i_this->m0DE8.GetTgHitObj();
             atInfo.pParticlePos = i_this->m0DE8.GetTgHitPosP();
-        } else {
-            if (i_this->m0CB8.ChkTgHit() != 0) {
-                r28 = 2;
-                atInfo.mpObj = i_this->m0CB8.GetTgHitObj();
-                atInfo.pParticlePos = i_this->m0CB8.GetTgHitPosP();
-            }
+        } else if (i_this->m0CB8.ChkTgHit() != 0) {
+            r28 = 2;
+            atInfo.mpObj = i_this->m0CB8.GetTgHitObj();
+            atInfo.pParticlePos = i_this->m0CB8.GetTgHitPosP();
         }
         
         at_power_check(&atInfo);

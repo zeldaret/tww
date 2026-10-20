@@ -253,10 +253,8 @@ void daPy_lk_c::setBlendRopeMoveAnime(int param_0) {
                     anm = ANM_ROPESWINGB;
                 }
             }
-        } else {
-            if (mProcVar0.m34D0 == 0) {
-                cLib_addCalc(&sp08, dVar6, 0.5f, 0.05f, 0.005f);
-            }
+        } else if (mProcVar0.m34D0 == 0) {
+            cLib_addCalc(&sp08, dVar6, 0.5f, 0.05f, 0.005f);
         }
     }
     f32 f4;
@@ -478,17 +476,15 @@ BOOL daPy_lk_c::procRopeReady_init() {
     m370C.x = rope->current.pos.x;
     if (m3600 >= 0.0f) {
         m370C.y = rope->current.pos.y - m3600;
+    } else if (checkBossGomaStage() && rope->current.pos.y - current.pos.y > 700.0f) {
+        m370C.y = rope->current.pos.y - 700.0f;
     } else {
-        if (checkBossGomaStage() && rope->current.pos.y - current.pos.y > 700.0f) {
-            m370C.y = rope->current.pos.y - 700.0f;
+        mGndChk.SetPos(&rope->current.pos);
+        f32 dVar4 = dComIfG_Bgsp()->GroundCross(&mGndChk);
+        if (dVar4 > ((current.pos.y - 125.0f) - 50.0f)) {
+            m370C.y = 50.0f + (125.0f + dVar4);
         } else {
-            mGndChk.SetPos(&rope->current.pos);
-            f32 dVar4 = dComIfG_Bgsp()->GroundCross(&mGndChk);
-            if (dVar4 > ((current.pos.y - 125.0f) - 50.0f)) {
-                m370C.y = 50.0f + (125.0f + dVar4);
-            } else {
-                m370C.y = current.pos.y;
-            }
+            m370C.y = current.pos.y;
         }
     }
     m3600 = m370C.y;
@@ -991,26 +987,24 @@ BOOL daPy_lk_c::procRopeUp() {
             int direction = getDirectionFromAngle(m34DC);
             if (mStickDistance <= 0.05f) {
                 procRopeHangWait_init(0);
-            } else {
-                if (!spActionButton()) {
-                    procRopeSwingStart_init();
-                } else if (direction == DIR_BACKWARD) {
-                    procRopeDown_init();
-                } else if (direction == DIR_FORWARD) {
-                    if (m35A0 <= current.pos.y) {
+            } else if (!spActionButton()) {
+                procRopeSwingStart_init();
+            } else if (direction == DIR_BACKWARD) {
+                procRopeDown_init();
+            } else if (direction == DIR_FORWARD) {
+                if (m35A0 <= current.pos.y) {
 #if VERSION > VERSION_DEMO
-                        if (!specialRopeHangUp())
+                    if (!specialRopeHangUp())
 #endif
-                        {
-                            procRopeHangWait_init(0);
-                        }
-                    } else {
-                        setSingleMoveAnime(ANM_ROPECLIMB, m_HIO->mItem.mRope.m.field_0x30, 0.0f, -1, -1.0f);
-                        mFrameCtrlUnder[UNDER_MOVE0_e].setAttribute(J3DFrameCtrl::EMode_NONE);
+                    {
+                        procRopeHangWait_init(0);
                     }
                 } else {
-                    procRopeHangWait_init(0);
+                    setSingleMoveAnime(ANM_ROPECLIMB, m_HIO->mItem.mRope.m.field_0x30, 0.0f, -1, -1.0f);
+                    mFrameCtrlUnder[UNDER_MOVE0_e].setAttribute(J3DFrameCtrl::EMode_NONE);
                 }
+            } else {
+                procRopeHangWait_init(0);
             }
         } else {
             cLib_chaseF(&current.pos.y, m35A0, 5.0f);
@@ -1070,22 +1064,20 @@ BOOL daPy_lk_c::procRopeDown() {
         int direction = getDirectionFromAngle(m34DC);
         if (mStickDistance <= 0.05f) {
             procRopeHangWait_init(1);
-        } else {
-            if (!spActionButton()) {
-                procRopeSwingStart_init();
-            } else if (direction == DIR_FORWARD) {
-                procRopeUp_init();
-            } else if (direction == DIR_BACKWARD) {
-                m35A0 += 1.5f;
-                if (m35A0 > m_HIO->mItem.mRope.m.field_0x40) {
-                    m35A0 = m_HIO->mItem.mRope.m.field_0x40;
-                }
-                if (cLib_chaseF(&current.pos.y, m35A4, m35A0)) {
-                    procRopeHangWait_init(1);
-                }
-            } else {
+        } else if (!spActionButton()) {
+            procRopeSwingStart_init();
+        } else if (direction == DIR_FORWARD) {
+            procRopeUp_init();
+        } else if (direction == DIR_BACKWARD) {
+            m35A0 += 1.5f;
+            if (m35A0 > m_HIO->mItem.mRope.m.field_0x40) {
+                m35A0 = m_HIO->mItem.mRope.m.field_0x40;
+            }
+            if (cLib_chaseF(&current.pos.y, m35A4, m35A0)) {
                 procRopeHangWait_init(1);
             }
+        } else {
+            procRopeHangWait_init(1);
         }
     }
     return true;
@@ -1186,12 +1178,10 @@ BOOL daPy_lk_c::procRopeMove() {
     if (fopAcM_GetParam(mActorKeepEquip.getActor()) == 0 && checkRopeReadyAnime()) {
         if (mpAttnActorLockOn != NULL) {
             setSpeedAndAngleAtnActor();
+        } else if (m355E == 0 && !checkAttentionLock()) {
+            resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
         } else {
-            if (m355E == 0 && !checkAttentionLock()) {
-                resetActAnimeUpper(UPPER_MOVE2_e, -1.0f);
-            } else {
-                setSpeedAndAngleAtn();
-            }
+            setSpeedAndAngleAtn();
         }
     }
     if (checkNextMode(0) == 0) {
