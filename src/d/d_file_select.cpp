@@ -234,12 +234,17 @@ void dFile_select_c::_move() {
     if((mDoMemCd_getProbeStat() == 0 || mDoMemCd_getProbeStat() == 1) && field_0x3941 == 0)
 #endif
     {
+#if VERSION == VERSION_PAL
+        if(mUseType != 1) {
+            dComIfGp_setMsgDtArchive(field_0x3cd4[g_mDoMemCd_control.field_0x165B]);
+        }
+#endif
         field_0x392e = 1;
         field_0x3930 = 0;
         selectEnd = 2;
         mIconMode = 3;
         field_0x392a = 7;
-        field_0x392b = 0x26;
+        field_0x392b = VERSION_SELECT(0x26, 0x26, 0x26, 0x29);
     }
     else {
         (this->*DataSelProc[field_0x392b])();
@@ -255,13 +260,20 @@ bool dFile_select_c::_open() {
     int temp2 = PaneTranceRecTlt1(field_0x3930 - g_fsHIO.field_0x0F, g_fsHIO.field_0x0C, g_fsHIO.field_0x18, 0.0f, 0.0f, 0.0f, 1, 0);
     int temp3 = PaneTranceRecTlt2(field_0x3930 - (g_fsHIO.field_0x0F + g_fsHIO.field_0x10), g_fsHIO.field_0x0D, g_fsHIO.field_0x18, 0.0f, 0.0f, 0.0f, 1, 0);
     int temp4 = PaneTranceRecTlt3(field_0x3930 - (g_fsHIO.field_0x0F + g_fsHIO.field_0x10 * 2), g_fsHIO.field_0x0E, g_fsHIO.field_0x18, 0.0f, 0.0f, 0.0f, 1, 0);
+#if VERSION == VERSION_PAL
+    int temp8 = PaneTranceLanguage(field_0x3930 - (g_fsHIO.field_0x0F + g_fsHIO.field_0x10 * 3), g_fsHIO.field_0x0E, g_fsHIO.field_0x18, 0.0f, 0.0f, 0.0f, 1, 0);
+#endif
     int temp5 = PaneTranceRecInfo1(field_0x3930 - g_fsHIO.field_0x14, g_fsHIO.field_0x11, 0.0f, g_fsHIO.field_0x1A, 0.0f, 0.0f, 1, 0);
     int temp6 = PaneTranceRecInfo2(field_0x3930 - g_fsHIO.field_0x15, g_fsHIO.field_0x12, 0.0f, g_fsHIO.field_0x1C, 0.0f, 0.0f, 1, 0);
     int temp7 = PaneTranceRecInfo3(field_0x3930 - g_fsHIO.field_0x16, g_fsHIO.field_0x13, 0.0f, g_fsHIO.field_0x1E, 0.0f, 0.0f, 1, 0);
 
     field_0x3930++;
 
-    if(temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 == 1 && temp7 == 1) {
+    if(temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 == 1 && temp7 == 1
+#if VERSION == VERSION_PAL
+        && temp8 == 1
+#endif
+    ) {
         return true;
     }
 
@@ -372,8 +384,15 @@ int dFile_select_c::closeBack() {
     int temp5 = PaneTranceRecInfo2(field_0x3930 - g_fsHIO.field_0x10, g_fsHIO.field_0x12, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
     int temp6 = PaneTranceRecTlt3(field_0x3930 - g_fsHIO.field_0x10 * 2, g_fsHIO.field_0x0E, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
     int temp7 = PaneTranceRecInfo3(field_0x3930 - g_fsHIO.field_0x10 * 2, g_fsHIO.field_0x12, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
+#if VERSION == VERSION_PAL
+    int temp8 = PaneTranceLanguage(field_0x3930 - g_fsHIO.field_0x10 * 3, g_fsHIO.field_0x0E, 0.0f, 0.0f, -(float)g_fsHIO.field_0x40, 0.0f, 0, 1);
+#endif
 
-    if(temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 == 1 && temp7 == 1) {
+    if(temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 == 1 && temp7 == 1
+#if VERSION == VERSION_PAL
+        && temp8 == 1
+#endif
+    ) {
         return true;
     }
 
@@ -567,9 +586,22 @@ void dFile_select_c::SelectTitAnime() {
             }
 
             break;
+#if VERSION == VERSION_PAL
+        case 3:
+            fopMsgM_paneTrans(pad, 0.0f, field_0x3948);
+            break;
+#endif
     }
 
+#if VERSION == VERSION_PAL
+    float temp2 = 0.0f;
+    if(selectNum == 3) {
+        temp2 = 8.0f;
+    }
+    fopMsgM_paneTrans(field_0x2fc0, 0.0f, temp2 + (selectNum * 81.0f + field_0x3948));
+#else
     fopMsgM_paneTrans(field_0x2fc0, 0.0f, selectNum * 85.0f + field_0x3948);
+#endif
     field_0x3930++;
     if(field_0x3930 > g_fsHIO.field_0x4F) {
         field_0x3930 = 0;
