@@ -6,6 +6,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JStudio/JStudio/jstudio-math.h"
+#include <cmath>
 #include "dolphin/types.h"
 
 namespace JStudio {

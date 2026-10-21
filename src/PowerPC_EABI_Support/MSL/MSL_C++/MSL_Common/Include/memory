@@ -1,7 +1,5 @@
-#ifndef MSL_MEMORY_H
-#define MSL_MEMORY_H
-#ifndef MSL_MEMORY_H_
-#define MSL_MEMORY_H_
+#ifndef MSL_MEMORY
+#define MSL_MEMORY
 
 #include "stddef.h"
 
@@ -51,8 +49,5 @@ inline T* uninitialized_copy(T* first, T* last, T* result) {
 }
 
 }
-
-#endif
-
 
 #endif /* MSL_MEMORY_H */

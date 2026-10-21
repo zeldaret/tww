@@ -1,0 +1,6 @@
+#ifndef MSL_CMATH
+#define MSL_CMATH
+
+#include "math.h"
+
+#endif

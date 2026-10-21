@@ -1,7 +1,7 @@
 #ifndef C_XYZ_H
 #define C_XYZ_H
 
-#include "math.h" // IWYU pragma: keep
+#include <cmath> // IWYU pragma: keep
 #include "dolphin/mtx/vec.h"
 
 struct cXy {

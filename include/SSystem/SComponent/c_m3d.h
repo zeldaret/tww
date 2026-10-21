@@ -1,7 +1,7 @@
 #ifndef C_M3D_H_
 #define C_M3D_H_
 
-#include "math.h" // IWYU pragma: keep
+#include <cmath> // IWYU pragma: keep
 #include "dolphin/types.h"
 #include "dolphin/mtx/vec.h"
 #include "dolphin/mtx/mtx.h"
