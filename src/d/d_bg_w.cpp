@@ -56,7 +56,7 @@ void dBgW::DrawBox() {
     points[7].y = min.y;
     points[7].z = max.z;
 
-    dDbVw_drawCube8pXlu(points, (GXColor){0x00, 0xFF, 0x00, 0x64});
+    dDbVw_drawCube8pXlu(points, COMPOUND_LITERAL(GXColor){0x00, 0xFF, 0x00, 0x64});
 }
 
 void dBgW::DebugDraw() {

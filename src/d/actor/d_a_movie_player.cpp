@@ -3167,13 +3167,13 @@ static void daMP_THPGXYuv2RgbSetup(const GXRenderModeObj* rmode) {
     GXSetTevKColorSel(GX_TEVSTAGE3, GX_TEV_KCSEL_K2);
 
 #if VERSION == VERSION_DEMO
-    GXSetTevColorS10(GX_TEVREG0, (GXColorS10){-0x5A, 0x00, -0x72, 0x87});
+    GXSetTevColorS10(GX_TEVREG0, COMPOUND_LITERAL(GXColorS10){-0x5A, 0x00, -0x72, 0x87});
 
-    GXSetTevKColor(GX_KCOLOR0, (GXColor){0x00, 0x00, 0xE2, 0x58});
+    GXSetTevKColor(GX_KCOLOR0, COMPOUND_LITERAL(GXColor){0x00, 0x00, 0xE2, 0x58});
 
-    GXSetTevKColor(GX_KCOLOR1, (GXColor){0xB3, 0x00, 0x00, 0xB6});
+    GXSetTevKColor(GX_KCOLOR1, COMPOUND_LITERAL(GXColor){0xB3, 0x00, 0x00, 0xB6});
 
-    GXSetTevKColor(GX_KCOLOR2, (GXColor){0xFF, 0x00, 0xFF, 0x80});
+    GXSetTevKColor(GX_KCOLOR2, COMPOUND_LITERAL(GXColor){0xFF, 0x00, 0xFF, 0x80});
 #else
     GXColorS10 spA8 = {-0x5A, 0x00, -0x72, 0x87};
     GXSetTevColorS10(GX_TEVREG0, spA8);

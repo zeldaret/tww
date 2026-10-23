@@ -23,12 +23,12 @@ static void hand_draw(sitem_class* i_this) {
         mDoExt_modelUpdateDL(model);
     }
 
-    i_this->mVineLineMat.update(10, (GXColor){0x00, 0xB4, 0x32, 0xFF}, &actor->tevStr);
+    i_this->mVineLineMat.update(10, COMPOUND_LITERAL(GXColor){0x00, 0xB4, 0x32, 0xFF}, &actor->tevStr);
 
     dComIfGd_set3DlineMat(&i_this->mVineLineMat);
 
     if (i_this->field_0x308 > 0.1f) {
-        i_this->mVineStubLineMat.update(5, (GXColor){0x00, 0xB4, 0x32, 0xFF}, &actor->tevStr);
+        i_this->mVineStubLineMat.update(5, COMPOUND_LITERAL(GXColor){0x00, 0xB4, 0x32, 0xFF}, &actor->tevStr);
         dComIfGd_set3DlineMat(&i_this->mVineStubLineMat);
     }
 }
