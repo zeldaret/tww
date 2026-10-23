@@ -199,7 +199,7 @@ void daGFlag_packet_c::draw() {
     GXSetArray(GX_VA_NRM, &mBackNrm[mCurrArr], sizeof(cXyz));
     GXCallDisplayList(l_goal_flag_DL, 256);
 #if VERSION > VERSION_JPN
-    J3DShape::sOldVcdVatCmd = 0;
+    J3DShape::resetVcdVatCache();
 #endif
 }
 

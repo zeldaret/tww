@@ -105,8 +105,8 @@ static BOOL dScnMenu_Draw(menu_of_scene_class* i_this) {
         JUTReport(20, y, "%c %2d %s　＜%s＞", l_cursolID == id ? (s8)79 : (s8)32, id, info->stage[id].name, info->stage[id].roomPtr[l_groupPoint[id]].name);
     }
     JUTReport(280,400,"Ｘ：進む　Ｙ：戻る");
-    char* timepat_str[] = {"通常", "高速経過", "朝（あさ）に固定", "昼（ひる）に固定", "夕方（ゆうがた）に固定", "夜（よる）に固定", "時に固定"};
-    char* weekpat_str[] = {"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"};
+    const char* timepat_str[] = {"通常", "高速経過", "朝（あさ）に固定", "昼（ひる）に固定", "夕方（ゆうがた）に固定", "夜（よる）に固定", "時に固定"};
+    const char* weekpat_str[] = {"日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"};
     if (l_timepat >= 6) {
         JUTReport(280, 420, "時刻：%d%s", l_timepat - 6, timepat_str[6]);
     } else {

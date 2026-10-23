@@ -527,32 +527,32 @@ void dPa_smokePcallBack::draw(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
 
     GXPosition3f32(local_168.x, local_168.y, local_168.z);
     GXNormal3f32(norm1.x, norm1.y, norm1.z);
-    GXColor4x8(255, 255, 255, r30);
+    GXColor4u8(255, 255, 255, r30);
     GXTexCoord2f32(0.5f, 0.5f);
 
     GXPosition3f32(f28_f27_f31.x, f28_f27_f31.y, f28_f27_f31.z);
     GXNormal3f32(norm2.x, norm2.y, norm2.z);
-    GXColor4x8(255, 255, 255, r30);
+    GXColor4u8(255, 255, 255, r30);
     GXTexCoord2f32(0.0f, 0.0f);
 
     GXPosition3f32(sp38_3c.x, sp38_3c.y, sp38_3c.z);
     GXNormal3f32(norm3.x, norm3.y, norm3.z);
-    GXColor4x8(255, 255, 255, r30);
+    GXColor4u8(255, 255, 255, r30);
     GXTexCoord2f32(1.0f, 0.0f);
 
     GXPosition3f32(sp30_34.x, sp30_34.y, sp30_34.z);
     GXNormal3f32(norm4.x, norm4.y, norm4.z);
-    GXColor4x8(255, 255, 255, r30);
+    GXColor4u8(255, 255, 255, r30);
     GXTexCoord2f32(1.0f, 1.0f);
 
     GXPosition3f32(sp28_2c.x, sp28_2c.y, sp28_2c.z);
     GXNormal3f32(norm5.x, norm5.y, norm5.z);
-    GXColor4x8(255, 255, 255, r30);
+    GXColor4u8(255, 255, 255, r30);
     GXTexCoord2f32(0.0f, 1.0f);
 
     GXPosition3f32(f28_f27_f31.x, f28_f27_f31.y, f28_f27_f31.z);
     GXNormal3f32(norm2.x, norm2.y, norm2.z);
-    GXColor4x8(255, 255, 255, r30);
+    GXColor4u8(255, 255, 255, r30);
     GXTexCoord2f32(0.0f, 0.0f);
 
     GXEnd();

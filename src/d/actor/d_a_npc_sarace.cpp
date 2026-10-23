@@ -80,7 +80,7 @@ void daNpc_Sarace_c::checkOrder() {
 }
 
 /* 000008E8-00000A6C       .text next_msgStatus__14daNpc_Sarace_cFPUl */
-void daNpc_Sarace_c::next_msgStatus(unsigned long*) {
+void daNpc_Sarace_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
@@ -90,7 +90,7 @@ void daNpc_Sarace_c::getMsg() {
 }
 
 /* 00000B50-00000BEC       .text anmAtr__14daNpc_Sarace_cFUs */
-void daNpc_Sarace_c::anmAtr(unsigned short) {
+void daNpc_Sarace_c::anmAtr(u16) {
     /* Nonmatching */
 }
 
