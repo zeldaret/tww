@@ -81,9 +81,9 @@ public:
     BOOL chkStopOpen();
     void setStopDemo();
     BOOL chkStopClose();
-    char* getBmdName();
-    char* getBmdName2();
-    char* getDzbName();
+    const char* getBmdName();
+    const char* getBmdName2();
+    const char* getDzbName();
     BOOL CreateHeap();
     void setEventPrm();
     void openInit();
