@@ -8,7 +8,7 @@ struct SoundInfo {
     /* 0x04 */ u8 mPriority;
     /* 0x05 */ u8 _05;
     /* 0x06 */ u16 mOffsetNo;
-    /* 0x08 */ u32 mPitch;
+    /* 0x08 */ f32 mPitch;
     /* 0x0C */ union Volume {
         u32 typeView;
         u8 byteView[4];

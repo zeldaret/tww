@@ -657,7 +657,6 @@ void mDoExt_backupMatBlock_c::store(J3DMaterial* i_material) {
 
 /* 800101BC-8001084C       .text restore__23mDoExt_backupMatBlock_cFP11J3DMaterial */
 void mDoExt_backupMatBlock_c::restore(J3DMaterial* i_material) {
-    /* Nonmatching - retail-only regalloc on indBlock */
     J3DColorBlock* colorBlock = i_material->getColorBlock();
     colorBlock->setColorChanNum(mColorChanNum);
     for (u32 i = 0; i < 2; i++) {
@@ -715,7 +714,9 @@ void mDoExt_backupMatBlock_c::restore(J3DMaterial* i_material) {
     if (indBlock->getType() == 'IBLF') {
         indBlock->setIndTexStageNum(mIndTexStageNum);
         for (u32 i = 0; i < 4; i++) {
-            *indBlock->getIndTexOrder(i) = mIndTexOrder[i];
+            J3DIndTexOrder* order = indBlock->getIndTexOrder(i);
+            order->setCoord(mIndTexOrder[i].getCoord());
+            order->setMap(mIndTexOrder[i].getMap());
         }
         for (u32 i = 0; i < 3; i++) {
             indBlock->setIndTexMtx(i, mIndTexMtx[i]);
@@ -3123,7 +3124,7 @@ void mDoExt_initFontCommon(JUTFont** p_font, ResFONT** p_resfont, JKRHeap* p_hea
     JUT_ASSERT(VERSION_SELECT(6575, 6668, 6685, 6685), mDoExt_font != NULL);
 }
 
-#if VERSION == VERSION_DEMO
+#if VERSION <= VERSION_JPN
 JUTFont* mDoExt_font0;
 JUTFont* mDoExt_font1;
 s32 mDoExt_font0_getCount;

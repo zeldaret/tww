@@ -180,7 +180,7 @@ void JAIZelBasic::gframeProcess() {
     if (!JAInter::SeMgr::seHandle) {
         return;
     }
-    if (JAInter::SeMgr::seHandle->mState >= SOUNDSTATE_Playing) {
+    if (JAInter::SeMgr::seHandle->getStatus() >= SOUNDSTATE_Playing) {
         zeldaGFrameWork();
     }
     processFrameWork();
@@ -203,8 +203,8 @@ void JAIZelBasic::resetProcess() {
 
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         JAInter::SeqUpdateData* data = JAInter::SequenceMgr::getPlayTrackInfo(i);
-        if (data && data->mSequence) {
-            data->mSequence->setSeqInterVolume(SOUNDPARAM_Direct, 0.0f, 1);
+        if (data && data->mpSequence) {
+            data->mpSequence->setSeqInterVolume(SOUNDPARAM_Direct, 0.0f, 1);
         }
     }
     if (JAInter::StreamMgr::getUpdateInfo()->mpSound) {
@@ -228,8 +228,8 @@ void JAIZelBasic::resetRecover() {
     }
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         JAInter::SeqUpdateData* data = JAInter::SequenceMgr::getPlayTrackInfo(i);
-        if (data && data->mSequence && data->mSequence != JAInter::SeMgr::seHandle) {
-            data->mSequence->stop(0);
+        if (data && data->mpSequence && data->mpSequence != JAInter::SeMgr::seHandle) {
+            data->mpSequence->stop(0);
         }
     }
     setScene(0, dIsleRoom_SeaFloor_e, 0, -1);

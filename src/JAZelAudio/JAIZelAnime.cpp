@@ -158,7 +158,7 @@ void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_soun
 void JAIZelAnime::setSpeedModifySound(JAISound* i_sound, JAIAnimeFrameSoundData* i_data, f32 param_2) {
     f32 base_pitch = i_data->mPitch;
     if (i_data->mPitchFactor != 0) {
-        switch (i_sound->field_0x1c) {
+        switch (i_sound->mMapInfoIndex) {
         case 6:
             break;
         case 0x12:
@@ -187,7 +187,7 @@ void JAIZelAnime::setSpeedModifySound(JAISound* i_sound, JAIAnimeFrameSoundData*
                 base_volume = (int)((param_2 - 1.2f) * 35.0f);
             }
         } else {
-            switch (i_sound->field_0x1c) {
+            switch (i_sound->mMapInfoIndex) {
             case 19:
                 base_volume += (int)(i_data->mVolumeFactor * (param_2 - 1.0f));
                 break;
@@ -205,7 +205,7 @@ void JAIZelAnime::setSpeedModifySound(JAISound* i_sound, JAIAnimeFrameSoundData*
     }
 
     if (i_sound->getID() == JA_SE_LK_HOFUKU) {
-        if (i_sound->field_0x18 <= 1) {
+        if (i_sound->mActiveTimer <= 1) {
             i_sound->setVolume((u8)base_volume / 127.0f, 0, 5);
         }
     } else {
