@@ -21,6 +21,8 @@ static char* l_npc_staff_id[] = { "Sv0", "Sv1", "Sv2", "Sv3" };
 
 static const char* l_arcname_tbl[] = { "Sv", "Sv", "Sv", "Sv" };
 
+const char daNpcSv_c::m_arcname[] = "Sv";
+
 static const int l_bmd_ix_tbl[] = {
     dRes_ID_SV_BDL_SV_e,
     dRes_ID_SV_BDL_SV_e,
@@ -202,7 +204,7 @@ static u16 l_msg_sv_flag_tbl[] = {
     TALK_FLAG_1ST, TALK_FLAG_1ST, TALK_FLAG_2ND, TALK_FLAG_2ND, 0, 0, TALK_FLAG_P2, 0, TALK_FLAG_P3, 0, TALK_FLAG_P4, 0,
 };
 
-static s16 l_event_id_tbl[] = { 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
+static s16 l_event_id_tbl[] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2 };
 
 static u32 l_get_item_no[] = { dItemNo_COLLECT_MAP_26_e };
 
@@ -301,12 +303,94 @@ cPhs_State daNpcSv_c::_create() {
 
 /* 00000768-00000A04       .text createHeap__9daNpcSv_cFv */
 BOOL daNpcSv_c::createHeap() {
-    /* Nonmatching */
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes(l_arcname_tbl[getNpcNo()], l_bmd_ix_tbl[getNpcNo()]);
+    mpMorf = new mDoExt_McaMorf(
+        modelData,
+        NULL,
+        NULL,
+        (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[getNpcNo()], l_bck_ix_tbl[getNpcNo()][mBckIdx]),
+        J3DFrameCtrl::EMode_LOOP,
+        1.0f,
+        0,
+        -1,
+        1,
+        NULL,
+        0x80000,
+        0x37441422
+    );
+    if (mpMorf == NULL || mpMorf->getModel() == NULL) {
+        return FALSE;
+    }
+
+    m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
+    JUT_ASSERT(946, m_jnt.getHeadJntNum() >= 0);
+    m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
+    JUT_ASSERT(950, m_jnt.getBackboneJntNum() >= 0);
+
+    for (u16 jntIdx = 0; jntIdx < modelData->getJointNum(); jntIdx++) {
+        if (jntIdx == m_jnt.getHeadJntNum() || jntIdx == m_jnt.getBackboneJntNum()) {
+            modelData->getJointNodePointer(jntIdx)->setCallBack(daNpc_People_nodeCallBack);
+        }
+    }
+
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
+    mAcchCir.SetWall(30.0f, 30.0f);
+    mObjAcch.Set(
+        fopAcM_GetPosition_p(this),
+        fopAcM_GetOldPosition_p(this),
+        this,
+        1,
+        &mAcchCir,
+        fopAcM_GetSpeed_p(this),
+        fopAcM_GetAngle_p(this),
+        fopAcM_GetShapeAngle_p(this)
+    );
+    return TRUE;
 }
 
 /* 00000A04-00000C74       .text createInit__9daNpcSv_cFv */
 cPhs_State daNpcSv_c::createInit() {
-    /* Nonmatching */
+    fopAcM_SetGravity(this, -9.0f);
+    setAnmTbl(&l_npc_anm_wait);
+    field_0x71E[0] = dComIfGp_evmng_getEventIdx("SV_TALK_P1_1ST", 0xFF);
+    field_0x71E[1] = dComIfGp_evmng_getEventIdx("SV_TALK_P1_2ND", 0xFF);
+    field_0x71E[2] = dComIfGp_evmng_getEventIdx("SV_TALK_P4_1ST", 0xFF);
+
+    eventInfo.setEventId(field_0x71E[l_event_id_tbl[getTalkNo() & 0xFF]]);
+    mEventCut.setActorInfo2(l_npc_staff_id[getNpcNo()], this);
+
+    field_0x730 = 0;
+    field_0x736 = 0;
+    field_0x737 = 0;
+    field_0x745 = 0;
+    cullMtx = mpMorf->getModel()->getBaseTRMtx();
+    fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
+    attention_info.distances[1] = 0xB1;
+    attention_info.distances[3] = 0xB1;
+    attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
+
+    m_jnt.setParam(
+        l_npc_dat[getNpcNo()].field_0x04,
+        l_npc_dat[getNpcNo()].field_0x06,
+        l_npc_dat[getNpcNo()].field_0x0C,
+        l_npc_dat[getNpcNo()].field_0x0E,
+        l_npc_dat[getNpcNo()].field_0x00,
+        l_npc_dat[getNpcNo()].field_0x02,
+        l_npc_dat[getNpcNo()].field_0x08,
+        l_npc_dat[getNpcNo()].field_0x0A,
+        l_npc_dat[getNpcNo()].field_0x10
+    );
+
+    field_0x743 = l_npc_dat[getNpcNo()].field_0x42;
+    field_0x744 = l_npc_dat[getNpcNo()].field_0x43;
+    field_0x710 = l_npc_dat[getNpcNo()].field_0x2C;
+    field_0x726 = l_npc_dat[getNpcNo()].field_0x34;
+    setMtx();
+    mpMorf->getModel()->calc();
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(dNpc_cyl_src);
+    mCyl.SetStts(&mStts);
+    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].field_0x38, l_npc_dat[getNpcNo()].field_0x3C);
     return cPhs_COMPLEATE_e;
 }
 

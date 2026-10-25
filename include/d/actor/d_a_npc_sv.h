@@ -92,6 +92,8 @@ public:
     u8 getTalkNo();
     BOOL isTalkOK();
 
+    static const char m_arcname[];
+
 private:
     /* 0x6C4 */ request_of_phase_process_class mPhase;
     /* 0x6CC */ request_of_phase_process_class mPhaseCreate;
