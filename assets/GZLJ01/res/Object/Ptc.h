@@ -20,10 +20,12 @@ enum dRes_ID_PTC {
 
 enum PTCO_JNT {
     PTCO_JNT_PTCO_e=0x0,
+    PTCO_NUM_JNTS_e=0x1,
 };
 
 enum PTCU_JNT {
     PTCU_JNT_PTCU_e=0x0,
+    PTCU_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_PTC_H */

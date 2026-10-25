@@ -45,7 +45,7 @@ ASM BOOL OSEnableInterrupts(void) {
 #endif
 }
 
-ASM BOOL OSRestoreInterrupts(register BOOL status) {
+ASM BOOL OSRestoreInterrupts(__REGISTER BOOL status) {
 #ifdef __MWERKS__
     // clang-format off
     nofralloc
@@ -407,7 +407,7 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context) {
     OSLoadContext(context);
 }
 
-static ASM void ExternalInterruptHandler(register __OSInterrupt type, register OSContext* context) {
+static ASM void ExternalInterruptHandler(__REGISTER __OSInterrupt type, __REGISTER OSContext* context) {
 #ifdef __MWERKS__
     // clang-format off
     nofralloc

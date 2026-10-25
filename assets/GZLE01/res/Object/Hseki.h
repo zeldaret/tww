@@ -26,10 +26,12 @@ enum dRes_ID_HSEKI {
 
 enum HMON1_JNT {
     HMON1_JNT_MONO_e=0x0,
+    HMON1_NUM_JNTS_e=0x1,
 };
 
 enum HMON2_JNT {
     HMON2_JNT_MONO_e=0x0,
+    HMON2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HSEKI_H */

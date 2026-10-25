@@ -539,7 +539,7 @@ void daPy_lk_c::setAuraEffect() {
 
     if (checkNoDamageMode() && (!dComIfGp_event_runCheck() || (eventInfo.checkCommandDoor() && !dComIfGp_event_chkEventFlag(dEvtFlag_TALK_e))) ) {
         if (yauraFrame < 0.01f) {
-            for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++) {
+            for (int idx = 0; idx < ARRAY_SSIZE(mMagicArmorAuraEntries); idx++) {
                 mMagicArmorAuraEntries[idx].setFrame(cM_rndF(y00BtkFrameMax));
             }
         }
@@ -588,7 +588,7 @@ void daPy_lk_c::setAuraEffect() {
 
         cXyz localScale = scale * (var_f28 * cM_fcos(M_PI * (0.5f * var_f31)));
 
-        for (int idx = 0; idx < (int)ARRAY_SIZE(mMagicArmorAuraEntries); idx++, auraEntry++) {
+        for (int idx = 0; idx < ARRAY_SSIZE(mMagicArmorAuraEntries); idx++, auraEntry++) {
             f32 var_f0 = 1.0f + auraEntry->getFrame();
             if (var_f0 >= y00BtkFrameMax) {
                 var_f0 -= y00BtkFrameMax;
@@ -642,12 +642,11 @@ void daPy_lk_c::setWaterRipple() {
             )
         )
     ) {
-
         if (m3280.getEmitter() == NULL) {
             dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_HAMON00, &current.pos, NULL, NULL, 0xFF, &m3280);
         }
 
-        f32 var_f1 = (0.1f * std::fabsf(getSpeedF()));
+        f32 var_f1 = (0.1f * std::fabsf(speedF));
         var_f1 *= var_f1;
         if (var_f1 > 1.0f) {
             var_f1 = 1.0f;
@@ -1072,7 +1071,7 @@ void daPy_lk_c::setFootEffect() {
 /* 8012C128-8012C1A8       .text resetFootEffect__9daPy_lk_cFv */
 void daPy_lk_c::resetFootEffect() {
     daPy_footEffect_c* pFootEffect = mFootEffect;
-    for (int idx = 0; idx < (s32)ARRAY_SIZE(mFootEffect); idx++, pFootEffect++) {
+    for (int idx = 0; idx < ARRAY_SSIZE(mFootEffect); idx++, pFootEffect++) {
         pFootEffect->getSmokeCallBack()->remove();
         pFootEffect->getOtherCallBack()->remove();
         pFootEffect->setID(-1);
@@ -1191,7 +1190,7 @@ void daPy_lk_c::setDamageFlameEmitter() {
 
         const u16* jointNoP = flame_joint;
         daPy_dmEcallBack_c* dmECB = mDmEcallBack;
-        for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++, jointNoP++, dmECB++) {
+        for (int i = 0; i < ARRAY_SSIZE(mDmEcallBack); i++, jointNoP++, dmECB++) {
             cXyz jointPos;
             mDoMtx_multVecZero(mpCLModel->getAnmMtx(*jointNoP), &jointPos);
             dmECB->makeEmitter(dPa_name::ID_AK_JN_BODYABLAZE00, mpCLModel->getAnmMtx(*jointNoP), &jointPos, NULL);
@@ -1255,7 +1254,7 @@ void daPy_lk_c::endFlameDamageEmitter() {
     if (!daPy_dmEcallBack_c::checkFlame()) return;
 
     if (current.pos.y < mWaterY - 10.0f) {
-        for (int i = 0; i < (s32)ARRAY_SIZE(mDmEcallBack); i++) {
+        for (int i = 0; i < ARRAY_SSIZE(mDmEcallBack); i++) {
             cXyz pos;
             mDoMtx_multVecZero(mDmEcallBack[i].getMtx(), &pos);
             pos.y = mWaterY;
@@ -1269,7 +1268,7 @@ void daPy_lk_c::endFlameDamageEmitter() {
 
 /* 8012C9D8-8012CA44       .text endDamageEmitter__9daPy_lk_cFv */
 void daPy_lk_c::endDamageEmitter() {
-    for (int i = 0; i < (int)ARRAY_SIZE(mDmEcallBack); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mDmEcallBack); i++) {
         mDmEcallBack[i].end();
     }
     daPy_dmEcallBack_c::setTimer(0);

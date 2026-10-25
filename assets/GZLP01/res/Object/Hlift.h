@@ -28,14 +28,17 @@ enum dRes_ID_HLIFT {
 
 enum HLIFT_JNT {
     HLIFT_JNT_MONO_e=0x0,
+    HLIFT_NUM_JNTS_e=0x1,
 };
 
 enum HLIFTB_JNT {
     HLIFTB_JNT_MONO_e=0x0,
+    HLIFTB_NUM_JNTS_e=0x1,
 };
 
 enum HLIFTC_JNT {
     HLIFTC_JNT_PPLANE1_e=0x0,
+    HLIFTC_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HLIFT_H */

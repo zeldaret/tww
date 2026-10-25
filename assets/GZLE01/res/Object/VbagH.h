@@ -18,6 +18,7 @@ enum dRes_ID_VBAGH {
 
 enum VBAGH_JNT {
     VBAGH_JNT_VBAGH_MODEL_e=0x0,
+    VBAGH_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VBAGH_H */

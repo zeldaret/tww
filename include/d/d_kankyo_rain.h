@@ -45,5 +45,6 @@ void wave_move();
 void dKyr_get_vectle_calc(cXyz*, cXyz*, cXyz*);
 BOOL dKyr_poison_live_check();
 BOOL dKyr_moon_arrival_check();
+void dKyr_kazanbai_tamari_move();
 
 #endif /* D_KANKYO_D_KANKYO_RAIN_H */

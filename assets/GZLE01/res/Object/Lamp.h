@@ -22,10 +22,12 @@ enum LAMP_00_JNT {
     LAMP_00_JNT_SLAMP_00_e=0x0,
     LAMP_00_JNT_S00_e=0x1,
     LAMP_00_JNT_LAMP_e=0x2,
+    LAMP_00_NUM_JNTS_e=0x3,
 };
 
 enum L_GA_JNT {
     L_GA_JNT_BODY_e=0x0,
+    L_GA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_LAMP_H */

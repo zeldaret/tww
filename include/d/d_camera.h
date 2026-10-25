@@ -314,8 +314,9 @@ public:
             /* 0x38C */ u8 m38C;
             /* 0x390 */ cXyz m390;
             /* 0x39C */ u8 m39C;
-            /* 0x3A0 */ f32 m3A0;
-            /* 0x3A4 */ f32 m3A4;
+            /* 0x39D */ u8 m39D;
+            /* 0x3A0 */ int m3A0;
+            /* 0x3A4 */ int m3A4;
             /* 0x3A8 */ cSGlobe m3A8;
             /* 0x3B0 */ f32 m3B0;
             /* 0x3B4 */ f32 m3B4;
@@ -536,11 +537,11 @@ public:
     bool eventCamera(s32);
     bool demoCamera(s32);
     bool letCamera(s32);
-    bool Set(cXyz, cXyz);
-    bool Set(cXyz, cXyz, f32, s16);
-    bool Set(cXyz, cXyz, s16, f32);
-    bool Reset(cXyz, cXyz, f32, s16);
-    bool Reset(cXyz, cXyz);
+    bool Set(cXyz center, cXyz eye);
+    bool Set(cXyz center, cXyz eye, f32 fovY, s16 bank);
+    bool Set(cXyz center, cXyz eye, s16 bank, f32 fovY);
+    bool Reset(cXyz center, cXyz eye, f32 fovY, s16 bank);
+    bool Reset(cXyz center, cXyz eye);
     bool Reset();
     void ResetView();
     bool Chtyp(s32);
@@ -656,15 +657,19 @@ public:
     void CheckFlag(u32) {}
     void Owner(fopAc_ac_c*) {}
     void R() {}
-    void TrimHeight() {}
+    f32 TrimHeight() { return mTrimHeight; }
     void U() {}
     void U2(s16) {}
     void V() {}
     void isModeOK() {}
     void positionPntOf(fopAc_ac_c*) {}
 
-    void Far4Debug() {}
-    void Near4Debug() {}
+    f32 Near4Debug() {
+        return mCamSetup.Near();
+    }
+    f32 Far4Debug() {
+        return mCamSetup.Far();
+    }
     void debugDraw() {}
     void debugDrawInit() {}
     void debugDrawLine(cXyz&, cXyz&) {}

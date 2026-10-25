@@ -64,6 +64,7 @@ enum dRes_ID_YM {
 
 enum YMKAMA_JNT {
     YMKAMA_JNT_YMKAMA_e=0x0,
+    YMKAMA_NUM_JNTS_e=0x1,
 };
 
 enum YM_JNT {
@@ -86,14 +87,17 @@ enum YM_JNT {
     YM_JNT_LEGR1_e=0x10,
     YM_JNT_LEGR2_e=0x11,
     YM_JNT_FOOTR_e=0x12,
+    YM_NUM_JNTS_e=0x13,
 };
 
 enum YMHEAD01_JNT {
     YMHEAD01_JNT_YMHEAD1_e=0x0,
+    YMHEAD01_NUM_JNTS_e=0x1,
 };
 
 enum YMHEAD02_JNT {
     YMHEAD02_JNT_YM_HEAD02_e=0x0,
+    YMHEAD02_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_YM_H */

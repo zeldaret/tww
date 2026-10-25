@@ -10,16 +10,16 @@
 #include "d/d_s_play.h"
 
 /* 8002A688-8002A6B0       .text fopMsg_Draw__FPv */
-int fopMsg_Draw(void* i_this) {
+BOOL fopMsg_Draw(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
     return fpcLf_DrawMethod((leafdraw_method_class*)_this->sub_method, i_this);
 }
 
 /* 8002A6B0-8002A6E8       .text fopMsg_Execute__FPv */
-int fopMsg_Execute(void* i_this) {
+BOOL fopMsg_Execute(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
-    int stat = 1;
+    BOOL stat = TRUE;
     if (!dScnPly_ply_c::isPause()) {
         stat = fpcMtd_Execute((process_method_class*)_this->sub_method, i_this);
     }
@@ -28,11 +28,11 @@ int fopMsg_Execute(void* i_this) {
 }
 
 /* 8002A6E8-8002A73C       .text fopMsg_IsDelete__FPv */
-int fopMsg_IsDelete(void* i_this) {
+BOOL fopMsg_IsDelete(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
-    int stat = fpcMtd_IsDelete((process_method_class*)_this->sub_method, i_this);
-    if (stat == 1) {
+    BOOL stat = fpcMtd_IsDelete((process_method_class*)_this->sub_method, i_this);
+    if (stat == TRUE) {
         fopDwTg_DrawQTo(&_this->draw_tag);
     }
 
@@ -40,10 +40,10 @@ int fopMsg_IsDelete(void* i_this) {
 }
 
 /* 8002A73C-8002A788       .text fopMsg_Delete__FPv */
-int fopMsg_Delete(void* i_this) {
+BOOL fopMsg_Delete(void* i_this) {
     msg_class* _this = static_cast<msg_class*>(i_this);
 
-    int stat = fpcMtd_Delete((process_method_class*)_this->sub_method, i_this);
+    BOOL stat = fpcMtd_Delete((process_method_class*)_this->sub_method, i_this);
     fopDwTg_DrawQTo(&_this->draw_tag);
 
     return stat;

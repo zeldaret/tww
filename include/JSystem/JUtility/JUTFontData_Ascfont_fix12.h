@@ -3,6 +3,6 @@
 
 #include "global.h"
 
-extern const u8 JUTResFONT_Ascfont_fix12[] ALIGN_DECL(32);
+ALIGN_DECL(32, extern const u8 JUTResFONT_Ascfont_fix12[]);
 
 #endif /* JUTFONTDATA_ASCFONT_FIX12_H */

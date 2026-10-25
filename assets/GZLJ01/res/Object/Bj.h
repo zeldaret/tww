@@ -78,55 +78,66 @@ enum dRes_ID_BJ {
 
 enum PL_AL_JNT {
     PL_AL_JNT_PLANT_AL_e=0x0,
+    PL_AL_NUM_JNTS_e=0x1,
 };
 
 enum PL_AR_JNT {
     PL_AR_JNT_PLANT_AR_e=0x0,
+    PL_AR_NUM_JNTS_e=0x1,
 };
 
 enum BJ1_FACE_JNT {
     BJ1_FACE_JNT_FACE_01_e=0x0,
     BJ1_FACE_JNT_NOSE_e=0x1,
+    BJ1_FACE_NUM_JNTS_e=0x2,
 };
 
 enum BJ2_FACE_JNT {
     BJ2_FACE_JNT_FACE_02_e=0x0,
     BJ2_FACE_JNT_NOSE_e=0x1,
+    BJ2_FACE_NUM_JNTS_e=0x2,
 };
 
 enum BJ3_FACE_JNT {
     BJ3_FACE_JNT_FACE_03_e=0x0,
     BJ3_FACE_JNT_NOSE_e=0x1,
+    BJ3_FACE_NUM_JNTS_e=0x2,
 };
 
 enum BJ4_FACE_JNT {
     BJ4_FACE_JNT_FACE_04_e=0x0,
     BJ4_FACE_JNT_NOSE_e=0x1,
+    BJ4_FACE_NUM_JNTS_e=0x2,
 };
 
 enum BJ5_FACE_JNT {
     BJ5_FACE_JNT_FACE_05_e=0x0,
     BJ5_FACE_JNT_NOSE_e=0x1,
+    BJ5_FACE_NUM_JNTS_e=0x2,
 };
 
 enum BJ6_FACE_JNT {
     BJ6_FACE_JNT_FACE_06_e=0x0,
     BJ6_FACE_JNT_NOSE_e=0x1,
+    BJ6_FACE_NUM_JNTS_e=0x2,
 };
 
 enum BJ7_FACE_JNT {
     BJ7_FACE_JNT_FACE_07_e=0x0,
     BJ7_FACE_JNT_NOSE_e=0x1,
+    BJ7_FACE_NUM_JNTS_e=0x2,
 };
 
 enum BJ8_FACE_JNT {
     BJ8_FACE_JNT_FACE_08_e=0x0,
     BJ8_FACE_JNT_NOSE_e=0x1,
+    BJ8_FACE_NUM_JNTS_e=0x2,
 };
 
 enum BJ9_FACE_JNT {
     BJ9_FACE_JNT_FACE_09_e=0x0,
     BJ9_FACE_JNT_NOSE_e=0x1,
+    BJ9_FACE_NUM_JNTS_e=0x2,
 };
 
 enum PP_JNT {
@@ -134,6 +145,7 @@ enum PP_JNT {
     PP_JNT_CENTER_e=0x1,
     PP_JNT_LEAFL_e=0x2,
     PP_JNT_LEAFR_e=0x3,
+    PP_NUM_JNTS_e=0x4,
 };
 
 enum BJ_JNT {
@@ -147,6 +159,7 @@ enum BJ_JNT {
     BJ_JNT_WAIST_e=0x7,
     BJ_JNT_LEGL_e=0x8,
     BJ_JNT_LEGR_e=0x9,
+    BJ_NUM_JNTS_e=0xA,
 };
 
 #endif /* RES_BJ_H */

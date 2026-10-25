@@ -4,6 +4,23 @@
 #include "dolphin/gx/GXEnum.h"
 #include "dolphin/gx/GXStruct.h"
 
+#define XF_LIGHT_ID 0x0600
+#define XF_LIGHT_COLOR_ID 0x0603
+#define XF_LIGHT_ATTN_ID 0x0604
+#define XF_LIGHT_DISTATTN_ID 0x0607
+#define XF_LIGHT_POS_ID 0x060A
+#define XF_LIGHT_SPEC_DIR_ID 0x060A
+#define XF_LIGHT_DIR_ID 0x060D
+
+#define XF_REG_AMBIENT0_ID 0x100A
+#define XF_REG_AMBIENT1_ID 0x100B
+#define XF_REG_MATERIAL0_ID 0x100C
+#define XF_REG_MATERIAL1_ID 0x100D
+#define XF_REG_COLOR0CNTRL_ID 0x100E
+#define XF_REG_COLOR1CNTRL_ID 0x100F
+#define XF_REG_ALPHA0CNTRL_ID 0x1010
+#define XF_REG_ALPHA1CNTRL_ID 0x1011
+
 void GFSetChanMatColor(GXChannelID, GXColor);
 
 #endif /* GFLIGHT_H */

@@ -19,6 +19,7 @@ enum dRes_ID_VLEAF {
 enum VLEAF_JNT {
     VLEAF_JNT_VLEAF_e=0x0,
     VLEAF_JNT_LEAF_MODEL_e=0x1,
+    VLEAF_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VLEAF_H */

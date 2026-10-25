@@ -23,6 +23,7 @@ enum dRes_ID_FOBJ02 {
 enum FOBJ02_JNT {
     FOBJ02_JNT_MINAMI_F_BASE_e=0x0,
     FOBJ02_JNT_MINAMI_F_TOP_e=0x1,
+    FOBJ02_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_FOBJ02_H */

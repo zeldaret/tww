@@ -77,10 +77,10 @@ BOOL daToge_c::CreateHeap() {
         return FALSE;
     }
 
-    mpModel->setUserArea((u32)this);
+    mpModel->setUserArea((uintptr_t)this);
 
-    mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1A_e), cBgW::MOVE_BG_e, &mtx1);
-    mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1B_e), cBgW::MOVE_BG_e, &mtx2);
+    mpBgW1 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1A_e), cBgW::MOVE_BG_e, &mBgWMtx1);
+    mpBgW2 = dBgW_NewSet((cBgD_t*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_HTOGE1_DZB_HTOGE1B_e), cBgW::MOVE_BG_e, &mBgWMtx2);
 
     if (mpBgW1 == NULL || mpBgW2 == NULL) {
         return FALSE;
@@ -97,11 +97,11 @@ static BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         daToge_c* i_this = (daToge_c*)model->getUserArea();
         if (i_this != NULL) {
             mDoMtx_stack_c::copy(model->getAnmMtx(jntNo));
-            mDoMtx_stack_c::transM(0.0f, i_this->unk470, 0.0f);
+            mDoMtx_stack_c::transM(0.0f, i_this->mYOffset, 0.0f);
             model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
 
             mDoMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
-            mDoMtx_copy(mDoMtx_stack_c::get(), i_this->mtx2);
+            mDoMtx_copy(mDoMtx_stack_c::get(), i_this->mBgWMtx2);
         }
     }
 
@@ -121,12 +121,12 @@ BOOL daToge_c::Create() {
     mSwitchNo = daToge_prm::getSwitchNo(this);
 
     if (fopAcM_isSwitch(this, mSwitchNo)) {
-        unk470 = m_y_min;
-        mEventState = 2;
+        mYOffset = m_y_min;
+        mMode = 2;
     }
 
     set_mtx();
-    cMtx_copy(mtx1, mtx2);
+    cMtx_copy(mBgWMtx1, mBgWMtx2);
 
     JUTNameTab* jointName = mpModel->getModelData()->getJointName();
     for (u16 i = 0; i < mpModel->getModelData()->getJointNum(); i++) {
@@ -170,31 +170,31 @@ void daToge_c::set_mtx() {
     mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
     mDoMtx_stack_c::YrotM(current.angle.y);
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
-    mDoMtx_copy(mDoMtx_stack_c::get(), mtx1);
+    mDoMtx_copy(mDoMtx_stack_c::get(), mBgWMtx1);
 }
 
 /* 00000868-000009F4       .text _execute__8daToge_cFv */
 BOOL daToge_c::_execute() {
     if (mSwitchNo != 0xFF) {
         if (fopAcM_isSwitch(this, mSwitchNo) != 0) {
-            if (mEventState != 1) {
-                unk485 = 1;
+            if (mMode != 1) {
+                unk485 = true;
             }
-        } else if (!fopAcM_isSwitch(this, mSwitchNo) && mEventState != 4) {
-            mEventState = 3;
+        } else if (!fopAcM_isSwitch(this, mSwitchNo) && mMode != 4) {
+            mMode = 3;
         }
-    } else if (mSwitchNo == 0xFF) {  // Redundant condition (necessary for matching)
+    } else if (mSwitchNo == 0xFF) {
         search_wind();
 
         daWindTag::daWindTag_c* pActor = (daWindTag::daWindTag_c*)fopAcM_SearchByID(mWindTagId);
 
         if (pActor != NULL) {
             if (pActor->mOffsY > 0.0f) {
-                if (mEventState != 4) {
-                    mEventState = 3;
+                if (mMode != 4) {
+                    mMode = 3;
                 }
-            } else if (mEventState != 1) {
-                unk485 = 1;
+            } else if (mMode != 1) {
+                unk485 = true;
             }
         }
     }
@@ -212,10 +212,10 @@ BOOL daToge_c::_execute() {
 
 /* 000009F4-00000A78       .text set_collision__8daToge_cFv */
 void daToge_c::set_collision() {
-    if (mEventState != 2) {
+    if (mMode != 2) {
         cXyz center = current.pos;
 
-        center.y += (unk470 - 10.0f);
+        center.y += mYOffset - 10.0f;
 
         mCyl.SetC(center);
         dComIfG_Ccsp()->Set(&mCyl);
@@ -237,39 +237,38 @@ void daToge_c::search_wind() {
 void daToge_c::toge_move() {
     f32 f31 = 30.0f;
     f32 f30 = 15.0f;
-    int timer  = 0xA;
+    int timer = 10;
     bool r30 = true;
-    switch (mEventState) {
+    switch (mMode) {
     case 0:
         break;
     case 1:
-        if (cLib_calcTimer(&unk486) != 0)
+        if (cLib_calcTimer(&mTimer) != 0)
             break;
         toge_seStart(JA_SE_OBJ_TOGETOGE_IN);
-        mEventState = 2;
+        mMode = 2;
         // Fallthrough
     case 2:
-        // m_y_min is also -150.0f, so that might be related
-        cLib_addCalc(&unk470, -150.0f, 0.1f, f31, f30);
+        cLib_addCalc(&mYOffset, -150.0f, 0.1f, f31, f30);
         break;
     case 3:
         toge_seStart(JA_SE_OBJ_TOGETOGE_OUT);
-        mEventState = 4;
+        mMode = 4;
         r30 = false;
         // Fallthrough
     case 4:
-        if (cLib_addCalc(&unk470, unk474, 0.1f, f31, f30) == 0) {
-            if (unk470 < 0) {
-                unk474 = 0;
-            } else if (unk485 != 0) {
-                unk486 = timer;
-                mEventState = 1;
-                unk485 = 0;
+        if (cLib_addCalc(&mYOffset, mTargetYOffset, 0.1f, f31, f30) == 0) {
+            if (mYOffset < 0) {
+                mTargetYOffset = 0.0f;
+            } else if (unk485) {
+                mTimer = timer;
+                mMode = 1;
+                unk485 = false;
             } else {
                 if (r30) {
                     toge_seStart(JA_SE_OBJ_TOGETOGE_MOVE);
                 }
-                unk474 = -60.0f;
+                mTargetYOffset = -60.0f;
             }
         }
         break;

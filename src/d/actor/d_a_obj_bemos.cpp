@@ -1147,11 +1147,11 @@ BOOL daBemos_c::eye_break() {
         GXColor local_38;
 
         if (m6B8 == 0) {
-            local_34 = (GXColor){0x10, 0x23, 0xC0, 0x00};
-            local_38 = (GXColor){0x14, 0x36, 0xC3, 0x00};
+            local_34 = COMPOUND_LITERAL(GXColor){0x10, 0x23, 0xC0, 0x00};
+            local_38 = COMPOUND_LITERAL(GXColor){0x14, 0x36, 0xC3, 0x00};
         } else {
-            local_34 = (GXColor){0xC0, 0x10, 0x23, 0x00};
-            local_38 = (GXColor){0xC3, 0x14, 0x36, 0x00};
+            local_34 = COMPOUND_LITERAL(GXColor){0xC0, 0x10, 0x23, 0x00};
+            local_38 = COMPOUND_LITERAL(GXColor){0xC3, 0x14, 0x36, 0x00};
         }
 
         dComIfGp_particle_set(dPa_name::ID_AK_SN_BMOSBREAK00, &m2A4, &tmp, NULL, 0xff, NULL, fopAcM_GetRoomNo(this), &local_34);

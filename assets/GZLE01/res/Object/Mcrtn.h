@@ -22,6 +22,7 @@ enum dRes_ID_MCRTN {
 
 enum MCRTN1_JNT {
     MCRTN1_JNT_MCRTN1_e=0x0,
+    MCRTN1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MCRTN_H */

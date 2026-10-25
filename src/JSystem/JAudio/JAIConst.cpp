@@ -58,10 +58,10 @@ void JAInter::deleteTmpDVDFile(u8** tmpPointer) {
 }
 
 /* 802918FC-8029193C       .text routeToTrack__7JAInterFUl */
-u32 JAInter::routeToTrack(u32 param_1) {
+u32 JAInter::routeToTrack(u32 route) {
     u32 r4;
     u32 r5 = 0;
-    r4 = param_1 & 0xF0000000;
+    r4 = route & 0xF0000000;
     if (r4 == 0) {
         return 0;
     }
@@ -70,5 +70,5 @@ u32 JAInter::routeToTrack(u32 param_1) {
     } else if (r4 == 0x20000000) {
         r5 = 0xFF;
     }
-    return param_1 & r5;
+    return route & r5;
 }

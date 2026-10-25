@@ -87,23 +87,28 @@ enum CB_JNT {
     CB_JNT_WAIST_e=0x9,
     CB_JNT_LEGL_e=0xA,
     CB_JNT_LEGR_e=0xB,
+    CB_NUM_JNTS_e=0xC,
 };
 
 enum CB_CELLO_JNT {
     CB_CELLO_JNT_CB_CELLO_POLYSURFACE1_e=0x0,
+    CB_CELLO_NUM_JNTS_e=0x1,
 };
 
 enum CB_FACE_JNT {
     CB_FACE_JNT_FACE_e=0x0,
+    CB_FACE_NUM_JNTS_e=0x1,
 };
 
 enum CB_NUT_JNT {
     CB_NUT_JNT_MC_SEED_MODEL_1_e=0x0,
+    CB_NUT_NUM_JNTS_e=0x1,
 };
 
 enum CB_STICK_JNT {
     CB_STICK_JNT_STICK_e=0x0,
     CB_STICK_JNT_NUT_e=0x1,
+    CB_STICK_NUM_JNTS_e=0x2,
 };
 
 enum PP_JNT {
@@ -111,6 +116,7 @@ enum PP_JNT {
     PP_JNT_CENTER_e=0x1,
     PP_JNT_LEAFL_e=0x2,
     PP_JNT_LEAFR_e=0x3,
+    PP_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_CB_H */

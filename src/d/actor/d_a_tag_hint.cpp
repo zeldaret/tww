@@ -478,8 +478,8 @@ void daTag_Hint_c::startProc() {
 }
 
 /* 000018A4-000018AC       .text next_msgStatus__12daTag_Hint_cFPUl */
-u16 daTag_Hint_c::next_msgStatus(unsigned long*) {
-    return 16;
+u16 daTag_Hint_c::next_msgStatus(u32*) {
+    return fopMsgStts_MSG_ENDS_e;
 }
 
 /* 000018AC-000018B4       .text getMsg__12daTag_Hint_cFv */
@@ -626,20 +626,18 @@ BOOL daTag_Hint_c::actionHunt() {
         setActio(4);
         startProc();
         mMsgNo = getMessage();
-    } else {
-        if (waitTerms()) {
-            setActio(0);
-        } else if (otherCheck()) {
-            makeEventId();
-            eventInfo.setEventId(m2A4);
-            eventInfo.setToolId(getEventNo());
-            if (getType2() & 1) {
-                fopAcM_orderSpeakEvent(this);
-            } else {
-                dComIfGp_att_ZHintRequest(this, getPriority());
-            }
-            eventInfo.onCondition(dEvtCnd_CANTALK_e);
+    } else if (waitTerms()) {
+        setActio(0);
+    } else if (otherCheck()) {
+        makeEventId();
+        eventInfo.setEventId(m2A4);
+        eventInfo.setToolId(getEventNo());
+        if (getType2() & 1) {
+            fopAcM_orderSpeakEvent(this);
+        } else {
+            dComIfGp_att_ZHintRequest(this, getPriority());
         }
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
     return TRUE;
 }

@@ -194,7 +194,7 @@ void JASystem::Kernel::mixExtraTrack(s16* dest, s32 size, s16* (*cb)(s32)) {
     probeStart(6,"MIXING");
     s16* destPtr = dest;
     s16* srcPtr = src;
-    s16* srcPtr2 = src + gFrameSamples;
+    s16* srcPtr2 = src + getFrameSamples();
     for (int i = 0; i < size; i++) {
         s32 var1 = destPtr[0] + srcPtr2[0];
         s16 var2;

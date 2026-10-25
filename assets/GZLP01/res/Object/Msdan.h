@@ -22,6 +22,7 @@ enum dRes_ID_MSDAN {
 
 enum MSDAN_JNT {
     MSDAN_JNT_MSDAN_e=0x0,
+    MSDAN_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MSDAN_H */

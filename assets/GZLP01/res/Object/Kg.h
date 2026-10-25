@@ -81,10 +81,12 @@ enum KG_JNT {
     KG_JNT_LEGR1_e=0x11,
     KG_JNT_LEGR2_e=0x12,
     KG_JNT_FOOTR_e=0x13,
+    KG_NUM_JNTS_e=0x14,
 };
 
 enum KG_PLATE_JNT {
     KG_PLATE_JNT_KG_PLATE_e=0x0,
+    KG_PLATE_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KG_H */

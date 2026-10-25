@@ -19,10 +19,8 @@
     }
 
 #ifdef DEBUG
-#define J3D_ASSERT(LINE, COND, MSG) JUT_ASSERT_MSG(LINE, (COND) != 0, MSG)
 #define JUT_ASSERT_DEBUG(LINE, COND) (COND) ? (void)0 : (JUT_SHOW_ASSERT(LINE, COND), OSPanic(__FILE__, LINE, "Halt"));
 #else
-#define J3D_ASSERT(LINE, COND, MSG) (void)0
 #define JUT_ASSERT_DEBUG(LINE, COND) (void)0
 #endif
 
@@ -50,6 +48,10 @@ namespace JUTAssertion {
     void flushMessage_dbPrint();
     void setVisible(bool);
     void setMessageCount(int);
+
+    inline void setWarningMessage(u32 device, char* file, int line, const char* msg) {
+        setWarningMessage_f(device, file, line, "%s", msg);
+    }
 };
 
 extern "C" {

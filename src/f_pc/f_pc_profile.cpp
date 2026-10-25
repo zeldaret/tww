@@ -9,5 +9,6 @@ process_profile_definition** g_fpcPf_ProfileList_p;
 
 /* 8004003C-80040050       .text fpcPf_Get__Fs */
 process_profile_definition* fpcPf_Get(s16 i_profName) {
-    return g_fpcPf_ProfileList_p[i_profName];
+    int profName = i_profName;
+    return g_fpcPf_ProfileList_p[profName];
 }

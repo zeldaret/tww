@@ -304,9 +304,9 @@ u8 daDoor12_c::getShapeType() {
 }
 
 /* 00000974-000009B0       .text getArcName__10daDoor12_cFv */
-char* daDoor12_c::getArcName() {
+const char* daDoor12_c::getArcName() {
     u8 uVar2 = getShapeType();
-    char* pcVar1;
+    const char* pcVar1;
 
     if (uVar2 >= 3) {
         pcVar1 = "door13";

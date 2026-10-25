@@ -24,6 +24,7 @@ enum FOBJ00_JNT {
     FOBJ00_JNT_MATI_F_BASE_e=0x0,
     FOBJ00_JNT_MATI_F_TOP_e=0x1,
     FOBJ00_JNT_MATI_F_END_e=0x2,
+    FOBJ00_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_FOBJ00_H */

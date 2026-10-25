@@ -26,6 +26,7 @@ enum dRes_ID_HMLIF {
 
 enum HMLIF_JNT {
     HMLIF_JNT_MONO_e=0x0,
+    HMLIF_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HMLIF_H */

@@ -36,6 +36,7 @@ enum KYJIM_00_JNT {
     KYJIM_00_JNT_KYGNJ_07_e=0x4,
     KYJIM_00_JNT_KYGNJ_08_e=0x5,
     KYJIM_00_JNT_KYGNJ_09_e=0x6,
+    KYJIM_00_NUM_JNTS_e=0x7,
 };
 
 #endif /* RES_KYJIM_H */

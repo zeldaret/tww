@@ -6,6 +6,7 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_att.h"
 #include "d/d_com_inf_game.h"
+#include "d/d_s_play.h"
 #include "f_op/f_op_actor_mng.h"
 #include "d/actor/d_a_bgn.h"
 
@@ -36,6 +37,7 @@ static BOOL daAtt_Execute(att_class* i_this) {
         dComIfG_Ccsp()->Set(&i_this->mSph);
     }
 #endif
+
     if (i_this->m2B5 == 100) {
         i_this->attention_info.position = i_this->eyePos = i_this->current.pos;
     } else {
@@ -49,12 +51,21 @@ static BOOL daAtt_Execute(att_class* i_this) {
             i_this->m550--;
         }
         
+#if VERSION == VERSION_DEMO
+        if (i_this->m535 != 0) {
+            i_this->m535--;
+        }
+#endif
+
         if (i_this->m550 == 0 && (i_this->mCyl.ChkTgHit() || i_this->mSph.ChkTgHit())) {
             i_this->m550 = 10;
             boss->mAAA8[r30].m308--;
             if (boss->mAAA8[r30].m308 <= 0) {
+#if VERSION == VERSION_DEMO
+                i_this->m535 = 30;
+#endif
                 boss->mAAA8[r30].m2D0 = 1;
-                boss->mAAA8[r30].m304 = 6000.0f;
+                boss->mAAA8[r30].m304 = 6000.0f + DEMO_SELECT(REG6_F(3), 0.0f);
                 mDoAud_seStart(JA_SE_LK_W_WEP_HIT, NULL, 0x21, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
                 if (r30 <= 1) {
                     if (boss->mAAA8[1-r30].m2D0 != 0) {
@@ -62,31 +73,51 @@ static BOOL daAtt_Execute(att_class* i_this) {
                     }
                 }
             } else {
-                boss->mAAA8[r30].m300 = 15;
+                boss->mAAA8[r30].m300 = 15 + DEMO_SELECT(REG6_S(7), 0);
                 mDoAud_seStart(JA_SE_CM_BGN_D_STRING_PLINK, NULL, 0, dComIfGp_getReverb(fopAcM_GetRoomNo(i_this)));
             }
         }
         
         i_this->current.pos = boss->mC33C[r30];
+#if VERSION == VERSION_DEMO
+        cXyz sp24 = i_this->current.pos - i_this->old.pos;
+#endif
         cXyz sp08 = i_this->current.pos;
         
         if (
-            boss->m02B5 == 0
-            &&
-            (boss->mC748 != 0 || boss->mC74C != 0 || r30 != 7)
-            &&
-            (boss->mAAA8[r30].m2D0 == 0 && boss->mAAA8[r30].m2EC < 1.0f)
+            (
+                boss->m02B5 == 0 &&
+#if VERSION == VERSION_DEMO
+                sp24.abs() < 100.0f + REG17_F(16) &&
+#else
+                (boss->mC748 != 0 || boss->mC74C != 0 || r30 != 7) &&
+#endif
+                boss->mAAA8[r30].m2D0 == 0 &&
+                boss->mAAA8[r30].m2EC < 1.0f
+            )
+#if VERSION == VERSION_DEMO
+            || i_this->m535 != 0
+#endif
          ) {
+#if VERSION > VERSION_DEMO
             i_this->attention_info.flags = fopAc_Attn_LOCKON_BATTLE_e;
-            i_this->mCyl.SetR(200.0f);
+#endif
+            i_this->mCyl.SetR(200.0f + DEMO_SELECT(REG0_F(16), 0.0f));
             i_this->mCyl.SetC(sp08);
-            sp08.y += 1000.0f;
+            sp08.y += 1000.0f + DEMO_SELECT(REG13_F(3), 0.0f);
             i_this->mSph.SetC(sp08);
-            i_this->eyePos = sp08;
-            i_this->attention_info.position = sp08;
+#if VERSION == VERSION_DEMO
+            if (i_this->m535 == 0)
+#endif
+            {
+                i_this->eyePos = sp08;
+                i_this->attention_info.position = sp08;
+            }
         } else {
+#if VERSION > VERSION_DEMO
             fopAcM_OffStatus(i_this, 0);
             i_this->attention_info.flags = 0;
+#endif
             i_this->mCyl.SetC(non_pos);
             i_this->mSph.SetC(non_pos);
         }

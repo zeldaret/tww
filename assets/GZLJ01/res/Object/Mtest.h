@@ -40,10 +40,12 @@ enum dRes_ID_MTEST {
 
 enum MCUBE_JNT {
     MCUBE_JNT_MCUBE_e=0x0,
+    MCUBE_NUM_JNTS_e=0x1,
 };
 
 enum MCYLN_JNT {
     MCYLN_JNT_MCYLN_e=0x0,
+    MCYLN_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MTEST_H */

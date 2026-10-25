@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_MemCardRWmng.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_MemCardRWmng.h"
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_dvd_thread.h"
@@ -23,8 +24,8 @@
 #define HEADER_COMMENT "%d/%d Save Data"
 #endif
 
-static u8 sTmpBuf[0x2000] ALIGN_DECL(32);
-static u8 sTmpBuf2[0x2000] ALIGN_DECL(32);
+ALIGN_DECL(32, static u8 sTmpBuf[0x2000]);
+ALIGN_DECL(32, static u8 sTmpBuf2[0x2000]);
 static u32 sSaveCount;
 
 /* 80019940-80019CE8       .text mDoMemCdRWm_Store__FP12CARDFileInfoPvUl */
@@ -84,7 +85,7 @@ s32 mDoMemCdRWm_Store(CARDFileInfo* card, void* data, u32 size) {
     } else {
         slot = dComIfGs_getDataNum() * 3 + 3;
         for (i = 0; i < 3; i++) {
-            if (dComIfGp_isPictureFlag(i)) {
+            if (dComIfGp_isPictureFlag(i) != FALSE) {
                 memset(sTmpBuf, 0, sizeof(card_pictdata));
                 JKRAramToMainRam(dComIfGp_getPictureBoxData(i), sTmpBuf, sizeof(card_pictdata));
                 ret = CARDWrite(card, sTmpBuf, sizeof(card_pictdata), (slot + i) * sizeof(card_pictdata));
@@ -237,7 +238,7 @@ void mDoMemCdRWm_BuildHeader(mDoMemCdRWm_HeaderData* header) {
     ResTIMG* icon = (ResTIMG*)arc->getResource("ipl_icon1.bti");
     memcpy(header->banner, ((char*)banner) + banner->imageOffset, 0xc00 + banner->numColors * 2);
     memcpy(header->icon, ((char*)icon) + icon->imageOffset, 0x400 + icon->numColors * 2);
-    arc->unmount();
+    JKRUnmountArchive(arc);
     delete cmd;
 }
 
@@ -346,12 +347,12 @@ u64 mDoMemCdRWm_CalcCheckSumGameData(void* p, u32 size) {
 /* 8001A408-8001A454       .text mDoMemCdRWm_TestCheckSumGameData__FPv */
 BOOL mDoMemCdRWm_TestCheckSumGameData(void *p) {
     card_gamedata* save = (card_gamedata*)p;
-    u64 csum = mDoMemCdRWm_CalcCheckSumGameData(save->data, sizeof(save->data));
+    u64 csum = mDoMemCdRWm_CalcCheckSumGameData(&save->data, sizeof(save->data));
     return csum == save->csum;
 }
 
 /* 8001A454-8001A498       .text mDoMemCdRWm_SetCheckSumGameData__FPUcUc */
 void mDoMemCdRWm_SetCheckSumGameData(u8* p, u8 slot) {
     card_gamedata* save = &((card_gamedata*)p)[slot];
-    save->csum = mDoMemCdRWm_CalcCheckSumGameData(save->data, sizeof(save->data));
+    save->csum = mDoMemCdRWm_CalcCheckSumGameData(&save->data, sizeof(save->data));
 }

@@ -32,6 +32,7 @@ enum dRes_ID_DBARREL {
 
 enum KTARU_02_JNT {
     KTARU_02_JNT_KTARU_02_e=0x0,
+    KTARU_02_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_DBARREL_H */

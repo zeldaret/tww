@@ -27,7 +27,7 @@ BOOL daObjGnntakis_c::create_heap() {
         if (mpModel != NULL) {
             btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNDEMOTAKIS_BTK_GNN_DEMO_TAKI_S_e));
             JUT_ASSERT(162, btk_data != NULL);
-            if (btk_data != NULL && mpBtkAnm.init(mdl_data, btk_data, TRUE, 0, 1.0f, 0, -1, FALSE, 0)) {
+            if (btk_data != NULL && mBtkAnm.init(mdl_data, btk_data, TRUE, 0, 1.0f, 0, -1, FALSE, 0)) {
                 ret = TRUE;
             }
         }
@@ -46,8 +46,8 @@ cPhs_State daObjGnntakis_c::_create() {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0)) {
             fopAcM_SetMtx(this, mpModel->getBaseTRMtx());
             init_mtx();
-            mpBtkAnm.getFrameCtrl()->setFrame(mpBtkAnm.getStartFrame());
-            mpBtkAnm.setPlaySpeed(0.0f);
+            mBtkAnm.getFrameCtrl()->setFrame(mBtkAnm.getStartFrame());
+            mBtkAnm.setPlaySpeed(0.0f);
             state = cPhs_COMPLEATE_e;
             m2B0 = FALSE;
         }
@@ -74,15 +74,15 @@ bool daObjGnntakis_c::_execute() {
         dComIfGp_evmng_startCheck("g2before") && 
         dComIfGp_demo_get()) {
         if (m2B0 == 0 && dComIfGp_demo_get()->getFrameNoMsg() >= 0x11d9) {
-            mpBtkAnm.setFrame(mpBtkAnm.getStartFrame());
-            mpBtkAnm.setPlaySpeed(1.0f);
+            mBtkAnm.setFrame(mBtkAnm.getStartFrame());
+            mBtkAnm.setPlaySpeed(1.0f);
             m2B0 = TRUE;
         } else if (dComIfGp_demo_get()->getFrameNoMsg() >= 0x126f) {
             fopAcM_delete(this);
         }
     }
 
-    mpBtkAnm.play();
+    mBtkAnm.play();
     return TRUE;
 }
 
@@ -90,7 +90,7 @@ bool daObjGnntakis_c::_execute() {
 bool daObjGnntakis_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
-    mpBtkAnm.entry(mpModel->getModelData());
+    mBtkAnm.entry(mpModel->getModelData());
     mDoExt_modelUpdateDL(mpModel);
     return TRUE;
 }

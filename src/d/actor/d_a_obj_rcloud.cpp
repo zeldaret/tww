@@ -196,8 +196,7 @@ void daObjRcloud_c::setTexMtx() {
     for (u16 i = 0; i < modelData->getMaterialNum(); i++) {
         J3DMaterial* material = modelData->getMaterialNodePointer(i);
         for (u32 texMtxID = 0; texMtxID < 8; texMtxID++) {
-            J3DTexGenBlock* texGenBlock = material->getTexGenBlock();
-            J3DTexMtx* pTexMtx = texGenBlock->getTexMtx(texMtxID);
+            J3DTexMtx* pTexMtx = material->getTexMtx(texMtxID);
 
             if (pTexMtx != NULL) {
                 pTexMtx->getMtx()[0][3] += pTexMtx->getTextureSRT().mTranslationX;

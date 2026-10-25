@@ -18,6 +18,7 @@ enum dRes_ID_VLETT {
 
 enum VLETT_JNT {
     VLETT_JNT_VLETT_MODEL_e=0x0,
+    VLETT_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VLETT_H */

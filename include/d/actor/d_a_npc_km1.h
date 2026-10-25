@@ -29,18 +29,18 @@ public:
 
     s8 getHeadJntNum() { return m_head_jnt_num; }
     s8 getBackboneJntNum()  {return m_backbone_jnt_num; }
-    s16 getBackbone_x() { return m_jnt.getBackbone_x(); }
-    s16 getBackbone_y() { return m_jnt.getBackbone_y(); }
-    s16 getHead_x() { return m_jnt.getHead_x(); }
-    s16 getHead_y() { return m_jnt.getHead_y(); }
-    Vec* getAttPos() { return &mAttPos; }
-    Vec* getEyePos() { return &mEyePos; }
+    s16 getHead_x() { return m_jnt.mAngles[0][0]; }
+    s16 getHead_y() { return m_jnt.mAngles[0][1]; }
+    s16 getBackbone_x() { return m_jnt.mAngles[1][0]; }
+    s16 getBackbone_y() { return m_jnt.mAngles[1][1]; }
+    cXyz* getAttPos() { return &mAttPos; }
+    cXyz* getEyePos() { return &mEyePos; }
 
     bool createInit();
     void setMtx();
     bool anmResID(int, int*, int*);
     void BtpNum2ResID(int, int*);
-    void setAnm_tex(signed char);
+    void setAnm_tex(s8);
     bool init_btp(bool, int);
     bool initTexPatternAnm(bool);
     void playTexPatternAnm();
@@ -48,12 +48,12 @@ public:
     void setAnm();
     void chngAnmTag();
     void ctrlAnmTag();
-    void chngAnmAtr(unsigned char);
+    void chngAnmAtr(u8);
     void ctrlAnmAtr();
     void setAnm_ATR(int);
-    void anmAtr(unsigned short);
-    void setStt(signed char);
-    u16 next_msgStatus(unsigned long*);
+    void anmAtr(u16);
+    void setStt(s8);
+    u16 next_msgStatus(u32*);
     u32 getMsg();
     void eventOrder();
     void checkOrder();
@@ -67,6 +67,7 @@ public:
     void endEvent();
     void event_proc();
     bool set_action(ActionFunc, void*);
+    BOOL chk_action(ActionFunc); // Unused
     BOOL wait01();
     BOOL talk01();
     int wait_action1(void*);

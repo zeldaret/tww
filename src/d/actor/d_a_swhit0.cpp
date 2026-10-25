@@ -374,7 +374,7 @@ void daSwhit0_c::setDrawMtx() {
     mpModel->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
-s32 daSwhit0_c::draw() {
+BOOL daSwhit0_c::draw() {
     static GXColorS10 l_color[] = {
         { 0xF0, 0xF5, 0xFF, 0x6E },
         { 0xB4, 0xC8, 0xD2, 0x64 },
@@ -415,12 +415,12 @@ s32 daSwhit0_c::draw() {
 }
 
 /* 000011E4-00001334       .text daSwhit0_Draw__FP10daSwhit0_c */
-static s32 daSwhit0_Draw(daSwhit0_c* i_this) {
+static BOOL daSwhit0_Draw(daSwhit0_c* i_this) {
     return i_this->draw();
 }
 
 /* 00001334-00001420       .text daSwhit0_Execute__FP10daSwhit0_c */
-static s32 daSwhit0_Execute(daSwhit0_c* i_this) {
+static BOOL daSwhit0_Execute(daSwhit0_c* i_this) {
     i_this->mAnm.play();
     i_this->mTexAnm.play();
 
@@ -454,13 +454,13 @@ static s32 daSwhit0_Execute(daSwhit0_c* i_this) {
 }
 
 /* 00001420-00001428       .text daSwhit0_IsDelete__FP10daSwhit0_c */
-static s32 daSwhit0_IsDelete(daSwhit0_c* i_this) {
+static BOOL daSwhit0_IsDelete(daSwhit0_c* i_this) {
     UNUSED(i_this);
     return TRUE;
 }
 
 /* 00001428-00001450       .text daSwhit0_Delete__FP10daSwhit0_c */
-static s32 daSwhit0_Delete(daSwhit0_c* i_this) {
+static BOOL daSwhit0_Delete(daSwhit0_c* i_this) {
     i_this->~daSwhit0_c();
     return TRUE;
 }

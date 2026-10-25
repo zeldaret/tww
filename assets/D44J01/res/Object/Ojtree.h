@@ -24,6 +24,7 @@ enum OJTREE_JNT {
     OJTREE_JNT_R00_OJTREE_01_e=0x0,
     OJTREE_JNT_A00_e=0x1,
     OJTREE_JNT_OJTREE_e=0x2,
+    OJTREE_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_OJTREE_H */

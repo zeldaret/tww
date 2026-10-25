@@ -25,6 +25,7 @@ enum VBINY_JNT {
     VBINY_JNT_BIN_0_OUTSIDE_e=0x1,
     VBINY_JNT_BIN_1_YOSEI_e=0x2,
     VBINY_JNT_BIN_2_INSIDE_e=0x3,
+    VBINY_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_VBINY_H */

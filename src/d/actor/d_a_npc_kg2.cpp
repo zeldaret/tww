@@ -95,12 +95,12 @@ void daNpc_Kg2_c::getMsg() {
 }
 
 /* 00000E38-00001028       .text next_msgStatus__11daNpc_Kg2_cFPUl */
-void daNpc_Kg2_c::next_msgStatus(unsigned long*) {
+void daNpc_Kg2_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
 /* 00001028-000012EC       .text anmAtr__11daNpc_Kg2_cFUs */
-void daNpc_Kg2_c::anmAtr(unsigned short) {
+void daNpc_Kg2_c::anmAtr(u16) {
     /* Nonmatching */
 }
 

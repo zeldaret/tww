@@ -244,7 +244,7 @@ void daNpc_Fa1_c::setPointLightParam() {
 }
 
 /* 800FB2B8-800FB514       .text createInit__11daNpc_Fa1_cFv */
-int daNpc_Fa1_c::createInit() {
+BOOL daNpc_Fa1_c::createInit() {
     mType = fopAcM_GetParam(this);
     m764 = NULL;
     m768.setall(0.0f);
@@ -770,7 +770,7 @@ void daNpc_Fa1_c::bottle_baba_move() {
         BGCheck();
         u8 dVar1 = getSubMode();
         (this->*bottleBabaSubProc[dVar1])();
-        if ((dVar1 == 1) && (current.pos.y > m764->current.pos.y + 150.0f)) {
+        if (dVar1 == 1 && current.pos.y > m764->current.pos.y + 150.0f) {
             fopAcM_delete(this);
         }
     }
@@ -813,7 +813,7 @@ void daNpc_Fa1_c::bottle_baba_move2() {
         current.pos += speed;
         BGCheck();
         (this->*bottleBabaSubProc[getSubMode()])();
-        if ((current.pos.y > m764->current.pos.y + 180.0f)) {
+        if (current.pos.y > m764->current.pos.y + 180.0f) {
             init_bottle_baba_move();
         }
     }
@@ -911,7 +911,7 @@ BOOL daNpc_Fa1_c::_delete() {
     if (l_hio_counter != 0) {
         l_hio_counter--;
     }
-    if ((l_hio_counter <= 0) && (l_HIO.mNo >= 0)) {
+    if (l_hio_counter <= 0 && l_HIO.mNo >= 0) {
         mDoHIO_deleteChild(l_HIO.mNo);
         l_HIO.mNo = -1;
     }

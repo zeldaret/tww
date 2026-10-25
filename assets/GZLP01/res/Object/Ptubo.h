@@ -18,6 +18,7 @@ enum dRes_ID_PTUBO {
 
 enum PTUBO_JNT {
     PTUBO_JNT_PTUBO_e=0x0,
+    PTUBO_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_PTUBO_H */

@@ -22,6 +22,7 @@ enum dRes_ID_DOGUUD {
 
 enum ESKZTO_JNT {
     ESKZTO_JNT_ESKZTO_e=0x0,
+    ESKZTO_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_DOGUUD_H */

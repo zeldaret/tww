@@ -18,6 +18,7 @@ enum dRes_ID_X_FUTA {
 
 enum X_FUTA_JNT {
     X_FUTA_JNT_WORLD_ROOT_e=0x0,
+    X_FUTA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_X_FUTA_H */

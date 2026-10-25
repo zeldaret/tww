@@ -18,6 +18,7 @@ enum dRes_ID_VOHOM {
 
 enum VOHOM_JNT {
     VOHOM_JNT_VOHOM_MODEL_e=0x0,
+    VOHOM_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VOHOM_H */

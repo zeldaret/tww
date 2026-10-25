@@ -282,13 +282,11 @@ f32 daPy_lk_c::getSwimTimerRate() {
     if (dComIfGp_getItemSwimTimerStatus() && !dComIfGp_event_runCheck()) {
         swimTimerRate = (1.0f - dComIfGp_getItemTimeCount() * 0.0011111111f);
     }
+    else if (dComIfGp_getItemTimeCount() <= 0) {
+        swimTimerRate = 1.0f;
+    }
     else {
-        if (dComIfGp_getItemTimeCount() <= 0) {
-            swimTimerRate = 1.0f;
-        }
-        else {
-            swimTimerRate = 0.0f;
-        }
+        swimTimerRate = 0.0f;
     }
     return swimTimerRate;
 }
@@ -353,15 +351,13 @@ BOOL daPy_lk_c::procSwimUp_init(BOOL param_1) {
 
         if (emitter) {
             emitter->setRate(15.0f);
-            emitter->setGlobalDynamicsScale(splash_scale);
-            emitter->setGlobalParticleScale(splash_scale);
+            emitter->setGlobalScale(splash_scale);
         }
 
         emitter = dComIfGp_particle_setShipTail(dPa_name::ID_IT_JN_WP_HAMON01, &current.pos, NULL, NULL, 0xFF, &dPa_control_c::mSingleRippleEcallBack);
         
         if (emitter) {
-            emitter->setGlobalDynamicsScale(ripple_scale);
-            emitter->setGlobalParticleScale(ripple_scale);
+            emitter->setGlobalScale(ripple_scale);
         }
     }
 
@@ -379,23 +375,19 @@ BOOL daPy_lk_c::procSwimUp() {
         if (frameCtrl.getRate() < 0.01f) {
             procSwimWait_init(FALSE);
         }
+        else if (frameCtrl.getFrame() > m_HIO->mSwim.m.field_0x34) {
+            if (mStickDistance > 0.05f) {
+                procSwimMove_init(FALSE);
+            }
+        }
+        else if (frameCtrl.checkPass(4.0f)) {
+            voiceStart(0x1A);
+            seStartOnlyReverb(JA_SE_LK_WALK_IN_WATER);
+            seStartOnlyReverb(JA_SE_LK_SWIM);
+        }
         else {
-            if (frameCtrl.getFrame() > m_HIO->mSwim.m.field_0x34) {
-                if (mStickDistance > 0.05f) {
-                    procSwimMove_init(FALSE);
-                }
-            }
-            else {
-                if (frameCtrl.checkPass(4.0f)) {
-                    voiceStart(0x1A);
-                    seStartOnlyReverb(JA_SE_LK_WALK_IN_WATER);
-                    seStartOnlyReverb(JA_SE_LK_SWIM);
-                }
-                else {
-                    m35C4 = m_HIO->mSwim.m.field_0x3C;
-                    current.pos.y = mWaterY;
-                }
-            }
+            m35C4 = m_HIO->mSwim.m.field_0x3C;
+            current.pos.y = mWaterY;
         }
     }
     setSwimTimerStartStop();
@@ -419,7 +411,7 @@ BOOL daPy_lk_c::procSwimWait_init(BOOL param_1) {
     }
 
     gravity = 0.0f;
-    setSingleMoveAnime(ANM_SWIMWAIT, (f32)(getSwimTimerRate() * m_HIO->mSwim.m.field_0x70) + m_HIO->mSwim.m.field_0x40, 0.0f, -1, m_HIO->mSwim.m.field_0x44);
+    setSingleMoveAnime(ANM_SWIMWAIT, getSwimTimerRate() * m_HIO->mSwim.m.field_0x70 + m_HIO->mSwim.m.field_0x40, 0.0f, -1, m_HIO->mSwim.m.field_0x44);
     frameCtrl.setFrame(fVar2 * frameCtrl.getEnd());
     mAnmRatioUnder[UNDER_MOVE0_e].getAnmTransform()->setFrame(frameCtrl.getFrame());
     dComIfGp_setPlayerStatus0(0, daPyStts0_SWIM_e);

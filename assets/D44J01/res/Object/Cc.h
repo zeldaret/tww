@@ -96,10 +96,12 @@ enum dRes_ID_CC {
 
 enum CC_BETA_JNT {
     CC_BETA_JNT_CC_BETA_e=0x0,
+    CC_BETA_NUM_JNTS_e=0x1,
 };
 
 enum CC_IWA_JNT {
     CC_IWA_JNT_CC_ROCK_e=0x0,
+    CC_IWA_NUM_JNTS_e=0x1,
 };
 
 enum CC_PTCL_JNT {
@@ -115,6 +117,7 @@ enum CC_PTCL_JNT {
     CC_PTCL_JNT_CCB_7_e=0x9,
     CC_PTCL_JNT_CCB_8_e=0xA,
     CC_PTCL_JNT_CCB_9_e=0xB,
+    CC_PTCL_NUM_JNTS_e=0xC,
 };
 
 enum CC_JNT {
@@ -124,6 +127,7 @@ enum CC_JNT {
     CC_JNT_BODY03_e=0x3,
     CC_JNT_DODAI_e=0x4,
     CC_JNT_PETA_e=0x5,
+    CC_NUM_JNTS_e=0x6,
 };
 
 #endif /* RES_CC_H */

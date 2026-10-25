@@ -8,7 +8,7 @@
 
 /* 802AD008-802AD014       .text initSeaEnvPos__11JAIZelBasicFv */
 void JAIZelBasic::initSeaEnvPos() {
-    /* Nonmatching */
+    field_0x1b80 = 0;
 }
 
 /* 802AD014-802AD0A8       .text registSeaEnvPos__11JAIZelBasicFP3Vec */
@@ -43,7 +43,7 @@ void JAIZelBasic::seaShoreSE(u32, Vec*, u32, s8) {
 
 /* 802AD98C-802AD998       .text initRiverPos__11JAIZelBasicFv */
 void JAIZelBasic::initRiverPos() {
-    /* Nonmatching */
+    field_0x1dd0 = 0;
 }
 
 /* 802AD998-802ADB38       .text registRiverPos__11JAIZelBasicFP3Vec */
@@ -63,7 +63,7 @@ void JAIZelBasic::waterfallSePlay(u8, Vec*, s8) {
 
 /* 802ADE68-802ADE74       .text initWindowPos__11JAIZelBasicFv */
 void JAIZelBasic::initWindowPos() {
-    /* Nonmatching */
+    field_0x1ec0 = 0;
 }
 
 /* 802ADE74-802ADF20       .text registWindowPos__11JAIZelBasicFP3Vec */

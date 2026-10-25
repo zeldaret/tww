@@ -96,7 +96,7 @@ BOOL JntHit_c::CylHitPosAngleOffset(cXyz* r27, csXyz* r28, cXyz* r29, csXyz* r30
     r1_B8 -= r1_D0;
     if (r1_B8.normalizeRS()) {
         f32 f31 = r1_DC.inprod(r1_B8);
-        f32 temp = f31*f31 + f28*f28 - r1_DC.abs2();
+        f32 temp = SQUARE(f31) + SQUARE(f28) - r1_DC.abs2();
         if (temp < 0.0f)
             temp = 0.0f;
         f32 temp2 = (-f31 - std::sqrtf(temp));
@@ -195,7 +195,7 @@ BOOL JntHit_c::SphHitPosAngleOffset(cXyz* r27, csXyz* r29, cXyz* r30, csXyz* r31
     f32 cosY = cM_scos(r29->y);
     cXyz r1_34(cosX * sinY, -sinX, cosX * cosY);
     f32 f31 = r27->inprod(r1_34);
-    f32 temp = f31*f31 + f30*f30 - r27->abs2();
+    f32 temp = SQUARE(f31) + SQUARE(f30) - r27->abs2();
     if (temp < 0.0f)
         temp = 0.0f;
     f32 temp2 = (-f31 - std::sqrtf(temp));

@@ -52,70 +52,70 @@ void J3DTexMtx::calc() {
         0.0f, 0.0f, 1.0f, 0.0f,
     };
 
-    u32 mode = mTexMtxInfo.mInfo & 0x7f;
-    u32 extra = (mTexMtxInfo.mInfo >> 7) & 1;
+    u32 mode = mInfo & 0x7f;
+    u32 extra = (mInfo >> 7) & 1;
 
     if (mode == J3DTexMtxMode_Projmap || mode == J3DTexMtxMode_ViewProjmap || mode == J3DTexMtxMode_EnvmapEffectMtx) {
         if (extra == 0) {
-            J3DGetTextureMtx(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx2);
+            J3DGetTextureMtx(mSRT, mCenter, mtx2);
         } else if (extra == 1) {
-            J3DGetTextureMtxMaya(mTexMtxInfo.mSRT, mtx2);
+            J3DGetTextureMtxMaya(mSRT, mtx2);
         }
         MTXConcat(mtx2, qMtx, mtx2);
-        J3DMtxProjConcat(mtx2, mTexMtxInfo.mEffectMtx, mtx1);
+        J3DMtxProjConcat(mtx2, mEffectMtx, mtx1);
         MTXConcat(mtx1, mViewMtx, mMtx);
     } else if (mode == J3DTexMtxMode_Envmap) {
         if (extra == 0) {
-            J3DGetTextureMtx(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx1);
+            J3DGetTextureMtx(mSRT, mCenter, mtx1);
         } else if (extra == 1) {
-            J3DGetTextureMtxMaya(mTexMtxInfo.mSRT, mtx1);
+            J3DGetTextureMtxMaya(mSRT, mtx1);
         }
         MTXConcat(mtx1, qMtx, mtx1);
         MTXConcat(mtx1, mViewMtx, mMtx);
     } else if (mode == J3DTexMtxMode_EnvmapOldEffectMtx) {
         if (extra == 0) {
-            J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx2);
+            J3DGetTextureMtxOld(mSRT, mCenter, mtx2);
         } else if (extra == 1) {
-            J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx2);
+            J3DGetTextureMtxMayaOld(mSRT, mtx2);
         }
         MTXConcat(mtx2, qMtx2, mtx2);
-        J3DMtxProjConcat(mtx2, mTexMtxInfo.mEffectMtx, mtx1);
+        J3DMtxProjConcat(mtx2, mEffectMtx, mtx1);
         MTXConcat(mtx1, mViewMtx, mMtx);
     } else if (mode == J3DTexMtxMode_EnvmapOld) {
         if (extra == 0) {
-            J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx1);
+            J3DGetTextureMtxOld(mSRT, mCenter, mtx1);
         } else if (extra == 1) {
-            J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx1);
+            J3DGetTextureMtxMayaOld(mSRT, mtx1);
         }
         MTXConcat(mtx1, qMtx2, mtx1);
         MTXConcat(mtx1, mViewMtx, mMtx);
     } else if (mode == J3DTexMtxMode_EnvmapBasic) {
         if (extra == 0) {
-            J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx1);
+            J3DGetTextureMtxOld(mSRT, mCenter, mtx1);
         } else if (extra == 1) {
-            J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx1);
+            J3DGetTextureMtxMayaOld(mSRT, mtx1);
         }
         MTXConcat(mtx1, mViewMtx, mMtx);
     } else if (mode == J3DTexMtxMode_ProjmapBasic || mode == J3DTexMtxMode_ViewProjmapBasic || mode == J3DTexMtxMode_Unknown5) {
         if (extra == 0) {
-            J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx2);
+            J3DGetTextureMtxOld(mSRT, mCenter, mtx2);
         } else if (extra == 1) {
-            J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx2);
+            J3DGetTextureMtxMayaOld(mSRT, mtx2);
         }
-        J3DMtxProjConcat(mtx2, mTexMtxInfo.mEffectMtx, mtx1);
+        J3DMtxProjConcat(mtx2, mEffectMtx, mtx1);
         MTXConcat(mtx1, mViewMtx, mMtx);
     } else if (mode == J3DTexMtxMode_Unknown4) {
         if (extra == 0) {
-            J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mtx2);
+            J3DGetTextureMtxOld(mSRT, mCenter, mtx2);
         } else if (extra == 1) {
-            J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mtx2);
+            J3DGetTextureMtxMayaOld(mSRT, mtx2);
         }
-        J3DMtxProjConcat(mtx2, mTexMtxInfo.mEffectMtx, mMtx);
+        J3DMtxProjConcat(mtx2, mEffectMtx, mMtx);
     } else {
         if (extra == 0) {
-            J3DGetTextureMtxOld(mTexMtxInfo.mSRT, mTexMtxInfo.mCenter, mMtx);
+            J3DGetTextureMtxOld(mSRT, mCenter, mMtx);
         } else if (extra == 1) {
-            J3DGetTextureMtxMayaOld(mTexMtxInfo.mSRT, mMtx);
+            J3DGetTextureMtxMayaOld(mSRT, mMtx);
         }
     }
 }

@@ -130,8 +130,8 @@ void OSCancelAlarm(OSAlarm* alarm) {
     OSRestoreInterrupts(enabled);
 }
 
-static void DecrementerExceptionCallback(register __OSException exception,
-                                         register OSContext* context) {
+static void DecrementerExceptionCallback(__REGISTER __OSException exception,
+                                         __REGISTER OSContext* context) {
     OSAlarm* alarm;
     OSAlarm* next;
     OSAlarmHandler handler;
@@ -177,8 +177,8 @@ static void DecrementerExceptionCallback(register __OSException exception,
     OSLoadContext(context);
 }
 
-static ASM void DecrementerExceptionHandler(register __OSException exception,
-                                            register OSContext* context) {
+static ASM void DecrementerExceptionHandler(__REGISTER __OSException exception,
+                                            __REGISTER OSContext* context) {
 #ifdef __MWERKS__
     // clang-format off
     nofralloc

@@ -203,8 +203,8 @@ void JAIZelBasic::resetProcess() {
 
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         JAInter::SeqUpdateData* data = JAInter::SequenceMgr::getPlayTrackInfo(i);
-        if (data && data->field_0x48) {
-            data->field_0x48->setSeqInterVolume(SOUNDPARAM_Direct, 0.0f, 1);
+        if (data && data->mSequence) {
+            data->mSequence->setSeqInterVolume(SOUNDPARAM_Direct, 0.0f, 1);
         }
     }
     if (JAInter::StreamMgr::getUpdateInfo()->mpSound) {
@@ -228,8 +228,8 @@ void JAIZelBasic::resetRecover() {
     }
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         JAInter::SeqUpdateData* data = JAInter::SequenceMgr::getPlayTrackInfo(i);
-        if (data && data->field_0x48 && data->field_0x48 != JAInter::SeMgr::seHandle) {
-            data->field_0x48->stop(0);
+        if (data && data->mSequence && data->mSequence != JAInter::SeMgr::seHandle) {
+            data->mSequence->stop(0);
         }
     }
     setScene(0, dIsleRoom_SeaFloor_e, 0, -1);
@@ -758,12 +758,12 @@ void JAIZelBasic::seDeleteObject(Vec* param_1) {
 }
 
 /* 802A86A8-802A8748       .text getLinkVoiceVowel__11JAIZelBasicFUl */
-u8 JAIZelBasic::getLinkVoiceVowel(u32) {
+u8 JAIZelBasic::getLinkVoiceVowel(u32 i_soundID) {
     /* Nonmatching */
 }
 
 /* 802A8748-802A892C       .text linkVoiceStart__11JAIZelBasicFUlP3VecUcSc */
-void JAIZelBasic::linkVoiceStart(u32, Vec*, u8, s8) {
+void JAIZelBasic::linkVoiceStart(u32 i_soundID, Vec* i_sePos, u8, s8) {
     /* Nonmatching */
 }
 
@@ -1499,7 +1499,7 @@ void JAIZelBasic::loadStaticWaves() {
 }
 
 static void dummy2() {
-    OSReport("Warning : bgm pointer is NULL!\n");
+    DEAD_STRING("Warning : bgm pointer is NULL!\n");
 }
 
 /* 802AB888-802AB8B0       .text checkFirstWaves__11JAIZelBasicFv */
@@ -1565,7 +1565,7 @@ int JAIZelBasic::checkStreamPlaying(u32 param_1) {
     if (JAInter::StreamLib::getPlayingFlag() == 0) {
         return false;
     }
-    if (param_1 != sound->mSoundID) {
+    if (param_1 != sound->getID()) {
         return false;
     }
     return true;

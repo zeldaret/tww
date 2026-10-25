@@ -25,6 +25,7 @@ enum OYASHI_JNT {
     OYASHI_JNT_J_MIKI_e=0x1,
     OYASHI_JNT_J_HAPPA1_e=0x2,
     OYASHI_JNT_J_HAPPA2_e=0x3,
+    OYASHI_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_OYASHI_H */

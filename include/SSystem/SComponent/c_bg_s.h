@@ -34,6 +34,7 @@ public:
 STATIC_ASSERT(sizeof(cBgS_ChkElm) == 0x14);
 
 class cBgW;
+
 class cBgS {
 public:
     /* 0x0000 */ cBgS_ChkElm m_chk_element[256];

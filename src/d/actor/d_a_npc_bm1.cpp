@@ -852,7 +852,7 @@ void daNpc_Bm1_c::setMtx(bool i_param_1) {
 
 /* 000017A8-000017F8       .text anmNum_toResID__11daNpc_Bm1_cFi */
 char* daNpc_Bm1_c::anmNum_toResID(int i_anmNum) {
-    static char* a_BCKName_TBL[0x16] = {"bm_dwait",    "bm_fly01",     "bm_lookup",  "bm_orooro",   "bm_wait01", "bm_wait02",  "bm_talk01", "bm_nadame",
+    static const char* a_BCKName_TBL[0x16] = {"bm_dwait",    "bm_fly01",     "bm_lookup",  "bm_orooro",   "bm_wait01", "bm_wait02",  "bm_talk01", "bm_nadame",
                                         "bm_gliding",  "bm_endurance", "bm_flyaway", "bm_flyaway2", "bm_talk02", "bm_landing", "bm_walk",   "bm02_wait01",
                                         "bm02_talk01", "bm02_talk02",  "bm_talk03",  "bm_turn",     "bm_walk02", "bm_check"};
     strcpy(l_BCKName, a_BCKName_TBL[i_anmNum]);
@@ -861,7 +861,7 @@ char* daNpc_Bm1_c::anmNum_toResID(int i_anmNum) {
 
 /* 000017F8-00001848       .text headAnmNum_toResID__11daNpc_Bm1_cFi */
 char* daNpc_Bm1_c::headAnmNum_toResID(int i_anmNum) {
-    static char* a_BCKName_TBL[0x16] = {"bmhead01_dwait",   "bmhead01_fly01",    "bmhead01_lookup", "bmhead01_orooro",  "bmhead01_wait01",
+    static const char* a_BCKName_TBL[0x16] = {"bmhead01_dwait",   "bmhead01_fly01",    "bmhead01_lookup", "bmhead01_orooro",  "bmhead01_wait01",
                                         "bmhead01_wait02",  "bmhead01_talk01",   "bmhead01_nadame", "bmhead01_gliding", "bmhead01_endurance",
                                         "bmhead01_flyaway", "bmhead01_flyaway2", "bmhead01_talk02", "bmhead01_landing", "bmhead01_walk",
                                         "bmhead01_wait01",  "bmhead01_wait01",   "bmhead01_wait01", "bmhead01_talk03",  "bmhead01_turn",
@@ -872,7 +872,7 @@ char* daNpc_Bm1_c::headAnmNum_toResID(int i_anmNum) {
 
 /* 00001848-00001898       .text wingAnmNum_toResID__11daNpc_Bm1_cFi */
 char* daNpc_Bm1_c::wingAnmNum_toResID(int i_anmNum) {
-    static char* a_BCKName_TBL[0x16] = {"bmwing_dwait", "bmwing_fly01",  "bmwing_lookup",  "bmwing_orooro",    "bmarm_wait01",   "bmarm_wait02",
+    static const char* a_BCKName_TBL[0x16] = {"bmwing_dwait", "bmwing_fly01",  "bmwing_lookup",  "bmwing_orooro",    "bmarm_wait01",   "bmarm_wait02",
                                         "bmarm_talk01", "bmarm_nadame",  "bmwing_gliding", "bmwing_endurance", "bmarm_flyaway",  "bmwing_flyaway2",
                                         "bmarm_talk02", "bmarm_landing", "bmarm_walk",     "bmarm02_wait01",   "bmarm02_talk01", "bmarm02_talk02",
                                         "bmarm_talk03", "bmarm_turn",    "bmarm_walk02",   "bmarm_check"};
@@ -882,8 +882,8 @@ char* daNpc_Bm1_c::wingAnmNum_toResID(int i_anmNum) {
 
 /* 00001898-00001948       .text btpNum_toResID__11daNpc_Bm1_cFi */
 char* daNpc_Bm1_c::btpNum_toResID(int i_param_1) {
-    static char* a_BTPName_TBL[] = {"bmhead01"};
-    static char* a_BTPName_TBL_2[] = {
+    static const char* a_BTPName_TBL[] = {"bmhead01"};
+    static const char* a_BTPName_TBL_2[] = {
         "bmhead01",
         "bmhead01",
         "bmhead01",
@@ -3908,34 +3908,34 @@ BOOL daNpc_Bm1_c::_draw() {
 
     switch (mType) {
         case TYPE_Quill_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8D, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_PST, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Akoot_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8E, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_SKT_KKT, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Skett_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8E, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_SKT_KKT, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Basht_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK93, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMB_0_1, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Bisht_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK93, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMB_0_1, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Hoskit_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK91, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMB_2, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Ilari_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK90, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMC_0_1_2, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Pashli_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK97, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMC_3, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Namali_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK92, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMD_0, this, 1.0f, 1.0f, 1.0f);
             break;
         case TYPE_Kogoli_e:
-            dSnap_RegistFig(DSNAP_TYPE_UNK8F, this, 1.0f, 1.0f, 1.0f);
+            dSnap_RegistFig(DSNAP_TYPE_NPC_BM1_BMD_1, this, 1.0f, 1.0f, 1.0f);
             break;
     }
 
@@ -4143,7 +4143,7 @@ J3DModelData* daNpc_Bm1_c::create_Anm() {
 
 /* 00008710-00008878       .text create_hed_Anm__11daNpc_Bm1_cFv */
 J3DModelData* daNpc_Bm1_c::create_hed_Anm() {
-    static char* a_headBDLName_TBL[] = {
+    static const char* a_headBDLName_TBL[] = {
         "bmhead01.bdl",
         "bmhead01.bdl",
         "bmhead01.bdl",
@@ -4333,19 +4333,19 @@ BOOL daNpc_Bm1_c::CreateHeap() {
                 mpWingMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Wng);
             }
         }
-        mpWingMorf->getModel()->setUserArea((u32)this);
+        mpWingMorf->getModel()->setUserArea((uintptr_t)this);
         for (u16 i = 0; i < arm_anmdata->getJointNum(); i++) {
             if ((i == m_armL1_jnt_num) || (i == m_armL2_jnt_num) || (i == m_armR1_jnt_num) || (i == m_armR2_jnt_num)) {
                 mpArmMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Arm);
             }
         }
-        mpArmMorf->getModel()->setUserArea((u32)this);
+        mpArmMorf->getModel()->setUserArea((uintptr_t)this);
         for (u16 i = 0; i < anm_model->getJointNum(); i++) {
             if ((i == m_hed_jnt_num) || (i == m_nec_jnt_num) || (i == m_bbone_jnt_num) || (i == m_arm_L_jnt_num) || i == m_arm_R_jnt_num) {
                 mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack_Bm1);
             }
         }
-        mpMorf->getModel()->setUserArea((u32)this);
+        mpMorf->getModel()->setUserArea((uintptr_t)this);
         mAcchCir.SetWall(30.0f, 50.0f);
         mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), NULL, NULL);
 

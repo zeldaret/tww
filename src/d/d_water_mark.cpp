@@ -32,7 +32,7 @@ BOOL dWaterMark_c::setMatrix() {
 
     mPos.y = dComIfG_Bgsp()->GroundCross(&m_ground_check);
     if (mPos.y != -G_CM3D_F_INF) {
-        cM3dGPla* tri = dComIfG_Bgsp()->GetTriPla(m_ground_check.GetBgIndex(), m_ground_check.GetPolyIndex());
+        cM3dGPla* tri = dComIfG_Bgsp()->GetTriPla(m_ground_check);
         s16 tri_angle = cM_atan2s(tri->mNormal.x, tri->mNormal.z) - field_0x12e;
         f32 norm_xz_mag = tri->mNormal.absXZ();
 

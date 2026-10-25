@@ -22,6 +22,7 @@ enum dRes_ID_HFUCK1 {
 
 enum HFUCK1_JNT {
     HFUCK1_JNT_POLYSURFACE1916_e=0x0,
+    HFUCK1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HFUCK1_H */

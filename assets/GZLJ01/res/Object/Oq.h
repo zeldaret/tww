@@ -60,6 +60,7 @@ enum dRes_ID_OQ {
 
 enum ISI_JNT {
     ISI_JNT_PCUBE4_e=0x0,
+    ISI_NUM_JNTS_e=0x1,
 };
 
 enum OQ_JNT {
@@ -83,6 +84,7 @@ enum OQ_JNT {
     OQ_JNT_UDER2_e=0x11,
     OQ_JNT_UDER3_e=0x12,
     OQ_JNT_HANDR_e=0x13,
+    OQ_NUM_JNTS_e=0x14,
 };
 
 enum RED_OQ_JNT {
@@ -106,6 +108,7 @@ enum RED_OQ_JNT {
     RED_OQ_JNT_UDER2_e=0x11,
     RED_OQ_JNT_UDER3_e=0x12,
     RED_OQ_JNT_HANDR_e=0x13,
+    RED_OQ_NUM_JNTS_e=0x14,
 };
 
 #endif /* RES_OQ_H */

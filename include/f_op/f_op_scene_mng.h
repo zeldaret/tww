@@ -22,10 +22,6 @@ inline u32 fpcM_LayerID(void* pProc) {
     }
 }
 
-inline layer_class* fpcM_Layer(void* pProc) {
-    return &((process_node_class*)pProc)->mLayer;
-}
-
 inline fpc_ProcID fopScnM_GetID(void* proc) {
     return fpcM_GetID(proc);
 }

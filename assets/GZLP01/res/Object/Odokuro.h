@@ -18,6 +18,7 @@ enum dRes_ID_ODOKURO {
 
 enum ODOKURO_JNT {
     ODOKURO_JNT_ODOKURO_e=0x0,
+    ODOKURO_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ODOKURO_H */

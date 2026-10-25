@@ -18,6 +18,7 @@ enum dRes_ID_VTIN4 {
 
 enum VTIN4_JNT {
     VTIN4_JNT_VTIN4_MODEL_e=0x0,
+    VTIN4_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VTIN4_H */

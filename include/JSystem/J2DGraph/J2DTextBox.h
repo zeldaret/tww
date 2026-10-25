@@ -57,7 +57,11 @@ public:
     void setGradColor(JUtility::TColor c) { mGradColor.set(c); }
     void setBlack(JUtility::TColor c) { mBlack = c; }
     void setWhite(JUtility::TColor c) { mWhite = c; }
-    
+    void setBlackWhite(JUtility::TColor black, JUtility::TColor white) {
+        mBlack = black;
+        mWhite = white;
+    }
+
     void setLineSpace(f32 x) { mLineSpace = x; }
     f32 getLineSpace() const { return mLineSpace; }
     f32 getCharSpace() const { return mCharSpace; }
@@ -94,6 +98,6 @@ public:
     /* 0xFC */ u8 mBindingH;
     /* 0xFD */ u8 mBindingV;
     /* 0xFE */ bool mTextFontOwned;
-};     // Size: 0x100
+};  // Size: 0x100
 
 #endif /* J2DTEXTBOX_H */

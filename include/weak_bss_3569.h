@@ -17,7 +17,7 @@ static inline void dummy_bss_3569() {
 #include "dolphin/mtx/mtx.h"
 
 static inline void dummy_bss_3569() {
-    Vec vec = (Vec){0.0f, 0.0f, 0.0f}; // @3569 / @3599
+    Vec vec = {0.0f, 0.0f, 0.0f}; // @3569 / @3599
 }
 #endif
 

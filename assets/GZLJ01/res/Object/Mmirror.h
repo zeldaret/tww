@@ -43,6 +43,7 @@ enum MMRR_JNT {
     MMRR_JNT_KIRARI_e=0x1,
     MMRR_JNT_BODY_e=0x2,
     MMRR_JNT_MIRROR_e=0x3,
+    MMRR_NUM_JNTS_e=0x4,
 };
 
 enum MSUSW_JNT {
@@ -52,10 +53,12 @@ enum MSUSW_JNT {
     MSUSW_JNT_AFTER_FIRE2_e=0x3,
     MSUSW_JNT_BEFORE_FACE_e=0x4,
     MSUSW_JNT_BEFORE_MIRROR_e=0x5,
+    MSUSW_NUM_JNTS_e=0x6,
 };
 
 enum YSSMR00_JNT {
     YSSMR00_JNT_SASORIMIRROR_e=0x0,
+    YSSMR00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MMIRROR_H */

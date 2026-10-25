@@ -11,6 +11,7 @@
 #include "d/actor/d_a_sea.h"
 #include "d/d_kankyo_wether.h"
 #include "f_op/f_op_camera.h"
+#include "f_op/f_op_camera_mng.h"
 #include "f_op/f_op_kankyo_mng.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_lib.h"
@@ -112,11 +113,11 @@ void daBomb_fuseSparksEcallBack::execute(JPABaseEmitter* emitter) {
     JGeometry::TVec3<f32> pos(mpPos->x, mpPos->y, mpPos->z);
     emitter->setGlobalTranslation(pos);
     
-    JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
-    while(link != 0) {
-        JSUPtrLink* next = link->getNext();
+    JSUList<JPABaseParticle>* list = emitter->getParticleList();
+    for (JSULink<JPABaseParticle>* link = list->getFirst(); link != NULL;) {
+        JSULink<JPABaseParticle>* next = link->getNext();
 
-        JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
+        JPABaseParticle* ptcl = link->getObject();
         ptcl->setOffsetPosition(pos);
 
         link = next;
@@ -376,19 +377,17 @@ bool daBomb_c::checkExplodeBg_nut() {
     if(burn) {
         ret = procExplode_init();
     }
-    else {
-        if(sink) {
-            makeWaterEffect();
-            field_0x781 = true;
-        }
-        else if(hit && field_0x780) {
-            change_state(STATE_1);
-            setFuseEffect();
-            if(30 < mRestTime) {
-                mRestTime = 30;
-                mBck1.setFrame(105.0f);
-                mBrk1.setFrame(105.0f);
-            }
+    else if(sink) {
+        makeWaterEffect();
+        field_0x781 = true;
+    }
+    else if(hit && field_0x780) {
+        change_state(STATE_1);
+        setFuseEffect();
+        if(30 < mRestTime) {
+            mRestTime = 30;
+            mBck1.setFrame(105.0f);
+            mBrk1.setFrame(105.0f);
         }
     }
 
@@ -409,17 +408,15 @@ bool daBomb_c::checkExplodeBg_cannon() {
     if(burn || hit) {
         ret = procExplode_init();
     }
-    else {
-        if(sink) {
-            makeWaterEffect();
-            field_0x781 = true;
-        }
-#if VERSION > VERSION_DEMO
-        else if(dead) {
-            field_0x781 = true;
-        }
-#endif
+    else if(sink) {
+        makeWaterEffect();
+        field_0x781 = true;
     }
+#if VERSION > VERSION_DEMO
+    else if(dead) {
+        field_0x781 = true;
+    }
+#endif
     
     return ret;
 }
@@ -476,7 +473,7 @@ void daBomb_c::posMoveF() {
             if(tri) {
                 norm = tri->GetNP();
                 friction = 0.06f;
-                no_grade_cos = cM_scos(0xA4F);
+                no_grade_cos = cM_scos(cM_deg2s(14.496459519f));
             }
             else {
                 norm = NULL;
@@ -618,10 +615,8 @@ void daBomb_c::bound(f32 param_1) {
             }
         }
     }
-    else {
-        if(mAcch.ChkGroundHit()) {
-            cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
-        }
+    else if(mAcch.ChkGroundHit()) {
+        cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
     }
 }
 
@@ -656,7 +651,7 @@ void daBomb_c::set_real_shadow_flag() {
         field_0x7C8--;
     }
 #endif
-    model = r30 ? mpModel : NULL;
+    fopAcM_SetModel(this, r30 ? mpModel : NULL);
 }
 
 /* 800DA9DC-800DAA60       .text setRoomInfo__8daBomb_cFv */
@@ -682,8 +677,8 @@ void daBomb_c::makeFireEffect(cXyz& pos, csXyz& rotation) {
     cXyz scale;
     scale.setall(0.3f);
     csXyz rot;
-    rot.x = -cam->mAngle.x;
-    rot.y = cam->mAngle.y + 0x8000;
+    rot.x = -fopCamM_GetAngleX(cam);
+    rot.y = fopCamM_GetAngleY(cam) + 0x8000;
     rot.z = 0;
 
     rotation.x = rotation.x + 0x4000;
@@ -698,9 +693,9 @@ void daBomb_c::makeWaterEffect() {
     if(field_0x77D == 0) {
         fopAcM_seStart(this, JA_SE_OBJ_BOMB_WATER, 0);
         fopKyM_createWpillar(&current.pos, 1.0f, 1.0f, 1);
-        mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
-        mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
-        mSph.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
+        mSph.OffTgSetBit();
+        mSph.OffCoSetBit();
+        mSph.OnAtSetBit();
         mSph.SetR(200.0f);
         mSph.SetC(current.pos);
         if(mMassCounter != g_Counter.mCounter0) {
@@ -726,9 +721,7 @@ void daBomb_c::setFuseEffect() {
 
         dComIfGp_particle_setP1(dPa_name::ID_IT_JN_BM_HIBANA, &mFusePos, NULL, &scale, 0xFF, &mSparks);
         dComIfGp_particle_setToonP1(dPa_name::ID_IT_JT_BM_SMOKE, &mFusePos, NULL, &scale, 0xDC, &mSmoke);
-        mSmoke.field_0x0C = &mFusePos2;
-        mSmoke.field_0x10 = &mFusePos3;
-        mSmoke.field_0x04 = 0x14;
+        mSmoke.setOldPosP(&mFusePos2, &mFusePos3);
     }
 }
 
@@ -767,8 +760,8 @@ void daBomb_c::eff_explode_cheap(const csXyz* rotation) {
 void daBomb_c::eff_explode() {
     camera_process_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
     csXyz rot;
-    rot.x = -cam->mAngle.x;
-    rot.y = cam->mAngle.y + 0x8000;
+    rot.x = -fopCamM_GetAngleX(cam);
+    rot.y = fopCamM_GetAngleY(cam) + 0x8000;
     rot.z = 0;
 
     if(prm_get_cheapEff()) {
@@ -810,17 +803,8 @@ BOOL daBomb_c::procExplode_init() {
         fopKyM_createWpillar(&current.pos, 1.0f, 1.0f, 1);
     }
 
-    if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
-        mSmoke.mpEmitter->becomeInvalidEmitter();
-    }
-    mSmoke.mpEmitter = NULL;
-
-    if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
-        mSparks.mpEmitter->becomeInvalidEmitter();
-    }
-    mSparks.mpEmitter = NULL;
+    mSmoke.deleteCallBack();
+    mSparks.deleteCallBack();
 
     mPntLight.mPos = current.pos;
     mPntLight.mPos.y += 100.0f;
@@ -858,9 +842,9 @@ BOOL daBomb_c::procExplode_init() {
         field_0x6F0 = 0;
     }
 
-    mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
-    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
-    mSph.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
+    mSph.OffTgSetBit();
+    mSph.OffCoSetBit();
+    mSph.OnAtSetBit();
     mSph.SetR(200.0f);
     mSph.SetC(current.pos);
     if(mMassCounter != g_Counter.mCounter0) {
@@ -956,7 +940,7 @@ bool daBomb_c::procCarry_init() {
     speedF = 0.0f;
     speed.set(cXyz::Zero);
     cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OffCoSetBit();
 
     return true;
 }
@@ -971,18 +955,15 @@ bool daBomb_c::procCarry() {
         procWait_init();
         return procWait();
     }
-    else {
-        if(checkExplode()) {
-            return true;
-        }
-        else {
-            cXyz curPos(current.pos);
-            bgCrrPos();
-            current.pos.set(curPos);
-
-            return true;
-        }
+    if(checkExplode()) {
+        return true;
     }
+
+    cXyz curPos(current.pos);
+    bgCrrPos();
+    current.pos.set(curPos);
+
+    return true;
 }
 
 /* 800DB9DC-800DBA50       .text procWait_init__8daBomb_cFv */
@@ -992,7 +973,7 @@ bool daBomb_c::procWait_init() {
         change_state(STATE_1);
     }
 
-    mSph.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OnCoSetBit();
     return true;
 }
 
@@ -1001,44 +982,37 @@ bool daBomb_c::procWait() {
     if(checkExplode()) {
         return true;
     }
-    else {
-        if(fopAcM_checkCarryNow(this)) {
-            return procCarry_init();
-        }
-        else {
-            posMoveF();
-            f32 y_vel = speed.y;
-            bgCrrPos();
-            bool temp = false;
-            if(checkExplodeBg()) {
-                temp = true;
-            }
-            else {
-                if(chk_state(STATE_4)) {
-                    if(waitState_cannon()) {
-                        temp = true;
-                    }
-                }
-                else {
-                    if(chk_state(STATE_7)) {
-                        waitState_bomtyu();
-                    }
-                }
-            }
+    if(fopAcM_checkCarryNow(this)) {
+        return procCarry_init();
+    }
 
-            if(!temp && !field_0x781) {
-                bound(y_vel);
-                if((mAcch.ChkGroundHit() || chk_state(STATE_5)) && !mAcch.ChkGroundLanding()) {
-                    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-                }
-                else {
-                    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-                }
-            }
-
-            return true;
+    posMoveF();
+    f32 y_vel = speed.y;
+    bgCrrPos();
+    bool temp = false;
+    if(checkExplodeBg()) {
+        temp = true;
+    }
+    else if(chk_state(STATE_4)) {
+        if(waitState_cannon()) {
+            temp = true;
         }
     }
+    else if(chk_state(STATE_7)) {
+        waitState_bomtyu();
+    }
+
+    if(!temp && !field_0x781) {
+        bound(y_vel);
+        if((mAcch.ChkGroundHit() || chk_state(STATE_5)) && !mAcch.ChkGroundLanding()) {
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+        }
+        else {
+            cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+        }
+    }
+
+    return true;
 }
 
 /* 800DBBA0-800DBBC4       .text waitState_cannon__8daBomb_cFv */
@@ -1200,11 +1174,9 @@ void daBomb_c::anm_play_nut() {
         mBck0.play();
         mBrk0.play();
     }
-    else {
-        if(mRestTime + 2 <= 0x87) {
-            mBck1.play();
-            mBrk1.play();
-        }
+    else if(mRestTime + 2 <= 0x87) {
+        mBck1.play();
+        mBrk1.play();
     }
 }
 
@@ -1278,17 +1250,8 @@ static BOOL daBomb_IsDelete(daBomb_c*) {
 
 /* 800DC570-800DC67C       .text bombDelete__8daBomb_cFv */
 bool daBomb_c::bombDelete() {
-    if(mSmoke.mpEmitter) {
-        mSmoke.mpEmitter->setEmitterCallBackPtr(NULL);
-        mSmoke.mpEmitter->becomeInvalidEmitter();
-    }
-    mSmoke.mpEmitter = NULL;
-
-    if(mSparks.mpEmitter) {
-        mSparks.mpEmitter->setEmitterCallBackPtr(NULL);
-        mSparks.mpEmitter->becomeInvalidEmitter();
-    }
-    mSparks.mpEmitter = NULL;
+    mSmoke.deleteCallBack();
+    mSparks.deleteCallBack();
 
     if(field_0x6F0) {
         daPy_getPlayerLinkActorClass()->decrementBombCnt();
@@ -1346,12 +1309,10 @@ BOOL daBomb_c::createHeap() {
         if(!mpModel) {
             return false;
         }
-        else {
-            J3DAnmTransform* bck0_data = (J3DAnmTransform*)dComIfG_getObjectRes(m_attrType[mType].resName, dRes_INDEX_LINK_BCK_BOMB_e);
-            int temp = mBck0.init(modelData, bck0_data, false, J3DFrameCtrl::EMode_LOOP);
+        J3DAnmTransform* bck0_data = (J3DAnmTransform*)dComIfG_getObjectRes(m_attrType[mType].resName, dRes_INDEX_LINK_BCK_BOMB_e);
+        int temp = mBck0.init(modelData, bck0_data, false, J3DFrameCtrl::EMode_LOOP);
 
-            return temp ? TRUE : FALSE;
-        }
+        return temp ? TRUE : FALSE;
     }
 }
 
@@ -1446,7 +1407,7 @@ void daBomb_c::create_init() {
     mSph.Set(l_sph_src);
     mSph.SetStts(&mStts);
     if(chk_state(STATE_8)) {
-        mSph.GetObjAt().SetAtp(2);
+        mSph.SetAtAtp(2);
     }
 
     gravity = -2.9f;
@@ -1484,7 +1445,7 @@ void daBomb_c::create_init() {
         field_0x6F0 = 1;
         field_0x7C8 = 2;
 #if VERSION == VERSION_DEMO
-        model = mpModel;
+        fopAcM_SetModel(this, mpModel);
 #endif
     }
     else {

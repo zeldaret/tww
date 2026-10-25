@@ -26,6 +26,7 @@ enum dRes_ID_VHANE {
 
 enum VHANE_JNT {
     VHANE_JNT_VHANE_MODEL_e=0x0,
+    VHANE_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VHANE_H */

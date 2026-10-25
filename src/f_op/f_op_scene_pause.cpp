@@ -7,7 +7,7 @@
 #include "f_op/f_op_scene.h"
 #include "f_pc/f_pc_manager.h"
 
-int fopScnPause_Enable(scene_class* i_scene) {
+BOOL fopScnPause_Enable(scene_class* i_scene) {
     if (i_scene) {
         fpcM_PauseEnable(i_scene, 1);
         fpcM_PauseEnable(i_scene, 2);
@@ -17,19 +17,19 @@ int fopScnPause_Enable(scene_class* i_scene) {
     return 0;
 }
 
-int fopScnPause_Disable(scene_class* i_scene) {
+BOOL fopScnPause_Disable(scene_class* i_scene) {
     if (i_scene) {
-        void* tmp = (void*)i_scene->base.base.mLyTg.mpLayer->mpPcNode;
+        process_node_class* process_node = fpcM_Layer(i_scene);
 
-        if (!tmp) {
+        if (!process_node) {
             fpcM_PauseDisable(i_scene, 1);
             fpcM_PauseDisable(i_scene, 2);
-        } else if (fpcEx_IsExist((s32)((int*)tmp)[1]) == 1) {
-            if (!fpcM_IsPause(tmp, 1)) {
+        } else if (fpcEx_IsExist(process_node->base.mBsPcId) == 1) {
+            if (!fpcM_IsPause(process_node, 1)) {
                 fpcM_PauseDisable(i_scene, 1);
             }
 
-            if (!fpcM_IsPause(tmp, 2)) {
+            if (!fpcM_IsPause(process_node, 2)) {
                 fpcM_PauseDisable(i_scene, 2);
             }
         }

@@ -10,6 +10,7 @@
 #include "d/d_a_obj.h"
 #include "d/d_kankyo_wether.h"
 #include "d/d_com_inf_game.h"
+#include "f_op/f_op_camera_mng.h"
 #include "res/Object/VbakH.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo_mng.h"
@@ -51,7 +52,7 @@ namespace {
 
     const Attr_c L_attr = {
         /* resName      */ "VbakH",
-        /* heapSize     */ 0x920,
+        /* heapSize     */ DEMO_SELECT(0x4000, 0x920),
         /* field_0x8    */ 0x96,
         /* field_0xA    */ 0x1E,
         /* gravity      */ -2.9f,
@@ -172,10 +173,8 @@ void FuseSmokeCB_c::execute(JPABaseEmitter* emitter) {
 
 /* 800DD6C0-800DDAE8       .text executeAfter__Q27daBomb213FuseSmokeCB_cFP14JPABaseEmitter */
 void FuseSmokeCB_c::executeAfter(JPABaseEmitter* emitter) {
-    JGeometry::TVec3<f32> vec1;
-    vec1.set(*field_0x0C);
-    JGeometry::TVec3<f32> vec2;
-    vec2.set(*mpPos);
+    JGeometry::TVec3<f32> vec1(field_0x0C->x, field_0x0C->y, field_0x0C->z);
+    JGeometry::TVec3<f32> vec2(mpPos->x, mpPos->y, mpPos->z);
     f32 f15 = attr().field_0x24;
     emitter->setGlobalTranslation(vec2);
     
@@ -233,14 +232,14 @@ void FuseSparksCB_c::deleteCallBack() {
 }
 
 void FuseSparksCB_c::execute(JPABaseEmitter* emitter) {
-    JGeometry::TVec3<f32> pos(*mpPos);
+    JGeometry::TVec3<f32> pos(mpPos->x, mpPos->y, mpPos->z);
     emitter->setGlobalTranslation(pos);
 
-    JSUPtrLink* link = emitter->getParticleList()->getFirstLink();
-    while(link != 0) {
-        JSUPtrLink* next = link->getNext();
+    JSUList<JPABaseParticle>* list = emitter->getParticleList();
+    for (JSULink<JPABaseParticle>* link = list->getFirst(); link != NULL;) {
+        JSULink<JPABaseParticle>* next = link->getNext();
 
-        JPABaseParticle* ptcl = (JPABaseParticle*)link->getObjectPtr();
+        JPABaseParticle* ptcl = link->getObject();
         ptcl->setOffsetPosition(pos);
 
         link = next;
@@ -262,18 +261,18 @@ BOOL Act_c::solidHeapCB(fopAc_ac_c* i_this) {
 
 /* 800DDBAC-800DDD90       .text create_heap_nut__Q27daBomb25Act_cFv */
 bool Act_c::create_heap_nut() {
-    const char* resName = attr().resName;
+    const char* const resName = attr().resName;
 
-    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(attr().resName, dRes_INDEX_VBAKH_BDL_VBAKM_e));
-    JUT_ASSERT(0x303, mdl_data != NULL);
+    J3DModelData* mdl_data = static_cast<J3DModelData*>(dComIfG_getObjectRes(resName, dRes_INDEX_VBAKH_BDL_VBAKM_e));
+    JUT_ASSERT(771, mdl_data != NULL);
     mpModel = mDoExt_J3DModel__create(mdl_data, 0x80000, 0x11000022);
 
     J3DAnmTransform* bck_data = static_cast<J3DAnmTransform*>(dComIfG_getObjectRes(resName, dRes_INDEX_VBAKH_BCK_VBAKM_e));
-    JUT_ASSERT(0x30D, bck_data != NULL);
+    JUT_ASSERT(781, bck_data != NULL);
     int temp = mBck0.init(mdl_data, bck_data, true, J3DFrameCtrl::EMode_NONE);
 
     J3DAnmTevRegKey* brk_data = static_cast<J3DAnmTevRegKey*>(dComIfG_getObjectRes(resName, dRes_INDEX_VBAKH_BRK_VBAKM_e));
-    JUT_ASSERT(0x314, brk_data != NULL);
+    JUT_ASSERT(788, brk_data != NULL);
     int temp3 = mBrk0.init(mdl_data, brk_data, true, J3DFrameCtrl::EMode_NONE);
 
     return mpModel && temp && temp3;
@@ -290,12 +289,14 @@ void Act_c::crr_init() {
     mAcch.ClrRoofNone();
     mAcch.m_roof_crr_height = 50.0f;
     mAcch.OnLineCheck();
+#if VERSION > VERSION_DEMO
     field_0x51C = -G_CM3D_F_INF;
     field_0x520 = -G_CM3D_F_INF;
     field_0x524 = 0;
     mbWaterIn = 0;
-    field_0x526 = 0;
+    field_0x526 = false;
     field_0x528 = -G_CM3D_F_INF;
+#endif
 }
 
 dCcD_SrcSph Act_c::M_sph_src = {
@@ -363,7 +364,7 @@ void Act_c::start_proc_call() {
         &Act_c::start_carry
     };
 
-    int proc = daObj::PrmAbstract(this, PRM_2_W, PRM_2_S);
+    int proc = prm_get_start();
     return (this->*start_proc[proc])();
 }
 
@@ -377,7 +378,7 @@ void Act_c::create_init() {
     fopAcM_setCullSizeBox(this, -36.0f, 0.0f, -36.0f, 36.0f, 66.0f, 36.0f);
     fopAcM_setCullSizeFar(this, 10.0f);
 
-    if(daObj::PrmAbstract(this, PRM_1_W, PRM_1_S)) {
+    if(prm_get_stick()) {
         off_carry();
     }
     else {
@@ -424,7 +425,7 @@ Act_c::Act_c() {}
 bool Act_c::_delete() {
     eff_fuse_end();
     mEnv.clean();
-    dComIfG_resDelete(&mPhase, attr().resName);
+    dComIfG_resDeleteDemo(&mPhase, attr().resName);
 
     return true;
 }
@@ -462,7 +463,7 @@ void Act_c::cc_set() {
         }
     } else if (r4) {
         r31 = false;
-    } else if (r31) {
+    } else {
         radius = scale.x * 30.0f;
         static cXyz local_center(0.0f, 30.0f, 0.0f);
         mDoMtx_stack_c::copy(mpModel->getBaseTRMtx());
@@ -512,11 +513,21 @@ void Act_c::posMoveF() {
 /* 800DE854-800DE8A8       .text bgCrrPos__Q27daBomb25Act_cFv */
 void Act_c::bgCrrPos() {
     mAcch.CrrPos(*dComIfG_Bgsp());
+#if VERSION > VERSION_DEMO
     bgCrrPos_lava();
     bgCrrPos_water();
+#else
+    cXyz temp(current.pos.x, old.pos.y + 1.0f, current.pos.z);
+    mGndChk.SetPos(&temp);
+    field_0x51C = dComIfG_Bgsp()->GroundCross(&mGndChk);
+    
+    field_0x524 = daSea_ChkArea(current.pos.x, current.pos.z);
+    field_0x520 = daSea_calcWave(current.pos.x, current.pos.z);
+#endif
     setRoomInfo();
 }
 
+#if VERSION > VERSION_DEMO
 /* 800DE8A8-800DE914       .text bgCrrPos_lava__Q27daBomb25Act_cFv */
 void Act_c::bgCrrPos_lava() {
     cXyz temp(current.pos.x, old.pos.y + 1.0f, current.pos.z);
@@ -524,7 +535,9 @@ void Act_c::bgCrrPos_lava() {
 
     field_0x51C = dComIfG_Bgsp()->GroundCross(&mGndChk);
 }
+#endif
 
+#if VERSION > VERSION_DEMO
 /* 800DE914-800DEA0C       .text bgCrrPos_water__Q27daBomb25Act_cFv */
 void Act_c::bgCrrPos_water() {
     f32 f31 = mAcch.m_wtr.GetHeight();
@@ -543,20 +556,34 @@ void Act_c::bgCrrPos_water() {
     if (r4) {
         field_0x520 = f31;
         r5 = true;
-        field_0x526 = 0;
+        field_0x526 = false;
     } else if (r3) {
         field_0x520 = f1;
         r5 = true;
-        field_0x526 = 1;
+        field_0x526 = true;
     } else {
         field_0x520 = -G_CM3D_F_INF;
-        field_0x526 = 0;
+        field_0x526 = false;
     }
     mbWaterIn = r5;
 }
+#endif
 
 bool Act_c::chk_water_in() const {
+#if VERSION > VERSION_DEMO
     return mbWaterIn;
+#else
+    BOOL temp = const_cast<Act_c*>(this)->mAcch.ChkWaterIn();
+    bool r4 = false;
+    if (temp) {
+        r4 = true;
+    } else if (field_0x524) {
+        if (current.pos.y < field_0x520) {
+            r4 = true;
+        }
+    }
+    return r4;
+#endif
 }
 
 bool Act_c::chk_lava_in() const {
@@ -604,10 +631,8 @@ void Act_c::bound(f32 param_1) {
             }
         }
     }
-    else {
-        if(mAcch.ChkGroundHit()) {
-            cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
-        }
+    else if(mAcch.ChkGroundHit()) {
+        cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
     }
 }
 
@@ -649,7 +674,7 @@ void Act_c::set_wind_vec() {
     }
     cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
     cXyz hitNormal = cXyz::Zero;
-    f30 = 1.0f;
+    f32 f30_2 = 1.0f;
     f32 f29 = 1.0f;
     if (hitShapeAttr->GetNVec(current.pos, &hitNormal)) {
         hitNormal *= attr().field_0x44;
@@ -659,22 +684,23 @@ void Act_c::set_wind_vec() {
             s16 hitObjAngleY = cM_atan2s(hitNormal.x, hitNormal.z);
             f32 f2 = cM_scos(hitActor->shape_angle.y - hitObjAngleY);
             if (f2 > 0.0f) {
-                f30 = 1.0f + attr().field_0x48*f2;
+                f30_2 = 1.0f + attr().field_0x48*f2;
                 f29 = 1.0f + attr().field_0x4C*f2;
             }
         }
     }
+    f32 f31_2;
     f32 f28;
     if (f31 > 0.01f) {
-        f31 = 0.9f;
+        f31_2 = 0.9f;
         f28 = 0.1f;
     } else {
-        f31 = 0.0f;
+        f31_2 = 0.0f;
         f28 = 1.0f;
     }
-    mWindVec = sp48 * f31 + hitNormal * f28 * f30;
+    mWindVec = sp48 * f31_2 + hitNormal * f28 * f30_2;
     if (std::fabsf(mWindVec.y) < 5.0f) {
-        mWindVec.y += attr().field_0x38*f31 + f29*(attr().field_0x3C*f28);
+        mWindVec.y += attr().field_0x38*f31_2 + f29*(attr().field_0x3C*f28);
     }
     field_0x7A8 = 2;
 }
@@ -685,8 +711,8 @@ void Act_c::eff_explode() {
 
         camera_process_class* cam = dComIfGp_getCamera(dComIfGp_getPlayerCameraID(0));
         csXyz rot;
-        rot.x = -cam->mAngle.x;
-        rot.y = cam->mAngle.y + 0x8000;
+        rot.x = -fopCamM_GetAngleX(cam);
+        rot.y = fopCamM_GetAngleY(cam) + 0x8000;
         rot.z = 0;
 
         eff_explode_normal(&rot);
@@ -755,7 +781,7 @@ void Act_c::eff_fuse_end() {
 }
 
 void Act_c::eff_water_splash() {
-    cXyz pos(current.pos.x, field_0x520, current.pos.z);
+    cXyz pos(current.pos.x, DEMO_SELECT(mAcch.m_wtr.GetHeight(), field_0x520), current.pos.z);
     fopKyM_createWpillar(&pos, 0.5f, 0.75f, 0);
 
     se_fall_water();
@@ -764,15 +790,24 @@ void Act_c::eff_water_splash() {
 
 /* 800DF488-800DF578       .text se_fall_water__Q27daBomb25Act_cFv */
 void Act_c::se_fall_water() {
+#if VERSION > VERSION_DEMO
     cBgS_PolyInfo* temp[2] = {
         field_0x526 ? NULL : &mAcch.m_wtr,
         &mAcch.m_gnd,
     };
+#else
+    cBgS_PolyInfo* temp[2] = {
+        &mAcch.m_wtr,
+        &mAcch.m_gnd,
+    };
+#endif
     
     u32 mtrlSndId = 0x13;
     for (int i = 0; i < ARRAY_SIZE(temp); i++) {
+#if VERSION > VERSION_DEMO
         if (temp[i] == NULL)
             continue;
+#endif
         int bg_index = temp[i]->GetBgIndex();
         if (bg_index >= 0 && bg_index < 0x100) {
             mtrlSndId = dComIfG_Bgsp()->GetMtrlSndId(*temp[i]);
@@ -856,17 +891,15 @@ bool Act_c::chk_exp_bg_nut() {
         eff_explode();
         ret = true;
     }
-    else {
-        if(water && speed.abs() > attr().field_0x28) {
-            eff_explode_water();
-            ret = true;
-            
-        }
-        else if(hit) {
-            if(field_0x741 || speed.abs() > attr().field_0x2C) {
-                eff_fuse_start();
-                set_nut_exp_interval();
-            }
+    else if(water && speed.abs() > attr().field_0x28) {
+        eff_explode_water();
+        ret = true;
+        
+    }
+    else if(hit) {
+        if(field_0x741 || speed.abs() > attr().field_0x2C) {
+            eff_fuse_start();
+            set_nut_exp_interval();
         }
     }
 
@@ -930,7 +963,7 @@ void Act_c::set_real_shadow_flag() {
             }
         }
     }
-    model = r30 ? mpModel : NULL;
+    fopAcM_SetModel(this, r30 ? mpModel : NULL);
 }
 
 /* 800DFD0C-800DFDB0       .text carry_fuse_start__Q27daBomb25Act_cFv */
@@ -962,7 +995,7 @@ void Act_c::off_carry() {
 void Act_c::mode_wait_init() {
     mState = 0;
     gravity = attr().gravity;
-    mSph.OnCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OnCoSetBit();
 }
 
 void Act_c::mode_wait() {
@@ -970,45 +1003,39 @@ void Act_c::mode_wait() {
         mode_explode_init();
         mode_explode();
     }
+    else if(fopAcM_checkCarryNow(this)) {
+        mode_carry_init();
+        mode_carry();
+    }
     else {
-        if(fopAcM_checkCarryNow(this)) {
-            mode_carry_init();
-            mode_carry();
-        }
-        else {
-            bool temp = daObj::PrmAbstract(this, PRM_1_W, PRM_1_S);
-            f32 yVel = 0.0f;
-            if(!temp) {
-                if(!field_0x745) {
-                    posMoveF();
-                }
-
-                yVel = speed.y;
-                bgCrrPos();
+        bool temp = prm_get_stick();
+        f32 yVel = 0.0f;
+        if(!temp) {
+            if(!field_0x745) {
+                posMoveF();
             }
 
-            if(chk_exp_post()) {
-                mode_explode_init();
+            yVel = speed.y;
+            bgCrrPos();
+        }
+
+        if(chk_exp_post()) {
+            mode_explode_init();
+        }
+        else if(chk_sink_post()) {
+            mode_sink_init();
+        }
+        else if(!field_0x740) {
+            if(temp) {
+                off_carry();
             }
             else {
-                if(chk_sink_post()) {
-                    mode_sink_init();
+                bound(yVel);
+                if(mAcch.ChkGroundHit()) {
+                    on_carry();
                 }
                 else {
-                    if(!field_0x740) {
-                        if(temp) {
-                            off_carry();
-                        }
-                        else {
-                            bound(yVel);
-                            if(mAcch.ChkGroundHit()) {
-                                on_carry();
-                            }
-                            else {
-                                off_carry();
-                            }
-                        }
-                    }
+                    off_carry();
                 }
             }
         }
@@ -1020,7 +1047,7 @@ void Act_c::mode_carry_init() {
     speedF = 0.0f;
     speed = cXyz::Zero;
     off_carry();
-    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OffCoSetBit();
 }
 
 void Act_c::mode_carry() {
@@ -1029,21 +1056,19 @@ void Act_c::mode_carry() {
         mode_explode_init();
         mode_explode();
     }
-    else {
-        if(!fopAcM_checkCarryNow(this)) {
-            if(speedF > 0.0f) {
-                field_0x741 = 1;
-                field_0x7A8 = 2;
-            }
+    else if(!fopAcM_checkCarryNow(this)) {
+        if(speedF > 0.0f) {
+            field_0x741 = 1;
+            field_0x7A8 = 2;
+        }
 
-            mode_wait_init();
-            mode_wait();
-        }
-        else {
-            cXyz temp = current.pos;
-            bgCrrPos();
-            current.pos = temp;
-        }
+        mode_wait_init();
+        mode_wait();
+    }
+    else {
+        cXyz temp = current.pos;
+        bgCrrPos();
+        current.pos = temp;
     }
 }
 
@@ -1056,9 +1081,9 @@ void Act_c::mode_explode_init() {
     speed = cXyz::Zero;
     gravity = 0.0f;
     off_carry();
-    mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
-    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
-    mSph.OnAtSPrmBit(cCcD_AtSPrm_Set_e);
+    mSph.OffTgSetBit();
+    mSph.OffCoSetBit();
+    mSph.OnAtSetBit();
     fopAcM_cancelCarryNow(this);
     mBombTimer = 0;
     field_0x73C = 4;
@@ -1076,9 +1101,9 @@ void Act_c::mode_sink_init() {
     mState = 3;
     speed.y *= 0.8f;
     speedF *= 0.8f;
-    mSph.OffAtSPrmBit(cCcD_AtSPrm_Set_e);
-    mSph.OffTgSPrmBit(cCcD_TgSPrm_Set_e);
-    mSph.OffCoSPrmBit(cCcD_CoSPrm_Set_e);
+    mSph.OffAtSetBit();
+    mSph.OffTgSetBit();
+    mSph.OffCoSetBit();
     off_carry();
     fopAcM_cancelCarryNow(this);
     field_0x698 = 4;
@@ -1135,10 +1160,12 @@ void Act_c::vib_init() {
 
 /* 800E0430-800E04FC       .text vib_proc__Q27daBomb25Act_cFv */
 void Act_c::vib_proc() {
-    f32 f5 = field_0x7A0 - attr().field_0x50 * (field_0x790 - field_0x788);
+    f32 temp1 = field_0x78C - field_0x784;
+    f32 temp2 = field_0x790 - field_0x788;
+    f32 f0 = field_0x79C - attr().field_0x50 * temp1;
+    f32 f5 = field_0x7A0 - attr().field_0x50 * temp2;
     f32 f6 = 1.0f / attr().field_0x5C;
     f32 f7 = 1.0f - field_0x7A4;
-    f32 f0 = field_0x79C - attr().field_0x50 * (field_0x78C - field_0x784);
     field_0x794 += f0 * f6;
     field_0x798 += f5 * f6;
     field_0x794 *= f7;
@@ -1221,7 +1248,7 @@ void Act_c::tensor_proc_call() {
         &Act_c::tensor_sink,
     };
 
-    if(!daObj::PrmAbstract(this, PRM_1_W, PRM_1_S)) {
+    if(!prm_get_stick()) {
         (this->*tensor_proc[mState])();
         vib_proc();
         set_vib_tensor();
@@ -1283,9 +1310,11 @@ void Act_c::draw_shadow() {
 
     if(fopAcM_GetModel(this) == 0) {
         int framesLeft = mBck0.getEndFrame() - mBck0.getFrame();
-        f32 scale = mult[cLib_minMaxLimit<int>(framesLeft, 0, 9)] * 25.0f;
-
-        dComIfGd_setSimpleShadow2(&current.pos, mAcch.GetGroundH(), scale, mAcch.m_gnd, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex());
+        dComIfGd_setSimpleShadow2(
+            &current.pos, mAcch.GetGroundH(),
+            mult[cLib_minMaxLimit<int>(framesLeft, 0, 9)] * 25.0f,
+            mAcch.m_gnd, 0, 1.0f, dDlst_shadowControl_c::getSimpleTex()
+        );
     }
 }
 

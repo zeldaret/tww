@@ -18,6 +18,7 @@ enum dRes_ID_VMANT {
 
 enum VMANT_JNT {
     VMANT_JNT_VMANT_MODEL_e=0x0,
+    VMANT_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VMANT_H */

@@ -258,6 +258,7 @@ enum GND_JNT {
     GND_JNT_GND_SUSO_L1_e=0x3C,
     GND_JNT_GND_SUSO_R1_e=0x3D,
     GND_JNT_GND_SUSO1_e=0x3E,
+    GND_NUM_JNTS_e=0x3F,
 };
 
 #endif /* RES_GND_H */

@@ -33,6 +33,7 @@ enum KN_JNT {
     KN_JNT_UDEL_e=0x3,
     KN_JNT_UDER_e=0x4,
     KN_JNT_TSUME_e=0x5,
+    KN_NUM_JNTS_e=0x6,
 };
 
 #endif /* RES_KN_H */

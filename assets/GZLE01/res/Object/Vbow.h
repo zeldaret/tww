@@ -23,6 +23,7 @@ enum dRes_ID_VBOW {
 enum VBOW_JNT {
     VBOW_JNT_ROOT_VBOW_e=0x0,
     VBOW_JNT_VBOW_MODEL_e=0x1,
+    VBOW_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VBOW_H */

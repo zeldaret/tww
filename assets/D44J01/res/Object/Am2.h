@@ -51,6 +51,7 @@ enum AM2_JNT {
     AM2_JNT_COA_e=0x1,
     AM2_JNT_EYE_e=0x2,
     AM2_JNT_TOGE_e=0x3,
+    AM2_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_AM2_H */

@@ -59,6 +59,7 @@ enum GP_JNT {
     GP_JNT_LEGR2_e=0x13,
     GP_JNT_FOOTR_e=0x14,
     GP_JNT_TAIL_e=0x15,
+    GP_NUM_JNTS_e=0x16,
 };
 
 #endif /* RES_GP_H */

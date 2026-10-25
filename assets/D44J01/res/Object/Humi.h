@@ -72,42 +72,52 @@ enum dRes_ID_HUMI {
 
 enum HNURE0_JNT {
     HNURE0_JNT_MONO_e=0x0,
+    HNURE0_NUM_JNTS_e=0x1,
 };
 
 enum HNURE2_JNT {
     HNURE2_JNT_POLYSURFACE1881_e=0x0,
+    HNURE2_NUM_JNTS_e=0x1,
 };
 
 enum HNURE3_JNT {
     HNURE3_JNT_POLYSURFACE1984_e=0x0,
+    HNURE3_NUM_JNTS_e=0x1,
 };
 
 enum HNURE4_JNT {
     HNURE4_JNT_POLYSURFACE1914_e=0x0,
+    HNURE4_NUM_JNTS_e=0x1,
 };
 
 enum HNURE5_JNT {
     HNURE5_JNT_POLYSURFACE1881_e=0x0,
+    HNURE5_NUM_JNTS_e=0x1,
 };
 
 enum HUMI0_JNT {
     HUMI0_JNT_UMI_e=0x0,
+    HUMI0_NUM_JNTS_e=0x1,
 };
 
 enum HUMI2_JNT {
     HUMI2_JNT_UMI_e=0x0,
+    HUMI2_NUM_JNTS_e=0x1,
 };
 
 enum HUMI3_JNT {
     HUMI3_JNT_UMI3_e=0x0,
+    HUMI3_NUM_JNTS_e=0x1,
 };
 
 enum HUMI4_JNT {
     HUMI4_JNT_UMI1_e=0x0,
+    HUMI4_NUM_JNTS_e=0x1,
 };
 
 enum HUMI5_JNT {
     HUMI5_JNT_UMI2_e=0x0,
+    HUMI5_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HUMI_H */

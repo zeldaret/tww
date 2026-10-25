@@ -24,7 +24,7 @@ dOvlpFd3_c::dOvlpFd3_c() {
     setExecute(&dOvlpFd3_c::execFirstSnap);
 
     JKRArchive* menu_archive = dComIfGp_getMenuArchive();
-    ResTIMG* texture = (ResTIMG*)JKRArchive::getGlbResource('TIMG', "wipe_00.bti", menu_archive);
+    ResTIMG* texture = (ResTIMG*)JKRGetResource('TIMG', "wipe_00.bti", menu_archive);
     JUT_ASSERT(81, texture != 0);
     field_0xdc.init(texture, -9.0f, -21.0f, 659.0f, 524.0f, 0, 1, 1, 2.0f, 2.436f);
     field_0x120.init(mDoGph_gInf_c::getFrameBufferTimg(), -9.0f, -21.0f, 659.0f, 524.0f, 1, 0, 0, 1.0f, 1.0f);

@@ -1,6 +1,7 @@
 #ifndef D_A_BOMB_2_H
 #define D_A_BOMB_2_H
 
+#include "d/d_a_obj.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_particle.h"
 #include "d/d_bg_s_acch.h"
@@ -15,7 +16,6 @@ namespace daBomb2 {
         FuseSmokeCB_c() {}
         virtual ~FuseSmokeCB_c() {}
 
-        
         void setOldPosP(const cXyz*, const cXyz*);
         void deleteCallBack();
 
@@ -63,17 +63,27 @@ namespace daBomb2 {
     }; // Size 0x54
 
     enum Start_e {
-        Start_UNK0_e,
-        Start_UNK1_e,
-        Start_UNK2_e,
+        /* 0x0 */ Start_EXPLODE_INSTANT_e,
+        /* 0x1 */ Start_EXPLODE_INTERVAL_e,
+        /* 0x2 */ Start_CARRY_e,
     };
 
     class Act_c : public fopAc_ac_c {
     public:
-        void prm_get_start() const {}
-        void prm_get_stick() const {}
-        static u32 prm_make(Start_e start, bool param) { // Might be wrong
-            return start | ((param ? 1 : 0) << 8);
+        enum Prm_e {
+            PRM_STICK_W = 0x01,
+            PRM_STICK_S = 0x08,
+
+            PRM_START_W = 0x02,
+            PRM_START_S = 0x00,
+        };
+
+        int prm_get_start() const { return daObj::PrmAbstract(this, PRM_START_W, PRM_START_S); }
+        bool prm_get_stick() const { return daObj::PrmAbstract(this, PRM_STICK_W, PRM_STICK_S); }
+        static u32 prm_make(Start_e i_start, bool i_stick) { // Might be wrong
+            u32 prm = 0;
+            prm |= (i_stick ? 1 : 0) << 8;
+            return prm | i_start;
         }
 
         Act_c();
@@ -105,8 +115,10 @@ namespace daBomb2 {
         void camera_lockoff() const;
         void posMoveF();
         void bgCrrPos();
+#if VERSION > VERSION_DEMO
         void bgCrrPos_lava();
         void bgCrrPos_water();
+#endif
         bool chk_water_in() const;
         bool chk_lava_in() const;
         void setRoomInfo();
@@ -167,14 +179,6 @@ namespace daBomb2 {
         void draw_shadow();
         bool _draw();
 
-        enum Prm_e {
-            PRM_1_W = 1,
-            PRM_1_S = 0x08,
-
-            PRM_2_W = 2,
-            PRM_2_S = 0x00,
-        };
-
     private:
         /* 0x290 */ request_of_phase_process_class mPhase;
         /* 0x298 */ J3DModel* mpModel;
@@ -184,10 +188,15 @@ namespace daBomb2 {
         /* 0x488 */ dBgS_AcchCir mCir;
         /* 0x4C8 */ dBgS_ObjGndChk_Yogan mGndChk;
         /* 0x51C */ f32 field_0x51C;
+#if VERSION > VERSION_DEMO
         /* 0x520 */ f32 field_0x520;
         /* 0x524 */ bool field_0x524;
         /* 0x525 */ bool mbWaterIn;
-        /* 0x526 */ u8 field_0x526;
+        /* 0x526 */ bool field_0x526;
+#else
+        /* 0x520 */ bool field_0x524;
+        /* 0x524 */ f32 field_0x520;
+#endif
         /* 0x528 */ f32 field_0x528;
         /* 0x52C */ dCcD_Stts mStts;
         /* 0x568 */ dCcD_Sph mSph;

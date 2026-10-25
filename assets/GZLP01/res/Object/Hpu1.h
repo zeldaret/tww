@@ -24,6 +24,7 @@ enum HPU1_JNT {
     HPU1_JNT_HPU1_00_e=0x0,
     HPU1_JNT_DAI_e=0x1,
     HPU1_JNT_POLYSURFACE2007_e=0x2,
+    HPU1_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_HPU1_H */

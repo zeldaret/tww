@@ -905,17 +905,16 @@ dDlst_alphaModel_c::dDlst_alphaModel_c() {
 
 /* 80082E58-80082EFC       .text create__18dDlst_alphaModel_cFi */
 dDlst_alphaModel_c * dDlst_alphaModel_c::create(int num) {
-    dDlst_alphaModel_c * i_this = new dDlst_alphaModel_c();
-    if (i_this != NULL) {
+    dDlst_alphaModel_c * alphaModel = new dDlst_alphaModel_c();
+    if (alphaModel != NULL) {
         dDlst_alphaModelData_c * pData = new dDlst_alphaModelData_c[num];
         if (pData != NULL) {
-            i_this->mpData = pData;
-            i_this->mCapacity = num;
-            return i_this;
+            alphaModel->mpData = pData;
+            alphaModel->mCapacity = num;
+            return alphaModel;
         }
 
-        if (i_this != NULL)
-            delete i_this;
+        delete alphaModel;
     }
     return NULL;
 }
@@ -1304,13 +1303,12 @@ u8 setShadowRealMtx(Mtx viewMtx, Mtx renderProjMtx, Mtx receiverProjMtx, cXyz* l
         lightVec.z *= tmp;
     }
 
-    f32 lightDist = std::sqrtf(lightVec.abs2());
+    f32 lightDist = lightVec.abs();
     if (lightDist != 0.0f) {
         f32 tmp3 = (lightVec.y / lightDist);
         if (tmp3 < 1.5f) {
             lightVec.y = 1.5f * lightDist;
-            lightDist = lightVec.abs2();
-            lightDist = std::sqrtf(lightDist);
+            lightDist = lightVec.abs();
         }
         lightDist = (casterSize * 0.5f) / lightDist;
     }
@@ -1357,17 +1355,17 @@ u32 dDlst_shadowReal_c::set(u32 key, s8 shouldFade, J3DModel* model, cXyz* pos, 
         mModelNum = 0;
     }
 
-    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(0);
-    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(1);
+    J3DDrawBuffer* buffer0 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa);
+    J3DDrawBuffer* buffer1 = j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu);
     j3dSys.setViewMtx(mViewMtx);
-    j3dSys.setDrawBuffer(mpDrawBuffer, 0);
-    j3dSys.setDrawBuffer(mpDrawBuffer, 1);
+    j3dSys.setDrawBuffer(mpDrawBuffer, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(mpDrawBuffer, J3DSysDrawBuf_Xlu);
     model->entry();
     model->lock();
     model->viewCalc();
     j3dSys.setViewMtx(dComIfGd_getView()->mViewMtx);
-    j3dSys.setDrawBuffer(buffer0, 0);
-    j3dSys.setDrawBuffer(buffer1, 1);
+    j3dSys.setDrawBuffer(buffer0, J3DSysDrawBuf_Opa);
+    j3dSys.setDrawBuffer(buffer1, J3DSysDrawBuf_Xlu);
     return mKey;
 }
 
@@ -1546,7 +1544,7 @@ void dDlst_shadowControl_c::draw(Mtx drawMtx) {
 #endif
     dKy_GxFog_set();
     GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
-    GXSetChanMatColor(GX_ALPHA0, (GXColor){ 0x00, 0x00, 0x00, 0x20 });
+    GXSetChanMatColor(GX_ALPHA0, COMPOUND_LITERAL(GXColor){ 0x00, 0x00, 0x00, 0x20 });
     GXSetArray(GX_VA_POS, l_shadowVolPos, sizeof(*l_shadowVolPos));
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0);
     GXSetNumTevStages(1);
@@ -1950,10 +1948,8 @@ dDlst_list_c::~dDlst_list_c() {
     delete mpOpaListInvisible;
     delete mpXluListInvisible;
     delete mpOpaList2D;
-    if (mpAlphaModel != NULL)
-        delete mpAlphaModel;
-    if (mpSpotModel != NULL)
-        delete mpSpotModel;
+    delete mpAlphaModel;
+    delete mpSpotModel;
 }
 
 /* 80086368-80086490       .text reset__12dDlst_list_cFv */

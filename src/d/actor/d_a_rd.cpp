@@ -249,7 +249,7 @@ BOOL daRd_c::_createHeap() {
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
+    mpMorf->getModel()->setUserArea(reinterpret_cast<uintptr_t>(this));
     
     if (!mInvisModel.create(mpMorf->getModel())) {
         return FALSE;
@@ -1439,7 +1439,7 @@ void daRd_c::setBtkAnm(s8 idx) {
 }
 
 /* 00003B3C-00003C48       .text setAnm__6daRd_cFScb */
-void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
+void daRd_c::setAnm(s8 anmPrmIdx, bool force) {
     static const int a_anm_bcks_tbl[] = {
         dRes_INDEX_RD_BCK_TACHIP_e,
         dRes_INDEX_RD_BCK_SUWARIP_e,
@@ -1614,7 +1614,7 @@ void daRd_c::setAnm(s8 anmPrmIdx, bool param_2) {
         mBrkAnm.setFrame(mpMorf->getFrame());
     }
     
-    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, param_2);
+    dLib_bcks_setAnm(m_arc_name, mpMorf, &mBckIdx, &mAnmPrmIdx, &mOldAnmPrmIdx, a_anm_bcks_tbl, a_anm_prm_tbl, force);
 }
 
 /* 00003C48-000040A8       .text _execute__6daRd_cFv */
@@ -1729,9 +1729,9 @@ void daRd_c::debugDraw() {
     cXyz pos = current.pos;
     pos.y += 10.0f;
     GXColor unused = {0x00, 0xFF, 0x00, 0x80}; // Unused color, needed for the .rodata section to match.
-    dLib_debugDrawFan(pos, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, (GXColor){0xFF, 0xFF, 0x00, 0x80});
-    dLib_debugDrawFan(pos, shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, (GXColor){0xFF, 0x00, 0x00, 0x80});
-    dLib_debugDrawFan(pos, shape_angle.y, l_HIO.m40, l_HIO.m34, (GXColor){0xFF, 0x00, 0xFF, 0x80});
+    dLib_debugDrawFan(pos, mHeadAngle, l_HIO.mCrySpreadAngle, l_HIO.mCryRadius, COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0x00, 0x80});
+    dLib_debugDrawFan(pos, shape_angle.y, l_HIO.mAttackSpreadAngle, l_HIO.mAttackRadius, COMPOUND_LITERAL(GXColor){0xFF, 0x00, 0x00, 0x80});
+    dLib_debugDrawFan(pos, shape_angle.y, l_HIO.m40, l_HIO.m34, COMPOUND_LITERAL(GXColor){0xFF, 0x00, 0xFF, 0x80});
     dLib_debugDrawAxis(mCE8, 50.0f);
 }
 

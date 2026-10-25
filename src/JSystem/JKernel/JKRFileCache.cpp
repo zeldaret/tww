@@ -11,7 +11,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "ctype.h"
-#include "string.h"
+#include <cstring>
 #include "global.h"
 
 /* 802B6FEC-802B70EC       .text mount__12JKRFileCacheFPCcP7JKRHeapPCc */
@@ -212,7 +212,7 @@ u32 JKRFileCache::readResource(void* dst, u32 dstLength, u32, const char* path) 
     if (found)
         return readResource(dst, dstLength, filePath);
 
-    return NULL;
+    return 0;
 }
 
 /* 802B7830-802B7904       .text removeResourceAll__12JKRFileCacheFv */

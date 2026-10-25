@@ -65,7 +65,7 @@ void dGrass_data_c::WorkCo(fopAc_ac_c* other, u32, int roomNo) {
     delta.z = mPos.z - other->current.pos.z;
 
     f32 distSq = delta.abs2XZ();
-    if (distSq > 1600.0f)
+    if (distSq > SQUARE(40.0f))
         return;
 
     delta.y = mPos.y - other->current.pos.y;
@@ -291,9 +291,9 @@ void dGrass_packet_c::draw() {
 
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
-    GFSetArray(GX_VA_POS, mpPosArr, sizeof(cXyz));
+    GFSetArray(GX_VA_POS, mpPosArr, sizeof(*mpPosArr));
     GFSetArray(GX_VA_CLR0, mpColorArr, sizeof(*mpColorArr));
-    GFSetArray(GX_VA_TEX0, mpTexCoordArr, sizeof(cXy));
+    GFSetArray(GX_VA_TEX0, mpTexCoordArr, sizeof(*mpTexCoordArr));
     GXCallDisplayList(mpMatDL, mMatDLSize);
 
     dGrass_room_c* room = &mGrassRoom[0];
@@ -411,7 +411,7 @@ void dGrass_packet_c::update() {
         data++;
     }
     mDoLib_clipper::resetFar();
-    j3dSys.getDrawBuffer(0)->entryImm(this, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(this, 0);
 }
 
 /* 800784E8-800785C0       .text setData__15dGrass_packet_cFP13dGrass_data_ciR4cXyziSc */

@@ -244,8 +244,9 @@ static void* allOffObjectCallBack(fopAc_ac_c* actor, void*) {
 void dEvent_manager_c::startProc(dEvDtEvent_c* event) {
     dEv_seach_prm prm(NULL, 0, 0);
     for (s32 i = 0; i < event->getNStaff(); i++) {
+        dEvDtStaff_c* staff;
         int staffIdx = event->getStaff(i);
-        dEvDtStaff_c* staff = mList.getStaffP(staffIdx);
+        staff = mList.getStaffP(staffIdx);
         if (staff->getType() == dEvDtStaff_c::NORMAL_e) {
             fopAc_ac_c* actor = specialCast(staff->getName(), 1);
             if (actor == NULL) {
@@ -488,11 +489,11 @@ int dEvent_manager_c::getMyActIdx(int staffIdx, const char* const* action, int a
 }
 
 /* 80074964-800749A0       .text getMyActName__16dEvent_manager_cFi */
-char* dEvent_manager_c::getMyActName(int staffIdx) {
+const char* dEvent_manager_c::getMyActName(int staffIdx) {
     if (staffIdx == -1)
         return NULL;
 
-    char* cutName = getMyNowCutName(staffIdx);
+    const char* cutName = getMyNowCutName(staffIdx);
     if (cutName == NULL)
         return NULL;
 
@@ -614,7 +615,7 @@ void dEvent_manager_c::exceptionProc() {
 }
 
 static void dummy1() {
-    OSReport("EVENT_DEBUG_OFF");
+    DEAD_STRING("EVENT_DEBUG_OFF");
 }
 
 

@@ -70,30 +70,37 @@ enum dRes_ID_DR2 {
 
 enum IWA00_JNT {
     IWA00_JNT_POLYSURFACE41_e=0x0,
+    IWA00_NUM_JNTS_e=0x1,
 };
 
 enum IWA01_1_JNT {
     IWA01_1_JNT_A1_e=0x0,
+    IWA01_1_NUM_JNTS_e=0x1,
 };
 
 enum IWA01_2_JNT {
     IWA01_2_JNT_A2_e=0x0,
+    IWA01_2_NUM_JNTS_e=0x1,
 };
 
 enum IWA01_3_JNT {
     IWA01_3_JNT_A3_e=0x0,
+    IWA01_3_NUM_JNTS_e=0x1,
 };
 
 enum IWA01_4_JNT {
     IWA01_4_JNT_A4_e=0x0,
+    IWA01_4_NUM_JNTS_e=0x1,
 };
 
 enum IWA01_5_JNT {
     IWA01_5_JNT_A5_e=0x0,
+    IWA01_5_NUM_JNTS_e=0x1,
 };
 
 enum IWA01_6_JNT {
     IWA01_6_JNT_A6_e=0x0,
+    IWA01_6_NUM_JNTS_e=0x1,
 };
 
 enum DR_JNT {
@@ -160,6 +167,7 @@ enum DR_JNT {
     DR_JNT_J_DR_SIPPO2_e=0x3C,
     DR_JNT_J_DR_SIPPO3_e=0x3D,
     DR_JNT_J_DR_SIPPO4_e=0x3E,
+    DR_NUM_JNTS_e=0x3F,
 };
 
 enum DR_SIPPO_JNT {
@@ -176,20 +184,24 @@ enum DR_SIPPO_JNT {
     DR_SIPPO_JNT_J_DR_SIPPO9_e=0xA,
     DR_SIPPO_JNT_J_DR_SIPPO10_e=0xB,
     DR_SIPPO_JNT_J_DR_SIPPO_END_e=0xC,
+    DR_SIPPO_NUM_JNTS_e=0xD,
 };
 
 enum GAN_MAGMA_JNT {
     GAN_MAGMA_JNT_MAGMA_e=0x0,
+    GAN_MAGMA_NUM_JNTS_e=0x1,
 };
 
 enum MBYO1_JNT {
     MBYO1_JNT_POLYSURFACE37_e=0x0,
+    MBYO1_NUM_JNTS_e=0x1,
 };
 
 enum MBYO2_JNT {
     MBYO2_JNT_MBYO2_00_e=0x0,
     MBYO2_JNT_SITA_e=0x1,
     MBYO2_JNT_YOGAN_e=0x2,
+    MBYO2_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_DR2_H */

@@ -90,8 +90,8 @@ void daDai_c::CreateInit() {
     shape_angle = current.angle;
     cLib_onBit<u32>(attention_info.flags, fopAc_Attn_TALKFLAG_CHECK_e | fopAc_Attn_ACTION_SPEAK_e);
 
-    eventInfo.mpCheckCB = daDai_XyCheckCB;
-    eventInfo.mpEventCB = daDai_XyEventCB;
+    eventInfo.setXyCheckCB(daDai_XyCheckCB);
+    eventInfo.setXyEventCB(daDai_XyEventCB);
 
     mEvtDaiItemIdx = dComIfGp_evmng_getEventIdx("DAI_ITEM");
     mEvtDefaultTalkIdx = dComIfGp_evmng_getEventIdx("DEFAULT_TALK");

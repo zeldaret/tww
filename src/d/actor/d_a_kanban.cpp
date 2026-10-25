@@ -872,7 +872,7 @@ static BOOL daKanban_Execute(kanban_class* i_this) {
             i_this->m5B0.SetR(i_this->m2A8);
             dComIfG_Ccsp()->Set(&i_this->m5B0);
 
-            if (i_this->m294 != 1 && i_this->m294 != 0x7FE && player->getTactMusic() == 4) {
+            if (i_this->m294 != 1 && i_this->m294 != 0x7FE && player->getTactMusic() == mDoAud_MELODY_WIND_GODS_ARIA_e) {
                 i_this->actor.gravity = 0.0f;
                 i_this->actor.speedF = 0.0f;
                 i_this->actor.speed.set(0.0f, 0.0f, 0.0f);
@@ -887,7 +887,7 @@ static BOOL daKanban_Execute(kanban_class* i_this) {
 
         case 2:
             mother_water_swim(i_this);
-            if (player->getTactMusic() == 4) {
+            if (player->getTactMusic() == mDoAud_MELODY_WIND_GODS_ARIA_e) {
                 i_this->m514.remove();
                 i_this->actor.gravity = 0.0;
                 i_this->actor.speedF = 0.0;
@@ -899,7 +899,7 @@ static BOOL daKanban_Execute(kanban_class* i_this) {
 
         case 100:
             parts_move(i_this);
-            if (player->getTactMusic() == 4) {
+            if (player->getTactMusic() == mDoAud_MELODY_WIND_GODS_ARIA_e) {
                 i_this->actor.gravity = 0.0;
                 i_this->actor.speedF = 0.0;
                 i_this->actor.speed.set(0.0f, 0.0f, 0.0f);
@@ -917,7 +917,7 @@ static BOOL daKanban_Execute(kanban_class* i_this) {
             
         case 102:
             chield_water_swim(i_this);
-            if (player->getTactMusic() == 4) {
+            if (player->getTactMusic() == mDoAud_MELODY_WIND_GODS_ARIA_e) {
                 i_this->m514.remove();
                 i_this->actor.gravity = 0.0;
                 i_this->actor.speedF = 0.0;

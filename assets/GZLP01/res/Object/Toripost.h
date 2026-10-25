@@ -28,6 +28,7 @@ enum VPOST_JNT {
     VPOST_JNT_ROOT_APOST_e=0x0,
     VPOST_JNT_BODY_e=0x1,
     VPOST_JNT_MOUTH_e=0x2,
+    VPOST_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_TORIPOST_H */

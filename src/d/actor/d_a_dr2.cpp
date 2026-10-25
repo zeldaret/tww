@@ -671,7 +671,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     for (u16 i = 0; i < i_this->mpMorf1->getModel()->getModelData()->getJointNum(); i++) {
         i_this->mpMorf1->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(nodeCallBack);
     }
-    i_this->mpMorf1->getModel()->setUserArea((u32)i_this);
+    i_this->mpMorf1->getModel()->setUserArea((uintptr_t)i_this);
 
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes("Dr2", dRes_INDEX_DR2_BDL_IWA00_e);
     JUT_ASSERT(DEMO_SELECT(1347, 1361), modelData != NULL);

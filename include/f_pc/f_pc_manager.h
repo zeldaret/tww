@@ -24,6 +24,9 @@ inline BOOL fpcM_IsErrorID(fpc_ProcID id) {
 inline s16 fpcM_GetName(void* pProc) {
     return ((base_process_class*)pProc)->mProcName;
 }
+inline process_node_class* fpcM_Layer(void* pProc) {
+    return ((base_process_class*)pProc)->mLyTg.mpLayer->mpPcNode;
+}
 inline u32 fpcM_GetParam(void* pProc) {
     return ((base_process_class*)pProc)->mParameters;
 }
@@ -80,7 +83,7 @@ inline base_process_class* fpcM_Search(fpcLyIt_JudgeFunc i_func, void* i_data) {
     return fpcEx_Search(i_func, i_data);
 }
 
-inline s8 fpcM_CreateResult(void* pProc) {
+inline int fpcM_CreateResult(void* pProc) {
     return ((base_process_class*)pProc)->mCreateResult;
 }
 

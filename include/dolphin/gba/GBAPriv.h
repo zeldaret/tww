@@ -22,7 +22,7 @@ typedef struct GBASecParam {
     /* 0x20 */ u32 keyA;
     /* 0x24 */ s32 keyB;
     /* 0x28 */ u8 _padding1[24];
-} GBASecParam ALIGN_DECL(32);  // Size: 0x40
+} ALIGN_DECL(32, GBASecParam);  // Size: 0x40
 
 typedef struct GBABootInfo {
     /* 0x00 */ s32 paletteColor;

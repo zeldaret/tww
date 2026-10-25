@@ -29,6 +29,7 @@ enum VDORA_JNT {
     VDORA_JNT_DORASCALE_e=0x3,
     VDORA_JNT_POLEL_e=0x4,
     VDORA_JNT_POLER_e=0x5,
+    VDORA_NUM_JNTS_e=0x6,
 };
 
 #endif /* RES_VDORA_H */

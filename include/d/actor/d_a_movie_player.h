@@ -60,7 +60,7 @@ public:
     BOOL daMP_c_Finish();
     BOOL daMP_c_Main();
     BOOL daMP_c_Draw();
-    static int daMP_c_Callback_Init(fopAc_ac_c*);
+    static cPhs_State daMP_c_Callback_Init(fopAc_ac_c*);
     static BOOL daMP_c_Callback_Finish(daMP_c*);
     static BOOL daMP_c_Callback_Main(daMP_c*);
     static BOOL daMP_c_Callback_Draw(daMP_c*);

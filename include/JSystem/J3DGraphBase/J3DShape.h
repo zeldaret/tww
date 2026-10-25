@@ -1,8 +1,10 @@
 #ifndef J3DSHAPE_H
 #define J3DSHAPE_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DShapeDraw.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "dolphin/gd/GDGeometry.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/types.h"
 
@@ -15,15 +17,15 @@ public:
 };
 
 static inline void JRNLoadCPCmd(u8 cmd, u32 param) {
-    GXFIFO.u8 = GX_CMD_LOAD_CP_REG;
-    GXFIFO.u8 = cmd;
-    GXFIFO.u32 = param;
+    GXCmd1u8(GX_CMD_LOAD_CP_REG);
+    GXCmd1u8(cmd);
+    GXCmd1u32(param);
 }
 
 inline void JRNLoadXFCmdHdr(u16 cmd, u8 len) {
-    GXFIFO.u8 = GX_CMD_LOAD_XF_REG;
-    GXFIFO.u16 = len - 1;
-    GXFIFO.u16 = cmd;
+    GXCmd1u8(GX_CMD_LOAD_XF_REG);
+    GXCmd1u16(len - 1);
+    GXCmd1u16(cmd);
 }
 
 class J3DCurrentMtx : public J3DCurrentMtxInfo {
@@ -41,12 +43,12 @@ public:
     u32 getMtxIdxRegA() const { return mMtxIdxRegA; }
     u32 getMtxIdxRegB() const { return mMtxIdxRegB; }
 
-    inline void load() const {
-        JRNLoadCPCmd(0x30, getMtxIdxRegA());  // CP_MATINDEX_A
-        JRNLoadCPCmd(0x40, getMtxIdxRegB());  // CP_MATINDEX_B
-        JRNLoadXFCmdHdr(0x1018, 2);
-        GXFIFO.u32 = getMtxIdxRegA();
-        GXFIFO.u32 = getMtxIdxRegB();
+    void load() const {
+        JRNLoadCPCmd(CP_REG_MTXIDXA_ID, mMtxIdxRegA);
+        JRNLoadCPCmd(CP_REG_MTXIDXB_ID, mMtxIdxRegB);
+        JRNLoadXFCmdHdr(GX_XF_REG_MATRIXINDEX0, 2);
+        GXCmd1u32(mMtxIdxRegA);
+        GXCmd1u32(mMtxIdxRegB);
     }
 
     void setCurrentTexMtx(u8 t0, u8 t1, u8 t2, u8 t3, u8 t4, u8 t5, u8 t6, u8 t7) {
@@ -97,33 +99,43 @@ public:
 
     void onFlag(u32 flag) { mFlags |= flag; }
     void offFlag(u32 flag) { mFlags &= ~flag; }
-    bool checkFlag(u32 flag) const { return !!(mFlags & flag); }
-    void setDrawMtxDataPointer(J3DDrawMtxData* pMtxData) { mDrawMtxData = pMtxData; }
-    void setVertexDataPointer(J3DVertexData* pVtxData) { mVertexData = pVtxData; }
-    void* getVcdVatCmd() const { return mVcdVatCmd; }
+    bool checkFlag(u32 flag) const { return (mFlags & flag) ? true : false; }
+    void setMaterial(J3DMaterial* pMaterial) {
+        J3D_ASSERT_NULLPTR(509, pMaterial != NULL);
+        mMaterial = pMaterial;
+    }
+    void setDrawMtxDataPointer(J3DDrawMtxData* pMtxData) {
+        J3D_ASSERT_NULLPTR(554, pMtxData != NULL);
+        mDrawMtxData = pMtxData;
+    }
+    void setVertexDataPointer(J3DVertexData* pVtxData) {
+        J3D_ASSERT_NULLPTR(657, pVtxData != NULL);
+        mVertexData = pVtxData;
+    }
+    void* getVcdVatCmd() { return mVcdVatCmd; }
     void setVcdVatCmd(void* pVatCmd) { mVcdVatCmd = (u8*)pVatCmd; }
     void show() { offFlag(J3DShpFlag_Hide); }
     void hide() { onFlag(J3DShpFlag_Hide); }
-    void setCurrentViewNoPtr(u32* pViewNoPtr) { mCurrentViewNo = pViewNoPtr; }
+    void setCurrentViewNoPtr(u32* pViewNoPtr) {
+        J3D_ASSERT_NULLPTR(584, pViewNoPtr != NULL);
+        mCurrentViewNo = pViewNoPtr;
+    }
     void setCurrentMtx(J3DCurrentMtx& mtx) { mCurrentMtx = mtx; }
-    void setScaleFlagArray(u8* pScaleFlagArray) { mScaleFlagArray = pScaleFlagArray; }
+    void setScaleFlagArray(u8* pScaleFlagArray) {
+        J3D_ASSERT_NULLPTR(595, pScaleFlagArray != NULL);
+        mScaleFlagArray = pScaleFlagArray;
+    }
     void setDrawMtx(Mtx** pDrawMtx) { mDrawMtx = pDrawMtx; }
     void setNrmMtx(Mtx33** pNrmMtx) { mNrmMtx = pNrmMtx; }
-    void setTexMtxLoadType(u32 type) { mFlags = (mFlags & 0xFFFF0FFF) | type; }
-    bool getNBTFlag() const { return mHasNBT; }
     u32 getBumpMtxOffset() const { return mBumpMtxOffset; }
     void setBumpMtxOffset(u32 offs) { mBumpMtxOffset = offs; }
-    GXVtxDescList* getVtxDesc() const { return mVtxDesc; }
+    GXVtxDescList* getVtxDesc() { return mVtxDesc; }
 
     J3DMaterial* getMaterial() const { return mMaterial; }
-    u32 getIndex() const { return mIndex; }
-    u32 getPipeline() const { return (mFlags >> 2) & 0x07; }
-    u32 getTexMtxLoadType() const { return mFlags & 0xF000; }
-    u32 getMtxGroupNum() const { return mMtxGroupNum; }
-    J3DShapeDraw* getShapeDraw(u16 idx) const { return mShapeDraw[idx]; }
-    J3DShapeMtx* getShapeMtx(u16 idx) const { return mShapeMtx[idx]; }
-    Vec* getMin() { return &mMin; }
-    Vec* getMax() { return &mMax; }
+    u16 getIndex() const { return mIndex; }
+    u16 getMtxGroupNum() const { return mMtxGroupNum; }
+    J3DShapeDraw* getShapeDraw(u16 idx) { return mShapeDraw[idx]; }
+    J3DShapeMtx* getShapeMtx(u16 idx) { return mShapeMtx[idx]; }
 
     static void resetVcdVatCache() { sOldVcdVatCmd = NULL; }
 
@@ -181,7 +193,7 @@ public:
     static u8 sNBTFlag;
 
     static void setCurrentPipeline(u32 pipeline) {
-        J3D_ASSERT(91, pipeline < 4, "Error : range over.");
+        J3D_ASSERT_RANGE(91, pipeline < 4);
         sCurrentPipeline = pipeline;
     }
 

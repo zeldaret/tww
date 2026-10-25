@@ -538,8 +538,8 @@ struct PsoData {
     /* 0x0C */ f32 field_0x0C;
     /* 0x10 */ f32 field_0x10;
     /* 0x14 */ s16 field_0x14;
-    /* 0x16 */ u8 field_0x16;
-    /* 0x17 */ u8 field_0x17;
+    /* 0x16 */ s8 field_0x16;
+    /* 0x17 */ s8 field_0x17;
 };  // Size: 0x18
 
 static PsoData l_pso_photo = {
@@ -684,7 +684,7 @@ BOOL daNpcPhoto_c::createHeap() {
             modelData->getJointNodePointer(i)->setCallBack(daNpc_Photo_nodeCallBack);
         }
     }
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 30.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
     return TRUE;
@@ -1107,7 +1107,7 @@ void daNpcPhoto_c::executeTurn() {
 
 /* 00001E5C-00001FDC       .text checkOrder__12daNpcPhoto_cFv */
 void daNpcPhoto_c::checkOrder() {
-    if(eventInfo.mCommand == dEvtCmd_INDEMO_e){
+    if(eventInfo.checkCommandDemoAccrpt()){
         if(dComIfGp_evmng_startCheck(mPhotoLinkBackEventIdx) && field_0x9BE == 3){
             field_0x9BE = 0;
         } else if(dComIfGp_evmng_startCheck(mPhotoGetItemEventIdx) && field_0x9BE == 4){
@@ -1121,7 +1121,7 @@ void daNpcPhoto_c::checkOrder() {
         } else if(dComIfGp_evmng_startCheck(mPhotoDateUB4EventIdx) && field_0x9BE == 10){
             field_0x9BE = 0;
         }
-    } else if(eventInfo.mCommand == dEvtCmd_INTALK_e && (field_0x9BE == 2 || field_0x9BE == 1)){
+    } else if(eventInfo.checkCommandTalk() && (field_0x9BE == 2 || field_0x9BE == 1)){
         field_0x9BC = true;
         executeSetMode(1);
     }
@@ -1166,7 +1166,7 @@ void daNpcPhoto_c::eventMove() {
         field_0x9C6 |= 0x40;
     } else if(dComIfGp_evmng_endCheck(field_0x9A6)){
         field_0x9C6 |= 0x40;
-        eventInfo.mEventId = -1;
+        eventInfo.setEventId(-1);
         field_0x9C7 = true;
         field_0x9BE = 0;
         field_0x9BC = false;
@@ -2178,7 +2178,7 @@ BOOL daNpcPhoto_c::isPhotoOk() {
 BOOL daNpcPhoto_c::isPhotoDxOk() {
     switch(dKy_get_dayofweek()){
         case 0:
-            if(dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) {
+            if(dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) {
                 return TRUE;
             }
             break;

@@ -12,7 +12,7 @@
 #include "d/d_com_inf_game.h"
 #include "m_Do/m_Do_mtx.h"
 
-char* daObjMtest::Act_c::M_arcname[Type_Max] = {
+const char* daObjMtest::Act_c::M_arcname[Type_Max] = {
     "Mtest",
     "Mtest",
     "Mtest",
@@ -260,9 +260,7 @@ cPhs_State daObjMtest::Act_c::Mthd_Create() {
         mbAppear = chk_appear();
         
         cXyz& scl_mult = M_scl_mult[M_type];
-        scale.x *= scl_mult.x;
-        scale.y *= scl_mult.y;
-        scale.z *= scl_mult.z;
+        scale *= scl_mult;
         
         phase_state = MoveBGCreate(M_arcname[M_type], dzb_data[dzb_idx][M_type], NULL, heap_size[dzb_idx][M_type]);
         

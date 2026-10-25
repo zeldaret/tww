@@ -32,18 +32,21 @@ enum dRes_ID_HJUMP {
 
 enum HBOX1_JNT {
     HBOX1_JNT_PCUBE4_e=0x0,
+    HBOX1_NUM_JNTS_e=0x1,
 };
 
 enum HJUMP1_JNT {
     HJUMP1_JNT_JOINT5_e=0x0,
     HJUMP1_JNT_JOINT6_e=0x1,
     HJUMP1_JNT_JOINT7_e=0x2,
+    HJUMP1_NUM_JNTS_e=0x3,
 };
 
 enum HJUMP2_JNT {
     HJUMP2_JNT_JOINT1_e=0x0,
     HJUMP2_JNT_JOINT2_e=0x1,
     HJUMP2_JNT_JOINT3_e=0x2,
+    HJUMP2_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_HJUMP_H */

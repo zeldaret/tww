@@ -19,6 +19,7 @@ enum dRes_ID_CLUB {
 enum ST_BUKI_JNT {
     ST_BUKI_JNT_ST_BUKI_e=0x0,
     ST_BUKI_JNT_BUKI_EFFECT_e=0x1,
+    ST_BUKI_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_CLUB_H */

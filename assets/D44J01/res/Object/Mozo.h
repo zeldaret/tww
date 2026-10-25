@@ -39,6 +39,7 @@ enum MOZ_JNT {
     MOZ_JNT_HANA_J_e=0x7,
     MOZ_JNT_UDEL_J_e=0x8,
     MOZ_JNT_UDER_J_e=0x9,
+    MOZ_NUM_JNTS_e=0xA,
 };
 
 #endif /* RES_MOZO_H */

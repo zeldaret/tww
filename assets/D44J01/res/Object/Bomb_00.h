@@ -19,6 +19,7 @@ enum dRes_ID_BOMB_00 {
 enum VBOMB_JNT {
     VBOMB_JNT_ROOT_VBOMB_e=0x0,
     VBOMB_JNT_VBOMB_MODEL_e=0x1,
+    VBOMB_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_BOMB_00_H */

@@ -90,6 +90,7 @@ enum LSHAND_JNT {
     LSHAND_JNT_WORLD_ROOT_e=0x0,
     LSHAND_JNT_LS_HANDL_e=0x1,
     LSHAND_JNT_LS_HANDR_e=0x2,
+    LSHAND_NUM_JNTS_e=0x3,
 };
 
 enum LS_JNT {
@@ -120,6 +121,7 @@ enum LS_JNT {
     LS_JNT_SKIRTFR_e=0x18,
     LS_JNT_SKIRTRL_e=0x19,
     LS_JNT_SKIRTRR_e=0x1A,
+    LS_NUM_JNTS_e=0x1B,
 };
 
 #endif /* RES_LS_H */

@@ -23,6 +23,7 @@ enum dRes_ID_VROPE {
 enum VROPE_JNT {
     VROPE_JNT_ROOT_VROPE_e=0x0,
     VROPE_JNT_VROPE_MODEL_e=0x1,
+    VROPE_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VROPE_H */

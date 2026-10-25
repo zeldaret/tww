@@ -364,7 +364,7 @@ void JUTCacheFont::getGlyphFromAram(TGlyphCacheInfo* param_0, TCachePage* pCache
     *param_3 = iVar2;
     *param_2 -= iVar2 * iVar3;
     u8* result =
-        JKRAramToMainRam((u32)param_0->mPrev + pGylphCacheInfo->field_0x10 * iVar2, (u8*)(pCachePage + 1),
+        JKRAramToMainRam((uintptr_t)param_0->mPrev + pGylphCacheInfo->field_0x10 * iVar2, (u8*)(pCachePage + 1),
                          pGylphCacheInfo->field_0x10, EXPAND_SWITCH_UNKNOWN0, 0, NULL, 0xffffffff, NULL);
     JUT_ASSERT(623, result);
     GXInitTexObj(&pCachePage->mTexObj, pCachePage + 1, pGylphCacheInfo->mWidth, pGylphCacheInfo->mHeight,

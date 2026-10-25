@@ -55,10 +55,12 @@ enum SO_JNT {
     SO_JNT_WAIST2_e=0x11,
     SO_JNT_WAIST3_e=0x12,
     SO_JNT_TAIL_e=0x13,
+    SO_NUM_JNTS_e=0x14,
 };
 
 enum SO_FUDE_JNT {
     SO_FUDE_JNT_SO_FUDE_e=0x0,
+    SO_FUDE_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_SO_H */

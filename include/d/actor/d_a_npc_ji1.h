@@ -9,7 +9,7 @@
 
 class mDoExt_McaMorf;
 
-class daNpc_Ji1_c : public fopAc_ac_c {
+class daNpc_Ji1_c : public fopEn_enemy_c {
 public:
     typedef int (daNpc_Ji1_c::*Action_t)(void*);
     typedef int (daNpc_Ji1_c::*SubAction_t)();
@@ -146,23 +146,16 @@ public:
     void harpoonMove();
 
 public:
-    /* 0x290 */ f32 field_0x290;
-    /* 0x294 */ f32 field_0x294;
-    /* 0x298 */ f32 field_0x298;
-    /* 0x29C */ f32 field_0x29C;
-    /* 0x2A0 */ f32 field_0x2A0;
-    /* 0x2A4 */ f32 field_0x2A4;
-    /* 0x2A8 */ u8 field_0x2A8;
     /* 0x2AC */ u32 mMsgNo;
     /* 0x2B0 */ Action_t mAction;
     /* 0x2BC */ Action_t field_0x2BC;
     /* 0x2C8 */ Action_t field_0x2C8;
     /* 0x2D4 */ SubAction_t mSubAction;
-    /* 0x2E0 */ dPa_smokeEcallBack field_0x2E0;
-    /* 0x300 */ dPa_smokeEcallBack field_0x300;
+    /* 0x2E0 */ dPa_smokeEcallBack mSmokeCb;
+    /* 0x300 */ dPa_smokeEcallBack mSmokeCbAT;
 #if VERSION == VERSION_DEMO
-    /* 0x320 */ JPABaseEmitter* field_0x320_demo;
-    /* 0x324 */ JPABaseEmitter* field_0x324_demo;
+    /* 0x320 */ JPABaseEmitter* mpParticle;
+    /* 0x324 */ JPABaseEmitter* mpParticleAT;
 #endif
     /* 0x320 */ cXyz field_0x320;
     /* 0x32C */ s16 field_0x32C;
@@ -277,84 +270,5 @@ public:
     
     static u8 game_life_point;
 }; // Size: 0xD88
-
-class daNpc_Ji1_HIO_c : public JORReflexible {
-public:
-    daNpc_Ji1_HIO_c();
-    virtual ~daNpc_Ji1_HIO_c() {}
-
-    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
-
-public:
-    /* 0x004 */ s8 mNo;
-    /* 0x008 */ f32 field_0x08;
-    /* 0x00C */ s16 field_0x0C;
-    /* 0x00E */ s16 field_0x0E;
-    /* 0x010 */ s16 field_0x10;
-    /* 0x012 */ s16 field_0x12;
-    /* 0x014 */ s16 field_0x14;
-    /* 0x016 */ s16 field_0x16;
-    /* 0x018 */ s16 field_0x18;
-    /* 0x01A */ u8 field_0x1A;
-    /* 0x01C */ f32 field_0x1C;
-    /* 0x020 */ f32 field_0x20;
-    /* 0x024 */ f32 field_0x24;
-    /* 0x028 */ u8 field_0x28;
-    /* 0x02C */ f32 field_0x2C;
-    /* 0x030 */ u8 field_0x30;
-    /* 0x034 */ f32 field_0x34;
-    /* 0x038 */ f32 field_0x38;
-    /* 0x03C */ f32 field_0x3C;
-    /* 0x040 */ f32 field_0x40;
-    /* 0x044 */ f32 field_0x44;
-    /* 0x048 */ f32 field_0x48;
-    /* 0x04C */ f32 field_0x4C;
-    /* 0x050 */ f32 field_0x50;
-    /* 0x054 */ s16 field_0x54[6];
-    /* 0x060 */ s16 field_0x60[4];
-    /* 0x068 */ u8 field_0x68;
-    /* 0x06C */ f32 field_0x6C;
-    /* 0x070 */ f32 field_0x70;
-    /* 0x074 */ f32 field_0x74;
-    /* 0x078 */ f32 field_0x78;
-    /* 0x07C */ f32 field_0x7C;
-    /* 0x080 */ f32 field_0x80;
-    /* 0x084 */ f32 field_0x84;
-    /* 0x088 */ s16 field_0x88;
-    /* 0x08A */ s16 field_0x8A;
-    /* 0x08C */ s16 field_0x8C;
-    /* 0x08E */ s16 field_0x8E;
-    /* 0x090 */ s16 field_0x90;
-    /* 0x092 */ s16 field_0x92;
-    /* 0x094 */ s16 field_0x94;
-    /* 0x096 */ s16 field_0x96;
-    /* 0x098 */ s16 field_0x98;
-    /* 0x09A */ s16 field_0x9A;
-    /* 0x09C */ s16 field_0x9C;
-    /* 0x09E */ s16 field_0x9E;
-    /* 0x0A0 */ s16 field_0xA0;
-    /* 0x0A2 */ u8 field_0xA2;
-    /* 0x0A4 */ f32 field_0xA4;
-    /* 0x0A8 */ f32 field_0xA8;
-    /* 0x0AC */ f32 field_0xAC;
-    /* 0x0B0 */ f32 field_0xB0;
-    /* 0x0B4 */ f32 field_0xB4;
-    /* 0x0B8 */ u8 field_0xB8;
-    /* 0x0BC */ f32 field_0xBC;
-    /* 0x0C0 */ f32 field_0xC0;
-    /* 0x0C4 */ cXyz field_0xC4[3];
-    /* 0x0E8 */ s16 field_0xE8;
-    /* 0x0EA */ s16 field_0xEA;
-    /* 0x0EC */ s16 field_0xEC;
-    /* 0x0EE */ s16 field_0xEE;
-    /* 0x0F0 */ s16 field_0xF0;
-    /* 0x0F2 */ s16 field_0xF2;
-    /* 0x0F4 */ s16 field_0xF4;
-    /* 0x0F6 */ s16 field_0xF6;
-    /* 0x0F8 */ s16 field_0xF8;
-    /* 0x0FA */ s16 field_0xFA;
-    /* 0x0FC */ s16 field_0xFC;
-    /* 0x0FE */ s16 field_0xFE;
-};  // Size: 0x100
 
 #endif /* D_A_NPC_JI1_H */

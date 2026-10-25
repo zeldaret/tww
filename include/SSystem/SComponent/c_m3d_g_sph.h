@@ -23,11 +23,12 @@ public:
 #if VERSION == VERSION_DEMO
     void SetC(const cXyz& p) { mCenter = p; }
     void SetR(f32 r) { mRadius = r; }
+    void SetC(f32 x, f32 y, f32 z) { mCenter.x = x; mCenter.y = y; mCenter.z = z; }
 #else
     void SetC(const cXyz& p);
     void SetR(f32 r);
+    void SetC(f32 x, f32 y, f32 z) { SetC(cXyz(x, y, z)); }
 #endif
-    void SetC(f32 x, f32 y, f32 z) { mCenter.x = x; mCenter.y = y; mCenter.z = z; }
     void Set(const cM3dGSphS & src) {
 #if VERSION == VERSION_DEMO
         mCenter = src.mCenter;

@@ -26,12 +26,14 @@ enum dRes_ID_HHBOT {
 
 enum HHBOT1_JNT {
     HHBOT1_JNT_POLYSURFACE2_e=0x0,
+    HHBOT1_NUM_JNTS_e=0x1,
 };
 
 enum HHBOT2_JNT {
     HHBOT2_JNT_WORLD_ROOT_e=0x0,
     HHBOT2_JNT_BOTAN_e=0x1,
     HHBOT2_JNT_JOINT2_e=0x2,
+    HHBOT2_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_HHBOT_H */

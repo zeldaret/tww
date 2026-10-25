@@ -22,7 +22,7 @@ void __DBExceptionDestinationAux(void) {
     PPCHalt();
 }
 
-asm void __DBExceptionDestination(void) {
+ASM void __DBExceptionDestination(void) {
     nofralloc
     mfmsr r3
     ori r3, r3, 0x30

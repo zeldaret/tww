@@ -28,18 +28,22 @@ enum dRes_ID_KUI {
 
 enum HKANE1_JNT {
     HKANE1_JNT_WORLD_ROOT_e=0x0,
+    HKANE1_NUM_JNTS_e=0x1,
 };
 
 enum HKANE2_JNT {
     HKANE2_JNT_WORLD_ROOT_e=0x0,
+    HKANE2_NUM_JNTS_e=0x1,
 };
 
 enum MROPESW_JNT {
     MROPESW_JNT_MROPESW1_e=0x0,
+    MROPESW_NUM_JNTS_e=0x1,
 };
 
 enum OBI_ROPETAG_JNT {
     OBI_ROPETAG_JNT_OBI_ROPETAG_e=0x0,
+    OBI_ROPETAG_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KUI_H */

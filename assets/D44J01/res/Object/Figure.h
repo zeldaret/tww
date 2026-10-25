@@ -22,6 +22,7 @@ enum dRes_ID_FIGURE {
 
 enum VF_BS_JNT {
     VF_BS_JNT_VF_DAIZA_MODEL_e=0x0,
+    VF_BS_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_FIGURE_H */

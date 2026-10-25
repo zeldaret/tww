@@ -594,7 +594,7 @@ static void ke_disp(mo2_class* i_this) {
         ke_control(i_this, pkVar2, i);
         ke_draw(i_this, pkVar2, i);
     }
-    i_this->m3Dline.update(10, 1.25f, (GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
+    i_this->m3Dline.update(10, 1.25f, COMPOUND_LITERAL(GXColor){0xFF, 0x64, 0, 0xFF}, 2, &actor->tevStr);
     dComIfGd_set3DlineMat(&i_this->m3Dline);
 }
 
@@ -1862,7 +1862,7 @@ static void fight(mo2_class* i_this) {
                             i_this->m0598 = 1;
                         }
                         iVar6 = (int)i_this->m2068 - l_mo2HIO.m0D8;
-                        if (iVar6 < (int)ARRAY_SIZE(l_mo2HIO.m0E0)) {
+                        if (iVar6 < ARRAY_SSIZE(l_mo2HIO.m0E0)) {
                             i_this->m0590 = l_mo2HIO.m0E0[iVar6];
                         }
                     }
@@ -1874,7 +1874,7 @@ static void fight(mo2_class* i_this) {
                             i_this->m0598 = 1;
                         }
                         iVar6 = (int)i_this->m2068 - l_mo2HIO.m108;
-                        if (iVar6 < (int)ARRAY_SIZE(l_mo2HIO.m110)) {
+                        if (iVar6 < ARRAY_SSIZE(l_mo2HIO.m110)) {
                             i_this->m0590 = l_mo2HIO.m110[iVar6];
                         }
                     }
@@ -4124,7 +4124,7 @@ static cPhs_State daMo2_Create(fopAc_ac_c* a_this) {
     fopAcM_SetMin(a_this, -200.0f, -50.0f, -100.0f);
     fopAcM_SetMax(a_this, 125.0f, 250.0f, 250.0f);
     fopAcM_SetMtx(a_this, i_this->mpMorf->getModel()->getBaseTRMtx());
-    i_this->mpMorf->getModel()->setUserArea((u32)a_this);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)a_this);
     i_this->actor.initBt(162.5f, 125.0f);
     i_this->mDamageReaction.m70C = 1;
     i_this->mDamageReaction.mSpawnY = a_this->current.pos.y;

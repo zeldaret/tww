@@ -164,10 +164,12 @@ enum dRes_ID_BTD {
 
 enum HAHENA_JNT {
     HAHENA_JNT_HAHENA_e=0x0,
+    HAHENA_NUM_JNTS_e=0x1,
 };
 
 enum KAMENA_JNT {
     KAMENA_JNT_KAMENA_e=0x0,
+    KAMENA_NUM_JNTS_e=0x1,
 };
 
 enum BTD_JNT {
@@ -244,12 +246,14 @@ enum BTD_JNT {
     BTD_JNT_UDER2_e=0x46,
     BTD_JNT_UDER3_e=0x47,
     BTD_JNT_UDER4BUKI_e=0x48,
+    BTD_NUM_JNTS_e=0x49,
 };
 
 enum NAMAKUBI_JNT {
     NAMAKUBI_JNT_CENT_e=0x0,
     NAMAKUBI_JNT_EYE_e=0x1,
     NAMAKUBI_JNT_MEDAMA1_e=0x2,
+    NAMAKUBI_NUM_JNTS_e=0x3,
 };
 
 enum SOTAI_JNT {
@@ -326,6 +330,7 @@ enum SOTAI_JNT {
     SOTAI_JNT_UDER2_e=0x46,
     SOTAI_JNT_UDER3_e=0x47,
     SOTAI_JNT_UDER4BUKI_e=0x48,
+    SOTAI_NUM_JNTS_e=0x49,
 };
 
 #endif /* RES_BTD_H */

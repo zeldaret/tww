@@ -68,13 +68,13 @@ public:
         : TFunctionValueAttributeSet_const(refer, range, interp) {}
 
     TFunctionValueAttribute_refer* refer_get() const {
-        return static_cast<const TFunctionValueAttributeSet_const*>(this)->refer_get();
+        return TFunctionValueAttributeSet_const::refer_get();
     }
     TFunctionValueAttribute_range* range_get() const {
-        return static_cast<const TFunctionValueAttributeSet_const*>(this)->range_get();
+        return TFunctionValueAttributeSet_const::range_get();
     }
     TFunctionValueAttribute_interpolate* interpolate_get() const {
-        return static_cast<const TFunctionValueAttributeSet_const*>(this)->interpolate_get();
+        return TFunctionValueAttributeSet_const::interpolate_get();
     }
 };
 
@@ -174,19 +174,22 @@ private:
 class TFunctionValue_composite : public TFunctionValue, public TFunctionValueAttribute_refer {
 public:
     struct TData {
-        TData(void* data) : u32data((u32)data) {}
-        TData(const void* data) : rawData(data) {}
-        TData(u32 data) : u32data(data) {}
-        TData(f32 data) : f32data(data) {}
+        TData(void* data) : uintdata((uintptr_t)data) {}
+        TData(unsigned int data) : uintdata(data) {}
+        TData(f64 data) : f64data(data) {}
 
-        inline void operator=(const TData& rhs) { f32data = rhs.f32data; }
-        u32 get_unsignedInteger() const { return u32data; }
-        f64 get_value() const { return f32data; }
+        inline void operator=(const TData& rhs) { f64data = rhs.f64data; }
+        unsigned int get_unsignedInteger() const { return uintdata; }
+        f64 get_value() const { return f64data; }
+
+        // TODO
+        TData(JStudio::TFunctionValue::TEOutside) {}
+        void get_outside() const {}
 
         union {
             const void* rawData;
-            u32 u32data;
-            f64 f32data;
+            unsigned int uintdata;
+            f64 f64data;
         };
     };
     typedef f64 (*UnkFunc)(f64, const TFunctionValueAttribute_refer*,
@@ -334,7 +337,12 @@ public:
             return r1.pf_ == r2.pf_;
         }
 
+
+#ifdef __MWERKS__
         f32 operator*() {
+#else
+        f32 operator*() const {
+#endif
 #ifdef DEBUG
             JUT_ASSERT(947, pf_!=0);
 #endif
@@ -442,7 +450,11 @@ public:
             return r1.pf_ == r2.pf_;
         }
 
+#ifdef __MWERKS__
         f32 operator*() {
+#else
+        f32 operator*() const {
+#endif
 #ifdef DEBUG
             JUT_ASSERT(1098, pf_!=0);
 #endif

@@ -184,6 +184,7 @@ dPa_J3Dmodel_c::dPa_J3Dmodel_c() {
     mInit = 0;
 }
 
+#if VERSION > VERSION_DEMO
 /* 8007AED8-8007AF64       .text __dt__18dPa_modelControl_cFv */
 dPa_modelControl_c::~dPa_modelControl_c() {
     dPa_modelEmitter_c* node = (dPa_modelEmitter_c*)mpHead;
@@ -194,6 +195,7 @@ dPa_modelControl_c::~dPa_modelControl_c() {
         node = nextNode;
     }
 }
+#endif
 
 dPa_J3Dmodel_c * dPa_modelControl_c::mModel;
 
@@ -462,7 +464,99 @@ void dPa_smokePcallBack::execute(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
 
 /* 8007BCB4-8007C380       .text draw__18dPa_smokePcallBackFP14JPABaseEmitterP15JPABaseParticle */
 void dPa_smokePcallBack::draw(JPABaseEmitter* emtr, JPABaseParticle* ptcl) {
-    /* Nonmatching */
+    /* Nonmatching - regalloc */
+    JGeometry::TVec3<f32> local_168;
+    ptcl->getGlobalPosition(local_168);
+    f32 f30 = JMASSin(ptcl->getDrawParamPPtr()->mRotateAngle);
+    f32 f29 = JMASCos(ptcl->getDrawParamPPtr()->mRotateAngle);
+    f32 f1_1 = ptcl->getDrawParamPPtr()->mScaleX * 2.0f;
+    f32 f15 = f1_1 * JPADraw::cb.mGlobalScaleX;
+    f32 f1_2 = ptcl->getDrawParamPPtr()->mScaleY * 2.0f;
+    f32 f31 = f1_2 * JPADraw::cb.mGlobalScaleY;
+    f32 f14 = -(f15 * emtr->getPivotX() * 0.5f);
+    f15 += f14;
+    f32 f16 = -(f31 * emtr->getPivotY() * 0.5f);
+    f32 f17 = f31 + f16;
+    u8 r30 = emtr->getGlobalAlpha();
+    MtxP r29 = JPADraw::cb.mDrawMtxPtr;
+#if VERSION > VERSION_DEMO
+    MTXMultVec(r29, &local_168, &local_168);
+#endif
+    f32 f15d = f29 * f14 - f30 * f17;
+    f32 f16d = f29 * f17 + f30 * f14;
+    f32 f17d = f29 * f15 - f30 * f17;
+    f32 f18d = f29 * f17 + f30 * f15;
+    f32 f19d = f29 * f15 - f30 * f16;
+    f32 f20d = f29 * f16 + f30 * f15;
+    f32 f21d = f29 * f14 - f30 * f16;
+    f32 f22d = f29 * f16 + f30 * f14;
+#if VERSION == VERSION_DEMO
+    MTXMultVec(r29, &local_168, &local_168);
+#endif
+    JGeometry::TVec3<f32> f28_f27_f31(
+        f15d + local_168.x,
+        f16d + local_168.y,
+        local_168.z
+    );
+    JGeometry::TVec3<f32> sp38_3c(
+        f17d + local_168.x,
+        f18d + local_168.y,
+        local_168.z
+    );
+    JGeometry::TVec3<f32> sp30_34(
+        f19d + local_168.x,
+        f20d + local_168.y,
+        local_168.z
+    );
+    JGeometry::TVec3<f32> sp28_2c(
+        f21d + local_168.x,
+        f22d + local_168.y,
+        local_168.z
+    );
+    JGeometry::TVec3<f32> norm1(r29[0][3] - local_168.x, r29[1][3] - local_168.y, r29[2][3] - local_168.z); // f29, f30, f26
+    JGeometry::TVec3<f32> norm2(f28_f27_f31.x - local_168.x, f28_f27_f31.y - local_168.y, f28_f27_f31.z - local_168.z); // f25, f24, f23
+    JGeometry::TVec3<f32> norm3(sp38_3c.x - local_168.x, sp38_3c.y - local_168.y, sp38_3c.z - local_168.z); // f22, f21, f20
+    JGeometry::TVec3<f32> norm4(sp30_34.x - local_168.x, sp30_34.y - local_168.y, sp30_34.z - local_168.z); // f19, f18, f17,
+    JGeometry::TVec3<f32> norm5(sp28_2c.x - local_168.x, sp28_2c.y - local_168.y, sp28_2c.z - local_168.z); // f16, f15, f14,
+    norm1.normalize();
+    norm2.normalize();
+    norm3.normalize();
+    norm4.normalize();
+    norm5.normalize();
+    GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, 6);
+
+    GXPosition3f32(local_168.x, local_168.y, local_168.z);
+    GXNormal3f32(norm1.x, norm1.y, norm1.z);
+    GXColor4u8(255, 255, 255, r30);
+    GXTexCoord2f32(0.5f, 0.5f);
+
+    GXPosition3f32(f28_f27_f31.x, f28_f27_f31.y, f28_f27_f31.z);
+    GXNormal3f32(norm2.x, norm2.y, norm2.z);
+    GXColor4u8(255, 255, 255, r30);
+    GXTexCoord2f32(0.0f, 0.0f);
+
+    GXPosition3f32(sp38_3c.x, sp38_3c.y, sp38_3c.z);
+    GXNormal3f32(norm3.x, norm3.y, norm3.z);
+    GXColor4u8(255, 255, 255, r30);
+    GXTexCoord2f32(1.0f, 0.0f);
+
+    GXPosition3f32(sp30_34.x, sp30_34.y, sp30_34.z);
+    GXNormal3f32(norm4.x, norm4.y, norm4.z);
+    GXColor4u8(255, 255, 255, r30);
+    GXTexCoord2f32(1.0f, 1.0f);
+
+    GXPosition3f32(sp28_2c.x, sp28_2c.y, sp28_2c.z);
+    GXNormal3f32(norm5.x, norm5.y, norm5.z);
+    GXColor4u8(255, 255, 255, r30);
+    GXTexCoord2f32(0.0f, 1.0f);
+
+    GXPosition3f32(f28_f27_f31.x, f28_f27_f31.y, f28_f27_f31.z);
+    GXNormal3f32(norm2.x, norm2.y, norm2.z);
+    GXColor4u8(255, 255, 255, r30);
+    GXTexCoord2f32(0.0f, 0.0f);
+
+    GXEnd();
+    ptcl->setInvisibleParticleFlag();
 }
 
 /* 8007C380-8007C3B0       .text draw__22dPa_selectTexEcallBackFP14JPABaseEmitter */
@@ -515,7 +609,7 @@ void dPa_simpleEcallBack::executeAfter(JPABaseEmitter* emitter) {
 /* 8007C674-8007C6EC       .text draw__19dPa_simpleEcallBackFP14JPABaseEmitter */
 void dPa_simpleEcallBack::draw(JPABaseEmitter* emtr) {
     if (mbIsSmoke)
-        smokeEcallBack(emtr, NULL, -1, (GXColor){ 0xA0, 0xA0, 0x80, 0xFF });
+        smokeEcallBack(emtr, NULL, -1, COMPOUND_LITERAL(GXColor){ 0xA0, 0xA0, 0x80, 0xFF });
 
     if (emtr->getGroupID() == dPa_control_c::dPtclGroup_Projection_e)
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
@@ -1048,7 +1142,7 @@ void dPa_waveEcallBack::remove() {
 
 /* 8007E2BC-8007E484       .text executeAfter__17dPa_waveEcallBackFP14JPABaseEmitter */
 void dPa_waveEcallBack::executeAfter(JPABaseEmitter* emitter) {
-    emitter->getEmitterAxis(reinterpret_cast<JGeometry::TVec3<f32>&>(mRotMtx[0]), reinterpret_cast<JGeometry::TVec3<f32>&>(mRotMtx[1]), reinterpret_cast<JGeometry::TVec3<f32>&>(mRotMtx[2]));
+    emitter->getEmitterAxis(mRotMtx0, mRotMtx1, mRotMtx2);
 
     if (mState != 0) {
         emitter->setDirectionalSpeed(0.0f);
@@ -1088,7 +1182,46 @@ void dPa_waveEcallBack::executeAfter(JPABaseEmitter* emitter) {
 
 /* 8007E484-8007E804       .text draw__17dPa_waveEcallBackFP14JPABaseEmitter */
 void dPa_waveEcallBack::draw(JPABaseEmitter* emitter) {
-    /* Nonmatching */
+    u32 r26 = emitter->getParticleList()->getNumLinks();
+    JGeometry::TVec3<f32> globalTranslation;
+    emitter->getGlobalTranslation(globalTranslation);
+    f32 f28;
+    f32 f27 = 1.0f / (r26 - 1);
+    if (r26 < 2) {
+        return;
+    }
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXSetMisc(GX_MT_XF_FLUSH, 8);
+    GXColor local_ec;
+    GXColor local_f0;
+    dKy_get_seacolor(&local_ec, &local_f0);
+    local_ec.a = 255;
+    local_f0.a = 255;
+    GXSetTevColor(GX_TEVREG0, local_ec);
+    GXSetTevColor(GX_TEVREG1, local_f0);
+    cXyz* collapsePos = mCollapsePos;
+    for (int i = 0; i < 2; i++, collapsePos++) {
+        f28 = 0.0f;
+        JGeometry::TVec3<f32> local_b8 = mRotMtx0 * collapsePos->x + mRotMtx1 * collapsePos->y + mRotMtx2 * collapsePos->z;
+
+        GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, r26 + 1);
+        GXPosition3f32(globalTranslation.x + local_b8.x, globalTranslation.y + local_b8.y, globalTranslation.z + local_b8.z);
+        GXTexCoord2f32(0.5f, 0.0f);
+        for (JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst(); link != NULL;) {
+            JPABaseParticle* particle = link->getObject();
+            // Fakematch, missing inline and doesn't match demo
+            GXPosition3f32(particle->mGlobalPosition.x, particle->mGlobalPosition.y, particle->mGlobalPosition.z);
+            // JGeometry::TVec3<f32> globalPos;
+            // particle->getGlobalPosition(globalPos);
+            // GXPosition3f32(globalPos.x, globalPos.y, globalPos.z);
+            GXTexCoord2f32(f28, 1.0f);
+            link = link->getNext();
+            f28 += f27;
+        }
+        GXEnd();
+    }
+    GXSetMisc(GX_MT_XF_FLUSH, 0);
 }
 
 /* 8007E804-8007E81C       .text setup__19dPa_splashEcallBackFP14JPABaseEmitterPC4cXyzPC5csXyzSc */
@@ -1123,8 +1256,7 @@ void dPa_splashEcallBack::execute(JPABaseEmitter* emitter) {
             return;
         }
         local_20.z = local_20.y = local_20.x;
-        emitter->setGlobalDynamicsScale(local_20);
-        emitter->setGlobalParticleScale(local_20);
+        emitter->setGlobalScale(local_20);
         emitter->setDirectionalSpeed(local_20.x * 15.0f);
     } else {
         emitter->setGlobalTranslation(mpPos->x, mpPos->y, mpPos->z);
@@ -1134,10 +1266,9 @@ void dPa_splashEcallBack::execute(JPABaseEmitter* emitter) {
             scaleF = 1.0f;
         }
         JGeometry::TVec3<f32> scale(scaleF, scaleF, scaleF);
-        emitter->setGlobalDynamicsScale(scale);
-        emitter->setGlobalParticleScale(scale);
+        emitter->setGlobalScale(scale);
         emitter->setDirectionalSpeed(scaleF * 15.0f);
-        JGeometry::TVec3<s16> rot(s16(0), yaw, s16(0));
+        JGeometry::TVec3<s16> rot(s16(0), (s16)yaw, s16(0));
         emitter->setGlobalRotation(rot);
     }
 }
@@ -1246,7 +1377,6 @@ void dPa_trackEcallBack::remove() {
 
 /* 8007F1F4-8007F3BC       .text execute__18dPa_trackEcallBackFP14JPABaseEmitter */
 void dPa_trackEcallBack::execute(JPABaseEmitter* emitter) {
-    /* Nonmatching - regalloc */
     GXColor local_30;
     GXColor local_34;
     dKy_get_seacolor(&local_30, &local_34);
@@ -1264,7 +1394,8 @@ void dPa_trackEcallBack::execute(JPABaseEmitter* emitter) {
         }
     } else {
         emitter->setGlobalTranslation(mpPos->x, mpPos->y, mpPos->z);
-        JGeometry::TVec3<s16> rot(0, mVel >= 0.0f ? mpRot->y : mpRot->y + 0x8000, 0);
+        s16 y = mVel >= 0.0f ? mpRot->y : (s16)(mpRot->y + 0x8000);
+        JGeometry::TVec3<s16> rot((s16)0, (s16)y, (s16)0);
         emitter->setGlobalRotation(rot);
         s16 local_38 = emitter->getGlobalAlpha();
         if (std::fabsf(mVel) > mMinVel) {
@@ -1287,7 +1418,6 @@ void dPa_trackEcallBack::execute(JPABaseEmitter* emitter) {
 
 /* 8007F3BC-8007F62C       .text draw__18dPa_trackEcallBackFP14JPABaseEmitter */
 void dPa_trackEcallBack::draw(JPABaseEmitter* emitter) {
-    /* Nonmatching - regalloc, instruction order */
     u32 r28 = emitter->getParticleList()->getNumLinks();
     if (r28 < 6) {
         return;
@@ -1296,6 +1426,9 @@ void dPa_trackEcallBack::draw(JPABaseEmitter* emitter) {
         GXSetZMode(GX_DISABLE, GX_NEVER, GX_DISABLE);
     }
     r28 = r28 * (1.0f / 3.0f);
+    f32 f27;
+    f32 f31;
+    f32 f30d = 0.5f;
     f32 f30 = 1.0f / (r28 - 1);
     GXSetCullMode(GX_CULL_NONE);
     Mtx local_bc;
@@ -1306,12 +1439,12 @@ void dPa_trackEcallBack::draw(JPABaseEmitter* emitter) {
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
     JSULink<JPABaseParticle>* link = emitter->getParticleList()->getFirst();
     u32 i = 0;
-    f32 f31 = 0.0f;
+    f31 = 0.0f;
     for (; i < r28; i++) {
         if (i) {
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
             u32 j = 0;
-            f32 f27 = 0.0f;
+            f27 = 0.0f;
             for (; j < 3; j++) {
                 JPABaseParticle* particle = link->getObject();
                 JGeometry::TVec3<f32> local_c8;
@@ -1322,7 +1455,7 @@ void dPa_trackEcallBack::draw(JPABaseEmitter* emitter) {
                 GXPosition3f32(mPos[j].x, mPos[j].y, mPos[j].z);
                 GXTexCoord2f32(f27, f31 - f30);
                 mPos[j].set(local_c8);
-                f27 += 0.5f;
+                f27 += f30d;
                 link = link->getNext();
             }
             GXEnd();

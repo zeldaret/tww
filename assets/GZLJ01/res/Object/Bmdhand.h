@@ -31,6 +31,7 @@ enum BKM_FOOK_JNT {
     BKM_FOOK_JNT_NAKAYUBI_e=0x1,
     BKM_FOOK_JNT_YUBI1_e=0x2,
     BKM_FOOK_JNT_YUBI2_e=0x3,
+    BKM_FOOK_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_BMDHAND_H */

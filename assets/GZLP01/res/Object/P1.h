@@ -96,22 +96,27 @@ enum P1_JNT {
     P1_JNT_LEGR1_e=0x10,
     P1_JNT_LEGR2_e=0x11,
     P1_JNT_FOOTR_e=0x12,
+    P1_NUM_JNTS_e=0x13,
 };
 
 enum DORA_STICK_JNT {
     DORA_STICK_JNT_DORA_STICK_e=0x0,
+    DORA_STICK_NUM_JNTS_e=0x1,
 };
 
 enum P1A_HEAD_JNT {
     P1A_HEAD_JNT_P1A_HEAD_ALL_e=0x0,
+    P1A_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum P1B_HEAD_JNT {
     P1B_HEAD_JNT_P1B_HEAD_ALL_e=0x0,
+    P1B_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum P1C_HEAD_JNT {
     P1C_HEAD_JNT_C_HEAD_e=0x0,
+    P1C_HEAD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_P1_H */

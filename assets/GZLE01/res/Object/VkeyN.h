@@ -19,6 +19,7 @@ enum dRes_ID_VKEYN {
 enum VKEYN_JNT {
     VKEYN_JNT_ROOT_KEYN_e=0x0,
     VKEYN_JNT_VKEYN_MODEL_e=0x1,
+    VKEYN_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VKEYN_H */

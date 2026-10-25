@@ -34,7 +34,9 @@ public:
     void Throw();
     void EndInit();
     void End();
+#if VERSION > VERSION_DEMO
     void SeDelete();
+#endif
     void move();
     void draw(dKy_tevstr_c*);
 
@@ -61,31 +63,31 @@ public:
 class SwCam_c {
 public:
     SwCam_c() {
-        field_0x1E = 0;
+        mActive = false;
         field_0x1C = 0;
         field_0x1D = 0;
-        field_0x00 = SwCam_c::camera_center_data[0][1];
-        field_0x0C = camera_eye;
-        field_0x18 = 58.0f;
+        mCenter = SwCam_c::camera_center_data[0][1];
+        mEye = camera_eye;
+        mFovY = 58.0f;
     }
 
     void ActiveOff() {
-        field_0x1E = 0;
+        mActive = false;
     }
     void ActiveOn() {
-        field_0x1E = 1;
+        mActive = true;
 
-        field_0x00 = camera_center_data[0][1];
-        field_0x0C = camera_eye;
-        field_0x18 = 58.0f;
+        mCenter = camera_center_data[0][1];
+        mEye = camera_eye;
+        mFovY = 58.0f;
 
         setAimIdx(0, 0);
     }
     cXyz* getCenterP() {
-        return &field_0x0C;
+        return &mCenter;
     }
     cXyz* getEyeP() {
-        return &field_0x00;
+        return &mEye;
     }
     void setAimIdx(s8 row, s8 col) {
         field_0x1C = row;
@@ -98,12 +100,12 @@ public:
     static cXyz camera_eye;
 
 public:
-    /* 0x00 */ cXyz field_0x00;
-    /* 0x0C */ cXyz field_0x0C;
-    /* 0x18 */ f32 field_0x18;
+    /* 0x00 */ cXyz mCenter;
+    /* 0x0C */ cXyz mEye;
+    /* 0x18 */ f32 mFovY;
     /* 0x1C */ s8 field_0x1C;
     /* 0x1D */ s8 field_0x1D;
-    /* 0x1E */ u8 field_0x1E;
+    /* 0x1E */ bool mActive;
 };  // Size: 0x1F
 
 class daNpc_Bmsw_c : public fopNpc_npc_c {

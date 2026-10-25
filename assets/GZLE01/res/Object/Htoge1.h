@@ -26,6 +26,7 @@ enum HTOGE1_JNT {
     HTOGE1_JNT_HTOGE1_00_e=0x0,
     HTOGE1_JNT_MONO_e=0x1,
     HTOGE1_JNT_TOGE_e=0x2,
+    HTOGE1_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_HTOGE1_H */

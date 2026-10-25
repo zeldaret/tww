@@ -134,7 +134,7 @@ u32 daPz_c::getMsg() {
 }
 
 /* 00001194-00001208       .text next_msgStatus__6daPz_cFPUl */
-u16 daPz_c::next_msgStatus(unsigned long*) {
+u16 daPz_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 

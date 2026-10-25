@@ -16,23 +16,32 @@
 
 /* 80232A68-80232BC4       .text create__10dScnOpen_cFv */
 cPhs_State dScnOpen_c::create() {
+#if VERSION > VERSION_DEMO
     dComIfGp_offEnableNextStage();
     mpProc = NULL;
+#endif
 
     cPhs_State rt = dComIfG_resLoad(&mPhs, "Opening");
     if (rt == cPhs_COMPLEATE_e) {
         solid_heap = mDoExt_createSolidHeapFromGameToCurrent(0x20000, 0);
-        JUT_ASSERT(0x3b, solid_heap != NULL);
+        JUT_ASSERT(DEMO_SELECT(56, 59), solid_heap != NULL);
         mpProc = new dScnOpen_proc_c();
+#if VERSION > VERSION_DEMO
         field_0x1d4 = NULL;
+#endif
         mDoExt_restoreCurrentHeap();
         mDoExt_adjustSolidHeap(solid_heap);
         mDoGph_gInf_c::setTickRate((OS_BUS_CLOCK / 4) / 30);
+#if VERSION > VERSION_DEMO
         return cPhs_COMPLEATE_e;
-    } else if (rt == cPhs_ERROR_e) {
-        JUT_ASSERT(0x48, rt == cPhs_COMPLEATE_e);
+#endif
+    }
+#if VERSION > VERSION_DEMO
+    else if (rt == cPhs_ERROR_e) {
+        JUT_ASSERT(72, rt == cPhs_COMPLEATE_e);
         return rt;
     }
+#endif
 
     return rt;
 }
@@ -45,16 +54,22 @@ BOOL dScnOpen_c::execute() {
     if (!fopOvlpM_IsPeek() && !dComIfG_resetToOpening(this)) {
 #endif
         if (fpcM_GetName(this) == fpcNm_OPEN2_SCENE_e && (CPad_CHECK_TRIG_A(0) || CPad_CHECK_TRIG_B(0) || CPad_CHECK_TRIG_START(0))) {
+#if VERSION == VERSION_DEMO
+            dComIfG_changeOpeningScene(this, fpcNm_OPENING2_SCENE_e);
+#else
             field_0x1d4 = 1;
-            mDoAud_bgmStop(20);
+#endif
+            mDoAud_bgmStop(DEMO_SELECT(30, 20));
         }
 
+#if VERSION > VERSION_DEMO
         if (field_0x1d4 == 1 && !mDoAud_isUsedHeapForStreamBuffer())
             dComIfG_changeOpeningScene(this, fpcNm_OPENING2_SCENE_e);
+#endif
     }
 
     mpProc->proc_execute();
-    if (mpProc->mState == 44)
+    if (mpProc->isEnd())
         changeGameScene();
 
     return TRUE;

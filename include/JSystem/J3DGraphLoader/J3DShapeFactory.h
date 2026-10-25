@@ -32,7 +32,7 @@ struct J3DShapeDrawInitData {
 };
 
 struct J3DShapeBlock {
-    /* 0x00 */ u8 mMagic[4];
+    /* 0x00 */ u32 mMagic;
     /* 0x04 */ u32 mSize;
 
     /* 0x08 */ u16 mShapeNum;

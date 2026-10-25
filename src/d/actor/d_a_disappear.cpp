@@ -35,7 +35,7 @@ static BOOL daDisappear_Execute(disappear_class* i_this) {
                         dItemNo_LARGE_MAGIC_e,
                         dItemNo_ARROW_10_e,
                     };
-                    if (dropType < daDisItem_HEART_e + (int)ARRAY_SIZE(ki_item_d)) {
+                    if (dropType < daDisItem_HEART_e + ARRAY_SSIZE(ki_item_d)) {
                         fopAcM_createItem(&i_this->current.pos, ki_item_d[dropType - daDisItem_HEART_e], -1, -1, daItemType_0_e, NULL, daItemAct_4_e);
                     }
                 }

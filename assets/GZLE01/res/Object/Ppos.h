@@ -18,6 +18,7 @@ enum dRes_ID_PPOS {
 
 enum PPOS_JNT {
     PPOS_JNT_PPOS_e=0x0,
+    PPOS_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_PPOS_H */

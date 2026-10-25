@@ -1,6 +1,7 @@
 #ifndef J3DCLUSTER_H
 #define J3DCLUSTER_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/types.h"
 
@@ -71,11 +72,11 @@ public:
     u16 getClusterNum() const { return mClusterNum; }
     u16 getClusterKeyNum() const { return mClusterKeyNum; }
     J3DCluster* getClusterPointer(u16 index) {
-        J3D_ASSERT(186, (index < mClusterNum), "Error : range over.");
+        J3D_ASSERT_RANGE(186, (index < mClusterNum));
         return &mClusterPointer[index];
     }
     J3DClusterKey* getClusterKeyPointer(u16 i) {
-        J3D_ASSERT(199, (i < mClusterKeyNum), "Error : range over.");
+        J3D_ASSERT_RANGE(199, (i < mClusterKeyNum));
         return &mClusterKeyPointer[i];
     }
     f32* getVtxPos() { return mVtxPos; }

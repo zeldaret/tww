@@ -39,11 +39,13 @@ enum dRes_ID_VBAKH {
 enum VBAKH_JNT {
     VBAKH_JNT_ROOT_VBAKH_e=0x0,
     VBAKH_JNT_VBAKH_e=0x1,
+    VBAKH_NUM_JNTS_e=0x2,
 };
 
 enum VBAKM_JNT {
     VBAKM_JNT_VBAKM_MODEL_e=0x0,
     VBAKM_JNT_VBAKM_FLOWER_e=0x1,
+    VBAKM_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VBAKH_H */

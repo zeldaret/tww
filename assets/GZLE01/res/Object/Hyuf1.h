@@ -30,6 +30,7 @@ enum dRes_ID_HYUF1 {
 
 enum HYUF1_JNT {
     HYUF1_JNT_POLYSURFACE2_e=0x0,
+    HYUF1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HYUF1_H */

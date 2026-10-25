@@ -535,9 +535,7 @@ static void sita_hit(bwd_class* i_this) {
         }
         i_this->m1BB5++;
         dComIfGp_particle_set(dPa_name::ID_AK_JN_CRITICALHITFLASH, &i_this->mTongueSegments[29].m04);
-        local_38.z = 2.0f;
-        local_38.y = 2.0f;
-        local_38.x = 2.0f;
+        local_38.x = local_38.y = local_38.z = 2.0f;
         local_40.z = 0;
         local_40.x = 0;
         local_40.y = fopAcM_searchPlayerAngleY(actor);

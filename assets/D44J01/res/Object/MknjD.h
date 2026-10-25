@@ -28,6 +28,7 @@ enum MKNJD_JNT {
     MKNJD_JNT_MKNJD_e=0x0,
     MKNJD_JNT_MKNJL_e=0x1,
     MKNJD_JNT_MKNJR_e=0x2,
+    MKNJD_NUM_JNTS_e=0x3,
 };
 
 enum MKNJH_JNT {
@@ -52,12 +53,14 @@ enum MKNJH_JNT {
     MKNJH_JNT_HAHEN7_e=0x12,
     MKNJH_JNT_HAHEN8_e=0x13,
     MKNJH_JNT_HAHEN9_e=0x14,
+    MKNJH_NUM_JNTS_e=0x15,
 };
 
 enum MKNJK_JNT {
     MKNJK_JNT_MKNJK_e=0x0,
     MKNJK_JNT_MKNJL_e=0x1,
     MKNJK_JNT_MKNJR_e=0x2,
+    MKNJK_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_MKNJD_H */

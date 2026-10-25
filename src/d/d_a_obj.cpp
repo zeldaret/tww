@@ -120,7 +120,7 @@ namespace {
                 accel += *pAccel1;
             }
 
-            if(accel.getDotProduct(*pNorm) < 0.0f) {
+            if(accel.inprod(*pNorm) < 0.0f) {
                 if(pNorm->y <= noGradeCos) {
                     cXyz temp;
                     cM3d_CrawVec(*pNorm, accel, &temp);

@@ -13,7 +13,7 @@ public:
     dMn_HIO_c();
     virtual ~dMn_HIO_c() {}
 
-    void genMessage(JORMContext* ctx);
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
 
 public:
     /* 0x04 */ f32 mEchoScale;

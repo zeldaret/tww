@@ -62,6 +62,7 @@ enum dRes_ID_BMS {
 
 enum SHOP_CURSOR01_JNT {
     SHOP_CURSOR01_JNT_CURSOR01_e=0x0,
+    SHOP_CURSOR01_NUM_JNTS_e=0x1,
 };
 
 enum BY2_JNT {
@@ -71,14 +72,17 @@ enum BY2_JNT {
     BY2_JNT_WAIST_e=0x3,
     BY2_JNT_LEG1_e=0x4,
     BY2_JNT_LEG2_e=0x5,
+    BY2_NUM_JNTS_e=0x6,
 };
 
 enum BY_EYE_JNT {
     BY_EYE_JNT_BY_EYE_e=0x0,
+    BY_EYE_NUM_JNTS_e=0x1,
 };
 
 enum BY_MASK_JNT {
     BY_MASK_JNT_BY_MASK_e=0x0,
+    BY_MASK_NUM_JNTS_e=0x1,
 };
 
 enum BY1_JNT {
@@ -93,24 +97,29 @@ enum BY1_JNT {
     BY1_JNT_ARMR1_e=0x8,
     BY1_JNT_ARMR2_e=0x9,
     BY1_JNT_HANDR_e=0xA,
+    BY1_NUM_JNTS_e=0xB,
 };
 
 enum BY_LOW1_JNT {
     BY_LOW1_JNT_BY_LOW_BODY1_e=0x0,
+    BY_LOW1_NUM_JNTS_e=0x1,
 };
 
 enum BY_LOW2_JNT {
     BY_LOW2_JNT_BY_LOW_BODY2_e=0x0,
+    BY_LOW2_NUM_JNTS_e=0x1,
 };
 
 enum PTARU_JNT {
     PTARU_JNT_KTARU_01_e=0x0,
+    PTARU_NUM_JNTS_e=0x1,
 };
 
 enum BY_HEAD_JNT {
     BY_HEAD_JNT_HEAD_CENTER_e=0x0,
     BY_HEAD_JNT_HAIRL_e=0x1,
     BY_HEAD_JNT_HAIRR_e=0x2,
+    BY_HEAD_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_BMS_H */

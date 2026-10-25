@@ -63,6 +63,7 @@ enum ZL_JNT {
     ZL_JNT_ZL_GRIP_e=0x1F,
     ZL_JNT_ZL_POD_e=0x20,
     ZL_JNT_ZL_SACK_e=0x21,
+    ZL_NUM_JNTS_e=0x22,
 };
 
 #endif /* RES_ZL2_H */

@@ -813,9 +813,7 @@ void core_move(bmd_class* i_this) {
         i_this->mpHeadDeadMorf->play(&actor->eyePos, 0, 0);
         i_this->mpHeadDeadMorf->calc();
         MTXCopy(pJVar11->getAnmMtx(REG0_S(4) + (s16)BKM_COA_DEADMODEL_JNT_KOUTOUBU_e), *calc_mtx);
-        local_40.z = 0.0f;
-        local_40.y = 0.0f;
-        local_40.x = 0.0f;
+        local_40.x = local_40.y = local_40.z = 0.0f;
         MtxPosition(&local_40, &actor->eyePos);
         if (i_this->m306 >= 0x6F) {
             actor->eyePos.y += 20000.0f;
@@ -1767,7 +1765,7 @@ BOOL useHeapInit(bmd_class* i_this) {
     if (model == NULL) {
         return FALSE;
     }
-    model->setUserArea((u32)i_this);
+    model->setUserArea((uintptr_t)i_this);
     for (u16 uVar16 = 0; uVar16 < model->getModelData()->getJointNum(); uVar16++) {
         model->getModelData()->getJointNodePointer(uVar16)->setCallBack(core_nodeCallBack);
     }

@@ -3,6 +3,7 @@
 // Translation Unit: m_Do_dvd_thread.cpp
 //
 
+#include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_dvd_thread.h"
 #include "m_Do/m_Do_ext.h"
 #include "m_Do/m_Do_printf.h"
@@ -13,7 +14,6 @@
 #include "SSystem/SComponent/c_list.h"
 #include "dolphin/dvd/dvd.h"
 
-static u8 dummy[0x0c];
 OSThread mDoDvdThd::l_thread;
 mDoDvdThdStack mDoDvdThd::l_threadStack;
 mDoDvdThd_param_c mDoDvdThd::l_param;
@@ -323,14 +323,14 @@ BOOL mDoDvdThd_toMainRam_c::execute() {
 }
 
 static void dummy2() {
-    OSReport("m_Do_dvd_thread.cpp");
-    OSReport("mArchive != 0");
-    OSReport("Halt");
-    OSReport("archive");
-    OSReport("mDoDvdThd_getResource_c::create() クラス生成に失敗\n");
-    OSReport("mDoDvdThd_getResource_c::create() リソース取得に失敗\n");
-    OSReport("entry");
-    OSReport("mArchive");
-    OSReport("mDoDvdThd_getResource_c::execute() リソース取得に失敗\n");
-    OSReport("mEntryNum != -1");
+    DEAD_STRING("m_Do_dvd_thread.cpp");
+    DEAD_STRING("mArchive != 0");
+    DEAD_STRING("Halt");
+    DEAD_STRING("archive");
+    DEAD_STRING("mDoDvdThd_getResource_c::create() クラス生成に失敗\n");
+    DEAD_STRING("mDoDvdThd_getResource_c::create() リソース取得に失敗\n");
+    DEAD_STRING("entry");
+    DEAD_STRING("mArchive");
+    DEAD_STRING("mDoDvdThd_getResource_c::execute() リソース取得に失敗\n");
+    DEAD_STRING("mEntryNum != -1");
 }

@@ -35,7 +35,7 @@ u32 daBoko_c::m_heap_size[] = {
     /* Type_PGANON_SWORD_e  */ 0x2000
 };
 
-char* daBoko_c::m_arc_name[] = {
+const char* daBoko_c::m_arc_name[] = {
     /* Type_BOKO_STICK_e    */ "Boko",
     /* Type_MACHETE_e       */ "Nata",
     /* Type_STALFOS_MACE_e  */ "Club",
@@ -73,7 +73,7 @@ static daBoko_HIO_c l_HIO;
 
 /* 000000EC-0000017C       .text keDraw__8daBoko_cFv */
 void daBoko_c::keDraw() {
-    mpLineKe->lineMat.update(0xA, 1.25f, (GXColor){0xFF, 0x64, 0x00, 0xFF}, 2, &tevStr);
+    mpLineKe->lineMat.update(0xA, 1.25f, COMPOUND_LITERAL(GXColor){0xFF, 0x64, 0x00, 0xFF}, 2, &tevStr);
     dComIfGd_set3DlineMat(&mpLineKe->lineMat);
 }
 
@@ -189,7 +189,7 @@ BOOL daBoko_c::draw() {
                 dComIfGd_setAlphaModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[i], dark_stts->getBokoAlpha(i));
             }
 
-            if (getNowMode() == Mode_PLAYER_CARRY_e && dStage_roomControl_c::getDarkMode() != 0) {
+            if (getNowMode() == Mode_PLAYER_CARRY_e && dComIfGp_roomControl_getDarkMode() != 0) {
                 for (int j = i; j < 4; j++) {
                     dComIfGd_setSpotModel(dDlst_alphaModel_c::TYPE_SPHERE, mAlphaModelMtx[j], dark_stts->getBokoAlpha(j));
                 }
@@ -932,9 +932,9 @@ cPhs_State daBoko_c::create() {
         },
         // cM3dGCpsS
         {{
-            /* P0 */ {0.0f, 0.0f, 0.0f},
-            /* P1 */ {0.0f, 0.0f, 0.0f},
-            /* Height */ 20.0f,
+            /* Start  */ {0.0f, 0.0f, 0.0f},
+            /* End    */ {0.0f, 0.0f, 0.0f},
+            /* Radius */ 20.0f,
         }},
     };
 

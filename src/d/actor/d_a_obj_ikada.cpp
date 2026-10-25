@@ -397,7 +397,7 @@ void daObj_Ikada_c::createWave() {
 
         JPABaseEmitter* emitter = mTrackCallBack.getEmitter();
         if (emitter != NULL) {
-            JGeometry::TVec3<f32> scale = (Vec){1.0f, 1.0f, 1.0f};
+            JGeometry::TVec3<f32> scale = COMPOUND_LITERAL(Vec){1.0f, 1.0f, 1.0f};
             emitter->setGlobalScale(scale);
         }
     }
@@ -405,7 +405,6 @@ void daObj_Ikada_c::createWave() {
 
 /* 000012EC-00001528       .text setWave__13daObj_Ikada_cFv */
 void daObj_Ikada_c::setWave() {
-    /* Nonmatching */
     f32 fVar2 = l_HIO.mTrackVel;
     f32 fVar1 = l_HIO.mWaveVelFade;
     f32 target = l_HIO.mSplashScaleMax;
@@ -1161,10 +1160,9 @@ bool daObj_Ikada_c::_execute() {
         mBombSmokeRot = shape_angle;
         mBombSmokeRot.y += mBombSmokeAngle;
 
-        JGeometry::TVec3<f32> scale = (Vec){3.0f, 3.0f, 3.0f};
+        JGeometry::TVec3<f32> scale = COMPOUND_LITERAL(Vec){3.0f, 3.0f, 3.0f};
         JPABaseEmitter* emitter = mBombSmokeEasterEgg.getEmitter();
-        emitter->setGlobalDynamicsScale(scale);
-        emitter->setGlobalParticleScale(scale);
+        emitter->setGlobalScale(scale);
 
         mBombSmokePos = current.pos;
         mBombSmokePos.y = l_HIO.m28;
@@ -1318,7 +1316,7 @@ bool daObj_Ikada_c::_draw() {
     }
 
     if (isCrane()) {
-        dSnap_RegistFig(DSNAP_TYPE_UNK83, this, 1.0f, 1.0f, 1.0f);
+        dSnap_RegistFig(DSNAP_TYPE_SALVAGE_CORP, this, 1.0f, 1.0f, 1.0f);
     }
 
     return true;
@@ -1500,7 +1498,7 @@ BOOL daObj_Ikada_c::_createHeap() {
         }
     }
 
-    mpModel->setUserArea((u32)this);
+    mpModel->setUserArea((uintptr_t)this);
 
     if (mType == 4) {
         for (u16 i = 0; i < modelData->getJointNum(); i++) {

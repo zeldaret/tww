@@ -54,6 +54,7 @@ enum MT_JNT {
     MT_JNT_LEGR1_e=0x10,
     MT_JNT_LEGR2_e=0x11,
     MT_JNT_FOOTR_e=0x12,
+    MT_NUM_JNTS_e=0x13,
 };
 
 #endif /* RES_NITEN_H */

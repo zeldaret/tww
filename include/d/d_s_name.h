@@ -9,6 +9,7 @@
 #include "m_Do/m_Do_hostIO.h"
 
 class J2DScreen;
+class JKRArchive;
 class JKRMemArchive;
 class dFile_error_c;
 class dFile_select_c;
@@ -86,7 +87,7 @@ public:
     void buttonIconCreate();
 #if VERSION == VERSION_PAL
     void buttonIconTexChange(u8, u8);
-    void PaneAlphaLangTxt(s16, u8);
+    int PaneAlphaLangTxt(s16, u8);
     void languageTexChange();
     void langTexChg();
     void langTexChgFast();
@@ -142,12 +143,8 @@ public:
     void changeGameScene();
 
 #if VERSION == VERSION_PAL
-    /* 0x01C4 */ mDoDvdThd_mountXArchive_c* field_0x1c4;
-    /* 0x01C8 */ mDoDvdThd_mountXArchive_c* field_0x1c8;
-    /* 0x01CC */ mDoDvdThd_mountXArchive_c* field_0x1cc;
-    /* 0x01D0 */ mDoDvdThd_mountXArchive_c* field_0x1d0;
-    /* 0x01D4 */ mDoDvdThd_mountXArchive_c* field_0x1d4;
-    u8 pad[0x14];
+    /* 0x01C4 */ mDoDvdThd_mountXArchive_c* field_0x1c4[5];
+    /* 0x01D8 */ JKRArchive* field_0x1d8[5];
 #endif
     /* 0x01C4 */ request_of_phase_process_class mPhs;
 #if VERSION == VERSION_DEMO
@@ -169,11 +166,9 @@ public:
     /* 0x043C */ fopMsgM_pane_class field_0x43c;
     /* 0x0474 */ fopMsgM_pane_class field_0x474;
     /* 0x04AC */ fopMsgM_pane_class field_0x4ac;
-    /* 0x04E4 */ fopMsgM_pane_class field_0x4e4;
-    /* 0x051C */ fopMsgM_pane_class field_0x51c;
+    /* 0x04E4 */ fopMsgM_pane_class field_0x4e4[2];
 #if VERSION == VERSION_PAL
-    /* 0x0554 */ fopMsgM_pane_class field_0x554;
-    /* 0x058C */ fopMsgM_pane_class field_0x58C;
+    /* 0x0554 */ fopMsgM_pane_class field_0x554[2];
 #endif
     /* 0x0554 */ u8 mMainProc;
     /* 0x0555 */ u8 mOpenProc;
@@ -196,6 +191,11 @@ public:
     /* 0x1BB9 */ u8 field_0x1bb9;
     /* 0x1BBA */ u8 field_0x1bba[0x1BBC - 0x1BBA];
     /* 0x1BBC */ int field_0x1bbc;
+#if VERSION == VERSION_PAL
+    /* 0x1C58 */ u8 field_0x1c58;
+    /* 0x1C59 */ u8 field_0x1c59;
+    /* 0x1C5A */ u8 field_0x1c5a;
+#endif
 };
 
 extern dSn_HIO_c g_snHIO;

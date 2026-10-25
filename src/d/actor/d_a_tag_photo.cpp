@@ -112,7 +112,7 @@ cPhs_State daTagPhoto_c::_create() {
         NULL
     };
 
-    return dComLbG_PhaseHandler(&mPhs, l_method, this);
+    return dComLbG_PhaseHandler(&mPhase, l_method, this);
 }
 
 /* 000001C8-000001D0       .text createHeap__12daTagPhoto_cFv */

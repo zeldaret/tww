@@ -22,6 +22,7 @@ enum dRes_ID_KKIBA_00 {
 
 enum KKIBA_00_JNT {
     KKIBA_00_JNT_KKIBA_00_e=0x0,
+    KKIBA_00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KKIBA_00_H */

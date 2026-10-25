@@ -35,16 +35,16 @@ static cPhs_State fopScnRq_phase_Done(scene_request_class* i_sceneReq) {
     return cPhs_NEXT_e;
 }
 
-static void fopScnRq_Execute(scene_request_class* i_sceneReq) {
+static cPhs_State fopScnRq_Execute(scene_request_class* i_sceneReq) {
     cPhs_State phase_state = cPhs_Do(&i_sceneReq->mReqPhsProcCls, i_sceneReq);
     switch (phase_state) {
     case cPhs_NEXT_e:
-        fopScnRq_Execute(i_sceneReq);
-        break;
+        return fopScnRq_Execute(i_sceneReq);
     }
+    return phase_state;
 }
 
-static int fopScnRq_PostMethod(void* param_1, scene_request_class* i_sceneReq) {
+static BOOL fopScnRq_PostMethod(void* param_1, scene_request_class* i_sceneReq) {
     fopScnPause_Enable((scene_class*)param_1);
     if (i_sceneReq->mFadeRequest) {
         fopOvlpM_ToldAboutID(((scene_class*)param_1)->base.base.mBsPcId);
@@ -52,7 +52,7 @@ static int fopScnRq_PostMethod(void* param_1, scene_request_class* i_sceneReq) {
     return 1;
 }
 
-static int fopScnRq_Cancel(scene_request_class* i_sceneReq) {
+static BOOL fopScnRq_Cancel(scene_request_class* i_sceneReq) {
     if (i_sceneReq->mFadeRequest && !fopOvlpM_Cancel()) {
         return 0;
     } else {

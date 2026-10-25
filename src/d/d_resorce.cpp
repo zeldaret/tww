@@ -84,7 +84,7 @@ static void setToonTex(J3DModelData* pModel) {
 
             j3dSys.setTexture(pTexture);
 
-            s32 isBDL = (pModel->getJointTree().getModelDataType() == 1);
+            s32 isBDL = (pModel->getModelDataType() == 1);
 
             for (u16 i = 0; i < pModel->getMaterialNum() ; i++) {
                 J3DMaterial * pMaterial = pModel->getMaterialNodePointer(i);
@@ -189,11 +189,11 @@ int dRes_info_c::loadResource() {
 
     u32 *pResType = &l_readResType[0];
     for (i = 0; i < ARRAY_SIZE(l_readResType); i++, pResType++) {
-        JKRFileFinder * pArcFinder = mpArchive->getFirstResource(*pResType);
+        JKRFileFinder * pArcFinder = JKRGetFirstResource(*pResType, mpArchive);
 
-        for (; pArcFinder->isAvailable(); pArcFinder->findNextFile()) {
+        for (; JKRIsFileFinderAvailable(pArcFinder); pArcFinder->findNextFile()) {
             u32 resType;
-            void * pRes = JKRArchive::getGlbResource(*pResType, pArcFinder->mEntryName, mpArchive);
+            void * pRes = JKRGetResource(*pResType, pArcFinder->mEntryName, mpArchive);
             if (pRes == NULL) {
                 OSReport_Error("<%s> res == NULL !!\n", pArcFinder->mEntryName);
                 goto next;
@@ -418,7 +418,7 @@ int dRes_info_c::setRes() {
             mode = 2;
 
             if (mode == 0) {
-                u32 allocSize = (mDataHeap->getSize() - mpParentHeap->getFreeSize()) + 0x8c;
+                u32 allocSize = (mDataHeap->getHeapSize() - mpParentHeap->getFreeSize()) + 0x8c;
                 JKRSolidHeap * pHeap = mDoExt_createSolidHeapFromGameToCurrent(allocSize, 0);
                 if (pHeap != NULL) {
                     mDoExt_adjustSolidHeap(mDataHeap);
@@ -479,7 +479,7 @@ static SArcHeader* getArcHeader(JKRArchive* pArchive) {
 }
 
 static void dummy() {
-    OSReport("%5.1f %5x %5.1f %5x %3d %s\n");
+    DEAD_STRING("%5.1f %5x %5.1f %5x %3d %s\n");
 }
 
 /* 8006EBF8-8006ECF4       .text dump_long__11dRes_info_cFP11dRes_info_ci */

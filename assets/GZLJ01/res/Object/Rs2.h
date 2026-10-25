@@ -66,6 +66,7 @@ enum RS_JNT {
     RS_JNT_LEGR1_e=0x14,
     RS_JNT_LEGR2_e=0x15,
     RS_JNT_FOOTR_e=0x16,
+    RS_NUM_JNTS_e=0x17,
 };
 
 #endif /* RES_RS2_H */

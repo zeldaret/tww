@@ -41,14 +41,15 @@ BOOL daKaji_c::CreateHeap() {
 }
 
 cPhs_State daKaji_c::_create() {
-    fopAcM_ct(this, daKaji_c);
+    fopAcM_ct_Retail(this, daKaji_c);
     
     cPhs_State phase_state = dComIfG_resLoad(&mPhs, M_arcname);
     if (phase_state == cPhs_COMPLEATE_e) {
+        fopAcM_ct_Demo(this, daKaji_c);
         if (fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x660)) {
-            mDoMtx_stack_c::transS(current.pos);
+            mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
             mDoMtx_stack_c::YrotM(shape_angle.y);
-            mDoMtx_stack_c::scaleM(scale);
+            mDoMtx_stack_c::scaleM(scale.x, scale.y, scale.z);
             MTXCopy(mDoMtx_stack_c::get(), mMtx);
             
             l_p_ship = (daObjPirateship::Act_c*)fopAcM_SearchByID(parentActorID);
@@ -66,7 +67,7 @@ cPhs_State daKaji_c::_create() {
 }
 
 bool daKaji_c::_delete() {
-    dComIfG_resDelete(&mPhs, M_arcname);
+    dComIfG_resDeleteDemo(&mPhs, M_arcname);
     return TRUE;
 }
 

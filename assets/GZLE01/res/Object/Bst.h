@@ -224,18 +224,21 @@ enum BST_JNT {
     BST_JNT_MABUTAR2_e=0xC,
     BST_JNT_MIMIL_e=0xD,
     BST_JNT_MIMIR_e=0xE,
+    BST_NUM_JNTS_e=0xF,
 };
 
 enum HBSITA1_JNT {
     HBSITA1_JNT_HBSITA1_00_e=0x0,
     HBSITA1_JNT_A00_e=0x1,
     HBSITA1_JNT_LIGHTLINE_e=0x2,
+    HBSITA1_NUM_JNTS_e=0x3,
 };
 
 enum HBYOKO1_JNT {
     HBYOKO1_JNT_HBYOKO1_e=0x0,
     HBYOKO1_JNT_A00_e=0x1,
     HBYOKO1_JNT_MONO_e=0x2,
+    HBYOKO1_NUM_JNTS_e=0x3,
 };
 
 enum LHAND_JNT {
@@ -259,10 +262,12 @@ enum LHAND_JNT {
     LHAND_JNT_EYE_e=0x11,
     LHAND_JNT_MABUTA1_e=0x12,
     LHAND_JNT_MABUTA2_e=0x13,
+    LHAND_NUM_JNTS_e=0x14,
 };
 
 enum MUNE_JNT {
     MUNE_JNT_MUNE1_e=0x0,
+    MUNE_NUM_JNTS_e=0x1,
 };
 
 enum RHAND_JNT {
@@ -286,18 +291,22 @@ enum RHAND_JNT {
     RHAND_JNT_EYE_e=0x11,
     RHAND_JNT_MABUTA1_e=0x12,
     RHAND_JNT_MABUTA2_e=0x13,
+    RHAND_NUM_JNTS_e=0x14,
 };
 
 enum TAMA_JNT {
     TAMA_JNT_POLYSURFACE1_e=0x0,
+    TAMA_NUM_JNTS_e=0x1,
 };
 
 enum UDEL_JNT {
     UDEL_JNT_UDE_e=0x0,
+    UDEL_NUM_JNTS_e=0x1,
 };
 
 enum UDER_JNT {
     UDER_JNT_UDE_e=0x0,
+    UDER_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BST_H */

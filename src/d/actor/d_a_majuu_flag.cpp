@@ -115,8 +115,8 @@ void daMajuu_Flag_packet_c::setNrmMtx() {
 
 /* 000003E4-0000046C       .text setBackNrm__21daMajuu_Flag_packet_cFv */
 void daMajuu_Flag_packet_c::setBackNrm() {
-    cXyz* nrm = mpNrmArr[mCurArr];
-    cXyz* nrmBack = mpNrmArrBack[mCurArr];
+    cXyz* nrm = mNrm[mCurArr];
+    cXyz* nrmBack = mBackNrm[mCurArr];
 
     for (s32 i = 0; i < 21; i++, nrm++, nrmBack++) {
         *nrmBack = cXyz::Zero;
@@ -477,7 +477,7 @@ void daMajuu_Flag_packet_c::draw() {
     GXSetCullMode(GX_CULL_BACK);
     GXCallDisplayList(l_majuu_flagDL, 0x80);
     GXSetCullMode(GX_CULL_FRONT);
-    GXSetArray(GX_VA_NRM, mpNrmArrBack[mCurArr], sizeof(cXyz) * 1);
+    GXSetArray(GX_VA_NRM, mBackNrm[mCurArr], sizeof(cXyz) * 1);
     GXCallDisplayList(l_majuu_flagDL, 0x80);
 #if VERSION > VERSION_JPN
     J3DShape::resetVcdVatCache();
@@ -493,7 +493,7 @@ static BOOL daMajuu_Flag_Draw(daMajuu_Flag_c* i_this) {
     } else {
         i_this->mPacket.setTevStr(&i_this->tevStr);
     }
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&i_this->mPacket, 0);
     return TRUE;
 }
 
@@ -759,11 +759,11 @@ void majuu_flag_move(daMajuu_Flag_c* i_this) {
     i_this->mPacket.setBackNrm();
 
 #if VERSION <= VERSION_JPN
-    DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(i_this->mPacket.mpPosArr[0]) * 21);
+    DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(i_this->mPacket.mPos[0]) * 21);
 #else
-    DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(i_this->mPacket.mpPosArr[0]));
-    DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(i_this->mPacket.mpNrmArr[0]));
-    DCStoreRangeNoSync(i_this->mPacket.getBackNrm(), sizeof(i_this->mPacket.mpNrmArrBack[0]));
+    DCStoreRangeNoSync(i_this->mPacket.getPos(), sizeof(i_this->mPacket.mPos[0]));
+    DCStoreRangeNoSync(i_this->mPacket.getNrm(), sizeof(i_this->mPacket.mNrm[0]));
+    DCStoreRangeNoSync(i_this->mPacket.getBackNrm(), sizeof(i_this->mPacket.mBackNrm[0]));
 #endif
 }
 

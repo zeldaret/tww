@@ -119,7 +119,7 @@ BOOL fopAc_IsActor(void* pProc) {
 }
 
 /* 80023540-8002362C       .text fopAc_Draw__FPv */
-s32 fopAc_Draw(void* pProc) {
+BOOL fopAc_Draw(void* pProc) {
     fopAc_ac_c * actor = (fopAc_ac_c *)pProc;
     BOOL ret = TRUE;
 

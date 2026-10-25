@@ -18,10 +18,10 @@ JMessage::TResourceContainer::TResourceContainer() {
 
 /* 8029FD04-8029FD90       .text Get_groupID__Q28JMessage18TResourceContainerFUs */
 JMessage::TResource* JMessage::TResourceContainer::Get_groupID(u16 groupID) {
-    JGadget::TContainerEnumerator<TResource, 0> enumerator(this);
+    JGadget::TContainerEnumerator<TResourceContainer> enumerator(*this);
     while (enumerator) {
         const TResource* res = &(*enumerator);
-        if (res->mInfo.get_groupID() == groupID)
+        if (res->getGroupID() == groupID)
             return (TResource*)res;
     }
     return NULL;
@@ -78,20 +78,19 @@ JMessage::TParse::~TParse() {
 }
 
 /* 8029FEF0-802A0024       .text parseHeader_next__Q28JMessage6TParseFPPCvPUlUl */
-bool JMessage::TParse::parseHeader_next(const void** ppData, u32* pOutSize, u32 flag) {
-    /* Nonmatching */
-    const void* pData = *ppData;
-    data::TParse_THeader header(pData);
-    *ppData = header.getContent();
-    *pOutSize = header.get_blockNumber();
+bool JMessage::TParse::parseHeader_next(const void** ppData_inout, u32* puBlock_out, u32 flag) {
+    const void* pData = *ppData_inout;
+    data::TParse_THeader oHeader(pData);
+    *ppData_inout = oHeader.getContent();
+    *puBlock_out = oHeader.get_blockNumber();
 
-    if (memcmp(header.get_signature(), &data::ga4cSignature, sizeof(data::ga4cSignature)) != 0)
+    if (memcmp(oHeader.get_signature(), &data::ga4cSignature, sizeof(data::ga4cSignature)) != 0)
         return false;
 
-    if (header.get_type() != 'bmg1')
+    if (oHeader.get_type() != 'bmg1')
         return false;
 
-    u8 encoding = header.get_encoding();
+    const u8 encoding = oHeader.get_encoding();
     if (encoding != 0) {
         if (!mResourceContainer->IsEncodingSettable(encoding))
             return false;
@@ -106,35 +105,36 @@ bool JMessage::TParse::parseHeader_next(const void** ppData, u32* pOutSize, u32 
     if (mResource == NULL)
         return flag & 0x20 ? true : false;
 
-    mResource->setData_header(header.getRaw());
+    mResource->setData_header(oHeader.getRaw());
     mResourceContainer->Push_back(mResource);
     return true;
 }
 
 /* 802A0024-802A0170       .text parseBlock_next__Q28JMessage6TParseFPPCvPUlUl */
-bool JMessage::TParse::parseBlock_next(const void** ppData, u32* pOutSize, u32 flag) {
-    /* Nonmatching */
-    JUTDataBlockHeader* pHeader = *(JUTDataBlockHeader**)ppData;
-    *(char**)ppData += pHeader->mSize;
-    *pOutSize = pHeader->mSize;
+bool JMessage::TParse::parseBlock_next(const void** ppData_inout, u32* puData_out, u32 flag) {
+    const void* pData = *ppData_inout;
+    data::TParse_TBlock oBlock(pData);
+    *ppData_inout = oBlock.getNext();
+    *puData_out = oBlock.get_size();
 
-    switch (pHeader->mType) {
+    u32 uType = oBlock.get_type();
+    switch (uType) {
     case 'INF1':
-        mResource->setData_block_info(pHeader);
+        mResource->setData_block_info(pData);
         break;
     case 'DAT1': {
-        mResource->setData_block_messageData((char*)&pHeader[1]);
-        TResource* res = mResourceContainer->Get_groupID(mResource->mInfo.get_groupID());
+        mResource->setData_block_messageData(pData);
+        TResource* res = mResourceContainer->Get_groupID(mResource->getGroupID());
         if (res != mResource && !!(flag & 0x80)) {
             mResourceContainer->Erase_destroy(res);
         }
         break;
     }
     case 'STR1':
-        mResource->setData_block_stringAttribute((char*)&pHeader[1]);
+        mResource->setData_block_stringAttribute(pData);
         break;
     case 'MID1':
-        mResource->setData_block_messageID(pHeader);
+        mResource->setData_block_messageID(pData);
         break;
     default:
         if (!(flag & 0x40))

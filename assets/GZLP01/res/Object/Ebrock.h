@@ -26,10 +26,12 @@ enum dRes_ID_EBROCK {
 
 enum EBROCK_JNT {
     EBROCK_JNT_EBROCK_e=0x0,
+    EBROCK_NUM_JNTS_e=0x1,
 };
 
 enum EBROCK2_JNT {
     EBROCK2_JNT_EBROCK2_e=0x0,
+    EBROCK2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_EBROCK_H */

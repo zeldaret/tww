@@ -34,6 +34,7 @@ enum VZOUK_JNT {
     VZOUK_JNT_ARM_R1_e=0x4,
     VZOUK_JNT_ARM_R2_e=0x5,
     VZOUK_JNT_ARM_R3_e=0x6,
+    VZOUK_NUM_JNTS_e=0x7,
 };
 
 #endif /* RES_VZOUK_H */

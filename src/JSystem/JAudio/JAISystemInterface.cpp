@@ -7,7 +7,7 @@
 
 #include "JSystem/JAudio/JAISystemInterface.h"
 #include "JSystem/JAudio/JASTrack.h"
-#include "JSystem/JAudio/JAISequenceMgr.h"
+#include "JSystem/JAudio/JAISound.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "dolphin/dvd/dvd.h"
 
@@ -22,7 +22,7 @@ BOOL JAInter::SystemInterface::checkFileExsistence(char* param_1) {
 }
 
 /* 8029E1B4-8029E2A0       .text checkSeqActiveFlag__Q27JAInter15SystemInterfaceFPQ28JASystem6TTrack */
-int JAInter::SystemInterface::checkSeqActiveFlag(JASystem::TTrack* param_1) {
+u8 JAInter::SystemInterface::checkSeqActiveFlag(JASystem::TTrack* param_1) {
     if (param_1 && param_1->field_0x37e) {
         if (param_1->mChildren[0] || param_1->mChildren[1] || param_1->mChildren[2] || param_1->mChildren[3] ||
             param_1->mChildren[4] || param_1->mChildren[5] || param_1->mChildren[6] || param_1->mChildren[7] ||
@@ -63,15 +63,15 @@ void JAInter::SystemInterface::setSeqPortargsU32(JAInter::SeqUpdateData* updateD
 
 /* 8029E4B0-8029E518       .text rootInit__Q27JAInter15SystemInterfaceFPQ27JAInter13SeqUpdateData */
 void JAInter::SystemInterface::rootInit(JAInter::SeqUpdateData* updateData) {
-    JAISound* r30 = updateData->field_0x48;
-    JASystem::TTrack* track = r30->getSeqParameter()->getRootTrackPointer();
+    JAISound* r30 = updateData->mSequence;
+    JASystem::TTrack* track = r30->getTrack();
     outerInit(updateData, track, JAIGlobalParameter::getParamSeqTrackMax(), 0xFFFF, 0);
     r30->getSeqParameter();
 }
 
 /* 8029E518-8029E5B4       .text trackInit__Q27JAInter15SystemInterfaceFPQ27JAInter13SeqUpdateData */
 void JAInter::SystemInterface::trackInit(JAInter::SeqUpdateData* updateData) {
-    JAISound* seq = updateData->field_0x48;
+    JAISound* seq = updateData->mSequence;
     u32 max = 16;
     if (!IsJAISoundIDInUse(seq->getID())) {
         max = JAIGlobalParameter::getParamSeqTrackMax();
@@ -104,7 +104,7 @@ void JAInter::SystemInterface::outerInit(JAInter::SeqUpdateData* updateData, voi
         portArgs->mFlags       = 0xFF;
         outerParam->onSwitch(OUTERPARAM_Tempo);
     } else {
-        JAInter::SeqParameter* seqParam = updateData->field_0x48->getSeqParameter();
+        JAInter::SeqParameter* seqParam = updateData->mSequence->getSeqParameter();
         portArgs->mTrackVolume = seqParam->mTrackVolumes[trackNo].mCurrentValue;
         portArgs->mTrackPitch  = seqParam->mTrackPitches[trackNo].mCurrentValue;
         portArgs->mTrackFxmix  = seqParam->mTrackFxmixes[trackNo].mCurrentValue;

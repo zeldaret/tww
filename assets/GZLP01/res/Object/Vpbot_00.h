@@ -21,6 +21,7 @@ enum VPBOT_00_JNT {
     VPBOT_00_JNT_A00_e=0x1,
     VPBOT_00_JNT_DAI_e=0x2,
     VPBOT_00_JNT_KAITEN_e=0x3,
+    VPBOT_00_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_VPBOT_00_H */

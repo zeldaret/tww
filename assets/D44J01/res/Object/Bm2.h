@@ -64,10 +64,12 @@ enum BMWING_JNT {
     BMWING_JNT_WINGR2_e=0x8,
     BMWING_JNT_WINGR3_e=0x9,
     BMWING_JNT_WINGREND_e=0xA,
+    BMWING_NUM_JNTS_e=0xB,
 };
 
 enum BM_BAG_JNT {
     BM_BAG_JNT_BAG_e=0x0,
+    BM_BAG_NUM_JNTS_e=0x1,
 };
 
 enum BM_JNT {
@@ -86,6 +88,7 @@ enum BM_JNT {
     BM_JNT_LEGR2_e=0xC,
     BM_JNT_FOOTR_e=0xD,
     BM_JNT_FOOTREND_e=0xE,
+    BM_NUM_JNTS_e=0xF,
 };
 
 enum BMARM_JNT {
@@ -102,12 +105,14 @@ enum BMARM_JNT {
     BMARM_JNT_HANDR_e=0xA,
     BMARM_JNT_SLEEVER1_e=0xB,
     BMARM_JNT_SLEEVER2_e=0xC,
+    BMARM_NUM_JNTS_e=0xD,
 };
 
 enum BMHEAD01_JNT {
     BMHEAD01_JNT_HEAD02_e=0x0,
     BMHEAD01_JNT_SIDEHAIRL_e=0x1,
     BMHEAD01_JNT_SIDEHAIRR_e=0x2,
+    BMHEAD01_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_BM2_H */

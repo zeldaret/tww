@@ -18,7 +18,7 @@
 #include "d/d_com_inf_game.h"
 #include "f_op/f_op_actor_mng.h"
 
-char* daSalvage_c::m_arcname = "Yslvg00";
+const char* daSalvage_c::m_arcname = "Yslvg00";
 
 const f32 daSalvage_c::m_outersea_near = 20.0f;
 const f32 daSalvage_c::m_inside_near = 10.0f;
@@ -717,7 +717,7 @@ BOOL daSalvage_c::isEffectKind(int salvageId) {
 
 /* 0000240C-00002410       .text debugDraw__11daSalvage_cFv */
 void daSalvage_c::debugDraw() {
-    /* Nonmatching */
+    /* Debug Nonmatching */
 }
 
 /* 00002410-00002430       .text daSalvageCreate__FPv */

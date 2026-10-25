@@ -94,6 +94,7 @@ enum dRes_ID_T_TREE {
 
 enum PO_TEST_JNT {
     PO_TEST_JNT_POW_e=0x0,
+    PO_TEST_NUM_JNTS_e=0x1,
 };
 
 enum CL_JNT {
@@ -139,6 +140,7 @@ enum CL_JNT {
     CL_JNT_RFOOT_JNT_e=0x27,
     CL_JNT_RTOE_JNT_e=0x28,
     CL_JNT_CL_BACK_e=0x29,
+    CL_NUM_JNTS_e=0x2A,
 };
 
 enum MO_JNT {
@@ -193,6 +195,7 @@ enum MO_JNT {
     MO_JNT_OA_J_e=0x30,
     MO_JNT_OB_J_e=0x31,
     MO_JNT_OC_J_e=0x32,
+    MO_NUM_JNTS_e=0x33,
 };
 
 enum MO_LOFF_TOFF_JNT {
@@ -247,6 +250,7 @@ enum MO_LOFF_TOFF_JNT {
     MO_LOFF_TOFF_JNT_OA_J_e=0x30,
     MO_LOFF_TOFF_JNT_OB_J_e=0x31,
     MO_LOFF_TOFF_JNT_OC_J_e=0x32,
+    MO_LOFF_TOFF_NUM_JNTS_e=0x33,
 };
 
 enum MO_LON_TOFF_JNT {
@@ -301,6 +305,7 @@ enum MO_LON_TOFF_JNT {
     MO_LON_TOFF_JNT_OA_J_e=0x30,
     MO_LON_TOFF_JNT_OB_J_e=0x31,
     MO_LON_TOFF_JNT_OC_J_e=0x32,
+    MO_LON_TOFF_NUM_JNTS_e=0x33,
 };
 
 enum MO_LON_TON_JNT {
@@ -355,6 +360,7 @@ enum MO_LON_TON_JNT {
     MO_LON_TON_JNT_OA_J_e=0x30,
     MO_LON_TON_JNT_OB_J_e=0x31,
     MO_LON_TON_JNT_OC_J_e=0x32,
+    MO_LON_TON_NUM_JNTS_e=0x33,
 };
 
 enum PZ_JNT {
@@ -385,6 +391,7 @@ enum PZ_JNT {
     PZ_JNT_SKIRT_1_e=0x18,
     PZ_JNT_SKIRT_2_e=0x19,
     PZ_JNT_SKIRT_3_e=0x1A,
+    PZ_NUM_JNTS_e=0x1B,
 };
 
 enum MO_JNT {
@@ -439,6 +446,7 @@ enum MO_JNT {
     MO_JNT_OA_J_e=0x30,
     MO_JNT_OB_J_e=0x31,
     MO_JNT_OC_J_e=0x32,
+    MO_NUM_JNTS_e=0x33,
 };
 
 #endif /* RES_T_TREE_H */

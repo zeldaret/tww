@@ -78,7 +78,7 @@ void objectSetCheck(room_of_scene_class* i_this) {
     } else {
         s32 roomNo = fopScnM_GetParam(i_this);
         if (hiddenFlag) {
-            fpcLyIt_Judge(fpcM_Layer(i_this), deleteJugge, NULL);
+            fpcLyIt_Judge(&i_this->base.mLayer, deleteJugge, NULL);
             dComIfGs_clearRoomSwitch(dComIfGp_roomControl_getZoneNo(roomNo));
             i_this->mbReLoaded = false;
         }

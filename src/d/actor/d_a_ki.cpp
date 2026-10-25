@@ -141,10 +141,8 @@ void anm_init(ki_class* i_this, int anmResIdx, float morf, unsigned char loopMod
 
 /* 000003A4-00000478       .text tex_anm_set__FP8ki_classUs */
 void tex_anm_set(ki_class* i_this, unsigned short idx) {
-    J3DAnmTexPattern* pJVar2;
-
     i_this->m335 = 1;
-    pJVar2 = (J3DAnmTexPattern*)dComIfG_getObjectRes("Ki", ki_tex_anm_idx[idx]);
+    J3DAnmTexPattern* pJVar2 = (J3DAnmTexPattern*)dComIfG_getObjectRes("Ki", ki_tex_anm_idx[idx]);
     i_this->m336 = ki_tex_max_frame[idx];
     i_this->m337 = ki_tex_loop[idx];
     i_this->m32C = pJVar2;
@@ -1274,7 +1272,7 @@ static BOOL useHeapInit(fopAc_ac_c* a_this) {
     }
 
     tex_anm_set(i_this, 1);
-    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)i_this);
     return TRUE;
 }
 

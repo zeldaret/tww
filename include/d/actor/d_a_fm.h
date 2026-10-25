@@ -128,7 +128,7 @@ public:
 
 public:
     /* 0x2AC */ int mMode;
-    /* 0x2B0 */ dPa_followEcallBack mpFollowEcallBack;
+    /* 0x2B0 */ dPa_followEcallBack mPtclFollowCb;
     /* 0x2C4 */ s8 mBckIdx;
     /* 0x2C5 */ s8 mAnmPrmIdx;
     /* 0x2C6 */ s8 mOldAnmPrmIdx;

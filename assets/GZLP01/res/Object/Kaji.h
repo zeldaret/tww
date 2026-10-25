@@ -38,6 +38,7 @@ enum dRes_ID_KAJI {
 
 enum ASODA_JNT {
     ASODA_JNT_ASODA_e=0x0,
+    ASODA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KAJI_H */

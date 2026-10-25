@@ -35,6 +35,7 @@ enum KSYLF_00_JNT {
     KSYLF_00_JNT_B3_e=0x1,
     KSYLF_00_JNT_B2_e=0x2,
     KSYLF_00_JNT_B1_e=0x3,
+    KSYLF_00_NUM_JNTS_e=0x4,
 };
 
 enum KSYLF_01_JNT {
@@ -42,6 +43,7 @@ enum KSYLF_01_JNT {
     KSYLF_01_JNT_B3_e=0x1,
     KSYLF_01_JNT_B2_e=0x2,
     KSYLF_01_JNT_B1_e=0x3,
+    KSYLF_01_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_SK2_H */

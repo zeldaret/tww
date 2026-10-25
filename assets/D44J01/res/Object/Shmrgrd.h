@@ -25,6 +25,7 @@ enum SHMRGRD_JNT {
     SHMRGRD_JNT_MHMRSW_e=0x1,
     SHMRGRD_JNT_HIT_e=0x2,
     SHMRGRD_JNT_BODY_e=0x3,
+    SHMRGRD_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_SHMRGRD_H */

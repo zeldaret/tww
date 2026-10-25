@@ -46,34 +46,42 @@ enum dRes_ID_KAISEN_0 {
 
 enum AK2SH_JNT {
     AK2SH_JNT_AK2SH_e=0x0,
+    AK2SH_NUM_JNTS_e=0x1,
 };
 
 enum AK3SH_JNT {
     AK3SH_JNT_AK3SH_e=0x0,
+    AK3SH_NUM_JNTS_e=0x1,
 };
 
 enum AK4SH_JNT {
     AK4SH_JNT_AK4SH_e=0x0,
+    AK4SH_NUM_JNTS_e=0x1,
 };
 
 enum AKATR_JNT {
     AKATR_JNT_AKATR_e=0x0,
+    AKATR_NUM_JNTS_e=0x1,
 };
 
 enum AKBOD_JNT {
     AKBOD_JNT_AKBOD_e=0x0,
+    AKBOD_NUM_JNTS_e=0x1,
 };
 
 enum AKCSR_JNT {
     AKCSR_JNT_AKCSR_e=0x0,
+    AKCSR_NUM_JNTS_e=0x1,
 };
 
 enum AKHZR_JNT {
     AKHZR_JNT_AKHZR_e=0x0,
+    AKHZR_NUM_JNTS_e=0x1,
 };
 
 enum AKKSL_JNT {
     AKKSL_JNT_AKCSR_e=0x0,
+    AKKSL_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KAISEN_0_H */

@@ -24,6 +24,7 @@ enum ITNAK_JNT {
     ITNAK_JNT_TN_MAIN1_e=0x4,
     ITNAK_JNT_TN_TATE1_e=0x5,
     ITNAK_JNT_TN_YOROI1_e=0x6,
+    ITNAK_NUM_JNTS_e=0x7,
 };
 
 #endif /* RES_ITNAK_H */

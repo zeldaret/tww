@@ -22,9 +22,9 @@ public:
     Mtx* getMtx() { return &mPosMtx; }
     GXTexObj* getToonTexObj() { return &mToonTex; }
     GXTexObj* getImageTexObj() { return &mFlagTex; }
-    cXyz* getPos() { return mpPosArr[mCurArr]; }
-    cXyz* getNrm() { return mpNrmArr[mCurArr]; }
-    cXyz* getBackNrm() { return mpNrmArrBack[mCurArr]; }
+    cXyz* getPos() { return mPos[mCurArr]; }
+    cXyz* getNrm() { return mNrm[mCurArr]; }
+    cXyz* getBackNrm() { return mBackNrm[mCurArr]; }
     cXyz* getOffsetVec() { return mSpeed; }
 
     void setTevStr(dKy_tevstr_c* tevStr) { mpTevStr = tevStr; }
@@ -40,11 +40,11 @@ public:
     /* 0x044 */ GXTexObj mToonTex;
     /* 0x064 */ GXTexObj mFlagTex;
     /* 0x084 */ u8 m084[0x0A0 - 0x084];
-    /* 0x0A0 */ cXyz mpPosArr[2][21];
+    /* 0x0A0 */ cXyz mPos[2][21];
     /* 0x298 */ u8 m298[0x2A0 - 0x298];
-    /* 0x2A0 */ cXyz mpNrmArr[2][21];
+    /* 0x2A0 */ cXyz mNrm[2][21];
     /* 0x498 */ u8 m498[0x4A0 - 0x498];
-    /* 0x4A0 */ cXyz mpNrmArrBack[2][21];
+    /* 0x4A0 */ cXyz mBackNrm[2][21];
     /* 0x698 */ cXyz mSpeed[21];
     /* 0x794 */ s16 mRotateY;
     /* 0x796 */ s16 m796;

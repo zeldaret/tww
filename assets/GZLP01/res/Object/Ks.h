@@ -42,10 +42,12 @@ enum dRes_ID_KS {
 
 enum KS_BODY_JNT {
     KS_BODY_JNT_KARADA_e=0x0,
+    KS_BODY_NUM_JNTS_e=0x1,
 };
 
 enum KS_EYE_JNT {
     KS_EYE_JNT_EYE_e=0x0,
+    KS_EYE_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KS_H */

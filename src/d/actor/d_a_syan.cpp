@@ -216,7 +216,7 @@ static cPhs_State daSyan_Create(fopAc_ac_c* i_ac) {
             fopAcM_SetMin(i_this, -1000.0f, -5000.0f, -1000.0f);
             fopAcM_SetMax(i_this, 1000.0f, 5000.0f, 1000.0f);
             fopAcM_SetMtx(i_this, i_this->morf->getModel()->getBaseTRMtx());
-            model->setUserArea((u32)i_this);
+            model->setUserArea((uintptr_t)i_this);
             i_this->field_0x2b8 = 200.0f;
 
             static s16 fire_time[] = { 0, 5, 10, 15, 20, 25 };

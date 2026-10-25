@@ -58,12 +58,14 @@ enum SA_JNT {
     SA_JNT_LEGR1_e=0x10,
     SA_JNT_LEGR2_e=0x11,
     SA_JNT_FOOTR_e=0x12,
+    SA_NUM_JNTS_e=0x13,
 };
 
 enum SA01_HEAD_JNT {
     SA01_HEAD_JNT_HEAD2_e=0x0,
     SA01_HEAD_JNT_HAIR1_e=0x1,
     SA01_HEAD_JNT_HAIR2_e=0x2,
+    SA01_HEAD_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_SARACE_H */

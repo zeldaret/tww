@@ -1,22 +1,70 @@
 #ifndef D_MENU_FMAP_H
 #define D_MENU_FMAP_H
 
+#include "d/d_2dnumber.h"
 #include "d/d_drawlist.h"
+#include "d/d_lib.h"
+#include "d/d_menu_fmapSv.h"
 #include "dolphin/types.h"
+#include "JSystem/JParticle/JPAEmitter.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "d/d_menu_fmap2.h"
+#include "f_op/f_op_msg_mng.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class JUTFont;
 class J2DScreen;
-struct fopMsgM_pane_class;
-class dMenu_FmapSv_c;
-struct cursorTable_t;
-struct aramCmapDatPat_t;
+
+struct cursorTable_t {
+    /* 0x0 */ s8 gridX;
+    /* 0x1 */ s8 gridY;
+    /* 0x2 */ s8 no;
+    /* 0x3 */ s8 left;
+    /* 0x4 */ s8 right;
+    /* 0x5 */ s8 up;
+    /* 0x6 */ s8 down;
+};
+
+enum dMf_DispMode {
+    FMAP_DISP_NORMAL = 0,
+    FMAP_DISP_HIKAKU = 1,
+};
+
+enum dMf_Mode {
+    FMAP_MODE_NORMAL    = 0,
+    FMAP_MODE_WARP      = 1,
+    FMAP_MODE_WALLPAPER = 2,
+    FMAP_MODE_FISHMAN   = 3,
+};
+
+enum dMf_ButtonIconMode {
+    FMAP_BTN_ICON_WORLD     = 0,
+    FMAP_BTN_ICON_SECTOR    = 1,
+    FMAP_BTN_ICON_DETAIL    = 2,
+    FMAP_BTN_ICON_LOCKED    = 3,
+    FMAP_BTN_ICON_WARP      = 4,
+    FMAP_BTN_ICON_WALLPAPER = 5,
+    FMAP_BTN_ICON_FISHMAN   = 6,
+};
+
+enum dMf_WarpSel {
+    FMAP_WARP_SEL_YES = 0,
+    FMAP_WARP_SEL_NO  = 1,
+};
+
+#if VERSION == VERSION_DEMO
+#define FMAP_WARP_COUNT 7
+#else
+#define FMAP_WARP_COUNT 9
+#endif
 
 class dDlst_FMAP_c : public dDlst_base_c {
 public:
     virtual ~dDlst_FMAP_c() {}
     virtual void draw();
+
+public:
+    /* 0x0004 */ J2DScreen* scrn;
 };
 
 class dMenu_Fmap_c {
@@ -24,41 +72,107 @@ public:
     virtual ~dMenu_Fmap_c() {}
 
     void draw() { _draw(); }
-    void getCtCurWX() {}
-    void getCtCurWY() {}
-    void getCtCurX() {}
-    void getCtCurY() {}
-    void getCtDispMode() {}
-    void getCtFmapZoom() {}
-    void getCtZoomGridX() {}
-    void getCtZoomGridY() {}
-    void lineInter0to1(float, float, float) {}
-    void lineInter0to1ForU8(unsigned char, unsigned char, float) {}
-    void setCtCurHX(signed char) {}
-    void setCtCurHY(signed char) {}
-    void setCtCurWX(signed char) {}
-    void setCtCurWY(signed char) {}
-    void setCtCurX(signed char) {}
-    void setCtCurY(signed char) {}
-    void setCtDispMode(unsigned char) {}
-    void setCtFmapZoom(unsigned char) {}
-    void setCtZoomGridX(signed char) {}
-    void setCtZoomGridY(signed char) {}
+    u8 getCtDispMode() {
+        JUT_ASSERT(VERSION_SELECT(456, 456, 467, 467), fmapSv != NULL);
+        return fmapSv->getDispMode();
+    }
+    void setCtDispMode(u8 val) {
+        JUT_ASSERT(VERSION_SELECT(461, 461, 472, 472), fmapSv != NULL);
+        fmapSv->setDispMode(val);
+    }
+    u8 getCtFmapZoom() {
+        JUT_ASSERT(VERSION_SELECT(467, 467, 478, 478), fmapSv != NULL);
+        return fmapSv->getFmapZoom();
+    }
+    void setCtFmapZoom(u8 val) {
+        JUT_ASSERT(VERSION_SELECT(472, 472, 483, 483), fmapSv != NULL);
+        fmapSv->setFmapZoom(val);
+    }
+    s8 getCtCurX() {
+        JUT_ASSERT(VERSION_SELECT(478, 478, 489, 489), fmapSv != NULL);
+        return fmapSv->getCurX();
+    }
+    void setCtCurX(s8 val) {
+        JUT_ASSERT(VERSION_SELECT(483, 483, 494, 494), fmapSv != NULL);
+        fmapSv->setCurX(val);
+    }
+    s8 getCtCurY() {
+        JUT_ASSERT(VERSION_SELECT(489, 489, 500, 500), fmapSv != NULL);
+        return fmapSv->getCurY();
+    }
+    void setCtCurY(s8 val) {
+        JUT_ASSERT(VERSION_SELECT(494, 494, 505, 505), fmapSv != NULL);
+        fmapSv->setCurY(val);
+    }
+    s8 getCtCurWX() {
+        JUT_ASSERT(VERSION_SELECT(500, 500, 511, 511), fmapSv != NULL);
+        return fmapSv->getCurWX();
+    }
+    void setCtCurWX(s8 val) {
+        JUT_ASSERT(VERSION_SELECT(505, 505, 516, 516), fmapSv != NULL);
+        fmapSv->setCurWX(val);
+    }
+    s8 getCtCurWY() {
+        JUT_ASSERT(VERSION_SELECT(511, 511, 522, 522), fmapSv != NULL);
+        return fmapSv->getCurWY();
+    }
+    void setCtCurWY(s8 val) {
+        JUT_ASSERT(VERSION_SELECT(516, 516, 527, 527), fmapSv != NULL);
+        fmapSv->setCurWY(val);
+    }
+    s8 getCtZoomGridX() {
+        JUT_ASSERT(VERSION_SELECT(522, 522, 533, 533), fmapSv != NULL);
+        return fmapSv->getZoomGridX();
+    }
+    void setCtZoomGridX(s8 val) {
+        JUT_ASSERT(VERSION_SELECT(527, 527, 538, 538), fmapSv != NULL);
+        fmapSv->setZoomGridX(val);
+    }
+    s8 getCtZoomGridY() {
+        JUT_ASSERT(VERSION_SELECT(532, 532, 543, 543), fmapSv != NULL);
+        return fmapSv->getZoomGridY();
+    }
+    void setCtZoomGridY(s8 val) {
+        JUT_ASSERT(VERSION_SELECT(537, 537, 548, 548), fmapSv != NULL);
+        fmapSv->setZoomGridY(val);
+    }
+    void setCtCurHX(s8 val) {
+        JUT_ASSERT(VERSION_SELECT(548, 548, 559, 559), fmapSv != NULL);
+        fmapSv->setCurHX(val);
+    }
+    void setCtCurHY(s8 val) {
+        JUT_ASSERT(VERSION_SELECT(558, 558, 569, 569), fmapSv != NULL);
+        fmapSv->setCurHY(val);
+    }
+    f32 lineInter0to1(f32 a, f32 b, f32 c) {
+        return a + (b - a) * c;
+    }
+    u8 lineInter0to1ForU8(u8 a, u8 b, f32 c) {
+        return a + (b - a) * c;
+    }
     void setFont(JUTFont* font, JUTFont* rfont) {
         mFont = font;
         mRFont = rfont;
     }
     void setSvPtr(dMenu_FmapSv_c* i_ptr) { fmapSv = i_ptr; }
     void setTextArea_New(char* name0, char* name1, char* note0, char* note1, char* dummy0, char* dummy1) {
-        name[0] = name0;
-        name[1] = name1;
-        note[0] = note0;
-        note[1] = note1;
-        dummy[0] = dummy0;
-        dummy[1] = dummy1;
+        mTxtName[0] = name0;
+        mTxtName[1] = name1;
+        mTxtNote[0] = note0;
+        mTxtNote[1] = note1;
+        mTxtDummy[0] = dummy0;
+        mTxtDummy[1] = dummy1;
     }
-    void stopWrapBackEmitter() {}
-    void stopWrapSpotEmitter(int) {}
+    void stopWrapBackEmitter() {
+        if (mWrapBackEmitter != NULL) {
+            mWrapBackEmitter->becomeInvalidEmitter();
+        }
+    }
+    void stopWrapSpotEmitter(int i_idx) {
+        if (mWrapSpotEmitters[i_idx] != NULL) {
+            mWrapSpotEmitters[i_idx]->becomeInvalidEmitter();
+        }
+    }
 
     void _create();
     void phantomShipCheck();
@@ -72,21 +186,21 @@ public:
     void checkMarkCheck2();
     void checkMarkCheck3();
     bool isFmapClose();
-    void setPaneOnOff(J2DScreen*, unsigned long, bool);
-    void childPaneMoveSp(fopMsgM_pane_class*, fopMsgM_pane_class*, float, float, float);
-    void selGridMaskAlphaCtrl(short, unsigned char, unsigned char, int);
-    void fmapMaskAlphaCtrl(short, unsigned char, unsigned char, int);
+    void setPaneOnOff(J2DScreen*, u32, bool);
+    void childPaneMoveSp(fopMsgM_pane_class*, fopMsgM_pane_class*, f32, f32, f32);
+    BOOL selGridMaskAlphaCtrl(s16, u8, u8, int);
+    BOOL fmapMaskAlphaCtrl(s16, u8, u8, int);
     void selCursorInit();
     void selCursorHide();
     void selCursorMove();
     void islandNameChange();
-    void changeIslandName(unsigned char);
+    void changeIslandName(u8);
     void AreaTxtChg();
     void AreaTxtChgFast();
     void salvageGetItemChg();
     void salvageGetItemChange();
     void SalvItmDispChgFast();
-    void changeSalvageGetItem(unsigned char);
+    void changeSalvageGetItem(u8);
     void selCursorAnime();
     void zoomCursorInit();
     void zoomCursorAnime();
@@ -96,32 +210,36 @@ public:
     void windArrowColorAnime();
     void checkMarkAnimeInit();
     void checkMarkAnime();
-    void readFmapTexture(const char*);
+#if VERSION == VERSION_DEMO
+    void krogMarkAnimeInit();
+    void krogMarkAnime();
+#endif
+    u32 readFmapTexture(const char*);
     void aramCmapDatRead();
     void initCmapDatPnt(aramCmapDatPat_t*);
-    void getGridNumToCmapDatPnt(int);
-    void setDispIslandPos(signed char, signed char);
-    void setIslandPos(fopMsgM_pane_class*, float, float);
-    void changeFmapTexture(signed char, signed char);
+    aramCmapDatPnt_t* getGridNumToCmapDatPnt(int);
+    void setDispIslandPos(s8, s8);
+    void setIslandPos(fopMsgM_pane_class*, f32, f32);
+    void changeFmapTexture(s8, s8);
     void setDspNormalMapLink();
     void setDspLargeMapLink();
     void checkDspLargeMapLink();
     void checkDspLargeMapShip();
     void dispEndSalvageLargeMark();
     void setDspHugeMapLink();
-    void dispEndSalvageHugeMark(float, float);
+    void dispEndSalvageHugeMark(f32, f32);
     void checkDspHugeMapLink();
     void checkDspHugeMapShip();
     bool _open();
     bool _close();
-    void _close_normalMode();
+    bool _close_normalMode();
     void _move();
     void _draw();
     void _delete();
     void FmapProcMain();
     void SelectGrid();
     void zoom1000x1000Init();
-    void zoomMapAlphaSet(signed char, signed char, fopMsgM_pane_class*, unsigned char);
+    void zoomMapAlphaSet(s8, s8, fopMsgM_pane_class*, u8);
     void ZoomGridLv1In();
     void ZoomGridLv1Proc();
     void zoom200x200Init();
@@ -135,18 +253,20 @@ public:
     void fmap2Open();
     void fmap2Move();
     void fmap2Close();
-    void paneTransBase(short, unsigned char, float, float, unsigned char, int);
-    void paneTranceZoomMap(short, unsigned char, float, float, float, float, float, float, unsigned char, int);
-    void paneTranceZoomMapAlpah(short, unsigned char, unsigned char, int);
-    void paneTranceZoom2Map(short, unsigned char, float, float, float, float, float, float, unsigned char, int);
-    void paneAlphaFmapCursor(fopMsgM_pane_class*, short, unsigned char, unsigned char, int);
-    void PaneAlphaSelvageItem(short, unsigned char);
+    BOOL paneTransBase(s16, u8, f32, f32, u8, int);
+    BOOL paneTranceZoomMap(s16, u8, f32, f32, f32, f32, f32, f32, u8, int);
+    BOOL paneTranceZoomMapAlpah(s16, u8, u8, int);
+    BOOL paneTranceZoom2Map(s16, u8, f32, f32, f32, f32, f32, f32, u8, int);
+    BOOL paneAlphaFmapCursor(fopMsgM_pane_class*, s16, u8, u8, int);
+    BOOL PaneAlphaSelvageItem(s16, u8);
+#if VERSION > VERSION_JPN
     void gShipMarkAnimeInit();
     void gShipMarkAnime();
+#endif
     bool _open_warpMode();
     void init_warpMode();
     void selCursorMoveWarp();
-    void _close_warpMode();
+    bool _close_warpMode();
     void moveMain_warpMode();
     void wrapMove();
     void wrapSelWinFadeIn1();
@@ -154,72 +274,314 @@ public:
     void wrapSelWinFadeOut();
     void wrapSelWarp();
     void warpAreaAnime0();
-    void paneTranceWarpMsg(fopMsgM_pane_class*, short, unsigned char, float, float, unsigned char, int);
-    void paneAlphaWarpMsgBack(short, unsigned char, unsigned char, int);
+    BOOL paneTranceWarpMsg(fopMsgM_pane_class*, s16, u8, f32, f32, u8, int);
+    BOOL paneAlphaWarpMsgBack(s16, u8, u8, int);
     void warpSelCursorMove();
     void warpSelCursorAnimeInit();
     void warpSelCursorAnime();
-    void getWarpAreaGridX(int);
-    void getWarpAreaGridY(int);
-    void getWarpAreaNo(const cursorTable_t*);
-    void getWarpAreaNoUp(const cursorTable_t*);
-    void getWarpAreaNoDown(const cursorTable_t*);
-    void getWarpAreaNoLeft(const cursorTable_t*);
-    void getWarpAreaNoRight(const cursorTable_t*);
-    void getWarpAreaTablePtr(signed char, signed char);
+    s8 getWarpAreaGridX(int);
+    s8 getWarpAreaGridY(int);
+    int getWarpAreaNo(const cursorTable_t*);
+    int getWarpAreaNoUp(const cursorTable_t*);
+    int getWarpAreaNoDown(const cursorTable_t*);
+    int getWarpAreaNoLeft(const cursorTable_t*);
+    int getWarpAreaNoRight(const cursorTable_t*);
+    const cursorTable_t* getWarpAreaTablePtr(s8, s8);
     void areaTextChangeAnimeInit();
     void areaTextChangeAnime();
-    void PaneAlphaAreaTxt(short, unsigned char, int);
-    void setDspWarpBackCornerColor(float);
+    BOOL PaneAlphaAreaTxt(s16, u8, int);
+    void setDspWarpBackCornerColor(f32);
     void setWrapBackEmitter(cXyz);
     void setWrapSpotEmitter(int, cXyz);
     bool _open_fishManMode();
-    void _close_fishManMode();
+    bool _close_fishManMode();
     void init_fishManMode();
     void movefishManMode();
     void fmDispArea();
     void fmZoomGridLv1In();
     void fmZoomGridLv2In();
-    void islandNameSet(unsigned char);
+    void islandNameSet(u8);
     void fmMapWrite();
     void fmMapWait();
-    void paneAlphaZoom2Map(short, unsigned char, unsigned char, int);
+    BOOL paneAlphaZoom2Map(s16, u8, u8, int);
     void fmZoomGridLv2Out();
     void fmZoomGridLv1Out();
     void fmEndWait();
     bool _open_wallPaper();
-    u8 getButtonIconMode();
+    int getButtonIconMode();
 
-public:
-    /* 0x0004 */ u8 padding_0x4[0x1C - 0x4];
-    /* 0x001C */ dDlst_FMAP_c mDlst;
-    /* 0x0020 */ J2DScreen* scrn;
+private:
+    /* 0x0004 */ u8 padding_0x4[0x18 - 0x4];
+    /* 0x0018 */ ResTIMG * mChkPntTxt_p;
+    /* 0x001C */ dDlst_FMAP_c fmapDl;
     /* 0x0024 */ dMenu_Fmap2_c mFmap2;
-    /* 0x2874 */ u8 padding_0x2874[0x2878 - 0x2874];
     /* 0x2878 */ dMenu_FmapSv_c* fmapSv;
-    /* 0x287C */ u8 padding_0x287C[0x50D0 - 0x287C];
+    /* 0x287C */ aramCmapDat_c mCmapDatPnt;
+    /* 0x2884 */ dDlst_2DOutFont_c* outFont;
+    /* 0x2888 */ dDlst_2DOutFont_c* outFont2;
+    /* 0x288C */ fopMsgM_pane_class mFddmPane;
+    /* 0x28C4 */ fopMsgM_pane_class mClPane;
+    /* 0x28FC */ fopMsgM_pane_class mCi22Pane;
+    /* 0x2934 */ fopMsgM_pane_class mCi21Pane;
+    /* 0x296C */ fopMsgM_pane_class mCi32Pane;
+    /* 0x29A4 */ fopMsgM_pane_class mCi31Pane;
+    /* 0x29DC */ fopMsgM_pane_class mGtixPanes[2];
+    /* 0x2A4C */ fopMsgM_pane_class mKk1xPanes[8];
+    /* 0x2C0C */ fopMsgM_pane_class mKk3xPanes[8];
+    /* 0x2DCC */ fopMsgM_pane_class mAreaPane;
+    /* 0x2E04 */ fopMsgM_pane_class mLnk1Pane;
+    /* 0x2E3C */ fopMsgM_pane_class mSpi1Pane;
+    /* 0x2E74 */ fopMsgM_pane_class mKkdmPane;
+    /* 0x2EAC */ fopMsgM_pane_class mSmskPane;
+    /* 0x2EE4 */ fopMsgM_pane_class mLnk2Pane;
+    /* 0x2F1C */ fopMsgM_pane_class mSpi2Pane;
+    /* 0x2F54 */ fopMsgM_pane_class mTsw1Pane;
+    /* 0x2F8C */ fopMsgM_pane_class mR01bPane;
+    /* 0x2FC4 */ fopMsgM_pane_class mStm1Pane;
+    /* 0x2FFC */ fopMsgM_pane_class mKtx1Pane;
+    /* 0x3034 */ fopMsgM_pane_class mKtx2Pane;
+    /* 0x306C */ fopMsgM_pane_class mClb2Pane;
+    /* 0x30A4 */ fopMsgM_pane_class mClbPane;
+    /* 0x30DC */ fopMsgM_pane_class mSc1xPanes[9];
+    /* 0x32D4 */ fopMsgM_pane_class mLnk3Pane;
+    /* 0x330C */ fopMsgM_pane_class mSpi3Pane;
+    /* 0x3344 */ fopMsgM_pane_class mStl1Pane;
+    /* 0x337C */ fopMsgM_pane_class mR01gPane;
+    /* 0x33B4 */ fopMsgM_pane_class mFmxxPanes[5];
+    /* 0x34CC */ fopMsgM_pane_class mFmnPanes[15];
+    /* 0x3814 */ fopMsgM_pane_class mClgPane;
+    /* 0x384C */ fopMsgM_pane_class mSc2xPanes[7];
+    /* 0x39D4 */ fopMsgM_pane_class mR0xPanes[DEMO_SELECT(10, 11)];
+    /* 0x3C3C */ fopMsgM_pane_class mStxxPanes[49];
+    /* 0x46F4 */ fopMsgM_pane_class mCk1xPanes[3];
+    /* 0x479C */ fopMsgM_pane_class mCk2xPanes[3];
+    /* 0x4844 */ fopMsgM_pane_class mCk3xPanes[2];
+    /* 0x48B4 */ fopMsgM_pane_class mKr0xPanes[8];
+    /* 0x4A74 */ fopMsgM_pane_class mWnd1Pane;
+    /* 0x4AAC */ fopMsgM_pane_class mWnd2Pane;
+    /* 0x4AE4 */ fopMsgM_pane_class mMr01Pane;
+    /* 0x4B1C */ fopMsgM_pane_class mAreaTxtPanes[3];
+    /* 0x4BC4 */ fopMsgM_pane_class mBt00Pane;
+    /* 0x4BFC */ fopMsgM_pane_class mBt01Pane;
+    /* 0x4C34 */ fopMsgM_pane_class mBt02Pane;
+    /* 0x4C6C */ fopMsgM_pane_class mWts1Pane;
+    /* 0x4CA4 */ fopMsgM_pane_class mCc01Pane;
+    /* 0x4CDC */ fopMsgM_pane_class mWt1Pane;
+    /* 0x4D14 */ fopMsgM_pane_class mWt0Pane;
+    /* 0x4D4C */ fopMsgM_pane_class mYs01Pane;
+    /* 0x4D84 */ fopMsgM_pane_class mYs00Pane;
+    /* 0x4DBC */ fopMsgM_pane_class mYsk0Pane;
+    /* 0x4DF4 */ fopMsgM_pane_class mYesPane;
+    /* 0x4E2C */ fopMsgM_pane_class mNo01Pane;
+    /* 0x4E64 */ fopMsgM_pane_class mNo00Pane;
+    /* 0x4E9C */ fopMsgM_pane_class mNok0Pane;
+    /* 0x4ED4 */ fopMsgM_pane_class mNoPane;
+    /* 0x4F0C */ fopMsgM_pane_class mCur1Pane;
+#if VERSION > VERSION_JPN
+    /* 0x4F44 */ fopMsgM_pane_class mGsPanes[7];
+#endif
+#if VERSION == VERSION_DEMO
+    u8 pad [0x340 + 8 + 0x38];
+#endif
+    /* 0x50CC */ STControl* stick;
     /* 0x50D0 */ JUTFont* mFont;
     /* 0x50D4 */ JUTFont* mRFont;
-    /* 0x50D8 */ u8 padding_0x50D8[0x5148 - 0x50D8];
-    /* 0x5148 */ char* name[2];
-    /* 0x5150 */ u8 padding_0x5150[0x5154 - 0x5150];
-    /* 0x5154 */ char* note[2];
-    /* 0x515C */ char* dummy[2];
-    /* 0x5164 */ u8 padding_0x5164[0x5194 - 0x5164];
-    /* 0x5194 */ JUtility::TColor color_0x5194;
-    /* 0x5198 */ JUtility::TColor color_0x5198;
-    /* 0x519C */ JUtility::TColor color_0x519C;
-    /* 0x51A0 */ JUtility::TColor color_0x51A0;
-    /* 0x51A4 */ JUtility::TColor color_0x51A4;
-    /* 0x51A8 */ JUtility::TColor color_0x51A8;
-    /* 0x51AC */ u8 padding_0x51AC[0x51B4 - 0x51AC];
+    /* 0x50D8 */ JPABaseEmitter* mWrapBackEmitter;
+    /* 0x50DC */ JPABaseEmitter* mWrapSpotEmitters[FMAP_WARP_COUNT];
+    /* 0x5100 */ u8 padding_0x5100[0x510C - 0x5100];
+    /* 0x510C */ bool mMapClose;
+    /* 0x510D */ u8 mSelCursorBufIdx;
+    /* 0x510E */ u8 mCursorBufIdx;
+    /* 0x510F */ u8 mPlayerPointTimer;
+    /* 0x5110 */ u8 mPlayerPointToggle;
+    /* 0x5111 */ s8 mCurChkPntNo;
+    /* 0x5112 */ s8 mPlayerChkPntNo;
+    /* 0x5113 */ u8 mMainProcIdx;
+    /* 0x5114 */ u8 mFmapProcIdx;
+    /* 0x5115 */ u8 mHikakuProcIdx;
+    /* 0x5116 */ s16 mFrameTimer;
+    /* 0x5118 */ s8 mGridX;
+    /* 0x5119 */ s8 mGridY;
+    /* 0x511A */ s8 mTargetGridX;
+    /* 0x511B */ s8 mTargetGridY;
+    /* 0x511C */ cXyz mPlayerPos;
+    /* 0x5128 */ cXyz mShipPos;
+    /* 0x5134 */ f32 mDispIslandPosX;
+    /* 0x5138 */ f32 mDispIslandPosY;
+    /* 0x513C */ bool mFullMapMode;
+    /* 0x513D */ u8 mSalvItmBufIdx;
+    /* 0x513E */ u8 mSalvItmTimer;
+    /* 0x513F */ bool mSalvItmChanging;
+    /* 0x5140 */ u8 mAreaTxtBufIdx;
+    /* 0x5141 */ u8 mAreaTxtTimer;
+    /* 0x5142 */ bool mAreaTxtChanging;
+    /* 0x5143 */ u8 mWarpAnimTimer;
+    /* 0x5144 */ u8 mWarpBlinkToggle;
+    /* 0x5145 */ u8 padding_0x5145[0x5148-0x5145];
+    /* 0x5148 */ char* mTxtName[3];
+    /* 0x5154 */ char* mTxtNote[2];
+    /* 0x515C */ char* mTxtDummy[2];
+    /* 0x5164 */ bool mWarpScrollGuard;
+    /* 0x5165 */ bool mWarpAnimActive;
+    /* 0x5166 */ u8 mBlackAlpha;
+    /* 0x5167 */ u8 mWhiteAlpha;
+    /* 0x5168 */ bool mMapSelectActive;
+    /* 0x5169 */ bool mZoomLocked;
+    /* 0x516A */ bool mInputDisabled;
+    /* 0x516B */ u8 mFmapMode;
+    /* 0x516C */ u8 mWarpProcIdx;
+    /* 0x516D */ u8 mWarpSubState;
+    /* 0x516E */ u8 padding_0x516E[0x5176-0x516E];
+    /* 0x5176 */ u8 mFrameCounter;
+    /* 0x5177 */ u8 mFishmanProcIdx;
+    /* 0x5178 */ u8 mFishmanTimer1;
+    /* 0x5179 */ u8 mFishmanTimer2;
+    /* 0x517A */ u8 mFishmanTimer3;
+    /* 0x517B */ u8 mCheckMarkTimer;
+    /* 0x517C */ u8 mCheckMarkToggle;
+    /* 0x517D */ u8 mKorokMarkTimer;
+    /* 0x517E */ u8 mKorokMarkToggle;
+    /* 0x517F */ bool mFishmanActive;
+    /* 0x5180 */ u8 mSalvagePntIdx;
+    /* 0x5181 */ u8 mButtonIconMode;
+    /* 0x5182 */ bool mDspLargeMapLink;
+    /* 0x5183 */ bool mDspHugeMapLink;
+    /* 0x5184 */ bool mDspLargeMapShip;
+    /* 0x5185 */ bool mDspHugeMapShip;
+    /* 0x5186 */ bool mShipOpenWater;
+    /* 0x5187 */ u8 padding_0x5187[0x518C-0x5187];
+    /* 0x518C */ char* mpKtx1String;
+    /* 0x5190 */ char* mpKtx2String;
+    /* 0x5194 */ JUtility::TColor mCk1Color1;
+    /* 0x5198 */ JUtility::TColor mCk1Color2;
+    /* 0x519C */ JUtility::TColor mKr0Color1;
+    /* 0x51A0 */ JUtility::TColor mKr0Color2;
+    /* 0x51A4 */ JUtility::TColor mYs01Color1;
+    /* 0x51A8 */ JUtility::TColor mYs01Color2;
+#if VERSION > VERSION_JPN
+    /* 0x51AC */ bool mMoonAlphaActive;
+    /* 0x51AD */ bool mMoonAlphaState1;
+    /* 0x51AE */ bool mMoonAlphaState2;
+    /* 0x51AF */ u8 mMoonAlphaTimer;
+    /* 0x51B0 */ u8 mMoonAlphaToggle;
+    /* 0x51B1 */ u8 padding_0x51B1[0x51B4-0x51B1];
+#endif
 }; // Size: 0x51B4
 
-STATIC_ASSERT(sizeof(dMenu_Fmap_c) == 0x51B4);
-
-class dMf_HIO_c {
+class dMf_HIO_c : public JORReflexible {
 public:
     dMf_HIO_c();
+    virtual ~dMf_HIO_c() {}
+
+    void genMessage(JORMContext* ctx) { UNUSED(ctx); }
+
+public:
+    /* 0x004 */ s8 mNo;
+    /* 0x005 */ u8 field_0x05;
+    /* 0x006 */ u8 field_0x06;
+    /* 0x007 */ u8 field_0x07;
+    /* 0x008 */ u8 field_0x08;
+    /* 0x009 */ GXColor mWindArrowColor1;
+    /* 0x00D */ GXColor mWindArrowColor2;
+    /* 0x011 */ u8 padding_0x11[0x12 - 0x11];
+    /* 0x012 */ s16 mWindArrowPivotX;
+    /* 0x014 */ s16 mWindArrowPivotY;
+    /* 0x016 */ GXColor mPlayerPointWhite1;
+    /* 0x01A */ GXColor mPlayerPointWhite2;
+    /* 0x01E */ GXColor mPlayerPointBlack1;
+    /* 0x022 */ GXColor mPlayerPointBlack2;
+    /* 0x026 */ s16 mWindArrowPeriod;
+    /* 0x028 */ s16 mPlayerPointTimer;
+    /* 0x02A */ s16 mWindArrowHold1;
+    /* 0x02C */ s16 mWindArrowHold2;
+    /* 0x02E */ u8 mZoomAnimFrame;
+    /* 0x02F */ u8 mZoom2AnimFrame;
+    /* 0x030 */ u8 mZoomOutDelay;
+    /* 0x031 */ u8 mAreaTxtChangeFrame;
+    /* 0x032 */ u8 mAreaTxtAlphaFrame;
+    /* 0x033 */ u8 mOpenDelay;
+    /* 0x034 */ u8 mBaseAnimFrame;
+    /* 0x035 */ u8 padding_0x35[0x36 - 0x35];
+    /* 0x036 */ s16 mOpenPosY;
+    /* 0x038 */ s16 mClosePosY;
+    /* 0x03A */ u8 mCursorFlashFrame;
+    /* 0x03B */ u8 mSelCursorAlphaFrame;
+    /* 0x03C */ u8 mZoomMapDelay;
+    /* 0x03D */ u8 field_0x3D;
+    /* 0x03E */ u8 mWarpMsgBackAlphaFrame;
+    /* 0x03F */ u8 mWarpMsgBackInDelay;
+    /* 0x040 */ u8 mWarpMsgBackOutDelay;
+    /* 0x041 */ u8 mWarpMsgAnimFrame;
+    /* 0x042 */ u8 mWarpMsgDelay;
+    /* 0x043 */ u8 field_0x43;
+    /* 0x044 */ s16 mWarpMsgPosY;
+    /* 0x046 */ u8 mWarpYesNoAnimFrame;
+    /* 0x047 */ u8 field_0x47;
+    /* 0x048 */ u8 field_0x48;
+    /* 0x049 */ u8 mWarpNoDelay;
+    /* 0x04A */ s16 mWarpYesNoPosY;
+    /* 0x04C */ u8 mWarpCursorBlinkFrame;
+    /* 0x04D */ u8 mWarpCursorAlphaMin;
+    /* 0x04E */ u8 mWarpCursorAlphaMax;
+    /* 0x04F */ u8 padding_0x4F[0x50 - 0x4F];
+    /* 0x050 */ f32 mWarpSpotPosX[FMAP_WARP_COUNT];
+    /* 0x074 */ f32 mWarpSpotPosY[FMAP_WARP_COUNT];
+    /* 0x098 */ f32 mWarpSpotScaleSel;
+    /* 0x09C */ f32 mWarpSpotScale;
+    /* 0x0A0 */ f32 field_0xA0;
+    /* 0x0A4 */ f32 field_0xA4;
+    /* 0x0A8 */ f32 field_0xA8;
+    /* 0x0AC */ f32 field_0xAC;
+    /* 0x0B0 */ f32 field_0xB0;
+    /* 0x0B4 */ f32 field_0xB4;
+    /* 0x0B8 */ f32 field_0xB8;
+    /* 0x0BC */ f32 field_0xBC;
+    /* 0x0C0 */ f32 field_0xC0;
+    /* 0x0C4 */ f32 field_0xC4;
+    /* 0x0C8 */ f32 field_0xC8;
+    /* 0x0CC */ f32 field_0xCC;
+    /* 0x0D0 */ f32 field_0xD0;
+    /* 0x0D4 */ f32 field_0xD4;
+    /* 0x0D8 */ f32 field_0xD8;
+    /* 0x0DC */ f32 field_0xDC;
+    /* 0x0E0 */ u8 mCheckMarkAnimFrame;
+    /* 0x0E1 */ GXColor mCheckMarkWhite;
+    /* 0x0E5 */ GXColor mCheckMarkBlack;
+    /* 0x0E9 */ u8 mKorokMarkAnimFrame;
+    /* 0x0EA */ GXColor mKorokMarkAnimWhite;
+    /* 0x0EE */ GXColor mKorokMarkAnimBlack;
+    /* 0x0F2 */ u8 field_0xF2;
+    /* 0x0F3 */ GXColor mKorokMarkWhite;
+    /* 0x0F7 */ GXColor mKorokMarkBlack;
+    /* 0x0FB */ u8 field_0xFB;
+    /* 0x0FC */ GXColor mAreaTxtColor;
+    /* 0x100 */ GXColor mAreaTxtColorMain;
+    /* 0x104 */ u8 field_0x104;
+    /* 0x105 */ u8 field_0x105;
+    /* 0x106 */ u8 field_0x106;
+    /* 0x107 */ u8 mWarpBackColorCycle;
+    /* 0x108 */ GXColor mWarpBackColor1;
+    /* 0x10C */ GXColor mWarpBackColor2;
+    /* 0x110 */ u8 mFishmanOpenFrame;
+    /* 0x111 */ u8 mFishmanZoom1Frame;
+    /* 0x112 */ u8 field_0x112;
+    /* 0x113 */ u8 mFishmanZoom1OutFrame;
+    /* 0x114 */ u8 mFishmanZoom2Frame;
+    /* 0x115 */ u8 mFishmanZoom2AlphaFrame;
+    /* 0x116 */ u8 mFishmanMapWriteWait;
+    /* 0x117 */ u8 mFishmanMapWriteFrame;
+    /* 0x118 */ u8 mFishmanBlinkFrame;
+    /* 0x119 */ u8 mFishmanDispWait;
+    /* 0x11A */ u8 mFishmanCloseWait;
+    /* 0x11B */ u8 mFishmanCloseFrame;
+#if VERSION > VERSION_JPN
+    /* 0x11C */ u8 mMoonAlphaFrame;
+    /* 0x11D */ u8 mMoonAlphaMax;
+    /* 0x11E */ u8 mMoonAlphaMin;
+    /* 0x11F */ u8 padding_0x11F[0x120 - 0x11F];
+#endif
 };
+
+extern dMf_HIO_c g_mfHIO;
 
 #endif /* D_MENU_FMAP_H */

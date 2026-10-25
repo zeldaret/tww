@@ -42,10 +42,12 @@ enum dRes_ID_KP {
 
 enum LT_01_JNT {
     LT_01_JNT_LETTER1_e=0x0,
+    LT_01_NUM_JNTS_e=0x1,
 };
 
 enum LT_02_JNT {
     LT_02_JNT_LETTER1_e=0x0,
+    LT_02_NUM_JNTS_e=0x1,
 };
 
 enum KP_JNT {
@@ -68,6 +70,7 @@ enum KP_JNT {
     KP_JNT_WAIST_e=0x10,
     KP_JNT_FOOT_e=0x11,
     KP_JNT_TRAIN_e=0x12,
+    KP_NUM_JNTS_e=0x13,
 };
 
 #endif /* RES_KP_H */

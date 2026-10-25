@@ -140,8 +140,7 @@ BOOL daRaceItem_c::execute() {
         case 0: {
             checkGet();
 
-            s16 spin = 0xFFFF / daItemBase_c::m_data.mRotateYSpeed;
-            fopAcM_addAngleY(this, current.angle.y + spin, spin);
+            RotateBase();
             mCyl.SetC(current.pos);
             dComIfG_Ccsp()->Set(&mCyl);
 

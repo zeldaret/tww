@@ -156,16 +156,15 @@ void Bgc_c::wrt_pos(const cXyz& pos) {
 
 /* 00000474-00000748       .text wall_pos__Q212daObjMovebox5Bgc_cFPCQ212daObjMovebox5Act_cPCQ212daObjMovebox8BgcSrc_cisf */
 void Bgc_c::wall_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCount, s16 param_4, f32 param_5) {
-    s16 angle;
     cXyz startPos;
     cXyz endPos;
     cXyz temp_2c;
     cXyz temp_20;
     
-    angle = movebox->home.angle.y + param_4;
+    const s16 angle = movebox->home.angle.y + param_4;
     mWallIdx = -1;
     mNearestWallDist = FLOAT_MAX;
-    mDoMtx_stack_c::YrotS((s16)angle);
+    mDoMtx_stack_c::YrotS(angle);
     mDoMtx_stack_c::XrotM(0x4000);
     mDoMtx_stack_c::multVec(&cXyz::BaseY, &temp_20);
     temp_20 *= param_5 + movebox->attr()->mScaleXZ * 0.5f;
@@ -174,7 +173,7 @@ void Bgc_c::wall_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCou
         mDoMtx_stack_c::XrotS(0x4000);
         cXyz temp_14(bgcSrc->m0C, 0.0f, bgcSrc->m08);
         mDoMtx_stack_c::multVec(&temp_14, &temp_2c);
-        mDoMtx_stack_c::YrotS((s16)angle);
+        mDoMtx_stack_c::YrotS(angle);
         mDoMtx_stack_c::transM(temp_2c);
         mDoMtx_stack_c::scaleM(movebox->attr()->mScaleXZ, movebox->attr()->mScaleY, movebox->attr()->mScaleXZ);
         mDoMtx_stack_c::transM(0.0f, 0.5f, 0.0f);
@@ -253,8 +252,8 @@ bool Bgc_c::chk_wall_touch(const Act_c* movebox, const BgcSrc_c* bgcSrc, s16 dir
     cXyz temp_20;
     cXyz direction;
     
-    s16 angle = movebox->home.angle.y + dirAngle;
-    mDoMtx_stack_c::YrotS((s16)angle);
+    const s16 angle = movebox->home.angle.y + dirAngle;
+    mDoMtx_stack_c::YrotS(angle);
     mDoMtx_stack_c::XrotM(0x4000);
     offset.set(bgcSrc->m0C, 0.0f, bgcSrc->m08);
     mDoMtx_stack_c::multVec(&cXyz::BaseY, &direction);
@@ -263,7 +262,7 @@ bool Bgc_c::chk_wall_touch(const Act_c* movebox, const BgcSrc_c* bgcSrc, s16 dir
     mDoMtx_stack_c::XrotM(0x4000);
     offset.set(bgcSrc->m0C, 0.0f, bgcSrc->m08);
     mDoMtx_stack_c::multVec(&offset, &temp_20);
-    mDoMtx_stack_c::YrotS((s16)angle);
+    mDoMtx_stack_c::YrotS(angle);
     mDoMtx_stack_c::transM(temp_20);
     mDoMtx_stack_c::scaleM(movebox->attr()->mScaleXZ, movebox->attr()->mScaleY, movebox->attr()->mScaleXZ);
     mDoMtx_stack_c::transM(0.0f, 0.5f, 0.0f);
@@ -1134,15 +1133,7 @@ void Act_c::path_init() {
         int swSave2 = prmZ_get_swSave2();
         
         bool isMoved1 = is_switch1();
-        
-        u32 isMoved2 = false;
-        if (swSave2 == 0xFF) {
-            isMoved2 = false;
-        } else {
-            isMoved2 = is_switch2() ? true : false;
-        }
-        // TODO: is this a fakematch? why the extra conversion to bool here?
-        isMoved2 = isMoved2 ? true : false;
+        bool isMoved2 = swSave2 == 0xFF ? false : is_switch2();
         
         int pntIdx = 0;
         if (isMoved1) {
@@ -1448,7 +1439,7 @@ int Act_c::check_to_walk() {
             }
         }
         
-        for (int i = 0; i < (int)ARRAY_SIZE(mMomentCnt); i++) {
+        for (int i = 0; i < ARRAY_SSIZE(mMomentCnt); i++) {
             if (mMomentCnt[i] >= r0) {
                 const BgcSrc_c* bgcSrc = attr()->m9A ? Bgc_c::M_lin20 : Bgc_c::M_lin5;
                 int bgcSrcCount = attr()->m9A ? (mType == TYPE_MIRROR ? ARRAY_SIZE(mBgc.M_lin20) : ARRAY_SIZE(mBgc.M_lin20)-2) : ARRAY_SIZE(mBgc.M_lin5);
@@ -1508,7 +1499,7 @@ void Act_c::eff_set_slip_smoke_pos() {
     mDoMtx_stack_c::transM(0.0f, 0.0f, 10.0f);
     mDoMtx_stack_c::scaleM(scaleMag, scaleMag, scaleMag);
     
-    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeCbs); i++) {
         mDoMtx_stack_c::multVec(&base_pos[i], &mSmokeCbs[i].field_0x20);
         mSmokeCbs[i].field_0x2C.set(0, angle, 0);
     }
@@ -1520,7 +1511,7 @@ void Act_c::eff_smoke_slip_start() {
     
     eff_set_slip_smoke_pos();
     
-    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeCbs); i++) {
         JPABaseEmitter* emitter = dComIfGp_particle_setToon(
             dPa_name::ID_AK_JT_ELEMENTSMOKE00, &mSmokeCbs[i].field_0x20, &mSmokeCbs[i].field_0x2C,
             &scl, 0xB9, &mSmokeCbs[i], fopAcM_GetRoomNo(this)
@@ -1536,14 +1527,14 @@ void Act_c::eff_smoke_slip_start() {
 
 /* 00002A14-00002A74       .text eff_smoke_slip_end__Q212daObjMovebox5Act_cFv */
 void Act_c::eff_smoke_slip_end() {
-    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeCbs); i++) {
         mSmokeCbs[i].remove();
     }
 }
 
 /* 00002A74-00002AD4       .text eff_smoke_slip_remove__Q212daObjMovebox5Act_cFv */
 void Act_c::eff_smoke_slip_remove() {
-    for (int i = 0; i < (int)ARRAY_SIZE(mSmokeCbs); i++) {
+    for (int i = 0; i < ARRAY_SSIZE(mSmokeCbs); i++) {
         mSmokeCbs[i].remove();
     }
 }
@@ -1880,8 +1871,8 @@ BOOL Act_c::Draw() {
 BOOL Act_c::Delete() {
     eff_smoke_slip_remove();
     if (mpBgW) {
-        mpBgW->mpRideCb = NULL;
-        mpBgW->mpPushPullCb = NULL;
+        mpBgW->SetRideCallback(NULL);
+        mpBgW->SetPushPullCallback(NULL);
     }
     return TRUE;
 }

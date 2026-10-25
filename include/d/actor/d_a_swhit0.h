@@ -12,7 +12,7 @@ public:
         
     }
 
-    inline s32 draw();
+    inline BOOL draw();
     inline BOOL execute();
 
     s32 getSwNo();

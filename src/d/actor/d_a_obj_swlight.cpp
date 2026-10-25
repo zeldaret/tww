@@ -71,7 +71,7 @@ bool Act_c::create_heap() {
         modelData->getJointNodePointer(MSUSW_JNT_AFTER_FIRE2_e)->setCallBack(jnodeCB_moon);
         modelData->getJointNodePointer(MSUSW_JNT_BEFORE_FACE_e)->setCallBack(jnodeCB_moon);
         modelData->getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->setCallBack(jnodeCB_moon);
-        m298->setUserArea((u32)this);
+        m298->setUserArea((uintptr_t)this);
     }
 
     J3DAnmTextureSRTKey* btk = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_MMIRROR_BTK_MSUSW_e));
@@ -427,8 +427,8 @@ void setMaterial_Before_mirror(J3DMaterial* material, u8 arg2) {
         } else {
             material->getShape()->show();
             material->setMaterialMode(4);
-            material->mPEBlock->getZMode()->setUpdateEnable(0);
-            material->mPEBlock->getBlend()->setType(GX_BM_BLEND);
+            material->getZMode()->setUpdateEnable(0);
+            material->getBlend()->setType(GX_BM_BLEND);
             material->getTevKColor(3)->mColor.a = arg2;
         }
 
@@ -456,7 +456,7 @@ bool Act_c::_draw() {
     pJVar1 = 0xff - pJVar1;
 
     setMaterial(pJVar5->getJointNodePointer(MSUSW_JNT_BEFORE_FACE_e)->getMesh(), pJVar1);
-    setMaterial_Before_mirror(pJVar5->getJointTree().getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->getMesh(), pJVar1);
+    setMaterial_Before_mirror(pJVar5->getJointNodePointer(MSUSW_JNT_BEFORE_MIRROR_e)->getMesh(), pJVar1);
     mDoExt_modelUpdateDL(m298);
 
     dComIfGd_setList();

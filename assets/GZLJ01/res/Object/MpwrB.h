@@ -22,6 +22,7 @@ enum dRes_ID_MPWRB {
 
 enum MPWRB_JNT {
     MPWRB_JNT_MPWRB_e=0x0,
+    MPWRB_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MPWRB_H */

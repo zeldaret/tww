@@ -1,6 +1,6 @@
 /**
  * d_a_kui.cpp
- * Object - Grappling Hook objects
+ * Object - Hookable posts for the Grappling Hook
  */
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
@@ -17,8 +17,6 @@
 #include "f_op/f_op_actor_mng.h"
 #include "f_pc/f_pc_executor.h"
 #include "JSystem/JUtility/JUTReport.h"
-
-class J3DModelData;
 
 /* 00000078-000000C4       .text s_a_i_sub__FPvPv */
 static void* s_a_i_sub(void* search, void*) {
@@ -428,7 +426,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
             return FALSE;
         }
     } else {
-        // Rope
+        // Wooden post
         modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_OBI_ROPETAG_e);
         JUT_ASSERT(DEMO_SELECT(860, 875), modelData != NULL);
 
@@ -438,7 +436,7 @@ static BOOL daKui_CreateHeap(fopAc_ac_c* a_this) {
         }
 
         if (i_this->type == 2 || i_this->type == 4) {
-            // Rope swing attachment
+            // Device that holds the post
             modelData = (J3DModelData*)dComIfG_getObjectRes("Kui", dRes_INDEX_KUI_BDL_MROPESW_e);
             JUT_ASSERT(DEMO_SELECT(872, 887), modelData != NULL);
 

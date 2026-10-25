@@ -26,10 +26,12 @@ enum dRes_ID_MKANOKE {
 
 enum MOKE1_JNT {
     MOKE1_JNT_MOKE1_e=0x0,
+    MOKE1_NUM_JNTS_e=0x1,
 };
 
 enum MOKE2_JNT {
     MOKE2_JNT_MOKE2_e=0x0,
+    MOKE2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MKANOKE_H */

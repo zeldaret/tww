@@ -18,7 +18,7 @@ CompileFlags:
   ]
 ---
 If:
-  PathMatch: src/PowerPC_EABI_Support/MSL/MSL_C\+\+/.*\.h
+  PathMatch: src/PowerPC_EABI_Support/MSL/MSL_C\+\+/.*
 CompileFlags:
   Add: ["--language=c++", "--std=c++98"]
 ---
