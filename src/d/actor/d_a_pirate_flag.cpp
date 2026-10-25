@@ -242,8 +242,8 @@ void daPirate_Flag_packet_c::draw() {
     GXSetTevColor(GX_TEVREG2, mTevStr->mColorK1);
     GXCallDisplayList(l_pirate_flag_matDL, sizeof(l_pirate_flag_matDL) - 0x14);
 
-    GXLoadPosMtxImm(getMtx(), GX_PNMTX0);
-    GXLoadNrmMtxImm(getMtx(), GX_PNMTX0);
+    GXLoadPosMtxImm(mMtx, GX_PNMTX0);
+    GXLoadNrmMtxImm(mMtx, GX_PNMTX0);
     GXSetCullMode(GX_CULL_BACK);
     GXCallDisplayList(l_pirate_flag_DL, sizeof(l_pirate_flag_DL) - 0x04);
 
@@ -277,7 +277,7 @@ static BOOL daPirate_Flag_Draw(pirate_flag_class* i_this) {
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mPacket.getMtx());
     i_this->mPacket.setTevStr(&i_this->tevStr);
 
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&i_this->mPacket, 0);
     if (l_HIO.m05 != 0) {
         s16 tmp_r29 = i_this->current.angle.y;
 

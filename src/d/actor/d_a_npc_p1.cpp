@@ -590,7 +590,7 @@ BOOL daNpc_P1_c::speakAction(void*) {
                 setAction(&daNpc_P1_c::normalAction, NULL, 0);
                 if (mPrevMesg == 0xFA4) {
                     dComIfGp_event_reset();
-                    fopAcM_orderOtherEvent2(this, "sea_exp_cam", dEvtFlag_NOPARTNER_e);
+                    fopAcM_orderOtherEvent(this, "sea_exp_cam");
                     eventInfo.onCondition(dEvtCnd_UNK2_e);
                     setAction(&daNpc_P1_c::explainAction, NULL, 0);
                 } else {
@@ -941,8 +941,8 @@ static BOOL nodeCallBack1(J3DNode* i_node, int i_param_2) {
             MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             if (jntNo == i_this->m_jnt.getHeadJntNum()) {
                 cXyz local_28(REG10_F(0), REG10_F(1), REG10_F(2));
-                cMtx_YrotM(*calc_mtx, -i_this->m_jnt.getHead_y() - i_this->mHeadAnm.field_0x02);
-                cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x() - i_this->mHeadAnm.field_0x00);
+                cMtx_YrotM(*calc_mtx, -i_this->m_jnt.getHead_y() - i_this->mHeadAnm.field_0x00.y);
+                cMtx_ZrotM(*calc_mtx, -i_this->m_jnt.getHead_x() - i_this->mHeadAnm.field_0x00.x);
                 MtxPosition(&local_28, &i_this->eyePos);
             }
             if (jntNo == i_this->m_jnt.getBackboneJntNum()) {
@@ -1159,7 +1159,7 @@ BOOL daNpc_P1_c::CreateHeap() {
             model_data_p->getJointNodePointer(i)->setCallBack(nodeCallBack1);
         }
     }
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 0.0f);
     mObjAcch.Set(
         fopAcM_GetPosition_p(this),
@@ -1200,7 +1200,7 @@ fpc_ProcID daNpc_P1_c::getKajiID() {
     fpc_ProcID parent_id = parentActorID;
     if (parent_id != fpcM_ERROR_PROCESS_ID_e) {
         fopAc_ac_c* actor = fopAcM_SearchByID(parent_id);
-        if (fopAc_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Pirateship_e) {
+        if (fopAcM_IsActor(actor) && fopAcM_GetName(actor) == fpcNm_Obj_Pirateship_e) {
             kaji_id = ((daObjPirateship::Act_c*)actor)->getKajiID();
         }
     }
@@ -1231,7 +1231,7 @@ BOOL daNpc_P1_c::kaji_anm() {
         }
         if (mKajiId != fpcM_ERROR_PROCESS_ID_e) {
             fopAc_ac_c* kaji = fopAcM_SearchByID(mKajiId);
-            if (fopAc_IsActor(kaji) && fopAcM_GetName(kaji) == fpcNm_Kaji_e) {
+            if (fopAcM_IsActor(kaji) && fopAcM_GetName(kaji) == fpcNm_Kaji_e) {
                 ((daKaji_c*)kaji)->setAnm(mAnmNum - 9, mpMorf->getFrame());
             }
         }

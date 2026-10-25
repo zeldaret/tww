@@ -145,7 +145,7 @@ void TAdaptor_particle::TVVOOn_BEGIN_FADE_IN_::operator()(f32 value, JStudio::TA
     if (adaptor_particle->mEmitter) {
         adaptor_particle->mEmitterManager->forceDeleteEmitter(adaptor_particle->mEmitter);
     }
-    JGeometry::TVec3<f32> pos = (Vec){0.0f, 0.0f, 0.0f};
+    JGeometry::TVec3<f32> pos = COMPOUND_LITERAL(Vec){0.0f, 0.0f, 0.0f};
     adaptor_particle->mEmitter = adaptor_particle->mEmitterManager->createSimpleEmitterID(
         pos,
         (temp & 0x0000FFFF),

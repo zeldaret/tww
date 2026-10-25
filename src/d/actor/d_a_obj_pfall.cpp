@@ -143,7 +143,7 @@ BOOL daObj_Pfall_c::CreateHeap() {
     if(mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     set_mtx();
     mpMorf->calc();
     mpBgW = new dBgW();

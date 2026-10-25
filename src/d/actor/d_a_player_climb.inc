@@ -323,31 +323,29 @@ BOOL daPy_lk_c::procClimbDownStart() {
 
 /* 80136A34-80136B80       .text procClimbMoveUpDown_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procClimbMoveUpDown_init(int param_0) {
-    daPy_ANM dVar2;
-    float dVar3;
-
-    dVar3 = getLadderMoveAnmSpeed();
+    f32 anm_speed = getLadderMoveAnmSpeed();
     commonProcInit(daPyProc_CLIMB_MOVE_UP_DOWN_e);
     current.angle.y = shape_angle.y;
     if (mDirection == DIR_BACKWARD) {
-        dVar3 *= -1.0f;
+        anm_speed *= -1.0f;
     }
+    daPy_ANM anm;
     if (param_0 != 0) {
         mProcVar6.m3570 = 0;
         if (mDirection == DIR_FORWARD) {
-            dVar2 = ANM_LADDERLTOR;
+            anm = ANM_LADDERLTOR;
         } else {
-            dVar2 = ANM_LADDERRTOL;
+            anm = ANM_LADDERRTOL;
         }
     } else {
         mProcVar6.m3570 = 1;
         if (mDirection == DIR_FORWARD) {
-            dVar2 = ANM_LADDERRTOL;
+            anm = ANM_LADDERRTOL;
         } else {
-            dVar2 = ANM_LADDERLTOR;
+            anm = ANM_LADDERLTOR;
         }
     }
-    setSingleMoveAnime(dVar2, dVar3, 0.0f, -1, m_HIO->mLadder.m.field_0x2C);
+    setSingleMoveAnime(anm, anm_speed, 0.0f, -1, m_HIO->mLadder.m.field_0x2C);
     if (mDirection == DIR_FORWARD) {
         setTextureAnime(10, 0);
     } else {
@@ -394,27 +392,25 @@ BOOL daPy_lk_c::procClimbMoveUpDown() {
 
 /* 80136C7C-80136E28       .text procClimbMoveSide_init__9daPy_lk_cFi */
 BOOL daPy_lk_c::procClimbMoveSide_init(int param_0) {
-    daPy_ANM dVar2;
-    float dVar4;
-
-    dVar4 = getClimbMoveAnmSpeed();
+    f32 dVar4 = getClimbMoveAnmSpeed();
     commonProcInit(daPyProc_CLIMB_MOVE_SIDE_e);
     mProcVar2.m34D4 = m34E8 - shape_angle.y;
     m34C2 = 7;
     mProcVar6.m3570 = param_0;
+    daPy_ANM anm;
     if (param_0 != 0) {
-        dVar2 = ANM_FCLIMBSLIDELUP;
+        anm = ANM_FCLIMBSLIDELUP;
         if (mDirection == DIR_RIGHT) {
             dVar4 *= -1.0f;
         }
     } else {
-        dVar2 = ANM_FCLIMBSLIDERUP;
+        anm = ANM_FCLIMBSLIDERUP;
         if (mDirection == DIR_LEFT) {
             dVar4 *= -1.0f;
         }
     }
     setSingleMoveAnime(
-        dVar2,
+        anm,
         dVar4,
         m_HIO->mLadder.m.field_0x38,
         m_HIO->mLadder.m.field_0x0,

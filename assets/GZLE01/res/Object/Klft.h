@@ -30,6 +30,7 @@ enum LIFT_00_JNT {
     LIFT_00_JNT_LIFT_00_e=0x0,
     LIFT_00_JNT_POLYSURFACE38_e=0x1,
     LIFT_00_JNT_POLYSURFACE39_e=0x2,
+    LIFT_00_NUM_JNTS_e=0x3,
 };
 
 enum VPBOT_00_JNT {
@@ -37,6 +38,7 @@ enum VPBOT_00_JNT {
     VPBOT_00_JNT_A00_e=0x1,
     VPBOT_00_JNT_DAI_e=0x2,
     VPBOT_00_JNT_KAITEN_e=0x3,
+    VPBOT_00_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_KLFT_H */

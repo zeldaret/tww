@@ -61,7 +61,7 @@ void daShopItem_c::CreateInit() {
         mTevType = TEV_TYPE_BG1_PLIGHT;
     }
 
-    mpModel->setUserArea(0);
+    mpModel->setUserArea(NULL);
 }
 
 /* 00000240-000003BC       .text clothCreate__12daShopItem_cFv */

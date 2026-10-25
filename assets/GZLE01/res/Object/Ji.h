@@ -178,15 +178,18 @@ enum JI_JNT {
     JI_JNT_NUNO2_e=0x1E,
     JI_JNT_NUNO3_e=0x1F,
     JI_JNT_WAISTEND_e=0x20,
+    JI_NUM_JNTS_e=0x21,
 };
 
 enum JI_YARI_JNT {
     JI_YARI_JNT_YARI_LOC_e=0x0,
     JI_YARI_JNT_JI_YARI_e=0x1,
+    JI_YARI_NUM_JNTS_e=0x2,
 };
 
 enum YJITR00_JNT {
     YJITR00_JNT_JI_TEAR_e=0x0,
+    YJITR00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_JI_H */

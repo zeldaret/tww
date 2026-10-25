@@ -3,9 +3,9 @@
 
 #include "f_op/f_op_actor.h"
 
-class andsw0_class : public fopAc_ac_c {
-public:
-    /* 0x290 */ u32 _pad[2];
+struct andsw0_class {
+    /* 0x000 */ fopAc_ac_c actor;
+    /* 0x290 */ request_of_phase_process_class mPhase; // Unused
     /* 0x298 */ s8 mAction;
     /* 0x299 */ u8 mNumSwitchesToCheck;
     /* 0x29A */ u8 mBehaviorType;

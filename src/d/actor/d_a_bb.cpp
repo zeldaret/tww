@@ -370,7 +370,7 @@ static void* s_a_d_sub(void* ac1, void* ac2) {
     cXyz sp14;
     cXyz sp8;
 
-    if (esa_check_count < 100 && fopAc_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_ESA_e) {
+    if (esa_check_count < 100 && fopAcM_IsActor(ac1) && fpcM_GetName(ac1) == fpcNm_ESA_e) {
         esa_class* esa1 = (esa_class*)ac1;
         esa_class* esa2 = (esa_class*)ac2;
 
@@ -1246,7 +1246,7 @@ void bb_water_check(bb_class* i_this) {
 
 /* 00004000-0000404C       .text pl_name_check__FPvPv */
 void* pl_name_check(void* ac1, void* ac2) {
-    if (fopAc_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_NPC_KAM_e) {
+    if (fopAcM_IsActor(ac1) && fopAcM_GetName(ac1) == fpcNm_NPC_KAM_e) {
         return ac1;
     }
     return NULL;
@@ -2720,7 +2720,7 @@ static cPhs_State daBb_Create(fopAc_ac_c* a_this) {
             }
         }
 
-        model->setUserArea(reinterpret_cast<u32>(i_this));
+        model->setUserArea(reinterpret_cast<uintptr_t>(i_this));
 
         if (i_this->unk_2DA != 0xFF) {
             i_this->ppd = dPath_GetRoomPath(i_this->unk_2DA, fopAcM_GetRoomNo(a_this));

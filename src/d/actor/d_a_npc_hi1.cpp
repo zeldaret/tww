@@ -427,20 +427,20 @@ void daNpc_Hi1_c::eventOrder() {
             fopAcM_orderSpeakEvent(this);
         }
     } else if(field_0x7C1 >= 3) {
-        mEventIdx[1] = field_0x7C1 - 3;
-        fopAcM_orderOtherEventId(this, mEventIdx[mEventIdx[1]]);
+        field_0x796 = field_0x7C1 - 3;
+        fopAcM_orderOtherEventId(this, mEventIdx[field_0x796]);
     }
 }
 
 /* 00000EB0-00000F64       .text checkOrder__11daNpc_Hi1_cFv */
 void daNpc_Hi1_c::checkOrder() {
     if(eventInfo.checkCommandDemoAccrpt()) {
-        if(dComIfGp_evmng_startCheck(mEventIdx[mEventIdx[1]]) && field_0x7C1 >= 3) {
+        if(dComIfGp_evmng_startCheck(mEventIdx[field_0x796]) && field_0x7C1 >= 3) {
             field_0x7C1 = 0;
             field_0x7BC = 0xff;
             field_0x7BD = 0xff;
         }
-    } else if(eventInfo.mCommand == dEvtCmd_INTALK_e && (field_0x7C1 == 1 || field_0x7C1 == 2)) {
+    } else if(eventInfo.checkCommandTalk() && (field_0x7C1 == 1 || field_0x7C1 == 2)) {
         field_0x7C1 = 0;
         field_0x7B7 = true;
     }
@@ -615,7 +615,7 @@ int daNpc_Hi1_c::isEventEntry() {
 
 /* 000014B0-00001534       .text event_proc__11daNpc_Hi1_cFi */
 void daNpc_Hi1_c::event_proc(int i_staffIdx) {    
-    if(dComIfGp_evmng_endCheck(mEventIdx[mEventIdx[1]])) {
+    if(dComIfGp_evmng_endCheck(mEventIdx[field_0x796])) {
         endEvent();
     } else {
         if(!mEventCut.cutProc()) {
@@ -840,7 +840,6 @@ BOOL daNpc_Hi1_c::_draw() {
     mBtpAnm.remove(modelData);
     shadowDraw();
     return TRUE;
-    /* Nonmatching */
 }
 
 /* 00001CB4-00001EDC       .text _execute__11daNpc_Hi1_cFv */
@@ -975,14 +974,15 @@ BOOL daNpc_Hi1_c::bodyCreateHeap() {
         mpMorf = NULL;
         return FALSE;
     }
+
     m_hed_jnt_num = a_mdl_dat->getJointName()->getIndex("head");
     JUT_ASSERT(DEMO_SELECT(1489, 1487), m_hed_jnt_num >= 0);
     m_bbone_jnt_num = a_mdl_dat->getJointName()->getIndex("backbone1");
     JUT_ASSERT(DEMO_SELECT(1491, 1489), m_bbone_jnt_num >= 0);
 
-    mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num & 0xffff)->setCallBack(nodeCB_Head);
-    mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num & 0xffff)->setCallBack(nodeCB_BackBone);
-    mpMorf->getModel()->setUserArea((u32)(this));
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_hed_jnt_num)->setCallBack(nodeCB_Head);
+    mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
 
     return TRUE;
 }

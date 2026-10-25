@@ -112,7 +112,7 @@ void daArrow_c::_atHit(dCcD_GObjInf* thisObjInf, fopAc_ac_c* hitActor, dCcD_GObj
     if (!hitActor) {
         return;
     }
-    if (!fopAc_IsActor(hitActor)) {
+    if (!fopAcM_IsActor(hitActor)) {
         return;
     }
     if (!fopAcM_GetJntHit(hitActor)) {
@@ -835,9 +835,8 @@ BOOL daArrow_c::procMove() {
                 fopAcM_seStartCurrent(this, JA_SE_LK_ARROW_HIT, mtrlSndId);
             }
         }
-    } else if (check_water_in()) {
-        // Do nothing.
-        // There was probably some code here that got commented out.
+    } else {
+        check_water_in();
     }
     
     if (mCurrProcFunc == &daArrow_c::procWater) {

@@ -15,6 +15,9 @@
 #include "JSystem/JAudio/JASRate.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JAudio/JASWaveBankMgr.h"
+#include "JSystem/JAudio/JASWaveBank.h"
+#include "JSystem/JAudio/JASInst.h"
+#include "JSystem/JAudio/JASDSPInterface.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
@@ -95,7 +98,7 @@ bool JASystem::BankMgr::assignWaveBank(int param_1, int param_2) {
     if (!waveBank) {
         return false;
     }
-    bank->field_0x4 = waveBank;
+    bank->assignWaveBank(waveBank);
     return true;
 }
 
@@ -111,13 +114,103 @@ f32 JASystem::BankMgr::clamp01(f32 param_1) {
 }
 
 /* 8028892C-80288CE8       .text noteOn__Q28JASystem7BankMgrFPQ28JASystem11TChannelMgriiUcUcUl */
-JASystem::TChannel* JASystem::BankMgr::noteOn(TChannelMgr*, int, int, u8, u8, u32) {
-    /* Nonmatching */
+JASystem::TChannel* JASystem::BankMgr::noteOn(TChannelMgr* param_1, int param_2, int param_3, u8 param_4, u8 param_5, u32 param_6) {
+    if (param_3 > 0xEF)
+        return noteOnOsc(param_1, param_3 - 0xF0, param_4, param_5, param_6);
+
+    TBank* bank = getBank(param_2);
+    if (!bank)
+        return NULL;
+
+    TInst* inst = bank->getInst(param_3);
+    if (!inst)
+        return NULL;
+
+    TInstParam instParam;
+    if (!inst->getParam(param_4, param_5, &instParam))
+        return NULL;
+
+    const TWaveBank* waveBank = bank->getWaveBank();
+    if (!waveBank)
+        return NULL;
+
+    TWaveHandle* waveHndl = waveBank->getWaveHandle(instParam.field_0x4);
+    if (!waveHndl)
+        return NULL;
+
+    const TWaveInfo* waveInfo = waveHndl->getWaveInfo();
+    if (!waveInfo)
+        return NULL;
+
+    intptr_t wave = waveHndl->getWavePtr();
+    if (!wave)
+        return NULL;
+
+    u32 chanKey = (instParam.field_0x40 << 0x18) | (param_2 << 8) | param_3;
+    switch (instParam.field_0x40 & 0xC0) {
+    case 0xC0:
+        chanKey |= 0xffffff;
+        break;
+    case 0x80:
+        chanKey |= 0xff;
+        break;
+    case 0x40:
+        chanKey |= instParam.field_0x3c << 0x10;
+        break;
+    }
+
+    TChannel* chan = param_1->getLogicalChannel(chanKey);
+    if (!chan)
+        return NULL;
+
+    // TODO: TWaveInfo and Driver::Wave_ appear to be the same struct, but have two different names in the maps?
+    chan->field_0x10 = (Driver::Wave_*)waveInfo;
+    chan->field_0x14 = wave;
+    chan->field_0xc = instParam.field_0x0;
+    chan->field_0x0 = param_5;
+    chan->field_0x1 = param_4;
+    chan->field_0x50 = instParam.field_0x14 * (waveInfo->field_0x4 / Kernel::getDacRate());
+    chan->field_0x58 = chan->field_0x50 * instParam.field_0x1c;
+    if (instParam.field_0x38 == 0) {
+        int var = (param_4 + 0x3C) - waveInfo->field_0x2;
+        if (var < 0)
+            var = 0;
+        if (var > 0x7f)
+            var = 0x7f;
+        chan->field_0x58 *= Driver::C5BASE_PITCHTABLE[var];
+    }
+    chan->field_0x54 = instParam.field_0x10;
+    chan->field_0x5c = chan->field_0x0 / 127.0f;
+    chan->field_0x5c = chan->field_0x54 * (chan->field_0x5c * chan->field_0x5c);
+    chan->field_0x5c *= instParam.field_0x18;
+
+    chan->field_0x6c[1].mSound = instParam.field_0x20;
+    chan->field_0x6c[2].mSound = instParam.field_0x24;
+    chan->field_0x6c[3].mSound = instParam.field_0x28;
+
+    for (int i = 1; i < 3; i++) {
+        chan->field_0x6c[i].mSound = clamp01(chan->field_0x6c[i].mSound);
+    }
+
+    chan->field_0x6c[1].mEffect = instParam.field_0x2c;
+    chan->field_0x6c[2].mEffect = instParam.field_0x30;
+    chan->field_0x6c[3].mEffect = instParam.field_0x34;
+
+    chan->field_0x94 = 1.0f;
+    chan->field_0x98 = 1.0f;
+
+    for (u32 i = 0; i < instParam.mOscCount; ++i)
+        chan->setOscInit(i, instParam.mOscData[i]);
+
+    chan->directReleaseOsc(0, instParam.field_0x3a);
+    if (!chan->play(param_6))
+        return NULL;
+
+    return chan;
 }
 
 /* 80288CE8-80288E44       .text noteOnOsc__Q28JASystem7BankMgrFPQ28JASystem11TChannelMgriUcUcUl */
 JASystem::TChannel* JASystem::BankMgr::noteOnOsc(TChannelMgr* param_1, int param_2, u8 param_3, u8 param_4, u32 param_5) {
-    /* Nonmatching */
     TChannel* channel = param_1->getLogicalChannel(0);
     if (!channel) {
         return NULL;
@@ -139,12 +232,12 @@ JASystem::TChannel* JASystem::BankMgr::noteOnOsc(TChannelMgr* param_1, int param
     channel->field_0x54 = 1.0f;
     channel->field_0x5c = channel->field_0x0 / 127.0f;
     channel->field_0x5c = channel->field_0x54 * (channel->field_0x5c * channel->field_0x5c);
-    channel->mPanVec.mSound = 0.5f;
-    channel->mFxmixVec.mSound = 0.0f;
-    channel->mDolbyVec.mSound = 0.0f;
-    channel->mPanVec.mEffect = 0.5f;
-    channel->mFxmixVec.mEffect = 0.0f;
-    channel->mDolbyVec.mEffect = 0.0f;
+    channel->field_0x6c[1].mSound = 0.5f;
+    channel->field_0x6c[2].mSound = 0.0f;
+    channel->field_0x6c[3].mSound = 0.0f;
+    channel->field_0x6c[1].mEffect = 0.5f;
+    channel->field_0x6c[2].mEffect = 0.0f;
+    channel->field_0x6c[3].mEffect = 0.0f;
     channel->field_0x94 = 1.0f;
     channel->field_0x98 = 1.0f;
     channel->setOscInit(0, &OSC_ENV);
@@ -156,6 +249,27 @@ JASystem::TChannel* JASystem::BankMgr::noteOnOsc(TChannelMgr* param_1, int param
 }
 
 /* 80288E44-80288F08       .text gateOn__Q28JASystem7BankMgrFPQ28JASystem8TChannelUcUcUl */
-void JASystem::BankMgr::gateOn(JASystem::TChannel*, u8, u8, u32) {
-    /* Nonmatching */
+void JASystem::BankMgr::gateOn(JASystem::TChannel* channel, u8 param_2, u8 param_3, u32 param_4) {
+    if (channel->field_0x30 != -1)
+        return;
+
+    channel->field_0x30 = param_4;
+    channel->field_0x34 = channel->field_0x30;
+    s32 var;
+    if (channel->field_0xc == 2)
+        var = param_2;
+    else
+        var = (param_2 + 0x3C) - channel->field_0x10->field_0x2;
+
+    if (var < 0)
+        var = 0;
+    if (var > 0x7F)
+        var = 0x7F;
+
+    f32 pitch = Driver::C5BASE_PITCHTABLE[var];
+    channel->field_0x0 = param_3;
+    channel->field_0x1 = param_2;
+    channel->field_0x58 = channel->field_0x50 * pitch;
+    channel->field_0x5c = channel->field_0x0 / 127.0f;
+    channel->field_0x5c = channel->field_0x54 * (channel->field_0x5c * channel->field_0x5c);
 }

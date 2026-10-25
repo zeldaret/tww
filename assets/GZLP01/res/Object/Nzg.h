@@ -18,6 +18,7 @@ enum dRes_ID_NZG {
 
 enum KANA_00_JNT {
     KANA_00_JNT_TYU_ANA_e=0x0,
+    KANA_00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_NZG_H */

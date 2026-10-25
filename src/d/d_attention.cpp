@@ -100,7 +100,7 @@ dAttention_c::dAttention_c(fopAc_ac_c* i_player, u32 i_padNo) {
 
     mDoExt_restoreCurrentHeap();
     if (mDoExt_adjustSolidHeap(heap) >= 0)
-        DCStoreRangeNoSync(heap->getStartAddr(), heap->getSize());
+        DCStoreRangeNoSync(heap->getStartAddr(), heap->getHeapSize());
 
     field_0x028 = -1;
     mFlags = 0;
@@ -253,7 +253,7 @@ s32 check_event_condition(u32 attnType, u16 flags) {
 /* 8009DB60-8009DC28       .text check_flontofplayer__FUlss */
 s32 check_flontofplayer(u32 checkMask, s16 angle1, s16 angle2) {
     /// merged from TP
-    static uint ftp_table[] = {
+    static u32 ftp_table[] = {
         0x04, 0x01, 0x02, 0x08, 0x10, 0x20, 0x40, 0x80, 0x100,
     };
     static s16 ang_table[3] = {

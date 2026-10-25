@@ -3,6 +3,8 @@
 // Translation Unit: m_Do_DVDError.cpp
 //
 
+// PCH not used here? Messes up .bss
+// #include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_DVDError.h"
 #include "JSystem/JKernel/JKRThread.h"
 #include "dolphin/os/OS.h"
@@ -11,7 +13,7 @@
 #include "m_Do/m_Do_ext.h"
 
 OSThread DvdErr_thread;
-u8 DvdErr_stack[0x1000] ALIGN_DECL(32);
+ALIGN_DECL(32, u8 DvdErr_stack[0x1000]);
 
 static OSAlarm Alarm;
 bool mDoDvdErr_initialized;

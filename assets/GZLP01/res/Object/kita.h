@@ -22,6 +22,7 @@ enum dRes_ID_KITA {
 
 enum VHLIF_00_JNT {
     VHLIF_00_JNT_HLIF_MODEL_e=0x0,
+    VHLIF_00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KITA_H */

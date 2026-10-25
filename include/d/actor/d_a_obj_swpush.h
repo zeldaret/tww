@@ -78,7 +78,7 @@ namespace daObjSwpush {
         };
 
         const Attr_c& attr() const { return M_attr[mType]; }
-        BOOL is_switch() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
+        bool is_switch() const { return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
         void off_switch() const { fopAcM_offSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
         void on_switch() const { fopAcM_onSwitch(const_cast<Act_c*>(this), prm_get_swSave()); }
         u8 prmZ_get_swSave2() const { return prm_get_version() >= 1 ? mPrmZ & 0xff : 0xff; }

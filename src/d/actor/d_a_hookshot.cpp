@@ -243,7 +243,7 @@ BOOL daHookshot_c::procShot() {
         cXyz sp8C = current.pos + (mMoveVec * 15.0f);
         mLinChk.Set(&current.pos, &sp8C, this);
         if (dComIfG_Bgsp()->LineCross(&mLinChk)) {
-            sp8C = mLinChk.GetLinP()->GetEnd();
+            sp8C = mLinChk.GetCross();
             if (dComIfG_Bgsp()->ChkPolyHSStick(mLinChk)) {
                 fopAcM_SetParam(this, Mode_Pull);
                 mShipRideFlg = false;
@@ -517,7 +517,7 @@ static dCcD_SrcCps l_at_cps_src = {
 cPhs_State daHookshot_c::create() {
     fopAcM_ct(this, daHookshot_c);
     
-    mShape.setUserArea(reinterpret_cast<u32>(this));
+    mShape.setUserArea(reinterpret_cast<uintptr_t>(this));
     mLinChk.ClrSttsRoofOff();
     procWait_init(FALSE);
     gravity = -5.0f;

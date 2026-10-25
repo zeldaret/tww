@@ -50,7 +50,7 @@ inline void J3DGDWriteXFCmdHdr(u16 cmd, u8 len) {
 }
 
 inline void J3DGXCmd1f32ptr(f32* value) {
-    GXFIFO.u32 = *(u32*)value;
+    GXCmd1u32(*(u32*)value);
 }
 
 void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevStageNum, u8 IndTexStageNum, GXCullMode cullMode);
@@ -80,15 +80,15 @@ void J3DGDSetFogRangeAdj(u8, u16, GXFogAdjTable*);
 void J3DGDSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList*, bool);
 
 static inline void J3DFifoLoadIndx(u8 cmd, u16 indx, u16 addr) {
-    GXFIFO.u8 = cmd;
-    GXFIFO.u16 = indx;
-    GXFIFO.u16 = addr;
+    GXCmd1u8(cmd);
+    GXCmd1u16(indx);
+    GXCmd1u16(addr);
 }
 
 inline void J3DFifoWriteXFCmdHdr(u16 addr, u8 len) {
-    GXFIFO.u8 = GX_CMD_LOAD_XF_REG;
-    GXFIFO.u16 = len - 1;
-    GXFIFO.u16 = addr;
+    GXCmd1u8(GX_CMD_LOAD_XF_REG);
+    GXCmd1u16(len - 1);
+    GXCmd1u16(addr);
 }
 
 inline void J3DGDSetNumChans(u8 numChans) {
@@ -138,7 +138,7 @@ inline void J3DGDSetZCompLoc(u32 compLocEnable) {
 }
 
 inline void J3DGDSetTevKonstantSel_SwapModeTable(GXTevStageID stage, GXTevKColorSel colorSel1, GXTevKAlphaSel alphaSel1, GXTevKColorSel colorSel2, GXTevKAlphaSel alphaSel2, GXTevColorChan chan1, GXTevColorChan chan2) {
-    J3DGDWriteBPCmd((stage / 2 + 0xF6) << 24 | (chan1 | chan2 << 2 | colorSel1 << 4 | alphaSel1 << 9 | colorSel2 << 14 | alphaSel2 << 19) & 0x00FFFFFF);
+    J3DGDWriteBPCmd((stage / 2 + 0xF6) << 24 | ((chan1 | chan2 << 2 | colorSel1 << 4 | alphaSel1 << 9 | colorSel2 << 14 | alphaSel2 << 19) & 0x00FFFFFF));
 }
 
 #endif /* J3DGD_H */

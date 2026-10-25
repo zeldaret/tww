@@ -3,12 +3,6 @@
 
 #include "JSystem/JSupport/JSUIosBase.h"
 
-enum JSUStreamSeekFrom {
-    JSUStreamSeekFrom_SET = 0,  // absolute
-    JSUStreamSeekFrom_CUR = 1,  // relative
-    JSUStreamSeekFrom_END = 2,  // relative to end
-};
-
 class JSUInputStream : public JSUIosBase {
 public:
     JSUInputStream() {}
@@ -66,8 +60,40 @@ public:
         return val;
     }
 
+    JSUInputStream& operator>>(u32& dest) {
+        read(&dest, 4);
+        return *this;
+    }
+
+    JSUInputStream& operator>>(u16& dest) {
+        read(&dest, 2);
+        return *this;
+    }
+
+    JSUInputStream& operator>>(u8& dest) {
+        read(&dest, 1);
+        return *this;
+    }
+
+    JSUInputStream& operator>>(s16& dest) {
+        read(&dest, 2);
+        return *this;
+    }
+
+    JSUInputStream& operator>>(char* dest) {
+        read(dest);
+        return *this;
+    }
+
+    s32 read(bool& val) { return read(&val, sizeof(bool)); }
+
+    s32 read(u8& val) { return read(&val, sizeof(u8)); }
+
+    s32 read(u32& param_0) { return read(&param_0, 4); }
+
     // TODO: return value probably wrong
     s32 read(void*, s32);
+    char* read(char*);
 };  // Size = 0x8
 
 // move?

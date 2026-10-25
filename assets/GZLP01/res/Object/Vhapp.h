@@ -18,6 +18,7 @@ enum dRes_ID_VHAPP {
 
 enum VHAPP_JNT {
     VHAPP_JNT_VHAPP_MODEL_e=0x0,
+    VHAPP_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VHAPP_H */

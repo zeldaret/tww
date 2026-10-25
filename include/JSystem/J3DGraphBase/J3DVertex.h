@@ -2,10 +2,10 @@
 #define J3DVERTEX_H
 
 #include "dolphin/gx/GXAttr.h"
+#include "dolphin/gx/GXStruct.h"
 #include "dolphin/mtx/vec.h"
 #include "dolphin/types.h"
 
-typedef struct _GXColor GXColor;
 class J3DModel;
 class J3DAnmVtxColor;
 class J3DVertexBuffer;
@@ -24,11 +24,9 @@ public:
     J3DVertexData();
     ~J3DVertexData();
 
-    inline void clear() { mPacketNum = 0; }
-
     void* getVtxPosArray() { return mVtxPosArray; }
     void* getVtxNrmArray() { return mVtxNrmArray; }
-    GXColor* getVtxColorArray(u8 idx) const { return mVtxColorArray[idx]; }
+    GXColor* getVtxColorArray(u8 idx) { return mVtxColorArray[idx]; }
     void* getVtxTexCoordArray(u8 idx) { return mVtxTexCoordArray[idx]; }
     void* getVtxNBTArray() { return mVtxNBTArray; }
     u32 getNrmNum() const { return mNrmNum; }
@@ -46,6 +44,7 @@ public:
 
 private:
     friend class J3DModelLoader;
+    friend class J3DModelData;
 
     /* 0x00 */ u32 mVtxNum;
     /* 0x04 */ u32 mNrmNum;

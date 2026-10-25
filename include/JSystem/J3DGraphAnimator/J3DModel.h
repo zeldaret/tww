@@ -94,7 +94,7 @@ public:
 
     void onFlag(u32 flag) { mFlags |= flag; }
     void offFlag(u32 flag) { mFlags &= ~flag; }
-    bool checkFlag(u32 flag) const { return (mFlags & flag) ? true : false; }
+    bool checkFlag(u32 flag) const { return (mFlags & flag) ? TRUE : FALSE; }
 
     bool isCpuSkinningOn() const { return (mFlags & J3DMdlFlag_SkinPosCpu) && (mFlags & J3DMdlFlag_SkinNrmCpu); }
 
@@ -126,17 +126,17 @@ public:
     J3DShapePacket* getShapePacket(u16 idx) { return &mpShapePacket[idx]; }
     J3DShapePacket* getShapePacketArray() { return mpShapePacket; }
     Mtx* getDrawMtxPtr() { return mpDrawMtxBuf[1][mCurrentViewNo]; }
-    Mtx& getDrawMtx(int idx) { return getDrawMtxPtr()[idx]; }
+    Mtx& getDrawMtx(int idx) { return mpDrawMtxBuf[1][mCurrentViewNo][idx]; }
     Mtx33* getNrmMtxPtr() { return mpNrmMtxBuf[1][mCurrentViewNo]; }
-    Mtx33& getNrmMtx(int idx) { return getNrmMtxPtr()[idx]; }
-    void setNrmMtx(int idx, Mtx m) { J3DPSMtx33CopyFrom34(m, getNrmMtxPtr()[idx]); }
+    Mtx33& getNrmMtx(int idx) { return mpNrmMtxBuf[1][mCurrentViewNo][idx]; }
+    void setNrmMtx(int idx, Mtx m) { J3DPSMtx33CopyFrom34(m, mpNrmMtxBuf[1][mCurrentViewNo][idx]); }
     Mtx33* getBumpMtxPtr(int idx) { return mpBumpMtxArr[1][idx][mCurrentViewNo]; }
     Vec* getBaseScale() { return &mBaseScale; } // Unused in TWW
     void setBaseScale(const Vec& scale) { mBaseScale = scale; }
-    void setUserArea(u32 area) { mUserArea = area; }
-    u32 getUserArea() const { return mUserArea; }
+    void setUserArea(uintptr_t area) { mUserArea = area; }
+    uintptr_t getUserArea() const { return mUserArea; }
     void setVisibilityManager(J3DVisibilityManager* manager) { mpVisibilityManager = manager; }
-    J3DSkinDeform* getSkinDeform() { return mpSkinDeform; }
+    J3DSkinDeform* getSkinDeform() { return mpSkinDeform; } // Unused in TWW
 
 private:
     /* 0x000 */ /* vtable */
@@ -144,7 +144,7 @@ private:
     /* 0x008 */ u32 mFlags;
     /* 0x00C */ u32 mDiffFlag;
     /* 0x010 */ J3DCalcCallBack mCalcCallBack;
-    /* 0x014 */ u32 mUserArea;
+    /* 0x014 */ uintptr_t mUserArea;
     /* 0x018 */ Vec mBaseScale;
     /* 0x024 */ Mtx mBaseTransformMtx;
     /* 0x054 */ Mtx mViewBaseMtx;

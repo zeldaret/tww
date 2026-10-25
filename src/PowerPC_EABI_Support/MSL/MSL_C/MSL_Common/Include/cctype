@@ -1,0 +1,6 @@
+#ifndef MSL_CCTYPE
+#define MSL_CCTYPE
+
+#include "ctype.h"
+
+#endif

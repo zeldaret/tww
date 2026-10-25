@@ -32,17 +32,17 @@ public:
     /* 0x29C */ dCcD_Stts mStts;
     /* 0x2D8 */ dCcD_Cyl mCyl;
     /* 0x408 */ dBgW* mpBgW1;
-    /* 0x40C */ Mtx mtx1;
+    /* 0x40C */ Mtx mBgWMtx1;
     /* 0x43C */ dBgW* mpBgW2;
-    /* 0x440 */ Mtx mtx2;
-    /* 0x470 */ f32 unk470;
-    /* 0x474 */ f32 unk474;
+    /* 0x440 */ Mtx mBgWMtx2;
+    /* 0x470 */ f32 mYOffset;
+    /* 0x474 */ f32 mTargetYOffset;
     /* 0x478 */ s32 mSwitchNo;
-    /* 0x47C */ u8 pad47C[4];
+    /* 0x47C */ u8 field_0x47C[0x480 - 0x47C];
     /* 0x480 */ fpc_ProcID mWindTagId;
-    /* 0x484 */ u8 mEventState;
-    /* 0x485 */ u8 unk485;
-    /* 0x486 */ u8 unk486;
+    /* 0x484 */ u8 mMode;
+    /* 0x485 */ bool unk485;
+    /* 0x486 */ u8 mTimer;
 };
 
 namespace daToge_prm {

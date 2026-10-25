@@ -94,17 +94,17 @@ cPhs_State daSwTact_c::_create() {
 s32 daSwTact_c::getAnswer() {
     switch (mAnswer) {
     case 0:
-        return 0;
+        return mDoAud_MELODY_WINDS_REQUIEM_e;
     case 1:
-        return 1;
+        return mDoAud_MELODY_BALLAD_OF_GALES_e;
     case 2:
-        return 5;
+        return mDoAud_MELODY_SONG_OF_PASSING_e;
     case 3:
-        return 2;
+        return mDoAud_MELODY_COMMAND_MELODY_e;
     case 4:
-        return 3;
+        return mDoAud_MELODY_EARTH_GODS_LYRIC_e;
     case 5:
-        return 4;
+        return mDoAud_MELODY_WIND_GODS_ARIA_e;
     case 0xFF:
     default:
         return -1;
@@ -128,32 +128,40 @@ bool daSwTact_c::_execute() {
         s32 tactMusic = player->getTactMusic();
         switch (mAnswer) {
         case 0:
-            if (tactMusic == 0)
+            if (tactMusic == mDoAud_MELODY_WINDS_REQUIEM_e)
                 mTrigger = true;
             break;
         case 1:
-            if (tactMusic == 1)
+            if (tactMusic == mDoAud_MELODY_BALLAD_OF_GALES_e)
                 mTrigger = true;
             break;
         case 2:
-            if (tactMusic == 5)
+            if (tactMusic == mDoAud_MELODY_SONG_OF_PASSING_e)
                 mTrigger = true;
             break;
         case 3:
-            if (tactMusic == 2)
+            if (tactMusic == mDoAud_MELODY_COMMAND_MELODY_e)
                 mTrigger = true;
             break;
         case 4:
-            if (tactMusic == 3)
+            if (tactMusic == mDoAud_MELODY_EARTH_GODS_LYRIC_e)
                 mTrigger = true;
             break;
         case 5:
-            if (tactMusic == 4)
+            if (tactMusic == mDoAud_MELODY_WIND_GODS_ARIA_e)
                 mTrigger = true;
             break;
         case 0xFF:
-            if (tactMusic == 0 || tactMusic == 1 || tactMusic == 2 || tactMusic == 3 || tactMusic == 4 || tactMusic == 5)
+            if (
+                tactMusic == mDoAud_MELODY_WINDS_REQUIEM_e ||
+                tactMusic == mDoAud_MELODY_BALLAD_OF_GALES_e ||
+                tactMusic == mDoAud_MELODY_COMMAND_MELODY_e ||
+                tactMusic == mDoAud_MELODY_EARTH_GODS_LYRIC_e ||
+                tactMusic == mDoAud_MELODY_WIND_GODS_ARIA_e ||
+                tactMusic == mDoAud_MELODY_SONG_OF_PASSING_e
+            ) {
                 mTrigger = true;
+            }
             break;
         }
     }

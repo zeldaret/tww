@@ -70,6 +70,7 @@ enum dRes_ID_BA {
 
 enum BA_CLOTH_JNT {
     BA_CLOTH_JNT_CLOTH_e=0x0,
+    BA_CLOTH_NUM_JNTS_e=0x1,
 };
 
 enum BA_JNT {
@@ -92,6 +93,7 @@ enum BA_JNT {
     BA_JNT_LEGR1_e=0x10,
     BA_JNT_LEGR2_e=0x11,
     BA_JNT_FOOTR_e=0x12,
+    BA_NUM_JNTS_e=0x13,
 };
 
 #endif /* RES_BA_H */

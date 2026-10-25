@@ -27,7 +27,7 @@ BOOL daObjGnntakie_c::create_heap() {
         if (mpModel != NULL) {
             btk_data = static_cast<J3DAnmTextureSRTKey*>(dComIfG_getObjectRes(M_arcname, dRes_INDEX_GNNDEMOTAKIE_BTK_GNN_DEMO_TAKI_E_e));
             JUT_ASSERT(97, btk_data != NULL);
-            if (btk_data != NULL && mpBtkAnm.init(mdl_data, btk_data, true, J3DFrameCtrl::EMode_LOOP)) {
+            if (btk_data != NULL && mBtkAnm.init(mdl_data, btk_data, true, J3DFrameCtrl::EMode_LOOP)) {
                 ret = TRUE;
             }
         }
@@ -44,8 +44,8 @@ cPhs_State daObjGnntakie_c::_create() {
         if (fopAcM_entrySolidHeap(this, solidHeapCB, 0x0)) {
             cullMtx = mpModel->getBaseTRMtx();
             init_mtx();
-            mpBtkAnm.getFrameCtrl()->setFrame(mpBtkAnm.getStartFrame());
-            mpBtkAnm.setPlaySpeed(1.0);
+            mBtkAnm.getFrameCtrl()->setFrame(mBtkAnm.getStartFrame());
+            mBtkAnm.setPlaySpeed(1.0);
             state = cPhs_COMPLEATE_e;
         }
     }
@@ -65,7 +65,7 @@ void daObjGnntakie_c::init_mtx() {
 
 /* 000003F4-0000041C       .text _execute__15daObjGnntakie_cFv */
 bool daObjGnntakie_c::_execute() {
-    mpBtkAnm.play();
+    mBtkAnm.play();
     return true;
 }
 
@@ -73,7 +73,7 @@ bool daObjGnntakie_c::_execute() {
 bool daObjGnntakie_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG3, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mpModel, &tevStr);
-    mpBtkAnm.entry(mpModel->getModelData());
+    mBtkAnm.entry(mpModel->getModelData());
     mDoExt_modelUpdateDL(mpModel);
     return true;
 }

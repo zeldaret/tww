@@ -18,6 +18,7 @@ enum dRes_ID_AISI {
 
 enum AISI_JNT {
     AISI_JNT_AISI_A_e=0x0,
+    AISI_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_AISI_H */

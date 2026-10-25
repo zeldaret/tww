@@ -1,5 +1,5 @@
-#ifndef MSL_UTILITY_H_
-#define MSL_UTILITY_H_
+#ifndef MSL_UTILITY
+#define MSL_UTILITY
 
 namespace std {
 template <class T1, class T2>

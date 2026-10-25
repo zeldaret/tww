@@ -794,7 +794,7 @@ void dDoor_hkyo_c::proc(dDoor_info_c* door) {
             setAnm(3);
         break;
     case 3:
-        if (!dComIfGs_isTact(2) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1704))
+        if (!dComIfGs_isTact(mDoAud_MELODY_COMMAND_MELODY_e) || dComIfGs_isEventBit(dSv_event_flag_c::UNK_1704))
             setAnm(0);
         else
             setAnm(3);

@@ -27,12 +27,11 @@ public:
     void OnLightGrp() { mGrp |= LIGHT_GRP; }
     void OffNormalGrp() { mGrp &= ~NORMAL_GRP; }
     void OffWaterGrp() { mGrp &= ~WATER_GRP; }
-    void OffFullGrp() { mGrp &= ~FULL_GRP; }
-    u32 MaskNormalGrp() const { return mGrp & NORMAL_GRP; }
-    u32 MaskWaterGrp() const { return mGrp & WATER_GRP; }
-    u32 MaskYoganGrp() const { return mGrp & YOGAN_GRP; }
-    u32 MaskDokuGrp() const { return mGrp & DOKU_GRP; }
-    u32 MaskLightGrp() const { return mGrp & LIGHT_GRP; }
+    u32 MaskNormalGrp() { return mGrp & NORMAL_GRP; }
+    u32 MaskWaterGrp() { return mGrp & WATER_GRP; }
+    u32 MaskYoganGrp() { return mGrp & YOGAN_GRP; }
+    u32 MaskDokuGrp() { return mGrp & DOKU_GRP; }
+    u32 MaskLightGrp() { return mGrp & LIGHT_GRP; }
 private:
     /* 0x4 */ u32 mGrp;
 };

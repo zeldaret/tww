@@ -4,6 +4,8 @@ This document describes the basics how to start decompiling code and contributin
 
 If you haven't already, you should first follow the instructions in the [readme](../README.md) to get the decomp set up, as well as the tools you will be using to work on it: objdiff and Ghidra.
 
+You should also read the [coding guidelines page](/docs/coding_guidelines.md) page to ensure that the code you write is clear and readable.
+
 ## Table of Contents
 
 1. [Choosing an object to decompile](#choosing-an-object-to-decompile)
@@ -689,4 +691,4 @@ Then you can just submit a pull request as-is instead of worrying about it any m
 
 Once an actor is fully decompiled, you can start naming some of its member variables if you want to. This is completely optional - it's normal to submit a PR without documenting most fields. Leaving them unnamed (e.g. `field_0x290`) is preferable to coming up with wrong names if you aren't sure.
 
-But if you do decide to start naming things, you should check out the [coding guidelines page](coding_guidelines.md).
+But if you do decide to start naming things, you should check out the ['Naming style' section of the coding guidelines page](/docs/coding_guidelines.md#naming-style).

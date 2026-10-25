@@ -202,7 +202,9 @@ void body_draw(bpw_class* i_this) {
     if (i_this->m3E0 == 0) {
         dComIfGd_setListMaskOff();
     }
-    dSnap_RegistFig(DSNAP_TYPE_UNKCE, actor, 1.0f, 1.0f, 1.0f);
+    // !@bug Jalhalla registers Ganondorf figurine photo here, then the correct photo later.
+    // TODO: Is it possible to actually get a photo of Jalhalla that counts as Ganondorf?
+    dSnap_RegistFig(DSNAP_TYPE_GND, actor, 1.0f, 1.0f, 1.0f);
     if (i_this->m3E0 != 0) {
         i_this->mpLightFreezeBrkAnm->entry(model->getModelData());
     } else if (i_this->m3E1 != 0) {
@@ -235,7 +237,7 @@ void body_draw(bpw_class* i_this) {
     if ((i_this->m47E == 0) || (fopAcM_checkCarryNow(actor))) {
         return;
     }
-    dSnap_RegistFig(DSNAP_TYPE_UNKCB, actor, 1.0f, 1.0f, 1.0f);
+    dSnap_RegistFig(DSNAP_TYPE_BPW, actor, 1.0f, 1.0f, 1.0f);
     local_28.set(actor->current.pos.x, actor->current.pos.y + 400.0f + REG8_F(18), actor->current.pos.z);
     i_this->mShadowId = dComIfGd_setShadow(
         i_this->mShadowId,
@@ -3758,7 +3760,7 @@ void action_b_fire_1_dousa(bpw_class* i_this) {
         if (dComIfG_Bgsp()->LineCross(&linChk)) {
             cM3dGPla* pla = dComIfG_Bgsp()->GetTriPla(linChk);
             (i_this->m66C) = *linChk.GetCrossP();
-            if (pla->GetNP()->y == 1.0f) {
+            if (pla->mNormal.y == 1.0f) {
                 i_this->m67E = 0;
             } else {
                 fVar1 = i_this->m304[0].x - i_this->m66C.x;
@@ -4263,7 +4265,7 @@ static BOOL boss_useHeapInit(fopAc_ac_c* a_this) {
     if ((i_this->mpMorf == NULL) || (i_this->mpMorf->getModel() == NULL)) {
         return FALSE;
     }
-    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)i_this);
     for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
         i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(body_nodeCallBack);
     }
@@ -4410,7 +4412,7 @@ static BOOL kantera_useHeapInit(fopAc_ac_c* a_this) {
     if ((i_this->mpMorf == NULL) || (i_this->mpMorf->getModel() == NULL)) {
         return FALSE;
     }
-    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)i_this);
     for (u16 i = 0; i < i_this->mpMorf->getModel()->getModelData()->getJointNum(); i++) {
         i_this->mpMorf->getModel()->getModelData()->getJointNodePointer(i)->setCallBack(kantera_nodeCallBack);
     }

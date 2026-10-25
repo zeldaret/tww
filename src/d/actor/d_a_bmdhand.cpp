@@ -47,7 +47,7 @@ void hand_draw(bmdhand_class* i_this) {
         g_env_light.setLightTevColorType(i_this->mpMorf->getModel(), &actor->tevStr);
         i_this->mpMorf->updateDL();
     }
-    i_this->mLineMat.update(0x14, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, &actor->tevStr);
+    i_this->mLineMat.update(0x14, COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, &actor->tevStr);
     dComIfGd_set3DlineMat(&i_this->mLineMat);
 }
 

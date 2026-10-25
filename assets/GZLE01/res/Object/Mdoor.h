@@ -26,10 +26,12 @@ enum dRes_ID_MDOOR {
 
 enum MORI1_JNT {
     MORI1_JNT_MORI1_e=0x0,
+    MORI1_NUM_JNTS_e=0x1,
 };
 
 enum MORI2_JNT {
     MORI2_JNT_MORI2_e=0x0,
+    MORI2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MDOOR_H */

@@ -122,7 +122,7 @@ void daWarpdm20_c::CreateInit() {
 
     mEventIdx = dComIfGp_evmng_getEventIdx("TO_HYRULE_WARP", 0xff);
 
-    if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2D02)) {
+    if (dComIfGs_isEventBit(dSv_event_flag_c::ZELDA_AWAKENED)) {
         dComIfGs_onEventBit(dSv_event_flag_c::UNK_1820);
     }
 }

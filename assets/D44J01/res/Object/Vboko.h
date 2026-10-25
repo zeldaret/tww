@@ -18,6 +18,7 @@ enum dRes_ID_VBOKO {
 
 enum VBOKO_JNT {
     VBOKO_JNT_VBOKO_e=0x0,
+    VBOKO_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VBOKO_H */

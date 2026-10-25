@@ -52,27 +52,27 @@ void dMetronome_c::screenSet() {
     static const u32 bs_t1[] = { 'bs01', 'bs02', 'bs03', 'bs04', 'bs05', 'bs06', 'bs07' };
 
     static const u32 timing_t[21] = {
-        '\000\00001',
-        '\000\00002',
-        '\000\00003',
-        '\000\00004',
-        '\000\00005',
-        '\000\00006',
-        '\000\00007',
-        '\000\00008',
-        '\000\00009',
-        '\000\00010',
-        '\000\00011',
-        '\000\00012',
-        '\000\00013',
-        '\000\00014',
-        '\000\00015',
-        '\000\00016',
-        '\000\00017',
-        '\000\00018',
-        '\000\00019',
-        '\000\00020',
-        '\000\00021',
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20',
+        '21',
     };
 
     for (s32 i = 0; i < 7; i++) {
@@ -88,7 +88,7 @@ void dMetronome_c::screenSet() {
         fopMsgM_setPaneData(&pane_timing[i], scrn, timing_t[i]);
     }
 
-    fopMsgM_setPaneData(&pane_echo, scrn, '\000112');
+    fopMsgM_setPaneData(&pane_echo, scrn, '112');
 }
 
 /* 80221DF4-802222D8       .text metronomeMove__12dMetronome_cFv */
@@ -304,15 +304,9 @@ void dMetronome_c::melodyGuideShow(s32 note, s16 no) {
 
     fopMsgM_cposMove(&pane_cn[no]);
 
-    // This is almost J2DPane::setBasePosition
     f32 centerX = pane_i11[no].mSize.x / 2.0f;
     f32 centerY = pane_i11[no].mSize.y / 2.0f;
-    J2DScreen* scrn = (J2DScreen*)pane_i11[no].pane;
-    scrn->mBasePosition.x = centerX;
-    scrn->mBasePosition.y = centerY;
-    scrn->mRotationAxis = ROTATE_Z;
-    scrn->mRotation = rot[note];
-    scrn->calcMtx();
+    ((J2DScreen*)pane_i11[no].pane)->rotate(centerX, centerY, ROTATE_Z, rot[note]);
 }
 
 /* 80222854-80222C4C       .text melodyShow__12dMetronome_cFv */

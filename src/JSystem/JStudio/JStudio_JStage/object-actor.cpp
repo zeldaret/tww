@@ -236,7 +236,7 @@ void TAdaptor_actor::setJSG_ID_(IDFunction function, JStudio::data::TEOperationD
 void TAdaptor_actor::TVVOutput_ANIMATION_FRAME_::operator()(f32 p1, JStudio::TAdaptor* adaptor) const {
     JStage::TActor* actor = static_cast<TAdaptor_actor*>(adaptor)->mObject;
     // not sure what this bit is
-    u32 idx = *(u32*)(((u32)adaptor - 1) + _08);
+    u32 idx = *(u32*)(((uintptr_t)adaptor - 1) + _08);
 
     u8 idx_lowBytes  = idx;
     u8 idx_highBytes = idx >> 8;

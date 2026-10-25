@@ -25,6 +25,7 @@ enum VBINX_JNT {
     VBINX_JNT_BIN_0_OUTSIDE_e=0x1,
     VBINX_JNT_BIN_1_CAP_MODEL_e=0x2,
     VBINX_JNT_BIN_2_INSIDE_e=0x3,
+    VBINX_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_BIN_H */

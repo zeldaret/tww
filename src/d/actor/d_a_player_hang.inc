@@ -23,34 +23,33 @@ f32 daPy_lk_c::getHangMoveAnmSpeed() {
 int daPy_lk_c::getHangDirectionFromAngle() {
     s16 angle = m34E8 - shape_angle.y;
     if (abs(angle) > 0x78E4) {
-        return 1;
+        return DIR_BACKWARD;
     }
 
     if (angle >= 0x071C) {
-        return 2;
+        return DIR_LEFT;
     }
 
     if (angle <= -0x071C) {
-        return 3;
+        return DIR_RIGHT;
     }
 
-    return 0;
+    return DIR_FORWARD;
 }
 
 /* 80133FB4-801342D8       .text changeHangMoveProc__9daPy_lk_cFi */
 BOOL daPy_lk_c::changeHangMoveProc(int i_direction) {
-    s16 uVar1;
-
-    if ((!(mAcch.ChkGroundHit())) || !dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) {
+    if (!mAcch.ChkGroundHit() || !dComIfG_Bgsp()->ChkPolySafe(mAcch.m_gnd)) {
         return false;
     }
     if (dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd)->GetNP()->y < 0.9986f) {
         return false;
     }
 
-    if (i_direction == 2) {
+    s16 uVar1;
+    if (i_direction == DIR_LEFT) {
         uVar1 = shape_angle.y + 0x4000;
-    } else if (i_direction == 3) {
+    } else if (i_direction == DIR_RIGHT) {
         uVar1 = shape_angle.y + -0x4000;
     } else {
         uVar1 = current.angle.y;
@@ -104,7 +103,7 @@ BOOL daPy_lk_c::changeHangMoveProc(int i_direction) {
 }
 
 /* 801342D8-80134440       .text changeHangEndProc__9daPy_lk_cFi */
-int daPy_lk_c::changeHangEndProc(int param_0) {
+BOOL daPy_lk_c::changeHangEndProc(BOOL i_canLetGo) {
     MtxP mtx = mpCLModel->getAnmMtx(CL_JNT_LINK_ROOT_e);
     cXyz pos;
     pos.x = mtx[0][3] - cM_ssin(shape_angle.y) * 4.0f;
@@ -119,9 +118,9 @@ int daPy_lk_c::changeHangEndProc(int param_0) {
         m3588 = dBgS_Attr_UNK1B_e;
     }
     if (mHangGroundH > mFootData[1].field_0x018.y + current.pos.y) {
-        return procLand_init(m_HIO->mAutoJump.m.field_0x24, 0);
+        return procLand_init(m_HIO->mAutoJump.m.field_0x24, FALSE);
     }
-    if (param_0 != 0) {
+    if (i_canLetGo) {
         dComIfGp_setDoStatus(dActStts_LET_GO_e);
         if (doTrigger()) {
             speed.y = 0.0f;
@@ -236,7 +235,7 @@ BOOL daPy_lk_c::procHangStart_init() {
 
 /* 80134908-801349D8       .text procHangStart__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHangStart() {
-    if (changeHangEndProc(1)) {
+    if (changeHangEndProc(TRUE)) {
         return true;
     }
 
@@ -350,20 +349,19 @@ BOOL daPy_lk_c::procHangFallStart_init(cM3dGPla* param_0) {
 
 /* 80134DF8-80134EF0       .text procHangFallStart__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHangFallStart() {
-    int iVar2;
-
+    BOOL canLetGo;
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f ||
         mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mHang.m.field_0xC)
     {
-        iVar2 = 1;
+        canLetGo = TRUE;
     } else {
-        iVar2 = 0;
+        canLetGo = FALSE;
     }
-    if (changeHangEndProc(iVar2)) {
+    if (changeHangEndProc(canLetGo)) {
         return true;
     }
 
-    if (iVar2 != 0) {
+    if (canLetGo) {
         if (checkModeFlg(ModeFlg_00000400)) {
             offModeFlg(ModeFlg_00000400);
             onModeFlg(ModeFlg_00000100);
@@ -371,16 +369,16 @@ BOOL daPy_lk_c::procHangFallStart() {
         if (checkModeFlg(ModeFlg_00000100)) {
             setTextureAnime(7, 0);
         }
-        iVar2 = getHangDirectionFromAngle();
-        if (mStickDistance > 0.05f && iVar2 != 1) {
-            procHangUp_init(iVar2);
+        int direction = getHangDirectionFromAngle();
+        if (mStickDistance > 0.05f && direction != DIR_BACKWARD) {
+            procHangUp_init(direction);
         }
     }
     return true;
 }
 
 /* 80134EF0-80134F74       .text procHangUp_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procHangUp_init(int param_0) {
+BOOL daPy_lk_c::procHangUp_init(int i_direction) {
     commonProcInit(daPyProc_HANG_UP_e);
     setSingleMoveAnime(
         ANM_HANGUP,
@@ -390,14 +388,14 @@ BOOL daPy_lk_c::procHangUp_init(int param_0) {
         m_HIO->mHang.m.field_0x20
     );
     dComIfGp_setPlayerStatus0(0, daPyStts0_HANG_e);
-    mProcVar6.m3570 = param_0;
+    mProcVar6.mHangUpDirection = i_direction;
     mNormalSpeed = 0.0f;
     return true;
 }
 
 /* 80134F74-80135094       .text procHangUp__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHangUp() {
-    if (changeHangEndProc(1)) {
+    if (changeHangEndProc(TRUE)) {
         if (mCurProc == daPyProc_FALL_e) {
             current.pos.x = current.pos.x - 8.0f * cM_ssin(shape_angle.y);
             current.pos.z = current.pos.z - 8.0f * cM_scos(shape_angle.y);
@@ -408,10 +406,10 @@ BOOL daPy_lk_c::procHangUp() {
     if (mFrameCtrlUnder[UNDER_MOVE0_e].getRate() < 0.01f ||
         mFrameCtrlUnder[UNDER_MOVE0_e].getFrame() > m_HIO->mHang.m.field_0x1C)
     {
-        if (mProcVar6.m3570 == 0) {
+        if (mProcVar6.mHangUpDirection == DIR_FORWARD) {
             procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
-        } else if (changeHangMoveProc(mProcVar6.m3570)) {
-            procHangMove_init(mProcVar6.m3570);
+        } else if (changeHangMoveProc(mProcVar6.mHangUpDirection)) {
+            procHangMove_init(mProcVar6.mHangUpDirection);
         } else {
             procHangWait_init();
         }
@@ -433,22 +431,19 @@ BOOL daPy_lk_c::procHangWait_init() {
 
 /* 80135140-801351FC       .text procHangWait__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHangWait() {
-    int iVar2;
-
-    iVar2 = changeHangEndProc(1);
-    if (iVar2 != 0) {
+    if (changeHangEndProc(TRUE)) {
         return true;
     }
 
     setHangShapeOffset();
 
     if (mStickDistance > 0.05f) {
-        iVar2 = getHangDirectionFromAngle();
-        if (iVar2 == 0) {
+        int direction = getHangDirectionFromAngle();
+        if (direction == DIR_FORWARD) {
             procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
-        } else if (iVar2 != 1 && changeHangMoveProc(iVar2)) {
+        } else if (direction != DIR_BACKWARD && changeHangMoveProc(direction)) {
             s16 sVar1 = m34EC;
-            procHangMove_init(iVar2);
+            procHangMove_init(direction);
             m34EC = sVar1;
         }
     }
@@ -456,10 +451,11 @@ BOOL daPy_lk_c::procHangWait() {
 }
 
 /* 801351FC-80135354       .text procHangMove_init__9daPy_lk_cFi */
-BOOL daPy_lk_c::procHangMove_init(int param_0) {
+BOOL daPy_lk_c::procHangMove_init(int i_direction) {
     commonProcInit(daPyProc_HANG_MOVE_e);
+
     daPy_ANM anm;
-    if (param_0 == 2) {
+    if (i_direction == DIR_LEFT) {
         anm = ANM_HANGMOVEL;
         current.angle.y = shape_angle.y + 0x4000;
     } else {
@@ -476,18 +472,18 @@ BOOL daPy_lk_c::procHangMove_init(int param_0) {
 
 /* 80135354-801357C0       .text procHangMove__9daPy_lk_cFv */
 BOOL daPy_lk_c::procHangMove() {
-    int iVar7 = getHangDirectionFromAngle();
+    int direction = getHangDirectionFromAngle();
 
-    if (!changeHangEndProc(1)) {
-        if (iVar7 == 0 && mStickDistance > 0.05f) {
+    if (!changeHangEndProc(TRUE)) {
+        if (direction == DIR_FORWARD && mStickDistance > 0.05f) {
             procHangClimb_init(m_HIO->mWallCatch.m.field_0x2C);
         } else {
             J3DFrameCtrl& frameCtrl = mFrameCtrlUnder[UNDER_MOVE0_e];
             frameCtrl.setRate(getHangMoveAnmSpeed());
             if (frameCtrl.checkPass(0.0f) != 0) {
                 s16 sVar3 = m34EC;
-                if (mStickDistance > 0.05f && iVar7 != 1 && changeHangMoveProc(iVar7)) {
-                    procHangMove_init(iVar7);
+                if (mStickDistance > 0.05f && direction != DIR_BACKWARD && changeHangMoveProc(direction)) {
+                    procHangMove_init(direction);
                 } else {
                     procHangWait_init();
                 }
@@ -495,7 +491,7 @@ BOOL daPy_lk_c::procHangMove() {
             } else {
                 cXyz local_64 = mRightHandPos - mLeftHandPos;
                 f32 dVar12 = local_64.absXZ();
-                if (changeHangMoveProc(4)) {
+                if (changeHangMoveProc(DIR_NONE)) {
                     mNormalSpeed = std::fabsf(dVar12 - m35A0) * m_HIO->mHang.m.field_0x30;
                     f32 fVar1 = cM_ssin(shape_angle.y);
                     f32 fVar2 = cM_scos(shape_angle.y);
@@ -524,7 +520,7 @@ BOOL daPy_lk_c::procHangMove() {
                             m34EC += (s16)(shape_angle.y - sVar6);
                             shape_angle.y = sVar6;
                             cXyz local_88;
-                            local_88.set(*mLinkLinChk.GetLinP()->GetEndP());
+                            local_88.set(mLinkLinChk.GetCross());
                             local_88.x -= triPla->GetNP()->x * 1.5f;
                             local_88.y += 25.0f;
                             local_88.z -= triPla->GetNP()->z * 1.5f;
@@ -534,9 +530,9 @@ BOOL daPy_lk_c::procHangMove() {
                                 current.pos = local_88;
                             }
                         } else {
-                            current.pos.x = (mLinkLinChk.GetLinP()->GetEndP()->x - 1.5f * triPla->GetNP()->x) -
+                            current.pos.x = (mLinkLinChk.GetCross().x - 1.5f * triPla->GetNP()->x) -
                                             (mNormalSpeed * dVar13);
-                            current.pos.z = (mLinkLinChk.GetLinP()->GetEndP()->z - 1.5f * triPla->GetNP()->z) -
+                            current.pos.z = (mLinkLinChk.GetCross().z - 1.5f * triPla->GetNP()->z) -
                                             (mNormalSpeed * dVar11);
                         }
                     }

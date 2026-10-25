@@ -22,6 +22,7 @@ enum dRes_ID_QDGHD {
 
 enum QDGHD_JNT {
     QDGHD_JNT_DGHD_e=0x0,
+    QDGHD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_QDGHD_H */

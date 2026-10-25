@@ -23,6 +23,7 @@ enum dRes_ID_FOBJ09 {
 enum FOBJ09_JNT {
     FOBJ09_JNT_TUBOKO_BASE_e=0x0,
     FOBJ09_JNT_TUBOKO_HEAD_e=0x1,
+    FOBJ09_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_FOBJ09_H */

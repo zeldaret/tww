@@ -15,52 +15,66 @@ from pathlib import Path
 import re
 import subprocess
 import argparse
-from collections import defaultdict
+from collections import Counter, defaultdict
+import time
 
-arg_parse = argparse.ArgumentParser()
-arg_parse.add_argument("object_name", nargs="?", help="Name of the object to build and diff, e.g. d_a_bridge or d_a_npc_fa1")
-arg_parse.add_argument("--all", action='store_true', help="Build and diff all objects")
-args = arg_parse.parse_args()
-if args.all:
-  build_all = True
-else:
-  if args.object_name is None:
-    arg_parse.error("the following arguments are required: object_name (or --all)")
-  build_all = False
-  arg_object_name: str = args.object_name
-  assert not re.search(r"[/\\.]", arg_object_name), "The object name should not contain slashes or dots"
+DEBUG_MAPS_ROOT_PATH = Path("orig") / "D44J01" / "files" / "maps"
+DECOMP_ROOT_PATH = Path(".")
 
-debug_maps_root_path = Path("orig") / "D44J01" / "files" / "maps"
-decomp_root_path = Path(".")
+def configure_debug_and_get_all_ninja_outputs():
+  retcode = subprocess.call(["python", "configure.py", "--version", "D44J01", "--debug", "--map", "--non-matching"], cwd=DECOMP_ROOT_PATH)
+  assert retcode == 0, "Failed to configure"
+  
+  # Add a short delay between configuring and building to prevent the weird "illegal data in precompiled header" error.
+  time.sleep(0.5)
+  
+  all_ninja_outputs: list[str] = []
+  for ninja_target in subprocess.check_output(["ninja", "-t", "targets", "all"]).decode("utf-8").splitlines():
+    ninja_output, ninja_rule = ninja_target.split(":", 1)
+    all_ninja_outputs.append(ninja_output)
+  
+  return all_ninja_outputs
 
-retcode = subprocess.call(["python", "configure.py", "--version", "D44J01", "--debug", "--map", "--non-matching"], cwd=decomp_root_path)
-assert retcode == 0, "Failed to configure"
+def ninja_build_all():
+  retcode = subprocess.call(["ninja"], cwd=DECOMP_ROOT_PATH)
+  assert retcode == 0, "Ninja build call failed"
 
-all_ninja_outputs: list[str] = []
-for ninja_target in subprocess.check_output(["ninja", "-t", "targets", "all"]).decode("utf-8").splitlines():
-  ninja_output, ninja_rule = ninja_target.split(":", 1)
-  all_ninja_outputs.append(ninja_output)
+def ninja_build_one_map(base_map_path: Path):
+  retcode = subprocess.call(["ninja", base_map_path.relative_to(DECOMP_ROOT_PATH)], cwd=DECOMP_ROOT_PATH)
+  assert retcode == 0, "Ninja build call failed"
 
-all_object_names = []
-for output_path in all_ninja_outputs:
-  if not output_path.startswith("build/D44J01/"):
-    continue
-  if not output_path.endswith(".o"):
-    continue
-  object_name = output_path.rsplit("/", 1)[1].split(".", 1)[0]
-  all_object_names.append(object_name)
+def get_all_object_names_from_ninja_outputs(all_ninja_outputs: list[str]):
+  all_object_names: list[str] = []
+  for output_path in all_ninja_outputs:
+    if not output_path.startswith("build/D44J01/"):
+      continue
+    if not output_path.endswith(".o"):
+      continue
+    object_name = output_path.rsplit("/", 1)[1].split(".", 1)[0]
+    all_object_names.append(object_name)
+  return all_object_names
 
 class Symbol:
-  def __init__(self, name: str, size: int, sym_type: str | None = None, linkage: str | None = None, stripped: bool | None = None, align: int | None = None):
+  def __init__(
+      self,
+      name: str,
+      size: int,
+      section: str,
+      sym_type: str | None = None,
+      linkage: str | None = None,
+      stripped: bool | None = None,
+      align: int | None = None
+  ):
     self.name = name
     self.size = size
+    self.section = section
     self.sym_type = sym_type
     self.linkage = linkage
     self.stripped = stripped
     self.align = align
   
   def __repr__(self):
-    return f"Symbol(name={self.name}, size={self.size}, sym_type={self.sym_type}, linkage={self.linkage}, stripped={self.stripped})"
+    return f"Symbol(name={self.name}, size={self.size}, section={self.section}, sym_type={self.sym_type}, linkage={self.linkage}, stripped={self.stripped})"
 
 @cache
 def get_symbols_from_linker_map(map_contents: str, missing_tree_and_stripped=False):
@@ -143,6 +157,7 @@ def get_symbols_from_linker_map(map_contents: str, missing_tree_and_stripped=Fal
   
   symbols: dict[str, dict[str, Symbol]] = defaultdict(dict)
   unref_dupe_symbol_names_already_added = set()
+  curr_section_name = None
   for line in map_lines:
     symbol_entry_match = re.search(r"^  ([0-9a-f]{8}|UNUSED  ) ([0-9a-f]{6}) ([0-9a-f]{8}|\.{8})(?: +(\d+))? (.+?)(?: \(entry of [^)]+\))? \t?(?:(\S+\.a) )?(\S+) ?$", line, re.IGNORECASE)
     if symbol_entry_match:
@@ -173,9 +188,14 @@ def get_symbols_from_linker_map(map_contents: str, missing_tree_and_stripped=Fal
         symbols[object_name]
       
       original_symbol_name = symbol_name
-      if symbol_name.startswith(".") or symbol_name in ["extab", "extabindex"]:
-        # e.g. Section symbol (.text) or pool symbol (...data)
+      if symbol_name.startswith("..."):
+        # Pool symbol (e.g. ...data)
         continue
+      if symbol_name.startswith(".") or symbol_name in ["extab", "extabindex"]:
+        # Section symbol (e.g. .text)
+        curr_section_name = symbol_name
+        continue
+      assert curr_section_name is not None
       if re.search(r"^@\d+$", symbol_name):
         continue
       if localstatic_match := re.search(r"^([^\s\$]+)\$\d+$", symbol_name):
@@ -194,25 +214,48 @@ def get_symbols_from_linker_map(map_contents: str, missing_tree_and_stripped=Fal
       else:
         assert stripped or missing_tree_and_stripped, f"Symbol {repr(original_symbol_name)} is missing linkage information in object {repr(object_name)}"
         symbol_type = linkage = None
-      symbols[object_name][symbol_name] = Symbol(symbol_name, symbol_size, sym_type=symbol_type, linkage=linkage, stripped=stripped, align=symbol_align)
+      symbols[object_name][symbol_name] = Symbol(symbol_name, symbol_size, curr_section_name, sym_type=symbol_type, linkage=linkage, stripped=stripped, align=symbol_align)
       
       if symbol_name in unref_dupe_symbol_names_to_object_name_to_type_linkage and symbol_name not in unref_dupe_symbol_names_already_added:
         for other_object_name in unref_dupe_symbol_names_to_object_name_to_type_linkage[symbol_name]:
           symbol_type, linkage = unref_dupe_symbol_names_to_object_name_to_type_linkage[symbol_name][other_object_name]
           assert stripped == False, "Shouldn't reach a stripped duplicate here"
-          symbols[other_object_name][symbol_name] = Symbol(symbol_name, symbol_size, sym_type=symbol_type, linkage=linkage, stripped=stripped, align=symbol_align)
+          symbols[other_object_name][symbol_name] = Symbol(symbol_name, symbol_size, curr_section_name, sym_type=symbol_type, linkage=linkage, stripped=stripped, align=symbol_align)
         unref_dupe_symbol_names_already_added.add(symbol_name)
   
   return symbols
 
-def is_debug_only_symbol(symbol_name: str):
+def should_ignore_fake_symbol(symbol_name: str):
+  if symbol_name in ["_three$localstatic4$sqrtf__3stdFf", "_half$localstatic3$sqrtf__3stdFf"]:
+    # This weak data from the PCH has no symbol in the target for some reason (but does still exist and take up space).
+    return True
+  return False
+
+def should_ignore_missing_symbol(symbol_name: str):
   if "__11JORMContextF" in symbol_name:
     return True
   return False
 
-def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: bool, print_maybe_fake: bool):
-  target_map_path_dol = debug_maps_root_path / "frameworkD.map"
-  target_map_path_rel = debug_maps_root_path / f"{target_object_name}D.map"
+class MapDiffResult:
+  def __init__(
+      self,
+      target_symbols: dict[str, Symbol],
+      base_symbols: dict[str, Symbol],
+      all_target_symbols: dict[str, dict[str, Symbol]],
+      all_base_symbols: dict[str, dict[str, Symbol]],
+      target_missing_tree_and_stripped: bool,
+      target_symbol_names_in_previous_objects: set[str],
+  ):
+    self.target_symbols = target_symbols
+    self.base_symbols = base_symbols
+    self.all_target_symbols = all_target_symbols
+    self.all_base_symbols = all_base_symbols
+    self.target_missing_tree_and_stripped = target_missing_tree_and_stripped
+    self.target_symbol_names_in_previous_objects = target_symbol_names_in_previous_objects
+
+def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: bool, print_maybe_fake: bool, all_ninja_outputs: list[str]):
+  target_map_path_dol = DEBUG_MAPS_ROOT_PATH / "frameworkD.map"
+  target_map_path_rel = DEBUG_MAPS_ROOT_PATH / f"{target_object_name}D.map"
   if target_map_path_rel.exists():
     target_is_rel = True
     target_map_path = target_map_path_rel
@@ -223,8 +266,8 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
   del target_map_path_dol
   del target_map_path_rel
   
-  base_map_path_dol = decomp_root_path / "build" / "D44J01" / "framework.elf.MAP"
-  base_map_path_rel = decomp_root_path / "build" / "D44J01" / target_object_name / f"{target_object_name}.plf.MAP"
+  base_map_path_dol = DECOMP_ROOT_PATH / "build" / "D44J01" / "framework.elf.MAP"
+  base_map_path_rel = DECOMP_ROOT_PATH / "build" / "D44J01" / target_object_name / f"{target_object_name}.plf.MAP"
   if base_map_path_rel.as_posix() in all_ninja_outputs:
     base_is_rel = True
     base_map_path = base_map_path_rel
@@ -236,8 +279,7 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
   del base_map_path_rel
   
   if call_ninja:
-    retcode = subprocess.call(["ninja", base_map_path.relative_to(decomp_root_path)], cwd=decomp_root_path)
-    assert retcode == 0, "Ninja build call failed"
+    ninja_build_one_map(base_map_path)
   
   target_missing_tree_and_stripped = not target_is_rel
   
@@ -253,7 +295,7 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
   
   # print(len(target_symbols), len(base_symbols))
   
-  target_symbol_names_in_previous_objects = set()
+  target_symbol_names_in_previous_objects: set[str] = set()
   if target_missing_tree_and_stripped:
     # This handles the logic for checking if a symbol already appeared earlier on in framework.map.
     # Note: I'm not sure if the logic here is 100% accurate for edge cases since it just relies on dict insertion order.
@@ -264,6 +306,19 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
       for symbol_name, symbol in symbols.items():
         target_symbol_names_in_previous_objects.add(symbol.name)
   
+  map_diff = MapDiffResult(
+    target_symbols=target_symbols,
+    base_symbols=base_symbols,
+    all_target_symbols=all_target_symbols,
+    all_base_symbols=all_base_symbols,
+    target_missing_tree_and_stripped=target_missing_tree_and_stripped,
+    target_symbol_names_in_previous_objects=target_symbol_names_in_previous_objects,
+  )
+  return map_diff
+
+def print_diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: bool, print_maybe_fake: bool, all_ninja_outputs: list[str]):
+  map_diff = diff_debug_map(target_object_name, call_ninja, print_size_diffs, print_maybe_fake, all_ninja_outputs)
+  
   print("==================================================")
   print(f"=== Diff for object: {target_object_name}")
   print("==================================================")
@@ -272,24 +327,24 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
     symbol_size_diffs = []
     total_right_size = 0
     total_wrong_size = 0
-  total_missing = 0
-  total_fake = 0
+  missing_target_symbols: set[str] = set()
+  fake_base_symbols: set[str] = set()
   if print_maybe_fake:
     total_maybe_fake = 0
-  total_wrong_linkage = 0
-  total_wrong_align = 0
+  wrong_linkage_symbols: set[str] = set()
+  wrong_align_symbols: set[str] = set()
   
   if print_size_diffs:
-    for symbol_name, target_symbol in target_symbols.items():
+    for symbol_name, target_symbol in map_diff.target_symbols.items():
       if target_symbol.size == 0:
         continue
-      if symbol_name not in base_symbols:
+      if symbol_name not in map_diff.base_symbols:
         base_size = 0
       else:
-        base_size = base_symbols[symbol_name].size
+        base_size = map_diff.base_symbols[symbol_name].size
       size_diff = abs(target_symbol.size - base_size)
       ratio = size_diff / target_symbol.size
-      if symbol_name in base_symbols and size_diff != 0:
+      if symbol_name in map_diff.base_symbols and size_diff != 0:
         total_wrong_size += 1
       symbol_size_diffs.append((symbol_name, target_symbol.size, base_size, ratio))
     
@@ -310,12 +365,12 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
         prefix = "WRONG: "
       print(prefix + symbol_name, "0x%X" % target_size, "0x%X" % base_size, ratio)
   
-  for symbol_name, target_symbol in target_symbols.items():
+  for symbol_name, target_symbol in map_diff.target_symbols.items():
     if target_symbol.size == 0:
       continue
-    if symbol_name not in base_symbols:
+    if symbol_name not in map_diff.base_symbols:
       continue
-    base_symbol = base_symbols[symbol_name]
+    base_symbol = map_diff.base_symbols[symbol_name]
     is_wrong_linkage = False
     if target_symbol.linkage is None and base_symbol.sym_type == "object":
       # The official framework.map for main.dol doesn't include linkage, but we can guess it based off of certain symbol name prefixes.
@@ -329,46 +384,53 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
       is_wrong_linkage = True
       target_linkage = target_symbol.linkage
     if is_wrong_linkage:
-      total_wrong_linkage += 1
+      wrong_linkage_symbols.add(symbol_name)
       print(f"LINKAGE: {symbol_name} (should be {target_linkage}, is {base_symbol.linkage})")
   
-  for symbol_name, target_symbol in target_symbols.items():
+  for symbol_name, target_symbol in map_diff.target_symbols.items():
     if target_symbol.align is None:
       continue
-    if symbol_name not in base_symbols:
+    if symbol_name not in map_diff.base_symbols:
       continue
-    base_symbol = base_symbols[symbol_name]
+    base_symbol = map_diff.base_symbols[symbol_name]
     if target_symbol.align != base_symbol.align:
-      total_wrong_align += 1
+      wrong_align_symbols.add(symbol_name)
       print(f"ALIGN: {symbol_name} (should be {target_symbol.align}, is {base_symbol.align})")
   
-  maybe_fake_symbols = []
-  fake_symbols = []
-  for symbol_name, base_symbol in base_symbols.items():
-    if symbol_name in target_symbols:
+  maybe_fake_symbols: list[Symbol] = []
+  fake_symbols: list[Symbol] = []
+  for symbol_name, base_symbol in map_diff.base_symbols.items():
+    if symbol_name in map_diff.target_symbols:
       continue
-    if target_missing_tree_and_stripped and (base_symbol.stripped or symbol_name in target_symbol_names_in_previous_objects):
+    if map_diff.target_missing_tree_and_stripped and (base_symbol.stripped or symbol_name in map_diff.target_symbol_names_in_previous_objects):
       maybe_fake_symbols.append(base_symbol)
     else:
       fake_symbols.append(base_symbol)
   
   if print_maybe_fake:
     for base_symbol in maybe_fake_symbols:
-      print("FAKE?:", base_symbol.name, "0x%X" % base_symbol.size)
+      if should_ignore_fake_symbol(base_symbol.name):
+        continue
+      # print("FAKE?:", base_symbol.name, "0x%X" % base_symbol.size)
       total_maybe_fake += 1
   
   for base_symbol in fake_symbols:
+    if should_ignore_fake_symbol(base_symbol.name):
+      continue
     print("FAKE:", base_symbol.name, "0x%X" % base_symbol.size)
-    total_fake += 1
+    fake_base_symbols.add(base_symbol.name)
   
-  for symbol_name, target_symbol in target_symbols.items():
+  for symbol_name, target_symbol in map_diff.target_symbols.items():
     if target_symbol.size == 0:
       continue
-    if is_debug_only_symbol(symbol_name):
+    if should_ignore_missing_symbol(symbol_name):
       continue
-    if symbol_name not in base_symbols:
-      total_missing += 1
-      print("MISSING: " + symbol_name, "0x%X" % target_symbol.size)
+    if symbol_name not in map_diff.base_symbols:
+      missing_target_symbols.add(symbol_name)
+      suffix = ""
+      if target_symbol.stripped:
+        suffix = "(UNUSED)"
+      print("MISSING: " + symbol_name, "0x%X" % target_symbol.size, suffix)
   
   print("==================================================")
   print(f"=== Summary for object: {target_object_name}")
@@ -376,43 +438,78 @@ def diff_debug_map(target_object_name: str, call_ninja: bool, print_size_diffs: 
   if print_size_diffs:
     print(f"Total right size: {total_right_size}")
     print(f"Total wrong size: {total_wrong_size}")
-  print(f"Total wrong linkage: {total_wrong_linkage}")
-  print(f"Total wrong alignment: {total_wrong_align}")
+  print(f"Total wrong linkage: {len(wrong_linkage_symbols)}")
+  print(f"Total wrong alignment: {len(wrong_align_symbols)}")
   if print_maybe_fake:
     print(f"Total maybe fake: {total_maybe_fake}")
-  print(f"Total fake: {total_fake}")
-  print(f"Total missing: {total_missing}")
+  print(f"Total fake: {len(fake_base_symbols)}")
+  print(f"Total missing: {len(missing_target_symbols)}")
   
-  return (total_missing, total_fake, total_wrong_linkage, total_wrong_align)
+  return (missing_target_symbols, fake_base_symbols, wrong_linkage_symbols, wrong_align_symbols)
 
-def diff_all_debug_maps():
-  retcode = subprocess.call(["ninja"], cwd=decomp_root_path)
-  assert retcode == 0, "Ninja build call failed"
+def diff_all_debug_maps(all_ninja_outputs: list[str]):
+  ninja_build_all()
   
-  total_missing = 0
-  total_fake = 0
-  total_wrong_linkage = 0
-  total_wrong_align = 0
+  missing_counts: Counter[str] = Counter()
+  fake_counts: Counter[str] = Counter()
+  wrong_linkage_counts: Counter[str] = Counter()
+  wrong_align_counts: Counter[str] = Counter()
+  
+  all_object_names = get_all_object_names_from_ninja_outputs(all_ninja_outputs)
   
   for target_object_name in all_object_names:
     if target_object_name in ["__mem", "exception", "executor"]:
       continue
-    missing, fake, wrong_linkage, wrong_align = diff_debug_map(target_object_name, call_ninja=False, print_size_diffs=False, print_maybe_fake=False)
-    total_missing += missing
-    total_fake += fake
-    total_wrong_linkage += wrong_linkage
-    total_wrong_align += wrong_align
+    missing, fake, wrong_linkage, wrong_align = print_diff_debug_map(target_object_name, call_ninja=False, print_size_diffs=False, print_maybe_fake=False, all_ninja_outputs=all_ninja_outputs)
+    missing_counts.update(missing)
+    fake_counts.update(fake)
+    wrong_linkage_counts.update(wrong_linkage)
+    wrong_align_counts.update(wrong_align)
+  
+  print("=== Most common wrong linkage:")
+  for (symbol_name, count) in wrong_linkage_counts.most_common(10):
+    print(count, symbol_name)
+  
+  print("=== Most common wrong alignment:")
+  for (symbol_name, count) in wrong_align_counts.most_common(10):
+    print(count, symbol_name)
+  
+  print("=== Most common fake:")
+  for (symbol_name, count) in fake_counts.most_common(10):
+    print(count, symbol_name)
+  
+  print("=== Most common missing:")
+  for (symbol_name, count) in missing_counts.most_common(10):
+    print(count, symbol_name)
   
   print("==================================================")
   print("=== Summary for all objects")
   print("==================================================")
-  print(f"Total wrong linkage: {total_wrong_linkage}")
-  print(f"Total wrong alignment: {total_wrong_align}")
-  print(f"Total fake: {total_fake}")
-  print(f"Total missing: {total_missing}")
+  print(f"Total wrong linkage: {sum(wrong_linkage_counts.values())}")
+  print(f"Total wrong alignment: {sum(wrong_align_counts.values())}")
+  print(f"Total fake: {sum(fake_counts.values())}")
+  print(f"Total missing: {sum(missing_counts.values())}")
+
+def main():
+  arg_parse = argparse.ArgumentParser()
+  arg_parse.add_argument("object_name", nargs="?", help="Name of the object to build and diff, e.g. d_a_bridge or d_a_npc_fa1")
+  arg_parse.add_argument("--all", action='store_true', help="Build and diff all objects")
+  args = arg_parse.parse_args()
+  if args.all:
+    build_all = True
+  else:
+    if args.object_name is None:
+      arg_parse.error("the following arguments are required: object_name (or --all)")
+    build_all = False
+    arg_object_name: str = args.object_name
+    assert not re.search(r"[/\\.]", arg_object_name), "The object name should not contain slashes or dots"
+  
+  all_ninja_outputs = configure_debug_and_get_all_ninja_outputs()
+  
+  if build_all:
+    diff_all_debug_maps(all_ninja_outputs)
+  else:
+    print_diff_debug_map(arg_object_name, call_ninja=True, print_size_diffs=True, print_maybe_fake=True, all_ninja_outputs=all_ninja_outputs)
 
 if __name__ == "__main__":
-  if build_all:
-    diff_all_debug_maps()
-  else:
-    diff_debug_map(arg_object_name, call_ninja=True, print_size_diffs=True, print_maybe_fake=True)
+  main()

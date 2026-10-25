@@ -31,6 +31,7 @@ enum YAFLW00_JNT {
     YAFLW00_JNT_A00_e=0x1,
     YAFLW00_JNT_INNER_e=0x2,
     YAFLW00_JNT_OUTER_e=0x3,
+    YAFLW00_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_YAFLW00_H */

@@ -664,16 +664,14 @@ static void fly(bdk_class* i_this) {
         case 0:
             if (i_this->m2FC == 0) {
                 i_this->m2FC = cM_rndF(2.990f);
-            } else {
-                if (cM_rndF(1.0f) < 0.8f) {
-                    if (i_this->m2FC == 1) {
-                        i_this->m2FC = 2;
-                    } else if (i_this->m2FC == 2) {
-                        i_this->m2FC = 1;
-                    }
-                } else {
-                    i_this->m2FC = 0;
+            } else if (cM_rndF(1.0f) < 0.8f) {
+                if (i_this->m2FC == 1) {
+                    i_this->m2FC = 2;
+                } else if (i_this->m2FC == 2) {
+                    i_this->m2FC = 1;
                 }
+            } else {
+                i_this->m2FC = 0;
             }
 
             if (i_this->m2FC == 0) {
@@ -794,10 +792,8 @@ static void landing(bdk_class* i_this) {
                 anm_init(i_this, dRes_INDEX_BDK_BCK_TYAKUTI1_e, 15.0f, 0, 0.001f, dRes_INDEX_BDK_BAS_TYAKUTI1_e, 0);
                 i_this->m2E0 = 1.0f;
                 pos_flag = 1;
-            } else {
-                if (i_this->m2EC[0] == 1) {
-                    anm_init(i_this, dRes_INDEX_BDK_BCK_KAKKU1_e, 30.0f, 2, 1.0f, -1, 0);
-                }
+            } else if (i_this->m2EC[0] == 1) {
+                anm_init(i_this, dRes_INDEX_BDK_BCK_KAKKU1_e, 30.0f, 2, 1.0f, -1, 0);
             }
             break;
         case 2:
@@ -926,18 +922,16 @@ static void wait(bdk_class* i_this) {
                             anm_init(i_this, dRes_INDEX_BDK_BCK_SENKAI_L1_e, 10.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_SENKAI_L1_e, 0);
                             i_this->m2EC[1] = 0x14;
                         }
-                    } else {
-                        if (angle < -0x800) {
-                            if (i_this->m2CA != 2) {
-                                i_this->m2CA = 2;
-                                anm_init(i_this, dRes_INDEX_BDK_BCK_SENKAI_R1_e, 10.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_SENKAI_R1_e, 0);
-                                i_this->m2EC[1] = 0x14;
-                            }
-                        } else if (i_this->m2CA != 3) {
-                            i_this->m2CA = 3;
-                            anm_init(i_this, dRes_INDEX_BDK_BCK_WAIT1_e, 10.0f, 2, 1.0f, -1, 0);
+                    } else if (angle < -0x800) {
+                        if (i_this->m2CA != 2) {
+                            i_this->m2CA = 2;
+                            anm_init(i_this, dRes_INDEX_BDK_BCK_SENKAI_R1_e, 10.0f, 2, 1.0f, dRes_INDEX_BDK_BAS_SENKAI_R1_e, 0);
                             i_this->m2EC[1] = 0x14;
                         }
+                    } else if (i_this->m2CA != 3) {
+                        i_this->m2CA = 3;
+                        anm_init(i_this, dRes_INDEX_BDK_BCK_WAIT1_e, 10.0f, 2, 1.0f, -1, 0);
+                        i_this->m2EC[1] = 0x14;
                     }
                 }
                 if (i_this->m2CA != 3) {
@@ -1598,9 +1592,7 @@ static void damage_check(bdk_class* i_this) {
                 }
                 i_this->m1138 = 0;
 
-                pos.z = 2.0f;
-                pos.y = 2.0f;
-                pos.x = 2.0f;
+                pos.x = pos.y = pos.z = 2.0f;
                 angle.x = angle.z = 0;
                 angle.y = player->shape_angle.y + 0x8000;
                 dComIfGp_particle_set(dPa_name::ID_AK_JN_OK, i_this->mHeadTgSph.GetTgHitPosP(), &angle, &pos);
@@ -1629,23 +1621,21 @@ static void damage_check(bdk_class* i_this) {
                     i_this->m2F8 = 0x14;
                 }
                 sVar1 = 1;
-            } else {
-                if (i_this->m2586 != 0) {
-                    if (i_this->mAction == ACTION_KUTI_ATTACK) {
-                        i_this->mAction = ACTION_WAIT;
-                        anm_init(i_this, dRes_INDEX_BDK_BCK_WAIT1_e, 10.0f, 2, 1.0f, -1, 0);
-                        i_this->mState = 1;
+            } else if (i_this->m2586 != 0) {
+                if (i_this->mAction == ACTION_KUTI_ATTACK) {
+                    i_this->mAction = ACTION_WAIT;
+                    anm_init(i_this, dRes_INDEX_BDK_BCK_WAIT1_e, 10.0f, 2, 1.0f, -1, 0);
+                    i_this->mState = 1;
 
-                        i_this->m2EC[0] = cM_rndF(30.0f) + 30.0f;
-                        i_this->m2EC[1] = i_this->m2EC[0];
-                        i_this->m2CA = 0;
-                    }
-                    anm_init(i_this, dRes_INDEX_BDK_BCK_DAMAGE3_e, 2.0f, 0, 1.0f, -1, 1);
-                    sVar1 = 1;
-                } else {
-                    anm_init(i_this, dRes_INDEX_BDK_BCK_DAMAGE2_e, 2.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_DAMAGE2_e, 1);
-                    sVar1 = 1;
+                    i_this->m2EC[0] = cM_rndF(30.0f) + 30.0f;
+                    i_this->m2EC[1] = i_this->m2EC[0];
+                    i_this->m2CA = 0;
                 }
+                anm_init(i_this, dRes_INDEX_BDK_BCK_DAMAGE3_e, 2.0f, 0, 1.0f, -1, 1);
+                sVar1 = 1;
+            } else {
+                anm_init(i_this, dRes_INDEX_BDK_BCK_DAMAGE2_e, 2.0f, 0, 1.0f, dRes_INDEX_BDK_BAS_DAMAGE2_e, 1);
+                sVar1 = 1;
             }
             if (actor->health <= 0) {
                 dScnPly_ply_c::setPauseTimer(8);
@@ -2313,7 +2303,6 @@ static void t_down(bdk_class* i_this) {
 #else
             mDoGph_gInf_c::setBlureRate(REG8_S(4) + 0xb4);
             mDoGph_gInf_c::onBlure();
-
 #endif
 
             // Fall-through
@@ -3496,9 +3485,7 @@ static BOOL daBdk_Execute(bdk_class* i_this) {
     } else {
         fVar1 = l_HIO.m008;
     }
-    actor->scale.z = fVar1;
-    actor->scale.y = fVar1;
-    actor->scale.x = fVar1;
+    actor->scale.x = actor->scale.y = actor->scale.z = fVar1;
 
     J3DModel* model = i_this->mpMorf->getModel();
     model->setBaseScale(actor->scale);
@@ -3525,10 +3512,8 @@ static BOOL daBdk_Execute(bdk_class* i_this) {
         s16 angle = out.z * (REG8_F(0xF) + -200.0f);
         if (angle > 8000) {
             angle = 8000;
-        } else {
-            if (angle < -8000) {
-                angle = -8000;
-            }
+        } else if (angle < -8000) {
+            angle = -8000;
         }
 
         s16 iVar4 = (DEMO_SELECT(REG14_F(5), REG0_F(5)) + -2000.0f) * i_this->m1140 * cM_ssin(i_this->m1130 * (REG8_S(4) + 2500));
@@ -3588,10 +3573,8 @@ static BOOL daBdk_Execute(bdk_class* i_this) {
         angle = cM_atan2s(offset.x, offset.z) - actor->shape_angle.y;
         if (angle > 7000) {
             angle = 7000;
-        } else {
-            if (angle < -7000) {
-                angle = -7000;
-            }
+        } else if (angle < -7000) {
+            angle = -7000;
         }
     } else {
         angle = 0;
@@ -3726,7 +3709,7 @@ static BOOL useHeapInit(fopAc_ac_c* i_actor) {
         }
     }
 
-    i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+    i_this->mpMorf->getModel()->setUserArea((uintptr_t)i_this);
 
     i_this->mp2BC = mDoExt_J3DModel__create(i_this->mpMorf->getModel()->getModelData(), 0, 0x11020203);
     if (i_this->mp2BC == NULL) {
@@ -4245,27 +4228,25 @@ static cPhs_State daBdk_Create(fopAc_ac_c* a_this) {
             i_this->m6320 = -630.0f;
             i_this->m6324 = -70.0f;
             i_this->m62D4 = -500.0f;
-        } else {
-            if (i_this->m2B4 == 0x1) {
-                i_this->mAction = ACTION_T_FLY;
-                actor->current.pos = center_pos;
-                actor->current.pos.y = 5000.0f;
-                i_this->m6320 = -630.0f;
-                i_this->m6324 = -70.0f;
-                mDoAud_bgmStart(JA_BGM_MJ_TOWER_BATTLE);
-                for (s32 i = 0; i < 0xA; i++) {
-                    i_this->mWindAtSph[i].SetAtType(AT_TYPE_UNK400000);
-                }
-                i_this->m2EC[0] = 0x168;
-            } else {
-                actor->gravity = REG0_F(4) + -5.0f;
-                actor->speedF = l_HIO.m020;
-                i_this->m2CA = -1;
-                i_this->m1120 = -2000;
-                actor->health = 20;
-                actor->max_health = 20;
-                actor->current.pos.y = 11000.0f;
+        } else if (i_this->m2B4 == 0x1) {
+            i_this->mAction = ACTION_T_FLY;
+            actor->current.pos = center_pos;
+            actor->current.pos.y = 5000.0f;
+            i_this->m6320 = -630.0f;
+            i_this->m6324 = -70.0f;
+            mDoAud_bgmStart(JA_BGM_MJ_TOWER_BATTLE);
+            for (s32 i = 0; i < 0xA; i++) {
+                i_this->mWindAtSph[i].SetAtType(AT_TYPE_UNK400000);
             }
+            i_this->m2EC[0] = 0x168;
+        } else {
+            actor->gravity = REG0_F(4) + -5.0f;
+            actor->speedF = l_HIO.m020;
+            i_this->m2CA = -1;
+            i_this->m1120 = -2000;
+            actor->health = 20;
+            actor->max_health = 20;
+            actor->current.pos.y = 11000.0f;
         }
     }
 #if VERSION > VERSION_DEMO

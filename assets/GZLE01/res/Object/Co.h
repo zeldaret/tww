@@ -84,6 +84,7 @@ enum dRes_ID_CO {
 
 enum CO_LETTER_JNT {
     CO_LETTER_JNT_CO_LETTER_e=0x0,
+    CO_LETTER_NUM_JNTS_e=0x1,
 };
 
 enum CO_JNT {
@@ -109,12 +110,14 @@ enum CO_JNT {
     CO_JNT_LEGR2_e=0x13,
     CO_JNT_FOOTR_e=0x14,
     CO_JNT_SKIRTF_e=0x15,
+    CO_NUM_JNTS_e=0x16,
 };
 
 enum CO_PEAL_JNT {
     CO_PEAL_JNT_PEAL_LOC_e=0x0,
     CO_PEAL_JNT_CO_PEARL_e=0x1,
     CO_PEAL_JNT_CO_P_MARK_e=0x2,
+    CO_PEAL_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_CO_H */

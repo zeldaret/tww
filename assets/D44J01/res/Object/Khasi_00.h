@@ -18,6 +18,7 @@ enum dRes_ID_KHASI_00 {
 
 enum KHASI_00_JNT {
     KHASI_00_JNT_KHASI_00_e=0x0,
+    KHASI_00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KHASI_00_H */

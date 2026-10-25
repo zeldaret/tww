@@ -25,6 +25,7 @@ enum VSAIL_JNT {
     VSAIL_JNT_VSAIL_BODY_e=0x1,
     VSAIL_JNT_VUPY1_OUTSIDE_e=0x2,
     VSAIL_JNT_VUPY2_INSIDE_e=0x3,
+    VSAIL_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_VSAIL_H */

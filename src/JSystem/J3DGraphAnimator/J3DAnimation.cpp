@@ -330,14 +330,14 @@ f32 J3DHermiteInterpolationS(f32 t, s16* time0, s16* value0, s16* tangent0, s16*
     return (t1 * kt * kt + (timeRange * *(f32*)tangent0 + t2) * kt + v0) - t2;
     */
 
-    register f32 p1 = t;
-    register s16* p2 = time0;
-    register s16* p3 = value0;
-    register s16* p4 = tangent0;
-    register s16* p5 = time1;
-    register s16* p6 = value1;
-    register s16* p7 = tangent1;
-    register f32 fout;
+    __REGISTER f32 p1 = t;
+    __REGISTER s16* p2 = time0;
+    __REGISTER s16* p3 = value0;
+    __REGISTER s16* p4 = tangent0;
+    __REGISTER s16* p5 = time1;
+    __REGISTER s16* p6 = value1;
+    __REGISTER s16* p7 = tangent1;
+    __REGISTER f32 fout;
 #ifdef __MWERKS__
     asm {
         psq_l f0, 0(p2), 0x1, 5

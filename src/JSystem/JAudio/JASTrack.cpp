@@ -15,6 +15,7 @@
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JAudio/JASRate.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
+#include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
 /* 80280960-80280A34       .text __ct__Q28JASystem6TTrackFv */
@@ -22,7 +23,7 @@ JASystem::TTrack::TTrack() {
     mParent = NULL;
     field_0x364 = 0.0f;
     field_0x368 = 0.0f;
-    field_0x36c = 0;
+    mRoute = 0;
     mUpdateFlags = 0;
     field_0x374 = 0;
     field_0x376 = 0x78;
@@ -69,7 +70,7 @@ void JASystem::TTrack::init() {
     }
     field_0x364 = 0.0f;
     field_0x368 = 1.0f;
-    field_0x36c = 0;
+    mRoute = 0;
     mVibrate.init();
     mUpdateFlags = 0;
     field_0x374 = 0;
@@ -136,13 +137,13 @@ s8 JASystem::TTrack::mainProc() {
         }
         field_0x364 -= 1.0f;
     }
-    if (mParent && mChannelUpdater.field_0x0) {
+    if (mParent && mChannelUpdater.mManagedChannels) {
         TChannel* channel = mChannelUpdater.getListHead(0);
         if (channel) {
             mParent->mChannelUpdater.addListHead(channel, 0);
             channel->field_0x4 = &mParent->mChannelUpdater;
-            mChannelUpdater.field_0x0--;
-            mParent->mChannelUpdater.field_0x0++;
+            mChannelUpdater.mManagedChannels--;
+            mParent->mChannelUpdater.mManagedChannels++;
         }
     }
     mIntrMgr.request(REQUEST_UNK_7);
@@ -225,21 +226,21 @@ void JASystem::TTrack::flushAll() {
 /* 80281088-80281138       .text moveFreeChannel__Q28JASystem6TTrackFPQ28JASystem11TChannelMgrPQ28JASystem11TChannelMgri */
 int JASystem::TTrack::moveFreeChannel(TChannelMgr* param_1, TChannelMgr* param_2, int param_3) {
     if (param_3 < 0) {
-        u32 r31 = param_1->field_0x0;
+        u32 r31 = param_1->mManagedChannels;
         param_2->receiveAllChannels(param_1);
         return r31;
     }
     for (int i = 0; i < param_3; i++) {
-        if (!param_1->field_0x0) {
+        if (!param_1->mManagedChannels) {
             break;
         }
         TChannel* channel = param_1->getListHead(0);
         if (!channel) {
             break;
         }
-        param_1->field_0x0--;
+        param_1->mManagedChannels--;
         param_2->addListHead(channel, 0);
-        param_2->field_0x0++;
+        param_2->mManagedChannels++;
     }
     return 0;
 }
@@ -272,8 +273,8 @@ void JASystem::TTrack::initTimed() {
 }
 
 static void dummy() {
-    OSReport("i >= 0");
-    OSReport("i < 3");
+    DEAD_STRING("i >= 0");
+    DEAD_STRING("i < 3");
 }
 
 /* 802811DC-80281258       .text connectBus__Q28JASystem6TTrackFii */
@@ -283,14 +284,14 @@ void JASystem::TTrack::connectBus(int line, int param_2) {
 }
 
 /* 80281258-802814AC       .text noteOn__Q28JASystem6TTrackFUclllUl */
-int JASystem::TTrack::noteOn(u8 param_1, s32 param_2, s32 param_3, s32 param_4, u32 param_5) {
+int JASystem::TTrack::noteOn(u8 param_1, s32 param_2, s32 param_3, s32 param_4, u32 skipSamples) {
     if (field_0x386 && (mPauseStatus & 0x40)) {
         return -1;
     }
     noteOff(param_1, 0);
     TChannelMgr* r31 = &mChannelUpdater;
     TTrack* parent = mParent;
-    while (r31->field_0x0 == 0 || r31->field_0x8 == 0) {
+    while (r31->mManagedChannels == 0 || r31->field_0x8 == 0) {
         if (!parent) {
             r31 = &mChannelUpdater;
             break;
@@ -302,13 +303,13 @@ int JASystem::TTrack::noteOn(u8 param_1, s32 param_2, s32 param_3, s32 param_4, 
         JUT_ASSERT(527, mParent != NULL);
         if (r31 != &mParent->mChannelUpdater) {
             if (moveFreeChannel(r31, &mParent->mChannelUpdater, 1) != 1) {
-                OSReport("in Player (NOTE-MODE) ... ボイス借用に失敗しました！！ (%d)\n", r31->field_0x0);
+                OSReport("in Player (NOTE-MODE) ... ボイス借用に失敗しました！！ (%d)\n", r31->mManagedChannels);
             }
             r31 = &mParent->mChannelUpdater;
         }
     } else if (r31 != &mChannelUpdater) {
         if (moveFreeChannel(r31, &mChannelUpdater, 1) != 1) {
-            OSReport("in Player ボイス借用に失敗しました！！ (%d)\n", r31->field_0x0);
+            OSReport("in Player ボイス借用に失敗しました！！ (%d)\n", r31->mManagedChannels);
         }
         r31 = &mChannelUpdater;
     }
@@ -320,7 +321,7 @@ int JASystem::TTrack::noteOn(u8 param_1, s32 param_2, s32 param_3, s32 param_4, 
         return -1;
     }
     mNoteMgr.setChannel(param_1, channel);
-    channel->field_0xe8 = param_5;
+    channel->setSkipSamples(skipSamples);
     channel->setPanPower(mRegisterParam.getPanPowerBank(), mRegisterParam.getPanPowerExt(), mRegisterParam.getPanPowerOsc(), 0.0f);
     overwriteOsc(channel);
     if (field_0x374) {
@@ -971,13 +972,13 @@ JASystem::TTrack* JASystem::TTrack::openChild(u8 trk_no, u8 param_2) {
     new_track->mParent = this;
     new_track->field_0x37b = param_2;
 
-    u32 top_nibble = field_0x36c & 0xf0000000;
+    u32 top_nibble = mRoute & 0xf0000000;
     if (top_nibble >= 0x70000000) {
         // "JASTrack:openTrack: The hierarchy exceeds 8 levels and an invalid track ID is generated.\n"
         OSReport("JASTrack:openTrack: 階層が8段階を超えてしまい、不正なトラックIDが生成されました\n");
     }
-    new_track->field_0x36c = (top_nibble + 0x10000000) |
-                             (((field_0x36c) << 4 | ((u32) trk_no)) & 0x0FFFFFFF);
+    new_track->mRoute = (top_nibble + 0x10000000) |
+                        (((mRoute) << 4 | ((u32) trk_no)) & 0x0FFFFFFF);
     mChildren[(int)trk_no] = new_track;
     new_track->inherit();
     return new_track;
@@ -1012,7 +1013,7 @@ int JASystem::TTrack::exchangeRegisterValue(u8 target) {
     }
 
     u8 index = target - 0x40;
-    return mTrackPort.mValue[index];
+    return mTrackPort.get(index);
 }
 
 /* 80282DC0-80282ED4       .text readReg32__Q28JASystem6TTrackFUc */
@@ -1089,7 +1090,7 @@ void JASystem::TTrack::writeRegDirect(u8 target, u16 value) {
         case 0:
         case 1:
         case 2:
-            val_u8 = value & 0xFF;
+            val_u8 = JSULoByte(value);
             value = val_u8;
             r4 = Player::extend8to16(val_u8);
             break;
@@ -1097,10 +1098,10 @@ void JASystem::TTrack::writeRegDirect(u8 target, u16 value) {
         case 0x21:
             return;
         case 0x22:
-            writeRegDirect(0, value >> 8);
+            writeRegDirect(0, JSUHiByte(value));
             target = 1;
             r4 = value;
-            value = value & 0xFF;
+            value = JSULoByte(value);
             break;
         default:
             r4 = value;
@@ -1196,8 +1197,8 @@ void JASystem::TTrack::writeRegParam(u8 param) {
             break;
         case 0x2:
             extended_sVar1 *= sVar0;
-            writeRegDirect(4, extended_sVar1 >> 16);
-            writeRegDirect(5, extended_sVar1 & 0xFFFF);
+            writeRegDirect(4, JSUHiHalf(extended_sVar1));
+            writeRegDirect(5, JSULoHalf(extended_sVar1));
             return;
         case 0x3:
             mRegisterParam.setFlag(sVar1 - sVar0);

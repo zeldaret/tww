@@ -77,7 +77,7 @@ static GXBool DrawDone;
 void GXSetDrawDone(void) {
     u8 padding[8];
     BOOL restore = OSDisableInterrupts();
-    GFWriteBPCmd(0x45000002);
+    GX_WRITE_RAS_REG(0x45000002);
     GXFlush();
     DrawDone = 0;
     OSRestoreInterrupts(restore);

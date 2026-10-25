@@ -24,6 +24,7 @@ enum dRes_ID_DEKU {
 
 enum VLFDM_JNT {
     VLFDM_JNT_LEAF_MODEL_e=0x0,
+    VLFDM_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_DEKU_H */

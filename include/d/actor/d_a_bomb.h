@@ -10,17 +10,31 @@
 class daBomb_fuseSmokeEcallBack : public dPa_levelEcallBack {
 public:
     daBomb_fuseSmokeEcallBack() {}
-    ~daBomb_fuseSmokeEcallBack() {}
+    virtual ~daBomb_fuseSmokeEcallBack() {}
     
-    void execute(JPABaseEmitter*) {}
-    void executeAfter(JPABaseEmitter*);
-    void draw(JPABaseEmitter*) {}
+    virtual void execute(JPABaseEmitter*) {}
+    virtual void executeAfter(JPABaseEmitter*);
+    virtual void draw(JPABaseEmitter*) {}
     
-    void setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz*, s8) {
+    virtual void setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz*, s8) {
         mpPos = pos;
         mpEmitter = emitter;
     }
 
+    void deleteCallBack() {
+        if(mpEmitter) {
+            mpEmitter->setEmitterCallBackPtr(NULL);
+            mpEmitter->becomeInvalidEmitter();
+        }
+        mpEmitter = NULL;
+    }
+    void setOldPosP(cXyz* param_0, cXyz* param_1) {
+        field_0x0C = param_0;
+        field_0x10 = param_1;
+        field_0x04 = 20;
+    }
+
+private:
     /* 0x04 */ s16 field_0x04;
     /* 0x08 */ const cXyz* mpPos;
     /* 0x0C */ cXyz* field_0x0C;
@@ -31,14 +45,22 @@ public:
 class daBomb_fuseSparksEcallBack : public dPa_levelEcallBack {
 public:
     daBomb_fuseSparksEcallBack() {}
-    ~daBomb_fuseSparksEcallBack() {}
+    virtual ~daBomb_fuseSparksEcallBack() {}
     
-    void execute(JPABaseEmitter*);
-    void draw(JPABaseEmitter*) {}
+    virtual void execute(JPABaseEmitter*);
+    virtual void draw(JPABaseEmitter*) {}
 
-    void setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz*, s8) {
+    virtual void setup(JPABaseEmitter* emitter, const cXyz* pos, const csXyz*, s8) {
         mpPos = pos;
         mpEmitter = emitter;
+    }
+
+    void deleteCallBack() {
+        if(mpEmitter) {
+            mpEmitter->setEmitterCallBackPtr(NULL);
+            mpEmitter->becomeInvalidEmitter();
+        }
+        mpEmitter = NULL;
     }
 
     /* 0x04 */ const cXyz* mpPos;
@@ -47,7 +69,7 @@ public:
 
 class dBgS_BombAcch : public dBgS_Acch {
 public:
-    dBgS_BombAcch() { mbBombThrough = true; }
+    dBgS_BombAcch() { SetBomb(); }
 }; // Size 0x1C4
 
 

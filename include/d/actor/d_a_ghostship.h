@@ -18,8 +18,8 @@ public:
     };
 
     bool checkInShip() { return mbCanEnterShip; }
-    void getAlpha() {}
-    void setMtx() {}
+    f32 getAlpha() { return mAlpha; }
+    inline void setMtx();
 
     inline cPhs_State _create();
     inline bool _delete();
@@ -38,7 +38,7 @@ public:
     void createInit();
     void getArg();
 
-public:
+private:
     /* 0x290 */ u32 mMode;
     /* 0x294 */ s32 mPathNo;
     /* 0x298 */ u8 moonPhase;
@@ -52,8 +52,8 @@ public:
     /* 0x2C8 */ u32 field_0x2C8;
     /* 0x2CC */ request_of_phase_process_class mPhs;
     /* 0x2D4 */ request_of_phase_process_class mClothPhs;
-    /* 0x2DC */ dCloth_packet_c* mpCloth;
-    /* 0x2E0 */ dCloth_packet_c* mpCloth2;
+    /* 0x2DC */ dCloth_packetXlu_c* mpCloth;
+    /* 0x2E0 */ dCloth_packetXlu_c* mpCloth2;
     /* 0x2E4 */ J3DModel* mpModel;
     /* 0x2E8 */ mDoExt_btkAnm mBtk;
     /* 0x2FC */ f32 mAlpha;

@@ -26,6 +26,7 @@ enum dRes_ID_HFBOT {
 
 enum HFBOT1_JNT {
     HFBOT1_JNT_POLYSURFACE1_e=0x0,
+    HFBOT1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HFBOT_H */

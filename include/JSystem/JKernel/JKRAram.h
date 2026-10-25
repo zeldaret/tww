@@ -43,7 +43,7 @@ public:
     static void dump(void);
 
     static JKRAram* getManager() { return sAramObject; }
-    static JKRAramHeap* getAramHeap() { return getManager()->mAramHeap; }
+    static JKRAramHeap* getAramHeap() { return sAramObject->mAramHeap; }
     static JSUList<JKRAMCommand>& getCommandList() { return sAramCommandList; }
 
     static u8 decideAramGroupId(int groupId) {
@@ -93,7 +93,5 @@ inline JKRAramBlock *JKRMainRamToAram(u8 *buf, u32 bufSize, u32 alignedSize, JKR
 inline JKRAramBlock* JKRMainRamToAram(u8* buf, JKRAramBlock* block, u32 size, JKRExpandSwitch expandSwitch, u32 fileSize, JKRHeap* heap, int id) {
     return JKRAram::mainRamToAram(buf, block, size, expandSwitch, fileSize, heap, id);
 }
-
-// void JKRDecompressFromAramToMainRam(u32, void*, u32, u32, u32, u32*);
 
 #endif /* JKRARAM_H */

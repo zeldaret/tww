@@ -18,6 +18,7 @@ enum dRes_ID_VLEOF {
 
 enum VLEOF_JNT {
     VLEOF_JNT_VLEOF_MODEL_e=0x0,
+    VLEOF_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VLEOF_H */

@@ -22,6 +22,7 @@ enum dRes_ID_ESHATA {
 
 enum ESHATA_JNT {
     ESHATA_JNT_ESHATA_e=0x0,
+    ESHATA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ESHATA_H */

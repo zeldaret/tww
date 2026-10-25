@@ -87,7 +87,7 @@ const daObjSwpush::Attr_c daObjSwpush::Act_c::M_attr[] = {
         /* m44              */ 2.5f,
         /* mPauseDuration   */ 10
     },
-    {
+    { // Unused type
         /* mHeapSize        */ 0x8000,
         /* mFlags           */ static_cast<AttrFlag_e>(FLAG_REQ_HEAVY | FLAG_STAY_PRESSED | FLAG_OBEY_SAVE),
         /* mScale           */ 1.5f,
@@ -156,8 +156,8 @@ bool daObjSwpush::Act_c::create_heap() {
     }
     mpModel = mDoExt_J3DModel__create(model_data, 0x80000, flag);
     if (mpModel) {
-        model_data->getJointNodePointer(1)->setCallBack(jnodeCB);
-        mpModel->setUserArea((u32) this);
+        model_data->getJointNodePointer(KBOTA_00_JNT_BOTAN_e)->setCallBack(jnodeCB);
+        mpModel->setUserArea((uintptr_t) this);
     }
 
     BOOL btp_success = TRUE;
@@ -314,7 +314,8 @@ void daObjSwpush::Act_c::init_mtx() {
 /* 00000AA0-00000B34       .text set_btp_frame__Q211daObjSwpush5Act_cFv */
 void daObjSwpush::Act_c::set_btp_frame() {
     if (attr().mBtpArcName != NULL) {
-        mBtpAnm.setFrame(is_switch() ? 1.0f : 0.0f);
+        f32 tmp1 = is_switch() ? 1.0f : 0.0f;
+        mBtpAnm.setFrame(tmp1);
     }
 }
 

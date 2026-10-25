@@ -22,6 +22,7 @@ enum PHANA_JNT {
     PHANA_JNT_JOINT1_e=0x2,
     PHANA_JNT_JOINT2_e=0x3,
     PHANA_JNT_JOINT3_e=0x4,
+    PHANA_NUM_JNTS_e=0x5,
 };
 
 #endif /* RES_RFLW_H */

@@ -18,6 +18,7 @@ enum dRes_ID_AANA {
 
 enum AANA_JNT {
     AANA_JNT_AANA_e=0x0,
+    AANA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_AANA_H */

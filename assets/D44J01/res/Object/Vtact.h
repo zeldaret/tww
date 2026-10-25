@@ -19,6 +19,7 @@ enum dRes_ID_VTACT {
 enum VTACT_JNT {
     VTACT_JNT_ROOT_VTACT_e=0x0,
     VTACT_JNT_TACT_MODEL_e=0x1,
+    VTACT_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VTACT_H */

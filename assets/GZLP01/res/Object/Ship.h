@@ -60,6 +60,7 @@ enum FN_BODY_JNT {
     FN_BODY_JNT_J_FN_SAIL2_e=0x8,
     FN_BODY_JNT_J_FN_SAIL_E_e=0x9,
     FN_BODY_JNT_J_FN_STEER1_e=0xA,
+    FN_BODY_NUM_JNTS_e=0xB,
 };
 
 enum FN_HEAD_H_JNT {
@@ -81,17 +82,20 @@ enum FN_HEAD_H_JNT {
     FN_HEAD_H_JNT_J_FN_MAYU_R2_e=0xF,
     FN_HEAD_H_JNT_J_FN_ME_L_e=0x10,
     FN_HEAD_H_JNT_J_FN_ME_R_e=0x11,
+    FN_HEAD_H_NUM_JNTS_e=0x12,
 };
 
 enum VFNCN_JNT {
     VFNCN_JNT_CANON_ROOT_e=0x0,
     VFNCN_JNT_CANON1_e=0x1,
     VFNCN_JNT_CANON2_e=0x2,
+    VFNCN_NUM_JNTS_e=0x3,
 };
 
 enum VFNCR_JNT {
     VFNCR_JNT_V_CRANE_ROOT_e=0x0,
     VFNCR_JNT_V_CRANE_ROTATION_e=0x1,
+    VFNCR_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_SHIP_H */

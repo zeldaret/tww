@@ -31,6 +31,7 @@ enum SSS_HAND_JNT {
     SSS_HAND_JNT_NAKAYUBI_e=0x1,
     SSS_HAND_JNT_YUBI1_e=0x2,
     SSS_HAND_JNT_YUBI2_e=0x3,
+    SSS_HAND_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_SSS_H */

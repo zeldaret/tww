@@ -163,6 +163,8 @@ void daObj_Search::Bgc_c::wall_pos(const daObj_Search::Act_c*, cXyz*, cXyz*, boo
     /* Nonmatching */
 }
 
+bool daObj_Search::Act_c::m_find_flag;
+
 /* 801002D4-801002E0       .text attr__Q212daObj_Search5Act_cCFv */
 void daObj_Search::Act_c::attr() const {
     /* Nonmatching */

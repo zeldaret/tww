@@ -76,15 +76,18 @@ enum UG_JNT {
     UG_JNT_LEGR1_e=0xE,
     UG_JNT_LEGR2_e=0xF,
     UG_JNT_FOOTR_e=0x10,
+    UG_NUM_JNTS_e=0x11,
 };
 
 enum UG01_HEAD_JNT {
     UG01_HEAD_JNT_HEAD2_e=0x0,
     UG01_HEAD_JNT_HAIR_e=0x1,
+    UG01_HEAD_NUM_JNTS_e=0x2,
 };
 
 enum UG02_HEAD_JNT {
     UG02_HEAD_JNT_UG02_HEAD_e=0x0,
+    UG02_HEAD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_UG_H */

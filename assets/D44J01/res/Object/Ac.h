@@ -68,6 +68,7 @@ enum ACARM_JNT {
     ACARM_JNT_SLEEVER1_e=0xC,
     ACARM_JNT_SLEEVER2_e=0xD,
     ACARM_JNT_SLEEVER3_e=0xE,
+    ACARM_NUM_JNTS_e=0xF,
 };
 
 enum ACWING_JNT {
@@ -80,14 +81,17 @@ enum ACWING_JNT {
     ACWING_JNT_WINGR1_e=0x6,
     ACWING_JNT_WINGR2_e=0x7,
     ACWING_JNT_WINGR3_e=0x8,
+    ACWING_NUM_JNTS_e=0x9,
 };
 
 enum AC_FLOWER_JNT {
     AC_FLOWER_JNT_AC_FLOWER_e=0x0,
+    AC_FLOWER_NUM_JNTS_e=0x1,
 };
 
 enum AC_FLOWER02_JNT {
     AC_FLOWER02_JNT_AC_FLOWER02_e=0x0,
+    AC_FLOWER02_NUM_JNTS_e=0x1,
 };
 
 enum AC_JNT {
@@ -110,6 +114,7 @@ enum AC_JNT {
     AC_JNT_LEGR1_e=0x10,
     AC_JNT_LEGR2_e=0x11,
     AC_JNT_FOOTR_e=0x12,
+    AC_NUM_JNTS_e=0x13,
 };
 
 #endif /* RES_AC_H */

@@ -7,7 +7,6 @@ class JPABaseEmitter;
 class JPABaseParticle;
 
 class daTpota_c : public fopAc_ac_c {
-
     struct unknown_struct {
         JPABaseParticle* ptcl;
         f32 pos_y;
@@ -24,7 +23,7 @@ public:
     bool _draw();
 
 public:
-    /* 0x290 */ u8 field_0x290[0x298 - 0x290];
+    /* 0x290 */ request_of_phase_process_class mPhase; // Unused
     /* 0x298 */ JPABaseEmitter* mpEmitters[2];
     /* 0x2A0 */ cXyz mPositions[2];
     /* 0x2B8 */ csXyz mAngles[2];

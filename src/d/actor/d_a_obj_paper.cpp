@@ -24,7 +24,7 @@ namespace daObjPaper {
 
 namespace {
     struct Attr_c {
-        /* 0x00 */ char* mResName;
+        /* 0x00 */ const char* mResName;
         /* 0x04 */ s32 mHeapSize;
         /* 0x06 */ s16 mModelId;
         /* 0x08 */ s16 mEyeOffset;
@@ -201,7 +201,7 @@ void daObjPaper::Act_c::mode_wait_init() {
 
 /* 00000748-00000784       .text mode_wait__Q210daObjPaper5Act_cFv */
 void daObjPaper::Act_c::mode_wait() {
-    if (eventInfo.mCommand == dEvtCmd_INTALK_e) {
+    if (eventInfo.checkCommandTalk()) {
         mode_talk0_init();
     }
     else {

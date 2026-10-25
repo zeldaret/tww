@@ -172,6 +172,7 @@ enum HEADB_JNT {
     HEADB_JNT_HEADB_e=0x0,
     HEADB_JNT_AGOB_e=0x1,
     HEADB_JNT_HAT_e=0x2,
+    HEADB_NUM_JNTS_e=0x3,
 };
 
 enum ST_JNT {
@@ -201,102 +202,127 @@ enum ST_JNT {
     ST_JNT_MOMOR_e=0x17,
     ST_JNT_SUNER_e=0x18,
     ST_JNT_ASIR_e=0x19,
+    ST_NUM_JNTS_e=0x1A,
 };
 
 enum ST_AGO_JNT {
     ST_AGO_JNT_ST_AGO_e=0x0,
+    ST_AGO_NUM_JNTS_e=0x1,
 };
 
 enum ST_ASIL_JNT {
     ST_ASIL_JNT_ST_ASIL_e=0x0,
+    ST_ASIL_NUM_JNTS_e=0x1,
 };
 
 enum ST_ASIR_JNT {
     ST_ASIR_JNT_ST_ASIR_e=0x0,
+    ST_ASIR_NUM_JNTS_e=0x1,
 };
 
 enum ST_BUKI_JNT {
     ST_BUKI_JNT_ST_BUKI_e=0x0,
+    ST_BUKI_NUM_JNTS_e=0x1,
 };
 
 enum ST_HANDL_JNT {
     ST_HANDL_JNT_ST_HANDL_e=0x0,
+    ST_HANDL_NUM_JNTS_e=0x1,
 };
 
 enum ST_HANDR_JNT {
     ST_HANDR_JNT_ST_HANDR_e=0x0,
+    ST_HANDR_NUM_JNTS_e=0x1,
 };
 
 enum ST_HARA_JNT {
     ST_HARA_JNT_ST_HARA_e=0x0,
+    ST_HARA_NUM_JNTS_e=0x1,
 };
 
 enum ST_HAT_JNT {
     ST_HAT_JNT_HAT_e=0x0,
+    ST_HAT_NUM_JNTS_e=0x1,
 };
 
 enum ST_HEAD_JNT {
     ST_HEAD_JNT_ST_HEAD_e=0x0,
+    ST_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum ST_KATAL_JNT {
     ST_KATAL_JNT_ST_KATAL_e=0x0,
+    ST_KATAL_NUM_JNTS_e=0x1,
 };
 
 enum ST_KATAR_JNT {
     ST_KATAR_JNT_ST_KATAR_e=0x0,
+    ST_KATAR_NUM_JNTS_e=0x1,
 };
 
 enum ST_KOTUBAN_JNT {
     ST_KOTUBAN_JNT_ST_KOTUBAN_e=0x0,
+    ST_KOTUBAN_NUM_JNTS_e=0x1,
 };
 
 enum ST_KUBI_JNT {
     ST_KUBI_JNT_ST_KUBI_e=0x0,
+    ST_KUBI_NUM_JNTS_e=0x1,
 };
 
 enum ST_MOMOL_JNT {
     ST_MOMOL_JNT_ST_MOMOL_e=0x0,
+    ST_MOMOL_NUM_JNTS_e=0x1,
 };
 
 enum ST_MOMOR_JNT {
     ST_MOMOR_JNT_ST_MOMOR_e=0x0,
+    ST_MOMOR_NUM_JNTS_e=0x1,
 };
 
 enum ST_MUNE_JNT {
     ST_MUNE_JNT_ST_MUNE1_e=0x0,
+    ST_MUNE_NUM_JNTS_e=0x1,
 };
 
 enum ST_SUNEL_JNT {
     ST_SUNEL_JNT_ST_SUNEL_e=0x0,
+    ST_SUNEL_NUM_JNTS_e=0x1,
 };
 
 enum ST_SUNER_JNT {
     ST_SUNER_JNT_ST_SUNER_e=0x0,
+    ST_SUNER_NUM_JNTS_e=0x1,
 };
 
 enum ST_UDEL_JNT {
     ST_UDEL_JNT_ST_UDEL_e=0x0,
+    ST_UDEL_NUM_JNTS_e=0x1,
 };
 
 enum ST_UDER_JNT {
     ST_UDER_JNT_ST_UDER_e=0x0,
+    ST_UDER_NUM_JNTS_e=0x1,
 };
 
 enum ST_YUBI1L_JNT {
     ST_YUBI1L_JNT_ST_YUBI1L_e=0x0,
+    ST_YUBI1L_NUM_JNTS_e=0x1,
 };
 
 enum ST_YUBI1R_JNT {
     ST_YUBI1R_JNT_ST_YUBI1R_e=0x0,
+    ST_YUBI1R_NUM_JNTS_e=0x1,
 };
 
 enum ST_YUBI2L_JNT {
     ST_YUBI2L_JNT_ST_YUBI2L_e=0x0,
+    ST_YUBI2L_NUM_JNTS_e=0x1,
 };
 
 enum ST_YUBI2R_JNT {
     ST_YUBI2R_JNT_ST_YUBI2R_e=0x0,
+    ST_YUBI2R_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_ST_H */

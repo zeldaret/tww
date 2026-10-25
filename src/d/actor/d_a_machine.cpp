@@ -155,7 +155,7 @@ void daMachine_c::CreateInit() {
 
     set_mtx();
 
-    mpModel->setUserArea((u32)this);
+    mpModel->setUserArea((uintptr_t)this);
 
     JUTNameTab* jointName = mpModel->getModelData()->getJointName();
     for(u16 i = 0; i < mpModel->getModelData()->getJointNum(); ++i) {

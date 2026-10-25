@@ -44,44 +44,53 @@ enum dRes_ID_KNOB {
 
 enum DOOR_JNT {
     DOOR_JNT_DOORDUMMY_e=0x0,
+    DOOR_NUM_JNTS_e=0x1,
 };
 
 enum DOOR_A_JNT {
     DOOR_A_JNT_DOOR_A_e=0x0,
+    DOOR_A_NUM_JNTS_e=0x1,
 };
 
 enum DOOR_B_JNT {
     DOOR_B_JNT_DOOR_B_e=0x0,
+    DOOR_B_NUM_JNTS_e=0x1,
 };
 
 enum DOOR_C_JNT {
     DOOR_C_JNT_DOOR_C_e=0x0,
     DOOR_C_JNT_LOCATOR2_e=0x1,
     DOOR_C_JNT_POLYSURFACE12_e=0x2,
+    DOOR_C_NUM_JNTS_e=0x3,
 };
 
 enum DOOR_D_JNT {
     DOOR_D_JNT_DOOR_D_e=0x0,
+    DOOR_D_NUM_JNTS_e=0x1,
 };
 
 enum DOOR_E_JNT {
     DOOR_E_JNT_DOOR_E_e=0x0,
+    DOOR_E_NUM_JNTS_e=0x1,
 };
 
 enum DOOR_F_JNT {
     DOOR_F_JNT_DOOR_F_e=0x0,
     DOOR_F_JNT_LOCATOR2_e=0x1,
     DOOR_F_JNT_POLYSURFACE13_e=0x2,
+    DOOR_F_NUM_JNTS_e=0x3,
 };
 
 enum DOOR_G_JNT {
     DOOR_G_JNT_DOOR_G_e=0x0,
+    DOOR_G_NUM_JNTS_e=0x1,
 };
 
 enum DOOR_H_JNT {
     DOOR_H_JNT_DOOR_H_e=0x0,
     DOOR_H_JNT_LOCATOR2_e=0x1,
     DOOR_H_JNT_RICHDOOR_e=0x2,
+    DOOR_H_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_KNOB_H */

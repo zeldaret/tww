@@ -672,25 +672,23 @@ u16 fopNpc_npc_c::talk(int param_1) {
         mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgNo, this);
         mpCurrMsg = NULL;
     }
-    else {
-        if(mpCurrMsg) {
-            status = mpCurrMsg->mStatus;
-            if(status == fopMsgStts_MSG_DISPLAYED_e) {
-                mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
-                if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
-                    fopMsgM_messageSet(mCurrMsgNo);
-                }
+    else if(mpCurrMsg) {
+        status = mpCurrMsg->mStatus;
+        if(status == fopMsgStts_MSG_DISPLAYED_e) {
+            mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
+            if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                fopMsgM_messageSet(mCurrMsgNo);
             }
-            else if (status == fopMsgStts_BOX_CLOSED_e) {
-                mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
-                mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-            }
+        }
+        else if (status == fopMsgStts_BOX_CLOSED_e) {
+            mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+            mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+        }
 
-            anmAtr(status);
-        }
-        else {
-            mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
-        }
+        anmAtr(status);
+    }
+    else {
+        mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
     }
 
     return status;
@@ -741,8 +739,8 @@ void dNpc_HeadAnm_c::swing_vertical() {
     s16 temp2 = field_0x1C;
     field_0x1C += field_0x1E;
     s16 temp = cM_ssin(field_0x1C) * field_0x14;
-    cLib_addCalcAngleS(&field_0x00, temp, 4, 0x1000, 0x100);
-    cLib_addCalcAngleS(&field_0x02, 0, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x00.x, temp, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x00.y, 0, 4, 0x1000, 0x100);
     
     if (temp2 < 0 && field_0x1C >= 0 && --field_0x20 <= 0) {
         setProc(NULL);
@@ -765,8 +763,8 @@ void dNpc_HeadAnm_c::swing_horizone() {
     s16 temp2 = field_0x1C;
     field_0x1C += field_0x1E;
     s16 temp = cM_ssin(field_0x1C) * field_0x18;
-    cLib_addCalcAngleS(&field_0x00, 0, 4, 0x1000, 0x100);
-    cLib_addCalcAngleS(&field_0x02, temp, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x00.x, 0, 4, 0x1000, 0x100);
+    cLib_addCalcAngleS(&field_0x00.y, temp, 4, 0x1000, 0x100);
     
     if (temp2 < 0 && field_0x1C >= 0 && --field_0x20 <= 0) {
         setProc(NULL);
@@ -779,8 +777,8 @@ void dNpc_HeadAnm_c::move() {
         (this->*mProc)();
     }
     else {
-        cLib_addCalcAngleS(&field_0x00, 0, 4, 0x1000, 0x100);
-        cLib_addCalcAngleS(&field_0x02, 0, 4, 0x1000, 0x100);
+        cLib_addCalcAngleS(&field_0x00.x, 0, 4, 0x1000, 0x100);
+        cLib_addCalcAngleS(&field_0x00.y, 0, 4, 0x1000, 0x100);
     }
 }
 

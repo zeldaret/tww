@@ -6,28 +6,32 @@
 #include "JSystem/JMessage/data.h"
 
 namespace JMessage {
-    namespace data {
-        struct JUTMesgInfo;
-        struct JUTMesgIDData;
-    };
 
     class TResource {
     public:
-        TResource() : mHeader(NULL), mInfo(NULL) {
-            mMessageData = NULL;
-            mStringAttribute = NULL;
-            mMessageID = NULL;
+        TResource()
+            : oParse_THeader_(NULL),
+            oParse_TBlock_info_(NULL),
+            pMessageText_(NULL),
+            pStringAttribute_(NULL),
+            oParse_TBlock_messageID_(NULL)
+            {}
+
+        void setData_header(const void* p) { oParse_THeader_.setRaw(p); }
+        void setData_block_info(const void* p) { oParse_TBlock_info_.setRaw(p); }
+        void setData_block_messageData(const void* pData) {
+            pMessageText_ = data::TParse_TBlock_messageData(pData).getContent();
+        }
+        void setData_block_stringAttribute(const void* pData) {
+            pStringAttribute_ = data::TParse_TBlock_stringAttribute(pData).getContent();
+        }
+        void setData_block_messageID(const void* pData) {
+            oParse_TBlock_messageID_.setRaw(pData);
         }
 
-        void setData_header(const void* p) { mHeader.setRaw(p); }
-        void setData_block_info(const void* p) { mInfo.setRaw(p); }
-        void setData_block_messageData(const void* p) { mMessageData = (const char*)p; }
-        void setData_block_stringAttribute(const void* p) { mStringAttribute = (const char*)p; }
-        void setData_block_messageID(const void* p) { mMessageID = (data::JUTMesgIDData*)p; }
-
-        u32 getMessageEntryNumber() const { return mInfo.get_messageEntryNumber(); }
-        u32 getMessageEntrySize() const { return mInfo.get_messageEntrySize(); }
-        u16 getGroupID() const { return mInfo.get_groupID(); }
+        u32 getMessageEntryNumber() const { return oParse_TBlock_info_.get_messageEntryNumber(); }
+        u32 getMessageEntrySize() const { return oParse_TBlock_info_.get_messageEntrySize(); }
+        u16 getGroupID() const { return oParse_TBlock_info_.get_groupID(); }
 
         void* getMessageEntry(u16 messageIndex) const {
             // Fakematch?
@@ -40,7 +44,7 @@ namespace JMessage {
             return getMessageEntry_(messageIndex);
         }
         void* getMessageEntry_(u16 messageIndex) const {
-            return mInfo.getContent() + (messageIndex * getMessageEntrySize());
+            return oParse_TBlock_info_.getContent() + (messageIndex * getMessageEntrySize());
         }
         bool isMessageIndexContained(u16 messageIndex) const {
             // wrong somehow?
@@ -49,16 +53,16 @@ namespace JMessage {
         void getMessageData_messageEntry(const void*) const {} // TODO
 
     public:
-        /* 0x00 */ JGadget::TLinkListNode mLinkNode;
-        /* 0x08 */ data::TParse_THeader mHeader;
-        /* 0x0C */ data::TParse_TBlock_info mInfo;
-        /* 0x10 */ const char* mMessageData;
-        /* 0x14 */ const char* mStringAttribute;
-        /* 0x18 */ data::JUTMesgIDData* mMessageID;
+        /* 0x00 */ JGadget::TLinkListNode ocObject_;
+        /* 0x08 */ data::TParse_THeader oParse_THeader_;
+        /* 0x0C */ data::TParse_TBlock_info oParse_TBlock_info_;
+        /* 0x10 */ char* pMessageText_;
+        /* 0x14 */ char* pStringAttribute_;
+        /* 0x18 */ data::TParse_TBlock_messageID oParse_TBlock_messageID_;
     };
 
 #ifdef __MWERKS__
-    class TResourceContainer : public JGadget::TLinkList_factory<TResource, -offsetof(TResource, mLinkNode)>
+    class TResourceContainer : public JGadget::TLinkList_factory<TResource, -offsetof(TResource, ocObject_)>
 #else
     // clangd does not support offsetof in template arguments.
     class TResourceContainer : public JGadget::TLinkList_factory<TResource, -0x00>
@@ -98,6 +102,7 @@ namespace JMessage {
         /* 0x04 */ TResourceContainer* mResourceContainer;
         /* 0x08 */ TResource* mResource;
     };
-}
+
+};  // namespace JMessage
 
 #endif /* RESOURCE_H */

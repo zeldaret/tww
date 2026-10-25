@@ -246,7 +246,7 @@ static void __AIDHandler(__OSInterrupt interrupt, OSContext* context) {
 }
 
 // clang-format off
-static asm void __AICallbackStackSwitch(__REGISTER void* cb) {
+static ASM void __AICallbackStackSwitch(__REGISTER void* cb) {
     nofralloc
     mflr r0
     stw r0, 0x4(r1)

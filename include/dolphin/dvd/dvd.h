@@ -88,7 +88,7 @@ typedef struct DVDDriveInfo {
     /* 0x02 */ u16 device_code;
     /* 0x04 */ u32 release_date;
     /* 0x08 */ u8 padding[24];
-} DVDDriveInfo ALIGN_DECL(32);
+} ALIGN_DECL(32, DVDDriveInfo);
 
 typedef struct DVDBB1 {
     u32 appLoaderLength;

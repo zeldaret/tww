@@ -11,8 +11,9 @@
 
 /* 802BF3F4-802BF47C       .text __dt__14JSUInputStreamFv */
 JSUInputStream::~JSUInputStream() {
-    if (!isGood())
+    if (!isGood()) {
         OSReport("JSUInputStream: occur error.\n");
+    }
 }
 
 /* 802BF47C-802BF4D4       .text read__14JSUInputStreamFPvl */
@@ -24,29 +25,46 @@ s32 JSUInputStream::read(void* buffer, s32 numBytes) {
     return bytesRead;
 }
 
+char* JSUInputStream::read(char* str) {
+    u16 sp8;
+    if (readData(&sp8, sizeof(sp8)) != sizeof(sp8)) {
+        *str = 0;
+        setState(IOS_STATE_1);
+        return 0;
+    }
+
+    s32 len = readData(str, sp8);
+    str[len] = 0;
+    if (len != sp8) {
+        setState(IOS_STATE_1);
+    }
+    return str;
+}
+
 /* 802BF4D4-802BF554       .text skip__14JSUInputStreamFl */
 s32 JSUInputStream::skip(s32 count) {
-    s32 skipCount = 0;
-    u8 buffer[1];
-    while (count > skipCount) {
-        if (readData(&buffer, 1) != 1) {
+    s32 skipCount;
+    for (skipCount = 0; skipCount < count; skipCount++) {
+        u8 buffer;
+        if (readData(&buffer, sizeof(buffer)) != sizeof(buffer)) {
             setState(IOS_STATE_1);
             break;
         }
-        skipCount++;
     }
+
     return skipCount;
 }
 
 /* 802BF554-802BF5E0       .text align__20JSURandomInputStreamFl */
 s32 JSURandomInputStream::align(s32 alignment) {
+    s32 seekLen = 0;
     s32 currentPos = getPosition();
-    s32 offset = (alignment + currentPos);
-    offset -= 1;
-    offset &= ~(alignment - 1);
+
+    s32 offset = (alignment - 1 + currentPos) & ~(alignment - 1);
     s32 alignmentOffset = offset - currentPos;
+
     if (alignmentOffset != 0) {
-        s32 seekLen = seekPos(offset, JSUStreamSeekFrom_SET);
+        seekLen = seekPos(offset, JSUStreamSeekFrom_SET);
         if (seekLen != alignmentOffset) {
             setState(IOS_STATE_1);
         }

@@ -20,6 +20,7 @@ enum BOKO_JNT {
     BOKO_JNT_WORLD_ROOT_e=0x0,
     BOKO_JNT_CL_BOKO_e=0x1,
     BOKO_JNT_CL_BOKOPIECEA_e=0x2,
+    BOKO_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_BOKO_H */

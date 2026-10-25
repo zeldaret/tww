@@ -7,6 +7,7 @@
 #include "d/actor/d_a_npc_ls1.h"
 #include "d/actor/d_a_npc_bm1.h"
 #include "d/actor/d_a_player_main.h"
+#include "d/d_scope.h"
 #if VERSION > VERSION_DEMO
 #include "d/d_bg_s_func.h"
 #endif
@@ -220,7 +221,7 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
 
     if (
         l_check_wrk < ARRAY_SSIZE(l_check_inf) && 
-        fopAc_IsActor(i_actorP) && 
+        fopAcM_IsActor(i_actorP) && 
         fpcM_GetName(i_actorP) == fpcNm_NPC_BM1_e
     ) {
         l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_actorP;
@@ -234,7 +235,7 @@ void* searchActor_Bm1(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
     UNUSED(i_unusedP);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
+    if (fopAcM_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OnStatus((fopAc_ac_c*)i_actorP, fopAcStts_UNK4000_e);
     }
 
@@ -245,7 +246,7 @@ void* searchActor_kamome_Set_NOSTOP_DEMO(void* i_actorP, void* i_unusedP) {
 void* searchActor_kamome_Clr_NOSTOP_DEMO(void* i_actorP, void* i_unused) {
     UNUSED(i_unused);
 
-    if (fopAc_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
+    if (fopAcM_IsActor(i_actorP) && fpcM_GetName(i_actorP) == fpcNm_KAMOME_e) {
         fopAcM_OffStatus((fopAc_ac_c*) i_actorP, fopAcStts_UNK4000_e);
     }
     
@@ -1803,7 +1804,7 @@ bool daNpc_Ls1_c::telescope_proc() {
             if (g_dComIfG_gameInfo.play.mScopeWipeFlag) {
                 daPy_getPlayerLinkActorClass()->setPlayerPosAndAngle(&m7CC[1], 0xCC70);
             }
-            dComIfGp_setScopeType(1);
+            dComIfGp_setScopeType(dScpTyp_UNK1_e);
             return true;
         }
         return false;
@@ -2005,14 +2006,12 @@ BOOL daNpc_Ls1_c::wait_2() {
             m853 = 2;
             m838 = true; 
             return TRUE;
+        } else if (mbAttention && mBckNum == BCKNUM_WAIT01_e) {
+            m853 = 1;
+            return TRUE;
         } else {
-            if (mbAttention && mBckNum == BCKNUM_WAIT01_e) {
-                m853 = 1;
-                return TRUE;
-            } else {
-                m853 = 0;
-                return TRUE;
-            }
+            m853 = 0;
+            return TRUE;
         }
     }
 }
@@ -2102,7 +2101,7 @@ BOOL daNpc_Ls1_c::talk_1() {
             break;
         case 0xBC4:
         case 0xBC6:
-            eventInfo.mEventId = -1;
+            eventInfo.setEventId(-1);
             break;
         }
         fpcM_Search(searchActor_kamome_Clr_NOSTOP_DEMO, this);
@@ -2127,13 +2126,11 @@ BOOL daNpc_Ls1_c::wait_action1(void* param_1) {
             if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_2A80)) {
                 if (dComIfGs_isEventBit(dSv_event_flag_c::UNK_0001)) {
                     setStt(3);
+                } else if (dComIfGs_checkGetItem(dItemNo_TELESCOPE_e)) {
+                    m7A0.y = current.angle.y;
+                    setStt(2);
                 } else {
-                    if (dComIfGs_checkGetItem(dItemNo_TELESCOPE_e)) {
-                        m7A0.y = current.angle.y;
-                        setStt(2);
-                    } else {
-                        setStt(1);
-                    }
+                    setStt(1);
                 }
             } else {
                 setStt(4);
@@ -2542,7 +2539,7 @@ BOOL daNpc_Ls1_c::bodyCreateHeap() {
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_bbone_jnt_num)->setCallBack(nodeCB_BackBone);
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_hnd_L_jnt_num)->setCallBack(nodeCB_Hand_L);
     mpMorf->getModel()->getModelData()->getJointNodePointer(m_hnd_R_jnt_num)->setCallBack(nodeCB_Hand_R);
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     
     return TRUE;
 }
@@ -2566,7 +2563,7 @@ BOOL daNpc_Ls1_c::handCreateHeap() {
 
     mpLsHandModel->getModelData()->getJointNodePointer(m_lsHnd_L_jnt_num)->setCallBack(Ls_hand_nodeCB_Hand_L);
     mpLsHandModel->getModelData()->getJointNodePointer(m_lsHnd_R_jnt_num)->setCallBack(Ls_hand_nodeCB_Hand_R);
-    mpLsHandModel->setUserArea((u32)this);
+    mpLsHandModel->setUserArea((uintptr_t)this);
     return TRUE;
 }
 

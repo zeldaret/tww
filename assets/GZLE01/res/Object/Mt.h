@@ -106,26 +106,32 @@ enum dRes_ID_MT {
 
 enum KBA_JNT {
     KBA_JNT_BLURA_e=0x0,
+    KBA_NUM_JNTS_e=0x1,
 };
 
 enum KBB_JNT {
     KBB_JNT_BLURB_e=0x0,
+    KBB_NUM_JNTS_e=0x1,
 };
 
 enum KBC_JNT {
     KBC_JNT_BLURC_e=0x0,
+    KBC_NUM_JNTS_e=0x1,
 };
 
 enum KBD_JNT {
     KBD_JNT_BLURD_e=0x0,
+    KBD_NUM_JNTS_e=0x1,
 };
 
 enum KBE_JNT {
     KBE_JNT_BLURE_e=0x0,
+    KBE_NUM_JNTS_e=0x1,
 };
 
 enum MAGT_F_JNT {
     MAGT_F_JNT_PPLANE1_e=0x0,
+    MAGT_F_NUM_JNTS_e=0x1,
 };
 
 enum MG_BODY_JNT {
@@ -135,6 +141,7 @@ enum MG_BODY_JNT {
     MG_BODY_JNT_J_MG_BODY_ASHI_LB1_e=0x3,
     MG_BODY_JNT_J_MG_BODY_ASHI_RA1_e=0x4,
     MG_BODY_JNT_J_MG_BODY_ASHI_RB1_e=0x5,
+    MG_BODY_NUM_JNTS_e=0x6,
 };
 
 enum MG_HEAD_JNT {
@@ -144,6 +151,7 @@ enum MG_HEAD_JNT {
     MG_HEAD_JNT_J_MG_HEAD_ASHI_R1_e=0x3,
     MG_HEAD_JNT_J_MG_HEAD_HASAMI_L1_e=0x4,
     MG_HEAD_JNT_J_MG_HEAD_HASAMI_R1_e=0x5,
+    MG_HEAD_NUM_JNTS_e=0x6,
 };
 
 enum MG_TAIL_JNT {
@@ -153,6 +161,7 @@ enum MG_TAIL_JNT {
     MG_TAIL_JNT_J_MG_TAIL_ASHI_LB1_e=0x3,
     MG_TAIL_JNT_J_MG_TAIL_ASHI_RA1_e=0x4,
     MG_TAIL_JNT_J_MG_TAIL_ASHI_RB1_e=0x5,
+    MG_TAIL_NUM_JNTS_e=0x6,
 };
 
 #endif /* RES_MT_H */

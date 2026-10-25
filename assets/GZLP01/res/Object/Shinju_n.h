@@ -23,6 +23,7 @@ enum dRes_ID_SHINJU_N {
 enum VPEAN_JNT {
     VPEAN_JNT_ROOT_VPEAN_e=0x0,
     VPEAN_JNT_V_MARK_N_e=0x1,
+    VPEAN_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_SHINJU_N_H */

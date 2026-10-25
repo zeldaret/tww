@@ -307,25 +307,24 @@ BOOL daPy_lk_c::procBtRoll() {
 
 /* 8013F010-8013F200       .text procBtRollCut_init__9daPy_lk_cFP4cXyz */
 BOOL daPy_lk_c::procBtRollCut_init(cXyz* param_0) {
-    daPy_ANM dVar4;
-
     commonProcInit(daPyProc_BT_ROLL_CUT_e);
 
     s16 angle_y_delta = current.angle.y - shape_angle.y;
+    daPy_ANM anm;
     if (angle_y_delta > 0) {
-        dVar4 = ANM_MROLLLC;
+        anm = ANM_MROLLLC;
         mProcVar6.m3570 = 1;
         m34EC = 1;
         setBlurPosResource(dRes_INDEX_LKANM__BTROTATECUTL_POS_e);
     } else {
-        dVar4 = ANM_MROLLRC;
+        anm = ANM_MROLLRC;
         mProcVar6.m3570 = -1;
         m34EC = -1;
         setBlurPosResource(dRes_INDEX_LKANM__BTROTATECUTR_POS_e);
     }
 
     setSingleMoveAnime(
-        dVar4,
+        anm,
         m_HIO->mBattle.mBRoll.m.field_0x1C,
         m_HIO->mBattle.mBRoll.m.field_0x20,
         m_HIO->mBattle.mBRoll.m.field_0x8,

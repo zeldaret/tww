@@ -24,6 +24,7 @@ enum HSEN3_JNT {
     HSEN3_JNT_HSEN3_00_e=0x0,
     HSEN3_JNT_POLYSURFACE4_e=0x1,
     HSEN3_JNT_PURO_e=0x2,
+    HSEN3_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_HSEN3_H */

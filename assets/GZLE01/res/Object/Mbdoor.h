@@ -30,24 +30,28 @@ enum S_MBD_L_JNT {
     S_MBD_L_JNT_S_HIDARI_e=0x0,
     S_MBD_L_JNT_HIDARI_e=0x1,
     S_MBD_L_JNT_POLYSURFACE5_e=0x2,
+    S_MBD_L_NUM_JNTS_e=0x3,
 };
 
 enum S_MBD_R_JNT {
     S_MBD_R_JNT_S_MIGI_e=0x0,
     S_MBD_R_JNT_MIGI_e=0x1,
     S_MBD_R_JNT_POLYSURFACE6_e=0x2,
+    S_MBD_R_NUM_JNTS_e=0x3,
 };
 
 enum S_MBDFU_JNT {
     S_MBDFU_JNT_S_FUTI_e=0x0,
     S_MBDFU_JNT_FTI_e=0x1,
     S_MBDFU_JNT_OUT_WOOD_e=0x2,
+    S_MBDFU_NUM_JNTS_e=0x3,
 };
 
 enum S_MBDTO_JNT {
     S_MBDTO_JNT_S_TOME_e=0x0,
     S_MBDTO_JNT_TOME_e=0x1,
     S_MBDTO_JNT_PCUBE1_e=0x2,
+    S_MBDTO_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_MBDOOR_H */

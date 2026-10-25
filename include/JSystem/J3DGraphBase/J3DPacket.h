@@ -1,6 +1,7 @@
 #ifndef J3DPACKET_H
 #define J3DPACKET_H
 
+#include "JSystem/J3DAssert.h"
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JUtility/JUTAssert.h"
@@ -81,8 +82,8 @@ public:
     void beginPatch();
     u32 endPatch();
 
-    u8* getDisplayList(int idx) const { return (u8*)mpData[idx]; }
-    u32 getDisplayListSize() const { return mSize; }
+    u8* getDisplayList(int idx) { return (u8*)mpData[idx]; }
+    u32 getDisplayListSize() { return mSize; }
 
     static GDLObj sGDLObj;
     static s32 sInterruptFlag;
@@ -97,7 +98,7 @@ public:
     J3DPacket() {
         mpNextPacket = NULL;
         mpFirstChild = NULL;
-        mpUserData = NULL;
+        mUserData = 0;
     }
 
     void addChildPacket(J3DPacket*);
@@ -110,8 +111,8 @@ public:
         mpFirstChild = NULL;
     }
 
-    void setUserArea(u32 area) { mpUserData = (void*)area; }
-    u32 getUserArea() const { return (u32)mpUserData; }
+    void setUserArea(uintptr_t area) { mUserData = area; }
+    uintptr_t getUserArea() const { return mUserData; }
 
     virtual bool isSame(J3DMatPacket*) const;
     virtual int entry(J3DDrawBuffer*);
@@ -121,7 +122,7 @@ public:
 public:
     /* 0x04 */ J3DPacket* mpNextPacket;
     /* 0x08 */ J3DPacket* mpFirstChild;
-    /* 0x0C */ void* mpUserData;
+    /* 0x0C */ uintptr_t mUserData;
 };  // Size: 0x10
 
 class J3DDrawPacket : public J3DPacket {
@@ -155,7 +156,7 @@ public:
     /* 0x10 */ u32 mFlags;
     /* 0x14 */ char mPad0[0x0C];  // unk
     /* 0x20 */ J3DDisplayListObj* mpDisplayListObj;
-};  // Size: 0x28
+};  // Size: 0x24
 
 class J3DShapePacket : public J3DDrawPacket {
 public:
@@ -176,9 +177,8 @@ public:
     void setScaleFlagArray(u8* pScaleFlagArray) { mpScaleFlagArray = pScaleFlagArray; }
     void setCurrentViewNoPtr(u32* pCurrentViewNo) { mpCurrentViewNo = pCurrentViewNo; }
 
-    J3DShape* getShape() const { return mpShape; }
-    J3DModel* getModel() const { return mpModel; }
-    Mtx* getBaseMtxPtr() const { return mpBaseMtxPtr; }
+    J3DShape* getShape() { return mpShape; }
+    Mtx* getBaseMtxPtr() { return mpBaseMtxPtr; }
 
 public:
     /* 0x24 */ J3DShape* mpShape;
@@ -202,33 +202,33 @@ public:
     J3DShapePacket* getShapePacket() { return mpShapePacket; }
     void setShapePacket(J3DShapePacket* packet) { mpShapePacket = packet; }
     void setMaterial(J3DMaterial* pMaterial) {
-        J3D_ASSERT(646, pMaterial != NULL, "Error : null pointer.");
+        J3D_ASSERT_NULLPTR(646, pMaterial != NULL);
         mpMaterial = pMaterial;
     }
     void setTexture(J3DTexture* pTexture) { mpTexture = pTexture; }
     void setInitShapePacket(J3DShapePacket* packet) { mpInitShapePacket = packet; }
-    void setMaterialAnmID(u32 materialAnm) { mpMaterialAnm = (J3DMaterialAnm*)materialAnm; }
+    void setMaterialAnmID(uintptr_t materialAnm) { mpMaterialAnm = (J3DMaterialAnm*)materialAnm; }
     void setMaterialID(u32 id) { mDiffFlag = id; }
     bool isChanged() { return mDiffFlag & 0x80000000; }
     bool isEnabled_Diff() { return mpInitShapePacket->getDisplayListObj() != NULL; }
     J3DTexture* getTexture() { return mpTexture; }
 
     virtual ~J3DMatPacket();
-    virtual int entry(J3DDrawBuffer* param_1) {
-        J3DDrawBuffer::sortFunc func = J3DDrawBuffer::sortFuncTable[param_1->mSortType];
-        return (param_1->*func)(this);
+    virtual int entry(J3DDrawBuffer* pBuffer) {
+        J3DDrawBuffer::sortFunc func = J3DDrawBuffer::sortFuncTable[pBuffer->getSortMode()];
+        return (pBuffer->*func)(this);
     }
     virtual void draw();
     virtual bool isSame(J3DMatPacket*) const;
 
 public:
-    /* 0x28 */ J3DShapePacket* mpInitShapePacket;
-    /* 0x2C */ J3DShapePacket* mpShapePacket;
-    /* 0x30 */ J3DMaterial* mpMaterial;
-    /* 0x34 */ u32 mDiffFlag;
-    /* 0x38 */ J3DTexture* mpTexture;
-    /* 0x3C */ J3DMaterialAnm* mpMaterialAnm;
-};  // Size: 0x40
+    /* 0x24 */ J3DShapePacket* mpInitShapePacket;
+    /* 0x28 */ J3DShapePacket* mpShapePacket;
+    /* 0x2C */ J3DMaterial* mpMaterial;
+    /* 0x30 */ u32 mDiffFlag;
+    /* 0x34 */ J3DTexture* mpTexture;
+    /* 0x38 */ J3DMaterialAnm* mpMaterialAnm;
+};  // Size: 0x3C
 
 class J3DCallBackPacket : public J3DPacket {
 public:
@@ -239,7 +239,7 @@ public:
 
 public:
     typedef void (*CallBack)(J3DCallBackPacket * pPacket, u32 timing);
-    CallBack mpCallBack;
-};
+    /* 0x10 */ CallBack mpCallBack;
+};  // Size: 0x14
 
 #endif /* J3DPACKET_H */

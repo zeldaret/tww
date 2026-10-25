@@ -4,7 +4,9 @@
 #include "dolphin/dvd/dvdlow.h"
 #include "dolphin/dvd/dvdqueue.h"
 #include "dolphin/dvd/dvdFatal.h"
+#include "dolphin/dvd/fstload.h"
 #include "dolphin/os/OS.h"
+#include <string.h>
 
 const char* __DVDVersion = "<< Dolphin SDK - DVD\trelease build: Sep  5 2002 05:34:06 (0x2301) >>";
 

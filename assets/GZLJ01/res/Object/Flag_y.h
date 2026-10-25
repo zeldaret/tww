@@ -18,6 +18,7 @@ enum dRes_ID_FLAG_Y {
 
 enum FLAG_Y_JNT {
     FLAG_Y_JNT_FLAG_Y_e=0x0,
+    FLAG_Y_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_FLAG_Y_H */

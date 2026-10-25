@@ -22,6 +22,7 @@ enum dRes_ID_EBOMZO {
 
 enum EBOMZO_JNT {
     EBOMZO_JNT_VZOUT_MODEL_e=0x0,
+    EBOMZO_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_EBOMZO_H */

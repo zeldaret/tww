@@ -39,6 +39,7 @@ enum GMJWP00_JNT {
     GMJWP00_JNT_LINE_1_e=0x5,
     GMJWP00_JNT_MAIN_e=0x6,
     GMJWP00_JNT_MAIN_1_e=0x7,
+    GMJWP00_NUM_JNTS_e=0x8,
 };
 
 #endif /* RES_GMJWP_H */

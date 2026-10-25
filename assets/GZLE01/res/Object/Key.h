@@ -38,6 +38,7 @@ enum VLOCB_JNT {
     VLOCB_JNT_EYE_e=0xA,
     VLOCB_JNT_TOGE_e=0xB,
     VLOCB_JNT_TSUNO_e=0xC,
+    VLOCB_NUM_JNTS_e=0xD,
 };
 
 enum VLOCN_JNT {
@@ -47,6 +48,7 @@ enum VLOCN_JNT {
     VLOCN_JNT_CHAIN2_e=0x3,
     VLOCN_JNT_CHAIN3_e=0x4,
     VLOCN_JNT_CHAIN4_e=0x5,
+    VLOCN_NUM_JNTS_e=0x6,
 };
 
 #endif /* RES_KEY_H */

@@ -24,6 +24,7 @@ enum VARFI_JNT {
     VARFI_JNT_ROOT_VARFI_e=0x0,
     VARFI_JNT_SC_ARRI_OUTSIDE_e=0x1,
     VARFI_JNT_Z_ARRFI_INSIDE_e=0x2,
+    VARFI_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_VARFI_H */

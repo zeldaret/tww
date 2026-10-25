@@ -1849,22 +1849,22 @@ void Act_c::mode_walk() {
         speedF *= 0.9f;
     }
 
-    cM3dGPla* pNorm = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
+    cM3dGPla* plane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
     m6F0 += m814;
     f32 fVar2;
     f32 noGradeCos;
-    cM3dGPla* pNorm2;
-    if (pNorm != NULL) {
-        pNorm2 = pNorm;
+    cXyz* pNorm;
+    if (plane != NULL) {
+        pNorm = &plane->mNormal;
         fVar2 = data().m5C;
         noGradeCos = cM_scos(cM_deg2s(data().m56 - 0.5f));
     } else {
-        pNorm2 = NULL;
+        pNorm = NULL;
         fVar2 = 0.0f;
         noGradeCos = fVar2;
     }
 
-    daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &m7F4, sp0C, sp08, pNorm2->GetNP(), fVar2, noGradeCos, &m6F0);
+    daObj::posMoveF_grade(this, mStts.GetCCMoveP(), &m7F4, sp0C, sp08, pNorm, fVar2, noGradeCos, &m6F0);
 
     if (mAcch.ChkGroundHit()) {
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
@@ -2281,15 +2281,15 @@ bool Act_c::damage_tg_acc() {
         }
 
         if (fVar1 > 0.0f) {
-            f32 abs = m814.abs();
+            f32 temp1 = m814.abs();
             cXyz sp34 = *mCyl.GetTgRVecP();
-            f32 abs2 = sp34.abs();
+            f32 temp2 = sp34.abs();
 
-            if (fVar1 > abs && abs2 > abs) {
-                if (abs2 < fVar1) {
+            if (fVar1 > temp1 && temp2 > temp1) {
+                if (temp2 < fVar1) {
                     m814 = sp34;
                 } else {
-                    m814 = sp34 * (fVar1 / abs2);
+                    m814 = sp34 * (fVar1 / temp2);
                 }
                 m814.y += fVar2;
                 iVar9 = true;
@@ -2827,13 +2827,13 @@ void Act_c::moment_proc_call() {
     };
 
     if (m678 == 3) {
-        cM3dGPla* pcVar1 = NULL;
+        cM3dGPla* plane = NULL;
         if (mAcch.ChkGroundHit()) {
-            pcVar1 = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd.GetBgIndex(), mAcch.m_gnd.GetPolyIndex());
+            plane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         }
 
-        if (pcVar1 != NULL) {
-            (this->*moment_proc[mType])(pcVar1->GetNP());
+        if (plane != NULL) {
+            (this->*moment_proc[mType])(&plane->mNormal);
         } else {
             cLib_addCalc0(&m6EC, 0.4f, data().mAcchRoofHeight * 0.125f);
         }

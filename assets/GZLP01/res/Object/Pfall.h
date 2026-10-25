@@ -32,6 +32,7 @@ enum dRes_ID_PFALL {
 
 enum AOTSI_JNT {
     AOTSI_JNT_AOTSI_e=0x0,
+    AOTSI_NUM_JNTS_e=0x1,
 };
 
 enum PFALL_NZ_JNT {
@@ -57,10 +58,12 @@ enum PFALL_NZ_JNT {
     PFALL_NZ_JNT_UDER_e=0x13,
     PFALL_NZ_JNT_UDER2_e=0x14,
     PFALL_NZ_JNT_UDER3_e=0x15,
+    PFALL_NZ_NUM_JNTS_e=0x16,
 };
 
 enum PSUZU_JNT {
     PSUZU_JNT_PSUZU_e=0x0,
+    PSUZU_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_PFALL_H */

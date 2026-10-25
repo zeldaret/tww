@@ -60,7 +60,7 @@ public:
     /* 0x5C4 */ dDlst_2DNumber_c* mpNumber1;
     /* 0x5C8 */ dDlst_2DMinigame_c* mpMinigameDList;
     /* 0x5CC */ dDlst_2DObject_c* mpSquidIcon[3];
-    /* 0x5D8 */ u8 mpBombIcons;
+    /* 0x5D8 */ u8 mBombIcons;
     /* 0x5D9 */ u8 field_0x5D9[0x638 - 0x5D9];
     /* 0x638 */ int mState;
     /* 0x63C */ u8 mbDraw;

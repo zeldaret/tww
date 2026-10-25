@@ -92,6 +92,7 @@ enum RD_JNT {
     RD_JNT_REE_UDE_R2_e=0x14,
     RD_JNT_REE_TEKUBI_R1_e=0x15,
     RD_JNT_REE_YUBI_R1_e=0x16,
+    RD_NUM_JNTS_e=0x17,
 };
 
 #endif /* RES_RD_H */

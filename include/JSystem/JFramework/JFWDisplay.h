@@ -8,8 +8,6 @@
 #include "dolphin/os/OSAlarm.h"
 #include "dolphin/types.h"
 
-typedef struct _GXColor GXColor;
-typedef struct _GXRenderModeObj GXRenderModeObj;
 class JKRHeap;
 
 typedef void (*JFWDisplayUnkFunc)(void);

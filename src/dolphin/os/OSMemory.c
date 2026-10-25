@@ -155,7 +155,7 @@ static ASM void Config48MB(void) {
     // clang-format on
 }
 
-static ASM void RealMode(register u32 config) {
+static ASM void RealMode(__REGISTER u32 config) {
     // clang-format off
 #ifdef __MWERKS__
     nofralloc

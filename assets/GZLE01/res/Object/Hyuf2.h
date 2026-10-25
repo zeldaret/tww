@@ -26,6 +26,7 @@ enum dRes_ID_HYUF2 {
 
 enum HYUF2_JNT {
     HYUF2_JNT_POLYSURFACE2_e=0x0,
+    HYUF2_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HYUF2_H */

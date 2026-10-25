@@ -19,7 +19,7 @@ public:
 
     static const char M_arcname[8];
 
-    /* 0x290 */ request_of_phase_process_class mphs;
+    /* 0x290 */ request_of_phase_process_class mPhase;
     /* 0x29C */ J3DModel* mpModel;
     /* 0x2A0 */ dBgW* mpBgW;
     /* 0x2A4 */ Mtx mMtx;

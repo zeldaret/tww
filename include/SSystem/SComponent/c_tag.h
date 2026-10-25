@@ -8,7 +8,7 @@ typedef struct node_list_class node_list_class;
 typedef struct node_lists_tree_class node_lists_tree_class;
 
 typedef struct create_tag_class {
-    /* 0x00 */ node_class mpNode;
+    /* 0x00 */ node_class mNode;
     /* 0x0C */ void* mpTagData;
     /* 0x10 */ s8 mbIsUse;
 } create_tag_class;  // Size: 0x14

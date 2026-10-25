@@ -2,8 +2,8 @@
 #include "dolphin/gx/GX.h"
 #include "dolphin/gx/GXInit.h"
 
-static void Copy6Floats(register f32 src[6], register f32 dst[6]) {
-    register f32 ps_0, ps_1, ps_2;
+static void Copy6Floats(__REGISTER f32 src[6], __REGISTER f32 dst[6]) {
+    __REGISTER f32 ps_0, ps_1, ps_2;
 
     // clang-format off
 #ifdef __MWERKS__
@@ -19,8 +19,8 @@ static void Copy6Floats(register f32 src[6], register f32 dst[6]) {
     // clang-format on
 }
 
-static void WriteProjPS(const register f32 src[6], register volatile void* dst) {
-    register f32 ps_0, ps_1, ps_2;
+static void WriteProjPS(const __REGISTER f32 src[6], __REGISTER volatile void* dst) {
+    __REGISTER f32 ps_0, ps_1, ps_2;
 
     // clang-format off
 #ifdef __MWERKS__
@@ -133,8 +133,8 @@ void GXGetProjectionv(f32* proj) {
     proj[6] = gx->projMtx[5];
 }
 
-static void WriteMTXPS4x3(register volatile void* dst, register const Mtx src) {
-    register f32 ps_0, ps_1, ps_2, ps_3, ps_4, ps_5;
+static void WriteMTXPS4x3(__REGISTER volatile void* dst, __REGISTER const Mtx src) {
+    __REGISTER f32 ps_0, ps_1, ps_2, ps_3, ps_4, ps_5;
 
     // clang-format off
 #ifdef __MWERKS__
@@ -162,8 +162,8 @@ void GXLoadPosMtxImm(Mtx mtx, u32 id) {
     WriteMTXPS4x3(&GXFIFO, mtx);
 }
 
-static void WriteMTXPS3x3(register volatile void* dst, register const Mtx src) {
-    register f32 ps_0, ps_1, ps_2, ps_3, ps_4, ps_5;
+static void WriteMTXPS3x3(__REGISTER volatile void* dst, __REGISTER const Mtx src) {
+    __REGISTER f32 ps_0, ps_1, ps_2, ps_3, ps_4, ps_5;
 
     // clang-format off
 #ifdef __MWERKS__
@@ -196,8 +196,8 @@ void GXSetCurrentMtx(u32 id) {
     __GXSetMatrixIndex(GX_VA_PNMTXIDX);
 }
 
-static void WriteMTXPS4x2(register volatile void* dst, register const Mtx src) {
-    register f32 ps_0, ps_1, ps_2, ps_3;
+static void WriteMTXPS4x2(__REGISTER volatile void* dst, __REGISTER const Mtx src) {
+    __REGISTER f32 ps_0, ps_1, ps_2, ps_3;
 
     // clang-format off
 #ifdef __MWERKS__

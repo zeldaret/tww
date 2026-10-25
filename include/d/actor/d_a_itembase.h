@@ -6,6 +6,7 @@
 #include "d/d_bg_s.h"
 #include "d/d_bg_s_acch.h"
 #include "d/d_cc_d.h"
+#include "f_op/f_op_actor_mng.h"
 
 class mDoExt_btkAnm;
 class mDoExt_brkAnm;
@@ -41,8 +42,13 @@ STATIC_ASSERT(sizeof(daItemBase_c_m_data) == 0x4C);
 
 class daItemBase_c : public fopAc_ac_c {
 public:
+    void RotateBase() {
+        s16 rotationSpeed = 0xFFFF / m_data.mRotateYSpeed;
+        fopAcM_addAngleY(this, current.angle.y + rotationSpeed, rotationSpeed);
+    }
+
     BOOL DeleteBase(const char*);
-    BOOL CreateItemHeap(const char*, short, short, short, short, short, short, short);
+    BOOL CreateItemHeap(const char*, s16, s16, s16, s16, s16, s16, s16);
     virtual BOOL DrawBase();
     virtual void setListStart();
     void setListEnd();
@@ -50,7 +56,7 @@ public:
     virtual void setTevStr();
     virtual void setShadow();
     virtual void animEntry();
-    void animPlay(float, float, float, float, float);
+    void animPlay(f32, f32, f32, f32, f32);
     virtual BOOL clothCreate();
 
     u8 getItemNo();

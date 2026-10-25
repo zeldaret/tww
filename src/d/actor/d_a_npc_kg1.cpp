@@ -125,12 +125,12 @@ void daNpc_Kg1_c::getMsg() {
 }
 
 /* 000019B4-00001C7C       .text next_msgStatus__11daNpc_Kg1_cFPUl */
-void daNpc_Kg1_c::next_msgStatus(unsigned long*) {
+void daNpc_Kg1_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
 /* 00001C7C-00001CB8       .text anmAtr__11daNpc_Kg1_cFUs */
-void daNpc_Kg1_c::anmAtr(unsigned short) {
+void daNpc_Kg1_c::anmAtr(u16) {
     /* Nonmatching */
 }
 

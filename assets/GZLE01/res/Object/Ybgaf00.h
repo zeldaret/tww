@@ -31,6 +31,7 @@ enum YBGAF00_JNT {
     YBGAF00_JNT_A00_e=0x1,
     YBGAF00_JNT_INNER_e=0x2,
     YBGAF00_JNT_OUTER_e=0x3,
+    YBGAF00_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_YBGAF00_H */

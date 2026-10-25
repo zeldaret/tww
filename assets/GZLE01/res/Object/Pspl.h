@@ -18,6 +18,7 @@ enum dRes_ID_PSPL {
 
 enum PSPL_JNT {
     PSPL_JNT_PSPL_e=0x0,
+    PSPL_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_PSPL_H */

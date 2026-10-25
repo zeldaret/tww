@@ -323,9 +323,9 @@ void daObjBarrel::Act_c::mode_walk() {
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
         cXyz* norm;
         cXyz addAccel = cXyz::Zero;
-        float cos, friction;
+        f32 cos, friction;
         if (gndPlane) {
-            norm = gndPlane->GetNP();
+            norm = &gndPlane->mNormal;
             friction = l_gnd_fric;
             cos = cM_scos(0xA4F);
             addAccel.set(norm->x, 0.0f, norm->z);
@@ -339,7 +339,7 @@ void daObjBarrel::Act_c::mode_walk() {
         set_walk_rot();
         cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
 
-        float mag = speed.abs2XZ();
+        f32 mag = speed.abs2XZ();
         if (mag < l_gnd_fric) {
             if (std::fabsf(norm->x) >= 0.001f && std::fabsf(norm->z) >= 0.001f) {
                 mode_wait_init();
@@ -572,8 +572,8 @@ bool daObjBarrel::Act_c::damage_cc_proc() {
                 broken = true;
             } else if ((mMode == MODE_WAIT || mMode == MODE_WALK) && hitObj->ChkAtType(AT_TYPE_WIND)) {
                 cXyz windVec = *mCyl.GetTgRVecP();
-                float windMag2 = windVec.abs2();
-                if (windMag2 > l_wind_max*l_wind_max) {
+                f32 windMag2 = windVec.abs2();
+                if (windMag2 > SQUARE(l_wind_max)) {
                     windVec *= l_wind_max / std::sqrtf(windMag2);
                 }
                 cCcD_ShapeAttr* hitShapeAttr = hitObj->GetShapeAttr();
@@ -721,9 +721,9 @@ bool daObjBarrel::Act_c::_draw() {
         g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mpModel, &tevStr);
         mDoExt_modelUpdateDL(mpModel);
-        float gndH = mAcch.GetGroundH();
+        f32 gndH = mAcch.GetGroundH();
         cM3dGPla* gndPlane = dComIfG_Bgsp()->GetTriPla(mAcch.m_gnd);
-        cXyz *norm = gndPlane->GetNP();
+        cXyz* norm = &gndPlane->mNormal;
         if (norm && gndH != -G_CM3D_F_INF) {
             dComIfGd_setSimpleShadow(&current.pos, gndH, attr().mShadowSize, norm);        
         }

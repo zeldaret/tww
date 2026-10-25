@@ -18,6 +18,7 @@ enum dRes_ID_VLEMG {
 
 enum VLEMG_JNT {
     VLEMG_JNT_VLEMG_MODEL_e=0x0,
+    VLEMG_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VLEMG_H */

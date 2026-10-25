@@ -668,7 +668,7 @@ static s32 target_info_count;
 
 /* 00002C4C-00002CD4       .text s_w_sub__FPvPv */
 static void* s_w_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOKO_e) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOKO_e) {
         daBoko_c* boko = (daBoko_c*)param_1;
         if (fopAcM_GetParam(boko) != daBoko_c::Type_MOBLIN_SPEAR_e && !fopAcM_checkCarryNow(boko)) {
             if (target_info_count < (s32)ARRAY_SIZE(target_info)) {
@@ -739,7 +739,7 @@ static fpc_ProcID search_wepon(bk_class* i_this) {
 
 /* 00002FB0-0000302C       .text s_b_sub__FPvPv */
 static void* s_b_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOMB_e) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_BOMB_e) {
         daBomb_c* bomb = (daBomb_c*)param_1;
         // TODO: why is it checking the bomb's params as a single field instead of just one param? bug?
         if (fopAcM_GetParam(bomb) != 0) {
@@ -1192,7 +1192,7 @@ static void jyunkai(bk_class* i_this) {
 
 /* 0000488C-000048E4       .text ken_s_sub__FPvPv */
 static void* ken_s_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_ITEM_e) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_ITEM_e) {
         daItem_c* item = (daItem_c*)param_1;
         if (item->getItemNo() == dItemNo_DROPPED_SWORD_e) {
             return param_1;
@@ -1428,7 +1428,7 @@ static void stand(bk_class* i_this) {
 /* 000053E0-000054E0       .text s_s_sub__FPvPv */
 static void* s_s_sub(void* r29, void* r30) {
     bk_class* i_this = (bk_class*)r30;
-    if (fopAc_IsActor(r29) && fopAcM_GetName(r29) == fpcNm_OBJ_SEARCH_e) {
+    if (fopAcM_IsActor(r29) && fopAcM_GetName(r29) == fpcNm_OBJ_SEARCH_e) {
         daObj_Search::Act_c* search = (daObj_Search::Act_c*)r29;
         cXyz sp18 = i_this->home.pos - search->current.pos;
         if (sp18.abs() < 600.0f) {
@@ -1767,7 +1767,7 @@ u16 learn_check;
 
 /* 0000647C-000064D8       .text shot_s_sub__FPvPv */
 static void* shot_s_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && (learn_check & 0x400) && fopAcM_GetName(param_1) == fpcNm_HIMO2_e) {
+    if (fopAcM_IsActor(param_1) && (learn_check & 0x400) && fopAcM_GetName(param_1) == fpcNm_HIMO2_e) {
         return param_1;
     }
     return NULL;
@@ -2203,7 +2203,7 @@ temp_1B8:
                         i_this->m02F4 = 1;
                     }
                     int r0 = (int)i_this->m0B64 - l_bkHIO.m0A0;
-                    if (r0 < (int)ARRAY_SIZE(l_bkHIO.m0A8)) {
+                    if (r0 < ARRAY_SSIZE(l_bkHIO.m0A8)) {
                         i_this->m02EC = l_bkHIO.m0A8[r0];
                     }
                 }
@@ -2215,7 +2215,7 @@ temp_1B8:
                         i_this->m02F4 = 1;
                     }
                     int r0 = (int)i_this->m0B64 - l_bkHIO.m0D0;
-                    if (r0 < (int)ARRAY_SIZE(l_bkHIO.m0D8)) {
+                    if (r0 < ARRAY_SSIZE(l_bkHIO.m0D8)) {
                         i_this->m02EC = l_bkHIO.m0D8[r0];
                     }
                 }
@@ -2792,25 +2792,23 @@ static void wepon_search(bk_class* i_this) {
             i_this->dr.mMode = 2;
             anm_init(i_this, dRes_INDEX_BK_BCK_BK_CATCH_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_CATCH_e);
             i_this->m0300[1] = 29;
-        } else {
-            if (i_this->m030A == 0) {
-                i_this->dr.mAction = 4;
-                i_this->m0300[1] = 0;
-                i_this->m11F3 = 1;
-            } else if (i_this->dr.mAcch.ChkGroundHit() && i_this->dr.mAcch.ChkWallHit()) {
-                if (i_this->m02CE < 2) {
-                    actor->speed.y = 100.0f + REG0_F(16);
-                    anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
-                    fopAcM_monsSeStart(actor, JA_SE_CV_BK_JUMP, 0);
-                    i_this->dr.mMode = 5;
-                    i_this->m02CE++;
-                } else {
-                    i_this->dr.mAction = 0;
-                    path_check(i_this, 0);
-                    wait_set(i_this);
-                    i_this->dr.mMode = 2;
-                    i_this->m02CC = 70;
-                }
+        } else if (i_this->m030A == 0) {
+            i_this->dr.mAction = 4;
+            i_this->m0300[1] = 0;
+            i_this->m11F3 = 1;
+        } else if (i_this->dr.mAcch.ChkGroundHit() && i_this->dr.mAcch.ChkWallHit()) {
+            if (i_this->m02CE < 2) {
+                actor->speed.y = 100.0f + REG0_F(16);
+                anm_init(i_this, dRes_INDEX_BK_BCK_BK_JUMP1_e, 2.0f, J3DFrameCtrl::EMode_NONE, 1.0f, dRes_INDEX_BK_BAS_BK_JUMP1_e);
+                fopAcM_monsSeStart(actor, JA_SE_CV_BK_JUMP, 0);
+                i_this->dr.mMode = 5;
+                i_this->m02CE++;
+            } else {
+                i_this->dr.mAction = 0;
+                path_check(i_this, 0);
+                wait_set(i_this);
+                i_this->dr.mMode = 2;
+                i_this->m02CC = 70;
             }
         }
         break;
@@ -3571,12 +3569,10 @@ static void damage_check(bk_class* i_this) {
             r28 = 1;
             atInfo.mpObj = i_this->m0DE8.GetTgHitObj();
             atInfo.pParticlePos = i_this->m0DE8.GetTgHitPosP();
-        } else {
-            if (i_this->m0CB8.ChkTgHit() != 0) {
-                r28 = 2;
-                atInfo.mpObj = i_this->m0CB8.GetTgHitObj();
-                atInfo.pParticlePos = i_this->m0CB8.GetTgHitPosP();
-            }
+        } else if (i_this->m0CB8.ChkTgHit() != 0) {
+            r28 = 2;
+            atInfo.mpObj = i_this->m0CB8.GetTgHitObj();
+            atInfo.pParticlePos = i_this->m0CB8.GetTgHitPosP();
         }
         
         at_power_check(&atInfo);
@@ -3780,7 +3776,7 @@ static void damage_check(bk_class* i_this) {
 
 /* 0000BCD4-0000BD30       .text s_s2_sub__FPvPv */
 static void* s_s2_sub(void* param_1, void*) {
-    if (fopAc_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_OBJ_SEARCH_e) {
+    if (fopAcM_IsActor(param_1) && fopAcM_GetName(param_1) == fpcNm_OBJ_SEARCH_e) {
         if (daObj_Search::Act_c::getFindFlag()) {
             return param_1;
         }
@@ -4987,7 +4983,7 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         i_this->mpJntHit = JntHit_create(i_this->mpMorf->getModel(), search_data, ARRAY_SIZE(search_data));
         
         if (i_this->mpJntHit) {
-            i_actor->jntHit = i_this->mpJntHit;
+            fopAcM_SetJntHit(i_actor, i_this->mpJntHit);
         }
         fopAcM_adjustHeap(i_actor);
 #else
@@ -5011,7 +5007,7 @@ static cPhs_State daBk_Create(fopAc_ac_c* i_actor) {
         fopAcM_SetMin(i_actor, -200.0f, -50.0f, -100.0f);
         fopAcM_SetMax(i_actor, 125.0f, 250.0f, 250.0f);
         fopAcM_SetMtx(i_actor, i_this->mpMorf->getModel()->getBaseTRMtx());
-        i_this->mpMorf->getModel()->setUserArea((u32)i_this);
+        i_this->mpMorf->getModel()->setUserArea((uintptr_t)i_this);
         i_this->initBt(162.5f, 125.0f);
         
         i_this->dr.m70C = 1;

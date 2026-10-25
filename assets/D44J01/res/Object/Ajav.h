@@ -32,26 +32,32 @@ enum dRes_ID_AJAV {
 
 enum AJAVA_JNT {
     AJAVA_JNT_AJAVA_e=0x0,
+    AJAVA_NUM_JNTS_e=0x1,
 };
 
 enum AJAVB_JNT {
     AJAVB_JNT_AJAVB_e=0x0,
+    AJAVB_NUM_JNTS_e=0x1,
 };
 
 enum AJAVC_JNT {
     AJAVC_JNT_AAVC_e=0x0,
+    AJAVC_NUM_JNTS_e=0x1,
 };
 
 enum AJAVD_JNT {
     AJAVD_JNT_AJAVD_e=0x0,
+    AJAVD_NUM_JNTS_e=0x1,
 };
 
 enum AJAVE_JNT {
     AJAVE_JNT_AJAVE_e=0x0,
+    AJAVE_NUM_JNTS_e=0x1,
 };
 
 enum AJAVF_JNT {
     AJAVF_JNT_AJAVF_e=0x0,
+    AJAVF_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_AJAV_H */

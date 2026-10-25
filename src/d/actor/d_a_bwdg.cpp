@@ -46,8 +46,8 @@ void daBwdg_packet_c::draw() {
     dKy_setLight_mine(mpTevStr);
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
-    GFSetArray(GX_VA_POS, &mPos[m00010 * 0x1081], sizeof(cXyz));
-    GFSetArray(GX_VA_NRM, &mNrm[m00010 * 0x1081], sizeof(cXyz));
+    GFSetArray(GX_VA_POS, mPos[m00010], sizeof(cXyz));
+    GFSetArray(GX_VA_NRM, mNrm[m00010], sizeof(cXyz));
     GFSetArray(GX_VA_TEX0, l_texCoord, sizeof(cXy));
     GFSetTevColorS10(GX_TEVREG0, mpTevStr->mColorC0);
     GFSetTevColor(GX_TEVREG1, mpTevStr->mColorK0);
@@ -69,7 +69,7 @@ static BOOL daBwdg_Draw(bwdg_class* i_this) {
     MtxTrans(0.0f, 10.0f + f1, 0.0f, 0);
     cMtx_concat(j3dSys.getViewMtx(), *calc_mtx, i_this->mBwdgPacket.getMtx());
     i_this->mBwdgPacket.setTevStr(&i_this->tevStr);
-    j3dSys.getDrawBuffer(0)->entryImm(&i_this->mBwdgPacket, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Opa)->entryImm(&i_this->mBwdgPacket, 0);
     return TRUE;
 }
 

@@ -22,6 +22,7 @@ enum dRes_ID_MTORISU {
 
 enum MTORISU_JNT {
     MTORISU_JNT_MTORISU_e=0x0,
+    MTORISU_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MTORISU_H */

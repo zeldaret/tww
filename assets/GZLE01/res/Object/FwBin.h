@@ -25,6 +25,7 @@ enum VBINW_F_JNT {
     VBINW_F_JNT_BIN_0_OUTSIDE_e=0x1,
     VBINW_F_JNT_BIN_1_CAP_MODEL_e=0x2,
     VBINW_F_JNT_BIN_2_INSIDE_e=0x3,
+    VBINW_F_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_FWBIN_H */

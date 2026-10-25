@@ -380,11 +380,11 @@ void dMsg2_multiTexDraw(sub_msg2_class* i_Msg, s16 param_1, s16 param_2, s16 par
     board.setPos(param_1, param_2, r6, r7);
 
     if (i_Msg->mesgEntry.mTextboxType == 7) {
-        board.setBlackColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        board.setWhiteColor((GXColor){0x00, 0x00, 0x00, 0x00});
+        board.setBlackColor(COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        board.setWhiteColor(COMPOUND_LITERAL(GXColor){0x00, 0x00, 0x00, 0x00});
     } else {
-        board.setBlackColor((GXColor){0xF0, 0xF0, 0xF0, 0xDC});
-        board.setWhiteColor((GXColor){0x78, 0x78, 0x8C, 0x00});
+        board.setBlackColor(COMPOUND_LITERAL(GXColor){0xF0, 0xF0, 0xF0, 0xDC});
+        board.setWhiteColor(COMPOUND_LITERAL(GXColor){0x78, 0x78, 0x8C, 0x00});
     }
 
     board.setAlpha(var_f31);
@@ -421,7 +421,7 @@ void dMsg2_messageOut(sub_msg2_class* i_Msg, u8 i_index, int i_aimLine) {
                     iconNum == fopMsgM_Icon_ARROW_UP_e ||
                     iconNum == fopMsgM_Icon_ARROW_DOWN_e ||
                     iconNum == fopMsgM_Icon_SELECT_YOKO_RIGHT_e ||
-                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_e
+                    iconNum == fopMsgM_Icon_FLASHING_A_BUTTON_2_e
                 ) && iconColor == 0
             ) {
                 iconColor = 0xFFFFFFFF;
@@ -770,7 +770,7 @@ int dMsg2_closeProc(sub_msg2_class* i_Msg) {
             dMsg2_outFontHide(i_Msg, i);
         }
 
-        JKRFileLoader::removeResource(i_Msg->head_p, NULL);
+        JKRRemoveResource(i_Msg->head_p, NULL);
         i_Msg->msg.mStatus = fopMsgStts_BOX_CLOSED_e;
     }
 
@@ -947,7 +947,6 @@ void dDlst_2DMSG2_c::draw() {
 }
 
 /* 801E9CDC-801E9FC4       .text outFontDraw__14dDlst_2DMSG2_cFv */
-// NONMATCHING - regswap
 void dDlst_2DMSG2_c::outFontDraw() {
     J2DPane* ppane = ((sub_msg2_class*)actorP)->field_0xd00[0].pane;
     f32 var_f31 = ppane->getGlbBounds().i.y;
@@ -962,21 +961,20 @@ void dDlst_2DMSG2_c::outFontDraw() {
 
             if (iconNum != fopMsgM_Icon_NONE_e) {
                 u8 r14;
-                J2DTextBox* scrn = (J2DTextBox*)actorP->text_pane[i].pane;
-                int r18 = (f32)posX + scrn->getGlbBounds().i.x;
+                int r18 = (f32)posX + ((J2DTextBox*)actorP->text_pane[i].pane)->getGlbBounds().i.x;
 
                 int r17;
                 if (scale > actorP->field_0xeb4) {
                     if (actorP->field_0xecc[i] > 1) {
                         f32 temp = (actorP->field_0xeb0 * (DEMO_SELECT(2, 3) - posY));
-                        r17 = temp + scrn->getGlbBounds().i.y - (f32)(int)(scale / 2);
+                        r17 = temp + ((J2DTextBox*)actorP->text_pane[i].pane)->getGlbBounds().i.y - (f32)(int)(scale / 2);
                     } else {
                         f32 temp = actorP->field_0xeb0 * DEMO_SELECT(3, 4);
-                        r17 = (temp + scrn->getGlbBounds().i.y - (f32)(int)(scale / 2));
+                        r17 = (temp + ((J2DTextBox*)actorP->text_pane[i].pane)->getGlbBounds().i.y - (f32)(int)(scale / 2));
                     }
                 } else {
                     f32 temp = (actorP->field_0xeb0 * (DEMO_SELECT(2, 3) - actorP->field_0xecc[i] + (posY * 2)));
-                    r17 = (temp + scrn->getGlbBounds().i.y);
+                    r17 = (temp + ((J2DTextBox*)actorP->text_pane[i].pane)->getGlbBounds().i.y);
                 }
 
                 r14 = actorP->field_0xeac;
@@ -1128,7 +1126,7 @@ static BOOL dMsg2_IsDelete(sub_msg2_class* i_Msg) {
 
 /* 801EA7CC-801EA97C       .text dMsg2_Delete__FP14sub_msg2_class */
 static BOOL dMsg2_Delete(sub_msg2_class* i_Msg) {
-    dComIfGp_setMesgStatus(0);
+    dComIfGp_setMesgStatus(fopMsgStts_MSG_UNK0_e);
     dComIfG_setBrightness(0xFF);
 
     JKRHeap* heap = mDoExt_setCurrentHeap(i_Msg->Heap);

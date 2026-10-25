@@ -22,12 +22,14 @@ enum VBTSP_JNT {
     VBTSP_JNT_ROOT_VBTSP_e=0x0,
     VBTSP_JNT_HEAD_e=0x1,
     VBTSP_JNT_CANON_e=0x2,
+    VBTSP_NUM_JNTS_e=0x3,
 };
 
 enum VBTST_JNT {
     VBTST_JNT_ROOT_VBTST_e=0x0,
     VBTST_JNT_HEAD_e=0x1,
     VBTST_JNT_CANON_e=0x2,
+    VBTST_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_OSHIP_H */

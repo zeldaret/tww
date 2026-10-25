@@ -1,5 +1,5 @@
 // Debug-only file. This file is known to have existed for TWW based on the debug maps.
-// The contents of this are copied from the TP debug build decomp and may or may not match the actual TWW debug build.
+// The contents of this are based on the TP debug build decomp and may or may not match the actual TWW debug build.
 
 #include "d/d_debug_pad.h"
 #include "m_Do/m_Do_controller_pad.h"

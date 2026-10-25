@@ -50,30 +50,37 @@ enum dRes_ID_VGNFD {
 
 enum VGNFD0_JNT {
     VGNFD0_JNT_V0_GANON_e=0x0,
+    VGNFD0_NUM_JNTS_e=0x1,
 };
 
 enum VGNFD1_JNT {
     VGNFD1_JNT_V1_GOMA_e=0x0,
+    VGNFD1_NUM_JNTS_e=0x1,
 };
 
 enum VGNFD2_JNT {
     VGNFD2_JNT_V2_BABARESIA_e=0x0,
+    VGNFD2_NUM_JNTS_e=0x1,
 };
 
 enum VGNFD3_JNT {
     VGNFD3_JNT_V3_BIG_POW_e=0x0,
+    VGNFD3_NUM_JNTS_e=0x1,
 };
 
 enum VGNFD4_JNT {
     VGNFD4_JNT_V4_RANENEMORA_e=0x0,
+    VGNFD4_NUM_JNTS_e=0x1,
 };
 
 enum VGNFD5_JNT {
     VGNFD5_JNT_V5_DOOR_FOUR_e=0x0,
+    VGNFD5_NUM_JNTS_e=0x1,
 };
 
 enum YGCBD00_JNT {
     YGCBD00_JNT_V5_DOOR_FOUR_e=0x0,
+    YGCBD00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VGNFD_H */

@@ -63,6 +63,7 @@ enum dRes_ID_BL {
 enum BL_JNT {
     BL_JNT_HEAD_e=0x0,
     BL_JNT_AGO_e=0x1,
+    BL_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_BL_H */

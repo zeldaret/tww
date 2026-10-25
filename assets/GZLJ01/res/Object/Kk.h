@@ -83,11 +83,13 @@ enum KK_JNT {
     KK_JNT_FOOTR_e=0x13,
     KK_JNT_SKIRTF_e=0x14,
     KK_JNT_SKIRTR_e=0x15,
+    KK_NUM_JNTS_e=0x16,
 };
 
 enum GFKDS00_JNT {
     GFKDS00_JNT_ROOT_e=0x0,
     GFKDS00_JNT_FUKIDASHI_e=0x1,
+    GFKDS00_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_KK_H */

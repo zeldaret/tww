@@ -13,11 +13,12 @@ namespace JASystem {
             TWaveHandle() { mHeap = NULL; }
             ~TWaveHandle();
             const TWaveInfo* getWaveInfo() const { return &mWaveInfo; }
-            const void* getWavePtr() const {
-                if (mHeap->mBase == NULL) {
-                    return NULL;
+            intptr_t getWavePtr() const {
+                void* base = mHeap->getBase();
+                if (base == NULL) {
+                    return 0;
                 }
-                return (u8*)mHeap->mBase + mWaveInfo.mWavePtrOffs;
+                return (intptr_t)base + mWaveInfo.mWavePtrOffs;
             }
 
             /* 0x04 */ TWaveInfo mWaveInfo;

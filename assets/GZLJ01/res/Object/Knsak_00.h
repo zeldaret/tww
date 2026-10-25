@@ -28,26 +28,32 @@ enum dRes_ID_KNSAK_00 {
 
 enum KNSAK_00_JNT {
     KNSAK_00_JNT_KNSAK_00_e=0x0,
+    KNSAK_00_NUM_JNTS_e=0x1,
 };
 
 enum KNSAK_01_JNT {
     KNSAK_01_JNT_KNSAK_01_e=0x0,
+    KNSAK_01_NUM_JNTS_e=0x1,
 };
 
 enum KNSAK_02_JNT {
     KNSAK_02_JNT_KNSAK_02_e=0x0,
+    KNSAK_02_NUM_JNTS_e=0x1,
 };
 
 enum KNSAK_03_JNT {
     KNSAK_03_JNT_KNSAK_03_e=0x0,
+    KNSAK_03_NUM_JNTS_e=0x1,
 };
 
 enum KNSAK_04_JNT {
     KNSAK_04_JNT_KNSAK_04_e=0x0,
+    KNSAK_04_NUM_JNTS_e=0x1,
 };
 
 enum KNSAK_05_JNT {
     KNSAK_05_JNT_KNSAK_05_e=0x0,
+    KNSAK_05_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KNSAK_00_H */

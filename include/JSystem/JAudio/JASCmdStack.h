@@ -20,12 +20,14 @@ namespace JASystem {
             /* 0x24 */ f32 mTrackTempo;
         };
 
+        typedef void (*TPortFunc)(TPortArgs*);
+
         class TPortCmd;
 
         class TPortHead {
         public:
-            /* 0x00 */ TPortCmd* field_0x0;
-            /* 0x04 */ TPortCmd* field_0x4;
+            /* 0x00 */ TPortCmd* mFirst;
+            /* 0x04 */ TPortCmd* mLast;
         };
 
         class TPortCmd {
@@ -33,13 +35,20 @@ namespace JASystem {
             TPortCmd();
             ~TPortCmd() {}
             bool addPortCmdOnce();
-            bool setPortCmd(void (*)(TPortArgs*), TPortArgs*);
+            bool setPortCmd(TPortFunc, TPortArgs*);
             bool addPortCmd(TPortHead*);
 
-            /* 0x00 */ TPortHead* field_0x0;
-            /* 0x04 */ TPortCmd* field_0x4;
-            /* 0x08 */ void (*field_0x8)(TPortArgs*);
-            /* 0x0C */ TPortArgs* field_0xc;
+            TPortHead* getHead() { return mHead; }
+            void setHead(TPortHead* head) { mHead = head; }
+            TPortCmd* getNext() { return mNext; }
+            TPortFunc getFunc() { return mFunc; }
+            TPortArgs* getArgs() { return mArgs; }
+
+        private:
+            /* 0x00 */ TPortHead* mHead;
+            /* 0x04 */ TPortCmd* mNext;
+            /* 0x08 */ TPortFunc mFunc;
+            /* 0x0C */ TPortArgs* mArgs;
         };
 
         void portCmdProcOnce(TPortHead*);

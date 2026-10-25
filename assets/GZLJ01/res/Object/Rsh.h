@@ -96,10 +96,12 @@ enum RS_JNT {
     RS_JNT_LEGR1_e=0x14,
     RS_JNT_LEGR2_e=0x15,
     RS_JNT_FOOTR_e=0x16,
+    RS_NUM_JNTS_e=0x17,
 };
 
 enum SHOP_CURSOR01_JNT {
     SHOP_CURSOR01_JNT_CURSOR01_e=0x0,
+    SHOP_CURSOR01_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_RSH_H */

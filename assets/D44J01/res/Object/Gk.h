@@ -40,10 +40,12 @@ enum dRes_ID_GK {
 
 enum GK_HAIR_JNT {
     GK_HAIR_JNT_GK_HAIR_e=0x0,
+    GK_HAIR_NUM_JNTS_e=0x1,
 };
 
 enum GK_HAT_JNT {
     GK_HAT_JNT_GK_HAT_e=0x0,
+    GK_HAT_NUM_JNTS_e=0x1,
 };
 
 enum GK_JNT {
@@ -67,6 +69,7 @@ enum GK_JNT {
     GK_JNT_LEGR1_e=0x11,
     GK_JNT_LEGR2_e=0x12,
     GK_JNT_FOOTR_e=0x13,
+    GK_NUM_JNTS_e=0x14,
 };
 
 #endif /* RES_GK_H */

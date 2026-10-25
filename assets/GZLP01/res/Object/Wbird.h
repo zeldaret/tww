@@ -41,6 +41,7 @@ enum KA_JNT {
     KA_JNT_J_KA_WING_R1_e=0xD,
     KA_JNT_J_KA_WING_R2_e=0xE,
     KA_JNT_J_KA_WING_R3_e=0xF,
+    KA_NUM_JNTS_e=0x10,
 };
 
 #endif /* RES_WBIRD_H */

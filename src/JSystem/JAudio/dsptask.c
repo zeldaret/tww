@@ -488,9 +488,9 @@ static u8 jdsp[] = {
     0x80, 0x01, 0x02, 0xBF, 0x00, 0xEB, 0x02, 0xDF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-static DSPTaskInfo audio_task ALIGN_DECL(32);
+ALIGN_DECL(32, static DSPTaskInfo audio_task);
 
-static u8 AUDIO_YIELD_BUFFER[8192] ALIGN_DECL(32);
+ALIGN_DECL(32, static u8 AUDIO_YIELD_BUFFER[8192]);
 
 /* 8028E8A0-8028E94C       .text DspBoot__FPFPv_v */
 void DspBoot(void (*param_1)(void*)) {

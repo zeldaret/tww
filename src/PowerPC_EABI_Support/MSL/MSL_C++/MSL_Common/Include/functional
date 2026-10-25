@@ -1,5 +1,5 @@
-#ifndef MSL_FUNCTIONAL_H_
-#define MSL_FUNCTIONAL_H_
+#ifndef MSL_FUNCTIONAL
+#define MSL_FUNCTIONAL
 
 namespace std {
 

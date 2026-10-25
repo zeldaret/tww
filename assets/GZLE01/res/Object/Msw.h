@@ -28,10 +28,12 @@ enum dRes_ID_MSW {
 
 enum MSWNG_JNT {
     MSWNG_JNT_MSWNG_e=0x0,
+    MSWNG_NUM_JNTS_e=0x1,
 };
 
 enum OBM_CHAIN1_JNT {
     OBM_CHAIN1_JNT_OBM_CHAIN1_e=0x0,
+    OBM_CHAIN1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MSW_H */

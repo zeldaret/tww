@@ -18,6 +18,7 @@ enum dRes_ID_KROCK_01 {
 
 enum KROCK_01_JNT {
     KROCK_01_JNT_KOISI1_e=0x0,
+    KROCK_01_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_KROCK_01_H */

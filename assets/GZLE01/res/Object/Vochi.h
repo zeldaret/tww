@@ -22,6 +22,7 @@ enum dRes_ID_VOCHI {
 
 enum VOCHI_JNT {
     VOCHI_JNT_OCHIBA_MODEL_e=0x0,
+    VOCHI_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VOCHI_H */

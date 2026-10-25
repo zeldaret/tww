@@ -24,6 +24,7 @@ enum MHMRSW_JNT {
     MHMRSW_JNT_MHMRSW_e=0x0,
     MHMRSW_JNT_HIT_e=0x1,
     MHMRSW_JNT_BODY_e=0x2,
+    MHMRSW_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_MHMRSW_H */

@@ -8,15 +8,15 @@ class dBgW;
 
 class daShutter_c : public fopAc_ac_c {
 public:
-    bool _delete();
+    BOOL _delete();
     BOOL CreateHeap();
     BOOL Create();
     cPhs_State _create();
     void set_mtx();
-    bool _execute();
+    BOOL _execute();
     void shutter_move();
     void demo();
-    bool _draw();
+    BOOL _draw();
 
     /* 0x00 */ static const float m_max_speed[2];
     /* 0x08 */ static const float m_min_speed[2];
@@ -29,10 +29,10 @@ public:
     /* 0x38 */ static const Vec m_cull_min[2];
     /* 0x50 */ static const Vec m_cull_max[2];
 
-    static char* m_arcname[2];
-    static char* m_open_ev_name[2];
-    static char* m_close_ev_name[2];
-    static char* m_staff_name[2];
+    static const char* m_arcname[2];
+    static const char* m_open_ev_name[2];
+    static const char* m_close_ev_name[2];
+    static const char* m_staff_name[2];
     
 public:
     /* 0x290 */ request_of_phase_process_class mPhs;

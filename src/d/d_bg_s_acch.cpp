@@ -76,7 +76,7 @@ dBgS_Acch::dBgS_Acch() {
 }
 
 static void dummy1() {
-    OSReport("***********************************\ndBgS_Acch::copy constructer called.\n***********************************\n");
+    DEAD_STRING("***********************************\ndBgS_Acch::copy constructer called.\n***********************************\n");
 }
 
 /* 800A2CFC-800A2D78       .text Init__9dBgS_AcchFv */
@@ -184,7 +184,7 @@ void dBgS_Acch::LineCheck(dBgS& i_bgs) {
         linChk.Set2(&old_pos, &pos, GetActorPid());
         linChk.SetExtChk(*this);
         if (i_bgs.LineCross(&linChk)) {
-            *pm_pos = linChk.GetLinP()->GetEnd();
+            *pm_pos = linChk.GetCross();
             OnLineCheckHit();
 
             if (pm_out_poly_info != NULL)
@@ -451,6 +451,6 @@ f32 dBgS_Acch::GetWallAddY(Vec& vec, int) {
 }
 
 static void dummy2() {
-    OSReport("\x1B[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
+    DEAD_STRING("\x1B[43;30m**************************************\ndBgS_ObjAcch::copy constructer called.\n**************************************\n\033[m");
     dBgS_ObjAcch acch; // fakematch to get dBgS_ObjAcch's vtable and destructor to show up in this TU
 }

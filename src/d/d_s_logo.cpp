@@ -258,15 +258,15 @@ BOOL progSelDraw(dScnLogo_c* i_this) {
     u8 selG = t * 0xC8;
 
     if (i_this->mInterFlag) {
-        i_this->progyesImg->getPicture()->setWhite((GXColor){0xA0, 0xA0, 0xA0, 0xFF});
-        i_this->progyesImg->getPicture()->setBlack((GXColor){0x00, 0x00, 0x00, 0x00});
-        i_this->prognoImg->getPicture()->setWhite((GXColor){0xFF, 0xC8, 0x00, 0xFF});
-        i_this->prognoImg->getPicture()->setBlack((GXColor){selR, selG, 0x00, 0x00});
+        i_this->progyesImg->getPicture()->setWhite(COMPOUND_LITERAL(GXColor){0xA0, 0xA0, 0xA0, 0xFF});
+        i_this->progyesImg->getPicture()->setBlack(COMPOUND_LITERAL(GXColor){0x00, 0x00, 0x00, 0x00});
+        i_this->prognoImg->getPicture()->setWhite(COMPOUND_LITERAL(GXColor){0xFF, 0xC8, 0x00, 0xFF});
+        i_this->prognoImg->getPicture()->setBlack(COMPOUND_LITERAL(GXColor){selR, selG, 0x00, 0x00});
     } else {
-        i_this->progyesImg->getPicture()->setWhite((GXColor){0xFF, 0xC8, 0x00, 0xFF});
-        i_this->progyesImg->getPicture()->setBlack((GXColor){selR, selG, 0x00, 0x00});
-        i_this->prognoImg->getPicture()->setWhite((GXColor){0xA0, 0xA0, 0xA0, 0xFF});
-        i_this->prognoImg->getPicture()->setBlack((GXColor){0x00, 0x00, 0x00, 0x00});
+        i_this->progyesImg->getPicture()->setWhite(COMPOUND_LITERAL(GXColor){0xFF, 0xC8, 0x00, 0xFF});
+        i_this->progyesImg->getPicture()->setBlack(COMPOUND_LITERAL(GXColor){selR, selG, 0x00, 0x00});
+        i_this->prognoImg->getPicture()->setWhite(COMPOUND_LITERAL(GXColor){0xA0, 0xA0, 0xA0, 0xFF});
+        i_this->prognoImg->getPicture()->setBlack(COMPOUND_LITERAL(GXColor){0x00, 0x00, 0x00, 0x00});
     }
 
     if (i_this->field_0x1f0 == 0) {
@@ -754,10 +754,10 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     i_this->nintendoImg->setAlpha(0xFF);
 #if VERSION <= VERSION_JPN
     // Blue Nintendo logo for JPN.
-    i_this->nintendoImg->getPicture()->setWhite((GXColor){0x00, 0x46, 0xFF, 0xFF});
+    i_this->nintendoImg->getPicture()->setWhite(COMPOUND_LITERAL(GXColor){0x00, 0x46, 0xFF, 0xFF});
 #else
     // Red Nintendo logo for other regions.
-    i_this->nintendoImg->getPicture()->setWhite((GXColor){0xDC, 0x00, 0x00, 0xFF});
+    i_this->nintendoImg->getPicture()->setWhite(COMPOUND_LITERAL(GXColor){0xDC, 0x00, 0x00, 0xFF});
 #endif
 
     timg = (ResTIMG *)dComIfG_getObjectRes("Logo", dRes_INDEX_LOGO_BTI_TITLE_DOLBY_MARK_e);
@@ -822,7 +822,7 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     JUT_ASSERT(VERSION_SELECT(1240, 1295, 1579, 1619), timg != NULL);
     i_this->progyesImg = new dDlst_2D_c(timg, 211, 372, 0);
     JUT_ASSERT(VERSION_SELECT(1242, 1297, 1581, 1621), i_this->progyesImg != NULL);
-    i_this->progyesImg->getPicture()->setWhite((GXColor){0xFF, 0xC8, 0x00, 0xFF});
+    i_this->progyesImg->getPicture()->setWhite(COMPOUND_LITERAL(GXColor){0xFF, 0xC8, 0x00, 0xFF});
     i_this->progyesImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL
@@ -833,7 +833,7 @@ cPhs_State phase_2(dScnLogo_c* i_this) {
     JUT_ASSERT(VERSION_SELECT(1249, 1305, 1594, 1634), timg != NULL);
     i_this->prognoImg = new dDlst_2D_c(timg, 350, 372, 0);
     JUT_ASSERT(VERSION_SELECT(1251, 1307, 1596, 1636), i_this->prognoImg != NULL);
-    i_this->prognoImg->getPicture()->setWhite((GXColor){0xA0, 0xA0, 0xA0, 0xFF});
+    i_this->prognoImg->getPicture()->setWhite(COMPOUND_LITERAL(GXColor){0xA0, 0xA0, 0xA0, 0xFF});
     i_this->prognoImg->setAlpha(0x00);
 
 #if VERSION == VERSION_PAL

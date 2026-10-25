@@ -92,6 +92,7 @@ enum PG_JNT {
     PG_JNT_J_PG_MIMI_R_e=0xA,
     PG_JNT_J_PG_NESE_e=0xB,
     PG_JNT_J_PG_TAIL_e=0xC,
+    PG_NUM_JNTS_e=0xD,
 };
 
 enum PG_BIG_JNT {
@@ -108,6 +109,7 @@ enum PG_BIG_JNT {
     PG_BIG_JNT_J_PG_MIMI_R_e=0xA,
     PG_BIG_JNT_J_PG_NESE_e=0xB,
     PG_BIG_JNT_J_PG_TAIL_e=0xC,
+    PG_BIG_NUM_JNTS_e=0xD,
 };
 
 #endif /* RES_KB_H */

@@ -21,64 +21,61 @@ bool dNpc_EventCut_c::cutProc() {
     if(mpEvtStaffName == NULL || mpActor == NULL) {
         return false;
     }
-    else {
-        mEvtStaffId = dComIfGp_evmng_getMyStaffId(mpEvtStaffName);
-        if(mEvtStaffId == -1) {
-            return false;
-        }
-        else {
-            typedef void(dNpc_EventCut_c::*cut_func_t)(void);
-            struct cut_entry_t {
-                cut_func_t start;
-                cut_func_t proc;
-            };
 
-            static cut_entry_t cut_tbl[] = {
-                {
-                    &dNpc_EventCut_c::cutWaitStart,
-                    &dNpc_EventCut_c::cutWaitProc,
-                },
-                {
-                    &dNpc_EventCut_c::cutTurnToActorStart,
-                    &dNpc_EventCut_c::cutTurnToActorProc,
-                },
-                {
-                    &dNpc_EventCut_c::cutMoveToActorStart,
-                    &dNpc_EventCut_c::cutMoveToActorProc,
-                },
-                {
-                    &dNpc_EventCut_c::cutTurnToPosStart,
-                    &dNpc_EventCut_c::cutTurnToPosProc,
-                },
-                {
-                    &dNpc_EventCut_c::cutMoveToPosStart,
-                    &dNpc_EventCut_c::cutMoveToPosProc,
-                },
-                {
-                    &dNpc_EventCut_c::cutTalkMsgStart,
-                    &dNpc_EventCut_c::cutTalkMsgProc,
-                },
-                {
-                    &dNpc_EventCut_c::cutContinueTalkStart,
-                    &dNpc_EventCut_c::cutTalkMsgProc,
-                },
-            };
-
-            mCurActIdx = dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, ARRAY_SIZE(action_table), TRUE, 0);
-            if(mCurActIdx == -1) {
-                return false;
-            }
-            else {
-                if(dComIfGp_evmng_getIsAddvance(mEvtStaffId)) {
-                    mbAttention = false;
-                    (this->*cut_tbl[mCurActIdx].start)();
-                }
-                
-                (this->*cut_tbl[mCurActIdx].proc)();
-                return true;
-            }
-        }
+    mEvtStaffId = dComIfGp_evmng_getMyStaffId(mpEvtStaffName);
+    if(mEvtStaffId == -1) {
+        return false;
     }
+
+    typedef void(dNpc_EventCut_c::*cut_func_t)(void);
+    struct cut_entry_t {
+        cut_func_t start;
+        cut_func_t proc;
+    };
+
+    static cut_entry_t cut_tbl[] = {
+        {
+            &dNpc_EventCut_c::cutWaitStart,
+            &dNpc_EventCut_c::cutWaitProc,
+        },
+        {
+            &dNpc_EventCut_c::cutTurnToActorStart,
+            &dNpc_EventCut_c::cutTurnToActorProc,
+        },
+        {
+            &dNpc_EventCut_c::cutMoveToActorStart,
+            &dNpc_EventCut_c::cutMoveToActorProc,
+        },
+        {
+            &dNpc_EventCut_c::cutTurnToPosStart,
+            &dNpc_EventCut_c::cutTurnToPosProc,
+        },
+        {
+            &dNpc_EventCut_c::cutMoveToPosStart,
+            &dNpc_EventCut_c::cutMoveToPosProc,
+        },
+        {
+            &dNpc_EventCut_c::cutTalkMsgStart,
+            &dNpc_EventCut_c::cutTalkMsgProc,
+        },
+        {
+            &dNpc_EventCut_c::cutContinueTalkStart,
+            &dNpc_EventCut_c::cutTalkMsgProc,
+        },
+    };
+
+    mCurActIdx = dComIfGp_evmng_getMyActIdx(mEvtStaffId, action_table, ARRAY_SIZE(action_table), TRUE, 0);
+    if(mCurActIdx == -1) {
+        return false;
+    }
+
+    if(dComIfGp_evmng_getIsAddvance(mEvtStaffId)) {
+        mbAttention = false;
+        (this->*cut_tbl[mCurActIdx].start)();
+    }
+    
+    (this->*cut_tbl[mCurActIdx].proc)();
+    return true;
 }
 
 /* 8021CED0-8021CF3C       .text cutWaitStart__15dNpc_EventCut_cFv */
@@ -176,14 +173,12 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
         mTargetActorPos.set(0.0f, 0.0f, 0.0f);
         fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
+    else if(mpActorName == NULL || strcmp(mpActorName, "Player") == 0) {
+        mpTargetActor = dComIfGp_getPlayer(0);
+    }
     else {
-        if(mpActorName == NULL || strcmp(mpActorName, "Player") == 0) {
-            mpTargetActor = dComIfGp_getPlayer(0);
-        }
-        else {
-            mTargetActorPos.set(0.0f, 0.0f, 0.0f);
-            fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
-        }
+        mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+        fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
 
     if(mpJntCtrl) {
@@ -208,16 +203,14 @@ void dNpc_EventCut_c::cutTurnToActorProc() {
     if(mpActorName == NULL || strcmp(mpActorName, "Player") == 0) {
         mPos = dNpc_playerEyePos(0.0f) + mOffsetPos;
     }
+    else if(mAddAngle && pDelDistance) {
+        u16 angle = mpTargetActor->shape_angle.y + mAddAngle;
+        mPos = mpTargetActor->current.pos;
+        mPos.x -= pDelDistance * cM_ssin(angle);
+        mPos.z -= pDelDistance * cM_scos(angle);
+    }
     else {
-        if(mAddAngle && pDelDistance) {
-            u16 angle = mpTargetActor->shape_angle.y + mAddAngle;
-            mPos = mpTargetActor->current.pos;
-            mPos.x -= pDelDistance * cM_ssin(angle);
-            mPos.z -= pDelDistance * cM_scos(angle);
-        }
-        else {
-            mPos = mpTargetActor->current.pos + mOffsetPos;
-        }
+        mPos = mpTargetActor->current.pos + mOffsetPos;
     }
 
     mbAttention = true;
@@ -304,14 +297,12 @@ void dNpc_EventCut_c::cutMoveToActorProc() {
         mTargetActorPos.set(0.0f, 0.0f, 0.0f);
         fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
+    else if(mpActorName == NULL || strcmp(mpActorName, "Player") == 0) {
+        mpTargetActor = dComIfGp_getPlayer(0);
+    }
     else {
-        if(mpActorName == NULL || strcmp(mpActorName, "Player") == 0) {
-            mpTargetActor = dComIfGp_getPlayer(0);
-        }
-        else {
-            mTargetActorPos.set(0.0f, 0.0f, 0.0f);
-            fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
-        }
+        mTargetActorPos.set(0.0f, 0.0f, 0.0f);
+        fopAcM_Search((fopAcIt_JudgeFunc)&findActorCallBack, this);
     }
 
     if(mpTargetActor == NULL) {
@@ -356,35 +347,30 @@ fopAc_ac_c* dNpc_EventCut_c::findActorCallBack(fopAc_ac_c* pActor, void* pData) 
 
         return pActor;
     }
-    else {
-        if(cut->mpActorName == NULL) {
-            return 0;
+    else if(cut->mpActorName == NULL) {
+        return NULL;
+    }
+
+    dStage_objectNameInf* obj = dStage_searchName(cut->mpActorName);
+    if(obj == 0) {
+        return NULL;
+    }
+    if(obj->procname == fopAcM_GetProfName(pActor) && obj->argument == pActor->argument) {
+        if(cut->mTargetActorPos.abs() == 0.0f) {
+            cut->mTargetActorPos = pActor->current.pos;
+            cut->mpTargetActor = pActor;
         }
         else {
-            dStage_objectNameInf* obj = dStage_searchName(cut->mpActorName);
-            if(obj == 0) {
-                return 0;
-            }
-            else {
-                if(obj->procname == fopAcM_GetProfName(pActor) && obj->argument == pActor->argument) {
-                    if(cut->mTargetActorPos.abs() == 0.0f) {
-                        cut->mTargetActorPos = pActor->current.pos;
-                        cut->mpTargetActor = pActor;
-                    }
-                    else {
-                        f32 mag1 = (cut->mTargetActorPos - cut->mpActor->current.pos).abs();
-                        f32 mag2 = (pActor->current.pos - cut->mpActor->current.pos).abs();
-                        if(mag2 < mag1) {
-                            cut->mTargetActorPos = pActor->current.pos;
-                            cut->mpTargetActor = pActor;
-                        }
-                    }
-                }
+            f32 mag1 = (cut->mTargetActorPos - cut->mpActor->current.pos).abs();
+            f32 mag2 = (pActor->current.pos - cut->mpActor->current.pos).abs();
+            if(mag2 < mag1) {
+                cut->mTargetActorPos = pActor->current.pos;
+                cut->mpTargetActor = pActor;
             }
         }
     }
 
-    return 0;
+    return NULL;
 }
 
 /* 8021DC7C-8021DE2C       .text cutTurnToPosStart__15dNpc_EventCut_cFv */
@@ -543,7 +529,7 @@ void dNpc_EventCut_c::cutMoveToPosProc() {
         dComIfGp_evmng_cutEnd(mEvtStaffId);
     }
 
-    f32 dist = std::sqrtf((temp - mpActor->current.pos).abs2XZ());
+    f32 dist = (temp - mpActor->current.pos).absXZ();
 
     cLib_addCalc2(&mpActor->current.pos.x, temp.x, 0.1f, mSpeed);
     cLib_addCalc2(&mpActor->current.pos.z, temp.z, 0.1f, mSpeed);

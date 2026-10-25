@@ -28,7 +28,7 @@ void JStage::TLight::JSGSetLightType(JStage::TELight) {
 
 /* 8026DF08-8026DF1C       .text JSGGetColor__Q26JStage6TLightCFv */
 GXColor JStage::TLight::JSGGetColor() const {
-    return (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+    return COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0xFF};
 }
 
 /* 8026DF1C-8026DF20       .text JSGSetColor__Q26JStage6TLightF8_GXColor */

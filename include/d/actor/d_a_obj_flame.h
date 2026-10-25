@@ -52,6 +52,8 @@ namespace daObjFlame {
         void mode_l_after();
         void mode_proc_call();
     
+        static const dCcD_SrcCps M_cps_src;
+
     public:
         /* 0x290 */ request_of_phase_process_class mPhs;
         /* 0x298 */ J3DModel* mpModel;

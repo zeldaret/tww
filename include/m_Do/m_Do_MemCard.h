@@ -59,7 +59,7 @@ public:
     s32 checkspace();
     void setCardState(s32);
 
-    bool isCardCommNone() { return mCommand != CARD_NO_COMMAND; }
+    BOOL isCardCommNone() { return mCommand == CARD_NO_COMMAND; }
     u8 getNowSlot() { return mCardSlot; }
     u8* getPictDataPtr() { return mPictDataPtr; }
     u8* getPictWriteDataPtr() { return mPictDataWritePtr; }
@@ -98,7 +98,7 @@ static int mDoMemCd_main(void*);
 
 extern mDoMemCd_Ctrl_c g_mDoMemCd_control;
 
-inline bool mDoMemCd_isCardCommNone() {
+inline BOOL mDoMemCd_isCardCommNone() {
     return g_mDoMemCd_control.isCardCommNone();
 }
 

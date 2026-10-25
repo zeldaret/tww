@@ -599,7 +599,7 @@ void dTree_packet_c::update() {
 
     mDoLib_clipper::resetFar();
     dComIfGd_setXluListBG();
-    j3dSys.getDrawBuffer(1)->entryImm(this, 0);
+    j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu)->entryImm(this, 0);
     dComIfGd_setXluList();
 }
 

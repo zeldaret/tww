@@ -247,10 +247,8 @@ void daOship_c::createWave() {
         dComIfGp_particle_setShipTail(dPa_name::ID_AK_JN_SHIPTAIL00, &mTrackPos, &shape_angle, NULL, 0, &mTrackCallback);
         JPABaseEmitter* emitter_p = mTrackCallback.getEmitter();
         if (emitter_p) {
-            Vec vec_scale = { 3.0f, 3.0f, 3.0f };
-            JGeometry::TVec3<f32> scale = vec_scale;
-            emitter_p->setGlobalDynamicsScale(scale);
-            emitter_p->setGlobalParticleScale(scale);
+            Vec scale = { 3.0f, 3.0f, 3.0f };
+            emitter_p->setGlobalScale(scale);
         }
     }
 }
@@ -735,7 +733,7 @@ void daOship_c::modeDelete() {
                 fopAcM_delete(this);
             }
         } else {
-            fopAcM_orderOtherEvent2(this, "GOLD_SHIP_DELETE", dEvtFlag_NOPARTNER_e);
+            fopAcM_orderOtherEvent(this, "GOLD_SHIP_DELETE");
         }        
     } else {
         s16 temp = cLib_addCalcAngleS(&shape_angle.x, -15000, 0x14, 0x1000, 0x100);
@@ -795,13 +793,8 @@ bool daOship_c::_execute() {
             mSmokeRot[i] = shape_angle;
             mSmokeRot[i].y += mSmokeRotY[i];
             
-            Vec vec_scale = { 3.0f, 3.0f, 3.0f };
-            JGeometry::TVec3<f32> scale = vec_scale;
-            
-            JPABaseEmitter* emitter_p = mSmokeFollowCallback[i].getEmitter();
-
-            emitter_p->setGlobalDynamicsScale(scale);
-            emitter_p->setGlobalParticleScale(scale);
+            Vec scale = { 3.0f, 3.0f, 3.0f };
+            mSmokeFollowCallback[i].getEmitter()->setGlobalScale(scale);
         }
     }
 
@@ -974,7 +967,7 @@ BOOL daOship_c::_createHeap() {
         return FALSE;
     }
 
-    mpModel->setUserArea((u32) this);
+    mpModel->setUserArea((uintptr_t) this);
     for (u16 i = 0; i < modelData->getJointNum(); i++) {
         switch (i) {
             case VBTSP_JNT_HEAD_e:

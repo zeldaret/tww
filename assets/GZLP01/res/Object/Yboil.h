@@ -30,6 +30,7 @@ enum dRes_ID_YBOIL {
 
 enum YBOIL00_JNT {
     YBOIL00_JNT_BOIL_e=0x0,
+    YBOIL00_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_YBOIL_H */

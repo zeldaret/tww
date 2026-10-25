@@ -41,10 +41,12 @@ enum dRes_ID_BOMBER {
 enum VCANK_JNT {
     VCANK_JNT_CANON_ROOT_e=0x0,
     VCANK_JNT_CANON_e=0x1,
+    VCANK_NUM_JNTS_e=0x2,
 };
 
 enum AISI_JNT {
     AISI_JNT_POLYSURFACE3967_e=0x0,
+    AISI_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_BOMBER_H */

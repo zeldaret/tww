@@ -27,7 +27,7 @@ public:
     }
 
     f32 acc(s16 param_0, s16 param_1, s16 param_2) {
-        return ((f32)(param_1 - param_2) * (f32)(param_1 - param_2)) / ((f32)(param_0 - param_2) * (f32)(param_0 - param_2));
+        return SQUARE((f32)(param_1 - param_2)) / SQUARE((f32)(param_0 - param_2));
     }
     void deleteScreen() { delete scrn; }
     void setAlpha(f32 alpha) { mAlpha = alpha; }
@@ -96,5 +96,31 @@ private:
     /* 0x119 */ bool mAnimeStart;
     /* 0x11C */ u8 field_0x11c;
 };
+
+inline fpc_ProcID d_GameOver_Create() {
+    return fopMsgM_create(fpcNm_GAMEOVER_e);;
+}
+
+inline void d_GameOver_setBackAlpha(fpc_ProcID& pid, f32 alpha) {
+    dGameover_c* gameover = (dGameover_c*)fopMsgM_SearchByID(pid);
+    if (gameover) {
+        gameover->setBackAlpha(alpha);
+    }
+}
+
+inline void d_GameOver_animeStart(fpc_ProcID& pid) {
+    dGameover_c* gameover = (dGameover_c*)fopMsgM_SearchByID(pid);
+    if (gameover) {
+        gameover->animeStart();
+    }
+}
+
+inline BOOL d_GameOver_CheckDelete(fpc_ProcID& pid) {
+    dGameover_c* gameover = (dGameover_c*)fopMsgM_SearchByID(pid);
+    if (gameover != NULL) {
+        return gameover->deleteCheck();
+    }
+    return FALSE;
+}
 
 #endif /* D_GAMEOVER_H */

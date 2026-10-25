@@ -23,6 +23,7 @@ enum dRes_ID_VIGAH {
 enum VIGAH_JNT {
     VIGAH_JNT_ROOT_VIGAH_e=0x0,
     VIGAH_JNT_VIGAH_e=0x1,
+    VIGAH_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VIGAH_H */

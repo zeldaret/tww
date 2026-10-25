@@ -21,6 +21,32 @@
 #include "JSystem/JUtility/JUTDataHeader.h"
 #include "JSystem/JKernel/JKRHeap.h"
 
+struct JPAEmitterArchiveData_v10 {
+    /* 0x00 */ u32 magic;
+    /* 0x04 */ u32 version;
+    /* 0x08 */ u16 emtrResNum;
+    /* 0x0A */ u16 texResNum;
+};
+
+struct JPAEmitterParticleHeader_v10 {
+    /* 0x00 */ u32 magic; // 'JEFF'
+    /* 0x04 */ u32 type;  // 'jpa1'
+    /* 0x08 */ u8 field_0x08[0x0C - 0x08];
+    /* 0x0C */ u32 blockNum;
+    /* 0x10 */ u8 field_0x10[0x14 - 0x10];
+    /* 0x14 */ u8 keyNum;
+    /* 0x15 */ u8 fldNum;
+    /* 0x16 */ u8 textureNum;
+    /* 0x18 */ u16 resID;
+};
+
+struct JPAEmitterBlockHeader_v10 {
+    /* 0x00 */ u32 magic;
+    /* 0x04 */ u32 size;
+    /* 0x08 */ u8 field_0x08[0x0C - 0x08];
+    /* 0x0C */ u8 blockData;
+};
+
 static void dummy(u32 texNum) {
     JUT_WARN(0, "%s", "This is WRONG Version File\n");
     JUT_WARN(0, "%s", "This is NO JPA File\n");
@@ -45,10 +71,11 @@ static void dummy(u32 texNum) {
 
 /* 802590B4-8025917C       .text load__31JPAEmitterArchiveLoaderDataBaseFPCUcP7JKRHeapPP18JPAEmitterResourcePP18JPATextureResource */
 void JPAEmitterArchiveLoaderDataBase::load(const u8* data, JKRHeap* heap, JPAEmitterResource** dstEmtrRes, JPATextureResource** dstTexRes) {
-    u32 magic = ((const u32*)data)[0];
+    const JPAEmitterArchiveData_v10* header = (const JPAEmitterArchiveData_v10*)data;
+    u32 magic = header->magic;
 
     if (magic == 'JPAC') {
-        u32 version = ((const u32*)data)[1];
+        u32 version = header->version;
         if (version == '1-00') {
             JPAEmitterArchiveLoader_v10 loader;
             loader.pHeap = heap;
@@ -65,32 +92,6 @@ void JPAEmitterArchiveLoaderDataBase::load(const u8* data, JKRHeap* heap, JPAEmi
         JUT_WARN(202, "%s", "This is WRONG File\n");
     }
 }
-
-struct JPAEmitterArchiveData_v10 {
-    /* 0x00 */ u32 magic;
-    /* 0x04 */ u32 size;
-    /* 0x08 */ u16 emtrResNum;
-    /* 0x0A */ u16 texResNum;
-};
-
-struct JPAEmitterParticleHeader_v10 {
-    /* 0x00 */ u32 magic; // 'JEFF'
-    /* 0x04 */ u32 type;  // 'jpa1'
-    /* 0x08 */ u8 field_0x08[0x0C - 0x08];
-    /* 0x0C */ u32 blockNum;
-    /* 0x10 */ u8 field_0x10[0x14 - 0x10];
-    /* 0x14 */ u8 keyNum;
-    /* 0x15 */ u8 fldNum;
-    /* 0x16 */ u8 textureNum;
-    /* 0x18 */ u16 resID;
-};
-
-struct JPAEmitterBlockHeader_v10 {
-    /* 0x00 */ u32 magic;
-    /* 0x04 */ u32 size;
-    /* 0x08 */ u8 field_0x08[0x0C - 0x08];
-    /* 0x0C */ u8 blockData;
-};
 
 /* 8025917C-8025991C       .text load__27JPAEmitterArchiveLoader_v10Fv */
 void JPAEmitterArchiveLoader_v10::load() {

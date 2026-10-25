@@ -18,6 +18,7 @@ enum dRes_ID_HIMO2 {
 
 enum SEARCHITA_JNT {
     SEARCHITA_JNT_EREAITA_e=0x0,
+    SEARCHITA_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HIMO2_H */

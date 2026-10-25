@@ -5,13 +5,19 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_tag_kb_item.h"
-#include "d/d_com_inf_game.h"
+
+namespace daTagKbItem_prm {
+    inline u32 getItemNo(daTagKbItem_c* i_this) { return fopAcM_GetParam(i_this) & 0xFF; }
+    inline s8 getItemBitNo(daTagKbItem_c* i_this) { return (fopAcM_GetParam(i_this) >> 8) & 0xFF; }
+    inline s8 getEnemyKind(daTagKbItem_c* i_this) { return (fopAcM_GetParam(i_this) >> 16) & 0xFF; }
+    inline u32 getSwBitNo(daTagKbItem_c* i_this) { return (fopAcM_GetParam(i_this) >> 24) & 0xFF; }
+};
 
 /* 00000078-000000C8       .text _delete__13daTagKbItem_cFv */
 bool daTagKbItem_c::_delete() {
 #if VERSION > VERSION_JPN
-    if (field_0x2a0 != 0xff && field_0x2a4 != 0xff) {
-        dComIfGs_offSwitch(field_0x2a4, home.roomNo);
+    if (mItemNo != dItemNo_NONE_e && mSwBitNo != 0xff) {
+        fopAcM_offSwitch(this, mSwBitNo);
     }
 #endif
     return true;
@@ -19,12 +25,11 @@ bool daTagKbItem_c::_delete() {
 
 /* 000000C8-0000010C       .text CreateInit__13daTagKbItem_cFv */
 void daTagKbItem_c::CreateInit() {
-    field_0x2a0 = fopAcM_GetParam(this);
-    s8 paramBit = fopAcM_GetParamBit(fopAcM_GetParam(this), 8, 8);
-    field_0x29c = paramBit;
-    field_0x2a1 = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x10, 8);
-    field_0x2a4 = fopAcM_GetParamBit(fopAcM_GetParam(this), 0x18, 8);
-    field_0x298 = 0;
+    mItemNo = daTagKbItem_prm::getItemNo(this);
+    mItemBitNo = daTagKbItem_prm::getItemBitNo(this);
+    mEnemyKind = daTagKbItem_prm::getEnemyKind(this);
+    mSwBitNo = daTagKbItem_prm::getSwBitNo(this);
+    field_0x298 = false;
     field_0x299 = 0;
     mpActor = NULL;
 }
@@ -34,8 +39,8 @@ cPhs_State daTagKbItem_c::_create() {
     fopAcM_ct(this, daTagKbItem_c);
 
     CreateInit();
-    if ((field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, fopAcM_GetHomeRoomNo(this))) ||
-        (field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, fopAcM_GetHomeRoomNo(this))))
+    if ((mItemBitNo != 0x1f && fopAcM_isItem(this, mItemBitNo)) ||
+        (mSwBitNo != 0xff && fopAcM_isSwitch(this, mSwBitNo)))
     {
         return cPhs_ERROR_e;
     }
@@ -45,8 +50,8 @@ cPhs_State daTagKbItem_c::_create() {
 /* 000001BC-000001C4       .text _execute__13daTagKbItem_cFv */
 bool daTagKbItem_c::_execute() {
 #if VERSION <= VERSION_JPN
-    if ((field_0x29c != 0x1f && dComIfGs_isItem(field_0x29c, fopAcM_GetHomeRoomNo(this))) ||
-        (field_0x2a4 != 0xff && dComIfGs_isSwitch(field_0x2a4, fopAcM_GetHomeRoomNo(this))))
+    if ((mItemBitNo != 0x1f && fopAcM_isItem(this, mItemBitNo)) ||
+        (mSwBitNo != 0xff && fopAcM_isSwitch(this, mSwBitNo)))
     {
         fopAcM_delete(this);
     }

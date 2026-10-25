@@ -13,8 +13,8 @@ inline f32 JMAFastReciprocal(f32 value) {
     return __fres(value);
 }
 
-inline float __frsqrtes(register double f) {
-    register float out;
+inline float __frsqrtes(__REGISTER double f) {
+    __REGISTER float out;
     // clang-format off
 #ifdef __MWERKS__
     asm {
@@ -25,9 +25,9 @@ inline float __frsqrtes(register double f) {
     return out;
 }
 
-inline f32 JMAFastSqrt(register f32 input) {
+inline f32 JMAFastSqrt(__REGISTER f32 input) {
     if (input > 0.0f) {
-        register f32 out;
+        __REGISTER f32 out;
 #ifdef __MWERKS__
         asm {
             frsqrte out, input
@@ -45,9 +45,9 @@ inline f32 fastReciprocal(f32 value) {
     return JMAFastReciprocal(value);
 }
 
-inline void gekko_ps_copy3(register void* dst, register const void* src) {
-    register f32 src0;
-    register f32 src1;
+inline void gekko_ps_copy3(__REGISTER void* dst, __REGISTER const void* src) {
+    __REGISTER f32 src0;
+    __REGISTER f32 src1;
 #ifdef __MWERKS__
     asm {
         psq_l src0, 0(src), 0, 0
@@ -58,10 +58,10 @@ inline void gekko_ps_copy3(register void* dst, register const void* src) {
 #endif
 }
 
-inline void gekko_ps_copy6(register void* dst, register const void* src) {
-    register f32 src0;
-    register f32 src1;
-    register f32 src2;
+inline void gekko_ps_copy6(__REGISTER void* dst, __REGISTER const void* src) {
+    __REGISTER f32 src0;
+    __REGISTER f32 src1;
+    __REGISTER f32 src2;
 #ifdef __MWERKS__
     asm {
         psq_l src0, 0(src), 0, 0
@@ -74,13 +74,13 @@ inline void gekko_ps_copy6(register void* dst, register const void* src) {
 #endif
 }
 
-inline void gekko_ps_copy12(register void* dst, register const void* src) {
-    register f32 src0;
-    register f32 src1;
-    register f32 src2;
-    register f32 src3;
-    register f32 src4;
-    register f32 src5;
+inline void gekko_ps_copy12(__REGISTER void* dst, __REGISTER const void* src) {
+    __REGISTER f32 src0;
+    __REGISTER f32 src1;
+    __REGISTER f32 src2;
+    __REGISTER f32 src3;
+    __REGISTER f32 src4;
+    __REGISTER f32 src5;
 #ifdef __MWERKS__
     asm {
         psq_l src0, 0(src), 0, 0
@@ -99,15 +99,15 @@ inline void gekko_ps_copy12(register void* dst, register const void* src) {
 #endif
 }
 
-inline void gekko_ps_copy16(register void* dst, register const void* src) {
-    register f32 src0;
-    register f32 src1;
-    register f32 src2;
-    register f32 src3;
-    register f32 src4;
-    register f32 src5;
-    register f32 src6;
-    register f32 src7;
+inline void gekko_ps_copy16(__REGISTER void* dst, __REGISTER const void* src) {
+    __REGISTER f32 src0;
+    __REGISTER f32 src1;
+    __REGISTER f32 src2;
+    __REGISTER f32 src3;
+    __REGISTER f32 src4;
+    __REGISTER f32 src5;
+    __REGISTER f32 src6;
+    __REGISTER f32 src7;
 #ifdef __MWERKS__
     asm {
         psq_l src0, 0(src), 0, 0

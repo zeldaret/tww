@@ -22,6 +22,7 @@ enum dRes_ID_HHYU1 {
 
 enum HHYU1_JNT {
     HHYU1_JNT_MONO_e=0x0,
+    HHYU1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HHYU1_H */

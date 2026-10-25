@@ -55,6 +55,7 @@ enum PO_JNT {
     PO_JNT_FOOTL_e=0x11,
     PO_JNT_LEGR2_e=0x12,
     PO_JNT_FOOTR_e=0x13,
+    PO_NUM_JNTS_e=0x14,
 };
 
 #endif /* RES_PO_H */

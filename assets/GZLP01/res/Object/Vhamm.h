@@ -19,6 +19,7 @@ enum dRes_ID_VHAMM {
 enum VHAMM_JNT {
     VHAMM_JNT_ROOT_VHAMM_e=0x0,
     VHAMM_JNT_VHAMM_MODEL_e=0x1,
+    VHAMM_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_VHAMM_H */

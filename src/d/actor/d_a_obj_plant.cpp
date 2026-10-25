@@ -40,9 +40,7 @@ static dCcD_SrcCyl l_cyl_src = {
 }; 
 static BOOL nodeCallBack(J3DNode*, int);
 
-static BOOL _CheckCreateHeap(fopAc_ac_c* i_this) {
-    return static_cast<daObjPlant_c*>(i_this)->CreateHeap();
-}
+static BOOL CheckCreateHeap(fopAc_ac_c* i_this);
 
 cPhs_State daObjPlant_c::_create() {
     fopAcM_ct(this, daObjPlant_c);
@@ -50,7 +48,7 @@ cPhs_State daObjPlant_c::_create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Plant");
 
     if (phase_state == cPhs_COMPLEATE_e) {
-        if (!fopAcM_entrySolidHeap(this, _CheckCreateHeap, 0x0D20)) {
+        if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0x0D20)) {
             return cPhs_ERROR_e;
         }
     
@@ -142,7 +140,7 @@ BOOL daObjPlant_c::CreateHeap() {
                 break;
             }
         }
-        mpModel->setUserArea((u32)this);
+        mpModel->setUserArea((uintptr_t)this);
     } else {
         return FALSE; 
     }
@@ -172,12 +170,12 @@ static inline BOOL nodeCallBack(J3DNode* node, int calcTiming) {
         daObjPlant_c* plant = (daObjPlant_c*)model->getUserArea();
         
         if (plant != NULL) {
-            PSMTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
+            MTXCopy(model->getAnmMtx(jntNo), *calc_mtx);
             cMtx_XrotM(*calc_mtx, plant->field_0x40E);
             cMtx_YrotM(*calc_mtx, plant->field_0x408);
             cMtx_XrotM(*calc_mtx, -plant->field_0x40E);
             model->setAnmMtx(jntNo, *calc_mtx);
-            PSMTXCopy(*calc_mtx, j3dSys.mCurrentMtx);
+            MTXCopy(*calc_mtx, j3dSys.mCurrentMtx);
         }
     }
     return TRUE;

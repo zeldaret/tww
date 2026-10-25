@@ -116,36 +116,44 @@ enum SA_JNT {
     SA_JNT_LEGR1_e=0x10,
     SA_JNT_LEGR2_e=0x11,
     SA_JNT_FOOTR_e=0x12,
+    SA_NUM_JNTS_e=0x13,
 };
 
 enum SA_CUP04_JNT {
     SA_CUP04_JNT_KOPPU_e=0x0,
+    SA_CUP04_NUM_JNTS_e=0x1,
 };
 
 enum SA_CUP05_JNT {
     SA_CUP05_JNT_KOPPU_e=0x0,
+    SA_CUP05_NUM_JNTS_e=0x1,
 };
 
 enum SA01_HEAD_JNT {
     SA01_HEAD_JNT_HEAD2_e=0x0,
     SA01_HEAD_JNT_HAIR1_e=0x1,
     SA01_HEAD_JNT_HAIR2_e=0x2,
+    SA01_HEAD_NUM_JNTS_e=0x3,
 };
 
 enum SA02_HEAD_JNT {
     SA02_HEAD_JNT_SA02_HEAD_e=0x0,
+    SA02_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum SA03_HEAD_JNT {
     SA03_HEAD_JNT_SA03_HEAD_e=0x0,
+    SA03_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum SA04_HEAD_JNT {
     SA04_HEAD_JNT_SA04_HEAD_e=0x0,
+    SA04_HEAD_NUM_JNTS_e=0x1,
 };
 
 enum SA05_HEAD_JNT {
     SA05_HEAD_JNT_SA05_HEAD_e=0x0,
+    SA05_HEAD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_SA_H */

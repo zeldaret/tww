@@ -643,9 +643,9 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
 
     int i;
 
-    u8* saveData = &mSaveDataPtr[i_dataNo * sizeof(card_gamedata)];
+    card_gamedata* saveData = (card_gamedata*)&mSaveDataPtr[i_dataNo * sizeof(card_gamedata)];
 
-    u16 curHealth = *(u16*)(saveData + 2);
+    u16 curHealth = saveData->data.mPlayer.mPlayerStatusA.mLife;
 
     int curHearts = curHealth / 4;
     int healthMod4 = curHealth % 4;
@@ -655,7 +655,7 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
 
     // display hearts
     for(i = 0; i < 0x14; i++) {
-        if(i < *(u16*)saveData / 4) {
+        if(i < saveData->data.mPlayer.mPlayerStatusA.mMaxLife / 4) {
             field_0x828[i].pane->show();
             field_0xc88[i].pane->show();
 
@@ -681,12 +681,12 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     }
 
     // triforce (shards)
-    int temp = *(saveData + 0xBC); // surely this weirdly used temp is not real
+    int temp = saveData->data.mPlayer.mCollect.mTriforce; // surely this weirdly used temp is not real
     if(temp) {
         field_0x208[2].pane->hide();
         field_0x5f8.pane->show();
 
-        temp = *(saveData + 0xBC);
+        temp = saveData->data.mPlayer.mCollect.mTriforce;
         if(temp == 0xFF) {
             for(i = 0; i < 8; i++) {
                 field_0x630[i].pane->hide();
@@ -695,16 +695,16 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
         }
         else {
             field_0x630[8].pane->hide();
-            int shardBit = 1;
+            u8 shardBit = 1;
             for(i = 0; i < 8; i++) {
-                if(*(saveData + 0xBC) & (shardBit & 0xFF)) {
+                if(saveData->data.mPlayer.mCollect.mTriforce & shardBit) {
                     field_0x630[i].pane->show();
                 }
                 else {
                     field_0x630[i].pane->hide();
                 }
 
-                shardBit = (shardBit & 0x7F) << 1;
+                shardBit <<= 1;
             }
         }
     }
@@ -717,9 +717,9 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
     }
 
     // display pearls
-    int pearlBit = 1;
+    u8 pearlBit = 1;
     for(i = 0; i < 3; i++) {
-        if(*(saveData + 0xBD) & (pearlBit & 0xFF)) {
+        if(saveData->data.mPlayer.mCollect.mSymbol & pearlBit) {
             field_0x4a8[i].pane->show();
             field_0x550[i].pane->show();
         }
@@ -728,7 +728,7 @@ void dFile_select_c::makeRecInfo(u8 i_dataNo) {
             field_0x550[i].pane->hide();
         }
 
-        pearlBit = (pearlBit & 0x7F) << 1;
+        pearlBit <<= 1;
     }
 }
 
@@ -1811,22 +1811,22 @@ void dFile_select_c::CommandExec() {
         mDoMemCdRWm_SetCheckSumGameData(mSaveDataPtr, selectNum);
         mDoMemCd_setPictWriteDataPtr(mSavePicDataPtr);
         mDoMemCd_setCopyToPos(0xFF);
-        mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
+        mDoMemCd_Save(mSaveDataPtr, sizeof(card_gamedata) * 3, 0);
         field_0x392b = 0xF;
     }
     else if(field_0x392a == 3) {
         u8* r4 = mSaveDataPtr;
-        r4 += (field_0x3924 * 0x770);
+        r4 += (field_0x3924 * sizeof(card_gamedata));
         u8* r3 = mSaveDataPtr;
-        r3 += (field_0x3926 * 0x770);
-        memcpy(r3, r4, 0x770);
+        r3 += (field_0x3926 * sizeof(card_gamedata));
+        memcpy(r3, r4, sizeof(card_gamedata));
         mDoMemCdRWm_SetCheckSumGameData(mSaveDataPtr, field_0x3926);
-        u8* r4_2 = &mSavePicDataPtr[field_0x3924 * 0x6000];
-        u8* r30 = &mSavePicDataPtr[field_0x3926 * 0x6000];
-        memcpy(r30, r4_2, 0x6000);
+        u8* r4_2 = &mSavePicDataPtr[field_0x3924 * sizeof(card_pictdata) * 3];
+        u8* r30 = &mSavePicDataPtr[field_0x3926 * sizeof(card_pictdata) * 3];
+        memcpy(r30, r4_2, sizeof(card_pictdata) * 3);
         mDoMemCd_setCopyToPos(field_0x3926);
         mDoMemCd_setPictWriteDataPtr(r30);
-        mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
+        mDoMemCd_Save(mSaveDataPtr, sizeof(card_gamedata) * 3, 0);
         field_0x392b = 0x10;
     }
 }
@@ -3079,118 +3079,24 @@ void dFile_select_c::displayInit() {
     field_0x630[8].pane->hide();
 }
 
-#if VERSION == VERSION_DEMO
+/* 8018BD24-8018C0C0       .text setSaveData__14dFile_select_cFv */
 void dFile_select_c::setSaveData() {
+#if VERSION == VERSION_DEMO
     static fopMsgM_pane_class* pane[] = {
         &field_0x1cb8[1],
         &field_0x2310[1],
         &field_0x2968[1],
     };
+#endif
 
     int i;
-    u8* data = mSaveDataPtr;
+    card_gamedata* saveData = (card_gamedata*)mSaveDataPtr;
 
     for(i = 0; i < 3; i++) {
-        fopMsgM_paneScaleXY(pane[i], 1.0f);
-
-        ((J2DTextBox*)pane[i]->pane)->setFontSize(field_0x38e0);
-
-        J2DTextBox::TFontSize fontSize;
-
-        fopMsgM_paneTrans(pane[i], 0.0f, 0.0f);
-        if(mDoMemCdRWm_TestCheckSumGameData(data)) {
-            if(data[0x19B]) {
-                dataExtra[i] = 1;
-                field_0x391D[i] = ((data[0x64D] / 16) & 1) ^ 1;
-            }
-            else {
-                dataExtra[i] = 0;
-                field_0x391D[i] = 0;
-            }
-
-            changeExtraColor(i);
-
-            if(data[0x157] == 0) {
-                fopMsgM_paneScaleXY(pane[i], g_fsHIO.field_0x54);
-
-                fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-                fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
-
-#if VERSION > VERSION_JPN
-                strcpy(field_0x38f4[i], "New Game");
-#endif
-
-                ((J2DTextBox*)pane[i]->pane)->setFontSize(fontSize);
-
-                fopMsgM_paneTrans(pane[i], pane[i]->mPosTopLeftOrig.x - pane[i]->mPosTopLeft.x, pane[i]->mPosTopLeftOrig.y - pane[i]->mPosTopLeft.y + g_fsHIO.field_0x58);
-
-#if VERSION <= VERSION_JPN
-                // "New Game"
-                strcpy(field_0x38f4[i], "はじめから");
-#endif
-
-                strcpy(field_0x3900[i], "");
-
-                dataNew[i] = 1;
-            }
-            else {
-                strcpy(field_0x38f4[i], (char*)(&data[0x157]));
-                OSCalendarTime time;
-                OSTicksToCalendarTime(*(u64*)(data + 0x18), &time);
-                sprintf(
-                    field_0x3900[i],
-#if VERSION <= VERSION_JPN
-                    "%d.%02d.%02d %02d:%02d:%02d",
-                    time.year, time.month + 1, time.day_of_month,
+#if VERSION == VERSION_DEMO
+        #define CURPANE pane[i]
 #else
-                    "%02d/%02d/%d %02d:%02d:%02d",
-                    time.month + 1, time.day_of_month, time.year,
-#endif
-                    time.hours, time.minutes, time.seconds
-                );
-                dataNew[i] = 0;
-            }
-
-            field_0x3917[i] = 0;
-        }
-        else {
-            changeBrokenColor(i);
-            fopMsgM_paneScaleXY(pane[i], g_fsHIO.field_0x54);
-
-#if VERSION <= VERSION_JPN
-            fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
-            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
-#else
-            fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
-            fontSize.mSizeX = field_0x38e0.mSizeX * 0.9f;
-#endif
-
-#if VERSION > VERSION_JPN
-            strcpy(field_0x38f4[i], "This data is corrupted.");
-#endif
-
-            ((J2DTextBox*)pane[i]->pane)->setFontSize(fontSize);
-
-            fopMsgM_paneTrans(pane[i], pane[i]->mPosTopLeftOrig.x - pane[i]->mPosTopLeft.x, pane[i]->mPosTopLeftOrig.y - pane[i]->mPosTopLeft.y + g_fsHIO.field_0x58);
-#if VERSION <= VERSION_JPN
-            // "Broken"
-            strcpy(field_0x38f4[i], "こわれています");
-#endif
-            strcpy(field_0x3900[i], "");
-            field_0x3917[i] = 1;
-            dataNew[i] = 0;
-        }
-
-        data += 0x770;
-    }
-}
-#else
-/* 8018BD24-8018C0C0       .text setSaveData__14dFile_select_cFv */
-void dFile_select_c::setSaveData() {
-    int i;
-    u8* data = mSaveDataPtr;
-
-    for(i = 0; i < 3; i++) {
+        #define CURPANE pane
         fopMsgM_pane_class* pane;
         switch(i) {
             case 0:
@@ -3203,18 +3109,19 @@ void dFile_select_c::setSaveData() {
                 pane = &field_0x2968[1];
                 break;
         }
+#endif
 
-        fopMsgM_paneScaleXY(pane, 1.0f);
+        fopMsgM_paneScaleXY(CURPANE, 1.0f);
 
-        ((J2DTextBox*)pane->pane)->setFontSize(field_0x38e0);
+        ((J2DTextBox*)CURPANE->pane)->setFontSize(field_0x38e0);
 
         J2DTextBox::TFontSize fontSize;
 
-        fopMsgM_paneTrans(pane, 0.0f, 0.0f);
-        if(mDoMemCdRWm_TestCheckSumGameData(data)) {
-            if(data[0x19B]) {
+        fopMsgM_paneTrans(CURPANE, 0.0f, 0.0f);
+        if(mDoMemCdRWm_TestCheckSumGameData(saveData)) {
+            if(saveData->data.mPlayer.mInfo.mClearCount) {
                 dataExtra[i] = 1;
-                field_0x391D[i] = ((data[0x64D] / 16) & 1) ^ 1;
+                field_0x391D[i] = ((saveData->data.mEvent.mFlags[0x35] / 16) & 1) ^ 1;
             }
             else {
                 dataExtra[i] = 0;
@@ -3223,8 +3130,8 @@ void dFile_select_c::setSaveData() {
 
             changeExtraColor(i);
 
-            if(data[0x157] == 0) {
-                fopMsgM_paneScaleXY(pane, g_fsHIO.field_0x54);
+            if(((u8*)saveData->data.mPlayer.mInfo.mPlayerName)[0] == 0) {
+                fopMsgM_paneScaleXY(CURPANE, g_fsHIO.field_0x54);
 
                 fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
                 fontSize.mSizeY = field_0x38e0.mSizeY * g_fsHIO.field_0x54;
@@ -3233,9 +3140,13 @@ void dFile_select_c::setSaveData() {
                 strcpy(field_0x38f4[i], "New Game");
 #endif
 
-                ((J2DTextBox*)pane->pane)->setFontSize(fontSize);
+                ((J2DTextBox*)CURPANE->pane)->setFontSize(fontSize);
 
-                fopMsgM_paneTrans(pane, pane->mPosTopLeftOrig.x - pane->mPosTopLeft.x, pane->mPosTopLeftOrig.y - pane->mPosTopLeft.y + g_fsHIO.field_0x58);
+                fopMsgM_paneTrans(
+                    CURPANE,
+                    CURPANE->mPosTopLeftOrig.x - CURPANE->mPosTopLeft.x,
+                    CURPANE->mPosTopLeftOrig.y - CURPANE->mPosTopLeft.y + g_fsHIO.field_0x58
+                );
 
 #if VERSION <= VERSION_JPN
                 // "New Game"
@@ -3247,9 +3158,9 @@ void dFile_select_c::setSaveData() {
                 dataNew[i] = 1;
             }
             else {
-                strcpy(field_0x38f4[i], (char*)(&data[0x157]));
+                strcpy(field_0x38f4[i], saveData->data.mPlayer.mInfo.mPlayerName);
                 OSCalendarTime time;
-                OSTicksToCalendarTime(*(u64*)(data + 0x18), &time);
+                OSTicksToCalendarTime(saveData->data.mPlayer.mPlayerStatusB.mDateIPL, &time);
                 sprintf(
                     field_0x3900[i],
 #if VERSION <= VERSION_JPN
@@ -3268,7 +3179,7 @@ void dFile_select_c::setSaveData() {
         }
         else {
             changeBrokenColor(i);
-            fopMsgM_paneScaleXY(pane, g_fsHIO.field_0x54);
+            fopMsgM_paneScaleXY(CURPANE, g_fsHIO.field_0x54);
 
 #if VERSION <= VERSION_JPN
             fontSize.mSizeX = field_0x38e0.mSizeX * g_fsHIO.field_0x54;
@@ -3282,9 +3193,13 @@ void dFile_select_c::setSaveData() {
             strcpy(field_0x38f4[i], "This data is corrupted.");
 #endif
 
-            ((J2DTextBox*)pane->pane)->setFontSize(fontSize);
+            ((J2DTextBox*)CURPANE->pane)->setFontSize(fontSize);
 
-            fopMsgM_paneTrans(pane, pane->mPosTopLeftOrig.x - pane->mPosTopLeft.x, pane->mPosTopLeftOrig.y - pane->mPosTopLeft.y + g_fsHIO.field_0x58);
+            fopMsgM_paneTrans(
+                CURPANE,
+                CURPANE->mPosTopLeftOrig.x - CURPANE->mPosTopLeft.x,
+                CURPANE->mPosTopLeftOrig.y - CURPANE->mPosTopLeft.y + g_fsHIO.field_0x58
+            );
 #if VERSION <= VERSION_JPN
             // "Broken"
             strcpy(field_0x38f4[i], "こわれています");
@@ -3294,10 +3209,11 @@ void dFile_select_c::setSaveData() {
             dataNew[i] = 0;
         }
 
-        data += 0x770;
+        saveData++;
+
+        #undef CURPANE
     }
 }
-#endif
 
 #if VERSION == VERSION_DEMO
 void dFile_select_c::changeExtraColor(int param_1) {
@@ -3725,7 +3641,7 @@ void dFile_select_c::ExDataSave() {
     dComIfGs_setDataNum(selectNum);
     mDoMemCd_setPictWriteDataPtr(NULL);
 #endif
-    mDoMemCd_Save(mSaveDataPtr, 0x1650, 0);
+    mDoMemCd_Save(mSaveDataPtr, sizeof(card_gamedata) * 3, 0);
     field_0x392b = 0x20;
 }
 

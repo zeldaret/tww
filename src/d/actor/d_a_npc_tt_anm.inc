@@ -1,5 +1,7 @@
 // The name of this .inc file is known because of an assert contained in it.
 #include "d/actor/d_a_npc_tt.h"
+#include "d/d_com_inf_game.h"
+#include "res/Object/Tt.h"
 
 static const s16 l_bck_ix_tbl[] = {
     dRes_INDEX_TT_BCK_WAIT01_e,

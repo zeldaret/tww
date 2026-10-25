@@ -34,16 +34,19 @@ enum dRes_ID_KANTERA {
 
 enum GA_JNT {
     GA_JNT_BODY_e=0x0,
+    GA_NUM_JNTS_e=0x1,
 };
 
 enum LF_JNT {
     LF_JNT_HIKARI_e=0x0,
+    LF_NUM_JNTS_e=0x1,
 };
 
 enum MK_KANTERA_JNT {
     MK_KANTERA_JNT_TOTTE_e=0x0,
     MK_KANTERA_JNT_KANTERA_e=0x1,
     MK_KANTERA_JNT_FIRE_e=0x2,
+    MK_KANTERA_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_KANTERA_H */

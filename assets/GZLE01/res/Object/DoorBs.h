@@ -26,10 +26,12 @@ enum dRes_ID_DOORBS {
 
 enum DOORDR_JNT {
     DOORDR_JNT_DOOR20_DD_0_e=0x0,
+    DOORDR_NUM_JNTS_e=0x1,
 };
 
 enum DOORKD_JNT {
     DOORKD_JNT_DOOR20KD_e=0x0,
+    DOORKD_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_DOORBS_H */

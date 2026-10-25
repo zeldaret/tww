@@ -2,7 +2,7 @@
 #define JAISTREAMMGR_H
 
 #include "dolphin/dvd/dvd.h"
-#include "JSystem/JAudio/JAISound.h"
+#include "JSystem/JAudio/JAISoundParams.h"
 #include "JSystem/JAudio/JASHeapCtrl.h"
 
 class JAISound;
@@ -22,7 +22,7 @@ namespace JAInter {
         
         /* 0x00 */ u8 field_0x0;
         /* 0x01 */ u8 field_0x1;
-        /* 0x02 */ u8 field_0x2;
+        /* 0x02 */ u8 mPrepareFlag;
         /* 0x04 */ f32 field_0x4;
         /* 0x08 */ f32 field_0x8;
         /* 0x0C */ f32 field_0xc;

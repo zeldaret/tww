@@ -11,7 +11,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "JSystem/JUtility/JUTAssert.h"
 
-#include "weak_bss_3569.h"  // IWYU pragma: keep
+#include "weak_bss_3569.h" // IWYU pragma: keep
 
 int (dSnap_packet::*dSnap_packet::m_judge_tbl[])() = {
     NULL,
@@ -1645,6 +1645,7 @@ void dSnap_Obj::draw() {
             GXPosition3f32(-cylvtx[i+1].x, 0.0f, cylvtx[i+1].z);
             GXPosition3f32(-cylvtx[i+1].x, 1.0f, cylvtx[i+1].z);
         }
+        GXEnd();
         
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, field_0x19 * 0xC);
         for (int i = 0; i < field_0x19; i++) {
@@ -1664,6 +1665,7 @@ void dSnap_Obj::draw() {
             GXPosition3f32(-cylvtx[i+1].x, 0.0f, cylvtx[i+1].z);
             GXPosition3f32(-cylvtx[i].x, 0.0f, cylvtx[i].z);
         }
+        GXEnd();
     } else {
         f32 scale = mRadius;
         mDoMtx_stack_c::copy(j3dSys.getViewMtx());
@@ -1680,6 +1682,7 @@ void dSnap_Obj::draw() {
             GXPosition3f32(vdata[tindices[i][0]].x, vdata[tindices[i][0]].y, vdata[tindices[i][0]].z);
             GXPosition3f32(vdata[tindices[i][1]].x, vdata[tindices[i][1]].y, vdata[tindices[i][1]].z);
             GXPosition3f32(vdata[tindices[i][2]].x, vdata[tindices[i][2]].y, vdata[tindices[i][2]].z);
+            GXEnd();
         }
     }
 }
@@ -1929,6 +1932,7 @@ void dSnap_packet::ClearAlphaBuffer() {
     GXPosition3s16(0x1D4, 0x083, -0x005);
     GXPosition3s16(0x1D4, 0x149, -0x005);
     GXPosition3s16(0x0AE, 0x149, -0x005);
+    GXEnd();
     
     camera_process_class* view = dComIfGp_getCamera(dComIfGp_getWindow(0)->getCameraID());
     GXSetProjection(view->view.mProjMtx, GX_PERSPECTIVE);
@@ -2248,7 +2252,7 @@ void dSnap_RegistFig(u8 photoNo, fopAc_ac_c* actor, const Vec& pos, s16 angleY, 
 void dSnap_DebugDraw() {
     if (l_snap.ChkReleaseShutter()) {
         dComIfGd_setListMaskOff();
-        j3dSys.getDrawBuffer(1)->entryImm(&l_snap, 0xFF);
+        j3dSys.getDrawBuffer(J3DSysDrawBuf_Xlu)->entryImm(&l_snap, 0xFF);
         dComIfGd_setList();
     }
 }

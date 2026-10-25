@@ -24,6 +24,7 @@ enum VICE_JNT {
     VICE_JNT_ROOT_VICE_e=0x0,
     VICE_JNT_VICE_0_OUTSIDE_e=0x1,
     VICE_JNT_VICE_1_INSIDE_e=0x2,
+    VICE_NUM_JNTS_e=0x3,
 };
 
 #endif /* RES_IKORI_H */

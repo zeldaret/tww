@@ -110,6 +110,7 @@ enum dRes_ID_BMD {
 
 enum R00_EF_JNT {
     R00_EF_JNT_R00_EF_BDL_e=0x0,
+    R00_EF_NUM_JNTS_e=0x1,
 };
 
 enum BKM_JNT {
@@ -181,6 +182,7 @@ enum BKM_JNT {
     BKM_JNT_HANAE8_e=0x41,
     BKM_JNT_HANAE9_e=0x42,
     BKM_JNT_HIP_e=0x43,
+    BKM_NUM_JNTS_e=0x44,
 };
 
 enum BKM_COA_JNT {
@@ -197,6 +199,7 @@ enum BKM_COA_JNT {
     BKM_COA_JNT_TOSAKAB1_e=0xA,
     BKM_COA_JNT_TOSAKAB2_e=0xB,
     BKM_COA_JNT_TOSAKAB3_e=0xC,
+    BKM_COA_NUM_JNTS_e=0xD,
 };
 
 enum BKM_COA_DEADMODEL_JNT {
@@ -210,6 +213,7 @@ enum BKM_COA_DEADMODEL_JNT {
     BKM_COA_DEADMODEL_JNT_TOSAKA2_e=0x7,
     BKM_COA_DEADMODEL_JNT_TOSAKA3_e=0x8,
     BKM_COA_DEADMODEL_JNT_TOSAKA4_e=0x9,
+    BKM_COA_DEADMODEL_NUM_JNTS_e=0xA,
 };
 
 enum CB_JNT {
@@ -225,15 +229,18 @@ enum CB_JNT {
     CB_JNT_WAIST_e=0x9,
     CB_JNT_LEGL_e=0xA,
     CB_JNT_LEGR_e=0xB,
+    CB_NUM_JNTS_e=0xC,
 };
 
 enum CB_FACE_JNT {
     CB_FACE_JNT_FACE_e=0x0,
+    CB_FACE_NUM_JNTS_e=0x1,
 };
 
 enum CB_STICK_JNT {
     CB_STICK_JNT_STICK_e=0x0,
     CB_STICK_JNT_NUT_e=0x1,
+    CB_STICK_NUM_JNTS_e=0x2,
 };
 
 #endif /* RES_BMD_H */

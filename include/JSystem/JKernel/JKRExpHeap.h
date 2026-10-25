@@ -30,7 +30,7 @@ public:
         CMemBlock* getNextBlock() const { return mNext; }
         u32 getSize() const { return size; }
         u8 getGroupId() const { return mGroupId; }
-        static CMemBlock* getBlock(void* data) { return (CMemBlock*)((u32)data + -0x10); }
+        static CMemBlock* getBlock(void* data) { return (CMemBlock*)((uintptr_t)data + -sizeof(CMemBlock)); }
 
     private:
         /* 0x0 */ u16 mMagic;
@@ -62,10 +62,12 @@ public:
     s32 getUsedSize(u8 groupId) const;
     s32 getTotalUsedSize(void) const;
 
-    CMemBlock* getHeadUsedList() const { return mHeadUsedList; }
+    CMemBlock* getUsedFirst() { return mHeadUsedList; }
     void setAllocationMode(EAllocMode mode) {
         mAllocMode = mode;
     }
+    static s32 getUsedSize_(JKRExpHeap* heap) { return heap->mSize - heap->getTotalFreeSize(); }
+    static void* getState_(TState* state) { return getState_buf_(state); }
 
 public:
     /* vt[04] */ virtual u32 getHeapType();                                     /* override */

@@ -22,6 +22,7 @@ enum dRes_ID_MFLFT {
 
 enum MFLFT_JNT {
     MFLFT_JNT_MFLFT_e=0x0,
+    MFLFT_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_MFLFT_H */

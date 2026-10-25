@@ -60,7 +60,7 @@ void dOvlpFd2_dlst_c::draw() {
     GXSetNumChans(1);
                        
     GXSetChanCtrl(GX_COLOR0, false, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
-    GXSetChanMatColor(GX_COLOR0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+    GXSetChanMatColor(GX_COLOR0, COMPOUND_LITERAL(GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     GXSetNumTexGens(1);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetNumTevStages(1);

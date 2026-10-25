@@ -30,6 +30,7 @@ enum SYAN_JNT {
     SYAN_JNT_JOINT7_e=0x4,
     SYAN_JNT_JOINT8_e=0x5,
     SYAN_JNT_DECO_e=0x6,
+    SYAN_NUM_JNTS_e=0x7,
 };
 
 #endif /* RES_SYAN_H */

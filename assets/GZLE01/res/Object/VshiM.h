@@ -22,6 +22,7 @@ enum dRes_ID_VSHIM {
 
 enum VSHIM_JNT {
     VSHIM_JNT_VSHIM_MODEL_e=0x0,
+    VSHIM_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VSHIM_H */

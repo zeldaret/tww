@@ -44,6 +44,7 @@ enum GKAI00_JNT {
     GKAI00_JNT_SHITA_e=0x2,
     GKAI00_JNT_UE_e=0x3,
     GKAI00_JNT_V_MOYOU_e=0x4,
+    GKAI00_NUM_JNTS_e=0x5,
 };
 
 #endif /* RES_GKAI00_H */

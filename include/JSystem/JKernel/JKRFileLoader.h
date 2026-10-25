@@ -65,4 +65,8 @@ inline void* JKRGetResource(const char* name) {
     return JKRFileLoader::getGlbResource(name);
 }
 
+inline bool JKRRemoveResource(void* resource, JKRFileLoader* fileLoader) {
+    return JKRFileLoader::removeResource(resource, fileLoader);
+}
+
 #endif /* JKRFILELOADER_H */

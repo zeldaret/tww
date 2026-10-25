@@ -60,6 +60,7 @@ enum YW_JNT {
     YW_JNT_LEGR1_e=0x10,
     YW_JNT_LEGR2_e=0x11,
     YW_JNT_FOOTR_e=0x12,
+    YW_NUM_JNTS_e=0x13,
 };
 
 enum YWHEAD01_JNT {
@@ -67,6 +68,7 @@ enum YWHEAD01_JNT {
     YWHEAD01_JNT_HAIR1_e=0x1,
     YWHEAD01_JNT_HAIR2_e=0x2,
     YWHEAD01_JNT_HAIR3_e=0x3,
+    YWHEAD01_NUM_JNTS_e=0x4,
 };
 
 #endif /* RES_YW_H */

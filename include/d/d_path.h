@@ -9,7 +9,7 @@ struct dPnt {
     /* 0x01 */ u8 mArg1;
     /* 0x02 */ u8 mArg2;
     /* 0x03 */ u8 mArg3;
-    /* 0x04 */ cXyz m_position;
+    /* 0x04 */ Vec m_position;
 };
 
 struct dPath {

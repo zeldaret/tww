@@ -46,6 +46,7 @@ enum dRes_ID_AJ {
 
 enum AJ_STICK_JNT {
     AJ_STICK_JNT_AJ_STICK_e=0x0,
+    AJ_STICK_NUM_JNTS_e=0x1,
 };
 
 enum AJ_JNT {
@@ -73,6 +74,7 @@ enum AJ_JNT {
     AJ_JNT_LEGR1_e=0x15,
     AJ_JNT_LEGR2_e=0x16,
     AJ_JNT_FOOTR_e=0x17,
+    AJ_NUM_JNTS_e=0x18,
 };
 
 #endif /* RES_AJ_H */

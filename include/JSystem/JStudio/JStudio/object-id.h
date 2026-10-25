@@ -20,9 +20,13 @@ private:
     /* 0x04 */ u32 mID_size;
 };
 
-struct TObject_ID : public TIDData {
-    TObject_ID(const void* id, u32 id_size) : TIDData(id, id_size) {}
-    TIDData const& getIDData() const { return *this; }
+struct TObject_ID {
+    TObject_ID(const void* id, u32 id_size) : mData(id, id_size) {}
+    ~TObject_ID() {}
+    TIDData const& getIDData() const { return mData; }
+    const u8 *getID() const { return mData.getID(); }
+
+    TIDData mData;
 };
 
 struct TPRObject_ID_equal : public TIDData {

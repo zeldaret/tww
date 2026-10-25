@@ -22,6 +22,7 @@ enum dRes_ID_HBW1 {
 
 enum HBW1_JNT {
     HBW1_JNT_POLYSURFACE1963_e=0x0,
+    HBW1_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_HBW1_H */

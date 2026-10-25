@@ -321,7 +321,7 @@ static u16 l_figure_comp[] = {
     dSv_event_flag_c::UNK_80FF,
 };
 
-static char* l_figure_room_name[] = {
+static const char* l_figure_room_name[] = {
     "Pfigure",
     "figureA",
     "figureB",
@@ -467,7 +467,7 @@ BOOL daNpcMt_c::createHeap() {
         }
     }
 
-    mpMorf->getModel()->setUserArea((u32)this);
+    mpMorf->getModel()->setUserArea((uintptr_t)this);
     mAcchCir.SetWall(30.0f, 30.0f);
     mObjAcch.Set(fopAcM_GetPosition_p(this), fopAcM_GetOldPosition_p(this), this, 1, &mAcchCir, fopAcM_GetSpeed_p(this), fopAcM_GetAngle_p(this), fopAcM_GetShapeAngle_p(this));
     return TRUE;
@@ -489,7 +489,7 @@ cPhs_State daNpcMt_c::createInit() {
     gravity = -9.0f;
     setAnmTbl(l_npc_anm_wait);
     mMtGetItemEventIdx = dComIfGp_evmng_getEventIdx("MT_GET_ITEM", 0xff);
-    eventInfo.mpCheckCB = daNpcMt_XyCheckCB;
+    eventInfo.setXyCheckCB(daNpcMt_XyCheckCB);
     mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
 #if VERSION == VERSION_DEMO
     setMtx();
@@ -1301,20 +1301,19 @@ bool daNpcMt_c::setAnmTbl(sMtAnmDat* anmDat) {
         mpAnmDat = NULL;
         return true;
     }
-    else {
-        mpAnmDat = anmDat;
-        m74C = mpAnmDat->field_0x02;
 
-        int temp = 2;
-        if (m74C > 0) {
-            temp = 0;
-        }
+    mpAnmDat = anmDat;
+    m74C = mpAnmDat->field_0x02;
 
-        if (m74A != mpAnmDat->field_0x00 || temp == 0) {
-            setAnm(mpAnmDat->field_0x00, temp, mpAnmDat->field_0x01);
-        }
-        return false;
+    int temp = 2;
+    if (m74C > 0) {
+        temp = 0;
     }
+
+    if (m74A != mpAnmDat->field_0x00 || temp == 0) {
+        setAnm(mpAnmDat->field_0x00, temp, mpAnmDat->field_0x01);
+    }
+    return false;
 }
 
 /* 00002984-00002A28       .text XyCheckCB__9daNpcMt_cFi */

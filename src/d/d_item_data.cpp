@@ -116,7 +116,7 @@
 #include "res/Object/Vbeso.h"
 
 /* 80383F20-803840E0       .data item_arcname_tbl__10dItem_data */
-char* dItem_data::item_arcname_tbl[0x70] = {
+const char* dItem_data::item_arcname_tbl[0x70] = {
     "Always",
     "Vhutu",
     "Vhkak",
@@ -347,7 +347,7 @@ enum ItemArcnameIdx {
 };
 
 /* 803840E0-803842B0       .data item_texture_tbl__10dItem_data */
-char* dItem_data::item_texture_tbl[0x74] = {
+const char* dItem_data::item_texture_tbl[0x74] = {
     "get_rupy.bti",
     "get_key.bti",
     "heart_up_01.bti",

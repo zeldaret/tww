@@ -18,6 +18,7 @@ enum dRes_ID_VHYOI {
 
 enum VHYOI_JNT {
     VHYOI_JNT_HYOI_MODEL_e=0x0,
+    VHYOI_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_VHYOI_H */

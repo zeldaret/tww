@@ -22,6 +22,7 @@ enum dRes_ID_EAYOGN {
 
 enum EAYOGN_JNT {
     EAYOGN_JNT_EAYOGN_e=0x0,
+    EAYOGN_NUM_JNTS_e=0x1,
 };
 
 #endif /* RES_EAYOGN_H */
