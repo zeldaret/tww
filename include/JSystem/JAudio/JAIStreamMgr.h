@@ -2,6 +2,7 @@
 #define JAISTREAMMGR_H
 
 #include "dolphin/dvd/dvd.h"
+#include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JAudio/JAISoundParams.h"
 #include "JSystem/JAudio/JASHeapCtrl.h"
 
@@ -38,7 +39,22 @@ namespace JAInter {
 
     class StreamParameter {
     public:
-        void init() {} // TODO
+        void init() {
+            mPauseMode = 0;
+            field_0x4 = 0;
+            mVolumeFlags = 0;
+            mPitchFlags = 0;
+            mPanFlags = 0;
+            for (u32 i = 0; i < 20; i++) {
+                MoveParaSet* movePara = &mVolumes[i];
+                movePara->init(1.0f);
+            }
+            u32 i = 0;
+            for (u32 i = 0; i < JAIGlobalParameter::getParamStreamParameterLines(); i++) {
+                pitch[i].init(1.0f);
+                pan[i].init(0.5f);
+            }
+        }
 
         /* 0x000 */ u8 mPauseMode;
         /* 0x004 */ int field_0x4;
@@ -84,8 +100,8 @@ namespace JAInter {
 
     namespace StreamLib {
         void Play_DirectPCM(JASystem::TDSPChannel*, s16*, u16, u32, s16, u16);
-        int Get_DirectPCM_LoopRemain(JASystem::DSPInterface::DSPBuffer*);
-        int Get_DirectPCM_Remain(JASystem::DSPInterface::DSPBuffer*);
+        u32 Get_DirectPCM_LoopRemain(JASystem::DSPInterface::DSPBuffer*);
+        u32 Get_DirectPCM_Remain(JASystem::DSPInterface::DSPBuffer*);
         void init(bool);
         void allocBuffer(void*, s32);
         bool deallocBuffer();
@@ -107,12 +123,17 @@ namespace JAInter {
         void setPrepareFlag(u8 param_1);
         void setOutputMode(u32 param_1);
         u8 getPlayingFlag();
-        void setDecodedBufferBlocks(u32 param_1);
+        void setDecodedBufferBlocks(u32 i_blockCount);
         void LoopInit();
         s32 directPlayWait(void* param_1);
         void start(char* param_1, u32 param_2, void* param_3);
         void __start();
         s32 callBack(void* param_1);
+
+        struct StreamHeaderInner {
+            int field_0x00;
+            int field_0x04;
+        };
 
         struct StreamHeader {
             int field_0x0;
@@ -123,8 +144,7 @@ namespace JAInter {
             u16 field_0xe;
             u32 field_0x10;
             u32 field_0x14;
-            int field_0x18;
-            int field_0x1c;
+            StreamHeaderInner field_0x18;
         };
 
         extern s16 filter_table[];
@@ -135,13 +155,13 @@ namespace JAInter {
         extern JASystem::Kernel::TSolidHeap streamHeap;
         extern u32 LOOP_BLOCKS;
         extern int LOOP_SAMPLESIZE;
-        extern int outputmode;
+        extern u32 outputmode;
         extern u32 adpcm_remain;
         extern u32 adpcm_loadpoint;
         extern u32 loadsize;
         extern s16* adpcm_buffer;
         extern s16*** loop_buffer;
-        extern void** store_buffer;
+        extern s16** store_buffer;
         extern JASystem::TDSPChannel* assign_ch[2];
         extern u32 playside;
         extern int playback_samples;
@@ -163,11 +183,11 @@ namespace JAInter {
         extern u8 outflag_volume;
         extern bool outflag_pan;
         extern bool outflag_pitch;
-        extern int loop_start_flag;
+        extern u32 loop_start_flag;
         extern int outpause;
-        extern int playmode;
-        extern int shift_sample;
-        extern int extra_sample;
+        extern u32 playmode;
+        extern u32 shift_sample;
+        extern u32 extra_sample;
         extern int DvdLoadFlag;
         extern u32 startInitFlag;
         extern int Mode;

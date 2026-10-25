@@ -68,11 +68,9 @@ namespace JAInter {
 class JAISound {
 public:
     struct PositionInfo_t {
-        /* 0x00 */ f32 field_0x0;
-        /* 0x04 */ u8 field_0x4[0x8 - 0x4];
-        /* 0x08 */ f32 field_0x8;
-        /* 0x0C */ u8 field_0xc[0x18 - 0xc];
-        /* 0x18 */ f32 field_0x18;
+        /* 0x00 */ Vec mPosition;
+        /* 0x0C */ Vec mPrevPosition;
+        /* 0x18 */ f32 mDistance;
     };
 
     JAISound();
@@ -139,7 +137,7 @@ public:
     void decWait() {}
     void getAct() {}
     void getAdjustPriority() {}
-    void getFadetime() {}
+    u32 getFadetime() { return mFadetime; }
     u32 getID() { return mSoundID; }
     void getInfoPointer() {}
     void getMapInfo() {}
@@ -147,9 +145,11 @@ public:
     void getPlayGameFrameCounter() {}
     void getPlayer() {}
     PositionInfo_t* getPositionInfo() { return mPositionInfo; }
+    Vec* getPosition() { return mPosition; }
+    u8 getTrackNo() { return mTrackNo; }
     void getPrevSound() {}
     void getPriority() {}
-    void getStatus() {}
+    u8 getStatus() { return mStatus; }
     JASystem::TTrack* getTrack() { return getSeqParameter()->getRootTrackPointer(); }
     void getTrans() {}
     void getWait() {}
@@ -159,7 +159,7 @@ public:
     void setDemoPan(f32 f1, u32 r4) { setPan(f1, r4, 3); }
     void setDemoPitch(f32 f1, u32 r4) { setPitch(f1, r4, 3); }
     void setDemoVolume(f32 f1, u32 r4) { setVolume(f1, r4, SOUNDPARAM_Unk3); }
-    void setFadetime(u32) {}
+    void setFadetime(u32 i_fadetime) { mFadetime = i_fadetime; }
     void setID(u32 id) { mSoundID = id; }
     void setMainSoundPPointer(JAISound**) {}
     void setNextSound(JAISound*) {}
@@ -169,8 +169,8 @@ public:
     void setSeInterDolbyU7(u8, u8, u32, u8) {}
     void setSeInterFxmixU7(u8, u8, u32, u8) {}
     void setSeqInterVolumeU7(u8, u8, u32) {}
-    void setStatus(u8) {}
-    void setTrack(u8) {}
+    void setStatus(u8 i_status) { mStatus = i_status; }
+    void setTrack(u8 i_trackNo) { mTrackNo = i_trackNo; }
     void setTrackVolumeU7(u8, u8, u32) {}
     void setVolumeU7(u8 value, u32 moveTime, u8 type) {
         f32 volume = value / 127.0f;
@@ -178,23 +178,23 @@ public:
     }
     void setWait(u8) {}
 
-    /* 0x04 */ u8 field_0x4;
-    /* 0x05 */ u8 mState;
-    /* 0x06 */ u8 field_0x6;
-    /* 0x07 */ u8 field_0x7;
-    /* 0x08 */ u8 field_0x8;
+    /* 0x04 */ u8 mTrackNo;
+    /* 0x05 */ u8 mStatus;
+    /* 0x06 */ u8 mFinishWaitTimer;
+    /* 0x07 */ u8 mRandPitchModifier;
+    /* 0x08 */ u8 mCameraIndex; // 0-3 cam id, 4 = use other game logic;
     /* 0x09 */ u8 field_0x9;
-    /* 0x0a */ s16 field_0xa;
+    /* 0x0a */ s16 mAdjustPriority;
     /* 0x0c */ u32 mSoundID;
     /* 0x10 */ int field_0x10;
-    /* 0x14 */ u32 mFadeCounter;
-    /* 0x18 */ u32 field_0x18;
-    /* 0x1c */ int field_0x1c;
+    /* 0x14 */ u32 mFadetime;
+    /* 0x18 */ u32 mActiveTimer;
+    /* 0x1c */ int mMapInfoIndex;
     /* 0x20 */ PositionInfo_t* mPositionInfo;
-    /* 0x24 */ void* field_0x24;
-    /* 0x28 */ Vec* field_0x28;
+    /* 0x24 */ void* mCreatureObj;
+    /* 0x28 */ Vec* mPosition;
     /* 0x2C */ void* field_0x2c;
-    /* 0x30 */ JAISound* field_0x30;
+    /* 0x30 */ JAISound* mSoundObj;
     /* 0x34 */ JAISound* field_0x34;
     /* 0x38 */ JAISound** field_0x38;
     /* 0x3C */ void* field_0x3c;

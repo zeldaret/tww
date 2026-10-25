@@ -9,8 +9,6 @@ namespace JAInter {
 
     class SeParameter {
     public:
-        SeParameter();
-
         /* 0x000 */ u16 field_0x0[16];
         /* 0x020 */ u16 field_0x20;
         /* 0x024 */ MoveParaSet field_0x24[16];
@@ -46,7 +44,7 @@ namespace JAInter {
         void releaseSeRegist(JAISound* param_1);
         SeParameter* getSeParametermeterPointer();
         void releaseSeParameterPointer(SeParameter* param_1);
-        void storeSeBuffer(JAISound** param_1, Actor* param_2, u32 param_3, u32 param_4, u8 param_5, void* param_6);
+        void storeSeBuffer(JAISound** param_1, Actor* param_2, u32 param_3, u32 param_4, u8 param_5, void* i_soundInfo);
         void releaseSeBuffer(JAISound* param_1, u32 param_2);
 
         struct seTrackUpdate_s {

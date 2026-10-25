@@ -278,6 +278,7 @@ namespace JASystem {
         }
 
         TOuterParam* getOuterParam() { return mOuterParam; }
+        void setOuterParam(u8 k, f32 v) { mOuterParam->setParam(k, v); }
 
         u8 checkImport(int i) const { return mTrackPort.checkImport(i); }
         u8 checkExport(int i) const { return mTrackPort.checkExport(i); }

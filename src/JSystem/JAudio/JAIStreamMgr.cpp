@@ -8,6 +8,7 @@
 #include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
+#include "JSystem/JAudio/JASCalc.h"
 #include "JSystem/JAudio/JASCallback.h"
 #include "JSystem/JAudio/JASDSPChannel.h"
 #include "JSystem/JAudio/JASDSPInterface.h"
@@ -45,7 +46,7 @@ char JAInter::StreamLib::Filename[100];
 JASystem::Kernel::TSolidHeap JAInter::StreamLib::streamHeap;
 u32 JAInter::StreamLib::LOOP_BLOCKS = 12;
 int JAInter::StreamLib::LOOP_SAMPLESIZE = 0xF000;
-int JAInter::StreamLib::outputmode = 1;
+u32 JAInter::StreamLib::outputmode = 1;
 JAInter::StreamMgr::flags_t JAInter::StreamMgr::flags;
 JAInter::streamUpdate_t* JAInter::StreamMgr::streamUpdate;
 JAInter::streamList_t* JAInter::StreamMgr::streamList;
@@ -55,7 +56,7 @@ u32 JAInter::StreamLib::adpcm_loadpoint;
 u32 JAInter::StreamLib::loadsize;
 s16* JAInter::StreamLib::adpcm_buffer;
 s16*** JAInter::StreamLib::loop_buffer;
-void** JAInter::StreamLib::store_buffer;
+s16** JAInter::StreamLib::store_buffer;
 JASystem::TDSPChannel* JAInter::StreamLib::assign_ch[2];
 u32 JAInter::StreamLib::playside;
 int JAInter::StreamLib::playback_samples;
@@ -77,11 +78,11 @@ f32 JAInter::StreamLib::stackpan;
 u8 JAInter::StreamLib::outflag_volume;
 bool JAInter::StreamLib::outflag_pan;
 bool JAInter::StreamLib::outflag_pitch;
-int JAInter::StreamLib::loop_start_flag;
+u32 JAInter::StreamLib::loop_start_flag;
 int JAInter::StreamLib::outpause;
-int JAInter::StreamLib::playmode;
-int JAInter::StreamLib::shift_sample;
-int JAInter::StreamLib::extra_sample;
+u32 JAInter::StreamLib::playmode;
+u32 JAInter::StreamLib::shift_sample;
+u32 JAInter::StreamLib::extra_sample;
 int JAInter::StreamLib::DvdLoadFlag;
 u32 JAInter::StreamLib::startInitFlag;
 int JAInter::StreamLib::Mode;
@@ -124,39 +125,36 @@ void JAInter::StreamMgr::init() {
 
 /* 8029BEB4-8029C04C       .text storeStreamBuffer__Q27JAInter9StreamMgrFPP8JAISoundPQ27JAInter5ActorUlUlUcPv */
 void JAInter::StreamMgr::storeStreamBuffer(JAISound** param_1, JAInter::Actor* param_2, u32 param_3, u32 param_4, u8 param_5, void* param_6) {
-    /* Nonmatching */
     if (param_1 && param_1[0] && param_1[0]->checkSoundHandle(param_3, param_6)) {
         return;
     }
+
+#if VERSION > VERSION_DEMO
     if (streamControl.field_0x4) {
         releaseStreamBuffer(streamControl.field_0x4, 0);
     }
+#endif
+
     JAISound* sound = streamControl.getSound();
+#if VERSION == VERSION_DEMO
+    if (sound == NULL) {
+        param_1[0] = NULL;
+        return;
+    }
+#endif
     StreamParameter* para = sound->getStreamParameter();
-    para->mPauseMode = 0;
-    para->field_0x4 = 0;
-    para->mVolumeFlags = 0;
-    para->mPitchFlags = 0;
-    para->mPanFlags = 0;
-    for (u32 i = 0; i < 20; i++) {
-        MoveParaSet* movePara = &para->mVolumes[i];
-        movePara->init(1.0f);
-    }
-    for (u32 i = 0; i < JAIGlobalParameter::getParamStreamParameterLines(); i++) {
-        para->pitch[i].init(1.0f);
-        para->pan[i].init(0.5f);
-    }
-    sound->mState = SOUNDSTATE_Stored;
-    sound->field_0x6 = 10;
+    para->init();
+    sound->setStatus(SOUNDSTATE_Stored);
+    sound->mFinishWaitTimer = 10;
     streamUpdate->mPrepareFlag = 0;
     sound->initParameter(param_1, param_2, param_3, param_4, param_5, param_6);
 }
 
 /* 8029C04C-8029C0F0       .text releaseStreamBuffer__Q27JAInter9StreamMgrFP8JAISoundUl */
 void JAInter::StreamMgr::releaseStreamBuffer(JAISound* param_1, u32 param_2) {
-    if (param_2 == 0 || param_1->mState < SOUNDSTATE_Playing) {
+    if (param_2 == 0 || param_1->getStatus() < SOUNDSTATE_Playing) {
         StreamLib::stop();
-        param_1->mState = SOUNDSTATE_Inactive;
+        param_1->setStatus(SOUNDSTATE_Inactive);
         streamUpdate->mpSound = NULL;
         param_1->clearMainSoundPPointer();
         streamControl.releaseSound(param_1);
@@ -164,7 +162,7 @@ void JAInter::StreamMgr::releaseStreamBuffer(JAISound* param_1, u32 param_2) {
     } else {
         if (param_1->getStreamParameter()->mUpdateData) {
             param_1->getStreamParameter()->mUpdateData->mActiveTrackFlag |= SOUNDACTIVE_DoFadeout;
-            param_1->mFadeCounter = param_2;
+            param_1->mFadetime = param_2;
         }
     }
 }
@@ -182,10 +180,10 @@ void JAInter::StreamMgr::processGFrameStream() {
 /* 8029C128-8029C1D8       .text checkEntriedStream__Q27JAInter9StreamMgrFv */
 void JAInter::StreamMgr::checkEntriedStream() {
     for (JAISound* sound = streamControl.field_0x4; sound; sound = sound->field_0x34) {
-        if (sound->mState != SOUNDSTATE_Stored || StreamLib::getPlayingFlag() == 1) {
+        if (sound->getStatus() != SOUNDSTATE_Stored || StreamLib::getPlayingFlag() == 1) {
             continue;
         }
-        sound->mState = SOUNDSTATE_Loaded;
+        sound->setStatus(SOUNDSTATE_Loaded);
         sound->getStreamParameter()->mUpdateData = streamUpdate;
         streamUpdate_t* tmp = streamUpdate;
         tmp->field_0x0 = 0;
@@ -205,14 +203,14 @@ void JAInter::StreamMgr::checkWaitStream() {
     if (!sound) {
         return;
     }
-    if (sound->mState != SOUNDSTATE_Loaded) {
+    if (sound->getStatus() != SOUNDSTATE_Loaded) {
         return;
     }
     char buffer[64];
     strcpy(buffer, JAIGlobalParameter::getParamStreamPath());
     strcat(buffer, streamList[JAIBasic::getInterface()->getSoundOffsetNumberFromID(sound->getID())].field_0x10);
     JAIBasic::getInterface()->setSeExtParameter(sound);
-    sound->mState = SOUNDSTATE_Ready;
+    sound->setStatus(SOUNDSTATE_Ready);
     checkPlayingStream();
     StreamLib::start(buffer, sound->getStreamParameter()->field_0x4, streamList[sound->getID() & 0x3FF].field_0x20);
     StreamLib::setPrepareFlag(1);
@@ -224,16 +222,16 @@ void JAInter::StreamMgr::checkRequestStream() {
     if (!sound) {
         return;
     }
-    if (sound->mState != SOUNDSTATE_Ready) {
+    if (sound->getStatus() != SOUNDSTATE_Ready) {
         return;
     }
     if (streamUpdate->mPrepareFlag) {
         return;
     }
-    sound->mState = SOUNDSTATE_Playing;
-    if (sound->mFadeCounter > 1) {
+    sound->setStatus(SOUNDSTATE_Playing);
+    if (sound->mFadetime > 1) {
         sound->setStreamInterVolume(SOUNDPARAM_Fadeout, 0.0, 0);
-        sound->setStreamInterVolume(SOUNDPARAM_Fadeout, 1.0, sound->mFadeCounter);
+        sound->setStreamInterVolume(SOUNDPARAM_Fadeout, 1.0, sound->mFadetime);
         StreamLib::setVolume(0.0);
     }
     StreamLib::setPrepareFlag(0);
@@ -247,10 +245,10 @@ void JAInter::StreamMgr::checkPlayingStream() {
     }
 
     streamUpdate_t* data = getUpdateInfo();
-    if (streamSound->mState >= SOUNDSTATE_Playing) {
+    if (streamSound->getStatus() >= SOUNDSTATE_Playing) {
         streamSound->getStreamParameter();
         if (StreamLib::getPlayingFlag() == 2) {
-            streamSound->mState = SOUNDSTATE_Inactive;
+            streamSound->setStatus(SOUNDSTATE_Inactive);
             if (streamSound->getStreamParameter()->mUpdateData) {
                 streamSound->getStreamParameter()->mUpdateData->mpSound = NULL;
             }
@@ -259,22 +257,22 @@ void JAInter::StreamMgr::checkPlayingStream() {
             return;
         }
 
-        if (streamSound->field_0x6 != 0) {
-            streamSound->field_0x6--;
+        if (streamSound->mFinishWaitTimer != 0) {
+            streamSound->mFinishWaitTimer--;
         }
 
         if ((data->mActiveTrackFlag & SOUNDACTIVE_DoFadeout) != 0) {
-            streamSound->setStreamInterVolume(SOUNDPARAM_Fadeout, 0.0f, streamSound->mFadeCounter);
-            streamSound->mState = SOUNDSTATE_Fadeout;
+            streamSound->setStreamInterVolume(SOUNDPARAM_Fadeout, 0.0f, streamSound->mFadetime);
+            streamSound->setStatus(SOUNDSTATE_Fadeout);
             data->mActiveTrackFlag ^= SOUNDACTIVE_DoFadeout;
         }
-        
-        if (streamSound->mState == SOUNDSTATE_Fadeout &&
-            (streamSound->getStreamInterVolume(SOUNDPARAM_Fadeout) == 0.0f || streamSound->mFadeCounter == 0) &&
-            streamSound->field_0x6 == 0
+
+        if (streamSound->getStatus() == SOUNDSTATE_Fadeout &&
+            (streamSound->getStreamInterVolume(SOUNDPARAM_Fadeout) == 0.0f || streamSound->mFadetime == 0) &&
+            streamSound->mFinishWaitTimer == 0
         ) {
             StreamLib::stop();
-            streamSound->mState = SOUNDSTATE_Inactive;
+            streamSound->setStatus(SOUNDSTATE_Inactive);
             if (streamSound->getStreamParameter()->mUpdateData != NULL) {
                 streamSound->getStreamParameter()->mUpdateData->mpSound = NULL;
             }
@@ -282,7 +280,7 @@ void JAInter::StreamMgr::checkPlayingStream() {
             streamControl.releaseSound(streamSound);
         }
     }
-    if (streamSound->mState < SOUNDSTATE_Ready) {
+    if (streamSound->getStatus() < SOUNDSTATE_Ready) {
         return;
     }
 
@@ -363,7 +361,7 @@ void JAInter::StreamMgr::checkPlayingStream() {
         }
     }
 
-    streamSound->field_0x18++;
+    streamSound->mActiveTimer++;
 }
 
 /* 8029C730-8029C858       .text Play_DirectPCM__Q27JAInter9StreamLibFPQ28JASystem11TDSPChannelPsUsUlsUs */
@@ -393,12 +391,12 @@ void JAInter::StreamLib::Play_DirectPCM(JASystem::TDSPChannel* param_1, s16* par
 }
 
 /* 8029C858-8029C864       .text Get_DirectPCM_LoopRemain__Q27JAInter9StreamLibFPQ38JASystem12DSPInterface9DSPBuffer */
-int JAInter::StreamLib::Get_DirectPCM_LoopRemain(JASystem::DSPInterface::DSPBuffer* dspBuffer) {
+u32 JAInter::StreamLib::Get_DirectPCM_LoopRemain(JASystem::DSPInterface::DSPBuffer* dspBuffer) {
     return dspBuffer->field_0x6c >> 0x10;
 }
 
 /* 8029C864-8029C86C       .text Get_DirectPCM_Remain__Q27JAInter9StreamLibFPQ38JASystem12DSPInterface9DSPBuffer */
-int JAInter::StreamLib::Get_DirectPCM_Remain(JASystem::DSPInterface::DSPBuffer* dspBuffer) {
+u32 JAInter::StreamLib::Get_DirectPCM_Remain(JASystem::DSPInterface::DSPBuffer* dspBuffer) {
     return dspBuffer->field_0x74;
 }
 
@@ -418,24 +416,24 @@ void JAInter::StreamLib::allocBuffer(void* param_1, s32 param_2) {
     }
     streamHeap.init((u8*)param_1, param_2);
     loop_buffer = (s16***)streamHeap.alloc(8);
-    JUT_ASSERT_3(555, loop_buffer);
+    JUT_ASSERT_3(DEMO_SELECT(548, 555), loop_buffer);
     for (u32 i = 0; i < 2; i++) {
         loop_buffer[i] = (s16**)streamHeap.alloc(LOOP_BLOCKS << 2);
-        JUT_ASSERT_3(559, loop_buffer[i]);
+        JUT_ASSERT_3(DEMO_SELECT(552, 559), loop_buffer[i]);
         for (int j = 0; j < LOOP_BLOCKS; j++) {
             loop_buffer[i][j] = (s16*)streamHeap.alloc(0x2800);
-            JUT_ASSERT_3(563, loop_buffer[i][j]);
+            JUT_ASSERT_3(DEMO_SELECT(556, 563), loop_buffer[i][j]);
         }
     };
-    store_buffer = (void**)streamHeap.alloc(8);
-    JUT_ASSERT_3(568, store_buffer);
+    store_buffer = (s16**)streamHeap.alloc(8);
+    JUT_ASSERT_3(DEMO_SELECT(561, 568), store_buffer);
     for (u32 i = 0; i < 2; i++) {
-        store_buffer[i] = streamHeap.alloc(0x5000);
-        JUT_ASSERT_3(572, store_buffer[i]);
+        store_buffer[i] = (s16*)streamHeap.alloc(0x5000);
+        JUT_ASSERT_3(DEMO_SELECT(565, 572), store_buffer[i]);
     }
-    JUT_ASSERT_3(575, loop_buffer);
+    JUT_ASSERT_3(DEMO_SELECT(568, 575), loop_buffer);
     adpcm_buffer = (s16*)streamHeap.alloc(0x5000);
-    JUT_ASSERT_3(577, adpcm_buffer);
+    JUT_ASSERT_3(DEMO_SELECT(570, 577), adpcm_buffer);
     allocFlag = true;
 }
 
@@ -449,25 +447,40 @@ bool JAInter::StreamLib::deallocBuffer() {
     return false;
 }
 
+#pragma optimization_level 4
+static inline u32 getLoopBufferTableSize() {
+    return ALIGN_PREV(JAInter::StreamLib::LOOP_BLOCKS * 4, 0x20) + 0x20;
+}
+
 /* 8029CC50-8029CCA4       .text getNeedBufferSize__Q27JAInter9StreamLibFv */
 u32 JAInter::StreamLib::getNeedBufferSize() {
-    /* Nonmatching - regalloc */
+    u32 r0;
     u32 i = 0;
-    u32 size;
-    u32 r0 = ((LOOP_BLOCKS << 2) & ~0x1F) + 0x20;
-    for (size = 0x20; i < 2; i++) {
+    r0 = getLoopBufferTableSize();
+    u32 size = 0x20;
+    for (; i < 2; i++) {
         size += r0;
         for (u32 j = 0; j < LOOP_BLOCKS; j++) {
-            size += 0x2820;
+            size += 0x2800;
+            size += 0x20;
         }
     }
+
     size += 0x20;
-    for (u32 i = 0; i < 2; i++) {
-        size += 0x5020;
+
+    for (i = 0; i < 2; i++) {
+        size += 0x5000;
+        size += 0x20;
     }
-    size += 0x5020;
+
+    for (i = 0; i < 1; i++) {
+        size += 0x5000;
+        size += 0x20;
+    }
+
     return size;
 }
+#pragma optimization_level reset
 
 /* 8029CCA4-8029CCAC       .text setAllocBufferCallback__Q27JAInter9StreamLibFPFv_v */
 void JAInter::StreamLib::setAllocBufferCallback(void (*param_1)(void)) {
@@ -487,23 +500,114 @@ void JAInter::StreamLib::sync(s32 param_1) {
 
 /* 8029CCD0-8029CD8C       .text __DecodePCM__Q27JAInter9StreamLibFv */
 void JAInter::StreamLib::__DecodePCM() {
-    /* Nonmatching */
     int i;
     s16* dst1 = loop_buffer[0][playside];
     s16* dst2 = loop_buffer[1][playside];
     s16* src = adpcm_buffer;
-    for (i = 0; i < loadsize >> 2; dst2++, i++, dst1++, src += 2) {
-        dst1[0] = src[0];
-        dst2[0] = src[1];
+
+    for (i = 0; i < loadsize / 4; i++) {
+        *dst1++ = *src++;
+        *dst2++ = *src++;
     }
-    loadup_samples += loadsize >> 2;
-    DCStoreRange(loop_buffer[0][playside], loadsize >> 1);
-    DCStoreRange(loop_buffer[1][playside], loadsize >> 1);
+
+    loadup_samples += loadsize / 2 / 2;
+    DCStoreRange(loop_buffer[0][playside], loadsize / 2);
+    DCStoreRange(loop_buffer[1][playside], loadsize / 2);
 }
 
 /* 8029CD8C-8029D134       .text __DecodeADPCM__Q27JAInter9StreamLibFv */
 void JAInter::StreamLib::__DecodeADPCM() {
-    /* Nonmatching */
+    static s16 L1;
+    static s16 L2;
+    static s16 R1;
+    static s16 R2;
+
+    s16* var_r7;
+    s16* var_r8;
+    u8* var_r9;
+    u32 i1;
+    u32 var_r11 = 0;
+    if (movieframe == 0 && playside == 0) {
+        R2 = 0;
+        R1 = 0;
+        L2 = 0;
+        L1 = 0;
+    }
+
+    var_r7 = store_buffer[0];
+    var_r8 = store_buffer[1];
+    var_r9 = (u8*)adpcm_buffer;
+    if (loop_start_flag != 0) {
+        var_r11 = ((header.field_0x14 / 16) & 0x7) * 18;
+        loadsize = 0x1680 - var_r11;
+        var_r9 = (u8*)adpcm_buffer + var_r11;
+        loop_start_flag = 0;
+    }
+
+    for (i1 = 0; i1 < loadsize / 18; i1++) {
+        u8 temp_r0 = *var_r9 / 16;
+        s16 temp_r5 = filter_table[(*var_r9 & 0xF) * 2];
+        s16 temp_r6 = filter_table[(*var_r9 & 0xF) * 2 + 1];
+
+        var_r9++;
+        for (int j = 0; j < 8; j++) {
+            int var_r31 = *var_r9++;
+            u8 hi = var_r31 >> 4;
+            u8 lo = var_r31 & 0xF;
+            L2 = *var_r7++ = (table4[hi] << temp_r0) + ((temp_r5 * L1 + temp_r6 * L2) >> 11);
+            L1 = *var_r7++ = (table4[lo] << temp_r0) + ((temp_r5 * L2 + temp_r6 * L1) >> 11);
+        }
+
+        temp_r0 = *var_r9 / 16;
+        temp_r5 = filter_table[(*var_r9 & 0xF) * 2];
+        temp_r6 = filter_table[(*var_r9 & 0xF) * 2 + 1];
+        var_r9++;
+        for (int j = 0; j < 8; j++) {
+            int var_r31 = *var_r9++;
+            u8 hi = var_r31 >> 4;
+            u8 lo = var_r31 & 0xF;
+            R2 = *var_r8++ = (table4[hi] << temp_r0) + (((temp_r5 * R1) + (temp_r6 * R2)) >> 11);
+            R1 = *var_r8++ = (table4[lo] << temp_r0) + (((temp_r5 * R2) + (temp_r6 * R1)) >> 11);
+        }
+    }
+
+    loadup_samples += (((loadsize - var_r11) / 18) & 0x7FFFFFF) * 16;
+
+    u32 var_r31;
+    u32 i2;
+    for (i2 = 0; i2 < loadsize / 18 * 16; i2++) {
+        var_r31 = i2 + shift_sample;
+        if (var_r31 == 0x1400) {
+            DCStoreRange(loop_buffer[0][playside] + shift_sample, (0x1400 - shift_sample) * 2);
+            DCStoreRange(loop_buffer[1][playside] + shift_sample, (0x1400 - shift_sample) * 2);
+            playside = (playside + 1) % LOOP_BLOCKS;
+        }
+
+        if (var_r31 >= 0x1400) {
+            var_r31 -= 0x1400;
+        }
+
+        loop_buffer[0][playside][var_r31] = store_buffer[0][i2];
+        loop_buffer[1][playside][var_r31] = store_buffer[1][i2];
+    }
+
+    u32 temp_r29 = i2 + shift_sample;
+    DCStoreRange(loop_buffer[0][playside], 0x2800);
+    DCStoreRange(loop_buffer[1][playside], 0x2800);
+
+    if (temp_r29 == 0x1400) {
+        playside = (playside + 1) % LOOP_BLOCKS;
+    }
+
+    if (temp_r29 >= 0x1400) {
+        shift_sample = temp_r29 - 0x1400;
+        return;
+    }
+
+    shift_sample = temp_r29;
+    if (temp_r29 > 0x1400) {
+        shift_sample = temp_r29 - 0x1400;
+    }
 }
 
 /* 8029D134-8029D1C8       .text __Decode__Q27JAInter9StreamLibFv */
@@ -516,7 +620,7 @@ void JAInter::StreamLib::__Decode() {
         __DecodeADPCM();
         return;
     }
-    JUT_ASSERT_3(948, 0);
+    JUT_ASSERT_3(DEMO_SELECT(941, 948), 0);
 }
 
 /* 8029D1C8-8029D1E8       .text __LoadFin__Q27JAInter9StreamLibFlP11DVDFileInfo */
@@ -530,7 +634,43 @@ void JAInter::StreamLib::__LoadFin(s32, DVDFileInfo*) {
 
 /* 8029D1E8-8029D328       .text LoadADPCM__Q27JAInter9StreamLibFv */
 void JAInter::StreamLib::LoadADPCM() {
-    /* Nonmatching */
+    if (adpcmbuf_state != 0) {
+        return;
+    }
+
+    switch (header.field_0xa) {
+        case 2:
+            loadsize = 0x5000;
+            break;
+        case 4:
+            loadsize = 0x1680;
+            break;
+        case 3:
+        default:
+            JUT_ASSERT_3(DEMO_SELECT(985, 992), 0);
+            break;
+        }
+
+        extra_sample = 0;
+        if (adpcm_remain < loadsize) {
+            u32 temp_r0 = adpcm_remain & 0x1F;
+            if (temp_r0 != 0) {
+                loadsize = adpcm_remain + (0x20 - temp_r0);
+                extra_sample = loadsize - adpcm_remain;
+            } else {
+                loadsize = adpcm_remain;
+            }
+        }
+
+        adpcmbuf_state = 1;
+        DVDReadAsyncPrio(&finfo, adpcm_buffer, loadsize, adpcm_loadpoint, __LoadFin, 2);
+        DvdLoadFlag = 1;
+        adpcm_loadpoint += loadsize;
+        if (adpcm_remain < loadsize) {
+            adpcm_remain = 0;
+        } else {
+            adpcm_remain = adpcm_remain - loadsize;
+        }
 }
 
 /* 8029D328-8029D338       .text setVolume__Q27JAInter9StreamLibFf */
@@ -585,16 +725,17 @@ u8 JAInter::StreamLib::getPlayingFlag() {
 }
 
 /* 8029D3BC-8029D424       .text setDecodedBufferBlocks__Q27JAInter9StreamLibFUl */
-void JAInter::StreamLib::setDecodedBufferBlocks(u32 param_1) {
-    /* Nonmatching */
-    if (param_1 < 3) {
-        OSReport("setDecodedBufferBlocks : 3ブロック以上必要ですので、使用ブロックを%dから3に変更します。\n");
-        param_1 = 3;
-    } else if (param_1 > 12) {
-        OSReport("setDecodedBufferBlocks : 13ブロック以上は設定できませんので、使用ブロックを%dから12に変更しま す。\n");
-        param_1 = 12;
+void JAInter::StreamLib::setDecodedBufferBlocks(u32 i_blockCount) {
+    if (i_blockCount < 3) {
+        // setDecodedBufferBlocks: At least 3 blocks are required, changing the number of blocks used from %d to 3.
+        OSReport("setDecodedBufferBlocks : 3ブロック以上必要ですので、使用ブロックを%dから3に変更します。\n", i_blockCount);
+        i_blockCount = 3;
+    } else if (i_blockCount > 12) {
+        // setDecodedBufferBlocks: Cannot set more than 13 blocks, changing the number of blocks used from %d to 12.
+        OSReport("setDecodedBufferBlocks : 13ブロック以上は設定できませんので、使用ブロックを%dから12に変更します。\n", i_blockCount);
+        i_blockCount = 12;
     }
-    LOOP_BLOCKS = param_1;
+    LOOP_BLOCKS = i_blockCount;
 }
 
 /* 8029D424-8029D464       .text LoopInit__Q27JAInter9StreamLibFv */
@@ -619,7 +760,6 @@ s32 JAInter::StreamLib::directPlayWait(void*) {
 
 /* 8029D4C0-8029D560       .text start__Q27JAInter9StreamLibFPcUlPv */
 void JAInter::StreamLib::start(char* param_1, u32 param_2, void* param_3) {
-    /* Nonmatching */
     if (!startInitFlag) {
         strcpy(Filename, param_1);
         Mode = param_2;
@@ -638,10 +778,363 @@ void JAInter::StreamLib::start(char* param_1, u32 param_2, void* param_3) {
 
 /* 8029D560-8029D7C0       .text __start__Q27JAInter9StreamLibFv */
 void JAInter::StreamLib::__start() {
-    /* Nonmatching */
+    startInitFlag = 0;
+
+    if (bufferMode == 1) {
+        if (!allocFlag) {
+            if (allocCallback) {
+                allocCallback();
+            }
+        }
+
+        JUT_ASSERT_3(DEMO_SELECT(1210, 1217), allocFlag);
+    }
+
+    playmode = Mode;
+
+    sFillBlockSize = 0;
+
+    if (playflag != 0) {
+        assign_ch[0]->forceStop();
+        assign_ch[1]->forceStop();
+        playflag++;
+    }
+
+    DVDOpen(Filename, &finfo);
+
+    if (Head == NULL) {
+        DVDReadPrio(&finfo, adpcm_buffer, 0x20, 0, 2);
+    } else {
+        for (int i = 0; i < 32; ++i) {
+            u8* dst = (u8*)adpcm_buffer;
+            dst[i] = ((u8*)Head)[i];
+        }
+    }
+
+    adpcm_loadpoint = 0x20;
+    header = *(StreamHeader*)adpcm_buffer;
+
+    adpcm_remain = header.field_0x0;
+    playback_samples = header.field_0x4;
+    if (playmode != 0) {
+        header.field_0x10 = 0;
+    }
+
+    stopflag = false;
+    stopflag2 = false;
+    playflag2 = 0;
+    outvolume = 1.0f;
+    outpitch = 1.0f;
+    outpan = 0.5f;
+    loadup_samples = 0;
+    movieframe = 0;
+    loop_start_flag = false;
+    adpcmbuf_state = 0;
+    playside = 0;
+    shift_sample = 0;
+#if VERSION > VERSION_DEMO
+    dspFinishFlag = 0;
+#endif
+    LOOP_SAMPLESIZE = LOOP_BLOCKS * 0x1400;
+
+    LoadADPCM();
+
+    for (u32 i = 0; i < ARRAY_SIZE(assign_ch); ++i) {
+        if (assign_ch[i] != NULL && !assign_ch[i]->checkSign(0))
+            JASystem::TDSPChannel::free(assign_ch[i], (uintptr_t)&assign_ch[i]);
+
+        assign_ch[i] = NULL;
+    }
+
+    dspch_deallockflag = true;
+}
+
+static inline s16 getStreamVolume(u16 base, f32 pan) {
+    return JAInter::StreamLib::outvolume * ((f32)base * pan);
+}
+
+static inline u16 getStreamPitch() {
+    return JAInter::StreamLib::outpitch * ((JAInter::StreamLib::header.field_0x8 * 0x1000) / 32000);
 }
 
 /* 8029D7C0-8029E14C       .text callBack__Q27JAInter9StreamLibFPv */
-s32 JAInter::StreamLib::callBack(void*) {
-    /* Nonmatching */
+s32 JAInter::StreamLib::callBack(void* param_1) {
+    UNUSED(param_1);
+
+    if (startInitFlag != 0) {
+        if (DvdLoadFlag != 0) {
+            return 0;
+        }
+
+        __start();
+    }
+
+    if (startInitFlag == 0) {
+        if (outflag_volume) {
+            outvolume = stackvolume;
+            outflag_volume = 0;
+        }
+
+        if (outflag_pitch) {
+            outpitch = stackpitch;
+            outflag_pitch = false;
+        }
+
+        if (outflag_pan != 0) {
+            outpan = stackpan;
+            outflag_pan = false;
+        }
+    }
+
+    if (assign_ch[0] == NULL) {
+        assign_ch[0] = JASystem::TDSPChannel::alloc(0, (uintptr_t)&assign_ch[0]);
+        assign_ch[1] = JASystem::TDSPChannel::alloc(0, (uintptr_t)&assign_ch[1]);
+        if (assign_ch[0] != NULL && assign_ch[1] != NULL) {
+            assign_ch[0]->mPriority = 0x7F;
+            assign_ch[1]->mPriority = 0x7F;
+        }
+    }
+
+    if (assign_ch[0] == NULL || assign_ch[1] == NULL) {
+        // JAIStream::callBack channel could not be allocated or was lost
+        JUT_WARN(DEMO_SELECT(1395, 1403), "%s", "JAIStream::callBack チャンネルが確保できないor無くなった！\n");
+
+        sync(-1);
+
+        playflag = 0;
+        playflag2 = 2;
+
+        return -1;
+    }
+
+    static int oldstat;
+    static s8 init;
+    if (init == 0) {
+        oldstat = 0;
+        init = 1;
+    }
+
+    switch (DVDGetDriveStatus()) {
+    case 5:
+        outpause |= 0x88;
+        break;
+    case 0:
+        if (oldstat != DVDGetDriveStatus()) {
+            outpause &= 0xF7;
+            outpause |= 0x80;
+        }
+        break;
+    }
+
+    oldstat = DVDGetDriveStatus();
+    if (outpause & 0x80) {
+        if (outpause & 0x7F) {
+            JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber)->setPauseFlag(1);
+            JASystem::DSPInterface::getDSPHandle(assign_ch[1]->mNumber)->setPauseFlag(1);
+            JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber)->flushChannel();
+            JASystem::DSPInterface::getDSPHandle(assign_ch[1]->mNumber)->flushChannel();
+            return 0;
+        } else {
+            JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber)->setPauseFlag(0);
+            JASystem::DSPInterface::getDSPHandle(assign_ch[1]->mNumber)->setPauseFlag(0);
+            JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber)->flushChannel();
+            JASystem::DSPInterface::getDSPHandle(assign_ch[1]->mNumber)->flushChannel();
+        }
+    }
+
+    BOOL needDecode;
+
+    if (movieframe != NULL) {
+        JASystem::DSPInterface::DSPBuffer* dspHandle = JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber);
+
+        if (dspHandle->field_0x2 != 0 || DEMO_SELECT(FALSE, dspFinishFlag != 0)) {
+            if (adpcmbuf_state != DEMO_SELECT(2, 1)) {
+                assign_ch[0]->free(assign_ch[0], (uintptr_t)&assign_ch[0]);
+                assign_ch[1]->free(assign_ch[1], (uintptr_t)&assign_ch[1]);
+                assign_ch[0] = NULL;
+                assign_ch[1] = NULL;
+
+                sync(-1);
+
+                playflag = 0;
+                playflag2 = 2;
+
+                if (bufferMode == 1 && deallocCallback != NULL) {
+                    deallocCallback();
+                }
+
+                return -1;
+            }
+
+#if VERSION > VERSION_DEMO
+            dspFinishFlag = 1;
+#endif
+
+            return 0;
+        }
+
+        u32 playedSamples = playback_samples - Get_DirectPCM_Remain(dspHandle);
+        sync(playedSamples * header.field_0xe / header.field_0x8);
+
+        movieframe++;
+
+        u32 cur = (LOOP_SAMPLESIZE - (u16)Get_DirectPCM_LoopRemain(dspHandle)) / 5120U;
+
+        static u32 old_dspside;
+        static s8 init;
+        if (init == 0) {
+            old_dspside = 0;
+            init = 1;
+        }
+
+        sFillBlockSize = cur > playside ? playside + LOOP_BLOCKS - cur : playside - cur;
+
+        if (old_dspside != cur) {
+            old_dspside = cur;
+        }
+
+        if (cur != (playside + 1) % LOOP_BLOCKS) {
+            needDecode = TRUE;
+        } else {
+            needDecode = FALSE;
+        }
+    }
+
+    if (stopflag != 0 && stopflag2 != 0) {
+        if (movieframe == 0) {
+#if VERSION > VERSION_DEMO
+            if (adpcmbuf_state != 1)
+#endif
+            {
+                assign_ch[0]->free(assign_ch[0], (uintptr_t)&assign_ch[0]);
+                assign_ch[1]->free(assign_ch[1], (uintptr_t)&assign_ch[1]);
+                assign_ch[0] = NULL;
+                assign_ch[1] = NULL;
+
+                sync(-1);
+
+                playflag = 0;
+                playflag2 = 2;
+
+                if (bufferMode == 1 && deallocCallback != NULL) {
+                    deallocCallback();
+                }
+                return -1;
+            }
+            return 0;
+        }
+
+        stopflag2 = false;
+        assign_ch[0]->forceStop();
+        assign_ch[1]->forceStop();
+
+#if VERSION == VERSION_DEMO
+        adpcmbuf_state = 3;
+#endif
+    }
+
+    if ((needDecode == TRUE || movieframe == 0) && (adpcmbuf_state == 2 || adpcmbuf_state == 4)) {
+        if (adpcmbuf_state == 2) {
+            __Decode();
+
+            adpcmbuf_state = NULL;
+        }
+
+        if (movieframe == 0) {
+            if (playside == LOOP_BLOCKS - 2) {
+                s16 base;
+
+                if (prepareflag != 0) {
+                    prepareflag = 2;
+                    adpcmbuf_state = 4;
+
+                    return 0;
+                }
+
+                prepareflag = 2;
+                playflag2 = 1;
+
+                movieframe++;
+
+                f32 sp8[2] = {1.0f, 1.0f};
+                if (outputmode == 1) {
+                    if (outpan < 0.5f) {
+                        sp8[0] = 1.0f;
+                        sp8[1] = 1.4142f * JASystem::Calc::sinfT(outpan);
+                    } else {
+                        sp8[0] = 1.4142f * JASystem::Calc::sinfT(1.0f - outpan);
+                        sp8[1] = 1.0f;
+                    }
+                    base = 0x7FFF;
+                } else {
+                    base = 0x5A7E;
+                }
+
+                for (u32 i = 0; i < 2; i++) {
+                    JASystem::DSPInterface::getDSPHandle(assign_ch[i]->mNumber);
+                    Play_DirectPCM(assign_ch[i], *loop_buffer[i], LOOP_SAMPLESIZE, playback_samples,
+                        outvolume * (base * sp8[i]), outpitch * ((header.field_0x8 * 0x1000) / 32000));
+                }
+                if (adpcmbuf_state != 3) {
+                    adpcmbuf_state = NULL;
+                }
+            }
+        }
+    }
+
+    if (movieframe != 0) {
+        f32 fL = 1.0f;
+        f32 fR = 1.0f;
+        u16 base;
+
+        if (outputmode == 1) {
+            if (outpan < 0.5f) {
+                fR = 1.4142f * JASystem::Calc::sinfT(outpan);
+            } else {
+                fL = 1.4142f * JASystem::Calc::sinfT(1.0f - outpan);
+                fR = 1.0f;
+            }
+
+            base = 0x7FFF;
+
+            JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber)->setMixerVolume(1, 0, 0);
+            JASystem::DSPInterface::getDSPHandle(assign_ch[1]->mNumber)->setMixerVolume(0, 0, 0);
+        } else {
+            base = 0x5A7E;
+
+            s16 volL = outvolume * 23166.0f;
+            JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber)->setMixerVolume(1, volL, 0);
+            s16 volR = outvolume * 23166.0f;
+            JASystem::DSPInterface::getDSPHandle(assign_ch[1]->mNumber)->setMixerVolume(0, volR, 0);
+        }
+
+        s16 volL = getStreamVolume(base, fL);
+        JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber)->setMixerVolume(0, volL, 0);
+        s16 volR = getStreamVolume(base, fR);
+        JASystem::DSPInterface::getDSPHandle(assign_ch[1]->mNumber)->setMixerVolume(1, volR, 0);
+
+        u16 pitchL = getStreamPitch();
+        JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber)->setPitch(pitchL);
+        u16 pitchR = getStreamPitch();
+        JASystem::DSPInterface::getDSPHandle(assign_ch[1]->mNumber)->setPitch(pitchR);
+
+        JASystem::DSPInterface::getDSPHandle(assign_ch[0]->mNumber)->flushChannel();
+        JASystem::DSPInterface::getDSPHandle(assign_ch[1]->mNumber)->flushChannel();
+    }
+
+    if (adpcmbuf_state == 0) {
+        if (adpcm_remain == 0) {
+            if (header.field_0x10 != 0) {
+                LoopInit();
+            } else {
+                adpcmbuf_state = 3;
+            }
+        } else if (stopflag != 0) {
+            adpcmbuf_state = 3;
+        } else {
+            LoadADPCM();
+        }
+    }
+
+    return 0;
 }
