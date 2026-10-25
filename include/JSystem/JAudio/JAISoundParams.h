@@ -12,7 +12,7 @@ namespace JAInter {
         int set(f32 param_1, u32 param_2);
         BOOL move();
 
-        inline void init(f32 value) {
+        void init(f32 value) {
             mCurrentValue = value;
             mTargetValue = value;
             mMoveCounter = 0;

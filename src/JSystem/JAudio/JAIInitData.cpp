@@ -95,9 +95,9 @@ void JAInter::InitData::checkInitDataOnMemory() {
         case 6: {
             u32* r28 = (u32*)transInitDataFile((u8*)aafPointer + aafPointer[r30], aafPointer[r30 + 1]);
             JAIGlobalParameter::setParamSoundSceneMax(*r28);
-            JAIBasic::getInterface()->field_0x1c = (u8**)(r28 + 1);
+            JAIBasic::getInterface()->setInitOnCodeSeScene(r28 + 1);
             for (int i = 0; i < JAIGlobalParameter::getParamSoundSceneMax(); i++) {
-                JAIBasic::getInterface()->field_0x1c[i] += u32(r28);
+                JAIBasic::getInterface()->addInitOnCodeSeScene(i, (u32)r28);
             }
             r30 += 3;
             break;

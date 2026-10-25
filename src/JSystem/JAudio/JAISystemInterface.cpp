@@ -64,7 +64,7 @@ void JAInter::SystemInterface::setSeqPortargsU32(JAInter::SeqUpdateData* updateD
 /* 8029E4B0-8029E518       .text rootInit__Q27JAInter15SystemInterfaceFPQ27JAInter13SeqUpdateData */
 void JAInter::SystemInterface::rootInit(JAInter::SeqUpdateData* updateData) {
     JAISound* r30 = updateData->mpSequence;
-    JASystem::TTrack* track = r30->getTrack();
+    JASystem::TTrack* track = r30->getSeqParameter()->getRootTrackPointer();
     outerInit(updateData, track, JAIGlobalParameter::getParamSeqTrackMax(), 0xFFFF, 0);
     r30->getSeqParameter();
 }

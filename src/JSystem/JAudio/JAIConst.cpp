@@ -23,7 +23,7 @@ u8 JAInter::Const::sCInfos_0[] = {
     4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2,
     4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2,
 };
-JMath::TRandom_fast_ JAInter::Const::random(0);
+JMath::TRandom_<JMath::TRandom_fast_> JAInter::Const::random(0);
 
 /* 80291704-802917D8       .text transInitDataFile__7JAInterFPUcUl */
 u8* JAInter::transInitDataFile(u8* param_1, u32 param_2) {

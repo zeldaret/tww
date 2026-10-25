@@ -12,8 +12,8 @@ JAIZelSound::JAIZelSound() {}
 /* 802AEFA0-802AF19C       .text setDistanceVolumeCommon__11JAIZelSoundFfUc */
 f32 JAIZelSound::setDistanceVolumeCommon(f32 f30, u8 r31) {
     f32 f31;
-    if (mCameraIndex != 4) {
-        f31 = mPositionInfo[mCameraIndex].mDistance;
+    if (mPlayer != 4) {
+        f31 = mPositionInfo[mPlayer].mDistance;
     } else {
         f31 = mPositionInfo[0].mDistance;
         for (u8 i = 1; i < JAIGlobalParameter::getParamAudioCameraMax(); i++) {
@@ -56,7 +56,7 @@ f32 JAIZelSound::setDistanceVolumeCommon(f32 f30, u8 r31) {
 
 /* 802AF19C-802AF2A0       .text setSeDistanceVolume__11JAIZelSoundFUc */
 void JAIZelSound::setSeDistanceVolume(u8 r30) {
-    if ((getSwBit() & 0x00400000) && mActiveTimer > 1) {
+    if ((getSwBit() & 0x00400000) && mPlayGameFrameCounter > 1) {
         return;
     }
     f32 f31;
@@ -79,7 +79,7 @@ void JAIZelSound::setSeDistanceVolume(u8 r30) {
 
 /* 802AF2A0-802AF314       .text setSeDistancePan__11JAIZelSoundFUc */
 void JAIZelSound::setSeDistancePan(u8 r31) {
-    if ((getSwBit() & 0x00800000) && mActiveTimer > 1) {
+    if ((getSwBit() & 0x00800000) && mPlayGameFrameCounter > 1) {
         return;
     }
     setSeInterPan(SOUNDPARAM_Distance, setDistancePanCommon(), r31, 0);
@@ -87,13 +87,13 @@ void JAIZelSound::setSeDistancePan(u8 r31) {
 
 /* 802AF314-802AF458       .text setSeDistanceDolby__11JAIZelSoundFUc */
 void JAIZelSound::setSeDistanceDolby(u8 r30) {
-    if ((getSwBit() & 0x00800000) && mActiveTimer > 1) {
+    if ((getSwBit() & 0x00800000) && mPlayGameFrameCounter > 1) {
         return;
     }
     
     PositionInfo_t* posInf = &mPositionInfo[0];
     f32 f0;
-    if (mPosition == 0 || posInf->mPosition.z < JAIGlobalParameter::getParamSeDolbyFrontDistanceMax()) {
+    if (mTrans == 0 || posInf->mPosition.z < JAIGlobalParameter::getParamSeDolbyFrontDistanceMax()) {
         f0 = 0.0f;
     } else if (posInf->mPosition.z < 0.0f) {
         f0 = (
@@ -109,5 +109,5 @@ void JAIZelSound::setSeDistanceDolby(u8 r30) {
         f0 = 127.0f;
     }
     
-    setSeInterDolby(SOUNDPARAM_Distance, (u8)f0 / 127.0f, r30, 0);
+    setSeInterDolbyU7(SOUNDPARAM_Distance, f0, r30, 0);
 }

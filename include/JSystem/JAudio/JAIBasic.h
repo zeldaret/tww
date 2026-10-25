@@ -63,25 +63,6 @@ public:
     bool allocStreamBuffer(void*, s32);
     bool deallocStreamBuffer();
 
-    /* 0x04 */ JAInter::Camera* mAudioCamera;
-    /* 0x08 */ JKRSolidHeap* field_0x8;
-    /* 0x0C */ u8 initLoadFileSw;
-    /* 0x0D */ u8 field_0xd;
-    /* 0x0E */ struct {
-        u8 flag1 : 1;
-        u8 flag2 : 1;
-        u8 flag3 : 1;
-        u8 flag4 : 1;
-        u8 flag5 : 1;
-        u8 flag6 : 1;
-        u8 flag7 : 1;
-        u8 flag8 : 1;
-    } field_0xe;
-    /* 0x10 */ int field_0x10;
-    /* 0x14 */ int field_0x14;
-    /* 0x18 */ void* field_0x18;
-    /* 0x1C */ u8** field_0x1c;
-
     static JAIBasic* getInterface() { return msBasic; }
     static JKRSolidHeap* getCurrentJAIHeap() {
         JUT_ASSERT_MSG(148, msCurrentHeap, "JAIBasicのカレントヒープがありません（mCurrentHeap==NULL）\n");
@@ -102,21 +83,43 @@ public:
         }
     }
 
-    // TODO
-    void addInitOnCodeSeScene(u32, u32) {}
     JAInter::Camera* getAudioCamera() { return mAudioCamera; }
+
+    u8** getInitOnCodeSeScene() { return (u8**)mInitOnCodeSeScene; }
+    void setInitOnCodeSeScene(u32* param_0) { mInitOnCodeSeScene = param_0; }
+    void addInitOnCodeSeScene(u32 i, u32 param_1) { mInitOnCodeSeScene[i] += param_1; }
+
+    // TODO
     void getInitDataInfo() {}
-    void getInitOnCodeSeScene() {}
     void getSceneSetFlag() {}
     void getSeSoundHandle() {}
     void getWaveLoadStatus(s32) {}
     void initAudio(JKRSolidHeap*, u32, u8) {}
     void loadSceneWave(s32, s32) {}
     void setInitDataInfo(char*) {}
-    void setInitOnCodeSeScene(u32*) {}
 
     static JAIBasic* msBasic;
     static JKRSolidHeap* msCurrentHeap;
+
+// protected:
+    /* 0x04 */ JAInter::Camera* mAudioCamera;
+    /* 0x08 */ JKRSolidHeap* field_0x8;
+    /* 0x0C */ u8 initLoadFileSw;
+    /* 0x0D */ u8 field_0xd;
+    /* 0x0E */ struct {
+        u8 flag1 : 1;
+        u8 flag2 : 1;
+        u8 flag3 : 1;
+        u8 flag4 : 1;
+        u8 flag5 : 1;
+        u8 flag6 : 1;
+        u8 flag7 : 1;
+        u8 flag8 : 1;
+    } field_0xe;
+    /* 0x10 */ int field_0x10;
+    /* 0x14 */ int field_0x14;
+    /* 0x18 */ void* field_0x18;
+    /* 0x1C */ u32* mInitOnCodeSeScene;
 };
 
 #endif /* JAIBASIC_H */

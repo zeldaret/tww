@@ -48,7 +48,7 @@ JAIBasic::JAIBasic() {
     mAudioCamera = NULL;
     field_0x10 = 0;
     initLoadFileSw = 2;
-    field_0x1c = NULL;
+    mInitOnCodeSeScene = NULL;
     field_0x8 = NULL;
     field_0x18 = 0;
     msCurrentHeap = JASDram;
@@ -282,7 +282,7 @@ void JAIBasic::stopSoundHandle(JAISound* param_1, u32 fadeTime) {
     if (!param_1) {
         return;
     }
-    switch (param_1->getID() & JAISoundID_TypeMask) {
+    switch (param_1->mSoundID & JAISoundID_TypeMask) {
     case JAISoundID_Type_Sequence:
         JAInter::SequenceMgr::releaseSeqBuffer(param_1, fadeTime);
         break;
@@ -302,14 +302,14 @@ void JAIBasic::stopPlayingCategorySe(u8) {
 }
 
 /* 802907E0-80290864       .text stopPlayingCategoryObjectSe__8JAIBasicFUcPv */
-void JAIBasic::stopPlayingCategoryObjectSe(u8 param_1, void* param_2) {
+void JAIBasic::stopPlayingCategoryObjectSe(u8 param_1, void* actorObj) {
     if (param_1 >= JAIGlobalParameter::getParamSeCategoryMax()) {
         return;
     }
     JAISound* sound = JAInter::SeMgr::seRegist[param_1].field_0x4;
     while (sound) {
-        JAISound* nextSound = sound->field_0x34;
-        if (sound->mCreatureObj == param_2) {
+        JAISound* nextSound = sound->getNextSound();
+        if (sound->getAct() == actorObj) {
             stopSoundHandle(sound, 0);
         }
         sound = nextSound;
@@ -321,19 +321,19 @@ void JAIBasic::stopAllSe(u8) {
 }
 
 /* 80290864-80290884       .text stopAllSe__8JAIBasicFUcPv */
-void JAIBasic::stopAllSe(u8 param_1, void* param_2) {
-    stopPlayingCategoryObjectSe(param_1, param_2);
+void JAIBasic::stopAllSe(u8 param_1, void* actorObj) {
+    stopPlayingCategoryObjectSe(param_1, actorObj);
 }
 
 /* 80290884-802908E8       .text stopActorSoundOneBuffer__8JAIBasicFPvP8JAISound */
-void JAIBasic::stopActorSoundOneBuffer(void* param_1, JAISound* param_2) {
+void JAIBasic::stopActorSoundOneBuffer(void* actorObj, JAISound* param_2) {
     while (param_2) {
-        if (param_2->mCreatureObj == param_1) {
-            JAISound* sound = param_2->field_0x34;
+        if (param_2->getAct() == actorObj) {
+            JAISound* sound = param_2->getNextSound();
             param_2->stop(1);
             param_2 = sound;
         } else {
-            param_2 = param_2->field_0x34;
+            param_2 = param_2->getNextSound();
         }
     }
 }
@@ -341,7 +341,7 @@ void JAIBasic::stopActorSoundOneBuffer(void* param_1, JAISound* param_2) {
 /* 802908E8-8029094C       .text stopIDSoundOneBuffer__8JAIBasicFUlP8JAISound */
 void JAIBasic::stopIDSoundOneBuffer(u32 soundID, JAISound* param_2) {
     while (param_2) {
-        JAISound* sound = param_2->field_0x34;
+        JAISound* sound = param_2->getNextSound();
         if (param_2->mSoundID == soundID) {
             stopSoundHandle(param_2, 0);
         }
@@ -350,10 +350,10 @@ void JAIBasic::stopIDSoundOneBuffer(u32 soundID, JAISound* param_2) {
 }
 
 /* 8029094C-802909C0       .text stopIDActorSoundOneBuffer__8JAIBasicFUlPvP8JAISound */
-void JAIBasic::stopIDActorSoundOneBuffer(u32 soundID, void* param_2, JAISound* param_3) {
+void JAIBasic::stopIDActorSoundOneBuffer(u32 soundID, void* actorObj, JAISound* param_3) {
     while (param_3) {
-        JAISound* sound = param_3->field_0x34;
-        if (param_3->mSoundID == soundID && param_3->mCreatureObj == param_2) {
+        JAISound* sound = param_3->getNextSound();
+        if (param_3->mSoundID == soundID && param_3->getAct() == actorObj) {
             stopSoundHandle(param_3, 0);
         }
         param_3 = sound;
@@ -361,16 +361,16 @@ void JAIBasic::stopIDActorSoundOneBuffer(u32 soundID, void* param_2, JAISound* p
 }
 
 /* 802909C0-80290A5C       .text stopAllSound__8JAIBasicFPv */
-void JAIBasic::stopAllSound(void* param_1) {
+void JAIBasic::stopAllSound(void* actorObj) {
     JAISound* sound;
     for (int i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
         sound = JAInter::SeMgr::seRegist[i].field_0x4;
-        stopActorSoundOneBuffer(param_1, sound);
+        stopActorSoundOneBuffer(actorObj, sound);
     }
     sound = JAInter::SequenceMgr::seqControl.field_0x4;
-    stopActorSoundOneBuffer(param_1, sound);
+    stopActorSoundOneBuffer(actorObj, sound);
     sound = JAInter::StreamMgr::streamControl.field_0x4;
-    stopActorSoundOneBuffer(param_1, sound);
+    stopActorSoundOneBuffer(actorObj, sound);
 }
 
 static void dummy2() {
@@ -412,14 +412,14 @@ void JAIBasic::stopAllSound(u32 soundID, void* param_2) {
 }
 
 /* 80290C74-80290D94       .text deleteObject__8JAIBasicFPv */
-void JAIBasic::deleteObject(void* param_1) {
+void JAIBasic::deleteObject(void* actorObj) {
     JAInter::DummyVec* r30 = NULL;
     u8 r29;
     for (int i = 0; i < JAIGlobalParameter::getParamSeCategoryMax(); i++) {
         JAISound* sound = JAInter::SeMgr::seRegist[i].field_0x4;
         while (sound) {
-            JAISound* nextSound = sound->field_0x34;
-            if (sound->mCreatureObj == param_1) {
+            JAISound* nextSound = sound->mNextSound;
+            if (sound->getAct() == actorObj) {
                 r29 = 0;
                 if (sound->checkSwBit(0x8000)) {
                     r29++;
@@ -429,12 +429,12 @@ void JAIBasic::deleteObject(void* param_1) {
                 }
 
                 if (r29 > 0 && r30 != NULL) {
-                    r30->field_0xc = *sound->mPosition;
+                    r30->field_0xc = *sound->getTrans();
                     r30->field_0x8 = sound;
                     sound->clearMainSoundPPointer();
-                    sound->field_0x38 = &r30->field_0x8;
-                    sound->mPosition = &r30->field_0xc;
-                    sound->mCreatureObj = NULL;
+                    sound->setMainSoundPPointer(&r30->field_0x8);
+                    sound->mTrans = &r30->field_0xc;
+                    sound->mActObj = NULL;
                 } else {
                     stopSoundHandle(sound, 0);
                 }
@@ -501,9 +501,9 @@ u16 JAIBasic::setParameterSeqSync(JASystem::TTrack* track, u16 param_2) {
             JAInter::SeqParameter* seqParam = JAInter::SequenceMgr::getPlayTrackInfo(i)->mpSequence->getSeqParameter();
             JASystem::TTrack* seqTrack = seqParam->getRootTrackPointer();
             JAISound* sequence = JAInter::SequenceMgr::getPlayTrackInfo(i)->mpSequence;
-            if (seqTrack == (sequence->getID() & 0x800 ? track->getParent()->getParent() : track->getParent())) {
+            if (seqTrack == (sequence->mSoundID & 0x800 ? track->getParent()->getParent() : track->getParent())) {
                 u32 trackNo = JAInter::routeToTrack(track->getRoute());
-                u16 paramFlags = (JAInter::SoundTable::getInfoPointer(JAInter::SequenceMgr::getPlayTrackInfo(i)->mpSequence->getID())->mFlag >> 8) & 0xFFFF;
+                u16 paramFlags = (JAInter::SoundTable::getInfoPointer(JAInter::SequenceMgr::getPlayTrackInfo(i)->mpSequence->mSoundID)->mFlag >> 8) & 0xFFFF;
                 JAInter::SystemInterface::outerInit(JAInter::SequenceMgr::getPlayTrackInfo(i), track, trackNo, paramFlags, param_2 & 1);
                 JAInter::SequenceMgr::getPlayTrackInfo(i)->field_0x4 |= 1 << trackNo;
                 result = 0;
@@ -535,7 +535,7 @@ void JAIBasic::setSeExtParameter(JAISound* i_sound) {
         return;
     }
 
-    u8 infoFormat = JAInter::SoundTable::getInfoFormat(i_sound->getID());
+    u8 infoFormat = JAInter::SoundTable::getInfoFormat(i_sound->mSoundID);
     if (infoFormat & 0x4) {
         i_sound->setVolume(i_sound->mSoundInfo->mVolume.byteView[0] / 127.0f, 0, 1);
     }

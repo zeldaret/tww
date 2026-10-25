@@ -47,7 +47,7 @@ namespace JAInter {
         extern Vec camPreTrans;
         extern Vec dummyZeroVec;
         extern u8 sCInfos_0[];
-        extern JMath::TRandom_fast_ random;
+        extern JMath::TRandom_<JMath::TRandom_fast_> random;
     }
 }
 

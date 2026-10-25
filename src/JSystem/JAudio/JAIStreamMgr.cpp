@@ -109,7 +109,7 @@ void JAInter::StreamMgr::init() {
         JUT_ASSERT_MSG(54, _para->pan, "JAIStreamMgr::initHeap Cannot Alloc Heap!!\n");
         _para->pitch = new (JAIBasic::getCurrentJAIHeap(), 32) MoveParaSet[JAIGlobalParameter::getParamStreamParameterLines()];
         JUT_ASSERT_MSG(56, _para->pitch, "JAIStreamMgr::initHeap Cannot Alloc Heap!!\n");
-        streamControl.Buffer[i].field_0x3c = _para;
+        streamControl.Buffer[i].setCustomParameterPointer(_para);
     }
     streamUpdate = new (JAIBasic::getCurrentJAIHeap(), 32) streamUpdate_t();
     JUT_ASSERT_MSG(61, streamUpdate, "JAIStreamMgr::initHeap Cannot Alloc Heap!!\n");
@@ -145,7 +145,7 @@ void JAInter::StreamMgr::storeStreamBuffer(JAISound** param_1, JAInter::Actor* p
     StreamParameter* para = sound->getStreamParameter();
     para->init();
     sound->setStatus(SOUNDSTATE_Stored);
-    sound->mFinishWaitTimer = 10;
+    sound->setWait(10);
     streamUpdate->mPrepareFlag = 0;
     sound->initParameter(param_1, param_2, param_3, param_4, param_5, param_6);
 }
@@ -162,7 +162,7 @@ void JAInter::StreamMgr::releaseStreamBuffer(JAISound* param_1, u32 param_2) {
     } else {
         if (param_1->getStreamParameter()->mUpdateData) {
             param_1->getStreamParameter()->mUpdateData->mActiveTrackFlag |= SOUNDACTIVE_DoFadeout;
-            param_1->mFadetime = param_2;
+            param_1->setFadetime(param_2);
         }
     }
 }
@@ -179,7 +179,7 @@ void JAInter::StreamMgr::processGFrameStream() {
 
 /* 8029C128-8029C1D8       .text checkEntriedStream__Q27JAInter9StreamMgrFv */
 void JAInter::StreamMgr::checkEntriedStream() {
-    for (JAISound* sound = streamControl.field_0x4; sound; sound = sound->field_0x34) {
+    for (JAISound* sound = streamControl.field_0x4; sound; sound = sound->getNextSound()) {
         if (sound->getStatus() != SOUNDSTATE_Stored || StreamLib::getPlayingFlag() == 1) {
             continue;
         }
@@ -229,9 +229,9 @@ void JAInter::StreamMgr::checkRequestStream() {
         return;
     }
     sound->setStatus(SOUNDSTATE_Playing);
-    if (sound->mFadetime > 1) {
+    if (sound->getFadetime() > 1) {
         sound->setStreamInterVolume(SOUNDPARAM_Fadeout, 0.0, 0);
-        sound->setStreamInterVolume(SOUNDPARAM_Fadeout, 1.0, sound->mFadetime);
+        sound->setStreamInterVolume(SOUNDPARAM_Fadeout, 1.0, sound->getFadetime());
         StreamLib::setVolume(0.0);
     }
     StreamLib::setPrepareFlag(0);
@@ -257,19 +257,19 @@ void JAInter::StreamMgr::checkPlayingStream() {
             return;
         }
 
-        if (streamSound->mFinishWaitTimer != 0) {
-            streamSound->mFinishWaitTimer--;
+        if (streamSound->getWait() != 0) {
+            streamSound->decWait();
         }
 
         if ((data->mActiveTrackFlag & SOUNDACTIVE_DoFadeout) != 0) {
-            streamSound->setStreamInterVolume(SOUNDPARAM_Fadeout, 0.0f, streamSound->mFadetime);
+            streamSound->setStreamInterVolume(SOUNDPARAM_Fadeout, 0.0f, streamSound->getFadetime());
             streamSound->setStatus(SOUNDSTATE_Fadeout);
             data->mActiveTrackFlag ^= SOUNDACTIVE_DoFadeout;
         }
 
         if (streamSound->getStatus() == SOUNDSTATE_Fadeout &&
-            (streamSound->getStreamInterVolume(SOUNDPARAM_Fadeout) == 0.0f || streamSound->mFadetime == 0) &&
-            streamSound->mFinishWaitTimer == 0
+            (streamSound->getStreamInterVolume(SOUNDPARAM_Fadeout) == 0.0f || streamSound->getFadetime() == 0) &&
+            streamSound->getWait() == 0
         ) {
             StreamLib::stop();
             streamSound->setStatus(SOUNDSTATE_Inactive);
@@ -361,7 +361,7 @@ void JAInter::StreamMgr::checkPlayingStream() {
         }
     }
 
-    streamSound->mActiveTimer++;
+    streamSound->incPlayGameFrameCounter();
 }
 
 /* 8029C730-8029C858       .text Play_DirectPCM__Q27JAInter9StreamLibFPQ28JASystem11TDSPChannelPsUsUlsUs */

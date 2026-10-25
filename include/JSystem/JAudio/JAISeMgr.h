@@ -1,6 +1,7 @@
 #ifndef JAISEMGR_H
 #define JAISEMGR_H
 
+#include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JAudio/JAISoundParams.h"
 
 namespace JAInter {
@@ -9,6 +10,31 @@ namespace JAInter {
 
     class SeParameter {
     public:
+        void init() {
+            f32 center = JAIGlobalParameter::getParamSeDolbyCenterValue() / 127.0f;
+            for (u32 i = 0; i < 8; i++) {
+                mVolumes[i].init(1.0f);
+                mPans[i].init(0.5f);
+                mPitches[i].init(1.0f);
+                mFxmixes[i].init(0.0f);
+                field_0x324[i].init(0.0f);
+                mDolbys[i].init(center);
+            }
+            mVolumes[7].init(-1.0f);
+            mPans[7].init(-1.0f);
+            mPitches[7].init(-1.0f);
+            mFxmixes[7].init(-1.0f);
+            field_0x324[7].init(-1.0f);
+            mDolbys[7].init(-1.0f);
+            field_0x424 = NULL;
+            field_0x428 = NULL;
+            field_0x42c = NULL;
+            field_0x430 = NULL;
+            field_0x434 = 0;
+            field_0x438 = NULL;
+            field_0x20 = 0;
+        }
+
         /* 0x000 */ u16 field_0x0[16];
         /* 0x020 */ u16 field_0x20;
         /* 0x024 */ MoveParaSet field_0x24[16];
@@ -47,6 +73,8 @@ namespace JAInter {
         void storeSeBuffer(JAISound** param_1, Actor* param_2, u32 param_3, u32 param_4, u8 param_5, void* i_soundInfo);
         void releaseSeBuffer(JAISound* param_1, u32 param_2);
 
+        // TODO: This struct might be JAInter::SePlayPriority?
+        // Though init's size doesn't quite match the debug map
         struct seTrackUpdate_s {
             void init() {
                 mPlayingVolume = 1.0f;
