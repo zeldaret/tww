@@ -1230,15 +1230,11 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 00002FCC-00003124       .text _create__10daBigelf_cFv */
 cPhs_State daBigelf_c::_create() {
-    #if VERSION > VERSION_DEMO
-        fopAcM_SetupActor(this, daBigelf_c);
-    #endif
+    fopAcM_ct_Retail(this, daBigelf_c);
     cPhs_State ret = dComIfG_resLoad(&this->mPhaseProcReq, "bigelf");
     
     if(ret == cPhs_COMPLEATE_e){
-        #if VERSION == VERSION_DEMO
-            fopAcM_SetupActor(this, daBigelf_c);
-        #endif
+        fopAcM_ct_Demo(this, daBigelf_c)
         switch(fopAcM_GetName(this)){
             case fpcNm_BIGELF_e:
                 this->m3F4 = 0;
@@ -1248,7 +1244,7 @@ cPhs_State daBigelf_c::_create() {
         }
 
         if(!fopAcM_entrySolidHeap(this, CheckCreateHeap, 0xb7b0)){
-            #if VERSION > VERSION_DEMO
+            #if VERSION != VERSION_DEMO
                 this->mpBckAnimator = NULL;
             #endif
 
@@ -1258,7 +1254,7 @@ cPhs_State daBigelf_c::_create() {
         fopAcM_SetMtx(this, this->mpBckAnimator->getModel()->getBaseTRMtx());
 
         if(init() == FALSE){
-            #if VERSION > VERSION_DEMO
+            #if VERSION != VERSION_DEMO
                 this->mpBckAnimator = NULL;
             #endif
             return cPhs_ERROR_e;
