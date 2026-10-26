@@ -365,7 +365,7 @@ bool daObjVds::Act_c::create_heap() {
 
 /* 00001020-000011EC       .text _create__Q28daObjVds5Act_cFv */
 cPhs_State daObjVds::Act_c::_create() {
-    fopAcM_SetupActor(this, daObjVds::Act_c);
+    fopAcM_ct(this, daObjVds::Act_c);
 
     cPhs_State state = dComIfG_resLoad(&mPhs, M_arcname);
     if(state == cPhs_COMPLEATE_e){
