@@ -58,7 +58,7 @@ public:
     bool _delete();
     bool _draw();
     bool _execute();
-    void executeCommon();
+    BOOL executeCommon();
     void executeSetMode(u8);
     BOOL executeWaitInit();
     void executeWait();
@@ -103,11 +103,10 @@ private:
     /* 0x6EC */ cXyz field_0x6EC;
     /* 0x6F8 */ u8 padding_0x6F8[0x704 - 0x6F8];
     /* 0x704 */ sSvAnmDat* mpAnmDat;
-    /* 0x708 */ int field_0x708;
+    /* 0x708 */ u32* mpMsgNo;
     /* 0x70C */ f32 mAnmMorfOverride;
     /* 0x710 */ f32 field_0x710;
-    /* 0x714 */ s16 field_0x714;
-    /* 0x716 */ s16 field_0x716;
+    /* 0x714 */ u32 field_0x714;
     /* 0x718 */ u32 field_0x718;
     /* 0x71C */ u8 field_0x71C;
     /* 0x71D */ u8 field_0x71D;
@@ -116,7 +115,7 @@ private:
     /* 0x726 */ s16 field_0x726;
     /* 0x728 */ s16 field_0x728;
     /* 0x72A */ u16 field_0x72A;
-    /* 0x72C */ u16 field_0x72C;
+    /* 0x72C */ s16 field_0x72C;
     /* 0x72E */ u16 field_0x72E;
     /* 0x730 */ s16 field_0x730;
     /* 0x732 */ u16 field_0x732;

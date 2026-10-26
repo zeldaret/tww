@@ -434,8 +434,13 @@ bool daNpcSv_c::_execute() {
 }
 
 /* 00000F90-00000FB8       .text executeCommon__9daNpcSv_cFv */
-void daNpcSv_c::executeCommon() {
-    /* Nonmatching */
+BOOL daNpcSv_c::executeCommon() {
+    if (field_0x737) {
+        mEvtOrderType = 1;
+    } else {
+        mEvtOrderType = 0;
+    }
+    return FALSE;
 }
 
 /* 00000FB8-00001000       .text executeSetMode__9daNpcSv_cFUc */
@@ -445,7 +450,19 @@ void daNpcSv_c::executeSetMode(u8 i_mode) {
 
 /* 00001000-00001080       .text executeWaitInit__9daNpcSv_cFv */
 BOOL daNpcSv_c::executeWaitInit() {
-    /* Nonmatching */
+    setAnmTbl(&l_npc_anm_wait);
+    m_jnt.setParam(
+        l_npc_dat[getNpcNo()].field_0x04,
+        l_npc_dat[getNpcNo()].field_0x06,
+        l_npc_dat[getNpcNo()].field_0x0C,
+        l_npc_dat[getNpcNo()].field_0x0E,
+        l_npc_dat[getNpcNo()].field_0x00,
+        l_npc_dat[getNpcNo()].field_0x02,
+        l_npc_dat[getNpcNo()].field_0x08,
+        l_npc_dat[getNpcNo()].field_0x0A,
+        l_npc_dat[getNpcNo()].field_0x10
+    );
+    return FALSE;
 }
 
 /* 00001080-0000131C       .text executeWait__9daNpcSv_cFv */
@@ -463,7 +480,15 @@ BOOL daNpcSv_c::executeTalkInit() {
 
 /* 00001338-000013B8       .text executeTalk__9daNpcSv_cFv */
 void daNpcSv_c::executeTalk() {
-    /* Nonmatching */
+    executeCommon();
+    if (talk2(1, this) == fopMsgStts_BOX_CLOSED_e) {
+        field_0x736 = 0;
+        field_0x749 = 0;
+        executeSetMode(0);
+        dComIfGp_event_onEventFlag(8);
+    } else {
+        setAnmFromMsgTag();
+    }
 }
 
 /* 000013B8-000013EC       .text checkOrder__9daNpcSv_cFv */
@@ -527,8 +552,23 @@ void daNpcSv_c::privateCut() {
 }
 
 /* 00001744-00001814       .text eventMesSetInit__9daNpcSv_cFi */
-void daNpcSv_c::eventMesSetInit(int) {
-    /* Nonmatching */
+void daNpcSv_c::eventMesSetInit(int i_staffIdx) {
+    int* msgNo = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "MsgNo");
+    if (msgNo != NULL) {
+        mpMsgNo = NULL;
+        int msg = *msgNo;
+        switch (msg) {
+            case 0:
+                setMessage(getMsg());
+                break;
+            default:
+                setMessage(msg);
+        }
+    } else {
+        mpMsgNo++;
+        setMessage(*mpMsgNo);
+    }
+    dComIfGp_event_setTalkPartner(this);
 }
 
 /* 00001814-0000184C       .text eventMesSet__9daNpcSv_cFv */
@@ -537,8 +577,21 @@ BOOL daNpcSv_c::eventMesSet() {
 }
 
 /* 0000184C-000018F0       .text eventGetItemInit__9daNpcSv_cFi */
-void daNpcSv_c::eventGetItemInit(int) {
-    /* Nonmatching */
+void daNpcSv_c::eventGetItemInit(int i_staffIdx) {
+    fpc_ProcID pcId;
+
+    int* pData = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "ItemNo");
+    u32 itemNo;
+    if (pData != NULL) {
+        itemNo = l_get_item_no[*pData];
+    } else {
+        itemNo = field_0x714;
+    }
+    pcId = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, fopAcM_GetRoomNo(this));
+
+    if (pcId != fpcM_ERROR_PROCESS_ID_e) {
+        dComIfGp_event_setItemPartnerId(pcId);
+    }
 }
 
 /* 000018F0-000018F8       .text eventGetItem__9daNpcSv_cFv */
@@ -548,7 +601,24 @@ bool daNpcSv_c::eventGetItem() {
 
 /* 000018F8-000019E0       .text eventSetAngleInit__9daNpcSv_cFv */
 void daNpcSv_c::eventSetAngleInit() {
-    /* Nonmatching */
+    fopAc_ac_c* parent;
+    fopAcM_SearchByID(parentActorID, &parent);
+
+    if (parent != NULL) {
+        s16 angle;
+        fopAc_ac_c* link = dComIfGp_getLinkPlayer();
+        dNpc_calc_DisXZ_AngY(parent->current.pos, link->current.pos, NULL, &angle);
+        angle -= parent->shape_angle.y;
+        if (angle > 0) {
+            field_0x72C = parent->shape_angle.y + 0x4000;
+        } else {
+            field_0x72C = parent->shape_angle.y - 0x4000;
+        }
+        field_0x728 = field_0x72C;
+    } else {
+        field_0x72C = field_0x728;
+    }
+    field_0x73C |= 2;
 }
 
 /* 000019E0-00001A74       .text eventAttentionInit__9daNpcSv_cFi */
@@ -572,8 +642,49 @@ u16 daNpcSv_c::talk2(int, fopAc_ac_c*) {
 }
 
 /* 00001CF0-00001DC8       .text next_msgStatus__9daNpcSv_cFPUl */
-u16 daNpcSv_c::next_msgStatus(u32*) {
-    /* Nonmatching */
+u16 daNpcSv_c::next_msgStatus(u32* i_msgNo) {
+    u16 msgStatus = fopMsgStts_MSG_CONTINUES_e;
+    switch (*i_msgNo) {
+        case 0:
+            msgStatus = fopMsgStts_MSG_ENDS_e;
+            break;
+        default:
+            if (mpMsgNo != NULL) {
+                mpMsgNo++;
+                switch (*mpMsgNo) {
+                    case 1:
+                        msgStatus = fopMsgStts_MSG_ENDS_e;
+                        break;
+                    case 2:
+                        field_0x747 = 2;
+                        msgStatus = fopMsgStts_MSG_ENDS_e;
+                        break;
+                    case 3:
+                        field_0x747 = 3;
+                        msgStatus = fopMsgStts_MSG_ENDS_e;
+                        break;
+                    case 4:
+                        field_0x747 = 4;
+                        msgStatus = fopMsgStts_MSG_ENDS_e;
+                        break;
+                    case 5:
+                        field_0x747 = 5;
+                        msgStatus = fopMsgStts_MSG_ENDS_e;
+                        break;
+                    case 0:
+                        mpMsgNo = NULL;
+                        msgStatus = fopMsgStts_MSG_ENDS_e;
+                        break;
+                    default:
+                        *i_msgNo = *mpMsgNo;
+                        break;
+                }
+            } else {
+                msgStatus = fopMsgStts_MSG_ENDS_e;
+            }
+            break;
+    }
+    return msgStatus;
 }
 
 /* 00001DC8-00001EB4       .text getMsg__9daNpcSv_cFv */
