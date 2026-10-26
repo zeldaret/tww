@@ -23,13 +23,13 @@ BOOL JAInter::SystemInterface::checkFileExsistence(char* param_1) {
 
 /* 8029E1B4-8029E2A0       .text checkSeqActiveFlag__Q27JAInter15SystemInterfaceFPQ28JASystem6TTrack */
 u8 JAInter::SystemInterface::checkSeqActiveFlag(JASystem::TTrack* param_1) {
-    if (param_1 && param_1->field_0x37e) {
+    if (param_1 && param_1->mActivity) {
         if (param_1->mChildren[0] || param_1->mChildren[1] || param_1->mChildren[2] || param_1->mChildren[3] ||
             param_1->mChildren[4] || param_1->mChildren[5] || param_1->mChildren[6] || param_1->mChildren[7] ||
             param_1->mChildren[8] || param_1->mChildren[9] || param_1->mChildren[10] || param_1->mChildren[11] ||
             param_1->mChildren[12] || param_1->mChildren[13] || param_1->mChildren[14] || param_1->mChildren[15]
         ) {
-            return param_1->field_0x37e;
+            return param_1->mActivity;
         }
         return 0;
     }
@@ -112,7 +112,7 @@ void JAInter::SystemInterface::outerInit(JAInter::SeqUpdateData* updateData, voi
         portArgs->mTrackDolby  = seqParam->mTrackDolbys[trackNo].mCurrentValue;
         portArgs->_20          = 0;
         portArgs->mFlags       = 0x7F;
-        seqP->muteTrack(seqParam->mMuteBits[trackNo].flag1);
+        seqP->muteTrack(seqParam->mMuteBits[trackNo].getBitNow());
     }
 
     outerParam->onSwitch(OUTERPARAM_Volume);

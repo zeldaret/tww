@@ -50,7 +50,7 @@ JAIBasic::JAIBasic() {
     initLoadFileSw = 2;
     mInitOnCodeSeScene = NULL;
     field_0x8 = NULL;
-    field_0x18 = 0;
+    mInitDataInfo = NULL;
     msCurrentHeap = JASDram;
 }
 

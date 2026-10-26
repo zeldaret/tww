@@ -80,20 +80,6 @@ namespace JAInter {
         /* 0x4C */ PlayerParameter* systemTrackParameter;
     };
 
-    class MuteBit {
-    public:
-        MuteBit();
-
-        u8 flag1 : 1;
-        u8 flag2 : 1;
-        u8 flag3 : 1;
-        u8 flag4 : 1;
-        u8 flag5 : 1;
-        u8 flag6 : 1;
-        u8 flag7 : 1;
-        u8 flag8 : 1;
-    };
-
     class SeqParameter {
     public:
         void init() {

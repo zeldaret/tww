@@ -16,6 +16,7 @@ u16* JAInter::SoundTable::mSoundMax;
 u32 JAInter::SoundTable::mDatasize;
 SoundInfo** JAInter::SoundTable::mPointerCategory;
 u8* JAInter::SoundTable::mAddress;
+// TODO: The mAddress reads in this file should probably use a struct?
 
 /* 8029B570-8029B6FC       .text init__Q27JAInter10SoundTableFPUcUl */
 void JAInter::SoundTable::init(u8* param_1, u32 param_2) {

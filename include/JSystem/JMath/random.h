@@ -52,6 +52,10 @@ public:
     u8 get_uint8(u8 param_0) {
         return this->get_ufloat_1() * param_0;
     }
+
+    u32 get_uint32(u32 param_0) {
+        return this->get_ufloat_1() * param_0;
+    }
 };
 
 }  // namespace JMath

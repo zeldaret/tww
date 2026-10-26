@@ -1,6 +1,7 @@
 #ifndef JAISTREAMMGR_H
 #define JAISTREAMMGR_H
 
+#include "JSystem/JAudio/JAISound.h"
 #include "dolphin/dvd/dvd.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JAudio/JAISoundParams.h"
@@ -18,8 +19,18 @@ namespace JASystem {
 namespace JAInter {
     class Actor;
     
-    struct streamUpdate_t {
-        streamUpdate_t() { mpSound = NULL; }
+    struct StreamUpdateData {
+        StreamUpdateData() { mpSound = NULL; }
+
+        void init() {
+            field_0x0 = 0;
+            field_0x1 = 0;
+            field_0x4 = 1.0f;
+            field_0x8 = 1.0f;
+            field_0xc = 0.5f;
+            mActiveTrackFlag = SOUNDACTIVE_Unk0;
+            mpSound = NULL;
+        }
         
         /* 0x00 */ u8 field_0x0;
         /* 0x01 */ u8 field_0x1;
@@ -64,7 +75,7 @@ namespace JAInter {
         /* 0x014 */ JAInter::MoveParaSet mVolumes[20];
         /* 0x154 */ JAInter::MoveParaSet* pitch;
         /* 0x158 */ JAInter::MoveParaSet* pan;
-        /* 0x15C */ streamUpdate_t* mUpdateData;
+        /* 0x15C */ StreamUpdateData* mUpdateData;
     };
 
     namespace StreamMgr {
@@ -78,25 +89,42 @@ namespace JAInter {
         void checkPlayingStream();
 
         struct flags_t {
-            u8 flag1 : 1;
-            u8 flag2 : 1;
-            u8 flag3 : 1;
-            u8 flag4 : 1;
-            u8 flag5 : 1;
-            u8 flag6 : 1;
-            u8 flag7 : 1;
-            u8 flag8 : 1;
-            u8 flag9 : 1;
+            u16 flag1 : 1;
+            u16 flag2 : 1;
+            u16 flag3 : 1;
+            u16 flag4 : 1;
+            u16 flag5 : 1;
+            u16 flag6 : 1;
+            u16 flag7 : 1;
+            u16 flag8 : 1;
+            u16 flag9 : 1;
         };
 
         extern LinkSound streamControl;
         extern flags_t flags;
-        extern streamUpdate_t* streamUpdate;
+        extern StreamUpdateData* streamUpdate;
         extern streamList_t* streamList;
-        extern streamList_t* initOnCodeStrm;
+        extern void* initOnCodeStrm;
 
-        inline streamUpdate_t* getUpdateInfo() { return streamUpdate; }
+        inline StreamUpdateData* getUpdateInfo() { return streamUpdate; }
     }
+
+    struct StreamHeaderInner { // fake name
+        int field_0x00;
+        int field_0x04;
+    };
+
+    struct StreamHeader_ {
+        int field_0x0;
+        int field_0x4;
+        u16 field_0x8;
+        u16 field_0xa;
+        u16 field_0xc;
+        u16 field_0xe;
+        u32 field_0x10;
+        u32 field_0x14;
+        StreamHeaderInner field_0x18;
+    };
 
     namespace StreamLib {
         void Play_DirectPCM(JASystem::TDSPChannel*, s16*, u16, u32, s16, u16);
@@ -130,27 +158,10 @@ namespace JAInter {
         void __start();
         s32 callBack(void* param_1);
 
-        struct StreamHeaderInner {
-            int field_0x00;
-            int field_0x04;
-        };
-
-        struct StreamHeader {
-            int field_0x0;
-            int field_0x4;
-            u16 field_0x8;
-            u16 field_0xa;
-            u16 field_0xc;
-            u16 field_0xe;
-            u32 field_0x10;
-            u32 field_0x14;
-            StreamHeaderInner field_0x18;
-        };
-
         extern s16 filter_table[];
         extern s16 table4[];
         extern DVDFileInfo finfo;
-        extern StreamHeader header;
+        extern StreamHeader_ header;
         extern char Filename[];
         extern JASystem::Kernel::TSolidHeap streamHeap;
         extern u32 LOOP_BLOCKS;

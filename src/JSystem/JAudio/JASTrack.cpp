@@ -32,7 +32,7 @@ JASystem::TTrack::TTrack() {
     field_0x37b = 0;
     mPauseStatus = 0;
     mVolumeMode = 0;
-    field_0x37e = 0;
+    mActivity = 0;
     mIsPaused = 0;
     field_0x386 = 0;
     field_0x387 = 0;
@@ -81,7 +81,7 @@ void JASystem::TTrack::init() {
     field_0x37b = 0;
     mPauseStatus = 10;
     mVolumeMode = 0;
-    field_0x37e = 0;
+    mActivity = 0;
     for (int i = 0; i < 3; i++) {
         mCalcTypes[i] = 0;
         mParentCalcTypes[i] = 0;
@@ -175,7 +175,7 @@ lab_19c:
     }
     for (int i = 0; i < 16; i++) {
         TTrack* child = mChildren[i];
-        if (child && child->field_0x37e) {
+        if (child && child->mActivity) {
             JUT_ASSERT(276, this == child->mParent);
             if (child->mainProc() == -1) {
                 child->close();
@@ -762,7 +762,7 @@ void JASystem::TTrack::updateTempo() {
 
     for (s32 i = 0; i < MAX_CHILDREN; i++) {
         TTrack* child = mChildren[i];
-        if (child && child->field_0x37e) {
+        if (child && child->mActivity) {
             JUT_ASSERT(1159, this == child->mParent);
             child->updateTempo();
         }
@@ -786,7 +786,7 @@ void JASystem::TTrack::updateSeq(u32 flags, bool update_children) {
 
     for (s32 i = 0; i < MAX_CHILDREN; i++) {
         TTrack* child = mChildren[i];
-        if (child && child->field_0x37e) {
+        if (child && child->mActivity) {
             if (update_children) {
                 child->updateSeq(new_flags, update_children);
             } else {
@@ -834,13 +834,13 @@ bool JASystem::TTrack::setSeqData(u8* param_1, s32, int) {
     field_0x37b = 3;
     mSeqCtrl.start(param_1, 0);
     updateTrackAll();
-    field_0x37e = 2;
+    mActivity = 2;
     return true;
 }
 
 /* 802827F0-802828A8       .text startSeq__Q28JASystem6TTrackFv */
 bool JASystem::TTrack::startSeq() {
-    switch (field_0x37e) {
+    switch (mActivity) {
         case 0:
             // Not ready
             OSReport("in Player StartSeq:   準備ができていません\n");
@@ -854,7 +854,7 @@ bool JASystem::TTrack::startSeq() {
             OSReport("in Player StartSeq: 停止中です\n");
             return false;
         case 2:
-            field_0x37e = 1;
+            mActivity = 1;
             break;
     }
 
@@ -864,17 +864,17 @@ bool JASystem::TTrack::startSeq() {
 
 /* 802828A8-80282908       .text stopSeq__Q28JASystem6TTrackFv */
 bool JASystem::TTrack::stopSeq() {
-    switch (field_0x37e) {
+    switch (mActivity) {
         case 0:
             break;
         case 2:
-            field_0x37e = 0;
-            if (field_0x389 != 0 && this != NULL) {
+            mActivity = 0;
+            if (field_0x389 != 0) {
                 delete this;
             }
             break;
         default:
-            field_0x37e = 3;
+            mActivity = 3;
             break;
     }
     return true;
@@ -902,12 +902,12 @@ void JASystem::TTrack::noteOffAll() {
 
 /* 802829DC-80282A90       .text close__Q28JASystem6TTrackFv */
 int JASystem::TTrack::close() {
-    if (field_0x37e == 0) {
+    if (mActivity == 0) {
         return 0;
     }
 
     noteOffAll();
-    field_0x37e = 0;
+    mActivity = 0;
 
     for (s32 i = 0; i < MAX_CHILDREN; i++) {
         if (mChildren[i]) {
@@ -918,7 +918,7 @@ int JASystem::TTrack::close() {
 
     field_0x386 = 0;
     releaseChannelAll();
-    if (field_0x389 != 0 && this != NULL) {
+    if (field_0x389 != 0) {
         delete this;
     }
     return 0;
@@ -945,7 +945,7 @@ void JASystem::TTrack::muteTrack(bool mute) {
 /* 80282B44-80282B84       .text start__Q28JASystem6TTrackFPvUl */
 bool JASystem::TTrack::start(void* param_1, u32 param_2) {
     mSeqCtrl.start(param_1, param_2);
-    field_0x37e = 1;
+    mActivity = 1;
     updateTrackAll();
     return false;
 }
@@ -1059,7 +1059,7 @@ u16 JASystem::TTrack::readReg16(u8 target) {
             result = 0;
             for (i = MAX_CHILDREN - 1; i >= 0; i--) {
                 result <<= 1;
-                if (mChildren[i] && mChildren[i]->field_0x37e != 0) {
+                if (mChildren[i] && mChildren[i]->mActivity != 0) {
                     result |= 1;
                 }
             }
@@ -1413,7 +1413,7 @@ void JASystem::TTrack::pause(bool pause, bool pause_children) {
     if (pause_children) {
         for (s32 i = 0; i < MAX_CHILDREN; i++) {
             TTrack* child = mChildren[i];
-            if (child && child->field_0x37e) {
+            if (child && child->mActivity) {
                 JUT_ASSERT(2109, this == child->mParent);
                 child->pause(pause, true);
             }
@@ -1468,10 +1468,10 @@ s32 JASystem::TTrack::rootCallback(void* user_data) {
     if (track == NULL) {
         return -1;
     }
-    if (track->field_0x37e == 0) {
+    if (track->mActivity == 0) {
         return -1;
     }
-    if (track->field_0x37e == 3) {
+    if (track->mActivity == 3) {
         track->stopSeqMain();
         return -1;
     }

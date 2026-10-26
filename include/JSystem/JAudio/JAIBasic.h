@@ -72,6 +72,9 @@ public:
     bool checkAllWaveLoadStatus() {
         return JAInter::BankWave::checkAllWaveLoadStatus();
     }
+    s32 getSceneSetFlag() {
+        return JAInter::BankWave::SceneSetFlag;
+    }
 
     // this might be wrong, it matches but the size doesn't seem to match the debug map
     u32 checkEnablePrepare(u32 soundID) { return (soundID & JAISoundID_TypeMask); }
@@ -89,14 +92,14 @@ public:
     void setInitOnCodeSeScene(u32* param_0) { mInitOnCodeSeScene = param_0; }
     void addInitOnCodeSeScene(u32 i, u32 param_1) { mInitOnCodeSeScene[i] += param_1; }
 
+    void setInitDataInfo(char* i_initData) { mInitDataInfo = i_initData; }
+
     // TODO
     void getInitDataInfo() {}
-    void getSceneSetFlag() {}
     void getSeSoundHandle() {}
     void getWaveLoadStatus(s32) {}
     void initAudio(JKRSolidHeap*, u32, u8) {}
     void loadSceneWave(s32, s32) {}
-    void setInitDataInfo(char*) {}
 
     static JAIBasic* msBasic;
     static JKRSolidHeap* msCurrentHeap;
@@ -118,7 +121,7 @@ public:
     } field_0xe;
     /* 0x10 */ int field_0x10;
     /* 0x14 */ int field_0x14;
-    /* 0x18 */ void* field_0x18;
+    /* 0x18 */ char* mInitDataInfo;
     /* 0x1C */ u32* mInitOnCodeSeScene;
 };
 

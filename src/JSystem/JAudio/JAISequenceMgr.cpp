@@ -22,12 +22,6 @@ JAInter::SeqUpdateData* JAInter::SequenceMgr::seqTrackInfo;
 JAISound** JAInter::SequenceMgr::FixSeqBufPointer;
 JKRArchive* JAInter::SequenceMgr::arcPointer;
 
-// fake inline - see below
-static inline u32 toUnsigned(int n) {
-    const u32& u = n;
-    return u;
-}
-
 /* 80295684-802960A0       .text init__Q27JAInter11SequenceMgrFv */
 void JAInter::SequenceMgr::init() {
     JAISound* soundObjects = JAIBasic::getInterface()->makeSound(JAIGlobalParameter::getParamSeqControlBufferMax());
@@ -37,8 +31,7 @@ void JAInter::SequenceMgr::init() {
 
     seqControl.init(soundObjects, JAIGlobalParameter::getParamSeqControlBufferMax());
 
-    // TODO: toUnsigned fakematch to fix regalloc
-    for (u32 i = 0; i < toUnsigned(JAIGlobalParameter::getParamSeqControlBufferMax()); i++) {
+    for (u32 i = 0; i < JAIGlobalParameter::getParamSeqControlBufferMax(); i++) {
         SeqParameter* _para = new (JAIBasic::getCurrentJAIHeap(), 0x20) SeqParameter();
         JUT_ASSERT_MSG(47, _para, "JAISequenceMgr::initHeap Cannot Alloc Heap!!\n");
         seqControl.Buffer[i].setCustomParameterPointer(_para);
@@ -292,7 +285,7 @@ void JAInter::SequenceMgr::checkReadSeq() {
             continue;
         }
         SeqParameter* seqParam = info->mpSequence->getSeqParameter();
-        if (seqParam->mTrack.field_0x37e) {
+        if (seqParam->mTrack.getActivity()) {
             continue;
         }
 
@@ -328,14 +321,14 @@ void JAInter::SequenceMgr::checkSeqWave() {
             continue;
         }
 
-        if (BankWave::SceneSetFlag == 0xFFFFFFFF) {
+        if (JAIBasic::getInterface()->getSceneSetFlag() == 0xFFFFFFFF) {
             continue;
         }
 
         u32 flag = (*seqSlot)->getSeqParameter()->field_0x1264;
-        if (flag != BankWave::SceneSetFlag && flag != 0xFF00FF00) {
-            if ((flag & 0xFFFF0000) != (BankWave::SceneSetFlag & 0xFFFF0000) || flag != 0xFFFF) {
-                if ((flag & 0xFFFF) != (BankWave::SceneSetFlag & 0xFFFF)) {
+        if (flag != JAIBasic::getInterface()->getSceneSetFlag() && flag != 0xFF00FF00) {
+            if ((flag & 0xFFFF0000) != (JAIBasic::getInterface()->getSceneSetFlag() & 0xFFFF0000) || flag != 0xFFFF) {
+                if ((flag & 0xFFFF) != (JAIBasic::getInterface()->getSceneSetFlag() & 0xFFFF)) {
                     continue;
                 }
                 if (flag != 0xFFFF0000) {
@@ -574,12 +567,12 @@ void JAInter::SequenceMgr::checkPlayingSeqTrack(u32 playTrackNo) {
     if (data->mActiveTrackFlag & SOUNDACTIVE_Unk6) {
         data->mActiveTrackFlag ^= SOUNDACTIVE_Unk6;
         for (u8 i = 0; i < JAIGlobalParameter::getParamSeqTrackMax(); i++) {
-            if ((bool)param->mMuteBits[i].flag3 == true && (bool)param->mMuteBits[i].flag1 != (bool)param->mMuteBits[i].flag2) {
+            if (param->mMuteBits[i].getBitUpdate() == true && param->mMuteBits[i].getBitNow() != param->mMuteBits[i].getBitTarget()) {
                 JASystem::TTrack* seqP = SystemInterface::trackToSeqp(data->mpSequence, i);
                 if (seqP) {
-                    seqP->muteTrack(param->mMuteBits[i].flag2);
+                    seqP->muteTrack(param->mMuteBits[i].getBitTarget());
                 }
-                param->mMuteBits[i].flag1 = (bool)param->mMuteBits[i].flag2;
+                param->mMuteBits[i].setBitNow(param->mMuteBits[i].getBitTarget());
             }
         }
     }
@@ -647,10 +640,6 @@ void JAInter::SequenceMgr::stopSeq(JAISound* i_sequence) {
 }
 
 /* 80297F14-80297FD0       .text checkDvdLoadArc__Q27JAInter11SequenceMgrFUlUl */
-#pragma push
-// probably a fakematch, can't figure out another way to prevent
-// JAIBasic::getInterface from being inlined though
-#pragma dont_inline on
 void JAInter::SequenceMgr::checkDvdLoadArc(u32 param_1, u32 param_2) {
     u32 seqNo = param_2 & 0xFF;
     u32 offset = (param_2 >> 16) & 0x3FF;
@@ -663,9 +652,9 @@ void JAInter::SequenceMgr::checkDvdLoadArc(u32 param_1, u32 param_2) {
     if (seqNo < 0xFE) {
         JAISound* seq = seqTrackInfo[seqNo].mpSequence;
         seqTrackInfo[seqNo].field_0x3 = 0;
-        if (seq != NULL && seq->mStatus == SOUNDSTATE_Stored &&
-            offset == JAIBasic::getInterface()->getSoundOffsetNumberFromID(seq->mSoundID)) {
-            seq->mStatus = SOUNDSTATE_Loaded;
+        if (seq != NULL && seq->getStatus() == SOUNDSTATE_Stored &&
+            offset == JAIBasic::getInterface()->getInterface()->getSoundOffsetNumberFromID(seq->mSoundID)) {
+            seq->setStatus(SOUNDSTATE_Loaded);
         } else {
             HeapMgr::releaseAutoHeapPointer(heapIdx);
         }
@@ -673,7 +662,6 @@ void JAInter::SequenceMgr::checkDvdLoadArc(u32 param_1, u32 param_2) {
         HeapMgr::releaseAutoHeapPointer(heapIdx);
     }
 }
-#pragma pop
 
 /* 80297FD0-80298208       .text storeSeqBuffer__Q27JAInter11SequenceMgrFPP8JAISoundPQ27JAInter5ActorUlUlUcPv */
 void JAInter::SequenceMgr::storeSeqBuffer(JAISound** soundHandlePtr, JAInter::Actor* actor, u32 soundID, u32 param_4, u8 param_5, void* param_6) {
@@ -759,10 +747,4 @@ void JAInter::SequenceMgr::releaseSeqBuffer(JAISound* i_sound, u32 fadeTime) {
 /* 802982C0-802982D0       .text getPlayTrackInfo__Q27JAInter11SequenceMgrFUl */
 JAInter::SeqUpdateData* JAInter::SequenceMgr::getPlayTrackInfo(u32 param_1) {
     return &seqTrackInfo[param_1];
-}
-
-/* 802982D0-802982F0       .text __ct__Q27JAInter7MuteBitFv */
-JAInter::MuteBit::MuteBit() {
-    flag1 = 0;
-    flag3 = 0;
 }
