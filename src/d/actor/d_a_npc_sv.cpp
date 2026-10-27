@@ -430,7 +430,7 @@ bool daNpcSv_c::_draw() {
 }
 
 /* 00000DAC-00000F90       .text _execute__9daNpcSv_cFv */
-BOOL daNpcSv_c::_execute() {
+bool daNpcSv_c::_execute() {
     fopAc_ac_c* parent;
     fopAcM_SearchByID(parentActorID, &parent);
     chkAttention();
@@ -461,7 +461,7 @@ BOOL daNpcSv_c::_execute() {
     eyePos.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].field_0x28, current.pos.z);
     lookBack();
     setMtx();
-    return FALSE;
+    return false;
 }
 
 /* 00000F90-00000FB8       .text executeCommon__9daNpcSv_cFv */
@@ -498,7 +498,83 @@ BOOL daNpcSv_c::executeWaitInit() {
 
 /* 00001080-0000131C       .text executeWait__9daNpcSv_cFv */
 void daNpcSv_c::executeWait() {
-    /* Nonmatching */
+    daObj_Ikada_c* parent;
+    fopAcM_SearchByID(parentActorID, (fopAc_ac_c**)&parent);
+
+    if (parent != NULL) {
+        if (!getNpcNo()) {
+            if (field_0x745) {
+                mEvtOrderType = 1;
+                if (field_0x745 != field_0x74A) {
+                    field_0x749 = 1;
+                }
+                parent->m1166 = 1;
+            } else {
+                mEvtOrderType = 0;
+                field_0x749 = 0;
+                parent->m1166 = 0;
+            }
+
+            if (field_0x749) {
+                setAnmTbl(&l_npc_anm_wait);
+            } else {
+                field_0x732 = parent->shape_angle.y;
+                current.angle.x = parent->shape_angle.x;
+                current.angle.z = parent->shape_angle.z;
+                field_0x741 = 2;
+                field_0x71C = 0;
+                m_jnt.setTrn();
+                setAnmTbl(&l_npc_anm_mawasi);
+            }
+            field_0x74A = field_0x745;
+        } else {
+            field_0x743 = 1;
+            if (parent->mCurMode == 8 || parent->mCurMode == 9 || parent->mCurMode == 5) {
+                field_0x732 = parent->shape_angle.y;
+                field_0x741 = 2;
+                field_0x71C = 0;
+                m_jnt.setTrn();
+            } else if (parent->mCurMode == 4 || parent->mCurMode == 6) {
+                if (parent->m1168 == 0) {
+                    field_0x732 = parent->shape_angle.y + 0x4000;
+                } else {
+                    field_0x732 = parent->shape_angle.y - 0x4000;
+                }
+                field_0x741 = 2;
+                field_0x71C = 0;
+                m_jnt.setTrn();
+            } else {
+                s16 angle;
+                if (parent->m1168 == 0) {
+                    angle = parent->shape_angle.y + 0x4000;
+                } else {
+                    angle = parent->shape_angle.y - 0x4000;
+                }
+
+                if (current.angle.y == angle) {
+                    field_0x6EC.set(parent->getCranePos());
+                    field_0x741 = 1;
+                    field_0x71C = 1;
+                    field_0x743 = 0;
+                } else {
+                    field_0x732 = angle;
+                    field_0x741 = 2;
+                    field_0x71C = 0;
+                    m_jnt.setTrn();
+                }
+            }
+
+            if (parent->mCurMode == 7) {
+                if (field_0x748 == 0) {
+                    field_0x748 = 1;
+                    setAnmTbl(l_npc_anm_sv1_tbl[1]);
+                }
+            } else if (field_0x748 == 1) {
+                field_0x748 = 0;
+                setAnmTbl(l_npc_anm_sv1_tbl[0]);
+            }
+        }
+    }
 }
 
 /* 0000131C-00001338       .text executeTalkInit__9daNpcSv_cFv */

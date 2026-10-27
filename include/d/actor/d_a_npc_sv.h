@@ -57,7 +57,7 @@ public:
     cPhs_State createInit();
     bool _delete();
     bool _draw();
-    BOOL _execute();
+    bool _execute();
     BOOL executeCommon();
     void executeSetMode(u8);
     BOOL executeWaitInit();

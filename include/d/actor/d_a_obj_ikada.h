@@ -18,9 +18,11 @@ public:
         PROC_EXEC_e = 1,
     };
 
-    void getCranePos() {}
+    cXyz getCranePos() {
+        return mCranePos;
+    }
     s32 getFrame() {
-        return m1154;
+        return mFrame;
     }
     void getMode() {}
     void getSvDirection() {}
@@ -125,7 +127,7 @@ public:
     /* 0x0462 */ u8 m0462[0x0464 - 0x0462];
     /* 0x0464 */ f32 mSplashScaleTimer;
     /* 0x0468 */ cXyz mTrackPos;
-    /* 0x0474 */ cXyz m0474;
+    /* 0x0474 */ cXyz mCranePos;
     /* 0x0480 */ dPa_followEcallBack mBombSmokeEasterEgg;
     /* 0x0494 */ csXyz mBombSmokeRot;
     /* 0x049A */ u8 m049A[0x049C - 0x049A];
@@ -163,7 +165,7 @@ public:
     /* 0x07D8 */ s32 m07D8;
     /* 0x07DC */ cXyz m07DC[200];
     /* 0x113C */ csXyz mJointRot[4];
-    /* 0x1154 */ s32 m1154;
+    /* 0x1154 */ s32 mFrame;
     /* 0x1158 */ s16 m1158;
     /* 0x115A */ s16 m115A;
     /* 0x115C */ s16 m115C;
