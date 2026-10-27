@@ -37,7 +37,7 @@ void JStage::TFog::JSGSetStartZ(f32) {
 
 /* 8026DE70-8026DE78       .text JSGGetEndZ__Q26JStage4TFogCFv */
 f32 JStage::TFog::JSGGetEndZ() const {
-    return FLOAT_MAX;
+    return FLT_MAX;
 }
 
 /* 8026DE78-8026DE7C       .text JSGSetEndZ__Q26JStage4TFogFf */

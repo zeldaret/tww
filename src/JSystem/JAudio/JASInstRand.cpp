@@ -10,8 +10,8 @@
 
 /* 80286B58-80286BF4       .text getY__Q28JASystem9TInstRandCFii */
 f32 JASystem::TInstRand::getY(int, int) const {
-    static JMath::TRandom_fast_ oRandom(0);
-    f32 tmp = (oRandom.get_ufloat_1() * 2.0f - 0.9999999f);
+    static JMath::TRandom_<JMath::TRandom_fast_> oRandom(0);
+    f32 tmp = oRandom.get_float(2.0f);
     tmp *= mWidth;
     return tmp + mBase;
 }

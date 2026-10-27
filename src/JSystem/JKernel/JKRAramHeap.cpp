@@ -52,7 +52,7 @@ JKRAramBlock* JKRAramHeap::alloc(u32 size, JKRAramHeap::EAllocMode allocationMod
 /* 802B55D8-802B5660       .text allocFromHead__11JKRAramHeapFUl */
 JKRAramBlock* JKRAramHeap::allocFromHead(u32 size) {
     u32 alignedSize = ALIGN_NEXT(size, 0x20);
-    u32 bestFreeSize = UINT32_MAX;
+    u32 bestFreeSize = UINT_MAX;
     JKRAramBlock* bestBlock = NULL;
 
     JSUList<JKRAramBlock>* list = &sAramList;

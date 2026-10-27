@@ -300,7 +300,7 @@ void daArrow_c::arrowShooting() {
     
     clrAtHitNormal();
     setAtHitPosBuff(&end);
-    mNearestHitDist = FLOAT_MAX;
+    mNearestHitDist = FLT_MAX;
 }
 
 /* 800D4D98-800D4DC0       .text arrowUseMp__9daArrow_cFv */

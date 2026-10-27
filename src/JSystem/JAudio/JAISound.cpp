@@ -517,7 +517,7 @@ void JAISound::setTrackPortData(u8 param_1, u8 param_2, u16 param_3) {
 
 /* 80299CD4-80299DE8       .text setSeInterRandomPara__8JAISoundFPfUlff */
 void JAISound::setSeInterRandomPara(f32* param_1, u32 param_2, f32 param_3, f32 param_4) {
-    u32 uVar3 = JAInter::Const::random.get_uint32(UINT32_MAX);
+    u32 uVar3 = JAInter::Const::random.get_uint32(UINT_MAX);
 
     u32 term = uVar3 / (param_2 * 2);
     f32 fVar2 = ((f32)(uVar3 - term * (param_2 * 2) + 1) - param_2) / 1000.0f;

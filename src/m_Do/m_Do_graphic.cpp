@@ -970,7 +970,7 @@ void blockenc(u8* block) {
         color_1_idx = 0; // r16
         if (color_num > 1) {
             r23 = 0;
-            r18 = INT32_MAX;
+            r18 = INT_MAX;
             for (; r23 < color_num*3 - 3; r23 += 3) {
                 c0[0] = colors[r23+0] * 30;
                 c0[1] = colors[r23+1] * 59;
@@ -993,7 +993,7 @@ void blockenc(u8* block) {
                         color_mags[3] = COLOR_SQUARE_MAG(c3[0], c3[1], c3[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
 
                         r5 = 0;
-                        u32 r6_r25 = INT32_MAX;
+                        u32 r6_r25 = INT_MAX;
                         for (; r5 < 4; r5++) {
                             if (color_mags[r5] < r6_r25) {
                                 r6_r25 = color_mags[r5];
@@ -1051,7 +1051,7 @@ void blockenc(u8* block) {
             color_mags[3] = COLOR_SQUARE_MAG(c3[0], c3[1], c3[2], block[offs1+0] * 30, block[offs1+1] * 59, block[offs1+2] * 11);
 
             r5 = r24 = 0;
-            u32 r6_r25 = INT32_MAX;
+            u32 r6_r25 = INT_MAX;
             for (; r5 < 4; r5++) {
                 if (color_mags[r5] < r6_r25) {
                     r6_r25 = color_mags[r5];
@@ -1089,7 +1089,7 @@ void blockenc(u8* block) {
         // color_1_idx = 0; // r16
         if (color_num > 1) {
             r23 = 0;
-            r18 = INT32_MAX;
+            r18 = INT_MAX;
             for (; r23 < color_num*3 - 3; r23 += 3) {
                 c0[0] = colors[r23+0] * 30;
                 c0[1] = colors[r23+1] * 59;
@@ -1109,7 +1109,7 @@ void blockenc(u8* block) {
                             color_mags[2] = COLOR_SQUARE_MAG(c2[0], c2[1], c2[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
 
                             r5 = 0;
-                            u32 r6_r25 = INT32_MAX;
+                            u32 r6_r25 = INT_MAX;
                             for (; r5 < 3; r5++) {
                                 if (color_mags[r5] < r6_r25) {
                                     r6_r25 = color_mags[r5];
@@ -1171,7 +1171,7 @@ void blockenc(u8* block) {
                 color_mags[2] = COLOR_SQUARE_MAG(c2[0], c2[1], c2[2], block[offs2+0] * 30, block[offs2+1] * 59, block[offs2+2] * 11);
 
                 r24 = r5 = 0;
-                u32 r6_r25 = INT32_MAX;
+                u32 r6_r25 = INT_MAX;
                 for (; r24 < 3; r24++) {
                     if (color_mags[r24] < r6_r25) {
                         r6_r25 = color_mags[r24];

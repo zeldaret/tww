@@ -12,7 +12,6 @@ const u32 MAX_PORTS = 16;
 
 /* 802842A8-802842E8       .text init__Q28JASystem10TTrackPortFv */
 void JASystem::TTrackPort::init() {
-    /* Nonmatching */
     for (int i = 0; i < 16; i++) {
         mImportFlag[i] = 0;
         mExportFlag[i] = 0;

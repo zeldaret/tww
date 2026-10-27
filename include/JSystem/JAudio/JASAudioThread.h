@@ -25,6 +25,9 @@ namespace JASystem {
         extern OSPriority sDVDPrio;
         extern vs32 snIntCount;
         extern int sbIsDSPBoot;
+
+        inline u32 getDSPSyncCount() { return snIntCount; }
+        inline void setDSPSyncCount(u32 count) { snIntCount = count; }
     };
 }
 

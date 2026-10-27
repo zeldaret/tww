@@ -92,7 +92,7 @@ f32 daYkgr_c::getPosRate() {
         return 0.0f;
     }
 
-    f32 fVar4 = FLOAT_MAX;
+    f32 fVar4 = FLT_MAX;
     fopAc_ac_c* player = dComIfGp_getPlayer(0);
     cXyz sp30 = player->current.pos;
     dPnt* pdVar7 = m_path->m_points;

@@ -38,7 +38,7 @@ BOOL JASTaskThread::sendCmdMsg(s32 (*param_1)(void*), void* param_2, u32 param_3
 void* JASTaskThread::run() {
     OSMessage msg;
     while (true) {
-        msg = waitMessageBlock();
+        msg = waitMessage();
         TCallStack* callStack = (TCallStack*)msg;
         if (mPaused) {
             OSSleepThread(&mQ);

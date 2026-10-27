@@ -14,7 +14,6 @@ JKRHeap* JASystem::TBank::sCurrentHeap;
 
 /* 80284548-8028455C       .text getCurrentHeap__Q28JASystem5TBankFv */
 JKRHeap* JASystem::TBank::getCurrentHeap() {
-    /* Nonmatching */
     if (sCurrentHeap) {
         return sCurrentHeap;
     }

@@ -17,8 +17,8 @@ dDemo_actor_c::dDemo_actor_c() {
     mScale.setall(1.0f);
     mRotate.setall(0);
     mModel = NULL;
-    mAnmFrameMax = FLOAT_MAX;
-    mTexAnimationFrameMax = FLOAT_MAX;
+    mAnmFrameMax = FLT_MAX;
+    mTexAnimationFrameMax = FLT_MAX;
 }
 
 /* 80069330-800693C0       .text __dt__13dDemo_actor_cFv */
@@ -238,7 +238,7 @@ void dDemo_actor_c::JSGSetShape(u32 id) {
 /* 80069CA4-80069CC0       .text JSGSetAnimation__13dDemo_actor_cFUl */
 void dDemo_actor_c::JSGSetAnimation(u32 no) {
     mAnmId = no;
-    mAnmFrameMax = FLOAT_MAX;
+    mAnmFrameMax = FLT_MAX;
     onEnable(ENABLE_ANM_e);
 }
 

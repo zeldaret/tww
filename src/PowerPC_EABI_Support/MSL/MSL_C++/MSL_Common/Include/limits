@@ -1,6 +1,9 @@
 #ifndef MSL_LIMITS
 #define MSL_LIMITS
 
+#include <climits>
+#include <float.h>
+
 namespace std {
 template <typename T>
 class numeric_limits {
@@ -63,6 +66,15 @@ class numeric_limits<unsigned long> {
 public:
 	inline static unsigned long min() { return 0x0; }
 	inline static unsigned long max() { return 0xFFFFFFFF; }
+};
+
+template <>
+class numeric_limits<float> {
+public:
+	inline static float min() { return FLT_MIN; }
+	inline static float max() { return FLT_MAX; }
+	inline static float epsilon() { return FLT_EPSILON; }
+	inline static float signaling_NaN();
 };
 
 } // namespace std

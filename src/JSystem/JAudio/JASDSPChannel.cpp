@@ -254,7 +254,7 @@ void JASystem::TDSPChannel::updateAll() {
         u32 var2;
         OSTick var3 = time - old_time;
         old_time = time;
-        var2 = Kernel::getSubFrames() - TAudioThread::snIntCount;
+        var2 = Kernel::getSubFrames() - TAudioThread::getDSPSyncCount();
         history[var2] = var3;
         if (var2) {
             if (f32(history[0]) / var3 < DSP_LIMIT_RATIO) {

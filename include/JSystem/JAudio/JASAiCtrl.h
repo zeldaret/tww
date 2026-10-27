@@ -32,7 +32,15 @@ namespace JASystem {
         extern s16* (*extMixCallback)(s32);
         extern u8 extMixMode;
 
-        inline void JASAiMixLimit16(s32) {} // TODO
+        inline s16 JASAiMixLimit16(s32 val) {
+            if (val < -0x8000) {
+                return -0x7fff;
+            } else if (val > 0x7fff) {
+                return 0x7fff;
+            } else {
+                return val;
+            }
+        }
     }
 }
 

@@ -3,12 +3,14 @@
 
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTGamePad.h"
+#include "dolphin/gx/GX.h"
 #include "stdarg.h"
 #include "dolphin/gx/GXEnum.h"
 #include "dolphin/os/OSError.h"
 #include "global.h"
 
 class JUTDirectPrint;
+class JUTConsole;
 
 class JUTExternalFB {
 public:

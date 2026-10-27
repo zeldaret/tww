@@ -825,7 +825,7 @@ bool daNpc_Nz_c::_execute() {
     TailControl();
     mAcch.CrrPos(*dComIfG_Bgsp());
     mpBait = NULL;
-    field_0x910 = FLOAT_MAX;
+    field_0x910 = FLT_MAX;
     setMtx();
 
     return false;

@@ -14,7 +14,6 @@
 #include "JSystem/JAudio/JAISoundTable.h"
 #include "JSystem/JAudio/JAISystemInterface.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "limits.h"
 #include "math.h"
 #include "dolphin/mtx/mtxvec.h"
 

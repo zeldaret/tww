@@ -25,7 +25,7 @@ void dEnvSe_getNearPathPos(cXyz* r30, cXyz* r31, dPath* r26) {
     BOOL spc[2] = {FALSE, FALSE};
     cXyz sp30[2];
     f32 sp8;
-    f32 f31 = FLOAT_MAX;
+    f32 f31 = FLT_MAX;
     dPnt* point = r26->m_points;
     cM3dGLin lin;
     
@@ -94,7 +94,7 @@ BOOL dEnvSe_c::execute() {
             }
             mDoAud_seaEnvSePlay(sound_data->field_0x14);
         } else if (sound_data->field_0x17 == 1) {
-            f32 f31 = FLOAT_MAX;
+            f32 f31 = FLT_MAX;
             int r27;
             mPos = sp2c;
             path = dPath_GetRoomPath(sound_data->field_0x18, roomNo);
@@ -131,7 +131,7 @@ BOOL dEnvSe_c::execute() {
             }
             mDoAud_riverSePlay(sound_data->field_0x14, dComIfGp_getReverb(roomNo));
         } else if (sound_data->field_0x17 == 3) {
-            f32 f31 = FLOAT_MAX;
+            f32 f31 = FLT_MAX;
             mPos = sp2c;
             path = dPath_GetRoomPath(sound_data->field_0x18, roomNo);
             while (path != NULL) {

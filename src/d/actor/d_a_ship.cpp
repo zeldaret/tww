@@ -999,7 +999,7 @@ BOOL daShip_c::checkOutRange() {
             } 
         }
 
-        f32 minDist = FLOAT_MAX;
+        f32 minDist = FLT_MAX;
         
         for (int i = 0; i < path->m_num; pnt++, i++) {
             f32 dx = current.pos.x - pnt->m_position.x;
