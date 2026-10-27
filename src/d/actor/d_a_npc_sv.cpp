@@ -622,8 +622,18 @@ void daNpcSv_c::eventSetAngleInit() {
 }
 
 /* 000019E0-00001A74       .text eventAttentionInit__9daNpcSv_cFi */
-void daNpcSv_c::eventAttentionInit(int) {
-    /* Nonmatching */
+void daNpcSv_c::eventAttentionInit(int i_staffIdx) {
+    int* timer = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
+    if (timer != NULL) {
+        field_0x72A = *timer;
+    } else {
+        field_0x72A = 0xC;
+    }
+    field_0x748 = 0;
+
+    if (getNpcNo() == 2) {
+        dComIfGp_event_setTalkPartner(this);
+    }
 }
 
 /* 00001A74-00001BC8       .text eventAttention__9daNpcSv_cFv */
@@ -689,7 +699,25 @@ u16 daNpcSv_c::next_msgStatus(u32* i_msgNo) {
 
 /* 00001DC8-00001EB4       .text getMsg__9daNpcSv_cFv */
 u32 daNpcSv_c::getMsg() {
-    /* Nonmatching */
+    u32 msgNo = 0;
+    mpMsgNo = NULL;
+    if (!dComIfGp_event_chkTalkXY()) {
+        mpMsgNo = l_msg_sv_talk_tbl[mTalkNo];
+        mTalkFlags |= l_msg_sv_flag_tbl[mTalkNo];
+
+        if (mTalkFlags & 0x10) {
+            dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F80);
+        }
+    }
+
+    if (mpMsgNo != NULL) {
+        msgNo = *mpMsgNo;
+    }
+    if (msgNo == 0) {
+        setAnmTbl(&l_npc_anm_talk);
+    }
+
+    return msgNo;
 }
 
 /* 00001EB4-00001EBC       .text setMessage__9daNpcSv_cFUl */
