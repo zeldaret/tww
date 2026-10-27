@@ -57,7 +57,7 @@ public:
     cPhs_State createInit();
     bool _delete();
     bool _draw();
-    bool _execute();
+    BOOL _execute();
     BOOL executeCommon();
     void executeSetMode(u8);
     BOOL executeWaitInit();
@@ -107,7 +107,7 @@ private:
     /* 0x70C */ f32 mAnmMorfOverride;
     /* 0x710 */ f32 field_0x710;
     /* 0x714 */ u32 field_0x714;
-    /* 0x718 */ u32 field_0x718;
+    /* 0x718 */ s32 mIkadaFrame;
     /* 0x71C */ u8 field_0x71C;
     /* 0x71D */ u8 field_0x71D;
     /* 0x71E */ s16 field_0x71E[3];

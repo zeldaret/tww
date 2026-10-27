@@ -19,7 +19,9 @@ public:
     };
 
     void getCranePos() {}
-    void getFrame() {}
+    s32 getFrame() {
+        return m1154;
+    }
     void getMode() {}
     void getSvDirection() {}
     bool isBonbori() { return mType == 3 || mType == 1; }

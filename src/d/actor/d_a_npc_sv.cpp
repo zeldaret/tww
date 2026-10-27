@@ -5,6 +5,7 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_sv.h"
+#include "d/actor/d_a_obj_ikada.h"
 #include "d/d_com_lib_game.h"
 #include "res/Object/Sv.h"
 
@@ -232,7 +233,7 @@ daNpcSv_c::daNpcSv_c() {
     field_0x728 = home.angle.y;
     mBckIdx = 0;
     mTalkFlags = 0;
-    field_0x718 = 0;
+    mIkadaFrame = 0;
 
     if (dComIfGs_checkGetItem(dItemNo_COLLECT_MAP_26_e)) {
         mTalkFlags |= TALK_FLAG_GOT_CHART;
@@ -429,8 +430,38 @@ bool daNpcSv_c::_draw() {
 }
 
 /* 00000DAC-00000F90       .text _execute__9daNpcSv_cFv */
-bool daNpcSv_c::_execute() {
-    /* Nonmatching */
+BOOL daNpcSv_c::_execute() {
+    fopAc_ac_c* parent;
+    fopAcM_SearchByID(parentActorID, &parent);
+    chkAttention();
+    checkOrder();
+
+    dEvt_control_c* event = g_dComIfG_gameInfo.play.getEvent();
+    if (event->getMode() == 0) {
+        (this->*moveProc[mMoveState])();
+    } else {
+        eventMove();
+    }
+
+    eventOrder();
+
+    if (!getNpcNo() && mBckIdx == 5) {
+        mpMorf->setFrame(mIkadaFrame);
+    } else {
+        playAnm();
+    }
+
+    if (parent != NULL) {
+        mIkadaFrame = static_cast<daObj_Ikada_c*>(parent)->getFrame();
+    }
+
+    mObjAcch.CrrPos(*dComIfG_Bgsp());
+    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].field_0x38, l_npc_dat[getNpcNo()].field_0x3C);
+    attention_info.position.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].field_0x24, current.pos.z);
+    eyePos.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].field_0x28, current.pos.z);
+    lookBack();
+    setMtx();
+    return FALSE;
 }
 
 /* 00000F90-00000FB8       .text executeCommon__9daNpcSv_cFv */
