@@ -105,7 +105,7 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
                     TBasicInst::TVeloRegion* instVeloRegion = instKeymap->getVeloRegion(k);
                     TVmap* vmapRaw = keymapRaw->mVmapOffsets[k].ptr(header);
                     instVeloRegion->mBaseVel = vmapRaw->field_0x0;
-                    instVeloRegion->field_0x04 = vmapRaw->field_0x4 & 0xFFFF;
+                    instVeloRegion->field_0x04 = JSULoHalf(vmapRaw->field_0x4);
                     instVeloRegion->field_0x08 = vmapRaw->field_0x8;
                     instVeloRegion->field_0x0c = vmapRaw->field_0xC;
                 }
@@ -147,7 +147,7 @@ JASystem::TBasicBank* JASystem::BNKParser::createBasicBank(void* stream) {
                         TBasicInst::TVeloRegion* instVeloRegion = drumSetPerc->getVeloRegion(k);
                         TVmap* vmapRaw = pmapRaw->mVeloRegionOffsets[k].ptr(header);
                         instVeloRegion->mBaseVel = vmapRaw->field_0x0;
-                        instVeloRegion->field_0x04 = vmapRaw->field_0x4 & 0xFFFF;
+                        instVeloRegion->field_0x04 = JSULoHalf(vmapRaw->field_0x4);
                         instVeloRegion->field_0x08 = vmapRaw->field_0x8;
                         instVeloRegion->field_0x0c = vmapRaw->field_0xC;
                     }

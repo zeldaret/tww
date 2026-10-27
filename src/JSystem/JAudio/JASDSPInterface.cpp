@@ -57,7 +57,7 @@ void JASystem::DSPInterface::clearBuffer() {
     }
 }
 
-u32 JASystem::DSPInterface::DOLBY2_DELAY_BUF[600];
+u32 ATTRIBUTE_ALIGN(32) JASystem::DSPInterface::DOLBY2_DELAY_BUF[600];
 
 /* 8028A240-8028A28C       .text setupBuffer__Q28JASystem12DSPInterfaceFv */
 void JASystem::DSPInterface::setupBuffer() {
