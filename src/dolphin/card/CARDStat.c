@@ -1,4 +1,5 @@
 #include "dolphin/card.h"
+#include <string.h>
 
 extern CARDDir* __CARDGetDirBlock(CARDControl* card);
 extern void __CARDSyncCallback(s32 chan, s32 result);

@@ -1,6 +1,5 @@
 #include "dolphin/card.h"
-
-extern u8 __CARDPermMask;
+#include <string.h>
 
 extern CARDDir* __CARDGetDirBlock(CARDControl* card);
 
