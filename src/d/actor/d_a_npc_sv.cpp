@@ -227,8 +227,8 @@ daNpcSv_c::daNpcSv_c() {
     mResFlag = 0;
     mMoveState = 0;
     mAnmMorfOverride = -1.0f;
-    field_0x741 = 0;
-    field_0x71C = 1;
+    mLookMode = 0;
+    mHeadOnlyFollow = 1;
     field_0x742 = 1;
     field_0x728 = home.angle.y;
     mBckIdx = 0;
@@ -518,11 +518,11 @@ void daNpcSv_c::executeWait() {
             if (field_0x749) {
                 setAnmTbl(&l_npc_anm_wait);
             } else {
-                field_0x732 = parent->shape_angle.y;
+                mLookAngleY = parent->shape_angle.y;
                 current.angle.x = parent->shape_angle.x;
                 current.angle.z = parent->shape_angle.z;
-                field_0x741 = 2;
-                field_0x71C = 0;
+                mLookMode = 2;
+                mHeadOnlyFollow = 0;
                 m_jnt.setTrn();
                 setAnmTbl(&l_npc_anm_mawasi);
             }
@@ -530,18 +530,18 @@ void daNpcSv_c::executeWait() {
         } else {
             field_0x743 = 1;
             if (parent->mCurMode == 8 || parent->mCurMode == 9 || parent->mCurMode == 5) {
-                field_0x732 = parent->shape_angle.y;
-                field_0x741 = 2;
-                field_0x71C = 0;
+                mLookAngleY = parent->shape_angle.y;
+                mLookMode = 2;
+                mHeadOnlyFollow = 0;
                 m_jnt.setTrn();
             } else if (parent->mCurMode == 4 || parent->mCurMode == 6) {
                 if (parent->m1168 == 0) {
-                    field_0x732 = parent->shape_angle.y + 0x4000;
+                    mLookAngleY = parent->shape_angle.y + 0x4000;
                 } else {
-                    field_0x732 = parent->shape_angle.y - 0x4000;
+                    mLookAngleY = parent->shape_angle.y - 0x4000;
                 }
-                field_0x741 = 2;
-                field_0x71C = 0;
+                mLookMode = 2;
+                mHeadOnlyFollow = 0;
                 m_jnt.setTrn();
             } else {
                 s16 angle;
@@ -553,13 +553,13 @@ void daNpcSv_c::executeWait() {
 
                 if (current.angle.y == angle) {
                     field_0x6EC.set(parent->getCranePos());
-                    field_0x741 = 1;
-                    field_0x71C = 1;
+                    mLookMode = 1;
+                    mHeadOnlyFollow = 1;
                     field_0x743 = 0;
                 } else {
-                    field_0x732 = angle;
-                    field_0x741 = 2;
-                    field_0x71C = 0;
+                    mLookAngleY = angle;
+                    mLookMode = 2;
+                    mHeadOnlyFollow = 0;
                     m_jnt.setTrn();
                 }
             }
@@ -627,7 +627,7 @@ void daNpcSv_c::eventMove() {
     if (dComIfGp_evmng_endCheck(field_0x71E[0]) || dComIfGp_evmng_endCheck(field_0x71E[1]) || dComIfGp_evmng_endCheck(field_0x71E[2])) {
         eventInfo.setEventId(field_0x71E[l_event_id_tbl[(getTalkNo() & 0xFF)]]);
         dComIfGp_event_onEventFlag(8);
-        field_0x73C &= ~2;
+        mCutFlags &= ~2;
         field_0x736 = 0;
         field_0x749 = 0;
         executeSetMode(0);
@@ -652,10 +652,65 @@ void daNpcSv_c::eventMove() {
 
 /* 00001570-00001744       .text privateCut__9daNpcSv_cFv */
 void daNpcSv_c::privateCut() {
-    /* Nonmatching */
     static char* cut_name_tbl[] = {
         "MES_SET", "GET_ITEM", "SET_ANGLE", "ATTENTION", "TURN_OK",
     };
+
+    int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[getNpcNo()]);
+    if (staffIdx != -1) {
+        mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 5, TRUE, 0);
+
+        if (mActIdx == -1) {
+            dComIfGp_evmng_cutEnd(staffIdx);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
+                switch (mActIdx) {
+                    case 0:
+                        eventMesSetInit(staffIdx);
+                        break;
+                    case 1:
+                        eventGetItemInit(staffIdx);
+                        break;
+                    case 2:
+                        eventSetAngleInit();
+                        break;
+                    case 3:
+                        eventAttentionInit(staffIdx);
+                        break;
+                    case 4:
+                        eventTurnOkInit();
+                        break;
+                }
+            }
+
+            bool endCut;
+            switch (mActIdx) {
+                case 0:
+                    endCut = eventMesSet();
+                    break;
+                case 1:
+                    endCut = eventGetItem();
+                    break;
+                case 3:
+                    endCut = eventAttention();
+                    break;
+                default:
+                    endCut = 1;
+                    break;
+            }
+
+            if (endCut) {
+                dComIfGp_evmng_cutEnd(staffIdx);
+            }
+        }
+    }
+
+    if ((mCutFlags & 2) != 0) {
+        mLookAngleY = mTargetAngleY;
+        mLookMode = 2;
+        mHeadOnlyFollow = 0;
+        m_jnt.setTrn();
+    }
 }
 
 /* 00001744-00001814       .text eventMesSetInit__9daNpcSv_cFi */
@@ -679,8 +734,8 @@ void daNpcSv_c::eventMesSetInit(int i_staffIdx) {
 }
 
 /* 00001814-0000184C       .text eventMesSet__9daNpcSv_cFv */
-BOOL daNpcSv_c::eventMesSet() {
-    return talk2(0, this) == fopMsgStts_BOX_CLOSED_e ? TRUE : FALSE;
+bool daNpcSv_c::eventMesSet() {
+    return talk2(0, this) == fopMsgStts_BOX_CLOSED_e ? true : false;
 }
 
 /* 0000184C-000018F0       .text eventGetItemInit__9daNpcSv_cFi */
@@ -717,15 +772,15 @@ void daNpcSv_c::eventSetAngleInit() {
         dNpc_calc_DisXZ_AngY(parent->current.pos, link->current.pos, NULL, &angle);
         angle -= parent->shape_angle.y;
         if (angle > 0) {
-            field_0x72C = parent->shape_angle.y + 0x4000;
+            mTargetAngleY = parent->shape_angle.y + 0x4000;
         } else {
-            field_0x72C = parent->shape_angle.y - 0x4000;
+            mTargetAngleY = parent->shape_angle.y - 0x4000;
         }
-        field_0x728 = field_0x72C;
+        field_0x728 = mTargetAngleY;
     } else {
-        field_0x72C = field_0x728;
+        mTargetAngleY = field_0x728;
     }
-    field_0x73C |= 2;
+    mCutFlags |= 2;
 }
 
 /* 000019E0-00001A74       .text eventAttentionInit__9daNpcSv_cFi */
@@ -744,7 +799,7 @@ void daNpcSv_c::eventAttentionInit(int i_staffIdx) {
 }
 
 /* 00001A74-00001BC8       .text eventAttention__9daNpcSv_cFv */
-void daNpcSv_c::eventAttention() {
+bool daNpcSv_c::eventAttention() {
     /* Nonmatching */
 }
 
