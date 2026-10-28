@@ -382,7 +382,7 @@ cPhs_State daNpcSv_c::createInit() {
         l_npc_dat[getNpcNo()].field_0x10
     );
 
-    field_0x743 = l_npc_dat[getNpcNo()].field_0x42;
+    mTurnOk = l_npc_dat[getNpcNo()].field_0x42;
     field_0x744 = l_npc_dat[getNpcNo()].field_0x43;
     field_0x710 = l_npc_dat[getNpcNo()].field_0x2C;
     field_0x726 = l_npc_dat[getNpcNo()].field_0x34;
@@ -528,7 +528,7 @@ void daNpcSv_c::executeWait() {
             }
             field_0x74A = field_0x745;
         } else {
-            field_0x743 = 1;
+            mTurnOk = 1;
             if (parent->mCurMode == 8 || parent->mCurMode == 9 || parent->mCurMode == 5) {
                 mLookAngleY = parent->shape_angle.y;
                 mLookMode = 2;
@@ -555,7 +555,7 @@ void daNpcSv_c::executeWait() {
                     field_0x6EC.set(parent->getCranePos());
                     mLookMode = 1;
                     mHeadOnlyFollow = 1;
-                    field_0x743 = 0;
+                    mTurnOk = 0;
                 } else {
                     mLookAngleY = angle;
                     mLookMode = 2;
@@ -565,12 +565,12 @@ void daNpcSv_c::executeWait() {
             }
 
             if (parent->mCurMode == 7) {
-                if (field_0x748 == 0) {
-                    field_0x748 = 1;
+                if (mKyoroFlag == 0) {
+                    mKyoroFlag = 1;
                     setAnmTbl(l_npc_anm_sv1_tbl[1]);
                 }
-            } else if (field_0x748 == 1) {
-                field_0x748 = 0;
+            } else if (mKyoroFlag == 1) {
+                mKyoroFlag = 0;
                 setAnmTbl(l_npc_anm_sv1_tbl[0]);
             }
         }
@@ -787,11 +787,11 @@ void daNpcSv_c::eventSetAngleInit() {
 void daNpcSv_c::eventAttentionInit(int i_staffIdx) {
     int* timer = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "Timer");
     if (timer != NULL) {
-        field_0x72A = *timer;
+        mAttnTimer = *timer;
     } else {
-        field_0x72A = 0xC;
+        mAttnTimer = 0xC;
     }
-    field_0x748 = 0;
+    mKyoroFlag = 0;
 
     if (getNpcNo() == 2) {
         dComIfGp_event_setTalkPartner(this);
@@ -800,17 +800,60 @@ void daNpcSv_c::eventAttentionInit(int i_staffIdx) {
 
 /* 00001A74-00001BC8       .text eventAttention__9daNpcSv_cFv */
 bool daNpcSv_c::eventAttention() {
-    /* Nonmatching */
+    if (mAttnTimer != 0) {
+        mAttnTimer--;
+        if (mAttnTimer == 0) {
+            daNpcSv_c* pSv0 = (daNpcSv_c*)fopAcM_searchFromName(l_npc_staff_id[0], 0, 0);
+            if (pSv0 != NULL) {
+                setAnmTbl(l_npc_anm_sv1_tbl[pSv0->mAttnAnmIdx]);
+                if (getNpcNo() == 1) {
+                    mDoAud_seStart(l_npc_se_sv1_tbl[pSv0->mAttnAnmIdx]);
+                }
+            } else {
+                setAnmTbl(l_npc_anm_sv1_tbl[2]);
+                mDoAud_seStart(l_npc_se_sv1_tbl[2]);
+            }
+        }
+    } else if ((mAnmFlag & 1) != 0) {
+        setAnmTbl(l_npc_anm_sv1_tbl[0]);
+        return true;
+    }
+    return false;
 }
 
 /* 00001BC8-00001BD4       .text eventTurnOkInit__9daNpcSv_cFv */
 void daNpcSv_c::eventTurnOkInit() {
-    field_0x743 = 1;
+    mTurnOk = 1;
 }
 
 /* 00001BD4-00001CF0       .text talk2__9daNpcSv_cFiP10fopAc_ac_c */
-u16 daNpcSv_c::talk2(int, fopAc_ac_c*) {
-    /* Nonmatching */
+u16 daNpcSv_c::talk2(int i_param, fopAc_ac_c* i_partner) {
+    u16 status = 0xFF;
+    if (mCurrMsgBsPcId == fpcM_ERROR_PROCESS_ID_e) {
+        if (i_param == 1) {
+            mCurrMsgNo = getMsg();
+        }
+        mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgNo, i_partner);
+        mpCurrMsg = NULL;
+    } else if (mpCurrMsg) {
+        status = mpCurrMsg->mStatus;
+        switch (status) {
+            case fopMsgStts_MSG_DISPLAYED_e:
+                mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
+                if (mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                    fopMsgM_messageSet(mCurrMsgNo);
+                }
+                break;
+            case fopMsgStts_BOX_CLOSED_e:
+                mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+                mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+                break;
+        }
+        anmAtr(status);
+    } else {
+        mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
+    }
+    return status;
 }
 
 /* 00001CF0-00001DC8       .text next_msgStatus__9daNpcSv_cFPUl */
@@ -828,19 +871,19 @@ u16 daNpcSv_c::next_msgStatus(u32* i_msgNo) {
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 2:
-                        field_0x747 = 2;
+                        mAttnAnmIdx = 2;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 3:
-                        field_0x747 = 3;
+                        mAttnAnmIdx = 3;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 4:
-                        field_0x747 = 4;
+                        mAttnAnmIdx = 4;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 5:
-                        field_0x747 = 5;
+                        mAttnAnmIdx = 5;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 0:
@@ -922,7 +965,17 @@ u8 daNpcSv_c::getPrmNpcNo() {
 
 /* 00001F94-0000209C       .text setMtx__9daNpcSv_cFv */
 void daNpcSv_c::setMtx() {
-    /* Nonmatching */
+    mpMorf->getModel()->setBaseScale(scale);
+
+    cXyz offset(l_npc_dat[getNpcNo()].field_0x14, l_npc_dat[getNpcNo()].field_0x18, l_npc_dat[getNpcNo()].field_0x1C);
+
+    mDoMtx_stack_c::YrotS(current.angle.y);
+    mDoMtx_stack_c::multVec(&offset, &offset);
+    mDoMtx_stack_c::transS(current.pos.x + offset.x, current.pos.y + offset.y, current.pos.z + offset.z);
+    mDoMtx_stack_c::XYZrotM(current.angle.x, 0, current.angle.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
 }
 
 /* 0000209C-000023D4       .text chkAttention__9daNpcSv_cFv */

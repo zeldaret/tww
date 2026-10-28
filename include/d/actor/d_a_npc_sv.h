@@ -114,7 +114,7 @@ private:
     /* 0x724 */ s16 field_0x724;
     /* 0x726 */ s16 field_0x726;
     /* 0x728 */ s16 field_0x728;
-    /* 0x72A */ u16 field_0x72A;
+    /* 0x72A */ s16 mAttnTimer;
     /* 0x72C */ s16 mTargetAngleY;
     /* 0x72E */ u16 field_0x72E;
     /* 0x730 */ s16 field_0x730;
@@ -133,12 +133,12 @@ private:
     /* 0x740 */ s8 mActIdx;
     /* 0x741 */ u8 mLookMode;
     /* 0x742 */ u8 field_0x742;
-    /* 0x743 */ u8 field_0x743;
+    /* 0x743 */ u8 mTurnOk;
     /* 0x744 */ u8 field_0x744;
     /* 0x745 */ u8 field_0x745;
     /* 0x746 */ u8 mTalkNo;
-    /* 0x747 */ u8 field_0x747;
-    /* 0x748 */ u8 field_0x748;
+    /* 0x747 */ u8 mAttnAnmIdx;
+    /* 0x748 */ u8 mKyoroFlag;
     /* 0x749 */ u8 field_0x749;
     /* 0x74A */ u8 field_0x74A;
     /* 0x74B */ u8 padding_0x74B[0x74C - 0x74B];
