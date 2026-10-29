@@ -76,27 +76,31 @@ static sSvAnmDat l_npc_anm_talk3 = {
     0xFF,
 };
 
-static sSvAnmDat l_npc_anm_ya1[] = { {
-                                         4,
-                                         0x08,
-                                         1,
-                                     },
-                                     {
-                                         0,
-                                         0x08,
-                                         0xFF,
-                                     } };
+static sSvAnmDat l_npc_anm_ya1[] = {
+    {
+        4,
+        0x08,
+        1,
+    },
+    {
+        0,
+        0x08,
+        0xFF,
+    },
+};
 
-static sSvAnmDat l_npc_anm_ya2[] = { {
-                                         4,
-                                         0x08,
-                                         1,
-                                     },
-                                     {
-                                         1,
-                                         0x08,
-                                         0xFF,
-                                     } };
+static sSvAnmDat l_npc_anm_ya2[] = {
+    {
+        4,
+        0x08,
+        1,
+    },
+    {
+        1,
+        0x08,
+        0xFF,
+    },
+};
 
 static sSvAnmDat l_npc_anm_mawasi = {
     5,
@@ -110,49 +114,57 @@ static sSvAnmDat l_npc_anm_kyoro = {
     0xFF,
 };
 
-static sSvAnmDat l_npc_anm_unun[] = { {
-                                          2,
-                                          0x08,
-                                          1,
-                                      },
-                                      {
-                                          0xFF,
-                                          0x08,
-                                          0,
-                                      } };
+static sSvAnmDat l_npc_anm_unun[] = {
+    {
+        2,
+        0x08,
+        1,
+    },
+    {
+        0xFF,
+        0x08,
+        0,
+    },
+};
 
-static sSvAnmDat l_npc_anm_sisi[] = { {
-                                          3,
-                                          0x08,
-                                          1,
-                                      },
-                                      {
-                                          0xFF,
-                                          0x08,
-                                          0,
-                                      } };
+static sSvAnmDat l_npc_anm_sisi[] = {
+    {
+        3,
+        0x08,
+        1,
+    },
+    {
+        0xFF,
+        0x08,
+        0,
+    },
+};
 
-static sSvAnmDat l_npc_anm_byebye[] = { {
-                                            4,
-                                            0x08,
-                                            1,
-                                        },
-                                        {
-                                            0xFF,
-                                            0x08,
-                                            0,
-                                        } };
+static sSvAnmDat l_npc_anm_byebye[] = {
+    {
+        4,
+        0x08,
+        1,
+    },
+    {
+        0xFF,
+        0x08,
+        0,
+    },
+};
 
-static sSvAnmDat l_npc_anm_shi[] = { {
-                                         5,
-                                         0x08,
-                                         1,
-                                     },
-                                     {
-                                         0xFF,
-                                         0x08,
-                                         0,
-                                     } };
+static sSvAnmDat l_npc_anm_shi[] = {
+    {
+        5,
+        0x08,
+        1,
+    },
+    {
+        0xFF,
+        0x08,
+        0,
+    },
+};
 
 static sSvAnmDat* l_npc_anm_sv1_tbl[] = {
     &l_npc_anm_wait, &l_npc_anm_kyoro, l_npc_anm_unun, l_npc_anm_sisi, l_npc_anm_byebye, l_npc_anm_shi,
@@ -209,28 +221,16 @@ static s16 l_event_id_tbl[] = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2 };
 
 static u32 l_get_item_no[] = { dItemNo_COLLECT_MAP_26_e };
 
-typedef int (daNpcSv_c::*ExecuteInit_t)();
-static ExecuteInit_t l_execute_init[] = {
-    &daNpcSv_c::executeWaitInit,
-    &daNpcSv_c::executeTalkInit,
-};
-
-typedef void (daNpcSv_c::*MoveProc_t)();
-static MoveProc_t moveProc[] = {
-    &daNpcSv_c::executeWait,
-    &daNpcSv_c::executeTalk,
-};
-
 /* 00000078-0000021C       .text __ct__9daNpcSv_cFv */
 daNpcSv_c::daNpcSv_c() {
     mNpcNo = getPrmNpcNo();
     mResFlag = 0;
     mMoveState = 0;
     mAnmMorfOverride = -1.0f;
-    mLookMode = 0;
-    mHeadOnlyFollow = 1;
+    mLookMode = LOOK_MODE_NONE;
+    mHeadOnlyFollow = true;
     field_0x742 = 1;
-    field_0x728 = home.angle.y;
+    mHomeYRot = home.angle.y;
     mBckIdx = 0;
     mTalkFlags = 0;
     mIkadaFrame = 0;
@@ -272,14 +272,14 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 }
 
 /* 00000660-000006B8       .text phase_1__FP9daNpcSv_c */
-cPhs_State phase_1(daNpcSv_c* i_this) {
+static cPhs_State phase_1(daNpcSv_c* i_this) {
     fopAcM_ct(i_this, daNpcSv_c);
     i_this->setResFlag(1);
     return cPhs_NEXT_e;
 }
 
 /* 000006B8-00000738       .text phase_2__FP9daNpcSv_c */
-cPhs_State phase_2(daNpcSv_c* i_this) {
+static cPhs_State phase_2(daNpcSv_c* i_this) {
     cPhs_State state = dComIfG_resLoad(i_this->getPhaseP(), l_arcname_tbl[i_this->getNpcNo()]);
 
     if (state == cPhs_COMPLEATE_e) {
@@ -301,6 +301,18 @@ cPhs_State daNpcSv_c::_create() {
 
     return dComLbG_PhaseHandler(&mPhaseCreate, l_method, this);
 }
+
+typedef int (daNpcSv_c::*ExecuteInit_t)();
+static ExecuteInit_t l_execute_init[] = {
+    &daNpcSv_c::executeWaitInit,
+    &daNpcSv_c::executeTalkInit,
+};
+
+typedef void (daNpcSv_c::*MoveProc_t)();
+static MoveProc_t moveProc[] = {
+    &daNpcSv_c::executeWait,
+    &daNpcSv_c::executeTalk,
+};
 
 /* 00000768-00000A04       .text createHeap__9daNpcSv_cFv */
 BOOL daNpcSv_c::createHeap() {
@@ -353,17 +365,17 @@ BOOL daNpcSv_c::createHeap() {
 cPhs_State daNpcSv_c::createInit() {
     fopAcM_SetGravity(this, -9.0f);
     setAnmTbl(&l_npc_anm_wait);
-    field_0x71E[0] = dComIfGp_evmng_getEventIdx("SV_TALK_P1_1ST", 0xFF);
-    field_0x71E[1] = dComIfGp_evmng_getEventIdx("SV_TALK_P1_2ND", 0xFF);
-    field_0x71E[2] = dComIfGp_evmng_getEventIdx("SV_TALK_P4_1ST", 0xFF);
+    mEventIdx[0] = dComIfGp_evmng_getEventIdx("SV_TALK_P1_1ST", 0xFF);
+    mEventIdx[1] = dComIfGp_evmng_getEventIdx("SV_TALK_P1_2ND", 0xFF);
+    mEventIdx[2] = dComIfGp_evmng_getEventIdx("SV_TALK_P4_1ST", 0xFF);
 
-    eventInfo.setEventId(field_0x71E[l_event_id_tbl[getTalkNo() & 0xFF]]);
+    eventInfo.setEventId(mEventIdx[l_event_id_tbl[getTalkNo() & 0xFF]]);
     mEventCut.setActorInfo2(l_npc_staff_id[getNpcNo()], this);
 
-    field_0x730 = 0;
-    field_0x736 = 0;
-    field_0x737 = 0;
-    field_0x745 = 0;
+    mTurnVel = 0;
+    mTalkOrder = 0;
+    mbPlayerAttention = 0;
+    mbNearPlayer = false;
     cullMtx = mpMorf->getModel()->getBaseTRMtx();
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
     attention_info.distances[1] = 0xB1;
@@ -371,27 +383,27 @@ cPhs_State daNpcSv_c::createInit() {
     attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
 
     m_jnt.setParam(
-        l_npc_dat[getNpcNo()].field_0x04,
-        l_npc_dat[getNpcNo()].field_0x06,
-        l_npc_dat[getNpcNo()].field_0x0C,
-        l_npc_dat[getNpcNo()].field_0x0E,
-        l_npc_dat[getNpcNo()].field_0x00,
-        l_npc_dat[getNpcNo()].field_0x02,
-        l_npc_dat[getNpcNo()].field_0x08,
-        l_npc_dat[getNpcNo()].field_0x0A,
-        l_npc_dat[getNpcNo()].field_0x10
+        l_npc_dat[getNpcNo()].mMax_backbone_x,
+        l_npc_dat[getNpcNo()].mMax_backbone_y,
+        l_npc_dat[getNpcNo()].mMin_backbone_x,
+        l_npc_dat[getNpcNo()].mMin_backbone_y,
+        l_npc_dat[getNpcNo()].mMax_head_x,
+        l_npc_dat[getNpcNo()].mMax_head_y,
+        l_npc_dat[getNpcNo()].mMin_head_x,
+        l_npc_dat[getNpcNo()].mMin_head_y,
+        l_npc_dat[getNpcNo()].mMax_turn_step
     );
 
-    mTurnOk = l_npc_dat[getNpcNo()].field_0x42;
-    field_0x744 = l_npc_dat[getNpcNo()].field_0x43;
-    field_0x710 = l_npc_dat[getNpcNo()].field_0x2C;
-    field_0x726 = l_npc_dat[getNpcNo()].field_0x34;
+    mbAllowBodyTurn = l_npc_dat[getNpcNo()].mbAllowBodyTurn;
+    mbLookOnly = l_npc_dat[getNpcNo()].mbLookOnly;
+    mAttnDist = l_npc_dat[getNpcNo()].mAttnDist;
+    mAttnAngle = l_npc_dat[getNpcNo()].mAttnAngle;
     setMtx();
     mpMorf->getModel()->calc();
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
     mCyl.SetStts(&mStts);
-    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].field_0x38, l_npc_dat[getNpcNo()].field_0x3C);
+    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].mCylRadius, l_npc_dat[getNpcNo()].mCylHeight);
     return cPhs_COMPLEATE_e;
 }
 
@@ -456,9 +468,9 @@ bool daNpcSv_c::_execute() {
     }
 
     mObjAcch.CrrPos(*dComIfG_Bgsp());
-    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].field_0x38, l_npc_dat[getNpcNo()].field_0x3C);
-    attention_info.position.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].field_0x24, current.pos.z);
-    eyePos.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].field_0x28, current.pos.z);
+    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].mCylRadius, l_npc_dat[getNpcNo()].mCylHeight);
+    attention_info.position.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].mAttnPosOfsY, current.pos.z);
+    eyePos.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].mEyePosOfsY, current.pos.z);
     lookBack();
     setMtx();
     return false;
@@ -466,7 +478,7 @@ bool daNpcSv_c::_execute() {
 
 /* 00000F90-00000FB8       .text executeCommon__9daNpcSv_cFv */
 BOOL daNpcSv_c::executeCommon() {
-    if (field_0x737) {
+    if (mbPlayerAttention) {
         mEvtOrderType = 1;
     } else {
         mEvtOrderType = 0;
@@ -483,15 +495,15 @@ void daNpcSv_c::executeSetMode(u8 i_mode) {
 BOOL daNpcSv_c::executeWaitInit() {
     setAnmTbl(&l_npc_anm_wait);
     m_jnt.setParam(
-        l_npc_dat[getNpcNo()].field_0x04,
-        l_npc_dat[getNpcNo()].field_0x06,
-        l_npc_dat[getNpcNo()].field_0x0C,
-        l_npc_dat[getNpcNo()].field_0x0E,
-        l_npc_dat[getNpcNo()].field_0x00,
-        l_npc_dat[getNpcNo()].field_0x02,
-        l_npc_dat[getNpcNo()].field_0x08,
-        l_npc_dat[getNpcNo()].field_0x0A,
-        l_npc_dat[getNpcNo()].field_0x10
+        l_npc_dat[getNpcNo()].mMax_backbone_x,
+        l_npc_dat[getNpcNo()].mMax_backbone_y,
+        l_npc_dat[getNpcNo()].mMin_backbone_x,
+        l_npc_dat[getNpcNo()].mMin_backbone_y,
+        l_npc_dat[getNpcNo()].mMax_head_x,
+        l_npc_dat[getNpcNo()].mMax_head_y,
+        l_npc_dat[getNpcNo()].mMin_head_x,
+        l_npc_dat[getNpcNo()].mMin_head_y,
+        l_npc_dat[getNpcNo()].mMax_turn_step
     );
     return FALSE;
 }
@@ -503,36 +515,36 @@ void daNpcSv_c::executeWait() {
 
     if (parent != NULL) {
         if (!getNpcNo()) {
-            if (field_0x745) {
+            if (mbNearPlayer) {
                 mEvtOrderType = 1;
-                if (field_0x745 != field_0x74A) {
-                    field_0x749 = 1;
+                if (mbNearPlayer != mbWasNearPlayer) {
+                    mbStopMawasi = 1;
                 }
                 parent->m1166 = 1;
             } else {
                 mEvtOrderType = 0;
-                field_0x749 = 0;
+                mbStopMawasi = 0;
                 parent->m1166 = 0;
             }
 
-            if (field_0x749) {
+            if (mbStopMawasi) {
                 setAnmTbl(&l_npc_anm_wait);
             } else {
                 mLookAngleY = parent->shape_angle.y;
                 current.angle.x = parent->shape_angle.x;
                 current.angle.z = parent->shape_angle.z;
-                mLookMode = 2;
-                mHeadOnlyFollow = 0;
+                mLookMode = LOOK_MODE_TURN;
+                mHeadOnlyFollow = false;
                 m_jnt.setTrn();
                 setAnmTbl(&l_npc_anm_mawasi);
             }
-            field_0x74A = field_0x745;
+            mbWasNearPlayer = mbNearPlayer;
         } else {
-            mTurnOk = 1;
+            mbAllowBodyTurn = 1;
             if (parent->mCurMode == 8 || parent->mCurMode == 9 || parent->mCurMode == 5) {
                 mLookAngleY = parent->shape_angle.y;
-                mLookMode = 2;
-                mHeadOnlyFollow = 0;
+                mLookMode = LOOK_MODE_TURN;
+                mHeadOnlyFollow = false;
                 m_jnt.setTrn();
             } else if (parent->mCurMode == 4 || parent->mCurMode == 6) {
                 if (parent->m1168 == 0) {
@@ -540,8 +552,8 @@ void daNpcSv_c::executeWait() {
                 } else {
                     mLookAngleY = parent->shape_angle.y - 0x4000;
                 }
-                mLookMode = 2;
-                mHeadOnlyFollow = 0;
+                mLookMode = LOOK_MODE_TURN;
+                mHeadOnlyFollow = false;
                 m_jnt.setTrn();
             } else {
                 s16 angle;
@@ -552,14 +564,14 @@ void daNpcSv_c::executeWait() {
                 }
 
                 if (current.angle.y == angle) {
-                    field_0x6EC.set(parent->getCranePos());
-                    mLookMode = 1;
-                    mHeadOnlyFollow = 1;
-                    mTurnOk = 0;
+                    mLookAtPos.set(parent->getCranePos());
+                    mLookMode = LOOK_MODE_ATTN;
+                    mHeadOnlyFollow = true;
+                    mbAllowBodyTurn = 0;
                 } else {
                     mLookAngleY = angle;
-                    mLookMode = 2;
-                    mHeadOnlyFollow = 0;
+                    mLookMode = LOOK_MODE_TURN;
+                    mHeadOnlyFollow = false;
                     m_jnt.setTrn();
                 }
             }
@@ -589,8 +601,8 @@ BOOL daNpcSv_c::executeTalkInit() {
 void daNpcSv_c::executeTalk() {
     executeCommon();
     if (talk2(1, this) == fopMsgStts_BOX_CLOSED_e) {
-        field_0x736 = 0;
-        field_0x749 = 0;
+        mTalkOrder = 0;
+        mbStopMawasi = 0;
         executeSetMode(0);
         dComIfGp_event_onEventFlag(8);
     } else {
@@ -609,7 +621,7 @@ void daNpcSv_c::checkOrder() {
     if (mEvtOrderType != 2 && mEvtOrderType != 1) {
         return;
     }
-    field_0x736 = 1;
+    mTalkOrder = 1;
 }
 
 /* 000013EC-00001458       .text eventOrder__9daNpcSv_cFv */
@@ -624,12 +636,12 @@ void daNpcSv_c::eventOrder() {
 
 /* 00001458-00001570       .text eventMove__9daNpcSv_cFv */
 void daNpcSv_c::eventMove() {
-    if (dComIfGp_evmng_endCheck(field_0x71E[0]) || dComIfGp_evmng_endCheck(field_0x71E[1]) || dComIfGp_evmng_endCheck(field_0x71E[2])) {
-        eventInfo.setEventId(field_0x71E[l_event_id_tbl[(getTalkNo() & 0xFF)]]);
+    if (dComIfGp_evmng_endCheck(mEventIdx[0]) || dComIfGp_evmng_endCheck(mEventIdx[1]) || dComIfGp_evmng_endCheck(mEventIdx[2])) {
+        eventInfo.setEventId(mEventIdx[l_event_id_tbl[(getTalkNo() & 0xFF)]]);
         dComIfGp_event_onEventFlag(8);
         mCutFlags &= ~2;
-        field_0x736 = 0;
-        field_0x749 = 0;
+        mTalkOrder = 0;
+        mbStopMawasi = 0;
         executeSetMode(0);
         return;
     }
@@ -707,8 +719,8 @@ void daNpcSv_c::privateCut() {
 
     if ((mCutFlags & 2) != 0) {
         mLookAngleY = mTargetAngleY;
-        mLookMode = 2;
-        mHeadOnlyFollow = 0;
+        mLookMode = LOOK_MODE_TURN;
+        mHeadOnlyFollow = false;
         m_jnt.setTrn();
     }
 }
@@ -747,7 +759,7 @@ void daNpcSv_c::eventGetItemInit(int i_staffIdx) {
     if (pData != NULL) {
         itemNo = l_get_item_no[*pData];
     } else {
-        itemNo = field_0x714;
+        itemNo = mItemNo;
     }
     pcId = fopAcM_createItemForPresentDemo(&current.pos, itemNo, 0, -1, fopAcM_GetRoomNo(this));
 
@@ -776,9 +788,9 @@ void daNpcSv_c::eventSetAngleInit() {
         } else {
             mTargetAngleY = parent->shape_angle.y - 0x4000;
         }
-        field_0x728 = mTargetAngleY;
+        mHomeYRot = mTargetAngleY;
     } else {
-        mTargetAngleY = field_0x728;
+        mTargetAngleY = mHomeYRot;
     }
     mCutFlags |= 2;
 }
@@ -805,9 +817,9 @@ bool daNpcSv_c::eventAttention() {
         if (mAttnTimer == 0) {
             daNpcSv_c* pSv0 = (daNpcSv_c*)fopAcM_searchFromName(l_npc_staff_id[0], 0, 0);
             if (pSv0 != NULL) {
-                setAnmTbl(l_npc_anm_sv1_tbl[pSv0->mAttnAnmIdx]);
+                setAnmTbl(l_npc_anm_sv1_tbl[pSv0->getMsgPtn()]);
                 if (getNpcNo() == 1) {
-                    mDoAud_seStart(l_npc_se_sv1_tbl[pSv0->mAttnAnmIdx]);
+                    mDoAud_seStart(l_npc_se_sv1_tbl[pSv0->getMsgPtn()]);
                 }
             } else {
                 setAnmTbl(l_npc_anm_sv1_tbl[2]);
@@ -823,7 +835,7 @@ bool daNpcSv_c::eventAttention() {
 
 /* 00001BC8-00001BD4       .text eventTurnOkInit__9daNpcSv_cFv */
 void daNpcSv_c::eventTurnOkInit() {
-    mTurnOk = 1;
+    mbAllowBodyTurn = 1;
 }
 
 /* 00001BD4-00001CF0       .text talk2__9daNpcSv_cFiP10fopAc_ac_c */
@@ -871,19 +883,19 @@ u16 daNpcSv_c::next_msgStatus(u32* i_msgNo) {
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 2:
-                        mAttnAnmIdx = 2;
+                        mMsgPtn = 2;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 3:
-                        mAttnAnmIdx = 3;
+                        mMsgPtn = 3;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 4:
-                        mAttnAnmIdx = 4;
+                        mMsgPtn = 4;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 5:
-                        mAttnAnmIdx = 5;
+                        mMsgPtn = 5;
                         msgStatus = fopMsgStts_MSG_ENDS_e;
                         break;
                     case 0:
@@ -910,7 +922,7 @@ u32 daNpcSv_c::getMsg() {
         mpMsgNo = l_msg_sv_talk_tbl[mTalkNo];
         mTalkFlags |= l_msg_sv_flag_tbl[mTalkNo];
 
-        if (mTalkFlags & 0x10) {
+        if (mTalkFlags & TALK_FLAG_P4) {
             dComIfGs_onEventBit(dSv_event_flag_c::UNK_2F80);
         }
     }
@@ -967,7 +979,7 @@ u8 daNpcSv_c::getPrmNpcNo() {
 void daNpcSv_c::setMtx() {
     mpMorf->getModel()->setBaseScale(scale);
 
-    cXyz offset(l_npc_dat[getNpcNo()].field_0x14, l_npc_dat[getNpcNo()].field_0x18, l_npc_dat[getNpcNo()].field_0x1C);
+    cXyz offset(l_npc_dat[getNpcNo()].mModelOfsX, l_npc_dat[getNpcNo()].mModelOfsY, l_npc_dat[getNpcNo()].mModelOfsZ);
 
     mDoMtx_stack_c::YrotS(current.angle.y);
     mDoMtx_stack_c::multVec(&offset, &offset);
@@ -980,12 +992,90 @@ void daNpcSv_c::setMtx() {
 
 /* 0000209C-000023D4       .text chkAttention__9daNpcSv_cFv */
 void daNpcSv_c::chkAttention() {
-    /* Nonmatching */
+    mbNearPlayer = false;
+    if (mEventCut.getAttnFlag()) {
+        mLookAtPos = mEventCut.getAttnPos();
+        mLookMode = LOOK_MODE_ATTN;
+        if (mbAllowBodyTurn) {
+            mHeadOnlyFollow = false;
+            m_jnt.setTrn();
+        } else {
+            mHeadOnlyFollow = true;
+        }
+        if (mbPlayerAttention == 0) {
+            mbPlayerAttention = 1;
+        }
+    } else {
+        fopAc_ac_c* player = dComIfGp_getLinkPlayer();
+        f32 maxDist = mAttnDist;
+        int maxAngle = mAttnAngle;
+        f32 dist;
+        s16 angle;
+        dNpc_calc_DisXZ_AngY(current.pos, player->current.pos, &dist, &angle);
+        if (mbPlayerAttention != 0) {
+            maxDist += 100.0f;
+            maxAngle += 0x71C;
+        }
+        angle -= shape_angle.y;
+        if (maxDist > dist && maxAngle > abs(angle)) {
+            mLookAtPos = dNpc_playerEyePos(l_npc_dat[mNpcNo].mPlayerEyeOfsY);
+            mLookMode = LOOK_MODE_ATTN;
+            if (mbAllowBodyTurn) {
+                mHeadOnlyFollow = false;
+            } else {
+                mHeadOnlyFollow = true;
+            }
+            if (mbLookOnly == 0) {
+                mLookAngleY = mHomeYRot;
+                mHeadOnlyFollow = false;
+                mLookMode = LOOK_MODE_TURN;
+                m_jnt.setTrn();
+            }
+            if (mbPlayerAttention == 0) {
+                mbPlayerAttention = 1;
+            }
+            mbNearPlayer = true;
+        } else {
+            if (mbPlayerAttention == 1) {
+                mbPlayerAttention = 0;
+                mLookResetTimer = l_npc_dat[mNpcNo].mLookResetTimer;
+            }
+            if (l_npc_dat[mNpcNo].mNearDist > dist) {
+                mLookAtPos = dNpc_playerEyePos(l_npc_dat[mNpcNo].mPlayerEyeOfsY);
+                mLookMode = LOOK_MODE_ATTN;
+                if (mbAllowBodyTurn != 0) {
+                    mHeadOnlyFollow = false;
+                } else {
+                    mHeadOnlyFollow = true;
+                }
+                if (mbLookOnly == 0) {
+                    mLookAngleY = mHomeYRot;
+                    mHeadOnlyFollow = false;
+                    mLookMode = LOOK_MODE_TURN;
+                    m_jnt.setTrn();
+                }
+                mbNearPlayer = true;
+            } else {
+                mLookMode = LOOK_MODE_NONE;
+                if (!field_0x6D8) {
+                    if (mLookResetTimer != 0) {
+                        mLookResetTimer--;
+                    } else {
+                        mLookAngleY = mHomeYRot;
+                        mHeadOnlyFollow = false;
+                        mLookMode = LOOK_MODE_TURN;
+                        m_jnt.setTrn();
+                    }
+                }
+            }
+        }
+    }
+    mLookAtMaxVel = l_npc_dat[mNpcNo].mLookAtMaxVel;
 }
 
 /* 000023D4-00002520       .text lookBack__9daNpcSv_cFv */
 void daNpcSv_c::lookBack() {
-    s16 target = field_0x72E;
+    s16 target = mLookAtMaxVel;
     s16 desiredYRot = current.angle.y;
     cXyz* dstTemp = NULL;
     cXyz temp2;
@@ -993,19 +1083,19 @@ void daNpcSv_c::lookBack() {
     bool headOnlyFollow = mHeadOnlyFollow;
 
     switch (mLookMode) {
-        case 1:
-            temp2 = field_0x6EC;
+        case LOOK_MODE_ATTN:
+            temp2 = mLookAtPos;
             dstTemp = &temp2;
             break;
-        case 2:
+        case LOOK_MODE_TURN:
             desiredYRot = mLookAngleY;
             break;
-        case 0:
+        case LOOK_MODE_NONE:
         default:
             break;
     }
 
-    if (field_0x736 && mTurnOk) {
+    if (mTalkOrder && mbAllowBodyTurn) {
         headOnlyFollow = false;
         m_jnt.setTrn();
     }
@@ -1014,12 +1104,12 @@ void daNpcSv_c::lookBack() {
         if (mEventCut.getTurnSpeed() != 0) {
             target = mEventCut.getTurnSpeed();
         }
-        cLib_addCalcAngleS2(&field_0x730, target, 4, 0x800);
+        cLib_addCalcAngleS2(&mTurnVel, target, 4, 0x800);
     } else {
-        field_0x730 = 0;
+        mTurnVel = 0;
     }
 
-    m_jnt.lookAtTarget(&current.angle.y, dstTemp, dstPos, desiredYRot, field_0x730, headOnlyFollow);
+    m_jnt.lookAtTarget(&current.angle.y, dstTemp, dstPos, desiredYRot, mTurnVel, headOnlyFollow);
     shape_angle = current.angle;
 }
 
