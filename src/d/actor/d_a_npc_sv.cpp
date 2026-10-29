@@ -363,7 +363,7 @@ BOOL daNpcSv_c::createHeap() {
 
 /* 00000A04-00000C74       .text createInit__9daNpcSv_cFv */
 cPhs_State daNpcSv_c::createInit() {
-    fopAcM_SetGravity(this, -9.0f);
+    gravity = -9.0f;
     setAnmTbl(&l_npc_anm_wait);
     mEventIdx[0] = dComIfGp_evmng_getEventIdx("SV_TALK_P1_1ST", 0xFF);
     mEventIdx[1] = dComIfGp_evmng_getEventIdx("SV_TALK_P1_2ND", 0xFF);
@@ -376,7 +376,7 @@ cPhs_State daNpcSv_c::createInit() {
     mTalkOrder = 0;
     mbPlayerAttention = 0;
     mbNearPlayer = false;
-    cullMtx = mpMorf->getModel()->getBaseTRMtx();
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
     fopAcM_setCullSizeBox(this, -70.0f, 0.0f, -70.0f, 70.0f, 200.0f, 70.0f);
     attention_info.distances[1] = 0xB1;
     attention_info.distances[3] = 0xB1;
@@ -448,8 +448,7 @@ bool daNpcSv_c::_execute() {
     chkAttention();
     checkOrder();
 
-    dEvt_control_c* event = g_dComIfG_gameInfo.play.getEvent();
-    if (event->getMode() == 0) {
+    if (!dComIfGp_event_runCheck()) {
         (this->*moveProc[mMoveState])();
     } else {
         eventMove();
@@ -520,11 +519,11 @@ void daNpcSv_c::executeWait() {
                 if (mbNearPlayer != mbWasNearPlayer) {
                     mbStopMawasi = 1;
                 }
-                parent->m1166 = 1;
+                parent->setStart();
             } else {
                 mEvtOrderType = 0;
                 mbStopMawasi = 0;
-                parent->m1166 = 0;
+                parent->setStop();
             }
 
             if (mbStopMawasi) {
@@ -541,13 +540,13 @@ void daNpcSv_c::executeWait() {
             mbWasNearPlayer = mbNearPlayer;
         } else {
             mbAllowBodyTurn = 1;
-            if (parent->mCurMode == 8 || parent->mCurMode == 9 || parent->mCurMode == 5) {
+            if (parent->getMode() == 8 || parent->getMode() == 9 || parent->getMode() == 5) {
                 mLookAngleY = parent->shape_angle.y;
                 mLookMode = LOOK_MODE_TURN;
                 mHeadOnlyFollow = false;
                 m_jnt.setTrn();
-            } else if (parent->mCurMode == 4 || parent->mCurMode == 6) {
-                if (parent->m1168 == 0) {
+            } else if (parent->getMode() == 4 || parent->getMode() == 6) {
+                if (parent->getSvDirection() == 0) {
                     mLookAngleY = parent->shape_angle.y + 0x4000;
                 } else {
                     mLookAngleY = parent->shape_angle.y - 0x4000;
@@ -557,14 +556,14 @@ void daNpcSv_c::executeWait() {
                 m_jnt.setTrn();
             } else {
                 s16 angle;
-                if (parent->m1168 == 0) {
+                if (parent->getSvDirection() == 0) {
                     angle = parent->shape_angle.y + 0x4000;
                 } else {
                     angle = parent->shape_angle.y - 0x4000;
                 }
 
                 if (current.angle.y == angle) {
-                    mLookAtPos.set(parent->getCranePos());
+                    mLookAtPos = parent->getCranePos();
                     mLookMode = LOOK_MODE_ATTN;
                     mHeadOnlyFollow = true;
                     mbAllowBodyTurn = 0;
@@ -576,7 +575,7 @@ void daNpcSv_c::executeWait() {
                 }
             }
 
-            if (parent->mCurMode == 7) {
+            if (parent->getMode() == 7) {
                 if (mKyoroFlag == 0) {
                     mKyoroFlag = 1;
                     setAnmTbl(l_npc_anm_sv1_tbl[1]);
@@ -604,7 +603,7 @@ void daNpcSv_c::executeTalk() {
         mTalkOrder = 0;
         mbStopMawasi = 0;
         executeSetMode(0);
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
     } else {
         setAnmFromMsgTag();
     }
@@ -638,7 +637,7 @@ void daNpcSv_c::eventOrder() {
 void daNpcSv_c::eventMove() {
     if (dComIfGp_evmng_endCheck(mEventIdx[0]) || dComIfGp_evmng_endCheck(mEventIdx[1]) || dComIfGp_evmng_endCheck(mEventIdx[2])) {
         eventInfo.setEventId(mEventIdx[l_event_id_tbl[(getTalkNo() & 0xFF)]]);
-        dComIfGp_event_onEventFlag(8);
+        dComIfGp_event_reset();
         mCutFlags &= ~2;
         mTalkOrder = 0;
         mbStopMawasi = 0;
@@ -982,7 +981,7 @@ void daNpcSv_c::setMtx() {
     cXyz offset(l_npc_dat[getNpcNo()].mModelOfsX, l_npc_dat[getNpcNo()].mModelOfsY, l_npc_dat[getNpcNo()].mModelOfsZ);
 
     mDoMtx_stack_c::YrotS(current.angle.y);
-    mDoMtx_stack_c::multVec(&offset, &offset);
+    cMtx_multVec(mDoMtx_stack_c::get(), &offset, &offset);
     mDoMtx_stack_c::transS(current.pos.x + offset.x, current.pos.y + offset.y, current.pos.z + offset.z);
     mDoMtx_stack_c::XYZrotM(current.angle.x, 0, current.angle.z);
     mDoMtx_stack_c::YrotM(current.angle.y);

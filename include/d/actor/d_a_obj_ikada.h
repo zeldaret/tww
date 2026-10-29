@@ -24,16 +24,16 @@ public:
     s32 getFrame() {
         return mFrame;
     }
-    void getMode() {}
-    void getSvDirection() {}
+    s32 getMode() { return mCurMode; }
+    s32 getSvDirection() { return m1168; }
     bool isBonbori() { return mType == 3 || mType == 1; }
     bool isCrane() {return mType == 4; }
     bool isFlag() { return mType == 0 || mType == 4; }
     bool isWave() { return mType == 4 || mType == 3 || mType == 1; }
     void modeProcInit(int idx) { modeProc(PROC_INIT_e, idx); }
     void setInitPos() {}
-    void setStart() {}
-    void setStop() {}
+    void setStart() { m1166 = 1; }
+    void setStop() { m1166 = 0; }
 
     void _nodeControl(J3DNode*, J3DModel*);
     BOOL _pathMove(cXyz*, cXyz*, cXyz*);
