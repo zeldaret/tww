@@ -985,7 +985,42 @@ void daNpcSv_c::chkAttention() {
 
 /* 000023D4-00002520       .text lookBack__9daNpcSv_cFv */
 void daNpcSv_c::lookBack() {
-    /* Nonmatching */
+    s16 target = field_0x72E;
+    s16 desiredYRot = current.angle.y;
+    cXyz* dstTemp = NULL;
+    cXyz temp2;
+    cXyz dstPos = eyePos;
+    bool headOnlyFollow = mHeadOnlyFollow;
+
+    switch (mLookMode) {
+        case 1:
+            temp2 = field_0x6EC;
+            dstTemp = &temp2;
+            break;
+        case 2:
+            desiredYRot = mLookAngleY;
+            break;
+        case 0:
+        default:
+            break;
+    }
+
+    if (field_0x736 && mTurnOk) {
+        headOnlyFollow = false;
+        m_jnt.setTrn();
+    }
+
+    if (m_jnt.trnChk()) {
+        if (mEventCut.getTurnSpeed() != 0) {
+            target = mEventCut.getTurnSpeed();
+        }
+        cLib_addCalcAngleS2(&field_0x730, target, 4, 0x800);
+    } else {
+        field_0x730 = 0;
+    }
+
+    m_jnt.lookAtTarget(&current.angle.y, dstTemp, dstPos, desiredYRot, field_0x730, headOnlyFollow);
+    shape_angle = current.angle;
 }
 
 /* 00002520-000025E8       .text playAnm__9daNpcSv_cFv */

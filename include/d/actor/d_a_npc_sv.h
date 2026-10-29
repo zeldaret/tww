@@ -108,7 +108,7 @@ private:
     /* 0x710 */ f32 field_0x710;
     /* 0x714 */ u32 field_0x714;
     /* 0x718 */ s32 mIkadaFrame;
-    /* 0x71C */ u8 mHeadOnlyFollow;
+    /* 0x71C */ bool mHeadOnlyFollow;
     /* 0x71D */ u8 field_0x71D;
     /* 0x71E */ s16 field_0x71E[3];
     /* 0x724 */ s16 field_0x724;
@@ -116,9 +116,9 @@ private:
     /* 0x728 */ s16 field_0x728;
     /* 0x72A */ s16 mAttnTimer;
     /* 0x72C */ s16 mTargetAngleY;
-    /* 0x72E */ u16 field_0x72E;
+    /* 0x72E */ s16 field_0x72E;
     /* 0x730 */ s16 field_0x730;
-    /* 0x732 */ u16 mLookAngleY;
+    /* 0x732 */ s16 mLookAngleY;
     /* 0x734 */ u16 mTalkFlags;
     /* 0x736 */ u8 field_0x736;
     /* 0x737 */ u8 field_0x737;
@@ -131,7 +131,7 @@ private:
     /* 0x73E */ u8 mAnmFlag;
     /* 0x73F */ s8 mAnmLoopCnt;
     /* 0x740 */ s8 mActIdx;
-    /* 0x741 */ u8 mLookMode;
+    /* 0x741 */ s8 mLookMode;
     /* 0x742 */ u8 field_0x742;
     /* 0x743 */ u8 mTurnOk;
     /* 0x744 */ u8 field_0x744;
