@@ -355,7 +355,6 @@ static BOOL daGrid_Draw(daGrid_c* i_this) {
 }
 
 /* 800E9C0C-800EA928       .text ho_move__FP8daGrid_c */
-// NONMATCHING - some small reg alloc
 void ho_move(daGrid_c* i_this) {
     if (l_HIO.field_0x38) {
         return;
@@ -393,10 +392,9 @@ void ho_move(daGrid_c* i_this) {
     s16 sail_angle = l_ship->getSailAngle();
 
     s16 windAngle = cM_atan2s(windVec->x, windVec->z);
-    int var_r28 = (s16)(i_this->current.angle.y + sail_angle);
-    var_r28 -= windAngle;
+    s16 sailDir = i_this->current.angle.y + sail_angle;
 
-    s16 temp_r3 = var_r28 + 0x8000;
+    s16 temp_r3 = sailDir - windAngle + 0x8000;
     if (temp_r3 > 0) {
         if (sail_angle > 0 && sail_angle < 0x4000) {
             temp_r3 = 0;
@@ -430,7 +428,7 @@ void ho_move(daGrid_c* i_this) {
     f32 temp_f = 1.0f + (0.01f + REG6_F(15)) * (temp_f28 * cM_ssin(i_this->field_0x1b44));
     int temp_r0_2 = 2500.0f + (9000.0f * (DEMO_SELECT(temp_f15, 0.8f) * windPow)) * DEMO_SELECT((1.0f + REG10_F(3)), 1);
     i_this->field_0x1b44 += cLib_maxLimit(temp_r0_2, 10000);
-    i_this->field_0x2212 += (s16)(3000.0f * cM_scos(var_r28));
+    i_this->field_0x2212 += (s16)(3000.0f * cM_scos(sailDir - windAngle));
 
     s16 temp_r3_2;
     if (i_this->field_0x2212 > 0) {
@@ -440,7 +438,7 @@ void ho_move(daGrid_c* i_this) {
     }
     i_this->field_0x2212 += temp_r3_2;
 
-    f32 temp_f26 = 0.5f * cM_ssin(var_r28);
+    f32 temp_f26 = 0.5f * cM_ssin(sailDir - windAngle);
     sp34.x = 0.0f;
     sp34.z = DEMO_SELECT(temp_f15 * (REG0_F(14) + 2.0f), 1.6f);
 
