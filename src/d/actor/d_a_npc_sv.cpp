@@ -1202,7 +1202,13 @@ u8 daNpcSv_c::getTalkNo() {
         } else {
             mTalkNo = 7;
         }
-    } else if (!dComIfGs_isCollect(0, 1)) {
+    } else
+#if VERSION <= VERSION_JPN
+        if (!dComIfGs_checkGetItem(dItemNo_MASTER_SWORD_1_e))
+#else
+        if (!dComIfGs_isCollect(0, 1))
+#endif
+    {
         if (!(mTalkFlags & TALK_FLAG_P3)) {
             mTalkNo = 8;
         } else {
