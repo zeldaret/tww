@@ -377,7 +377,7 @@ cPhs_State daNpcSv_c::createInit() {
     setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].mCylRadius, l_npc_dat[mNpcNo].mCylHeight);
 #endif
     mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
-#if VERISON == VERSION_DEMO
+#if VERSION == VERSION_DEMO
     setMtx();
 #endif
 
