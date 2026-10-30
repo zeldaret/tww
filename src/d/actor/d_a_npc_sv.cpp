@@ -225,7 +225,7 @@ static u32 l_get_item_no[] = { dItemNo_COLLECT_MAP_26_e };
 daNpcSv_c::daNpcSv_c() {
     mNpcNo = getPrmNpcNo();
     mResFlag = 0;
-    mMoveState = 0;
+    mMoveState = MOVE_PROC_WAIT;
     mAnmMorfOverride = -1.0f;
     mLookMode = LOOK_MODE_NONE;
     mHeadOnlyFollow = true;
@@ -602,7 +602,7 @@ void daNpcSv_c::executeTalk() {
     if (talk2(1, this) == fopMsgStts_BOX_CLOSED_e) {
         mTalkOrder = 0;
         mbStopMawasi = 0;
-        executeSetMode(0);
+        executeSetMode(MOVE_PROC_WAIT);
         dComIfGp_event_reset();
     } else {
         setAnmFromMsgTag();
@@ -641,16 +641,16 @@ void daNpcSv_c::eventMove() {
         mCutFlags &= ~2;
         mTalkOrder = 0;
         mbStopMawasi = 0;
-        executeSetMode(0);
+        executeSetMode(MOVE_PROC_WAIT);
         return;
     }
 
-    bool attn = mEventCut.getAttnFlag();
+    bool prevAttnFlag = mEventCut.getAttnFlag();
     if (mEventCut.cutProc()) {
         if (mEventCut.getAttnFlag()) {
             return;
         }
-        mEventCut.setAttnFlag(attn);
+        mEventCut.setAttnFlag(prevAttnFlag);
     } else {
         privateCut();
         if (getNpcNo()) {
@@ -676,19 +676,19 @@ void daNpcSv_c::privateCut() {
         } else {
             if (dComIfGp_evmng_getIsAddvance(staffIdx)) {
                 switch (mActIdx) {
-                    case 0:
+                    case CUT_MES_SET:
                         eventMesSetInit(staffIdx);
                         break;
-                    case 1:
+                    case CUT_GET_ITEM:
                         eventGetItemInit(staffIdx);
                         break;
-                    case 2:
+                    case CUT_SET_ANGLE:
                         eventSetAngleInit();
                         break;
-                    case 3:
+                    case CUT_ATTENTION:
                         eventAttentionInit(staffIdx);
                         break;
-                    case 4:
+                    case CUT_TURN_OK:
                         eventTurnOkInit();
                         break;
                 }
@@ -696,13 +696,13 @@ void daNpcSv_c::privateCut() {
 
             bool endCut;
             switch (mActIdx) {
-                case 0:
+                case CUT_MES_SET:
                     endCut = eventMesSet();
                     break;
-                case 1:
+                case CUT_GET_ITEM:
                     endCut = eventGetItem();
                     break;
-                case 3:
+                case CUT_ATTENTION:
                     endCut = eventAttention();
                     break;
                 default:
@@ -746,17 +746,17 @@ void daNpcSv_c::eventMesSetInit(int i_staffIdx) {
 
 /* 00001814-0000184C       .text eventMesSet__9daNpcSv_cFv */
 bool daNpcSv_c::eventMesSet() {
-    return talk2(0, this) == fopMsgStts_BOX_CLOSED_e ? true : false;
+    return talk2(0, this) == fopMsgStts_BOX_CLOSED_e;
 }
 
 /* 0000184C-000018F0       .text eventGetItemInit__9daNpcSv_cFi */
 void daNpcSv_c::eventGetItemInit(int i_staffIdx) {
     fpc_ProcID pcId;
 
-    int* pData = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "ItemNo");
+    int* pItemIdx = dComIfGp_evmng_getMyIntegerP(i_staffIdx, "ItemNo");
     u32 itemNo;
-    if (pData != NULL) {
-        itemNo = l_get_item_no[*pData];
+    if (pItemIdx != NULL) {
+        itemNo = l_get_item_no[*pItemIdx];
     } else {
         itemNo = mItemNo;
     }
@@ -1074,17 +1074,17 @@ void daNpcSv_c::chkAttention() {
 
 /* 000023D4-00002520       .text lookBack__9daNpcSv_cFv */
 void daNpcSv_c::lookBack() {
-    s16 target = mLookAtMaxVel;
+    s16 maxTurnVel = mLookAtMaxVel;
     s16 desiredYRot = current.angle.y;
-    cXyz* dstTemp = NULL;
-    cXyz temp2;
+    cXyz* pLookAt = NULL;
+    cXyz lookAtPos;
     cXyz dstPos = eyePos;
     bool headOnlyFollow = mHeadOnlyFollow;
 
     switch (mLookMode) {
         case LOOK_MODE_ATTN:
-            temp2 = mLookAtPos;
-            dstTemp = &temp2;
+            lookAtPos = mLookAtPos;
+            pLookAt = &lookAtPos;
             break;
         case LOOK_MODE_TURN:
             desiredYRot = mLookAngleY;
@@ -1101,14 +1101,14 @@ void daNpcSv_c::lookBack() {
 
     if (m_jnt.trnChk()) {
         if (mEventCut.getTurnSpeed() != 0) {
-            target = mEventCut.getTurnSpeed();
+            maxTurnVel = mEventCut.getTurnSpeed();
         }
-        cLib_addCalcAngleS2(&mTurnVel, target, 4, 0x800);
+        cLib_addCalcAngleS2(&mTurnVel, maxTurnVel, 4, 0x800);
     } else {
         mTurnVel = 0;
     }
 
-    m_jnt.lookAtTarget(&current.angle.y, dstTemp, dstPos, desiredYRot, mTurnVel, headOnlyFollow);
+    m_jnt.lookAtTarget(&current.angle.y, pLookAt, dstPos, desiredYRot, mTurnVel, headOnlyFollow);
     shape_angle = current.angle;
 }
 

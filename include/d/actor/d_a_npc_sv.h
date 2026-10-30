@@ -40,10 +40,23 @@ struct NpcDatStruct {
 
 class daNpcSv_c : public fopNpc_npc_c {
 public:
+    enum MoveProcIdx {
+        MOVE_PROC_WAIT = 0,
+        MOVE_PROC_TALK = 1,
+    };
+
     enum LookMode {
         LOOK_MODE_NONE = 0,
         LOOK_MODE_ATTN = 1,
         LOOK_MODE_TURN = 2,
+    };
+
+    enum CutAct {
+        CUT_MES_SET = 0,
+        CUT_GET_ITEM = 1,
+        CUT_SET_ANGLE = 2,
+        CUT_ATTENTION = 3,
+        CUT_TURN_OK = 4,
     };
 
     u8 getMsgPtn() { return mMsgPtn; }
