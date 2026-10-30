@@ -97,10 +97,8 @@ void daLodbg_c::deleteModelData() {
 #if VERSION > VERSION_DEMO
 /* 0000046C-00000738       .text loadModelData__9daLodbg_cFPCcRP12J3DModelDataRP12JKRSolidHeapRUl */
 BOOL daLodbg_c::loadModelData(const char* filename, J3DModelData*& mModelData, JKRSolidHeap*& mDataHeap, u32& mDataSize) {
-    /* Nonmatching - regalloc */
     void* bin;
     bool success;
-    void* dst;
     s32 resSize;
     JKRHeap* oldHeap;
     s32 size;
@@ -116,7 +114,7 @@ BOOL daLodbg_c::loadModelData(const char* filename, J3DModelData*& mModelData, J
     JUT_ASSERT(0x12f, success);
 
     if (sLocalHeap != NULL) {
-        dst = sLocalHeap->alloc(resSize, 0x20);
+        void* dst = sLocalHeap->alloc(resSize, 0x20);
         if (dst != NULL) {
             memcpy(dst, bin, resSize);
             JKRFreeToHeap(NULL, bin);
@@ -125,13 +123,13 @@ BOOL daLodbg_c::loadModelData(const char* filename, J3DModelData*& mModelData, J
     }
 
     JUT_ASSERT(0x13d, mDataHeap == NULL);
-    mDataHeap = JKRSolidHeap::create(-1, sLocalHeap, false);
+    mDataHeap = JKRCreateSolidHeap(-1, sLocalHeap, false);
     if (mDataHeap != NULL && mDataHeap->getTotalFreeSize() < 0x2000) {
         mDataHeap->destroy();
         mDataHeap = NULL;
     }
     if (mDataHeap == NULL)
-        mDataHeap = JKRSolidHeap::create(-1, mDoExt_getArchiveHeap(), false);
+        mDataHeap = JKRCreateSolidHeap(-1, mDoExt_getArchiveHeap(), false);
     oldHeap = JKRGetCurrentHeap();
     mDataHeap->becomeCurrentHeap();
     mModelData = J3DModelLoaderDataBase::loadBinaryDisplayList(bin, 0x2020);
