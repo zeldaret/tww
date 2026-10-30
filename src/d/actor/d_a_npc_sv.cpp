@@ -56,34 +56,34 @@ static const int l_bck_ix_tbl[][6] = { { dRes_ID_SV_BCK_SV_WAIT01_e,
                                          dRes_ID_SV_BCK_SV_BYE_e,
                                          dRes_ID_SV_BCK_SV_SHI_e } };
 
-static sSvAnmDat l_npc_anm_wait = { 0, 0x08, 0xFF };
+static sSvAnmDat l_npc_anm_wait = { daNpcSv_c::BCK_IDX_0, 0x08, 0xFF };
 
 static sSvAnmDat l_npc_anm_talk = {
-    1,
+    daNpcSv_c::BCK_IDX_1,
     0x08,
     0xFF,
 };
 
 static sSvAnmDat l_npc_anm_talk2 = {
-    2,
+    daNpcSv_c::BCK_IDX_2,
     0x08,
     0xFF,
 };
 
 static sSvAnmDat l_npc_anm_talk3 = {
-    3,
+    daNpcSv_c::BCK_IDX_3,
     0x08,
     0xFF,
 };
 
 static sSvAnmDat l_npc_anm_ya1[] = {
     {
-        4,
+        daNpcSv_c::BCK_IDX_4,
         0x08,
         1,
     },
     {
-        0,
+        daNpcSv_c::BCK_IDX_0,
         0x08,
         0xFF,
     },
@@ -91,37 +91,37 @@ static sSvAnmDat l_npc_anm_ya1[] = {
 
 static sSvAnmDat l_npc_anm_ya2[] = {
     {
-        4,
+        daNpcSv_c::BCK_IDX_4,
         0x08,
         1,
     },
     {
-        1,
+        daNpcSv_c::BCK_IDX_1,
         0x08,
         0xFF,
     },
 };
 
 static sSvAnmDat l_npc_anm_mawasi = {
-    5,
+    daNpcSv_c::BCK_IDX_5,
     0x00,
     0xFF,
 };
 
 static sSvAnmDat l_npc_anm_kyoro = {
-    1,
+    daNpcSv_c::BCK_IDX_1,
     0x08,
     0xFF,
 };
 
 static sSvAnmDat l_npc_anm_unun[] = {
     {
-        2,
+        daNpcSv_c::BCK_IDX_2,
         0x08,
         1,
     },
     {
-        0xFF,
+        daNpcSv_c::BCK_NULL,
         0x08,
         0,
     },
@@ -129,12 +129,12 @@ static sSvAnmDat l_npc_anm_unun[] = {
 
 static sSvAnmDat l_npc_anm_sisi[] = {
     {
-        3,
+        daNpcSv_c::BCK_IDX_3,
         0x08,
         1,
     },
     {
-        0xFF,
+        daNpcSv_c::BCK_NULL,
         0x08,
         0,
     },
@@ -142,12 +142,12 @@ static sSvAnmDat l_npc_anm_sisi[] = {
 
 static sSvAnmDat l_npc_anm_byebye[] = {
     {
-        4,
+        daNpcSv_c::BCK_IDX_4,
         0x08,
         1,
     },
     {
-        0xFF,
+        daNpcSv_c::BCK_NULL,
         0x08,
         0,
     },
@@ -155,12 +155,12 @@ static sSvAnmDat l_npc_anm_byebye[] = {
 
 static sSvAnmDat l_npc_anm_shi[] = {
     {
-        5,
+        daNpcSv_c::BCK_IDX_5,
         0x08,
         1,
     },
     {
-        0xFF,
+        daNpcSv_c::BCK_NULL,
         0x08,
         0,
     },
@@ -231,7 +231,7 @@ daNpcSv_c::daNpcSv_c() {
     mHeadOnlyFollow = true;
     field_0x742 = 1;
     mHomeYRot = home.angle.y;
-    mBckIdx = 0;
+    mBckIdx = BCK_IDX_0;
     mTalkFlags = 0;
     mIkadaFrame = 0;
 
@@ -478,7 +478,7 @@ bool daNpcSv_c::_execute() {
 
     eventOrder();
 
-    if (!mNpcNo && mBckIdx == 5) {
+    if (!mNpcNo && mBckIdx == BCK_IDX_5) {
         mpMorf->setFrame(mIkadaFrame);
     } else {
         playAnm();
@@ -1163,7 +1163,7 @@ void daNpcSv_c::setAnm(u8 i_bckIdx, int i_loopMode, f32 i_morf) {
 
 /* 000026C8-00002768       .text setAnmTbl__9daNpcSv_cFP9sSvAnmDat */
 bool daNpcSv_c::setAnmTbl(sSvAnmDat* i_anmDat) {
-    if (i_anmDat->mBckIdx == 0xFF) {
+    if (i_anmDat->mBckIdx == BCK_NULL) {
         mpAnmDat = NULL;
         return true;
     }

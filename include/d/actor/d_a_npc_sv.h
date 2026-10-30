@@ -59,6 +59,16 @@ public:
         CUT_TURN_OK = 4,
     };
 
+    enum BckIdx {
+        BCK_IDX_0 = 0,
+        BCK_IDX_1 = 1,
+        BCK_IDX_2 = 2,
+        BCK_IDX_3 = 3,
+        BCK_IDX_4 = 4,
+        BCK_IDX_5 = 5,
+        BCK_NULL = 0xFF,
+    };
+
     u8 getMsgPtn() { return mMsgPtn; }
     u8 getNpcNo() {
         return mNpcNo;
