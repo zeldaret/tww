@@ -355,17 +355,17 @@ void daObj_Ikada_c::pathMove() {
 
 /* 00000F04-00000FBC       .text HandleRight__13daObj_Ikada_cFv */
 void daObj_Ikada_c::HandleRight() {
-    m1154 += l_HIO.m20;
-    if (m1154 >= mBckAnm.getEndFrame()) {
-        m1154 = mBckAnm.getStartFrame();
+    mFrame += l_HIO.m20;
+    if (mFrame >= mBckAnm.getEndFrame()) {
+        mFrame = mBckAnm.getStartFrame();
     }
 }
 
 /* 00000FBC-00001074       .text HandleLeft__13daObj_Ikada_cFv */
 void daObj_Ikada_c::HandleLeft() {
-    m1154 -= l_HIO.m20;
-    if (m1154 <= mBckAnm.getStartFrame()) {
-        m1154 = mBckAnm.getEndFrame();
+    mFrame -= l_HIO.m20;
+    if (mFrame <= mBckAnm.getStartFrame()) {
+        mFrame = mBckAnm.getEndFrame();
     }
 }
 
@@ -580,7 +580,7 @@ void daObj_Ikada_c::setRopePos() {
 
     mDoMtx_stack_c::ZXYrotM(cM_atan2s(sp98.z, sp98.y) + iVar3, shape_angle.y, cM_atan2s(-sp98.x, std::sqrtf(sp98.y * sp98.y + sp98.z * sp98.z)) + iVar4);
     mDoMtx_stack_c::XrotM(-0x4000);
-    mDoMtx_stack_c::multVecZero(&m0474);
+    mDoMtx_stack_c::multVecZero(&mCranePos);
 
     mpRopeEnd->setBaseTRMtx(mDoMtx_stack_c::get());
     f32 fVar9 = pcVar7->y;
@@ -1186,7 +1186,7 @@ bool daObj_Ikada_c::_execute() {
     }
 
     if (mType == 4) {
-        mBckAnm.setFrame(m1154);
+        mBckAnm.setFrame(mFrame);
         if (REG12_S(0) != 0) {
             mJointRot[REG12_S(0)].x = REG12_S(1);
             mJointRot[REG12_S(0)].y = REG12_S(2);
@@ -1467,7 +1467,7 @@ void daObj_Ikada_c::createInit() {
         mDoMtx_stack_c::transS(pcVar8->x, pcVar8->y, pcVar8->z);
         mDoMtx_stack_c::ZXYrotM((s16)cM_atan2s(sp68.z, sp68.y), shape_angle.y, (s16)cM_atan2s(-sp68.x, std::sqrtf(sp68.y * sp68.y + sp68.z * sp68.z)));
         mDoMtx_stack_c::XrotM(-0x4000);
-        mDoMtx_stack_c::multVecZero(&m0474);
+        mDoMtx_stack_c::multVecZero(&mCranePos);
         mpRopeEnd->setBaseTRMtx(mDoMtx_stack_c::get());
     }
 

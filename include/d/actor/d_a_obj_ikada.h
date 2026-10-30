@@ -18,18 +18,22 @@ public:
         PROC_EXEC_e = 1,
     };
 
-    void getCranePos() {}
-    void getFrame() {}
-    void getMode() {}
-    void getSvDirection() {}
+    cXyz getCranePos() {
+        return mCranePos;
+    }
+    s32 getFrame() {
+        return mFrame;
+    }
+    s32 getMode() { return mCurMode; }
+    s32 getSvDirection() { return m1168; }
     bool isBonbori() { return mType == 3 || mType == 1; }
     bool isCrane() {return mType == 4; }
     bool isFlag() { return mType == 0 || mType == 4; }
     bool isWave() { return mType == 4 || mType == 3 || mType == 1; }
     void modeProcInit(int idx) { modeProc(PROC_INIT_e, idx); }
     void setInitPos() {}
-    void setStart() {}
-    void setStop() {}
+    void setStart() { m1166 = 1; }
+    void setStop() { m1166 = 0; }
 
     void _nodeControl(J3DNode*, J3DModel*);
     BOOL _pathMove(cXyz*, cXyz*, cXyz*);
@@ -123,7 +127,7 @@ public:
     /* 0x0462 */ u8 m0462[0x0464 - 0x0462];
     /* 0x0464 */ f32 mSplashScaleTimer;
     /* 0x0468 */ cXyz mTrackPos;
-    /* 0x0474 */ cXyz m0474;
+    /* 0x0474 */ cXyz mCranePos;
     /* 0x0480 */ dPa_followEcallBack mBombSmokeEasterEgg;
     /* 0x0494 */ csXyz mBombSmokeRot;
     /* 0x049A */ u8 m049A[0x049C - 0x049A];
@@ -161,7 +165,7 @@ public:
     /* 0x07D8 */ s32 m07D8;
     /* 0x07DC */ cXyz m07DC[200];
     /* 0x113C */ csXyz mJointRot[4];
-    /* 0x1154 */ s32 m1154;
+    /* 0x1154 */ s32 mFrame;
     /* 0x1158 */ s16 m1158;
     /* 0x115A */ s16 m115A;
     /* 0x115C */ s16 m115C;
