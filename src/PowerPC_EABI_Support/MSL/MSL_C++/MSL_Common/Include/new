@@ -1,5 +1,5 @@
-#ifndef MSL_NEW_H_
-#define MSL_NEW_H_
+#ifndef MSL_NEW
+#define MSL_NEW
 
 #include "stddef.h"
 

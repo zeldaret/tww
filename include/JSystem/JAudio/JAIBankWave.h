@@ -23,15 +23,15 @@ namespace JAInter {
             u32 field_0x8;
         };
         struct flags_t {
-            u8 flag1 : 1;
-            u8 flag2 : 1;
-            u8 flag3 : 1;
-            u8 flag4 : 1;
-            u8 flag5 : 1;
-            u8 flag6 : 1;
-            u8 flag7 : 1;
-            u8 flag8 : 1;
-            u8 flag9 : 1;
+            u16 flag1 : 1;
+            u16 flag2 : 1;
+            u16 flag3 : 1;
+            u16 flag4 : 1;
+            u16 flag5 : 1;
+            u16 flag6 : 1;
+            u16 flag7 : 1;
+            u16 flag8 : 1;
+            u16 flag9 : 1;
         };
 
         extern initOnCode_s* initOnCodeBnk;

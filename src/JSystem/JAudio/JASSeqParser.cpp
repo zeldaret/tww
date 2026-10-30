@@ -212,14 +212,7 @@ int JASystem::TSeqParser::cmdCall(TTrack* track, u32* args) {
 /* 8027E90C-8027E9AC       .text cmdRet__Q28JASystem10TSeqParserFPQ28JASystem6TTrackPUl */
 int JASystem::TSeqParser::cmdRet(TTrack* track, u32* args) {
     if (conditionCheck(track, args[0])) {
-        u32 var1 = track->getSeq()->mLoopIndex;
-        bool tmp;
-        if (var1 == 0) {
-            tmp = false;
-        } else {
-            tmp = track->getSeq()->ret();
-        }
-        if (!tmp) {
+        if (!track->getSeq()->ret()) {
             JUT_WARN(335, "%s", "cannot ret for call-stack is NULL");
             return 3;
         }
@@ -801,7 +794,7 @@ int JASystem::TSeqParser::cmdWait(TTrack* track, u8 flag) {
         val <<= 8;
         val |= track->getSeq()->readByte();
     }
-    track->getSeq()->mWaitTimer = val;
+    track->getSeq()->wait(val);
     if (val != 0) {
         return 1;
     } else {

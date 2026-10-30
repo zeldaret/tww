@@ -1,9 +1,9 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#include <iterator.h>
-#include <functional.h>
-#include <algorithm.h>
+#include <iterator>
+#include <functional>
+#include <algorithm>
 
 namespace JGadget {
 

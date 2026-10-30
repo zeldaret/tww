@@ -180,7 +180,7 @@ void JAIZelBasic::gframeProcess() {
     if (!JAInter::SeMgr::seHandle) {
         return;
     }
-    if (JAInter::SeMgr::seHandle->mState >= SOUNDSTATE_Playing) {
+    if (JAInter::SeMgr::seHandle->getStatus() >= SOUNDSTATE_Playing) {
         zeldaGFrameWork();
     }
     processFrameWork();
@@ -203,8 +203,8 @@ void JAIZelBasic::resetProcess() {
 
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         JAInter::SeqUpdateData* data = JAInter::SequenceMgr::getPlayTrackInfo(i);
-        if (data && data->mSequence) {
-            data->mSequence->setSeqInterVolume(SOUNDPARAM_Direct, 0.0f, 1);
+        if (data && data->mpSequence) {
+            data->mpSequence->setSeqInterVolume(SOUNDPARAM_Direct, 0.0f, 1);
         }
     }
     if (JAInter::StreamMgr::getUpdateInfo()->mpSound) {
@@ -228,8 +228,8 @@ void JAIZelBasic::resetRecover() {
     }
     for (int i = 0; i < JAIGlobalParameter::getParamSeqPlayTrackMax(); i++) {
         JAInter::SeqUpdateData* data = JAInter::SequenceMgr::getPlayTrackInfo(i);
-        if (data && data->mSequence && data->mSequence != JAInter::SeMgr::seHandle) {
-            data->mSequence->stop(0);
+        if (data && data->mpSequence && data->mpSequence != JAInter::SeMgr::seHandle) {
+            data->mpSequence->stop(0);
         }
     }
     setScene(0, dIsleRoom_SeaFloor_e, 0, -1);
@@ -742,19 +742,19 @@ BOOL JAIZelBasic::checkSePlaying(u32 param_1) {
 }
 
 /* 802A8634-802A8688       .text seStopActor__11JAIZelBasicFP3VecUl */
-void JAIZelBasic::seStopActor(Vec* param_1, u32 param_2) {
+void JAIZelBasic::seStopActor(Vec* actorObj, u32 param_2) {
     if (param_2 == 0xffffffff) {
-        stopAllSound(param_1);
-    } else if (!param_1) {
+        stopAllSound(actorObj);
+    } else if (!actorObj) {
         stopAllSound(param_2);
     } else {
-        stopAllSound(param_2, param_1);
+        stopAllSound(param_2, actorObj);
     }
 }
 
 /* 802A8688-802A86A8       .text seDeleteObject__11JAIZelBasicFP3Vec */
-void JAIZelBasic::seDeleteObject(Vec* param_1) {
-    deleteObject(param_1);
+void JAIZelBasic::seDeleteObject(Vec* actorObj) {
+    deleteObject(actorObj);
 }
 
 /* 802A86A8-802A8748       .text getLinkVoiceVowel__11JAIZelBasicFUl */

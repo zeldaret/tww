@@ -6,7 +6,6 @@
 #include "SSystem/SComponent/c_m3d_g_sph.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "float.h"
 
 #define CHECK_FLOAT_RANGE(line, x) JUT_ASSERT(line, -1.0e32f < x && x < 1.0e32f);
 #define CHECK_VEC3_RANGE(line, v) JUT_ASSERT(line, -1.0e32f < v.x && v.x < 1.0e32f && -1.0e32f < v.y && v.y < 1.0e32f && -1.0e32f < v.z && v.z < 1.0e32f)

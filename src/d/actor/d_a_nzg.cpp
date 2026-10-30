@@ -23,13 +23,7 @@ static f32 dummy40(int arg1) {
     if (arg1 == 1) {
         return 40.0f;
     } else if (arg1 == 2) {
-        return 0.0f;
-    } else if (arg1 == 3) {
-        f64 val = 0.5;
-        return val;
-    } else if (arg1 == 4) {
-        f64 val = 3.0;
-        return val;
+        return cXyz().abs();
     } else {
         return 300.0f;
     }

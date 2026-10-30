@@ -124,20 +124,22 @@ namespace JASystem {
         void initBuffer();
         FXBuffer* getFXHandle(u8 param_1);
 
-        // TODO inlines
-        inline void boot(void (*)(void*)) {}
-        inline void finishWork(u16) {}
-        inline void flushChannel(u8) {}
-        inline void restart() {}
-        inline void setBusConnect(u8, u8, u8) {}
+        inline void setPitch(u8 i, u16 param_1) { getDSPHandle(i)->setPitch(param_1); }
+        inline void setMixerInitDelayMax(u8 i, u8 param_1) { getDSPHandle(i)->setMixerInitDelayMax(param_1); }
+        inline void setMixerInitVolume(u8 i, u8 param_1, s16 param_2, u8 param_3) { getDSPHandle(i)->setMixerInitVolume(param_1, param_2, param_3); }
+        inline void setMixerVolume(u8 i, u8 param_1, s16 param_2, u8 param_3) { getDSPHandle(i)->setMixerVolume(param_1, param_2, param_3); }
+        inline void setPauseFlag(u8 i, u8 param_1) { getDSPHandle(i)->setPauseFlag(param_1); }
+        inline void flushChannel(u8 i) { getDSPHandle(i)->flushChannel(); }
+        inline void setBusConnect(u8 i, u8 param_1, u8 param_2) { getDSPHandle(i)->setBusConnect(param_1, param_2); }
+
         inline bool setFXLine(u8 i, s16* buffer, FxlineConfig_* config) {
             return getFXHandle(i)->setFXLine(buffer, config);
         }
-        inline void setMixerInitDelayMax(u8, u8) {}
-        inline void setMixerInitVolume(u8, u8, s16, u8) {}
-        inline void setMixerVolume(u8, u8, s16, u8) {}
-        inline void setPauseFlag(u8, u8) {}
-        inline void setPitch(u8, u16) {}
+    
+        // TODO inlines
+        inline void boot(void (*)(void*)) {}
+        inline void finishWork(u16) {}
+        inline void restart() {}
         inline void sync(u32, u32, u32) {}
 
         extern u16 SEND_TABLE[12];

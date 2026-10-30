@@ -631,10 +631,8 @@ void Act_c::bound(f32 param_1) {
             }
         }
     }
-    else {
-        if(mAcch.ChkGroundHit()) {
-            cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
-        }
+    else if(mAcch.ChkGroundHit()) {
+        cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
     }
 }
 
@@ -893,17 +891,15 @@ bool Act_c::chk_exp_bg_nut() {
         eff_explode();
         ret = true;
     }
-    else {
-        if(water && speed.abs() > attr().field_0x28) {
-            eff_explode_water();
-            ret = true;
-            
-        }
-        else if(hit) {
-            if(field_0x741 || speed.abs() > attr().field_0x2C) {
-                eff_fuse_start();
-                set_nut_exp_interval();
-            }
+    else if(water && speed.abs() > attr().field_0x28) {
+        eff_explode_water();
+        ret = true;
+        
+    }
+    else if(hit) {
+        if(field_0x741 || speed.abs() > attr().field_0x2C) {
+            eff_fuse_start();
+            set_nut_exp_interval();
         }
     }
 
@@ -1007,45 +1003,39 @@ void Act_c::mode_wait() {
         mode_explode_init();
         mode_explode();
     }
+    else if(fopAcM_checkCarryNow(this)) {
+        mode_carry_init();
+        mode_carry();
+    }
     else {
-        if(fopAcM_checkCarryNow(this)) {
-            mode_carry_init();
-            mode_carry();
-        }
-        else {
-            bool temp = prm_get_stick();
-            f32 yVel = 0.0f;
-            if(!temp) {
-                if(!field_0x745) {
-                    posMoveF();
-                }
-
-                yVel = speed.y;
-                bgCrrPos();
+        bool temp = prm_get_stick();
+        f32 yVel = 0.0f;
+        if(!temp) {
+            if(!field_0x745) {
+                posMoveF();
             }
 
-            if(chk_exp_post()) {
-                mode_explode_init();
+            yVel = speed.y;
+            bgCrrPos();
+        }
+
+        if(chk_exp_post()) {
+            mode_explode_init();
+        }
+        else if(chk_sink_post()) {
+            mode_sink_init();
+        }
+        else if(!field_0x740) {
+            if(temp) {
+                off_carry();
             }
             else {
-                if(chk_sink_post()) {
-                    mode_sink_init();
+                bound(yVel);
+                if(mAcch.ChkGroundHit()) {
+                    on_carry();
                 }
                 else {
-                    if(!field_0x740) {
-                        if(temp) {
-                            off_carry();
-                        }
-                        else {
-                            bound(yVel);
-                            if(mAcch.ChkGroundHit()) {
-                                on_carry();
-                            }
-                            else {
-                                off_carry();
-                            }
-                        }
-                    }
+                    off_carry();
                 }
             }
         }
@@ -1066,21 +1056,19 @@ void Act_c::mode_carry() {
         mode_explode_init();
         mode_explode();
     }
-    else {
-        if(!fopAcM_checkCarryNow(this)) {
-            if(speedF > 0.0f) {
-                field_0x741 = 1;
-                field_0x7A8 = 2;
-            }
+    else if(!fopAcM_checkCarryNow(this)) {
+        if(speedF > 0.0f) {
+            field_0x741 = 1;
+            field_0x7A8 = 2;
+        }
 
-            mode_wait_init();
-            mode_wait();
-        }
-        else {
-            cXyz temp = current.pos;
-            bgCrrPos();
-            current.pos = temp;
-        }
+        mode_wait_init();
+        mode_wait();
+    }
+    else {
+        cXyz temp = current.pos;
+        bgCrrPos();
+        current.pos = temp;
     }
 }
 

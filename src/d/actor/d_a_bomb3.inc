@@ -377,19 +377,17 @@ bool daBomb_c::checkExplodeBg_nut() {
     if(burn) {
         ret = procExplode_init();
     }
-    else {
-        if(sink) {
-            makeWaterEffect();
-            field_0x781 = true;
-        }
-        else if(hit && field_0x780) {
-            change_state(STATE_1);
-            setFuseEffect();
-            if(30 < mRestTime) {
-                mRestTime = 30;
-                mBck1.setFrame(105.0f);
-                mBrk1.setFrame(105.0f);
-            }
+    else if(sink) {
+        makeWaterEffect();
+        field_0x781 = true;
+    }
+    else if(hit && field_0x780) {
+        change_state(STATE_1);
+        setFuseEffect();
+        if(30 < mRestTime) {
+            mRestTime = 30;
+            mBck1.setFrame(105.0f);
+            mBrk1.setFrame(105.0f);
         }
     }
 
@@ -410,17 +408,15 @@ bool daBomb_c::checkExplodeBg_cannon() {
     if(burn || hit) {
         ret = procExplode_init();
     }
-    else {
-        if(sink) {
-            makeWaterEffect();
-            field_0x781 = true;
-        }
-#if VERSION > VERSION_DEMO
-        else if(dead) {
-            field_0x781 = true;
-        }
-#endif
+    else if(sink) {
+        makeWaterEffect();
+        field_0x781 = true;
     }
+#if VERSION > VERSION_DEMO
+    else if(dead) {
+        field_0x781 = true;
+    }
+#endif
     
     return ret;
 }
@@ -619,10 +615,8 @@ void daBomb_c::bound(f32 param_1) {
             }
         }
     }
-    else {
-        if(mAcch.ChkGroundHit()) {
-            cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
-        }
+    else if(mAcch.ChkGroundHit()) {
+        cLib_addCalc(&speedF, 0.0f, 0.5f, 5.0f, 1.0f);
     }
 }
 
@@ -961,18 +955,15 @@ bool daBomb_c::procCarry() {
         procWait_init();
         return procWait();
     }
-    else {
-        if(checkExplode()) {
-            return true;
-        }
-        else {
-            cXyz curPos(current.pos);
-            bgCrrPos();
-            current.pos.set(curPos);
-
-            return true;
-        }
+    if(checkExplode()) {
+        return true;
     }
+
+    cXyz curPos(current.pos);
+    bgCrrPos();
+    current.pos.set(curPos);
+
+    return true;
 }
 
 /* 800DB9DC-800DBA50       .text procWait_init__8daBomb_cFv */
@@ -991,44 +982,37 @@ bool daBomb_c::procWait() {
     if(checkExplode()) {
         return true;
     }
-    else {
-        if(fopAcM_checkCarryNow(this)) {
-            return procCarry_init();
-        }
-        else {
-            posMoveF();
-            f32 y_vel = speed.y;
-            bgCrrPos();
-            bool temp = false;
-            if(checkExplodeBg()) {
-                temp = true;
-            }
-            else {
-                if(chk_state(STATE_4)) {
-                    if(waitState_cannon()) {
-                        temp = true;
-                    }
-                }
-                else {
-                    if(chk_state(STATE_7)) {
-                        waitState_bomtyu();
-                    }
-                }
-            }
+    if(fopAcM_checkCarryNow(this)) {
+        return procCarry_init();
+    }
 
-            if(!temp && !field_0x781) {
-                bound(y_vel);
-                if((mAcch.ChkGroundHit() || chk_state(STATE_5)) && !mAcch.ChkGroundLanding()) {
-                    cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-                }
-                else {
-                    cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
-                }
-            }
-
-            return true;
+    posMoveF();
+    f32 y_vel = speed.y;
+    bgCrrPos();
+    bool temp = false;
+    if(checkExplodeBg()) {
+        temp = true;
+    }
+    else if(chk_state(STATE_4)) {
+        if(waitState_cannon()) {
+            temp = true;
         }
     }
+    else if(chk_state(STATE_7)) {
+        waitState_bomtyu();
+    }
+
+    if(!temp && !field_0x781) {
+        bound(y_vel);
+        if((mAcch.ChkGroundHit() || chk_state(STATE_5)) && !mAcch.ChkGroundLanding()) {
+            cLib_onBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+        }
+        else {
+            cLib_offBit<u32>(attention_info.flags, fopAc_Attn_ACTION_CARRY_e);
+        }
+    }
+
+    return true;
 }
 
 /* 800DBBA0-800DBBC4       .text waitState_cannon__8daBomb_cFv */
@@ -1190,11 +1174,9 @@ void daBomb_c::anm_play_nut() {
         mBck0.play();
         mBrk0.play();
     }
-    else {
-        if(mRestTime + 2 <= 0x87) {
-            mBck1.play();
-            mBrk1.play();
-        }
+    else if(mRestTime + 2 <= 0x87) {
+        mBck1.play();
+        mBrk1.play();
     }
 }
 
@@ -1327,12 +1309,10 @@ BOOL daBomb_c::createHeap() {
         if(!mpModel) {
             return false;
         }
-        else {
-            J3DAnmTransform* bck0_data = (J3DAnmTransform*)dComIfG_getObjectRes(m_attrType[mType].resName, dRes_INDEX_LINK_BCK_BOMB_e);
-            int temp = mBck0.init(modelData, bck0_data, false, J3DFrameCtrl::EMode_LOOP);
+        J3DAnmTransform* bck0_data = (J3DAnmTransform*)dComIfG_getObjectRes(m_attrType[mType].resName, dRes_INDEX_LINK_BCK_BOMB_e);
+        int temp = mBck0.init(modelData, bck0_data, false, J3DFrameCtrl::EMode_LOOP);
 
-            return temp ? TRUE : FALSE;
-        }
+        return temp ? TRUE : FALSE;
     }
 }
 

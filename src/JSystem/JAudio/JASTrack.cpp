@@ -32,7 +32,7 @@ JASystem::TTrack::TTrack() {
     field_0x37b = 0;
     mPauseStatus = 0;
     mVolumeMode = 0;
-    field_0x37e = 0;
+    mActivity = 0;
     mIsPaused = 0;
     field_0x386 = 0;
     field_0x387 = 0;
@@ -81,7 +81,7 @@ void JASystem::TTrack::init() {
     field_0x37b = 0;
     mPauseStatus = 10;
     mVolumeMode = 0;
-    field_0x37e = 0;
+    mActivity = 0;
     for (int i = 0; i < 3; i++) {
         mCalcTypes[i] = 0;
         mParentCalcTypes[i] = 0;
@@ -175,7 +175,7 @@ lab_19c:
     }
     for (int i = 0; i < 16; i++) {
         TTrack* child = mChildren[i];
-        if (child && child->field_0x37e) {
+        if (child && child->mActivity) {
             JUT_ASSERT(276, this == child->mParent);
             if (child->mainProc() == -1) {
                 child->close();
@@ -193,7 +193,7 @@ void JASystem::TTrack::setInterrupt(u16 param_1) {
 
 /* 80280FA8-80281004       .text tryInterrupt__Q28JASystem6TTrackFv */
 bool JASystem::TTrack::tryInterrupt() {
-    if (mSeqCtrl.mPreviousFilePtr) {
+    if (mSeqCtrl.isIntr()) {
         return false;
     }
     void* var1 = mIntrMgr.checkIntr();
@@ -415,7 +415,7 @@ void JASystem::TTrack::oscSetupFull(u8 param_1, u32 param_2, u32 param_3) {
         if (param_2 == 0) {
             field_0x2cc[r8].table = NULL;
         }
-        field_0x2cc[r8].table = (s16*)(mSeqCtrl.mRawFilePtr + param_2);
+        field_0x2cc[r8].table = (s16*)mSeqCtrl.getAddr(param_2);
     }
     if (!r10) {
         return;
@@ -423,7 +423,7 @@ void JASystem::TTrack::oscSetupFull(u8 param_1, u32 param_2, u32 param_3) {
     if (param_3 == 0) {
         field_0x2cc[r8].rel_table = Player::sRelTable;
     }
-    field_0x2cc[r8].rel_table = (s16*)(mSeqCtrl.mRawFilePtr + param_3);
+    field_0x2cc[r8].rel_table = (s16*)mSeqCtrl.getAddr(param_3);
 }
 
 /* 802817E4-80281850       .text oscSetupSimpleEnv__Q28JASystem6TTrackFUcUl */
@@ -431,10 +431,10 @@ void JASystem::TTrack::oscSetupSimpleEnv(u8 param_1, u32 param_2) {
     switch (param_1) {
     case 0:
         field_0x2cc[0] = Player::sEnvelopeDef;
-        field_0x2cc[0].table = (s16*)(mSeqCtrl.mRawFilePtr + param_2);
+        field_0x2cc[0].table = (s16*)mSeqCtrl.getAddr(param_2);
         break;
     case 1:
-        field_0x2cc[0].rel_table = (s16*)(mSeqCtrl.mRawFilePtr + param_2);
+        field_0x2cc[0].rel_table = (s16*)mSeqCtrl.getAddr(param_2);
         break;
     }
 }
@@ -762,7 +762,7 @@ void JASystem::TTrack::updateTempo() {
 
     for (s32 i = 0; i < MAX_CHILDREN; i++) {
         TTrack* child = mChildren[i];
-        if (child && child->field_0x37e) {
+        if (child && child->mActivity) {
             JUT_ASSERT(1159, this == child->mParent);
             child->updateTempo();
         }
@@ -786,7 +786,7 @@ void JASystem::TTrack::updateSeq(u32 flags, bool update_children) {
 
     for (s32 i = 0; i < MAX_CHILDREN; i++) {
         TTrack* child = mChildren[i];
-        if (child && child->field_0x37e) {
+        if (child && child->mActivity) {
             if (update_children) {
                 child->updateSeq(new_flags, update_children);
             } else {
@@ -834,13 +834,13 @@ bool JASystem::TTrack::setSeqData(u8* param_1, s32, int) {
     field_0x37b = 3;
     mSeqCtrl.start(param_1, 0);
     updateTrackAll();
-    field_0x37e = 2;
+    mActivity = 2;
     return true;
 }
 
 /* 802827F0-802828A8       .text startSeq__Q28JASystem6TTrackFv */
 bool JASystem::TTrack::startSeq() {
-    switch (field_0x37e) {
+    switch (mActivity) {
         case 0:
             // Not ready
             OSReport("in Player StartSeq:   準備ができていません\n");
@@ -854,7 +854,7 @@ bool JASystem::TTrack::startSeq() {
             OSReport("in Player StartSeq: 停止中です\n");
             return false;
         case 2:
-            field_0x37e = 1;
+            mActivity = 1;
             break;
     }
 
@@ -864,17 +864,17 @@ bool JASystem::TTrack::startSeq() {
 
 /* 802828A8-80282908       .text stopSeq__Q28JASystem6TTrackFv */
 bool JASystem::TTrack::stopSeq() {
-    switch (field_0x37e) {
+    switch (mActivity) {
         case 0:
             break;
         case 2:
-            field_0x37e = 0;
-            if (field_0x389 != 0 && this != NULL) {
+            mActivity = 0;
+            if (field_0x389 != 0) {
                 delete this;
             }
             break;
         default:
-            field_0x37e = 3;
+            mActivity = 3;
             break;
     }
     return true;
@@ -902,12 +902,12 @@ void JASystem::TTrack::noteOffAll() {
 
 /* 802829DC-80282A90       .text close__Q28JASystem6TTrackFv */
 int JASystem::TTrack::close() {
-    if (field_0x37e == 0) {
+    if (mActivity == 0) {
         return 0;
     }
 
     noteOffAll();
-    field_0x37e = 0;
+    mActivity = 0;
 
     for (s32 i = 0; i < MAX_CHILDREN; i++) {
         if (mChildren[i]) {
@@ -918,7 +918,7 @@ int JASystem::TTrack::close() {
 
     field_0x386 = 0;
     releaseChannelAll();
-    if (field_0x389 != 0 && this != NULL) {
+    if (field_0x389 != 0) {
         delete this;
     }
     return 0;
@@ -945,7 +945,7 @@ void JASystem::TTrack::muteTrack(bool mute) {
 /* 80282B44-80282B84       .text start__Q28JASystem6TTrackFPvUl */
 bool JASystem::TTrack::start(void* param_1, u32 param_2) {
     mSeqCtrl.start(param_1, param_2);
-    field_0x37e = 1;
+    mActivity = 1;
     updateTrackAll();
     return false;
 }
@@ -990,7 +990,7 @@ int JASystem::TTrack::loadTbl(u32 param_1, u32 param_2, u32 param_3) {
 
     switch (param_3) {
     case 4:
-        return mSeqCtrl.mRawFilePtr[param_1 + param_2];
+        return mSeqCtrl.getByte(param_1 + param_2);
     case 5:
         return mSeqCtrl.get16(param_1 + param_2 * 2);
     case 6:
@@ -1020,13 +1020,13 @@ int JASystem::TTrack::exchangeRegisterValue(u8 target) {
 u32 JASystem::TTrack::readReg32(u8 target) {
     u32 result;
     switch(target) {
-        case 0x28:
-        case 0x29:
-        case 0x2a:
-        case 0x2b:
-            result = mRegisterParam.getAddress(target - 0x28);
+        case TRegisterParam::PARAM_REG_AR0:
+        case TRegisterParam::PARAM_REG_AR1:
+        case TRegisterParam::PARAM_REG_AR2:
+        case TRegisterParam::PARAM_REG_AR3:
+            result = mRegisterParam.getAddress(target - TRegisterParam::PARAM_REG_AR0);
             break;
-        case 0x23:
+        case TRegisterParam::PARAM_REG_XY:
             result = readReg16(0x4) << 16;
             result |= readReg16(0x5);
             break;
@@ -1059,7 +1059,7 @@ u16 JASystem::TTrack::readReg16(u8 target) {
             result = 0;
             for (i = MAX_CHILDREN - 1; i >= 0; i--) {
                 result <<= 1;
-                if (mChildren[i] && mChildren[i]->field_0x37e != 0) {
+                if (mChildren[i] && mChildren[i]->mActivity != 0) {
                     result |= 1;
                 }
             }
@@ -1114,8 +1114,7 @@ void JASystem::TTrack::writeRegDirect(u8 target, u16 value) {
 /* 80283164-802836FC       .text writeRegParam__Q28JASystem6TTrackFUc */
 void JASystem::TTrack::writeRegParam(u8 param) {
     u8 curr_file_byte;
-    u8 bVar0;
-    u8 bVar1;
+    u8 target;
 
     u32 iVar1;
     u32 iVar2;
@@ -1124,7 +1123,7 @@ void JASystem::TTrack::writeRegParam(u8 param) {
 
     s16 sVar0;
     s16 sVar1;
-    u32 extended_sVar1;
+    u32 r23;
     u32 tbl_return;
 
     switch (param & 0xF) {
@@ -1133,13 +1132,13 @@ void JASystem::TTrack::writeRegParam(u8 param) {
             iVar2 = 11;
             break;
         case 10:
-            curr_file_byte = *mSeqCtrl.mCurrentFilePtr++;
+            curr_file_byte = mSeqCtrl.readByte();
             iVar1 = curr_file_byte & 0xC;
             tbl_param_3 = (curr_file_byte >> 4) + 4;
             iVar2 = 10;
             break;
         case 9:
-            curr_file_byte = *mSeqCtrl.mCurrentFilePtr++;
+            curr_file_byte = mSeqCtrl.readByte();
             iVar1 = curr_file_byte & 0xC;
             iVar2 = curr_file_byte & 0xF0;
             if (iVar1 == 8) {
@@ -1152,25 +1151,23 @@ void JASystem::TTrack::writeRegParam(u8 param) {
             break;
     }
 
-    bVar0 = *mSeqCtrl.mCurrentFilePtr++;
+    target = mSeqCtrl.readByte();
     if (iVar2 == 10) {
-        u8 next_file_byte = *mSeqCtrl.mCurrentFilePtr++;
-        tbl_param_1 = readReg32(next_file_byte);
+        tbl_param_1 = readReg32(mSeqCtrl.readByte());
     }
 
     switch (iVar1) {
         case 0:
-            bVar1 = *mSeqCtrl.mCurrentFilePtr++;
-            sVar0 = readReg16(bVar1);
+            sVar0 = readReg16(mSeqCtrl.readByte());
             break;
         case 4:
-            sVar0 = *mSeqCtrl.mCurrentFilePtr++;
+            sVar0 = mSeqCtrl.readByte();
             break;
         case 12:
             sVar0 = mSeqCtrl.read16();
             break;
         case 8: {
-            u32 byte = (u32) *mSeqCtrl.mCurrentFilePtr++;
+            u32 byte = mSeqCtrl.readByte();
             if (byte & 0x80) {
                 sVar0 = byte << 8;
             } else {
@@ -1183,8 +1180,8 @@ void JASystem::TTrack::writeRegParam(u8 param) {
             break;
     }
 
-    sVar1 = readReg16(bVar0);
-    extended_sVar1 = sVar1;
+    sVar1 = readReg16(target);
+    r23 = sVar1;
 
     switch (iVar2) {
         case 0x0:
@@ -1196,15 +1193,15 @@ void JASystem::TTrack::writeRegParam(u8 param) {
             sVar0 += sVar1;
             break;
         case 0x2:
-            extended_sVar1 *= sVar0;
-            writeRegDirect(4, JSUHiHalf(extended_sVar1));
-            writeRegDirect(5, JSULoHalf(extended_sVar1));
+            r23 *= sVar0;
+            writeRegDirect(4, JSUHiHalf(r23));
+            writeRegDirect(5, JSULoHalf(r23));
             return;
         case 0x3:
             mRegisterParam.setFlag(sVar1 - sVar0);
             return;
         case 0xB:
-            sVar0 = extended_sVar1 - (u32)sVar0;
+            sVar0 = r23 - (u32)sVar0;
             break;
         case 0x10:
             if (iVar1 == 4) {
@@ -1250,56 +1247,54 @@ void JASystem::TTrack::writeRegParam(u8 param) {
 
     // Bug: reg_flags is uninitialized in several of these cases.
     u16 reg_flags;
-    switch (bVar0) {
+    switch (target) {
         case 0:
         case 1:
         case 2: {
-            u8 val3 = sVar0 & 0xFF;
-            sVar0 = val3;
-            reg_flags = Player::extend8to16(val3);
+            sVar0 = sVar0 & 0xFF;
+            reg_flags = Player::extend8to16(sVar0);
             break;
         }
         case 0x21: {
             u8 bank = mRegisterParam.getBankNumber();
             sVar0 = (bank << 8) | (sVar0 & 0xFF);
-            bVar0 = 6;
+            target = 6;
             break;
         }
         case 0x20:
             sVar0 = mRegisterParam.getProgramNumber() | ((s16)sVar0 << 8);
-            bVar0 = 6;
+            target = 6;
             break;
         case 0x2E:
             sVar0 = (mRegisterParam.field_0x1a & 0xFF00) | (sVar0 & 0xFF);
-            bVar0 = 13;
+            target = 13;
             break;
         case 0x2F: {
-            s16 tmp = (mRegisterParam.field_0x1a & 0xFF);
-            sVar0 = tmp | (sVar0 << 8);
-            bVar0 = 13;
+            sVar0 = (s16)(mRegisterParam.field_0x1a & 0xFF) | (sVar0 << 8);
+            target = 13;
             break;
         }
         case 0x22:
             writeRegDirect(0, sVar0 >> 8);
-            bVar0 = 1;
+            target = 1;
             sVar0 = sVar0 & 0xFF;
             reg_flags = sVar0;
             break;
-        case 0x28:
-        case 0x29:
-        case 0x2a:
-        case 0x2b:
-            mRegisterParam.setAddress(bVar0 - 0x28, tbl_return);
+        case TRegisterParam::PARAM_REG_AR0:
+        case TRegisterParam::PARAM_REG_AR1:
+        case TRegisterParam::PARAM_REG_AR2:
+        case TRegisterParam::PARAM_REG_AR3:
+            mRegisterParam.setAddress(target - TRegisterParam::PARAM_REG_AR0, tbl_return);
             return;
         default:
             reg_flags = sVar0;
             break;
     }
 
-    mRegisterParam.field_0x0[bVar0] = sVar0;
+    mRegisterParam.field_0x0[target] = sVar0;
     mRegisterParam.setFlag(reg_flags);
 
-    switch (bVar0) {
+    switch (target) {
         case 6:
             for (s32 i = 0; i < (s32)ARRAY_SIZE(mOscRoute); i++) {
                 mOscRoute[i] = 0xF;
@@ -1413,7 +1408,7 @@ void JASystem::TTrack::pause(bool pause, bool pause_children) {
     if (pause_children) {
         for (s32 i = 0; i < MAX_CHILDREN; i++) {
             TTrack* child = mChildren[i];
-            if (child && child->field_0x37e) {
+            if (child && child->mActivity) {
                 JUT_ASSERT(2109, this == child->mParent);
                 child->pause(pause, true);
             }
@@ -1468,10 +1463,10 @@ s32 JASystem::TTrack::rootCallback(void* user_data) {
     if (track == NULL) {
         return -1;
     }
-    if (track->field_0x37e == 0) {
+    if (track->mActivity == 0) {
         return -1;
     }
-    if (track->field_0x37e == 3) {
+    if (track->mActivity == 3) {
         track->stopSeqMain();
         return -1;
     }

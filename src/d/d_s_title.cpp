@@ -110,7 +110,7 @@ static BOOL dScnTitle_Delete(title_of_scene_class* i_this) {
 static cPhs_State dScnTitle_Create(scene_class* i_scn) {
     title_of_scene_class * i_this = (title_of_scene_class*) i_scn;
 
-    if (JAInter::BankWave::checkAllWaveLoadStatus())
+    if (mDoAud_checkAllWaveLoadStatus())
         return cPhs_INIT_e;
 
     dMenu_flagSet(0);

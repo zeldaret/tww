@@ -350,10 +350,8 @@ bool daGhostship_c::_execute() {
         if(mPaths[i].mRadius < 900.0f) {
             field_0x6C4[i] = i * 100.0f + 1500.0f;
         }
-        else {
-            if(mPaths[i].mRadius > i * 100.0f + 1400.0f) {
-                field_0x6C4[i] = 800.0f;
-            }
+        else if(mPaths[i].mRadius > i * 100.0f + 1400.0f) {
+            field_0x6C4[i] = 800.0f;
         }
 
         s32 temp2 = 1;

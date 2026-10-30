@@ -12,7 +12,8 @@ namespace JASystem {
             mLoopStartPositions[mLoopIndex++] = mCurrentFilePtr;
             mCurrentFilePtr = mRawFilePtr + offset;
         }
-        void clrIntr() { mPreviousFilePtr = 0; }
+        void clrIntr() { mPreviousFilePtr = NULL; }
+        bool isIntr() const { return mPreviousFilePtr != NULL; }
         u8* getAddr(u32 offset) { return mRawFilePtr + offset; }
         u8* getBase() { return mRawFilePtr; }
         u8 getByte(u32 offset) const { return mRawFilePtr[offset]; }
@@ -23,7 +24,6 @@ namespace JASystem {
             return mLoopTimers[mLoopIndex - 1]; 
         }
         s32 getWait() const { return mWaitTimer; }
-        void isIntr() const {}
         void jump(u32 offset) {
             mCurrentFilePtr = mRawFilePtr + offset;
         }
@@ -33,6 +33,9 @@ namespace JASystem {
         }
         u8 readByte() { return *mCurrentFilePtr++; }
         bool ret() {
+            if (mLoopIndex == 0) {
+                return false;
+            }
             mCurrentFilePtr = mLoopStartPositions[--mLoopIndex];
             return true;
         }
@@ -52,6 +55,7 @@ namespace JASystem {
         u16 read16();
         u32 read24();
 
+    // private:
         /* 0x00 */ u8* mRawFilePtr;
         /* 0x04 */ u8* mCurrentFilePtr;
         /* 0x08 */ s32 mWaitTimer;

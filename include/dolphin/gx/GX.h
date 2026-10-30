@@ -219,7 +219,7 @@ inline void GXColor3x8(u8 r, u8 g, u8 b) {
     GXFIFO.u8 = b;
 }
 
-inline void GXColor4x8(u8 r, u8 g, u8 b, u8 a) {
+inline void GXColor4u8(u8 r, u8 g, u8 b, u8 a) {
     GXFIFO.u8 = r;
     GXFIFO.u8 = g;
     GXFIFO.u8 = b;

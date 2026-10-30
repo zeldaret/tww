@@ -59,23 +59,24 @@ namespace JASystem {
             void calcCurVolume();
             u8 volFloatToU8(f32);
 
-            void getLastAddrBefore() {}
             TPlayList* getList() { return mpList; }
-            void getPlayArea() {}
-            void getRestart() {}
-            void getState() {}
             void setList(TPlayList* list) { mpList = list; }
-            void setPlayArea(u16) {}
-            void setRestart(u8) {}
-            void setState(u8) {}
+            u16 getPlayArea() { return mPlayArea; }
+            void setPlayArea(u16 area) { mPlayArea = area; }
+            u8 getRestart() { return mRestart; }
+            void setRestart(u8 restart) { mRestart = restart; }
+            u8 getState() { return mState; }
+            void setState(u8 state) { mState = state; }
+            u32 getLastAddrBefore() { return mAddrs[mAddrIdx ^ 1]; }
 
+        private:
             /* 0x00 */ int field_0x0;
             /* 0x04 */ TPlayList* mpList;
-            /* 0x08 */ u16 field_0x8;
-            /* 0x0A */ u8 field_0xa;
-            /* 0x0B */ u8 field_0xb;
+            /* 0x08 */ u16 mPlayArea;
+            /* 0x0A */ u8 mRestart;
+            /* 0x0B */ u8 mState;
             /* 0x0C */ f32 field_0xc;
-            /* 0x10 */ f32 field_0x10;
+            /* 0x10 */ f32 mCurVolume;
             /* 0x14 */ u32 field_0x14;
             /* 0x18 */ u32 field_0x18;
             /* 0x1C */ u32 field_0x1c;
@@ -88,8 +89,8 @@ namespace JASystem {
             /* 0x38 */ u32 field_0x38;
             /* 0x3C */ u32 field_0x3c;
             /* 0x40 */ u32 field_0x40;
-            /* 0x44 */ u32 field_0x44[2];
-            /* 0x4C */ u8 field_0x4c;
+            /* 0x44 */ u32 mAddrs[2];
+            /* 0x4C */ u8 mAddrIdx;
         };
 
         extern TControl strCtrl;

@@ -68,11 +68,9 @@ namespace JAInter {
 class JAISound {
 public:
     struct PositionInfo_t {
-        /* 0x00 */ f32 field_0x0;
-        /* 0x04 */ u8 field_0x4[0x8 - 0x4];
-        /* 0x08 */ f32 field_0x8;
-        /* 0x0C */ u8 field_0xc[0x18 - 0xc];
-        /* 0x18 */ f32 field_0x18;
+        /* 0x00 */ Vec mPosition;
+        /* 0x0C */ Vec mPrevPosition;
+        /* 0x18 */ f32 mDistance;
     };
 
     JAISound();
@@ -135,69 +133,94 @@ public:
     u32 checkSoundHandle(u32, void*);
     void initParameter(JAISound**, JAInter::Actor*, u32, u32, u8, void*);
 
-    // TODO
-    void decWait() {}
-    void getAct() {}
-    void getAdjustPriority() {}
-    void getFadetime() {}
+    u8 getTrack() { return mTrackNo; }
+    void setTrack(u8 i_trackNo) { mTrackNo = i_trackNo; }
+
+    u8 getStatus() { return mStatus; }
+    void setStatus(u8 i_status) { mStatus = i_status; }
+
     u32 getID() { return mSoundID; }
-    void getInfoPointer() {}
-    void getMapInfo() {}
-    void getNextSound() {}
-    void getPlayGameFrameCounter() {}
-    void getPlayer() {}
+    void setID(u32 id) { mSoundID = id; }
+
+    u8 getWait() { return mFinishWaitTimer; }
+    void setWait(u8 i_wait) { mFinishWaitTimer = i_wait; }
+    void decWait() { mFinishWaitTimer--; }
+
+    u32 getPriority() { return mPriority; }
+    void setPriority(u32 i_priority) { mPriority = i_priority; }
+
+    s16 getAdjustPriority() { return mAdjustPriority; }
+
     PositionInfo_t* getPositionInfo() { return mPositionInfo; }
-    void getPrevSound() {}
-    void getPriority() {}
-    void getStatus() {}
-    JASystem::TTrack* getTrack() { return getSeqParameter()->getRootTrackPointer(); }
-    void getTrans() {}
-    void getWait() {}
-    void incPlayGameFrameCounter() {}
-    void setCustomParameterPointer(void*) {}
+
+    Vec* getTrans() { return mTrans; }
+
+    void* getAct() { return mActObj; }
+
+    u8 getPlayer() { return mPlayer; }
+
+    u32 getPlayGameFrameCounter() { return mPlayGameFrameCounter; }
+    void incPlayGameFrameCounter() { mPlayGameFrameCounter++; }
+
+    u32 getFadetime() { return mFadetime; }
+    void setFadetime(u32 i_fadetime) { mFadetime = i_fadetime; }
+
+    void setRandom(u8 i_random) { mRandPitchModifier = i_random; }
+
+    int getMapInfo() { return mMapInfoIndex; }
+
+    SoundInfo* getInfoPointer() { return mSoundInfo; }
+
+    void setCustomParameterPointer(void* i_customParam) { mCustomParameter = i_customParam; }
+
+    JAISound* getPrevSound() { return mPrevSound; }
+    void setPrevSound(JAISound* i_sound) { mPrevSound = i_sound; }
+    JAISound* getNextSound() { return mNextSound; }
+    void setNextSound(JAISound* i_sound) { mNextSound = i_sound; }
+
+    void setMainSoundPPointer(JAISound** i_soundPPointer) { mMainSoundPPointer = i_soundPPointer; }
+
     void setDemoFxmix(f32 f1, u32 r4) { setFxmix(f1, r4, 3); }
     void setDemoPan(f32 f1, u32 r4) { setPan(f1, r4, 3); }
     void setDemoPitch(f32 f1, u32 r4) { setPitch(f1, r4, 3); }
     void setDemoVolume(f32 f1, u32 r4) { setVolume(f1, r4, SOUNDPARAM_Unk3); }
-    void setFadetime(u32) {}
-    void setID(u32 id) { mSoundID = id; }
-    void setMainSoundPPointer(JAISound**) {}
-    void setNextSound(JAISound*) {}
-    void setPrevSound(JAISound*) {}
-    void setPriority(u32) {}
-    void setRandom(u8) {}
-    void setSeInterDolbyU7(u8, u8, u32, u8) {}
-    void setSeInterFxmixU7(u8, u8, u32, u8) {}
-    void setSeqInterVolumeU7(u8, u8, u32) {}
-    void setStatus(u8) {}
-    void setTrack(u8) {}
-    void setTrackVolumeU7(u8, u8, u32) {}
-    void setVolumeU7(u8 value, u32 moveTime, u8 type) {
-        f32 volume = value / 127.0f;
-        setVolume(volume, moveTime, type);
-    }
-    void setWait(u8) {}
 
-    /* 0x04 */ u8 field_0x4;
-    /* 0x05 */ u8 mState;
-    /* 0x06 */ u8 field_0x6;
-    /* 0x07 */ u8 field_0x7;
-    /* 0x08 */ u8 field_0x8;
+    void setVolumeU7(u8 value, u32 moveTime, u8 type) {
+        setVolume(value / 127.0f, moveTime, type);
+    }
+    void setSeInterDolbyU7(u8 param_1, u8 param_2, u32 param_3, u8 param_4) {
+        setSeInterDolby(param_1, param_2 / 127.0f, param_3, param_4);
+    }
+    void setSeInterFxmixU7(u8 param_1, u8 param_2, u32 param_3, u8 param_4) {
+        setSeInterFxmix(param_1, param_2 / 127.0f, param_3, param_4);
+    }
+    void setSeqInterVolumeU7(u8 param_1, u8 param_2, u32 param_3) {
+        setSeqInterVolume(param_1, param_2 / 127.0f, param_3);
+    }
+    void setTrackVolumeU7(u8 param_1, u8 param_2, u32 param_3) {
+        setTrackVolume(param_1, param_2 / 127.0f, param_3);
+    }
+
+    /* 0x04 */ u8 mTrackNo;
+    /* 0x05 */ u8 mStatus;
+    /* 0x06 */ u8 mFinishWaitTimer;
+    /* 0x07 */ u8 mRandPitchModifier;
+    /* 0x08 */ u8 mPlayer; // 0-3 cam id, 4 = use other game logic
     /* 0x09 */ u8 field_0x9;
-    /* 0x0a */ s16 field_0xa;
+    /* 0x0a */ s16 mAdjustPriority;
     /* 0x0c */ u32 mSoundID;
-    /* 0x10 */ int field_0x10;
-    /* 0x14 */ u32 mFadeCounter;
-    /* 0x18 */ u32 field_0x18;
-    /* 0x1c */ int field_0x1c;
+    /* 0x10 */ u32 mPriority;
+    /* 0x14 */ u32 mFadetime;
+    /* 0x18 */ u32 mPlayGameFrameCounter;
+    /* 0x1c */ int mMapInfoIndex;
     /* 0x20 */ PositionInfo_t* mPositionInfo;
-    /* 0x24 */ void* field_0x24;
-    /* 0x28 */ Vec* field_0x28;
+    /* 0x24 */ void* mActObj; // TODO: This might be a Vec*?
+    /* 0x28 */ Vec* mTrans;
     /* 0x2C */ void* field_0x2c;
-    /* 0x30 */ JAISound* field_0x30;
-    /* 0x34 */ JAISound* field_0x34;
-    /* 0x38 */ JAISound** field_0x38;
-    /* 0x3C */ void* field_0x3c;
+    /* 0x30 */ JAISound* mPrevSound;
+    /* 0x34 */ JAISound* mNextSound;
+    /* 0x38 */ JAISound** mMainSoundPPointer;
+    /* 0x3C */ void* mCustomParameter;
     /* 0x40 */ SoundInfo* mSoundInfo;
 };
 

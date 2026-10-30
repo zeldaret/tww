@@ -182,21 +182,16 @@ JASystem::TDSPChannel* JASystem::TDSPChannel::getLower() {
 
 /* 80289C0C-80289D10       .text getLowerActive__Q28JASystem11TDSPChannelFv */
 JASystem::TDSPChannel* JASystem::TDSPChannel::getLowerActive() {
-    /* Nonmatching - regalloc */
-    u8 i;
-    u32 r27;
-    u8 r29;
-    u8 r28;
-    u8 r30;
-    r29 = 0xff;
-    r28 = 0;
-    r27 = 0;
-    for (i = 0; i < 64; i++) {
+    u8 r29 = 0xff;
+    u8 r28 = 0;
+    u32 r27 = 0;
+    for (u8 i = 0; i < 64; i++) {
         TDSPChannel* dspch = &DSPCH[i];
-        if (dspch->getStatus() == 2 || dspch->isFree()) {
+        u32 status = dspch->getStatus();
+        if (status == 2 || status == 1) {
             continue;
         }
-        r30 = dspch->getPriority();
+        u8 r30 = dspch->getPriority();
         if (r30 <= r29) {
             JUT_ASSERT(345, i == dspch->getNumber());
             if (r30 != r29 || dspch->field_0xc->field_0x10c >= r27) {
@@ -253,14 +248,13 @@ f32 JASystem::DSP_LIMIT_RATIO = 1.1f;
 
 /* 80289E68-8028A04C       .text updateAll__Q28JASystem11TDSPChannelFv */
 void JASystem::TDSPChannel::updateAll() {
-    /* Nonmatching - instruction ordering, maybe inline related */
     DSPInterface::DSPBuffer* dspBuffer;
     if (Kernel::getSubFrames() <= 10) {
         OSTick time = OSGetTick();
         u32 var2;
         OSTick var3 = time - old_time;
         old_time = time;
-        var2 = Kernel::getSubFrames() - TAudioThread::snIntCount;
+        var2 = Kernel::getSubFrames() - TAudioThread::getDSPSyncCount();
         history[var2] = var3;
         if (var2) {
             if (f32(history[0]) / var3 < DSP_LIMIT_RATIO) {
@@ -273,11 +267,14 @@ void JASystem::TDSPChannel::updateAll() {
         if ((i & 0x0f) == 0 && i != 0) {
             DSPReleaseHalt2((i - 1) >> 4);
         }
+
+        u32 status = DSPCH[i].getStatus();
         dspBuffer = DSPCH[i].field_0xc;
-        TDSPChannel* dspChannel = &DSPCH[i];
-        if (dspChannel->isFree()) {
+        if (status == 1) {
             continue;
         }
+
+        TDSPChannel* dspChannel = &DSPCH[i];
         if (dspBuffer->field_0x2 != 0) {
             if (dspChannel->mCallback) {
                 dspChannel->onUpdate(2);

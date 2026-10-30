@@ -63,6 +63,48 @@ public:
     bool allocStreamBuffer(void*, s32);
     bool deallocStreamBuffer();
 
+    static JAIBasic* getInterface() { return msBasic; }
+    static JKRSolidHeap* getCurrentJAIHeap() {
+        JUT_ASSERT_MSG(148, msCurrentHeap, "JAIBasicのカレントヒープがありません（mCurrentHeap==NULL）\n");
+        return msCurrentHeap;
+    }
+
+    bool checkAllWaveLoadStatus() {
+        return JAInter::BankWave::checkAllWaveLoadStatus();
+    }
+    s32 getSceneSetFlag() {
+        return JAInter::BankWave::SceneSetFlag;
+    }
+
+    // this might be wrong, it matches but the size doesn't seem to match the debug map
+    u32 checkEnablePrepare(u32 soundID) { return (soundID & JAISoundID_TypeMask); }
+
+    void prepareSoundVec(u32 soundID, JAISound** pSound, Vec* pos, u32 r7, u32 r8, u8 r9) {
+        startSoundVec(soundID, pSound, pos, r7, r8, r9);
+        if (*pSound) {
+            (*pSound)->setPrepareFlag(1);
+        }
+    }
+
+    JAInter::Camera* getAudioCamera() { return mAudioCamera; }
+
+    u8** getInitOnCodeSeScene() { return (u8**)mInitOnCodeSeScene; }
+    void setInitOnCodeSeScene(u32* param_0) { mInitOnCodeSeScene = param_0; }
+    void addInitOnCodeSeScene(u32 i, u32 param_1) { mInitOnCodeSeScene[i] += param_1; }
+
+    void setInitDataInfo(char* i_initData) { mInitDataInfo = i_initData; }
+
+    // TODO
+    void getInitDataInfo() {}
+    void getSeSoundHandle() {}
+    void getWaveLoadStatus(s32) {}
+    void initAudio(JKRSolidHeap*, u32, u8) {}
+    void loadSceneWave(s32, s32) {}
+
+    static JAIBasic* msBasic;
+    static JKRSolidHeap* msCurrentHeap;
+
+// protected:
     /* 0x04 */ JAInter::Camera* mAudioCamera;
     /* 0x08 */ JKRSolidHeap* field_0x8;
     /* 0x0C */ u8 initLoadFileSw;
@@ -79,44 +121,8 @@ public:
     } field_0xe;
     /* 0x10 */ int field_0x10;
     /* 0x14 */ int field_0x14;
-    /* 0x18 */ void* field_0x18;
-    /* 0x1C */ u8** field_0x1c;
-
-    static JAIBasic* getInterface() { return msBasic; }
-    static JKRSolidHeap* getCurrentJAIHeap() {
-        JUT_ASSERT_MSG(148, msCurrentHeap, "JAIBasicのカレントヒープがありません（mCurrentHeap==NULL）\n");
-        return msCurrentHeap;
-    }
-
-    bool checkAllWaveLoadStatus() {
-        return JAInter::BankWave::checkAllWaveLoadStatus();
-    }
-
-    // this might be wrong, it matches but the size doesn't seem to match the debug map
-    u32 checkEnablePrepare(u32 soundID) { return (soundID & JAISoundID_TypeMask); }
-
-    void prepareSoundVec(u32 soundID, JAISound** pSound, Vec* pos, u32 r7, u32 r8, u8 r9) {
-        startSoundVec(soundID, pSound, pos, r7, r8, r9);
-        if (*pSound) {
-            (*pSound)->setPrepareFlag(1);
-        }
-    }
-
-    // TODO
-    void addInitOnCodeSeScene(u32, u32) {}
-    void getAudioCamera() {}
-    void getInitDataInfo() {}
-    void getInitOnCodeSeScene() {}
-    void getSceneSetFlag() {}
-    void getSeSoundHandle() {}
-    void getWaveLoadStatus(s32) {}
-    void initAudio(JKRSolidHeap*, u32, u8) {}
-    void loadSceneWave(s32, s32) {}
-    void setInitDataInfo(char*) {}
-    void setInitOnCodeSeScene(u32*) {}
-
-    static JAIBasic* msBasic;
-    static JKRSolidHeap* msCurrentHeap;
+    /* 0x18 */ char* mInitDataInfo;
+    /* 0x1C */ u32* mInitOnCodeSeScene;
 };
 
 #endif /* JAIBASIC_H */

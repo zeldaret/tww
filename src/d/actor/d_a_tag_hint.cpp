@@ -626,20 +626,18 @@ BOOL daTag_Hint_c::actionHunt() {
         setActio(4);
         startProc();
         mMsgNo = getMessage();
-    } else {
-        if (waitTerms()) {
-            setActio(0);
-        } else if (otherCheck()) {
-            makeEventId();
-            eventInfo.setEventId(m2A4);
-            eventInfo.setToolId(getEventNo());
-            if (getType2() & 1) {
-                fopAcM_orderSpeakEvent(this);
-            } else {
-                dComIfGp_att_ZHintRequest(this, getPriority());
-            }
-            eventInfo.onCondition(dEvtCnd_CANTALK_e);
+    } else if (waitTerms()) {
+        setActio(0);
+    } else if (otherCheck()) {
+        makeEventId();
+        eventInfo.setEventId(m2A4);
+        eventInfo.setToolId(getEventNo());
+        if (getType2() & 1) {
+            fopAcM_orderSpeakEvent(this);
+        } else {
+            dComIfGp_att_ZHintRequest(this, getPriority());
         }
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
     }
     return TRUE;
 }

@@ -151,7 +151,7 @@ int dVibration_c::Run() {
             loopLen = mMotor.mQuake.mLength;
             pattern = rollshift(mMotor.mQuake.mPattern, loopLen, mFrameIdx);
             pattern |= randombit(mMotor.mQuake.mRounds, loopLen);
-            mMotor.mQuake.mStopFrame = INT32_MAX;
+            mMotor.mQuake.mStopFrame = INT_MAX;
             pBuf = makedata(data, pattern, loopLen);
             g_mDoCPd_gamePad[0]->startMotorWave(pBuf, JUTGamePad::CRumble::LOOP_FOREVER, 60);
             break;

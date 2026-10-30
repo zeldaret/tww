@@ -37,7 +37,7 @@ void JStage::TCamera::JSGSetProjectionNear(f32) {
 
 /* 8026DD94-8026DD9C       .text JSGGetProjectionFar__Q26JStage7TCameraCFv */
 f32 JStage::TCamera::JSGGetProjectionFar() const {
-    return FLOAT_MAX;
+    return FLT_MAX;
 }
 
 /* 8026DD9C-8026DDA0       .text JSGSetProjectionFar__Q26JStage7TCameraFf */

@@ -425,7 +425,7 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
                     const u8 g = mClothColor.g;
 #endif
 
-                    GXColor4x8(r, g, b, alpha0);
+                    GXColor4u8(r, g, b, alpha0);
                     GXTexCoord2f32(xPos, yPos);
                 }
 
@@ -444,7 +444,7 @@ void dMCloth_c::plot(float xMin, float yMin, float xMax, float yMax) {
                     const u8 g = mClothColor.g;
 #endif
 
-                    GXColor4x8(r, g, b, alpha1);
+                    GXColor4u8(r, g, b, alpha1);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
             } break;
@@ -512,7 +512,7 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
                     const u8 g = mShadowColor.g;
 #endif
 
-                    GXColor4x8(r, g, b, alpha0);
+                    GXColor4u8(r, g, b, alpha0);
                     GXTexCoord2f32(xPos, yPos);
                 }
 
@@ -531,7 +531,7 @@ void dMCloth_c::plot_shadow(float xMin, float yMin, float xMax, float yMax) {
                     const u8 g = mShadowColor.g;
 #endif
 
-                    GXColor4x8(r, g, b, alpha1);
+                    GXColor4u8(r, g, b, alpha1);
                     GXTexCoord2f32(xPos + xStep, yPos);
                 }
             } break;

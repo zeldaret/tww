@@ -105,7 +105,7 @@ Bgc_c::Bgc_c() {
     }
     mMaxGroundIdx = -1;
     mWallIdx = -1;
-    mNearestWallDist = FLOAT_MAX;
+    mNearestWallDist = FLT_MAX;
     mWaterY = 0.0f;
     mStateFlags = (State_e)0;
 }
@@ -163,7 +163,7 @@ void Bgc_c::wall_pos(const Act_c* movebox, const BgcSrc_c* bgcSrc, int bgcSrcCou
     
     const s16 angle = movebox->home.angle.y + param_4;
     mWallIdx = -1;
-    mNearestWallDist = FLOAT_MAX;
+    mNearestWallDist = FLT_MAX;
     mDoMtx_stack_c::YrotS(angle);
     mDoMtx_stack_c::XrotM(0x4000);
     mDoMtx_stack_c::multVec(&cXyz::BaseY, &temp_20);

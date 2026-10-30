@@ -2286,7 +2286,7 @@ void demo_camera(bst_class* i_this) {
         if (i_this->msFrameCount == 200) {
             cXyz sp98(0.0f, 0.0f, 0.0f);
             i_this->m2EF8 = dComIfGp_particle_set(dPa_name::ID_AK_SN_BSTSTAGEEFFECT00, &sp98);
-            JAIZelBasic::getInterface()->bstHoriOn();
+            mDoAud_zelAudio_c::getInterface()->bstHoriOn();
         }
         if (i_this->msFrameCount == 300) {
             camera->mCamera.SetTrimSize(0);
@@ -2322,7 +2322,7 @@ void demo_camera(bst_class* i_this) {
         if (i_this->m2EF8 != NULL) {
             i_this->m2EF8->becomeInvalidEmitter();
             i_this->m2EF8 = NULL;
-            JAIZelBasic::getInterface()->bstHoriOff();
+            mDoAud_zelAudio_c::getInterface()->bstHoriOff();
         }
         i_this->m2FE4 = 0;
 #if VERSION > VERSION_DEMO

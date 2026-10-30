@@ -124,25 +124,8 @@ void JASystem::Kernel::mixMonoTrack(s16* dest, s32 size, s16* (*cb)(s32)) {
     s16* destPtr = dest;
     s16* srcPtr = src;
     for (int i = 0; i < size; i++) {
-        s32 var1 = destPtr[0] + srcPtr[0];
-        s16 var2;
-        if (var1 < -0x8000) {
-            var2 = -0x7fff;
-        } else if (var1 > 0x7fff) {
-            var2 = 0x7fff;
-        } else {
-            var2 = var1;
-        }
-        destPtr[0] = var2;
-        var1 = destPtr[1] + srcPtr[0];
-        if (var1 < -0x8000) {
-            var2 = -0x7fff;
-        } else if (var1 > 0x7fff) {
-            var2 = 0x7fff;
-        } else {
-            var2 = var1;
-        }
-        destPtr[1] = var2;
+        destPtr[0] = JASAiMixLimit16(destPtr[0] + srcPtr[0]);
+        destPtr[1] = JASAiMixLimit16(destPtr[1] + srcPtr[0]);
         destPtr += 2;
         srcPtr++;
     }
@@ -159,25 +142,8 @@ void JASystem::Kernel::mixMonoTrackWide(s16* dest, s32 size, s16* (*cb)(s32)) {
     s16* destPtr = dest;
     s16* srcPtr = src;
     for (int i = 0; i < size; i++) {
-        s32 var1 = destPtr[0] + srcPtr[0];
-        s16 var2;
-        if (var1 < -0x8000) {
-            var2 = -0x7fff;
-        } else if (var1 > 0x7fff) {
-            var2 = 0x7fff;
-        } else {
-            var2 = var1;
-        }
-        destPtr[0] = var2;
-        var1 = destPtr[1] - srcPtr[0];
-        if (var1 < -0x8000) {
-            var2 = -0x7fff;
-        } else if (var1 > 0x7fff) {
-            var2 = 0x7fff;
-        } else {
-            var2 = var1;
-        }
-        destPtr[1] = var2;
+        destPtr[0] = JASAiMixLimit16(destPtr[0] + srcPtr[0]);
+        destPtr[1] = JASAiMixLimit16(destPtr[1] - srcPtr[0]);
         destPtr += 2;
         srcPtr++;
     }
@@ -196,25 +162,8 @@ void JASystem::Kernel::mixExtraTrack(s16* dest, s32 size, s16* (*cb)(s32)) {
     s16* srcPtr = src;
     s16* srcPtr2 = src + getFrameSamples();
     for (int i = 0; i < size; i++) {
-        s32 var1 = destPtr[0] + srcPtr2[0];
-        s16 var2;
-        if (var1 < -0x8000) {
-            var2 = -0x7fff;
-        } else if (var1 > 0x7fff) {
-            var2 = 0x7fff;
-        } else {
-            var2 = var1;
-        }
-        destPtr[0] = var2;
-        var1 = destPtr[1] + srcPtr[0];
-        if (var1 < -0x8000) {
-            var2 = -0x7fff;
-        } else if (var1 > 0x7fff) {
-            var2 = 0x7fff;
-        } else {
-            var2 = var1;
-        }
-        destPtr[1] = var2;
+        destPtr[0] = JASAiMixLimit16(destPtr[0] + srcPtr2[0]);
+        destPtr[1] = JASAiMixLimit16(destPtr[1] + srcPtr[0]);
         destPtr += 2;
         srcPtr2++;
         srcPtr++;
@@ -230,16 +179,7 @@ void JASystem::Kernel::mixInterleaveTrack(s16* dest, s32 size, s16* (*cb)(s32)) 
     }
     s16* destPtr = dest;
     for (int i = 0; i < size * 2 ; i++) {
-        s32 var1 = destPtr[0] + src[0];
-        s16 var2;
-        if (var1 < -0x8000) {
-            var2 = -0x7fff;
-        } else if (var1 > 0x7fff) {
-            var2 = 0x7fff;
-        } else {
-            var2 = var1;
-        }
-        destPtr[0] = var2;
+        destPtr[0] = JASAiMixLimit16(destPtr[0] + src[0]);
         destPtr++;
         src++;
     }

@@ -10,7 +10,6 @@ struct JKRThreadName_ {
     char* name;
 };
 
-class JUTConsole;
 class JKRThread : public JKRDisposer {
 public:
     JKRThread(u32 stack_size, int message_count, int param_3);
@@ -20,7 +19,6 @@ public:
     /* vt[03] */ virtual void* run() { return NULL; }
 
     OSThread* getThreadRecord() const { return mThreadRecord; }
-    void* getStack() const { return mStackMemory; }
     JKRHeap* getCurrentHeap() const { return mCurrentHeap; }
     s32 getCurrentHeapError() const { return mCurrentHeapError; }
 
@@ -30,24 +28,13 @@ public:
     void resume() { OSResumeThread(mThreadRecord); }
 
 protected:
-    BOOL sendMessage(OSMessage message) {
-        return OSSendMessage(&mMessageQueue, message, OS_MESSAGE_NOBLOCK);
-    }
     BOOL sendMessageBlock(OSMessage message) {
         return OSSendMessage(&mMessageQueue, message, OS_MESSAGE_BLOCK);
     }
     OSMessage waitMessage() {
         OSMessage message;
-        OSReceiveMessage(&mMessageQueue, &message, OS_MESSAGE_NOBLOCK);
-        return message;
-    }
-    OSMessage waitMessageBlock() {
-        OSMessage message;
         OSReceiveMessage(&mMessageQueue, &message, OS_MESSAGE_BLOCK);
         return message;
-    }
-    void jamMessageBlock(OSMessage message) {
-        OSJamMessage(&mMessageQueue, message, OS_MESSAGE_BLOCK);
     }
 
 private:

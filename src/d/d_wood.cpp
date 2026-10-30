@@ -741,7 +741,7 @@ void dWood::Room_c::delete_all_unit() {
     while (unit = mpUnit, unit != NULL) {
         mpUnit = unit->mpNext;
 #if VERSION > VERSION_DEMO
-        mDoAud_zelAudio_c::getInterface()->seDeleteObject(&unit->mPos);
+        mDoAud_seDeleteObject(&unit->mPos);
 #endif
         unit->clear();
     }

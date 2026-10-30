@@ -1301,20 +1301,19 @@ bool daNpcMt_c::setAnmTbl(sMtAnmDat* anmDat) {
         mpAnmDat = NULL;
         return true;
     }
-    else {
-        mpAnmDat = anmDat;
-        m74C = mpAnmDat->field_0x02;
 
-        int temp = 2;
-        if (m74C > 0) {
-            temp = 0;
-        }
+    mpAnmDat = anmDat;
+    m74C = mpAnmDat->field_0x02;
 
-        if (m74A != mpAnmDat->field_0x00 || temp == 0) {
-            setAnm(mpAnmDat->field_0x00, temp, mpAnmDat->field_0x01);
-        }
-        return false;
+    int temp = 2;
+    if (m74C > 0) {
+        temp = 0;
     }
+
+    if (m74A != mpAnmDat->field_0x00 || temp == 0) {
+        setAnm(mpAnmDat->field_0x00, temp, mpAnmDat->field_0x01);
+    }
+    return false;
 }
 
 /* 00002984-00002A28       .text XyCheckCB__9daNpcMt_cFi */

@@ -672,25 +672,23 @@ u16 fopNpc_npc_c::talk(int param_1) {
         mCurrMsgBsPcId = fopMsgM_messageSet(mCurrMsgNo, this);
         mpCurrMsg = NULL;
     }
-    else {
-        if(mpCurrMsg) {
-            status = mpCurrMsg->mStatus;
-            if(status == fopMsgStts_MSG_DISPLAYED_e) {
-                mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
-                if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
-                    fopMsgM_messageSet(mCurrMsgNo);
-                }
+    else if(mpCurrMsg) {
+        status = mpCurrMsg->mStatus;
+        if(status == fopMsgStts_MSG_DISPLAYED_e) {
+            mpCurrMsg->mStatus = next_msgStatus(&mCurrMsgNo);
+            if(mpCurrMsg->mStatus == fopMsgStts_MSG_CONTINUES_e) {
+                fopMsgM_messageSet(mCurrMsgNo);
             }
-            else if (status == fopMsgStts_BOX_CLOSED_e) {
-                mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
-                mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
-            }
+        }
+        else if (status == fopMsgStts_BOX_CLOSED_e) {
+            mpCurrMsg->mStatus = fopMsgStts_MSG_DESTROYED_e;
+            mCurrMsgBsPcId = fpcM_ERROR_PROCESS_ID_e;
+        }
 
-            anmAtr(status);
-        }
-        else {
-            mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
-        }
+        anmAtr(status);
+    }
+    else {
+        mpCurrMsg = fopMsgM_SearchByID(mCurrMsgBsPcId);
     }
 
     return status;

@@ -545,17 +545,17 @@ f32 dummy() {
 const char daKddoor_c::M_arcname[] = "Ssk";
 
 /* 00001904-00001914       .text getBmdName__10daKddoor_cFv */
-char* daKddoor_c::getBmdName() {
+const char* daKddoor_c::getBmdName() {
     return "door10.bmd";
 }
 
 /* 00001914-00001924       .text getBmdName2__10daKddoor_cFv */
-char* daKddoor_c::getBmdName2() {
+const char* daKddoor_c::getBmdName2() {
     return "door10.bdl";
 }
 
 /* 00001924-00001934       .text getDzbName__10daKddoor_cFv */
-char* daKddoor_c::getDzbName() {
+const char* daKddoor_c::getDzbName() {
     return "door10.dzb";
 }
 

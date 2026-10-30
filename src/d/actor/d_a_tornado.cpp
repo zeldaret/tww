@@ -119,10 +119,8 @@ BOOL daTornado_c::execute() {
             fVar8 = (dComIfGp_getShipActor()->current.pos.y - home.pos.y) / 500.0f;
             if (fVar8 < 0.0f) {
                 fVar8 = 0.0f;
-            } else {
-                if (fVar8 > 1.0f) {
-                    fVar8 = 1.0f;
-                }
+            } else if (fVar8 > 1.0f) {
+                fVar8 = 1.0f;
             }
         } else {
             fVar8 = 1.0f;

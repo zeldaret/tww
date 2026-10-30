@@ -1,4 +1,5 @@
 #include "dolphin/card.h"
+#include <string.h>
 
 // prototypes
 static void WriteCallback(s32 chan, s32 result);

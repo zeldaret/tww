@@ -1,4 +1,5 @@
 #include "dolphin/card.h"
+#include <string.h>
 
 extern CARDDir* __CARDGetDirBlock(CARDControl* card);
 extern void* __CARDGetFatBlock(CARDControl* card);

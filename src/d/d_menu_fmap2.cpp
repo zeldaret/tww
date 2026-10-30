@@ -1243,27 +1243,25 @@ void dMenu_Fmap2_c::gsShipAnime() {
     if (field_0x2811 == 0 && field_0x2817 != 0) {
         if (field_0x281B != 0) {
             field_0x281B--;
-        } else {
-            if (field_0x281C != 0xFF) {
-                f32 alpha = fopMsgM_valueIncrease(g_mf2HIO.mGsShipAnimFrame, field_0x281C, 2);
+        } else if (field_0x281C != 0xFF) {
+            f32 alpha = fopMsgM_valueIncrease(g_mf2HIO.mGsShipAnimFrame, field_0x281C, 2);
 
-                white.r = lineInter0to1ForU8(g_mf2HIO.mGsShipWhite.r, color_0x282C.r, alpha);
-                white.g = lineInter0to1ForU8(g_mf2HIO.mGsShipWhite.g, color_0x282C.g, alpha);
-                white.b = lineInter0to1ForU8(g_mf2HIO.mGsShipWhite.b, color_0x282C.b, alpha);
-                white.a = lineInter0to1ForU8(g_mf2HIO.mGsShipWhite.a, color_0x282C.a, alpha);
+            white.r = lineInter0to1ForU8(g_mf2HIO.mGsShipWhite.r, color_0x282C.r, alpha);
+            white.g = lineInter0to1ForU8(g_mf2HIO.mGsShipWhite.g, color_0x282C.g, alpha);
+            white.b = lineInter0to1ForU8(g_mf2HIO.mGsShipWhite.b, color_0x282C.b, alpha);
+            white.a = lineInter0to1ForU8(g_mf2HIO.mGsShipWhite.a, color_0x282C.a, alpha);
 
-                black.r = lineInter0to1ForU8(g_mf2HIO.mGsShipBlack.r, color_0x2828.r, alpha);
-                black.g = lineInter0to1ForU8(g_mf2HIO.mGsShipBlack.g, color_0x2828.g, alpha);
-                black.b = lineInter0to1ForU8(g_mf2HIO.mGsShipBlack.b, color_0x2828.b, alpha);
-                black.a = lineInter0to1ForU8(g_mf2HIO.mGsShipBlack.a, color_0x2828.a, alpha);
+            black.r = lineInter0to1ForU8(g_mf2HIO.mGsShipBlack.r, color_0x2828.r, alpha);
+            black.g = lineInter0to1ForU8(g_mf2HIO.mGsShipBlack.g, color_0x2828.g, alpha);
+            black.b = lineInter0to1ForU8(g_mf2HIO.mGsShipBlack.b, color_0x2828.b, alpha);
+            black.a = lineInter0to1ForU8(g_mf2HIO.mGsShipBlack.a, color_0x2828.a, alpha);
 
-                ((J2DPicture*)mGsKz01PaneAlpha.pane)->setBlackWhite(black, white);
+            ((J2DPicture*)mGsKz01PaneAlpha.pane)->setBlackWhite(black, white);
 
-                if (field_0x281C == 0) {
-                    field_0x281C = 0xFF;
-                } else {
-                    field_0x281C--;
-                }
+            if (field_0x281C == 0) {
+                field_0x281C = 0xFF;
+            } else {
+                field_0x281C--;
             }
         }
     }

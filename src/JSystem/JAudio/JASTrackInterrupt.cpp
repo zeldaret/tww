@@ -36,7 +36,6 @@ void JASystem::TIntrMgr::setIntr(u32 param_1, void* param_2) {
 
 /* 802841A0-802841B8       .text resetInter__Q28JASystem8TIntrMgrFUl */
 void JASystem::TIntrMgr::resetInter(u32 param_1) {
-    /* Nonmatching */
     field_0x2 &= ~(1 << param_1);
 }
 

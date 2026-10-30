@@ -86,18 +86,17 @@ void JAInter::InitData::checkInitDataOnMemory() {
             r30 += 3;
             break;
         case 5:
-            StreamMgr::initOnCodeStrm = (JAInter::streamList_t*)transInitDataFile((u8*)(aafPointer + r30), 8);
-            // fakematch?
-            *(JAInter::streamList_t**)StreamMgr::initOnCodeStrm = (JAInter::streamList_t*)transInitDataFile((u8*)aafPointer + aafPointer[r30], aafPointer[r30 + 1]);
+            StreamMgr::initOnCodeStrm = transInitDataFile((u8*)(aafPointer + r30), 8);
+            *(u8**)StreamMgr::initOnCodeStrm = transInitDataFile((u8*)aafPointer + aafPointer[r30], aafPointer[r30 + 1]);
             StreamMgr::streamList = *(JAInter::streamList_t**)StreamMgr::initOnCodeStrm;
             r30 += 3;
             break;
         case 6: {
             u32* r28 = (u32*)transInitDataFile((u8*)aafPointer + aafPointer[r30], aafPointer[r30 + 1]);
             JAIGlobalParameter::setParamSoundSceneMax(*r28);
-            JAIBasic::getInterface()->field_0x1c = (u8**)(r28 + 1);
+            JAIBasic::getInterface()->setInitOnCodeSeScene(r28 + 1);
             for (int i = 0; i < JAIGlobalParameter::getParamSoundSceneMax(); i++) {
-                JAIBasic::getInterface()->field_0x1c[i] += u32(r28);
+                JAIBasic::getInterface()->addInitOnCodeSeScene(i, (u32)r28);
             }
             r30 += 3;
             break;
@@ -107,8 +106,8 @@ void JAInter::InitData::checkInitDataOnMemory() {
             r30 += 3;
             break;
         case 8: {
-            u8* tmp = transInitDataFile((u8*)aafPointer + aafPointer[r30], (aafPointer[r30 + 1] & 0xFFF0) + 16);
-            JAIBasic::getInterface()->field_0x18 = tmp;
+            char* initData = (char*)transInitDataFile((u8*)aafPointer + aafPointer[r30], (aafPointer[r30 + 1] & 0xFFF0) + 16);
+            JAIBasic::getInterface()->setInitDataInfo(initData);
             r30 += 3;
             break;
         }

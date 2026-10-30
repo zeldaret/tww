@@ -197,7 +197,7 @@ void daNpc_Nz_c::cutEatesaProc() {
     if(pBait) {
         fopAcM_delete(pBait);
         mpBait = NULL;
-        field_0x910 = FLOAT_MAX;
+        field_0x910 = FLT_MAX;
     }
     else {
         if(mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {

@@ -361,7 +361,7 @@ u8 dMap_GetFloorNoForDmap(dStage_dt_c* stag, int param_2, f32 param_3) {
         }
 
         if (!var3) {
-            f32 var1 = FLOAT_MAX;
+            f32 var1 = FLT_MAX;
             floorData = floor->m_entries;
 
             for (int i = 0; i < floor->num; i++, floorData++) {

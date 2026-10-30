@@ -44,6 +44,28 @@ namespace JAInter {
         /* 0x04 */ JAISound* field_0x4;
         /* 0x08 */ JAISound* Buffer;
     };
+
+    // unsure which JAI header this class goes in, but it can't be JAISequenceMgr.h or it breaks weak func order
+    class MuteBit {
+    public:
+        MuteBit() {
+            init();
+        }
+        void init() {
+            mBitNow = 0;
+            mBitUpdate = 0;
+        }
+
+        bool getBitNow() { return mBitNow; }
+        void setBitNow(bool bit) { mBitNow = bit; }
+        bool getBitTarget() { return mBitTarget; }
+        bool getBitUpdate() { return mBitUpdate; }
+
+    private:
+        u8 mBitNow : 1;
+        u8 mBitTarget : 1;
+        u8 mBitUpdate : 1;
+    };
 }
 
 #endif /* JAISOUNDPARAMS_H */

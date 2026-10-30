@@ -825,7 +825,7 @@ bool daNpc_Nz_c::_execute() {
     TailControl();
     mAcch.CrrPos(*dComIfG_Bgsp());
     mpBait = NULL;
-    field_0x910 = FLOAT_MAX;
+    field_0x910 = FLT_MAX;
     setMtx();
 
     return false;
@@ -836,38 +836,37 @@ bool daNpc_Nz_c::_draw() {
     if(!field_0x8FC) {
         return true;
     }
-    else {
-        J3DModel* pModel = mpMorf->getModel();
-        J3DModelData* pModelData = pModel->getModelData();
 
-        J3DJoint* rootJoint = pModelData->getJointNodePointer(NPCNZ_NZ_JNT_KOSI_e);
-        J3DShape* matShape = pModelData->getMaterialNodePointer(0)->getShape();
-        J3DShape* matShape2 = pModelData->getMaterialNodePointer(1)->getShape();
-        J3DShape* matShape3 = pModelData->getMaterialNodePointer(2)->getShape();
-        matShape->hide();
+    J3DModel* pModel = mpMorf->getModel();
+    J3DModelData* pModelData = pModel->getModelData();
 
-        g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
-        g_env_light.setLightTevColorType(pModel, &tevStr);
+    J3DJoint* rootJoint = pModelData->getJointNodePointer(NPCNZ_NZ_JNT_KOSI_e);
+    J3DShape* matShape = pModelData->getMaterialNodePointer(0)->getShape();
+    J3DShape* matShape2 = pModelData->getMaterialNodePointer(1)->getShape();
+    J3DShape* matShape3 = pModelData->getMaterialNodePointer(2)->getShape();
+    matShape->hide();
 
-        mpMorf->entryDL();
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(pModel, &tevStr);
 
-        dComIfGd_setListMaskOff();
+    mpMorf->entryDL();
 
-        matShape->show();
-        pModel->getMatPacket(0)->unlock();
-        matShape2->hide();
-        matShape3->hide();
-        rootJoint->entryIn();
-        matShape2->show();
-        matShape3->show();
+    dComIfGd_setListMaskOff();
 
-        dComIfGd_setList();
+    matShape->show();
+    pModel->getMatPacket(0)->unlock();
+    matShape2->hide();
+    matShape3->hide();
+    rootJoint->entryIn();
+    matShape2->show();
+    matShape3->show();
 
-        GXColor unusedColor_5609 = {255, 255, 0, 128};
-        GXColor unusedColor_5611 = {255, 0, 0, 128};
-        field_0x934.update(10, scale.x * 5.0f, COMPOUND_LITERAL(GXColor){200, 200, 200, 255}, 6, &tevStr);
-        dComIfGd_set3DlineMat(&field_0x934);
-    }
+    dComIfGd_setList();
+
+    GXColor unusedColor_5609 = {255, 255, 0, 128};
+    GXColor unusedColor_5611 = {255, 0, 0, 128};
+    field_0x934.update(10, scale.x * 5.0f, COMPOUND_LITERAL(GXColor){200, 200, 200, 255}, 6, &tevStr);
+    dComIfGd_set3DlineMat(&field_0x934);
 
     return true;
 }

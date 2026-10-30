@@ -125,7 +125,6 @@ void daWarpls_c::CreateInit() {
         mSkipActivationEvt = TRUE;
         mStartupDelayTimer = 0;
     } else {
- 
         if (mpEmitter != NULL) {
             mpEmitter->setStatus(JPAEmtrStts_StopEmit);
         }

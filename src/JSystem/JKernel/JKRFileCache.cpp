@@ -11,7 +11,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "ctype.h"
-#include "string.h"
+#include <cstring>
 #include "global.h"
 
 /* 802B6FEC-802B70EC       .text mount__12JKRFileCacheFPCcP7JKRHeapPCc */

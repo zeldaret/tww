@@ -4,7 +4,7 @@
 //
 
 #include "JSystem/JSystem.h" // IWYU pragma: keep
-#include <algorithm.h>
+#include <algorithm>
 
 #include "JSystem/JGadget/linklist.h"
 

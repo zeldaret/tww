@@ -1,22 +1,16 @@
 #ifndef JSUPPORT_H
 #define JSUPPORT_H
 
+#include "dolphin/types.h"
+
 template <typename T>
-T* JSUConvertOffsetToPtr(const void* ptr, u32 offset) {
-    if (offset == 0) {
-        return NULL;
-    } else {
-        return (T*)((s32)ptr + offset);
-    }
+T* JSUConvertOffsetToPtr(const void* ptr, uintptr_t offset) {
+    return offset == 0 ? NULL : (T*)((intptr_t)ptr + (intptr_t)offset);
 }
 
 template <typename T>
 T* JSUConvertOffsetToPtr(const void* ptr, const void* offset) {
-    if (offset == NULL) {
-        return NULL;
-    } else {
-        return (T*)((s32)ptr + (s32)offset);
-    }
+    return offset == NULL ? NULL : (T*)((intptr_t)ptr + (intptr_t)offset);
 }
 
 inline u8 JSULoNibble(u8 param_0) { return param_0 & 0x0f; }

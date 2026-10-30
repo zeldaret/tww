@@ -60,7 +60,7 @@ namespace JAInter {
         /* 0x02 */ u8 mPrepareFlag;
         /* 0x03 */ u8 field_0x3;
         /* 0x04 */ int field_0x4;
-        /* 0x08 */ int mActiveTrackFlag;
+        /* 0x08 */ u32 mActiveTrackFlag;
         /* 0x0C */ f32 mSeqVolume;
         /* 0x10 */ f32 mSeqPitch;
         /* 0x14 */ f32 mSeqFxmix;
@@ -76,22 +76,8 @@ namespace JAInter {
         /* 0x3C */ int field_0x3c;
         /* 0x40 */ u8* field_0x40;
         /* 0x44 */ u32* trackupdate;
-        /* 0x48 */ JAISound* mSequence;
+        /* 0x48 */ JAISound* mpSequence;
         /* 0x4C */ PlayerParameter* systemTrackParameter;
-    };
-
-    class MuteBit {
-    public:
-        MuteBit();
-
-        u8 flag1 : 1;
-        u8 flag2 : 1;
-        u8 flag3 : 1;
-        u8 flag4 : 1;
-        u8 flag5 : 1;
-        u8 flag6 : 1;
-        u8 flag7 : 1;
-        u8 flag8 : 1;
     };
 
     class SeqParameter {
@@ -100,21 +86,21 @@ namespace JAInter {
             mTrack.assignExtBuffer(&mOuterParam);
             field_0x1264 = -1;
             mTempo.init(1.0f);
-            field_0x1261 = 0;
+            mPauseMode = 0;
             field_0x1262 = 0;
             field_0x1268 = 0;
-            field_0x126c = 0;
-            field_0x1270 = 0;
-            field_0x1274 = 0;
-            field_0x1278 = 0;
-            field_0x127c = 0;
-            field_0x1280 = 0;
-            field_0x1284 = 0;
-            field_0x1288 = 0;
-            field_0x128c = 0;
-            field_0x1290 = 0;
+            mVolumeFlags = 0;
+            mPanFlags = 0;
+            mPitchFlags = 0;
+            mFxmixFlags = 0;
+            mDolbyFlags = 0;
+            mTrackVolumeFlag = 0;
+            mTrackPanFlag = 0;
+            mTrackPitchFlag = 0;
+            mTrackFxmixFlag = 0;
+            mTrackDolbyFlag = 0;
             field_0x1294 = 0;
-            field_0x1298 = 0;
+            mTrackPortDataFlag = 0;
             for (int i = 0; i < JAIGlobalParameter::getParamSeqTrackMax(); i++) {
                 mTrackVolumes[i].init(1.0f);
                 mTrackPans[i].init(0.5f);
@@ -122,7 +108,7 @@ namespace JAInter {
                 mTrackFxmixes[i].init(0.0f);
                 mTrackDolbys[i].init(0.5f);
                 field_0xc60[i].init(0.0f);
-                field_0x131c[i] = 0;
+                mInterruptSwitches[i] = 0;
                 field_0x129c[i] = 0;
                 for (int j = 0; j < 16; j++) {
                     field_0xe60[i][j] = 0;
@@ -156,26 +142,26 @@ namespace JAInter {
         /* 0x0860 */ MoveParaSetInitZero mTrackFxmixes[32];
         /* 0x0A60 */ MoveParaSetInitZero mTrackDolbys[32];
         /* 0x0C60 */ MoveParaSetInitZero field_0xc60[32];
-        /* 0x0E60 */ s16 field_0xe60[32][16];
+        /* 0x0E60 */ u16 field_0xe60[32][16];
         /* 0x1260 */ u8 mHeapIndex;
-        /* 0x1261 */ u8 field_0x1261;
+        /* 0x1261 */ u8 mPauseMode;
         /* 0x1262 */ u16 field_0x1262;
         /* 0x1264 */ int field_0x1264;
-        /* 0x1268 */ int field_0x1268;
-        /* 0x126C */ int field_0x126c;
-        /* 0x1270 */ int field_0x1270;
-        /* 0x1274 */ int field_0x1274;
-        /* 0x1278 */ int field_0x1278;
-        /* 0x127C */ int field_0x127c;
-        /* 0x1280 */ int field_0x1280;
-        /* 0x1284 */ int field_0x1284;
-        /* 0x1288 */ int field_0x1288;
-        /* 0x128C */ int field_0x128c;
-        /* 0x1290 */ int field_0x1290;
+        /* 0x1268 */ u32 field_0x1268;
+        /* 0x126C */ u32 mVolumeFlags;
+        /* 0x1270 */ u32 mPanFlags;
+        /* 0x1274 */ u32 mPitchFlags;
+        /* 0x1278 */ u32 mFxmixFlags;
+        /* 0x127C */ u32 mDolbyFlags;
+        /* 0x1280 */ u32 mTrackVolumeFlag;
+        /* 0x1284 */ u32 mTrackPanFlag;
+        /* 0x1288 */ u32 mTrackPitchFlag;
+        /* 0x128C */ u32 mTrackFxmixFlag;
+        /* 0x1290 */ u32 mTrackDolbyFlag;
         /* 0x1294 */ int field_0x1294;
-        /* 0x1298 */ int field_0x1298;
+        /* 0x1298 */ u32 mTrackPortDataFlag;
         /* 0x129C */ int field_0x129c[32];
-        /* 0x131C */ u8 field_0x131c[32];
+        /* 0x131C */ u8 mInterruptSwitches[32];
         /* 0x133C */ MuteBit mMuteBits[32];
         /* 0x135C */ SeqUpdateData* mUpdateData;
         /* 0x1360 */ JASystem::TTrack mTrack;

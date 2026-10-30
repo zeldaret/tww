@@ -196,6 +196,7 @@ namespace JASystem {
         static const int MAX_CHILDREN = 16;
 
         TTrack();
+        ~TTrack() {}
         void init();
         void inherit();
         s8 mainProc();
@@ -281,7 +282,7 @@ namespace JASystem {
 
         u8 checkImport(int i) const { return mTrackPort.checkImport(i); }
         u8 checkExport(int i) const { return mTrackPort.checkExport(i); }
-        void getActivity() const {}
+        u8 getActivity() const { return mActivity; }
         int getRoute() const { return mRoute; }
         TSeqCtrl* getSeq() { return &mSeqCtrl; }
         void pauseTrackAll() { pause(true, true); }
@@ -320,7 +321,7 @@ namespace JASystem {
         /* 0x37B */ u8 field_0x37b;
         /* 0x37C */ u8 mPauseStatus;
         /* 0x37D */ u8 mVolumeMode;
-        /* 0x37E */ u8 field_0x37e;
+        /* 0x37E */ u8 mActivity;
         /* 0x37F */ u8 mCalcTypes[3];
         /* 0x382 */ u8 mParentCalcTypes[3];
         /* 0x385 */ bool mIsPaused;

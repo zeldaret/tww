@@ -207,12 +207,10 @@ void daNpc_Km1_c::playTexPatternAnm() {
 
     if(field_0x7CD){
         mBtpFrame = m_head_tex_pattern->getFrameMax();
-        return;
     }else{
         mBtpFrame = 0;
         field_0x6F2 = cM_rndF(60.0) + 30.0f;
     }
-    return;
 }
 
 /* 00000958-00000A24       .text setAnm_anm__11daNpc_Km1_cFPQ211daNpc_Km1_c9anm_prm_c */

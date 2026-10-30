@@ -2,19 +2,19 @@
 #define JASWSPARSER_H
 
 #include "JSystem/JSupport/JSupport.h"
+#include "dolphin/types.h"
 
 namespace JASystem {
     class TBasicWaveBank;
     class TSimpleWaveBank;
     namespace WSParser {
-        // Using this class breaks match for JASystem::WSParser::createSimpleWaveBank
         template <typename T>
         class TOffset {
         public:
             T *ptr(const void *p) { return JSUConvertOffsetToPtr<T>(p, mOffset); }
             T *ptr(const void *p) const { return JSUConvertOffsetToPtr<T>(p, mOffset); }
         private:
-            u32 mOffset;
+            uintptr_t mOffset;
         };
 
         struct TWave {
@@ -35,12 +35,12 @@ namespace JASystem {
         };
         struct TWaveArchive {
             /* 0x00 */ char mFileName[0x74];
-            /* 0x74 */ u32 mWaveOffsets[1];
+            /* 0x74 */ TOffset<TWave> mWaveOffsets[1];
         };
         struct TWaveArchiveBank {
             /* 0x00 */ u32 mMagic;
             /* 0x04 */ u8 field_0x4[0x08 - 0x04];
-            /* 0x08 */ u32 mArchiveOffsets[1];
+            /* 0x08 */ TOffset<TWaveArchive> mArchiveOffsets[1];
         };
         struct TCtrlWave {
             /* 0x00 */ u32 field_0x0;
@@ -48,23 +48,23 @@ namespace JASystem {
         struct TCtrl {
             /* 0x00 */ u32 mMagic;
             /* 0x04 */ u32 mWaveCount;
-            /* 0x08 */ u32 mCtrlWaveOffsets[1];
+            /* 0x08 */ TOffset<TCtrlWave> mCtrlWaveOffsets[1];
         };
         struct TCtrlScene {
             /* 0x00 */ u32 mMagic;
             /* 0x04 */ u8 field_0x4[0x0C - 0x04];
-            /* 0x0C */ u32 mCtrlOffset;
+            /* 0x0C */ TOffset<TCtrl> mCtrlOffset;
         };
         struct TCtrlGroup {
             /* 0x00 */ u32 mMagic;
             /* 0x04 */ u8 field_0x4[0x08 - 0x04];
             /* 0x08 */ u32 mCtrlGroupCount;
-            /* 0x0C */ u32 mCtrlSceneOffsets[1];
+            /* 0x0C */ TOffset<TCtrlScene> mCtrlSceneOffsets[1];
         };
         struct THeader {
             /* 0x00 */ u8 field_0x0[0x10];
-            /* 0x10 */ u32 mArchiveBankOffset;
-            /* 0x14 */ u32 mCtrlGroupOffset;
+            /* 0x10 */ TOffset<TWaveArchiveBank> mArchiveBankOffset;
+            /* 0x14 */ TOffset<TCtrlGroup> mCtrlGroupOffset;
         };
 
         u32 getGroupCount(void*);

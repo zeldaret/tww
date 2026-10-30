@@ -2,6 +2,7 @@
 #define RANDOM_H
 
 #include "dolphin/types.h"
+#include <limits>
 
 namespace JMath {
 struct TRandom_fast_ {
@@ -43,6 +44,29 @@ struct TRandom_enough_ {
     u32 field_0x4;
     u32 field_0x8[32];
 };
+
+template <class RandomT>
+class TRandom_ : public RandomT {
+public:
+    TRandom_(u32 value) : RandomT(value) {}
+
+    u8 get_uint8(u8 param_0) {
+        return this->get_ufloat_1() * param_0;
+    }
+
+    u32 get_uint32(u32 param_0) {
+        return this->get_ufloat_1() * param_0;
+    }
+
+    f32 get_ufloat(f32 param_0) {
+        return this->get_ufloat_1() * param_0;
+    }
+
+    f32 get_float(f32 param_0) {
+        return this->get_ufloat(param_0) - ((param_0 / 2.0f) - std::numeric_limits<f32>::epsilon());
+    }
+};
+
 }  // namespace JMath
 
 #endif /* RANDOM_H */

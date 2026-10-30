@@ -437,14 +437,14 @@ void dAttention_c::initList(u32 flagMask) {
 
     for (i = 0; i < (s32)ARRAY_SIZE(mLockOnList); i++) {
         mLockOnList[i].setActor(NULL);
-        mLockOnList[i].mWeight = FLOAT_MAX;
+        mLockOnList[i].mWeight = FLT_MAX;
     }
     mLockOnOffset = 0;
     mLockonCount = 0;
 
     for (i = 0; i < (s32)ARRAY_SIZE(mActionList); i++) {
         mActionList[i].setActor(NULL);
-        mActionList[i].mWeight = FLOAT_MAX;
+        mActionList[i].mWeight = FLT_MAX;
     }
     mActionOffset = 0;
     mActionCount = 0;

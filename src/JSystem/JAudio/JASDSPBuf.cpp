@@ -106,7 +106,7 @@ void JASystem::TDSP_DACBuffer::finishDSPFrame() {
         return;
     }
     writeBuffer = var2;
-    TAudioThread::snIntCount = Kernel::getSubFrames();
+    TAudioThread::setDSPSyncCount(Kernel::getSubFrames());
     Kernel::probeStart(7, "DSP-MAIN");
     DsyncFrame2(Kernel::getSubFrames(), u32(dsp_buf[writeBuffer]), u32(&dsp_buf[writeBuffer][frameSamples]));
     dspStatus = 1;
