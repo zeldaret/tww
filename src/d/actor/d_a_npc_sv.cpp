@@ -316,12 +316,12 @@ static MoveProc_t moveProc[] = {
 
 /* 00000768-00000A04       .text createHeap__9daNpcSv_cFv */
 BOOL daNpcSv_c::createHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes(l_arcname_tbl[getNpcNo()], l_bmd_ix_tbl[getNpcNo()]);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bmd_ix_tbl[mNpcNo]);
     mpMorf = new mDoExt_McaMorf(
         modelData,
         NULL,
         NULL,
-        (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[getNpcNo()], l_bck_ix_tbl[getNpcNo()][mBckIdx]),
+        (J3DAnmTransform*)dComIfG_getObjectIDRes(l_arcname_tbl[mNpcNo], l_bck_ix_tbl[mNpcNo][mBckIdx]),
         J3DFrameCtrl::EMode_LOOP,
         1.0f,
         0,
@@ -336,9 +336,9 @@ BOOL daNpcSv_c::createHeap() {
     }
 
     m_jnt.setHeadJntNum(modelData->getJointName()->getIndex("head"));
-    JUT_ASSERT(946, m_jnt.getHeadJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(945, 946), m_jnt.getHeadJntNum() >= 0);
     m_jnt.setBackboneJntNum(modelData->getJointName()->getIndex("backbone"));
-    JUT_ASSERT(950, m_jnt.getBackboneJntNum() >= 0);
+    JUT_ASSERT(DEMO_SELECT(949, 950), m_jnt.getBackboneJntNum() >= 0);
 
     for (u16 jntIdx = 0; jntIdx < modelData->getJointNum(); jntIdx++) {
         if (jntIdx == m_jnt.getHeadJntNum() || jntIdx == m_jnt.getBackboneJntNum()) {
@@ -370,7 +370,16 @@ cPhs_State daNpcSv_c::createInit() {
     mEventIdx[2] = dComIfGp_evmng_getEventIdx("SV_TALK_P4_1ST", 0xFF);
 
     eventInfo.setEventId(mEventIdx[l_event_id_tbl[getTalkNo() & 0xFF]]);
-    mEventCut.setActorInfo2(l_npc_staff_id[getNpcNo()], this);
+#if VERSION == VERSION_DEMO
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(dNpc_cyl_src);
+    mCyl.SetStts(&mStts);
+    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].mCylRadius, l_npc_dat[mNpcNo].mCylHeight);
+#endif
+    mEventCut.setActorInfo2(l_npc_staff_id[mNpcNo], this);
+#if VERISON == VERSION_DEMO
+    setMtx();
+#endif
 
     mTurnVel = 0;
     mTalkOrder = 0;
@@ -383,35 +392,48 @@ cPhs_State daNpcSv_c::createInit() {
     attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
 
     m_jnt.setParam(
-        l_npc_dat[getNpcNo()].mMax_backbone_x,
-        l_npc_dat[getNpcNo()].mMax_backbone_y,
-        l_npc_dat[getNpcNo()].mMin_backbone_x,
-        l_npc_dat[getNpcNo()].mMin_backbone_y,
-        l_npc_dat[getNpcNo()].mMax_head_x,
-        l_npc_dat[getNpcNo()].mMax_head_y,
-        l_npc_dat[getNpcNo()].mMin_head_x,
-        l_npc_dat[getNpcNo()].mMin_head_y,
-        l_npc_dat[getNpcNo()].mMax_turn_step
+        l_npc_dat[mNpcNo].mMax_backbone_x,
+        l_npc_dat[mNpcNo].mMax_backbone_y,
+        l_npc_dat[mNpcNo].mMin_backbone_x,
+        l_npc_dat[mNpcNo].mMin_backbone_y,
+        l_npc_dat[mNpcNo].mMax_head_x,
+        l_npc_dat[mNpcNo].mMax_head_y,
+        l_npc_dat[mNpcNo].mMin_head_x,
+        l_npc_dat[mNpcNo].mMin_head_y,
+        l_npc_dat[mNpcNo].mMax_turn_step
     );
 
-    mbAllowBodyTurn = l_npc_dat[getNpcNo()].mbAllowBodyTurn;
-    mbLookOnly = l_npc_dat[getNpcNo()].mbLookOnly;
-    mAttnDist = l_npc_dat[getNpcNo()].mAttnDist;
-    mAttnAngle = l_npc_dat[getNpcNo()].mAttnAngle;
+    mbAllowBodyTurn = l_npc_dat[mNpcNo].mbAllowBodyTurn;
+    mbLookOnly = l_npc_dat[mNpcNo].mbLookOnly;
+    mAttnDist = l_npc_dat[mNpcNo].mAttnDist;
+    mAttnAngle = l_npc_dat[mNpcNo].mAttnAngle;
+#if VERSION > VERSION_DEMO
     setMtx();
     mpMorf->getModel()->calc();
     mStts.Init(0xFF, 0xFF, this);
     mCyl.Set(dNpc_cyl_src);
     mCyl.SetStts(&mStts);
-    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].mCylRadius, l_npc_dat[getNpcNo()].mCylHeight);
+    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].mCylRadius, l_npc_dat[mNpcNo].mCylHeight);
+#endif
     return cPhs_COMPLEATE_e;
 }
 
 /* 00000C74-00000CD8       .text _delete__9daNpcSv_cFv */
 bool daNpcSv_c::_delete() {
-    dComIfG_resDeleteDemo(&mPhase, l_arcname_tbl[mNpcNo]);
-    if (heap != NULL && mpMorf != NULL) {
-        mpMorf->stopZelAnime();
+#if VERSION == VERSION_DEMO
+    if (mResFlag != 0)
+#endif
+    {
+        dComIfG_resDeleteDemo(&mPhase, l_arcname_tbl[mNpcNo]);
+    }
+
+#if VERSION > VERSION_DEMO
+    if (heap != NULL)
+#endif
+    {
+        if (mpMorf != NULL) {
+            mpMorf->stopZelAnime();
+        }
     }
     return true;
 }
@@ -456,7 +478,7 @@ bool daNpcSv_c::_execute() {
 
     eventOrder();
 
-    if (!getNpcNo() && mBckIdx == 5) {
+    if (!mNpcNo && mBckIdx == 5) {
         mpMorf->setFrame(mIkadaFrame);
     } else {
         playAnm();
@@ -467,9 +489,9 @@ bool daNpcSv_c::_execute() {
     }
 
     mObjAcch.CrrPos(*dComIfG_Bgsp());
-    setCollision(&mCyl, current.pos, l_npc_dat[getNpcNo()].mCylRadius, l_npc_dat[getNpcNo()].mCylHeight);
-    attention_info.position.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].mAttnPosOfsY, current.pos.z);
-    eyePos.set(current.pos.x, current.pos.y + l_npc_dat[getNpcNo()].mEyePosOfsY, current.pos.z);
+    setCollision(&mCyl, current.pos, l_npc_dat[mNpcNo].mCylRadius, l_npc_dat[mNpcNo].mCylHeight);
+    attention_info.position.set(current.pos.x, current.pos.y + l_npc_dat[mNpcNo].mAttnPosOfsY, current.pos.z);
+    eyePos.set(current.pos.x, current.pos.y + l_npc_dat[mNpcNo].mEyePosOfsY, current.pos.z);
     lookBack();
     setMtx();
     return false;
@@ -494,15 +516,15 @@ void daNpcSv_c::executeSetMode(u8 i_mode) {
 BOOL daNpcSv_c::executeWaitInit() {
     setAnmTbl(&l_npc_anm_wait);
     m_jnt.setParam(
-        l_npc_dat[getNpcNo()].mMax_backbone_x,
-        l_npc_dat[getNpcNo()].mMax_backbone_y,
-        l_npc_dat[getNpcNo()].mMin_backbone_x,
-        l_npc_dat[getNpcNo()].mMin_backbone_y,
-        l_npc_dat[getNpcNo()].mMax_head_x,
-        l_npc_dat[getNpcNo()].mMax_head_y,
-        l_npc_dat[getNpcNo()].mMin_head_x,
-        l_npc_dat[getNpcNo()].mMin_head_y,
-        l_npc_dat[getNpcNo()].mMax_turn_step
+        l_npc_dat[mNpcNo].mMax_backbone_x,
+        l_npc_dat[mNpcNo].mMax_backbone_y,
+        l_npc_dat[mNpcNo].mMin_backbone_x,
+        l_npc_dat[mNpcNo].mMin_backbone_y,
+        l_npc_dat[mNpcNo].mMax_head_x,
+        l_npc_dat[mNpcNo].mMax_head_y,
+        l_npc_dat[mNpcNo].mMin_head_x,
+        l_npc_dat[mNpcNo].mMin_head_y,
+        l_npc_dat[mNpcNo].mMax_turn_step
     );
     return FALSE;
 }
@@ -513,7 +535,7 @@ void daNpcSv_c::executeWait() {
     fopAcM_SearchByID(parentActorID, (fopAc_ac_c**)&parent);
 
     if (parent != NULL) {
-        if (!getNpcNo()) {
+        if (!mNpcNo) {
             if (mbNearPlayer) {
                 mEvtOrderType = 1;
                 if (mbNearPlayer != mbWasNearPlayer) {
@@ -653,7 +675,7 @@ void daNpcSv_c::eventMove() {
         mEventCut.setAttnFlag(prevAttnFlag);
     } else {
         privateCut();
-        if (getNpcNo()) {
+        if (mNpcNo) {
             return;
         }
         setAnmFromMsgTag();
@@ -667,7 +689,7 @@ void daNpcSv_c::privateCut() {
         "MES_SET", "GET_ITEM", "SET_ANGLE", "ATTENTION", "TURN_OK",
     };
 
-    int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[getNpcNo()]);
+    int staffIdx = dComIfGp_evmng_getMyStaffId(l_npc_staff_id[mNpcNo]);
     if (staffIdx != -1) {
         mActIdx = dComIfGp_evmng_getMyActIdx(staffIdx, cut_name_tbl, 5, TRUE, 0);
 
@@ -804,7 +826,7 @@ void daNpcSv_c::eventAttentionInit(int i_staffIdx) {
     }
     mKyoroFlag = 0;
 
-    if (getNpcNo() == 2) {
+    if (mNpcNo == 2) {
         dComIfGp_event_setTalkPartner(this);
     }
 }
@@ -817,7 +839,7 @@ bool daNpcSv_c::eventAttention() {
             daNpcSv_c* pSv0 = (daNpcSv_c*)fopAcM_searchFromName(l_npc_staff_id[0], 0, 0);
             if (pSv0 != NULL) {
                 setAnmTbl(l_npc_anm_sv1_tbl[pSv0->getMsgPtn()]);
-                if (getNpcNo() == 1) {
+                if (mNpcNo == 1) {
                     mDoAud_seStart(l_npc_se_sv1_tbl[pSv0->getMsgPtn()]);
                 }
             } else {
@@ -978,7 +1000,7 @@ u8 daNpcSv_c::getPrmNpcNo() {
 void daNpcSv_c::setMtx() {
     mpMorf->getModel()->setBaseScale(scale);
 
-    cXyz offset(l_npc_dat[getNpcNo()].mModelOfsX, l_npc_dat[getNpcNo()].mModelOfsY, l_npc_dat[getNpcNo()].mModelOfsZ);
+    cXyz offset(l_npc_dat[mNpcNo].mModelOfsX, l_npc_dat[mNpcNo].mModelOfsY, l_npc_dat[mNpcNo].mModelOfsZ);
 
     mDoMtx_stack_c::YrotS(current.angle.y);
     cMtx_multVec(mDoMtx_stack_c::get(), &offset, &offset);
