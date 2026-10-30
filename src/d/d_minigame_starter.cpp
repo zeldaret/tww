@@ -27,7 +27,6 @@ static s16 dMinigame_Starter_tex_number = 3;
 #endif
 
 /* 80205FE8-80206124       .text _create__19dMinigame_Starter_cFv */
-// NONMATCHING - missing b
 cPhs_State dMinigame_Starter_c::_create() {
     cPhs_State phase_state = dComIfG_resLoad(&mPhase, "Mgst");
     if (phase_state == cPhs_COMPLEATE_e) {
@@ -50,15 +49,15 @@ cPhs_State dMinigame_Starter_c::_create() {
         } else {
             return cPhs_ERROR_e;
         }
-
-        mStatus = 0;
-        mTimer = 0;
-        field_0x10e = 3;
-
-        return cPhs_COMPLEATE_e;
+    } else {
+        return phase_state;
     }
 
-    return phase_state;
+    mStatus = 0;
+    mTimer = 0;
+    field_0x10e = 3;
+
+    return cPhs_COMPLEATE_e;
 }
 
 /* 80206124-8020629C       .text _execute__19dMinigame_Starter_cFv */
@@ -205,122 +204,106 @@ void dDlst_StarterScrnDraw_c::setScreen(const char* i_layoutName, JKRArchive* i_
 }
 
 /* 802064DC-80206908       .text anime1__23dDlst_StarterScrnDraw_cFi */
-// NONMATCHING - regalloc
 BOOL dDlst_StarterScrnDraw_c::anime1(int i_no) {
     f32 angle = -8.0f;
-    BOOL rt = FALSE;
+    BOOL ret = FALSE;
+    f32 ratio;
+    s16 frame[5];
 
-    s16 var_r30 = cdFrame0;
-    s16 var_r31 = var_r30 + cdFrame1;
-    s16 temp_r6 = var_r31 + tmFrame;
-    s16 var_r27 = temp_r6 + cdFrame2;
-    s16 temp_r7 = var_r27 + cdFrame3;
+    frame[0] = cdFrame0;
+    frame[1] = frame[0] + cdFrame1;
+    frame[2] = frame[1] + tmFrame;
+    frame[3] = frame[2] + cdFrame2;
+    frame[4] = frame[3] + cdFrame3;
 
     field_0x1c8[i_no].mUserArea++;
 
-    f32 temp;
-    f32 var_f2;
+    if (field_0x1c8[i_no].mUserArea <= frame[0]) {
+        fopMsgM_paneScaleXY(&field_0x270[i_no], acc(frame[1], field_0x1c8[i_no].mUserArea, 0) * 0.3f + 0.7f);
+        fopMsgM_setNowAlpha(&field_0x270[i_no], acc(frame[0], field_0x1c8[i_no].mUserArea, 0));
+    } else if (field_0x1c8[i_no].mUserArea <= frame[1]) {
+        ratio = acc(frame[1], field_0x1c8[i_no].mUserArea, frame[0]);
+        fopMsgM_paneScaleXY(&field_0x1c8[i_no], ratio * 0.3f + 0.7f);
+        fopMsgM_setNowAlpha(&field_0x1c8[i_no], ratio);
+        fopMsgM_paneScaleXY(&field_0x270[i_no], acc(frame[1], field_0x1c8[i_no].mUserArea, 0) * 0.3f + 0.7f);
+        fopMsgM_setNowAlpha(&field_0x270[i_no], 1.0f - ratio);
 
-    s16 temp_r0 = field_0x1c8[i_no].mUserArea;
-    if (temp_r0 <= var_r30) {
-        temp = SQUARE((f32)field_0x1c8[i_no].mUserArea);
-        temp /= SQUARE((f32)var_r31);
-        fopMsgM_paneScaleXY(&field_0x270[i_no], temp * 0.3f + 0.7f);
-
-        temp = SQUARE((f32)field_0x1c8[i_no].mUserArea) / SQUARE((f32)var_r30);
-        fopMsgM_setNowAlpha(&field_0x270[i_no], temp);
-    } else if (temp_r0 <= var_r31) {
-        var_f2 = acc(var_r31, temp_r0, var_r30);
-        fopMsgM_paneScaleXY(&field_0x1c8[i_no], var_f2 * 0.3f + 0.7f);
-        fopMsgM_setNowAlpha(&field_0x1c8[i_no], var_f2);
-
-        temp = SQUARE((f32)field_0x1c8[i_no].mUserArea);
-        temp /= SQUARE((f32)var_r31);
-        fopMsgM_paneScaleXY(&field_0x270[i_no], temp * 0.3f + 0.7f);
-        fopMsgM_setNowAlpha(&field_0x270[i_no], 1.0f - var_f2);
-
-        if (field_0x1c8[i_no].mUserArea == var_r31) {
+        if (field_0x1c8[i_no].mUserArea == frame[1]) {
             mDoAud_seStart(JA_SE_SGAME_COUNTDOWN, NULL);
         }
-    } else if (temp_r6 > temp_r0) {
-        if (temp_r0 <= var_r27) {
-            int r7 = ((var_r27 - temp_r0) / 4);
-            if (((temp_r6 - temp_r0) / r7) % 2)
+    } else if (field_0x1c8[i_no].mUserArea > frame[2]) {
+        if (field_0x1c8[i_no].mUserArea <= frame[3]) {
+            if (((field_0x1c8[i_no].mUserArea - frame[2]) / ((frame[3] - frame[2]) / 4)) % 2) {
                 angle *= -1.0f;
+            }
             setRotate(&field_0x1c8[i_no], angle);
-        } else if (temp_r0 < temp_r7) {
-            var_f2 = acc(temp_r7, temp_r0, var_r27);
-            fopMsgM_paneScaleXY(&field_0x1c8[i_no], var_f2 * 2.0f + 1.0f);
-
-            temp = acc(temp_r7, field_0x1c8[i_no].mUserArea, var_r27);
-            fopMsgM_setNowAlpha(&field_0x1c8[i_no], 1.0f - temp);
+        } else if (field_0x1c8[i_no].mUserArea < frame[4]) {
+            ratio = acc(frame[4], field_0x1c8[i_no].mUserArea, frame[3]);
+            fopMsgM_paneScaleXY(&field_0x1c8[i_no], ratio * 2.0f + 1.0f);
+            fopMsgM_setNowAlpha(&field_0x1c8[i_no], 1.0f - acc(frame[4], field_0x1c8[i_no].mUserArea, frame[3]));
         } else {
             fopMsgM_paneScaleXY(&field_0x1c8[i_no], 3.0f);
             fopMsgM_setNowAlphaZero(&field_0x1c8[i_no]);
-            rt = TRUE;
+            ret = TRUE;
         }
     }
 
-    return rt;
+    return ret;
 }
 
 /* 80206908-80206CB0       .text anime2__23dDlst_StarterScrnDraw_cFv */
-// NONMATCHING - regalloc
 BOOL dDlst_StarterScrnDraw_c::anime2() {
-    BOOL rt = FALSE;
+    BOOL ret = FALSE;
+    f32 ratio;
+    f32 scale;
+    f32 angle;
+    s16 frame[5];
 
-    s16 var_r30 = cdFrame4;
-    s16 var_r31 = var_r30 + cdFrame5;
-    s16 temp_r6 = var_r31 + cdFrame6;
-    s16 var_r27 = temp_r6 + cdFrame7;
-    s16 temp_r7 = var_r27 + cdFrame8;
+    frame[0] = cdFrame4;
+    frame[1] = frame[0] + cdFrame5;
+    frame[2] = frame[1] + cdFrame6;
+    frame[3] = frame[2] + cdFrame7;
+    frame[4] = frame[3] + cdFrame8;
 
     field_0x008[0].mUserArea++;
 
-    f32 alpha;
-    f32 var_f31;
-    f32 scaleAdj;
-    f32 angle;
-
-    s16 temp_r0 = field_0x008[0].mUserArea;
-    if (temp_r0 <= var_r30) {
-        var_f31 = SQUARE((f32)temp_r0) / SQUARE((f32)var_r30);
-        alpha = var_f31;
-        scaleAdj = 3.0f - var_f31 * 2.2f;
-        angle = 90.0f - var_f31 * 65.0f;
-        scaleAnime(scaleAdj * g_menuHIO.field_0x14);
+    if (field_0x008[0].mUserArea <= frame[0]) {
+        ratio = acc(frame[0], field_0x008[0].mUserArea, 0);
+        scale = 3.0f - ratio * 2.2f;
+        angle = 90.0f - ratio * 65.0f;
+        scaleAnime(scale * g_menuHIO.field_0x14);
         setRotate(&field_0x190, angle);
-        fopMsgM_setNowAlpha(&field_0x008[0], alpha);
-    } else if (temp_r0 <= var_r31) {
-        var_f31 = acc(var_r31, temp_r0, var_r30);
-        scaleAdj = 0.8f - var_f31 * -0.19999999f;
-        scaleAnime(scaleAdj * g_menuHIO.field_0x14);
+        fopMsgM_setNowAlpha(&field_0x008[0], ratio);
+    } else if (field_0x008[0].mUserArea <= frame[1]) {
+        ratio = acc(frame[1], field_0x008[0].mUserArea, frame[0]);
+        scale = 0.8f - ratio * -0.19999999f;
+        scaleAnime(scale * g_menuHIO.field_0x14);
 
-        if (field_0x008[0].mUserArea == var_r31) {
+        if (field_0x008[0].mUserArea == frame[1]) {
             mDoAud_seStart(JA_SE_SGAME_COUNT_GO, NULL);
         }
-    } else if (temp_r0 > temp_r6) {
-        if (temp_r0 <= var_r27) {
-            var_f31 = acc(var_r27, temp_r0, temp_r6);
-            angle = 25.0f - var_f31 * -35.0f;
+    } else if (field_0x008[0].mUserArea > frame[2]) {
+        if (field_0x008[0].mUserArea <= frame[3]) {
+            ratio = acc(frame[3], field_0x008[0].mUserArea, frame[2]);
+            angle = 25.0f - ratio * -35.0f;
             setRotate(&field_0x190, angle);
-        } else if (temp_r0 < temp_r7) {
-            var_f31 = acc(temp_r7, temp_r0, var_r27);
-            scaleAdj = 1.0f - var_f31 * 0.5f;
-            angle = 60.0f - var_f31 * -210.0f;
-            scaleAnime(scaleAdj * g_menuHIO.field_0x14);
+        } else if (field_0x008[0].mUserArea < frame[4]) {
+            ratio = acc(frame[4], field_0x008[0].mUserArea, frame[3]);
+            scale = 1.0f - ratio * 0.5f;
+            angle = 60.0f - ratio * -210.0f;
+            scaleAnime(scale * g_menuHIO.field_0x14);
             setRotate(&field_0x190, angle);
-            fopMsgM_setNowAlpha(&field_0x008[0], 1.0f - var_f31);
+            fopMsgM_setNowAlpha(&field_0x008[0], 1.0f - ratio);
         } else {
-            scaleAdj = 0.5f;
-            scaleAnime(scaleAdj * g_menuHIO.field_0x14);
+            scale = 0.5f;
+            scaleAnime(scale * g_menuHIO.field_0x14);
             setRotate(&field_0x190, -90.0f);
             fopMsgM_setNowAlphaZero(&field_0x008[0]);
-            rt = TRUE;
+            ret = TRUE;
         }
     }
 
-    return rt;
+    return ret;
 }
 
 /* 80206CB0-80206DA4       .text scaleAnime__23dDlst_StarterScrnDraw_cFf */

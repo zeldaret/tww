@@ -652,7 +652,7 @@ config.libs = [
             Object(NonMatching, "d/d_message.cpp"),
             Object(NonMatching, "d/d_message_paper.cpp"),
             Object(NonMatching, "d/d_meter.cpp"),
-            Object(NonMatching, "d/d_minigame_starter.cpp"),
+            Object(Matching,    "d/d_minigame_starter.cpp"),
             Object(NonMatching, "d/d_minigame_terminater.cpp"),
             Object(NonMatching, "d/d_msg.cpp"),
             Object(Matching,    "d/d_name.cpp"),
