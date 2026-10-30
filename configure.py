@@ -1594,7 +1594,7 @@ config.libs = [
     ActorRel(Matching,    "d_a_hys"),
     ActorRel(Matching,    "d_a_kamome"),
     ActorRel(Matching,    "d_a_kamome2"), # Demo-only TU
-    ActorRel(NonMatching, "d_a_kantera"),
+    ActorRel(MatchingFor("GZLJ01", "GZLE01", "GZLP01"), "d_a_kantera"),
     ActorRel(Matching,    "d_a_kn"),
     ActorRel(Matching,    "d_a_kokiie"),
     ActorRel(Matching,    "d_a_ks"),
