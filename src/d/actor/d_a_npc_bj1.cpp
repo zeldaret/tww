@@ -5,6 +5,16 @@
 
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_npc_bj1.h"
+#include "d/actor/d_a_jbo.h"
+
+static fopAc_ac_c* l_check_inf[20];
+static int l_check_wrk;
+
+static char* l_evn_tbl[] = {
+    "Mak_Drg",
+    "Get_Blu_Btl",
+    "Calling",
+};
 
 /* 000000EC-00000108       .text __ct__20daNpc_Bj1_childHIO_cFv */
 daNpc_Bj1_childHIO_c::daNpc_Bj1_childHIO_c() {
@@ -17,8 +27,12 @@ daNpc_Bj1_HIO_c::daNpc_Bj1_HIO_c() {
 }
 
 /* 00000268-000002EC       .text searchActor_Jb__FPvPv */
-void searchActor_Jb(void*, void*) {
-    /* Nonmatching */
+static void* searchActor_Jb(void* i_actor, void*) {
+    if (l_check_wrk < 0x14 && fopAcM_IsActor(i_actor) && fopAcM_GetName(i_actor) == fpcNm_JBO_e && ((jbo_class*)i_actor)->mType != daJbo_Type_NORMAL_e) {
+        l_check_inf[l_check_wrk] = (fopAc_ac_c*)i_actor;
+        l_check_wrk += 1;
+    }
+    return NULL;
 }
 
 /* 000002EC-00000338       .text nodeCallBack_Bj1__FP7J3DNodei */
@@ -32,8 +46,30 @@ static BOOL nodeCallBack_Bj1(J3DNode* i_node, int i_calcTiming) {
 }
 
 /* 00000338-000004C4       .text nodeBj1Control__11daNpc_Bj1_cFP7J3DNodeP8J3DModel */
-void daNpc_Bj1_c::nodeBj1Control(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::nodeBj1Control(J3DNode* i_node, J3DModel* i_model) {
+    static cXyz a_eye_pos_off(26.0f, 26.0f, 0.0f);
+    s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
+    mDoMtx_stack_c::copy(i_model->getAnmMtx(jntNo));
+
+    if (jntNo == field_0x6CC) {
+        mDoMtx_stack_c::XrotM(m_jnt.getHead_y());
+        mDoMtx_stack_c::ZrotM(-m_jnt.getHead_x());
+        mDoMtx_stack_c::scaleM(field_0x7F0, field_0x7F4, field_0x7F8);
+        mDoMtx_stack_c::multVec(&field_0x7E4, &field_0x7C0);
+    }
+
+    if (jntNo == field_0x6CD) {
+        mDoMtx_stack_c::XrotM(m_jnt.getBackbone_y());
+        mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
+        mDoMtx_stack_c::scaleM(field_0x7FC, field_0x800, field_0x804);
+    }
+
+    if (jntNo == field_0x6CF) {
+        cMtx_copy(mDoMtx_stack_c::get(), field_0x704);
+    }
+
+    cMtx_copy(mDoMtx_stack_c::get(), j3dSys.mCurrentMtx);
+    i_model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
 }
 
 /* 00000500-0000054C       .text nodeCallBack_Prp__FP7J3DNodei */

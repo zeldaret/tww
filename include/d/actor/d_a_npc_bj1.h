@@ -253,6 +253,10 @@ public:
 
 class daNpc_Bj1_childHIO_c {
 public:
+    struct hio_prm_c {
+        /* 0x00 */ u8 field_0x00[0x64];
+    }; // Size: 0x64
+
     daNpc_Bj1_childHIO_c();
 
 public:
