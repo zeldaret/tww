@@ -78,8 +78,22 @@ static BOOL nodeCallBack_Prp(J3DNode*, int) {
 }
 
 /* 0000054C-00000664       .text nodePrpControl__11daNpc_Bj1_cFP7J3DNodeP8J3DModel */
-void daNpc_Bj1_c::nodePrpControl(J3DNode*, J3DModel*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::nodePrpControl(J3DNode* i_node, J3DModel* i_model) {
+    s32 jntNo = ((J3DJoint*)i_node)->getJntNo();
+
+    if (jntNo == field_0x6E9) {
+        cMtx_copy(field_0x704, mDoMtx_stack_c::get());
+        mDoMtx_stack_c::transM(-1.5f, 4.5f, -4.2f);
+        mDoMtx_stack_c::XYZrotM(-0x4000, -0x5555, 0);
+        cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        i_model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+    }
+    if (jntNo == field_0x6E8) {
+        mDoMtx_stack_c::YrotS(field_0x6F0);
+        mDoMtx_stack_c::revConcat(i_model->getAnmMtx(jntNo));
+        cMtx_copy(mDoMtx_stack_c::get(), J3DSys::mCurrentMtx);
+        i_model->setAnmMtx(jntNo, mDoMtx_stack_c::get());
+    }
 }
 
 /* 00000664-00000710       .text init_BJ4_0__11daNpc_Bj1_cFv */
