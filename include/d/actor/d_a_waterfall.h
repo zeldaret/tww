@@ -38,11 +38,11 @@ public:
     /* 0x298 */ J3DModel* mModelWater;
     /* 0x29C */ J3DModel* mModelGate;
     /* 0x2A0 */ J3DModel* mModelMinamo; // water surface model
-    /* 0x2A4 */ int mModeProc;
+    /* 0x2A4 */ int mMode;
     /* 0x2A8 */ int mSwitchNo;
-    /* 0x2AC */ mDoExt_btkAnm mBtkAnm;
-    /* 0x2C0 */ mDoExt_brkAnm mBrkAnm;
-    /* 0x2D8 */ mDoExt_btkAnm mBtkAnm2;
+    /* 0x2AC */ mDoExt_btkAnm mWaterBtkAnm;
+    /* 0x2C0 */ mDoExt_brkAnm mWaterSurfaceBrkAnm;
+    /* 0x2D8 */ mDoExt_btkAnm mWaterSurfaceBtkAnm;
     /* 0x2EC */ dPa_followEcallBack mPCallBack;
     /* 0x300 */ dPa_followEcallBack mPCallBack2;
     /* 0x314 */ cXyz mParticlePos1;
@@ -51,10 +51,10 @@ public:
     /* 0x338 */ csXyz mParticleAngle1;
     /* 0x33E */ csXyz mParticleAngle2;
     /* 0x344 */ Vec mSePos;
-    /* 0x350 */ s16 mEvtIdx;
-    /* 0x352 */ s16 mSomeState;
+    /* 0x350 */ s16 mEventIdx;
+    /* 0x352 */ s16 mfield_0x352;
     /* 0x354 */ u8 field_0x354[0x355 - 0x354];
-    /* 0x355 */ u8 mSomeCounter;
+    /* 0x355 */ u8 mEventState;
     /* 0x356 */ u8 mType;
     /* 0x357 */ u8 field_0x357[0x358 - 0x357];
 }; // Size: 0x358

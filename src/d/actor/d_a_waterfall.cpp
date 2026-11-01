@@ -41,10 +41,10 @@ BOOL daWfall_c::CreateHeap() {
 
     J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BTK_YSWTR00_e);
     JUT_ASSERT(0x10d, pbtk != NULL);
-    if (mBtkAnm.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
+    if (mWaterBtkAnm.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
         return FALSE;
     }
-    mBtkAnm.setPlaySpeed(1.0f);
+    mWaterBtkAnm.setPlaySpeed(1.0f);
 
     modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BDL_HSUI1_e);
     JUT_ASSERT(0x119, modelData != NULL);
@@ -63,16 +63,16 @@ BOOL daWfall_c::CreateHeap() {
 
         pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BTK_YSMNM00_e);
         JUT_ASSERT(0x138, pbtk != NULL);
-        if (mBtkAnm2.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
+        if (mWaterSurfaceBtkAnm.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
             return FALSE;
         }
 
         J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BRK_YSMNM00_e);
         JUT_ASSERT(0x143, pbrk != NULL);
-        if (mBrkAnm.init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
+        if (mWaterSurfaceBrkAnm.init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
             return FALSE;
         }
-        mBrkAnm.setPlaySpeed(0.0f);
+        mWaterSurfaceBrkAnm.setPlaySpeed(0.0f);
     }
 
     return TRUE;
@@ -98,20 +98,20 @@ void daWfall_c::CreateInit() {
     if (dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
         mode_wtr_off_init();
         mSePos = current.pos;
-        mSomeCounter = 10;
+        mEventState = 10;
         if (mType == true) {
-            mBrkAnm.setFrame(mBrkAnm.getEndFrame());
+            mWaterSurfaceBrkAnm.setFrame(mWaterSurfaceBrkAnm.getEndFrame());
         }
     } else {
         mode_wtr_on_init();
         mSePos = current.pos;
         mSePos.y += 863.0f;
         if (mType == true) {
-            mBrkAnm.setFrame(0.0f);
+            mWaterSurfaceBrkAnm.setFrame(0.0f);
         }
     }
 
-    mEvtIdx = dComIfGp_evmng_getEventIdx("GATECLOSE", 0xff);
+    mEventIdx = dComIfGp_evmng_getEventIdx("GATECLOSE", 0xff);
 }
 /* 00000708-00000838       .text _create__9daWfall_cFv */
 cPhs_State daWfall_c::_create() {
@@ -160,40 +160,40 @@ void daWfall_c::set_minamo_mtx() {
 
 /* 00000AD0-00000C94       .text _execute__9daWfall_cFv */
 bool daWfall_c::_execute() {
-    switch (mSomeCounter) {
+    switch (mEventState) {
         case 0:
-            if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck(mEvtIdx)) {
-                mSomeCounter += 1;
+            if (eventInfo.checkCommandDemoAccrpt() || dComIfGp_evmng_startCheck(mEventIdx)) {
+                mEventState += 1;
             } else if (dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
-                fopAcM_orderOtherEventId(this, mEvtIdx, 0xff, 0xffff, 0, 1);
+                fopAcM_orderOtherEventId(this, mEventIdx, 0xff, 0xffff, 0, 1);
                 eventInfo.onCondition(2);
             }
             break;
         case 1:
-            if (dComIfGp_evmng_startCheck(mEvtIdx)) {
+            if (dComIfGp_evmng_startCheck(mEventIdx)) {
                 mode_wtr_off_init();
-                mSomeCounter += 1;
+                mEventState += 1;
             }
             break;
         case 2:
-            if (dComIfGp_evmng_endCheck(mEvtIdx)) {
+            if (dComIfGp_evmng_endCheck(mEventIdx)) {
                 dComIfGp_event_onEventFlag(8);
-                mSomeCounter = 10;
+                mEventState = 10;
             }
             break;
         case 10:
-            mSomeState = 0;
+            mfield_0x352 = 0;
             break;
     }
 
     if (!dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
         mode_wtr_on_init();
-        mSomeCounter = 0;
+        mEventState = 0;
     }
 
     if (mType == true) {
-        mBrkAnm.play();
-        mBtkAnm2.play();
+        mWaterSurfaceBrkAnm.play();
+        mWaterSurfaceBtkAnm.play();
         set_minamo_mtx();
     }
     mode_proc_call();
@@ -210,14 +210,14 @@ void daWfall_c::mode_proc_call() {
         &daWfall_c::mode_wtr_off,
     };
 
-    (this->*mode_proc[mModeProc])();
+    (this->*mode_proc[mMode])();
 }
 
 /* 00000D20-00000D48       .text mode_wtr_on_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_on_init() {
-    mModeProc = 0;
+    mMode = 0;
     if (mType == true) {
-        mBrkAnm.setPlaySpeed(-1.0f);
+        mWaterSurfaceBrkAnm.setPlaySpeed(-1.0f);
     }
 }
 
@@ -227,8 +227,8 @@ void daWfall_c::mode_wtr_on() {
 
     cLib_addCalc(&mSePos.y, current.pos.y + 760.0f + 100.0f, 0.1f, 10.0f, 5.0f);
     scale.y = getWaterScaleFromGatePos();
-    mBtkAnm.setPlaySpeed(1.0f);
-    mBtkAnm.play();
+    mWaterBtkAnm.setPlaySpeed(1.0f);
+    mWaterBtkAnm.play();
 
     emitterPosSet |= setEmitter00Pos();
     emitterPosSet |= setEmitter01Pos();
@@ -240,9 +240,9 @@ void daWfall_c::mode_wtr_on() {
 
 /* 00000DEC-00000E14       .text mode_wtr_off_init__9daWfall_cFv */
 void daWfall_c::mode_wtr_off_init() {
-    mModeProc = 1;
+    mMode = 1;
     if (mType == true) {
-        mBrkAnm.setPlaySpeed(1.0f);
+        mWaterSurfaceBrkAnm.setPlaySpeed(1.0f);
     }
 }
 
@@ -254,8 +254,8 @@ void daWfall_c::mode_wtr_off() {
     float waterScale = getWaterScaleFromGatePos();
     scale.y = waterScale;
     if (waterScale > 0.0f) {
-        mBtkAnm.setPlaySpeed(1.0f);
-        mBtkAnm.play();
+        mWaterBtkAnm.setPlaySpeed(1.0f);
+        mWaterBtkAnm.play();
         emitterPosSet |= setEmitter00Pos();
         emitterPosSet |= setEmitter01Pos();
         if (emitterPosSet) {
@@ -359,7 +359,7 @@ void daWfall_c::set_se() {
 bool daWfall_c::_draw() {
     g_env_light.settingTevStruct(TEV_TYPE_BG0, &current.pos, &tevStr);
     g_env_light.setLightTevColorType(mModelWater, &tevStr);
-    mBtkAnm.entry(mModelWater->getModelData());
+    mWaterBtkAnm.entry(mModelWater->getModelData());
     mDoExt_modelUpdateDL(mModelWater);
 
     g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
@@ -369,8 +369,8 @@ bool daWfall_c::_draw() {
     if (mType == true) {
         g_env_light.settingTevStruct(TEV_TYPE_BG1, &current.pos, &tevStr);
         g_env_light.setLightTevColorType(mModelMinamo, &tevStr);
-        mBtkAnm2.entry(mModelMinamo->getModelData());
-        mBrkAnm.entry(mModelMinamo->getModelData());
+        mWaterSurfaceBtkAnm.entry(mModelMinamo->getModelData());
+        mWaterSurfaceBrkAnm.entry(mModelMinamo->getModelData());
         mDoExt_modelUpdateDL(mModelMinamo);
     }
 
