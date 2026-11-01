@@ -107,8 +107,13 @@ void daNpc_Bj1_c::nodeBj1Control(J3DNode* i_node, J3DModel* i_model) {
 }
 
 /* 00000500-0000054C       .text nodeCallBack_Prp__FP7J3DNodei */
-static BOOL nodeCallBack_Prp(J3DNode*, int) {
-    /* Nonmatching */
+static BOOL nodeCallBack_Prp(J3DNode* i_node, int i_calcTiming) {
+    if (i_calcTiming == J3DNodeCBCalcTiming_In) {
+        if (j3dSys.getModel()->getUserArea() != NULL) {
+            reinterpret_cast<daNpc_Bj1_c*>(j3dSys.getModel()->getUserArea())->nodePrpControl(i_node, j3dSys.getModel());
+        }
+    }
+    return TRUE;
 }
 
 /* 0000054C-00000664       .text nodePrpControl__11daNpc_Bj1_cFP7J3DNodeP8J3DModel */
@@ -221,25 +226,47 @@ u32 daNpc_Bj1_c::anmNum_toResID(int i_idx) {
 }
 
 /* 000010AC-00001188       .text setAnm_anm__11daNpc_Bj1_cFPQ211daNpc_Bj1_c9anm_prm_c */
-void daNpc_Bj1_c::setAnm_anm(daNpc_Bj1_c::anm_prm_c*) {
-    /* Nonmatching */
+BOOL daNpc_Bj1_c::setAnm_anm(anm_prm_c* i_anm_prm) {
+    if (field_0x8AF == i_anm_prm->anmNum) {
+        return TRUE;
+    }
+    field_0x8AF = i_anm_prm->anmNum;
+
+    u32 resID = anmNum_toResID(field_0x8AF);
+    dNpc_setAnmIDRes(mpMorf, i_anm_prm->loopMode, i_anm_prm->morf, i_anm_prm->speed, resID, -1, "Bj");
+
+    switch (field_0x8AF) {
+        case 7:
+            setPrtcl_danceLR();
+            field_0x888 = 0;
+            field_0x894 = 0x1E;
+            break;
+        default:
+            delPrtcl_danceLR();
+    }
+
+    field_0x808 = 0.0f;
+    field_0x83D = 0;
+    field_0x83C = 0;
+    return TRUE;
 }
 
 /* 00001188-000011B8       .text setAnm_NUM__11daNpc_Bj1_cFi */
-void daNpc_Bj1_c::setAnm_NUM(int) {
+void daNpc_Bj1_c::setAnm_NUM(int i_idx) {
     static anm_prm_c a_anm_prm_tbl[] = {
         { 0, 8.0f, 1.0f, 2 }, { 1, 8.0f, 1.0f, 0 }, { 2, 8.0f, 1.0f, 2 }, { 3, 8.0f, 1.0f, 2 }, { 4, 8.0f, 1.0f, 2 },  { 5, 8.0f, 1.0f, 0 },
         { 6, 8.0f, 1.0f, 0 }, { 7, 8.0f, 1.0f, 0 }, { 8, 8.0f, 1.0f, 2 }, { 9, 8.0f, 1.0f, 0 }, { 10, 8.0f, 1.0f, 2 }, { 0, 0.0f, 0.0f, 0 },
     };
-    /* Nonmatching */
+    setAnm_anm(&a_anm_prm_tbl[i_idx]);
 }
 
 /* 000011B8-000011F4       .text setAnm__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::setAnm() {
+BOOL daNpc_Bj1_c::setAnm() {
     static anm_prm_c a_anm_prm_tbl[] = { { -1, 0.0f, 0.0f, -1 }, { 0, 8.0f, 1.0f, 2 }, { -1, 0.0f, 0.0f, -1 }, { 1, 8.0f, 1.0f, 0 }, { 10, 8.0f, 1.0f, 2 },
                                          { 0, 8.0f, 1.0f, 2 },   { 8, 8.0f, 1.0f, 2 }, { 0, 8.0f, 1.0f, 2 },   { 0, 8.0f, 1.0f, 2 } };
 
-    /* Nonmatching */
+    setAnm_anm(&a_anm_prm_tbl[field_0x8B1]);
+    return TRUE;
 }
 
 /* 000011F4-00001378       .text setAnm_prp__11daNpc_Bj1_cFSc */
@@ -804,11 +831,8 @@ static BOOL daNpc_Bj1_IsDelete(daNpc_Bj1_c*) {
 }
 
 static actor_method_class l_daNpc_Bj1_Method = {
-    (process_method_func)daNpc_Bj1_Create,
-    (process_method_func)daNpc_Bj1_Delete,
-    (process_method_func)daNpc_Bj1_Execute,
-    (process_method_func)daNpc_Bj1_IsDelete,
-    (process_method_func)daNpc_Bj1_Draw,
+    (process_method_func)daNpc_Bj1_Create,   (process_method_func)daNpc_Bj1_Delete, (process_method_func)daNpc_Bj1_Execute,
+    (process_method_func)daNpc_Bj1_IsDelete, (process_method_func)daNpc_Bj1_Draw,
 };
 
 actor_process_profile_definition g_profile_NPC_BJ1 = {

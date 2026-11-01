@@ -11,7 +11,7 @@ class J3DNode;
 class daNpc_Bj1_c : public fopNpc_npc_c {
 public:
     struct anm_prm_c {
-        /* 0x00 */ s8 field_0x00;
+        /* 0x00 */ s8 anmNum;
         /* 0x04 */ f32 morf;
         /* 0x08 */ f32 speed;
         /* 0x0C */ int loopMode;
@@ -30,9 +30,9 @@ public:
     void setMtx_anmProc();
     void setMtx(bool);
     u32 anmNum_toResID(int);
-    void setAnm_anm(anm_prm_c*);
+    BOOL setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int);
-    void setAnm();
+    BOOL setAnm();
     void setAnm_prp(s8);
     void chg_anmTag();
     void control_anmTag();
@@ -239,7 +239,7 @@ public:
     /* 0x8AC */ u8 field_0x8AC;
     /* 0x8AD */ u8 field_0x8AD;
     /* 0x8AE */ u8 field_0x8AE;
-    /* 0x8AF */ u8 field_0x8AF;
+    /* 0x8AF */ s8 field_0x8AF;
     /* 0x8B0 */ u8 field_0x8B0;
     /* 0x8B1 */ s8 field_0x8B1;
     /* 0x8B2 */ u8 field_0x8B2;
