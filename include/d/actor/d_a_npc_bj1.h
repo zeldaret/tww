@@ -4,6 +4,7 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "d/d_npc.h"
 #include "f_op/f_op_actor.h"
+#include "m_Do/m_Do_hostIO.h"
 
 class J3DNode;
 
@@ -22,11 +23,11 @@ public:
 
     void nodeBj1Control(J3DNode*, J3DModel*);
     void nodePrpControl(J3DNode*, J3DModel*);
-    void init_BJ4_0();
-    void init_BJ6_0();
-    void init_BJ7_0();
-    void init_BJX_0();
-    void init_BJX_1();
+    bool init_BJ4_0();
+    bool init_BJ6_0();
+    bool init_BJ7_0();
+    bool init_BJX_0();
+    bool init_BJX_1();
     void createInit();
     void setMtx_anmProc();
     void setMtx(bool);
@@ -119,10 +120,10 @@ public:
     void fall01();
     void talk_1();
     void walk_1();
-    void wait_action1(void*);
-    void wait_action2(void*);
-    void wait_action3(void*);
-    void wait_action4(void*);
+    BOOL wait_action1(void*);
+    BOOL wait_action2(void*);
+    BOOL wait_action3(void*);
+    BOOL wait_action4(void*);
     void demo();
     void shadowDraw();
     BOOL _draw();
@@ -251,24 +252,33 @@ public:
     /* 0x8B7 */ u8 field_0x8B7;
 }; // size 0x8B8;
 
-class daNpc_Bj1_childHIO_c {
+class daNpc_Bj1_childHIO_c : public mDoHIO_entry_c {
 public:
     struct hio_prm_c {
         /* 0x00 */ u8 field_0x00[0x64];
     }; // Size: 0x64
 
     daNpc_Bj1_childHIO_c();
+    void genMessage(JORMContext* ctx) {
+        UNUSED(ctx);
+    };
 
-public:
-    /* Place member variables here */
-};
+    /* 0x04 */ hio_prm_c hio_prm;
+    /* 0x68 */ u32 field_0x68;
+}; // Size: 0x6C
 
-class daNpc_Bj1_HIO_c {
+class daNpc_Bj1_HIO_c : public mDoHIO_entry_c {
 public:
     daNpc_Bj1_HIO_c();
+    virtual ~daNpc_Bj1_HIO_c() {
+    }
+    void genMessage(JORMContext* ctx) {
+        UNUSED(ctx);
+    }
 
-public:
-    /* Place member variables here */
-};
+    /* 0x04 */ s8 field_0x04;
+    /* 0x08 */ s32 field_0x08;
+    /* 0x0C */ daNpc_Bj1_childHIO_c children[9];
+}; // Size: 0x3D8
 
 #endif /* D_A_NPC_BJ1_H */
