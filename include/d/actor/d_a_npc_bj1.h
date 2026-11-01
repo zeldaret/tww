@@ -17,6 +17,12 @@ public:
         /* 0x0C */ int loopMode;
     }; // Size: 0x10
 
+    struct bj1_prm_c {
+        /* 0x00 */ Vec head_scale;
+        /* 0x0C */ Vec backbone_scale;
+        /* 0x18 */ Vec eye_offset;
+    }; // Size: 0x24
+
     typedef BOOL (daNpc_Bj1_c::*ActionFunc)(void*);
 
     void nodeBj1Control(J3DNode*, J3DModel*);
@@ -26,7 +32,7 @@ public:
     bool init_BJ7_0();
     bool init_BJX_0();
     bool init_BJX_1();
-    void createInit();
+    bool createInit();
     void setMtx_anmProc();
     void setMtx(bool);
     u32 anmNum_toResID(int);
@@ -167,12 +173,8 @@ public:
     /* 0x7CC */ cXyz field_0x7CC;
     /* 0x7D8 */ cXyz field_0x7D8;
     /* 0x7E4 */ cXyz field_0x7E4;
-    /* 0x7F0 */ f32 field_0x7F0;
-    /* 0x7F4 */ f32 field_0x7F4;
-    /* 0x7F8 */ f32 field_0x7F8;
-    /* 0x7FC */ f32 field_0x7FC;
-    /* 0x800 */ f32 field_0x800;
-    /* 0x804 */ f32 field_0x804;
+    /* 0x7F0 */ cXyz field_0x7F0;
+    /* 0x7FC */ cXyz field_0x7FC;
     /* 0x808 */ f32 field_0x808;
     /* 0x80C */ f32 field_0x80C;
     /* 0x810 */ u8 padding_0x810[0x814 - 0x810];
@@ -182,8 +184,7 @@ public:
     /* 0x820 */ s16 field_0x820;
     /* 0x822 */ s16 field_0x822;
     /* 0x824 */ s16 field_0x824;
-    /* 0x826 */ u16 field_0x826;
-    /* 0x828 */ u8 padding_0x828[0x82C - 0x828];
+    /* 0x826 */ u16 field_0x826[3];
     /* 0x82C */ s16 field_0x82C;
     /* 0x82E */ u16 field_0x82E;
     /* 0x830 */ u16 field_0x830;
@@ -245,7 +246,7 @@ public:
     /* 0x8B2 */ u8 field_0x8B2;
     /* 0x8B3 */ u8 field_0x8B3;
     /* 0x8B4 */ s8 field_0x8B4;
-    /* 0x8B5 */ u8 field_0x8B5;
+    /* 0x8B5 */ s8 field_0x8B5;
     /* 0x8B6 */ u8 field_0x8B6;
     /* 0x8B7 */ u8 field_0x8B7;
 }; // size 0x8B8;

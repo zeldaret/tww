@@ -28,7 +28,7 @@ daNpc_Bj1_HIO_c::daNpc_Bj1_HIO_c() {
           0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
           0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
         { 0x13881B58, 0xFF38F830, 0x00000000, 0x00000000, 0x04000400, 0x42C80000, 0x00000000, 0x43960000, 0x005A0006,
-          0x04000000, 0x40800000, 0x40A00000, 0x3E4CCCCD, 0x40800000, 0x3E4CCCCD, 0x3F800000, 0x232800C8, 0x10001388,
+          0x04000000, 0x40800000, 0x40A00000, 0x3E4CCCCD, 0x40800000, 0x3E4CCCCD, 1.0f,       0x232800C8, 0x10001388,
           0x437A0000, 0x7FFF0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
         { 0x13880BB8, 0x0064F448, 0x00001388, 0x0000EC78, 0x04000400, 0x42DC0000, 0x00000000, 0x43960000, 0x00000000,
           0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
@@ -38,7 +38,7 @@ daNpc_Bj1_HIO_c::daNpc_Bj1_HIO_c() {
           0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
         { 0x13881388, 0xE000EC78, 0x00001C70, 0x0000E390, 0x04000400, 0x42FA0000, 0x00000000, 0x43960000, 0x00000000,
           0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-          0x00000000, 0x00000006, 0x04000000, 0x3ECCCCCD, 0x40A00000, 0x3E4CCCCD, 0x42200000 },
+          0x00000000, 0x00000006, 0x04000000, 0x3ECCCCCD, 0x40A00000, 0x3E4CCCCD, 40.0f },
         { 0x13880FA0, 0xF830F060, 0x00001C70, 0x0000E390, 0x04000400, 0x42F00000, 0x00000000, 0x43960000, 0x00000000,
           0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
           0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
@@ -88,14 +88,14 @@ void daNpc_Bj1_c::nodeBj1Control(J3DNode* i_node, J3DModel* i_model) {
     if (jntNo == field_0x6CC) {
         mDoMtx_stack_c::XrotM(m_jnt.getHead_y());
         mDoMtx_stack_c::ZrotM(-m_jnt.getHead_x());
-        mDoMtx_stack_c::scaleM(field_0x7F0, field_0x7F4, field_0x7F8);
+        mDoMtx_stack_c::scaleM(field_0x7F0.x, field_0x7F0.y, field_0x7F0.z);
         mDoMtx_stack_c::multVec(&field_0x7E4, &field_0x7C0);
     }
 
     if (jntNo == field_0x6CD) {
         mDoMtx_stack_c::XrotM(m_jnt.getBackbone_y());
         mDoMtx_stack_c::ZrotM(-m_jnt.getBackbone_x());
-        mDoMtx_stack_c::scaleM(field_0x7FC, field_0x800, field_0x804);
+        mDoMtx_stack_c::scaleM(field_0x7FC.x, field_0x7FC.y, field_0x7FC.z);
     }
 
     if (jntNo == field_0x6CF) {
@@ -193,20 +193,114 @@ bool daNpc_Bj1_c::init_BJX_1() {
 }
 
 /* 00000998-00000C90       .text createInit__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::createInit() {
-    static u32 l_bj1_prm_tbl[] = { 0x3F800000, 0x3F800000, 0x3F800000, 0x3F8CCCCD, 0x3F800000, 0x3F800000, 0x42200000, 0x41200000, 0x00000000,
-                                   0x3F666666, 0x3F800000, 0x3F800000, 0x3F666666, 0x3F800000, 0x3F800000, 0x41F00000, 0x41200000, 0x00000000,
-                                   0x3F8CCCCD, 0x3F800000, 0x3F800000, 0x3FA00000, 0x3F8CCCCD, 0x3F8CCCCD, 0x42200000, 0x41200000, 0x00000000,
-                                   0x3F4CCCCD, 0x3F800000, 0x3F800000, 0x3F666666, 0x3F800000, 0x3F800000, 0x41F00000, 0x41200000, 0x00000000,
-                                   0x3F4CCCCD, 0x3F800000, 0x3F800000, 0x3F4CCCCD, 0x3F800000, 0x3F800000, 0x41F00000, 0x41200000, 0x00000000,
-                                   0x3F800000, 0x3F800000, 0x3F800000, 0x3F933333, 0x3F800000, 0x3F866666, 0x42200000, 0x41200000, 0x00000000,
-                                   0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x42200000, 0x41200000, 0x00000000,
-                                   0x3F800000, 0x3F800000, 0x3F800000, 0x3F8CCCCD, 0x3F99999A, 0x3F866666, 0x42200000, 0x41200000, 0x00000000,
-                                   0x3F8CCCCD, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x42200000, 0x41200000, 0x00000000 };
+bool daNpc_Bj1_c::createInit() {
+    static bj1_prm_c l_bj1_prm_tbl[] = {
+        { { 1.0f, 1.0f, 1.0f }, { 1.1f, 1.0f, 1.0f }, { 40.0f, 10.0f, 0.0f } },  { { 0.9f, 1.0f, 1.0f }, { 0.9f, 1.0f, 1.0f }, { 30.0f, 10.0f, 0.0f } },
+        { { 1.1f, 1.0f, 1.0f }, { 1.25f, 1.1f, 1.1f }, { 40.0f, 10.0f, 0.0f } }, { { 0.8f, 1.0f, 1.0f }, { 0.9f, 1.0f, 1.0f }, { 30.0f, 10.0f, 0.0f } },
+        { { 0.8f, 1.0f, 1.0f }, { 0.8f, 1.0f, 1.0f }, { 30.0f, 10.0f, 0.0f } },  { { 1.0f, 1.0f, 1.0f }, { 1.15f, 1.0f, 1.05f }, { 40.0f, 10.0f, 0.0f } },
+        { { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f }, { 40.0f, 10.0f, 0.0f } },  { { 1.0f, 1.0f, 1.0f }, { 1.1f, 1.2f, 1.05f }, { 40.0f, 10.0f, 0.0f } },
+        { { 1.1f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f }, { 40.0f, 10.0f, 0.0f } },
+    };
     static char* a_staff_tbl[] = {
         "Bj1", "Bj1", "Bj2", "Bj2", "Bj3", "Bj3", "Bj4", "Bj4", "Bj5", "Bj5", "Bj6", "Bj6", "Bj7", "Bj8", "Bj8", "Bj9", "Bj9",
     };
-    /* Nonmatching */
+
+    for (int i = 0; i < 3; i++) {
+        field_0x826[i] = dComIfGp_evmng_getEventIdx(l_evn_tbl[i], -1);
+    }
+    attention_info.flags = fopAc_Attn_ACTION_SPEAK_e | fopAc_Attn_LOCKON_TALK_e;
+
+    switch (field_0x8B4) {
+        case 4:
+            attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xA7;
+            attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
+            break;
+        case 0:
+        case 1:
+        case 7:
+            attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAB;
+            attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAB;
+            break;
+        case 2:
+        case 3:
+        case 5:
+        case 8:
+            attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0xAA;
+            attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0xAA;
+            break;
+        case 6:
+            attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x5A;
+            attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x5A;
+            break;
+        default:
+            return false;
+    }
+
+    field_0x7F0 = l_bj1_prm_tbl[field_0x8B4].head_scale;
+    field_0x7FC = l_bj1_prm_tbl[field_0x8B4].backbone_scale;
+    field_0x7E4 = l_bj1_prm_tbl[field_0x8B4].eye_offset;
+    gravity = -4.5f;
+    field_0x7CC = current.pos;
+
+    u32 pathIdx = (fpcM_GetParam(this) >> 16) & 0xFF;
+    field_0x83F = pathIdx;
+
+    if (pathIdx != 0xFF) {
+        field_0x734.setInf(pathIdx, fopAcM_GetRoomNo(this), true);
+        if (field_0x734.isPath()) {
+            fopAcM_OffStatus(this, fopAcStts_NOCULLEXEC_e);
+        } else {
+            return false;
+        }
+    }
+    field_0x73C.setActorInfo2(a_staff_tbl[field_0x8B5], this);
+    field_0x8AF = 0xB;
+
+    bool init_success;
+    switch (field_0x8B5) {
+        case 0:
+        case 2:
+        case 4:
+        case 8:
+        case 13:
+        case 15:
+            init_success = init_BJ4_0();
+            break;
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 9:
+        case 11:
+        case 14:
+        case 16:
+            init_success = init_BJ6_0();
+            break;
+        case 6:
+            init_success = init_BJX_0();
+            break;
+        case 10:
+            init_success = init_BJX_1();
+            break;
+        case 12:
+            init_success = init_BJ7_0();
+            break;
+        default:
+            init_success = false;
+    }
+
+    if (init_success) {
+        shape_angle = current.angle;
+    } else {
+        return false;
+    }
+
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.SetStts(&mStts);
+    mCyl.Set(dNpc_cyl_src);
+    mpMorf->setMorf(0.0f);
+    setMtx(true);
+    return true;
 }
 
 /* 00000C90-00000E00       .text setMtx_anmProc__11daNpc_Bj1_cFv */
@@ -465,8 +559,8 @@ void daNpc_Bj1_c::partner_srch() {
 
 /* 00002724-000027B0       .text setCollision_SP___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setCollision_SP_() {
-    static u32 l_chk_tbl[] = { 0x43020000, 0x42200000, 0x42C80000, 0x42200000, 0x43160000, 0x42200000, 0x42C80000, 0x42200000, 0x42C80000,
-                               0x42200000, 0x43020000, 0x42200000, 0x43020000, 0x42200000, 0x43020000, 0x42200000, 0x43020000, 0x42200000 };
+    static u32 l_chk_tbl[] = { 0x43020000, 40.0f,      0x42C80000, 40.0f,      0x43160000, 40.0f,      0x42C80000, 40.0f,      0x42C80000,
+                               40.0f,      0x43020000, 40.0f,      0x43020000, 40.0f,      0x43020000, 40.0f,      0x43020000, 40.0f };
     /* Nonmatching */
 }
 
