@@ -6,11 +6,11 @@
 #include "d/dolzel_rel.h" // IWYU pragma: keep
 #include "d/actor/d_a_waterfall.h"
 #include "d/d_bg_s_func.h"
-#include "d/d_procname.h"
-#include "d/d_priority.h"
-#include "d/res/res_wfall.h"
 #include "d/d_particle_name.h"
+#include "res/Object/Wfall.h"
 #include "f_op/f_op_actor.h"
+#include "f_pc/f_pc_name.h"
+#include "f_pc/f_pc_priority.h"
 
 const char daWfall_c::m_arcname[] = "Wfall";
 const u8 daWfall_c::m_wait_timer = 0x32;
@@ -32,21 +32,21 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_actor) {
 
 /* 00000110-0000048C       .text CreateHeap__9daWfall_cFv */
 BOOL daWfall_c::CreateHeap() {
-    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, WFALL_BDL_YSWTR00);
+    J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BDL_YSWTR00_e);
     JUT_ASSERT(0xfd, modelData != NULL);
     mModelWater = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
     if (mModelWater == NULL) {
         return FALSE;
     }
 
-    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, WFALL_BTK_YSWTR00);
+    J3DAnmTextureSRTKey* pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BTK_YSWTR00_e);
     JUT_ASSERT(0x10d, pbtk != NULL);
     if (mBtkAnm.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
         return FALSE;
     }
     mBtkAnm.setPlaySpeed(1.0f);
 
-    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, WFALL_BDL_HSUI1);
+    modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BDL_HSUI1_e);
     JUT_ASSERT(0x119, modelData != NULL);
     mModelGate = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000022);
     if (mModelGate == NULL) {
@@ -54,20 +54,20 @@ BOOL daWfall_c::CreateHeap() {
     }
 
     if (mType == true) {
-        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, WFALL_BDL_YSMNM00);
+        modelData = (J3DModelData*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BDL_YSMNM00_e);
         JUT_ASSERT(0x129, modelData != NULL);
         mModelMinamo = mDoExt_J3DModel__create(modelData, 0x80000, 0x11000222);
         if (mModelMinamo == NULL) {
             return FALSE;
         }
 
-        pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, WFALL_BTK_YSMNM00);
+        pbtk = (J3DAnmTextureSRTKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BTK_YSMNM00_e);
         JUT_ASSERT(0x138, pbtk != NULL);
         if (mBtkAnm2.init(modelData, pbtk, true, J3DFrameCtrl::EMode_LOOP, 1.0f, 0, -1, false, 0) == 0) {
             return FALSE;
         }
 
-        J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, WFALL_BRK_YSMNM00);
+        J3DAnmTevRegKey* pbrk = (J3DAnmTevRegKey*)dComIfG_getObjectRes(m_arcname, dRes_INDEX_WFALL_BRK_YSMNM00_e);
         JUT_ASSERT(0x143, pbrk != NULL);
         if (mBrkAnm.init(modelData, pbrk, true, J3DFrameCtrl::EMode_NONE, 1.0f, 0, -1, false, 0) == 0) {
             return FALSE;
@@ -115,7 +115,7 @@ void daWfall_c::CreateInit() {
 }
 /* 00000708-00000838       .text _create__9daWfall_cFv */
 cPhs_State daWfall_c::_create() {
-    fopAcM_SetupActor(this, daWfall_c);
+    fopAcM_ct(this, daWfall_c);
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
     if (ret == cPhs_COMPLEATE_e) {
