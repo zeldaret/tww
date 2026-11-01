@@ -31,7 +31,7 @@ public:
     void createInit();
     void setMtx_anmProc();
     void setMtx(bool);
-    void anmNum_toResID(int);
+    u32 anmNum_toResID(int);
     void setAnm_anm(anm_prm_c*);
     void setAnm_NUM(int);
     void setAnm();
@@ -194,7 +194,7 @@ public:
     /* 0x836 */ u8 padding_0x836[0x838 - 0x836];
     /* 0x838 */ s16 field_0x838;
     /* 0x83A */ s16 field_0x83A;
-    /* 0x83C */ u8 field_0x83C;
+    /* 0x83C */ s8 field_0x83C;
     /* 0x83D */ u8 field_0x83D;
     /* 0x83E */ u8 field_0x83E;
     /* 0x83F */ u8 field_0x83F;
