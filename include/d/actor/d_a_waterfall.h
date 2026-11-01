@@ -3,6 +3,7 @@
 
 #include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
 #include "m_Do/m_Do_ext.h"
 
 class daWfall_c : public fopAc_ac_c {
@@ -57,5 +58,15 @@ public:
     /* 0x356 */ u8 mType;
     /* 0x357 */ u8 field_0x357[0x358 - 0x357];
 }; // Size: 0x358
+
+namespace daWfall_prm {
+    inline u8 getType(daWfall_c* i_this) {
+        return (fopAcM_GetParam(i_this) >> 8) & 0xF;
+    }
+
+    inline u8 getSwitchNo(daWfall_c* i_this) {
+        return fopAcM_GetParam(i_this) & 0xFF;
+    }
+}
 
 #endif /* D_A_WATERFALL_H */

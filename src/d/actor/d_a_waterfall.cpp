@@ -94,7 +94,7 @@ void daWfall_c::CreateInit() {
     mParticleAngle2 = current.angle;
     dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU00, &mParticlePos1, &mParticleAngle1, NULL, 0xff, &mPCallBack, -1, NULL, NULL, NULL);
     dComIfGp_particle_set(dPa_name::ID_AK_SN_SIRENSUIRYU01, &mParticlePos2, &mParticleAngle2, NULL, 0xff, &mPCallBack2, -1, NULL, NULL, NULL);
-    mSwitchNo = fpcM_GetParam(this) & 0xff;
+    mSwitchNo = daWfall_prm::getSwitchNo(this);
     if (dComIfGs_isSwitch(mSwitchNo, home.roomNo)) {
         mode_wtr_off_init();
         mSePos = current.pos;
@@ -119,7 +119,7 @@ cPhs_State daWfall_c::_create() {
 
     cPhs_State ret = dComIfG_resLoad(&mPhs, m_arcname);
     if (ret == cPhs_COMPLEATE_e) {
-        mType = (fopAcM_GetParam(this) >> 8) & 0xf;
+        mType = daWfall_prm::getType(this);
         if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, m_heapsize[mType])) {
             return cPhs_ERROR_e;
         }
@@ -264,10 +264,10 @@ void daWfall_c::mode_wtr_off() {
         return;
     }
     if (mPCallBack.getEmitter() != NULL) {
-        mPCallBack.getEmitter()->setStatus(1);
+        mPCallBack.getEmitter()->stopCreateParticle();
     }
     if (mPCallBack2.getEmitter() != NULL) {
-        mPCallBack2.getEmitter()->setStatus(1);
+        mPCallBack2.getEmitter()->stopCreateParticle();
     }
     return;
 }
@@ -307,11 +307,11 @@ BOOL daWfall_c::setEmitter01Pos() {
     float waterHeight = getWaterHeight();
     if (waterHeight > mSePos.y) {
         if (mPCallBack2.getEmitter() != NULL) {
-            mPCallBack2.getEmitter()->setStatus(1);
+            mPCallBack2.getEmitter()->stopCreateParticle();
         }
     } else {
         if (mPCallBack2.getEmitter() != NULL) {
-            mPCallBack2.getEmitter()->clearStatus(1);
+            mPCallBack2.getEmitter()->playCreateParticle();
         }
         ret = TRUE;
     }
