@@ -11,13 +11,11 @@ class J3DNode;
 class daNpc_Bj1_c : public fopNpc_npc_c {
 public:
     struct anm_prm_c {
-        /* 0x00 */ s8 anmNum;
-        /* 0x01 */ s8 btpNum;
+        /* 0x00 */ s8 field_0x00;
         /* 0x04 */ f32 morf;
         /* 0x08 */ f32 speed;
         /* 0x0C */ int loopMode;
-        /* 0x10 */ BOOL hasArms;
-    };
+    }; // Size: 0x10
 
     typedef BOOL (daNpc_Bj1_c::*ActionFunc)(void*);
 
@@ -243,7 +241,7 @@ public:
     /* 0x8AE */ u8 field_0x8AE;
     /* 0x8AF */ u8 field_0x8AF;
     /* 0x8B0 */ u8 field_0x8B0;
-    /* 0x8B1 */ u8 field_0x8B1;
+    /* 0x8B1 */ s8 field_0x8B1;
     /* 0x8B2 */ u8 field_0x8B2;
     /* 0x8B3 */ u8 field_0x8B3;
     /* 0x8B4 */ s8 field_0x8B4;
@@ -255,7 +253,7 @@ public:
 class daNpc_Bj1_childHIO_c : public mDoHIO_entry_c {
 public:
     struct hio_prm_c {
-        /* 0x00 */ u8 field_0x00[0x64];
+        /* 0x00 */ u32 field_0x00[0x19];
     }; // Size: 0x64
 
     daNpc_Bj1_childHIO_c();

@@ -7,14 +7,9 @@
 #include "d/actor/d_a_npc_bj1.h"
 #include "d/actor/d_a_jbo.h"
 
+static daNpc_Bj1_HIO_c l_HIO;
 static fopAc_ac_c* l_check_inf[20];
 static int l_check_wrk;
-
-static char* l_evn_tbl[] = {
-    "Mak_Drg",
-    "Get_Blu_Btl",
-    "Calling",
-};
 
 /* 000000EC-00000108       .text __ct__20daNpc_Bj1_childHIO_cFv */
 daNpc_Bj1_childHIO_c::daNpc_Bj1_childHIO_c() {
@@ -22,7 +17,35 @@ daNpc_Bj1_childHIO_c::daNpc_Bj1_childHIO_c() {
 
 /* 00000150-0000020C       .text __ct__15daNpc_Bj1_HIO_cFv */
 daNpc_Bj1_HIO_c::daNpc_Bj1_HIO_c() {
-    static daNpc_Bj1_childHIO_c::hio_prm_c a_prm_tbl[] = { {} };
+    static daNpc_Bj1_childHIO_c::hio_prm_c a_prm_tbl[] = {
+        { 0x13881388, 0xE000EC78, 0x00001C70, 0x0000E390, 0x04000400, 0x43020000, 0x00000000, 0x43960000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+        { 0x13881388, 0xFD44EC78, 0x00001C70, 0x0000E390, 0x04000400, 0x42C80000, 0x00000000, 0x43960000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+        { 0x13881388, 0xE000EC78, 0x00001C70, 0x0000E390, 0x04000400, 0x43160000, 0x00000000, 0x43960000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+        { 0x13881B58, 0xFF38F830, 0x00000000, 0x00000000, 0x04000400, 0x42C80000, 0x00000000, 0x43960000, 0x005A0006,
+          0x04000000, 0x40800000, 0x40A00000, 0x3E4CCCCD, 0x40800000, 0x3E4CCCCD, 0x3F800000, 0x232800C8, 0x10001388,
+          0x437A0000, 0x7FFF0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+        { 0x13880BB8, 0x0064F448, 0x00001388, 0x0000EC78, 0x04000400, 0x42DC0000, 0x00000000, 0x43960000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+        { 0x13881388, 0xFF9CEC78, 0x000007D0, 0x0000F830, 0x04000400, 0x43020000, 0x00000000, 0x43960000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+        { 0x13881388, 0xE000EC78, 0x00001C70, 0x0000E390, 0x04000400, 0x42FA0000, 0x00000000, 0x43960000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+          0x00000000, 0x00000006, 0x04000000, 0x3ECCCCCD, 0x40A00000, 0x3E4CCCCD, 0x42200000 },
+        { 0x13880FA0, 0xF830F060, 0x00001C70, 0x0000E390, 0x04000400, 0x42F00000, 0x00000000, 0x43960000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+        { 0x13881388, 0xF254EC78, 0x00001C70, 0x0000E390, 0x04000400, 0x43020000, 0x00000000, 0x43960000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+          0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+    };
     for (int i = 0; i < 9; i++) {
         children[i].field_0x68 = i;
         memcpy(&children[i].hio_prm, &a_prm_tbl[i], 0x64);
@@ -30,6 +53,12 @@ daNpc_Bj1_HIO_c::daNpc_Bj1_HIO_c() {
     field_0x04 = -1;
     field_0x08 = -1;
 }
+
+static char* l_evn_tbl[] = {
+    "Mak_Drg",
+    "Get_Blu_Btl",
+    "Calling",
+};
 
 /* 00000268-000002EC       .text searchActor_Jb__FPvPv */
 static void* searchActor_Jb(void* i_actor, void*) {
@@ -160,6 +189,18 @@ bool daNpc_Bj1_c::init_BJX_1() {
 
 /* 00000998-00000C90       .text createInit__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::createInit() {
+    static u32 l_bj1_prm_tbl[] = { 0x3F800000, 0x3F800000, 0x3F800000, 0x3F8CCCCD, 0x3F800000, 0x3F800000, 0x42200000, 0x41200000, 0x00000000,
+                                   0x3F666666, 0x3F800000, 0x3F800000, 0x3F666666, 0x3F800000, 0x3F800000, 0x41F00000, 0x41200000, 0x00000000,
+                                   0x3F8CCCCD, 0x3F800000, 0x3F800000, 0x3FA00000, 0x3F8CCCCD, 0x3F8CCCCD, 0x42200000, 0x41200000, 0x00000000,
+                                   0x3F4CCCCD, 0x3F800000, 0x3F800000, 0x3F666666, 0x3F800000, 0x3F800000, 0x41F00000, 0x41200000, 0x00000000,
+                                   0x3F4CCCCD, 0x3F800000, 0x3F800000, 0x3F4CCCCD, 0x3F800000, 0x3F800000, 0x41F00000, 0x41200000, 0x00000000,
+                                   0x3F800000, 0x3F800000, 0x3F800000, 0x3F933333, 0x3F800000, 0x3F866666, 0x42200000, 0x41200000, 0x00000000,
+                                   0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x42200000, 0x41200000, 0x00000000,
+                                   0x3F800000, 0x3F800000, 0x3F800000, 0x3F8CCCCD, 0x3F99999A, 0x3F866666, 0x42200000, 0x41200000, 0x00000000,
+                                   0x3F8CCCCD, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000, 0x42200000, 0x41200000, 0x00000000 };
+    static char* a_staff_tbl[] = {
+        "Bj1", "Bj1", "Bj2", "Bj2", "Bj3", "Bj3", "Bj4", "Bj4", "Bj5", "Bj5", "Bj6", "Bj6", "Bj7", "Bj8", "Bj8", "Bj9", "Bj9",
+    };
     /* Nonmatching */
 }
 
@@ -175,7 +216,7 @@ void daNpc_Bj1_c::setMtx(bool) {
 
 /* 00001098-000010AC       .text anmNum_toResID__11daNpc_Bj1_cFi */
 u32 daNpc_Bj1_c::anmNum_toResID(int i_idx) {
-    static const u32 a_bck_resID_tbl[] = { 0xA, 0x2, 0x7, 0x8, 0x3, 0x6, 0x0, 0x1, 0xB, 0x9, 0x2A };
+    static const u32 a_bck_resID_tbl[] = { 10, 2, 7, 8, 3, 6, 0, 1, 11, 9, 42 };
     return a_bck_resID_tbl[i_idx];
 }
 
@@ -186,11 +227,18 @@ void daNpc_Bj1_c::setAnm_anm(daNpc_Bj1_c::anm_prm_c*) {
 
 /* 00001188-000011B8       .text setAnm_NUM__11daNpc_Bj1_cFi */
 void daNpc_Bj1_c::setAnm_NUM(int) {
+    static anm_prm_c a_anm_prm_tbl[] = {
+        { 0, 8.0f, 1.0f, 2 }, { 1, 8.0f, 1.0f, 0 }, { 2, 8.0f, 1.0f, 2 }, { 3, 8.0f, 1.0f, 2 }, { 4, 8.0f, 1.0f, 2 },  { 5, 8.0f, 1.0f, 0 },
+        { 6, 8.0f, 1.0f, 0 }, { 7, 8.0f, 1.0f, 0 }, { 8, 8.0f, 1.0f, 2 }, { 9, 8.0f, 1.0f, 0 }, { 10, 8.0f, 1.0f, 2 }, { 0, 0.0f, 0.0f, 0 },
+    };
     /* Nonmatching */
 }
 
 /* 000011B8-000011F4       .text setAnm__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setAnm() {
+    static anm_prm_c a_anm_prm_tbl[] = { { -1, 0.0f, 0.0f, -1 }, { 0, 8.0f, 1.0f, 2 }, { -1, 0.0f, 0.0f, -1 }, { 1, 8.0f, 1.0f, 0 }, { 10, 8.0f, 1.0f, 2 },
+                                         { 0, 8.0f, 1.0f, 2 },   { 8, 8.0f, 1.0f, 2 }, { 0, 8.0f, 1.0f, 2 },   { 0, 8.0f, 1.0f, 2 } };
+
     /* Nonmatching */
 }
 
@@ -246,7 +294,11 @@ void daNpc_Bj1_c::control_anmAtr() {
 
 /* 0000143C-00001470       .text setAnm_ATR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setAnm_ATR() {
-    /* Nonmatching */
+    static anm_prm_c a_anm_prm_tbl[] = {
+        { 0, 8.0f, 1.0f, 2 }, { 2, 8.0f, 1.0f, 2 }, { 3, 8.0f, 1.0f, 2 }, { 4, 8.0f, 1.0f, 2 }, { 5, 8.0f, 1.0f, 0 }, { 6, 8.0f, 1.0f, 0 },
+        { 6, 8.0f, 1.0f, 0 }, { 4, 8.0f, 1.0f, 2 }, { 7, 8.0f, 1.0f, 0 }, { 8, 8.0f, 1.0f, 2 }, { 5, 8.0f, 1.0f, 0 },
+    };
+    setAnm_anm(&a_anm_prm_tbl[field_0x8AD]);
 }
 
 /* 00001470-00001534       .text anmAtr__11daNpc_Bj1_cFUs */
@@ -386,6 +438,8 @@ void daNpc_Bj1_c::partner_srch() {
 
 /* 00002724-000027B0       .text setCollision_SP___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setCollision_SP_() {
+    static u32 l_chk_tbl[] = { 0x43020000, 0x42200000, 0x42C80000, 0x42200000, 0x43160000, 0x42200000, 0x42C80000, 0x42200000, 0x42C80000,
+                               0x42200000, 0x43020000, 0x42200000, 0x43020000, 0x42200000, 0x43020000, 0x42200000, 0x43020000, 0x42200000 };
     /* Nonmatching */
 }
 
@@ -576,6 +630,7 @@ void daNpc_Bj1_c::event_action() {
 
 /* 000046E8-000047D4       .text privateCut__11daNpc_Bj1_cFi */
 void daNpc_Bj1_c::privateCut(int) {
+    static char* a_cut_tbl[] = { "ACTION" };
     /* Nonmatching */
 }
 
@@ -696,6 +751,7 @@ static BOOL CheckCreateHeap(fopAc_ac_c*) {
 
 /* 000061C4-000062E4       .text _create__11daNpc_Bj1_cFv */
 cPhs_State daNpc_Bj1_c::_create() {
+    static u32 a_size_tbl[] = { 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0 };
     /* Nonmatching */
 }
 
@@ -711,6 +767,9 @@ void daNpc_Bj1_c::create_prp_Anm() {
 
 /* 00006C14-00006F54       .text create_itm_Mdl__11daNpc_Bj1_cFv */
 bool daNpc_Bj1_c::create_itm_Mdl() {
+    static int l_arm_L_bmd_tbl[] = { -1, -1, -1, -1, -1, -1, 25, -1, -1 };
+    static int l_arm_R_bmd_tbl[] = { -1, -1, -1, -1, -1, -1, 26, -1, -1 };
+    static int l_bmd_tbl[] = { 29, 30, 31, 32, 33, 34, 35, 36, 37 };
     /* Nonmatching */
 }
 
