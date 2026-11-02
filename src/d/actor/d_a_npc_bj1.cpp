@@ -306,7 +306,29 @@ bool daNpc_Bj1_c::createInit() {
 
 /* 00000C90-00000E00       .text setMtx_anmProc__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setMtx_anmProc() {
-    /* Nonmatching */
+    switch (field_0x8AF) {
+        case 4:
+            if (field_0x8A9) {
+                if (speed.y < 0.0f) {
+                    if (mpMorf->getFrame() < 7.0f) {
+                        mpMorf->setFrame(mpMorf->getEndFrame());
+                    }
+                } else {
+                    if (mpMorf->getFrame() >= 7.0f) {
+                        mpMorf->setFrame(7.0f);
+                    }
+                }
+            }
+            break;
+        case 7:
+            if (field_0x83C && !field_0x888 && !cLib_calcTimer(&field_0x894)) {
+                s8 reverb = dComIfGp_getReverb(current.roomNo);
+                mDoAud_seStart(JA_SE_OBJ_CRG_DRUG_MADE, &current.pos, 0, reverb);
+                setAnm_NUM(0x5);
+                setPrtcl_drugPot_2();
+            }
+            break;
+    };
 }
 
 /* 00000E00-00001098       .text setMtx__11daNpc_Bj1_cFb */
@@ -424,8 +446,28 @@ void daNpc_Bj1_c::setAnm_ATR() {
 }
 
 /* 00001470-00001534       .text anmAtr__11daNpc_Bj1_cFUs */
-void daNpc_Bj1_c::anmAtr(u16) {
-    /* Nonmatching */
+void daNpc_Bj1_c::anmAtr(u16 i_param1) {
+    u8 tag;
+    switch (i_param1) {
+        case 6:
+            if (field_0x8B7 == 0) {
+                field_0x8AD = 0xFF;
+                chg_anmAtr(dComIfGp_getMesgAnimeAttrInfo());
+                field_0x8B7++;
+            }
+            tag = dComIfGp_getMesgAnimeTagInfo();
+            dComIfGp_clearMesgAnimeTagInfo();
+            if (tag != 0xFF && field_0x8AE != tag) {
+                field_0x8AE = tag;
+                chg_anmTag();
+            }
+            break;
+        case 14:
+            field_0x8B7 = 0;
+            break;
+    }
+    control_anmTag();
+    control_anmAtr();
 }
 
 /* 00001534-000015D8       .text eventOrder__11daNpc_Bj1_cFv */

@@ -226,10 +226,10 @@ public:
     /* 0x87C */ JPABaseEmitter* field_0x87C;
     /* 0x880 */ JPABaseEmitter* field_0x880;
     /* 0x884 */ JPABaseEmitter* field_0x884;
-    /* 0x888 */ int field_0x888;
+    /* 0x888 */ u32 field_0x888;
     /* 0x88C */ JPABaseEmitter* field_0x88C;
     /* 0x890 */ JPABaseEmitter* field_0x890;
-    /* 0x894 */ u16 field_0x894;
+    /* 0x894 */ s16 field_0x894;
     /* 0x896 */ u8 padding_0x896[0x898 - 0x896];
     /* 0x898 */ int field_0x898;
     /* 0x89C */ u8 padding_0x89C[0x8A8 - 0x89C];
@@ -248,7 +248,7 @@ public:
     /* 0x8B4 */ s8 field_0x8B4;
     /* 0x8B5 */ s8 field_0x8B5;
     /* 0x8B6 */ u8 field_0x8B6;
-    /* 0x8B7 */ u8 field_0x8B7;
+    /* 0x8B7 */ s8 field_0x8B7;
 }; // size 0x8B8;
 
 class daNpc_Bj1_childHIO_c : public mDoHIO_entry_c {
