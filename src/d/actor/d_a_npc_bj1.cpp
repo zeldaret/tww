@@ -332,8 +332,51 @@ void daNpc_Bj1_c::setMtx_anmProc() {
 }
 
 /* 00000E00-00001098       .text setMtx__11daNpc_Bj1_cFb */
-void daNpc_Bj1_c::setMtx(bool) {
-    /* Nonmatching */
+void daNpc_Bj1_c::setMtx(bool i_param1) {
+    if (!field_0x857) {
+        int uVar5 = 0;
+        if (mObjAcch.ChkGroundHit()) {
+            uVar5 = dComIfG_Bgsp()->GetMtrlSndId(mObjAcch.m_gnd);
+        }
+        s8 reverb = dComIfGp_getReverb(fopAcM_GetRoomNo(this));
+        field_0x83C = mpMorf->play(&eyePos, uVar5, reverb);
+        if (mpMorf->getFrame() < field_0x808) {
+            field_0x83C = true;
+        }
+        field_0x808 = mpMorf->getFrame();
+        setMtx_anmProc();
+        field_0x6E4->play(&eyePos, 0, 0);
+        if (field_0x84D) {
+            setPrtcl_peraProOpen();
+            field_0x84D = 0;
+        }
+        mObjAcch.CrrPos(*dComIfG_Bgsp());
+    }
+    tevStr.mRoomNo = dComIfG_Bgsp()->GetRoomId(mObjAcch.m_gnd);
+    tevStr.mEnvrIdxOverride = dComIfG_Bgsp()->GetPolyColor(mObjAcch.m_gnd);
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(current.angle.y);
+    mpMorf->getModel()->setBaseTRMtx(mDoMtx_stack_c::get());
+    mpMorf->calc();
+    field_0x6E4->calc();
+
+    if (field_0x6D4) {
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(field_0x6CE));
+        field_0x6D4->setBaseTRMtx(mDoMtx_stack_c::get());
+        field_0x6D4->calc();
+    }
+
+    if (field_0x6D8) {
+        mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(field_0x6CF));
+        field_0x6D8->setBaseTRMtx(mDoMtx_stack_c::get());
+        field_0x6D8->calc();
+    }
+
+    mDoMtx_stack_c::copy(mpMorf->getModel()->getAnmMtx(field_0x6CC));
+    field_0x6D0->setBaseTRMtx(mDoMtx_stack_c::get());
+    field_0x6D0->calc();
+    flwPrtcl_danceLR();
+    setAttention(i_param1);
 }
 
 /* 00001098-000010AC       .text anmNum_toResID__11daNpc_Bj1_cFi */
@@ -472,7 +515,18 @@ void daNpc_Bj1_c::anmAtr(u16 i_param1) {
 
 /* 00001534-000015D8       .text eventOrder__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::eventOrder() {
-    /* Nonmatching */
+    if (field_0x8B0 == 1 || field_0x8B0 == 2) {
+        eventInfo.onCondition(dEvtCnd_CANTALK_e);
+        if (field_0x8B5 == 12) {
+            eventInfo.onCondition(dEvtCnd_CANTALKITEM_e);
+        }
+        if (field_0x8B0 == 1) {
+            fopAcM_orderSpeakEvent(this);
+        }
+    } else if (field_0x8B0 >= 3) {
+        field_0x82C = field_0x8B0 - 3;
+        fopAcM_orderOtherEventId(this, field_0x826[field_0x82C]);
+    }
 }
 
 /* 000015D8-00001690       .text checkOrder__11daNpc_Bj1_cFv */
