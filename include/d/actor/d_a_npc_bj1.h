@@ -48,9 +48,9 @@ public:
     void anmAtr(u16);
     void eventOrder();
     void checkOrder();
-    void chk_talk();
-    void chk_drct(f32);
-    void chk_partsNotMove();
+    BOOL chk_talk();
+    u32 chk_drct(f32);
+    BOOL chk_partsNotMove();
     void lookBack();
     void getMaskInf(u8*);
     bool chkReg(u16);
