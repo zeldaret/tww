@@ -278,7 +278,7 @@ JAIZelBasic::scene_info_s JAIZelBasic::m_isle_info[] = {
     /* 0x31 */ {(u16)0x0000,               0x0A, 0x06},
 };
 
-const char* JAIZelBasic::spot_dir_name[] = {
+const char* JAIZelBasic::spot_dir_name[120] = {
     "M_NewD2",
     "M_DragB",
     "kindan",

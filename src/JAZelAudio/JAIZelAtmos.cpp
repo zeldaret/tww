@@ -5,6 +5,7 @@
 
 #include "JAZelAudio/JAIZelBasic.h"
 #include "dolphin/types.h"
+#include "dolphin/mtx/mtxvec.h"
 
 /* 802AD008-802AD014       .text initSeaEnvPos__11JAIZelBasicFv */
 void JAIZelBasic::initSeaEnvPos() {
@@ -12,33 +13,269 @@ void JAIZelBasic::initSeaEnvPos() {
 }
 
 /* 802AD014-802AD0A8       .text registSeaEnvPos__11JAIZelBasicFP3Vec */
-void JAIZelBasic::registSeaEnvPos(Vec*) {
-    /* Nonmatching */
+int JAIZelBasic::registSeaEnvPos(Vec* arg0) {
+    if (arg0 == NULL) {
+        return -1;
+    }
+    field_0x1580[field_0x1b80] = *arg0;
+    field_0x1b80++;
+    int rv = field_0x1b80;
+
+    if (field_0x1b80 >= ARRAY_SSIZE(field_0x1580)) {
+        OSReport("[JAIZelBasic::registSeaEnvPos] !! WARNING : num of sea rail is over range!\n");
+        field_0x1b80 = ARRAY_SSIZE(field_0x1580) - 1;
+        return -1;
+    }
+    return rv;
 }
 
 /* 802AD0A8-802AD54C       .text seaEnvSePlay__11JAIZelBasicFUlSc */
-void JAIZelBasic::seaEnvSePlay(u32, s8) {
-    /* Nonmatching */
+void JAIZelBasic::seaEnvSePlay(u32 arg0, s8 arg1) {
+    if (field_0x01f8 == 0 && field_0x0204 != 1 && field_0x0201 != 1 && field_0x0206 != 1) {
+        if ((field_0x0218 & 0xFF) == 0x14) {
+            f32 x = mAudioCamera->field_0x0->x;
+            f32 y = 0.0f;
+            f32 z = mAudioCamera->field_0x0->z;
+
+            Vec sp2C = {0.0f, 0.0f, 0.0f};
+            sp2C.x = x - 5.0f;
+            sp2C.y = y;
+            sp2C.z = z - 5.0f;
+
+            Vec sp20 = {0.0f, 0.0f, 0.0f};
+            sp20.x = x - 5.0f;
+            sp20.y = y;
+            sp20.z = z + 5.0f;
+
+            Vec sp14 = {0.0f, 0.0f, 0.0f};
+            sp14.x = x + 5.0f;
+            sp14.y = y;
+            sp14.z = z - 5.0f;
+
+            Vec sp8 = {0.0f, 0.0f, 0.0f};
+            sp8.x = x + 5.0f;
+            sp8.y = y;
+            sp8.z = z + 5.0f;
+
+            registSeaEnvPos(&sp2C);
+            registSeaEnvPos(&sp20);
+            registSeaEnvPos(&sp14);
+            registSeaEnvPos(&sp8);
+        }
+
+        f32 var_f30;
+        f32 var_f29 = 0.0f;
+        f32 var_f28 = 0.0f;
+        f32 var_f27 = 0.0f;
+
+        if (field_0x1b80 != 0) {
+            MtxP cameraMtx = mAudioCamera->field_0x8;
+            for (int i = 0; i < field_0x1b80; i++) {
+                MTXMultVec(cameraMtx, &field_0x1580[i], &field_0x1880[i]);
+
+                f32 var_f26;
+                if (arg0 >= 8) {
+                    var_f30 = calcPosVolume(&field_0x1880[i], 1.0f);
+                    var_f26 = calcPosPanSR(&field_0x1880[i], 1.0f);
+                } else {
+                    var_f30 = calcPosVolume(&field_0x1880[i], 3.0f);
+                }
+
+                f32 temp_f1 = calcPosPanLR(&field_0x1880[i]);
+
+                f32 temp_f0_2 = (1.0f - temp_f1) * var_f30;
+                f32 temp_f1_2 = temp_f1 * var_f30;
+                f32 temp_f2_3 = var_f26 * var_f30;
+
+                if (temp_f0_2 > var_f29) {
+                    var_f29 = temp_f0_2;
+                }
+
+                if (temp_f1_2 > var_f28) {
+                    var_f28 = temp_f1_2;
+                }
+
+                if (temp_f2_3 > var_f27) {
+                    var_f27 = temp_f2_3;
+                }
+            }
+
+            if (var_f29 > 1.0f) {
+                var_f29 = 1.0f;
+            }
+
+            if (var_f28 > 1.0f) {
+                var_f28 = 1.0f;
+            }
+
+            if (var_f27 > 1.0f) {
+                var_f27 = 1.0f;
+            }
+
+            if (field_0x0020 != 0) {
+                var_f29 *= 0.33f;
+                var_f28 *= 0.33f;
+                var_f27 *= 0.33f;
+            }
+
+            u32 var_r4;
+            u32 var_r25_2;
+            u32 var_r26;
+            switch (arg0) {
+            case 8:
+                var_r4 = JA_SE_MAGMA_L;
+                var_r25_2 = JA_SE_MAGMA_R;
+                var_r26 = JA_SE_MAGMA_SR;
+                break;
+            default:
+            case 0:
+                var_r4 = JA_SE_SEA_ALL_NORM_L;
+                var_r25_2 = JA_SE_SEA_ALL_NORM_R;
+                var_r26 = JA_SE_SEA_ALL_NORM_SR;
+                break;
+            }
+
+            if (var_f29 != 0.0f) {
+                startSoundVec(var_r4, &field_0x1ec4, NULL, 0, 0, 4);
+                if (field_0x1ec4 != NULL) {
+                    field_0x1ec4->setPortData(9, arg1);
+                    field_0x1ec4->setPan(1.0f, 0, 0);
+                    field_0x1ec4->setDolby(0.0f, 0, 0);
+                    field_0x1ec4->setVolume(var_f29, 0, 0);
+                }
+            }
+
+            if (var_f28 != 0.0f) {
+                startSoundVec(var_r25_2, &field_0x1ec8, NULL, 0, 0, 4);
+                if (field_0x1ec8 != NULL) {
+                    field_0x1ec8->setPortData(9, arg1);
+                    field_0x1ec8->setPan(0.0f, 0, 0);
+                    field_0x1ec8->setDolby(0.0f, 0, 0);
+                    field_0x1ec8->setVolume(var_f28, 0, 0);
+                }
+            }
+
+            if (var_f27 != 0.0f) {
+                startSoundVec(var_r26, &field_0x1ecc, NULL, 0, 0, 4);
+                if (field_0x1ecc != NULL) {
+                    field_0x1ecc->setPortData(9, arg1);
+                    field_0x1ecc->setPan(0.5f, 0, 0);
+                    field_0x1ecc->setDolby(1.0f, 0, 0);
+                    field_0x1ecc->setVolume(var_f27, 0, 0);
+                }
+            }
+        }
+    }
 }
 
 /* 802AD54C-802AD63C       .text calcPosPanLR__11JAIZelBasicFP3Vec */
-void JAIZelBasic::calcPosPanLR(Vec*) {
-    /* Nonmatching */
+f32 JAIZelBasic::calcPosPanLR(Vec* arg0) {
+    if (arg0->x == 0.0f) {
+        return 0.5f;
+    }
+
+    if (arg0->z == 0.0f) {
+        if (arg0->x > 0.0f) {
+            return 1.0f;
+        }
+        if (arg0->x < 0.0f) {
+            return 0.0f;
+        }
+    }
+
+    f32 latDist = std::sqrtf(arg0->x * arg0->x + arg0->z * arg0->z);
+
+    f32 var_f1 = arg0->x / latDist;
+    if (var_f1 > 1.0f) {
+        var_f1 = 1.0f;
+    }
+
+    if (var_f1 < -1.0f) {
+        var_f1 = -1.0f;
+    }
+
+    return (var_f1 + 1.0f) / 2.0f;
 }
 
 /* 802AD63C-802AD728       .text calcPosPanSR__11JAIZelBasicFP3Vecf */
-void JAIZelBasic::calcPosPanSR(Vec*, f32) {
-    /* Nonmatching */
+f32 JAIZelBasic::calcPosPanSR(Vec* arg0, f32 arg1) {
+    f32 temp_f30 = JAIGlobalParameter::getParamSeDolbyCenterValue() / 127.0f;
+    f32 temp_f31 = 1.0f - temp_f30;
+
+    if (arg0->z < arg1 * JAIGlobalParameter::getParamSeDolbyFrontDistanceMax()) {
+        return 0.0f;
+    }
+
+    if (arg0->z < 0.0f) {
+        return temp_f30 * (JAIGlobalParameter::getParamSeDolbyFrontDistanceMax() - arg0->z) / JAIGlobalParameter::getParamSeDolbyFrontDistanceMax();
+    }
+
+    if (arg0->z < arg1 * JAIGlobalParameter::getParamSeDolbyBehindDistanceMax()) {
+        return temp_f30 + temp_f31 * (arg0->z / (arg1 * JAIGlobalParameter::getParamSeDolbyBehindDistanceMax()));
+    }
+
+    return 1.0f;
 }
 
 /* 802AD728-802AD878       .text calcPosVolume__11JAIZelBasicFP3Vecf */
-void JAIZelBasic::calcPosVolume(Vec*, f32) {
-    /* Nonmatching */
+f32 JAIZelBasic::calcPosVolume(Vec* arg0, f32 arg1) {
+    if (arg0 == NULL) {
+        return 0.0f;
+    }
+
+    f32 temp_f4 = arg0->x * arg0->x + arg0->y * arg0->y + arg0->z * arg0->z;
+    f32 var_f30 = std::sqrtf(temp_f4);
+    if (var_f30 < JAIGlobalParameter::getParamMaxVolumeDistance()) {
+        return 1.0f;
+    }
+
+    f32 temp_f29 = var_f30 - JAIGlobalParameter::getParamMaxVolumeDistance();
+    f32 temp_f30 = JAIGlobalParameter::getParamDistanceMax() - JAIGlobalParameter::getParamMaxVolumeDistance();
+    temp_f30 *= arg1;
+    if (temp_f29 >= temp_f30) {
+        return 0.0f;
+    }
+
+    return JAIGlobalParameter::getParamMinDistanceVolume() + (1.0f - temp_f29 / temp_f30) * (1.0f - JAIGlobalParameter::getParamMinDistanceVolume());
 }
 
 /* 802AD878-802AD98C       .text seaShoreSE__11JAIZelBasicFUlP3VecUlSc */
-void JAIZelBasic::seaShoreSE(u32, Vec*, u32, s8) {
-    /* Nonmatching */
+void JAIZelBasic::seaShoreSE(u32 arg0, Vec* arg1, u32 arg2, s8 arg3) {
+    if (field_0x0201 != 1 && field_0x0206 != 1) {
+        u32 var_r31;
+
+        switch (arg0) {
+            case 1:
+                var_r31 = JA_SE_SEASHORE_QUAY;
+                break;
+            case 2:
+                var_r31 = JA_SE_SEASHORE_CLIFF;
+                break;
+            case 0:
+            default:
+                var_r31 = JA_SE_SEASHORE_NORM;
+                break;
+        }
+
+        if (field_0x022d != 0) {
+            field_0x1b84[0] = *arg1;
+
+            if (arg2 == 0) {
+                if (field_0x1ed0 != NULL) {
+                    field_0x1ed0->stop(1);
+                }
+            }
+
+            startSoundVec(var_r31, &field_0x1ed0, &field_0x1b84[0], 0, 0, 4);
+
+            if (field_0x1ed0 != NULL) {
+                field_0x1ed0->setPortData(9, arg3);
+            }
+            if (field_0x0020 != 0) {
+                field_0x1ed0->setVolume(0.33f, 0, 0);
+            }
+        }
+    }
 }
 
 /* 802AD98C-802AD998       .text initRiverPos__11JAIZelBasicFv */
@@ -47,18 +284,122 @@ void JAIZelBasic::initRiverPos() {
 }
 
 /* 802AD998-802ADB38       .text registRiverPos__11JAIZelBasicFP3Vec */
-void JAIZelBasic::registRiverPos(Vec*) {
-    /* Nonmatching */
+int JAIZelBasic::registRiverPos(Vec* wpos) {
+    if (wpos == NULL) {
+        OSReport("[JAIZelBasic::registRiverPos] WARNING : wpos = NULL\n");
+        return -1;
+    }
+
+    MtxP cameraMtx = mAudioCamera->field_0x8;
+    Vec spC = *wpos;
+    if (cameraMtx != NULL) {
+        MTXMultVec(cameraMtx, &spC, &spC);
+    }
+
+    f32 distSquared = spC.x * spC.x + spC.y * spC.y + spC.z * spC.z;
+    f32 dist = std::sqrtf(distSquared);
+    if (dist > 3.0f * JAIGlobalParameter::getParamDistanceMax()) {
+        return field_0x1dd0;
+    }
+
+    field_0x1b90[field_0x1dd0] = *wpos;
+
+    field_0x1dd0++;
+    // !@bug Presumably a copy-paste error; bound should be 0x30.
+    if (field_0x1dd0 >= 0x40) {
+        OSReport("[JAIZelBasic::registRiverPos] !! WARNING : num of river rail is over range!\n");
+        field_0x1dd0 = ARRAY_SSIZE(field_0x1b90) - 1;
+        return -1;
+    }
+
+    return field_0x1dd0;
 }
 
 /* 802ADB38-802ADC58       .text riverSePlay__11JAIZelBasicFUcSc */
-void JAIZelBasic::riverSePlay(u8, s8) {
-    /* Nonmatching */
-}
+void JAIZelBasic::riverSePlay(u8 arg0, s8 arg1) {
+    if (field_0x1dd0 != 0 && field_0x01f8 == 0 && field_0x0201 != 1 && field_0x0206 != 1) {
+        if (field_0x0218 == 24) {
+            registRiverPos(&field_0x0054);
+        }
+
+        u32 seNum;
+        switch (arg0) {
+        case 0:
+            seNum = JA_SE_ATM_RIVER_M;
+            break;
+        case 1:
+            seNum = JA_SE_ATM_RIVER_S;
+            break;
+        case 2:
+            if (field_0x1dd4 == 0) {
+                return;
+            }
+            seNum = JA_SE_CM_BST_HORI;
+            break;
+        case 4:
+        case 6:
+            seNum = JA_SE_ATM_RIVER_S_ISLE;
+            break;
+        default:
+            return;
+        }
+
+        for (int i = 0; i < field_0x1dd0; i++) {
+            seStart(seNum, &field_0x1b90[i], 0, arg1);
+        }
+    }
+
+    }
 
 /* 802ADC58-802ADE68       .text waterfallSePlay__11JAIZelBasicFUcP3VecSc */
-void JAIZelBasic::waterfallSePlay(u8, Vec*, s8) {
-    /* Nonmatching */
+void JAIZelBasic::waterfallSePlay(u8 arg0, Vec* arg1, s8 arg2) {
+    u32 seNum;
+    switch (arg0) {
+    case 0:
+        seNum = JA_SE_ATM_WATERFALL_S;
+        break;
+    case 2:
+    case 4:
+        seNum = JA_SE_ATM_WATERFALL_M_RIV;
+        break;
+    default:
+        seNum = JA_SE_ATM_WATERFALL_M;
+        break;
+    }
+
+    MtxP cameraMtx = mAudioCamera->field_0x8;
+    Vec spC = *arg1;
+    if (cameraMtx != NULL) {
+        PSMTXMultVec(cameraMtx, &spC, &spC);
+    }
+    f32 temp_f4 = spC.x * spC.x + spC.y * spC.y + spC.z * spC.z;
+    f32 var_f31 = std::sqrtf(temp_f4);
+
+    if (!(var_f31 > 4.0f * JAIGlobalParameter::getParamDistanceMax())) {
+        field_0x1dd8[field_0x1e98] = *arg1;
+
+#if VERSION > VERSION_DEMO
+        if ((int)field_0x0207 != 0) {
+            if (field_0x1e98 < ARRAY_SSIZE(field_0x1dd8)) {
+                field_0x1e98++;
+            }
+        } else
+#endif
+        {
+            if (checkPlayingStreamBgmFlag() != JA_STRM_DEMO_31_01) {
+#if VERSION > VERSION_DEMO
+                if ((int)field_0x0207 == 0)
+#endif
+                {
+                    seStart(seNum, &field_0x1dd8[field_0x1e98], 0, arg2, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+                }
+            }
+
+            if (field_0x1e98 < ARRAY_SSIZE(field_0x1dd8)) {
+                field_0x1e98++;
+            }
+        }
+    }
 }
 
 /* 802ADE68-802ADE74       .text initWindowPos__11JAIZelBasicFv */
@@ -67,11 +408,41 @@ void JAIZelBasic::initWindowPos() {
 }
 
 /* 802ADE74-802ADF20       .text registWindowPos__11JAIZelBasicFP3Vec */
-void JAIZelBasic::registWindowPos(Vec*) {
-    /* Nonmatching */
+int JAIZelBasic::registWindowPos(Vec* wpos) {
+    if (wpos == NULL) {
+        OSReport("[JAIZelBasic::setWindowPos] WARNING : wpos = NULL\n");
+        return -1;
+    }
+
+    field_0x1e9c[field_0x1ec0] = *wpos;
+    field_0x1ec0++;
+
+    if (field_0x1ec0 >= ARRAY_SSIZE(field_0x1e9c)) {
+        OSReport("[JAIZelBasic::registWindowPos] !! WARNING : num of window rail is over range!\n");
+        field_0x1ec0 = ARRAY_SSIZE(field_0x1e9c) - 1;
+        return -1;
+    }
+
+    return field_0x1ec0;
 }
 
 /* 802ADF20-802AE04C       .text rainPlay__11JAIZelBasicFl */
-void JAIZelBasic::rainPlay(s32) {
-    /* Nonmatching */
+void JAIZelBasic::rainPlay(s32 arg0) {
+    if (field_0x1ec0 == 0) {
+        if (arg0 == 1) {
+            seStart(JA_SE_ATM_RAIN_HARD, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+            return;
+        }
+
+        seStart(JA_SE_ATM_RAIN_1, NULL, 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        return;
+    }
+
+    for (int i = 0; i < field_0x1ec0; i++) {
+        if (arg0 == 1) {
+            seStart(JA_SE_ATM_RAIN_ROOM_HARD, &field_0x1e9c[i], 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        } else {
+            seStart(JA_SE_ATM_RAIN_ROOM, &field_0x1e9c[i], 0, 0, 1.0f, 1.0f, -1.0f, -1.0f, 0);
+        }
+    }
 }

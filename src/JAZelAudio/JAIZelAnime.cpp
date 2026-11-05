@@ -17,7 +17,6 @@ void JAIZelAnime::setAnimSound(Vec* pos, f32 frame, f32 rate, u32 mtrlSndId, s8 
 }
 
 /* 802AC888-802ACD34       .text startAnimSound__11JAIZelAnimeFPvUlPP8JAISoundPQ27JAInter5ActorUc */
-// NONMATCHING - 1 missing reg move
 void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_sound, JAInter::Actor* i_actor, u8 param_4) {
     JAIZelBasic* basic = (JAIZelBasic*)i_basic;
 
@@ -36,10 +35,10 @@ void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_soun
     case JA_SE_CV_DRG_MTOP_BIKU:
     case JA_SE_CV_DRG_MTOP_ABARE:
     case JA_SE_CV_DRG_MTOP_AKUBI:
-        mDoAud_seStart(i_soundID, i_actor->field_0x4);
+        mDoAud_zelAudio_c::getInterface()->seStart(i_soundID, i_actor->field_0x4);
         return;
     case JA_SE_FT_PW_RUN_AWAY:
-        mDoAud_seStart(i_soundID, i_actor->field_0x4);
+        mDoAud_zelAudio_c::getInterface()->seStart(i_soundID, i_actor->field_0x4);
         return;
     }
 
@@ -87,8 +86,8 @@ void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_soun
         }
     }
 
-    int var_r27 = (i_actor->field_0xc & 0xFF000000) >> 0x18;
-    i_actor->field_0xc &= 0xFFFFFF;
+    u16 var_r27 = (i_actor->field_0xc >> 24);
+    i_actor->field_0xc = i_actor->field_0xc & 0xFFFFFF;
 
     if (i_actor->field_0x4 != NULL) {
         MtxP m = basic->getCurCamera(0)->field_0x8;
@@ -154,15 +153,18 @@ void JAIZelAnime::startAnimSound(void* i_basic, u32 i_soundID, JAISound** i_soun
 }
 
 /* 802ACD34-802ACFA0       .text setSpeedModifySound__11JAIZelAnimeFP8JAISoundP22JAIAnimeFrameSoundDataf */
-// NONMATCHING - idk how the pitch factor switch is supposed to look
 void JAIZelAnime::setSpeedModifySound(JAISound* i_sound, JAIAnimeFrameSoundData* i_data, f32 param_2) {
     f32 base_pitch = i_data->mPitch;
     if (i_data->mPitchFactor != 0) {
         switch (i_sound->getMapInfo()) {
         case 6:
+        case 18:
+        case 19:
+        case 20:
+        case 21:
+        case 22:
             break;
-        case 0x12:
-        case 0x17:
+        default:
             base_pitch += i_data->mPitchFactor * (param_2 - 1.0f) / 32;
             break;
         }
@@ -214,24 +216,19 @@ void JAIZelAnime::setSpeedModifySound(JAISound* i_sound, JAIAnimeFrameSoundData*
 }
 
 /* 802ACFA0-802AD008       .text setPlayPosition__11JAIZelAnimeFf */
-// NONMATCHING - supposed to check if unsigned value is less than or equal to 0?
 void JAIZelAnime::setPlayPosition(f32 param_0) {
     if (mpAsData == NULL) {
         return;
     }
 
-    int var_r0 = mpAsData->datas;
+    u32 var_r0 = mpAsData->datas;
     int count = 0;
-    int i = 0;
-    
-    while ((u32)var_r0 > 0) {
+    for (int i = 0; i < var_r0; i++) {
         if (mpAsData->mAfsData[i].mStartFrame >= param_0) {
             break;
         }
 
         count++;
-        i++;
-        var_r0--;
     }
 
     if (mDataCounterInc == 1) {
