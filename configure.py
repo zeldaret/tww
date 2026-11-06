@@ -229,6 +229,7 @@ cflags_base = [
     f"-i build/{config.version}/include",
     f"-i assets/{config.version}",
     "-i src",
+    "-i libs/dolphin/include",
     "-i libs/JSystem/include",
     "-i libs/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include",
     "-i libs/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include",
@@ -321,7 +322,7 @@ config.linker_version = "GC/1.3.2"
 def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "src_dir": "libs/dolphin",
+        "src_dir": "libs/dolphin/src",
         "strip_prefix": "dolphin/",
         "mw_version": "GC/1.2.5n",
         "cflags": cflags_dolphin,
@@ -951,7 +952,7 @@ config.libs = [
     },
     {
         "lib": "gf",
-        "src_dir": "libs/dolphin",
+        "src_dir": "libs/dolphin/src",
         "strip_prefix": "dolphin/",
         "mw_version": "GC/1.3.2",
         "cflags": [*cflags_base, "-O3"],
@@ -1161,7 +1162,7 @@ config.libs = [
     ),
     {
         "lib": "exi",
-        "src_dir": "libs/dolphin",
+        "src_dir": "libs/dolphin/src",
         "strip_prefix": "dolphin/",
         "mw_version": "GC/1.2.5n",
         "cflags": [*cflags_base],
