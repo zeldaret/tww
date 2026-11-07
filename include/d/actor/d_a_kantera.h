@@ -65,7 +65,7 @@ struct kantera_class {
     /* 0x5B0 */ dCcD_Sph mSph;
     /* 0x6DC */ dPa_followEcallBack mPtclCallBack0;
     /* 0x6F0 */ dPa_followEcallBack mPtclCallBack1;
-    /* 0x704 */ cXyz mParticleScale;
+    /* 0x704 */ JGeometry::TVec3<f32> mParticleScale;
     /* 0x710 */ mo_ga_s mGa[2];
 };  // Size: 0x770
 
