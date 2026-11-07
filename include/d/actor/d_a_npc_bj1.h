@@ -52,7 +52,7 @@ public:
     u32 chk_drct(f32);
     BOOL chk_partsNotMove();
     void lookBack();
-    void getMaskInf(u8*);
+    bool getMaskInf(u8*);
     bool chkReg(u16);
     void setReg(u16);
     u16 next_msgStatus(u32*);

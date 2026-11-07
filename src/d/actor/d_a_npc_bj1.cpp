@@ -602,23 +602,220 @@ void daNpc_Bj1_c::lookBack() {
 }
 
 /* 000019A0-00001A44       .text getMaskInf__11daNpc_Bj1_cFPUc */
-void daNpc_Bj1_c::getMaskInf(u8*) {
+bool daNpc_Bj1_c::getMaskInf(u8*) {
     /* Nonmatching */
 }
 
 /* 00001A44-00001AA8       .text chkReg__11daNpc_Bj1_cFUs */
-bool daNpc_Bj1_c::chkReg(u16) {
-    /* Nonmatching */
+bool daNpc_Bj1_c::chkReg(u16 i_reg) {
+    u8 mask;
+    bool ret = getMaskInf(&mask);
+    if (ret) {
+        u8 reg = dComIfGs_getEventReg(i_reg);
+        ret = reg & mask;
+    }
+    return ret;
 }
 
 /* 00001AA8-00001B14       .text setReg__11daNpc_Bj1_cFUs */
-void daNpc_Bj1_c::setReg(u16) {
-    /* Nonmatching */
+void daNpc_Bj1_c::setReg(u16 i_reg) {
+    u8 mask;
+    if (getMaskInf(&mask)) {
+        u8 reg = dComIfGs_getEventReg(i_reg);
+        reg |= mask;
+        dComIfGs_setEventReg(i_reg, reg);
+    }
 }
 
 /* 00001B14-00001E84       .text next_msgStatus__11daNpc_Bj1_cFPUl */
-u16 daNpc_Bj1_c::next_msgStatus(u32*) {
-    /* Nonmatching */
+u16 daNpc_Bj1_c::next_msgStatus(u32* i_msg_no) {
+    u16 ret = 0xF;
+    switch (*i_msg_no) {
+        case 0x13ED:
+            *i_msg_no = 0x13EE;
+            break;
+        case 0x13EE:
+            *i_msg_no = 0x13EF;
+            break;
+        case 0x13F0:
+            *i_msg_no = 0x13F1;
+            break;
+        case 0x13F2:
+            *i_msg_no = 0x13F3;
+            break;
+        case 0x13F5:
+            *i_msg_no = 0x13F6;
+            break;
+        case 0x13F8:
+            *i_msg_no = 0x13F9;
+            break;
+        case 0x13FB:
+            *i_msg_no = 0x13FC;
+            break;
+        case 0x13FD:
+            *i_msg_no = 0x13FE;
+            break;
+        case 0x13FF:
+            *i_msg_no = 0x1400;
+            break;
+        case 0x1400:
+            *i_msg_no = 0x1401;
+            break;
+        case 0x1402:
+            *i_msg_no = 0x1403;
+            break;
+        case 0x1403:
+            *i_msg_no = 0x1404;
+            break;
+        case 0x1406:
+            *i_msg_no = 0x1407;
+            break;
+        case 0x1407:
+            *i_msg_no = 0x1408;
+            break;
+        case 0x140B:
+            *i_msg_no = 0x140C;
+            break;
+        case 0x140E:
+            *i_msg_no = 0x140F;
+            break;
+        case 0x1412:
+            *i_msg_no = 0x1413;
+            break;
+        case 0x1414:
+            *i_msg_no = 0x1415;
+            break;
+        case 0x1416:
+            *i_msg_no = 0x1417;
+            break;
+        case 0x1417:
+            *i_msg_no = 0x1418;
+            break;
+        case 0x1418:
+            *i_msg_no = 0x1419;
+            break;
+        case 0x1419:
+            *i_msg_no = 0x141A;
+            break;
+        case 0x141A:
+            *i_msg_no = 0x141B;
+            break;
+        case 0x141B:
+            *i_msg_no = 0x141C;
+            break;
+        case 0x141C:
+            *i_msg_no = 0x141D;
+            break;
+        case 0x141F:
+            *i_msg_no = 0x1420;
+            break;
+        case 0x142C:
+            *i_msg_no = 0x142D;
+            break;
+        case 0x1431:
+            *i_msg_no = 0x1432;
+            break;
+        case 0x1433:
+            *i_msg_no = 0x1417;
+            break;
+        case 0x1422:
+            *i_msg_no = 0x1423;
+            break;
+        case 0x1423:
+            dComIfGs_onEventBit(0x1B80);
+        case 0x1424:
+            if (dComIfGs_getBeastNum(dBeastIdx_BOKOBABA_SEED_e) < 4) {
+                if (field_0x840 != 0) {
+                    *i_msg_no = 0x1427;
+                } else {
+                    *i_msg_no = 0x1425;
+                }
+            } else {
+                if (dComIfGs_checkEmptyBottle()) {
+                    *i_msg_no = 0x1428;
+                } else {
+                    if (field_0x841 != 0) {
+                        *i_msg_no = 0x1430;
+                    } else {
+                        *i_msg_no = 0x142E;
+                    }
+                }
+            }
+            break;
+        case 0x1425:
+            *i_msg_no = 0x1426;
+            break;
+        case 0x1428:
+            *i_msg_no = 0x1429;
+            break;
+        case 0x142E:
+            *i_msg_no = 0x142F;
+            break;
+        case 0x1487:
+            *i_msg_no = 0x1488;
+            break;
+        case 0x1488:
+            *i_msg_no = 0x1489;
+            break;
+        case 0x1482:
+            *i_msg_no = 0x1483;
+            break;
+        case 0x148A:
+            *i_msg_no = 0x148B;
+            break;
+        case 0x148B:
+            *i_msg_no = 0x148C;
+            break;
+        case 0x148C:
+            *i_msg_no = 0x148D;
+            break;
+        case 0x148D:
+            *i_msg_no = 0x148E;
+            break;
+        case 0x148E:
+            *i_msg_no = 0x148F;
+            break;
+        case 0x148F:
+            *i_msg_no = 0x1490;
+            break;
+        case 0x1490:
+            *i_msg_no = 0x1491;
+            break;
+        case 0x1491:
+            *i_msg_no = 0x1492;
+            break;
+        case 0x1492:
+            *i_msg_no = 0x1493;
+            break;
+        case 0x1497:
+            *i_msg_no = 0x1498;
+            break;
+        case 0x1498:
+            *i_msg_no = 0x1499;
+            break;
+        case 0x1499:
+            *i_msg_no = 0x149A;
+            break;
+        case 0x149A:
+            *i_msg_no = 0x149B;
+            break;
+        case 0x149B:
+            *i_msg_no = 0x149C;
+            break;
+        case 0x149C:
+            *i_msg_no = 0x149D;
+            break;
+        case 0x1494:
+            *i_msg_no = 0x1495;
+            break;
+        case 0x1495:
+            *i_msg_no = 0x1496;
+            break;
+        default:
+            ret = 0x10;
+            break;
+    }
+    return ret;
 }
 
 /* 00001E84-00001F14       .text getMsg_BJ1_0__11daNpc_Bj1_cFv */
