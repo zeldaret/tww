@@ -67,7 +67,7 @@ public:
     u32 getMsg_BJ9_0();
     u32 getMsg_Corog();
     u32 getMsg();
-    void chkAttention();
+    bool chkAttention();
     void setAttention(bool);
     fopAc_ac_c* searchByID(fpc_ProcID);
     bool partner_srch_sub(fpcLyIt_JudgeFunc);
@@ -169,7 +169,7 @@ public:
     /* 0x7BA */ s16 field_0x7BA;
     /* 0x7BC */ s16 field_0x7BC;
     /* 0x7BE */ u8 padding_0x7BE[0x7C0 - 0x7BE];
-    /* 0x7C0 */ cXyz field_0x7C0;
+    /* 0x7C0 */ cXyz mEyePos;
     /* 0x7CC */ cXyz field_0x7CC;
     /* 0x7D8 */ cXyz field_0x7D8;
     /* 0x7E4 */ cXyz field_0x7E4;
@@ -213,10 +213,10 @@ public:
     /* 0x84D */ u8 field_0x84D;
     /* 0x84E */ u8 field_0x84E;
     /* 0x84F */ u8 padding_0x84F[0x850 - 0x84F];
-    /* 0x850 */ int field_0x850;
+    /* 0x850 */ BOOL mbSetEyePos;
     /* 0x854 */ u8 field_0x854;
     /* 0x855 */ u8 field_0x855;
-    /* 0x856 */ u8 field_0x856;
+    /* 0x856 */ bool mHeadOnlyFollow;
     /* 0x857 */ u8 field_0x857;
     /* 0x858 */ csXyz field_0x858;
     /* 0x85E */ u8 padding_0x85E[0x860 - 0x85E];
@@ -244,8 +244,8 @@ public:
     /* 0x8B0 */ s8 field_0x8B0;
     /* 0x8B1 */ s8 field_0x8B1;
     /* 0x8B2 */ u8 field_0x8B2;
-    /* 0x8B3 */ u8 field_0x8B3;
-    /* 0x8B4 */ s8 field_0x8B4;
+    /* 0x8B3 */ s8 field_0x8B3;
+    /* 0x8B4 */ s8 mType;
     /* 0x8B5 */ s8 field_0x8B5;
     /* 0x8B6 */ u8 field_0x8B6;
     /* 0x8B7 */ s8 field_0x8B7;
@@ -254,7 +254,10 @@ public:
 class daNpc_Bj1_childHIO_c : public mDoHIO_entry_c {
 public:
     struct hio_prm_c {
-        /* 0x00 */ u32 field_0x00[0x19];
+        /* 0x00 */ u8 field_0x00[0x12];
+        /* 0x12 */ s16 mCalcAngleTarget;
+        /* 0x14 */ f32 mAttPosOffsetY;
+        /* 0x14 */ u8 field_0x14[0x64 - 0x18];
     }; // Size: 0x64
 
     daNpc_Bj1_childHIO_c();
