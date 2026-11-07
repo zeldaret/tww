@@ -27,10 +27,10 @@ public:
     void isAnm(s8) {}
     void isEyeAnm(s8) {}
     void modeProcInit(int) {}
-    void setAfraid() {}
-    void setDown() {}
-    void setMove() {}
-    void setStand() {}
+    void setAfraid() { m073F = 1; }
+    void setDown() { m08B0 = 1; }
+    void setMove() { m0740 = 1; }
+    void setStand() { m08B0 = 2; }
 
     void _nodeHeadControl(J3DNode*, J3DModel*);
     void _nodeWaistControl(J3DNode*, J3DModel*);
@@ -108,7 +108,8 @@ public:
     /* 0x06D6 */ u8 m06D6[0x073E - 0x06D6];
     /* 0x073E */ u8 mbEyesFollowGanondorf;
     /* 0x073F */ u8 m073F;
-    /* 0x0740 */ u8 m0740[0x076C - 0x0740];
+    /* 0x0740 */ s8 m0740;
+    /* 0x0741 */ u8 m0741[0x076C - 0x0741];
     /* 0x076C */ request_of_phase_process_class mPhs;
     /* 0x0774 */ u32 m0774;
     /* 0x0778 */ mDoExt_invisibleModel mInvisibleModel;
