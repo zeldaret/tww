@@ -1,14 +1,21 @@
 #ifndef D_A_WATERFALL_H
 #define D_A_WATERFALL_H
 
+#include "d/d_particle.h"
 #include "f_op/f_op_actor.h"
+#include "f_op/f_op_actor_mng.h"
+#include "m_Do/m_Do_ext.h"
 
 class daWfall_c : public fopAc_ac_c {
 public:
+    static const char m_arcname[];
+    static const u8 m_wait_timer;
+    static const s16 m_heapsize[];
+
     inline bool _draw();
 
     bool _delete();
-    void CreateHeap();
+    BOOL CreateHeap();
     void CreateInit();
     cPhs_State _create();
     void set_mtx();
@@ -20,14 +27,46 @@ public:
     void mode_wtr_on();
     void mode_wtr_off_init();
     void mode_wtr_off();
-    void setEmitter00Pos();
-    void setEmitter01Pos();
-    void getWaterScaleFromGatePos();
-    void getWaterHeight();
+    BOOL setEmitter00Pos();
+    BOOL setEmitter01Pos();
+    float getWaterScaleFromGatePos();
+    float getWaterHeight();
     void set_se();
 
 public:
-    /* Place member variables here */
-};
+    /* 0x290 */ request_of_phase_process_class mPhs;
+    /* 0x298 */ J3DModel* mModelWater;
+    /* 0x29C */ J3DModel* mModelGate;
+    /* 0x2A0 */ J3DModel* mModelMinamo; // water surface model
+    /* 0x2A4 */ int mMode;
+    /* 0x2A8 */ int mSwitchNo;
+    /* 0x2AC */ mDoExt_btkAnm mWaterBtkAnm;
+    /* 0x2C0 */ mDoExt_brkAnm mWaterSurfaceBrkAnm;
+    /* 0x2D8 */ mDoExt_btkAnm mWaterSurfaceBtkAnm;
+    /* 0x2EC */ dPa_followEcallBack mPCallBack;
+    /* 0x300 */ dPa_followEcallBack mPCallBack2;
+    /* 0x314 */ cXyz mParticlePos1;
+    /* 0x320 */ cXyz mParticlePos2;
+    /* 0x32C */ u8 field_0x32C[0x338 - 0x32C];
+    /* 0x338 */ csXyz mParticleAngle1;
+    /* 0x33E */ csXyz mParticleAngle2;
+    /* 0x344 */ Vec mSePos;
+    /* 0x350 */ s16 mEventIdx;
+    /* 0x352 */ s16 mfield_0x352;
+    /* 0x354 */ u8 field_0x354[0x355 - 0x354];
+    /* 0x355 */ u8 mEventState;
+    /* 0x356 */ u8 mType;
+    /* 0x357 */ u8 field_0x357[0x358 - 0x357];
+}; // Size: 0x358
+
+namespace daWfall_prm {
+    inline u8 getType(daWfall_c* i_this) {
+        return (fopAcM_GetParam(i_this) >> 8) & 0xF;
+    }
+
+    inline u8 getSwitchNo(daWfall_c* i_this) {
+        return fopAcM_GetParam(i_this) & 0xFF;
+    }
+}
 
 #endif /* D_A_WATERFALL_H */
