@@ -2,7 +2,7 @@
 #define WEAK_DATA_H
 
 #ifdef DECOMPCTX
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 
 static inline void fake_data_2100() {
     static Vec data_2100 = {1.0f, 1.0f, 1.0f};

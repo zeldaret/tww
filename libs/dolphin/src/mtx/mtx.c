@@ -1,7 +1,6 @@
 
-#include <dolphin/mtx/mtx.h>
-#include <dolphin/mtx/vec.h>
-#include <dolphin/os/OS.h>
+#include <dolphin/mtx.h>
+#include <dolphin/os.h>
 #include <math.h>
 
 static f32 Unit01[2] = {

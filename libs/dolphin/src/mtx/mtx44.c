@@ -1,7 +1,6 @@
 
-#include <dolphin/mtx/mtx.h>
-#include <dolphin/mtx/mtx44.h>
-#include <dolphin/os/OS.h>
+#include <dolphin/mtx.h>
+#include <dolphin/os.h>
 #include <math.h>
 
 void C_MTXFrustum(Mtx44 m, f32 t, f32 b, f32 l, f32 r, f32 n, f32 f) {

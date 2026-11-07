@@ -1,5 +1,5 @@
 #include "dolphin/dvd/fstload.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "string.h"
 
 // .bss

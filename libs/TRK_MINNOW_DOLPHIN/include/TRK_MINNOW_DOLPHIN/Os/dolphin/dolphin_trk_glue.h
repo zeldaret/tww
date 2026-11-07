@@ -2,7 +2,7 @@
 #define OS_DOLPHIN_DOLPHIN_TRK_GLUE_H
 
 #include "trk.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,5 +1,5 @@
 #include "dolphin/os/OSAlloc.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 #define ALIGNMENT  32
 #define MINOBJSIZE 64

@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 
 class dCcMassS_HitInf;
 class cCcD_Obj;

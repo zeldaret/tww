@@ -19,7 +19,7 @@
 #include "JSystem/JAudio/dsptask.h"
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/ai/ai.h"
+#include "dolphin/ai.h"
 
 OSThread JASystem::TAudioThread::sAudioThread;
 u8 JASystem::TAudioThread::saAudioStack[4096];

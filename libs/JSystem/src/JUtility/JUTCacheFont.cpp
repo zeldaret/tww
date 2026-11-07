@@ -10,7 +10,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDataHeader.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 /* 802C03D4-802C0454       .text __ct__12JUTCacheFontFPC7ResFONTUlP7JKRHeap */
 JUTCacheFont::JUTCacheFont(const ResFONT* p_fontRes, u32 cacheSize, JKRHeap* p_heap) {

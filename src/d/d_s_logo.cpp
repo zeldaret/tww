@@ -29,7 +29,7 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRAramBlock.h"
 #include "JSystem/JKernel/JKRAramHeap.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "string.h"
 #include "stdio.h"
 

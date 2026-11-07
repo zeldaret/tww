@@ -1,5 +1,5 @@
-#include "dolphin/si/SIBios.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/si.h"
+#include "dolphin/os.h"
 
 #define ROUND(n, a) (((u32)(n) + (a)-1) & ~((a)-1))
 

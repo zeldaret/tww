@@ -1,7 +1,7 @@
 #ifndef JMATH_H
 #define JMATH_H
 
-#include "dolphin/mtx/quat.h"
+#include "dolphin/mtx.h"
 #include "math.h"
 
 bool JMANewSinTable(u8 numBits);

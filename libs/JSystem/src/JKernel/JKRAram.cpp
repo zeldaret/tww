@@ -12,9 +12,8 @@
 #include "JSystem/JKernel/JKRExpHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "string.h"
-#include "dolphin/ar/ar.h"
-#include "dolphin/ar/arq.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/ar.h"
+#include "dolphin/os.h"
 #include "global.h"
 
 static int JKRDecompressFromAramToMainRam(u32, void*, u32, u32, u32);

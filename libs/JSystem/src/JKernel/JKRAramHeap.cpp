@@ -7,7 +7,7 @@
 
 #include "JSystem/JKernel/JKRAramHeap.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "global.h"
 
 JSUList<JKRAramBlock> JKRAramHeap::sAramList;

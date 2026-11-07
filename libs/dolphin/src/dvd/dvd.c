@@ -1,11 +1,11 @@
-#include "dolphin/dvd/dvd.h"
+#include "dolphin/dvd.h"
 #include "dolphin/dvd/dvderror.h"
 #include "dolphin/dvd/dvdfs.h"
 #include "dolphin/dvd/dvdlow.h"
 #include "dolphin/dvd/dvdqueue.h"
 #include "dolphin/dvd/dvdFatal.h"
 #include "dolphin/dvd/fstload.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include <string.h>
 
 const char* __DVDVersion = "<< Dolphin SDK - DVD\trelease build: Sep  5 2002 05:34:06 (0x2301) >>";

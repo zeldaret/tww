@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_item.h"
 #include "d/d_item_data.h"
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 
 static dCcD_SrcCps l_cps_src = {
     // dCcD_SrcGObjInf

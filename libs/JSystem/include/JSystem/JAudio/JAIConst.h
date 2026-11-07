@@ -2,8 +2,7 @@
 #define JAICONST_H
 
 #include "JSystem/JMath/random.h"
-#include "dolphin/mtx/mtx.h"
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 
 namespace JAInter {
     u8* transInitDataFile(u8*, u32);

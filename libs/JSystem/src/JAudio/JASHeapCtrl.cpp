@@ -7,7 +7,7 @@
 
 #include "JSystem/JAudio/JASHeapCtrl.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 8027CC14-8027CC88       .text __ct__Q38JASystem6Kernel5THeapFPQ38JASystem6Kernel9TDisposer */
 JASystem::Kernel::THeap::THeap(TDisposer* disposer) : mTree(this) {

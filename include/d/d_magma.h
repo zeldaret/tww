@@ -2,7 +2,7 @@
 #define D_MAGMA_H
 
 #include "SSystem/SComponent/c_xyz.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 #include "JSystem/J3DGraphBase/J3DPacket.h"
 
 class dMagma_ball_c {

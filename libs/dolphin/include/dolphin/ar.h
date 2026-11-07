@@ -1,11 +1,21 @@
-#ifndef ARQ_H
-#define ARQ_H
+#ifndef AR_H
+#define AR_H
 
 #include "dolphin/types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef void (*ARCallback)(void);
+
+ARCallback ARRegisterDMACallback(ARCallback callback);
+u32 ARGetDMAStatus(void);
+void ARStartDMA(u32 type, u32 mainmem_addr, u32 aram_addr, u32 length);
+u32 ARInit(u32* stack_index_addr, u32 num_entries);
+u32 ARAlloc(u32 length);
+u32 ARGetBaseAddress();
+u32 ARGetSize(void);
 
 #define ARQ_CHUNK_SIZE_DEFAULT 4096
 
@@ -40,4 +50,4 @@ void ARQPostRequest(ARQRequest* task, u32 owner, u32 type, u32 priority, u32 sou
 };
 #endif
 
-#endif /* ARQ_H */
+#endif /* AR_H */

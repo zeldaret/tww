@@ -1,5 +1,5 @@
 #include "dolphin/dvd/dvdlow.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 static BOOL FirstRead                    = TRUE;
 static volatile BOOL StopAtNextInt       = FALSE;

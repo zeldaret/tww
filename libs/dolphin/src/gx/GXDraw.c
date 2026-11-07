@@ -1,5 +1,5 @@
 #include "dolphin/gx/GXDraw.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "math.h"
 
 static GXVtxDescList vcd[27];

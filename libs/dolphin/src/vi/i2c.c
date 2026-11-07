@@ -1,4 +1,4 @@
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 static volatile u32 __i2c_ident_flag  = 1;
 static volatile u32 __i2c_ident_first = 0;

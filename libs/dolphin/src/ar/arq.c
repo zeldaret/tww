@@ -1,6 +1,5 @@
-#include "dolphin/os/OS.h"
-#include "dolphin/ar/ar.h"
-#include "dolphin/ar/arq.h"
+#include "dolphin/os.h"
+#include "dolphin/ar.h"
 
 const char* __ARQVersion = "<< Dolphin SDK - ARQ\trelease build: Sep  5 2002 05:34:29 (0x2301) >>";
 

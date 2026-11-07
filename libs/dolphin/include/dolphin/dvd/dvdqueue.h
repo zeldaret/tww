@@ -1,7 +1,7 @@
 #ifndef DVDQUEUE_H
 #define DVDQUEUE_H
 
-#include "dolphin/dvd/dvd.h"
+#include "dolphin/dvd.h"
 
 void __DVDClearWaitingQueue();
 int __DVDPushWaitingQueue(long prio, DVDCommandBlock * block);

@@ -11,7 +11,7 @@
 #include "JSystem/J3DGraphLoader/J3DShapeFactory.h"
 #include "JSystem/J3DGraphLoader/J3DJointFactory.h"
 #include "JSystem/JSupport/JSupport.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802FD828-802FD868       .text countMaterialNum__14J3DModelLoaderFPCv */
 u16 J3DModelLoader::countMaterialNum(const void* i_data) {

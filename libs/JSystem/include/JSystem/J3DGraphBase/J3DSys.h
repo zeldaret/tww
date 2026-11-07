@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DAssert.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "dolphin/types.h"
 
 // Perhaps move to a new J3DEnum.h?

@@ -13,7 +13,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "math.h"
 #include "string.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802BABD4-802BAC7C       .text __ct__13JKRDvdArchiveFlQ210JKRArchive15EMountDirection */
 JKRDvdArchive::JKRDvdArchive(s32 entryNum, JKRArchive::EMountDirection mountDirection) : JKRArchive(entryNum, MOUNT_DVD) {

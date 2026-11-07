@@ -1,7 +1,7 @@
 #ifndef JPAEMITTERLOADER_H
 #define JPAEMITTERLOADER_H
 
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 class JPADataBlockLinkInfo;
 class JPAEmitterResource;

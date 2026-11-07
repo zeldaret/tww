@@ -2,7 +2,7 @@
 #define J3DSHAPEFACTORY_H
 
 #include "dolphin/gx/GXAttr.h"
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 
 class J3DShape;
 class J3DShapeMtx;

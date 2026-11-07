@@ -4,7 +4,7 @@
 #include "JSystem/J2DGraph/J2DPane.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "JSystem/JUtility/TColor.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 class JKRArchive;
 class JUTTexture;

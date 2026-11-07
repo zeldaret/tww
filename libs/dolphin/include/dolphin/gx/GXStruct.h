@@ -2,7 +2,7 @@
 #define GXSTRUCT_H
 
 #include "global.h"
-#include "dolphin/vi/vi.h"
+#include "dolphin/vi.h"
 
 typedef struct _GXColor {
     /* 0x0 */ u8 r;

@@ -15,7 +15,7 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "math.h"
 #include "string.h"
-#include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx.h"
 
 JAInter::LinkSound JAInter::SequenceMgr::seqControl;
 JAInter::SeqUpdateData* JAInter::SequenceMgr::seqTrackInfo;

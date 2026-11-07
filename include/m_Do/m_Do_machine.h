@@ -2,7 +2,7 @@
 #ifndef M_DO_M_DO_MACHINE_H
 #define M_DO_M_DO_MACHINE_H
 
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 bool mDoMch_Create();
 void mDoMch_HeapCheckAll();

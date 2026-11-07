@@ -11,8 +11,7 @@
 #include "JSystem/JParticle/JPASweepShape.h"
 #include "JSystem/JParticle/JPAKeyBlock.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "dolphin/mtx/mtx.h"
-#include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx.h"
 
 JPAEmitterInfo JPABaseEmitter::emtrInfo;
 

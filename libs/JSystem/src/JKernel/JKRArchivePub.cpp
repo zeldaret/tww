@@ -13,7 +13,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/dvd/dvd.h"
+#include "dolphin/dvd.h"
 
 /* 802B7FB4-802B8008       .text check_mount_already__10JKRArchiveFl */
 JKRArchive* JKRArchive::check_mount_already(s32 entryNum) {

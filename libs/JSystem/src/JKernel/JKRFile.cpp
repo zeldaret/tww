@@ -7,7 +7,7 @@
 
 #include "JSystem/JKernel/JKRFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/vi/vi.h"
+#include "dolphin/vi.h"
 
 /* 802BC610-802BC6B4       .text read__7JKRFileFPvll */
 s32 JKRFile::read(void* data, s32 length, s32 offset) {

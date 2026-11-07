@@ -7,7 +7,7 @@
 
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JMath/JMath.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802EF5D8-802EF608       .text init__12J3DFrameCtrlFs */
 void J3DFrameCtrl::init(s16 end) {

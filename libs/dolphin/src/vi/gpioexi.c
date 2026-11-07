@@ -1,4 +1,4 @@
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 static u8 shadowGPIOOE;
 static u8 shadowGPIOData;

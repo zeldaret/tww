@@ -10,7 +10,7 @@
 #include "d/d_material.h"
 #include "d/actor/d_a_player_main.h"
 #include "res/Object/Link.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gf.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_camera_mng.h"
 #include "m_Do/m_Do_lib.h"

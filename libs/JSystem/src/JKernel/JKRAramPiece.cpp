@@ -9,7 +9,7 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JKernel/JKRDecomp.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802B5C14-802B5C94       .text prepareCommand__12JKRAramPieceFiUlUlUlP12JKRAramBlockPFUl_v */
 JKRAMCommand* JKRAramPiece::prepareCommand(int direction, uintptr_t src, uintptr_t dst, u32 length, JKRAramBlock* block, JKRAMCommand::AsyncCallback callback) {

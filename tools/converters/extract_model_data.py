@@ -55,7 +55,7 @@ def convert_binary_to_Vec_c_source(src_path: str, dest_path: str, symbol_name: s
     # Load data
     with open(src_path, "rb") as binary_file, open(dest_path, "w") as c_file:
 
-        c_file.write('#include "dolphin/mtx/vec.h"\n\n')
+        c_file.write('#include "dolphin/mtx.h"\n\n')
 
         write_array_declaration(c_file, symbol_name, scope, "Vec")
 

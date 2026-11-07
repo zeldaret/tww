@@ -7,7 +7,7 @@
 #include "SSystem/SComponent/c_m3d_g_aab.h"
 #include "SSystem/SComponent/c_m3d_g_pla.h"
 #include "SSystem/SComponent/c_bg_w_tri_elm.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 
 class cBgW_BgId {
 private:

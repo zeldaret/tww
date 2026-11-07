@@ -9,7 +9,7 @@
 #include "JSystem/JParticle/JPADynamicsBlock.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPASweepShape.h"
-#include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx.h"
 
 /* 8025DEF4-8025E62C       .text initParticle__15JPABaseParticleFv */
 void JPABaseParticle::initParticle() {

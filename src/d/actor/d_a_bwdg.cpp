@@ -10,7 +10,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/actor/d_a_bwd.h"
 #include "f_op/f_op_actor_mng.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gf.h"
 
 static bwd_class* boss;
 

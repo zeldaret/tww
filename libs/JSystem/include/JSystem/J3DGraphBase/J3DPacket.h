@@ -5,7 +5,7 @@
 #include "JSystem/J3DGraphBase/J3DDrawBuffer.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/gd/GDBase.h"
+#include "dolphin/gd.h"
 #include "dolphin/types.h"
 
 class J3DMatPacket;

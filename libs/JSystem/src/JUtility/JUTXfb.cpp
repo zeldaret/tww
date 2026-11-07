@@ -8,7 +8,7 @@
 #include "JSystem/JUtility/JUTXfb.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 JUTXfb* JUTXfb::sManager;
 

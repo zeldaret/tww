@@ -18,8 +18,8 @@
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTFontData_Ascfont_fix12.h"
-#include "dolphin/os/OS.h"
-#include "dolphin/dvd/dvd.h"
+#include "dolphin/os.h"
+#include "dolphin/dvd.h"
 #include "dolphin/gx/GXFrameBuf.h"
 #include "dolphin/types.h"
 

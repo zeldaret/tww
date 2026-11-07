@@ -1,4 +1,4 @@
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "dolphin/os/OSReboot.h"
 
 static void* SaveStart = NULL;

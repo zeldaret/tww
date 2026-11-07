@@ -10,7 +10,7 @@
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTTexture.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 /* 80017530-800176BC       .text mDoLib_setResTimgObj__FP7ResTIMGP9_GXTexObjUlP10_GXTlutObj */
 u32 mDoLib_setResTimgObj(ResTIMG* i_img, GXTexObj* o_texObj, u32 i_tlut_name, GXTlutObj * o_tlutObj) {

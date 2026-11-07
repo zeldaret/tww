@@ -1,7 +1,7 @@
 #ifndef JGEOMETRY_H
 #define JGEOMETRY_H
 
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 #include "math.h"
 
 namespace JGeometry {

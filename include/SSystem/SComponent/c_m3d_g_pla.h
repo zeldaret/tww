@@ -3,7 +3,7 @@
 
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_m3d.h"
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 #include "global.h"
 
 // Plane with a normal

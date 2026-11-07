@@ -14,7 +14,7 @@
 #include "d/d_kankyo_wether.h"
 #include "d/d_tree.h"
 #include "d/d_cc_d.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gf.h"
 #include "dolphin/gx/GXAttr.h"
 #include "dolphin/gx/GXDisplayList.h"
 #include "dolphin/gx/GXStruct.h"

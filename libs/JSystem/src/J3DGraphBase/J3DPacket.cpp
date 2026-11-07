@@ -11,8 +11,8 @@
 #include "JSystem/J3DGraphAnimator/J3DModel.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "string.h"
-#include "dolphin/gx/GX.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/gx.h"
+#include "dolphin/os.h"
 
 /* 802DAE1C-802DAE9C       .text newDisplayList__17J3DDisplayListObjFUl */
 J3DError J3DDisplayListObj::newDisplayList(u32 capacity) {

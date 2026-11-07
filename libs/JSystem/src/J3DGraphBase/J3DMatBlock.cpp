@@ -11,8 +11,8 @@
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/J3DGraphBase/J3DTexture.h"
 #include "JSystem/J3DGraphBase/J3DTransform.h"
-#include "dolphin/gd/GDBase.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/gd.h"
+#include "dolphin/os.h"
 #include "dolphin/types.h"
 #include "string.h"
 

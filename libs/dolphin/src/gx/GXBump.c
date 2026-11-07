@@ -4,7 +4,7 @@
  */
 
 #include "dolphin/gx/GXBump.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 void GXSetTevIndirect(GXTevStageID tevStage, GXIndTexStageID texStage, GXIndTexFormat texFmt,
                       GXIndTexBiasSel biasSel, GXIndTexMtxID mtxID, GXIndTexWrap wrapS,

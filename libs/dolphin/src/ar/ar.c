@@ -1,6 +1,5 @@
-#include "dolphin/os/OS.h"
-#include "dolphin/ar/ar.h"
-#include "dolphin/ar/arq.h"
+#include "dolphin/os.h"
+#include "dolphin/ar.h"
 #include "dolphin/dsp.h"
 
 const char* __ARVersion = "<< Dolphin SDK - AR\trelease build: Sep  5 2002 05:34:27 (0x2301) >>";

@@ -18,7 +18,7 @@
 #include "m_Do/m_Do_graphic.h"
 #include "dolphin/os/OSMessage.h"
 #include "dolphin/base/PPCArch.h"
-#include "dolphin/ai/ai.h"
+#include "dolphin/ai.h"
 #include "JSystem/JAudio/JASAiCtrl.h"
 #include "JSystem/JKernel/JKRExpHeap.h"
 

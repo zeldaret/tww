@@ -1,5 +1,5 @@
 #include "dolphin/card.h"
-#include "dolphin/vi/vi.h"
+#include "dolphin/vi.h"
 #include <string.h>
 
 extern void __CARDDefaultApiCallback(s32 chan, s32 result);

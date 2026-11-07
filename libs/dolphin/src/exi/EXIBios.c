@@ -1,5 +1,5 @@
-#include "dolphin/exi/EXIBios.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/exi.h"
+#include "dolphin/os.h"
 
 extern int __gUnknown800030C0[2] AT_ADDRESS(OS_BASE_CACHED | 0x30C0);
 

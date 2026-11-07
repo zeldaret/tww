@@ -1,7 +1,7 @@
 #ifndef _DOLPHIN_DSP
 #define _DOLPHIN_DSP
 
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "dolphin/types.h"
 #include "dolphin/os/OSUtil.h"
 

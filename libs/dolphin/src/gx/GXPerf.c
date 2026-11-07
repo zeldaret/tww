@@ -1,5 +1,5 @@
 #include "dolphin/gx/GXPerf.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     switch (gx->perf0) {

@@ -1,6 +1,6 @@
 #include "dolphin/gx/GXFifo.h"
-#include "dolphin/gx/GX.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/gx.h"
+#include "dolphin/os.h"
 #include "dolphin/base/PPCArch.h"
 
 static void GXInitFifoLimits(GXFifoObj* fifo, u32 hi_watermark, u32 lo_watermark);

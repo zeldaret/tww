@@ -6,7 +6,7 @@
 
 #include "JSystem/JAudio/JAIBasic.h"
 #include "JSystem/JMath/random.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 
 class JAISound;
 class JKRSolidHeap;

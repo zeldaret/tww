@@ -1,7 +1,7 @@
 #ifndef JPAEXTEXSHAPE_H
 #define JPAEXTEXSHAPE_H
 
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 struct JPAExTexShapeData {
     /* 0x00 */ u32 mFlags;

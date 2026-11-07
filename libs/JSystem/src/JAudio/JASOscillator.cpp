@@ -8,7 +8,7 @@
 #include "JSystem/JAudio/JASOscillator.h"
 #include "JSystem/JAudio/JASDriverIF.h"
 #include "JSystem/JAudio/JASRate.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "dolphin/types.h"
 #include <cmath>
 

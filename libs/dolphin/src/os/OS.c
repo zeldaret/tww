@@ -2,12 +2,12 @@
 // OS
 //
 
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "dolphin/base/PPCArch.h"
-#include "dolphin/db/db.h"
-#include "dolphin/pad/Pad.h"
+#include "dolphin/db.h"
+#include "dolphin/pad.h"
 #include "dolphin/dvd/dvdfs.h"
-#include "dolphin/si/SIBios.h"
+#include "dolphin/si.h"
 #include <string.h>
 // #include "TRK_MINNOW_DOLPHIN/Os/dolphin/dolphin_trk.h"
 

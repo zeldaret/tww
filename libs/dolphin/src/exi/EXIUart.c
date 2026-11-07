@@ -1,5 +1,5 @@
-#include "dolphin/exi/EXIUart.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/exi.h"
+#include "dolphin/os.h"
 
 static s32 Chan;
 static u32 Dev;

@@ -9,7 +9,7 @@
 #include "JSystem/JGeometry.h"
 #include "JSystem/TPosition3.h"
 #include "dolphin/gx/GXStruct.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 
 class JPADynamicsBlock;
 class JPABaseShape;

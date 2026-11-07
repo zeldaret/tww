@@ -2,7 +2,7 @@
 #define JPAMATH_H
 
 #include "JSystem/JGeometry.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 #include "dolphin/types.h"
 
 void JPAGetYZRotateMtx(s16, s16, Mtx);

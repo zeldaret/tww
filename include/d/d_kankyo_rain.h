@@ -2,7 +2,7 @@
 #define D_KANKYO_D_KANKYO_RAIN_H
 
 #include "dolphin/types.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 struct DOUBLE_POS {
     f64 x, y, z;

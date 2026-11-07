@@ -1,6 +1,6 @@
 #include "dolphin/base/PPCArch.h"
-#include "dolphin/db/db.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/db.h"
+#include "dolphin/os.h"
 
 BOOL DBVerbose;
 DBInterface* __DBInterface;

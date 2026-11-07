@@ -8,7 +8,7 @@
 #include "d/actor/d_a_agb.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_stage.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "dolphin/gx/GXEnum.h"
 #include "dolphin/gx/GXInit.h"
 #include "dolphin/gx/GXGeometry.h"

@@ -1,7 +1,7 @@
 #include "dolphin/os/OSInterrupt.h"
 #include "dolphin/dsp.h"
-#include "dolphin/exi/EXIBios.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/exi.h"
+#include "dolphin/os.h"
 #include <string.h>
 
 vu32 __PIRegs[12] AT_ADDRESS(0xCC003000);

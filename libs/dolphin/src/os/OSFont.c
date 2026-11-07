@@ -1,6 +1,6 @@
 #include "dolphin/os/OSFont.h"
-#include "dolphin/os/OS.h"
-#include "dolphin/vi/vi.h"
+#include "dolphin/os.h"
+#include "dolphin/vi.h"
 
 u16 OSGetFontEncode(void) {
     static u16 fontEncode = 0xFFFF;

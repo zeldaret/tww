@@ -2,8 +2,8 @@
 #define _DOLPHIN_GBAPRIV
 
 #include "dolphin/dsp.h"
-#include "dolphin/gba/GBA.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/gba.h"
+#include "dolphin/os.h"
 #include "global.h"
 
 #ifdef __cplusplus

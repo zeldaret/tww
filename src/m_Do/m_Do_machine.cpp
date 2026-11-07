@@ -19,7 +19,7 @@
 #include "SSystem/SComponent/c_math.h"
 #include "dolphin/base/PPCArch.h"
 #include "dolphin/gx/GXStruct.h"
-#include "dolphin/vi/vi.h"
+#include "dolphin/vi.h"
 #include "m_Do/m_Do_DVDError.h"
 #include "m_Do/m_Do_MemCard.h"
 #include "m_Do/m_Do_dvd_thread.h"

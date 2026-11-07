@@ -1,7 +1,7 @@
 #ifndef GFGEOMETRY_H
 #define GFGEOMETRY_H
 
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 void GFSetVtxDescv(GXVtxDescList*);
 void GFSetVtxAttrFmtv(GXVtxFmt, GXVtxAttrFmtList*);

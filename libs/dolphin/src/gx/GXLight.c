@@ -4,7 +4,7 @@
  */
 
 #include "dolphin/gx/GXLight.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "math.h"
 
 void GXInitLightAttn(GXLightObj* obj, f32 a0, f32 a1, f32 a2, f32 k0, f32 k1, f32 k2) {

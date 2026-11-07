@@ -2,7 +2,7 @@
 #define GFTRANSFORM_H
 
 #include "dolphin/gx/GXEnum.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 
 #define CP_MTX_REG_A_ID 0x30
 #define CP_MTX_REG_B_ID 0x40

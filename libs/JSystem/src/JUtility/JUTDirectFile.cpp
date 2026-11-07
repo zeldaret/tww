@@ -6,8 +6,8 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/JUtility/JUTDirectFile.h"
-#include "dolphin/dvd/dvd.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/dvd.h"
+#include "dolphin/os.h"
 #include "global.h"
 
 /* 802CBAD8-802CBBA0       .text fetch32byte__13JUTDirectFileFv */

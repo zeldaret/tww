@@ -15,7 +15,7 @@
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JAudio/osdsp_task.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "global.h"
 
 u8 JASystem::TDSP_DACBuffer::numDSPBuf = 3;

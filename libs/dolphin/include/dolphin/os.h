@@ -3,7 +3,7 @@
 
 #include "stdarg.h"
 #include "dolphin/base/PPCArch.h" // IWYU pragma: export
-#include "dolphin/dvd/dvd.h"
+#include "dolphin/dvd.h"
 
 #include "dolphin/os/OSAlarm.h" // IWYU pragma: export
 #include "dolphin/os/OSAlloc.h" // IWYU pragma: export

@@ -5,7 +5,7 @@
 #include "JSystem/J3DGraphBase/J3DShapeDraw.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/gd/GDGeometry.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "dolphin/types.h"
 
 class J3DShapeMtx;

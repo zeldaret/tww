@@ -1,6 +1,6 @@
 #include "dolphin/dvd/dvdFatal.h"
 #include "dolphin/gx/GXStruct.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 static void (*FatalFunc)();
 

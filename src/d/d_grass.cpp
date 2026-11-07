@@ -15,7 +15,7 @@
 #include "m_Do/m_Do_lib.h"
 #include "m_Do/m_Do_graphic.h"
 #include "SSystem/SComponent/c_counter.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gf.h"
 
 #include "assets/l_K_kusa_00TEX.h"
 const u32 l_K_kusa_00TEX__width = 64;

@@ -2,7 +2,7 @@
 #define C_XYZ_H
 
 #include <cmath> // IWYU pragma: keep
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 
 struct cXy {
     f32 x;

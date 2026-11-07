@@ -13,7 +13,7 @@
 #include "JSystem/JUtility/JUTNameTab.h"
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JKernel/JKRHeap.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802FB758-802FB8A4       .text load__22J3DModelLoaderDataBaseFPCvUl */
 J3DModelData* J3DModelLoaderDataBase::load(const void* i_data, u32 i_flags) {

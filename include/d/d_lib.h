@@ -3,7 +3,7 @@
 
 #include "dolphin/types.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 #include "d/d_bg_s_acch.h"
 #include "dolphin/gx/GXStruct.h"
 #include "JSystem/J3DGraphAnimator/J3DModelData.h"
