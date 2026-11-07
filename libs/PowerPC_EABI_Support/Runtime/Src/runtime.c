@@ -1,4 +1,3 @@
-#include "PowerPC_EABI_Support/Runtime/Inc/runtime.h"
 #include "global.h"
 
 #ifdef __cplusplus
