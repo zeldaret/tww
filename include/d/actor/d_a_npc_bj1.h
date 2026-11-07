@@ -163,7 +163,7 @@ public:
     /* 0x704 */ Mtx field_0x704;
     /* 0x734 */ dNpc_PathRun_c field_0x734;
     /* 0x73C */ dNpc_EventCut_c field_0x73C;
-    /* 0x7A8 */ u32 field_0x7A8;
+    /* 0x7A8 */ u32 mPartnerProcID;
     /* 0x7AC */ cXyz field_0x7AC;
     /* 0x7B8 */ s16 field_0x7B8;
     /* 0x7BA */ s16 field_0x7BA;
@@ -247,7 +247,7 @@ public:
     /* 0x8B3 */ s8 field_0x8B3;
     /* 0x8B4 */ s8 mType;
     /* 0x8B5 */ s8 field_0x8B5;
-    /* 0x8B6 */ u8 field_0x8B6;
+    /* 0x8B6 */ s8 field_0x8B6;
     /* 0x8B7 */ s8 field_0x8B7;
 }; // size 0x8B8;
 

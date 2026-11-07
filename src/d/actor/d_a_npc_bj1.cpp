@@ -1082,25 +1082,57 @@ fopAc_ac_c* daNpc_Bj1_c::searchByID(fpc_ProcID i_procID) {
 }
 
 /* 00002608-000026B8       .text partner_srch_sub__11daNpc_Bj1_cFPFPvPv_Pv */
-bool daNpc_Bj1_c::partner_srch_sub(fpcLyIt_JudgeFunc) {
-    /* Nonmatching */
+bool daNpc_Bj1_c::partner_srch_sub(fpcLyIt_JudgeFunc i_searchFunc) {
+    bool o_retval = false;
+    mPartnerProcID = -1;
+    l_check_wrk = 0;
+    for (int i = 0; i < 20; i++) {
+        l_check_inf[i] = 0;
+    }
+    fpcM_Search(i_searchFunc, this);
+    if (l_check_wrk != 0) {
+        mPartnerProcID = fopAcM_GetID(l_check_inf[0]);
+        o_retval = true;
+    }
+    return o_retval;
 }
 
 /* 000026B8-00002724       .text partner_srch__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::partner_srch() {
-    /* Nonmatching */
+    bool found_partner = false;
+    if (field_0x8B6 == 1) {
+        switch (field_0x8B5) {
+            case 4:
+                found_partner = partner_srch_sub(searchActor_Jb);
+        }
+        if (found_partner) {
+            field_0x8B6++;
+        }
+    }
 }
 
 /* 00002724-000027B0       .text setCollision_SP___11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setCollision_SP_() {
-    static u32 l_chk_tbl[] = { 0x43020000, 40.0f,      0x42C80000, 40.0f,      0x43160000, 40.0f,      0x42C80000, 40.0f,      0x42C80000,
-                               40.0f,      0x43020000, 40.0f,      0x43020000, 40.0f,      0x43020000, 40.0f,      0x43020000, 40.0f };
-    /* Nonmatching */
+    struct l_chk_tbl_c {
+        f32 mH;
+        f32 mR;
+    };
+    static l_chk_tbl_c l_chk_tbl[] = { { 130.0f, 40.0f }, { 100.0f, 40.0f }, { 150.0f, 40.0f }, { 100.0f, 40.0f }, { 100.0f, 40.0f },
+                                       { 130.0f, 40.0f }, { 130.0f, 40.0f }, { 130.0f, 40.0f }, { 130.0f, 40.0f } };
+    mCyl.SetC(current.pos);
+    mCyl.SetR(l_chk_tbl[mType].mR);
+    mCyl.SetH(l_chk_tbl[mType].mH);
+    dComIfG_Ccsp()->Set(&mCyl);
 }
 
 /* 000027B0-00002840       .text set_pthPoint__11daNpc_Bj1_cFUc */
-void daNpc_Bj1_c::set_pthPoint(u8) {
-    /* Nonmatching */
+void daNpc_Bj1_c::set_pthPoint(u8 i_pointIdx) {
+    if (field_0x734.isPath()) {
+        u8 idx = cLib_maxLimit(i_pointIdx, field_0x734.maxPoint());
+        field_0x734.setIdx(idx);
+        current.pos = field_0x734.getPoint(idx);
+        field_0x734.nextIdxAuto();
+    }
 }
 
 /* 00002840-00002988       .text bj_clcFlySpd__11daNpc_Bj1_cFv */
