@@ -237,6 +237,7 @@ cflags_base = [
     "-i libs/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include",
     "-i libs/PowerPC_EABI_Support/Runtime/Inc",
     "-i libs/PowerPC_EABI_Support/MetroTRK",
+    "-i libs/TRK_MINNOW_DOLPHIN/include",
     f"-DVERSION={version_num}",
 ]
 
@@ -1378,7 +1379,8 @@ config.libs = [
     },
     {
         "lib": "TRK_MINNOW_DOLPHIN",
-        "src_dir": "libs",
+        "src_dir": "libs/TRK_MINNOW_DOLPHIN/src",
+        "strip_prefix": "TRK_MINNOW_DOLPHIN/",
         "mw_version": "GC/1.3.2",
         "cflags": cflags_trk,
         "progress_category": "sdk",
