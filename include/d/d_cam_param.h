@@ -433,7 +433,7 @@ public:
     BOOL Change(s32);
     s32 SearchStyle(u32);
     f32 ratiof(f32, f32, f32, f32);
-    BOOL DefaultRadius(f32*);
+    bool DefaultRadius(f32*);
     f32 RadiusRatio(f32);
     f32 CenterHeight(f32);
     f32 Fovy(f32);

@@ -198,7 +198,7 @@ f32 dCamParam_c::ratiof(f32 t, f32 upper, f32 lower, f32 base) {
 }
 
 /* 800AFAA4-800AFB00       .text DefaultRadius__11dCamParam_cFPf */
-BOOL dCamParam_c::DefaultRadius(f32* radius) {
+bool dCamParam_c::DefaultRadius(f32* radius) {
     f32 param13;
     f32 param14;
     f32 min;
@@ -217,15 +217,15 @@ BOOL dCamParam_c::DefaultRadius(f32* radius) {
 
     if (*radius > max) {
         *radius = max;
-        return FALSE;
+        return false;
     }
 
     if (*radius < min) {
         *radius = min;
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /* 800AFB00-800AFB88       .text RadiusRatio__11dCamParam_cFf */
