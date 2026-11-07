@@ -225,6 +225,9 @@ public:
     int PaneTranceCopy(s16, u8, f32, f32, u8, int);
     int PaneTranceErase(s16, u8, f32, f32, u8, int);
     int PaneTranceBack(s16, u8, f32, f32, u8, int);
+#if VERSION == VERSION_PAL
+    int PaneTranceLanguage(s16, u8, f32, f32, f32, f32, u8, int);
+#endif
     void displayInit();
     void setSaveData();
     void changeExtraColor(int);
@@ -243,6 +246,9 @@ public:
     void ExDataSavePaneMoveOk2();
     void ExErrorMsgPaneMove();
     void ExErrorMsgPaneMove2();
+#if VERSION == VERSION_PAL
+    void langSelCurAnimeInit();
+#endif
 
 public:
     /* 0x0000 */ JKRMemArchive* archive;
