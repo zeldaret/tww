@@ -75,7 +75,7 @@ public:
     void setCollision_SP_();
     void set_pthPoint(u8);
     void bj_clcFlySpd();
-    void bj_movPass(bool);
+    u32 bj_movPass(bool);
     void bj_flyMove();
     void bj_clcMovSpd();
     void bj_nMove();
@@ -233,7 +233,7 @@ public:
     /* 0x896 */ u8 padding_0x896[0x898 - 0x896];
     /* 0x898 */ int field_0x898;
     /* 0x89C */ u8 padding_0x89C[0x8A8 - 0x89C];
-    /* 0x8A8 */ u8 field_0x8A8;
+    /* 0x8A8 */ s8 field_0x8A8;
     /* 0x8A9 */ s8 field_0x8A9;
     /* 0x8AA */ u8 field_0x8AA;
     /* 0x8AB */ u8 field_0x8AB;
@@ -257,7 +257,14 @@ public:
         /* 0x00 */ u8 field_0x00[0x12];
         /* 0x12 */ s16 mCalcAngleTarget;
         /* 0x14 */ f32 mAttPosOffsetY;
-        /* 0x14 */ u8 field_0x14[0x64 - 0x18];
+        /* 0x14 */ u8 field_0x14[0x22 - 0x18];
+        /* 0x22 */ s16 mFlyScale;
+        /* 0x24 */ s16 mFlyMaxStep;
+        /* 0x26 */ u8 field_0x26[0x28 - 0x26];
+        /* 0x28 */ f32 field_0x28;
+        /* 0x2C */ f32 field_0x2C;
+        /* 0x30 */ f32 field_0x30;
+        /* 0x34 */ u8 field_0x34[0x64 - 0x34];
     }; // Size: 0x64
 
     daNpc_Bj1_childHIO_c();

@@ -1137,12 +1137,66 @@ void daNpc_Bj1_c::set_pthPoint(u8 i_pointIdx) {
 
 /* 00002840-00002988       .text bj_clcFlySpd__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::bj_clcFlySpd() {
-    /* Nonmatching */
+    switch (field_0x8A8) {
+        case 1:
+            {
+                s16 target = cLib_targetAngleY(&current.pos, &field_0x7D8);
+                cLib_addCalcAngleS(&current.angle.y, target, l_HIO.children[mType].hio_prm.mFlyScale, l_HIO.children[mType].hio_prm.mFlyMaxStep, 0);
+                field_0x848 = (field_0x7D8.y - current.pos.y) > l_HIO.children[mType].hio_prm.field_0x28;
+                f32 spdY = l_HIO.children[mType].hio_prm.field_0x2C;
+                if (field_0x848 == 0) {
+                    spdY *= -1.0f;
+                }
+                cLib_chaseF(&speed.y, spdY, l_HIO.children[mType].hio_prm.field_0x30);
+                break;
+            }
+        case 2:
+            cLib_chaseF(&speed.y, -l_HIO.children[mType].hio_prm.field_0x2C, -l_HIO.children[mType].hio_prm.field_0x30);
+            break;
+        case 3:
+            break;
+    }
+    cLib_chaseF(&speedF, field_0x80C, field_0x814);
 }
 
 /* 00002988-00002B80       .text bj_movPass__11daNpc_Bj1_cFb */
-void daNpc_Bj1_c::bj_movPass(bool) {
-    /* Nonmatching */
+u32 daNpc_Bj1_c::bj_movPass(bool i_param1) {
+    cXyz cmpCoords;
+    cXyz idxCoords;
+    u8 point_idx;
+    u32 ret = 0;
+    f32 dist_xz;
+    if (field_0x734.isPath() && (point_idx = field_0x734.getIdx(), dPath_ChkClose(field_0x734.getPath()))) {
+        if (field_0x734.chkPointPass(current.pos, field_0x734.getDir())) {
+            field_0x734.nextIdxAuto();
+            ret = 1;
+            if (i_param1) {
+                goto block_y;
+            }
+        }
+        return ret;
+    }
+
+    dist_xz = (field_0x7D8 - current.pos).absXZ();
+    if (dist_xz <= field_0x81C) {
+        ret = 1;
+        if (field_0x734.isPath()) {
+            if (!field_0x734.nextIdxAuto()) {
+                ret = 2;
+            }
+        }
+        if (i_param1) {
+            goto block_y;
+        }
+    }
+    return ret;
+
+block_y:
+    u8 idx = field_0x734.getIdx();
+    idxCoords = field_0x734.getPoint(idx);
+    cmpCoords = field_0x734.getPoint(point_idx);
+    field_0x848 = cmpCoords.y <= idxCoords.y;
+    return ret;
 }
 
 /* 00002B80-00002EDC       .text bj_flyMove__11daNpc_Bj1_cFv */
