@@ -1,6 +1,6 @@
-#include "dolphin/gx/GX.h"
-#include "dolphin/os/OS.h"
-#include "dolphin/vi/vi.h"
+#include "dolphin/gx.h"
+#include "dolphin/os.h"
+#include "dolphin/vi.h"
 #include "dolphin/base/PPCArch.h"
 
 char* __GXVersion = "<< Dolphin SDK - GX\trelease build: Sep  5 2002 05:33:28 (0x2301) >>";

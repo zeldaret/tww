@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "JSystem/JHostIO/JOREvent.h"
 #include "JSystem/JSupport/JSUMemoryStream.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 #define MCTX_MSG_RESET 0
 #define MCTX_MSG_GET_ROOT_OBJ 2

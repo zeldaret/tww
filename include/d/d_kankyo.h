@@ -3,7 +3,7 @@
 
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "SSystem/SComponent/c_xyz.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "f_pc/f_pc_base.h"
 #include "global.h"
 

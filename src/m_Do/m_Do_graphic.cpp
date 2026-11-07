@@ -10,7 +10,7 @@
 #include "d/d_drawlist.h"
 #include "d/d_meter.h"
 #include "d/d_s_play.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gf.h"
 #include "f_ap/f_ap_game.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_machine.h"

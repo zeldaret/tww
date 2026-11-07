@@ -1,7 +1,7 @@
 #include "dolphin/os/OSCache.h"
 #include "dolphin/base/PPCArch.h"
-#include "dolphin/db/db.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/db.h"
+#include "dolphin/os.h"
 
 static ASM void DCEnable(void) {
     // clang-format off

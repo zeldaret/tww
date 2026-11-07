@@ -10,8 +10,7 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/J3DGraphBase/J3DVertex.h"
 #include "JSystem/J3DGraphBase/J3DGD.h"
-#include "dolphin/gd/GDBase.h"
-#include "dolphin/gd/GDGeometry.h"
+#include "dolphin/gd.h"
 #include "dolphin/types.h"
 
 /* 802DD18C-802DD1FC       .text initialize__8J3DShapeFv */

@@ -1,7 +1,7 @@
 #ifndef D_DEBUG_VIEWER_H
 #define D_DEBUG_VIEWER_H
 
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "SSystem/SComponent/c_xyz.h"
 #include "SSystem/SComponent/c_sxyz.h"

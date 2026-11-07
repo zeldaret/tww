@@ -1,4 +1,4 @@
-#include "dolphin/pad/Pad.h"
+#include "dolphin/pad.h"
 
 static const PADClampRegion ClampRegion = {
     // Triggers

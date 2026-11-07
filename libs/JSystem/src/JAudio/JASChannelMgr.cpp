@@ -10,7 +10,7 @@
 #include "JSystem/JAudio/JASChannel.h"
 #include "JSystem/JAudio/JASDSPChannel.h"
 #include "JSystem/JAudio/JASChAllocQueue.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 namespace JASystem{
 namespace Driver {

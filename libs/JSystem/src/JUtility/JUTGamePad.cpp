@@ -7,7 +7,7 @@
 
 #include "JSystem/JUtility/JUTGamePad.h"
 #include <cmath>
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 u32 channel_mask[4] = {0x80000000, 0x40000000, 0x20000000, 0x10000000};
 JSUList<JUTGamePad> JUTGamePad::mPadList(false);

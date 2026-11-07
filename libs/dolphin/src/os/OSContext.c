@@ -1,6 +1,6 @@
 #include "dolphin/os/OSContext.h"
-#include "dolphin/db/db.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/db.h"
+#include "dolphin/os.h"
 #include "dolphin/os/OSUtil.h"
 
 volatile OSContext* __OSCurrentContext AT_ADDRESS(OS_BASE_CACHED | 0x00D4);

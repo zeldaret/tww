@@ -12,7 +12,7 @@
 #include "JSystem/JKernel/JKRMemArchive.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_list.h"
-#include "dolphin/dvd/dvd.h"
+#include "dolphin/dvd.h"
 
 OSThread mDoDvdThd::l_thread;
 mDoDvdThdStack mDoDvdThd::l_threadStack;

@@ -7,7 +7,7 @@
 
 #include "JSystem/JSupport/JSUInputStream.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802BF3F4-802BF47C       .text __dt__14JSUInputStreamFv */
 JSUInputStream::~JSUInputStream() {

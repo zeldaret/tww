@@ -11,7 +11,7 @@
 #include "JSystem/JKernel/JKRAram.h"
 #include "JSystem/JUtility/JUTTexture.h"
 #include "dolphin/card.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 #include <string.h>
 #include <stdio.h>

@@ -8,7 +8,7 @@
 #include "JSystem/J3DGraphLoader/J3DAnmLoader.h"
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JSupport/JSupport.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802FEDA0-802FF6C8       .text load__20J3DAnmLoaderDataBaseFPCv */
 J3DAnmBase* J3DAnmLoaderDataBase::load(const void* i_data) {

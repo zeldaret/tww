@@ -9,7 +9,7 @@
 #include "JSystem/JAudio/JASTrack.h"
 #include "JSystem/JAudio/JAISound.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
-#include "dolphin/dvd/dvd.h"
+#include "dolphin/dvd.h"
 
 JASystem::Kernel::TPortCmd JAInter::SystemInterface::systemPortCmd;
 

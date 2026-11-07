@@ -1,5 +1,5 @@
 #include "dolphin/gx/GXFrameBuf.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 GXRenderModeObj GXNtsc480IntDf = {
     VI_TVMODE_NTSC_INT,

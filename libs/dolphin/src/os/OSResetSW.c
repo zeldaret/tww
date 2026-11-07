@@ -1,5 +1,5 @@
 #include "dolphin/os/OSResetSW.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "dolphin/os/OSReset.h"
 
 u8 GameChoice AT_ADDRESS(OS_BASE_CACHED | 0x30E3);

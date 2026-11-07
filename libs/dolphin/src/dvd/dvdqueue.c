@@ -1,5 +1,5 @@
 #include "dolphin/dvd/dvdqueue.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 static struct {
     /* 0x00 */ struct DVDCommandBlock * next;

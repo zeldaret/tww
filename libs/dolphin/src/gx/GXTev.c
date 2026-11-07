@@ -1,5 +1,5 @@
 #include "dolphin/gx/GXTev.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 /* ############################################################################################## */
 static u32 TEVCOpTableST0[] = {

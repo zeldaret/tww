@@ -1,6 +1,6 @@
 #include "stdlib.h"
 #include "global.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include <string.h>
 #include "dolphin/os/__start.h"
 

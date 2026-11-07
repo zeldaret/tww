@@ -12,7 +12,7 @@
 #include "d/d_kankyo_wether.h"
 #include "d/d_s_play.h"
 #include "d/d_stage.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gf.h"
 #include "f_op/f_op_actor_mng.h"
 #include "f_op/f_op_camera.h"
 #include "f_op/f_op_kankyo.h"

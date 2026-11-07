@@ -11,7 +11,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDataHeader.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "dolphin/types.h"
 
 IsLeadByte_func const JUTResFont::saoAboutEncoding_[3] = {

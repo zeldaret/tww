@@ -9,7 +9,7 @@
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "JSystem/J3DGraphBase/J3DTevs.h"
 #include "JSystem/JRenderer/JRenderer.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "global.h"
 
 /* 802D8AA8-802D8B8C       .text __ct__6J3DSysFv */

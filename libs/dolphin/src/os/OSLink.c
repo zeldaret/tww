@@ -1,4 +1,4 @@
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include <string.h>
 
 #define SHN_UNDEF 0

@@ -1,6 +1,6 @@
 #include "dolphin/dvd/dvdfs.h"
 #include "dolphin/dvd/dvdlow.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 struct FSTEntry {
     /* 0x00 */ u32 isDirAndStringOff;

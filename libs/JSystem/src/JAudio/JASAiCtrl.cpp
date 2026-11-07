@@ -13,7 +13,7 @@
 #include "JSystem/JAudio/JASProbe.h"
 #include "JSystem/JAudio/JASRate.h"
 #include "JSystem/JAudio/JASSystemHeap.h"
-#include "dolphin/ai/ai.h"
+#include "dolphin/ai.h"
 #include "dolphin/os/OSCache.h"
 #include "dolphin/os/OSInterrupt.h"
 

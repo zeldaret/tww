@@ -10,7 +10,7 @@
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
 #include "JSystem/JSupport/JSURandomInputStream.h"
 #include "dolphin/gx/GXEnum.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "dolphin/types.h"
 
 /* 802CF8F4-802CF984       .text __ct__7J2DPaneFv */

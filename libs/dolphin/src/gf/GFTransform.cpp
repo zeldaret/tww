@@ -1,6 +1,5 @@
-#include "dolphin/gd/GDBase.h"
-#include "dolphin/gd/GDGeometry.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gd.h"
+#include "dolphin/gf.h"
 
 void GFLoadPosMtxImm(MtxP mtx, u32 id) {
     GFWriteXFCmdHdr(4 * id, 12);

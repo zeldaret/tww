@@ -2,7 +2,7 @@
 #define JPABASESHAPE_H
 
 #include "JSystem/JParticle/JPAEmitter.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 class JKRHeap;
 

@@ -7,7 +7,7 @@
 
 #include "JSystem/J3DGraphBase/J3DGD.h"
 #include "dolphin/types.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802D5F38-802D60B0       .text J3DGDSetGenMode__FUcUcUcUc11_GXCullMode */
 void J3DGDSetGenMode(u8 texGenNum, u8 colorChanNum, u8 tevNum, u8 indTevNum, GXCullMode cull) {

@@ -1,7 +1,7 @@
 #ifndef JRENDERER_H
 #define JRENDERER_H
 
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 void JRNLoadTexCached(GXTexMapID id, u32 addr_even, GXTexCacheSize size_even, u32 addr_odd, GXTexCacheSize size_odd);
 

@@ -10,8 +10,8 @@
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "JSystem/JKernel/JKRStdHeap.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/ar/ar.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/ar.h"
+#include "dolphin/os.h"
 
 u32 JASystem::Kernel::audioDramSize = 0x000C8000;
 JKRSolidHeap* JASDram;

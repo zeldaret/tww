@@ -2,7 +2,7 @@
 #define CARD_H
 
 #include "dolphin/dsp.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,5 +1,5 @@
 #include "dolphin/os/OSMutex.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 #define PushTail(queue, mutex, link)                                                               \
     do {                                                                                           \

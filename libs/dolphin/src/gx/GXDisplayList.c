@@ -4,7 +4,7 @@
  */
 
 #include "dolphin/gx/GXDisplayList.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 void GXCallDisplayList(void* list, u32 nbytes) {
     if (gx->dirtyState != 0) {

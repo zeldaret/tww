@@ -15,7 +15,7 @@
 #include "SSystem/SComponent/c_m3d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gf.h"
 #include "m_Do/m_Do_mtx.h"
 #include "m_Do/m_Do_printf.h"
 

@@ -8,7 +8,7 @@
 #include "d/d_com_inf_game.h"
 #include "d/d_kankyo_rain.h"
 #include "d/actor/d_a_sea.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gf.h"
 #include "f_op/f_op_camera.h"
 #include "m_Do/m_Do_graphic.h"
 #include "m_Do/m_Do_lib.h"

@@ -13,7 +13,7 @@
 #include "d/d_kankyo_wether.h"
 #include "d/d_stage.h"
 #include "m_Do/m_Do_audio.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 80197FE4-80198008       .text dKyeff_Draw__FP8dKyeff_c */
 static BOOL dKyeff_Draw(dKyeff_c* i_this) {

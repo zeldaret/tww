@@ -1,5 +1,5 @@
 #include "dolphin/gx/GXPixel.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 void GXSetFog(GXFogType type, f32 startz, f32 endz, f32 nearz, f32 farz, GXColor color) {
     f32 a, c;

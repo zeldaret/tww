@@ -1,5 +1,5 @@
 #include "dolphin/os/OSMemory.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 #define TRUNC(n, a) (((u32)(n)) & ~((a)-1))
 #define ROUND(n, a) (((u32)(n) + (a)-1) & ~((a)-1))

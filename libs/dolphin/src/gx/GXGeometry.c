@@ -4,7 +4,7 @@
  */
 
 #include "dolphin/gx/GXGeometry.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 void __GXSetDirtyState(void) {
     u32 dirtyFlags = gx->dirtyState;

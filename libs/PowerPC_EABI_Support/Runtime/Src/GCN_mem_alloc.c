@@ -1,5 +1,5 @@
 #include "GCN_mem_alloc.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 inline static void InitDefaultHeap() {
     void* arenaLo;

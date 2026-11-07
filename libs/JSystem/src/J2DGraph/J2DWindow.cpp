@@ -11,7 +11,7 @@
 #include "JSystem/JUtility/JUTPalette.h"
 #include "JSystem/JUtility/JUTResource.h"
 #include "JSystem/JUtility/JUTTexture.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 /* 802D12E0-802D1820       .text __ct__9J2DWindowFP7J2DPaneP20JSURandomInputStream */
 J2DWindow::J2DWindow(J2DPane* param_0, JSURandomInputStream* param_1)

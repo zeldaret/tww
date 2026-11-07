@@ -1,7 +1,6 @@
-#include "dolphin/gx/GX.h"
-#include "dolphin/gd/GDGeometry.h"
-#include "dolphin/gd/GDBase.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/gx.h"
+#include "dolphin/gd.h"
+#include "dolphin/os.h"
 
 void GDSetVtxDescv(GXVtxDescList* attrPtr) {
     u32 nnorms = 0;

@@ -1,5 +1,5 @@
 #include "dolphin/dvd/dvderror.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 static u32 ErrorTable[18] = {
     0x00000000,

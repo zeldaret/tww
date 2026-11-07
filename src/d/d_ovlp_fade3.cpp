@@ -9,7 +9,7 @@
 #include "f_op/f_op_overlap.h"
 #include "f_op/f_op_overlap_mng.h"
 #include "m_Do/m_Do_graphic.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 /* 8022433C-80224390       .text draw__16dDlst_snapShot_cFv */
 void dDlst_snapShot_c::draw() {

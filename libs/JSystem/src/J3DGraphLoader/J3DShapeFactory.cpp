@@ -12,7 +12,7 @@
 #include "JSystem/JSupport/JSupport.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "dolphin/gx/GXAttr.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802FE3A8-802FE458       .text __ct__15J3DShapeFactoryFRC13J3DShapeBlock */
 J3DShapeFactory::J3DShapeFactory(const J3DShapeBlock& block) {

@@ -17,7 +17,7 @@
 #include "string.h"
 #include "dolphin/os/OSCache.h"
 #include "dolphin/os/OSInterrupt.h"
-#include "dolphin/vi/vi.h"
+#include "dolphin/vi.h"
 #include "global.h"
 
 static int JKRDecompressFromDVDToAram(JKRDvdFile*, u32, u32, u32, u32, u32);

@@ -16,7 +16,7 @@
 #include "JSystem/JAudio/JASSystemHeap.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "string.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 const u32 sChannelMax = 2;
 

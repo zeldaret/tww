@@ -24,8 +24,8 @@
 #include "JSystem/J3DGraphBase/J3DSys.h"
 #include "JSystem/JAudio/JAIStreamMgr.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/dvd/dvd.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/dvd.h"
+#include "dolphin/gx.h"
 
 #include "assets/black_tex.h"
 #include "assets/msg_data.h"

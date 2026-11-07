@@ -13,7 +13,7 @@
 #include "JSystem/JKernel/JKRFileCache.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "DynamicLink.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include "string.h"
 
 DynamicModuleControlBase * DMC[fpcNm_MAX_NUM_e];

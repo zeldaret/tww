@@ -1,5 +1,5 @@
 #include "dolphin/gx/GXTransform.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "dolphin/gx/GXInit.h"
 
 static void Copy6Floats(__REGISTER f32 src[6], __REGISTER f32 dst[6]) {

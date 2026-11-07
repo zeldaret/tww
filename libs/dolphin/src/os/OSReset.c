@@ -1,5 +1,5 @@
 #include "dolphin/os/OSReset.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include <string.h>
 
 vu16 __VIRegs[59] AT_ADDRESS(0xCC002000);

@@ -88,6 +88,9 @@ static void PADProbeCallback(s32 chan, u32 error, OSContext* context);
 static void PADTypeAndStatusCallback(s32 chan, u32 type);
 static void PADReceiveCheckCallback(s32 chan, u32 type);
 
+void PADClamp(PADStatus* status);
+void PADClampCircle(PADStatus* status);
+
 extern u32 __PADSpec;
 extern u32 __PADFixBits;
 

@@ -1,3 +1,3 @@
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 void __GXSetRange(f32 nearz, f32 fgSideX) {}

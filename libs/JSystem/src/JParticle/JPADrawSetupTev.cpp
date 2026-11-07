@@ -8,7 +8,7 @@
 #include "JSystem/JParticle/JPADrawSetupTev.h"
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JParticle/JPAExTexShape.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 /* 8026D7B8-8026DBBC       .text setupTev__15JPADrawSetupTevFP12JPABaseShapeP13JPAExTexShape */
 void JPADrawSetupTev::setupTev(JPABaseShape* param_1, JPAExTexShape* param_2) {

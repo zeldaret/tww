@@ -2,7 +2,7 @@
 #define DVDFS_H
 
 #include "dolphin/types.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 extern struct OSThreadQueue __DVDThreadQueue;
 extern u32 __DVDLongFileNameFlag;

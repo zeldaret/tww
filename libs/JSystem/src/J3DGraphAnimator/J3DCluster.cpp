@@ -11,7 +11,7 @@
 #include "JSystem/J3DGraphAnimator/J3DAnimation.h"
 #include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/J3DAssert.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 #include <cmath>
 #include "string.h"
 

@@ -2,7 +2,7 @@
 #define J3DMATERIALFACTORY_H
 
 #include "dolphin/types.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "JSystem/J3DGraphBase/J3DStruct.h"
 
 class J3DMaterial;

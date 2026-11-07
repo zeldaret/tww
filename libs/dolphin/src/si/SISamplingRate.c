@@ -1,6 +1,6 @@
-#include "dolphin/si/SIBios.h"
-#include "dolphin/os/OS.h"
-#include "dolphin/vi/vi.h"
+#include "dolphin/si.h"
+#include "dolphin/os.h"
+#include "dolphin/vi.h"
 
 #define LATENCY 8
 

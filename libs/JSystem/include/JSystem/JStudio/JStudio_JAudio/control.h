@@ -1,7 +1,7 @@
 #ifndef JSTUDIO_JAUDIO_CONTROL_H
 #define JSTUDIO_JAUDIO_CONTROL_H
 
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "JSystem/JStudio/JStudio/jstudio-object.h"
 #include "JSystem/JStage/JSGSystem.h"
 

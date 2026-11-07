@@ -8,9 +8,9 @@
 #include "JSystem/JAudio/JASHardStream.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "string.h"
-#include "dolphin/ai/ai.h"
-#include "dolphin/dvd/dvd.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/ai.h"
+#include "dolphin/dvd.h"
+#include "dolphin/os.h"
 
 JASystem::HardStream::TControl JASystem::HardStream::strCtrl;
 bool JASystem::HardStream::useHardStreaming;

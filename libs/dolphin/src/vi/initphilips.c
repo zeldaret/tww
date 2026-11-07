@@ -1,4 +1,4 @@
-#include "dolphin/vi/vi.h"
+#include "dolphin/vi.h"
 
 static u8 ntscRange0[4] = { 0x00, 0x00, 0x19, 0x1D };
 

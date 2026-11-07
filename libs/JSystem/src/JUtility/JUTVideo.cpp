@@ -8,7 +8,7 @@
 #include "JSystem/JUtility/JUTVideo.h"
 #include "JSystem/JUtility/JUTDirectPrint.h"
 #include "JSystem/JUtility/JUTXfb.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 
 JUTVideo* JUTVideo::sManager;
 OSTick JUTVideo::sVideoLastTick;

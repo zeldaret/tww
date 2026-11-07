@@ -1,7 +1,7 @@
 #ifndef OS_DOLPHIN_GDEV_STUBS_H
 #define OS_DOLPHIN_GDEV_STUBS_H
 
-#include "dolphin/exi/EXIBios.h"
+#include "dolphin/exi.h"
 
 #ifdef __cplusplus
 extern "C" {

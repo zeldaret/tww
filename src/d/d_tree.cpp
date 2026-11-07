@@ -1,7 +1,7 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_tree.h"
 #include "d/actor/d_a_player.h"
-#include "dolphin/gf/GF.h"
+#include "dolphin/gf.h"
 #include "SSystem/SComponent/c_counter.h"
 #include "m_Do/m_Do_lib.h"
 #include "f_op/f_op_overlap_mng.h"

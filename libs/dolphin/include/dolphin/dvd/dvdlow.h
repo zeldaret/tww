@@ -1,7 +1,7 @@
 #ifndef DVDLOW_H
 #define DVDLOW_H
 
-#include "dolphin/dvd/dvd.h" // IWYU pragma: export
+#include "dolphin/dvd.h" // IWYU pragma: export
 #include "dolphin/types.h"
 #include "dolphin/os/OSUtil.h"
 #include "dolphin/os/OSContext.h"

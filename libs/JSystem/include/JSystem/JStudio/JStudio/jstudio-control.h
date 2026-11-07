@@ -3,7 +3,7 @@
 
 #include "JSystem/JStudio/JStudio/fvb.h"
 #include "JSystem/JStudio/JStudio/stb.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "dolphin/mtx.h"
 
 namespace JStudio {

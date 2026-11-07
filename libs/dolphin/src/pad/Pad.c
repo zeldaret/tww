@@ -1,6 +1,6 @@
-#include "dolphin/os/OS.h"
-#include "dolphin/si/SIBios.h"
-#include "dolphin/pad/Pad.h"
+#include "dolphin/os.h"
+#include "dolphin/si.h"
+#include "dolphin/pad.h"
 
 extern u16 __OSWirelessPadFixMode AT_ADDRESS(OS_BASE_CACHED | 0x30E0);
 

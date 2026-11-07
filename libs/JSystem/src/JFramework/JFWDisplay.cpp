@@ -11,8 +11,8 @@
 #include "JSystem/JUtility/JUTConsole.h"
 #include "JSystem/JUtility/JUTDbPrint.h"
 #include "JSystem/JUtility/JUTProcBar.h"
-#include "dolphin/gx/GX.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/gx.h"
+#include "dolphin/os.h"
 #include "global.h"
 
 JFWDisplay* JFWDisplay::sManager = NULL;

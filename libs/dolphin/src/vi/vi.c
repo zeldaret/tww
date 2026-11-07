@@ -1,6 +1,6 @@
-#include "dolphin/os/OS.h"
-#include "dolphin/vi/vi.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/os.h"
+#include "dolphin/vi.h"
+#include "dolphin/gx.h"
 
 const char* __VIVersion = "<< Dolphin SDK - VI\trelease build: Sep  5 2002 05:33:13 (0x2301) >>";
 

@@ -10,8 +10,8 @@
 #include "JSystem/JKernel/JKRDvdFile.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "string.h"
-#include "dolphin/os/OS.h"
-#include "dolphin/vi/vi.h"
+#include "dolphin/os.h"
+#include "dolphin/vi.h"
 #include "global.h"
 
 static int JKRDecompressFromDVD(JKRDvdFile*, void*, u32, u32, u32, u32);

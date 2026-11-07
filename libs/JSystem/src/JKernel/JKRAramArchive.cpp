@@ -17,7 +17,7 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "math.h"
 #include "string.h"
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 /* 802B9FE0-802BA088       .text __ct__14JKRAramArchiveFlQ210JKRArchive15EMountDirection */
 JKRAramArchive::JKRAramArchive(s32 entryNumber, JKRArchive::EMountDirection mountDirection) : JKRArchive(entryNumber, MOUNT_ARAM) {

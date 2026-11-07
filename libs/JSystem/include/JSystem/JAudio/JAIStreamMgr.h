@@ -2,7 +2,7 @@
 #define JAISTREAMMGR_H
 
 #include "JSystem/JAudio/JAISound.h"
-#include "dolphin/dvd/dvd.h"
+#include "dolphin/dvd.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
 #include "JSystem/JAudio/JAISoundParams.h"
 #include "JSystem/JAudio/JASHeapCtrl.h"

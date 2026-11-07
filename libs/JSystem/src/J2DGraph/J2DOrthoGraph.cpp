@@ -6,7 +6,7 @@
 #include "JSystem/JSystem.h" // IWYU pragma: keep
 
 #include "JSystem/J2DGraph/J2DOrthoGraph.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "dolphin/types.h"
 
 /* 802CDB78-802CDBD8       .text __ct__13J2DOrthoGraphFv */

@@ -8,8 +8,8 @@
 #include "JSystem/JUtility/JUTGba.h"
 #include "JSystem/JKernel/JKRThread.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/gba/GBA.h"
-#include "dolphin/si/SIBios.h"
+#include "dolphin/gba.h"
+#include "dolphin/si.h"
 #include "global.h"
 
 typedef struct OSAlarm OSAlarm;

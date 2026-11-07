@@ -14,7 +14,7 @@
 #include "JSystem/JParticle/JPASweepShape.h"
 #include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JGeometry.h"
-#include "dolphin/gx/GX.h"
+#include "dolphin/gx.h"
 #include "dolphin/mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JParticle/JPAExTexShape.h"

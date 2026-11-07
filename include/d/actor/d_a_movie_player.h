@@ -4,7 +4,7 @@
 #include "dolphin/thp.h"
 #include "f_op/f_op_actor.h"
 #include "d/d_drawlist.h"
-#include "dolphin/dvd/dvd.h"
+#include "dolphin/dvd.h"
 
 #if VERSION > VERSION_DEMO
 #ifdef __cplusplus

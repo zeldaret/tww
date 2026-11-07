@@ -1,7 +1,7 @@
 #ifndef DYNAMICLINK_H
 #define DYNAMICLINK_H
 
-#include "dolphin/os/OS.h"
+#include "dolphin/os.h"
 
 class JKRArchive;
 class JKRFileCache;
