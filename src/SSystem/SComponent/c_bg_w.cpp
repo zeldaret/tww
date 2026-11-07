@@ -16,7 +16,7 @@
 #include "JSystem/JKernel/JKRHeap.h"
 #include "m_Do/m_Do_printf.h"
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx.h"
 #include "dolphin/types.h"
 
 /* 80247500-8024754C       .text ASSERT_SOLDHEAP__Fv */

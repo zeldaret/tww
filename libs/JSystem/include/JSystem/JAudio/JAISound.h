@@ -1,7 +1,7 @@
 #ifndef JAISOUND_H
 #define JAISOUND_H
 
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 #include "JSystem/JAudio/JAISequenceMgr.h"
 
 enum JAISoundType {

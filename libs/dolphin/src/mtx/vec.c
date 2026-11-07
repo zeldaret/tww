@@ -1,6 +1,6 @@
 
-#include <dolphin/mtx/vec.h>
 #include <dolphin/os/OS.h>
+#include <dolphin/mtx.h>
 #include <math.h>
 
 void C_VECAdd(const Vec* a, const Vec* b, Vec* ab) {

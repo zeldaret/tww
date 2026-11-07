@@ -3,8 +3,7 @@
 
 #include <cmath> // IWYU pragma: keep
 #include "dolphin/types.h"
-#include "dolphin/mtx/vec.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 
 class cM3dGAab;
 class cM3dGCps;

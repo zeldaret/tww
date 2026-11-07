@@ -1,5 +1,5 @@
 
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 
 extern char l_arcName[];
 

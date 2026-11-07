@@ -1,6 +1,6 @@
 
-#include <dolphin/mtx/mtxvec.h>
 #include <dolphin/os/OS.h>
+#include <dolphin/mtx.h>
 
 void C_MTXMultVec(const Mtx m, const Vec* src, Vec* dst) {
     Vec vTmp;

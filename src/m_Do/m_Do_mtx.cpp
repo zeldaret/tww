@@ -5,7 +5,7 @@
 
 #include "m_Do/machine.h" // IWYU pragma: keep
 #include "m_Do/m_Do_mtx.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_m3d.h"
 #include "SSystem/SComponent/c_math.h"

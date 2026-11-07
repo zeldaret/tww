@@ -6,7 +6,7 @@
 #include "SSystem/SComponent/c_lib.h"
 #include "string.h"
 #include "SSystem/SComponent/c_math.h"
-#include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx.h"
 
 /* 802528A4-802528C4       .text cLib_memCpy__FPvPCvUl */
 void cLib_memCpy(void* dst, const void* src, unsigned long size) {

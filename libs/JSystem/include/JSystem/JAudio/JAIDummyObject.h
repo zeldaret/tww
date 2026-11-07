@@ -1,7 +1,7 @@
 #ifndef JAIDUMMYOBJECT_H
 #define JAIDUMMYOBJECT_H
 
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 
 class JAISound;
 

@@ -2,7 +2,7 @@
 #define J3DSHAPEMTX_H
 
 #include "JSystem/J3DGraphBase/J3DShape.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 
 class J3DShapeMtxImm : public J3DShapeMtx {
 public:

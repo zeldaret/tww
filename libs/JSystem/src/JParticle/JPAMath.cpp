@@ -8,7 +8,7 @@
 #include "JSystem/JParticle/JPAMath.h"
 #include "JSystem/JMath/JMath.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 
 static f32 dummy() {
     return 1.0f;

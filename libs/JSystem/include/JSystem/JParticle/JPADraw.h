@@ -6,7 +6,7 @@
 #include "JSystem/JParticle/JPADrawSetupTev.h"
 #include "dolphin/gx/GXStruct.h"
 #include "dolphin/gx/GXEnum.h"
-#include "dolphin/mtx/mtx.h"
+#include "dolphin/mtx.h"
 #include "global.h"
 
 class JPADrawClipBoard {

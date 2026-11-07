@@ -15,7 +15,7 @@
 #include "JSystem/JAudio/JAISystemInterface.h"
 #include "JSystem/JKernel/JKRSolidHeap.h"
 #include "math.h"
-#include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx.h"
 
 namespace JAISeMgr = JAInter::SeMgr;
 

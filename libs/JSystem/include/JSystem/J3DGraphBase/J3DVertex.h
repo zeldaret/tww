@@ -3,7 +3,7 @@
 
 #include "dolphin/gx/GXAttr.h"
 #include "dolphin/gx/GXStruct.h"
-#include "dolphin/mtx/vec.h"
+#include "dolphin/mtx.h"
 #include "dolphin/types.h"
 
 class J3DModel;

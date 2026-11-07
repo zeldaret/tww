@@ -11,7 +11,7 @@
 #include "JSystem/JParticle/JPAFieldBlock.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx.h"
 
 JPAFieldContainer JPAFieldManager::fc;
 JPAEmitterInfo * JPAFieldData::pEmtrInfo;

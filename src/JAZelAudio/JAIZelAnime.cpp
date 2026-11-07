@@ -1,7 +1,7 @@
 #include "JAZelAudio/JAIZelAnime.h"
 #include "JSystem/JAudio/JAIConst.h"
 #include "JSystem/JAudio/JAIGlobalParameter.h"
-#include "dolphin/mtx/mtxvec.h"
+#include "dolphin/mtx.h"
 #include "m_Do/m_Do_audio.h"
 
 /* 802AC830-802AC888       .text setAnimSound__11JAIZelAnimeFP3VecffUlSc */
