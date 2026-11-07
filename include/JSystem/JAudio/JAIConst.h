@@ -25,6 +25,10 @@ namespace JAInter {
         Vec* field_0x4;
         void* field_0x8;
         u32 field_0xc;
+
+        Vec* get4() {
+            return field_0x4;
+        }
     };
 
     class Camera {

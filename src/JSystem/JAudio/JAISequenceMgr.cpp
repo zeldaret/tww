@@ -34,7 +34,7 @@ void JAInter::SequenceMgr::init() {
     for (u32 i = 0; i < JAIGlobalParameter::getParamSeqControlBufferMax(); i++) {
         SeqParameter* _para = new (JAIBasic::getCurrentJAIHeap(), 0x20) SeqParameter();
         JUT_ASSERT_MSG(47, _para, "JAISequenceMgr::initHeap Cannot Alloc Heap!!\n");
-        seqControl.Buffer[i].setCustomParameterPointer(_para);
+        seqControl.Buffer[i].mCustomParameter = _para;
         _para->seqPan = new (JAIBasic::getCurrentJAIHeap(), 0x20) MoveParaSet[JAIGlobalParameter::getParamSeqParameterLines()];
         JUT_ASSERT_MSG(50, _para->seqPan, "JAISequenceMgr::initHeap Cannot Alloc Heap!!\n");
         _para->seqPitch = new (JAIBasic::getCurrentJAIHeap(), 0x20) MoveParaSet[JAIGlobalParameter::getParamSeqParameterLines()];
