@@ -109,12 +109,12 @@ public:
     bool eMove_JMP_();
     bool eMove_SET_TNE_();
     bool eMove_PTH_MOV_();
-    void event_action();
+    bool event_action();
     void privateCut(int);
     void endEvent();
     void isEventEntry();
     void event_proc(int);
-    void set_action(ActionFunc, void*);
+    BOOL set_action(ActionFunc, void*);
     void setStt(s8);
     BOOL wait_1();
     BOOL wait_2();
@@ -159,7 +159,7 @@ public:
     /* 0x6F0 */ s16 field_0x6F0;
     /* 0x6F2 */ s16 field_0x6F2;
     /* 0x6F4 */ u8 padding_0x6F4[0x6F8 - 0x6F4];
-    /* 0x6F8 */ ActionFunc field_0x6F8;
+    /* 0x6F8 */ ActionFunc mCurrActionFunc;
     /* 0x704 */ Mtx field_0x704;
     /* 0x734 */ dNpc_PathRun_c field_0x734;
     /* 0x73C */ dNpc_EventCut_c field_0x73C;
@@ -235,7 +235,7 @@ public:
     /* 0x8A9 */ s8 field_0x8A9;
     /* 0x8AA */ s8 field_0x8AA;
     /* 0x8AB */ u8 field_0x8AB;
-    /* 0x8AC */ u8 field_0x8AC;
+    /* 0x8AC */ s8 field_0x8AC;
     /* 0x8AD */ u8 field_0x8AD;
     /* 0x8AE */ u8 field_0x8AE;
     /* 0x8AF */ s8 field_0x8AF;
@@ -262,12 +262,17 @@ public:
         /* 0x28 */ f32 field_0x28;
         /* 0x2C */ f32 field_0x2C;
         /* 0x30 */ f32 field_0x30;
-        /* 0x34 */ u8 field_0x34[0x48 - 0x34];
+        /* 0x34 */ f32 field_0x34;
+        /* 0x38 */ f32 field_0x38;
+        /* 0x3C */ u8 field_0x3C[0x48 - 0x3C];
         /* 0x48 */ f32 field_0x48;
         /* 0x4C */ s16 field_0x4C;
         /* 0x4E */ s16 field_0x4E;
         /* 0x50 */ s16 field_0x50;
-        /* 0x38 */ u8 field_0x52[0x64 - 0x52];
+        /* 0x52 */ u8 field_0x52[0x58 - 0x52];
+        /* 0x58 */ f32 field_0x58;
+        /* 0x5C */ f32 field_0x5C;
+        /* 0x60 */ f32 field_0x60;
     }; // Size: 0x64
 
     daNpc_Bj1_childHIO_c();

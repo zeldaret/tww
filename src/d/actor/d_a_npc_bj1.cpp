@@ -1396,8 +1396,22 @@ bool daNpc_Bj1_c::eMove_PTH_MOV_() {
 }
 
 /* 00004678-000046E8       .text event_action__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::event_action() {
-    /* Nonmatching */
+bool daNpc_Bj1_c::event_action() {
+    switch (field_0x8AC) {
+        case 0:
+            return eMove_ATTENTION_();
+        case 2:
+            return eMove_MOV_();
+        case 3:
+            return eMove_JMP_();
+        case 6:
+            return eMove_SET_TNE_();
+        case 8:
+            return eMove_PTH_MOV_();
+        case 9:
+        default:
+            return true;
+    }
 }
 
 /* 000046E8-000047D4       .text privateCut__11daNpc_Bj1_cFi */
@@ -1408,27 +1422,103 @@ void daNpc_Bj1_c::privateCut(int) {
 
 /* 000047D4-000047F4       .text endEvent__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::endEvent() {
-    /* Nonmatching */
+    dComIfGp_event_onEventFlag(8);
+    field_0x8AD = 0xFF;
 }
 
 /* 000047F4-0000482C       .text isEventEntry__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::isEventEntry() {
-    /* Nonmatching */
+    dComIfGp_evmng_getMyStaffId(field_0x73C.getActorName(), NULL, 0);
 }
 
 /* 0000482C-00004914       .text event_proc__11daNpc_Bj1_cFi */
-void daNpc_Bj1_c::event_proc(int) {
-    /* Nonmatching */
+void daNpc_Bj1_c::event_proc(int i_param1) {
+    if (dComIfGp_evmng_endCheck(field_0x826[field_0x82C])) {
+        switch (field_0x82C) {
+            case 0:
+                field_0x8B0 = 1;
+                field_0x842 = 1;
+                break;
+            case 1:
+                field_0x8B0 = 1;
+                field_0x843 = 1;
+                break;
+            case 2:
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2902);
+                break;
+        }
+        endEvent();
+    } else {
+        if (!field_0x73C.cutProc()) {
+            privateCut(i_param1);
+        }
+        lookBack();
+    }
 }
 
 /* 00004914-000049C0       .text set_action__11daNpc_Bj1_cFM11daNpc_Bj1_cFPCvPvPv_iPv */
-void daNpc_Bj1_c::set_action(ActionFunc, void*) {
-    /* Nonmatching */
+BOOL daNpc_Bj1_c::set_action(ActionFunc i_action, void* i_param2) {
+    if (mCurrActionFunc != i_action) {
+        if (mCurrActionFunc) {
+            field_0x8B6 = 9;
+            (this->*mCurrActionFunc)(i_param2);
+        }
+        mCurrActionFunc = i_action;
+        field_0x8B6 = 0;
+        (this->*mCurrActionFunc)(i_param2);
+    }
+    return TRUE;
 }
 
 /* 000049C0-00004B60       .text setStt__11daNpc_Bj1_cFSc */
-void daNpc_Bj1_c::setStt(s8) {
-    /* Nonmatching */
+void daNpc_Bj1_c::setStt(s8 i_status) {
+    s8 status = mStatus;
+    field_0x832 = 0;
+    mStatus = i_status;
+    switch (mStatus) {
+        case 0:
+        case 1:
+        case 7:
+        case 8:
+            break;
+        case 2:
+            if (field_0x8B5 == 4) {
+                daNpc_Bj1_c* partner = (daNpc_Bj1_c*)searchByID(mPartnerProcID);
+                if (partner != NULL) {
+                    field_0x84B = partner->m_jnt.field_0x2A != 0;
+                }
+            }
+            field_0x8AD = 0xFF;
+            field_0x8B3 = 1;
+            field_0x8B2 = status;
+            m_jnt.setTrn();
+            return;
+        case 3:
+            field_0x8B3 = 0;
+            field_0x80C = l_HIO.children[mType].hio_prm.field_0x34;
+            field_0x814 = l_HIO.children[mType].hio_prm.field_0x38;
+            gravity = 0.0f;
+            field_0x849 = 0;
+            field_0x8A8 = 6;
+            setAnm_prp(1);
+            field_0x84C = 1;
+            break;
+        case 4:
+            field_0x8B3 = 1;
+            mHeadOnlyFollow = true;
+            field_0x80C = 0.0f;
+            break;
+        case 5:
+            field_0x834 = 0x5A;
+            break;
+        case 6:
+            field_0x80C = l_HIO.children[mType].hio_prm.field_0x58;
+            field_0x814 = l_HIO.children[mType].hio_prm.field_0x5C;
+            field_0x81C = l_HIO.children[mType].hio_prm.field_0x60;
+            field_0x8AA = 1;
+            break;
+    }
+    setAnm();
 }
 
 /* 00004B60-00004C30       .text wait_1__11daNpc_Bj1_cFv */
