@@ -48,9 +48,9 @@ public:
     void anmAtr(u16);
     void eventOrder();
     void checkOrder();
-    BOOL chk_talk();
-    u32 chk_drct(f32);
-    BOOL chk_partsNotMove();
+    bool chk_talk();
+    bool chk_drct(f32);
+    bool chk_partsNotMove();
     void lookBack();
     bool getMaskInf(u8*);
     bool chkReg(u16);
@@ -186,8 +186,8 @@ public:
     /* 0x82C */ s16 field_0x82C;
     /* 0x82E */ u16 field_0x82E;
     /* 0x830 */ u16 field_0x830;
-    /* 0x832 */ u16 field_0x832;
-    /* 0x834 */ u16 field_0x834;
+    /* 0x832 */ s16 field_0x832;
+    /* 0x834 */ s16 field_0x834;
     /* 0x836 */ u8 padding_0x836[0x838 - 0x836];
     /* 0x838 */ s16 field_0x838;
     /* 0x83A */ s16 field_0x83A;
@@ -262,7 +262,10 @@ public:
         /* 0x28 */ f32 field_0x28;
         /* 0x2C */ f32 field_0x2C;
         /* 0x30 */ f32 field_0x30;
-        /* 0x34 */ u8 field_0x34[0x64 - 0x34];
+        /* 0x34 */ u8 field_0x34[0x4E - 0x34];
+        /* 0x4E */ s16 field_0x4E;
+        /* 0x50 */ s16 field_0x50;
+        /* 0x38 */ u8 field_0x52[0x64 - 0x52];
     }; // Size: 0x64
 
     daNpc_Bj1_childHIO_c();
