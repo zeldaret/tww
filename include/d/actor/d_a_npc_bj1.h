@@ -104,11 +104,11 @@ public:
     void eInit_DEL_TNE_();
     void eInit_SET_ANM_(int*, f32*);
     void event_actionInit(int);
-    void eMove_ATTENTION_();
-    void eMove_MOV_();
-    void eMove_JMP_();
-    void eMove_SET_TNE_();
-    void eMove_PTH_MOV_();
+    bool eMove_ATTENTION_();
+    bool eMove_MOV_();
+    bool eMove_JMP_();
+    bool eMove_SET_TNE_();
+    bool eMove_PTH_MOV_();
     void event_action();
     void privateCut(int);
     void endEvent();
@@ -185,7 +185,7 @@ public:
     /* 0x826 */ s16 field_0x826[3];
     /* 0x82C */ s16 field_0x82C;
     /* 0x82E */ s16 field_0x82E;
-    /* 0x830 */ u16 field_0x830;
+    /* 0x830 */ s16 field_0x830;
     /* 0x832 */ s16 field_0x832;
     /* 0x834 */ s16 field_0x834;
     /* 0x836 */ u8 padding_0x836[0x838 - 0x836];
