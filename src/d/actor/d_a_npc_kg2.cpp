@@ -90,12 +90,12 @@ void daNpc_Kg2_c::checkOrder() {
 }
 
 /* 00000CC4-00000E38       .text getMsg__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::getMsg() {
+u32 daNpc_Kg2_c::getMsg() {
     /* Nonmatching */
 }
 
 /* 00000E38-00001028       .text next_msgStatus__11daNpc_Kg2_cFPUl */
-void daNpc_Kg2_c::next_msgStatus(u32*) {
+u16 daNpc_Kg2_c::next_msgStatus(u32*) {
     /* Nonmatching */
 }
 
@@ -125,8 +125,57 @@ void daNpc_Kg2_c::CreateHeap() {
 }
 
 /* 0000180C-00001A9C       .text CreateInit__11daNpc_Kg2_cFv */
-void daNpc_Kg2_c::CreateInit() {
+int daNpc_Kg2_c::CreateInit() {
     /* Nonmatching */
+    mActorAngle = current.angle;
+
+    attention_info.flags = fopAc_Attn_LOCKON_TALK_e | fopAc_Attn_ACTION_SPEAK_e;
+    attention_info.distances[fopAc_Attn_TYPE_TALK_e] = 0x6E;
+    attention_info.distances[fopAc_Attn_TYPE_SPEAK_e] = 0x6E;
+
+    gravity = -30.0f;
+    setAction(&daNpc_Kg2_c::wait_action, NULL);
+
+    mAttPos = current.pos;
+
+    mStts.Init(0xFF, 0xFF, this);
+    mCyl.Set(l_cyl_src);
+    mCyl.SetStts(&mStts);
+
+    setCollision(60.0f, 150.0f);
+
+    mEventCut.setActorInfo2("Kg2", this);
+    mEventCut.setJntCtrlPtr(&m_jnt);
+
+    field_0x72A[10] = 0;
+    field_0x72A[11] = 0;
+    field_0x72A[12] = 0;
+    field_0x72A[13] = 0;
+
+    field_0x74C = 0;
+
+    m_jnt.mbHeadLock = true;
+    m_jnt.mbBackBoneLock = true;
+
+    field_0x750[0] = 0;
+    field_0x754 = 4;
+
+    mEventIdx[0] = dComIfGp_evmng_getEventIdx("KG2_START_DEMO");
+    mEventIdx[1] = dComIfGp_evmng_getEventIdx("KG2_CLEAR_DEMO");
+    mEventIdx[2] = dComIfGp_evmng_getEventIdx("KG2_GETDEMO");
+    mEventIdx[3] = dComIfGp_evmng_getEventIdx("CANON_GAME");
+    set_mtx();
+
+    if (dComIfGs_getTime() >= 105.0f && dComIfGs_getTime() < 300.0f) {
+        field_0x72A[0xC] = 0;  // field_0x738 = 0
+        setAnm(1, -1.0f);
+    } else {
+        field_0x72A[0xC] = 1;  // field_0x738 = 1
+        setAnm(13, 0.0f);
+    }
+
+    l_kg2_pointer = this;
+    return 1;
 }
 
 /* 00001A9C-00001BDC       .text wait01__11daNpc_Kg2_cFv */
@@ -180,7 +229,7 @@ void daNpc_Kg2_c::processMove() {
 }
 
 /* 00002250-00002334       .text wait_action__11daNpc_Kg2_cFPv */
-void daNpc_Kg2_c::wait_action(void*) {
+int daNpc_Kg2_c::wait_action(void*) {
     /* Nonmatching */
 }
 

@@ -2,13 +2,32 @@
 #define D_A_NPC_KG2_H
 
 #include "f_op/f_op_actor.h"
+#include "d/d_npc.h"
 
-class daNpc_Kg2_c : public fopAc_ac_c {
+class daNpc_Kg2_c : public fopNpc_npc_c {
 public:
+    typedef int (daNpc_Kg2_c::*ActionFunc)(void*);
+
+    enum ActionStatus {
+        ACTION_STARTING = 0,
+        ACTION_ONGOING  = 1,
+        ACTION_ENDING   = -1,
+    };
+
     void getAttentionBasePos() {}
     void getEyePos() {}
     void seStart(u32) {}
-    void setAction(int (daNpc_Kg2_c::*)(void*), void*) {}
+    void setAction(ActionFunc func, void* arg) {
+        if (mCurrActionFunc != func) {
+            if (mCurrActionFunc) {
+                mActionStatus = ACTION_ENDING;
+                (this->*mCurrActionFunc)(arg);
+            }
+            mCurrActionFunc = func;
+            mActionStatus = ACTION_STARTING;
+            (this->*mCurrActionFunc)(arg);
+        }
+    }
     static void setCanonGameResult(u8 result) { canon_game_result = result; }
 
     void set_mtx();
@@ -19,13 +38,13 @@ public:
     void chkAttention(cXyz, s16);
     void eventOrder();
     void checkOrder();
-    void getMsg();
-    void next_msgStatus(u32*);
+    u32 getMsg();
+    u16 next_msgStatus(u32*);
     void anmAtr(u16);
     void setAttention();
     void lookBack();
     void CreateHeap();
-    void CreateInit();
+    int CreateInit();
     void wait01();
     void talk01();
     void evn_setAnm_init(int);
@@ -36,7 +55,7 @@ public:
     void evn_createItem_init(int);
     void privateCut();
     void processMove();
-    void wait_action(void*);
+    int wait_action(void*);
     void event_wait_action(void*);
     cPhs_State _create();
     BOOL _delete();
@@ -51,8 +70,23 @@ public:
     static daNpc_Kg2_c* l_kg2_pointer;
 
 public:
-    /* Place member variables here */
-};
+    /* 0x6C4 */ u8 field_0x6C4[0x6C8 - 0x6C4];
+    /* 0x6C8 */ request_of_phase_process_class mPhase;
+    /* 0x6D0 */ u8 field_0x6D0[0x708 - 0x6D0];
+    /* 0x708 */ cXyz mAttPos;
+    /* 0x714 */ u8 field_0x714[0x724 - 0x714];
+    /* 0x724 */ csXyz mActorAngle;
+    /* 0x72A */ u8 field_0x72A[0x73C - 0x72A];
+    /* 0x73C */ ActionFunc mCurrActionFunc;
+    /* 0x748 */ u8 field_0x748[0x74C - 0x748];
+    /* 0x74C */ int field_0x74C;
+    /* 0x750 */ u8 field_0x750[0x754 - 0x750];
+    /* 0x754 */ u32 field_0x754;
+    /* 0x758 */ u16 mEventIdx[4];
+    /* 0x760 */ u8 field_0x760[0x763 - 0x760];
+    /* 0x763 */ s8 mActionStatus;
+};  // Size: 0x764
+
 
 class daNpc_Kg2_HIO_c {
 public:
