@@ -231,13 +231,31 @@ void daNpc_Kg2_c::processMove() {
 
 /* 00002250-00002334       .text wait_action__11daNpc_Kg2_cFPv */
 int daNpc_Kg2_c::wait_action(void*) {
-    /* Nonmatching */
+    if (mActionStatus == 0) {
+        field_0x760 = 1;
+        mActionStatus += 1;
+    } else if (mActionStatus != -1) {
+        s16 local_1 = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
+        field_0x72C = chkAttention(current.pos, local_1);
+        field_0x750[0] = 0;
+        switch(field_0x760) {
+            case 1:
+                wait01();
+                break;
+            case 2:
+                talk01();
+                break;
+        }
+        lookBack();
+        setAttention();
+    }
+    return 1;
 }
 
 /* 00002334-00002590       .text event_wait_action__11daNpc_Kg2_cFPv */
 u32 daNpc_Kg2_c::event_wait_action(void*) {
     if (mActionStatus == 0) {
-        field_0x760[0] = 1;
+        field_0x760 = 1;
         mActionStatus += 1;
     } else if (mActionStatus != -1) {
         s16 local_1 = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
