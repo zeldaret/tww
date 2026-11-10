@@ -35,7 +35,7 @@ public:
     void playTexPatternAnm();
     void setAnm(s8, f32);
     void subAnm();
-    void chkAttention(cXyz, s16);
+    BOOL chkAttention(cXyz, s16);
     void eventOrder();
     void checkOrder();
     u32 getMsg();
@@ -56,7 +56,7 @@ public:
     void privateCut();
     void processMove();
     int wait_action(void*);
-    void event_wait_action(void*);
+    u32 event_wait_action(void*);
     cPhs_State _create();
     BOOL _delete();
     BOOL _execute();
@@ -66,7 +66,7 @@ public:
         canon_game_result = 0;
     }
 
-    static s8 canon_game_result;
+    static u8 canon_game_result;
     static daNpc_Kg2_c* l_kg2_pointer;
 
 public:
@@ -82,15 +82,17 @@ public:
     /* 0x708 */ cXyz mAttPos;
     /* 0x714 */ u8 field_0x714[0x724 - 0x714];
     /* 0x724 */ csXyz mActorAngle;
-    /* 0x72A */ u8 field_0x72A[0x737 - 0x72A];
+    /* 0x72A */ u8 field_0x72A[0x72C - 0x72A];
+    /* 0x72C */ u8 field_0x72C;
+    /* 0x72D */ u8 field_0x72D[0x737 - 0x72D];
     /* 0x737 */ u8 field_0x737;
     /* 0x738 */ u8 field_0x738[0x73C - 0x738];
     /* 0x73C */ ActionFunc mCurrActionFunc;
     /* 0x748 */ u8 field_0x748[0x74C - 0x748];
     /* 0x74C */ int field_0x74C;
     /* 0x750 */ u8 field_0x750[0x754 - 0x750];
-    /* 0x754 */ u32 field_0x754;
-    /* 0x758 */ u16 mEventIdx[4];
+    /* 0x754 */ s32 mEventIdx;
+    /* 0x758 */ s16 mEventIdTable[4];
     /* 0x760 */ u8 field_0x760[0x763 - 0x760];
     /* 0x763 */ s8 mActionStatus;
 };  // Size: 0x764

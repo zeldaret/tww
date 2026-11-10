@@ -76,7 +76,7 @@ void daNpc_Kg2_c::subAnm() {
 }
 
 /* 000009E8-00000B3C       .text chkAttention__11daNpc_Kg2_cF4cXyzs */
-void daNpc_Kg2_c::chkAttention(cXyz, short) {
+BOOL daNpc_Kg2_c::chkAttention(cXyz, short) {
     /* Nonmatching */
 }
 
@@ -159,12 +159,12 @@ int daNpc_Kg2_c::CreateInit() {
     m_jnt.mbBackBoneLock = true;
 
     field_0x750[0] = 0;
-    field_0x754 = 4;
+    mEventIdx = 4;
 
-    mEventIdx[0] = dComIfGp_evmng_getEventIdx("KG2_START_DEMO");
-    mEventIdx[1] = dComIfGp_evmng_getEventIdx("KG2_CLEAR_DEMO");
-    mEventIdx[2] = dComIfGp_evmng_getEventIdx("KG2_GETDEMO");
-    mEventIdx[3] = dComIfGp_evmng_getEventIdx("CANON_GAME");
+    mEventIdTable[0] = dComIfGp_evmng_getEventIdx("KG2_START_DEMO");
+    mEventIdTable[1] = dComIfGp_evmng_getEventIdx("KG2_CLEAR_DEMO");
+    mEventIdTable[2] = dComIfGp_evmng_getEventIdx("KG2_GETDEMO");
+    mEventIdTable[3] = dComIfGp_evmng_getEventIdx("CANON_GAME");
     set_mtx();
 
     if (dComIfGs_getTime() >= 105.0f && dComIfGs_getTime() < 300.0f) {
@@ -235,8 +235,45 @@ int daNpc_Kg2_c::wait_action(void*) {
 }
 
 /* 00002334-00002590       .text event_wait_action__11daNpc_Kg2_cFPv */
-void daNpc_Kg2_c::event_wait_action(void*) {
-    /* Nonmatching */
+u32 daNpc_Kg2_c::event_wait_action(void*) {
+    if (mActionStatus == 0) {
+        field_0x760[0] = 1;
+        mActionStatus += 1;
+    } else if (mActionStatus != -1) {
+        s16 local_1 = current.angle.y + m_jnt.getHead_y() + m_jnt.getBackbone_y();
+        field_0x72C = chkAttention(current.pos, local_1);
+        lookBack();
+        setAttention();
+
+        if (dComIfGp_evmng_endCheck(mEventIdTable[mEventIdx])) {
+            if (mEventIdx == 0) {
+                field_0x750[0] = 3;
+                mEventIdx = 3;
+            } else if (mEventIdx == 3) {
+                if (canon_game_result == 1) {
+                    field_0x750[0] = 3;
+                    mEventIdx = 1;
+                } else {
+                    field_0x750[0] = 1;
+                    field_0x74C = 0x314E;
+                }
+            } else if (mEventIdx == 1) {
+                field_0x750[0] = 3;
+                mEventIdx = 2;
+                u8 local_2 = cLib_maxLimit(dComIfGs_getEventReg(dSv_event_flag_c::UNK_B703) + 1, 3);
+                dComIfGs_setEventReg(dSv_event_flag_c::UNK_B703, local_2);
+            } else if (mEventIdx == 2) {
+                field_0x750[0] = 1;
+                field_0x74C = 0x315A;
+            } else {
+                mEventIdx = 4;
+            }
+
+            dComIfGp_event_reset();
+            setAction(&daNpc_Kg2_c::wait_action, NULL);
+        }
+    }
+    return 1;
 }
 
 /* 00002590-000027BC       .text _create__11daNpc_Kg2_cFv */
