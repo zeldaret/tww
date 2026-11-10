@@ -1241,7 +1241,18 @@ void daNpc_Bj1_c::flwPrtcl_danceLR() {
 
 /* 00003484-000034D8       .text delPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::delPrtcl_danceLR() {
-    /* Nonmatching */
+    JPABaseEmitter* emitter = field_0x88C;
+    if (emitter != NULL) {
+        emitter->setMaxFrame(-1);
+        emitter->setStatus(JPAEmtrStts_StopEmit);
+        field_0x88C = NULL;
+    }
+    emitter = field_0x890;
+    if (emitter != NULL) {
+        emitter->setMaxFrame(-1);
+        emitter->setStatus(JPAEmtrStts_StopEmit);
+        field_0x890 = NULL;
+    }
 }
 
 /* 000034D8-00003594       .text setPrtcl_peraProOpen__11daNpc_Bj1_cFv */
@@ -1255,8 +1266,15 @@ void daNpc_Bj1_c::createSeed() {
 }
 
 /* 00003774-000037E4       .text deleteSeed__11daNpc_Bj1_cFv */
-void daNpc_Bj1_c::deleteSeed() {
-    /* Nonmatching */
+BOOL daNpc_Bj1_c::deleteSeed() {
+    for (int i = 0; i < 4; i++) {
+        fopAc_ac_c* actor = searchByID(field_0x898[i]);
+        if (actor != NULL) {
+            field_0x898[i] = -1;
+            fopAcM_delete(actor);
+        }
+    }
+    return TRUE;
 }
 
 /* 000037E4-00003998       .text charDecide__11daNpc_Bj1_cFi */
@@ -1270,23 +1288,53 @@ void daNpc_Bj1_c::eInit_setLocFlag(int*) {
 }
 
 /* 000039DC-00003A14       .text eInit_setShapeAngleY__11daNpc_Bj1_cFPis */
-void daNpc_Bj1_c::eInit_setShapeAngleY(int*, s16) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_setShapeAngleY(int* i_param1, s16 i_param2) {
+    field_0x846 = false;
+    if (i_param1 == NULL) {
+        return;
+    }
+    field_0x846 = *i_param1 == 1;
+    if (!field_0x846) {
+        return;
+    }
+    shape_angle.y = i_param2;
 }
 
 /* 00003A14-00003A30       .text eInit_setEvTimer__11daNpc_Bj1_cFPi */
-void daNpc_Bj1_c::eInit_setEvTimer(int*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_setEvTimer(int* i_param1) {
+    field_0x830 = 0;
+    if (i_param1 != NULL) {
+        field_0x830 = *i_param1;
+    }
 }
 
 /* 00003A30-00003B10       .text eInit_calcRelativPos__11daNpc_Bj1_cFP4cXyzPi */
-void daNpc_Bj1_c::eInit_calcRelativPos(cXyz*, int*) {
-    /* Nonmatching */
+cXyz daNpc_Bj1_c::eInit_calcRelativPos(cXyz* i_pos, int* i_angle) {
+    s16 angleY;
+    if (i_angle) {
+        angleY = shape_angle.y + (s16)*i_angle;
+    } else {
+        angleY = shape_angle.y;
+    }
+    cXyz local_1c;
+    cXyz local_28;
+    if (i_pos) {
+        local_1c.set(i_pos->x, i_pos->y, i_pos->z);
+    } else {
+        local_1c.set(0.0f, 0.0f, 0.0f);
+    }
+    mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
+    mDoMtx_stack_c::YrotM(angleY);
+    mDoMtx_stack_c::multVec(&local_1c, &local_28);
+    return local_28;
 }
 
 /* 00003B10-00003B20       .text eInit_prmFloat__11daNpc_Bj1_cFPff */
-void daNpc_Bj1_c::eInit_prmFloat(f32*, f32) {
-    /* Nonmatching */
+f32 daNpc_Bj1_c::eInit_prmFloat(f32* i_param1, f32 i_param2) {
+    if (i_param1 != NULL) {
+        return *i_param1;
+    }
+    return i_param2;
 }
 
 /* 00003B20-00003D3C       .text eInit_ATTENTION___11daNpc_Bj1_cFPiPiPiP4cXyzPiPiPi */

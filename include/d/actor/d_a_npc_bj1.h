@@ -87,13 +87,13 @@ public:
     void delPrtcl_danceLR();
     void setPrtcl_peraProOpen();
     void createSeed();
-    void deleteSeed();
+    BOOL deleteSeed();
     void charDecide(int);
     void eInit_setLocFlag(int*);
     void eInit_setShapeAngleY(int*, s16);
     void eInit_setEvTimer(int*);
-    void eInit_calcRelativPos(cXyz*, int*);
-    void eInit_prmFloat(f32*, f32);
+    cXyz eInit_calcRelativPos(cXyz*, int*);
+    f32 eInit_prmFloat(f32*, f32);
     void eInit_ATTENTION_(int*, int*, int*, cXyz*, int*, int*, int*);
     void eInit_PLYER_MOV_1_();
     void eInit_MOV_(f32*, f32*, f32*, int*);
@@ -201,7 +201,7 @@ public:
     /* 0x843 */ u8 field_0x843;
     /* 0x844 */ u8 field_0x844;
     /* 0x845 */ u8 field_0x845;
-    /* 0x846 */ u8 field_0x846;
+    /* 0x846 */ bool field_0x846;
     /* 0x847 */ u8 field_0x847;
     /* 0x848 */ u8 field_0x848;
     /* 0x849 */ u8 field_0x849;
@@ -229,8 +229,7 @@ public:
     /* 0x890 */ JPABaseEmitter* field_0x890;
     /* 0x894 */ s16 field_0x894;
     /* 0x896 */ u8 padding_0x896[0x898 - 0x896];
-    /* 0x898 */ int field_0x898;
-    /* 0x89C */ u8 padding_0x89C[0x8A8 - 0x89C];
+    /* 0x898 */ fpc_ProcID field_0x898[4];
     /* 0x8A8 */ s8 field_0x8A8;
     /* 0x8A9 */ s8 field_0x8A9;
     /* 0x8AA */ s8 field_0x8AA;
