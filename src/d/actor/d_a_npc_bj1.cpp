@@ -1278,13 +1278,24 @@ BOOL daNpc_Bj1_c::deleteSeed() {
 }
 
 /* 000037E4-00003998       .text charDecide__11daNpc_Bj1_cFi */
-void daNpc_Bj1_c::charDecide(int) {
+bool daNpc_Bj1_c::charDecide(int) {
     /* Nonmatching */
 }
 
 /* 00003998-000039DC       .text eInit_setLocFlag__11daNpc_Bj1_cFPi */
-void daNpc_Bj1_c::eInit_setLocFlag(int*) {
-    /* Nonmatching */
+void daNpc_Bj1_c::eInit_setLocFlag(int* i_param1) {
+    mHeadOnlyFollow = false;
+    if (i_param1 == NULL) {
+        return;
+    }
+    switch (*i_param1) {
+        case 2:
+            m_jnt.setTrn();
+            break;
+        case 1:
+            mHeadOnlyFollow = true;
+            break;
+    }
 }
 
 /* 000039DC-00003A14       .text eInit_setShapeAngleY__11daNpc_Bj1_cFPis */
@@ -1999,8 +2010,27 @@ static BOOL CheckCreateHeap(fopAc_ac_c* i_this) {
 
 /* 000061C4-000062E4       .text _create__11daNpc_Bj1_cFv */
 cPhs_State daNpc_Bj1_c::_create() {
-    static u32 a_size_tbl[] = { 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0, 0x000272E0 };
-    /* Nonmatching */
+    static u32 a_size_tbl[] = { 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0, 0x272E0 };
+
+    fopAcM_ct_Retail(this, daNpc_Bj1_c);
+    cPhs_State state = dComIfG_resLoad(&field_0x6C4, "Bj");
+    if (state != cPhs_COMPLEATE_e) {
+        return state;
+    }
+    if (!charDecide(fopAcM_GetParam(this) & 0xFF)) {
+        return cPhs_ERROR_e;
+    }
+
+    if (!fopAcM_entrySolidHeap(this, CheckCreateHeap, a_size_tbl[mType])) {
+        return cPhs_ERROR_e;
+    }
+    fopAcM_SetMtx(this, mpMorf->getModel()->getBaseTRMtx());
+    fopAcM_setCullSizeBox(this, -50.0, -20.0, -50.0, 50.0, 160.0, 50.0);
+    if (!createInit()) {
+        return cPhs_ERROR_e;
+    }
+
+    return state;
 }
 
 /* 00006734-00006A00       .text create_Anm__11daNpc_Bj1_cFv */
