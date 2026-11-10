@@ -7,6 +7,7 @@
 #include "d/actor/d_a_npc_kg2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
+#include "d/d_snap.h"
 
 static dCcD_SrcCyl l_cyl_src = {
     // dCcD_SrcGObjInf
@@ -256,6 +257,44 @@ BOOL daNpc_Kg2_c::_execute() {
 /* 00002D14-00002E74       .text _draw__11daNpc_Kg2_cFv */
 BOOL daNpc_Kg2_c::_draw() {
     /* Nonmatching */
+    J3DModel* morf_model = mpMorf->getModel();
+    J3DModelData* model_data = morf_model->getModelData();
+
+    g_env_light.settingTevStruct(TEV_TYPE_ACTOR, &current.pos, &tevStr);
+    g_env_light.setLightTevColorType(morf_model, &tevStr);
+    mBtpAnm.entry(model_data, field_0x704);
+    mpMorf->entryDL();
+    model_data->getMaterialTable().removeTexNoAnimator(mBtpAnm.getBtpAnm());
+
+    if (field_0x72A[0xB] != NULL) {
+        model_data = field_0x6D4->getModelData();
+        g_env_light.setLightTevColorType(field_0x6D4, &tevStr);
+        field_0x6D8.entry(model_data, field_0x737);
+        mDoExt_modelUpdateDL(field_0x6D4);
+        model_data->getMaterialTable().removeTexNoAnimator(mBtpAnm.getBtpAnm());
+    }
+
+    cXyz shadow_pos(
+        current.pos.z,
+        current.pos.y + 150.0f,
+        current.pos.x
+    );
+
+    mShadowId = dComIfGd_setShadow(
+        mShadowId,
+        1,
+        mpMorf->getModel(),
+        &shadow_pos,
+        800.0f,
+        20.0f,
+        current.pos.y,
+        mObjAcch.GetGroundH(),
+        mObjAcch.m_gnd,
+        &tevStr
+    );
+
+    dSnap_RegistFig(DSNAP_TYPE_NPC_KG2, this, current.pos, current.angle.y, 1.0f, 1.0f, 1.0f);
+    return true;
 }
 
 /* 00002E74-00002E94       .text daNpc_Kg2_Create__FP10fopAc_ac_c */
