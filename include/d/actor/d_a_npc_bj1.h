@@ -76,7 +76,7 @@ public:
     void set_pthPoint(u8);
     void bj_clcFlySpd();
     u32 bj_movPass(bool);
-    void bj_flyMove();
+    bool bj_flyMove();
     void bj_clcMovSpd();
     void bj_nMove();
     void setPrtcl_drugPot_1();
@@ -86,7 +86,7 @@ public:
     void flwPrtcl_danceLR();
     void delPrtcl_danceLR();
     void setPrtcl_peraProOpen();
-    void createSeed();
+    BOOL createSeed();
     BOOL deleteSeed();
     bool charDecide(int);
     void eInit_setLocFlag(int*);
@@ -204,7 +204,7 @@ public:
     /* 0x846 */ bool field_0x846;
     /* 0x847 */ u8 field_0x847;
     /* 0x848 */ u8 field_0x848;
-    /* 0x849 */ u8 field_0x849;
+    /* 0x849 */ bool field_0x849;
     /* 0x84A */ u8 field_0x84A;
     /* 0x84B */ u8 field_0x84B;
     /* 0x84C */ u8 field_0x84C;
@@ -254,7 +254,8 @@ public:
         /* 0x00 */ u8 field_0x00[0x12];
         /* 0x12 */ s16 mCalcAngleTarget;
         /* 0x14 */ f32 mAttPosOffsetY;
-        /* 0x14 */ u8 field_0x14[0x22 - 0x18];
+        /* 0x14 */ u8 field_0x14[0x20 - 0x18];
+        /* 0x20 */ s16 field_0x20;
         /* 0x22 */ s16 mFlyScale;
         /* 0x24 */ s16 mFlyMaxStep;
         /* 0x26 */ u8 field_0x26[0x28 - 0x26];
@@ -263,12 +264,17 @@ public:
         /* 0x30 */ f32 field_0x30;
         /* 0x34 */ f32 field_0x34;
         /* 0x38 */ f32 field_0x38;
-        /* 0x3C */ u8 field_0x3C[0x48 - 0x3C];
+        /* 0x3C */ f32 field_0x3C;
+        /* 0x40 */ s16 field_0x40;
+        /* 0x42 */ s16 field_0x42;
+        /* 0x44 */ u8 field_0x44[0x46 - 0x44];
+        /* 0x46 */ s16 field_0x46;
         /* 0x48 */ f32 field_0x48;
         /* 0x4C */ s16 field_0x4C;
         /* 0x4E */ s16 field_0x4E;
         /* 0x50 */ s16 field_0x50;
-        /* 0x52 */ u8 field_0x52[0x58 - 0x52];
+        /* 0x52 */ u8 field_0x52[0x54 - 0x52];
+        /* 0x54 */ f32 field_0x54;
         /* 0x58 */ f32 field_0x58;
         /* 0x5C */ f32 field_0x5C;
         /* 0x60 */ f32 field_0x60;
