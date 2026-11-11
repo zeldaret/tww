@@ -182,6 +182,33 @@ int daNpc_Kg2_c::CreateInit() {
 /* 00001A9C-00001BDC       .text wait01__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::wait01() {
     /* Nonmatching */
+    if (dComIfGs_getTime() >= 105.0f && dComIfGs_getTime() < 300.0f) {
+        if (field_0x738[0] == 1) {
+            field_0x738[0] = 0;
+            setAnm(12, -1.0f);
+            field_0x748[0] = 0;
+            initTexPatternAnm(true);
+        }
+    } else if (field_0x738[0] == 0) {
+        field_0x738[0] = 1;
+        setAnm(13, -1.0f);
+        field_0x748[0] = 0;
+        initTexPatternAnm(true);
+    }
+
+    if (field_0x72D[0] != 0) {
+        field_0x760 = 2;
+        return;
+    }
+
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+    f32 delta = std::fabsf(current.pos.y - player->current.pos.y);
+    if (field_0x72C != 0 && delta < 50.0f) {
+        if (field_0x749 != 13 && field_0x749 != 12) {
+            field_0x750[0] = 2;
+        }
+    }
+    return;
 }
 
 /* 00001BDC-00001CA4       .text talk01__11daNpc_Kg2_cFv */
