@@ -7,6 +7,7 @@
 #include "d/actor/d_a_npc_kg2.h"
 #include "m_Do/m_Do_ext.h"
 #include "d/d_cc_d.h"
+#include "d/d_lib.h"
 #include "d/d_snap.h"
 
 static dCcD_SrcCyl l_cyl_src = {
@@ -96,8 +97,86 @@ u32 daNpc_Kg2_c::getMsg() {
 }
 
 /* 00000E38-00001028       .text next_msgStatus__11daNpc_Kg2_cFPUl */
-u16 daNpc_Kg2_c::next_msgStatus(u32*) {
-    /* Nonmatching */
+u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
+    u16 temp = 0xF;
+    switch (*pMsgNo) {
+        case 0x3140:
+        case 0x3145:
+        case 0x3146:
+        case 0x3147:
+        case 0x3148:
+        case 0x314C:
+        case 0x314E:
+        case 0x3150:
+        case 0x3152:
+        case 0x3154:
+        case 0x3156:
+        case 0x3158:
+            *pMsgNo += 1;
+            break;
+        case 0x314D:
+            *pMsgNo = 0x3147;
+            break;
+        case 0x3139:
+            if (dComIfGs_getEventReg(dSv_event_flag_c::UNK_B703) == 0) {
+                *pMsgNo = 0x313E;
+            } else if ((s32)dLib_getIplDaysFromSaveTime() < 4) {
+                *pMsgNo = 0x313B;
+            } else {
+                if (dComIfGs_isTmpBit(dSv_event_flag_c::UNK_0102)) {
+                    *pMsgNo = 0x313C;
+                } else {
+                    dComIfGs_onTmpBit(dSv_event_flag_c::UNK_0102);
+                    *pMsgNo = 0x313D;
+                }
+            }
+            break;
+        case 0x3149:
+            if (mpCurrMsg->mSelectNum == 0) {
+                dComIfGs_onEventBit(dSv_event_flag_c::UNK_2508);
+                field_0x72D[8] = 1;
+                *pMsgNo = 0x314B;
+            } else {
+                *pMsgNo = 0x314A;
+            }
+            break;
+        case 0x314A:
+            *pMsgNo = 0x3148;
+            break;
+        case 0x313A:
+        case 0x313B:
+        case 0x313C:
+        case 0x313D:
+        case 0x313E:
+            *pMsgNo = 0x313F;
+            break;
+        case 0x313F:
+        case 0x314F:
+            if (mpCurrMsg->mSelectNum == 0) {
+                if (dComIfGs_getRupee() < 50) {
+                    *pMsgNo = 0x3143;
+                } else {
+                    dComIfGp_setItemRupeeCount(-50);
+                    dComIfGp_setAStatusForce(25);
+                    *pMsgNo = 0x3144;
+                }
+            } else {
+                *pMsgNo = 0x3142;
+            }
+            break;
+        case 0x3141:
+            if (field_0x72D[7] == 0) {
+                field_0x72D[7] = 1;
+                *pMsgNo = 0x3139;
+            } else {
+                *pMsgNo = 0x313A;
+            }
+            break;
+        default:
+            temp = 0x10;
+            break;
+    }
+    return temp;
 }
 
 /* 00001028-000012EC       .text anmAtr__11daNpc_Kg2_cFUs */
