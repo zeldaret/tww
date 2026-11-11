@@ -1223,11 +1223,11 @@ bool daNpc_Bj1_c::bj_flyMove() {
         case 1:
             {
                 bj_clcFlySpd();
-                s32 pass = bj_movPass(true);
-                if (pass < 3) {
-                    if (pass < 1) {
+                switch (bj_movPass(true)) {
+                    case 1:
+                    case 2:
                         field_0x849 = 1;
-                    }
+                        break;
                 }
                 break;
             }
