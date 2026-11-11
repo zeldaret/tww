@@ -398,7 +398,7 @@ BOOL daNpc_Bj1_c::setAnm_anm(anm_prm_c* i_anm_prm) {
     switch (field_0x8AF) {
         case 7:
             setPrtcl_danceLR();
-            field_0x888 = 0;
+            field_0x888 = NULL;
             field_0x894 = 0x1E;
             break;
         default:
@@ -1140,9 +1140,9 @@ void daNpc_Bj1_c::bj_clcFlySpd() {
     switch (field_0x8A8) {
         case 1:
             {
-                s16 target = cLib_targetAngleY(&current.pos, &field_0x7D8);
+                s16 target = cLib_targetAngleY(&current.pos, &mTargetPos);
                 cLib_addCalcAngleS(&current.angle.y, target, l_HIO.children[mType].hio_prm.mFlyScale, l_HIO.children[mType].hio_prm.mFlyMaxStep, 0);
-                field_0x848 = (field_0x7D8.y - current.pos.y) > l_HIO.children[mType].hio_prm.field_0x28;
+                field_0x848 = (mTargetPos.y - current.pos.y) > l_HIO.children[mType].hio_prm.field_0x28;
                 f32 spdY = l_HIO.children[mType].hio_prm.field_0x2C;
                 if (field_0x848 == 0) {
                     spdY *= -1.0f;
@@ -1156,7 +1156,7 @@ void daNpc_Bj1_c::bj_clcFlySpd() {
         case 3:
             break;
     }
-    cLib_chaseF(&speedF, field_0x80C, field_0x814);
+    cLib_chaseF(&speedF, mTargetFlySpeed, mTargetFlyStep);
 }
 
 /* 00002988-00002B80       .text bj_movPass__11daNpc_Bj1_cFb */
@@ -1177,7 +1177,7 @@ u32 daNpc_Bj1_c::bj_movPass(bool i_param1) {
         return ret;
     }
 
-    dist_xz = (field_0x7D8 - current.pos).absXZ();
+    dist_xz = (mTargetPos - current.pos).absXZ();
     if (dist_xz <= field_0x81C) {
         ret = 1;
         if (field_0x734.isPath()) {
@@ -1206,7 +1206,11 @@ void daNpc_Bj1_c::bj_flyMove() {
 
 /* 00002EDC-00002F5C       .text bj_clcMovSpd__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::bj_clcMovSpd() {
-    /* Nonmatching */
+    if (field_0x8A9 == 0) {
+        s16 target = cLib_targetAngleY(&current.pos, &mTargetPos);
+        cLib_addCalcAngleS(&current.angle.y, target, l_HIO.children[mType].hio_prm.field_0x4E, l_HIO.children[mType].hio_prm.field_0x50, 0);
+    }
+    cLib_chaseF(&speedF, mTargetFlySpeed, mTargetFlyStep);
 }
 
 /* 00002F5C-000030A4       .text bj_nMove__11daNpc_Bj1_cFv */
@@ -1216,27 +1220,65 @@ void daNpc_Bj1_c::bj_nMove() {
 
 /* 000030A4-000031F4       .text setPrtcl_drugPot_1__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_drugPot_1() {
-    /* Nonmatching */
+    f32 transX, transZ;
+    s16 angleY;
+    if (dComIfGp_getMapTrans(fopAcM_GetRoomNo(this), &transX, &transZ, &angleY)) {
+        field_0x858.set(0, angleY, 0);
+        field_0x860.set(transX, 0.0f, transZ);
+        field_0x87C = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT00, &field_0x860, &field_0x858, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        field_0x880 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT01, &field_0x860, &field_0x858, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+        field_0x884 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT02, &field_0x860, &field_0x858, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+    }
 }
 
 /* 000031F4-000032B4       .text setPrtcl_drugPot_2__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_drugPot_2() {
-    /* Nonmatching */
+    f32 transX, transZ;
+    s16 angleY;
+    if (dComIfGp_getMapTrans(fopAcM_GetRoomNo(this), &transX, &transZ, &angleY)) {
+        field_0x858.set(0, angleY, 0);
+        field_0x860.set(transX, 0.0f, transZ);
+        field_0x888 = dComIfGp_particle_set(dPa_name::ID_AK_SN_DRUGPOT03, &field_0x860, &field_0x858, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+    }
 }
 
 /* 000032B4-00003330       .text delPrtcl_drugPot__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::delPrtcl_drugPot() {
-    /* Nonmatching */
+    JPABaseEmitter* emitter = field_0x87C;
+    if (emitter != NULL) {
+        emitter->setMaxFrame(-1);
+        emitter->setStatus(JPAEmtrStts_StopEmit);
+        field_0x87C = NULL;
+    }
+    emitter = field_0x880;
+    if (emitter != NULL) {
+        emitter->setMaxFrame(-1);
+        emitter->setStatus(JPAEmtrStts_StopEmit);
+        field_0x880 = NULL;
+    }
+    emitter = field_0x884;
+    if (emitter != NULL) {
+        emitter->setMaxFrame(-1);
+        emitter->setStatus(JPAEmtrStts_StopEmit);
+        field_0x884 = NULL;
+    }
 }
 
 /* 00003330-000033F4       .text setPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_danceLR() {
-    /* Nonmatching */
+    delPrtcl_danceLR();
+    field_0x88C = dComIfGp_particle_set(dPa_name::ID_AK_SN_NIYATODANCEL00, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
+    field_0x890 = dComIfGp_particle_set(dPa_name::ID_AK_SN_NIYATODANCER00, &current.pos, NULL, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
 }
 
 /* 000033F4-00003484       .text flwPrtcl_danceLR__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::flwPrtcl_danceLR() {
-    /* Nonmatching */
+    if (field_0x88C != NULL) {
+        field_0x88C->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(field_0x6CE));
+    }
+    if (field_0x890 != NULL) {
+        field_0x890->setGlobalRTMatrix(mpMorf->getModel()->getAnmMtx(field_0x6CF));
+    }
 }
 
 /* 00003484-000034D8       .text delPrtcl_danceLR__11daNpc_Bj1_cFv */
@@ -1257,7 +1299,9 @@ void daNpc_Bj1_c::delPrtcl_danceLR() {
 
 /* 000034D8-00003594       .text setPrtcl_peraProOpen__11daNpc_Bj1_cFv */
 void daNpc_Bj1_c::setPrtcl_peraProOpen() {
-    /* Nonmatching */
+    mDoMtx_stack_c::copy(field_0x6E4->getModel()->getAnmMtx(field_0x6E8));
+    mDoMtx_stack_c::multVecZero(&field_0x86C);
+    field_0x878 = dComIfGp_particle_set(dPa_name::ID_AK_SN_PERAPROOPEN00, &field_0x86C, &current.angle, NULL, 0xFF, NULL, fopAcM_GetRoomNo(this));
 }
 
 /* 00003594-00003774       .text createSeed__11daNpc_Bj1_cFv */
@@ -1377,9 +1421,9 @@ void daNpc_Bj1_c::eInit_CHG_PTH_(int*, int*) {
 void daNpc_Bj1_c::eInit_END_MOV_() {
     setAnm_NUM(0);
     field_0x8AA = 0;
-    field_0x80C = 0.0f;
-    speedF = field_0x80C;
-    field_0x814 = 0.0f;
+    mTargetFlySpeed = 0.0f;
+    speedF = mTargetFlySpeed;
+    mTargetFlyStep = 0.0f;
 }
 
 /* 000040BC-000040F4       .text eInit_SET_TNE___11daNpc_Bj1_cFv */
@@ -1447,7 +1491,7 @@ bool daNpc_Bj1_c::eMove_PTH_MOV_() {
     bool finished = field_0x8AA == 0;
     if (!finished) {
         if (field_0x84A != 0) {
-            field_0x7D8 = field_0x734.getPoint(field_0x734.getIdx());
+            mTargetPos = field_0x734.getPoint(field_0x734.getIdx());
         }
         field_0x84A = 0;
     }
@@ -1474,9 +1518,36 @@ bool daNpc_Bj1_c::event_action() {
 }
 
 /* 000046E8-000047D4       .text privateCut__11daNpc_Bj1_cFi */
-void daNpc_Bj1_c::privateCut(int) {
+void daNpc_Bj1_c::privateCut(int i_param1) {
     static char* a_cut_tbl[] = { "ACTION" };
-    /* Nonmatching */
+
+    if (i_param1 != -1) {
+        mActionIndex = dComIfGp_evmng_getMyActIdx(i_param1, a_cut_tbl, ARRAY_SIZE(a_cut_tbl), 1, 0);
+        if (mActionIndex == -1) {
+            dComIfGp_evmng_cutEnd(i_param1);
+        } else {
+            if (dComIfGp_evmng_getIsAddvance(i_param1)) {
+                switch (mActionIndex) {
+                    case 0:
+                        event_actionInit(i_param1);
+                        break;
+                }
+            }
+            bool ret;
+            switch (mActionIndex) {
+                case 0:
+                    ret = event_action();
+                    break;
+                default:
+                    ret = 1;
+                    break;
+            }
+
+            if (ret) {
+                dComIfGp_evmng_cutEnd(i_param1);
+            }
+        }
+    }
 }
 
 /* 000047D4-000047F4       .text endEvent__11daNpc_Bj1_cFv */
@@ -1554,8 +1625,8 @@ void daNpc_Bj1_c::setStt(s8 i_status) {
             return;
         case 3:
             field_0x8B3 = 0;
-            field_0x80C = l_HIO.children[mType].hio_prm.field_0x34;
-            field_0x814 = l_HIO.children[mType].hio_prm.field_0x38;
+            mTargetFlySpeed = l_HIO.children[mType].hio_prm.field_0x34;
+            mTargetFlyStep = l_HIO.children[mType].hio_prm.field_0x38;
             gravity = 0.0f;
             field_0x849 = 0;
             field_0x8A8 = 6;
@@ -1565,14 +1636,14 @@ void daNpc_Bj1_c::setStt(s8 i_status) {
         case 4:
             field_0x8B3 = 1;
             mHeadOnlyFollow = true;
-            field_0x80C = 0.0f;
+            mTargetFlySpeed = 0.0f;
             break;
         case 5:
             field_0x834 = 0x5A;
             break;
         case 6:
-            field_0x80C = l_HIO.children[mType].hio_prm.field_0x58;
-            field_0x814 = l_HIO.children[mType].hio_prm.field_0x5C;
+            mTargetFlySpeed = l_HIO.children[mType].hio_prm.field_0x58;
+            mTargetFlyStep = l_HIO.children[mType].hio_prm.field_0x5C;
             field_0x81C = l_HIO.children[mType].hio_prm.field_0x60;
             field_0x8AA = 1;
             break;
@@ -1828,13 +1899,13 @@ BOOL daNpc_Bj1_c::walk_1() {
     if (field_0x8AA == 0) {
         field_0x7AC = current.pos;
         field_0x7B8 = current.angle;
-        field_0x80C = 0.0f;
-        field_0x814 = 0.0f;
-        speedF = field_0x80C;
+        mTargetFlySpeed = 0.0f;
+        mTargetFlyStep = 0.0f;
+        speedF = mTargetFlySpeed;
         setStt(7);
         return TRUE;
     }
-    field_0x7D8 = field_0x734.getPoint(field_0x734.getIdx());
+    mTargetPos = field_0x734.getPoint(field_0x734.getIdx());
     mHeadOnlyFollow = true;
     return TRUE;
 }
