@@ -213,7 +213,22 @@ void daNpc_Kg2_c::wait01() {
 
 /* 00001BDC-00001CA4       .text talk01__11daNpc_Kg2_cFv */
 void daNpc_Kg2_c::talk01() {
-    /* Nonmatching */
+    if (talk(1) == 0x12) {  // Maybe 0x12 = fopMsgStts_BOX_CLOSED_e ?
+        field_0x760 = 1;
+        dComIfGp_event_reset();
+        field_0x72D[0] = 0;
+        if (mCurrMsgNo == 0x3144) {
+            field_0x750[0] = 3;
+            mEventIdx = 0;
+        } else if (field_0x738[0] == 0) {
+            setAnm(1, -1.0f);
+            field_0x748[0] = 0;
+            initTexPatternAnm(true);
+        } else {
+            setAnm(4, -1.0f);
+        }
+    }
+    return;
 }
 
 /* 00001CA4-00001D88       .text evn_setAnm_init__11daNpc_Kg2_cFi */
