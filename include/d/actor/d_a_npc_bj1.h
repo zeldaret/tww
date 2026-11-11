@@ -88,7 +88,7 @@ public:
     void setPrtcl_peraProOpen();
     BOOL createSeed();
     BOOL deleteSeed();
-    bool charDecide(int);
+    bool charDecide(BOOL);
     void eInit_setLocFlag(int*);
     void eInit_setShapeAngleY(int*, s16);
     void eInit_setEvTimer(int*);

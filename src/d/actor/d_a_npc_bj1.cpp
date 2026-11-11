@@ -1462,8 +1462,106 @@ BOOL daNpc_Bj1_c::deleteSeed() {
 }
 
 /* 000037E4-00003998       .text charDecide__11daNpc_Bj1_cFi */
-bool daNpc_Bj1_c::charDecide(int) {
-    /* Nonmatching */
+bool daNpc_Bj1_c::charDecide(BOOL i_param1) {
+    mType = -1;
+    field_0x8B5 = -1;
+    switch (fpcM_GetName(this)) {
+        case fpcNm_NPC_BJ1_e:
+            mType = 0;
+            switch (i_param1) {
+                case TRUE:
+                    field_0x8B5 = 1;
+                    break;
+                default:
+                    field_0x8B5 = 0;
+                    break;
+            }
+            break;
+        case fpcNm_NPC_BJ2_e:
+            mType = 1;
+            switch (i_param1) {
+                case TRUE:
+                    field_0x8B5 = 3;
+                    break;
+                default:
+                    field_0x8B5 = 2;
+                    break;
+            }
+            break;
+        case fpcNm_NPC_BJ3_e:
+            mType = 2;
+            switch (i_param1) {
+                case TRUE:
+                    field_0x8B5 = 5;
+                    break;
+                default:
+                    field_0x8B5 = 4;
+                    break;
+            }
+            break;
+        case fpcNm_NPC_BJ4_e:
+            mType = 3;
+            switch (i_param1) {
+                case TRUE:
+                    field_0x8B5 = 7;
+                    break;
+                default:
+                    field_0x8B5 = 6;
+                    break;
+            }
+            break;
+        case fpcNm_NPC_BJ5_e:
+            mType = 4;
+            switch (i_param1) {
+                case TRUE:
+                    field_0x8B5 = 9;
+                    break;
+                default:
+                    field_0x8B5 = 8;
+                    break;
+            }
+            break;
+        case fpcNm_NPC_BJ6_e:
+            mType = 5;
+            switch (i_param1) {
+                case TRUE:
+                    field_0x8B5 = 11;
+                    break;
+                default:
+                    field_0x8B5 = 10;
+                    break;
+            }
+            break;
+        case fpcNm_NPC_BJ7_e:
+            mType = 6;
+            field_0x8B5 = 12;
+            break;
+        case fpcNm_NPC_BJ8_e:
+            mType = 7;
+            switch (i_param1) {
+                case TRUE:
+                    field_0x8B5 = 14;
+                    break;
+                default:
+                    field_0x8B5 = 13;
+                    break;
+            }
+            break;
+        case fpcNm_NPC_BJ9_e:
+            mType = 8;
+            switch (i_param1) {
+                case TRUE:
+                    field_0x8B5 = 16;
+                    break;
+                default:
+                    field_0x8B5 = 15;
+                    break;
+            }
+            break;
+        default:
+            return false;
+    }
+    return true;
 }
 
 /* 00003998-000039DC       .text eInit_setLocFlag__11daNpc_Bj1_cFPi */
