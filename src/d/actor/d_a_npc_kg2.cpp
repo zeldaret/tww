@@ -180,8 +180,80 @@ u16 daNpc_Kg2_c::next_msgStatus(u32* pMsgNo) {
 }
 
 /* 00001028-000012EC       .text anmAtr__11daNpc_Kg2_cFUs */
-void daNpc_Kg2_c::anmAtr(u16) {
-    /* Nonmatching */
+void daNpc_Kg2_c::anmAtr(u16 i_msgStatus) {
+    u8 temp = dComIfGp_getMesgAnimeAttrInfo();
+    if (field_0x738[0] != 1) {
+        switch (temp) {
+            case 0:
+                setAnm(0, -1.0f);
+                field_0x748[0] = 0;
+                initTexPatternAnm(true);
+                break;
+            case 1:
+                setAnm(1, -1.0f);
+                field_0x748[0] = 0;
+                initTexPatternAnm(true);
+                break;
+            case 2:
+                setAnm(2, -1.0f);
+                field_0x748[0] = 1;
+                initTexPatternAnm(true);
+                break;
+            case 3:
+                setAnm(3, -1.0f);
+                field_0x748[0] = 0;
+                initTexPatternAnm(true);
+                break;
+            case 4:
+                setAnm(5, -1.0f);
+                field_0x748[0] = 1;
+                initTexPatternAnm(true);
+                break;
+            case 5:
+                setAnm(6, -1.0f);
+                field_0x748[0] = 1;
+                initTexPatternAnm(true);
+                break;
+            case 6:
+                setAnm(7, -1.0f);
+                field_0x748[0] = 2;
+                initTexPatternAnm(true);
+                break;
+            case 7:
+                setAnm(8, -1.0f);
+                field_0x748[0] = 3;
+                initTexPatternAnm(true);
+                break;
+            case 8:
+                setAnm(9, -1.0f);
+                field_0x748[0] = 0;
+                initTexPatternAnm(true);
+                break;
+            case 9:
+                setAnm(10, -1.0f);
+                field_0x748[0] = 1;
+                initTexPatternAnm(true);
+                break;
+            case 10:
+                setAnm(11, -1.0f);
+                field_0x748[0] = 2;
+                initTexPatternAnm(true);
+                break;
+            case 11:
+                setAnm(14, -1.0f);
+                field_0x748[0] = 2;
+                initTexPatternAnm(true);
+        }
+
+        if (field_0x749 == 3 && mpMorf->checkFrame(mpMorf->getEndFrame() - 1.0f)) {
+            setAnm(4, -1.0f);
+            field_0x748[0] = 0;
+            initTexPatternAnm(true);
+        }
+
+        dComIfGp_setMesgAnimeAttrInfo(0xff);
+    }
+    return;
 }
 
 /* 000012EC-00001308       .text setAttention__11daNpc_Kg2_cFv */
