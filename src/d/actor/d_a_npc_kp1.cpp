@@ -341,7 +341,7 @@ void daNpc_Kp1_c::setAnm_ATR(int param_1) {
         {ANM_READ, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
         {ANM_PRAY, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
         {ANM_THINK, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
-        {ANM_HAPPY, 0, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
+        {ANM_HAPPY, 1, 8.0f, 1.0f, J3DFrameCtrl::EMode_LOOP},
     };
     if (param_1 != 0) {
         setAnm_tex(a_anm_prm_tbl[mAtr].field_0x1);
@@ -483,7 +483,7 @@ u32 daNpc_Kp1_c::getMsg() {
         return 0x1E9E;
     }
     if (dComIfGs_isGetItemReserve(0xF) && !dComIfGs_checkReserveItem(0x9B)) {
-        return dComIfGs_getEventReg(dSv_event_flag_c::UNK_CCFF) >= 1 ? 0x1E83 : 0x1E82;
+        return dComIfGs_getEventReg(dSv_event_flag_c::UNK_CCFF) >= 1 ? 0x1E84 : 0x1E83;
     }
     if (dComIfGs_isGetItemReserve(0xE)) {
         return dComIfGs_isGetItemBeast(0) ? 0x1E87 : 0x1E88;
