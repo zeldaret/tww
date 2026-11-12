@@ -297,7 +297,7 @@ void daObjLight::Act_c::set_mtx() {
             cXyz offset = i_offset[i];
             offset.z += 700.0f;
             mDoMtx_stack_c::transS(current.pos.x, current.pos.y, current.pos.z);
-            mDoMtx_stack_c::YrotM(shape_angle.y + (mAngle + 0x8000));
+            mDoMtx_stack_c::YrotM(shape_angle.y + mAngle + 0x8000);
             mDoMtx_stack_c::transM(offset.x, offset.y, offset.z);
             mpModel[i]->setBaseTRMtx(mDoMtx_stack_c::get());
         }
