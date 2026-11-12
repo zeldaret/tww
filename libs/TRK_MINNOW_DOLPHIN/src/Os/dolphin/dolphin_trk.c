@@ -13,26 +13,23 @@ extern u32 _db_stack_addr;
 
 #define EXCEPTIONMASK_ADDR 0x80000044
 
-static u32 lc_base;
+u32 lc_base;
 
-static u32 TRK_ISR_OFFSETS[15] = {PPC_SystemReset,
-                                  PPC_MachineCheck,
-                                  PPC_DataStorage,
-                                  PPC_InstructionStorage,
-                                  PPC_ExternalInterrupt,
-                                  PPC_Alignment,
-                                  PPC_Program,
-                                  PPC_FloatingPointUnavaiable,
-                                  PPC_Decrementer,
-                                  PPC_SystemCall,
-                                  PPC_Trace,
-                                  PPC_PerformanceMonitor,
-                                  PPC_InstructionAddressBreakpoint,
-                                  PPC_SystemManagementInterrupt,
-                                  PPC_ThermalManagementInterrupt};
-
-void __TRK_copy_vectors(void);
-__declspec(section ".init") void __TRK_reset(void) { OSResetSystem(FALSE, 0, FALSE); }
+u32 TRK_ISR_OFFSETS[15] = {PPC_SystemReset,
+                           PPC_MachineCheck,
+                           PPC_DataStorage,
+                           PPC_InstructionStorage,
+                           PPC_ExternalInterrupt,
+                           PPC_Alignment,
+                           PPC_Program,
+                           PPC_FloatingPointUnavaiable,
+                           PPC_Decrementer,
+                           PPC_SystemCall,
+                           PPC_Trace,
+                           PPC_PerformanceMonitor,
+                           PPC_InstructionAddressBreakpoint,
+                           PPC_SystemManagementInterrupt,
+                           PPC_ThermalManagementInterrupt};
 
 void EnableMetroTRKInterrupts(void) {
     EnableEXI2Interrupts();
@@ -49,35 +46,25 @@ u32 TRKTargetTranslate(u32 param_0) {
 
 extern u8 gTRKInterruptVectorTable[];
 
-__declspec(section ".init") void TRK_copy_vector(u32 offset) {
+static inline void TRK_copy_vector(u32 offset) {
     void* destPtr = (void*)TRKTargetTranslate(offset);
-    TRK_memcpy(destPtr, (void*)(gTRKInterruptVectorTable + offset), 0x100);
+    TRK_memcpy(destPtr, gTRKInterruptVectorTable + offset, 0x100);
     TRK_flush_cache(destPtr, 0x100);
 }
 
-void __TRK_copy_vectors(void) {
-    u32 r3 = lc_base;
-    u32* isrOffsetPtr;
+static inline void TRK_copy_enabled_vectors(u32* maskPtr) {
     int i;
-    u32 r29;
+    u32 mask = *maskPtr;
 
-    if (r3 <= 0x44 && r3 + 0x4000 > 0x44 && gTRKCPUState.Extended1.DBAT3U & 3) {
-        r3 = 0x44;
-    } else {
-        r3 = EXCEPTIONMASK_ADDR;
-    }
-
-    i = 0;
-    r29 = *(u32*)r3;
-    isrOffsetPtr = TRK_ISR_OFFSETS;
-
-    do {
-        if ((r29 & (1 << i)) && i != 4) {
-            TRK_copy_vector(isrOffsetPtr[i]);
+    for (i = 0; i <= 14; i++) {
+        if (mask & (1 << i)) {
+            TRK_copy_vector(TRK_ISR_OFFSETS[i]);
         }
+    }
+}
 
-        i++;
-    } while (i <= 14);
+__declspec(section ".init") void __TRK_copy_vectors(void) {
+    TRK_copy_enabled_vectors((u32*)TRKTargetTranslate(0x44));
 }
 
 DSError TRKInitializeTarget() {
