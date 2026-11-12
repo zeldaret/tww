@@ -228,7 +228,8 @@ void daWfall_c::mode_wtr_on() {
     scale.y = getWaterScaleFromGatePos();
     mBtkAnm.setPlaySpeed(1.0f);
     mBtkAnm.play();
-    BOOL on = setEmitter00Pos();
+    BOOL on = FALSE;
+    on |= setEmitter00Pos();
     on |= setEmitter01Pos();
     if (on) {
         set_se();
@@ -249,7 +250,8 @@ void daWfall_c::mode_wtr_off() {
     if ((scale.y = getWaterScaleFromGatePos()) > 0.0f) {
         mBtkAnm.setPlaySpeed(1.0f);
         mBtkAnm.play();
-        BOOL on = setEmitter00Pos();
+        BOOL on = FALSE;
+        on |= setEmitter00Pos();
         on |= setEmitter01Pos();
         if (on) {
             set_se();
